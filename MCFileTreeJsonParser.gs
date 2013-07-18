@@ -1,12 +1,11 @@
 doit
-Object subclass: 'MCFileTreeJsonParser'
+(Object subclass: 'MCFileTreeJsonParser'
 	instVarNames: #( stream)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	inDictionary: ''
-	category: 'MonticelloFileTree-Core'
-	options: #()
+	inDictionary: UserGlobals
+	options: #()) category: 'MonticelloFileTree-Core'
 
 %
 

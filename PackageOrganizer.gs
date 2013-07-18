@@ -1,12 +1,11 @@
 doit
-Object subclass: 'PackageOrganizer'
+(Object subclass: 'PackageOrganizer'
 	instVarNames: #( packages)
 	classVars: #()
 	classInstVars: #( default)
 	poolDictionaries: #()
-	inDictionary: ''
-	category: 'PackageInfo-Base'
-	options: #()
+	inDictionary: UserGlobals
+	options: #()) category: 'PackageInfo-Base'
 
 %
 

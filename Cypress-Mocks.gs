@@ -1,5 +1,5 @@
 doit
-(Object subclass: 'CypressMockBasic'  instVarNames: #( name)  classVars: #()  classInstVars: #( current)  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Mocks'
+(CypressObject subclass: 'CypressMockBasic'  instVarNames: #( name)  classVars: #()  classInstVars: #( current)  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Mocks'
 .
 %
 doit

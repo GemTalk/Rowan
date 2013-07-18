@@ -1,12 +1,11 @@
 doit
-Object subclass: 'MCPackage'
+(Object subclass: 'MCPackage'
 	instVarNames: #( name)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	inDictionary: ''
-	category: 'Monticello-Base'
-	options: #()
+	inDictionary: UserGlobals
+	options: #()) category: 'Monticello-Base'
 
 %
 

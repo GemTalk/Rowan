@@ -1,5 +1,5 @@
 doit
-(Object subclass: 'CypressStructure'  instVarNames: #( name properties packageStructure)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Structure'
+(CypressObject subclass: 'CypressStructure'  instVarNames: #( name properties packageStructure)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Structure'
 .
 %
 doit

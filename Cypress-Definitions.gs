@@ -1,5 +1,9 @@
 doit
-(Object subclass: 'CypressDefinition'  instVarNames: #()  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
+(Object subclass: 'CypressObject'  instVarNames: #()  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
+.
+%
+doit
+(CypressObject subclass: 'CypressDefinition'  instVarNames: #()  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
 .
 %
 doit
@@ -11,27 +15,27 @@ doit
 .
 %
 doit
-(Object subclass: 'CypressDefinitionIndex'  instVarNames: #( definitionMap)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
+(CypressObject subclass: 'CypressDefinitionIndex'  instVarNames: #( definitionMap)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
 .
 %
 doit
-(Object subclass: 'CypressDependencySorter'  instVarNames: #( required provided orderedItems)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
+(CypressObject subclass: 'CypressDependencySorter'  instVarNames: #( required provided orderedItems)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
 .
 %
 doit
-(Object subclass: 'CypressLoader'  instVarNames: #( additions removals unloadable                    provisions errors methodAdditions requirements)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
+(CypressObject subclass: 'CypressLoader'  instVarNames: #( additions removals unloadable                    provisions errors methodAdditions requirements)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
 .
 %
 doit
-(Object subclass: 'CypressPackageDefinition'  instVarNames: #( name)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
+(CypressObject subclass: 'CypressPackageDefinition'  instVarNames: #( name)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
 .
 %
 doit
-(Object subclass: 'CypressPatch'  instVarNames: #( operations)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
+(CypressObject subclass: 'CypressPatch'  instVarNames: #( operations)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
 .
 %
 doit
-(Object subclass: 'CypressPatchOperation'  instVarNames: #()  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
+(CypressObject subclass: 'CypressPatchOperation'  instVarNames: #()  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
 .
 %
 doit
@@ -47,8 +51,11 @@ doit
 .
 %
 doit
-(Object subclass: 'CypressSnapshot'  instVarNames: #( definitions)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
+(CypressObject subclass: 'CypressSnapshot'  instVarNames: #( definitions)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: UserGlobals  options: #()) category: 'Cypress-Definitions'
 .
+%
+doit
+CypressObject immediateInvariant.
 %
 doit
 CypressDefinition immediateInvariant.
@@ -88,6 +95,20 @@ CypressRemoval immediateInvariant.
 %
 doit
 CypressSnapshot immediateInvariant.
+%
+
+! Remove existing behavior from CypressObject
+doit
+CypressObject removeAllMethods.
+CypressObject class removeAllMethods.
+%
+! ------------------- Class methods for CypressObject
+! ------------------- Instance methods for CypressObject
+category: 'initializing'
+set compile_env: 0
+method: CypressObject
+initialize
+	"Placeholder: #initialize is not defined by Object in GemStone Smalltalk."
 %
 
 ! Remove existing behavior from CypressDefinition

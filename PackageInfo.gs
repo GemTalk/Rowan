@@ -1,13 +1,12 @@
 doit
-Object subclass: 'PackageInfo'
+(Object subclass: 'PackageInfo'
 	instVarNames: #( packageName methodCategoryPrefix preamble
 	                  postscript preambleOfRemoval postscriptOfRemoval)
 	classVars: #()
 	classInstVars: #( default)
 	poolDictionaries: #()
-	inDictionary: ''
-	category: 'PackageInfo-Base'
-	options: #()
+	inDictionary: UserGlobals
+	options: #()) category: 'PackageInfo-Base'
 
 %
 
