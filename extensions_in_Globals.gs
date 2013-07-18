@@ -1,3 +1,2401 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+! On July 17, 2013, 4:47:01 PM
+doit
+(Object subclass: 'SymbolDictionaryComparer'  instVarNames: #( userSymbolDictionaryMapping symbolDictionaries targetDirectoryPath                    fileName summaryReportStream addedMethods changedMethods                    deletedMethods addedClasses deletedClasses)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: Globals  options: #())
+.
+%
+
+! ------------------- Class comment for SymbolDictionaryComparer
+doit
+SymbolDictionaryComparer comment: 
+'Examples:
+
+SymbolDictionaryComparer forAllUsers report
+SymbolDictionaryComparer forGlobalsOnly report
+SymbolDictionaryComparer forAllUsers reportInto: ''/home/rsargent/2013-02-15_13.14.54''; summaryReport
+
+SymbolDictionaryComparer forGlobalsOnly reportInto: ''/home/rsargent/2013-02-15_13.14.54''; summaryReport
+'
+%
+doit
+(Object subclass: 'SymbolDictionaryDumper'  instVarNames: #( userSymbolDictionaryMapping symbolDictionaries targetDirectoryPath                    fileName)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: Globals  options: #())
+.
+%
+
+! ------------------- Class comment for SymbolDictionaryDumper
+doit
+SymbolDictionaryDumper comment: 
+'Examples:
+
+SymbolDictionaryDumper forAllUsers report
+SymbolDictionaryDumper forGlobalsOnly report
+SymbolDictionaryDumper forAllUsers reportIntoTimestampedDirectoryUnder: ''/home/rsargent''
+
+SymbolDictionaryDumper forGlobalsOnly reportIntoTimestampedDirectoryUnder: ''/home/rsargent''
+'
+%
+doit
+(SymbolDictionaryDumper subclass: 'SymbolDictionarySnapshotter'  instVarNames: #( snapshot)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: Globals  options: #())
+.
+%
+
+! ------------------- Class comment for SymbolDictionarySnapshotter
+doit
+SymbolDictionarySnapshotter comment: 
+'Examples:
+
+SymbolDictionarySnapshotter forAllUsers publicSnapshot
+SymbolDictionarySnapshotter forGlobalsOnly temporarySnapshot
+'
+%
+doit
+(Object subclass: 'SymbolDictionarySnapshotComparer'  instVarNames: #( olderSnapshot newerSnapshot olderDiffs                    newerDiffs)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: Globals  options: #())
+.
+%
+
+! ------------------- Class comment for SymbolDictionarySnapshotComparer
+doit
+SymbolDictionarySnapshotComparer comment: 
+''
+%
+doit
+(Object subclass: 'SymbolDictionarySnapshotManager'  instVarNames: #( repository)  classVars: #()  classInstVars: #()  poolDictionaries: #()  inDictionary: Globals  options: #())
+.
+%
+
+! ------------------- Class comment for SymbolDictionarySnapshotManager
+doit
+SymbolDictionarySnapshotManager comment: 
+''
+%
+doit
+
+SymbolDictionaryComparer immediateInvariant.
+%
+doit
+SymbolDictionaryDumper immediateInvariant.
+%
+doit
+SymbolDictionarySnapshotter immediateInvariant.
+%
+doit
+SymbolDictionarySnapshotComparer immediateInvariant.
+%
+doit
+SymbolDictionarySnapshotManager immediateInvariant.
+%
+
+category: '*Cypress-Mocks-Extensions'
+set compile_env: 0
+method: Object
+isCypressMockBasic
+
+	^false
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+method: Object
+asCypressPropertyObject
+
+	^self
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+method: Behavior
+methodDictionary
+
+	^self methodDictForEnv: 0
+%
+
+category: '*Cypress-Definitions'
+set compile_env: 0
+method: Class
+asCypressClassDefinition
+
+	^CypressClassDefinition
+		name: self name
+		superclassName: self superclass name
+		category: self category
+		instVarNames: self instVarNames
+		classInstVarNames: self class instVarNames
+		classVarNames: self classVarNames
+		comment: self comment.
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+method: Boolean
+writeCypressJsonOn: aStream indent: startIndent
+
+	aStream nextPutAll: self printString
+%
+
+category: '*Cypress-Definitions'
+set compile_env: 0
+method: Collection
+difference: aCollection
+	"Answer the set theoretic difference of two collections."
+
+	| set |
+	set := self asSet.
+	aCollection do: [:each | set remove: each ifAbsent: []].
+	^self species withAll: set asArray
+%
+category: '*Cypress-Definitions'
+set compile_env: 0
+method: Collection
+gather: aBlock
+
+	^Array
+		streamContents: [:stream | self do: [:ea | stream nextPutAll: (aBlock value: ea)]]
+%
+category: '*Cypress-Definitions'
+set compile_env: 0
+method: Collection
+intersection: aCollection
+	"Answer the set theoretic intersection of two collections."
+
+	| set outputSet |
+	set := self asSet.
+	outputSet := Set new.
+	aCollection do: 
+			[:each |
+			((set includes: each) and: [(outputSet includes: each) not])
+				ifTrue: [outputSet add: each]].
+	^self species withAll: outputSet asArray
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+method: Dictionary
+asCypressPropertyObject
+
+	| result |
+	result := self class new: self size.
+	self associationsDo: [:assoc | result at: assoc key put: assoc value asCypressPropertyObject].
+	^result.
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+method: Dictionary
+writeCypressJsonOn: aStream indent: startIndent
+
+	| indent cnt |
+	indent := startIndent.
+	aStream
+		nextPutAll: '{';
+		lf.
+	cnt := 0.
+	indent := indent + 1.
+	self keys asSortedCollection do: 
+			[:key |
+			| value |
+			value := self at: key.
+			cnt := cnt + 1.
+			aStream tab: indent.
+			key writeCypressJsonOn: aStream indent: indent.
+			aStream nextPutAll: ' : '.
+			value writeCypressJsonOn: aStream indent: indent.
+			cnt < self size
+				ifTrue: 
+					[aStream
+						nextPutAll: ',';
+						lf]].
+	self size = 0 ifTrue: [aStream tab: indent].
+	aStream nextPutAll: ' }'
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+classmethod: SequenceableCollection
+new: newSize streamContents: aOneArgBlock
+
+	| stream |
+	stream := WriteStream on: (self streamSpecies new: newSize).
+	aOneArgBlock value: stream.
+	stream position = newSize
+		ifTrue: [ ^stream originalContents ]
+		ifFalse: [ ^stream contents ]
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+classmethod: SequenceableCollection
+streamContents: aOneArgBlock
+
+	^ self new: 100 streamContents: aOneArgBlock
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+classmethod: SequenceableCollection
+streamSpecies
+	"Answer the class that is used for streaming.
+	 If overridden, consider overriding #new:streamContents:."
+
+	^self
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+method: SequenceableCollection
+beginsWith: aSequence
+	"Answer whether the first elements of the receiver are the same as aSequence."
+
+	^(self indexOfSubCollection: aSequence startingAt: 1) = 1
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+method: SequenceableCollection
+copyWithoutSuffix: aSequence
+	"Answer a copy of the receiver excluding the specified suffix.
+	 If the suffix does not match, answer a copy of the receiver."
+
+	^self copyWithoutSuffix: aSequence or: [self copy].
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+method: SequenceableCollection
+copyWithoutSuffix: aSequence or: aBlock
+	"Answer a copy of the receiver excluding the specified suffix.
+	 If the suffix does not match, answer the result of evaluating aBlock."
+
+	(self endsWith: aSequence) ifFalse: [^aBlock value].
+	^self copyFrom: 1 to: self size - aSequence size.
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+method: SequenceableCollection
+endsWith: aSequence
+	"Answer whether the last elements of the receiver are the same as aSequence."
+
+	^(self indexOfSubCollection: aSequence
+		startingAt: (self size - aSequence size max: 1))
+			= (self size - aSequence size + 1)
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+method: SequenceableCollection
+indexOfAnyOf: aCollection startingAt: start
+	"Answer the index of the first occurence of any element included in aCollection after start within the receiver.
+	If the receiver does not contain anElement, answer zero, which is an invalid index."
+
+	^self indexOfAnyOf: aCollection startingAt: start ifAbsent: [0]
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+method: SequenceableCollection
+indexOfAnyOf: aCollection startingAt: start ifAbsent: exceptionBlock
+	"Answer the index of the first occurence of any element included in aCollection after start within the receiver.
+	If the receiver does not contain anElement, answer the result of evaluating the argument, exceptionBlock.
+	Note: it is user responsibility to provide aCollection that behaves relatevily fast when asked for includes: (like a Set)"
+
+	start to: self size do:
+		[:index |
+		(aCollection includes: (self at: index)) ifTrue: [^ index]].
+	^ exceptionBlock value
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+method: Array
+asCypressPropertyObject
+
+	^self collect: [:each | each asCypressPropertyObject]
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+method: Array
+writeCypressJsonOn: aStream indent: startIndent
+
+	| indent |
+	aStream
+		nextPutAll: '[';
+		lf.
+	indent := startIndent + 1.
+	1 to: self size
+		do: 
+			[:index |
+			| item |
+			item := self at: index.
+			aStream tab: indent.
+			item writeCypressJsonOn: aStream indent: indent.
+			index < self size
+				ifTrue: 
+					[aStream
+						nextPutAll: ',';
+						lf]].
+	self size = 0 ifTrue: [aStream tab: indent].
+	aStream nextPutAll: ' ]'
+%
+
+category: '*Cypress-Definitions'
+set compile_env: 0
+method: SymbolList
+allSatisfying: aOneArgBlock
+	"Answer the elements from the receiver's Symbol Dictionaries
+	 which meet the criteria specified in aOneArgBlock."
+
+	| result |
+	result := Array new.
+	self asArray do: [:each | result addAll: (each select: aOneArgBlock)].
+	^result.
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+method: ByteArray
+escapePercents
+	"Answer a new string with 'dangerous' characters escaped to their %XX form,
+	 for use in HTTP transactions."
+
+	^String streamContents: 
+			[:stream |
+			self do: 
+					[:each |
+					| c |
+					(c := Character withValue: each) isSafeForHTTP
+						ifTrue: [stream nextPut: c]
+						ifFalse: 
+							[stream nextPut: $%.
+							each // 16 printOn: stream base: 16 showRadix: false.
+							each \\ 16 printOn: stream base: 16 showRadix: false]]]
+%
+
+category: '*Cypress-Definitions'
+set compile_env: 0
+method: CharacterCollection
+findString: subString startingAt: startIndex caseSensitive: aBoolean
+	"If a receiver contains subString beginning at some point at or after
+	 startIndex, this returns the index at which subString begins.  If the
+	 receiver does not contain subString, this returns 0."
+
+	^self
+		_findString: subString
+		startingAt: startIndex
+		ignoreCase: aBoolean not
+%
+category: '*Cypress-Definitions'
+set compile_env: 0
+method: CharacterCollection
+withUnixLineEndings
+	"Assume the string is textual, and that CR, LF, and CRLF are all valid line endings.
+	 Replace each occurence with a single LF."
+
+	| cr lf inPos outPos outString newOutPos indexLF indexCR |
+	cr := Character cr.
+	indexCR := self indexOf: cr startingAt: 1.
+	indexCR = 0 ifTrue: [^self].
+	lf := Character lf.
+	indexLF := self indexOf: lf startingAt: 1.
+	indexLF = 0 ifTrue: [^self copyReplacing: cr with: lf].
+	inPos := outPos := 1.
+	outString := String new: self size.
+	
+	["check if next CR is before next LF or if there are no more LF"
+	(indexLF = 0 or: [indexCR < indexLF])
+		ifTrue: 
+			[newOutPos := outPos + 1 + indexCR - inPos.
+			outString
+				replaceFrom: outPos
+				to: newOutPos - 2
+				with: self
+				startingAt: inPos.
+			outString at: newOutPos - 1 put: lf.
+			outPos := newOutPos.
+			1 + indexCR = indexLF
+				ifTrue: 
+					["Caught a CR-LF pair"
+					inPos := 1 + indexLF.
+					indexLF := self indexOf: lf startingAt: inPos]
+				ifFalse: [inPos := 1 + indexCR].
+			indexCR := self indexOf: cr startingAt: inPos]
+		ifFalse: 
+			[newOutPos := outPos + 1 + indexLF - inPos.
+			outString
+				replaceFrom: outPos
+				to: newOutPos - 1
+				with: self
+				startingAt: inPos.
+			outPos := newOutPos.
+			inPos := 1 + indexLF.
+			indexLF := self indexOf: lf startingAt: inPos].
+	indexCR = 0]
+			whileFalse.
+
+	"no more CR line endings. copy the rest"
+	newOutPos := outPos + (self size - inPos + 1).
+	outString
+		replaceFrom: outPos
+		to: newOutPos - 1
+		with: self
+		startingAt: inPos.
+	^outString copyFrom: 1 to: newOutPos - 1
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+method: String
+asCypressPropertyObject
+
+	^self unescapePercents withUnixLineEndings
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+method: String
+escapePercents
+	"Answer a new string with 'dangerous' characters escaped to their %XX form,
+	 for use in HTTP transactions."
+
+	^String streamContents: 
+			[:stream |
+			self do: 
+					[:c |
+					c isSafeForHTTP
+						ifTrue: [stream nextPut: c]
+						ifFalse: 
+							[stream nextPut: $%.
+							c codePoint // 16 printOn: stream base: 16 showRadix: false.
+							c codePoint \\ 16 printOn: stream base: 16 showRadix: false]]]
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+method: String
+unescapePercents
+	"decode string including %XX form
+	 (adapted from Pharo 2.0)"
+
+	| unescaped char asciiVal specialChars oldPos pos |
+	unescaped := ReadWriteStream on: String new.
+	specialChars := '+%' asSet.
+	oldPos := 1.
+	
+	[pos := self indexOfAnyOf: specialChars startingAt: oldPos.
+	pos > 0]
+			whileTrue: 
+				[unescaped nextPutAll: (self copyFrom: oldPos to: pos - 1).
+				char := self at: pos.
+				(char = $% and: [pos + 2 <= self size])
+					ifTrue: 
+						[asciiVal := ((self at: pos + 1) asUppercase digitValueInRadix: 16) * 16
+									+ ((self at: pos + 2) asUppercase digitValueInRadix: 16).
+						asciiVal > 255 ifTrue: [^self].
+						unescaped nextPut: (Character withValue: asciiVal).
+						pos := pos + 3.
+						pos <= self size ifFalse: [char := nil].
+						oldPos := pos]
+					ifFalse: 
+						[char = $+
+							ifTrue: [unescaped nextPut: Character space]
+							ifFalse: [unescaped nextPut: char].
+						oldPos := pos + 1]].
+	oldPos <= self size
+		ifTrue: [unescaped nextPutAll: (self copyFrom: oldPos to: self size)].
+	^unescaped contents
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+method: String
+writeCypressJsonOn: aStream indent: startIndent
+
+	aStream
+		nextPutAll: '"';
+		nextPutAll: self withUnixLineEndings encodeAsUTF8 escapePercents;
+		nextPutAll: '"'
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+classmethod: Symbol
+new: size streamContents: aOneArgBlock
+
+	^(super new: size streamContents: aOneArgBlock) asSymbol
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+classmethod: Symbol
+streamSpecies
+
+	^String
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+classmethod: Interval
+streamSpecies
+
+	^Array
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+classmethod: OrderedCollection
+new: size streamContents: aOneArgBlock
+
+	^self withAll: (super new: size streamContents: aOneArgBlock)
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+classmethod: OrderedCollection
+streamSpecies
+
+	^Array
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+classmethod: SortedCollection
+new: size streamContents: aOneArgBlock
+
+	^self withAll: (super new: size streamContents: aOneArgBlock)
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+classmethod: SortedCollection
+streamSpecies
+
+	^Array
+%
+
+category: '*Cypress-Definitions'
+set compile_env: 0
+method: GsNMethod
+asCypressMethodDefinition
+
+	^CypressMethodDefinition
+		className: self methodClass theNonMetaClass name
+		classIsMeta: self methodClass isMeta
+		selector: self selector
+		category: self category
+		source: self sourceString
+%
+category: '*Cypress-Definitions'
+set compile_env: 0
+method: GsNMethod
+category
+
+	^self inClass categoryOfSelector: self selector
+%
+category: '*Cypress-Definitions'
+set compile_env: 0
+method: GsNMethod
+methodClass
+
+	^self inClass
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+method: Character
+isSafeForHTTP
+	"Answer whether a character is 'safe', or needs to be escaped when used, eg, in a URL."
+
+	^self codePoint < 128
+		and: [self isAlphaNumeric or: ['.-_' includes: self]]
+%
+category: 'other'
+set compile_env: 0
+classmethod: DateAndTimeANSI
+fromString: aString
+
+	"YYYY-MM-DDTHH:MM:SS+HH:MM
+
+	 Examples:
+
+		| string |
+
+		string := '2013-06-20T14:47:55.40271592140198-07:00'.
+
+		(DateAndTimeANSI fromString: string) printString = string.
+
+
+
+		| time |
+
+		time := DateAndTime now.
+
+		(DateAndTime fromString: time printString) = time.
+
+	"
+
+
+
+	| stream sign positionBias |
+
+	stream := ReadStream on: aString.
+
+	sign := aString at: aString size - 5.
+
+	positionBias := stream class isLegacyStreamImplementation
+
+		ifTrue: [1]
+
+		ifFalse: [0].
+
+	^self
+
+		year:   (stream next: 4) asNumber
+
+		month:  (stream next; next: 2) asNumber
+
+		day:    (stream next; next: 2) asNumber
+
+		hour:   (stream next; next: 2) asNumber
+
+		minute: (stream next; next: 2) asNumber
+
+		second: (stream next; next: (aString size - 6 - stream position + positionBias)) asNumber
+
+		offset: (Duration
+
+			days:    0 
+
+			hours:   (stream next; next: 2) asNumber * (sign == $- ifTrue: [-1] ifFalse: [1])
+
+			minutes: (stream next; next: 2) asNumber
+
+			seconds: 0)
+
+%
+category: '*Cypress-Structure'
+set compile_env: 0
+method: Number
+writeCypressJsonOn: aStream indent: startIndent
+
+	aStream nextPutAll: self printString
+%
+
+! Remove existing behavior from SymbolDictionaryComparer
+doit
+SymbolDictionaryComparer removeAllMethods.
+SymbolDictionaryComparer class removeAllMethods.
+%
+! ------------------- Class methods for SymbolDictionaryComparer
+category: 'Instance Creation'
+set compile_env: 0
+classmethod: SymbolDictionaryComparer
+forAllUsers
+
+	^self new
+		addSymbolListsForAllUsers;
+		yourself
+%
+category: 'Instance Creation'
+set compile_env: 0
+classmethod: SymbolDictionaryComparer
+forGlobalsOnly
+
+	^self new
+		addGlobals;
+		yourself
+%
+category: 'Instance Creation'
+set compile_env: 0
+classmethod: SymbolDictionaryComparer
+new
+
+	^super new
+		initialize;
+		yourself
+%
+! ------------------- Instance methods for SymbolDictionaryComparer
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionaryComparer
+fileName
+
+   ^fileName
+%
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionaryComparer
+summaryReport
+
+	^self summaryReportStream contents
+%
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionaryComparer
+symbolDictionaries
+
+   ^symbolDictionaries
+%
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionaryComparer
+targetDirectoryPath
+
+   ^targetDirectoryPath
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+addedClasses
+
+	^addedClasses
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+addedMethods
+
+	^addedMethods
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+changedMethods
+
+	^changedMethods
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+deletedClasses
+
+	^deletedClasses
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+deletedMethods
+
+	^deletedMethods
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+fileNameFor: aSymbolDictionary andUserId: aString
+
+	^self targetDirectoryPath, '/',
+		aString, '-', aSymbolDictionary name, '-', self fileName
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+summaryReportStream
+
+	^summaryReportStream
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+userSymbolDictionaryMapping
+
+   ^userSymbolDictionaryMapping
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+initialize
+
+	self
+		initializeUserSymbolDictionaryMapping;
+		initializeSymbolDictionaries;
+		initializeTargetDirectoryPath;
+		initializeFileName;
+		initializeSummaryReportStream
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+initializeChanges
+
+	self
+		addedMethods: OrderedCollection new;
+		changedMethods: OrderedCollection new;
+		deletedMethods: OrderedCollection new;
+		addedClasses: OrderedCollection new;
+		deletedClasses: OrderedCollection new
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+initializeFileName
+
+	self fileName: ((System gemVersionReport at: #gsRelease) copyReplaceAll: ' ' with: ''), '-sourceStrings.obj'.
+
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+initializeSummaryReportStream
+
+	self summaryReportStream: (WriteStream on: String new)
+
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+initializeSymbolDictionaries
+
+	self symbolDictionaries: IdentitySet new
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+initializeTargetDirectoryPath
+
+	self targetDirectoryPath: '/tmp'
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+initializeUserSymbolDictionaryMapping
+
+	self userSymbolDictionaryMapping: Dictionary new
+%
+category: 'Reporting'
+set compile_env: 0
+method: SymbolDictionaryComparer
+report
+
+	self userSymbolDictionaryMapping keysAndValuesDo: 
+			[:userId :symbolDicts |
+			symbolDicts
+				do: [:each | self compareSymbolDictionary: each forUserId: userId]]
+%
+category: 'Reporting'
+set compile_env: 0
+method: SymbolDictionaryComparer
+reportInto: aString
+
+	self
+		targetDirectoryPath: aString;
+		report
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+compareDeletedMethods: meths fromClass: theClass named: clsNam withDesignator: clsMethStr filingOutTo: fileinFile
+
+	| envPrefix prefixSize lf |
+	envPrefix := ':env_'.
+	prefixSize := envPrefix size.
+	lf := Character lf.
+	meths keysDo: 
+			[:aName |
+			| envId namSiz selectr |
+			envId := 0.
+			selectr := aName.
+			(aName at: 1 equals: envPrefix)
+				ifTrue: 
+					[| endIdx |
+					endIdx := aName indexOf: $: startingAt: 2.
+					envId := Integer
+								fromString: (aName copyFrom: prefixSize + 1 to: endIdx - 1).
+					selectr := aName copyFrom: endIdx + 1 to: aName size].
+			(theClass includesSelector: selectr environmentId: envId)
+				ifFalse: 
+					[self deletedMethods add: clsNam , '>>' , clsMethStr , aName.
+					fileinFile
+						nextPutAll: 'doit' , lf , clsNam , ' removeSelector: #' , selectr
+								, ' environmentId:' , envId asString
+								, lf , $%
+								, lf]]
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+compareDeletionsIn: aSymbolDictionary from: prevClasses filingOutOn: fileinFile
+	"Now check to see if there are any deleted methods or classes"
+
+	prevClasses keysAndValuesDo: 
+			[:clsNam :meths |
+			((aSymbolDictionary includesKey: clsNam) and: [(aSymbolDictionary at: clsNam) isBehavior])
+				ifFalse: [self deletedClasses add: clsNam]
+				ifTrue: 
+					[| theClass |
+					theClass := aSymbolDictionary at: clsNam.
+					self
+						compareDeletedMethods: (meths at: 1)
+						fromClass: theClass
+						named: clsNam
+						withDesignator: ''
+						filingOutTo: fileinFile.
+					self
+						compareDeletedMethods: (meths at: 2)
+						fromClass: theClass class
+						named: clsNam
+						withDesignator: '(C)'
+						filingOutTo: fileinFile]]
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+compareMethods: mDict fromClass: theClass withDesignator: clsMethStr against: prevDict filingOutTo: fileinFile
+
+	mDict keysAndValuesDo: 
+			[:selector :aMeth |
+			| envId aName |
+			envId := aMeth environmentId.
+			aName := envId == 0
+						ifTrue: [selector]
+						ifFalse: [':env_' , envId asString , ':' , selector asString].
+			" check to see if same method exists in prevClasses"
+			(prevDict includesKey: aName)
+				ifFalse: 
+					[self addedMethods add: theClass nameForFileout , '>>' , clsMethStr , aName.
+					fileinFile nextPutAll: (theClass fileOutMethod: selector environmentId: envId)]
+				ifTrue: 
+					[" method exists in both versions, do a diff."
+					aMeth sourceString = (prevDict at: aName)
+						ifFalse: 
+							[self changedMethods add: theClass nameForFileout , '>>' , clsMethStr , aName.
+							fileinFile nextPutAll: (theClass fileOutMethod: selector environmentId: envId)]]]
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+compareMethodSourcesIn: aSymbolDictionary from: prevClasses filingOutOn: fileinFile
+	"Iterate through the classes in the current SymbolDictionary and compare method source strings."
+
+	aSymbolDictionary do: 
+			[:ea |
+			ea isBehavior
+				ifTrue: 
+					[| meths classMeths className |
+					className := ea nameForFileout.
+					(prevClasses includesKey: className)
+						ifFalse: 
+							[self addedClasses add: className.
+							ea fileOutClassOn: fileinFile]
+						ifTrue: 
+							[ea persistentMethodDictsDo: 
+									[:mDict |
+									self
+										compareMethods: mDict
+										fromClass: ea
+										withDesignator: ''
+										against: ((prevClasses at: className) at: 1)
+										filingOutTo: fileinFile].
+							ea class persistentMethodDictsDo: 
+									[:mDict |
+									self
+										compareMethods: mDict
+										fromClass: ea class
+										withDesignator: '(C)'
+										against: ((prevClasses at: className) at: 2)
+										filingOutTo: fileinFile]]]].
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+compareSymbolDictionary: aSymbolDictionary forUserId: aString
+	"Compile a report on Smalltalk method differences between this version and a previous version. 
+	 The report string will be written to a file with the same name plus the suffix '.changes.report'.
+	 The changes are also written into a file with the same name plus the suffix '.changes.filein' in Topaz filein format."
+
+	| prevClasses fileinFile fName |
+	prevClasses := self
+				readPreviouslySavedClassesInformationFor: aSymbolDictionary
+				andUserId: aString.
+	fileinFile := self openFileinFileFor: aSymbolDictionary andUserId: aString.
+	self
+		initializeChanges;
+		compareMethodSourcesIn: aSymbolDictionary from: prevClasses filingOutOn: fileinFile;
+		compareDeletionsIn: aSymbolDictionary from: prevClasses filingOutOn: fileinFile;
+		reportChangesIn: aSymbolDictionary forUserId: aString.
+	fileinFile close
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+openFileinFileFor: aSymbolDictionary andUserId: aString
+
+	| fileinFile fName |
+	fileinFile := GsFile
+				openWriteOnServer: (fName := (self fileNameFor: aSymbolDictionary
+								andUserId: aString) , '.changes.filein').
+	fileinFile == nil ifTrue: [self error: 'Can''t open ' , fName , ' for writing.'].
+	^fileinFile
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+readPreviouslySavedClassesInformationFor: aSymbolDictionary andUserId: aString
+	"Read in and answer the prevClasses from passivated object file corresponding to the given SymbolDictionary and User Id."
+
+	| prevClasses prevClassesFile fName |
+	prevClassesFile := GsFile
+				openReadOnServer: (fName := self fileNameFor: aSymbolDictionary
+								andUserId: aString).
+	prevClassesFile == nil ifTrue: [self error: 'Can''t open ' , fName , ' for reading.'].
+
+	"read in the prevClasses from passivated object file"
+	prevClasses := (PassiveObject newOnStream: prevClassesFile) activate.
+	prevClasses == nil
+		ifTrue: [self error: 'Failed to activate source dictionaries from ' , fName , '.'].
+	^prevClasses
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+reportChangesIn: aSymbolDictionary forUserId: aString
+	"Put together the report."
+
+	| reportFile fName lf |
+	lf := Character lf.
+	self summaryReportStream
+		nextPutAll: '====' , lf , 'Image change report ', aString, ' ', aSymbolDictionary name , lf , '====' , lf.
+	self addedClasses size ~~ 0
+		ifTrue: 
+			[self summaryReportStream
+				nextPutAll: '----' , lf , 'Added Classes:' , lf , '----' , lf.
+			self addedClasses sortAscending
+				do: [:ea | self summaryReportStream nextPutAll: ea , lf]].
+	self deletedClasses size ~~ 0
+		ifTrue: 
+			[self summaryReportStream
+				nextPutAll: '----' , lf , 'Deleted Classes:' , lf , '----' , lf.
+			self deletedClasses sortAscending
+				do: [:ea | self summaryReportStream nextPutAll: ea , lf]].
+	self addedMethods size ~~ 0
+		ifTrue: 
+			[self summaryReportStream
+				nextPutAll: '----' , lf , 'Added Methods:' , lf , '----' , lf.
+			self addedMethods sortAscending
+				do: [:ea | self summaryReportStream nextPutAll: ea , lf]].
+	self deletedMethods size ~~ 0
+		ifTrue: 
+			[self summaryReportStream
+				nextPutAll: '----' , lf , 'Deleted Methods' , lf , '----' , lf.
+			self deletedMethods sortAscending
+				do: [:ea | self summaryReportStream nextPutAll: ea , lf]].
+	self changedMethods size ~~ 0
+		ifTrue: 
+			[self summaryReportStream
+				nextPutAll: '----' , lf , 'Changed Methods' , lf , '----' , lf.
+			self changedMethods sortAscending
+				do: [:ea | self summaryReportStream nextPutAll: ea , lf]].
+	reportFile := GsFile
+				openWriteOnServer: (fName := (self fileNameFor: aSymbolDictionary
+								andUserId: aString) , '.changes.report').
+	reportFile == nil
+		ifTrue: [self error: 'Can''t open ' , fName , ' for writing.'].
+	reportFile
+		nextPutAll: self summaryReport;
+		close
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionaryComparer
+add: aSymbolDictionary forUserId: aString
+
+	((self symbolDictionaries includes: aSymbolDictionary)
+		or: [aSymbolDictionary _behaviorKeys isEmpty]) ifTrue: [^self].
+	self symbolDictionaries add: aSymbolDictionary.
+	(self userSymbolDictionaryMapping at: aString ifAbsentPut: [OrderedCollection new])
+		add: aSymbolDictionary
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionaryComparer
+addGlobals
+
+	self add: Globals forUserId: 'SystemUser'
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionaryComparer
+addSymbolListsForAllUsers
+
+	AllUsers do: 
+			[:user |
+			user symbolList
+				do: [:symbolDict | self add: symbolDict forUserId: user userId]]
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionaryComparer
+fileName: aString
+
+   fileName := aString
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionaryComparer
+targetDirectoryPath: aString
+
+   targetDirectoryPath := aString
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+addedClasses: someStrings
+
+	addedClasses := someStrings
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+addedMethods: someStrings
+
+	addedMethods := someStrings
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+changedMethods: someStrings
+
+	changedMethods := someStrings
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+deletedClasses: someStrings
+
+	deletedClasses := someStrings
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+deletedMethods: someStrings
+
+	deletedMethods := someStrings
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+summaryReportStream: aWriteStream
+
+	summaryReportStream := aWriteStream
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+symbolDictionaries: someSymbolDictionaries
+
+   symbolDictionaries := someSymbolDictionaries
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionaryComparer
+userSymbolDictionaryMapping: someSymbolDictionariesKeyedByUserId
+
+   userSymbolDictionaryMapping := someSymbolDictionariesKeyedByUserId
+%
+
+! Remove existing behavior from SymbolDictionaryDumper
+doit
+SymbolDictionaryDumper removeAllMethods.
+SymbolDictionaryDumper class removeAllMethods.
+%
+! ------------------- Class methods for SymbolDictionaryDumper
+category: 'Instance Creation'
+set compile_env: 0
+classmethod: SymbolDictionaryDumper
+forAllUsers
+
+	^self new
+		addSymbolListsForAllUsers;
+		yourself
+%
+category: 'Instance Creation'
+set compile_env: 0
+classmethod: SymbolDictionaryDumper
+forGlobalsOnly
+
+	^self new
+		addGlobals;
+		yourself
+%
+category: 'Instance Creation'
+set compile_env: 0
+classmethod: SymbolDictionaryDumper
+forMe
+
+	^self new
+		addMySymbolList;
+		yourself
+%
+category: 'Instance Creation'
+set compile_env: 0
+classmethod: SymbolDictionaryDumper
+forUserId: aString
+
+	^self new
+		addSymbolListForUserId: aString;
+		yourself
+%
+category: 'Instance Creation'
+set compile_env: 0
+classmethod: SymbolDictionaryDumper
+new
+
+	^super new
+		initialize;
+		yourself
+%
+! ------------------- Instance methods for SymbolDictionaryDumper
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionaryDumper
+fileName
+
+   ^fileName
+%
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionaryDumper
+symbolDictionaries
+
+   ^symbolDictionaries
+%
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionaryDumper
+targetDirectoryPath
+
+   ^targetDirectoryPath
+%
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionaryDumper
+userSymbolDictionaryMapping
+
+   ^userSymbolDictionaryMapping
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionaryDumper
+fileNameFor: aSymbolDictionary andUserId: aString
+
+	^self targetDirectoryPath, '/',
+		aString, '-', aSymbolDictionary name, '-', self fileName
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionaryDumper
+initialize
+
+	self
+		initializeUserSymbolDictionaryMapping;
+		initializeSymbolDictionaries;
+		initializeTargetDirectoryPath;
+		initializeFileName
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionaryDumper
+initializeFileName
+
+	self fileName: ((System gemVersionReport at: #gsRelease) copyReplaceAll: ' ' with: ''), '-sourceStrings.obj'.
+
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionaryDumper
+initializeSymbolDictionaries
+
+	self symbolDictionaries: IdentitySet new
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionaryDumper
+initializeTargetDirectoryPath
+
+	self targetDirectoryPath: '/tmp'
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionaryDumper
+initializeUserSymbolDictionaryMapping
+
+	self userSymbolDictionaryMapping: Dictionary new
+%
+category: 'Reporting'
+set compile_env: 0
+method: SymbolDictionaryDumper
+report
+
+	self userSymbolDictionaryMapping keysAndValuesDo: 
+			[:userId :symbolDicts |
+			symbolDicts
+				do: [:each | self reportSymbolDictionary: each forUserId: userId]]
+%
+category: 'Reporting'
+set compile_env: 0
+method: SymbolDictionaryDumper
+reportInto: aString
+
+	self
+		targetDirectoryPath: aString;
+		report
+%
+category: 'Reporting'
+set compile_env: 0
+method: SymbolDictionaryDumper
+reportIntoTimestampedDirectoryUnder: aString
+
+	| fullPath |
+	fullPath := aString, '/', self timestampDirectoryName.
+	(GsFile createServerDirectory: fullPath) isNil ifTrue: [self error: GsFile lastErrorString].
+	self reportInto: fullPath
+%
+category: 'Reporting'
+set compile_env: 0
+method: SymbolDictionaryDumper
+timestampDirectoryName
+
+	| in out insertion |
+	in := ReadStream on: DateAndTime now printString.
+	out := WriteStream on: (String new: 19).
+	out nextPutAll: (in next: 10).
+	insertion := $_.
+	3 timesRepeat: 
+			[in next.
+			out nextPut: insertion.
+			out nextPutAll: (in next: 2).
+			insertion := $.].
+	^out contents
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionaryDumper
+compileReportOfSymbolDictionary: aSymbolDictionary forUserId: aString
+	"Generate a Dictionary data structure containing all the source code for the classes
+	 in the specified Symbol Dictionary. The Dictionary produced by this method can be used by 
+	 to generate a report and/or a filein script to reconcile class differences between two versions
+	 of the image, or any number of other things."
+
+	| classes |
+	classes := Dictionary new.
+	(aSymbolDictionary select: [:each | each isKindOf: Behavior])
+		do: [:each | classes at: each nameForFileout put: (self flattenClassDetailsFor: each)].
+	^classes
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionaryDumper
+flattenClassDetailsFor: aClass
+
+	| classDetails |
+	classDetails := (Dictionary new)
+				at: 'class category' put: aClass category;
+				at: 'class comment' put: aClass comment;
+				at: 'class definition' put: aClass definition;
+				at: 'instance methods' put: Dictionary new;
+				at: 'class methods' put: Dictionary new;
+				yourself.
+	self
+		flattenMethodDictionaryFor: aClass
+			into: (classDetails at: 'instance methods');
+		flattenMethodDictionaryFor: aClass class
+			into: (classDetails at: 'class methods').
+	^classDetails
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionaryDumper
+flattenMethodDictionaryFor: aClass into: targetDict
+
+	aClass persistentMethodDictsDo: 
+			[:mDict |
+			mDict keysAndValuesDo: 
+					[:k :aMeth |
+					| envId aName |
+					envId := aMeth environmentId.
+					aName := envId == 0
+								ifTrue: [k]
+								ifFalse: [k asString , ':env_' , envId asString].
+					targetDict at: aName
+						put: (aClass categoryOfSelector: aName) -> aMeth sourceString]]
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionaryDumper
+reportSymbolDictionary: aSymbolDictionary forUserId: aString
+	"Generate a passivated data structure containing all the source code for the classes
+	 in the specified Symbol Dictionary. The file generated by this method can be used by 
+	 to generate a report and/or filein script to reconcile class differences between two versions
+	 of the image."
+
+	| classes outfile outfilename |
+	classes := self compileReportOfSymbolDictionary: aSymbolDictionary forUserId: aString.
+	outfilename := self fileNameFor: aSymbolDictionary andUserId: aString.
+	outfile := GsFile openWriteOnServer: outfilename.
+	outfile == nil ifTrue: [^'error opening outfile' , outfilename, ' (', GsFile lastErrorString asString, ')'].
+	(PassiveObject passivate: classes toStream: outfile) == nil
+		ifTrue: ['error writing outfile' , outfilename, ' (', GsFile lastErrorString asString, ')'].
+	outfile close.
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionaryDumper
+add: aSymbolDictionary forUserId: aString
+
+	((self symbolDictionaries includes: aSymbolDictionary)
+		or: [aSymbolDictionary _behaviorKeys isEmpty]) ifTrue: [^self].
+	self symbolDictionaries add: aSymbolDictionary.
+	(self userSymbolDictionaryMapping at: aString ifAbsentPut: [OrderedCollection new])
+		add: aSymbolDictionary
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionaryDumper
+addGlobals
+
+	self add: Globals forUserId: 'SystemUser'
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionaryDumper
+addMySymbolList
+
+	self addSymbolListForUserProfile: System myUserProfile.
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionaryDumper
+addSymbolListForUserId: aString
+
+	self addSymbolListForUserProfile: (System users detect: [:each | each userId = aString]).
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionaryDumper
+addSymbolListsForAllUsers
+
+	AllUsers do: 
+			[:user |
+			user symbolList
+				do: [:symbolDict | self add: symbolDict forUserId: user userId]]
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionaryDumper
+fileName: aString
+
+   fileName := aString
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionaryDumper
+targetDirectoryPath: aString
+
+   targetDirectoryPath := aString
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionaryDumper
+addSymbolListForUserProfile: aUserProfile
+
+	aUserProfile symbolList do: [:each | self add: each forUserId: aUserProfile userId]
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionaryDumper
+symbolDictionaries: someSymbolDictionaries
+
+   symbolDictionaries := someSymbolDictionaries
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionaryDumper
+userSymbolDictionaryMapping: someSymbolDictionariesKeyedByUserId
+
+   userSymbolDictionaryMapping := someSymbolDictionariesKeyedByUserId
+%
+
+! Remove existing behavior from SymbolDictionarySnapshotter
+doit
+SymbolDictionarySnapshotter removeAllMethods.
+SymbolDictionarySnapshotter class removeAllMethods.
+%
+! ------------------- Class methods for SymbolDictionarySnapshotter
+! ------------------- Instance methods for SymbolDictionarySnapshotter
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+snapshot
+
+   ^snapshot
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+snapshotDescription
+
+	^self snapshot at: 'Description' ifAbsent: ['']
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+initialize
+
+	super initialize.
+	self initializeSnapshot
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+initializeSnapshot
+
+	self snapshot: Dictionary new
+%
+category: 'Reporting'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+privateSnapshot
+	"Take a snapshot, saving it UserGlobals.
+	 Answer the snapshot."
+
+	^self
+		report;
+		saveInUserGlobals;
+		snapshot
+%
+category: 'Reporting'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+publicSnapshot
+	"Take a snapshot, saving it Globals.
+	 Answer the snapshot."
+
+	^self
+		report;
+		saveInGlobals;
+		snapshot
+%
+category: 'Reporting'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+report
+
+	self recordTimesWhile: [super report]
+%
+category: 'Reporting'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+reportInto: aString
+	"Snapshots are saved to the database, not the file system."
+
+	self shouldNotImplement: #reportInto:
+%
+category: 'Reporting'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+reportIntoTimestampedDirectoryUnder: aString
+	"Snapshots are saved to the database, not the file system."
+
+	self shouldNotImplement: #reportIntoTimestampedDirectoryUnder:
+%
+category: 'Reporting'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+temporarySnapshot
+	"Take a snapshot without saving it anywhere.
+	 Answer the snapshot."
+
+	^self
+		report;
+		snapshot
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+reportSymbolDictionary: aSymbolDictionary forUserId: aString
+
+	self record: (self compileReportOfSymbolDictionary: aSymbolDictionary forUserId: aString)
+		as: aSymbolDictionary name , '-' , aString
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+saveInGlobals
+
+	self saveSnapshotIn: Globals
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+saveInUserGlobals
+
+	self saveSnapshotIn: UserGlobals
+%
+category: 'Reporting - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+saveSnapshotIn: aSymbolDictionary
+
+	(aSymbolDictionary at: #'Source Code Snapshots' ifAbsentPut: [Dictionary new])
+		at: (self snapshot at: 'Finished at')
+		put: self snapshot.
+	System commit
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+add: aSymbolDictionary forUserId: aString
+
+	super add: aSymbolDictionary forUserId: aString.
+	self uniqueDescription: aSymbolDictionary name, '-', aString
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+addGlobals
+
+	super addGlobals.
+	self uniqueDescription: 'Globals only'.
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+addSymbolListsForAllUsers
+	"We need to record the user id when snapshotting everything,
+	 as the class definitions report whose SymbolDictionaries the class is in.
+	 This means some classes will report as (class not in your dictionaries) for
+	 different users requesting the snapshot."
+
+	super addSymbolListsForAllUsers.
+	self snapshotDescription: 'Everything-', System myUserProfile userId.
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+addSymbolListForUserProfile: aUserProfile
+
+	super addSymbolListForUserProfile: aUserProfile.
+	self snapshotDescription: aUserProfile userId, '''s SymbolList'.
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+describeSnapshotAsFromVariousSources
+
+	self snapshotDescription: '(various)'
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+record: anObject as: aString
+
+	self snapshot at: aString put: anObject
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+recordTimesWhile: aBlock
+
+	| start end elapsed |
+	self record: (start := DateAndTime now) as: 'Started at'.
+	aBlock value.
+	self record: (end := DateAndTime now) as: 'Finished at'.
+	self record: (elapsed := end - start) as: 'Elapsed time'.
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+snapshot: someFlattenedSymbolDictionaries
+
+   snapshot := someFlattenedSymbolDictionaries
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+snapshotDescription: aString
+
+	self record: aString as: 'Description'
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotter
+uniqueDescription: aString
+
+	self snapshotDescription isEmpty
+		ifTrue: [self snapshotDescription: aString]
+		ifFalse: [self describeSnapshotAsFromVariousSources]
+%
+
+! Remove existing behavior from SymbolDictionarySnapshotComparer
+doit
+SymbolDictionarySnapshotComparer removeAllMethods.
+SymbolDictionarySnapshotComparer class removeAllMethods.
+%
+! ------------------- Class methods for SymbolDictionarySnapshotComparer
+category: 'Comparing'
+set compile_env: 0
+classmethod: SymbolDictionarySnapshotComparer
+differencesBetween: oneSnapshot and: anotherSnapshot
+	"Answer a Dictionary keyed by 'older' and 'newer' for the two snapshots
+	 containing the subsets of each snapshot different from the other."
+
+	^(self comparing: oneSnapshot and: anotherSnapshot) differences
+%
+category: 'Instance Creation'
+set compile_env: 0
+classmethod: SymbolDictionarySnapshotComparer
+comparing: oneSnapshot and: anotherSnapshot
+
+	^self new
+		initializeFrom: oneSnapshot and: anotherSnapshot;
+		yourself
+%
+! ------------------- Instance methods for SymbolDictionarySnapshotComparer
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+ageOf: snapshot
+
+	^snapshot at: 'Finished at'
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+categoryNotAvailable
+
+	^'category not available' printString
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+commentNotAvailable
+
+	^'comment not available' printString
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+definitionNotAvailable
+
+	^'definition not available' printString
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+newerDiffs
+
+	^newerDiffs
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+newerSnapshot
+
+	^newerSnapshot
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+olderDiffs
+
+	^olderDiffs
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+olderSnapshot
+
+	^olderSnapshot
+%
+category: 'Comparing'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+differences
+	"Answer a Dictionary keyed by 'older' and 'newer' for the two snapshots
+	 containing the subsets of each snapshot different from the other."
+
+	self compareSnapshots.
+	^Dictionary new
+		at: 'older' put: self olderDiffs;
+		at: 'newer' put: self newerDiffs;
+		yourself
+%
+category: 'Comparing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+compare: aSnapshotDictionary to: anotherSnapshotDictionary into: aDifferencesDictionary and: anotherDifferencesDictionary
+
+	| combinedKeys |
+	combinedKeys := (Set new)
+				addAll: aSnapshotDictionary keys;
+				addAll: anotherSnapshotDictionary keys;
+				yourself.
+	combinedKeys do: 
+			[:each |
+			self
+				compareAtKey: each
+				from: aSnapshotDictionary
+				to: anotherSnapshotDictionary
+				into: aDifferencesDictionary
+				and: anotherDifferencesDictionary]
+%
+category: 'Comparing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+compareAtKey: key from: aSnapshotDictionary to: anotherSnapshotDictionary into: aDifferencesDictionary and: anotherDifferencesDictionary
+
+	| aSubset anotherSubset aNestedDiffs anotherNestedDiffs |
+	aSubset := aSnapshotDictionary at: key
+				ifAbsent: [^anotherDifferencesDictionary at: key put: (anotherSnapshotDictionary at: key)].
+	anotherSubset := anotherSnapshotDictionary at: key
+				ifAbsent: [^aDifferencesDictionary at: key put: aSubset].
+	aSubset class = Dictionary
+		ifTrue: 
+			[(aSubset includesKey: 'class definition')
+				ifTrue: 
+					[((aSubset at: 'class definition') = self definitionNotAvailable
+						or: [(aSubset at: 'class comment') = self commentNotAvailable
+						or: [(aSubset at: 'class category') = self categoryNotAvailable]])
+						ifTrue: 
+							[aSubset := aSubset deepCopy.
+							(aSubset at: 'class definition') = self definitionNotAvailable
+								ifTrue: [aSubset at: 'class definition' put: (anotherSubset at: 'class definition')].
+							(aSubset at: 'class comment') = self commentNotAvailable
+								ifTrue: [aSubset at: 'class comment' put: (anotherSubset at: 'class comment')].
+							(aSubset at: 'class category') = self categoryNotAvailable
+								ifTrue: [aSubset at: 'class category' put: (anotherSubset at: 'class category')]].
+					((anotherSubset at: 'class definition') = self definitionNotAvailable
+						or: [(anotherSubset at: 'class comment') = self commentNotAvailable
+						or: [(anotherSubset at: 'class category') = self categoryNotAvailable]])
+						ifTrue: 
+							[anotherSubset := anotherSubset deepCopy.
+							(anotherSubset at: 'class definition') = self definitionNotAvailable
+								ifTrue: [anotherSubset at: 'class definition' put: (aSubset at: 'class definition')].
+							(anotherSubset at: 'class comment') = self commentNotAvailable
+								ifTrue: [anotherSubset at: 'class comment' put: (aSubset at: 'class comment')].
+							(anotherSubset at: 'class category') = self categoryNotAvailable
+								ifTrue: [anotherSubset at: 'class category' put: (aSubset at: 'class category')]]].
+			aNestedDiffs := Dictionary new.
+			anotherNestedDiffs := Dictionary new.
+			self
+				compare: aSubset
+				to: anotherSubset
+				into: aNestedDiffs
+				and: anotherNestedDiffs.
+			(aNestedDiffs notEmpty or: [anotherNestedDiffs notEmpty])
+				ifTrue:
+					[(aNestedDiffs notEmpty or: [aDifferencesDictionary == self olderDiffs])
+						ifTrue: [aDifferencesDictionary at: key put: aNestedDiffs].
+					(anotherNestedDiffs notEmpty or: [anotherDifferencesDictionary == self newerDiffs])
+						ifTrue: [anotherDifferencesDictionary at: key put: anotherNestedDiffs]]]
+		ifFalse: 
+			["One of the snapshots might be imported from the old passivated classes code. Fix it up, if so."
+			((aSubset isKindOf: Association)
+				and: [anotherSubset isKindOf: Association])
+					ifTrue: 
+						[aSubset key = self categoryNotAvailable
+							ifTrue: [aSubset := Association newWithKey: anotherSubset key value: aSubset value].
+						anotherSubset key = self categoryNotAvailable
+							ifTrue: [anotherSubset := Association newWithKey: aSubset key value: anotherSubset value]].
+			aSubset = anotherSubset
+				ifFalse: 
+					[aDifferencesDictionary at: key put: aSubset.
+					anotherDifferencesDictionary at: key put: anotherSubset]]
+%
+category: 'Comparing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+compareSnapshots
+
+	self compare: self olderSnapshot to: self newerSnapshot into: self olderDiffs and: self newerDiffs
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+initializeFrom: oneSnapshot and: anotherSnapshot
+
+	(self ageOf: oneSnapshot) > (self ageOf: anotherSnapshot)
+		ifTrue: [^self initializeFrom: anotherSnapshot and: oneSnapshot].
+	self
+		olderSnapshot: oneSnapshot;
+		newerSnapshot: anotherSnapshot;
+		olderDiffs: Dictionary new;
+		newerDiffs: Dictionary new
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+newerDiffs: aDictionary
+
+	newerDiffs := aDictionary
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+newerSnapshot: aDictionary
+
+	newerSnapshot := aDictionary
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+olderDiffs: aDictionary
+
+	olderDiffs := aDictionary
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotComparer
+olderSnapshot: aDictionary
+
+	olderSnapshot := aDictionary
+%
+
+! Remove existing behavior from SymbolDictionarySnapshotManager
+doit
+SymbolDictionarySnapshotManager removeAllMethods.
+SymbolDictionarySnapshotManager class removeAllMethods.
+%
+! ------------------- Class methods for SymbolDictionarySnapshotManager
+category: 'Instance Creation'
+set compile_env: 0
+classmethod: SymbolDictionarySnapshotManager
+private
+
+	^self new
+		usePrivateRepository;
+		yourself
+%
+category: 'Instance Creation'
+set compile_env: 0
+classmethod: SymbolDictionarySnapshotManager
+public
+
+	^self new
+%
+category: 'Instance Creation - private'
+set compile_env: 0
+classmethod: SymbolDictionarySnapshotManager
+new
+
+	^super new
+		initialize;
+		yourself
+%
+! ------------------- Instance methods for SymbolDictionarySnapshotManager
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+availableSnapshotDescriptions
+
+	^(self repository values collect: [:each | self snapshotDescriptionOf: each]) sortDescending
+%
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+availableSnapshotTimestamps
+
+	^self repository keys sortAscending
+%
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+latestSnapshot
+
+	^self snapshotOf: self availableSnapshotTimestamps last
+%
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+possibleSourcesForNewSnapshot
+
+	^(Array with: 'Everything' with: 'My SymbolList')
+		, (System users asArray collect: [:each | self possibleSourceForUserId: each userId])
+%
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+privateSnapshotDescriptions
+
+	^self
+		usePrivateRepository;
+		availableSnapshotDescriptions
+%
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+publicSnapshotDescriptions
+
+	^self
+		usePublicRepository;
+		availableSnapshotDescriptions
+%
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+snapshotDescribedAs: aString
+
+	^self snapshotOf: (self repositoryKeyFromDescription: aString)
+%
+category: 'Accessing'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+snapshotOf: aDateAndTime
+	"It is an error to request a snapshot that doesn't exist."
+
+	^self repository at: aDateAndTime
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+descriptionForSnapshot: snapshot
+
+	^(snapshot at: 'Description' ifAbsent: [''])
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+possibleSourceForUserId: aString
+
+	^aString, '''s sources'
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+privateRepositorySource
+
+	^UserGlobals
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+publicRepositorySource
+
+	^Globals
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+repository
+
+	^repository
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+repositoryKeyForSnapshot: snapshot
+
+	^(snapshot at: 'Finished at')
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+repositoryKeyFromDescription: aString
+
+	^(DateAndTime fromString: aString asArrayOfSubstrings first)
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+snapshotDescriptionOf: snapshot
+
+	^(self repositoryKeyForSnapshot: snapshot) printString, ' ', (self descriptionForSnapshot: snapshot)
+%
+category: 'Accessing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+userProfileCorrespondingToSourceDescription: aString
+
+	^System users
+		detect: [:each | aString = (self possibleSourceForUserId: each userId)]
+%
+category: 'Comparing'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+compareSnapshotDescribedAs: aSnapshotDescription against: alternateSnapshotDescription
+
+	^self differencesBetween: (self snapshotDescribedAs: aSnapshotDescription)
+		and: (self snapshotDescribedAs: alternateSnapshotDescription)
+%
+category: 'Comparing'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+compareSnapshotDescribedAs: aSnapshotDescription againstLatestFromSourceMatching: aString
+
+	^self differencesBetween: (self snapshotDescribedAs: aSnapshotDescription)
+		and: (self snapshotFromSourceMatching: aString)
+%
+category: 'Comparing'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+differencesBetween: oneSnapshot and: anotherSnapshot
+	"Answer a Dictionary keyed by 'older' and 'newer' for the two snapshots
+	 containing the subsets of each snapshot different from the other."
+
+	^SymbolDictionarySnapshotComparer
+		differencesBetween: oneSnapshot
+		and: anotherSnapshot
+%
+category: 'Comparing'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+latestDifferencesForAllUsers
+
+	^self differencesBetween: self latestSnapshot and: self allUsersSnapshot
+%
+category: 'Importing/Exporting'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+exportSnapshotDescribedAs: aString toFileNamed: aPathName onClient: aBoolean
+
+	| snapshot exportFile |
+	snapshot := self snapshotOf: (self repositoryKeyFromDescription: aString).
+	(exportFile := GsFile open: aPathName mode: 'w' onClient: aBoolean)
+		ifNil: [self error: 'opening export' onFileNamed: aPathName].
+	(PassiveObject passivate: snapshot toStream: exportFile)
+		ifNil: [self error: 'writing export' onFileNamed: aPathName].
+	exportFile close.
+	^aPathName
+%
+category: 'Importing/Exporting'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+importPassiveSourceFileFromFileNamed: aPathName onClient: aBoolean creationTimestamp: aDateAndTime
+
+	| inportFile sources |
+	(inportFile := GsFile open: aPathName mode: 'r' onClient: aBoolean)
+		ifNil: [self error: 'opening import' onFileNamed: aPathName].
+	sources := (PassiveObject newOnStream: inportFile) activate.
+	sources ifNil: [self error: 'reading import' onFileNamed: aPathName].
+	inportFile close.
+	self commitSnapshot: (self convertPassiveSources: sources toSnapshotFormatDated: aDateAndTime).
+%
+category: 'Importing/Exporting'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+importSnapshotFromFileNamed: aPathName onClient: aBoolean
+
+	| inportFile snapshot |
+	(inportFile := GsFile open: aPathName mode: 'r' onClient: aBoolean)
+		ifNil: [self error: 'opening import' onFileNamed: aPathName].
+	snapshot := (PassiveObject newOnStream: inportFile) activate.
+	snapshot ifNil: [self error: 'reading import' onFileNamed: aPathName].
+	inportFile close.
+	self commitSnapshot: snapshot.
+%
+category: 'Importing/Exporting - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+convertPassiveSources: sources toSnapshotFormatDated: aDateAndTime
+
+	| convertedSources |
+	convertedSources := sources collect: [:each |
+		Dictionary new
+			at: 'class category' put: 'category not available' printString;
+			at: 'class comment' put: 'comment not available' printString;
+			at: 'class definition' put: 'definition not available' printString;
+			at: 'instance methods' put: (each first collect: [:meth | 'category not available' printString -> meth]);
+			at: 'class methods' put: (each last collect: [:meth | 'category not available' printString -> meth]);
+			yourself
+	].
+	^Dictionary new
+		at: 'Description' put: 'Passive sources from build';
+		at: 'Finished at' put: aDateAndTime;
+		at: 'Globals-SystemUser' put: convertedSources;
+		yourself
+%
+category: 'Importing/Exporting - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+error: aString onFileNamed: aPathName
+
+	self error: 'error ', aString, ' file ', aPathName, ' (', GsFile lastErrorString asString, ')'
+%
+category: 'Initializing - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+initialize
+
+	self usePublicRepository
+%
+category: 'Single Trip Operations'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+availableSnapshotDescriptionsAfterDeletingSnapshotDescribedAs: aString
+
+	^self
+		deleteSnapshotDescribedAs: aString;
+		availableSnapshotDescriptions
+%
+category: 'Single Trip Operations'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+availableSnapshotDescriptionsAfterImportingSnapshotFromFileNamed: aPathName onClient: aBoolean
+
+	^self
+		importSnapshotFromFileNamed: aPathName onClient: aBoolean;
+		availableSnapshotDescriptions
+%
+category: 'Single Trip Operations'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+availableSnapshotDescriptionsAfterTakingSnapshotFromSourceMatching: aString
+
+	^self
+		takeSnapshotFromSourceMatching: aString;
+		availableSnapshotDescriptions
+%
+category: 'Snapshotting'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+allUsersSnapshot
+
+	^SymbolDictionarySnapshotter forAllUsers temporarySnapshot
+%
+category: 'Snapshotting'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+mySymbolListSnapshot
+
+	^SymbolDictionarySnapshotter forMe temporarySnapshot
+%
+category: 'Snapshotting'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+snapshotFromSourceMatching: aString
+
+	aString = 'Everything' ifTrue: [^self allUsersSnapshot].
+	aString = 'My SymbolList' ifTrue: [^self mySymbolListSnapshot].
+	^self symbolListSnapshotForUserProfile: (self userProfileCorrespondingToSourceDescription: aString)
+%
+category: 'Snapshotting'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+symbolListSnapshotForUserProfile: aUserProfile
+
+	^(SymbolDictionarySnapshotter forUserId: aUserProfile userId) temporarySnapshot
+%
+category: 'Snapshotting'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+takeAllUsersSnapshot
+
+	self commitSnapshot: self allUsersSnapshot
+%
+category: 'Snapshotting'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+takeMySymbolListSnapshot
+
+	self commitSnapshot: self mySymbolListSnapshot
+%
+category: 'Snapshotting'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+takePrivateSnapshotForAllUsers
+
+	self updatePrivateRepositoryUsing: [self takeAllUsersSnapshot]
+%
+category: 'Snapshotting'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+takePublicSnapshotForAllUsers
+
+	self updatePublicRepositoryUsing: [self takeAllUsersSnapshot]
+%
+category: 'Snapshotting'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+takeSnapshotFromSourceMatching: aString
+
+	self commitSnapshot: (self snapshotFromSourceMatching: aString)
+%
+category: 'Snapshotting - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+commitSnapshot: snapshot
+
+	self repository at: (self repositoryKeyForSnapshot: snapshot) put: snapshot.
+	System commit
+%
+category: 'Snapshotting - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+updatePrivateRepositoryUsing: aBlock
+
+	self updateRepositoryFrom: self privateRepositorySource using: aBlock
+%
+category: 'Snapshotting - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+updatePublicRepositoryUsing: aBlock
+
+	self updateRepositoryFrom: self publicRepositorySource using: aBlock
+%
+category: 'Snapshotting - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+updateRepositoryFrom: aSymbolDictionary using: aBlock
+
+	| currentRepository |
+	currentRepository := self repository.
+	self useRepositoryFrom: aSymbolDictionary.
+	aBlock value.
+	self repository: currentRepository.
+
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+deleteSnapshot: snapshot
+	"It is an error to delete a snapshot that doesn't exist."
+
+	self deleteSnapshotOf: (self repositoryKeyForSnapshot: snapshot)
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+deleteSnapshotDescribedAs: aString
+
+	self deleteSnapshotOf: (self repositoryKeyFromDescription: aString).
+	System commit
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+deleteSnapshotOf: aDateAndTime
+	"It is an error to delete a snapshot that doesn't exist."
+
+	self repository removeKey: aDateAndTime
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+usePrivateRepository
+
+	self useRepositoryFrom: self privateRepositorySource
+%
+category: 'Updating'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+usePublicRepository
+
+	self useRepositoryFrom: self publicRepositorySource
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+repository: aDictionary
+
+	repository := aDictionary
+%
+category: 'Updating - private'
+set compile_env: 0
+method: SymbolDictionarySnapshotManager
+useRepositoryFrom: aSymbolDictionary
+
+	self repository: (aSymbolDictionary at: #'Source Code Snapshots' ifAbsentPut: [Dictionary new])
+%
+
+
+
+
+
+
 !
 ! From ! GEMSTONE: 3.2.0, Thu Jun 20 14:06:03 2013 rsargent private build; IMAGE: GemStone/S64 v3.2.0 kernel classes filein completed at 20/06/2013 14:15:17
 
@@ -4174,9 +6572,9 @@ method: CypressExtensionsTest
 test_escapePercents
 
 	self
-		assert: 'aa aa éé aa aa' encodeAsUTF8 escapePercents
+		assert: 'aa aa Ã©Ã© aa aa' encodeAsUTF8 escapePercents
 			equals: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa';
-		assert: 'aa aa éé aa aa' escapePercents
+		assert: 'aa aa Ã©Ã© aa aa' escapePercents
 			equals: 'aa%20aa%20%E9%E9%20aa%20aa'
 %
 category: 'tests'
@@ -4265,9 +6663,9 @@ test_unescapePercents
 
 	self
 		assert: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa'  unescapePercents asByteArray decodeFromUTF8 asString
-			equals: 'aa aa éé aa aa';
+			equals: 'aa aa Ã©Ã© aa aa';
 		assert: 'aa%20aa%20%E9%E9%20aa%20aa' unescapePercents
-			equals: 'aa aa éé aa aa' asUnicodeString
+			equals: 'aa aa Ã©Ã© aa aa' asUnicodeString
 %
 category: 'tests'
 set compile_env: 0
