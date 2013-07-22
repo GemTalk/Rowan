@@ -1,5 +1,5 @@
 ! Package: Cypress-Structure
-! Written: 2013-07-19T16:39:15.07481098175049-07:00
+! Written: 2013-07-22T12:46:56.85497808456421-07:00
 
 
 ! Remove existing behavior from package Cypress-Structure
@@ -919,6 +919,7 @@ asCypressClassDefinition
 		instVarNames: self instanceVariableNames
 		classInstVarNames: self classInstanceVariableNames
 		classVarNames: self classVariableNames
+		poolDictionaryNames: self poolDictionaryNames
 		comment: self comment
 %
 
@@ -1034,7 +1035,8 @@ fromClassDefinition: classDefinition
 		superclassName: classDefinition superclassName;
 		instanceVariableNames: classDefinition instVarNames;
 		classInstanceVariableNames: classDefinition classInstVarNames;
-		classVariableNames: classDefinition classVarNames.
+		classVariableNames: classDefinition classVarNames;
+		poolDictionaryNames: classDefinition poolDictionaryNames.
 %
 
 category: 'initialization'
@@ -1133,6 +1135,30 @@ method: CypressClassStructure
 name: aString
 
 	self properties at: 'name' put: aString
+%
+
+category: 'converting'
+set compile_env: 0
+method: CypressClassStructure
+poolDictionariesString
+
+	^self stringForVariables: self poolDictionaryNames
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressClassStructure
+poolDictionaryNames
+
+	^self properties at: 'pooldictionaries' ifAbsent: [#()]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressClassStructure
+poolDictionaryNames: someStrings
+
+	^self properties at: 'pooldictionaries' put: someStrings
 %
 
 category: 'private'

@@ -1,5 +1,5 @@
 ! Package: Cypress-Definitions
-! Written: 2013-07-19T16:39:15.05640292167664-07:00
+! Written: 2013-07-22T12:46:56.82775211334229-07:00
 
 
 ! Remove existing behavior from package Cypress-Definitions
@@ -284,7 +284,7 @@ doit
 doit
 (CypressDefinition
 	subclass: 'CypressClassDefinition'
-	instVarNames: #( name superclassName category comment instVarNames classInstVarNames classVarNames )
+	instVarNames: #( name superclassName category comment instVarNames classInstVarNames classVarNames poolDictionaryNames )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -1250,6 +1250,23 @@ operations
 
 ! ------------------- Class methods for CypressPackageDefinition
 
+category: 'unknown'
+set compile_env: 0
+classmethod: CypressPackageDefinition
+fileOutsForPackagesNamed: someNames
+
+	^someNames inject: Dictionary new
+		into: 
+			[:result :each |
+			result
+				at: each
+					put: (String streamContents: 
+								[:stream |
+								(CypressPackageStructure fromPackage: (self named: each))
+									fileOutOn: stream]);
+				yourself]
+%
+
 category: 'instance creation'
 set compile_env: 0
 classmethod: CypressPackageDefinition
@@ -1871,7 +1888,7 @@ unloadDefinition
 category: 'instance creation'
 set compile_env: 0
 classmethod: CypressClassDefinition
-name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames comment: aComment
+name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment
 
 	^self new
 		name: aClassName asString
@@ -1882,6 +1899,8 @@ name: aClassName superclassName: aSuperclassName category: aCategory instVarName
 		classInstVarNames: (someClassInstanceVariableNames asArray
 				collect: [:each | each asString])
 		classVarNames: (someClassVariableNames asArray
+				collect: [:each | each asString])
+		poolDictionaryNames: (somePoolDictionaryNames asArray
 				collect: [:each | each asString])
 		comment: (self normalizeLineEndings: aComment)
 %
@@ -1898,7 +1917,8 @@ method: CypressClassDefinition
 		and: [instVarNames = aDefinition instVarNames
 		and: [classInstVarNames = aDefinition classInstVarNames
 		and: [classVarNames = aDefinition classVarNames
-		and: [comment = aDefinition comment]]]]]]
+		and: [poolDictionaryNames = aDefinition poolDictionaryNames
+		and: [comment = aDefinition comment]]]]]]]
 %
 
 category: 'loading'
@@ -2044,7 +2064,7 @@ hash
 	hash := name hash.
 	hash := superclassName hash bitOr: hash.
 	hash := (category ifNil: ['']) hash bitOr: hash.
-	instVarNames , classInstVarNames, classVarNames
+	instVarNames , classInstVarNames, classVarNames, poolDictionaryNames
 		do: [:vName | hash := vName hash bitOr: hash].
 	^hash
 %
@@ -2093,7 +2113,7 @@ name
 category: 'initialization'
 set compile_env: 0
 method: CypressClassDefinition
-name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames comment: aComment
+name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment
 
 	name := aClassName.
 	superclassName := aSuperclassName.
@@ -2101,7 +2121,24 @@ name: aClassName superclassName: aSuperclassName category: aCategory instVarName
 	instVarNames := someInstanceVariableNames.
 	classInstVarNames := someClassInstanceVariableNames.
 	classVarNames := someClassVariableNames.
+	poolDictionaryNames := somePoolDictionaryNames.
 	comment := aComment
+%
+
+category: 'private'
+set compile_env: 0
+method: CypressClassDefinition
+poolDictionariesString
+
+	^self stringForVariables: self poolDictionaryNames
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressClassDefinition
+poolDictionaryNames
+
+	^poolDictionaryNames
 %
 
 category: 'printString'
@@ -2603,6 +2640,7 @@ asCypressClassDefinition
 		instVarNames: self instVarNames
 		classInstVarNames: self class instVarNames
 		classVarNames: self classVarNames
+		poolDictionaryNames: self sharedPools
 		comment: self comment.
 %
 

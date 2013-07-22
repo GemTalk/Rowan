@@ -1,5 +1,5 @@
 ! Package: Cypress-Tests
-! Written: 2013-07-19T16:39:15.08403706550598-07:00
+! Written: 2013-07-22T12:46:56.86819005012512-07:00
 
 
 ! Remove existing behavior from package Cypress-Tests
@@ -166,6 +166,7 @@ baseDefinitions
 			instVarNames: #('name')
 			classInstVarNames: #('current')
 			classVarNames: #('Something')
+			poolDictionaryNames: #()
 			comment: 'This mock contains basic class and instance method selectors'.
 		CypressMethodDefinition
 			className: className
@@ -283,6 +284,8 @@ basePackageStructureJson
 				"instvars" : [
 					"name" ],
 				"name" : "CypressMockBasic",
+				"pooldictionaries" : [
+					 ],
 				"super" : "Object" }
 		 },
 		{
@@ -319,6 +322,7 @@ baseTargetPatch
 				instVarNames: #('name')
 				classInstVarNames: #('current')
 				classVarNames: #('Something')
+				poolDictionaryNames: #()
 				comment: 'This mock contains basic class and instance method selectors')
 			to: (CypressClassDefinition
 				name: className
@@ -327,6 +331,7 @@ baseTargetPatch
 				instVarNames: #('name')
 				classInstVarNames: #('current')
 				classVarNames: #()
+				poolDictionaryNames: #()
 				comment: 'This mock contains basic class and instance method selectors').
 		CypressAddition
 			of: (CypressMethodDefinition
@@ -381,6 +386,7 @@ baseTargetPatch
 				instVarNames: #('anotherIV')
 				classInstVarNames: #('anotherCIV')
 				classVarNames: #()
+				poolDictionaryNames: #()
 				comment: 'Hacked subclass to test class loading and unloading').
 		CypressAddition
 			of: (CypressMethodDefinition
@@ -427,6 +433,7 @@ targetDefinitions
 			instVarNames: #('name')
 			classInstVarNames: #('current')
 			classVarNames: #()
+			poolDictionaryNames: #()
 			comment: 'This mock contains basic class and instance method selectors'.
 		CypressMethodDefinition
 			className: className
@@ -493,6 +500,7 @@ targetDefinitions
 			instVarNames: #('anotherIV')
 			classInstVarNames: #('anotherCIV')
 			classVarNames: #()
+			poolDictionaryNames: #()
 			comment: 'Hacked subclass to test class loading and unloading'.
 		CypressMethodDefinition
 			className: className , 'Sub'
@@ -522,6 +530,7 @@ testClassDefinition
 					instVarNames: #()
 					classInstVarNames: #()
 					classVarNames: #()
+					poolDictionaryNames: #()
 					comment: '') printString
 		equals: 'a CypressClassDefinition(Foo)'
 %
@@ -611,6 +620,7 @@ erroneousClassDefinitions
 			instVarNames: #('name')
 			classInstVarNames: #()
 			classVarNames: #()
+			poolDictionaryNames: #()
 			comment: 'This class tries to define an instance variable which already exists in the superclass.'.
 	}
 %
@@ -735,6 +745,7 @@ unloadableDefinitions
 			instVarNames: #()
 			classInstVarNames: #()
 			classVarNames: #()
+			poolDictionaryNames: #()
 			comment: 'This class depends on a class that is intended to be missing.'.
 		CypressMethodDefinition
 			className: 'UnloadableClass'
@@ -901,7 +912,7 @@ testClassStructure
 	self deny: classStructure isClassExtension description: 'Class structure should not have been an extension'.
 	self assert: classStructure comment equals: 'This mock contains basic class and instance method selectors'.
 	classProperties := classStructure properties.
-	self assert: classProperties size equals: 5.
+	self assert: classProperties size equals: 6.
 	self assert: (classProperties at: 'instvars') equals: #('name').
 	self assert: (classProperties at: 'classinstvars') equals: #('current').
 	self assert: (classProperties at: 'name') equals: 'CypressMockBasic'.
@@ -1107,9 +1118,9 @@ method: CypressExtensionsTest
 test_escapePercents
 
 	self
-		assert: 'aa aa Ã©Ã© aa aa' encodeAsUTF8 escapePercents
+		assert: 'aa aa éé aa aa' encodeAsUTF8 escapePercents
 			equals: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa';
-		assert: 'aa aa Ã©Ã© aa aa' escapePercents
+		assert: 'aa aa éé aa aa' escapePercents
 			equals: 'aa%20aa%20%E9%E9%20aa%20aa'
 %
 
@@ -1205,9 +1216,9 @@ test_unescapePercents
 
 	self
 		assert: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa'  unescapePercents asByteArray decodeFromUTF8 asString
-			equals: 'aa aa Ã©Ã© aa aa';
+			equals: 'aa aa éé aa aa';
 		assert: 'aa%20aa%20%E9%E9%20aa%20aa' unescapePercents
-			equals: 'aa aa Ã©Ã© aa aa' asUnicodeString
+			equals: 'aa aa éé aa aa' asUnicodeString
 %
 
 category: 'tests'
