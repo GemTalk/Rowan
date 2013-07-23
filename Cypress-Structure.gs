@@ -1,5 +1,5 @@
 ! Package: Cypress-Structure
-! Written: 2013-07-22T12:46:56.85497808456421-07:00
+! Written: 2013-07-23T16:34:40.58666896820068-07:00
 
 
 ! Remove existing behavior from package Cypress-Structure
@@ -136,6 +136,16 @@ fromJs: jsObject
 
 	^(self new) 
 		fromJs: jsObject asCypressPropertyObject;
+		yourself
+%
+
+category: 'instance creation'
+set compile_env: 0
+classmethod: CypressStructure
+named: aString
+
+	^(self new)
+		name: aString;
 		yourself
 %
 
@@ -576,7 +586,8 @@ fromPackage: aCypressPackageDefinition
 					put: methodStructure ].
 		self classes add: classStructure ].
 	classMap keysAndValuesDo: [:className :methods |
-		classStructure := (CypressClassStructure new name: className)
+		classStructure := (CypressClassStructure named: className)
+			isClassExtension: true;
 			packageStructure: self.
 		methods do: [:methodDefinition | | methodStructure |
 			methodStructure := (CypressMethodStructure fromMethodDefinition: methodDefinition)
@@ -962,7 +973,7 @@ classMethodNamed: methodName
 
 	^self classMethods
 		at: methodName
-		ifAbsentPut: [CypressMethodStructure new name: methodName]
+		ifAbsentPut: [CypressMethodStructure named: methodName]
 %
 
 category: 'accessing'
@@ -1068,7 +1079,7 @@ instanceMethodNamed: methodName
 
 	^self instanceMethods
 		at: methodName 
-		ifAbsentPut: [CypressMethodStructure new name: methodName]
+		ifAbsentPut: [CypressMethodStructure named: methodName]
 %
 
 category: 'accessing'
@@ -1150,7 +1161,7 @@ set compile_env: 0
 method: CypressClassStructure
 poolDictionaryNames
 
-	^self properties at: 'pooldictionaries' ifAbsent: [#()]
+	^self properties at: 'pools' ifAbsent: [#()]
 %
 
 category: 'accessing'
@@ -1158,7 +1169,7 @@ set compile_env: 0
 method: CypressClassStructure
 poolDictionaryNames: someStrings
 
-	^self properties at: 'pooldictionaries' put: someStrings
+	^self properties at: 'pools' put: someStrings
 %
 
 category: 'private'
@@ -2004,6 +2015,14 @@ method: Object
 asCypressPropertyObject
 
 	^self
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+method: Object
+writeCypressJsonOn: fileStream
+
+	self writeCypressJsonOn: fileStream indent: 0
 %
 
 ! Class Extension for SortedCollection
