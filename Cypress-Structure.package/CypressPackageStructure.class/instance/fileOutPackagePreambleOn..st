@@ -3,7 +3,6 @@ fileOutPackagePreambleOn: aStream
 
 	aStream
 		nextPutAll: '! Package: ', self packageName; lf;
-		nextPutAll: '! Written: ', DateAndTime now printString; lf;
 		lf;
 		lf;
 		nextPutAll: '! Remove existing behavior from package ', self packageName; lf;
