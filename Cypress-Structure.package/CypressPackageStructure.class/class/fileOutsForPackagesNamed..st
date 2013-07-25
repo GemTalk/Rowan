@@ -1,4 +1,4 @@
-unknown
+instance creation
 fileOutsForPackagesNamed: someNames
 
 	^someNames inject: Dictionary new
@@ -8,6 +8,6 @@ fileOutsForPackagesNamed: someNames
 				at: each
 					put: (String streamContents: 
 								[:stream |
-								(CypressPackageStructure fromPackage: (self named: each))
+								(self fromPackage: (CypressPackageDefinition named: each))
 									fileOutOn: stream]);
 				yourself]
