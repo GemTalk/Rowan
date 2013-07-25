@@ -14,11 +14,11 @@ fileOuts keysAndValuesDo: [:packageName :fileOut |
 "
 CypressPackageWriter 
 	writePackageStructure: (CypressPackageStructure fromPackage: (CypressPackageDefinition named: 'Cypress-Mocks')) 
-	to: '/home/rsargent/cypress/'
+	to: '/opt/git/CypressReferenceImplementation'
 "
 "
 CypressPackageReader 
-	readPackageStructureFrom: '/home/rsargent/cypress/Cypress-Mocks.package'
+	readPackageStructureFrom: '/opt/git/CypressReferenceImplementation/Cypress-Mocks.package'
 "
 "
 | path packages fileOuts |
