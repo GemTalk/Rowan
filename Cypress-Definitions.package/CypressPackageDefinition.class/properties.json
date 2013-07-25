@@ -1,0 +1,11 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"name" ],
+	"name" : "CypressPackageDefinition",
+	"pools" : [
+		 ],
+	"super" : "CypressObject" }

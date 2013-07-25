@@ -1,0 +1,13 @@
+{
+	"classinstvars" : [
+		"specials" ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"packageDirectory",
+		"packageStructure",
+		"rootDirectory" ],
+	"name" : "CypressPackageWriter",
+	"pools" : [
+		 ],
+	"super" : "Object" }

@@ -1,0 +1,4 @@
+loading
+notifyOnFailedPatchOperations
+
+	exceptionClass := CypressLoaderErrorNotification.

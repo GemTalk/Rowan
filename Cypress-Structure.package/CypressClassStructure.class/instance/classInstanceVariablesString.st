@@ -1,0 +1,4 @@
+converting
+classInstanceVariablesString
+
+	^self stringForVariables: self classInstanceVariableNames

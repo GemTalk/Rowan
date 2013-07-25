@@ -1,0 +1,12 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"patchOperation",
+		"exception" ],
+	"name" : "CypressLoaderErrorNotification",
+	"pools" : [
+		 ],
+	"super" : "Notification" }

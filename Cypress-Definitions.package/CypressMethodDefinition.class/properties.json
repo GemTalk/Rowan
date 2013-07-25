@@ -1,0 +1,15 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"classIsMeta",
+		"source",
+		"category",
+		"selector",
+		"className" ],
+	"name" : "CypressMethodDefinition",
+	"pools" : [
+		 ],
+	"super" : "CypressDefinition" }

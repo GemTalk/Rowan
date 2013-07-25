@@ -1,0 +1,4 @@
+reading
+read
+
+	self readPackageStructure

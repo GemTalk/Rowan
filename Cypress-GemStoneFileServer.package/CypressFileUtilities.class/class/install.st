@@ -1,0 +1,4 @@
+initializating
+install
+
+	Current := self

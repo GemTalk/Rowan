@@ -1,0 +1,11 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"definition" ],
+	"name" : "CypressRemoval",
+	"pools" : [
+		 ],
+	"super" : "CypressPatchOperation" }

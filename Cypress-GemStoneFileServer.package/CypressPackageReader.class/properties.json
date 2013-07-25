@@ -1,0 +1,12 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"packageDirectory",
+		"packageStructure" ],
+	"name" : "CypressPackageReader",
+	"pools" : [
+		 ],
+	"super" : "Object" }

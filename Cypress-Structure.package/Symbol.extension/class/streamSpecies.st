@@ -1,0 +1,4 @@
+*Cypress-Structure
+streamSpecies
+
+	^String

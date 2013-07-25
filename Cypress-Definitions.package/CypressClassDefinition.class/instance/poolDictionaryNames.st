@@ -1,0 +1,4 @@
+accessing
+poolDictionaryNames
+
+	^poolDictionaryNames

@@ -1,0 +1,4 @@
+loading
+errorOnFailedPatchOperations
+
+	exceptionClass := CypressLoaderError.

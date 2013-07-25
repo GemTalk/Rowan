@@ -1,0 +1,14 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"instanceMethods",
+		"classMethods",
+		"comment",
+		"isClassExtension" ],
+	"name" : "CypressClassStructure",
+	"pools" : [
+		 ],
+	"super" : "CypressStructure" }

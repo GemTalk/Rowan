@@ -1,0 +1,11 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "CypressGemStoneDirectoryUtilities",
+	"pools" : [
+		 ],
+	"super" : "CypressFileUtilities" }

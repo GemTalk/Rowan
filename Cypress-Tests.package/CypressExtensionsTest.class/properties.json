@@ -1,0 +1,11 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "CypressExtensionsTest",
+	"pools" : [
+		 ],
+	"super" : "CypressAbstractTest" }

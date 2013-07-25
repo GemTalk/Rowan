@@ -1,0 +1,13 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"required",
+		"provided",
+		"orderedItems" ],
+	"name" : "CypressDependencySorter",
+	"pools" : [
+		 ],
+	"super" : "CypressObject" }

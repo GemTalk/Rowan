@@ -1,0 +1,4 @@
+utilities
+directoryEntriesFrom: aDirectory
+
+	self subclassResponsibility
