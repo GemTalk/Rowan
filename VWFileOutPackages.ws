@@ -1,7 +1,7 @@
 "
 | path packages fileOuts |
 packages := #('Cypress-Definitions' 'Cypress-Mocks' 'Cypress-Structure' 'Cypress-Tests' 'Cypress-GemStoneFileServer').
-path := 'C:\Users\rsargent\Documents\VisualWorks Projects\CypressReferenceImplementation\'.
+path := 'C:\CypressReferenceImplementation\'.
 fileOuts := GBSM currentSession
 		evaluate: 'CypressPackageDefinition fileOutsForPackagesNamed: self'
 		context: packages.
@@ -23,7 +23,7 @@ CypressPackageReader
 "
 | path packages fileOuts |
 packages := #('Cypress-Definitions' 'Cypress-Mocks' 'Cypress-Structure' 'Cypress-Tests' 'Cypress-GemStoneFileServer').
-path := '/home/rsargent/cypress/'.
+path := '/opt/git/CypressReferenceImplementation'.
 packages do: [:each |
 	CypressPackageWriter 
 		writePackageStructure: (CypressPackageStructure fromPackage: (CypressPackageDefinition named: each)) 
