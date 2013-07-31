@@ -1,6 +1,6 @@
 | path packageNames packages fileOuts |
 path := '/opt/git/CypressReferenceImplementation'.
-packageNames := #('Cypress-Definitions' 'Cypress-Mocks' 'Cypress-Structure' 'Cypress-Tests' 'Cypress-GemStoneFileServer').
+packageNames := #('Cypress-Definitions' 'Cypress-Mocks' 'Cypress-Structure' 'Cypress-Tests' 'Cypress-GemStoneFileServer' 'Cypress-Comparison').
 
 packages := packageNames collect: 
 				[:each |

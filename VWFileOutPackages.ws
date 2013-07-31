@@ -14,7 +14,7 @@ fileOuts keysAndValuesDo: [:packageName :fileOut |
 "
 CypressPackageWriter 
 	writePackageStructure: (CypressPackageStructure fromPackage: (CypressPackageDefinition named: 'Cypress-Mocks')) 
-	to: '/opt/git/CypressReferenceImplementation'
+	to: '/opt/git/CypressReferenceImplementation/'
 "
 "
 CypressPackageReader 
@@ -22,8 +22,8 @@ CypressPackageReader
 "
 "
 | path packages fileOuts |
-packages := #('Cypress-Definitions' 'Cypress-Mocks' 'Cypress-Structure' 'Cypress-Tests' 'Cypress-GemStoneFileServer').
-path := '/opt/git/CypressReferenceImplementation'.
+packages := #('Cypress-Definitions' 'Cypress-Mocks' 'Cypress-Structure' 'Cypress-Tests' 'Cypress-GemStoneFileServer' 'Cypress-Comparison').
+path := '/opt/git/CypressReferenceImplementation/'.
 packages do: [:each |
 	CypressPackageWriter 
 		writePackageStructure: (CypressPackageStructure fromPackage: (CypressPackageDefinition named: each)) 
