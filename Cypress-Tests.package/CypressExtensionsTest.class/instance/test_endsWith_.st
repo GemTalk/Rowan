@@ -5,7 +5,7 @@ test_endsWith_
 		assert: ('abc' endsWith: 'c');
 		deny: ('abc' endsWith: 'a');
 		assert: ('abc' endsWith: 'abc');
-		deny: ('abc' endsWith: 'xxxabc');
+		deny: ('abc' endsWith: 'xabc');
 		deny: ('abc' endsWith: '');
 		deny: ('' endsWith: 'abc');
 		deny: ('' endsWith: '')

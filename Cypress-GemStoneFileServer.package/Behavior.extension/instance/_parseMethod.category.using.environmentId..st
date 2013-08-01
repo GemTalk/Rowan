@@ -1,7 +1,8 @@
 *Cypress-GemStoneFileServer
 _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId
-	"Attempts auto-recompile for undefinedSymbols.
-	 Returns the compiled method or signals a CompileError"
+	"Compiles the method into disposable dictionaries, if possible.
+	 Attempts auto-recompile for undefinedSymbols.
+	 Returns the compiled method or signals a CompileError."
 
 	| undefinedSymbolList undefinedSymbols |
 	undefinedSymbols := SymbolDictionary new name: #UndefinedSymbols.
@@ -11,6 +12,9 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
 		compileMethod: source
 		dictionaries: aSymbolList
 		category: cat
+	       intoMethodDict: GsMethodDictionary new
+	       intoCategories: GsMethodDictionary new  
+	       intoPragmas: nil
 		environmentId: anEnvironmentId]
 			onSynchronous: (Array with: CompileError with: CompileWarning)
 			do: (Array with: 
@@ -32,6 +36,9 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
 									compileMethod: source
 									dictionaries: aSymbolList , undefinedSymbolList
 									category: cat
+								       intoMethodDict: GsMethodDictionary new
+								       intoCategories: GsMethodDictionary new
+								       intoPragmas: nil
 									environmentId: anEnvironmentId]
 										onException: CompileError
 										do: [:exb | undefSymbol := false]].

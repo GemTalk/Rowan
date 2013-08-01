@@ -1,5 +1,4 @@
 ! Package: Cypress-GemStoneFileServer
-! Written: 2013-07-23T16:34:40.61967706680298-07:00
 
 
 ! Remove existing behavior from package Cypress-GemStoneFileServer
@@ -228,7 +227,7 @@ classmethod: CypressGemStoneDirectoryUtilities
 directoryEntriesFrom: aDirectory
 	"Answer fully qualified paths to the contents of aDirectory."
 
-	^GsFile contentsOfDirectory: aDirectory onClient: false
+	^(GsFile contentsOfDirectory: aDirectory onClient: false) ifNil: [#()]
 %
 
 category: 'utilities'
@@ -295,11 +294,12 @@ set compile_env: 0
 classmethod: CypressGemStoneDirectoryUtilities
 readStreamFor: filePath do: aOneArgBlock
 
-	| file |
+	| file stream |
 	GsFile serverErrorString.
 	file := GsFile openReadOnServer: filePath.
 	GsFile serverErrorString ifNotNil: [:errorMessage | self error: errorMessage].
-	[aOneArgBlock value: file] ensure: [file close]
+	[stream := ReadStream on: (String withAll: file contents asByteArray decodeFromUTF8).
+	aOneArgBlock value: stream] ensure: [file close]
 %
 
 category: 'utilities'
@@ -317,11 +317,12 @@ set compile_env: 0
 classmethod: CypressGemStoneDirectoryUtilities
 writeStreamFor: filePath in: aDirectory do: aOneArgBlock
 
-	| file |
+	| file stream |
 	GsFile serverErrorString.
 	file := GsFile openWriteOnServer: (self directoryFromPath: filePath relativeTo: aDirectory).
 	GsFile serverErrorString ifNotNil: [:errorMessage | self error: errorMessage].
-	[aOneArgBlock value: file] ensure: [file close]
+	stream := WriteStream on: String new.
+	[aOneArgBlock value: stream] ensure: [file nextPutAll: stream contents encodeAsUTF8; close]
 %
 
 ! Class Implementation for CypressPackageWriter
@@ -393,7 +394,7 @@ fileNameForSelector: selector
 	^selector last = $:
 		ifTrue: [selector copyReplacing: $: with: $.]
 		ifFalse: 
-			[selector first isLetter
+			[(selector first isLetter or: [selector first = $_])
 				ifTrue: [selector]
 				ifFalse: 
 					[| specials |
@@ -546,10 +547,7 @@ writeInDirectoryName: directoryNameOrPath fileName: fileName extension: ext visi
 	self fileUtils
 		writeStreamFor: fileName , ext
 		in: directory
-		do: 
-			[:fileStream |
-			fileStream lineEndConvention: #lf.
-			visitBlock value: fileStream]
+		do: [:fileStream | visitBlock value: fileStream]
 %
 
 category: 'writing'
@@ -624,13 +622,21 @@ writePropertiesFile
 
 ! ------------------- Class methods for CypressPackageReader
 
+category: 'unknown'
+set compile_env: 0
+classmethod: CypressPackageReader
+readPackageStructureForPackageNamed: packageName from: aDirectory
+
+	^self readPackageStructureFrom: aDirectory, packageName, '.package'
+%
+
 category: 'instance creation'
 set compile_env: 0
 classmethod: CypressPackageReader
-readPackageStructureFrom: aPackagesDirectory
+readPackageStructureFrom: aPackageDirectory
 
 	^(self new)
-		packageDirectory: aPackagesDirectory;
+		packageDirectory: aPackageDirectory;
 		read;
 		yourself
 %
@@ -836,7 +842,7 @@ parseSelectorFrom: methodString
 	| meth |
 	meth := self
 				_parseMethod: methodString
-				category: 'xyzzy'
+				category: #'xyzzy'
 				using: GsSession currentSession symbolList
 				environmentId: 0.
 	meth class ~~ GsNMethod
@@ -851,8 +857,9 @@ category: '*Cypress-GemStoneFileServer'
 set compile_env: 0
 method: Behavior
 _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId
-	"Attempts auto-recompile for undefinedSymbols.
-	 Returns the compiled method or signals a CompileError"
+	"Compiles the method into disposable dictionaries, if possible.
+	 Attempts auto-recompile for undefinedSymbols.
+	 Returns the compiled method or signals a CompileError."
 
 	| undefinedSymbolList undefinedSymbols |
 	undefinedSymbols := SymbolDictionary new name: #UndefinedSymbols.
@@ -862,6 +869,9 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
 		compileMethod: source
 		dictionaries: aSymbolList
 		category: cat
+	       intoMethodDict: GsMethodDictionary new
+	       intoCategories: GsMethodDictionary new  
+	       intoPragmas: nil
 		environmentId: anEnvironmentId]
 			onSynchronous: (Array with: CompileError with: CompileWarning)
 			do: (Array with: 
@@ -883,6 +893,9 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
 									compileMethod: source
 									dictionaries: aSymbolList , undefinedSymbolList
 									category: cat
+								       intoMethodDict: GsMethodDictionary new
+								       intoCategories: GsMethodDictionary new
+								       intoPragmas: nil
 									environmentId: anEnvironmentId]
 										onException: CompileError
 										do: [:exb | undefSymbol := false]].
@@ -893,15 +906,6 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
 ! Class Extension for GsFile
 
 ! ------------------- Instance methods for GsFile
-
-category: '*Cypress-GemStoneFileServer'
-set compile_env: 0
-method: GsFile
-lineEndConvention: aSymbol
-
-	aSymbol = #lf ifTrue: [^self].
-	self error: 'GsFile does not support line end conventions other than #lf'
-%
 
 category: '*Cypress-GemStoneFileServer'
 set compile_env: 0

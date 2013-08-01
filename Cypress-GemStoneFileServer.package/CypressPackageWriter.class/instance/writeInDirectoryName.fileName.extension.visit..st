@@ -6,7 +6,4 @@ writeInDirectoryName: directoryNameOrPath fileName: fileName extension: ext visi
 	self fileUtils
 		writeStreamFor: fileName , ext
 		in: directory
-		do: 
-			[:fileStream |
-			fileStream lineEndConvention: #lf.
-			visitBlock value: fileStream]
+		do: [:fileStream | visitBlock value: fileStream]
