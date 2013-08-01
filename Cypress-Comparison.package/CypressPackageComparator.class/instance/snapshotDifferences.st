@@ -1,0 +1,4 @@
+accessing
+snapshotDifferences
+
+	^snapshotDifferences

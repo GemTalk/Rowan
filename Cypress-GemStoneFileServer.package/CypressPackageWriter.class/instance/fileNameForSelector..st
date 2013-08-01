@@ -4,7 +4,7 @@ fileNameForSelector: selector
 	^selector last = $:
 		ifTrue: [selector copyReplacing: $: with: $.]
 		ifFalse: 
-			[selector first isLetter
+			[(selector first isLetter or: [selector first = $_])
 				ifTrue: [selector]
 				ifFalse: 
 					[| specials |

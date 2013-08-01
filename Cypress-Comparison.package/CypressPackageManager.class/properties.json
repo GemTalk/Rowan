@@ -1,0 +1,12 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"knownPackages",
+		"packageInformationList" ],
+	"name" : "CypressPackageManager",
+	"pools" : [
+		 ],
+	"super" : "Object" }

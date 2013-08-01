@@ -1,0 +1,19 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"name",
+		"type",
+		"advice",
+		"competingPackageNames",
+		"imageDefinitions",
+		"savedDefinitions",
+		"savedLocation",
+		"imageCounts",
+		"changesCount" ],
+	"name" : "CypressPackageInformation",
+	"pools" : [
+		 ],
+	"super" : "CypressObject" }

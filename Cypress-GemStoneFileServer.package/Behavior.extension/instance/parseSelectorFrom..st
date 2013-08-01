@@ -4,7 +4,7 @@ parseSelectorFrom: methodString
 	| meth |
 	meth := self
 				_parseMethod: methodString
-				category: 'xyzzy'
+				category: #'xyzzy'
 				using: GsSession currentSession symbolList
 				environmentId: 0.
 	meth class ~~ GsNMethod

@@ -1,5 +1,4 @@
 ! Package: Cypress-Structure
-! Written: 2013-07-23T16:34:40.58666896820068-07:00
 
 
 ! Remove existing behavior from package Cypress-Structure
@@ -249,6 +248,23 @@ writeJsonOn: aStream  indent: indent
 category: 'instance creation'
 set compile_env: 0
 classmethod: CypressPackageStructure
+fileOutsForPackagesNamed: someNames
+
+	^someNames inject: Dictionary new
+		into: 
+			[:result :each |
+			result
+				at: each
+					put: (String streamContents: 
+								[:stream |
+								(self fromPackage: (CypressPackageDefinition named: each))
+									fileOutOn: stream]);
+				yourself]
+%
+
+category: 'instance creation'
+set compile_env: 0
+classmethod: CypressPackageStructure
 fromJson: aJsonString
 
 	^self fromJs: (CypressJsonParser parse: aJsonString)
@@ -463,7 +479,6 @@ fileOutPackagePreambleOn: aStream
 
 	aStream
 		nextPutAll: '! Package: ', self packageName; lf;
-		nextPutAll: '! Written: ', DateAndTime now printString; lf;
 		lf;
 		lf;
 		nextPutAll: '! Remove existing behavior from package ', self packageName; lf;
@@ -1938,9 +1953,10 @@ method: SequenceableCollection
 endsWith: aSequence
 	"Answer whether the last elements of the receiver are the same as aSequence."
 
-	^(self indexOfSubCollection: aSequence
-		startingAt: (self size - aSequence size max: 1))
-			= (self size - aSequence size + 1)
+	| expectedStart |
+	expectedStart := self size - aSequence size + 1 max: 1.
+	^expectedStart
+		= (self indexOfSubCollection: aSequence startingAt: expectedStart)
 %
 
 category: '*Cypress-Structure'

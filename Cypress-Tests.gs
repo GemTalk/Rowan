@@ -1,5 +1,4 @@
 ! Package: Cypress-Tests
-! Written: 2013-07-23T16:34:40.60470509529114-07:00
 
 
 ! Remove existing behavior from package Cypress-Tests
@@ -1046,7 +1045,7 @@ test_beginsWith_
 		assert: ('abc' beginsWith: 'a');
 		deny: ('abc' beginsWith: 'c');
 		assert: ('abc' beginsWith: 'abc');
-		deny: ('abc' beginsWith: 'abcxxx');
+		deny: ('abc' beginsWith: 'abcx');
 		deny: ('abc' beginsWith: '');
 		deny: ('' beginsWith: 'abc');
 		deny: ('' beginsWith: '')
@@ -1106,7 +1105,7 @@ test_endsWith_
 		assert: ('abc' endsWith: 'c');
 		deny: ('abc' endsWith: 'a');
 		assert: ('abc' endsWith: 'abc');
-		deny: ('abc' endsWith: 'xxxabc');
+		deny: ('abc' endsWith: 'xabc');
 		deny: ('abc' endsWith: '');
 		deny: ('' endsWith: 'abc');
 		deny: ('' endsWith: '')
@@ -1194,6 +1193,37 @@ test_intersection_
 		assert: (#(1 2 3) intersection: #(2 3 4)) sortAscending equals: #(2 3);
 		assert: (#(1 2 3) intersection: #(3 4 5)) sortAscending equals: #(3);
 		assert: (#(1 2 3) intersection: #(4 5 6)) sortAscending equals: #()
+%
+
+category: 'tests'
+set compile_env: 0
+method: CypressExtensionsTest
+test_parseSelectorFrom_
+
+	self
+		assert: (UndefinedObject parseSelectorFrom: 'a') equals: 'a';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: 'a self halt') equals: 'a';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: 'a: something') equals: 'a:';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: 'a: something b: else') equals: 'a:b:';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: '= another ^false') equals: '=';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: '=@= another ^false') equals: '=@=';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+
+		assert: (UndefinedObject parseSelectorFrom: 'a ^undefined') equals: 'a';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: 'a: something undefined := something') equals: 'a:';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: 'a: something b: else ^something =@= else') equals: 'a:b:';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: '= another ^undefined = another') equals: '=';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: '=@= another ^undefined =@= another') equals: '=@=';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind'
 %
 
 category: 'tests'
