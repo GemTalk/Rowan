@@ -39,6 +39,34 @@ System myUserProfile symbolList do: [:symDict |
 ! Class Declarations
 
 doit
+(Object
+	subclass: 'CypressPackageManager'
+	instVarNames: #( knownPackages packageInformationList )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Comparison';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(Object
+	subclass: 'CypressPackageComparator'
+	instVarNames: #( directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentAdditions currentRemovals )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Comparison';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
 (CypressObject
 	subclass: 'CypressPackageInformation'
 	instVarNames: #( name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation imageCounts changesCount )
@@ -71,470 +99,6 @@ Instance Variables
 
 ';
 		immediateInvariant.
-%
-
-doit
-(Object
-	subclass: 'CypressPackageManager'
-	instVarNames: #( knownPackages packageInformationList )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
-		category: 'Cypress-Comparison';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(Object
-	subclass: 'CypressPackageComparator'
-	instVarNames: #( directoryPackageMap diskTimestamps diskSnapshots imageSnapshots snapshotDifferences currentPackageName currentAdditions currentRemovals )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
-		category: 'Cypress-Comparison';
-		comment: '';
-		immediateInvariant.
-%
-
-! Class Implementation for CypressPackageInformation
-
-! ------------------- Class methods for CypressPackageInformation
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressPackageInformation
-named: aString savedAt: aDirectory
-	"Answer an instance of the receiver representing the named package.
-	 If the package was saved in aDirectory, load up the saved details."
-
-	^self new
-		initializeFromName: aString andSavedLocation: aDirectory;
-		yourself
-%
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressPackageInformation
-new
-
-	^super new
-		initialize;
-		yourself
-%
-
-! ------------------- Instance methods for CypressPackageInformation
-
-category: 'updating - type'
-set compile_env: 0
-method: CypressPackageInformation
-beConflictedWith: somePackageNames
-	"Be designated as representing the prefix of one or more Known Package names."
-
-	type := 'Conflicted Name'.
-	competingPackageNames := somePackageNames sortAscending.
-	advice := 'Conflicts with the packages named ', self competingPackageNamesString
-%
-
-category: 'updating - type'
-set compile_env: 0
-method: CypressPackageInformation
-beKnown
-	"Be known to represent a real package."
-
-	type := 'Known Package'.
-	advice := ''.
-	competingPackageNames := #()
-%
-
-category: 'updating - type'
-set compile_env: 0
-method: CypressPackageInformation
-beQualifiedNameOf: somePackageNames
-	"Be designated as qualifying a Known Package name and therefore not eligible as a package name."
-
-	type := 'Qualified Name'.
-	competingPackageNames := somePackageNames sortAscending.
-	advice := 'Qualifies the package named ', self competingPackageNamesString
-%
-
-category: 'updating - type'
-set compile_env: 0
-method: CypressPackageInformation
-beUnknown
-	"Be designated as possibly representing a package, but not known to do so."
-
-	type := 'Unknown'.
-	advice := ''.
-	competingPackageNames := #()
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-changesCount
-
-	^changesCount
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-changesCount: anInteger
-
-	changesCount := anInteger
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-changesStatus
-
-	^self hasChanges
-		ifTrue: [' (' , self changesCount printString , ')']
-		ifFalse: ['']
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-classCount
-
-	^self imageCounts first
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-competingPackageNames
-
-	^competingPackageNames
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-competingPackageNamesString
-
-	^String streamContents: 
-			[:stream |
-			self competingPackageNames
-				do: [:each | stream nextPutAll: each printString]
-				separatedBy: [stream nextPutAll: ', ']]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-description
-
-	self isKnown ifTrue: [^self savedLocation].
-	self isUnknown ifTrue: [^' <unknown>'].
-	^' <', advice, '>'
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-determinedChangesCount
-
-	| notInImage notInSaved |
-	notInImage := self savedDefinitions
-				reject: [:each | self imageDefinitions includes: each].
-	notInSaved := self imageDefinitions
-		reject: [:each | self savedDefinitions includes: each].
-	^notInImage size + notInSaved size
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressPackageInformation
-hasChanges
-
-	^self changesCount > 0
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-imageCounts
-
-	^imageCounts
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-imageCounts: someIntegers
-	"A pair: the number of classes and number of methods"
-
-	imageCounts := someIntegers
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-imageDefinitionCounts
-
-	| classCount methodCount |
-	classCount := methodCount := 0.
-	self imageDefinitions do: 
-			[:each |
-			each classDefinition: [:classDefinition | classCount := classCount + 1]
-				methodDefinition: [:methodDefinition | methodCount := methodCount + 1]].
-	^Array with: classCount with: methodCount
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-imageDefinitions
-
-	^imageDefinitions
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-imageDefinitions: someCypressDefinitions
-
-	imageDefinitions := someCypressDefinitions
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-imageDefinitionsStatus
-
-	^self classCount printString , '/' , self methodCount printString
-%
-
-category: 'initializing'
-set compile_env: 0
-method: CypressPackageInformation
-initialize
-
-	self
-		beUnknown;
-		name: '';
-		imageDefinitions: #();
-		savedDefinitions: #();
-		savedLocation: '';
-		imageCounts: #(0 0);
-		changesCount: 0
-%
-
-category: 'initializing'
-set compile_env: 0
-method: CypressPackageInformation
-initializeFromName: aString andSavedLocation: aDirectory
-
-	self
-		name: aString;
-		initializeFromSavedLocation: aDirectory.
-%
-
-category: 'initializing'
-set compile_env: 0
-method: CypressPackageInformation
-initializeFromSavedLocation: aDirectory
-
-	self updateKnownPackageSavedLocation: aDirectory or: [^self]
-%
-
-category: 'testing - type'
-set compile_env: 0
-method: CypressPackageInformation
-isConflicted
-
-	^type = 'Conflicted Name'
-%
-
-category: 'testing - type'
-set compile_env: 0
-method: CypressPackageInformation
-isKnown
-
-	^type = 'Known Package'
-%
-
-category: 'testing - type'
-set compile_env: 0
-method: CypressPackageInformation
-isQualifiedName
-
-	^type = 'Qualified Name'
-%
-
-category: 'testing - type'
-set compile_env: 0
-method: CypressPackageInformation
-isUnknown
-
-	^type = 'Unknown'
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-methodCount
-
-	^self imageCounts last
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-name
-
-	^name
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-name: aString
-
-	name := aString
-%
-
-category: 'printing'
-set compile_env: 0
-method: CypressPackageInformation
-printDetailsOn: aStream
-
-	aStream
-		nextPutAll: self name;
-		nextPutAll: ' - ';
-		nextPutAll: self description
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
-refresh
-
-	self isKnown ifFalse: [^self].
-	self updateKnownPackageSavedLocation: self savedLocation
-		or: [self error: 'invalid directory path']
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-savedDefinitions
-
-	^savedDefinitions
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-savedDefinitions: someCypressDefinitions
-
-	savedDefinitions := someCypressDefinitions
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-savedLocation
-
-	^savedLocation
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-savedLocation: aString
-
-	savedLocation := aString
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
-status
-
-	| changes |
-	(changes := self changesStatus) isEmpty ifTrue: [^self imageDefinitionsStatus].
-	^self imageDefinitionsStatus, changes
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
-updateChangesCount
-	"Must be applied after the image definitions and saved definitions are updated."
-
-	self changesCount: self determinedChangesCount
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
-updateImageCounts
-
-	self imageCounts: self imageDefinitionCounts
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
-updateImageDefinitions
-
-	self updateImageDefinitions: (CypressPackageDefinition named: self name) snapshot definitions
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
-updateImageDefinitions: someCypressDefinitions
-
-	self
-		imageDefinitions: someCypressDefinitions;
-		updateImageCounts
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
-updateKnownPackageSavedLocation: aDirectory or: aBlock
-	"Update the receiver to reflect it being a known package.
-	 If aDirectory is unspecified, answer the result of evaluating aBlock."
-
-	aDirectory isEmpty ifTrue: [^aBlock value].
-	self
-		beKnown;
-		updateImageDefinitions;
-		updateSavedLocation: aDirectory;
-		updateChangesCount.
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
-updateSavedDefinitions: someCypressDefinitions
-
-	self savedDefinitions: someCypressDefinitions
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
-updateSavedLocation: aDirectory
-
-	self savedLocation: aDirectory.
-	self updateSavedDefinitions: (aDirectory isEmpty
-				ifTrue: [#()]
-				ifFalse: 
-					[(CypressPackageReader readPackageStructureForPackageNamed: self name
-						from: aDirectory) packageStructure
-						snapshot definitions])
 %
 
 ! Class Implementation for CypressPackageManager
@@ -1083,6 +647,442 @@ updateCurrentAdditionsAndRemovals
 				ifAbsentPut: [Dictionary with: 'Timestamp' -> oldTimestamp printString].
 %
 
+! Class Implementation for CypressPackageInformation
+
+! ------------------- Class methods for CypressPackageInformation
+
+category: 'instance creation'
+set compile_env: 0
+classmethod: CypressPackageInformation
+named: aString savedAt: aDirectory
+	"Answer an instance of the receiver representing the named package.
+	 If the package was saved in aDirectory, load up the saved details."
+
+	^self new
+		initializeFromName: aString andSavedLocation: aDirectory;
+		yourself
+%
+
+category: 'instance creation'
+set compile_env: 0
+classmethod: CypressPackageInformation
+new
+
+	^super new
+		initialize;
+		yourself
+%
+
+! ------------------- Instance methods for CypressPackageInformation
+
+category: 'updating - type'
+set compile_env: 0
+method: CypressPackageInformation
+beConflictedWith: somePackageNames
+	"Be designated as representing the prefix of one or more Known Package names."
+
+	type := 'Conflicted Name'.
+	competingPackageNames := somePackageNames sortAscending.
+	advice := 'Conflicts with the packages named ', self competingPackageNamesString
+%
+
+category: 'updating - type'
+set compile_env: 0
+method: CypressPackageInformation
+beKnown
+	"Be known to represent a real package."
+
+	type := 'Known Package'.
+	advice := ''.
+	competingPackageNames := #()
+%
+
+category: 'updating - type'
+set compile_env: 0
+method: CypressPackageInformation
+beQualifiedNameOf: somePackageNames
+	"Be designated as qualifying a Known Package name and therefore not eligible as a package name."
+
+	type := 'Qualified Name'.
+	competingPackageNames := somePackageNames sortAscending.
+	advice := 'Qualifies the package named ', self competingPackageNamesString
+%
+
+category: 'updating - type'
+set compile_env: 0
+method: CypressPackageInformation
+beUnknown
+	"Be designated as possibly representing a package, but not known to do so."
+
+	type := 'Unknown'.
+	advice := ''.
+	competingPackageNames := #()
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+changesCount
+
+	^changesCount
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+changesCount: anInteger
+
+	changesCount := anInteger
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+changesStatus
+
+	^self hasChanges
+		ifTrue: [' (' , self changesCount printString , ')']
+		ifFalse: ['']
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+classCount
+
+	^self imageCounts first
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+competingPackageNames
+
+	^competingPackageNames
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+competingPackageNamesString
+
+	^String streamContents: 
+			[:stream |
+			self competingPackageNames
+				do: [:each | stream nextPutAll: each printString]
+				separatedBy: [stream nextPutAll: ', ']]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+description
+
+	self isKnown ifTrue: [^self savedLocation].
+	self isUnknown ifTrue: [^' <unknown>'].
+	^' <', advice, '>'
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+determinedChangesCount
+
+	| notInImage notInSaved |
+	notInImage := self savedDefinitions
+				reject: [:each | self imageDefinitions includes: each].
+	notInSaved := self imageDefinitions
+		reject: [:each | self savedDefinitions includes: each].
+	^notInImage size + notInSaved size
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressPackageInformation
+hasChanges
+
+	^self changesCount > 0
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+imageCounts
+
+	^imageCounts
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+imageCounts: someIntegers
+	"A pair: the number of classes and number of methods"
+
+	imageCounts := someIntegers
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+imageDefinitionCounts
+
+	| classCount methodCount |
+	classCount := methodCount := 0.
+	self imageDefinitions do: 
+			[:each |
+			each classDefinition: [:classDefinition | classCount := classCount + 1]
+				methodDefinition: [:methodDefinition | methodCount := methodCount + 1]].
+	^Array with: classCount with: methodCount
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+imageDefinitions
+
+	^imageDefinitions
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+imageDefinitions: someCypressDefinitions
+
+	imageDefinitions := someCypressDefinitions
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+imageDefinitionsStatus
+
+	^self classCount printString , '/' , self methodCount printString
+%
+
+category: 'initializing'
+set compile_env: 0
+method: CypressPackageInformation
+initialize
+
+	self
+		beUnknown;
+		name: '';
+		imageDefinitions: #();
+		savedDefinitions: #();
+		savedLocation: '';
+		imageCounts: #(0 0);
+		changesCount: 0
+%
+
+category: 'initializing'
+set compile_env: 0
+method: CypressPackageInformation
+initializeFromName: aString andSavedLocation: aDirectory
+
+	self
+		name: aString;
+		initializeFromSavedLocation: aDirectory.
+%
+
+category: 'initializing'
+set compile_env: 0
+method: CypressPackageInformation
+initializeFromSavedLocation: aDirectory
+
+	self updateKnownPackageSavedLocation: aDirectory or: [^self]
+%
+
+category: 'testing - type'
+set compile_env: 0
+method: CypressPackageInformation
+isConflicted
+
+	^type = 'Conflicted Name'
+%
+
+category: 'testing - type'
+set compile_env: 0
+method: CypressPackageInformation
+isKnown
+
+	^type = 'Known Package'
+%
+
+category: 'testing - type'
+set compile_env: 0
+method: CypressPackageInformation
+isQualifiedName
+
+	^type = 'Qualified Name'
+%
+
+category: 'testing - type'
+set compile_env: 0
+method: CypressPackageInformation
+isUnknown
+
+	^type = 'Unknown'
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+methodCount
+
+	^self imageCounts last
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+name
+
+	^name
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+name: aString
+
+	name := aString
+%
+
+category: 'printing'
+set compile_env: 0
+method: CypressPackageInformation
+printDetailsOn: aStream
+
+	aStream
+		nextPutAll: self name;
+		nextPutAll: ' - ';
+		nextPutAll: self description
+%
+
+category: 'updating'
+set compile_env: 0
+method: CypressPackageInformation
+refresh
+
+	self isKnown ifFalse: [^self].
+	self updateKnownPackageSavedLocation: self savedLocation
+		or: [self error: 'invalid directory path']
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+savedDefinitions
+
+	^savedDefinitions
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+savedDefinitions: someCypressDefinitions
+
+	savedDefinitions := someCypressDefinitions
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+savedLocation
+
+	^savedLocation
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+savedLocation: aString
+
+	savedLocation := aString
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+status
+
+	| changes |
+	(changes := self changesStatus) isEmpty ifTrue: [^self imageDefinitionsStatus].
+	^self imageDefinitionsStatus, changes
+%
+
+category: 'updating'
+set compile_env: 0
+method: CypressPackageInformation
+updateChangesCount
+	"Must be applied after the image definitions and saved definitions are updated."
+
+	self changesCount: self determinedChangesCount
+%
+
+category: 'updating'
+set compile_env: 0
+method: CypressPackageInformation
+updateImageCounts
+
+	self imageCounts: self imageDefinitionCounts
+%
+
+category: 'updating'
+set compile_env: 0
+method: CypressPackageInformation
+updateImageDefinitions
+
+	self updateImageDefinitions: (CypressPackageDefinition named: self name) snapshot definitions
+%
+
+category: 'updating'
+set compile_env: 0
+method: CypressPackageInformation
+updateImageDefinitions: someCypressDefinitions
+
+	self
+		imageDefinitions: someCypressDefinitions;
+		updateImageCounts
+%
+
+category: 'updating'
+set compile_env: 0
+method: CypressPackageInformation
+updateKnownPackageSavedLocation: aDirectory or: aBlock
+	"Update the receiver to reflect it being a known package.
+	 If aDirectory is unspecified, answer the result of evaluating aBlock."
+
+	aDirectory isEmpty ifTrue: [^aBlock value].
+	self
+		beKnown;
+		updateImageDefinitions;
+		updateSavedLocation: aDirectory;
+		updateChangesCount.
+%
+
+category: 'updating'
+set compile_env: 0
+method: CypressPackageInformation
+updateSavedDefinitions: someCypressDefinitions
+
+	self savedDefinitions: someCypressDefinitions
+%
+
+category: 'updating'
+set compile_env: 0
+method: CypressPackageInformation
+updateSavedLocation: aDirectory
+
+	self savedLocation: aDirectory.
+	self updateSavedDefinitions: (aDirectory isEmpty
+				ifTrue: [#()]
+				ifFalse: 
+					[(CypressPackageReader readPackageStructureForPackageNamed: self name
+						from: aDirectory) packageStructure
+						snapshot definitions])
+%
+
 ! Class Extensions
 
 ! Class Extension for CypressClassDefinition
@@ -1145,4 +1145,14 @@ fromUnixFormatString: aString
 			minutes: (stream next: 2) asNumber
 			seconds: 0)
 %
+
+! ------------------- Class initializers 
+
+doit
+%
+
+
+
+! End of Package: Cypress-Comparison
+
 

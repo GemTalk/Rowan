@@ -54,7 +54,7 @@ doit
 
 doit
 (CypressAbstractTest
-	subclass: 'CypressDefinitionTest'
+	subclass: 'CypressStructureTest'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -69,6 +69,20 @@ doit
 doit
 (CypressAbstractTest
 	subclass: 'CypressLoaderTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Tests';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressAbstractTest
+	subclass: 'CypressDefinitionTest'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -97,20 +111,6 @@ doit
 doit
 (CypressAbstractTest
 	subclass: 'CypressSnapshotTest'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
-		category: 'Cypress-Tests';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(CypressAbstractTest
-	subclass: 'CypressStructureTest'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -512,94 +512,150 @@ targetDefinitions
 	}
 %
 
-! Class Implementation for CypressDefinitionTest
+! Class Implementation for CypressStructureTest
 
-! ------------------- Instance methods for CypressDefinitionTest
+! ------------------- Instance methods for CypressStructureTest
 
-category: 'tests'
+category: 'private'
 set compile_env: 0
-method: CypressDefinitionTest
-testClassDefinition
+method: CypressStructureTest
+compileJSON: aJsonString
 
-	self
-		assert: (CypressClassDefinition
-					name: 'Foo'
-					superclassName: 'Object'
-					category: 'Foo'
-					instVarNames: #()
-					classInstVarNames: #()
-					classVarNames: #()
-					poolDictionaryNames: #()
-					comment: '') printString
-		equals: 'a CypressClassDefinition(Foo)'
+	^CypressJsonParser parse: aJsonString
 %
 
 category: 'tests'
 set compile_env: 0
-method: CypressDefinitionTest
-testDictionaryOfDefinitions
+method: CypressStructureTest
+testClassStructure
 
-	| dict |
-	"baseDefinitions"
-	dict := Dictionary new.
-	self baseDefinitions do: [:each | 
-		dict at: each put: each ].
-	self baseDefinitions do: [:each | 
-		self assert: (dict at: each) equals: each ].
-
-	"targetDefinitions"
-	dict := Dictionary new.
-	self targetDefinitions do: [:each | 
-		dict at: each put: each ].
-	self targetDefinitions do: [:each | 
-		self assert: (dict at: each) equals: each ].
+	| jsObject packageStructure classStructure classProperties |
+	jsObject := self compileJSON: self basePackageStructureJson.
+	packageStructure := CypressPackageStructure fromJs: jsObject.
+	classStructure := packageStructure classes first.
+	self assert: classStructure name equals: 'CypressMockBasic'.
+	self deny: classStructure isClassExtension description: 'Class structure should not have been an extension'.
+	self assert: classStructure comment equals: 'This mock contains basic class and instance method selectors'.
+	classProperties := classStructure properties.
+	self assert: classProperties size equals: 6.
+	self assert: (classProperties at: 'instvars') equals: #('name').
+	self assert: (classProperties at: 'classinstvars') equals: #('current').
+	self assert: (classProperties at: 'name') equals: 'CypressMockBasic'.
+	self assert: (classProperties at: 'super') equals: 'Object'.
+	self assert: classStructure instanceMethods size equals: 4.
+	self assert: classStructure classMethods size equals: 3.
+	classStructure := packageStructure extensions first.
+	self assert: classStructure name equals: 'Object'.
+	self assert: classStructure isClassExtension description: 'Class structure should have been an extension'.
+	self assert: classStructure comment equals: ''.
+	classProperties := classStructure properties.
+	self assert: classProperties size equals: 1.
+	self assert: (classProperties at: 'name') equals: 'Object'.
+	self assert: classStructure instanceMethods size equals: 1.
+	self assert: classStructure classMethods size equals: 0.
 %
 
 category: 'tests'
 set compile_env: 0
-method: CypressDefinitionTest
-testEquality
-	| pkg1 pkg2 pkg3 name |
-	name := 'Cypress-Mocks'.
-	pkg1 := CypressPackageDefinition named: name.
-	pkg2 := CypressPackageDefinition named: name.
-	pkg3 := CypressPackageDefinition named: 'Nope!'.
+method: CypressStructureTest
+testJson
+	"Let's compile the JSON without errors"
 
-	self assert: pkg1 equals: pkg2.
-	self deny: pkg1 equals: pkg3
+	self compileJSON: self basePackageStructureJson
 %
 
 category: 'tests'
 set compile_env: 0
-method: CypressDefinitionTest
-testMethodDefinition
-	self assert: (CypressMethodDefinition
-		className: 'Foo'
-		classIsMeta: false
-		selector: 'isFoo'
-		category: 'testing'
-		source: 'isFoo ^true') printString equals: 'a CypressMethodDefinition(Foo>>isFoo)'
+method: CypressStructureTest
+testPackageStructureFromJson
+
+	| packageStructure classStructure classProperties |
+	packageStructure := CypressPackageStructure fromJson: self basePackageStructureJson.
+	self assert: packageStructure name equals: 'Cypress-Mocks.package'.
+	self assert: packageStructure packageName equals: 'Cypress-Mocks'.
+	self assert: packageStructure properties isEmpty description: 'Properties should have been empty'.
+	self assert: packageStructure extensions size equals: 1.
+	self assert: packageStructure classes size equals: 1.
 %
 
 category: 'tests'
 set compile_env: 0
-method: CypressDefinitionTest
-testNameEquality
-	| pkg name |
-	name := 'Cypress-Mocks'.
-	pkg := CypressPackageDefinition named: name.
-	self assert: pkg name equals: name.
-	self deny: pkg name equals: 'Nope.'.
+method: CypressStructureTest
+testPackageStructureFromPackage
+
+	| packageStructure packageDefinitions expectedDefinitions |
+	packageStructure := CypressPackageStructure
+				fromPackage: (CypressPackageDefinition named: 'Cypress-Mocks').
+	packageDefinitions := packageStructure snapshot definitions.
+	expectedDefinitions := self baseDefinitions.
+	self assert: expectedDefinitions size equals: packageDefinitions size.
+	packageDefinitions do: 
+			[:def |
+			self assert: (expectedDefinitions includes: def)
+				description: 'Definition for ', def printString, ' did not match expected ones']
 %
 
 category: 'tests'
 set compile_env: 0
-method: CypressDefinitionTest
-testPrintString
-	| name pkg |
-	name := 'Cypress-Mocks'.
-	pkg := CypressPackageDefinition named: name.
-	self assert: 'a CypressPackageDefinition(', name, ')' equals: pkg printString.
+method: CypressStructureTest
+testPackageStructureSnapshot
+
+	| packageStructure packageDefinitions expectedDefinitions |
+	packageStructure := CypressPackageStructure
+				fromJs: (self compileJSON: self basePackageStructureJson).
+	packageDefinitions := packageStructure snapshot definitions.
+	expectedDefinitions := self baseDefinitions.
+	self assert: expectedDefinitions size equals: packageDefinitions size.
+	packageDefinitions do: 
+			[:def |
+			self assert: (expectedDefinitions includes: def)
+				description: 'Definition was not as expected']
+%
+
+category: 'tests'
+set compile_env: 0
+method: CypressStructureTest
+testPackageStructureToJson
+    | packageStructure stream string expected x y |
+    packageStructure := CypressPackageStructure fromPackage: (CypressPackageDefinition named: 'Cypress-Mocks').
+    stream := WriteStream on: String new.
+    packageStructure writeJsonOn: stream.
+    string := stream contents withUnixLineEndings.
+    expected := self basePackageStructureJson withUnixLineEndings.
+    1 to: string size do: [ :i | 
+        (i > expected size or: [ (string at: i) ~= (expected at: i) ])
+            ifTrue: [ 
+                x := string copyFrom: (i - 25 max: 1) to: (i + 25 min: string size).
+                y := expected copyFrom: ((i - 25 max: 1) min: expected size) to: (i + 25 min: expected size).
+                Array with: x with: y	"halt" ] ].
+    self assert: expected equals: string
+%
+
+category: 'tests'
+set compile_env: 0
+method: CypressStructureTest
+testPropertyDictionaryRead
+
+	| propertyDictionary phoneNumbers |
+	propertyDictionary := (self compileJSON: self sampleJson) asCypressPropertyObject.
+	self assert: (propertyDictionary at: 'name') equals: 'John Smith'.
+	self assert: (propertyDictionary at: 'age') equals: 25.
+	self assert: (propertyDictionary at: 'registered') description: '"registered" property should have been true'.
+	phoneNumbers := propertyDictionary at: 'phoneNumber'.
+	self assert: phoneNumbers size equals: 2.
+	self assert: ((phoneNumbers at: 1) at: 'number') equals: '212 555-1234'.
+	self assert: ((phoneNumbers at: 2) at: 'number') equals: '646 555-4567'.
+%
+
+category: 'tests'
+set compile_env: 0
+method: CypressStructureTest
+testPropertyDictionaryWrite
+    | propertyDictionary stream x |
+    propertyDictionary := (self compileJSON: self sampleJson) asCypressPropertyObject.
+    stream := WriteStream on: String new.
+    propertyDictionary writeCypressJsonOn: stream indent: 0.
+    self assert: (x := stream contents withUnixLineEndings) equals: self sampleJson withUnixLineEndings
 %
 
 ! Class Implementation for CypressLoaderTest
@@ -763,6 +819,96 @@ unloadableDefinitions
 	}
 %
 
+! Class Implementation for CypressDefinitionTest
+
+! ------------------- Instance methods for CypressDefinitionTest
+
+category: 'tests'
+set compile_env: 0
+method: CypressDefinitionTest
+testClassDefinition
+
+	self
+		assert: (CypressClassDefinition
+					name: 'Foo'
+					superclassName: 'Object'
+					category: 'Foo'
+					instVarNames: #()
+					classInstVarNames: #()
+					classVarNames: #()
+					poolDictionaryNames: #()
+					comment: '') printString
+		equals: 'a CypressClassDefinition(Foo)'
+%
+
+category: 'tests'
+set compile_env: 0
+method: CypressDefinitionTest
+testDictionaryOfDefinitions
+
+	| dict |
+	"baseDefinitions"
+	dict := Dictionary new.
+	self baseDefinitions do: [:each | 
+		dict at: each put: each ].
+	self baseDefinitions do: [:each | 
+		self assert: (dict at: each) equals: each ].
+
+	"targetDefinitions"
+	dict := Dictionary new.
+	self targetDefinitions do: [:each | 
+		dict at: each put: each ].
+	self targetDefinitions do: [:each | 
+		self assert: (dict at: each) equals: each ].
+%
+
+category: 'tests'
+set compile_env: 0
+method: CypressDefinitionTest
+testEquality
+	| pkg1 pkg2 pkg3 name |
+	name := 'Cypress-Mocks'.
+	pkg1 := CypressPackageDefinition named: name.
+	pkg2 := CypressPackageDefinition named: name.
+	pkg3 := CypressPackageDefinition named: 'Nope!'.
+
+	self assert: pkg1 equals: pkg2.
+	self deny: pkg1 equals: pkg3
+%
+
+category: 'tests'
+set compile_env: 0
+method: CypressDefinitionTest
+testMethodDefinition
+	self assert: (CypressMethodDefinition
+		className: 'Foo'
+		classIsMeta: false
+		selector: 'isFoo'
+		category: 'testing'
+		source: 'isFoo ^true') printString equals: 'a CypressMethodDefinition(Foo>>isFoo)'
+%
+
+category: 'tests'
+set compile_env: 0
+method: CypressDefinitionTest
+testNameEquality
+	| pkg name |
+	name := 'Cypress-Mocks'.
+	pkg := CypressPackageDefinition named: name.
+	self assert: pkg name equals: name.
+	self deny: pkg name equals: 'Nope.'.
+%
+
+category: 'tests'
+set compile_env: 0
+method: CypressDefinitionTest
+testPrintString
+	| name pkg |
+	name := 'Cypress-Mocks'.
+	pkg := CypressPackageDefinition named: name.
+	self assert: 'a CypressPackageDefinition(', name, ')' equals: pkg printString.
+%
+
 ! Class Implementation for CypressPatchTest
 
 ! ------------------- Instance methods for CypressPatchTest
@@ -884,152 +1030,6 @@ testSnapshotEquality
 	packageDefinitions := pkg snapshot definitions.
 	expectedDefinitions := self baseDefinitions.
 	self assert: packageDefinitions asArray equals: expectedDefinitions asArray
-%
-
-! Class Implementation for CypressStructureTest
-
-! ------------------- Instance methods for CypressStructureTest
-
-category: 'private'
-set compile_env: 0
-method: CypressStructureTest
-compileJSON: aJsonString
-
-	^CypressJsonParser parse: aJsonString
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testClassStructure
-
-	| jsObject packageStructure classStructure classProperties |
-	jsObject := self compileJSON: self basePackageStructureJson.
-	packageStructure := CypressPackageStructure fromJs: jsObject.
-	classStructure := packageStructure classes first.
-	self assert: classStructure name equals: 'CypressMockBasic'.
-	self deny: classStructure isClassExtension description: 'Class structure should not have been an extension'.
-	self assert: classStructure comment equals: 'This mock contains basic class and instance method selectors'.
-	classProperties := classStructure properties.
-	self assert: classProperties size equals: 6.
-	self assert: (classProperties at: 'instvars') equals: #('name').
-	self assert: (classProperties at: 'classinstvars') equals: #('current').
-	self assert: (classProperties at: 'name') equals: 'CypressMockBasic'.
-	self assert: (classProperties at: 'super') equals: 'Object'.
-	self assert: classStructure instanceMethods size equals: 4.
-	self assert: classStructure classMethods size equals: 3.
-	classStructure := packageStructure extensions first.
-	self assert: classStructure name equals: 'Object'.
-	self assert: classStructure isClassExtension description: 'Class structure should have been an extension'.
-	self assert: classStructure comment equals: ''.
-	classProperties := classStructure properties.
-	self assert: classProperties size equals: 1.
-	self assert: (classProperties at: 'name') equals: 'Object'.
-	self assert: classStructure instanceMethods size equals: 1.
-	self assert: classStructure classMethods size equals: 0.
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testJson
-	"Let's compile the JSON without errors"
-
-	self compileJSON: self basePackageStructureJson
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testPackageStructureFromJson
-
-	| packageStructure classStructure classProperties |
-	packageStructure := CypressPackageStructure fromJson: self basePackageStructureJson.
-	self assert: packageStructure name equals: 'Cypress-Mocks.package'.
-	self assert: packageStructure packageName equals: 'Cypress-Mocks'.
-	self assert: packageStructure properties isEmpty description: 'Properties should have been empty'.
-	self assert: packageStructure extensions size equals: 1.
-	self assert: packageStructure classes size equals: 1.
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testPackageStructureFromPackage
-
-	| packageStructure packageDefinitions expectedDefinitions |
-	packageStructure := CypressPackageStructure
-				fromPackage: (CypressPackageDefinition named: 'Cypress-Mocks').
-	packageDefinitions := packageStructure snapshot definitions.
-	expectedDefinitions := self baseDefinitions.
-	self assert: expectedDefinitions size equals: packageDefinitions size.
-	packageDefinitions do: 
-			[:def |
-			self assert: (expectedDefinitions includes: def)
-				description: 'Definition for ', def printString, ' did not match expected ones']
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testPackageStructureSnapshot
-
-	| packageStructure packageDefinitions expectedDefinitions |
-	packageStructure := CypressPackageStructure
-				fromJs: (self compileJSON: self basePackageStructureJson).
-	packageDefinitions := packageStructure snapshot definitions.
-	expectedDefinitions := self baseDefinitions.
-	self assert: expectedDefinitions size equals: packageDefinitions size.
-	packageDefinitions do: 
-			[:def |
-			self assert: (expectedDefinitions includes: def)
-				description: 'Definition was not as expected']
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testPackageStructureToJson
-    | packageStructure stream string expected x y |
-    packageStructure := CypressPackageStructure fromPackage: (CypressPackageDefinition named: 'Cypress-Mocks').
-    stream := WriteStream on: String new.
-    packageStructure writeJsonOn: stream.
-    string := stream contents withUnixLineEndings.
-    expected := self basePackageStructureJson withUnixLineEndings.
-    1 to: string size do: [ :i | 
-        (i > expected size or: [ (string at: i) ~= (expected at: i) ])
-            ifTrue: [ 
-                x := string copyFrom: (i - 25 max: 1) to: (i + 25 min: string size).
-                y := expected copyFrom: ((i - 25 max: 1) min: expected size) to: (i + 25 min: expected size).
-                Array with: x with: y	"halt" ] ].
-    self assert: expected equals: string
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testPropertyDictionaryRead
-
-	| propertyDictionary phoneNumbers |
-	propertyDictionary := (self compileJSON: self sampleJson) asCypressPropertyObject.
-	self assert: (propertyDictionary at: 'name') equals: 'John Smith'.
-	self assert: (propertyDictionary at: 'age') equals: 25.
-	self assert: (propertyDictionary at: 'registered') description: '"registered" property should have been true'.
-	phoneNumbers := propertyDictionary at: 'phoneNumber'.
-	self assert: phoneNumbers size equals: 2.
-	self assert: ((phoneNumbers at: 1) at: 'number') equals: '212 555-1234'.
-	self assert: ((phoneNumbers at: 2) at: 'number') equals: '646 555-4567'.
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testPropertyDictionaryWrite
-    | propertyDictionary stream x |
-    propertyDictionary := (self compileJSON: self sampleJson) asCypressPropertyObject.
-    stream := WriteStream on: String new.
-    propertyDictionary writeCypressJsonOn: stream indent: 0.
-    self assert: (x := stream contents withUnixLineEndings) equals: self sampleJson withUnixLineEndings
 %
 
 ! Class Implementation for CypressExtensionsTest
@@ -1291,4 +1291,14 @@ unixLinesFrom: aString
 %
 
 ! Class Extensions
+
+! ------------------- Class initializers 
+
+doit
+%
+
+
+
+! End of Package: Cypress-Tests
+
 

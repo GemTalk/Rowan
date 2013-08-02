@@ -923,3 +923,14 @@ upToEnd
 	^self next: (self fileSize - self positionA)
 %
 
+! ------------------- Class initializers 
+
+doit
+CypressGemStoneDirectoryUtilities initialize.
+%
+
+
+
+! End of Package: Cypress-GemStoneFileServer
+
+

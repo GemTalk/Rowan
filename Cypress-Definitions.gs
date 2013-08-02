@@ -1,5 +1,4 @@
 ! Package: Cypress-Definitions
-! Written: 2013-07-23T16:34:40.55085396766663-07:00
 
 
 ! Remove existing behavior from package Cypress-Definitions
@@ -41,6 +40,30 @@ System myUserProfile symbolList do: [:symDict |
 
 doit
 (Error
+	subclass: 'CypressLoaderError'
+	instVarNames: #( patchOperation exception )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Definitions';
+		comment: 'CypressLoaderError is used to report a failure applying a specific CypressPatchOperation.
+The CypressLoader made a first attempt to apply the Patch Operation and reported a 
+CypressLoaderErrorNotification, set aside the Patch Operation, and has retried it after applying
+all other Patch Operations.
+
+
+Instance Variables:
+
+patchOperation:		the CypressPatchOperation that could not be applied.
+exception:			the Error which occurred while trying to apply the Patch Operation.
+';
+		immediateInvariant.
+%
+
+doit
+(Error
 	subclass: 'CypressLoaderMissingClasses'
 	instVarNames: #( requirementsMap )
 	classVars: #(  )
@@ -64,30 +87,6 @@ doit
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
-		immediateInvariant.
-%
-
-doit
-(Error
-	subclass: 'CypressLoaderError'
-	instVarNames: #( patchOperation exception )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
-		category: 'Cypress-Definitions';
-		comment: 'CypressLoaderError is used to report a failure applying a specific CypressPatchOperation.
-The CypressLoader made a first attempt to apply the Patch Operation and reported a 
-CypressLoaderErrorNotification, set aside the Patch Operation, and has retried it after applying
-all other Patch Operations.
-
-
-Instance Variables:
-
-patchOperation:		the CypressPatchOperation that could not be applied.
-exception:			the Error which occurred while trying to apply the Patch Operation.
-';
 		immediateInvariant.
 %
 
@@ -129,8 +128,8 @@ doit
 
 doit
 (CypressObject
-	subclass: 'CypressSnapshot'
-	instVarNames: #( definitions )
+	subclass: 'CypressDefinitionIndex'
+	instVarNames: #( definitionMap )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -145,20 +144,6 @@ doit
 (CypressObject
 	subclass: 'CypressPatchOperation'
 	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
-		category: 'Cypress-Definitions';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(CypressPatchOperation
-	subclass: 'CypressRemoval'
-	instVarNames: #( definition )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -198,9 +183,23 @@ doit
 %
 
 doit
+(CypressPatchOperation
+	subclass: 'CypressRemoval'
+	instVarNames: #( definition )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Definitions';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
 (CypressObject
-	subclass: 'CypressPatch'
-	instVarNames: #( operations )
+	subclass: 'CypressSnapshot'
+	instVarNames: #( definitions )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -241,36 +240,8 @@ doit
 
 doit
 (CypressObject
-	subclass: 'CypressDefinitionIndex'
-	instVarNames: #( definitionMap )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
-		category: 'Cypress-Definitions';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(CypressObject
 	subclass: 'CypressDefinition'
 	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
-		category: 'Cypress-Definitions';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(CypressDefinition
-	subclass: 'CypressMethodDefinition'
-	instVarNames: #( classIsMeta source category selector className )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -296,6 +267,34 @@ doit
 %
 
 doit
+(CypressDefinition
+	subclass: 'CypressMethodDefinition'
+	instVarNames: #( classIsMeta source category selector className )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Definitions';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressObject
+	subclass: 'CypressPatch'
+	instVarNames: #( operations )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Definitions';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
 (CypressObject
 	subclass: 'CypressLoader'
 	instVarNames: #( additions removals unloadable provisions errors methodAdditions requirements exceptionClass )
@@ -308,82 +307,6 @@ doit
 		comment: '';
 		immediateInvariant.
 %
-
-! Class Implementation for CypressLoaderMissingClasses
-
-! ------------------- Class methods for CypressLoaderMissingClasses
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressLoaderMissingClasses
-missingRequirementsMap: aDictionary
-	"Answer an instance of the receiver initialized on the specified
-	 missing requirements. aDictionary maps prerequisite names to
-	 a collection of dependent definitions."
-
-	^self new
-		initializeRequirementsMap: aDictionary;
-		yourself
-%
-
-! ------------------- Instance methods for CypressLoaderMissingClasses
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressLoaderMissingClasses
-initialize
-
-	super initialize.
-	gsResumable := true
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressLoaderMissingClasses
-initializeMessageText
-
-	messageText := String streamContents: 
-					[:stream |
-					stream nextPutAll: 'Missing classes:'.
-					self requirementsMap keysAndValuesDo: 
-							[:className :definitions |
-							stream
-								space;
-								nextPutAll: className printString , '(' , definitions size printString
-											, ')']]
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressLoaderMissingClasses
-initializeRequirementsMap: aDictionary
-
-	self
-		requirementsMap: aDictionary;
-		initializeMessageText.
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressLoaderMissingClasses
-requirementsMap
-	"The requirements map is a Dictionary mapping missing class
-	 names to a collection of dependent definitions."
-
-   ^requirementsMap
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressLoaderMissingClasses
-requirementsMap: aDictionary
-	"The requirements map is a Dictionary mapping missing class
-	 names to a collection of dependent definitions."
-
-	requirementsMap := aDictionary
-%
-
-! Class Implementation for CypressError
 
 ! Class Implementation for CypressLoaderError
 
@@ -478,6 +401,82 @@ patchOperation: aCypressPatchOperation
 
 	patchOperation := aCypressPatchOperation
 %
+
+! Class Implementation for CypressLoaderMissingClasses
+
+! ------------------- Class methods for CypressLoaderMissingClasses
+
+category: 'instance creation'
+set compile_env: 0
+classmethod: CypressLoaderMissingClasses
+missingRequirementsMap: aDictionary
+	"Answer an instance of the receiver initialized on the specified
+	 missing requirements. aDictionary maps prerequisite names to
+	 a collection of dependent definitions."
+
+	^self new
+		initializeRequirementsMap: aDictionary;
+		yourself
+%
+
+! ------------------- Instance methods for CypressLoaderMissingClasses
+
+category: 'initializing - private'
+set compile_env: 0
+method: CypressLoaderMissingClasses
+initialize
+
+	super initialize.
+	gsResumable := true
+%
+
+category: 'initializing - private'
+set compile_env: 0
+method: CypressLoaderMissingClasses
+initializeMessageText
+
+	messageText := String streamContents: 
+					[:stream |
+					stream nextPutAll: 'Missing classes:'.
+					self requirementsMap keysAndValuesDo: 
+							[:className :definitions |
+							stream
+								space;
+								nextPutAll: className printString , '(' , definitions size printString
+											, ')']]
+%
+
+category: 'initializing - private'
+set compile_env: 0
+method: CypressLoaderMissingClasses
+initializeRequirementsMap: aDictionary
+
+	self
+		requirementsMap: aDictionary;
+		initializeMessageText.
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressLoaderMissingClasses
+requirementsMap
+	"The requirements map is a Dictionary mapping missing class
+	 names to a collection of dependent definitions."
+
+   ^requirementsMap
+%
+
+category: 'updating'
+set compile_env: 0
+method: CypressLoaderMissingClasses
+requirementsMap: aDictionary
+	"The requirements map is a Dictionary mapping missing class
+	 names to a collection of dependent definitions."
+
+	requirementsMap := aDictionary
+%
+
+! Class Implementation for CypressError
 
 ! Class Implementation for CypressLoaderErrorNotification
 
@@ -745,66 +744,64 @@ stringForVariables: variableList
 				separatedBy: [stream space]]
 %
 
-! Class Implementation for CypressSnapshot
+! Class Implementation for CypressDefinitionIndex
 
-! ------------------- Class methods for CypressSnapshot
+! ------------------- Class methods for CypressDefinitionIndex
 
 category: 'instance creation'
 set compile_env: 0
-classmethod: CypressSnapshot
-definitions: aDefinitions
-
-	^(self new) definitions: aDefinitions
+classmethod: CypressDefinitionIndex
+definitions: aCollection
+	^ self new addAll: aCollection
 %
 
-! ------------------- Instance methods for CypressSnapshot
+! ------------------- Instance methods for CypressDefinitionIndex
 
-category: 'comparing'
+category: 'adding'
 set compile_env: 0
-method: CypressSnapshot
-= other
-	^ definitions asArray = other definitions asArray
+method: CypressDefinitionIndex
+add: aDefinition
+	^ self definitionMap at: aDefinition description put: aDefinition
 %
 
-category: 'enumerating'
+category: 'adding'
 set compile_env: 0
-method: CypressSnapshot
-classDefinitions: classBlock methodDefinitions: methodBlock
+method: CypressDefinitionIndex
+addAll: aCollection
+	aCollection do: [:ea | self add: ea]
+%
 
-	self definitions do: [:definition |
-		definition classDefinition: classBlock methodDefinition: methodBlock]
+category: 'querying'
+set compile_env: 0
+method: CypressDefinitionIndex
+definitionLike: aDefinition ifPresent: foundBlock ifAbsent: errorBlock
+	| definition |
+	definition := self definitionMap at: aDefinition description ifAbsent: [].
+	^ definition
+		ifNil: errorBlock
+		ifNotNil: [foundBlock value: definition]
 %
 
 category: 'accessing'
 set compile_env: 0
-method: CypressSnapshot
+method: CypressDefinitionIndex
+definitionMap
+	definitionMap ifNil: [ definitionMap := Dictionary new ].
+	^ definitionMap
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressDefinitionIndex
 definitions
-
-	^definitions
+	^self definitionMap values
 %
 
-category: 'accessing'
+category: 'removing'
 set compile_env: 0
-method: CypressSnapshot
-definitions: aDefinitions
-
-	definitions := aDefinitions
-%
-
-category: 'patching'
-set compile_env: 0
-method: CypressSnapshot
-patchRelativeToBase: aSnapshot
-	^ CypressPatch fromBase: aSnapshot toTarget: self
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressSnapshot
-updatePackage: aPackage
-	"Answer the loader used to apply the update."
-
-	^CypressLoader updatePackage: aPackage withSnapshot: self
+method: CypressDefinitionIndex
+remove: aDefinition
+	self definitionMap removeKey: aDefinition description ifAbsent: []
 %
 
 ! Class Implementation for CypressPatchOperation
@@ -895,108 +892,6 @@ method: CypressPatchOperation
 unloadDefinition
 
 	CypressError signal: 'inappropriate to send #unloadDefinition to an addition or modification operation'
-%
-
-! Class Implementation for CypressRemoval
-
-! ------------------- Class methods for CypressRemoval
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressRemoval
-of: aDefinition
-	^ self new definition: aDefinition
-%
-
-! ------------------- Instance methods for CypressRemoval
-
-category: 'comparing'
-set compile_env: 0
-method: CypressRemoval
-= aPatchOperation
-	^(super = aPatchOperation) and: [self definition = aPatchOperation definition]
-%
-
-category: 'applying'
-set compile_env: 0
-method: CypressRemoval
-applyTo: aCypressLoader
-
-	aCypressLoader applyRemoval: self
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressRemoval
-definition
-
-	^definition
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressRemoval
-definition: aDefinition
-
-	definition := aDefinition
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressRemoval
-description
-
-	^'remove: ', self definition printString
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressRemoval
-loadClassDefinition
-	
-	CypressError signal: 'inappropriate to send #loadClassDefinition to a removal operation'
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressRemoval
-loadMethodDefinition
-	
-	CypressError signal: 'inappropriate to send #loadMethodDefinition to a removal operation'
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressRemoval
-postLoadDefinition
-	
-	CypressError signal: 'inappropriate to send #postLoadDefinition to a removal operation'
-%
-
-category: 'dependency'
-set compile_env: 0
-method: CypressRemoval
-provisions
-	"Answer list of global names defined by this definition"
-
-	^#()
-%
-
-category: 'dependency'
-set compile_env: 0
-method: CypressRemoval
-requirements
-	"Answer list of global names required by this definition"
-
-	^#()
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressRemoval
-unloadDefinition
-
-	self definition unloadDefinition.
 %
 
 ! Class Implementation for CypressModification
@@ -1192,80 +1087,173 @@ requirements
 	^self definition requirements
 %
 
-! Class Implementation for CypressPatch
+! Class Implementation for CypressRemoval
 
-! ------------------- Class methods for CypressPatch
+! ------------------- Class methods for CypressRemoval
 
 category: 'instance creation'
 set compile_env: 0
-classmethod: CypressPatch
-fromBase: baseSnapshot toTarget: targetSnapshot
-	^ (self new)
-		fromBase: baseSnapshot
-		toTarget: targetSnapshot
+classmethod: CypressRemoval
+of: aDefinition
+	^ self new definition: aDefinition
 %
 
-! ------------------- Instance methods for CypressPatch
+! ------------------- Instance methods for CypressRemoval
+
+category: 'comparing'
+set compile_env: 0
+method: CypressRemoval
+= aPatchOperation
+	^(super = aPatchOperation) and: [self definition = aPatchOperation definition]
+%
 
 category: 'applying'
 set compile_env: 0
-method: CypressPatch
+method: CypressRemoval
 applyTo: aCypressLoader
-	operations do: [:ea | ea applyTo: aCypressLoader].
-%
 
-category: 'initialization'
-set compile_env: 0
-method: CypressPatch
-fromBase: baseSnapshot toTarget: targetSnapshot
-	| base target |	
-	operations := OrderedCollection new.
-	base := CypressDefinitionIndex definitions: baseSnapshot definitions.
-	target := CypressDefinitionIndex definitions: targetSnapshot definitions.
-	
-	target definitions do:
-		[:t |
-		base
-			definitionLike: t
-			ifPresent: [:b | (b isSameRevisionAs: t) ifFalse: [operations add: (CypressModification of: b to: t)]]
-			ifAbsent: [operations add: (CypressAddition of: t)]].
-		
-	base definitions do:
-		[:b |
-		target
-			definitionLike: b
-			ifPresent: [:t | ]
-			ifAbsent: [operations add: (CypressRemoval of: b)]]
+	aCypressLoader applyRemoval: self
 %
 
 category: 'accessing'
 set compile_env: 0
-method: CypressPatch
-operations
+method: CypressRemoval
+definition
 
-	^operations
+	^definition
+%
+
+category: 'initialization'
+set compile_env: 0
+method: CypressRemoval
+definition: aDefinition
+
+	definition := aDefinition
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressRemoval
+description
+
+	^'remove: ', self definition printString
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressRemoval
+loadClassDefinition
+	
+	CypressError signal: 'inappropriate to send #loadClassDefinition to a removal operation'
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressRemoval
+loadMethodDefinition
+	
+	CypressError signal: 'inappropriate to send #loadMethodDefinition to a removal operation'
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressRemoval
+postLoadDefinition
+	
+	CypressError signal: 'inappropriate to send #postLoadDefinition to a removal operation'
+%
+
+category: 'dependency'
+set compile_env: 0
+method: CypressRemoval
+provisions
+	"Answer list of global names defined by this definition"
+
+	^#()
+%
+
+category: 'dependency'
+set compile_env: 0
+method: CypressRemoval
+requirements
+	"Answer list of global names required by this definition"
+
+	^#()
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressRemoval
+unloadDefinition
+
+	self definition unloadDefinition.
+%
+
+! Class Implementation for CypressSnapshot
+
+! ------------------- Class methods for CypressSnapshot
+
+category: 'instance creation'
+set compile_env: 0
+classmethod: CypressSnapshot
+definitions: aDefinitions
+
+	^(self new) definitions: aDefinitions
+%
+
+! ------------------- Instance methods for CypressSnapshot
+
+category: 'comparing'
+set compile_env: 0
+method: CypressSnapshot
+= other
+	^ definitions asArray = other definitions asArray
+%
+
+category: 'enumerating'
+set compile_env: 0
+method: CypressSnapshot
+classDefinitions: classBlock methodDefinitions: methodBlock
+
+	self definitions do: [:definition |
+		definition classDefinition: classBlock methodDefinition: methodBlock]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressSnapshot
+definitions
+
+	^definitions
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressSnapshot
+definitions: aDefinitions
+
+	definitions := aDefinitions
+%
+
+category: 'patching'
+set compile_env: 0
+method: CypressSnapshot
+patchRelativeToBase: aSnapshot
+	^ CypressPatch fromBase: aSnapshot toTarget: self
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressSnapshot
+updatePackage: aPackage
+	"Answer the loader used to apply the update."
+
+	^CypressLoader updatePackage: aPackage withSnapshot: self
 %
 
 ! Class Implementation for CypressPackageDefinition
 
 ! ------------------- Class methods for CypressPackageDefinition
-
-category: 'unknown'
-set compile_env: 0
-classmethod: CypressPackageDefinition
-fileOutsForPackagesNamed: someNames
-
-	^someNames inject: Dictionary new
-		into: 
-			[:result :each |
-			result
-				at: each
-					put: (String streamContents: 
-								[:stream |
-								(CypressPackageStructure fromPackage: (self named: each))
-									fileOutOn: stream]);
-				yourself]
-%
 
 category: 'instance creation'
 set compile_env: 0
@@ -1509,66 +1497,6 @@ unresolvedRequirementsFor: aPatchOperation
 	^ aPatchOperation requirements difference: self provided
 %
 
-! Class Implementation for CypressDefinitionIndex
-
-! ------------------- Class methods for CypressDefinitionIndex
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressDefinitionIndex
-definitions: aCollection
-	^ self new addAll: aCollection
-%
-
-! ------------------- Instance methods for CypressDefinitionIndex
-
-category: 'adding'
-set compile_env: 0
-method: CypressDefinitionIndex
-add: aDefinition
-	^ self definitionMap at: aDefinition description put: aDefinition
-%
-
-category: 'adding'
-set compile_env: 0
-method: CypressDefinitionIndex
-addAll: aCollection
-	aCollection do: [:ea | self add: ea]
-%
-
-category: 'querying'
-set compile_env: 0
-method: CypressDefinitionIndex
-definitionLike: aDefinition ifPresent: foundBlock ifAbsent: errorBlock
-	| definition |
-	definition := self definitionMap at: aDefinition description ifAbsent: [].
-	^ definition
-		ifNil: errorBlock
-		ifNotNil: [foundBlock value: definition]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressDefinitionIndex
-definitionMap
-	definitionMap ifNil: [ definitionMap := Dictionary new ].
-	^ definitionMap
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressDefinitionIndex
-definitions
-	^self definitionMap values
-%
-
-category: 'removing'
-set compile_env: 0
-method: CypressDefinitionIndex
-remove: aDefinition
-	self definitionMap removeKey: aDefinition description ifAbsent: []
-%
-
 ! Class Implementation for CypressDefinition
 
 ! ------------------- Instance methods for CypressDefinition
@@ -1671,214 +1599,6 @@ method: CypressDefinition
 unloadDefinition
 
 	self subclassResponsibility
-%
-
-! Class Implementation for CypressMethodDefinition
-
-! ------------------- Class methods for CypressMethodDefinition
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressMethodDefinition
-className: aName classIsMeta: isMetaclass selector: aSelector category: aCategory source: aSource
-
-	^self new
-		className: aName asString
-		classIsMeta: isMetaclass
-		selector: aSelector asString
-		category: aCategory asString
-		source: (self normalizeLineEndings: aSource)
-%
-
-! ------------------- Instance methods for CypressMethodDefinition
-
-category: 'comparing'
-set compile_env: 0
-method: CypressMethodDefinition
-= aDefinition
-    ^ super = aDefinition
-        and: [ aDefinition source = self source
-                and: [ aDefinition category = self category ] ]
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressMethodDefinition
-actualClass
-
-	| cls |
-	cls := self theNonMetaClass.
-	^self classIsMeta
-		ifTrue: [ cls class ]
-		ifFalse: [ cls  ].
-%
-
-category: 'converting'
-set compile_env: 0
-method: CypressMethodDefinition
-asCypressMethodDefinition
-
-	^self
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodDefinition
-category
-
-	^category
-%
-
-category: 'visiting'
-set compile_env: 0
-method: CypressMethodDefinition
-classDefinition: classBlock methodDefinition: methodBlock
-
-	methodBlock value: self
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodDefinition
-classIsMeta
-
-	^classIsMeta
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodDefinition
-className
-
-	^className
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressMethodDefinition
-className: aName classIsMeta: isMetaclass selector: aSelector category: aCategory source: aSource
-
-	className := aName.
-	classIsMeta := isMetaclass.
-	selector := aSelector.
-	category := aCategory.
-	source := self normalizeLineEndings: aSource
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodDefinition
-description
-	^ Array	
-		with: className
-		with: selector
-		with: classIsMeta
-%
-
-category: 'comparing'
-set compile_env: 0
-method: CypressMethodDefinition
-hash
-
-	| hash |
-	hash := classIsMeta asString hash.
-	hash := source hash bitOr: hash.
-	hash := category hash bitOr: hash.
-	hash := className hash bitOr: hash.
-	^hash
-%
-
-category: 'visiting'
-set compile_env: 0
-method: CypressMethodDefinition
-instanceMethod: instanceBlock classMethod: classBlock
-
-	^(self classIsMeta
-		ifTrue: [ classBlock ]
-		ifFalse: [ instanceBlock ]) value: self
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressMethodDefinition
-isInitializer
-	^ self selector = 'initialize' and: [self classIsMeta]
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressMethodDefinition
-loadMethodDefinition
-
-	self actualClass
-		compileMethod: self source
-		dictionaries: System myUserProfile symbolList
-		category: self category
-		environmentId: 0
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressMethodDefinition
-postLoadOver: aDefinition
-
-	super postLoadOver: aDefinition.
-	(self isInitializer
-		and: [ aDefinition isNil or: [ self source ~= aDefinition source ]]) 
-			ifTrue: [ self theNonMetaClass initialize ].
-%
-
-category: 'printing'
-set compile_env: 0
-method: CypressMethodDefinition
-printDetailsOn: aStream
-
-	aStream
-		nextPutAll: self className;
-		nextPutAll: (self classIsMeta ifTrue: [' class'] ifFalse: ['']);
-		nextPutAll: '>>';
-		nextPutAll: self selector.
-%
-
-category: 'dependency'
-set compile_env: 0
-method: CypressMethodDefinition
-requirements
-	"Answer list of global names required by this definition"
-
-	^{self className}
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodDefinition
-selector
-
-	^selector
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodDefinition
-source
-
-	^source
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressMethodDefinition
-theNonMetaClass
-
-	^self resolveGlobalNamed: self className
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressMethodDefinition
-unloadDefinition
-
-	self actualClass removeSelector: self selector asSymbol
 %
 
 ! Class Implementation for CypressClassDefinition
@@ -2228,6 +1948,268 @@ unloadDefinition
 				dictionariesAndSymbolsOf: self actualClass)
 					select: [:each | each last = self name asSymbol]) first.
 	dictionarySymbolPair first removeKey: dictionarySymbolPair last
+%
+
+! Class Implementation for CypressMethodDefinition
+
+! ------------------- Class methods for CypressMethodDefinition
+
+category: 'instance creation'
+set compile_env: 0
+classmethod: CypressMethodDefinition
+className: aName classIsMeta: isMetaclass selector: aSelector category: aCategory source: aSource
+
+	^self new
+		className: aName asString
+		classIsMeta: isMetaclass
+		selector: aSelector asString
+		category: aCategory asString
+		source: (self normalizeLineEndings: aSource)
+%
+
+! ------------------- Instance methods for CypressMethodDefinition
+
+category: 'comparing'
+set compile_env: 0
+method: CypressMethodDefinition
+= aDefinition
+    ^ super = aDefinition
+        and: [ aDefinition source = self source
+                and: [ aDefinition category = self category ] ]
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressMethodDefinition
+actualClass
+
+	| cls |
+	cls := self theNonMetaClass.
+	^self classIsMeta
+		ifTrue: [ cls class ]
+		ifFalse: [ cls  ].
+%
+
+category: 'converting'
+set compile_env: 0
+method: CypressMethodDefinition
+asCypressMethodDefinition
+
+	^self
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodDefinition
+category
+
+	^category
+%
+
+category: 'visiting'
+set compile_env: 0
+method: CypressMethodDefinition
+classDefinition: classBlock methodDefinition: methodBlock
+
+	methodBlock value: self
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodDefinition
+classIsMeta
+
+	^classIsMeta
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodDefinition
+className
+
+	^className
+%
+
+category: 'initialization'
+set compile_env: 0
+method: CypressMethodDefinition
+className: aName classIsMeta: isMetaclass selector: aSelector category: aCategory source: aSource
+
+	className := aName.
+	classIsMeta := isMetaclass.
+	selector := aSelector.
+	category := aCategory.
+	source := self normalizeLineEndings: aSource
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodDefinition
+description
+	^ Array	
+		with: className
+		with: selector
+		with: classIsMeta
+%
+
+category: 'comparing'
+set compile_env: 0
+method: CypressMethodDefinition
+hash
+
+	| hash |
+	hash := classIsMeta asString hash.
+	hash := source hash bitOr: hash.
+	hash := category hash bitOr: hash.
+	hash := className hash bitOr: hash.
+	^hash
+%
+
+category: 'visiting'
+set compile_env: 0
+method: CypressMethodDefinition
+instanceMethod: instanceBlock classMethod: classBlock
+
+	^(self classIsMeta
+		ifTrue: [ classBlock ]
+		ifFalse: [ instanceBlock ]) value: self
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressMethodDefinition
+isInitializer
+	^ self selector = 'initialize' and: [self classIsMeta]
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressMethodDefinition
+loadMethodDefinition
+
+	self actualClass
+		compileMethod: self source
+		dictionaries: System myUserProfile symbolList
+		category: self category
+		environmentId: 0
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressMethodDefinition
+postLoadOver: aDefinition
+
+	super postLoadOver: aDefinition.
+	(self isInitializer
+		and: [ aDefinition isNil or: [ self source ~= aDefinition source ]]) 
+			ifTrue: [ self theNonMetaClass initialize ].
+%
+
+category: 'printing'
+set compile_env: 0
+method: CypressMethodDefinition
+printDetailsOn: aStream
+
+	aStream
+		nextPutAll: self className;
+		nextPutAll: (self classIsMeta ifTrue: [' class'] ifFalse: ['']);
+		nextPutAll: '>>';
+		nextPutAll: self selector.
+%
+
+category: 'dependency'
+set compile_env: 0
+method: CypressMethodDefinition
+requirements
+	"Answer list of global names required by this definition"
+
+	^{self className}
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodDefinition
+selector
+
+	^selector
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodDefinition
+source
+
+	^source
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressMethodDefinition
+theNonMetaClass
+
+	^self resolveGlobalNamed: self className
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressMethodDefinition
+unloadDefinition
+
+	self actualClass removeSelector: self selector asSymbol
+%
+
+! Class Implementation for CypressPatch
+
+! ------------------- Class methods for CypressPatch
+
+category: 'instance creation'
+set compile_env: 0
+classmethod: CypressPatch
+fromBase: baseSnapshot toTarget: targetSnapshot
+	^ (self new)
+		fromBase: baseSnapshot
+		toTarget: targetSnapshot
+%
+
+! ------------------- Instance methods for CypressPatch
+
+category: 'applying'
+set compile_env: 0
+method: CypressPatch
+applyTo: aCypressLoader
+	operations do: [:ea | ea applyTo: aCypressLoader].
+%
+
+category: 'initialization'
+set compile_env: 0
+method: CypressPatch
+fromBase: baseSnapshot toTarget: targetSnapshot
+	| base target |	
+	operations := OrderedCollection new.
+	base := CypressDefinitionIndex definitions: baseSnapshot definitions.
+	target := CypressDefinitionIndex definitions: targetSnapshot definitions.
+	
+	target definitions do:
+		[:t |
+		base
+			definitionLike: t
+			ifPresent: [:b | (b isSameRevisionAs: t) ifFalse: [operations add: (CypressModification of: b to: t)]]
+			ifAbsent: [operations add: (CypressAddition of: t)]].
+		
+	base definitions do:
+		[:b |
+		target
+			definitionLike: b
+			ifPresent: [:t | ]
+			ifAbsent: [operations add: (CypressRemoval of: b)]]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPatch
+operations
+
+	^operations
 %
 
 ! Class Implementation for CypressLoader
@@ -2734,4 +2716,14 @@ methodClass
 
 	^self inClass
 %
+
+! ------------------- Class initializers 
+
+doit
+%
+
+
+
+! End of Package: Cypress-Definitions
+
 

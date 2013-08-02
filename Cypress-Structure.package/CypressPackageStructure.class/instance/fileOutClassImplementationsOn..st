@@ -3,5 +3,5 @@ fileOutClassImplementationsOn: aStream
 
 	self
 		fileOut: 'Class Implementation'
-		implementationsFrom: self classes
+		implementationsFrom: self classesInFileInOrder
 		on: aStream

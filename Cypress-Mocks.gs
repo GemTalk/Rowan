@@ -1,5 +1,4 @@
 ! Package: Cypress-Mocks
-! Written: 2013-07-23T16:34:40.56970500946045-07:00
 
 
 ! Remove existing behavior from package Cypress-Mocks
@@ -122,4 +121,15 @@ isCypressMockBasic
 
 	^false
 %
+
+! ------------------- Class initializers 
+
+doit
+CypressMockBasic initialize.
+%
+
+
+
+! End of Package: Cypress-Mocks
+
 

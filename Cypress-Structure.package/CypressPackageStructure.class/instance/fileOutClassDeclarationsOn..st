@@ -1,5 +1,5 @@
 filing out - private
 fileOutClassDeclarationsOn: aStream
 
-	self classes
+	self classesInFileInOrder
 		do: [:classStructure | self fileOutClassDeclaration: classStructure on: aStream]

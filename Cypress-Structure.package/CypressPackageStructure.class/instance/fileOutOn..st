@@ -4,4 +4,6 @@ fileOutOn: aStream
 	self
 		fileOutPackagePreambleOn: aStream;
 		fileOutClassesOn: aStream;
-		fileOutExtensionsOn: aStream
+		fileOutExtensionsOn: aStream;
+		fileOutClassInitializersOn: aStream;
+		fileOutPackagePostambleOn: aStream
