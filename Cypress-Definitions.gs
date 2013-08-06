@@ -2530,82 +2530,6 @@ updatePackage: aPackage withSnapshot: aSnapshot
 
 ! Class Extensions
 
-! Class Extension for CharacterCollection
-
-! ------------------- Instance methods for CharacterCollection
-
-category: '*Cypress-Definitions'
-set compile_env: 0
-method: CharacterCollection
-findString: subString startingAt: startIndex caseSensitive: aBoolean
-	"If a receiver contains subString beginning at some point at or after
-	 startIndex, this returns the index at which subString begins.  If the
-	 receiver does not contain subString, this returns 0."
-
-	^self
-		_findString: subString
-		startingAt: startIndex
-		ignoreCase: aBoolean not
-%
-
-category: '*Cypress-Definitions'
-set compile_env: 0
-method: CharacterCollection
-withUnixLineEndings
-	"Assume the string is textual, and that CR, LF, and CRLF are all valid line endings.
-	 Replace each occurence with a single LF."
-
-	| cr lf inPos outPos outString newOutPos indexLF indexCR |
-	cr := Character cr.
-	indexCR := self indexOf: cr startingAt: 1.
-	indexCR = 0 ifTrue: [^self].
-	lf := Character lf.
-	indexLF := self indexOf: lf startingAt: 1.
-	indexLF = 0 ifTrue: [^self copyReplacing: cr with: lf].
-	inPos := outPos := 1.
-	outString := String new: self size.
-	
-	["check if next CR is before next LF or if there are no more LF"
-	(indexLF = 0 or: [indexCR < indexLF])
-		ifTrue: 
-			[newOutPos := outPos + 1 + indexCR - inPos.
-			outString
-				replaceFrom: outPos
-				to: newOutPos - 2
-				with: self
-				startingAt: inPos.
-			outString at: newOutPos - 1 put: lf.
-			outPos := newOutPos.
-			1 + indexCR = indexLF
-				ifTrue: 
-					["Caught a CR-LF pair"
-					inPos := 1 + indexLF.
-					indexLF := self indexOf: lf startingAt: inPos]
-				ifFalse: [inPos := 1 + indexCR].
-			indexCR := self indexOf: cr startingAt: inPos]
-		ifFalse: 
-			[newOutPos := outPos + 1 + indexLF - inPos.
-			outString
-				replaceFrom: outPos
-				to: newOutPos - 1
-				with: self
-				startingAt: inPos.
-			outPos := newOutPos.
-			inPos := 1 + indexLF.
-			indexLF := self indexOf: lf startingAt: inPos].
-	indexCR = 0]
-			whileFalse.
-
-	"no more CR line endings. copy the rest"
-	newOutPos := outPos + (self size - inPos + 1).
-	outString
-		replaceFrom: outPos
-		to: newOutPos - 1
-		with: self
-		startingAt: inPos.
-	^outString copyFrom: 1 to: newOutPos - 1
-%
-
 ! Class Extension for Class
 
 ! ------------------- Instance methods for Class
@@ -2626,64 +2550,6 @@ asCypressClassDefinition
 		comment: self comment.
 %
 
-! Class Extension for Collection
-
-! ------------------- Instance methods for Collection
-
-category: '*Cypress-Definitions'
-set compile_env: 0
-method: Collection
-difference: aCollection
-	"Answer the set theoretic difference of two collections."
-
-	| set |
-	set := self asSet.
-	aCollection do: [:each | set remove: each ifAbsent: []].
-	^self species withAll: set asArray
-%
-
-category: '*Cypress-Definitions'
-set compile_env: 0
-method: Collection
-gather: aBlock
-
-	^Array
-		streamContents: [:stream | self do: [:ea | stream nextPutAll: (aBlock value: ea)]]
-%
-
-category: '*Cypress-Definitions'
-set compile_env: 0
-method: Collection
-intersection: aCollection
-	"Answer the set theoretic intersection of two collections."
-
-	| set outputSet |
-	set := self asSet.
-	outputSet := Set new.
-	aCollection do: 
-			[:each |
-			((set includes: each) and: [(outputSet includes: each) not])
-				ifTrue: [outputSet add: each]].
-	^self species withAll: outputSet asArray
-%
-
-! Class Extension for SymbolList
-
-! ------------------- Instance methods for SymbolList
-
-category: '*Cypress-Definitions'
-set compile_env: 0
-method: SymbolList
-allSatisfying: aOneArgBlock
-	"Answer the elements from the receiver's Symbol Dictionaries
-	 which meet the criteria specified in aOneArgBlock."
-
-	| result |
-	result := Array new.
-	self asArray do: [:each | result addAll: (each select: aOneArgBlock)].
-	^result.
-%
-
 ! Class Extension for GsNMethod
 
 ! ------------------- Instance methods for GsNMethod
@@ -2699,22 +2565,6 @@ asCypressMethodDefinition
 		selector: self selector
 		category: self category
 		source: self sourceString
-%
-
-category: '*Cypress-Definitions'
-set compile_env: 0
-method: GsNMethod
-category
-
-	^self inClass categoryOfSelector: self selector
-%
-
-category: '*Cypress-Definitions'
-set compile_env: 0
-method: GsNMethod
-methodClass
-
-	^self inClass
 %
 
 ! Class initializers 

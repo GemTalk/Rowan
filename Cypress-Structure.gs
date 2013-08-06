@@ -1866,6 +1866,44 @@ writeJsonOn: aStream  indent: startIndent
 
 ! Class Extensions
 
+! Class Extension for Array
+
+! ------------------- Instance methods for Array
+
+category: '*Cypress-Structure'
+set compile_env: 0
+method: Array
+asCypressPropertyObject
+
+	^self collect: [:each | each asCypressPropertyObject]
+%
+
+category: '*Cypress-Structure'
+set compile_env: 0
+method: Array
+writeCypressJsonOn: aStream indent: startIndent
+
+	| indent |
+	aStream
+		nextPutAll: '[';
+		lf.
+	indent := startIndent + 1.
+	1 to: self size
+		do: 
+			[:index |
+			| item |
+			item := self at: index.
+			aStream tab: indent.
+			item writeCypressJsonOn: aStream indent: indent.
+			index < self size
+				ifTrue: 
+					[aStream
+						nextPutAll: ',';
+						lf]].
+	self size = 0 ifTrue: [aStream tab: indent].
+	aStream nextPutAll: ' ]'
+%
+
 ! Class Extension for Boolean
 
 ! ------------------- Instance methods for Boolean
@@ -1878,24 +1916,24 @@ writeCypressJsonOn: aStream indent: startIndent
 	aStream nextPutAll: self printString
 %
 
-! Class Extension for OrderedCollection
+! Class Extension for Object
 
-! ------------------- Class methods for OrderedCollection
+! ------------------- Instance methods for Object
 
 category: '*Cypress-Structure'
 set compile_env: 0
-classmethod: OrderedCollection
-new: size streamContents: aOneArgBlock
+method: Object
+asCypressPropertyObject
 
-	^self withAll: (super new: size streamContents: aOneArgBlock)
+	^self
 %
 
 category: '*Cypress-Structure'
 set compile_env: 0
-classmethod: OrderedCollection
-streamSpecies
+method: Object
+writeCypressJsonOn: fileStream
 
-	^Array
+	self writeCypressJsonOn: fileStream indent: 0
 %
 
 ! Class Extension for Dictionary
@@ -1958,316 +1996,12 @@ asCypressPropertyObject
 category: '*Cypress-Structure'
 set compile_env: 0
 method: String
-escapePercents
-	"Answer a new string with 'dangerous' characters escaped to their %XX form,
-	 for use in HTTP transactions."
-
-	^String streamContents: 
-			[:stream |
-			self do: 
-					[:c |
-					c isSafeForHTTP
-						ifTrue: [stream nextPut: c]
-						ifFalse: 
-							[stream nextPut: $%.
-							c codePoint // 16 printOn: stream base: 16 showRadix: false.
-							c codePoint \\ 16 printOn: stream base: 16 showRadix: false]]]
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: String
-unescapePercents
-	"decode string including %XX form
-	 (adapted from Pharo 2.0)"
-
-	| unescaped char asciiVal specialChars oldPos pos |
-	unescaped := ReadWriteStream on: String new.
-	specialChars := '+%' asSet.
-	oldPos := 1.
-	
-	[pos := self indexOfAnyOf: specialChars startingAt: oldPos.
-	pos > 0]
-			whileTrue: 
-				[unescaped nextPutAll: (self copyFrom: oldPos to: pos - 1).
-				char := self at: pos.
-				(char = $% and: [pos + 2 <= self size])
-					ifTrue: 
-						[asciiVal := ((self at: pos + 1) asUppercase digitValueInRadix: 16) * 16
-									+ ((self at: pos + 2) asUppercase digitValueInRadix: 16).
-						asciiVal > 255 ifTrue: [^self].
-						unescaped nextPut: (Character withValue: asciiVal).
-						pos := pos + 3.
-						pos <= self size ifFalse: [char := nil].
-						oldPos := pos]
-					ifFalse: 
-						[char = $+
-							ifTrue: [unescaped nextPut: Character space]
-							ifFalse: [unescaped nextPut: char].
-						oldPos := pos + 1]].
-	oldPos <= self size
-		ifTrue: [unescaped nextPutAll: (self copyFrom: oldPos to: self size)].
-	^unescaped contents
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: String
 writeCypressJsonOn: aStream indent: startIndent
 
 	aStream
 		nextPutAll: '"';
 		nextPutAll: self withUnixLineEndings encodeAsUTF8 escapePercents;
 		nextPutAll: '"'
-%
-
-! Class Extension for Interval
-
-! ------------------- Class methods for Interval
-
-category: '*Cypress-Structure'
-set compile_env: 0
-classmethod: Interval
-streamSpecies
-
-	^Array
-%
-
-! Class Extension for Behavior
-
-! ------------------- Instance methods for Behavior
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Behavior
-methodDictionary
-
-	^self methodDictForEnv: 0
-%
-
-! Class Extension for SequenceableCollection
-
-! ------------------- Class methods for SequenceableCollection
-
-category: '*Cypress-Structure'
-set compile_env: 0
-classmethod: SequenceableCollection
-new: newSize streamContents: aOneArgBlock
-
-	| stream |
-	stream := WriteStream on: (self streamSpecies new: newSize).
-	aOneArgBlock value: stream.
-	stream position = newSize
-		ifTrue: [ ^stream originalContents ]
-		ifFalse: [ ^stream contents ]
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-classmethod: SequenceableCollection
-streamContents: aOneArgBlock
-
-	^ self new: 100 streamContents: aOneArgBlock
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-classmethod: SequenceableCollection
-streamSpecies
-	"Answer the class that is used for streaming.
-	 If overridden, consider overriding #new:streamContents:."
-
-	^self
-%
-
-! ------------------- Instance methods for SequenceableCollection
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: SequenceableCollection
-beginsWith: aSequence
-	"Answer whether the first elements of the receiver are the same as aSequence."
-
-	^(self indexOfSubCollection: aSequence startingAt: 1) = 1
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: SequenceableCollection
-copyWithoutSuffix: aSequence
-	"Answer a copy of the receiver excluding the specified suffix.
-	 If the suffix does not match, answer a copy of the receiver."
-
-	^self copyWithoutSuffix: aSequence or: [self copy].
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: SequenceableCollection
-copyWithoutSuffix: aSequence or: aBlock
-	"Answer a copy of the receiver excluding the specified suffix.
-	 If the suffix does not match, answer the result of evaluating aBlock."
-
-	(self endsWith: aSequence) ifFalse: [^aBlock value].
-	^self copyFrom: 1 to: self size - aSequence size.
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: SequenceableCollection
-endsWith: aSequence
-	"Answer whether the last elements of the receiver are the same as aSequence."
-
-	| expectedStart |
-	expectedStart := self size - aSequence size + 1 max: 1.
-	^expectedStart
-		= (self indexOfSubCollection: aSequence startingAt: expectedStart)
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: SequenceableCollection
-indexOfAnyOf: aCollection startingAt: start
-	"Answer the index of the first occurence of any element included in aCollection after start within the receiver.
-	If the receiver does not contain anElement, answer zero, which is an invalid index."
-
-	^self indexOfAnyOf: aCollection startingAt: start ifAbsent: [0]
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: SequenceableCollection
-indexOfAnyOf: aCollection startingAt: start ifAbsent: exceptionBlock
-	"Answer the index of the first occurence of any element included in aCollection after start within the receiver.
-	If the receiver does not contain anElement, answer the result of evaluating the argument, exceptionBlock.
-	Note: it is user responsibility to provide aCollection that behaves relatevily fast when asked for includes: (like a Set)"
-
-	start to: self size do:
-		[:index |
-		(aCollection includes: (self at: index)) ifTrue: [^ index]].
-	^ exceptionBlock value
-%
-
-! Class Extension for Array
-
-! ------------------- Instance methods for Array
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Array
-asCypressPropertyObject
-
-	^self collect: [:each | each asCypressPropertyObject]
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Array
-writeCypressJsonOn: aStream indent: startIndent
-
-	| indent |
-	aStream
-		nextPutAll: '[';
-		lf.
-	indent := startIndent + 1.
-	1 to: self size
-		do: 
-			[:index |
-			| item |
-			item := self at: index.
-			aStream tab: indent.
-			item writeCypressJsonOn: aStream indent: indent.
-			index < self size
-				ifTrue: 
-					[aStream
-						nextPutAll: ',';
-						lf]].
-	self size = 0 ifTrue: [aStream tab: indent].
-	aStream nextPutAll: ' ]'
-%
-
-! Class Extension for Symbol
-
-! ------------------- Class methods for Symbol
-
-category: '*Cypress-Structure'
-set compile_env: 0
-classmethod: Symbol
-new: size streamContents: aOneArgBlock
-
-	^(super new: size streamContents: aOneArgBlock) asSymbol
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-classmethod: Symbol
-streamSpecies
-
-	^String
-%
-
-! Class Extension for Object
-
-! ------------------- Instance methods for Object
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Object
-asCypressPropertyObject
-
-	^self
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Object
-writeCypressJsonOn: fileStream
-
-	self writeCypressJsonOn: fileStream indent: 0
-%
-
-! Class Extension for SortedCollection
-
-! ------------------- Class methods for SortedCollection
-
-category: '*Cypress-Structure'
-set compile_env: 0
-classmethod: SortedCollection
-new: size streamContents: aOneArgBlock
-
-	^self withAll: (super new: size streamContents: aOneArgBlock)
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-classmethod: SortedCollection
-streamSpecies
-
-	^Array
-%
-
-! Class Extension for ByteArray
-
-! ------------------- Instance methods for ByteArray
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: ByteArray
-escapePercents
-	"Answer a new string with 'dangerous' characters escaped to their %XX form,
-	 for use in HTTP transactions."
-
-	^String streamContents: 
-			[:stream |
-			self do: 
-					[:each |
-					| c |
-					(c := Character withValue: each) isSafeForHTTP
-						ifTrue: [stream nextPut: c]
-						ifFalse: 
-							[stream nextPut: $%.
-							each // 16 printOn: stream base: 16 showRadix: false.
-							each \\ 16 printOn: stream base: 16 showRadix: false]]]
 %
 
 ! Class Extension for Number
@@ -2280,20 +2014,6 @@ method: Number
 writeCypressJsonOn: aStream indent: startIndent
 
 	aStream nextPutAll: self printString
-%
-
-! Class Extension for Character
-
-! ------------------- Instance methods for Character
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Character
-isSafeForHTTP
-	"Answer whether a character is 'safe', or needs to be escaped when used, eg, in a URL."
-
-	^self codePoint < 128
-		and: [self isAlphaNumeric or: ['.-_' includes: self]]
 %
 
 ! Class initializers 
