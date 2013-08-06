@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: updating
-"
+updating
 determineKnownPackages
 
 	^(packageInformationList select: [:each | each repository notNil])

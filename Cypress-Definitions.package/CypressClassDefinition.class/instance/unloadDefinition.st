@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: loading
-"
+loading
 unloadDefinition
 	"GemStone could hold multiple definitions of the same class name.
 	 Ignore aliased references.

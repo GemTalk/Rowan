@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: *Cypress-GemStoneCompatibilityLayer
-"
+*Cypress-GemStoneCompatibilityLayer
 difference: aCollection
 	"Answer the set theoretic difference of two collections."
 

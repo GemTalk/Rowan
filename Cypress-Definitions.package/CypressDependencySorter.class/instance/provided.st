@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: accessing
-"
+accessing
 provided
 	"set of global names provided by definitions already loaded"
 

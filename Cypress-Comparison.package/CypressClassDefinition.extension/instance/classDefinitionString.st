@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: *Cypress-Comparison-accessing
-"
+*Cypress-Comparison-accessing
 classDefinitionString
 
 	^superclassName, ' subclass: ', self name printString, '

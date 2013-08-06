@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: reading
-"
+reading
 readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
 	"If the stream begins with a double quote, process it on the assumption it is a Cypress-format method.
 	 Otherwise, treat it as a FileTree-format method."

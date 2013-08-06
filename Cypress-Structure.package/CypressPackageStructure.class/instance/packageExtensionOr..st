@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: accessing
-"
+accessing
 packageExtensionOr: aBlock
 
 	^self properties at: 'extension' ifAbsent: aBlock

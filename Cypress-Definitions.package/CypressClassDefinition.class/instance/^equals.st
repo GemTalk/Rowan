@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: comparing
-"
+comparing
 = aDefinition
 	^(super = aDefinition)
 		and: [superclassName = aDefinition superclassName

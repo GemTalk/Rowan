@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: *Cypress-GemStoneCompatibilityLayer
-"
+*Cypress-GemStoneCompatibilityLayer
 isSafeForHTTP
 	"Answer whether a character is 'safe', or needs to be escaped when used, eg, in a URL."
 

@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: reading
-"
+reading
 readClassPropertiesFromDirectoryEntries: entries
 	"Look for Cypress .ston properties file first, but accept a .json version if present."
 

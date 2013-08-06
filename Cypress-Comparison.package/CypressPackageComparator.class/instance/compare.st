@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: comparing
-"
+comparing
 compare
 
 	diskSnapshots keys do: [:packageName |

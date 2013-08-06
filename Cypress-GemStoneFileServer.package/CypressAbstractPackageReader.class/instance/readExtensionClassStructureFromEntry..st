@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: reading
-"
+reading
 readExtensionClassStructureFromEntry: classEntry
 
 	| classDirectory classPropertiesDict classComment entries classStructure |

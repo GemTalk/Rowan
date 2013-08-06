@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: private
-"
+private
 match: aString
 	"Tries to match aString, consume input and answer true if successful."
 	

@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: private
-"
+private
 writeInDirectoryName: directoryNameOrPath fileName: fileName extension: ext visit: visitBlock
 
 	| directory |

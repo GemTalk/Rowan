@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: loading
-"
+loading
 retryFailedLoads
 	"In case any of the failed loads were resolved by subsequent
 	 patch operations after the initial attempt or by editting of the

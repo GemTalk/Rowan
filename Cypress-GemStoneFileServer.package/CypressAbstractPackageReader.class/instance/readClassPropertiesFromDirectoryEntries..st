@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: reading
-"
+reading
 readClassPropertiesFromDirectoryEntries: entries
 
 	self fileUtils readStreamFor: (entries

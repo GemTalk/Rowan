@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: tests
-"
+tests
 testPackageStructureToJson
     | packageStructure stream string expected x y |
     packageStructure := CypressPackageStructure fromPackage: (CypressPackageDefinition named: 'Cypress-Mocks').

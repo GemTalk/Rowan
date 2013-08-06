@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: writing
-"
+writing
 writePackageStructureClasses: classStructures isClassExtension: isClassExtension
 
 	| classDirExtension |

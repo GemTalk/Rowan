@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: reading
-"
+reading
 isPropertiesFileDirectoryEntry: entry
 	"Expect .ston properties file, but tolerate .json if present."
 

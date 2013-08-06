@@ -1,6 +1,3 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: loading
-"
+loading
 postLoadDefinition
 	self definition postLoadOver: nil

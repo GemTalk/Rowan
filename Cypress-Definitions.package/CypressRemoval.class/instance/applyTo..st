@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: applying
-"
+applying
 applyTo: aCypressLoader
 
 	aCypressLoader applyRemoval: self

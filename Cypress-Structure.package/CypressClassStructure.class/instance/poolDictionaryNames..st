@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: accessing
-"
+accessing
 poolDictionaryNames: someStrings
 
 	^self properties at: 'pools' put: someStrings

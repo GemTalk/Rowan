@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: utilities
-"
+utilities
 directoryEntriesFrom: aDirectory
 	"Answer fully qualified paths to the contents of aDirectory."
 

@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: loading
-"
+loading
 createOrReviseClass
 	"To be resolved:
 		- the question of an 'environment' in which to create the class.

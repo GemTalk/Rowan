@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: comparing - private
-"
+comparing - private
 resetCurrentForPackage: aStringOrNil
 
 	currentPackageName := aStringOrNil.

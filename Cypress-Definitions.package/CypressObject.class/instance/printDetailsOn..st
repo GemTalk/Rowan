@@ -1,5 +1,2 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: printing
-"
+printing
 printDetailsOn: aStream

@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: *Cypress-GemStoneCompatibilityLayer
-"
+*Cypress-GemStoneCompatibilityLayer
 unescapePercents
 	"decode string including %XX form
 	 (adapted from Pharo 2.0)"

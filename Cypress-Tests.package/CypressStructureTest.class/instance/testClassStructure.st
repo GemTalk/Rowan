@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: tests
-"
+tests
 testClassStructure
 
 	| jsObject packageStructure classStructure classProperties |

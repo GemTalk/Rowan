@@ -1,6 +1,3 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: private
-"
+private
 itemsRequiring: globalName
 	^ self required at: globalName ifAbsentPut: [Set new]

@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: instance creation
-"
+instance creation
 on: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock
 	"Create an instance of the receiver capable for sorting the dependencies of someCandidates.
 	 aOneArgBlock is used to evaluate the key of the object depended on for a candidate.

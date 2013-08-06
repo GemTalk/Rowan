@@ -1,6 +1,3 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: private
-"
+private
 instanceVariablesString
     ^ self stringForVariables: self instVarNames

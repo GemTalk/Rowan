@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: private
-"
+private
 poolDictionariesString
 
 	^self stringForVariables: self poolDictionaryNames

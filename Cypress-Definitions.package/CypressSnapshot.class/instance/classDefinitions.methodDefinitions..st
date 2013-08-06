@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: enumerating
-"
+enumerating
 classDefinitions: classBlock methodDefinitions: methodBlock
 
 	self definitions do: [:definition |

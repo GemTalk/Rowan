@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: updating
-"
+updating
 readDefinitionsFromRepository
 
 	^(self repository reader readPackageStructureForPackageNamed: self name)

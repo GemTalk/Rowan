@@ -1,6 +1,3 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: loading
-"
+loading
 loadClassDefinition
 	"default is to do nothing"

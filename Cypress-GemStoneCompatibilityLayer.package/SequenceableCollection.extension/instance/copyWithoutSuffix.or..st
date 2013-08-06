@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: *Cypress-GemStoneCompatibilityLayer
-"
+*Cypress-GemStoneCompatibilityLayer
 copyWithoutSuffix: aSequence or: aBlock
 	"Answer a copy of the receiver excluding the specified suffix.
 	 If the suffix does not match, answer the result of evaluating aBlock."

@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: reading
-"
+reading
 readPackageStructure
 
    (self fileUtils directoryEntriesFrom: self packageDirectory)

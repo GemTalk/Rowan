@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: instance creation
-"
+instance creation
 comparingPackageNamed: packageName fromDirectory: aDirectory
 
 	^(self new)

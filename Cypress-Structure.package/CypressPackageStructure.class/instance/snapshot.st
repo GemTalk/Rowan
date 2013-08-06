@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: snapshotting
-"
+snapshotting
 snapshot
 	| definitions |
 	definitions := OrderedCollection new.

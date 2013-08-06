@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: private
-"
+private
 targetDefinitions
 	"remove #extra method and modify #name: method"
 

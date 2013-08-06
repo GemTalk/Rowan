@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: filing out - private
-"
+filing out - private
 fileOutPackagePostambleOn: aStream
 
 	aStream

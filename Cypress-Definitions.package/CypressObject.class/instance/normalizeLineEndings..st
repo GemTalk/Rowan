@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: converting
-"
+converting
 normalizeLineEndings: aString
 	"Answer a copy of aString with the line endings normalized to
 	 correspond to the current platform, regardless of how they were

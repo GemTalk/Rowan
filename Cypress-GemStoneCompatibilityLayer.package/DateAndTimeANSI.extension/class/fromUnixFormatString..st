@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: *Cypress-GemStoneCompatibilityLayer
-"
+*Cypress-GemStoneCompatibilityLayer
 fromUnixFormatString: aString
 	"YYYY-MM-DDTHH:MM:SS +HHMM
 	 Examples:

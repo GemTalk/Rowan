@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: updating - type
-"
+updating - type
 beKnown
 	"Be known to represent a real package."
 

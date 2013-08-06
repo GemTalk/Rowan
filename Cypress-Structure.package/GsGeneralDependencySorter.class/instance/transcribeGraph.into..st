@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: sorting - private
-"
+sorting - private
 transcribeGraph: subtree into: sorted
 
 	subtree keysAndValuesDo: [:name :subsubtree |

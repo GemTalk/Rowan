@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: tests
-"
+tests
 testPropertyDictionaryRead
 
 	| propertyDictionary phoneNumbers |

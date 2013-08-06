@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: loading
-"
+loading
 recompileWithSubclassesFrom: oldClass to: newClass symbolList: aSymbolList
 
 	| olds news removedClassVariables removedSharedPools organizer subclasses newSubclass |

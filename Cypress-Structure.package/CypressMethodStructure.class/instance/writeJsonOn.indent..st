@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: writing
-"
+writing
 writeJsonOn: aStream  indent: startIndent
 
 	| indent |

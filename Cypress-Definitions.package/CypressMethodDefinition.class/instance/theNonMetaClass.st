@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: loading
-"
+loading
 theNonMetaClass
 
 	^self resolveGlobalNamed: self className

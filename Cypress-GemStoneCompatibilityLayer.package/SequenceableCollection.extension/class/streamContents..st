@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: *Cypress-GemStoneCompatibilityLayer
-"
+*Cypress-GemStoneCompatibilityLayer
 streamContents: aOneArgBlock
 
 	^ self new: 100 streamContents: aOneArgBlock

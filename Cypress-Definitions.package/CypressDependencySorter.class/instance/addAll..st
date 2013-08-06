@@ -1,6 +1,3 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: building
-"
+building
 addAll: aCollection
 	aCollection do: [:aPatchOperation | self add: aPatchOperation ]

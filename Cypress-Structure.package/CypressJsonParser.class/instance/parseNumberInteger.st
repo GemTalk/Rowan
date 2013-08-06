@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: parsing-internal
-"
+parsing-internal
 parseNumberInteger
     | number |
     number := 0.

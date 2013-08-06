@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: tests
-"
+tests
 testPropertyDictionaryWrite
     | propertyDictionary stream x |
     propertyDictionary := (self compileJSON: self sampleJson) asCypressPropertyObject.

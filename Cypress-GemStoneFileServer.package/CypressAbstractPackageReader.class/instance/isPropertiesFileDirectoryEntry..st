@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: reading
-"
+reading
 isPropertiesFileDirectoryEntry: entry
 
 	^entry endsWith: '/properties', self propertiesFileNameExtension

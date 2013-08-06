@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: initializing
-"
+initializing
 comparingPackages: someNames fromDirectory: aDirectory
 
 	(directoryPackageMap at: aDirectory ifAbsentPut: [OrderedCollection new])

@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: accessing
-"
+accessing
 imageDefinitionsStatus
 
 	^self classCount printString , '/' , self methodCount printString

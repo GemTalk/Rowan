@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: updating - type
-"
+updating - type
 beQualifiedNameOf: somePackageNames
 	"Be designated as qualifying a Known Package name and therefore not eligible as a package name."
 

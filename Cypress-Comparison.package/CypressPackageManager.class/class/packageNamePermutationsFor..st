@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: accessing
-"
+accessing
 packageNamePermutationsFor: aString
 	"Answer the variations on possible package names from the specified string.
 	 Each hyphen may possibly separate the package name from a suffix."

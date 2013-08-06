@@ -1,7 +1,4 @@
-"
-notice: This work is protected by copyright. All rights reserved.
-category: writing - needs work
-"
+writing - needs work
 writePackagesToDiskFrom: someCypressPackageInformations
 
 	| packageStructure |
