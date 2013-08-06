@@ -9,4 +9,5 @@
 	"name" : "CypressLoaderError",
 	"pools" : [
 		 ],
+	"subclassType" : "",
 	"super" : "Error" }

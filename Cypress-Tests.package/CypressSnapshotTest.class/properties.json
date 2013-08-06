@@ -8,4 +8,5 @@
 	"name" : "CypressSnapshotTest",
 	"pools" : [
 		 ],
+	"subclassType" : "",
 	"super" : "CypressAbstractTest" }

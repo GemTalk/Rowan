@@ -9,4 +9,5 @@
 	"name" : "CypressLoaderErrorNotification",
 	"pools" : [
 		 ],
+	"subclassType" : "",
 	"super" : "Notification" }

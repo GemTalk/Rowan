@@ -8,4 +8,5 @@
 	"name" : "CypressPatch",
 	"pools" : [
 		 ],
+	"subclassType" : "",
 	"super" : "CypressObject" }

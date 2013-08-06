@@ -9,4 +9,5 @@ fromClassDefinition: classDefinition
 		instanceVariableNames: classDefinition instVarNames;
 		classInstanceVariableNames: classDefinition classInstVarNames;
 		classVariableNames: classDefinition classVarNames;
-		poolDictionaryNames: classDefinition poolDictionaryNames.
+		poolDictionaryNames: classDefinition poolDictionaryNames;
+		subclassType: classDefinition subclassType.

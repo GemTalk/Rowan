@@ -739,6 +739,7 @@ asCypressClassDefinition
 		classVarNames: self classVariableNames
 		poolDictionaryNames: self poolDictionaryNames
 		comment: self comment
+		subclassType: self subclassType
 %
 
 category: 'accessing'
@@ -854,7 +855,8 @@ fromClassDefinition: classDefinition
 		instanceVariableNames: classDefinition instVarNames;
 		classInstanceVariableNames: classDefinition classInstVarNames;
 		classVariableNames: classDefinition classVarNames;
-		poolDictionaryNames: classDefinition poolDictionaryNames.
+		poolDictionaryNames: classDefinition poolDictionaryNames;
+		subclassType: classDefinition subclassType.
 %
 
 category: 'initialization'
@@ -999,6 +1001,22 @@ method: CypressClassStructure
 splitMethodNameFor: jsMethodObject
 
 	^self splitMethodName: (jsMethodObject at: 'name')
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressClassStructure
+subclassType
+
+	^self properties at: 'subclassType' ifAbsent: ['']
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressClassStructure
+subclassType: aString
+
+	^self properties at: 'subclassType' put: aString
 %
 
 category: 'accessing'

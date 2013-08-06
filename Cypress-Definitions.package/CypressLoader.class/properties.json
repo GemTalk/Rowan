@@ -15,4 +15,5 @@
 	"name" : "CypressLoader",
 	"pools" : [
 		 ],
+	"subclassType" : "",
 	"super" : "CypressObject" }

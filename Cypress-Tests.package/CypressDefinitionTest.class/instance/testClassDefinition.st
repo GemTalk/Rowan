@@ -10,5 +10,6 @@ testClassDefinition
 					classInstVarNames: #()
 					classVarNames: #()
 					poolDictionaryNames: #()
-					comment: '') printString
+					comment: ''
+					subclassType: '') printString
 		equals: 'a CypressClassDefinition(Foo)'

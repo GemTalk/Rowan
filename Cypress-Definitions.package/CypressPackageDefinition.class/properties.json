@@ -8,4 +8,5 @@
 	"name" : "CypressPackageDefinition",
 	"pools" : [
 		 ],
+	"subclassType" : "",
 	"super" : "CypressObject" }

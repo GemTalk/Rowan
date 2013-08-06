@@ -8,4 +8,5 @@
 	"name" : "CypressJsonParser",
 	"pools" : [
 		 ],
+	"subclassType" : "",
 	"super" : "Object" }

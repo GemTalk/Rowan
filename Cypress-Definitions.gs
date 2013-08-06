@@ -255,7 +255,7 @@ doit
 doit
 (CypressDefinition
 	subclass: 'CypressClassDefinition'
-	instVarNames: #( name superclassName category comment instVarNames classInstVarNames classVarNames poolDictionaryNames )
+	instVarNames: #( name superclassName category comment instVarNames classInstVarNames classVarNames poolDictionaryNames subclassType )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -1608,7 +1608,7 @@ unloadDefinition
 category: 'instance creation'
 set compile_env: 0
 classmethod: CypressClassDefinition
-name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment
+name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment subclassType: subclassType
 
 	^self new
 		name: aClassName asString
@@ -1623,6 +1623,7 @@ name: aClassName superclassName: aSuperclassName category: aCategory instVarName
 		poolDictionaryNames: (somePoolDictionaryNames asArray
 				collect: [:each | each asString])
 		comment: (self normalizeLineEndings: aComment)
+		subclassType: subclassType
 %
 
 ! ------------------- Instance methods for CypressClassDefinition
@@ -1738,7 +1739,69 @@ comment
 category: 'loading'
 set compile_env: 0
 method: CypressClassDefinition
+createOrReviseByteClass
+	"To be resolved:
+		- the question of an 'environment' in which to create the class.
+		- the question of which SymbolDictionary in which to create the class.
+	 These are perhaps the same question."
+
+	| superClass |
+	superClass := self resolveGlobalNamed: self superclassName.
+	^(superClass
+		byteSubclass: self name
+		classVars: (self classVarNames collect: [:each | each asSymbol])
+		classInstVars: (self classInstVarNames collect: [:each | each asSymbol])
+		poolDictionaries: #()
+		inDictionary: UserGlobals
+		options: #())
+			category: category;
+			comment: self comment
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressClassDefinition
 createOrReviseClass
+
+	^self subclassType = ''
+		ifTrue: [self createOrReviseRegularClass]
+		ifFalse: 
+			[self subclassType = 'byteSubclass'
+				ifTrue: [self createOrReviseByteClass]
+				ifFalse: 
+					[self subclassType = 'indexableSubclass'
+						ifTrue: [self createOrReviseIndexableClass]
+						ifFalse: 
+							[self error: 'unknown subclass type: ' , self subclassType printString]]]
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressClassDefinition
+createOrReviseIndexableClass
+	"To be resolved:
+		- the question of an 'environment' in which to create the class.
+		- the question of which SymbolDictionary in which to create the class.
+	 These are perhaps the same question."
+
+	| superClass |
+	superClass := self resolveGlobalNamed: self superclassName.
+	^(superClass
+		indexableSubclass: self name
+		instVarNames: (self instVarNames collect: [:each | each asSymbol])
+		classVars: (self classVarNames collect: [:each | each asSymbol])
+		classInstVars: (self classInstVarNames collect: [:each | each asSymbol])
+		poolDictionaries: #()
+		inDictionary: UserGlobals
+		options: #())
+			category: category;
+			comment: self comment
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressClassDefinition
+createOrReviseRegularClass
 	"To be resolved:
 		- the question of an 'environment' in which to create the class.
 		- the question of which SymbolDictionary in which to create the class.
@@ -1833,7 +1896,7 @@ name
 category: 'initialization'
 set compile_env: 0
 method: CypressClassDefinition
-name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment
+name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment subclassType: aSubclassType
 
 	name := aClassName.
 	superclassName := aSuperclassName.
@@ -1842,7 +1905,8 @@ name: aClassName superclassName: aSuperclassName category: aCategory instVarName
 	classInstVarNames := someClassInstanceVariableNames.
 	classVarNames := someClassVariableNames.
 	poolDictionaryNames := somePoolDictionaryNames.
-	comment := aComment
+	comment := aComment.
+	subclassType := aSubclassType
 %
 
 category: 'private'
@@ -1923,6 +1987,14 @@ requirements
 	"Answer list of global names required by this definition"
 
 	^{self superclassName}
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressClassDefinition
+subclassType
+
+	^subclassType
 %
 
 category: 'accessing'
@@ -2547,7 +2619,23 @@ asCypressClassDefinition
 		classInstVarNames: self class instVarNames
 		classVarNames: self classVarNames
 		poolDictionaryNames: self sharedPools
-		comment: self comment.
+		comment: self comment
+		subclassType: self subclassType.
+%
+
+category: '*Cypress-Definitions'
+set compile_env: 0
+method: Class
+subclassType
+	"Answer a description of the receiver to identify whether it is a regular class,
+	 a byte subclass, or an indexable subclass."
+
+	^(self isBytes and: [self superClass isBytes not])
+		ifTrue: ['byteSubclass']
+		ifFalse: 
+			[(self isIndexable and: [self superClass isIndexable not])
+				ifTrue: ['indexableSubclass']
+				ifFalse: ['']]
 %
 
 ! Class Extension for GsNMethod

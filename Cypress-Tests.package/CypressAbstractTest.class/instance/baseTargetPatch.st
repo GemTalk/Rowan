@@ -13,7 +13,8 @@ baseTargetPatch
 				classInstVarNames: #('current')
 				classVarNames: #('Something')
 				poolDictionaryNames: #()
-				comment: 'This mock contains basic class and instance method selectors')
+				comment: 'This mock contains basic class and instance method selectors'
+				subclassType: '')
 			to: (CypressClassDefinition
 				name: className
 				superclassName: 'Object'
@@ -22,7 +23,8 @@ baseTargetPatch
 				classInstVarNames: #('current')
 				classVarNames: #()
 				poolDictionaryNames: #()
-				comment: 'This mock contains basic class and instance method selectors').
+				comment: 'This mock contains basic class and instance method selectors'
+				subclassType: '').
 		CypressAddition
 			of: (CypressMethodDefinition
 				className: className
@@ -77,7 +79,8 @@ baseTargetPatch
 				classInstVarNames: #('anotherCIV')
 				classVarNames: #()
 				poolDictionaryNames: #()
-				comment: 'Hacked subclass to test class loading and unloading').
+				comment: 'Hacked subclass to test class loading and unloading'
+				subclassType: '').
 		CypressAddition
 			of: (CypressMethodDefinition
 				className: className , 'Sub'

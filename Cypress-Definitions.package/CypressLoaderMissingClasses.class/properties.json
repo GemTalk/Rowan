@@ -8,4 +8,5 @@
 	"name" : "CypressLoaderMissingClasses",
 	"pools" : [
 		 ],
+	"subclassType" : "",
 	"super" : "Error" }

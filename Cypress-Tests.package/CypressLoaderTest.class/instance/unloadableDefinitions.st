@@ -10,7 +10,8 @@ unloadableDefinitions
 			classInstVarNames: #()
 			classVarNames: #()
 			poolDictionaryNames: #()
-			comment: 'This class depends on a class that is intended to be missing.'.
+			comment: 'This class depends on a class that is intended to be missing.'
+			subclassType: ''.
 		CypressMethodDefinition
 			className: 'UnloadableClass'
 			classIsMeta: false

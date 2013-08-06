@@ -11,8 +11,10 @@
 		"instVarNames",
 		"classInstVarNames",
 		"classVarNames",
-		"poolDictionaryNames" ],
+		"poolDictionaryNames",
+		"subclassType" ],
 	"name" : "CypressClassDefinition",
 	"pools" : [
 		 ],
+	"subclassType" : "",
 	"super" : "CypressDefinition" }

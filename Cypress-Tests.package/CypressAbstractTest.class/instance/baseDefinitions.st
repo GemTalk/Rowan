@@ -12,7 +12,8 @@ baseDefinitions
 			classInstVarNames: #('current')
 			classVarNames: #('Something')
 			poolDictionaryNames: #()
-			comment: 'This mock contains basic class and instance method selectors'.
+			comment: 'This mock contains basic class and instance method selectors'
+			subclassType: ''.
 		CypressMethodDefinition
 			className: className
 			classIsMeta: false

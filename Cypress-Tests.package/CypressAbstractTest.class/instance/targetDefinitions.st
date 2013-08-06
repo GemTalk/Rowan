@@ -13,7 +13,8 @@ targetDefinitions
 			classInstVarNames: #('current')
 			classVarNames: #()
 			poolDictionaryNames: #()
-			comment: 'This mock contains basic class and instance method selectors'.
+			comment: 'This mock contains basic class and instance method selectors'
+			subclassType: ''.
 		CypressMethodDefinition
 			className: className
 			classIsMeta: false
@@ -80,7 +81,8 @@ targetDefinitions
 			classInstVarNames: #('anotherCIV')
 			classVarNames: #()
 			poolDictionaryNames: #()
-			comment: 'Hacked subclass to test class loading and unloading'.
+			comment: 'Hacked subclass to test class loading and unloading'
+			subclassType: ''.
 		CypressMethodDefinition
 			className: className , 'Sub'
 			classIsMeta: false

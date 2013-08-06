@@ -11,3 +11,4 @@ asCypressClassDefinition
 		classVarNames: self classVariableNames
 		poolDictionaryNames: self poolDictionaryNames
 		comment: self comment
+		subclassType: self subclassType

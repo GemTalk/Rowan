@@ -166,7 +166,8 @@ baseDefinitions
 			classInstVarNames: #('current')
 			classVarNames: #('Something')
 			poolDictionaryNames: #()
-			comment: 'This mock contains basic class and instance method selectors'.
+			comment: 'This mock contains basic class and instance method selectors'
+			subclassType: ''.
 		CypressMethodDefinition
 			className: className
 			classIsMeta: false
@@ -285,6 +286,7 @@ basePackageStructureJson
 				"name" : "CypressMockBasic",
 				"pools" : [
 					 ],
+				"subclassType" : "",
 				"super" : "Object" }
 		 },
 		{
@@ -322,7 +324,8 @@ baseTargetPatch
 				classInstVarNames: #('current')
 				classVarNames: #('Something')
 				poolDictionaryNames: #()
-				comment: 'This mock contains basic class and instance method selectors')
+				comment: 'This mock contains basic class and instance method selectors'
+				subclassType: '')
 			to: (CypressClassDefinition
 				name: className
 				superclassName: 'Object'
@@ -331,7 +334,8 @@ baseTargetPatch
 				classInstVarNames: #('current')
 				classVarNames: #()
 				poolDictionaryNames: #()
-				comment: 'This mock contains basic class and instance method selectors').
+				comment: 'This mock contains basic class and instance method selectors'
+				subclassType: '').
 		CypressAddition
 			of: (CypressMethodDefinition
 				className: className
@@ -386,7 +390,8 @@ baseTargetPatch
 				classInstVarNames: #('anotherCIV')
 				classVarNames: #()
 				poolDictionaryNames: #()
-				comment: 'Hacked subclass to test class loading and unloading').
+				comment: 'Hacked subclass to test class loading and unloading'
+				subclassType: '').
 		CypressAddition
 			of: (CypressMethodDefinition
 				className: className , 'Sub'
@@ -433,7 +438,8 @@ targetDefinitions
 			classInstVarNames: #('current')
 			classVarNames: #()
 			poolDictionaryNames: #()
-			comment: 'This mock contains basic class and instance method selectors'.
+			comment: 'This mock contains basic class and instance method selectors'
+			subclassType: ''.
 		CypressMethodDefinition
 			className: className
 			classIsMeta: false
@@ -500,7 +506,8 @@ targetDefinitions
 			classInstVarNames: #('anotherCIV')
 			classVarNames: #()
 			poolDictionaryNames: #()
-			comment: 'Hacked subclass to test class loading and unloading'.
+			comment: 'Hacked subclass to test class loading and unloading'
+			subclassType: ''.
 		CypressMethodDefinition
 			className: className , 'Sub'
 			classIsMeta: false
@@ -537,10 +544,11 @@ testClassStructure
 	self deny: classStructure isClassExtension description: 'Class structure should not have been an extension'.
 	self assert: classStructure comment equals: 'This mock contains basic class and instance method selectors'.
 	classProperties := classStructure properties.
-	self assert: classProperties size equals: 6.
+	self assert: classProperties size equals: 7.
 	self assert: (classProperties at: 'instvars') equals: #('name').
 	self assert: (classProperties at: 'classinstvars') equals: #('current').
 	self assert: (classProperties at: 'name') equals: 'CypressMockBasic'.
+	self assert: (classProperties at: 'subclassType') equals: ''.
 	self assert: (classProperties at: 'super') equals: 'Object'.
 	self assert: classStructure instanceMethods size equals: 4.
 	self assert: classStructure classMethods size equals: 3.
@@ -676,7 +684,8 @@ erroneousClassDefinitions
 			classInstVarNames: #()
 			classVarNames: #()
 			poolDictionaryNames: #()
-			comment: 'This class tries to define an instance variable which already exists in the superclass.'.
+			comment: 'This class tries to define an instance variable which already exists in the superclass.'
+			subclassType: ''.
 	}
 %
 
@@ -801,7 +810,8 @@ unloadableDefinitions
 			classInstVarNames: #()
 			classVarNames: #()
 			poolDictionaryNames: #()
-			comment: 'This class depends on a class that is intended to be missing.'.
+			comment: 'This class depends on a class that is intended to be missing.'
+			subclassType: ''.
 		CypressMethodDefinition
 			className: 'UnloadableClass'
 			classIsMeta: false
@@ -837,7 +847,8 @@ testClassDefinition
 					classInstVarNames: #()
 					classVarNames: #()
 					poolDictionaryNames: #()
-					comment: '') printString
+					comment: ''
+					subclassType: '') printString
 		equals: 'a CypressClassDefinition(Foo)'
 %
 

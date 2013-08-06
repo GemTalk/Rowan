@@ -9,4 +9,5 @@ asCypressClassDefinition
 		classInstVarNames: self class instVarNames
 		classVarNames: self classVarNames
 		poolDictionaryNames: self sharedPools
-		comment: self comment.
+		comment: self comment
+		subclassType: self subclassType.

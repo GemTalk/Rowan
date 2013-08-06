@@ -9,10 +9,11 @@ testClassStructure
 	self deny: classStructure isClassExtension description: 'Class structure should not have been an extension'.
 	self assert: classStructure comment equals: 'This mock contains basic class and instance method selectors'.
 	classProperties := classStructure properties.
-	self assert: classProperties size equals: 6.
+	self assert: classProperties size equals: 7.
 	self assert: (classProperties at: 'instvars') equals: #('name').
 	self assert: (classProperties at: 'classinstvars') equals: #('current').
 	self assert: (classProperties at: 'name') equals: 'CypressMockBasic'.
+	self assert: (classProperties at: 'subclassType') equals: ''.
 	self assert: (classProperties at: 'super') equals: 'Object'.
 	self assert: classStructure instanceMethods size equals: 4.
 	self assert: classStructure classMethods size equals: 3.

@@ -10,4 +10,5 @@
 	"name" : "CypressMethodStructure",
 	"pools" : [
 		 ],
+	"subclassType" : "",
 	"super" : "CypressStructure" }

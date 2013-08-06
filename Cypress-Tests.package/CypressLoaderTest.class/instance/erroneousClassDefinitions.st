@@ -10,5 +10,6 @@ erroneousClassDefinitions
 			classInstVarNames: #()
 			classVarNames: #()
 			poolDictionaryNames: #()
-			comment: 'This class tries to define an instance variable which already exists in the superclass.'.
+			comment: 'This class tries to define an instance variable which already exists in the superclass.'
+			subclassType: ''.
 	}

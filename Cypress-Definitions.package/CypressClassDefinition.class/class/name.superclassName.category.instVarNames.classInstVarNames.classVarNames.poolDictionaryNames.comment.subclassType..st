@@ -1,5 +1,5 @@
 instance creation
-name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment
+name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment subclassType: subclassType
 
 	^self new
 		name: aClassName asString
@@ -14,3 +14,4 @@ name: aClassName superclassName: aSuperclassName category: aCategory instVarName
 		poolDictionaryNames: (somePoolDictionaryNames asArray
 				collect: [:each | each asString])
 		comment: (self normalizeLineEndings: aComment)
+		subclassType: subclassType
