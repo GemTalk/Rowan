@@ -1,4 +1,7 @@
-loading
+"
+notice: This work is protected by copyright. All rights reserved.
+category: loading
+"
 handlePatchOperation: aPatchOperation failure: anException
 	"Signal the loader exception appropriate to the current phase.
 	 Note that a handler may suppress the #addFailedPatchOperation: by

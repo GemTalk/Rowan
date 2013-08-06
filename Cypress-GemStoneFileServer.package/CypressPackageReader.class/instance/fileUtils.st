@@ -1,4 +1,0 @@
-private
-fileUtils
-
-	^CypressGemStoneDirectoryUtilities current

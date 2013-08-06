@@ -1,0 +1,11 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "CypressFileTreeFormatPackageReader",
+	"pools" : [
+		 ],
+	"super" : "CypressAbstractPackageReader" }

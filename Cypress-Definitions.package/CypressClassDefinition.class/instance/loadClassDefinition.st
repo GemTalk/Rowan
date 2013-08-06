@@ -1,4 +1,7 @@
-loading
+"
+notice: This work is protected by copyright. All rights reserved.
+category: loading
+"
 loadClassDefinition
 	"Create a new version of the defined class. If the class already exists,
 	 copy the behaviors and state from the old version."

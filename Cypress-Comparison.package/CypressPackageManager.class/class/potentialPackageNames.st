@@ -1,4 +1,7 @@
-accessing
+"
+notice: This work is protected by copyright. All rights reserved.
+category: accessing
+"
 potentialPackageNames
 	"Answer a list of 'package names' from classes and methods.
 	 The class category is the package name, if the class is in a package at all.

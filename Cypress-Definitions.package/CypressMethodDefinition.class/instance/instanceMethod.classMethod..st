@@ -1,4 +1,7 @@
-visiting
+"
+notice: This work is protected by copyright. All rights reserved.
+category: visiting
+"
 instanceMethod: instanceBlock classMethod: classBlock
 
 	^(self classIsMeta

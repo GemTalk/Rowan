@@ -1,4 +1,7 @@
-tests
+"
+notice: This work is protected by copyright. All rights reserved.
+category: tests
+"
 test_difference_
 	"Set theoretic difference means elements from the first collection not in the second."
 

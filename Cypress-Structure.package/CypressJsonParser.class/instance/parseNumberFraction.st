@@ -1,4 +1,7 @@
-parsing-internal
+"
+notice: This work is protected by copyright. All rights reserved.
+category: parsing-internal
+"
 parseNumberFraction
     | number power |
     number := 0.

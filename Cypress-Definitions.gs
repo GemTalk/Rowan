@@ -2717,7 +2717,7 @@ methodClass
 	^self inClass
 %
 
-! ------------------- Class initializers 
+! Class initializers 
 
 doit
 %

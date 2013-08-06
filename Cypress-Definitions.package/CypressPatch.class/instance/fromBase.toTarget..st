@@ -1,4 +1,7 @@
-initialization
+"
+notice: This work is protected by copyright. All rights reserved.
+category: initialization
+"
 fromBase: baseSnapshot toTarget: targetSnapshot
 	| base target |	
 	operations := OrderedCollection new.

@@ -122,7 +122,7 @@ isCypressMockBasic
 	^false
 %
 
-! ------------------- Class initializers 
+! Class initializers 
 
 doit
 CypressMockBasic initialize.

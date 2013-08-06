@@ -1,9 +1,12 @@
-initialization
+"
+notice: This work is protected by copyright. All rights reserved.
+category: initialization
+"
 fromPackage: aCypressPackageDefinition
 
 	| snapshot classMap classDefinitions classStructure |
 	snapshot := aCypressPackageDefinition snapshot.
-	name := aCypressPackageDefinition name, '.package'.
+	name := aCypressPackageDefinition name, self packageExtension.
 	properties := Dictionary new.
 	classDefinitions := OrderedCollection new.
 	classMap := Dictionary new.

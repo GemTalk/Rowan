@@ -1,6 +1,11 @@
-updating
+"
+notice: This work is protected by copyright. All rights reserved.
+category: updating
+"
 refresh
 
 	self isKnown ifFalse: [^self].
-	self updateKnownPackageSavedLocation: self savedLocation
-		or: [self error: 'invalid directory path']
+	self
+		updateImageDefinitions;
+		updateSavedDefinitions;
+		updateChangesCount.

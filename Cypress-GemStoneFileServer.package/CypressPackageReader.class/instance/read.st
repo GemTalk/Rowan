@@ -1,4 +1,0 @@
-reading
-read
-
-	self readPackageStructure

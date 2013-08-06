@@ -1,4 +1,0 @@
-accessing
-packageStructure
-
-	^packageStructure

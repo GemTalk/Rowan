@@ -1,4 +1,7 @@
-parsing
+"
+notice: This work is protected by copyright. All rights reserved.
+category: parsing
+"
 parseValue
 	| char |
 	stream atEnd ifFalse: [ 

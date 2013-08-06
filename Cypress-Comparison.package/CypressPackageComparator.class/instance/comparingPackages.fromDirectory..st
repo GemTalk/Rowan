@@ -1,4 +1,7 @@
-initializing
+"
+notice: This work is protected by copyright. All rights reserved.
+category: initializing
+"
 comparingPackages: someNames fromDirectory: aDirectory
 
 	(directoryPackageMap at: aDirectory ifAbsentPut: [OrderedCollection new])
@@ -6,9 +9,8 @@ comparingPackages: someNames fromDirectory: aDirectory
 	someNames do: 
 			[:packageName |
 			| reader modTime modTimestamp |
-			reader := CypressPackageReader
-						readPackageStructureForPackageNamed: packageName
-						from: aDirectory.
+			reader := (CypressFileSystemRepository on: aDirectory) reader
+						readPackageStructureForPackageNamed: packageName.
 			diskSnapshots at: packageName put: reader packageStructure snapshot.
 			modTime := System
 						performOnServer: 'stat --printf=%y ' , reader packageDirectory.

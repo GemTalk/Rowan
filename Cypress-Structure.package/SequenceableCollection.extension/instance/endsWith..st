@@ -1,4 +1,7 @@
-*Cypress-Structure
+"
+notice: This work is protected by copyright. All rights reserved.
+category: *Cypress-Structure
+"
 endsWith: aSequence
 	"Answer whether the last elements of the receiver are the same as aSequence."
 

@@ -1,4 +1,7 @@
-*Cypress-Definitions
+"
+notice: This work is protected by copyright. All rights reserved.
+category: *Cypress-Definitions
+"
 findString: subString startingAt: startIndex caseSensitive: aBoolean
 	"If a receiver contains subString beginning at some point at or after
 	 startIndex, this returns the index at which subString begins.  If the

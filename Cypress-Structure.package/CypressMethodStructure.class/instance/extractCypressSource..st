@@ -1,4 +1,7 @@
-private
+"
+notice: This work is protected by copyright. All rights reserved.
+category: private
+"
 extractCypressSource: aString
     | stream categoryStream sourceStream readingCategory |
     stream := ReadStream on: aString.

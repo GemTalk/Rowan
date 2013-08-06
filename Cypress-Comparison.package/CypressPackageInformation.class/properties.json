@@ -11,6 +11,7 @@
 		"imageDefinitions",
 		"savedDefinitions",
 		"savedLocation",
+		"repository",
 		"imageCounts",
 		"changesCount" ],
 	"name" : "CypressPackageInformation",

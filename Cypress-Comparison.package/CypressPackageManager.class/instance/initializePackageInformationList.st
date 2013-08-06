@@ -1,8 +1,16 @@
-initializing
+"
+notice: This work is protected by copyright. All rights reserved.
+category: initializing
+"
 initializePackageInformationList
 
 	packageInformationList := self potentialPackageNames collect: 
 					[:each |
-					CypressPackageInformation
-						named: each
-						savedAt: (knownPackages at: each ifAbsent: [''])]
+					| directory repo |
+					directory := knownPackages at: each ifAbsent: [nil].
+					repo := directory
+								ifNil: [nil]
+								ifNotNil: 
+									[knownRepositories at: directory
+										ifAbsentPut: [CypressFileSystemRepository on: directory]].
+					CypressPackageInformation named: each repository: repo]

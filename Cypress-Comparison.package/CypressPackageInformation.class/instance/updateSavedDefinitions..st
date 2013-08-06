@@ -1,4 +1,0 @@
-updating
-updateSavedDefinitions: someCypressDefinitions
-
-	self savedDefinitions: someCypressDefinitions

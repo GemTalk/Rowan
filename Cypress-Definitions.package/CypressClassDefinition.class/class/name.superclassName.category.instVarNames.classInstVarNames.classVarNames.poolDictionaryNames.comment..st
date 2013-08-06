@@ -1,4 +1,7 @@
-instance creation
+"
+notice: This work is protected by copyright. All rights reserved.
+category: instance creation
+"
 name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment
 
 	^self new

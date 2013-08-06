@@ -5,6 +5,7 @@
 		 ],
 	"instvars" : [
 		"knownPackages",
+		"knownRepositories",
 		"packageInformationList" ],
 	"name" : "CypressPackageManager",
 	"pools" : [

@@ -1,4 +1,7 @@
-comparing - private
+"
+notice: This work is protected by copyright. All rights reserved.
+category: comparing - private
+"
 addClassDefinition: classDefinition to: aDictionary
 
 	(aDictionary at: classDefinition className ifAbsentPut: [Dictionary new])

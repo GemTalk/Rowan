@@ -68,8 +68,22 @@ doit
 
 doit
 (Object
-	subclass: 'CypressPackageWriter'
-	instVarNames: #( packageDirectory packageStructure rootDirectory )
+	subclass: 'CypressAbstractPackageFiler'
+	instVarNames: #( repository packageDirectory packageStructure )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-GemStoneFileServer';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressAbstractPackageFiler
+	subclass: 'CypressAbstractPackageWriter'
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #( specials )
 	poolDictionaries: #()
@@ -81,9 +95,79 @@ doit
 %
 
 doit
-(Object
+(CypressAbstractPackageWriter
+	subclass: 'CypressFileTreeFormatPackageWriter'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-GemStoneFileServer';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressAbstractPackageWriter
+	subclass: 'CypressPackageWriter'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-GemStoneFileServer';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressAbstractPackageFiler
+	subclass: 'CypressAbstractPackageReader'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-GemStoneFileServer';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressAbstractPackageReader
+	subclass: 'CypressFileTreeFormatPackageReader'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-GemStoneFileServer';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressAbstractPackageReader
+	subclass: 'CypressFlexiblePackageReader'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-GemStoneFileServer';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressAbstractPackageReader
 	subclass: 'CypressPackageReader'
-	instVarNames: #( packageDirectory packageStructure )
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -325,60 +409,132 @@ writeStreamFor: filePath in: aDirectory do: aOneArgBlock
 	[aOneArgBlock value: stream] ensure: [file nextPutAll: stream contents encodeAsUTF8; close]
 %
 
-! Class Implementation for CypressPackageWriter
+! Class Implementation for CypressAbstractPackageFiler
 
-! ------------------- Class methods for CypressPackageWriter
+! ------------------- Class methods for CypressAbstractPackageFiler
+
+category: 'instance creation'
+set compile_env: 0
+classmethod: CypressAbstractPackageFiler
+forRepository: aCypressFileSystemRepository
+
+	^self new
+		initializeForRepository: aCypressFileSystemRepository;
+		yourself.
+%
+
+! ------------------- Instance methods for CypressAbstractPackageFiler
+
+category: 'private'
+set compile_env: 0
+method: CypressAbstractPackageFiler
+fileUtils
+
+	^CypressFileUtilities current
+%
+
+category: 'initializing - private'
+set compile_env: 0
+method: CypressAbstractPackageFiler
+initializeForRepository: aCypressFileSystemRepository
+
+	repository := aCypressFileSystemRepository
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressAbstractPackageFiler
+packageDirectory
+
+	^packageDirectory
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressAbstractPackageFiler
+packageDirectory: aDirectory
+
+	packageDirectory := aDirectory
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressAbstractPackageFiler
+packageStructure
+
+	^packageStructure
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressAbstractPackageFiler
+packageStructure: aPackageStructure
+
+	packageStructure := aPackageStructure
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressAbstractPackageFiler
+propertiesFileNameExtension
+
+	^'.ston'
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressAbstractPackageFiler
+repository
+
+	^repository
+%
+
+! Class Implementation for CypressAbstractPackageWriter
+
+! ------------------- Class methods for CypressAbstractPackageWriter
 
 category: 'initialization'
 set compile_env: 0
-classmethod: CypressPackageWriter
+classmethod: CypressAbstractPackageWriter
 initializeSpecials
+	"Valid binarySelector characters  '!' | '%' | '&' | '*' | '+' | ','' | '/' | '<' | '=' | '>' | '?' | '@' | '\' | '~' | '|' | '-'"
 
 	| map |
 	map := Dictionary new.
 	map
-		at: $+ put: 'plus';
-		at: $- put: 'minus';
-		at: $= put: 'equals';
-		at: $< put: 'less';
-		at: $> put: 'more';
+		at: $! put: 'bang';
 		at: $% put: 'percent';
 		at: $& put: 'and';
-		at: $| put: 'pipe';
 		at: $* put: 'star';
+		at: $+ put: 'plus';
+		at: $, put: 'comma';
+		at: $- put: 'minus';
 		at: $/ put: 'slash';
-		at: $\ put: 'backslash';
-		at: $~ put: 'tilde';
+		at: $< put: 'less';
+		at: $= put: 'equals';
+		at: $> put: 'more';
 		at: $? put: 'wat';
-		at: $@ put: 'at'.
+		at: $@ put: 'at';
+		at: $\ put: 'backslash';
+		at: $| put: 'pipe';
+		at: $~ put: 'tilde'.
 	map keys do: [:key | map at: (map at: key) put: key].
 	^map
 %
 
 category: 'accessing'
 set compile_env: 0
-classmethod: CypressPackageWriter
+classmethod: CypressAbstractPackageWriter
 specials
 
 	^specials ifNil: [specials := self initializeSpecials]
 %
 
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressPackageWriter
-writePackageStructure: aPackageStructure to: aPackagesDirectory
-
-	^(self new)
-		packageStructure: aPackageStructure;
-		rootDirectory: aPackagesDirectory;
-		write
-%
-
-! ------------------- Instance methods for CypressPackageWriter
+! ------------------- Instance methods for CypressAbstractPackageWriter
 
 category: 'private'
 set compile_env: 0
-method: CypressPackageWriter
+method: CypressAbstractPackageWriter
 directoryForDirectoryNamed: directoryNameOrPath
 
 	^directoryNameOrPath = '.'
@@ -388,7 +544,7 @@ directoryForDirectoryNamed: directoryNameOrPath
 
 category: 'private'
 set compile_env: 0
-method: CypressPackageWriter
+method: CypressAbstractPackageWriter
 fileNameForSelector: selector
 
 	^selector last = $:
@@ -408,68 +564,7 @@ fileNameForSelector: selector
 
 category: 'private'
 set compile_env: 0
-method: CypressPackageWriter
-fileUtils
-
-	^CypressGemStoneDirectoryUtilities current
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageWriter
-packageDirectory
-
-	packageDirectory
-		ifNil: 
-			[packageDirectory := self fileUtils ensureDirectoryExists: (self fileUtils
-								directoryFromPath: self packageStructure name
-								relativeTo: self rootDirectory)].
-	^packageDirectory
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageWriter
-packageDirectory: aPackageDirectory
-
-	packageDirectory := aPackageDirectory
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageWriter
-packageStructure
-
-	^packageStructure
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageWriter
-packageStructure: aCypressPackageStructure
-
-	packageStructure := aCypressPackageStructure
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageWriter
-rootDirectory
-
-	^rootDirectory
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageWriter
-rootDirectory: aDirectory
-
-	rootDirectory := aDirectory
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressPackageWriter
+method: CypressAbstractPackageWriter
 subPackageFileDirectoryFor: directoryNameOrPath
 
 	| dir |
@@ -481,18 +576,7 @@ subPackageFileDirectoryFor: directoryNameOrPath
 
 category: 'writing'
 set compile_env: 0
-method: CypressPackageWriter
-write
-
-	(self fileUtils directoryExists: self packageDirectory)
-		ifTrue: [self fileUtils deleteAll: self packageDirectory].
-	self writePropertiesFile.
-	self writePackageStructure
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressPackageWriter
+method: CypressAbstractPackageWriter
 writeClassComment: classStructure on: fileStream
 
 	fileStream nextPutAll: classStructure comment withUnixLineEndings
@@ -500,15 +584,7 @@ writeClassComment: classStructure on: fileStream
 
 category: 'writing'
 set compile_env: 0
-method: CypressPackageWriter
-writeClassStructure: classStructure on: fileStream
-
-	classStructure properties writeCypressJsonOn: fileStream
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressPackageWriter
+method: CypressAbstractPackageWriter
 writeClassStructure: classStructure to: classPath
 
 	self
@@ -518,28 +594,28 @@ writeClassStructure: classStructure to: classPath
 			visit: [:fileStream | self writeClassComment: classStructure on: fileStream];
 		writeInDirectoryName: classPath
 			fileName: 'properties'
-			extension: '.json'
-			visit: [:fileStream | self writeClassStructure: classStructure on: fileStream]
+			extension: self propertiesFileNameExtension
+			visit: [:fileStream | classStructure  properties writeCypressJsonOn: fileStream]
 %
 
 category: 'writing'
 set compile_env: 0
-method: CypressPackageWriter
+method: CypressAbstractPackageWriter
 writeExtensionClassStructure: classStructure to: classPath
 
-     self
-        writeInDirectoryName: classPath
-        fileName: 'properties'
-        extension: '.json'
-        visit: [:fileStream |  | properties |
-    		properties := Dictionary new.
-    		properties at: 'name' put: classStructure className.
-    		properties writeCypressJsonOn: fileStream ]
+	self
+		writeInDirectoryName: classPath
+		fileName: 'properties'
+		extension: self propertiesFileNameExtension
+		visit: 
+			[:fileStream |
+			(Dictionary with: 'name' -> classStructure className)
+				writeCypressJsonOn: fileStream]
 %
 
 category: 'private'
 set compile_env: 0
-method: CypressPackageWriter
+method: CypressAbstractPackageWriter
 writeInDirectoryName: directoryNameOrPath fileName: fileName extension: ext visit: visitBlock
 
 	| directory |
@@ -552,7 +628,15 @@ writeInDirectoryName: directoryNameOrPath fileName: fileName extension: ext visi
 
 category: 'writing'
 set compile_env: 0
-method: CypressPackageWriter
+method: CypressAbstractPackageWriter
+writeMethodStructure: methodStructure onStream: fileStream
+
+	self subclassResponsibility: #writeMethodStructure:onStream:
+%
+
+category: 'writing'
+set compile_env: 0
+method: CypressAbstractPackageWriter
 writeMethodStructure: methodStructure to: methodPath
 
 	| filename |
@@ -561,17 +645,12 @@ writeMethodStructure: methodStructure to: methodPath
 		writeInDirectoryName: methodPath
 		fileName: filename
 		extension: '.st'
-		visit: 
-			[:fileStream |
-			fileStream
-				nextPutAll: methodStructure category;
-				lf;
-				nextPutAll: methodStructure source withUnixLineEndings]
+		visit: [:fileStream | self writeMethodStructure: methodStructure onStream: fileStream]
 %
 
 category: 'writing'
 set compile_env: 0
-method: CypressPackageWriter
+method: CypressAbstractPackageWriter
 writePackageStructure
 
 	self
@@ -583,7 +662,22 @@ writePackageStructure
 
 category: 'writing'
 set compile_env: 0
-method: CypressPackageWriter
+method: CypressAbstractPackageWriter
+writePackageStructure: aPackageStructure
+
+	self
+		packageStructure: aPackageStructure;
+		packageDirectory: (self fileUtils ensureDirectoryExists: (self fileUtils
+							directoryFromPath: self packageStructure name
+							relativeTo: self repository directoryPath)).
+	self fileUtils deleteAll: self packageDirectory.
+	self writePropertiesFile.
+	self writePackageStructure
+%
+
+category: 'writing'
+set compile_env: 0
+method: CypressAbstractPackageWriter
 writePackageStructureClasses: classStructures isClassExtension: isClassExtension
 
 	| classDirExtension |
@@ -608,44 +702,72 @@ writePackageStructureClasses: classStructures isClassExtension: isClassExtension
 
 category: 'writing'
 set compile_env: 0
-method: CypressPackageWriter
+method: CypressAbstractPackageWriter
 writePropertiesFile
 
 	self
 		writeInDirectoryName: '.'
 		fileName: 'properties'
-		extension: '.json'
+		extension: self propertiesFileNameExtension
 		visit: [:fileStream | Dictionary new writeCypressJsonOn: fileStream]
 %
 
-! Class Implementation for CypressPackageReader
+! Class Implementation for CypressFileTreeFormatPackageWriter
 
-! ------------------- Class methods for CypressPackageReader
+! ------------------- Instance methods for CypressFileTreeFormatPackageWriter
 
-category: 'unknown'
+category: 'accessing'
 set compile_env: 0
-classmethod: CypressPackageReader
-readPackageStructureForPackageNamed: packageName from: aDirectory
+method: CypressFileTreeFormatPackageWriter
+propertiesFileNameExtension
 
-	^self readPackageStructureFrom: aDirectory, packageName, '.package'
+	^'.json'
 %
 
-category: 'instance creation'
+category: 'writing'
 set compile_env: 0
-classmethod: CypressPackageReader
-readPackageStructureFrom: aPackageDirectory
+method: CypressFileTreeFormatPackageWriter
+writeMethodStructure: methodStructure onStream: fileStream
 
-	^(self new)
-		packageDirectory: aPackageDirectory;
-		read;
-		yourself
+	fileStream
+		nextPutAll: methodStructure category; lf;
+		nextPutAll: methodStructure source withUnixLineEndings
 %
 
-! ------------------- Instance methods for CypressPackageReader
+! Class Implementation for CypressPackageWriter
+
+! ------------------- Instance methods for CypressPackageWriter
+
+category: 'accessing - private'
+set compile_env: 0
+method: CypressPackageWriter
+methodNoticeLine
+
+	^self packageStructure properties
+		at: 'copyrightLine'
+		ifAbsent: [self repository copyrightProperty]
+%
+
+category: 'writing'
+set compile_env: 0
+method: CypressPackageWriter
+writeMethodStructure: methodStructure onStream: fileStream
+
+	fileStream
+		nextPutAll: '"'; lf;
+		nextPutAll: 'notice: ', self methodNoticeLine; lf;
+		nextPutAll: 'category: ', methodStructure category; lf;
+		nextPutAll: '"'; lf;
+		nextPutAll: methodStructure source withUnixLineEndings
+%
+
+! Class Implementation for CypressAbstractPackageReader
+
+! ------------------- Instance methods for CypressAbstractPackageReader
 
 category: 'private'
 set compile_env: 0
-method: CypressPackageReader
+method: CypressAbstractPackageReader
 classStructureFrom: classPropertiesDict
 
 	^(CypressClassStructure new)
@@ -657,7 +779,7 @@ classStructureFrom: classPropertiesDict
 
 category: 'private'
 set compile_env: 0
-method: CypressPackageReader
+method: CypressAbstractPackageReader
 classStructureFrom: classPropertiesDict comment: classComment
 
 	^(self classStructureFrom: classPropertiesDict)
@@ -666,57 +788,26 @@ classStructureFrom: classPropertiesDict comment: classComment
 		yourself
 %
 
-category: 'private'
+category: 'reading'
 set compile_env: 0
-method: CypressPackageReader
-fileUtils
+method: CypressAbstractPackageReader
+isPropertiesFileDirectoryEntry: entry
 
-	^CypressGemStoneDirectoryUtilities current
+	^entry endsWith: '/properties', self propertiesFileNameExtension
 %
 
 category: 'accessing'
 set compile_env: 0
-method: CypressPackageReader
-packageDirectory
+method: CypressAbstractPackageReader
+packageExtension
 
-	^packageDirectory
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageReader
-packageDirectory: aDirectory
-
-	packageDirectory := aDirectory
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageReader
-packageStructure
-
-	^packageStructure
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageReader
-packageStructure: aPackageStructure
-
-	packageStructure := aPackageStructure
+	^self packageStructure
+		packageExtensionOr: [self repository packageExtension]
 %
 
 category: 'reading'
 set compile_env: 0
-method: CypressPackageReader
-read
-
-	self readPackageStructure
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressPackageReader
+method: CypressAbstractPackageReader
 readClassCommentFromDirectoryEntries: entries
 
 	self fileUtils readStreamFor: (entries
@@ -727,25 +818,25 @@ readClassCommentFromDirectoryEntries: entries
 
 category: 'reading'
 set compile_env: 0
-method: CypressPackageReader
-readClassPropertiesDictFromDirectoryEntries: entries
+method: CypressAbstractPackageReader
+readClassPropertiesFromDirectoryEntries: entries
 
 	self fileUtils readStreamFor: (entries
-				detect: [:entry | entry endsWith: '/properties.json']
+				detect: [:entry | entry endsWith: '/properties', self propertiesFileNameExtension]
 				ifNone: [^Dictionary new])
 		do: [:fileStream | ^CypressJsonParser parseStream: fileStream]
 %
 
 category: 'reading'
 set compile_env: 0
-method: CypressPackageReader
+method: CypressAbstractPackageReader
 readClassStructureFromEntry: classEntry
 
 	| classDirectory classPropertiesDict classComment entries classStructure |
 	classDirectory := classEntry.
-	entries := (self fileUtils directoryEntriesFrom: classDirectory).
+	entries := self fileUtils directoryEntriesFrom: classDirectory.
 	classPropertiesDict := self
-				readClassPropertiesDictFromDirectoryEntries: entries.
+				readClassPropertiesFromDirectoryEntries: entries.
 	classComment := self readClassCommentFromDirectoryEntries: entries.
 	classStructure := self classStructureFrom: classPropertiesDict
 				comment: classComment.
@@ -755,14 +846,46 @@ readClassStructureFromEntry: classEntry
 
 category: 'reading'
 set compile_env: 0
-method: CypressPackageReader
+method: CypressAbstractPackageReader
+readCypressFormatMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
+
+	| notice category source selector |
+	(fileStream peekFor: $")
+		ifTrue: [fileStream nextLine]
+		ifFalse: [self error: 'Method does not have valid Cypress format'].
+	(fileStream match: 'notice: ')
+		ifTrue: [notice := fileStream nextLine trimSeparators]
+		ifFalse: [self error: 'Method does not have valid Cypress format'].
+	(fileStream match: 'category: ')
+		ifTrue: [category := fileStream nextLine trimSeparators]
+		ifFalse: [self error: 'Method does not have valid Cypress format'].
+	(fileStream peekFor: $")
+		ifTrue: [fileStream nextLine]
+		ifFalse: [self error: 'Method does not have valid Cypress format'].
+	source := fileStream upToEnd.
+	selector := UndefinedObject parseSelectorFrom: source.
+	methods at: selector
+		put: ((CypressMethodStructure new)
+				packageStructure: self packageStructure;
+				classStructure: classStructure;
+				name: selector;
+				isMetaclass: isMeta;
+				selector: selector;
+				category: category;
+				source: source;
+				yourself)
+%
+
+category: 'reading'
+set compile_env: 0
+method: CypressAbstractPackageReader
 readExtensionClassStructureFromEntry: classEntry
 
 	| classDirectory classPropertiesDict classComment entries classStructure |
 	classDirectory := classEntry.
-	entries := (self fileUtils directoryEntriesFrom: classDirectory).
+	entries := self fileUtils directoryEntriesFrom: classDirectory.
 	classPropertiesDict := self
-				readClassPropertiesDictFromDirectoryEntries: entries.
+				readClassPropertiesFromDirectoryEntries: entries.
 	classStructure := self classStructureFrom: classPropertiesDict.
 	self readMethodStructureFor: classStructure in: entries.
 	^classStructure
@@ -770,47 +893,67 @@ readExtensionClassStructureFromEntry: classEntry
 
 category: 'reading'
 set compile_env: 0
-method: CypressPackageReader
-readMethodStructureFor: classStructure in: entries
+method: CypressAbstractPackageReader
+readFileTreeFormatMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
 
-    entries
-        do: [ :entry | 
-            | methods isMeta |
- 		methods := (isMeta := entry endsWith: '/class')
-                ifTrue: [ classStructure classMethods ]
-		    ifFalse: [ classStructure instanceMethods ].
-            ((entry endsWith: '/instance') or: [entry endsWith: '/class' ])
-                ifTrue: [ 
-                    ((self fileUtils directoryEntriesFrom: entry) select: [ :each | each endsWith: '.st' ])
-                        do: [ :methodEntry | 
-                            self fileUtils readStreamFor: methodEntry
-                                do: [ :fileStream | 
-                                    | category source selector |
-                                    category := fileStream nextLine trimSeparators.
-                                    source := fileStream upToEnd.
-						selector := UndefinedObject parseSelectorFrom: source.
-                                     methods 
-							at: selector
-							put: ((CypressMethodStructure new)
-									packageStructure: self packageStructure;
-									classStructure: classStructure;
-									name: selector;
-									isMetaclass: isMeta;
-									selector: selector;
-									category: category;
-									source: source;
-									yourself) ] ] ] ]
+	| category source selector |
+	category := fileStream nextLine trimSeparators.
+	source := fileStream upToEnd.
+	selector := UndefinedObject parseSelectorFrom: source.
+	methods at: selector
+		put: ((CypressMethodStructure new)
+				packageStructure: self packageStructure;
+				classStructure: classStructure;
+				name: selector;
+				isMetaclass: isMeta;
+				selector: selector;
+				category: category;
+				source: source;
+				yourself)
 %
 
 category: 'reading'
 set compile_env: 0
-method: CypressPackageReader
+method: CypressAbstractPackageReader
+readMethodStructureFor: classStructure in: entries
+
+	entries do: 
+			[:entry |
+			| methods isMeta |
+			methods := (isMeta := entry endsWith: '/class')
+						ifTrue: [classStructure classMethods]
+						ifFalse: [classStructure instanceMethods].
+			((entry endsWith: '/instance') or: [entry endsWith: '/class'])
+				ifTrue: 
+					[((self fileUtils directoryEntriesFrom: entry)
+						select: [:each | each endsWith: '.st']) do: 
+								[:methodEntry |
+								self fileUtils readStreamFor: methodEntry
+									do: 
+										[:fileStream |
+										self
+											readMethodStructureFrom: fileStream
+											intoClassStructure: classStructure
+											meta: isMeta
+											methods: methods]]]]
+%
+
+category: 'reading'
+set compile_env: 0
+method: CypressAbstractPackageReader
+readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
+
+	self subclassResponsibility: #readMethodStructureFrom:intoClassStructure:meta:methods:
+%
+
+category: 'reading'
+set compile_env: 0
+method: CypressAbstractPackageReader
 readPackageStructure
 
-   packageStructure := CypressPackageStructure named: (self fileUtils localNameFrom: self packageDirectory).
    (self fileUtils directoryEntriesFrom: self packageDirectory)
         do: [ :entry | 
-		(entry endsWith: '/properties.json')
+		(self isPropertiesFileDirectoryEntry: entry)
 			ifTrue: [ self packageStructure properties: (self readPropertiesFile: entry) ].
             (entry endsWith: '.class')
                 ifTrue: [ self packageStructure classes add: (self readClassStructureFromEntry: entry) ].
@@ -820,12 +963,118 @@ readPackageStructure
 
 category: 'reading'
 set compile_env: 0
-method: CypressPackageReader
+method: CypressAbstractPackageReader
+readPackageStructureForPackageNamed: packageName
+
+	| structureName |
+	structureName := packageName , self repository packageExtension.
+	self
+		packageStructure: (CypressPackageStructure named: structureName);
+		packageDirectory: (self fileUtils directoryFromPath: structureName
+					relativeTo: self repository directoryPath);
+		readPackageStructure
+%
+
+category: 'reading'
+set compile_env: 0
+method: CypressAbstractPackageReader
 readPropertiesFile: entry
 
 	self fileUtils
 		readStreamFor: entry
 		do: [:fileStream | ^CypressJsonParser parseStream: fileStream]
+%
+
+! Class Implementation for CypressFileTreeFormatPackageReader
+
+! ------------------- Instance methods for CypressFileTreeFormatPackageReader
+
+category: 'accessing'
+set compile_env: 0
+method: CypressFileTreeFormatPackageReader
+propertiesFileNameExtension
+
+	^'.json'
+%
+
+category: 'reading'
+set compile_env: 0
+method: CypressFileTreeFormatPackageReader
+readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
+	"Strict!"
+
+	self
+		readFileTreeFormatMethodStructureFrom: fileStream
+		intoClassStructure: classStructure
+		meta: isMeta
+		methods: methods
+%
+
+! Class Implementation for CypressFlexiblePackageReader
+
+! ------------------- Instance methods for CypressFlexiblePackageReader
+
+category: 'reading'
+set compile_env: 0
+method: CypressFlexiblePackageReader
+isPropertiesFileDirectoryEntry: entry
+	"Expect .ston properties file, but tolerate .json if present."
+
+	^(super isPropertiesFileDirectoryEntry: entry)
+		or: [entry endsWith: '/properties.json']
+%
+
+category: 'reading'
+set compile_env: 0
+method: CypressFlexiblePackageReader
+readClassPropertiesFromDirectoryEntries: entries
+	"Look for Cypress .ston properties file first, but accept a .json version if present."
+
+	self fileUtils readStreamFor: (entries
+				detect: [:entry | entry endsWith: '/properties' , self propertiesFileNameExtension]
+				ifNone: 
+					[entries detect: [:entry | entry endsWith: '/properties.json']
+						ifNone: [^Dictionary new]])
+		do: [:fileStream | ^CypressJsonParser parseStream: fileStream]
+%
+
+category: 'reading'
+set compile_env: 0
+method: CypressFlexiblePackageReader
+readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
+	"If the stream begins with a double quote, process it on the assumption it is a Cypress-format method.
+	 Otherwise, treat it as a FileTree-format method."
+
+	fileStream peek = $"
+		ifTrue: 
+			[self
+				readCypressFormatMethodStructureFrom: fileStream
+				intoClassStructure: classStructure
+				meta: isMeta
+				methods: methods]
+		ifFalse: 
+			[self
+				readFileTreeFormatMethodStructureFrom: fileStream
+				intoClassStructure: classStructure
+				meta: isMeta
+				methods: methods]
+%
+
+! Class Implementation for CypressPackageReader
+
+! ------------------- Instance methods for CypressPackageReader
+
+category: 'reading'
+set compile_env: 0
+method: CypressPackageReader
+readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
+	"Strict!"
+
+	self
+		readCypressFormatMethodStructureFrom: fileStream
+		intoClassStructure: classStructure
+		meta: isMeta
+		methods: methods
 %
 
 ! Class Extensions
@@ -923,7 +1172,7 @@ upToEnd
 	^self next: (self fileSize - self positionA)
 %
 
-! ------------------- Class initializers 
+! Class initializers 
 
 doit
 CypressGemStoneDirectoryUtilities initialize.

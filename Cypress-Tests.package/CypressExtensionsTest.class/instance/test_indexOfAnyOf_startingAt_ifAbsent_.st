@@ -1,4 +1,7 @@
-tests
+"
+notice: This work is protected by copyright. All rights reserved.
+category: tests
+"
 test_indexOfAnyOf_startingAt_ifAbsent_
 
 	self

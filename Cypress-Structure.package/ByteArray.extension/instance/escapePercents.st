@@ -1,4 +1,7 @@
-*Cypress-Structure
+"
+notice: This work is protected by copyright. All rights reserved.
+category: *Cypress-Structure
+"
 escapePercents
 	"Answer a new string with 'dangerous' characters escaped to their %XX form,
 	 for use in HTTP transactions."

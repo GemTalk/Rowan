@@ -1,4 +1,7 @@
-*Cypress-Definitions
+"
+notice: This work is protected by copyright. All rights reserved.
+category: *Cypress-Definitions
+"
 intersection: aCollection
 	"Answer the set theoretic intersection of two collections."
 

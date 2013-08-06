@@ -1,4 +1,7 @@
-*Cypress-GemStoneFileServer
+"
+notice: This work is protected by copyright. All rights reserved.
+category: *Cypress-GemStoneFileServer
+"
 _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId
 	"Compiles the method into disposable dictionaries, if possible.
 	 Attempts auto-recompile for undefinedSymbols.

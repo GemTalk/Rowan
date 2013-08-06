@@ -1,4 +1,7 @@
-sorting
+"
+notice: This work is protected by copyright. All rights reserved.
+category: sorting
+"
 addClasses: subs to: order fromRelevantClasses: classSet organizedBy: org
 
 	1 to: subs size

@@ -1,4 +1,7 @@
-printing
+"
+notice: This work is protected by copyright. All rights reserved.
+category: printing
+"
 printOn: aStream
 
 	| className |

@@ -1,7 +1,10 @@
-updating
+"
+notice: This work is protected by copyright. All rights reserved.
+category: updating
+"
 determineKnownPackages
 
-	^(packageInformationList select: [:each | each savedLocation notEmpty])
+	^(packageInformationList select: [:each | each repository notNil])
 		inject: Dictionary new
 		into: 
 			[:dict :each |

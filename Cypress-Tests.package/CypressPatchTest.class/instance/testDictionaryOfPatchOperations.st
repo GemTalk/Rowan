@@ -1,4 +1,7 @@
-tests
+"
+notice: This work is protected by copyright. All rights reserved.
+category: tests
+"
 testDictionaryOfPatchOperations
 	"loader uses dictionary for managing patch operations ... ensure that Amber Dictionaries stand up"
 

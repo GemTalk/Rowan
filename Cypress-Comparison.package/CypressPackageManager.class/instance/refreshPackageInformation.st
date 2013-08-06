@@ -1,7 +1,12 @@
-updating
+"
+notice: This work is protected by copyright. All rights reserved.
+category: updating
+"
 refreshPackageInformation
 
-	self initializeKnownPackages.
-	self initializePackageInformationList.
-	self initializeConflictingPackageNames.
-	self initializeQualifiedPackageNames.
+	self
+		initializeKnownPackages;
+		initializeKnownRepositories;
+		initializePackageInformationList;
+		initializeConflictingPackageNames;
+		initializeQualifiedPackageNames

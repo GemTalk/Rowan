@@ -41,7 +41,7 @@ System myUserProfile symbolList do: [:symDict |
 doit
 (Object
 	subclass: 'CypressPackageManager'
-	instVarNames: #( knownPackages packageInformationList )
+	instVarNames: #( knownPackages knownRepositories packageInformationList )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -69,7 +69,7 @@ doit
 doit
 (CypressObject
 	subclass: 'CypressPackageInformation'
-	instVarNames: #( name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation imageCounts changesCount )
+	instVarNames: #( name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation repository imageCounts changesCount )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -217,7 +217,7 @@ set compile_env: 0
 method: CypressPackageManager
 determineKnownPackages
 
-	^(packageInformationList select: [:each | each savedLocation notEmpty])
+	^(packageInformationList select: [:each | each repository notNil])
 		inject: Dictionary new
 		into: 
 			[:dict :each |
@@ -264,13 +264,28 @@ initializeKnownPackages
 category: 'initializing'
 set compile_env: 0
 method: CypressPackageManager
+initializeKnownRepositories
+
+	knownRepositories := Dictionary new.
+	knownPackages asSet
+		do: [:each | knownRepositories at: each put: (CypressFileSystemRepository on: each)]
+%
+
+category: 'initializing'
+set compile_env: 0
+method: CypressPackageManager
 initializePackageInformationList
 
 	packageInformationList := self potentialPackageNames collect: 
 					[:each |
-					CypressPackageInformation
-						named: each
-						savedAt: (knownPackages at: each ifAbsent: [''])]
+					| directory repo |
+					directory := knownPackages at: each ifAbsent: [nil].
+					repo := directory
+								ifNil: [nil]
+								ifNotNil: 
+									[knownRepositories at: directory
+										ifAbsentPut: [CypressFileSystemRepository on: directory]].
+					CypressPackageInformation named: each repository: repo]
 %
 
 category: 'initializing'
@@ -299,14 +314,27 @@ lookForLoadedPackagesIn: aDirectory
 	 the specified directory to reflect the path where the package has theoretically
 	 been saved."
 
-	| packageDirectories |
-	packageDirectories := GsFile contentsOfDirectory: aDirectory , '*.package' onClient: false.
+	| repo |
+	repo := knownRepositories
+				at: aDirectory
+				ifAbsent: [CypressFileSystemRepository on: aDirectory].
+	self lookForLoadedPackagesInRepository: repo.
+	^nil
+%
+
+category: 'updating'
+set compile_env: 0
+method: CypressPackageManager
+lookForLoadedPackagesInRepository: aCypressRepository
+	"Update any of the packages in the image which have a Cypress file out in
+	 the specified directory to reflect the path where the package has theoretically
+	 been saved."
+
+	| packageNames |
+	packageNames := aCypressRepository packageNames.
 	(self packageInformationList
-		select: [:each | packageDirectories includes: aDirectory , each name , '.package'])
-			do: 
-				[:each |
-				each updateKnownPackageSavedLocation: aDirectory
-					or: [self error: 'invalid directory path']].
+		select: [:each | packageNames includes: each name])
+			do: [:each | each updateKnownPackageRepository: aCypressRepository].
 	self saveKnownPackages.
 	^nil
 %
@@ -341,10 +369,12 @@ set compile_env: 0
 method: CypressPackageManager
 refreshPackageInformation
 
-	self initializeKnownPackages.
-	self initializePackageInformationList.
-	self initializeConflictingPackageNames.
-	self initializeQualifiedPackageNames.
+	self
+		initializeKnownPackages;
+		initializeKnownRepositories;
+		initializePackageInformationList;
+		initializeConflictingPackageNames;
+		initializeQualifiedPackageNames
 %
 
 category: 'updating'
@@ -368,19 +398,7 @@ updateKnownPackages
 	knownPackages := self determineKnownPackages
 %
 
-category: 'updating'
-set compile_env: 0
-method: CypressPackageManager
-updateSavedLocation: aDirectory for: aCypressPackageInformation
-	"Update package information to reflect the path where the package should be saved."
-
-	aCypressPackageInformation updateKnownPackageSavedLocation: aDirectory
-		or: [self error: 'invalid directory path'].
-	self saveKnownPackages.
-	^nil
-%
-
-category: 'writing'
+category: 'writing - needs work'
 set compile_env: 0
 method: CypressPackageManager
 writePackagesToDiskFrom: someCypressPackageInformations
@@ -390,13 +408,14 @@ writePackagesToDiskFrom: someCypressPackageInformations
 			[:each |
 			packageStructure := CypressPackageStructure
 						fromPackage: (CypressPackageDefinition named: each name).
-			CypressPackageWriter writePackageStructure: packageStructure
-				to: each savedLocation.
+			each repository writer writePackageStructure: packageStructure.
+"The choice to produce .gs files should be provided by the package and failing that, by the repository."
 			(GsFile openWriteOnServer: each savedLocation , each name , '.gs')
 				nextPutAll: (String
 							streamContents: [:stream | packageStructure fileOutOn: stream]);
 				close.
-			self updateSavedLocation: each savedLocation for: each]
+			each refresh.
+			self saveKnownPackages]
 %
 
 category: 'writing'
@@ -534,9 +553,8 @@ comparingPackages: someNames fromDirectory: aDirectory
 	someNames do: 
 			[:packageName |
 			| reader modTime modTimestamp |
-			reader := CypressPackageReader
-						readPackageStructureForPackageNamed: packageName
-						from: aDirectory.
+			reader := (CypressFileSystemRepository on: aDirectory) reader
+						readPackageStructureForPackageNamed: packageName.
 			diskSnapshots at: packageName put: reader packageStructure snapshot.
 			modTime := System
 						performOnServer: 'stat --printf=%y ' , reader packageDirectory.
@@ -654,12 +672,12 @@ updateCurrentAdditionsAndRemovals
 category: 'instance creation'
 set compile_env: 0
 classmethod: CypressPackageInformation
-named: aString savedAt: aDirectory
+named: aString repository: aCypressRepository
 	"Answer an instance of the receiver representing the named package.
-	 If the package was saved in aDirectory, load up the saved details."
+	 If the package was saved in a Repository, load up the saved details."
 
 	^self new
-		initializeFromName: aString andSavedLocation: aDirectory;
+		initializeFromName: aString andRepository: aCypressRepository;
 		yourself
 %
 
@@ -869,7 +887,6 @@ initialize
 		name: '';
 		imageDefinitions: #();
 		savedDefinitions: #();
-		savedLocation: '';
 		imageCounts: #(0 0);
 		changesCount: 0
 %
@@ -877,19 +894,11 @@ initialize
 category: 'initializing'
 set compile_env: 0
 method: CypressPackageInformation
-initializeFromName: aString andSavedLocation: aDirectory
+initializeFromName: aString andRepository: aCypressRepositoryOrNil
 
-	self
-		name: aString;
-		initializeFromSavedLocation: aDirectory.
-%
-
-category: 'initializing'
-set compile_env: 0
-method: CypressPackageInformation
-initializeFromSavedLocation: aDirectory
-
-	self updateKnownPackageSavedLocation: aDirectory or: [^self]
+	self name: aString.
+	aCypressRepositoryOrNil isNil ifTrue: [^self].
+	self updateKnownPackageRepository: aCypressRepositoryOrNil
 %
 
 category: 'testing - type'
@@ -962,11 +971,39 @@ printDetailsOn: aStream
 category: 'updating'
 set compile_env: 0
 method: CypressPackageInformation
+readDefinitionsFromRepository
+
+	^(self repository reader readPackageStructureForPackageNamed: self name)
+		packageStructure snapshot
+		definitions
+%
+
+category: 'updating'
+set compile_env: 0
+method: CypressPackageInformation
 refresh
 
 	self isKnown ifFalse: [^self].
-	self updateKnownPackageSavedLocation: self savedLocation
-		or: [self error: 'invalid directory path']
+	self
+		updateImageDefinitions;
+		updateSavedDefinitions;
+		updateChangesCount.
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+repository
+
+	^repository
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageInformation
+repository: aCypressFileSystemRepository
+
+	repository := aCypressFileSystemRepository
 %
 
 category: 'accessing'
@@ -996,9 +1033,9 @@ savedLocation
 category: 'accessing'
 set compile_env: 0
 method: CypressPackageInformation
-savedLocation: aString
+savedLocation: aDirectory
 
-	savedLocation := aString
+	savedLocation := aDirectory
 %
 
 category: 'accessing'
@@ -1023,64 +1060,41 @@ updateChangesCount
 category: 'updating'
 set compile_env: 0
 method: CypressPackageInformation
-updateImageCounts
-
-	self imageCounts: self imageDefinitionCounts
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
 updateImageDefinitions
 
-	self updateImageDefinitions: (CypressPackageDefinition named: self name) snapshot definitions
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
-updateImageDefinitions: someCypressDefinitions
-
 	self
-		imageDefinitions: someCypressDefinitions;
-		updateImageCounts
+		imageDefinitions: (CypressPackageDefinition named: self name) snapshot
+					definitions;
+		imageCounts: self imageDefinitionCounts
 %
 
 category: 'updating'
 set compile_env: 0
 method: CypressPackageInformation
-updateKnownPackageSavedLocation: aDirectory or: aBlock
-	"Update the receiver to reflect it being a known package.
-	 If aDirectory is unspecified, answer the result of evaluating aBlock."
+updateKnownPackageRepository: aCypressRepository
+	"Update the receiver to reflect it being a known package."
 
-	aDirectory isEmpty ifTrue: [^aBlock value].
 	self
 		beKnown;
-		updateImageDefinitions;
-		updateSavedLocation: aDirectory;
-		updateChangesCount.
+		updateRepository: aCypressRepository;
+		savedLocation: aCypressRepository directoryPath;
+		refresh.
 %
 
 category: 'updating'
 set compile_env: 0
 method: CypressPackageInformation
-updateSavedDefinitions: someCypressDefinitions
+updateRepository: aCypressRepository
 
-	self savedDefinitions: someCypressDefinitions
+	self repository: aCypressRepository
 %
 
 category: 'updating'
 set compile_env: 0
 method: CypressPackageInformation
-updateSavedLocation: aDirectory
+updateSavedDefinitions
 
-	self savedLocation: aDirectory.
-	self updateSavedDefinitions: (aDirectory isEmpty
-				ifTrue: [#()]
-				ifFalse: 
-					[(CypressPackageReader readPackageStructureForPackageNamed: self name
-						from: aDirectory) packageStructure
-						snapshot definitions])
+	self savedDefinitions: self readDefinitionsFromRepository
 %
 
 ! Class Extensions
@@ -1146,7 +1160,7 @@ fromUnixFormatString: aString
 			seconds: 0)
 %
 
-! ------------------- Class initializers 
+! Class initializers 
 
 doit
 %

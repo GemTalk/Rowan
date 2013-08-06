@@ -1324,7 +1324,7 @@ method: CypressPackageStructure
 fileOutClassInitializersPreambleOn: aStream
 
 	aStream
-		nextPutAll: '! ------------------- Class initializers '; lf;
+		nextPutAll: '! Class initializers '; lf;
 		lf;
 		nextPutAll: 'doit'; lf
 %
@@ -1515,7 +1515,7 @@ fromPackage: aCypressPackageDefinition
 
 	| snapshot classMap classDefinitions classStructure |
 	snapshot := aCypressPackageDefinition snapshot.
-	name := aCypressPackageDefinition name, '.package'.
+	name := aCypressPackageDefinition name, self packageExtension.
 	properties := Dictionary new.
 	classDefinitions := OrderedCollection new.
 	classMap := Dictionary new.
@@ -1561,7 +1561,15 @@ set compile_env: 0
 method: CypressPackageStructure
 packageExtension
 
-	^self properties at: 'extension' ifAbsent: ['.package' ]
+	^self packageExtensionOr: ['.package' ]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressPackageStructure
+packageExtensionOr: aBlock
+
+	^self properties at: 'extension' ifAbsent: aBlock
 %
 
 category: 'accessing'
@@ -2288,7 +2296,7 @@ isSafeForHTTP
 		and: [self isAlphaNumeric or: ['.-_' includes: self]]
 %
 
-! ------------------- Class initializers 
+! Class initializers 
 
 doit
 %

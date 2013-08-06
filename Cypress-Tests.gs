@@ -1292,7 +1292,7 @@ unixLinesFrom: aString
 
 ! Class Extensions
 
-! ------------------- Class initializers 
+! Class initializers 
 
 doit
 %

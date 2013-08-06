@@ -1,4 +1,7 @@
-*Cypress-Definitions
+"
+notice: This work is protected by copyright. All rights reserved.
+category: *Cypress-Definitions
+"
 allSatisfying: aOneArgBlock
 	"Answer the elements from the receiver's Symbol Dictionaries
 	 which meet the criteria specified in aOneArgBlock."

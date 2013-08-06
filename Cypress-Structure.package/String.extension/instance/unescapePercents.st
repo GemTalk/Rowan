@@ -1,4 +1,7 @@
-*Cypress-Structure
+"
+notice: This work is protected by copyright. All rights reserved.
+category: *Cypress-Structure
+"
 unescapePercents
 	"decode string including %XX form
 	 (adapted from Pharo 2.0)"

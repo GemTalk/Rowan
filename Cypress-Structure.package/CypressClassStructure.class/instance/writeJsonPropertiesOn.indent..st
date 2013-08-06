@@ -1,4 +1,7 @@
-writing
+"
+notice: This work is protected by copyright. All rights reserved.
+category: writing
+"
 writeJsonPropertiesOn: aStream  indent: indent
 
 	aStream

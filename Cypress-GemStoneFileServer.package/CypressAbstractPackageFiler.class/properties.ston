@@ -1,0 +1,13 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"repository",
+		"packageDirectory",
+		"packageStructure" ],
+	"name" : "CypressAbstractPackageFiler",
+	"pools" : [
+		 ],
+	"super" : "Object" }

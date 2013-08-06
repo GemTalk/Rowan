@@ -1,4 +1,7 @@
-*Cypress-Comparison
+"
+notice: This work is protected by copyright. All rights reserved.
+category: *Cypress-Comparison
+"
 fromUnixFormatString: aString
 	"YYYY-MM-DDTHH:MM:SS +HHMM
 	 Examples:

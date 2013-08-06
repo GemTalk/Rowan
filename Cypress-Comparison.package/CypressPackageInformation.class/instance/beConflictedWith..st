@@ -1,4 +1,7 @@
-updating - type
+"
+notice: This work is protected by copyright. All rights reserved.
+category: updating - type
+"
 beConflictedWith: somePackageNames
 	"Be designated as representing the prefix of one or more Known Package names."
 

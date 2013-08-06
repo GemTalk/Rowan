@@ -1,4 +1,7 @@
-private
+"
+notice: This work is protected by copyright. All rights reserved.
+category: private
+"
 unresolvedRequirementsFor: aPatchOperation
 	"Answer a list of global names that are required by <aPatchOperation>, but not 
 	 provided by patchOperations that have already been processed"

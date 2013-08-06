@@ -1,4 +1,7 @@
-filing out - private
+"
+notice: This work is protected by copyright. All rights reserved.
+category: filing out - private
+"
 fileOutClassInitializersOn: aStream
 
 	self fileOutClassInitializersPreambleOn: aStream.

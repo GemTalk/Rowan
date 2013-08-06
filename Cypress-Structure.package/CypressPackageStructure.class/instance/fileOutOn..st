@@ -1,4 +1,7 @@
-filing out
+"
+notice: This work is protected by copyright. All rights reserved.
+category: filing out
+"
 fileOutOn: aStream
 
 	self
