@@ -46,8 +46,8 @@ basePackageStructureJson
 				"name" : "CypressMockBasic",
 				"pools" : [
 					 ],
-				"subclassType" : "",
-				"super" : "Object" }
+				"super" : "Object",
+				"_gs_subclassType" : "" }
 		 },
 		{
 			"name" : "Object.extension",
