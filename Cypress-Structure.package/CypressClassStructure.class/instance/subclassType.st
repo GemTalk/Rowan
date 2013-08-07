@@ -1,4 +1,4 @@
 accessing
 subclassType
 
-	^self properties at: 'subclassType' ifAbsent: ['']
+	^self properties at: '_gs_subclassType' ifAbsent: ['']

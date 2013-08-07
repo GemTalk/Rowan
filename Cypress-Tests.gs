@@ -548,7 +548,7 @@ testClassStructure
 	self assert: (classProperties at: 'instvars') equals: #('name').
 	self assert: (classProperties at: 'classinstvars') equals: #('current').
 	self assert: (classProperties at: 'name') equals: 'CypressMockBasic'.
-	self assert: (classProperties at: 'subclassType') equals: ''.
+	self assert: (classProperties at: '_gs_subclassType') equals: ''.
 	self assert: (classProperties at: 'super') equals: 'Object'.
 	self assert: classStructure instanceMethods size equals: 4.
 	self assert: classStructure classMethods size equals: 3.

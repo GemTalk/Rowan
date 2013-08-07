@@ -8,5 +8,5 @@
 	"name" : "CypressPatchTest",
 	"pools" : [
 		 ],
-	"subclassType" : "",
-	"super" : "CypressAbstractTest" }
+	"super" : "CypressAbstractTest",
+	"_gs_subclassType" : "" }

@@ -1008,7 +1008,7 @@ set compile_env: 0
 method: CypressClassStructure
 subclassType
 
-	^self properties at: 'subclassType' ifAbsent: ['']
+	^self properties at: '_gs_subclassType' ifAbsent: ['']
 %
 
 category: 'accessing'
@@ -1016,7 +1016,7 @@ set compile_env: 0
 method: CypressClassStructure
 subclassType: aString
 
-	^self properties at: 'subclassType' put: aString
+	^self properties at: '_gs_subclassType' put: aString
 %
 
 category: 'accessing'

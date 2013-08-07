@@ -9,5 +9,5 @@
 	"name" : "CypressPackageStructure",
 	"pools" : [
 		 ],
-	"subclassType" : "",
-	"super" : "CypressStructure" }
+	"super" : "CypressStructure",
+	"_gs_subclassType" : "" }

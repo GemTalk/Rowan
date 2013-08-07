@@ -13,5 +13,5 @@
 	"name" : "GsGeneralDependencySorter",
 	"pools" : [
 		 ],
-	"subclassType" : "",
-	"super" : "Object" }
+	"super" : "Object",
+	"_gs_subclassType" : "" }
