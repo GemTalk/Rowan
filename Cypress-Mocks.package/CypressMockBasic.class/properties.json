@@ -8,4 +8,5 @@
 	"name" : "CypressMockBasic",
 	"pools" : [
 		 ],
-	"super" : "Object" }
+	"super" : "Object",
+	"_gs_subclassType" : "" }

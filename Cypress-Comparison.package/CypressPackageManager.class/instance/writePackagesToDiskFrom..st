@@ -1,4 +1,4 @@
-writing - needs work
+writing
 writePackagesToDiskFrom: someCypressPackageInformations
 
 	| packageStructure |
@@ -7,10 +7,7 @@ writePackagesToDiskFrom: someCypressPackageInformations
 			packageStructure := CypressPackageStructure
 						fromPackage: (CypressPackageDefinition named: each name).
 			each repository writer writePackageStructure: packageStructure.
-"The choice to produce .gs files should be provided by the package and failing that, by the repository."
-			(GsFile openWriteOnServer: each savedLocation , each name , '.gs')
-				nextPutAll: (String
-							streamContents: [:stream | packageStructure fileOutOn: stream]);
-				close.
+			self writeGemStoneFileoutForPackageStructure: packageStructure
+				andPackageInformation: each.
 			each refresh.
 			self saveKnownPackages]

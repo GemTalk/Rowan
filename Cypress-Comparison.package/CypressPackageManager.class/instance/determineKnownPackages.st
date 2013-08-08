@@ -1,4 +1,4 @@
-updating
+updating - private
 determineKnownPackages
 
 	^(packageInformationList select: [:each | each repository notNil])

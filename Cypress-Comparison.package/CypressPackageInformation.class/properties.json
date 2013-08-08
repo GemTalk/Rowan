@@ -12,9 +12,11 @@
 		"savedDefinitions",
 		"savedLocation",
 		"repository",
+		"repositoryDescription",
 		"imageCounts",
 		"changesCount" ],
 	"name" : "CypressPackageInformation",
 	"pools" : [
 		 ],
-	"super" : "CypressObject" }
+	"super" : "CypressObject",
+	"_gs_subclassType" : "" }

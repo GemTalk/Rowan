@@ -1,4 +1,4 @@
-initializing
+initializing - private
 initialize
 
 	self refreshPackageInformation.

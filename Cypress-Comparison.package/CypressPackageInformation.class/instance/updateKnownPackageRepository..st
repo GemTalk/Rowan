@@ -5,5 +5,4 @@ updateKnownPackageRepository: aCypressRepository
 	self
 		beKnown;
 		updateRepository: aCypressRepository;
-		savedLocation: aCypressRepository directoryPath;
 		refresh.

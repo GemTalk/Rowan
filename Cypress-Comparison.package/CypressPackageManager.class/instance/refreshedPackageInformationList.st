@@ -1,4 +1,4 @@
-updating
+accessing
 refreshedPackageInformationList
 
 	self refreshPackageInformation.

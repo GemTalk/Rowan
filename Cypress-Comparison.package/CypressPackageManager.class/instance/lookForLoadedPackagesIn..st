@@ -4,9 +4,5 @@ lookForLoadedPackagesIn: aDirectory
 	 the specified directory to reflect the path where the package has theoretically
 	 been saved."
 
-	| repo |
-	repo := knownRepositories
-				at: aDirectory
-				ifAbsent: [CypressFileSystemRepository on: aDirectory].
-	self lookForLoadedPackagesInRepository: repo.
+	self lookForLoadedPackagesInRepository: (self repositoryOn: aDirectory).
 	^nil

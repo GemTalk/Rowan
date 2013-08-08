@@ -16,5 +16,5 @@
 	"name" : "CypressClassDefinition",
 	"pools" : [
 		 ],
-	"subclassType" : "",
-	"super" : "CypressDefinition" }
+	"super" : "CypressDefinition",
+	"_gs_subclassType" : "" }

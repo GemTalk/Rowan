@@ -8,4 +8,5 @@
 	"name" : "CypressPackageWriter",
 	"pools" : [
 		 ],
-	"super" : "CypressAbstractPackageWriter" }
+	"super" : "CypressAbstractPackageWriter",
+	"_gs_subclassType" : "" }

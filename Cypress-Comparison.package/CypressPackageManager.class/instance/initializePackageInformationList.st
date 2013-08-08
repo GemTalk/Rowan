@@ -1,13 +1,14 @@
-initializing
+initializing - private
 initializePackageInformationList
 
-	packageInformationList := self potentialPackageNames collect: 
+	| allInterestingNames |
+	allInterestingNames := Set new
+		addAll: self potentialPackageNames;
+		addAll: knownPackages keys;
+		sortAscending.
+	packageInformationList := allInterestingNames collect: 
 					[:each |
 					| directory repo |
 					directory := knownPackages at: each ifAbsent: [nil].
-					repo := directory
-								ifNil: [nil]
-								ifNotNil: 
-									[knownRepositories at: directory
-										ifAbsentPut: [CypressFileSystemRepository on: directory]].
+					repo := directory ifNotNil: [self repositoryOn: directory].
 					CypressPackageInformation named: each repository: repo]

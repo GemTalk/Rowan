@@ -8,4 +8,5 @@
 	"name" : "CypressGemStoneDirectoryUtilities",
 	"pools" : [
 		 ],
-	"super" : "CypressFileUtilities" }
+	"super" : "CypressFileUtilities",
+	"_gs_subclassType" : "" }

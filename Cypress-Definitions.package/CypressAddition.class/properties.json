@@ -8,5 +8,5 @@
 	"name" : "CypressAddition",
 	"pools" : [
 		 ],
-	"subclassType" : "",
-	"super" : "CypressPatchOperation" }
+	"super" : "CypressPatchOperation",
+	"_gs_subclassType" : "" }

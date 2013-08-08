@@ -8,4 +8,5 @@
 	"name" : "CypressAbstractPackageReader",
 	"pools" : [
 		 ],
-	"super" : "CypressAbstractPackageFiler" }
+	"super" : "CypressAbstractPackageFiler",
+	"_gs_subclassType" : "" }

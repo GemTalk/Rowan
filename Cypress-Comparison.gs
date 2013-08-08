@@ -69,7 +69,7 @@ doit
 doit
 (CypressObject
 	subclass: 'CypressPackageInformation'
-	instVarNames: #( name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation repository imageCounts changesCount )
+	instVarNames: #( name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation repository repositoryDescription imageCounts changesCount )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -212,7 +212,7 @@ comparePackagesFrom: someCypressPackageInformations
 				getDifferences
 %
 
-category: 'updating'
+category: 'updating - private'
 set compile_env: 0
 method: CypressPackageManager
 determineKnownPackages
@@ -226,7 +226,7 @@ determineKnownPackages
 				yourself]
 %
 
-category: 'initializing'
+category: 'initializing - private'
 set compile_env: 0
 method: CypressPackageManager
 initialize
@@ -234,7 +234,7 @@ initialize
 	self refreshPackageInformation.
 %
 
-category: 'initializing'
+category: 'initializing - private'
 set compile_env: 0
 method: CypressPackageManager
 initializeConflictingPackageNames
@@ -252,7 +252,7 @@ initializeConflictingPackageNames
 		keysAndValuesDo: [:package :conflicts | package beConflictedWith: conflicts]
 %
 
-category: 'initializing'
+category: 'initializing - private'
 set compile_env: 0
 method: CypressPackageManager
 initializeKnownPackages
@@ -261,34 +261,35 @@ initializeKnownPackages
 				ifNil: [Dictionary new]
 %
 
-category: 'initializing'
+category: 'initializing - private'
 set compile_env: 0
 method: CypressPackageManager
 initializeKnownRepositories
 
 	knownRepositories := Dictionary new.
 	knownPackages asSet
-		do: [:each | knownRepositories at: each put: (CypressFileSystemRepository on: each)]
+		do: [:each | self repositoryOn: each]
 %
 
-category: 'initializing'
+category: 'initializing - private'
 set compile_env: 0
 method: CypressPackageManager
 initializePackageInformationList
 
-	packageInformationList := self potentialPackageNames collect: 
+	| allInterestingNames |
+	allInterestingNames := Set new
+		addAll: self potentialPackageNames;
+		addAll: knownPackages keys;
+		sortAscending.
+	packageInformationList := allInterestingNames collect: 
 					[:each |
 					| directory repo |
 					directory := knownPackages at: each ifAbsent: [nil].
-					repo := directory
-								ifNil: [nil]
-								ifNotNil: 
-									[knownRepositories at: directory
-										ifAbsentPut: [CypressFileSystemRepository on: directory]].
+					repo := directory ifNotNil: [self repositoryOn: directory].
 					CypressPackageInformation named: each repository: repo]
 %
 
-category: 'initializing'
+category: 'initializing - private'
 set compile_env: 0
 method: CypressPackageManager
 initializeQualifiedPackageNames
@@ -309,16 +310,29 @@ initializeQualifiedPackageNames
 category: 'updating'
 set compile_env: 0
 method: CypressPackageManager
+loadPackageFrom: aCypressPackageInformation
+
+	| summary loader |
+	loader := (CypressSnapshot definitions: aCypressPackageInformation savedDefinitions)
+				updatePackage: (CypressPackageDefinition named: aCypressPackageInformation name).
+	summary := Dictionary new.
+
+	loader unloadable notEmpty ifTrue: [summary at: 'Unloadable count' put: loader unloadable size].
+	loader errors notEmpty ifTrue: [summary at: 'Errors count' put: loader errors size].
+	loader requirements notEmpty ifTrue: [summary at: 'Missing Requirements count' put: loader requirements size].
+
+	^summary
+%
+
+category: 'updating'
+set compile_env: 0
+method: CypressPackageManager
 lookForLoadedPackagesIn: aDirectory
 	"Update any of the packages in the image which have a Cypress file out in
 	 the specified directory to reflect the path where the package has theoretically
 	 been saved."
 
-	| repo |
-	repo := knownRepositories
-				at: aDirectory
-				ifAbsent: [CypressFileSystemRepository on: aDirectory].
-	self lookForLoadedPackagesInRepository: repo.
+	self lookForLoadedPackagesInRepository: (self repositoryOn: aDirectory).
 	^nil
 %
 
@@ -339,6 +353,39 @@ lookForLoadedPackagesInRepository: aCypressRepository
 	^nil
 %
 
+category: 'updating'
+set compile_env: 0
+method: CypressPackageManager
+lookForUnloadedPackagesIn: aDirectory
+	"Load any package names from aDirectory as known packages.
+	 This does not load the package contents."
+
+	self lookForUnloadedPackagesInRepository: (self repositoryOn: aDirectory).
+	^nil
+%
+
+category: 'updating'
+set compile_env: 0
+method: CypressPackageManager
+lookForUnloadedPackagesInRepository: aCypressRepository
+	"Add known packages for any Cypress file outs in the specified directory."
+
+	| packageNames existingPackageNames |
+	packageNames := aCypressRepository packageNames.
+	(self packageInformationList
+		select: [:each | packageNames includes: each name])
+			do: [:each | each updateKnownPackageRepository: aCypressRepository].
+	existingPackageNames := self packageInformationList
+				collect: [:each | each name].
+	(packageNames reject: [:each | existingPackageNames includes: each])
+		do: 
+			[:each |
+			self packageInformationList
+				add: (CypressPackageInformation named: each repository: aCypressRepository)].
+	self saveKnownPackages.
+	^nil
+%
+
 category: 'accessing'
 set compile_env: 0
 method: CypressPackageManager
@@ -355,7 +402,7 @@ potentialPackageNames
 	^self class potentialPackageNames
 %
 
-category: 'updating'
+category: 'accessing'
 set compile_env: 0
 method: CypressPackageManager
 refreshedPackageInformationList
@@ -377,7 +424,17 @@ refreshPackageInformation
 		initializeQualifiedPackageNames
 %
 
-category: 'updating'
+category: 'initializing - private'
+set compile_env: 0
+method: CypressPackageManager
+repositoryOn: aDirectory
+
+	^knownRepositories
+		at: aDirectory
+		ifAbsentPut: [CypressFileSystemRepository on: aDirectory].
+%
+
+category: 'updating - private'
 set compile_env: 0
 method: CypressPackageManager
 saveKnownPackages
@@ -390,7 +447,7 @@ saveKnownPackages
 			value: knownPackages
 %
 
-category: 'updating'
+category: 'updating - private'
 set compile_env: 0
 method: CypressPackageManager
 updateKnownPackages
@@ -405,16 +462,41 @@ updateSavedLocation: aDirectory for: aCypressPackageInformation
 	"Update the specified package to reflect the path and repository where the
 	 package should be saved."
 
-	| repo |
-	repo := knownRepositories
-				at: aDirectory
-				ifAbsent: [CypressFileSystemRepository on: aDirectory].
-	aCypressPackageInformation updateKnownPackageRepository: repo.
+	aCypressPackageInformation
+		updateKnownPackageRepository: (self repositoryOn: aDirectory).
 	self saveKnownPackages.
 	^nil
 %
 
-category: 'writing - needs work'
+category: 'writing - private'
+set compile_env: 0
+method: CypressPackageManager
+writeCypressPackageToDiskFrom: aCypressPackageInformation
+
+	| packageStructure |
+	packageStructure := CypressPackageStructure
+				fromPackage: (CypressPackageDefinition
+						named: aCypressPackageInformation name).
+	aCypressPackageInformation repository writer
+		writePackageStructure: packageStructure
+%
+
+category: 'writing - private'
+set compile_env: 0
+method: CypressPackageManager
+writeGemStoneFileoutForPackageStructure: packageStructure andPackageInformation: aCypressPackageInformation
+
+	| filePath |
+	filePath := aCypressPackageInformation savedLocation, aCypressPackageInformation name , '.gs'.
+	aCypressPackageInformation repository areGemStoneFileoutsEnabled
+		ifTrue: 
+			[(GsFile openWriteOnServer: filePath)
+				nextPutAll: (String streamContents: [:stream | packageStructure fileOutOn: stream]);
+				close]
+		ifFalse: [GsFile removeServerFile: filePath]
+%
+
+category: 'writing'
 set compile_env: 0
 method: CypressPackageManager
 writePackagesToDiskFrom: someCypressPackageInformations
@@ -425,13 +507,18 @@ writePackagesToDiskFrom: someCypressPackageInformations
 			packageStructure := CypressPackageStructure
 						fromPackage: (CypressPackageDefinition named: each name).
 			each repository writer writePackageStructure: packageStructure.
-"The choice to produce .gs files should be provided by the package and failing that, by the repository."
-			(GsFile openWriteOnServer: each savedLocation , each name , '.gs')
-				nextPutAll: (String
-							streamContents: [:stream | packageStructure fileOutOn: stream]);
-				close.
+			self writeGemStoneFileoutForPackageStructure: packageStructure
+				andPackageInformation: each.
 			each refresh.
 			self saveKnownPackages]
+%
+
+category: 'writing - private'
+set compile_env: 0
+method: CypressPackageManager
+writePackageStructure: packageStructure to: aCypressRepository
+
+	aCypressRepository writer writePackageStructure: packageStructure
 %
 
 category: 'writing'
@@ -904,6 +991,7 @@ initialize
 		imageDefinitions: #();
 		savedDefinitions: #();
 		savedLocation: '';
+		repositoryDescription: '';
 		imageCounts: #(0 0);
 		changesCount: 0
 %
@@ -1023,6 +1111,22 @@ repository: aCypressFileSystemRepository
 	repository := aCypressFileSystemRepository
 %
 
+category: 'unknown'
+set compile_env: 0
+method: CypressPackageInformation
+repositoryDescription
+
+	^repositoryDescription
+%
+
+category: 'unknown'
+set compile_env: 0
+method: CypressPackageInformation
+repositoryDescription: aString
+
+	repositoryDescription := aString
+%
+
 category: 'accessing'
 set compile_env: 0
 method: CypressPackageInformation
@@ -1094,7 +1198,6 @@ updateKnownPackageRepository: aCypressRepository
 	self
 		beKnown;
 		updateRepository: aCypressRepository;
-		savedLocation: aCypressRepository directoryPath;
 		refresh.
 %
 
@@ -1103,7 +1206,10 @@ set compile_env: 0
 method: CypressPackageInformation
 updateRepository: aCypressRepository
 
-	self repository: aCypressRepository
+	self
+		repository: aCypressRepository;
+		repositoryDescription: self repository description;
+		savedLocation: self repository directoryPath
 %
 
 category: 'updating'

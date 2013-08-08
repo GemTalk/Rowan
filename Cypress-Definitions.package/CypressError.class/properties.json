@@ -8,5 +8,5 @@
 	"name" : "CypressError",
 	"pools" : [
 		 ],
-	"subclassType" : "",
-	"super" : "Error" }
+	"super" : "Error",
+	"_gs_subclassType" : "" }

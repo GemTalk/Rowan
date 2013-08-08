@@ -1,4 +1,4 @@
-updating
+updating - private
 saveKnownPackages
 
 	self updateKnownPackages.
