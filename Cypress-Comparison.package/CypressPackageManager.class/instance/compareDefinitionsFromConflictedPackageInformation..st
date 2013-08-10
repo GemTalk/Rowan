@@ -20,4 +20,4 @@ compareDefinitionsFromConflictedPackageInformation: aCypressPackageInformation
 			each classDefinition: [:cd | cd category: aCypressPackageInformation name]
 				methodDefinition: [:md | ]].
 	expectedDefinitions do: [:each | badDefinitions remove: each ifAbsent: []].
-	^badDefinitions sortAscending
+	^(badDefinitions collect: [:each | each printString]) sortAscending

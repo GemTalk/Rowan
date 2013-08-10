@@ -12,7 +12,7 @@ createOrReviseByteClass
 		classVars: (self classVarNames collect: [:each | each asSymbol])
 		classInstVars: (self classInstVarNames collect: [:each | each asSymbol])
 		poolDictionaries: #()
-		inDictionary: UserGlobals
+		inDictionary: (self symbolDictionaryForClassNamed: self name)
 		options: #())
 			category: category;
 			comment: self comment

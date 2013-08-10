@@ -2,7 +2,7 @@
 parseSelectorFrom: methodString
 
 	| meth |
-	meth := self
+	^[meth := self
 				_parseMethod: methodString
 				category: #'xyzzy'
 				using: GsSession currentSession symbolList
@@ -12,4 +12,6 @@ parseSelectorFrom: methodString
 			["if error slot is nil, then the method wasn't compiled because of errors"
 			(meth at: 2) == nil ifFalse: [^nil].
 			meth := meth at: 1].
-	^meth selector asString
+	meth selector asString]
+		on: CompileError
+		do: [:ex | ex return: '_____could_not_parse_selector_from_method_source_____'].

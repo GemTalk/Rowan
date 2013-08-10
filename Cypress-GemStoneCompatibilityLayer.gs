@@ -178,10 +178,62 @@ streamSpecies
 category: '*Cypress-GemStoneCompatibilityLayer'
 set compile_env: 0
 method: SequenceableCollection
+allButFirst: n
+	"Answer a copy of the receiver containing all but the first n
+	elements. Raise an error if there are not enough elements."
+
+	^ self copyFrom: n + 1 to: self size
+%
+
+category: '*Cypress-GemStoneCompatibilityLayer'
+set compile_env: 0
+method: SequenceableCollection
 beginsWith: aSequence
 	"Answer whether the first elements of the receiver are the same as aSequence."
 
 	^(self indexOfSubCollection: aSequence startingAt: 1) = 1
+%
+
+category: '*Cypress-GemStoneCompatibilityLayer'
+set compile_env: 0
+method: SequenceableCollection
+copyAfter: anElement
+	"Answer a copy of the receiver from after the first occurence
+	of anElement up to the end. If no such element exists, answer 
+	an empty copy."
+
+	^self allButFirst: (self indexOf: anElement ifAbsent: [^self copyEmpty])
+%
+
+category: '*Cypress-GemStoneCompatibilityLayer'
+set compile_env: 0
+method: SequenceableCollection
+copyAfterLast: anElement
+	"Answer a copy of the receiver from after the last occurence
+	of anElement up to the end. If no such element exists, answer 
+	an empty copy."
+
+	^self allButFirst: (self lastIndexOf: anElement ifAbsent: [^self copyEmpty])
+%
+
+category: '*Cypress-GemStoneCompatibilityLayer'
+set compile_env: 0
+method: SequenceableCollection
+copyUpTo: anElement
+	"Answer all elements up to but not including anObject. If there
+	is no such object, answer a copy of the receiver."
+
+	^self copyFrom: 1 to: (self indexOf: anElement ifAbsent: [^self copy]) - 1
+%
+
+category: '*Cypress-GemStoneCompatibilityLayer'
+set compile_env: 0
+method: SequenceableCollection
+copyUpToLast: anElement
+	"Answer a copy of the receiver from index 1 to the last occurrence of 
+	anElement, not including anElement."
+
+	^self copyFrom: 1 to: (self lastIndexOf: anElement ifAbsent: [^self copy]) - 1
 %
 
 category: '*Cypress-GemStoneCompatibilityLayer'
@@ -239,6 +291,47 @@ indexOfAnyOf: aCollection startingAt: start ifAbsent: exceptionBlock
 		[:index |
 		(aCollection includes: (self at: index)) ifTrue: [^ index]].
 	^ exceptionBlock value
+%
+
+category: '*Cypress-GemStoneCompatibilityLayer'
+set compile_env: 0
+method: SequenceableCollection
+lastIndexOf: anElement
+	"Answer the index of the last occurence of anElement within the 
+	receiver. If the receiver does not contain anElement, answer 0."
+
+	^self
+		lastIndexOf: anElement
+		startingAt: self size
+		ifAbsent: [0]
+%
+
+category: '*Cypress-GemStoneCompatibilityLayer'
+set compile_env: 0
+method: SequenceableCollection
+lastIndexOf: anElement ifAbsent: exceptionBlock
+	"Answer the index of the last occurence of anElement within the  
+	receiver. If the receiver does not contain anElement, answer the
+	result of evaluating the argument, exceptionBlock."
+
+	^self
+		lastIndexOf: anElement
+		startingAt: self size
+		ifAbsent: exceptionBlock
+%
+
+category: '*Cypress-GemStoneCompatibilityLayer'
+set compile_env: 0
+method: SequenceableCollection
+lastIndexOf: anElement startingAt: lastIndex ifAbsent: exceptionBlock
+	"Answer the index of the last occurence of anElement within the  
+	receiver. If the receiver does not contain anElement, answer the
+	result of evaluating the argument, exceptionBlock."
+
+	lastIndex to: 1
+		by: -1
+		do: [:index | (self at: index) = anElement ifTrue: [^index]].
+	^exceptionBlock value
 %
 
 ! Class Extension for Symbol
@@ -334,7 +427,7 @@ method: Behavior
 parseSelectorFrom: methodString
 
 	| meth |
-	meth := self
+	^[meth := self
 				_parseMethod: methodString
 				category: #'xyzzy'
 				using: GsSession currentSession symbolList
@@ -344,7 +437,9 @@ parseSelectorFrom: methodString
 			["if error slot is nil, then the method wasn't compiled because of errors"
 			(meth at: 2) == nil ifFalse: [^nil].
 			meth := meth at: 1].
-	^meth selector asString
+	meth selector asString]
+		on: CompileError
+		do: [:ex | ex return: '_____could_not_parse_selector_from_method_source_____'].
 %
 
 category: '*Cypress-GemStoneCompatibilityLayer'

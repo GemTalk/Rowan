@@ -1,0 +1,16 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"name",
+		"package",
+		"author",
+		"branch",
+		"versionNumber" ],
+	"name" : "CypressVersionReference",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"_gs_subclassType" : "" }

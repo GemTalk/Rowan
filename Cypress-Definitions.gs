@@ -744,6 +744,31 @@ stringForVariables: variableList
 				separatedBy: [stream space]]
 %
 
+category: 'accessing'
+set compile_env: 0
+method: CypressObject
+symbolDictionaryForClassNamed: aString
+	"Answer the SymbolDictionary containing the named class.
+	 If there are multiple answers, answer the first.
+	 If there are no answers (i.e., the class does not exist), put it in UserGlobals."
+
+	^self symbolDictionaryForClassNamed: aString or: [UserGlobals]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressObject
+symbolDictionaryForClassNamed: aString or: aBlock
+	"Answer the SymbolDictionary containing the named class.
+	 If there are multiple answers, answer the first.
+	 If there are no answers (i.e., the class does not exist), answer
+	 the result of evaluating aBlock."
+
+	^System myUserProfile symbolList asArray
+		detect: [:each | each anySatisfy: [:every | every isBehavior and: [every name asString = aString asString]]]
+		ifNone: aBlock
+%
+
 ! Class Implementation for CypressDefinitionIndex
 
 ! ------------------- Class methods for CypressDefinitionIndex
@@ -1752,7 +1777,7 @@ createOrReviseByteClass
 		classVars: (self classVarNames collect: [:each | each asSymbol])
 		classInstVars: (self classInstVarNames collect: [:each | each asSymbol])
 		poolDictionaries: #()
-		inDictionary: UserGlobals
+		inDictionary: (self symbolDictionaryForClassNamed: self name)
 		options: #())
 			category: category;
 			comment: self comment
@@ -1792,7 +1817,7 @@ createOrReviseIndexableClass
 		classVars: (self classVarNames collect: [:each | each asSymbol])
 		classInstVars: (self classInstVarNames collect: [:each | each asSymbol])
 		poolDictionaries: #()
-		inDictionary: UserGlobals
+		inDictionary: (self symbolDictionaryForClassNamed: self name)
 		options: #())
 			category: category;
 			comment: self comment
@@ -1815,7 +1840,7 @@ createOrReviseRegularClass
 		classVars: (self classVarNames collect: [:each | each asSymbol])
 		classInstVars: (self classInstVarNames collect: [:each | each asSymbol])
 		poolDictionaries: #()
-		inDictionary: UserGlobals
+		inDictionary: (self symbolDictionaryForClassNamed: self name)
 		options: #())
 			category: category;
 			comment: self comment
@@ -2407,6 +2432,20 @@ errors
 	^errors
 %
 
+category: 'unknown'
+set compile_env: 0
+method: CypressLoader
+handleCompileError: aCompileError from: aPatchOperation
+
+	| undefinedSymbolErrors otherErrors |
+	undefinedSymbolErrors := aCompileError errorDetails
+				select: [:each | each first = 1031].
+	otherErrors := aCompileError errorDetails
+				reject: [:each | each first = 1031].
+	undefinedSymbolErrors do: [:each | self requirements add: each last].
+	aCompileError pass
+%
+
 category: 'loading'
 set compile_env: 0
 method: CypressLoader
@@ -2460,9 +2499,12 @@ set compile_env: 0
 method: CypressLoader
 loadMethodDefinition: aPatchOperation
 
-	[aPatchOperation loadMethodDefinition]
-		on: Error
-		do: [:ex | self handlePatchOperation: aPatchOperation failure: ex].
+	
+	[[aPatchOperation loadMethodDefinition]
+		on: CompileError
+		do: [:ex | self handleCompileError: ex from: aPatchOperation]]
+			on: Error
+			do: [:ex | self handlePatchOperation: aPatchOperation failure: ex]
 %
 
 category: 'accessing'

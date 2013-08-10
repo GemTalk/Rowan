@@ -136,6 +136,20 @@ doit
 		immediateInvariant.
 %
 
+doit
+(CypressAbstractTest
+	subclass: 'CypressReferenceTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Tests';
+		comment: '';
+		immediateInvariant.
+%
+
 ! Class Implementation for CypressAbstractTest
 
 ! ------------------- Class methods for CypressAbstractTest
@@ -1299,6 +1313,364 @@ unixLinesFrom: aString
 	[sourceStream atEnd]
 		whileFalse: [resultStream nextPut: (sourceStream upTo: Character lf)].
 	^resultStream contents.
+%
+
+! Class Implementation for CypressReferenceTest
+
+! ------------------- Instance methods for CypressReferenceTest
+
+category: 'running'
+set compile_env: 0
+method: CypressReferenceTest
+assert: aString parsesToPackageName: packageName author: authorId branch: branchId version: versionNumber
+
+	| queryReference |
+	queryReference := CypressVersionReference name: aString.
+	self
+		assert: queryReference packageName equals: packageName;
+		assert: queryReference author equals: authorId;
+		assert: queryReference branch equals: branchId;
+		assert: queryReference versionNumber equals: versionNumber.
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testAuthorAlone
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: '-dhk'
+			parsesToPackageName: ''
+			author: 'dhk'
+			branch: ''
+			version: 0
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testAuthorAndVersionOnly
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: '-dhk.1'
+			parsesToPackageName: ''
+			author: 'dhk'
+			branch: ''
+			version: 1
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testBranchAfterAuthorIsNotABranch
+
+	self
+		assert: 'Seaside-Core-jf.configcleanup.3'
+			parsesToPackageName: 'Seaside-Core'
+			author: 'jf.configcleanup'
+			branch: ''
+			version: 3;
+		assert: 'Seaside-Core-lr.configcleanup.extraspeedup.69'
+			parsesToPackageName: 'Seaside-Core'
+			author: 'lr.configcleanup.extraspeedup'
+			branch: ''
+			version: 69;
+		assert: 'Seaside-Core-lr.configcleanup42.extraspeedup.69'
+			parsesToPackageName: 'Seaside-Core'
+			author: 'lr.configcleanup42.extraspeedup'
+			branch: ''
+			version: 69
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testBranchAlone
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: '.v3'
+			parsesToPackageName: ''
+			author: ''
+			branch: 'v3'
+			version: 0
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testBranchAndAuthorOnly
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: '.v3-dhk'
+			parsesToPackageName: ''
+			author: 'dhk'
+			branch: 'v3'
+			version: 0
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testBranchAndVersionOnly
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: '.v3.1'
+			parsesToPackageName: ''
+			author: ''
+			branch: 'v3.1'
+			version: 0;
+		assert: '.v3-.1'
+			parsesToPackageName: ''
+			author: ''
+			branch: 'v3'
+			version: 1
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testBranchAuthorAndVersionOnly
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: '.v3-dhk.1'
+			parsesToPackageName: ''
+			author: 'dhk'
+			branch: 'v3'
+			version: 1
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testEmptyString
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: ''
+			parsesToPackageName: ''
+			author: ''
+			branch: ''
+			version: 0
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testPackageAlone
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: 'Announcements'
+			parsesToPackageName: 'Announcements'
+			author: ''
+			branch: ''
+			version: 0;
+		assert: 'Announcements.-.'
+			parsesToPackageName: 'Announcements'
+			author: ''
+			branch: ''
+			version: 0
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testPackageAndAuthorOnly
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: 'Announcements-dhk'
+			parsesToPackageName: 'Announcements'
+			author: 'dhk'
+			branch: ''
+			version: 0
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testPackageAndBranchOnly
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: 'Announcements.v3'
+			parsesToPackageName: 'Announcements'
+			author: ''
+			branch: 'v3'
+			version: 0
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testPackageAndVersionOnly
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: 'Announcements..1'
+			parsesToPackageName: 'Announcements'
+			author: ''
+			branch: '.1'
+			version: 0;
+		assert: 'Announcements.-.1'
+			parsesToPackageName: 'Announcements'
+			author: ''
+			branch: ''
+			version: 1
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testPackageAuthorAndVersionOnly
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: 'Announcements-dhk.1'
+			parsesToPackageName: 'Announcements'
+			author: 'dhk'
+			branch: ''
+			version: 1
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testPackageBranchAndAuthorOnly
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: 'Announcements.v3-dhk'
+			parsesToPackageName: 'Announcements'
+			author: 'dhk'
+			branch: 'v3'
+			version: 0
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testPackageBranchAndVersionOnly
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: 'Announcements.v3.1'
+			parsesToPackageName: 'Announcements'
+			author: ''
+			branch: 'v3.1'
+			version: 0;
+		assert: 'Announcements.v3-.1'
+			parsesToPackageName: 'Announcements'
+			author: ''
+			branch: 'v3'
+			version: 1
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testPackageBranchAuthorAndVersion
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: 'Announcements.v3-dhk.1'
+			parsesToPackageName: 'Announcements'
+			author: 'dhk'
+			branch: 'v3'
+			version: 1
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testPunctuationOnly
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: '.-.'
+			parsesToPackageName: ''
+			author: ''
+			branch: ''
+			version: 0;
+		assert: '.-'
+			parsesToPackageName: ''
+			author: ''
+			branch: ''
+			version: 0;
+		assert: '.'
+			parsesToPackageName: ''
+			author: ''
+			branch: ''
+			version: 0;
+		assert: '..'
+			parsesToPackageName: ''
+			author: ''
+			branch: '.'
+			version: 0
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testVersionAlone
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: '..1'
+			parsesToPackageName: ''
+			author: ''
+			branch: '.1'
+			version: 0;
+		assert: '.-.1'
+			parsesToPackageName: ''
+			author: ''
+			branch: ''
+			version: 1
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressReferenceTest
+testVersionShouldParseComplexName
+	"Syntax: packageName[.branch][-author][.version]"
+
+	self
+		assert: 'Seaside2.8b5'
+			parsesToPackageName: 'Seaside2'
+			author: ''
+			branch: '8b5'
+			version: 0;
+		assert: 'Seaside2.8b5-avi.1'
+			parsesToPackageName: 'Seaside2'
+			author: 'avi'
+			branch: '8b5'
+			version: 1;
+		assert: 'Seaside-Core-pmm.2'
+			parsesToPackageName: 'Seaside-Core'
+			author: 'pmm'
+			branch: ''
+			version: 2;
+		assert: 'Seaside-Core.configcleanup-jf.3'
+			parsesToPackageName: 'Seaside-Core'
+			author: 'jf'
+			branch: 'configcleanup'
+			version: 3;
+		assert: 'Seaside-Core.configcleanup.extraspeedup-lr.69'
+			parsesToPackageName: 'Seaside-Core'
+			author: 'lr'
+			branch: 'configcleanup.extraspeedup'
+			version: 69;
+		assert: 'Seaside-Core.configcleanup42.extraspeedup-lr.69'
+			parsesToPackageName: 'Seaside-Core'
+			author: 'lr'
+			branch: 'configcleanup42.extraspeedup'
+			version: 69
 %
 
 ! Class Extensions

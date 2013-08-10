@@ -1,0 +1,12 @@
+{
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "CypressReferenceTest",
+	"pools" : [
+		 ],
+	"super" : "CypressAbstractTest",
+	"_gs_subclassType" : "" }
