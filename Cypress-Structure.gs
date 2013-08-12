@@ -598,16 +598,6 @@ transcribeGraph: subtree into: sorted
 category: 'instance creation'
 set compile_env: 0
 classmethod: CypressStructure
-fromJs: jsObject
-
-	^(self new) 
-		fromJs: jsObject asCypressPropertyObject;
-		yourself
-%
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressStructure
 named: aString
 
 	^(self new)
@@ -616,14 +606,6 @@ named: aString
 %
 
 ! ------------------- Instance methods for CypressStructure
-
-category: 'initialization'
-set compile_env: 0
-method: CypressStructure
-fromJs: jsObject
-
-	self subclassResponsibility
-%
 
 category: 'accessing'
 set compile_env: 0
@@ -655,18 +637,6 @@ packageStructure: aCypressPackageStructure
 	packageStructure := aCypressPackageStructure
 %
 
-category: 'writing'
-set compile_env: 0
-method: CypressStructure
-path: aFSPath file: aFilename write: writeBlock
-
-	| fs stream |
-	fs := aFSPath fs.
-	stream := fs createWriteStream: (aFSPath resolve: aFilename).
-	writeBlock value: stream.
-	stream end.
-%
-
 category: 'printing'
 set compile_env: 0
 method: CypressStructure
@@ -690,22 +660,6 @@ method: CypressStructure
 properties: aDictionary
 
 	properties := aDictionary
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressStructure
-writeJsonOn: aStream
-
-	self writeJsonOn: aStream indent: 0.
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressStructure
-writeJsonOn: aStream  indent: indent
-
-	self subclassResponsibility
 %
 
 ! Class Implementation for CypressClassStructure
@@ -747,7 +701,17 @@ set compile_env: 0
 method: CypressClassStructure
 category
 
-	^self packageStructure packageName
+	^self properties
+		at: 'category'
+		ifAbsent: [self packageStructure packageName]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressClassStructure
+category: aString
+
+	^self properties at: 'category' put: aString
 %
 
 category: 'accessing'
@@ -850,6 +814,7 @@ fromClassDefinition: classDefinition
 	self
 		isClassExtension: false;
 		name: classDefinition name;
+		category: classDefinition category;
 		comment: classDefinition comment;
 		superclassName: classDefinition superclassName;
 		instanceVariableNames: classDefinition instVarNames;
@@ -857,28 +822,6 @@ fromClassDefinition: classDefinition
 		classVariableNames: classDefinition classVarNames;
 		poolDictionaryNames: classDefinition poolDictionaryNames;
 		subclassType: classDefinition subclassType.
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressClassStructure
-fromJs: jsObject
-
-	properties := jsObject at: 'properties.json'.
-	(jsObject at: 'class' ifAbsent: [#()]) do: [:jsMethodObject |  | methodNameParts |
-		methodNameParts := self splitMethodNameFor: jsMethodObject.
-		(self classMethodNamed: (methodNameParts at: 1)) 
-			packageStructure: self packageStructure;
-			classStructure: self;
-			isMetaclass: true;
-			fromJs: jsMethodObject named: methodNameParts ].
-	(jsObject at: 'instance' ifAbsent: [#()]) do: [:jsMethodObject |  | methodNameParts |
-		methodNameParts := self splitMethodNameFor: jsMethodObject.
-		(self instanceMethodNamed: (methodNameParts at: 1)) 
-			packageStructure: self packageStructure;
-			classStructure: self;
-			fromJs: jsMethodObject named: methodNameParts ].	
-	comment := jsObject at: 'README.md' ifAbsent: ['']
 %
 
 category: 'querying'
@@ -981,28 +924,6 @@ poolDictionaryNames: someStrings
 	^self properties at: 'pools' put: someStrings
 %
 
-category: 'private'
-set compile_env: 0
-method: CypressClassStructure
-splitMethodName: methodName
-
-	| extension |
-	extension := #('.json' '.st')
-		detect: [:each | methodName endsWith: each] 
-		ifNone: [CypressError signal: 'invalid structure element: ', methodName].
-	^Array
-		with: (methodName copyWithoutSuffix: extension)
-		with: extension.
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressClassStructure
-splitMethodNameFor: jsMethodObject
-
-	^self splitMethodName: (jsMethodObject at: 'name')
-%
-
 category: 'accessing'
 set compile_env: 0
 method: CypressClassStructure
@@ -1016,7 +937,9 @@ set compile_env: 0
 method: CypressClassStructure
 subclassType: aString
 
-	^self properties at: '_gs_subclassType' put: aString
+	aString isEmpty
+		ifTrue: [self properties removeKey: '_gs_subclassType' ifAbsent: []]
+		ifFalse: [self properties at: '_gs_subclassType' put: aString]
 %
 
 category: 'accessing'
@@ -1033,94 +956,6 @@ method: CypressClassStructure
 superclassName: aString
 
 	^self properties at: 'super' put: aString
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressClassStructure
-writeJson: aString methods: someMethodStructures on: aStream  indent: indent
-
-	| methods |
-	aStream
-		tab: indent;
-		nextPutAll: '"', aString, '" : [';
-		lf;
-		yourself.
-	(someMethodStructures asSortedCollection: [:a :b | a selector <= b selector])
-	doWithIndex: [:methodStructure :index |
-		index > 1 ifTrue: [ aStream nextPutAll: ','; lf ].
-		methodStructure writeJsonOn: aStream indent: indent + 1].
-	aStream
-		tab: indent;
-		nextPutAll: '],';
-		lf;
-		yourself.
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressClassStructure
-writeJsonCommentOn: aStream  indent: indent
-
-	self isClassExtension ifTrue: [^self].
-	aStream
-		tab: indent;
-		nextPutAll: '"README.md" : ';
-		yourself.
-	self comment writeCypressJsonOn: aStream indent: indent.
-	aStream
-		nextPutAll: ',';
-		lf;
-		yourself.
-
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressClassStructure
-writeJsonNameOn: aStream  indent: indent
-
-	aStream
-		tab: indent;
-		nextPutAll: '"name"';
-		nextPutAll: ' : ';
-		nextPutAll: '"', self name, (self isClassExtension ifTrue: [ '.extension' ] ifFalse: [ '.class' ]), '",';
-		lf.
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressClassStructure
-writeJsonOn: aStream indent: startIndent
-
-	| indent |
-	aStream
-		tab: startIndent;
-		nextPutAll: '{';
-		lf.
-	indent := startIndent + 1.
-	self
-		writeJsonNameOn: aStream indent: indent;
-		writeJson: 'instance' methods: self instanceMethods on: aStream indent: indent;
-		writeJson: 'class' methods: self classMethods on: aStream indent: indent;
-		writeJsonCommentOn: aStream indent: indent;
-		writeJsonPropertiesOn: aStream indent: indent.
-	aStream
-		lf;
-		tab: startIndent;
-		nextPutAll: ' }'
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressClassStructure
-writeJsonPropertiesOn: aStream  indent: indent
-
-	aStream
-		tab: indent;
-		nextPutAll: '"properties.json" : ';
-		yourself.
-	self properties writeCypressJsonOn: aStream indent: indent.
 %
 
 ! Class Implementation for CypressPackageStructure
@@ -1147,14 +982,6 @@ fileOutsForPackagesNamed: someNames
 category: 'instance creation'
 set compile_env: 0
 classmethod: CypressPackageStructure
-fromJson: aJsonString
-
-	^self fromJs: (CypressJsonParser parse: aJsonString)
-%
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressPackageStructure
 fromPackage: aCypressPackageDefinition
 
 	^(self new) 
@@ -1163,17 +990,6 @@ fromPackage: aCypressPackageDefinition
 %
 
 ! ------------------- Instance methods for CypressPackageStructure
-
-category: 'conversion'
-set compile_env: 0
-method: CypressPackageStructure
-asCypressJson
-
-	| stream |
-    	stream := WriteStream on: String new.
-    	self writeJsonOn: stream.
-	^stream contents
-%
 
 category: 'accessing'
 set compile_env: 0
@@ -1506,29 +1322,6 @@ fileOutType: aString implementationOf: classStructure on: aStream
 category: 'initialization'
 set compile_env: 0
 method: CypressPackageStructure
-fromJs: jsObject
-
-	name := jsObject at: 'name'.
-	(jsObject at: 'contents') do: [:jsClassObject| | classStructure objectName |
-		classStructure := (CypressClassStructure new)
-                		packageStructure: self;
-				yourself.
-                ((objectName := jsClassObject at: 'name') endsWith: '.extension')
-			ifTrue: [ 
-				classStructure isClassExtension: true.
-				self extensions add: classStructure ]
-			ifFalse: [
-				((objectName := jsClassObject at: 'name') endsWith: '.class')
-					ifTrue: [ 
-						classStructure isClassExtension: false.
-						self classes add: classStructure ]].
-		classStructure fromJs: jsClassObject].
-	properties := jsObject at: 'properties.json'
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressPackageStructure
 fromPackage: aCypressPackageDefinition
 
 	| snapshot classMap classDefinitions classStructure |
@@ -1625,52 +1418,6 @@ snapshot
 	^ CypressSnapshot definitions: definitions
 %
 
-category: 'writing'
-set compile_env: 0
-method: CypressPackageStructure
-writeJsonOn: aStream  indent: startIndent
-
-	| indent |
-	indent := startIndent.
-	aStream 
-		tab: indent;
-		nextPutAll: '{';
-		lf.
-	indent := indent + 1.
-	aStream
-		tab: indent;
-		nextPutAll: '"name"';
-		nextPutAll: ' : ';
-		nextPutAll: '"', self name, '",'.
-	aStream
-		lf;
-		tab: indent;
-		nextPutAll: '"contents" : [';
-		lf;
-		yourself.
-	1 to: self classes size do: [:index | | classStructure | 
-		classStructure := self classes at: index.
-		classStructure writeJsonOn: aStream indent: indent + 1.
-		(self extensions size > 0 or: [ index < self classes size]) ifTrue: [ aStream nextPutAll: ','; lf. ]].
-	1 to: self extensions size do: [:index | | classStructure | 
-		classStructure := self extensions at: index.
-		classStructure writeJsonOn: aStream indent: indent + 1.
-		index < self extensions size ifTrue: [ aStream nextPutAll: ','; lf.] ].
-	aStream
-		lf;
-		tab: indent;
-		nextPutAll: '],';
-		lf;
-		tab: indent;
-		nextPutAll: '"properties.json" : '.
-	self properties writeCypressJsonOn: aStream indent: indent.
-	indent := indent - 1.
-	aStream 
-		lf;
-		tab: indent;
-		nextPutAll: '}'
-%
-
 ! Class Implementation for CypressMethodStructure
 
 ! ------------------- Class methods for CypressMethodStructure
@@ -1728,55 +1475,6 @@ set compile_env: 0
 method: CypressMethodStructure
 classStructure: aCypressClassStructure
 	classStructure := aCypressClassStructure
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-cypressSource
-
-	| stream |
-	stream := WriteStream on: String new.
-	stream 
-		nextPutAll: self category;
-		lf;
-		nextPutAll: self source.
-	^stream contents
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressMethodStructure
-extractCypressSource: aString
-    | stream categoryStream sourceStream readingCategory |
-    stream := ReadStream on: aString.
-    categoryStream := WriteStream on: String new.
-    sourceStream := WriteStream on: String new.
-    readingCategory := true.
-    [ stream atEnd ]
-        whileFalse: [ 
-            | char |
-            char := stream next.
-            readingCategory
-                ifTrue: [ 
-                    char = Character lf
-                        ifTrue: [ readingCategory := false ]
-                        ifFalse: [ categoryStream nextPut: char ] ]
-                ifFalse: [ sourceStream nextPut: char ] ].
-    self category: categoryStream contents.
-    self source: sourceStream contents
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressMethodStructure
-fromJs: jsObject named: methodNameParts
-    | ext |
-    (ext := methodNameParts at: 2) = '.st'
-        ifTrue: [ self extractCypressSource: (jsObject at: 'contents') ]
-        ifFalse: [ 
-            ext = '.json'
-                ifTrue: [ properties := jsObject at: 'contents' ] ]
 %
 
 category: 'initialization'
@@ -1850,36 +1548,6 @@ method: CypressMethodStructure
 source: aString
 
 	source := aString
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressMethodStructure
-writeJsonOn: aStream  indent: startIndent
-
-	| indent |
-	indent := startIndent.
-	aStream 
-		tab: indent;
-		nextPutAll: '{';
-		lf.
-	indent := indent + 1.
-	aStream
-		tab: indent;
-		nextPutAll: '"name"';
-		nextPutAll: ' : ';
-		nextPutAll: '"', self name, '.st",';
-		lf.
-	aStream
-		tab: indent;
-		nextPutAll: '"contents"';
-		nextPutAll: ' : '.
-	self cypressSource writeCypressJsonOn: aStream indent: indent.
-	indent := indent - 1.
-	aStream
-		lf;
-		tab: indent;
-		nextPutAll: ' }'
 %
 
 ! Class Extensions

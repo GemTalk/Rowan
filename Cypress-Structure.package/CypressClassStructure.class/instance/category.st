@@ -1,4 +1,6 @@
 accessing
 category
 
-	^self packageStructure packageName
+	^self properties
+		at: 'category'
+		ifAbsent: [self packageStructure packageName]

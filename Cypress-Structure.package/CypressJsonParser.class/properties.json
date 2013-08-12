@@ -1,4 +1,5 @@
 {
+	"category" : "Cypress-Structure",
 	"classinstvars" : [
 		 ],
 	"classvars" : [
@@ -8,5 +9,4 @@
 	"name" : "CypressJsonParser",
 	"pools" : [
 		 ],
-	"super" : "Object",
-	"_gs_subclassType" : "" }
+	"super" : "Object" }

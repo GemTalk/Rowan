@@ -47,7 +47,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: UserGlobals
 	options: #())
-		category: 'Cypress-Mocks';
+		category: 'Cypress-Mocks-Definitions';
 		comment: 'This mock contains basic class and instance method selectors';
 		immediateInvariant.
 %

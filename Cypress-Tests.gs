@@ -175,7 +175,7 @@ baseDefinitions
 		CypressClassDefinition
 			name: className
 			superclassName: 'Object'
-			category: 'Cypress-Mocks'
+			category: 'Cypress-Mocks-Definitions'
 			instVarNames: #('name')
 			classInstVarNames: #('current')
 			classVarNames: #('Something')
@@ -253,191 +253,6 @@ baseDefinitions
 category: 'private'
 set compile_env: 0
 method: CypressAbstractTest
-basePackageStructureJson
-    ^ '{
-	"name" : "Cypress-Mocks.package",
-	"contents" : [
-		{
-			"name" : "CypressMockBasic.class",
-			"instance" : [
-				{
-					"name" : "extra.st",
-					"contents" : "accessing%0Aextra%0A%09%22extra%20method%22%0A"
-				 },
-				{
-					"name" : "initialize.st",
-					"contents" : "initialization%0Ainitialize%0A%09super%20initialize.%0A%09self%20name%3A%20%27Unknown%27%0A"
-				 },
-				{
-					"name" : "name.st",
-					"contents" : "accessing%0Aname%0A%09%5Ename%0A"
-				 },
-				{
-					"name" : "name..st",
-					"contents" : "accessing%0Aname%3A%20aString%0A%09name%20%3A%3D%20aString%0A"
-				 }			],
-			"class" : [
-				{
-					"name" : "current.st",
-					"contents" : "accessing%0Acurrent%0A%09%5Ecurrent%0A"
-				 },
-				{
-					"name" : "current..st",
-					"contents" : "accessing%0Acurrent%3A%20anObject%0A%09current%20%3A%3D%20anObject%0A"
-				 },
-				{
-					"name" : "initialize.st",
-					"contents" : "initialization%0Ainitialize%0A%09self%20current%3A%20self%20new%0A"
-				 }			],
-			"README.md" : "This%20mock%20contains%20basic%20class%20and%20instance%20method%20selectors",
-			"properties.json" : {
-				"classinstvars" : [
-					"current" ],
-				"classvars" : [
-					"Something" ],
-				"instvars" : [
-					"name" ],
-				"name" : "CypressMockBasic",
-				"pools" : [
-					 ],
-				"super" : "Object",
-				"_gs_subclassType" : "" }
-		 },
-		{
-			"name" : "Object.extension",
-			"instance" : [
-				{
-					"name" : "isCypressMockBasic.st",
-					"contents" : "%2ACypress-Mocks-Extensions%0AisCypressMockBasic%0A%0A%09%5Efalse"
-				 }			],
-			"class" : [
-			],
-			"properties.json" : {
-				"name" : "Object" }
-		 }
-	],
-	"properties.json" : {
-		 }
-}'
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractTest
-baseTargetPatch
-
-	| className |
-	className := 'CypressMockBasic'.
-	^{
-		CypressModification
-			of: (CypressClassDefinition
-				name: className
-				superclassName: 'Object'
-				category: 'Cypress-Mocks'
-				instVarNames: #('name')
-				classInstVarNames: #('current')
-				classVarNames: #('Something')
-				poolDictionaryNames: #()
-				comment: 'This mock contains basic class and instance method selectors'
-				subclassType: '')
-			to: (CypressClassDefinition
-				name: className
-				superclassName: 'Object'
-				category: 'Cypress-Mocks'
-				instVarNames: #('name')
-				classInstVarNames: #('current')
-				classVarNames: #()
-				poolDictionaryNames: #()
-				comment: 'This mock contains basic class and instance method selectors'
-				subclassType: '').
-		CypressAddition
-			of: (CypressMethodDefinition
-				className: className
-				classIsMeta: false
-				selector: 'added'
-				category: 'accessing'
-				source: 'added
-	"added method"
-').
-		CypressModification
-			of: (CypressMethodDefinition
-				className: className
-				classIsMeta: false
-				selector: 'name:'
-				category: 'accessing'
-				source: 'name: aString
-	name := aString
-')
-			to: (CypressMethodDefinition
-				className: className
-				classIsMeta: false
-				selector: 'name:'
-				category: 'accessing'
-				source: 'name: aString
-	"changed method"
-	name := aString
-').
-		CypressRemoval
-			of: (CypressMethodDefinition
-				className: className
-				classIsMeta: false
-				selector: 'extra'
-				category: 'accessing'
-				source: 'extra
-	"extra method"
-').
-		CypressRemoval
-			of: (CypressMethodDefinition
-				className: 'Object'
-				classIsMeta: false
-				selector: 'isCypressMockBasic'
-				category: '*Cypress-Mocks-Extensions'
-				source: 'isCypressMockBasic
-
-	^false').
-		CypressAddition
-			of: (CypressClassDefinition
-				name: className , 'Sub'
-				superclassName: className
-				category: 'Cypress-Mocks'
-				instVarNames: #('anotherIV')
-				classInstVarNames: #('anotherCIV')
-				classVarNames: #()
-				poolDictionaryNames: #()
-				comment: 'Hacked subclass to test class loading and unloading'
-				subclassType: '').
-		CypressAddition
-			of: (CypressMethodDefinition
-				className: className , 'Sub'
-				classIsMeta: false
-				selector: 'added'
-				category: 'accessing'
-				source: 'added
-	"added method"
-').
-	}
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractTest
-sampleJson
-    ^ '{
-	"age" : 25,
-	"name" : "John%20Smith",
-	"phoneNumber" : [
-		{
-			"number" : "212%20555-1234",
-			"type" : "home" },
-		{
-			"number" : "646%20555-4567",
-			"type" : "fax" } ],
-	"registered" : true }'
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractTest
 targetDefinitions
 	"remove #extra method and modify #name: method"
 
@@ -447,7 +262,7 @@ targetDefinitions
 		CypressClassDefinition
 			name: className
 			superclassName: 'Object'
-			category: 'Cypress-Mocks'
+			category: 'Cypress-Mocks-Definitions'
 			instVarNames: #('name')
 			classInstVarNames: #('current')
 			classVarNames: #()
@@ -545,59 +360,21 @@ compileJSON: aJsonString
 	^CypressJsonParser parse: aJsonString
 %
 
-category: 'tests'
+category: 'private'
 set compile_env: 0
 method: CypressStructureTest
-testClassStructure
-
-	| jsObject packageStructure classStructure classProperties |
-	jsObject := self compileJSON: self basePackageStructureJson.
-	packageStructure := CypressPackageStructure fromJs: jsObject.
-	classStructure := packageStructure classes first.
-	self assert: classStructure name equals: 'CypressMockBasic'.
-	self deny: classStructure isClassExtension description: 'Class structure should not have been an extension'.
-	self assert: classStructure comment equals: 'This mock contains basic class and instance method selectors'.
-	classProperties := classStructure properties.
-	self assert: classProperties size equals: 7.
-	self assert: (classProperties at: 'instvars') equals: #('name').
-	self assert: (classProperties at: 'classinstvars') equals: #('current').
-	self assert: (classProperties at: 'name') equals: 'CypressMockBasic'.
-	self assert: (classProperties at: '_gs_subclassType') equals: ''.
-	self assert: (classProperties at: 'super') equals: 'Object'.
-	self assert: classStructure instanceMethods size equals: 4.
-	self assert: classStructure classMethods size equals: 3.
-	classStructure := packageStructure extensions first.
-	self assert: classStructure name equals: 'Object'.
-	self assert: classStructure isClassExtension description: 'Class structure should have been an extension'.
-	self assert: classStructure comment equals: ''.
-	classProperties := classStructure properties.
-	self assert: classProperties size equals: 1.
-	self assert: (classProperties at: 'name') equals: 'Object'.
-	self assert: classStructure instanceMethods size equals: 1.
-	self assert: classStructure classMethods size equals: 0.
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testJson
-	"Let's compile the JSON without errors"
-
-	self compileJSON: self basePackageStructureJson
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testPackageStructureFromJson
-
-	| packageStructure classStructure classProperties |
-	packageStructure := CypressPackageStructure fromJson: self basePackageStructureJson.
-	self assert: packageStructure name equals: 'Cypress-Mocks.package'.
-	self assert: packageStructure packageName equals: 'Cypress-Mocks'.
-	self assert: packageStructure properties isEmpty description: 'Properties should have been empty'.
-	self assert: packageStructure extensions size equals: 1.
-	self assert: packageStructure classes size equals: 1.
+sampleJson
+    ^ '{
+	"age" : 25,
+	"name" : "John%20Smith",
+	"phoneNumber" : [
+		{
+			"number" : "212%20555-1234",
+			"type" : "home" },
+		{
+			"number" : "646%20555-4567",
+			"type" : "fax" } ],
+	"registered" : true }'
 %
 
 category: 'tests'
@@ -615,42 +392,6 @@ testPackageStructureFromPackage
 			[:def |
 			self assert: (expectedDefinitions includes: def)
 				description: 'Definition for ', def printString, ' did not match expected ones']
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testPackageStructureSnapshot
-
-	| packageStructure packageDefinitions expectedDefinitions |
-	packageStructure := CypressPackageStructure
-				fromJs: (self compileJSON: self basePackageStructureJson).
-	packageDefinitions := packageStructure snapshot definitions.
-	expectedDefinitions := self baseDefinitions.
-	self assert: expectedDefinitions size equals: packageDefinitions size.
-	packageDefinitions do: 
-			[:def |
-			self assert: (expectedDefinitions includes: def)
-				description: 'Definition was not as expected']
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testPackageStructureToJson
-    | packageStructure stream string expected x y |
-    packageStructure := CypressPackageStructure fromPackage: (CypressPackageDefinition named: 'Cypress-Mocks').
-    stream := WriteStream on: String new.
-    packageStructure writeJsonOn: stream.
-    string := stream contents withUnixLineEndings.
-    expected := self basePackageStructureJson withUnixLineEndings.
-    1 to: string size do: [ :i | 
-        (i > expected size or: [ (string at: i) ~= (expected at: i) ])
-            ifTrue: [ 
-                x := string copyFrom: (i - 25 max: 1) to: (i + 25 min: string size).
-                y := expected copyFrom: ((i - 25 max: 1) min: expected size) to: (i + 25 min: expected size).
-                Array with: x with: y	"halt" ] ].
-    self assert: expected equals: string
 %
 
 category: 'tests'
@@ -937,6 +678,103 @@ testPrintString
 ! Class Implementation for CypressPatchTest
 
 ! ------------------- Instance methods for CypressPatchTest
+
+category: 'private'
+set compile_env: 0
+method: CypressPatchTest
+baseTargetPatch
+
+	| className |
+	className := 'CypressMockBasic'.
+	^{
+		CypressModification
+			of: (CypressClassDefinition
+				name: className
+				superclassName: 'Object'
+				category: 'Cypress-Mocks-Definitions'
+				instVarNames: #('name')
+				classInstVarNames: #('current')
+				classVarNames: #('Something')
+				poolDictionaryNames: #()
+				comment: 'This mock contains basic class and instance method selectors'
+				subclassType: '')
+			to: (CypressClassDefinition
+				name: className
+				superclassName: 'Object'
+				category: 'Cypress-Mocks-Definitions'
+				instVarNames: #('name')
+				classInstVarNames: #('current')
+				classVarNames: #()
+				poolDictionaryNames: #()
+				comment: 'This mock contains basic class and instance method selectors'
+				subclassType: '').
+		CypressAddition
+			of: (CypressMethodDefinition
+				className: className
+				classIsMeta: false
+				selector: 'added'
+				category: 'accessing'
+				source: 'added
+	"added method"
+').
+		CypressModification
+			of: (CypressMethodDefinition
+				className: className
+				classIsMeta: false
+				selector: 'name:'
+				category: 'accessing'
+				source: 'name: aString
+	name := aString
+')
+			to: (CypressMethodDefinition
+				className: className
+				classIsMeta: false
+				selector: 'name:'
+				category: 'accessing'
+				source: 'name: aString
+	"changed method"
+	name := aString
+').
+		CypressRemoval
+			of: (CypressMethodDefinition
+				className: className
+				classIsMeta: false
+				selector: 'extra'
+				category: 'accessing'
+				source: 'extra
+	"extra method"
+').
+		CypressRemoval
+			of: (CypressMethodDefinition
+				className: 'Object'
+				classIsMeta: false
+				selector: 'isCypressMockBasic'
+				category: '*Cypress-Mocks-Extensions'
+				source: 'isCypressMockBasic
+
+	^false').
+		CypressAddition
+			of: (CypressClassDefinition
+				name: className , 'Sub'
+				superclassName: className
+				category: 'Cypress-Mocks'
+				instVarNames: #('anotherIV')
+				classInstVarNames: #('anotherCIV')
+				classVarNames: #()
+				poolDictionaryNames: #()
+				comment: 'Hacked subclass to test class loading and unloading'
+				subclassType: '').
+		CypressAddition
+			of: (CypressMethodDefinition
+				className: className , 'Sub'
+				classIsMeta: false
+				selector: 'added'
+				category: 'accessing'
+				source: 'added
+	"added method"
+').
+	}
+%
 
 category: 'tests'
 set compile_env: 0

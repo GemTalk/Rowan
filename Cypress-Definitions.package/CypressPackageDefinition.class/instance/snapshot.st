@@ -1,7 +1,7 @@
 snapshotting
 snapshot
 
-	| classDefinitions methodDefinitions map classMap |
+	| classDefinitions methodDefinitions classMap |
 	classDefinitions := OrderedCollection new.
 	methodDefinitions := OrderedCollection new.
 	(self determineClassHierarchicalOrder: self classes) do: 

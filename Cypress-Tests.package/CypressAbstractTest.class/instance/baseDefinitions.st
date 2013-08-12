@@ -7,7 +7,7 @@ baseDefinitions
 		CypressClassDefinition
 			name: className
 			superclassName: 'Object'
-			category: 'Cypress-Mocks'
+			category: 'Cypress-Mocks-Definitions'
 			instVarNames: #('name')
 			classInstVarNames: #('current')
 			classVarNames: #('Something')
