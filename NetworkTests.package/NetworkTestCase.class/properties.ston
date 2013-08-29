@@ -1,0 +1,12 @@
+{
+	"category" : "NetworkTests",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "NetworkTestCase",
+	"pools" : [
+		 ],
+	"super" : "TestCase" }

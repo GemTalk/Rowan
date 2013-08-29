@@ -39,6 +39,20 @@ System myUserProfile symbolList do: [:symDict |
 ! Class Declarations
 
 doit
+(TestCase
+	subclass: 'NetworkTestCase'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'NetworkTests';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
 (NetworkTestCase
 	subclass: 'HTTPEncodingTest'
 	instVarNames: #(  )
@@ -123,6 +137,20 @@ doit
 		category: 'NetworkTests-Url';
 		comment: '';
 		immediateInvariant.
+%
+
+! Class Implementation for NetworkTestCase
+
+! ------------------- Class methods for NetworkTestCase
+
+category: 'Testing'
+set compile_env: 0
+classmethod: NetworkTestCase
+isAbstract
+	"Override to true if a TestCase subclass is Abstract and should not have
+	TestCase instances built from it"
+
+	^self sunitName = #NetworkTestCase
 %
 
 ! Class Implementation for HTTPEncodingTest
