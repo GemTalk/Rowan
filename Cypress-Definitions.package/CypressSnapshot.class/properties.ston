@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-Definitions",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"definitions" ],
+	"name" : "CypressSnapshot",
+	"pools" : [
+		 ],
+	"super" : "CypressObject" }

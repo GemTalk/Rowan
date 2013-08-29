@@ -16,4 +16,6 @@ deleteAll: aDirectory
 						ifFalse: 
 							[(#('/..' '/.' '\..' '\.')
 								anySatisfy: [:special | filename endsWith: special])
-									ifFalse: [self deleteAll: filename]]]]
+									ifFalse: 
+										[self deleteAll: filename.
+										GsFile removeServerDirectory: filename]]]]

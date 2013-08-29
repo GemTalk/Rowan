@@ -1,4 +1,4 @@
 utilities
 readStreamFor: filePath in: aDirectory do: aOneArgBlock
 
-	self subclassResponsibility
+	self subclassResponsibility: #readStreamFor:in:do:

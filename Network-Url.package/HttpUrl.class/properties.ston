@@ -1,0 +1,12 @@
+{
+	"category" : "Network-Url",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		"Passwords" ],
+	"instvars" : [
+		"realm" ],
+	"name" : "HttpUrl",
+	"pools" : [
+		 ],
+	"super" : "HierarchicalUrl" }

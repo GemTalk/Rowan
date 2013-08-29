@@ -1,0 +1,4 @@
+unknown
+directoryFileNamesAndContents: aDirectory
+
+	self subclassResponsibility: #directoryFileNamesAndContents:

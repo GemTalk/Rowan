@@ -1,4 +1,5 @@
 reading
 isPropertiesFileDirectoryEntry: entry
 
-	^entry endsWith: '/properties', self propertiesFileNameExtension
+	^self propertiesFileNameExtensions
+		anySatisfy: [:each | entry endsWith: '/properties' , each]

@@ -1,4 +1,4 @@
 utilities
 ensureDirectoryExists: aDirectory
 
-	self subclassResponsibility
+	self subclassResponsibility: #ensureDirectoryExists:

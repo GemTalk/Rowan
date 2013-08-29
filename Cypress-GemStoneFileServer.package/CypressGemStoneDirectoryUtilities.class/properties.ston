@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-GemStoneFileServer",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "CypressGemStoneDirectoryUtilities",
+	"pools" : [
+		 ],
+	"super" : "CypressFileUtilities" }

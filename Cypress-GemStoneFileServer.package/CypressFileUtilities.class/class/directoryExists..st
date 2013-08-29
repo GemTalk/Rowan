@@ -1,4 +1,4 @@
 utilities
 directoryExists: aDirectory
 
-	self subclassResponsibility
+	self subclassResponsibility: #directoryExists:

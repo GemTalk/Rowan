@@ -1,4 +1,4 @@
 utilities
 writeStreamFor: filePath in: aDirectory do: aOneArgBlock
 
-	self subclassResponsibility
+	self subclassResponsibility: #writeStreamFor:in:do:

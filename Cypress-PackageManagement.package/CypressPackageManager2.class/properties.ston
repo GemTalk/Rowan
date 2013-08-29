@@ -1,0 +1,13 @@
+{
+	"category" : "Cypress-PackageManagement",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		"SavedPackageManagers" ],
+	"instvars" : [
+		"knownRepositories",
+		"packageInformationList" ],
+	"name" : "CypressPackageManager2",
+	"pools" : [
+		 ],
+	"super" : "Object" }

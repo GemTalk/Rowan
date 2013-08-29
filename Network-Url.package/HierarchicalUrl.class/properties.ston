@@ -1,0 +1,18 @@
+{
+	"category" : "Network-Url",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"schemeName",
+		"authority",
+		"path",
+		"query",
+		"port",
+		"username",
+		"password" ],
+	"name" : "HierarchicalUrl",
+	"pools" : [
+		 ],
+	"super" : "Url" }

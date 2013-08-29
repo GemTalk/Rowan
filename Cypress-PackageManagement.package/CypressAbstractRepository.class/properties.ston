@@ -1,0 +1,15 @@
+{
+	"category" : "Cypress-PackageManagement",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		"DefaultCopyrightNotice" ],
+	"instvars" : [
+		"url",
+		"properties",
+		"readerClass",
+		"writerClass" ],
+	"name" : "CypressAbstractRepository",
+	"pools" : [
+		 ],
+	"super" : "Object" }

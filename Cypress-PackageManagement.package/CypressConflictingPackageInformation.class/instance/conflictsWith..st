@@ -1,0 +1,4 @@
+Updating
+conflictsWith: someCypressKnownPackageInformations
+
+	conflictsWith := someCypressKnownPackageInformations

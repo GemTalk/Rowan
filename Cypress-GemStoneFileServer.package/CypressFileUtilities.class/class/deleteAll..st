@@ -1,4 +1,4 @@
 utilities
 deleteAll: aDirectory
 
-	self subclassResponsibility
+	self subclassResponsibility: #deleteAll:

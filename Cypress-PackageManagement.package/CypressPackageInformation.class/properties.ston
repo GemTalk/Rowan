@@ -1,0 +1,22 @@
+{
+	"category" : "Cypress-PackageManagement",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"name",
+		"type",
+		"advice",
+		"competingPackageNames",
+		"imageDefinitions",
+		"savedDefinitions",
+		"savedLocation",
+		"repository",
+		"repositoryDescription",
+		"imageCounts",
+		"changesCount" ],
+	"name" : "CypressPackageInformation",
+	"pools" : [
+		 ],
+	"super" : "CypressObject" }

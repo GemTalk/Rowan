@@ -1,0 +1,12 @@
+{
+	"category" : "NetworkTests-Url",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "FileUrlTest",
+	"pools" : [
+		 ],
+	"super" : "NetworkTestCase" }

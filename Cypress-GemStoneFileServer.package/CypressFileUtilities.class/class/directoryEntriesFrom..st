@@ -1,4 +1,4 @@
 utilities
 directoryEntriesFrom: aDirectory
 
-	self subclassResponsibility
+	self subclassResponsibility: #directoryEntriesFrom:

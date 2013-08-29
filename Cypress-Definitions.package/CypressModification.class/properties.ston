@@ -1,0 +1,13 @@
+{
+	"category" : "Cypress-Definitions",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"obsoletion",
+		"modification" ],
+	"name" : "CypressModification",
+	"pools" : [
+		 ],
+	"super" : "CypressPatchOperation" }

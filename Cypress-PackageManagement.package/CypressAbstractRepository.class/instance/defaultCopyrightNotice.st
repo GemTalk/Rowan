@@ -1,0 +1,4 @@
+accessing
+defaultCopyrightNotice
+
+	^self class defaultCopyrightNotice

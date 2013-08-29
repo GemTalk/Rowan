@@ -1,4 +1,4 @@
-unknown
+loading
 handleCompileError: aCompileError from: aPatchOperation
 
 	| undefinedSymbolErrors otherErrors |

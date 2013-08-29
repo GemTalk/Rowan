@@ -40,6 +40,34 @@ System myUserProfile symbolList do: [:symDict |
 
 doit
 (Object
+	subclass: 'CypressFileUtilities'
+	instVarNames: #(  )
+	classVars: #( Current )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-GemStoneFileServer';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressFileUtilities
+	subclass: 'CypressGemStoneDirectoryUtilities'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-GemStoneFileServer';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(Object
 	subclass: 'CypressAbstractPackageFiler'
 	instVarNames: #( repository packageDirectory packageStructure )
 	classVars: #(  )
@@ -58,6 +86,20 @@ doit
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #( specials )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-GemStoneFileServer';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressAbstractPackageWriter
+	subclass: 'CypressStrictFileTreeFormatDoNothingPackageWriter'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
 	options: #())
@@ -150,46 +192,305 @@ doit
 		immediateInvariant.
 %
 
-doit
-(Object
-	subclass: 'CypressFileUtilities'
-	instVarNames: #(  )
-	classVars: #( Current )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
-		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
+! Class Implementation for CypressFileUtilities
+
+! ------------------- Class methods for CypressFileUtilities
+
+category: 'accessing'
+set compile_env: 0
+classmethod: CypressFileUtilities
+current
+
+	^Current
 %
 
-doit
-(CypressFileUtilities
-	subclass: 'CypressGemStoneDirectoryUtilities'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
-		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressFileUtilities
+deleteAll: aDirectory
+
+	self subclassResponsibility: #deleteAll:
 %
 
-doit
-(Object
-	subclass: 'CypressVersionReference'
-	instVarNames: #( name package author branch versionNumber )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
-		category: 'Cypress-GemStoneFileServer';
-		comment: 'A CypressVersionReference refers to a specific version of a Monticello package.';
-		immediateInvariant.
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressFileUtilities
+directoryEntriesFrom: aDirectory
+
+	self subclassResponsibility: #directoryEntriesFrom:
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressFileUtilities
+directoryExists: aDirectory
+
+	self subclassResponsibility: #directoryExists:
+%
+
+category: 'unknown'
+set compile_env: 0
+classmethod: CypressFileUtilities
+directoryFileNamesAndContents: aDirectory
+
+	self subclassResponsibility: #directoryFileNamesAndContents:
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressFileUtilities
+directoryFromPath: directoryPath relativeTo: aDirectory
+
+	self subclassResponsibility: #directoryFromPath:relativeTo:
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressFileUtilities
+ensureDirectoryExists: aDirectory
+
+	self subclassResponsibility: #ensureDirectoryExists:
+%
+
+category: 'initializating'
+set compile_env: 0
+classmethod: CypressFileUtilities
+install
+
+	Current := self
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressFileUtilities
+localNameFrom: aDirectory
+
+	self subclassResponsibility: #localNameFrom:
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressFileUtilities
+pathNameDelimiter
+
+	self subclassResponsibility: #pathNameDelimiter
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressFileUtilities
+readStreamFor: filePath do: aOneArgBlock
+
+	self subclassResponsibility: #readStreamFor:do:
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressFileUtilities
+readStreamFor: filePath in: aDirectory do: aOneArgBlock
+
+	self subclassResponsibility: #readStreamFor:in:do:
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressFileUtilities
+workingDirectory
+
+	self subclassResponsibility: #workingDirectory
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressFileUtilities
+writeStreamFor: filePath in: aDirectory do: aOneArgBlock
+
+	self subclassResponsibility: #writeStreamFor:in:do:
+%
+
+! Class Implementation for CypressGemStoneDirectoryUtilities
+
+! ------------------- Class methods for CypressGemStoneDirectoryUtilities
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+deleteAll: aDirectory
+	"Delete all the files and directories under the named directory.
+	 Ensure we don't try to recursively delete . or .."
+
+	| filename isFile |
+	(GsFile contentsAndTypesOfDirectory: aDirectory onClient: false)
+		doWithIndex: 
+			[:each :index |
+			index odd
+				ifTrue: [filename := each]
+				ifFalse: 
+					[isFile := each.
+					isFile
+						ifTrue: [GsFile removeServerFile: filename]
+						ifFalse: 
+							[(#('/..' '/.' '\..' '\.')
+								anySatisfy: [:special | filename endsWith: special])
+									ifFalse: 
+										[self deleteAll: filename.
+										GsFile removeServerDirectory: filename]]]]
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+directoryEntriesFrom: aDirectory
+	"Answer fully qualified paths to the contents of aDirectory."
+
+	^(GsFile contentsOfDirectory: aDirectory onClient: false) ifNil: [#()]
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+directoryExists: aDirectory
+
+	^GsFile existsOnServer: aDirectory
+%
+
+category: 'unknown'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+directoryFileNamesAndContents: aDirectory
+	"Walk the directory tree starting at aDirectory and
+	 answer a map of the names of the files in the tree to
+	 their contents (which work best when text)."
+
+	| map |
+	map := Dictionary new.
+	self directoryFileNamesAndContents: aDirectory into: map.
+	^map.
+%
+
+category: 'unknown'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+directoryFileNamesAndContents: aDirectory into: aDictionary
+	"Walk the directory tree starting at aDirectory and
+	 answer a map of the names of the files in the tree to
+	 their contents (which work best when text)."
+
+	| filename isFile |
+	(GsFile contentsAndTypesOfDirectory: aDirectory onClient: false)
+		doWithIndex: 
+			[:each :index |
+			index odd
+				ifTrue: [filename := each]
+				ifFalse: 
+					[isFile := each.
+					isFile
+						ifTrue: 
+							[| file |
+							file := GsFile openReadOnServer: filename.
+							file isNil
+								ifFalse: 
+									[aDictionary at: filename put: file contents.
+									file close]]
+						ifFalse: 
+							[(#('/..' '/.' '\..' '\.')
+								anySatisfy: [:special | filename endsWith: special])
+									ifFalse: [self directoryFileNamesAndContents: filename into: aDictionary]]]]
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+directoryFromPath: directoryPath relativeTo: aDirectory
+
+	^((aDirectory endsWith: self pathNameDelimiter) or: [directoryPath beginsWith: self pathNameDelimiter])
+		ifTrue: [aDirectory, directoryPath]
+		ifFalse: [aDirectory, self pathNameDelimiter, directoryPath]
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+ensureDirectoryExists: aDirectory
+
+	| lastSeparator |
+	(GsFile existsOnServer: aDirectory) ifTrue: [^aDirectory].
+	(GsFile createServerDirectory: aDirectory) ifNotNil: [^aDirectory].
+	lastSeparator := aDirectory findLastSubString: self pathNameDelimiter startingAt: aDirectory size.
+	lastSeparator <= 1 ifTrue: [self error: 'Cannot create directory'].
+	self ensureDirectoryExists: (aDirectory copyFrom: 1 to: lastSeparator - 1).
+	self ensureDirectoryExists: aDirectory.
+%
+
+category: 'initializating'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+initialize
+	"self initialize"
+
+	self install
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+localNameFrom: aDirectory
+
+	| endOfPath |
+	endOfPath := aDirectory findLastSubString: self pathNameDelimiter startingAt: aDirectory size.
+	^aDirectory copyFrom: endOfPath + 1 to: aDirectory size
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+pathNameDelimiter
+
+	^'/'
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+readStreamFor: filePath do: aOneArgBlock
+
+	| file stream |
+	GsFile serverErrorString.
+	file := GsFile openReadOnServer: filePath.
+	GsFile serverErrorString ifNotNil: [:errorMessage | self error: errorMessage].
+	[stream := ReadStream on: (String withAll: file contents asByteArray decodeFromUTF8).
+	aOneArgBlock value: stream] ensure: [file close]
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+readStreamFor: filePath in: aDirectory do: aOneArgBlock
+
+	self
+		readStreamFor: (self directoryFromPath: filePath relativeTo: aDirectory)
+		do: aOneArgBlock
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+workingDirectory
+
+	^System gemEnvironmentVariable: 'PWD'
+%
+
+category: 'utilities'
+set compile_env: 0
+classmethod: CypressGemStoneDirectoryUtilities
+writeStreamFor: filePath in: aDirectory do: aOneArgBlock
+
+	| file stream |
+	GsFile serverErrorString.
+	file := GsFile openWriteOnServer: (self directoryFromPath: filePath relativeTo: aDirectory).
+	GsFile serverErrorString ifNotNil: [:errorMessage | self error: errorMessage].
+	stream := WriteStream on: String new.
+	[aOneArgBlock value: stream] ensure: [file nextPutAll: stream contents encodeAsUTF8; close]
 %
 
 ! Class Implementation for CypressAbstractPackageFiler
@@ -267,6 +568,14 @@ propertiesFileNameExtension
 category: 'accessing'
 set compile_env: 0
 method: CypressAbstractPackageFiler
+propertiesFileNameExtensions
+
+	^Array with: self propertiesFileNameExtension
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressAbstractPackageFiler
 repository
 
 	^repository
@@ -318,6 +627,16 @@ specials
 category: 'private'
 set compile_env: 0
 method: CypressAbstractPackageWriter
+determinePackageDirectory
+
+	^self fileUtils ensureDirectoryExists: (self fileUtils
+				directoryFromPath: self packageStructure name
+				relativeTo: self repository directoryPath)
+%
+
+category: 'private'
+set compile_env: 0
+method: CypressAbstractPackageWriter
 directoryForDirectoryNamed: directoryNameOrPath
 
 	^directoryNameOrPath = '.'
@@ -343,6 +662,16 @@ fileNameForSelector: selector
 							output nextPut: $^.
 							selector do: [:each | output nextPutAll: (specials at: each)]
 								separatedBy: [output nextPut: $.]]]]
+%
+
+category: 'writing'
+set compile_env: 0
+method: CypressAbstractPackageWriter
+removeOldReplacingWithNew
+
+	self fileUtils deleteAll: self packageDirectory.
+	self writePropertiesFile.
+	self writePackageStructure
 %
 
 category: 'private'
@@ -450,12 +779,8 @@ writePackageStructure: aPackageStructure
 
 	self
 		packageStructure: aPackageStructure;
-		packageDirectory: (self fileUtils ensureDirectoryExists: (self fileUtils
-							directoryFromPath: self packageStructure name
-							relativeTo: self repository directoryPath)).
-	self fileUtils deleteAll: self packageDirectory.
-	self writePropertiesFile.
-	self writePackageStructure
+		packageDirectory: (self determinePackageDirectory);
+		removeOldReplacingWithNew
 %
 
 category: 'writing'
@@ -495,17 +820,29 @@ writePropertiesFile
 		visit: [:fileStream | Dictionary new writeCypressJsonOn: fileStream]
 %
 
+! Class Implementation for CypressStrictFileTreeFormatDoNothingPackageWriter
+
+! ------------------- Instance methods for CypressStrictFileTreeFormatDoNothingPackageWriter
+
+category: 'writing'
+set compile_env: 0
+method: CypressStrictFileTreeFormatDoNothingPackageWriter
+removeOldReplacingWithNew
+	"Change nothing, since a Cypress writer has insufficient information
+	 for preserving the FileTree details. Strictly read-only."
+%
+
+category: 'writing'
+set compile_env: 0
+method: CypressStrictFileTreeFormatDoNothingPackageWriter
+writePropertiesFile
+	"Change nothing, since a Cypress writer has insufficient information
+	 for preserving the FileTree details. Strictly read-only."
+%
+
 ! Class Implementation for CypressFileTreeFormatPackageWriter
 
 ! ------------------- Instance methods for CypressFileTreeFormatPackageWriter
-
-category: 'accessing'
-set compile_env: 0
-method: CypressFileTreeFormatPackageWriter
-propertiesFileNameExtension
-
-	^'.json'
-%
 
 category: 'writing'
 set compile_env: 0
@@ -576,7 +913,8 @@ set compile_env: 0
 method: CypressAbstractPackageReader
 isPropertiesFileDirectoryEntry: entry
 
-	^entry endsWith: '/properties', self propertiesFileNameExtension
+	^self propertiesFileNameExtensions
+		anySatisfy: [:each | entry endsWith: '/properties' , each]
 %
 
 category: 'accessing'
@@ -605,7 +943,7 @@ method: CypressAbstractPackageReader
 readClassPropertiesFromDirectoryEntries: entries
 
 	self fileUtils readStreamFor: (entries
-				detect: [:entry | entry endsWith: '/properties', self propertiesFileNameExtension]
+				detect: [:entry | self isPropertiesFileDirectoryEntry: entry]
 				ifNone: [^Dictionary new])
 		do: [:fileStream | ^CypressJsonParser parseStream: fileStream]
 %
@@ -780,6 +1118,16 @@ propertiesFileNameExtension
 	^'.json'
 %
 
+category: 'accessing'
+set compile_env: 0
+method: CypressFileTreeFormatPackageReader
+propertiesFileNameExtensions
+
+	^Array
+		with: super propertiesFileNameExtension
+		with: self propertiesFileNameExtension
+%
+
 category: 'reading'
 set compile_env: 0
 method: CypressFileTreeFormatPackageReader
@@ -805,20 +1153,6 @@ isPropertiesFileDirectoryEntry: entry
 
 	^(super isPropertiesFileDirectoryEntry: entry)
 		or: [entry endsWith: '/properties.json']
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressFlexiblePackageReader
-readClassPropertiesFromDirectoryEntries: entries
-	"Look for Cypress .ston properties file first, but accept a .json version if present."
-
-	self fileUtils readStreamFor: (entries
-				detect: [:entry | entry endsWith: '/properties' , self propertiesFileNameExtension]
-				ifNone: 
-					[entries detect: [:entry | entry endsWith: '/properties.json']
-						ifNone: [^Dictionary new]])
-		do: [:fileStream | ^CypressJsonParser parseStream: fileStream]
 %
 
 category: 'reading'
@@ -858,370 +1192,6 @@ readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isM
 		intoClassStructure: classStructure
 		meta: isMeta
 		methods: methods
-%
-
-! Class Implementation for CypressFileUtilities
-
-! ------------------- Class methods for CypressFileUtilities
-
-category: 'accessing'
-set compile_env: 0
-classmethod: CypressFileUtilities
-current
-
-	^Current
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
-deleteAll: aDirectory
-
-	self subclassResponsibility
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
-directoryEntriesFrom: aDirectory
-
-	self subclassResponsibility
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
-directoryExists: aDirectory
-
-	self subclassResponsibility
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
-directoryFromPath: directoryPath relativeTo: aDirectory
-
-	self subclassResponsibility
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
-ensureDirectoryExists: aDirectory
-
-	self subclassResponsibility
-%
-
-category: 'initializating'
-set compile_env: 0
-classmethod: CypressFileUtilities
-install
-
-	Current := self
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
-localNameFrom: aDirectory
-
-	self subclassResponsibility
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
-pathNameDelimiter
-
-	self subclassResponsibility
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
-readStreamFor: filePath do: aOneArgBlock
-
-	self subclassResponsibility
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
-readStreamFor: filePath in: aDirectory do: aOneArgBlock
-
-	self subclassResponsibility
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
-writeStreamFor: filePath in: aDirectory do: aOneArgBlock
-
-	self subclassResponsibility
-%
-
-! Class Implementation for CypressGemStoneDirectoryUtilities
-
-! ------------------- Class methods for CypressGemStoneDirectoryUtilities
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
-deleteAll: aDirectory
-	"Delete all the files and directories under the named directory.
-	 Ensure we don't try to recursively delete . or .."
-
-	| filename isFile |
-	(GsFile contentsAndTypesOfDirectory: aDirectory onClient: false)
-		doWithIndex: 
-			[:each :index |
-			index odd
-				ifTrue: [filename := each]
-				ifFalse: 
-					[isFile := each.
-					isFile
-						ifTrue: [GsFile removeServerFile: filename]
-						ifFalse: 
-							[(#('/..' '/.' '\..' '\.')
-								anySatisfy: [:special | filename endsWith: special])
-									ifFalse: [self deleteAll: filename]]]]
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
-directoryEntriesFrom: aDirectory
-	"Answer fully qualified paths to the contents of aDirectory."
-
-	^(GsFile contentsOfDirectory: aDirectory onClient: false) ifNil: [#()]
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
-directoryExists: aDirectory
-
-	^GsFile existsOnServer: aDirectory
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
-directoryFromPath: directoryPath relativeTo: aDirectory
-
-	^((aDirectory endsWith: self pathNameDelimiter) or: [directoryPath beginsWith: self pathNameDelimiter])
-		ifTrue: [aDirectory, directoryPath]
-		ifFalse: [aDirectory, self pathNameDelimiter, directoryPath]
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
-ensureDirectoryExists: aDirectory
-
-	| lastSeparator |
-	(GsFile existsOnServer: aDirectory) ifTrue: [^aDirectory].
-	(GsFile createServerDirectory: aDirectory) ifNotNil: [^aDirectory].
-	lastSeparator := aDirectory findLastSubString: self pathNameDelimiter startingAt: aDirectory size.
-	lastSeparator <= 1 ifTrue: [self error: 'Cannot create directory'].
-	self ensureDirectoryExists: (aDirectory copyFrom: 1 to: lastSeparator - 1).
-	self ensureDirectoryExists: aDirectory.
-%
-
-category: 'initializating'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
-initialize
-	"self initialize"
-
-	self install
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
-localNameFrom: aDirectory
-
-	| endOfPath |
-	endOfPath := aDirectory findLastSubString: self pathNameDelimiter startingAt: aDirectory size.
-	^aDirectory copyFrom: endOfPath + 1 to: aDirectory size
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
-pathNameDelimiter
-
-	^'/'
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
-readStreamFor: filePath do: aOneArgBlock
-
-	| file stream |
-	GsFile serverErrorString.
-	file := GsFile openReadOnServer: filePath.
-	GsFile serverErrorString ifNotNil: [:errorMessage | self error: errorMessage].
-	[stream := ReadStream on: (String withAll: file contents asByteArray decodeFromUTF8).
-	aOneArgBlock value: stream] ensure: [file close]
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
-readStreamFor: filePath in: aDirectory do: aOneArgBlock
-
-	self
-		readStreamFor: (self directoryFromPath: filePath relativeTo: aDirectory)
-		do: aOneArgBlock
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
-writeStreamFor: filePath in: aDirectory do: aOneArgBlock
-
-	| file stream |
-	GsFile serverErrorString.
-	file := GsFile openWriteOnServer: (self directoryFromPath: filePath relativeTo: aDirectory).
-	GsFile serverErrorString ifNotNil: [:errorMessage | self error: errorMessage].
-	stream := WriteStream on: String new.
-	[aOneArgBlock value: stream] ensure: [file nextPutAll: stream contents encodeAsUTF8; close]
-%
-
-! Class Implementation for CypressVersionReference
-
-! ------------------- Class methods for CypressVersionReference
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressVersionReference
-name: aString
-
-	^(self basicNew)
-		initializeName: aString;
-		yourself
-%
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressVersionReference
-new
-
-	self error: 'Use #name: to initialize the receiver.'
-%
-
-! ------------------- Instance methods for CypressVersionReference
-
-category: 'comparing'
-set compile_env: 0
-method: CypressVersionReference
-= aReference
-
-	^self class = aReference class
-		and: [self name = aReference name]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressVersionReference
-author
-	"Answer the author of the receiver."
-	
-	^ author
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressVersionReference
-branch
-	"Answer the branch of the receiver."
-	
-	^ branch
-%
-
-category: 'comparing'
-set compile_env: 0
-method: CypressVersionReference
-hash
-
-	^self name hash
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressVersionReference
-initializeName: aString
-
-	name := aString.
-	self parseName: aString
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressVersionReference
-matches: aResolvedReference
-	^ self name = aResolvedReference name
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressVersionReference
-name
-	"Answer the name of this reference."
-	
-	^ name
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressVersionReference
-packageName
-	"Answer the package of the receiver."
-
-	^ package
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressVersionReference
-parseName: aString
-	| basicName |
-	basicName := (aString isEmpty or: [aString last isDigit or: [(aString includes: $() not]])
-		ifTrue: [ aString ]
-		ifFalse: [ (aString copyUpToLast: $.) copyUpTo: $( ].
-	package := basicName copyUpToLast: $-.
-	(package includes: $.)
-		ifFalse: [ branch := '' ]
-		ifTrue: [
-			branch := package copyAfter: $..
-			package := package copyUpTo: $. ].
-	author := (basicName copyAfterLast: $-) copyUpToLast: $..
-	versionNumber := (basicName copyAfterLast: $-) copyAfterLast: $..
-	(versionNumber notEmpty and: [ versionNumber allSatisfy: [ :each | each isDigit ] ])
-		ifTrue: [ versionNumber := versionNumber asInteger ]
-		ifFalse: [ versionNumber := 0 ]
-%
-
-category: 'printing'
-set compile_env: 0
-method: CypressVersionReference
-printOn: aStream
-
-	super printOn: aStream.
-	aStream nextPutAll: ' name: '.
-	self name printOn: aStream
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressVersionReference
-versionNumber
-	"Answer the version of the receiver."
-
-	^ versionNumber
 %
 
 ! Class Extensions

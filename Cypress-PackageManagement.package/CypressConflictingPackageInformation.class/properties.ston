@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-PackageManagement",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"conflictsWith" ],
+	"name" : "CypressConflictingPackageInformation",
+	"pools" : [
+		 ],
+	"super" : "CypressAbstractPackageInformation" }

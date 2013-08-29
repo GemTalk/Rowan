@@ -1,0 +1,12 @@
+{
+	"category" : "NetworkTests-Protocols",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "HTTPEncodingTest",
+	"pools" : [
+		 ],
+	"super" : "NetworkTestCase" }

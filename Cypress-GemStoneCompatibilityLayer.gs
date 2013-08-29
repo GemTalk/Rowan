@@ -499,6 +499,14 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
 category: '*Cypress-GemStoneCompatibilityLayer'
 set compile_env: 0
 method: CharacterCollection
+encodeForHTTP
+
+	^self encodeAsUTF8 escapePercents
+%
+
+category: '*Cypress-GemStoneCompatibilityLayer'
+set compile_env: 0
+method: CharacterCollection
 findString: subString startingAt: startIndex caseSensitive: aBoolean
 	"If a receiver contains subString beginning at some point at or after
 	 startIndex, this returns the index at which subString begins.  If the

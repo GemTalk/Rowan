@@ -1,4 +1,4 @@
 utilities
 localNameFrom: aDirectory
 
-	self subclassResponsibility
+	self subclassResponsibility: #localNameFrom:

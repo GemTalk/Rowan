@@ -1,0 +1,4 @@
+Writing
+writeChangesToAllRepositoriesFor: aPackageInformation
+
+	aPackageInformation writeChangesToAllRepositories.

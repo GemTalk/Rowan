@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-GemStoneFileServer",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "CypressPackageWriter",
+	"pools" : [
+		 ],
+	"super" : "CypressAbstractPackageWriter" }

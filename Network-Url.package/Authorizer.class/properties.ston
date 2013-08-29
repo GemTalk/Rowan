@@ -1,0 +1,13 @@
+{
+	"category" : "Network-Url",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"users",
+		"realm" ],
+	"name" : "Authorizer",
+	"pools" : [
+		 ],
+	"super" : "Object" }

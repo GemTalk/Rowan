@@ -1,0 +1,12 @@
+{
+	"category" : "Network-Url",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "HttpsUrl",
+	"pools" : [
+		 ],
+	"super" : "HttpUrl" }

@@ -627,9 +627,14 @@ set compile_env: 0
 method: CypressObject
 classesInPackageNamed: aString
 
+	| packageName candidateName |
+	packageName := aString asLowercase.
 	^(System myUserProfile symbolList allSatisfying: 
 			[:each |
-			each isBehavior and: [each category = aString or: [each category beginsWith: aString, '-']]])
+			each isBehavior and: 
+					[candidateName := each category asLowercase.
+					candidateName = packageName
+						or: [candidateName beginsWith: packageName , '-']]])
 		sortAscending: #('name')
 %
 
@@ -2432,7 +2437,7 @@ errors
 	^errors
 %
 
-category: 'unknown'
+category: 'loading'
 set compile_env: 0
 method: CypressLoader
 handleCompileError: aCompileError from: aPatchOperation

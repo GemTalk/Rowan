@@ -1,0 +1,4 @@
+testing
+isStrict
+
+	^false

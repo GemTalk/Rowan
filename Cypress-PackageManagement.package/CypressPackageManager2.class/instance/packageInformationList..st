@@ -1,0 +1,4 @@
+Updating
+packageInformationList: someNamedPackageInformations
+
+	packageInformationList := someNamedPackageInformations
