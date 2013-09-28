@@ -1,0 +1,41 @@
+errorCount
+output pushnew CypressReferenceImplementationInstall.out  only
+errorCount
+display resultcheck
+
+set user SystemUser pass swordfish
+login
+
+! switch to errorcheck because class definitions doit's don't have expectvalue
+display errorcheck
+errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-GemStoneCompatibilityLayer.gs
+errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-Definitions.gs
+errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-Structure.gs
+errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-Mocks.gs
+errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-GemStoneFileServer.gs
+errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Network-Url.gs
+errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-MesssageDigest.gs
+errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-PackageManagement.gs
+errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-Comparison.gs
+errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-Tests.gs
+errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/NetworkTests.gs
+errorCount
+
+display resultcheck
+commit
+
+logout
+
+output pop
+errorCount
