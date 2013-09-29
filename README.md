@@ -26,25 +26,27 @@ but it is incomplete (CypressPackageManager2). The unit tests are written agains
 
 CypressPackageManager is the class to instantiate for manipulating Cypress packages. The GBS/VW client class CypressPackageManagerView
 provides an example of how this class should be used. The premise is that package is found in a single repository only, which can be limiting.
+This implementation make relatively simple use of replication and can potentially be extended for use in a non-GBS environment such as Pharo.
 
 - #packageInformationList answers a list of CypressPackageInformation instances for possible and known packages in the image.
-(CypressPackageManager2 uses a hierachy of Package Information classes for richer behaviour.)
+  (CypressPackageManager2 uses a hierachy of Package Information classes for richer behaviour.)
 - #potentialPackageNames answers a list of possible package names found in the image, based on class categories and on method categories 
-which begin with an asterisk. This method is not normally used directly.
+  which begin with an asterisk. This method is not normally used directly.
 - #refreshPackageInformation is used to provide an updated list of Package Information instances, reflecting the latest image and file
-system representations of the packages.
+  system representations of the packages.
 - #lookForLoadedPackagesIn: updates the Package Information instances list with information for each package in the image which has
-a Cypress fileout in the directory specified by the argument.
+  a Cypress fileout in the directory specified by the argument.
 - #lookForUnloadedPackagesIn: is similar, but adds Package Information instances for packages found in the specified directory, but
-not presently loaded.
+  not presently loaded.
 - #updateSavedLocation:for: updates the Package Information with a new directory path in which the Cypress fileout will be saved or 
-will be found.
+  will be found.
 - #writePackageToDiskFrom: and #writePackagesToDiskFrom: are used to fileout the Cypress representation of a single package or a number
-of packages, respectively.
+  of packages, respectively.
 - #loadPackageFrom: loads the package specified in the argument (a Package Information instance).
 
-CypressPackageManager2 is similar, but a little richer in scope. In essence, a package can reside in a number of repositories, each of 
-which can differ from the others. Additionally, it supports URL-based repository identification. There are four supported repository 
+CypressPackageManager2 is similar, but richer in scope. It is predicated on GBS replication, so will take more work
+to implement in a non-GBS environment. In this model, a package can reside in a number of repositories, each of 
+which can hold a different version from the others. Additionally, it supports URL-based repository identification. There are four supported repository 
 formats (see the subclasses of CypressAbstractFileUrl). The URL scheme distinguishes the formats. ('cypress' is the pure Cypress format. 
 'cypresslax' tolerates FileTree method formats, but writes Cypress format. 'cypressft' reads and writes using the FileTree method format.
 'cypressfiletree' is a read-only scheme that reads FileTree format, but cannot overwrite it, thereby protecting the FileTree meta-data.)
@@ -53,13 +55,19 @@ CypressPackageManagerTest provides test cases for this upcoming Package Manager 
 
 ### Issues
 - The .gs fileouts used to bootstrap Cypress into the image add extra linefeeds at the end of methods.
-(This is unavoidable, due to the .gs file format, and will not be corrected.)
+  (This is unavoidable, due to the .gs file format, and will not be corrected.)
 - The .gs fileouts have problems loading character values between 128 and 255 (e.g., accented characters).
-(By loading the actual Cypress version over it, the problem is eliminated during the bootstrap.)
+  (By loading the actual Cypress version over it, the problem is eliminated during the bootstrap.)
 - CypressPackageManager2 is incomplete, a work in progress.
 - The only user interface offered requires GBS 7.6 and VisualWorks 7.9.1. (It may work with older versions, but hasn't been tested with any.)
 - There is no GBS for VisualAge user interface provided yet.
 - Older versions of GemStone/S will be problematic, as will older versions of VisualWorks.
 - The code has been developed by and for SystemUser, with the bulk of the code loaded into SystemUser's UserGlobals Symbol Dictionary.
-(This means it is not yet accessible to other GemStone users.)
+  (This means it is not yet accessible to other GemStone users.)
 - There is no support for packages which load into a user's Globals and load extensions into Globals classes.
+- CypressPackageManagerTest>>#testLoadingPackageBranchFromRepository is not yet written and the functionality is absent.
+- CypressPackageManagerTest>>#testLoadingPackageWithGlobalExtensionWhenNotSystemUser is not yet written and the functionality is absent.
+- CypressPackageManagerTest>>#testLoadingPackageFromGemStoneFileoutRepository is not yet written and the functionality is absent.
+  It is a future possibility, not necessarily a planned feature.
+- CypressPackageManagerTest>>#testLoadingPackageBranchFromRepository is not yet written and the functionality is absent.
+  It is a future possibility, not necessarily a planned feature.
