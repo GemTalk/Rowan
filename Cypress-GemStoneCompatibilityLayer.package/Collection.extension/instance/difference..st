@@ -1,4 +1,7 @@
-*Cypress-GemStoneCompatibilityLayer
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: *Cypress-GemStoneCompatibilityLayer
+"
 difference: aCollection
 	"Answer the set theoretic difference of two collections."
 

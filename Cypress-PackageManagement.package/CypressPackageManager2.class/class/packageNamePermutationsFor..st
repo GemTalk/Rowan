@@ -1,4 +1,7 @@
-Accessing - private
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: Accessing - private
+"
 packageNamePermutationsFor: aString
 	"Answer the variations on possible package names from the specified string.
 	 Each hyphen may possibly separate the package name from a suffix."

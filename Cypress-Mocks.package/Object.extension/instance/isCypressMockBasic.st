@@ -1,4 +1,7 @@
-*Cypress-Mocks-Extensions
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: *Cypress-Mocks-Extensions
+"
 isCypressMockBasic
 
 	^false

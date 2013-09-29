@@ -1,4 +1,7 @@
-snapshotting
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: snapshotting
+"
 addMethodsFromClass: aClass toDefinitions: definitions
 	"Add only those methods which are not extensions from other packages."
 

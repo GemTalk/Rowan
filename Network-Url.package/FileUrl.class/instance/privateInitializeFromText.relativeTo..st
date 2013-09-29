@@ -1,4 +1,7 @@
-private-initialization
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: private-initialization
+"
 privateInitializeFromText: pathString relativeTo: aUrl
 	"<pathString> should be a filesystem path.
 	This url is adjusted to be aUrl + the path."

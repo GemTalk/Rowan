@@ -1,4 +1,7 @@
-testing properties
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: testing properties
+"
 isCodeFormatFileTree
 
 	^self isCodeFormatProperty: 'FileTree'

@@ -1,4 +1,7 @@
-authentication
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: authentication
+"
 mapFrom: aKey to: aPerson
 	"Establish a mapping from a RFC 1421 key to a user."
 

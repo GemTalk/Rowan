@@ -1,4 +1,7 @@
-parsing
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: parsing
+"
 newFromRelativeText: aString
 	"return a URL relative to the current one, given by aString.  For instance, if self is 'http://host/dir/file', and aString is '/dir2/file2', then the return will be a Url for 'http://host/dir2/file2'"
 

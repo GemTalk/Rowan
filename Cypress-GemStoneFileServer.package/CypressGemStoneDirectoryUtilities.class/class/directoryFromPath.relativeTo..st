@@ -1,4 +1,7 @@
-utilities
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: utilities
+"
 directoryFromPath: directoryPath relativeTo: aDirectory
 
 	^((aDirectory endsWith: self pathNameDelimiter) or: [directoryPath beginsWith: self pathNameDelimiter])

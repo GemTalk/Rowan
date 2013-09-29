@@ -1,4 +1,7 @@
-access
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: access
+"
 fileName
 	"Return the last part of the path,
 	most often a filename but does not need to be."

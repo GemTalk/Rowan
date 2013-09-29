@@ -1,4 +1,7 @@
-*Cypress-Comparison-accessing
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: *Cypress-Comparison-accessing
+"
 classDefinitionString
 
 	^superclassName, ' subclass: ', self name printString, '

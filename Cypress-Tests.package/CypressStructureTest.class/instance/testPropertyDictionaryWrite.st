@@ -1,4 +1,7 @@
-tests
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: tests
+"
 testPropertyDictionaryWrite
     | propertyDictionary stream x |
     propertyDictionary := (self compileJSON: self sampleJson) asCypressPropertyObject.

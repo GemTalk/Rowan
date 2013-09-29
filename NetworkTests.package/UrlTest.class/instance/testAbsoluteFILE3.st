@@ -1,4 +1,7 @@
-tests
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: tests
+"
 testAbsoluteFILE3
 	"Just a few selected tests for FileUrl, not complete by any means."
 

@@ -1,4 +1,7 @@
-accessing
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: accessing
+"
 path
 	"Return an ordered collection of the path elements."
 	

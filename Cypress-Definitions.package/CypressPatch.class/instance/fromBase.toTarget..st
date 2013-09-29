@@ -1,4 +1,7 @@
-initialization
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: initialization
+"
 fromBase: baseSnapshot toTarget: targetSnapshot
 	| base target |	
 	operations := OrderedCollection new.

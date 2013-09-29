@@ -1,4 +1,7 @@
-updating - type
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: updating - type
+"
 beConflictedWith: somePackageNames
 	"Be designated as representing the prefix of one or more Known Package names."
 

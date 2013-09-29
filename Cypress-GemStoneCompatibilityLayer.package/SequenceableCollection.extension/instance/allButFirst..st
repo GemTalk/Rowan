@@ -1,4 +1,7 @@
-*Cypress-GemStoneCompatibilityLayer
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: *Cypress-GemStoneCompatibilityLayer
+"
 allButFirst: n
 	"Answer a copy of the receiver containing all but the first n
 	elements. Raise an error if there are not enough elements."

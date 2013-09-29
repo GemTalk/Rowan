@@ -166,7 +166,7 @@ doit
 
 doit
 (CypressAbstractPackageReader
-	subclass: 'CypressFlexiblePackageReader'
+	subclass: 'CypressPackageReader'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -180,7 +180,7 @@ doit
 
 doit
 (CypressAbstractPackageReader
-	subclass: 'CypressPackageReader'
+	subclass: 'CypressFlexiblePackageReader'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -1141,6 +1141,23 @@ readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isM
 		methods: methods
 %
 
+! Class Implementation for CypressPackageReader
+
+! ------------------- Instance methods for CypressPackageReader
+
+category: 'reading'
+set compile_env: 0
+method: CypressPackageReader
+readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
+	"Strict!"
+
+	self
+		readCypressFormatMethodStructureFrom: fileStream
+		intoClassStructure: classStructure
+		meta: isMeta
+		methods: methods
+%
+
 ! Class Implementation for CypressFlexiblePackageReader
 
 ! ------------------- Instance methods for CypressFlexiblePackageReader
@@ -1175,23 +1192,6 @@ readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isM
 				intoClassStructure: classStructure
 				meta: isMeta
 				methods: methods]
-%
-
-! Class Implementation for CypressPackageReader
-
-! ------------------- Instance methods for CypressPackageReader
-
-category: 'reading'
-set compile_env: 0
-method: CypressPackageReader
-readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
-	"Strict!"
-
-	self
-		readCypressFormatMethodStructureFrom: fileStream
-		intoClassStructure: classStructure
-		meta: isMeta
-		methods: methods
 %
 
 ! Class Extensions

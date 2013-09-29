@@ -1,4 +1,7 @@
-converting
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: converting
+"
 asCypressClassDefinition
 
 	self isClassExtension ifTrue: [^CypressError signal: 'Extensions cannot have class definitions'].

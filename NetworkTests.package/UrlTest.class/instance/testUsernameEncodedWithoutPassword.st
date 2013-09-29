@@ -1,4 +1,7 @@
-tests
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: tests
+"
 testUsernameEncodedWithoutPassword
 	"Sometimes, weird usernames or passwords are necessary in applications, and, thus, we might receive them in a Url. The @ and the : ar the kind of critical ones."
 

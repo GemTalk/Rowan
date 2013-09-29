@@ -1,4 +1,7 @@
-tests
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: tests
+"
 test_difference_
 	"Set theoretic difference means elements from the first collection not in the second."
 

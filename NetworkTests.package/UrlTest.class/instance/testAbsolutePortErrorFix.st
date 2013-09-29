@@ -1,4 +1,7 @@
-tests
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: tests
+"
 testAbsolutePortErrorFix
 	
 	self shouldnt: [Url absoluteFromText: 'http://swikis.ddo.jp:8823/'] raise: Error.

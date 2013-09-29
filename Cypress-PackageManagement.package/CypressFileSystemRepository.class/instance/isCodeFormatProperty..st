@@ -1,4 +1,7 @@
-testing properties - private
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: testing properties - private
+"
 isCodeFormatProperty: aString
 
 	^(properties at: '_gs_format') equalsNoCase: aString

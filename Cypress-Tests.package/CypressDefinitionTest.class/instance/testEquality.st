@@ -1,4 +1,7 @@
-tests
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: tests
+"
 testEquality
 	| pkg1 pkg2 pkg3 name |
 	name := 'Cypress-Mocks'.

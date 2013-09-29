@@ -1,4 +1,7 @@
-instance creation
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: instance creation
+"
 absoluteFromText: aString
 	"Return a URL from a string and handle
 	a String without a scheme as a FileUrl."

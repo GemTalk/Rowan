@@ -1,4 +1,7 @@
-*Cypress-GemStoneCompatibilityLayer
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: *Cypress-GemStoneCompatibilityLayer
+"
 _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId
 	"Compiles the method into disposable dictionaries, if possible.
 	 Attempts auto-recompile for undefinedSymbols.

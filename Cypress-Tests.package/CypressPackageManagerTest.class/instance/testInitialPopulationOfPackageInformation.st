@@ -1,4 +1,7 @@
-tests
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: tests
+"
 testInitialPopulationOfPackageInformation
 	"A clean ab initio start up will only have Unknown packages
 	 (or potential packages) based on the categories used in the image."

@@ -1,4 +1,7 @@
-testing
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: testing
+"
 testMatchingSchemesToSubclasses
 
 	{ { nil. GenericUrl }. "Assume HTTP by default (i.e. when no scheme is provided)"

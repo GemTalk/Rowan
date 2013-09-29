@@ -1,4 +1,7 @@
-reading
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: reading
+"
 readCypressFormatMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
 
 	| notice category source selector |

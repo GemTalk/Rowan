@@ -1,4 +1,7 @@
-sorting
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: sorting
+"
 addClasses: subs to: order fromRelevantClasses: classSet organizedBy: org
 
 	1 to: subs size

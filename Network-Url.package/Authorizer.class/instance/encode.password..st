@@ -1,4 +1,7 @@
-authentication
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: authentication
+"
 encode: nameString password: pwdString
 	"Encode per RFC1421 of the username:password combination."
 

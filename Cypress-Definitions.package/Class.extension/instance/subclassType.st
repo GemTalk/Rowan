@@ -1,4 +1,7 @@
-*Cypress-Definitions
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: *Cypress-Definitions
+"
 subclassType
 	"Answer a description of the receiver to identify whether it is a regular class,
 	 a byte subclass, or an indexable subclass."

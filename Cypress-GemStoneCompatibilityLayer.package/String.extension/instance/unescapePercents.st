@@ -1,4 +1,7 @@
-*Cypress-GemStoneCompatibilityLayer
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: *Cypress-GemStoneCompatibilityLayer
+"
 unescapePercents
 	"decode string including %XX form
 	 (adapted from Pharo 2.0)"

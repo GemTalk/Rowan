@@ -1,4 +1,7 @@
-private
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: private
+"
 createFilesFor: aDictionary
 	"aDictionay is a mapping of repository file names to their expected contents."
 

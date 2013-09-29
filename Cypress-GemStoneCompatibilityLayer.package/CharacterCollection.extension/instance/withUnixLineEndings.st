@@ -1,4 +1,7 @@
-*Cypress-GemStoneCompatibilityLayer
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: *Cypress-GemStoneCompatibilityLayer
+"
 withUnixLineEndings
 	"Assume the string is textual, and that CR, LF, and CRLF are all valid line endings.
 	 Replace each occurence with a single LF."

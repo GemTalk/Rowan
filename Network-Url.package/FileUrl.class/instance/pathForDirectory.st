@@ -1,4 +1,7 @@
-paths
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: paths
+"
 pathForDirectory
 	"Path using local file system's pathname delimiter.
 	DOS paths with drive letters should not

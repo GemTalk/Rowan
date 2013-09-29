@@ -1,4 +1,7 @@
-*Cypress-Definitions
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: *Cypress-Definitions
+"
 asCypressMethodDefinition
 	"Try to coerce Unicode source to simple Strings when possible."
 

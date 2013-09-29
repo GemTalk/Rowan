@@ -1,4 +1,7 @@
-updating - type
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: updating - type
+"
 beKnown
 	"Be known to represent a real package."
 

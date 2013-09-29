@@ -1,4 +1,7 @@
-tests
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: tests
+"
 testAbsoluteBrowser
 
 	url := Url absoluteFromText: 'browser:bookmarks#mainPart'.

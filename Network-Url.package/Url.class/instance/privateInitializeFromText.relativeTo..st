@@ -1,4 +1,7 @@
-parsing
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: parsing
+"
 privateInitializeFromText: aString relativeTo: aUrl
 	"initialize from the given string, as a relative URL.  aString will have had the scheme name removed, if it was present to begin with.  If it was, then the scheme name was the same as the receiver's scheme name"
 

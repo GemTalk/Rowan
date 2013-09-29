@@ -1,4 +1,7 @@
-*Cypress-GemStoneCompatibilityLayer
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: *Cypress-GemStoneCompatibilityLayer
+"
 findString: subString startingAt: startIndex caseSensitive: aBoolean
 	"If a receiver contains subString beginning at some point at or after
 	 startIndex, this returns the index at which subString begins.  If the

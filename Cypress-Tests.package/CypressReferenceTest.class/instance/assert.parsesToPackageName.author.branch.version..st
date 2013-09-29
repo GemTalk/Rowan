@@ -1,4 +1,7 @@
-running
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: running
+"
 assert: aString parsesToPackageName: packageName author: authorId branch: branchId version: versionNumber
 
 	| queryReference |

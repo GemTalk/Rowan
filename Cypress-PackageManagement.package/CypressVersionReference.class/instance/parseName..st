@@ -1,4 +1,7 @@
-initialization
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: initialization
+"
 parseName: aString
 	| basicName |
 	basicName := (aString isEmpty or: [aString last isDigit or: [(aString includes: $() not]])

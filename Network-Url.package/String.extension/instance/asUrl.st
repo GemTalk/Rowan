@@ -1,4 +1,7 @@
-*network-url
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: *network-url
+"
 asUrl
 	"convert to a Url"
 	"'http://www.cc.gatech.edu/' asUrl"

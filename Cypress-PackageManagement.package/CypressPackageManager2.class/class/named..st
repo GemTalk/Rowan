@@ -1,4 +1,7 @@
-Accessing
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: Accessing
+"
 named: aKey
 	"Answer the Package Manager previously saved under aKey.
 	 It is an error if there was not one saved under that key."

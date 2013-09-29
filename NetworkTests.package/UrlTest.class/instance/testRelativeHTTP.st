@@ -1,4 +1,7 @@
-tests
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: tests
+"
 testRelativeHTTP
 	
 	baseUrl := 'http://some.where/some/dir?query1#fragment1' asUrl.

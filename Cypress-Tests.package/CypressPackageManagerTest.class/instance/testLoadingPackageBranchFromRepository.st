@@ -1,2 +1,5 @@
-tests - loading - To Do
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: tests - loading - To Do
+"
 testLoadingPackageBranchFromRepository

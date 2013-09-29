@@ -1,4 +1,7 @@
-tests
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: tests
+"
 testUsernamePasswordPrinting
 
 	#(	'http://user:pword@someserver.blah:8000/root/index.html'

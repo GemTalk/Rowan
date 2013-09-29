@@ -1,4 +1,7 @@
-loading
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: loading
+"
 handlePatchOperation: aPatchOperation failure: anException
 	"Signal the loader exception appropriate to the current phase.
 	 Note that a handler may suppress the #addFailedPatchOperation: by

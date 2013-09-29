@@ -1402,7 +1402,7 @@ printDetailsOn: aStream
 			[aStream
 				nextPutAll: self alias;
 				nextPutAll: ': '].
-	aStream nextPutAll: self directoryPath
+	aStream nextPutAll: self url printString
 %
 
 category: 'reading'
@@ -2845,7 +2845,7 @@ set compile_env: 0
 method: CypressKnownPackageInformation
 repositoryDigests
 
-	^self repositories collect: [:each | self digestFor: each]
+	^self repositories collect: [:each | self digestFor: each url]
 %
 
 category: 'Updating - digests'

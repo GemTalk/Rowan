@@ -1,4 +1,7 @@
-parsing
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: parsing
+"
 privateParsePath: remainder relativeTo: basePath 
 	| nextTok s parsedPath |
 	s := remainder readStream.

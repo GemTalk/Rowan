@@ -1,4 +1,7 @@
-reading
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: reading
+"
 readPropertiesFile: fileName
 	"Expect 'properties.ston' for Cypress, but permit 'properties.json' in which case we assume
 	 the format should be FileTree.

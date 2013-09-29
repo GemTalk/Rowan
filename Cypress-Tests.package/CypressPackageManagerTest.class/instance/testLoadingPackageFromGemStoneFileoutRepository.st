@@ -1,4 +1,7 @@
-tests - GemStone fileouts - Future
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: tests - GemStone fileouts - Future
+"
 testLoadingPackageFromGemStoneFileoutRepository
 	"Presently, filing out .gs files is an option in the repository properties file,
 	 and there is no filing in support at all - as a 'repository'.

@@ -1,4 +1,7 @@
-printing
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: printing
+"
 printOn: aStream
 	"Return the FileUrl according to RFC1738 plus supporting fragments:
 		'file://<host>/<path>#<fragment>'

@@ -1,4 +1,7 @@
-parsing-internal
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: parsing-internal
+"
 parseNumberExponent
     | number negated |
     number := 0.

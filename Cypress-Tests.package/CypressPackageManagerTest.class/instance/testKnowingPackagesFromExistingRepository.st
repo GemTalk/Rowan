@@ -1,4 +1,7 @@
-tests
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: tests
+"
 testKnowingPackagesFromExistingRepository
 	"The repository used here is not viable for the long run.
 	 It is being used to defer creating the tooling to create a directory with

@@ -1,4 +1,7 @@
-*Cypress-MesssageDigest
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: *Cypress-MesssageDigest
+"
 digest
 	"Answer a digest of the receiver, unless it is a skeleton (never populated).
 	 The digest is not constrained, but is typically a ByteArray or an Integer.

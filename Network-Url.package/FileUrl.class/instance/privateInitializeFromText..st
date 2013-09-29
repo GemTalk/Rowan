@@ -1,4 +1,7 @@
-private-initialization
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: private-initialization
+"
 privateInitializeFromText: aString
 	"Calculate host and path from a file URL in String format.
 	Some malformed formats are allowed and interpreted by guessing."

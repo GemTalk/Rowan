@@ -1,4 +1,7 @@
-*Cypress-GemStoneCompatibilityLayer
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: *Cypress-GemStoneCompatibilityLayer
+"
 isSafeForHTTP
 	"Answer whether a character is 'safe', or needs to be escaped when used, eg, in a URL."
 

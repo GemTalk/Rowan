@@ -1,4 +1,7 @@
-private
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: private
+"
 match: aString
 	"Tries to match aString, consume input and answer true if successful."
 	

@@ -1,4 +1,7 @@
-private
+"
+notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+category: private
+"
 addMethodNamed: selector body: bodyString toClass: aClass inCategory: aString
 
 	| newMethod |
