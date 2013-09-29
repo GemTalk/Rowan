@@ -71,3 +71,8 @@ CypressPackageManagerTest provides test cases for this upcoming Package Manager 
   It is a future possibility, not necessarily a planned feature.
 - CypressPackageManagerTest>>#testLoadingPackageBranchFromRepository is not yet written and the functionality is absent.
   It is a future possibility, not necessarily a planned feature.
+
+### License and Copyright
+
+The original work is copyright by GemTalk Systems, but is licensed under the MIT license.
+In other words, you are welcome to use it in anyway you wish, provided the original attribution is maintained.
