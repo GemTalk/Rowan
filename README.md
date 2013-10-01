@@ -71,8 +71,18 @@ CypressPackageManagerTest provides test cases for this upcoming Package Manager 
   It is a future possibility, not necessarily a planned feature.
 - CypressPackageManagerTest>>#testLoadingPackageBranchFromRepository is not yet written and the functionality is absent.
   It is a future possibility, not necessarily a planned feature.
+- The packages with the Pharo-derived URL hierarchy and tests do not have the correct copyright notice.
+  The method files say "GemTalk" in the notice line, and need to be corrected.
 
 ### License and Copyright
 
 The original work is copyright by GemTalk Systems, but is licensed under the MIT license.
 In other words, you are welcome to use it in anyway you wish, provided the original attribution is maintained.
+
+### Acknowledgements
+
+Some portions of this reference implementation came from Pharo. Notably, the URL hierarchy of classes.
+In addition, some scattered methods also came from Pharo.
+
+Thanks to the Pharo project and community for providing such an excellent base.
+
