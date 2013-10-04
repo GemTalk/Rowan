@@ -12,6 +12,9 @@ There is a Topaz installation script, install.tpz, which can be used to bootstra
 ends methods with a LF character, and that the actual Cypress code may not include a final line terminator. Once the .gs files are 
 loaded, use the Cypress Package Manager to reload the actual Cypress implementation.
 
+Note that this implementation requires the Portable Stream classes. The install.tpz script includes a step to switch the Streams.
+(It is unconditional. It is unknown whether one can switch back to the Legacy Streams after bootstrapping the Cypress code.)
+
 The GemStone/S implementation is a pure server implementation and lacks a user interface. There is a client user interface available for
 GBS under VisualWorks v7.9.1. It almost certainly will have issues under older versions of VisualWorks.
 

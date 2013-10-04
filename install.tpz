@@ -1,13 +1,18 @@
 errorCount
 output pushnew CypressReferenceImplementationInstall.out  only
 errorCount
-display resultcheck
 
 set user SystemUser pass swordfish
 login
 
 ! switch to errorcheck because class definitions doit's don't have expectvalue
 display errorcheck
+errorCount
+
+! Make sure the portable Streams are installed - we depend on them.
+run
+Stream installPortableStreamImplementation.
+%
 errorCount
 input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-GemStoneCompatibilityLayer.gs
 errorCount
