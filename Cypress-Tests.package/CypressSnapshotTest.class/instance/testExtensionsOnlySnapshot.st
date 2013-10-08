@@ -4,7 +4,7 @@ category: tests
 "
 testExtensionsOnlySnapshot
 
-	| name pkg packageDefinitions expectedDefinitions |
+	| name pkg packageDefinitions |
 	name := 'Cypress-Mocks-Extensions'.
 	pkg := CypressPackageDefinition named: name.
 	packageDefinitions := pkg snapshot definitions.

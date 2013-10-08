@@ -182,6 +182,36 @@ isSkeleton
 		and: [isClassExtension isNil]]]
 %
 
+! Class Extension for CypressMethodStructure
+
+! ------------------- Instance methods for CypressMethodStructure
+
+category: '*Cypress-MesssageDigest'
+set compile_env: 0
+method: CypressMethodStructure
+addToDigest: aMessageDigestStream
+
+	aMessageDigestStream
+		tab; tab; tab; tab; nextPutAll: self class name; cr;
+		tab; tab; tab; tab; tab; nextPutAll: self selector; cr;
+		tab; tab; tab; tab; tab; nextPutAll: 'properties:'; cr;
+		tab; tab; tab; tab; tab; tab.
+	self properties writeCypressJsonOn: aMessageDigestStream indent: 6.
+	aMessageDigestStream
+		cr;
+		tab; tab; tab; tab; nextPutAll: 'source:'; nextPutAll: self source; cr.
+%
+
+category: '*Cypress-MesssageDigest'
+set compile_env: 0
+method: CypressMethodStructure
+isSkeleton
+
+	^source isNil
+		and: [classStructure isNil
+		and: [isMetaclass isNil]]
+%
+
 ! Class Extension for CypressPackageStructure
 
 ! ------------------- Instance methods for CypressPackageStructure
@@ -216,36 +246,6 @@ isSkeleton
 	^(properties isNil or: [properties isEmpty])
 		and: [classes isNil
 		and: [extensions isNil]]
-%
-
-! Class Extension for CypressMethodStructure
-
-! ------------------- Instance methods for CypressMethodStructure
-
-category: '*Cypress-MesssageDigest'
-set compile_env: 0
-method: CypressMethodStructure
-addToDigest: aMessageDigestStream
-
-	aMessageDigestStream
-		tab; tab; tab; tab; nextPutAll: self class name; cr;
-		tab; tab; tab; tab; tab; nextPutAll: self selector; cr;
-		tab; tab; tab; tab; tab; nextPutAll: 'properties:'; cr;
-		tab; tab; tab; tab; tab; tab.
-	self properties writeCypressJsonOn: aMessageDigestStream indent: 6.
-	aMessageDigestStream
-		cr;
-		tab; tab; tab; tab; nextPutAll: 'source:'; nextPutAll: self source; cr.
-%
-
-category: '*Cypress-MesssageDigest'
-set compile_env: 0
-method: CypressMethodStructure
-isSkeleton
-
-	^source isNil
-		and: [classStructure isNil
-		and: [isMetaclass isNil]]
 %
 
 ! Class initializers 

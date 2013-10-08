@@ -152,7 +152,7 @@ doit
 
 doit
 (CypressAbstractFileUrl
-	subclass: 'CypressFileTreeReadOnlyFileUrl'
+	subclass: 'CypressFileUrl'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -166,7 +166,7 @@ doit
 
 doit
 (CypressAbstractFileUrl
-	subclass: 'CypressFileUrl'
+	subclass: 'CypressFileTreeReadOnlyFileUrl'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -799,14 +799,13 @@ set compile_env: 0
 method: CypressPackageManager
 writeGemStoneFileoutForPackageStructure: packageStructure andPackageInformation: aCypressPackageInformation
 
-	| filePath |
-	filePath := aCypressPackageInformation savedLocation, aCypressPackageInformation name , '.gs'.
 	aCypressPackageInformation repository areGemStoneFileoutsEnabled
 		ifTrue: 
-			[(GsFile openWriteOnServer: filePath)
-				nextPutAll: (String streamContents: [:stream | packageStructure fileOutOn: stream]);
-				close]
-		ifFalse: [GsFile removeServerFile: filePath]
+			[CypressFileUtilities current
+				writeStreamFor: aCypressPackageInformation name , '.gs'
+				in: aCypressPackageInformation savedLocation
+				do: [:fileStream | fileStream nextPutAll: (String streamContents: [:stream | packageStructure fileOutOn: stream])]]
+		ifFalse: [GsFile removeServerFile: aCypressPackageInformation savedLocation, aCypressPackageInformation name , '.gs']
 %
 
 category: 'writing'
@@ -2053,36 +2052,6 @@ isStrict
 	^false
 %
 
-! Class Implementation for CypressFileTreeReadOnlyFileUrl
-
-! ------------------- Class methods for CypressFileTreeReadOnlyFileUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: CypressFileTreeReadOnlyFileUrl
-schemeName
-
-	^'cypressfiletree'
-%
-
-! ------------------- Instance methods for CypressFileTreeReadOnlyFileUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressFileTreeReadOnlyFileUrl
-codeFormat
-
-	^'FileTree'
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressFileTreeReadOnlyFileUrl
-isStrict
-
-	^true
-%
-
 ! Class Implementation for CypressFileUrl
 
 ! ------------------- Class methods for CypressFileUrl
@@ -2108,6 +2077,36 @@ codeFormat
 category: 'testing'
 set compile_env: 0
 method: CypressFileUrl
+isStrict
+
+	^true
+%
+
+! Class Implementation for CypressFileTreeReadOnlyFileUrl
+
+! ------------------- Class methods for CypressFileTreeReadOnlyFileUrl
+
+category: 'constants'
+set compile_env: 0
+classmethod: CypressFileTreeReadOnlyFileUrl
+schemeName
+
+	^'cypressfiletree'
+%
+
+! ------------------- Instance methods for CypressFileTreeReadOnlyFileUrl
+
+category: 'accessing'
+set compile_env: 0
+method: CypressFileTreeReadOnlyFileUrl
+codeFormat
+
+	^'FileTree'
+%
+
+category: 'testing'
+set compile_env: 0
+method: CypressFileTreeReadOnlyFileUrl
 isStrict
 
 	^true

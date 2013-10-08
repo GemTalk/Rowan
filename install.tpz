@@ -37,10 +37,39 @@ errorCount
 input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/NetworkTests.gs
 errorCount
 
-display resultcheck
 commit
 
+run
+| packageManager repo packageNames summary |
+packageNames := #(
+		'Cypress-GemStoneCompatibilityLayer'
+		'Cypress-Definitions'
+		'Cypress-Structure'
+		'Cypress-Mocks'
+		'Cypress-GemStoneFileServer'
+		'Network-Url'
+		'Cypress-MesssageDigest'
+		'Cypress-PackageManagement'
+		'Cypress-Comparison'
+		'Cypress-Tests'
+		'NetworkTests'
+	).
+packageManager := CypressPackageManager2 new.
+repo := CypressAbstractRepository
+			onUrl: 'cypress:/export/galbadia1/users/rsargent/git/CypressReferenceImplementation/' asUrl
+			alias: 'Reference Implementation'.
+packageNames do: [:each |
+	summary := packageManager
+					loadPackageFrom: (CypressKnownPackageInformation named: each)
+					inRepository: repo.
+	summary isEmpty
+		ifFalse: [self error: 'Could not reload package named: ', each printString].
+].
+%
+
+commit
 logout
 
 output pop
 errorCount
+

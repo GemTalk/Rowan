@@ -4,7 +4,7 @@ category: tests
 "
 testSavingChangedImagePackageToCypressRepository
 
-	| repo groups old new repoDigest newClass results |
+	| repo old newClass results |
 	currentManager := self createManagerWithUnknownPackages: #('X-Y').
 	repo := self createTestRepoNamed: 'CypressTestRepo'.
 	old := currentManager packageInformationNamed: 'X-Y'.

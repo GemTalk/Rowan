@@ -709,7 +709,7 @@ set compile_env: 0
 method: CypressSnapshotTest
 testExtensionsOnlySnapshot
 
-	| name pkg packageDefinitions expectedDefinitions |
+	| name pkg packageDefinitions |
 	name := 'Cypress-Mocks-Extensions'.
 	pkg := CypressPackageDefinition named: name.
 	packageDefinitions := pkg snapshot definitions.
@@ -831,9 +831,9 @@ method: CypressExtensionsTest
 test_escapePercents
 
 	self
-		assert: 'aa aa éé aa aa' encodeAsUTF8 escapePercents
+		assert: 'aa aa Ã©Ã© aa aa' encodeAsUTF8 escapePercents
 			equals: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa';
-		assert: 'aa aa éé aa aa' escapePercents
+		assert: 'aa aa Ã©Ã© aa aa' escapePercents
 			equals: 'aa%20aa%20%E9%E9%20aa%20aa'
 %
 
@@ -960,9 +960,9 @@ test_unescapePercents
 
 	self
 		assert: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa'  unescapePercents asByteArray decodeFromUTF8 asString
-			equals: 'aa aa éé aa aa';
+			equals: 'aa aa Ã©Ã© aa aa';
 		assert: 'aa%20aa%20%E9%E9%20aa%20aa' unescapePercents
-			equals: 'aa aa éé aa aa' asUnicodeString
+			equals: 'aa aa Ã©Ã© aa aa' asUnicodeString
 %
 
 category: 'tests'
@@ -2184,7 +2184,7 @@ set compile_env: 0
 method: CypressPackageManagerTest
 testRemovingRepositoryFromPackage
 
-	| old repo repoDigest newClass |
+	| old repo |
 	self testAttachingNewCypressRepositoryToUnknownImagePackages.
 	old := currentManager packageInformationNamed: 'X-Y'.
 	repo := old repositories any.
@@ -2212,7 +2212,7 @@ set compile_env: 0
 method: CypressPackageManagerTest
 testSavingChangedImagePackageToCypressRepository
 
-	| repo groups old new repoDigest newClass results |
+	| repo old newClass results |
 	currentManager := self createManagerWithUnknownPackages: #('X-Y').
 	repo := self createTestRepoNamed: 'CypressTestRepo'.
 	old := currentManager packageInformationNamed: 'X-Y'.
@@ -2234,7 +2234,7 @@ set compile_env: 0
 method: CypressPackageManagerTest
 testSavingChangedImagePackageToFileTreeReadOnlyRepository
 
-	| repo groups old new repoDigest newClass results |
+	| repo old newClass results |
 	currentManager := self createManagerWithUnknownPackages: #('X-Y').
 	repo := self createFileTreeReadOnlyTestRepoNamed: 'CypressTestRepo'.
 	old := currentManager packageInformationNamed: 'X-Y'.
@@ -2256,7 +2256,7 @@ set compile_env: 0
 method: CypressPackageManagerTest
 testSavingChangedImagePackageToFileTreeRepository
 
-	| repo groups old new repoDigest newClass results |
+	| repo old newClass results |
 	currentManager := self createManagerWithUnknownPackages: #('X-Y').
 	repo := self createFileTreeCompatibleTestRepoNamed: 'CypressTestRepo'.
 	old := currentManager packageInformationNamed: 'X-Y'.

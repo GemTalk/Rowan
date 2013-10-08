@@ -54,8 +54,8 @@ doit
 
 doit
 (Object
-	subclass: 'CypressJsonParser'
-	instVarNames: #( stream )
+	subclass: 'GsGeneralDependencySorter'
+	instVarNames: #( candidates dependsOnConverter dependentConverter individualDependencyMap dependencyGraphs candidateAliasMap )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -68,8 +68,8 @@ doit
 
 doit
 (Object
-	subclass: 'GsGeneralDependencySorter'
-	instVarNames: #( candidates dependsOnConverter dependentConverter individualDependencyMap dependencyGraphs candidateAliasMap )
+	subclass: 'CypressJsonParser'
+	instVarNames: #( stream )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -110,20 +110,6 @@ doit
 
 doit
 (CypressStructure
-	subclass: 'CypressPackageStructure'
-	instVarNames: #( classes extensions )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
-		category: 'Cypress-Structure';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(CypressStructure
 	subclass: 'CypressMethodStructure'
 	instVarNames: #( source isMetaclass classStructure )
 	classVars: #(  )
@@ -136,7 +122,108 @@ doit
 		immediateInvariant.
 %
 
+doit
+(CypressStructure
+	subclass: 'CypressPackageStructure'
+	instVarNames: #( classes extensions )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Structure';
+		comment: '';
+		immediateInvariant.
+%
+
 ! Class Implementation for CypressJsonError
+
+! Class Implementation for GsGeneralDependencySorter
+
+! ------------------- Class methods for GsGeneralDependencySorter
+
+category: 'instance creation'
+set compile_env: 0
+classmethod: GsGeneralDependencySorter
+on: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock
+	"Create an instance of the receiver capable for sorting the dependencies of someCandidates.
+	 aOneArgBlock is used to evaluate the key of the object depended on for a candidate.
+	 anotherOneArgBlock is used to evaluate the key of the candidate itself."
+
+	^self new
+		initializeOn: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock;
+		yourself.
+%
+
+! ------------------- Instance methods for GsGeneralDependencySorter
+
+category: 'sorting - private'
+set compile_env: 0
+method: GsGeneralDependencySorter
+determineGraphRoots
+
+	^dependencyGraphs
+		selectAssociations: [:each | (candidateAliasMap includesKey: each key) not]
+%
+
+category: 'initializing - private'
+set compile_env: 0
+method: GsGeneralDependencySorter
+initializeOn: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock
+
+	candidates := someCandidates.
+	dependsOnConverter := aOneArgBlock.
+	dependentConverter := anotherOneArgBlock.
+	individualDependencyMap := Dictionary new.
+	dependencyGraphs := Dictionary new.
+	candidateAliasMap := Dictionary new
+%
+
+category: 'sorting'
+set compile_env: 0
+method: GsGeneralDependencySorter
+inOrder
+
+	| sorted |
+	sorted := OrderedCollection new.
+	self mapCandidatesIntoGraphs.
+	self determineGraphRoots
+		do: [:each | self transcribeGraph: each into: sorted].
+	^sorted.
+%
+
+category: 'sorting - private'
+set compile_env: 0
+method: GsGeneralDependencySorter
+mapCandidatesIntoGraphs
+
+	| dependsOnKey dependentKey |
+	candidates do: 
+			[:each |
+			| individualDependency |
+			dependsOnKey := dependsOnConverter value: each.
+			dependentKey := dependentConverter value: each.
+			candidateAliasMap at: dependentKey put: each.
+			individualDependencyMap at: dependsOnKey ifAbsentPut: [Dictionary new].
+			individualDependencyMap at: dependentKey ifAbsentPut: [Dictionary new].
+			individualDependency := individualDependencyMap
+						associationAt: dependsOnKey.
+			(dependencyGraphs includesKey: dependsOnKey)
+				ifFalse: [dependencyGraphs add: individualDependency].
+			individualDependency value
+				add: (individualDependencyMap associationAt: dependentKey)]
+%
+
+category: 'sorting - private'
+set compile_env: 0
+method: GsGeneralDependencySorter
+transcribeGraph: subtree into: sorted
+
+	subtree keysAndValuesDo: [:name :subsubtree |
+		sorted add: (candidateAliasMap at: name).
+		self transcribeGraph: subsubtree into: sorted.
+	].
+%
 
 ! Class Implementation for CypressJsonParser
 
@@ -504,93 +591,6 @@ whitespace
 		whileTrue: [ stream next ]
 %
 
-! Class Implementation for GsGeneralDependencySorter
-
-! ------------------- Class methods for GsGeneralDependencySorter
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: GsGeneralDependencySorter
-on: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock
-	"Create an instance of the receiver capable for sorting the dependencies of someCandidates.
-	 aOneArgBlock is used to evaluate the key of the object depended on for a candidate.
-	 anotherOneArgBlock is used to evaluate the key of the candidate itself."
-
-	^self new
-		initializeOn: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock;
-		yourself.
-%
-
-! ------------------- Instance methods for GsGeneralDependencySorter
-
-category: 'sorting - private'
-set compile_env: 0
-method: GsGeneralDependencySorter
-determineGraphRoots
-
-	^dependencyGraphs
-		selectAssociations: [:each | (candidateAliasMap includesKey: each key) not]
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: GsGeneralDependencySorter
-initializeOn: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock
-
-	candidates := someCandidates.
-	dependsOnConverter := aOneArgBlock.
-	dependentConverter := anotherOneArgBlock.
-	individualDependencyMap := Dictionary new.
-	dependencyGraphs := Dictionary new.
-	candidateAliasMap := Dictionary new
-%
-
-category: 'sorting'
-set compile_env: 0
-method: GsGeneralDependencySorter
-inOrder
-
-	| sorted |
-	sorted := OrderedCollection new.
-	self mapCandidatesIntoGraphs.
-	self determineGraphRoots
-		do: [:each | self transcribeGraph: each into: sorted].
-	^sorted.
-%
-
-category: 'sorting - private'
-set compile_env: 0
-method: GsGeneralDependencySorter
-mapCandidatesIntoGraphs
-
-	| dependsOnKey dependentKey |
-	candidates do: 
-			[:each |
-			| individualDependency |
-			dependsOnKey := dependsOnConverter value: each.
-			dependentKey := dependentConverter value: each.
-			candidateAliasMap at: dependentKey put: each.
-			individualDependencyMap at: dependsOnKey ifAbsentPut: [Dictionary new].
-			individualDependencyMap at: dependentKey ifAbsentPut: [Dictionary new].
-			individualDependency := individualDependencyMap
-						associationAt: dependsOnKey.
-			(dependencyGraphs includesKey: dependsOnKey)
-				ifFalse: [dependencyGraphs add: individualDependency].
-			individualDependency value
-				add: (individualDependencyMap associationAt: dependentKey)]
-%
-
-category: 'sorting - private'
-set compile_env: 0
-method: GsGeneralDependencySorter
-transcribeGraph: subtree into: sorted
-
-	subtree keysAndValuesDo: [:name :subsubtree |
-		sorted add: (candidateAliasMap at: name).
-		self transcribeGraph: subsubtree into: sorted.
-	].
-%
-
 ! Class Implementation for CypressStructure
 
 ! ------------------- Class methods for CypressStructure
@@ -956,6 +956,139 @@ method: CypressClassStructure
 superclassName: aString
 
 	^self properties at: 'super' put: aString
+%
+
+! Class Implementation for CypressMethodStructure
+
+! ------------------- Class methods for CypressMethodStructure
+
+category: 'instance creation'
+set compile_env: 0
+classmethod: CypressMethodStructure
+fromMethodDefinition: methodDefinition
+
+	^self new
+		fromMethodDefinition: methodDefinition;
+		yourself
+%
+
+! ------------------- Instance methods for CypressMethodStructure
+
+category: 'converting'
+set compile_env: 0
+method: CypressMethodStructure
+asCypressMethodDefinition
+	"Try to coerce Unicode source to simple Strings when possible."
+
+	^CypressMethodDefinition 
+        	className: self classStructure className
+		classIsMeta: self isMetaclass
+		selector: self selector
+		category: self category
+		source: self source asString
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodStructure
+category
+
+	^self properties at: 'category'
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodStructure
+category: aString
+
+	self properties at: 'category' put: aString
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodStructure
+classStructure
+	^classStructure
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodStructure
+classStructure: aCypressClassStructure
+	classStructure := aCypressClassStructure
+%
+
+category: 'initialization'
+set compile_env: 0
+method: CypressMethodStructure
+fromMethodDefinition: methodDefinition
+
+	self isMetaclass: methodDefinition classIsMeta.
+	self selector: methodDefinition selector.
+	self category: methodDefinition category.
+	self source: methodDefinition source.
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodStructure
+isMetaclass
+
+	isMetaclass ifNil: [ isMetaclass := false ].
+	^isMetaclass
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodStructure
+isMetaclass: aBoolean
+	isMetaclass := aBoolean
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodStructure
+selector
+    ^ String
+        streamContents: [ :stream | 
+            self name
+                do: [ :chara | 
+                    stream
+                        nextPut:
+                            (chara = $.
+                                ifTrue: [ $: ]
+                                ifFalse: [ chara ]) ] ]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodStructure
+selector: aString
+    name := String
+        streamContents: [ :stream | 
+            aString
+                do: [ :chara | 
+                    stream
+                        nextPut:
+                            (chara = $:
+                                ifTrue: [ $. ]
+                                ifFalse: [ chara ]) ] ]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodStructure
+source
+
+	^source
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressMethodStructure
+source: aString
+
+	source := aString
 %
 
 ! Class Implementation for CypressPackageStructure
@@ -1416,139 +1549,6 @@ snapshot
                 (classStructure classMethods asSortedCollection: [:a :b | a selector <= b selector]) do: [:methodStructure |
 			definitions add: methodStructure asCypressMethodDefinition ]].
 	^ CypressSnapshot definitions: definitions
-%
-
-! Class Implementation for CypressMethodStructure
-
-! ------------------- Class methods for CypressMethodStructure
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressMethodStructure
-fromMethodDefinition: methodDefinition
-
-	^self new
-		fromMethodDefinition: methodDefinition;
-		yourself
-%
-
-! ------------------- Instance methods for CypressMethodStructure
-
-category: 'converting'
-set compile_env: 0
-method: CypressMethodStructure
-asCypressMethodDefinition
-	"Try to coerce Unicode source to simple Strings when possible."
-
-	^CypressMethodDefinition 
-        	className: self classStructure className
-		classIsMeta: self isMetaclass
-		selector: self selector
-		category: self category
-		source: self source asString
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-category
-
-	^self properties at: 'category'
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-category: aString
-
-	self properties at: 'category' put: aString
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-classStructure
-	^classStructure
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-classStructure: aCypressClassStructure
-	classStructure := aCypressClassStructure
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressMethodStructure
-fromMethodDefinition: methodDefinition
-
-	self isMetaclass: methodDefinition classIsMeta.
-	self selector: methodDefinition selector.
-	self category: methodDefinition category.
-	self source: methodDefinition source.
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-isMetaclass
-
-	isMetaclass ifNil: [ isMetaclass := false ].
-	^isMetaclass
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-isMetaclass: aBoolean
-	isMetaclass := aBoolean
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-selector
-    ^ String
-        streamContents: [ :stream | 
-            self name
-                do: [ :chara | 
-                    stream
-                        nextPut:
-                            (chara = $.
-                                ifTrue: [ $: ]
-                                ifFalse: [ chara ]) ] ]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-selector: aString
-    name := String
-        streamContents: [ :stream | 
-            aString
-                do: [ :chara | 
-                    stream
-                        nextPut:
-                            (chara = $:
-                                ifTrue: [ $. ]
-                                ifFalse: [ chara ]) ] ]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-source
-
-	^source
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-source: aString
-
-	source := aString
 %
 
 ! Class Extensions

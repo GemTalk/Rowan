@@ -96,15 +96,18 @@ doit
 
 doit
 (NetworkTestCase
-	subclass: 'GenericUrlTest'
-	instVarNames: #(  )
+	subclass: 'UrlTest'
+	instVarNames: #( url baseUrl )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
 	options: #())
 		category: 'NetworkTests-Url';
-		comment: '';
+		comment: 'This is the unit test for the class Url. Unit tests are a good way to exercise the functionality of your system in a repeatable and automatic manner. They are therefore recommended if you plan to release anything. For more information, see: 
+	- http://www.c2.com/cgi/wiki?UnitTest
+	- there is a chapter in the PharoByExample book (http://pharobyexample.org)
+	- the sunit class category';
 		immediateInvariant.
 %
 
@@ -124,18 +127,15 @@ doit
 
 doit
 (NetworkTestCase
-	subclass: 'UrlTest'
-	instVarNames: #( url baseUrl )
+	subclass: 'GenericUrlTest'
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: UserGlobals
 	options: #())
 		category: 'NetworkTests-Url';
-		comment: 'This is the unit test for the class Url. Unit tests are a good way to exercise the functionality of your system in a repeatable and automatic manner. They are therefore recommended if you plan to release anything. For more information, see: 
-	- http://www.c2.com/cgi/wiki?UnitTest
-	- there is a chapter in the PharoByExample book (http://pharobyexample.org)
-	- the sunit class category';
+		comment: '';
 		immediateInvariant.
 %
 
@@ -162,7 +162,7 @@ set compile_env: 0
 method: HTTPEncodingTest
 testEncodeForHTTP
 
-	self assert: 'aa aa éé aa aa' encodeForHTTP = 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa'
+	self assert: 'aa aa Ã©Ã© aa aa' encodeForHTTP = 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa'
 %
 
 ! Class Implementation for HttpUrlTest
@@ -191,51 +191,6 @@ testAsString
 		path: #('path' 'to' 'file')
 		query: 'aQuery'.
 	self assert: url asString = 'ftp://localhost/path/to/file?aQuery'.
-%
-
-! Class Implementation for GenericUrlTest
-
-! ------------------- Instance methods for GenericUrlTest
-
-category: 'testing'
-set compile_env: 0
-method: GenericUrlTest
-testAsString
-	| url |
-	url := GenericUrl new schemeName: 'sip' locator: 'foo@bar'.
-	self assert: url asString = 'sip:foo@bar'.
-%
-
-! Class Implementation for FileUrlTest
-
-! ------------------- Instance methods for FileUrlTest
-
-category: 'testing'
-set compile_env: 0
-method: FileUrlTest
-testAsString
-	| target url |
-	target := 'file://localhost/etc/rc.conf'.
-	url := target asUrl.
-	self assert: url asString = target.
-		
-%
-
-category: 'testing'
-set compile_env: 0
-method: FileUrlTest
-testMatchingSchemesToSubclasses
-
-	{ { nil. GenericUrl }. "Assume HTTP by default (i.e. when no scheme is provided)"
-	{ 'isbn'. GenericUrl }. "Handle unknown Url types with GenericUrl"
-	{ 'http'. HttpUrl }.
-	{ 'https'. HttpsUrl }.
-	{ 'file'. FileUrl }.
-	{ 'mailto'. MailtoUrl }.
-	{ 'browser'. BrowserUrl } } do: [ :pair | | schemeString urlClassToUse |
-		schemeString := pair first.
-		urlClassToUse := pair at: 2.
-		self assert: (Url urlClassForScheme: schemeString) equals: urlClassToUse ].
 %
 
 ! Class Implementation for UrlTest
@@ -440,9 +395,9 @@ testUsernameEncodedWithoutPassword
 	"Sometimes, weird usernames or passwords are necessary in applications, and, thus, we might receive them in a Url. The @ and the : ar the kind of critical ones."
 
 	#(      "('user' 'pword' 'host' port 'path')"
-	('Stéphane rst Pückler' 'leckerEis' 'cottbus.brandenburg' 80 'mein/Zuhause')
-	('Jeannde.d''Arc' 'jaiunesécret' 'orleans' 8080 'une/deux/trois')
-	('HaXor@roxor:fnac' 'my~Pa$§wert' 'cbase' 42 'do/not_try')
+	('StÃ©phane rst PÃ¼ckler' 'leckerEis' 'cottbus.brandenburg' 80 'mein/Zuhause')
+	('Jeannde.d''Arc' 'jaiunesÃ©cret' 'orleans' 8080 'une/deux/trois')
+	('HaXor@roxor:fnac' 'my~Pa$Â§wert' 'cbase' 42 'do/not_try')
 	) do: [:urlParts | |theUrl|
 			theUrl := ('http://', (urlParts at: 1) encodeForHTTP, '@', (urlParts at: 3), ':', (urlParts at: 4) printString, '/', (urlParts at: 5)) asUrl.
 		self assert: (theUrl schemeName = 'http').
@@ -515,9 +470,9 @@ testUsernamePasswordEncoded2
 	"Sometimes, weird usernames or passwords are necessary in applications, and, thus, we might receive them in a Url. The @ and the : ar the kind of critical ones."
 
 	#(      "('user' 'pword' 'host' port 'path')"
-	('Stéphane rst Pückler' 'leckerEis' 'cottbus.brandenburg' 80 'mein/Zuhause')
-	('Jeannde.d''Arc' 'jaiunesécret' 'orleans' 8080 'une/deux/trois')
-	('HaXor@roxor:fnac' 'my~Pa$§wert' 'cbase' 42 'do/not_try')
+	('StÃ©phane rst PÃ¼ckler' 'leckerEis' 'cottbus.brandenburg' 80 'mein/Zuhause')
+	('Jeannde.d''Arc' 'jaiunesÃ©cret' 'orleans' 8080 'une/deux/trois')
+	('HaXor@roxor:fnac' 'my~Pa$Â§wert' 'cbase' 42 'do/not_try')
 	) do: [:urlParts | |theUrl|
 			theUrl := ('http://', (urlParts at: 1) encodeForHTTP, ':', (urlParts at: 2) encodeForHTTP, '@', (urlParts at: 3), ':', (urlParts at: 4) printString, '/', (urlParts at: 5)) asUrl.
 		self assert: (theUrl schemeName = 'http').
@@ -551,6 +506,51 @@ testUsernamePasswordPrintingEncoded
 	'http://HaXor%40roxor%3Afnac:my%7EPa%24%C2%A7wert@cbase:42/do/not_try') 
 		do: [ :urlText |
 			self should: [ urlText = urlText asUrl asString ] ].
+%
+
+! Class Implementation for FileUrlTest
+
+! ------------------- Instance methods for FileUrlTest
+
+category: 'testing'
+set compile_env: 0
+method: FileUrlTest
+testAsString
+	| target url |
+	target := 'file://localhost/etc/rc.conf'.
+	url := target asUrl.
+	self assert: url asString = target.
+		
+%
+
+category: 'testing'
+set compile_env: 0
+method: FileUrlTest
+testMatchingSchemesToSubclasses
+
+	{ { nil. GenericUrl }. "Assume HTTP by default (i.e. when no scheme is provided)"
+	{ 'isbn'. GenericUrl }. "Handle unknown Url types with GenericUrl"
+	{ 'http'. HttpUrl }.
+	{ 'https'. HttpsUrl }.
+	{ 'file'. FileUrl }.
+	{ 'mailto'. MailtoUrl }.
+	{ 'browser'. BrowserUrl } } do: [ :pair | | schemeString urlClassToUse |
+		schemeString := pair first.
+		urlClassToUse := pair at: 2.
+		self assert: (Url urlClassForScheme: schemeString) equals: urlClassToUse ].
+%
+
+! Class Implementation for GenericUrlTest
+
+! ------------------- Instance methods for GenericUrlTest
+
+category: 'testing'
+set compile_env: 0
+method: GenericUrlTest
+testAsString
+	| url |
+	url := GenericUrl new schemeName: 'sip' locator: 'foo@bar'.
+	self assert: url asString = 'sip:foo@bar'.
 %
 
 ! Class Extensions

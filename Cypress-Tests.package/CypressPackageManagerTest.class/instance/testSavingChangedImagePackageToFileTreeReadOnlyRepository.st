@@ -4,7 +4,7 @@ category: tests
 "
 testSavingChangedImagePackageToFileTreeReadOnlyRepository
 
-	| repo groups old new repoDigest newClass results |
+	| repo old newClass results |
 	currentManager := self createManagerWithUnknownPackages: #('X-Y').
 	repo := self createFileTreeReadOnlyTestRepoNamed: 'CypressTestRepo'.
 	old := currentManager packageInformationNamed: 'X-Y'.

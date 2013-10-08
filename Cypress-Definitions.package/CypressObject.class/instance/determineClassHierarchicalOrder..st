@@ -6,7 +6,7 @@ determineClassHierarchicalOrder: someClasses
 	"Returns an ordered collection of the specified classes such that
 	 hierarchical dependencies come first."
 
-	| org order classSet block |
+	| org order classSet |
 	org := Dictionary new.
 	org at: #nil put: ClassSet new.
 	classSet := ClassSet new.

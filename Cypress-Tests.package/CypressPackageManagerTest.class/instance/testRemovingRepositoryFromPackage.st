@@ -4,7 +4,7 @@ category: tests
 "
 testRemovingRepositoryFromPackage
 
-	| old repo repoDigest newClass |
+	| old repo |
 	self testAttachingNewCypressRepositoryToUnknownImagePackages.
 	old := currentManager packageInformationNamed: 'X-Y'.
 	repo := old repositories any.
