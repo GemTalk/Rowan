@@ -624,7 +624,7 @@ unescapePercents
 	 (adapted from Pharo 2.0)"
 
 	| unescaped char asciiVal specialChars oldPos pos |
-	unescaped := ReadWriteStream on: String new.
+	unescaped := ReadWriteStreamPortable on: String new.
 	specialChars := '+%' asSet.
 	oldPos := 1.
 	

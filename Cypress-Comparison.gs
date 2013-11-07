@@ -45,7 +45,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Comparison';
 		comment: '';
@@ -179,7 +179,7 @@ comparingPackages: someNames fromDirectory: aDirectory
 	someNames do: 
 			[:packageName |
 			| reader modTime modTimestamp |
-			reader := (CypressFileSystemRepository on: aDirectory) reader
+			reader := ((Globals at: #CypressFileSystemRepository) on: aDirectory) reader
 						readPackageStructureForPackageNamed: packageName.
 			diskSnapshots at: packageName put: reader packageStructure snapshot.
 			modTime := System
@@ -315,7 +315,7 @@ classDefinitionString
 		classVars: #(', self classVariablesString, ')
 		classInstVars: #(', self classInstanceVariablesString, ')
 		poolDictionaries: #(', self poolDictionariesString, ')
-		inDictionary: UserGlobals
+		inDictionary: Globals
 		options: #()'
 %
 

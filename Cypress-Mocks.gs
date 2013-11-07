@@ -45,7 +45,7 @@ doit
 	classVars: #( Something )
 	classInstVars: #( current )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Mocks-Definitions';
 		comment: 'This mock contains basic class and instance method selectors';

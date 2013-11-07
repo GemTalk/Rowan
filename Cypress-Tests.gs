@@ -45,7 +45,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -59,7 +59,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -73,7 +73,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -87,7 +87,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -101,7 +101,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -115,7 +115,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -129,7 +129,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -143,7 +143,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -157,7 +157,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -828,18 +828,6 @@ test_endsWith_
 category: 'tests'
 set compile_env: 0
 method: CypressExtensionsTest
-test_escapePercents
-
-	self
-		assert: 'aa aa יי aa aa' encodeAsUTF8 escapePercents
-			equals: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa';
-		assert: 'aa aa יי aa aa' escapePercents
-			equals: 'aa%20aa%20%E9%E9%20aa%20aa'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
 test_findString_startingAt_caseSensitive_
 
 	| string |
@@ -951,18 +939,6 @@ test_streamContents_
 					(1 to: 3) do: [:each | stream nextPutAll: each printString]
 						separatedBy: [stream space]])
 		equals: '1 2 3'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_unescapePercents
-
-	self
-		assert: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa'  unescapePercents asByteArray decodeFromUTF8 asString
-			equals: 'aa aa יי aa aa';
-		assert: 'aa%20aa%20%E9%E9%20aa%20aa' unescapePercents
-			equals: 'aa aa יי aa aa' asUnicodeString
 %
 
 category: 'tests'
