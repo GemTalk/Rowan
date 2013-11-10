@@ -1,5 +1,5 @@
 | path packageNames packages fileOuts |
-path := '/opt/git/CypressReferenceImplementation'.
+path := '/opt/git/CypressReferenceImplementation/topaz'.
 packageNames := #('Cypress-Definitions' 'Cypress-Mocks' 'Cypress-Structure' 'Cypress-Tests' 'Cypress-GemStoneFileServer' 'Cypress-Comparison').
 
 packages := packageNames collect: 

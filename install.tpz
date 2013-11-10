@@ -14,27 +14,27 @@ run
 Stream installPortableStreamImplementation.
 %
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-GemStoneCompatibilityLayer.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-GemStoneCompatibilityLayer.gs
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-Definitions.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Definitions.gs
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-Structure.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Structure.gs
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-Mocks.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Mocks.gs
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-GemStoneFileServer.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-GemStoneFileServer.gs
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Network-Url.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Network-Url.gs
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-MesssageDigest.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-MesssageDigest.gs
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-PackageManagement.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-PackageManagement.gs
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-Comparison.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Comparison.gs
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/Cypress-Tests.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Tests.gs
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/NetworkTests.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/NetworkTests.gs
 errorCount
 
 commit
@@ -56,7 +56,7 @@ packageNames := #(
 	).
 packageManager := CypressPackageManager2 new.
 repo := CypressAbstractRepository
-			onUrl: 'cypress:/export/galbadia1/users/rsargent/git/CypressReferenceImplementation/' asUrl
+			onUrl: 'cypress:/export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/' asUrl
 			alias: 'Reference Implementation'.
 packageNames do: [:each |
 	summary := packageManager
