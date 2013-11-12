@@ -4,4 +4,4 @@ category: loading
 "
 unloadDefinition
 
-	self subclassResponsibility
+	self subclassResponsibility: #unloadDefinition

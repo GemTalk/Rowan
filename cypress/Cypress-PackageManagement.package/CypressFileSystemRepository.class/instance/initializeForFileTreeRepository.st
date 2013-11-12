@@ -8,5 +8,4 @@ initializeForFileTreeRepository
 	self
 		alias: 'FileTree read-only repository on ', self directoryPath;
 		codeFormatProperty: 'FileTree';
-		strictCodeFormat: true;
-		gemStoneFileoutsEnabled: false.
+		strictCodeFormat: true.

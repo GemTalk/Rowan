@@ -4,4 +4,4 @@ category: accessing
 "
 description
 
-	self subclassResponsibility
+	self subclassResponsibility: #description

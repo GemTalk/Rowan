@@ -4,4 +4,4 @@ category: loading
 "
 actualClass
 
-	self subclassResponsibility
+	self subclassResponsibility: #actualClass

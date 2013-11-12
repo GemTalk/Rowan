@@ -5,4 +5,4 @@ category: dependency
 requirements
 	"Answer list of global names required by this definition"
 
-	self subclassResponsibility
+	self subclassResponsibility: #requirements
