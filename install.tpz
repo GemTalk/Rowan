@@ -30,6 +30,8 @@ input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypres
 errorCount
 input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-PackageManagement.gs
 errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-PackageManagementTests.gs
+errorCount
 input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Comparison.gs
 errorCount
 input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Tests.gs
@@ -50,6 +52,7 @@ packageNames := #(
 		'Network-Url'
 		'Cypress-MesssageDigest'
 		'Cypress-PackageManagement'
+		'Cypress-PackageManagementTests'
 		'Cypress-Comparison'
 		'Cypress-Tests'
 		'NetworkTests'
