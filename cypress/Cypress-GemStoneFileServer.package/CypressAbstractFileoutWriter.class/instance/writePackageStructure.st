@@ -6,5 +6,5 @@ writePackageStructure
 
 	CypressFileUtilities current
 		writeStreamFor: self packageStructure packageName, self packageNameExtension
-		in: self directory
+		in: self packageDirectory
 		do: [:fileStream | fileStream nextPutAll: (String streamContents: [:stream | self fileOutPackageOn: stream])]

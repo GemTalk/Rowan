@@ -1,376 +1,208 @@
-! Package: Cypress-GemStoneFileServer
+" Package: Cypress-GemStoneFileServer"!
 
 
-! Remove existing behavior from package Cypress-GemStoneFileServer
-!!!! This can be cleaned up when some package functionality is moved to the base system.
+" Class Declarations "!
 
-doit
-| packageName |
-packageName := 'Cypress-GemStoneFileServer'.
-System myUserProfile symbolList do: [:symDict |
-	symDict do: [:possibleClass |
-			| toRemove |
-		possibleClass isBehavior ifTrue: [
-			{possibleClass. possibleClass class} do: [:aClass |
-				aClass category = packageName
-					ifTrue: [
-							"*anythingbutpackagename[-anything]"
-						toRemove := aClass categoryNames select: 
-										[:each |
-										(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]])
-										or: [each first ~= $*]]
-					]
-					ifFalse: [
-							"*packagename[-anything]"
-						toRemove := aClass categoryNames select: 
-										[:each |
-										each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]
-					].
-				toRemove do: [:each | aClass removeCategory: each].
-			]
-		]
-	]
-].
-%
-
-
-! Class Declarations
-
-doit
 (Object
 	subclass: 'CypressFileUtilities'
 	instVarNames: #(  )
 	classVars: #( Current )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressFileUtilities
 	subclass: 'CypressGemStoneDirectoryUtilities'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (Object
 	subclass: 'CypressAbstractPackageFiler'
 	instVarNames: #( repository packageDirectory packageStructure )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageFiler
 	subclass: 'CypressAbstractPackageWriter'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #( specials )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageWriter
 	subclass: 'CypressStrictFileTreeFormatDoNothingPackageWriter'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageWriter
 	subclass: 'CypressFileTreeFormatPackageWriter'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageWriter
 	subclass: 'CypressPackageWriter'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageFiler
 	subclass: 'CypressAbstractFileoutWriter'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractFileoutWriter
 	subclass: 'CypressTopazFileoutWriter'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractFileoutWriter
 	subclass: 'CypressSmalltalkFileoutWriter'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageFiler
 	subclass: 'CypressAbstractPackageReader'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageReader
 	subclass: 'CypressFileTreeFormatPackageReader'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageReader
 	subclass: 'CypressDoNothingPackageReader'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageReader
 	subclass: 'CypressPackageReader'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageReader
 	subclass: 'CypressFlexiblePackageReader'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-GemStoneFileServer';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-! Class Implementation for CypressFileUtilities
+" Class Implementation for CypressFileUtilities"!
 
-! ------------------- Class methods for CypressFileUtilities
+" ------------------- Class methods for CypressFileUtilities"!
 
-category: 'accessing'
-set compile_env: 0
-classmethod: CypressFileUtilities
+!CypressFileUtilities class methodsFor: 'accessing'!
 current
 
-	^Current
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
+	^Current! !
+!CypressFileUtilities class methodsFor: 'utilities'!
 deleteAll: aDirectory
 
-	self subclassResponsibility: #deleteAll:
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
+	self subclassResponsibility: #deleteAll:! !
+!CypressFileUtilities class methodsFor: 'utilities'!
 directoryEntriesFrom: aDirectory
 
-	self subclassResponsibility: #directoryEntriesFrom:
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
+	self subclassResponsibility: #directoryEntriesFrom:! !
+!CypressFileUtilities class methodsFor: 'utilities'!
 directoryExists: aDirectory
 
-	self subclassResponsibility: #directoryExists:
-%
-
-category: 'unknown'
-set compile_env: 0
-classmethod: CypressFileUtilities
+	self subclassResponsibility: #directoryExists:! !
+!CypressFileUtilities class methodsFor: 'unknown'!
 directoryFileNamesAndContents: aDirectory
 
-	self subclassResponsibility: #directoryFileNamesAndContents:
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
+	self subclassResponsibility: #directoryFileNamesAndContents:! !
+!CypressFileUtilities class methodsFor: 'utilities'!
 directoryFromPath: directoryPath relativeTo: aDirectory
 
-	self subclassResponsibility: #directoryFromPath:relativeTo:
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
+	self subclassResponsibility: #directoryFromPath:relativeTo:! !
+!CypressFileUtilities class methodsFor: 'utilities'!
 ensureDirectoryExists: aDirectory
 
-	self subclassResponsibility: #ensureDirectoryExists:
-%
-
-category: 'initializating'
-set compile_env: 0
-classmethod: CypressFileUtilities
+	self subclassResponsibility: #ensureDirectoryExists:! !
+!CypressFileUtilities class methodsFor: 'initializating'!
 install
 
-	Current := self
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
+	Current := self! !
+!CypressFileUtilities class methodsFor: 'utilities'!
 localNameFrom: aDirectory
 
-	self subclassResponsibility: #localNameFrom:
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
+	self subclassResponsibility: #localNameFrom:! !
+!CypressFileUtilities class methodsFor: 'utilities'!
 pathNameDelimiter
 
-	self subclassResponsibility: #pathNameDelimiter
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
+	self subclassResponsibility: #pathNameDelimiter! !
+!CypressFileUtilities class methodsFor: 'utilities'!
 readStreamFor: filePath do: aOneArgBlock
 
-	self subclassResponsibility: #readStreamFor:do:
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
+	self subclassResponsibility: #readStreamFor:do:! !
+!CypressFileUtilities class methodsFor: 'utilities'!
 readStreamFor: filePath in: aDirectory do: aOneArgBlock
 
-	self subclassResponsibility: #readStreamFor:in:do:
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
+	self subclassResponsibility: #readStreamFor:in:do:! !
+!CypressFileUtilities class methodsFor: 'utilities'!
 workingDirectory
 
-	self subclassResponsibility: #workingDirectory
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressFileUtilities
+	self subclassResponsibility: #workingDirectory! !
+!CypressFileUtilities class methodsFor: 'utilities'!
 writeStreamFor: filePath in: aDirectory do: aOneArgBlock
 
-	self subclassResponsibility: #writeStreamFor:in:do:
-%
+	self subclassResponsibility: #writeStreamFor:in:do:! !
+" Class Implementation for CypressGemStoneDirectoryUtilities"!
 
-! Class Implementation for CypressGemStoneDirectoryUtilities
+" ------------------- Class methods for CypressGemStoneDirectoryUtilities"!
 
-! ------------------- Class methods for CypressGemStoneDirectoryUtilities
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+!CypressGemStoneDirectoryUtilities class methodsFor: 'utilities'!
 deleteAll: aDirectory
 	"Delete all the files and directories under the named directory.
 	 Ensure we don't try to recursively delete . or .."
@@ -390,29 +222,18 @@ deleteAll: aDirectory
 								anySatisfy: [:special | filename endsWith: special])
 									ifFalse: 
 										[self deleteAll: filename.
-										GsFile removeServerDirectory: filename]]]]
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+										GsFile removeServerDirectory: filename]]]]! !
+!CypressGemStoneDirectoryUtilities class methodsFor: 'utilities'!
 directoryEntriesFrom: aDirectory
 	"Answer fully qualified paths to the contents of aDirectory."
 
-	^(GsFile contentsOfDirectory: aDirectory onClient: false) ifNil: [#()]
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+	^(GsFile contentsOfDirectory: aDirectory onClient: false) ifNil: [#()]! !
+!CypressGemStoneDirectoryUtilities class methodsFor: 'utilities'!
 directoryExists: aDirectory
 
 	^GsFile existsOnServer: aDirectory
-%
-
-category: 'unknown'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+! !
+!CypressGemStoneDirectoryUtilities class methodsFor: 'unknown'!
 directoryFileNamesAndContents: aDirectory
 	"Walk the directory tree starting at aDirectory and
 	 answer a map of the names of the files in the tree to
@@ -422,11 +243,8 @@ directoryFileNamesAndContents: aDirectory
 	map := Dictionary new.
 	self directoryFileNamesAndContents: aDirectory into: map.
 	^map.
-%
-
-category: 'unknown'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+! !
+!CypressGemStoneDirectoryUtilities class methodsFor: 'unknown'!
 directoryFileNamesAndContents: aDirectory into: aDictionary
 	"Walk the directory tree starting at aDirectory and
 	 answer a map of the names of the files in the tree to
@@ -451,22 +269,14 @@ directoryFileNamesAndContents: aDirectory into: aDictionary
 						ifFalse: 
 							[(#('/..' '/.' '\..' '\.')
 								anySatisfy: [:special | filename endsWith: special])
-									ifFalse: [self directoryFileNamesAndContents: filename into: aDictionary]]]]
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+									ifFalse: [self directoryFileNamesAndContents: filename into: aDictionary]]]]! !
+!CypressGemStoneDirectoryUtilities class methodsFor: 'utilities'!
 directoryFromPath: directoryPath relativeTo: aDirectory
 
 	^((aDirectory endsWith: self pathNameDelimiter) or: [directoryPath beginsWith: self pathNameDelimiter])
 		ifTrue: [aDirectory, directoryPath]
-		ifFalse: [aDirectory, self pathNameDelimiter, directoryPath]
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+		ifFalse: [aDirectory, self pathNameDelimiter, directoryPath]! !
+!CypressGemStoneDirectoryUtilities class methodsFor: 'utilities'!
 ensureDirectoryExists: aDirectory
 
 	| lastSeparator |
@@ -476,38 +286,23 @@ ensureDirectoryExists: aDirectory
 	lastSeparator <= 1 ifTrue: [self error: 'Cannot create directory'].
 	self ensureDirectoryExists: (aDirectory copyFrom: 1 to: lastSeparator - 1).
 	self ensureDirectoryExists: aDirectory.
-%
-
-category: 'initializating'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+! !
+!CypressGemStoneDirectoryUtilities class methodsFor: 'initializating'!
 initialize
 	"self initialize"
 
-	self install
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+	self install! !
+!CypressGemStoneDirectoryUtilities class methodsFor: 'utilities'!
 localNameFrom: aDirectory
 
 	| endOfPath |
 	endOfPath := aDirectory findLastSubString: self pathNameDelimiter startingAt: aDirectory size.
-	^aDirectory copyFrom: endOfPath + 1 to: aDirectory size
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+	^aDirectory copyFrom: endOfPath + 1 to: aDirectory size! !
+!CypressGemStoneDirectoryUtilities class methodsFor: 'utilities'!
 pathNameDelimiter
 
-	^'/'
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+	^'/'! !
+!CypressGemStoneDirectoryUtilities class methodsFor: 'utilities'!
 readStreamFor: filePath do: aOneArgBlock
 
 	| file stream |
@@ -515,30 +310,18 @@ readStreamFor: filePath do: aOneArgBlock
 	file := GsFile openReadOnServer: filePath.
 	GsFile serverErrorString ifNotNil: [:errorMessage | self error: errorMessage].
 	[stream := ReadStream on: (String withAll: file contents asByteArray decodeFromUTF8).
-	aOneArgBlock value: stream] ensure: [file close]
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+	aOneArgBlock value: stream] ensure: [file close]! !
+!CypressGemStoneDirectoryUtilities class methodsFor: 'utilities'!
 readStreamFor: filePath in: aDirectory do: aOneArgBlock
 
 	self
 		readStreamFor: (self directoryFromPath: filePath relativeTo: aDirectory)
-		do: aOneArgBlock
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+		do: aOneArgBlock! !
+!CypressGemStoneDirectoryUtilities class methodsFor: 'utilities'!
 workingDirectory
 
-	^System gemEnvironmentVariable: 'PWD'
-%
-
-category: 'utilities'
-set compile_env: 0
-classmethod: CypressGemStoneDirectoryUtilities
+	^System gemEnvironmentVariable: 'PWD'! !
+!CypressGemStoneDirectoryUtilities class methodsFor: 'utilities'!
 writeStreamFor: filePath in: aDirectory do: aOneArgBlock
 
 	| file stream |
@@ -546,111 +329,69 @@ writeStreamFor: filePath in: aDirectory do: aOneArgBlock
 	file := GsFile openWriteOnServer: (self directoryFromPath: filePath relativeTo: aDirectory).
 	GsFile serverErrorString ifNotNil: [:errorMessage | self error: errorMessage].
 	stream := WriteStream on: String new.
-	[aOneArgBlock value: stream] ensure: [file nextPutAll: stream contents encodeAsUTF8; close]
-%
+	[aOneArgBlock value: stream] ensure: [file nextPutAll: stream contents encodeAsUTF8; close]! !
+" Class Implementation for CypressAbstractPackageFiler"!
 
-! Class Implementation for CypressAbstractPackageFiler
+" ------------------- Class methods for CypressAbstractPackageFiler"!
 
-! ------------------- Class methods for CypressAbstractPackageFiler
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressAbstractPackageFiler
+!CypressAbstractPackageFiler class methodsFor: 'instance creation'!
 forRepository: aCypressFileSystemRepository
 
 	^self new
 		initializeForRepository: aCypressFileSystemRepository;
 		yourself.
-%
+! !
+" ------------------- Instance methods for CypressAbstractPackageFiler"!
 
-! ------------------- Instance methods for CypressAbstractPackageFiler
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractPackageFiler
+!CypressAbstractPackageFiler methodsFor: 'private'!
 fileUtils
 
 	^CypressFileUtilities current
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressAbstractPackageFiler
+! !
+!CypressAbstractPackageFiler methodsFor: 'initializing - private'!
 initializeForRepository: aCypressFileSystemRepository
 
-	repository := aCypressFileSystemRepository
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractPackageFiler
+	repository := aCypressFileSystemRepository! !
+!CypressAbstractPackageFiler methodsFor: 'accessing'!
 packageDirectory
 
-	^packageDirectory
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractPackageFiler
+	^packageDirectory! !
+!CypressAbstractPackageFiler methodsFor: 'accessing'!
 packageDirectory: aDirectory
 
-	packageDirectory := aDirectory
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractPackageFiler
+	packageDirectory := aDirectory! !
+!CypressAbstractPackageFiler methodsFor: 'accessing'!
 packageStructure
 
-	^packageStructure
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractPackageFiler
+	^packageStructure! !
+!CypressAbstractPackageFiler methodsFor: 'accessing'!
 packageStructure: aPackageStructure
 
-	packageStructure := aPackageStructure
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractPackageFiler
+	packageStructure := aPackageStructure! !
+!CypressAbstractPackageFiler methodsFor: 'accessing'!
 propertiesFileNameExtension
 
-	^'.ston'
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractPackageFiler
+	^'.ston'! !
+!CypressAbstractPackageFiler methodsFor: 'accessing'!
 propertiesFileNameExtensions
 
-	^Array with: self propertiesFileNameExtension
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractPackageFiler
+	^Array with: self propertiesFileNameExtension! !
+!CypressAbstractPackageFiler methodsFor: 'accessing'!
 repository
 
-	^repository
-%
+	^repository! !
+" Class Implementation for CypressAbstractPackageWriter"!
 
-! Class Implementation for CypressAbstractPackageWriter
+" ------------------- Class methods for CypressAbstractPackageWriter"!
 
-! ------------------- Class methods for CypressAbstractPackageWriter
-
-category: 'initialization'
-set compile_env: 0
-classmethod: CypressAbstractPackageWriter
+!CypressAbstractPackageWriter class methodsFor: 'initialization'!
 initializeSpecials
-	"Valid binarySelector characters  '!' | '%' | '&' | '*' | '+' | ','' | '/' | '<' | '=' | '>' | '?' | '@' | '\' | '~' | '|' | '-'"
+	"Valid binarySelector characters  '!!' | '%' | '&' | '*' | '+' | ','' | '/' | '<' | '=' | '>' | '?' | '@' | '\' | '~' | '|' | '-'"
 
 	| map |
 	map := Dictionary new.
 	map
-		at: $! put: 'bang';
+		at: $!! put: 'bang';
 		at: $% put: 'percent';
 		at: $& put: 'and';
 		at: $* put: 'star';
@@ -668,41 +409,28 @@ initializeSpecials
 		at: $~ put: 'tilde'.
 	map keys do: [:key | map at: (map at: key) put: key].
 	^map
-%
-
-category: 'accessing'
-set compile_env: 0
-classmethod: CypressAbstractPackageWriter
+! !
+!CypressAbstractPackageWriter class methodsFor: 'accessing'!
 specials
 
 	^specials ifNil: [specials := self initializeSpecials]
-%
+! !
+" ------------------- Instance methods for CypressAbstractPackageWriter"!
 
-! ------------------- Instance methods for CypressAbstractPackageWriter
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+!CypressAbstractPackageWriter methodsFor: 'private'!
 determinePackageDirectory
 
 	^self fileUtils ensureDirectoryExists: (self fileUtils
 				directoryFromPath: self packageStructure name
-				relativeTo: self repository directoryPath)
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+				relativeTo: self repository directoryPath)! !
+!CypressAbstractPackageWriter methodsFor: 'private'!
 directoryForDirectoryNamed: directoryNameOrPath
 
 	^directoryNameOrPath = '.'
 		ifTrue: [self fileUtils ensureDirectoryExists: self packageDirectory]
 		ifFalse: [self subPackageFileDirectoryFor: directoryNameOrPath]
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+! !
+!CypressAbstractPackageWriter methodsFor: 'private'!
 fileNameForSelector: selector
 
 	^selector last = $:
@@ -718,21 +446,14 @@ fileNameForSelector: selector
 							output nextPut: $^.
 							selector do: [:each | output nextPutAll: (specials at: each)]
 								separatedBy: [output nextPut: $.]]]]
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+! !
+!CypressAbstractPackageWriter methodsFor: 'writing'!
 removeOldReplacingWithNew
 
 	self fileUtils deleteAll: self packageDirectory.
 	self writePropertiesFile.
-	self writePackageStructure
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+	self writePackageStructure! !
+!CypressAbstractPackageWriter methodsFor: 'private'!
 subPackageFileDirectoryFor: directoryNameOrPath
 
 	| dir |
@@ -740,19 +461,13 @@ subPackageFileDirectoryFor: directoryNameOrPath
 				relativeTo: self packageDirectory.
 	self fileUtils ensureDirectoryExists: dir.
 	^dir
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+! !
+!CypressAbstractPackageWriter methodsFor: 'writing'!
 writeClassComment: classStructure on: fileStream
 
 	fileStream nextPutAll: classStructure comment withUnixLineEndings
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+! !
+!CypressAbstractPackageWriter methodsFor: 'writing'!
 writeClassStructure: classStructure to: classPath
 
 	self
@@ -764,11 +479,8 @@ writeClassStructure: classStructure to: classPath
 			fileName: 'properties'
 			extension: self propertiesFileNameExtension
 			visit: [:fileStream | classStructure  properties writeCypressJsonOn: fileStream]
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+! !
+!CypressAbstractPackageWriter methodsFor: 'writing'!
 writeExtensionClassStructure: classStructure to: classPath
 
 	self
@@ -778,12 +490,8 @@ writeExtensionClassStructure: classStructure to: classPath
 		visit: 
 			[:fileStream |
 			(Dictionary with: 'name' -> classStructure className)
-				writeCypressJsonOn: fileStream]
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+				writeCypressJsonOn: fileStream]! !
+!CypressAbstractPackageWriter methodsFor: 'private'!
 writeInDirectoryName: directoryNameOrPath fileName: fileName extension: ext visit: visitBlock
 
 	| directory |
@@ -792,19 +500,12 @@ writeInDirectoryName: directoryNameOrPath fileName: fileName extension: ext visi
 		writeStreamFor: fileName , ext
 		in: directory
 		do: [:fileStream | visitBlock value: fileStream]
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+! !
+!CypressAbstractPackageWriter methodsFor: 'writing'!
 writeMethodStructure: methodStructure onStream: fileStream
 
-	self subclassResponsibility: #writeMethodStructure:onStream:
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+	self subclassResponsibility: #writeMethodStructure:onStream:! !
+!CypressAbstractPackageWriter methodsFor: 'writing'!
 writeMethodStructure: methodStructure to: methodPath
 
 	| filename |
@@ -813,12 +514,8 @@ writeMethodStructure: methodStructure to: methodPath
 		writeInDirectoryName: methodPath
 		fileName: filename
 		extension: '.st'
-		visit: [:fileStream | self writeMethodStructure: methodStructure onStream: fileStream]
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+		visit: [:fileStream | self writeMethodStructure: methodStructure onStream: fileStream]! !
+!CypressAbstractPackageWriter methodsFor: 'writing'!
 writePackageStructure
 
 	self
@@ -826,22 +523,16 @@ writePackageStructure
 			isClassExtension: false;
 		writePackageStructureClasses: self packageStructure extensions
 			isClassExtension: true
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+! !
+!CypressAbstractPackageWriter methodsFor: 'writing'!
 writePackageStructure: aPackageStructure
 
 	self
 		packageStructure: aPackageStructure;
 		packageDirectory: self determinePackageDirectory;
 		removeOldReplacingWithNew
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+! !
+!CypressAbstractPackageWriter methodsFor: 'writing'!
 writePackageStructureClasses: classStructures isClassExtension: isClassExtension
 
 	| classDirExtension |
@@ -862,71 +553,49 @@ writePackageStructureClasses: classStructures isClassExtension: isClassExtension
 			classMethodPath := classPath , 'class' , self fileUtils pathNameDelimiter asString.
 			classStructure classMethods
 				do: [:methodStructure | self writeMethodStructure: methodStructure to: classMethodPath]]
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractPackageWriter
+! !
+!CypressAbstractPackageWriter methodsFor: 'writing'!
 writePropertiesFile
 
 	self
 		writeInDirectoryName: '.'
 		fileName: 'properties'
 		extension: self propertiesFileNameExtension
-		visit: [:fileStream | Dictionary new writeCypressJsonOn: fileStream]
-%
+		visit: [:fileStream | Dictionary new writeCypressJsonOn: fileStream]! !
+" Class Implementation for CypressStrictFileTreeFormatDoNothingPackageWriter"!
 
-! Class Implementation for CypressStrictFileTreeFormatDoNothingPackageWriter
+" ------------------- Instance methods for CypressStrictFileTreeFormatDoNothingPackageWriter"!
 
-! ------------------- Instance methods for CypressStrictFileTreeFormatDoNothingPackageWriter
-
-category: 'writing'
-set compile_env: 0
-method: CypressStrictFileTreeFormatDoNothingPackageWriter
+!CypressStrictFileTreeFormatDoNothingPackageWriter methodsFor: 'writing'!
 removeOldReplacingWithNew
 	"Change nothing, since a Cypress writer has insufficient information
-	 for preserving the FileTree details. Strictly read-only."
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressStrictFileTreeFormatDoNothingPackageWriter
+	 for preserving the FileTree details. Strictly read-only."! !
+!CypressStrictFileTreeFormatDoNothingPackageWriter methodsFor: 'writing'!
 writePropertiesFile
 	"Change nothing, since a Cypress writer has insufficient information
-	 for preserving the FileTree details. Strictly read-only."
-%
+	 for preserving the FileTree details. Strictly read-only."! !
+" Class Implementation for CypressFileTreeFormatPackageWriter"!
 
-! Class Implementation for CypressFileTreeFormatPackageWriter
+" ------------------- Instance methods for CypressFileTreeFormatPackageWriter"!
 
-! ------------------- Instance methods for CypressFileTreeFormatPackageWriter
-
-category: 'writing'
-set compile_env: 0
-method: CypressFileTreeFormatPackageWriter
+!CypressFileTreeFormatPackageWriter methodsFor: 'writing'!
 writeMethodStructure: methodStructure onStream: fileStream
 
 	fileStream
 		nextPutAll: methodStructure category; lf;
 		nextPutAll: methodStructure source withUnixLineEndings
-%
+! !
+" Class Implementation for CypressPackageWriter"!
 
-! Class Implementation for CypressPackageWriter
+" ------------------- Instance methods for CypressPackageWriter"!
 
-! ------------------- Instance methods for CypressPackageWriter
-
-category: 'accessing - private'
-set compile_env: 0
-method: CypressPackageWriter
+!CypressPackageWriter methodsFor: 'accessing - private'!
 methodNoticeLine
 
 	^self packageStructure properties
 		at: 'copyrightLine'
-		ifAbsent: [self repository copyrightProperty]
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressPackageWriter
+		ifAbsent: [self repository copyrightProperty]! !
+!CypressPackageWriter methodsFor: 'writing'!
 writeMethodStructure: methodStructure onStream: fileStream
 
 	fileStream
@@ -934,145 +603,93 @@ writeMethodStructure: methodStructure onStream: fileStream
 		nextPutAll: 'notice: ', self methodNoticeLine; lf;
 		nextPutAll: 'category: ', methodStructure category; lf;
 		nextPutAll: '"'; lf;
-		nextPutAll: methodStructure source withUnixLineEndings
-%
+		nextPutAll: methodStructure source withUnixLineEndings! !
+" Class Implementation for CypressAbstractFileoutWriter"!
 
-! Class Implementation for CypressAbstractFileoutWriter
+" ------------------- Instance methods for CypressAbstractFileoutWriter"!
 
-! ------------------- Instance methods for CypressAbstractFileoutWriter
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+!CypressAbstractFileoutWriter methodsFor: 'accessing'!
 classesInDependencyOrder
 
 	^(GsGeneralDependencySorter
 		on: self packageStructure classes
 		dependsOn: [:candidate | candidate superclassName]
 		dependent: [:candidate | candidate className])
-			inOrder
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+			inOrder! !
+!CypressAbstractFileoutWriter methodsFor: 'accessing'!
 classesWithInitializers
 
 	^self classesInDependencyOrder
-		select: [:each | each classMethods anySatisfy: [:method | method selector = 'initialize']]
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+		select: [:each | each classMethods anySatisfy: [:method | method selector = 'initialize']]! !
+!CypressAbstractFileoutWriter methodsFor: 'private'!
 determinePackageDirectory
 
 	^self fileUtils ensureDirectoryExists: self repository directoryPath
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+! !
+!CypressAbstractFileoutWriter methodsFor: 'accessing'!
 extensions
 
-	^self packageStructure extensions
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+	^self packageStructure extensions! !
+!CypressAbstractFileoutWriter methodsFor: 'writing - private'!
 fileOut: aString implementationsFrom: someClassStructures on: aStream
 
 	someClassStructures
-		do: [:each | self fileOutType: aString implementationOf: each on: aStream]
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+		do: [:each | self fileOutType: aString implementationOf: each on: aStream]! !
+!CypressAbstractFileoutWriter methodsFor: 'writing - private'!
 fileOut: aString methods: someMethodStructures on: aStream
 
 	someMethodStructures isEmpty ifTrue: [^self].
 	self
 		fileOut: aString methodsPreambleFor: someMethodStructures any classStructure on: aStream;
-		fileOutMethods: someMethodStructures on: aStream
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+		fileOutMethods: someMethodStructures on: aStream! !
+!CypressAbstractFileoutWriter methodsFor: 'writing - private'!
 fileOutClassDeclarationsOn: aStream
 
 	self classesInDependencyOrder
-		do: [:classStructure | self fileOutClassDeclaration: classStructure on: aStream]
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+		do: [:classStructure | self fileOutClassDeclaration: classStructure on: aStream]! !
+!CypressAbstractFileoutWriter methodsFor: 'writing - private'!
 fileOutClassesOn: aStream
 
 	self
 		fileOutClassesPreambleOn: aStream;
 		fileOutClassDeclarationsOn: aStream;
-		fileOutClassImplementationsOn: aStream
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+		fileOutClassImplementationsOn: aStream! !
+!CypressAbstractFileoutWriter methodsFor: 'writing - private'!
 fileOutClassImplementationsOn: aStream
 
 	self
 		fileOut: 'Class Implementation'
 		implementationsFrom: self classesInDependencyOrder
 		on: aStream
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+! !
+!CypressAbstractFileoutWriter methodsFor: 'writing - private'!
 fileOutClassInitializersOn: aStream
 
 	self fileOutClassInitializersPreambleOn: aStream.
 	self classesWithInitializers do: [:each | self fileOutClassInitializerFor: each on: aStream].
 	self fileOutClassInitializersPostambleOn: aStream.
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+! !
+!CypressAbstractFileoutWriter methodsFor: 'writing - private'!
 fileOutExtensionImplementationsOn: aStream
 
 	self
 		fileOut: 'Class Extension'
 		implementationsFrom: self extensions
 		on: aStream
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+! !
+!CypressAbstractFileoutWriter methodsFor: 'writing - private'!
 fileOutExtensionsOn: aStream
 
 	self
 		fileOutExtensionsPreambleOn: aStream;
-		fileOutExtensionImplementationsOn: aStream
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+		fileOutExtensionImplementationsOn: aStream! !
+!CypressAbstractFileoutWriter methodsFor: 'writing - private'!
 fileOutMethods: someMethodStructures on: aStream
 
 	(someMethodStructures
 		asSortedCollection: [:a :b | a selector <= b selector])
-			do: [:methodStructure | self fileOutMethod: methodStructure on: aStream]
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+			do: [:methodStructure | self fileOutMethod: methodStructure on: aStream]! !
+!CypressAbstractFileoutWriter methodsFor: 'writing - private'!
 fileOutPackageOn: aStream
 
 	self
@@ -1080,12 +697,8 @@ fileOutPackageOn: aStream
 		fileOutClassesOn: aStream;
 		fileOutExtensionsOn: aStream;
 		fileOutClassInitializersOn: aStream;
-		fileOutPackagePostambleOn: aStream
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+		fileOutPackagePostambleOn: aStream! !
+!CypressAbstractFileoutWriter methodsFor: 'writing - private'!
 fileOutType: aString implementationOf: classStructure on: aStream
 
 	self
@@ -1097,64 +710,44 @@ fileOutType: aString implementationOf: classStructure on: aStream
 			on: aStream;
 		fileOut: 'Instance'
 			methods: classStructure instanceMethods
-			on: aStream
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+			on: aStream! !
+!CypressAbstractFileoutWriter methodsFor: 'accessing'!
 packageName
 
-	^self packageStructure packageName
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+	^self packageStructure packageName! !
+!CypressAbstractFileoutWriter methodsFor: 'accessing'!
 packageNameExtension
 
 	^self subclassResponsibility: #packageNameExtension
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+! !
+!CypressAbstractFileoutWriter methodsFor: 'writing'!
 writePackageStructure
 
 	CypressFileUtilities current
 		writeStreamFor: self packageStructure packageName, self packageNameExtension
 		in: self packageDirectory
 		do: [:fileStream | fileStream nextPutAll: (String streamContents: [:stream | self fileOutPackageOn: stream])]
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractFileoutWriter
+! !
+!CypressAbstractFileoutWriter methodsFor: 'writing'!
 writePackageStructure: aPackageStructure
 
 	self
 		packageStructure: aPackageStructure;
 		packageDirectory: self determinePackageDirectory;
 		writePackageStructure
-%
+! !
+" Class Implementation for CypressTopazFileoutWriter"!
 
-! Class Implementation for CypressTopazFileoutWriter
+" ------------------- Instance methods for CypressTopazFileoutWriter"!
 
-! ------------------- Instance methods for CypressTopazFileoutWriter
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressTopazFileoutWriter
+!CypressTopazFileoutWriter methodsFor: 'writing - private'!
 fileOut: aString methodsPreambleFor: classStructure on: aStream
 
 	aStream
-		nextPutAll: '! ------------------- ', aString, ' methods for ', classStructure name; lf;
+		nextPutAll: '!! ------------------- ', aString, ' methods for ', classStructure name; lf;
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressTopazFileoutWriter
+! !
+!CypressTopazFileoutWriter methodsFor: 'writing - private'!
 fileOutClassDeclaration: classStructure on: aStream
 
 	aStream
@@ -1172,61 +765,40 @@ fileOutClassDeclaration: classStructure on: aStream
 		nextPutAll: '		immediateInvariant.'; lf;
 		nextPutAll: '%'; lf;
 		lf.
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressTopazFileoutWriter
+! !
+!CypressTopazFileoutWriter methodsFor: 'writing - private'!
 fileOutClassesPreambleOn: aStream
 
 	aStream
-		nextPutAll: '! Class Declarations'; lf;
+		nextPutAll: '!! Class Declarations'; lf;
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressTopazFileoutWriter
+! !
+!CypressTopazFileoutWriter methodsFor: 'writing - private'!
 fileOutClassInitializerFor: classStructure on: aStream
 
 	aStream
-		nextPutAll: classStructure className, ' initialize.'; lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressTopazFileoutWriter
+		nextPutAll: classStructure className, ' initialize.'; lf! !
+!CypressTopazFileoutWriter methodsFor: 'writing - private'!
 fileOutClassInitializersPostambleOn: aStream
 
 	aStream
 		nextPutAll: '%'; lf;
-		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressTopazFileoutWriter
+		lf! !
+!CypressTopazFileoutWriter methodsFor: 'writing - private'!
 fileOutClassInitializersPreambleOn: aStream
 
 	aStream
-		nextPutAll: '! Class initializers '; lf;
+		nextPutAll: '!! Class initializers '; lf;
 		lf;
-		nextPutAll: 'doit'; lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressTopazFileoutWriter
+		nextPutAll: 'doit'; lf! !
+!CypressTopazFileoutWriter methodsFor: 'writing - private'!
 fileOutExtensionsPreambleOn: aStream
 
 	aStream
-		nextPutAll: '! Class Extensions'; lf;
+		nextPutAll: '!! Class Extensions'; lf;
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressTopazFileoutWriter
+! !
+!CypressTopazFileoutWriter methodsFor: 'writing - private'!
 fileOutMethod: methodStructure on: aStream
 
 	aStream
@@ -1238,32 +810,26 @@ fileOutMethod: methodStructure on: aStream
 		ifFalse: [aStream lf].
 	aStream nextPutAll: '%'; lf;
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressTopazFileoutWriter
+! !
+!CypressTopazFileoutWriter methodsFor: 'writing - private'!
 fileOutPackagePostambleOn: aStream
 
 	aStream
 		lf;
 		lf;
-		nextPutAll: '! End of Package: ', self packageName; lf;
+		nextPutAll: '!! End of Package: ', self packageName; lf;
 		lf;
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressTopazFileoutWriter
+! !
+!CypressTopazFileoutWriter methodsFor: 'writing - private'!
 fileOutPackagePreambleOn: aStream
 
 	aStream
-		nextPutAll: '! Package: ', self packageName; lf;
+		nextPutAll: '!! Package: ', self packageName; lf;
 		lf;
 		lf;
-		nextPutAll: '! Remove existing behavior from package ', self packageName; lf;
-		nextPutAll: '!!!! This can be cleaned up when some package functionality is moved to the base system.'; lf;
+		nextPutAll: '!! Remove existing behavior from package ', self packageName; lf;
+		nextPutAll: '!!!!!!!! This can be cleaned up when some package functionality is moved to the base system.'; lf;
 		lf;
 		nextPutAll: 'doit'; lf;
 		nextPutAll: '| packageName |'; lf;
@@ -1297,43 +863,31 @@ fileOutPackagePreambleOn: aStream
 		nextPutAll: '%'; lf;
 		lf;
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressTopazFileoutWriter
+! !
+!CypressTopazFileoutWriter methodsFor: 'writing - private'!
 fileOutPreambleType: aString for: classStructure on: aStream
 
 	aStream
-		nextPutAll: '! ', aString, ' for ', classStructure name; lf;
+		nextPutAll: '!! ', aString, ' for ', classStructure name; lf;
 		lf
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressTopazFileoutWriter
+! !
+!CypressTopazFileoutWriter methodsFor: 'accessing'!
 packageNameExtension
 
 	^'.gs'
-%
+! !
+" Class Implementation for CypressSmalltalkFileoutWriter"!
 
-! Class Implementation for CypressSmalltalkFileoutWriter
+" ------------------- Instance methods for CypressSmalltalkFileoutWriter"!
 
-! ------------------- Instance methods for CypressSmalltalkFileoutWriter
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressSmalltalkFileoutWriter
+!CypressSmalltalkFileoutWriter methodsFor: 'writing - private'!
 fileOut: aString methodsPreambleFor: classStructure on: aStream
 
 	aStream
 		nextChunkPut: '" ------------------- ', aString, ' methods for ', classStructure name, '"'; lf;
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressSmalltalkFileoutWriter
+! !
+!CypressSmalltalkFileoutWriter methodsFor: 'writing - private'!
 fileOutClassDeclaration: classStructure on: aStream
 
 	aStream
@@ -1346,72 +900,51 @@ fileOutClassDeclaration: classStructure on: aStream
 		nextPutAll: '		category: ', classStructure category printString, ';'; lf;
 		nextChunkPut: '		comment: ', classStructure comment printString; lf;
 		lf.
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressSmalltalkFileoutWriter
+! !
+!CypressSmalltalkFileoutWriter methodsFor: 'writing - private'!
 fileOutClassesPreambleOn: aStream
 
 	aStream
 		nextChunkPut: '" Class Declarations "'; lf;
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressSmalltalkFileoutWriter
+! !
+!CypressSmalltalkFileoutWriter methodsFor: 'writing - private'!
 fileOutClassInitializerFor: classStructure on: aStream
 
 	aStream
 		nextChunkPut: classStructure className, ' initialize.'; lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressSmalltalkFileoutWriter
+! !
+!CypressSmalltalkFileoutWriter methodsFor: 'writing - private'!
 fileOutClassInitializersPostambleOn: aStream
 
 	aStream
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressSmalltalkFileoutWriter
+! !
+!CypressSmalltalkFileoutWriter methodsFor: 'writing - private'!
 fileOutClassInitializersPreambleOn: aStream
 
 	aStream
 		nextChunkPut: '" Class initializers "'; lf;
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressSmalltalkFileoutWriter
+! !
+!CypressSmalltalkFileoutWriter methodsFor: 'writing - private'!
 fileOutExtensionsPreambleOn: aStream
 
 	aStream
 		nextChunkPut: '" Class Extensions "'; lf;
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressSmalltalkFileoutWriter
+! !
+!CypressSmalltalkFileoutWriter methodsFor: 'writing - private'!
 fileOutMethod: methodStructure on: aStream
 
 	aStream
-		nextPutAll: '!';
+		nextPutAll: '!!';
 		nextChunkPut: methodStructure classStructure className, (methodStructure isMetaclass ifTrue: [' class methodsFor: '] ifFalse: [' methodsFor: ']), methodStructure category printString; lf;
 		nextChunkPut: methodStructure source;
 		nextChunkPut: ' ';
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressSmalltalkFileoutWriter
+! !
+!CypressSmalltalkFileoutWriter methodsFor: 'writing - private'!
 fileOutPackagePostambleOn: aStream
 
 	aStream
@@ -1420,44 +953,32 @@ fileOutPackagePostambleOn: aStream
 		nextChunkPut: '" End of Package: ', self packageName, '"'; lf;
 		lf;
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressSmalltalkFileoutWriter
+! !
+!CypressSmalltalkFileoutWriter methodsFor: 'writing - private'!
 fileOutPackagePreambleOn: aStream
 
 	aStream
 		nextChunkPut: '" Package: ', self packageName, '"'; lf;
 		lf;
 		lf
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressSmalltalkFileoutWriter
+! !
+!CypressSmalltalkFileoutWriter methodsFor: 'writing - private'!
 fileOutPreambleType: aString for: classStructure on: aStream
 
 	aStream
 		nextChunkPut: '" ', aString, ' for ', classStructure name, '"'; lf;
 		lf
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressSmalltalkFileoutWriter
+! !
+!CypressSmalltalkFileoutWriter methodsFor: 'accessing'!
 packageNameExtension
 
 	^'.st'
-%
+! !
+" Class Implementation for CypressAbstractPackageReader"!
 
-! Class Implementation for CypressAbstractPackageReader
+" ------------------- Instance methods for CypressAbstractPackageReader"!
 
-! ------------------- Instance methods for CypressAbstractPackageReader
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractPackageReader
+!CypressAbstractPackageReader methodsFor: 'private'!
 classStructureFrom: classPropertiesDict
 
 	^(CypressClassStructure new)
@@ -1465,62 +986,42 @@ classStructureFrom: classPropertiesDict
 		isClassExtension: true;
 		properties: classPropertiesDict;
 		yourself
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractPackageReader
+! !
+!CypressAbstractPackageReader methodsFor: 'private'!
 classStructureFrom: classPropertiesDict comment: classComment
 
 	^(self classStructureFrom: classPropertiesDict)
 		isClassExtension: false;
 		comment: classComment;
 		yourself
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractPackageReader
+! !
+!CypressAbstractPackageReader methodsFor: 'reading'!
 isPropertiesFileDirectoryEntry: entry
 
 	^self propertiesFileNameExtensions
-		anySatisfy: [:each | entry endsWith: '/properties' , each]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractPackageReader
+		anySatisfy: [:each | entry endsWith: '/properties' , each]! !
+!CypressAbstractPackageReader methodsFor: 'accessing'!
 packageExtension
 
 	^self packageStructure
-		packageExtensionOr: [self repository packageExtension]
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractPackageReader
+		packageExtensionOr: [self repository packageExtension]! !
+!CypressAbstractPackageReader methodsFor: 'reading'!
 readClassCommentFromDirectoryEntries: entries
 
 	self fileUtils readStreamFor: (entries
 				detect: [:entry | entry endsWith: '/README.md']
 				ifNone: [^''])
 		do: [:fileStream | ^fileStream contents]
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractPackageReader
+! !
+!CypressAbstractPackageReader methodsFor: 'reading'!
 readClassPropertiesFromDirectoryEntries: entries
 
 	self fileUtils readStreamFor: (entries
 				detect: [:entry | self isPropertiesFileDirectoryEntry: entry]
 				ifNone: [^Dictionary new])
 		do: [:fileStream | ^CypressJsonParser parseStream: fileStream]
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractPackageReader
+! !
+!CypressAbstractPackageReader methodsFor: 'reading'!
 readClassStructureFromEntry: classEntry
 
 	| classDirectory classPropertiesDict classComment entries classStructure |
@@ -1532,12 +1033,8 @@ readClassStructureFromEntry: classEntry
 	classStructure := self classStructureFrom: classPropertiesDict
 				comment: classComment.
 	self readMethodStructureFor: classStructure in: entries.
-	^classStructure
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractPackageReader
+	^classStructure! !
+!CypressAbstractPackageReader methodsFor: 'reading'!
 readCypressFormatMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
 
 	| notice category source selector |
@@ -1564,12 +1061,8 @@ readCypressFormatMethodStructureFrom: fileStream intoClassStructure: classStruct
 				selector: selector;
 				category: category;
 				source: source;
-				yourself)
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractPackageReader
+				yourself)! !
+!CypressAbstractPackageReader methodsFor: 'reading'!
 readExtensionClassStructureFromEntry: classEntry
 
 	| classPropertiesDict entries classStructure |
@@ -1578,12 +1071,8 @@ readExtensionClassStructureFromEntry: classEntry
 				readClassPropertiesFromDirectoryEntries: entries.
 	classStructure := self classStructureFrom: classPropertiesDict.
 	self readMethodStructureFor: classStructure in: entries.
-	^classStructure
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractPackageReader
+	^classStructure! !
+!CypressAbstractPackageReader methodsFor: 'reading'!
 readFileTreeFormatMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
 
 	| category source selector |
@@ -1600,11 +1089,8 @@ readFileTreeFormatMethodStructureFrom: fileStream intoClassStructure: classStruc
 				category: category;
 				source: source;
 				yourself)
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractPackageReader
+! !
+!CypressAbstractPackageReader methodsFor: 'reading'!
 readMethodStructureFor: classStructure in: entries
 
 	entries do: 
@@ -1625,20 +1111,12 @@ readMethodStructureFor: classStructure in: entries
 											readMethodStructureFrom: fileStream
 											intoClassStructure: classStructure
 											meta: isMeta
-											methods: methods]]]]
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractPackageReader
+											methods: methods]]]]! !
+!CypressAbstractPackageReader methodsFor: 'reading'!
 readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
 
-	self subclassResponsibility: #readMethodStructureFrom:intoClassStructure:meta:methods:
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractPackageReader
+	self subclassResponsibility: #readMethodStructureFrom:intoClassStructure:meta:methods:! !
+!CypressAbstractPackageReader methodsFor: 'reading'!
 readPackageStructure
 
    (self fileUtils directoryEntriesFrom: self packageDirectory)
@@ -1649,11 +1127,8 @@ readPackageStructure
                 ifTrue: [ self packageStructure classes add: (self readClassStructureFromEntry: entry) ].
             (entry endsWith: '.extension')
                 ifTrue: [ self packageStructure extensions add: (self readExtensionClassStructureFromEntry: entry) ] ]
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractPackageReader
+! !
+!CypressAbstractPackageReader methodsFor: 'reading'!
 readPackageStructureForPackageNamed: packageName
 
 	| structureName |
@@ -1662,98 +1137,69 @@ readPackageStructureForPackageNamed: packageName
 		packageStructure: (CypressPackageStructure named: structureName);
 		packageDirectory: (self fileUtils directoryFromPath: structureName
 					relativeTo: self repository directoryPath);
-		readPackageStructure
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractPackageReader
+		readPackageStructure! !
+!CypressAbstractPackageReader methodsFor: 'reading'!
 readPropertiesFile: entry
 
 	self fileUtils
 		readStreamFor: entry
 		do: [:fileStream | ^CypressJsonParser parseStream: fileStream]
-%
+! !
+" Class Implementation for CypressFileTreeFormatPackageReader"!
 
-! Class Implementation for CypressFileTreeFormatPackageReader
+" ------------------- Instance methods for CypressFileTreeFormatPackageReader"!
 
-! ------------------- Instance methods for CypressFileTreeFormatPackageReader
-
-category: 'accessing'
-set compile_env: 0
-method: CypressFileTreeFormatPackageReader
+!CypressFileTreeFormatPackageReader methodsFor: 'accessing'!
 propertiesFileNameExtension
 
-	^'.json'
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressFileTreeFormatPackageReader
+	^'.json'! !
+!CypressFileTreeFormatPackageReader methodsFor: 'accessing'!
 propertiesFileNameExtensions
 
 	^Array
 		with: super propertiesFileNameExtension
-		with: self propertiesFileNameExtension
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressFileTreeFormatPackageReader
+		with: self propertiesFileNameExtension! !
+!CypressFileTreeFormatPackageReader methodsFor: 'reading'!
 readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
-	"Strict!"
+	"Strict!!"
 
 	self
 		readFileTreeFormatMethodStructureFrom: fileStream
 		intoClassStructure: classStructure
 		meta: isMeta
-		methods: methods
-%
+		methods: methods! !
+" Class Implementation for CypressDoNothingPackageReader"!
 
-! Class Implementation for CypressDoNothingPackageReader
+" ------------------- Instance methods for CypressDoNothingPackageReader"!
 
-! ------------------- Instance methods for CypressDoNothingPackageReader
-
-category: 'reading'
-set compile_env: 0
-method: CypressDoNothingPackageReader
+!CypressDoNothingPackageReader methodsFor: 'reading'!
 readPackageStructure
-%
+! !
+" Class Implementation for CypressPackageReader"!
 
-! Class Implementation for CypressPackageReader
+" ------------------- Instance methods for CypressPackageReader"!
 
-! ------------------- Instance methods for CypressPackageReader
-
-category: 'reading'
-set compile_env: 0
-method: CypressPackageReader
+!CypressPackageReader methodsFor: 'reading'!
 readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
-	"Strict!"
+	"Strict!!"
 
 	self
 		readCypressFormatMethodStructureFrom: fileStream
 		intoClassStructure: classStructure
 		meta: isMeta
-		methods: methods
-%
+		methods: methods! !
+" Class Implementation for CypressFlexiblePackageReader"!
 
-! Class Implementation for CypressFlexiblePackageReader
+" ------------------- Instance methods for CypressFlexiblePackageReader"!
 
-! ------------------- Instance methods for CypressFlexiblePackageReader
-
-category: 'reading'
-set compile_env: 0
-method: CypressFlexiblePackageReader
+!CypressFlexiblePackageReader methodsFor: 'reading'!
 isPropertiesFileDirectoryEntry: entry
 	"Expect .ston properties file, but tolerate .json if present."
 
 	^(super isPropertiesFileDirectoryEntry: entry)
 		or: [entry endsWith: '/properties.json']
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressFlexiblePackageReader
+! !
+!CypressFlexiblePackageReader methodsFor: 'reading'!
 readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isMeta methods: methods
 	"If the stream begins with a double quote, process it on the assumption it is a Cypress-format method.
 	 Otherwise, treat it as a FileTree-format method."
@@ -1770,35 +1216,28 @@ readMethodStructureFrom: fileStream intoClassStructure: classStructure meta: isM
 				readFileTreeFormatMethodStructureFrom: fileStream
 				intoClassStructure: classStructure
 				meta: isMeta
-				methods: methods]
-%
+				methods: methods]! !
+" Class Extensions "!
 
-! Class Extensions
+" Class Extension for WriteStream"!
 
-! Class Extension for WriteStream
+" ------------------- Instance methods for WriteStream"!
 
-! ------------------- Instance methods for WriteStream
-
-category: '*Cypress-GemStoneFileServer-Adding'
-set compile_env: 0
-method: WriteStream
+!WriteStream methodsFor: '*Cypress-GemStoneFileServer-Adding'!
 nextChunkPut: aString
 
 	aString do: 
 		[:each |
 		self nextPut: each.
-		each = $! ifTrue: [self nextPut: each]].
-	self nextPut: $!.
-%
+		each = $!! ifTrue: [self nextPut: each]].
+	self nextPut: $!!.
+! !
+" Class initializers "!
 
-! Class initializers 
-
-doit
-CypressGemStoneDirectoryUtilities initialize.
-%
+CypressGemStoneDirectoryUtilities initialize.!
 
 
 
-! End of Package: Cypress-GemStoneFileServer
+" End of Package: Cypress-GemStoneFileServer"!
 
 

@@ -4,5 +4,5 @@ category: initializing - private
 "
 initializeReaderAndWriterClasses
 
-	readerClass := nil.
+	readerClass := CypressDoNothingPackageReader.
 	writerClass := CypressTopazFileoutWriter.

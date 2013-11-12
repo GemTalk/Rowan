@@ -1,158 +1,83 @@
-! Package: Cypress-Tests
+" Package: Cypress-Tests"!
 
 
-! Remove existing behavior from package Cypress-Tests
-!!!! This can be cleaned up when some package functionality is moved to the base system.
+" Class Declarations "!
 
-doit
-| packageName |
-packageName := 'Cypress-Tests'.
-System myUserProfile symbolList do: [:symDict |
-	symDict do: [:possibleClass |
-			| toRemove |
-		possibleClass isBehavior ifTrue: [
-			{possibleClass. possibleClass class} do: [:aClass |
-				aClass category = packageName
-					ifTrue: [
-							"*anythingbutpackagename[-anything]"
-						toRemove := aClass categoryNames select: 
-										[:each |
-										(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]])
-										or: [each first ~= $*]]
-					]
-					ifFalse: [
-							"*packagename[-anything]"
-						toRemove := aClass categoryNames select: 
-										[:each |
-										each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]
-					].
-				toRemove do: [:each | aClass removeCategory: each].
-			]
-		]
-	]
-].
-%
-
-
-! Class Declarations
-
-doit
 (TestCase
 	subclass: 'CypressAbstractTest'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Tests';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractTest
 	subclass: 'CypressStructureTest'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Tests';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractTest
 	subclass: 'CypressLoaderTest'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Tests';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractTest
 	subclass: 'CypressExtensionsTest'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Tests';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractTest
 	subclass: 'CypressSnapshotTest'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Tests';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractTest
 	subclass: 'CypressDefinitionTest'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Tests';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractTest
 	subclass: 'CypressPatchTest'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Tests';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-! Class Implementation for CypressAbstractTest
+" Class Implementation for CypressAbstractTest"!
 
-! ------------------- Class methods for CypressAbstractTest
+" ------------------- Class methods for CypressAbstractTest"!
 
-category: 'testing'
-set compile_env: 0
-classmethod: CypressAbstractTest
+!CypressAbstractTest class methodsFor: 'testing'!
 isAbstract
 
 	^self sunitName = #CypressAbstractTest
-%
+! !
+" ------------------- Instance methods for CypressAbstractTest"!
 
-! ------------------- Instance methods for CypressAbstractTest
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractTest
+!CypressAbstractTest methodsFor: 'private'!
 baseDefinitions
 
 	| className |
@@ -233,12 +158,8 @@ baseDefinitions
 		source: 'isCypressMockBasic
 
 	^false'.
-	}
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressAbstractTest
+	}! !
+!CypressAbstractTest methodsFor: 'private'!
 targetDefinitions
 	"remove #extra method and modify #name: method"
 
@@ -332,23 +253,17 @@ targetDefinitions
 	"added method"
 '.
 	}
-%
+! !
+" Class Implementation for CypressStructureTest"!
 
-! Class Implementation for CypressStructureTest
+" ------------------- Instance methods for CypressStructureTest"!
 
-! ------------------- Instance methods for CypressStructureTest
-
-category: 'private'
-set compile_env: 0
-method: CypressStructureTest
+!CypressStructureTest methodsFor: 'private'!
 compileJSON: aJsonString
 
 	^CypressJsonParser parse: aJsonString
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressStructureTest
+! !
+!CypressStructureTest methodsFor: 'private'!
 sampleJson
     ^ '{
 	"age" : 25,
@@ -361,11 +276,8 @@ sampleJson
 			"number" : "646%20555-4567",
 			"type" : "fax" } ],
 	"registered" : true }'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
+! !
+!CypressStructureTest methodsFor: 'tests'!
 testPackageStructureFromPackage
 
 	| packageStructure packageDefinitions expectedDefinitions |
@@ -377,12 +289,8 @@ testPackageStructureFromPackage
 	packageDefinitions do: 
 			[:def |
 			self assert: (expectedDefinitions includes: def)
-				description: 'Definition for ', def printString, ' did not match expected ones']
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
+				description: 'Definition for ', def printString, ' did not match expected ones']! !
+!CypressStructureTest methodsFor: 'tests'!
 testPropertyDictionaryRead
 
 	| propertyDictionary phoneNumbers |
@@ -394,26 +302,20 @@ testPropertyDictionaryRead
 	self assert: phoneNumbers size equals: 2.
 	self assert: ((phoneNumbers at: 1) at: 'number') equals: '212 555-1234'.
 	self assert: ((phoneNumbers at: 2) at: 'number') equals: '646 555-4567'.
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
+! !
+!CypressStructureTest methodsFor: 'tests'!
 testPropertyDictionaryWrite
     | propertyDictionary stream x |
     propertyDictionary := (self compileJSON: self sampleJson) asCypressPropertyObject.
     stream := WriteStream on: String new.
     propertyDictionary writeCypressJsonOn: stream indent: 0.
     self assert: (x := stream contents withUnixLineEndings) equals: self sampleJson withUnixLineEndings
-%
+! !
+" Class Implementation for CypressLoaderTest"!
 
-! Class Implementation for CypressLoaderTest
+" ------------------- Instance methods for CypressLoaderTest"!
 
-! ------------------- Instance methods for CypressLoaderTest
-
-category: 'utility'
-set compile_env: 0
-method: CypressLoaderTest
+!CypressLoaderTest methodsFor: 'utility'!
 erroneousClassDefinitions
 
 	^{
@@ -428,11 +330,8 @@ erroneousClassDefinitions
 			comment: 'This class tries to define an instance variable which already exists in the superclass.'
 			subclassType: ''.
 	}
-%
-
-category: 'running'
-set compile_env: 0
-method: CypressLoaderTest
+! !
+!CypressLoaderTest methodsFor: 'running'!
 tearDown
 
 	| name |
@@ -440,11 +339,8 @@ tearDown
 	name := 'Cypress-Mocks'.
 	(CypressSnapshot definitions: self baseDefinitions)
 		 updatePackage: (CypressPackageDefinition named: name)
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressLoaderTest
+! !
+!CypressLoaderTest methodsFor: 'tests'!
 testLoad
 
 	| name loader |
@@ -460,12 +356,8 @@ testLoad
 		assert: loader errors size equals: 0;
 		assert: loader methodAdditions size equals: 0;
 		assert: loader requirements isEmpty
-			description: 'There should have been no external requirements'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressLoaderTest
+			description: 'There should have been no external requirements'! !
+!CypressLoaderTest methodsFor: 'tests'!
 testLoaderWithClassDefinitionError
 
 	| name loader |
@@ -497,12 +389,8 @@ testLoaderWithClassDefinitionError
 			description: 'There should have been a number of classes provided by the system';
 		assert: loader errors size equals: 1;
 		assert: loader methodAdditions size equals: 0;
-		assert: loader requirements size equals: 0
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressLoaderTest
+		assert: loader requirements size equals: 0! !
+!CypressLoaderTest methodsFor: 'tests'!
 testLoaderWithUnloadable
 
 	| name loader |
@@ -534,12 +422,8 @@ testLoaderWithUnloadable
 			description: 'There should have been a number of classes provided by the system';
 		assert: loader errors size equals: 0;
 		assert: loader methodAdditions size equals: 0;
-		assert: loader requirements size equals: 2
-%
-
-category: 'utility'
-set compile_env: 0
-method: CypressLoaderTest
+		assert: loader requirements size equals: 2! !
+!CypressLoaderTest methodsFor: 'utility'!
 unloadableDefinitions
 
 	^{
@@ -568,15 +452,12 @@ unloadableDefinitions
 			source: 'unloadable
 	"This method cannot be loaded because the class cannot be."'.
 	}
-%
+! !
+" Class Implementation for CypressExtensionsTest"!
 
-! Class Implementation for CypressExtensionsTest
+" ------------------- Instance methods for CypressExtensionsTest"!
 
-! ------------------- Instance methods for CypressExtensionsTest
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+!CypressExtensionsTest methodsFor: 'tests'!
 test_beginsWith_
 
 	self
@@ -587,11 +468,8 @@ test_beginsWith_
 		deny: ('abc' beginsWith: '');
 		deny: ('' beginsWith: 'abc');
 		deny: ('' beginsWith: '')
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_copyWithoutSuffix_
 
 	self
@@ -602,11 +480,8 @@ test_copyWithoutSuffix_
 		assert: ('abc' copyWithoutSuffix: '') equals: 'abc';
 		assert: ('' copyWithoutSuffix: 'abc') equals: '';
 		assert: ('' copyWithoutSuffix: '') equals: ''
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_copyWithoutSuffix_or_
 
 	self
@@ -617,11 +492,8 @@ test_copyWithoutSuffix_or_
 		assert: ('abc' copyWithoutSuffix: '' or: [nil]) equals: nil;
 		assert: ('' copyWithoutSuffix: 'abc' or: [nil]) equals: nil;
 		assert: ('' copyWithoutSuffix: '' or: [nil]) equals: nil
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_difference_
 	"Set theoretic difference means elements from the first collection not in the second."
 
@@ -632,11 +504,8 @@ test_difference_
 		assert: (#(1 2 3) difference: #(2 3 4)) sortAscending equals: #(1);
 		assert: (#(1 2 3) difference: #(3 4 5)) sortAscending equals: #(1 2);
 		assert: (#(1 2 3) difference: #(4 5 6)) sortAscending equals: #(1 2 3)
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_endsWith_
 
 	self
@@ -647,23 +516,16 @@ test_endsWith_
 		deny: ('abc' endsWith: '');
 		deny: ('' endsWith: 'abc');
 		deny: ('' endsWith: '')
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_escapePercents
 
 	self
 		assert: 'aa aa éé aa aa' encodeAsUTF8 escapePercents
 			equals: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa';
 		assert: 'aa aa éé aa aa' escapePercents
-			equals: 'aa%20aa%20%E9%E9%20aa%20aa'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+			equals: 'aa%20aa%20%E9%E9%20aa%20aa'! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_findString_startingAt_caseSensitive_
 
 	| string |
@@ -677,21 +539,14 @@ test_findString_startingAt_caseSensitive_
 		assert: (string findString: 'def' startingAt: 1 caseSensitive: false) equals: 7;
 		assert: (string findString: 'DEF' startingAt: 1 caseSensitive: true) equals: 0;
 		assert: (string findString: 'DEF' startingAt: 1 caseSensitive: false) equals: 7
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_gather_
 
 	self
 		assert: (#(1 2 3) gather: [:each | each * 10 + 1 to: each * 10 + each])
-		equals: #(11 21 22 31 32 33)
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+		equals: #(11 21 22 31 32 33)! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_indexOfAnyOf_startingAt_
 
 	self
@@ -702,11 +557,8 @@ test_indexOfAnyOf_startingAt_
 		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 16) equals: 20;
 		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 21) equals: 0;
 		assert: ('word, another, done.' indexOfAnyOf: '+-' startingAt: 1) equals: 0
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_indexOfAnyOf_startingAt_ifAbsent_
 
 	self
@@ -717,11 +569,8 @@ test_indexOfAnyOf_startingAt_ifAbsent_
 		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 16 ifAbsent: [nil]) equals: 20;
 		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 21 ifAbsent: [nil]) equals: nil;
 		assert: ('word, another, done.' indexOfAnyOf: '+-' startingAt: 1 ifAbsent: [nil]) equals: nil
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_intersection_
 
 	self
@@ -731,11 +580,8 @@ test_intersection_
 		assert: (#(1 2 3) intersection: #(2 3 4)) sortAscending equals: #(2 3);
 		assert: (#(1 2 3) intersection: #(3 4 5)) sortAscending equals: #(3);
 		assert: (#(1 2 3) intersection: #(4 5 6)) sortAscending equals: #()
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_parseSelectorFrom_
 
 	self
@@ -762,11 +608,8 @@ test_parseSelectorFrom_
 		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
 		assert: (UndefinedObject parseSelectorFrom: '=@= another ^undefined =@= another') equals: '=@=';
 		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_streamContents_
 
 	self
@@ -774,24 +617,16 @@ test_streamContents_
 					[:stream |
 					(1 to: 3) do: [:each | stream nextPutAll: each printString]
 						separatedBy: [stream space]])
-		equals: '1 2 3'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+		equals: '1 2 3'! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_unescapePercents
 
 	self
 		assert: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa'  unescapePercents asByteArray decodeFromUTF8 asString
 			equals: 'aa aa éé aa aa';
 		assert: 'aa%20aa%20%E9%E9%20aa%20aa' unescapePercents
-			equals: 'aa aa éé aa aa' asUnicodeString
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
+			equals: 'aa aa éé aa aa' asUnicodeString! !
+!CypressExtensionsTest methodsFor: 'tests'!
 test_withUnixLineEndings
 
 	| lf cr crlf |
@@ -812,12 +647,8 @@ test_withUnixLineEndings
 		assert: (self unixLinesFrom: 'abc', crlf, lf) equals: #('abc' '');
 		assert: (self unixLinesFrom: 'abc', lf, crlf) equals: #('abc' '');
 		assert: (self unixLinesFrom: 'abc', cr, crlf) equals: #('abc' '');
-		assert: (self unixLinesFrom: 'abc', crlf, crlf) equals: #('abc' '')
-%
-
-category: 'utility'
-set compile_env: 0
-method: CypressExtensionsTest
+		assert: (self unixLinesFrom: 'abc', crlf, crlf) equals: #('abc' '')! !
+!CypressExtensionsTest methodsFor: 'utility'!
 unixLinesFrom: aString
 	
 	| sourceStream resultStream |
@@ -826,15 +657,12 @@ unixLinesFrom: aString
 	[sourceStream atEnd]
 		whileFalse: [resultStream nextPut: (sourceStream upTo: Character lf)].
 	^resultStream contents.
-%
+! !
+" Class Implementation for CypressSnapshotTest"!
 
-! Class Implementation for CypressSnapshotTest
+" ------------------- Instance methods for CypressSnapshotTest"!
 
-! ------------------- Instance methods for CypressSnapshotTest
-
-category: 'tests'
-set compile_env: 0
-method: CypressSnapshotTest
+!CypressSnapshotTest methodsFor: 'tests'!
 testExtensionsOnlySnapshot
 
 	| name pkg packageDefinitions |
@@ -844,12 +672,8 @@ testExtensionsOnlySnapshot
 	self
 		assert: packageDefinitions size equals: 1;
 		assert: packageDefinitions first selector equals: 'isCypressMockBasic';
-		assert: packageDefinitions first className equals: 'Object'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressSnapshotTest
+		assert: packageDefinitions first className equals: 'Object'! !
+!CypressSnapshotTest methodsFor: 'tests'!
 testSnapshot
 
 	| name pkg packageDefinitions expectedDefinitions |
@@ -859,12 +683,8 @@ testSnapshot
 	expectedDefinitions := self baseDefinitions.
 	self assert: expectedDefinitions size equals: packageDefinitions size.
 	packageDefinitions
-		do: [:def | self assert: (expectedDefinitions includes: def)]
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressSnapshotTest
+		do: [:def | self assert: (expectedDefinitions includes: def)]! !
+!CypressSnapshotTest methodsFor: 'tests'!
 testSnapshotEquality
 	| name pkg packageDefinitions expectedDefinitions |
 	name := 'Cypress-Mocks'.
@@ -872,15 +692,12 @@ testSnapshotEquality
 	packageDefinitions := pkg snapshot definitions.
 	expectedDefinitions := self baseDefinitions.
 	self assert: packageDefinitions asArray equals: expectedDefinitions asArray
-%
+! !
+" Class Implementation for CypressDefinitionTest"!
 
-! Class Implementation for CypressDefinitionTest
+" ------------------- Instance methods for CypressDefinitionTest"!
 
-! ------------------- Instance methods for CypressDefinitionTest
-
-category: 'tests'
-set compile_env: 0
-method: CypressDefinitionTest
+!CypressDefinitionTest methodsFor: 'tests'!
 testClassDefinition
 
 	self
@@ -894,12 +711,8 @@ testClassDefinition
 					poolDictionaryNames: #()
 					comment: ''
 					subclassType: '') printString
-		equals: 'a CypressClassDefinition(Foo)'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressDefinitionTest
+		equals: 'a CypressClassDefinition(Foo)'! !
+!CypressDefinitionTest methodsFor: 'tests'!
 testDictionaryOfDefinitions
 
 	| dict |
@@ -916,25 +729,19 @@ testDictionaryOfDefinitions
 		dict at: each put: each ].
 	self targetDefinitions do: [:each | 
 		self assert: (dict at: each) equals: each ].
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressDefinitionTest
+! !
+!CypressDefinitionTest methodsFor: 'tests'!
 testEquality
 	| pkg1 pkg2 pkg3 name |
 	name := 'Cypress-Mocks'.
 	pkg1 := CypressPackageDefinition named: name.
 	pkg2 := CypressPackageDefinition named: name.
-	pkg3 := CypressPackageDefinition named: 'Nope!'.
+	pkg3 := CypressPackageDefinition named: 'Nope!!'.
 
 	self assert: pkg1 equals: pkg2.
 	self deny: pkg1 equals: pkg3
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressDefinitionTest
+! !
+!CypressDefinitionTest methodsFor: 'tests'!
 testMethodDefinition
 	self assert: (CypressMethodDefinition
 		className: 'Foo'
@@ -942,36 +749,27 @@ testMethodDefinition
 		selector: 'isFoo'
 		category: 'testing'
 		source: 'isFoo ^true') printString equals: 'a CypressMethodDefinition(Foo>>isFoo)'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressDefinitionTest
+! !
+!CypressDefinitionTest methodsFor: 'tests'!
 testNameEquality
 	| pkg name |
 	name := 'Cypress-Mocks'.
 	pkg := CypressPackageDefinition named: name.
 	self assert: pkg name equals: name.
 	self deny: pkg name equals: 'Nope.'.
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressDefinitionTest
+! !
+!CypressDefinitionTest methodsFor: 'tests'!
 testPrintString
 	| name pkg |
 	name := 'Cypress-Mocks'.
 	pkg := CypressPackageDefinition named: name.
 	self assert: 'a CypressPackageDefinition(', name, ')' equals: pkg printString.
-%
+! !
+" Class Implementation for CypressPatchTest"!
 
-! Class Implementation for CypressPatchTest
+" ------------------- Instance methods for CypressPatchTest"!
 
-! ------------------- Instance methods for CypressPatchTest
-
-category: 'private'
-set compile_env: 0
-method: CypressPatchTest
+!CypressPatchTest methodsFor: 'private'!
 baseTargetPatch
 
 	| className |
@@ -1064,11 +862,8 @@ baseTargetPatch
 	"added method"
 ').
 	}
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressPatchTest
+! !
+!CypressPatchTest methodsFor: 'tests'!
 testDictionaryOfPatchOperations
 	"loader uses dictionary for managing patch operations ... ensure that Amber Dictionaries stand up"
 
@@ -1078,11 +873,8 @@ testDictionaryOfPatchOperations
 		dict at: each put: each ].
 	self baseTargetPatch do: [:each | 
 		self assert: (dict at: each) equals: each ].
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressPatchTest
+! !
+!CypressPatchTest methodsFor: 'tests'!
 testPatch
 
 	| baseSnapshot targetSnapshot patch operations expected |
@@ -1092,12 +884,8 @@ testPatch
 	operations := patch operations.
 	expected := self baseTargetPatch asArray.
 	self assert: operations size equals: expected size.
-	operations do: [:each | self assert: (expected includes: each)]
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressPatchTest
+	operations do: [:each | self assert: (expected includes: each)]! !
+!CypressPatchTest methodsFor: 'tests'!
 testPatchOperationEquality
 
 	| className modification removal addition |
@@ -1137,17 +925,14 @@ testPatchOperationEquality
         			source:'extra
 	"extra method"').
 	self assert: addition equals: addition.
-%
+! !
+" Class Extensions "!
 
-! Class Extensions
-
-! Class initializers 
-
-doit
-%
+" Class initializers "!
 
 
 
-! End of Package: Cypress-Tests
+
+" End of Package: Cypress-Tests"!
 
 

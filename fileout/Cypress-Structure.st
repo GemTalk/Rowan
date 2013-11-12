@@ -1,281 +1,162 @@
-! Package: Cypress-Structure
+" Package: Cypress-Structure"!
 
 
-! Remove existing behavior from package Cypress-Structure
-!!!! This can be cleaned up when some package functionality is moved to the base system.
+" Class Declarations "!
 
-doit
-| packageName |
-packageName := 'Cypress-Structure'.
-System myUserProfile symbolList do: [:symDict |
-	symDict do: [:possibleClass |
-			| toRemove |
-		possibleClass isBehavior ifTrue: [
-			{possibleClass. possibleClass class} do: [:aClass |
-				aClass category = packageName
-					ifTrue: [
-							"*anythingbutpackagename[-anything]"
-						toRemove := aClass categoryNames select: 
-										[:each |
-										(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]])
-										or: [each first ~= $*]]
-					]
-					ifFalse: [
-							"*packagename[-anything]"
-						toRemove := aClass categoryNames select: 
-										[:each |
-										each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]
-					].
-				toRemove do: [:each | aClass removeCategory: each].
-			]
-		]
-	]
-].
-%
-
-
-! Class Declarations
-
-doit
 (Error
 	subclass: 'CypressJsonError'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Structure';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (Object
 	subclass: 'CypressJsonParser'
 	instVarNames: #( stream )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Structure';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (Object
 	subclass: 'GsGeneralDependencySorter'
 	instVarNames: #( candidates dependsOnConverter dependentConverter individualDependencyMap dependencyGraphs candidateAliasMap )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Structure';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressObject
 	subclass: 'CypressStructure'
 	instVarNames: #( name properties packageStructure )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Structure';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressStructure
 	subclass: 'CypressClassStructure'
 	instVarNames: #( instanceMethods classMethods comment isClassExtension )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Structure';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressStructure
 	subclass: 'CypressPackageStructure'
 	instVarNames: #( classes extensions )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Structure';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressStructure
 	subclass: 'CypressMethodStructure'
 	instVarNames: #( source isMetaclass classStructure )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-Structure';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-! Class Implementation for CypressJsonError
+" Class Implementation for CypressJsonError"!
 
-! Class Implementation for CypressJsonParser
+" Class Implementation for CypressJsonParser"!
 
-! ------------------- Class methods for CypressJsonParser
+" ------------------- Class methods for CypressJsonParser"!
 
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressJsonParser
+!CypressJsonParser class methodsFor: 'instance creation'!
 new
 
-	CypressJsonError signal: 'Instantiate the parser with a stream.'
-%
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressJsonParser
+	CypressJsonError signal: 'Instantiate the parser with a stream.'! !
+!CypressJsonParser class methodsFor: 'instance creation'!
 on: aStream
 	^ self basicNew initializeOn: aStream
-%
-
-category: 'accessing'
-set compile_env: 0
-classmethod: CypressJsonParser
+! !
+!CypressJsonParser class methodsFor: 'accessing'!
 parse: aString
 	^ self parseStream: aString readStream
-%
-
-category: 'accessing'
-set compile_env: 0
-classmethod: CypressJsonParser
+! !
+!CypressJsonParser class methodsFor: 'accessing'!
 parseStream: aStream
 	^ (self on: aStream) parse
-%
+! !
+" ------------------- Instance methods for CypressJsonParser"!
 
-! ------------------- Instance methods for CypressJsonParser
-
-category: 'adding'
-set compile_env: 0
-method: CypressJsonParser
+!CypressJsonParser methodsFor: 'adding'!
 addProperty: anAssociation to: anObject
 	"Add the property anAssociation described with key and value to anObject. Subclasses might want to refine this implementation."
 	
 	^ anObject 
 		add: anAssociation;
 		yourself
-%
-
-category: 'adding'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'adding'!
 addValue: anObject to: aCollection
 	"Add anObject to aCollection. Subclasses might want to refine this implementation."
 
 	^ aCollection copyWith: anObject
-%
-
-category: 'creating'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'creating'!
 createArray
 	"Create an empty collection. Subclasses might want to refine this implementation."
 
 	^ Array new
-%
-
-category: 'creating'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'creating'!
 createFalse
 	"Create the false literal. Subclasses might want to refine this implementation."
 	
 	^ false
-%
-
-category: 'creating'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'creating'!
 createNull
 	"Create the null literal. Subclasses might want to refine this implementation."
 
 	^ nil
-%
-
-category: 'creating'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'creating'!
 createObject
 	"Create an empty object. Subclasses might want to refine this implementation."
 	
 	^ Dictionary new
-%
-
-category: 'creating'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'creating'!
 createProperty: aKey with: aValue
 	"Create an empty attribute value pair. Subclasses might want to refine this implementation."
 	
 	^ aKey -> aValue
-%
-
-category: 'creating'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'creating'!
 createString: aString
 	"Create a string literal. Subclasses might want to refine this implementation."
 
 	^ aString
-%
-
-category: 'creating'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'creating'!
 createTrue
 	"Create the true literal. Subclasses might want to refine this implementation."
 
 	^ true
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'private'!
 expect: aString
 	"Expects aString and consume input, throw an error otherwise."
 
 	^(self match: aString)
-		ifFalse: [CypressJsonError signal: aString , ' expected']
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressJsonParser
+		ifFalse: [CypressJsonError signal: aString , ' expected']! !
+!CypressJsonParser methodsFor: 'initialization'!
 initializeOn: aStream
 	stream := aStream
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'private'!
 match: aString
 	"Tries to match aString, consume input and answer true if successful."
 	
@@ -287,11 +168,8 @@ match: aString
 			^ false ] ].
 	self whitespace.
 	^ true
-%
-
-category: 'parsing'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'parsing'!
 parse
 
 	| result |
@@ -299,12 +177,8 @@ parse
 				whitespace;
 				parseValue.
 	stream atEnd ifFalse: [CypressJsonError signal: 'end of input expected'].
-	^result
-%
-
-category: 'parsing'
-set compile_env: 0
-method: CypressJsonParser
+	^result! !
+!CypressJsonParser methodsFor: 'parsing'!
 parseArray
 
 	| result |
@@ -315,12 +189,8 @@ parseArray
 			[result := self addValue: self parseValue to: result.
 			(self match: ']') ifTrue: [^result].
 			self expect: ','].
-	CypressJsonError signal: 'end of array expected'
-%
-
-category: 'parsing-internal'
-set compile_env: 0
-method: CypressJsonParser
+	CypressJsonError signal: 'end of array expected'! !
+!CypressJsonParser methodsFor: 'parsing-internal'!
 parseCharacter
 	| char |
 	(char := stream next) = $\ 
@@ -344,21 +214,15 @@ parseCharacter
 	char = $u
 		ifTrue: [ ^ self parseCharacterHex ].
 	CypressJsonError signal: 'invalid escape character \' , (String with: char)
-%
-
-category: 'parsing-internal'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'parsing-internal'!
 parseCharacterHex
 	| value |
 	value := self parseCharacterHexDigit.
 	3 timesRepeat: [ value := (value << 4) + self parseCharacterHexDigit ].
 	^ Character codePoint: value
-%
-
-category: 'parsing-internal'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'parsing-internal'!
 parseCharacterHexDigit
     | digit |
     stream atEnd
@@ -371,11 +235,8 @@ parseCharacterHexDigit
             (digit between: 97 and: 102)
                 ifTrue: [ ^ digit - 87 ]	"$a"	"$f" ].
     CypressJsonError signal: 'hex-digit expected'
-%
-
-category: 'parsing-internal'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'parsing-internal'!
 parseNumber
 	| negated number |
 	negated := stream peek = $-.
@@ -390,11 +251,8 @@ parseNumber
 	negated ifTrue: [ number := number negated ].
 	self whitespace.
 	^ number
-%
-
-category: 'parsing-internal'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'parsing-internal'!
 parseNumberExponent
     | number negated |
     number := 0.
@@ -405,11 +263,8 @@ parseNumberExponent
     negated
         ifTrue: [ number := number negated ].
     ^ 10 raisedTo: number
-%
-
-category: 'parsing-internal'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'parsing-internal'!
 parseNumberFraction
     | number power |
     number := 0.
@@ -419,21 +274,15 @@ parseNumberFraction
             number := 10 * number + (stream next codePoint - 48).
             power := power * 10.0 ].
     ^ number / power
-%
-
-category: 'parsing-internal'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'parsing-internal'!
 parseNumberInteger
     | number |
     number := 0.
     [ stream atEnd not and: [ stream peek isDigit ] ] whileTrue: [ number := 10 * number + (stream next codePoint - 48) ].
     ^ number
-%
-
-category: 'parsing'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'parsing'!
 parseObject
 
 	| result |
@@ -444,23 +293,16 @@ parseObject
 			[result := self addProperty: self parseProperty to: result.
 			(self match: '}') ifTrue: [^result].
 			self expect: ','].
-	CypressJsonError signal: 'end of object expected'
-%
-
-category: 'parsing-internal'
-set compile_env: 0
-method: CypressJsonParser
+	CypressJsonError signal: 'end of object expected'! !
+!CypressJsonParser methodsFor: 'parsing-internal'!
 parseProperty
 	| name value |
 	name := self parseString.
 	self expect: ':'.
 	value := self parseValue.
 	^ self createProperty: name with: value.
-%
-
-category: 'parsing-internal'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'parsing-internal'!
 parseString
 	| result |
 	self expect: '"'.
@@ -468,11 +310,8 @@ parseString
 	[ stream atEnd or: [ stream peek = $" ] ] 
 		whileFalse: [ result nextPut: self parseCharacter ].
 	^ self expect: '"'; createString: result contents
-%
-
-category: 'parsing'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'parsing'!
 parseValue
 	| char |
 	stream atEnd ifFalse: [ 
@@ -492,25 +331,19 @@ parseValue
 		(self match: 'null')
 			ifTrue: [ ^ self createNull ] ].
 	CypressJsonError signal: 'invalid input'
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressJsonParser
+! !
+!CypressJsonParser methodsFor: 'private'!
 whitespace
 	"Strip whitespaces from the input stream."
 
 	[ stream atEnd not and: [ stream peek isSeparator ] ]
 		whileTrue: [ stream next ]
-%
+! !
+" Class Implementation for GsGeneralDependencySorter"!
 
-! Class Implementation for GsGeneralDependencySorter
+" ------------------- Class methods for GsGeneralDependencySorter"!
 
-! ------------------- Class methods for GsGeneralDependencySorter
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: GsGeneralDependencySorter
+!GsGeneralDependencySorter class methodsFor: 'instance creation'!
 on: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock
 	"Create an instance of the receiver capable for sorting the dependencies of someCandidates.
 	 aOneArgBlock is used to evaluate the key of the object depended on for a candidate.
@@ -519,22 +352,15 @@ on: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock
 	^self new
 		initializeOn: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock;
 		yourself.
-%
+! !
+" ------------------- Instance methods for GsGeneralDependencySorter"!
 
-! ------------------- Instance methods for GsGeneralDependencySorter
-
-category: 'sorting - private'
-set compile_env: 0
-method: GsGeneralDependencySorter
+!GsGeneralDependencySorter methodsFor: 'sorting - private'!
 determineGraphRoots
 
 	^dependencyGraphs
-		selectAssociations: [:each | (candidateAliasMap includesKey: each key) not]
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: GsGeneralDependencySorter
+		selectAssociations: [:each | (candidateAliasMap includesKey: each key) not]! !
+!GsGeneralDependencySorter methodsFor: 'initializing - private'!
 initializeOn: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock
 
 	candidates := someCandidates.
@@ -542,12 +368,8 @@ initializeOn: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlo
 	dependentConverter := anotherOneArgBlock.
 	individualDependencyMap := Dictionary new.
 	dependencyGraphs := Dictionary new.
-	candidateAliasMap := Dictionary new
-%
-
-category: 'sorting'
-set compile_env: 0
-method: GsGeneralDependencySorter
+	candidateAliasMap := Dictionary new! !
+!GsGeneralDependencySorter methodsFor: 'sorting'!
 inOrder
 
 	| sorted |
@@ -556,11 +378,8 @@ inOrder
 	self determineGraphRoots
 		do: [:each | self transcribeGraph: each into: sorted].
 	^sorted.
-%
-
-category: 'sorting - private'
-set compile_env: 0
-method: GsGeneralDependencySorter
+! !
+!GsGeneralDependencySorter methodsFor: 'sorting - private'!
 mapCandidatesIntoGraphs
 
 	| dependsOnKey dependentKey |
@@ -577,110 +396,75 @@ mapCandidatesIntoGraphs
 			(dependencyGraphs includesKey: dependsOnKey)
 				ifFalse: [dependencyGraphs add: individualDependency].
 			individualDependency value
-				add: (individualDependencyMap associationAt: dependentKey)]
-%
-
-category: 'sorting - private'
-set compile_env: 0
-method: GsGeneralDependencySorter
+				add: (individualDependencyMap associationAt: dependentKey)]! !
+!GsGeneralDependencySorter methodsFor: 'sorting - private'!
 transcribeGraph: subtree into: sorted
 
 	subtree keysAndValuesDo: [:name :subsubtree |
 		sorted add: (candidateAliasMap at: name).
 		self transcribeGraph: subsubtree into: sorted.
 	].
-%
+! !
+" Class Implementation for CypressStructure"!
 
-! Class Implementation for CypressStructure
+" ------------------- Class methods for CypressStructure"!
 
-! ------------------- Class methods for CypressStructure
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressStructure
+!CypressStructure class methodsFor: 'instance creation'!
 named: aString
 
 	^(self new)
 		name: aString;
-		yourself
-%
+		yourself! !
+" ------------------- Instance methods for CypressStructure"!
 
-! ------------------- Instance methods for CypressStructure
-
-category: 'accessing'
-set compile_env: 0
-method: CypressStructure
+!CypressStructure methodsFor: 'accessing'!
 name
 
 	^name
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressStructure
+! !
+!CypressStructure methodsFor: 'accessing'!
 name: aString 
 
 	name := aString
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressStructure
+! !
+!CypressStructure methodsFor: 'accessing'!
 packageStructure
 	^packageStructure
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressStructure
+! !
+!CypressStructure methodsFor: 'accessing'!
 packageStructure: aCypressPackageStructure
 	packageStructure := aCypressPackageStructure
-%
-
-category: 'printing'
-set compile_env: 0
-method: CypressStructure
+! !
+!CypressStructure methodsFor: 'printing'!
 printDetailsOn: aStream
 
 	aStream nextPutAll: self name.
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressStructure
+! !
+!CypressStructure methodsFor: 'accessing'!
 properties
 
 	properties ifNil: [ properties := Dictionary new ].
 	^properties
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressStructure
+! !
+!CypressStructure methodsFor: 'accessing'!
 properties: aDictionary
 
 	properties := aDictionary
-%
+! !
+" Class Implementation for CypressClassStructure"!
 
-! Class Implementation for CypressClassStructure
+" ------------------- Class methods for CypressClassStructure"!
 
-! ------------------- Class methods for CypressClassStructure
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressClassStructure
+!CypressClassStructure class methodsFor: 'instance creation'!
 fromClassDefinition: classDefinition
 
 	^self new
 		fromClassDefinition: classDefinition;
 		yourself
-%
+! !
+" ------------------- Instance methods for CypressClassStructure"!
 
-! ------------------- Instance methods for CypressClassStructure
-
-category: 'converting'
-set compile_env: 0
-method: CypressClassStructure
+!CypressClassStructure methodsFor: 'converting'!
 asCypressClassDefinition
 
 	self isClassExtension ifTrue: [^CypressError signal: 'Extensions cannot have class definitions'].
@@ -693,122 +477,72 @@ asCypressClassDefinition
 		classVarNames: self classVariableNames
 		poolDictionaryNames: self poolDictionaryNames
 		comment: self comment
-		subclassType: self subclassType
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+		subclassType: self subclassType! !
+!CypressClassStructure methodsFor: 'accessing'!
 category
 
 	^self properties
 		at: 'category'
 		ifAbsent: [self packageStructure packageName]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'accessing'!
 category: aString
 
-	^self properties at: 'category' put: aString
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+	^self properties at: 'category' put: aString! !
+!CypressClassStructure methodsFor: 'accessing'!
 classInstanceVariableNames
 
-	^self properties at: 'classinstvars' ifAbsent: [#()]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+	^self properties at: 'classinstvars' ifAbsent: [#()]! !
+!CypressClassStructure methodsFor: 'accessing'!
 classInstanceVariableNames: someStrings
 
-	^self properties at: 'classinstvars' put: someStrings
-%
-
-category: 'converting'
-set compile_env: 0
-method: CypressClassStructure
+	^self properties at: 'classinstvars' put: someStrings! !
+!CypressClassStructure methodsFor: 'converting'!
 classInstanceVariablesString
 
-	^self stringForVariables: self classInstanceVariableNames
-%
-
-category: 'querying'
-set compile_env: 0
-method: CypressClassStructure
+	^self stringForVariables: self classInstanceVariableNames! !
+!CypressClassStructure methodsFor: 'querying'!
 classMethodNamed: methodName
 
 	^self classMethods
 		at: methodName
 		ifAbsentPut: [CypressMethodStructure named: methodName]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'accessing'!
 classMethods
 
 	classMethods ifNil: [ classMethods := Dictionary new ].
 	^classMethods
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'accessing'!
 className
 
 	^self name
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'accessing'!
 classVariableNames
 
-	^self properties at: 'classvars' ifAbsent: [#()]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+	^self properties at: 'classvars' ifAbsent: [#()]! !
+!CypressClassStructure methodsFor: 'accessing'!
 classVariableNames: someStrings
 
-	^self properties at: 'classvars' put: someStrings
-%
-
-category: 'converting'
-set compile_env: 0
-method: CypressClassStructure
+	^self properties at: 'classvars' put: someStrings! !
+!CypressClassStructure methodsFor: 'converting'!
 classVariablesString
 
-	^self stringForVariables: self classVariableNames
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+	^self stringForVariables: self classVariableNames! !
+!CypressClassStructure methodsFor: 'accessing'!
 comment
 
 	comment ifNil: [ comment := '' ].
 	^comment
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'accessing'!
 comment: aString
 
 	comment := aString
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'initialization'!
 fromClassDefinition: classDefinition
 
 	self
@@ -822,179 +556,114 @@ fromClassDefinition: classDefinition
 		classVariableNames: classDefinition classVarNames;
 		poolDictionaryNames: classDefinition poolDictionaryNames;
 		subclassType: classDefinition subclassType.
-%
-
-category: 'querying'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'querying'!
 instanceMethodNamed: methodName
 
 	^self instanceMethods
 		at: methodName 
 		ifAbsentPut: [CypressMethodStructure named: methodName]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'accessing'!
 instanceMethods
 
 	instanceMethods ifNil: [ instanceMethods := Dictionary new ].
 	^instanceMethods
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'accessing'!
 instanceVariableNames
 
 	^self properties at: 'instvars' ifAbsent: [#()]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'accessing'!
 instanceVariableNames: someStrings
 
 	^self properties at: 'instvars' put: someStrings
-%
-
-category: 'converting'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'converting'!
 instanceVariablesString
 
-	^self stringForVariables: self instanceVariableNames
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+	^self stringForVariables: self instanceVariableNames! !
+!CypressClassStructure methodsFor: 'accessing'!
 isClassExtension
 
         isClassExtension ifNil: [ isClassExtension := true ].
         ^isClassExtension
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'accessing'!
 isClassExtension: aBoolean
 
 	isClassExtension := aBoolean
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'accessing'!
 name
 
 	^self properties at: 'name'
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'accessing'!
 name: aString
 
 	self properties at: 'name' put: aString
-%
-
-category: 'converting'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'converting'!
 poolDictionariesString
 
-	^self stringForVariables: self poolDictionaryNames
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+	^self stringForVariables: self poolDictionaryNames! !
+!CypressClassStructure methodsFor: 'accessing'!
 poolDictionaryNames
 
-	^self properties at: 'pools' ifAbsent: [#()]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+	^self properties at: 'pools' ifAbsent: [#()]! !
+!CypressClassStructure methodsFor: 'accessing'!
 poolDictionaryNames: someStrings
 
-	^self properties at: 'pools' put: someStrings
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+	^self properties at: 'pools' put: someStrings! !
+!CypressClassStructure methodsFor: 'accessing'!
 subclassType
 
 	^self properties at: '_gs_subclassType' ifAbsent: ['']
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'accessing'!
 subclassType: aString
 
 	aString isEmpty
 		ifTrue: [self properties removeKey: '_gs_subclassType' ifAbsent: []]
-		ifFalse: [self properties at: '_gs_subclassType' put: aString]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+		ifFalse: [self properties at: '_gs_subclassType' put: aString]! !
+!CypressClassStructure methodsFor: 'accessing'!
 superclassName
 
 	^self properties at: 'super'
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressClassStructure
+! !
+!CypressClassStructure methodsFor: 'accessing'!
 superclassName: aString
 
 	^self properties at: 'super' put: aString
-%
+! !
+" Class Implementation for CypressPackageStructure"!
 
-! Class Implementation for CypressPackageStructure
+" ------------------- Class methods for CypressPackageStructure"!
 
-! ------------------- Class methods for CypressPackageStructure
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressPackageStructure
+!CypressPackageStructure class methodsFor: 'instance creation'!
 fromPackage: aCypressPackageDefinition
 
 	^(self new) 
 		fromPackage: aCypressPackageDefinition;
 		yourself
-%
+! !
+" ------------------- Instance methods for CypressPackageStructure"!
 
-! ------------------- Instance methods for CypressPackageStructure
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageStructure
+!CypressPackageStructure methodsFor: 'accessing'!
 classes
 
 	classes ifNil: [ classes := OrderedCollection new ].
 	^classes
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageStructure
+! !
+!CypressPackageStructure methodsFor: 'accessing'!
 extensions
 
 	extensions ifNil: [ extensions := OrderedCollection new ].
 	^extensions
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressPackageStructure
+! !
+!CypressPackageStructure methodsFor: 'initialization'!
 fromPackage: aCypressPackageDefinition
 
 	| snapshot classMap classDefinitions classStructure |
@@ -1038,42 +707,27 @@ fromPackage: aCypressPackageDefinition
 					at: methodDefinition selector
 					put: methodStructure ].
 		self extensions add: classStructure ].
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageStructure
+! !
+!CypressPackageStructure methodsFor: 'accessing'!
 packageExtension
 
 	^self packageExtensionOr: ['.package' ]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageStructure
+! !
+!CypressPackageStructure methodsFor: 'accessing'!
 packageExtensionOr: aBlock
 
 	^self properties at: 'extension' ifAbsent: aBlock
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageStructure
+! !
+!CypressPackageStructure methodsFor: 'accessing'!
 packageName
 
 	^self name copyWithoutSuffix: self packageExtension
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageStructure
+! !
+!CypressPackageStructure methodsFor: 'accessing'!
 packageStructure
 	^self
-%
-
-category: 'snapshotting'
-set compile_env: 0
-method: CypressPackageStructure
+! !
+!CypressPackageStructure methodsFor: 'snapshotting'!
 snapshot
 	| definitions |
 	definitions := OrderedCollection new.
@@ -1089,27 +743,21 @@ snapshot
                 (classStructure classMethods asSortedCollection: [:a :b | a selector <= b selector]) do: [:methodStructure |
 			definitions add: methodStructure asCypressMethodDefinition ]].
 	^ CypressSnapshot definitions: definitions
-%
+! !
+" Class Implementation for CypressMethodStructure"!
 
-! Class Implementation for CypressMethodStructure
+" ------------------- Class methods for CypressMethodStructure"!
 
-! ------------------- Class methods for CypressMethodStructure
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressMethodStructure
+!CypressMethodStructure class methodsFor: 'instance creation'!
 fromMethodDefinition: methodDefinition
 
 	^self new
 		fromMethodDefinition: methodDefinition;
 		yourself
-%
+! !
+" ------------------- Instance methods for CypressMethodStructure"!
 
-! ------------------- Instance methods for CypressMethodStructure
-
-category: 'converting'
-set compile_env: 0
-method: CypressMethodStructure
+!CypressMethodStructure methodsFor: 'converting'!
 asCypressMethodDefinition
 	"Try to coerce Unicode source to simple Strings when possible."
 
@@ -1119,68 +767,44 @@ asCypressMethodDefinition
 		selector: self selector
 		category: self category
 		source: self source asString
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
+! !
+!CypressMethodStructure methodsFor: 'accessing'!
 category
 
 	^self properties at: 'category'
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
+! !
+!CypressMethodStructure methodsFor: 'accessing'!
 category: aString
 
 	self properties at: 'category' put: aString
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
+! !
+!CypressMethodStructure methodsFor: 'accessing'!
 classStructure
 	^classStructure
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
+! !
+!CypressMethodStructure methodsFor: 'accessing'!
 classStructure: aCypressClassStructure
 	classStructure := aCypressClassStructure
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressMethodStructure
+! !
+!CypressMethodStructure methodsFor: 'initialization'!
 fromMethodDefinition: methodDefinition
 
 	self isMetaclass: methodDefinition classIsMeta.
 	self selector: methodDefinition selector.
 	self category: methodDefinition category.
 	self source: methodDefinition source.
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
+! !
+!CypressMethodStructure methodsFor: 'accessing'!
 isMetaclass
 
 	isMetaclass ifNil: [ isMetaclass := false ].
 	^isMetaclass
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
+! !
+!CypressMethodStructure methodsFor: 'accessing'!
 isMetaclass: aBoolean
 	isMetaclass := aBoolean
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
+! !
+!CypressMethodStructure methodsFor: 'accessing'!
 selector
     ^ String
         streamContents: [ :stream | 
@@ -1191,11 +815,8 @@ selector
                             (chara = $.
                                 ifTrue: [ $: ]
                                 ifFalse: [ chara ]) ] ]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
+! !
+!CypressMethodStructure methodsFor: 'accessing'!
 selector: aString
     name := String
         streamContents: [ :stream | 
@@ -1206,41 +827,28 @@ selector: aString
                             (chara = $:
                                 ifTrue: [ $. ]
                                 ifFalse: [ chara ]) ] ]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
+! !
+!CypressMethodStructure methodsFor: 'accessing'!
 source
 
 	^source
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
+! !
+!CypressMethodStructure methodsFor: 'accessing'!
 source: aString
 
 	source := aString
-%
+! !
+" Class Extensions "!
 
-! Class Extensions
+" Class Extension for Array"!
 
-! Class Extension for Array
+" ------------------- Instance methods for Array"!
 
-! ------------------- Instance methods for Array
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Array
+!Array methodsFor: '*Cypress-Structure'!
 asCypressPropertyObject
 
-	^self collect: [:each | each asCypressPropertyObject]
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Array
+	^self collect: [:each | each asCypressPropertyObject]! !
+!Array methodsFor: '*Cypress-Structure'!
 writeCypressJsonOn: aStream indent: startIndent
 
 	| indent |
@@ -1261,59 +869,40 @@ writeCypressJsonOn: aStream indent: startIndent
 						nextPutAll: ',';
 						lf]].
 	self size = 0 ifTrue: [aStream tab: indent].
-	aStream nextPutAll: ' ]'
-%
+	aStream nextPutAll: ' ]'! !
+" Class Extension for Boolean"!
 
-! Class Extension for Boolean
+" ------------------- Instance methods for Boolean"!
 
-! ------------------- Instance methods for Boolean
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Boolean
+!Boolean methodsFor: '*Cypress-Structure'!
 writeCypressJsonOn: aStream indent: startIndent
 
-	aStream nextPutAll: self printString
-%
+	aStream nextPutAll: self printString! !
+" Class Extension for Object"!
 
-! Class Extension for Object
+" ------------------- Instance methods for Object"!
 
-! ------------------- Instance methods for Object
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Object
+!Object methodsFor: '*Cypress-Structure'!
 asCypressPropertyObject
 
-	^self
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Object
+	^self! !
+!Object methodsFor: '*Cypress-Structure'!
 writeCypressJsonOn: fileStream
 
-	self writeCypressJsonOn: fileStream indent: 0
-%
+	self writeCypressJsonOn: fileStream indent: 0! !
+" Class Extension for Dictionary"!
 
-! Class Extension for Dictionary
+" ------------------- Instance methods for Dictionary"!
 
-! ------------------- Instance methods for Dictionary
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Dictionary
+!Dictionary methodsFor: '*Cypress-Structure'!
 asCypressPropertyObject
 
 	| result |
 	result := self class new: self size.
 	self associationsDo: [:assoc | result at: assoc key put: assoc value asCypressPropertyObject].
 	^result.
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Dictionary
+! !
+!Dictionary methodsFor: '*Cypress-Structure'!
 writeCypressJsonOn: aStream indent: startIndent
 
 	| indent cnt |
@@ -1338,51 +927,35 @@ writeCypressJsonOn: aStream indent: startIndent
 						nextPutAll: ',';
 						lf]].
 	self size = 0 ifTrue: [aStream tab: indent].
-	aStream nextPutAll: ' }'
-%
+	aStream nextPutAll: ' }'! !
+" Class Extension for String"!
 
-! Class Extension for String
+" ------------------- Instance methods for String"!
 
-! ------------------- Instance methods for String
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: String
+!String methodsFor: '*Cypress-Structure'!
 asCypressPropertyObject
 
-	^self unescapePercents withUnixLineEndings
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: String
+	^self unescapePercents withUnixLineEndings! !
+!String methodsFor: '*Cypress-Structure'!
 writeCypressJsonOn: aStream indent: startIndent
 
 	aStream
 		nextPutAll: '"';
 		nextPutAll: self withUnixLineEndings encodeAsUTF8 escapePercents;
-		nextPutAll: '"'
-%
+		nextPutAll: '"'! !
+" Class Extension for Number"!
 
-! Class Extension for Number
+" ------------------- Instance methods for Number"!
 
-! ------------------- Instance methods for Number
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Number
+!Number methodsFor: '*Cypress-Structure'!
 writeCypressJsonOn: aStream indent: startIndent
 
-	aStream nextPutAll: self printString
-%
-
-! Class initializers 
-
-doit
-%
+	aStream nextPutAll: self printString! !
+" Class initializers "!
 
 
 
-! End of Package: Cypress-Structure
+
+" End of Package: Cypress-Structure"!
 
 

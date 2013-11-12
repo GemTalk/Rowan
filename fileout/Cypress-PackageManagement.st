@@ -1,266 +1,153 @@
-! Package: Cypress-PackageManagement
+" Package: Cypress-PackageManagement"!
 
 
-! Remove existing behavior from package Cypress-PackageManagement
-!!!! This can be cleaned up when some package functionality is moved to the base system.
+" Class Declarations "!
 
-doit
-| packageName |
-packageName := 'Cypress-PackageManagement'.
-System myUserProfile symbolList do: [:symDict |
-	symDict do: [:possibleClass |
-			| toRemove |
-		possibleClass isBehavior ifTrue: [
-			{possibleClass. possibleClass class} do: [:aClass |
-				aClass category = packageName
-					ifTrue: [
-							"*anythingbutpackagename[-anything]"
-						toRemove := aClass categoryNames select: 
-										[:each |
-										(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]])
-										or: [each first ~= $*]]
-					]
-					ifFalse: [
-							"*packagename[-anything]"
-						toRemove := aClass categoryNames select: 
-										[:each |
-										each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]
-					].
-				toRemove do: [:each | aClass removeCategory: each].
-			]
-		]
-	]
-].
-%
-
-
-! Class Declarations
-
-doit
 (Object
 	subclass: 'CypressVersionReference'
 	instVarNames: #( name package author branch versionNumber )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: 'A CypressVersionReference refers to a specific version of a Monticello package.';
-		immediateInvariant.
-%
+		comment: 'A CypressVersionReference refers to a specific version of a Monticello package.'!
 
-doit
 (Object
 	subclass: 'CypressPackageManager'
 	instVarNames: #( knownPackages knownRepositories packageInformationList )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (Object
 	subclass: 'CypressAbstractRepository'
 	instVarNames: #( url properties readerClass writerClass )
 	classVars: #( DefaultCopyrightNotice )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractRepository
 	subclass: 'CypressFileSystemRepository'
 	instVarNames: #( directoryPath )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractRepository
 	subclass: 'CypressAbstractFileoutRepository'
 	instVarNames: #( directoryPath )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractFileoutRepository
 	subclass: 'CypressTopazRepository'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'This is a "write-only" repository.
 It could be made readable, to be able to file-in Topaz scripts, but it''s not the same thing.
-';
-		immediateInvariant.
-%
+'!
 
-doit
 (CypressAbstractFileoutRepository
 	subclass: 'CypressSmalltalkRepository'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'This is a "write-only" repository.
 It could be made readable, to be able to file-in Smalltalk scripts, but it''s not the same thing.
-';
-		immediateInvariant.
-%
+'!
 
-doit
 (Object
 	subclass: 'CypressPackageManager2'
 	instVarNames: #( knownRepositories packageInformationList )
 	classVars: #( SavedPackageManagers )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (FileUrl
 	subclass: 'CypressAbstractFileUrl'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractFileUrl
 	subclass: 'CypressLaxFileUrl'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractFileUrl
 	subclass: 'CypressFileTreeFormatFileUrl'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractFileUrl
 	subclass: 'CypressFileUrl'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractFileUrl
 	subclass: 'CypressFileTreeReadOnlyFileUrl'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractFileUrl
 	subclass: 'CypressTopazUrl'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractFileUrl
 	subclass: 'CypressSmalltalkUrl'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressObject
 	subclass: 'CypressPackageInformation'
 	instVarNames: #( name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation repository repositoryDescription imageCounts changesCount )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'CypressPackageInformation documents potential and actual packages for the Cypress Package Manager. 
 
@@ -283,176 +170,117 @@ Instance Variables
 	imageDefinitions	<CypressDefinition>*	0 or more definitions from the image.
 	savedDefinitions	<CypressDefinition>*	0 or more definitions from the savedLocation storage.
 
-';
-		immediateInvariant.
-%
+'!
 
-doit
 (CypressObject
 	subclass: 'CypressAbstractPackageInformation'
 	instVarNames: #( name )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressEclipsedPackageInformation'
 	instVarNames: #( eclipsedBy )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressUnknownPackageInformation'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressKnownPackageInformation'
 	instVarNames: #( repositories digests )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-doit
 (CypressAbstractPackageInformation
 	subclass: 'CypressConflictingPackageInformation'
 	instVarNames: #( conflictsWith )
 	classVars: #(  )
 	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: UserGlobals
-	options: #())
+	poolDictionaries: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-%
+		comment: ''!
 
-! Class Implementation for CypressVersionReference
+" Class Implementation for CypressVersionReference"!
 
-! ------------------- Class methods for CypressVersionReference
+" ------------------- Class methods for CypressVersionReference"!
 
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressVersionReference
+!CypressVersionReference class methodsFor: 'instance creation'!
 name: aString
 
 	^(self basicNew)
 		initializeName: aString;
 		yourself
-%
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressVersionReference
+! !
+!CypressVersionReference class methodsFor: 'instance creation'!
 new
 
 	self error: 'Use #name: to initialize the receiver.'
-%
+! !
+" ------------------- Instance methods for CypressVersionReference"!
 
-! ------------------- Instance methods for CypressVersionReference
-
-category: 'comparing'
-set compile_env: 0
-method: CypressVersionReference
+!CypressVersionReference methodsFor: 'comparing'!
 = aReference
 
 	^self class = aReference class
 		and: [self name = aReference name]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressVersionReference
+! !
+!CypressVersionReference methodsFor: 'accessing'!
 author
 	"Answer the author of the receiver."
 	
 	^ author
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressVersionReference
+! !
+!CypressVersionReference methodsFor: 'accessing'!
 branch
 	"Answer the branch of the receiver."
 	
 	^ branch
-%
-
-category: 'comparing'
-set compile_env: 0
-method: CypressVersionReference
+! !
+!CypressVersionReference methodsFor: 'comparing'!
 hash
 
 	^self name hash
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressVersionReference
+! !
+!CypressVersionReference methodsFor: 'initialization'!
 initializeName: aString
 
 	name := aString.
 	self parseName: aString
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressVersionReference
+! !
+!CypressVersionReference methodsFor: 'private'!
 matches: aResolvedReference
 	^ self name = aResolvedReference name
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressVersionReference
+! !
+!CypressVersionReference methodsFor: 'accessing'!
 name
 	"Answer the name of this reference."
 	
 	^ name
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressVersionReference
+! !
+!CypressVersionReference methodsFor: 'accessing'!
 packageName
 	"Answer the package of the receiver."
 
 	^ package
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressVersionReference
+! !
+!CypressVersionReference methodsFor: 'initialization'!
 parseName: aString
 	| basicName |
 	basicName := (aString isEmpty or: [aString last isDigit or: [(aString includes: $() not]])
@@ -469,44 +297,32 @@ parseName: aString
 	(versionNumber notEmpty and: [ versionNumber allSatisfy: [ :each | each isDigit ] ])
 		ifTrue: [ versionNumber := versionNumber asInteger ]
 		ifFalse: [ versionNumber := 0 ]
-%
-
-category: 'printing'
-set compile_env: 0
-method: CypressVersionReference
+! !
+!CypressVersionReference methodsFor: 'printing'!
 printOn: aStream
 
 	super printOn: aStream.
 	aStream nextPutAll: ' name: '.
 	self name printOn: aStream
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressVersionReference
+! !
+!CypressVersionReference methodsFor: 'accessing'!
 versionNumber
 	"Answer the version of the receiver."
 
 	^ versionNumber
-%
+! !
+" Class Implementation for CypressPackageManager"!
 
-! Class Implementation for CypressPackageManager
+" ------------------- Class methods for CypressPackageManager"!
 
-! ------------------- Class methods for CypressPackageManager
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressPackageManager
+!CypressPackageManager class methodsFor: 'instance creation'!
 new
 
 	^super new
 		initialize;
 		yourself
-%
-
-category: 'accessing'
-set compile_env: 0
-classmethod: CypressPackageManager
+! !
+!CypressPackageManager class methodsFor: 'accessing'!
 packageNamePermutationsFor: aString
 	"Answer the variations on possible package names from the specified string.
 	 Each hyphen may possibly separate the package name from a suffix."
@@ -518,12 +334,8 @@ packageNamePermutationsFor: aString
 			(each = $- and: [index > 1])
 				ifTrue: [names add: (aString copyFrom: 1 to: index - 1)]].
 	aString last ~= $- ifTrue: [names add: aString].
-	^names
-%
-
-category: 'accessing'
-set compile_env: 0
-classmethod: CypressPackageManager
+	^names! !
+!CypressPackageManager class methodsFor: 'accessing'!
 potentialPackageNames
 	"Answer a list of 'package names' from classes and methods.
 	 The class category is the package name, if the class is in a package at all.
@@ -548,14 +360,10 @@ potentialPackageNames
 		addAll: methodCategories;
 		remove: 'User Classes';
 		remove: 'Kernel';
-		sortAscending
-%
+		sortAscending! !
+" ------------------- Instance methods for CypressPackageManager"!
 
-! ------------------- Instance methods for CypressPackageManager
-
-category: 'comparing'
-set compile_env: 0
-method: CypressPackageManager
+!CypressPackageManager methodsFor: 'comparing'!
 compareDefinitionsFromConflictedPackageInformation: aCypressPackageInformation
 
 	| badDefinitions expectedDefinitions |
@@ -572,20 +380,12 @@ compareDefinitionsFromConflictedPackageInformation: aCypressPackageInformation
 						fromPackage: (CypressPackageDefinition named: each)) snapshot
 						definitions].
 	expectedDefinitions do: [:each | badDefinitions remove: each ifAbsent: []].
-	^(badDefinitions collect: [:each | each printString]) sortAscending
-%
-
-category: 'comparing'
-set compile_env: 0
-method: CypressPackageManager
+	^(badDefinitions collect: [:each | each printString]) sortAscending! !
+!CypressPackageManager methodsFor: 'comparing'!
 comparePackageFrom: aCypressPackageInformation
 
-	^self comparePackagesFrom: (Array with: aCypressPackageInformation)
-%
-
-category: 'comparing'
-set compile_env: 0
-method: CypressPackageManager
+	^self comparePackagesFrom: (Array with: aCypressPackageInformation)! !
+!CypressPackageManager methodsFor: 'comparing'!
 comparePackagesFrom: someCypressPackageInformations
 
 	^(someCypressPackageInformations
@@ -593,12 +393,8 @@ comparePackagesFrom: someCypressPackageInformations
 		into: 
 			[:comparer :each |
 			comparer comparingPackageNamed: each name fromDirectory: each savedLocation])
-				getDifferences
-%
-
-category: 'updating - private'
-set compile_env: 0
-method: CypressPackageManager
+				getDifferences! !
+!CypressPackageManager methodsFor: 'updating - private'!
 determineKnownPackages
 
 	^(packageInformationList select: [:each | each repository notNil])
@@ -607,20 +403,13 @@ determineKnownPackages
 			[:dict :each |
 			dict
 				at: each name put: each savedLocation;
-				yourself]
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressPackageManager
+				yourself]! !
+!CypressPackageManager methodsFor: 'initializing - private'!
 initialize
 
 	self refreshPackageInformation.
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressPackageManager
+! !
+!CypressPackageManager methodsFor: 'initializing - private'!
 initializeConflictingPackageNames
 
 	| conflictingPackages |
@@ -633,31 +422,19 @@ initializeConflictingPackageNames
 						select: [:knownName | knownName ~= each name and: [knownName beginsWith: each name , '-']])].
 	conflictingPackages := conflictingPackages reject: [:each | each isEmpty].
 	conflictingPackages
-		keysAndValuesDo: [:package :conflicts | package beConflictedWith: conflicts]
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressPackageManager
+		keysAndValuesDo: [:package :conflicts | package beConflictedWith: conflicts]! !
+!CypressPackageManager methodsFor: 'initializing - private'!
 initializeKnownPackages
 
 	knownPackages := (System myUserProfile objectNamed: #KnownCypressPackages)
-				ifNil: [Dictionary new]
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressPackageManager
+				ifNil: [Dictionary new]! !
+!CypressPackageManager methodsFor: 'initializing - private'!
 initializeKnownRepositories
 
 	knownRepositories := Dictionary new.
 	knownPackages asSet
-		do: [:each | self repositoryOn: each]
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressPackageManager
+		do: [:each | self repositoryOn: each]! !
+!CypressPackageManager methodsFor: 'initializing - private'!
 initializePackageInformationList
 
 	| allInterestingNames |
@@ -670,12 +447,8 @@ initializePackageInformationList
 					| directory repo |
 					directory := knownPackages at: each ifAbsent: [nil].
 					repo := directory ifNotNil: [self repositoryOn: directory].
-					CypressPackageInformation named: each repository: repo]
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressPackageManager
+					CypressPackageInformation named: each repository: repo]! !
+!CypressPackageManager methodsFor: 'initializing - private'!
 initializeQualifiedPackageNames
 
 	| qualifiedPackages |
@@ -688,12 +461,8 @@ initializeQualifiedPackageNames
 						select: [:knownName | knownName ~= each name and: [each name beginsWith: knownName , '-']])].
 	qualifiedPackages := qualifiedPackages reject: [:each | each isEmpty].
 	qualifiedPackages
-		keysAndValuesDo: [:package :baseNames | package beQualifiedNameOf: baseNames]
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageManager
+		keysAndValuesDo: [:package :baseNames | package beQualifiedNameOf: baseNames]! !
+!CypressPackageManager methodsFor: 'updating'!
 loadPackageFrom: aCypressPackageInformation
 
 	| summary loader |
@@ -709,23 +478,16 @@ loadPackageFrom: aCypressPackageInformation
 		ifTrue: [summary at: 'Missing Requirements' put: loader requirements asArray].
 
 	^summary
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageManager
+! !
+!CypressPackageManager methodsFor: 'updating'!
 lookForLoadedPackagesIn: aDirectory
 	"Update any of the packages in the image which have a Cypress file out in
 	 the specified directory to reflect the path where the package has theoretically
 	 been saved."
 
 	self lookForLoadedPackagesInRepository: (self repositoryOn: aDirectory).
-	^nil
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageManager
+	^nil! !
+!CypressPackageManager methodsFor: 'updating'!
 lookForLoadedPackagesInRepository: aCypressRepository
 	"Update any of the packages in the image which have a Cypress file out in
 	 the specified directory to reflect the path where the package has theoretically
@@ -737,23 +499,15 @@ lookForLoadedPackagesInRepository: aCypressRepository
 		select: [:each | packageNames includes: each name])
 			do: [:each | each updateKnownPackageRepository: aCypressRepository].
 	self saveKnownPackages.
-	^nil
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageManager
+	^nil! !
+!CypressPackageManager methodsFor: 'updating'!
 lookForUnloadedPackagesIn: aDirectory
 	"Load any package names from aDirectory as known packages.
 	 This does not load the package contents."
 
 	self lookForUnloadedPackagesInRepository: (self repositoryOn: aDirectory).
-	^nil
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageManager
+	^nil! !
+!CypressPackageManager methodsFor: 'updating'!
 lookForUnloadedPackagesInRepository: aCypressRepository
 	"Add known packages for any Cypress file outs in the specified directory."
 
@@ -770,37 +524,22 @@ lookForUnloadedPackagesInRepository: aCypressRepository
 			self packageInformationList
 				add: (CypressPackageInformation named: each repository: aCypressRepository)].
 	self saveKnownPackages.
-	^nil
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageManager
+	^nil! !
+!CypressPackageManager methodsFor: 'accessing'!
 packageInformationList
 
-	^packageInformationList
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageManager
+	^packageInformationList! !
+!CypressPackageManager methodsFor: 'accessing'!
 potentialPackageNames
 
-	^self class potentialPackageNames
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageManager
+	^self class potentialPackageNames! !
+!CypressPackageManager methodsFor: 'accessing'!
 refreshedPackageInformationList
 
 	self refreshPackageInformation.
 	^self packageInformationList.
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageManager
+! !
+!CypressPackageManager methodsFor: 'updating'!
 refreshPackageInformation
 
 	self
@@ -808,22 +547,15 @@ refreshPackageInformation
 		initializeKnownRepositories;
 		initializePackageInformationList;
 		initializeConflictingPackageNames;
-		initializeQualifiedPackageNames
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressPackageManager
+		initializeQualifiedPackageNames! !
+!CypressPackageManager methodsFor: 'initializing - private'!
 repositoryOn: aDirectory
 
 	^knownRepositories
 		at: aDirectory
 		ifAbsentPut: [CypressFileSystemRepository on: aDirectory].
-%
-
-category: 'updating - private'
-set compile_env: 0
-method: CypressPackageManager
+! !
+!CypressPackageManager methodsFor: 'updating - private'!
 saveKnownPackages
 
 	self updateKnownPackages.
@@ -831,20 +563,12 @@ saveKnownPackages
 		ifNil: 
 			[(System myUserProfile objectNamed: #UserGlobals)
 				addAssociation: #KnownCypressPackages -> Dictionary new])
-			value: knownPackages
-%
-
-category: 'updating - private'
-set compile_env: 0
-method: CypressPackageManager
+			value: knownPackages! !
+!CypressPackageManager methodsFor: 'updating - private'!
 updateKnownPackages
 
-	knownPackages := self determineKnownPackages
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageManager
+	knownPackages := self determineKnownPackages! !
+!CypressPackageManager methodsFor: 'updating'!
 updateSavedLocation: aDirectory for: aCypressPackageInformation
 	"Update the specified package to reflect the path and repository where the
 	 package should be saved."
@@ -852,12 +576,8 @@ updateSavedLocation: aDirectory for: aCypressPackageInformation
 	aCypressPackageInformation
 		updateKnownPackageRepository: (self repositoryOn: aDirectory).
 	self saveKnownPackages.
-	^nil
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressPackageManager
+	^nil! !
+!CypressPackageManager methodsFor: 'writing - private'!
 writeCypressPackageToDiskFrom: aCypressPackageInformation
 
 	| packageStructure |
@@ -865,12 +585,8 @@ writeCypressPackageToDiskFrom: aCypressPackageInformation
 				fromPackage: (CypressPackageDefinition
 						named: aCypressPackageInformation name).
 	aCypressPackageInformation repository writer
-		writePackageStructure: packageStructure
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressPackageManager
+		writePackageStructure: packageStructure! !
+!CypressPackageManager methodsFor: 'writing'!
 writePackagesToDiskFrom: someCypressPackageInformations
 
 	| packageStructure |
@@ -880,168 +596,103 @@ writePackagesToDiskFrom: someCypressPackageInformations
 						fromPackage: (CypressPackageDefinition named: each name).
 			each repository writer writePackageStructure: packageStructure.
 			each refresh.
-			self saveKnownPackages]
-%
-
-category: 'writing - private'
-set compile_env: 0
-method: CypressPackageManager
+			self saveKnownPackages]! !
+!CypressPackageManager methodsFor: 'writing - private'!
 writePackageStructure: packageStructure to: aCypressRepository
 
-	aCypressRepository writer writePackageStructure: packageStructure
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressPackageManager
+	aCypressRepository writer writePackageStructure: packageStructure! !
+!CypressPackageManager methodsFor: 'writing'!
 writePackageToDiskFrom: aCypressPackageInformation
 
-	^self writePackagesToDiskFrom: (Array with: aCypressPackageInformation)
-%
+	^self writePackagesToDiskFrom: (Array with: aCypressPackageInformation)! !
+" Class Implementation for CypressAbstractRepository"!
 
-! Class Implementation for CypressAbstractRepository
+" ------------------- Class methods for CypressAbstractRepository"!
 
-! ------------------- Class methods for CypressAbstractRepository
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressAbstractRepository
+!CypressAbstractRepository class methodsFor: 'instance creation'!
 createOn: aUrl alias: aString
 
-	^self createOn: aUrl alias: aString
-%
-
-category: 'accessing'
-set compile_env: 0
-classmethod: CypressAbstractRepository
+	^self createOn: aUrl alias: aString! !
+!CypressAbstractRepository class methodsFor: 'accessing'!
 defaultCopyrightNotice
 
-	^DefaultCopyrightNotice
-%
-
-category: 'accessing'
-set compile_env: 0
-classmethod: CypressAbstractRepository
+	^DefaultCopyrightNotice! !
+!CypressAbstractRepository class methodsFor: 'accessing'!
 defaultCopyrightNotice: aString
 
-	DefaultCopyrightNotice := aString
-%
-
-category: 'initializing'
-set compile_env: 0
-classmethod: CypressAbstractRepository
+	DefaultCopyrightNotice := aString! !
+!CypressAbstractRepository class methodsFor: 'initializing'!
 initialize
 
-	self initializeDefaultCopyrightNotice
-%
-
-category: 'initializing'
-set compile_env: 0
-classmethod: CypressAbstractRepository
+	self initializeDefaultCopyrightNotice! !
+!CypressAbstractRepository class methodsFor: 'initializing'!
 initializeDefaultCopyrightNotice
 
 	self defaultCopyrightNotice isNil ifFalse: [^self].
 	self defaultCopyrightNotice: 'This work is protected by copyright. All rights reserved.'
-%
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressAbstractRepository
+! !
+!CypressAbstractRepository class methodsFor: 'instance creation'!
 onUrl: aUrl alias: aString
 
 	^(aUrl repositoryClass new)
 		initializeUrl: aUrl andAlias: aString;
-		yourself
-%
+		yourself! !
+" ------------------- Instance methods for CypressAbstractRepository"!
 
-! ------------------- Instance methods for CypressAbstractRepository
-
-category: 'accessing properties'
-set compile_env: 0
-method: CypressAbstractRepository
+!CypressAbstractRepository methodsFor: 'accessing properties'!
 alias
 
 	^properties 
 		at: 'alias'
 		ifAbsent: ['']
-%
-
-category: 'accessing properties'
-set compile_env: 0
-method: CypressAbstractRepository
+! !
+!CypressAbstractRepository methodsFor: 'accessing properties'!
 alias: aString
 
 	properties 
 		at: 'alias'
 		put: aString
-%
-
-category: 'accessing properties'
-set compile_env: 0
-method: CypressAbstractRepository
+! !
+!CypressAbstractRepository methodsFor: 'accessing properties'!
 copyrightProperty
 
 	^properties 
 		at: '_cypress_copyright'
 		ifAbsent: ['']
-%
-
-category: 'accessing properties'
-set compile_env: 0
-method: CypressAbstractRepository
+! !
+!CypressAbstractRepository methodsFor: 'accessing properties'!
 copyrightProperty: aString
 
 	properties 
 		at: '_cypress_copyright'
 		put: aString
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractRepository
+! !
+!CypressAbstractRepository methodsFor: 'accessing'!
 defaultCopyrightNotice
 
-	^self class defaultCopyrightNotice
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractRepository
+	^self class defaultCopyrightNotice! !
+!CypressAbstractRepository methodsFor: 'accessing'!
 description
 
-	^self alias
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressAbstractRepository
+	^self alias! !
+!CypressAbstractRepository methodsFor: 'initializing - private'!
 initialize
 
 	self initializeDefaultRepositoryProperties.
 	readerClass := CypressPackageReader.
-	writerClass := CypressPackageWriter.
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressAbstractRepository
+	writerClass := CypressPackageWriter.! !
+!CypressAbstractRepository methodsFor: 'initializing - private'!
 initializeDefaultCopyrightProperty
 
 	self copyrightProperty: self defaultCopyrightNotice
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressAbstractRepository
+! !
+!CypressAbstractRepository methodsFor: 'initializing - private'!
 initializeDefaultRepositoryProperties
 
 	properties := Dictionary new.
 	self initializeDefaultCopyrightProperty
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressAbstractRepository
+! !
+!CypressAbstractRepository methodsFor: 'initializing - private'!
 initializeUrl: aUrl andAlias: aString
 
 	self
@@ -1049,224 +700,142 @@ initializeUrl: aUrl andAlias: aString
 		url: aUrl;
 		alias: aString;
 		validateUrl
-%
-
-category: 'accessing properties'
-set compile_env: 0
-method: CypressAbstractRepository
+! !
+!CypressAbstractRepository methodsFor: 'accessing properties'!
 packageExtension
 
 	^properties 
 		at: 'packageExtension'
 		ifAbsent: ['.package']
-%
-
-category: 'printing'
-set compile_env: 0
-method: CypressAbstractRepository
+! !
+!CypressAbstractRepository methodsFor: 'printing'!
 printDetailsOn: aStream
 
-	aStream nextPutAll: self alias
-%
-
-category: 'printing'
-set compile_env: 0
-method: CypressAbstractRepository
+	aStream nextPutAll: self alias! !
+!CypressAbstractRepository methodsFor: 'printing'!
 printOn: aStream
 
 	aStream
 		nextPutAll: self class name;
 		nextPutAll: '('.
 	self printDetailsOn: aStream.
-	aStream nextPutAll: ')'
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractRepository
+	aStream nextPutAll: ')'! !
+!CypressAbstractRepository methodsFor: 'reading'!
 reader
 
-	^readerClass forRepository: self
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressAbstractRepository
+	^readerClass forRepository: self! !
+!CypressAbstractRepository methodsFor: 'reading'!
 readPackageStructureForPackageNamed: packageName
 
 	^(self reader)
 		readPackageStructureForPackageNamed: packageName;
-		packageStructure
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractRepository
+		packageStructure! !
+!CypressAbstractRepository methodsFor: 'accessing'!
 url
 
 	^url
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractRepository
+! !
+!CypressAbstractRepository methodsFor: 'accessing'!
 url: aString
 
 	url := aString
-%
-
-category: 'validating - private'
-set compile_env: 0
-method: CypressAbstractRepository
+! !
+!CypressAbstractRepository methodsFor: 'validating - private'!
 validateUrl
 	"At this level, there is nothing to check.
 	 But different URLs denote different kinds of repositories, and
-	 each kind of repository may have specific checks."
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractRepository
+	 each kind of repository may have specific checks."! !
+!CypressAbstractRepository methodsFor: 'writing'!
 writePackageStructure: aPackageStructure
 
-	^self writer writePackageStructure: aPackageStructure
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressAbstractRepository
+	^self writer writePackageStructure: aPackageStructure! !
+!CypressAbstractRepository methodsFor: 'writing'!
 writer
 
-	^writerClass forRepository: self
-%
+	^writerClass forRepository: self! !
+" Class Implementation for CypressFileSystemRepository"!
 
-! Class Implementation for CypressFileSystemRepository
+" ------------------- Class methods for CypressFileSystemRepository"!
 
-! ------------------- Class methods for CypressFileSystemRepository
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressFileSystemRepository
+!CypressFileSystemRepository class methodsFor: 'instance creation'!
 on: aDirectory
 
 	^self new
 		initializeForDirectory: aDirectory;
 		yourself.
-%
+! !
+" ------------------- Instance methods for CypressFileSystemRepository"!
 
-! ------------------- Instance methods for CypressFileSystemRepository
-
-category: 'accessing - properties'
-set compile_env: 0
-method: CypressFileSystemRepository
+!CypressFileSystemRepository methodsFor: 'accessing - properties'!
 codeFormatProperty
 
 	^properties 
 		at: '_gs_format'
 		ifAbsent: ['Cypress']
-%
-
-category: 'updating properties'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'updating properties'!
 codeFormatProperty: aString
 
 	self validate: aString isOneOf: #('Cypress' 'FileTree' 'Flexible').
 	properties 
 		at: '_gs_format'
 		put: aString
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'accessing'!
 description
 
 	| desc |
 	desc := super description.
 	^desc notEmpty
 		ifTrue: [desc]
-		ifFalse: [self directoryPath]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressFileSystemRepository
+		ifFalse: [self directoryPath]! !
+!CypressFileSystemRepository methodsFor: 'accessing'!
 directoryPath
 
-	^directoryPath
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+	^directoryPath! !
+!CypressFileSystemRepository methodsFor: 'initializing - private'!
 directoryPath:  aString
 
-	directoryPath := aString
-%
-
-category: 'testing - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+	directoryPath := aString! !
+!CypressFileSystemRepository methodsFor: 'testing - private'!
 doesRepositoryFileExist: fileName
 	"Answer whether the named file exists at the repository level."
 
 	^self fileUtils
 		directoryExists: (self fileUtils
 				directoryFromPath: fileName
-				relativeTo: self directoryPath)
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+				relativeTo: self directoryPath)! !
+!CypressFileSystemRepository methodsFor: 'initializing - private'!
 ensureDirectoryPathExists
 
-	self fileUtils ensureDirectoryExists: self directoryPath
-%
-
-category: 'accessing - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+	self fileUtils ensureDirectoryExists: self directoryPath! !
+!CypressFileSystemRepository methodsFor: 'accessing - private'!
 fileUtils
 
 	^CypressFileUtilities current
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'initializing - private'!
 fixupMissingCopyrightProperty
 
 	self copyrightProperty isEmpty ifFalse: [^self].
 	self initializeDefaultCopyrightProperty.
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'initializing - private'!
 initializeCreationOn: aUrl alias: aString
 
 	self
 		initializeUrl: aUrl andAlias: aString;
 		alias: aString;
-		writePropertiesFile
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+		writePropertiesFile! !
+!CypressFileSystemRepository methodsFor: 'initializing - private'!
 initializeDefaultRepositoryProperties
 
 	super initializeDefaultRepositoryProperties.
 	self
 		codeFormatProperty: 'Cypress';
 		strictCodeFormat: false.
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'initializing - private'!
 initializeForDirectory: aDirectory
 
 	self initialize.
@@ -1276,11 +845,8 @@ initializeForDirectory: aDirectory
 	self readPropertiesFile.
 	self fixupMissingCopyrightProperty.
 	self initializeReaderAndWriterClasses.
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'initializing - private'!
 initializeForFileTreeRepository
 
 	self initializeDefaultRepositoryProperties.
@@ -1288,11 +854,8 @@ initializeForFileTreeRepository
 		alias: 'FileTree read-only repository on ', self directoryPath;
 		codeFormatProperty: 'FileTree';
 		strictCodeFormat: true.
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'initializing - private'!
 initializeReaderAndWriterClasses
 
 	self isCodeFormatCypress
@@ -1311,12 +874,8 @@ initializeReaderAndWriterClasses
 					writerClass := CypressStrictFileTreeFormatDoNothingPackageWriter]
 				ifFalse: 
 					[readerClass := CypressFlexiblePackageReader.
-					writerClass := CypressFileTreeFormatPackageWriter]]
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+					writerClass := CypressFileTreeFormatPackageWriter]]! !
+!CypressFileSystemRepository methodsFor: 'initializing - private'!
 initializeUrl: aUrl andAlias: aString
 
 	super initializeUrl: aUrl andAlias: aString.
@@ -1327,86 +886,55 @@ initializeUrl: aUrl andAlias: aString
 	self strictCodeFormat: self url isStrict.
 	self fixupMissingCopyrightProperty.
 	self initializeReaderAndWriterClasses.
-%
-
-category: 'testing properties'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'testing properties'!
 isCodeFormatCypress
 
 	^self isCodeFormatProperty: 'Cypress'
-%
-
-category: 'testing properties'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'testing properties'!
 isCodeFormatFileTree
 
 	^self isCodeFormatProperty: 'FileTree'
-%
-
-category: 'testing properties'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'testing properties'!
 isCodeFormatFlexiblyCypress
 
 	^self isCodeFormatStrict not and: [self isCodeFormatCypress]
-%
-
-category: 'testing properties'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'testing properties'!
 isCodeFormatFlexiblyFileTree
 
 	^self isCodeFormatStrict not and: [self isCodeFormatFileTree]
-%
-
-category: 'testing properties - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'testing properties - private'!
 isCodeFormatProperty: aString
 
 	^(properties at: '_gs_format') equalsNoCase: aString
-%
-
-category: 'testing properties'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'testing properties'!
 isCodeFormatStrict
 
 	^(properties 
 		at: '_gs_strict'
 		ifAbsent: ['']) equalsNoCase: 'true'
-%
-
-category: 'testing properties'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'testing properties'!
 isCodeFormatStrictlyCypress
 
 	^self isCodeFormatStrict and: [self isCodeFormatCypress]
-%
-
-category: 'testing properties'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'testing properties'!
 isCodeFormatStrictlyFileTree
 
 	^self isCodeFormatStrict and: [self isCodeFormatFileTree]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'accessing'!
 packageNames
 
 	^(self fileUtils directoryEntriesFrom: self directoryPath , '*', self packageExtension)
-		collect: [:each | (self fileUtils localNameFrom: each) copyWithoutSuffix: self packageExtension]
-%
-
-category: 'printing'
-set compile_env: 0
-method: CypressFileSystemRepository
+		collect: [:each | (self fileUtils localNameFrom: each) copyWithoutSuffix: self packageExtension]! !
+!CypressFileSystemRepository methodsFor: 'printing'!
 printDetailsOn: aStream
 
 	self alias notEmpty
@@ -1414,22 +942,15 @@ printDetailsOn: aStream
 			[aStream
 				nextPutAll: self alias;
 				nextPutAll: ': '].
-	aStream nextPutAll: self url printString
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressFileSystemRepository
+	aStream nextPutAll: self url printString! !
+!CypressFileSystemRepository methodsFor: 'reading'!
 readPropertiesFile
 
 	self readPropertiesFile: (#('properties.ston' 'properties.json' '.filetree')
 				detect: [:each | self doesRepositoryFileExist: each]
 				ifNone: [^self]).
-%
-
-category: 'reading'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'reading'!
 readPropertiesFile: fileName
 	"Expect 'properties.ston' for Cypress, but permit 'properties.json' in which case we assume
 	 the format should be FileTree.
@@ -1448,145 +969,94 @@ readPropertiesFile: fileName
 	self fileUtils
 		readStreamFor: fileName
 		in: self directoryPath
-		do: [:fileStream | properties := CypressJsonParser parseStream: fileStream]
-%
-
-category: 'updating properties'
-set compile_env: 0
-method: CypressFileSystemRepository
+		do: [:fileStream | properties := CypressJsonParser parseStream: fileStream]! !
+!CypressFileSystemRepository methodsFor: 'updating properties'!
 strictCodeFormat: aBoolean
 
 	self strictCodeFormatProperty: aBoolean printString
 
-%
-
-category: 'updating properties - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'updating properties - private'!
 strictCodeFormatProperty: aString
 
 	self validate: aString isOneOf: #('true' 'false').
 	properties 
 		at: '_gs_strict'
 		put: aString
-%
-
-category: 'updating properties - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'updating properties - private'!
 validate: aString isOneOf: someStrings
 
 	someStrings
 		detect: [:each | aString equalsNoCase: each]
 		ifNone: [self error: aString printString, ' must be one of ', someStrings printString].
-%
-
-category: 'validating - private'
-set compile_env: 0
-method: CypressFileSystemRepository
+! !
+!CypressFileSystemRepository methodsFor: 'validating - private'!
 validateUrl
 	"At this level, there is nothing to check.
 	 But different URLs denote different kinds of repositories, and
 	 each kind of repository may have specific checks."
 
 	self url fileName isEmpty
-		ifFalse: [self error: self printString, ' should not be used with URLs for file names (', self url fileName, ' in ', self url pathForDirectory, ')']
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressFileSystemRepository
+		ifFalse: [self error: self printString, ' should not be used with URLs for file names (', self url fileName, ' in ', self url pathForDirectory, ')']! !
+!CypressFileSystemRepository methodsFor: 'writing'!
 writePropertiesFile
 
 	self writePropertiesFile: (self isCodeFormatFileTree
 				ifTrue: ['properties.json']
-				ifFalse: ['properties.ston'])
-%
-
-category: 'writing'
-set compile_env: 0
-method: CypressFileSystemRepository
+				ifFalse: ['properties.ston'])! !
+!CypressFileSystemRepository methodsFor: 'writing'!
 writePropertiesFile: fileName
 
 	self fileUtils
 		writeStreamFor: fileName
 		in: self directoryPath
-		do: [:fileStream | properties writeCypressJsonOn: fileStream]
-%
+		do: [:fileStream | properties writeCypressJsonOn: fileStream]! !
+" Class Implementation for CypressAbstractFileoutRepository"!
 
-! Class Implementation for CypressAbstractFileoutRepository
+" ------------------- Class methods for CypressAbstractFileoutRepository"!
 
-! ------------------- Class methods for CypressAbstractFileoutRepository
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressAbstractFileoutRepository
+!CypressAbstractFileoutRepository class methodsFor: 'instance creation'!
 on: aDirectory
 
 	^self new
 		initializeForDirectory: aDirectory;
 		yourself.
-%
+! !
+" ------------------- Instance methods for CypressAbstractFileoutRepository"!
 
-! ------------------- Instance methods for CypressAbstractFileoutRepository
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractFileoutRepository
+!CypressAbstractFileoutRepository methodsFor: 'accessing'!
 description
 
 	| desc |
 	desc := super description.
 	^desc notEmpty
 		ifTrue: [desc]
-		ifFalse: [self directoryPath]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractFileoutRepository
+		ifFalse: [self directoryPath]! !
+!CypressAbstractFileoutRepository methodsFor: 'accessing'!
 directoryPath
 
-	^directoryPath
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressAbstractFileoutRepository
+	^directoryPath! !
+!CypressAbstractFileoutRepository methodsFor: 'initializing - private'!
 directoryPath:  aString
 
-	directoryPath := aString
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressAbstractFileoutRepository
+	directoryPath := aString! !
+!CypressAbstractFileoutRepository methodsFor: 'initializing - private'!
 ensureDirectoryPathExists
 
-	self fileUtils ensureDirectoryExists: self directoryPath
-%
-
-category: 'accessing - private'
-set compile_env: 0
-method: CypressAbstractFileoutRepository
+	self fileUtils ensureDirectoryExists: self directoryPath! !
+!CypressAbstractFileoutRepository methodsFor: 'accessing - private'!
 fileUtils
 
 	^CypressFileUtilities current
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressAbstractFileoutRepository
+! !
+!CypressAbstractFileoutRepository methodsFor: 'initializing - private'!
 initializeCreationOn: aUrl alias: aString
 
 	self
 		initializeUrl: aUrl andAlias: aString;
-		alias: aString
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressAbstractFileoutRepository
+		alias: aString! !
+!CypressAbstractFileoutRepository methodsFor: 'initializing - private'!
 initializeForDirectory: aDirectory
 
 	self initialize.
@@ -1594,30 +1064,20 @@ initializeForDirectory: aDirectory
 	self directoryPath isEmpty ifTrue: [^self].	"Not really valid; not a very good idea."
 	self ensureDirectoryPathExists.
 	self initializeReaderAndWriterClasses.
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressAbstractFileoutRepository
+! !
+!CypressAbstractFileoutRepository methodsFor: 'initializing - private'!
 initializeReaderAndWriterClasses
 
-	self suubclassResponsibility: #initializeReaderAndWriterClasses
-%
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressAbstractFileoutRepository
+	self suubclassResponsibility: #initializeReaderAndWriterClasses! !
+!CypressAbstractFileoutRepository methodsFor: 'initializing - private'!
 initializeUrl: aUrl andAlias: aString
 
 	super initializeUrl: aUrl andAlias: aString.
 	self directoryPath: self url pathForDirectory.
 	self ensureDirectoryPathExists.
 	self initializeReaderAndWriterClasses.
-%
-
-category: 'printing'
-set compile_env: 0
-method: CypressAbstractFileoutRepository
+! !
+!CypressAbstractFileoutRepository methodsFor: 'printing'!
 printDetailsOn: aStream
 
 	self alias notEmpty
@@ -1626,103 +1086,71 @@ printDetailsOn: aStream
 				nextPutAll: self alias;
 				nextPutAll: ': '].
 	aStream nextPutAll: self url printString
-%
-
-category: 'validating - private'
-set compile_env: 0
-method: CypressAbstractFileoutRepository
+! !
+!CypressAbstractFileoutRepository methodsFor: 'validating - private'!
 validateUrl
 	"At this level, there is nothing to check.
 	 But different URLs denote different kinds of repositories, and
 	 each kind of repository may have specific checks."
 
 	self url fileName isEmpty
-		ifFalse: [self error: self printString, ' should not be used with URLs for file names (', self url fileName, ' in ', self url pathForDirectory, ')']
-%
+		ifFalse: [self error: self printString, ' should not be used with URLs for file names (', self url fileName, ' in ', self url pathForDirectory, ')']! !
+" Class Implementation for CypressTopazRepository"!
 
-! Class Implementation for CypressTopazRepository
+" ------------------- Instance methods for CypressTopazRepository"!
 
-! ------------------- Instance methods for CypressTopazRepository
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressTopazRepository
+!CypressTopazRepository methodsFor: 'initializing - private'!
 initializeReaderAndWriterClasses
 
 	readerClass := CypressDoNothingPackageReader.
-	writerClass := CypressTopazFileoutWriter.
-%
+	writerClass := CypressTopazFileoutWriter.! !
+" Class Implementation for CypressSmalltalkRepository"!
 
-! Class Implementation for CypressSmalltalkRepository
+" ------------------- Instance methods for CypressSmalltalkRepository"!
 
-! ------------------- Instance methods for CypressSmalltalkRepository
-
-category: 'initializing - private'
-set compile_env: 0
-method: CypressSmalltalkRepository
+!CypressSmalltalkRepository methodsFor: 'initializing - private'!
 initializeReaderAndWriterClasses
 
 	readerClass := CypressDoNothingPackageReader.
 	writerClass := CypressSmalltalkFileoutWriter.
-%
+! !
+" Class Implementation for CypressPackageManager2"!
 
-! Class Implementation for CypressPackageManager2
+" ------------------- Class methods for CypressPackageManager2"!
 
-! ------------------- Class methods for CypressPackageManager2
-
-category: 'Instance Creation'
-set compile_env: 0
-classmethod: CypressPackageManager2
+!CypressPackageManager2 class methodsFor: 'Instance Creation'!
 create
 
 	^self new
 		initializeFromImage;
 		yourself.
-%
-
-category: 'Initializing'
-set compile_env: 0
-classmethod: CypressPackageManager2
+! !
+!CypressPackageManager2 class methodsFor: 'Initializing'!
 initialize
 
-	self savedPackageManagers: IdentityDictionary new
-%
-
-category: 'Accessing'
-set compile_env: 0
-classmethod: CypressPackageManager2
+	self savedPackageManagers: IdentityDictionary new! !
+!CypressPackageManager2 class methodsFor: 'Accessing'!
 named: aKey
 	"Answer the Package Manager previously saved under aKey.
 	 It is an error if there was not one saved under that key."
 
 	^self
 		named: aKey
-		or: [self error: 'No previously saved Package Manager under the key ', aKey printString]
-%
-
-category: 'Accessing'
-set compile_env: 0
-classmethod: CypressPackageManager2
+		or: [self error: 'No previously saved Package Manager under the key ', aKey printString]! !
+!CypressPackageManager2 class methodsFor: 'Accessing'!
 named: aKey or: aBlock
 	"Answer the Package Manager previously saved under aKey.
 	 Answer the result of evaluating aBlock, if there was not one saved under that key."
 
-	^self savedPackageManagers at: aKey ifAbsent: aBlock
-%
-
-category: 'Instance Creation'
-set compile_env: 0
-classmethod: CypressPackageManager2
+	^self savedPackageManagers at: aKey ifAbsent: aBlock! !
+!CypressPackageManager2 class methodsFor: 'Instance Creation'!
 new
 
 	^super new
 		initialize;
 		yourself.
-%
-
-category: 'Accessing - private'
-set compile_env: 0
-classmethod: CypressPackageManager2
+! !
+!CypressPackageManager2 class methodsFor: 'Accessing - private'!
 packageNamePermutationsFor: aString
 	"Answer the variations on possible package names from the specified string.
 	 Each hyphen may possibly separate the package name from a suffix."
@@ -1734,12 +1162,8 @@ packageNamePermutationsFor: aString
 			(each = $- and: [index > 1])
 				ifTrue: [names add: (aString copyFrom: 1 to: index - 1)]].
 	aString last ~= $- ifTrue: [names add: aString].
-	^names
-%
-
-category: 'Accessing - private'
-set compile_env: 0
-classmethod: CypressPackageManager2
+	^names! !
+!CypressPackageManager2 class methodsFor: 'Accessing - private'!
 potentialPackageNames
 	"Answer a list of 'package names' from classes and methods.
 	 The class category is the package name, if the class is in a package at all.
@@ -1764,66 +1188,39 @@ potentialPackageNames
 		addAll: methodCategories;
 		remove: 'User Classes';
 		remove: 'Kernel';
-		sortAscending
-%
-
-category: 'Updating'
-set compile_env: 0
-classmethod: CypressPackageManager2
+		sortAscending! !
+!CypressPackageManager2 class methodsFor: 'Updating'!
 removePackageManagerSavedAs: aKey
 	"Remove the Package Manager previously saved under aKey, if there was one.
 	 Answer it or nil if there was not one saved under that key."
 
-	^self savedPackageManagers removeKey: aKey ifAbsent: []
-%
-
-category: 'Accessing'
-set compile_env: 0
-classmethod: CypressPackageManager2
+	^self savedPackageManagers removeKey: aKey ifAbsent: []! !
+!CypressPackageManager2 class methodsFor: 'Accessing'!
 savedPackageManagers
 
-	^SavedPackageManagers
-%
-
-category: 'Initializing - private'
-set compile_env: 0
-classmethod: CypressPackageManager2
+	^SavedPackageManagers! !
+!CypressPackageManager2 class methodsFor: 'Initializing - private'!
 savedPackageManagers: anIdentityDictionary
 
-	SavedPackageManagers := anIdentityDictionary
-%
+	SavedPackageManagers := anIdentityDictionary! !
+" ------------------- Instance methods for CypressPackageManager2"!
 
-! ------------------- Instance methods for CypressPackageManager2
-
-category: 'Updating'
-set compile_env: 0
-method: CypressPackageManager2
+!CypressPackageManager2 methodsFor: 'Updating'!
 addRepository: aRepository to: aKnownPackageInformation
 
-	aKnownPackageInformation addRepository: aRepository.
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressPackageManager2
+	aKnownPackageInformation addRepository: aRepository.! !
+!CypressPackageManager2 methodsFor: 'Updating'!
 addUnknownPackageNamed: aString
 
 	self packageInformationList
 		at: aString
 		put: (CypressUnknownPackageInformation named: aString).
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressPackageManager2
+! !
+!CypressPackageManager2 methodsFor: 'Updating'!
 assignRepository: aRepository to: aPackageInformation
 
-	self assignRepository: aRepository toAll: (Array with: aPackageInformation)
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressPackageManager2
+	self assignRepository: aRepository toAll: (Array with: aPackageInformation)! !
+!CypressPackageManager2 methodsFor: 'Updating'!
 assignRepository: aRepository toAll: somePackageInformations
 	"Assign to those having no repository information and add to those with.
 	 Those without a repository need to be converted to Known Package Information instances."
@@ -1833,11 +1230,8 @@ assignRepository: aRepository toAll: somePackageInformations
 		do: [:each | self addRepository: aRepository to: (self convertToKnown: each)].
 	(somePackageInformations select: [:each | each isKnown])
 		do: [:each | self addRepository: aRepository to: each].
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressPackageManager2
+! !
+!CypressPackageManager2 methodsFor: 'Updating'!
 convert: anUnknownPackageInformation toConflictingWith: aKnownPackageInformation
 
 	| conflicting |
@@ -1845,12 +1239,8 @@ convert: anUnknownPackageInformation toConflictingWith: aKnownPackageInformation
 				fromUnknown: anUnknownPackageInformation
 				conflictingWith: aKnownPackageInformation.
 	self replace: anUnknownPackageInformation with: conflicting.
-	^conflicting
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressPackageManager2
+	^conflicting! !
+!CypressPackageManager2 methodsFor: 'Updating'!
 convert: anUnknownPackageInformation toEclipsedBy: aKnownPackageInformation
 
 	| eclipsed |
@@ -1858,12 +1248,8 @@ convert: anUnknownPackageInformation toEclipsedBy: aKnownPackageInformation
 				fromUnknown: anUnknownPackageInformation
 				eclipsedBy: aKnownPackageInformation.
 	self replace: anUnknownPackageInformation with: eclipsed.
-	^eclipsed
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressPackageManager2
+	^eclipsed! !
+!CypressPackageManager2 methodsFor: 'Updating'!
 convertToKnown: aPackageInformation
 
 	| known |
@@ -1872,11 +1258,8 @@ convertToKnown: aPackageInformation
 	(self findPackagesEclipsedBy: known) do: [:each | self convert: each toEclipsedBy: known].
 	(self findPackagesConflictingWith: known) do: [:each | self convert: each toConflictingWith: known].
 	^known.
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressPackageManager2
+! !
+!CypressPackageManager2 methodsFor: 'Updating'!
 createRepositoryNamed: aName under: aDirectory alias: aString schema: schemaName
 
 	^CypressFileSystemRepository
@@ -1885,52 +1268,34 @@ createRepositoryNamed: aName under: aDirectory alias: aString schema: schemaName
 					directoryFromPath: aName
 						relativeTo: aDirectory)
 				, '/') asUrl
-		alias: aString
-%
-
-category: 'Accessing - private'
-set compile_env: 0
-method: CypressPackageManager2
+		alias: aString! !
+!CypressPackageManager2 methodsFor: 'Accessing - private'!
 findPackagesConflictingWith: aKnownPackageInformation
 
 	^self packageInformationList select: 
 			[:each |
 			aKnownPackageInformation name ~= each name
 				and: [aKnownPackageInformation name beginsWith: each name , '-']]
-%
-
-category: 'Accessing - private'
-set compile_env: 0
-method: CypressPackageManager2
+! !
+!CypressPackageManager2 methodsFor: 'Accessing - private'!
 findPackagesEclipsedBy: aKnownPackageInformation
 
 	^self packageInformationList select: 
 			[:each |
 			aKnownPackageInformation name ~= each name
-				and: [each name beginsWith: aKnownPackageInformation name , '-']]
-%
-
-category: 'Initializing - private'
-set compile_env: 0
-method: CypressPackageManager2
+				and: [each name beginsWith: aKnownPackageInformation name , '-']]! !
+!CypressPackageManager2 methodsFor: 'Initializing - private'!
 initialize
 
 	self
 		knownRepositories: Dictionary new;
-		packageInformationList: Dictionary new
-%
-
-category: 'Initializing - private'
-set compile_env: 0
-method: CypressPackageManager2
+		packageInformationList: Dictionary new! !
+!CypressPackageManager2 methodsFor: 'Initializing - private'!
 initializeFromImage
 
 	self initializePackageInformationList.
-%
-
-category: 'Initializing - private'
-set compile_env: 0
-method: CypressPackageManager2
+! !
+!CypressPackageManager2 methodsFor: 'Initializing - private'!
 initializePackageInformationList
 
 	self
@@ -1940,28 +1305,16 @@ initializePackageInformationList
 					[:dict :each |
 					dict
 						at: each put: (CypressUnknownPackageInformation named: each);
-						yourself])
-%
-
-category: 'Accessing'
-set compile_env: 0
-method: CypressPackageManager2
+						yourself])! !
+!CypressPackageManager2 methodsFor: 'Accessing'!
 knownRepositories
 
-	^knownRepositories
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressPackageManager2
+	^knownRepositories! !
+!CypressPackageManager2 methodsFor: 'Updating'!
 knownRepositories: someNamedRepositories
 
-	knownRepositories := someNamedRepositories
-%
-
-category: 'Loading'
-set compile_env: 0
-method: CypressPackageManager2
+	knownRepositories := someNamedRepositories! !
+!CypressPackageManager2 methodsFor: 'Loading'!
 loadPackageFrom: aKnownPackageInformation inRepository: aRepository
 
 	| snapshot summary loader |
@@ -1985,11 +1338,8 @@ loadPackageFrom: aKnownPackageInformation inRepository: aRepository
 				at: 'Missing Requirements'
 				put: loader requirements asArray].
 	^summary.
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressPackageManager2
+! !
+!CypressPackageManager2 methodsFor: 'Updating'!
 lookForPackagesInRepository: aRepository
 	"Find the packages in the repository and update the list
 	 of package information accordingly."
@@ -2000,65 +1350,39 @@ lookForPackagesInRepository: aRepository
 	exImage := packageNames reject: [:each | self packageInformationList anySatisfy: [:info | info name = each]].
 	exImage := exImage collect: [:each | CypressUnknownPackageInformation named: each].
 
-	self assignRepository: aRepository toAll: inImage, exImage
-%
-
-category: 'Accessing'
-set compile_env: 0
-method: CypressPackageManager2
+	self assignRepository: aRepository toAll: inImage, exImage! !
+!CypressPackageManager2 methodsFor: 'Accessing'!
 packageInformationList
 
-	^packageInformationList
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressPackageManager2
+	^packageInformationList! !
+!CypressPackageManager2 methodsFor: 'Updating'!
 packageInformationList: someNamedPackageInformations
 
-	packageInformationList := someNamedPackageInformations
-%
-
-category: 'Accessing'
-set compile_env: 0
-method: CypressPackageManager2
+	packageInformationList := someNamedPackageInformations! !
+!CypressPackageManager2 methodsFor: 'Accessing'!
 packageInformationNamed: aString
 
 	^self packageInformationNamed: aString
-		or: [self error: 'No package information for ' , aString printString]
-%
-
-category: 'Accessing'
-set compile_env: 0
-method: CypressPackageManager2
+		or: [self error: 'No package information for ' , aString printString]! !
+!CypressPackageManager2 methodsFor: 'Accessing'!
 packageInformationNamed: aString or: aBlock
 
 	^self packageInformationList
 		at: aString
 		ifAbsent: aBlock.
-%
-
-category: 'Accessing - private'
-set compile_env: 0
-method: CypressPackageManager2
+! !
+!CypressPackageManager2 methodsFor: 'Accessing - private'!
 potentialPackageNames
 
-	^self class potentialPackageNames
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressPackageManager2
+	^self class potentialPackageNames! !
+!CypressPackageManager2 methodsFor: 'Updating'!
 replace: oldPackageInformation with: newPackageInformation
 
 	self packageInformationList
 		at: oldPackageInformation name
 		put: newPackageInformation.
-%
-
-category: 'Initializing - private'
-set compile_env: 0
-method: CypressPackageManager2
+! !
+!CypressPackageManager2 methodsFor: 'Initializing - private'!
 repositoryOn: url alias: aString
 	"Answer a repository instance for the specified URL.
 	 The characteristics will come from the properties file at the URL location,
@@ -2067,11 +1391,8 @@ repositoryOn: url alias: aString
 	^self knownRepositories
 		at: url
 		ifAbsentPut: [CypressAbstractRepository onUrl: url alias: aString].
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressPackageManager2
+! !
+!CypressPackageManager2 methodsFor: 'Updating'!
 saveAs: aKey
 	"Save the receiver in the class' collection of named managers
 	 under the specified key.
@@ -2079,31 +1400,20 @@ saveAs: aKey
 
 
 	self savedPackageManagers at: aKey put: self.
-%
-
-category: 'Accessing - private'
-set compile_env: 0
-method: CypressPackageManager2
+! !
+!CypressPackageManager2 methodsFor: 'Accessing - private'!
 savedPackageManagers
 
-	^self class savedPackageManagers
-%
-
-category: 'Writing'
-set compile_env: 0
-method: CypressPackageManager2
+	^self class savedPackageManagers! !
+!CypressPackageManager2 methodsFor: 'Writing'!
 writeChangesToAllRepositoriesFor: aPackageInformation
 
-	aPackageInformation writeChangesToAllRepositories.
-%
+	aPackageInformation writeChangesToAllRepositories.! !
+" Class Implementation for CypressAbstractFileUrl"!
 
-! Class Implementation for CypressAbstractFileUrl
+" ------------------- Class methods for CypressAbstractFileUrl"!
 
-! ------------------- Class methods for CypressAbstractFileUrl
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressAbstractFileUrl
+!CypressAbstractFileUrl class methodsFor: 'instance creation'!
 absoluteFromText: aString
 	"Return a URL from a string and handle
 	a String without a scheme as a FileUrl."
@@ -2127,247 +1437,154 @@ absoluteFromText: aString
 	scheme := self schemeNameForString: remainder.
 	newUrl := (self urlClassForScheme: scheme) new privateInitializeFromText: remainder.
 	newUrl privateFragment: fragment.
-	^newUrl
-%
-
-category: 'parsing'
-set compile_env: 0
-classmethod: CypressAbstractFileUrl
+	^newUrl! !
+!CypressAbstractFileUrl class methodsFor: 'parsing'!
 urlClassForScheme: scheme
 
 	scheme isNil ifTrue: [^FileUrl].
 	^super urlClassForScheme: scheme
-%
+! !
+" ------------------- Instance methods for CypressAbstractFileUrl"!
 
-! ------------------- Instance methods for CypressAbstractFileUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractFileUrl
+!CypressAbstractFileUrl methodsFor: 'accessing'!
 codeFormat
 
 	^self subclassResponsibility: #codeFormat.
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressAbstractFileUrl
+! !
+!CypressAbstractFileUrl methodsFor: 'testing'!
 isStrict
 
 	^self subclassResponsibility: #isStrict.
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractFileUrl
+! !
+!CypressAbstractFileUrl methodsFor: 'accessing'!
 repositoryClass
 
-	^CypressFileSystemRepository
-%
+	^CypressFileSystemRepository! !
+" Class Implementation for CypressLaxFileUrl"!
 
-! Class Implementation for CypressLaxFileUrl
+" ------------------- Class methods for CypressLaxFileUrl"!
 
-! ------------------- Class methods for CypressLaxFileUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: CypressLaxFileUrl
+!CypressLaxFileUrl class methodsFor: 'constants'!
 schemeName
 
-	^'cypresslax'
-%
+	^'cypresslax'! !
+" ------------------- Instance methods for CypressLaxFileUrl"!
 
-! ------------------- Instance methods for CypressLaxFileUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressLaxFileUrl
+!CypressLaxFileUrl methodsFor: 'accessing'!
 codeFormat
 
-	^'Cypress'
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressLaxFileUrl
+	^'Cypress'! !
+!CypressLaxFileUrl methodsFor: 'testing'!
 isStrict
 
-	^false
-%
+	^false! !
+" Class Implementation for CypressFileTreeFormatFileUrl"!
 
-! Class Implementation for CypressFileTreeFormatFileUrl
+" ------------------- Class methods for CypressFileTreeFormatFileUrl"!
 
-! ------------------- Class methods for CypressFileTreeFormatFileUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: CypressFileTreeFormatFileUrl
+!CypressFileTreeFormatFileUrl class methodsFor: 'constants'!
 schemeName
 
-	^'cypressft'
-%
+	^'cypressft'! !
+" ------------------- Instance methods for CypressFileTreeFormatFileUrl"!
 
-! ------------------- Instance methods for CypressFileTreeFormatFileUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressFileTreeFormatFileUrl
+!CypressFileTreeFormatFileUrl methodsFor: 'accessing'!
 codeFormat
 
-	^'FileTree'
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressFileTreeFormatFileUrl
+	^'FileTree'! !
+!CypressFileTreeFormatFileUrl methodsFor: 'testing'!
 isStrict
 
-	^false
-%
+	^false! !
+" Class Implementation for CypressFileUrl"!
 
-! Class Implementation for CypressFileUrl
+" ------------------- Class methods for CypressFileUrl"!
 
-! ------------------- Class methods for CypressFileUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: CypressFileUrl
+!CypressFileUrl class methodsFor: 'constants'!
 schemeName
 
-	^'cypress'
-%
+	^'cypress'! !
+" ------------------- Instance methods for CypressFileUrl"!
 
-! ------------------- Instance methods for CypressFileUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressFileUrl
+!CypressFileUrl methodsFor: 'accessing'!
 codeFormat
 
-	^'Cypress'
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressFileUrl
+	^'Cypress'! !
+!CypressFileUrl methodsFor: 'testing'!
 isStrict
 
-	^true
-%
+	^true! !
+" Class Implementation for CypressFileTreeReadOnlyFileUrl"!
 
-! Class Implementation for CypressFileTreeReadOnlyFileUrl
+" ------------------- Class methods for CypressFileTreeReadOnlyFileUrl"!
 
-! ------------------- Class methods for CypressFileTreeReadOnlyFileUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: CypressFileTreeReadOnlyFileUrl
+!CypressFileTreeReadOnlyFileUrl class methodsFor: 'constants'!
 schemeName
 
-	^'cypressfiletree'
-%
+	^'cypressfiletree'! !
+" ------------------- Instance methods for CypressFileTreeReadOnlyFileUrl"!
 
-! ------------------- Instance methods for CypressFileTreeReadOnlyFileUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressFileTreeReadOnlyFileUrl
+!CypressFileTreeReadOnlyFileUrl methodsFor: 'accessing'!
 codeFormat
 
-	^'FileTree'
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressFileTreeReadOnlyFileUrl
+	^'FileTree'! !
+!CypressFileTreeReadOnlyFileUrl methodsFor: 'testing'!
 isStrict
 
-	^true
-%
+	^true! !
+" Class Implementation for CypressTopazUrl"!
 
-! Class Implementation for CypressTopazUrl
+" ------------------- Class methods for CypressTopazUrl"!
 
-! ------------------- Class methods for CypressTopazUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: CypressTopazUrl
+!CypressTopazUrl class methodsFor: 'constants'!
 schemeName
 
-	^'topaz'
-%
+	^'topaz'! !
+" ------------------- Instance methods for CypressTopazUrl"!
 
-! ------------------- Instance methods for CypressTopazUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressTopazUrl
+!CypressTopazUrl methodsFor: 'accessing'!
 codeFormat
 
-	^'Topaz'
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressTopazUrl
+	^'Topaz'! !
+!CypressTopazUrl methodsFor: 'testing'!
 isStrict
 
-	^true
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressTopazUrl
+	^true! !
+!CypressTopazUrl methodsFor: 'accessing'!
 repositoryClass
 
-	^CypressTopazRepository
-%
+	^CypressTopazRepository! !
+" Class Implementation for CypressSmalltalkUrl"!
 
-! Class Implementation for CypressSmalltalkUrl
+" ------------------- Class methods for CypressSmalltalkUrl"!
 
-! ------------------- Class methods for CypressSmalltalkUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: CypressSmalltalkUrl
+!CypressSmalltalkUrl class methodsFor: 'constants'!
 schemeName
 
 	^'chunk'
-%
+! !
+" ------------------- Instance methods for CypressSmalltalkUrl"!
 
-! ------------------- Instance methods for CypressSmalltalkUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressSmalltalkUrl
+!CypressSmalltalkUrl methodsFor: 'accessing'!
 codeFormat
 
 	^'Chunk'
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressSmalltalkUrl
+! !
+!CypressSmalltalkUrl methodsFor: 'testing'!
 isStrict
 
 	^true
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressSmalltalkUrl
+! !
+!CypressSmalltalkUrl methodsFor: 'accessing'!
 repositoryClass
 
 	^CypressSmalltalkRepository
-%
+! !
+" Class Implementation for CypressPackageInformation"!
 
-! Class Implementation for CypressPackageInformation
+" ------------------- Class methods for CypressPackageInformation"!
 
-! ------------------- Class methods for CypressPackageInformation
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressPackageInformation
+!CypressPackageInformation class methodsFor: 'instance creation'!
 named: aString repository: aCypressRepository
 	"Answer an instance of the receiver representing the named package.
 	 If the package was saved in a Repository, load up the saved details."
@@ -2375,131 +1592,83 @@ named: aString repository: aCypressRepository
 	^self new
 		initializeFromName: aString andRepository: aCypressRepository;
 		yourself
-%
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressPackageInformation
+! !
+!CypressPackageInformation class methodsFor: 'instance creation'!
 new
 
 	^super new
 		initialize;
 		yourself
-%
+! !
+" ------------------- Instance methods for CypressPackageInformation"!
 
-! ------------------- Instance methods for CypressPackageInformation
-
-category: 'updating - type'
-set compile_env: 0
-method: CypressPackageInformation
+!CypressPackageInformation methodsFor: 'updating - type'!
 beConflictedWith: somePackageNames
 	"Be designated as representing the prefix of one or more Known Package names."
 
 	type := 'Conflicted Name'.
 	competingPackageNames := somePackageNames sortAscending.
-	advice := 'Conflicts with the packages named ', self competingPackageNamesString
-%
-
-category: 'updating - type'
-set compile_env: 0
-method: CypressPackageInformation
+	advice := 'Conflicts with the packages named ', self competingPackageNamesString! !
+!CypressPackageInformation methodsFor: 'updating - type'!
 beKnown
 	"Be known to represent a real package."
 
 	type := 'Known Package'.
 	advice := ''.
 	competingPackageNames := #()
-%
-
-category: 'updating - type'
-set compile_env: 0
-method: CypressPackageInformation
+! !
+!CypressPackageInformation methodsFor: 'updating - type'!
 beQualifiedNameOf: somePackageNames
 	"Be designated as qualifying a Known Package name and therefore not eligible as a package name."
 
 	type := 'Qualified Name'.
 	competingPackageNames := somePackageNames sortAscending.
 	advice := 'Qualifies the package named ', self competingPackageNamesString
-%
-
-category: 'updating - type'
-set compile_env: 0
-method: CypressPackageInformation
+! !
+!CypressPackageInformation methodsFor: 'updating - type'!
 beUnknown
 	"Be designated as possibly representing a package, but not known to do so."
 
 	type := 'Unknown'.
 	advice := ''.
-	competingPackageNames := #()
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	competingPackageNames := #()! !
+!CypressPackageInformation methodsFor: 'accessing'!
 changesCount
 
-	^changesCount
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	^changesCount! !
+!CypressPackageInformation methodsFor: 'accessing'!
 changesCount: anInteger
 
-	changesCount := anInteger
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	changesCount := anInteger! !
+!CypressPackageInformation methodsFor: 'accessing'!
 changesStatus
 
 	^self hasChanges
 		ifTrue: [' (' , self changesCount printString , ')']
-		ifFalse: ['']
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+		ifFalse: ['']! !
+!CypressPackageInformation methodsFor: 'accessing'!
 classCount
 
-	^self imageCounts first
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	^self imageCounts first! !
+!CypressPackageInformation methodsFor: 'accessing'!
 competingPackageNames
 
-	^competingPackageNames
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	^competingPackageNames! !
+!CypressPackageInformation methodsFor: 'accessing'!
 competingPackageNamesString
 
 	^String streamContents: 
 			[:stream |
 			self competingPackageNames
 				do: [:each | stream nextPutAll: each printString]
-				separatedBy: [stream nextPutAll: ', ']]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+				separatedBy: [stream nextPutAll: ', ']]! !
+!CypressPackageInformation methodsFor: 'accessing'!
 description
 
 	self isKnown ifTrue: [^self savedLocation].
 	self isUnknown ifTrue: [^' <unknown>'].
-	^' <', advice, '>'
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	^' <', advice, '>'! !
+!CypressPackageInformation methodsFor: 'accessing'!
 determinedChangesCount
 
 	| notInImage notInSaved |
@@ -2508,36 +1677,21 @@ determinedChangesCount
 	notInSaved := self imageDefinitions
 		reject: [:each | self savedDefinitions includes: each].
 	^notInImage size + notInSaved size
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressPackageInformation
+! !
+!CypressPackageInformation methodsFor: 'testing'!
 hasChanges
 
-	^self changesCount > 0
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	^self changesCount > 0! !
+!CypressPackageInformation methodsFor: 'accessing'!
 imageCounts
 
-	^imageCounts
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	^imageCounts! !
+!CypressPackageInformation methodsFor: 'accessing'!
 imageCounts: someIntegers
 	"A pair: the number of classes and number of methods"
 
-	imageCounts := someIntegers
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	imageCounts := someIntegers! !
+!CypressPackageInformation methodsFor: 'accessing'!
 imageDefinitionCounts
 
 	| classCount methodCount |
@@ -2547,35 +1701,23 @@ imageDefinitionCounts
 			each classDefinition: [:classDefinition | classCount := classCount + 1]
 				methodDefinition: [:methodDefinition | methodCount := methodCount + 1]].
 	^Array with: classCount with: methodCount
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+! !
+!CypressPackageInformation methodsFor: 'accessing'!
 imageDefinitions
 
 	^imageDefinitions
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+! !
+!CypressPackageInformation methodsFor: 'accessing'!
 imageDefinitions: someCypressDefinitions
 
 	imageDefinitions := someCypressDefinitions
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+! !
+!CypressPackageInformation methodsFor: 'accessing'!
 imageDefinitionsStatus
 
 	^self classCount printString , '/' , self methodCount printString
-%
-
-category: 'initializing'
-set compile_env: 0
-method: CypressPackageInformation
+! !
+!CypressPackageInformation methodsFor: 'initializing'!
 initialize
 
 	self
@@ -2586,99 +1728,57 @@ initialize
 		savedLocation: '';
 		repositoryDescription: '';
 		imageCounts: #(0 0);
-		changesCount: 0
-%
-
-category: 'initializing'
-set compile_env: 0
-method: CypressPackageInformation
+		changesCount: 0! !
+!CypressPackageInformation methodsFor: 'initializing'!
 initializeFromName: aString andRepository: aCypressRepositoryOrNil
 
 	self name: aString.
 	aCypressRepositoryOrNil isNil ifTrue: [^self].
-	self updateKnownPackageRepository: aCypressRepositoryOrNil
-%
-
-category: 'testing - type'
-set compile_env: 0
-method: CypressPackageInformation
+	self updateKnownPackageRepository: aCypressRepositoryOrNil! !
+!CypressPackageInformation methodsFor: 'testing - type'!
 isConflicted
 
-	^type = 'Conflicted Name'
-%
-
-category: 'testing - type'
-set compile_env: 0
-method: CypressPackageInformation
+	^type = 'Conflicted Name'! !
+!CypressPackageInformation methodsFor: 'testing - type'!
 isKnown
 
-	^type = 'Known Package'
-%
-
-category: 'testing - type'
-set compile_env: 0
-method: CypressPackageInformation
+	^type = 'Known Package'! !
+!CypressPackageInformation methodsFor: 'testing - type'!
 isQualifiedName
 
-	^type = 'Qualified Name'
-%
-
-category: 'testing - type'
-set compile_env: 0
-method: CypressPackageInformation
+	^type = 'Qualified Name'! !
+!CypressPackageInformation methodsFor: 'testing - type'!
 isUnknown
 
-	^type = 'Unknown'
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	^type = 'Unknown'! !
+!CypressPackageInformation methodsFor: 'accessing'!
 methodCount
 
-	^self imageCounts last
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	^self imageCounts last! !
+!CypressPackageInformation methodsFor: 'accessing'!
 name
 
 	^name
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+! !
+!CypressPackageInformation methodsFor: 'accessing'!
 name: aString
 
 	name := aString
-%
-
-category: 'printing'
-set compile_env: 0
-method: CypressPackageInformation
+! !
+!CypressPackageInformation methodsFor: 'printing'!
 printDetailsOn: aStream
 
 	aStream
 		nextPutAll: self name;
 		nextPutAll: ' - ';
-		nextPutAll: self description
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
+		nextPutAll: self description! !
+!CypressPackageInformation methodsFor: 'updating'!
 readDefinitionsFromRepository
 
 	^(self repository reader readPackageStructureForPackageNamed: self name)
 		packageStructure snapshot
-		definitions
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
+		definitions! !
+!CypressPackageInformation methodsFor: 'updating'!
 refresh
 
 	self isKnown ifFalse: [^self].
@@ -2686,105 +1786,60 @@ refresh
 		updateImageDefinitions;
 		updateSavedDefinitions;
 		updateChangesCount.
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+! !
+!CypressPackageInformation methodsFor: 'accessing'!
 repository
 
-	^repository
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	^repository! !
+!CypressPackageInformation methodsFor: 'accessing'!
 repository: aCypressFileSystemRepository
 
-	repository := aCypressFileSystemRepository
-%
-
-category: 'unknown'
-set compile_env: 0
-method: CypressPackageInformation
+	repository := aCypressFileSystemRepository! !
+!CypressPackageInformation methodsFor: 'unknown'!
 repositoryDescription
 
-	^repositoryDescription
-%
-
-category: 'unknown'
-set compile_env: 0
-method: CypressPackageInformation
+	^repositoryDescription! !
+!CypressPackageInformation methodsFor: 'unknown'!
 repositoryDescription: aString
 
-	repositoryDescription := aString
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	repositoryDescription := aString! !
+!CypressPackageInformation methodsFor: 'accessing'!
 savedDefinitions
 
 	^savedDefinitions
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+! !
+!CypressPackageInformation methodsFor: 'accessing'!
 savedDefinitions: someCypressDefinitions
 
 	savedDefinitions := someCypressDefinitions
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+! !
+!CypressPackageInformation methodsFor: 'accessing'!
 savedLocation
 
-	^savedLocation
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	^savedLocation! !
+!CypressPackageInformation methodsFor: 'accessing'!
 savedLocation: aDirectory
 
-	savedLocation := aDirectory
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageInformation
+	savedLocation := aDirectory! !
+!CypressPackageInformation methodsFor: 'accessing'!
 status
 
 	| changes |
 	(changes := self changesStatus) isEmpty ifTrue: [^self imageDefinitionsStatus].
-	^self imageDefinitionsStatus, changes
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
+	^self imageDefinitionsStatus, changes! !
+!CypressPackageInformation methodsFor: 'updating'!
 updateChangesCount
 	"Must be applied after the image definitions and saved definitions are updated."
 
-	self changesCount: self determinedChangesCount
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
+	self changesCount: self determinedChangesCount! !
+!CypressPackageInformation methodsFor: 'updating'!
 updateImageDefinitions
 
 	self
 		imageDefinitions: (CypressPackageDefinition named: self name) snapshot
 					definitions;
-		imageCounts: self imageDefinitionCounts
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
+		imageCounts: self imageDefinitionCounts! !
+!CypressPackageInformation methodsFor: 'updating'!
 updateKnownPackageRepository: aCypressRepository
 	"Update the receiver to reflect it being a known package."
 
@@ -2792,325 +1847,195 @@ updateKnownPackageRepository: aCypressRepository
 		beKnown;
 		updateRepository: aCypressRepository;
 		refresh.
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
+! !
+!CypressPackageInformation methodsFor: 'updating'!
 updateRepository: aCypressRepository
 
 	self
 		repository: aCypressRepository;
 		repositoryDescription: self repository description;
-		savedLocation: self repository directoryPath
-%
-
-category: 'updating'
-set compile_env: 0
-method: CypressPackageInformation
+		savedLocation: self repository directoryPath! !
+!CypressPackageInformation methodsFor: 'updating'!
 updateSavedDefinitions
 
-	self savedDefinitions: self readDefinitionsFromRepository
-%
+	self savedDefinitions: self readDefinitionsFromRepository! !
+" Class Implementation for CypressAbstractPackageInformation"!
 
-! Class Implementation for CypressAbstractPackageInformation
+" ------------------- Class methods for CypressAbstractPackageInformation"!
 
-! ------------------- Class methods for CypressAbstractPackageInformation
-
-category: 'Instance Creation'
-set compile_env: 0
-classmethod: CypressAbstractPackageInformation
+!CypressAbstractPackageInformation class methodsFor: 'Instance Creation'!
 named: aString
 
 	^self new
 		initializeWithName: aString;
-		yourself
-%
+		yourself! !
+" ------------------- Instance methods for CypressAbstractPackageInformation"!
 
-! ------------------- Instance methods for CypressAbstractPackageInformation
-
-category: 'Initializing - private'
-set compile_env: 0
-method: CypressAbstractPackageInformation
-initialize
-%
-
-category: 'Initializing - private'
-set compile_env: 0
-method: CypressAbstractPackageInformation
+!CypressAbstractPackageInformation methodsFor: 'Initializing - private'!
+initialize! !
+!CypressAbstractPackageInformation methodsFor: 'Initializing - private'!
 initializeWithName: aString
 
 	self initialize.
-	self name: aString
-%
-
-category: 'Testing'
-set compile_env: 0
-method: CypressAbstractPackageInformation
+	self name: aString! !
+!CypressAbstractPackageInformation methodsFor: 'Testing'!
 isKnown
 
 	^false
-%
-
-category: 'Accessing'
-set compile_env: 0
-method: CypressAbstractPackageInformation
+! !
+!CypressAbstractPackageInformation methodsFor: 'Accessing'!
 name
 
-	^name
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressAbstractPackageInformation
+	^name! !
+!CypressAbstractPackageInformation methodsFor: 'Updating'!
 name: aString
 
-	name := aString
-%
-
-category: 'Printing'
-set compile_env: 0
-method: CypressAbstractPackageInformation
+	name := aString! !
+!CypressAbstractPackageInformation methodsFor: 'Printing'!
 printDetailsOn: aStream
 
-	aStream nextPutAll: self name
-%
-
-category: 'Accessing'
-set compile_env: 0
-method: CypressAbstractPackageInformation
+	aStream nextPutAll: self name! !
+!CypressAbstractPackageInformation methodsFor: 'Accessing'!
 repositories
 
-	^#()
-%
+	^#()! !
+" Class Implementation for CypressEclipsedPackageInformation"!
 
-! Class Implementation for CypressEclipsedPackageInformation
+" ------------------- Class methods for CypressEclipsedPackageInformation"!
 
-! ------------------- Class methods for CypressEclipsedPackageInformation
-
-category: 'Instance Creation'
-set compile_env: 0
-classmethod: CypressEclipsedPackageInformation
+!CypressEclipsedPackageInformation class methodsFor: 'Instance Creation'!
 fromUnknown: unknownPackageInformation eclipsedBy: knownPackageInformation
 
 	^(self named: unknownPackageInformation name)
 		eclipsedBy: knownPackageInformation;
 		yourself.
-%
+! !
+" ------------------- Instance methods for CypressEclipsedPackageInformation"!
 
-! ------------------- Instance methods for CypressEclipsedPackageInformation
-
-category: 'Accessing'
-set compile_env: 0
-method: CypressEclipsedPackageInformation
+!CypressEclipsedPackageInformation methodsFor: 'Accessing'!
 eclipsedBy
 
-	^eclipsedBy
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressEclipsedPackageInformation
+	^eclipsedBy! !
+!CypressEclipsedPackageInformation methodsFor: 'Updating'!
 eclipsedBy: aPackageInformation
 
-	eclipsedBy := aPackageInformation
-%
+	eclipsedBy := aPackageInformation! !
+" Class Implementation for CypressUnknownPackageInformation"!
 
-! Class Implementation for CypressUnknownPackageInformation
+" Class Implementation for CypressKnownPackageInformation"!
 
-! Class Implementation for CypressKnownPackageInformation
+" ------------------- Class methods for CypressKnownPackageInformation"!
 
-! ------------------- Class methods for CypressKnownPackageInformation
-
-category: 'Instance Creation'
-set compile_env: 0
-classmethod: CypressKnownPackageInformation
+!CypressKnownPackageInformation class methodsFor: 'Instance Creation'!
 fromUnknown: aPackageInformation
 
-	^self named: aPackageInformation name
-%
+	^self named: aPackageInformation name! !
+" ------------------- Instance methods for CypressKnownPackageInformation"!
 
-! ------------------- Instance methods for CypressKnownPackageInformation
-
-category: 'Updating'
-set compile_env: 0
-method: CypressKnownPackageInformation
+!CypressKnownPackageInformation methodsFor: 'Updating'!
 addRepository: aRepository
 
 	self repositories at: aRepository url put: aRepository.
-	self updateDigestsFromImageAndRepository: aRepository.
-%
-
-category: 'Accessing - digests'
-set compile_env: 0
-method: CypressKnownPackageInformation
+	self updateDigestsFromImageAndRepository: aRepository.! !
+!CypressKnownPackageInformation methodsFor: 'Accessing - digests'!
 determineDigestFromImage
 
-	^self packageStructure digest
-%
-
-category: 'Accessing - digests'
-set compile_env: 0
-method: CypressKnownPackageInformation
+	^self packageStructure digest! !
+!CypressKnownPackageInformation methodsFor: 'Accessing - digests'!
 determineDigestFromRepository: aRepository
 
 	^ (aRepository readPackageStructureForPackageNamed: self name) digest.
-%
-
-category: 'Accessing - digests'
-set compile_env: 0
-method: CypressKnownPackageInformation
+! !
+!CypressKnownPackageInformation methodsFor: 'Accessing - digests'!
 digestFor: source
 
-	^self digestFor: source or: [nil]
-%
-
-category: 'Accessing - digests'
-set compile_env: 0
-method: CypressKnownPackageInformation
+	^self digestFor: source or: [nil]! !
+!CypressKnownPackageInformation methodsFor: 'Accessing - digests'!
 digestFor: source or: aBlock
 
-	^self digests at: source ifAbsent: aBlock
-%
-
-category: 'Accessing - digests'
-set compile_env: 0
-method: CypressKnownPackageInformation
+	^self digests at: source ifAbsent: aBlock! !
+!CypressKnownPackageInformation methodsFor: 'Accessing - digests'!
 digests
 
-	^digests
-%
-
-category: 'Initializing - private'
-set compile_env: 0
-method: CypressKnownPackageInformation
+	^digests! !
+!CypressKnownPackageInformation methodsFor: 'Initializing - private'!
 digests: anIdentityDictionary
 	"Key: Source of package definitions (#IMAGE or a Repository url)
 	 Value: (e.g. MD5) Digest of the package's defintions or an empty string.
 	 A nil digest means there are no definitions for the given source."
 
    digests := anIdentityDictionary
-%
-
-category: 'Accessing - digests'
-set compile_env: 0
-method: CypressKnownPackageInformation
+! !
+!CypressKnownPackageInformation methodsFor: 'Accessing - digests'!
 imageDigest
 
 	^self digestFor: #IMAGE.
-%
-
-category: 'Initializing - private'
-set compile_env: 0
-method: CypressKnownPackageInformation
+! !
+!CypressKnownPackageInformation methodsFor: 'Initializing - private'!
 initialize
 
 	super initialize.
 	self
 		repositories: IdentityDictionary new;
 		digests: IdentityDictionary new.
-%
-
-category: 'Testing'
-set compile_env: 0
-method: CypressKnownPackageInformation
+! !
+!CypressKnownPackageInformation methodsFor: 'Testing'!
 isKnown
 
 	^true
-%
-
-category: 'Accessing - digests'
-set compile_env: 0
-method: CypressKnownPackageInformation
+! !
+!CypressKnownPackageInformation methodsFor: 'Accessing - digests'!
 packageStructure
 
 	^CypressPackageStructure
-		fromPackage: (CypressPackageDefinition named: self name)
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressKnownPackageInformation
+		fromPackage: (CypressPackageDefinition named: self name)! !
+!CypressKnownPackageInformation methodsFor: 'Updating'!
 removeRepository: aRepository
 
 	self repositories removeKey: aRepository url ifAbsent: [].
 	self digests removeKey: aRepository url ifAbsent: [].
 	self updateDigestsFromImage.
-%
-
-category: 'Accessing'
-set compile_env: 0
-method: CypressKnownPackageInformation
+! !
+!CypressKnownPackageInformation methodsFor: 'Accessing'!
 repositories
 
-	^repositories
-%
-
-category: 'Initializing - private'
-set compile_env: 0
-method: CypressKnownPackageInformation
+	^repositories! !
+!CypressKnownPackageInformation methodsFor: 'Initializing - private'!
 repositories: anIdentityDictionary
 	"Key: Repository url
 	 Value: Repository"
 
-	repositories := anIdentityDictionary
-%
-
-category: 'Accessing - digests'
-set compile_env: 0
-method: CypressKnownPackageInformation
+	repositories := anIdentityDictionary! !
+!CypressKnownPackageInformation methodsFor: 'Accessing - digests'!
 repositoryDigests
 
-	^self repositories collect: [:each | self digestFor: each url]
-%
-
-category: 'Updating - digests'
-set compile_env: 0
-method: CypressKnownPackageInformation
+	^self repositories collect: [:each | self digestFor: each url]! !
+!CypressKnownPackageInformation methodsFor: 'Updating - digests'!
 updateDigestsFromAllRepositories
 
-	self repositories do: [:each | self updateDigestsFromRepository: each]
-%
-
-category: 'Updating - digests'
-set compile_env: 0
-method: CypressKnownPackageInformation
+	self repositories do: [:each | self updateDigestsFromRepository: each]! !
+!CypressKnownPackageInformation methodsFor: 'Updating - digests'!
 updateDigestsFromImage
 
-	self digests at: #IMAGE put: self determineDigestFromImage
-%
-
-category: 'Updating - digests'
-set compile_env: 0
-method: CypressKnownPackageInformation
+	self digests at: #IMAGE put: self determineDigestFromImage! !
+!CypressKnownPackageInformation methodsFor: 'Updating - digests'!
 updateDigestsFromImageAndAllRepositories
 
 	self
 		updateDigestsFromImage;
-		updateDigestsFromAllRepositories
-%
-
-category: 'Updating - digests'
-set compile_env: 0
-method: CypressKnownPackageInformation
+		updateDigestsFromAllRepositories! !
+!CypressKnownPackageInformation methodsFor: 'Updating - digests'!
 updateDigestsFromImageAndRepository: aRepository
 
 	self
 		updateDigestsFromImage;
-		updateDigestsFromRepository: aRepository
-%
-
-category: 'Updating - digests'
-set compile_env: 0
-method: CypressKnownPackageInformation
+		updateDigestsFromRepository: aRepository! !
+!CypressKnownPackageInformation methodsFor: 'Updating - digests'!
 updateDigestsFromRepository: aRepository
 
 	self digests at: aRepository url put: (self determineDigestFromRepository: aRepository).
-%
-
-category: 'Writing'
-set compile_env: 0
-method: CypressKnownPackageInformation
+! !
+!CypressKnownPackageInformation methodsFor: 'Writing'!
 writeChangesToAllRepositories
 
 	| imageDigest changedDigests changedRepositories |
@@ -3119,62 +2044,44 @@ writeChangesToAllRepositories
 	changedDigests := self repositoryDigests reject: [:each | each = imageDigest].
 	changedRepositories := changedDigests keys collect: [:each | self repositories at: each].
 	self writePackageToRepositories: changedRepositories.
-%
-
-category: 'Writing'
-set compile_env: 0
-method: CypressKnownPackageInformation
+! !
+!CypressKnownPackageInformation methodsFor: 'Writing'!
 writePackageToRepositories: someRepositories
 
 	| packageStructure |
 	packageStructure := self packageStructure.
 	^someRepositories
-		do: [:each | each writePackageStructure: packageStructure]
-%
+		do: [:each | each writePackageStructure: packageStructure]! !
+" Class Implementation for CypressConflictingPackageInformation"!
 
-! Class Implementation for CypressConflictingPackageInformation
+" ------------------- Class methods for CypressConflictingPackageInformation"!
 
-! ------------------- Class methods for CypressConflictingPackageInformation
-
-category: 'Instance Creation'
-set compile_env: 0
-classmethod: CypressConflictingPackageInformation
+!CypressConflictingPackageInformation class methodsFor: 'Instance Creation'!
 fromUnknown: unknownPackageInformation conflictingWith: knownPackageInformation
 
 	^(self named: unknownPackageInformation name)
 		conflictsWith: knownPackageInformation;
 		yourself.
-%
+! !
+" ------------------- Instance methods for CypressConflictingPackageInformation"!
 
-! ------------------- Instance methods for CypressConflictingPackageInformation
-
-category: 'Accessing'
-set compile_env: 0
-method: CypressConflictingPackageInformation
+!CypressConflictingPackageInformation methodsFor: 'Accessing'!
 conflictsWith
 
-	^conflictsWith
-%
-
-category: 'Updating'
-set compile_env: 0
-method: CypressConflictingPackageInformation
+	^conflictsWith! !
+!CypressConflictingPackageInformation methodsFor: 'Updating'!
 conflictsWith: someCypressKnownPackageInformations
 
-	conflictsWith := someCypressKnownPackageInformations
-%
+	conflictsWith := someCypressKnownPackageInformations! !
+" Class Extensions "!
 
-! Class Extensions
+" Class initializers "!
 
-! Class initializers 
-
-doit
-CypressAbstractRepository initialize.
-CypressPackageManager2 initialize.
-%
+CypressAbstractRepository initialize.!
+CypressPackageManager2 initialize.!
 
 
 
-! End of Package: Cypress-PackageManagement
+" End of Package: Cypress-PackageManagement"!
 
 
