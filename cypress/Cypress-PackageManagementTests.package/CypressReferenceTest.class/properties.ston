@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-PackageManagementTests",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "CypressReferenceTest",
+	"pools" : [
+		 ],
+	"super" : "CypressAbstractTest" }

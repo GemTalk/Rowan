@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-GemStoneFileServer",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "CypressTopazFileoutWriter",
+	"pools" : [
+		 ],
+	"super" : "CypressAbstractFileoutWriter" }

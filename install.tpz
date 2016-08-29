@@ -14,33 +14,67 @@ errorCount
 !Stream installPortableStreamImplementation.
 !%
 errorCount
-input /opt/git/CypressReferenceImplementation/Cypress-GemStoneCompatibilityLayer.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-GemStoneCompatibilityLayer.gs
 errorCount
-input /opt/git/CypressReferenceImplementation/Cypress-Definitions.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Definitions.gs
 errorCount
-input /opt/git/CypressReferenceImplementation/Cypress-Structure.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Structure.gs
 errorCount
-input /opt/git/CypressReferenceImplementation/Cypress-Mocks.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Mocks.gs
 errorCount
-input /opt/git/CypressReferenceImplementation/Cypress-GemStoneFileServer.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-GemStoneFileServer.gs
 errorCount
-input /opt/git/CypressReferenceImplementation/Network-Url.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Network-Url.gs
 errorCount
-input /opt/git/CypressReferenceImplementation/Cypress-MesssageDigest.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-MesssageDigest.gs
 errorCount
-input /opt/git/CypressReferenceImplementation/Cypress-Comparison.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-PackageManagement.gs
 errorCount
-input /opt/git/CypressReferenceImplementation/Cypress-PackageManagement.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-PackageManagementTests.gs
 errorCount
-input /opt/git/CypressReferenceImplementation/Cypress-Tests.gs
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Comparison.gs
+errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Tests.gs
+errorCount
+input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/NetworkTests.gs
 errorCount
 !input /opt/git/CypressReferenceImplementation/NetworkTests.gs
 !errorCount
 
-display resultcheck
 commit
 
+run
+| packageManager repo packageNames summary |
+packageNames := #(
+		'Cypress-GemStoneCompatibilityLayer'
+		'Cypress-Definitions'
+		'Cypress-Structure'
+		'Cypress-Mocks'
+		'Cypress-GemStoneFileServer'
+		'Network-Url'
+		'Cypress-MesssageDigest'
+		'Cypress-PackageManagement'
+		'Cypress-PackageManagementTests'
+		'Cypress-Comparison'
+		'Cypress-Tests'
+		'NetworkTests'
+	).
+packageManager := CypressPackageManager2 new.
+repo := CypressAbstractRepository
+			onUrl: 'cypress:/export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/' asUrl
+			alias: 'Reference Implementation'.
+packageNames do: [:each |
+	summary := packageManager
+					loadPackageFrom: (CypressKnownPackageInformation named: each)
+					inRepository: repo.
+	summary isEmpty
+		ifFalse: [self error: 'Could not reload package named: ', each printString].
+].
+%
+
+commit
 logout
 
 output pop
 errorCount
+

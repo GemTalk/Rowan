@@ -54,13 +54,14 @@ formats (see the subclasses of CypressAbstractFileUrl). The URL scheme distingui
 'cypresslax' tolerates FileTree method formats, but writes Cypress format. 'cypressft' reads and writes using the FileTree method format.
 'cypressfiletree' is a read-only scheme that reads FileTree format, but cannot overwrite it, thereby protecting the FileTree meta-data.)
 
+A recent addition to the URLs provide a topaz scheme and a chunk scheme. These allow repositories of Topaz file-ins and chunk-format file-ins.
+At present, these are 'write-only' repository schemes.
+
 CypressPackageManagerTest provides test cases for this upcoming Package Manager (note that some tests have no implementation yet).
 
 ### Issues
 - The .gs fileouts used to bootstrap Cypress into the image add extra linefeeds at the end of methods.
   (This is unavoidable, due to the .gs file format, and will not be corrected.)
-- The .gs fileouts have problems loading character values between 128 and 255 (e.g., accented characters).
-  (By loading the actual Cypress version over it, the problem is eliminated during the bootstrap.)
 - CypressPackageManager2 is incomplete, a work in progress.
 - The only user interface offered requires GBS 7.6 and VisualWorks 7.9.1. (It may work with older versions, but hasn't been tested with any.)
 - There is no GBS for VisualAge user interface provided yet.
