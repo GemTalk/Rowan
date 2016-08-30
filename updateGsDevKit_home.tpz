@@ -1,4 +1,8 @@
 
+ifErr 1 stk
+ifErr 2 stack
+ifErr 3 exit 1
+
 set u SystemUser p swordfish
 login
 

@@ -8,5 +8,5 @@ readStreamFor: filePath do: aOneArgBlock
 	GsFile serverErrorString.
 	file := GsFile openReadOnServer: filePath.
 	GsFile serverErrorString ifNotNil: [:errorMessage | self error: errorMessage].
-	[stream := ReadStream on: (String withAll: file contents asByteArray decodeFromUTF8).
+	[stream := ReadStreamPortable on: (String withAll: file contents asByteArray decodeFromUTF8).
 	aOneArgBlock value: stream] ensure: [file close]
