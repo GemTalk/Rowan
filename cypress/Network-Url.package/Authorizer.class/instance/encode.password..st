@@ -11,7 +11,7 @@ encode: nameString password: pwdString
 	[ clear size \\ 3 ~= 0 ] whileTrue: [ clear := clear, #(0) ].
 	idx := 1.
 	map := 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.
-	code := WriteStream on: String new.
+	code := WriteStreamPortable on: String new.
 	[ idx < clear size ] whileTrue: [ code 
 		nextPut: (map at: (clear at: idx) // 4 + 1);
 		nextPut: (map at: (clear at: idx) \\ 4 * 16 + ((clear at: idx + 1) // 16) + 1);

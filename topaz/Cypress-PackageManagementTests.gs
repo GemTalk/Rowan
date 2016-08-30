@@ -430,7 +430,7 @@ method: CypressStructureTest
 testPropertyDictionaryWrite
     | propertyDictionary stream x |
     propertyDictionary := (self compileJSON: self sampleJson) asCypressPropertyObject.
-    stream := WriteStream on: String new.
+    stream := WriteStreamPortable on: String new.
     propertyDictionary writeCypressJsonOn: stream indent: 0.
     self assert: (x := stream contents withUnixLineEndings) equals: self sampleJson withUnixLineEndings
 %
@@ -973,8 +973,8 @@ method: CypressExtensionsTest
 unixLinesFrom: aString
 	
 	| sourceStream resultStream |
-	sourceStream := ReadStream on: aString withUnixLineEndings.
-	resultStream := WriteStream on: Array new.
+	sourceStream := ReadStreamPortable on: aString withUnixLineEndings.
+	resultStream := WriteStreamPortable on: Array new.
 	[sourceStream atEnd]
 		whileFalse: [resultStream nextPut: (sourceStream upTo: Character lf)].
 	^resultStream contents.

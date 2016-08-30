@@ -10,7 +10,7 @@ privateParsePath: remainder relativeTo: basePath
 	parsedPath isEmpty ifFalse: [ parsedPath removeLast ].
 	
 	[ s peek = $/ ifTrue: [ s next ].
-	nextTok := WriteStream on: String new.
+	nextTok := WriteStreamPortable on: String new.
 	[ s atEnd or: [ s peek = $/ ] ] whileFalse: [ nextTok nextPut: s next ].
 	nextTok := nextTok contents unescapePercents.
 	nextTok = '..' 

@@ -148,7 +148,7 @@ classmethod: SequenceableCollection
 new: newSize streamContents: aOneArgBlock
 
 	| stream |
-	stream := WriteStream on: (self streamSpecies new: newSize).
+	stream := WriteStreamPortable on: (self streamSpecies new: newSize).
 	aOneArgBlock value: stream.
 	stream position = newSize
 		ifTrue: [ ^stream originalContents ]
@@ -390,7 +390,7 @@ fromUnixFormatString: aString
 	"
 
 	| stream sign positionBias |
-	stream := ReadStream on: aString.
+	stream := ReadStreamPortable on: aString.
 	sign := aString at: aString size - 4.
 	positionBias := stream class isLegacyStreamImplementation
 		ifTrue: [1]

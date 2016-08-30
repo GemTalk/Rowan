@@ -5,7 +5,7 @@ category: *Cypress-GemStoneCompatibilityLayer
 new: newSize streamContents: aOneArgBlock
 
 	| stream |
-	stream := WriteStream on: (self streamSpecies new: newSize).
+	stream := WriteStreamPortable on: (self streamSpecies new: newSize).
 	aOneArgBlock value: stream.
 	stream position = newSize
 		ifTrue: [ ^stream originalContents ]

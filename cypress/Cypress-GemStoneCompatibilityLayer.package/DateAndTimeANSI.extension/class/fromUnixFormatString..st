@@ -11,7 +11,7 @@ fromUnixFormatString: aString
 	"
 
 	| stream sign positionBias |
-	stream := ReadStream on: aString.
+	stream := ReadStreamPortable on: aString.
 	sign := aString at: aString size - 4.
 	positionBias := stream class isLegacyStreamImplementation
 		ifTrue: [1]

@@ -4,7 +4,7 @@ category: printing
 "
 fullPath
 	| ans |
-	ans := WriteStream on: String new.
+	ans := WriteStreamPortable on: String new.
 	path do: [ :pathElem |
 		ans nextPut: $/.
 		ans nextPutAll: pathElem encodeForHTTP. ].
