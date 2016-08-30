@@ -1,0 +1,74 @@
+errorCount
+output pushnew CypressReferenceImplementationInstall.out  only
+errorCount
+
+set user SystemUser pass swordfish
+login
+
+! switch to errorcheck because class definitions doit's don't have expectvalue
+display errorcheck
+errorCount
+
+errorCount
+input $GS_HOME/shared/repos/CypressReferenceImplementation/cypress/Cypress-GemStoneCompatibilityLayer.gs
+errorCount
+input $GS_HOME/shared/repos/CypressReferenceImplementation/cypress/Cypress-Definitions.gs
+errorCount
+input $GS_HOME/shared/repos/CypressReferenceImplementation/cypress/Cypress-Structure.gs
+errorCount
+input $GS_HOME/shared/repos/CypressReferenceImplementation/cypress/Cypress-Mocks.gs
+errorCount
+input $GS_HOME/shared/repos/CypressReferenceImplementation/cypress/Cypress-GemStoneFileServer.gs
+errorCount
+input $GS_HOME/shared/repos/CypressReferenceImplementation/cypress/Network-Url.gs
+errorCount
+input $GS_HOME/shared/repos/CypressReferenceImplementation/cypress/Cypress-MesssageDigest.gs
+errorCount
+input $GS_HOME/shared/repos/CypressReferenceImplementation/cypress/Cypress-PackageManagement.gs
+errorCount
+input $GS_HOME/shared/repos/CypressReferenceImplementation/cypress/Cypress-PackageManagementTests.gs
+errorCount
+input $GS_HOME/shared/repos/CypressReferenceImplementation/cypress/Cypress-Comparison.gs
+errorCount
+input $GS_HOME/shared/repos/CypressReferenceImplementation/cypress/Cypress-Tests.gs
+errorCount
+input $GS_HOME/shared/repos/CypressReferenceImplementation/cypress/NetworkTests.gs
+errorCount
+
+commit
+
+run
+| packageManager repo packageNames summary |
+packageNames := #(
+		'Cypress-GemStoneCompatibilityLayer'
+		'Cypress-Definitions'
+		'Cypress-Structure'
+		'Cypress-Mocks'
+		'Cypress-GemStoneFileServer'
+		'Network-Url'
+		'Cypress-MesssageDigest'
+		'Cypress-PackageManagement'
+		'Cypress-PackageManagementTests'
+		'Cypress-Comparison'
+		'Cypress-Tests'
+		'NetworkTests'
+	).
+packageManager := CypressPackageManager2 new.
+repo := CypressAbstractRepository
+			onUrl: 'cypress:$GS_HOME/shared/repos/CypressReferenceImplementation/cypress/' asUrl
+			alias: 'Reference Implementation'.
+packageNames do: [:each |
+	summary := packageManager
+					loadPackageFrom: (CypressKnownPackageInformation named: each)
+					inRepository: repo.
+	summary isEmpty
+		ifFalse: [self error: 'Could not reload package named: ', each printString].
+].
+%
+
+commit
+logout
+
+output pop
+errorCount
+
