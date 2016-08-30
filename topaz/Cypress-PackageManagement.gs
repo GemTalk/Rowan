@@ -583,18 +583,8 @@ comparePackageFrom: aCypressPackageInformation
 	^self comparePackagesFrom: (Array with: aCypressPackageInformation)
 %
 
-category: 'comparing'
-set compile_env: 0
-method: CypressPackageManager
-comparePackagesFrom: someCypressPackageInformations
 
-	^(someCypressPackageInformations
-		inject: CypressPackageComparator new
-		into: 
-			[:comparer :each |
-			comparer comparingPackageNamed: each name fromDirectory: each savedLocation])
-				getDifferences
-%
+! remove comparePackagesFrom: because of a forward dependency
 
 category: 'updating - private'
 set compile_env: 0

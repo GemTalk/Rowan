@@ -1489,7 +1489,7 @@ System myUserProfile symbolList do: [:symDict |
 			]
 		]
 	]
-].
+]'.
 %
 
 
