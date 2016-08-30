@@ -101,7 +101,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -115,7 +115,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'This is a "write-only" repository.
@@ -131,7 +131,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'This is a "write-only" repository.
@@ -203,7 +203,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -231,7 +231,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
