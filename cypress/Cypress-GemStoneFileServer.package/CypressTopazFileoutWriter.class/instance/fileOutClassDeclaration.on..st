@@ -17,5 +17,6 @@ fileOutClassDeclaration: classStructure on: aStream
 		nextPutAll: '		category: ', classStructure category printString, ';'; lf;
 		nextPutAll: '		comment: ', classStructure comment printString, ';'; lf;
 		nextPutAll: '		immediateInvariant.'; lf;
+                nextPutAll: 'true.'; lf;
 		nextPutAll: '%'; lf;
 		lf.

@@ -1,5 +1,5 @@
 "
-notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
 category: writing - private
 "
 fileOutPackagePreambleOn: aStream
@@ -40,6 +40,7 @@ fileOutPackagePreambleOn: aStream
 		nextPutAll: '		]'; lf;
 		nextPutAll: '	]'; lf;
 		nextPutAll: '].'; lf;
+                nextPutAll: 'true.'; lf;
 		nextPutAll: '%'; lf;
 		lf;
 		lf
