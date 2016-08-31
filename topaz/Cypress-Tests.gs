@@ -45,7 +45,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -59,7 +59,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -73,7 +73,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -87,7 +87,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -101,7 +101,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -115,7 +115,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';
@@ -129,7 +129,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Tests';
 		comment: '';

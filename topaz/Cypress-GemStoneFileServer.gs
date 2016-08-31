@@ -143,7 +143,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-GemStoneFileServer';
 		comment: '';
@@ -157,7 +157,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-GemStoneFileServer';
 		comment: '';
@@ -171,7 +171,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-GemStoneFileServer';
 		comment: '';
@@ -213,7 +213,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-GemStoneFileServer';
 		comment: '';
@@ -1165,7 +1165,7 @@ fileOutClassDeclaration: classStructure on: aStream
 		nextPutAll: '	classVars: #( ', classStructure classVariablesString, ' )'; lf;
 		nextPutAll: '	classInstVars: #( ', classStructure classInstanceVariablesString, ' )'; lf;
 		nextPutAll: '	poolDictionaries: #()'; lf;
-		nextPutAll: '	inDictionary: UserGlobals'; lf;
+		nextPutAll: '	inDictionary: Globals'; lf;
 		nextPutAll: '	options: #())'; lf;
 		nextPutAll: '		category: ', classStructure category printString, ';'; lf;
 		nextPutAll: '		comment: ', classStructure comment printString, ';'; lf;
