@@ -45,7 +45,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: 'CypressLoaderError is used to report a failure applying a specific CypressPatchOperation.
@@ -69,7 +69,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -83,7 +83,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -97,7 +97,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: 'CypressLoaderErrorNotification is used to notify a consumer of the CypressLoader that a particular CypressPatchOperation failed.
@@ -119,7 +119,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -133,7 +133,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -147,7 +147,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -161,7 +161,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -175,7 +175,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -189,7 +189,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -203,7 +203,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -217,7 +217,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -231,7 +231,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -245,7 +245,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -259,7 +259,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -273,7 +273,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -287,7 +287,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -301,7 +301,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';

@@ -45,7 +45,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'A CypressVersionReference refers to a specific version of a Monticello package.';
@@ -59,7 +59,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -73,7 +73,7 @@ doit
 	classVars: #( DefaultCopyrightNotice )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -87,7 +87,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -101,7 +101,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -115,7 +115,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'This is a "write-only" repository.
@@ -131,7 +131,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'This is a "write-only" repository.
@@ -147,7 +147,7 @@ doit
 	classVars: #( SavedPackageManagers )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -161,7 +161,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'No class-specific documentation for CypressAbstractFileUrl, hierarchy is: 
@@ -180,7 +180,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'No class-specific documentation for CypressLaxFileUrl, hierarchy is: 
@@ -200,7 +200,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'No class-specific documentation for CypressFileTreeFormatFileUrl, hierarchy is: 
@@ -220,7 +220,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'No class-specific documentation for CypressFileUrl, hierarchy is: 
@@ -240,7 +240,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'No class-specific documentation for CypressFileTreeReadOnlyFileUrl, hierarchy is: 
@@ -260,7 +260,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'No class-specific documentation for CypressTopazUrl, hierarchy is: 
@@ -280,7 +280,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'No class-specific documentation for CypressSmalltalkUrl, hierarchy is: 
@@ -300,7 +300,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'CypressPackageInformation documents potential and actual packages for the Cypress Package Manager. 
@@ -335,7 +335,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -349,7 +349,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -363,7 +363,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -377,7 +377,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -391,7 +391,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
