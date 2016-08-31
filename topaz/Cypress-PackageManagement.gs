@@ -1953,28 +1953,34 @@ category: 'Loading'
 set compile_env: 0
 method: CypressPackageManager2
 loadPackageFrom: aKnownPackageInformation inRepository: aRepository
+  ^ self
+    loadPackageFrom: aKnownPackageInformation
+    defaultSymbolDictionaryName: nil
+    inRepository: aRepository
+%
 
-	| snapshot summary loader |
-	snapshot := (aRepository readPackageStructureForPackageNamed: aKnownPackageInformation name)
-				snapshot.
-	loader := snapshot updatePackage: (CypressPackageDefinition
-						named: aKnownPackageInformation name).
-	summary := Dictionary new.
-	loader unloadable notEmpty
-		ifTrue: 
-			[summary
-				at: 'Unloadable'
-				put: (loader unloadable collect: [:each | each printString])].
-	loader errors notEmpty
-		ifTrue: 
-			[summary
-				at: 'Errors'
-				put: (loader errors collect: [:each | each printString])].
-	loader requirements notEmpty
-		ifTrue: [summary
-				at: 'Missing Requirements'
-				put: loader requirements asArray].
-	^summary.
+category: 'Loading'
+set compile_env: 0
+method: CypressPackageManager2
+loadPackageFrom: aKnownPackageInformation defaultSymbolDictionaryName: defaultSymbolDictionaryNameOrNil inRepository: aRepository
+  | snapshot summary loader |
+  snapshot := (aRepository
+    readPackageStructureForPackageNamed: aKnownPackageInformation name) snapshot.
+  loader := snapshot
+    updatePackage:
+      (CypressPackageDefinition named: aKnownPackageInformation name)
+    defaultSymbolDictionaryName: defaultSymbolDictionaryNameOrNil.
+  summary := Dictionary new.
+  loader unloadable notEmpty
+    ifTrue: [ 
+      summary
+        at: 'Unloadable'
+        put: (loader unloadable collect: [ :each | each printString ]) ].
+  loader errors notEmpty
+    ifTrue: [ summary at: 'Errors' put: (loader errors collect: [ :each | each printString ]) ].
+  loader requirements notEmpty
+    ifTrue: [ summary at: 'Missing Requirements' put: loader requirements asArray ].
+  ^ summary
 %
 
 category: 'Updating'
