@@ -6,6 +6,9 @@ ifErr 3 exit 1
 set u SystemUser p swordfish
 login
 
+# break method CypressClassDefinition createOrReviseRegularClass @ 4
+# break method CypressClassDefinition loadClassDefinition: @ 3
+
 run
 | packageManager repo packageNames summary |
   packageNames := #('Cypress-GemStoneCompatibilityLayer' 'Cypress-Definitions' 'Cypress-Structure' 'Cypress-Mocks' 'Cypress-GemStoneFileServer' 'Network-Url' 'Cypress-MesssageDigest' 'Cypress-Comparison' 'Cypress-PackageManagement' 'Cypress-Tests' 'NetworkTests' 'Cypress-PackageManagementTests').
