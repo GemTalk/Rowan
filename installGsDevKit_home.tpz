@@ -24,12 +24,12 @@ input $GS_HOME/shared/repos/CypressReferenceImplementation/topaz/Network-Url.gs
 errorCount
 input $GS_HOME/shared/repos/CypressReferenceImplementation/topaz/Cypress-MesssageDigest.gs
 errorCount
+input $GS_HOME/shared/repos/CypressReferenceImplementation/topaz/Cypress-Comparison.gs
+errorCount
 input $GS_HOME/shared/repos/CypressReferenceImplementation/topaz/Cypress-PackageManagement.gs
 errorCount
 ! input $GS_HOME/shared/repos/CypressReferenceImplementation/topaz/Cypress-PackageManagementTests.gs
 ! errorCount
-input $GS_HOME/shared/repos/CypressReferenceImplementation/topaz/Cypress-Comparison.gs
-errorCount
 ! input $GS_HOME/shared/repos/CypressReferenceImplementation/topaz/Cypress-Tests.gs
 ! errorCount
 ! input $GS_HOME/shared/repos/CypressReferenceImplementation/topaz/NetworkTests.gs

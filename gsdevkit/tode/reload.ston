@@ -1,0 +1,15 @@
+TDSmalltalkLeafNode{#name:'reload',#contents:'| packageManager repo packageNames summary |
+  packageNames := #(\'Cypress-GemStoneCompatibilityLayer\' \'Cypress-Definitions\' \'Cypress-Structure\' \'Cypress-Mocks\' \'Cypress-GemStoneFileServer\' \'Network-Url\' \'Cypress-MesssageDigest\' \'Cypress-PackageManagement\' \'Cypress-Comparison\' \'Cypress-Tests\' \'NetworkTests\' \'Cypress-PackageManagementTests\').
+  packageManager := CypressPackageManager2 new.
+  repo := CypressAbstractRepository
+    onUrl:
+      \'cypress:$GS_HOME/shared/repos/CypressReferenceImplementation/cypress/\' asUrl
+    alias: \'Reference Implementation\'.
+  packageNames
+    do: [ :each | 
+      summary := packageManager
+        loadPackageFrom: (CypressKnownPackageInformation named: each)
+        defaultSymbolDictionaryName: #\'Globals\'
+        inRepository: repo.
+      summary isEmpty
+        ifFalse: [ self error: \'Could not reload package named: \' , each printString ] ]',#creationTime:DateAndTime['2016-08-30T06:58:04.430474996566772-07:00'],#modificationTime:DateAndTime['2016-08-30T17:09:51.48294806480408-07:00']}

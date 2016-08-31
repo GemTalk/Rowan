@@ -1,0 +1,11 @@
+TDSmalltalkLeafNode{#name:'export',#contents:'| packageNames repo |
+  packageNames := #(\'Cypress-Definitions\' \'Cypress-PackageManagement\').
+  repo := CypressAbstractRepository
+    onUrl:
+      \'topaz:$GS_HOME/shared/repos/CypressReferenceImplementation/topazx/\' asUrl
+    alias: \'Topaz repo\'.
+  packageNames
+    do: [ :each | 
+      repo
+        writePackageStructure:
+          (CypressPackageStructure fromPackage: (CypressPackageDefinition named: each)) ]',#creationTime:DateAndTime['2016-08-30T18:10:44.78255009651184-07:00'],#modificationTime:DateAndTime['2016-08-30T18:42:08.425540924072266-07:00']}
