@@ -12,7 +12,7 @@ fileOutClassDeclaration: classStructure on: aStream
 		nextPutAll: '	classVars: #( ', classStructure classVariablesString, ' )'; lf;
 		nextPutAll: '	classInstVars: #( ', classStructure classInstanceVariablesString, ' )'; lf;
 		nextPutAll: '	poolDictionaries: #()'; lf;
-		nextPutAll: '	inDictionary: UserGlobals'; lf;
+		nextPutAll: '	inDictionary: Globals'; lf;
 		nextPutAll: '	options: #())'; lf;
 		nextPutAll: '		category: ', classStructure category printString, ';'; lf;
 		nextPutAll: '		comment: ', classStructure comment printString, ';'; lf;
