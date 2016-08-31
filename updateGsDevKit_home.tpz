@@ -8,7 +8,7 @@ login
 
 run
 | packageManager repo packageNames summary |
-  packageNames := #('Cypress-GemStoneCompatibilityLayer' 'Cypress-Definitions' 'Cypress-Structure' 'Cypress-Mocks' 'Cypress-GemStoneFileServer' 'Network-Url' 'Cypress-MesssageDigest' 'Cypress-PackageManagement' 'Cypress-PackageManagementTests' 'Cypress-Comparison' 'Cypress-Tests' 'NetworkTests').
+  packageNames := #('Cypress-GemStoneCompatibilityLayer' 'Cypress-Definitions' 'Cypress-Structure' 'Cypress-Mocks' 'Cypress-GemStoneFileServer' 'Network-Url' 'Cypress-MesssageDigest' 'Cypress-PackageManagement' 'Cypress-Comparison' 'Cypress-Tests' 'NetworkTests' 'Cypress-PackageManagementTests').
   packageManager := CypressPackageManager2 new.
   repo := CypressAbstractRepository
     onUrl:
@@ -18,6 +18,7 @@ run
     do: [ :each | 
       summary := packageManager
         loadPackageFrom: (CypressKnownPackageInformation named: each)
+        defaultSymbolDictionaryName: #'Globals'
         inRepository: repo.
       summary isEmpty
         ifFalse: [ self error: 'Could not reload package named: ' , each printString ] ]
