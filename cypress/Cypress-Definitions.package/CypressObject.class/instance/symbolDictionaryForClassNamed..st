@@ -9,4 +9,4 @@ symbolDictionaryForClassNamed: aString
 
   ^ self
     symbolDictionaryForClassNamed: aString
-    or: [ System myUserProfile resolveSymbol: self defaultSymbolDictionaryName ]
+    or: [ System myUserProfile objectNamed: self defaultSymbolDictionaryName ]
