@@ -12,7 +12,8 @@
 		"errors",
 		"methodAdditions",
 		"requirements",
-		"exceptionClass" ],
+		"exceptionClass",
+                "defaultSymbolDictionaryName" ],
 	"name" : "CypressLoader",
 	"pools" : [
 		 ],
