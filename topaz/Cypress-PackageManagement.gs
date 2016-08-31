@@ -45,7 +45,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'A CypressVersionReference refers to a specific version of a Monticello package.';
@@ -59,7 +59,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -73,7 +73,7 @@ doit
 	classVars: #( DefaultCopyrightNotice )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -87,7 +87,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -101,7 +101,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -115,7 +115,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'This is a "write-only" repository.
@@ -131,7 +131,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'This is a "write-only" repository.
@@ -147,7 +147,7 @@ doit
 	classVars: #( SavedPackageManagers )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -161,10 +161,15 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
+		comment: 'No class-specific documentation for CypressAbstractFileUrl, hierarchy is: 
+Object
+  Url( fragment)
+    FileUrl( host path isAbsolute)
+      CypressAbstractFileUrl
+';
 		immediateInvariant.
 %
 
@@ -175,10 +180,16 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
+		comment: 'No class-specific documentation for CypressLaxFileUrl, hierarchy is: 
+Object
+  Url( fragment)
+    FileUrl( host path isAbsolute)
+      CypressAbstractFileUrl
+        CypressLaxFileUrl
+';
 		immediateInvariant.
 %
 
@@ -189,10 +200,16 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
+		comment: 'No class-specific documentation for CypressFileTreeFormatFileUrl, hierarchy is: 
+Object
+  Url( fragment)
+    FileUrl( host path isAbsolute)
+      CypressAbstractFileUrl
+        CypressFileTreeFormatFileUrl
+';
 		immediateInvariant.
 %
 
@@ -203,10 +220,16 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
+		comment: 'No class-specific documentation for CypressFileUrl, hierarchy is: 
+Object
+  Url( fragment)
+    FileUrl( host path isAbsolute)
+      CypressAbstractFileUrl
+        CypressFileUrl
+';
 		immediateInvariant.
 %
 
@@ -217,10 +240,16 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
+		comment: 'No class-specific documentation for CypressFileTreeReadOnlyFileUrl, hierarchy is: 
+Object
+  Url( fragment)
+    FileUrl( host path isAbsolute)
+      CypressAbstractFileUrl
+        CypressFileTreeReadOnlyFileUrl
+';
 		immediateInvariant.
 %
 
@@ -231,10 +260,16 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
+		comment: 'No class-specific documentation for CypressTopazUrl, hierarchy is: 
+Object
+  Url( fragment)
+    FileUrl( host path isAbsolute)
+      CypressAbstractFileUrl
+        CypressTopazUrl
+';
 		immediateInvariant.
 %
 
@@ -245,10 +280,16 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
-		comment: '';
+		comment: 'No class-specific documentation for CypressSmalltalkUrl, hierarchy is: 
+Object
+  Url( fragment)
+    FileUrl( host path isAbsolute)
+      CypressAbstractFileUrl
+        CypressSmalltalkUrl
+';
 		immediateInvariant.
 %
 
@@ -259,7 +300,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: 'CypressPackageInformation documents potential and actual packages for the Cypress Package Manager. 
@@ -294,7 +335,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -308,7 +349,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -322,7 +363,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -336,7 +377,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -350,7 +391,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
@@ -583,8 +624,18 @@ comparePackageFrom: aCypressPackageInformation
 	^self comparePackagesFrom: (Array with: aCypressPackageInformation)
 %
 
+category: 'comparing'
+set compile_env: 0
+method: CypressPackageManager
+comparePackagesFrom: someCypressPackageInformations
 
-! remove comparePackagesFrom: because of a forward dependency
+        ^(someCypressPackageInformations
+                inject: CypressPackageComparator new
+                into:
+                        [:comparer :each |
+                        comparer comparingPackageNamed: each name fromDirectory: each savedLocation])
+                                getDifferences
+%
 
 category: 'updating - private'
 set compile_env: 0
@@ -1952,29 +2003,35 @@ knownRepositories: someNamedRepositories
 category: 'Loading'
 set compile_env: 0
 method: CypressPackageManager2
-loadPackageFrom: aKnownPackageInformation inRepository: aRepository
+loadPackageFrom: aKnownPackageInformation defaultSymbolDictionaryName: defaultSymbolDictionaryNameOrNil inRepository: aRepository
+  | snapshot summary loader |
+  snapshot := (aRepository
+    readPackageStructureForPackageNamed: aKnownPackageInformation name) snapshot.
+  loader := snapshot
+    updatePackage:
+      (CypressPackageDefinition named: aKnownPackageInformation name)
+    defaultSymbolDictionaryName: defaultSymbolDictionaryNameOrNil.
+  summary := Dictionary new.
+  loader unloadable notEmpty
+    ifTrue: [ 
+      summary
+        at: 'Unloadable'
+        put: (loader unloadable collect: [ :each | each printString ]) ].
+  loader errors notEmpty
+    ifTrue: [ summary at: 'Errors' put: (loader errors collect: [ :each | each printString ]) ].
+  loader requirements notEmpty
+    ifTrue: [ summary at: 'Missing Requirements' put: loader requirements asArray ].
+  ^ summary
+%
 
-	| snapshot summary loader |
-	snapshot := (aRepository readPackageStructureForPackageNamed: aKnownPackageInformation name)
-				snapshot.
-	loader := snapshot updatePackage: (CypressPackageDefinition
-						named: aKnownPackageInformation name).
-	summary := Dictionary new.
-	loader unloadable notEmpty
-		ifTrue: 
-			[summary
-				at: 'Unloadable'
-				put: (loader unloadable collect: [:each | each printString])].
-	loader errors notEmpty
-		ifTrue: 
-			[summary
-				at: 'Errors'
-				put: (loader errors collect: [:each | each printString])].
-	loader requirements notEmpty
-		ifTrue: [summary
-				at: 'Missing Requirements'
-				put: loader requirements asArray].
-	^summary.
+category: 'Loading'
+set compile_env: 0
+method: CypressPackageManager2
+loadPackageFrom: aKnownPackageInformation inRepository: aRepository
+  ^ self
+    loadPackageFrom: aKnownPackageInformation
+    defaultSymbolDictionaryName: nil
+    inRepository: aRepository
 %
 
 category: 'Updating'
@@ -2089,267 +2146,17 @@ writeChangesToAllRepositoriesFor: aPackageInformation
 
 ! Class Implementation for CypressAbstractFileUrl
 
-! ------------------- Class methods for CypressAbstractFileUrl
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressAbstractFileUrl
-absoluteFromText: aString
-	"Return a URL from a string and handle
-	a String without a scheme as a FileUrl."
-
-	"Url absoluteFromText: 'http://chaos.resnet.gatech.edu:8000/docs/java/index.html?A%20query%20#part'" 
-	"Url absoluteFromText: 'msw://chaos.resnet.gatech.edu:9000/testbook?top'"
-	"Url absoluteFromText: 'telnet:chaos.resnet.gatech.edu'"
-	"Url absoluteFromText: 'file:/etc/passwd'"
-
-	| remainder index scheme fragment newUrl |
-	"trim surrounding whitespace"
-	remainder := aString trimSeparators.	
-
-	"extract the fragment, if any"
-	index := remainder indexOf: $#.
-	index > 0 ifTrue: [
-		fragment := remainder copyFrom: index + 1 to: remainder size.
-		remainder := remainder copyFrom: 1 to: index - 1].
-
-	"choose class based on the scheme name, and let that class do the bulk of the parsing"
-	scheme := self schemeNameForString: remainder.
-	newUrl := (self urlClassForScheme: scheme) new privateInitializeFromText: remainder.
-	newUrl privateFragment: fragment.
-	^newUrl
-%
-
-category: 'parsing'
-set compile_env: 0
-classmethod: CypressAbstractFileUrl
-urlClassForScheme: scheme
-
-	scheme isNil ifTrue: [^FileUrl].
-	^super urlClassForScheme: scheme
-%
-
-! ------------------- Instance methods for CypressAbstractFileUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractFileUrl
-codeFormat
-
-	^self subclassResponsibility: #codeFormat.
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressAbstractFileUrl
-isStrict
-
-	^self subclassResponsibility: #isStrict.
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressAbstractFileUrl
-repositoryClass
-
-	^CypressFileSystemRepository
-%
-
 ! Class Implementation for CypressLaxFileUrl
-
-! ------------------- Class methods for CypressLaxFileUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: CypressLaxFileUrl
-schemeName
-
-	^'cypresslax'
-%
-
-! ------------------- Instance methods for CypressLaxFileUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressLaxFileUrl
-codeFormat
-
-	^'Cypress'
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressLaxFileUrl
-isStrict
-
-	^false
-%
 
 ! Class Implementation for CypressFileTreeFormatFileUrl
 
-! ------------------- Class methods for CypressFileTreeFormatFileUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: CypressFileTreeFormatFileUrl
-schemeName
-
-	^'cypressft'
-%
-
-! ------------------- Instance methods for CypressFileTreeFormatFileUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressFileTreeFormatFileUrl
-codeFormat
-
-	^'FileTree'
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressFileTreeFormatFileUrl
-isStrict
-
-	^false
-%
-
 ! Class Implementation for CypressFileUrl
-
-! ------------------- Class methods for CypressFileUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: CypressFileUrl
-schemeName
-
-	^'cypress'
-%
-
-! ------------------- Instance methods for CypressFileUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressFileUrl
-codeFormat
-
-	^'Cypress'
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressFileUrl
-isStrict
-
-	^true
-%
 
 ! Class Implementation for CypressFileTreeReadOnlyFileUrl
 
-! ------------------- Class methods for CypressFileTreeReadOnlyFileUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: CypressFileTreeReadOnlyFileUrl
-schemeName
-
-	^'cypressfiletree'
-%
-
-! ------------------- Instance methods for CypressFileTreeReadOnlyFileUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressFileTreeReadOnlyFileUrl
-codeFormat
-
-	^'FileTree'
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressFileTreeReadOnlyFileUrl
-isStrict
-
-	^true
-%
-
 ! Class Implementation for CypressTopazUrl
 
-! ------------------- Class methods for CypressTopazUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: CypressTopazUrl
-schemeName
-
-	^'topaz'
-%
-
-! ------------------- Instance methods for CypressTopazUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressTopazUrl
-codeFormat
-
-	^'Topaz'
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressTopazUrl
-isStrict
-
-	^true
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressTopazUrl
-repositoryClass
-
-	^CypressTopazRepository
-%
-
 ! Class Implementation for CypressSmalltalkUrl
-
-! ------------------- Class methods for CypressSmalltalkUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: CypressSmalltalkUrl
-schemeName
-
-	^'chunk'
-%
-
-! ------------------- Instance methods for CypressSmalltalkUrl
-
-category: 'accessing'
-set compile_env: 0
-method: CypressSmalltalkUrl
-codeFormat
-
-	^'Chunk'
-%
-
-category: 'testing'
-set compile_env: 0
-method: CypressSmalltalkUrl
-isStrict
-
-	^true
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressSmalltalkUrl
-repositoryClass
-
-	^CypressSmalltalkRepository
-%
 
 ! Class Implementation for CypressPackageInformation
 

@@ -45,7 +45,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: 'CypressLoaderError is used to report a failure applying a specific CypressPatchOperation.
@@ -69,7 +69,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -83,7 +83,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -97,7 +97,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: 'CypressLoaderErrorNotification is used to notify a consumer of the CypressLoader that a particular CypressPatchOperation failed.
@@ -119,7 +119,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -133,7 +133,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -147,7 +147,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -161,7 +161,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -175,7 +175,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -189,7 +189,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -198,82 +198,12 @@ doit
 
 doit
 (CypressObject
-	subclass: 'CypressSnapshot'
-	instVarNames: #( definitions )
+	subclass: 'CypressLoader'
+	instVarNames: #( additions removals unloadable provisions errors methodAdditions requirements exceptionClass defaultSymbolDictionaryName )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-Definitions';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(CypressObject
-	subclass: 'CypressPackageDefinition'
-	instVarNames: #( name )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-Definitions';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(CypressObject
-	subclass: 'CypressDependencySorter'
-	instVarNames: #( required provided orderedItems )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-Definitions';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(CypressObject
-	subclass: 'CypressDefinition'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-Definitions';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(CypressDefinition
-	subclass: 'CypressClassDefinition'
-	instVarNames: #( name superclassName category comment instVarNames classInstVarNames classVarNames poolDictionaryNames subclassType )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-Definitions';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(CypressDefinition
-	subclass: 'CypressMethodDefinition'
-	instVarNames: #( classIsMeta source category selector className )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -287,7 +217,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -296,12 +226,82 @@ doit
 
 doit
 (CypressObject
-	subclass: 'CypressLoader'
-	instVarNames: #( additions removals unloadable provisions errors methodAdditions requirements exceptionClass )
+	subclass: 'CypressDefinition'
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Definitions';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressDefinition
+	subclass: 'CypressClassDefinition'
+	instVarNames: #( name superclassName category comment instVarNames classInstVarNames classVarNames poolDictionaryNames subclassType )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Definitions';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressDefinition
+	subclass: 'CypressMethodDefinition'
+	instVarNames: #( classIsMeta source category selector className )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Definitions';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressObject
+	subclass: 'CypressDependencySorter'
+	instVarNames: #( required provided orderedItems )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Definitions';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressObject
+	subclass: 'CypressPackageDefinition'
+	instVarNames: #( name )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #())
+		category: 'Cypress-Definitions';
+		comment: '';
+		immediateInvariant.
+%
+
+doit
+(CypressObject
+	subclass: 'CypressSnapshot'
+	instVarNames: #( definitions )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: UserGlobals
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
@@ -638,6 +638,15 @@ classesInPackageNamed: aString
 		sortAscending: #('name')
 %
 
+category: 'accessing'
+set compile_env: 0
+method: CypressObject
+defaultSymbolDictionaryName
+  "Name of the SymbolDictionary where new classes should be installed"
+
+  ^ #'UserGlobals'
+%
+
 category: 'sorting'
 set compile_env: 0
 method: CypressObject
@@ -753,11 +762,13 @@ category: 'accessing'
 set compile_env: 0
 method: CypressObject
 symbolDictionaryForClassNamed: aString
-	"Answer the SymbolDictionary containing the named class.
+  "Answer the SymbolDictionary containing the named class.
 	 If there are multiple answers, answer the first.
 	 If there are no answers (i.e., the class does not exist), put it in UserGlobals."
 
-	^self symbolDictionaryForClassNamed: aString or: [UserGlobals]
+  ^ self
+    symbolDictionaryForClassNamed: aString
+    or: [ System myUserProfile resolveSymbol: self defaultSymbolDictionaryName ]
 %
 
 category: 'accessing'
@@ -1221,312 +1232,418 @@ unloadDefinition
 	self definition unloadDefinition.
 %
 
-! Class Implementation for CypressSnapshot
+! Class Implementation for CypressLoader
 
-! ------------------- Class methods for CypressSnapshot
+! ------------------- Class methods for CypressLoader
 
-category: 'instance creation'
+category: 'loading'
 set compile_env: 0
-classmethod: CypressSnapshot
-definitions: aDefinitions
+classmethod: CypressLoader
+updatePackage: aPackage defaultSymbolDictionaryName: defaultSymbolDictionaryName withSnapshot: aSnapshot
+  "Answer the loader used to apply the update."
 
-	^(self new) definitions: aDefinitions
-%
-
-! ------------------- Instance methods for CypressSnapshot
-
-category: 'comparing'
-set compile_env: 0
-method: CypressSnapshot
-= other
-	^ definitions asArray = other definitions asArray
-%
-
-category: 'enumerating'
-set compile_env: 0
-method: CypressSnapshot
-classDefinitions: classBlock methodDefinitions: methodBlock
-
-	self definitions do: [:definition |
-		definition classDefinition: classBlock methodDefinition: methodBlock]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressSnapshot
-definitions
-
-	^definitions
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressSnapshot
-definitions: aDefinitions
-
-	definitions := aDefinitions
-%
-
-category: 'patching'
-set compile_env: 0
-method: CypressSnapshot
-patchRelativeToBase: aSnapshot
-	^ CypressPatch fromBase: aSnapshot toTarget: self
+  ^ self new
+    defaultSymbolDictionaryName: defaultSymbolDictionaryName;
+    updatePackage: aPackage withSnapshot: aSnapshot;
+    load
 %
 
 category: 'loading'
 set compile_env: 0
-method: CypressSnapshot
-updatePackage: aPackage
-	"Answer the loader used to apply the update."
+classmethod: CypressLoader
+updatePackage: aPackage withSnapshot: aSnapshot
+  "Answer the loader used to apply the update."
 
-	^CypressLoader updatePackage: aPackage withSnapshot: self
+  ^ self
+    updatePackage: aPackage
+    defaultSymbolDictionaryName: nil
+    withSnapshot: aSnapshot
 %
 
-! Class Implementation for CypressPackageDefinition
+! ------------------- Instance methods for CypressLoader
 
-! ------------------- Class methods for CypressPackageDefinition
+category: 'updating'
+set compile_env: 0
+method: CypressLoader
+addFailedPatchOperation: aPatchOperation
+
+	self errors add: aPatchOperation
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressLoader
+additions
+
+	additions ifNil: [ additions := OrderedCollection new ].
+	^additions
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+analyze
+
+	self 
+		analyzeAdditions;
+		analyzeRemovals
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+analyzeAdditions
+
+	| sorter |
+	sorter := CypressDependencySorter new 
+		addAll: self additions;
+		addExternalProvisions: self provisions;
+		yourself.
+	additions := sorter orderedItems.
+	requirements := sorter externalRequirements.
+	unloadable := sorter required.
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+analyzeRemovals
+
+	| sorter |
+	sorter := CypressDependencySorter new 
+		addAll: self removals;
+		yourself.
+	removals := sorter orderedItems reverse.
+%
+
+category: 'applying'
+set compile_env: 0
+method: CypressLoader
+applyAddition: aCypressPatchOperation
+
+	self additions add: aCypressPatchOperation
+%
+
+category: 'applying'
+set compile_env: 0
+method: CypressLoader
+applyModification: aCypressPatchOperation
+
+	self additions add: aCypressPatchOperation
+%
+
+category: 'applying'
+set compile_env: 0
+method: CypressLoader
+applyRemoval: aCypressPatchOperation
+
+	self removals add: aCypressPatchOperation
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+attemptInitialLoad
+
+	self
+		resetErrors;
+		notifyOnFailedPatchOperations;
+		loadAdditions: self additions;
+		unloadRemovals: self removals.
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressLoader
+defaultSymbolDictionaryName
+  ^ defaultSymbolDictionaryName ifNil: [ super defaultSymbolDictionaryName ]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressLoader
+defaultSymbolDictionaryName: aSymbol
+  defaultSymbolDictionaryName := aSymbol
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+errorOnFailedPatchOperations
+
+	exceptionClass := CypressLoaderError.
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressLoader
+errors
+	errors ifNil: [self resetErrors].
+	^errors
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+handleCompileError: aCompileError from: aPatchOperation
+
+	| undefinedSymbolErrors otherErrors |
+	undefinedSymbolErrors := aCompileError errorDetails
+				select: [:each | each first = 1031].
+	otherErrors := aCompileError errorDetails
+				reject: [:each | each first = 1031].
+	undefinedSymbolErrors do: [:each | self requirements add: each last].
+	aCompileError pass
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+handlePatchOperation: aPatchOperation failure: anException
+	"Signal the loader exception appropriate to the current phase.
+	 Note that a handler may suppress the #addFailedPatchOperation: by
+	 sending #return or #return: to the resignaled exception. Otherwise,
+	 resumption from a resumable resignalled exception will continue through
+	 this method."
+
+	(exceptionClass patchOperation: aPatchOperation exception: anException) signal.
+	self addFailedPatchOperation: aPatchOperation.
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+load
+
+	self
+		analyze;
+		reportUnloadableDefinitions;
+		attemptInitialLoad;
+		retryFailedLoads;
+		postLoad.
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+loadAdditions: somePatchOperations
+	"Load class definitions first, then method definitions."
+
+	somePatchOperations
+		do: [:each | self loadClassDefinition: each];
+		do: [:each | self loadMethodDefinition: each].
+%
+
+category: 'operations'
+set compile_env: 0
+method: CypressLoader
+loadClassDefinition: aPatchOperation
+
+	[aPatchOperation loadClassDefinition]
+		on: Error
+		do: [:ex | self handlePatchOperation: aPatchOperation failure: ex].
+%
+
+category: 'operations'
+set compile_env: 0
+method: CypressLoader
+loadMethodDefinition: aPatchOperation
+
+	
+	[[aPatchOperation loadMethodDefinition]
+		on: CompileError
+		do: [:ex | self handleCompileError: ex from: aPatchOperation]]
+			on: Error
+			do: [:ex | self handlePatchOperation: aPatchOperation failure: ex]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressLoader
+methodAdditions
+
+	^#()
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+notifyOnFailedPatchOperations
+
+	exceptionClass := CypressLoaderErrorNotification.
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+postLoad
+	"This is where the obsoletion is taken into account ..."
+
+	self additions do: [:each | self postLoad: each].
+%
+
+category: 'operations'
+set compile_env: 0
+method: CypressLoader
+postLoad: aPatchOperation
+
+	[aPatchOperation postLoadDefinition]
+		on: Error
+		do: [:ex | self handlePatchOperation: aPatchOperation failure: ex].
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressLoader
+provisions
+	^ provisions ifNil: [provisions := (self allClasses collect: [:cl | cl name asString]) asSet ]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressLoader
+removals
+
+	removals ifNil: [ removals := OrderedCollection new ].
+	^removals
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+reportUnloadableDefinitions
+
+	self unloadable isEmpty ifTrue: [^self].
+	(CypressLoaderMissingClasses missingRequirementsMap: unloadable) signal.
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressLoader
+requirements
+
+	^requirements
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+resetErrors
+
+	errors := OrderedCollection new.
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+retryFailedLoads
+	"In case any of the failed loads were resolved by subsequent
+	 patch operations after the initial attempt or by editting of the
+	 failed patch operations by exception handling during the notification
+	 phase (initial attempt)."
+
+	| failed |
+	failed := self errors.
+	self
+		resetErrors;
+		errorOnFailedPatchOperations;
+		loadAdditions: (self additions intersection: failed);
+		unloadRemovals: (self removals intersection: failed).
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressLoader
+unloadable
+
+	unloadable ifNil: [ unloadable := OrderedCollection new ].
+	^unloadable
+%
+
+category: 'operations'
+set compile_env: 0
+method: CypressLoader
+unloadDefinition: aPatchOperation
+
+	[aPatchOperation unloadDefinition]
+		on: Error
+		do: [:ex | self handlePatchOperation: aPatchOperation failure: ex].
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+unloadRemovals: somePatchOperations
+	"Removals need to be done after adding classes and methods."
+
+	somePatchOperations
+		do: [:each | self unloadDefinition: each].
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressLoader
+updatePackage: aPackage withSnapshot: aSnapshot
+
+	| patch snapshot |
+	snapshot := aPackage snapshot.
+	patch := aSnapshot patchRelativeToBase: snapshot.
+	patch applyTo: self.
+	snapshot definitions do: [:ea | self provisions addAll: ea provisions]
+%
+
+! Class Implementation for CypressPatch
+
+! ------------------- Class methods for CypressPatch
 
 category: 'instance creation'
 set compile_env: 0
-classmethod: CypressPackageDefinition
-named: aString
-
-	^self new
-		name: aString;
-		yourself.
+classmethod: CypressPatch
+fromBase: baseSnapshot toTarget: targetSnapshot
+	^ (self new)
+		fromBase: baseSnapshot
+		toTarget: targetSnapshot
 %
 
-! ------------------- Instance methods for CypressPackageDefinition
+! ------------------- Instance methods for CypressPatch
 
-category: 'comparing'
+category: 'applying'
 set compile_env: 0
-method: CypressPackageDefinition
-= other
-	^ other species = self species and: [other name sameAs: name]
+method: CypressPatch
+applyTo: aCypressLoader
+	operations do: [:ea | ea applyTo: aCypressLoader].
 %
 
-category: 'snapshotting'
+category: 'initialization'
 set compile_env: 0
-method: CypressPackageDefinition
-addClass: aClass toDefinitions: definitions
-
-	definitions add: aClass asCypressClassDefinition
-%
-
-category: 'snapshotting'
-set compile_env: 0
-method: CypressPackageDefinition
-addExtensionMethodsFromClass: aClass toMap: classMap
-
-	| defs map |
-	defs := classMap at: aClass theNonMetaClass ifAbsent: [OrderedCollection new.].
-	map := Dictionary new.
-	aClass categorysDo: 
-			[:category :selectors |
-			(category asLowercase beginsWith: '*' , self name asLowercase)
-				ifTrue: [map at: category put: selectors asSortedCollection]].
-	map keys asSortedCollection do: 
-			[:category |
-			(map at: category)
-				do: [:selector | defs add: (aClass compiledMethodAt: selector) asCypressMethodDefinition]].
-	defs notEmpty ifTrue: [classMap at: aClass theNonMetaClass put: defs]
-%
-
-category: 'snapshotting'
-set compile_env: 0
-method: CypressPackageDefinition
-addMethodsFromClass: aClass toDefinitions: definitions
-	"Add only those methods which are not extensions from other packages."
-
-	((aClass methodDictionary reject: [:each | each category first = $*])
-		asSortedCollection: [:a :b | a selector <= b selector])
-			do: [:method | definitions add: method asCypressMethodDefinition]
+method: CypressPatch
+fromBase: baseSnapshot toTarget: targetSnapshot
+	| base target |	
+	operations := OrderedCollection new.
+	base := CypressDefinitionIndex definitions: baseSnapshot definitions.
+	target := CypressDefinitionIndex definitions: targetSnapshot definitions.
+	
+	target definitions do:
+		[:t |
+		base
+			definitionLike: t
+			ifPresent: [:b | (b isSameRevisionAs: t) ifFalse: [operations add: (CypressModification of: b to: t)]]
+			ifAbsent: [operations add: (CypressAddition of: t)]].
+		
+	base definitions do:
+		[:b |
+		target
+			definitionLike: b
+			ifPresent: [:t | ]
+			ifAbsent: [operations add: (CypressRemoval of: b)]]
 %
 
 category: 'accessing'
 set compile_env: 0
-method: CypressPackageDefinition
-classes
+method: CypressPatch
+operations
 
-	^self classesInPackageNamed: self name
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageDefinition
-name
-	^ name
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPackageDefinition
-name: aString
-	name := aString
-%
-
-category: 'printing'
-set compile_env: 0
-method: CypressPackageDefinition
-printDetailsOn: aStream
-
-	aStream nextPutAll: name
-%
-
-category: 'snapshotting'
-set compile_env: 0
-method: CypressPackageDefinition
-snapshot
-
-	| classDefinitions methodDefinitions classMap |
-	classDefinitions := OrderedCollection new.
-	methodDefinitions := OrderedCollection new.
-	(self determineClassHierarchicalOrder: self classes) do: 
-			[:cls |
-			self
-				addClass: cls toDefinitions: classDefinitions;
-				addMethodsFromClass: cls toDefinitions: methodDefinitions;
-				addMethodsFromClass: cls class toDefinitions: methodDefinitions].
-	classMap := Dictionary new.
-	self allClasses do: 
-			[:each |
-			self
-				addExtensionMethodsFromClass: each toMap: classMap;
-				addExtensionMethodsFromClass: each class toMap: classMap].
-	(self determineClassHierarchicalOrder: classMap keys)
-		do: [:aClass | methodDefinitions addAll: (classMap at: aClass)].
-	^CypressSnapshot definitions: classDefinitions, methodDefinitions
-%
-
-! Class Implementation for CypressDependencySorter
-
-! ------------------- Instance methods for CypressDependencySorter
-
-category: 'building'
-set compile_env: 0
-method: CypressDependencySorter
-add: aPatchOperation
-	| requirements |
-	requirements := self unresolvedRequirementsFor: aPatchOperation.
-	requirements isEmpty
-		ifTrue: [self addToOrder: aPatchOperation]
-		ifFalse: [self addRequirements: requirements for: aPatchOperation].
-	^ aPatchOperation
-%
-
-category: 'building'
-set compile_env: 0
-method: CypressDependencySorter
-addAll: aCollection
-	aCollection do: [:aPatchOperation | self add: aPatchOperation ]
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressDependencySorter
-addExternalProvisions: aCollection
-	(aCollection intersection: self externalRequirements)
-		do: [:globalName | self addProvision: globalName]
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressDependencySorter
-addProvision: aGlobalName
-	| newlySatisfied |
-	self provided add: aGlobalName.
-	newlySatisfied := self required removeKey: aGlobalName ifAbsent: [#()].
-	self addAll: newlySatisfied.
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressDependencySorter
-addRequirement: globalName for: aPatchOperation
-	(self itemsRequiring: globalName) add: aPatchOperation
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressDependencySorter
-addRequirements: aCollection for: aPatchOperation
-	aCollection do: [:globalName | self addRequirement: globalName for: aPatchOperation]
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressDependencySorter
-addToOrder: aPatchOperation
-	self orderedItems add: aPatchOperation.
-	aPatchOperation provisions do: [:globalName | self addProvision: globalName ].
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressDependencySorter
-externalRequirements
-	| unloaded providedByUnloaded |
-	unloaded := self itemsWithMissingRequirements.
-	providedByUnloaded := (unloaded gather: [:e | e provisions]) asSet.
-	^ self required keys reject: [:globalName | providedByUnloaded includes: globalName ]
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressDependencySorter
-itemsRequiring: globalName
-	^ self required at: globalName ifAbsentPut: [Set new]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressDependencySorter
-itemsWithMissingRequirements
-	| patchOperations |
-	patchOperations := Set new.
-	self required values do: [:aSetOfPatchOperations | patchOperations addAll: aSetOfPatchOperations ].
-	^ patchOperations
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressDependencySorter
-orderedItems
-	"ordered list of patch operations"
-
-	orderedItems ifNil: [ orderedItems := OrderedCollection new ].
-	^orderedItems
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressDependencySorter
-provided
-	"set of global names provided by definitions already loaded"
-
-	provided ifNil: [ provided := Set new ].
-	^provided
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressDependencySorter
-required
-	"dictionary of required global name mapped to list of definitions that require the global"
-
-	required ifNil: [ required := Dictionary new ].
-	^required
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressDependencySorter
-unresolvedRequirementsFor: aPatchOperation
-	"Answer a list of global names that are required by <aPatchOperation>, but not 
-	 provided by patchOperations that have already been processed"
-
-	^ aPatchOperation requirements difference: self provided
+	^operations
 %
 
 ! Class Implementation for CypressDefinition
@@ -2262,391 +2379,324 @@ unloadDefinition
 	self actualClass removeSelector: self selector asSymbol
 %
 
-! Class Implementation for CypressPatch
+! Class Implementation for CypressDependencySorter
 
-! ------------------- Class methods for CypressPatch
+! ------------------- Instance methods for CypressDependencySorter
+
+category: 'building'
+set compile_env: 0
+method: CypressDependencySorter
+add: aPatchOperation
+	| requirements |
+	requirements := self unresolvedRequirementsFor: aPatchOperation.
+	requirements isEmpty
+		ifTrue: [self addToOrder: aPatchOperation]
+		ifFalse: [self addRequirements: requirements for: aPatchOperation].
+	^ aPatchOperation
+%
+
+category: 'building'
+set compile_env: 0
+method: CypressDependencySorter
+addAll: aCollection
+	aCollection do: [:aPatchOperation | self add: aPatchOperation ]
+%
+
+category: 'private'
+set compile_env: 0
+method: CypressDependencySorter
+addExternalProvisions: aCollection
+	(aCollection intersection: self externalRequirements)
+		do: [:globalName | self addProvision: globalName]
+%
+
+category: 'private'
+set compile_env: 0
+method: CypressDependencySorter
+addProvision: aGlobalName
+	| newlySatisfied |
+	self provided add: aGlobalName.
+	newlySatisfied := self required removeKey: aGlobalName ifAbsent: [#()].
+	self addAll: newlySatisfied.
+%
+
+category: 'private'
+set compile_env: 0
+method: CypressDependencySorter
+addRequirement: globalName for: aPatchOperation
+	(self itemsRequiring: globalName) add: aPatchOperation
+%
+
+category: 'private'
+set compile_env: 0
+method: CypressDependencySorter
+addRequirements: aCollection for: aPatchOperation
+	aCollection do: [:globalName | self addRequirement: globalName for: aPatchOperation]
+%
+
+category: 'private'
+set compile_env: 0
+method: CypressDependencySorter
+addToOrder: aPatchOperation
+	self orderedItems add: aPatchOperation.
+	aPatchOperation provisions do: [:globalName | self addProvision: globalName ].
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressDependencySorter
+externalRequirements
+	| unloaded providedByUnloaded |
+	unloaded := self itemsWithMissingRequirements.
+	providedByUnloaded := (unloaded gather: [:e | e provisions]) asSet.
+	^ self required keys reject: [:globalName | providedByUnloaded includes: globalName ]
+%
+
+category: 'private'
+set compile_env: 0
+method: CypressDependencySorter
+itemsRequiring: globalName
+	^ self required at: globalName ifAbsentPut: [Set new]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressDependencySorter
+itemsWithMissingRequirements
+	| patchOperations |
+	patchOperations := Set new.
+	self required values do: [:aSetOfPatchOperations | patchOperations addAll: aSetOfPatchOperations ].
+	^ patchOperations
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressDependencySorter
+orderedItems
+	"ordered list of patch operations"
+
+	orderedItems ifNil: [ orderedItems := OrderedCollection new ].
+	^orderedItems
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressDependencySorter
+provided
+	"set of global names provided by definitions already loaded"
+
+	provided ifNil: [ provided := Set new ].
+	^provided
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressDependencySorter
+required
+	"dictionary of required global name mapped to list of definitions that require the global"
+
+	required ifNil: [ required := Dictionary new ].
+	^required
+%
+
+category: 'private'
+set compile_env: 0
+method: CypressDependencySorter
+unresolvedRequirementsFor: aPatchOperation
+	"Answer a list of global names that are required by <aPatchOperation>, but not 
+	 provided by patchOperations that have already been processed"
+
+	^ aPatchOperation requirements difference: self provided
+%
+
+! Class Implementation for CypressPackageDefinition
+
+! ------------------- Class methods for CypressPackageDefinition
 
 category: 'instance creation'
 set compile_env: 0
-classmethod: CypressPatch
-fromBase: baseSnapshot toTarget: targetSnapshot
-	^ (self new)
-		fromBase: baseSnapshot
-		toTarget: targetSnapshot
-%
+classmethod: CypressPackageDefinition
+named: aString
 
-! ------------------- Instance methods for CypressPatch
-
-category: 'applying'
-set compile_env: 0
-method: CypressPatch
-applyTo: aCypressLoader
-	operations do: [:ea | ea applyTo: aCypressLoader].
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressPatch
-fromBase: baseSnapshot toTarget: targetSnapshot
-	| base target |	
-	operations := OrderedCollection new.
-	base := CypressDefinitionIndex definitions: baseSnapshot definitions.
-	target := CypressDefinitionIndex definitions: targetSnapshot definitions.
-	
-	target definitions do:
-		[:t |
-		base
-			definitionLike: t
-			ifPresent: [:b | (b isSameRevisionAs: t) ifFalse: [operations add: (CypressModification of: b to: t)]]
-			ifAbsent: [operations add: (CypressAddition of: t)]].
-		
-	base definitions do:
-		[:b |
-		target
-			definitionLike: b
-			ifPresent: [:t | ]
-			ifAbsent: [operations add: (CypressRemoval of: b)]]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressPatch
-operations
-
-	^operations
-%
-
-! Class Implementation for CypressLoader
-
-! ------------------- Class methods for CypressLoader
-
-category: 'loading'
-set compile_env: 0
-classmethod: CypressLoader
-updatePackage: aPackage withSnapshot: aSnapshot
-	"Answer the loader used to apply the update."
-
-	^(self new)
-		updatePackage: aPackage withSnapshot: aSnapshot;
-		load
-%
-
-! ------------------- Instance methods for CypressLoader
-
-category: 'updating'
-set compile_env: 0
-method: CypressLoader
-addFailedPatchOperation: aPatchOperation
-
-	self errors add: aPatchOperation
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressLoader
-additions
-
-	additions ifNil: [ additions := OrderedCollection new ].
-	^additions
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-analyze
-
-	self 
-		analyzeAdditions;
-		analyzeRemovals
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-analyzeAdditions
-
-	| sorter |
-	sorter := CypressDependencySorter new 
-		addAll: self additions;
-		addExternalProvisions: self provisions;
+	^self new
+		name: aString;
 		yourself.
-	additions := sorter orderedItems.
-	requirements := sorter externalRequirements.
-	unloadable := sorter required.
 %
 
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-analyzeRemovals
+! ------------------- Instance methods for CypressPackageDefinition
 
-	| sorter |
-	sorter := CypressDependencySorter new 
-		addAll: self removals;
-		yourself.
-	removals := sorter orderedItems reverse.
+category: 'comparing'
+set compile_env: 0
+method: CypressPackageDefinition
+= other
+	^ other species = self species and: [other name sameAs: name]
 %
 
-category: 'applying'
+category: 'snapshotting'
 set compile_env: 0
-method: CypressLoader
-applyAddition: aCypressPatchOperation
+method: CypressPackageDefinition
+addClass: aClass toDefinitions: definitions
 
-	self additions add: aCypressPatchOperation
+	definitions add: aClass asCypressClassDefinition
 %
 
-category: 'applying'
+category: 'snapshotting'
 set compile_env: 0
-method: CypressLoader
-applyModification: aCypressPatchOperation
+method: CypressPackageDefinition
+addExtensionMethodsFromClass: aClass toMap: classMap
 
-	self additions add: aCypressPatchOperation
+	| defs map |
+	defs := classMap at: aClass theNonMetaClass ifAbsent: [OrderedCollection new.].
+	map := Dictionary new.
+	aClass categorysDo: 
+			[:category :selectors |
+			(category asLowercase beginsWith: '*' , self name asLowercase)
+				ifTrue: [map at: category put: selectors asSortedCollection]].
+	map keys asSortedCollection do: 
+			[:category |
+			(map at: category)
+				do: [:selector | defs add: (aClass compiledMethodAt: selector) asCypressMethodDefinition]].
+	defs notEmpty ifTrue: [classMap at: aClass theNonMetaClass put: defs]
 %
 
-category: 'applying'
+category: 'snapshotting'
 set compile_env: 0
-method: CypressLoader
-applyRemoval: aCypressPatchOperation
+method: CypressPackageDefinition
+addMethodsFromClass: aClass toDefinitions: definitions
+	"Add only those methods which are not extensions from other packages."
 
-	self removals add: aCypressPatchOperation
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-attemptInitialLoad
-
-	self
-		resetErrors;
-		notifyOnFailedPatchOperations;
-		loadAdditions: self additions;
-		unloadRemovals: self removals.
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-errorOnFailedPatchOperations
-
-	exceptionClass := CypressLoaderError.
+	((aClass methodDictionary reject: [:each | each category first = $*])
+		asSortedCollection: [:a :b | a selector <= b selector])
+			do: [:method | definitions add: method asCypressMethodDefinition]
 %
 
 category: 'accessing'
 set compile_env: 0
-method: CypressLoader
-errors
-	errors ifNil: [self resetErrors].
-	^errors
-%
+method: CypressPackageDefinition
+classes
 
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-handleCompileError: aCompileError from: aPatchOperation
-
-	| undefinedSymbolErrors otherErrors |
-	undefinedSymbolErrors := aCompileError errorDetails
-				select: [:each | each first = 1031].
-	otherErrors := aCompileError errorDetails
-				reject: [:each | each first = 1031].
-	undefinedSymbolErrors do: [:each | self requirements add: each last].
-	aCompileError pass
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-handlePatchOperation: aPatchOperation failure: anException
-	"Signal the loader exception appropriate to the current phase.
-	 Note that a handler may suppress the #addFailedPatchOperation: by
-	 sending #return or #return: to the resignaled exception. Otherwise,
-	 resumption from a resumable resignalled exception will continue through
-	 this method."
-
-	(exceptionClass patchOperation: aPatchOperation exception: anException) signal.
-	self addFailedPatchOperation: aPatchOperation.
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-load
-
-	self
-		analyze;
-		reportUnloadableDefinitions;
-		attemptInitialLoad;
-		retryFailedLoads;
-		postLoad.
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-loadAdditions: somePatchOperations
-	"Load class definitions first, then method definitions."
-
-	somePatchOperations
-		do: [:each | self loadClassDefinition: each];
-		do: [:each | self loadMethodDefinition: each].
-%
-
-category: 'operations'
-set compile_env: 0
-method: CypressLoader
-loadClassDefinition: aPatchOperation
-
-	[aPatchOperation loadClassDefinition]
-		on: Error
-		do: [:ex | self handlePatchOperation: aPatchOperation failure: ex].
-%
-
-category: 'operations'
-set compile_env: 0
-method: CypressLoader
-loadMethodDefinition: aPatchOperation
-
-	
-	[[aPatchOperation loadMethodDefinition]
-		on: CompileError
-		do: [:ex | self handleCompileError: ex from: aPatchOperation]]
-			on: Error
-			do: [:ex | self handlePatchOperation: aPatchOperation failure: ex]
+	^self classesInPackageNamed: self name
 %
 
 category: 'accessing'
 set compile_env: 0
-method: CypressLoader
-methodAdditions
-
-	^#()
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-notifyOnFailedPatchOperations
-
-	exceptionClass := CypressLoaderErrorNotification.
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-postLoad
-	"This is where the obsoletion is taken into account ..."
-
-	self additions do: [:each | self postLoad: each].
-%
-
-category: 'operations'
-set compile_env: 0
-method: CypressLoader
-postLoad: aPatchOperation
-
-	[aPatchOperation postLoadDefinition]
-		on: Error
-		do: [:ex | self handlePatchOperation: aPatchOperation failure: ex].
+method: CypressPackageDefinition
+name
+	^ name
 %
 
 category: 'accessing'
 set compile_env: 0
-method: CypressLoader
-provisions
-	^ provisions ifNil: [provisions := (self allClasses collect: [:cl | cl name asString]) asSet ]
+method: CypressPackageDefinition
+name: aString
+	name := aString
+%
+
+category: 'printing'
+set compile_env: 0
+method: CypressPackageDefinition
+printDetailsOn: aStream
+
+	aStream nextPutAll: name
+%
+
+category: 'snapshotting'
+set compile_env: 0
+method: CypressPackageDefinition
+snapshot
+
+	| classDefinitions methodDefinitions classMap |
+	classDefinitions := OrderedCollection new.
+	methodDefinitions := OrderedCollection new.
+	(self determineClassHierarchicalOrder: self classes) do: 
+			[:cls |
+			self
+				addClass: cls toDefinitions: classDefinitions;
+				addMethodsFromClass: cls toDefinitions: methodDefinitions;
+				addMethodsFromClass: cls class toDefinitions: methodDefinitions].
+	classMap := Dictionary new.
+	self allClasses do: 
+			[:each |
+			self
+				addExtensionMethodsFromClass: each toMap: classMap;
+				addExtensionMethodsFromClass: each class toMap: classMap].
+	(self determineClassHierarchicalOrder: classMap keys)
+		do: [:aClass | methodDefinitions addAll: (classMap at: aClass)].
+	^CypressSnapshot definitions: classDefinitions, methodDefinitions
+%
+
+! Class Implementation for CypressSnapshot
+
+! ------------------- Class methods for CypressSnapshot
+
+category: 'instance creation'
+set compile_env: 0
+classmethod: CypressSnapshot
+definitions: aDefinitions
+
+	^(self new) definitions: aDefinitions
+%
+
+! ------------------- Instance methods for CypressSnapshot
+
+category: 'comparing'
+set compile_env: 0
+method: CypressSnapshot
+= other
+	^ definitions asArray = other definitions asArray
+%
+
+category: 'enumerating'
+set compile_env: 0
+method: CypressSnapshot
+classDefinitions: classBlock methodDefinitions: methodBlock
+
+	self definitions do: [:definition |
+		definition classDefinition: classBlock methodDefinition: methodBlock]
 %
 
 category: 'accessing'
 set compile_env: 0
-method: CypressLoader
-removals
+method: CypressSnapshot
+definitions
 
-	removals ifNil: [ removals := OrderedCollection new ].
-	^removals
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-reportUnloadableDefinitions
-
-	self unloadable isEmpty ifTrue: [^self].
-	(CypressLoaderMissingClasses missingRequirementsMap: unloadable) signal.
+	^definitions
 %
 
 category: 'accessing'
 set compile_env: 0
-method: CypressLoader
-requirements
+method: CypressSnapshot
+definitions: aDefinitions
 
-	^requirements
+	definitions := aDefinitions
+%
+
+category: 'patching'
+set compile_env: 0
+method: CypressSnapshot
+patchRelativeToBase: aSnapshot
+	^ CypressPatch fromBase: aSnapshot toTarget: self
 %
 
 category: 'loading'
 set compile_env: 0
-method: CypressLoader
-resetErrors
+method: CypressSnapshot
+updatePackage: aPackage
+  "Answer the loader used to apply the update."
 
-	errors := OrderedCollection new.
+  ^ self updatePackage: aPackage defaultSymbolDictionaryName: nil
 %
 
 category: 'loading'
 set compile_env: 0
-method: CypressLoader
-retryFailedLoads
-	"In case any of the failed loads were resolved by subsequent
-	 patch operations after the initial attempt or by editting of the
-	 failed patch operations by exception handling during the notification
-	 phase (initial attempt)."
+method: CypressSnapshot
+updatePackage: aPackage defaultSymbolDictionaryName: defaultSymbolDictionaryName
+  "Answer the loader used to apply the update."
 
-	| failed |
-	failed := self errors.
-	self
-		resetErrors;
-		errorOnFailedPatchOperations;
-		loadAdditions: (self additions intersection: failed);
-		unloadRemovals: (self removals intersection: failed).
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressLoader
-unloadable
-
-	unloadable ifNil: [ unloadable := OrderedCollection new ].
-	^unloadable
-%
-
-category: 'operations'
-set compile_env: 0
-method: CypressLoader
-unloadDefinition: aPatchOperation
-
-	[aPatchOperation unloadDefinition]
-		on: Error
-		do: [:ex | self handlePatchOperation: aPatchOperation failure: ex].
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-unloadRemovals: somePatchOperations
-	"Removals need to be done after adding classes and methods."
-
-	somePatchOperations
-		do: [:each | self unloadDefinition: each].
-%
-
-category: 'loading'
-set compile_env: 0
-method: CypressLoader
-updatePackage: aPackage withSnapshot: aSnapshot
-
-	| patch snapshot |
-	snapshot := aPackage snapshot.
-	patch := aSnapshot patchRelativeToBase: snapshot.
-	patch applyTo: self.
-	snapshot definitions do: [:ea | self provisions addAll: ea provisions]
+  ^ CypressLoader
+    updatePackage: aPackage
+    defaultSymbolDictionaryName: defaultSymbolDictionaryName
+    withSnapshot: self
 %
 
 ! Class Extensions
