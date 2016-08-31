@@ -13,7 +13,8 @@
 		"classInstVarNames",
 		"classVarNames",
 		"poolDictionaryNames",
-		"subclassType" ],
+		"subclassType",
+                "defaultSymbolDictionaryName" ],
 	"name" : "CypressClassDefinition",
 	"pools" : [
 		 ],

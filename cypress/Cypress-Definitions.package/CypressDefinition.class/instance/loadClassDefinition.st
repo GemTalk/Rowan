@@ -1,6 +1,6 @@
 "
-notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
 category: loading
 "
-loadClassDefinition
-	"default is to do nothing"
+loadClassDefinition: aDefaultSymbolDictionaryName
+  "default is to do nothing"

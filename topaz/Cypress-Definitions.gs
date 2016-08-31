@@ -241,7 +241,7 @@ doit
 doit
 (CypressDefinition
 	subclass: 'CypressClassDefinition'
-	instVarNames: #( name superclassName category comment instVarNames classInstVarNames classVarNames poolDictionaryNames subclassType )
+	instVarNames: #( name superclassName category comment instVarNames classInstVarNames classVarNames poolDictionaryNames subclassType defaultSymbolDictionaryName )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -883,8 +883,14 @@ category: 'loading'
 set compile_env: 0
 method: CypressPatchOperation
 loadClassDefinition
+  self loadClassDefinition: self defaultSymbolDictionaryName
+%
 
-	self subclassResponsibility: #loadClassDefinition
+category: 'loading'
+set compile_env: 0
+method: CypressPatchOperation
+loadClassDefinition: aDefaultSymbolDictionaryName
+  self subclassResponsibility: #'loadClassDefinition:'
 %
 
 category: 'loading'
@@ -984,9 +990,8 @@ description
 category: 'loading'
 set compile_env: 0
 method: CypressModification
-loadClassDefinition
-
-	self modification loadClassDefinition.
+loadClassDefinition: aDefaultSymbolDictionaryName
+  self modification loadClassDefinition: aDefaultSymbolDictionaryName
 %
 
 category: 'loading'
@@ -1092,9 +1097,8 @@ description
 category: 'loading'
 set compile_env: 0
 method: CypressAddition
-loadClassDefinition
-
-	self definition loadClassDefinition.
+loadClassDefinition: aDefaultSymbolDictionaryName
+  self definition loadClassDefinition: aDefaultSymbolDictionaryName
 %
 
 category: 'loading'
@@ -1185,9 +1189,9 @@ description
 category: 'loading'
 set compile_env: 0
 method: CypressRemoval
-loadClassDefinition
-	
-	CypressError signal: 'inappropriate to send #loadClassDefinition to a removal operation'
+loadClassDefinition: aDefaultSymbolDictionaryName
+  CypressError
+    signal: 'inappropriate to send #loadClassDefinition to a removal operation'
 %
 
 category: 'loading'
@@ -1699,7 +1703,14 @@ category: 'loading'
 set compile_env: 0
 method: CypressDefinition
 loadClassDefinition
-	"default is to do nothing"
+  self loadClassDefinition: self defaultSymbolDictionaryName
+%
+
+category: 'loading'
+set compile_env: 0
+method: CypressDefinition
+loadClassDefinition: aDefaultSymbolDictionaryName
+  "default is to do nothing"
 %
 
 category: 'loading'
@@ -1813,6 +1824,20 @@ method: CypressClassDefinition
 asCypressClassDefinition
 
 	^self
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressClassDefinition
+defaultSymbolDictionaryName
+  ^ defaultSymbolDictionaryName ifNil: [ super defaultSymbolDictionaryName ]
+%
+
+category: 'accessing'
+set compile_env: 0
+method: CypressClassDefinition
+defaultSymbolDictionaryName: aSymbol
+  defaultSymbolDictionaryName := aSymbol
 %
 
 category: 'accessing'
@@ -2019,11 +2044,12 @@ instVarNames
 category: 'loading'
 set compile_env: 0
 method: CypressClassDefinition
-loadClassDefinition
+loadClassDefinition: aDefaultSymbolDictionaryName
 	"Create a new version of the defined class. If the class already exists,
 	 copy the behaviors and state from the old version."
 
 	| newClass oldClass |
+        self defaultSymbolDictionaryName: aDefaultSymbolDictionaryName.
 	oldClass := self actualClassOrNil.
 	newClass := self createOrReviseClass.
 	(oldClass isNil or: [newClass == oldClass]) ifTrue: [^self].
