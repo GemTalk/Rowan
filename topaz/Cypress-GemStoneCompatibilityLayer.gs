@@ -148,7 +148,7 @@ escapePercents
 
 ! ------------------- Instance methods for Character
 
-category: '*squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: Character
 isSafeForHTTP
 	"whether a character is 'safe', or needs to be escaped when used, eg, in a URL"
@@ -162,65 +162,119 @@ isSafeForHTTP
 
 ! ------------------- Instance methods for CharacterCollection
 
-category: '*squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: CharacterCollection
 encodeForHTTP
-	"change dangerous characters to their %XX form, for use in HTTP transactions"
-	| encodedStream |
-	encodedStream _ WriteStream on: (String new).
-	
-	1 to: self size do: [ :n | | c |
-		c := self at: n.
-		c isSafeForHTTP ifTrue: [ encodedStream nextPut: c ] ifFalse: [
-			encodedStream nextPut: $%.
-			encodedStream nextPut: (c asciiValue // 16) asHexDigit.
-			encodedStream nextPut: (c asciiValue \\ 16) asHexDigit.
-		]
-	].
-	^encodedStream contents.
+
+	^self encodeAsUTF8 escapePercents
 %
 
-category: '*squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: CharacterCollection
 findString: subString startingAt: startIndex caseSensitive: aBoolean
+	"If a receiver contains subString beginning at some point at or after
+	 startIndex, this returns the index at which subString begins.  If the
+	 receiver does not contain subString, this returns 0."
 
-	^ self _findString: subString startingAt: startIndex ignoreCase: aBoolean not
+	^self
+		_findString: subString
+		startingAt: startIndex
+		ignoreCase: aBoolean not
 %
 
-category: '*monticellofiletree-core'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: CharacterCollection
 withUnixLineEndings
+	"Assume the string is textual, and that CR, LF, and CRLF are all valid line endings.
+	 Replace each occurence with a single LF."
 
-	^self withGemstoneLineEndings
+	| cr lf inPos outPos outString newOutPos indexLF indexCR |
+	cr := Character cr.
+	indexCR := self indexOf: cr startingAt: 1.
+	indexCR = 0 ifTrue: [^self].
+	lf := Character lf.
+	indexLF := self indexOf: lf startingAt: 1.
+	indexLF = 0 ifTrue: [^self copyReplacing: cr with: lf].
+	inPos := outPos := 1.
+	outString := String new: self size.
+	
+	["check if next CR is before next LF or if there are no more LF"
+	(indexLF = 0 or: [indexCR < indexLF])
+		ifTrue: 
+			[newOutPos := outPos + 1 + indexCR - inPos.
+			outString
+				replaceFrom: outPos
+				to: newOutPos - 2
+				with: self
+				startingAt: inPos.
+			outString at: newOutPos - 1 put: lf.
+			outPos := newOutPos.
+			1 + indexCR = indexLF
+				ifTrue: 
+					["Caught a CR-LF pair"
+					inPos := 1 + indexLF.
+					indexLF := self indexOf: lf startingAt: inPos]
+				ifFalse: [inPos := 1 + indexCR].
+			indexCR := self indexOf: cr startingAt: inPos]
+		ifFalse: 
+			[newOutPos := outPos + 1 + indexLF - inPos.
+			outString
+				replaceFrom: outPos
+				to: newOutPos - 1
+				with: self
+				startingAt: inPos.
+			outPos := newOutPos.
+			inPos := 1 + indexLF.
+			indexLF := self indexOf: lf startingAt: inPos].
+	indexCR = 0]
+			whileFalse.
+
+	"no more CR line endings. copy the rest"
+	newOutPos := outPos + (self size - inPos + 1).
+	outString
+		replaceFrom: outPos
+		to: newOutPos - 1
+		with: self
+		startingAt: inPos.
+	^outString copyFrom: 1 to: newOutPos - 1
 %
 
 ! Class Extension for Collection
 
 ! ------------------- Instance methods for Collection
 
-category: '*squeak-enumerating'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: Collection
 difference: aCollection
 	"Answer the set theoretic difference of two collections."
 
-	^ self reject: [:each | aCollection includes: each]
+	| set |
+	set := self asSet.
+	aCollection do: [:each | set remove: each ifAbsent: []].
+	^self species withAll: set asArray
 %
 
-category: '*packageinfo-base'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: Collection
 gather: aBlock
-  | res |
-  res := { } .
-  self do: [:ea | res addAll: (aBlock value: ea)].
-  ^ res
+
+	^Array
+		streamContents: [:stream | self do: [:ea | stream nextPutAll: (aBlock value: ea)]]
 %
 
-category: '*squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: Collection
 intersection: aCollection
 	"Answer the set theoretic intersection of two collections."
 
-	^ self select: [:each | aCollection includes: each]
+	| set outputSet |
+	set := self asSet.
+	outputSet := Set new.
+	aCollection do: 
+			[:each |
+			((set includes: each) and: [(outputSet includes: each) not])
+				ifTrue: [outputSet add: each]].
+	^self species withAll: outputSet asArray
 %
 
 ! Class Extension for DateAndTimeANSI
@@ -261,7 +315,7 @@ fromUnixFormatString: aString
 
 ! ------------------- Instance methods for GsFile
 
-category: '*squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: GsFile
 tab: anInteger 
 	"Append anInteger tab characters to the receiver."
@@ -327,19 +381,19 @@ streamSpecies
 
 ! ------------------- Class methods for SequenceableCollection
 
-category: '*core-squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 classmethod: SequenceableCollection
-new: newSize streamContents: blockWithArg
+new: newSize streamContents: aOneArgBlock
 
 	| stream |
-	stream := WriteStream on: (self new: newSize).
-	blockWithArg value: stream.
-	stream positionA = newSize
+	stream := WriteStreamPortable on: (self streamSpecies new: newSize).
+	aOneArgBlock value: stream.
+	stream position = newSize
 		ifTrue: [ ^stream originalContents ]
 		ifFalse: [ ^stream contents ]
 %
 
-category: '*core-squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 classmethod: SequenceableCollection
 streamContents: blockWithArg
 
@@ -357,7 +411,7 @@ streamSpecies
 
 ! ------------------- Instance methods for SequenceableCollection
 
-category: '*core-squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: SequenceableCollection
 allButFirst: n
 	"Answer a copy of the receiver containing all but the first n
@@ -366,16 +420,15 @@ allButFirst: n
 	^ self copyFrom: n + 1 to: self size
 %
 
-category: '*core-squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: SequenceableCollection
-beginsWith: aSequenceableCollection
+beginsWith: aSequence
+	"Answer whether the first elements of the receiver are the same as aSequence."
 
-	(aSequenceableCollection isEmpty or: [self size < aSequenceableCollection size]) ifTrue: [^false].
-	aSequenceableCollection withIndexDo: [:each :index | (self at: index) ~= each ifTrue: [^false]].
-	^true
+	^(self indexOfSubCollection: aSequence startingAt: 1) = 1
 %
 
-category: '*squeak-copying'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: SequenceableCollection
 copyAfter: anElement
 	"Answer a copy of the receiver from after the first occurence
@@ -385,7 +438,7 @@ copyAfter: anElement
 	^ self allButFirst: (self indexOf: anElement ifAbsent: [^ self copyEmpty])
 %
 
-category: '*squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: SequenceableCollection
 copyAfterLast: anElement
 	"Answer a copy of the receiver from after the last occurence
@@ -395,22 +448,16 @@ copyAfterLast: anElement
 	^ self allButFirst: (self lastIndexOf: anElement ifAbsent: [^ self copyEmpty])
 %
 
-category: '*squeak-copying'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: SequenceableCollection
-copyUpTo: anObject
-  "Answer all elements up to but not including anObject. If there
-  is no such object, answer a copy of the receiver."
+copyUpTo: anElement
+	"Answer all elements up to but not including anObject. If there
+	is no such object, answer a copy of the receiver."
 
-| idx |
-idx := self indexOf: anObject startingAt: 1 .
-idx == 0 ifTrue:[ 
-  ^ self copy 
-] ifFalse:[
-  ^ self copyFrom: 1 to: idx - 1
-]
+	^self copyFrom: 1 to: (self indexOf: anElement ifAbsent: [^self copy]) - 1
 %
 
-category: '*squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: SequenceableCollection
 copyUpToLast: anElement
 	"Answer a copy of the receiver from index 1 to the last occurrence of 
@@ -438,15 +485,15 @@ copyWithoutSuffix: aSequence or: aBlock
 	^self copyFrom: 1 to: self size - aSequence size.
 %
 
-category: '*squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: SequenceableCollection
-endsWith: aSequenceableCollection
+endsWith: aSequence
+	"Answer whether the last elements of the receiver are the same as aSequence."
 
-	| start |
-	(aSequenceableCollection isEmpty or: [self size < aSequenceableCollection size]) ifTrue: [^false].
-	start := self size - aSequenceableCollection size.
-	aSequenceableCollection withIndexDo: [:each :index | (self at: start + index) ~= each ifTrue: [^false]].
-	^true
+	| expectedStart |
+	expectedStart := self size - aSequence size + 1 max: 1.
+	^expectedStart
+		= (self indexOfSubCollection: aSequence startingAt: expectedStart)
 %
 
 category: '*Cypress-GemStoneCompatibilityLayer'
@@ -471,16 +518,19 @@ indexOfAnyOf: aCollection startingAt: start ifAbsent: exceptionBlock
 	^ exceptionBlock value
 %
 
-category: '*squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: SequenceableCollection
 lastIndexOf: anElement
 	"Answer the index of the last occurence of anElement within the 
 	receiver. If the receiver does not contain anElement, answer 0."
 
-	^ self lastIndexOf: anElement startingAt: self size ifAbsent: nil
+	^self
+		lastIndexOf: anElement
+		startingAt: self size
+		ifAbsent: [0]
 %
 
-category: '*squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: SequenceableCollection
 lastIndexOf: anElement ifAbsent: exceptionBlock
 	"Answer the index of the last occurence of anElement within the  
@@ -489,17 +539,17 @@ lastIndexOf: anElement ifAbsent: exceptionBlock
 	^self lastIndexOf: anElement startingAt: self size ifAbsent: exceptionBlock
 %
 
-category: '*squeak'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: SequenceableCollection
 lastIndexOf: anElement startingAt: lastIndex ifAbsent: exceptionBlock
 	"Answer the index of the last occurence of anElement within the  
 	receiver. If the receiver does not contain anElement, answer the
 	result of evaluating the argument, exceptionBlock."
 
-	lastIndex to: 1 by: -1 do:
-		[:index |
-		(self at: index) = anElement ifTrue: [^ index]].
-	^ exceptionBlock ~~ nil ifTrue:[ exceptionBlock value ] ifFalse:[ 0 ]
+	lastIndex to: 1
+		by: -1
+		do: [:index | (self at: index) = anElement ifTrue: [^index]].
+	^exceptionBlock value
 %
 
 ! Class Extension for SortedCollection
@@ -542,15 +592,39 @@ escapePercents
 							c codePoint \\ 16 printOn: stream base: 16 showRadix: false]]]
 %
 
-category: '*gssqueakcommon-core'
+category: '*Cypress-GemStoneCompatibilityLayer'
 method: String
 unescapePercents
-	"change each %XY substring to the character with ASCII value XY in hex.  This is the opposite of #encodeForHTTP.
-	 Assume UTF8 encoding for Pharo compatibility"
+	"decode string including %XX form
+	 (adapted from Pharo 2.0)"
 
-	"this method not implemented in CharacterCollection in order to preserve original behavior without overrides"
-
-	^self unescapePercentsWithTextEncoding: 'utf-8'
+	| unescaped char asciiVal specialChars oldPos pos |
+	unescaped := ReadWriteStreamPortable on: String new.
+	specialChars := '+%' asSet.
+	oldPos := 1.
+	
+	[pos := self indexOfAnyOf: specialChars startingAt: oldPos.
+	pos > 0]
+			whileTrue: 
+				[unescaped nextPutAll: (self copyFrom: oldPos to: pos - 1).
+				char := self at: pos.
+				(char = $% and: [pos + 2 <= self size])
+					ifTrue: 
+						[asciiVal := ((self at: pos + 1) asUppercase digitValueInRadix: 16) * 16
+									+ ((self at: pos + 2) asUppercase digitValueInRadix: 16).
+						asciiVal > 255 ifTrue: [^self].
+						unescaped nextPut: (Character withValue: asciiVal).
+						pos := pos + 3.
+						pos <= self size ifFalse: [char := nil].
+						oldPos := pos]
+					ifFalse: 
+						[char = $+
+							ifTrue: [unescaped nextPut: Character space]
+							ifFalse: [unescaped nextPut: char].
+						oldPos := pos + 1]].
+	oldPos <= self size
+		ifTrue: [unescaped nextPutAll: (self copyFrom: oldPos to: self size)].
+	^unescaped contents
 %
 
 ! Class Extension for Symbol
