@@ -1,10 +1,12 @@
 "
-notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
 category: writing - private
 "
 fileOutExtensionImplementationsOn: aStream
-
-	self
-		fileOut: 'Class Extension'
-		implementationsFrom: self extensions
-		on: aStream
+  | sortedExtensions |
+  sortedExtensions := self extensions
+    asSortedCollection: [ :a :b | a className <= b className ].
+  self
+    fileOut: 'Class Extension'
+    implementationsFrom: sortedExtensions
+    on: aStream
