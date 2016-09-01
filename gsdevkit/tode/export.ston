@@ -1,5 +1,5 @@
 TDSmalltalkLeafNode{#name:'export',#contents:'| packageNames repo |
-  packageNames := #(\'Cypress-Definitions\' \'Cypress-PackageManagement\').
+  packageNames := #(\'Cypress-Comparison\' \'Cypress-Definitions\' \'Cypress-GemStoneCompatibilityLayer\' \'Cypress-GemStoneFileServer\' \'Cypress-MesssageDigest\' \'Cypress-Mocks\' \'Cypress-PackageManagement\' \'Cypress-PackageManagementTests\' \'Cypress-Structure\' \'Cypress-Tests\' \'NetworkTests\' \'Network-Url\').
   repo := CypressAbstractRepository
     onUrl:
       \'topaz:$GS_HOME/shared/repos/CypressReferenceImplementation/topazx/\' asUrl
@@ -8,4 +8,4 @@ TDSmalltalkLeafNode{#name:'export',#contents:'| packageNames repo |
     do: [ :each | 
       repo
         writePackageStructure:
-          (CypressPackageStructure fromPackage: (CypressPackageDefinition named: each)) ]',#creationTime:DateAndTime['2016-08-30T18:10:44.78255009651184-07:00'],#modificationTime:DateAndTime['2016-08-30T18:42:08.425540924072266-07:00']}
+          (CypressPackageStructure fromPackage: (CypressPackageDefinition named: each)) ]',#creationTime:DateAndTime['2016-08-30T18:10:44.78255009651184-07:00'],#modificationTime:DateAndTime['2016-08-31T17:33:33.07768106460571-07:00']}
