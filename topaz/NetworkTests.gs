@@ -33,6 +33,7 @@ System myUserProfile symbolList do: [:symDict |
 		]
 	]
 ].
+true.
 %
 
 
@@ -50,62 +51,7 @@ doit
 		category: 'NetworkTests';
 		comment: '';
 		immediateInvariant.
-%
-
-doit
-(NetworkTestCase
-	subclass: 'HTTPEncodingTest'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'NetworkTests-Protocols';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(NetworkTestCase
-	subclass: 'HttpUrlTest'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'NetworkTests-Url';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(NetworkTestCase
-	subclass: 'HierarchicalUrlTest'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'NetworkTests-Url';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(NetworkTestCase
-	subclass: 'GenericUrlTest'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'NetworkTests-Url';
-		comment: '';
-		immediateInvariant.
+true.
 %
 
 doit
@@ -120,6 +66,67 @@ doit
 		category: 'NetworkTests-Url';
 		comment: '';
 		immediateInvariant.
+true.
+%
+
+doit
+(NetworkTestCase
+	subclass: 'GenericUrlTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'NetworkTests-Url';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(NetworkTestCase
+	subclass: 'HierarchicalUrlTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'NetworkTests-Url';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(NetworkTestCase
+	subclass: 'HTTPEncodingTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'NetworkTests-Protocols';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(NetworkTestCase
+	subclass: 'HttpUrlTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'NetworkTests-Url';
+		comment: '';
+		immediateInvariant.
+true.
 %
 
 doit
@@ -137,6 +144,7 @@ doit
 	- there is a chapter in the PharoByExample book (http://pharobyexample.org)
 	- the sunit class category';
 		immediateInvariant.
+true.
 %
 
 ! Class Implementation for NetworkTestCase
@@ -144,7 +152,6 @@ doit
 ! ------------------- Class methods for NetworkTestCase
 
 category: 'Testing'
-set compile_env: 0
 classmethod: NetworkTestCase
 isAbstract
 	"Override to true if a TestCase subclass is Abstract and should not have
@@ -153,65 +160,11 @@ isAbstract
 	^self sunitName = #NetworkTestCase
 %
 
-! Class Implementation for HTTPEncodingTest
-
-! ------------------- Instance methods for HTTPEncodingTest
-
-category: 'as yet unclassified'
-set compile_env: 0
-method: HTTPEncodingTest
-testEncodeForHTTP
-
-	self assert: 'aa aa éé aa aa' encodeForHTTP = 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa'
-%
-
-! Class Implementation for HttpUrlTest
-
-! ------------------- Instance methods for HttpUrlTest
-
-category: 'testing'
-set compile_env: 0
-method: HttpUrlTest
-testHttps
-	self assert: 'https://encrypted.google.com' asUrl scheme = 'https'.
-%
-
-! Class Implementation for HierarchicalUrlTest
-
-! ------------------- Instance methods for HierarchicalUrlTest
-
-category: 'testing'
-set compile_env: 0
-method: HierarchicalUrlTest
-testAsString
-	| url |
-	url := HierarchicalUrl new
-		schemeName: 'ftp'
-		authority: 'localhost'
-		path: #('path' 'to' 'file')
-		query: 'aQuery'.
-	self assert: url asString = 'ftp://localhost/path/to/file?aQuery'.
-%
-
-! Class Implementation for GenericUrlTest
-
-! ------------------- Instance methods for GenericUrlTest
-
-category: 'testing'
-set compile_env: 0
-method: GenericUrlTest
-testAsString
-	| url |
-	url := GenericUrl new schemeName: 'sip' locator: 'foo@bar'.
-	self assert: url asString = 'sip:foo@bar'.
-%
-
 ! Class Implementation for FileUrlTest
 
 ! ------------------- Instance methods for FileUrlTest
 
 category: 'testing'
-set compile_env: 0
 method: FileUrlTest
 testAsString
 	| target url |
@@ -222,7 +175,6 @@ testAsString
 %
 
 category: 'testing'
-set compile_env: 0
 method: FileUrlTest
 testMatchingSchemesToSubclasses
 
@@ -238,12 +190,60 @@ testMatchingSchemesToSubclasses
 		self assert: (Url urlClassForScheme: schemeString) equals: urlClassToUse ].
 %
 
+! Class Implementation for GenericUrlTest
+
+! ------------------- Instance methods for GenericUrlTest
+
+category: 'testing'
+method: GenericUrlTest
+testAsString
+	| url |
+	url := GenericUrl new schemeName: 'sip' locator: 'foo@bar'.
+	self assert: url asString = 'sip:foo@bar'.
+%
+
+! Class Implementation for HierarchicalUrlTest
+
+! ------------------- Instance methods for HierarchicalUrlTest
+
+category: 'testing'
+method: HierarchicalUrlTest
+testAsString
+	| url |
+	url := HierarchicalUrl new
+		schemeName: 'ftp'
+		authority: 'localhost'
+		path: #('path' 'to' 'file')
+		query: 'aQuery'.
+	self assert: url asString = 'ftp://localhost/path/to/file?aQuery'.
+%
+
+! Class Implementation for HTTPEncodingTest
+
+! ------------------- Instance methods for HTTPEncodingTest
+
+category: 'as yet unclassified'
+method: HTTPEncodingTest
+testEncodeForHTTP
+
+	self assert: 'aa aa éé aa aa' encodeForHTTP = 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa'
+%
+
+! Class Implementation for HttpUrlTest
+
+! ------------------- Instance methods for HttpUrlTest
+
+category: 'testing'
+method: HttpUrlTest
+testHttps
+	self assert: 'https://encrypted.google.com' asUrl scheme = 'https'.
+%
+
 ! Class Implementation for UrlTest
 
 ! ------------------- Instance methods for UrlTest
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testAbsoluteBrowser
 
@@ -257,7 +257,6 @@ testAbsoluteBrowser
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testAbsoluteFILE
 	
@@ -270,7 +269,6 @@ testAbsoluteFILE
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testAbsoluteFILE2
 	
@@ -284,7 +282,6 @@ testAbsoluteFILE2
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testAbsoluteFILE3
 	"Just a few selected tests for FileUrl, not complete by any means."
@@ -333,7 +330,6 @@ testAbsoluteFILE3
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testAbsoluteHTTP
 	
@@ -348,7 +344,6 @@ testAbsoluteHTTP
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testAbsolutePortErrorFix
 	
@@ -360,7 +355,6 @@ testAbsolutePortErrorFix
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testAbsoluteTELNET
 	
@@ -372,7 +366,6 @@ testAbsoluteTELNET
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testCombineWithRelative
 	#(#('http://www.rfc1149.net/' 'foo.html' 'http://www.rfc1149.net/foo.html') #('http://www.rfc1149.net/index.html' 'foo.html' 'http://www.rfc1149.net/foo.html') #('http://www.rfc1149.net/devel/' '../sam/' 'http://www.rfc1149.net/sam/') #('http://www.rfc1149.net/devel/index.html' '../sam/' 'http://www.rfc1149.net/sam/')) 
@@ -380,7 +373,6 @@ testCombineWithRelative
 %
 
 category: 'testing'
-set compile_env: 0
 method: UrlTest
 testFromFileNameOrUrlString
 
@@ -396,7 +388,6 @@ testFromFileNameOrUrlString
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testRelativeFILE
 	
@@ -423,7 +414,6 @@ testRelativeFILE
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testRelativeHTTP
 	
@@ -434,7 +424,6 @@ testRelativeHTTP
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testUsernameEncodedWithoutPassword
 	"Sometimes, weird usernames or passwords are necessary in applications, and, thus, we might receive them in a Url. The @ and the : ar the kind of critical ones."
@@ -454,7 +443,6 @@ testUsernameEncodedWithoutPassword
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testUsernamePassword
 	"basic case with a username+password specified"
@@ -509,7 +497,6 @@ testUsernamePassword
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testUsernamePasswordEncoded2
 	"Sometimes, weird usernames or passwords are necessary in applications, and, thus, we might receive them in a Url. The @ and the : ar the kind of critical ones."
@@ -529,7 +516,6 @@ testUsernamePasswordEncoded2
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testUsernamePasswordPrinting
 
@@ -542,7 +528,6 @@ testUsernamePasswordPrinting
 %
 
 category: 'tests'
-set compile_env: 0
 method: UrlTest
 testUsernamePasswordPrintingEncoded
 	
@@ -558,6 +543,7 @@ testUsernamePasswordPrintingEncoded
 ! Class initializers 
 
 doit
+true.
 %
 
 

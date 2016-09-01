@@ -33,6 +33,7 @@ System myUserProfile symbolList do: [:symDict |
 		]
 	]
 ].
+true.
 %
 
 
@@ -50,6 +51,7 @@ doit
 		category: 'Cypress-Structure';
 		comment: '';
 		immediateInvariant.
+true.
 %
 
 doit
@@ -64,6 +66,7 @@ doit
 		category: 'Cypress-Structure';
 		comment: '';
 		immediateInvariant.
+true.
 %
 
 doit
@@ -78,6 +81,7 @@ doit
 		category: 'Cypress-Structure';
 		comment: '';
 		immediateInvariant.
+true.
 %
 
 doit
@@ -92,6 +96,7 @@ doit
 		category: 'Cypress-Structure';
 		comment: '';
 		immediateInvariant.
+true.
 %
 
 doit
@@ -106,20 +111,7 @@ doit
 		category: 'Cypress-Structure';
 		comment: '';
 		immediateInvariant.
-%
-
-doit
-(CypressStructure
-	subclass: 'CypressPackageStructure'
-	instVarNames: #( classes extensions )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-Structure';
-		comment: '';
-		immediateInvariant.
+true.
 %
 
 doit
@@ -134,6 +126,22 @@ doit
 		category: 'Cypress-Structure';
 		comment: '';
 		immediateInvariant.
+true.
+%
+
+doit
+(CypressStructure
+	subclass: 'CypressPackageStructure'
+	instVarNames: #( classes extensions )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-Structure';
+		comment: '';
+		immediateInvariant.
+true.
 %
 
 ! Class Implementation for CypressJsonError
@@ -143,7 +151,6 @@ doit
 ! ------------------- Class methods for CypressJsonParser
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: CypressJsonParser
 new
 
@@ -151,21 +158,18 @@ new
 %
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: CypressJsonParser
 on: aStream
 	^ self basicNew initializeOn: aStream
 %
 
 category: 'accessing'
-set compile_env: 0
 classmethod: CypressJsonParser
 parse: aString
 	^ self parseStream: aString readStream
 %
 
 category: 'accessing'
-set compile_env: 0
 classmethod: CypressJsonParser
 parseStream: aStream
 	^ (self on: aStream) parse
@@ -174,7 +178,6 @@ parseStream: aStream
 ! ------------------- Instance methods for CypressJsonParser
 
 category: 'adding'
-set compile_env: 0
 method: CypressJsonParser
 addProperty: anAssociation to: anObject
 	"Add the property anAssociation described with key and value to anObject. Subclasses might want to refine this implementation."
@@ -185,7 +188,6 @@ addProperty: anAssociation to: anObject
 %
 
 category: 'adding'
-set compile_env: 0
 method: CypressJsonParser
 addValue: anObject to: aCollection
 	"Add anObject to aCollection. Subclasses might want to refine this implementation."
@@ -194,7 +196,6 @@ addValue: anObject to: aCollection
 %
 
 category: 'creating'
-set compile_env: 0
 method: CypressJsonParser
 createArray
 	"Create an empty collection. Subclasses might want to refine this implementation."
@@ -203,7 +204,6 @@ createArray
 %
 
 category: 'creating'
-set compile_env: 0
 method: CypressJsonParser
 createFalse
 	"Create the false literal. Subclasses might want to refine this implementation."
@@ -212,7 +212,6 @@ createFalse
 %
 
 category: 'creating'
-set compile_env: 0
 method: CypressJsonParser
 createNull
 	"Create the null literal. Subclasses might want to refine this implementation."
@@ -221,7 +220,6 @@ createNull
 %
 
 category: 'creating'
-set compile_env: 0
 method: CypressJsonParser
 createObject
 	"Create an empty object. Subclasses might want to refine this implementation."
@@ -230,7 +228,6 @@ createObject
 %
 
 category: 'creating'
-set compile_env: 0
 method: CypressJsonParser
 createProperty: aKey with: aValue
 	"Create an empty attribute value pair. Subclasses might want to refine this implementation."
@@ -239,7 +236,6 @@ createProperty: aKey with: aValue
 %
 
 category: 'creating'
-set compile_env: 0
 method: CypressJsonParser
 createString: aString
 	"Create a string literal. Subclasses might want to refine this implementation."
@@ -248,7 +244,6 @@ createString: aString
 %
 
 category: 'creating'
-set compile_env: 0
 method: CypressJsonParser
 createTrue
 	"Create the true literal. Subclasses might want to refine this implementation."
@@ -257,7 +252,6 @@ createTrue
 %
 
 category: 'private'
-set compile_env: 0
 method: CypressJsonParser
 expect: aString
 	"Expects aString and consume input, throw an error otherwise."
@@ -267,14 +261,12 @@ expect: aString
 %
 
 category: 'initialization'
-set compile_env: 0
 method: CypressJsonParser
 initializeOn: aStream
 	stream := aStream
 %
 
 category: 'private'
-set compile_env: 0
 method: CypressJsonParser
 match: aString
 	"Tries to match aString, consume input and answer true if successful."
@@ -290,7 +282,6 @@ match: aString
 %
 
 category: 'parsing'
-set compile_env: 0
 method: CypressJsonParser
 parse
 
@@ -303,7 +294,6 @@ parse
 %
 
 category: 'parsing'
-set compile_env: 0
 method: CypressJsonParser
 parseArray
 
@@ -319,7 +309,6 @@ parseArray
 %
 
 category: 'parsing-internal'
-set compile_env: 0
 method: CypressJsonParser
 parseCharacter
 	| char |
@@ -347,7 +336,6 @@ parseCharacter
 %
 
 category: 'parsing-internal'
-set compile_env: 0
 method: CypressJsonParser
 parseCharacterHex
 	| value |
@@ -357,7 +345,6 @@ parseCharacterHex
 %
 
 category: 'parsing-internal'
-set compile_env: 0
 method: CypressJsonParser
 parseCharacterHexDigit
     | digit |
@@ -374,7 +361,6 @@ parseCharacterHexDigit
 %
 
 category: 'parsing-internal'
-set compile_env: 0
 method: CypressJsonParser
 parseNumber
 	| negated number |
@@ -393,7 +379,6 @@ parseNumber
 %
 
 category: 'parsing-internal'
-set compile_env: 0
 method: CypressJsonParser
 parseNumberExponent
     | number negated |
@@ -408,7 +393,6 @@ parseNumberExponent
 %
 
 category: 'parsing-internal'
-set compile_env: 0
 method: CypressJsonParser
 parseNumberFraction
     | number power |
@@ -422,7 +406,6 @@ parseNumberFraction
 %
 
 category: 'parsing-internal'
-set compile_env: 0
 method: CypressJsonParser
 parseNumberInteger
     | number |
@@ -432,7 +415,6 @@ parseNumberInteger
 %
 
 category: 'parsing'
-set compile_env: 0
 method: CypressJsonParser
 parseObject
 
@@ -448,7 +430,6 @@ parseObject
 %
 
 category: 'parsing-internal'
-set compile_env: 0
 method: CypressJsonParser
 parseProperty
 	| name value |
@@ -459,7 +440,6 @@ parseProperty
 %
 
 category: 'parsing-internal'
-set compile_env: 0
 method: CypressJsonParser
 parseString
 	| result |
@@ -471,7 +451,6 @@ parseString
 %
 
 category: 'parsing'
-set compile_env: 0
 method: CypressJsonParser
 parseValue
 	| char |
@@ -495,7 +474,6 @@ parseValue
 %
 
 category: 'private'
-set compile_env: 0
 method: CypressJsonParser
 whitespace
 	"Strip whitespaces from the input stream."
@@ -509,7 +487,6 @@ whitespace
 ! ------------------- Class methods for GsGeneralDependencySorter
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: GsGeneralDependencySorter
 on: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock
 	"Create an instance of the receiver capable for sorting the dependencies of someCandidates.
@@ -524,7 +501,6 @@ on: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock
 ! ------------------- Instance methods for GsGeneralDependencySorter
 
 category: 'sorting - private'
-set compile_env: 0
 method: GsGeneralDependencySorter
 determineGraphRoots
 
@@ -533,7 +509,6 @@ determineGraphRoots
 %
 
 category: 'initializing - private'
-set compile_env: 0
 method: GsGeneralDependencySorter
 initializeOn: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlock
 
@@ -546,7 +521,6 @@ initializeOn: someCandidates dependsOn: aOneArgBlock dependent: anotherOneArgBlo
 %
 
 category: 'sorting'
-set compile_env: 0
 method: GsGeneralDependencySorter
 inOrder
 
@@ -559,7 +533,6 @@ inOrder
 %
 
 category: 'sorting - private'
-set compile_env: 0
 method: GsGeneralDependencySorter
 mapCandidatesIntoGraphs
 
@@ -581,14 +554,14 @@ mapCandidatesIntoGraphs
 %
 
 category: 'sorting - private'
-set compile_env: 0
 method: GsGeneralDependencySorter
 transcribeGraph: subtree into: sorted
-
-	subtree keysAndValuesDo: [:name :subsubtree |
-		sorted add: (candidateAliasMap at: name).
-		self transcribeGraph: subsubtree into: sorted.
-	].
+  (subtree keys asSortedCollection: [ :a :b | a <= b ])
+    do: [ :name | 
+      | subsubtree |
+      subsubtree := subtree at: name.
+      sorted add: (candidateAliasMap at: name).
+      self transcribeGraph: subsubtree into: sorted ]
 %
 
 ! Class Implementation for CypressStructure
@@ -596,7 +569,6 @@ transcribeGraph: subtree into: sorted
 ! ------------------- Class methods for CypressStructure
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: CypressStructure
 named: aString
 
@@ -608,7 +580,6 @@ named: aString
 ! ------------------- Instance methods for CypressStructure
 
 category: 'accessing'
-set compile_env: 0
 method: CypressStructure
 name
 
@@ -616,7 +587,6 @@ name
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressStructure
 name: aString 
 
@@ -624,21 +594,18 @@ name: aString
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressStructure
 packageStructure
 	^packageStructure
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressStructure
 packageStructure: aCypressPackageStructure
 	packageStructure := aCypressPackageStructure
 %
 
 category: 'printing'
-set compile_env: 0
 method: CypressStructure
 printDetailsOn: aStream
 
@@ -646,7 +613,6 @@ printDetailsOn: aStream
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressStructure
 properties
 
@@ -655,7 +621,6 @@ properties
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressStructure
 properties: aDictionary
 
@@ -667,7 +632,6 @@ properties: aDictionary
 ! ------------------- Class methods for CypressClassStructure
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: CypressClassStructure
 fromClassDefinition: classDefinition
 
@@ -679,7 +643,6 @@ fromClassDefinition: classDefinition
 ! ------------------- Instance methods for CypressClassStructure
 
 category: 'converting'
-set compile_env: 0
 method: CypressClassStructure
 asCypressClassDefinition
 
@@ -697,7 +660,6 @@ asCypressClassDefinition
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 category
 
@@ -707,7 +669,6 @@ category
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 category: aString
 
@@ -715,7 +676,6 @@ category: aString
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 classInstanceVariableNames
 
@@ -723,7 +683,6 @@ classInstanceVariableNames
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 classInstanceVariableNames: someStrings
 
@@ -731,7 +690,6 @@ classInstanceVariableNames: someStrings
 %
 
 category: 'converting'
-set compile_env: 0
 method: CypressClassStructure
 classInstanceVariablesString
 
@@ -739,7 +697,6 @@ classInstanceVariablesString
 %
 
 category: 'querying'
-set compile_env: 0
 method: CypressClassStructure
 classMethodNamed: methodName
 
@@ -749,7 +706,6 @@ classMethodNamed: methodName
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 classMethods
 
@@ -758,7 +714,6 @@ classMethods
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 className
 
@@ -766,7 +721,6 @@ className
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 classVariableNames
 
@@ -774,7 +728,6 @@ classVariableNames
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 classVariableNames: someStrings
 
@@ -782,7 +735,6 @@ classVariableNames: someStrings
 %
 
 category: 'converting'
-set compile_env: 0
 method: CypressClassStructure
 classVariablesString
 
@@ -790,7 +742,6 @@ classVariablesString
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 comment
 
@@ -799,7 +750,6 @@ comment
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 comment: aString
 
@@ -807,7 +757,6 @@ comment: aString
 %
 
 category: 'initialization'
-set compile_env: 0
 method: CypressClassStructure
 fromClassDefinition: classDefinition
 
@@ -825,7 +774,6 @@ fromClassDefinition: classDefinition
 %
 
 category: 'querying'
-set compile_env: 0
 method: CypressClassStructure
 instanceMethodNamed: methodName
 
@@ -835,7 +783,6 @@ instanceMethodNamed: methodName
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 instanceMethods
 
@@ -844,7 +791,6 @@ instanceMethods
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 instanceVariableNames
 
@@ -852,7 +798,6 @@ instanceVariableNames
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 instanceVariableNames: someStrings
 
@@ -860,7 +805,6 @@ instanceVariableNames: someStrings
 %
 
 category: 'converting'
-set compile_env: 0
 method: CypressClassStructure
 instanceVariablesString
 
@@ -868,7 +812,6 @@ instanceVariablesString
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 isClassExtension
 
@@ -877,7 +820,6 @@ isClassExtension
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 isClassExtension: aBoolean
 
@@ -885,7 +827,6 @@ isClassExtension: aBoolean
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 name
 
@@ -893,7 +834,6 @@ name
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 name: aString
 
@@ -901,7 +841,6 @@ name: aString
 %
 
 category: 'converting'
-set compile_env: 0
 method: CypressClassStructure
 poolDictionariesString
 
@@ -909,7 +848,6 @@ poolDictionariesString
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 poolDictionaryNames
 
@@ -917,7 +855,6 @@ poolDictionaryNames
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 poolDictionaryNames: someStrings
 
@@ -925,7 +862,6 @@ poolDictionaryNames: someStrings
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 subclassType
 
@@ -933,7 +869,6 @@ subclassType
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 subclassType: aString
 
@@ -943,7 +878,6 @@ subclassType: aString
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 superclassName
 
@@ -951,11 +885,130 @@ superclassName
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressClassStructure
 superclassName: aString
 
 	^self properties at: 'super' put: aString
+%
+
+! Class Implementation for CypressMethodStructure
+
+! ------------------- Class methods for CypressMethodStructure
+
+category: 'instance creation'
+classmethod: CypressMethodStructure
+fromMethodDefinition: methodDefinition
+
+	^self new
+		fromMethodDefinition: methodDefinition;
+		yourself
+%
+
+! ------------------- Instance methods for CypressMethodStructure
+
+category: 'converting'
+method: CypressMethodStructure
+asCypressMethodDefinition
+	"Try to coerce Unicode source to simple Strings when possible."
+
+	^CypressMethodDefinition 
+        	className: self classStructure className
+		classIsMeta: self isMetaclass
+		selector: self selector
+		category: self category
+		source: self source asString
+%
+
+category: 'accessing'
+method: CypressMethodStructure
+category
+
+	^self properties at: 'category'
+%
+
+category: 'accessing'
+method: CypressMethodStructure
+category: aString
+
+	self properties at: 'category' put: aString
+%
+
+category: 'accessing'
+method: CypressMethodStructure
+classStructure
+	^classStructure
+%
+
+category: 'accessing'
+method: CypressMethodStructure
+classStructure: aCypressClassStructure
+	classStructure := aCypressClassStructure
+%
+
+category: 'initialization'
+method: CypressMethodStructure
+fromMethodDefinition: methodDefinition
+
+	self isMetaclass: methodDefinition classIsMeta.
+	self selector: methodDefinition selector.
+	self category: methodDefinition category.
+	self source: methodDefinition source.
+%
+
+category: 'accessing'
+method: CypressMethodStructure
+isMetaclass
+
+	isMetaclass ifNil: [ isMetaclass := false ].
+	^isMetaclass
+%
+
+category: 'accessing'
+method: CypressMethodStructure
+isMetaclass: aBoolean
+	isMetaclass := aBoolean
+%
+
+category: 'accessing'
+method: CypressMethodStructure
+selector
+    ^ String
+        streamContents: [ :stream | 
+            self name
+                do: [ :chara | 
+                    stream
+                        nextPut:
+                            (chara = $.
+                                ifTrue: [ $: ]
+                                ifFalse: [ chara ]) ] ]
+%
+
+category: 'accessing'
+method: CypressMethodStructure
+selector: aString
+    name := String
+        streamContents: [ :stream | 
+            aString
+                do: [ :chara | 
+                    stream
+                        nextPut:
+                            (chara = $:
+                                ifTrue: [ $. ]
+                                ifFalse: [ chara ]) ] ]
+%
+
+category: 'accessing'
+method: CypressMethodStructure
+source
+
+	^source
+%
+
+category: 'accessing'
+method: CypressMethodStructure
+source: aString
+
+	source := aString
 %
 
 ! Class Implementation for CypressPackageStructure
@@ -963,7 +1016,6 @@ superclassName: aString
 ! ------------------- Class methods for CypressPackageStructure
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: CypressPackageStructure
 fromPackage: aCypressPackageDefinition
 
@@ -975,7 +1027,6 @@ fromPackage: aCypressPackageDefinition
 ! ------------------- Instance methods for CypressPackageStructure
 
 category: 'accessing'
-set compile_env: 0
 method: CypressPackageStructure
 classes
 
@@ -984,7 +1035,6 @@ classes
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressPackageStructure
 extensions
 
@@ -993,7 +1043,6 @@ extensions
 %
 
 category: 'initialization'
-set compile_env: 0
 method: CypressPackageStructure
 fromPackage: aCypressPackageDefinition
 
@@ -1041,7 +1090,6 @@ fromPackage: aCypressPackageDefinition
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressPackageStructure
 packageExtension
 
@@ -1049,7 +1097,6 @@ packageExtension
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressPackageStructure
 packageExtensionOr: aBlock
 
@@ -1057,7 +1104,6 @@ packageExtensionOr: aBlock
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressPackageStructure
 packageName
 
@@ -1065,14 +1111,12 @@ packageName
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressPackageStructure
 packageStructure
 	^self
 %
 
 category: 'snapshotting'
-set compile_env: 0
 method: CypressPackageStructure
 snapshot
 	| definitions |
@@ -1091,139 +1135,6 @@ snapshot
 	^ CypressSnapshot definitions: definitions
 %
 
-! Class Implementation for CypressMethodStructure
-
-! ------------------- Class methods for CypressMethodStructure
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: CypressMethodStructure
-fromMethodDefinition: methodDefinition
-
-	^self new
-		fromMethodDefinition: methodDefinition;
-		yourself
-%
-
-! ------------------- Instance methods for CypressMethodStructure
-
-category: 'converting'
-set compile_env: 0
-method: CypressMethodStructure
-asCypressMethodDefinition
-	"Try to coerce Unicode source to simple Strings when possible."
-
-	^CypressMethodDefinition 
-        	className: self classStructure className
-		classIsMeta: self isMetaclass
-		selector: self selector
-		category: self category
-		source: self source asString
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-category
-
-	^self properties at: 'category'
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-category: aString
-
-	self properties at: 'category' put: aString
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-classStructure
-	^classStructure
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-classStructure: aCypressClassStructure
-	classStructure := aCypressClassStructure
-%
-
-category: 'initialization'
-set compile_env: 0
-method: CypressMethodStructure
-fromMethodDefinition: methodDefinition
-
-	self isMetaclass: methodDefinition classIsMeta.
-	self selector: methodDefinition selector.
-	self category: methodDefinition category.
-	self source: methodDefinition source.
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-isMetaclass
-
-	isMetaclass ifNil: [ isMetaclass := false ].
-	^isMetaclass
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-isMetaclass: aBoolean
-	isMetaclass := aBoolean
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-selector
-    ^ String
-        streamContents: [ :stream | 
-            self name
-                do: [ :chara | 
-                    stream
-                        nextPut:
-                            (chara = $.
-                                ifTrue: [ $: ]
-                                ifFalse: [ chara ]) ] ]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-selector: aString
-    name := String
-        streamContents: [ :stream | 
-            aString
-                do: [ :chara | 
-                    stream
-                        nextPut:
-                            (chara = $:
-                                ifTrue: [ $. ]
-                                ifFalse: [ chara ]) ] ]
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-source
-
-	^source
-%
-
-category: 'accessing'
-set compile_env: 0
-method: CypressMethodStructure
-source: aString
-
-	source := aString
-%
-
 ! Class Extensions
 
 ! Class Extension for Array
@@ -1231,7 +1142,6 @@ source: aString
 ! ------------------- Instance methods for Array
 
 category: '*Cypress-Structure'
-set compile_env: 0
 method: Array
 asCypressPropertyObject
 
@@ -1239,7 +1149,6 @@ asCypressPropertyObject
 %
 
 category: '*Cypress-Structure'
-set compile_env: 0
 method: Array
 writeCypressJsonOn: aStream indent: startIndent
 
@@ -1269,31 +1178,10 @@ writeCypressJsonOn: aStream indent: startIndent
 ! ------------------- Instance methods for Boolean
 
 category: '*Cypress-Structure'
-set compile_env: 0
 method: Boolean
 writeCypressJsonOn: aStream indent: startIndent
 
 	aStream nextPutAll: self printString
-%
-
-! Class Extension for Object
-
-! ------------------- Instance methods for Object
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Object
-asCypressPropertyObject
-
-	^self
-%
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Object
-writeCypressJsonOn: fileStream
-
-	self writeCypressJsonOn: fileStream indent: 0
 %
 
 ! Class Extension for Dictionary
@@ -1301,7 +1189,6 @@ writeCypressJsonOn: fileStream
 ! ------------------- Instance methods for Dictionary
 
 category: '*Cypress-Structure'
-set compile_env: 0
 method: Dictionary
 asCypressPropertyObject
 
@@ -1312,7 +1199,6 @@ asCypressPropertyObject
 %
 
 category: '*Cypress-Structure'
-set compile_env: 0
 method: Dictionary
 writeCypressJsonOn: aStream indent: startIndent
 
@@ -1341,12 +1227,40 @@ writeCypressJsonOn: aStream indent: startIndent
 	aStream nextPutAll: ' }'
 %
 
+! Class Extension for Number
+
+! ------------------- Instance methods for Number
+
+category: '*Cypress-Structure'
+method: Number
+writeCypressJsonOn: aStream indent: startIndent
+
+	aStream nextPutAll: self printString
+%
+
+! Class Extension for Object
+
+! ------------------- Instance methods for Object
+
+category: '*Cypress-Structure'
+method: Object
+asCypressPropertyObject
+
+	^self
+%
+
+category: '*Cypress-Structure'
+method: Object
+writeCypressJsonOn: fileStream
+
+	self writeCypressJsonOn: fileStream indent: 0
+%
+
 ! Class Extension for String
 
 ! ------------------- Instance methods for String
 
 category: '*Cypress-Structure'
-set compile_env: 0
 method: String
 asCypressPropertyObject
 
@@ -1354,7 +1268,6 @@ asCypressPropertyObject
 %
 
 category: '*Cypress-Structure'
-set compile_env: 0
 method: String
 writeCypressJsonOn: aStream indent: startIndent
 
@@ -1364,21 +1277,10 @@ writeCypressJsonOn: aStream indent: startIndent
 		nextPutAll: '"'
 %
 
-! Class Extension for Number
-
-! ------------------- Instance methods for Number
-
-category: '*Cypress-Structure'
-set compile_env: 0
-method: Number
-writeCypressJsonOn: aStream indent: startIndent
-
-	aStream nextPutAll: self printString
-%
-
 ! Class initializers 
 
 doit
+true.
 %
 
 

@@ -33,6 +33,7 @@ System myUserProfile symbolList do: [:symDict |
 		]
 	]
 ].
+true.
 %
 
 
@@ -50,62 +51,7 @@ doit
 		category: 'Cypress-Tests';
 		comment: '';
 		immediateInvariant.
-%
-
-doit
-(CypressAbstractTest
-	subclass: 'CypressStructureTest'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-Tests';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(CypressAbstractTest
-	subclass: 'CypressLoaderTest'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-Tests';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(CypressAbstractTest
-	subclass: 'CypressExtensionsTest'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-Tests';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(CypressAbstractTest
-	subclass: 'CypressSnapshotTest'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-Tests';
-		comment: '';
-		immediateInvariant.
+true.
 %
 
 doit
@@ -120,6 +66,37 @@ doit
 		category: 'Cypress-Tests';
 		comment: '';
 		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractTest
+	subclass: 'CypressExtensionsTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractTest
+	subclass: 'CypressLoaderTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-Tests';
+		comment: '';
+		immediateInvariant.
+true.
 %
 
 doit
@@ -134,6 +111,37 @@ doit
 		category: 'Cypress-Tests';
 		comment: '';
 		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractTest
+	subclass: 'CypressSnapshotTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-Tests';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractTest
+	subclass: 'CypressStructureTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-Tests';
+		comment: '';
+		immediateInvariant.
+true.
 %
 
 ! Class Implementation for CypressAbstractTest
@@ -141,7 +149,6 @@ doit
 ! ------------------- Class methods for CypressAbstractTest
 
 category: 'testing'
-set compile_env: 0
 classmethod: CypressAbstractTest
 isAbstract
 
@@ -151,7 +158,6 @@ isAbstract
 ! ------------------- Instance methods for CypressAbstractTest
 
 category: 'private'
-set compile_env: 0
 method: CypressAbstractTest
 baseDefinitions
 
@@ -237,7 +243,6 @@ baseDefinitions
 %
 
 category: 'private'
-set compile_env: 0
 method: CypressAbstractTest
 targetDefinitions
 	"remove #extra method and modify #name: method"
@@ -334,77 +339,331 @@ targetDefinitions
 	}
 %
 
-! Class Implementation for CypressStructureTest
+! Class Implementation for CypressDefinitionTest
 
-! ------------------- Instance methods for CypressStructureTest
+! ------------------- Instance methods for CypressDefinitionTest
 
-category: 'private'
-set compile_env: 0
-method: CypressStructureTest
-compileJSON: aJsonString
+category: 'tests'
+method: CypressDefinitionTest
+testClassDefinition
 
-	^CypressJsonParser parse: aJsonString
-%
-
-category: 'private'
-set compile_env: 0
-method: CypressStructureTest
-sampleJson
-    ^ '{
-	"age" : 25,
-	"name" : "John%20Smith",
-	"phoneNumber" : [
-		{
-			"number" : "212%20555-1234",
-			"type" : "home" },
-		{
-			"number" : "646%20555-4567",
-			"type" : "fax" } ],
-	"registered" : true }'
+	self
+		assert: (CypressClassDefinition
+					name: 'Foo'
+					superclassName: 'Object'
+					category: 'Foo'
+					instVarNames: #()
+					classInstVarNames: #()
+					classVarNames: #()
+					poolDictionaryNames: #()
+					comment: ''
+					subclassType: '') printString
+		equals: 'a CypressClassDefinition(Foo)'
 %
 
 category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testPackageStructureFromPackage
+method: CypressDefinitionTest
+testDictionaryOfDefinitions
 
-	| packageStructure packageDefinitions expectedDefinitions |
-	packageStructure := CypressPackageStructure
-				fromPackage: (CypressPackageDefinition named: 'Cypress-Mocks').
-	packageDefinitions := packageStructure snapshot definitions.
-	expectedDefinitions := self baseDefinitions.
-	self assert: expectedDefinitions size equals: packageDefinitions size.
-	packageDefinitions do: 
-			[:def |
-			self assert: (expectedDefinitions includes: def)
-				description: 'Definition for ', def printString, ' did not match expected ones']
+	| dict |
+	"baseDefinitions"
+	dict := Dictionary new.
+	self baseDefinitions do: [:each | 
+		dict at: each put: each ].
+	self baseDefinitions do: [:each | 
+		self assert: (dict at: each) equals: each ].
+
+	"targetDefinitions"
+	dict := Dictionary new.
+	self targetDefinitions do: [:each | 
+		dict at: each put: each ].
+	self targetDefinitions do: [:each | 
+		self assert: (dict at: each) equals: each ].
 %
 
 category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testPropertyDictionaryRead
+method: CypressDefinitionTest
+testEquality
+	| pkg1 pkg2 pkg3 name |
+	name := 'Cypress-Mocks'.
+	pkg1 := CypressPackageDefinition named: name.
+	pkg2 := CypressPackageDefinition named: name.
+	pkg3 := CypressPackageDefinition named: 'Nope!'.
 
-	| propertyDictionary phoneNumbers |
-	propertyDictionary := (self compileJSON: self sampleJson) asCypressPropertyObject.
-	self assert: (propertyDictionary at: 'name') equals: 'John Smith'.
-	self assert: (propertyDictionary at: 'age') equals: 25.
-	self assert: (propertyDictionary at: 'registered') description: '"registered" property should have been true'.
-	phoneNumbers := propertyDictionary at: 'phoneNumber'.
-	self assert: phoneNumbers size equals: 2.
-	self assert: ((phoneNumbers at: 1) at: 'number') equals: '212 555-1234'.
-	self assert: ((phoneNumbers at: 2) at: 'number') equals: '646 555-4567'.
+	self assert: pkg1 equals: pkg2.
+	self deny: pkg1 equals: pkg3
 %
 
 category: 'tests'
-set compile_env: 0
-method: CypressStructureTest
-testPropertyDictionaryWrite
-    | propertyDictionary stream x |
-    propertyDictionary := (self compileJSON: self sampleJson) asCypressPropertyObject.
-    stream := WriteStreamPortable on: String new.
-    propertyDictionary writeCypressJsonOn: stream indent: 0.
-    self assert: (x := stream contents withUnixLineEndings) equals: self sampleJson withUnixLineEndings
+method: CypressDefinitionTest
+testMethodDefinition
+	self assert: (CypressMethodDefinition
+		className: 'Foo'
+		classIsMeta: false
+		selector: 'isFoo'
+		category: 'testing'
+		source: 'isFoo ^true') printString equals: 'a CypressMethodDefinition(Foo>>isFoo)'
+%
+
+category: 'tests'
+method: CypressDefinitionTest
+testNameEquality
+	| pkg name |
+	name := 'Cypress-Mocks'.
+	pkg := CypressPackageDefinition named: name.
+	self assert: pkg name equals: name.
+	self deny: pkg name equals: 'Nope.'.
+%
+
+category: 'tests'
+method: CypressDefinitionTest
+testPrintString
+	| name pkg |
+	name := 'Cypress-Mocks'.
+	pkg := CypressPackageDefinition named: name.
+	self assert: 'a CypressPackageDefinition(', name, ')' equals: pkg printString.
+%
+
+! Class Implementation for CypressExtensionsTest
+
+! ------------------- Instance methods for CypressExtensionsTest
+
+category: 'tests'
+method: CypressExtensionsTest
+test_beginsWith_
+
+	self
+		assert: ('abc' beginsWith: 'a');
+		deny: ('abc' beginsWith: 'c');
+		assert: ('abc' beginsWith: 'abc');
+		deny: ('abc' beginsWith: 'abcx');
+		deny: ('abc' beginsWith: '');
+		deny: ('' beginsWith: 'abc');
+		deny: ('' beginsWith: '')
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_copyWithoutSuffix_
+
+	self
+		assert: ('abc' copyWithoutSuffix: 'c') equals: 'ab';
+		assert: ('abc' copyWithoutSuffix: 'a') equals: 'abc';
+		assert: ('abc' copyWithoutSuffix: 'abc') equals: '';
+		assert: ('abc' copyWithoutSuffix: 'xxxabc') equals: 'abc';
+		assert: ('abc' copyWithoutSuffix: '') equals: 'abc';
+		assert: ('' copyWithoutSuffix: 'abc') equals: '';
+		assert: ('' copyWithoutSuffix: '') equals: ''
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_copyWithoutSuffix_or_
+
+	self
+		assert: ('abc' copyWithoutSuffix: 'c' or: [nil]) equals: 'ab';
+		assert: ('abc' copyWithoutSuffix: 'a' or: [nil]) equals: nil;
+		assert: ('abc' copyWithoutSuffix: 'abc' or: [nil]) equals: '';
+		assert: ('abc' copyWithoutSuffix: 'xxxabc' or: [nil]) equals: nil;
+		assert: ('abc' copyWithoutSuffix: '' or: [nil]) equals: nil;
+		assert: ('' copyWithoutSuffix: 'abc' or: [nil]) equals: nil;
+		assert: ('' copyWithoutSuffix: '' or: [nil]) equals: nil
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_difference_
+	"Set theoretic difference means elements from the first collection not in the second."
+
+	self
+		assert: (#(1 2 3) difference: #()) sortAscending equals: #(1 2 3);
+		assert: (#() difference: #(1 2 3)) sortAscending equals: #();
+		assert: (#(1 2 3) difference: #(1 2 3)) sortAscending equals: #();
+		assert: (#(1 2 3) difference: #(2 3 4)) sortAscending equals: #(1);
+		assert: (#(1 2 3) difference: #(3 4 5)) sortAscending equals: #(1 2);
+		assert: (#(1 2 3) difference: #(4 5 6)) sortAscending equals: #(1 2 3)
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_endsWith_
+
+	self
+		assert: ('abc' endsWith: 'c');
+		deny: ('abc' endsWith: 'a');
+		assert: ('abc' endsWith: 'abc');
+		deny: ('abc' endsWith: 'xabc');
+		deny: ('abc' endsWith: '');
+		deny: ('' endsWith: 'abc');
+		deny: ('' endsWith: '')
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_escapePercents
+
+	self
+		assert: 'aa aa éé aa aa' encodeAsUTF8 escapePercents
+			equals: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa';
+		assert: 'aa aa éé aa aa' escapePercents
+			equals: 'aa%20aa%20%E9%E9%20aa%20aa'
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_findString_startingAt_caseSensitive_
+
+	| string |
+	string := 'abcABCdef'.
+	self
+		assert: (string findString: 'abc' startingAt: 1 caseSensitive: true) equals: 1;
+		assert: (string findString: 'abc' startingAt: 1 caseSensitive: false) equals: 1;
+		assert: (string findString: 'ABC' startingAt: 1 caseSensitive: true) equals: 4;
+		assert: (string findString: 'ABC' startingAt: 1 caseSensitive: false) equals: 1;
+		assert: (string findString: 'def' startingAt: 1 caseSensitive: true) equals: 7;
+		assert: (string findString: 'def' startingAt: 1 caseSensitive: false) equals: 7;
+		assert: (string findString: 'DEF' startingAt: 1 caseSensitive: true) equals: 0;
+		assert: (string findString: 'DEF' startingAt: 1 caseSensitive: false) equals: 7
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_gather_
+
+	self
+		assert: (#(1 2 3) gather: [:each | each * 10 + 1 to: each * 10 + each])
+		equals: #(11 21 22 31 32 33)
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_indexOfAnyOf_startingAt_
+
+	self
+		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 1) equals: 5;
+		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 6) equals: 6;
+		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 7) equals: 14;
+		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 15) equals: 15;
+		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 16) equals: 20;
+		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 21) equals: 0;
+		assert: ('word, another, done.' indexOfAnyOf: '+-' startingAt: 1) equals: 0
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_indexOfAnyOf_startingAt_ifAbsent_
+
+	self
+		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 1 ifAbsent: [nil]) equals: 5;
+		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 6 ifAbsent: [nil]) equals: 6;
+		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 7 ifAbsent: [nil]) equals: 14;
+		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 15 ifAbsent: [nil]) equals: 15;
+		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 16 ifAbsent: [nil]) equals: 20;
+		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 21 ifAbsent: [nil]) equals: nil;
+		assert: ('word, another, done.' indexOfAnyOf: '+-' startingAt: 1 ifAbsent: [nil]) equals: nil
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_intersection_
+
+	self
+		assert: (#(1 2 3) intersection: #()) sortAscending equals: #();
+		assert: (#() intersection: #(1 2 3)) sortAscending equals: #();
+		assert: (#(1 2 3) intersection: #(1 2 3)) sortAscending equals: #(1 2 3);
+		assert: (#(1 2 3) intersection: #(2 3 4)) sortAscending equals: #(2 3);
+		assert: (#(1 2 3) intersection: #(3 4 5)) sortAscending equals: #(3);
+		assert: (#(1 2 3) intersection: #(4 5 6)) sortAscending equals: #()
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_parseSelectorFrom_
+
+	self
+		assert: (UndefinedObject parseSelectorFrom: 'a') equals: 'a';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: 'a self halt') equals: 'a';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: 'a: something') equals: 'a:';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: 'a: something b: else') equals: 'a:b:';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: '= another ^false') equals: '=';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: '=@= another ^false') equals: '=@=';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+
+		assert: (UndefinedObject parseSelectorFrom: 'a ^undefined') equals: 'a';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: 'a: something undefined := something') equals: 'a:';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: 'a: something b: else ^something =@= else') equals: 'a:b:';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: '= another ^undefined = another') equals: '=';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
+		assert: (UndefinedObject parseSelectorFrom: '=@= another ^undefined =@= another') equals: '=@=';
+		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind'
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_streamContents_
+
+	self
+		assert: (String streamContents: 
+					[:stream |
+					(1 to: 3) do: [:each | stream nextPutAll: each printString]
+						separatedBy: [stream space]])
+		equals: '1 2 3'
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_unescapePercents
+
+	self
+		assert: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa'  unescapePercents asByteArray decodeFromUTF8 asString
+			equals: 'aa aa éé aa aa';
+		assert: 'aa%20aa%20%E9%E9%20aa%20aa' unescapePercents
+			equals: 'aa aa éé aa aa' asUnicodeString
+%
+
+category: 'tests'
+method: CypressExtensionsTest
+test_withUnixLineEndings
+
+	| lf cr crlf |
+	lf := String with: Character lf.
+	cr := String with: Character cr.
+	crlf := cr, lf.
+
+	self
+		assert: (self unixLinesFrom: '') equals: #();
+		assert: (self unixLinesFrom: 'abc') equals: #('abc');
+		assert: (self unixLinesFrom: 'abc', lf) equals: #('abc');
+		assert: (self unixLinesFrom: 'abc', cr) equals: #('abc');
+		assert: (self unixLinesFrom: 'abc', crlf) equals: #('abc');
+		assert: (self unixLinesFrom: 'abc', lf, cr) equals: #('abc' '');
+		assert: (self unixLinesFrom: 'abc', cr, cr) equals: #('abc' '');
+		assert: (self unixLinesFrom: 'abc', crlf, cr) equals: #('abc' '');
+		assert: (self unixLinesFrom: 'abc', lf, lf) equals: #('abc' '');
+		assert: (self unixLinesFrom: 'abc', crlf, lf) equals: #('abc' '');
+		assert: (self unixLinesFrom: 'abc', lf, crlf) equals: #('abc' '');
+		assert: (self unixLinesFrom: 'abc', cr, crlf) equals: #('abc' '');
+		assert: (self unixLinesFrom: 'abc', crlf, crlf) equals: #('abc' '')
+%
+
+category: 'utility'
+method: CypressExtensionsTest
+unixLinesFrom: aString
+	
+	| sourceStream resultStream |
+	sourceStream := ReadStreamPortable on: aString withUnixLineEndings.
+	resultStream := WriteStreamPortable on: Array new.
+	[sourceStream atEnd]
+		whileFalse: [resultStream nextPut: (sourceStream upTo: Character lf)].
+	^resultStream contents.
 %
 
 ! Class Implementation for CypressLoaderTest
@@ -412,7 +671,6 @@ testPropertyDictionaryWrite
 ! ------------------- Instance methods for CypressLoaderTest
 
 category: 'utility'
-set compile_env: 0
 method: CypressLoaderTest
 erroneousClassDefinitions
 
@@ -431,7 +689,6 @@ erroneousClassDefinitions
 %
 
 category: 'running'
-set compile_env: 0
 method: CypressLoaderTest
 tearDown
 
@@ -443,7 +700,6 @@ tearDown
 %
 
 category: 'tests'
-set compile_env: 0
 method: CypressLoaderTest
 testLoad
 
@@ -464,7 +720,6 @@ testLoad
 %
 
 category: 'tests'
-set compile_env: 0
 method: CypressLoaderTest
 testLoaderWithClassDefinitionError
 
@@ -501,7 +756,6 @@ testLoaderWithClassDefinitionError
 %
 
 category: 'tests'
-set compile_env: 0
 method: CypressLoaderTest
 testLoaderWithUnloadable
 
@@ -538,7 +792,6 @@ testLoaderWithUnloadable
 %
 
 category: 'utility'
-set compile_env: 0
 method: CypressLoaderTest
 unloadableDefinitions
 
@@ -570,407 +823,11 @@ unloadableDefinitions
 	}
 %
 
-! Class Implementation for CypressExtensionsTest
-
-! ------------------- Instance methods for CypressExtensionsTest
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_beginsWith_
-
-	self
-		assert: ('abc' beginsWith: 'a');
-		deny: ('abc' beginsWith: 'c');
-		assert: ('abc' beginsWith: 'abc');
-		deny: ('abc' beginsWith: 'abcx');
-		deny: ('abc' beginsWith: '');
-		deny: ('' beginsWith: 'abc');
-		deny: ('' beginsWith: '')
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_copyWithoutSuffix_
-
-	self
-		assert: ('abc' copyWithoutSuffix: 'c') equals: 'ab';
-		assert: ('abc' copyWithoutSuffix: 'a') equals: 'abc';
-		assert: ('abc' copyWithoutSuffix: 'abc') equals: '';
-		assert: ('abc' copyWithoutSuffix: 'xxxabc') equals: 'abc';
-		assert: ('abc' copyWithoutSuffix: '') equals: 'abc';
-		assert: ('' copyWithoutSuffix: 'abc') equals: '';
-		assert: ('' copyWithoutSuffix: '') equals: ''
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_copyWithoutSuffix_or_
-
-	self
-		assert: ('abc' copyWithoutSuffix: 'c' or: [nil]) equals: 'ab';
-		assert: ('abc' copyWithoutSuffix: 'a' or: [nil]) equals: nil;
-		assert: ('abc' copyWithoutSuffix: 'abc' or: [nil]) equals: '';
-		assert: ('abc' copyWithoutSuffix: 'xxxabc' or: [nil]) equals: nil;
-		assert: ('abc' copyWithoutSuffix: '' or: [nil]) equals: nil;
-		assert: ('' copyWithoutSuffix: 'abc' or: [nil]) equals: nil;
-		assert: ('' copyWithoutSuffix: '' or: [nil]) equals: nil
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_difference_
-	"Set theoretic difference means elements from the first collection not in the second."
-
-	self
-		assert: (#(1 2 3) difference: #()) sortAscending equals: #(1 2 3);
-		assert: (#() difference: #(1 2 3)) sortAscending equals: #();
-		assert: (#(1 2 3) difference: #(1 2 3)) sortAscending equals: #();
-		assert: (#(1 2 3) difference: #(2 3 4)) sortAscending equals: #(1);
-		assert: (#(1 2 3) difference: #(3 4 5)) sortAscending equals: #(1 2);
-		assert: (#(1 2 3) difference: #(4 5 6)) sortAscending equals: #(1 2 3)
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_endsWith_
-
-	self
-		assert: ('abc' endsWith: 'c');
-		deny: ('abc' endsWith: 'a');
-		assert: ('abc' endsWith: 'abc');
-		deny: ('abc' endsWith: 'xabc');
-		deny: ('abc' endsWith: '');
-		deny: ('' endsWith: 'abc');
-		deny: ('' endsWith: '')
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_escapePercents
-
-	self
-		assert: 'aa aa éé aa aa' encodeAsUTF8 escapePercents
-			equals: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa';
-		assert: 'aa aa éé aa aa' escapePercents
-			equals: 'aa%20aa%20%E9%E9%20aa%20aa'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_findString_startingAt_caseSensitive_
-
-	| string |
-	string := 'abcABCdef'.
-	self
-		assert: (string findString: 'abc' startingAt: 1 caseSensitive: true) equals: 1;
-		assert: (string findString: 'abc' startingAt: 1 caseSensitive: false) equals: 1;
-		assert: (string findString: 'ABC' startingAt: 1 caseSensitive: true) equals: 4;
-		assert: (string findString: 'ABC' startingAt: 1 caseSensitive: false) equals: 1;
-		assert: (string findString: 'def' startingAt: 1 caseSensitive: true) equals: 7;
-		assert: (string findString: 'def' startingAt: 1 caseSensitive: false) equals: 7;
-		assert: (string findString: 'DEF' startingAt: 1 caseSensitive: true) equals: 0;
-		assert: (string findString: 'DEF' startingAt: 1 caseSensitive: false) equals: 7
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_gather_
-
-	self
-		assert: (#(1 2 3) gather: [:each | each * 10 + 1 to: each * 10 + each])
-		equals: #(11 21 22 31 32 33)
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_indexOfAnyOf_startingAt_
-
-	self
-		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 1) equals: 5;
-		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 6) equals: 6;
-		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 7) equals: 14;
-		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 15) equals: 15;
-		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 16) equals: 20;
-		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 21) equals: 0;
-		assert: ('word, another, done.' indexOfAnyOf: '+-' startingAt: 1) equals: 0
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_indexOfAnyOf_startingAt_ifAbsent_
-
-	self
-		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 1 ifAbsent: [nil]) equals: 5;
-		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 6 ifAbsent: [nil]) equals: 6;
-		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 7 ifAbsent: [nil]) equals: 14;
-		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 15 ifAbsent: [nil]) equals: 15;
-		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 16 ifAbsent: [nil]) equals: 20;
-		assert: ('word, another, done.' indexOfAnyOf: '., ' startingAt: 21 ifAbsent: [nil]) equals: nil;
-		assert: ('word, another, done.' indexOfAnyOf: '+-' startingAt: 1 ifAbsent: [nil]) equals: nil
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_intersection_
-
-	self
-		assert: (#(1 2 3) intersection: #()) sortAscending equals: #();
-		assert: (#() intersection: #(1 2 3)) sortAscending equals: #();
-		assert: (#(1 2 3) intersection: #(1 2 3)) sortAscending equals: #(1 2 3);
-		assert: (#(1 2 3) intersection: #(2 3 4)) sortAscending equals: #(2 3);
-		assert: (#(1 2 3) intersection: #(3 4 5)) sortAscending equals: #(3);
-		assert: (#(1 2 3) intersection: #(4 5 6)) sortAscending equals: #()
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_parseSelectorFrom_
-
-	self
-		assert: (UndefinedObject parseSelectorFrom: 'a') equals: 'a';
-		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
-		assert: (UndefinedObject parseSelectorFrom: 'a self halt') equals: 'a';
-		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
-		assert: (UndefinedObject parseSelectorFrom: 'a: something') equals: 'a:';
-		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
-		assert: (UndefinedObject parseSelectorFrom: 'a: something b: else') equals: 'a:b:';
-		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
-		assert: (UndefinedObject parseSelectorFrom: '= another ^false') equals: '=';
-		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
-		assert: (UndefinedObject parseSelectorFrom: '=@= another ^false') equals: '=@=';
-		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
-
-		assert: (UndefinedObject parseSelectorFrom: 'a ^undefined') equals: 'a';
-		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
-		assert: (UndefinedObject parseSelectorFrom: 'a: something undefined := something') equals: 'a:';
-		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
-		assert: (UndefinedObject parseSelectorFrom: 'a: something b: else ^something =@= else') equals: 'a:b:';
-		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
-		assert: (UndefinedObject parseSelectorFrom: '= another ^undefined = another') equals: '=';
-		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind';
-		assert: (UndefinedObject parseSelectorFrom: '=@= another ^undefined =@= another') equals: '=@=';
-		deny: (UndefinedObject includesCategory: #'xyzzy') description: '#parseSelectorFrom: should not leave anything behind'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_streamContents_
-
-	self
-		assert: (String streamContents: 
-					[:stream |
-					(1 to: 3) do: [:each | stream nextPutAll: each printString]
-						separatedBy: [stream space]])
-		equals: '1 2 3'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_unescapePercents
-
-	self
-		assert: 'aa%20aa%20%C3%A9%C3%A9%20aa%20aa'  unescapePercents asByteArray decodeFromUTF8 asString
-			equals: 'aa aa éé aa aa';
-		assert: 'aa%20aa%20%E9%E9%20aa%20aa' unescapePercents
-			equals: 'aa aa éé aa aa' asUnicodeString
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressExtensionsTest
-test_withUnixLineEndings
-
-	| lf cr crlf |
-	lf := String with: Character lf.
-	cr := String with: Character cr.
-	crlf := cr, lf.
-
-	self
-		assert: (self unixLinesFrom: '') equals: #();
-		assert: (self unixLinesFrom: 'abc') equals: #('abc');
-		assert: (self unixLinesFrom: 'abc', lf) equals: #('abc');
-		assert: (self unixLinesFrom: 'abc', cr) equals: #('abc');
-		assert: (self unixLinesFrom: 'abc', crlf) equals: #('abc');
-		assert: (self unixLinesFrom: 'abc', lf, cr) equals: #('abc' '');
-		assert: (self unixLinesFrom: 'abc', cr, cr) equals: #('abc' '');
-		assert: (self unixLinesFrom: 'abc', crlf, cr) equals: #('abc' '');
-		assert: (self unixLinesFrom: 'abc', lf, lf) equals: #('abc' '');
-		assert: (self unixLinesFrom: 'abc', crlf, lf) equals: #('abc' '');
-		assert: (self unixLinesFrom: 'abc', lf, crlf) equals: #('abc' '');
-		assert: (self unixLinesFrom: 'abc', cr, crlf) equals: #('abc' '');
-		assert: (self unixLinesFrom: 'abc', crlf, crlf) equals: #('abc' '')
-%
-
-category: 'utility'
-set compile_env: 0
-method: CypressExtensionsTest
-unixLinesFrom: aString
-	
-	| sourceStream resultStream |
-	sourceStream := ReadStreamPortable on: aString withUnixLineEndings.
-	resultStream := WriteStreamPortable on: Array new.
-	[sourceStream atEnd]
-		whileFalse: [resultStream nextPut: (sourceStream upTo: Character lf)].
-	^resultStream contents.
-%
-
-! Class Implementation for CypressSnapshotTest
-
-! ------------------- Instance methods for CypressSnapshotTest
-
-category: 'tests'
-set compile_env: 0
-method: CypressSnapshotTest
-testExtensionsOnlySnapshot
-
-	| name pkg packageDefinitions |
-	name := 'Cypress-Mocks-Extensions'.
-	pkg := CypressPackageDefinition named: name.
-	packageDefinitions := pkg snapshot definitions.
-	self
-		assert: packageDefinitions size equals: 1;
-		assert: packageDefinitions first selector equals: 'isCypressMockBasic';
-		assert: packageDefinitions first className equals: 'Object'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressSnapshotTest
-testSnapshot
-
-	| name pkg packageDefinitions expectedDefinitions |
-	name := 'Cypress-Mocks'.
-	pkg := CypressPackageDefinition named: name.
-	packageDefinitions := pkg snapshot definitions.
-	expectedDefinitions := self baseDefinitions.
-	self assert: expectedDefinitions size equals: packageDefinitions size.
-	packageDefinitions
-		do: [:def | self assert: (expectedDefinitions includes: def)]
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressSnapshotTest
-testSnapshotEquality
-	| name pkg packageDefinitions expectedDefinitions |
-	name := 'Cypress-Mocks'.
-	pkg := CypressPackageDefinition named: name.
-	packageDefinitions := pkg snapshot definitions.
-	expectedDefinitions := self baseDefinitions.
-	self assert: packageDefinitions asArray equals: expectedDefinitions asArray
-%
-
-! Class Implementation for CypressDefinitionTest
-
-! ------------------- Instance methods for CypressDefinitionTest
-
-category: 'tests'
-set compile_env: 0
-method: CypressDefinitionTest
-testClassDefinition
-
-	self
-		assert: (CypressClassDefinition
-					name: 'Foo'
-					superclassName: 'Object'
-					category: 'Foo'
-					instVarNames: #()
-					classInstVarNames: #()
-					classVarNames: #()
-					poolDictionaryNames: #()
-					comment: ''
-					subclassType: '') printString
-		equals: 'a CypressClassDefinition(Foo)'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressDefinitionTest
-testDictionaryOfDefinitions
-
-	| dict |
-	"baseDefinitions"
-	dict := Dictionary new.
-	self baseDefinitions do: [:each | 
-		dict at: each put: each ].
-	self baseDefinitions do: [:each | 
-		self assert: (dict at: each) equals: each ].
-
-	"targetDefinitions"
-	dict := Dictionary new.
-	self targetDefinitions do: [:each | 
-		dict at: each put: each ].
-	self targetDefinitions do: [:each | 
-		self assert: (dict at: each) equals: each ].
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressDefinitionTest
-testEquality
-	| pkg1 pkg2 pkg3 name |
-	name := 'Cypress-Mocks'.
-	pkg1 := CypressPackageDefinition named: name.
-	pkg2 := CypressPackageDefinition named: name.
-	pkg3 := CypressPackageDefinition named: 'Nope!'.
-
-	self assert: pkg1 equals: pkg2.
-	self deny: pkg1 equals: pkg3
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressDefinitionTest
-testMethodDefinition
-	self assert: (CypressMethodDefinition
-		className: 'Foo'
-		classIsMeta: false
-		selector: 'isFoo'
-		category: 'testing'
-		source: 'isFoo ^true') printString equals: 'a CypressMethodDefinition(Foo>>isFoo)'
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressDefinitionTest
-testNameEquality
-	| pkg name |
-	name := 'Cypress-Mocks'.
-	pkg := CypressPackageDefinition named: name.
-	self assert: pkg name equals: name.
-	self deny: pkg name equals: 'Nope.'.
-%
-
-category: 'tests'
-set compile_env: 0
-method: CypressDefinitionTest
-testPrintString
-	| name pkg |
-	name := 'Cypress-Mocks'.
-	pkg := CypressPackageDefinition named: name.
-	self assert: 'a CypressPackageDefinition(', name, ')' equals: pkg printString.
-%
-
 ! Class Implementation for CypressPatchTest
 
 ! ------------------- Instance methods for CypressPatchTest
 
 category: 'private'
-set compile_env: 0
 method: CypressPatchTest
 baseTargetPatch
 
@@ -1067,7 +924,6 @@ baseTargetPatch
 %
 
 category: 'tests'
-set compile_env: 0
 method: CypressPatchTest
 testDictionaryOfPatchOperations
 	"loader uses dictionary for managing patch operations ... ensure that Amber Dictionaries stand up"
@@ -1081,7 +937,6 @@ testDictionaryOfPatchOperations
 %
 
 category: 'tests'
-set compile_env: 0
 method: CypressPatchTest
 testPatch
 
@@ -1096,7 +951,6 @@ testPatch
 %
 
 category: 'tests'
-set compile_env: 0
 method: CypressPatchTest
 testPatchOperationEquality
 
@@ -1139,11 +993,123 @@ testPatchOperationEquality
 	self assert: addition equals: addition.
 %
 
+! Class Implementation for CypressSnapshotTest
+
+! ------------------- Instance methods for CypressSnapshotTest
+
+category: 'tests'
+method: CypressSnapshotTest
+testExtensionsOnlySnapshot
+
+	| name pkg packageDefinitions |
+	name := 'Cypress-Mocks-Extensions'.
+	pkg := CypressPackageDefinition named: name.
+	packageDefinitions := pkg snapshot definitions.
+	self
+		assert: packageDefinitions size equals: 1;
+		assert: packageDefinitions first selector equals: 'isCypressMockBasic';
+		assert: packageDefinitions first className equals: 'Object'
+%
+
+category: 'tests'
+method: CypressSnapshotTest
+testSnapshot
+
+	| name pkg packageDefinitions expectedDefinitions |
+	name := 'Cypress-Mocks'.
+	pkg := CypressPackageDefinition named: name.
+	packageDefinitions := pkg snapshot definitions.
+	expectedDefinitions := self baseDefinitions.
+	self assert: expectedDefinitions size equals: packageDefinitions size.
+	packageDefinitions
+		do: [:def | self assert: (expectedDefinitions includes: def)]
+%
+
+category: 'tests'
+method: CypressSnapshotTest
+testSnapshotEquality
+	| name pkg packageDefinitions expectedDefinitions |
+	name := 'Cypress-Mocks'.
+	pkg := CypressPackageDefinition named: name.
+	packageDefinitions := pkg snapshot definitions.
+	expectedDefinitions := self baseDefinitions.
+	self assert: packageDefinitions asArray equals: expectedDefinitions asArray
+%
+
+! Class Implementation for CypressStructureTest
+
+! ------------------- Instance methods for CypressStructureTest
+
+category: 'private'
+method: CypressStructureTest
+compileJSON: aJsonString
+
+	^CypressJsonParser parse: aJsonString
+%
+
+category: 'private'
+method: CypressStructureTest
+sampleJson
+    ^ '{
+	"age" : 25,
+	"name" : "John%20Smith",
+	"phoneNumber" : [
+		{
+			"number" : "212%20555-1234",
+			"type" : "home" },
+		{
+			"number" : "646%20555-4567",
+			"type" : "fax" } ],
+	"registered" : true }'
+%
+
+category: 'tests'
+method: CypressStructureTest
+testPackageStructureFromPackage
+
+	| packageStructure packageDefinitions expectedDefinitions |
+	packageStructure := CypressPackageStructure
+				fromPackage: (CypressPackageDefinition named: 'Cypress-Mocks').
+	packageDefinitions := packageStructure snapshot definitions.
+	expectedDefinitions := self baseDefinitions.
+	self assert: expectedDefinitions size equals: packageDefinitions size.
+	packageDefinitions do: 
+			[:def |
+			self assert: (expectedDefinitions includes: def)
+				description: 'Definition for ', def printString, ' did not match expected ones']
+%
+
+category: 'tests'
+method: CypressStructureTest
+testPropertyDictionaryRead
+
+	| propertyDictionary phoneNumbers |
+	propertyDictionary := (self compileJSON: self sampleJson) asCypressPropertyObject.
+	self assert: (propertyDictionary at: 'name') equals: 'John Smith'.
+	self assert: (propertyDictionary at: 'age') equals: 25.
+	self assert: (propertyDictionary at: 'registered') description: '"registered" property should have been true'.
+	phoneNumbers := propertyDictionary at: 'phoneNumber'.
+	self assert: phoneNumbers size equals: 2.
+	self assert: ((phoneNumbers at: 1) at: 'number') equals: '212 555-1234'.
+	self assert: ((phoneNumbers at: 2) at: 'number') equals: '646 555-4567'.
+%
+
+category: 'tests'
+method: CypressStructureTest
+testPropertyDictionaryWrite
+    | propertyDictionary stream x |
+    propertyDictionary := (self compileJSON: self sampleJson) asCypressPropertyObject.
+    stream := WriteStreamPortable on: String new.
+    propertyDictionary writeCypressJsonOn: stream indent: 0.
+    self assert: (x := stream contents withUnixLineEndings) equals: self sampleJson withUnixLineEndings
+%
+
 ! Class Extensions
 
 ! Class initializers 
 
 doit
+true.
 %
 
 

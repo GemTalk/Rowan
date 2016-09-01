@@ -33,6 +33,7 @@ System myUserProfile symbolList do: [:symDict |
 		]
 	]
 ].
+true.
 %
 
 
@@ -50,6 +51,7 @@ doit
 		category: 'Cypress-Mocks-Definitions';
 		comment: 'This mock contains basic class and instance method selectors';
 		immediateInvariant.
+true.
 %
 
 ! Class Implementation for CypressMockBasic
@@ -57,21 +59,18 @@ doit
 ! ------------------- Class methods for CypressMockBasic
 
 category: 'accessing'
-set compile_env: 0
 classmethod: CypressMockBasic
 current
 	^current
 %
 
 category: 'accessing'
-set compile_env: 0
 classmethod: CypressMockBasic
 current: anObject
 	current := anObject
 %
 
 category: 'initialization'
-set compile_env: 0
 classmethod: CypressMockBasic
 initialize
 	self current: self new
@@ -80,14 +79,12 @@ initialize
 ! ------------------- Instance methods for CypressMockBasic
 
 category: 'accessing'
-set compile_env: 0
 method: CypressMockBasic
 extra
 	"extra method"
 %
 
 category: 'initialization'
-set compile_env: 0
 method: CypressMockBasic
 initialize
 	super initialize.
@@ -95,14 +92,12 @@ initialize
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressMockBasic
 name
 	^name
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressMockBasic
 name: aString
 	name := aString
@@ -115,7 +110,6 @@ name: aString
 ! ------------------- Instance methods for Object
 
 category: '*Cypress-Mocks-Extensions'
-set compile_env: 0
 method: Object
 isCypressMockBasic
 
@@ -126,6 +120,7 @@ isCypressMockBasic
 
 doit
 CypressMockBasic initialize.
+true.
 %
 
 

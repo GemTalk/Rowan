@@ -33,6 +33,7 @@ System myUserProfile symbolList do: [:symDict |
 		]
 	]
 ].
+true.
 %
 
 
@@ -50,6 +51,7 @@ doit
 		category: 'Network-Url';
 		comment: '';
 		immediateInvariant.
+true.
 %
 
 doit
@@ -65,6 +67,7 @@ doit
 		comment: 'The Authorizer does user authorization checking. Each instance of authorizer keeps track of the realm that it is authorizing for, and the table of authorized users. An authorizer can be asked to return the user name/symbol associated with a userID (which concatenates the username and password from the HTTP request) with the user: method.
 ';
 		immediateInvariant.
+true.
 %
 
 doit
@@ -79,112 +82,7 @@ doit
 		category: 'Network-Url';
 		comment: 'A Uniform Resource Locator.  It specifies the location of a document on the Internet.  The base class is abstract; child classes break different types of URLs down in ways appropriate for that type.';
 		immediateInvariant.
-%
-
-doit
-(Url
-	subclass: 'GenericUrl'
-	instVarNames: #( schemeName locator )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Network-Url';
-		comment: 'a URL type that can''t be broken down in any systematic way.  For example, mailto: and telnet: URLs.  The part after the scheme name is stored available via the #locator message.';
-		immediateInvariant.
-%
-
-doit
-(GenericUrl
-	subclass: 'MailtoUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Network-Url';
-		comment: 'a URL specifying a mailing address; activating it triggers a mail-sender to start up, if one is present.';
-		immediateInvariant.
-%
-
-doit
-(GenericUrl
-	subclass: 'BrowserUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Network-Url';
-		comment: 'URLs that instruct a browser to do something.';
-		immediateInvariant.
-%
-
-doit
-(Url
-	subclass: 'HierarchicalUrl'
-	instVarNames: #( schemeName authority path query port username password )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Network-Url';
-		comment: 'A URL which has a hierarchical encoding.  For instance, http and ftp URLs are hierarchical.';
-		immediateInvariant.
-%
-
-doit
-(HierarchicalUrl
-	subclass: 'FtpUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Network-Url';
-		comment: '';
-		immediateInvariant.
-%
-
-doit
-(HierarchicalUrl
-	subclass: 'HttpUrl'
-	instVarNames: #( realm )
-	classVars: #( Passwords )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Network-Url';
-		comment: 'A URL that can be accessed via the Hypertext Transfer Protocol (HTTP), ie, a standard Web URL
-
-realm = the name of the security realm that has been discovered for this URL.   Look it up in Passwords.
-
-Passwords = a Dictionary of (realm -> encoded user&password)
-
-
-TODO: use the username and password, if specified
-';
-		immediateInvariant.
-%
-
-doit
-(HttpUrl
-	subclass: 'HttpsUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Network-Url';
-		comment: '';
-		immediateInvariant.
+true.
 %
 
 doit
@@ -246,6 +144,120 @@ Notes regarding non RFC features in this class:
 
 ';
 		immediateInvariant.
+true.
+%
+
+doit
+(Url
+	subclass: 'GenericUrl'
+	instVarNames: #( schemeName locator )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Network-Url';
+		comment: 'a URL type that can''t be broken down in any systematic way.  For example, mailto: and telnet: URLs.  The part after the scheme name is stored available via the #locator message.';
+		immediateInvariant.
+true.
+%
+
+doit
+(GenericUrl
+	subclass: 'BrowserUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Network-Url';
+		comment: 'URLs that instruct a browser to do something.';
+		immediateInvariant.
+true.
+%
+
+doit
+(GenericUrl
+	subclass: 'MailtoUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Network-Url';
+		comment: 'a URL specifying a mailing address; activating it triggers a mail-sender to start up, if one is present.';
+		immediateInvariant.
+true.
+%
+
+doit
+(Url
+	subclass: 'HierarchicalUrl'
+	instVarNames: #( schemeName authority path query port username password )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Network-Url';
+		comment: 'A URL which has a hierarchical encoding.  For instance, http and ftp URLs are hierarchical.';
+		immediateInvariant.
+true.
+%
+
+doit
+(HierarchicalUrl
+	subclass: 'FtpUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Network-Url';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(HierarchicalUrl
+	subclass: 'HttpUrl'
+	instVarNames: #( realm )
+	classVars: #( Passwords )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Network-Url';
+		comment: 'A URL that can be accessed via the Hypertext Transfer Protocol (HTTP), ie, a standard Web URL
+
+realm = the name of the security realm that has been discovered for this URL.   Look it up in Passwords.
+
+Passwords = a Dictionary of (realm -> encoded user&password)
+
+
+TODO: use the username and password, if specified
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(HttpUrl
+	subclass: 'HttpsUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Network-Url';
+		comment: '';
+		immediateInvariant.
+true.
 %
 
 ! Class Implementation for InvalidDirectoryError
@@ -253,7 +265,6 @@ Notes regarding non RFC features in this class:
 ! ------------------- Class methods for InvalidDirectoryError
 
 category: 'exceptioninstantiator'
-set compile_env: 0
 classmethod: InvalidDirectoryError
 pathName: badPathName
 	^self new pathName: badPathName
@@ -262,7 +273,6 @@ pathName: badPathName
 ! ------------------- Instance methods for InvalidDirectoryError
 
 category: 'exceptiondescription'
-set compile_env: 0
 method: InvalidDirectoryError
 defaultAction
 
@@ -270,14 +280,12 @@ defaultAction
 %
 
 category: 'accessing'
-set compile_env: 0
 method: InvalidDirectoryError
 pathName
 	^pathName
 %
 
 category: 'accessing'
-set compile_env: 0
 method: InvalidDirectoryError
 pathName: badPathName
 	pathName := badPathName
@@ -288,7 +296,6 @@ pathName: badPathName
 ! ------------------- Class methods for Authorizer
 
 category: 'as yet unclassified'
-set compile_env: 0
 classmethod: Authorizer
 unauthorizedFor: realm
 	^'HTTP/1.0 401 Unauthorized', self crlf, 'WWW-Authenticate: Basic realm="Pharo/',realm,'"',
@@ -299,7 +306,6 @@ unauthorizedFor: realm
 ! ------------------- Instance methods for Authorizer
 
 category: 'authentication'
-set compile_env: 0
 method: Authorizer
 encode: nameString password: pwdString
 	"Encode per RFC1421 of the username:password combination."
@@ -324,7 +330,6 @@ encode: nameString password: pwdString
 %
 
 category: 'authentication'
-set compile_env: 0
 method: Authorizer
 mapFrom: aKey to: aPerson
 	"Establish a mapping from a RFC 1421 key to a user."
@@ -338,7 +343,6 @@ mapFrom: aKey to: aPerson
 %
 
 category: 'authentication'
-set compile_env: 0
 method: Authorizer
 mapName: nameString password: pwdString to: aPerson
 	"Insert/remove the encoding per RFC1421 of the username:password combination into/from the UserMap.  DO NOT call this directly, use mapName:password:to: in your ServerAction class.  Only it knows how to record the change on the disk!"
@@ -347,21 +351,18 @@ mapName: nameString password: pwdString to: aPerson
 %
 
 category: 'realms'
-set compile_env: 0
 method: Authorizer
 realm
 	^realm
 %
 
 category: 'realms'
-set compile_env: 0
 method: Authorizer
 realm: aString
 	realm := aString
 %
 
 category: 'authentication'
-set compile_env: 0
 method: Authorizer
 user: userId
 	"Return the requesting user."
@@ -373,7 +374,6 @@ user: userId
 ! ------------------- Class methods for Url
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: Url
 absoluteFromFileNameOrUrlString: aString
 	"Return a URL from and handle Strings without schemes
@@ -386,7 +386,6 @@ absoluteFromFileNameOrUrlString: aString
 %
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: Url
 absoluteFromText: aString
 	"Return a URL from a string and handle
@@ -415,7 +414,6 @@ absoluteFromText: aString
 %
 
 category: 'parsing'
-set compile_env: 0
 classmethod: Url
 combine: baseURL withRelative: relURL 
 	"Take two URL as string form, combine them and return the corresponding URL in string form"
@@ -424,7 +422,6 @@ combine: baseURL withRelative: relURL
 %
 
 category: 'constants'
-set compile_env: 0
 classmethod: Url
 schemeName
 	"When searching for a class to handle a particular scheme, make sure that Url classes never match by default. This is so that abstract Url classes e.g. HierarchicalUrl can be iterated over, but will not be selected"
@@ -433,7 +430,6 @@ schemeName
 %
 
 category: 'parsing'
-set compile_env: 0
 classmethod: Url
 schemeNameForString: aString
 	"Get the scheme name from a string, or return nil if it's not specified. 
@@ -452,7 +448,6 @@ schemeNameForString: aString
 %
 
 category: 'parsing'
-set compile_env: 0
 classmethod: Url
 urlClassForScheme: scheme
 
@@ -464,7 +459,6 @@ urlClassForScheme: scheme
 ! ------------------- Instance methods for Url
 
 category: 'downloading'
-set compile_env: 0
 method: Url
 activate
 	"spawn an external handler for this URL"
@@ -472,7 +466,6 @@ activate
 %
 
 category: 'converting'
-set compile_env: 0
 method: Url
 asString
 
@@ -480,49 +473,42 @@ asString
 %
 
 category: 'converting'
-set compile_env: 0
 method: Url
 asURI
 	^self asString asURI
 %
 
 category: 'converting'
-set compile_env: 0
 method: Url
 asUrl
 	^self
 %
 
 category: 'converting'
-set compile_env: 0
 method: Url
 asUrlRelativeTo: aUrl
 	^self
 %
 
 category: 'accessing'
-set compile_env: 0
 method: Url
 authority
 	^''
 %
 
 category: 'converting'
-set compile_env: 0
 method: Url
 downloadUrl
 	^self asString
 %
 
 category: 'fragment'
-set compile_env: 0
 method: Url
 fragment
 	^fragment
 %
 
 category: 'downloading'
-set compile_env: 0
 method: Url
 hasContents
 	"whether this URL can download contents to be displayed; if not, it fundamentally requires an outside application to deal with it.  For example, mailto: and telnet: urls"
@@ -530,7 +516,6 @@ hasContents
 %
 
 category: 'parsing'
-set compile_env: 0
 method: Url
 newFromRelativeText: aString
 	"return a URL relative to the current one, given by aString.  For instance, if self is 'http://host/dir/file', and aString is '/dir2/file2', then the return will be a Url for 'http://host/dir2/file2'"
@@ -569,7 +554,6 @@ newFromRelativeText: aString
 %
 
 category: 'printing'
-set compile_env: 0
 method: Url
 printOn: aStream
 
@@ -577,14 +561,12 @@ printOn: aStream
 %
 
 category: 'fragment'
-set compile_env: 0
 method: Url
 privateFragment: aString
 	fragment := aString
 %
 
 category: 'parsing'
-set compile_env: 0
 method: Url
 privateInitializeFromText: aString
 
@@ -592,7 +574,6 @@ privateInitializeFromText: aString
 %
 
 category: 'parsing'
-set compile_env: 0
 method: Url
 privateInitializeFromText: aString relativeTo: aUrl
 	"initialize from the given string, as a relative URL.  aString will have had the scheme name removed, if it was present to begin with.  If it was, then the scheme name was the same as the receiver's scheme name"
@@ -602,7 +583,6 @@ privateInitializeFromText: aString relativeTo: aUrl
 %
 
 category: 'classification'
-set compile_env: 0
 method: Url
 scheme
 	"return a string with the scheme of this URL.  For instance, HTTP"
@@ -611,7 +591,6 @@ scheme
 %
 
 category: 'classification'
-set compile_env: 0
 method: Url
 schemeName
 	"return a lowercase string with the scheme of this URL.  For instance, 'http'"
@@ -620,7 +599,6 @@ schemeName
 %
 
 category: 'fragment'
-set compile_env: 0
 method: Url
 withFragment: newFragment
 	"return a URL which is the same except that it has a different fragment"
@@ -628,11 +606,334 @@ withFragment: newFragment
 %
 
 category: 'fragment'
-set compile_env: 0
 method: Url
 withoutFragment
 	"return a URL which is identical to the receiver except that it has no fragment associated with it"
 	^self withFragment: nil
+%
+
+! Class Implementation for FileUrl
+
+! ------------------- Class methods for FileUrl
+
+category: 'instance creation'
+classmethod: FileUrl
+absoluteFromText: aString
+	"Method that can be called explicitly to create a FileUrl."
+
+	^self new privateInitializeFromText: aString
+%
+
+category: 'instance creation'
+classmethod: FileUrl
+host: aHost pathParts: aCollectionOfPathParts isAbsolute: aBoolean
+	"Create a FileUrl."
+
+	^self new host: aHost pathParts: aCollectionOfPathParts isAbsolute: aBoolean
+%
+
+category: 'instance creation'
+classmethod: FileUrl
+pathParts: aCollectionOfPathParts
+	"Create a FileUrl."
+
+	^self host: nil pathParts: aCollectionOfPathParts isAbsolute: true
+%
+
+category: 'instance creation'
+classmethod: FileUrl
+pathParts: aCollectionOfPathParts isAbsolute: aBoolean
+	"Create a FileUrl."
+
+	^self host: nil pathParts: aCollectionOfPathParts isAbsolute: aBoolean
+%
+
+category: 'constants'
+classmethod: FileUrl
+schemeName
+	^'file'
+%
+
+category: 'instance creation'
+classmethod: FileUrl
+workingDirectory
+
+	^self absoluteFromText: CypressFileUtilities current workingDirectory
+%
+
+! ------------------- Instance methods for FileUrl
+
+category: 'downloading'
+method: FileUrl
+default
+	"Answer a new URL with the receiver's path relative to the current working directory."
+	
+	self privateInitializeFromText: self pathString relativeTo: self class workingDirectory.
+%
+
+category: 'accessing'
+method: FileUrl
+fileName
+	"Return the last part of the path,
+	most often a filename but can also be a directory."
+
+	^self path last
+%
+
+category: 'testing'
+method: FileUrl
+firstPartIsDriveLetter
+	"Return true if the first part of the path is a letter
+	followed by a $: like 'C:' "
+	
+	| firstPart |
+	path isEmpty ifTrue: [^false].
+	firstPart := path first.
+	^firstPart size = 2 and: [
+		firstPart first isLetter
+			and: [firstPart last = $:]]
+%
+
+category: 'downloading'
+method: FileUrl
+hasContents
+	^true
+%
+
+category: 'accessing'
+method: FileUrl
+host
+	"Return the host name, either 'localhost', '', or a fully qualified domain name."
+	
+	^host ifNil: ['']
+%
+
+category: 'accessing'
+method: FileUrl
+host: hostName
+	"Set the host name, either 'localhost', '', or a fully qualified domain name."
+	
+	host := hostName
+%
+
+category: 'private-initialization'
+method: FileUrl
+host: aHostString pathParts: aCollection isAbsolute: aBoolean
+
+	host := aHostString.
+	path := aCollection.
+	isAbsolute := aBoolean
+%
+
+category: 'private-initialization'
+method: FileUrl
+initializeFromPathString: aPathString
+	"<aPathString> is a file path as a String.
+	We construct a path collection using various heuristics."
+
+	| pathString hasDriveLetter |
+	pathString := aPathString.
+	pathString isEmpty ifTrue: [pathString := '/'].
+	"Copy without empty string preceeding first / or between duplicated /s."
+	path := ((pathString subStrings: '/') copyWithout: '') collect: [:token | token unescapePercents].
+
+	"A path like 'C:' refers in practice to 'c:/'"
+	((pathString endsWith: '/') or:
+		[(hasDriveLetter := self firstPartIsDriveLetter) and: [path size = 1]])
+			ifTrue: [path add: ''].
+
+	"Decide if we are absolute by checking for leading $/ or
+	beginning with drive letter. Smarts for other OSes?"
+	self isAbsolute: ((pathString beginsWith: '/')
+						or: [hasDriveLetter ifNil: [self firstPartIsDriveLetter]])
+%
+
+category: 'accessing'
+method: FileUrl
+isAbsolute
+	"Should the path be considered absolute to
+	the filesystem instead of relative to the default directory?"
+ 
+	^isAbsolute
+%
+
+category: 'accessing'
+method: FileUrl
+isAbsolute: aBoolean
+	"Set if the path should be considered absolute to
+	the filesystem instead of relative to the default directory."
+
+	isAbsolute := aBoolean
+%
+
+category: 'accessing'
+method: FileUrl
+path
+	"Return an ordered collection of the path elements."
+	
+	^path
+%
+
+category: 'accessing'
+method: FileUrl
+path: aCollection
+	"Set the collection of path elements."
+
+	path := aCollection
+%
+
+category: 'paths'
+method: FileUrl
+pathDirString
+	"Path to directory as url, using slash as delimiter.
+	Filename is left out."
+
+	^String streamContents: [ :s |
+		isAbsolute ifTrue: [ s nextPut: $/ ].
+		1 to: self path size - 1 do: [ :ii |
+			s nextPutAll: (path at: ii); nextPut: $/]]
+%
+
+category: 'paths'
+method: FileUrl
+pathForDirectory
+	"Path using local file system's pathname delimiter.
+	DOS paths with drive letters should not
+	be prepended with a delimiter even though
+	they are absolute. Filename is left out."
+
+	| delimiter |
+	delimiter :=  CypressFileUtilities current pathNameDelimiter.
+	^String streamContents: [ :s |
+		(self isAbsolute and: [self firstPartIsDriveLetter not])
+			ifTrue: [ s nextPutAll: delimiter ].
+		1 to: self path size - 1 do: [ :ii |
+			s nextPutAll: (path at: ii); nextPutAll: delimiter]]
+%
+
+category: 'private-initialization'
+method: FileUrl
+pathParts: aCollection isAbsolute: aBoolean
+
+	^self host: nil pathParts: aCollection isAbsolute: aBoolean
+%
+
+category: 'paths'
+method: FileUrl
+pathString
+	"Path as it appears in a URL with $/ as delimiter."
+	
+	
+	^String streamContents: [ :s | | first |
+		"isAbsolute ifTrue:[ s nextPut: $/ ]."
+		first := true.
+		self path do: [ :p |
+			first ifFalse: [ s nextPut: $/ ].
+			first := false.
+			s nextPutAll: p encodeForHTTP ] ]
+%
+
+category: 'copying'
+method: FileUrl
+postCopy
+	"Be sure not to share the path with the copy."
+
+	super postCopy.
+	path := path copy
+%
+
+category: 'printing'
+method: FileUrl
+printOn: aStream
+	"Return the FileUrl according to RFC1738 plus supporting fragments:
+		'file://<host>/<path>#<fragment>'
+	Note that <host> being '' is equivalent to 'localhost'.
+	Note: The pathString can not start with a leading $/
+	to indicate an 'absolute' file path.
+	This is not according to RFC1738 where the path should have
+	no leading or trailing slashes, and always
+	be considered absolute relative to the filesystem."
+
+	aStream nextPutAll: self schemeName, '://'.
+
+	host ifNotNil: [aStream nextPutAll: host].
+
+	aStream
+		nextPut: $/;
+		nextPutAll: self pathString.
+
+	fragment ifNotNil:
+		[aStream
+			nextPut: $#;
+			nextPutAll: fragment encodeForHTTP].
+%
+
+category: 'private-initialization'
+method: FileUrl
+privateInitializeFromText: aString
+	"Calculate host and path from a file URL in String format.
+	Some malformed formats are allowed and interpreted by guessing."
+
+	| schemeName pathString bare i |
+	bare := aString trimSeparators.
+	schemeName := Url schemeNameForString: bare.
+	(schemeName isNil or: [schemeName ~= self schemeName])
+		ifTrue: [
+			host := ''.
+			pathString := bare]
+		ifFalse: [
+			"First remove schemeName and colon"
+			bare := bare copyFrom: (schemeName size + 2) to: bare size.
+			"A proper file URL then has two slashes before host,
+			A malformed URL is interpreted as using syntax file:<path>."
+			(bare beginsWith: '//')
+				ifTrue: [i := bare indexOf: $/ startingAt: 3.
+						i=0 ifTrue: [
+								host := bare copyFrom: 3 to: bare size.
+								pathString := '']
+							ifFalse: [
+								host := bare copyFrom: 3 to: i-1.
+								pathString := bare copyFrom: host size + 3 to: bare size]]
+				ifFalse: [host := ''.
+						pathString := bare]].
+	self initializeFromPathString: pathString
+%
+
+category: 'private-initialization'
+method: FileUrl
+privateInitializeFromText: pathString relativeTo: aUrl
+	"<pathString> should be a filesystem path.
+	This url is adjusted to be aUrl + the path."
+
+	| newPath |
+	self host: aUrl host.
+	self initializeFromPathString: pathString.
+	self isAbsolute: aUrl isAbsolute.
+
+	newPath := aUrl path copy.
+	newPath removeLast.	"empty string that says its a directory"
+	path do: [ :token |
+		((token ~= '..') and: [token ~= '.']) ifTrue: [ 
+			newPath addLast: token unescapePercents ].
+		token = '..' ifTrue: [ 
+			newPath isEmpty ifFalse: [ 
+				newPath last = '..' ifFalse: [ newPath removeLast ] ] ].
+		"token = '.' do nothing" ].
+	path := newPath
+
+	
+%
+
+category: 'classification'
+method: FileUrl
+scheme
+	^self class schemeName
+%
+
+category: 'classification'
+method: FileUrl
+schemeName
+	^self class schemeName
 %
 
 ! Class Implementation for GenericUrl
@@ -640,7 +941,6 @@ withoutFragment
 ! ------------------- Class methods for GenericUrl
 
 category: 'parsing'
-set compile_env: 0
 classmethod: GenericUrl
 absoluteFromText: aString
 	| schemeName locator |
@@ -651,7 +951,6 @@ absoluteFromText: aString
 %
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: GenericUrl
 schemeName: schemeName  locator: locator
 	^self new schemeName: schemeName  locator: locator
@@ -660,14 +959,12 @@ schemeName: schemeName  locator: locator
 ! ------------------- Instance methods for GenericUrl
 
 category: 'access'
-set compile_env: 0
 method: GenericUrl
 locator
 	^locator
 %
 
 category: 'printing'
-set compile_env: 0
 method: GenericUrl
 printOn: aStream
 	
@@ -681,7 +978,6 @@ printOn: aStream
 %
 
 category: 'parsing'
-set compile_env: 0
 method: GenericUrl
 privateInitializeFromText: aString
 	schemeName := Url schemeNameForString: aString.
@@ -691,7 +987,6 @@ privateInitializeFromText: aString
 %
 
 category: 'parsing'
-set compile_env: 0
 method: GenericUrl
 privateInitializeFromText: aString relativeTo: aUrl
 	schemeName := aUrl schemeName.
@@ -699,37 +994,22 @@ privateInitializeFromText: aString relativeTo: aUrl
 %
 
 category: 'classification'
-set compile_env: 0
 method: GenericUrl
 scheme
 	^ self schemeName.
 %
 
 category: 'access'
-set compile_env: 0
 method: GenericUrl
 schemeName
 	^schemeName
 %
 
 category: 'private'
-set compile_env: 0
 method: GenericUrl
 schemeName: schemeName0  locator: locator0
 	schemeName := schemeName0.
 	locator := locator0.
-%
-
-! Class Implementation for MailtoUrl
-
-! ------------------- Class methods for MailtoUrl
-
-category: 'constants'
-set compile_env: 0
-classmethod: MailtoUrl
-schemeName
-
-	^ 'mailto'
 %
 
 ! Class Implementation for BrowserUrl
@@ -737,7 +1017,6 @@ schemeName
 ! ------------------- Class methods for BrowserUrl
 
 category: 'constants'
-set compile_env: 0
 classmethod: BrowserUrl
 schemeName
 
@@ -747,10 +1026,20 @@ schemeName
 ! ------------------- Instance methods for BrowserUrl
 
 category: 'downloading'
-set compile_env: 0
 method: BrowserUrl
 hasContents
 	^true
+%
+
+! Class Implementation for MailtoUrl
+
+! ------------------- Class methods for MailtoUrl
+
+category: 'constants'
+classmethod: MailtoUrl
+schemeName
+
+	^ 'mailto'
 %
 
 ! Class Implementation for HierarchicalUrl
@@ -758,7 +1047,6 @@ hasContents
 ! ------------------- Class methods for HierarchicalUrl
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: HierarchicalUrl
 schemeName: schemeName  authority: authority  path: path  query: query
 	^self new schemeName: schemeName  authority: authority  path: path  query: query
@@ -767,14 +1055,12 @@ schemeName: schemeName  authority: authority  path: path  query: query
 ! ------------------- Instance methods for HierarchicalUrl
 
 category: 'access'
-set compile_env: 0
 method: HierarchicalUrl
 authority
 	^authority
 %
 
 category: 'access'
-set compile_env: 0
 method: HierarchicalUrl
 fileName
 	"Return the last part of the path,
@@ -784,7 +1070,6 @@ fileName
 %
 
 category: 'printing'
-set compile_env: 0
 method: HierarchicalUrl
 fullPath
 	| ans |
@@ -803,7 +1088,6 @@ fullPath
 %
 
 category: 'downloading'
-set compile_env: 0
 method: HierarchicalUrl
 hasContents
 	"most of these do...."
@@ -811,7 +1095,6 @@ hasContents
 %
 
 category: 'access'
-set compile_env: 0
 method: HierarchicalUrl
 isAbsolute
 	
@@ -821,7 +1104,6 @@ isAbsolute
 %
 
 category: 'access'
-set compile_env: 0
 method: HierarchicalUrl
 password
 	"http://user:pword@foo.com' asUrl password"
@@ -829,7 +1111,6 @@ password
 %
 
 category: 'access'
-set compile_env: 0
 method: HierarchicalUrl
 path
 	"return a collection of the decoded path elements, as strings"
@@ -837,7 +1118,6 @@ path
 %
 
 category: 'access'
-set compile_env: 0
 method: HierarchicalUrl
 path: aCollection
 	"Set the collection of path elements."
@@ -846,14 +1126,12 @@ path: aCollection
 %
 
 category: 'access'
-set compile_env: 0
 method: HierarchicalUrl
 port
 	^port
 %
 
 category: 'copying'
-set compile_env: 0
 method: HierarchicalUrl
 postCopy
 	"Be sure not to share the path with the copy"
@@ -863,7 +1141,6 @@ postCopy
 %
 
 category: 'printing'
-set compile_env: 0
 method: HierarchicalUrl
 printOn: aStream
 
@@ -889,7 +1166,6 @@ printOn: aStream
 %
 
 category: 'parsing'
-set compile_env: 0
 method: HierarchicalUrl
 privateInitializeFromText: aString 
 	| remainder ind specifiedSchemeName |
@@ -959,7 +1235,6 @@ privateInitializeFromText: aString
 %
 
 category: 'parsing'
-set compile_env: 0
 method: HierarchicalUrl
 privateInitializeFromText: aString relativeTo: aUrl 
 	| remainder ind basePath |
@@ -992,7 +1267,6 @@ privateInitializeFromText: aString relativeTo: aUrl
 %
 
 category: 'parsing'
-set compile_env: 0
 method: HierarchicalUrl
 privateParsePath: remainder relativeTo: basePath 
 	| nextTok s parsedPath |
@@ -1014,7 +1288,6 @@ privateParsePath: remainder relativeTo: basePath
 %
 
 category: 'access'
-set compile_env: 0
 method: HierarchicalUrl
 query
 	"return the query, the part after any ?.  Any %XY's have already been decoded.  If there wasno query part, nil is returned (it is possible to also have an empty query"
@@ -1022,21 +1295,18 @@ query
 %
 
 category: 'classification'
-set compile_env: 0
 method: HierarchicalUrl
 scheme
 	^ self schemeName.
 %
 
 category: 'access'
-set compile_env: 0
 method: HierarchicalUrl
 schemeName
 	^schemeName
 %
 
 category: 'private'
-set compile_env: 0
 method: HierarchicalUrl
 schemeName: schemeName0  authority: authority0  path: path0  query: query0
 	"initialize a new instance"
@@ -1047,7 +1317,6 @@ schemeName: schemeName0  authority: authority0  path: path0  query: query0
 %
 
 category: 'access'
-set compile_env: 0
 method: HierarchicalUrl
 username
 	"http://user:pword@foo.com' asUrl username"
@@ -1059,7 +1328,6 @@ username
 ! ------------------- Class methods for FtpUrl
 
 category: 'constants'
-set compile_env: 0
 classmethod: FtpUrl
 schemeName
 
@@ -1071,7 +1339,6 @@ schemeName
 ! ------------------- Class methods for HttpUrl
 
 category: 'constants'
-set compile_env: 0
 classmethod: HttpUrl
 schemeName
 
@@ -1083,373 +1350,31 @@ schemeName
 ! ------------------- Class methods for HttpsUrl
 
 category: 'constants'
-set compile_env: 0
 classmethod: HttpsUrl
 schemeName
 
 	^ 'https'.
 %
 
-! Class Implementation for FileUrl
-
-! ------------------- Class methods for FileUrl
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: FileUrl
-absoluteFromText: aString
-	"Method that can be called explicitly to create a FileUrl."
-
-	^self new privateInitializeFromText: aString
-%
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: FileUrl
-host: aHost pathParts: aCollectionOfPathParts isAbsolute: aBoolean
-	"Create a FileUrl."
-
-	^self new host: aHost pathParts: aCollectionOfPathParts isAbsolute: aBoolean
-%
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: FileUrl
-pathParts: aCollectionOfPathParts
-	"Create a FileUrl."
-
-	^self host: nil pathParts: aCollectionOfPathParts isAbsolute: true
-%
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: FileUrl
-pathParts: aCollectionOfPathParts isAbsolute: aBoolean
-	"Create a FileUrl."
-
-	^self host: nil pathParts: aCollectionOfPathParts isAbsolute: aBoolean
-%
-
-category: 'constants'
-set compile_env: 0
-classmethod: FileUrl
-schemeName
-	^'file'
-%
-
-category: 'instance creation'
-set compile_env: 0
-classmethod: FileUrl
-workingDirectory
-
-	^self absoluteFromText: CypressFileUtilities current workingDirectory
-%
-
-! ------------------- Instance methods for FileUrl
-
-category: 'downloading'
-set compile_env: 0
-method: FileUrl
-default
-	"Answer a new URL with the receiver's path relative to the current working directory."
-	
-	self privateInitializeFromText: self pathString relativeTo: self class workingDirectory.
-%
-
-category: 'accessing'
-set compile_env: 0
-method: FileUrl
-fileName
-	"Return the last part of the path,
-	most often a filename but can also be a directory."
-
-	^self path last
-%
-
-category: 'testing'
-set compile_env: 0
-method: FileUrl
-firstPartIsDriveLetter
-	"Return true if the first part of the path is a letter
-	followed by a $: like 'C:' "
-	
-	| firstPart |
-	path isEmpty ifTrue: [^false].
-	firstPart := path first.
-	^firstPart size = 2 and: [
-		firstPart first isLetter
-			and: [firstPart last = $:]]
-%
-
-category: 'downloading'
-set compile_env: 0
-method: FileUrl
-hasContents
-	^true
-%
-
-category: 'accessing'
-set compile_env: 0
-method: FileUrl
-host
-	"Return the host name, either 'localhost', '', or a fully qualified domain name."
-	
-	^host ifNil: ['']
-%
-
-category: 'accessing'
-set compile_env: 0
-method: FileUrl
-host: hostName
-	"Set the host name, either 'localhost', '', or a fully qualified domain name."
-	
-	host := hostName
-%
-
-category: 'private-initialization'
-set compile_env: 0
-method: FileUrl
-host: aHostString pathParts: aCollection isAbsolute: aBoolean
-
-	host := aHostString.
-	path := aCollection.
-	isAbsolute := aBoolean
-%
-
-category: 'private-initialization'
-set compile_env: 0
-method: FileUrl
-initializeFromPathString: aPathString
-	"<aPathString> is a file path as a String.
-	We construct a path collection using various heuristics."
-
-	| pathString hasDriveLetter |
-	pathString := aPathString.
-	pathString isEmpty ifTrue: [pathString := '/'].
-	"Copy without empty string preceeding first / or between duplicated /s."
-	path := ((pathString subStrings: '/') copyWithout: '') collect: [:token | token unescapePercents].
-
-	"A path like 'C:' refers in practice to 'c:/'"
-	((pathString endsWith: '/') or:
-		[(hasDriveLetter := self firstPartIsDriveLetter) and: [path size = 1]])
-			ifTrue: [path add: ''].
-
-	"Decide if we are absolute by checking for leading $/ or
-	beginning with drive letter. Smarts for other OSes?"
-	self isAbsolute: ((pathString beginsWith: '/')
-						or: [hasDriveLetter ifNil: [self firstPartIsDriveLetter]])
-%
-
-category: 'accessing'
-set compile_env: 0
-method: FileUrl
-isAbsolute
-	"Should the path be considered absolute to
-	the filesystem instead of relative to the default directory?"
- 
-	^isAbsolute
-%
-
-category: 'accessing'
-set compile_env: 0
-method: FileUrl
-isAbsolute: aBoolean
-	"Set if the path should be considered absolute to
-	the filesystem instead of relative to the default directory."
-
-	isAbsolute := aBoolean
-%
-
-category: 'accessing'
-set compile_env: 0
-method: FileUrl
-path
-	"Return an ordered collection of the path elements."
-	
-	^path
-%
-
-category: 'accessing'
-set compile_env: 0
-method: FileUrl
-path: aCollection
-	"Set the collection of path elements."
-
-	path := aCollection
-%
-
-category: 'paths'
-set compile_env: 0
-method: FileUrl
-pathDirString
-	"Path to directory as url, using slash as delimiter.
-	Filename is left out."
-
-	^String streamContents: [ :s |
-		isAbsolute ifTrue: [ s nextPut: $/ ].
-		1 to: self path size - 1 do: [ :ii |
-			s nextPutAll: (path at: ii); nextPut: $/]]
-%
-
-category: 'paths'
-set compile_env: 0
-method: FileUrl
-pathForDirectory
-	"Path using local file system's pathname delimiter.
-	DOS paths with drive letters should not
-	be prepended with a delimiter even though
-	they are absolute. Filename is left out."
-
-	| delimiter |
-	delimiter :=  CypressFileUtilities current pathNameDelimiter.
-	^String streamContents: [ :s |
-		(self isAbsolute and: [self firstPartIsDriveLetter not])
-			ifTrue: [ s nextPutAll: delimiter ].
-		1 to: self path size - 1 do: [ :ii |
-			s nextPutAll: (path at: ii); nextPutAll: delimiter]]
-%
-
-category: 'private-initialization'
-set compile_env: 0
-method: FileUrl
-pathParts: aCollection isAbsolute: aBoolean
-
-	^self host: nil pathParts: aCollection isAbsolute: aBoolean
-%
-
-category: 'paths'
-set compile_env: 0
-method: FileUrl
-pathString
-	"Path as it appears in a URL with $/ as delimiter."
-	
-	
-	^String streamContents: [ :s | | first |
-		"isAbsolute ifTrue:[ s nextPut: $/ ]."
-		first := true.
-		self path do: [ :p |
-			first ifFalse: [ s nextPut: $/ ].
-			first := false.
-			s nextPutAll: p encodeForHTTP ] ]
-%
-
-category: 'copying'
-set compile_env: 0
-method: FileUrl
-postCopy
-	"Be sure not to share the path with the copy."
-
-	super postCopy.
-	path := path copy
-%
-
-category: 'printing'
-set compile_env: 0
-method: FileUrl
-printOn: aStream
-	"Return the FileUrl according to RFC1738 plus supporting fragments:
-		'file://<host>/<path>#<fragment>'
-	Note that <host> being '' is equivalent to 'localhost'.
-	Note: The pathString can not start with a leading $/
-	to indicate an 'absolute' file path.
-	This is not according to RFC1738 where the path should have
-	no leading or trailing slashes, and always
-	be considered absolute relative to the filesystem."
-
-	aStream nextPutAll: self schemeName, '://'.
-
-	host ifNotNil: [aStream nextPutAll: host].
-
-	aStream
-		nextPut: $/;
-		nextPutAll: self pathString.
-
-	fragment ifNotNil:
-		[aStream
-			nextPut: $#;
-			nextPutAll: fragment encodeForHTTP].
-%
-
-category: 'private-initialization'
-set compile_env: 0
-method: FileUrl
-privateInitializeFromText: aString
-	"Calculate host and path from a file URL in String format.
-	Some malformed formats are allowed and interpreted by guessing."
-
-	| schemeName pathString bare i |
-	bare := aString trimSeparators.
-	schemeName := Url schemeNameForString: bare.
-	(schemeName isNil or: [schemeName ~= self schemeName])
-		ifTrue: [
-			host := ''.
-			pathString := bare]
-		ifFalse: [
-			"First remove schemeName and colon"
-			bare := bare copyFrom: (schemeName size + 2) to: bare size.
-			"A proper file URL then has two slashes before host,
-			A malformed URL is interpreted as using syntax file:<path>."
-			(bare beginsWith: '//')
-				ifTrue: [i := bare indexOf: $/ startingAt: 3.
-						i=0 ifTrue: [
-								host := bare copyFrom: 3 to: bare size.
-								pathString := '']
-							ifFalse: [
-								host := bare copyFrom: 3 to: i-1.
-								pathString := bare copyFrom: host size + 3 to: bare size]]
-				ifFalse: [host := ''.
-						pathString := bare]].
-	self initializeFromPathString: pathString
-%
-
-category: 'private-initialization'
-set compile_env: 0
-method: FileUrl
-privateInitializeFromText: pathString relativeTo: aUrl
-	"<pathString> should be a filesystem path.
-	This url is adjusted to be aUrl + the path."
-
-	| newPath |
-	self host: aUrl host.
-	self initializeFromPathString: pathString.
-	self isAbsolute: aUrl isAbsolute.
-
-	newPath := aUrl path copy.
-	newPath removeLast.	"empty string that says its a directory"
-	path do: [ :token |
-		((token ~= '..') and: [token ~= '.']) ifTrue: [ 
-			newPath addLast: token unescapePercents ].
-		token = '..' ifTrue: [ 
-			newPath isEmpty ifFalse: [ 
-				newPath last = '..' ifFalse: [ newPath removeLast ] ] ].
-		"token = '.' do nothing" ].
-	path := newPath
-
-	
-%
-
-category: 'classification'
-set compile_env: 0
-method: FileUrl
-scheme
-	^self class schemeName
-%
-
-category: 'classification'
-set compile_env: 0
-method: FileUrl
-schemeName
-	^self class schemeName
-%
-
 ! Class Extensions
+
+! Class Extension for FileStreamPortable
+
+! ------------------- Instance methods for FileStreamPortable
+
+category: '*Network-Url'
+method: FileStreamPortable
+asUrl
+	"Convert my path into a file:// type url - a FileUrl."
+	
+	^ FileUrl pathParts: (self directory pathSegments copyWith: self localName)
+%
 
 ! Class Extension for String
 
 ! ------------------- Instance methods for String
 
 category: '*network-url'
-set compile_env: 0
 method: String
 asUrl
 	"convert to a Url"
@@ -1459,28 +1384,15 @@ asUrl
 %
 
 category: '*network-url'
-set compile_env: 0
 method: String
 asUrlRelativeTo: aUrl
 	^aUrl newFromRelativeText: self
 %
 
-! Class Extension for FileStreamPortable
-
-! ------------------- Instance methods for FileStreamPortable
-
-category: '*Network-Url'
-set compile_env: 0
-method: FileStreamPortable
-asUrl
-	"Convert my path into a file:// type url - a FileUrl."
-	
-	^ FileUrl pathParts: (self directory pathSegments copyWith: self localName)
-%
-
 ! Class initializers 
 
 doit
+true.
 %
 
 

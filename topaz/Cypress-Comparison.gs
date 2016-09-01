@@ -33,6 +33,7 @@ System myUserProfile symbolList do: [:symDict |
 		]
 	]
 ].
+true.
 %
 
 
@@ -50,6 +51,7 @@ doit
 		category: 'Cypress-Comparison';
 		comment: '';
 		immediateInvariant.
+true.
 %
 
 ! Class Implementation for CypressPackageComparator
@@ -57,7 +59,6 @@ doit
 ! ------------------- Class methods for CypressPackageComparator
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: CypressPackageComparator
 comparingPackageNamed: packageName fromDirectory: aDirectory
 
@@ -67,7 +68,6 @@ comparingPackageNamed: packageName fromDirectory: aDirectory
 %
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: CypressPackageComparator
 forCypress
 
@@ -78,7 +78,6 @@ forCypress
 %
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: CypressPackageComparator
 new
 
@@ -90,7 +89,6 @@ new
 ! ------------------- Instance methods for CypressPackageComparator
 
 category: 'comparing - private'
-set compile_env: 0
 method: CypressPackageComparator
 add: aDefinition to: aDictionary
 
@@ -100,7 +98,6 @@ add: aDefinition to: aDictionary
 %
 
 category: 'comparing - private'
-set compile_env: 0
 method: CypressPackageComparator
 addClassDefinition: classDefinition to: aDictionary
 
@@ -111,7 +108,6 @@ addClassDefinition: classDefinition to: aDictionary
 %
 
 category: 'comparing - private'
-set compile_env: 0
 method: CypressPackageComparator
 addMethodDefinition: methodDefinition to: aDictionary
 
@@ -124,7 +120,6 @@ addMethodDefinition: methodDefinition to: aDictionary
 %
 
 category: 'comparing - private'
-set compile_env: 0
 method: CypressPackageComparator
 applyAddition: aCypressAddition
 
@@ -132,7 +127,6 @@ applyAddition: aCypressAddition
 %
 
 category: 'comparing - private'
-set compile_env: 0
 method: CypressPackageComparator
 applyModification: aCypressModification
 
@@ -142,7 +136,6 @@ applyModification: aCypressModification
 %
 
 category: 'comparing - private'
-set compile_env: 0
 method: CypressPackageComparator
 applyRemoval: aCypressRemoval
 
@@ -150,7 +143,6 @@ applyRemoval: aCypressRemoval
 %
 
 category: 'comparing'
-set compile_env: 0
 method: CypressPackageComparator
 compare
 
@@ -162,7 +154,6 @@ compare
 %
 
 category: 'initializing'
-set compile_env: 0
 method: CypressPackageComparator
 comparingPackageNamed: packageName fromDirectory: aDirectory
 
@@ -170,7 +161,6 @@ comparingPackageNamed: packageName fromDirectory: aDirectory
 %
 
 category: 'initializing'
-set compile_env: 0
 method: CypressPackageComparator
 comparingPackages: someNames fromDirectory: aDirectory
 
@@ -179,7 +169,7 @@ comparingPackages: someNames fromDirectory: aDirectory
 	someNames do: 
 			[:packageName |
 			| reader modTime modTimestamp |
-			reader := ((Globals at: #CypressFileSystemRepository) on: aDirectory) reader
+			reader := (CypressFileSystemRepository on: aDirectory) reader
 						readPackageStructureForPackageNamed: packageName.
 			diskSnapshots at: packageName put: reader packageStructure snapshot.
 			modTime := System
@@ -193,7 +183,6 @@ comparingPackages: someNames fromDirectory: aDirectory
 %
 
 category: 'comparing - private'
-set compile_env: 0
 method: CypressPackageComparator
 currentAdditions
 
@@ -202,7 +191,6 @@ currentAdditions
 %
 
 category: 'comparing - private'
-set compile_env: 0
 method: CypressPackageComparator
 currentDiskSnapshot
 
@@ -210,7 +198,6 @@ currentDiskSnapshot
 %
 
 category: 'comparing - private'
-set compile_env: 0
 method: CypressPackageComparator
 currentImageSnapshot
 
@@ -218,7 +205,6 @@ currentImageSnapshot
 %
 
 category: 'comparing - private'
-set compile_env: 0
 method: CypressPackageComparator
 currentPatchOperations
 
@@ -226,7 +212,6 @@ currentPatchOperations
 %
 
 category: 'comparing - private'
-set compile_env: 0
 method: CypressPackageComparator
 currentRemovals
 
@@ -235,7 +220,6 @@ currentRemovals
 %
 
 category: 'comparing'
-set compile_env: 0
 method: CypressPackageComparator
 getDifferences
 
@@ -244,7 +228,6 @@ getDifferences
 %
 
 category: 'initializing - private'
-set compile_env: 0
 method: CypressPackageComparator
 initialize
 
@@ -259,7 +242,6 @@ initialize
 %
 
 category: 'comparing - private'
-set compile_env: 0
 method: CypressPackageComparator
 resetCurrentForPackage: aStringOrNil
 
@@ -269,7 +251,6 @@ resetCurrentForPackage: aStringOrNil
 %
 
 category: 'accessing'
-set compile_env: 0
 method: CypressPackageComparator
 snapshotDifferences
 
@@ -277,7 +258,6 @@ snapshotDifferences
 %
 
 category: 'comparing - private'
-set compile_env: 0
 method: CypressPackageComparator
 updateCurrentAdditionsAndRemovals
 
@@ -298,7 +278,6 @@ updateCurrentAdditionsAndRemovals
 ! ------------------- Instance methods for CypressClassDefinition
 
 category: '*Cypress-Comparison-accessing'
-set compile_env: 0
 method: CypressClassDefinition
 category: aString
 
@@ -306,7 +285,6 @@ category: aString
 %
 
 category: '*Cypress-Comparison-accessing'
-set compile_env: 0
 method: CypressClassDefinition
 classDefinitionString
 
@@ -315,16 +293,18 @@ classDefinitionString
 		classVars: #(', self classVariablesString, ')
 		classInstVars: #(', self classInstanceVariablesString, ')
 		poolDictionaries: #(', self poolDictionariesString, ')
-		inDictionary: Globals
+		inDictionary: UserGlobals
 		options: #()'
 %
 
 ! Class initializers 
 
 doit
+true.
 %
 
 
 
 ! End of Package: Cypress-Comparison
+
 

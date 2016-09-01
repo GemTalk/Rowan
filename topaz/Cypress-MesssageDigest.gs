@@ -33,6 +33,7 @@ System myUserProfile symbolList do: [:symDict |
 		]
 	]
 ].
+true.
 %
 
 
@@ -50,6 +51,7 @@ doit
 		category: 'Cypress-MesssageDigest';
 		comment: '';
 		immediateInvariant.
+true.
 %
 
 ! Class Implementation for MessageDigestStream
@@ -57,7 +59,6 @@ doit
 ! ------------------- Class methods for MessageDigestStream
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: MessageDigestStream
 bytes
 
@@ -65,7 +66,6 @@ bytes
 %
 
 category: 'instance creation'
-set compile_env: 0
 classmethod: MessageDigestStream
 characters
 
@@ -75,7 +75,6 @@ characters
 ! ------------------- Instance methods for MessageDigestStream
 
 category: 'digests'
-set compile_env: 0
 method: MessageDigestStream
 md5sum
 
@@ -83,7 +82,6 @@ md5sum
 %
 
 category: 'digests'
-set compile_env: 0
 method: MessageDigestStream
 sha1Sum
 
@@ -91,7 +89,6 @@ sha1Sum
 %
 
 category: 'digests'
-set compile_env: 0
 method: MessageDigestStream
 sha256Sum
 
@@ -99,7 +96,6 @@ sha256Sum
 %
 
 category: 'digests'
-set compile_env: 0
 method: MessageDigestStream
 sha512Sum
 
@@ -108,48 +104,11 @@ sha512Sum
 
 ! Class Extensions
 
-! Class Extension for CypressStructure
-
-! ------------------- Instance methods for CypressStructure
-
-category: '*Cypress-MesssageDigest'
-set compile_env: 0
-method: CypressStructure
-addToDigest: aMessageDigestStream
-
-	self subclassResponsibility: #addToDigest:
-%
-
-category: '*Cypress-MesssageDigest'
-set compile_env: 0
-method: CypressStructure
-digest
-	"Answer a digest of the receiver, unless it is a skeleton (never populated).
-	 The digest is not constrained, but is typically a ByteArray or an Integer.
-	 In the case of a skeleton, answer nil so there is a distinction between
-	 no such package and an empty package."
-
-	| stream |
-	self isSkeleton ifTrue: [^nil].
-	stream := MessageDigestStream characters.
-	self addToDigest: stream.
-	^stream md5sum
-%
-
-category: '*Cypress-MesssageDigest'
-set compile_env: 0
-method: CypressStructure
-isSkeleton
-
-	^self subclassResponsibility: #isSkeleton
-%
-
 ! Class Extension for CypressClassStructure
 
 ! ------------------- Instance methods for CypressClassStructure
 
 category: '*Cypress-MesssageDigest'
-set compile_env: 0
 method: CypressClassStructure
 addToDigest: aMessageDigestStream
 
@@ -172,7 +131,6 @@ addToDigest: aMessageDigestStream
 %
 
 category: '*Cypress-MesssageDigest'
-set compile_env: 0
 method: CypressClassStructure
 isSkeleton
 
@@ -182,12 +140,39 @@ isSkeleton
 		and: [isClassExtension isNil]]]
 %
 
+! Class Extension for CypressMethodStructure
+
+! ------------------- Instance methods for CypressMethodStructure
+
+category: '*Cypress-MesssageDigest'
+method: CypressMethodStructure
+addToDigest: aMessageDigestStream
+
+	aMessageDigestStream
+		tab; tab; tab; tab; nextPutAll: self class name; cr;
+		tab; tab; tab; tab; tab; nextPutAll: self selector; cr;
+		tab; tab; tab; tab; tab; nextPutAll: 'properties:'; cr;
+		tab; tab; tab; tab; tab; tab.
+	self properties writeCypressJsonOn: aMessageDigestStream indent: 6.
+	aMessageDigestStream
+		cr;
+		tab; tab; tab; tab; nextPutAll: 'source:'; nextPutAll: self source; cr.
+%
+
+category: '*Cypress-MesssageDigest'
+method: CypressMethodStructure
+isSkeleton
+
+	^source isNil
+		and: [classStructure isNil
+		and: [isMetaclass isNil]]
+%
+
 ! Class Extension for CypressPackageStructure
 
 ! ------------------- Instance methods for CypressPackageStructure
 
 category: '*Cypress-MesssageDigest'
-set compile_env: 0
 method: CypressPackageStructure
 addToDigest: aMessageDigestStream
 
@@ -209,7 +194,6 @@ addToDigest: aMessageDigestStream
 %
 
 category: '*Cypress-MesssageDigest'
-set compile_env: 0
 method: CypressPackageStructure
 isSkeleton
 
@@ -218,39 +202,43 @@ isSkeleton
 		and: [extensions isNil]]
 %
 
-! Class Extension for CypressMethodStructure
+! Class Extension for CypressStructure
 
-! ------------------- Instance methods for CypressMethodStructure
+! ------------------- Instance methods for CypressStructure
 
 category: '*Cypress-MesssageDigest'
-set compile_env: 0
-method: CypressMethodStructure
+method: CypressStructure
 addToDigest: aMessageDigestStream
 
-	aMessageDigestStream
-		tab; tab; tab; tab; nextPutAll: self class name; cr;
-		tab; tab; tab; tab; tab; nextPutAll: self selector; cr;
-		tab; tab; tab; tab; tab; nextPutAll: 'properties:'; cr;
-		tab; tab; tab; tab; tab; tab.
-	self properties writeCypressJsonOn: aMessageDigestStream indent: 6.
-	aMessageDigestStream
-		cr;
-		tab; tab; tab; tab; nextPutAll: 'source:'; nextPutAll: self source; cr.
+	self subclassResponsibility: #addToDigest:
 %
 
 category: '*Cypress-MesssageDigest'
-set compile_env: 0
-method: CypressMethodStructure
+method: CypressStructure
+digest
+	"Answer a digest of the receiver, unless it is a skeleton (never populated).
+	 The digest is not constrained, but is typically a ByteArray or an Integer.
+	 In the case of a skeleton, answer nil so there is a distinction between
+	 no such package and an empty package."
+
+	| stream |
+	self isSkeleton ifTrue: [^nil].
+	stream := MessageDigestStream characters.
+	self addToDigest: stream.
+	^stream md5sum
+%
+
+category: '*Cypress-MesssageDigest'
+method: CypressStructure
 isSkeleton
 
-	^source isNil
-		and: [classStructure isNil
-		and: [isMetaclass isNil]]
+	^self subclassResponsibility: #isSkeleton
 %
 
 ! Class initializers 
 
 doit
+true.
 %
 
 
