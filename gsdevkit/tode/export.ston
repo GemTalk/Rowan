@@ -2,7 +2,7 @@ TDSmalltalkLeafNode{#name:'export',#contents:'| packageNames repo |
   packageNames := #(\'Cypress-Comparison\' \'Cypress-Definitions\' \'Cypress-GemStoneCompatibilityLayer\' \'Cypress-GemStoneFileServer\' \'Cypress-MesssageDigest\' \'Cypress-Mocks\' \'Cypress-PackageManagement\' \'Cypress-PackageManagementTests\' \'Cypress-Structure\' \'Cypress-Tests\' \'NetworkTests\' \'Network-Url\').
   repo := CypressAbstractRepository
     onUrl:
-      \'topaz:$GS_HOME/shared/repos/CypressReferenceImplementation/topazx/\' asUrl
+      \'topaz:$GS_HOME/shared/repos/CypressReferenceImplementation/topaz/\' asUrl
     alias: \'Topaz repo\'.
   packageNames
     do: [ :each | 
