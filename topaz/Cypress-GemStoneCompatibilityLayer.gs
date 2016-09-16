@@ -151,11 +151,10 @@ escapePercents
 category: '*Cypress-GemStoneCompatibilityLayer'
 method: Character
 isSafeForHTTP
-	"whether a character is 'safe', or needs to be escaped when used, eg, in a URL"
+	"Answer whether a character is 'safe', or needs to be escaped when used, eg, in a URL."
 
-	^ self charCode < 128
-		and: [ self isAlphaNumeric
-				or: [ '.-_' includes: self ]]
+	^self codePoint < 128
+		and: [self isAlphaNumeric or: ['.-_' includes: self]]
 %
 
 ! Class Extension for CharacterCollection
@@ -317,8 +316,7 @@ fromUnixFormatString: aString
 
 category: '*Cypress-GemStoneCompatibilityLayer'
 method: GsFile
-tab: anInteger 
-	"Append anInteger tab characters to the receiver."
+tab: anInteger
 
 	anInteger timesRepeat: [self tab]
 %
@@ -395,9 +393,9 @@ new: newSize streamContents: aOneArgBlock
 
 category: '*Cypress-GemStoneCompatibilityLayer'
 classmethod: SequenceableCollection
-streamContents: blockWithArg
+streamContents: aOneArgBlock
 
-	^self new: 100 streamContents: blockWithArg
+	^ self new: 100 streamContents: aOneArgBlock
 %
 
 category: '*Cypress-GemStoneCompatibilityLayer'
@@ -435,7 +433,7 @@ copyAfter: anElement
 	of anElement up to the end. If no such element exists, answer 
 	an empty copy."
 
-	^ self allButFirst: (self indexOf: anElement ifAbsent: [^ self copyEmpty])
+	^self allButFirst: (self indexOf: anElement ifAbsent: [^self copyEmpty])
 %
 
 category: '*Cypress-GemStoneCompatibilityLayer'
@@ -445,7 +443,7 @@ copyAfterLast: anElement
 	of anElement up to the end. If no such element exists, answer 
 	an empty copy."
 
-	^ self allButFirst: (self lastIndexOf: anElement ifAbsent: [^ self copyEmpty])
+	^self allButFirst: (self lastIndexOf: anElement ifAbsent: [^self copyEmpty])
 %
 
 category: '*Cypress-GemStoneCompatibilityLayer'
@@ -463,7 +461,7 @@ copyUpToLast: anElement
 	"Answer a copy of the receiver from index 1 to the last occurrence of 
 	anElement, not including anElement."
 
-	^ self first: (self lastIndexOf: anElement ifAbsent: [^ self copy]) - 1
+	^self copyFrom: 1 to: (self lastIndexOf: anElement ifAbsent: [^self copy]) - 1
 %
 
 category: '*Cypress-GemStoneCompatibilityLayer'
@@ -536,7 +534,11 @@ lastIndexOf: anElement ifAbsent: exceptionBlock
 	"Answer the index of the last occurence of anElement within the  
 	receiver. If the receiver does not contain anElement, answer the
 	result of evaluating the argument, exceptionBlock."
-	^self lastIndexOf: anElement startingAt: self size ifAbsent: exceptionBlock
+
+	^self
+		lastIndexOf: anElement
+		startingAt: self size
+		ifAbsent: exceptionBlock
 %
 
 category: '*Cypress-GemStoneCompatibilityLayer'

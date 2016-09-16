@@ -664,38 +664,23 @@ fileOut: aString methodsPreambleFor: classStructure on: aStream
 category: 'writing - private'
 method: CypressTopazFileoutWriter
 fileOutClassDeclaration: classStructure on: aStream
-  aStream
-    nextPutAll: 'doit';
-    lf;
-    nextPutAll: '(' , classStructure superclassName;
-    lf;
-    nextPutAll: '	subclass: ' , classStructure className asString printString;
-    lf;
-    nextPutAll:
-        '	instVarNames: #( ' , classStructure instanceVariablesString , ' )';
-    lf;
-    nextPutAll: '	classVars: #( ' , classStructure classVariablesString , ' )';
-    lf;
-    nextPutAll:
-        '	classInstVars: #( ' , classStructure classInstanceVariablesString , ' )';
-    lf;
-    nextPutAll: '	poolDictionaries: #()';
-    lf;
-    nextPutAll: '	inDictionary: Globals';
-    lf;
-    nextPutAll: '	options: #())';
-    lf;
-    nextPutAll: '		category: ' , classStructure category printString , ';';
-    lf;
-    nextPutAll: '		comment: ' , classStructure comment printString , ';';
-    lf;
-    nextPutAll: '		immediateInvariant.';
-    lf;
-    nextPutAll: 'true.';
-    lf;
-    nextPutAll: '%';
-    lf;
-    lf
+
+	aStream
+		nextPutAll: 'doit'; lf;
+		nextPutAll: '(', classStructure superclassName; lf;
+		nextPutAll: '	subclass: ', classStructure className asString printString; lf;
+		nextPutAll: '	instVarNames: #( ', classStructure instanceVariablesString, ' )'; lf;
+		nextPutAll: '	classVars: #( ', classStructure classVariablesString, ' )'; lf;
+		nextPutAll: '	classInstVars: #( ', classStructure classInstanceVariablesString, ' )'; lf;
+		nextPutAll: '	poolDictionaries: #()'; lf;
+		nextPutAll: '	inDictionary: Globals'; lf;
+		nextPutAll: '	options: #())'; lf;
+		nextPutAll: '		category: ', classStructure category printString, ';'; lf;
+		nextPutAll: '		comment: ', classStructure comment printString, ';'; lf;
+		nextPutAll: '		immediateInvariant.'; lf;
+                nextPutAll: 'true.'; lf;
+		nextPutAll: '%'; lf;
+		lf.
 %
 
 category: 'writing - private'
@@ -718,12 +703,11 @@ fileOutClassInitializerFor: classStructure on: aStream
 category: 'writing - private'
 method: CypressTopazFileoutWriter
 fileOutClassInitializersPostambleOn: aStream
-  aStream
-    nextPutAll: 'true.';
-    lf;
-    nextPutAll: '%';
-    lf;
-    lf
+
+	aStream
+                nextPutAll: 'true.'; lf;
+		nextPutAll: '%'; lf;
+		lf
 %
 
 category: 'writing - private'
@@ -748,21 +732,15 @@ fileOutExtensionsPreambleOn: aStream
 category: 'writing - private'
 method: CypressTopazFileoutWriter
 fileOutMethod: methodStructure on: aStream
-  aStream
-    nextPutAll: 'category: ' , methodStructure category printString;
-    lf;
-    nextPutAll:
-        (methodStructure isMetaclass
-            ifTrue: [ 'classmethod: ' ]
-            ifFalse: [ 'method: ' ]) , methodStructure classStructure className;
-    lf;
-    nextPutAll: methodStructure source.
-  methodStructure source last = Character lf
-    ifFalse: [ aStream lf ].
-  aStream
-    nextPutAll: '%';
-    lf;
-    lf
+
+	aStream
+		nextPutAll: 'category: ', methodStructure category printString; lf;
+		nextPutAll: (methodStructure isMetaclass ifTrue: ['classmethod: '] ifFalse: ['method: ']), methodStructure classStructure className; lf;
+		nextPutAll: methodStructure source.
+	methodStructure source last = Character lf
+		ifFalse: [aStream lf].
+	aStream nextPutAll: '%'; lf;
+		lf
 %
 
 category: 'writing - private'
@@ -780,85 +758,47 @@ fileOutPackagePostambleOn: aStream
 category: 'writing - private'
 method: CypressTopazFileoutWriter
 fileOutPackagePreambleOn: aStream
-  aStream
-    nextPutAll: '! Package: ' , self packageName;
-    lf;
-    lf;
-    lf;
-    nextPutAll: '! Remove existing behavior from package ' , self packageName;
-    lf;
-    nextPutAll:
-        '!!!! This can be cleaned up when some package functionality is moved to the base system.';
-    lf;
-    lf;
-    nextPutAll: 'doit';
-    lf;
-    nextPutAll: '| packageName |';
-    lf;
-    nextPutAll: 'packageName := ' , self packageName printString , '.';
-    lf;
-    nextPutAll: 'System myUserProfile symbolList do: [:symDict |';
-    lf;
-    nextPutAll: '	symDict do: [:possibleClass |';
-    lf;
-    nextPutAll: '			| toRemove |';
-    lf;
-    nextPutAll: '		possibleClass isBehavior ifTrue: [';
-    lf;
-    nextPutAll: '			{possibleClass. possibleClass class} do: [:aClass |';
-    lf;
-    nextPutAll: '				aClass category = packageName';
-    lf;
-    nextPutAll: '					ifTrue: [';
-    lf;
-    nextPutAll: '							"*anythingbutpackagename[-anything]"';
-    lf;
-    nextPutAll: '						toRemove := aClass categoryNames select: ';
-    lf;
-    nextPutAll: '										[:each |';
-    lf;
-    nextPutAll:
-        '										(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])';
-    lf;
-    nextPutAll:
-        '														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]])';
-    lf;
-    nextPutAll: '										or: [each first ~= $*]]';
-    lf;
-    nextPutAll: '					]';
-    lf;
-    nextPutAll: '					ifFalse: [';
-    lf;
-    nextPutAll: '							"*packagename[-anything]"';
-    lf;
-    nextPutAll: '						toRemove := aClass categoryNames select: ';
-    lf;
-    nextPutAll: '										[:each |';
-    lf;
-    nextPutAll:
-        '										each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])';
-    lf;
-    nextPutAll:
-        '														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]';
-    lf;
-    nextPutAll: '					].';
-    lf;
-    nextPutAll: '				toRemove do: [:each | aClass removeCategory: each].';
-    lf;
-    nextPutAll: '			]';
-    lf;
-    nextPutAll: '		]';
-    lf;
-    nextPutAll: '	]';
-    lf;
-    nextPutAll: '].';
-    lf;
-    nextPutAll: 'true.';
-    lf;
-    nextPutAll: '%';
-    lf;
-    lf;
-    lf
+
+	aStream
+		nextPutAll: '! Package: ', self packageName; lf;
+		lf;
+		lf;
+		nextPutAll: '! Remove existing behavior from package ', self packageName; lf;
+		nextPutAll: '!!!! This can be cleaned up when some package functionality is moved to the base system.'; lf;
+		lf;
+		nextPutAll: 'doit'; lf;
+		nextPutAll: '| packageName |'; lf;
+		nextPutAll: 'packageName := ', self packageName printString, '.'; lf;
+		nextPutAll: 'System myUserProfile symbolList do: [:symDict |'; lf;
+		nextPutAll: '	symDict do: [:possibleClass |'; lf;
+		nextPutAll: '			| toRemove |'; lf;
+		nextPutAll: '		possibleClass isBehavior ifTrue: ['; lf;
+		nextPutAll: '			{possibleClass. possibleClass class} do: [:aClass |'; lf;
+		nextPutAll: '				aClass category = packageName'; lf;
+		nextPutAll: '					ifTrue: ['; lf;
+		nextPutAll: '							"*anythingbutpackagename[-anything]"'; lf;
+		nextPutAll: '						toRemove := aClass categoryNames select: '; lf;
+		nextPutAll: '										[:each |'; lf;
+		nextPutAll: '										(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])'; lf;
+		nextPutAll: '														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]])'; lf;
+		nextPutAll: '										or: [each first ~= $*]]'; lf;
+		nextPutAll: '					]'; lf;
+		nextPutAll: '					ifFalse: ['; lf;
+		nextPutAll: '							"*packagename[-anything]"'; lf;
+		nextPutAll: '						toRemove := aClass categoryNames select: '; lf;
+		nextPutAll: '										[:each |'; lf;
+		nextPutAll: '										each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])'; lf;
+		nextPutAll: '														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]'; lf;
+		nextPutAll: '					].'; lf;
+		nextPutAll: '				toRemove do: [:each | aClass removeCategory: each].'; lf;
+		nextPutAll: '			]'; lf;
+		nextPutAll: '		]'; lf;
+		nextPutAll: '	]'; lf;
+		nextPutAll: '].'; lf;
+                nextPutAll: 'true.'; lf;
+		nextPutAll: '%'; lf;
+		lf;
+		lf
 %
 
 category: 'writing - private'
@@ -1098,6 +1038,25 @@ readPackageStructure
 ! Class Implementation for CypressFileTreeFormatPackageReader
 
 ! ------------------- Instance methods for CypressFileTreeFormatPackageReader
+
+category: 'private'
+method: CypressFileTreeFormatPackageReader
+classStructureFrom: fileteeClassPropertiesDict comment: classComment
+  | classPropertiesDict subclassType filetreeSubclassType |
+  classPropertiesDict := fileteeClassPropertiesDict copy.
+  filetreeSubclassType := classPropertiesDict at: 'type'.
+  filetreeSubclassType = 'normal'
+    ifTrue: [ subclassType := '' ]
+    ifFalse: [ 
+      filetreeSubclassType = 'variable'
+        ifTrue: [ subclassType := 'indexableSubclass' ]
+        ifFalse: [ 
+          filetreeSubclassType = 'bytes'
+            ifTrue: [ subclassType := 'byteSubclass' ]
+            ifFalse: [ self error: 'unknown subclass type: ' , filetreeSubclassType printString ] ] ].
+  classPropertiesDict at: '_gs_subclassType' put: subclassType.
+  ^ super classStructureFrom: classPropertiesDict comment: classComment
+%
 
 category: 'accessing'
 method: CypressFileTreeFormatPackageReader
@@ -1734,20 +1693,15 @@ writeStreamFor: filePath in: aDirectory do: aOneArgBlock
 
 ! ------------------- Instance methods for WriteStream
 
-category: '*squeak'
+category: '*Cypress-GemStoneFileServer-Adding'
 method: WriteStream
 nextChunkPut: aString
-	"Append the argument, aString, to the receiver, doubling embedded terminators."
 
-	| i remainder terminator |
-	terminator := $!.
-	remainder := aString.
-	[(i := remainder indexOf: terminator) = 0] whileFalse:
-		[self nextPutAll: (remainder copyFrom: 1 to: i).
-		self nextPut: terminator.  "double imbedded terminators"
-		remainder := remainder copyFrom: i+1 to: remainder size].
-	self nextPutAll: remainder.
-	self nextPut: terminator.
+	aString do: 
+		[:each |
+		self nextPut: each.
+		each = $! ifTrue: [self nextPut: each]].
+	self nextPut: $!.
 %
 
 ! Class initializers 

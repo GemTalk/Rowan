@@ -1045,21 +1045,30 @@ extensions
 category: 'initialization'
 method: CypressPackageStructure
 fromPackage: aCypressPackageDefinition
+  | snapshot classMap classDefinitions |
+  snapshot := aCypressPackageDefinition snapshot.
+  classDefinitions := OrderedCollection new.
+  classMap := Dictionary new.
+  snapshot definitions
+    do: [ :definition | 
+      definition
+        classDefinition: [ :classDefinition | classDefinitions add: classDefinition ]
+        methodDefinition: [ :methodDefinition | 
+          (classMap at: methodDefinition className ifAbsentPut: [ Set new ])
+            add: methodDefinition ] ].
+  self
+    name: aCypressPackageDefinition name , self packageExtension
+    from: classDefinitions
+    classMap: classMap
+%
 
-	| snapshot classMap classDefinitions classStructure |
-	snapshot := aCypressPackageDefinition snapshot.
-	name := aCypressPackageDefinition name, self packageExtension.
+category: 'initialization'
+method: CypressPackageStructure
+name: aString from: classDefinitions classMap: classMap
+
+	| classStructure |
+	name := aString.
 	properties := Dictionary new.
-	classDefinitions := OrderedCollection new.
-	classMap := Dictionary new.
-	snapshot definitions do: [:definition |  
-			definition 
-				classDefinition: [:classDefinition |  classDefinitions add: classDefinition ] 
-				methodDefinition: [:methodDefinition | 
-					(classMap 
-						at: methodDefinition className 
-						ifAbsentPut: [Set new]) 
-							add: methodDefinition. ]].
 	classDefinitions do: [:classDefinition |
 		classStructure := (CypressClassStructure fromClassDefinition: classDefinition)
 			packageStructure: self.
