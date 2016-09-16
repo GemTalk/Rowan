@@ -1,5 +1,5 @@
 "
-notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
 category: instance creation
 "
 className: aName classIsMeta: isMetaclass selector: aSelector category: aCategory source: aSource

@@ -1,5 +1,5 @@
 "
-notice: Copyright 2013 GemTalk Systems, LLC. Open source under the MIT license.
+notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
 category: sorting
 "
 addClasses: subs to: order fromRelevantClasses: classSet organizedBy: org
