@@ -4,5 +4,5 @@ category: unloading
 "
 unloadSnapshot: aSnapshot
   |  patch |
-  patch := aSnapshot patchRelativeToBase: CypressSnapshot empty.
+  patch := CypressSnapshot empty patchRelativeToBase: aSnapshot.
   patch applyTo: self

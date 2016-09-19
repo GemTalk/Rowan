@@ -4,4 +4,4 @@ category: loading
 "
 unloadDefinition
 
-	self actualClass removeSelector: self selector asSymbol
+  self actualClass ifNotNil: [:cl | cl removeSelector: self selector asSymbol ].

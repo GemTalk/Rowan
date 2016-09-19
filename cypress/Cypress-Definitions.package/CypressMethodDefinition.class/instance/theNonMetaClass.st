@@ -4,4 +4,4 @@ category: loading
 "
 theNonMetaClass
 
-	^self resolveGlobalNamed: self className
+	^self resolveGlobalNamed: self className or: []

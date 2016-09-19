@@ -4,8 +4,8 @@ category: loading
 "
 actualClass
 
-	| cls |
-	cls := self theNonMetaClass.
-	^self classIsMeta
-		ifTrue: [ cls class ]
-		ifFalse: [ cls  ].
+  ^ self theNonMetaClass
+    ifNotNil: [:cls |
+      self classIsMeta
+        ifTrue: [ cls class ]
+        ifFalse: [ cls  ] ].
