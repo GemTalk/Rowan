@@ -671,8 +671,7 @@ initializeForDirectory: aDirectory
 category: 'initializing - private'
 method: CypressAbstractFileoutRepository
 initializeReaderAndWriterClasses
-
-	self suubclassResponsibility: #initializeReaderAndWriterClasses
+  self subclassResponsibility: #'initializeReaderAndWriterClasses'
 %
 
 category: 'initializing - private'

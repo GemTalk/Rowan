@@ -298,9 +298,16 @@ pathName: badPathName
 category: 'as yet unclassified'
 classmethod: Authorizer
 unauthorizedFor: realm
-	^'HTTP/1.0 401 Unauthorized', self crlf, 'WWW-Authenticate: Basic realm="Pharo/',realm,'"',
-	String crlfcrlf, '<html><title>Unauthorized</title><body><h2>Unauthorized for ',realm, '</h2></body></html>'
-
+  ^ 'HTTP/1.0 401 Unauthorized' , self crlf
+    , 'WWW-Authenticate: Basic realm="Pharo/' , realm , '"'
+    ,
+      (String
+        with: Character cr
+        with: Character lf
+        with: Character cr
+        with: Character lf)
+    , '<html><title>Unauthorized</title><body><h2>Unauthorized for ' , realm
+    , '</h2></body></html>'
 %
 
 ! ------------------- Instance methods for Authorizer
@@ -809,6 +816,12 @@ pathForDirectory
 			ifTrue: [ s nextPutAll: delimiter ].
 		1 to: self path size - 1 do: [ :ii |
 			s nextPutAll: (path at: ii); nextPutAll: delimiter]]
+%
+
+category: 'paths'
+method: FileUrl
+pathForFile
+  ^ self pathString
 %
 
 category: 'private-initialization'
