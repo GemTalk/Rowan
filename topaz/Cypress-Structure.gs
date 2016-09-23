@@ -1024,6 +1024,14 @@ fromPackage: aCypressPackageDefinition
 		yourself
 %
 
+category: 'instance creation'
+classmethod: CypressPackageStructure
+name: aPackageNameString from: classDefinitions classMap: classMap
+  ^ self new
+    name: aPackageNameString from: classDefinitions classMap: classMap;
+    yourself
+%
+
 ! ------------------- Instance methods for CypressPackageStructure
 
 category: 'accessing'

@@ -1291,11 +1291,11 @@ category: 'loading'
 method: CypressMethodDefinition
 actualClass
 
-	| cls |
-	cls := self theNonMetaClass.
-	^self classIsMeta
-		ifTrue: [ cls class ]
-		ifFalse: [ cls  ].
+  ^ self theNonMetaClass
+    ifNotNil: [:cls |
+      self classIsMeta
+        ifTrue: [ cls class ]
+        ifFalse: [ cls  ] ].
 %
 
 category: 'converting'
@@ -1438,14 +1438,14 @@ category: 'loading'
 method: CypressMethodDefinition
 theNonMetaClass
 
-	^self resolveGlobalNamed: self className
+	^self resolveGlobalNamed: self className or: []
 %
 
 category: 'loading'
 method: CypressMethodDefinition
 unloadDefinition
 
-	self actualClass removeSelector: self selector asSymbol
+  self actualClass ifNotNil: [:cl | cl removeSelector: self selector asSymbol ].
 %
 
 ! Class Implementation for CypressDefinitionIndex
@@ -1620,6 +1620,14 @@ unresolvedRequirementsFor: aPatchOperation
 ! Class Implementation for CypressLoader
 
 ! ------------------- Class methods for CypressLoader
+
+category: 'unloading'
+classmethod: CypressLoader
+unloadSnapshot: aSnapshot
+  ^ self new
+    unloadSnapshot: aSnapshot;
+    load
+%
 
 category: 'loading'
 classmethod: CypressLoader
@@ -1929,6 +1937,14 @@ unloadRemovals: somePatchOperations
 
 	somePatchOperations
 		do: [:each | self unloadDefinition: each].
+%
+
+category: 'unloading'
+method: CypressLoader
+unloadSnapshot: aSnapshot
+  |  patch |
+  patch := CypressSnapshot empty patchRelativeToBase: aSnapshot.
+  patch applyTo: self
 %
 
 category: 'loading'
@@ -2452,6 +2468,13 @@ definitions: aDefinitions
 	^(self new) definitions: aDefinitions
 %
 
+category: 'instance creation'
+classmethod: CypressSnapshot
+empty
+
+  ^self definitions: #()
+%
+
 ! ------------------- Instance methods for CypressSnapshot
 
 category: 'comparing'
@@ -2486,6 +2509,13 @@ category: 'patching'
 method: CypressSnapshot
 patchRelativeToBase: aSnapshot
 	^ CypressPatch fromBase: aSnapshot toTarget: self
+%
+
+category: 'unloading'
+method: CypressSnapshot
+unload
+
+  ^CypressLoader unloadSnapshot: self
 %
 
 category: 'loading'
