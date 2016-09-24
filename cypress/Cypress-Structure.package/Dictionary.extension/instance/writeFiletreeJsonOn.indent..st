@@ -2,7 +2,7 @@
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
 category: *Cypress-Structure
 "
-writeCypressJsonOn: aStream indent: startIndent
+writeFiletreeJsonOn: aStream indent: startIndent
   | indent cnt |
   indent := startIndent.
   aStream
@@ -18,7 +18,7 @@ writeCypressJsonOn: aStream indent: startIndent
       aStream tab: indent.
       key writeCypressJsonOn: aStream indent: indent.
       aStream nextPutAll: ' : '.
-      value writeCypressJsonOn: aStream indent: indent.
+      value writeFiletreeJsonOn: aStream indent: indent.
       cnt < self size
         ifTrue: [ 
           aStream
@@ -26,4 +26,6 @@ writeCypressJsonOn: aStream indent: startIndent
             lf ] ].
   self size = 0
     ifTrue: [ aStream tab: indent ].
-  aStream nextPutAll: ' }'
+  aStream
+    nextPutAll: ' }';
+    lf
