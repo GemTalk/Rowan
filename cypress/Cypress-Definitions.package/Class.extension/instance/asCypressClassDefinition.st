@@ -3,14 +3,17 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: *Cypress-Definitions
 "
 asCypressClassDefinition
-
-	^CypressClassDefinition
-		name: self name
-		superclassName: self superclass name
-		category: self category
-		instVarNames: self instVarNames
-		classInstVarNames: self class instVarNames
-		classVarNames: self classVarNames
-		poolDictionaryNames: self sharedPools
-		comment: self comment
-		subclassType: self subclassType.
+  | superclassname |
+  superclassname := self superclass
+    ifNil: [ 'nil' ]
+    ifNotNil: [ :sClass | sClass name ].
+  ^ CypressClassDefinition
+    name: self name
+    superclassName: superclassname
+    category: self category
+    instVarNames: self instVarNames
+    classInstVarNames: self class instVarNames
+    classVarNames: self classVarNames
+    poolDictionaryNames: self sharedPools
+    comment: self comment
+    subclassType: self subclassType
