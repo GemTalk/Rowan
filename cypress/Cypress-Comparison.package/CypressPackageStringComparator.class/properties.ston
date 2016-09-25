@@ -11,8 +11,7 @@
 		"imageSnapshots",
 		"snapshotDifferences",
 		"currentPackageName",
-		"currentAdditions",
-		"currentRemovals" ],
+		"currentOperations" ],
 	"name" : "CypressPackageStringComparator",
 	"pools" : [
 		 ],

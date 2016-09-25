@@ -3,5 +3,6 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: loading
 "
 classNeedingMigration: aClass
+  "right now we will create classes without doing a migration ..."
 
-	self halt: 'not implemented yet'
+  
