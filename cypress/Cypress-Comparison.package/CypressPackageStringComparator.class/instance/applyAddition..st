@@ -3,5 +3,4 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: comparing - private
 "
 applyAddition: aCypressAddition
-
-	self add: aCypressAddition definition to: self currentAdditions
+  self addAddition: aCypressAddition to: self currentOperations

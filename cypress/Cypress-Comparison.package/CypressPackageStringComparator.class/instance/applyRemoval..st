@@ -3,5 +3,4 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: comparing - private
 "
 applyRemoval: aCypressRemoval
-
-	self add: aCypressRemoval definition to: self currentRemovals.
+  self addRemoval: aCypressRemoval to: self currentOperations

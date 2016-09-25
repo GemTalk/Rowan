@@ -3,20 +3,14 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: initializing
 "
 comparingPackages: someNames fromDirectory: aDirectory
-
-	(directoryPackageMap at: aDirectory ifAbsentPut: [OrderedCollection new])
-		addAll: someNames.
-	someNames do: 
-			[:packageName |
-			| reader modTime modTimestamp |
-			reader := (CypressFileSystemRepository on: aDirectory) reader
-						readPackageStructureForPackageNamed: packageName.
-			diskSnapshots at: packageName put: reader packageStructure snapshot.
-			modTime := System
-						performOnServer: 'stat --printf=%y ' , reader packageDirectory.
-			modTimestamp := (modTime beginsWith: 'stat:')
-						ifTrue: [nil]
-						ifFalse: [DateAndTime fromUnixFormatString: modTime].
-			diskTimestamps at: packageName put: modTimestamp.
-			imageSnapshots at: packageName
-				put: (CypressPackageDefinition named: packageName) snapshot]
+  (directoryPackageMap at: aDirectory ifAbsentPut: [ OrderedCollection new ])
+    addAll: someNames.
+  someNames
+    do: [ :packageName | 
+      | reader |
+      reader := (CypressFileSystemRepository on: aDirectory) reader
+        readPackageStructureForPackageNamed: packageName.
+      diskSnapshots at: packageName put: reader packageStructure snapshot.
+      imageSnapshots
+        at: packageName
+        put: (CypressPackageDefinition named: packageName) snapshot ]
