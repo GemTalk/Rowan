@@ -3,4 +3,9 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: comparing - private
 "
 addClassRemoval: aCypressModification to: aCollection
-  self halt
+  aCollection
+    add:
+      {(aCypressModification definition details).
+      #'removal'.
+      #'class'.
+      (aCypressModification definition classDefinitionString)}

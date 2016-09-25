@@ -3,5 +3,4 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: converting
 "
 classInstanceVariablesString
-
-	^self stringForVariables: self classInstanceVariableNames
+  ^ self stringForVariables: self classInstanceVariableNames
