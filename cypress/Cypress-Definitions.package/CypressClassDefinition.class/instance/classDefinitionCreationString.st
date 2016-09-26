@@ -5,6 +5,7 @@ category: accessing
 classDefinitionCreationString
   ^ String
     streamContents: [ :stream | 
+      | symbolDict |
       stream
         nextPutAll: '(CypressClassDefinition';
         lf;
@@ -39,6 +40,15 @@ classDefinitionCreationString
         lf;
         tab;
         tab;
-        nextPutAll:
-            'loadClassDefinition"optionally loadClassDefinition: <symbolDictionary-name>".';
-        yourself ]
+        yourself.
+      symbolDict := self symbolDictionaryForClassNamed: self className.
+      self actualClassOrNil isNil
+        ifTrue: [ 
+          stream
+            nextPutAll: 'loadClassDefinition.';
+            yourself ]
+        ifFalse: [ 
+          stream
+            nextPutAll:
+                'loadClassDefinition: ' , symbolDict name asString printString , '.';
+            yourself ] ]
