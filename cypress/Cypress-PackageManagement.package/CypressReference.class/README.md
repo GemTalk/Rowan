@@ -1,0 +1,1 @@
+A CypressReference is an abstract superclass for various kinds of references to Cypress packages. Inspired by GoferReference in Pharo

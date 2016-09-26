@@ -1,0 +1,1 @@
+A CypressPackageReference refers to a specific Cypress package.
