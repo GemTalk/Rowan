@@ -81,7 +81,7 @@ CypressPackageManagerTest provides test cases for this upcoming Package Manager 
 ### License and Copyright
 
 The original work is copyright by GemTalk Systems, but is licensed under the MIT license.
-In other words, you are welcome to use it in anyway you wish, provided the original attribution is maintained.
+In other words, you are welcome to use it in almost any way you wish. See license.txt for details.
 
 ### Acknowledgements
 
