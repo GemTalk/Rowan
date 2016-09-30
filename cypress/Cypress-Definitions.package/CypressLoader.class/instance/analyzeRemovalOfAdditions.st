@@ -6,13 +6,11 @@ analyzeRemovalOfAdditions
   "if there is an addition and a removal for the same definition, the addition wins ... needed when loading multiple packages and a defintion has been moved from one package to another --- see atomic loads for Metacello"
 
   | index |
-  self halt.
-  index := CypressDefinitionIndex definitions: self additions.
+  index := CypressDefinitionIndex
+    definitions: (self additions collect: [ :each | each definition ]).
   self removals
     removeAllSuchThat: [ :removal | 
       (index
-        definitionLike: removal
-        ifPresent: [ :addition | 
-          self halt.
-          self obsoletions at: addition put: removal ]
+        definitionLike: removal definition
+        ifPresent: [ :additionDefinition | self obsoletions at: additionDefinition description put: removal definition ]
         ifAbsent: [  ]) notNil ]
