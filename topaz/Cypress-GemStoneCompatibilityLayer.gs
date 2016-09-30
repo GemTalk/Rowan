@@ -382,13 +382,10 @@ streamSpecies
 category: '*Cypress-GemStoneCompatibilityLayer'
 classmethod: SequenceableCollection
 new: newSize streamContents: aOneArgBlock
-
-	| stream |
-	stream := WriteStreamPortable on: (self streamSpecies new: newSize).
-	aOneArgBlock value: stream.
-	stream position = newSize
-		ifTrue: [ ^stream originalContents ]
-		ifFalse: [ ^stream contents ]
+  | stream |
+  stream := WriteStreamPortable on: (self streamSpecies new: newSize).
+  aOneArgBlock value: stream.
+  ^ stream contents
 %
 
 category: '*Cypress-GemStoneCompatibilityLayer'
