@@ -1772,13 +1772,13 @@ analyzeRemovalOfAdditions
   "if there is an addition and a removal for the same definition, the addition wins ... needed when loading multiple packages and a defintion has been moved from one package to another --- see atomic loads for Metacello"
 
   | index |
-  index := CypressDefinitionIndex definitions: self additions.
+  index := CypressDefinitionIndex
+    definitions: (self additions collect: [ :each | each definition ]).
   self removals
     removeAllSuchThat: [ :removal | 
       (index
-        definitionLike: removal
-        ifPresent: [ :addition | 
-          self obsoletions at: addition put: removal ]
+        definitionLike: removal definition
+        ifPresent: [ :additionDefinition | self obsoletions at: additionDefinition description put: removal definition ]
         ifAbsent: [  ]) notNil ]
 %
 
@@ -1803,8 +1803,10 @@ applyAddition: aCypressPatchOperation
 category: 'applying'
 method: CypressLoader
 applyModification: aCypressPatchOperation
-
-	self additions add: aCypressPatchOperation
+  self additions add: aCypressPatchOperation.
+  self obsoletions
+    at: aCypressPatchOperation modification description
+    put: aCypressPatchOperation obsoletion
 %
 
 category: 'applying'
@@ -2245,6 +2247,14 @@ applyTo: aCypressLoader
 
 category: 'accessing'
 method: CypressPatchOperation
+definition
+  "answer the primary definition associated with the operation"
+
+  self subclassResponsibility: #'definition'
+%
+
+category: 'accessing'
+method: CypressPatchOperation
 description
 
 	self subclassResponsibility: #description
@@ -2422,6 +2432,14 @@ base: base target: target
 
 	obsoletion := base.
 	modification := target.
+%
+
+category: 'accessing'
+method: CypressModification
+definition
+  "answer the primary definition associated with the operation"
+
+  ^ self modification
 %
 
 category: 'accessing'

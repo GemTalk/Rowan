@@ -1371,18 +1371,6 @@ schemeName
 
 ! Class Extensions
 
-! Class Extension for FileStreamPortable
-
-! ------------------- Instance methods for FileStreamPortable
-
-category: '*Network-Url'
-method: FileStreamPortable
-asUrl
-	"Convert my path into a file:// type url - a FileUrl."
-	
-	^ FileUrl pathParts: (self directory pathSegments copyWith: self localName)
-%
-
 ! Class Extension for String
 
 ! ------------------- Instance methods for String

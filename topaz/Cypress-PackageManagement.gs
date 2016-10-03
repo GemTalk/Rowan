@@ -1690,6 +1690,18 @@ addUnknownPackageNamed: aString
 		put: (CypressUnknownPackageInformation named: aString).
 %
 
+category: 'Querying'
+method: CypressPackageManager2
+allResolvedPackageReferences
+  | resolved |
+  resolved := OrderedCollection new.
+  self knownRepositories
+    keysAndValuesDo: [ :repoUrl :repo | 
+      repo packageNames
+        do: [ :packageName | resolved add: (CypressResolvedReference name: packageName repository: repo) ] ].
+  ^ resolved asSortedCollection asArray
+%
+
 category: 'Updating'
 method: CypressPackageManager2
 assignRepository: aRepository to: aPackageInformation
