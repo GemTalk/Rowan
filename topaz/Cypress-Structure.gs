@@ -692,8 +692,7 @@ classInstanceVariableNames: someStrings
 category: 'converting'
 method: CypressClassStructure
 classInstanceVariablesString
-
-	^self stringForVariables: self classInstanceVariableNames
+  ^ self stringForVariables: self classInstanceVariableNames
 %
 
 category: 'querying'
@@ -737,8 +736,7 @@ classVariableNames: someStrings
 category: 'converting'
 method: CypressClassStructure
 classVariablesString
-
-	^self stringForVariables: self classVariableNames
+  ^ self stringForVariables: self classVariableNames asSortedCollection
 %
 
 category: 'accessing'
@@ -843,8 +841,7 @@ name: aString
 category: 'converting'
 method: CypressClassStructure
 poolDictionariesString
-
-	^self stringForVariables: self poolDictionaryNames
+  ^ self stringForVariables: self poolDictionaryNames
 %
 
 category: 'accessing'
@@ -1218,30 +1215,61 @@ asCypressPropertyObject
 category: '*Cypress-Structure'
 method: Dictionary
 writeCypressJsonOn: aStream indent: startIndent
+  | indent cnt |
+  indent := startIndent.
+  aStream
+    nextPutAll: '{';
+    lf.
+  cnt := 0.
+  indent := indent + 1.
+  self keys asSortedCollection
+    do: [ :key | 
+      | value |
+      value := self at: key.
+      cnt := cnt + 1.
+      aStream tab: indent.
+      key writeCypressJsonOn: aStream indent: indent.
+      aStream nextPutAll: ' : '.
+      value writeCypressJsonOn: aStream indent: indent.
+      cnt < self size
+        ifTrue: [ 
+          aStream
+            nextPutAll: ',';
+            lf ] ].
+  self size = 0
+    ifTrue: [ aStream tab: indent ].
+  aStream nextPutAll: ' }'
+%
 
-	| indent cnt |
-	indent := startIndent.
-	aStream
-		nextPutAll: '{';
-		lf.
-	cnt := 0.
-	indent := indent + 1.
-	self keys asSortedCollection do: 
-			[:key |
-			| value |
-			value := self at: key.
-			cnt := cnt + 1.
-			aStream tab: indent.
-			key writeCypressJsonOn: aStream indent: indent.
-			aStream nextPutAll: ' : '.
-			value writeCypressJsonOn: aStream indent: indent.
-			cnt < self size
-				ifTrue: 
-					[aStream
-						nextPutAll: ',';
-						lf]].
-	self size = 0 ifTrue: [aStream tab: indent].
-	aStream nextPutAll: ' }'
+category: '*Cypress-Structure'
+method: Dictionary
+writeFiletreeJsonOn: aStream indent: startIndent
+  | indent cnt |
+  indent := startIndent.
+  aStream
+    nextPutAll: '{';
+    lf.
+  cnt := 0.
+  indent := indent + 1.
+  self keys asSortedCollection
+    do: [ :key | 
+      | value |
+      value := self at: key.
+      cnt := cnt + 1.
+      aStream tab: indent.
+      key writeCypressJsonOn: aStream indent: indent.
+      aStream nextPutAll: ' : '.
+      value writeFiletreeJsonOn: aStream indent: indent.
+      cnt < self size
+        ifTrue: [ 
+          aStream
+            nextPutAll: ',';
+            lf ] ].
+  self size = 0
+    ifTrue: [ aStream tab: indent ].
+  aStream
+    nextPutAll: ' }';
+    lf
 %
 
 ! Class Extension for Number
@@ -1271,6 +1299,18 @@ method: Object
 writeCypressJsonOn: fileStream
 
 	self writeCypressJsonOn: fileStream indent: 0
+%
+
+category: '*Cypress-Structure'
+method: Object
+writeFiletreeJsonOn: fileStream
+  self writeFiletreeJsonOn: fileStream indent: 0
+%
+
+category: '*Cypress-Structure'
+method: Object
+writeFiletreeJsonOn: aStream indent: startIndent
+  ^self writeCypressJsonOn: aStream indent: startIndent
 %
 
 ! Class Extension for String

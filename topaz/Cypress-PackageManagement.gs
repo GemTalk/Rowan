@@ -105,6 +105,21 @@ true.
 
 doit
 (CypressAbstractRepository
+	subclass: 'CypressDictionaryRepository'
+	instVarNames: #( dictionary )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractRepository
 	subclass: 'CypressFileSystemRepository'
 	instVarNames: #( directoryPath )
 	classVars: #(  )
@@ -144,6 +159,51 @@ doit
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'CypressReference'
+	instVarNames: #( name )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: 'A CypressReference is an abstract superclass for various kinds of references to Cypress packages. Inspired by GoferReference in Pharo';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressReference
+	subclass: 'CypressPackageReference'
+	instVarNames: #( package branch )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: 'A CypressPackageReference refers to a specific Cypress package.';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressPackageReference
+	subclass: 'CypressResolvedReference'
+	instVarNames: #( repository )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: 'A CypressResolvedReference refers to a specific Cypress package in a repository. This class is the only one that can actually load a package, because it is the only one knowing where to find it.';
 		immediateInvariant.
 true.
 %
@@ -386,8 +446,7 @@ true.
 category: 'instance creation'
 classmethod: CypressAbstractRepository
 createOn: aUrl alias: aString
-
-	^self createOn: aUrl alias: aString
+  ^ self onUrl: aUrl alias: aString
 %
 
 category: 'accessing'
@@ -731,6 +790,65 @@ initializeReaderAndWriterClasses
 	writerClass := CypressTopazFileoutWriter.
 %
 
+! Class Implementation for CypressDictionaryRepository
+
+! ------------------- Class methods for CypressDictionaryRepository
+
+category: 'instance creation'
+classmethod: CypressDictionaryRepository
+on: aDictionary
+  ^ self new
+    initializeForDictionary: aDictionary;
+    yourself
+%
+
+! ------------------- Instance methods for CypressDictionaryRepository
+
+category: 'accessing'
+method: CypressDictionaryRepository
+dictionary
+  ^ dictionary
+%
+
+category: 'accessing'
+method: CypressDictionaryRepository
+dictionary: aDictionary
+  dictionary := aDictionary
+%
+
+category: 'initializing - private'
+method: CypressDictionaryRepository
+initialize
+  super initialize.
+  readerClass := nil.
+  writerClass := nil
+%
+
+category: 'initializing - private'
+method: CypressDictionaryRepository
+initializeForDictionary: aDictionary
+  self initialize.
+  self dictionary: aDictionary
+%
+
+category: 'accessing'
+method: CypressDictionaryRepository
+packageNames
+  ^ self dictionary keys
+%
+
+category: 'reading'
+method: CypressDictionaryRepository
+readPackageStructureForPackageNamed: packageName
+  ^ (self dictionary at: packageName) packageStructure
+%
+
+category: 'writing'
+method: CypressDictionaryRepository
+writePackageStructure: aPackageStructure
+  ^ self dictionary at: aPackageStructure packageName put: aPackageStructure
+%
+
 ! Class Implementation for CypressFileSystemRepository
 
 ! ------------------- Class methods for CypressFileSystemRepository
@@ -768,12 +886,11 @@ codeFormatProperty: aString
 category: 'accessing'
 method: CypressFileSystemRepository
 description
-
-	| desc |
-	desc := super description.
-	^desc notEmpty
-		ifTrue: [desc]
-		ifFalse: [self directoryPath]
+  | desc |
+  desc := super description.
+  ^ desc notEmpty
+    ifTrue: [ desc ]
+    ifFalse: [ self url asString ]
 %
 
 category: 'accessing'
@@ -1157,18 +1274,6 @@ method: CypressPackageManager
 comparePackageFrom: aCypressPackageInformation
 
 	^self comparePackagesFrom: (Array with: aCypressPackageInformation)
-%
-
-category: 'comparing'
-method: CypressPackageManager
-comparePackagesFrom: someCypressPackageInformations
-
-	^(someCypressPackageInformations
-		inject: CypressPackageComparator new
-		into: 
-			[:comparer :each |
-			comparer comparingPackageNamed: each name fromDirectory: each savedLocation])
-				getDifferences
 %
 
 category: 'updating - private'
@@ -1847,6 +1952,173 @@ method: CypressPackageManager2
 writeChangesToAllRepositoriesFor: aPackageInformation
 
 	aPackageInformation writeChangesToAllRepositories.
+%
+
+! Class Implementation for CypressReference
+
+! ------------------- Class methods for CypressReference
+
+category: 'instance creation'
+classmethod: CypressReference
+name: aString
+  ^ self basicNew initializeName: aString
+%
+
+category: 'instance creation'
+classmethod: CypressReference
+new
+  self error: 'Use #name: to initialize the receiver.'
+%
+
+! ------------------- Instance methods for CypressReference
+
+category: 'comparing'
+method: CypressReference
+= aReference
+	^ self class = aReference class and: [ self name = aReference name ]
+%
+
+category: 'comparing'
+method: CypressReference
+hash
+	^ self name hash
+%
+
+category: 'initialization'
+method: CypressReference
+initializeName: aString
+	name := aString
+%
+
+category: 'private'
+method: CypressReference
+matches: aResolvedReference
+  "Answer true if the receiver matches aResolvedReference."
+
+  self subclassResponsibility: #'matches:'
+%
+
+category: 'accessing'
+method: CypressReference
+name
+	"Answer the name of this reference."
+	
+	^ name
+%
+
+category: 'accessing'
+method: CypressReference
+packageName
+  "Answer the package name."
+
+  self subclassResponsibility: #'packageName'
+%
+
+category: 'printing'
+method: CypressReference
+printOn: aStream
+  aStream
+    nextPutAll: self class name;
+    nextPutAll: ' name: ';
+    print: self name
+%
+
+category: 'querying'
+method: CypressReference
+resolveAllWith: aPackageManager
+  "Answer a sorted collection of all resolved references within aGofer."
+
+  ^ aPackageManager allResolvedPackageReferences
+    select: [ :each | self matches: each ]
+%
+
+! Class Implementation for CypressPackageReference
+
+! ------------------- Instance methods for CypressPackageReference
+
+category: 'accessing'
+method: CypressPackageReference
+branch
+	"Answer the branch of the receiver."
+	
+	^ branch
+%
+
+category: 'initialization'
+method: CypressPackageReference
+initializeName: aString
+	super initializeName: aString.
+	self parseName: aString
+%
+
+category: 'private'
+method: CypressPackageReference
+matches: aResolvedReference
+	^ self packageName = aResolvedReference packageName
+%
+
+category: 'accessing'
+method: CypressPackageReference
+packageDefinition
+  "For in-image packages, only the base package name is used (no branch)"
+
+  ^ CypressPackageDefinition named: self packageName
+%
+
+category: 'accessing'
+method: CypressPackageReference
+packageName
+  "Answer the package of the receiver."
+
+  ^ package
+%
+
+category: 'initialization'
+method: CypressPackageReference
+parseName: aString
+  | basicName index |
+  basicName := aString.
+  index := basicName indexOfSubCollection: '.' startingAt: 1.
+  index = 0
+    ifTrue: [ 
+      package := basicName.
+      branch := '' ]
+    ifFalse: [ 
+      package := basicName copyFrom: 1 to: index - 1.
+      branch := basicName copyFrom: index to: basicName size ]
+%
+
+! Class Implementation for CypressResolvedReference
+
+! ------------------- Class methods for CypressResolvedReference
+
+category: 'instance creation'
+classmethod: CypressResolvedReference
+name: aString repository: aRepository
+	^ self basicNew initializeName: aString repository: aRepository
+%
+
+! ------------------- Instance methods for CypressResolvedReference
+
+category: 'comparing'
+method: CypressResolvedReference
+<= aResolvedReference
+  ^ self name <= aResolvedReference name
+%
+
+category: 'initialization'
+method: CypressResolvedReference
+initializeName: aString repository: aRepository
+	self initializeName: aString.
+	repository := aRepository
+%
+
+category: 'accessing'
+method: CypressResolvedReference
+repository
+	"Answer the repository of the receiver."
+	
+	^ repository
 %
 
 ! Class Implementation for CypressVersionReference

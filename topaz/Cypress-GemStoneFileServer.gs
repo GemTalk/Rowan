@@ -1217,10 +1217,9 @@ fileNameForSelector: selector
 category: 'writing'
 method: CypressAbstractPackageWriter
 removeOldReplacingWithNew
-
-	self fileUtils deleteAll: self packageDirectory.
-	self writePropertiesFile.
-	self writePackageStructure
+  self fileUtils deleteAll: self packageDirectory.
+  self writePropertiesFile.
+  self writePackageStructure
 %
 
 category: 'private'
@@ -1362,6 +1361,73 @@ writePropertiesFile
 
 ! ------------------- Instance methods for CypressFileTreeFormatPackageWriter
 
+category: 'private'
+method: CypressFileTreeFormatPackageWriter
+adjustClassPropertiesForFileTree: classPropertyDict
+  | props classType |
+  props := classPropertyDict copy.
+  classType := (props at: '_gs_subclassType' ifAbsent: [  ])
+    ifNil: [ 'normal' ]
+    ifNotNil: [ :type | 
+      props removeKey: '_gs_subclassType'.
+      type = 'indexableSubclass'
+        ifTrue: [ 'variable' ]
+        ifFalse: [ 
+          type = 'byteSubclass'
+            ifTrue: [ 'bytes' ]
+            ifFalse: [ self error: 'unknown subclass type: ' , type ] ] ].
+  props at: 'type' put: classType.
+  ^ props
+%
+
+category: 'accessing'
+method: CypressFileTreeFormatPackageWriter
+propertiesFileNameExtension
+  ^ '.json'
+%
+
+category: 'writing'
+method: CypressFileTreeFormatPackageWriter
+removeOldReplacingWithNew
+  self fileUtils
+    deleteAll: self packageDirectory
+    rejecting: [ :filename | 
+      "do not delete the monticello.meta directory to preserve existing Monticello meta data.
+       Equivalent behavior to MCFileTreeRepository with Metadata property set to false."
+      (filename endsWith: 'monticello.meta')
+        or: [ filename endsWith: '.filetree' ] ].
+  self writePropertiesFile.
+  self writePackageStructure
+%
+
+category: 'writing'
+method: CypressFileTreeFormatPackageWriter
+writeClassStructure: classStructure to: classPath
+  self
+    writeInDirectoryName: classPath
+      fileName: 'README'
+      extension: '.md'
+      visit: [ :fileStream | self writeClassComment: classStructure on: fileStream ];
+    writeInDirectoryName: classPath
+      fileName: 'properties'
+      extension: self propertiesFileNameExtension
+      visit: [ :fileStream | 
+        (self adjustClassPropertiesForFileTree: classStructure properties)
+          writeFiletreeJsonOn: fileStream ]
+%
+
+category: 'writing'
+method: CypressFileTreeFormatPackageWriter
+writeExtensionClassStructure: classStructure to: classPath
+  self
+    writeInDirectoryName: classPath
+    fileName: 'properties'
+    extension: self propertiesFileNameExtension
+    visit: [ :fileStream | 
+      (Dictionary with: 'name' -> classStructure className)
+        writeFiletreeJsonOn: fileStream ]
+%
+
 category: 'writing'
 method: CypressFileTreeFormatPackageWriter
 writeMethodStructure: methodStructure onStream: fileStream
@@ -1369,6 +1435,16 @@ writeMethodStructure: methodStructure onStream: fileStream
 	fileStream
 		nextPutAll: methodStructure category; lf;
 		nextPutAll: methodStructure source withUnixLineEndings
+%
+
+category: 'writing'
+method: CypressFileTreeFormatPackageWriter
+writePropertiesFile
+  self
+    writeInDirectoryName: '.'
+    fileName: 'properties'
+    extension: self propertiesFileNameExtension
+    visit: [ :fileStream | Dictionary new writeFiletreeJsonOn: fileStream ]
 %
 
 ! Class Implementation for CypressPackageWriter
@@ -1430,6 +1506,12 @@ classmethod: CypressFileUtilities
 deleteAll: aDirectory
 
 	self subclassResponsibility: #deleteAll:
+%
+
+category: 'utilities'
+classmethod: CypressFileUtilities
+deleteAll: aDirectory rejecting: rejectBlock
+  self subclassResponsibility: #'deleteAll:rejecting:'
 %
 
 category: 'utilities'
@@ -1523,25 +1605,40 @@ writeStreamFor: filePath in: aDirectory do: aOneArgBlock
 category: 'utilities'
 classmethod: CypressGemStoneDirectoryUtilities
 deleteAll: aDirectory
-	"Delete all the files and directories under the named directory.
+  "Delete all the files and directories under the named directory.
 	 Ensure we don't try to recursively delete . or .."
 
-	| filename isFile |
-	(GsFile contentsAndTypesOfDirectory: aDirectory onClient: false)
-		doWithIndex: 
-			[:each :index |
-			index odd
-				ifTrue: [filename := each]
-				ifFalse: 
-					[isFile := each.
-					isFile
-						ifTrue: [GsFile removeServerFile: filename]
-						ifFalse: 
-							[(#('/..' '/.' '\..' '\.')
-								anySatisfy: [:special | filename endsWith: special])
-									ifFalse: 
-										[self deleteAll: filename.
-										GsFile removeServerDirectory: filename]]]]
+  self deleteAll: aDirectory rejecting: [ :filename | false ]
+%
+
+category: 'utilities'
+classmethod: CypressGemStoneDirectoryUtilities
+deleteAll: aDirectory rejecting: rejectBlock
+  "Delete all the files and directories under the named directory.
+       Reject file and directores in aDirectory that are rejected by rejectBlock.
+       The rejectBlock is not used recursively.
+       Ensure we don't try to recursively delete . or .."
+
+  | filename isFile |
+  (GsFile contentsAndTypesOfDirectory: aDirectory onClient: false)
+    doWithIndex: [ :each :index | 
+      index odd
+        ifTrue: [ filename := each ]
+        ifFalse: [ 
+          isFile := each.
+          isFile
+            ifTrue: [ 
+              (rejectBlock value: filename)
+                ifFalse: [ 
+                  (rejectBlock value: filename)
+                    ifFalse: [ GsFile removeServerFile: filename ] ] ]
+            ifFalse: [ 
+              (#('/..' '/.' '\..' '\.') anySatisfy: [ :special | filename endsWith: special ])
+                ifFalse: [ 
+                  (rejectBlock value: filename)
+                    ifFalse: [ 
+                      self deleteAll: filename.
+                      GsFile removeServerDirectory: filename ] ] ] ] ]
 %
 
 category: 'utilities'
