@@ -2063,42 +2063,22 @@ knownRepositories: anObject
 
 category: 'loading'
 method: CypressPackageManager3
-loadPackageFrom: aPackage defaultSymbolDictionaryName: defaultSymbolDictionaryNameOrNil inRepository: aRepository
-  | snapshot summary loader |
-  snapshot := (aRepository
-    readPackageStructureForPackageNamed: aPackage name) snapshot.
-  loader := snapshot
-    updatePackage: aPackage
-    defaultSymbolDictionaryName: defaultSymbolDictionaryNameOrNil.
-  summary := Dictionary new.
-  loader unloadable notEmpty
-    ifTrue: [ 
-      summary
-        at: 'Unloadable'
-        put: (loader unloadable collect: [ :each | each printString ]) ].
-  loader errors notEmpty
-    ifTrue: [ summary at: 'Errors' put: (loader errors collect: [ :each | each printString ]) ].
-  loader requirements notEmpty
-    ifTrue: [ summary at: 'Missing Requirements' put: loader requirements asArray ].
-  ^ summary
-%
-
-category: 'loading'
-method: CypressPackageManager3
-loadPackageFrom: aPackage inRepository: aRepository
-
-  ^ self 
-    loadPackageFrom: aPackage 
-    defaultSymbolDictionaryName: self defaultSymbolDictionaryName 
-    inRepository: aRepository
-%
-
-category: 'loading'
-method: CypressPackageManager3
-loadResolvedReference: cypressResolvedReference
-  self
-    loadPackageFrom: cypressResolvedReference packageDefinition
-    inRepository: cypressResolvedReference repository
+loadResolvedReference: resolvedReference
+  | cypressLoader package repository snapshot |
+  cypressLoader := CypressLoader new.
+  cypressLoader defaultSymbolDictionaryName: self defaultSymbolDictionaryName.
+  package := resolvedReference packageDefinition.
+  repository := resolvedReference repository.
+  snapshot := (repository
+    readPackageStructureForPackageNamed: resolvedReference name) snapshot.
+  cypressLoader updatePackage: package withSnapshot: snapshot.
+  cypressLoader load.
+  cypressLoader unloadable notEmpty
+    ifTrue: [ self error: 'Unloadable definitions' ].
+  cypressLoader errors notEmpty
+    ifTrue: [ self error: 'Load errors' ].
+  cypressLoader requirements notEmpty
+    ifTrue: [ self error: 'Missing Requirements' ]
 %
 
 category: 'loading'
@@ -2108,12 +2088,11 @@ loadResolvedReferences
   cypressLoader := CypressLoader new.
   cypressLoader defaultSymbolDictionaryName: self defaultSymbolDictionaryName.
   self resolvedPackageReferences
-    do: [ :resolvedReference | 
-      | package repository snapshot |
+    do: [ :resolvedReference | | package repository snapshot |
       package := resolvedReference packageDefinition.
       repository := resolvedReference repository.
-      snapshot := (repository readPackageStructureForPackageNamed: package name)
-        snapshot.
+      snapshot := (repository
+        readPackageStructureForPackageNamed: resolvedReference name) snapshot.
       cypressLoader updatePackage: package withSnapshot: snapshot ].
   cypressLoader load.
   cypressLoader unloadable notEmpty
@@ -2262,7 +2241,7 @@ initializeName: aString
 category: 'private'
 method: CypressPackageReference
 matches: aResolvedReference
-	^ self packageName = aResolvedReference packageName
+  ^ self name = aResolvedReference name
 %
 
 category: 'accessing'
