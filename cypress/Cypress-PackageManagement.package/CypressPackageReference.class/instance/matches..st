@@ -3,4 +3,4 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: private
 "
 matches: aResolvedReference
-	^ self packageName = aResolvedReference packageName
+  ^ self name = aResolvedReference name

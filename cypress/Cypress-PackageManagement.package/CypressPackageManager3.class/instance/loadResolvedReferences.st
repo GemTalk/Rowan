@@ -7,12 +7,11 @@ loadResolvedReferences
   cypressLoader := CypressLoader new.
   cypressLoader defaultSymbolDictionaryName: self defaultSymbolDictionaryName.
   self resolvedPackageReferences
-    do: [ :resolvedReference | 
-      | package repository snapshot |
+    do: [ :resolvedReference | | package repository snapshot |
       package := resolvedReference packageDefinition.
       repository := resolvedReference repository.
-      snapshot := (repository readPackageStructureForPackageNamed: package name)
-        snapshot.
+      snapshot := (repository
+        readPackageStructureForPackageNamed: resolvedReference name) snapshot.
       cypressLoader updatePackage: package withSnapshot: snapshot ].
   cypressLoader load.
   cypressLoader unloadable notEmpty
