@@ -2135,6 +2135,12 @@ classes
   ^ self classesInPackageNamed: self basePackageName
 %
 
+category: 'comparing'
+method: CypressPackageDefinition
+hash
+  ^ name hash
+%
+
 category: 'accessing'
 method: CypressPackageDefinition
 name
@@ -2457,7 +2463,7 @@ description
 category: 'comparing'
 method: CypressModification
 hash
-  ^ (super hash bitXor: modification hash) bitXor: obsoletion
+  ^ (super hash bitXor: modification hash) bitXor: obsoletion hash
 %
 
 category: 'loading'
@@ -2651,6 +2657,12 @@ method: CypressSnapshot
 definitions: aDefinitions
 
 	definitions := aDefinitions
+%
+
+category: 'comparing'
+method: CypressSnapshot
+hash
+  ^ definitions asArray hash
 %
 
 category: 'patching'
