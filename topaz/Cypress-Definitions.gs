@@ -2367,6 +2367,12 @@ description
     ^ 'add: ' , self definition printString
 %
 
+category: 'comparing'
+method: CypressAddition
+hash
+  ^ super hash bitXor: definition hash
+%
+
 category: 'loading'
 method: CypressAddition
 loadClassDefinition: aDefaultSymbolDictionaryName
@@ -2446,6 +2452,12 @@ category: 'accessing'
 method: CypressModification
 description
     ^ 'modify from: ' , self obsoletion printString , ' to: ' , self modification printString
+%
+
+category: 'comparing'
+method: CypressModification
+hash
+  ^ (super hash bitXor: modification hash) bitXor: obsoletion
 %
 
 category: 'loading'
@@ -2541,6 +2553,12 @@ method: CypressRemoval
 description
 
 	^'remove: ', self definition printString
+%
+
+category: 'comparing'
+method: CypressRemoval
+hash
+  ^ super hash bitXor: definition hash
 %
 
 category: 'loading'
