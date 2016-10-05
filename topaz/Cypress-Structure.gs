@@ -338,10 +338,10 @@ parseCharacter
 category: 'parsing-internal'
 method: CypressJsonParser
 parseCharacterHex
-	| value |
-	value := self parseCharacterHexDigit.
-	3 timesRepeat: [ value := (value << 4) + self parseCharacterHexDigit ].
-	^ Character codePoint: value
+  | value |
+  value := self parseCharacterHexDigit.
+  3 timesRepeat: [ value := (value bitShift: 4) + self parseCharacterHexDigit ].
+  ^ Character codePoint: value
 %
 
 category: 'parsing-internal'
