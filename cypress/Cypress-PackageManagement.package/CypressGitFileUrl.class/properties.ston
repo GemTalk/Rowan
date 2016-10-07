@@ -1,0 +1,14 @@
+{
+	"category" : "Cypress-PackageManagement",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"projectPath",
+		"projectBranchOrTag",
+		"repositoryPath" ],
+	"name" : "CypressGitFileUrl",
+	"pools" : [
+		 ],
+	"super" : "CypressAbstractFileUrl" }

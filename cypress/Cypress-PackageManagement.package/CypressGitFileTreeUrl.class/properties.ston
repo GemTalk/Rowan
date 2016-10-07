@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-PackageManagement",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "CypressGitFileTreeUrl",
+	"pools" : [
+		 ],
+	"super" : "CypressGitFileUrl" }
