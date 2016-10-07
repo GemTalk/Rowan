@@ -165,6 +165,21 @@ true.
 
 doit
 (Object
+	subclass: 'CypressPackageManager3'
+	instVarNames: #( knownRepositories defaultSymbolDictionaryName resolvedPackageReferences )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
 	subclass: 'CypressReference'
 	instVarNames: #( name )
 	classVars: #(  )
@@ -1690,6 +1705,18 @@ addUnknownPackageNamed: aString
 		put: (CypressUnknownPackageInformation named: aString).
 %
 
+category: 'Querying'
+method: CypressPackageManager2
+allResolvedPackageReferences
+  | resolved |
+  resolved := OrderedCollection new.
+  self knownRepositories
+    keysAndValuesDo: [ :repoUrl :repo | 
+      repo packageNames
+        do: [ :packageName | resolved add: (CypressResolvedReference name: packageName repository: repo) ] ].
+  ^ resolved asSortedCollection asArray
+%
+
 category: 'Updating'
 method: CypressPackageManager2
 assignRepository: aRepository to: aPackageInformation
@@ -1954,6 +1981,166 @@ writeChangesToAllRepositoriesFor: aPackageInformation
 	aPackageInformation writeChangesToAllRepositories.
 %
 
+! Class Implementation for CypressPackageManager3
+
+! ------------------- Class methods for CypressPackageManager3
+
+category: 'testing'
+classmethod: CypressPackageManager3
+isPackageLoaded: aPackageName
+
+  ^ (CypressPackageDefinition named: aPackageName) snapshot definitions isEmpty not
+%
+
+category: 'instance creation'
+classmethod: CypressPackageManager3
+new
+  ^self basicNew initialize
+%
+
+! ------------------- Instance methods for CypressPackageManager3
+
+category: 'Updating'
+method: CypressPackageManager3
+addRepository: aRepository
+  self knownRepositories at: aRepository url asString put: aRepository
+%
+
+category: 'Updating'
+method: CypressPackageManager3
+addResolvedReference: resolvedReference
+  self resolvedPackageReferences add: resolvedReference
+%
+
+category: 'Querying'
+method: CypressPackageManager3
+allResolvedPackageReferences
+  | resolved |
+  resolved := OrderedCollection new.
+  self knownRepositories
+    keysAndValuesDo: [ :repoUrl :repo | 
+      repo packageNames
+        do: [ :packageName | resolved add: (CypressResolvedReference name: packageName repository: repo) ] ].
+  ^ resolved asSortedCollection asArray
+%
+
+category: 'initialization'
+method: CypressPackageManager3
+defaultSymbolDictionaryName
+
+  ^defaultSymbolDictionaryName ifNil: [ #UserGlobals ]
+%
+
+category: 'initialization'
+method: CypressPackageManager3
+defaultSymbolDictionaryName: aStringOrNil
+
+  defaultSymbolDictionaryName := aStringOrNil
+%
+
+category: 'Updating'
+method: CypressPackageManager3
+initialize
+  self
+    knownRepositories: Dictionary new;
+    resolvedPackageReferences: OrderedCollection new;
+    yourself
+%
+
+category: 'Accessing'
+method: CypressPackageManager3
+knownRepositories
+
+   ^knownRepositories
+%
+
+category: 'Accessing'
+method: CypressPackageManager3
+knownRepositories: anObject
+
+   knownRepositories := anObject
+%
+
+category: 'loading'
+method: CypressPackageManager3
+loadResolvedReference: resolvedReference
+  | cypressLoader package repository snapshot |
+  cypressLoader := CypressLoader new.
+  cypressLoader defaultSymbolDictionaryName: self defaultSymbolDictionaryName.
+  package := resolvedReference packageDefinition.
+  repository := resolvedReference repository.
+  snapshot := (repository
+    readPackageStructureForPackageNamed: resolvedReference name) snapshot.
+  cypressLoader updatePackage: package withSnapshot: snapshot.
+  cypressLoader load.
+  cypressLoader unloadable notEmpty
+    ifTrue: [ self error: 'Unloadable definitions' ].
+  cypressLoader errors notEmpty
+    ifTrue: [ self error: 'Load errors' ].
+  cypressLoader requirements notEmpty
+    ifTrue: [ self error: 'Missing Requirements' ]
+%
+
+category: 'loading'
+method: CypressPackageManager3
+loadResolvedReferences
+  | cypressLoader |
+  cypressLoader := CypressLoader new.
+  cypressLoader defaultSymbolDictionaryName: self defaultSymbolDictionaryName.
+  self resolvedPackageReferences
+    do: [ :resolvedReference | | package repository snapshot |
+      package := resolvedReference packageDefinition.
+      repository := resolvedReference repository.
+      snapshot := (repository
+        readPackageStructureForPackageNamed: resolvedReference name) snapshot.
+      cypressLoader updatePackage: package withSnapshot: snapshot ].
+  cypressLoader load.
+  cypressLoader unloadable notEmpty
+    ifTrue: [ self error: 'Unloadable definitions' ].
+  cypressLoader errors notEmpty
+    ifTrue: [ self error: 'Load errors' ].
+  cypressLoader requirements notEmpty
+    ifTrue: [ self error: 'Missing Requirements' ]
+%
+
+category: 'Accessing'
+method: CypressPackageManager3
+resolvedPackageReferences
+  ^ resolvedPackageReferences
+%
+
+category: 'Accessing'
+method: CypressPackageManager3
+resolvedPackageReferences: anObject
+  resolvedPackageReferences := anObject
+%
+
+category: 'Unloading'
+method: CypressPackageManager3
+unloadPackage: aPackage
+
+  | loader summary |
+  loader := (CypressPackageDefinition named: aPackage name) snapshot
+              unload.
+  summary := Dictionary new.
+  loader unloadable notEmpty
+    ifTrue: [ 
+      summary
+        at: 'Unloadable'
+        put: (loader unloadable collect: [ :each | each printString ]) ].
+  loader errors notEmpty
+    ifTrue: [ summary at: 'Errors' put: (loader errors collect: [ :each | each printString ]) ].
+  loader requirements notEmpty
+    ifTrue: [ summary at: 'Missing Requirements' put: loader requirements asArray ].
+  ^ summary
+%
+
+category: 'Unloading'
+method: CypressPackageManager3
+unloadPackageNamed: aPackageName
+  ^ self unloadPackage: (CypressPackageDefinition named: aPackageName)
+%
+
 ! Class Implementation for CypressReference
 
 ! ------------------- Class methods for CypressReference
@@ -2054,7 +2241,7 @@ initializeName: aString
 category: 'private'
 method: CypressPackageReference
 matches: aResolvedReference
-	^ self packageName = aResolvedReference packageName
+  ^ self name = aResolvedReference name
 %
 
 category: 'accessing'
@@ -2258,7 +2445,7 @@ absoluteFromText: aString
 
 	| remainder index scheme fragment newUrl |
 	"trim surrounding whitespace"
-	remainder := aString trimSeparators.	
+	remainder := aString trimSeparators.	
 
 	"extract the fragment, if any"
 	index := remainder indexOf: $#.

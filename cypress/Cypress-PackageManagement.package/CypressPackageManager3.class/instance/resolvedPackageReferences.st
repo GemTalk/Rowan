@@ -1,6 +1,6 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: private
+category: Accessing
 "
-matches: aResolvedReference
-  ^ self name = aResolvedReference name
+resolvedPackageReferences
+  ^ resolvedPackageReferences

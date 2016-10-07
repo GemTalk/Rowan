@@ -13,7 +13,7 @@ absoluteFromText: aString
 
 	| remainder index scheme fragment newUrl |
 	"trim surrounding whitespace"
-	remainder := aString trimSeparators.	
+	remainder := aString trimSeparators.
 
 	"extract the fragment, if any"
 	index := remainder indexOf: $#.

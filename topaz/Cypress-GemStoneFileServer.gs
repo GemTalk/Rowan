@@ -1801,6 +1801,21 @@ nextChunkPut: aString
 	self nextPut: $!.
 %
 
+! Class Extension for WriteStreamPortable
+
+! ------------------- Instance methods for WriteStreamPortable
+
+category: '*Cypress-GemStoneFileServer-Adding'
+method: WriteStreamPortable
+nextChunkPut: aString
+
+	aString do: 
+		[:each |
+		self nextPut: each.
+		each = $! ifTrue: [self nextPut: each]].
+	self nextPut: $!.
+%
+
 ! Class initializers 
 
 doit
