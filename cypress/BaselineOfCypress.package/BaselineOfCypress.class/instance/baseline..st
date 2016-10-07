@@ -4,10 +4,7 @@ category: baseline
 "
 baseline: spec
   <baseline>
-  spec
-    for: #'gemstoneBase'
-    do: [ 
-      spec
+  spec for: #'gemstoneBase' do: [ spec
         package: 'Cypress-GemStoneCompatibilityLayer';
         package: 'Cypress-Definitions'
           with: [ spec requires: 'Cypress-GemStoneCompatibilityLayer' ];
@@ -20,14 +17,13 @@ baseline: spec
         package: 'Cypress-Comparison'
           with: [ spec requires: 'Cypress-Definitions' ];
         package: 'Network-Url';
-        package: 'Cypress-PackageManagement'
-          with: [ 
-              spec
+        package: 'Cypress-PackageManagement' with: [ spec
                 requires:
                   #('Cypress-Definitions' 'Network-Url' 'Cypress-GemStoneFileServer') ];
         package: 'Cypress-Mocks';
-        package: 'Cypress-Tests'
-          with: [ spec requires: #('Cypress-Mocks' 'Cypress-Definitions' 'Cypress-Structure') ];
+        package: 'Cypress-Tests' with: [ spec
+                requires:
+                  #('Cypress-Mocks' 'Cypress-Definitions' 'Cypress-Structure' 'Cypress-PackageManagement') ];
         package: 'NetworkTests' with: [ spec requires: #('Network-Url') ];
         yourself.
       spec
