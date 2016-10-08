@@ -1,3 +1,5 @@
+!!!! Input this with current directory where this file appears in a Cypress working directory !!!!
+
 errorCount
 output pushnew CypressReferenceImplementationInstall.out  only
 errorCount
@@ -14,32 +16,24 @@ errorCount
 !Stream installPortableStreamImplementation.
 !%
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-GemStoneCompatibilityLayer.gs
+input topaz/Cypress-GemStoneCompatibilityLayer.gs
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Definitions.gs
+input topaz/Cypress-Definitions.gs
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Structure.gs
+input topaz/Cypress-Structure.gs
 errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Mocks.gs
-errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-GemStoneFileServer.gs
-errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Network-Url.gs
-errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-MesssageDigest.gs
-errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-PackageManagement.gs
-errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-PackageManagementTests.gs
-errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Comparison.gs
-errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/Cypress-Tests.gs
-errorCount
-input /export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/NetworkTests.gs
-errorCount
-!input /opt/git/CypressReferenceImplementation/NetworkTests.gs
+!input topaz/Cypress-Mocks.gs
 !errorCount
+input topaz/Cypress-GemStoneFileServer.gs
+errorCount
+input topaz/Network-Url.gs
+errorCount
+input topaz/Cypress-MesssageDigest.gs
+errorCount
+input topaz/Cypress-PackageManagement.gs
+errorCount
+input topaz/Cypress-Comparison.gs
+errorCount
 
 commit
 
@@ -49,19 +43,15 @@ packageNames := #(
 		'Cypress-GemStoneCompatibilityLayer'
 		'Cypress-Definitions'
 		'Cypress-Structure'
-		'Cypress-Mocks'
 		'Cypress-GemStoneFileServer'
 		'Network-Url'
 		'Cypress-MesssageDigest'
 		'Cypress-PackageManagement'
-		'Cypress-PackageManagementTests'
 		'Cypress-Comparison'
-		'Cypress-Tests'
-		'NetworkTests'
 	).
 packageManager := CypressPackageManager2 new.
 repo := CypressAbstractRepository
-			onUrl: 'cypress:/export/galbadia1/users/rsargent/git/CypressReferenceImplementation/cypress/' asUrl
+			onUrl: 'cypress:cypress/' asUrl
 			alias: 'Reference Implementation'.
 packageNames do: [:each |
 	summary := packageManager
@@ -73,8 +63,11 @@ packageNames do: [:each |
 %
 
 commit
-logout
+errorCount
 
 output pop
+
+!!!! Final error count:
 errorCount
+logout
 
