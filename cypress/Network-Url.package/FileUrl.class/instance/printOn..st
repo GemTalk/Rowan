@@ -3,21 +3,21 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: printing
 "
 printOn: aStream
-	"Return the FileUrl according to RFC1738 plus supporting fragments:
-		'file://<host>/<path>#<fragment>'
-	Note that <host> being '' is equivalent to 'localhost'.
-	Note: The pathString can not start with a leading $/
-	to indicate an 'absolute' file path.
-	This is not according to RFC1738 where the path should have
-	no leading or trailing slashes, and always
-	be considered absolute relative to the filesystem."
+	"Return the FileUrl according to RFC3986
+		'file:'['//'<host>]<path>#<fragment>
+	Note that <host> being '' is equivalent to 'localhost' and is not printed."
 
-	aStream nextPutAll: self schemeName, '://'.
+	aStream nextPutAll: self schemeName;
+		nextPut: $:.
 
-	host ifNotNil: [aStream nextPutAll: host].
+	"File URLs with hosts (which are fairly useless) cannot be relative."
+	host isEmpty ifFalse: [isAbsolute ifFalse: [aStream nextPutAll: '<ErroneousURL>'. ^nil].
+						aStream nextPutAll: '//';
+						nextPutAll: host].
+
+	isAbsolute ifTrue: [aStream nextPut: $/].
 
 	aStream
-		nextPut: $/;
 		nextPutAll: self pathString.
 
 	fragment ifNotNil:
