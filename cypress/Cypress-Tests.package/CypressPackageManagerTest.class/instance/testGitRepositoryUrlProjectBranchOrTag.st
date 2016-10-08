@@ -11,14 +11,14 @@ testGitRepositoryUrlProjectBranchOrTag
       {'://github.com/dalehenrich/filetree/repository'.
       'master'}.
       {'://github.com/dalehenrich/filetree:pharo5.0_dev/repository'.
-      'pharo5.0'}.
+      'pharo5.0_dev'}.
       {'://github.com/dalehenrich/filetree:pharo5.0_dev/repository/x'.
-      'pharo5.0'}.
+      'pharo5.0_dev'}.
       {'://github.com/dalehenrich/filetree:pharo5.0_dev\/branch/repository/x'.
-      'pharo5.0/branch'}.
+      'pharo5.0_dev/branch'}.
       {'://github.com/dalehenrich/filetree:pharo5.0_dev\/branch'.
-      'pharo5.0/branch'}} do: [ :ar | | url expected repoPath |
+      'pharo5.0_dev/branch'}} do: [ :ar | | url expected projectBranchOrTag |
           url := (scheme , (ar at: 1)) asUrl.
           expected := ar at: 2.
-          repoPath := url projectBranchOrTab.
-          self assert: repoPath = expected ] ]
+          projectBranchOrTag := url projectBranchOrTag.
+          self assert: projectBranchOrTag = expected ] ]

@@ -3,9 +3,9 @@
 	"classinstvars" : [
 		 ],
 	"classvars" : [
-		 ],
+		"GitRepositoryDir" ],
 	"instvars" : [
-		 ],
+		"remoteUrl" ],
 	"name" : "CypressFileSystemGitRepository",
 	"pools" : [
 		 ],
