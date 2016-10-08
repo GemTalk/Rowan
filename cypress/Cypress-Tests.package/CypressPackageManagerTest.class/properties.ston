@@ -5,7 +5,7 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		 ],
+		"gitRepoDir" ],
 	"name" : "CypressPackageManagerTest",
 	"pools" : [
 		 ],
