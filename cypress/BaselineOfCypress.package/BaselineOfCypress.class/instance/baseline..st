@@ -4,7 +4,7 @@ category: baseline
 "
 baseline: spec
   <baseline>
-  spec for: #'gemstoneBase' do: [ spec
+  spec for: #'gemstone64' do: [ spec
         package: 'Cypress-GemStoneCompatibilityLayer';
         package: 'Cypress-Definitions'
           with: [ spec requires: 'Cypress-GemStoneCompatibilityLayer' ];
