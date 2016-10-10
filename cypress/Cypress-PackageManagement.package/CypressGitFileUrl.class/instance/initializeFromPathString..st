@@ -9,17 +9,17 @@ initializeFromPathString: aPathString
   repoDelimIndex := aPathString indexOf: $/ startingAt: projectDelim + 1.
   (branchOrTagDelimIndex := aPathString indexOf: $:) == 0
     ifTrue: [ repoDelimIndex == 0
-        ifTrue: [ projectPath := aPathString ]
-        ifFalse: [ projectPath := aPathString copyFrom: 1 to: repoDelimIndex - 1.
-          repositoryPath := aPathString
-            copyFrom: repoDelimIndex + 1
-            to: aPathString size ] ]
-    ifFalse: [ projectPath := aPathString copyFrom: 1 to: branchOrTagDelimIndex - 1.
+        ifTrue: [ self projectPath: aPathString ]
+        ifFalse: [ self projectPath: (aPathString copyFrom: 1 to: repoDelimIndex - 1).
+          self
+            repositoryPath:
+              (aPathString copyFrom: repoDelimIndex + 1 to: aPathString size) ] ]
+    ifFalse: [ self projectPath: (aPathString copyFrom: 1 to: branchOrTagDelimIndex - 1).
       repoDelimIndex == 0
         ifTrue: [ projectBranchOrTag := aPathString
             copyFrom: branchOrTagDelimIndex + 1
             to: aPathString size ]
-        ifFalse: [ projectPath := aPathString copyFrom: 1 to: branchOrTagDelimIndex - 1.
+        ifFalse: [ self projectPath: (aPathString copyFrom: 1 to: branchOrTagDelimIndex - 1).
           self parseBranchOrTagField: [ :pv :rp | projectBranchOrTag := pv.
-              repositoryPath := rp ] pathString: aPathString
+              self repositoryPath: rp ] pathString: aPathString
           branchOrTagDelimIndex: branchOrTagDelimIndex ] ]

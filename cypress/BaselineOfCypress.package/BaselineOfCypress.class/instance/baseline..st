@@ -4,7 +4,7 @@ category: baseline
 "
 baseline: spec
   <baseline>
-  spec for: #'gemstoneBase' do: [ spec
+  spec for: #'gemstone64' do: [ spec
         package: 'Cypress-GemStoneCompatibilityLayer';
         package: 'Cypress-Definitions'
           with: [ spec requires: 'Cypress-GemStoneCompatibilityLayer' ];
@@ -31,6 +31,5 @@ baseline: spec
         group: 'Core'
           with:
             #('Cypress-Structure' 'Cypress-MesssageDigest' 'Cypress-PackageManagement' 'Cypress-Comparison');
-        group: 'Tests' with: #('Cypress-Tests');
-        group: 'Core Tests' with: #('Core' 'Tests' 'NetworkTests');
+        group: 'Tests' with: #('Cypress-Tests' 'NetworkTests');
         yourself ]
