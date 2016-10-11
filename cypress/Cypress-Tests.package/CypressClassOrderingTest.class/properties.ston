@@ -1,0 +1,13 @@
+{
+	"category" : "Cypress-Tests",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"unorderedClasses",
+		"orderedClasses" ],
+	"name" : "CypressClassOrderingTest",
+	"pools" : [
+		 ],
+	"super" : "CypressAbstractTest" }
