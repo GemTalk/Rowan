@@ -6,7 +6,7 @@
 		 ],
 	"instvars" : [
 		"gitRepoDir" ],
-	"name" : "CypressPackageManagerTest",
+	"name" : "CypressRemoteRepositoryTest",
 	"pools" : [
 		 ],
 	"super" : "CypressAbstractTest" }
