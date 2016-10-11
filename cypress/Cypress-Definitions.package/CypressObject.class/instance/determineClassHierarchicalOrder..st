@@ -5,37 +5,19 @@ category: sorting
 determineClassHierarchicalOrder: someClasses
 	"Returns an ordered collection of the specified classes such that
 	 hierarchical dependencies come first."
+	"Not sure whether we ever get non-behaviors. 
+	The previous, more complex, version of this method contained this filter."
 
-	| org order classSet |
-	org := Dictionary new.
-	org at: #nil put: ClassSet new.
-	classSet := ClassSet new.
-	someClasses do: 
-			[:each |
-			| sub |
-			sub := each.
-			sub isBehavior
-				ifTrue: 
-					[| superCls |
-					classSet add: sub.
-					
-					[superCls := sub superClass.
-					superCls ~~ nil] whileTrue: 
-								[| assoc |
-								assoc := org associationAt: superCls otherwise: nil.
-								assoc
-									ifNil: 
-										[assoc := Association newWithKey: superCls value: ClassSet new.
-										org add: assoc].
-								assoc value add: sub.
-								sub := superCls].
-					(org at: #nil) add: sub]].
-
-	"Order the subclass sets and weed out unwanted classes."
-	order := Array new.
-	self
-		addClasses: (org at: #nil)
-		to: order
-		fromRelevantClasses: classSet
-		organizedBy: org.
+	| order toBeOrdered processed aClass |
+	toBeOrdered := (someClasses select: [:each | each isBehavior])
+				asIdentitySet.
+	order := OrderedCollection new.
+	processed := IdentitySet new.
+	[(aClass := self anyElementOf: toBeOrdered ifEmpty: [nil]) isNil]
+		whileFalse: 
+			[self
+				orderBySuperclass: aClass
+				from: toBeOrdered
+				into: order
+				ignoring: processed].
 	^order
