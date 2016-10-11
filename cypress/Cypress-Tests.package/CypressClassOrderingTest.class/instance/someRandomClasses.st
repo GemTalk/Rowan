@@ -7,8 +7,8 @@ someRandomClasses
 	| cutoff random someClasses randomlyOrderedClasses |
 	cutoff := 0.5.
 	random := HostRandom new.
-	someClasses := Globals
-				select: [:aGlobal | aGlobal isBehavior and: [random float > cutoff]].
+	someClasses := (Globals
+				select: [:aGlobal | aGlobal isBehavior and: [random float > cutoff]]) asSet.
 	randomlyOrderedClasses := Dictionary new: someClasses size.
 	someClasses
 		do: [:aClass | randomlyOrderedClasses at: random integer put: aClass].
