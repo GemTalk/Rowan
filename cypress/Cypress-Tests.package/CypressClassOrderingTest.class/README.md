@@ -1,0 +1,1 @@
+Test sorting of arbitrary sets of classes so that superclasses always follow the subclasses.
