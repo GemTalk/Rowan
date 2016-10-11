@@ -19,11 +19,13 @@ potentialPackageNames
 					aClass categorysDo: 
 							[:cat :method |
 							cat first = $*
-								ifTrue: [methodCategories addAll: (self packageNamePermutationsFor: (cat copyFrom: 2 to: cat size))]].
+								ifTrue: 
+									[methodCategories
+										addAll: (self packageNamePermutationsFor: (cat copyFrom: 2 to: cat size))]].
 					false]].
 	^(Set new)
 		addAll: classCategories;
 		addAll: methodCategories;
-		remove: 'User Classes';
-		remove: 'Kernel';
+		removeIfPresent: 'User Classes';
+		removeIfPresent: 'Kernel';
 		sortAscending
