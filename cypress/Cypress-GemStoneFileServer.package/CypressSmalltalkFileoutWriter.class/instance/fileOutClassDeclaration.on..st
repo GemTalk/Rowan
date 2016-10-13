@@ -3,14 +3,25 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: writing - private
 "
 fileOutClassDeclaration: classStructure on: aStream
+	"This is the structure for VW/Pharo  class definitions. It may or may not be portable
+	to all dialects that use chunk-format fileins. It does not attempt to handle VW
+	namespaces at this time. Probably should use an XML fileout for that."
 
 	aStream
-		nextPutAll: '(', classStructure superclassName; lf;
-		nextPutAll: '	subclass: ', classStructure className asString printString; lf;
-		nextPutAll: '	instVarNames: #( ', classStructure instanceVariablesString, ' )'; lf;
-		nextPutAll: '	classVars: #( ', classStructure classVariablesString, ' )'; lf;
-		nextPutAll: '	classInstVars: #( ', classStructure classInstanceVariablesString, ' )'; lf;
-		nextPutAll: '	poolDictionaries: #())'; lf;
-		nextPutAll: '		category: ', classStructure category printString, ';'; lf;
-		nextChunkPut: '		comment: ', classStructure comment printString; lf;
-		lf.
+		nextPutAll: classStructure superclassName;
+		nextPutAll: ' subclass: #' nextPutAll: classStructure className;
+		lf;
+		nextPutAll: '	instanceVariableNames:  ''';
+		nextPutAll: classStructure instanceVariablesString;
+		nextPut: $';
+		lf;
+		nextPutAll: '	classVariableNames: ''';
+		nextPutAll: classStructure classVariablesString;
+		nextPut: $';
+		lf;
+		nextPutAll: '	poolDictionaries: ''';
+		nextPutAll: classStructure poolDictionariesString;
+		nextPut: $';
+		lf;
+		nextPutAll: '	category: ''' nextPutAll: classStructure category;
+		nextPut: $'
