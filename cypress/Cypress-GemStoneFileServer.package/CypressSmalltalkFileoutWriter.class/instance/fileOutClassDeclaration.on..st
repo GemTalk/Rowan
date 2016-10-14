@@ -9,7 +9,8 @@ fileOutClassDeclaration: classStructure on: aStream
 
 	aStream
 		nextPutAll: classStructure superclassName;
-		nextPutAll: ' subclass: #' nextPutAll: classStructure className;
+		nextPutAll: ' subclass: #';
+		nextPutAll: classStructure className;
 		lf;
 		nextPutAll: '	instanceVariableNames:  ''';
 		nextPutAll: classStructure instanceVariablesString;
@@ -23,5 +24,20 @@ fileOutClassDeclaration: classStructure on: aStream
 		nextPutAll: classStructure poolDictionariesString;
 		nextPut: $';
 		lf;
-		nextPutAll: '	category: ''' nextPutAll: classStructure category;
-		nextPut: $'
+		nextPutAll: '	category: ''';
+		nextPutAll: classStructure category;
+		nextChunkPut: '''';
+		lf;
+		lf;
+		nextPutAll: classStructure className;
+		nextPutAll: ' comment:';
+		lf;
+		nextChunkPut: classStructure comment printString;
+		lf;
+		lf;
+		nextPutAll: classStructure className;
+		nextPutAll: ' class instanceVariableNames: ''';
+		nextPutAll: classStructure classInstanceVariablesString;
+		nextChunkPut: '''';
+		lf;
+		lf

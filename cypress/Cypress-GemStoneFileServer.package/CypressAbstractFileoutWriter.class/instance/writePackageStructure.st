@@ -5,6 +5,7 @@ category: writing
 writePackageStructure
 
 	CypressFileUtilities current
-		writeStreamFor: self packageStructure packageName, self packageNameExtension
+		writeStreamFor: self packageStructure packageName
+				, self packageNameExtension
 		in: self packageDirectory
-		do: [:fileStream | fileStream nextPutAll: (String streamContents: [:stream | self fileOutPackageOn: stream])]
+		do: [:fileStream | self fileOutPackageOn: fileStream]
