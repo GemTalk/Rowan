@@ -4,12 +4,9 @@ category: accessing
 "
 classesInPackageNamed: aString
 
-	| packageName candidateName |
+	| packageName |
 	packageName := aString asLowercase.
 	^(System myUserProfile symbolList allSatisfying: 
 			[:each |
-			each isBehavior and: 
-					[candidateName := each category asLowercase.
-					candidateName = packageName
-						or: [candidateName beginsWith: packageName , '-']]])
+			each isBehavior and: [each category asLowercase = packageName]])
 		sortAscending: #('name')
