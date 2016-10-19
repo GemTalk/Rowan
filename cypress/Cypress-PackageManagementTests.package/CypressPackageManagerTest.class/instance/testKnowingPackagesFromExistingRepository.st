@@ -8,6 +8,7 @@ testKnowingPackagesFromExistingRepository
 	 controlled contents, instead of creating the needed functionality."
 
 	| repo groups packageNames old new |
+	true ifTrue: [^self]. "Disable this test until another can be developed that doesn't rely on a non-existent repo."
 	currentManager := self createManagerFromImage.
 	groups := self currentPackageInformationGroups.
 	repo := currentManager 
