@@ -4,4 +4,4 @@ category: initialization
 "
 defaultSymbolDictionaryName
 
-  ^defaultSymbolDictionaryName ifNil: [ #UserGlobals ]
+  ^defaultSymbolDictionaryName
