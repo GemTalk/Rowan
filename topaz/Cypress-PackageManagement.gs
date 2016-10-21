@@ -134,6 +134,21 @@ true.
 %
 
 doit
+(CypressFileSystemRepository
+	subclass: 'CypressFileSystemGitRepository'
+	instVarNames: #( remoteUrl )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (Object
 	subclass: 'CypressPackageManager'
 	instVarNames: #( knownPackages knownRepositories packageInformationList )
@@ -294,6 +309,48 @@ doit
 	options: #())
 		category: 'Cypress-PackageManagement';
 		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractFileUrl
+	subclass: 'CypressGitFileUrl'
+	instVarNames: #( projectPath projectBranchOrTag repositoryPath )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: 'No class-specific documentation for CypressGitFileUrl, hierarchy is: 
+Object
+  Url( fragment)
+    FileUrl( host path isAbsolute)
+      CypressAbstractFileUrl
+        CypressGitFileUrl
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressGitFileUrl
+	subclass: 'CypressGitFileTreeUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: 'No class-specific documentation for CypressGitFileTreeUrl, hierarchy is: 
+Object
+  Url( fragment)
+    FileUrl( host path isAbsolute)
+      CypressAbstractFileUrl
+        CypressGitFileTreeUrl
+';
 		immediateInvariant.
 true.
 %
@@ -917,9 +974,12 @@ directoryPath
 
 category: 'initializing - private'
 method: CypressFileSystemRepository
-directoryPath:  aString
-
-	directoryPath := aString
+directoryPath: aString
+  | delim |
+  delim := self fileUtils pathNameDelimiter.
+  aString last = delim last
+    ifTrue: [ directoryPath := aString ]
+    ifFalse: [ directoryPath := aString , delim ]
 %
 
 category: 'testing - private'
@@ -991,12 +1051,10 @@ initializeForDirectory: aDirectory
 category: 'initializing - private'
 method: CypressFileSystemRepository
 initializeForFileTreeRepository
-
-	self initializeDefaultRepositoryProperties.
-	self
-		alias: 'FileTree read-only repository on ', self directoryPath;
-		codeFormatProperty: 'FileTree';
-		strictCodeFormat: true.
+  self initializeDefaultRepositoryProperties.
+  self
+    codeFormatProperty: 'FileTree';
+    strictCodeFormat: true
 %
 
 category: 'initializing - private'
@@ -1024,16 +1082,21 @@ initializeReaderAndWriterClasses
 
 category: 'initializing - private'
 method: CypressFileSystemRepository
-initializeUrl: aUrl andAlias: aString
+initializeRepositoryDirectory
+  self directoryPath: self url pathForDirectory.
+  self ensureDirectoryPathExists
+%
 
-	super initializeUrl: aUrl andAlias: aString.
-	self directoryPath: self url pathForDirectory.
-	self ensureDirectoryPathExists.
-	self readPropertiesFile.
-	self codeFormatProperty: self url codeFormat.
-	self strictCodeFormat: self url isStrict.
-	self fixupMissingCopyrightProperty.
-	self initializeReaderAndWriterClasses.
+category: 'initializing - private'
+method: CypressFileSystemRepository
+initializeUrl: aUrl andAlias: aString
+  super initializeUrl: aUrl andAlias: aString.
+  self initializeRepositoryDirectory.
+  self readPropertiesFile.
+  self codeFormatProperty: self url codeFormat.
+  self strictCodeFormat: self url isStrict.
+  self fixupMissingCopyrightProperty.
+  self initializeReaderAndWriterClasses
 %
 
 category: 'testing properties'
@@ -1105,13 +1168,11 @@ packageNames
 category: 'printing'
 method: CypressFileSystemRepository
 printDetailsOn: aStream
-
-	self alias notEmpty
-		ifTrue: 
-			[aStream
-				nextPutAll: self alias;
-				nextPutAll: ': '].
-	aStream nextPutAll: self url printString
+  self alias notEmpty
+    ifTrue: [ aStream
+        nextPutAll: self alias;
+        nextPutAll: ': ' ].
+  aStream nextPutAll: self url printString
 %
 
 category: 'reading'
@@ -1201,6 +1262,194 @@ writePropertiesFile: fileName
 		writeStreamFor: fileName
 		in: self directoryPath
 		do: [:fileStream | properties writeCypressJsonOn: fileStream]
+%
+
+! Class Implementation for CypressFileSystemGitRepository
+
+! ------------------- Class methods for CypressFileSystemGitRepository
+
+category: 'accessing'
+classmethod: CypressFileSystemGitRepository
+gitRepositoryDir
+  | path |
+  path := (SessionTemps current at: #'Cypress_FileSystem_Git_Repository_Directory' otherwise: nil)
+    ifNil: [
+      path := (System gemEnvironmentVariable: 'GEMSTONE_GITDIR')
+        ifNil: [ 
+          CypressFileUtilities current workingDirectory
+          , CypressFileUtilities current pathNameDelimiter , 'cypress-git-repos' ].
+      SessionTemps current at: #'Cypress_FileSystem_Git_Repository_Directory' put: path ].
+  ^path
+%
+
+category: 'accessing'
+classmethod: CypressFileSystemGitRepository
+gitRepositoryDir: directoryPath
+  ^ SessionTemps current at: #'Cypress_FileSystem_Git_Repository_Directory' put: directoryPath
+%
+
+category: 'git commands'
+classmethod: CypressFileSystemGitRepository
+performOnServer: commandLine
+  | result |
+  result := self
+    performOnServer: commandLine
+    status: [ :performOnServerStatusArray | "Array of 5 elements: 
+       raw status Integer, 
+       child process status Integer (after WEXITSTATUS macro applied), 
+       result String (or nil if operation failed) ,
+       error string from script file write, fork, or result file read ,
+       errno value, a SmallInteger from file write, fork, or file read"
+      (performOnServerStatusArray at: 1) ~~ 0
+        ifTrue: [ | message |
+          message := 'performOnServer: ' , commandLine printString , ' stdout: '
+            , (performOnServerStatusArray at: 3) printString
+            , ' failed with status: '
+            , (performOnServerStatusArray at: 1) printString , ' errno: '
+            , (performOnServerStatusArray at: 5) printString , ' errStr: '
+            , (performOnServerStatusArray at: 4) asString.
+          self error: message ].
+      performOnServerStatusArray at: 3 ].
+  Transcript
+    cr;
+    show: commandLine printString;
+    cr;
+    show: result.
+  ^ result
+%
+
+category: 'git commands'
+classmethod: CypressFileSystemGitRepository
+performOnServer: commandLine status: statusBlock
+  | performOnServerStatusArray |
+  performOnServerStatusArray := System _performOnServer: commandLine.
+  ^ statusBlock value: performOnServerStatusArray
+%
+
+category: 'git commands'
+classmethod: CypressFileSystemGitRepository
+runGitCommand: argsArray in: gitRootPath
+  | command |
+  command := String
+    streamContents: [ :stream | stream nextPutAll: 'cd ' , gitRootPath , '; git '.
+      argsArray do: [ :arg | stream
+            space;
+            nextPutAll: arg ] ].
+  ^ self performOnServer: command
+%
+
+! ------------------- Instance methods for CypressFileSystemGitRepository
+
+category: 'accessing'
+method: CypressFileSystemGitRepository
+currentBranch
+  | result |
+  result := self
+    gitCommand: #('rev-parse' '--abbrev-ref' 'HEAD')
+    in: self directoryPath.
+  ^ result trimWhiteSpace
+%
+
+category: 'git querying'
+method: CypressFileSystemGitRepository
+gitCloneRepositoryAndCheckoutIn: aDirectoryName workingDirectory: workingDirectory
+  "Do a clone on the remote repository and do a checkout on it to get the right branch. Complement the directory as well with the working directory."
+
+  | gitDir branch |
+  gitDir := workingDirectory , self fileUtils pathNameDelimiter
+    , (aDirectoryName subStrings: '/') last.
+  branch := self projectBranchOrTag.
+  (self fileUtils directoryExists: gitDir)
+    ifTrue: [ | targetDirBranch |
+      self directoryPath: (self repositoryPath isEmpty
+            ifTrue: [ gitDir ]
+            ifFalse: [ gitDir , self fileUtils pathNameDelimiter , self repositoryPath ]).
+      targetDirBranch := self currentBranch.
+      targetDirBranch = branch
+        ifFalse: [ self error: self class name asString
+                ,
+                  ' target directory already exists and is on another branch, cancelling clone and repository instanciation : '
+                , gitDir ] ]
+    ifFalse: [ self gitCommand: #('clone') , {'-b'.
+              branch} , {remoteUrl.
+              gitDir} in: workingDirectory.
+      self directoryPath: (self repositoryPath isEmpty
+            ifTrue: [ gitDir ]
+            ifFalse: [ gitDir , self fileUtils pathNameDelimiter , self repositoryPath ]) ]
+%
+
+category: 'git querying'
+method: CypressFileSystemGitRepository
+gitCommand: aCommandString in: aDirectory
+  ^ self class runGitCommand: aCommandString in: aDirectory
+%
+
+category: 'initializing - private'
+method: CypressFileSystemGitRepository
+initializeRepositoryDirectory
+  self remoteUrl: self url httpsAccessString.
+  self
+    gitCloneRepositoryAndCheckoutIn: self projectPath
+    workingDirectory: self class gitRepositoryDir.
+  (self isGitRepository: self directoryPath)
+    ifFalse: [ self error: 'This url is not a git repository' , self url printString ]
+%
+
+category: 'git querying'
+method: CypressFileSystemGitRepository
+isGitRepository: aDirectory
+  "Check that we have a git repository"
+
+  | gitPath |
+  gitPath := self gitCommand: #('rev-parse' '--show-toplevel') in: aDirectory.
+  (gitPath indexOfSubCollection: 'fatal:') = 1
+    ifTrue: [ ^ false ].
+  ^ true
+%
+
+category: 'accessing'
+method: CypressFileSystemGitRepository
+projectBranchOrTag
+  "right now only expect to work with branches"
+
+  ^ self url projectBranchOrTag
+%
+
+category: 'accessing'
+method: CypressFileSystemGitRepository
+projectPath
+  ^ self url projectPath
+%
+
+category: 'accessing'
+method: CypressFileSystemGitRepository
+remoteUrl
+
+   ^remoteUrl
+%
+
+category: 'accessing'
+method: CypressFileSystemGitRepository
+remoteUrl: anObject
+
+   remoteUrl := anObject
+%
+
+category: 'accessing'
+method: CypressFileSystemGitRepository
+repositoryPath
+  ^ self url repositoryPath
+%
+
+category: 'validating - private'
+method: CypressFileSystemGitRepository
+validateUrl
+  "At this level, there is nothing to check.
+	 But different URLs denote different kinds of repositories, and
+	 each kind of repository may have specific checks."
+
+  (self url projectPath isEmpty or: [ self url projectBranchOrTag isEmpty ])
+    ifTrue: [ self error: self printString , ' should not be used with non-git URLs.' ]
 %
 
 ! Class Implementation for CypressPackageManager
@@ -2028,7 +2277,7 @@ category: 'initialization'
 method: CypressPackageManager3
 defaultSymbolDictionaryName
 
-  ^defaultSymbolDictionaryName ifNil: [ #UserGlobals ]
+  ^defaultSymbolDictionaryName
 %
 
 category: 'initialization'
@@ -2477,6 +2726,12 @@ codeFormat
 	^self subclassResponsibility: #codeFormat.
 %
 
+category: 'private'
+method: CypressAbstractFileUrl
+fileUtils
+  ^ CypressFileUtilities current
+%
+
 category: 'testing'
 method: CypressAbstractFileUrl
 isStrict
@@ -2570,6 +2825,216 @@ method: CypressFileUrl
 isStrict
 
 	^true
+%
+
+! Class Implementation for CypressGitFileUrl
+
+! ------------------- Class methods for CypressGitFileUrl
+
+category: 'constants'
+classmethod: CypressGitFileUrl
+schemeName
+  "A gitcypress url with a host is the target for a remote. All other parameters are optional.
+	Parameters are:
+		dir : the directory inside the repository where the target MC packages are.
+		branch : the git branch to fetch.
+		protocol: the user name part to add to the ssh Url, default to git, but can also be https (which implies read only access).
+		readOnly : is the repository read only? If present, reduce the history to a minimum (and change the GUI).
+	Alternative url syntax:
+		gitcypress://github.com/dalehenrich/filetree:pharo5.0_dev/repository
+	with:
+		host : github.com
+		project : dalehenrich/filetree
+		branch : pharo5.0_dev
+		dir : repository
+"
+
+  ^ 'gitcypress'
+%
+
+! ------------------- Instance methods for CypressGitFileUrl
+
+category: 'accessing'
+method: CypressGitFileUrl
+codeFormat
+
+	^'Cypress'
+%
+
+category: 'printing'
+method: CypressGitFileUrl
+httpsAccessString
+  ^ 'https://' , self host , self projectPath , '.git'
+%
+
+category: 'private-initialization'
+method: CypressGitFileUrl
+initializeFromPathString: aPathString
+  | projectDelim repoDelimIndex branchOrTagDelimIndex |
+  projectBranchOrTag := repositoryPath := nil.
+  projectDelim := aPathString indexOf: $/ startingAt: 2.
+  repoDelimIndex := aPathString indexOf: $/ startingAt: projectDelim + 1.
+  (branchOrTagDelimIndex := aPathString indexOf: $:) == 0
+    ifTrue: [ repoDelimIndex == 0
+        ifTrue: [ self projectPath: aPathString ]
+        ifFalse: [ self projectPath: (aPathString copyFrom: 1 to: repoDelimIndex - 1).
+          self
+            repositoryPath:
+              (aPathString copyFrom: repoDelimIndex + 1 to: aPathString size) ] ]
+    ifFalse: [ self projectPath: (aPathString copyFrom: 1 to: branchOrTagDelimIndex - 1).
+      repoDelimIndex == 0
+        ifTrue: [ projectBranchOrTag := aPathString
+            copyFrom: branchOrTagDelimIndex + 1
+            to: aPathString size ]
+        ifFalse: [ self projectPath: (aPathString copyFrom: 1 to: branchOrTagDelimIndex - 1).
+          self parseBranchOrTagField: [ :pv :rp | projectBranchOrTag := pv.
+              self repositoryPath: rp ] pathString: aPathString
+          branchOrTagDelimIndex: branchOrTagDelimIndex ] ]
+%
+
+category: 'testing'
+method: CypressGitFileUrl
+isStrict
+
+	^true
+%
+
+category: 'private-initialization'
+method: CypressGitFileUrl
+parseBranchOrTagField: parseBlock pathString: aPathString branchOrTagDelimIndex: branchOrTagDelimIndex
+  | strm done escaped repoDelimIndex |
+  strm := WriteStream on: String new.
+  repoDelimIndex := branchOrTagDelimIndex + 1.
+  escaped := done := false.
+  [ done ] whileFalse: [ | char |
+      repoDelimIndex > aPathString size
+        ifTrue: [ done := true ]
+        ifFalse: [ char := aPathString at: repoDelimIndex.
+          char == $\
+            ifTrue: [ escaped
+                ifTrue: [ "$\ not legal in branch name ... literally ignored"
+                  escaped := false ]
+                ifFalse: [ escaped := true ] ]
+            ifFalse: [ char == $/
+                ifTrue: [ escaped
+                    ifFalse: [ done := true ] ].
+              done
+                ifFalse: [ strm nextPut: char ].
+              escaped := false ].
+          repoDelimIndex := repoDelimIndex + 1 ] ].
+  repoDelimIndex := repoDelimIndex - 1.
+  parseBlock
+    value: strm contents
+    value: (aPathString copyFrom: repoDelimIndex + 1 to: aPathString size)
+%
+
+category: 'printing'
+method: CypressGitFileUrl
+printOn: aStream
+  | escapedBranchOrTag |
+  aStream nextPutAll: self schemeName , '://' , self host.
+  aStream
+    nextPutAll: self projectPath;
+    nextPut: $:.
+  escapedBranchOrTag := String
+    streamContents: [ :stream | self projectBranchOrTag do: [ :char | char = $/
+            ifTrue: [ stream nextPut: $\ ].
+          stream nextPut: char ] ].
+  aStream
+    nextPutAll: escapedBranchOrTag;
+    nextPut: $/;
+    nextPutAll: self repositoryPath;
+    yourself
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+projectBranchOrTag
+  ^ projectBranchOrTag ifNil: [ 'master' ]
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+projectBranchOrTag: anObject
+
+   projectBranchOrTag := anObject
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+projectPath
+
+   ^projectPath
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+projectPath: aString
+  aString last = self fileUtils pathNameDelimiter last
+    ifTrue: [ projectPath := aString copyFrom: 1 to: aString size - 1 ]
+    ifFalse: [ projectPath := aString ]
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+repositoryClass
+  ^ CypressFileSystemGitRepository
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+repositoryPath
+  ^ repositoryPath ifNil: [ '' ]
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+repositoryPath: aString
+  (aString size > 0
+    and: [ aString last = self fileUtils pathNameDelimiter last ])
+    ifTrue: [ repositoryPath := aString copyFrom: 1 to: aString size - 1 ]
+    ifFalse: [ repositoryPath := aString ]
+%
+
+! Class Implementation for CypressGitFileTreeUrl
+
+! ------------------- Class methods for CypressGitFileTreeUrl
+
+category: 'constants'
+classmethod: CypressGitFileTreeUrl
+schemeName
+  "A gitfiletree url with a host is the target for a remote. All other parameters are optional.
+	Parameters are:
+		dir : the directory inside the repository where the target MC packages are.
+		branch : the git branch to fetch.
+		protocol: the user name part to add to the ssh Url, default to git, but can also be https (which implies read only access).
+		readOnly : is the repository read only? If present, reduce the history to a minimum (and change the GUI).
+	Alternative url syntax:
+		gitfiletree://github.com/dalehenrich/filetree:pharo5.0_dev/repository
+	with:
+		host : github.com
+		project : dalehenrich/filetree
+		branch : pharo5.0_dev
+		dir : repository
+"
+
+  ^ 'gitfiletree'
+%
+
+! ------------------- Instance methods for CypressGitFileTreeUrl
+
+category: 'accessing'
+method: CypressGitFileTreeUrl
+codeFormat
+
+	^'FileTree'
+%
+
+category: 'testing'
+method: CypressGitFileTreeUrl
+isStrict
+
+	^false
 %
 
 ! Class Implementation for CypressLaxFileUrl

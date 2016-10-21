@@ -346,6 +346,25 @@ methodClass
 	^self inClass
 %
 
+category: '*Cypress-GemStoneCompatibilityLayer'
+method: GsNMethod
+printOn: aStream
+
+	| classOrNil selectorOrNil |
+	aStream
+		nextPutAll: self class name;
+		space.
+	self isMethodForBlock ifTrue: [aStream nextPutAll: '[] in '].
+	classOrNil := self inClass.
+	selectorOrNil := self selector.
+	aStream
+		nextPutAll: (classOrNil == nil ifTrue: ['<nil>'] ifFalse: [classOrNil name]);
+		nextPutAll: '>>';
+		nextPutAll: (selectorOrNil == nil
+					ifTrue: ['<anonymous>']
+					ifFalse: [selectorOrNil])
+%
+
 ! Class Extension for Interval
 
 ! ------------------- Class methods for Interval

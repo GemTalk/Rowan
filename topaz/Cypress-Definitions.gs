@@ -95,29 +95,6 @@ true.
 %
 
 doit
-(Notification
-	subclass: 'CypressLoaderErrorNotification'
-	instVarNames: #( patchOperation exception )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-Definitions';
-		comment: 'CypressLoaderErrorNotification is used to notify a consumer of the CypressLoader that a particular CypressPatchOperation failed.
-As a Notification, it resumes by default, logging the error to the Transcript.
-
-
-Instance Variables:
-
-patchOperation:		the CypressPatchOperation that could not be applied.
-exception:			the Error which occurred while trying to apply the Patch Operation.
-';
-		immediateInvariant.
-true.
-%
-
-doit
 (Object
 	subclass: 'CypressObject'
 	instVarNames: #(  )
@@ -327,6 +304,29 @@ doit
 true.
 %
 
+doit
+(Notification
+	subclass: 'CypressLoaderErrorNotification'
+	instVarNames: #( patchOperation exception )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-Definitions';
+		comment: 'CypressLoaderErrorNotification is used to notify a consumer of the CypressLoader that a particular CypressPatchOperation failed.
+As a Notification, it resumes by default, logging the error to the Transcript.
+
+
+Instance Variables:
+
+patchOperation:		the CypressPatchOperation that could not be applied.
+exception:			the Error which occurred while trying to apply the Patch Operation.
+';
+		immediateInvariant.
+true.
+%
+
 ! Class Implementation for CypressError
 
 ! Class Implementation for CypressLoaderError
@@ -482,92 +482,6 @@ requirementsMap: aDictionary
 	requirementsMap := aDictionary
 %
 
-! Class Implementation for CypressLoaderErrorNotification
-
-! ------------------- Class methods for CypressLoaderErrorNotification
-
-category: 'instance creation'
-classmethod: CypressLoaderErrorNotification
-patchOperation: aPatchOperation exception: anException
-
-	^self new
-		initializePatchOperation: aPatchOperation exception: anException;
-		yourself
-%
-
-! ------------------- Instance methods for CypressLoaderErrorNotification
-
-category: 'handling'
-method: CypressLoaderErrorNotification
-defaultAction
-	"Log the notification to the GCI log and the Transcript, then resume."
-
-	self logNotification: 'Notice: ' , self asString.
-	^super defaultAction
-%
-
-category: 'accessing'
-method: CypressLoaderErrorNotification
-exception
-	"Answer the original exception raised when applying the Patch Operation."
-
-	^exception
-%
-
-category: 'updating'
-method: CypressLoaderErrorNotification
-exception: anException
-	"Assign the original exception raised when applying the Patch Operation."
-
-	exception := anException
-%
-
-category: 'initializing - private'
-method: CypressLoaderErrorNotification
-initializeMessageText
-
-	messageText := String streamContents: 
-					[:stream |
-					stream
-						nextPutAll: self patchOperation printString;
-						nextPutAll: ' failed because ';
-						nextPutAll: self exception printString]
-%
-
-category: 'initializing - private'
-method: CypressLoaderErrorNotification
-initializePatchOperation: aPatchOperation exception: anException
-
-	self
-		patchOperation: aPatchOperation;
-		exception: anException;
-		initializeMessageText
-%
-
-category: 'handling'
-method: CypressLoaderErrorNotification
-logNotification: aString
-
-	GsFile gciLogServer: aString.
-	Transcript cr; nextPutAll: aString.
-%
-
-category: 'accessing'
-method: CypressLoaderErrorNotification
-patchOperation
-	"Answer the Patch Operation that could not be applied."
-
-	^patchOperation
-%
-
-category: 'updating'
-method: CypressLoaderErrorNotification
-patchOperation: aCypressPatchOperation
-	"Assign the Patch Operation that could not be applied."
-
-	patchOperation := aCypressPatchOperation
-%
-
 ! Class Implementation for CypressObject
 
 ! ------------------- Class methods for CypressObject
@@ -587,31 +501,19 @@ normalizeLineEndings: aString
 
 ! ------------------- Instance methods for CypressObject
 
-category: 'sorting'
-method: CypressObject
-addClasses: subs to: order fromRelevantClasses: classSet organizedBy: org
-
-	1 to: subs size
-		do: 
-			[:i |
-			| assoc class |
-			class := subs at: i.
-			(classSet includesIdentical: class) ifTrue: [order add: class].
-			assoc := org associationAt: class otherwise: nil.
-			assoc ~~ nil
-				ifTrue: 
-					[self
-						addClasses: assoc value
-						to: order
-						fromRelevantClasses: classSet
-						organizedBy: org]]
-%
-
 category: 'accessing'
 method: CypressObject
 allClasses
 
 	^System myUserProfile symbolList allSatisfying: [:each | each isBehavior]
+%
+
+category: 'private'
+method: CypressObject
+anyElementOf: aCollection ifEmpty: aBlock
+
+	aCollection do: [:each | ^each].
+	^aBlock value
 %
 
 category: 'accessing'
@@ -642,39 +544,21 @@ method: CypressObject
 determineClassHierarchicalOrder: someClasses
 	"Returns an ordered collection of the specified classes such that
 	 hierarchical dependencies come first."
+	"Not sure whether we ever get non-behaviors. 
+	The previous, more complex, version of this method contained this filter."
 
-	| org order classSet |
-	org := Dictionary new.
-	org at: #nil put: ClassSet new.
-	classSet := ClassSet new.
-	someClasses do: 
-			[:each |
-			| sub |
-			sub := each.
-			sub isBehavior
-				ifTrue: 
-					[| superCls |
-					classSet add: sub.
-					
-					[superCls := sub superClass.
-					superCls ~~ nil] whileTrue: 
-								[| assoc |
-								assoc := org associationAt: superCls otherwise: nil.
-								assoc
-									ifNil: 
-										[assoc := Association newWithKey: superCls value: ClassSet new.
-										org add: assoc].
-								assoc value add: sub.
-								sub := superCls].
-					(org at: #nil) add: sub]].
-
-	"Order the subclass sets and weed out unwanted classes."
-	order := Array new.
-	self
-		addClasses: (org at: #nil)
-		to: order
-		fromRelevantClasses: classSet
-		organizedBy: org.
+	| order toBeOrdered processed aClass |
+	toBeOrdered := (someClasses select: [:each | each isBehavior])
+				asIdentitySet.
+	order := OrderedCollection new.
+	processed := IdentitySet new.
+	[(aClass := self anyElementOf: toBeOrdered ifEmpty: [nil]) isNil]
+		whileFalse: 
+			[self
+				orderBySuperclass: aClass
+				from: toBeOrdered
+				into: order
+				ignoring: processed].
 	^order
 %
 
@@ -693,6 +577,30 @@ normalizeLineEndings: aString
 	 #withSqueakLineEndings, for example."
 
 	^self class normalizeLineEndings: aString.
+%
+
+category: 'private'
+method: CypressObject
+orderBySuperclass: aClass from: toBeOrdered into: order ignoring: processed
+	"Private. Add to 'order', superclasses first, aClass and any of its superclasses 
+	that appear in 'toBeOrdered' but do not appear in 'processed'.
+	Remove from 'toBeOrdered' any class added to 'ordered'.
+	Any class seen, add to 'processed' whether or not added to 'order'."
+
+	| superclass |
+	superclass := aClass superclass.
+	superclass isNil | (processed includes: superclass)
+		ifFalse: 
+			[self
+				orderBySuperclass: superclass
+				from: toBeOrdered
+				into: order
+				ignoring: processed].
+	processed add: aClass.
+	(toBeOrdered includes: aClass)
+		ifTrue: 
+			[toBeOrdered remove: aClass.
+			order add: aClass]
 %
 
 category: 'printing'
@@ -1696,6 +1604,28 @@ unresolvedRequirementsFor: aPatchOperation
 
 ! ------------------- Class methods for CypressLoader
 
+category: 'accessing'
+classmethod: CypressLoader
+defaultSymbolDictionaryName
+  "Name of the SymbolDictionary where new classes should be installed"
+
+  ^ (SessionTemps current 
+      at: #'Cypress_Loader_Default_Symbol_Dictionary_Name' 
+      ifAbsent: [] ) 
+        ifNil: [
+          System myUserProfile userId = 'SystemUser'
+          ifTrue: [ #Globals ]
+          ifFalse: [ #'UserGlobals' ] ]
+%
+
+category: 'accessing'
+classmethod: CypressLoader
+defaultSymbolDictionaryName: aSymbol
+  SessionTemps current 
+      at: #'Cypress_Loader_Default_Symbol_Dictionary_Name'
+      put: aSymbol
+%
+
 category: 'unloading'
 classmethod: CypressLoader
 unloadSnapshot: aSnapshot
@@ -1830,7 +1760,7 @@ attemptInitialLoad
 category: 'accessing'
 method: CypressLoader
 defaultSymbolDictionaryName
-  ^ defaultSymbolDictionaryName ifNil: [ super defaultSymbolDictionaryName ]
+  ^ defaultSymbolDictionaryName ifNil: [ self class defaultSymbolDictionaryName ]
 %
 
 category: 'accessing'
@@ -2695,6 +2625,92 @@ updatePackage: aPackage defaultSymbolDictionaryName: defaultSymbolDictionaryName
     updatePackage: aPackage
     defaultSymbolDictionaryName: defaultSymbolDictionaryName
     withSnapshot: self
+%
+
+! Class Implementation for CypressLoaderErrorNotification
+
+! ------------------- Class methods for CypressLoaderErrorNotification
+
+category: 'instance creation'
+classmethod: CypressLoaderErrorNotification
+patchOperation: aPatchOperation exception: anException
+
+	^self new
+		initializePatchOperation: aPatchOperation exception: anException;
+		yourself
+%
+
+! ------------------- Instance methods for CypressLoaderErrorNotification
+
+category: 'handling'
+method: CypressLoaderErrorNotification
+defaultAction
+	"Log the notification to the GCI log and the Transcript, then resume."
+
+	self logNotification: 'Notice: ' , self asString.
+	^super defaultAction
+%
+
+category: 'accessing'
+method: CypressLoaderErrorNotification
+exception
+	"Answer the original exception raised when applying the Patch Operation."
+
+	^exception
+%
+
+category: 'updating'
+method: CypressLoaderErrorNotification
+exception: anException
+	"Assign the original exception raised when applying the Patch Operation."
+
+	exception := anException
+%
+
+category: 'initializing - private'
+method: CypressLoaderErrorNotification
+initializeMessageText
+
+	messageText := String streamContents: 
+					[:stream |
+					stream
+						nextPutAll: self patchOperation printString;
+						nextPutAll: ' failed because ';
+						nextPutAll: self exception printString]
+%
+
+category: 'initializing - private'
+method: CypressLoaderErrorNotification
+initializePatchOperation: aPatchOperation exception: anException
+
+	self
+		patchOperation: aPatchOperation;
+		exception: anException;
+		initializeMessageText
+%
+
+category: 'handling'
+method: CypressLoaderErrorNotification
+logNotification: aString
+
+	GsFile gciLogServer: aString.
+	Transcript cr; nextPutAll: aString.
+%
+
+category: 'accessing'
+method: CypressLoaderErrorNotification
+patchOperation
+	"Answer the Patch Operation that could not be applied."
+
+	^patchOperation
+%
+
+category: 'updating'
+method: CypressLoaderErrorNotification
+patchOperation: aCypressPatchOperation
+	"Assign the Patch Operation that could not be applied."
+
+	patchOperation := aCypressPatchOperation
 %
 
 ! Class Extensions

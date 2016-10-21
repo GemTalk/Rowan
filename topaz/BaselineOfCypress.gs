@@ -62,10 +62,7 @@ category: 'baseline'
 method: BaselineOfCypress
 baseline: spec
   <baseline>
-  spec
-    for: #'gemstoneBase'
-    do: [ 
-      spec
+  spec for: #'gemstone64' do: [ spec
         package: 'Cypress-GemStoneCompatibilityLayer';
         package: 'Cypress-Definitions'
           with: [ spec requires: 'Cypress-GemStoneCompatibilityLayer' ];
@@ -78,14 +75,13 @@ baseline: spec
         package: 'Cypress-Comparison'
           with: [ spec requires: 'Cypress-Definitions' ];
         package: 'Network-Url';
-        package: 'Cypress-PackageManagement'
-          with: [ 
-              spec
+        package: 'Cypress-PackageManagement' with: [ spec
                 requires:
                   #('Cypress-Definitions' 'Network-Url' 'Cypress-GemStoneFileServer') ];
         package: 'Cypress-Mocks';
-        package: 'Cypress-Tests'
-          with: [ spec requires: #('Cypress-Mocks' 'Cypress-Definitions' 'Cypress-Structure') ];
+        package: 'Cypress-Tests' with: [ spec
+                requires:
+                  #('Cypress-Mocks' 'Cypress-Definitions' 'Cypress-Structure' 'Cypress-PackageManagement') ];
         package: 'NetworkTests' with: [ spec requires: #('Network-Url') ];
         yourself.
       spec
@@ -93,15 +89,8 @@ baseline: spec
         group: 'Core'
           with:
             #('Cypress-Structure' 'Cypress-MesssageDigest' 'Cypress-PackageManagement' 'Cypress-Comparison');
-        group: 'Tests' with: #('Cypress-Tests');
-        group: 'Core Tests' with: #('Core' 'Tests' 'NetworkTests');
+        group: 'Tests' with: #('Cypress-Tests' 'NetworkTests');
         yourself ]
-%
-
-category: 'accessing'
-method: BaselineOfCypress
-projectClass
-  ^ MetacelloCypressBaselineProject
 %
 
 ! Class Extensions
