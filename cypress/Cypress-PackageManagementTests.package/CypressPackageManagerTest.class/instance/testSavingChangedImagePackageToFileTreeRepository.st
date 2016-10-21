@@ -13,7 +13,7 @@ testSavingChangedImagePackageToFileTreeRepository
 
 	newClass := self addClassNamed: 'XYClass' under: Object to: UserGlobals inCatgeory: 'X-Y'.
 	self addMethodNamed: 'stub' body: '^nil' toClass: newClass inCategory: 'dummy'.
-	self addMethodNamed: 'isXY' body: '^false' toClass: Object inCategory: '*X-Y-testing'.
+	self addMethodNamed: 'isXY' body: '^false' toClass: Object inCategory: '*X-Y'.
 
 	currentManager writeChangesToAllRepositoriesFor: old.
 

@@ -16,16 +16,16 @@ testLoadingPackageFromFileTreeRepository
 		ensure: [
 	self classToCleanUpNamed: 'XYClass' from: UserGlobals.
 	self methodToCleanUp: (Object compiledMethodAt: #isXY).
-	self categoryToCleanUp: '*X-Y-testing' from: Object].
+	self categoryToCleanUp: '*X-Y' from: Object].
 
 	self
 		assert: summary isEmpty
 			description: 'This package should have loaded without problems';
 		assert: (UserGlobals includesKey: #XYClass)
 			 description: 'Should have loaded class named XYClass';
-		assert: (Object includesCategory: '*X-Y-testing')
-			description: 'Should have loaded a method into *X-Y-testing category on Object';
+		assert: (Object includesCategory: '*X-Y')
+			description: 'Should have loaded a method into *X-Y category on Object';
 		assert: (Object includesSelector: #isXY)
 			description: 'Should have loaded the method Object>>#isXY';
-		assert: (Object selectorsIn: '*X-Y-testing') asSet
+		assert: (Object selectorsIn: '*X-Y') asSet
 			equals: (Set with: #isXY)
