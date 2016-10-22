@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"packageDefinitions" ],
+	"name" : "CypProjectDefinition",
+	"pools" : [
+		 ],
+	"super" : "CypDefinition" }

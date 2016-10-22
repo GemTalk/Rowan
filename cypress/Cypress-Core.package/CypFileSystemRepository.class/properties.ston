@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"directoryPath" ],
+	"name" : "CypFileSystemRepository",
+	"pools" : [
+		 ],
+	"super" : "CypRepository" }

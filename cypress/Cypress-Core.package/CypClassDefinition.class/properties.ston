@@ -1,0 +1,13 @@
+{
+	"category" : "Cypress-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"classMethodDefinitions",
+		"instanceMethodDefinitions" ],
+	"name" : "CypClassDefinition",
+	"pools" : [
+		 ],
+	"super" : "CypDefinition" }

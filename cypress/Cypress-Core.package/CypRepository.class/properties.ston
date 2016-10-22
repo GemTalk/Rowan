@@ -1,0 +1,15 @@
+{
+	"category" : "Cypress-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"url",
+		"properties",
+		"readerClass",
+		"writerClass" ],
+	"name" : "CypRepository",
+	"pools" : [
+		 ],
+	"super" : "Object" }

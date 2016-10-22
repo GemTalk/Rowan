@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "CypFileUrl",
+	"pools" : [
+		 ],
+	"super" : "CypUrl" }

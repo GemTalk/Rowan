@@ -1,0 +1,16 @@
+{
+	"category" : "Cypress-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"name",
+		"url",
+		"commitId",
+		"loadedPackages",
+		"handle" ],
+	"name" : "CypLoadedProject",
+	"pools" : [
+		 ],
+	"super" : "Object" }
