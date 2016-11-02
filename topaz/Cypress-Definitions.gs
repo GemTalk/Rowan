@@ -17,16 +17,18 @@ System myUserProfile symbolList do: [:symDict |
 							"*anythingbutpackagename[-anything]"
 						toRemove := aClass categoryNames select: 
 										[:each |
-										(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
+										each isEmpty not and: [
+											(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
 														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]])
-										or: [each first ~= $*]]
+											or: [each first ~= $*]]]
 					]
 					ifFalse: [
 							"*packagename[-anything]"
 						toRemove := aClass categoryNames select: 
 										[:each |
-										each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]
+										each isEmpty not and: [
+											each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
+														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]]
 					].
 				toRemove do: [:each | aClass removeCategory: each].
 			]
@@ -90,6 +92,29 @@ doit
 	options: #())
 		category: 'Cypress-Definitions';
 		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Notification
+	subclass: 'CypressLoaderErrorNotification'
+	instVarNames: #( patchOperation exception )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-Definitions';
+		comment: 'CypressLoaderErrorNotification is used to notify a consumer of the CypressLoader that a particular CypressPatchOperation failed.
+As a Notification, it resumes by default, logging the error to the Transcript.
+
+
+Instance Variables:
+
+patchOperation:		the CypressPatchOperation that could not be applied.
+exception:			the Error which occurred while trying to apply the Patch Operation.
+';
 		immediateInvariant.
 true.
 %
@@ -304,29 +329,6 @@ doit
 true.
 %
 
-doit
-(Notification
-	subclass: 'CypressLoaderErrorNotification'
-	instVarNames: #( patchOperation exception )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-Definitions';
-		comment: 'CypressLoaderErrorNotification is used to notify a consumer of the CypressLoader that a particular CypressPatchOperation failed.
-As a Notification, it resumes by default, logging the error to the Transcript.
-
-
-Instance Variables:
-
-patchOperation:		the CypressPatchOperation that could not be applied.
-exception:			the Error which occurred while trying to apply the Patch Operation.
-';
-		immediateInvariant.
-true.
-%
-
 ! Class Implementation for CypressError
 
 ! Class Implementation for CypressLoaderError
@@ -480,6 +482,92 @@ requirementsMap: aDictionary
 	 names to a collection of dependent definitions."
 
 	requirementsMap := aDictionary
+%
+
+! Class Implementation for CypressLoaderErrorNotification
+
+! ------------------- Class methods for CypressLoaderErrorNotification
+
+category: 'instance creation'
+classmethod: CypressLoaderErrorNotification
+patchOperation: aPatchOperation exception: anException
+
+	^self new
+		initializePatchOperation: aPatchOperation exception: anException;
+		yourself
+%
+
+! ------------------- Instance methods for CypressLoaderErrorNotification
+
+category: 'handling'
+method: CypressLoaderErrorNotification
+defaultAction
+	"Log the notification to the GCI log and the Transcript, then resume."
+
+	self logNotification: 'Notice: ' , self asString.
+	^super defaultAction
+%
+
+category: 'accessing'
+method: CypressLoaderErrorNotification
+exception
+	"Answer the original exception raised when applying the Patch Operation."
+
+	^exception
+%
+
+category: 'updating'
+method: CypressLoaderErrorNotification
+exception: anException
+	"Assign the original exception raised when applying the Patch Operation."
+
+	exception := anException
+%
+
+category: 'initializing - private'
+method: CypressLoaderErrorNotification
+initializeMessageText
+
+	messageText := String streamContents: 
+					[:stream |
+					stream
+						nextPutAll: self patchOperation printString;
+						nextPutAll: ' failed because ';
+						nextPutAll: self exception printString]
+%
+
+category: 'initializing - private'
+method: CypressLoaderErrorNotification
+initializePatchOperation: aPatchOperation exception: anException
+
+	self
+		patchOperation: aPatchOperation;
+		exception: anException;
+		initializeMessageText
+%
+
+category: 'handling'
+method: CypressLoaderErrorNotification
+logNotification: aString
+
+	GsFile gciLogServer: aString.
+	Transcript cr; nextPutAll: aString.
+%
+
+category: 'accessing'
+method: CypressLoaderErrorNotification
+patchOperation
+	"Answer the Patch Operation that could not be applied."
+
+	^patchOperation
+%
+
+category: 'updating'
+method: CypressLoaderErrorNotification
+patchOperation: aCypressPatchOperation
+	"Assign the Patch Operation that could not be applied."
+
+	patchOperation := aCypressPatchOperation
 %
 
 ! Class Implementation for CypressObject
@@ -2625,92 +2713,6 @@ updatePackage: aPackage defaultSymbolDictionaryName: defaultSymbolDictionaryName
     updatePackage: aPackage
     defaultSymbolDictionaryName: defaultSymbolDictionaryName
     withSnapshot: self
-%
-
-! Class Implementation for CypressLoaderErrorNotification
-
-! ------------------- Class methods for CypressLoaderErrorNotification
-
-category: 'instance creation'
-classmethod: CypressLoaderErrorNotification
-patchOperation: aPatchOperation exception: anException
-
-	^self new
-		initializePatchOperation: aPatchOperation exception: anException;
-		yourself
-%
-
-! ------------------- Instance methods for CypressLoaderErrorNotification
-
-category: 'handling'
-method: CypressLoaderErrorNotification
-defaultAction
-	"Log the notification to the GCI log and the Transcript, then resume."
-
-	self logNotification: 'Notice: ' , self asString.
-	^super defaultAction
-%
-
-category: 'accessing'
-method: CypressLoaderErrorNotification
-exception
-	"Answer the original exception raised when applying the Patch Operation."
-
-	^exception
-%
-
-category: 'updating'
-method: CypressLoaderErrorNotification
-exception: anException
-	"Assign the original exception raised when applying the Patch Operation."
-
-	exception := anException
-%
-
-category: 'initializing - private'
-method: CypressLoaderErrorNotification
-initializeMessageText
-
-	messageText := String streamContents: 
-					[:stream |
-					stream
-						nextPutAll: self patchOperation printString;
-						nextPutAll: ' failed because ';
-						nextPutAll: self exception printString]
-%
-
-category: 'initializing - private'
-method: CypressLoaderErrorNotification
-initializePatchOperation: aPatchOperation exception: anException
-
-	self
-		patchOperation: aPatchOperation;
-		exception: anException;
-		initializeMessageText
-%
-
-category: 'handling'
-method: CypressLoaderErrorNotification
-logNotification: aString
-
-	GsFile gciLogServer: aString.
-	Transcript cr; nextPutAll: aString.
-%
-
-category: 'accessing'
-method: CypressLoaderErrorNotification
-patchOperation
-	"Answer the Patch Operation that could not be applied."
-
-	^patchOperation
-%
-
-category: 'updating'
-method: CypressLoaderErrorNotification
-patchOperation: aCypressPatchOperation
-	"Assign the Patch Operation that could not be applied."
-
-	patchOperation := aCypressPatchOperation
 %
 
 ! Class Extensions

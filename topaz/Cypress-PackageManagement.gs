@@ -17,16 +17,18 @@ System myUserProfile symbolList do: [:symDict |
 							"*anythingbutpackagename[-anything]"
 						toRemove := aClass categoryNames select: 
 										[:each |
-										(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
+										each isEmpty not and: [
+											(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
 														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]])
-										or: [each first ~= $*]]
+											or: [each first ~= $*]]]
 					]
 					ifFalse: [
 							"*packagename[-anything]"
 						toRemove := aClass categoryNames select: 
 										[:each |
-										each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]
+										each isEmpty not and: [
+											each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
+														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]]
 					].
 				toRemove do: [:each | aClass removeCategory: each].
 			]
@@ -38,6 +40,264 @@ true.
 
 
 ! Class Declarations
+
+doit
+(CypressObject
+	subclass: 'CypressAbstractPackageInformation'
+	instVarNames: #( name )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractPackageInformation
+	subclass: 'CypressConflictingPackageInformation'
+	instVarNames: #( conflictsWith )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractPackageInformation
+	subclass: 'CypressEclipsedPackageInformation'
+	instVarNames: #( eclipsedBy )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractPackageInformation
+	subclass: 'CypressKnownPackageInformation'
+	instVarNames: #( repositories digests )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractPackageInformation
+	subclass: 'CypressUnknownPackageInformation'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressObject
+	subclass: 'CypressPackageInformation'
+	instVarNames: #( name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation repository repositoryDescription imageCounts changesCount )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: 'CypressPackageInformation documents potential and actual packages for the Cypress Package Manager. 
+
+Candidate package names come from class categories and from method categories beginning with an asterisk. Category names may contain more information than just the package name, such as logical subdivisions within a package or method categorization in addition to the package name. For example, a Package might be named X or Y-Z or whatever. Classes could be categorized as X, Y-Z, X-A, or Y-Z-A, and methods could be categorized as *X, *Y-Z, *X-A, *Y-Z-A, etc. (The various letters X, Y, Z, and A can represent almost any sequence of characters, in either uppercase, lowercase, or both. Package names are case-insensitive.)
+
+There are four types of CypressPackageInformation objects:
+ - Known Package - those which are known to represent real packages (e.g., Y-Z). In general, it is because there is a savedLocation specified.
+ - Qualified Name - the name is a Known Package name qualified by further details, and cannot be used to represent a Known Package (e.g., X-accessing).
+ - Conflicted Name - the name is a prefix of a Known Package name (e.g. given a Known Package named Y-Z, there can be no package named Y).
+ - Unknown - the name could represent a package, but it is not known to do so.
+
+Instance Variables
+	advice	<String>	Additional information about the type of the instance, usually used only for Qualified Names and Conflcited Names.
+	changesCount	<Integer>	The number of differences between the in-image definitions of the package and the definitions previously saved to disk.
+	competingPackageNames	<String>*	0 or more strings naming packages in competition with this one.
+	imageCounts	<Integer pair>	The number of classes and the number of methods in the image for the package.
+	name	<String>	The name of the package or potential package.
+	savedLocation	<String>	The path to the directory in which the package was or should be saved, with a trailing slash (e.g., /usr/src/project/).
+	type	<String>	One of ''Known Package'', ''Qualified Name'', ''Conflicted Name'', and ''Unknown''.
+	imageDefinitions	<CypressDefinition>*	0 or more definitions from the image.
+	savedDefinitions	<CypressDefinition>*	0 or more definitions from the savedLocation storage.
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(FileUrl
+	subclass: 'CypressAbstractFileUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractFileUrl
+	subclass: 'CypressFileTreeFormatFileUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractFileUrl
+	subclass: 'CypressFileTreeReadOnlyFileUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractFileUrl
+	subclass: 'CypressFileUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractFileUrl
+	subclass: 'CypressGitFileUrl'
+	instVarNames: #( projectPath projectBranchOrTag repositoryPath )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: 'No class-specific documentation for CypressGitFileUrl, hierarchy is: 
+Object
+  Url( fragment)
+    FileUrl( host path isAbsolute)
+      CypressAbstractFileUrl
+        CypressGitFileUrl
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressGitFileUrl
+	subclass: 'CypressGitFileTreeUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: 'No class-specific documentation for CypressGitFileTreeUrl, hierarchy is: 
+Object
+  Url( fragment)
+    FileUrl( host path isAbsolute)
+      CypressAbstractFileUrl
+        CypressGitFileTreeUrl
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractFileUrl
+	subclass: 'CypressLaxFileUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractFileUrl
+	subclass: 'CypressSmalltalkUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(CypressAbstractFileUrl
+	subclass: 'CypressTopazUrl'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #())
+		category: 'Cypress-PackageManagement';
+		comment: '';
+		immediateInvariant.
+true.
+%
 
 doit
 (Object
@@ -253,262 +513,1178 @@ doit
 true.
 %
 
-doit
-(FileUrl
-	subclass: 'CypressAbstractFileUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-true.
+! Class Implementation for CypressAbstractPackageInformation
+
+! ------------------- Class methods for CypressAbstractPackageInformation
+
+category: 'Instance Creation'
+classmethod: CypressAbstractPackageInformation
+named: aString
+
+	^self new
+		initializeWithName: aString;
+		yourself
 %
 
-doit
-(CypressAbstractFileUrl
-	subclass: 'CypressFileTreeFormatFileUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-true.
+! ------------------- Instance methods for CypressAbstractPackageInformation
+
+category: 'Initializing - private'
+method: CypressAbstractPackageInformation
+initialize
 %
 
-doit
-(CypressAbstractFileUrl
-	subclass: 'CypressFileTreeReadOnlyFileUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-true.
+category: 'Initializing - private'
+method: CypressAbstractPackageInformation
+initializeWithName: aString
+
+	self initialize.
+	self name: aString
 %
 
-doit
-(CypressAbstractFileUrl
-	subclass: 'CypressFileUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-true.
+category: 'Testing'
+method: CypressAbstractPackageInformation
+isKnown
+
+	^false
 %
 
-doit
-(CypressAbstractFileUrl
-	subclass: 'CypressGitFileUrl'
-	instVarNames: #( projectPath projectBranchOrTag repositoryPath )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: 'No class-specific documentation for CypressGitFileUrl, hierarchy is: 
-Object
-  Url( fragment)
-    FileUrl( host path isAbsolute)
-      CypressAbstractFileUrl
-        CypressGitFileUrl
-';
-		immediateInvariant.
-true.
+category: 'Accessing'
+method: CypressAbstractPackageInformation
+name
+
+	^name
 %
 
-doit
-(CypressGitFileUrl
-	subclass: 'CypressGitFileTreeUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: 'No class-specific documentation for CypressGitFileTreeUrl, hierarchy is: 
-Object
-  Url( fragment)
-    FileUrl( host path isAbsolute)
-      CypressAbstractFileUrl
-        CypressGitFileTreeUrl
-';
-		immediateInvariant.
-true.
+category: 'Updating'
+method: CypressAbstractPackageInformation
+name: aString
+
+	name := aString
 %
 
-doit
-(CypressAbstractFileUrl
-	subclass: 'CypressLaxFileUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-true.
+category: 'Printing'
+method: CypressAbstractPackageInformation
+printDetailsOn: aStream
+
+	aStream nextPutAll: self name
 %
 
-doit
-(CypressAbstractFileUrl
-	subclass: 'CypressSmalltalkUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-true.
+category: 'Accessing'
+method: CypressAbstractPackageInformation
+repositories
+
+	^#()
 %
 
-doit
-(CypressAbstractFileUrl
-	subclass: 'CypressTopazUrl'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-true.
+! Class Implementation for CypressConflictingPackageInformation
+
+! ------------------- Class methods for CypressConflictingPackageInformation
+
+category: 'Instance Creation'
+classmethod: CypressConflictingPackageInformation
+fromUnknown: unknownPackageInformation conflictingWith: knownPackageInformation
+
+	^(self named: unknownPackageInformation name)
+		conflictsWith: knownPackageInformation;
+		yourself.
 %
 
-doit
-(CypressObject
-	subclass: 'CypressAbstractPackageInformation'
-	instVarNames: #( name )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-true.
+! ------------------- Instance methods for CypressConflictingPackageInformation
+
+category: 'Accessing'
+method: CypressConflictingPackageInformation
+conflictsWith
+
+	^conflictsWith
 %
 
-doit
-(CypressAbstractPackageInformation
-	subclass: 'CypressConflictingPackageInformation'
-	instVarNames: #( conflictsWith )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-true.
+category: 'Updating'
+method: CypressConflictingPackageInformation
+conflictsWith: someCypressKnownPackageInformations
+
+	conflictsWith := someCypressKnownPackageInformations
 %
 
-doit
-(CypressAbstractPackageInformation
-	subclass: 'CypressEclipsedPackageInformation'
-	instVarNames: #( eclipsedBy )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-true.
+! Class Implementation for CypressEclipsedPackageInformation
+
+! ------------------- Class methods for CypressEclipsedPackageInformation
+
+category: 'Instance Creation'
+classmethod: CypressEclipsedPackageInformation
+fromUnknown: unknownPackageInformation eclipsedBy: knownPackageInformation
+
+	^(self named: unknownPackageInformation name)
+		eclipsedBy: knownPackageInformation;
+		yourself.
 %
 
-doit
-(CypressAbstractPackageInformation
-	subclass: 'CypressKnownPackageInformation'
-	instVarNames: #( repositories digests )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-true.
+! ------------------- Instance methods for CypressEclipsedPackageInformation
+
+category: 'Accessing'
+method: CypressEclipsedPackageInformation
+eclipsedBy
+
+	^eclipsedBy
 %
 
-doit
-(CypressAbstractPackageInformation
-	subclass: 'CypressUnknownPackageInformation'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: '';
-		immediateInvariant.
-true.
+category: 'Updating'
+method: CypressEclipsedPackageInformation
+eclipsedBy: aPackageInformation
+
+	eclipsedBy := aPackageInformation
 %
 
-doit
-(CypressObject
-	subclass: 'CypressPackageInformation'
-	instVarNames: #( name type advice competingPackageNames imageDefinitions savedDefinitions savedLocation repository repositoryDescription imageCounts changesCount )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #())
-		category: 'Cypress-PackageManagement';
-		comment: 'CypressPackageInformation documents potential and actual packages for the Cypress Package Manager. 
+! Class Implementation for CypressKnownPackageInformation
 
-Candidate package names come from class categories and from method categories beginning with an asterisk. Category names may contain more information than just the package name, such as logical subdivisions within a package or method categorization in addition to the package name. For example, a Package might be named X or Y-Z or whatever. Classes could be categorized as X, Y-Z, X-A, or Y-Z-A, and methods could be categorized as *X, *Y-Z, *X-A, *Y-Z-A, etc. (The various letters X, Y, Z, and A can represent almost any sequence of characters, in either uppercase, lowercase, or both. Package names are case-insensitive.)
+! ------------------- Class methods for CypressKnownPackageInformation
 
-There are four types of CypressPackageInformation objects:
- - Known Package - those which are known to represent real packages (e.g., Y-Z). In general, it is because there is a savedLocation specified.
- - Qualified Name - the name is a Known Package name qualified by further details, and cannot be used to represent a Known Package (e.g., X-accessing).
- - Conflicted Name - the name is a prefix of a Known Package name (e.g. given a Known Package named Y-Z, there can be no package named Y).
- - Unknown - the name could represent a package, but it is not known to do so.
+category: 'Instance Creation'
+classmethod: CypressKnownPackageInformation
+fromUnknown: aPackageInformation
 
-Instance Variables
-	advice	<String>	Additional information about the type of the instance, usually used only for Qualified Names and Conflcited Names.
-	changesCount	<Integer>	The number of differences between the in-image definitions of the package and the definitions previously saved to disk.
-	competingPackageNames	<String>*	0 or more strings naming packages in competition with this one.
-	imageCounts	<Integer pair>	The number of classes and the number of methods in the image for the package.
-	name	<String>	The name of the package or potential package.
-	savedLocation	<String>	The path to the directory in which the package was or should be saved, with a trailing slash (e.g., /usr/src/project/).
-	type	<String>	One of ''Known Package'', ''Qualified Name'', ''Conflicted Name'', and ''Unknown''.
-	imageDefinitions	<CypressDefinition>*	0 or more definitions from the image.
-	savedDefinitions	<CypressDefinition>*	0 or more definitions from the savedLocation storage.
+	^self named: aPackageInformation name
+%
 
-';
-		immediateInvariant.
-true.
+! ------------------- Instance methods for CypressKnownPackageInformation
+
+category: 'Updating'
+method: CypressKnownPackageInformation
+addRepository: aRepository
+
+	self repositories at: aRepository url put: aRepository.
+	self updateDigestsFromImageAndRepository: aRepository.
+%
+
+category: 'Accessing - digests'
+method: CypressKnownPackageInformation
+determineDigestFromImage
+
+	^self packageStructure digest
+%
+
+category: 'Accessing - digests'
+method: CypressKnownPackageInformation
+determineDigestFromRepository: aRepository
+
+	^ (aRepository readPackageStructureForPackageNamed: self name) digest.
+%
+
+category: 'Accessing - digests'
+method: CypressKnownPackageInformation
+digestFor: source
+
+	^self digestFor: source or: [nil]
+%
+
+category: 'Accessing - digests'
+method: CypressKnownPackageInformation
+digestFor: source or: aBlock
+
+	^self digests at: source ifAbsent: aBlock
+%
+
+category: 'Accessing - digests'
+method: CypressKnownPackageInformation
+digests
+
+	^digests
+%
+
+category: 'Initializing - private'
+method: CypressKnownPackageInformation
+digests: anIdentityDictionary
+	"Key: Source of package definitions (#IMAGE or a Repository url)
+	 Value: (e.g. MD5) Digest of the package's defintions or an empty string.
+	 A nil digest means there are no definitions for the given source."
+
+   digests := anIdentityDictionary
+%
+
+category: 'Accessing - digests'
+method: CypressKnownPackageInformation
+imageDigest
+
+	^self digestFor: #IMAGE.
+%
+
+category: 'Initializing - private'
+method: CypressKnownPackageInformation
+initialize
+
+	super initialize.
+	self
+		repositories: IdentityDictionary new;
+		digests: IdentityDictionary new.
+%
+
+category: 'Testing'
+method: CypressKnownPackageInformation
+isKnown
+
+	^true
+%
+
+category: 'Accessing - digests'
+method: CypressKnownPackageInformation
+packageStructure
+
+	^CypressPackageStructure
+		fromPackage: (CypressPackageDefinition named: self name)
+%
+
+category: 'Updating'
+method: CypressKnownPackageInformation
+removeRepository: aRepository
+
+	self repositories removeKey: aRepository url ifAbsent: [].
+	self digests removeKey: aRepository url ifAbsent: [].
+	self updateDigestsFromImage.
+%
+
+category: 'Accessing'
+method: CypressKnownPackageInformation
+repositories
+
+	^repositories
+%
+
+category: 'Initializing - private'
+method: CypressKnownPackageInformation
+repositories: anIdentityDictionary
+	"Key: Repository url
+	 Value: Repository"
+
+	repositories := anIdentityDictionary
+%
+
+category: 'Accessing - digests'
+method: CypressKnownPackageInformation
+repositoryDigests
+
+	^self repositories collect: [:each | self digestFor: each url]
+%
+
+category: 'Updating - digests'
+method: CypressKnownPackageInformation
+updateDigestsFromAllRepositories
+
+	self repositories do: [:each | self updateDigestsFromRepository: each]
+%
+
+category: 'Updating - digests'
+method: CypressKnownPackageInformation
+updateDigestsFromImage
+
+	self digests at: #IMAGE put: self determineDigestFromImage
+%
+
+category: 'Updating - digests'
+method: CypressKnownPackageInformation
+updateDigestsFromImageAndAllRepositories
+
+	self
+		updateDigestsFromImage;
+		updateDigestsFromAllRepositories
+%
+
+category: 'Updating - digests'
+method: CypressKnownPackageInformation
+updateDigestsFromImageAndRepository: aRepository
+
+	self
+		updateDigestsFromImage;
+		updateDigestsFromRepository: aRepository
+%
+
+category: 'Updating - digests'
+method: CypressKnownPackageInformation
+updateDigestsFromRepository: aRepository
+
+	self digests at: aRepository url put: (self determineDigestFromRepository: aRepository).
+%
+
+category: 'Writing'
+method: CypressKnownPackageInformation
+writeChangesToAllRepositories
+
+	| imageDigest changedDigests changedRepositories |
+	self updateDigestsFromImageAndAllRepositories.
+	imageDigest := self imageDigest.
+	changedDigests := self repositoryDigests reject: [:each | each = imageDigest].
+	changedRepositories := changedDigests keys collect: [:each | self repositories at: each].
+	self writePackageToRepositories: changedRepositories.
+%
+
+category: 'Writing'
+method: CypressKnownPackageInformation
+writePackageToRepositories: someRepositories
+
+	| packageStructure |
+	packageStructure := self packageStructure.
+	^someRepositories
+		do: [:each | each writePackageStructure: packageStructure]
+%
+
+! Class Implementation for CypressUnknownPackageInformation
+
+! Class Implementation for CypressPackageInformation
+
+! ------------------- Class methods for CypressPackageInformation
+
+category: 'instance creation'
+classmethod: CypressPackageInformation
+named: aString repository: aCypressRepository
+	"Answer an instance of the receiver representing the named package.
+	 If the package was saved in a Repository, load up the saved details."
+
+	^self new
+		initializeFromName: aString andRepository: aCypressRepository;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: CypressPackageInformation
+new
+
+	^super new
+		initialize;
+		yourself
+%
+
+! ------------------- Instance methods for CypressPackageInformation
+
+category: 'updating - type'
+method: CypressPackageInformation
+beConflictedWith: somePackageNames
+	"Be designated as representing the prefix of one or more Known Package names."
+
+	type := 'Conflicted Name'.
+	competingPackageNames := somePackageNames sortAscending.
+	advice := 'Conflicts with the packages named ', self competingPackageNamesString
+%
+
+category: 'updating - type'
+method: CypressPackageInformation
+beKnown
+	"Be known to represent a real package."
+
+	type := 'Known Package'.
+	advice := ''.
+	competingPackageNames := #()
+%
+
+category: 'updating - type'
+method: CypressPackageInformation
+beQualifiedNameOf: somePackageNames
+	"Be designated as qualifying a Known Package name and therefore not eligible as a package name."
+
+	type := 'Qualified Name'.
+	competingPackageNames := somePackageNames sortAscending.
+	advice := 'Qualifies the package named ', self competingPackageNamesString
+%
+
+category: 'updating - type'
+method: CypressPackageInformation
+beUnknown
+	"Be designated as possibly representing a package, but not known to do so."
+
+	type := 'Unknown'.
+	advice := ''.
+	competingPackageNames := #()
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+changesCount
+
+	^changesCount
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+changesCount: anInteger
+
+	changesCount := anInteger
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+changesStatus
+
+	^self hasChanges
+		ifTrue: [' (' , self changesCount printString , ')']
+		ifFalse: ['']
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+classCount
+
+	^self imageCounts first
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+competingPackageNames
+
+	^competingPackageNames
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+competingPackageNamesString
+
+	^String streamContents: 
+			[:stream |
+			self competingPackageNames
+				do: [:each | stream nextPutAll: each printString]
+				separatedBy: [stream nextPutAll: ', ']]
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+description
+
+	self isKnown ifTrue: [^self savedLocation].
+	self isUnknown ifTrue: [^' <unknown>'].
+	^' <', advice, '>'
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+determinedChangesCount
+
+	| notInImage notInSaved |
+	notInImage := self savedDefinitions
+				reject: [:each | self imageDefinitions includes: each].
+	notInSaved := self imageDefinitions
+		reject: [:each | self savedDefinitions includes: each].
+	^notInImage size + notInSaved size
+%
+
+category: 'testing'
+method: CypressPackageInformation
+hasChanges
+
+	^self changesCount > 0
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+imageCounts
+
+	^imageCounts
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+imageCounts: someIntegers
+	"A pair: the number of classes and number of methods"
+
+	imageCounts := someIntegers
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+imageDefinitionCounts
+
+	| classCount methodCount |
+	classCount := methodCount := 0.
+	self imageDefinitions do: 
+			[:each |
+			each classDefinition: [:classDefinition | classCount := classCount + 1]
+				methodDefinition: [:methodDefinition | methodCount := methodCount + 1]].
+	^Array with: classCount with: methodCount
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+imageDefinitions
+
+	^imageDefinitions
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+imageDefinitions: someCypressDefinitions
+
+	imageDefinitions := someCypressDefinitions
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+imageDefinitionsStatus
+
+	^self classCount printString , '/' , self methodCount printString
+%
+
+category: 'initializing'
+method: CypressPackageInformation
+initialize
+
+	self
+		beUnknown;
+		name: '';
+		imageDefinitions: #();
+		savedDefinitions: #();
+		savedLocation: '';
+		repositoryDescription: '';
+		imageCounts: #(0 0);
+		changesCount: 0
+%
+
+category: 'initializing'
+method: CypressPackageInformation
+initializeFromName: aString andRepository: aCypressRepositoryOrNil
+
+	self name: aString.
+	aCypressRepositoryOrNil isNil ifTrue: [^self].
+	self updateKnownPackageRepository: aCypressRepositoryOrNil
+%
+
+category: 'testing - type'
+method: CypressPackageInformation
+isConflicted
+
+	^type = 'Conflicted Name'
+%
+
+category: 'testing - type'
+method: CypressPackageInformation
+isKnown
+
+	^type = 'Known Package'
+%
+
+category: 'testing - type'
+method: CypressPackageInformation
+isQualifiedName
+
+	^type = 'Qualified Name'
+%
+
+category: 'testing - type'
+method: CypressPackageInformation
+isUnknown
+
+	^type = 'Unknown'
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+methodCount
+
+	^self imageCounts last
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+name
+
+	^name
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+name: aString
+
+	name := aString
+%
+
+category: 'printing'
+method: CypressPackageInformation
+printDetailsOn: aStream
+
+	aStream
+		nextPutAll: self name;
+		nextPutAll: ' - ';
+		nextPutAll: self description
+%
+
+category: 'updating'
+method: CypressPackageInformation
+readDefinitionsFromRepository
+
+	^(self repository reader readPackageStructureForPackageNamed: self name)
+		packageStructure snapshot
+		definitions
+%
+
+category: 'updating'
+method: CypressPackageInformation
+refresh
+
+	self isKnown ifFalse: [^self].
+	self
+		updateImageDefinitions;
+		updateSavedDefinitions;
+		updateChangesCount.
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+repository
+
+	^repository
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+repository: aCypressFileSystemRepository
+
+	repository := aCypressFileSystemRepository
+%
+
+category: 'unknown'
+method: CypressPackageInformation
+repositoryDescription
+
+	^repositoryDescription
+%
+
+category: 'unknown'
+method: CypressPackageInformation
+repositoryDescription: aString
+
+	repositoryDescription := aString
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+savedDefinitions
+
+	^savedDefinitions
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+savedDefinitions: someCypressDefinitions
+
+	savedDefinitions := someCypressDefinitions
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+savedLocation
+
+	^savedLocation
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+savedLocation: aDirectory
+
+	savedLocation := aDirectory
+%
+
+category: 'accessing'
+method: CypressPackageInformation
+status
+
+	| changes |
+	(changes := self changesStatus) isEmpty ifTrue: [^self imageDefinitionsStatus].
+	^self imageDefinitionsStatus, changes
+%
+
+category: 'updating'
+method: CypressPackageInformation
+updateChangesCount
+	"Must be applied after the image definitions and saved definitions are updated."
+
+	self changesCount: self determinedChangesCount
+%
+
+category: 'updating'
+method: CypressPackageInformation
+updateImageDefinitions
+
+	self
+		imageDefinitions: (CypressPackageDefinition named: self name) snapshot
+					definitions;
+		imageCounts: self imageDefinitionCounts
+%
+
+category: 'updating'
+method: CypressPackageInformation
+updateKnownPackageRepository: aCypressRepository
+	"Update the receiver to reflect it being a known package."
+
+	self
+		beKnown;
+		updateRepository: aCypressRepository;
+		refresh.
+%
+
+category: 'updating'
+method: CypressPackageInformation
+updateRepository: aCypressRepository
+
+	self
+		repository: aCypressRepository;
+		repositoryDescription: self repository description;
+		savedLocation: self repository directoryPath
+%
+
+category: 'updating'
+method: CypressPackageInformation
+updateSavedDefinitions
+
+	self savedDefinitions: self readDefinitionsFromRepository
+%
+
+! Class Implementation for CypressAbstractFileUrl
+
+! ------------------- Class methods for CypressAbstractFileUrl
+
+category: 'instance creation'
+classmethod: CypressAbstractFileUrl
+absoluteFromText: aString
+	"Return a URL from a string and handle
+	a String without a scheme as a FileUrl."
+
+	"Url absoluteFromText: 'http://chaos.resnet.gatech.edu:8000/docs/java/index.html?A%20query%20#part'" 
+	"Url absoluteFromText: 'msw://chaos.resnet.gatech.edu:9000/testbook?top'"
+	"Url absoluteFromText: 'telnet:chaos.resnet.gatech.edu'"
+	"Url absoluteFromText: 'file:/etc/passwd'"
+
+	| remainder index scheme fragment newUrl |
+	"trim surrounding whitespace"
+	remainder := aString trimSeparators.
+
+	"extract the fragment, if any"
+	index := remainder indexOf: $#.
+	index > 0 ifTrue: [
+		fragment := remainder copyFrom: index + 1 to: remainder size.
+		remainder := remainder copyFrom: 1 to: index - 1].
+
+	"choose class based on the scheme name, and let that class do the bulk of the parsing"
+	scheme := self schemeNameForString: remainder.
+	newUrl := (self urlClassForScheme: scheme) new privateInitializeFromText: remainder.
+	newUrl privateFragment: fragment.
+	^newUrl
+%
+
+category: 'parsing'
+classmethod: CypressAbstractFileUrl
+urlClassForScheme: scheme
+
+	scheme isNil ifTrue: [^FileUrl].
+	^super urlClassForScheme: scheme
+%
+
+! ------------------- Instance methods for CypressAbstractFileUrl
+
+category: 'accessing'
+method: CypressAbstractFileUrl
+codeFormat
+
+	^self subclassResponsibility: #codeFormat.
+%
+
+category: 'private'
+method: CypressAbstractFileUrl
+fileUtils
+  ^ CypressFileUtilities current
+%
+
+category: 'testing'
+method: CypressAbstractFileUrl
+isStrict
+
+	^self subclassResponsibility: #isStrict.
+%
+
+category: 'accessing'
+method: CypressAbstractFileUrl
+repositoryClass
+
+	^CypressFileSystemRepository
+%
+
+! Class Implementation for CypressFileTreeFormatFileUrl
+
+! ------------------- Class methods for CypressFileTreeFormatFileUrl
+
+category: 'constants'
+classmethod: CypressFileTreeFormatFileUrl
+schemeName
+
+	^'cypressft'
+%
+
+! ------------------- Instance methods for CypressFileTreeFormatFileUrl
+
+category: 'accessing'
+method: CypressFileTreeFormatFileUrl
+codeFormat
+
+	^'FileTree'
+%
+
+category: 'testing'
+method: CypressFileTreeFormatFileUrl
+isStrict
+
+	^false
+%
+
+! Class Implementation for CypressFileTreeReadOnlyFileUrl
+
+! ------------------- Class methods for CypressFileTreeReadOnlyFileUrl
+
+category: 'constants'
+classmethod: CypressFileTreeReadOnlyFileUrl
+schemeName
+
+	^'cypressfiletree'
+%
+
+! ------------------- Instance methods for CypressFileTreeReadOnlyFileUrl
+
+category: 'accessing'
+method: CypressFileTreeReadOnlyFileUrl
+codeFormat
+
+	^'FileTree'
+%
+
+category: 'testing'
+method: CypressFileTreeReadOnlyFileUrl
+isStrict
+
+	^true
+%
+
+! Class Implementation for CypressFileUrl
+
+! ------------------- Class methods for CypressFileUrl
+
+category: 'constants'
+classmethod: CypressFileUrl
+schemeName
+
+	^'cypress'
+%
+
+! ------------------- Instance methods for CypressFileUrl
+
+category: 'accessing'
+method: CypressFileUrl
+codeFormat
+
+	^'Cypress'
+%
+
+category: 'testing'
+method: CypressFileUrl
+isStrict
+
+	^true
+%
+
+! Class Implementation for CypressGitFileUrl
+
+! ------------------- Class methods for CypressGitFileUrl
+
+category: 'constants'
+classmethod: CypressGitFileUrl
+schemeName
+  "A gitcypress url with a host is the target for a remote. All other parameters are optional.
+	Parameters are:
+		dir : the directory inside the repository where the target MC packages are.
+		branch : the git branch to fetch.
+		protocol: the user name part to add to the ssh Url, default to git, but can also be https (which implies read only access).
+		readOnly : is the repository read only? If present, reduce the history to a minimum (and change the GUI).
+	Alternative url syntax:
+		gitcypress://github.com/dalehenrich/filetree:pharo5.0_dev/repository
+	with:
+		host : github.com
+		project : dalehenrich/filetree
+		branch : pharo5.0_dev
+		dir : repository
+"
+
+  ^ 'gitcypress'
+%
+
+! ------------------- Instance methods for CypressGitFileUrl
+
+category: 'accessing'
+method: CypressGitFileUrl
+codeFormat
+
+	^'Cypress'
+%
+
+category: 'printing'
+method: CypressGitFileUrl
+httpsAccessString
+  ^ 'https://' , self host , self projectPath , '.git'
+%
+
+category: 'private-initialization'
+method: CypressGitFileUrl
+initializeFromPathString: aPathString
+  | projectDelim repoDelimIndex branchOrTagDelimIndex |
+  projectBranchOrTag := repositoryPath := nil.
+  projectDelim := aPathString indexOf: $/ startingAt: 2.
+  repoDelimIndex := aPathString indexOf: $/ startingAt: projectDelim + 1.
+  (branchOrTagDelimIndex := aPathString indexOf: $:) == 0
+    ifTrue: [ repoDelimIndex == 0
+        ifTrue: [ self projectPath: aPathString ]
+        ifFalse: [ self projectPath: (aPathString copyFrom: 1 to: repoDelimIndex - 1).
+          self
+            repositoryPath:
+              (aPathString copyFrom: repoDelimIndex + 1 to: aPathString size) ] ]
+    ifFalse: [ self projectPath: (aPathString copyFrom: 1 to: branchOrTagDelimIndex - 1).
+      repoDelimIndex == 0
+        ifTrue: [ projectBranchOrTag := aPathString
+            copyFrom: branchOrTagDelimIndex + 1
+            to: aPathString size ]
+        ifFalse: [ self projectPath: (aPathString copyFrom: 1 to: branchOrTagDelimIndex - 1).
+          self parseBranchOrTagField: [ :pv :rp | projectBranchOrTag := pv.
+              self repositoryPath: rp ] pathString: aPathString
+          branchOrTagDelimIndex: branchOrTagDelimIndex ] ]
+%
+
+category: 'testing'
+method: CypressGitFileUrl
+isStrict
+
+	^true
+%
+
+category: 'private-initialization'
+method: CypressGitFileUrl
+parseBranchOrTagField: parseBlock pathString: aPathString branchOrTagDelimIndex: branchOrTagDelimIndex
+  | strm done escaped repoDelimIndex |
+  strm := WriteStream on: String new.
+  repoDelimIndex := branchOrTagDelimIndex + 1.
+  escaped := done := false.
+  [ done ] whileFalse: [ | char |
+      repoDelimIndex > aPathString size
+        ifTrue: [ done := true ]
+        ifFalse: [ char := aPathString at: repoDelimIndex.
+          char == $\
+            ifTrue: [ escaped
+                ifTrue: [ "$\ not legal in branch name ... literally ignored"
+                  escaped := false ]
+                ifFalse: [ escaped := true ] ]
+            ifFalse: [ char == $/
+                ifTrue: [ escaped
+                    ifFalse: [ done := true ] ].
+              done
+                ifFalse: [ strm nextPut: char ].
+              escaped := false ].
+          repoDelimIndex := repoDelimIndex + 1 ] ].
+  repoDelimIndex := repoDelimIndex - 1.
+  parseBlock
+    value: strm contents
+    value: (aPathString copyFrom: repoDelimIndex + 1 to: aPathString size)
+%
+
+category: 'printing'
+method: CypressGitFileUrl
+printOn: aStream
+  | escapedBranchOrTag |
+  aStream nextPutAll: self schemeName , '://' , self host.
+  aStream
+    nextPutAll: self projectPath;
+    nextPut: $:.
+  escapedBranchOrTag := String
+    streamContents: [ :stream | self projectBranchOrTag do: [ :char | char = $/
+            ifTrue: [ stream nextPut: $\ ].
+          stream nextPut: char ] ].
+  aStream
+    nextPutAll: escapedBranchOrTag;
+    nextPut: $/;
+    nextPutAll: self repositoryPath;
+    yourself
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+projectBranchOrTag
+  ^ projectBranchOrTag ifNil: [ 'master' ]
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+projectBranchOrTag: anObject
+
+   projectBranchOrTag := anObject
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+projectPath
+
+   ^projectPath
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+projectPath: aString
+  aString last = self fileUtils pathNameDelimiter last
+    ifTrue: [ projectPath := aString copyFrom: 1 to: aString size - 1 ]
+    ifFalse: [ projectPath := aString ]
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+repositoryClass
+  ^ CypressFileSystemGitRepository
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+repositoryPath
+  ^ repositoryPath ifNil: [ '' ]
+%
+
+category: 'accessing'
+method: CypressGitFileUrl
+repositoryPath: aString
+  (aString size > 0
+    and: [ aString last = self fileUtils pathNameDelimiter last ])
+    ifTrue: [ repositoryPath := aString copyFrom: 1 to: aString size - 1 ]
+    ifFalse: [ repositoryPath := aString ]
+%
+
+! Class Implementation for CypressGitFileTreeUrl
+
+! ------------------- Class methods for CypressGitFileTreeUrl
+
+category: 'constants'
+classmethod: CypressGitFileTreeUrl
+schemeName
+  "A gitfiletree url with a host is the target for a remote. All other parameters are optional.
+	Parameters are:
+		dir : the directory inside the repository where the target MC packages are.
+		branch : the git branch to fetch.
+		protocol: the user name part to add to the ssh Url, default to git, but can also be https (which implies read only access).
+		readOnly : is the repository read only? If present, reduce the history to a minimum (and change the GUI).
+	Alternative url syntax:
+		gitfiletree://github.com/dalehenrich/filetree:pharo5.0_dev/repository
+	with:
+		host : github.com
+		project : dalehenrich/filetree
+		branch : pharo5.0_dev
+		dir : repository
+"
+
+  ^ 'gitfiletree'
+%
+
+! ------------------- Instance methods for CypressGitFileTreeUrl
+
+category: 'accessing'
+method: CypressGitFileTreeUrl
+codeFormat
+
+	^'FileTree'
+%
+
+category: 'testing'
+method: CypressGitFileTreeUrl
+isStrict
+
+	^false
+%
+
+! Class Implementation for CypressLaxFileUrl
+
+! ------------------- Class methods for CypressLaxFileUrl
+
+category: 'constants'
+classmethod: CypressLaxFileUrl
+schemeName
+
+	^'cypresslax'
+%
+
+! ------------------- Instance methods for CypressLaxFileUrl
+
+category: 'accessing'
+method: CypressLaxFileUrl
+codeFormat
+
+	^'Cypress'
+%
+
+category: 'testing'
+method: CypressLaxFileUrl
+isStrict
+
+	^false
+%
+
+! Class Implementation for CypressSmalltalkUrl
+
+! ------------------- Class methods for CypressSmalltalkUrl
+
+category: 'constants'
+classmethod: CypressSmalltalkUrl
+schemeName
+
+	^'chunk'
+%
+
+! ------------------- Instance methods for CypressSmalltalkUrl
+
+category: 'accessing'
+method: CypressSmalltalkUrl
+codeFormat
+
+	^'Chunk'
+%
+
+category: 'testing'
+method: CypressSmalltalkUrl
+isStrict
+
+	^true
+%
+
+category: 'accessing'
+method: CypressSmalltalkUrl
+repositoryClass
+
+	^CypressSmalltalkRepository
+%
+
+! Class Implementation for CypressTopazUrl
+
+! ------------------- Class methods for CypressTopazUrl
+
+category: 'constants'
+classmethod: CypressTopazUrl
+schemeName
+
+	^'topaz'
+%
+
+! ------------------- Instance methods for CypressTopazUrl
+
+category: 'accessing'
+method: CypressTopazUrl
+codeFormat
+
+	^'Topaz'
+%
+
+category: 'testing'
+method: CypressTopazUrl
+isStrict
+
+	^true
+%
+
+category: 'accessing'
+method: CypressTopazUrl
+repositoryClass
+
+	^CypressTopazRepository
 %
 
 ! Class Implementation for CypressAbstractRepository
@@ -2675,1180 +3851,6 @@ versionNumber
 	"Answer the version of the receiver."
 
 	^ versionNumber
-%
-
-! Class Implementation for CypressAbstractFileUrl
-
-! ------------------- Class methods for CypressAbstractFileUrl
-
-category: 'instance creation'
-classmethod: CypressAbstractFileUrl
-absoluteFromText: aString
-	"Return a URL from a string and handle
-	a String without a scheme as a FileUrl."
-
-	"Url absoluteFromText: 'http://chaos.resnet.gatech.edu:8000/docs/java/index.html?A%20query%20#part'" 
-	"Url absoluteFromText: 'msw://chaos.resnet.gatech.edu:9000/testbook?top'"
-	"Url absoluteFromText: 'telnet:chaos.resnet.gatech.edu'"
-	"Url absoluteFromText: 'file:/etc/passwd'"
-
-	| remainder index scheme fragment newUrl |
-	"trim surrounding whitespace"
-	remainder := aString trimSeparators.
-
-	"extract the fragment, if any"
-	index := remainder indexOf: $#.
-	index > 0 ifTrue: [
-		fragment := remainder copyFrom: index + 1 to: remainder size.
-		remainder := remainder copyFrom: 1 to: index - 1].
-
-	"choose class based on the scheme name, and let that class do the bulk of the parsing"
-	scheme := self schemeNameForString: remainder.
-	newUrl := (self urlClassForScheme: scheme) new privateInitializeFromText: remainder.
-	newUrl privateFragment: fragment.
-	^newUrl
-%
-
-category: 'parsing'
-classmethod: CypressAbstractFileUrl
-urlClassForScheme: scheme
-
-	scheme isNil ifTrue: [^FileUrl].
-	^super urlClassForScheme: scheme
-%
-
-! ------------------- Instance methods for CypressAbstractFileUrl
-
-category: 'accessing'
-method: CypressAbstractFileUrl
-codeFormat
-
-	^self subclassResponsibility: #codeFormat.
-%
-
-category: 'private'
-method: CypressAbstractFileUrl
-fileUtils
-  ^ CypressFileUtilities current
-%
-
-category: 'testing'
-method: CypressAbstractFileUrl
-isStrict
-
-	^self subclassResponsibility: #isStrict.
-%
-
-category: 'accessing'
-method: CypressAbstractFileUrl
-repositoryClass
-
-	^CypressFileSystemRepository
-%
-
-! Class Implementation for CypressFileTreeFormatFileUrl
-
-! ------------------- Class methods for CypressFileTreeFormatFileUrl
-
-category: 'constants'
-classmethod: CypressFileTreeFormatFileUrl
-schemeName
-
-	^'cypressft'
-%
-
-! ------------------- Instance methods for CypressFileTreeFormatFileUrl
-
-category: 'accessing'
-method: CypressFileTreeFormatFileUrl
-codeFormat
-
-	^'FileTree'
-%
-
-category: 'testing'
-method: CypressFileTreeFormatFileUrl
-isStrict
-
-	^false
-%
-
-! Class Implementation for CypressFileTreeReadOnlyFileUrl
-
-! ------------------- Class methods for CypressFileTreeReadOnlyFileUrl
-
-category: 'constants'
-classmethod: CypressFileTreeReadOnlyFileUrl
-schemeName
-
-	^'cypressfiletree'
-%
-
-! ------------------- Instance methods for CypressFileTreeReadOnlyFileUrl
-
-category: 'accessing'
-method: CypressFileTreeReadOnlyFileUrl
-codeFormat
-
-	^'FileTree'
-%
-
-category: 'testing'
-method: CypressFileTreeReadOnlyFileUrl
-isStrict
-
-	^true
-%
-
-! Class Implementation for CypressFileUrl
-
-! ------------------- Class methods for CypressFileUrl
-
-category: 'constants'
-classmethod: CypressFileUrl
-schemeName
-
-	^'cypress'
-%
-
-! ------------------- Instance methods for CypressFileUrl
-
-category: 'accessing'
-method: CypressFileUrl
-codeFormat
-
-	^'Cypress'
-%
-
-category: 'testing'
-method: CypressFileUrl
-isStrict
-
-	^true
-%
-
-! Class Implementation for CypressGitFileUrl
-
-! ------------------- Class methods for CypressGitFileUrl
-
-category: 'constants'
-classmethod: CypressGitFileUrl
-schemeName
-  "A gitcypress url with a host is the target for a remote. All other parameters are optional.
-	Parameters are:
-		dir : the directory inside the repository where the target MC packages are.
-		branch : the git branch to fetch.
-		protocol: the user name part to add to the ssh Url, default to git, but can also be https (which implies read only access).
-		readOnly : is the repository read only? If present, reduce the history to a minimum (and change the GUI).
-	Alternative url syntax:
-		gitcypress://github.com/dalehenrich/filetree:pharo5.0_dev/repository
-	with:
-		host : github.com
-		project : dalehenrich/filetree
-		branch : pharo5.0_dev
-		dir : repository
-"
-
-  ^ 'gitcypress'
-%
-
-! ------------------- Instance methods for CypressGitFileUrl
-
-category: 'accessing'
-method: CypressGitFileUrl
-codeFormat
-
-	^'Cypress'
-%
-
-category: 'printing'
-method: CypressGitFileUrl
-httpsAccessString
-  ^ 'https://' , self host , self projectPath , '.git'
-%
-
-category: 'private-initialization'
-method: CypressGitFileUrl
-initializeFromPathString: aPathString
-  | projectDelim repoDelimIndex branchOrTagDelimIndex |
-  projectBranchOrTag := repositoryPath := nil.
-  projectDelim := aPathString indexOf: $/ startingAt: 2.
-  repoDelimIndex := aPathString indexOf: $/ startingAt: projectDelim + 1.
-  (branchOrTagDelimIndex := aPathString indexOf: $:) == 0
-    ifTrue: [ repoDelimIndex == 0
-        ifTrue: [ self projectPath: aPathString ]
-        ifFalse: [ self projectPath: (aPathString copyFrom: 1 to: repoDelimIndex - 1).
-          self
-            repositoryPath:
-              (aPathString copyFrom: repoDelimIndex + 1 to: aPathString size) ] ]
-    ifFalse: [ self projectPath: (aPathString copyFrom: 1 to: branchOrTagDelimIndex - 1).
-      repoDelimIndex == 0
-        ifTrue: [ projectBranchOrTag := aPathString
-            copyFrom: branchOrTagDelimIndex + 1
-            to: aPathString size ]
-        ifFalse: [ self projectPath: (aPathString copyFrom: 1 to: branchOrTagDelimIndex - 1).
-          self parseBranchOrTagField: [ :pv :rp | projectBranchOrTag := pv.
-              self repositoryPath: rp ] pathString: aPathString
-          branchOrTagDelimIndex: branchOrTagDelimIndex ] ]
-%
-
-category: 'testing'
-method: CypressGitFileUrl
-isStrict
-
-	^true
-%
-
-category: 'private-initialization'
-method: CypressGitFileUrl
-parseBranchOrTagField: parseBlock pathString: aPathString branchOrTagDelimIndex: branchOrTagDelimIndex
-  | strm done escaped repoDelimIndex |
-  strm := WriteStream on: String new.
-  repoDelimIndex := branchOrTagDelimIndex + 1.
-  escaped := done := false.
-  [ done ] whileFalse: [ | char |
-      repoDelimIndex > aPathString size
-        ifTrue: [ done := true ]
-        ifFalse: [ char := aPathString at: repoDelimIndex.
-          char == $\
-            ifTrue: [ escaped
-                ifTrue: [ "$\ not legal in branch name ... literally ignored"
-                  escaped := false ]
-                ifFalse: [ escaped := true ] ]
-            ifFalse: [ char == $/
-                ifTrue: [ escaped
-                    ifFalse: [ done := true ] ].
-              done
-                ifFalse: [ strm nextPut: char ].
-              escaped := false ].
-          repoDelimIndex := repoDelimIndex + 1 ] ].
-  repoDelimIndex := repoDelimIndex - 1.
-  parseBlock
-    value: strm contents
-    value: (aPathString copyFrom: repoDelimIndex + 1 to: aPathString size)
-%
-
-category: 'printing'
-method: CypressGitFileUrl
-printOn: aStream
-  | escapedBranchOrTag |
-  aStream nextPutAll: self schemeName , '://' , self host.
-  aStream
-    nextPutAll: self projectPath;
-    nextPut: $:.
-  escapedBranchOrTag := String
-    streamContents: [ :stream | self projectBranchOrTag do: [ :char | char = $/
-            ifTrue: [ stream nextPut: $\ ].
-          stream nextPut: char ] ].
-  aStream
-    nextPutAll: escapedBranchOrTag;
-    nextPut: $/;
-    nextPutAll: self repositoryPath;
-    yourself
-%
-
-category: 'accessing'
-method: CypressGitFileUrl
-projectBranchOrTag
-  ^ projectBranchOrTag ifNil: [ 'master' ]
-%
-
-category: 'accessing'
-method: CypressGitFileUrl
-projectBranchOrTag: anObject
-
-   projectBranchOrTag := anObject
-%
-
-category: 'accessing'
-method: CypressGitFileUrl
-projectPath
-
-   ^projectPath
-%
-
-category: 'accessing'
-method: CypressGitFileUrl
-projectPath: aString
-  aString last = self fileUtils pathNameDelimiter last
-    ifTrue: [ projectPath := aString copyFrom: 1 to: aString size - 1 ]
-    ifFalse: [ projectPath := aString ]
-%
-
-category: 'accessing'
-method: CypressGitFileUrl
-repositoryClass
-  ^ CypressFileSystemGitRepository
-%
-
-category: 'accessing'
-method: CypressGitFileUrl
-repositoryPath
-  ^ repositoryPath ifNil: [ '' ]
-%
-
-category: 'accessing'
-method: CypressGitFileUrl
-repositoryPath: aString
-  (aString size > 0
-    and: [ aString last = self fileUtils pathNameDelimiter last ])
-    ifTrue: [ repositoryPath := aString copyFrom: 1 to: aString size - 1 ]
-    ifFalse: [ repositoryPath := aString ]
-%
-
-! Class Implementation for CypressGitFileTreeUrl
-
-! ------------------- Class methods for CypressGitFileTreeUrl
-
-category: 'constants'
-classmethod: CypressGitFileTreeUrl
-schemeName
-  "A gitfiletree url with a host is the target for a remote. All other parameters are optional.
-	Parameters are:
-		dir : the directory inside the repository where the target MC packages are.
-		branch : the git branch to fetch.
-		protocol: the user name part to add to the ssh Url, default to git, but can also be https (which implies read only access).
-		readOnly : is the repository read only? If present, reduce the history to a minimum (and change the GUI).
-	Alternative url syntax:
-		gitfiletree://github.com/dalehenrich/filetree:pharo5.0_dev/repository
-	with:
-		host : github.com
-		project : dalehenrich/filetree
-		branch : pharo5.0_dev
-		dir : repository
-"
-
-  ^ 'gitfiletree'
-%
-
-! ------------------- Instance methods for CypressGitFileTreeUrl
-
-category: 'accessing'
-method: CypressGitFileTreeUrl
-codeFormat
-
-	^'FileTree'
-%
-
-category: 'testing'
-method: CypressGitFileTreeUrl
-isStrict
-
-	^false
-%
-
-! Class Implementation for CypressLaxFileUrl
-
-! ------------------- Class methods for CypressLaxFileUrl
-
-category: 'constants'
-classmethod: CypressLaxFileUrl
-schemeName
-
-	^'cypresslax'
-%
-
-! ------------------- Instance methods for CypressLaxFileUrl
-
-category: 'accessing'
-method: CypressLaxFileUrl
-codeFormat
-
-	^'Cypress'
-%
-
-category: 'testing'
-method: CypressLaxFileUrl
-isStrict
-
-	^false
-%
-
-! Class Implementation for CypressSmalltalkUrl
-
-! ------------------- Class methods for CypressSmalltalkUrl
-
-category: 'constants'
-classmethod: CypressSmalltalkUrl
-schemeName
-
-	^'chunk'
-%
-
-! ------------------- Instance methods for CypressSmalltalkUrl
-
-category: 'accessing'
-method: CypressSmalltalkUrl
-codeFormat
-
-	^'Chunk'
-%
-
-category: 'testing'
-method: CypressSmalltalkUrl
-isStrict
-
-	^true
-%
-
-category: 'accessing'
-method: CypressSmalltalkUrl
-repositoryClass
-
-	^CypressSmalltalkRepository
-%
-
-! Class Implementation for CypressTopazUrl
-
-! ------------------- Class methods for CypressTopazUrl
-
-category: 'constants'
-classmethod: CypressTopazUrl
-schemeName
-
-	^'topaz'
-%
-
-! ------------------- Instance methods for CypressTopazUrl
-
-category: 'accessing'
-method: CypressTopazUrl
-codeFormat
-
-	^'Topaz'
-%
-
-category: 'testing'
-method: CypressTopazUrl
-isStrict
-
-	^true
-%
-
-category: 'accessing'
-method: CypressTopazUrl
-repositoryClass
-
-	^CypressTopazRepository
-%
-
-! Class Implementation for CypressAbstractPackageInformation
-
-! ------------------- Class methods for CypressAbstractPackageInformation
-
-category: 'Instance Creation'
-classmethod: CypressAbstractPackageInformation
-named: aString
-
-	^self new
-		initializeWithName: aString;
-		yourself
-%
-
-! ------------------- Instance methods for CypressAbstractPackageInformation
-
-category: 'Initializing - private'
-method: CypressAbstractPackageInformation
-initialize
-%
-
-category: 'Initializing - private'
-method: CypressAbstractPackageInformation
-initializeWithName: aString
-
-	self initialize.
-	self name: aString
-%
-
-category: 'Testing'
-method: CypressAbstractPackageInformation
-isKnown
-
-	^false
-%
-
-category: 'Accessing'
-method: CypressAbstractPackageInformation
-name
-
-	^name
-%
-
-category: 'Updating'
-method: CypressAbstractPackageInformation
-name: aString
-
-	name := aString
-%
-
-category: 'Printing'
-method: CypressAbstractPackageInformation
-printDetailsOn: aStream
-
-	aStream nextPutAll: self name
-%
-
-category: 'Accessing'
-method: CypressAbstractPackageInformation
-repositories
-
-	^#()
-%
-
-! Class Implementation for CypressConflictingPackageInformation
-
-! ------------------- Class methods for CypressConflictingPackageInformation
-
-category: 'Instance Creation'
-classmethod: CypressConflictingPackageInformation
-fromUnknown: unknownPackageInformation conflictingWith: knownPackageInformation
-
-	^(self named: unknownPackageInformation name)
-		conflictsWith: knownPackageInformation;
-		yourself.
-%
-
-! ------------------- Instance methods for CypressConflictingPackageInformation
-
-category: 'Accessing'
-method: CypressConflictingPackageInformation
-conflictsWith
-
-	^conflictsWith
-%
-
-category: 'Updating'
-method: CypressConflictingPackageInformation
-conflictsWith: someCypressKnownPackageInformations
-
-	conflictsWith := someCypressKnownPackageInformations
-%
-
-! Class Implementation for CypressEclipsedPackageInformation
-
-! ------------------- Class methods for CypressEclipsedPackageInformation
-
-category: 'Instance Creation'
-classmethod: CypressEclipsedPackageInformation
-fromUnknown: unknownPackageInformation eclipsedBy: knownPackageInformation
-
-	^(self named: unknownPackageInformation name)
-		eclipsedBy: knownPackageInformation;
-		yourself.
-%
-
-! ------------------- Instance methods for CypressEclipsedPackageInformation
-
-category: 'Accessing'
-method: CypressEclipsedPackageInformation
-eclipsedBy
-
-	^eclipsedBy
-%
-
-category: 'Updating'
-method: CypressEclipsedPackageInformation
-eclipsedBy: aPackageInformation
-
-	eclipsedBy := aPackageInformation
-%
-
-! Class Implementation for CypressKnownPackageInformation
-
-! ------------------- Class methods for CypressKnownPackageInformation
-
-category: 'Instance Creation'
-classmethod: CypressKnownPackageInformation
-fromUnknown: aPackageInformation
-
-	^self named: aPackageInformation name
-%
-
-! ------------------- Instance methods for CypressKnownPackageInformation
-
-category: 'Updating'
-method: CypressKnownPackageInformation
-addRepository: aRepository
-
-	self repositories at: aRepository url put: aRepository.
-	self updateDigestsFromImageAndRepository: aRepository.
-%
-
-category: 'Accessing - digests'
-method: CypressKnownPackageInformation
-determineDigestFromImage
-
-	^self packageStructure digest
-%
-
-category: 'Accessing - digests'
-method: CypressKnownPackageInformation
-determineDigestFromRepository: aRepository
-
-	^ (aRepository readPackageStructureForPackageNamed: self name) digest.
-%
-
-category: 'Accessing - digests'
-method: CypressKnownPackageInformation
-digestFor: source
-
-	^self digestFor: source or: [nil]
-%
-
-category: 'Accessing - digests'
-method: CypressKnownPackageInformation
-digestFor: source or: aBlock
-
-	^self digests at: source ifAbsent: aBlock
-%
-
-category: 'Accessing - digests'
-method: CypressKnownPackageInformation
-digests
-
-	^digests
-%
-
-category: 'Initializing - private'
-method: CypressKnownPackageInformation
-digests: anIdentityDictionary
-	"Key: Source of package definitions (#IMAGE or a Repository url)
-	 Value: (e.g. MD5) Digest of the package's defintions or an empty string.
-	 A nil digest means there are no definitions for the given source."
-
-   digests := anIdentityDictionary
-%
-
-category: 'Accessing - digests'
-method: CypressKnownPackageInformation
-imageDigest
-
-	^self digestFor: #IMAGE.
-%
-
-category: 'Initializing - private'
-method: CypressKnownPackageInformation
-initialize
-
-	super initialize.
-	self
-		repositories: IdentityDictionary new;
-		digests: IdentityDictionary new.
-%
-
-category: 'Testing'
-method: CypressKnownPackageInformation
-isKnown
-
-	^true
-%
-
-category: 'Accessing - digests'
-method: CypressKnownPackageInformation
-packageStructure
-
-	^CypressPackageStructure
-		fromPackage: (CypressPackageDefinition named: self name)
-%
-
-category: 'Updating'
-method: CypressKnownPackageInformation
-removeRepository: aRepository
-
-	self repositories removeKey: aRepository url ifAbsent: [].
-	self digests removeKey: aRepository url ifAbsent: [].
-	self updateDigestsFromImage.
-%
-
-category: 'Accessing'
-method: CypressKnownPackageInformation
-repositories
-
-	^repositories
-%
-
-category: 'Initializing - private'
-method: CypressKnownPackageInformation
-repositories: anIdentityDictionary
-	"Key: Repository url
-	 Value: Repository"
-
-	repositories := anIdentityDictionary
-%
-
-category: 'Accessing - digests'
-method: CypressKnownPackageInformation
-repositoryDigests
-
-	^self repositories collect: [:each | self digestFor: each url]
-%
-
-category: 'Updating - digests'
-method: CypressKnownPackageInformation
-updateDigestsFromAllRepositories
-
-	self repositories do: [:each | self updateDigestsFromRepository: each]
-%
-
-category: 'Updating - digests'
-method: CypressKnownPackageInformation
-updateDigestsFromImage
-
-	self digests at: #IMAGE put: self determineDigestFromImage
-%
-
-category: 'Updating - digests'
-method: CypressKnownPackageInformation
-updateDigestsFromImageAndAllRepositories
-
-	self
-		updateDigestsFromImage;
-		updateDigestsFromAllRepositories
-%
-
-category: 'Updating - digests'
-method: CypressKnownPackageInformation
-updateDigestsFromImageAndRepository: aRepository
-
-	self
-		updateDigestsFromImage;
-		updateDigestsFromRepository: aRepository
-%
-
-category: 'Updating - digests'
-method: CypressKnownPackageInformation
-updateDigestsFromRepository: aRepository
-
-	self digests at: aRepository url put: (self determineDigestFromRepository: aRepository).
-%
-
-category: 'Writing'
-method: CypressKnownPackageInformation
-writeChangesToAllRepositories
-
-	| imageDigest changedDigests changedRepositories |
-	self updateDigestsFromImageAndAllRepositories.
-	imageDigest := self imageDigest.
-	changedDigests := self repositoryDigests reject: [:each | each = imageDigest].
-	changedRepositories := changedDigests keys collect: [:each | self repositories at: each].
-	self writePackageToRepositories: changedRepositories.
-%
-
-category: 'Writing'
-method: CypressKnownPackageInformation
-writePackageToRepositories: someRepositories
-
-	| packageStructure |
-	packageStructure := self packageStructure.
-	^someRepositories
-		do: [:each | each writePackageStructure: packageStructure]
-%
-
-! Class Implementation for CypressUnknownPackageInformation
-
-! Class Implementation for CypressPackageInformation
-
-! ------------------- Class methods for CypressPackageInformation
-
-category: 'instance creation'
-classmethod: CypressPackageInformation
-named: aString repository: aCypressRepository
-	"Answer an instance of the receiver representing the named package.
-	 If the package was saved in a Repository, load up the saved details."
-
-	^self new
-		initializeFromName: aString andRepository: aCypressRepository;
-		yourself
-%
-
-category: 'instance creation'
-classmethod: CypressPackageInformation
-new
-
-	^super new
-		initialize;
-		yourself
-%
-
-! ------------------- Instance methods for CypressPackageInformation
-
-category: 'updating - type'
-method: CypressPackageInformation
-beConflictedWith: somePackageNames
-	"Be designated as representing the prefix of one or more Known Package names."
-
-	type := 'Conflicted Name'.
-	competingPackageNames := somePackageNames sortAscending.
-	advice := 'Conflicts with the packages named ', self competingPackageNamesString
-%
-
-category: 'updating - type'
-method: CypressPackageInformation
-beKnown
-	"Be known to represent a real package."
-
-	type := 'Known Package'.
-	advice := ''.
-	competingPackageNames := #()
-%
-
-category: 'updating - type'
-method: CypressPackageInformation
-beQualifiedNameOf: somePackageNames
-	"Be designated as qualifying a Known Package name and therefore not eligible as a package name."
-
-	type := 'Qualified Name'.
-	competingPackageNames := somePackageNames sortAscending.
-	advice := 'Qualifies the package named ', self competingPackageNamesString
-%
-
-category: 'updating - type'
-method: CypressPackageInformation
-beUnknown
-	"Be designated as possibly representing a package, but not known to do so."
-
-	type := 'Unknown'.
-	advice := ''.
-	competingPackageNames := #()
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-changesCount
-
-	^changesCount
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-changesCount: anInteger
-
-	changesCount := anInteger
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-changesStatus
-
-	^self hasChanges
-		ifTrue: [' (' , self changesCount printString , ')']
-		ifFalse: ['']
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-classCount
-
-	^self imageCounts first
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-competingPackageNames
-
-	^competingPackageNames
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-competingPackageNamesString
-
-	^String streamContents: 
-			[:stream |
-			self competingPackageNames
-				do: [:each | stream nextPutAll: each printString]
-				separatedBy: [stream nextPutAll: ', ']]
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-description
-
-	self isKnown ifTrue: [^self savedLocation].
-	self isUnknown ifTrue: [^' <unknown>'].
-	^' <', advice, '>'
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-determinedChangesCount
-
-	| notInImage notInSaved |
-	notInImage := self savedDefinitions
-				reject: [:each | self imageDefinitions includes: each].
-	notInSaved := self imageDefinitions
-		reject: [:each | self savedDefinitions includes: each].
-	^notInImage size + notInSaved size
-%
-
-category: 'testing'
-method: CypressPackageInformation
-hasChanges
-
-	^self changesCount > 0
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-imageCounts
-
-	^imageCounts
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-imageCounts: someIntegers
-	"A pair: the number of classes and number of methods"
-
-	imageCounts := someIntegers
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-imageDefinitionCounts
-
-	| classCount methodCount |
-	classCount := methodCount := 0.
-	self imageDefinitions do: 
-			[:each |
-			each classDefinition: [:classDefinition | classCount := classCount + 1]
-				methodDefinition: [:methodDefinition | methodCount := methodCount + 1]].
-	^Array with: classCount with: methodCount
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-imageDefinitions
-
-	^imageDefinitions
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-imageDefinitions: someCypressDefinitions
-
-	imageDefinitions := someCypressDefinitions
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-imageDefinitionsStatus
-
-	^self classCount printString , '/' , self methodCount printString
-%
-
-category: 'initializing'
-method: CypressPackageInformation
-initialize
-
-	self
-		beUnknown;
-		name: '';
-		imageDefinitions: #();
-		savedDefinitions: #();
-		savedLocation: '';
-		repositoryDescription: '';
-		imageCounts: #(0 0);
-		changesCount: 0
-%
-
-category: 'initializing'
-method: CypressPackageInformation
-initializeFromName: aString andRepository: aCypressRepositoryOrNil
-
-	self name: aString.
-	aCypressRepositoryOrNil isNil ifTrue: [^self].
-	self updateKnownPackageRepository: aCypressRepositoryOrNil
-%
-
-category: 'testing - type'
-method: CypressPackageInformation
-isConflicted
-
-	^type = 'Conflicted Name'
-%
-
-category: 'testing - type'
-method: CypressPackageInformation
-isKnown
-
-	^type = 'Known Package'
-%
-
-category: 'testing - type'
-method: CypressPackageInformation
-isQualifiedName
-
-	^type = 'Qualified Name'
-%
-
-category: 'testing - type'
-method: CypressPackageInformation
-isUnknown
-
-	^type = 'Unknown'
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-methodCount
-
-	^self imageCounts last
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-name
-
-	^name
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-name: aString
-
-	name := aString
-%
-
-category: 'printing'
-method: CypressPackageInformation
-printDetailsOn: aStream
-
-	aStream
-		nextPutAll: self name;
-		nextPutAll: ' - ';
-		nextPutAll: self description
-%
-
-category: 'updating'
-method: CypressPackageInformation
-readDefinitionsFromRepository
-
-	^(self repository reader readPackageStructureForPackageNamed: self name)
-		packageStructure snapshot
-		definitions
-%
-
-category: 'updating'
-method: CypressPackageInformation
-refresh
-
-	self isKnown ifFalse: [^self].
-	self
-		updateImageDefinitions;
-		updateSavedDefinitions;
-		updateChangesCount.
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-repository
-
-	^repository
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-repository: aCypressFileSystemRepository
-
-	repository := aCypressFileSystemRepository
-%
-
-category: 'unknown'
-method: CypressPackageInformation
-repositoryDescription
-
-	^repositoryDescription
-%
-
-category: 'unknown'
-method: CypressPackageInformation
-repositoryDescription: aString
-
-	repositoryDescription := aString
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-savedDefinitions
-
-	^savedDefinitions
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-savedDefinitions: someCypressDefinitions
-
-	savedDefinitions := someCypressDefinitions
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-savedLocation
-
-	^savedLocation
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-savedLocation: aDirectory
-
-	savedLocation := aDirectory
-%
-
-category: 'accessing'
-method: CypressPackageInformation
-status
-
-	| changes |
-	(changes := self changesStatus) isEmpty ifTrue: [^self imageDefinitionsStatus].
-	^self imageDefinitionsStatus, changes
-%
-
-category: 'updating'
-method: CypressPackageInformation
-updateChangesCount
-	"Must be applied after the image definitions and saved definitions are updated."
-
-	self changesCount: self determinedChangesCount
-%
-
-category: 'updating'
-method: CypressPackageInformation
-updateImageDefinitions
-
-	self
-		imageDefinitions: (CypressPackageDefinition named: self name) snapshot
-					definitions;
-		imageCounts: self imageDefinitionCounts
-%
-
-category: 'updating'
-method: CypressPackageInformation
-updateKnownPackageRepository: aCypressRepository
-	"Update the receiver to reflect it being a known package."
-
-	self
-		beKnown;
-		updateRepository: aCypressRepository;
-		refresh.
-%
-
-category: 'updating'
-method: CypressPackageInformation
-updateRepository: aCypressRepository
-
-	self
-		repository: aCypressRepository;
-		repositoryDescription: self repository description;
-		savedLocation: self repository directoryPath
-%
-
-category: 'updating'
-method: CypressPackageInformation
-updateSavedDefinitions
-
-	self savedDefinitions: self readDefinitionsFromRepository
 %
 
 ! Class Extensions

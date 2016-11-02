@@ -17,16 +17,18 @@ System myUserProfile symbolList do: [:symDict |
 							"*anythingbutpackagename[-anything]"
 						toRemove := aClass categoryNames select: 
 										[:each |
-										(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
+										each isEmpty not and: [
+											(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
 														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]])
-										or: [each first ~= $*]]
+											or: [each first ~= $*]]]
 					]
 					ifFalse: [
 							"*packagename[-anything]"
 						toRemove := aClass categoryNames select: 
 										[:each |
-										each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]
+										each isEmpty not and: [
+											each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
+														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]]
 					].
 				toRemove do: [:each | aClass removeCategory: each].
 			]

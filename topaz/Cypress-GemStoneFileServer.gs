@@ -17,16 +17,18 @@ System myUserProfile symbolList do: [:symDict |
 							"*anythingbutpackagename[-anything]"
 						toRemove := aClass categoryNames select: 
 										[:each |
-										(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
+										each isEmpty not and: [
+											(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
 														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]])
-										or: [each first ~= $*]]
+											or: [each first ~= $*]]]
 					]
 					ifFalse: [
 							"*packagename[-anything]"
 						toRemove := aClass categoryNames select: 
 										[:each |
-										each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]
+										each isEmpty not and: [
+											each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
+														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]]
 					].
 				toRemove do: [:each | aClass removeCategory: each].
 			]
@@ -664,23 +666,41 @@ fileOut: aString methodsPreambleFor: classStructure on: aStream
 category: 'writing - private'
 method: CypressTopazFileoutWriter
 fileOutClassDeclaration: classStructure on: aStream
-
-	aStream
-		nextPutAll: 'doit'; lf;
-		nextPutAll: '(', classStructure superclassName; lf;
-		nextPutAll: '	subclass: ', classStructure className asString printString; lf;
-		nextPutAll: '	instVarNames: #( ', classStructure instanceVariablesString, ' )'; lf;
-		nextPutAll: '	classVars: #( ', classStructure classVariablesString, ' )'; lf;
-		nextPutAll: '	classInstVars: #( ', classStructure classInstanceVariablesString, ' )'; lf;
-		nextPutAll: '	poolDictionaries: #()'; lf;
-		nextPutAll: '	inDictionary: Globals'; lf;
-		nextPutAll: '	options: #())'; lf;
-		nextPutAll: '		category: ', classStructure category printString, ';'; lf;
-		nextPutAll: '		comment: ', classStructure comment printString, ';'; lf;
-		nextPutAll: '		immediateInvariant.'; lf;
-                nextPutAll: 'true.'; lf;
-		nextPutAll: '%'; lf;
-		lf.
+  aStream
+    nextPutAll: 'doit';
+    lf;
+    nextPutAll: '(' , classStructure superclassName;
+    lf.
+  self
+    writeClassTypeMessage: classStructure
+    on: aStream
+    hasInstanceVariables: [ aStream
+        nextPutAll:
+            '	instVarNames: #( ' , classStructure instanceVariablesString , ' )';
+        lf ].
+  aStream
+    nextPutAll: '	classVars: #( ' , classStructure classVariablesString , ' )';
+    lf;
+    nextPutAll:
+        '	classInstVars: #( ' , classStructure classInstanceVariablesString , ' )';
+    lf;
+    nextPutAll: '	poolDictionaries: #()';
+    lf;
+    nextPutAll: '	inDictionary: Globals';
+    lf;
+    nextPutAll: '	options: #())';
+    lf;
+    nextPutAll: '		category: ' , classStructure category printString , ';';
+    lf;
+    nextPutAll: '		comment: ' , classStructure comment printString , ';';
+    lf;
+    nextPutAll: '		immediateInvariant.';
+    lf;
+    nextPutAll: 'true.';
+    lf;
+    nextPutAll: '%';
+    lf;
+    lf
 %
 
 category: 'writing - private'
@@ -779,16 +799,18 @@ fileOutPackagePreambleOn: aStream
 		nextPutAll: '							"*anythingbutpackagename[-anything]"'; lf;
 		nextPutAll: '						toRemove := aClass categoryNames select: '; lf;
 		nextPutAll: '										[:each |'; lf;
-		nextPutAll: '										(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])'; lf;
+		nextPutAll: '										each isEmpty not and: ['; lf;
+		nextPutAll: '											(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])'; lf;
 		nextPutAll: '														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]])'; lf;
-		nextPutAll: '										or: [each first ~= $*]]'; lf;
+		nextPutAll: '											or: [each first ~= $*]]]'; lf;
 		nextPutAll: '					]'; lf;
 		nextPutAll: '					ifFalse: ['; lf;
 		nextPutAll: '							"*packagename[-anything]"'; lf;
 		nextPutAll: '						toRemove := aClass categoryNames select: '; lf;
 		nextPutAll: '										[:each |'; lf;
-		nextPutAll: '										each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])'; lf;
-		nextPutAll: '														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]'; lf;
+		nextPutAll: '										each isEmpty not and: ['; lf;
+		nextPutAll: '											each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])'; lf;
+		nextPutAll: '														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]]'; lf;
 		nextPutAll: '					].'; lf;
 		nextPutAll: '				toRemove do: [:each | aClass removeCategory: each].'; lf;
 		nextPutAll: '			]'; lf;
@@ -815,6 +837,28 @@ method: CypressTopazFileoutWriter
 packageNameExtension
 
 	^'.gs'
+%
+
+category: 'writing - private'
+method: CypressTopazFileoutWriter
+writeClassTypeMessage: classStructure on: aStream hasInstanceVariables: instanceVariableBlock
+  | classType classTypeMessage hasInstanceVariables |
+  hasInstanceVariables := true.
+  classType := classStructure subclassType.
+  classType = 'indexableSubclass'
+    ifTrue: [ classTypeMessage := 'indexableSubclass: ' ]
+    ifFalse: [ classType = 'byteSubclass'
+        ifTrue: [ classTypeMessage := 'byteSubclass: '.
+          hasInstanceVariables := false ]
+        ifFalse: [ classType = ''
+            ifTrue: [ classTypeMessage := 'subclass: ' ]
+            ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
+  aStream
+    tab;
+    nextPutAll: classTypeMessage , classStructure className asString printString;
+    lf.
+  hasInstanceVariables
+    ifTrue: [ instanceVariableBlock value ]
 %
 
 ! Class Implementation for CypressAbstractPackageReader
