@@ -17,16 +17,18 @@ System myUserProfile symbolList do: [:symDict |
 							"*anythingbutpackagename[-anything]"
 						toRemove := aClass categoryNames select: 
 										[:each |
-										(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
+										each isEmpty not and: [
+											(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
 														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]])
-										or: [each first ~= $*]]
+											or: [each first ~= $*]]]
 					]
 					ifFalse: [
 							"*packagename[-anything]"
 						toRemove := aClass categoryNames select: 
 										[:each |
-										each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]
+										each isEmpty not and: [
+											each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
+														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]]
 					].
 				toRemove do: [:each | aClass removeCategory: each].
 			]
@@ -587,31 +589,19 @@ normalizeLineEndings: aString
 
 ! ------------------- Instance methods for CypressObject
 
-category: 'sorting'
-method: CypressObject
-addClasses: subs to: order fromRelevantClasses: classSet organizedBy: org
-
-	1 to: subs size
-		do: 
-			[:i |
-			| assoc class |
-			class := subs at: i.
-			(classSet includesIdentical: class) ifTrue: [order add: class].
-			assoc := org associationAt: class otherwise: nil.
-			assoc ~~ nil
-				ifTrue: 
-					[self
-						addClasses: assoc value
-						to: order
-						fromRelevantClasses: classSet
-						organizedBy: org]]
-%
-
 category: 'accessing'
 method: CypressObject
 allClasses
 
 	^System myUserProfile symbolList allSatisfying: [:each | each isBehavior]
+%
+
+category: 'private'
+method: CypressObject
+anyElementOf: aCollection ifEmpty: aBlock
+
+	aCollection do: [:each | ^each].
+	^aBlock value
 %
 
 category: 'accessing'
@@ -642,39 +632,21 @@ method: CypressObject
 determineClassHierarchicalOrder: someClasses
 	"Returns an ordered collection of the specified classes such that
 	 hierarchical dependencies come first."
+	"Not sure whether we ever get non-behaviors. 
+	The previous, more complex, version of this method contained this filter."
 
-	| org order classSet |
-	org := Dictionary new.
-	org at: #nil put: ClassSet new.
-	classSet := ClassSet new.
-	someClasses do: 
-			[:each |
-			| sub |
-			sub := each.
-			sub isBehavior
-				ifTrue: 
-					[| superCls |
-					classSet add: sub.
-					
-					[superCls := sub superClass.
-					superCls ~~ nil] whileTrue: 
-								[| assoc |
-								assoc := org associationAt: superCls otherwise: nil.
-								assoc
-									ifNil: 
-										[assoc := Association newWithKey: superCls value: ClassSet new.
-										org add: assoc].
-								assoc value add: sub.
-								sub := superCls].
-					(org at: #nil) add: sub]].
-
-	"Order the subclass sets and weed out unwanted classes."
-	order := Array new.
-	self
-		addClasses: (org at: #nil)
-		to: order
-		fromRelevantClasses: classSet
-		organizedBy: org.
+	| order toBeOrdered processed aClass |
+	toBeOrdered := (someClasses select: [:each | each isBehavior])
+				asIdentitySet.
+	order := OrderedCollection new.
+	processed := IdentitySet new.
+	[(aClass := self anyElementOf: toBeOrdered ifEmpty: [nil]) isNil]
+		whileFalse: 
+			[self
+				orderBySuperclass: aClass
+				from: toBeOrdered
+				into: order
+				ignoring: processed].
 	^order
 %
 
@@ -693,6 +665,30 @@ normalizeLineEndings: aString
 	 #withSqueakLineEndings, for example."
 
 	^self class normalizeLineEndings: aString.
+%
+
+category: 'private'
+method: CypressObject
+orderBySuperclass: aClass from: toBeOrdered into: order ignoring: processed
+	"Private. Add to 'order', superclasses first, aClass and any of its superclasses 
+	that appear in 'toBeOrdered' but do not appear in 'processed'.
+	Remove from 'toBeOrdered' any class added to 'ordered'.
+	Any class seen, add to 'processed' whether or not added to 'order'."
+
+	| superclass |
+	superclass := aClass superclass.
+	superclass isNil | (processed includes: superclass)
+		ifFalse: 
+			[self
+				orderBySuperclass: superclass
+				from: toBeOrdered
+				into: order
+				ignoring: processed].
+	processed add: aClass.
+	(toBeOrdered includes: aClass)
+		ifTrue: 
+			[toBeOrdered remove: aClass.
+			order add: aClass]
 %
 
 category: 'printing'
@@ -1696,6 +1692,28 @@ unresolvedRequirementsFor: aPatchOperation
 
 ! ------------------- Class methods for CypressLoader
 
+category: 'accessing'
+classmethod: CypressLoader
+defaultSymbolDictionaryName
+  "Name of the SymbolDictionary where new classes should be installed"
+
+  ^ (SessionTemps current 
+      at: #'Cypress_Loader_Default_Symbol_Dictionary_Name' 
+      ifAbsent: [] ) 
+        ifNil: [
+          System myUserProfile userId = 'SystemUser'
+          ifTrue: [ #Globals ]
+          ifFalse: [ #'UserGlobals' ] ]
+%
+
+category: 'accessing'
+classmethod: CypressLoader
+defaultSymbolDictionaryName: aSymbol
+  SessionTemps current 
+      at: #'Cypress_Loader_Default_Symbol_Dictionary_Name'
+      put: aSymbol
+%
+
 category: 'unloading'
 classmethod: CypressLoader
 unloadSnapshot: aSnapshot
@@ -1830,7 +1848,7 @@ attemptInitialLoad
 category: 'accessing'
 method: CypressLoader
 defaultSymbolDictionaryName
-  ^ defaultSymbolDictionaryName ifNil: [ super defaultSymbolDictionaryName ]
+  ^ defaultSymbolDictionaryName ifNil: [ self class defaultSymbolDictionaryName ]
 %
 
 category: 'accessing'

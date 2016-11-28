@@ -17,16 +17,18 @@ System myUserProfile symbolList do: [:symDict |
 							"*anythingbutpackagename[-anything]"
 						toRemove := aClass categoryNames select: 
 										[:each |
-										(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
+										each isEmpty not and: [
+											(each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
 														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]])
-										or: [each first ~= $*]]
+											or: [each first ~= $*]]]
 					]
 					ifFalse: [
 							"*packagename[-anything]"
 						toRemove := aClass categoryNames select: 
 										[:each |
-										each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
-														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]
+										each isEmpty not and: [
+											each first = $* and: [(each size = (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2])
+														or: [each size > (packageName size + 1) and: [(each findStringNoCase: packageName startingAt: 2) = 2 and: [(each at: packageName size + 2) = $-]]]]]]
 					].
 				toRemove do: [:each | aClass removeCategory: each].
 			]
@@ -344,6 +346,25 @@ method: GsNMethod
 methodClass
 
 	^self inClass
+%
+
+category: '*Cypress-GemStoneCompatibilityLayer'
+method: GsNMethod
+printOn: aStream
+
+	| classOrNil selectorOrNil |
+	aStream
+		nextPutAll: self class name;
+		space.
+	self isMethodForBlock ifTrue: [aStream nextPutAll: '[] in '].
+	classOrNil := self inClass.
+	selectorOrNil := self selector.
+	aStream
+		nextPutAll: (classOrNil == nil ifTrue: ['<nil>'] ifFalse: [classOrNil name]);
+		nextPutAll: '>>';
+		nextPutAll: (selectorOrNil == nil
+					ifTrue: ['<anonymous>']
+					ifFalse: [selectorOrNil])
 %
 
 ! Class Extension for Interval

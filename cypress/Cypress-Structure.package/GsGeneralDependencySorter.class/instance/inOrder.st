@@ -3,10 +3,10 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: sorting
 "
 inOrder
-
-	| sorted |
-	sorted := OrderedCollection new.
-	self mapCandidatesIntoGraphs.
-	self determineGraphRoots
-		do: [:each | self transcribeGraph: each into: sorted].
-	^sorted.
+  | sorted sortedRoots |
+  sorted := OrderedCollection new.
+  self mapCandidatesIntoGraphs.
+  sortedRoots := SortedCollection sortBlock: [ :a :b | a key <= b key ].
+  self determineGraphRoots associationsDo: [ :assoc | sortedRoots add: assoc ].
+  sortedRoots do: [ :assoc | self transcribeGraph: assoc value into: sorted ].
+  ^ sorted
