@@ -1,12 +1,13 @@
 {
-	"category" : "Cypress-GemStone",
+	"category" : "Cypress-Core",
 	"classinstvars" : [
 		 ],
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"selector" ],
-	"name" : "CypGsLoadedMethod",
+		"loadedClasses",
+		"loadedClassExtensions" ],
+	"name" : "CypGsLoadedPackage",
 	"pools" : [
 		 ],
 	"super" : "CypGsLoadedDefinition" }

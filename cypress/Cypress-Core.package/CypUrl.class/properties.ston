@@ -5,7 +5,7 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		 ],
+		"fragment" ],
 	"name" : "CypUrl",
 	"pools" : [
 		 ],

@@ -1,4 +1,3 @@
-No class-specific documentation for CypPackageDefinition, hierarchy is: 
-Object
-  CypDefinition( properties)
-    CypPackageDefinition( classDefinitions classExtensions)
+Defines a package, which is a bunch of class definitions and class extensions.
+Properties include 'name'.
+Sub-definitions are classDefinitions and classExtensions

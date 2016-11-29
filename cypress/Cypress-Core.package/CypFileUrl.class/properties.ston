@@ -5,7 +5,9 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		 ],
+		"host",
+		"path",
+		"isAbsolute" ],
 	"name" : "CypFileUrl",
 	"pools" : [
 		 ],

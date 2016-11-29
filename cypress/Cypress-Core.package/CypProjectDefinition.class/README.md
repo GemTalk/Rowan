@@ -1,4 +1,1 @@
-No class-specific documentation for CypProjectDefinition, hierarchy is: 
-Object
-  CypDefinition( properties)
-    CypProjectDefinition( packageDefinitions)
+Defines a project, a collection of packages from a single repository
