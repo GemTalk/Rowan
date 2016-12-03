@@ -1,7 +1,9 @@
 {
 	"category" : "Cypress-Core",
 	"classinstvars" : [
-		"loadedProjects" ],
+		"knownRepositories",
+		"loadedPackages",
+		"configuration" ],
 	"classvars" : [
 		 ],
 	"instvars" : [

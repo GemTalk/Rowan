@@ -3,5 +3,8 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: private
 "
 initialize
+	"Cypress initialize."
 
-	loadedProjects := Set new
+	knownRepositories := Set new.
+	loadedPackages := Set new.
+	configuration := CypConfiguration default
