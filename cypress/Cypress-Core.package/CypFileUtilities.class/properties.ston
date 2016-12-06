@@ -3,11 +3,10 @@
 	"classinstvars" : [
 		 ],
 	"classvars" : [
-		 ],
+		"Current" ],
 	"instvars" : [
-		"directoryPath",
-		"disk" ],
-	"name" : "CypFileSystemRepository",
+		 ],
+	"name" : "CypFileUtilities",
 	"pools" : [
 		 ],
-	"super" : "CypRepository" }
+	"super" : "Object" }

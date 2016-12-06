@@ -5,12 +5,10 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"name",
-		"url",
-		"commitId",
-		"loadedPackages",
-		"handle" ],
-	"name" : "CypLoadedProject",
+		"repository",
+		"packageDirectory",
+		"disk" ],
+	"name" : "CypPackageIO",
 	"pools" : [
 		 ],
 	"super" : "Object" }

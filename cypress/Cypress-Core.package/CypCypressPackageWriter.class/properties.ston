@@ -5,8 +5,8 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"packageDefinitions" ],
-	"name" : "CypProjectDefinition",
+		 ],
+	"name" : "CypCypressPackageWriter",
 	"pools" : [
 		 ],
-	"super" : "CypDefinition" }
+	"super" : "CypPackageWriter" }

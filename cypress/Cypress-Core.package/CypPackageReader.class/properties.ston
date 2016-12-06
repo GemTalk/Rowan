@@ -5,9 +5,8 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"directoryPath",
-		"disk" ],
-	"name" : "CypFileSystemRepository",
+		 ],
+	"name" : "CypPackageReader",
 	"pools" : [
 		 ],
-	"super" : "CypRepository" }
+	"super" : "CypPackageIO" }

@@ -1,0 +1,1 @@
+Abstract. Responsible for reading or writing a disk format of a package definition.

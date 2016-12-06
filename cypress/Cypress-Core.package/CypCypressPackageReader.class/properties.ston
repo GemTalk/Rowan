@@ -5,8 +5,8 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"loadedPackages" ],
-	"name" : "CypGsLoadedProject",
+		 ],
+	"name" : "CypCypressPackageReader",
 	"pools" : [
 		 ],
-	"super" : "CypGsLoadedDefinition" }
+	"super" : "CypPackageReader" }
