@@ -1,3 +1,1 @@
-No class-specific documentation for CypLoadedExtensionMethod, hierarchy is: 
-Object
-  CypLoadedExtensionMethod( name handle)
+class: The LoadedExtendedClass that I belong to.

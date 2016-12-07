@@ -4,6 +4,4 @@ category: initializing
 "
 initialize
 
-	properties := Dictionary new.
-	readerClass := CypCypressPackageReader.
-	writerClass := CypCypressPackageWriter.
+	properties := Dictionary new

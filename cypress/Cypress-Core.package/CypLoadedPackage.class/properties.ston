@@ -5,13 +5,11 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"name",
-		"url",
+		"repository",
 		"commitId",
 		"loadedClasses",
-		"loadedExtendedClasses",
-		"handle" ],
+		"loadedExtendedClasses" ],
 	"name" : "CypLoadedPackage",
 	"pools" : [
 		 ],
-	"super" : "Object" }
+	"super" : "CypLoadedThing" }

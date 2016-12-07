@@ -5,10 +5,10 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"name",
-		"methods",
-		"handle" ],
+		"package",
+		"class",
+		"methods" ],
 	"name" : "CypLoadedExtendedClass",
 	"pools" : [
 		 ],
-	"super" : "Object" }
+	"super" : "CypLoadedThing" }

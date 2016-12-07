@@ -4,4 +4,4 @@ category: Instance creation
 "
 default
 
-	^self new
+	^self new initialize

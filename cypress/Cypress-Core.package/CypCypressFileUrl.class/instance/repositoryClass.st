@@ -4,4 +4,4 @@ category: public
 "
 repositoryClass
 
-	^CypFileSystemRepository
+	^CypCypressRepository

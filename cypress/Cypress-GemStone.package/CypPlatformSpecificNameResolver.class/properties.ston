@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-GemStone",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "CypPlatformSpecificNameResolver",
+	"pools" : [
+		 ],
+	"super" : "Object" }

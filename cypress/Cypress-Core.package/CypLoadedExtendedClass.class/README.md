@@ -1,3 +1,3 @@
-No class-specific documentation for CypLoadedExtendedClass, hierarchy is: 
-Object
-  CypLoadedExtendedClass( name methods handle)
+package: The LoadedPackage that is extending the class
+class: The LoadedClass that I extend
+methods: A collection of LoadedExtensionMethods

@@ -1,3 +1,2 @@
-No class-specific documentation for CypLoadedClass, hierarchy is: 
-Object
-  CypLoadedClass( name handle)
+package: the CypLoadedPackage that defines me and all my methods that are not extension methods.
+extensions: a collection of CypLoadedExtendedClasses for this class. From these we can tell which methods don't belong to our default package.

@@ -3,7 +3,8 @@
 	"classinstvars" : [
 		"knownRepositories",
 		"loadedPackages",
-		"configuration" ],
+		"configuration",
+		"platform" ],
 	"classvars" : [
 		 ],
 	"instvars" : [

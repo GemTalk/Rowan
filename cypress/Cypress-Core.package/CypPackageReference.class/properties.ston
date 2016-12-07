@@ -1,0 +1,13 @@
+{
+	"category" : "Cypress-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"name",
+		"repository" ],
+	"name" : "CypPackageReference",
+	"pools" : [
+		 ],
+	"super" : "Object" }

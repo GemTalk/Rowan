@@ -6,9 +6,7 @@
 		 ],
 	"instvars" : [
 		"url",
-		"properties",
-		"readerClass",
-		"writerClass" ],
+		"properties" ],
 	"name" : "CypRepository",
 	"pools" : [
 		 ],

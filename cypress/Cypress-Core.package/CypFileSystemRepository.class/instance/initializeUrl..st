@@ -7,8 +7,4 @@ initializeUrl: anUrl
 	super initializeUrl: anUrl.
 	disk := CypFileUtilities current.
 	self initializeRepositoryDirectory.
-	self readPropertiesFile.
-	self codeFormatProperty: self url codeFormat.
-	self strictCodeFormat: self url isStrict.
-	self fixupMissingCopyrightProperty.
-	self initializeReaderAndWriterClasses
+	self readPropertiesFile
