@@ -6,7 +6,7 @@
 		 ],
 	"instvars" : [
 		 ],
-	"name" : "CypGemStonePlatform",
+	"name" : "CypGsPlatform",
 	"pools" : [
 		 ],
 	"super" : "CypPlatform" }

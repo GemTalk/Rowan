@@ -7,4 +7,8 @@ updateAllFromCategories
 	assign each class and method in the system to some LoadedPackage. This will create LoadedPackages as required."
 	"Scan the image for classes and methods. Platform-specific"
 
-	self subclassResponsibility
+	self allClassesDo: 
+			[:class |
+			| package |
+			package := Cypress existingOrNewLoadedPackageNamed: class category.
+			package addClass: class]

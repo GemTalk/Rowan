@@ -6,8 +6,8 @@ initialize
 	"Cypress initialize."
 
 	knownRepositories := Set new.
-	loadedPackages := Set new.
+	loadedPackages := Dictionary new.
 	configuration := CypConfiguration default.
 	platform := CypPlatform current.
 	configuration packageByCategory
-		ifTrue: [CypLoadedPackage updateAllFromCategories]
+		ifTrue: [platform loadedPackageClass updateAllFromCategories]
