@@ -6,7 +6,7 @@ forGemStone
 
 	| platformClass |
 	platformClass := CypPlatformSpecificNameResolver
-				resolve: 'CypGemStonePlatform'
+				resolve: 'CypGsPlatform'
 				ifAbsent: 
 					[self
 						error: 'The CypressGemStone prerequisite package does not seem to be installed.'].
