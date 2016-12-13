@@ -4,4 +4,7 @@ category: instance creation
 "
 newNamed: aName
 
-	^self new name: aName
+	^(self new)
+		initialize;
+		name: aName;
+		yourself

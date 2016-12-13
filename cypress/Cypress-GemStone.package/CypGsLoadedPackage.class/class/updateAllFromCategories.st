@@ -11,4 +11,4 @@ updateAllFromCategories
 			[:class |
 			| package |
 			package := Cypress existingOrNewLoadedPackageNamed: class category.
-			package addClass: class]
+			package addLoadedClass: (CypGsLoadedClass forClass: class)]

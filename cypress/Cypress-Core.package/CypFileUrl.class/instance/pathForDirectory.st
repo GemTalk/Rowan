@@ -9,7 +9,7 @@ pathForDirectory
 	they are absolute. Filename is left out."
 
 	| delimiter |
-	delimiter := CypFileUtilities current pathNameDelimiter.
+	delimiter := Cypress fileUtilities pathNameDelimiter.
 	^String streamContents: 
 			[:s |
 			(self isAbsolute and: [self firstPartIsDriveLetter not])

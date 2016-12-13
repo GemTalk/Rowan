@@ -5,6 +5,6 @@ category: initializing
 initializeUrl: anUrl
 
 	super initializeUrl: anUrl.
-	disk := CypFileUtilities current.
+	disk := Cypress fileUtilities.
 	self initializeRepositoryDirectory.
 	self readPropertiesFile
