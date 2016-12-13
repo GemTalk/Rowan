@@ -6,4 +6,5 @@ initialize
 
 	super initialize.
 	loadedClasses := Set new.
-	loadedExtendedClasses := Set new
+	loadedExtendedClasses := Set new.
+	isDirty := false

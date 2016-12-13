@@ -4,5 +4,6 @@ category: accessing
 "
 addLoadedClass: aLoadedClass
 
+	self markDirty.
 	loadedClasses add: aLoadedClass.
 	aLoadedClass setPackage: self

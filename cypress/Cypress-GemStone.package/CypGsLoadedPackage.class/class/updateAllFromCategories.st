@@ -7,8 +7,5 @@ updateAllFromCategories
 	assign each class and method in the system to some LoadedPackage. This will create LoadedPackages as required."
 	"Scan the image for classes and methods. Platform-specific"
 
-	self allClassesDo: 
-			[:class |
-			| package |
-			package := Cypress existingOrNewLoadedPackageNamed: class category.
-			package addLoadedClass: (CypGsLoadedClass forClass: class)]
+	self moveClassesToPackageOfCategory.
+	self moveExtensionMethods

@@ -1,6 +1,6 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: public
+category: private
 "
 allClassesDo: aBlock
 	"Iterate over all classes visible in the current session's transient symbol list, evaluating the block with each."
