@@ -1,0 +1,133 @@
+Specification for a class-per-file version of Cypress.
+
+
+Motivation (***Needs fleshing out)
+* Interchange between Smalltalk implementations
+* Management of Smalltalk code in Git or Subversion
+* Ability to edit Smalltalk code in plain-text editors, as well as within a Smalltalk IDE
+* Meaningful use of third-party diffing tools for Smalltalk code
+
+Declarative 
+Traditional Smalltalk fileins are imperative -- they execute code as the file is parsed.
+Cypress is declarative. In a typical implementation, Cypress files are parsed into a graph of definition objects (class definition, method definition, etc.) and these definition objects are then analyzed and either applied to the system or delivered to tools that can manipulate the definitions directly.
+
+=============
+
+SYNTAX:
+
+Encoding Shall be UTF-8
+
+This syntax is described in PEG syntax, see peg-popl04.pdf
+
+*** Need to think about extension methods.
+
+----------
+
+ClassFile <- Spacing FileSectionHeader UnknownSection* ClassDefinition UnknownSection* EndOfFile
+
+FileSectionHeader <- SECTIONMARK 'File' Spacing SectionProperties
+
+ClassDefinition <- ClassSectionHeader UnknownSection* ClassMethodsSection? UnknownSection* InstanceMethodSection?
+
+ClassSectionHeader <- SECTIONMARK 'Class' Spacing SectionProperties
+
+ClassMethodsSection <- ClassMethodsSectionHeader UnknownSection* MethodSections
+
+ClassMethodsSectionHeader <- SECTIONMARK 'ClassMethods' Spacing SectionProperties
+
+InstanceMethodsSection <- InstanceMethodsSectionHeader UnknownSection* MethodSections
+
+InstanceMethodsSectionHeader <- SECTIONMARK 'InstanceMethods' Spacing SectionProperties
+
+MethodSections <- (MethodSection? UnknownSection?)*
+
+MethodSection <- MethodSectionHeader SmalltalkMethodBody
+
+UnknownSection <- !(FileSectionHeader / ClassSectionHeader / ClassMethodsSection / InstanceMethodsSection / MethodSection) SECTIONMARK ((!SECTIONMARK !.) .)*
+
+MethodSectionHeader <- SECTIONMARK 'Method' Spacing SectionProperties
+
+SmalltalkMethodBody <- (MethodCode / SmalltalkComment)* 
+   #Should be valid to a Smalltalk compiler
+
+MethodCode <- (SmalltalkStringLiteral / OtherMethodCode )* 
+
+OtherMethodCode <- (!(SECTIONMARK / "'" / '"') . )*
+
+SmalltalkComment <- '"' ( !'"' . )* '"'
+
+SmalltalkStringLiteral <- "'" ("''" / (!"'" . ))* "'"
+
+SectionProperties <- LimitedStonMap?
+
+Spacing <- WhitespaceCharacter*
+
+WhitespaceCharacter <- ' ' / '\t' / '\r' / '\n'
+
+EndOfFile <- !.
+
+SECTIONMARK <- '-:'
+
+---
+
+STON subset for section properties:
+
+LimitedStonMap <- '{' Spacing LimitedStonMember* '}' Spacing
+
+LimitedStonMember <- LimitedStonPair (comma LimitedStonPair)*
+
+LimitedStonPair <- (StonString / StonSymbol / StonNumber) colon LimitedStonValue
+
+
+StonString <- "'" StonStringChar* "'"
+
+StonStringChar <- !['"\] . / StonEscapedChar
+
+StonEscapedChar <- '\' ['"\/bfnrt] / StonUnicodeChar
+
+StonUnicodeChar <- '\u' hexdigit hexdigit hexdigit hexdigit
+
+
+StonSymbol <- '#' StonUnquotedSymbolChar* / "#'" StonStringChar+ "'"
+
+StonUnquotedSymbolChar <- [-a-zA-Z0-9_./]
+
+
+StonNumber <- StonInt / StonFloat
+
+StonInt <- '-'? ('0' / [1-9] [0-9]*)
+
+StonFloat <- StonInt (StonFractionalPart / StonExponent / StonFractionalPart StonExponent)
+
+StonFractionalPart <- '.' [0-9]+ 
+
+StonExponent <- [Ee] [-+]? [0-9]+
+
+
+LimitedStonValue <- StonPrimitiveValue / LimitedStonObject 
+
+StonPrimitiveValue <- 'nil' / 'true' / 'false' / StonNumber / StonSymbol / StonString
+
+LimitedStonObject <- LimitedStonMap / LimitedStonList
+
+LimitedStonList <- '[' LimitedStonValue* ']'
+
+
+hexdigit <- [0-9] ([a-f] / [A-F])
+
+comma <- ',' Spacing
+colon <- ':' Spacing
+
+=========
+
+Each level of section has an optional properties definition in JSON.
+
+=========
+
+File-per-method Cypress
+
+Directory structure 
+Directories have uppercase names, files lower-case
+
+RepositoryDirectory (any name)
+properties.ston
