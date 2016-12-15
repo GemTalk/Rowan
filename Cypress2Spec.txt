@@ -23,42 +23,38 @@ This syntax is described in PEG syntax, see peg-popl04.pdf
 
 ----------
 
-ClassFile <- Spacing FileSectionHeader UnknownSection* ClassDefinition UnknownSection* EndOfFile
+ClassFile <- Spacing FileSectionHeader ClassDefinition EndOfFile
 
 FileSectionHeader <- SECTIONMARK 'File' Spacing SectionProperties
 
-ClassDefinition <- ClassSectionHeader UnknownSection* ClassMethodsSection? UnknownSection* InstanceMethodSection?
+ClassDefinition <- ClassSectionHeader ClassMethodsSection? InstanceMethodSection?
 
 ClassSectionHeader <- SECTIONMARK 'Class' Spacing SectionProperties
 
-ClassMethodsSection <- ClassMethodsSectionHeader UnknownSection* MethodSections
+ClassMethodsSection <- ClassMethodsSectionHeader MethodSections
 
 ClassMethodsSectionHeader <- SECTIONMARK 'ClassMethods' Spacing SectionProperties
 
-InstanceMethodsSection <- InstanceMethodsSectionHeader UnknownSection* MethodSections
+InstanceMethodsSection <- InstanceMethodsSectionHeader MethodSections
 
 InstanceMethodsSectionHeader <- SECTIONMARK 'InstanceMethods' Spacing SectionProperties
 
-MethodSections <- (MethodSection? UnknownSection?)*
+MethodSections <- MethodSection*
 
 MethodSection <- MethodSectionHeader SmalltalkMethodBody
 
-UnknownSection <- !(FileSectionHeader / ClassSectionHeader / ClassMethodsSection / InstanceMethodsSection / MethodSection) SECTIONMARK ((!SECTIONMARK !.) .)*
-
 MethodSectionHeader <- SECTIONMARK 'Method' Spacing SectionProperties
 
-SmalltalkMethodBody <- (MethodCode / SmalltalkComment)* 
+SmalltalkMethodBody <- (MethodCode / SmalltalkStringLiteral / SmalltalkComment)* 
    #Should be valid to a Smalltalk compiler
 
-MethodCode <- (SmalltalkStringLiteral / OtherMethodCode )* 
-
-OtherMethodCode <- (!(SECTIONMARK / "'" / '"') . )*
+MethodCode <- (!(EndOfFile / SECTIONMARK / "'" / '"') . )*
 
 SmalltalkComment <- '"' ( !'"' . )* '"'
 
 SmalltalkStringLiteral <- "'" ("''" / (!"'" . ))* "'"
 
-SectionProperties <- LimitedStonMap?
+SectionProperties <- LimitedStonMap / Spacing
 
 Spacing <- WhitespaceCharacter*
 
@@ -66,7 +62,7 @@ WhitespaceCharacter <- ' ' / '\t' / '\r' / '\n'
 
 EndOfFile <- !.
 
-SECTIONMARK <- '-:'
+SECTIONMARK <- '-:' Spacing
 
 ---
 
@@ -76,22 +72,31 @@ LimitedStonMap <- '{' Spacing LimitedStonMember* '}' Spacing
 
 LimitedStonMember <- LimitedStonPair (comma LimitedStonPair)*
 
-LimitedStonPair <- (StonString / StonSymbol / StonNumber) colon LimitedStonValue
+LimitedStonPair <- StonString colon LimitedStonValue
 
+StonString <- "'" StonStringChar* "'" Spacing
 
-StonString <- "'" StonStringChar* "'"
+StonStringChar <- !['"\\] PrintableAsciiCharacter / StonEscapedChar
 
-StonStringChar <- !['"\] . / StonEscapedChar
+PrintableAsciiCharacter <- [ -~]
 
-StonEscapedChar <- '\' ['"\/bfnrt] / StonUnicodeChar
+StonEscapedChar <- '\\' ['"\\/bfnrt] / StonUnicodeChar
 
 StonUnicodeChar <- '\u' hexdigit hexdigit hexdigit hexdigit
 
+hexdigit <- [0-9] / [a-f] / [A-F]
 
-StonSymbol <- '#' StonUnquotedSymbolChar* / "#'" StonStringChar+ "'"
+LimitedStonValue <- StonPrimitiveValue / LimitedStonObject 
 
-StonUnquotedSymbolChar <- [-a-zA-Z0-9_./]
+StonPrimitiveValue <- 'nil' Spacing 
+                   / 'true' Spacing 
+                   / 'false' Spacing 
+                   / StonNumber 
+                   / StonString
 
+LimitedStonObject <- LimitedStonMap / LimitedStonList
+
+LimitedStonList <- '[' LimitedStonValue* ']'
 
 StonNumber <- StonInt / StonFloat
 
@@ -102,18 +107,6 @@ StonFloat <- StonInt (StonFractionalPart / StonExponent / StonFractionalPart Sto
 StonFractionalPart <- '.' [0-9]+ 
 
 StonExponent <- [Ee] [-+]? [0-9]+
-
-
-LimitedStonValue <- StonPrimitiveValue / LimitedStonObject 
-
-StonPrimitiveValue <- 'nil' / 'true' / 'false' / StonNumber / StonSymbol / StonString
-
-LimitedStonObject <- LimitedStonMap / LimitedStonList
-
-LimitedStonList <- '[' LimitedStonValue* ']'
-
-
-hexdigit <- [0-9] ([a-f] / [A-F])
 
 comma <- ',' Spacing
 colon <- ':' Spacing
@@ -131,3 +124,8 @@ Directories have uppercase names, files lower-case
 
 RepositoryDirectory (any name)
 properties.ston
+
+=========
+
+File-per-package Cypress
+TBD, an extension of file-per-class
