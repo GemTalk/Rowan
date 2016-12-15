@@ -11,6 +11,34 @@ Declarative
 Traditional Smalltalk fileins are imperative -- they execute code as the file is parsed.
 Cypress is declarative. In a typical implementation, Cypress files are parsed into a graph of definition objects (class definition, method definition, etc.) and these definition objects are then analyzed and either applied to the system or delivered to tools that can manipulate the definitions directly.
 
+
+=============
+
+Example class file (rough example, hopefully close enough to give the flavor):
+
+-: File
+   { 'Standard' : 'Cypress2',
+     'FileFormat' : 'FilePerClass',
+     'CopyrightNotice' : 'Copyright 2016 Martin McClure' }
+-: Class
+   { 'Name' : 'ExampleClass',
+     'Superclass' : 'Object',
+     'gsSymbolDictionary' : 'UserGlobals',
+     'Instance Variables' : [ 'instVar1', 'instVar2'] }
+-: InstanceMethods
+-: Method
+   { 'protocol' : 'accessing',
+     'timestamp' : '2016-12-14T23:48:38Z',
+     'author' : 'Martin McClure' }
+instVar1
+  ^ instVar1
+-: Method
+   { 'protocol' : 'accessing',
+     'timestamp' : '2016-12-14T23:49:17Z',
+     'author' : 'Martin McClure' }
+instVar1: anObject
+  instVar1 := anObject     
+   
 =============
 
 SYNTAX:
@@ -96,7 +124,9 @@ StonPrimitiveValue <- 'nil' Spacing
 
 LimitedStonObject <- LimitedStonMap / LimitedStonList
 
-LimitedStonList <- '[' LimitedStonValue* ']'
+LimitedStonList <- '[' LimitedStonValues ']'
+
+LimitedStonValues <- LimitedStonValue (comma LimitedStonValue)*
 
 StonNumber <- StonInt / StonFloat
 
@@ -113,7 +143,9 @@ colon <- ':' Spacing
 
 =========
 
-Each level of section has an optional properties definition in JSON.
+=========
+
+Each level of section has an optional properties definition in a limited subset of STON.
 
 =========
 
