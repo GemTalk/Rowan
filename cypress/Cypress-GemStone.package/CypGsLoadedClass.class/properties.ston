@@ -3,7 +3,7 @@
 	"classinstvars" : [
 		 ],
 	"classvars" : [
-		 ],
+		"PackagesForClasses" ],
 	"instvars" : [
 		"symbolDictionaryName" ],
 	"name" : "CypGsLoadedClass",

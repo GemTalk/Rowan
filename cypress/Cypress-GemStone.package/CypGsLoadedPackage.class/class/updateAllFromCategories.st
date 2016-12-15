@@ -8,4 +8,4 @@ updateAllFromCategories
 	"Scan the image for classes and methods. Platform-specific"
 
 	self moveClassesToPackageOfCategory.
-	self moveExtensionMethods
+	self moveExtensionMethodsToPackageOfProtocol
