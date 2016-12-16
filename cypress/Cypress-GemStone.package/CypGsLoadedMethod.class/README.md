@@ -1,4 +1,1 @@
-No class-specific documentation for CypGsLoadedMethod, hierarchy is: 
-Object
-  CypGsLoadedDefinition( properties)
-    CypGsLoadedMethod( selector)
+PackagesForMethods maps GsNMethods to Packages that they are in. Normally, only extension methods are so mapped, other methods are taken as being in the package that their class is in.

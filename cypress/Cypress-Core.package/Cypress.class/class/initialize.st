@@ -7,7 +7,5 @@ initialize
 
 	knownRepositories := Set new.
 	loadedPackages := Dictionary new.
-	configuration := CypConfiguration default.
 	platform := CypPlatform current.
-	configuration packageByCategory
-		ifTrue: [platform loadedPackageClass updateAllFromCategories]
+	configuration := platform defaultConfiguration

@@ -1,4 +1,1 @@
-No class-specific documentation for CypGsLoadedClass, hierarchy is: 
-Object
-  CypGsLoadedDefinition( properties)
-    CypGsLoadedClass( symbolDictionaryName className)
+The class variable PackagesForClasses holds a dictionary that maps ClassHistory -> package for all non-meta classes that are known to be in a package.

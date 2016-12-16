@@ -1,7 +1,6 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: Instance creation
+category: Updating
 "
-default
-
-	^self new initialize
+packageInfoSource: newValue
+	packageInfoSource := newValue

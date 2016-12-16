@@ -1,4 +1,2 @@
-No class-specific documentation for CypGemStonePlatform, hierarchy is: 
-Object
-  CypPlatform
-    CypGemStonePlatform
+This class is private to Cypress.
+A GsPlatform is the gateway object for requesting platform-specific actions.

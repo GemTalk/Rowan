@@ -1,6 +1,6 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: instance creation
+category: updating
 "
 updateAllFromCategories
 	"Where tools do not yet fully understand Cypress packages, but do handle class categories and method protocols,

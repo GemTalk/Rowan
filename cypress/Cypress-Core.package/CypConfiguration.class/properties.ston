@@ -5,7 +5,7 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"packageByCategory" ],
+		"packageInfoSource" ],
 	"name" : "CypConfiguration",
 	"pools" : [
 		 ],
