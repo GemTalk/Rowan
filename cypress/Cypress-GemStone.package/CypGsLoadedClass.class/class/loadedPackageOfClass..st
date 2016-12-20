@@ -4,4 +4,6 @@ category: queries
 "
 loadedPackageOfClass: aClass
 
-	^PackagesForClasses at: aClass classHistory ifAbsent: [nil]
+	^(self loadedClassOfClass: aClass)
+		ifNil: [nil]
+		ifNotNil: [:loadedClass | loadedClass package]

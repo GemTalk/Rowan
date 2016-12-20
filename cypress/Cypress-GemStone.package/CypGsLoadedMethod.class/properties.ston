@@ -3,10 +3,10 @@
 	"classinstvars" : [
 		 ],
 	"classvars" : [
-		"PackagesForMethods" ],
+		"MethodRegistry" ],
 	"instvars" : [
 		 ],
 	"name" : "CypGsLoadedMethod",
 	"pools" : [
 		 ],
-	"super" : "CypLoadedThing" }
+	"super" : "CypLoadedMethod" }
