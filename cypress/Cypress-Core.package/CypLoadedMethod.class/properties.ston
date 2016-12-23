@@ -5,8 +5,9 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"class" ],
-	"name" : "CypLoadedExtensionMethod",
+		"loadedClass",
+		"classIsMeta" ],
+	"name" : "CypLoadedMethod",
 	"pools" : [
 		 ],
 	"super" : "CypLoadedThing" }

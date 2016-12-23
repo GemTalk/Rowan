@@ -3,6 +3,6 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: class initialization
 "
 initialize
-	"CypGsLoadedClass initialize"
+	"CypGsLoadedMethod initialize"
 
-	ClassRegistry := RcKeyValueDictionary new
+	MethodRegistry := RcKeyValueDictionary new

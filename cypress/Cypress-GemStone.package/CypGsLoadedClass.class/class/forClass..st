@@ -1,7 +1,8 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: instance creation
+category: queries
 "
 forClass: aClass
+	"Answer the registered LoadedClass for the given class. If none registered, create one, register it, and answer it."
 
-	^self new initializeForClass: aClass
+	^ClassRegistry at: aClass classHistory ifAbsent: [self newForClass: aClass]

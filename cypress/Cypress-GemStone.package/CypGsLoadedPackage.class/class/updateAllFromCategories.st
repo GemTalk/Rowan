@@ -7,5 +7,8 @@ updateAllFromCategories
 	assign each class and method in the system to some LoadedPackage. This will create LoadedPackages as required."
 	"Scan the image for classes and methods. Platform-specific"
 
-	self moveClassesToPackageOfCategory.
-	self moveExtensionMethodsToPackageOfProtocol
+	self
+		updateLoadedClasses;
+		updateLoadedMethods;
+		moveClassesToPackageOfCategory;
+		moveMethodsToPackageOfProtocolOrClass

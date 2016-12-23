@@ -6,4 +6,4 @@ addLoadedClass: aLoadedClass
 
 	self markDirty.
 	loadedClasses add: aLoadedClass.
-	aLoadedClass setPackage: self
+	aLoadedClass loadedPackage: self

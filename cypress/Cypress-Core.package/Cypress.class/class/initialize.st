@@ -8,4 +8,5 @@ initialize
 	knownRepositories := Set new.
 	loadedPackages := Dictionary new.
 	platform := CypPlatform current.
-	configuration := platform defaultConfiguration
+	configuration := platform defaultConfiguration.
+	platform initialize

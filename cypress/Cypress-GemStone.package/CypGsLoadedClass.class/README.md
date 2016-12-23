@@ -1,1 +1,1 @@
-The class variable PackagesForClasses holds a dictionary that maps ClassHistory -> package for all non-meta classes that are known to be in a package.
+The class variable ClassRegistry holds a dictionary that maps ClassHistory -> LoadedClass for all non-meta classes that are known to be defined in a package.

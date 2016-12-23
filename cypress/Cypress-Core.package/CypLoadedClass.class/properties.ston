@@ -5,8 +5,8 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"package",
-		"extensions" ],
+		"loadedPackage",
+		"loadedMethods" ],
 	"name" : "CypLoadedClass",
 	"pools" : [
 		 ],
