@@ -8,7 +8,7 @@ updateAllFromCategories
 	"Scan the image for classes and methods. Platform-specific"
 
 	self
-		updateLoadedClasses;
-		updateLoadedMethods;
-		moveClassesToPackageOfCategory;
-		moveMethodsToPackageOfProtocolOrClass
+		updateLoadedClassesFromCategories;
+		updateLoadedMethodsFromProtocols;
+		scanForNewClassesByCategories;
+		scanForNewMethodsByProtocols

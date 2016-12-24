@@ -4,5 +4,4 @@ category: queries
 "
 loadedClass
 
-Class.st
 	^loadedClass

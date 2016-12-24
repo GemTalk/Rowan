@@ -8,7 +8,7 @@ moveClassesToPackageOfCategory
 	self allClassesDo: 
 			[:aClass |
 			| loadedClass oldPackage newPackage |
-			loadedClass := CypGsLoadedClass loadedClassOfClass: aClass.
+			loadedClass := CypGsLoadedClass forClass: aClass.
 			newPackage := Cypress
 						existingOrNewLoadedPackageNamed: (self categoryOfClass: aClass).
 			(oldPackage := loadedClass loadedPackage)
