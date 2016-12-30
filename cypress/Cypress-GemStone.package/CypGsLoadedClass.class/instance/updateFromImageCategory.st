@@ -11,7 +11,7 @@ updateFromImageCategory
 	* The class comment may have changed."
 
 	self handleClassDeletionOrNewVersion
-		ifFalse: 
+		ifTrue: 
 			[self
 				updateForCategoryChange;
 				updateForCommentChange]

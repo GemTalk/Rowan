@@ -6,5 +6,3 @@ removeLoadedClass: aLoadedClass
 
 	self markDirty.
 	loadedClasses remove: aLoadedClass
-		ifAbsent: [self error: 'Class not present in package.'].
-	aLoadedClass setPackage: nil
