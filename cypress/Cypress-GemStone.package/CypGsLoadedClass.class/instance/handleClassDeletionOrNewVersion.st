@@ -1,6 +1,6 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: private
+category: private-updating
 "
 handleClassDeletionOrNewVersion
 	"The class is deleted if both:
@@ -14,7 +14,8 @@ handleClassDeletionOrNewVersion
 	resolved := self resolveClassNamed: name.
 	resolved == handle ifTrue: [^true].
 
-	"Has been deleted, renamed, or a new version under the same name. But which?"
+	"Has been deleted, renamed, or a new version under the same name.
+	Answer false if deleted, set handle and answer true otherwise."
 	thoseResolving := handle classHistory reverse
 				select: [:aClass | aClass == self resolveClassNamed: aClass name].
 	thoseResolving size = 0
@@ -26,5 +27,5 @@ handleClassDeletionOrNewVersion
 			[CypNotification
 				signal: 'Class history with multiple "current" members found. One associated name is '
 						, name].
-	self handleClassUpdateToVersion: thoseResolving first.
+	handle := thoseResolving first.
 	^true

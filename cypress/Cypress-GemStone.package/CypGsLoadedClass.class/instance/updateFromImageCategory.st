@@ -13,5 +13,9 @@ updateFromImageCategory
 	self handleClassDeletionOrNewVersion
 		ifTrue: 
 			[self
+				updatePropertiesFromClass;
 				updateForCategoryChange;
 				updateForCommentChange]
+		ifFalse: 
+			["Class has been deleted and the deletion handled"
+			]
