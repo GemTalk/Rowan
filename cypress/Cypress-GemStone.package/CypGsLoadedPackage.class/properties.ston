@@ -3,7 +3,7 @@
 	"classinstvars" : [
 		 ],
 	"classvars" : [
-		 ],
+		"PackageRegistry" ],
 	"instvars" : [
 		 ],
 	"name" : "CypGsLoadedPackage",

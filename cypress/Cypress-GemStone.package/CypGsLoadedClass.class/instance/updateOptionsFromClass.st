@@ -19,7 +19,7 @@ updateOptionsFromClass
 
 	| propertyName oldValue newValue changed |
 	propertyName := '_gs_options'.
-	oldValue := self propertiesAt: propertyName.
+	oldValue := self propertyAt: propertyName.
 	newValue := (handle _optionsArray collect: [:option | option asString])
 				asSortedCollection.
 	newValue isEmpty ifTrue: [newValue := self absentToken].
@@ -30,4 +30,4 @@ updateOptionsFromClass
 			[self markPackageDirty.
 			newValue == self absentToken
 				ifTrue: [self removeProperty: propertyName]
-				ifFalse: [self propertiesAt: propertyName put: newValue]]
+				ifFalse: [self propertyAt: propertyName put: newValue]]

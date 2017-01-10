@@ -12,7 +12,7 @@ updateClassTypeFromClass
 
 	| propertyName oldValue newValue changed |
 	propertyName := '_gs_type'.
-	oldValue := self propertiesAt: propertyName.
+	oldValue := self propertyAt: propertyName.
 	newValue := handle isBytesOrSpecial
 				ifTrue: [handle isBytes ifTrue: ['bytes'] ifFalse: ['immediate']]
 				ifFalse: 
@@ -29,4 +29,4 @@ updateClassTypeFromClass
 			[self markPackageDirty.
 			newValue == self absentToken
 				ifTrue: [self removeProperty: propertyName]
-				ifFalse: [self propertiesAt: propertyName put: newValue]]
+				ifFalse: [self propertyAt: propertyName put: newValue]]

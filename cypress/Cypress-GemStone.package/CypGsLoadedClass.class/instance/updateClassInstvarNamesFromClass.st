@@ -7,10 +7,10 @@ updateClassInstvarNamesFromClass
 
 	| propertyName oldNames newNames |
 	propertyName := 'classinstvars'.
-	oldNames := self propertiesAt: propertyName.
+	oldNames := self propertyAt: propertyName.
 	newNames := (handle class instVarNames collect: [:each | each asString])
 				asSortedCollection.
 	oldNames = newNames
 		ifFalse: 
 			[self markPackageDirty.
-			self propertiesAt: propertyName put: newNames]
+			self propertyAt: propertyName put: newNames]

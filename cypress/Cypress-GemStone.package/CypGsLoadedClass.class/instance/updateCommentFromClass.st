@@ -7,7 +7,7 @@ updateCommentFromClass
 	| propertyName oldValue newValue absentToken |
 	propertyName := 'comment'.
 	absentToken := self absentToken.
-	oldValue := self propertiesAt: propertyName.
+	oldValue := self propertyAt: propertyName.
 	newValue := (handle _extraDictAt: #comment) ifNil: [absentToken].
 	(newValue ~~ absentToken and: [newValue isEmpty])
 		ifTrue: [newValue := absentToken].
@@ -20,4 +20,4 @@ updateCommentFromClass
 				[self markPackageDirty.
 				newValue == absentToken
 					ifTrue: [self removeProperty: propertyName]
-					ifFalse: [self propertiesAt: propertyName put: newValue]]
+					ifFalse: [self propertyAt: propertyName put: newValue]]

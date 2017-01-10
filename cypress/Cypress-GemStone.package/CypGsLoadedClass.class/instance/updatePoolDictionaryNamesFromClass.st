@@ -7,9 +7,9 @@ updatePoolDictionaryNamesFromClass
 
 	| propertyName oldNames newNames |
 	propertyName := 'pools'.
-	oldNames := self propertiesAt: propertyName.
+	oldNames := self propertyAt: propertyName.
 	newNames := handle sharedPools collect: [:each | each name asString].
 	oldNames = newNames
 		ifFalse: 
 			[self markPackageDirty.
-			self propertiesAt: propertyName put: newNames]
+			self propertyAt: propertyName put: newNames]
