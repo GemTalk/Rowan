@@ -5,5 +5,5 @@ category: accessing
 addLoadedClass: aLoadedClass
 
 	self markDirty.
-	loadedClasses add: aLoadedClass.
+	loadedClasses at: aLoadedClass key put: aLoadedClass.
 	aLoadedClass loadedPackage: self

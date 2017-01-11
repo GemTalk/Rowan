@@ -5,6 +5,6 @@ category: initialization
 initialize
 
 	super initialize.
-	loadedClasses := Set new.
-	loadedExtendedClasses := Set new.
+	loadedClasses := KeyValueDictionary new.
+	loadedExtendedClasses := KeyValueDictionary new.
 	isDirty := false

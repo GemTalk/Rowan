@@ -5,4 +5,4 @@ category: accessing
 removeLoadedClass: aLoadedClass
 
 	self markDirty.
-	loadedClasses remove: aLoadedClass
+	loadedClasses removeKey: aLoadedClass key

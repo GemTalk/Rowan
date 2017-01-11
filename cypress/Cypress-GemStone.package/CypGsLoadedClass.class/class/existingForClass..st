@@ -5,4 +5,4 @@ category: queries
 existingForClass: aClass
 	"Answer the registered LoadedClass for the given class."
 
-	^ClassRegistry at: aClass classHistory
+	^ClassRegistry at: aClass classHistory ifAbsent: [AbsentToken]
