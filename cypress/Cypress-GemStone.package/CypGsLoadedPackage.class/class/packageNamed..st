@@ -4,4 +4,7 @@ category: queries
 "
 packageNamed: aName
 
-	^PackageRegistry at: aName ifAbsent: [nil]
+	| package |
+	package := self existingPackageNamed: aName.
+	package == AbsentToken ifTrue: [package := self newNamed: aName].
+	^package

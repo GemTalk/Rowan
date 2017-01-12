@@ -6,5 +6,5 @@ newNamed: aName
 
 	^(self new)
 		initialize;
-		name: aName;
+		initializeForName: aName;
 		yourself

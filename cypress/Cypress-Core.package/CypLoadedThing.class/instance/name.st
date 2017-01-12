@@ -1,8 +1,7 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: initialization
+category: accessing
 "
-initialize
+name
 
-	super initialize.
-	loadedMethods := Set new
+	^name

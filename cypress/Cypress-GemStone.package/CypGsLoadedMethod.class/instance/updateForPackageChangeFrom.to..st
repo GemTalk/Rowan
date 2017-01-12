@@ -12,8 +12,6 @@ updateForPackageChangeFrom: oldPackageName to: newPackageName
 
 	"Now we need something to add ourselves to."
 	newPackage := CypGsLoadedPackage packageNamed: newPackageName.
-	newPackage
-		ifNil: [newPackage := CypGsLoadedPackage newNamed: newPackageName].
 	myClass := handle inClass.
 	newLoadedClass := CypGsLoadedClass existingForClass: myClass.
 	packageOfClass := newLoadedClass package.
