@@ -10,5 +10,5 @@ loadedPackagesNamed: someNames
 	| packageRefs |
 	self updateLoadedPackages.
 	packageRefs := someNames
-				collect: [:aName | self loadedPackageNamed: aName].
+				collect: [:aName | self existingOrNewLoadedPackageNamed: aName].
 	^CypPackageSet withAll: packageRefs

@@ -14,5 +14,5 @@ updateForCategoryChange
 			[| newPackage |
 			loadedPackage removeLoadedClass: self.
 			"Could need to create the new package."
-			newPackage := CypGsLoadedPackage packageNamed: newPackageName.
+			newPackage := Cypress existingOrNewLoadedPackageNamed: newPackageName.
 			newPackage addLoadedClass: self]

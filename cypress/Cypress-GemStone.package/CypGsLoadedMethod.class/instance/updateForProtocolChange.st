@@ -11,11 +11,14 @@ updateForProtocolChange
 				asString.
 	oldProtocol = newProtocol
 		ifFalse: 
-			[oldProtocol first = $* | (newProtocol first = $*)
+			[| newProtocolIsExtension |
+			newProtocolIsExtension := newProtocol first = $*.
+			oldProtocol first = $* | newProtocolIsExtension
 				ifTrue: 
 					[self
 						updateForPackageChangeFrom: (oldProtocol copyFrom: 2 to: oldProtocol size)
-						to: (newProtocol copyFrom: 2 to: newProtocol size)].
+						to: (newProtocol copyFrom: 2 to: newProtocol size)
+						newIsExtension: newProtocolIsExtension].
 			self
 				markPackageDirty;
 				propertyAt: 'protocol' put: newProtocol]
