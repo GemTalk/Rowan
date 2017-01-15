@@ -13,7 +13,7 @@ scanForNewClassesByCategories
 			loadedClass == AbsentToken
 				ifTrue: 
 					[| package |
-					package := self packageNamed: class category asString.
+					package := self existingOrNewPackageNamed: class category asString.
 					loadedClass := CypGsLoadedClass newForClass: class.
 					package addLoadedClass: loadedClass.
 					loadedClass updateFromImageCategory]]

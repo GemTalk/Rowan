@@ -5,4 +5,5 @@ category: initialization
 initialize
 
 	super initialize.
-	loadedMethods := KeyValueDictionary new
+	loadedInstanceMethods := KeyValueDictionary new.
+	loadedClassMethods := KeyValueDictionary new

@@ -1,6 +1,6 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: unknown
+category: private
 "
 scanForNewMethodsByProtocols
 	"If we do not have a LoadedMethod for a method in the system, create one and put it in a package
@@ -18,9 +18,6 @@ scanForNewMethodsByProtocols
 					loadedClass == AbsentToken
 						ifTrue: [self error: 'Classes should have been scanned before methods.'].
 					loadedMethod := CypGsLoadedMethod newNamed: method selector asString.
-					"Assume method is in package of class. updateForProtocolChange 
-					will correct if it's really an extension method."
-					loadedClass addLoadedMethod: loadedMethod.
 					loadedMethod
 						handle: method;
 						updateForProtocolChange]]

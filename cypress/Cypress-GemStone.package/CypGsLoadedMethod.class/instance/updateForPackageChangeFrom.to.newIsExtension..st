@@ -7,15 +7,18 @@ updateForPackageChangeFrom: oldPackageName to: newPackageName newIsExtension: ne
 	May have to create a new LoadedClass, LoadedExtendedClass, and/or a new package."
 	"We know what our old loadedClass or loadedClassExtension is, so removing is simple."
 
-	| newPackage myClass packageOfClass newLoadedClass |
-	loadedClass removeLoadedMethod: self.
+	| newPackage myBehavior myClass packageOfClass newLoadedClass |
+	loadedClass ifNotNil: [loadedClass removeLoadedMethod: self].
 
 	"Now we need something to add ourselves to."
 	newPackage := Cypress existingOrNewLoadedPackageNamed: newPackageName.
-	myClass := handle inClass.
-self halt.
-	newLoadedClass := newIsExtension ifTrue: []
-	ifFalse: [].
+	myBehavior := handle inClass.
+	classIsMeta := myBehavior isMeta.
+	myClass := myBehavior thisClass.
+
+
+
+	newLoadedClass := newIsExtension ifTrue: [] ifFalse: [].
 	newLoadedClass := CypGsLoadedClass existingForClass: myClass.
 	packageOfClass := newLoadedClass package.
 	newPackage = packageOfClass
@@ -26,6 +29,6 @@ self halt.
 			newLoadedClass == AbsentToken
 				ifTrue: 
 					["Create an extension"
-					newLoadedClass := CypGsLoadedExtendedClass newNamed: myClass name.
-					newPackage addLoadedExtendedClass: newLoadedClass]].
+					newLoadedClass := CypGsLoadedClassExtension newNamed: myClass name.
+					newPackage addLoadedClassExtension: newLoadedClass]].
 	loadedClass := newLoadedClass

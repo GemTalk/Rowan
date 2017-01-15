@@ -26,7 +26,6 @@ updateClassTypeFromClass
 	"Since the absent token is not equal to any other valid value, we can skip the identity check in this case."
 	oldValue = newValue
 		ifFalse: 
-			[self markPackageDirty.
-			newValue == self absentToken
+			[newValue == self absentToken
 				ifTrue: [self removeProperty: propertyName]
 				ifFalse: [self propertyAt: propertyName put: newValue]]

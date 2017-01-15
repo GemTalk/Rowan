@@ -7,7 +7,4 @@ updateSuperclassNameFromClass
 	| oldName newName |
 	oldName := self propertyAt: 'super'.
 	newName := handle superclass ifNotNil: [:super | super name asString].
-	oldName = newName
-		ifFalse: 
-			[self markPackageDirty.
-			self propertyAt: 'super' put: newName]
+	oldName = newName ifFalse: [self propertyAt: 'super' put: newName]

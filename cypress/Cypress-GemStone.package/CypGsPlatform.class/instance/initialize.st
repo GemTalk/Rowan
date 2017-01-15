@@ -4,5 +4,6 @@ category: initialization
 "
 initialize
 
+	CypGsLoadedPackage initialize.
 	CypGsLoadedClass initialize.
 	CypGsLoadedMethod initialize

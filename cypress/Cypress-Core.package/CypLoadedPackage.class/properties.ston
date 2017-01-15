@@ -8,7 +8,7 @@
 		"repository",
 		"commitId",
 		"loadedClasses",
-		"loadedExtendedClasses",
+		"loadedClassExtensions",
 		"isDirty" ],
 	"name" : "CypLoadedPackage",
 	"pools" : [

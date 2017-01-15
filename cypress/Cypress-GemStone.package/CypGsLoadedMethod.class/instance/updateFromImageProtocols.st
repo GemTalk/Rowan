@@ -10,6 +10,7 @@ updateFromImageProtocols
 	* The method may be in a different protocol.
 	* If the protocol has changed, the method may be in a new package."
 
+	self updateIsMetaFromImage.
 	self handleMethodDeletionOrReplacement
 		ifTrue: [self updateForProtocolChange]
 		ifFalse: 

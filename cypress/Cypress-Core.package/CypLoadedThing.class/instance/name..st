@@ -1,8 +1,8 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: accessing
+category: unknown
 "
-removeProperty: propertyName
+name: aString
 
 	self markPackageDirty.
-	^properties removeKey: propertyName ifAbsent: [AbsentToken]
+	name := aString

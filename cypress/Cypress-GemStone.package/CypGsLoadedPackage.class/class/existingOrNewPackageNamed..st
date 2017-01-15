@@ -1,8 +1,8 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: queries
+category: unknown
 "
-packageNamed: aName
+existingOrNewPackageNamed: aName
 
 	| package |
 	package := self existingPackageNamed: aName.

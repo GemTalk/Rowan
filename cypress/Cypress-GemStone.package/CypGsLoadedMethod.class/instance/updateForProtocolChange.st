@@ -9,16 +9,7 @@ updateForProtocolChange
 	oldProtocol := self propertyAt: 'protocol'.
 	newProtocol := (handle inClass categoryOfSelector: handle selector)
 				asString.
-	oldProtocol = newProtocol
-		ifFalse: 
-			[| newProtocolIsExtension |
-			newProtocolIsExtension := newProtocol first = $*.
-			oldProtocol first = $* | newProtocolIsExtension
-				ifTrue: 
-					[self
-						updateForPackageChangeFrom: (oldProtocol copyFrom: 2 to: oldProtocol size)
-						to: (newProtocol copyFrom: 2 to: newProtocol size)
-						newIsExtension: newProtocolIsExtension].
-			self
-				markPackageDirty;
-				propertyAt: 'protocol' put: newProtocol]
+
+	"Must test for AbsentToken by identity, or a new protocol of '<absent>' would not  be detected."
+	oldProtocol == AbsentToken | (oldProtocol ~= newProtocol)
+		ifTrue: [self updateForProtocolChangeTo: newProtocol]

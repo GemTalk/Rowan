@@ -4,5 +4,4 @@ category: private
 "
 existingOrNewLoadedPackageNamed: aName
 
-	^self loadedPackageNamed: aName
-		ifNone: [self createLoadedPackageNamed: aName]
+	^platform loadedPackageClass existingOrNewPackageNamed: aName

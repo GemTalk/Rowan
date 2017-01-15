@@ -1,9 +1,9 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: accessing
+category: methods
 "
 addLoadedMethod: aLoadedMethod
 
-	self markPackageDirty.
-	loadedMethods at: aLoadedMethod key put: aLoadedMethod.
-	aLoadedMethod loadedClass: self
+	aLoadedMethod classIsMeta
+		ifTrue: [self addLoadedClassMethod: aLoadedMethod]
+		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]

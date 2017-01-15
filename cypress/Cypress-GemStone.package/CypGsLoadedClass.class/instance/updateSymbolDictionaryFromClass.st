@@ -14,7 +14,4 @@ updateSymbolDictionaryFromClass
 				signal: 'Class resolved in more than one SymbolDictionary. Using first found.'].
 	newName := dicts first name.
 	oldName := self propertyAt: 'SymbolDictionary'.
-	oldName = newName
-		ifFalse: 
-			[self markPackageDirty.
-			self symbolDictionaryName: newName]
+	oldName = newName ifFalse: [self symbolDictionaryName: newName]

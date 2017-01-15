@@ -17,7 +17,6 @@ updateCommentFromClass
 		ifTrue: [oldValue == newValue]
 		ifFalse: [oldValue = newValue])
 			ifFalse: 
-				[self markPackageDirty.
-				newValue == absentToken
+				[newValue == absentToken
 					ifTrue: [self removeProperty: propertyName]
 					ifFalse: [self propertyAt: propertyName put: newValue]]

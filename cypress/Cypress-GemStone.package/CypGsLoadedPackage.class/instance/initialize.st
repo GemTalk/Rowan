@@ -6,5 +6,6 @@ initialize
 
 	super initialize.
 	loadedClasses := KeyValueDictionary new.
-	loadedExtendedClasses := KeyValueDictionary new.
-	isDirty := false
+	loadedClassExtensions := KeyValueDictionary new.
+	"A new package is dirty until it has been shown to be identical to a repository."
+	isDirty := true

@@ -5,6 +5,5 @@ category: private-updating
 handleClassDeletion
 	"The class to which I refer has been deleted, so I must unregister myself."
 
-	self markPackageDirty.
 	loadedPackage removeLoadedClass: self.
 	ClassRegistry removeKey: handle classHistory

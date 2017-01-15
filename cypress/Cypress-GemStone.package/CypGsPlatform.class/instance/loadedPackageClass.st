@@ -5,4 +5,4 @@ category: queries
 loadedPackageClass
 	"Answer the platform-specific class for LoadedPackage"
 
-	^ CypGsLoadedPackage
+	^CypGsLoadedPackage

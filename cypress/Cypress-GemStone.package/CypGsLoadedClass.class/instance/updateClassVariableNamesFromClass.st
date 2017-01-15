@@ -10,7 +10,4 @@ updateClassVariableNamesFromClass
 	oldNames := self propertyAt: propertyName.
 	newNames := (handle classVarNames collect: [:each | each asString])
 				asSortedCollection.
-	oldNames = newNames
-		ifFalse: 
-			[self markPackageDirty.
-			self propertyAt: propertyName put: newNames]
+	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]

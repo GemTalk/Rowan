@@ -6,7 +6,6 @@ initialize
 	"Cypress initialize."
 
 	knownRepositories := Set new.
-	loadedPackages := Dictionary new.
 	platform := CypPlatform current.
 	configuration := platform defaultConfiguration.
 	platform initialize

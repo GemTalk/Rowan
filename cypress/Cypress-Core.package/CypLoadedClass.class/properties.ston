@@ -6,7 +6,8 @@
 		 ],
 	"instvars" : [
 		"loadedPackage",
-		"loadedMethods" ],
+		"loadedInstanceMethods",
+		"loadedClassMethods" ],
 	"name" : "CypLoadedClass",
 	"pools" : [
 		 ],

@@ -6,13 +6,13 @@ handleMethodDeletionOrReplacement
 	"The method has been deleted if the class to which my loadedClass refers no longer contains a method with my name (selector).
 	If the method is still there, check whether it's been replaced, and answer true. If not, delete myself and answer false."
 
-	| theClass theMethod |
+	| theClass theBehavior theMethod |
 	theClass := loadedClass handle.
-	theMethod := theClass compiledMethodAt: name asSymbol otherwise: nil.
+	theBehavior := classIsMeta ifTrue: [theClass class] ifFalse: [theClass].
+	theMethod := theBehavior compiledMethodAt: name asSymbol otherwise: nil.
 	^theMethod
 		ifNil: 
 			["Deleted, delete myself"
-			self markPackageDirty.
 			loadedClass removeLoadedMethod: self.
 			MethodRegistry removeKey: handle.
 			false]

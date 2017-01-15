@@ -6,7 +6,7 @@
 		 ],
 	"instvars" : [
 		 ],
-	"name" : "CypGsLoadedExtendedClass",
+	"name" : "CypGsLoadedClassExtension",
 	"pools" : [
 		 ],
-	"super" : "CypLoadedExtendedClass" }
+	"super" : "CypLoadedClassExtension" }

@@ -7,7 +7,4 @@ updateClassNameFromClass
 	| oldName newName |
 	oldName := name.
 	newName := handle name asString.
-	oldName = newName
-		ifFalse: 
-			[self markPackageDirty.
-			self name: name]
+	oldName = newName ifFalse: [self name: name]
