@@ -17,7 +17,5 @@ scanForNewMethodsByProtocols
 					loadedClass := CypGsLoadedClass existingForClass: class.
 					loadedClass == AbsentToken
 						ifTrue: [self error: 'Classes should have been scanned before methods.'].
-					loadedMethod := CypGsLoadedMethod newNamed: method selector asString.
-					loadedMethod
-						handle: method;
-						updateForProtocolChange]]
+					loadedMethod := CypGsLoadedMethod forMethod: method.
+					loadedMethod updateFromImageProtocols]]
