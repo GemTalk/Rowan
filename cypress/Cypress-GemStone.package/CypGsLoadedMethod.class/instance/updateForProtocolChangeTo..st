@@ -7,7 +7,7 @@ updateForProtocolChangeTo: newProtocol
 
 	| currentPackageName newPackageName |
 	self propertyAt: 'protocol' put: newProtocol.
-	currentPackageName := loadedClass ifNotNil: [loadedClass packageName].
+	currentPackageName := loadedClass packageName.
 	newProtocol first = $*
 		ifTrue: [newPackageName := newProtocol copyFrom: 2 to: newProtocol size]
 		ifFalse: [newPackageName := self definingPackageOfClass name].

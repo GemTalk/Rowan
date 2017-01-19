@@ -8,5 +8,6 @@ forMethod: aGsNMethod
 	instance := self newNamed: aGsNMethod selector asString.
 	instance
 		handle: aGsNMethod;
+		updateIsMetaFromImage;
 		registerYourself.
 	^instance
