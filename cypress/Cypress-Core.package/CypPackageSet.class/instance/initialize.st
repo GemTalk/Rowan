@@ -4,4 +4,4 @@ category: initialization
 "
 initialize
 
-	packages := Set new
+	packages := Dictionary new

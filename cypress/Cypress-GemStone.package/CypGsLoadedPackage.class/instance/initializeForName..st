@@ -5,4 +5,5 @@ category: initialization
 initializeForName: aName
 
 	super initializeForName: aName.
+	properties at: 'name' put: aName.
 	PackageRegistry at: aName put: self

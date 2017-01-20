@@ -4,4 +4,6 @@ category: accessing
 "
 addAll: somePackageRefs
 
-	^packages addAll: somePackageRefs
+	somePackageRefs
+		do: [:packageRef | packages at: packageRef name put: packageRef].
+	^somePackageRefs
