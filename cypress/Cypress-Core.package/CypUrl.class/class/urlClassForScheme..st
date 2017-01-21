@@ -6,4 +6,4 @@ urlClassForScheme: scheme
 
 	^ self allSubclasses
 				detect: [ :urlClass | urlClass schemeName = scheme ]
-				ifNone: [ CypCypressFileUrl ].
+				ifNone: [ CypCypress1FileUrl ].

@@ -4,7 +4,7 @@ category: instance creation
 "
 withProperties: propertiesDictionary classMethodDefinitions: classMethodDefinitions instanceMethodDefinitions: instanceMethodDefinitions
 
-	^(self new)
+	^(self basicNew)
 		properties: propertiesDictionary;
 		classMethodDefinitions: classMethodDefinitions;
 		instanceMethodDefinitions: instanceMethodDefinitions;

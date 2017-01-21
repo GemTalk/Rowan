@@ -1,7 +1,7 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: public
+category: private
 "
-repositoryClass
+isPropertiesFilePath: aPath
 
-	^CypCypressRepository
+	^aPath endsWith: '/properties.ston'

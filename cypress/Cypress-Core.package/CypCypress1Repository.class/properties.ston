@@ -6,7 +6,7 @@
 		 ],
 	"instvars" : [
 		 ],
-	"name" : "CypCypressRepository",
+	"name" : "CypCypress1Repository",
 	"pools" : [
 		 ],
 	"super" : "CypFileSystemRepository" }

@@ -4,7 +4,7 @@ category: instance creation
 "
 withProperties: propertiesDictionary source: sourceString
 
-	^(self new)
+	^(self basicNew)
 		properties: propertiesDictionary;
 		source: sourceString;
 		yourself

@@ -6,7 +6,7 @@
 		 ],
 	"instvars" : [
 		 ],
-	"name" : "CypCypressPackageReader",
+	"name" : "CypCypress1FileUrl",
 	"pools" : [
 		 ],
-	"super" : "CypPackageReader" }
+	"super" : "CypFileUrl" }

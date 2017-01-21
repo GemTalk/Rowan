@@ -17,7 +17,7 @@ handleClassDeletionOrNewVersion
 	"Has been deleted, renamed, or a new version under the same name.
 	Answer false if deleted, set handle and answer true otherwise."
 	thoseResolving := handle classHistory reverse
-				select: [:aClass | aClass == self resolveClassNamed: aClass name].
+				select: [:aClass | aClass == (self resolveClassNamed: aClass name)].
 	thoseResolving size = 0
 		ifTrue: 
 			[self handleClassDeletion.

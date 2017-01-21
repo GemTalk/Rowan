@@ -4,7 +4,7 @@ category: instance creation
 "
 withProperties: properties classDefinitions: classDefinitions classExtensions: classExtensionDefinitions
 
-	^(self new)
+	^(self basicNew)
 		properties: properties;
 		classDefinitions: classDefinitions;
 		classExtensions: classExtensionDefinitions;
