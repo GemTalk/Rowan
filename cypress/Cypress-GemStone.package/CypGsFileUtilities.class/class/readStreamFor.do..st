@@ -4,7 +4,7 @@ category: utilities
 "
 readStreamFor: filePath do: aOneArgBlock
 
-	| file stream |
+	| file stream result |
 	GsFile serverErrorString.
 	file := GsFile openReadOnServer: filePath.
 	GsFile serverErrorString
@@ -12,5 +12,6 @@ readStreamFor: filePath do: aOneArgBlock
 	
 	[stream := ReadStreamPortable
 				on: (String withAll: file contents asByteArray decodeFromUTF8).
-	aOneArgBlock value: stream]
-			ensure: [file close]
+	result := aOneArgBlock value: stream]
+			ensure: [file close].
+	^result

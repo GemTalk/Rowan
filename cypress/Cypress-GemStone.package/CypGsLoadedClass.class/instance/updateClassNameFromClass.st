@@ -7,4 +7,7 @@ updateClassNameFromClass
 	| oldName newName |
 	oldName := name.
 	newName := handle name asString.
-	oldName = newName ifFalse: [self name: name]
+	oldName = newName
+		ifFalse: 
+			[self name: newName.
+			self propertyAt: 'name' put: name]

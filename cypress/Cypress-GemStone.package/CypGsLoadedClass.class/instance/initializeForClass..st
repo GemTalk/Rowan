@@ -5,6 +5,6 @@ category: initialization
 initializeForClass: aClass
 
 	self initialize.
-	name := aClass name asString.
+	self initializeForName: aClass name asString.
 	handle := aClass.
 	ClassRegistry at: aClass classHistory put: self
