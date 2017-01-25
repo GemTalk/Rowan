@@ -19,4 +19,5 @@ readPackageDefinitionFromDirectory: fullPath
 				ifTrue: 
 					[packageDefinition
 						addClassExtension: (self readClassExtensionDefinitionFromPath: entry)]].
+	self setPackageNameIn: packageDefinition from: fullPath.
 	^packageDefinition
