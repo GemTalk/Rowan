@@ -4,7 +4,10 @@ category: private
 "
 readClassPropertiesFromDirectoryEntries: entries
 
-	disk
-		readStreamFor: (entries detect: [:entry | self isPropertiesFilePath: entry]
-				ifNone: [^Dictionary new])
-		do: [:fileStream | ^CypressJsonParser parseStream: fileStream]
+	| properties |
+	properties := disk
+				readStreamFor: (entries detect: [:entry | self isPropertiesFilePath: entry]
+						ifNone: [Dictionary new])
+				do: [:fileStream | CypressJsonParser parseStream: fileStream].
+	self sortVariablesOf: properties.
+	^properties
