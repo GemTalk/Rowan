@@ -6,7 +6,6 @@ definitions
 	"Answer a dictionary of package definitions, keyed by name."
 
 	| result |
-	result := Dictionary new.
-	packages
-		do: [:packageRef | result at: packageRef name put: packageRef asDefinition].
+	result := CypPackageSetDefinition new.
+	packages do: [:packageRef | result addPackage: packageRef asDefinition].
 	^result

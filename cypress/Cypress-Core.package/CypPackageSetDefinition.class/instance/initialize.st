@@ -1,7 +1,8 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: properties
+category: initialization
 "
-propertyAt: aKey put: aValue
+initialize
 
-	^properties at: aKey put: aValue
+	super initialize.
+	packages := Dictionary new
