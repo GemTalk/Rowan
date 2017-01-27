@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"definition" ],
+	"name" : "CypDeletion",
+	"pools" : [
+		 ],
+	"super" : "CypDiff" }

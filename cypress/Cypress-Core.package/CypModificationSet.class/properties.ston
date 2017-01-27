@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"diffs" ],
+	"name" : "CypModificationSet",
+	"pools" : [
+		 ],
+	"super" : "CypDiff" }

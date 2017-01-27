@@ -1,0 +1,13 @@
+{
+	"category" : "Cypress-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"before",
+		"after" ],
+	"name" : "CypModification",
+	"pools" : [
+		 ],
+	"super" : "CypDiff" }

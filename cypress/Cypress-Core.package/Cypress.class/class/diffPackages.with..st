@@ -8,4 +8,4 @@ diffPackages: beforePackages with: afterPackages
 	| beforeDefinitions afterDefinitions |
 	beforeDefinitions := beforePackages definitions.
 	afterDefinitions := afterPackages definitions.
-	^CypDiff between: beforeDefinitions and: afterDefinitions
+	^afterDefinitions compareAgainstBase: beforeDefinitions
