@@ -5,7 +5,7 @@ category: comparing
 compareAgainstBase: aDefinition
 
 	| modification mod |
-	modification := CypModificationSet new.
+	modification := CypModificationSet before: aDefinition after: self.
 	mod := self comparePropertiesAgainstBase: aDefinition.
 	mod isEmpty ifFalse: [modification addAll: mod].
 	mod := self compareDictionary: classDefinitions

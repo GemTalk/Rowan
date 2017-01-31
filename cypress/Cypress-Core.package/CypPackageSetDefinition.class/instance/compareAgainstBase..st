@@ -4,5 +4,10 @@ category: comparing
 "
 compareAgainstBase: aDefinition
 
-	^self compareDictionary: packages
-		againstBaseDictionary: aDefinition packages
+	| modifications |
+	modifications := self compareDictionary: packages
+				againstBaseDictionary: aDefinition packages.
+	modifications
+		before: aDefinition;
+		after: self.
+	^modifications

@@ -9,4 +9,4 @@
 	"name" : "CypModificationSet",
 	"pools" : [
 		 ],
-	"super" : "CypDiff" }
+	"super" : "CypModification" }
