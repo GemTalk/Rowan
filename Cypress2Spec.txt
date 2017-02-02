@@ -16,6 +16,8 @@ Cypress is declarative. In a typical implementation, Cypress files are parsed in
 
 Example class file (rough example, hopefully close enough to give the flavor):
 
+***Needs updating for containment in {} and () instead of -:
+
 -: File
    { 'Standard' : 'Cypress2',
      'FileFormat' : 'FilePerClass',
