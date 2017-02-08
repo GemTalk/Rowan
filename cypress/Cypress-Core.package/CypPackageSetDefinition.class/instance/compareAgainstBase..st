@@ -4,10 +4,13 @@ category: comparing
 "
 compareAgainstBase: aDefinition
 
-	| modifications |
-	modifications := self compareDictionary: packages
-				againstBaseDictionary: aDefinition packages.
-	modifications
+	| result |
+	result := CypPackageSetModification new.
+	self
+		compareDictionary: packages
+		againstBaseDictionary: aDefinition packages
+		into: result.
+	result
 		before: aDefinition;
 		after: self.
-	^modifications
+	^result

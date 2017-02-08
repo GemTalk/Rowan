@@ -5,10 +5,9 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"propertiesModification",
 		"instanceMethodsModification",
 		"classMethodsModification" ],
 	"name" : "CypClassModification",
 	"pools" : [
 		 ],
-	"super" : "Object" }
+	"super" : "CypModification" }

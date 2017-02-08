@@ -3,7 +3,7 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: public
 "
 diffPackages: beforePackages with: afterPackages
-	"Compare two PackageSets, answering a Diff"
+	"Compare two PackageSets, answering a PackageSetModification"
 
 	| beforeDefinitions afterDefinitions |
 	beforeDefinitions := beforePackages definitions.

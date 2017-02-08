@@ -9,4 +9,4 @@
 	"name" : "CypSourceModification",
 	"pools" : [
 		 ],
-	"super" : "CypModification" }
+	"super" : "CypElementsModification" }

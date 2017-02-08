@@ -5,10 +5,10 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"key",
-		"oldValue",
-		"newValue" ],
-	"name" : "CypPropertyModification",
+		"elementsAdded",
+		"elementsRemoved",
+		"elementsModified" ],
+	"name" : "CypElementsModification",
 	"pools" : [
 		 ],
 	"super" : "Object" }
