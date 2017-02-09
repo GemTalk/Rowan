@@ -5,7 +5,7 @@ category: comparing
 comparePropertiesAgainstBase: aDefinition
 
 	| keys modification |
-	modification := CypModificationSet new.
+	modification := CypPropertiesModification new.
 	keys := properties keys copy addAll: aDefinition properties keys.
 	keys do: 
 			[:key |
@@ -13,13 +13,16 @@ comparePropertiesAgainstBase: aDefinition
 			before := self propertyAt: key ifAbsent: [nil].
 			after := aDefinition propertyAt: key ifAbsent: [nil].
 			before = nil
-				ifTrue: [modification add: (CypAddition of: key -> after)]
+				ifTrue: [modification elementAdded: key -> after]
 				ifFalse: 
 					[after = nil
-						ifTrue: [modification add: (CypDeletion of: key -> before)]
+						ifTrue: [modification elementRemoved: key -> before]
 						ifFalse: 
 							[before = after
 								ifFalse: 
-									[modification
-										add: (CypPropertyModification key: key before: before after: after)]]]].
+									[modification add: (CypPropertyModification
+												addElementModification: (CypPropertyModification
+														key: key
+														before: before
+														after: after))]]]].
 	^modification

@@ -4,14 +4,10 @@ category: comparing
 "
 compareAgainstBase: aDefinition
 
-	| modification mod |
-	modification := CypModificationSet before: aDefinition after: self.
-	mod := self comparePropertiesAgainstBase: aDefinition.
-	mod isEmpty ifFalse: [modification addAll: mod].
-	source = aDefinition source
-		ifFalse: 
-			[modification add: ((CypSourceModification new)
-						before: aDefinition source;
-						after: source;
-						yourself)].
+	| modification |
+	modification := CypMethodModification before: aDefinition after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
+		oldSource: aDefinition source;
+		newSource: self source.
 	^modification

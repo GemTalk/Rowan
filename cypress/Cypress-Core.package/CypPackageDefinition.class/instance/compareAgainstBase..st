@@ -4,14 +4,21 @@ category: comparing
 "
 compareAgainstBase: aDefinition
 
-	| modification mod |
-	modification := CypModificationSet before: aDefinition after: self.
-	mod := self comparePropertiesAgainstBase: aDefinition.
-	mod isEmpty ifFalse: [modification addAll: mod].
-	mod := self compareDictionary: classDefinitions
-				againstBaseDictionary: aDefinition classDefinitions.
-	mod isEmpty ifFalse: [modification addAll: mod].
-	mod := self compareDictionary: classExtensions
-				againstBaseDictionary: aDefinition classExtensions.
-	mod isEmpty ifFalse: [modification addAll: mod].
+	| modification classesModification classExtensionsModification |
+	modification := CypPackageModification before: aDefinition after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
+	classesModification := CypClassesModification new.
+	classExtensionsModification := CypClassesModification new.
+	self
+		compareDictionary: classDefinitions
+		againstBaseDictionary: aDefinition classDefinitions
+		into: classesModification.
+	self
+		compareDictionary: classExtensions
+		againstBaseDictionary: aDefinition classExtensions
+		into: classExtensionsModification.
+	modification
+		classesModification: classesModification;
+		classExtensionsModification: classExtensionsModification.
 	^modification
