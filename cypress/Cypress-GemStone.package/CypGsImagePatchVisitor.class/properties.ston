@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-GemStone",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"patchSet" ],
+	"name" : "CypGsImagePatchVisitor",
+	"pools" : [
+		 ],
+	"super" : "Object" }

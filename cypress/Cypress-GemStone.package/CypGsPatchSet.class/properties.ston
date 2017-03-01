@@ -1,0 +1,24 @@
+{
+	"category" : "Cypress-GemStone",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"addedPackages",
+		"deletedPackages",
+		"deletedClasses",
+		"addedClasses",
+		"classesWithNewVersions",
+		"classesWithClassVariableChanges",
+		"classesWithPropertyChanges",
+		"deletedMethods",
+		"addedMethods",
+		"methodsNeedingRecompile",
+		"methodsWithPropertyChanges",
+		"tempSymbols",
+		"errors" ],
+	"name" : "CypGsPatchSet",
+	"pools" : [
+		 ],
+	"super" : "Object" }

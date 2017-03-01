@@ -1,0 +1,13 @@
+{
+	"category" : "Cypress-GemStone",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"oldClassDefinition",
+		"newClassDefinition" ],
+	"name" : "CypGsClassVariableChangePatch",
+	"pools" : [
+		 ],
+	"super" : "CypGsPatch" }
