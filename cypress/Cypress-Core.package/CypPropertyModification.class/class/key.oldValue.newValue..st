@@ -2,8 +2,10 @@
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
 category: instance creation
 "
-key: key before: beforeDefinition after: afterDefinition
+key: key oldValue: oldValue newValue: newValue
 
-	^(super before: beforeDefinition after: afterDefinition)
+	^(self new)
 		key: key;
+		oldValue: oldValue;
+		newValue: newValue;
 		yourself

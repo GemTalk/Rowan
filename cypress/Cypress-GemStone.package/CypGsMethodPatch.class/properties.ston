@@ -1,0 +1,15 @@
+{
+	"category" : "Cypress-GemStone",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"isMeta",
+		"methodDefinition",
+		"classDefinition",
+		"packageDefinition" ],
+	"name" : "CypGsMethodPatch",
+	"pools" : [
+		 ],
+	"super" : "CypGsPatch" }

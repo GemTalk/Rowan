@@ -6,7 +6,7 @@
 		 ],
 	"instvars" : [
 		 ],
-	"name" : "CypGsClassAdditionPatch",
+	"name" : "CypGsPackageDeletionPatch",
 	"pools" : [
 		 ],
-	"super" : "CypGsClassPatch" }
+	"super" : "CypGsPackagePatch" }

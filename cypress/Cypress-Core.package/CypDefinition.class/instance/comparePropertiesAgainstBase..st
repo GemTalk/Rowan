@@ -20,9 +20,8 @@ comparePropertiesAgainstBase: aDefinition
 						ifFalse: 
 							[before = after
 								ifFalse: 
-									[modification add: (CypPropertyModification
-												addElementModification: (CypPropertyModification
-														key: key
-														before: before
-														after: after))]]]].
+									[modification addElementModification: (CypPropertyModification
+												key: key
+												oldValue: before
+												newValue: after)]]]].
 	^modification

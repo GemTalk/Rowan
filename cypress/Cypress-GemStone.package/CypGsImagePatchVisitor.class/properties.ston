@@ -5,7 +5,10 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"patchSet" ],
+		"patchSet",
+		"currentPackage",
+		"currentClass",
+		"currentMethod" ],
 	"name" : "CypGsImagePatchVisitor",
 	"pools" : [
 		 ],

@@ -1,6 +1,6 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: Updating
+category: Accessing
 "
-key: znewValue
-	key := znewValue
+newValue
+	^newValue

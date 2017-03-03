@@ -2,6 +2,6 @@
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
 category: building
 "
-addAddedPackages: packageDefinitions
+addDeletedClass: classDefinition
 
-	addedPackages addAll: packageDefinitions
+	deletedClasses add: (CypGsClassDeletionPatch for: classDefinition)

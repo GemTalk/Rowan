@@ -5,8 +5,8 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		 ],
-	"name" : "CypGsClassAdditionPatch",
+		"packageDefinition" ],
+	"name" : "CypGsPackagePatch",
 	"pools" : [
 		 ],
-	"super" : "CypGsClassPatch" }
+	"super" : "CypGsPatch" }

@@ -4,4 +4,8 @@ category: visting
 "
 visitClassesModification: aClassesModification
 
-	self halt
+	self
+		addClasses: aClassesModification elementsAdded;
+		deleteClasses: aClassesModification elementsRemoved.
+	aClassesModification elementsModified
+		do: [:each | each acceptVisitor: self]

@@ -5,9 +5,8 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"classesGained",
-		"classesLost" ],
-	"name" : "CypClassesModification",
+		 ],
+	"name" : "CypClassExtensionsModification",
 	"pools" : [
 		 ],
 	"super" : "CypElementsModification" }
