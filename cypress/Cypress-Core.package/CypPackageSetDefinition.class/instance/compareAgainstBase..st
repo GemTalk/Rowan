@@ -10,4 +10,7 @@ compareAgainstBase: aDefinition
 		compareDictionary: packages
 		againstBaseDictionary: aDefinition packages
 		into: result.
+	result
+		findClassMoves;
+		findMethodMoves.
 	^result
