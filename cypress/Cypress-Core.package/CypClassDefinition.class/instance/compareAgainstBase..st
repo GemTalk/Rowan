@@ -13,11 +13,13 @@ compareAgainstBase: aDefinition
 	self
 		compareDictionary: instanceMethodDefinitions
 		againstBaseDictionary: aDefinition instanceMethodDefinitions
-		into: instanceMethodsModification.
+		into: instanceMethodsModification
+		elementClass: CypMethodDefinition.
 	self
 		compareDictionary: classMethodDefinitions
 		againstBaseDictionary: aDefinition classMethodDefinitions
-		into: classMethodsModification.
+		into: classMethodsModification
+		elementClass: CypMethodDefinition.
 	modification
 		instanceMethodsModification: instanceMethodsModification;
 		classMethodsModification: classMethodsModification.

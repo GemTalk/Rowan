@@ -3,5 +3,6 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: testing
 "
 isEmpty
+	"Answer true if this definition does not actually define anything."
 
-	^elementsModified isEmpty
+	^super isEmpty & packages isEmpty

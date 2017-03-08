@@ -4,4 +4,6 @@ category: Accessing
 "
 key
 
-	^before key
+	| beforeKey |
+	beforeKey := before key.
+	^beforeKey ifNil: [after key] ifNotNil: [beforeKey]

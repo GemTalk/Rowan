@@ -4,4 +4,4 @@ category: private
 "
 key
 
-	^properties at: 'selector'
+	^properties at: 'selector' ifAbsent: [nil]

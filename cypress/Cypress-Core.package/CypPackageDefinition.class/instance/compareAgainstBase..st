@@ -13,11 +13,13 @@ compareAgainstBase: aDefinition
 	self
 		compareDictionary: classDefinitions
 		againstBaseDictionary: aDefinition classDefinitions
-		into: classesModification.
+		into: classesModification
+		elementClass: CypClassDefinition.
 	self
 		compareDictionary: classExtensions
 		againstBaseDictionary: aDefinition classExtensions
-		into: classExtensionsModification.
+		into: classExtensionsModification
+		elementClass: CypClassExtensionDefinition.
 	modification
 		classesModification: classesModification;
 		classExtensionsModification: classExtensionsModification.

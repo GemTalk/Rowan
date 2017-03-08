@@ -9,7 +9,8 @@ compareAgainstBase: aDefinition
 	self
 		compareDictionary: packages
 		againstBaseDictionary: aDefinition packages
-		into: result.
+		into: result
+		elementClass: CypPackageDefinition.
 	result
 		findClassMoves;
 		findMethodMoves.

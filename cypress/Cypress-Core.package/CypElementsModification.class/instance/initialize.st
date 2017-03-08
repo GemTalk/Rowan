@@ -4,6 +4,4 @@ category: initialization
 "
 initialize
 
-	elementsAdded := Dictionary new.
-	elementsRemoved := Dictionary new.
 	elementsModified := Dictionary new

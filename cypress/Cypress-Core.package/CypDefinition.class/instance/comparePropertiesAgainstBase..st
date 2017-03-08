@@ -12,16 +12,10 @@ comparePropertiesAgainstBase: aDefinition
 			| before after |
 			before := self propertyAt: key ifAbsent: [nil].
 			after := aDefinition propertyAt: key ifAbsent: [nil].
-			before = nil
-				ifTrue: [modification elementAdded: key -> after]
+			before = after
 				ifFalse: 
-					[after = nil
-						ifTrue: [modification elementRemoved: key -> before]
-						ifFalse: 
-							[before = after
-								ifFalse: 
-									[modification addElementModification: (CypPropertyModification
-												key: key
-												oldValue: before
-												newValue: after)]]]].
+					[modification addElementModification: (CypPropertyModification
+								key: key
+								oldValue: before
+								newValue: after)]].
 	^modification

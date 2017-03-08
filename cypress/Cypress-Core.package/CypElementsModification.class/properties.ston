@@ -5,8 +5,6 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"elementsAdded",
-		"elementsRemoved",
 		"elementsModified" ],
 	"name" : "CypElementsModification",
 	"pools" : [

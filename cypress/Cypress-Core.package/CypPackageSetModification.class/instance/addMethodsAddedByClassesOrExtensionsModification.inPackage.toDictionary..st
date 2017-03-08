@@ -4,19 +4,21 @@ category: private - moves
 "
 addMethodsAddedByClassesOrExtensionsModification: classesOrExtensionsModification inPackage: package toDictionary: dictionary
 
-	classesOrExtensionsModification elementsAdded do: 
-			[:newClass |
-			self
-				addMethodsDefinedInPackage: package
-				classOrExtension: newClass
-				to: dictionary].
 	classesOrExtensionsModification elementsModified do: 
 			[:classModification |
-			classModification classMethodsModification elementsAdded do: 
-					[:newMethod |
-					dictionary at: classModification key -> true -> newMethod key
-						put: package -> classModification after -> newMethod].
-			classModification instanceMethodsModification elementsAdded do: 
-					[:newMethod |
-					dictionary at: classModification key -> false -> newMethod key
-						put: package -> classModification after -> newMethod]]
+			classModification classMethodsModification elementsModified do: 
+					[:methodModification |
+					methodModification before
+						ifNil: 
+							[| newMethod |
+							newMethod := methodModification after.
+							dictionary at: classModification key -> true -> newMethod key
+								put: package -> classModification after -> newMethod]].
+			classModification instanceMethodsModification elementsModified do: 
+					[:methodModification |
+					methodModification before
+						ifNil: 
+							[| newMethod |
+							newMethod := methodModification after.
+							dictionary at: classModification key -> false -> newMethod key
+								put: package -> classModification after -> newMethod]]]

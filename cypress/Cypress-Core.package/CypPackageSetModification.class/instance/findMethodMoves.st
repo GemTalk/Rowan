@@ -7,10 +7,6 @@ findMethodMoves
 	| addedMethods removedMethods |
 	addedMethods := Dictionary new.
 	removedMethods := Dictionary new.
-	elementsAdded
-		do: [:newPackage | self addMethodsDefinedInPackage: newPackage to: addedMethods].
-	elementsRemoved
-		do: [:oldPackage | self addMethodsDefinedInPackage: oldPackage to: removedMethods].
 	elementsModified do: 
 			[:packageModification |
 			self addMethodsAddedByPackageModification: packageModification
