@@ -12,6 +12,6 @@ compareAgainstBase: aDefinition
 		into: result
 		elementClass: CypPackageDefinition.
 	result
-		findClassMoves;
-		findMethodMoves.
+		updateForClassMoves;
+		updateForMethodMoves.
 	^result
