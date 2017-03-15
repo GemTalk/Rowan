@@ -6,19 +6,33 @@ addMethodsRemovedByClassesOrExtensionsModification: classesOrExtensionsModificat
 
 	classesOrExtensionsModification elementsModified do: 
 			[:classModification |
-			classModification classMethodsModification elementsModified do: 
+			| classMethodsModification instanceMethodsModification |
+			classMethodsModification := classModification classMethodsModification.
+			instanceMethodsModification := classModification
+						instanceMethodsModification.
+			classMethodsModification elementsModified do: 
 					[:methodModification |
 					methodModification after
 						ifNil: 
 							[| oldMethod |
 							oldMethod := methodModification before.
 							dictionary at: classModification key -> true -> oldMethod key
-								put: package -> classModification before -> oldMethod]].
-			classModification instanceMethodsModification elementsModified do: 
+								put: (CypMethodAdditionOrRemoval
+										packageDefinition: package
+										classDefinitionOrExtension: classModification before
+										methodKey: oldMethod key
+										isMeta: true
+										methodsModification: classMethodsModification)]].
+			instanceMethodsModification elementsModified do: 
 					[:methodModification |
 					methodModification after
 						ifNil: 
 							[| oldMethod |
 							oldMethod := methodModification before.
 							dictionary at: classModification key -> false -> oldMethod key
-								put: package -> classModification after -> oldMethod]]]
+								put: (CypMethodAdditionOrRemoval
+										packageDefinition: package
+										classDefinitionOrExtension: classModification after
+										methodKey: oldMethod key
+										isMeta: false
+										methodsModification: instanceMethodsModification)]]]

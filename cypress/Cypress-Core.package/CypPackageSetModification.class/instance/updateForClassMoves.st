@@ -4,10 +4,9 @@ category: moves
 "
 updateForClassMoves
 
-	| addedAndRemoved classAdditions classRemovals |
-	addedAndRemoved := self findAddedAndRemovedClasses.
-	classAdditions := addedAndRemoved first.
-	classRemovals := addedAndRemoved last.
+	| classAdditions classRemovals |
+	classAdditions := self findAddedClasses.
+	classRemovals := self findRemovedClasses.
 
 	"Any keys that match between added and removed should be considered a move."
 	classAdditions keysAndValuesDo: 
