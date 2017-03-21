@@ -1,0 +1,16 @@
+{
+	"category" : "Cypress-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"packageDefinition",
+		"classDefinitionOrExtension",
+		"methodKey",
+		"isMeta",
+		"methodsModification" ],
+	"name" : "CypMethodAdditionOrRemoval",
+	"pools" : [
+		 ],
+	"super" : "Object" }

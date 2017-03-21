@@ -1,0 +1,14 @@
+{
+	"category" : "Cypress-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"packageDefinition",
+		"classKey",
+		"classesModification" ],
+	"name" : "CypClassAdditionOrRemoval",
+	"pools" : [
+		 ],
+	"super" : "Object" }
