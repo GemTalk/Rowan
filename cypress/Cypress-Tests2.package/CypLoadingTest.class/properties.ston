@@ -1,0 +1,12 @@
+{
+	"category" : "Cypress-Tests2",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "CypLoadingTest",
+	"pools" : [
+		 ],
+	"super" : "TestCase" }
