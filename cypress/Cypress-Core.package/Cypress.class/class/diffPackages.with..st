@@ -5,7 +5,7 @@ category: public
 diffPackages: beforePackages with: afterPackages
 	"Compare two PackageSets, answering a PackageSetModification"
 
-	| beforeDefinitions afterDefinitions |
-	beforeDefinitions := beforePackages definitions.
-	afterDefinitions := afterPackages definitions.
-	^afterDefinitions compareAgainstBase: beforeDefinitions
+	| beforeDefinition afterDefinition |
+	beforeDefinition := beforePackages asDefinition.
+	afterDefinition := afterPackages asDefinition.
+	^afterDefinition compareAgainstBase: beforeDefinition

@@ -6,13 +6,13 @@ loadInitialPackages
 
 	| packageNames myPackageSet imagePackageSet1 diff1 imagePackageSet2 diff2 |
 	packageNames := #('TestPackage1' 'TestPackage2').
-	packageNames do: [:name | self assertAbsenceOfPackage: name].
+	packageNames do: [:name | self assertEmptinessOfPackage: name].
 	imagePackageSet1 := self definitionsOfLoadedPackages: packageNames.
 	myPackageSet := CypPackageSetDefinition new.
 	myPackageSet
 		addPackage: self package1Definition;
 		addPackage: self package2Definition.
-	diff1 := myPackageSet againstBase: imagePackageSet1.
+	diff1 := myPackageSet compareAgainstBase: imagePackageSet1.
 	self deny: diff1 isEmpty.
 	self applyDiffToImage: diff1.
 	imagePackageSet2 := self definitionsOfLoadedPackages: packageNames.

@@ -1,3 +1,1 @@
-No class-specific documentation for CypPackageSet, hierarchy is: 
-Object
-  CypPackageSet( set)
+Holds some number of PackageReferences or LoadedPackages to be operated on together.

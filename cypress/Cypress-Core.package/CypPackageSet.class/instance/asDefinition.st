@@ -2,8 +2,8 @@
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
 category: definitions
 "
-definitions
-	"Answer a dictionary of package definitions, keyed by name."
+asDefinition
+	"Read the full definitions of each of my PackageReferences from its repository, and answer the resulting PackageSetDefinition. "
 
 	| result |
 	result := CypPackageSetDefinition new.
