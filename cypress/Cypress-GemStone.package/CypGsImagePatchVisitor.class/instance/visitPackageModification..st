@@ -5,12 +5,20 @@ category: visting
 visitPackageModification: aPackageModification
 
 	| propertiesModification classesModification classExtensionsModification |
+	aPackageModification isAddition
+		ifTrue: 
+			[self addAddedPackage: aPackageModification after.
+			^self].
+	aPackageModification isDeletion
+		ifTrue: 
+			[self addDeletedPackage: aPackageModification before.
+			^self].
 	currentPackage := aPackageModification after.
 	propertiesModification := aPackageModification propertiesModification.
 	propertiesModification isEmpty
 		ifFalse: 
-			[CypGsPackagePropertiesPatch forPackageProperties: propertiesModification
+			[self halt: 'What do we do with this patch we''re creating here?'.
+			CypGsPackagePropertiesPatch forPackageProperties: propertiesModification
 				inPackage: currentPackage].
 	aPackageModification classesModification acceptVisitor: self.
-	aPackageModification classExtensionsModificationModification
-		acceptVisitor: self
+	aPackageModification classExtensionsModification acceptVisitor: self

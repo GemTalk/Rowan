@@ -4,22 +4,5 @@ category: private
 "
 addPackages: packageDefinitions
 
-	packageDefinitions do: 
-			[:packageDefinition |
-			currentPackage := packageDefinition.
-			patchSet addAddedPackage: currentPackage.
-			self addClasses: currentPackage classDefinitions.
-			packageDefinition classExtensions do: 
-					[:classExtension |
-					classExtension classMethodDefinitions do: 
-							[:classMethodDefinition |
-							patchSet
-								addAddedClassMethod: classMethodDefinition
-								inClass: classExtension
-								inPackage: packageDefinition].
-					classExtension instanceMethodDefinitions do: 
-							[:instanceMethodDefinition |
-							patchSet
-								addAddedInstanceMethod: instanceMethodDefinition
-								inClass: classExtension
-								inPackage: packageDefinition]]]
+	packageDefinitions
+		do: [:packageDefinition | self addAddedpackage: packageDefinition]

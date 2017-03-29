@@ -4,8 +4,5 @@ category: visting
 "
 visitPackageSetModification: aPackageSetModification
 
-	self
-		addPackages: aPackageSetModification elementsAdded;
-		deletePackages: aPackageSetModification elementsRemoved.
 	aPackageSetModification elementsModified
 		do: [:each | each acceptVisitor: self]
