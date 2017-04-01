@@ -6,8 +6,8 @@
 		 ],
 	"instvars" : [
 		"oldClassDefinition",
-		"newClassDefinition" ],
+		"newClassVersion" ],
 	"name" : "CypGsClassVersioningPatch",
 	"pools" : [
 		 ],
-	"super" : "CypGsPatch" }
+	"super" : "CypGsClassCreationPatch" }

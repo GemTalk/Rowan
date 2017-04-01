@@ -15,5 +15,6 @@ initialize
 	addedMethods := Set new.
 	methodsNeedingRecompile := Set new.
 	methodsWithPropertyChanges := Set new.
-	tempSymbols := Set new.
+	tempSymbols := SymbolDictionary new.
+	createdClasses := Dictionary new.
 	errors := Set new

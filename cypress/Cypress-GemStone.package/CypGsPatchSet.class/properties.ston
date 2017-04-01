@@ -17,6 +17,7 @@
 		"methodsNeedingRecompile",
 		"methodsWithPropertyChanges",
 		"tempSymbols",
+		"createdClasses",
 		"errors" ],
 	"name" : "CypGsPatchSet",
 	"pools" : [

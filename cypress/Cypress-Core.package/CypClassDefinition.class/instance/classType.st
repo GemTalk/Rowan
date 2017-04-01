@@ -2,6 +2,7 @@
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
 category: accessing
 "
-propertyAt: aKey ifAbsent: absentBlock
+classType
+	"Legal types are normal, variable, and bytes."
 
-	^properties at: aKey ifAbsent: absentBlock
+	^self propertyAt: 'type' ifAbsent: ['normal']

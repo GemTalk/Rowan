@@ -5,6 +5,7 @@ category: subtests
 loadInitialPackages
 
 	| packageNames myPackageSet imagePackageSet1 diff1 imagePackageSet2 diff2 |
+	Cypress updateLoadedPackages.
 	packageNames := #('TestPackage1' 'TestPackage2').
 	packageNames do: [:name | self assertEmptinessOfPackage: name].
 	imagePackageSet1 := self definitionsOfLoadedPackages: packageNames.

@@ -18,5 +18,6 @@ propertiesForSimpleClassNamed: className
 			put: (Array with: 'iv1In' , className with: 'iv2In' , className);
 		at: 'name' put: className;
 		at: 'pools' put: Array new;
-		at: 'super' put: 'Object'.
+		at: 'super' put: 'Object';
+		at: 'type' put: 'normal'.
 	^dict

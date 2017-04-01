@@ -1,6 +1,8 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: Updating
+category: accessing
 "
 packageInfoSource: newValue
+	"Valid values for GemStone are #Cypress, #Category, #SymbolDictionary"
+
 	packageInfoSource := newValue

@@ -8,6 +8,9 @@ createNewClassesAndClassVersions
 	   Order: Superclasses first.
 	   Errors: Collect for reporting later"
 
-	self
-		createAddedClasses;
-		createNewClassVersions
+	| newClassesByName workList |
+	newClassesByName := Dictionary new.
+	self addCreatedClassesAndVersionsTo: newClassesByName.
+	workList := Set withAll: newClassesByName keys.
+	[workList isEmpty] whileFalse: 
+			[self createClassesFromWorklist: workList andClassesByName: newClassesByName]
