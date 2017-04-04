@@ -13,7 +13,7 @@ createClassFor: aPatchSet
 				ifTrue: [packageName]
 				ifFalse: [classProperties at: 'category' ifAbsent: ['']].
 	oldVersion := self oldClassVersion.
-	superclass := aPatchSet superclassNamed: classProperties superclassName.
+	superclass := aPatchSet superclassNamed: classDefinition superclassName.
 	createdClass := type = 'normal'
 				ifTrue: 
 					[superclass
