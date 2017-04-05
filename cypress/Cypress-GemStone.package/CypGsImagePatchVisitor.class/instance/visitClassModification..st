@@ -8,12 +8,12 @@ visitClassModification: aClassModification
 	aClassModification isAddition
 		ifTrue: 
 			[patchSet addAddedClass: aClassModification after inPackage: currentPackage.
-			^self].
+			"^self"].
 	aClassModification isDeletion
 		ifTrue: 
 			[patchSet addDeletedClass: aClassModification before
 				inPackage: currentPackage.
-			^self].
+			"^self"].
 	currentClass := aClassModification after.
 	propertiesModification := aClassModification propertiesModification.
 	propertiesModification isEmpty
