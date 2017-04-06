@@ -11,4 +11,5 @@ updateAllFromCategories
 		updateLoadedClassesFromCategories;
 		updateLoadedMethodsFromProtocols;
 		scanForNewClassesByCategories;
-		scanForNewMethodsByProtocols
+		scanForNewMethodsByProtocols;
+		removeEmptyLoadedPackages

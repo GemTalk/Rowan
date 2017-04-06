@@ -4,4 +4,5 @@ category: visting
 "
 visitMethodsModification: aMethodsModification
 
-	self halt
+	aMethodsModification elementsModified
+		do: [:each | each acceptVisitor: self]

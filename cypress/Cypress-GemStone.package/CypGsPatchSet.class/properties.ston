@@ -7,6 +7,7 @@
 	"instvars" : [
 		"addedPackages",
 		"deletedPackages",
+		"packagesWithPropertyChanges",
 		"deletedClasses",
 		"addedClasses",
 		"classesWithNewVersions",

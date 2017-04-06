@@ -7,7 +7,7 @@ loadInitialPackages
 	| packageNames myPackageSet imagePackageSet1 diff1 imagePackageSet2 diff2 |
 	Cypress updateLoadedPackages.
 	packageNames := #('TestPackage1' 'TestPackage2').
-	packageNames do: [:name | self assertEmptinessOfPackage: name].
+	packageNames do: [:name | self assertAbsenceOfPackage: name].
 	imagePackageSet1 := self definitionsOfLoadedPackages: packageNames.
 	myPackageSet := CypPackageSetDefinition new.
 	myPackageSet

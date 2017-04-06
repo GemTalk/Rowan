@@ -6,12 +6,13 @@ comparePropertiesAgainstBase: aDefinition
 
 	| keys modification |
 	modification := CypPropertiesModification new.
-	keys := properties keys copy addAll: aDefinition properties keys.
+	keys := properties keys copy.
+	keys addAll: aDefinition properties keys.
 	keys do: 
 			[:key |
 			| before after |
-			before := self propertyAt: key ifAbsent: [nil].
-			after := aDefinition propertyAt: key ifAbsent: [nil].
+			before := aDefinition propertyAt: key ifAbsent: [nil].
+			after := self propertyAt: key ifAbsent: [nil].
 			before = after
 				ifFalse: 
 					[modification addElementModification: (CypPropertyModification

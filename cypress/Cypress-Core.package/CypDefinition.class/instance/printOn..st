@@ -7,4 +7,4 @@ printOn: aStream
 	super printOn: aStream.
 	aStream
 		nextPutAll: ' for ';
-		nextPutAll: self key
+		nextPutAll: (self key ifNil: ['nil'])

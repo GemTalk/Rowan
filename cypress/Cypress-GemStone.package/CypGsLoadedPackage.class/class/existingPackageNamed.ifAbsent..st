@@ -2,6 +2,6 @@
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
 category: queries
 "
-existingPackageNamed: aName
+existingPackageNamed: aName ifAbsent: absentBlock
 
-	^self existingPackageNamed: aName ifAbsent: [AbsentToken]
+	^PackageRegistry at: aName ifAbsent: absentBlock
