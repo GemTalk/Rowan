@@ -4,4 +4,5 @@ category: private - applying
 "
 compileMethods
 
+	addedMethods do: [:each | each compileInContext: tempSymbols].
 	methodsNeedingRecompile do: [:each | each compileInContext: tempSymbols]
