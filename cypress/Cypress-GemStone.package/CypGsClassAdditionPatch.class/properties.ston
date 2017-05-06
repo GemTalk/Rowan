@@ -5,7 +5,8 @@
 	"classvars" : [
 		 ],
 	"instvars" : [
-		"newClass" ],
+		"newClass",
+		"symbolAssociation" ],
 	"name" : "CypGsClassAdditionPatch",
 	"pools" : [
 		 ],

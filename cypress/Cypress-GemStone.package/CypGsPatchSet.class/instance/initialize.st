@@ -6,6 +6,7 @@ initialize
 
 	addedPackages := Set new.
 	deletedPackages := Set new.
+	packagesWithPropertyChanges := Set new.
 	deletedClasses := Set new.
 	addedClasses := Set new.
 	classesWithNewVersions := Set new.

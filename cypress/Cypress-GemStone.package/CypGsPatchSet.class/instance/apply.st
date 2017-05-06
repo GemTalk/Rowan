@@ -11,13 +11,15 @@ apply
 		addAddedClassesToTempSymbols;
 		createNewClassesAndClassVersions;
 		setupClassVariableDictionaries;
-		compileMethods;
-		reportAnyErrors;
-		updateLoadedPackages;
+		compileMethods.
+	self reportAnyErrors ifTrue: [^self].
+	"No errors -- go ahead and install what's been compiled."
+	self
+		addAndUpdateLoadedPackages;
 		removeDeletedClassesFromSystem;
-		removeDeletedClassExtensionsFromSystem;
-		addAddedClasses;
-		addAddedClassExtensions;
+		"removeDeletedClassExtensionsFromSystem;"
+		installAddedClasses;
+		"installAddedClassExtensions;"
 		moveClassesBetweenSymbolDictionaries;
 		moveClassesBetweenPackages;
 		updateSymbolAssociations;
