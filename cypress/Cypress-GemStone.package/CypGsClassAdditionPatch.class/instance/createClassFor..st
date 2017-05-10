@@ -4,6 +4,6 @@ category: actions
 "
 createClassFor: aPatchSet
 
-	newClass := self privateCreateClassFor: aPatchSet.
-	symbolAssociation := aPatchSet createdClass: newClass.
+	newClass := super createClassFor: aPatchSet.
+	symbolAssociation := aPatchSet associationFor: newClass name.
 	^newClass

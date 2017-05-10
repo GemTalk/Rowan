@@ -20,7 +20,7 @@ updateForPackageChangeFrom: oldPackageName to: newPackageName newIsExtension: ne
 
 	newLoadedClass := newIsExtension ifTrue: [] ifFalse: [].
 	newLoadedClass := CypGsLoadedClass existingForClass: myClass.
-	packageOfClass := newLoadedClass package.
+	packageOfClass := newLoadedClass loadedPackage.
 	newPackage = packageOfClass
 		ifFalse: 
 			["We're moving into a class extension, not the class definition.

@@ -20,8 +20,8 @@ apply
 		"removeDeletedClassExtensionsFromSystem;"
 		installAddedClasses;
 		"installAddedClassExtensions;"
-		moveClassesBetweenSymbolDictionaries;
-		moveClassesBetweenPackages;
+		"moveClassesBetweenSymbolDictionaries;"
+		"moveClassesBetweenPackages;"
 		updateSymbolAssociations;
 		updateClassVariables;
 		updateClassProperties;

@@ -5,4 +5,12 @@ category: actions
 createAndInstallLoadedClass
 	"Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
-self halt.
+	| loadedClass loadedPackage |
+	loadedClass := CypGsLoadedClass newForClass: newClass.
+	loadedClass setPropertiesTo: classDefinition properties.
+	loadedPackage := CypGsLoadedPackage
+				existingPackageNamed: packageDefinition key
+				ifAbsent: 
+					[self
+						error: 'Internal error -- Attempt to add a class to a nonexistent package.'].
+	loadedPackage addLoadedClass: loadedClass

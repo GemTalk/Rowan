@@ -6,13 +6,14 @@ addClassToSymbolDictionary
 	"Add the name association to the correct 
         SymbolDictionary in the live SymbolList."
 
-	| dictName dict existingClass |
+	| dictName dict existingAssociation |
 	dictName := classDefinition propertyAt: 'gs_SymbolDictionary'
 				ifAbsent: ['UserGlobals'].
 	dict := self newOrExistingSymbolDictionaryNamed: dictName.
-	existingClass := dict at: newClass name ifAbsent: [nil].
-	existingClass
+	existingAssociation := dict associationAt: newClass name ifAbsent: [nil].
+	existingAssociation
 		ifNotNil: 
 			[self
 				error: 'Internal error. Attempt to install class whose name is already bound.'].
+	symbolAssociation value: newClass.
 	dict add: symbolAssociation

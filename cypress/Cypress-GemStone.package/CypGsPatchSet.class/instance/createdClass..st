@@ -4,10 +4,9 @@ category: patch access
 "
 createdClass: aClass
 
-	| className association |
+	| className |
 	className := aClass name.
 	(createdClasses includesKey: className)
 		ifTrue: [self error: 'Duplicate class creation'].
-	association := SymbolAssociation newWithKey: className value: aClass.
-	createdClasses add: association.
-	^association
+	createdClasses
+		add: (SymbolAssociation newWithKey: className value: aClass)
