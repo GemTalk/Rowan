@@ -4,7 +4,7 @@ category: compiling
 "
 compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
 
-	| className class behavior sourceString symbolList protocol |
+	| className class sourceString symbolList protocol |
 	className := classDefinition key asSymbol.
 	class := createdClasses at: className
 				ifAbsent: 

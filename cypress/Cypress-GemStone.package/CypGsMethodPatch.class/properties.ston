@@ -8,7 +8,10 @@
 		"isMeta",
 		"methodDefinition",
 		"classDefinition",
-		"packageDefinition" ],
+		"packageDefinition",
+		"behavior",
+		"selector",
+		"compiledMethod" ],
 	"name" : "CypGsMethodPatch",
 	"pools" : [
 		 ],

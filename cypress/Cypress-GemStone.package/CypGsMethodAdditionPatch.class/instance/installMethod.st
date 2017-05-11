@@ -4,9 +4,7 @@ category: installing
 "
 installMethod
 
-	| class behavior methodDictionary selector protocolName |
-	class := (self resolveName: classDefinition key) value.
-	behavior := isMeta ifTrue: [class class] ifFalse: [class].
+	| methodDictionary protocolName |
 	methodDictionary := behavior persistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	methodDictionary at: selector put: compiledMethod.
