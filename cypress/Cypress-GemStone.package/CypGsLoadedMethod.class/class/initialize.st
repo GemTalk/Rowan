@@ -5,4 +5,4 @@ category: class initialization
 initialize
 	"CypGsLoadedMethod initialize"
 
-	MethodRegistry := RcKeyValueDictionary new
+	MethodRegistry := KeyValueDictionary new

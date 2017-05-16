@@ -5,4 +5,4 @@ category: class initialization
 initialize
 	"CypGsLoadedClass initialize"
 
-	ClassRegistry := RcKeyValueDictionary new
+	ClassRegistry := KeyValueDictionary new

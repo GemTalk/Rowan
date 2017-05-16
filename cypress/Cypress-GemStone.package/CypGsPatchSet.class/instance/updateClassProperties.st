@@ -6,4 +6,5 @@ updateClassProperties
 	"For classes with changes that don't require versioning, 
 	update the properties in the class and the LoadedClasses as appropriate."
 
+"*** Should also update properties of added and versioned classes here?***"
 	classesWithPropertyChanges do: [:each | each halt: 'Not yet implemented.']
