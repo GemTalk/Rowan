@@ -6,4 +6,5 @@ installMethod
 
 	self
 		updateMethodDictionary;
-		setProtocol
+		setProtocol;
+		installLoadedMethod

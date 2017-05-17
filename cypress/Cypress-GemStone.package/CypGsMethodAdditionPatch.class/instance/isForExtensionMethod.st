@@ -1,6 +1,6 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: installing
+category: private-testing
 "
 isForExtensionMethod
 	"Answer true if the method is not in the same package that defines the class."

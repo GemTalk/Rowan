@@ -1,9 +1,9 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: installing
+category: private-installing
 "
 setProtocol
-	"If I'm an extension method, my protocol in the image may need to be *<packageName>*."
+	"If I'm an extension method, my protocol in the image may need to be *<packageName>."
 
 	self
 		setProtocolTo: (Cypress configuration needsPackageProtocolNames
