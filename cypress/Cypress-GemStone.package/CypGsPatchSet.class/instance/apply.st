@@ -26,10 +26,10 @@ apply
 		updateClassVariables;
 		updateClassProperties;
 		updateMethodDictionaries;
-		moveMethodsBetweenPackages;
+		"moveMethodsBetweenPackages;"
 		updateMethodProperties;
 		removeDeletedMethods;
-		removeDeletedClassesAndExtensionsFromPackages;
+		"removeDeletedClassesAndExtensionsFromPackages;"
 		removeDeletedPackages;
 		markPackagesNotDirty;
 		commit;
