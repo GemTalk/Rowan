@@ -3,5 +3,6 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: private
 "
 addExternalProvisions: aCollection
-	(aCollection intersection: self externalRequirements)
+
+	(self elementsInBoth: aCollection and: self externalRequirements)
 		do: [:globalName | self addProvision: globalName]

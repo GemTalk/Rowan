@@ -13,5 +13,5 @@ retryFailedLoads
 	self
 		resetErrors;
 		errorOnFailedPatchOperations;
-		loadAdditions: (self additions intersection: failed);
-		unloadRemovals: (self removals intersection: failed).
+		loadAdditions: (self elementsInBoth: self additions and: failed);
+		unloadRemovals: (self elementsInBoth: self removals and: failed)

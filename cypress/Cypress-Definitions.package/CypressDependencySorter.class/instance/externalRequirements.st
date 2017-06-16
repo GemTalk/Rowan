@@ -3,7 +3,10 @@ notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT lice
 category: accessing
 "
 externalRequirements
+
 	| unloaded providedByUnloaded |
 	unloaded := self itemsWithMissingRequirements.
-	providedByUnloaded := (unloaded gather: [:e | e provisions]) asSet.
-	^ self required keys reject: [:globalName | providedByUnloaded includes: globalName ]
+	providedByUnloaded := (self collection: unloaded
+				gather: [:e | e provisions]) asSet.
+	^self required keys
+		reject: [:globalName | providedByUnloaded includes: globalName]

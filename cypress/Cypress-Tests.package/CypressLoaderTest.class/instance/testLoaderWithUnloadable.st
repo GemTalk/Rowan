@@ -28,7 +28,9 @@ testLoaderWithUnloadable
 		assert: loader additions size equals: 5;
 		assert: loader removals size equals: 2;
 		assert: loader unloadable size equals: 3;
-		assert: (loader unloadable gather: [:each | each]) size equals: 3;
+		assert: (CypressObject collection: loader unloadable gather: [:each | each])
+					size
+			equals: 3;
 		assert: loader provisions notEmpty
 			description: 'There should have been a number of classes provided by the system';
 		assert: loader errors size equals: 0;

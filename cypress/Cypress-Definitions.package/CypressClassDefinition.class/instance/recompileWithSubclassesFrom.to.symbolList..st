@@ -7,11 +7,16 @@ recompileWithSubclassesFrom: oldClass to: newClass symbolList: aSymbolList
 	| olds news removedClassVariables removedSharedPools organizer subclasses newSubclass |
 	olds := oldClass _classVars ifNil: [#()] ifNotNil: [:vars | vars keys].
 	news := newClass _classVars ifNil: [#()] ifNotNil: [:vars | vars keys].
-	removedClassVariables := olds difference: news.
-	removedSharedPools := oldClass sharedPools difference: newClass sharedPools.
+	removedClassVariables := self elementsIn: olds butNotIn: news.
+	removedSharedPools := self elementsIn: oldClass sharedPools
+				butNotIn: newClass sharedPools.
 	self failedCompiledMethods: (newClass
 				_copyMethodsAndVariablesFrom: oldClass
-				except: { $V. removedClassVariables. $P. removedSharedPools }
+				except: 
+					{$V.
+					removedClassVariables.
+					$P.
+					removedSharedPools}
 				dictionaries: aSymbolList).
 	organizer := ClassOrganizer new.
 	subclasses := organizer subclassesOf: oldClass.
