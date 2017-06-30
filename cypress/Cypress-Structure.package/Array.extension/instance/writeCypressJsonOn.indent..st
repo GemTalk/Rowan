@@ -14,12 +14,12 @@ writeCypressJsonOn: aStream indent: startIndent
 			[:index |
 			| item |
 			item := self at: index.
-			aStream tab: indent.
+			indent timesRepeat: [aStream tab].
 			item writeCypressJsonOn: aStream indent: indent.
 			index < self size
 				ifTrue: 
 					[aStream
 						nextPutAll: ',';
 						lf]].
-	self size = 0 ifTrue: [aStream tab: indent].
+	self size = 0 ifTrue: [indent timesRepeat: [aStream tab]].
 	aStream nextPutAll: ' ]'

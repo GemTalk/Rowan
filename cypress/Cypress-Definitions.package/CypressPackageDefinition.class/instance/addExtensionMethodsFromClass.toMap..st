@@ -14,6 +14,8 @@ addExtensionMethodsFromClass: aClass toMap: classMap
 				ifTrue: [map at: category put: selectors asSortedCollection]].
 	map keys asSortedCollection do: 
 			[:category |
-			(map at: category)
-				do: [:selector | defs add: (aClass compiledMethodAt: selector) asCypressMethodDefinition]].
+			(map at: category) do: 
+					[:selector |
+					defs add: (CypressMethodDefinition
+								forMethod: (aClass compiledMethodAt: selector))]].
 	defs notEmpty ifTrue: [classMap at: aClass theNonMetaClass put: defs]

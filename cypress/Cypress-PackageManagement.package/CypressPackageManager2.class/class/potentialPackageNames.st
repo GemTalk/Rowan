@@ -12,17 +12,19 @@ potentialPackageNames
 	| classCategories methodCategories |
 	classCategories := Set new.
 	methodCategories := Set new.
-	System myUserProfile symbolList allSatisfying: 
-			[:aClass |
-			aClass isBehavior and: 
-					[classCategories addAll: (self packageNamePermutationsFor: aClass category).
-					aClass categorysDo: 
-							[:cat :method |
-							cat first = $*
-								ifTrue: 
-									[methodCategories
-										addAll: (self packageNamePermutationsFor: (cat copyFrom: 2 to: cat size))]].
-					false]].
+	System myUserProfile symbolList do: 
+			[:dict |
+			dict do: 
+					[:aClass |
+					aClass isBehavior and: 
+							[classCategories addAll: (self packageNamePermutationsFor: aClass category).
+							aClass categorysDo: 
+									[:cat :method |
+									cat first = $*
+										ifTrue: 
+											[methodCategories
+												addAll: (self packageNamePermutationsFor: (cat copyFrom: 2 to: cat size))]].
+							false]]].
 	^(Set new)
 		addAll: classCategories;
 		addAll: methodCategories;

@@ -16,7 +16,7 @@ comparingPackages: someNames fromDirectory: aDirectory
 						performOnServer: 'stat --printf=%y ' , reader packageDirectory.
 			modTimestamp := (modTime beginsWith: 'stat:')
 						ifTrue: [nil]
-						ifFalse: [DateAndTime fromUnixFormatString: modTime].
+						ifFalse: [self dateAndTimeFromUnixFormatString: modTime].
 			diskTimestamps at: packageName put: modTimestamp.
 			imageSnapshots at: packageName
 				put: (CypressPackageDefinition named: packageName) snapshot]

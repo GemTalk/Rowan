@@ -5,4 +5,4 @@ category: set up / teardown
 cleanUpMethods
 
 	methodsToCleanUp
-		reverseDo: [:each | each methodClass removeSelector: each selector]
+		reverseDo: [:each | each inClass removeSelector: each selector]
