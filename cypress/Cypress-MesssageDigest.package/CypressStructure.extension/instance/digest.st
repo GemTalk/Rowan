@@ -10,6 +10,6 @@ digest
 
 	| stream |
 	self isSkeleton ifTrue: [^nil].
-	stream := MessageDigestStream characters.
+	stream := CypressMessageDigestStream characters.
 	self addToDigest: stream.
 	^stream md5sum

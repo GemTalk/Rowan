@@ -18,7 +18,7 @@ readCypressFormatMethodStructureFrom: fileStream intoClassStructure: classStruct
 		ifTrue: [fileStream nextLine]
 		ifFalse: [self error: 'Method does not have valid Cypress format'].
 	source := fileStream upToEnd.
-	selector := UndefinedObject parseSelectorFrom: source.
+	selector := self parseSelectorFrom: source.
 	methods at: selector
 		put: ((CypressMethodStructure new)
 				packageStructure: self packageStructure;

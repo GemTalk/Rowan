@@ -1,13 +1,14 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: *Cypress-GemStoneCompatibilityLayer
+category: parsing
 "
 parseSelectorFrom: methodString
 
 	| meth |
-	^[meth := self
+	^
+	[meth := self
 				_parseMethod: methodString
-				category: #'xyzzy'
+				category: #xyzzy
 				using: GsSession currentSession symbolList
 				environmentId: 0.
 	meth class ~~ GsNMethod
@@ -16,5 +17,5 @@ parseSelectorFrom: methodString
 			(meth at: 2) == nil ifFalse: [^nil].
 			meth := meth at: 1].
 	meth selector asString]
-		on: CompileError
-		do: [:ex | ex return: '_____could_not_parse_selector_from_method_source_____'].
+			on: CompileError
+			do: [:ex | ex return: '_____could_not_parse_selector_from_method_source_____']

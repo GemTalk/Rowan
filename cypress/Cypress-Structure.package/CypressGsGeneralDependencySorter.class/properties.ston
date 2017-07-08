@@ -11,7 +11,7 @@
 		"individualDependencyMap",
 		"dependencyGraphs",
 		"candidateAliasMap" ],
-	"name" : "GsGeneralDependencySorter",
+	"name" : "CypressGsGeneralDependencySorter",
 	"pools" : [
 		 ],
 	"super" : "Object" }

@@ -1,6 +1,6 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: *Cypress-GemStoneCompatibilityLayer
+category: parsing
 "
 _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId
 	"Compiles the method into disposable dictionaries, if possible.
@@ -11,13 +11,13 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
 	undefinedSymbols := SymbolDictionary new name: #UndefinedSymbols.
 	undefinedSymbolList := SymbolList with: undefinedSymbols.
 	^
-	[self
+	[UndefinedObject
 		compileMethod: source
 		dictionaries: aSymbolList
 		category: cat
-	       intoMethodDict: GsMethodDictionary new
-	       intoCategories: GsMethodDictionary new  
-	       intoPragmas: nil
+		intoMethodDict: GsMethodDictionary new
+		intoCategories: GsMethodDictionary new
+		intoPragmas: nil
 		environmentId: anEnvironmentId]
 			onSynchronous: (Array with: CompileError with: CompileWarning)
 			do: (Array with: 
@@ -35,13 +35,13 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
 								["attempt auto-define of undefined symbols"
 								symbols do: [:sym | undefinedSymbols at: sym put: nil].
 								
-								[^self
+								[^UndefinedObject
 									compileMethod: source
 									dictionaries: aSymbolList , undefinedSymbolList
 									category: cat
-								       intoMethodDict: GsMethodDictionary new
-								       intoCategories: GsMethodDictionary new
-								       intoPragmas: nil
+									intoMethodDict: GsMethodDictionary new
+									intoCategories: GsMethodDictionary new
+									intoPragmas: nil
 									environmentId: anEnvironmentId]
 										onException: CompileError
 										do: [:exb | undefSymbol := false]].

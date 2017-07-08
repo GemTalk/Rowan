@@ -7,7 +7,7 @@ readFileTreeFormatMethodStructureFrom: fileStream intoClassStructure: classStruc
 	| category source selector |
 	category := fileStream nextLine trimSeparators.
 	source := fileStream upToEnd.
-	selector := UndefinedObject parseSelectorFrom: source.
+	selector := self parseSelectorFrom: source.
 	methods at: selector
 		put: ((CypressMethodStructure new)
 				packageStructure: self packageStructure;

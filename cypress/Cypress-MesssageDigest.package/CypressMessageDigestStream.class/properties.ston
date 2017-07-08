@@ -6,7 +6,7 @@
 		 ],
 	"instvars" : [
 		 ],
-	"name" : "MessageDigestStream",
+	"name" : "CypressMessageDigestStream",
 	"pools" : [
 		 ],
 	"super" : "WriteStream" }

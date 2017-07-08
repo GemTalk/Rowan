@@ -4,8 +4,7 @@ category: accessing
 "
 classesInDependencyOrder
 
-	^(GsGeneralDependencySorter
+	^(CypressGsGeneralDependencySorter
 		on: self packageStructure classes
 		dependsOn: [:candidate | candidate superclassName]
-		dependent: [:candidate | candidate className])
-			inOrder
+		dependent: [:candidate | candidate className]) inOrder
