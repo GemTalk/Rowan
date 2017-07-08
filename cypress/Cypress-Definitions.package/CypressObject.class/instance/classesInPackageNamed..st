@@ -9,6 +9,12 @@ classesInPackageNamed: aString
 	classes := Array new.
 	System myUserProfile symbolList do: 
 			[:dict |
-			classes addAll: (dict
-						select: [:each | each isBehavior and: [each category asLowercase = packageName]])].
+			classes
+				addAll: (dict select: 
+							[:each |
+							each isBehavior and: 
+									[| candidateName |
+									candidateName := each category asLowercase.
+									candidateName = packageName
+										or: [candidateName beginsWith: packageName , '-']]])].
 	^classes sortAscending: #('name')

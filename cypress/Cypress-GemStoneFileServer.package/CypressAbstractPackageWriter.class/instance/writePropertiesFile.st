@@ -8,4 +8,4 @@ writePropertiesFile
 		writeInDirectoryName: '.'
 		fileName: 'properties'
 		extension: self propertiesFileNameExtension
-		visit: [:fileStream | Dictionary new writeCypressJsonOn: fileStream]
+		visit: [:fileStream | Dictionary new _writeCypressJsonOn: fileStream]

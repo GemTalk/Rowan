@@ -10,7 +10,7 @@ baseDefinitions
 		CypressClassDefinition
 			name: className
 			superclassName: 'Object'
-			category: 'Cypress-Mocks'
+			category: 'Cypress-Mocks-Definitions'
 			instVarNames: #('name')
 			classInstVarNames: #('current')
 			classVarNames: #('Something')
@@ -78,7 +78,7 @@ baseDefinitions
 			className: 'Object'
 			classIsMeta: false
 			selector: 'isCypressMockBasic'
-			category: '*Cypress-Mocks'
+			category: '*Cypress-Mocks-Extensions'
 		source: 'isCypressMockBasic
 
 	^false'.

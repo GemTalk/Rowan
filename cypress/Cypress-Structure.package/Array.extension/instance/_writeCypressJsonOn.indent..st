@@ -2,7 +2,8 @@
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
 category: *Cypress-Structure
 "
-writeCypressJsonOn: aStream indent: startIndent
+_writeCypressJsonOn: aStream indent: startIndent
+	"Private method which may be removed in a future GemStone version."
 
 	| indent |
 	aStream
@@ -15,7 +16,7 @@ writeCypressJsonOn: aStream indent: startIndent
 			| item |
 			item := self at: index.
 			indent timesRepeat: [aStream tab].
-			item writeCypressJsonOn: aStream indent: indent.
+			item _writeCypressJsonOn: aStream indent: indent.
 			index < self size
 				ifTrue: 
 					[aStream

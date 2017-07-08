@@ -12,4 +12,4 @@ writeClassStructure: classStructure to: classPath
 		writeInDirectoryName: classPath
 			fileName: 'properties'
 			extension: self propertiesFileNameExtension
-			visit: [:fileStream | classStructure  properties writeCypressJsonOn: fileStream]
+			visit: [:fileStream | classStructure properties _writeCypressJsonOn: fileStream]

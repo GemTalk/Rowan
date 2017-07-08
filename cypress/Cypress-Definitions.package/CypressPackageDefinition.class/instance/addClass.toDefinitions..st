@@ -4,4 +4,4 @@ category: snapshotting
 "
 addClass: aClass toDefinitions: definitions
 
-	definitions add: aClass asCypressClassDefinition
+	definitions add: (CypressClassDefinition forClass: aClass)

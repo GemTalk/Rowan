@@ -2,7 +2,8 @@
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
 category: *Cypress-Structure
 "
-writeFiletreeJsonOn: aStream indent: startIndent
+_writeCypressJsonOn: aStream indent: startIndent
+	"Private method which may be removed in a future GemStone version."
 
 	| indent cnt |
 	indent := startIndent.
@@ -17,15 +18,13 @@ writeFiletreeJsonOn: aStream indent: startIndent
 			value := self at: key.
 			cnt := cnt + 1.
 			indent timesRepeat: [aStream tab].
-			key writeCypressJsonOn: aStream indent: indent.
+			key _writeCypressJsonOn: aStream indent: indent.
 			aStream nextPutAll: ' : '.
-			value writeFiletreeJsonOn: aStream indent: indent.
+			value _writeCypressJsonOn: aStream indent: indent.
 			cnt < self size
 				ifTrue: 
 					[aStream
 						nextPutAll: ',';
 						lf]].
 	self size = 0 ifTrue: [indent timesRepeat: [aStream tab]].
-	aStream
-		nextPutAll: ' }';
-		lf
+	aStream nextPutAll: ' }'
