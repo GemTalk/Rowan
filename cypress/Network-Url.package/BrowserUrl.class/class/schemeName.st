@@ -4,4 +4,4 @@ category: constants
 "
 schemeName
 
-	^ 'browser'
+	^'browser'
