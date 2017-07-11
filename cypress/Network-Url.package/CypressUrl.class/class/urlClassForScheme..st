@@ -4,5 +4,5 @@ category: parsing
 "
 urlClassForScheme: scheme
 
-	scheme isNil ifTrue: [^CypressFileUrl].
-	^super urlClassForScheme: scheme
+	^self allSubclasses detect: [:urlClass | urlClass schemeName = scheme]
+		ifNone: [CypressGenericUrl]

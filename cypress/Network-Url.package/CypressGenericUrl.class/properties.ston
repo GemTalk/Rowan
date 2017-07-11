@@ -1,0 +1,13 @@
+{
+	"category" : "Network-Url",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		"schemeName",
+		"locator" ],
+	"name" : "CypressGenericUrl",
+	"pools" : [
+		 ],
+	"super" : "CypressUrl" }

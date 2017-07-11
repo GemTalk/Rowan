@@ -4,7 +4,8 @@ category: converting
 "
 stringForVariables: variableList
 
-	^String streamContents: 
-			[:stream |
-			variableList do: [:each | stream nextPutAll: each]
-				separatedBy: [stream space]]
+	| stream |
+	stream := WriteStreamPortable on: (String new: 100).
+	variableList do: [:each | stream nextPutAll: each]
+		separatedBy: [stream space].
+	^stream contents

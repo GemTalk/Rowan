@@ -4,8 +4,9 @@ category: accessing
 "
 competingPackageNamesString
 
-	^String streamContents: 
-			[:stream |
-			self competingPackageNames
-				do: [:each | stream nextPutAll: each printString]
-				separatedBy: [stream nextPutAll: ', ']]
+	| stream |
+	stream := WriteStreamPortable on: (String new: 100).
+	self competingPackageNames
+		do: [:each | stream nextPutAll: each printString]
+		separatedBy: [stream nextPutAll: ', '].
+	^stream contents

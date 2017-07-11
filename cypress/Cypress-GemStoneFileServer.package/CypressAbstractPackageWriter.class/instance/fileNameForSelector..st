@@ -10,10 +10,10 @@ fileNameForSelector: selector
 			[(selector first isLetter or: [selector first = $_])
 				ifTrue: [selector]
 				ifFalse: 
-					[| specials |
+					[| specials output |
 					specials := self class specials.
-					String streamContents: 
-							[:output |
-							output nextPut: $^.
-							selector do: [:each | output nextPutAll: (specials at: each)]
-								separatedBy: [output nextPut: $.]]]]
+					output := WriteStreamPortable on: (String new: 100).
+					output nextPut: $^.
+					selector do: [:each | output nextPutAll: (specials at: each)]
+						separatedBy: [output nextPut: $.].
+					output contents]]

@@ -1,0 +1,12 @@
+{
+	"category" : "Network-Url",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"instvars" : [
+		 ],
+	"name" : "CypressMailtoUrl",
+	"pools" : [
+		 ],
+	"super" : "CypressGenericUrl" }

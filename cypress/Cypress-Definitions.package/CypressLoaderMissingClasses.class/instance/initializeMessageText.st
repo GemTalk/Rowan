@@ -4,12 +4,13 @@ category: initializing - private
 "
 initializeMessageText
 
-	messageText := String streamContents: 
-					[:stream |
-					stream nextPutAll: 'Missing classes:'.
-					self requirementsMap keysAndValuesDo: 
-							[:className :definitions |
-							stream
-								space;
-								nextPutAll: className printString , '(' , definitions size printString
-											, ')']]
+	| stream |
+	stream := WriteStreamPortable on: (String new: 100).
+	stream nextPutAll: 'Missing classes:'.
+	self requirementsMap keysAndValuesDo: 
+			[:className :definitions |
+			stream
+				space;
+				nextPutAll: className printString , '(' , definitions size printString
+							, ')'].
+	messageText := stream contents
