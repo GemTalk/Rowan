@@ -1,9 +1,9 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: *Cypress-GemStoneCompatibilityLayer
+category: encoding
 "
-isSafeForHTTP
+isCharacterSafeForHttp: aChar
 	"Answer whether a character is 'safe', or needs to be escaped when used, eg, in a URL."
 
-	^self codePoint < 128
-		and: [self isAlphaNumeric or: ['.-_' includes: self]]
+	^aChar codePoint < 128
+		and: [aChar isAlphaNumeric or: ['.-_' includes: aChar]]

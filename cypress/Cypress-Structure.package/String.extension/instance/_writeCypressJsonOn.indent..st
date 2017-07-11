@@ -5,7 +5,7 @@ category: *Cypress-Structure
 _writeCypressJsonOn: aStream indent: startIndent
 	"Private method which may be removed in a future GemStone version."
 
-	aStream
-		nextPutAll: '"';
-		nextPutAll: self withUnixLineEndings encodeAsUTF8 escapePercents;
-		nextPutAll: '"'
+	aStream nextPutAll: '"'.
+	CypressUrl writeWithHttpEscapes: self withUnixLineEndings encodeAsUTF8
+		on: aStream.
+	aStream nextPutAll: '"'

@@ -7,20 +7,23 @@ printOn: aStream
 		'file:'['//'<host>]<path>#<fragment>
 	Note that <host> being '' is equivalent to 'localhost' and is not printed."
 
-	aStream nextPutAll: self schemeName;
+	aStream
+		nextPutAll: self schemeName;
 		nextPut: $:.
 
 	"File URLs with hosts (which are fairly useless) cannot be relative."
-	host isEmpty ifFalse: [isAbsolute ifFalse: [aStream nextPutAll: '<ErroneousURL>'. ^nil].
-						aStream nextPutAll: '//';
-						nextPutAll: host].
-
+	host isEmpty
+		ifFalse: 
+			[isAbsolute
+				ifFalse: 
+					[aStream nextPutAll: '<ErroneousURL>'.
+					^nil].
+			aStream
+				nextPutAll: '//';
+				nextPutAll: host].
 	isAbsolute ifTrue: [aStream nextPut: $/].
-
-	aStream
-		nextPutAll: self pathString.
-
-	fragment ifNotNil:
-		[aStream
-			nextPut: $#;
-			nextPutAll: fragment encodeForHTTP].
+	aStream nextPutAll: self pathString.
+	fragment
+		ifNotNil: 
+			[aStream nextPut: $#.
+			self writeWithHttpEscapes: fragment on: aStream]

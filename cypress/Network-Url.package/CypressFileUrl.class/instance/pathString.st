@@ -14,5 +14,5 @@ pathString
 			[:p |
 			first ifFalse: [s nextPut: $/].
 			first := false.
-			s nextPutAll: p encodeForHTTP].
+			self writeWithHttpEscapes: p on: s].
 	^s contents
