@@ -50,15 +50,18 @@ privateInitializeFromText: aString
 						to: authority size.
 			(username includes: $:)
 				ifTrue: 
-					[password := (username copyFrom: (username indexOf: $:) + 1
-								to: username size) unescapePercents
-								asByteArray decodeFromUTF8
+					[password := (self
+								decodeHttpEscapesOf: (username copyFrom: (username indexOf: $:) + 1
+										to: username size))
+									asByteArray decodeFromUTF8
 								asString.
-					username := (username copyUpTo: $:) unescapePercents asByteArray
-								decodeFromUTF8 asString]
+					username := (self decodeHttpEscapesOf: (username copyUpTo: $:))
+								asByteArray decodeFromUTF8
+								asString]
 				ifFalse: 
 					[password := nil.
-					username := username unescapePercents asByteArray decodeFromUTF8 asString]].
+					username := (self decodeHttpEscapesOf: username) asByteArray
+								decodeFromUTF8 asString]].
 
 	"Extract the port"
 	(authority includes: $:)
