@@ -10,10 +10,10 @@ newFromRelativeText: aString
 	| newSchemeName remainder fragmentStart newFragment newUrl bare |
 
 	bare := aString trimSeparators.
-	newSchemeName := Url schemeNameForString: bare.
+	newSchemeName := CypressUrl schemeNameForString: bare.
 	(newSchemeName notNil and: [ newSchemeName ~= self schemeName ]) ifTrue: [
 		"different scheme -- start from scratch"
-		^Url absoluteFromText: aString ].
+		^CypressUrl absoluteFromText: aString ].
 
 	remainder := bare.
 
