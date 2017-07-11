@@ -1,6 +1,1 @@
-No class-specific documentation for CypressGitFileUrl, hierarchy is: 
-Object
-  Url( fragment)
-    FileUrl( host path isAbsolute)
-      CypressAbstractFileUrl
-        CypressGitFileUrl
+All Cypress classes are private to GemStone and are likely to be removed in a future release.

@@ -1,3 +1,5 @@
+All Cypress classes are private to GemStone and are likely to be removed in a future release.
+
 This class models a file URL according to (somewhat) RFC1738, see http://www.w3.org/Addressing/rfc1738.txt
 
 Here is the relevant part of the RFC:
