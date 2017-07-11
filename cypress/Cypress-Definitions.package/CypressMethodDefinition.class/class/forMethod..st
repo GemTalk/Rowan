@@ -12,4 +12,4 @@ forMethod: aGsNMethod
 		classIsMeta: behavior isMeta
 		selector: selector asString
 		category: (behavior categoryOfSelector: selector) asString
-		source: (self normalizeLineEndings: aGsNMethod sourceString asString)
+		source: (self normalizeLineEndingsOf: aGsNMethod sourceString asString)

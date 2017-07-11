@@ -9,4 +9,4 @@ className: aName classIsMeta: isMetaclass selector: aSelector category: aCategor
 		classIsMeta: isMetaclass
 		selector: aSelector asString
 		category: aCategory asString
-		source: (self normalizeLineEndings: aSource)
+		source: (self normalizeLineEndingsOf: aSource)

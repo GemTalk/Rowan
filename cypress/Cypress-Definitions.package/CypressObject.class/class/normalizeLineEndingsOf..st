@@ -1,20 +1,24 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: *Cypress-GemStoneCompatibilityLayer
+category: converting
 "
-withUnixLineEndings
-	"Assume the string is textual, and that CR, LF, and CRLF are all valid line endings.
-	 Replace each occurence with a single LF."
+normalizeLineEndingsOf: aString
+	"Answer a copy of aString with the line endings normalized to
+	 correspond to the current platform, regardless of how they were
+	 saved. For example, Squeak uses CR and would normalize with
+	 #withSqueakLineEndings, for example.
+
+	 GemStone Smalltalk uses the Unix line ending of LF."
 
 	| cr lf inPos outPos outString newOutPos indexLF indexCR |
 	cr := Character cr.
-	indexCR := self indexOf: cr startingAt: 1.
-	indexCR = 0 ifTrue: [^self].
+	indexCR := aString indexOf: cr startingAt: 1.
+	indexCR = 0 ifTrue: [^aString].
 	lf := Character lf.
-	indexLF := self indexOf: lf startingAt: 1.
-	indexLF = 0 ifTrue: [^self copyReplacing: cr with: lf].
+	indexLF := aString indexOf: lf startingAt: 1.
+	indexLF = 0 ifTrue: [^aString copyReplacing: cr with: lf].
 	inPos := outPos := 1.
-	outString := String new: self size.
+	outString := String new: aString size.
 	
 	["check if next CR is before next LF or if there are no more LF"
 	(indexLF = 0 or: [indexCR < indexLF])
@@ -23,7 +27,7 @@ withUnixLineEndings
 			outString
 				replaceFrom: outPos
 				to: newOutPos - 2
-				with: self
+				with: aString
 				startingAt: inPos.
 			outString at: newOutPos - 1 put: lf.
 			outPos := newOutPos.
@@ -31,27 +35,27 @@ withUnixLineEndings
 				ifTrue: 
 					["Caught a CR-LF pair"
 					inPos := 1 + indexLF.
-					indexLF := self indexOf: lf startingAt: inPos]
+					indexLF := aString indexOf: lf startingAt: inPos]
 				ifFalse: [inPos := 1 + indexCR].
-			indexCR := self indexOf: cr startingAt: inPos]
+			indexCR := aString indexOf: cr startingAt: inPos]
 		ifFalse: 
 			[newOutPos := outPos + 1 + indexLF - inPos.
 			outString
 				replaceFrom: outPos
 				to: newOutPos - 1
-				with: self
+				with: aString
 				startingAt: inPos.
 			outPos := newOutPos.
 			inPos := 1 + indexLF.
-			indexLF := self indexOf: lf startingAt: inPos].
+			indexLF := aString indexOf: lf startingAt: inPos].
 	indexCR = 0]
 			whileFalse.
 
 	"no more CR line endings. copy the rest"
-	newOutPos := outPos + (self size - inPos + 1).
+	newOutPos := outPos + (aString size - inPos + 1).
 	outString
 		replaceFrom: outPos
 		to: newOutPos - 1
-		with: self
+		with: aString
 		startingAt: inPos.
 	^outString copyFrom: 1 to: newOutPos - 1

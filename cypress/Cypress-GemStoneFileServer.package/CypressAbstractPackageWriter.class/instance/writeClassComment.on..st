@@ -4,4 +4,5 @@ category: writing
 "
 writeClassComment: classStructure on: fileStream
 
-	fileStream nextPutAll: classStructure comment withUnixLineEndings
+	fileStream
+		nextPutAll: (CypressObject normalizeLineEndingsOf: classStructure comment)

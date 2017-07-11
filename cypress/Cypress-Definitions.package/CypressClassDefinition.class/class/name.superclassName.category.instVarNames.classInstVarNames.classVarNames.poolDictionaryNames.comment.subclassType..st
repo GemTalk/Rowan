@@ -16,5 +16,5 @@ name: aClassName superclassName: aSuperclassName category: aCategory instVarName
 				collect: [:each | each asString])
 		poolDictionaryNames: (somePoolDictionaryNames asArray
 				collect: [:each | each asString])
-		comment: (self normalizeLineEndings: aComment)
+		comment: (self normalizeLineEndingsOf: aComment)
 		subclassType: subclassType

@@ -8,4 +8,4 @@ className: aName classIsMeta: isMetaclass selector: aSelector category: aCategor
 	classIsMeta := isMetaclass.
 	selector := aSelector.
 	category := aCategory.
-	source := self normalizeLineEndings: aSource
+	source := self normalizeLineEndingsOf: aSource
