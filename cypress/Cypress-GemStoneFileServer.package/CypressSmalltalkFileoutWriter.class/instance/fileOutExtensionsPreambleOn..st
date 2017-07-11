@@ -4,6 +4,7 @@ category: writing - private
 "
 fileOutExtensionsPreambleOn: aStream
 
+	self writeChunk: '" Class Extensions "' on: aStream.
 	aStream
-		nextChunkPut: '" Class Extensions "'; lf;
+		lf;
 		lf

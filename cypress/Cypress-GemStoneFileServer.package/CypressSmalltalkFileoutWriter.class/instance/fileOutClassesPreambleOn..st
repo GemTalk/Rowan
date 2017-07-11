@@ -4,6 +4,7 @@ category: writing - private
 "
 fileOutClassesPreambleOn: aStream
 
+	self writeChunk: '" Class Declarations "' on: aStream.
 	aStream
-		nextChunkPut: '" Class Declarations "'; lf;
+		lf;
 		lf

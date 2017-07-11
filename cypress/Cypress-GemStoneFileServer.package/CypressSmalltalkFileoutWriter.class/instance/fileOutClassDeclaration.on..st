@@ -25,19 +25,22 @@ fileOutClassDeclaration: classStructure on: aStream
 		nextPut: $';
 		lf;
 		nextPutAll: '	category: ''';
-		nextPutAll: classStructure category;
-		nextChunkPut: '''';
+		nextPutAll: classStructure category.
+	self writeChunk: '''' on: aStream.
+	aStream
 		lf;
 		lf;
 		nextPutAll: classStructure className;
 		nextPutAll: ' comment:';
-		lf;
-		nextChunkPut: classStructure comment printString;
+		lf.
+	self writeChunk: classStructure comment printString on: aStream.
+	aStream
 		lf;
 		lf;
 		nextPutAll: classStructure className;
 		nextPutAll: ' class instanceVariableNames: ''';
-		nextPutAll: classStructure classInstanceVariablesString;
-		nextChunkPut: '''';
+		nextPutAll: classStructure classInstanceVariablesString.
+	self writeChunk: '''' on: aStream.
+	aStream
 		lf;
 		lf

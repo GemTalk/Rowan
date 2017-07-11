@@ -4,7 +4,8 @@ category: writing - private
 "
 fileOutPackagePreambleOn: aStream
 
+	self writeChunk: '" Package: ' , self packageName , '"' on: aStream.
 	aStream
-		nextChunkPut: '" Package: ', self packageName, '"'; lf;
+		lf;
 		lf;
 		lf

@@ -4,6 +4,10 @@ category: writing - private
 "
 fileOut: aString methodsPreambleFor: classStructure on: aStream
 
+	self
+		writeChunk: '" ------------------- ' , aString , ' methods for '
+				, classStructure name , '"'
+		on: aStream.
 	aStream
-		nextChunkPut: '" ------------------- ', aString, ' methods for ', classStructure name, '"'; lf;
+		lf;
 		lf

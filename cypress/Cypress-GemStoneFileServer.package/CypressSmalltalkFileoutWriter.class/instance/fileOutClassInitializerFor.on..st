@@ -4,5 +4,5 @@ category: writing - private
 "
 fileOutClassInitializerFor: classStructure on: aStream
 
-	aStream
-		nextChunkPut: classStructure className, ' initialize.'; lf
+	self writeChunk: classStructure className , ' initialize.' on: aStream.
+	aStream lf

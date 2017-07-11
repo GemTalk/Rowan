@@ -6,7 +6,9 @@ fileOutPackagePostambleOn: aStream
 
 	aStream
 		lf;
+		lf.
+	self writeChunk: '" End of Package: ' , self packageName , '"' on: aStream.
+	aStream
 		lf;
-		nextChunkPut: '" End of Package: ', self packageName, '"'; lf;
 		lf;
 		lf

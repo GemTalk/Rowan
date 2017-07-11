@@ -4,6 +4,7 @@ category: writing - private
 "
 fileOutClassInitializersPreambleOn: aStream
 
+	self writeChunk: '" Class initializers "' on: aStream.
 	aStream
-		nextChunkPut: '" Class initializers "'; lf;
+		lf;
 		lf
