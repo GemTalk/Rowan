@@ -6,10 +6,10 @@ absoluteFromText: aString
 	"Return a URL from a string and handle
 	a String without a scheme as a HttpUrl."
 
-	"Url absoluteFromText: 'http://chaos.resnet.gatech.edu:8000/docs/java/index.html?A%20query%20#part'" 
-	"Url absoluteFromText: 'msw://chaos.resnet.gatech.edu:9000/testbook?top'"
-	"Url absoluteFromText: 'telnet:chaos.resnet.gatech.edu'"
-	"Url absoluteFromText: 'file:/etc/passwd'"
+	"CypressUrl absoluteFromText: 'http://chaos.resnet.gatech.edu:8000/docs/java/index.html?A%20query%20#part'" 
+	"CypressUrl absoluteFromText: 'msw://chaos.resnet.gatech.edu:9000/testbook?top'"
+	"CypressUrl absoluteFromText: 'telnet:chaos.resnet.gatech.edu'"
+	"CypressUrl absoluteFromText: 'file:/etc/passwd'"
 
 	| remainder index scheme fragment newUrl |
 	"trim surrounding whitespace"
