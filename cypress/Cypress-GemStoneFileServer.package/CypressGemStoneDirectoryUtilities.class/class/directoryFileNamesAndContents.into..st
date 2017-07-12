@@ -1,6 +1,6 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: unknown
+category: utilities
 "
 directoryFileNamesAndContents: aDirectory into: aDictionary
 	"Walk the directory tree starting at aDirectory and
@@ -24,6 +24,5 @@ directoryFileNamesAndContents: aDirectory into: aDictionary
 									[aDictionary at: filename put: file contents.
 									file close]]
 						ifFalse: 
-							[(#('/..' '/.' '\..' '\.')
-								anySatisfy: [:special | filename endsWith: special])
-									ifFalse: [self directoryFileNamesAndContents: filename into: aDictionary]]]]
+							[(self endsWithSpecial: filename)
+								ifFalse: [self directoryFileNamesAndContents: filename into: aDictionary]]]]

@@ -16,5 +16,5 @@ classesInPackageNamed: aString
 									[| candidateName |
 									candidateName := each category asLowercase.
 									candidateName = packageName
-										or: [candidateName beginsWith: packageName , '-']]])].
+										or: [(candidateName indexOfSubCollection: packageName , '-') = 1]]])].
 	^classes sortAscending: #('name')

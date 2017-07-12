@@ -18,7 +18,7 @@ privateInitializeFromText: aString
 			bare := bare copyFrom: schemeName size + 2 to: bare size.
 			"A proper file URL then has two slashes before host,
 			A malformed URL is interpreted as using syntax file:<path>."
-			(bare beginsWith: '//')
+			(bare indexOfSubCollection: '//') = 1
 				ifTrue: 
 					[i := bare indexOf: $/ startingAt: 3.
 					i = 0

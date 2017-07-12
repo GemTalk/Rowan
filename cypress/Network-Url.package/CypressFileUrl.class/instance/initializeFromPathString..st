@@ -14,11 +14,11 @@ initializeFromPathString: aPathString
 				collect: [:token | self decodeHttpEscapesOf: token].
 
 	"A path like 'C:' refers in practice to 'c:/'"
-	((pathString endsWith: '/')
+	(pathString last = $/
 		or: [(hasDriveLetter := self firstPartIsDriveLetter) and: [path size = 1]])
 			ifTrue: [path add: ''].
 
 	"Decide if we are absolute by checking for leading $/ or
 	beginning with drive letter. Smarts for other OSes?"
-	self isAbsolute: ((pathString beginsWith: '/')
+	self isAbsolute: ((pathString at: 1) = $/
 				or: [hasDriveLetter ifNil: [self firstPartIsDriveLetter]])

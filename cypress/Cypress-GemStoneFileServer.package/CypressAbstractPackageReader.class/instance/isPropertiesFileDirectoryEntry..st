@@ -5,4 +5,4 @@ category: reading
 isPropertiesFileDirectoryEntry: entry
 
 	^self propertiesFileNameExtensions
-		anySatisfy: [:each | entry endsWith: '/properties' , each]
+		anySatisfy: [:each | self string: entry endsWith: '/properties' , each]

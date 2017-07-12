@@ -4,5 +4,12 @@ category: accessing
 "
 packageNames
 
-	^(self fileUtils directoryEntriesFrom: self directoryPath , '*', self packageExtension)
-		collect: [:each | (self fileUtils localNameFrom: each) copyWithoutSuffix: self packageExtension]
+	| extension extensionSize |
+	extension := self packageExtension.
+	extensionSize := extension size.
+	^(self fileUtils
+		directoryEntriesFrom: self directoryPath , '*' , extension) collect: 
+				[:each |
+				| localName |
+				localName := self fileUtils localNameFrom: each.
+				localName copyFrom: 1 to: localName size - extensionSize]

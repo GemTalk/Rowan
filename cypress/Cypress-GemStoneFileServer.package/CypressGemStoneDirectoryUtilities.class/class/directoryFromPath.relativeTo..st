@@ -4,6 +4,9 @@ category: utilities
 "
 directoryFromPath: directoryPath relativeTo: aDirectory
 
-	^((aDirectory endsWith: self pathNameDelimiter) or: [directoryPath beginsWith: self pathNameDelimiter])
-		ifTrue: [aDirectory, directoryPath]
-		ifFalse: [aDirectory, self pathNameDelimiter, directoryPath]
+	| delimiter |
+	delimiter := self pathNameDelimiter.
+	^(aDirectory last = delimiter last
+		or: [(directoryPath indexOfSubCollection: delimiter) = 1])
+			ifTrue: [aDirectory , directoryPath]
+			ifFalse: [aDirectory , delimiter , directoryPath]

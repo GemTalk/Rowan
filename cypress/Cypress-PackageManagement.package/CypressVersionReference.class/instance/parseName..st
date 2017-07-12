@@ -48,8 +48,24 @@ parseName: aString
 				ifFalse: 
 					[lastDotIndex < lastMinusIndex ifTrue: [lastDotIndex := basicName size + 1].
 					basicName copyFrom: lastMinusIndex + 1 to: lastDotIndex - 1].
-	versionNumber := (basicName copyAfterLast: $-) copyAfterLast: $..
-	(versionNumber notEmpty
-		and: [versionNumber allSatisfy: [:each | each isDigit]])
-			ifTrue: [versionNumber := versionNumber asInteger]
-			ifFalse: [versionNumber := 0]
+
+	"if basicName is of the form anything-something.number, you'll get number.
+If it contains no hyphen, or no period after the last hyphen, you get nothing"
+	versionNumber := (basicName indexOf: $-) = 0
+				ifTrue: [0]
+				ifFalse: 
+					[| index lastIndex char |
+					index := lastIndex := basicName size.
+					char := basicName at: index.
+					[char = $. | (char = $-)] whileFalse: 
+							[index := index - 1.
+							char := basicName at: index].
+					char = $-
+						ifTrue: [0	"No period after last hyphen."]
+						ifFalse: 
+							[| numberString |
+							numberString := basicName copyFrom: index + 1 to: lastIndex.
+							(numberString notEmpty
+								and: [numberString allSatisfy: [:each | each isDigit]])
+									ifTrue: [numberString asInteger]
+									ifFalse: [0]]]

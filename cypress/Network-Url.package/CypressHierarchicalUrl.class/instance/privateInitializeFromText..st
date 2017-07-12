@@ -19,7 +19,7 @@ privateInitializeFromText: aString
 					schemeName := 'http']].
 
 	"remove leading // if it's there"
-	(remainder beginsWith: '//')
+	(remainder indexOfSubCollection: '//') = 1
 		ifTrue: [remainder := remainder copyFrom: 3 to: remainder size].
 
 	"get the query"
@@ -43,25 +43,22 @@ privateInitializeFromText: aString
 			remainder := ''].
 
 	"extract the username+password"
-	(authority includes: $@)
+	ind := authority indexOf: $@.
+	ind > 0
 		ifTrue: 
-			[username := authority copyUpTo: $@.
-			authority := authority copyFrom: (authority indexOf: $@) + 1
-						to: authority size.
-			(username includes: $:)
+			[username := authority copyFrom: 1 to: ind - 1.
+			authority := authority copyFrom: ind + 1 to: authority size.
+			ind := username indexOf: $:.
+			ind > 0
 				ifTrue: 
 					[password := (self
-								decodeHttpEscapesOf: (username copyFrom: (username indexOf: $:) + 1
-										to: username size))
+								decodeHttpEscapesOf: (username copyFrom: ind + 1 to: username size))
 									asByteArray decodeFromUTF8
 								asString.
-					username := (self decodeHttpEscapesOf: (username copyUpTo: $:))
-								asByteArray decodeFromUTF8
-								asString]
-				ifFalse: 
-					[password := nil.
-					username := (self decodeHttpEscapesOf: username) asByteArray
-								decodeFromUTF8 asString]].
+					username := username copyFrom: 1 to: ind - 1]
+				ifFalse: [password := nil].
+			username := (self decodeHttpEscapesOf: username) asByteArray
+						decodeFromUTF8 asString].
 
 	"Extract the port"
 	(authority includes: $:)

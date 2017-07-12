@@ -8,10 +8,11 @@ initializeQualifiedPackageNames
 	qualifiedPackages := Dictionary new.
 	packageInformationList do: 
 			[:each |
-			qualifiedPackages
-				at: each
-				put: (knownPackages keys
-						select: [:knownName | knownName ~= each name and: [each name beginsWith: knownName , '-']])].
+			qualifiedPackages at: each
+				put: (knownPackages keys select: 
+							[:knownName |
+							knownName ~= each name
+								and: [(each name indexOfSubCollection: knownName , '-') = 1]])].
 	qualifiedPackages := qualifiedPackages reject: [:each | each isEmpty].
 	qualifiedPackages
 		keysAndValuesDo: [:package :baseNames | package beQualifiedNameOf: baseNames]

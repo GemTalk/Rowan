@@ -10,7 +10,8 @@ addExtensionMethodsFromClass: aClass toMap: classMap
 	map := Dictionary new.
 	aClass categorysDo: 
 			[:category :selectors |
-			(category asLowercase beginsWith: '*' , self basePackageName asLowercase)
+			(category asLowercase
+				indexOfSubCollection: '*' , self basePackageName asLowercase) = 1
 				ifTrue: [map at: category put: selectors asSortedCollection]].
 	map keys asSortedCollection do: 
 			[:category |

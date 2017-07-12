@@ -1,6 +1,6 @@
 "
 notice: Copyright 2013,2016 GemTalk Systems, LLC. Open source under the MIT license.
-category: unknown
+category: utilities
 "
 directoryFileNamesAndContents: aDirectory
 	"Walk the directory tree starting at aDirectory and
