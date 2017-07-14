@@ -8,7 +8,7 @@ printOn: aStream
 	aStream
 		nextPutAll: self projectPath;
 		nextPut: $:.
-	String self projectBranchOrTag do: 
+	self projectBranchOrTag do: 
 			[:char |
 			char = $/ ifTrue: [aStream nextPut: $\].
 			aStream nextPut: char].
