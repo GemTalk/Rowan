@@ -11,4 +11,4 @@ writeExtensionClassStructure: classStructure to: classPath
 		visit: 
 			[:fileStream |
 			(Dictionary with: 'name' -> classStructure className)
-				writeCypressJsonOn: fileStream]
+				_writeCypressJsonOn: fileStream]

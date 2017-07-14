@@ -15,4 +15,4 @@ writeClassStructure: classStructure to: classPath
 			visit: 
 				[:fileStream |
 				(self adjustClassPropertiesForFileTree: classStructure properties)
-					writeCypressJsonOn: fileStream]
+					_writeCypressJsonOn: fileStream]
