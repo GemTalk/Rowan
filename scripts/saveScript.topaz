@@ -1,0 +1,20 @@
+run
+  | packageManager repo |
+  packageManager := CypressEnvironmentPackageManager new.
+  repo := CypressAbstractRepository
+    onUrl:
+      (CypressUrl
+        absoluteFromText:
+          'tonel:/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/tonel/')
+    alias: ''.
+  packageManager
+    defaultSymbolDictionaryName: #'UserGlobals';
+    defaultSymbolList: System myUserProfile symbolList.
+  #('Cypress-Core' 'Cypress-GemStone' 'Cypress-Tests2')
+    do: [ :packageName | 
+      | package |
+      package := (CypressEnvironmentPackageDefinition named: packageName)
+        lookupSymbolList: System myUserProfile symbolList;
+        yourself.
+      repo writePackageStructure: (CypressPackageStructure fromPackage: package) ]
+%

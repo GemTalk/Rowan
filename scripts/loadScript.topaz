@@ -1,0 +1,16 @@
+  run
+  | packageManager repo |
+  packageManager := CypressEnvironmentPackageManager new.
+  repo := CypressAbstractRepository
+    onUrl: (CypressUrl absoluteFromText: 'cypress:/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/cypress/'  )
+    alias: ''.
+  packageManager
+    defaultSymbolDictionaryName: #'UserGlobals';
+    defaultSymbolList: System myUserProfile symbolList.
+  #('Cypress-Core' 'Cypress-GemStone' 'Cypress-Tests2' )
+    do: [ :packageName | 
+      packageManager
+        addResolvedReference:
+          (CypressResolvedReference name: packageName repository: repo) ].
+  packageManager loadResolvedReferences
+%
