@@ -34,14 +34,14 @@ CypLoadingTest >> accessorMethodsForSimpleClassNamed: name [
 	'iv2In' , name} do: 
 				[:ivName |
 				result
-					at: ivName
+					at: ivName asSymbol
 						put: (CypMethodDefinition
-								withProperties: (Dictionary with: 'selector' -> ivName
+								withProperties: (Dictionary with: 'selector' -> ivName asSymbol
 										with: 'protocol' -> 'accessing')
 								source: ivName , ' ^' , ivName);
-					at: ivName , ':'
+					at: (ivName , ':') asSymbol
 						put: (CypMethodDefinition
-								withProperties: (Dictionary with: 'selector' -> (ivName , ':')
+								withProperties: (Dictionary with: 'selector' -> (ivName , ':') asSymbol
 										with: 'protocol' -> 'accessing')
 								source: ivName , ': anObject ' , ivName , ' := anObject')].
 	^result
@@ -157,8 +157,8 @@ CypLoadingTest >> setUp [
 CypLoadingTest >> sillyClassMethodsForClassNamed: name [
 
 	^Dictionary
-		with: 'sillyMessage' -> (CypMethodDefinition
-						withProperties: (Dictionary with: 'selector' -> 'sillyMessage'
+		with: #'sillyMessage' -> (CypMethodDefinition
+						withProperties: (Dictionary with: 'selector' -> #'sillyMessage'
 								with: 'protocol' -> 'silliness')
 						source: 'sillyMessage
 	^ ''You have sent a silly message to the class '' , name')

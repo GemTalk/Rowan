@@ -298,7 +298,7 @@ CypGsLoadedClass >> updateClassVariableNamesFromClass [
 	propertyName := 'classvars'.
 	oldNames := self propertyAt: propertyName.
 	newNames := (handle classVarNames collect: [:each | each asString])
-				asSortedCollection.
+				asSortedCollection asArray.
 	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
 ]
 
@@ -409,7 +409,7 @@ CypGsLoadedClass >> updatePoolDictionaryNamesFromClass [
 	propertyName := 'pools'.
 	oldNames := self propertyAt: propertyName.
 	newNames := (handle sharedPools collect: [:each | each name asString])
-				asSortedCollection.
+				asSortedCollection asArray.
 	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
 ]
 
