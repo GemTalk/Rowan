@@ -92,7 +92,7 @@ CypLoadingTest >> loadInitialPackages [
 	self deny: diff1 isEmpty.
 	self applyDiffToImage: diff1.
 	imagePackageSet2 := self definitionsOfLoadedPackages: packageNames.
-	diff2 := myPackageSet againstBase: imagePackageSet2.
+	diff2 := myPackageSet compareAgainstBase: imagePackageSet2.
 	self assert: diff2 isEmpty
 ]
 

@@ -312,6 +312,11 @@ CypGsPatchSet >> markPackagesNotDirty [
 		allPatchesAffectingLivePackagesDo: [:patch | patch markPackageNotDirty]
 ]
 
+{ #category : 'stubs' }
+CypGsPatchSet >> migrateInstances [
+	"presumably migrate instances of changed classes ... noop for now"
+]
+
 { #category : 'private - applying' }
 CypGsPatchSet >> removeDeletedClassesFromSystem [
 	"Remove the name binding from the SymbolDictionaries in the live SymbolList
@@ -349,6 +354,11 @@ CypGsPatchSet >> reportAnyErrors [
 			[self halt: 'Errors detected. Aborting application of patch.'.
 			true]
 		ifTrue: [false]
+]
+
+{ #category : 'stubs' }
+CypGsPatchSet >> runInitializers [
+	"presumably run the class initialization methods as needed ... noop for now"
 ]
 
 { #category : 'private - applying' }
