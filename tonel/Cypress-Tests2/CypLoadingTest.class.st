@@ -62,10 +62,10 @@ CypLoadingTest >> assertAbsenceOfPackage: packageName [
 ]
 
 { #category : 'support-definitionBuilding' }
-CypLoadingTest >> definitionOfSimpleClassNamed: name [
+CypLoadingTest >> definitionOfSimpleClassNamed: name inPackage: packageName [
 
 	^CypClassDefinition
-		withProperties: (self propertiesForSimpleClassNamed: name)
+		withProperties: (self propertiesForSimpleClassNamed: name inPackage: packageName)
 		classMethodDefinitions: (self sillyClassMethodsForClassNamed: name)
 		instanceMethodDefinitions: (self accessorMethodsForSimpleClassNamed: name)
 ]
@@ -102,7 +102,7 @@ CypLoadingTest >> package1Definition [
 	^CypPackageDefinition
 		withProperties: (Dictionary with: 'name' -> 'TestPackage1')
 		classDefinitions: (Dictionary
-				with: 'TestClass1' -> (self definitionOfSimpleClassNamed: 'TestClass1'))
+				with: 'TestClass1' -> (self definitionOfSimpleClassNamed: 'TestClass1' inPackage: 'TestPackage1'))
 		classExtensions: Dictionary new
 ]
 
@@ -112,17 +112,17 @@ CypLoadingTest >> package2Definition [
 	^CypPackageDefinition
 		withProperties: (Dictionary with: 'name' -> 'TestPackage2')
 		classDefinitions: (Dictionary
-				with: 'TestClass2' -> (self definitionOfSimpleClassNamed: 'TestClass2'))
+				with: 'TestClass2' -> (self definitionOfSimpleClassNamed: 'TestClass2' inPackage: 'TestPackage2'))
 		classExtensions: Dictionary new
 ]
 
 { #category : 'support-definitionBuilding' }
-CypLoadingTest >> propertiesForSimpleClassNamed: className [
+CypLoadingTest >> propertiesForSimpleClassNamed: className inPackage: packageName [
 
 	| dict |
 	dict := Dictionary new.
 	dict
-		at: 'category' put: 'CypressTestData';
+		at: 'category' put: packageName;
 		at: 'classinstvars' put: Array new;
 		at: 'classvars' put: Array new;
 		at: 'comment'
