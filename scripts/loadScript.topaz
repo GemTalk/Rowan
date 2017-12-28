@@ -7,7 +7,7 @@
   packageManager
     defaultSymbolDictionaryName: #'UserGlobals';
     defaultSymbolList: System myUserProfile symbolList.
-  #('Cypress-Core' 'Cypress-GemStone' 'Cypress-Tests2' )
+  #('Cypress-Core' 'Cypress-GemStone' 'Rowan-Core' 'Rowan-GemStone' 'Rowan-Tests' )
     do: [ :packageName | 
       packageManager
         addResolvedReference:

@@ -19,7 +19,7 @@ CypCypress1PackageReader class >> withDisk: disk [
 CypCypress1PackageReader >> classDefinitionWithProperties: classPropertiesDict comment: commentString [
 
 	| definition properties |
-	definition := CypClassDefinition new.
+	definition := RwClassDefinition new.
 	properties := classPropertiesDict copy.
 	properties at: 'comment' put: commentString.
 	definition properties: properties.
@@ -85,9 +85,9 @@ CypCypress1PackageReader >> readMethodDefinitionFrom: aStream [
 		ifTrue: [aStream nextLine]
 		ifFalse: [self error: 'Method does not have valid Cypress format'].
 	source := aStream upToEnd.
-	selector := Cypress platform parseSelectorFrom: source.
+	selector := Rowan platform parseSelectorFrom: source.
 	properties at: 'selector' put: selector.
-	^CypMethodDefinition withProperties: properties source: source
+	^RwMethodDefinition withProperties: properties source: source
 ]
 
 { #category : 'private' }
@@ -117,7 +117,7 @@ CypCypress1PackageReader >> readMethodDefinitionsFor: classDefinition in: entrie
 CypCypress1PackageReader >> readPackageDefinitionFromDirectory: fullPath [
 
 	| packageDefinition |
-	packageDefinition := CypPackageDefinition new.
+	packageDefinition := RwPackageDefinition new.
 	(disk directoryEntriesFrom: fullPath) do: 
 			[:entry |
 			(self isPropertiesFilePath: entry)

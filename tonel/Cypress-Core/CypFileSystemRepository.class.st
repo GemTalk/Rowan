@@ -56,7 +56,7 @@ CypFileSystemRepository >> initializeRepositoryDirectory [
 CypFileSystemRepository >> initializeUrl: anUrl [
 
 	super initializeUrl: anUrl.
-	disk := Cypress fileUtilities.
+	disk := Rowan fileUtilities.
 	self initializeRepositoryDirectory.
 	self readPropertiesFile
 ]

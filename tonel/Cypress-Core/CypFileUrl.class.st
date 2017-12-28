@@ -117,7 +117,7 @@ CypFileUrl >> pathForDirectory [
 	they are absolute. Filename is left out."
 
 	| delimiter |
-	delimiter := Cypress fileUtilities pathNameDelimiter.
+	delimiter := Rowan fileUtilities pathNameDelimiter.
 	^String streamContents: 
 			[:s |
 			(self isAbsolute and: [self firstPartIsDriveLetter not])
