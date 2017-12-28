@@ -264,30 +264,25 @@ RwGsLoadedClass >> updateClassNameFromClass [
 RwGsLoadedClass >> updateClassTypeFromClass [
 	"For GemStone, the valid values are:
 	bytes
-	indexable
+	variable
 	immediate
-	nsc
-	No property is recorded for non-indexable pointer objects."
+	normal for non-indexable pointer object"
+
+	"Must be in-synch with RwGsClassCreationPatch>>basicCreateClassFor:"
 
 	| propertyName oldValue newValue changed |
-	propertyName := '_gs_type'.
+	propertyName := 'type'.
 	oldValue := self propertyAt: propertyName.
 	newValue := handle isBytesOrSpecial
 				ifTrue: [handle isBytes ifTrue: ['bytes'] ifFalse: ['immediate']]
 				ifFalse: 
-					[handle isNsc
-						ifTrue: ['nsc']
-						ifFalse: 
-							[handle isVariable
-								ifTrue: ['indexable']
-								ifFalse: [self absentToken	"non-indexable pointer object"]]].
+					[handle isVariable
+						ifTrue: ['variable']
+						ifFalse: [ 'normal']].
 
-	"Since the absent token is not equal to any other valid value, we can skip the identity check in this case."
 	oldValue = newValue
 		ifFalse: 
-			[newValue == self absentToken
-				ifTrue: [self removeProperty: propertyName]
-				ifFalse: [self propertyAt: propertyName put: newValue]]
+			[ self propertyAt: propertyName put: newValue ]
 ]
 
 { #category : 'private-updating' }

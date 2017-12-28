@@ -14,6 +14,13 @@ Class {
 
 { #category : 'private' }
 RwGsClassCreationPatch >> basicCreateClassFor: aPatchSet [
+	"For GemStone, the valid values are:
+	bytes
+	variable
+	immediate
+	normal for non-indexable pointer object"
+
+	"Must be in-synch with RwGsLoadedClass>>updateClassTypeFromClass"
 
 	| type oldVersion superclass createdClass |
 	type := classDefinition classType.

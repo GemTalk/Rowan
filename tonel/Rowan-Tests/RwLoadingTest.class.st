@@ -116,6 +116,14 @@ RwLoadingTest >> basicPackageDefinition: packageName [
                 instvars: {'instvar1'}
                 gs_options: {'dbTransient'}
                 inPackage: packageName);
+        at: 'TestVariableClass'
+          put:
+            (self
+                definitionOfClassNamed: 'TestVariableClass'
+                type: 'variable'
+                instvars: {}
+                gs_options: nil
+                inPackage: packageName);
         yourself)
     classExtensions: Dictionary new
 ]
