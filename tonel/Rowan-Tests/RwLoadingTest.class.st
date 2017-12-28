@@ -124,17 +124,26 @@ RwLoadingTest >> basicPackageDefinition: packageName [
                 instvars: {}
                 gs_options: nil
                 inPackage: packageName);
+        at: 'TestMyBagClass'
+          put:
+            (self
+                definitionOfClassNamed: 'TestMyBagClass'
+                superclass: 'Bag'
+                type: 'normal'
+                instvars: {}
+                gs_options: {'disallowGciStore'}
+                inPackage: packageName);
         yourself)
     classExtensions: Dictionary new
 ]
 
 { #category : 'basic definitions' }
-RwLoadingTest >> definitionOfClassNamed: className type: classType instvars: instvars gs_options: gs_options inPackage: packageName [
+RwLoadingTest >> definitionOfClassNamed: className superclass: superclassName type: classType instvars: instvars gs_options: gs_options inPackage: packageName [
   ^ RwClassDefinition
     withProperties:
       (self
         propertiesForBasicClassNamed: className
-        super: 'Object'
+        super: superclassName
         instvars: instvars
         classinstvars: {}
         classvars: {}
@@ -143,6 +152,17 @@ RwLoadingTest >> definitionOfClassNamed: className type: classType instvars: ins
         inPackage: packageName)
     classMethodDefinitions: (self basicClassMethodsForClass: className)
     instanceMethodDefinitions: (self basicInstanceMethodsForClass: className)
+]
+
+{ #category : 'basic definitions' }
+RwLoadingTest >> definitionOfClassNamed: className type: classType instvars: instvars gs_options: gs_options inPackage: packageName [
+  ^ self
+    definitionOfClassNamed: className
+    superclass: 'Object'
+    type: classType
+    instvars: instvars
+    gs_options: gs_options
+    inPackage: packageName
 ]
 
 { #category : 'basic definitions' }

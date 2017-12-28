@@ -276,9 +276,12 @@ RwGsLoadedClass >> updateClassTypeFromClass [
 	newValue := handle isBytesOrSpecial
 				ifTrue: [handle isBytes ifTrue: ['bytes'] ifFalse: ['immediate']]
 				ifFalse: 
-					[handle isVariable
-						ifTrue: ['variable']
-						ifFalse: [ 'normal']].
+					[handle isNsc
+						ifTrue: [ 'normal' ]
+						ifFalse:  [
+							handle isVariable
+								ifTrue: ['variable']
+								ifFalse: [ 'normal'] ] ].
 
 	oldValue = newValue
 		ifFalse: 
