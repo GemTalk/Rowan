@@ -10,7 +10,7 @@ run
   packageManager
     defaultSymbolDictionaryName: #'UserGlobals';
     defaultSymbolList: System myUserProfile symbolList.
-  #('Cypress-Core' 'Cypress-GemStone' 'Rowan-Core' 'Rowan-GemStone' 'Rowan-Tests')
+  #('Cypress-Core' 'Rowan-Core' 'Rowan-GemStone' 'Rowan-Tests')
     do: [ :packageName | 
       | package |
       package := (CypressEnvironmentPackageDefinition named: packageName)
