@@ -114,7 +114,7 @@ RwLoadingTest >> basicPackageDefinition: packageName [
                 definitionOfClassNamed: 'TestNormalDbTransientClass'
                 type: 'normal'
                 instvars: {'instvar1'}
-                gs_options: {}
+                gs_options: {'dbTransient'}
                 inPackage: packageName);
         yourself)
     classExtensions: Dictionary new
@@ -214,8 +214,9 @@ RwLoadingTest >> propertiesForBasicClassNamed: className super: superClassName i
     at: 'name' put: className;
     at: 'pools' put: Array new;
     at: 'super' put: superClassName;
-    at: 'type' put: type;
-    at: 'gs_options' put: gs_options.
+    at: 'type' put: type.
+  (gs_options _isArray and: [gs_options isEmpty not ])
+    ifTrue: [ dict at: 'gs_options' put: (gs_options collect: [:each | each asString ]) asSortedCollection asArray ].
   ^ dict
 ]
 

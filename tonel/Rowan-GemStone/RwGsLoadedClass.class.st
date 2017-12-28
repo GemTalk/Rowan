@@ -387,10 +387,10 @@ RwGsLoadedClass >> updateOptionsFromClass [
 	from the image, and the image is trusted to only have valid values."
 
 	| propertyName oldValue newValue changed |
-	propertyName := '_gs_options'.
+	propertyName := 'gs_options'.
 	oldValue := self propertyAt: propertyName.
 	newValue := (handle _optionsArray collect: [:option | option asString])
-				asSortedCollection.
+				asSortedCollection asArray.
 	newValue isEmpty ifTrue: [newValue := self absentToken].
 
 	"Since the absent token is not equal to any other valid value, we can skip the identity check in this case."

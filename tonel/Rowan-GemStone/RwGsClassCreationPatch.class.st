@@ -30,7 +30,7 @@ RwGsClassCreationPatch >> basicCreateClassFor: aPatchSet [
 						inDictionary: nil
 						newVersionOf: oldVersion
 						description: (classDefinition propertyAt: 'comment' ifAbsent: [''])
-						options: (classDefinition propertyAt: 'gs_options' ifAbsent: [#()])]
+						options: ((classDefinition propertyAt: 'gs_options' ifAbsent: [#()]) collect: [ :each | each asSymbol ])]
 				ifFalse: 
 					[type = 'variable'
 						ifTrue: 
