@@ -151,6 +151,15 @@ RwLoadingTest >> basicPackageDefinition: packageName [
                 instvars: {}
                 gs_options: {}
                 inPackage: packageName);
+        at: 'TestProtoObjectClass'
+          put:
+            (self
+                definitionOfClassNamed: 'TestProtoObjectClass'
+                superclass: 'nil'
+                type: 'normal'
+                instvars: {}
+                gs_options: {}
+                inPackage: packageName);
         yourself)
     classExtensions: Dictionary new
 ]

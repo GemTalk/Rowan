@@ -26,6 +26,10 @@ RwGsClassCreationPatch >> basicCreateClassFor: aPatchSet [
 	type := classDefinition classType.
 	oldVersion := self oldClassVersion.
 	superclass := aPatchSet superclassNamed: classDefinition superclassName.
+	superclass 
+		ifNil: [ 
+			classDefinition superclassName = 'nil' 
+				ifFalse: [ self error: 'The class named ', classDefinition superclassName printString , ' does not exist.' ] ].
 	gs_options := ((classDefinition propertyAt: 'gs_options' ifAbsent: [#()]) collect: [ :each | each asSymbol ]).
 	createdClass := type = 'normal'
 				ifTrue: 
