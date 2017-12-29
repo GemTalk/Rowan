@@ -64,7 +64,7 @@ RwLoadingTest >> assertAbsenceOfPackage: packageName [
 { #category : 'support - basic definitions' }
 RwLoadingTest >> basicClassMethodsForClass: className [
   ^ self
-    basicMethodDefsFromSpec:
+    methodDefsFromSpec:
       {{#'classMeth'.
       'accessing'.
       ('classMeth ^''classMeth for class ''' , className printString)}}
@@ -73,30 +73,10 @@ RwLoadingTest >> basicClassMethodsForClass: className [
 { #category : 'support - basic definitions' }
 RwLoadingTest >> basicInstanceMethodsForClass: className [
   ^ self
-    basicMethodDefsFromSpec:
+    methodDefsFromSpec:
       {{#'instanceMeth'.
       'accessing'.
       ('instanceMeth ^''instanceMeth for class ''' , className printString)}}
-]
-
-{ #category : 'support' }
-RwLoadingTest >> basicMethodDefsFromSpec: specArray [
-  | dict |
-  dict := Dictionary new.
-  specArray
-    do: [ :spec | 
-      | selector protocol source |
-      selector := (spec at: 1) asSymbol.
-      protocol := (spec at: 2) asString.
-      source := (spec at: 3) asString.
-      dict
-        at: selector
-        put:
-          (RwMethodDefinition
-            withProperties:
-              (Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
-            source: source) ].
-  ^ dict
 ]
 
 { #category : 'support - basic definitions' }
@@ -164,6 +144,36 @@ RwLoadingTest >> basicPackageDefinition: packageName [
     classExtensions: Dictionary new
 ]
 
+{ #category : 'support - classInitialization definitions' }
+RwLoadingTest >> classInitializationClassMethodsForClass: className [
+  ^ self
+    methodDefsFromSpec:
+      {
+			{#'initialize'.
+      		'initialization'.
+      		('initialize ClassVar1 := classInstVar1 := 1' )}.
+			{#'classVar'.
+      		'accessing'.
+      		('classVar ^ ClassVar1' )}.
+			{#'classInstVar'.
+      		'accessing'.
+      		('classInstVar ^ classInstVar1' )}.
+		}
+]
+
+{ #category : 'support - classInitialization definitions' }
+RwLoadingTest >> classInitializePackageDefinition: packageName className: className [
+  ^ RwPackageDefinition
+    withProperties: (Dictionary with: 'name' -> packageName)
+    classDefinitions:
+      (Dictionary new
+        at: className
+          put:
+            (self definitionOfClassInitializationClassNamed: className inPackage: packageName);
+       yourself)
+    classExtensions: Dictionary new
+]
+
 { #category : 'support - basic definitions' }
 RwLoadingTest >> definitionOfBasicClassNamed: className superclass: superclassName type: classType instvars: instvars gs_options: gs_options inPackage: packageName [
   ^ RwClassDefinition
@@ -190,6 +200,23 @@ RwLoadingTest >> definitionOfBasicClassNamed: className type: classType instvars
     instvars: instvars
     gs_options: gs_options
     inPackage: packageName
+]
+
+{ #category : 'support - classInitialization definitions' }
+RwLoadingTest >> definitionOfClassInitializationClassNamed: className inPackage: packageName [
+  ^ RwClassDefinition
+    withProperties:
+      (self
+        propertiesForClassNamed: className
+        super: 'Object'
+        instvars: {}
+        classinstvars: {'classInstVar1'}
+        classvars: {'ClassVar1'}
+        type: 'normal'
+        gs_options: {}
+        inPackage: packageName)
+    classMethodDefinitions: (self classInitializationClassMethodsForClass: className)
+    instanceMethodDefinitions: Dictionary new
 ]
 
 { #category : 'support - basic definitions' }
@@ -230,6 +257,26 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames using: myPackageSet [
 	imagePackageSet2 := self definitionsOfLoadedPackages: packageNames.
 	diff2 := myPackageSet compareAgainstBase: imagePackageSet2.
 	self assert: diff2 isEmpty
+]
+
+{ #category : 'support' }
+RwLoadingTest >> methodDefsFromSpec: specArray [
+  | dict |
+  dict := Dictionary new.
+  specArray
+    do: [ :spec | 
+      | selector protocol source |
+      selector := (spec at: 1) asSymbol.
+      protocol := (spec at: 2) asString.
+      source := (spec at: 3) asString.
+      dict
+        at: selector
+        put:
+          (RwMethodDefinition
+            withProperties:
+              (Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
+            source: source) ].
+  ^ dict
 ]
 
 { #category : 'support - simple definitions' }
@@ -335,6 +382,25 @@ RwLoadingTest >> testBasicLoading [
     addPackage: (self basicPackageDefinition: packageName);
     yourself.
   self loadAndTestPackagesNamed: packageNames using: myPackageSet
+]
+
+{ #category : 'tests' }
+RwLoadingTest >> testClassInitialization [
+  "test loading a variety of different class types"
+
+  | packageName packageNames myPackageSet className testClass |
+  packageName := 'ClassInitializationTestPackage'.
+  className := 'TestClassInitializationClass'.
+  packageNames := {packageName}.
+  myPackageSet := RwPackageSetDefinition new.
+  myPackageSet
+    addPackage: (self classInitializePackageDefinition: packageName className: className);
+    yourself.
+  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+  testClass := System myUserProfile symbolList objectNamed: className.
+  self assert: testClass classVar = 1.
+  self assert: testClass classInstVar = 1.
+
 ]
 
 { #category : 'tests' }
