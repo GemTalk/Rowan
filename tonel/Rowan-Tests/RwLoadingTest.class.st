@@ -133,6 +133,24 @@ RwLoadingTest >> basicPackageDefinition: packageName [
                 instvars: {}
                 gs_options: {'disallowGciStore'}
                 inPackage: packageName);
+        at: 'TestCustomByteArrayClass'
+          put:
+            (self
+                definitionOfClassNamed: 'TestCustomByteArrayClass'
+                superclass: 'Object'
+                type: 'bytes'
+                instvars: {}
+                gs_options: {}
+                inPackage: packageName);
+        at: 'TestMyByteArrayClass'
+          put:
+            (self
+                definitionOfClassNamed: 'TestMyByteArrayClass'
+                superclass: 'ByteArray'
+                type: 'bytes'
+                instvars: {}
+                gs_options: {}
+                inPackage: packageName);
         yourself)
     classExtensions: Dictionary new
 ]

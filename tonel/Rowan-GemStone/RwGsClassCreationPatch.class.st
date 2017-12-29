@@ -22,10 +22,11 @@ RwGsClassCreationPatch >> basicCreateClassFor: aPatchSet [
 
 	"Must be in-synch with RwGsLoadedClass>>updateClassTypeFromClass"
 
-	| type oldVersion superclass createdClass |
+	| type oldVersion superclass createdClass gs_options |
 	type := classDefinition classType.
 	oldVersion := self oldClassVersion.
 	superclass := aPatchSet superclassNamed: classDefinition superclassName.
+	gs_options := ((classDefinition propertyAt: 'gs_options' ifAbsent: [#()]) collect: [ :each | each asSymbol ]).
 	createdClass := type = 'normal'
 				ifTrue: 
 					[superclass
@@ -37,7 +38,7 @@ RwGsClassCreationPatch >> basicCreateClassFor: aPatchSet [
 						inDictionary: nil
 						newVersionOf: oldVersion
 						description: (classDefinition propertyAt: 'comment' ifAbsent: [''])
-						options: ((classDefinition propertyAt: 'gs_options' ifAbsent: [#()]) collect: [ :each | each asSymbol ])]
+						options: gs_options ]
 				ifFalse: 
 					[type = 'variable'
 						ifTrue: 
@@ -50,7 +51,7 @@ RwGsClassCreationPatch >> basicCreateClassFor: aPatchSet [
 								inDictionary: nil
 								newVersionOf: oldVersion
 								description: (classDefinition propertyAt: 'comment' ifAbsent: [''])
-								options: (classDefinition propertyAt: 'gs_options' ifAbsent: [#()])]
+								options: gs_options ]
 						ifFalse: 
 							[type = 'bytes'
 								ifTrue: 
@@ -64,7 +65,7 @@ RwGsClassCreationPatch >> basicCreateClassFor: aPatchSet [
 										inDictionary: nil
 										newVersionOf: oldVersion
 										description: (classDefinition propertyAt: 'comment' ifAbsent: [''])
-										options: (classDefinition propertyAt: 'gs_options' ifAbsent: [#()])]
+										options: gs_options ]
 								ifFalse: [self error: 'Unknown class type']]].
 	^createdClass
 ]
