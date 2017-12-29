@@ -24,7 +24,7 @@ RwLoadingTest class >> run [
 	^self suite run
 ]
 
-{ #category : 'support-definitionBuilding' }
+{ #category : 'support - simple definitions' }
 RwLoadingTest >> accessorMethodsForSimpleClassNamed: name [
 
 	| result |
@@ -61,7 +61,7 @@ RwLoadingTest >> assertAbsenceOfPackage: packageName [
 	self assert: loadedPackage equals: nil
 ]
 
-{ #category : 'basic definitions' }
+{ #category : 'support - basic definitions' }
 RwLoadingTest >> basicClassMethodsForClass: className [
   ^ self
     basicMethodDefsFromSpec:
@@ -70,7 +70,7 @@ RwLoadingTest >> basicClassMethodsForClass: className [
       ('classMeth ^''classMeth for class ''' , className printString)}}
 ]
 
-{ #category : 'basic definitions' }
+{ #category : 'support - basic definitions' }
 RwLoadingTest >> basicInstanceMethodsForClass: className [
   ^ self
     basicMethodDefsFromSpec:
@@ -79,7 +79,7 @@ RwLoadingTest >> basicInstanceMethodsForClass: className [
       ('instanceMeth ^''instanceMeth for class ''' , className printString)}}
 ]
 
-{ #category : 'basic definitions' }
+{ #category : 'support - basic definitions' }
 RwLoadingTest >> basicMethodDefsFromSpec: specArray [
   | dict |
   dict := Dictionary new.
@@ -99,7 +99,7 @@ RwLoadingTest >> basicMethodDefsFromSpec: specArray [
   ^ dict
 ]
 
-{ #category : 'basic definitions' }
+{ #category : 'support - basic definitions' }
 RwLoadingTest >> basicPackageDefinition: packageName [
   ^ RwPackageDefinition
     withProperties: (Dictionary with: 'name' -> packageName)
@@ -164,7 +164,7 @@ RwLoadingTest >> basicPackageDefinition: packageName [
     classExtensions: Dictionary new
 ]
 
-{ #category : 'basic definitions' }
+{ #category : 'support - basic definitions' }
 RwLoadingTest >> definitionOfClassNamed: className superclass: superclassName type: classType instvars: instvars gs_options: gs_options inPackage: packageName [
   ^ RwClassDefinition
     withProperties:
@@ -181,7 +181,7 @@ RwLoadingTest >> definitionOfClassNamed: className superclass: superclassName ty
     instanceMethodDefinitions: (self basicInstanceMethodsForClass: className)
 ]
 
-{ #category : 'basic definitions' }
+{ #category : 'support - basic definitions' }
 RwLoadingTest >> definitionOfClassNamed: className type: classType instvars: instvars gs_options: gs_options inPackage: packageName [
   ^ self
     definitionOfClassNamed: className
@@ -192,7 +192,7 @@ RwLoadingTest >> definitionOfClassNamed: className type: classType instvars: ins
     inPackage: packageName
 ]
 
-{ #category : 'basic definitions' }
+{ #category : 'support - basic definitions' }
 RwLoadingTest >> definitionOfNormalClassNamed: className inPackage: packageName [
   ^ self
     definitionOfClassNamed: className
@@ -202,7 +202,7 @@ RwLoadingTest >> definitionOfNormalClassNamed: className inPackage: packageName 
     inPackage: packageName
 ]
 
-{ #category : 'support-definitionBuilding' }
+{ #category : 'support - simple definitions' }
 RwLoadingTest >> definitionOfSimpleClassNamed: name inPackage: packageName [
 
 	^RwClassDefinition
@@ -232,7 +232,7 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames using: myPackageSet [
 	self assert: diff2 isEmpty
 ]
 
-{ #category : 'support-definitionBuilding' }
+{ #category : 'support - simple definitions' }
 RwLoadingTest >> package1Definition [
 
 	^RwPackageDefinition
@@ -242,7 +242,7 @@ RwLoadingTest >> package1Definition [
 		classExtensions: Dictionary new
 ]
 
-{ #category : 'support-definitionBuilding' }
+{ #category : 'support - simple definitions' }
 RwLoadingTest >> package2Definition [
 
 	^RwPackageDefinition
@@ -252,7 +252,7 @@ RwLoadingTest >> package2Definition [
 		classExtensions: Dictionary new
 ]
 
-{ #category : 'basic definitions' }
+{ #category : 'support - basic definitions' }
 RwLoadingTest >> propertiesForBasicClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars type: type gs_options: gs_options inPackage: packageName [
   | dict |
   dict := Dictionary new.
@@ -275,7 +275,7 @@ RwLoadingTest >> propertiesForBasicClassNamed: className super: superClassName i
   ^ dict
 ]
 
-{ #category : 'support-definitionBuilding' }
+{ #category : 'support - simple definitions' }
 RwLoadingTest >> propertiesForSimpleClassNamed: className inPackage: packageName [
 
 	| dict |
@@ -312,7 +312,7 @@ RwLoadingTest >> setUp [
 			index > 0 ifTrue: [user removeDictionaryAt: index]]
 ]
 
-{ #category : 'support-definitionBuilding' }
+{ #category : 'support - simple definitions' }
 RwLoadingTest >> sillyClassMethodsForClassNamed: name [
 
 	^Dictionary
