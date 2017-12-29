@@ -113,6 +113,12 @@ RwGsMethodAdditionPatch >> propertiesProtocolName [
 	^methodDefinition propertyAt: 'protocol' ifAbsent: ['unknown']
 ]
 
+{ #category : 'initializers' }
+RwGsMethodAdditionPatch >> runInitializer [
+	(isMeta and: [ selector == #initialize ])
+		ifTrue: [ behavior initialize ]
+]
+
 { #category : 'private-installing' }
 RwGsMethodAdditionPatch >> setProtocol [
 	"If I'm an extension method, my protocol in the image may need to be *<packageName>."

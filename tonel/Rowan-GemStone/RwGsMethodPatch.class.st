@@ -85,3 +85,8 @@ RwGsMethodPatch >> printOn: aStream [
 		nextPutAll: '>>';
 		nextPutAll: methodDefinition key
 ]
+
+{ #category : 'initializers' }
+RwGsMethodPatch >> runInitializer [
+	"noop by default"
+]

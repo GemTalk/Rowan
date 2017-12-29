@@ -356,9 +356,11 @@ RwGsPatchSet >> reportAnyErrors [
 		ifTrue: [false]
 ]
 
-{ #category : 'stubs' }
+{ #category : 'private - applying' }
 RwGsPatchSet >> runInitializers [
-	"presumably run the class initialization methods as needed ... noop for now"
+	"run the class initialization methods as needed"
+
+	addedMethods, methodsNeedingRecompile do: [:methodPatch | methodPatch runInitializer ]
 ]
 
 { #category : 'private - applying' }
