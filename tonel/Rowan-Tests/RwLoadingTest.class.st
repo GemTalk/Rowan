@@ -79,7 +79,7 @@ RwLoadingTest >> basicInstanceMethodsForClass: className [
       ('instanceMeth ^''instanceMeth for class ''' , className printString)}}
 ]
 
-{ #category : 'support - basic definitions' }
+{ #category : 'support' }
 RwLoadingTest >> basicMethodDefsFromSpec: specArray [
   | dict |
   dict := Dictionary new.
@@ -111,7 +111,7 @@ RwLoadingTest >> basicPackageDefinition: packageName [
         at: 'TestNormalDbTransientClass'
           put:
             (self
-                definitionOfClassNamed: 'TestNormalDbTransientClass'
+                definitionOfBasicClassNamed: 'TestNormalDbTransientClass'
                 type: 'normal'
                 instvars: {'instvar1'}
                 gs_options: {'dbTransient'}
@@ -119,7 +119,7 @@ RwLoadingTest >> basicPackageDefinition: packageName [
         at: 'TestVariableClass'
           put:
             (self
-                definitionOfClassNamed: 'TestVariableClass'
+                definitionOfBasicClassNamed: 'TestVariableClass'
                 type: 'variable'
                 instvars: {}
                 gs_options: nil
@@ -127,7 +127,7 @@ RwLoadingTest >> basicPackageDefinition: packageName [
         at: 'TestMyBagClass'
           put:
             (self
-                definitionOfClassNamed: 'TestMyBagClass'
+                definitionOfBasicClassNamed: 'TestMyBagClass'
                 superclass: 'Bag'
                 type: 'normal'
                 instvars: {}
@@ -136,7 +136,7 @@ RwLoadingTest >> basicPackageDefinition: packageName [
         at: 'TestCustomByteArrayClass'
           put:
             (self
-                definitionOfClassNamed: 'TestCustomByteArrayClass'
+                definitionOfBasicClassNamed: 'TestCustomByteArrayClass'
                 superclass: 'Object'
                 type: 'bytes'
                 instvars: {}
@@ -145,7 +145,7 @@ RwLoadingTest >> basicPackageDefinition: packageName [
         at: 'TestMyByteArrayClass'
           put:
             (self
-                definitionOfClassNamed: 'TestMyByteArrayClass'
+                definitionOfBasicClassNamed: 'TestMyByteArrayClass'
                 superclass: 'ByteArray'
                 type: 'bytes'
                 instvars: {}
@@ -154,7 +154,7 @@ RwLoadingTest >> basicPackageDefinition: packageName [
         at: 'TestProtoObjectClass'
           put:
             (self
-                definitionOfClassNamed: 'TestProtoObjectClass'
+                definitionOfBasicClassNamed: 'TestProtoObjectClass'
                 superclass: 'nil'
                 type: 'normal'
                 instvars: {}
@@ -165,11 +165,11 @@ RwLoadingTest >> basicPackageDefinition: packageName [
 ]
 
 { #category : 'support - basic definitions' }
-RwLoadingTest >> definitionOfClassNamed: className superclass: superclassName type: classType instvars: instvars gs_options: gs_options inPackage: packageName [
+RwLoadingTest >> definitionOfBasicClassNamed: className superclass: superclassName type: classType instvars: instvars gs_options: gs_options inPackage: packageName [
   ^ RwClassDefinition
     withProperties:
       (self
-        propertiesForBasicClassNamed: className
+        propertiesForClassNamed: className
         super: superclassName
         instvars: instvars
         classinstvars: {}
@@ -182,9 +182,9 @@ RwLoadingTest >> definitionOfClassNamed: className superclass: superclassName ty
 ]
 
 { #category : 'support - basic definitions' }
-RwLoadingTest >> definitionOfClassNamed: className type: classType instvars: instvars gs_options: gs_options inPackage: packageName [
+RwLoadingTest >> definitionOfBasicClassNamed: className type: classType instvars: instvars gs_options: gs_options inPackage: packageName [
   ^ self
-    definitionOfClassNamed: className
+    definitionOfBasicClassNamed: className
     superclass: 'Object'
     type: classType
     instvars: instvars
@@ -195,7 +195,7 @@ RwLoadingTest >> definitionOfClassNamed: className type: classType instvars: ins
 { #category : 'support - basic definitions' }
 RwLoadingTest >> definitionOfNormalClassNamed: className inPackage: packageName [
   ^ self
-    definitionOfClassNamed: className
+    definitionOfBasicClassNamed: className
     type: 'normal'
     instvars: {}
     gs_options: {}
@@ -252,8 +252,8 @@ RwLoadingTest >> package2Definition [
 		classExtensions: Dictionary new
 ]
 
-{ #category : 'support - basic definitions' }
-RwLoadingTest >> propertiesForBasicClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars type: type gs_options: gs_options inPackage: packageName [
+{ #category : 'support' }
+RwLoadingTest >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars type: type gs_options: gs_options inPackage: packageName [
   | dict |
   dict := Dictionary new.
   dict

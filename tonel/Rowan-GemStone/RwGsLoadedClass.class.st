@@ -46,7 +46,7 @@ RwGsLoadedClass class >> forClass: aClass [
 
 { #category : 'class initialization' }
 RwGsLoadedClass class >> initialize [
-	"CypGsLoadedClass initialize"
+	"RwGsLoadedClass initialize"
 
 	ClassRegistry := KeyValueDictionary new
 ]

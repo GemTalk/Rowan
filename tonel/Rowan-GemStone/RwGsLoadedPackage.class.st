@@ -55,7 +55,7 @@ RwGsLoadedPackage class >> existingPackageNamed: aName ifAbsent: absentBlock [
 
 { #category : 'initialization' }
 RwGsLoadedPackage class >> initialize [
-	"CypGsLoadedPackage initialize"
+	"RwGsLoadedPackage initialize"
 
 	PackageRegistry := RcKeyValueDictionary new
 ]
