@@ -26,6 +26,12 @@ RwModification class >> before: beforeDefinition after: afterDefinition [
 		yourself
 ]
 
+{ #category : 'patching' }
+RwModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage [
+
+	self subClassResponsibility: #addModificationToPathcSet:inPackage:
+]
+
 { #category : 'Accessing' }
 RwModification >> after [
 	^after

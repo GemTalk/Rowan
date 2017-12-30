@@ -23,6 +23,12 @@ RwPackageModification >> acceptVisitor: aVisitor [
 	^aVisitor visitPackageModification: self
 ]
 
+{ #category : 'patching' }
+RwPackageModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage [
+
+	self halt
+]
+
 { #category : 'Accessing' }
 RwPackageModification >> classesModification [
 	^classesModification
