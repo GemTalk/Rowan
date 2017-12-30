@@ -1,3 +1,9 @@
+"
+A framework for managing multi-client interactions like inspect, confirm:, inform:, and interactive Warning dialog (see the Object and Warning extensions).
+The framework has default actions defined for running doing reasonable things when run in a client-less environment like topaz.
+Clients can register client forwarder handlers for each of the interactions, so that the client can arrange to have the appropriate dialog come up for a given interaction. See the TDTopezServer extension method for an example of client registrations.
+"
+
 Class {
 	#name : 'GsInteraction',
 	#superclass : 'Object',
