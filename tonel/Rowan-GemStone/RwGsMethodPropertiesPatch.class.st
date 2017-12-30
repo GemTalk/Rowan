@@ -14,3 +14,8 @@ Class {
 	],
 	#category : 'Rowan-GemStone'
 }
+
+{ #category : 'initializers' }
+RwGsMethodPropertiesPatch >> runInitializer [
+	"noop"
+]

@@ -105,7 +105,9 @@ RwClassDefinition >> compareDictionary: myDictionary againstBaseDictionary: base
 			before := baseDictionary at: key ifAbsent: [elementClass new].
 			after := myDictionary at: key ifAbsent: [elementClass new].
 			modification := after compareAgainstBase: before.
-			modification isMeta: isClassMeta.
+			modification 
+				isMeta: isClassMeta;
+				classDefinition: self.
 			modification isEmpty
 				ifFalse: [anElementsModification addElementModification: modification]]
 ]

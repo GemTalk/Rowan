@@ -37,6 +37,30 @@ RwGsMethodPatch >> classDefinition: newValue [
 
 ]
 
+{ #category : 'compiling' }
+RwGsMethodPatch >> compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols [
+
+	| className class sourceString symbolList protocol |
+	className := classDefinition key asSymbol.
+	class := createdClasses at: className
+				ifAbsent: 
+					[tempSymbols at: className
+						ifAbsent: [self error: 'Cannot find class to compile method in.']].
+	behavior := isMeta ifTrue: [class class] ifFalse: [class].
+	sourceString := methodDefinition source.
+	symbolList := SymbolList with: tempSymbols.
+	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
+	compiledMethod := behavior
+				compileMethod: sourceString
+				dictionaries: symbolList
+				category: protocol
+				intoMethodDict: false
+				intoCategories: nil
+				intoPragmas: nil
+				environmentId: 0
+
+]
+
 { #category : 'accessing' }
 RwGsMethodPatch >> isMeta: newValue [
 	isMeta := newValue
@@ -88,5 +112,8 @@ RwGsMethodPatch >> printOn: aStream [
 
 { #category : 'initializers' }
 RwGsMethodPatch >> runInitializer [
-	"noop by default"
+	"execute class initialization methods"
+
+	(isMeta and: [ selector == #initialize ])
+		ifTrue: [ behavior theNonMetaClass initialize ]
 ]

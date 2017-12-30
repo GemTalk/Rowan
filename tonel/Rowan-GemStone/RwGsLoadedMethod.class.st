@@ -135,6 +135,14 @@ RwGsLoadedMethod >> myNonMetaClass [
 ]
 
 { #category : 'private' }
+RwGsLoadedMethod >> registerWithNewHandle: newHandle [
+
+	MethodRegistry removeKey: handle.
+	handle := newHandle.
+	MethodRegistry at: handle put: self
+]
+
+{ #category : 'private' }
 RwGsLoadedMethod >> registerYourself [
 
 	(MethodRegistry includesKey: handle)

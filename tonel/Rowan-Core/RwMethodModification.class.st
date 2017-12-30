@@ -13,7 +13,8 @@ Class {
 	#instVars : [
 		'oldSource',
 		'newSource',
-		'isMeta'
+		'isMeta',
+		'classDefinition'
 	],
 	#category : 'Rowan-Core'
 }
@@ -37,7 +38,24 @@ RwMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage
 			[	self isMeta
 					ifTrue: [ aPatchSet addDeletedClassMethod: self before inClass: self classDefinition inPackage: aPackage ]
 					ifFalse: [ aPatchSet addDeletedInstanceMethod: self before inClass: self classDefinition inPackage: aPackage ] ].
-self halt.
+	self isModification
+		ifTrue: 
+			[	self isMeta
+					ifTrue: [ aPatchSet addPatchedClassMethod: self after inClass: self classDefinition inPackage: aPackage ]
+					ifFalse: [ aPatchSet addPatchedInstanceMethod: self after inClass: self classDefinition inPackage: aPackage ] ].
+
+]
+
+{ #category : 'Accessing' }
+RwMethodModification >> classDefinition [
+	^classDefinition
+
+]
+
+{ #category : 'Updating' }
+RwMethodModification >> classDefinition: aClassDefinition [
+	classDefinition := aClassDefinition
+
 ]
 
 { #category : 'testing' }

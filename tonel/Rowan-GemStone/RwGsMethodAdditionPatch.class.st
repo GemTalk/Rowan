@@ -11,30 +11,6 @@ Class {
 	#category : 'Rowan-GemStone'
 }
 
-{ #category : 'compiling' }
-RwGsMethodAdditionPatch >> compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols [
-
-	| className class sourceString symbolList protocol |
-	className := classDefinition key asSymbol.
-	class := createdClasses at: className
-				ifAbsent: 
-					[tempSymbols at: className
-						ifAbsent: [self error: 'Cannot find class to compile method in.']].
-	behavior := isMeta ifTrue: [class class] ifFalse: [class].
-	sourceString := methodDefinition source.
-	symbolList := SymbolList with: tempSymbols.
-	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
-	compiledMethod := behavior
-				compileMethod: sourceString
-				dictionaries: symbolList
-				category: protocol
-				intoMethodDict: false
-				intoCategories: nil
-				intoPragmas: nil
-				environmentId: 0
-
-]
-
 { #category : 'private-installing' }
 RwGsMethodAdditionPatch >> createLoadedMethod [
 
@@ -111,12 +87,6 @@ RwGsMethodAdditionPatch >> packageProtocolName [
 RwGsMethodAdditionPatch >> propertiesProtocolName [
 
 	^methodDefinition propertyAt: 'protocol' ifAbsent: ['unknown']
-]
-
-{ #category : 'initializers' }
-RwGsMethodAdditionPatch >> runInitializer [
-	(isMeta and: [ selector == #initialize ])
-		ifTrue: [ behavior theNonMetaClass initialize ]
 ]
 
 { #category : 'private-installing' }

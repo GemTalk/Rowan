@@ -10,3 +10,8 @@ Class {
 	#superclass : 'RwGsMethodPatch',
 	#category : 'Rowan-GemStone'
 }
+
+{ #category : 'initializers' }
+RwGsMethodDeletionPatch >> runInitializer [
+	"noop"
+]

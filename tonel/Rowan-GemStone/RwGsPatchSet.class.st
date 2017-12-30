@@ -126,6 +126,26 @@ RwGsPatchSet >> addDeletedPackage: packageDefinition [
 	deletedPackages add: (RwGsPackageDeletionPatch for: packageDefinition)
 ]
 
+{ #category : 'building' }
+RwGsPatchSet >> addPatchedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+
+	methodsNeedingRecompile add: (RwGsMethodSourcePatch
+				forMethod: aClassMethodDefinition
+				isMeta: true
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+]
+
+{ #category : 'building' }
+RwGsPatchSet >> addPatchedInstanceMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+
+	methodsNeedingRecompile add: (RwGsMethodSourcePatch
+				forMethod: aClassMethodDefinition
+				isMeta: false
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+]
+
 { #category : 'private - applying' }
 RwGsPatchSet >> allPatchesAffectingLivePackagesDo: aBlock [
 	"Evaluate aBlock with every patch that can affect a package without deleting it, which is a lot."
@@ -417,10 +437,11 @@ RwGsPatchSet >> updateMethodDictionaries [
 	"For added methods and methods that need recompiling,
 	copy from temporary methodDictionaries to live methodDictionaries
 	For added methods, create LoadedMethods and add to the appropriate LoadedClass
-	or LoadedExtension"
+	or LoadedExtension
+   For methods that need recompiling updated the LoadedMethods registration. "
 
 	addedMethods do: [:each | each installMethod ].
-	methodsNeedingRecompile do: [:each | each halt]
+	methodsNeedingRecompile do: [:each | each installSourcePatch ]
 ]
 
 { #category : 'private - applying' }

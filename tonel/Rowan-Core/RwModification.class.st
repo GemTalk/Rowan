@@ -81,6 +81,12 @@ RwModification >> isEmpty [
 	^propertiesModification isEmpty
 ]
 
+{ #category : 'testing' }
+RwModification >> isModification [
+
+	^after isEmpty not and: [ before isEmpty not ]
+]
+
 { #category : 'Accessing' }
 RwModification >> key [
 
