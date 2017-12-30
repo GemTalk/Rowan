@@ -145,7 +145,7 @@ RwLoadingTest >> basicPackageDefinition: packageName [
 ]
 
 { #category : 'support - classInitialization definitions' }
-RwLoadingTest >> classInitializationClassMethodsForClass: className [
+RwLoadingTest >> classInitializationClassMethodsForClass1: className [
   ^ self
     methodDefsFromSpec:
       {
@@ -155,22 +155,48 @@ RwLoadingTest >> classInitializationClassMethodsForClass: className [
 			{#'classVar'.
       		'accessing'.
       		('classVar ^ ClassVar1' )}.
-			{#'classInstVar'.
+			{#'classInstVar1'.
       		'accessing'.
-      		('classInstVar ^ classInstVar1' )}.
+      		('classInstVar1 ^ classInstVar1' )}.
+			{#'classInstVar2'.
+      		'accessing'.
+      		('classInstVar2 ^ classInstVar2' )}.
 		}
 ]
 
 { #category : 'support - classInitialization definitions' }
-RwLoadingTest >> classInitializePackageDefinition: packageName className: className [
+RwLoadingTest >> classInitializationClassMethodsForClass2: className [
+  ^ self
+    methodDefsFromSpec:
+      {
+			{#'initialize'.
+      		'initialization'.
+      		('initialize ClassVar1 := classInstVar1 := 1. classInstVar2 := 2' )}.
+			{#'classVar'.
+      		'accessing'.
+      		('classVar ^ ClassVar1' )}.
+			{#'classInstVar1'.
+      		'accessing'.
+      		('classInstVar1 ^ classInstVar1' )}.
+			{#'classInstVar2'.
+      		'accessing'.
+      		('classInstVar2 ^ classInstVar2' )}.
+		}
+]
+
+{ #category : 'support - classInitialization definitions' }
+RwLoadingTest >> classInitializePackageDefinition: packageName className: className classMethodDefinitions: classMethodDefinitions [
   ^ RwPackageDefinition
     withProperties: (Dictionary with: 'name' -> packageName)
     classDefinitions:
       (Dictionary new
         at: className
           put:
-            (self definitionOfClassInitializationClassNamed: className inPackage: packageName);
-       yourself)
+            (self
+                definitionOfClassInitializationClassNamed: className
+                inPackage: packageName
+                classMethodDefinitions: classMethodDefinitions);
+        yourself)
     classExtensions: Dictionary new
 ]
 
@@ -203,19 +229,19 @@ RwLoadingTest >> definitionOfBasicClassNamed: className type: classType instvars
 ]
 
 { #category : 'support - classInitialization definitions' }
-RwLoadingTest >> definitionOfClassInitializationClassNamed: className inPackage: packageName [
+RwLoadingTest >> definitionOfClassInitializationClassNamed: className inPackage: packageName classMethodDefinitions: classMethodDefinitions [
   ^ RwClassDefinition
     withProperties:
       (self
         propertiesForClassNamed: className
         super: 'Object'
         instvars: {}
-        classinstvars: {'classInstVar1'}
+        classinstvars: {'classInstVar1'. 'classInstVar2'}
         classvars: {'ClassVar1'}
         type: 'normal'
         gs_options: {}
         inPackage: packageName)
-    classMethodDefinitions: (self classInitializationClassMethodsForClass: className)
+    classMethodDefinitions: classMethodDefinitions
     instanceMethodDefinitions: Dictionary new
 ]
 
@@ -245,11 +271,12 @@ RwLoadingTest >> definitionsOfLoadedPackages: packageNames [
 ]
 
 { #category : 'private' }
-RwLoadingTest >> loadAndTestPackagesNamed: packageNames using: myPackageSet [
+RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBeLoaded using: myPackageSet [ 
 
 	|  imagePackageSet1 diff1 imagePackageSet2 diff2 |
 	Rowan updateLoadedPackages.
-	packageNames do: [:name | self assertAbsenceOfPackage: name].
+	packagesShouldBeLoaded
+		ifFalse: [  packageNames do: [:name | self assertAbsenceOfPackage: name ] ].
 	imagePackageSet1 := self definitionsOfLoadedPackages: packageNames.
 	diff1 := myPackageSet compareAgainstBase: imagePackageSet1.
 	self deny: diff1 isEmpty.
@@ -257,6 +284,12 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames using: myPackageSet [
 	imagePackageSet2 := self definitionsOfLoadedPackages: packageNames.
 	diff2 := myPackageSet compareAgainstBase: imagePackageSet2.
 	self assert: diff2 isEmpty
+]
+
+{ #category : 'private' }
+RwLoadingTest >> loadAndTestPackagesNamed: packageNames using: myPackageSet [
+
+	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet
 ]
 
 { #category : 'support' }
@@ -385,7 +418,7 @@ RwLoadingTest >> testBasicLoading [
 ]
 
 { #category : 'tests' }
-RwLoadingTest >> testClassInitialization [
+RwLoadingTest >> testClassInitialization1 [
   "test loading a variety of different class types"
 
   | packageName packageNames myPackageSet className testClass |
@@ -394,13 +427,57 @@ RwLoadingTest >> testClassInitialization [
   packageNames := {packageName}.
   myPackageSet := RwPackageSetDefinition new.
   myPackageSet
-    addPackage: (self classInitializePackageDefinition: packageName className: className);
+    addPackage:
+        (self
+            classInitializePackageDefinition: packageName
+            className: className
+            classMethodDefinitions:
+              (self classInitializationClassMethodsForClass1: className));
     yourself.
   self loadAndTestPackagesNamed: packageNames using: myPackageSet.
   testClass := System myUserProfile symbolList objectNamed: className.
   self assert: testClass classVar = 1.
-  self assert: testClass classInstVar = 1.
+  self assert: testClass classInstVar1 = 1
+]
 
+{ #category : 'tests' }
+RwLoadingTest >> testClassInitialization2 [
+  "test loading a variety of different class types"
+
+  | packageName packageNames myPackageSet className testClass |
+  packageName := 'ClassInitializationTestPackage'.
+  className := 'TestClassInitializationClass'.
+  packageNames := {packageName}.
+  myPackageSet := RwPackageSetDefinition new.
+  myPackageSet
+    addPackage:
+        (self
+            classInitializePackageDefinition: packageName
+            className: className
+            classMethodDefinitions:
+              (self classInitializationClassMethodsForClass1: className));
+    yourself.
+  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+  testClass := System myUserProfile symbolList objectNamed: className.
+  self assert: testClass classVar = 1.
+  self assert: testClass classInstVar1 = 1.
+  self assert: testClass classInstVar2 isNil.	"update the initialization method ... #initialize should run again"
+  packageName := 'ClassInitializationTestPackage'.
+  className := 'TestClassInitializationClass'.
+  packageNames := {packageName}.
+  myPackageSet := RwPackageSetDefinition new.
+  myPackageSet
+    addPackage:
+        (self
+            classInitializePackageDefinition: packageName
+            className: className
+            classMethodDefinitions:
+              (self classInitializationClassMethodsForClass2: className));
+    yourself.
+  self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+  self assert: testClass classVar = 1.
+  self assert: testClass classInstVar1 = 1.
+  self assert: testClass classInstVar2 = 2
 ]
 
 { #category : 'tests' }
