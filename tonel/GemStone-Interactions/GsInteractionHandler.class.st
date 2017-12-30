@@ -1,0 +1,145 @@
+Class {
+	#name : 'GsInteractionHandler',
+	#superclass : 'Object',
+	#instVars : [
+		'choiceBlock',
+		'confirmBlock',
+		'informBlock',
+		'textBlock',
+		'multiLineTextBlock',
+		'defaultBlock',
+		'inspectBlock'
+	],
+	#category : 'GemStone-Interactions'
+}
+
+{ #category : 'accessing' }
+GsInteractionHandler >> choiceBlock [
+  choiceBlock ifNil: [ ^ self defaultBlock ].
+  ^ choiceBlock
+]
+
+{ #category : 'accessing' }
+GsInteractionHandler >> choiceBlock: anObject [
+
+   "Modify the value of the instance variable 'choiceBlock'."
+   choiceBlock := anObject
+]
+
+{ #category : 'accessing' }
+GsInteractionHandler >> confirmBlock [
+  confirmBlock ifNil: [ ^ self defaultBlock ].
+  ^ confirmBlock
+]
+
+{ #category : 'accessing' }
+GsInteractionHandler >> confirmBlock: anObject [
+
+   "Modify the value of the instance variable 'confirmBlock'."
+   confirmBlock := anObject
+]
+
+{ #category : 'accessing' }
+GsInteractionHandler >> defaultBlock [
+  defaultBlock
+    ifNil: [ 
+      defaultBlock := [ :interaction | 
+      self
+        error:
+          'No handler defined for ' , interaction class name asString , ' interaction.' ] ].
+  ^ defaultBlock
+]
+
+{ #category : 'accessing' }
+GsInteractionHandler >> defaultBlock: anObject [
+
+   "Modify the value of the instance variable 'defaultBlock'."
+   defaultBlock := anObject
+]
+
+{ #category : 'accessing' }
+GsInteractionHandler >> informBlock [
+  informBlock ifNil: [ ^ self defaultBlock ].
+  ^ informBlock
+]
+
+{ #category : 'accessing' }
+GsInteractionHandler >> informBlock: anObject [
+
+   "Modify the value of the instance variable 'informBlock'."
+   informBlock := anObject
+]
+
+{ #category : 'accessing' }
+GsInteractionHandler >> inspectBlock [
+  inspectBlock ifNil: [ ^ self defaultBlock ].
+  ^ inspectBlock
+]
+
+{ #category : 'accessing' }
+GsInteractionHandler >> inspectBlock: anObject [
+
+   "Modify the value of the instance variable 'inspectBlock'."
+   inspectBlock := anObject
+]
+
+{ #category : 'interactions' }
+GsInteractionHandler >> interactWithChoice: interaction [
+  ^ self choiceBlock value: interaction
+]
+
+{ #category : 'interactions' }
+GsInteractionHandler >> interactWithConfirm: interaction [
+  ^ self confirmBlock value: interaction
+]
+
+{ #category : 'interactions' }
+GsInteractionHandler >> interactWithExplore: interaction [
+  ^ self interactWithInspect: interaction
+]
+
+{ #category : 'interactions' }
+GsInteractionHandler >> interactWithInform: interaction [
+  ^ self informBlock value: interaction
+]
+
+{ #category : 'interactions' }
+GsInteractionHandler >> interactWithInspect: interaction [
+  ^ self inspectBlock value: interaction
+]
+
+{ #category : 'interactions' }
+GsInteractionHandler >> interactWithMultiLineText: interaction [
+  ^ self multiLineTextBlock value: interaction
+]
+
+{ #category : 'interactions' }
+GsInteractionHandler >> interactWithText: interaction [
+  ^ self textBlock value: interaction
+]
+
+{ #category : 'accessing' }
+GsInteractionHandler >> multiLineTextBlock [
+  multiLineTextBlock ifNil: [ ^ self defaultBlock ].
+  ^ multiLineTextBlock
+]
+
+{ #category : 'accessing' }
+GsInteractionHandler >> multiLineTextBlock: anObject [
+
+   "Modify the value of the instance variable 'multiLineTextBlock'."
+   multiLineTextBlock := anObject
+]
+
+{ #category : 'accessing' }
+GsInteractionHandler >> textBlock [
+  textBlock ifNil: [ ^ self defaultBlock ].
+  ^ textBlock
+]
+
+{ #category : 'accessing' }
+GsInteractionHandler >> textBlock: anObject [
+
+   "Modify the value of the instance variable 'textBlock'."
+   textBlock := anObject
+]
