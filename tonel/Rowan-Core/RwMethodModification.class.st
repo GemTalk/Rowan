@@ -12,7 +12,8 @@ Class {
 	#superclass : 'RwModification',
 	#instVars : [
 		'oldSource',
-		'newSource'
+		'newSource',
+		'isMeta'
 	],
 	#category : 'Rowan-Core'
 }
@@ -25,21 +26,36 @@ RwMethodModification >> acceptVisitor: aVisitor [
 
 { #category : 'patching' }
 RwMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage [
-self halt.
+
 	self isAddition
 		ifTrue: 
-			[ aPatchSet addAddedClass: self after inPackage: aPackage ].
+			[	self isMeta
+					ifTrue: [ aPatchSet addAddedClassMethod: self after inClass: self classDefinition inPackage: aPackage ]
+					ifFalse: [ aPatchSet addAddedInstanceMethod: self after inClass: self classDefinition inPackage: aPackage ] ].
 	self isDeletion
 		ifTrue: 
-			[ aPatchSet addDeletedClass: self before inPackage: aPackage ].
-	propertiesModification isEmpty
-		ifFalse: [self halt: 'Need to do something with modified properties']
+			[	self isMeta
+					ifTrue: [ aPatchSet addDeletedClassMethod: self before inClass: self classDefinition inPackage: aPackage ]
+					ifFalse: [ aPatchSet addDeletedInstanceMethod: self before inClass: self classDefinition inPackage: aPackage ] ].
+self halt.
 ]
 
 { #category : 'testing' }
 RwMethodModification >> isEmpty [
 
 	^super isEmpty & (oldSource = newSource)
+]
+
+{ #category : 'Accessing' }
+RwMethodModification >> isMeta [
+	^isMeta
+
+]
+
+{ #category : 'Updating' }
+RwMethodModification >> isMeta: newValue [
+	isMeta := newValue
+
 ]
 
 { #category : 'Accessing' }

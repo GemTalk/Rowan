@@ -55,10 +55,10 @@ RwGsPatchSet >> addAddedClassMethod: aClassMethodDefinition inClass: aClassDefin
 ]
 
 { #category : 'building' }
-RwGsPatchSet >> addAddedInstanceMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSet >> addAddedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
 
 	addedMethods add: (RwGsMethodAdditionPatch
-				forMethod: aClassMethodDefinition
+				forMethod: anInstanceMethodDefinition
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
@@ -111,10 +111,10 @@ RwGsPatchSet >> addDeletedClassMethod: aClassMethodDefinition inClass: aClassDef
 ]
 
 { #category : 'building' }
-RwGsPatchSet >> addDeletedInstanceMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSet >> addDeletedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
 
 	deletedMethods add: (RwGsMethodDeletionPatch
-				forMethod: aClassMethodDefinition
+				forMethod: anInstanceMethodDefinition
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)

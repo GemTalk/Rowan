@@ -79,16 +79,35 @@ RwClassDefinition >> compareAgainstBase: aDefinition [
 		compareDictionary: instanceMethodDefinitions
 		againstBaseDictionary: aDefinition instanceMethodDefinitions
 		into: instanceMethodsModification
-		elementClass: RwMethodDefinition.
+		elementClass: RwMethodDefinition
+		isMeta: false.
 	self
 		compareDictionary: classMethodDefinitions
 		againstBaseDictionary: aDefinition classMethodDefinitions
 		into: classMethodsModification
-		elementClass: RwMethodDefinition.
+		elementClass: RwMethodDefinition
+		isMeta: true.
 	modification
 		instanceMethodsModification: instanceMethodsModification;
 		classMethodsModification: classMethodsModification.
 	^modification
+]
+
+{ #category : 'comparing' }
+RwClassDefinition >> compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass isMeta: isClassMeta [
+
+	| keys |
+	keys := myDictionary keys copy.
+	keys addAll: baseDictionary keys.
+	keys do: 
+			[:key |
+			| before after modification |
+			before := baseDictionary at: key ifAbsent: [elementClass new].
+			after := myDictionary at: key ifAbsent: [elementClass new].
+			modification := after compareAgainstBase: before.
+			modification isMeta: isClassMeta.
+			modification isEmpty
+				ifFalse: [anElementsModification addElementModification: modification]]
 ]
 
 { #category : 'initialization' }
