@@ -245,6 +245,23 @@ RwLoadingTest >> definitionOfClassInitializationClassNamed: className inPackage:
     instanceMethodDefinitions: Dictionary new
 ]
 
+{ #category : 'support - methodDeletion definitions' }
+RwLoadingTest >> definitionOfMethodDeletionClassNamed: className inPackage: packageName instanceMethodDefinitions: instanceMethodDefinitions classMethodDefinitions: classMethodDefinitions [
+  ^ RwClassDefinition
+    withProperties:
+      (self
+        propertiesForClassNamed: className
+        super: 'Object'
+        instvars: {}
+        classinstvars: {}
+        classvars: {}
+        type: 'normal'
+        gs_options: {}
+        inPackage: packageName)
+    classMethodDefinitions: classMethodDefinitions
+    instanceMethodDefinitions: instanceMethodDefinitions
+]
+
 { #category : 'support - basic definitions' }
 RwLoadingTest >> definitionOfNormalClassNamed: className inPackage: packageName [
   ^ self
@@ -310,6 +327,65 @@ RwLoadingTest >> methodDefsFromSpec: specArray [
               (Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
             source: source) ].
   ^ dict
+]
+
+{ #category : 'support - methodDeletion definitions' }
+RwLoadingTest >> methodDeletionClassMethodsForClass1: className [
+  ^ self
+    methodDefsFromSpec:
+      {{#'testClassMethod'.
+      'class method to be deleted'.
+      'testClassMethod ^ true'}.
+      {#'testClassMethodSurvivor'.
+      'class method to be kept'.
+      'testClassMethodSurvivor ^ true'}}
+]
+
+{ #category : 'support - methodDeletion definitions' }
+RwLoadingTest >> methodDeletionClassMethodsForClass2: className [
+  ^ self
+    methodDefsFromSpec:
+      {{#'testClassMethodSurvivor'.
+      'class method to be kept'.
+      'testClassMethodSurvivor ^ true'}}
+]
+
+{ #category : 'support - methodDeletion definitions' }
+RwLoadingTest >> methodDeletionInstanceMethodsForClass1: className [
+  ^ self
+    methodDefsFromSpec:
+      {{#'testInstanceMethod'.
+      'instance method to be deleted'.
+      'testInstanceMethod ^ true'}.
+      {#'testInstanceMethodSurvivor'.
+      'instance method to be kept'.
+      'testInstanceMethodSurvivor ^ true'}}
+]
+
+{ #category : 'support - methodDeletion definitions' }
+RwLoadingTest >> methodDeletionInstanceMethodsForClass2: className [
+  ^ self
+    methodDefsFromSpec:
+      {{#'testInstanceMethodSurvivor'.
+      'instance method to be kept'.
+      'testInstanceMethodSurvivor ^ true'}}
+]
+
+{ #category : 'support - methodDeletion definitions' }
+RwLoadingTest >> methodDeletionPackageDefinition: packageName className: className instanceMethodDefinitions: instanceMethodDefinitions classMethodDefinitions: classMethodDefinitions [
+  ^ RwPackageDefinition
+    withProperties: (Dictionary with: 'name' -> packageName)
+    classDefinitions:
+      (Dictionary new
+        at: className
+          put:
+            (self
+                definitionOfMethodDeletionClassNamed: className
+                inPackage: packageName
+                instanceMethodDefinitions: instanceMethodDefinitions
+                classMethodDefinitions: classMethodDefinitions);
+        yourself)
+    classExtensions: Dictionary new
 ]
 
 { #category : 'support - simple definitions' }
@@ -419,7 +495,7 @@ RwLoadingTest >> testBasicLoading [
 
 { #category : 'tests' }
 RwLoadingTest >> testClassInitialization1 [
-  "test loading a variety of different class types"
+  "test that class #initialize method is run when the class #initialize method is added"
 
   | packageName packageNames myPackageSet className testClass |
   packageName := 'ClassInitializationTestPackage'.
@@ -442,7 +518,7 @@ RwLoadingTest >> testClassInitialization1 [
 
 { #category : 'tests' }
 RwLoadingTest >> testClassInitialization2 [
-  "test loading a variety of different class types"
+  "test that class #initialize method is run when the class #initialize method is changed"
 
   | packageName packageNames myPackageSet className testClass |
   packageName := 'ClassInitializationTestPackage'.
@@ -478,6 +554,61 @@ RwLoadingTest >> testClassInitialization2 [
   self assert: testClass classVar = 1.
   self assert: testClass classInstVar1 = 1.
   self assert: testClass classInstVar2 = 2
+]
+
+{ #category : 'tests' }
+RwLoadingTest >> testMethodDelete [
+  "test class and instance method deletion"
+
+  | packageName packageNames myPackageSet className testClass testInstance |
+  packageName := 'MethodDeletionTestPackage'.
+  className := 'TestMethodDeletionClass'.
+  packageNames := {packageName}.
+  myPackageSet := RwPackageSetDefinition new.
+  myPackageSet
+    addPackage:
+        (self
+            methodDeletionPackageDefinition: packageName
+            className: className
+            instanceMethodDefinitions:
+              (self methodDeletionInstanceMethodsForClass1: className)
+            classMethodDefinitions:
+              (self methodDeletionClassMethodsForClass1: className));
+    yourself.
+  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+  testClass := System myUserProfile symbolList objectNamed: className.
+  testInstance := testClass new.
+  self
+    assert:
+        (testClass class compiledMethodAt: #'testClassMethod' otherwise: false) ~~ false;
+    assert: testClass testClassMethod;
+    assert: testClass testClassMethodSurvivor.
+  self
+    assert:
+        (testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) ~~ false;
+    assert: testInstance testInstanceMethod;
+    assert: testInstance testInstanceMethodSurvivor.
+  packageNames := {packageName}.
+  myPackageSet := RwPackageSetDefinition new.
+  myPackageSet
+    addPackage:
+        (self
+            methodDeletionPackageDefinition: packageName
+            className: className
+            instanceMethodDefinitions:
+              (self methodDeletionInstanceMethodsForClass2: className)
+            classMethodDefinitions:
+              (self methodDeletionClassMethodsForClass: className));
+    yourself.
+  self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+  self
+    assert:
+        (testClass class compiledMethodAt: #'testClassMethod' otherwise: false) == false;
+    assert: testClass testClassMethodSurvivor.
+  self
+    assert:
+        (testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) == false;
+    assert: testInstance testInstanceMethodSurvivor
 ]
 
 { #category : 'tests' }
