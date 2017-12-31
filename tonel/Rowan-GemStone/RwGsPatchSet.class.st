@@ -355,7 +355,7 @@ RwGsPatchSet >> removeDeletedClassesFromTempSymbols [
 { #category : 'private - applying' }
 RwGsPatchSet >> removeDeletedMethods [
 
-	deletedMethods do: [:each | each halt: 'Not yet implemented. :-(']
+	deletedMethods do: [:each | each deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]
 ]
 
 { #category : 'private - applying' }

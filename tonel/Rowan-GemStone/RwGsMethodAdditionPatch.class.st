@@ -60,23 +60,6 @@ RwGsMethodAdditionPatch >> isForExtensionMethod [
 ]
 
 { #category : 'private-installing' }
-RwGsMethodAdditionPatch >> loadedClassOrExtensionForMethod [
-	"The loaded class or extension should already exist."
-
-	| packageName loadedPackage className |
-	packageName := packageDefinition key.
-	loadedPackage := Rowan loadedPackageNamed: packageName
-				ifAbsent: 
-					[self
-						error: 'Internal error -- attempt to add a method to a nonexistent package.'].
-	className := classDefinition key.
-	^loadedPackage classOrExtensionForClassNamed: className
-		ifAbsent: 
-			[self
-				error: 'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.']
-]
-
-{ #category : 'private-installing' }
 RwGsMethodAdditionPatch >> packageProtocolName [
 	"If I'm for an extension method, my protocol in the image may need to be *<packageName>*."
 

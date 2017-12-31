@@ -598,7 +598,7 @@ RwLoadingTest >> testMethodDelete [
             instanceMethodDefinitions:
               (self methodDeletionInstanceMethodsForClass2: className)
             classMethodDefinitions:
-              (self methodDeletionClassMethodsForClass: className));
+              (self methodDeletionClassMethodsForClass2: className));
     yourself.
   self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
   self

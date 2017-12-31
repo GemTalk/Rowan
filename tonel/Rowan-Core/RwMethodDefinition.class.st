@@ -46,6 +46,12 @@ RwMethodDefinition >> key [
 ]
 
 { #category : 'accessing' }
+RwMethodDefinition >> selector [
+
+	^properties at: 'selector'
+]
+
+{ #category : 'accessing' }
 RwMethodDefinition >> source [
 
 	^source

@@ -156,6 +156,12 @@ RwGsLoadedMethod >> source [
 	^handle sourceString copy
 ]
 
+{ #category : 'private' }
+RwGsLoadedMethod >> unregisterYourself [
+
+	MethodRegistry removeKey: handle ifAbsent: [ self error: 'Method already unregistered.' ]
+]
+
 { #category : 'private-updating' }
 RwGsLoadedMethod >> updateForPackageChangeFrom: oldPackageName to: newPackageName newIsExtension: newIsExtension [
 	"I'm being moved from one package to another. One or both of these is through a class extension.
