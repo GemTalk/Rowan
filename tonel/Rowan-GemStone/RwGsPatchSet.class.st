@@ -137,10 +137,30 @@ RwGsPatchSet >> addPatchedClassMethod: aClassMethodDefinition inClass: aClassDef
 ]
 
 { #category : 'building' }
-RwGsPatchSet >> addPatchedInstanceMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSet >> addPatchedClassMethodProperties: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+
+	methodsWithPropertyChanges add: (RwGsMethodPropertiesPatch
+				forMethod: aClassMethodDefinition
+				isMeta: true
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+]
+
+{ #category : 'building' }
+RwGsPatchSet >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
 
 	methodsNeedingRecompile add: (RwGsMethodSourcePatch
-				forMethod: aClassMethodDefinition
+				forMethod: aInstanceMethodDefinition
+				isMeta: false
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+]
+
+{ #category : 'building' }
+RwGsPatchSet >> addPatchedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+
+	methodsWithPropertyChanges add: (RwGsMethodPropertiesPatch
+				forMethod: aInstanceMethodDefinition
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
@@ -448,7 +468,7 @@ RwGsPatchSet >> updateMethodDictionaries [
 RwGsPatchSet >> updateMethodProperties [
 
 	methodsWithPropertyChanges
-		do: [:each | each halt: 'Not yet implemented. :-(']
+		do: [:each | each installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols ]
 ]
 
 { #category : 'private - applying' }

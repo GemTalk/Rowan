@@ -11,8 +11,7 @@ Class {
 	#name : 'RwMethodModification',
 	#superclass : 'RwModification',
 	#instVars : [
-		'oldSource',
-		'newSource',
+		'sourceModification',
 		'isMeta',
 		'classDefinition'
 	],
@@ -32,17 +31,26 @@ RwMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage
 		ifTrue: 
 			[	self isMeta
 					ifTrue: [ aPatchSet addAddedClassMethod: self after inClass: self classDefinition inPackage: aPackage ]
-					ifFalse: [ aPatchSet addAddedInstanceMethod: self after inClass: self classDefinition inPackage: aPackage ] ].
+					ifFalse: [ aPatchSet addAddedInstanceMethod: self after inClass: self classDefinition inPackage: aPackage ].
+				^self ].
 	self isDeletion
 		ifTrue: 
 			[	self isMeta
 					ifTrue: [ aPatchSet addDeletedClassMethod: self before inClass: self classDefinition inPackage: aPackage ]
-					ifFalse: [ aPatchSet addDeletedInstanceMethod: self before inClass: self classDefinition inPackage: aPackage ] ].
+					ifFalse: [ aPatchSet addDeletedInstanceMethod: self before inClass: self classDefinition inPackage: aPackage ].
+				^self ].
 	self isModification
 		ifTrue: 
-			[	self isMeta
-					ifTrue: [ aPatchSet addPatchedClassMethod: self after inClass: self classDefinition inPackage: aPackage ]
-					ifFalse: [ aPatchSet addPatchedInstanceMethod: self after inClass: self classDefinition inPackage: aPackage ] ].
+			[	sourceModification isEmpty
+					ifFalse: [
+						self isMeta
+							ifTrue: [ aPatchSet addPatchedClassMethod: self after inClass: self classDefinition inPackage: aPackage ]
+							ifFalse: [ aPatchSet addPatchedInstanceMethod: self after inClass: self classDefinition inPackage: aPackage ] ].
+				propertiesModification isEmpty
+					ifFalse: [
+						self isMeta
+							ifTrue: [ aPatchSet addPatchedClassMethodProperties: self after inClass: self classDefinition inPackage: aPackage ]
+							ifFalse: [ aPatchSet addPatchedInstanceMethodProperties: self after inClass: self classDefinition inPackage: aPackage ] ] ]
 
 ]
 
@@ -61,7 +69,7 @@ RwMethodModification >> classDefinition: aClassDefinition [
 { #category : 'testing' }
 RwMethodModification >> isEmpty [
 
-	^super isEmpty & (oldSource = newSource)
+	^super isEmpty & sourceModification isEmpty
 ]
 
 { #category : 'Accessing' }
@@ -77,25 +85,13 @@ RwMethodModification >> isMeta: newValue [
 ]
 
 { #category : 'Accessing' }
-RwMethodModification >> newSource [
-	^newSource
-
-]
-
-{ #category : 'Updating' }
-RwMethodModification >> newSource: newValue [
-	newSource := newValue
+RwMethodModification >> sourceModification [
+	^sourceModification
 
 ]
 
 { #category : 'Accessing' }
-RwMethodModification >> oldSource [
-	^oldSource
-
-]
-
-{ #category : 'Updating' }
-RwMethodModification >> oldSource: newValue [
-	oldSource := newValue
+RwMethodModification >> sourceModification: aRWSourceModification [
+	sourceModification := aRWSourceModification
 
 ]

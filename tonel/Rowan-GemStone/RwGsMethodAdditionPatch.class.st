@@ -48,51 +48,6 @@ RwGsMethodAdditionPatch >> installMethod [
 		installLoadedMethod
 ]
 
-{ #category : 'private-testing' }
-RwGsMethodAdditionPatch >> isForExtensionMethod [
-	"Answer true if the method is not in the same package that defines the class."
-
-	| packageOfClass packageOfMethod loadedClass |
-	packageOfMethod := packageDefinition key.
-	loadedClass := RwGsLoadedClass existingForClass: behavior thisClass.
-	packageOfClass := loadedClass loadedPackage name.
-	^packageOfClass ~= packageOfMethod
-]
-
-{ #category : 'private-installing' }
-RwGsMethodAdditionPatch >> packageProtocolName [
-	"If I'm for an extension method, my protocol in the image may need to be *<packageName>*."
-
-	^'*' , packageDefinition key
-]
-
-{ #category : 'private-installing' }
-RwGsMethodAdditionPatch >> propertiesProtocolName [
-
-	^methodDefinition propertyAt: 'protocol' ifAbsent: ['unknown']
-]
-
-{ #category : 'private-installing' }
-RwGsMethodAdditionPatch >> setProtocol [
-	"If I'm an extension method, my protocol in the image may need to be *<packageName>."
-
-	self
-		setProtocolTo: (Rowan configuration needsPackageProtocolNames
-				& self isForExtensionMethod
-					ifTrue: [self packageProtocolName]
-					ifFalse: [self propertiesProtocolName])
-]
-
-{ #category : 'private-installing' }
-RwGsMethodAdditionPatch >> setProtocolTo: protocolString [
-
-	| protocolSymbol |
-	protocolSymbol := protocolString asSymbol.
-	(behavior includesCategory: protocolSymbol)
-		ifFalse: [behavior addCategory: protocolSymbol].
-	behavior moveMethod: selector toCategory: protocolSymbol
-]
-
 { #category : 'private-installing' }
 RwGsMethodAdditionPatch >> updateMethodDictionary [
 

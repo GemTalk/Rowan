@@ -61,6 +61,17 @@ RwGsMethodPatch >> compileUsingNewClasses: createdClasses andExistingClasses: te
 
 ]
 
+{ #category : 'private-testing' }
+RwGsMethodPatch >> isForExtensionMethod [
+	"Answer true if the method is not in the same package that defines the class."
+
+	| packageOfClass packageOfMethod loadedClass |
+	packageOfMethod := packageDefinition key.
+	loadedClass := RwGsLoadedClass existingForClass: behavior thisClass.
+	packageOfClass := loadedClass loadedPackage name.
+	^packageOfClass ~= packageOfMethod
+]
+
 { #category : 'accessing' }
 RwGsMethodPatch >> isMeta: newValue [
 	isMeta := newValue
@@ -114,6 +125,13 @@ RwGsMethodPatch >> packageDefinition: newValue [
 
 ]
 
+{ #category : 'private-installing' }
+RwGsMethodPatch >> packageProtocolName [
+	"If I'm for an extension method, my protocol in the image may need to be *<packageName>*."
+
+	^'*' , packageDefinition key
+]
+
 { #category : 'printing' }
 RwGsMethodPatch >> printOn: aStream [
 
@@ -127,10 +145,37 @@ RwGsMethodPatch >> printOn: aStream [
 		nextPutAll: methodDefinition key
 ]
 
+{ #category : 'private-installing' }
+RwGsMethodPatch >> propertiesProtocolName [
+
+	^methodDefinition propertyAt: 'protocol' ifAbsent: ['unknown']
+]
+
 { #category : 'initializers' }
 RwGsMethodPatch >> runInitializer [
 	"execute class initialization methods"
 
 	(isMeta and: [ selector == #initialize ])
 		ifTrue: [ behavior theNonMetaClass initialize ]
+]
+
+{ #category : 'private-installing' }
+RwGsMethodPatch >> setProtocol [
+	"If I'm an extension method, my protocol in the image may need to be *<packageName>."
+
+	self
+		setProtocolTo: (Rowan configuration needsPackageProtocolNames
+				& self isForExtensionMethod
+					ifTrue: [self packageProtocolName]
+					ifFalse: [self propertiesProtocolName])
+]
+
+{ #category : 'private-installing' }
+RwGsMethodPatch >> setProtocolTo: protocolString [
+
+	| protocolSymbol |
+	protocolSymbol := protocolString asSymbol.
+	(behavior includesCategory: protocolSymbol)
+		ifFalse: [behavior addCategory: protocolSymbol].
+	behavior moveMethod: selector toCategory: protocolSymbol
 ]

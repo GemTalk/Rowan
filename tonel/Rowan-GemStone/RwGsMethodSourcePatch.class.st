@@ -16,11 +16,9 @@ RwGsMethodSourcePatch >> installSourcePatch [
 		ifAbsent: [ self error: 'Internal error -- no existing CompileMethod found for patched method.' ].
 	methodDictionary at: selector put: compiledMethod.
 	loadedMethod := RwGsLoadedMethod existingForMethod: oldCompiledMethod
-				ifAbsent: [nil].
-	loadedMethod
-		ifNil: 
-			[self
-				error: 'Internal error -- no existing LoadedMethod found for patched method.'].
+				ifAbsent: [
+					self
+						error: 'Internal error -- no existing LoadedMethod found for patched method.'].
 	loadedMethod registerWithNewHandle: compiledMethod
 
 ]
