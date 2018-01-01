@@ -288,6 +288,20 @@ RwLoadingTest >> definitionsOfLoadedPackages: packageNames [
 ]
 
 { #category : 'private' }
+RwLoadingTest >> loadAndTestPackagesNamed: packageNames before: beforePackageSet after: afterPackageSet [
+
+	|  imagePackageSet1 diff1 imagePackageSet2 diff2 |
+	Rowan updateLoadedPackages.
+	imagePackageSet1 := self definitionsOfLoadedPackages: packageNames.
+	diff1 := beforePackageSet compareAgainstBase: imagePackageSet1.
+	self deny: diff1 isEmpty.
+	self applyDiffToImage: diff1.
+	imagePackageSet2 := self definitionsOfLoadedPackages: packageNames.
+	diff2 := afterPackageSet compareAgainstBase: imagePackageSet2.
+	self assert: diff2 isEmpty
+]
+
+{ #category : 'private' }
 RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBeLoaded using: myPackageSet [ 
 
 	|  imagePackageSet1 diff1 imagePackageSet2 diff2 |
@@ -491,6 +505,54 @@ RwLoadingTest >> testBasicLoading [
     addPackage: (self basicPackageDefinition: packageName);
     yourself.
   self loadAndTestPackagesNamed: packageNames using: myPackageSet
+]
+
+{ #category : 'tests' }
+RwLoadingTest >> testClassDelete [
+  "test class deletion"
+
+  | packageName packageNames myPackageSet className testClass testInstance |
+  packageName := 'ClassDeletionTestPackage'.
+  className := 'TestClassDeletionClass'.
+  packageNames := {packageName}.
+  myPackageSet := RwPackageSetDefinition new.
+  myPackageSet
+    addPackage:
+        (self
+            methodDeletionPackageDefinition: packageName
+            className: className
+            instanceMethodDefinitions:
+              (self methodDeletionInstanceMethodsForClass1: className)
+            classMethodDefinitions:
+              (self methodDeletionClassMethodsForClass1: className));
+    yourself.
+  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+  testClass := System myUserProfile symbolList objectNamed: className.
+  testInstance := testClass new.
+  self
+    assert:
+        (testClass class compiledMethodAt: #'testClassMethod' otherwise: false) ~~ false;
+    assert: testClass testClassMethod;
+    assert: testClass testClassMethodSurvivor.
+  self
+    assert:
+        (testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) ~~ false;
+    assert: testInstance testInstanceMethod;
+    assert: testInstance testInstanceMethodSurvivor.
+  packageNames := {packageName}.
+  myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+    addPackage:
+        (RwPackageDefinition
+            withProperties: (Dictionary with: 'name' -> packageName)
+            classDefinitions: Dictionary new
+            classExtensions: Dictionary new);
+    yourself.
+  self 
+		loadAndTestPackagesNamed: packageNames 
+		before: myPackageSet 
+		after: RwPackageSetDefinition new. "the package will be deleted after load when updatePackagesFromCategories is called, because last class with that category no longer exists -- implicit delete package"
+  self assert: (System myUserProfile symbolList objectNamed: className) isNil
 ]
 
 { #category : 'tests' }

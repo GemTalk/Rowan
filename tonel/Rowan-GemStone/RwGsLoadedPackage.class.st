@@ -200,3 +200,14 @@ RwGsLoadedPackage >> loadedExtensionForClass: aClass [
 						inPackage: self].
 	^loadedExtension
 ]
+
+{ #category : 'removing' }
+RwGsLoadedPackage >> removeFromSystem [
+
+	self isEmpty 
+		ifFalse: [ 
+			 "This may not be an error, but in that case, we'll need to delete the contents of the 				package from the system and at this point that seems to be a bit late in the process, 
+				since package removal is the last thing done..."
+			self error: 'Internal Error - attempt to remove an non-empty package from system' ].
+	PackageRegistry removeKey: self name
+]

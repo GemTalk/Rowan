@@ -27,13 +27,14 @@ RwClassModification >> acceptVisitor: aVisitor [
 RwClassModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage [
 
 	self isAddition
-		ifTrue: 
-			[ aPatchSet addAddedClass: self after inPackage: aPackage ].
+		ifTrue: [ 
+			aPatchSet addAddedClass: self after inPackage: aPackage.
+			propertiesModification isEmpty
+				ifFalse: [self halt: 'Need to do something with modified properties'] ].
 	self isDeletion
 		ifTrue: 
 			[ aPatchSet addDeletedClass: self before inPackage: aPackage ].
-	propertiesModification isEmpty
-		ifFalse: [self halt: 'Need to do something with modified properties']
+
 ]
 
 { #category : 'Accessing' }

@@ -34,6 +34,12 @@ RwLoadedClass >> instanceMethodDefinitions [
 	^self definitionsFor: loadedInstanceMethods
 ]
 
+{ #category : 'testing' }
+RwLoadedClass >> isEmpty [
+
+	^loadedInstanceMethods isEmpty and: [loadedClassMethods isEmpty]
+]
+
 { #category : 'accessing' }
 RwLoadedClass >> key [
 	"Answer some token that will uniquely identify me relative to any other LoadedClass in the same package."

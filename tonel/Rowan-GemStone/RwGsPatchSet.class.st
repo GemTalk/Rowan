@@ -202,8 +202,8 @@ RwGsPatchSet >> apply [
 		updateMethodProperties;
 		removeDeletedMethods;
 		"removeDeletedClassesAndExtensionsFromPackages;"
-		removeDeletedPackages;
 		markPackagesNotDirty;
+		removeDeletedPackages;
 		commit;
 		runInitializers;
 		commit;
@@ -342,14 +342,14 @@ RwGsPatchSet >> removeDeletedClassesFromSystem [
 	"Remove the name binding from the SymbolDictionaries in the live SymbolList
         Remove the LoadedClass from its LoadedPackage"
 
-	deletedClasses do: [:each | self halt: 'Shucks. Not yet implemented.']
+	deletedClasses do: [:each | each deleteClassFromSystem ]
 ]
 
 { #category : 'private - applying' }
 RwGsPatchSet >> removeDeletedClassesFromTempSymbols [
 	"Deleted class names should not resolve during compilation."
 
-	deletedClasses do: [:each | tempSymbols removeKey: each name]
+	deletedClasses do: [:each | tempSymbols removeKey: each className asSymbol]
 ]
 
 { #category : 'private - applying' }
@@ -361,7 +361,7 @@ RwGsPatchSet >> removeDeletedMethods [
 { #category : 'private - applying' }
 RwGsPatchSet >> removeDeletedPackages [
 
-	deletedPackages do: [:each | each halt: 'Not yet implemented. :-(']
+	deletedPackages do: [:each | each deletePackage ]
 ]
 
 { #category : 'private - applying' }

@@ -174,6 +174,18 @@ RwGsLoadedClass >> key [
 	^name
 ]
 
+{ #category : 'removing' }
+RwGsLoadedClass >> removeFromSystem [
+
+	loadedInstanceMethods valuesDo: [: loadedInstanceMethod |
+		self removeLoadedInstanceMethod: loadedInstanceMethod.
+		loadedInstanceMethod unregisterYourself ].
+	loadedClassMethods valuesDo: [: loadedClassMethod |
+		self removeLoadedClassMethod: loadedClassMethod.
+		loadedClassMethod unregisterYourself ].
+	self handleClassDeletion
+]
+
 { #category : 'methods' }
 RwGsLoadedClass >> removeLoadedClassMethod: aLoadedMethod [
 

@@ -61,6 +61,12 @@ RwGsClassPatch >> packageDefinition: newValue [
 ]
 
 { #category : 'accessing' }
+RwGsClassPatch >> packageName [
+
+	^packageDefinition key
+]
+
+{ #category : 'accessing' }
 RwGsClassPatch >> superclassName [
 
 	^classDefinition superclassName
