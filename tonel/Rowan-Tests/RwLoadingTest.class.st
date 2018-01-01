@@ -402,6 +402,63 @@ RwLoadingTest >> methodDeletionPackageDefinition: packageName className: classNa
     classExtensions: Dictionary new
 ]
 
+{ #category : 'support - methodProtocolChange definitions' }
+RwLoadingTest >> methodProtocolChangeClassMethodsForClass1: className [
+  ^ self
+    methodDefsFromSpec:
+      {{#'testClassMethod1'.
+      'protocol A'.
+      'testClassMethod1 ^ true'}.
+      {#'testClassMethod2'.
+      'protocol A'.
+      'testClassMethod2 ^ true'}}
+]
+
+{ #category : 'support - methodProtocolChange definitions' }
+RwLoadingTest >> methodProtocolChangeClassMethodsForClass2: className [
+  ^ self
+    methodDefsFromSpec:
+      {{#'testClassMethod1'.
+      'protocol A'.
+      'testClassMethod1 ^ true'}.
+      {#'testClassMethod2'.
+      'protocol B'.
+      'testClassMethod2 ^ true'}}
+]
+
+{ #category : 'support - methodProtocolChange definitions' }
+RwLoadingTest >> methodProtocolChangeInstanceMethodsForClass1: className [
+  ^ self
+    methodDefsFromSpec:
+      {{#'testInstanceMethod1'.
+      'protocol A'.
+      'testInstanceMethod1 ^ true'}.
+      {#'testInstanceMethod2'.
+      'protocol A'.
+      'testInstanceMethod2 ^ true'}}
+]
+
+{ #category : 'support - methodProtocolChange definitions' }
+RwLoadingTest >> methodProtocolChangeInstanceMethodsForClass2: className [
+  ^ self
+    methodDefsFromSpec:
+      {{#'testInstanceMethod1'.
+      'protocol A'.
+      'testInstanceMethod1 ^ true'}.
+      {#'testInstanceMethod2'.
+      'protocol B'.
+      'testInstanceMethod2 ^ true'}}
+]
+
+{ #category : 'support - methodProtocolChange definitions' }
+RwLoadingTest >> methodProtocolChangePackageDefinition: packageName className: className instanceMethodDefinitions: instanceMethodDefinitions classMethodDefinitions: classMethodDefinitions [
+  ^ self
+    methodDeletionPackageDefinition: packageName
+    className: className
+    instanceMethodDefinitions: instanceMethodDefinitions
+    classMethodDefinitions: classMethodDefinitions
+]
+
 { #category : 'support - simple definitions' }
 RwLoadingTest >> package1Definition [
 
@@ -671,6 +728,53 @@ RwLoadingTest >> testMethodDelete [
     assert:
         (testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) == false;
     assert: testInstance testInstanceMethodSurvivor
+]
+
+{ #category : 'tests' }
+RwLoadingTest >> testMethodProtocolChange [
+  "test class and instance method protocol changes"
+
+  | packageName packageNames myPackageSet className testClass testInstance |
+  packageName := 'MethodProtocolChangedTestPackage'.
+  className := 'TestMethodProtocolChangeClass'.
+  packageNames := {packageName}.
+  myPackageSet := RwPackageSetDefinition new.
+  myPackageSet
+    addPackage:
+        (self
+            methodProtocolChangePackageDefinition: packageName
+            className: className
+            instanceMethodDefinitions:
+              (self methodProtocolChangeInstanceMethodsForClass1: className)
+            classMethodDefinitions:
+              (self methodProtocolChangeClassMethodsForClass1: className));
+    yourself.
+  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+  testClass := System myUserProfile symbolList objectNamed: className.
+  testInstance := testClass new.
+  self
+    assert: testClass testClassMethod1;
+    assert: testClass testClassMethod2;
+    assert: testInstance testInstanceMethod1;
+    assert: testInstance testInstanceMethod2.
+  packageNames := {packageName}.
+  myPackageSet := RwPackageSetDefinition new.
+  myPackageSet
+    addPackage:
+        (self
+            methodProtocolChangePackageDefinition: packageName
+            className: className
+            instanceMethodDefinitions:
+              (self methodProtocolChangeInstanceMethodsForClass2: className)
+            classMethodDefinitions:
+              (self methodProtocolChangeClassMethodsForClass2: className));
+    yourself.
+  self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+  self
+    assert: testClass testClassMethod1;
+    assert: testClass testClassMethod2;
+    assert: testInstance testInstanceMethod1;
+    assert: testInstance testInstanceMethod2
 ]
 
 { #category : 'tests' }
