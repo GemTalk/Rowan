@@ -1,4 +1,5 @@
 RwLoadSpecification {
+	#specName : 'rowanLoadSpec',
 	#packageNames : [
 		'Cypress-Core',
 		'Rowan-Core',
