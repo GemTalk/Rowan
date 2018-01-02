@@ -62,6 +62,67 @@ RwLoadingTest >> assertAbsenceOfPackage: packageName [
 ]
 
 { #category : 'support - basic definitions' }
+RwLoadingTest >> basicClassDefinitions: packageName [
+  ^ Dictionary new
+    at: 'TestNormalClass'
+      put:
+        (self definitionOfNormalClassNamed: 'TestNormalClass' inPackage: packageName);
+    at: 'TestNormalDbTransientClass'
+      put:
+        (self
+            definitionOfBasicClassNamed: 'TestNormalDbTransientClass'
+            type: 'normal'
+            instvars: {'instvar1'}
+            gs_options: {'dbTransient'}
+            inPackage: packageName);
+    at: 'TestVariableClass'
+      put:
+        (self
+            definitionOfBasicClassNamed: 'TestVariableClass'
+            type: 'variable'
+            instvars: {}
+            gs_options: nil
+            inPackage: packageName);
+    at: 'TestMyBagClass'
+      put:
+        (self
+            definitionOfBasicClassNamed: 'TestMyBagClass'
+            superclass: 'Bag'
+            type: 'normal'
+            instvars: {}
+            gs_options: {'disallowGciStore'}
+            inPackage: packageName);
+    at: 'TestCustomByteArrayClass'
+      put:
+        (self
+            definitionOfBasicClassNamed: 'TestCustomByteArrayClass'
+            superclass: 'Object'
+            type: 'bytes'
+            instvars: {}
+            gs_options: {}
+            inPackage: packageName);
+    at: 'TestMyByteArrayClass'
+      put:
+        (self
+            definitionOfBasicClassNamed: 'TestMyByteArrayClass'
+            superclass: 'ByteArray'
+            type: 'bytes'
+            instvars: {}
+            gs_options: {}
+            inPackage: packageName);
+    at: 'TestProtoObjectClass'
+      put:
+        (self
+            definitionOfBasicClassNamed: 'TestProtoObjectClass'
+            superclass: 'nil'
+            type: 'normal'
+            instvars: {}
+            gs_options: {}
+            inPackage: packageName);
+    yourself
+]
+
+{ #category : 'support - basic definitions' }
 RwLoadingTest >> basicClassMethodsForClass: className [
   ^ self
     methodDefsFromSpec:
@@ -83,64 +144,7 @@ RwLoadingTest >> basicInstanceMethodsForClass: className [
 RwLoadingTest >> basicPackageDefinition: packageName [
   ^ RwPackageDefinition
     withProperties: (Dictionary with: 'name' -> packageName)
-    classDefinitions:
-      (Dictionary new
-        at: 'TestNormalClass'
-          put:
-            (self definitionOfNormalClassNamed: 'TestNormalClass' inPackage: packageName);
-        at: 'TestNormalDbTransientClass'
-          put:
-            (self
-                definitionOfBasicClassNamed: 'TestNormalDbTransientClass'
-                type: 'normal'
-                instvars: {'instvar1'}
-                gs_options: {'dbTransient'}
-                inPackage: packageName);
-        at: 'TestVariableClass'
-          put:
-            (self
-                definitionOfBasicClassNamed: 'TestVariableClass'
-                type: 'variable'
-                instvars: {}
-                gs_options: nil
-                inPackage: packageName);
-        at: 'TestMyBagClass'
-          put:
-            (self
-                definitionOfBasicClassNamed: 'TestMyBagClass'
-                superclass: 'Bag'
-                type: 'normal'
-                instvars: {}
-                gs_options: {'disallowGciStore'}
-                inPackage: packageName);
-        at: 'TestCustomByteArrayClass'
-          put:
-            (self
-                definitionOfBasicClassNamed: 'TestCustomByteArrayClass'
-                superclass: 'Object'
-                type: 'bytes'
-                instvars: {}
-                gs_options: {}
-                inPackage: packageName);
-        at: 'TestMyByteArrayClass'
-          put:
-            (self
-                definitionOfBasicClassNamed: 'TestMyByteArrayClass'
-                superclass: 'ByteArray'
-                type: 'bytes'
-                instvars: {}
-                gs_options: {}
-                inPackage: packageName);
-        at: 'TestProtoObjectClass'
-          put:
-            (self
-                definitionOfBasicClassNamed: 'TestProtoObjectClass'
-                superclass: 'nil'
-                type: 'normal'
-                instvars: {}
-                gs_options: {}
-                inPackage: packageName);
-        yourself)
+    classDefinitions: (self basicClassDefinitions: packageName)
     classExtensions: Dictionary new
 ]
 
@@ -200,6 +204,66 @@ RwLoadingTest >> classInitializePackageDefinition: packageName className: classN
     classExtensions: Dictionary new
 ]
 
+{ #category : 'support - combined definitions' }
+RwLoadingTest >> combinedClassMethodsForClass1: className [
+  ^ self
+    methodDefsFromSpec:
+      {{#'initialize'.
+      'initialization'.
+      'initialize ClassVar1 := classInstVar1 := true'}.
+      {#'testClassMethod1'.
+      'xxx'.
+      'testClassMethod1 ^ ClassVar1'}.
+      {#'testClassMethod2'.
+      'xxx'.
+      'testClassMethod2 ^ classInstVar1'}.
+      {#'testClassMethod3'.
+      'xxx'.
+      'testClassMethod3 ^ 1'}}
+]
+
+{ #category : 'support - combined definitions' }
+RwLoadingTest >> combinedClassMethodsForClass2: className [
+  ^ self
+    methodDefsFromSpec:
+      {{#'initialize'.
+      'initialization'.
+      'initialize ClassVar1 := classInstVar1 := true'}.
+      {#'testClassMethod1'.
+      'xxx'.
+      'testClassMethod1 ^ ClassVar1'}.
+      {#'testClassMethod3'.
+      'yyy'.
+      'testClassMethod3 ^ 2'}}
+]
+
+{ #category : 'support - combined definitions' }
+RwLoadingTest >> combinedInstanceMethodsForClass1: className [
+  ^ self
+    methodDefsFromSpec:
+      {{#'testInstanceMethod1'.
+      'xxx'.
+      'testInstanceMethod1 ^ true'}.
+      {#'testInstanceMethod2'.
+      'xxx'.
+      'testInstanceMethod2 ^ true'}.
+      {#'testInstanceMethod3'.
+      'xxx'.
+      'testInstanceMethod3 ^ 1'}}
+]
+
+{ #category : 'support - combined definitions' }
+RwLoadingTest >> combinedInstanceMethodsForClass2: className [
+  ^ self
+    methodDefsFromSpec:
+      {{#'testInstanceMethod1'.
+      'xxx'.
+      'testInstanceMethod1 ^ true'}.
+      {#'testInstanceMethod3'.
+      'yyy'.
+      'testInstanceMethod3 ^ 2'}}
+]
+
 { #category : 'support - basic definitions' }
 RwLoadingTest >> definitionOfBasicClassNamed: className superclass: superclassName type: classType instvars: instvars gs_options: gs_options inPackage: packageName [
   ^ RwClassDefinition
@@ -232,15 +296,7 @@ RwLoadingTest >> definitionOfBasicClassNamed: className type: classType instvars
 RwLoadingTest >> definitionOfClassInitializationClassNamed: className inPackage: packageName classMethodDefinitions: classMethodDefinitions [
   ^ RwClassDefinition
     withProperties:
-      (self
-        propertiesForClassNamed: className
-        super: 'Object'
-        instvars: {}
-        classinstvars: {'classInstVar1'. 'classInstVar2'}
-        classvars: {'ClassVar1'}
-        type: 'normal'
-        gs_options: {}
-        inPackage: packageName)
+      (self properiesOfClassInitializationClassNamed: className inPackage: packageName)
     classMethodDefinitions: classMethodDefinitions
     instanceMethodDefinitions: Dictionary new
 ]
@@ -479,6 +535,21 @@ RwLoadingTest >> package2Definition [
 		classExtensions: Dictionary new
 ]
 
+{ #category : 'support - classInitialization definitions' }
+RwLoadingTest >> properiesOfClassInitializationClassNamed: className inPackage: packageName [
+  ^ self
+    propertiesForClassNamed: className
+    super: 'Object'
+    instvars: {}
+    classinstvars:
+      {'classInstVar1'.
+      'classInstVar2'}
+    classvars: {'ClassVar1'}
+    type: 'normal'
+    gs_options: {}
+    inPackage: packageName
+]
+
 { #category : 'support' }
 RwLoadingTest >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars type: type gs_options: gs_options inPackage: packageName [
   | dict |
@@ -673,6 +744,95 @@ RwLoadingTest >> testClassInitialization2 [
   self assert: testClass classVar = 1.
   self assert: testClass classInstVar1 = 1.
   self assert: testClass classInstVar2 = 2
+]
+
+{ #category : 'tests' }
+RwLoadingTest >> testCombinedChanges [
+  "single package update that includes an example of each kind of change supported"
+
+  | packageName packageNames myPackageSet className testClass testInstance classDefinitionsDictionary deletedClassName |
+  packageName := 'CombinedTestPackage'.
+  className := 'TestCombinedChangesClass'.
+  deletedClassName := 'TestClassDeletionClass'.
+  packageNames := {packageName}.
+  classDefinitionsDictionary := (self basicClassDefinitions: packageName)
+    at: className
+      put:
+        ((self
+            definitionOfMethodDeletionClassNamed: className
+            inPackage: packageName
+            instanceMethodDefinitions:
+              (self combinedInstanceMethodsForClass1: className)
+            classMethodDefinitions:
+              (self combinedClassMethodsForClass1: className))
+            properties:
+                (self properiesOfClassInitializationClassNamed: className inPackage: packageName);
+            yourself);
+    at: deletedClassName
+      put:
+        ((self
+            definitionOfMethodDeletionClassNamed: deletedClassName
+            inPackage: packageName
+            instanceMethodDefinitions:
+              (self combinedInstanceMethodsForClass1: deletedClassName)
+            classMethodDefinitions:
+              (self combinedClassMethodsForClass1: deletedClassName))
+            properties:
+                (self
+                    properiesOfClassInitializationClassNamed: deletedClassName
+                    inPackage: packageName);
+            yourself);
+    yourself.
+  myPackageSet := RwPackageSetDefinition new
+    addPackage:
+        (RwPackageDefinition
+            withProperties: (Dictionary with: 'name' -> packageName)
+            classDefinitions: classDefinitionsDictionary
+            classExtensions: Dictionary new);
+    yourself.
+  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+  testClass := System myUserProfile symbolList objectNamed: className.
+  testInstance := testClass new.
+  self
+    assert: testClass testClassMethod1;
+    assert: testClass testClassMethod2;
+    assert: testClass testClassMethod3 = 1;
+    assert: testInstance testInstanceMethod1;
+    assert: testInstance testInstanceMethod2;
+    assert: testInstance testInstanceMethod3 = 1.
+  packageNames := {packageName}.
+  classDefinitionsDictionary := (self basicClassDefinitions: packageName)
+    at: className
+      put:
+        ((self
+            definitionOfMethodDeletionClassNamed: className
+            inPackage: packageName
+            instanceMethodDefinitions:
+              (self combinedInstanceMethodsForClass2: className)
+            classMethodDefinitions:
+              (self combinedClassMethodsForClass2: className))
+            properties:
+                (self properiesOfClassInitializationClassNamed: className inPackage: packageName);
+            yourself);
+    yourself.
+  myPackageSet := RwPackageSetDefinition new
+    addPackage:
+        (RwPackageDefinition
+            withProperties: (Dictionary with: 'name' -> packageName)
+            classDefinitions: classDefinitionsDictionary
+            classExtensions: Dictionary new);
+    yourself.
+  self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+  self
+    assert: testClass testClassMethod1;
+    assert:
+        (testClass class compiledMethodAt: #'testClassMethod2' otherwise: false)
+            == false;
+    assert: testClass testClassMethod3 = 2;
+    assert: testInstance testInstanceMethod1;
+    assert:
+        (testClass compiledMethodAt: #'testInstanceMethod2' otherwise: false) == false;
+    assert: testInstance testInstanceMethod3 = 2
 ]
 
 { #category : 'tests' }
