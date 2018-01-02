@@ -1,5 +1,6 @@
-RwLoadSpecification {
+RwPackageLoadSpecification {
 	#specName : 'rowanLoadSpec',
+	#repositoryUrl : 'tonel:/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/tonel/',
 	#packageNames : [
 		'Cypress-Core',
 		'Rowan-Core',
@@ -7,5 +8,10 @@ RwLoadSpecification {
 		'Rowan-Tests',
 		'Rowan-Tode'
 	],
-	#repositoryUrl : 'tonel:/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/tonel/'
+	#packageNamesToLoad : [
+		'Cypress-Core',
+		'Rowan-Core',
+		'Rowan-GemStone',
+		'Rowan-Tests'
+	]
 }
