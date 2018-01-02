@@ -204,6 +204,208 @@ RwLoadingTest >> classInitializePackageDefinition: packageName className: classN
     classExtensions: Dictionary new
 ]
 
+{ #category : 'support - classProperyChange definitions' }
+RwLoadingTest >> classPropertyChangeClassDefinitions1: packageName [
+  ^ self classPropertyChangeClassDefinitions1: packageName in: Dictionary new
+]
+
+{ #category : 'support - classProperyChange definitions' }
+RwLoadingTest >> classPropertyChangeClassDefinitions1: packageName in: classDefinitionDictionary [
+  ^ classDefinitionDictionary
+    at: 'TestAddInstVarClass'
+      put:
+        (RwClassDefinition
+            withProperties:
+              (self
+                propertiesForClassNamed: 'TestAddInstVarClass'
+                super: 'Object'
+                instvars: {}
+                classinstvars: {}
+                classvars: {}
+                comment: 'a comment'
+                pools: {}
+                inPackage: packageName)
+            classMethodDefinitions: Dictionary new
+            instanceMethodDefinitions: Dictionary new);
+    at: 'TestAddClassInstVarClass'
+      put:
+        (RwClassDefinition
+            withProperties:
+              (self
+                propertiesForClassNamed: 'TestAddClassInstVarClass'
+                super: 'Object'
+                instvars: {}
+                classinstvars: {}
+                classvars: {}
+                comment: 'a comment'
+                pools: {}
+                inPackage: packageName)
+            classMethodDefinitions: Dictionary new
+            instanceMethodDefinitions: Dictionary new);
+    at: 'TestAddClassVarClass'
+      put:
+        (RwClassDefinition
+            withProperties:
+              (self
+                propertiesForClassNamed: 'TestAddClassVarClass'
+                super: 'Object'
+                instvars: {}
+                classinstvars: {}
+                classvars: {}
+                comment: 'a comment'
+                pools: {}
+                inPackage: packageName)
+            classMethodDefinitions: Dictionary new
+            instanceMethodDefinitions: Dictionary new);
+    at: 'TestChangeSuperclassClass'
+      put:
+        (RwClassDefinition
+            withProperties:
+              (self
+                propertiesForClassNamed: 'TestChangeSuperclassClass'
+                super: 'Object'
+                instvars: {'instVar1'}
+                classinstvars: {}
+                classvars: {}
+                comment: 'a comment'
+                pools: {}
+                inPackage: packageName)
+            classMethodDefinitions: Dictionary new
+            instanceMethodDefinitions: Dictionary new);
+    at: 'TestChangeCommentClass'
+      put:
+        (RwClassDefinition
+            withProperties:
+              (self
+                propertiesForClassNamed: 'TestChangeCommentClass'
+                super: 'Object'
+                instvars: {}
+                classinstvars: {}
+                classvars: {}
+                comment: 'a comment'
+                pools: {}
+                inPackage: packageName)
+            classMethodDefinitions: Dictionary new
+            instanceMethodDefinitions: Dictionary new);
+    at: 'TestChangePoolsClass'
+      put:
+        (RwClassDefinition
+            withProperties:
+              (self
+                propertiesForClassNamed: 'TestChangePoolsClass'
+                super: 'Object'
+                instvars: {}
+                classinstvars: {}
+                classvars: {}
+                comment: 'a comment'
+                pools: {}
+                inPackage: packageName)
+            classMethodDefinitions: Dictionary new
+            instanceMethodDefinitions: Dictionary new);
+    yourself
+]
+
+{ #category : 'support - classProperyChange definitions' }
+RwLoadingTest >> classPropertyChangeClassDefinitions2: packageName [
+  ^ self classPropertyChangeClassDefinitions2: packageName in: Dictionary new
+]
+
+{ #category : 'support - classProperyChange definitions' }
+RwLoadingTest >> classPropertyChangeClassDefinitions2: packageName in: classDefinitionDictionary [
+  ^ classDefinitionDictionary
+    at: 'TestAddInstVarClass'
+      put:
+        (RwClassDefinition
+            withProperties:
+              (self
+                propertiesForClassNamed: 'TestAddInstVarClass'
+                super: 'Object'
+                instvars: {'instVar1'}
+                classinstvars: {}
+                classvars: {}
+                comment: 'a comment'
+                pools: {}
+                inPackage: packageName)
+            classMethodDefinitions: Dictionary new
+            instanceMethodDefinitions: Dictionary new);
+    at: 'TestAddClassInstVarClass'
+      put:
+        (RwClassDefinition
+            withProperties:
+              (self
+                propertiesForClassNamed: 'TestAddClassInstVarClass'
+                super: 'Object'
+                instvars: {}
+                classinstvars: {'classInstVar1'}
+                classvars: {}
+                comment: 'a comment'
+                pools: {}
+                inPackage: packageName)
+            classMethodDefinitions: Dictionary new
+            instanceMethodDefinitions: Dictionary new);
+    at: 'TestAddClassVarClass'
+      put:
+        (RwClassDefinition
+            withProperties:
+              (self
+                propertiesForClassNamed: 'TestAddClassVarClass'
+                super: 'Object'
+                instvars: {}
+                classinstvars: {}
+                classvars: {'ClassVar1'}
+                comment: 'a comment'
+                pools: {}
+                inPackage: packageName)
+            classMethodDefinitions: Dictionary new
+            instanceMethodDefinitions: Dictionary new);
+    at: 'TestChangeSuperclassClass'
+      put:
+        (RwClassDefinition
+            withProperties:
+              (self
+                propertiesForClassNamed: 'TestChangeSuperclassClass'
+                super: 'Association'
+                instvars: {}
+                classinstvars: {}
+                classvars: {}
+                comment: 'a comment'
+                pools: {}
+                inPackage: packageName)
+            classMethodDefinitions: Dictionary new
+            instanceMethodDefinitions: Dictionary new);
+    at: 'TestChangeCommentClass'
+      put:
+        (RwClassDefinition
+            withProperties:
+              (self
+                propertiesForClassNamed: 'TestChangeCommentClass'
+                super: 'Object'
+                instvars: {}
+                classinstvars: {}
+                classvars: {}
+                comment: 'a new comment'
+                pools: {}
+                inPackage: packageName)
+            classMethodDefinitions: Dictionary new
+            instanceMethodDefinitions: Dictionary new);
+    at: 'TestChangePoolsClass'
+      put:
+        (RwClassDefinition
+            withProperties:
+              (self
+                propertiesForClassNamed: 'TestChangePoolsClass'
+                super: 'Object'
+                instvars: {}
+                classinstvars: {}
+                classvars: {}
+                comment: 'a comment'
+                pools: {}
+                inPackage: packageName)
+            classMethodDefinitions: Dictionary new
+            instanceMethodDefinitions: Dictionary new);
+    yourself
+]
+
 { #category : 'support - combined definitions' }
 RwLoadingTest >> combinedClassMethodsForClass1: className [
   ^ self
@@ -343,7 +545,7 @@ RwLoadingTest >> definitionsOfLoadedPackages: packageNames [
 	^(Rowan loadedPackagesNamed: packageNames) asDefinition
 ]
 
-{ #category : 'private' }
+{ #category : 'support' }
 RwLoadingTest >> loadAndTestPackagesNamed: packageNames before: beforePackageSet after: afterPackageSet [
 
 	|  imagePackageSet1 diff1 imagePackageSet2 diff2 |
@@ -357,7 +559,7 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames before: beforePackageSet
 	self assert: diff2 isEmpty
 ]
 
-{ #category : 'private' }
+{ #category : 'support' }
 RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBeLoaded using: myPackageSet [ 
 
 	|  imagePackageSet1 diff1 imagePackageSet2 diff2 |
@@ -373,7 +575,7 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBe
 	self assert: diff2 isEmpty
 ]
 
-{ #category : 'private' }
+{ #category : 'support' }
 RwLoadingTest >> loadAndTestPackagesNamed: packageNames using: myPackageSet [
 
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet
@@ -551,26 +753,61 @@ RwLoadingTest >> properiesOfClassInitializationClassNamed: className inPackage: 
 ]
 
 { #category : 'support' }
-RwLoadingTest >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars type: type gs_options: gs_options inPackage: packageName [
+RwLoadingTest >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars comment: comment gs_SymbolDictionary: gs_SymbolDictionary pools: pools type: type gs_options: gs_options inPackage: packageName [
   | dict |
   dict := Dictionary new.
   dict
     at: 'category' put: packageName;
     at: 'classinstvars' put: classinstvars;
     at: 'classvars' put: classvars;
-    at: 'comment'
-      put:
-        'I am a class generated by Cypress tests. My name is ' , className
-            , ', what''s yours?';
-    at: 'gs_SymbolDictionary' put: 'CypressTestData';
+    at: 'comment' put: comment;
+    at: 'gs_SymbolDictionary' put: gs_SymbolDictionary;
     at: 'instvars' put: instvars;
     at: 'name' put: className;
-    at: 'pools' put: Array new;
+    at: 'pools' put: pools;
     at: 'super' put: superClassName;
     at: 'type' put: type.
-  (gs_options _isArray and: [gs_options isEmpty not ])
-    ifTrue: [ dict at: 'gs_options' put: (gs_options collect: [:each | each asString ]) asSortedCollection asArray ].
+  (gs_options _isArray and: [ gs_options isEmpty not ])
+    ifTrue: [ 
+      dict
+        at: 'gs_options'
+        put:
+          (gs_options collect: [ :each | each asString ]) asSortedCollection asArray ].
   ^ dict
+]
+
+{ #category : 'support' }
+RwLoadingTest >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars comment: comment pools: pools inPackage: packageName [
+  ^ self
+    propertiesForClassNamed: className
+    super: superClassName
+    instvars: instvars
+    classinstvars: classinstvars
+    classvars: classvars
+    comment: comment
+    gs_SymbolDictionary: 'CypressTestData'
+    pools: pools
+    type: 'normal'
+    gs_options: {}
+    inPackage: packageName
+]
+
+{ #category : 'support' }
+RwLoadingTest >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars type: type gs_options: gs_options inPackage: packageName [
+  self
+    propertiesForClassNamed: className
+    super: superClassName
+    instvars: instvars
+    classinstvars: classinstvars
+    classvars: classvars
+    comment:
+      'I am a class generated by Cypress tests. My name is ' , className
+        , ', what''s yours?'
+    gs_SymbolDictionary: 'CypressTestData'
+    pools: {}
+    type: type
+    gs_options: gs_options
+    inPackage: packageName
 ]
 
 { #category : 'support - simple definitions' }
@@ -744,6 +981,36 @@ RwLoadingTest >> testClassInitialization2 [
   self assert: testClass classVar = 1.
   self assert: testClass classInstVar1 = 1.
   self assert: testClass classInstVar2 = 2
+]
+
+{ #category : 'tests' }
+RwLoadingTest >> testClassPropertyChanges [
+  "test class property changes -- skipping pools and no methods involved ... for now"
+
+  | packageName packageNames myPackageSet className |
+  packageName := 'ClassPropertyChangesTestPackage'.
+  packageNames := {packageName}.
+  myPackageSet := RwPackageSetDefinition new.
+  myPackageSet
+    addPackage:
+        (RwPackageDefinition
+            withProperties: (Dictionary with: 'name' -> packageName)
+            classDefinitions:
+              (self classPropertyChangeClassDefinitions1: packageName)
+            classExtensions: Dictionary new);
+    yourself.
+  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+  packageNames := {packageName}.
+  myPackageSet := RwPackageSetDefinition new.
+  myPackageSet
+    addPackage:
+        (RwPackageDefinition
+            withProperties: (Dictionary with: 'name' -> packageName)
+            classDefinitions:
+              (self classPropertyChangeClassDefinitions2: packageName)
+            classExtensions: Dictionary new);
+    yourself.
+  self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet
 ]
 
 { #category : 'tests' }
