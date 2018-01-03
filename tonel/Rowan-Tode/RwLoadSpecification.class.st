@@ -1,62 +1,14 @@
 Class {
 	#name : 'RwLoadSpecification',
-	#superclass : 'Object',
+	#superclass : 'RwSpecification',
 	#instVars : [
-		'specName',
 		'symbolDictName',
 		'repositoryUrl',
 		'userId',
 		'methodEnv'
 	],
-	#classVars : [
-		'Registry'
-	],
-	#classInstVars : [
-		'knownRepositories',
-		'configuration',
-		'platform'
-	],
 	#category : 'Rowan-Tode'
 }
-
-{ #category : 'instance creation' }
-RwLoadSpecification class >> fromUrl: specNameOrUrl [
-	"self fromUrl: 'file:/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston'"
-	"self fromUrl: 'sampleLoadSpec'"
-	"self fromUrl: 'https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston'"
-	| url |
-  	url := specNameOrUrl asUrl.
-	url schemeName isNil ifTrue: [ ^ self registry at: specNameOrUrl ].
-	url schemeName = 'file' 
-		ifTrue: [ 
-			CypressFileUtilities current 
-				readStreamFor: url fileName  
-				in: url pathForDirectory 
-				do: [:stream | ^ STON fromStream: stream ]].
-	url schemeName = 'https'
-		ifTrue: [ | contents client response |
-			GsSecureSocket disableCertificateVerificationOnClient.
-			client := ZnClient new.
-				response := client
-				beOneShot;
-				enforceHttpSuccess: true;
-				get: url.
-  			^ STON fromString: response decodeFromUTF8 ].
-	self error: 'Unknown scheme: ', url scheme printString
-]
-
-{ #category : 'initialization' }
-RwLoadSpecification class >> initialize [
-	"self initialize"
-	
-	Registry := StringKeyValueDictionary new
-]
-
-{ #category : 'accessing' }
-RwLoadSpecification class >> registry [
-
-	^Registry
-]
 
 { #category : 'private' }
 RwLoadSpecification >> _myUserProfile [
@@ -118,19 +70,6 @@ RwLoadSpecification >> repositoryUrl [
 RwLoadSpecification >> repositoryUrl: anObject [
 
    repositoryUrl := anObject
-
-]
-
-{ #category : 'accessing' }
-RwLoadSpecification >> specName [
-
-   ^specName
-]
-
-{ #category : 'accessing' }
-RwLoadSpecification >> specName: anObject [
-
-   specName := anObject
 
 ]
 
