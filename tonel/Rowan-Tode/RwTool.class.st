@@ -1,6 +1,9 @@
 Class {
 	#name : 'RwTool',
 	#superclass : 'Object',
+	#instVars : [
+		'specification'
+	],
 	#category : 'Rowan-Tode'
 }
 
@@ -106,7 +109,7 @@ DESCRIPTION
   Commands:
     clone      Clone repository
     commit     Save image changes to repository and commit
-    diff       View code differences between image and repository
+    diff       Browse package level diffs for the given spec
     list       List registered specs
     load       Load from the repository
     log        Browse commit log for the repository
@@ -135,16 +138,54 @@ EXAMPLES
     at: 'comit' put: self class commit manPage;
     at: 'diff' put: self class diff manPage;
     at: 'list' put: self class list manPage;
+    at: 'load' put: self class load manPage;
     at: 'log' put: self class log manPage;
-    at: 'package' put: self class package manPage;
-    at: 'project' put: self class project manPage;
     at: 'pull' put: self class pull manPage;
     at: 'push' put: self class push manPage;
     at: 'registry' put: self class registry manPage;
     at: 'revert' put: self class revert manPage;
+    at: 'save' put: self class save manPage;
     at: 'test' put: self class test manPage;
     at: 'unregister' put: self class unregister manPage;
     yourself.
   ^ manPage
+]
 
+{ #category : 'accessing' }
+RwTool >> packageNames [
+  ^ self specification packageNamesForTool: self
+]
+
+{ #category : 'operations for package specs' }
+RwTool >> packageNamesForPackageSpec: aPackageSpec [
+  ^ aPackageSpec packageNames
+]
+
+{ #category : 'operations for project specs' }
+RwTool >> packageNamesForProjectSpec: aProjectSpec [
+  self halt: 'not yet implemented'
+]
+
+{ #category : 'accessing' }
+RwTool >> repositoryUrl [
+  ^ self specification repositoryUrl
+]
+
+{ #category : 'accessing' }
+RwTool >> specification [
+
+   ^specification
+
+]
+
+{ #category : 'smalltalk api' }
+RwTool >> specification: aRwSpecification [
+  "subclasses are encouraged to use this method to initiate tool execution .. if appropriate"
+
+  specification := aRwSpecification
+]
+
+{ #category : 'smalltalk api' }
+RwTool >> specUrl: aString [
+  ^ self specification: (RwSpecification fromUrl: aString)
 ]

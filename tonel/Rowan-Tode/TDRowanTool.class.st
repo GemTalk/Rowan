@@ -30,7 +30,7 @@ TDRowanTool class >> rowan [
     performSubCommand: topez
     objIn: objIn
     commandOptions: {#('help' $h #'none')}
-    todeCommand: command ]
+    todeCommand: command ] 
 ]
 
 { #category : 'rowan' }
@@ -59,6 +59,23 @@ TDRowanTool >> rowancommit [
 
 { #category : 'commands' }
 TDRowanTool >> rowandiff [
+  "
+  rowan diff [-h|--help] <specUrl>
+"
+
+  | diffText |
+  self getSubcommandOptsMixedLongShort: {}.
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <specUrl>. See `man rowan diff` for details.' ].
+  diffText := RwTool diff specUrl: (subArguments at: 1).
+  diffText
+    editUsing:
+      ((TDEditorSpec topez: topez editorAspect: #'edit')
+        windowName: #'mcDiff';
+        yourself)
 ]
 
 { #category : 'commands' }

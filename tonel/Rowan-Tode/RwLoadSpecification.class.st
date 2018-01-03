@@ -33,12 +33,6 @@ RwLoadSpecification >> exportToUrl: specNameOrUrl [
 
 ]
 
-{ #category : 'loading' }
-RwLoadSpecification >> loadUsingLibrarian: aRwLibrarian [
-
-	self subclassResponsibility: #loadUsingLibrarian:
-]
-
 { #category : 'accessing' }
 RwLoadSpecification >> methodEnv [
 

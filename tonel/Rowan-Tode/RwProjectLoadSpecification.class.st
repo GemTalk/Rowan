@@ -22,10 +22,9 @@ RwProjectLoadSpecification >> loads: anObject [
 
 ]
 
-{ #category : 'loading' }
-RwProjectLoadSpecification >> loadUsingLibrarian: aRwLibrarian [
-
-	aRwLibrarian loadProjectSpecification: self
+{ #category : 'accessing' }
+RwProjectLoadSpecification >> packageNamesForTool: aRwTool [
+  ^ aRwTool packageNamesForProjectSpec: self
 ]
 
 { #category : 'accessing' }

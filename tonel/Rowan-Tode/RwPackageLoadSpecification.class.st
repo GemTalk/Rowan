@@ -20,12 +20,6 @@ Class {
 	#category : 'Rowan-Tode'
 }
 
-{ #category : 'loading' }
-RwPackageLoadSpecification >> loadUsingLibrarian: aRwLibrarian [
-
-	aRwLibrarian loadPackageSpecification: self
-]
-
 { #category : 'accessing' }
 RwPackageLoadSpecification >> packageNames [
 
@@ -38,6 +32,11 @@ RwPackageLoadSpecification >> packageNames: anObject [
 
    packageNames := anObject
 
+]
+
+{ #category : 'accessing' }
+RwPackageLoadSpecification >> packageNamesForTool: aRwTool [
+  ^ aRwTool packageNamesForPackageSpec: self
 ]
 
 { #category : 'accessing' }

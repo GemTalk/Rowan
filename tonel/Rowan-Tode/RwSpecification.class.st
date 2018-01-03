@@ -50,6 +50,11 @@ RwSpecification class >> registry [
 ]
 
 { #category : 'accessing' }
+RwSpecification >> packageNamesForTool: aRwTool [
+  self subclassResponsibility: #'packageNamesForTool:'
+]
+
+{ #category : 'accessing' }
 RwSpecification >> specName [
 
    ^specName
