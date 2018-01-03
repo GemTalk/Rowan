@@ -17,7 +17,7 @@ Class {
 		'packageNames',
 		'packageNamesToLoad'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Tode'
 }
 
 { #category : 'loading' }

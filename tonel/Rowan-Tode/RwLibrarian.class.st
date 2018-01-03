@@ -5,7 +5,7 @@ Class {
 		'baseLoadSpec',
 		'myLoadSpec'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Tode'
 }
 
 { #category : 'private' }

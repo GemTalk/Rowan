@@ -5,7 +5,7 @@ Class {
 		'projectName',
 		'loads'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Tode'
 }
 
 { #category : 'accessing' }

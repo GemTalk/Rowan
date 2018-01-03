@@ -16,7 +16,7 @@ Class {
 		'configuration',
 		'platform'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Tode'
 }
 
 { #category : 'instance creation' }
