@@ -25,18 +25,6 @@ RwPlatform class >> currentPlatformSymbol [
 	self error: 'We appear to be running on an unsupported platform'
 ]
 
-{ #category : 'private' }
-RwPlatform class >> forGemStone [
-
-	| platformClass |
-	platformClass := RwPlatformSpecificNameResolver
-				resolve: 'RwGsPlatform'
-				ifAbsent: 
-					[self
-						error: 'The CypressGemStone prerequisite package does not seem to be installed.'].
-	^platformClass new
-]
-
 { #category : 'unknown' }
 RwPlatform >> fileUtilities [
 	"Answer the platform-specific object for accessing files and directories"
