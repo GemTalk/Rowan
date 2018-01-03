@@ -20,7 +20,7 @@ EXAMPLES
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
   rowan save \
     file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
-  rowan save rowanLoadSpec
+  rowan save Rowan
 '
 ]
 

@@ -7,19 +7,25 @@ Class {
 { #category : 'man page' }
 RwUnregisterTool >> manPage [
   ^ TDManPage
-    commandName: 'xxx'
+    commandName: 'unregister'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan xxx - xxx
+  rowan unregister - xxx
 SYNOPSIS
-  rowan xxx
+  rowan unregister <spec-url>
 DESCRIPTION
 EXAMPLES
-  rowan xxx \
+  rowan unregister \
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  rowan xxx \
+  rowan unregister \
     file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
-  rowan xxx rowanLoadSpec
+  rowan unregister rowanLoadSpec
 '
+]
+
+{ #category : 'smalltalk api' }
+RwUnregisterTool >> specification: aRwSpecification [
+  super specification: aRwSpecification.
+  specification unregister
 ]

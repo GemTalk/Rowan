@@ -25,6 +25,8 @@ EXAMPLES
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
   rowan register --name=Rowan \
     file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
+
+  rowan register --name=OldRowan Rowan
 '
 ]
 

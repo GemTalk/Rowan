@@ -20,7 +20,7 @@ EXAMPLES
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
   rowan diff \
     file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
-  rowan diff rowanLoadSpec
+  rowan diff Rowan
 '
 ]
 

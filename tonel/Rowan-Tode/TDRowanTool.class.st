@@ -146,4 +146,15 @@ TDRowanTool >> rowantest [
 
 { #category : 'commands' }
 TDRowanTool >> rowanunregister [
+  "
+  rowan unregister <spec-url>
+"
+
+  self getSubcommandOptsMixedLongShort: {}.
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <specUrl>. See `man rowan unregister` for details.' ].
+  ^ RwTool unregister specUrl: (subArguments at: 1)
 ]
