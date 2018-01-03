@@ -112,6 +112,18 @@ TDRowanTool >> rowanrevert [
 
 { #category : 'commands' }
 TDRowanTool >> rowansave [
+  "
+  rowan save [-h|--help] <specUrl>
+"
+
+  | diffText |
+  self getSubcommandOptsMixedLongShort: {}.
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <specUrl>. See `man rowan save` for details.' ].
+  ^ RwTool save specUrl: (subArguments at: 1)
 ]
 
 { #category : 'commands' }

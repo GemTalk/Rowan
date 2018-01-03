@@ -19,21 +19,23 @@ EXAMPLES
   rowan diff --help
   rowan diff -h
 
-  rowan diff \\
+  rowan diff \
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  rowan diff \\
-    file:/$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
+  rowan diff \
+    file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
   rowan diff rowanLoadSpec
 '
 ]
 
 { #category : 'smalltalk api' }
 RwDiffTool >> specification: aRwSpecification [
+  "Note that specUrl: takes a string argument that calls this method, if you don't <aRwSpecification> handy"
+
   | repo stream diffy patch |
   super specification: aRwSpecification.
   stream := TextStream on: Text new.
   repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: self repositoryUrl)
+    onUrl: (CypressUrl absoluteFromText: specification repositoryUrl)
     alias: ''.
   self packageNames
     do: [ :packageName | 

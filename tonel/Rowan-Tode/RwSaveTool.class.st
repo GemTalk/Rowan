@@ -6,23 +6,43 @@ Class {
 
 { #category : 'man page' }
 RwSaveTool >> manPage [
-	^TDManPage
-		commandName: 'xxx'
-    	sourceMethod: self class name asString , '>>manPage'
-    	fromString:
-'NAME
-  rowan xxx - xxx
+  ^ TDManPage
+    commandName: 'save'
+    sourceMethod: self class name asString , '>>manPage'
+    fromString:
+      'NAME
+  rowan save - Save image changes to repository
 SYNOPSIS
-  rowan xxx [-h|--help]
+  rowan save [-h|--help]
 DESCRIPTION
 EXAMPLES
-  rowan xxx --help
-  rowan xxx -h
+  rowan save --help
+  rowan save -h
 
-  rowan xxx \\
+  rowan save \
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  rowan xxx \\
+  rowan save \
     file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
-  rowan xxx rowanLoadSpec
+  rowan save rowanLoadSpec
 '
+]
+
+{ #category : 'smalltalk api' }
+RwSaveTool >> specification: aRwSpecification [
+  | packageManager repo |
+  super specification: aRwSpecification.
+  packageManager := CypressEnvironmentPackageManager new.
+  repo := CypressAbstractRepository
+    onUrl: (CypressUrl absoluteFromText: specification repositoryUrl)
+    alias: ''.
+  packageManager
+    defaultSymbolDictionaryName: #'UserGlobals';
+    defaultSymbolList: System myUserProfile symbolList.
+  self packageNames
+    do: [ :packageName | 
+      | package |
+      package := (CypressEnvironmentPackageDefinition named: packageName)
+        lookupSymbolList: System myUserProfile symbolList;
+        yourself.
+      repo writePackageStructure: (CypressPackageStructure fromPackage: package) ]
 ]
