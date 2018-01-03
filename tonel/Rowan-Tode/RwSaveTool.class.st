@@ -1,28 +1,28 @@
 Class {
-	#name : 'RwDiffTool',
+	#name : 'RwSaveTool',
 	#superclass : 'RwTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'man page' }
-RwDiffTool >> manPage [
+RwSaveTool >> manPage [
 	^TDManPage
-		commandName: 'diff'
+		commandName: 'xxx'
     	sourceMethod: self class name asString , '>>manPage'
     	fromString:
 'NAME
-  rowan diff - Browse diffs for given spec
+  rowan xxx - xxx
 SYNOPSIS
-  rowan diff [-h|--help] <specUrl>
+  rowan xxx [-h|--help]
 DESCRIPTION
 EXAMPLES
-  rowan diff --help
-  rowan diff -h
+  rowan xxx --help
+  rowan xxx -h
 
-  rowan diff \\
+  rowan xxx \\
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  rowan diff \\
+  rowan xxx \\
     file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
-  rowan diff rowanLoadSpec
+  rowan xxx rowanLoadSpec
 '
 ]

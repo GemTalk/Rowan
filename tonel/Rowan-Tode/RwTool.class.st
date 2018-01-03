@@ -29,21 +29,15 @@ RwTool class >> list [
 ]
 
 { #category : 'commands' }
+RwTool class >> load [
+
+	^RwLoadTool new
+]
+
+{ #category : 'commands' }
 RwTool class >> log [
 
 	^RwLogTool new
-]
-
-{ #category : 'commands' }
-RwTool class >> package [
-
-	^RwPackageTool new
-]
-
-{ #category : 'commands' }
-RwTool class >> project [
-
-	^RwProjectTool new
 ]
 
 { #category : 'commands' }
@@ -68,6 +62,12 @@ RwTool class >> registry [
 RwTool class >> revert [
 
 	^RwRevertTool new
+]
+
+{ #category : 'commands' }
+RwTool class >> save [
+
+	^RwSaveTool new
 ]
 
 { #category : 'commands' }
@@ -105,18 +105,19 @@ DESCRIPTION
 
   Commands:
     clone      Clone repository
-    commit     Save image changes to repository and commit repository 
+    commit     Save image changes to repository and commit
     diff       View code differences between image and repository
     list       List registered specs
+    load       Load from the repository
     log        Browse commit log for the repository
-    package    Package management subcommand
-    project    Project management subcommand
-    pull       Execute a `git pull` for the project repository
-    push       Execute a `git push` for the project repository
+    pull       Execute a `git pull` for the repository
+    push       Execute a `git push` for the repository
+    register   Register the specification
     registry   Inspect the spec registry
     revert     Reload dirty packages from repository
-    test       Bring up test browser on tests for given spec
-    unregister Unregister the project
+    save       Save image changes to repository
+    test       Bring up test browser on tests in loaded packages
+    unregister Unregister the specification
 
   Use `rowan --help <command>` to read about a specific subcommand.
 
