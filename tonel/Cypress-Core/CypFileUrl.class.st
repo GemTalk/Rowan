@@ -137,7 +137,7 @@ CypFileUrl >> privateInitializeFromText: aString [
 
 	| schemeName pathString bare i |
 	bare := aString trimSeparators.
-	schemeName := Url schemeNameForString: bare.
+	schemeName := CypUrl schemeNameForString: bare.
 	(schemeName isNil or: [schemeName ~= self schemeName])
 		ifTrue: 
 			[host := ''.
