@@ -7,19 +7,17 @@ Class {
 { #category : 'man page' }
 RwRegistryTool >> manPage [
   ^ TDManPage
-    commandName: 'xxx'
+    commandName: 'registry'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan xxx - xxx
+  rowan registry - Inspect the spec registry
 SYNOPSIS
-  rowan xxx
+  rowan registry [--names|--list]
 DESCRIPTION
 EXAMPLES
-  rowan xxx \
-    https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  rowan xxx \
-    file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
-  rowan xxx rowanLoadSpec
+  rowan registry          # return registry dictionary
+  rowan registry --list   # return an array of registered specs
+  rowan registry --names  # return an array of registered spec names
 '
 ]

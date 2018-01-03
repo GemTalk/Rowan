@@ -157,7 +157,7 @@ EXAMPLES
   ^ manPage
 ]
 
-{ #category : 'accessing' }
+{ #category : 'smalltalk api' }
 RwTool >> packageNames [
   ^ specification packageNamesForTool: self
 ]
@@ -172,7 +172,22 @@ RwTool >> packageNamesForProjectSpec: aProjectSpec [
   self halt: 'not yet implemented'
 ]
 
-{ #category : 'accessing' }
+{ #category : 'smalltalk api' }
+RwTool >> registeredSpecNames [
+  ^ self registry keys
+]
+
+{ #category : 'smalltalk api' }
+RwTool >> registeredSpecs [
+  ^ self registry values
+]
+
+{ #category : 'smalltalk api' }
+RwTool >> registry [
+  ^ RwSpecification registry
+]
+
+{ #category : 'smalltalk api' }
 RwTool >> repositoryUrl [
   ^ self specification repositoryUrl
 ]

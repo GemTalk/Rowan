@@ -118,6 +118,22 @@ TDRowanTool >> rowanregister [
 
 { #category : 'commands' }
 TDRowanTool >> rowanregistry [
+  "
+  rowan registry [--names|--list]
+"
+
+  self
+    getSubcommandOptsMixedLongShort:
+      {#('names' nil #'none').
+      #('list' nil #'none')}.
+  ^ subOptions
+    at: 'names'
+    ifPresent: [ :ignored | RwTool registry registeredSpecNames ]
+    ifAbsent: [ 
+      subOptions
+        at: 'list'
+        ifPresent: [ :ignored | RwTool registry registeredSpecs ]
+        ifAbsent: [ RwTool registry registry ] ]
 ]
 
 { #category : 'commands' }
