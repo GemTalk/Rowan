@@ -60,7 +60,7 @@ TDRowanTool >> rowancommit [
 { #category : 'commands' }
 TDRowanTool >> rowandiff [
   "
-  rowan diff [-h|--help] <specUrl>
+  rowan diff <specUrl>
 "
 
   | diffText |
@@ -100,6 +100,20 @@ TDRowanTool >> rowanpush [
 
 { #category : 'commands' }
 TDRowanTool >> rowanregister [
+  "
+  rowan register [--name=<spec-name>] <specUrl>
+"
+
+  self getSubcommandOptsMixedLongShort: {#('name' nil #'required')}.
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <specUrl>. See `man rowan register` for details.' ].
+  ^ subOptions
+    at: 'name'
+    ifPresent: [ :specName | RwTool register specUrl: (subArguments at: 1) as: specName ]
+    ifAbsent: [ RwTool register specUrl: (subArguments at: 1) ]
 ]
 
 { #category : 'commands' }
@@ -113,7 +127,7 @@ TDRowanTool >> rowanrevert [
 { #category : 'commands' }
 TDRowanTool >> rowansave [
   "
-  rowan save [-h|--help] <specUrl>
+  rowan save <specUrl>
 "
 
   | diffText |

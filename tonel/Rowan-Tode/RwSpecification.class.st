@@ -54,6 +54,11 @@ RwSpecification >> packageNamesForTool: aRwTool [
   self subclassResponsibility: #'packageNamesForTool:'
 ]
 
+{ #category : 'registering' }
+RwSpecification >> register [
+  self class registry at: self specName put: self
+]
+
 { #category : 'accessing' }
 RwSpecification >> specName [
 
@@ -65,4 +70,9 @@ RwSpecification >> specName: anObject [
 
    specName := anObject
 
+]
+
+{ #category : 'registering' }
+RwSpecification >> unregister [
+  self class registry removeKey: self specName
 ]

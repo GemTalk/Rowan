@@ -13,12 +13,9 @@ RwDiffTool >> manPage [
       'NAME
   rowan diff - Browse package level diffs for the given spec
 SYNOPSIS
-  rowan diff [-h|--help] <specUrl>
+  rowan diff <spec-url>
 DESCRIPTION
 EXAMPLES
-  rowan diff --help
-  rowan diff -h
-
   rowan diff \
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
   rowan diff \

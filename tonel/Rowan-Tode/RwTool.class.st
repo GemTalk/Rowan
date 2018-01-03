@@ -56,6 +56,11 @@ RwTool class >> push [
 ]
 
 { #category : 'commands' }
+RwTool class >> register [
+  ^ RwRegisterTool new
+]
+
+{ #category : 'commands' }
 RwTool class >> registry [
 
 	^RwRegistryTool new
@@ -142,6 +147,7 @@ EXAMPLES
     at: 'log' put: self class log manPage;
     at: 'pull' put: self class pull manPage;
     at: 'push' put: self class push manPage;
+    at: 'register' put: self class register manPage;
     at: 'registry' put: self class registry manPage;
     at: 'revert' put: self class revert manPage;
     at: 'save' put: self class save manPage;

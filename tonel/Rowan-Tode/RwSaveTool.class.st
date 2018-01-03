@@ -13,12 +13,9 @@ RwSaveTool >> manPage [
       'NAME
   rowan save - Save image changes to repository
 SYNOPSIS
-  rowan save [-h|--help]
+  rowan save <spec-url>
 DESCRIPTION
 EXAMPLES
-  rowan save --help
-  rowan save -h
-
   rowan save \
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
   rowan save \

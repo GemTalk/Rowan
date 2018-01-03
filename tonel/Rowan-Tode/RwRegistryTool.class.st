@@ -6,22 +6,19 @@ Class {
 
 { #category : 'man page' }
 RwRegistryTool >> manPage [
-	^TDManPage
-		commandName: 'xxx'
-    	sourceMethod: self class name asString , '>>manPage'
-    	fromString:
-'NAME
+  ^ TDManPage
+    commandName: 'xxx'
+    sourceMethod: self class name asString , '>>manPage'
+    fromString:
+      'NAME
   rowan xxx - xxx
 SYNOPSIS
-  rowan xxx [-h|--help]
+  rowan xxx
 DESCRIPTION
 EXAMPLES
-  rowan xxx --help
-  rowan xxx -h
-
-  rowan xxx \\
+  rowan xxx \
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  rowan xxx \\
+  rowan xxx \
     file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
   rowan xxx rowanLoadSpec
 '

@@ -20,7 +20,8 @@ RwLoadSpecification >> exportToUrl: specNameOrUrl [
 
 	| url |
   	url := specNameOrUrl asUrl.
-	url schemeName isNil ifTrue: [ ^ self class registry at: specNameOrUrl put: self ].
+	url schemeName isNil 
+		ifTrue: [ "noop" ^nil].
 	url schemeName = 'file' 
 		ifTrue: [ 
 			CypressFileUtilities current 
