@@ -25,3 +25,18 @@ EXAMPLES
   rowan registry --names; edit
 '
 ]
+
+{ #category : 'smalltalk api' }
+RwRegistryTool >> registeredSpecNames [
+  ^ self registry keys
+]
+
+{ #category : 'smalltalk api' }
+RwRegistryTool >> registeredSpecs [
+  ^ self registry values
+]
+
+{ #category : 'smalltalk api' }
+RwRegistryTool >> registry [
+  ^ RwSpecification registry
+]

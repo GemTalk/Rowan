@@ -56,3 +56,17 @@ EXAMPLES
         Rowan
 '
 ]
+
+{ #category : 'smalltalk api' }
+RwSpecificationTool >> newPackageSpecNamed: aString [
+  ^ RwPackageLoadSpecification new
+    specName: aString;
+    yourself
+]
+
+{ #category : 'smalltalk api' }
+RwSpecificationTool >> newProjectSpecNamed: aString [
+  ^ RwProjectLoadSpecification new
+    specName: aString;
+    yourself
+]

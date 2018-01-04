@@ -165,20 +165,6 @@ EXAMPLES
 ]
 
 { #category : 'smalltalk api' }
-RwTool >> newPackageSpecNamed: aString [
-  ^ RwPackageLoadSpecification new
-    specName: aString;
-    yourself
-]
-
-{ #category : 'smalltalk api' }
-RwTool >> newProjectSpecNamed: aString [
-  ^ RwProjectLoadSpecification new
-    specName: aString;
-    yourself
-]
-
-{ #category : 'smalltalk api' }
 RwTool >> packageNames [
   ^ specification packageNamesForTool: self
 ]
@@ -191,21 +177,6 @@ RwTool >> packageNamesForPackageSpec: aPackageSpec [
 { #category : 'operations for project specs' }
 RwTool >> packageNamesForProjectSpec: aProjectSpec [
   self halt: 'not yet implemented'
-]
-
-{ #category : 'smalltalk api' }
-RwTool >> registeredSpecNames [
-  ^ self registry keys
-]
-
-{ #category : 'smalltalk api' }
-RwTool >> registeredSpecs [
-  ^ self registry values
-]
-
-{ #category : 'smalltalk api' }
-RwTool >> registry [
-  ^ RwSpecification registry
 ]
 
 { #category : 'smalltalk api' }
