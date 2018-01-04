@@ -2,13 +2,12 @@ Class {
 	#name : 'RwLoadSpecification',
 	#superclass : 'RwSpecification',
 	#instVars : [
-		'symbolDictName',
 		'repositoryUrl',
-		'userId',
-		'methodEnv',
-		'gitCheckout',
-		'gitRemote',
-		'repoPath'
+		'platformSpec',
+		'specsPath',
+		'repoSpec',
+		'repoPath',
+		'comment'
 	],
 	#category : 'Rowan-Tode'
 }
@@ -16,6 +15,20 @@ Class {
 { #category : 'private' }
 RwLoadSpecification >> _myUserProfile [
   ^ System myUserProfile
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> comment [
+
+   ^comment
+
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> comment: anObject [
+
+   comment := anObject
+
 ]
 
 { #category : 'exporting' }
@@ -37,52 +50,33 @@ RwLoadSpecification >> exportToUrl: specNameOrUrl [
 
 ]
 
-{ #category : 'accessing' }
-RwLoadSpecification >> gitCheckout [
-
-   ^gitCheckout
-
-]
-
-{ #category : 'accessing' }
-RwLoadSpecification >> gitCheckout: anObject [
-
-   gitCheckout := anObject
-
-]
-
-{ #category : 'accessing' }
-RwLoadSpecification >> gitRemote [
-
-   ^gitRemote
-
-]
-
-{ #category : 'accessing' }
-RwLoadSpecification >> gitRemote: anObject [
-
-   gitRemote := anObject
-
-]
-
-{ #category : 'accessing' }
-RwLoadSpecification >> methodEnv [
-
-   ^methodEnv ifNil: [ methodEnv := 0 ]
-
-]
-
-{ #category : 'accessing' }
-RwLoadSpecification >> methodEnv: anObject [
-
-   methodEnv := anObject
-
+{ #category : 'initialization' }
+RwLoadSpecification >> initialize [
+  super initialize.
+  comment := ''.
+  specsPath := 'specs'.
+  platformSpec := (Dictionary new at: 'gemstone' put: RwGemStoneSpecification new; yourself).
+  repoSpec := RwGitRepositorySpecification new
 ]
 
 { #category : 'accessing' }
 RwLoadSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
 
 	self subclassResponsibility: #packageOrGroupNamesToLoad:
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> platformSpec [
+
+   ^platformSpec
+
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> platformSpec: anObject [
+
+   platformSpec := anObject
+
 ]
 
 { #category : 'accessing' }
@@ -114,29 +108,29 @@ RwLoadSpecification >> repositoryUrl: anObject [
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> symbolDictName [
+RwLoadSpecification >> repoSpec [
 
-   ^symbolDictName ifNil: [ symbolDictName := 'UserGlobals' ]
-
-]
-
-{ #category : 'accessing' }
-RwLoadSpecification >> symbolDictName: anObject [
-
-   symbolDictName := anObject
+   ^repoSpec
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> userId [
+RwLoadSpecification >> repoSpec: anObject [
 
-   ^userId ifNil: [ userId := self _myUserProfile userId ]
+   repoSpec := anObject
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> userId: anObject [
+RwLoadSpecification >> specsPath [
 
-   userId := anObject
+   ^specsPath
+
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> specsPath: anObject [
+
+   specsPath := anObject
 
 ]

@@ -3,8 +3,7 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'specName',
-		'projectUrl',
-		'comment'
+		'projectUrl'
 	],
 	#classVars : [
 		'Registry'
@@ -45,24 +44,21 @@ RwSpecification class >> initialize [
 	Registry := StringKeyValueDictionary new
 ]
 
+{ #category : 'instance creation' }
+RwSpecification class >> new [
+
+	^self basicNew initialize
+]
+
 { #category : 'accessing' }
 RwSpecification class >> registry [
 
 	^Registry
 ]
 
-{ #category : 'accessing' }
-RwSpecification >> comment [
-
-   ^comment
-
-]
-
-{ #category : 'accessing' }
-RwSpecification >> comment: anObject [
-
-   comment := anObject
-
+{ #category : 'initialization' }
+RwSpecification >> initialize [
+  
 ]
 
 { #category : 'accessing' }

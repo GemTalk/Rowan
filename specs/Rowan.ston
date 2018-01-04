@@ -2,7 +2,18 @@ RwPackageLoadSpecification {
 	#specName : 'Rowan',
 	#projectUrl : 'https://github.com/dalehenrich/CypressReferenceImplementation',
 	#repositoryUrl : 'tonel:/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/tonel/',
+	#platformSpec : {
+		'gemstone' : RwGemStoneSpecification {
+			#symbolDictName : 'UserGlobals'
+		}
+	},
+	#specsPath : 'specs',
+	#repoSpec : RwGitRepositorySpecification {
+		#commitish : 'rowan',
+		#commitishType : 'branch'
+	},
 	#repoPath : 'tonel',
+	#comment : '',
 	#packageNames : [
 		'Cypress-Core',
 		'Rowan-Core',

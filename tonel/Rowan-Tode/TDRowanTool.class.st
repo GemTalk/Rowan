@@ -187,7 +187,10 @@ TDRowanTool >> rowansave [
 TDRowanTool >> rowanspec [
   "
   rowan spec [--name=<spec-name>] [--project=<project-url>] [--repository=<repository-url>] \
-             [--env=<meth-env>] [--symbolDict=<symbolDict-name>] [--userId=<user-id>] [<spec-url>]
+             [--comment=<comment-string>] [--repoPath=<repo-path>] [--specsPath=<specs-path>] \
+             [<spec-url>]
+
+  rowan spec [--env=<meth-env>] [--symbolDict=<symbolDict-name>] [--userId=<user-id>] [<spec-url>]
 
   rowan spec [--type=package] [--packages=<project-package-names>] [--loads=<package-names-to-load>] \
              [<spec-url>]
@@ -195,10 +198,10 @@ TDRowanTool >> rowanspec [
   rowan spec [--type=project] [--baseline=<project-name>] [--loads=<metacello-load-list>] \
              [<spec-url>]
 
-  rowan spec [--gitCheckout=<git-commitish>] [--gitRemote=<git-remote-name>] \
-             [--comment=<comment-string>] [--repoPath=<repo-path>] [<spec-url>]
+  rowan spec [--gitBranch=<branch-name>|--gitSHA=<SHA>|--gitTag=<tag>|--gitTagPattern=<pattern> \
+             [<spec-url>]
 
-  rowan spec [--export=<export-url>] [<spec-url>]
+  rowan spec [--export[=<export-url>]] [<spec-url>]
 "
 
   | shouldRegister specification specTool specName |
@@ -212,14 +215,17 @@ TDRowanTool >> rowanspec [
       #('repository' nil #'required').
       #('symbolDict' nil #'required').
       #('userId' nil #'required').
+      #('env' nil #'required').
       #('packages' nil #'required').
       #('loads' nil #'required').
       #('baseline' nil #'required').
-      #('gitCheckout' nil #'required').
-      #('gitRemote' nil #'required').
+      #('gitBranch' nil #'required').
+      #('gitSHA' nil #'required').
+      #('gitTag' nil #'required').
+      #('gitTagPattern' nil #'required').
       #('repoPath' nil #'required').
       #('comment' nil #'required').
-      #('export' nil #'required')}.
+      #('export' nil #'optional')}.
   subOptions at: 'name' ifPresent: [ :arg | specName := arg ].
   subArguments size = 0
     ifTrue: [ 
@@ -267,18 +273,47 @@ TDRowanTool >> rowanspec [
     ifPresent: [ :arg | specification repositoryUrl: arg ].
   subOptions
     at: 'symbolDict'
-    ifPresent: [ :arg | specification symbolDictName: arg ].
-  subOptions at: 'userId' ifPresent: [ :arg | specification userId: arg ].
+    ifPresent: [ :arg | (specification platformSpec at: 'gemstone')symbolDictName: arg ].
+  subOptions
+    at: 'env'
+    ifPresent: [ :arg | (specification platformSpec at: 'gemstone') methodEnv: arg asNumber ].
+  subOptions
+    at: 'userId'
+    ifPresent: [ :arg | (specification platformSpec at: 'gemstone') userId: arg ].
   subOptions at: 'packages' ifPresent: [ :arg | specification ].
   subOptions at: 'loads' ifPresent: [ :arg | specification ].
   subOptions at: 'baseline' ifPresent: [ :arg | specification projectName: arg ].
   subOptions
-    at: 'gitCheckout'
-    ifPresent: [ :arg | specification gitCheckout: arg ].
-  subOptions at: 'gitRemote' ifPresent: [ :arg | specification gitRemote: arg ].
+    at: 'gitBranch'
+    ifPresent: [ :arg | specification repoSpec branch: arg ].
+  subOptions at: 'gitSHA' ifPresent: [ :arg | specification repoSpec SHA: arg ].
+  subOptions
+    at: 'gitTag'
+    ifPresent: [ :arg | specification repoSpec gitTag: arg ].
+  subOptions
+    at: 'gitTagPattern'
+    ifPresent: [ :arg | specification repoSpec gitTagPattern: arg ].
   subOptions at: 'repoPath' ifPresent: [ :arg | specification repoPath: arg ].
+  subOptions at: 'specsPath' ifPresent: [ :arg | specification specsPath: arg ].
   subOptions at: 'comment' ifPresent: [ :arg | specification comment: arg ].
-  subOptions at: 'export' ifPresent: [ :arg | specification exportToUrl: arg ].
+  subOptions
+    at: 'export'
+    ifPresent: [ :arg | 
+      | exportUrl |
+      exportUrl := arg.
+      exportUrl
+        ifNil: [ 
+          | url |
+          specification repositoryUrl
+            ifNil: [ 
+              self
+                error:
+                  '<exportUrl> must be specified if repository has not been cloned. See `man rowan spec` for details.' ].
+          url := specification repositoryUrl asUrl.
+          exportUrl := 'file:'
+            , (ServerFileDirectory on: url locator) containingDirectory fullName
+            , '/' , specification specsPath , '/' ].
+      specification exportToUrl: exportUrl ].
   ^ specification
 ]
 
