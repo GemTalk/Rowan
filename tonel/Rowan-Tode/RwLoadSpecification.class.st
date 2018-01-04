@@ -5,7 +5,9 @@ Class {
 		'symbolDictName',
 		'repositoryUrl',
 		'userId',
-		'methodEnv'
+		'methodEnv',
+		'gitCheckout',
+		'gitRemote'
 	],
 	#category : 'Rowan-Tode'
 }
@@ -31,6 +33,34 @@ RwLoadSpecification >> exportToUrl: specNameOrUrl [
 					string := STON toStringPretty: self.
 					stream nextPutAll: string.
 					^ self ] ].
+
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> gitCheckout [
+
+   ^gitCheckout
+
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> gitCheckout: anObject [
+
+   gitCheckout := anObject
+
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> gitRemote [
+
+   ^gitRemote
+
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> gitRemote: anObject [
+
+   gitRemote := anObject
 
 ]
 

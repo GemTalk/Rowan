@@ -3,7 +3,8 @@ Class {
 	#superclass : 'RwLoadSpecification',
 	#instVars : [
 		'projectName',
-		'loads'
+		'loads',
+		'locked'
 	],
 	#category : 'Rowan-Tode'
 }
@@ -19,6 +20,20 @@ RwProjectLoadSpecification >> loads [
 RwProjectLoadSpecification >> loads: anObject [
 
    loads := anObject
+
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecification >> locked [
+
+   ^locked
+
+]
+
+{ #category : 'accessing' }
+RwProjectLoadSpecification >> locked: anObject [
+
+   locked := anObject
 
 ]
 

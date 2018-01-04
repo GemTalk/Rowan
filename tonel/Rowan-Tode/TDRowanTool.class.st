@@ -157,6 +157,101 @@ TDRowanTool >> rowansave [
 ]
 
 { #category : 'commands' }
+TDRowanTool >> rowanspec [
+  "
+  rowan spec [--name=<spec-name>] [--project=<project-url>] [--repository=<repository-url>] \
+             [--env=<meth-env>] [--symbolDict=<symbolDict-name>] [--userId=<user-id>] [<spec-url>]
+
+  rowan spec [--type=package] [--packages=<project-package-names>] [--loads=<package-names-to-load>] \
+             [<spec-url>]
+
+  rowan spec [--type=project] [--baseline=<project-name>] [--loads=<metacello-load-list>] \
+             [<spec-url>]
+
+  rowan spec [--gitCheckout=<git-commitish>] [--gitRemote=<git-remote-name>] \
+             [--comment=<comment-string> [<spec-url>]
+"
+
+  | shouldRegister specification specTool specName |
+  specTool := RwTool spec.
+  shouldRegister := false.
+  self
+    getSubcommandOptsMixedLongShort:
+      {#('name' nil #'required').
+      #('type' nil #'required').
+      #('project' nil #'required').
+      #('repository' nil #'required').
+      #('symbolDict' nil #'required').
+      #('userId' nil #'required').
+      #('packages' nil #'required').
+      #('loads' nil #'required').
+      #('baseline' nil #'required').
+      #('gitCheckout' nil #'required').
+      #('gitRemote' nil #'required').
+      #('comment' nil #'required').
+      #('export' nil #'required')}.
+  subOptions at: 'name' ifPresent: [ :arg | specName := arg ].
+  subArguments size = 0
+    ifTrue: [ 
+      "Creating a new spec object: --type required -- remaining required options a fuction of --type"
+      subOptions
+        at: 'type'
+        ifPresent: [ :arg | 
+          specName
+            ifNil: [ 
+              self
+                error:
+                  'Missing required option --name when no <spec-url> specified. See `man rowan spec` for details.' ].
+          arg = 'project'
+            ifTrue: [ specification := specTool newProjectSpecNamed: specName ]
+            ifFalse: [ 
+              arg = 'package'
+                ifTrue: [ specification := specTool newPackageSpecNamed: specName ]
+                ifFalse: [ 
+                  self
+                    error:
+                      'Unrecognized --type ' , arg printString
+                        ,
+                          '. Should be ''project'' or ''package''. See `man rowan spec` for details.' ] ].
+          shouldRegister := true ]
+        ifAbsent: [ 
+          self
+            error:
+              'Missing required option --type when no <spec-url> specified. See `man rowan spec` for details.' ] ]
+    ifFalse: [ 
+      "Updating existing spec. If --name is used, copy existing spec."
+      specification := specTool specUrl: (subArguments at: 1).
+      subOptions
+        at: 'name'
+        ifPresent: [ :arg | 
+          specification specName = arg
+            ifFalse: [ 
+              specification := specification copy.
+              shouldRegister := true.
+              specification specName: specName ] ] ].
+  shouldRegister
+    ifTrue: [ specification register ].
+  subOptions at: 'project' ifPresent: [ :arg | specification projectUrl: arg ].
+  subOptions
+    at: 'repository'
+    ifPresent: [ :arg | specification repositoryUrl: arg ].
+  subOptions
+    at: 'symbolDict'
+    ifPresent: [ :arg | specification symbolDictName: arg ].
+  subOptions at: 'userId' ifPresent: [ :arg | specification userId: arg ].
+  subOptions at: 'packages' ifPresent: [ :arg | specification ].
+  subOptions at: 'loads' ifPresent: [ :arg | specification ].
+  subOptions at: 'baseline' ifPresent: [ :arg | specification projectName: arg ].
+  subOptions
+    at: 'gitCheckout'
+    ifPresent: [ :arg | specification gitCheckout: arg ].
+  subOptions at: 'gitRemote' ifPresent: [ :arg | specification gitRemote: arg ].
+  subOptions at: 'comment' ifPresent: [ :arg | specification comment: arg ].
+  subOptions at: 'export' ifPresent: [ :arg | specification exportToUrl: arg ].
+  ^ specification
+]
+
+{ #category : 'commands' }
 TDRowanTool >> rowantest [
 ]
 

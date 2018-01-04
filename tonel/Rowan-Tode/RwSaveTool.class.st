@@ -41,5 +41,6 @@ RwSaveTool >> specification: aRwSpecification [
       package := (CypressEnvironmentPackageDefinition named: packageName)
         lookupSymbolList: System myUserProfile symbolList;
         yourself.
-      repo writePackageStructure: (CypressPackageStructure fromPackage: package) ]
+      repo writePackageStructure: (CypressPackageStructure fromPackage: package) ].
+  ^ specification
 ]

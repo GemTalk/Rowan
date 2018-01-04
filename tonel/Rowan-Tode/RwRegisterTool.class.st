@@ -35,7 +35,7 @@ RwRegisterTool >> specification: aRwSpecification [
   "Note that specUrl: takes a string argument that calls this method, if you don't <aRwSpecification> handy"
 
   super specification: aRwSpecification.
-  specification register
+  ^ specification register
 ]
 
 { #category : 'smalltalk api' }

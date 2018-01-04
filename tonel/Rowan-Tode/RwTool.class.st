@@ -79,6 +79,11 @@ RwTool class >> save [
 ]
 
 { #category : 'commands' }
+RwTool class >> spec [
+  ^ RwSpecificationTool new
+]
+
+{ #category : 'commands' }
 RwTool class >> test [
 
 	^RwTestTool new
@@ -124,6 +129,7 @@ DESCRIPTION
     registry   Inspect the spec registry
     revert     Reload dirty packages from repository
     save       Save image changes to repository
+    spec       Manipulate spec object
     test       Bring up test browser on tests in loaded packages
     unregister Unregister the specification
 
@@ -151,10 +157,25 @@ EXAMPLES
     at: 'registry' put: self class registry manPage;
     at: 'revert' put: self class revert manPage;
     at: 'save' put: self class save manPage;
+    at: 'spec' put: self class spec manPage;
     at: 'test' put: self class test manPage;
     at: 'unregister' put: self class unregister manPage;
     yourself.
   ^ manPage
+]
+
+{ #category : 'smalltalk api' }
+RwTool >> newPackageSpecNamed: aString [
+  ^ RwPackageLoadSpecification new
+    specName: aString;
+    yourself
+]
+
+{ #category : 'smalltalk api' }
+RwTool >> newProjectSpecNamed: aString [
+  ^ RwProjectLoadSpecification new
+    specName: aString;
+    yourself
 ]
 
 { #category : 'smalltalk api' }
@@ -198,7 +219,7 @@ RwTool >> specification: aRwSpecification [
 
   "Note that specUrl: takes a string argument that calls this method, if you don't <aRwSpecification> handy"
 
-  specification := aRwSpecification
+  ^ specification := aRwSpecification
 ]
 
 { #category : 'smalltalk api' }

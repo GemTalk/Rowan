@@ -27,5 +27,5 @@ EXAMPLES
 { #category : 'smalltalk api' }
 RwUnregisterTool >> specification: aRwSpecification [
   super specification: aRwSpecification.
-  specification unregister
+  ^ specification unregister
 ]

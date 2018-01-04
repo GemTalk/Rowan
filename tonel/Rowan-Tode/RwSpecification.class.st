@@ -2,7 +2,9 @@ Class {
 	#name : 'RwSpecification',
 	#superclass : 'Object',
 	#instVars : [
-		'specName'
+		'specName',
+		'projectUrl',
+		'comment'
 	],
 	#classVars : [
 		'Registry'
@@ -50,8 +52,36 @@ RwSpecification class >> registry [
 ]
 
 { #category : 'accessing' }
+RwSpecification >> comment [
+
+   ^comment
+
+]
+
+{ #category : 'accessing' }
+RwSpecification >> comment: anObject [
+
+   comment := anObject
+
+]
+
+{ #category : 'accessing' }
 RwSpecification >> packageNamesForTool: aRwTool [
   self subclassResponsibility: #'packageNamesForTool:'
+]
+
+{ #category : 'accessing' }
+RwSpecification >> projectUrl [
+
+   ^projectUrl
+
+]
+
+{ #category : 'accessing' }
+RwSpecification >> projectUrl: anObject [
+
+   projectUrl := anObject
+
 ]
 
 { #category : 'registering' }

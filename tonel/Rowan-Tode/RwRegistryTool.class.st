@@ -19,5 +19,9 @@ EXAMPLES
   rowan registry          # return registry dictionary
   rowan registry --list   # return an array of registered specs
   rowan registry --names  # return an array of registered spec names
+
+  rowan registry;         edit
+  rowan registry --list;  edit
+  rowan registry --names; edit
 '
 ]
