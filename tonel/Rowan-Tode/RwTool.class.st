@@ -26,6 +26,11 @@ RwTool class >> diff [
 ]
 
 { #category : 'commands' }
+RwTool class >> git [
+  ^ RwGitTool new
+]
+
+{ #category : 'commands' }
 RwTool class >> list [
 
 	^RwListTool new
@@ -117,7 +122,7 @@ SYNOPSIS
 DESCRIPTION
 
   Commands:
-    clone      Clone repository
+    clone      Clone project repository
     commit     Save image changes to repository and commit
     diff       Browse package level diffs for the given spec
     list       List registered specs

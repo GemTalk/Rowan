@@ -23,7 +23,7 @@ SYNOPSIS
              [<spec-url>]
 
   rowan spec [--gitCheckout=<git-commitish>] [--gitRemote=<git-remote-name>] \
-             [--comment=<comment-string> [<spec-url>]
+             [--comment=<comment-string>] [--repoPath=<repo-path>] [<spec-url>]
 
   rowan spec [--export=<export-url>] [<spec-url>]
 
@@ -49,7 +49,7 @@ EXAMPLES
   rowan spec --type=package --name=Rowan \
         --packages=`#(''Rowan-Core'' ''Rowan-GemStone'' ''Rowan-Tests'')`\
         --project=https://github.com/dalehenrich/CypressReferenceImplementation \
-        --gitCheckout=rowan --gitRemote=origin
+        --gitCheckout=rowan --gitRemote=origin --repoPath=tonel
 
   rowan spec --project=https://github.com/dalehenrich/CypressReferenceImplementation\
         --export=file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston \

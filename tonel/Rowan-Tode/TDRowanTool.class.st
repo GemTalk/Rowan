@@ -51,6 +51,33 @@ TDRowanTool class >> toolReadMe [
 
 { #category : 'commands' }
 TDRowanTool >> rowanclone [
+  "
+  rowan clone [--https] --gitRoot=<git-root-dir> <spec-url>
+"
+
+  | useSsh gitRoot |
+  useSsh := true.
+  self
+    getSubcommandOptsMixedLongShort:
+      {#('https' nil #'none').
+      #('gitRoot' nil #'required')}.
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <specUrl>. See `man rowan clone` for details.' ].
+  subOptions at: 'gitRoot' ifPresent: [ :ignored | useSsh := false ].
+  subOptions
+    at: 'gitRoot'
+    ifPresent: [ :arg | gitRoot := arg ]
+    ifAbsent: [ 
+      self
+        error:
+          'Missing required options <--gitRoot. See `man rowan clone` for details.' ].
+  ^ RwTool clone
+    specUrl: (subArguments at: 1)
+    gitRootPath: gitRoot
+    useSsh: useSsh
 ]
 
 { #category : 'commands' }
@@ -169,7 +196,9 @@ TDRowanTool >> rowanspec [
              [<spec-url>]
 
   rowan spec [--gitCheckout=<git-commitish>] [--gitRemote=<git-remote-name>] \
-             [--comment=<comment-string> [<spec-url>]
+             [--comment=<comment-string>] [--repoPath=<repo-path>] [<spec-url>]
+
+  rowan spec [--export=<export-url>] [<spec-url>]
 "
 
   | shouldRegister specification specTool specName |
@@ -188,6 +217,7 @@ TDRowanTool >> rowanspec [
       #('baseline' nil #'required').
       #('gitCheckout' nil #'required').
       #('gitRemote' nil #'required').
+      #('repoPath' nil #'required').
       #('comment' nil #'required').
       #('export' nil #'required')}.
   subOptions at: 'name' ifPresent: [ :arg | specName := arg ].
@@ -246,6 +276,7 @@ TDRowanTool >> rowanspec [
     at: 'gitCheckout'
     ifPresent: [ :arg | specification gitCheckout: arg ].
   subOptions at: 'gitRemote' ifPresent: [ :arg | specification gitRemote: arg ].
+  subOptions at: 'repoPath' ifPresent: [ :arg | specification repoPath: arg ].
   subOptions at: 'comment' ifPresent: [ :arg | specification comment: arg ].
   subOptions at: 'export' ifPresent: [ :arg | specification exportToUrl: arg ].
   ^ specification

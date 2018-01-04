@@ -7,7 +7,8 @@ Class {
 		'userId',
 		'methodEnv',
 		'gitCheckout',
-		'gitRemote'
+		'gitRemote',
+		'repoPath'
 	],
 	#category : 'Rowan-Tode'
 }
@@ -82,6 +83,20 @@ RwLoadSpecification >> methodEnv: anObject [
 RwLoadSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
 
 	self subclassResponsibility: #packageOrGroupNamesToLoad:
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> repoPath [
+
+   ^repoPath
+
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> repoPath: anObject [
+
+   repoPath := anObject
+
 ]
 
 { #category : 'accessing' }
