@@ -4,6 +4,20 @@ Class {
 	#category : 'Rowan-Tode'
 }
 
+{ #category : 'smalltalk api' }
+RwSpecificationTool >> export [
+
+	^specification export
+
+]
+
+{ #category : 'smalltalk api' }
+RwSpecificationTool >> exportToUrl: fileUrl [
+
+	^specification exportToUrl: fileUrl
+
+]
+
 { #category : 'man page' }
 RwSpecificationTool >> manPage [
   ^ TDManPage

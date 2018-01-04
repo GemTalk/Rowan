@@ -26,6 +26,8 @@ EXAMPLES
 
 { #category : 'smalltalk api' }
 RwSaveTool >> specification: aRwSpecification [
+  "Note that specUrl: takes a string argument that calls this method, if you don't <aRwSpecification> handy"
+
   | packageManager repo |
   super specification: aRwSpecification.
   packageManager := CypressEnvironmentPackageManager new.

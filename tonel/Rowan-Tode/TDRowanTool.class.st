@@ -273,7 +273,7 @@ TDRowanTool >> rowanspec [
     ifPresent: [ :arg | specification repositoryUrl: arg ].
   subOptions
     at: 'symbolDict'
-    ifPresent: [ :arg | (specification platformSpec at: 'gemstone')symbolDictName: arg ].
+    ifPresent: [ :arg | (specification platformSpec at: 'gemstone') symbolDictName: arg ].
   subOptions
     at: 'env'
     ifPresent: [ :arg | (specification platformSpec at: 'gemstone') methodEnv: arg asNumber ].
@@ -298,22 +298,19 @@ TDRowanTool >> rowanspec [
   subOptions at: 'comment' ifPresent: [ :arg | specification comment: arg ].
   subOptions
     at: 'export'
-    ifPresent: [ :arg | 
+    ifPresent: [ :argOrNil | 
       | exportUrl |
-      exportUrl := arg.
+      specTool specification: specification.
+      exportUrl := argOrNil.
       exportUrl
         ifNil: [ 
-          | url |
           specification repositoryUrl
             ifNil: [ 
               self
                 error:
                   '<exportUrl> must be specified if repository has not been cloned. See `man rowan spec` for details.' ].
-          url := specification repositoryUrl asUrl.
-          exportUrl := 'file:'
-            , (ServerFileDirectory on: url locator) containingDirectory fullName
-            , '/' , specification specsPath , '/' ].
-      specification exportToUrl: exportUrl ].
+          specTool export ]
+        ifNotNil: [ specTool exportToUrl: exportUrl ] ].
   ^ specification
 ]
 

@@ -32,12 +32,25 @@ RwLoadSpecification >> comment: anObject [
 ]
 
 { #category : 'exporting' }
-RwLoadSpecification >> exportToUrl: specNameOrUrl [
+RwLoadSpecification >> export [
+
+	| url exportUrl |
+	self repositoryUrl
+		ifNil: [ 
+			self
+			error: 'exportToUrl: must be if repositoryUrl has not been set' ].
+	url := self repositoryUrl asUrl.
+	exportUrl := 'file:'
+		, (ServerFileDirectory on: url locator) containingDirectory fullName
+		, '/' , self specsPath , '/'.
+	^self exportToUrl: exportUrl
+]
+
+{ #category : 'exporting' }
+RwLoadSpecification >> exportToUrl: fileUrl [
 
 	| url |
-  	url := specNameOrUrl asUrl.
-	url schemeName isNil 
-		ifTrue: [ "noop" ^nil].
+  	url := fileUrl asUrl.
 	url schemeName = 'file' 
 		ifTrue: [ 
 			CypressFileUtilities current 
@@ -47,6 +60,7 @@ RwLoadSpecification >> exportToUrl: specNameOrUrl [
 					string := STON toStringPretty: self.
 					stream nextPutAll: string.
 					^ self ] ].
+	^nil "otherwise a noop"
 
 ]
 
