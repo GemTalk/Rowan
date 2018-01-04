@@ -1,5 +1,5 @@
 RwPackageLoadSpecification {
-	#specName : 'rowanLoadSpec',
+	#specName : 'Rowan',
 	#projectUrl : 'https://github.com/dalehenrich/CypressReferenceImplementation',
 	#repositoryUrl : 'tonel:/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/tonel/',
 	#repoPath : 'tonel',
