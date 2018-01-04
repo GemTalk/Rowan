@@ -34,7 +34,7 @@ RwLoadSpecification >> comment: anObject [
 { #category : 'exporting' }
 RwLoadSpecification >> export [
 
-	| url exportUrl |
+	| url exportUrl exportSpec |
 	self repositoryUrl
 		ifNil: [ 
 			self
@@ -43,7 +43,9 @@ RwLoadSpecification >> export [
 	exportUrl := 'file:'
 		, (ServerFileDirectory on: url locator) containingDirectory fullName
 		, '/' , self specsPath , '/'.
-	^self exportToUrl: exportUrl
+	exportSpec := self copy.
+	exportSpec initializeForHttpsDownload. "clear fields that only apply to local image"
+	^exportSpec exportToUrl: exportUrl
 ]
 
 { #category : 'exporting' }
@@ -71,6 +73,14 @@ RwLoadSpecification >> initialize [
   specsPath := 'specs'.
   platformSpec := (Dictionary new at: 'gemstone' put: RwGemStoneSpecification new; yourself).
   repoSpec := RwGitRepositorySpecification new
+]
+
+{ #category : 'initialization' }
+RwLoadSpecification >> initializeForHttpsDownload [
+	"if spec has been downloaded, clear out any of the fields that represent local disk state"
+
+	super initializeForHttpsDownload.
+	repositoryUrl := nil
 ]
 
 { #category : 'accessing' }

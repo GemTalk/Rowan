@@ -33,7 +33,7 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 				beOneShot;
 				enforceHttpSuccess: true;
 				get: url.
-  			^ STON fromString: response decodeFromUTF8 ].
+  			^ (STON fromString: response decodeFromUTF8) initializeForHttpsDownload ].
 	self error: 'Unknown scheme: ', url scheme printString
 ]
 
@@ -59,6 +59,12 @@ RwSpecification class >> registry [
 { #category : 'initialization' }
 RwSpecification >> initialize [
   
+]
+
+{ #category : 'initialization' }
+RwSpecification >> initializeForHttpsDownload [
+	"if spec has been downloaded, clear out any of the fields that represent local disk state"
+
 ]
 
 { #category : 'accessing' }

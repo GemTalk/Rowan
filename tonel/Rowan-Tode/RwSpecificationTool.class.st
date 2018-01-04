@@ -8,7 +8,6 @@ Class {
 RwSpecificationTool >> export [
 
 	^specification export
-
 ]
 
 { #category : 'smalltalk api' }
