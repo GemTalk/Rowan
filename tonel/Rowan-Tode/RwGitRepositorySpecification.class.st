@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'commitish',
 		'commitishType',
-		'repositoryRootPath'
+		'repositoryRootPath',
+		'remote'
 	],
 	#category : 'Rowan-Tode'
 }
@@ -74,7 +75,24 @@ RwGitRepositorySpecification >> initializeForHttpsDownload [
   "if spec has been downloaded, clear out any of the fields that represent local disk state"
 
   super initializeForHttpsDownload.
-  repositoryRootPath := nil
+  remote := repositoryRootPath := nil
+]
+
+{ #category : 'actions' }
+RwGitRepositorySpecification >> pullForTool: aRwTool remote: remoteString [
+  ^ aRwTool doGitPull: remoteString
+]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> remote [
+  ^ remote ifNil: [ '' ]
+]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> remote: anObject [
+
+   remote := anObject
+
 ]
 
 { #category : 'accessing' }

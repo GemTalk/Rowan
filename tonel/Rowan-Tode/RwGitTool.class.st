@@ -18,6 +18,17 @@ RwGitTool >> gitaddIn: gitRepoDir with: args [
 ]
 
 { #category : 'smalltalk api' }
+RwGitTool >> gitBranchNameIn: gitRepoDir [
+  "return current branch for git repository located at gitPath"
+
+  | command result |
+  command := 'set -e; cd ' , gitRepoDir fullName
+    , '; git rev-parse --abbrev-ref HEAD'.
+  result := System performOnServer: command.
+  ^ result trimWhiteSpace
+]
+
+{ #category : 'smalltalk api' }
 RwGitTool >> gitcheckoutIn: gitRepoDir with: args [
   ^ self tdGitTool gitcheckoutIn: gitRepoDir with: args
 ]
@@ -52,6 +63,11 @@ RwGitTool >> gitlogtool: commitish limit: limit gitRepoDirectory: gitRepoDirecto
     gitlogIn: gitRepoDirectory
     with:
       '--date=relative --format="%h %cd %s" -' , limit printString , ' ' , commitish
+]
+
+{ #category : 'smalltalk api' }
+RwGitTool >> gitpullIn: gitRepoDir with: args [
+  ^ self tdGitTool gitpullIn: gitRepoDir with: args
 ]
 
 { #category : 'smalltalk api' }

@@ -4,22 +4,62 @@ Class {
 	#category : 'Rowan-Tode'
 }
 
+{ #category : 'git' }
+RwPullTool >> doGitPull: remote [
+  | gitTool gitRootDir |
+  gitTool := self class git.
+  gitRootDir := ServerFileDirectory
+    on: specification repoSpec repositoryRootPath.
+  ^ remote isEmpty
+    ifTrue: [ gitTool gitpullIn: gitRootDir with: '' ]
+    ifFalse: [ 
+      | currentBranchName |
+      currentBranchName := gitTool gitBranchNameIn: gitRootDir.
+      gitTool gitpullIn: gitRootDir with: remote , ' ' , currentBranchName ]
+]
+
 { #category : 'man page' }
 RwPullTool >> manPage [
   ^ TDManPage
-    commandName: 'xxx'
+    commandName: 'pull'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan xxx - xxx
+  rowan pull - Execute a `git pull` for the repository
 SYNOPSIS
-  rowan xxx
+  rowan pull [--remote=<git-remote-name>] <spec-url>
 DESCRIPTION
 EXAMPLES
-  rowan xxx \
-    https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  rowan xxx \
-    file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
-  rowan xxx rowanLoadSpec
+  rowan pull Rowan
+  rowan pull --remote=rowan Rowan
 '
+]
+
+{ #category : 'smalltalk api' }
+RwPullTool >> pullSpecification: aRwSpecification [
+  ^ self pullSpecification: aRwSpecification remote: nil
+]
+
+{ #category : 'smalltalk api' }
+RwPullTool >> pullSpecification: aRwSpecification remote: remoteOrNil [
+  | remote |
+  self specification: aRwSpecification.
+  remoteOrNil
+    ifNil: [ remote := specification repoSpec remote ]
+    ifNotNil: [ remote := remoteOrNil ].
+  ^ specification pullForTool: self remote: remote
+]
+
+{ #category : 'smalltalk api' }
+RwPullTool >> pullSpecUrl: aSpecUrlString [
+  ^ self
+    pullSpecification: (RwSpecification fromUrl: aSpecUrlString)
+    remote: nil
+]
+
+{ #category : 'smalltalk api' }
+RwPullTool >> pullSpecUrl: aSpecUrlString remote: remote [
+  ^ self
+    pullSpecification: (RwSpecification fromUrl: aSpecUrlString)
+    remote: remote
 ]

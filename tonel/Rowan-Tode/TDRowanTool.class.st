@@ -86,21 +86,22 @@ TDRowanTool >> rowancommit [
 rowan commit --message=<message-ref> <spec-url>
 "
 
-  | messageString |
+  | commitMessage specUrlString |
   self getSubcommandOptsMixedLongShort: {#('message' nil #'required')}.
   subArguments size < 1
     ifTrue: [ 
       self
         error:
           'Missing required argument <spec-url>. See `man rowan commit` for details.' ].
+  specUrlString := subArguments at: 1.
   subOptions
     at: 'message'
-    ifPresent: [ :arg | messageString := arg ]
+    ifPresent: [ :arg | commitMessage := arg ]
     ifAbsent: [ 
-      self
-        error:
-          'Must supply commit message (--message). See `man rowan commit` for details.' ].
-  ^ RwTool commit commitSpecUrl: (subArguments at: 1) message: messageString
+      commitMessage := (GsMultiLineTextInteraction
+        prompt: 'Please enter a commit message for project: ' , specUrlString
+        template: '') signal ].
+  ^ RwTool commit commitSpecUrl: specUrlString message: commitMessage
 ]
 
 { #category : 'commands' }
@@ -138,7 +139,7 @@ TDRowanTool >> rowanlog [
   rowan log [--limit=<max-commit-log-entries>] <spec-url>
 "
 
-  | logLimit |
+  | logLimit log |
   self getSubcommandOptsMixedLongShort: {#('limit' nil #'required')}.
   subOptions
     at: 'limit'
@@ -149,11 +150,33 @@ TDRowanTool >> rowanlog [
       self
         error:
           'Missing required argument <spec-url>. See `man rowan log` for details.' ].
-  ^ RwTool log commitLogSpecUrl: (subArguments at: 1) limit: logLimit
+  log := RwTool log commitLogSpecUrl: (subArguments at: 1) limit: logLimit.
+  log
+    editUsing:
+      ((TDEditorSpec topez: topez editorAspect: #'edit')
+        windowName: #'gitStatus';
+        yourself).
+  ^ log
 ]
 
 { #category : 'commands' }
 TDRowanTool >> rowanpull [
+  "
+  rowan pull [--remote=<git-remote-name>] <spec-url>
+"
+
+  | specUrlString |
+  self getSubcommandOptsMixedLongShort: {#('remote' nil #'required')}.
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <spec-url>. See `man rowan pull` for details.' ].
+  specUrlString := subArguments at: 1.
+  ^ subOptions
+    at: 'remote'
+    ifPresent: [ :remote | RwTool pull pullSpecUrl: specUrlString remote: remote ]
+    ifAbsent: [ RwTool pull pullSpecUrl: specUrlString ]
 ]
 
 { #category : 'commands' }
@@ -234,7 +257,7 @@ TDRowanTool >> rowanspec [
              [<spec-url>]
 
   rowan spec [--gitBranch=<branch-name>|--gitSHA=<SHA>|--gitTag=<tag>|--gitTagPattern=<pattern> \
-             [<spec-url>]
+             [--gitRemote=<remote-name>] [<spec-url>]
 
   rowan spec [--export[=<export-url>]] [<spec-url>]
 "
@@ -258,6 +281,7 @@ TDRowanTool >> rowanspec [
       #('gitSHA' nil #'required').
       #('gitTag' nil #'required').
       #('gitTagPattern' nil #'required').
+      #('gitRemote' nil #'required').
       #('repoPath' nil #'required').
       #('specsPath' nil #'required').
       #('comment' nil #'required').
@@ -316,8 +340,12 @@ TDRowanTool >> rowanspec [
   subOptions
     at: 'userId'
     ifPresent: [ :arg | (specification platformSpec at: 'gemstone') userId: arg ].
-  subOptions at: 'packages' ifPresent: [ :arg | specification packageNames: arg evaluate ].
-  subOptions at: 'loads' ifPresent: [ :arg | specification packageNamesToLoad: arg evaluate ].
+  subOptions
+    at: 'packages'
+    ifPresent: [ :arg | specification packageNames: arg evaluate ].
+  subOptions
+    at: 'loads'
+    ifPresent: [ :arg | specification packageNamesToLoad: arg evaluate ].
   subOptions at: 'baseline' ifPresent: [ :arg | specification projectName: arg ].
   subOptions
     at: 'gitBranch'
@@ -329,6 +357,9 @@ TDRowanTool >> rowanspec [
   subOptions
     at: 'gitTagPattern'
     ifPresent: [ :arg | specification repoSpec gitTagPattern: arg ].
+  subOptions
+    at: 'gitRemote'
+    ifPresent: [ :arg | specification repoSpec gitRemote: arg ].
   subOptions at: 'repoPath' ifPresent: [ :arg | specification repoPath: arg ].
   subOptions at: 'specsPath' ifPresent: [ :arg | specification specsPath: arg ].
   subOptions at: 'comment' ifPresent: [ :arg | specification comment: arg ].

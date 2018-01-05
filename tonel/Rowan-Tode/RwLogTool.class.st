@@ -18,19 +18,6 @@ RwLogTool >> commitLogSpecUrl: aString limit: logLimit [
 ]
 
 { #category : 'git' }
-RwLogTool >> doGitCommitLog [
-  | gitTool gitRootDir |
-  gitTool := self class git.
-  gitRootDir := ServerFileDirectory
-    on: specification repoSpec repositoryRootPath.
-  gitTool
-    gitlogtool: 'HEAD'
-    limit: logLimit
-    gitRepoDirectory: gitRepoDirectory
-    label: 'Commit log for ' , registration projectName printString
-]
-
-{ #category : 'git' }
 RwLogTool >> doGitCommitLog: logLimit [
   | gitTool gitRootDir |
   gitTool := self class git.

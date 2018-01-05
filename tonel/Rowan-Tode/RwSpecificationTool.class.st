@@ -53,7 +53,7 @@ SYNOPSIS
              [<spec-url>]
 
   rowan spec [--gitBranch=<branch-name>|--gitSHA=<SHA>|--gitTag=<tag>|--gitTagPattern=<pattern> \
-             [<spec-url>]
+             [--gitRemote=<remote-name>] [<spec-url>]
 
   rowan spec [--export[=<export-url>]] [<spec-url>]
 

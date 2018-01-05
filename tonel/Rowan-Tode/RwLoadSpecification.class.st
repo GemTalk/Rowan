@@ -116,6 +116,11 @@ RwLoadSpecification >> platformSpec: anObject [
 
 ]
 
+{ #category : 'actions' }
+RwLoadSpecification >> pullForTool: aRwTool remote: remoteString [
+  ^ self repoSpec pullForTool: aRwTool remote: remoteString
+]
+
 { #category : 'accessing' }
 RwLoadSpecification >> repoPath [
 
