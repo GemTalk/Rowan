@@ -412,6 +412,7 @@ TDRowanTool >> rowanspec [
 
 { #category : 'commands' }
 TDRowanTool >> rowantest [
+  self error: 'not yet implemented'
 ]
 
 { #category : 'commands' }
