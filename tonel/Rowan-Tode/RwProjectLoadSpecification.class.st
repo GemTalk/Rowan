@@ -10,6 +10,11 @@ Class {
 }
 
 { #category : 'accessing' }
+RwProjectLoadSpecification >> imageSpec [
+  ^ imageSpec ifNil: [ imageSpec := RwProjectImageSpecification new ]
+]
+
+{ #category : 'accessing' }
 RwProjectLoadSpecification >> loads [
 
    ^loads

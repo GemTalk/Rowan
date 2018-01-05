@@ -21,6 +21,11 @@ Class {
 }
 
 { #category : 'accessing' }
+RwPackageLoadSpecification >> imageSpec [
+  ^ imageSpec ifNil: [ imageSpec := RwPackageImageSpecification new ]
+]
+
+{ #category : 'accessing' }
 RwPackageLoadSpecification >> packageNames [
 
    ^packageNames ifNil: [ packageNames := #() ]

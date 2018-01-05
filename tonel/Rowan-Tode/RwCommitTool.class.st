@@ -29,7 +29,7 @@ RwCommitTool >> commitSpecUrl: aSpecUrlString message: messageString [
 
 { #category : 'git' }
 RwCommitTool >> doGitCommit: messageString [
-  | gitTool gitRootDir commitMessageFileName status |
+  | gitTool gitRootDir commitMessageFileName status commitId |
   gitTool := self class git.
   gitRootDir := ServerFileDirectory
     on: specification repoSpec repositoryRootPath.
@@ -41,7 +41,9 @@ RwCommitTool >> doGitCommit: messageString [
     cr;
     show: '==============';
     cr;
-    show: status
+    show: status.
+  commitId := gitTool gitcommitShaIn: gitRootDir.
+  specification imageSpec loadedCommitId commitId
 ]
 
 { #category : 'man page' }

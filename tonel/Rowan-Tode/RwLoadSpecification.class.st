@@ -7,7 +7,8 @@ Class {
 		'specsPath',
 		'repoSpec',
 		'repoPath',
-		'comment'
+		'comment',
+		'imageSpec'
 	],
 	#category : 'Rowan-Tode'
 }
@@ -78,6 +79,11 @@ RwLoadSpecification >> exportToUrl: fileUrl [
   ^ nil	"otherwise a noop"
 ]
 
+{ #category : 'accessing' }
+RwLoadSpecification >> imageSpec [
+  self subclassResponsibility: #'imageSpec'
+]
+
 { #category : 'initialization' }
 RwLoadSpecification >> initialize [
   super initialize.
@@ -92,7 +98,7 @@ RwLoadSpecification >> initializeForHttpsDownload [
   "if spec has been downloaded, clear out any of the fields that represent local disk state"
 
   super initializeForHttpsDownload.
-  repositoryUrl := nil.
+  imageSpec := repositoryUrl := nil.
   repoSpec initializeForHttpsDownload
 ]
 

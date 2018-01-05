@@ -100,7 +100,9 @@ rowan commit --message=<message-ref> <spec-url>
     ifAbsent: [ 
       commitMessage := (GsMultiLineTextInteraction
         prompt: 'Please enter a commit message for project: ' , specUrlString
-        template: '') signal ].
+        template: '') signal.
+      commitMessage
+        ifNil: [ ^ self inform: 'Commit aborted ... no commit message' ] ].
   ^ RwTool commit commitSpecUrl: specUrlString message: commitMessage
 ]
 
