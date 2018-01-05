@@ -46,7 +46,7 @@ RwGitTool >> gitcommitIn: gitRepoDir with: args [
 { #category : 'smalltalk api' }
 RwGitTool >> gitcommitShaIn: gitRepoDir [
   | result |
-  result := self gitlogIn: gitRepoDir with: ' 1 --pretty=format:%h '.
+  result := self gitlogIn: gitRepoDir with: ' -1 --pretty=format:%h '.
   (result beginsWith: 'fatal:')
     ifTrue: [ ^ nil ].
   ^ result trimWhiteSpace
