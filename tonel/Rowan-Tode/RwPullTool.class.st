@@ -31,7 +31,7 @@ SYNOPSIS
 DESCRIPTION
 EXAMPLES
   rowan pull Rowan
-  rowan pull --remote=rowan Rowan
+  rowan pull --remote=origin Rowan
 '
 ]
 

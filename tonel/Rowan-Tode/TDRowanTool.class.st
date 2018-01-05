@@ -183,6 +183,22 @@ TDRowanTool >> rowanpull [
 
 { #category : 'commands' }
 TDRowanTool >> rowanpush [
+  "
+  rowan push [--remote=<git-remote-name>] <spec-url>
+"
+
+  | specUrlString |
+  self getSubcommandOptsMixedLongShort: {#('remote' nil #'required')}.
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <spec-url>. See `man rowan push` for details.' ].
+  specUrlString := subArguments at: 1.
+  ^ subOptions
+    at: 'remote'
+    ifPresent: [ :remote | RwTool push pushSpecUrl: specUrlString remote: remote ]
+    ifAbsent: [ RwTool push pushSpecUrl: specUrlString ]
 ]
 
 { #category : 'commands' }

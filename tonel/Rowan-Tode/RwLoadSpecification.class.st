@@ -127,6 +127,11 @@ RwLoadSpecification >> pullForTool: aRwTool remote: remoteString [
   ^ self repoSpec pullForTool: aRwTool remote: remoteString
 ]
 
+{ #category : 'actions' }
+RwLoadSpecification >> pushForTool: aRwTool remote: remoteString [
+  ^ self repoSpec pushForTool: aRwTool remote: remoteString
+]
+
 { #category : 'accessing' }
 RwLoadSpecification >> repoPath [
 

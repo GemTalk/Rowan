@@ -83,6 +83,11 @@ RwGitRepositorySpecification >> pullForTool: aRwTool remote: remoteString [
   ^ aRwTool doGitPull: remoteString
 ]
 
+{ #category : 'actions' }
+RwGitRepositorySpecification >> pushForTool: aRwTool remote: remoteString [
+  ^ aRwTool doGitPush: remoteString
+]
+
 { #category : 'accessing' }
 RwGitRepositorySpecification >> remote [
   ^ remote ifNil: [ '' ]

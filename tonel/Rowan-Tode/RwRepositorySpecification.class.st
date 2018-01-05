@@ -29,3 +29,10 @@ RwRepositorySpecification >> pullForTool: aRwTool remote: remoteOrNil [
 
   
 ]
+
+{ #category : 'actions' }
+RwRepositorySpecification >> pushForTool: aRwTool remote: remoteOrNil [
+  "push not supported by default"
+
+  
+]

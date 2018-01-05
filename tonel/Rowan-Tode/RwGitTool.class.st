@@ -71,6 +71,11 @@ RwGitTool >> gitpullIn: gitRepoDir with: args [
 ]
 
 { #category : 'smalltalk api' }
+RwGitTool >> gitpushIn: gitRepoDir with: args [
+  ^ self tdGitTool gitpushIn: gitRepoDir with: args
+]
+
+{ #category : 'smalltalk api' }
 RwGitTool >> gitrevparseShowTopLevelIn: aDirectory [
   ^ self tdGitTool gitrevparseShowTopLevelIn: aDirectory
 ]
