@@ -55,9 +55,13 @@ RwCommitTool >> manPage [
       'NAME
   rowan commit - Save image changes to repository and commit (git repos only)
 SYNOPSIS
-  rowan commit --message=<message-ref> <spec-url>
+  rowan commit --message=<message-ref> [--push[=remote]] <spec-url>
 DESCRIPTION
 EXAMPLES
   rowan commit --message=`implement RwCommitTool` Rowan
+  rowan commit Rowan
+
+  rowan commit --push=origin Rowan
+  rowan commit --push Rowan
 '
 ]

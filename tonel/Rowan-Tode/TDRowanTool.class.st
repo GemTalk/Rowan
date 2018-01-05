@@ -83,11 +83,14 @@ TDRowanTool >> rowanclone [
 { #category : 'commands' }
 TDRowanTool >> rowancommit [
   "
-rowan commit --message=<message-ref> <spec-url>
+  rowan commit --message=<message-ref> [--push[=remote]] <spec-url>
 "
 
-  | commitMessage specUrlString |
-  self getSubcommandOptsMixedLongShort: {#('message' nil #'required')}.
+  | commitMessage specUrlString commitResult |
+  self
+    getSubcommandOptsMixedLongShort:
+      {#('message' nil #'required').
+      #('push' nil #'optional')}.
   subArguments size < 1
     ifTrue: [ 
       self
@@ -103,7 +106,16 @@ rowan commit --message=<message-ref> <spec-url>
         template: '') signal.
       commitMessage
         ifNil: [ ^ self inform: 'Commit aborted ... no commit message' ] ].
-  ^ RwTool commit commitSpecUrl: specUrlString message: commitMessage
+  commitResult := RwTool commit
+    commitSpecUrl: specUrlString
+    message: commitMessage.
+  subOptions
+    at: 'push'
+    ifPresent: [ :argOrNil | 
+      ^ argOrNil
+        ifNil: [ RwTool push pushSpecUrl: specUrlString ]
+        ifNotNil: [ RwTool push pushSpecUrl: specUrlString remote: argOrNil ] ].
+  ^ commitResult
 ]
 
 { #category : 'commands' }
