@@ -66,9 +66,10 @@ RwCloneTool >> checkoutSpecification: aRwSpecification [
 			msg := 'No commitish defined for the spec ', specification specName printString.
 			self inform: msg.
 			^ msg ] 
-		ifNotNil: [ | gitTool gitRepoDir |
+		ifNotNil: [ | gitTool gitRepoDir gitRepoDirUrl |
 			gitTool := self class git.
-			gitRepoDir := CypUrl fromString: specification repositoryUrl.
+			gitRepoDirUrl := CypUrl fromString: specification repositoryUrl.
+			gitRepoDir := ServerFileDirectory on: gitRepoDirUrl pathString.
 			gitTool gitcheckoutIn: gitRepoDir with: checkout ].
   ^ specification
 ]
