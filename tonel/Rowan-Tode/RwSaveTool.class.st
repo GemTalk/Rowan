@@ -25,8 +25,7 @@ EXAMPLES
 ]
 
 { #category : 'smalltalk api' }
-RwSaveTool >> specification: aRwSpecification [
-  "Note that specUrl: takes a string argument that calls this method, if you don't <aRwSpecification> handy"
+RwSaveTool >> saveSpecification: aRwSpecification [
 
   | packageManager repo |
   super specification: aRwSpecification.
@@ -45,4 +44,10 @@ RwSaveTool >> specification: aRwSpecification [
         yourself.
       repo writePackageStructure: (CypressPackageStructure fromPackage: package) ].
   ^ specification
+]
+
+{ #category : 'smalltalk api' }
+RwSaveTool >> saveSpecUrl: aString [
+
+	^ self saveSpecification: (RwSpecification fromUrl: aString)
 ]

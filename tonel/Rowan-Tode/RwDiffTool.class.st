@@ -4,29 +4,8 @@ Class {
 	#category : 'Rowan-Tode'
 }
 
-{ #category : 'man page' }
-RwDiffTool >> manPage [
-  ^ TDManPage
-    commandName: 'diff'
-    sourceMethod: self class name asString , '>>manPage'
-    fromString:
-      'NAME
-  rowan diff - Browse package level diffs for the given spec
-SYNOPSIS
-  rowan diff <spec-url>
-DESCRIPTION
-EXAMPLES
-  rowan diff \
-    https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  rowan diff \
-    file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
-  rowan diff Rowan
-'
-]
-
 { #category : 'smalltalk api' }
-RwDiffTool >> specification: aRwSpecification [
-  "Note that specUrl: takes a string argument that calls this method, if you don't <aRwSpecification> handy"
+RwDiffTool >> diffSpecification: aRwSpecification [
 
   | repo stream diffy patch |
   super specification: aRwSpecification.
@@ -57,4 +36,30 @@ RwDiffTool >> specification: aRwSpecification [
           diffy writePatch: patch.
           stream cr ] ].
   ^ stream contents
+]
+
+{ #category : 'smalltalk api' }
+RwDiffTool >> diffSpecUrl: aString [
+
+	^ self diffSpecification: (RwSpecification fromUrl: aString)
+]
+
+{ #category : 'man page' }
+RwDiffTool >> manPage [
+  ^ TDManPage
+    commandName: 'diff'
+    sourceMethod: self class name asString , '>>manPage'
+    fromString:
+      'NAME
+  rowan diff - Browse package level diffs for the given spec
+SYNOPSIS
+  rowan diff <spec-url>
+DESCRIPTION
+EXAMPLES
+  rowan diff \
+    https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
+  rowan diff \
+    file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
+  rowan diff Rowan
+'
 ]

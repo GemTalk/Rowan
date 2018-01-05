@@ -4,7 +4,7 @@ Class {
 	#category : 'Rowan-Tode'
 }
 
-{ #category : 'smalltalk api' }
+{ #category : 'private' }
 RwCloneTool >> _validateForGitRootPathForSpecification: gitRootDir gitRepoDir: gitRepoDir useSsh: useSsh ifDone: doneBlock [
   | gitTool response command cdResponse |
   gitTool := self class git.
@@ -56,6 +56,70 @@ RwCloneTool >> _validateForGitRootPathForSpecification: gitRootDir gitRepoDir: g
     ifFalse: [ gitRootDir assureExistence ]
 ]
 
+{ #category : 'smalltalk api' }
+RwCloneTool >> checkoutSpecification: aRwSpecification [
+	| checkout |
+	self specification: aRwSpecification.
+	checkout := specification repoSpec commitish.
+	checkout
+		ifNil: [ | msg |
+			msg := 'No commitish defined for the spec ', specification specName printString.
+			self inform: msg.
+			^ msg ] 
+		ifNotNil: [ | gitTool gitRepoDir |
+			gitTool := self class git.
+			gitRepoDir := CypUrl fromString: specification repositoryUrl.
+			gitTool gitcheckoutIn: gitRepoDir with: checkout ].
+  ^ specification
+]
+
+{ #category : 'smalltalk api' }
+RwCloneTool >> checkoutSpecUrl: aString [ 
+
+	^self checkoutSpecification: (RwSpecification fromUrl: aString) 
+
+]
+
+{ #category : 'smalltalk api' }
+RwCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath useSsh: useSsh [
+  | gitRootDir gitTool response projectUrl gitRepoDir cloneUrl cloneOption checkout |
+  self specification: aRwSpecification.
+  projectUrl := CypressUrl absoluteFromText: specification projectUrl.
+  gitRootDir := ServerFileDirectory on: gitRootPath.
+  gitRepoDir := gitRootDir directoryNamed: projectUrl path last.
+  self
+    _validateForGitRootPathForSpecification: gitRootDir
+    gitRepoDir: gitRepoDir
+    useSsh: useSsh
+    ifDone: [ :msg | 
+      "done block is invoked when it is not necessary to perform further processing. Typically,
+		the clone is already present."
+      ^ msg ].
+  gitTool := self class git.
+  cloneUrl := useSsh
+    ifTrue: [ 'git@' , projectUrl authority , ':' ]
+    ifFalse: [ 'https://' , projectUrl authority , '/' ].
+  cloneUrl := cloneUrl , (projectUrl path at: 1) , '/' , (projectUrl path at: 2)
+    , '.git'.
+  cloneOption := ' --no-checkout '.
+  checkout := specification repoSpec commitish.
+  checkout ifNil: [ cloneOption := '' ].
+  response := gitTool gitcloneIn: gitRootDir with: cloneOption , cloneUrl.
+  specification repositoryUrl: 'file:' , gitRepoDir fullName , '/'.
+  checkout ifNotNil: [ self checkoutSpecification: specification. ].
+  ^ specification
+]
+
+{ #category : 'smalltalk api' }
+RwCloneTool >> cloneSpecUrl: aString gitRootPath: gitRootPath useSsh: useSsh [
+
+	^self 
+		cloneSpecification: (RwSpecification fromUrl: aString) 
+		gitRootPath: gitRootPath 
+		useSsh: useSsh
+
+]
+
 { #category : 'man page' }
 RwCloneTool >> manPage [
   ^ TDManPage
@@ -83,44 +147,4 @@ EXAMPLES
 
   rowan clone --gitRoot=$GS_HOME/shared/repos Rowan
 '
-]
-
-{ #category : 'smalltalk api' }
-RwCloneTool >> specification: aRwSpecification gitRootPath: gitRootPath useSsh: useSsh [
-  | gitRootDir gitTool response projectUrl gitRepoDir cloneUrl cloneOption checkout |
-  self specification: aRwSpecification.
-  projectUrl := CypressUrl absoluteFromText: specification projectUrl.
-  gitRootDir := ServerFileDirectory on: gitRootPath.
-  gitRepoDir := gitRootDir directoryNamed: projectUrl path last.
-  self
-    _validateForGitRootPathForSpecification: gitRootDir
-    gitRepoDir: gitRepoDir
-    useSsh: useSsh
-    ifDone: [ :msg | 
-      "done block is invoked when it is not necessary to perform further processing. Typically,
-		the clone is already present."
-      ^ msg ].
-  gitTool := self class git.
-  cloneUrl := useSsh
-    ifTrue: [ 'git@' , projectUrl authority , ':' ]
-    ifFalse: [ 'https://' , projectUrl authority , '/' ].
-  cloneUrl := cloneUrl , (projectUrl path at: 1) , '/' , (projectUrl path at: 2)
-    , '.git'.
-  cloneOption := ' --no-checkout '.
-  checkout := specification repoSpec commitish.
-  checkout ifNil: [ cloneOption := '' ].
-  response := gitTool gitcloneIn: gitRootDir with: cloneOption , cloneUrl.
-  specification repositoryUrl: 'file:' , gitRepoDir fullName , '/'.
-  checkout ifNotNil: [ gitTool gitcheckoutIn: gitRepoDir with: checkout ].
-  ^ specification
-]
-
-{ #category : 'smalltalk api' }
-RwCloneTool >> specUrl: aString gitRootPath: gitRootPath useSsh: useSsh [
-
-	^self 
-		specification: (RwSpecification fromUrl: aString) 
-		gitRootPath: gitRootPath 
-		useSsh: useSsh
-
 ]

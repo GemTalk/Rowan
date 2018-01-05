@@ -5,16 +5,30 @@ Class {
 }
 
 { #category : 'smalltalk api' }
-RwSpecificationTool >> export [
+RwSpecificationTool >> exportSpecification: aRwSpecification [
 
+	self specification: aRwSpecification.
 	^specification export
 ]
 
 { #category : 'smalltalk api' }
-RwSpecificationTool >> exportToUrl: fileUrl [
+RwSpecificationTool >> exportSpecification: aRwSpecification toUrl: fileUrl [
 
+	self specification: aRwSpecification.
 	^specification exportToUrl: fileUrl
 
+]
+
+{ #category : 'smalltalk api' }
+RwSpecificationTool >> exportSpecUrl: aString [
+
+	^ self exportSpecification: (RwSpecification fromUrl: aString)
+]
+
+{ #category : 'smalltalk api' }
+RwSpecificationTool >> exportSpecUrl: aString toUrl: exportUrl [
+
+	^ self exportSpecification: (RwSpecification fromUrl: aString) toUrl: exportUrl
 ]
 
 { #category : 'man page' }

@@ -25,9 +25,14 @@ EXAMPLES
 ]
 
 { #category : 'smalltalk api' }
-RwUnregisterTool >> specification: aRwSpecification [
-  "Note that specUrl: takes a string argument that calls this method, if you don't <aRwSpecification> handy"
+RwUnregisterTool >> unregisterSpecification: aRwSpecification [
 
-  super specification: aRwSpecification.
+  self specification: aRwSpecification.
   ^ specification unregister
+]
+
+{ #category : 'smalltalk api' }
+RwUnregisterTool >> unregisterSpecUrl: aString [
+
+	^ self unregisterSpecification: (RwSpecification fromUrl: aString)
 ]

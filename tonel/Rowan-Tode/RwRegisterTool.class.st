@@ -31,23 +31,20 @@ EXAMPLES
 ]
 
 { #category : 'smalltalk api' }
-RwRegisterTool >> specification: aRwSpecification [
-  "Note that specUrl: takes a string argument that calls this method, if you don't <aRwSpecification> handy"
+RwRegisterTool >> registerSpecification: aRwSpecification [
 
-  super specification: aRwSpecification.
+  self specification: aRwSpecification.
   ^ specification register
 ]
 
 { #category : 'smalltalk api' }
-RwRegisterTool >> specification: aRwSpecification as: aSpecName [
-  super specification: aRwSpecification copy.
-  specification specName: aSpecName.
-  specification register
+RwRegisterTool >> registerSpecification: aRwSpecification as: aSpecName [
+  self registerSpecification: aRwSpecification copy.
+
 ]
 
 { #category : 'smalltalk api' }
-RwRegisterTool >> specUrl: aString as: aSpecName [
-  super specification: (RwSpecification fromUrl: aString) copy.
-  specification specName: aSpecName.
-  specification register
+RwRegisterTool >> registerSpecUrl: aString as: aSpecName [
+  ^ self registerSpecification: (RwSpecification fromUrl: aString) copy.
+
 ]

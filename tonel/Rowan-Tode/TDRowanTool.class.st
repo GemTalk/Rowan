@@ -75,7 +75,7 @@ TDRowanTool >> rowanclone [
         error:
           'Missing required options <--gitRoot. See `man rowan clone` for details.' ].
   ^ RwTool clone
-    specUrl: (subArguments at: 1)
+    cloneSpecUrl: (subArguments at: 1)
     gitRootPath: gitRoot
     useSsh: useSsh
 ]
@@ -97,7 +97,7 @@ TDRowanTool >> rowandiff [
       self
         error:
           'Missing required argument <specUrl>. See `man rowan diff` for details.' ].
-  diffText := RwTool diff specUrl: (subArguments at: 1).
+  diffText := RwTool diff diffSpecUrl: (subArguments at: 1).
   diffText
     editUsing:
       ((TDEditorSpec topez: topez editorAspect: #'edit')
@@ -139,8 +139,8 @@ TDRowanTool >> rowanregister [
           'Missing required argument <specUrl>. See `man rowan register` for details.' ].
   ^ subOptions
     at: 'name'
-    ifPresent: [ :specName | RwTool register specUrl: (subArguments at: 1) as: specName ]
-    ifAbsent: [ RwTool register specUrl: (subArguments at: 1) ]
+    ifPresent: [ :specName | RwTool register registerSpecUrl: (subArguments at: 1) as: specName ]
+    ifAbsent: [ RwTool register registerSpecUrl: (subArguments at: 1) ]
 ]
 
 { #category : 'commands' }
@@ -180,7 +180,7 @@ TDRowanTool >> rowansave [
       self
         error:
           'Missing required argument <specUrl>. See `man rowan save` for details.' ].
-  ^ RwTool save specUrl: (subArguments at: 1)
+  ^ RwTool save saveSpecUrl: (subArguments at: 1)
 ]
 
 { #category : 'commands' }
@@ -301,7 +301,6 @@ TDRowanTool >> rowanspec [
     at: 'export'
     ifPresent: [ :argOrNil | 
       | exportUrl |
-      specTool specification: specification.
       exportUrl := argOrNil.
       exportUrl
         ifNil: [ 
@@ -310,8 +309,8 @@ TDRowanTool >> rowanspec [
               self
                 error:
                   '<exportUrl> must be specified if repository has not been cloned. See `man rowan spec` for details.' ].
-          specTool export ]
-        ifNotNil: [ specTool exportToUrl: exportUrl ] ].
+          specTool exportSpecification: specification ]
+        ifNotNil: [ specTool exportSpecification: specification toUrl: exportUrl ] ].
   ^ specification
 ]
 
@@ -331,5 +330,5 @@ TDRowanTool >> rowanunregister [
       self
         error:
           'Missing required argument <specUrl>. See `man rowan unregister` for details.' ].
-  ^ RwTool unregister specUrl: (subArguments at: 1)
+  ^ RwTool unregister unregisterSpecUrl: (subArguments at: 1)
 ]
