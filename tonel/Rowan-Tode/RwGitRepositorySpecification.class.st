@@ -3,7 +3,8 @@ Class {
 	#superclass : 'RwRepositorySpecification',
 	#instVars : [
 		'commitish',
-		'commitishType'
+		'commitishType',
+		'repositoryRootPath'
 	],
 	#category : 'Rowan-Tode'
 }
@@ -62,6 +63,20 @@ RwGitRepositorySpecification >> initialize [
 	super initialize.
 	commitish := 'master'.
 	commitishType := 'branch'
+
+]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> repositoryRootPath [
+
+   ^repositoryRootPath
+
+]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> repositoryRootPath: anObject [
+
+   repositoryRootPath := anObject
 
 ]
 

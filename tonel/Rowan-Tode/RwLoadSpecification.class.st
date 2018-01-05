@@ -38,7 +38,7 @@ RwLoadSpecification >> comment: anObject [
 
 { #category : 'actions' }
 RwLoadSpecification >> commitForTool: aRwTool message: messageString [
-  ^ self repositorySpecification commitForTool: aRwTool message: messageString
+  ^ self repoSpec commitForTool: aRwTool message: messageString
 ]
 
 { #category : 'exporting' }

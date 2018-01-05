@@ -29,15 +29,15 @@ RwCommitTool >> commitSpecUrl: aSpecUrlString message: messageString [
 
 { #category : 'git' }
 RwCommitTool >> doGitCommit: messageString [
-  | gitTool repoUrlString repoUrl gitRepoDir commitMessageFileName status |
+  | gitTool gitRootDir commitMessageFileName status |
   gitTool := self class git.
-  repoUrlString := specification repositoryUrl.
-  repoUrl := CypUrl fromString: repoUrlString.
-  gitRepoDir := ServerFileDirectory on: repoUrl pathString.
+  gitRootDir := ServerFileDirectory
+    on: specification repoSpec repositoryRootPath.
+  self halt.
   commitMessageFileName := gitTool createTmpFileWith: messageString.
-  gitTool gitaddIn: gitRepoDir with: '.'.
-  gitTool gitcommitIn: gitRepoDir with: '-a --file=' , commitMessageFileName.
-  status := gitTool gitlogIn: gitRepoDir with: '-1'.
+  gitTool gitaddIn: gitRootDir with: '.'.
+  gitTool gitcommitIn: gitRootDir with: '-a --file=' , commitMessageFileName.
+  status := gitTool gitlogIn: gitRootDir with: '-1'.
   Transcript
     cr;
     show: '==============';

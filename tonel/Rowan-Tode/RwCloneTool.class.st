@@ -45,6 +45,7 @@ RwCloneTool >> _validateForGitRootPathForSpecification: gitRootDir gitRepoDir: g
             , '. Updating spec repositoryUrl and skipping clone.'.
           self inform: msg.
           specification repositoryUrl: 'file:' , gitRepoDir fullName , '/'.
+          specification repoSpec repositoryRootPath: gitRootDir fullName.
           doneBlock value: msg ] ]
         on: Error
         do: [ :ignored | 
