@@ -23,8 +23,6 @@ RwGitRepositorySpecification >> canCommit [
 
 { #category : 'actions' }
 RwGitRepositorySpecification >> commitForTool: aRwTool message: messageString [
-  "commit not supported by default"
-
   ^ aRwTool doGitCommit: messageString
 ]
 
@@ -57,6 +55,11 @@ RwGitRepositorySpecification >> commitishType: anObject [
 
 ]
 
+{ #category : 'actions' }
+RwGitRepositorySpecification >> commitLogForTool: aRwTool limit: logLimit [
+  ^ aRwTool doGitCommitLog: logLimit
+]
+
 { #category : 'initialization' }
 RwGitRepositorySpecification >> initialize [
 
@@ -64,6 +67,14 @@ RwGitRepositorySpecification >> initialize [
 	commitish := 'master'.
 	commitishType := 'branch'
 
+]
+
+{ #category : 'initialization' }
+RwGitRepositorySpecification >> initializeForHttpsDownload [
+  "if spec has been downloaded, clear out any of the fields that represent local disk state"
+
+  super initializeForHttpsDownload.
+  repositoryRootPath := nil
 ]
 
 { #category : 'accessing' }

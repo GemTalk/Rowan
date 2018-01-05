@@ -134,6 +134,22 @@ TDRowanTool >> rowanload [
 
 { #category : 'commands' }
 TDRowanTool >> rowanlog [
+  "
+  rowan log [--limit=<max-commit-log-entries>] <spec-url>
+"
+
+  | logLimit |
+  self getSubcommandOptsMixedLongShort: {#('limit' nil #'required')}.
+  subOptions
+    at: 'limit'
+    ifPresent: [ :limit | logLimit := limit asNumber ]
+    ifAbsent: [ logLimit := 100 ].
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <spec-url>. See `man rowan log` for details.' ].
+  ^ RwTool log commitLogSpecUrl: (subArguments at: 1) limit: logLimit
 ]
 
 { #category : 'commands' }

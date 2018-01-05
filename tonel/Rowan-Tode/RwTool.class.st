@@ -108,6 +108,8 @@ RwTool >> help [
 
 { #category : 'man page' }
 RwTool >> manPage [
+  "TDRowanTool install"
+
   | manPage |
   manPage := TDManPage
     commandName: 'rowan'
@@ -151,7 +153,7 @@ EXAMPLES
 '.
   manPage subCommands
     at: 'clone' put: self class clone manPage;
-    at: 'comit' put: self class commit manPage;
+    at: 'commit' put: self class commit manPage;
     at: 'diff' put: self class diff manPage;
     at: 'list' put: self class list manPage;
     at: 'load' put: self class load manPage;

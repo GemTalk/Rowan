@@ -41,6 +41,11 @@ RwLoadSpecification >> commitForTool: aRwTool message: messageString [
   ^ self repoSpec commitForTool: aRwTool message: messageString
 ]
 
+{ #category : 'actions' }
+RwLoadSpecification >> commitLogForTool: aRwTool limit: logLimit [
+  ^ self repoSpec commitLogForTool: aRwTool limit: logLimit
+]
+
 { #category : 'exporting' }
 RwLoadSpecification >> export [
   | url exportUrl exportSpec |
@@ -84,10 +89,11 @@ RwLoadSpecification >> initialize [
 
 { #category : 'initialization' }
 RwLoadSpecification >> initializeForHttpsDownload [
-	"if spec has been downloaded, clear out any of the fields that represent local disk state"
+  "if spec has been downloaded, clear out any of the fields that represent local disk state"
 
-	super initializeForHttpsDownload.
-	repositoryUrl := nil
+  super initializeForHttpsDownload.
+  repositoryUrl := nil.
+  repoSpec initializeForHttpsDownload
 ]
 
 { #category : 'accessing' }

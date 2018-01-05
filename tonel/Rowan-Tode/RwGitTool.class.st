@@ -47,6 +47,14 @@ RwGitTool >> gitlogIn: gitRepoDir with: args [
 ]
 
 { #category : 'smalltalk api' }
+RwGitTool >> gitlogtool: commitish limit: limit gitRepoDirectory: gitRepoDirectory [
+  ^ self tdGitTool
+    gitlogIn: gitRepoDirectory
+    with:
+      '--date=relative --format="%h %cd %s" -' , limit printString , ' ' , commitish
+]
+
+{ #category : 'smalltalk api' }
 RwGitTool >> gitrevparseShowTopLevelIn: aDirectory [
   ^ self tdGitTool gitrevparseShowTopLevelIn: aDirectory
 ]

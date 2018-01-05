@@ -15,3 +15,10 @@ RwRepositorySpecification >> commitForTool: aRwTool message: messageString [
 
   
 ]
+
+{ #category : 'actions' }
+RwRepositorySpecification >> commitLogForTool: aRwTool limit: logLimit [
+  "commit  log not supported by default"
+
+  
+]
