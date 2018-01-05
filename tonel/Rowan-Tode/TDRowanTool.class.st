@@ -82,6 +82,25 @@ TDRowanTool >> rowanclone [
 
 { #category : 'commands' }
 TDRowanTool >> rowancommit [
+  "
+rowan commit --message=<message-ref> <spec-url>
+"
+
+  | messageString |
+  self getSubcommandOptsMixedLongShort: {#('message' nil #'required')}.
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <spec-url>. See `man rowan commit` for details.' ].
+  subOptions
+    at: 'message'
+    ifPresent: [ :arg | messageString := arg ]
+    ifAbsent: [ 
+      self
+        error:
+          'Must supply commit message (--message). See `man rowan commit` for details.' ].
+  ^ RwTool commit commitSpecUrl: (subArguments at: 1) message: messageString
 ]
 
 { #category : 'commands' }

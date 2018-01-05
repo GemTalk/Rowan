@@ -17,6 +17,11 @@ RwLoadSpecification >> _myUserProfile [
   ^ System myUserProfile
 ]
 
+{ #category : 'testing' }
+RwLoadSpecification >> canCommit [
+  ^ self repositoryUrl notNil and: [ self repoSpec canCommit ]
+]
+
 { #category : 'accessing' }
 RwLoadSpecification >> comment [
 
@@ -29,6 +34,11 @@ RwLoadSpecification >> comment: anObject [
 
    comment := anObject
 
+]
+
+{ #category : 'actions' }
+RwLoadSpecification >> commitForTool: aRwTool message: messageString [
+  ^ self repositorySpecification commitForTool: aRwTool message: messageString
 ]
 
 { #category : 'exporting' }

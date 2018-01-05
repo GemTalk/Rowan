@@ -34,7 +34,7 @@ RwPackageLoadSpecification >> packageNames: anObject [
 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'actions' }
 RwPackageLoadSpecification >> packageNamesForTool: aRwTool [
   ^ aRwTool packageNamesForPackageSpec: self
 ]

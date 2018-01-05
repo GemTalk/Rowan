@@ -123,7 +123,7 @@ DESCRIPTION
 
   Commands:
     clone      Clone project repository
-    commit     Save image changes to repository and commit
+    commit     Save image changes to repository and commit (git repos only)
     diff       Browse package level diffs for the given spec
     list       List registered specs
     load       Load from the repository

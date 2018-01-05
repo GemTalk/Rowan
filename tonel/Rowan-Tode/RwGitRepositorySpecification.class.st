@@ -15,6 +15,18 @@ RwGitRepositorySpecification >> branch: aString [
 	self commitishType: 'branch'
 ]
 
+{ #category : 'testing' }
+RwGitRepositorySpecification >> canCommit [
+  ^ true
+]
+
+{ #category : 'actions' }
+RwGitRepositorySpecification >> commitForTool: aRwTool message: messageString [
+  "commit not supported by default"
+
+  ^ aRwTool doGitCommit: messageString
+]
+
 { #category : 'accessing' }
 RwGitRepositorySpecification >> commitish [
 

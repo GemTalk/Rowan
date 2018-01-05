@@ -37,7 +37,7 @@ RwProjectLoadSpecification >> locked: anObject [
 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'actions' }
 RwProjectLoadSpecification >> packageNamesForTool: aRwTool [
   ^ aRwTool packageNamesForProjectSpec: self
 ]

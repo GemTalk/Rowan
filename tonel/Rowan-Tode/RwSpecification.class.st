@@ -72,7 +72,7 @@ RwSpecification >> initializeForHttpsDownload [
 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'actions' }
 RwSpecification >> packageNamesForTool: aRwTool [
   self subclassResponsibility: #'packageNamesForTool:'
 ]
