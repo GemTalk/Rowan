@@ -224,6 +224,7 @@ TDRowanTool >> rowanspec [
       #('gitTag' nil #'required').
       #('gitTagPattern' nil #'required').
       #('repoPath' nil #'required').
+      #('specsPath' nil #'required').
       #('comment' nil #'required').
       #('export' nil #'optional')}.
   subOptions at: 'name' ifPresent: [ :arg | specName := arg ].
@@ -280,8 +281,8 @@ TDRowanTool >> rowanspec [
   subOptions
     at: 'userId'
     ifPresent: [ :arg | (specification platformSpec at: 'gemstone') userId: arg ].
-  subOptions at: 'packages' ifPresent: [ :arg | specification ].
-  subOptions at: 'loads' ifPresent: [ :arg | specification ].
+  subOptions at: 'packages' ifPresent: [ :arg | specification packageNames: arg evaluate ].
+  subOptions at: 'loads' ifPresent: [ :arg | specification packageNamesToLoad: arg evaluate ].
   subOptions at: 'baseline' ifPresent: [ :arg | specification projectName: arg ].
   subOptions
     at: 'gitBranch'

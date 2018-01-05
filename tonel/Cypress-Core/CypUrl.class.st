@@ -60,10 +60,9 @@ CypUrl class >> schemeNameForString: aString [
 
 { #category : 'private' }
 CypUrl class >> urlClassForScheme: scheme [
-
-	^ self allSubclasses
-				detect: [ :urlClass | urlClass schemeName = scheme ]
-				ifNone: [ CypCypress1FileUrl ].
+  ^ self allSubclasses
+    detect: [ :urlClass | urlClass schemeName = scheme ]
+    ifNone: [ CypGenericUrl ]
 ]
 
 { #category : 'Accessing' }

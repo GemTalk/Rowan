@@ -8,6 +8,16 @@ Class {
 }
 
 { #category : 'smalltalk api' }
+RwGitTool >> gitcheckoutIn: gitRepoDir with: args [
+  ^ self tdGitTool gitcheckoutIn: gitRepoDir with: args
+]
+
+{ #category : 'smalltalk api' }
+RwGitTool >> gitcloneIn: gitRootDirectory with: args [
+  ^ self tdGitTool gitcloneIn: gitRootDirectory with: args
+]
+
+{ #category : 'smalltalk api' }
 RwGitTool >> gitrevparseShowTopLevelIn: aDirectory [
   ^ self tdGitTool gitrevparseShowTopLevelIn: aDirectory
 ]

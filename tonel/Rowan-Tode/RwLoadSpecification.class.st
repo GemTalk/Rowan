@@ -33,37 +33,34 @@ RwLoadSpecification >> comment: anObject [
 
 { #category : 'exporting' }
 RwLoadSpecification >> export [
-
-	| url exportUrl exportSpec |
-	self repositoryUrl
-		ifNil: [ 
-			self
-			error: 'exportToUrl: must be if repositoryUrl has not been set' ].
-	url := self repositoryUrl asUrl.
-	exportUrl := 'file:'
-		, (ServerFileDirectory on: url locator) containingDirectory fullName
-		, '/' , self specsPath , '/'.
-	exportSpec := self copy.
-	exportSpec initializeForHttpsDownload. "clear fields that only apply to local image"
-	^exportSpec exportToUrl: exportUrl
+  | url exportUrl exportSpec |
+  self repositoryUrl
+    ifNil: [ self error: 'exportToUrl: must be if repositoryUrl has not been set' ].
+  url := CypUrl fromString: self repositoryUrl.
+  exportUrl := 'file:'
+    ,
+      (ServerFileDirectory on: url pathForDirectory) containingDirectory fullName
+    , '/' , self specsPath , '/'.
+  exportSpec := self copy.
+  exportSpec initializeForHttpsDownload.	"clear fields that only apply to local image"
+  ^ exportSpec exportToUrl: exportUrl
 ]
 
 { #category : 'exporting' }
 RwLoadSpecification >> exportToUrl: fileUrl [
-
-	| url |
-  	url := fileUrl asUrl.
-	url schemeName = 'file' 
-		ifTrue: [ 
-			CypressFileUtilities current 
-				writeStreamFor: self specName, '.ston'
-				in: url pathForDirectory 
-				do: [:stream |  | string |
-					string := STON toStringPretty: self.
-					stream nextPutAll: string.
-					^ self ] ].
-	^nil "otherwise a noop"
-
+  | url |
+  url := CypUrl fromString: fileUrl.
+  url schemeName = 'file'
+    ifTrue: [ 
+      CypressFileUtilities current
+        writeStreamFor: self specName , '.ston'
+        in: url pathForDirectory
+        do: [ :stream | 
+          | string |
+          string := STON toStringPretty: self.
+          stream nextPutAll: string.
+          ^ self ] ].
+  ^ nil	"otherwise a noop"
 ]
 
 { #category : 'initialization' }

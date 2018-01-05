@@ -16,6 +16,12 @@ Class {
 	#category : 'Cypress-Core'
 }
 
+{ #category : 'constants' }
+CypFileUrl class >> schemeName [
+	^'file'
+
+]
+
 { #category : 'comparing' }
 CypFileUrl >> = aFileUrl [
 
@@ -128,6 +134,37 @@ CypFileUrl >> pathForDirectory [
 					s
 						nextPutAll: (path at: ii);
 						nextPutAll: delimiter]]
+]
+
+{ #category : 'paths' }
+CypFileUrl >> pathString [
+  "Path as it appears in a URL with $/ as delimiter."
+
+  | s first |
+  s := WriteStreamPortable on: (String new: 100).	"isAbsolute ifTrue:[ s nextPut: $/ ]."
+  first := true.
+  self path
+    do: [ :p | 
+      first
+        ifFalse: [ s nextPut: $/ ].
+      first := false.
+      s nextPutAll: p ].
+  ^ s contents
+]
+
+{ #category : 'printing' }
+CypFileUrl >> printOn: aStream [
+  self schemeName
+    ifNotNil: [ 
+      aStream
+        nextPutAll: self schemeName;
+        nextPut: $: ].
+  aStream nextPutAll: self pathString.
+  self fragment
+    ifNotNil: [ 
+      aStream
+        nextPut: $#;
+        nextPutAll: self fragment ]
 ]
 
 { #category : 'private' }
