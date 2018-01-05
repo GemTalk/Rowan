@@ -33,7 +33,6 @@ RwCommitTool >> doGitCommit: messageString [
   gitTool := self class git.
   gitRootDir := ServerFileDirectory
     on: specification repoSpec repositoryRootPath.
-  self halt.
   commitMessageFileName := gitTool createTmpFileWith: messageString.
   gitTool gitaddIn: gitRootDir with: '.'.
   gitTool gitcommitIn: gitRootDir with: '-a --file=' , commitMessageFileName.
