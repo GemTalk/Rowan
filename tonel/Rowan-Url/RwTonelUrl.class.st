@@ -9,7 +9,7 @@ The scheme is supported for backward compatibility with the tonel disk format[1]
 "
 Class {
 	#name : 'RwTonelUrl',
-	#superclass : 'RwFiletreeUrl',
+	#superclass : 'RwCypressUrl',
 	#category : 'Rowan-Url'
 }
 

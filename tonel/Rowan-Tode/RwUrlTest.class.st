@@ -47,11 +47,20 @@ RwUrlTest >> sampleUrlStrings [
 
 { #category : 'tests' }
 RwUrlTest >> testAsRwRepository [
-  | repos |
-  repos := {'cypress:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/cypress/'.
-  'filetree://$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/filetree/'.
-  'tonel://$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/tonel/'}
-    collect: [ :urlString | urlString asRwRepository ]
+  | repos loadSpec repoRoot testRepoPath |
+  loadSpec := RwTool registry registry at: 'Rowan' ifAbsent: [ ^ self ].
+  repoRoot := loadSpec repoSpec repositoryRootPath.
+  testRepoPath := repoRoot , '/testRepositories'.
+  repos := {('cypress:' , testRepoPath , '/cypress/').
+  ('filetree://' , testRepoPath , '/filetree/').
+  ('tonel:' , testRepoPath , '/tonel/')}
+    collect: [ :urlString | urlString -> urlString asRwRepository ].
+  repos
+    do: [ :assoc | 
+      | repo x y |
+      repo := assoc value.
+      self assert: (x := repo url) = (y := assoc key) ].
+  self halt
 ]
 
 { #category : 'tests' }
