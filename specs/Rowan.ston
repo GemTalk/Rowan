@@ -8,8 +8,8 @@ RwPackageLoadSpecification {
 	},
 	#specsPath : 'specs',
 	#repoSpec : RwGitRepositorySpecification {
-		#commitish : 'rowan',
-		#commitishType : 'branch'
+		#committish : 'rowan',
+		#committishType : 'branch'
 	},
 	#repoPath : 'tonel',
 	#comment : '',
