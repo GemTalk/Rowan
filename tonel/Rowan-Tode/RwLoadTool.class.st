@@ -7,19 +7,23 @@ Class {
 { #category : 'man page' }
 RwLoadTool >> manPage [
   ^ TDManPage
-    commandName: 'xxx'
+    commandName: 'load'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan xxx - xxx
+  rowan load - Load from the repository
 SYNOPSIS
-  rowan xxx
+  rowan load [--loads=<load-expression>] <spec-url>
 DESCRIPTION
 EXAMPLES
-  rowan xxx \
-    https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  rowan xxx \
-    file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
-  rowan xxx rowanLoadSpec
+
+  # first download and clone the project, then load
+  rowan clone --gitRoot=$GS_HOME/shared/repos \
+    https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/Rowan.ston
+  rowan load Rowan
+
+  rowan load Rowan										# load default packages
+  rowan load --loads=ALL Rowan						# load all packages
+  rowan load --loads=`#( ''Rowan-Tode'')` Rowan		# load Rowan-Tode package in addition 
 '
 ]

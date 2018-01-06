@@ -193,11 +193,8 @@ RwTool >> repositoryUrl [
 
 { #category : 'smalltalk api' }
 RwTool >> specification: aRwSpecification [
-  "subclasses are encouraged to use this method to initiate tool execution .. if appropriate"
 
-  "Note that specUrl: takes a string argument that calls this method, if you don't <aRwSpecification> handy"
-
-  ^ specification := aRwSpecification
+  ^ specification := aRwSpecification register
 ]
 
 { #category : 'smalltalk api' }

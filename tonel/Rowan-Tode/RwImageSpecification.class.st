@@ -2,7 +2,8 @@ Class {
 	#name : 'RwImageSpecification',
 	#superclass : 'RwSpecification',
 	#instVars : [
-		'loadedCommitId'
+		'loadedCommitId',
+		'repositoryUrl'
 	],
 	#category : 'Rowan-Tode'
 }
@@ -15,4 +16,18 @@ RwImageSpecification >> loadedCommitId [
 { #category : 'accessing' }
 RwImageSpecification >> loadedCommitId: anObject [
   loadedCommitId := anObject
+]
+
+{ #category : 'accessing' }
+RwImageSpecification >> repositoryUrl [
+
+   ^repositoryUrl
+
+]
+
+{ #category : 'accessing' }
+RwImageSpecification >> repositoryUrl: anObject [
+
+   repositoryUrl := anObject
+
 ]

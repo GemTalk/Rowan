@@ -2,7 +2,7 @@ Class {
 	#name : 'RwLoadSpecification',
 	#superclass : 'RwSpecification',
 	#instVars : [
-		'repositoryUrl',
+		'projectUrl',
 		'platformSpec',
 		'specsPath',
 		'repoSpec',
@@ -98,7 +98,7 @@ RwLoadSpecification >> initializeForHttpsDownload [
   "if spec has been downloaded, clear out any of the fields that represent local disk state"
 
   super initializeForHttpsDownload.
-  imageSpec := repositoryUrl := nil.
+  imageSpec := nil.
   repoSpec initializeForHttpsDownload
 ]
 
@@ -119,6 +119,20 @@ RwLoadSpecification >> platformSpec [
 RwLoadSpecification >> platformSpec: anObject [
 
    platformSpec := anObject
+
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> projectUrl [
+
+   ^projectUrl
+
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> projectUrl: anObject [
+
+   projectUrl := anObject
 
 ]
 
@@ -149,14 +163,14 @@ RwLoadSpecification >> repoPath: anObject [
 { #category : 'accessing' }
 RwLoadSpecification >> repositoryUrl [
 
-   ^repositoryUrl
+   ^self imageSpec repositoryUrl
 
 ]
 
 { #category : 'accessing' }
 RwLoadSpecification >> repositoryUrl: anObject [
 
-   repositoryUrl := anObject
+   self imageSpec repositoryUrl: anObject
 
 ]
 

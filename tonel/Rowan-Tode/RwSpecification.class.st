@@ -2,8 +2,7 @@ Class {
 	#name : 'RwSpecification',
 	#superclass : 'Object',
 	#instVars : [
-		'specName',
-		'projectUrl'
+		'specName'
 	],
 	#classVars : [
 		'Registry'
@@ -75,20 +74,6 @@ RwSpecification >> initializeForHttpsDownload [
 { #category : 'actions' }
 RwSpecification >> packageNamesForTool: aRwTool [
   self subclassResponsibility: #'packageNamesForTool:'
-]
-
-{ #category : 'accessing' }
-RwSpecification >> projectUrl [
-
-   ^projectUrl
-
-]
-
-{ #category : 'accessing' }
-RwSpecification >> projectUrl: anObject [
-
-   projectUrl := anObject
-
 ]
 
 { #category : 'registering' }
