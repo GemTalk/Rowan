@@ -201,3 +201,8 @@ RwLoadSpecification >> specsPath: anObject [
    specsPath := anObject
 
 ]
+
+{ #category : 'actions' }
+RwLoadSpecification >> updateLoadedCommitIdForTool: aRwTool [
+  ^ self repoSpec updateLoadedCommitIdForTool: aRwTool
+]

@@ -4,6 +4,31 @@ Class {
 	#category : 'Rowan-Tode'
 }
 
+{ #category : 'smalltalk api' }
+RwLoadTool >> loadSpecification: aRwSpecification [
+  | packageManager repo |
+  self specification: aRwSpecification.
+  packageManager := CypressEnvironmentPackageManager new.
+  repo := CypressAbstractRepository
+    onUrl: (CypressUrl absoluteFromText: specification repositoryUrl)
+    alias: ''.
+  packageManager
+    defaultSymbolDictionaryName: #'UserGlobals';
+    defaultSymbolList: System myUserProfile symbolList.
+  self packageNames
+    do: [ :packageName | 
+      packageManager
+        addResolvedReference:
+          (CypressResolvedReference name: packageName repository: repo) ].
+  packageManager loadResolvedReferences.
+  ^ specification updateLoadedCommitIdForTool: self
+]
+
+{ #category : 'smalltalk api' }
+RwLoadTool >> loadSpecUrl: aString [
+  ^ self loadSpecification: (RwSpecification fromUrl: aString)
+]
+
 { #category : 'man page' }
 RwLoadTool >> manPage [
   ^ TDManPage

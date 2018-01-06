@@ -145,6 +145,19 @@ TDRowanTool >> rowanlist [
 
 { #category : 'commands' }
 TDRowanTool >> rowanload [
+  "
+  rowan load [--loads=<load-expression>] <spec-url>
+"
+
+  | loads |
+  self getSubcommandOptsMixedLongShort: {#('loads' nil #'required')}.
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <spec-url>. See `man rowan load` for details.' ].
+  subOptions at: 'loads' ifPresent: [ :arg | loads := arg evaluate ].
+  ^ RwTool load loadSpecUrl: (subArguments at: 1)
 ]
 
 { #category : 'commands' }

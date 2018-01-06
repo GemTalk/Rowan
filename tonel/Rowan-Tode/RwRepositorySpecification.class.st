@@ -36,3 +36,10 @@ RwRepositorySpecification >> pushForTool: aRwTool remote: remoteOrNil [
 
   
 ]
+
+{ #category : 'actions' }
+RwRepositorySpecification >> updateLoadedCommitIdForTool: aRwTool [
+  "commit not supported by default"
+
+  
+]

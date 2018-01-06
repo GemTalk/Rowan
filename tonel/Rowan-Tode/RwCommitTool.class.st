@@ -42,8 +42,7 @@ RwCommitTool >> doGitCommit: messageString [
     show: '==============';
     cr;
     show: status.
-  loadedCommitId := gitTool gitcommitShaIn: gitRootDir.
-  specification imageSpec loadedCommitId: loadedCommitId
+  ^ self doGitUpdateLoadedCommitId: gitRootDir
 ]
 
 { #category : 'man page' }

@@ -100,6 +100,22 @@ RwTool class >> unregister [
 	^RwUnregisterTool new
 ]
 
+{ #category : 'git' }
+RwTool >> doGitUpdateLoadedCommitId [
+  | gitRootDir |
+  gitRootDir := ServerFileDirectory
+    on: specification repoSpec repositoryRootPath.
+  ^ self doGitUpdateLoadedCommitId: gitRootDir
+]
+
+{ #category : 'git' }
+RwTool >> doGitUpdateLoadedCommitId: gitRootDir [
+  | gitTool loadedCommitId |
+  gitTool := self class git.
+  loadedCommitId := gitTool gitcommitShaIn: gitRootDir.
+  ^ specification imageSpec loadedCommitId: loadedCommitId
+]
+
 { #category : 'smalltalk api' }
 RwTool >> help [
 

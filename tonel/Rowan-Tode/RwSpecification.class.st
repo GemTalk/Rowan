@@ -76,6 +76,11 @@ RwSpecification >> packageNamesForTool: aRwTool [
   self subclassResponsibility: #'packageNamesForTool:'
 ]
 
+{ #category : 'accessing' }
+RwSpecification >> projectUrl: ignored [
+  
+]
+
 { #category : 'registering' }
 RwSpecification >> register [
   self class registry at: self specName put: self

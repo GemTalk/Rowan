@@ -134,3 +134,8 @@ RwGitRepositorySpecification >> tagPattern: aString [
 	self commitish: aString.
 	self commitishType: 'tagPattern'
 ]
+
+{ #category : 'actions' }
+RwGitRepositorySpecification >> updateLoadedCommitIdForTool: aRwTool [
+  ^ aRwTool doGitUpdateLoadedCommitId
+]
