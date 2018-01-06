@@ -10,7 +10,7 @@ RwLoadTool >> loadSpecification: aRwSpecification [
   self specification: aRwSpecification.
   packageManager := CypressEnvironmentPackageManager new.
   repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: specification repositoryUrl)
+    onUrl: (RwUrl fromString: specification repositoryUrl)
     alias: ''.
   packageManager
     defaultSymbolDictionaryName: #'UserGlobals';

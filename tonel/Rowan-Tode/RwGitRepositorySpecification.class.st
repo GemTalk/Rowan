@@ -2,8 +2,8 @@ Class {
 	#name : 'RwGitRepositorySpecification',
 	#superclass : 'RwRepositorySpecification',
 	#instVars : [
-		'commitish',
-		'commitishType',
+		'committish',
+		'committishType',
 		'repositoryRootPath',
 		'remote'
 	],
@@ -28,20 +28,6 @@ RwGitRepositorySpecification >> commitForTool: aRwTool message: messageString [
 ]
 
 { #category : 'accessing' }
-RwGitRepositorySpecification >> commitish [
-
-   ^commitish
-
-]
-
-{ #category : 'accessing' }
-RwGitRepositorySpecification >> commitish: anObject [
-
-   commitish := anObject
-
-]
-
-{ #category : 'accessing' }
 RwGitRepositorySpecification >> commitishType [
 	" branch, SHA, tag, tagPattern"
 
@@ -61,13 +47,33 @@ RwGitRepositorySpecification >> commitLogForTool: aRwTool limit: logLimit [
   ^ aRwTool doGitCommitLog: logLimit
 ]
 
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> committish [
+  ^ committish
+]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> committish: anObject [
+  committish := anObject
+]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> committishType [
+  " branch, SHA, tag, tagPattern"
+
+  ^ committishType
+]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> committishType: anObject [
+  committishType := anObject
+]
+
 { #category : 'initialization' }
 RwGitRepositorySpecification >> initialize [
-
-	super initialize.
-	commitish := 'master'.
-	commitishType := 'branch'
-
+  super initialize.
+  committish := 'master'.
+  committishType := 'branch'
 ]
 
 { #category : 'initialization' }

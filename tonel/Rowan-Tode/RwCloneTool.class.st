@@ -44,7 +44,7 @@ RwCloneTool >> _validateForGitRootPathForSpecification: gitRootDir gitRepoDir: g
             , ' already exists in ' , gitRepoDir fullName printString
             , '. Updating spec repositoryUrl and skipping clone.'.
           self inform: msg.
-          specification repositoryUrl: 'cypress:' , gitRepoDir fullName , '/', specification repoPath, '/'.
+          specification repositoryUrl: 'filetree:' , gitRepoDir fullName , '/', specification repoPath, '/'.
           specification repoSpec repositoryRootPath: gitRepoDir fullName.
           doneBlock value: msg ] ]
         on: Error
@@ -59,18 +59,22 @@ RwCloneTool >> _validateForGitRootPathForSpecification: gitRootDir gitRepoDir: g
 
 { #category : 'smalltalk api' }
 RwCloneTool >> checkoutSpecification: aRwSpecification [
-	| checkout |
-	self specification: aRwSpecification.
-	checkout := specification repoSpec commitish.
-	checkout
-		ifNil: [ | msg |
-			msg := 'No commitish defined for the spec ', specification specName printString.
-			self inform: msg.
-			^ msg ] 
-		ifNotNil: [ | gitTool gitRepoDir |
-			gitTool := self class git.
-			gitRepoDir := ServerFileDirectory on: specification repoSpec repositoryRootPath.
-			gitTool gitcheckoutIn: gitRepoDir with: checkout ].
+  | checkout |
+  self specification: aRwSpecification.
+  checkout := specification repoSpec committish.
+  checkout
+    ifNil: [ 
+      | msg |
+      msg := 'No committish defined for the spec '
+        , specification specName printString.
+      self inform: msg.
+      ^ msg ]
+    ifNotNil: [ 
+      | gitTool gitRepoDir |
+      gitTool := self class git.
+      gitRepoDir := ServerFileDirectory
+        on: specification repoSpec repositoryRootPath.
+      gitTool gitcheckoutIn: gitRepoDir with: checkout ].
   ^ specification
 ]
 
@@ -85,7 +89,7 @@ RwCloneTool >> checkoutSpecUrl: aString [
 RwCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath useSsh: useSsh [
   | gitRootDir gitTool response projectUrl gitRepoDir cloneUrl cloneOption checkout |
   self specification: aRwSpecification.
-  projectUrl := CypressUrl absoluteFromText: specification projectUrl.
+  projectUrl := RwUrl fromString: specification projectUrl.
   gitRootDir := ServerFileDirectory on: gitRootPath.
   gitRepoDir := gitRootDir directoryNamed: projectUrl path last.
   self
@@ -103,12 +107,14 @@ RwCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath use
   cloneUrl := cloneUrl , (projectUrl path at: 1) , '/' , (projectUrl path at: 2)
     , '.git'.
   cloneOption := ' --no-checkout '.
-  checkout := specification repoSpec commitish.
+  checkout := specification repoSpec committish.
   checkout ifNil: [ cloneOption := '' ].
   response := gitTool gitcloneIn: gitRootDir with: cloneOption , cloneUrl.
-  specification repositoryUrl: 'cypress:' , gitRepoDir fullName , '/', specification repoPath, '/'.
+  specification
+    repositoryUrl:
+      'filetree:' , gitRepoDir fullName , '/' , specification repoPath , '/'.
   specification repoSpec repositoryRootPath: gitRepoDir fullName.
-  checkout ifNotNil: [ self checkoutSpecification: specification. ].
+  checkout ifNotNil: [ self checkoutSpecification: specification ].
   ^ specification
 ]
 
