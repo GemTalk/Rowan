@@ -58,7 +58,7 @@ RwLoadSpecification >> export [
       (ServerFileDirectory on: url pathForDirectory) containingDirectory fullName
     , '/' , self specsPath , '/'.
   exportSpec := self copy.
-  exportSpec initializeForHttpsDownload.	"clear fields that only apply to local image"
+  exportSpec initializeForExport.	"clear fields that only apply to local image"
   ^ exportSpec exportToUrl: exportUrl
 ]
 
@@ -94,12 +94,12 @@ RwLoadSpecification >> initialize [
 ]
 
 { #category : 'initialization' }
-RwLoadSpecification >> initializeForHttpsDownload [
-  "if spec has been downloaded, clear out any of the fields that represent local disk state"
+RwLoadSpecification >> initializeForImport [
+  "if spec has been imorted, clear out any of the fields that represent local disk state"
 
-  super initializeForHttpsDownload.
+  super initializeForImport.
   projectUrl := imageSpec := nil.
-  repoSpec initializeForHttpsDownload
+  repoSpec initializeForImport
 ]
 
 { #category : 'accessing' }

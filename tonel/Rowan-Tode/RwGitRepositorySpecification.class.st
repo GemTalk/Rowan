@@ -77,10 +77,10 @@ RwGitRepositorySpecification >> initialize [
 ]
 
 { #category : 'initialization' }
-RwGitRepositorySpecification >> initializeForHttpsDownload [
-  "if spec has been downloaded, clear out any of the fields that represent local disk state"
+RwGitRepositorySpecification >> initializeForImport [
+  "if spec has been imported, clear out any of the fields that represent local disk state"
 
-  super initializeForHttpsDownload.
+  super initializeForImport.
   remote := repositoryRootPath := nil
 ]
 

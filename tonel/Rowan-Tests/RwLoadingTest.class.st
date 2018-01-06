@@ -498,7 +498,9 @@ RwLoadingTest >> definitionOfBasicClassNamed: className type: classType instvars
 RwLoadingTest >> definitionOfClassInitializationClassNamed: className inPackage: packageName classMethodDefinitions: classMethodDefinitions [
   ^ RwClassDefinition
     withProperties:
-      (self properiesOfClassInitializationClassNamed: className inPackage: packageName)
+      (self
+        propertiesOfClassInitializationClassNamed: className
+        inPackage: packageName)
     classMethodDefinitions: classMethodDefinitions
     instanceMethodDefinitions: Dictionary new
 ]
@@ -737,21 +739,6 @@ RwLoadingTest >> package2Definition [
 		classExtensions: Dictionary new
 ]
 
-{ #category : 'support - classInitialization definitions' }
-RwLoadingTest >> properiesOfClassInitializationClassNamed: className inPackage: packageName [
-  ^ self
-    propertiesForClassNamed: className
-    super: 'Object'
-    instvars: {}
-    classinstvars:
-      {'classInstVar1'.
-      'classInstVar2'}
-    classvars: {'ClassVar1'}
-    type: 'normal'
-    gs_options: {}
-    inPackage: packageName
-]
-
 { #category : 'support' }
 RwLoadingTest >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars comment: comment gs_SymbolDictionary: gs_SymbolDictionary pools: pools type: type gs_options: gs_options inPackage: packageName [
   | dict |
@@ -830,6 +817,21 @@ RwLoadingTest >> propertiesForSimpleClassNamed: className inPackage: packageName
 		at: 'super' put: 'Object';
 		at: 'type' put: 'normal'.
 	^dict
+]
+
+{ #category : 'support - classInitialization definitions' }
+RwLoadingTest >> propertiesOfClassInitializationClassNamed: className inPackage: packageName [
+  ^ self
+    propertiesForClassNamed: className
+    super: 'Object'
+    instvars: {}
+    classinstvars:
+      {'classInstVar1'.
+      'classInstVar2'}
+    classvars: {'ClassVar1'}
+    type: 'normal'
+    gs_options: {}
+    inPackage: packageName
 ]
 
 { #category : 'running' }
@@ -1033,7 +1035,9 @@ RwLoadingTest >> testCombinedChanges [
             classMethodDefinitions:
               (self combinedClassMethodsForClass1: className))
             properties:
-                (self properiesOfClassInitializationClassNamed: className inPackage: packageName);
+                (self
+                    propertiesOfClassInitializationClassNamed: className
+                    inPackage: packageName);
             yourself);
     at: deletedClassName
       put:
@@ -1046,7 +1050,7 @@ RwLoadingTest >> testCombinedChanges [
               (self combinedClassMethodsForClass1: deletedClassName))
             properties:
                 (self
-                    properiesOfClassInitializationClassNamed: deletedClassName
+                    propertiesOfClassInitializationClassNamed: deletedClassName
                     inPackage: packageName);
             yourself);
     yourself.
@@ -1079,7 +1083,9 @@ RwLoadingTest >> testCombinedChanges [
             classMethodDefinitions:
               (self combinedClassMethodsForClass2: className))
             properties:
-                (self properiesOfClassInitializationClassNamed: className inPackage: packageName);
+                (self
+                    propertiesOfClassInitializationClassNamed: className
+                    inPackage: packageName);
             yourself);
     yourself.
   myPackageSet := RwPackageSetDefinition new

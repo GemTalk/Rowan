@@ -19,7 +19,7 @@ RwSpecification class >> fromUrl: specNameOrUrl [
   "self fromUrl: 'https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston'"
 
   | url |
-  url := CypUrl fromString: specNameOrUrl.
+  url := specNameOrUrl asRwUrl.
   url schemeName isNil
     ifTrue: [ ^ self registry at: specNameOrUrl ].
   url schemeName = 'file'
@@ -27,20 +27,24 @@ RwSpecification class >> fromUrl: specNameOrUrl [
       CypressFileUtilities current
         readStreamFor: url fileName
         in: url pathForDirectory
-        do: [ :stream | ^ STON fromStream: stream ] ].
+        do: [ :stream | 
+          ^ (STON fromStream: stream)
+            initializeForImport;
+            projectUrl: specNameOrUrl;
+            yourself ] ].
   url schemeName = 'https'
     ifTrue: [ 
-      | contents client response spec |
+      | contents client response |
       GsSecureSocket disableCertificateVerificationOnClient.
       client := ZnClient new.
       response := client
         beOneShot;
         enforceHttpSuccess: true;
         get: url.
-      spec := (STON fromString: response decodeFromUTF8)
-        initializeForHttpsDownload.
-      spec projectUrl: specNameOrUrl.
-      ^ spec ].
+      ^ (STON fromString: response decodeFromUTF8)
+        initializeForImport;
+        projectUrl: specNameOrUrl;
+        yourself ].
   self error: 'Unknown scheme: ' , url scheme printString
 ]
 
@@ -69,9 +73,17 @@ RwSpecification >> initialize [
 ]
 
 { #category : 'initialization' }
-RwSpecification >> initializeForHttpsDownload [
-	"if spec has been downloaded, clear out any of the fields that represent local disk state"
+RwSpecification >> initializeForExport [
+  "if spec has been exported, clear out any of the fields that represent local disk state"
 
+  ^ self initializeForImport
+]
+
+{ #category : 'initialization' }
+RwSpecification >> initializeForImport [
+  "if spec has been imported, clear out any of the fields that represent local disk state"
+
+  
 ]
 
 { #category : 'actions' }

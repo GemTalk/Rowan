@@ -2,6 +2,8 @@ Extension { #name : 'RwUrl' }
 
 { #category : '*rowan-tode' }
 RwUrl >> asRwRepository [
+  "return a platform appropriate repository for the repository identified in the receiver"
+
   ^ self subclassResponsibility: #'asRwRepository'
 ]
 
@@ -17,12 +19,15 @@ RwUrl >> asZnUrl [
 
 { #category : '*rowan-tode' }
 RwUrl >> createRwCypressRepositoryForPath: repositoryDirectoryPath [
-  ^ CypressFileSystemRepository new
+  | repo |
+  repo := CypressFileSystemRepository new
     initializeDefaultRepositoryProperties;
     codeFormatProperty: 'Cypress';
     strictCodeFormat: false;
     initializeForDirectory: repositoryDirectoryPath;
-    yourself
+    url: self printString;
+    yourself.
+  ^ repo
 ]
 
 { #category : '*rowan-tode' }
@@ -33,6 +38,7 @@ RwUrl >> createRwFiletreeRepositoryForPath: repositoryDirectoryPath [
     codeFormatProperty: 'FileTree';
     strictCodeFormat: false;
     initializeReaderAndWriterClasses;
+    url: self printString;
     yourself
 ]
 
@@ -83,6 +89,7 @@ RwUrl >> createRwTonelRepositoryForPath: repositoryDirectoryPath [
     codeFormatProperty: 'Tonel';
     strictCodeFormat: false;
     initializeReaderAndWriterClasses;
+    url: self printString;
     yourself
 ]
 
