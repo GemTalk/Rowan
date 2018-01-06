@@ -98,7 +98,7 @@ RwLoadSpecification >> initializeForHttpsDownload [
   "if spec has been downloaded, clear out any of the fields that represent local disk state"
 
   super initializeForHttpsDownload.
-  imageSpec := nil.
+  projectUrl := imageSpec := nil.
   repoSpec initializeForHttpsDownload
 ]
 

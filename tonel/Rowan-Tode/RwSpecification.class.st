@@ -30,14 +30,17 @@ RwSpecification class >> fromUrl: specNameOrUrl [
         do: [ :stream | ^ STON fromStream: stream ] ].
   url schemeName = 'https'
     ifTrue: [ 
-      | contents client response |
+      | contents client response spec |
       GsSecureSocket disableCertificateVerificationOnClient.
       client := ZnClient new.
       response := client
         beOneShot;
         enforceHttpSuccess: true;
         get: url.
-      ^ (STON fromString: response decodeFromUTF8) initializeForHttpsDownload ].
+      spec := (STON fromString: response decodeFromUTF8)
+        initializeForHttpsDownload.
+      spec projectUrl: specNameOrUrl.
+      ^ spec ].
   self error: 'Unknown scheme: ' , url scheme printString
 ]
 
