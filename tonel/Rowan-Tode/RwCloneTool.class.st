@@ -150,3 +150,9 @@ EXAMPLES
   rowan clone --gitRoot=$GS_HOME/shared/repos Rowan
 '
 ]
+
+{ #category : 'smalltalk api' }
+RwCloneTool >> specification: aRwSpecification [
+
+  ^ specification := aRwSpecification register
+]

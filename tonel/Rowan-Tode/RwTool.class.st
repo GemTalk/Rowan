@@ -194,7 +194,7 @@ RwTool >> repositoryUrl [
 { #category : 'smalltalk api' }
 RwTool >> specification: aRwSpecification [
 
-  ^ specification := aRwSpecification register
+  ^ specification := aRwSpecification
 ]
 
 { #category : 'smalltalk api' }
