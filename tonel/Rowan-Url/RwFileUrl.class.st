@@ -56,7 +56,7 @@ Class {
 		'path',
 		'isAbsolute'
 	],
-	#category : 'Rowan-Tode'
+	#category : 'Rowan-Url'
 }
 
 { #category : 'instance creation' }

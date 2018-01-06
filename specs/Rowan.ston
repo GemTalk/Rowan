@@ -1,6 +1,5 @@
 RwPackageLoadSpecification {
 	#specName : 'Rowan',
-	#projectUrl : 'https://github.com/dalehenrich/CypressReferenceImplementation',
 	#platformSpec : {
 		'gemstone' : RwGemStoneSpecification {
 			#symbolDictName : 'UserGlobals'
@@ -15,6 +14,7 @@ RwPackageLoadSpecification {
 	#comment : '',
 	#packageNames : [
 		'Cypress-Core',
+		'Rowan-Url',
 		'Rowan-Core',
 		'Rowan-GemStone',
 		'Rowan-Tests',
@@ -22,6 +22,7 @@ RwPackageLoadSpecification {
 	],
 	#packageNamesToLoad : [
 		'Cypress-Core',
+		'Rowan-Url',
 		'Rowan-Core',
 		'Rowan-GemStone',
 		'Rowan-Tests'

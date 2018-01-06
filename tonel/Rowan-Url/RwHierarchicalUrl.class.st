@@ -13,7 +13,7 @@ Class {
 		'username',
 		'password'
 	],
-	#category : 'Rowan-Tode'
+	#category : 'Rowan-Url'
 }
 
 { #category : 'instance creation' }

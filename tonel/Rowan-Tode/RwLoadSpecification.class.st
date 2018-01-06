@@ -52,7 +52,7 @@ RwLoadSpecification >> export [
   | url exportUrl exportSpec |
   self repositoryUrl
     ifNil: [ self error: 'exportToUrl: must be if repositoryUrl has not been set' ].
-  url := CypUrl fromString: self repositoryUrl.
+  url := RwUrl fromString: self repositoryUrl.
   exportUrl := 'file:'
     ,
       (ServerFileDirectory on: url pathForDirectory) containingDirectory fullName

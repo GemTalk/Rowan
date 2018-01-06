@@ -8,7 +8,7 @@ Class {
 		'schemeName',
 		'locator'
 	],
-	#category : 'Rowan-Tode'
+	#category : 'Rowan-Url'
 }
 
 { #category : 'parsing' }
@@ -31,6 +31,12 @@ RwGenericUrl class >> schemeName: schemeName  locator: locator [
 RwGenericUrl >> locator [
 	^locator
 
+]
+
+{ #category : 'paths' }
+RwGenericUrl >> pathForDirectory [
+
+	^self locator
 ]
 
 { #category : 'printing' }

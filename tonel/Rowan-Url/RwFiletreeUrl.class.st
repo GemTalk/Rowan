@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwFiletreeUrl',
 	#superclass : 'RwFileUrl',
-	#category : 'Rowan-Tode'
+	#category : 'Rowan-Url'
 }
 
 { #category : 'constants' }

@@ -1,38 +1,42 @@
 Class {
-	#name : 'RwGithubUrl',
-	#superclass : 'RwFileUrl',
+	#name : 'RwMetacelloRepositoryUrl',
+	#superclass : 'RwHierarchicalUrl',
 	#instVars : [
 		'project',
 		'committish',
 		'dir'
 	],
-	#category : 'Rowan-Tode'
+	#category : 'Rowan-Url'
 }
 
 { #category : 'constants' }
-RwGithubUrl class >> schemeName [
-  ^ 'github'
+RwMetacelloRepositoryUrl class >> schemeName [
+  ^ 'metacello'
 ]
 
 { #category : 'accessing' }
-RwGithubUrl >> dirPath [
+RwMetacelloRepositoryUrl >> committish [
+
+   ^committish
+
+]
+
+{ #category : 'accessing' }
+RwMetacelloRepositoryUrl >> dir [
+
+   ^dir
+
+]
+
+{ #category : 'accessing' }
+RwMetacelloRepositoryUrl >> dirPath [
   ^ self pathFor: dir
 ]
 
-{ #category : 'printing' }
-RwGithubUrl >> printOn: aStream [
-  aStream
-    nextPutAll: self schemeName;
-    nextPut: $:.
-  aStream nextPutAll: '//'.
-  aStream nextPutAll: self pathString
-]
-
-{ #category : 'private-initialization' }
-RwGithubUrl >> privateInitializeFromText: aString [
+{ #category : 'parsing' }
+RwMetacelloRepositoryUrl >> privateParsePath: remainder relativeTo: basePath [
   | parsedPath |
-  super privateInitializeFromText: aString.
-  parsedPath := {host} , path.
+  parsedPath := super privateParsePath: remainder relativeTo: basePath.
   (parsedPath
     detect: [ :e | e includes: $: ]
     ifNone: [ 
@@ -45,11 +49,17 @@ RwGithubUrl >> privateInitializeFromText: aString [
       dir := parsedPath
         copyFrom: (parsedPath indexOf: pivot) + 1
         to: parsedPath size ].
-  path := parsedPath.
-  host := ''
+  ^ parsedPath
 ]
 
 { #category : 'accessing' }
-RwGithubUrl >> projectPath [
+RwMetacelloRepositoryUrl >> project [
+
+   ^project
+
+]
+
+{ #category : 'accessing' }
+RwMetacelloRepositoryUrl >> projectPath [
   ^ self pathFor: project
 ]

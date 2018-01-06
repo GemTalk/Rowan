@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'fragment'
 	],
-	#category : 'Rowan-Tode'
+	#category : 'Rowan-Url'
 }
 
 { #category : 'instance creation' }

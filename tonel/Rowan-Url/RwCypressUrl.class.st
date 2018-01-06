@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwCypressUrl',
 	#superclass : 'RwFileUrl',
-	#category : 'Rowan-Tode'
+	#category : 'Rowan-Url'
 }
 
 { #category : 'constants' }
