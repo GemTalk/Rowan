@@ -1,7 +1,20 @@
 "
 A Uniform Resource Locator.  It specifies the location of a document on the Internet.  The base class is abstract; child classes break different types of URLs down in ways appropriate for that type.
 
-The classes in this hierarchy are specificaly designed for parsing URLS for Rowan source code repositories:
+The classes in this hierarchy:
+
+RwUrl
+ RwFileUrl
+  RwCypressUrl
+  RwFiletreeUrl
+   RwTonelUrl
+  RwGithubUrl
+ RwGenericUrl
+ RwHierarchicalUrl
+  RwMetacelloRepositoryUrl
+   RwGitFileTreeUrl
+
+are specificaly designed for parsing URLS for Rowan source code repositories:
 
  file:/opt/git/shared/repos/rowan/sample/repository
  http://gsdevkit.github.io/GsDevKit_home/rowan/Sample.ston
