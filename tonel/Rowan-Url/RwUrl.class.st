@@ -11,7 +11,7 @@ RwUrl
   RwGithubUrl
  RwGenericUrl
  RwHierarchicalUrl
-  RwMetacelloRepositoryUrl
+  RwSmalltalkRepositoryUrl
    RwGitFileTreeUrl
 
 are specificaly designed for parsing URLS for Rowan source code repositories:
@@ -26,21 +26,21 @@ are specificaly designed for parsing URLS for Rowan source code repositories:
  gitfiletree://gitlab.com/GsDevKit/GsDevKit:master/repository
 
  cypress:/opt/git/shared/repos/rowan/sample/repository/
- metacello://dkh:pass@gitlab.ferlicot.fr:3456/Projet/Bazard:dev/src
- metacello://git@git.gemtalksystems.com/btree340:dev/repository
- metacello://git@github.com/GsDevKit/GsDevKit:350/repository
- metacello://github.com/GsDevKit/GsDevKit:350/repository
+ smalltalk://dkh:pass@gitlab.ferlicot.fr:3456/Projet/Bazard:dev/src
+ smalltalk://git@git.gemtalksystems.com/btree340:dev/repository
+ smalltalk://git@github.com/GsDevKit/GsDevKit:350/repository
+ smalltalk://github.com/GsDevKit/GsDevKit:350/repository
 
 
 The file:, http: and https: schemes should conform to the standard specs. ZnUrl is used for parsing http: and https: urls.
 
 The github:, filetree:, gitfiletree: and tonel: schemes are supported for backward compatibility with schemes that have historically been used to identify Metacello repository urls.
 
-The cypress: and metacello: schemes are new and intended to be used moving forward with Metacello and Rowan.
+The cypress: and smalltalk: schemes are new and intended to be used moving forward with Metacello and Rowan.
 
 The cypress: url is used to indicate that path to a Cypress-style repository, i.e., a disk-based format for storing Smalltalk packages in filetree or tonel format. A cypress: url does not define the specific repository type (filetree or tonel). The type of the repository is encoded in a .filetree file located in the directory specified by pathString of the url.
 
-The metacello: scheme is based on Thierry Goubier's gitfiletree url[1]. The original github: scheme cannot be used for arbitrary git servers or git servers using non-standard ports or requiring usernames and passwords. Thierry's scheme handles the full range of possibilites.
+The smalltalk: scheme is based on Thierry Goubier's gitfiletree url[1]. The original github: scheme cannot be used for arbitrary git servers or git servers using non-standard ports or requiring usernames and passwords. Thierry's scheme handles the full range of possibilites.
 
 [1] https://github.com/dalehenrich/filetree/blob/734eed46ea57ebf5e24e5d935768bd49727fc22f/repository/MonticelloFileTree-Git.package/MCFileTreeGitRepository.class/class/basicFromUrl..st
 "
@@ -55,32 +55,32 @@ Class {
 
 { #category : 'instance creation' }
 RwUrl class >> fromString: aString [
-	"Return a URL from a string and handle
+  "Return a URL from a string and handle
 	a String without a scheme as a HttpUrl."
 
-	"Url fromString: 'http://chaos.resnet.gatech.edu:8000/docs/java/index.html?A%20query%20#part'" 
-	"Url fromString: 'msw://chaos.resnet.gatech.edu:9000/testbook?top'"
-	"Url fromString: 'telnet:chaos.resnet.gatech.edu'"
-	"Url fromString: 'file:/etc/passwd'"
+  "RwUrl fromString: 'http://chaos.resnet.gatech.edu:8000/docs/java/index.html?A%20query%20#part'"
 
-	| remainder index scheme fragment newUrl |
-	"trim surrounding whitespace"
-	remainder := aString trimSeparators.
+  "RwUrl fromString: 'msw://chaos.resnet.gatech.edu:9000/testbook?top'"
 
-	"extract the fragment, if any"
-	index := remainder indexOf: $#.
-	index > 0 ifTrue: [
-		fragment := remainder copyFrom: index + 1 to: remainder size.
-		remainder := remainder copyFrom: 1 to: index - 1].
+  "RwUrl fromString: 'telnet:chaos.resnet.gatech.edu'"
 
-	"choose class based on the scheme name, and let that class do the bulk of the parsing"
-	scheme := self schemeNameForString: remainder.
-	(scheme = 'http' or: [ scheme = 'https' ])
-		ifTrue: [ ^ ZnUrl fromString: aString ].
-	newUrl := (self urlClassForScheme: scheme) new privateInitializeFromText: remainder.
-	newUrl privateFragment: fragment.
-	^newUrl
+  "RwUrl fromString: 'file:/etc/passwd'"
 
+  | remainder index scheme fragment newUrl |
+  remainder := aString trimSeparators.
+  index := remainder indexOf: $#.
+  index > 0
+    ifTrue: [ 
+      "extract the fragment, if any"
+      fragment := remainder copyFrom: index + 1 to: remainder size.
+      remainder := remainder copyFrom: 1 to: index - 1 ].
+  scheme := self schemeNameForString: remainder.
+  (scheme = 'http' or: [ scheme = 'https' ])
+    ifTrue: [ ^ self httpFromString: aString ].
+  newUrl := (self urlClassForScheme: scheme) new
+    privateInitializeFromText: remainder.
+  newUrl privateFragment: fragment.
+  ^ newUrl
 ]
 
 { #category : 'constants' }
@@ -191,13 +191,5 @@ RwUrl >> scheme [
 	"return a string with the scheme of this URL.  For instance, HTTP"
 
 	^self subclassResponsibility: #scheme
-
-]
-
-{ #category : 'classification' }
-RwUrl >> schemeName [
-	"return a lowercase string with the scheme of this URL.  For instance, 'http'"
-
-	^self subclassResponsibility: #schemeName
 
 ]

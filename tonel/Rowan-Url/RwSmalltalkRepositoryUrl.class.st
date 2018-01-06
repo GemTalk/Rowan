@@ -1,19 +1,19 @@
 "
-This class implements the metacello: scheme:
+This class implements the smalltalk: scheme:
 
- metacello://dkh:pass@gitlab.ferlicot.fr:3456/Projet/Bazard:dev/src
- metacello://git@git.gemtalksystems.com/btree340:dev/repository
- metacello://git@github.com/GsDevKit/GsDevKit:350/repository
- metacello://github.com/GsDevKit/GsDevKit:350/repository
+ smalltalk://dkh:pass@gitlab.ferlicot.fr:3456/Projet/Bazard:dev/src
+ smalltalk://git@git.gemtalksystems.com/btree340:dev/repository
+ smalltalk://git@github.com/GsDevKit/GsDevKit:350/repository
+ smalltalk://github.com/GsDevKit/GsDevKit:350/repository
 
-The metacello: scheme is based on Thierry Goubier's gitfiletree url[1]:
+The smalltalk: scheme is based on Thierry Goubier's gitfiletree url[1]:
 
-  metacello:// <[user[:password]@]host[:port]> / user/ projectName [ : versionIdentifier ] [ / repositoryPath ]
+  smalltalk:// <[user[:password]@]host[:port]> / user/ projectName [ : versionIdentifier ] [ / repositoryPath ]
 
 [1] https://github.com/dalehenrich/filetree/blob/734eed46ea57ebf5e24e5d935768bd49727fc22f/repository/MonticelloFileTree-Git.package/MCFileTreeGitRepository.class/class/basicFromUrl..st
 "
 Class {
-	#name : 'RwMetacelloRepositoryUrl',
+	#name : 'RwSmalltalkRepositoryUrl',
 	#superclass : 'RwHierarchicalUrl',
 	#instVars : [
 		'project',
@@ -24,31 +24,31 @@ Class {
 }
 
 { #category : 'constants' }
-RwMetacelloRepositoryUrl class >> schemeName [
-  ^ 'metacello'
+RwSmalltalkRepositoryUrl class >> schemeName [
+  ^ 'smalltalk'
 ]
 
 { #category : 'accessing' }
-RwMetacelloRepositoryUrl >> committish [
+RwSmalltalkRepositoryUrl >> committish [
 
    ^committish
 
 ]
 
 { #category : 'accessing' }
-RwMetacelloRepositoryUrl >> dir [
+RwSmalltalkRepositoryUrl >> dir [
 
    ^dir
 
 ]
 
 { #category : 'accessing' }
-RwMetacelloRepositoryUrl >> dirPath [
+RwSmalltalkRepositoryUrl >> dirPath [
   ^ self pathFor: dir
 ]
 
 { #category : 'parsing' }
-RwMetacelloRepositoryUrl >> privateParsePath: remainder relativeTo: basePath [
+RwSmalltalkRepositoryUrl >> privateParsePath: remainder relativeTo: basePath [
   | parsedPath |
   parsedPath := super privateParsePath: remainder relativeTo: basePath.
   (parsedPath
@@ -67,13 +67,13 @@ RwMetacelloRepositoryUrl >> privateParsePath: remainder relativeTo: basePath [
 ]
 
 { #category : 'accessing' }
-RwMetacelloRepositoryUrl >> project [
+RwSmalltalkRepositoryUrl >> project [
 
    ^project
 
 ]
 
 { #category : 'accessing' }
-RwMetacelloRepositoryUrl >> projectPath [
+RwSmalltalkRepositoryUrl >> projectPath [
   ^ self pathFor: project
 ]

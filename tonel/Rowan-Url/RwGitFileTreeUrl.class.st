@@ -26,7 +26,7 @@ From the method comment[1]:
 "
 Class {
 	#name : 'RwGitFileTreeUrl',
-	#superclass : 'RwMetacelloRepositoryUrl',
+	#superclass : 'RwSmalltalkRepositoryUrl',
 	#category : 'Rowan-Url'
 }
 
