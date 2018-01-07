@@ -35,7 +35,7 @@ RwPrjWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification
     ifNil: [ 
       specification repoSpec repositoryRootPath
         ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
-        ifNotNil: [ :rootPath | ('file:' , rootPath , '/' , specification repoPath , '/') asRwUrl ] ]
+        ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , specification repoPath , '/') asRwUrl ] ]
     ifNotNil: [ :urlString | urlString asRwUrl ].
   repo := repositoryUrl asRwRepository.
   packageManager

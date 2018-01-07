@@ -21,6 +21,14 @@ RwPackageImageSpecification >> loadedPackages: anObject [
 
 ]
 
+{ #category : 'copying' }
+RwPackageImageSpecification >> postCopy [
+  "don't forget to copy any compound state objects"
+
+  super postCopy.
+  loadedPackages := loadedPackages copy
+]
+
 { #category : 'actions' }
 RwPackageImageSpecification >> updateLoadedPackageNamesTool: aRwTool packageNames: aPackageNames [
   ^ aRwTool doUpdateLoadedPackageNames: aPackageNames

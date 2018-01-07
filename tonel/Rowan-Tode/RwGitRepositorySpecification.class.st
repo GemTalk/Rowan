@@ -83,6 +83,13 @@ RwGitRepositorySpecification >> initializeForImport [
   remote := repositoryRootPath := nil
 ]
 
+{ #category : 'copying' }
+RwGitRepositorySpecification >> postCopy [
+  "don't forget to copy any compound state objects"
+
+  super postCopy
+]
+
 { #category : 'actions' }
 RwGitRepositorySpecification >> pullForTool: aRwTool remote: remoteString [
   ^ aRwTool doGitPull: remoteString

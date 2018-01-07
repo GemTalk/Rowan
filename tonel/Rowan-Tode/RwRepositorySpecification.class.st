@@ -26,6 +26,13 @@ RwRepositorySpecification >> commitLogForTool: aRwTool limit: logLimit [
   
 ]
 
+{ #category : 'copying' }
+RwRepositorySpecification >> postCopy [
+  "don't forget to copy any compound state objects"
+
+  super postCopy
+]
+
 { #category : 'actions' }
 RwRepositorySpecification >> pullForTool: aRwTool remote: remoteOrNil [
   "pull not supported by default"

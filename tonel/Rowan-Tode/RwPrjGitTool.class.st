@@ -53,6 +53,11 @@ RwPrjGitTool >> gitcommitShaIn: gitRepoDir [
 ]
 
 { #category : 'smalltalk api' }
+RwPrjGitTool >> gitinitIn: aDirectory with: args [
+  ^ self tdGitTool gitinitIn: aDirectory with: args
+]
+
+{ #category : 'smalltalk api' }
 RwPrjGitTool >> gitlogIn: gitRepoDir with: args [
   ^ self tdGitTool gitlogIn: gitRepoDir with: args
 ]
@@ -63,6 +68,18 @@ RwPrjGitTool >> gitlogtool: commitish limit: limit gitRepoDirectory: gitRepoDire
     gitlogIn: gitRepoDirectory
     with:
       '--date=relative --format="%h %cd %s" -' , limit printString , ' ' , commitish
+]
+
+{ #category : 'smalltalk api' }
+RwPrjGitTool >> gitPresentIn: gitRepoDir [
+  | gitHome command cdResponse |
+  [ 
+  gitHome := self gitrevparseShowTopLevelIn: gitRepoDir.
+  command := 'set -e; cd ' , gitRepoDir fullName , '; pwd'.
+  cdResponse := self performOnServer: command logging: true ]
+    on: Error
+    do: [ :ex | ^ false ].
+  ^ gitHome = cdResponse
 ]
 
 { #category : 'smalltalk api' }

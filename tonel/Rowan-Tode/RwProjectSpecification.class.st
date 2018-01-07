@@ -52,7 +52,7 @@ RwProjectSpecification >> commitLogForTool: aRwTool limit: logLimit [
 RwProjectSpecification >> export [
   | url exportUrl exportSpec |
   self repositoryUrl
-    ifNil: [ self error: 'exportToUrl: must be if repositoryUrl has not been set' ].
+    ifNil: [ self error: 'exportToUrl: must be used if repositoryUrl has not been set' ].
   url := RwUrl fromString: self repositoryUrl.
   exportUrl := 'file:'
     ,
@@ -121,6 +121,20 @@ RwProjectSpecification >> platformSpec: anObject [
 
    platformSpec := anObject
 
+]
+
+{ #category : 'copying' }
+RwProjectSpecification >> postCopy [
+  "don't forget to copy any compound state objects"
+
+  | oldPlatformSpec |
+  super postCopy.
+  oldPlatformSpec := platformSpec.
+  platformSpec := Dictionary new.
+  oldPlatformSpec
+    keysAndValuesDo: [ :key :value | platformSpec at: key put: value copy ].
+  repoSpec := repoSpec copy.
+  imageSpec := imageSpec copy
 ]
 
 { #category : 'accessing' }

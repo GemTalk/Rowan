@@ -30,7 +30,7 @@ RwPrjReadTool >> readPackageSetForSpecification: aRwSpecification [
   packageManager := CypressEnvironmentPackageManager new.
   repositoryUrl := specification repositoryUrl
     ifNil: [ 
-      ('file:' , specification repoSpec repositoryRootPath , '/'
+      ('cypress:' , specification repoSpec repositoryRootPath , '/'
         , specification repoPath , '/') asRwUrl ]
     ifNotNil: [ :urlString | urlString asRwUrl ].
   repo := repositoryUrl asRwRepository.

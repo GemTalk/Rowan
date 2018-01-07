@@ -38,5 +38,5 @@ RwPrjRegistryTool >> registeredSpecs [
 
 { #category : 'smalltalk api' }
 RwPrjRegistryTool >> registry [
-  ^ RwSpecification registry
+  ^ Rowan knownProjects
 ]

@@ -88,15 +88,25 @@ EXAMPLES
 ]
 
 { #category : 'smalltalk api' }
-RwPrjSpecTool >> newPackageSpecNamed: aString [
-  ^ RwPackageProjectSpecification new
+RwPrjSpecTool >> newPackageSpecNamed: aString useGit: useGit [
+  | spec |
+  spec := RwPackageProjectSpecification new
     specName: aString;
-    yourself
+    yourself.
+  useGit
+    ifTrue: [ ^ spec ].
+  spec repoSpec: RwDiskRepositorySpecification new.
+  ^ spec
 ]
 
 { #category : 'smalltalk api' }
-RwPrjSpecTool >> newProjectSpecNamed: aString [
-  ^ RwMetacelloProjectSpecification new
+RwPrjSpecTool >> newProjectSpecNamed: aString useGit: useGit [
+  | spec |
+  spec := RwMetacelloProjectSpecification new
     specName: aString;
-    yourself
+    yourself.
+  useGit
+    ifTrue: [ ^ spec ].
+  spec repoSpec: RwDiskRepositorySpecification new.
+  ^ spec
 ]

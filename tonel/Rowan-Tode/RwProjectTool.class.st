@@ -127,15 +127,9 @@ RwProjectTool >> doGitUpdateLoadedCommitId: gitRootDir [
   ^ specification imageSpec loadedCommitId: loadedCommitId
 ]
 
-{ #category : 'smalltalk api' }
-RwProjectTool >> help [
-
-	^self manPage asText
-]
-
 { #category : 'man page' }
 RwProjectTool >> manPage [
-  "TDRowanPrjTool install"
+  "TDRowanTool install"
 
   | manPage |
   manPage := TDManPage

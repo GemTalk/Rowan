@@ -1,9 +1,6 @@
 Class {
 	#name : 'RwSpecification',
 	#superclass : 'Object',
-	#classVars : [
-		'Registry'
-	],
 	#category : 'Rowan-Tode'
 }
 
@@ -18,7 +15,10 @@ RwSpecification class >> fromUrl: specNameOrUrl [
   | url |
   url := specNameOrUrl asRwUrl.
   url schemeName isNil
-    ifTrue: [ ^ self registry at: specNameOrUrl ].
+    ifTrue: [ 
+      ^ Rowan
+        projectNamed: specNameOrUrl
+        ifAbsent: [ self error: 'No project named ' , specNameOrUrl printString , ' found/' ] ].
   url schemeName = 'file'
     ifTrue: [ 
       CypressFileUtilities current
@@ -47,21 +47,15 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 
 { #category : 'initialization' }
 RwSpecification class >> initialize [
-	"self initialize"
-	
-	Registry := StringKeyValueDictionary new
+  "self initialize"
+
+  
 ]
 
 { #category : 'instance creation' }
 RwSpecification class >> new [
 
 	^self basicNew initialize
-]
-
-{ #category : 'accessing' }
-RwSpecification class >> registry [
-
-	^Registry
 ]
 
 { #category : 'initialization' }
@@ -88,6 +82,13 @@ RwSpecification >> packageNamesForTool: aRwTool [
   self subclassResponsibility: #'packageNamesForTool:'
 ]
 
+{ #category : 'copying' }
+RwSpecification >> postCopy [
+  "don't forget to copy any compound state objects"
+
+  
+]
+
 { #category : 'accessing' }
 RwSpecification >> projectUrl: ignored [
   
@@ -95,10 +96,10 @@ RwSpecification >> projectUrl: ignored [
 
 { #category : 'registering' }
 RwSpecification >> register [
-  self class registry at: self specName put: self
+  Rowan addProject: self
 ]
 
 { #category : 'registering' }
 RwSpecification >> unregister [
-  self class registry removeKey: self specName
+  Rowan knownProjects removeKey: self specName ifAbsent: [  ]
 ]

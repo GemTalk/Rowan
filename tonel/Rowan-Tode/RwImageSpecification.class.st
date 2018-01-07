@@ -18,6 +18,13 @@ RwImageSpecification >> loadedCommitId: anObject [
   loadedCommitId := anObject
 ]
 
+{ #category : 'copying' }
+RwImageSpecification >> postCopy [
+  "don't forget to copy any compound state objects"
+
+  super postCopy
+]
+
 { #category : 'accessing' }
 RwImageSpecification >> repositoryUrl [
 

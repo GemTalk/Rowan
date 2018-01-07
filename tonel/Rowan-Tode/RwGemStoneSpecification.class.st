@@ -31,6 +31,13 @@ RwGemStoneSpecification >> methodEnv: anObject [
 
 ]
 
+{ #category : 'copying' }
+RwGemStoneSpecification >> postCopy [
+  "don't forget to copy any compound state objects"
+
+  super postCopy
+]
+
 { #category : 'accessing' }
 RwGemStoneSpecification >> symbolDictName [
 

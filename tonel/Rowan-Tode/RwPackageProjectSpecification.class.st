@@ -64,3 +64,12 @@ RwPackageProjectSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames 
    packageNames := packageOrGroupNames
 
 ]
+
+{ #category : 'copying' }
+RwPackageProjectSpecification >> postCopy [
+  "don't forget to copy any compound state objects"
+
+  super postCopy.
+  packageNames := packageNames copy.
+  packageNamesToLoad := packageNamesToLoad copy
+]

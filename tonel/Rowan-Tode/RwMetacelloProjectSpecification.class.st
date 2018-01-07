@@ -53,6 +53,14 @@ RwMetacelloProjectSpecification >> packageOrGroupNamesToLoad: packageOrGroupName
 	loads := packageOrGroupNames
 ]
 
+{ #category : 'copying' }
+RwMetacelloProjectSpecification >> postCopy [
+  "don't forget to copy any compound state objects"
+
+  super postCopy.
+  loads := loads copy
+]
+
 { #category : 'accessing' }
 RwMetacelloProjectSpecification >> projectName [
 

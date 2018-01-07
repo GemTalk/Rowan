@@ -1,27 +1,27 @@
 Class {
-	#name : 'TDRowanPrjTool',
+	#name : 'TDRowanTool',
 	#superclass : 'TDStandardTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'initialization' }
-TDRowanPrjTool class >> initialize [
+TDRowanTool class >> initialize [
   self install
 ]
 
 { #category : 'initialization' }
-TDRowanPrjTool class >> installExampleOn: aTDTopezServer [
+TDRowanTool class >> installExampleOn: aTDTopezServer [
   "nothing for now"
 ]
 
 { #category : 'initialization' }
-TDRowanPrjTool class >> priority [
+TDRowanTool class >> priority [
     <topezCommandPriority>
     ^ 50
 ]
 
 { #category : 'rowan project' }
-TDRowanPrjTool class >> prj [
+TDRowanTool class >> prj [
   "self initialize"
 
   <topezCommand: 'prj' manPage: #'prjManPage'>
@@ -34,23 +34,41 @@ TDRowanPrjTool class >> prj [
 ]
 
 { #category : 'rowan project' }
-TDRowanPrjTool class >> prjManPage [
+TDRowanTool class >> prjManPage [
 
 	^Rowan projectTools new manPage
 ]
 
-{ #category : 'initialization' }
-TDRowanPrjTool class >> toolName [
-  ^ 'prj'
+{ #category : 'rowan project' }
+TDRowanTool class >> rep [
+  "self initialize"
+
+  <topezCommand: 'rep' manPage: #'repManPage'>
+  ^ [ :topez :objIn :tokens :command | 
+  self
+    performSubCommand: topez
+    objIn: objIn
+    commandOptions: {#('help' $h #'none')}
+    todeCommand: command ]
+]
+
+{ #category : 'rowan project' }
+TDRowanTool class >> repManPage [
+  ^ Rowan repositoryTools new manPage
 ]
 
 { #category : 'initialization' }
-TDRowanPrjTool class >> toolReadMe [
-  ^ self commandPath , ' provides Rowan project/package management support.'
+TDRowanTool class >> toolName [
+  ^ 'rowan'
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjclone [
+{ #category : 'accessing' }
+TDRowanTool class >> toolReadMe [
+  ^ self commandPath , ' provides GemTools emulation.'
+]
+
+{ #category : 'prj commands' }
+TDRowanTool >> prjclone [
   "
   prj clone [--https] --gitRoot=<git-root-dir> <spec-url>
 "
@@ -80,8 +98,8 @@ TDRowanPrjTool >> prjclone [
     useSsh: useSsh
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjcommit [
+{ #category : 'prj commands' }
+TDRowanTool >> prjcommit [
   "
   prj commit --message=<message-ref> [--push[=remote]] <spec-url>
 "
@@ -118,8 +136,8 @@ TDRowanPrjTool >> prjcommit [
   ^ commitResult
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjdiff [
+{ #category : 'prj commands' }
+TDRowanTool >> prjdiff [
   "
   prj diff <spec-url>
 "
@@ -139,12 +157,12 @@ TDRowanPrjTool >> prjdiff [
         yourself)
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjlist [
+{ #category : 'prj commands' }
+TDRowanTool >> prjlist [
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjload [
+{ #category : 'prj commands' }
+TDRowanTool >> prjload [
   "
   prj load [--loads=<load-expression>] <spec-url>
 "
@@ -160,8 +178,8 @@ TDRowanPrjTool >> prjload [
   ^ Rowan projectTools load loadSpecUrl: (subArguments at: 1)
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjlog [
+{ #category : 'prj commands' }
+TDRowanTool >> prjlog [
   "
   prj log [--limit=<max-commit-log-entries>] <spec-url>
 "
@@ -186,8 +204,8 @@ TDRowanPrjTool >> prjlog [
   ^ log
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjpull [
+{ #category : 'prj commands' }
+TDRowanTool >> prjpull [
   "
   prj pull [--remote=<git-remote-name>] <spec-url>
 "
@@ -206,8 +224,8 @@ TDRowanPrjTool >> prjpull [
     ifAbsent: [ Rowan projectTools pull pullSpecUrl: specUrlString ]
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjpush [
+{ #category : 'prj commands' }
+TDRowanTool >> prjpush [
   "
   prj push [--remote=<git-remote-name>] <spec-url>
 "
@@ -226,8 +244,8 @@ TDRowanPrjTool >> prjpush [
     ifAbsent: [ Rowan projectTools push pushSpecUrl: specUrlString ]
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjread [
+{ #category : 'prj commands' }
+TDRowanTool >> prjread [
   "
   prj read <spec-url>
 "
@@ -242,8 +260,8 @@ TDRowanPrjTool >> prjread [
   ^ Rowan projectTools read readPackageSetForSpecUrl: (subArguments at: 1)
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjregister [
+{ #category : 'prj commands' }
+TDRowanTool >> prjregister [
   "
   prj register [--name=<spec-name>] <spec-url>
 "
@@ -260,8 +278,8 @@ TDRowanPrjTool >> prjregister [
     ifAbsent: [ Rowan projectTools register registerSpecUrl: (subArguments at: 1) ]
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjregistry [
+{ #category : 'prj commands' }
+TDRowanTool >> prjregistry [
   "
   prj registry [--names|--list]
 "
@@ -280,12 +298,12 @@ TDRowanPrjTool >> prjregistry [
         ifAbsent: [ Rowan projectTools registry registry ] ]
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjrevert [
+{ #category : 'prj commands' }
+TDRowanTool >> prjrevert [
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjspec [
+{ #category : 'prj commands' }
+TDRowanTool >> prjspec [
   "
   prj spec [--name=<spec-name>] [--project=<project-url>] [--repository=<repository-url>] \
              [--comment=<comment-string>] [--repoPath=<repo-path>] [--specsPath=<specs-path>] \
@@ -342,10 +360,10 @@ TDRowanPrjTool >> prjspec [
                 error:
                   'Missing required option --name when no <spec-url> specified. See `man prj spec` for details.' ].
           arg = 'project'
-            ifTrue: [ specification := specTool newProjectSpecNamed: specName ]
+            ifTrue: [ specification := specTool newProjectSpecNamed: specName useGit: true ]
             ifFalse: [ 
               arg = 'package'
-                ifTrue: [ specification := specTool newPackageSpecNamed: specName ]
+                ifTrue: [ specification := specTool newPackageSpecNamed: specName useGit: true ]
                 ifFalse: [ 
                   self
                     error:
@@ -423,13 +441,13 @@ TDRowanPrjTool >> prjspec [
   ^ specification
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjtest [
+{ #category : 'prj commands' }
+TDRowanTool >> prjtest [
   self error: 'not yet implemented'
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjunregister [
+{ #category : 'prj commands' }
+TDRowanTool >> prjunregister [
   "
   prj unregister <spec-url>
 "
@@ -443,8 +461,8 @@ TDRowanPrjTool >> prjunregister [
   ^ Rowan projectTools unregister unregisterSpecUrl: (subArguments at: 1)
 ]
 
-{ #category : 'commands' }
-TDRowanPrjTool >> prjwrite [
+{ #category : 'prj commands' }
+TDRowanTool >> prjwrite [
   "
   prj write <spec-url>
 "
@@ -457,4 +475,119 @@ TDRowanPrjTool >> prjwrite [
         error:
           'Missing required argument <spec-url>. See `man prj write` for details.' ].
   ^ Rowan projectTools write writeSpecUrl: (subArguments at: 1)
+]
+
+{ #category : 'rep commands' }
+TDRowanTool >> repadd [
+  "
+  rep add --format=[disk|cypress|filetree|tonel] --type=[metacello|package] <project-name>
+"
+
+  
+]
+
+{ #category : 'rep commands' }
+TDRowanTool >> repcommit [
+  
+]
+
+{ #category : 'rep commands' }
+TDRowanTool >> repcreate [
+  "
+  rep create --format=[disk|cypress|filetree|tonel] --type=[metacello|package] \
+             [--git] [--repoPath=<repo-path] --root=<path-to-root-directory> <project-name>
+"
+
+  | formats types format type projectName tool rootPath useGit repoPath |
+  self
+    getSubcommandOptsMixedLongShort:
+      {#('format' nil #'required').
+      #('git' nil #'none').
+      #('type' nil #'required').
+      #('repoPath' nil #'required').
+      #('root' nil #'required')}.
+  formats := #('disk' 'cypress' 'filetree' 'tonel').
+  types := #('metacello' 'package').
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <project-name>. See `man rep create` for details.' ].
+  projectName := subArguments at: 1.
+  subOptions
+    at: 'format'
+    ifPresent: [ :arg | 
+      (formats includes: arg)
+        ifFalse: [ 
+          self
+            error:
+              'unknown repository format: ' , arg printString
+                , ' See `man rep create` for details.' ].
+      format := arg ]
+    ifAbsent: [ 
+      self
+        error:
+          'Missing required option --format. See `man rep create` for details.' ].
+  subOptions
+    at: 'root'
+    ifPresent: [ :arg | rootPath := arg ]
+    ifAbsent: [ self error: 'Missing required option --root. See `man rep create` for details.' ].
+  subOptions
+    at: 'type'
+    ifPresent: [ :arg | 
+      (types includes: arg)
+        ifFalse: [ 
+          self
+            error:
+              'unknown repository type: ' , arg printString
+                , ' See `man rep create` for details.' ].
+      type := arg ]
+    ifAbsent: [ self error: 'Missing required option --type. See `man rep create` for details.' ].
+  useGit := subOptions includesKey: 'git'.
+  repoPath := subOptions
+    at: 'repoPath'
+    ifPresent: [ :arg | arg ]
+    ifAbsent: [ '' ].
+  tool := Rowan repositoryTools create.
+  ^ type = 'metacello'
+    ifTrue: [ 
+      tool
+        createMetacelloRepository: projectName
+        format: format
+        root: rootPath
+        repoPath: repoPath
+        useGit: useGit ]
+    ifFalse: [ 
+      "type = package"
+      tool
+        createPackageRepository: projectName
+        format: format
+        root: rootPath
+        repoPath: repoPath
+        useGit: useGit ]
+]
+
+{ #category : 'rep commands' }
+TDRowanTool >> replist [
+  
+]
+
+{ #category : 'rep commands' }
+TDRowanTool >> reppackages [
+  
+]
+
+{ #category : 'rep commands' }
+TDRowanTool >> reppull [
+  
+]
+
+{ #category : 'rep commands' }
+TDRowanTool >> reppush [
+  
+]
+
+{ #category : 'rep commands' }
+TDRowanTool >> repremove [
+  
 ]

@@ -11,7 +11,7 @@ RwPrjCloneTool >> _validateForGitRootPathForSpecification: gitRootDir gitRepoDir
   specification repositoryUrl
     ifNotNil: [ :repoUrlString | 
       | repoUrl repoDir |
-      repoUrl := CypUrl fromString: repoUrlString.
+      repoUrl := RwUrl fromString: repoUrlString.
       repoDir := ServerFileDirectory on: repoUrl pathString.
       response := gitTool
         gitrevparseShowTopLevelIn: (ServerFileDirectory on: repoUrl pathString).
@@ -44,8 +44,10 @@ RwPrjCloneTool >> _validateForGitRootPathForSpecification: gitRootDir gitRepoDir
             , ' already exists in ' , gitRepoDir fullName printString
             , '. Updating spec repositoryUrl and skipping clone.'.
           self inform: msg.
-          specification repositoryUrl: 'filetree:' , gitRepoDir fullName , '/', specification repoPath, '/'.
-          specification repoSpec repositoryRootPath: gitRepoDir fullName.
+          specification
+            repositoryUrl:
+              'cypress:' , gitRepoDir fullName , '/' , specification repoPath , '/'.
+          specification repositoryRootPath: gitRepoDir fullName.
           doneBlock value: msg ] ]
         on: Error
         do: [ :ignored | 
@@ -84,9 +86,10 @@ RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath 
   response := gitTool gitcloneIn: gitRootDir with: cloneOption , cloneUrl.
   specification
     repositoryUrl:
-      'filetree:' , gitRepoDir fullName , '/' , specification repoPath , '/'.
-  specification repoSpec repositoryRootPath: gitRepoDir fullName.
-  checkout ifNotNil: [ Rowan projectTools checkout checkoutSpecification: specification ].
+      'cypress:' , gitRepoDir fullName , '/' , specification repoPath , '/'.
+  specification repositoryRootPath: gitRepoDir fullName.
+  checkout
+    ifNotNil: [ Rowan projectTools checkout checkoutSpecification: specification ].
   ^ specification
 ]
 
