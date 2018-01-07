@@ -48,7 +48,7 @@ RwUrlTest >> sampleUrlStrings [
 { #category : 'tests' }
 RwUrlTest >> testAsRwRepository [
   | repos loadSpec repoRoot testRepoPath |
-  loadSpec := RwTool registry registry at: 'Rowan' ifAbsent: [ ^ self ].
+  loadSpec := Rowan projectTools registry registry at: 'Rowan' ifAbsent: [ ^ self ].
   repoRoot := loadSpec repoSpec repositoryRootPath.
   testRepoPath := repoRoot , '/testRepositories'.
   repos := {('cypress:' , testRepoPath , '/cypress/').

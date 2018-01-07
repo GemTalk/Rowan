@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwPullTool',
-	#superclass : 'RwTool',
+	#name : 'RwPrjPullTool',
+	#superclass : 'RwProjectTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'git' }
-RwPullTool >> doGitPull: remote [
+RwPrjPullTool >> doGitPull: remote [
   | gitTool gitRootDir |
   gitTool := self class git.
   gitRootDir := ServerFileDirectory
@@ -19,29 +19,29 @@ RwPullTool >> doGitPull: remote [
 ]
 
 { #category : 'man page' }
-RwPullTool >> manPage [
+RwPrjPullTool >> manPage [
   ^ TDManPage
     commandName: 'pull'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan pull - Execute a `git pull` for the repository
+  prj pull - Execute a `git pull` for the repository
 SYNOPSIS
-  rowan pull [--remote=<git-remote-name>] <spec-url>
+  prj pull [--remote=<git-remote-name>] <spec-url>
 DESCRIPTION
 EXAMPLES
-  rowan pull Rowan
-  rowan pull --remote=origin Rowan
+  prj pull Rowan
+  prj pull --remote=origin Rowan
 '
 ]
 
 { #category : 'smalltalk api' }
-RwPullTool >> pullSpecification: aRwSpecification [
+RwPrjPullTool >> pullSpecification: aRwSpecification [
   ^ self pullSpecification: aRwSpecification remote: nil
 ]
 
 { #category : 'smalltalk api' }
-RwPullTool >> pullSpecification: aRwSpecification remote: remoteOrNil [
+RwPrjPullTool >> pullSpecification: aRwSpecification remote: remoteOrNil [
   | remote |
   self specification: aRwSpecification.
   remoteOrNil
@@ -51,14 +51,14 @@ RwPullTool >> pullSpecification: aRwSpecification remote: remoteOrNil [
 ]
 
 { #category : 'smalltalk api' }
-RwPullTool >> pullSpecUrl: aSpecUrlString [
+RwPrjPullTool >> pullSpecUrl: aSpecUrlString [
   ^ self
     pullSpecification: (RwSpecification fromUrl: aSpecUrlString)
     remote: nil
 ]
 
 { #category : 'smalltalk api' }
-RwPullTool >> pullSpecUrl: aSpecUrlString remote: remote [
+RwPrjPullTool >> pullSpecUrl: aSpecUrlString remote: remote [
   ^ self
     pullSpecification: (RwSpecification fromUrl: aSpecUrlString)
     remote: remote

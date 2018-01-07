@@ -126,10 +126,22 @@ Rowan class >> packagesNamed: someNames [
 	^RwPackageSet withAll: packageRefs
 ]
 
+{ #category : 'public tools' }
+Rowan class >> packageTools [
+
+	^self platform packageTools
+]
+
 { #category : 'public' }
 Rowan class >> platform [
 
 	^platform
+]
+
+{ #category : 'public tools' }
+Rowan class >> projectTools [
+
+	^self platform projectTools
 ]
 
 { #category : 'public' }
@@ -137,6 +149,12 @@ Rowan class >> repositoryNamed: urlString [
 	"Answer a Repository"
 
 	^CypRepository onUrl: (CypUrl fromString: urlString)
+]
+
+{ #category : 'public tools' }
+Rowan class >> repositoryTools [
+
+	^self platform repositoryTools
 ]
 
 { #category : 'private' }

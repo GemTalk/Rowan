@@ -1,6 +1,6 @@
 Class {
-	#name : 'RwGitTool',
-	#superclass : 'RwTool',
+	#name : 'RwPrjGitTool',
+	#superclass : 'RwProjectTool',
 	#instVars : [
 		'tdGitTool'
 	],
@@ -8,17 +8,17 @@ Class {
 }
 
 { #category : 'smalltalk api' }
-RwGitTool >> createTmpFileWith: fileContents [
+RwPrjGitTool >> createTmpFileWith: fileContents [
   ^ self tdGitTool createTmpFileWith: fileContents
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> gitaddIn: gitRepoDir with: args [
+RwPrjGitTool >> gitaddIn: gitRepoDir with: args [
   ^ self tdGitTool gitaddIn: gitRepoDir with: args
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> gitBranchNameIn: gitRepoDir [
+RwPrjGitTool >> gitBranchNameIn: gitRepoDir [
   "return current branch for git repository located at gitPath"
 
   | command result |
@@ -29,22 +29,22 @@ RwGitTool >> gitBranchNameIn: gitRepoDir [
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> gitcheckoutIn: gitRepoDir with: args [
+RwPrjGitTool >> gitcheckoutIn: gitRepoDir with: args [
   ^ self tdGitTool gitcheckoutIn: gitRepoDir with: args
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> gitcloneIn: gitRootDirectory with: args [
+RwPrjGitTool >> gitcloneIn: gitRootDirectory with: args [
   ^ self tdGitTool gitcloneIn: gitRootDirectory with: args
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> gitcommitIn: gitRepoDir with: args [
+RwPrjGitTool >> gitcommitIn: gitRepoDir with: args [
   ^ self tdGitTool gitcommitIn: gitRepoDir with: args
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> gitcommitShaIn: gitRepoDir [
+RwPrjGitTool >> gitcommitShaIn: gitRepoDir [
   | result |
   result := self gitlogIn: gitRepoDir with: ' -1 --pretty=format:%h '.
   (result beginsWith: 'fatal:')
@@ -53,12 +53,12 @@ RwGitTool >> gitcommitShaIn: gitRepoDir [
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> gitlogIn: gitRepoDir with: args [
+RwPrjGitTool >> gitlogIn: gitRepoDir with: args [
   ^ self tdGitTool gitlogIn: gitRepoDir with: args
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> gitlogtool: commitish limit: limit gitRepoDirectory: gitRepoDirectory [
+RwPrjGitTool >> gitlogtool: commitish limit: limit gitRepoDirectory: gitRepoDirectory [
   ^ self tdGitTool
     gitlogIn: gitRepoDirectory
     with:
@@ -66,26 +66,26 @@ RwGitTool >> gitlogtool: commitish limit: limit gitRepoDirectory: gitRepoDirecto
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> gitpullIn: gitRepoDir with: args [
+RwPrjGitTool >> gitpullIn: gitRepoDir with: args [
   ^ self tdGitTool gitpullIn: gitRepoDir with: args
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> gitpushIn: gitRepoDir with: args [
+RwPrjGitTool >> gitpushIn: gitRepoDir with: args [
   ^ self tdGitTool gitpushIn: gitRepoDir with: args
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> gitrevparseShowTopLevelIn: aDirectory [
+RwPrjGitTool >> gitrevparseShowTopLevelIn: aDirectory [
   ^ self tdGitTool gitrevparseShowTopLevelIn: aDirectory
 ]
 
 { #category : 'smalltalk api' }
-RwGitTool >> performOnServer: command logging: logging [
+RwPrjGitTool >> performOnServer: command logging: logging [
   ^ self tdGitTool performOnServer: command logging: logging
 ]
 
 { #category : 'accessing' }
-RwGitTool >> tdGitTool [
+RwPrjGitTool >> tdGitTool [
   ^ tdGitTool ifNil: [ tdGitTool := TDGitTool new ]
 ]

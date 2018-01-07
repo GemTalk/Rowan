@@ -1,30 +1,30 @@
 Class {
-	#name : 'RwReadTool',
-	#superclass : 'RwTool',
+	#name : 'RwPrjReadTool',
+	#superclass : 'RwProjectTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'man page' }
-RwReadTool >> manPage [
+RwPrjReadTool >> manPage [
   ^ TDManPage
     commandName: 'read'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan read - Read packages from repository
+  prj read - Read packages from repository
 SYNOPSIS
-  rowan read <spec-url>
+  prj read <spec-url>
 DESCRIPTION
 
   Read the packages specified in the spec and return an RwPackageSet of packages.
 
 EXAMPLES
-  rowan read Rowan
+  prj read Rowan
 '
 ]
 
 { #category : 'smalltalk api' }
-RwReadTool >> readPackageSetForSpecification: aRwSpecification [
+RwPrjReadTool >> readPackageSetForSpecification: aRwSpecification [
   | packageManager repo repositoryUrl readPackages |
   self specification: aRwSpecification.
   packageManager := CypressEnvironmentPackageManager new.
@@ -57,12 +57,12 @@ RwReadTool >> readPackageSetForSpecification: aRwSpecification [
 ]
 
 { #category : 'smalltalk api' }
-RwReadTool >> readPackageSetForSpecUrl: aString [
+RwPrjReadTool >> readPackageSetForSpecUrl: aString [
   ^ self readPackageSetForSpecification: (RwSpecification fromUrl: aString)
 ]
 
 { #category : 'validation' }
-RwReadTool >> validate: aRwSpecification [
+RwPrjReadTool >> validate: aRwSpecification [
   super validate: aRwSpecification.
   self validateForRead: aRwSpecification
 ]

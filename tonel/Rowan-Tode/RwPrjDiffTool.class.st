@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwDiffTool',
-	#superclass : 'RwTool',
+	#name : 'RwPrjDiffTool',
+	#superclass : 'RwProjectTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'smalltalk api' }
-RwDiffTool >> diffSpecification: aRwSpecification [
+RwPrjDiffTool >> diffSpecification: aRwSpecification [
 
   | repo stream diffy patch |
   super specification: aRwSpecification.
@@ -39,33 +39,33 @@ RwDiffTool >> diffSpecification: aRwSpecification [
 ]
 
 { #category : 'smalltalk api' }
-RwDiffTool >> diffSpecUrl: aString [
+RwPrjDiffTool >> diffSpecUrl: aString [
 
 	^ self diffSpecification: (RwSpecification fromUrl: aString)
 ]
 
 { #category : 'man page' }
-RwDiffTool >> manPage [
+RwPrjDiffTool >> manPage [
   ^ TDManPage
     commandName: 'diff'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan diff - Browse package level diffs for the given spec
+  prj diff - Browse package level diffs for the given spec
 SYNOPSIS
-  rowan diff <spec-url>
+  prj diff <spec-url>
 DESCRIPTION
 EXAMPLES
-  rowan diff \
+  prj diff \
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  rowan diff \
+  prj diff \
     file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
-  rowan diff Rowan
+  prj diff Rowan
 '
 ]
 
 { #category : 'validation' }
-RwDiffTool >> validate: aRwSpecification [
+RwPrjDiffTool >> validate: aRwSpecification [
   super validate: aRwSpecification.
   self validateForRead: aRwSpecification
 ]

@@ -38,3 +38,10 @@ RwPlatform >> loadedPackageClass [
 
 	self subclassResponsibility
 ]
+
+{ #category : 'queries' }
+RwPlatform >> tools [
+	"Answer the platform-specific class for tools"
+
+	self subclassResponsibility
+]

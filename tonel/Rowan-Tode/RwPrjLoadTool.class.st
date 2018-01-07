@@ -1,19 +1,19 @@
 Class {
-	#name : 'RwLoadTool',
-	#superclass : 'RwTool',
+	#name : 'RwPrjLoadTool',
+	#superclass : 'RwProjectTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'image' }
-RwLoadTool >> doUpdateLoadedPackageNames: aPackageNames [
+RwPrjLoadTool >> doUpdateLoadedPackageNames: aPackageNames [
   ^ specification imageSpec loadedPackages: aPackageNames
 ]
 
 { #category : 'smalltalk api' }
-RwLoadTool >> loadSpecification: aRwSpecification [
+RwPrjLoadTool >> loadSpecification: aRwSpecification [
   | packageSetToLoad loadedPackageSet diff |
   self specification: aRwSpecification.
-  packageSetToLoad := RwTool read readPackageSetForSpecification: specification.
+  packageSetToLoad := Rowan projectTools read readPackageSetForSpecification: specification.
   loadedPackageSet := (Rowan loadedPackagesNamed: packageSetToLoad packageNames)
     asDefinition.
   diff := packageSetToLoad compareAgainstBase: loadedPackageSet.
@@ -34,36 +34,42 @@ RwLoadTool >> loadSpecification: aRwSpecification [
 ]
 
 { #category : 'smalltalk api' }
-RwLoadTool >> loadSpecUrl: aString [
+RwPrjLoadTool >> loadSpecUrl: aString [
   ^ self loadSpecification: (RwSpecification fromUrl: aString)
 ]
 
 { #category : 'man page' }
-RwLoadTool >> manPage [
+RwPrjLoadTool >> manPage [
   ^ TDManPage
     commandName: 'load'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan load - Load from the repository
+  prj load - Load from the repository
 SYNOPSIS
-  rowan load [--loads=<load-expression>] <spec-url>
+  prj load [--loads=<load-expression>] <spec-url>
 DESCRIPTION
 EXAMPLES
 
   # first download and clone the project, then load
-  rowan clone --gitRoot=$GS_HOME/shared/repos \
+  prj clone --gitRoot=$GS_HOME/shared/repos \
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/Rowan.ston
-  rowan load Rowan
+  prj load Rowan
 
-  rowan load Rowan										# load default packages
-  rowan load --loads=ALL Rowan						# load all packages
-  rowan load --loads=`#( ''Rowan-Tode'')` Rowan		# load Rowan-Tode package in addition 
+  prj load Rowan										# load default packages
+  prj load --loads=ALL Rowan						# load all packages
+  prj load --loads=`#( ''Rowan-Tode'')` Rowan		# load Rowan-Tode package in addition 
 '
 ]
 
+{ #category : 'public' }
+RwPrjLoadTool >> packageTools [
+
+	^self platform packageTools
+]
+
 { #category : 'smalltalk api' }
-RwLoadTool >> validate: aRwSpecification [
+RwPrjLoadTool >> validate: aRwSpecification [
   super validate: aRwSpecification.
   self validateForRead: aRwSpecification
 ]

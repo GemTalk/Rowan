@@ -1,25 +1,25 @@
 Class {
-	#name : 'RwRevertTool',
-	#superclass : 'RwTool',
+	#name : 'RwPrjRevertTool',
+	#superclass : 'RwProjectTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'man page' }
-RwRevertTool >> manPage [
+RwPrjRevertTool >> manPage [
   ^ TDManPage
     commandName: 'xxx'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan xxx - xxx
+  prj xxx - xxx
 SYNOPSIS
-  rowan xxx
+  prj xxx
 DESCRIPTION
 EXAMPLES
-  rowan xxx \
+  prj xxx \
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  rowan xxx \
+  prj xxx \
     file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
-  rowan xxx rowanLoadSpec
+  prj xxx rowanLoadSpec
 '
 ]

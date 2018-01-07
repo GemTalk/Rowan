@@ -1,33 +1,33 @@
 Class {
-	#name : 'RwWriteTool',
-	#superclass : 'RwTool',
+	#name : 'RwPrjWriteTool',
+	#superclass : 'RwProjectTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'man page' }
-RwWriteTool >> manPage [
+RwPrjWriteTool >> manPage [
   ^ TDManPage
     commandName: 'write'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan write - Write packages to repository
+  prj write - Write packages to repository
 SYNOPSIS
-  rowan write <spec-url>
+  prj write <spec-url>
 DESCRIPTION
 EXAMPLES
-  rowan write Rowan
+  prj write Rowan
 '
 ]
 
 { #category : 'smalltalk api' }
-RwWriteTool >> validate: aRwSpecification [
+RwPrjWriteTool >> validate: aRwSpecification [
   super validate: aRwSpecification.
   self validateForWrite: aRwSpecification
 ]
 
 { #category : 'smalltalk api' }
-RwWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification [
+RwPrjWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification [
   | packageManager repo repositoryUrl |
   self specification: aRwSpecification.
   packageManager := CypressEnvironmentPackageManager new.
@@ -51,14 +51,14 @@ RwWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification [
 ]
 
 { #category : 'smalltalk api' }
-RwWriteTool >> writePackageSet: aRwPackageSet specUrl: aString [
+RwPrjWriteTool >> writePackageSet: aRwPackageSet specUrl: aString [
   ^ self
     writePackageSet: aRwPackageSet
     specification: (RwSpecification fromUrl: aString)
 ]
 
 { #category : 'smalltalk api' }
-RwWriteTool >> writeSpecification: aRwSpecification [
+RwPrjWriteTool >> writeSpecification: aRwSpecification [
   | packageManager repo |
   self specification: aRwSpecification.
   packageManager := CypressEnvironmentPackageManager new.
@@ -80,7 +80,7 @@ RwWriteTool >> writeSpecification: aRwSpecification [
 ]
 
 { #category : 'smalltalk api' }
-RwWriteTool >> writeSpecUrl: aString [
+RwPrjWriteTool >> writeSpecUrl: aString [
 
 	^ self writeSpecification: (RwSpecification fromUrl: aString)
 ]

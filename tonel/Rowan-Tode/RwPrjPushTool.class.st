@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwPushTool',
-	#superclass : 'RwTool',
+	#name : 'RwPrjPushTool',
+	#superclass : 'RwProjectTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'git' }
-RwPushTool >> doGitPush: remote [
+RwPrjPushTool >> doGitPush: remote [
   | gitTool gitRootDir |
   gitTool := self class git.
   gitRootDir := ServerFileDirectory
@@ -19,29 +19,29 @@ RwPushTool >> doGitPush: remote [
 ]
 
 { #category : 'man page' }
-RwPushTool >> manPage [
+RwPrjPushTool >> manPage [
   ^ TDManPage
     commandName: 'push'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan push - Execute a `git push` for the repository
+  prj push - Execute a `git push` for theprj repository
 SYNOPSIS
-  rowan push [--remote=<git-remote-name>] <spec-url>
+  prj push [--remote=<git-remote-name>] <spec-url>
 DESCRIPTION
 EXAMPLES
-  rowan push Rowan
-  rowan push --remote=origin Rowan
+  prj push Rowan
+  prj push --remote=origin Rowan
 '
 ]
 
 { #category : 'smalltalk api' }
-RwPushTool >> pushSpecification: aRwSpecification [
+RwPrjPushTool >> pushSpecification: aRwSpecification [
   ^ self pushSpecification: aRwSpecification remote: nil
 ]
 
 { #category : 'smalltalk api' }
-RwPushTool >> pushSpecification: aRwSpecification remote: remoteOrNil [
+RwPrjPushTool >> pushSpecification: aRwSpecification remote: remoteOrNil [
   | remote |
   self specification: aRwSpecification.
   remoteOrNil
@@ -51,14 +51,14 @@ RwPushTool >> pushSpecification: aRwSpecification remote: remoteOrNil [
 ]
 
 { #category : 'smalltalk api' }
-RwPushTool >> pushSpecUrl: aSpecUrlString [
+RwPrjPushTool >> pushSpecUrl: aSpecUrlString [
   ^ self
     pushSpecification: (RwSpecification fromUrl: aSpecUrlString)
     remote: nil
 ]
 
 { #category : 'smalltalk api' }
-RwPushTool >> pushSpecUrl: aSpecUrlString remote: remote [
+RwPrjPushTool >> pushSpecUrl: aSpecUrlString remote: remote [
   ^ self
     pushSpecification: (RwSpecification fromUrl: aSpecUrlString)
     remote: remote

@@ -13,7 +13,7 @@ RwPackageReadWriteTest >> doTestReadWriteReadForFormat: format [
     setUpSpecificationForReadTest: basicPackageSet
     rowanSpec: rowanSpec
     repositoryFormat: format.
-  readPackageSet := RwTool read
+  readPackageSet := Rowan tools read
     readPackageSetForSpecification: myReadSpecification.
   myWriteSpecification := self
     setUpSpecificationForWriteTest: readPackageSet
@@ -30,10 +30,10 @@ RwPackageReadWriteTest >> doTestReadWriteReadForFormat: format [
 { #category : 'private' }
 RwPackageReadWriteTest >> doTestWriteRead: writePackageSet myWriteSpecification: myWriteSpecification forFormat: format [
   | readPackageSet diff |
-  RwTool write
+  Rowan tools write
     writePackageSet: writePackageSet
     specification: myWriteSpecification.
-  readPackageSet := RwTool read
+  readPackageSet := Rowan tools read
     readPackageSetForSpecification: myWriteSpecification.
   diff := writePackageSet compareAgainstBase: readPackageSet.
   self assert: diff isEmpty.
@@ -127,7 +127,7 @@ RwPackageReadWriteTest >> testFiletreeWriteRead [
 { #category : 'tests' }
 RwPackageReadWriteTest >> testSpecReadValidation [
   | spec tool |
-  tool := RwTool read.
+  tool := Rowan projectTools read.
   spec := RwPackageLoadSpecification new
     specName: 'Empty';
     register.
@@ -141,7 +141,7 @@ RwPackageReadWriteTest >> testSpecReadValidation [
 { #category : 'tests' }
 RwPackageReadWriteTest >> testSpecWriteValidation [
   | spec tool |
-  tool := RwTool write.
+  tool := Rowan projectTools write.
   spec := RwPackageLoadSpecification new
     specName: 'Empty';
     register.

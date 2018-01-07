@@ -1,6 +1,6 @@
 Class {
-	#name : 'RwTool',
-	#superclass : 'Object',
+	#name : 'RwProjectTool',
+	#superclass : 'RwAbstractTool',
 	#instVars : [
 		'specification'
 	],
@@ -8,111 +8,111 @@ Class {
 }
 
 { #category : 'commands' }
-RwTool class >> checkout [
+RwProjectTool class >> checkout [
 
-	^RwCheckoutTool new
+	^RwPrjCheckoutTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> clone [
+RwProjectTool class >> clone [
 
-	^RwCloneTool new
+	^RwPrjCloneTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> commit [
+RwProjectTool class >> commit [
 
-	^RwCommitTool new
+	^RwPrjCommitTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> diff [
+RwProjectTool class >> diff [
 
-	^RwDiffTool new
+	^RwPrjDiffTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> git [
-  ^ RwGitTool new
+RwProjectTool class >> git [
+  ^ RwPrjGitTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> list [
+RwProjectTool class >> list [
 
-	^RwListTool new
+	^RwPrjListTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> load [
+RwProjectTool class >> load [
 
-	^RwLoadTool new
+	^RwPrjLoadTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> log [
+RwProjectTool class >> log [
 
-	^RwLogTool new
+	^RwPrjLogTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> pull [
+RwProjectTool class >> pull [
 
-	^RwPullTool new
+	^RwPrjPullTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> push [
+RwProjectTool class >> push [
 
-	^RwPushTool new
+	^RwPrjPushTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> read [
-  ^ RwReadTool new
+RwProjectTool class >> read [
+  ^ RwPrjReadTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> register [
-  ^ RwRegisterTool new
+RwProjectTool class >> register [
+  ^ RwPrjRegisterTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> registry [
+RwProjectTool class >> registry [
 
-	^RwRegistryTool new
+	^RwPrjRegistryTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> revert [
+RwProjectTool class >> revert [
 
-	^RwRevertTool new
+	^RwPrjRevertTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> spec [
-  ^ RwSpecificationTool new
+RwProjectTool class >> spec [
+  ^ RwPrjSpecTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> test [
+RwProjectTool class >> test [
 
-	^RwTestTool new
+	^RwPrjTestTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> unregister [
+RwProjectTool class >> unregister [
 
-	^RwUnregisterTool new
+	^RwPrjUnregisterTool new
 ]
 
 { #category : 'commands' }
-RwTool class >> write [
+RwProjectTool class >> write [
 
-	^RwWriteTool new
+	^RwPrjWriteTool new
 ]
 
 { #category : 'git' }
-RwTool >> doGitUpdateLoadedCommitId [
+RwProjectTool >> doGitUpdateLoadedCommitId [
   | gitRootDir |
   gitRootDir := ServerFileDirectory
     on: specification repoSpec repositoryRootPath.
@@ -120,7 +120,7 @@ RwTool >> doGitUpdateLoadedCommitId [
 ]
 
 { #category : 'git' }
-RwTool >> doGitUpdateLoadedCommitId: gitRootDir [
+RwProjectTool >> doGitUpdateLoadedCommitId: gitRootDir [
   | gitTool loadedCommitId |
   gitTool := self class git.
   loadedCommitId := gitTool gitcommitShaIn: gitRootDir.
@@ -128,25 +128,25 @@ RwTool >> doGitUpdateLoadedCommitId: gitRootDir [
 ]
 
 { #category : 'smalltalk api' }
-RwTool >> help [
+RwProjectTool >> help [
 
 	^self manPage asText
 ]
 
 { #category : 'man page' }
-RwTool >> manPage [
-  "TDRowanTool install"
+RwProjectTool >> manPage [
+  "TDRowanPrjTool install"
 
   | manPage |
   manPage := TDManPage
-    commandName: 'rowan'
+    commandName: 'prj'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan - Project, package and  git repository support.
+  prj - Project support.
 
 SYNOPSIS
-  rowan [--help] <command> [<args>]
+  prj [--help] <command> [<args>]
 
 DESCRIPTION
 
@@ -168,7 +168,7 @@ DESCRIPTION
     unregister Unregister the specification
     write      Write packages to repository
 
-  Use `rowan --help <command>` to read about a specific subcommand.
+  Use `prj --help <command>` to read about a specific subcommand.
 
 OPTIONS
   --help [<subCommand>]
@@ -176,7 +176,7 @@ OPTIONS
 
 
 EXAMPLES
-  rowan --help
+  prj --help
 
 '.
   manPage subCommands
@@ -201,44 +201,44 @@ EXAMPLES
 ]
 
 { #category : 'smalltalk api' }
-RwTool >> packageNames [
+RwProjectTool >> packageNames [
   ^ specification packageNamesForTool: self
 ]
 
 { #category : 'operations for package specs' }
-RwTool >> packageNamesForPackageSpec: aPackageSpec [
+RwProjectTool >> packageNamesForPackageSpec: aPackageSpec [
   ^ aPackageSpec packageNames
 ]
 
 { #category : 'operations for project specs' }
-RwTool >> packageNamesForProjectSpec: aProjectSpec [
+RwProjectTool >> packageNamesForProjectSpec: aProjectSpec [
   self halt: 'not yet implemented'
 ]
 
 { #category : 'smalltalk api' }
-RwTool >> repositoryUrl [
+RwProjectTool >> repositoryUrl [
   ^ self specification repositoryUrl
 ]
 
 { #category : 'smalltalk api' }
-RwTool >> specification: aRwSpecification [
+RwProjectTool >> specification: aRwSpecification [
   self validate: aRwSpecification.
   ^ specification := aRwSpecification
 ]
 
 { #category : 'smalltalk api' }
-RwTool >> specUrl: aString [
+RwProjectTool >> specUrl: aString [
   ^ self specification: (RwSpecification fromUrl: aString)
 ]
 
 { #category : 'validation' }
-RwTool >> validate: aRwSpecification [
+RwProjectTool >> validate: aRwSpecification [
   aRwSpecification specName
     ifNil: [ self error: 'The specification must have a specName specified.' ]
 ]
 
 { #category : 'validation' }
-RwTool >> validateForRead: aRwSpecification [
+RwProjectTool >> validateForRead: aRwSpecification [
   aRwSpecification repositoryRootPath
     ifNil: [ 
       self
@@ -248,7 +248,7 @@ RwTool >> validateForRead: aRwSpecification [
 ]
 
 { #category : 'validation' }
-RwTool >> validateForWrite: aRwSpecification [
+RwProjectTool >> validateForWrite: aRwSpecification [
   aRwSpecification repositoryRootPath
     ifNil: [ 
       self

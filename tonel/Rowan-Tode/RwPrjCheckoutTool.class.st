@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwCheckoutTool',
-	#superclass : 'RwTool',
+	#name : 'RwPrjCheckoutTool',
+	#superclass : 'RwProjectTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'smalltalk api' }
-RwCheckoutTool >> checkoutSpecification: aRwSpecification [
+RwPrjCheckoutTool >> checkoutSpecification: aRwSpecification [
   | checkout |
   self specification: aRwSpecification.
   checkout := specification repoSpec committish.
@@ -26,7 +26,7 @@ RwCheckoutTool >> checkoutSpecification: aRwSpecification [
 ]
 
 { #category : 'smalltalk api' }
-RwCheckoutTool >> checkoutSpecUrl: aString [ 
+RwPrjCheckoutTool >> checkoutSpecUrl: aString [ 
 
 	^self checkoutSpecification: (RwSpecification fromUrl: aString) 
 

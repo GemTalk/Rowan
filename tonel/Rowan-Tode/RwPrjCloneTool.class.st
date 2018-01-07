@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwCloneTool',
-	#superclass : 'RwTool',
+	#name : 'RwPrjCloneTool',
+	#superclass : 'RwProjectTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'private' }
-RwCloneTool >> _validateForGitRootPathForSpecification: gitRootDir gitRepoDir: gitRepoDir useSsh: useSsh ifDone: doneBlock [
+RwPrjCloneTool >> _validateForGitRootPathForSpecification: gitRootDir gitRepoDir: gitRepoDir useSsh: useSsh ifDone: doneBlock [
   | gitTool response command cdResponse |
   gitTool := self class git.
   specification repositoryUrl
@@ -58,7 +58,7 @@ RwCloneTool >> _validateForGitRootPathForSpecification: gitRootDir gitRepoDir: g
 ]
 
 { #category : 'smalltalk api' }
-RwCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath useSsh: useSsh [
+RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath useSsh: useSsh [
   | gitRootDir gitTool response projectUrl gitRepoDir cloneUrl cloneOption checkout |
   self specification: aRwSpecification.
   projectUrl := RwUrl fromString: specification projectUrl.
@@ -86,12 +86,12 @@ RwCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath use
     repositoryUrl:
       'filetree:' , gitRepoDir fullName , '/' , specification repoPath , '/'.
   specification repoSpec repositoryRootPath: gitRepoDir fullName.
-  checkout ifNotNil: [ RwTool checkout checkoutSpecification: specification ].
+  checkout ifNotNil: [ Rowan projectTools checkout checkoutSpecification: specification ].
   ^ specification
 ]
 
 { #category : 'smalltalk api' }
-RwCloneTool >> cloneSpecUrl: aString gitRootPath: gitRootPath useSsh: useSsh [
+RwPrjCloneTool >> cloneSpecUrl: aString gitRootPath: gitRootPath useSsh: useSsh [
 
 	^self 
 		cloneSpecification: (RwSpecification fromUrl: aString) 
@@ -101,7 +101,7 @@ RwCloneTool >> cloneSpecUrl: aString gitRootPath: gitRootPath useSsh: useSsh [
 ]
 
 { #category : 'man page' }
-RwCloneTool >> manPage [
+RwPrjCloneTool >> manPage [
   ^ TDManPage
     commandName: 'clone'
     sourceMethod: self class name asString , '>>manPage'
@@ -120,17 +120,17 @@ DESCRIPTION
   (https://github.com).
 
 EXAMPLES
-  rowan clone \
+  prj clone \
     https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  rowan clone \
+  prj clone \
     file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
 
-  rowan clone --gitRoot=$GS_HOME/shared/repos Rowan
+  prj clone --gitRoot=$GS_HOME/shared/repos Rowan
 '
 ]
 
 { #category : 'smalltalk api' }
-RwCloneTool >> specification: aRwSpecification [
+RwPrjCloneTool >> specification: aRwSpecification [
   "let the validation run before sending #register"
 
   ^ (super specification: aRwSpecification) register

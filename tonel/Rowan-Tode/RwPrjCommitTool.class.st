@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwCommitTool',
-	#superclass : 'RwTool',
+	#name : 'RwPrjCommitTool',
+	#superclass : 'RwProjectTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'smalltalk api' }
-RwCommitTool >> commitSpecification: aRwSpecification message: messageString [
+RwPrjCommitTool >> commitSpecification: aRwSpecification message: messageString [
   self specification: aRwSpecification.
   self class write writeSpecification: specification.
   specification canCommit
@@ -21,14 +21,14 @@ RwCommitTool >> commitSpecification: aRwSpecification message: messageString [
 ]
 
 { #category : 'smalltalk api' }
-RwCommitTool >> commitSpecUrl: aSpecUrlString message: messageString [
+RwPrjCommitTool >> commitSpecUrl: aSpecUrlString message: messageString [
   ^ self
     commitSpecification: (RwSpecification fromUrl: aSpecUrlString)
     message: messageString
 ]
 
 { #category : 'git' }
-RwCommitTool >> doGitCommit: messageString [
+RwPrjCommitTool >> doGitCommit: messageString [
   | gitTool gitRootDir commitMessageFileName status loadedCommitId |
   gitTool := self class git.
   gitRootDir := ServerFileDirectory
@@ -46,21 +46,21 @@ RwCommitTool >> doGitCommit: messageString [
 ]
 
 { #category : 'man page' }
-RwCommitTool >> manPage [
+RwPrjCommitTool >> manPage [
   ^ TDManPage
     commandName: 'commit'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan commit - Save image changes to repository and commit (git repos only)
+  prj commit - Save image changes to repository and commit (git repos only)
 SYNOPSIS
-  rowan commit --message=<message-ref> [--push[=remote]] <spec-url>
+  prj commit --message=<message-ref> [--push[=remote]] <spec-url>
 DESCRIPTION
 EXAMPLES
-  rowan commit --message=`implement RwCommitTool` Rowan
-  rowan commit Rowan
+  prj commit --message=`implement RwCommitTool` Rowan
+  prj commit Rowan
 
-  rowan commit --push=origin Rowan
-  rowan commit --push Rowan
+  prj commit --push=origin Rowan
+  prj commit --push Rowan
 '
 ]

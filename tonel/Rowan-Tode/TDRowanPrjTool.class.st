@@ -1,30 +1,30 @@
 Class {
-	#name : 'TDRowanTool',
+	#name : 'TDRowanPrjTool',
 	#superclass : 'TDStandardTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'initialization' }
-TDRowanTool class >> initialize [
+TDRowanPrjTool class >> initialize [
   self install
 ]
 
 { #category : 'initialization' }
-TDRowanTool class >> installExampleOn: aTDTopezServer [
+TDRowanPrjTool class >> installExampleOn: aTDTopezServer [
   "nothing for now"
 ]
 
 { #category : 'initialization' }
-TDRowanTool class >> priority [
+TDRowanPrjTool class >> priority [
     <topezCommandPriority>
     ^ 50
 ]
 
-{ #category : 'rowan' }
-TDRowanTool class >> rowan [
+{ #category : 'rowan project' }
+TDRowanPrjTool class >> prj [
   "self initialize"
 
-  <topezCommand: 'rowan' manPage: #'rowanManPage'>
+  <topezCommand: 'prj' manPage: #'prjManPage'>
   ^ [ :topez :objIn :tokens :command | 
   self
     performSubCommand: topez
@@ -33,26 +33,26 @@ TDRowanTool class >> rowan [
     todeCommand: command ] 
 ]
 
-{ #category : 'rowan' }
-TDRowanTool class >> rowanManPage [
+{ #category : 'rowan project' }
+TDRowanPrjTool class >> prjManPage [
 
-	^RwTool new manPage
+	^Rowan projectTools new manPage
 ]
 
 { #category : 'initialization' }
-TDRowanTool class >> toolName [
-  ^ 'rowan'
+TDRowanPrjTool class >> toolName [
+  ^ 'prj'
 ]
 
 { #category : 'initialization' }
-TDRowanTool class >> toolReadMe [
+TDRowanPrjTool class >> toolReadMe [
   ^ self commandPath , ' provides Rowan project/package management support.'
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowanclone [
+TDRowanPrjTool >> prjclone [
   "
-  rowan clone [--https] --gitRoot=<git-root-dir> <spec-url>
+  prj clone [--https] --gitRoot=<git-root-dir> <spec-url>
 "
 
   | useSsh gitRoot |
@@ -65,7 +65,7 @@ TDRowanTool >> rowanclone [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <spec-url>. See `man rowan clone` for details.' ].
+          'Missing required argument <spec-url>. See `man prj clone` for details.' ].
   subOptions at: 'gitRoot' ifPresent: [ :ignored | useSsh := false ].
   subOptions
     at: 'gitRoot'
@@ -73,17 +73,17 @@ TDRowanTool >> rowanclone [
     ifAbsent: [ 
       self
         error:
-          'Missing required options <--gitRoot. See `man rowan clone` for details.' ].
-  ^ RwTool clone
+          'Missing required options <--gitRoot. See `man prj clone` for details.' ].
+  ^ Rowan projectTools clone
     cloneSpecUrl: (subArguments at: 1)
     gitRootPath: gitRoot
     useSsh: useSsh
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowancommit [
+TDRowanPrjTool >> prjcommit [
   "
-  rowan commit --message=<message-ref> [--push[=remote]] <spec-url>
+  prj commit --message=<message-ref> [--push[=remote]] <spec-url>
 "
 
   | commitMessage specUrlString commitResult |
@@ -95,7 +95,7 @@ TDRowanTool >> rowancommit [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <spec-url>. See `man rowan commit` for details.' ].
+          'Missing required argument <spec-url>. See `man prj commit` for details.' ].
   specUrlString := subArguments at: 1.
   subOptions
     at: 'message'
@@ -106,22 +106,22 @@ TDRowanTool >> rowancommit [
         template: '') signal.
       commitMessage
         ifNil: [ ^ self inform: 'Commit aborted ... no commit message' ] ].
-  commitResult := RwTool commit
+  commitResult := Rowan projectTools commit
     commitSpecUrl: specUrlString
     message: commitMessage.
   subOptions
     at: 'push'
     ifPresent: [ :argOrNil | 
       ^ argOrNil
-        ifNil: [ RwTool push pushSpecUrl: specUrlString ]
-        ifNotNil: [ RwTool push pushSpecUrl: specUrlString remote: argOrNil ] ].
+        ifNil: [ Rowan projectTools push pushSpecUrl: specUrlString ]
+        ifNotNil: [ Rowan projectTools push pushSpecUrl: specUrlString remote: argOrNil ] ].
   ^ commitResult
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowandiff [
+TDRowanPrjTool >> prjdiff [
   "
-  rowan diff <spec-url>
+  prj diff <spec-url>
 "
 
   | diffText |
@@ -130,8 +130,8 @@ TDRowanTool >> rowandiff [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <spec-url>. See `man rowan diff` for details.' ].
-  diffText := RwTool diff diffSpecUrl: (subArguments at: 1).
+          'Missing required argument <spec-url>. See `man prj diff` for details.' ].
+  diffText := Rowan projectTools diff diffSpecUrl: (subArguments at: 1).
   diffText
     editUsing:
       ((TDEditorSpec topez: topez editorAspect: #'edit')
@@ -140,13 +140,13 @@ TDRowanTool >> rowandiff [
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowanlist [
+TDRowanPrjTool >> prjlist [
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowanload [
+TDRowanPrjTool >> prjload [
   "
-  rowan load [--loads=<load-expression>] <spec-url>
+  prj load [--loads=<load-expression>] <spec-url>
 "
 
   | loads |
@@ -155,15 +155,15 @@ TDRowanTool >> rowanload [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <spec-url>. See `man rowan load` for details.' ].
+          'Missing required argument <spec-url>. See `man prj load` for details.' ].
   subOptions at: 'loads' ifPresent: [ :arg | loads := arg evaluate ].
-  ^ RwTool load loadSpecUrl: (subArguments at: 1)
+  ^ Rowan projectTools load loadSpecUrl: (subArguments at: 1)
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowanlog [
+TDRowanPrjTool >> prjlog [
   "
-  rowan log [--limit=<max-commit-log-entries>] <spec-url>
+  prj log [--limit=<max-commit-log-entries>] <spec-url>
 "
 
   | logLimit log |
@@ -176,8 +176,8 @@ TDRowanTool >> rowanlog [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <spec-url>. See `man rowan log` for details.' ].
-  log := RwTool log commitLogSpecUrl: (subArguments at: 1) limit: logLimit.
+          'Missing required argument <spec-url>. See `man prj log` for details.' ].
+  log := Rowan projectTools log commitLogSpecUrl: (subArguments at: 1) limit: logLimit.
   log
     editUsing:
       ((TDEditorSpec topez: topez editorAspect: #'edit')
@@ -187,9 +187,9 @@ TDRowanTool >> rowanlog [
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowanpull [
+TDRowanPrjTool >> prjpull [
   "
-  rowan pull [--remote=<git-remote-name>] <spec-url>
+  prj pull [--remote=<git-remote-name>] <spec-url>
 "
 
   | specUrlString |
@@ -198,18 +198,18 @@ TDRowanTool >> rowanpull [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <spec-url>. See `man rowan pull` for details.' ].
+          'Missing required argument <spec-url>. See `man prj pull` for details.' ].
   specUrlString := subArguments at: 1.
   ^ subOptions
     at: 'remote'
-    ifPresent: [ :remote | RwTool pull pullSpecUrl: specUrlString remote: remote ]
-    ifAbsent: [ RwTool pull pullSpecUrl: specUrlString ]
+    ifPresent: [ :remote | Rowan projectTools pull pullSpecUrl: specUrlString remote: remote ]
+    ifAbsent: [ Rowan projectTools pull pullSpecUrl: specUrlString ]
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowanpush [
+TDRowanPrjTool >> prjpush [
   "
-  rowan push [--remote=<git-remote-name>] <spec-url>
+  prj push [--remote=<git-remote-name>] <spec-url>
 "
 
   | specUrlString |
@@ -218,18 +218,18 @@ TDRowanTool >> rowanpush [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <spec-url>. See `man rowan push` for details.' ].
+          'Missing required argument <spec-url>. See `man prj push` for details.' ].
   specUrlString := subArguments at: 1.
   ^ subOptions
     at: 'remote'
-    ifPresent: [ :remote | RwTool push pushSpecUrl: specUrlString remote: remote ]
-    ifAbsent: [ RwTool push pushSpecUrl: specUrlString ]
+    ifPresent: [ :remote | Rowan projectTools push pushSpecUrl: specUrlString remote: remote ]
+    ifAbsent: [ Rowan projectTools push pushSpecUrl: specUrlString ]
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowanread [
+TDRowanPrjTool >> prjread [
   "
-  rowan read <spec-url>
+  prj read <spec-url>
 "
 
   | diffText |
@@ -238,14 +238,14 @@ TDRowanTool >> rowanread [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <spec-url>. See `man rowan read` for details.' ].
-  ^ RwTool read readPackageSetForSpecUrl: (subArguments at: 1)
+          'Missing required argument <spec-url>. See `man prj read` for details.' ].
+  ^ Rowan projectTools read readPackageSetForSpecUrl: (subArguments at: 1)
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowanregister [
+TDRowanPrjTool >> prjregister [
   "
-  rowan register [--name=<spec-name>] <spec-url>
+  prj register [--name=<spec-name>] <spec-url>
 "
 
   self getSubcommandOptsMixedLongShort: {#('name' nil #'required')}.
@@ -253,17 +253,17 @@ TDRowanTool >> rowanregister [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <spec-url>. See `man rowan register` for details.' ].
+          'Missing required argument <spec-url>. See `man prj register` for details.' ].
   ^ subOptions
     at: 'name'
-    ifPresent: [ :specName | RwTool register registerSpecUrl: (subArguments at: 1) as: specName ]
-    ifAbsent: [ RwTool register registerSpecUrl: (subArguments at: 1) ]
+    ifPresent: [ :specName | Rowan projectTools register registerSpecUrl: (subArguments at: 1) as: specName ]
+    ifAbsent: [ Rowan projectTools register registerSpecUrl: (subArguments at: 1) ]
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowanregistry [
+TDRowanPrjTool >> prjregistry [
   "
-  rowan registry [--names|--list]
+  prj registry [--names|--list]
 "
 
   self
@@ -272,41 +272,41 @@ TDRowanTool >> rowanregistry [
       #('list' nil #'none')}.
   ^ subOptions
     at: 'names'
-    ifPresent: [ :ignored | RwTool registry registeredSpecNames ]
+    ifPresent: [ :ignored | Rowan projectTools registry registeredSpecNames ]
     ifAbsent: [ 
       subOptions
         at: 'list'
-        ifPresent: [ :ignored | RwTool registry registeredSpecs ]
-        ifAbsent: [ RwTool registry registry ] ]
+        ifPresent: [ :ignored | Rowan projectTools registry registeredSpecs ]
+        ifAbsent: [ Rowan projectTools registry registry ] ]
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowanrevert [
+TDRowanPrjTool >> prjrevert [
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowanspec [
+TDRowanPrjTool >> prjspec [
   "
-  rowan spec [--name=<spec-name>] [--project=<project-url>] [--repository=<repository-url>] \
+  prj spec [--name=<spec-name>] [--project=<project-url>] [--repository=<repository-url>] \
              [--comment=<comment-string>] [--repoPath=<repo-path>] [--specsPath=<specs-path>] \
              [<spec-url>]
 
-  rowan spec [--env=<meth-env>] [--symbolDict=<symbolDict-name>] [--userId=<user-id>] [<spec-url>]
+  prj spec [--env=<meth-env>] [--symbolDict=<symbolDict-name>] [--userId=<user-id>] [<spec-url>]
 
-  rowan spec [--type=package] [--packages=<project-package-names>] [--loads=<package-names-to-load>] \
+  prj spec [--type=package] [--packages=<project-package-names>] [--loads=<package-names-to-load>] \
              [<spec-url>]
 
-  rowan spec [--type=project] [--baseline=<project-name>] [--loads=<metacello-load-list>] \
+  prj spec [--type=project] [--baseline=<project-name>] [--loads=<metacello-load-list>] \
              [<spec-url>]
 
-  rowan spec [--gitBranch=<branch-name>|--gitSHA=<SHA>|--gitTag=<tag>|--gitTagPattern=<pattern> \
+  prj spec [--gitBranch=<branch-name>|--gitSHA=<SHA>|--gitTag=<tag>|--gitTagPattern=<pattern> \
              [--gitRemote=<remote-name>] [<spec-url>]
 
-  rowan spec [--export[=<export-url>]] [<spec-url>]
+  prj spec [--export[=<export-url>]] [<spec-url>]
 "
 
   | shouldRegister specification specTool specName |
-  specTool := RwTool spec.
+  specTool := Rowan projectTools spec.
   shouldRegister := false.
   self
     getSubcommandOptsMixedLongShort:
@@ -340,7 +340,7 @@ TDRowanTool >> rowanspec [
             ifNil: [ 
               self
                 error:
-                  'Missing required option --name when no <spec-url> specified. See `man rowan spec` for details.' ].
+                  'Missing required option --name when no <spec-url> specified. See `man prj spec` for details.' ].
           arg = 'project'
             ifTrue: [ specification := specTool newProjectSpecNamed: specName ]
             ifFalse: [ 
@@ -351,12 +351,12 @@ TDRowanTool >> rowanspec [
                     error:
                       'Unrecognized --type ' , arg printString
                         ,
-                          '. Should be ''project'' or ''package''. See `man rowan spec` for details.' ] ].
+                          '. Should be ''project'' or ''package''. See `man prj spec` for details.' ] ].
           shouldRegister := true ]
         ifAbsent: [ 
           self
             error:
-              'Missing required option --type when no <spec-url> specified. See `man rowan spec` for details.' ] ]
+              'Missing required option --type when no <spec-url> specified. See `man prj spec` for details.' ] ]
     ifFalse: [ 
       "Updating existing spec. If --name is used, copy existing spec."
       specification := specTool specUrl: (subArguments at: 1).
@@ -417,21 +417,21 @@ TDRowanTool >> rowanspec [
             ifNil: [ 
               self
                 error:
-                  '<exportUrl> must be specified if repository has not been cloned. See `man rowan spec` for details.' ].
+                  '<exportUrl> must be specified if repository has not been cloned. See `man prj spec` for details.' ].
           specTool exportSpecification: specification ]
         ifNotNil: [ specTool exportSpecification: specification toUrl: exportUrl ] ].
   ^ specification
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowantest [
+TDRowanPrjTool >> prjtest [
   self error: 'not yet implemented'
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowanunregister [
+TDRowanPrjTool >> prjunregister [
   "
-  rowan unregister <spec-url>
+  prj unregister <spec-url>
 "
 
   self getSubcommandOptsMixedLongShort: {}.
@@ -439,14 +439,14 @@ TDRowanTool >> rowanunregister [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <spec-url>. See `man rowan unregister` for details.' ].
-  ^ RwTool unregister unregisterSpecUrl: (subArguments at: 1)
+          'Missing required argument <spec-url>. See `man prj unregister` for details.' ].
+  ^ Rowan projectTools unregister unregisterSpecUrl: (subArguments at: 1)
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowanwrite [
+TDRowanPrjTool >> prjwrite [
   "
-  rowan write <spec-url>
+  prj write <spec-url>
 "
 
   | diffText |
@@ -455,6 +455,6 @@ TDRowanTool >> rowanwrite [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <spec-url>. See `man rowan write` for details.' ].
-  ^ RwTool write writeSpecUrl: (subArguments at: 1)
+          'Missing required argument <spec-url>. See `man prj write` for details.' ].
+  ^ Rowan projectTools write writeSpecUrl: (subArguments at: 1)
 ]
