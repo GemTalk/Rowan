@@ -13,7 +13,7 @@ RwPackageReadWriteTest >> doTestReadWriteReadForFormat: format [
     setUpSpecificationForReadTest: basicPackageSet
     rowanSpec: rowanSpec
     repositoryFormat: format.
-  readPackageSet := Rowan tools read
+  readPackageSet := Rowan projectTools read
     readPackageSetForSpecification: myReadSpecification.
   myWriteSpecification := self
     setUpSpecificationForWriteTest: readPackageSet
@@ -30,10 +30,10 @@ RwPackageReadWriteTest >> doTestReadWriteReadForFormat: format [
 { #category : 'private' }
 RwPackageReadWriteTest >> doTestWriteRead: writePackageSet myWriteSpecification: myWriteSpecification forFormat: format [
   | readPackageSet diff |
-  Rowan tools write
+  Rowan projectTools write
     writePackageSet: writePackageSet
     specification: myWriteSpecification.
-  readPackageSet := Rowan tools read
+  readPackageSet := Rowan projectTools read
     readPackageSetForSpecification: myWriteSpecification.
   diff := writePackageSet compareAgainstBase: readPackageSet.
   self assert: diff isEmpty.
