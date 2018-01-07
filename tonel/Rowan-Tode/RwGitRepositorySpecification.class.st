@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'committish',
 		'committishType',
-		'repositoryRootPath',
 		'remote'
 	],
 	#category : 'Rowan-Tode'
@@ -103,20 +102,6 @@ RwGitRepositorySpecification >> remote [
 RwGitRepositorySpecification >> remote: anObject [
 
    remote := anObject
-
-]
-
-{ #category : 'accessing' }
-RwGitRepositorySpecification >> repositoryRootPath [
-
-   ^repositoryRootPath
-
-]
-
-{ #category : 'accessing' }
-RwGitRepositorySpecification >> repositoryRootPath: anObject [
-
-   repositoryRootPath := anObject
 
 ]
 

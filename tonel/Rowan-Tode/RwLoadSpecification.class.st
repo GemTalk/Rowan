@@ -161,6 +161,16 @@ RwLoadSpecification >> repoPath: anObject [
 ]
 
 { #category : 'accessing' }
+RwLoadSpecification >> repositoryRootPath [
+  ^ self repoSpec repositoryRootPath
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> repositoryRootPath: anObject [
+  self repoSpec repositoryRootPath: anObject
+]
+
+{ #category : 'accessing' }
 RwLoadSpecification >> repositoryUrl [
 
    ^self imageSpec repositoryUrl

@@ -65,7 +65,7 @@ TDRowanTool >> rowanclone [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <specUrl>. See `man rowan clone` for details.' ].
+          'Missing required argument <spec-url>. See `man rowan clone` for details.' ].
   subOptions at: 'gitRoot' ifPresent: [ :ignored | useSsh := false ].
   subOptions
     at: 'gitRoot'
@@ -121,7 +121,7 @@ TDRowanTool >> rowancommit [
 { #category : 'commands' }
 TDRowanTool >> rowandiff [
   "
-  rowan diff <specUrl>
+  rowan diff <spec-url>
 "
 
   | diffText |
@@ -130,7 +130,7 @@ TDRowanTool >> rowandiff [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <specUrl>. See `man rowan diff` for details.' ].
+          'Missing required argument <spec-url>. See `man rowan diff` for details.' ].
   diffText := RwTool diff diffSpecUrl: (subArguments at: 1).
   diffText
     editUsing:
@@ -227,9 +227,25 @@ TDRowanTool >> rowanpush [
 ]
 
 { #category : 'commands' }
+TDRowanTool >> rowanread [
+  "
+  rowan read <spec-url>
+"
+
+  | diffText |
+  self getSubcommandOptsMixedLongShort: {}.
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <spec-url>. See `man rowan read` for details.' ].
+  ^ RwTool read readPackageSetForSpecUrl: (subArguments at: 1)
+]
+
+{ #category : 'commands' }
 TDRowanTool >> rowanregister [
   "
-  rowan register [--name=<spec-name>] <specUrl>
+  rowan register [--name=<spec-name>] <spec-url>
 "
 
   self getSubcommandOptsMixedLongShort: {#('name' nil #'required')}.
@@ -237,7 +253,7 @@ TDRowanTool >> rowanregister [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <specUrl>. See `man rowan register` for details.' ].
+          'Missing required argument <spec-url>. See `man rowan register` for details.' ].
   ^ subOptions
     at: 'name'
     ifPresent: [ :specName | RwTool register registerSpecUrl: (subArguments at: 1) as: specName ]
@@ -271,7 +287,7 @@ TDRowanTool >> rowanrevert [
 { #category : 'commands' }
 TDRowanTool >> rowansave [
   "
-  rowan save <specUrl>
+  rowan save <spec-url>
 "
 
   | diffText |
@@ -280,7 +296,7 @@ TDRowanTool >> rowansave [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <specUrl>. See `man rowan save` for details.' ].
+          'Missing required argument <spec-url>. See `man rowan save` for details.' ].
   ^ RwTool save saveSpecUrl: (subArguments at: 1)
 ]
 
@@ -439,6 +455,6 @@ TDRowanTool >> rowanunregister [
     ifTrue: [ 
       self
         error:
-          'Missing required argument <specUrl>. See `man rowan unregister` for details.' ].
+          'Missing required argument <spec-url>. See `man rowan unregister` for details.' ].
   ^ RwTool unregister unregisterSpecUrl: (subArguments at: 1)
 ]

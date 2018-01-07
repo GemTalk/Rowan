@@ -1,6 +1,9 @@
 Class {
 	#name : 'RwRepositorySpecification',
 	#superclass : 'RwSpecification',
+	#instVars : [
+		'repositoryRootPath'
+	],
 	#category : 'Rowan-Tode'
 }
 
@@ -35,6 +38,20 @@ RwRepositorySpecification >> pushForTool: aRwTool remote: remoteOrNil [
   "push not supported by default"
 
   
+]
+
+{ #category : 'accessing' }
+RwRepositorySpecification >> repositoryRootPath [
+
+   ^repositoryRootPath
+
+]
+
+{ #category : 'accessing' }
+RwRepositorySpecification >> repositoryRootPath: anObject [
+
+   repositoryRootPath := anObject
+
 ]
 
 { #category : 'actions' }

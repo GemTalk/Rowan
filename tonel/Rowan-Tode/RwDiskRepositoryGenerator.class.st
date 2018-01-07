@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwDiskRepositoryGenerator',
 	#superclass : 'Object',
-	#category : 'Rowan-Tests'
+	#category : 'Rowan-Tode'
 }
 
 { #category : 'generating' }

@@ -11,22 +11,18 @@ RwSaveTool >> manPage [
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan save - Save image changes to repository
+  rowan save - Save packages to repository
 SYNOPSIS
   rowan save <spec-url>
 DESCRIPTION
 EXAMPLES
-  rowan save \
-    https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  rowan save \
-    file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
   rowan save Rowan
 '
 ]
 
 { #category : 'smalltalk api' }
 RwSaveTool >> savePackageSet: aRwPackageSet specification: aRwSpecification [
-  | packageManager repo xUrl repositoryUrl |
+  | packageManager repo repositoryUrl |
   self specification: aRwSpecification.
   packageManager := CypressEnvironmentPackageManager new.
   repositoryUrl := specification repositoryUrl

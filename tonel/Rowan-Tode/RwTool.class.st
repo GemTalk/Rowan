@@ -61,6 +61,11 @@ RwTool class >> push [
 ]
 
 { #category : 'commands' }
+RwTool class >> read [
+  ^ RwReadTool new
+]
+
+{ #category : 'commands' }
 RwTool class >> register [
   ^ RwRegisterTool new
 ]
@@ -148,10 +153,11 @@ DESCRIPTION
     log        Browse commit log for the repository
     pull       Execute a `git pull` for the repository
     push       Execute a `git push` for the repository
+    read       Read packages from repository
     register   Register the specification
     registry   Inspect the spec registry
     revert     Reload dirty packages from repository
-    save       Save image changes to repository
+    save       Save packages to repository
     spec       Manipulate spec object
     test       Bring up test browser on tests in loaded packages
     unregister Unregister the specification
@@ -176,6 +182,7 @@ EXAMPLES
     at: 'log' put: self class log manPage;
     at: 'pull' put: self class pull manPage;
     at: 'push' put: self class push manPage;
+    at: 'read' put: self class read manPage;
     at: 'register' put: self class register manPage;
     at: 'registry' put: self class registry manPage;
     at: 'revert' put: self class revert manPage;

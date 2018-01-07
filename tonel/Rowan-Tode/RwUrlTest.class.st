@@ -59,14 +59,15 @@ RwUrlTest >> testAsRwRepository [
     do: [ :assoc | 
       | repo x y |
       repo := assoc value.
-      self assert: (x := repo url) = (y := assoc key) ].
-  self halt
+      self assert: (x := repo url) = (y := assoc key) ]
 ]
 
 { #category : 'tests' }
-RwUrlTest >> testParseNoErrors [
+RwUrlTest >> testAsRwUrl [
   self sampleUrlStrings
     do: [ :urlString | 
+      | url |
       RwUrl fromString: urlString.
-      urlString asRwUrl ]
+      url := urlString asRwUrl.
+      self assert: url printString = urlString ]
 ]

@@ -35,6 +35,11 @@ RwDefinition >> addDefinition: aDefinition to: aDictionary [
 	aDictionary at: key put: aDefinition
 ]
 
+{ #category : 'converting' }
+RwDefinition >> asDefinition [
+  ^ self
+]
+
 { #category : 'comparing' }
 RwDefinition >> compareAgainstBase: aDefinition [
 	"Diff myself for changes against the given base definition. 
