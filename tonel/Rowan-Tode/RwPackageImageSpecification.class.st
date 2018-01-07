@@ -20,3 +20,8 @@ RwPackageImageSpecification >> loadedPackages: anObject [
    loadedPackages := anObject
 
 ]
+
+{ #category : 'actions' }
+RwPackageImageSpecification >> updateLoadedPackageNamesTool: aRwTool packageNames: aPackageNames [
+  ^ aRwTool doUpdateLoadedPackageNames: aPackageNames
+]

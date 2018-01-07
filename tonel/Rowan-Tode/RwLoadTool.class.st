@@ -4,24 +4,33 @@ Class {
 	#category : 'Rowan-Tode'
 }
 
+{ #category : 'image' }
+RwLoadTool >> doUpdateLoadedPackageNames: aPackageNames [
+  ^ specification imageSpec loadedPackages: aPackageNames
+]
+
 { #category : 'smalltalk api' }
 RwLoadTool >> loadSpecification: aRwSpecification [
-  | packageManager repo |
+  | packageSetToLoad loadedPackageSet diff |
   self specification: aRwSpecification.
-  packageManager := CypressEnvironmentPackageManager new.
-  repo := CypressAbstractRepository
-    onUrl: (RwUrl fromString: specification repositoryUrl)
-    alias: ''.
-  packageManager
-    defaultSymbolDictionaryName: #'UserGlobals';
-    defaultSymbolList: System myUserProfile symbolList.
-  self packageNames
-    do: [ :packageName | 
-      packageManager
-        addResolvedReference:
-          (CypressResolvedReference name: packageName repository: repo) ].
-  packageManager loadResolvedReferences.
-  ^ specification updateLoadedCommitIdForTool: self
+  packageSetToLoad := RwTool read readPackageSetForSpecification: specification.
+  loadedPackageSet := (Rowan loadedPackagesNamed: packageSetToLoad packageNames)
+    asDefinition.
+  diff := packageSetToLoad compareAgainstBase: loadedPackageSet.
+  diff isEmpty
+    ifTrue: [ 
+      | msg |
+      msg := 'The project ' , specification specName , ' is already up to date'.
+      self inform: msg.
+      ^ msg ].
+  Rowan image applyModification: diff.
+  specification
+    updateLoadedCommitIdForTool: self;
+    updateLoadedPackageNamesTool: self
+      packageNames:
+        (Rowan loadedPackagesNamed: packageSetToLoad packageNames) asDefinition
+            packageNames.
+  ^ diff
 ]
 
 { #category : 'smalltalk api' }
@@ -51,4 +60,10 @@ EXAMPLES
   rowan load --loads=ALL Rowan						# load all packages
   rowan load --loads=`#( ''Rowan-Tode'')` Rowan		# load Rowan-Tode package in addition 
 '
+]
+
+{ #category : 'smalltalk api' }
+RwLoadTool >> validate: aRwSpecification [
+  super validate: aRwSpecification.
+  self validateForRead: aRwSpecification
 ]

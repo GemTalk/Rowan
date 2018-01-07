@@ -16,7 +16,8 @@ RwCommitTool >> commitSpecification: aRwSpecification message: messageString [
           ' does not support commit operations. Source written to repository and skipping commit'.
       self inform: msg.
       ^ msg ].
-  ^ specification commitForTool: self message: messageString
+  specification commitForTool: self message: messageString.
+  ^ specification updateLoadedCommitIdForTool: self
 ]
 
 { #category : 'smalltalk api' }
@@ -41,7 +42,7 @@ RwCommitTool >> doGitCommit: messageString [
     show: '==============';
     cr;
     show: status.
-  ^ self doGitUpdateLoadedCommitId: gitRootDir
+  ^ status
 ]
 
 { #category : 'man page' }

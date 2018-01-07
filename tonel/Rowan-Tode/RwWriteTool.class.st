@@ -21,6 +21,12 @@ EXAMPLES
 ]
 
 { #category : 'smalltalk api' }
+RwWriteTool >> validate: aRwSpecification [
+  super validate: aRwSpecification.
+  self validateForWrite: aRwSpecification
+]
+
+{ #category : 'smalltalk api' }
 RwWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification [
   | packageManager repo repositoryUrl |
   self specification: aRwSpecification.

@@ -1,9 +1,6 @@
 Class {
 	#name : 'RwSpecification',
 	#superclass : 'Object',
-	#instVars : [
-		'specName'
-	],
 	#classVars : [
 		'Registry'
 	],
@@ -99,19 +96,6 @@ RwSpecification >> projectUrl: ignored [
 { #category : 'registering' }
 RwSpecification >> register [
   self class registry at: self specName put: self
-]
-
-{ #category : 'accessing' }
-RwSpecification >> specName [
-
-   ^specName
-]
-
-{ #category : 'accessing' }
-RwSpecification >> specName: anObject [
-
-   specName := anObject
-
 ]
 
 { #category : 'registering' }

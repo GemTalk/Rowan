@@ -74,6 +74,11 @@ RwPackageSetDefinition >> keys [
 ]
 
 { #category : 'accessing' }
+RwPackageSetDefinition >> packageNames [
+  ^ self packages keys asArray
+]
+
+{ #category : 'accessing' }
 RwPackageSetDefinition >> packages [
 
 	^packages

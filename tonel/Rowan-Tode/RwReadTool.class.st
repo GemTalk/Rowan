@@ -30,9 +30,8 @@ RwReadTool >> readPackageSetForSpecification: aRwSpecification [
   packageManager := CypressEnvironmentPackageManager new.
   repositoryUrl := specification repositoryUrl
     ifNil: [ 
-      specification repoSpec repositoryRootPath
-        ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
-        ifNotNil: [ :rootPath | ('file:' , rootPath , '/' , specification repoPath , '/') asRwUrl ] ]
+      ('file:' , specification repoSpec repositoryRootPath , '/'
+        , specification repoPath , '/') asRwUrl ]
     ifNotNil: [ :urlString | urlString asRwUrl ].
   repo := repositoryUrl asRwRepository.
   packageManager
@@ -60,4 +59,10 @@ RwReadTool >> readPackageSetForSpecification: aRwSpecification [
 { #category : 'smalltalk api' }
 RwReadTool >> readPackageSetForSpecUrl: aString [
   ^ self readPackageSetForSpecification: (RwSpecification fromUrl: aString)
+]
+
+{ #category : 'validation' }
+RwReadTool >> validate: aRwSpecification [
+  super validate: aRwSpecification.
+  self validateForRead: aRwSpecification
 ]

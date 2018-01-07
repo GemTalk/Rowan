@@ -131,6 +131,7 @@ EXAMPLES
 
 { #category : 'smalltalk api' }
 RwCloneTool >> specification: aRwSpecification [
+  "let the validation run before sending #register"
 
-  ^ specification := aRwSpecification register
+  ^ (super specification: aRwSpecification) register
 ]

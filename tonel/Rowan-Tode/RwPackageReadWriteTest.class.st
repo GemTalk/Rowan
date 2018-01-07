@@ -125,6 +125,34 @@ RwPackageReadWriteTest >> testFiletreeWriteRead [
 ]
 
 { #category : 'tests' }
+RwPackageReadWriteTest >> testSpecReadValidation [
+  | spec tool |
+  tool := RwTool read.
+  spec := RwPackageLoadSpecification new
+    specName: 'Empty';
+    register.
+  self should: [ tool validate: spec ] raise: Error.
+  spec specName: 'test spec for ' , self class name.
+  self should: [ tool validate: spec ] raise: Error.
+  spec repositoryRootPath: '/tmp/repo'.
+  tool validate: spec
+]
+
+{ #category : 'tests' }
+RwPackageReadWriteTest >> testSpecWriteValidation [
+  | spec tool |
+  tool := RwTool write.
+  spec := RwPackageLoadSpecification new
+    specName: 'Empty';
+    register.
+  self should: [ tool validate: spec ] raise: Error.
+  spec specName: 'test spec for ' , self class name.
+  self should: [ tool validate: spec ] raise: Error.
+  spec repositoryRootPath: '/tmp/repo'.
+  tool validate: spec
+]
+
+{ #category : 'tests' }
 RwPackageReadWriteTest >> testTonelReadWriteRead [
   "read from committed test repository, write to disk, read from disk and compare package sets along the way"
 

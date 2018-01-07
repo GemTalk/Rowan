@@ -31,3 +31,10 @@ RwImageSpecification >> repositoryUrl: anObject [
    repositoryUrl := anObject
 
 ]
+
+{ #category : 'actions' }
+RwImageSpecification >> updateLoadedPackageNamesTool: aRwTool packageNames: aPackageNames [
+  "noop by default"
+
+  
+]

@@ -63,3 +63,9 @@ EXAMPLES
   rowan diff Rowan
 '
 ]
+
+{ #category : 'validation' }
+RwDiffTool >> validate: aRwSpecification [
+  super validate: aRwSpecification.
+  self validateForRead: aRwSpecification
+]

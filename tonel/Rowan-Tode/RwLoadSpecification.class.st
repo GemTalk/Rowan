@@ -2,6 +2,7 @@ Class {
 	#name : 'RwLoadSpecification',
 	#superclass : 'RwSpecification',
 	#instVars : [
+		'specName',
 		'projectUrl',
 		'platformSpec',
 		'specsPath',
@@ -199,6 +200,19 @@ RwLoadSpecification >> repoSpec: anObject [
 ]
 
 { #category : 'accessing' }
+RwLoadSpecification >> specName [
+
+   ^specName
+]
+
+{ #category : 'accessing' }
+RwLoadSpecification >> specName: anObject [
+
+   specName := anObject
+
+]
+
+{ #category : 'accessing' }
 RwLoadSpecification >> specsPath [
 
    ^specsPath
@@ -215,4 +229,11 @@ RwLoadSpecification >> specsPath: anObject [
 { #category : 'actions' }
 RwLoadSpecification >> updateLoadedCommitIdForTool: aRwTool [
   ^ self repoSpec updateLoadedCommitIdForTool: aRwTool
+]
+
+{ #category : 'actions' }
+RwLoadSpecification >> updateLoadedPackageNamesTool: aRwTool packageNames: aPackageNames [
+  ^ self imageSpec
+    updateLoadedPackageNamesTool: aRwTool
+    packageNames: aPackageNames
 ]

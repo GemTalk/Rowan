@@ -222,11 +222,37 @@ RwTool >> repositoryUrl [
 
 { #category : 'smalltalk api' }
 RwTool >> specification: aRwSpecification [
-
+  self validate: aRwSpecification.
   ^ specification := aRwSpecification
 ]
 
 { #category : 'smalltalk api' }
 RwTool >> specUrl: aString [
   ^ self specification: (RwSpecification fromUrl: aString)
+]
+
+{ #category : 'validation' }
+RwTool >> validate: aRwSpecification [
+  aRwSpecification specName
+    ifNil: [ self error: 'The specification must have a specName specified.' ]
+]
+
+{ #category : 'validation' }
+RwTool >> validateForRead: aRwSpecification [
+  aRwSpecification repositoryRootPath
+    ifNil: [ 
+      self
+        error:
+          'The repositoryRootPath must be defined in the specification: '
+            , aRwSpecification specName printString ]
+]
+
+{ #category : 'validation' }
+RwTool >> validateForWrite: aRwSpecification [
+  aRwSpecification repositoryRootPath
+    ifNil: [ 
+      self
+        error:
+          'The repositoryRootPath must be defined in the specification: '
+            , aRwSpecification specName printString ]
 ]
