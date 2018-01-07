@@ -443,13 +443,13 @@ RwGsLoadedClass >> updatePropertiesFromClass [
 
 { #category : 'private-updating' }
 RwGsLoadedClass >> updateSuperclassNameFromClass [
-
-	| oldName newName |
-	oldName := self propertyAt: 'super'.
-	newName := handle superclass 
-		ifNil: [ 'nil' ]
-		ifNotNil: [:super | super name asString].
-	oldName = newName ifFalse: [self propertyAt: 'super' put: newName]
+  | oldName newName |
+  oldName := self propertyAt: 'superclass'.
+  newName := handle superclass
+    ifNil: [ 'nil' ]
+    ifNotNil: [ :super | super name asString ].
+  oldName = newName
+    ifFalse: [ self propertyAt: 'superclass' put: newName ]
 ]
 
 { #category : 'private-updating' }
