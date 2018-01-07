@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwRepCreateTool',
-	#superclass : 'RwRepositoryTool',
+	#name : 'RwPrjCreateTool',
+	#superclass : 'RwProjectTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'private' }
-RwRepCreateTool >> _createRepositoryDirectory: repoPath useGit: useGit abort: abortBlock [
+RwPrjCreateTool >> _createRepositoryDirectory: repoPath useGit: useGit abort: abortBlock [
   | utils gitTool |
   utils := self fileUtilities.
   gitTool := Rowan projectTools git.
@@ -30,12 +30,12 @@ RwRepCreateTool >> _createRepositoryDirectory: repoPath useGit: useGit abort: ab
 ]
 
 { #category : 'smalltalk api' }
-RwRepCreateTool >> createMetacelloRepository: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
+RwPrjCreateTool >> createMetacelloRepository: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
   self halt: 'not implemented ... yet'
 ]
 
 { #category : 'smalltalk api' }
-RwRepCreateTool >> createPackageRepository: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
+RwPrjCreateTool >> createPackageRepository: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
   | projectSpec utils rootRepoPath dirPath |
   projectSpec := Rowan projectTools spec
     newPackageSpecNamed: projectName
@@ -61,7 +61,7 @@ RwRepCreateTool >> createPackageRepository: projectName format: format root: roo
 ]
 
 { #category : 'man page' }
-RwRepCreateTool >> manPage [
+RwPrjCreateTool >> manPage [
   "TDRowanTool install"
 
   ^ TDManPage

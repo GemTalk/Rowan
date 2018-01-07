@@ -26,6 +26,11 @@ RwProjectTool class >> commit [
 ]
 
 { #category : 'commands' }
+RwProjectTool class >> create [
+  ^ RwPrjCreateTool new
+]
+
+{ #category : 'commands' }
 RwProjectTool class >> diff [
 
 	^RwPrjDiffTool new
@@ -147,6 +152,7 @@ DESCRIPTION
   Commands:
     clone      Clone project repository
     commit     Save image changes to repository and commit (git repos only)
+    create     Create a new repository and project
     diff       Browse package level diffs for the given spec
     list       List registered specs
     load       Load from the repository
@@ -176,6 +182,7 @@ EXAMPLES
   manPage subCommands
     at: 'clone' put: self class clone manPage;
     at: 'commit' put: self class commit manPage;
+    at: 'create' put: self class create manPage;
     at: 'diff' put: self class diff manPage;
     at: 'list' put: self class list manPage;
     at: 'load' put: self class load manPage;

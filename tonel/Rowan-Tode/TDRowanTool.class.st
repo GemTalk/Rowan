@@ -136,6 +136,82 @@ TDRowanTool >> prjcommit [
   ^ commitResult
 ]
 
+{ #category : 'rep commands' }
+TDRowanTool >> prjcreate [
+  "
+  prj create --format=[disk|cypress|filetree|tonel] --type=[metacello|package] \
+             [--git] [--repoPath=<repo-path] --root=<path-to-root-directory> <project-name>
+"
+
+  | formats types format type projectName tool rootPath useGit repoPath |
+  self
+    getSubcommandOptsMixedLongShort:
+      {#('format' nil #'required').
+      #('git' nil #'none').
+      #('type' nil #'required').
+      #('repoPath' nil #'required').
+      #('root' nil #'required')}.
+  formats := #('disk' 'cypress' 'filetree' 'tonel').
+  types := #('metacello' 'package').
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <project-name>. See `man rep create` for details.' ].
+  projectName := subArguments at: 1.
+  subOptions
+    at: 'format'
+    ifPresent: [ :arg | 
+      (formats includes: arg)
+        ifFalse: [ 
+          self
+            error:
+              'unknown repository format: ' , arg printString
+                , ' See `man rep create` for details.' ].
+      format := arg ]
+    ifAbsent: [ 
+      self
+        error:
+          'Missing required option --format. See `man rep create` for details.' ].
+  subOptions
+    at: 'root'
+    ifPresent: [ :arg | rootPath := arg ]
+    ifAbsent: [ self error: 'Missing required option --root. See `man rep create` for details.' ].
+  subOptions
+    at: 'type'
+    ifPresent: [ :arg | 
+      (types includes: arg)
+        ifFalse: [ 
+          self
+            error:
+              'unknown repository type: ' , arg printString
+                , ' See `man rep create` for details.' ].
+      type := arg ]
+    ifAbsent: [ self error: 'Missing required option --type. See `man rep create` for details.' ].
+  useGit := subOptions includesKey: 'git'.
+  repoPath := subOptions
+    at: 'repoPath'
+    ifPresent: [ :arg | arg ]
+    ifAbsent: [ '' ].
+  tool := Rowan projectTools create.
+  ^ type = 'metacello'
+    ifTrue: [ 
+      tool
+        createMetacelloRepository: projectName
+        format: format
+        root: rootPath
+        repoPath: repoPath
+        useGit: useGit ]
+    ifFalse: [ 
+      "type = package"
+      tool
+        createPackageRepository: projectName
+        format: format
+        root: rootPath
+        repoPath: repoPath
+        useGit: useGit ]
+]
+
 { #category : 'prj commands' }
 TDRowanTool >> prjdiff [
   "
@@ -489,82 +565,6 @@ TDRowanTool >> repadd [
 { #category : 'rep commands' }
 TDRowanTool >> repcommit [
   
-]
-
-{ #category : 'rep commands' }
-TDRowanTool >> repcreate [
-  "
-  rep create --format=[disk|cypress|filetree|tonel] --type=[metacello|package] \
-             [--git] [--repoPath=<repo-path] --root=<path-to-root-directory> <project-name>
-"
-
-  | formats types format type projectName tool rootPath useGit repoPath |
-  self
-    getSubcommandOptsMixedLongShort:
-      {#('format' nil #'required').
-      #('git' nil #'none').
-      #('type' nil #'required').
-      #('repoPath' nil #'required').
-      #('root' nil #'required')}.
-  formats := #('disk' 'cypress' 'filetree' 'tonel').
-  types := #('metacello' 'package').
-  subArguments size < 1
-    ifTrue: [ 
-      self
-        error:
-          'Missing required argument <project-name>. See `man rep create` for details.' ].
-  projectName := subArguments at: 1.
-  subOptions
-    at: 'format'
-    ifPresent: [ :arg | 
-      (formats includes: arg)
-        ifFalse: [ 
-          self
-            error:
-              'unknown repository format: ' , arg printString
-                , ' See `man rep create` for details.' ].
-      format := arg ]
-    ifAbsent: [ 
-      self
-        error:
-          'Missing required option --format. See `man rep create` for details.' ].
-  subOptions
-    at: 'root'
-    ifPresent: [ :arg | rootPath := arg ]
-    ifAbsent: [ self error: 'Missing required option --root. See `man rep create` for details.' ].
-  subOptions
-    at: 'type'
-    ifPresent: [ :arg | 
-      (types includes: arg)
-        ifFalse: [ 
-          self
-            error:
-              'unknown repository type: ' , arg printString
-                , ' See `man rep create` for details.' ].
-      type := arg ]
-    ifAbsent: [ self error: 'Missing required option --type. See `man rep create` for details.' ].
-  useGit := subOptions includesKey: 'git'.
-  repoPath := subOptions
-    at: 'repoPath'
-    ifPresent: [ :arg | arg ]
-    ifAbsent: [ '' ].
-  tool := Rowan repositoryTools create.
-  ^ type = 'metacello'
-    ifTrue: [ 
-      tool
-        createMetacelloRepository: projectName
-        format: format
-        root: rootPath
-        repoPath: repoPath
-        useGit: useGit ]
-    ifFalse: [ 
-      "type = package"
-      tool
-        createPackageRepository: projectName
-        format: format
-        root: rootPath
-        repoPath: repoPath
-        useGit: useGit ]
 ]
 
 { #category : 'rep commands' }
