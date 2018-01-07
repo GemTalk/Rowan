@@ -58,34 +58,6 @@ RwCloneTool >> _validateForGitRootPathForSpecification: gitRootDir gitRepoDir: g
 ]
 
 { #category : 'smalltalk api' }
-RwCloneTool >> checkoutSpecification: aRwSpecification [
-  | checkout |
-  self specification: aRwSpecification.
-  checkout := specification repoSpec committish.
-  checkout
-    ifNil: [ 
-      | msg |
-      msg := 'No committish defined for the spec '
-        , specification specName printString.
-      self inform: msg.
-      ^ msg ]
-    ifNotNil: [ 
-      | gitTool gitRepoDir |
-      gitTool := self class git.
-      gitRepoDir := ServerFileDirectory
-        on: specification repoSpec repositoryRootPath.
-      gitTool gitcheckoutIn: gitRepoDir with: checkout ].
-  ^ specification
-]
-
-{ #category : 'smalltalk api' }
-RwCloneTool >> checkoutSpecUrl: aString [ 
-
-	^self checkoutSpecification: (RwSpecification fromUrl: aString) 
-
-]
-
-{ #category : 'smalltalk api' }
 RwCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath useSsh: useSsh [
   | gitRootDir gitTool response projectUrl gitRepoDir cloneUrl cloneOption checkout |
   self specification: aRwSpecification.
@@ -114,7 +86,7 @@ RwCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath use
     repositoryUrl:
       'filetree:' , gitRepoDir fullName , '/' , specification repoPath , '/'.
   specification repoSpec repositoryRootPath: gitRepoDir fullName.
-  checkout ifNotNil: [ self checkoutSpecification: specification ].
+  checkout ifNotNil: [ RwTool checkout checkoutSpecification: specification ].
   ^ specification
 ]
 

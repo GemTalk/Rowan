@@ -8,6 +8,12 @@ Class {
 }
 
 { #category : 'commands' }
+RwTool class >> checkout [
+
+	^RwCheckoutTool new
+]
+
+{ #category : 'commands' }
 RwTool class >> clone [
 
 	^RwCloneTool new
