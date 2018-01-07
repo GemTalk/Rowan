@@ -89,14 +89,14 @@ EXAMPLES
 
 { #category : 'smalltalk api' }
 RwPrjSpecTool >> newPackageSpecNamed: aString [
-  ^ RwPackageLoadSpecification new
+  ^ RwPackageProjectSpecification new
     specName: aString;
     yourself
 ]
 
 { #category : 'smalltalk api' }
 RwPrjSpecTool >> newProjectSpecNamed: aString [
-  ^ RwProjectLoadSpecification new
+  ^ RwMetacelloProjectSpecification new
     specName: aString;
     yourself
 ]

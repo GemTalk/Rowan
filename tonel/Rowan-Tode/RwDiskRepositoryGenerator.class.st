@@ -75,7 +75,7 @@ RwDiskRepositoryGenerator >> generateForUrl: specNameOrUrl [
       self
         error:
           'Must use a file: url for spec, since generator will write to the disk repository' ].
-  ^ self generate: (RwLoadSpecification fromUrl: url)
+  ^ self generate: (RwPackageTool fromUrl: url)
 ]
 
 { #category : 'generator' }

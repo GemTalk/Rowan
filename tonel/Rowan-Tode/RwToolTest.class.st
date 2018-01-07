@@ -6,7 +6,7 @@ Class {
 
 { #category : 'private' }
 RwToolTest >> basicPackageLoadSpec: packageNames packageNamesToLoad: packageNamesToLoad [
-  ^ RwPackageLoadSpecification new
+  ^ RwPackageProjectSpecification new
     specName: 'basic test spec';
     packageNames: packageNames;
     packageNamesToLoad: packageNamesToLoad;

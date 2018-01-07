@@ -128,7 +128,7 @@ RwPackageReadWriteTest >> testFiletreeWriteRead [
 RwPackageReadWriteTest >> testSpecReadValidation [
   | spec tool |
   tool := Rowan projectTools read.
-  spec := RwPackageLoadSpecification new
+  spec := RwPackageProjectSpecification new
     specName: 'Empty';
     register.
   self should: [ tool validate: spec ] raise: Error.
@@ -142,7 +142,7 @@ RwPackageReadWriteTest >> testSpecReadValidation [
 RwPackageReadWriteTest >> testSpecWriteValidation [
   | spec tool |
   tool := Rowan projectTools write.
-  spec := RwPackageLoadSpecification new
+  spec := RwPackageProjectSpecification new
     specName: 'Empty';
     register.
   self should: [ tool validate: spec ] raise: Error.

@@ -1,5 +1,5 @@
 Class {
-	#name : 'RwLoadSpecification',
+	#name : 'RwProjectSpecification',
 	#superclass : 'RwSpecification',
 	#instVars : [
 		'specName',
@@ -15,41 +15,41 @@ Class {
 }
 
 { #category : 'private' }
-RwLoadSpecification >> _myUserProfile [
+RwProjectSpecification >> _myUserProfile [
   ^ System myUserProfile
 ]
 
 { #category : 'testing' }
-RwLoadSpecification >> canCommit [
+RwProjectSpecification >> canCommit [
   ^ self repositoryUrl notNil and: [ self repoSpec canCommit ]
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> comment [
+RwProjectSpecification >> comment [
 
    ^comment
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> comment: anObject [
+RwProjectSpecification >> comment: anObject [
 
    comment := anObject
 
 ]
 
 { #category : 'actions' }
-RwLoadSpecification >> commitForTool: aRwTool message: messageString [
+RwProjectSpecification >> commitForTool: aRwTool message: messageString [
   ^ self repoSpec commitForTool: aRwTool message: messageString
 ]
 
 { #category : 'actions' }
-RwLoadSpecification >> commitLogForTool: aRwTool limit: logLimit [
+RwProjectSpecification >> commitLogForTool: aRwTool limit: logLimit [
   ^ self repoSpec commitLogForTool: aRwTool limit: logLimit
 ]
 
 { #category : 'exporting' }
-RwLoadSpecification >> export [
+RwProjectSpecification >> export [
   | url exportUrl exportSpec |
   self repositoryUrl
     ifNil: [ self error: 'exportToUrl: must be if repositoryUrl has not been set' ].
@@ -64,7 +64,7 @@ RwLoadSpecification >> export [
 ]
 
 { #category : 'exporting' }
-RwLoadSpecification >> exportToUrl: fileUrl [
+RwProjectSpecification >> exportToUrl: fileUrl [
   | url |
   url := CypUrl fromString: fileUrl.
   url schemeName = 'file'
@@ -81,12 +81,12 @@ RwLoadSpecification >> exportToUrl: fileUrl [
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> imageSpec [
+RwProjectSpecification >> imageSpec [
   self subclassResponsibility: #'imageSpec'
 ]
 
 { #category : 'initialization' }
-RwLoadSpecification >> initialize [
+RwProjectSpecification >> initialize [
   super initialize.
   comment := ''.
   specsPath := 'specs'.
@@ -95,7 +95,7 @@ RwLoadSpecification >> initialize [
 ]
 
 { #category : 'initialization' }
-RwLoadSpecification >> initializeForImport [
+RwProjectSpecification >> initializeForImport [
   "if spec has been imorted, clear out any of the fields that represent local disk state"
 
   super initializeForImport.
@@ -104,135 +104,135 @@ RwLoadSpecification >> initializeForImport [
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
+RwProjectSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
 
 	self subclassResponsibility: #packageOrGroupNamesToLoad:
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> platformSpec [
+RwProjectSpecification >> platformSpec [
 
    ^platformSpec
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> platformSpec: anObject [
+RwProjectSpecification >> platformSpec: anObject [
 
    platformSpec := anObject
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> projectUrl [
+RwProjectSpecification >> projectUrl [
 
    ^projectUrl
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> projectUrl: anObject [
+RwProjectSpecification >> projectUrl: anObject [
 
    projectUrl := anObject
 
 ]
 
 { #category : 'actions' }
-RwLoadSpecification >> pullForTool: aRwTool remote: remoteString [
+RwProjectSpecification >> pullForTool: aRwTool remote: remoteString [
   ^ self repoSpec pullForTool: aRwTool remote: remoteString
 ]
 
 { #category : 'actions' }
-RwLoadSpecification >> pushForTool: aRwTool remote: remoteString [
+RwProjectSpecification >> pushForTool: aRwTool remote: remoteString [
   ^ self repoSpec pushForTool: aRwTool remote: remoteString
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> repoPath [
+RwProjectSpecification >> repoPath [
 
    ^repoPath
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> repoPath: anObject [
+RwProjectSpecification >> repoPath: anObject [
 
    repoPath := anObject
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> repositoryRootPath [
+RwProjectSpecification >> repositoryRootPath [
   ^ self repoSpec repositoryRootPath
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> repositoryRootPath: anObject [
+RwProjectSpecification >> repositoryRootPath: anObject [
   self repoSpec repositoryRootPath: anObject
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> repositoryUrl [
+RwProjectSpecification >> repositoryUrl [
 
    ^self imageSpec repositoryUrl
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> repositoryUrl: anObject [
+RwProjectSpecification >> repositoryUrl: anObject [
 
    self imageSpec repositoryUrl: anObject
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> repoSpec [
+RwProjectSpecification >> repoSpec [
 
    ^repoSpec
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> repoSpec: anObject [
+RwProjectSpecification >> repoSpec: anObject [
 
    repoSpec := anObject
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> specName [
+RwProjectSpecification >> specName [
 
    ^specName
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> specName: anObject [
+RwProjectSpecification >> specName: anObject [
 
    specName := anObject
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> specsPath [
+RwProjectSpecification >> specsPath [
 
    ^specsPath
 
 ]
 
 { #category : 'accessing' }
-RwLoadSpecification >> specsPath: anObject [
+RwProjectSpecification >> specsPath: anObject [
 
    specsPath := anObject
 
 ]
 
 { #category : 'actions' }
-RwLoadSpecification >> updateLoadedCommitIdForTool: aRwTool [
+RwProjectSpecification >> updateLoadedCommitIdForTool: aRwTool [
   ^ self repoSpec updateLoadedCommitIdForTool: aRwTool
 ]
 
 { #category : 'actions' }
-RwLoadSpecification >> updateLoadedPackageNamesTool: aRwTool packageNames: aPackageNames [
+RwProjectSpecification >> updateLoadedPackageNamesTool: aRwTool packageNames: aPackageNames [
   ^ self imageSpec
     updateLoadedPackageNamesTool: aRwTool
     packageNames: aPackageNames

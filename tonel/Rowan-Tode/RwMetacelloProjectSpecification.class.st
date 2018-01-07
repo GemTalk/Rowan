@@ -1,6 +1,6 @@
 Class {
-	#name : 'RwProjectLoadSpecification',
-	#superclass : 'RwLoadSpecification',
+	#name : 'RwMetacelloProjectSpecification',
+	#superclass : 'RwProjectSpecification',
 	#instVars : [
 		'projectName',
 		'loads',
@@ -10,58 +10,58 @@ Class {
 }
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> imageSpec [
+RwMetacelloProjectSpecification >> imageSpec [
   ^ imageSpec ifNil: [ imageSpec := RwProjectImageSpecification new ]
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> loads [
+RwMetacelloProjectSpecification >> loads [
 
    ^loads
 
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> loads: anObject [
+RwMetacelloProjectSpecification >> loads: anObject [
 
    loads := anObject
 
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> locked [
+RwMetacelloProjectSpecification >> locked [
 
    ^locked
 
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> locked: anObject [
+RwMetacelloProjectSpecification >> locked: anObject [
 
    locked := anObject
 
 ]
 
 { #category : 'actions' }
-RwProjectLoadSpecification >> packageNamesForTool: aRwTool [
+RwMetacelloProjectSpecification >> packageNamesForTool: aRwTool [
   ^ aRwTool packageNamesForProjectSpec: self
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
+RwMetacelloProjectSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
 
 	loads := packageOrGroupNames
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> projectName [
+RwMetacelloProjectSpecification >> projectName [
 
    ^projectName
 
 ]
 
 { #category : 'accessing' }
-RwProjectLoadSpecification >> projectName: anObject [
+RwMetacelloProjectSpecification >> projectName: anObject [
 
    projectName := anObject
 

@@ -11,8 +11,8 @@ RwPackageLoadSpecification new
         'file:/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/'
 "
 Class {
-	#name : 'RwPackageLoadSpecification',
-	#superclass : 'RwLoadSpecification',
+	#name : 'RwPackageProjectSpecification',
+	#superclass : 'RwProjectSpecification',
 	#instVars : [
 		'packageNames',
 		'packageNamesToLoad'
@@ -21,45 +21,45 @@ Class {
 }
 
 { #category : 'accessing' }
-RwPackageLoadSpecification >> imageSpec [
+RwPackageProjectSpecification >> imageSpec [
   ^ imageSpec ifNil: [ imageSpec := RwPackageImageSpecification new ]
 ]
 
 { #category : 'accessing' }
-RwPackageLoadSpecification >> packageNames [
+RwPackageProjectSpecification >> packageNames [
 
    ^packageNames ifNil: [ packageNames := #() ]
 
 ]
 
 { #category : 'accessing' }
-RwPackageLoadSpecification >> packageNames: anObject [
+RwPackageProjectSpecification >> packageNames: anObject [
 
    packageNames := anObject
 
 ]
 
 { #category : 'actions' }
-RwPackageLoadSpecification >> packageNamesForTool: aRwTool [
+RwPackageProjectSpecification >> packageNamesForTool: aRwTool [
   ^ aRwTool packageNamesForPackageSpec: self
 ]
 
 { #category : 'accessing' }
-RwPackageLoadSpecification >> packageNamesToLoad [
+RwPackageProjectSpecification >> packageNamesToLoad [
 
    ^packageNamesToLoad ifNil: [ self packageNames ]
 
 ]
 
 { #category : 'accessing' }
-RwPackageLoadSpecification >> packageNamesToLoad: anObject [
+RwPackageProjectSpecification >> packageNamesToLoad: anObject [
 
    packageNamesToLoad := anObject
 
 ]
 
 { #category : 'accessing' }
-RwPackageLoadSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
+RwPackageProjectSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
 
    packageNames := packageOrGroupNames
 
