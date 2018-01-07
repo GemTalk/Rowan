@@ -1,27 +1,27 @@
 Class {
-	#name : 'RwSaveTool',
+	#name : 'RwWriteTool',
 	#superclass : 'RwTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'man page' }
-RwSaveTool >> manPage [
+RwWriteTool >> manPage [
   ^ TDManPage
-    commandName: 'save'
+    commandName: 'write'
     sourceMethod: self class name asString , '>>manPage'
     fromString:
       'NAME
-  rowan save - Save packages to repository
+  rowan write - Write packages to repository
 SYNOPSIS
-  rowan save <spec-url>
+  rowan write <spec-url>
 DESCRIPTION
 EXAMPLES
-  rowan save Rowan
+  rowan write Rowan
 '
 ]
 
 { #category : 'smalltalk api' }
-RwSaveTool >> savePackageSet: aRwPackageSet specification: aRwSpecification [
+RwWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification [
   | packageManager repo repositoryUrl |
   self specification: aRwSpecification.
   packageManager := CypressEnvironmentPackageManager new.
@@ -45,14 +45,14 @@ RwSaveTool >> savePackageSet: aRwPackageSet specification: aRwSpecification [
 ]
 
 { #category : 'smalltalk api' }
-RwSaveTool >> savePackageSet: aRwPackageSet specUrl: aString [
+RwWriteTool >> writePackageSet: aRwPackageSet specUrl: aString [
   ^ self
-    savePackageSet: aRwPackageSet
+    writePackageSet: aRwPackageSet
     specification: (RwSpecification fromUrl: aString)
 ]
 
 { #category : 'smalltalk api' }
-RwSaveTool >> saveSpecification: aRwSpecification [
+RwWriteTool >> writeSpecification: aRwSpecification [
   | packageManager repo |
   self specification: aRwSpecification.
   packageManager := CypressEnvironmentPackageManager new.
@@ -74,7 +74,7 @@ RwSaveTool >> saveSpecification: aRwSpecification [
 ]
 
 { #category : 'smalltalk api' }
-RwSaveTool >> saveSpecUrl: aString [
+RwWriteTool >> writeSpecUrl: aString [
 
-	^ self saveSpecification: (RwSpecification fromUrl: aString)
+	^ self writeSpecification: (RwSpecification fromUrl: aString)
 ]

@@ -6,15 +6,14 @@ Class {
 
 { #category : 'smalltalk api' }
 RwCommitTool >> commitSpecification: aRwSpecification message: messageString [
-  | saveTool |
   self specification: aRwSpecification.
-  self class save saveSpecification: specification.
+  self class write writeSpecification: specification.
   specification canCommit
     ifFalse: [ 
       | msg |
       msg := 'repository for ' , specification specName printString
         ,
-          ' does not support commit operations. Source saved to repository and skipping commit'.
+          ' does not support commit operations. Source written to repository and skipping commit'.
       self inform: msg.
       ^ msg ].
   ^ specification commitForTool: self message: messageString

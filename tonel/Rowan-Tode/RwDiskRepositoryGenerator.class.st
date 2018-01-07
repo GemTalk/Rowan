@@ -63,7 +63,7 @@ RwDiskRepositoryGenerator >> generate: myLoadSpecification [
                   ' has not been attached to a cloned repository (repositoryUrl nonNil), then the projectUrl must be a file: url: '
                 , url printString ] ].
   myPackageSet := self generatePackageSet.
-  RwTool save savePackageSet: myPackageSet specification: myLoadSpecification
+  RwTool write writePackageSet: myPackageSet specification: myLoadSpecification
 ]
 
 { #category : 'generator' }

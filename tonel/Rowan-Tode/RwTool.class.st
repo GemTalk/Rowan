@@ -89,12 +89,6 @@ RwTool class >> revert [
 ]
 
 { #category : 'commands' }
-RwTool class >> save [
-
-	^RwSaveTool new
-]
-
-{ #category : 'commands' }
 RwTool class >> spec [
   ^ RwSpecificationTool new
 ]
@@ -109,6 +103,12 @@ RwTool class >> test [
 RwTool class >> unregister [
 
 	^RwUnregisterTool new
+]
+
+{ #category : 'commands' }
+RwTool class >> write [
+
+	^RwWriteTool new
 ]
 
 { #category : 'git' }
@@ -163,10 +163,10 @@ DESCRIPTION
     register   Register the specification
     registry   Inspect the spec registry
     revert     Reload dirty packages from repository
-    save       Save packages to repository
     spec       Manipulate spec object
     test       Bring up test browser on tests in loaded packages
     unregister Unregister the specification
+    write      Write packages to repository
 
   Use `rowan --help <command>` to read about a specific subcommand.
 
@@ -192,7 +192,7 @@ EXAMPLES
     at: 'register' put: self class register manPage;
     at: 'registry' put: self class registry manPage;
     at: 'revert' put: self class revert manPage;
-    at: 'save' put: self class save manPage;
+    at: 'write' put: self class write manPage;
     at: 'spec' put: self class spec manPage;
     at: 'test' put: self class test manPage;
     at: 'unregister' put: self class unregister manPage;

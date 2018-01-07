@@ -30,7 +30,7 @@ RwPackageReadSaveTest >> doTestReadSaveReadForFormat: format [
 { #category : 'private' }
 RwPackageReadSaveTest >> doTestSaveRead: savePackageSet mySaveSpecification: mySaveSpecification forFormat: format [
   | readPackageSet diff |
-  RwTool save savePackageSet: savePackageSet specification: mySaveSpecification.
+  RwTool write writePackageSet: savePackageSet specification: mySaveSpecification.
   readPackageSet := RwTool read
     readPackageSetForSpecification: mySaveSpecification.
   diff := savePackageSet compareAgainstBase: readPackageSet.

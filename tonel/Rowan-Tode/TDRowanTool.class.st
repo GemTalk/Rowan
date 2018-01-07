@@ -285,22 +285,6 @@ TDRowanTool >> rowanrevert [
 ]
 
 { #category : 'commands' }
-TDRowanTool >> rowansave [
-  "
-  rowan save <spec-url>
-"
-
-  | diffText |
-  self getSubcommandOptsMixedLongShort: {}.
-  subArguments size < 1
-    ifTrue: [ 
-      self
-        error:
-          'Missing required argument <spec-url>. See `man rowan save` for details.' ].
-  ^ RwTool save saveSpecUrl: (subArguments at: 1)
-]
-
-{ #category : 'commands' }
 TDRowanTool >> rowanspec [
   "
   rowan spec [--name=<spec-name>] [--project=<project-url>] [--repository=<repository-url>] \
@@ -457,4 +441,20 @@ TDRowanTool >> rowanunregister [
         error:
           'Missing required argument <spec-url>. See `man rowan unregister` for details.' ].
   ^ RwTool unregister unregisterSpecUrl: (subArguments at: 1)
+]
+
+{ #category : 'commands' }
+TDRowanTool >> rowanwrite [
+  "
+  rowan write <spec-url>
+"
+
+  | diffText |
+  self getSubcommandOptsMixedLongShort: {}.
+  subArguments size < 1
+    ifTrue: [ 
+      self
+        error:
+          'Missing required argument <spec-url>. See `man rowan write` for details.' ].
+  ^ RwTool write writeSpecUrl: (subArguments at: 1)
 ]
