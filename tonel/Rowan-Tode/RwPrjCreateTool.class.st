@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'private' }
-RwPrjCreateTool >> _createRepositoryDirectory: repoPath useGit: useGit abort: abortBlock [
+RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPath useGit: useGit abort: abortBlock [
   | utils gitTool |
   utils := self fileUtilities.
   gitTool := Rowan projectTools git.
@@ -30,19 +30,19 @@ RwPrjCreateTool >> _createRepositoryDirectory: repoPath useGit: useGit abort: ab
 ]
 
 { #category : 'smalltalk api' }
-RwPrjCreateTool >> createMetacelloRepository: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
+RwPrjCreateTool >> createMetacelloProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
   self halt: 'not implemented ... yet'
 ]
 
 { #category : 'smalltalk api' }
-RwPrjCreateTool >> createPackageRepository: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
+RwPrjCreateTool >> createPackageProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
   | projectSpec utils rootRepoPath dirPath |
   projectSpec := Rowan projectTools spec
     newPackageSpecNamed: projectName
     useGit: useGit.
   utils := self fileUtilities.
   rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
-  self _createRepositoryDirectory: rootRepoPath useGit: useGit abort: [ ^ self ].
+  self _createProjectRepositoryDirectory: rootRepoPath useGit: useGit abort: [ ^ self ].
   dirPath := rootRepoPath , utils pathNameDelimiter , repoPath.
   utils ensureDirectoryExists: dirPath.
   utils

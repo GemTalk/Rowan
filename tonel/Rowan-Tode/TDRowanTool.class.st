@@ -197,7 +197,7 @@ TDRowanTool >> prjcreate [
   ^ type = 'metacello'
     ifTrue: [ 
       tool
-        createMetacelloRepository: projectName
+        createMetacelloProject: projectName
         format: format
         root: rootPath
         repoPath: repoPath
@@ -205,7 +205,7 @@ TDRowanTool >> prjcreate [
     ifFalse: [ 
       "type = package"
       tool
-        createPackageRepository: projectName
+        createPackageProject: projectName
         format: format
         root: rootPath
         repoPath: repoPath
