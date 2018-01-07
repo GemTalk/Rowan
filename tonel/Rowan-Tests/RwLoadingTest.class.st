@@ -752,7 +752,7 @@ RwLoadingTest >> propertiesForClassNamed: className super: superClassName instva
     at: 'instvars' put: instvars;
     at: 'name' put: className;
     at: 'pools' put: pools;
-    at: 'super' put: superClassName;
+    at: 'superclass' put: superClassName;
     at: 'type' put: type.
   (gs_options _isArray and: [ gs_options isEmpty not ])
     ifTrue: [ 

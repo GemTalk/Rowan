@@ -156,7 +156,7 @@ RwDiskRepositoryGenerator >> methodDefsFromSpec: specArray [
 ]
 
 { #category : 'definitions' }
-RwDiskRepositoryGenerator >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars comment: comment gs_SymbolDictionary: gs_SymbolDictionary pools: pools type: type gs_options: gs_options inPackage: packageName [
+RwDiskRepositoryGenerator >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars comment: comment gs_SymbolDictionary: ignored pools: pools type: type gs_options: gs_options inPackage: packageName [
   | dict |
   dict := Dictionary new.
   dict
@@ -164,11 +164,10 @@ RwDiskRepositoryGenerator >> propertiesForClassNamed: className super: superClas
     at: 'classinstvars' put: classinstvars;
     at: 'classvars' put: classvars;
     at: 'comment' put: comment;
-    at: 'gs_SymbolDictionary' put: gs_SymbolDictionary;
     at: 'instvars' put: instvars;
     at: 'name' put: className;
     at: 'pools' put: pools;
-    at: 'super' put: superClassName;
+    at: 'superclass' put: superClassName;
     at: 'type' put: type.
   (gs_options _isArray and: [ gs_options isEmpty not ])
     ifTrue: [ 
