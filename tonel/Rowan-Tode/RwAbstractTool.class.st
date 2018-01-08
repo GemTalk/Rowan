@@ -1,8 +1,32 @@
 Class {
 	#name : 'RwAbstractTool',
 	#superclass : 'Object',
+	#instVars : [
+		'specification'
+	],
 	#category : 'Rowan-Tode'
 }
+
+{ #category : 'commands' }
+RwAbstractTool class >> git [
+  ^ RwPrjGitTool new
+]
+
+{ #category : 'git' }
+RwAbstractTool >> doGitUpdateLoadedCommitId [
+  | gitRootDir |
+  gitRootDir := ServerFileDirectory
+    on: specification repoSpec repositoryRootPath.
+  ^ self doGitUpdateLoadedCommitId: gitRootDir
+]
+
+{ #category : 'git' }
+RwAbstractTool >> doGitUpdateLoadedCommitId: gitRootDir [
+  | gitTool loadedCommitId |
+  gitTool := self class git.
+  loadedCommitId := gitTool gitcommitShaIn: gitRootDir.
+  ^ specification imageSpec loadedCommitId: loadedCommitId
+]
 
 { #category : 'private' }
 RwAbstractTool >> fileUtilities [
@@ -18,4 +42,41 @@ RwAbstractTool >> help [
 { #category : 'man page' }
 RwAbstractTool >> manPage [
   self subclassResponsibility: #'manPage'
+]
+
+{ #category : 'smalltalk api' }
+RwAbstractTool >> specification: aRwSpecification [
+  self validate: aRwSpecification.
+  ^ specification := aRwSpecification
+]
+
+{ #category : 'smalltalk api' }
+RwAbstractTool >> specUrl: aString [
+  ^ self specification: (RwSpecification fromUrl: aString)
+]
+
+{ #category : 'validation' }
+RwAbstractTool >> validate: aRwSpecification [
+  aRwSpecification specName
+    ifNil: [ self error: 'The specification must have a specName specified.' ]
+]
+
+{ #category : 'validation' }
+RwAbstractTool >> validateForRead: aRwSpecification [
+  aRwSpecification repositoryRootPath
+    ifNil: [ 
+      self
+        error:
+          'The repositoryRootPath must be defined in the specification: '
+            , aRwSpecification specName printString ]
+]
+
+{ #category : 'validation' }
+RwAbstractTool >> validateForWrite: aRwSpecification [
+  aRwSpecification repositoryRootPath
+    ifNil: [ 
+      self
+        error:
+          'The repositoryRootPath must be defined in the specification: '
+            , aRwSpecification specName printString ]
 ]

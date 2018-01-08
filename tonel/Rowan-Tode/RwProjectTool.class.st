@@ -1,9 +1,6 @@
 Class {
 	#name : 'RwProjectTool',
 	#superclass : 'RwAbstractTool',
-	#instVars : [
-		'specification'
-	],
 	#category : 'Rowan-Tode'
 }
 
@@ -34,11 +31,6 @@ RwProjectTool class >> create [
 RwProjectTool class >> diff [
 
 	^RwPrjDiffTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> git [
-  ^ RwPrjGitTool new
 ]
 
 { #category : 'commands' }
@@ -114,22 +106,6 @@ RwProjectTool class >> unregister [
 RwProjectTool class >> write [
 
 	^RwPrjWriteTool new
-]
-
-{ #category : 'git' }
-RwProjectTool >> doGitUpdateLoadedCommitId [
-  | gitRootDir |
-  gitRootDir := ServerFileDirectory
-    on: specification repoSpec repositoryRootPath.
-  ^ self doGitUpdateLoadedCommitId: gitRootDir
-]
-
-{ #category : 'git' }
-RwProjectTool >> doGitUpdateLoadedCommitId: gitRootDir [
-  | gitTool loadedCommitId |
-  gitTool := self class git.
-  loadedCommitId := gitTool gitcommitShaIn: gitRootDir.
-  ^ specification imageSpec loadedCommitId: loadedCommitId
 ]
 
 { #category : 'man page' }
@@ -219,41 +195,4 @@ RwProjectTool >> packageNamesForProjectSpec: aProjectSpec [
 { #category : 'smalltalk api' }
 RwProjectTool >> repositoryUrl [
   ^ self specification repositoryUrl
-]
-
-{ #category : 'smalltalk api' }
-RwProjectTool >> specification: aRwSpecification [
-  self validate: aRwSpecification.
-  ^ specification := aRwSpecification
-]
-
-{ #category : 'smalltalk api' }
-RwProjectTool >> specUrl: aString [
-  ^ self specification: (RwSpecification fromUrl: aString)
-]
-
-{ #category : 'validation' }
-RwProjectTool >> validate: aRwSpecification [
-  aRwSpecification specName
-    ifNil: [ self error: 'The specification must have a specName specified.' ]
-]
-
-{ #category : 'validation' }
-RwProjectTool >> validateForRead: aRwSpecification [
-  aRwSpecification repositoryRootPath
-    ifNil: [ 
-      self
-        error:
-          'The repositoryRootPath must be defined in the specification: '
-            , aRwSpecification specName printString ]
-]
-
-{ #category : 'validation' }
-RwProjectTool >> validateForWrite: aRwSpecification [
-  aRwSpecification repositoryRootPath
-    ifNil: [ 
-      self
-        error:
-          'The repositoryRootPath must be defined in the specification: '
-            , aRwSpecification specName printString ]
 ]

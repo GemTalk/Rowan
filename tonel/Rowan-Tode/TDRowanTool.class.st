@@ -14,6 +14,24 @@ TDRowanTool class >> installExampleOn: aTDTopezServer [
   "nothing for now"
 ]
 
+{ #category : 'rowan project' }
+TDRowanTool class >> pkg [
+  "self initialize"
+
+  <topezCommand: 'pkg' manPage: #'pkgManPage'>
+  ^ [ :topez :objIn :tokens :command | 
+  self
+    performSubCommand: topez
+    objIn: objIn
+    commandOptions: {#('help' $h #'none')}
+    todeCommand: command ]
+]
+
+{ #category : 'rowan project' }
+TDRowanTool class >> pkgManPage [
+  ^ Rowan packageTools new manPage
+]
+
 { #category : 'initialization' }
 TDRowanTool class >> priority [
     <topezCommandPriority>
@@ -65,6 +83,105 @@ TDRowanTool class >> toolName [
 { #category : 'accessing' }
 TDRowanTool class >> toolReadMe [
   ^ self commandPath , ' provides GemTools emulation.'
+]
+
+{ #category : 'pkg commands' }
+TDRowanTool >> pkgcommit [
+  
+]
+
+{ #category : 'pkg commands' }
+TDRowanTool >> pkgcopy [
+  
+]
+
+{ #category : 'pkg commands' }
+TDRowanTool >> pkgcreate [
+  "
+  pkg create [--commit[=<commit-message>] [--toLoad] --project=<project-name>] <package-name>...
+"
+
+  | doCommit commitMsg projectName tool toLoad |
+  toLoad := doCommit := false.
+  self
+    getSubcommandOptsMixedLongShort:
+      {#('project' nil #'required').
+      #('commit' nil #'optional').
+      #('toLoad' nil #'none')}.
+  subOptions
+    at: 'project'
+    ifPresent: [ :arg | 
+      projectName := arg.
+      subOptions
+        at: 'commit'
+        ifPresent: [ :arg | 
+          doCommit := true.
+          arg
+            ifNil: [ 
+              commitMsg := (GsMultiLineTextInteraction
+                prompt:
+                  'Please enter a commit message for project: ' , projectName
+                template: '') signal.
+              commitMsg
+                ifNil: [ 
+                  | msg |
+                  msg := 'pkg create aborted ... no commit message'.
+                  self inform: msg.
+                  ^ msg ] ]
+            ifNotNil: [ commitMsg := arg ] ].
+      subOptions at: 'toLoad' ifPresent: [ :ignored | toLoad := true ] ].
+  tool := Rowan packageTools create.
+  ^ projectName
+    ifNil: [ tool createPackagesNamed: subArguments ]
+    ifNotNil: [ 
+      toLoad
+        ifTrue: [ tool tool createToLoadPackagesNamed: subArguments forProjectNamed: projectName ]
+        ifFalse: [ 
+          tool
+            createPackagesNamed: subArguments
+            forProjectNamed: projectName
+            doCommit: doCommit
+            commitMsg: commitMsg ] ]
+]
+
+{ #category : 'pkg commands' }
+TDRowanTool >> pkgdiff [
+  
+]
+
+{ #category : 'pkg commands' }
+TDRowanTool >> pkglist [
+  
+]
+
+{ #category : 'pkg commands' }
+TDRowanTool >> pkgload [
+  
+]
+
+{ #category : 'pkg commands' }
+TDRowanTool >> pkgmove [
+  
+]
+
+{ #category : 'pkg commands' }
+TDRowanTool >> pkgrecompile [
+  
+]
+
+{ #category : 'pkg commands' }
+TDRowanTool >> pkgrename [
+  
+]
+
+{ #category : 'pkg commands' }
+TDRowanTool >> pkgrevert [
+  
+]
+
+{ #category : 'pkg commands' }
+TDRowanTool >> pkgwrite [
+  
 ]
 
 { #category : 'prj commands' }
@@ -125,7 +242,7 @@ TDRowanTool >> prjcommit [
       commitMessage
         ifNil: [ ^ self inform: 'Commit aborted ... no commit message' ] ].
   commitResult := Rowan projectTools commit
-    commitSpecUrl: specUrlString
+    commitPackagesForSpecUrl: specUrlString
     message: commitMessage.
   subOptions
     at: 'push'
@@ -550,7 +667,7 @@ TDRowanTool >> prjwrite [
       self
         error:
           'Missing required argument <spec-url>. See `man prj write` for details.' ].
-  ^ Rowan projectTools write writeSpecUrl: (subArguments at: 1)
+  ^ Rowan projectTools write writePackagesForSpecUrl: (subArguments at: 1)
 ]
 
 { #category : 'rep commands' }

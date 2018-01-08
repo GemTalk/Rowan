@@ -5,44 +5,23 @@ Class {
 }
 
 { #category : 'smalltalk api' }
-RwPrjCommitTool >> commitSpecification: aRwSpecification message: messageString [
-  self specification: aRwSpecification.
-  self class write writeSpecification: specification.
-  specification canCommit
-    ifFalse: [ 
-      | msg |
-      msg := 'repository for ' , specification specName printString
-        ,
-          ' does not support commit operations. Source written to repository and skipping commit'.
-      self inform: msg.
-      ^ msg ].
-  specification commitForTool: self message: messageString.
-  ^ specification updateLoadedCommitIdForTool: self
-]
+RwPrjCommitTool >> commitPackagesForSpecification: aRwSpecification message: messageString [
+  "write out packages and commit repository"
 
-{ #category : 'smalltalk api' }
-RwPrjCommitTool >> commitSpecUrl: aSpecUrlString message: messageString [
-  ^ self
-    commitSpecification: (RwSpecification fromUrl: aSpecUrlString)
+  self specification: aRwSpecification.
+  self class write writePackagesForSpecification: specification.
+  ^ Rowan repositoryTools commit
+    commitRepositoryForSpecification: specification
     message: messageString
 ]
 
-{ #category : 'git' }
-RwPrjCommitTool >> doGitCommit: messageString [
-  | gitTool gitRootDir commitMessageFileName status loadedCommitId |
-  gitTool := self class git.
-  gitRootDir := ServerFileDirectory
-    on: specification repoSpec repositoryRootPath.
-  commitMessageFileName := gitTool createTmpFileWith: messageString.
-  gitTool gitaddIn: gitRootDir with: '.'.
-  gitTool gitcommitIn: gitRootDir with: '-a --file=' , commitMessageFileName.
-  status := gitTool gitlogIn: gitRootDir with: '-1'.
-  Transcript
-    cr;
-    show: '==============';
-    cr;
-    show: status.
-  ^ status
+{ #category : 'smalltalk api' }
+RwPrjCommitTool >> commitPackagesForSpecUrl: aSpecUrlString message: messageString [
+  "write out packages and commit repository"
+
+  ^ self
+    commitPackagesForSpecification: (RwSpecification fromUrl: aSpecUrlString)
+    message: messageString
 ]
 
 { #category : 'man page' }

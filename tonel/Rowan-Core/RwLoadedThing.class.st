@@ -19,9 +19,9 @@ Class {
 
 { #category : 'class initialization' }
 RwLoadedThing class >> initialize [
-	"CypLoadedThing initialize"
+  "RwLoadedThing initialize"
 
-	AbsentToken := '<absent>'
+  AbsentToken := '<absent>'
 ]
 
 { #category : 'instance creation' }

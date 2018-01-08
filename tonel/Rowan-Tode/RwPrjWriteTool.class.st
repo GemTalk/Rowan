@@ -58,29 +58,16 @@ RwPrjWriteTool >> writePackageSet: aRwPackageSet specUrl: aString [
 ]
 
 { #category : 'smalltalk api' }
-RwPrjWriteTool >> writeSpecification: aRwSpecification [
-  | packageManager repo |
+RwPrjWriteTool >> writePackagesForSpecification: aRwSpecification [
+  | packageSet |
   self specification: aRwSpecification.
-  packageManager := CypressEnvironmentPackageManager new.
-  repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: specification repositoryUrl)
-    alias: ''.
-  packageManager
-    defaultSymbolDictionaryName:
-        (specification platformSpec at: 'gemstone') symbolDictName;
-    defaultSymbolList: GsCurrentSession currentSession symbolList.
-  self packageNames
-    do: [ :packageName | 
-      | package |
-      package := (CypressEnvironmentPackageDefinition named: packageName)
-        lookupSymbolList: GsCurrentSession currentSession symbolList;
-        yourself.
-      repo writePackageStructure: (CypressPackageStructure fromPackage: package) ].
+  packageSet := (Rowan loadedPackagesNamed: specification packageNames)
+    asDefinition.
+  self writePackageSet: packageSet specification: specification.
   ^ specification
 ]
 
 { #category : 'smalltalk api' }
-RwPrjWriteTool >> writeSpecUrl: aString [
-
-	^ self writeSpecification: (RwSpecification fromUrl: aString)
+RwPrjWriteTool >> writePackagesForSpecUrl: aString [
+  ^ self writePackagesForSpecification: (RwSpecification fromUrl: aString)
 ]
