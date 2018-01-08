@@ -242,7 +242,7 @@ TDRowanTool >> prjcommit [
       commitMessage
         ifNil: [ ^ self inform: 'Commit aborted ... no commit message' ] ].
   commitResult := Rowan projectTools commit
-    commitPackagesForSpecUrl: specUrlString
+    commitSpecUrl: specUrlString
     message: commitMessage.
   subOptions
     at: 'push'

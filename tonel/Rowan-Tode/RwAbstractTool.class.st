@@ -13,6 +13,24 @@ RwAbstractTool class >> git [
 ]
 
 { #category : 'git' }
+RwAbstractTool >> doGitCommit: messageString [
+  | gitTool gitRootDir commitMessageFileName status loadedCommitId |
+  gitTool := self class git.
+  gitRootDir := ServerFileDirectory
+    on: specification repoSpec repositoryRootPath.
+  commitMessageFileName := gitTool createTmpFileWith: messageString.
+  gitTool gitaddIn: gitRootDir with: '.'.
+  gitTool gitcommitIn: gitRootDir with: '-a --file=' , commitMessageFileName.
+  status := gitTool gitlogIn: gitRootDir with: '-1'.
+  Transcript
+    cr;
+    show: '==============';
+    cr;
+    show: status.
+  ^ status
+]
+
+{ #category : 'git' }
 RwAbstractTool >> doGitUpdateLoadedCommitId [
   | gitRootDir |
   gitRootDir := ServerFileDirectory

@@ -4,6 +4,5 @@ General way for Cypress to toss things up the stack for consideration by a highe
 Class {
 	#name : 'RwNotification',
 	#superclass : 'Notification',
-	#type : 'variable',
 	#category : 'Rowan-Core'
 }

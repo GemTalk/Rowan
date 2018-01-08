@@ -24,6 +24,29 @@ RwPrjCommitTool >> commitPackagesForSpecUrl: aSpecUrlString message: messageStri
     message: messageString
 ]
 
+{ #category : 'cypress api' }
+RwPrjCommitTool >> commitSpecification: aRwSpecification message: messageString [ 
+  self specification: aRwSpecification.
+  self class write writeSpecification: specification.
+  specification canCommit
+    ifFalse: [ 
+      | msg |
+      msg := 'repository for ' , specification specName printString
+        ,
+          ' does not support commit operations. Source written to repository and skipping commit'.
+      self inform: msg.
+      ^ msg ].
+  specification commitForTool: self message: messageString.
+^ specification updateLoadedCommitIdForTool: self
+]
+
+{ #category : 'cypress api' }
+RwPrjCommitTool >> commitSpecUrl: aSpecUrlString message: messageString [ 
+  ^ self
+    commitSpecification: (RwSpecification fromUrl: aSpecUrlString)
+message: messageString
+]
+
 { #category : 'man page' }
 RwPrjCommitTool >> manPage [
   ^ TDManPage
