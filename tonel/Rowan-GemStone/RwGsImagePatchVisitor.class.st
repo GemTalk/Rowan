@@ -115,7 +115,7 @@ RwGsImagePatchVisitor >> deletePackages: packageDefinitions [
 { #category : 'initialization' }
 RwGsImagePatchVisitor >> initialize [
 
-	patchSet := RwGsPatchSet new
+	patchSet := RwGsPatchSetBasic new
 ]
 
 { #category : 'accessing' }
