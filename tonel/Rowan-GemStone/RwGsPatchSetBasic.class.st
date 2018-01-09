@@ -29,11 +29,63 @@ RwGsPatchSetBasic class >> new [
 	^super new initialize
 ]
 
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _classAdditionPatchClass [
+  ^ RwGsClassAdditionPatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _classDeletionPatchClass [
+  ^ RwGsClassDeletionPatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _classPropertiesPatchClass [
+  ^ RwGsClassPropertiesPatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _classVersioningPatchClass [
+  ^ RwGsClassVersioningPatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _methodAdditionPatchClass [
+  ^ RwGsMethodAdditionPatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _methodDeletionPatchClass [
+  ^ RwGsMethodDeletionPatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _methodPropertiesPatchClass [
+  ^ RwGsMethodPropertiesPatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _methodSourcePatchClass [
+  ^ RwGsMethodSourcePatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _packageAdditionPatchClass [
+  ^ RwGsPackageAdditionPatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _packageDeletionPatchClass [
+  ^ RwGsPackageDeletionPatch
+]
+
 { #category : 'building' }
 RwGsPatchSetBasic >> addAddedClass: aClassDefinition inPackage: aPackageDefinition [
-
-	addedClasses add: (RwGsClassAdditionPatch for: aClassDefinition
-				inPackage: aPackageDefinition)
+  addedClasses
+    add:
+      (self _classAdditionPatchClass
+        for: aClassDefinition
+        inPackage: aPackageDefinition)
 ]
 
 { #category : 'private - applying' }
@@ -45,28 +97,29 @@ RwGsPatchSetBasic >> addAddedClassesToTempSymbols [
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addAddedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-
-	addedMethods add: (RwGsMethodAdditionPatch
-				forMethod: aClassMethodDefinition
-				isMeta: true
-				inClass: aClassDefinition
-				inPackage: aPackageDefinition)
+  addedMethods
+    add:
+      (self _methodAdditionPatchClass
+        forMethod: aClassMethodDefinition
+        isMeta: true
+        inClass: aClassDefinition
+        inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addAddedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-
-	addedMethods add: (RwGsMethodAdditionPatch
-				forMethod: anInstanceMethodDefinition
-				isMeta: false
-				inClass: aClassDefinition
-				inPackage: aPackageDefinition)
+  addedMethods
+    add:
+      (self _methodAdditionPatchClass
+        forMethod: anInstanceMethodDefinition
+        isMeta: false
+        inClass: aClassDefinition
+        inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addAddedPackage: packageDefinition [
-
-	addedPackages add: (RwGsPackageAdditionPatch for: packageDefinition)
+  addedPackages add: (self _packageAdditionPatchClass for: packageDefinition)
 ]
 
 { #category : 'private - applying' }
@@ -87,96 +140,101 @@ RwGsPatchSetBasic >> addCreatedClassesAndVersionsTo: newClassesByName [
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addDeletedClass: classDefinition [
-
-	deletedClasses add: (RwGsClassDeletionPatch for: classDefinition)
-]
-
-{ #category : 'building' }
 RwGsPatchSetBasic >> addDeletedClass: aClassDefinition inPackage: aPackageDefinition [
-
-	deletedClasses add: (RwGsClassDeletionPatch for: aClassDefinition
-				inPackage: aPackageDefinition)
+  deletedClasses
+    add:
+      (self _classDeletionPatchClass
+        for: aClassDefinition
+        inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addDeletedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-
-	deletedMethods add: (RwGsMethodDeletionPatch
-				forMethod: aClassMethodDefinition
-				isMeta: true
-				inClass: aClassDefinition
-				inPackage: aPackageDefinition)
+  deletedMethods
+    add:
+      (self _methodDeletionPatchClass
+        forMethod: aClassMethodDefinition
+        isMeta: true
+        inClass: aClassDefinition
+        inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addDeletedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-
-	deletedMethods add: (RwGsMethodDeletionPatch
-				forMethod: anInstanceMethodDefinition
-				isMeta: false
-				inClass: aClassDefinition
-				inPackage: aPackageDefinition)
+  deletedMethods
+    add:
+      (self _methodDeletionPatchClass
+        forMethod: anInstanceMethodDefinition
+        isMeta: false
+        inClass: aClassDefinition
+        inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addDeletedPackage: packageDefinition [
-
-	deletedPackages add: (RwGsPackageDeletionPatch for: packageDefinition)
+  deletedPackages add: (self _packageDeletionPatchClass for: packageDefinition)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addPatchedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-
-	methodsNeedingRecompile add: (RwGsMethodSourcePatch
-				forMethod: aClassMethodDefinition
-				isMeta: true
-				inClass: aClassDefinition
-				inPackage: aPackageDefinition)
+  methodsNeedingRecompile
+    add:
+      (self _methodSourcePatchClass
+        forMethod: aClassMethodDefinition
+        isMeta: true
+        inClass: aClassDefinition
+        inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addPatchedClassMethodProperties: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-
-	methodsWithPropertyChanges add: (RwGsMethodPropertiesPatch
-				forMethod: aClassMethodDefinition
-				isMeta: true
-				inClass: aClassDefinition
-				inPackage: aPackageDefinition)
+  methodsWithPropertyChanges
+    add:
+      (self _methodPropertiesPatchClass
+        forMethod: aClassMethodDefinition
+        isMeta: true
+        inClass: aClassDefinition
+        inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition [
-
-	classesWithNewVersions
-		add: (RwGsClassVersioningPatch for: aClassModification inPackage: aPackageDefinition)
+  classesWithNewVersions
+    add:
+      (self _classVersioningPatchClass
+        for: aClassModification
+        inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addPatchedClassProperties: aClassDefinition inPackage: aPackageDefinition [
-
-	classesWithPropertyChanges
-		add: (RwGsClassPropertiesPatch for: aClassDefinition inPackage: aPackageDefinition)
+  classesWithPropertyChanges
+    add:
+      (self _classPropertiesPatchClass
+        for: aClassDefinition
+        inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-
-	methodsNeedingRecompile add: (RwGsMethodSourcePatch
-				forMethod: aInstanceMethodDefinition
-				isMeta: false
-				inClass: aClassDefinition
-				inPackage: aPackageDefinition)
+  methodsNeedingRecompile
+    add:
+      (self _methodSourcePatchClass
+        forMethod: aInstanceMethodDefinition
+        isMeta: false
+        inClass: aClassDefinition
+        inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addPatchedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-
-	methodsWithPropertyChanges add: (RwGsMethodPropertiesPatch
-				forMethod: aInstanceMethodDefinition
-				isMeta: false
-				inClass: aClassDefinition
-				inPackage: aPackageDefinition)
+  methodsWithPropertyChanges
+    add:
+      (self RwGsMethodPropertiesPatch
+        forMethod: aInstanceMethodDefinition
+        isMeta: false
+        inClass: aClassDefinition
+        inPackage: aPackageDefinition)
 ]
 
 { #category : 'private - applying' }
@@ -444,14 +502,6 @@ RwGsPatchSetBasic >> updateClassProperties [
 
 	classesWithPropertyChanges do: [:each | 
 		each installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols ]
-]
-
-{ #category : 'private - applying' }
-RwGsPatchSetBasic >> updateClassVariables [
-	"For classes with added or removed class variables, but no new version, make the changes."
-
-	classesWithClassVariableChanges
-		do: [:each | each halt: 'Not yet implemented.']
 ]
 
 { #category : 'private - applying' }
