@@ -4,6 +4,25 @@ Class {
 	#category : 'Rowan-Tode'
 }
 
+{ #category : 'rowan project' }
+TDRowanTool class >> clas [
+  "self initialize"
+
+  <topezCommand: 'clas' manPage: #'clasManPage'>
+  ^ [ :topez :objIn :tokens :command | 
+  self
+    performSubCommand: topez
+    objIn: objIn
+    commandOptions: {#('help' $h #'none')}
+    todeCommand: command ]
+]
+
+{ #category : 'rowan project' }
+TDRowanTool class >> clasManPage [
+
+	^RwClassTool new manPage
+]
+
 { #category : 'initialization' }
 TDRowanTool class >> initialize [
   self install
@@ -83,6 +102,19 @@ TDRowanTool class >> toolName [
 { #category : 'accessing' }
 TDRowanTool class >> toolReadMe [
   ^ self commandPath , ' provides GemTools emulation.'
+]
+
+{ #category : 'clas commands' }
+TDRowanTool >> clasdiff [
+  "
+  clas diff class1 class2
+"
+
+  | clas1 clas2 |
+  self getSubcommandOptsMixedLongShort: {}.
+  clas1 := Smalltalk at: (subArguments at: 1).
+  clas2 := Smalltalk at: (subArguments at: 2).
+  RwClassTool clas diffClass: clas1 with: clas2
 ]
 
 { #category : 'pkg commands' }
