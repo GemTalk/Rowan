@@ -148,12 +148,16 @@ RwGsPatchSet >> addPatchedClassMethodProperties: aClassMethodDefinition inClass:
 
 { #category : 'building' }
 RwGsPatchSet >> addPatchedClassNewVersion: aClassDefinition inPackage: aPackageDefinition [
-self halt
+
+	classesWithNewVersions
+		add: (RwGsClassVersioningPatch for: aClassDefinition inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
 RwGsPatchSet >> addPatchedClassProperties: aClassDefinition inPackage: aPackageDefinition [
-self halt
+
+	classesWithPropertyChanges
+		add: (RwGsClassPropertiesPatch for: aClassDefinition inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
