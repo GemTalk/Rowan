@@ -34,7 +34,7 @@ RwGsClassAdditionPatch >> addClassToSymbolDictionary [
 ]
 
 { #category : 'actions' }
-RwGsClassAdditionPatch >> addToDictionary: aDictionary [
+RwGsClassAdditionPatch >> addToNewClassesByName: aDictionary [
 	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
 
 	| name |

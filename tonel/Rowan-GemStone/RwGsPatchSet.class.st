@@ -82,9 +82,9 @@ RwGsPatchSet >> addAndUpdateLoadedPackages [
 { #category : 'private - applying' }
 RwGsPatchSet >> addCreatedClassesAndVersionsTo: newClassesByName [
 
-	addedClasses do: [:each | each addToDictionary: newClassesByName].
+	addedClasses do: [:each | each addToNewClassesByName: newClassesByName].
 	classesWithNewVersions
-		do: [:each | each addToDictionary: newClassesByName]
+		do: [:each | each addToNewClassesByName: newClassesByName]
 ]
 
 { #category : 'building' }
@@ -147,10 +147,10 @@ RwGsPatchSet >> addPatchedClassMethodProperties: aClassMethodDefinition inClass:
 ]
 
 { #category : 'building' }
-RwGsPatchSet >> addPatchedClassNewVersion: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSet >> addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition [
 
 	classesWithNewVersions
-		add: (RwGsClassVersioningPatch for: aClassDefinition inPackage: aPackageDefinition)
+		add: (RwGsClassVersioningPatch for: aClassModification inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
@@ -489,5 +489,5 @@ RwGsPatchSet >> updateMethodProperties [
 RwGsPatchSet >> updateSymbolAssociations [
 	"Install new class versions."
 
-	classesWithNewVersions do: [:each | each halt: 'Not yet implemented.']
+	classesWithNewVersions do: [:each | each installNewClassVerionInSystem ]
 ]

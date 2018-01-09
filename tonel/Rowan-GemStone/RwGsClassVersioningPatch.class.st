@@ -10,7 +10,9 @@ Class {
 	#superclass : 'RwGsClassCreationPatch',
 	#instVars : [
 		'oldClassDefinition',
-		'newClassVersion'
+		'oldClassVersion',
+		'newClassVersion',
+		'symbolAssociation'
 	],
 	#category : 'Rowan-GemStone'
 }
@@ -25,6 +27,16 @@ RwGsClassVersioningPatch class >> addPatchedClassModification: aClassModificatio
 		inPackage: aPackageDefinition 
 		toPatchSet: aRwGsPatchSet
 
+]
+
+{ #category : 'instance creation' }
+RwGsClassVersioningPatch class >> for: aClassModification inPackage: aPackageDefinition [
+
+	^(self new)
+		oldClassDefinition: aClassModification before;
+		classDefinition: aClassModification after;
+		packageDefinition: aPackageDefinition;
+		yourself
 ]
 
 { #category : 'patching' }
@@ -60,12 +72,64 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 		inDict: dict
 		isKernel: false "needs work .. maybe")
 			ifTrue: [ aRwGsPatchSet addPatchedClassProperties: aClassDefinition inPackage: aPackageDefinition ]
-			ifFalse: [ aRwGsPatchSet addPatchedClassNewVersion: aClassDefinition inPackage: aPackageDefinition ]
+			ifFalse: [ aRwGsPatchSet addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition ]
+]
+
+{ #category : 'actions' }
+RwGsClassVersioningPatch >> addToNewClassesByName: aDictionary [
+	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
+
+	| name |
+	name := classDefinition key.
+	name ifNil: [self error: 'Class definition with no name.'].
+	(aDictionary includesKey: name) ifTrue: [self error: 'Duplicate name'].
+	aDictionary at: name put: self
+]
+
+{ #category : 'actions' }
+RwGsClassVersioningPatch >> createClassFor: aPatchSet [
+
+	oldClassVersion := self oldClassVersion.
+	newClassVersion := super createClassFor: aPatchSet.
+	symbolAssociation := aPatchSet associationFor: newClassVersion name.
+	^newClassVersion
+]
+
+{ #category : 'actions' }
+RwGsClassVersioningPatch >> installNewClassVerionInSystem [
+	"Install the new class association in the symbolAssociation for the class.
+	 Update the LoadedClass with properties for the new classversion."
+
+	self
+		updateSymbolAssociation;
+		updateLoadedClass
+]
+
+{ #category : 'accessing' }
+RwGsClassVersioningPatch >> oldClassDefinition [
+
+   ^oldClassDefinition
+
+]
+
+{ #category : 'accessing' }
+RwGsClassVersioningPatch >> oldClassDefinition: anObject [
+
+   oldClassDefinition := anObject
+
 ]
 
 { #category : 'versioning' }
 RwGsClassVersioningPatch >> oldClassVersion [
 	"The old version is what is currently bound to the old class definition's name."
 
-	^self resolveName: oldClassDefinition key
+	^(self resolveName: oldClassDefinition key) value
+]
+
+{ #category : 'actions' }
+RwGsClassVersioningPatch >> updateLoadedClass [
+]
+
+{ #category : 'actions' }
+RwGsClassVersioningPatch >> updateSymbolAssociation [
 ]

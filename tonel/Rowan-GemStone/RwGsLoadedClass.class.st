@@ -277,7 +277,6 @@ RwGsLoadedClass >> updateClassTypeFromClass [
 	"For GemStone, the valid values are:
 	bytes
 	variable
-	immediate
 	normal for non-indexable pointer object"
 
 	"Must be in-synch with RwGsClassCreationPatch>>basicCreateClassFor:"
