@@ -29,23 +29,9 @@ RwGsClassDeletionPatch >> deleteClassFromSystem [
 ]
 
 { #category : 'actions' }
-RwGsClassDeletionPatch >> existingSymbolDictionaryNamed: dictName [
-	"If the current session's transient symbol list includes a dictionary with the given name, answer it. "
-
-	| symbolName session symbolList association |
-	symbolName := dictName asSymbol.
-	session := GsCurrentSession currentSession.
-	symbolList := session symbolList.
-	^symbolList
-		detect: [:each | (each at: symbolName ifAbsent: [nil]) == each]
-		ifNone: 
-			[ nil ]
-]
-
-{ #category : 'actions' }
 RwGsClassDeletionPatch >> removeClassFromSymbolDictionary [
 
-	| dictName dict existingAssociation |
+	| dictName dict |
 	dictName := classDefinition propertyAt: 'gs_SymbolDictionary'
 				ifAbsent: ['UserGlobals'].
 	dict := self existingSymbolDictionaryNamed: dictName.

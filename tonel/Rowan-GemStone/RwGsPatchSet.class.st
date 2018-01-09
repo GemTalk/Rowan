@@ -147,6 +147,16 @@ RwGsPatchSet >> addPatchedClassMethodProperties: aClassMethodDefinition inClass:
 ]
 
 { #category : 'building' }
+RwGsPatchSet >> addPatchedClassNewVersion: aClassDefinition inPackage: aPackageDefinition [
+self halt
+]
+
+{ #category : 'building' }
+RwGsPatchSet >> addPatchedClassProperties: aClassDefinition inPackage: aPackageDefinition [
+self halt
+]
+
+{ #category : 'building' }
 RwGsPatchSet >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
 
 	methodsNeedingRecompile add: (RwGsMethodSourcePatch
@@ -440,8 +450,8 @@ RwGsPatchSet >> updateClassProperties [
 	"For classes with changes that don't require versioning, 
 	update the properties in the class and the LoadedClasses as appropriate."
 
-"*** Should also update properties of added and versioned classes here?***"
-	classesWithPropertyChanges do: [:each | each halt: 'Not yet implemented.']
+	classesWithPropertyChanges do: [:each | 
+		each installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols ]
 ]
 
 { #category : 'private - applying' }

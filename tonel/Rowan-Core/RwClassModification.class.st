@@ -34,7 +34,12 @@ RwClassModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage 
 	self isDeletion
 		ifTrue: 
 			[ aPatchSet addDeletedClass: self before inPackage: aPackage ].
-
+	self isModification
+		ifTrue: [ 
+			RwGsClassVersioningPatch 
+				addPatchedClassModification: self 
+				inPackage: aPackage 
+				toPatchSet: aPatchSet ].
 ]
 
 { #category : 'Accessing' }

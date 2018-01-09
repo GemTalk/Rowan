@@ -264,7 +264,7 @@ RwLoadingTest >> classPropertyChangeClassDefinitions1: packageName in: classDefi
               (self
                 propertiesForClassNamed: 'TestChangeSuperclassClass'
                 super: 'Object'
-                instvars: {'instVar1'}
+                instvars: {}
                 classinstvars: {}
                 classvars: {}
                 comment: 'a comment'
