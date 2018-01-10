@@ -228,13 +228,13 @@ RwGsPatchSetBasic >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addPatchedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-  methodsWithPropertyChanges
-    add:
-      (self RwGsMethodPropertiesPatch
-        forMethod: aInstanceMethodDefinition
-        isMeta: false
-        inClass: aClassDefinition
-        inPackage: aPackageDefinition)
+	methodsWithPropertyChanges
+		add:
+			(self _methodPropertiesPatchClass
+				forMethod: aInstanceMethodDefinition
+				isMeta: false
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
 ]
 
 { #category : 'private - applying' }
