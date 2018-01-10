@@ -40,6 +40,62 @@ RwGsClassPatch >> _classFormat: fmt forSubclassType: classType [
 						ifFalse: [self error: 'Unknown class type']]]
 ]
 
+{ #category : 'private' }
+RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
+	"For GemStone, the valid values are:
+	bytes
+	variable
+	normal for non-indexable pointer object"
+
+	"Must be in-synch with RwGsLoadedClass>>updateClassTypeFromClass"
+
+	| type oldVersion createdClass gs_options |
+	type := classDefinition classType.
+	oldVersion := self oldClassVersion.
+	gs_options := ((classDefinition propertyAt: 'gs_options' ifAbsent: [#()]) collect: [ :each | each asSymbol ]).
+	createdClass := type = 'normal'
+				ifTrue: 
+					[superclass
+						subclass: classDefinition key
+						instVarNames: (classDefinition propertyAt: 'instvars')
+						classVars: (classDefinition propertyAt: 'classvars')
+						classInstVars: (classDefinition propertyAt: 'classinstvars')
+						poolDictionaries: (classDefinition propertyAt: 'pools')
+						inDictionary: nil
+						newVersionOf: oldVersion
+						description: (classDefinition propertyAt: 'comment' ifAbsent: [''])
+						options: gs_options ]
+				ifFalse: 
+					[type = 'variable'
+						ifTrue: 
+							[superclass
+								indexableSubclass: classDefinition key
+								instVarNames: (classDefinition propertyAt: 'instvars')
+								classVars: (classDefinition propertyAt: 'classvars')
+								classInstVars: (classDefinition propertyAt: 'classinstvars')
+								poolDictionaries: (classDefinition propertyAt: 'pools')
+								inDictionary: nil
+								newVersionOf: oldVersion
+								description: (classDefinition propertyAt: 'comment' ifAbsent: [''])
+								options: gs_options ]
+						ifFalse: 
+							[type = 'bytes'
+								ifTrue: 
+									[(classDefinition propertyAt: 'instvars') isEmpty
+										ifFalse: [self error: 'Cannot define byte class with named instvars.'].
+									superclass
+										byteSubclass: classDefinition key
+										classVars: (classDefinition propertyAt: 'classvars')
+										classInstVars: (classDefinition propertyAt: 'classinstvars')
+										poolDictionaries: (classDefinition propertyAt: 'pools')
+										inDictionary: nil
+										newVersionOf: oldVersion
+										description: (classDefinition propertyAt: 'comment' ifAbsent: [''])
+										options: gs_options ]
+								ifFalse: [self error: 'Unknown class type']]].
+	^createdClass
+]
+
 { #category : 'accessing' }
 RwGsClassPatch >> classDefinition [
 	^classDefinition
@@ -56,6 +112,20 @@ RwGsClassPatch >> classDefinition: newValue [
 RwGsClassPatch >> className [
 
 	^classDefinition key
+]
+
+{ #category : 'actions' }
+RwGsClassPatch >> createClassFor: aPatchSet [
+
+	| createdClass superclass |
+	superclass := aPatchSet superclassNamed: classDefinition superclassName.
+	superclass 
+		ifNil: [ 
+			classDefinition superclassName = 'nil' 
+				ifFalse: [ self error: 'The class named ', classDefinition superclassName printString , ' does not exist.' ] ].
+	createdClass := self privateCreateClassWithSuperclass: superclass.
+	aPatchSet createdClass: createdClass.
+	^createdClass
 ]
 
 { #category : 'actions' }
@@ -78,6 +148,13 @@ RwGsClassPatch >> markPackageNotDirty [
 	self markNotDirtyPackageNamed: packageDefinition key
 ]
 
+{ #category : 'versioning' }
+RwGsClassPatch >> oldClassVersion [
+	"The old version is what is currently bound to the class definition's name."
+
+	^ (self resolveName: classDefinition key) value
+]
+
 { #category : 'accessing' }
 RwGsClassPatch >> packageDefinition [
 	^packageDefinition
@@ -94,6 +171,21 @@ RwGsClassPatch >> packageDefinition: newValue [
 RwGsClassPatch >> packageName [
 
 	^packageDefinition key
+]
+
+{ #category : 'private' }
+RwGsClassPatch >> privateCreateClassWithSuperclass: superclass [
+
+	| classProperties packageName infoSource category createdClass |
+	createdClass := self basicCreateClassWithSuperclass: superclass.
+	classProperties := classDefinition properties.
+	packageName := packageDefinition key.
+	infoSource := Rowan configuration packageInfoSource.
+	category := infoSource == #Category
+				ifTrue: [packageName]
+				ifFalse: [classProperties at: 'category' ifAbsent: ['']].
+	createdClass category: category.
+	^createdClass
 ]
 
 { #category : 'accessing' }

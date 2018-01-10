@@ -7,7 +7,7 @@ Object
 "
 Class {
 	#name : 'RwGsClassAdditionPatch',
-	#superclass : 'RwGsClassCreationPatch',
+	#superclass : 'RwGsClassPatch',
 	#instVars : [
 		'newClass',
 		'symbolAssociation'

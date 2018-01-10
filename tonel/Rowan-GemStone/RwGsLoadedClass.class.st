@@ -48,7 +48,7 @@ RwGsLoadedClass class >> forClass: aClass [
 RwGsLoadedClass class >> initialize [
 	"RwGsLoadedClass initialize"
 
-	ClassRegistry := KeyValueDictionary new
+	ClassRegistry := IdentityKeyValueDictionary new
 ]
 
 { #category : 'instance creation' }

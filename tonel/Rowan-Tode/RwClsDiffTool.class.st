@@ -9,12 +9,12 @@ RwClsDiffTool >> diffClass: aClass1 with: aClass2 [
   | stream diffy patch label classDef1 package1 classDef2 package2 |
   label := 'Compare ' , aClass1 name , ' to ' , aClass2 name.
   stream := TextStream on: Text new.
-  classDef1 := (RwGsLoadedClass forClass: aClass1) asDefinition.
+  classDef1 := (RwGsLoadedClass existingForClass: aClass1) asDefinition.
   package1 := RwPackageDefinition
     withProperties: (Dictionary with: 'name' -> aClass1 name)
     classDefinitions: (Dictionary new at: classDef1 key put: classDef1)
     classExtensions: Dictionary new.
-  classDef2 := (RwGsLoadedClass forClass: aClass2) asDefinition.
+  classDef2 := (RwGsLoadedClass existingForClass: aClass2) asDefinition.
   package2 := RwPackageDefinition
     withProperties: (Dictionary with: 'name' -> aClass2 name)
     classDefinitions: (Dictionary new at: classDef2 key put: classDef2)

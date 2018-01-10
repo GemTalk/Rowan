@@ -9,9 +9,6 @@ Object
 Class {
 	#name : 'RwGsMethodPropertiesPatch',
 	#superclass : 'RwGsMethodPatch',
-	#instVars : [
-		'propertiesModification'
-	],
 	#category : 'Rowan-GemStone'
 }
 

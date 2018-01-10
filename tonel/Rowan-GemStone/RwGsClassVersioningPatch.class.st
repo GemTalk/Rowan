@@ -7,7 +7,7 @@ Object
 "
 Class {
 	#name : 'RwGsClassVersioningPatch',
-	#superclass : 'RwGsClassCreationPatch',
+	#superclass : 'RwGsClassPatch',
 	#instVars : [
 		'oldClassDefinition',
 		'oldClassVersion',
@@ -44,35 +44,48 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	"Need to decide whether the patches in aClassModification warrant a new class version or 
 	 simple property changes."
 
-	| dictName dict existingClass  newOpts newFormat aClassDefinition |
+	| dictName dict existingClass newOpts newFormat aClassDefinition newSuperclass |
 	aClassDefinition := aClassModification after.
-	dictName := aClassDefinition propertyAt: 'gs_SymbolDictionary'
-				ifAbsent: ['UserGlobals'].
+	dictName := aClassDefinition
+		propertyAt: 'gs_SymbolDictionary'
+		ifAbsent: [ 'UserGlobals' ].
 	dict := self existingSymbolDictionaryNamed: dictName.
-	dict ifNil: [ self error: 'internal error - symbolDictionary named: ', dictName printString, ' not found' ].
-	existingClass := dict 
+	dict
+		ifNil: [ 
+			self
+				error:
+					'internal error - symbolDictionary named: ' , dictName printString
+						, ' not found' ].
+	existingClass := dict
 		at: aClassDefinition name asSymbol
-		ifAbsent: [
-			self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
-	newOpts := (aClassDefinition propertyAt: 'gs_options' ifAbsent: [ #() ]) 
-					copy 
-					add: #logCreation;
-					yourself.
-	newFormat := self _classFormat: existingClass superclass format forSubclassType: aClassDefinition classType.
-	(existingClass superclass 
-		_equivalentSubclass: existingClass 
-		superCls:existingClass superclass
- 		name: aClassDefinition name
+		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
+	newOpts := (aClassDefinition propertyAt: 'gs_options' ifAbsent: [ #() ]) copy
+		add: #'logCreation';
+		yourself.
+	newFormat := self
+		_classFormat: existingClass superclass format
+		forSubclassType: aClassDefinition classType.
+	newSuperclass := (self resolveName: aClassDefinition superclassName) value.
+	(newSuperclass
+		_equivalentSubclass: existingClass
+		superCls: newSuperclass
+		name: aClassDefinition name
 		newOpts: newOpts
 		newFormat: newFormat
 		newInstVars: aClassDefinition instVarNames
 		newClassInstVars: aClassDefinition classInstVarNames
 		newPools: aClassDefinition poolDictionaryNames
-		newClassVars:aClassDefinition classVarNames
+		newClassVars: aClassDefinition classVarNames
 		inDict: dict
-		isKernel: false "needs work .. maybe")
-			ifTrue: [ aRwGsPatchSet addPatchedClassProperties: aClassDefinition inPackage: aPackageDefinition ]
-			ifFalse: [ aRwGsPatchSet addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition ]
+		isKernel: false)
+		ifTrue: [ 
+			aRwGsPatchSet
+				addPatchedClassProperties: aClassDefinition
+				inPackage: aPackageDefinition ]
+		ifFalse: [ 
+			aRwGsPatchSet
+				addPatchedClassNewVersion: aClassModification
+				inPackage: aPackageDefinition ]
 ]
 
 { #category : 'actions' }
@@ -88,11 +101,10 @@ RwGsClassVersioningPatch >> addToNewClassesByName: aDictionary [
 
 { #category : 'actions' }
 RwGsClassVersioningPatch >> createClassFor: aPatchSet [
-
-	oldClassVersion := self oldClassVersion.
-	newClassVersion := super createClassFor: aPatchSet.
-	symbolAssociation := aPatchSet associationFor: newClassVersion name.
-	^newClassVersion
+  oldClassVersion := self oldClassVersion.
+  newClassVersion := super createClassFor: aPatchSet.
+  symbolAssociation := aPatchSet associationFor: newClassVersion name.
+  ^ newClassVersion
 ]
 
 { #category : 'actions' }
@@ -128,8 +140,23 @@ RwGsClassVersioningPatch >> oldClassVersion [
 
 { #category : 'actions' }
 RwGsClassVersioningPatch >> updateLoadedClass [
+	"Refresh the class properties if a new class version was created."
+
+	| loadedClass |
+	oldClassVersion == newClassVersion
+		ifTrue: [ ^ self ].
+	loadedClass := RwGsLoadedClass existingForClass: oldClassVersion.
+	loadedClass
+		updatePropertiesFromClass;
+		updateForCategoryChange
 ]
 
 { #category : 'actions' }
 RwGsClassVersioningPatch >> updateSymbolAssociation [
+
+	oldClassVersion == newClassVersion 
+		ifTrue: [ 
+			"no newClassVersion created when property modifications applied .. not a problem"
+			^self ].
+	symbolAssociation value: newClassVersion
 ]

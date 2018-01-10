@@ -368,6 +368,11 @@ RwGsPatchSetBasic >> createdClass: aClass [
 		add: (SymbolAssociation newWithKey: className value: aClass)
 ]
 
+{ #category : 'accessing' }
+RwGsPatchSetBasic >> createdClasses [
+	^ createdClasses
+]
+
 { #category : 'private - applying' }
 RwGsPatchSetBasic >> createNewClassesAndClassVersions [
 	"Who: Added classes and classes with new versions
@@ -495,13 +500,18 @@ RwGsPatchSetBasic >> superclassNamed: aName [
 				ifAbsent: [self error: 'Superclass not found.']]
 ]
 
+{ #category : 'accessing' }
+RwGsPatchSetBasic >> tempSymbols [
+	^ tempSymbols
+]
+
 { #category : 'private - applying' }
 RwGsPatchSetBasic >> updateClassProperties [
 	"For classes with changes that don't require versioning, 
 	update the properties in the class and the LoadedClasses as appropriate."
 
 	classesWithPropertyChanges do: [:each | 
-		each installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols ]
+		each installPropertiesPatchFor: self ]
 ]
 
 { #category : 'private - applying' }

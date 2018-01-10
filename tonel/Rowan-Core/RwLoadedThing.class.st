@@ -17,6 +17,12 @@ Class {
 	#category : 'Rowan-Core'
 }
 
+{ #category : 'accessing' }
+RwLoadedThing class >> absentToken [
+
+	^AbsentToken
+]
+
 { #category : 'class initialization' }
 RwLoadedThing class >> initialize [
   "RwLoadedThing initialize"
