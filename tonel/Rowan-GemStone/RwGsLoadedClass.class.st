@@ -417,9 +417,10 @@ RwGsLoadedClass >> updatePoolDictionaryNamesFromClass [
 	| propertyName oldNames newNames |
 	propertyName := 'pools'.
 	oldNames := self propertyAt: propertyName.
-	newNames := (handle sharedPools collect: [:each | each name asString])
-				asSortedCollection asArray.
-	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
+	newNames := (handle sharedPools collect: [ :each | each name asString ])
+		asArray.
+	oldNames = newNames
+		ifFalse: [ self propertyAt: propertyName put: newNames ]
 ]
 
 { #category : 'private-updating' }

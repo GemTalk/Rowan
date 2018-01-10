@@ -9,6 +9,9 @@ Object
 Class {
 	#name : 'RwLoadingTest',
 	#superclass : 'TestCase',
+	#classVars : [
+		'PoolDictionaryDictionary'
+	],
 	#category : 'Rowan-Tests'
 }
 
@@ -16,6 +19,31 @@ Class {
 RwLoadingTest class >> debug [
 
 	^self allTestSelectors do: [:selector | self debug: selector]
+]
+
+{ #category : 'initlization' }
+RwLoadingTest class >> initialize [
+	"self initialize"
+
+	"cannot create useful pool dictionaries on the fly, so need  a set of 
+	 canonical pool dictionaries."
+
+	PoolDictionaryDictionary := Dictionary new.
+	{(SymbolDictionary new
+		at: #'Carrot1' put: 1;
+		at: #'Radish1' put: 2;
+		name: #'PoolDictionary1';
+		yourself).
+	(SymbolDictionary new
+		at: #'Carrot2' put: 1;
+		at: #'Radish2' put: 2;
+		name: #'PoolDictionary2';
+		yourself).
+	(SymbolDictionary new
+		at: #'Carrot3' put: 1;
+		at: #'Radish3' put: 2;
+		name: #'PoolDictionary3';
+		yourself)} do: [ :pd | PoolDictionaryDictionary at: pd name put: pd ]
 ]
 
 { #category : 'running' }
@@ -971,6 +999,11 @@ RwLoadingTest >> definitionsOfLoadedPackages: packageNames [
 	^(Rowan loadedPackagesNamed: packageNames) asDefinition
 ]
 
+{ #category : 'running' }
+RwLoadingTest >> expectedFailures [
+	^ {#'testPoolDictionaryChanges'}
+]
+
 { #category : 'support - instVarChanges definitions' }
 RwLoadingTest >> instVarChangeClassDefinitions1: packageName in: classDefinitionDictionary [
 	"Inst Var Changes: "
@@ -1279,6 +1312,122 @@ RwLoadingTest >> package2Definition [
 		classExtensions: Dictionary new
 ]
 
+{ #category : 'support - poolDictionaryChanges definitions' }
+RwLoadingTest >> poolDictionaryChangeClassDefinitions1: packageName in: classDefinitionDictionary [
+	"Pool Dictionary Changes: "
+
+	^ classDefinitionDictionary
+		at: 'TestPoolDictionaryClass'
+			put:
+				(RwClassDefinition
+						withProperties:
+							(self
+								propertiesForClassNamed: 'TestPoolDictionaryClass'
+								super: 'Object'
+								instvars: {}
+								classinstvars: {}
+								classvars: {}
+								comment: 'a comment'
+								pools: {}
+								inPackage: packageName)
+						classMethodDefinitions: Dictionary new
+						instanceMethodDefinitions: Dictionary new);
+		yourself
+]
+
+{ #category : 'support - poolDictionaryChanges definitions' }
+RwLoadingTest >> poolDictionaryChangeClassDefinitions2: packageName in: classDefinitionDictionary [
+	"Pool Dictionary Changes: add PD1"
+
+	^ classDefinitionDictionary
+		at: 'TestPoolDictionaryClass'
+			put:
+				(RwClassDefinition
+						withProperties:
+							(self
+								propertiesForClassNamed: 'TestPoolDictionaryClass'
+								super: 'Object'
+								instvars: {}
+								classinstvars: {}
+								classvars: {}
+								comment: 'a comment'
+								pools: {(PoolDictionaryDictionary at: #'PoolDictionary1')}
+								inPackage: packageName)
+						classMethodDefinitions: Dictionary new
+						instanceMethodDefinitions: Dictionary new);
+		yourself
+]
+
+{ #category : 'support - poolDictionaryChanges definitions' }
+RwLoadingTest >> poolDictionaryChangeClassDefinitions3: packageName in: classDefinitionDictionary [
+	"Pool Dictionary Changes: add PD2"
+
+	^ classDefinitionDictionary
+		at: 'TestPoolDictionaryClass'
+			put:
+				(RwClassDefinition
+						withProperties:
+							(self
+								propertiesForClassNamed: 'TestPoolDictionaryClass'
+								super: 'Object'
+								instvars: {}
+								classinstvars: {}
+								classvars: {}
+								comment: 'a comment'
+								pools:
+									{(PoolDictionaryDictionary at: #'PoolDictionary1').
+									(PoolDictionaryDictionary at: #'PoolDictionary2')}
+								inPackage: packageName)
+						classMethodDefinitions: Dictionary new
+						instanceMethodDefinitions: Dictionary new);
+		yourself
+]
+
+{ #category : 'support - poolDictionaryChanges definitions' }
+RwLoadingTest >> poolDictionaryChangeClassDefinitions4: packageName in: classDefinitionDictionary [
+	"Pool Dictionary Changes: add PD3 and remove PD1"
+
+	^ classDefinitionDictionary
+		at: 'TestPoolDictionaryClass'
+			put:
+				(RwClassDefinition
+						withProperties:
+							(self
+								propertiesForClassNamed: 'TestPoolDictionaryClass'
+								super: 'Object'
+								instvars: {}
+								classinstvars: {}
+								classvars: {}
+								comment: 'a comment'
+								pools:
+									{(PoolDictionaryDictionary at: #'PoolDictionary2').
+									(PoolDictionaryDictionary at: #'PoolDictionary3')}
+								inPackage: packageName)
+						classMethodDefinitions: Dictionary new
+						instanceMethodDefinitions: Dictionary new);
+		yourself
+]
+
+{ #category : 'support - poolDictionaryChanges definitions' }
+RwLoadingTest >> poolDictionaryChangesClassDefinitions1: packageName [
+	^ self poolDictionaryChangeClassDefinitions1: packageName in: Dictionary new
+]
+
+{ #category : 'support - poolDictionaryChanges definitions' }
+RwLoadingTest >> poolDictionaryChangesClassDefinitions2: packageName [
+	^ self poolDictionaryChangeClassDefinitions2: packageName in: Dictionary new
+]
+
+{ #category : 'support - poolDictionaryChanges definitions' }
+RwLoadingTest >> poolDictionaryChangesClassDefinitions3: packageName [
+	^ self poolDictionaryChangeClassDefinitions3: packageName in: Dictionary new
+]
+
+{ #category : 'support - poolDictionaryChanges definitions' }
+RwLoadingTest >> poolDictionaryChangesClassDefinitions4: packageName [
+	^ self poolDictionaryChangeClassDefinitions4: packageName in: Dictionary new
+]
+
 { #category : 'support' }
 RwLoadingTest >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars comment: comment gs_SymbolDictionary: gs_SymbolDictionary pools: pools type: type gs_options: gs_options inPackage: packageName [
   | dict |
@@ -1554,7 +1703,7 @@ RwLoadingTest >> testClassInitialization2 [
 RwLoadingTest >> testClassInstVarChanges [
 	"characterize class inst var changes with respect to new version creation"
 
-	"as of GemStone 3.4, .... any change to the class vars creates a new class version"
+	"as of GemStone 3.4, .... any change to the class inst vars creates a new class version"
 
 	| packageName packageNames myPackageSet className testClass1 testClass2 testClass3 testClass4 civs1 civs2 civs3 civs4 |
 	packageName := 'ClassInstVarChangesTestPackage'.
@@ -1578,7 +1727,7 @@ RwLoadingTest >> testClassInstVarChanges [
 						withProperties: (Dictionary with: 'name' -> packageName)
 						classDefinitions: (self classInstVarChangesClassDefinitions2: packageName)
 						classExtensions: Dictionary new);
-		yourself.	"Class Var Changes: add ClassVar1"
+		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	testClass2 := System myUserProfile symbolList objectNamed: className.
 	civs2 := testClass2 _classInstVars copy.
@@ -1590,7 +1739,7 @@ RwLoadingTest >> testClassInstVarChanges [
 						withProperties: (Dictionary with: 'name' -> packageName)
 						classDefinitions: (self classInstVarChangesClassDefinitions3: packageName)
 						classExtensions: Dictionary new);
-		yourself.	"Class Var Changes: add ClassVar2"
+		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	testClass3 := System myUserProfile symbolList objectNamed: className.
 	civs3 := testClass3 _classInstVars copy.
@@ -1602,7 +1751,7 @@ RwLoadingTest >> testClassInstVarChanges [
 						withProperties: (Dictionary with: 'name' -> packageName)
 						classDefinitions: (self classInstVarChangesClassDefinitions4: packageName)
 						classExtensions: Dictionary new);
-		yourself.	"Class Var Changes: add ClassVar3 and remove ClassVar1"
+		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	testClass4 := System myUserProfile symbolList objectNamed: className.
 	civs4 := testClass4 _classInstVars copy.
@@ -1724,7 +1873,7 @@ RwLoadingTest >> testClassVarChanges [
 						withProperties: (Dictionary with: 'name' -> packageName)
 						classDefinitions: (self classVarChangesClassDefinitions2: packageName)
 						classExtensions: Dictionary new);
-		yourself.	"Class Var Changes: add ClassVar1"
+		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	testClass2 := System myUserProfile symbolList objectNamed: className.
 	cvs2 := testClass2 _classVars copy.
@@ -1736,7 +1885,7 @@ RwLoadingTest >> testClassVarChanges [
 						withProperties: (Dictionary with: 'name' -> packageName)
 						classDefinitions: (self classVarChangesClassDefinitions3: packageName)
 						classExtensions: Dictionary new);
-		yourself.	"Class Var Changes: add ClassVar2"
+		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	testClass3 := System myUserProfile symbolList objectNamed: className.
 	cvs3 := testClass3 _classVars copy.
@@ -1748,7 +1897,7 @@ RwLoadingTest >> testClassVarChanges [
 						withProperties: (Dictionary with: 'name' -> packageName)
 						classDefinitions: (self classVarChangesClassDefinitions4: packageName)
 						classExtensions: Dictionary new);
-		yourself.	"Class Var Changes: add ClassVar3 and remove ClassVar1"
+		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	testClass4 := System myUserProfile symbolList objectNamed: className.
 	cvs4 := testClass4 _classVars copy.
@@ -1852,7 +2001,7 @@ RwLoadingTest >> testCombinedChanges [
 RwLoadingTest >> testInstVarChanges [
 	"characterize class inst var changes with respect to new version creation"
 
-	"as of GemStone 3.4, .... any change to the class vars creates a new class version"
+	"as of GemStone 3.4, .... any change to the inst vars creates a new class version"
 
 	| packageName packageNames myPackageSet className testClass1 testClass2 testClass3 testClass4 ivs1 ivs2 ivs3 ivs4 |
 	packageName := 'InstVarChangesTestPackage'.
@@ -1876,7 +2025,7 @@ RwLoadingTest >> testInstVarChanges [
 						withProperties: (Dictionary with: 'name' -> packageName)
 						classDefinitions: (self instVarChangesClassDefinitions2: packageName)
 						classExtensions: Dictionary new);
-		yourself.	"Class Var Changes: add ClassVar1"
+		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	testClass2 := System myUserProfile symbolList objectNamed: className.
 	ivs2 := testClass2 _instVarNames copy.
@@ -1888,7 +2037,7 @@ RwLoadingTest >> testInstVarChanges [
 						withProperties: (Dictionary with: 'name' -> packageName)
 						classDefinitions: (self instVarChangesClassDefinitions3: packageName)
 						classExtensions: Dictionary new);
-		yourself.	"Class Var Changes: add ClassVar2"
+		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	testClass3 := System myUserProfile symbolList objectNamed: className.
 	ivs3 := testClass3 _instVarNames copy.
@@ -1900,7 +2049,7 @@ RwLoadingTest >> testInstVarChanges [
 						withProperties: (Dictionary with: 'name' -> packageName)
 						classDefinitions: (self instVarChangesClassDefinitions4: packageName)
 						classExtensions: Dictionary new);
-		yourself.	"Class Var Changes: add ClassVar3 and remove ClassVar1"
+		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	testClass4 := System myUserProfile symbolList objectNamed: className.
 	ivs4 := testClass4 _instVarNames copy.
@@ -2007,6 +2156,69 @@ RwLoadingTest >> testMethodProtocolChange [
     assert: testClass testClassMethod2;
     assert: testInstance testInstanceMethod1;
     assert: testInstance testInstanceMethod2
+]
+
+{ #category : 'tests' }
+RwLoadingTest >> testPoolDictionaryChanges [
+	"characterize pool dictionary changes with respect to new version creation"
+
+	"as of GemStone 3.4, .... "
+
+	| packageName packageNames myPackageSet className testClass1 testClass2 testClass3 testClass4 pds1 pds2 pds3 pds4 |
+	packageName := 'TestPoolDictionaryTestPackage'.
+	className := 'TestPoolDictionaryClass'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions:
+							(self poolDictionaryChangesClassDefinitions1: packageName)
+						classExtensions: Dictionary new);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+	testClass1 := System myUserProfile symbolList objectNamed: className.
+	pds1 := testClass1 _poolDictionaries copy.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions:
+							(self poolDictionaryChangesClassDefinitions2: packageName)
+						classExtensions: Dictionary new);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+	testClass2 := System myUserProfile symbolList objectNamed: className.
+	pds2 := testClass2 _poolDictionaries copy.
+	self deny: testClass2 == testClass1.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions:
+							(self poolDictionaryChangesClassDefinitions3: packageName)
+						classExtensions: Dictionary new);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+	testClass3 := System myUserProfile symbolList objectNamed: className.
+	pds3 := testClass3 _poolDictionaries copy.
+	self deny: testClass3 == testClass1.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions:
+							(self poolDictionaryChangesClassDefinitions4: packageName)
+						classExtensions: Dictionary new);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+	testClass4 := System myUserProfile symbolList objectNamed: className.
+	pds4 := testClass4 _poolDictionaries copy.
+	self deny: testClass4 == testClass1
 ]
 
 { #category : 'tests' }
