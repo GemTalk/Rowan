@@ -101,10 +101,13 @@ RwGsClassVersioningPatch >> addToNewClassesByName: aDictionary [
 
 { #category : 'actions' }
 RwGsClassVersioningPatch >> createClassFor: aPatchSet [
-  oldClassVersion := self oldClassVersion.
-  newClassVersion := super createClassFor: aPatchSet.
-  symbolAssociation := aPatchSet associationFor: newClassVersion name.
-  ^ newClassVersion
+	"we're using createClassFor: to apply the class modifications to the existing class
+	oldClassVersion and produce a new class version"
+
+	oldClassVersion := self oldClassVersion.
+	newClassVersion := super createClassFor: aPatchSet.
+	symbolAssociation := self resolveName: newClassVersion name.
+	^ newClassVersion
 ]
 
 { #category : 'actions' }
@@ -146,9 +149,14 @@ RwGsClassVersioningPatch >> updateLoadedClass [
 	oldClassVersion == newClassVersion
 		ifTrue: [ ^ self ].
 	loadedClass := RwGsLoadedClass existingForClass: oldClassVersion.
-	loadedClass
-		updatePropertiesFromClass;
-		updateForCategoryChange
+	loadedClass handleClassDeletionOrNewVersion
+		ifTrue: [ 
+			loadedClass
+				updatePropertiesFromClass;
+				updateForCategoryChange ]
+		ifFalse: [ 
+			self error: 'internal error - new version of class not properly installed'
+			 ]
 ]
 
 { #category : 'actions' }

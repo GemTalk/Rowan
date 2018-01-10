@@ -360,21 +360,6 @@ RwLoadingTest >> classVersionChangeClassDefinitions1: packageName in: classDefin
 								inPackage: packageName)
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions: Dictionary new);
-		at: 'TestChangeCommentClass'
-			put:
-				(RwClassDefinition
-						withProperties:
-							(self
-								propertiesForClassNamed: 'TestChangeCommentClass'
-								super: 'Object'
-								instvars: {}
-								classinstvars: {}
-								classvars: {}
-								comment: 'a comment'
-								pools: {}
-								inPackage: packageName)
-						classMethodDefinitions: Dictionary new
-						instanceMethodDefinitions: Dictionary new);
 		at: 'TestChangePoolsClass'
 			put:
 				(RwClassDefinition
@@ -459,21 +444,6 @@ RwLoadingTest >> classVersionChangeClassDefinitions2: packageName in: classDefin
 								classinstvars: {}
 								classvars: {}
 								comment: 'a comment'
-								pools: {}
-								inPackage: packageName)
-						classMethodDefinitions: Dictionary new
-						instanceMethodDefinitions: Dictionary new);
-		at: 'TestChangeCommentClass'
-			put:
-				(RwClassDefinition
-						withProperties:
-							(self
-								propertiesForClassNamed: 'TestChangeCommentClass'
-								super: 'Object'
-								instvars: {}
-								classinstvars: {}
-								classvars: {}
-								comment: 'a new comment'
 								pools: {}
 								inPackage: packageName)
 						classMethodDefinitions: Dictionary new

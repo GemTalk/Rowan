@@ -299,12 +299,6 @@ RwGsPatchSetBasic >> apply [
 		commit
 ]
 
-{ #category : 'patch access' }
-RwGsPatchSetBasic >> associationFor: aName [
-
-	^tempSymbols associationAt: aName
-]
-
 { #category : 'private - applying' }
 RwGsPatchSetBasic >> commit [
 
@@ -498,6 +492,11 @@ RwGsPatchSetBasic >> superclassNamed: aName [
 		ifAbsent: 
 			[tempSymbols at: aName asSymbol
 				ifAbsent: [self error: 'Superclass not found.']]
+]
+
+{ #category : 'patch access' }
+RwGsPatchSetBasic >> tempAssociationFor: aName [
+	^ tempSymbols associationAt: aName
 ]
 
 { #category : 'accessing' }

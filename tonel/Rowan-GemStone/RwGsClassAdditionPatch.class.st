@@ -61,10 +61,9 @@ RwGsClassAdditionPatch >> createAndInstallLoadedClass [
 
 { #category : 'actions' }
 RwGsClassAdditionPatch >> createClassFor: aPatchSet [
-
 	newClass := super createClassFor: aPatchSet.
-	symbolAssociation := aPatchSet associationFor: newClass name.
-	^newClass
+	symbolAssociation := aPatchSet tempAssociationFor: newClass name.
+	^ newClass
 ]
 
 { #category : 'actions' }
