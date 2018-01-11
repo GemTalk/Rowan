@@ -6,12 +6,12 @@ Class {
 
 { #category : 'man page' }
 RwPrjWriteTool >> manPage [
-  ^ TDManPage
-    commandName: 'write'
-    sourceMethod: self class name asString , '>>manPage'
-    fromString:
-      'NAME
-  prj write - Write packages to repository
+	^ TDManPage
+		commandName: 'write'
+		sourceMethod: self class name asString , '>>manPage'
+		fromString:
+			'NAME
+  prj write - Write project to disk and commit repository
 SYNOPSIS
   prj write <spec-url>
 DESCRIPTION

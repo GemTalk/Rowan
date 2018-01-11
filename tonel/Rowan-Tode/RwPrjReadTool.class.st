@@ -6,12 +6,12 @@ Class {
 
 { #category : 'man page' }
 RwPrjReadTool >> manPage [
-  ^ TDManPage
-    commandName: 'read'
-    sourceMethod: self class name asString , '>>manPage'
-    fromString:
-      'NAME
-  prj read - Read packages from repository
+	^ TDManPage
+		commandName: 'read'
+		sourceMethod: self class name asString , '>>manPage'
+		fromString:
+			'NAME
+  prj read - Read project from repository (disk -> defs)
 SYNOPSIS
   prj read <spec-url>
 DESCRIPTION

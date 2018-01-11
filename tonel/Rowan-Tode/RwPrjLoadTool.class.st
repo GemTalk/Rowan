@@ -40,12 +40,12 @@ RwPrjLoadTool >> loadSpecUrl: aString [
 
 { #category : 'man page' }
 RwPrjLoadTool >> manPage [
-  ^ TDManPage
-    commandName: 'load'
-    sourceMethod: self class name asString , '>>manPage'
-    fromString:
-      'NAME
-  prj load - Load from the repository
+	^ TDManPage
+		commandName: 'load'
+		sourceMethod: self class name asString , '>>manPage'
+		fromString:
+			'NAME
+  prj load - Read project from repository and install (disk -> image)
 SYNOPSIS
   prj load [--loads=<load-expression>] <spec-url>
 DESCRIPTION

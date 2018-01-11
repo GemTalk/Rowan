@@ -49,12 +49,12 @@ message: messageString
 
 { #category : 'man page' }
 RwPrjCommitTool >> manPage [
-  ^ TDManPage
-    commandName: 'commit'
-    sourceMethod: self class name asString , '>>manPage'
-    fromString:
-      'NAME
-  prj commit - Save image changes to repository and commit (git repos only)
+	^ TDManPage
+		commandName: 'commit'
+		sourceMethod: self class name asString , '>>manPage'
+		fromString:
+			'NAME
+  prj commit - Write project to disk and commit repository (defs -> disk)
 SYNOPSIS
   prj commit --message=<message-ref> [--push[=remote]] <spec-url>
 DESCRIPTION

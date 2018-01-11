@@ -1,21 +1,21 @@
 Class {
-	#name : 'RwPrjRevertTool',
+	#name : 'RwPrjInstallTool',
 	#superclass : 'RwProjectTool',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'man page' }
-RwPrjRevertTool >> manPage [
+RwPrjInstallTool >> manPage [
 	^ TDManPage
-		commandName: 'revert'
+		commandName: 'install'
 		sourceMethod: self class name asString , '>>manPage'
 		fromString:
 			'NAME
-  prj revert - Read project from repository and install, ignoring dirty packages (disk -> image)
+  prj install - Install project into the image (defs -> image)
 SYNOPSIS
-  prj revert
+  prj install <spec-url>
 DESCRIPTION
 EXAMPLES
-  prj revert Rowan
+  prj install Rowan
 '
 ]

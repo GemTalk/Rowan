@@ -25,6 +25,11 @@ RwPackageTool class >> diff [
 ]
 
 { #category : 'commands' }
+RwPackageTool class >> install [
+	^ RwPkgInstallTool new
+]
+
+{ #category : 'commands' }
 RwPackageTool class >> list [
   ^ RwPkgListTool new
 ]
@@ -37,6 +42,11 @@ RwPackageTool class >> load [
 { #category : 'commands' }
 RwPackageTool class >> move [
   ^ RwPkgMoveTool new
+]
+
+{ #category : 'commands' }
+RwPackageTool class >> read [
+	^ RwPkgReadTool new
 ]
 
 { #category : 'commands' }

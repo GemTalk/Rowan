@@ -1549,6 +1549,85 @@ RwLoadingTest >> sillyClassMethodsForClassNamed: name [
 	^ ''You have sent a silly message to the class '' , name')
 ]
 
+{ #category : 'support - singleClassVersionChange definitions' }
+RwLoadingTest >> singleClassVersionChangeClassDefinitions1: packageName className: className [
+	"Single class with methods and new class versions."
+
+	^ Dictionary new
+		at: className
+			put:
+				(RwClassDefinition
+						withProperties:
+							(self
+								propertiesForClassNamed: className
+								super: 'Object'
+								instvars: #('iva' 'ivb' 'ivc')
+								classinstvars: #('cia' 'cib' 'cic')
+								classvars: #('Ca' 'Cb' 'Cc')
+								comment: 'a comment'
+								pools: {}
+								inPackage: packageName)
+						classMethodDefinitions:
+							(self
+								methodDefsFromSpec:
+									{#(#'cia' 'accessing' 'cia ^cia').
+									#(#'cib' 'accessing' 'cib ^cib').
+									#(#'ca' 'accessing' 'ca ^Ca').
+									#(#'cb' 'accessing' 'cb ^Cb').
+									#(#'initialize' 'initialization' 'initialize Ca := cia := 1. Cb := cib := 2. Cc := cic := 3.').
+									#(#'new' 'instance creation' 'new ^ (self basicNew) initialize; yourself')})
+						instanceMethodDefinitions:
+							(self
+								methodDefsFromSpec:
+									{#(#'iva' 'accessing' 'iva ^iva').
+									#(#'ivb' 'accessing' 'ivb ^ivb').
+									#(#'ivc' 'accessing' 'ivc ^ivc').
+									#(#'foo' 'accessing' 'foo ^''foo''').
+									#(#'initialize' 'initialization' 'initialize iva:= ivb:= ivc:= 1')}));
+		yourself
+]
+
+{ #category : 'support - singleClassVersionChange definitions' }
+RwLoadingTest >> singleClassVersionChangeClassDefinitions2: packageName className: className [
+	"Single class with methods and new class versions."
+
+	"remove *a, add *d"
+
+	^ Dictionary new
+		at: className
+			put:
+				(RwClassDefinition
+						withProperties:
+							(self
+								propertiesForClassNamed: className
+								super: 'Object'
+								instvars: #('ivd' 'ivb' 'ivc')
+								classinstvars: #('cid' 'cib' 'cic')
+								classvars: #('Cd' 'Cb' 'Cc')
+								comment: 'a comment'
+								pools: {}
+								inPackage: packageName)
+						classMethodDefinitions:
+							(self
+								methodDefsFromSpec:
+									{#(#'cid' 'accessing' 'cid ^cid').
+									#(#'cib' 'accessing' 'cib ^cib').
+									#(#'cd' 'accessing' 'cd ^Cd').
+									#(#'cb' 'accessing' 'cb ^Cb').
+									#(#'initialize' 'initialization' 'initialize Cd := cid := 1. Cb := cib := 2. Cc := cic := 3.').
+									#(#'new' 'instance creation' 'new ^ (self basicNew) initialize; yourself')})
+						instanceMethodDefinitions:
+							(self
+								methodDefsFromSpec:
+									{#(#'ivd' 'accessing' 'ivd ^ivd').
+									#(#'ivb' 'accessing' 'ivb ^ivb').
+									#(#'ivc' 'accessing' 'ivc ^ivc').
+									#(#'foo' 'accessing' 'foo ^''foo''').
+									#(#'bar' 'accessing' 'bar ^''bar''').
+									#(#'initialize' 'initialization' 'initialize ivd:= ivb:= ivc:= 1')}));
+		yourself
+]
+
 { #category : 'tests' }
 RwLoadingTest >> testBasicLoading [
   "test loading a variety of different class types"
@@ -2233,4 +2312,61 @@ RwLoadingTest >> testSimpleLoading [
 		addPackage: self package2Definition.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
 
+]
+
+{ #category : 'tests' }
+RwLoadingTest >> testSingleClassVersionChange1 [
+	"test class property changes that result in new class versions 
+		- specifically add and remove some instance variable
+		- class will have methods some of which are explicitly changed (i.e., references
+			to added/removed instance variebles) and some methods that are implicitly changed
+			(i.e., because these methods must be recompiled in the new class version)"
+
+	"this test will act as driver for exploring impmlementations of alternate solutions"
+
+	"No automatic instance migration"
+
+	| packageName packageNames myPackageSet className testClass1 testInstance1 testClass2 testInstance2 |
+	packageName := 'SingleClassVersionChangeTestPackage'.
+	className := 'TestSingleClassNewVersions'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions:
+							(self
+								singleClassVersionChangeClassDefinitions1: packageName
+								className: className)
+						classExtensions: Dictionary new);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+	testClass1 := System myUserProfile symbolList objectNamed: className.
+	testInstance1 := testClass1 new.
+	self assert: testInstance1 iva = 1.
+	self assert: testInstance1 foo = 'foo'.
+	self should: [ testInstance1 bar ] raise: MessageNotUnderstood.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions:
+							(self
+								singleClassVersionChangeClassDefinitions2: packageName
+								className: className)
+						classExtensions: Dictionary new);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+	testClass2 := System myUserProfile symbolList objectNamed: className.
+	testInstance2 := testClass2 new.
+	self deny: testClass2 == testClass1.
+	self assert: testInstance1 iva = 1.
+	self assert: testInstance1 foo = 'foo'.
+	self should: [ testInstance2 iva ] raise: MessageNotUnderstood.
+	self assert: testInstance2 foo = 'foo'.
+	self assert: testInstance2 bar = 'bar'.
+	self assert: testInstance2 ivd = 1
 ]
