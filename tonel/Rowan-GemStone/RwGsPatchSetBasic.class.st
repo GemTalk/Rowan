@@ -11,6 +11,7 @@ Class {
 		'addedClasses',
 		'deletedClasses',
 		'classesWithPropertyChanges',
+		'classesWithClassVariableChanges',
 		'classesWithNewVersions',
 		'addedMethods',
 		'deletedMethods',
@@ -42,6 +43,12 @@ RwGsPatchSetBasic >> _classDeletionPatchClass [
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classPropertiesPatchClass [
   ^ RwGsClassPropertiesPatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _classVariablePatchClass [
+
+	^ RwGsClassVariableChangePatch
 ]
 
 { #category : 'private - patch class accessors' }
@@ -134,9 +141,11 @@ RwGsPatchSetBasic >> addAndUpdateLoadedPackages [
 { #category : 'private - applying' }
 RwGsPatchSetBasic >> addCreatedClassesAndVersionsTo: newClassesByName [
 
-	addedClasses do: [:each | each addToNewClassesByName: newClassesByName].
+	addedClasses do: [ :each | each addToNewClassesByName: newClassesByName ].
+	classesWithClassVariableChanges
+		do: [ :each | each addToNewClassesByName: newClassesByName ].
 	classesWithNewVersions
-		do: [:each | each addToNewClassesByName: newClassesByName]
+		do: [ :each | each addToNewClassesByName: newClassesByName ]
 ]
 
 { #category : 'building' }
@@ -173,6 +182,16 @@ RwGsPatchSetBasic >> addDeletedInstanceMethod: anInstanceMethodDefinition inClas
 { #category : 'building' }
 RwGsPatchSetBasic >> addDeletedPackage: packageDefinition [
   deletedPackages add: (self _packageDeletionPatchClass for: packageDefinition)
+]
+
+{ #category : 'building' }
+RwGsPatchSetBasic >> addPatchedClassClassVariables: aClassDefinition inPackage: aPackageDefinition [
+
+	classesWithClassVariableChanges
+		add:
+			(self _classVariablePatchClass
+				for: aClassDefinition
+				inPackage: aPackageDefinition)
 ]
 
 { #category : 'building' }
@@ -299,6 +318,12 @@ RwGsPatchSetBasic >> apply [
 		commit
 ]
 
+{ #category : 'accessing' }
+RwGsPatchSetBasic >> classesWithNewVersions [
+
+	^ classesWithNewVersions
+]
+
 { #category : 'private - applying' }
 RwGsPatchSetBasic >> commit [
 
@@ -369,7 +394,8 @@ RwGsPatchSetBasic >> createdClasses [
 
 { #category : 'private - applying' }
 RwGsPatchSetBasic >> createNewClassesAndClassVersions [
-	"Who: Added classes and classes with new versions
+
+	"Who: Added classes and classes with new versions and classes with class variable changes
 	   How: Create the new class or class version. Superclass by identity, not name resolution.
 	   Order: Superclasses first.
 	   Errors: Collect for reporting later"
@@ -378,8 +404,8 @@ RwGsPatchSetBasic >> createNewClassesAndClassVersions [
 	newClassesByName := Dictionary new.
 	self addCreatedClassesAndVersionsTo: newClassesByName.
 	workList := Set withAll: newClassesByName keys.
-	[workList isEmpty] whileFalse: 
-			[self createClassesFromWorklist: workList andClassesByName: newClassesByName]
+	[ workList isEmpty ]
+		whileFalse: [ self createClassesFromWorklist: workList andClassesByName: newClassesByName ]
 ]
 
 { #category : 'initialization' }
@@ -391,6 +417,7 @@ RwGsPatchSetBasic >> initialize [
 	deletedClasses := Set new.
 	addedClasses := Set new.
 	classesWithNewVersions := Set new.
+	classesWithClassVariableChanges := Set new.
 	classesWithPropertyChanges := Set new.
 	deletedMethods := Set new.
 	addedMethods := Set new.

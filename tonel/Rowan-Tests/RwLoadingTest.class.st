@@ -78,7 +78,21 @@ RwLoadingTest >> accessorMethodsForSimpleClassNamed: name [
 { #category : 'support' }
 RwLoadingTest >> applyDiffToImage: aPackageSetModification [
 
-	Rowan image applyModification: aPackageSetModification
+	"work out the process handling that is needed in the face of new class versions"
+
+	| visitor patchSet |
+	true
+		ifTrue: [ 
+			"original api"
+			Rowan image applyModification: aPackageSetModification.
+			^ self ].
+	visitor := RwGsImagePatchVisitor new.
+	visitor visit: aPackageSetModification.
+	patchSet := visitor patchSet.
+	patchSet classesWithNewVersions isEmpty
+		ifTrue: [ 
+			patchSet apply.
+			^ self ]
 ]
 
 { #category : 'support' }
@@ -1000,7 +1014,9 @@ RwLoadingTest >> definitionsOfLoadedPackages: packageNames [
 
 { #category : 'running' }
 RwLoadingTest >> expectedFailures [
-	^ {#'testPoolDictionaryChanges'}
+
+	^ {#'testPoolDictionaryChanges'.
+	#'testSingleClassVersionChange1'}
 ]
 
 { #category : 'support - instVarChanges definitions' }

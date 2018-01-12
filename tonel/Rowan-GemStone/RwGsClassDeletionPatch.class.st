@@ -20,6 +20,14 @@ RwGsClassDeletionPatch class >> for: aClassDefinition [
 	^self new classDefinition: aClassDefinition
 ]
 
+{ #category : 'actions' }
+RwGsClassDeletionPatch >> addToNewClassesByName: aDictionary [
+
+	"noop"
+
+	
+]
+
 { #category : 'deleting' }
 RwGsClassDeletionPatch >> deleteClassFromSystem [
 

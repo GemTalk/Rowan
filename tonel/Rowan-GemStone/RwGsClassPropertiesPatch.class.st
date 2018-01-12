@@ -12,6 +12,14 @@ Class {
 	#category : 'Rowan-GemStone'
 }
 
+{ #category : 'actions' }
+RwGsClassPropertiesPatch >> addToNewClassesByName: aDictionary [
+
+	"noop"
+
+	
+]
+
 { #category : 'installing' }
 RwGsClassPropertiesPatch >> installPropertiesPatchFor: aPatchSet [
 	" update class and update loadedClass with new properties"

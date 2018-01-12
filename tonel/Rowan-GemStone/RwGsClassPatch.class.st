@@ -40,8 +40,24 @@ RwGsClassPatch >> _classFormat: fmt forSubclassType: classType [
 						ifFalse: [self error: 'Unknown class type']]]
 ]
 
+{ #category : 'actions' }
+RwGsClassPatch >> addToNewClassesByName: aDictionary [
+
+	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
+
+	"subclasses that do not"
+
+	| name |
+	name := classDefinition key.
+	name ifNil: [ self error: 'Class definition with no name.' ].
+	(aDictionary includesKey: name)
+		ifTrue: [ self error: 'Duplicate name' ].
+	aDictionary at: name put: self
+]
+
 { #category : 'private' }
 RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
+
 	"For GemStone, the valid values are:
 	bytes
 	variable
@@ -52,48 +68,49 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 	| type oldVersion createdClass gs_options |
 	type := classDefinition classType.
 	oldVersion := self oldClassVersion.
-	gs_options := ((classDefinition propertyAt: 'gs_options' ifAbsent: [#()]) collect: [ :each | each asSymbol ]).
+	gs_options := (classDefinition propertyAt: 'gs_options' ifAbsent: [ #() ])
+		collect: [ :each | each asSymbol ].
 	createdClass := type = 'normal'
-				ifTrue: 
-					[superclass
-						subclass: classDefinition key
+		ifTrue: [ 
+			superclass
+				subclass: classDefinition key
+				instVarNames: (classDefinition propertyAt: 'instvars')
+				classVars: (classDefinition propertyAt: 'classvars')
+				classInstVars: (classDefinition propertyAt: 'classinstvars')
+				poolDictionaries: (classDefinition propertyAt: 'pools')
+				inDictionary: nil
+				newVersionOf: oldVersion
+				description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+				options: gs_options ]
+		ifFalse: [ 
+			type = 'variable'
+				ifTrue: [ 
+					superclass
+						indexableSubclass: classDefinition key
 						instVarNames: (classDefinition propertyAt: 'instvars')
 						classVars: (classDefinition propertyAt: 'classvars')
 						classInstVars: (classDefinition propertyAt: 'classinstvars')
 						poolDictionaries: (classDefinition propertyAt: 'pools')
 						inDictionary: nil
 						newVersionOf: oldVersion
-						description: (classDefinition propertyAt: 'comment' ifAbsent: [''])
+						description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
 						options: gs_options ]
-				ifFalse: 
-					[type = 'variable'
-						ifTrue: 
-							[superclass
-								indexableSubclass: classDefinition key
-								instVarNames: (classDefinition propertyAt: 'instvars')
+				ifFalse: [ 
+					type = 'bytes'
+						ifTrue: [ 
+							(classDefinition propertyAt: 'instvars') isEmpty
+								ifFalse: [ self error: 'Cannot define byte class with named instvars.' ].
+							superclass
+								byteSubclass: classDefinition key
 								classVars: (classDefinition propertyAt: 'classvars')
 								classInstVars: (classDefinition propertyAt: 'classinstvars')
 								poolDictionaries: (classDefinition propertyAt: 'pools')
 								inDictionary: nil
 								newVersionOf: oldVersion
-								description: (classDefinition propertyAt: 'comment' ifAbsent: [''])
+								description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
 								options: gs_options ]
-						ifFalse: 
-							[type = 'bytes'
-								ifTrue: 
-									[(classDefinition propertyAt: 'instvars') isEmpty
-										ifFalse: [self error: 'Cannot define byte class with named instvars.'].
-									superclass
-										byteSubclass: classDefinition key
-										classVars: (classDefinition propertyAt: 'classvars')
-										classInstVars: (classDefinition propertyAt: 'classinstvars')
-										poolDictionaries: (classDefinition propertyAt: 'pools')
-										inDictionary: nil
-										newVersionOf: oldVersion
-										description: (classDefinition propertyAt: 'comment' ifAbsent: [''])
-										options: gs_options ]
-								ifFalse: [self error: 'Unknown class type']]].
-	^createdClass
+						ifFalse: [ self error: 'Unknown class type' ] ] ].
+	^ createdClass
 ]
 
 { #category : 'accessing' }

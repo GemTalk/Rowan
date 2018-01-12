@@ -39,12 +39,110 @@ RwGsClassVersioningPatch class >> for: aClassModification inPackage: aPackageDef
 		yourself
 ]
 
+{ #category : 'private' }
+RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars patchedClassProperties: patchedClassPropertiesBlock patchedClassVars: patchedClassVarsBlock patchedClassNewVersions: patchedClassNewVersionsBlock [
+
+	" based on Class>>_equivalentSubclass:superCls:name:newOpts:newFormat:newInstVars:newClassInstVars:newPools:newClassVars:inDict:isKernel: and ultimately needs to be rolled back into base, so that class creation and Rowan use the same new class version rules.
+"
+
+	"Class>>_equivalentSubclass:... has unwanted side effects"
+
+	"squeezed down to the bare minimum"
+
+	"oldClass is equivalent to the subclass that would be created using
+ the other arguments if 
+     instVar names match exactly ,
+   and class instVar names match exactly ,
+   and the classVars in oldClass can be modified to add/remove Associations 
+     to match anArrayOfClassVars ,
+   and pool dictionaries match exactly
+
+  With respect to options and format, oldClass is equivalent if
+    The state of format bits dbTransient, instancesNonPersistent, instancesInvariant  
+     match exactly ,
+    and subclassesDisallowed cannot be set in the new subclass if it not set in oldClass ,
+    and modifiable  cannot be set if it is not set in oldClass  ,
+    and  (SELF_CAN_BE_SPECIAL, NSC_DUPLICATES, INDEXABLE, IMPLEMENTATION, NO_STRUCT_UPDATE bits)
+        of the formats must match exactly.
+"
+
+	| supr opts ivs civs poolds cvars ans cvarsOnly cvarsPatched |
+	cvarsPatched := anArrayOfClassVars isEmpty not.
+	self
+		_newSubclassWithSuperclass: newSuperclass
+		isEquivalentToSubclass: oldClass
+		newOpts: optionsArray
+		newFormat: theFormat
+		newInstVars: anArrayOfInstvarNames
+		newClassInstVars: anArrayOfClassInstVars
+		newPools: anArrayOfPoolDicts
+		newClassVars: anArrayOfClassVars
+		suprBlock: [ :bool | supr := bool ]
+		optsBlock: [ :bool | opts := bool ]
+		ivsBlock: [ :bool | ivs := bool ]
+		civsBlock: [ :bool | civs := bool ]
+		poolsBlock: [ :bool | poolds := bool ]
+		cvarsBlock: [ :bool | cvars := bool ].
+	(supr or: [ opts or: [ ivs or: [ civs or: [ poolds or: [ cvars ] ] ] ] ])
+		ifTrue: [ 
+			"new class version means that class vars will be patched (for free) before methods compiled"
+			patchedClassNewVersionsBlock value.
+			^ self ].
+	cvarsPatched
+		ifTrue: [ 
+			"have to patch class variables BEFORE methods are compiled"
+			patchedClassVarsBlock value ]
+		ifFalse: [ 
+			"class property changes that do not affect method compilation"
+			patchedClassPropertiesBlock value ]
+]
+
+{ #category : 'private' }
+RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars suprBlock: suprBlock optsBlock: optsBlock ivsBlock: ivsBlock civsBlock: civsBlock poolsBlock: poolsBlock cvarsBlock: cvarsBlock [
+
+	" based on Class>>_equivalentSubclass:superCls:name:newOpts:newFormat:newInstVars:newClassInstVars:newPools:newClassVars:inDict:isKernel: and ultimately needs to be rolled back into base, so that class creation and Rowan use the same new class version rules.
+"
+
+	"Class>>_equivalentSubclass:... has unwanted side effects"
+
+	"squeezed down to the bare minimum"
+
+	"oldClass is equivalent to the subclass that would be created using
+ the other arguments if 
+     instVar names match exactly ,
+   and class instVar names match exactly ,
+   and the classVars in oldClass can be modified to add/remove Associations 
+     to match anArrayOfClassVars ,
+   and pool dictionaries match exactly
+
+  With respect to options and format, oldClass is equivalent if
+    The state of format bits dbTransient, instancesNonPersistent, instancesInvariant  
+     match exactly ,
+    and subclassesDisallowed cannot be set in the new subclass if it not set in oldClass ,
+    and modifiable  cannot be set if it is not set in oldClass  ,
+    and  (SELF_CAN_BE_SPECIAL, NSC_DUPLICATES, INDEXABLE, IMPLEMENTATION, NO_STRUCT_UPDATE bits)
+        of the formats must match exactly.
+"
+
+	| fmtArr |
+	fmtArr := newSuperclass _validateOptions: optionsArray withFormat: theFormat.
+	(oldClass isKindOf: Class)
+		ifFalse: [ oldClass _validateClass: Class ].
+	suprBlock value: oldClass superClass == newSuperclass.
+	optsBlock value: (oldClass _optionsChangableTo: fmtArr).
+	ivsBlock value: (oldClass _instVarsEqual: anArrayOfInstvarNames).
+	civsBlock value: (oldClass class _instVarsEqual: anArrayOfClassInstVars).
+	poolsBlock value: (oldClass _poolDictsEqual: anArrayOfPoolDicts).
+	cvarsBlock value: (oldClass _classVarsChangableTo: anArrayOfClassVars copy)
+]
+
 { #category : 'patching' }
 RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPackage: aPackageDefinition toPatchSet: aRwGsPatchSet [
+
 	"Need to decide whether the patches in aClassModification warrant a new class version or 
 	 simple property changes."
 
-	| dictName dict existingClass newOpts newFormat aClassDefinition newSuperclass |
+	| dictName dict existingClass newFormat aClassDefinition newSuperclass |
 	aClassDefinition := aClassModification after.
 	dictName := aClassDefinition
 		propertyAt: 'gs_SymbolDictionary'
@@ -59,30 +157,28 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	existingClass := dict
 		at: aClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
-	newOpts := (aClassDefinition propertyAt: 'gs_options' ifAbsent: [ #() ]) copy
-		add: #'logCreation';
-		yourself.
 	newFormat := self
 		_classFormat: existingClass superclass format
 		forSubclassType: aClassDefinition classType.
 	newSuperclass := (self resolveName: aClassDefinition superclassName) value.
-	(newSuperclass
-		_equivalentSubclass: existingClass
-		superCls: newSuperclass
-		name: aClassDefinition name
-		newOpts: newOpts
+	self
+		_newSubclassWithSuperclass: newSuperclass
+		isEquivalentToSubclass: existingClass
+		newOpts: (aClassDefinition propertyAt: 'gs_options' ifAbsent: [ #() ])
 		newFormat: newFormat
 		newInstVars: aClassDefinition instVarNames
 		newClassInstVars: aClassDefinition classInstVarNames
 		newPools: aClassDefinition poolDictionaryNames
 		newClassVars: aClassDefinition classVarNames
-		inDict: dict
-		isKernel: false)
-		ifTrue: [ 
+		patchedClassProperties: [ 
 			aRwGsPatchSet
 				addPatchedClassProperties: aClassDefinition
 				inPackage: aPackageDefinition ]
-		ifFalse: [ 
+		patchedClassVars: [ 
+			aRwGsPatchSet
+				addPatchedClassClassVariables: aClassDefinition
+				inPackage: aPackageDefinition ]
+		patchedClassNewVersions: [ 
 			aRwGsPatchSet
 				addPatchedClassNewVersion: aClassModification
 				inPackage: aPackageDefinition ]
@@ -110,7 +206,7 @@ RwGsClassVersioningPatch >> createClassFor: aPatchSet [
 	^ newClassVersion
 ]
 
-{ #category : 'actions' }
+{ #category : 'patching' }
 RwGsClassVersioningPatch >> installNewClassVerionInSystem [
 	"Install the new class association in the symbolAssociation for the class.
 	 Update the LoadedClass with properties for the new classversion."
