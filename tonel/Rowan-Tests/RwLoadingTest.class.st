@@ -2331,6 +2331,7 @@ RwLoadingTest >> testSimpleLoading [
 
 { #category : 'tests' }
 RwLoadingTest >> testSingleClassVersionChange1 [
+
 	"test class property changes that result in new class versions 
 		- specifically add and remove some instance variable
 		- class will have methods some of which are explicitly changed (i.e., references
@@ -2340,6 +2341,8 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 	"this test will act as driver for exploring impmlementations of alternate solutions"
 
 	"No automatic instance migration"
+
+	""
 
 	| packageName packageNames myPackageSet className testClass1 testInstance1 testClass2 testInstance2 |
 	packageName := 'SingleClassVersionChangeTestPackage'.
