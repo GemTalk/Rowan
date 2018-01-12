@@ -11,26 +11,27 @@ RwPrjLoadTool >> doUpdateLoadedPackageNames: aPackageNames [
 
 { #category : 'smalltalk api' }
 RwPrjLoadTool >> loadSpecification: aRwSpecification [
-  | packageSetToLoad loadedPackageSet diff |
-  self specification: aRwSpecification.
-  packageSetToLoad := Rowan projectTools read readPackageSetForSpecification: specification.
-  loadedPackageSet := (Rowan loadedPackagesNamed: packageSetToLoad packageNames)
-    asDefinition.
-  diff := packageSetToLoad compareAgainstBase: loadedPackageSet.
-  diff isEmpty
-    ifTrue: [ 
-      | msg |
-      msg := 'The project ' , specification specName , ' is already up to date'.
-      self inform: msg.
-      ^ msg ].
-  Rowan image applyModification: diff.
-  specification
-    updateLoadedCommitIdForTool: self;
-    updateLoadedPackageNamesTool: self
-      packageNames:
-        (Rowan loadedPackagesNamed: packageSetToLoad packageNames) asDefinition
-            packageNames.
-  ^ diff
+	| packageSetToLoad loadedPackageSet diff |
+	self specification: aRwSpecification.
+	packageSetToLoad := Rowan projectTools read
+		readPackageSetForSpecification: specification.
+	loadedPackageSet := Rowan
+		loadedPackageDefinitionsNamed: packageSetToLoad packageNames.
+	diff := packageSetToLoad compareAgainstBase: loadedPackageSet.
+	diff isEmpty
+		ifTrue: [ 
+			| msg |
+			msg := 'The project ' , specification specName , ' is already up to date'.
+			self inform: msg.
+			^ msg ].
+	Rowan image applyModification: diff.
+	specification
+		updateLoadedCommitIdForTool: self;
+		updateLoadedPackageNamesTool: self
+			packageNames:
+				(Rowan loadedPackageDefinitionsNamed: packageSetToLoad packageNames)
+						packageNames.
+	^ diff
 ]
 
 { #category : 'smalltalk api' }

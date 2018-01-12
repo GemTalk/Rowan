@@ -92,6 +92,16 @@ Rowan class >> knownRepositories [
 	^knownRepositories
 ]
 
+{ #category : 'public' }
+Rowan class >> loadedPackageDefinitionsNamed: someNames [
+	"Answer a PackageSetDefinition containing packages with the given names in the image.
+ 	If any name is not a loaded package, that name is ignored."
+
+	^ (self loadedPackagesNamed: someNames) asDefinition
+		propertyAt: 'platform' put: platform;
+		yourself
+]
+
 { #category : 'private' }
 Rowan class >> loadedPackageNamed: aName ifAbsent: absentBlock [
 

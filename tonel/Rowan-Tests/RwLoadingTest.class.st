@@ -995,8 +995,7 @@ RwLoadingTest >> definitionOfSimpleClassNamed: name inPackage: packageName [
 
 { #category : 'support' }
 RwLoadingTest >> definitionsOfLoadedPackages: packageNames [
-
-	^(Rowan loadedPackagesNamed: packageNames) asDefinition
+	^ Rowan loadedPackageDefinitionsNamed: packageNames
 ]
 
 { #category : 'running' }
@@ -1135,12 +1134,12 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames before: beforePackageSet
 ]
 
 { #category : 'support' }
-RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBeLoaded using: myPackageSet [ 
+RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBeLoaded using: myPackageSet [
 
-	|  imagePackageSet1 diff1 imagePackageSet2 diff2 |
+	| imagePackageSet1 diff1 imagePackageSet2 diff2 |
 	Rowan updateLoadedPackages.
 	packagesShouldBeLoaded
-		ifFalse: [  packageNames do: [:name | self assertAbsenceOfPackage: name ] ].
+		ifFalse: [ packageNames do: [ :name | self assertAbsenceOfPackage: name ] ].
 	imagePackageSet1 := self definitionsOfLoadedPackages: packageNames.
 	diff1 := myPackageSet compareAgainstBase: imagePackageSet1.
 	self deny: diff1 isEmpty.

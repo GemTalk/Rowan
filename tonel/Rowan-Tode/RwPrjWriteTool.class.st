@@ -59,12 +59,11 @@ RwPrjWriteTool >> writePackageSet: aRwPackageSet specUrl: aString [
 
 { #category : 'smalltalk api' }
 RwPrjWriteTool >> writePackagesForSpecification: aRwSpecification [
-  | packageSet |
-  self specification: aRwSpecification.
-  packageSet := (Rowan loadedPackagesNamed: specification packageNames)
-    asDefinition.
-  self writePackageSet: packageSet specification: specification.
-  ^ specification
+	| packageSet |
+	self specification: aRwSpecification.
+	packageSet := Rowan loadedPackageDefinitionsNamed: specification packageNames.
+	self writePackageSet: packageSet specification: specification.
+	^ specification
 ]
 
 { #category : 'smalltalk api' }
