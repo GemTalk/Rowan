@@ -9,7 +9,7 @@ Class {
 	#name : 'RwGsClassVersioningPatch',
 	#superclass : 'RwGsClassPatch',
 	#instVars : [
-		'oldClassDefinition',
+		'classModification',
 		'oldClassVersion',
 		'newClassVersion',
 		'symbolAssociation'
@@ -32,9 +32,8 @@ RwGsClassVersioningPatch class >> addPatchedClassModification: aClassModificatio
 { #category : 'instance creation' }
 RwGsClassVersioningPatch class >> for: aClassModification inPackage: aPackageDefinition [
 
-	^(self new)
-		oldClassDefinition: aClassModification before;
-		classDefinition: aClassModification after;
+	^ self new
+		classModification: aClassModification;
 		packageDefinition: aPackageDefinition;
 		yourself
 ]
@@ -136,6 +135,19 @@ RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivale
 	cvarsBlock value: (oldClass _classVarsChangableTo: anArrayOfClassVars copy)
 ]
 
+{ #category : 'new version support' }
+RwGsClassVersioningPatch >> addNewVersionDefinitionsTo: newVersionClassDefinitions [
+
+	"classModification knows the set of properties that are being applied to the image given the classDefintion... I can ignore the class properties, and focus on merging in the loaded instance/class loaded methods that are not already in the patch, into the original defintion ... and marking these merrge methods as required ... to force method recompilation ... of course this can also be done by modifying the existing modification ... which is dicey ... "
+
+	| existingClass loadedClassDefinition diff |
+	existingClass := self oldClassVersion.
+	loadedClassDefinition := (RwGsLoadedClass existingForClass: existingClass)
+		asDefinition.
+	diff := self classDefinition compareAgainstBase: loadedClassDefinition.
+	classDefinition mergeMethodsFrom: loadedClassDefinition
+]
+
 { #category : 'patching' }
 RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPackage: aPackageDefinition toPatchSet: aRwGsPatchSet [
 
@@ -186,13 +198,22 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 
 { #category : 'actions' }
 RwGsClassVersioningPatch >> addToNewClassesByName: aDictionary [
+
 	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
 
 	| name |
-	name := classDefinition key.
-	name ifNil: [self error: 'Class definition with no name.'].
-	(aDictionary includesKey: name) ifTrue: [self error: 'Duplicate name'].
+	name := self classDefinition key.
+	name ifNil: [ self error: 'Class definition with no name.' ].
+	(aDictionary includesKey: name)
+		ifTrue: [ self error: 'Duplicate name' ].
 	aDictionary at: name put: self
+]
+
+{ #category : 'accessing' }
+RwGsClassVersioningPatch >> classModification: aClassModification [
+
+	classModification := aClassModification.
+	classDefinition := classModification after
 ]
 
 { #category : 'actions' }
@@ -219,22 +240,15 @@ RwGsClassVersioningPatch >> installNewClassVerionInSystem [
 { #category : 'accessing' }
 RwGsClassVersioningPatch >> oldClassDefinition [
 
-   ^oldClassDefinition
-
-]
-
-{ #category : 'accessing' }
-RwGsClassVersioningPatch >> oldClassDefinition: anObject [
-
-   oldClassDefinition := anObject
-
+	^ classModification before
 ]
 
 { #category : 'versioning' }
 RwGsClassVersioningPatch >> oldClassVersion [
+
 	"The old version is what is currently bound to the old class definition's name."
 
-	^(self resolveName: oldClassDefinition key) value
+	^ (self resolveName: self oldClassDefinition key) value
 ]
 
 { #category : 'actions' }

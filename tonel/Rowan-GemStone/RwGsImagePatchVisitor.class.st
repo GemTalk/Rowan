@@ -20,6 +20,12 @@ RwGsImagePatchVisitor class >> new [
 ]
 
 { #category : 'private' }
+RwGsImagePatchVisitor >> _patchSetClass [
+
+	^ RwGsPatchSetBasic
+]
+
+{ #category : 'private' }
 RwGsImagePatchVisitor >> addAddedPackage: aPackageDefinition [
 
 	currentPackage := aPackageDefinition.
@@ -115,7 +121,7 @@ RwGsImagePatchVisitor >> deletePackages: packageDefinitions [
 { #category : 'initialization' }
 RwGsImagePatchVisitor >> initialize [
 
-	patchSet := RwGsPatchSetBasic new
+	patchSet := self _patchSetClass new
 ]
 
 { #category : 'accessing' }

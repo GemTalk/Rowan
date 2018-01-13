@@ -80,8 +80,8 @@ RwLoadingTest >> applyDiffToImage: aPackageSetModification [
 
 	"work out the process handling that is needed in the face of new class versions"
 
-	| visitor patchSet |
-	true
+	| visitor patchSet subclassClassDefinitions |
+	false
 		ifTrue: [ 
 			"original api"
 			Rowan image applyModification: aPackageSetModification.
@@ -92,7 +92,16 @@ RwLoadingTest >> applyDiffToImage: aPackageSetModification [
 	patchSet classesWithNewVersions isEmpty
 		ifTrue: [ 
 			patchSet apply.
-			^ self ]
+			^ self ].
+	subclassClassDefinitions := Set new.
+	patchSet classesWithNewVersions
+		do: [ :each | each addNewVersionDefinitionsTo: subclassClassDefinitions ].
+	subclassClassDefinitions isEmpty
+		ifTrue: [ 
+			"no additonal process is necessary?"
+			patchSet apply.
+			^ self ].
+	self halt
 ]
 
 { #category : 'support' }
@@ -1445,26 +1454,27 @@ RwLoadingTest >> poolDictionaryChangesClassDefinitions4: packageName [
 
 { #category : 'support' }
 RwLoadingTest >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars comment: comment gs_SymbolDictionary: gs_SymbolDictionary pools: pools type: type gs_options: gs_options inPackage: packageName [
-  | dict |
-  dict := Dictionary new.
-  dict
-    at: 'category' put: packageName;
-    at: 'classinstvars' put: classinstvars;
-    at: 'classvars' put: classvars;
-    at: 'comment' put: comment;
-    at: 'gs_SymbolDictionary' put: gs_SymbolDictionary;
-    at: 'instvars' put: instvars;
-    at: 'name' put: className;
-    at: 'pools' put: pools;
-    at: 'superclass' put: superClassName;
-    at: 'type' put: type.
-  (gs_options _isArray and: [ gs_options isEmpty not ])
-    ifTrue: [ 
-      dict
-        at: 'gs_options'
-        put:
-          (gs_options collect: [ :each | each asString ]) asSortedCollection asArray ].
-  ^ dict
+
+	| dict |
+	dict := Dictionary new.
+	dict
+		at: 'category' put: packageName;
+		at: 'classinstvars' put: classinstvars;
+		at: 'classvars' put: classvars;
+		at: 'gs_SymbolDictionary' put: gs_SymbolDictionary;
+		at: 'instvars' put: instvars;
+		at: 'name' put: className;
+		at: 'pools' put: pools;
+		at: 'superclass' put: superClassName;
+		at: 'type' put: type.
+	comment ifNotNil: [ dict at: 'comment' put: comment ].
+	(gs_options _isArray and: [ gs_options isEmpty not ])
+		ifTrue: [ 
+			dict
+				at: 'gs_options'
+				put:
+					(gs_options collect: [ :each | each asString ]) asSortedCollection asArray ].
+	^ dict
 ]
 
 { #category : 'support' }
@@ -1566,7 +1576,8 @@ RwLoadingTest >> sillyClassMethodsForClassNamed: name [
 
 { #category : 'support - singleClassVersionChange definitions' }
 RwLoadingTest >> singleClassVersionChangeClassDefinitions1: packageName className: className [
-	"Single class with methods and new class versions."
+
+	"Single class with a method #foo. and new class version"
 
 	^ Dictionary new
 		at: className
@@ -1576,37 +1587,24 @@ RwLoadingTest >> singleClassVersionChangeClassDefinitions1: packageName classNam
 							(self
 								propertiesForClassNamed: className
 								super: 'Object'
-								instvars: #('iva' 'ivb' 'ivc')
-								classinstvars: #('cia' 'cib' 'cic')
-								classvars: #('Ca' 'Cb' 'Cc')
+								instvars: #()
+								classinstvars: #()
+								classvars: #()
 								comment: 'a comment'
 								pools: {}
 								inPackage: packageName)
-						classMethodDefinitions:
-							(self
-								methodDefsFromSpec:
-									{#(#'cia' 'accessing' 'cia ^cia').
-									#(#'cib' 'accessing' 'cib ^cib').
-									#(#'ca' 'accessing' 'ca ^Ca').
-									#(#'cb' 'accessing' 'cb ^Cb').
-									#(#'initialize' 'initialization' 'initialize Ca := cia := 1. Cb := cib := 2. Cc := cic := 3.').
-									#(#'new' 'instance creation' 'new ^ (self basicNew) initialize; yourself')})
+						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions:
-							(self
-								methodDefsFromSpec:
-									{#(#'iva' 'accessing' 'iva ^iva').
-									#(#'ivb' 'accessing' 'ivb ^ivb').
-									#(#'ivc' 'accessing' 'ivc ^ivc').
-									#(#'foo' 'accessing' 'foo ^''foo''').
-									#(#'initialize' 'initialization' 'initialize iva:= ivb:= ivc:= 1')}));
+							(self methodDefsFromSpec: {#(#'foo' 'accessing' 'foo ^''foo''')}));
 		yourself
 ]
 
 { #category : 'support - singleClassVersionChange definitions' }
 RwLoadingTest >> singleClassVersionChangeClassDefinitions2: packageName className: className [
-	"Single class with methods and new class versions."
 
-	"remove *a, add *d"
+	"Single class with method foo and new class version."
+
+	"add iva and preserve foo unchanged. "
 
 	^ Dictionary new
 		at: className
@@ -1616,30 +1614,15 @@ RwLoadingTest >> singleClassVersionChangeClassDefinitions2: packageName classNam
 							(self
 								propertiesForClassNamed: className
 								super: 'Object'
-								instvars: #('ivd' 'ivb' 'ivc')
-								classinstvars: #('cid' 'cib' 'cic')
-								classvars: #('Cd' 'Cb' 'Cc')
+								instvars: #('iva')
+								classinstvars: #()
+								classvars: #()
 								comment: 'a comment'
 								pools: {}
 								inPackage: packageName)
-						classMethodDefinitions:
-							(self
-								methodDefsFromSpec:
-									{#(#'cid' 'accessing' 'cid ^cid').
-									#(#'cib' 'accessing' 'cib ^cib').
-									#(#'cd' 'accessing' 'cd ^Cd').
-									#(#'cb' 'accessing' 'cb ^Cb').
-									#(#'initialize' 'initialization' 'initialize Cd := cid := 1. Cb := cib := 2. Cc := cic := 3.').
-									#(#'new' 'instance creation' 'new ^ (self basicNew) initialize; yourself')})
+						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions:
-							(self
-								methodDefsFromSpec:
-									{#(#'ivd' 'accessing' 'ivd ^ivd').
-									#(#'ivb' 'accessing' 'ivb ^ivb').
-									#(#'ivc' 'accessing' 'ivc ^ivc').
-									#(#'foo' 'accessing' 'foo ^''foo''').
-									#(#'bar' 'accessing' 'bar ^''bar''').
-									#(#'initialize' 'initialization' 'initialize ivd:= ivb:= ivc:= 1')}));
+							(self methodDefsFromSpec: {#(#'foo' 'accessing' 'foo ^''foo''')}));
 		yourself
 ]
 
@@ -2342,8 +2325,6 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 
 	"No automatic instance migration"
 
-	""
-
 	| packageName packageNames myPackageSet className testClass1 testInstance1 testClass2 testInstance2 |
 	packageName := 'SingleClassVersionChangeTestPackage'.
 	className := 'TestSingleClassNewVersions'.
@@ -2362,9 +2343,7 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
 	testClass1 := System myUserProfile symbolList objectNamed: className.
 	testInstance1 := testClass1 new.
-	self assert: testInstance1 iva = 1.
 	self assert: testInstance1 foo = 'foo'.
-	self should: [ testInstance1 bar ] raise: MessageNotUnderstood.
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2381,10 +2360,5 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 	testClass2 := System myUserProfile symbolList objectNamed: className.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance1 iva = 1.
-	self assert: testInstance1 foo = 'foo'.
-	self should: [ testInstance2 iva ] raise: MessageNotUnderstood.
-	self assert: testInstance2 foo = 'foo'.
-	self assert: testInstance2 bar = 'bar'.
-	self assert: testInstance2 ivd = 1
+	self assert: testInstance1 foo = 'foo'
 ]
