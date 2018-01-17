@@ -21,7 +21,7 @@ Class {
 { #category : 'visiting' }
 RwMethodModification >> acceptVisitor: aVisitor [
 
-	^aVisitor visitMethodModification: self
+	^ aVisitor visitMethodModification: self
 ]
 
 { #category : 'patching' }
@@ -52,6 +52,47 @@ RwMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage
 							ifTrue: [ aPatchSet addPatchedClassMethodProperties: self after inClass: self classDefinition inPackage: aPackage ]
 							ifFalse: [ aPatchSet addPatchedInstanceMethodProperties: self after inClass: self classDefinition inPackage: aPackage ] ] ]
 
+]
+
+{ #category : 'patching' }
+RwMethodModification >> addModificationToPatchSetForNewClassVersion: aPatchSet inPackage: aPackage [
+
+	self isAddition
+		ifTrue: [ self error: 'internal error - unexpected method addition' ].
+	self isDeletion
+		ifTrue: [ self error: 'internal error - unexpected method deletion' ].
+	self isModification
+		ifTrue: [ 
+			sourceModification isEmpty
+				ifTrue: [ self error: 'internal error - unexpected empty method source modification' ]
+				ifFalse: [ 
+					"treat like an addition, since it is an addition of a method to the new class version"
+					self isMeta
+						ifTrue: [ 
+							aPatchSet
+								addAddedClassMethod: self after
+								inClass: self classDefinition
+								inPackage: aPackage ]
+						ifFalse: [ 
+							aPatchSet
+								addAddedInstanceMethod: self after
+								inClass: self classDefinition
+								inPackage: aPackage ].
+					^ self ].
+			propertiesModification isEmpty
+				ifTrue: [ self error: 'internal error - unexpected empty method properties' ]
+				ifFalse: [ 
+					self isMeta
+						ifTrue: [ 
+							aPatchSet
+								addPatchedClassMethodProperties: self after
+								inClass: self classDefinition
+								inPackage: aPackage ]
+						ifFalse: [ 
+							aPatchSet
+								addPatchedInstanceMethodProperties: self after
+								inClass: self classDefinition
+								inPackage: aPackage ] ] ]
 ]
 
 { #category : 'Accessing' }

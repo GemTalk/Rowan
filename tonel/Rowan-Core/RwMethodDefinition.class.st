@@ -30,6 +30,20 @@ RwMethodDefinition >> compareAgainstBase: aDefinition [
 ]
 
 { #category : 'comparing' }
+RwMethodDefinition >> compareAgainstBaseForNewClassVersion: aDefinition [
+
+	| modification |
+	modification := RwMethodModificationForNewClassVersion
+		before: aDefinition
+		after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
+		sourceModification:
+				(self compareSourceAgainstBaseForNewClassVersion: aDefinition).
+	^ modification
+]
+
+{ #category : 'comparing' }
 RwMethodDefinition >> compareSourceAgainstBase: aDefinition [
 
 	| modification |
@@ -44,6 +58,24 @@ RwMethodDefinition >> compareSourceAgainstBase: aDefinition [
 								oldValue: before
 								newValue: after) ].
 	^modification
+]
+
+{ #category : 'comparing' }
+RwMethodDefinition >> compareSourceAgainstBaseForNewClassVersion: aDefinition [
+
+	"unconditional modification for new class versions"
+
+	| modification before after |
+	modification := RwSourceModification new.
+	before := aDefinition source.
+	after := self source.
+	modification
+		addElementModification:
+			(RwUnconditionalPropertyModification
+				key: 'source'
+				oldValue: before
+				newValue: after).
+	^ modification
 ]
 
 { #category : 'testing' }

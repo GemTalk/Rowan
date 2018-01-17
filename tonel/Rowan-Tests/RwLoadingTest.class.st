@@ -80,7 +80,7 @@ RwLoadingTest >> applyDiffToImage: aPackageSetModification [
 
 	"work out the process handling that is needed in the face of new class versions"
 
-	| visitor patchSet subclassClassDefinitions |
+	| visitor patchSet |
 	false
 		ifTrue: [ 
 			"original api"
@@ -93,15 +93,12 @@ RwLoadingTest >> applyDiffToImage: aPackageSetModification [
 		ifTrue: [ 
 			patchSet apply.
 			^ self ].
-	subclassClassDefinitions := Set new.
 	patchSet classesWithNewVersions
-		do: [ :each | each addNewVersionDefinitionsTo: subclassClassDefinitions ].
-	subclassClassDefinitions isEmpty
-		ifTrue: [ 
-			"no additonal process is necessary?"
-			patchSet apply.
-			^ self ].
-	self halt
+		do: [ :each | each newClassVersionPatches: aPackageSetModification patchSet: nil ].
+	visitor := RwGsImagePatchVisitor new.
+	visitor visit: aPackageSetModification.
+	patchSet := visitor patchSet.
+	patchSet apply
 ]
 
 { #category : 'support' }
@@ -1024,8 +1021,7 @@ RwLoadingTest >> definitionsOfLoadedPackages: packageNames [
 { #category : 'running' }
 RwLoadingTest >> expectedFailures [
 
-	^ {#'testPoolDictionaryChanges'.
-	#'testSingleClassVersionChange1'}
+	^ {#'testPoolDictionaryChanges'}
 ]
 
 { #category : 'support - instVarChanges definitions' }
@@ -1178,6 +1174,22 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBe
 RwLoadingTest >> loadAndTestPackagesNamed: packageNames using: myPackageSet [
 
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet
+]
+
+{ #category : 'support' }
+RwLoadingTest >> loadAndTestPackagesNamedForNewClassVersion: packageNames loaded: packagesShouldBeLoaded using: myPackageSet [
+
+	| imagePackageSet1 diff1 imagePackageSet2 diff2 |
+	Rowan updateLoadedPackages.
+	packagesShouldBeLoaded
+		ifFalse: [ packageNames do: [ :name | self assertAbsenceOfPackage: name ] ].
+	imagePackageSet1 := self definitionsOfLoadedPackages: packageNames.
+	diff1 := myPackageSet compareAgainstBase: imagePackageSet1.
+	self deny: diff1 isEmpty.
+	self applyDiffToImage: diff1.
+	imagePackageSet2 := self definitionsOfLoadedPackages: packageNames.
+	diff2 := myPackageSet compareAgainstBase: imagePackageSet2.
+	self assert: diff2 isEmpty
 ]
 
 { #category : 'support' }
@@ -2340,7 +2352,7 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 								className: className)
 						classExtensions: Dictionary new);
 		yourself.
-	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
 	testClass1 := System myUserProfile symbolList objectNamed: className.
 	testInstance1 := testClass1 new.
 	self assert: testInstance1 foo = 'foo'.
@@ -2356,7 +2368,10 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 								className: className)
 						classExtensions: Dictionary new);
 		yourself.
-	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+	self
+		loadAndTestPackagesNamedForNewClassVersion: packageNames
+		loaded: true
+		using: myPackageSet.
 	testClass2 := System myUserProfile symbolList objectNamed: className.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.

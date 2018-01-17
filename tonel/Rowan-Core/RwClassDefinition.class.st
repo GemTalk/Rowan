@@ -94,6 +94,37 @@ RwClassDefinition >> compareAgainstBase: aDefinition [
 ]
 
 { #category : 'comparing' }
+RwClassDefinition >> compareAgainstBaseForNewClassVersion: aDefinition [
+
+	"all unchanged and unremoved methods need to be applied to the patch"
+
+	| modification instanceMethodsModification classMethodsModification |
+	modification := RwClassModification before: aDefinition after: self.
+	false
+		ifTrue: [ 
+			modification
+				propertiesModification: (self comparePropertiesAgainstBase: aDefinition) ].
+	instanceMethodsModification := RwMethodsModification new.
+	classMethodsModification := RwMethodsModification new.
+	self
+		compareDictionary: instanceMethodDefinitions
+		againstBaseDictionaryForNewClassVersion: aDefinition instanceMethodDefinitions
+		into: instanceMethodsModification
+		elementClass: RwMethodDefinition
+		isMeta: false.
+	self
+		compareDictionary: classMethodDefinitions
+		againstBaseDictionaryForNewClassVersion: aDefinition classMethodDefinitions
+		into: classMethodsModification
+		elementClass: RwMethodDefinition
+		isMeta: true.
+	modification
+		instanceMethodsModification: instanceMethodsModification;
+		classMethodsModification: classMethodsModification.
+	^ modification
+]
+
+{ #category : 'comparing' }
 RwClassDefinition >> compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass isMeta: isClassMeta [
 
 	| keys |
@@ -110,6 +141,25 @@ RwClassDefinition >> compareDictionary: myDictionary againstBaseDictionary: base
 				classDefinition: self.
 			modification isEmpty
 				ifFalse: [anElementsModification addElementModification: modification]]
+]
+
+{ #category : 'comparing' }
+RwClassDefinition >> compareDictionary: myDictionary againstBaseDictionaryForNewClassVersion: baseDictionary into: anElementsModification elementClass: elementClass isMeta: isClassMeta [
+
+	| keys |
+	keys := myDictionary keys copy.
+	keys addAll: baseDictionary keys.
+	keys
+		do: [ :key | 
+			| before after modification |
+			before := baseDictionary at: key ifAbsent: [ elementClass new ].
+			after := myDictionary at: key ifAbsent: [ elementClass new ].
+			modification := after compareAgainstBaseForNewClassVersion: before.
+			modification
+				isMeta: isClassMeta;
+				classDefinition: self.
+			modification isEmpty
+				ifFalse: [ anElementsModification addElementModification: modification ] ]
 ]
 
 { #category : 'initialization' }

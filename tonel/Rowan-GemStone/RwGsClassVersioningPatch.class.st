@@ -135,19 +135,6 @@ RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivale
 	cvarsBlock value: (oldClass _classVarsChangableTo: anArrayOfClassVars copy)
 ]
 
-{ #category : 'new version support' }
-RwGsClassVersioningPatch >> addNewVersionDefinitionsTo: newVersionClassDefinitions [
-
-	"classModification knows the set of properties that are being applied to the image given the classDefintion... I can ignore the class properties, and focus on merging in the loaded instance/class loaded methods that are not already in the patch, into the original defintion ... and marking these merrge methods as required ... to force method recompilation ... of course this can also be done by modifying the existing modification ... which is dicey ... "
-
-	| existingClass loadedClassDefinition diff |
-	existingClass := self oldClassVersion.
-	loadedClassDefinition := (RwGsLoadedClass existingForClass: existingClass)
-		asDefinition.
-	diff := self classDefinition compareAgainstBase: loadedClassDefinition.
-	classDefinition mergeMethodsFrom: loadedClassDefinition
-]
-
 { #category : 'patching' }
 RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPackage: aPackageDefinition toPatchSet: aRwGsPatchSet [
 
@@ -235,6 +222,37 @@ RwGsClassVersioningPatch >> installNewClassVerionInSystem [
 	self
 		updateSymbolAssociation;
 		updateLoadedClass
+]
+
+{ #category : 'new version support' }
+RwGsClassVersioningPatch >> newClassVersionPatches: aPackageSetModification patchSet: newClassVersionPatchSet [
+
+	| existingClass loadedClassDefinition newVersionClassModification existingClassName |
+	existingClass := self oldClassVersion.
+	existingClassName := existingClass name asString.
+	loadedClassDefinition := (RwGsLoadedClass existingForClass: existingClass)
+		asDefinition.
+	newVersionClassModification := self classDefinition
+		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
+	false
+		ifTrue: [ 
+			"not needed right now and maybe never"
+			newVersionClassModification
+				addModificationToPatchSet: newClassVersionPatchSet
+				inPackage: nil ].
+	aPackageSetModification elementsModified
+		do: [ :packageModification | 
+			| classesModified |
+			classesModified := packageModification classesModification elementsModified.
+			(classesModified at: existingClassName ifAbsent: [  ])
+				ifNil: [ 
+					self
+						error:
+							'internal error - missing class modification for '
+								, existingClassName printString ]
+				ifNotNil: [ :existingClassModification | 
+					existingClassModification
+						mergeForNewClassVersionWith: newVersionClassModification ] ]
 ]
 
 { #category : 'accessing' }
