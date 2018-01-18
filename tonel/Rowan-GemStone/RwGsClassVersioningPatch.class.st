@@ -234,25 +234,22 @@ RwGsClassVersioningPatch >> newClassVersionPatches: aPackageSetModification patc
 		asDefinition.
 	newVersionClassModification := self classDefinition
 		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
-	false
-		ifTrue: [ 
-			"not needed right now and maybe never"
-			newVersionClassModification
-				addModificationToPatchSet: newClassVersionPatchSet
-				inPackage: nil ].
-	aPackageSetModification elementsModified
-		do: [ :packageModification | 
-			| classesModified |
-			classesModified := packageModification classesModification elementsModified.
-			(classesModified at: existingClassName ifAbsent: [  ])
-				ifNil: [ 
-					self
-						error:
-							'internal error - missing class modification for '
-								, existingClassName printString ]
-				ifNotNil: [ :existingClassModification | 
-					existingClassModification
-						mergeForNewClassVersionWith: newVersionClassModification ] ]
+	newVersionClassModification isEmpty
+		ifFalse: [ 
+			"only newVersionClassModification with substance need further processing"
+			aPackageSetModification elementsModified
+				do: [ :packageModification | 
+					| classesModified |
+					classesModified := packageModification classesModification elementsModified.
+					(classesModified at: existingClassName ifAbsent: [  ])
+						ifNil: [ 
+							self
+								error:
+									'internal error - missing class modification for '
+										, existingClassName printString ]
+						ifNotNil: [ :existingClassModification | 
+							existingClassModification
+								mergeForNewClassVersionWith: newVersionClassModification ] ] ]
 ]
 
 { #category : 'accessing' }
