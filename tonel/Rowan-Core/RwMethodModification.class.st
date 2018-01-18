@@ -131,15 +131,22 @@ RwMethodModification >> mergeForNewClassVersionWith: aMethodModification [
 	"merge aMethodModification modifictions into the receiver"
 
 	self sourceModification isEmpty
-		ifTrue: [ self error: 'internal error - not yet implenented' ]
+		ifTrue: [ 
+			aMethodModification sourceModification isEmpty
+				ifTrue: [ 
+					self
+						error:
+							'internal error - unexpected missing source modification during method modification for new class version merge' ]
+				ifFalse: [ 
+					"this is as it should be ... method source must be carried forward to the new class version"
+					 ] ]
 		ifFalse: [ 
 			aMethodModification sourceModification isEmpty
 				ifFalse: [ 
-					| x y |
 					"if both modifications have the same source then we are cool, otherwise this is not at all expected"
-					(x := (aMethodModification sourceModification elementsModified at: 'source')
-						newValue)
-						= (y := (self sourceModification elementsModified at: 'source') newValue)
+					(aMethodModification sourceModification elementsModified at: 'source')
+						newValue
+						= (self sourceModification elementsModified at: 'source') newValue
 						ifFalse: [ 
 							self
 								error:
@@ -147,8 +154,22 @@ RwMethodModification >> mergeForNewClassVersionWith: aMethodModification [
 	self propertiesModification isEmpty
 		ifTrue: [ 
 			aMethodModification propertiesModification isEmpty
-				ifFalse: [ self error: 'internal error - not yet implenented' ] ]
-		ifFalse: [ self error: 'internal error - not yet implenented' ]
+				ifFalse: [ self error: 'internal error - not yet implemented' ] ]
+		ifFalse: [ 
+			"must be a protocol change and both sides should agree"
+			(aMethodModification propertiesModification elementsModified size = 1
+				and: [ self propertiesModification elementsModified size = 1 ])
+				ifFalse: [ 
+					self
+						error:
+							'internal error - method properties do not match during method modification for new class version merge' ].
+			(aMethodModification propertiesModification elementsModified at: 'protocol')
+				newValue
+				= (self propertiesModification elementsModified at: 'protocol') newValue
+				ifFalse: [ 
+					self
+						error:
+							'internal error - method protocol is not the same during method modification for new class version merge' ] ]
 ]
 
 { #category : 'Accessing' }
