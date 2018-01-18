@@ -125,6 +125,32 @@ RwMethodModification >> isMeta: newValue [
 
 ]
 
+{ #category : 'merging' }
+RwMethodModification >> mergeForNewClassVersionWith: aMethodModification [
+
+	"merge aMethodModification modifictions into the receiver"
+
+	self sourceModification isEmpty
+		ifTrue: [ self error: 'internal error - not yet implenented' ]
+		ifFalse: [ 
+			aMethodModification sourceModification isEmpty
+				ifFalse: [ 
+					| x y |
+					"if both modifications have the same source then we are cool, otherwise this is not at all expected"
+					(x := (aMethodModification sourceModification elementsModified at: 'source')
+						newValue)
+						= (y := (self sourceModification elementsModified at: 'source') newValue)
+						ifFalse: [ 
+							self
+								error:
+									'internal error - method source is not the same during method modification for new class version merge' ] ] ].
+	self propertiesModification isEmpty
+		ifTrue: [ 
+			aMethodModification propertiesModification isEmpty
+				ifFalse: [ self error: 'internal error - not yet implenented' ] ]
+		ifFalse: [ self error: 'internal error - not yet implenented' ]
+]
+
 { #category : 'Accessing' }
 RwMethodModification >> sourceModification [
 	^sourceModification
