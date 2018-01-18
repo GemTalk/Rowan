@@ -2404,7 +2404,7 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 	testClass2 := System myUserProfile symbolList objectNamed: className.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance1 foo = 'foo'
+	self assert: testInstance2 foo = 'foo'
 ]
 
 { #category : 'tests' }
@@ -2449,7 +2449,7 @@ RwLoadingTest >> testSingleClassVersionChange2 [
 	testClass2 := System myUserProfile symbolList objectNamed: className.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance1 foo = 'bar'
+	self assert: testInstance2 foo = 'bar'
 ]
 
 { #category : 'tests' }
@@ -2494,5 +2494,5 @@ RwLoadingTest >> testSingleClassVersionChange3 [
 	testClass2 := System myUserProfile symbolList objectNamed: className.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance1 foo = 'foo'
+	self assert: testInstance2 foo = 'foo'
 ]
