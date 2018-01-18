@@ -1177,22 +1177,6 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames using: myPackageSet [
 ]
 
 { #category : 'support' }
-RwLoadingTest >> loadAndTestPackagesNamedForNewClassVersion: packageNames loaded: packagesShouldBeLoaded using: myPackageSet [
-
-	| imagePackageSet1 diff1 imagePackageSet2 diff2 |
-	Rowan updateLoadedPackages.
-	packagesShouldBeLoaded
-		ifFalse: [ packageNames do: [ :name | self assertAbsenceOfPackage: name ] ].
-	imagePackageSet1 := self definitionsOfLoadedPackages: packageNames.
-	diff1 := myPackageSet compareAgainstBase: imagePackageSet1.
-	self deny: diff1 isEmpty.
-	self applyDiffToImage: diff1.
-	imagePackageSet2 := self definitionsOfLoadedPackages: packageNames.
-	diff2 := myPackageSet compareAgainstBase: imagePackageSet2.
-	self assert: diff2 isEmpty
-]
-
-{ #category : 'support' }
 RwLoadingTest >> methodDefsFromSpec: specArray [
   | dict |
   dict := Dictionary new.
@@ -1635,6 +1619,60 @@ RwLoadingTest >> singleClassVersionChangeClassDefinitions2: packageName classNam
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions:
 							(self methodDefsFromSpec: {#(#'foo' 'accessing' 'foo ^''foo''')}));
+		yourself
+]
+
+{ #category : 'support - singleClassVersionChange definitions' }
+RwLoadingTest >> singleClassVersionChangeClassDefinitions3: packageName className: className [
+
+	"Single class with method foo and new class version."
+
+	"add civa and change foo. "
+
+	^ Dictionary new
+		at: className
+			put:
+				(RwClassDefinition
+						withProperties:
+							(self
+								propertiesForClassNamed: className
+								super: 'Object'
+								instvars: #('iva')
+								classinstvars: #('civa')
+								classvars: #()
+								comment: 'a comment'
+								pools: {}
+								inPackage: packageName)
+						classMethodDefinitions: Dictionary new
+						instanceMethodDefinitions:
+							(self methodDefsFromSpec: {#(#'foo' 'accessing' 'foo ^''bar''')}));
+		yourself
+]
+
+{ #category : 'support - singleClassVersionChange definitions' }
+RwLoadingTest >> singleClassVersionChangeClassDefinitions4: packageName className: className [
+
+	"Single class with method foo and new class version."
+
+	"add civa and change protocol of foo. "
+
+	^ Dictionary new
+		at: className
+			put:
+				(RwClassDefinition
+						withProperties:
+							(self
+								propertiesForClassNamed: className
+								super: 'Object'
+								instvars: #('iva')
+								classinstvars: #('civa')
+								classvars: #()
+								comment: 'a comment'
+								pools: {}
+								inPackage: packageName)
+						classMethodDefinitions: Dictionary new
+						instanceMethodDefinitions:
+							(self methodDefsFromSpec: {#(#'foo' 'fooing' 'foo ^''foo''')}));
 		yourself
 ]
 
@@ -2327,13 +2365,7 @@ RwLoadingTest >> testSimpleLoading [
 { #category : 'tests' }
 RwLoadingTest >> testSingleClassVersionChange1 [
 
-	"test class property changes that result in new class versions 
-		- specifically add and remove some instance variable
-		- class will have methods some of which are explicitly changed (i.e., references
-			to added/removed instance variebles) and some methods that are implicitly changed
-			(i.e., because these methods must be recompiled in the new class version)"
-
-	"this test will act as driver for exploring impmlementations of alternate solutions"
+	"add an instance variable to a class that has a single method"
 
 	"No automatic instance migration"
 
@@ -2368,10 +2400,97 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 								className: className)
 						classExtensions: Dictionary new);
 		yourself.
-	self
-		loadAndTestPackagesNamedForNewClassVersion: packageNames
-		loaded: true
-		using: myPackageSet.
+	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+	testClass2 := System myUserProfile symbolList objectNamed: className.
+	testInstance2 := testClass2 new.
+	self deny: testClass2 == testClass1.
+	self assert: testInstance1 foo = 'foo'
+]
+
+{ #category : 'tests' }
+RwLoadingTest >> testSingleClassVersionChange2 [
+
+	"add a class instance variable to a class that has a single method and change the method"
+
+	"No automatic instance migration"
+
+	| packageName packageNames myPackageSet className testClass1 testInstance1 testClass2 testInstance2 |
+	packageName := 'SingleClassVersionChangeTestPackage'.
+	className := 'TestSingleClassNewVersions'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions:
+							(self
+								singleClassVersionChangeClassDefinitions2: packageName
+								className: className)
+						classExtensions: Dictionary new);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
+	testClass1 := System myUserProfile symbolList objectNamed: className.
+	testInstance1 := testClass1 new.
+	self assert: testInstance1 foo = 'foo'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions:
+							(self
+								singleClassVersionChangeClassDefinitions3: packageName
+								className: className)
+						classExtensions: Dictionary new);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+	testClass2 := System myUserProfile symbolList objectNamed: className.
+	testInstance2 := testClass2 new.
+	self deny: testClass2 == testClass1.
+	self assert: testInstance1 foo = 'bar'
+]
+
+{ #category : 'tests' }
+RwLoadingTest >> testSingleClassVersionChange3 [
+
+	"add a class instance variable to a class that has a single method and change the protocol of the method"
+
+	"No automatic instance migration"
+
+	| packageName packageNames myPackageSet className testClass1 testInstance1 testClass2 testInstance2 |
+	packageName := 'SingleClassVersionChangeTestPackage'.
+	className := 'TestSingleClassNewVersions'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions:
+							(self
+								singleClassVersionChangeClassDefinitions2: packageName
+								className: className)
+						classExtensions: Dictionary new);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
+	testClass1 := System myUserProfile symbolList objectNamed: className.
+	testInstance1 := testClass1 new.
+	self assert: testInstance1 foo = 'foo'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions:
+							(self
+								singleClassVersionChangeClassDefinitions4: packageName
+								className: className)
+						classExtensions: Dictionary new);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	testClass2 := System myUserProfile symbolList objectNamed: className.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
