@@ -196,6 +196,57 @@ RwLoadingTest >> basicPackageDefinition: packageName [
     classExtensions: Dictionary new
 ]
 
+{ #category : 'support - classExtensions definitions' }
+RwLoadingTest >> classExtentionsInstanceMethodsForClass2: className [
+
+	^ self
+		methodDefsFromSpec:
+			{{#'foo'.
+			'accessing'.
+			'foo ^ ''foo'''}}
+]
+
+{ #category : 'support - classExtensions definitions' }
+RwLoadingTest >> classExtionsClassDefinitions1: packageName className: className in: classDefinitionDictionary [
+
+	"Class extension methods"
+
+	^ classDefinitionDictionary
+		at: className
+			put:
+				(RwClassDefinition
+						withProperties:
+							(self
+								propertiesForClassNamed: className
+								super: 'Object'
+								instvars: {}
+								classinstvars: {}
+								classvars: {}
+								comment: 'a comment'
+								pools: {}
+								inPackage: packageName)
+						classMethodDefinitions: Dictionary new
+						instanceMethodDefinitions: Dictionary new);
+		yourself
+]
+
+{ #category : 'support - classExtensions definitions' }
+RwLoadingTest >> classExtionsClassDefinitions2: packageName className: className in: classDefinitionDictionary [
+
+	"Class extension methods"
+
+	^ classDefinitionDictionary
+		at: className
+			put:
+				(RwClassExtensionDefinition
+						withProperties:
+							(self propertiesForClassExtensionsNamed: className inPackage: packageName)
+						classMethodDefinitions: Dictionary new
+						instanceMethodDefinitions:
+							(self classExtentionsInstanceMethodsForClass2: className));
+		yourself
+]
+
 { #category : 'support - classInitialization definitions' }
 RwLoadingTest >> classInitializationClassMethodsForClass1: className [
   ^ self
@@ -1449,6 +1500,17 @@ RwLoadingTest >> poolDictionaryChangesClassDefinitions4: packageName [
 ]
 
 { #category : 'support' }
+RwLoadingTest >> propertiesForClassExtensionsNamed: className inPackage: packageName [
+
+	| dict |
+	dict := Dictionary new.
+	dict
+		at: 'name' put: className;
+		yourself.
+	^ dict
+]
+
+{ #category : 'support' }
 RwLoadingTest >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars comment: comment gs_SymbolDictionary: gs_SymbolDictionary pools: pools type: type gs_options: gs_options inPackage: packageName [
 
 	| dict |
@@ -1666,7 +1728,7 @@ RwLoadingTest >> singleClassVersionChangeClassDefinitions4: packageName classNam
 								super: 'Object'
 								instvars: #('iva')
 								classinstvars: #('civa')
-								classvars: #()
+								classvars: #('CVA')
 								comment: 'a comment'
 								pools: {}
 								inPackage: packageName)
@@ -1761,6 +1823,49 @@ RwLoadingTest >> testClassDelete [
 		before: myPackageSet 
 		after: RwPackageSetDefinition new. "the package will be deleted after load when updatePackagesFromCategories is called, because last class with that category no longer exists -- implicit delete package"
   self assert: (System myUserProfile symbolList objectNamed: className) isNil
+]
+
+{ #category : 'tests' }
+RwLoadingTest >> testClassExtension [
+
+	"test class extenstion methods"
+
+	| packageName1 packageName2 packageNames myPackageSet className testClass testInstance |
+	className := 'TestClassExtensionClass'.
+	packageName1 := 'ClassExtensionsBaseTestPackage'.
+	packageName2 := 'ClassExtensionsExtensionTestPackage'.
+	packageNames := {packageName1}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName1)
+						classDefinitions:
+							(self
+								classExtionsClassDefinitions1: packageName1
+								className: className
+								in: Dictionary new)
+						classExtensions: Dictionary new);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
+	testClass := System myUserProfile symbolList objectNamed: className.
+	testInstance := testClass new.
+	self should: [ testInstance foo ] raise: MessageNotUnderstood.
+	packageNames := {packageName2}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName2)
+						classDefinitions: Dictionary new
+						classExtensions:
+							(self
+								classExtionsClassDefinitions2: packageName2
+								className: className
+								in: Dictionary new));
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
+	self assert: testInstance foo = 'foo'
 ]
 
 { #category : 'tests' }
