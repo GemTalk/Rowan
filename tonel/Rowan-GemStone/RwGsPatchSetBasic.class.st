@@ -351,7 +351,7 @@ RwGsPatchSetBasic >> apply [
 		"moveMethodsBetweenPackages;"
 		updateMethodProperties;
 		removeDeletedMethods;
-		removeDeletedClassesAndExtensionsFromPackages;
+		"removeDeletedClassesAndExtensionsFromPackages;"
 		markPackagesNotDirty;
 		removeDeletedPackages;
 		commit;
@@ -501,12 +501,6 @@ RwGsPatchSetBasic >> markPackagesNotDirty [
 { #category : 'stubs' }
 RwGsPatchSetBasic >> migrateInstances [
 	"presumably migrate instances of changed classes ... noop for now"
-]
-
-{ #category : 'private - applying' }
-RwGsPatchSetBasic >> removeDeletedClassesAndExtensionsFromPackages [
-
-	deletedClassExtensions, deletedClasses do: [:each | each deleteClassFromPackage ]
 ]
 
 { #category : 'private - applying' }

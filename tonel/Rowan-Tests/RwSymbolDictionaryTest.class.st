@@ -25,6 +25,26 @@ RwSymbolDictionaryTest >> _applyBenignPropertiesTo: existingClass [
 ]
 
 { #category : 'private' }
+RwSymbolDictionaryTest >> _applyClassVariableChangeTo: existingClass [
+
+	"benign properties are properties that do not cause a new class version or modify class variables"
+
+	| newClass |
+	newClass := existingClass superclass
+		subclass: existingClass name
+		instVarNames: #()
+		classVars: #('ClassVar1')
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: nil
+		newVersionOf: existingClass
+		description: ''
+		options: #().
+	self assert: newClass == existingClass.	"not supposed to create a new class version"
+	^ newClass
+]
+
+{ #category : 'private' }
 RwSymbolDictionaryTest >> _createClassNamed: className superclassName: superclassName [
 
 	| superclass |
@@ -84,6 +104,7 @@ RwSymbolDictionaryTest >> testClassDeletionPatch [
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
 	packagName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc toPackageNamed: packagName.
+
 	dict deleteClassFromPackage: class
 ]
 
@@ -104,6 +125,7 @@ RwSymbolDictionaryTest >> testClassPropertiesPatch [
 		value: existingClass.
 	packagName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc toPackageNamed: packagName.
+
 	newClass := self _applyBenignPropertiesTo: existingClass.
 	dict updateClassProperties: newClass
 ]
@@ -113,7 +135,7 @@ RwSymbolDictionaryTest >> testClassVariableChangePatch [
 
 	"RwGsClassPropertiesPatch>>installPropertiesPatchFor:"
 
-	"add a packaged class to a RwPackageSymbolDictionary, then update properties (non-class version/class variable properties)"
+	"add a packaged class to a RwPackageSymbolDictionary, then update class variable properties"
 
 	| dict existingClass assoc packagName newClass |
 	existingClass := self
@@ -125,6 +147,7 @@ RwSymbolDictionaryTest >> testClassVariableChangePatch [
 		value: existingClass.
 	packagName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc toPackageNamed: packagName.
+
 	newClass := self _applyClassVariableChangeTo: existingClass.
 	dict updateClassProperties: newClass
 ]
