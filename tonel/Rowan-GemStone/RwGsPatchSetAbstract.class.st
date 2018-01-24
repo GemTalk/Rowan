@@ -53,6 +53,24 @@ RwGsPatchSetAbstract >> addDeletedPackage: aPackageDefinition [
 ]
 
 { #category : 'building' }
+RwGsPatchSetAbstract >> addExtendedClass: aClassDefinition inPackage: aPackageDefinition [
+
+	self subclassResponsibility: #'addExtendedClass:inPackage:'
+]
+
+{ #category : 'building' }
+RwGsPatchSetAbstract >> addExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+
+	self subclassResponsibility: #'addExtendedClassMethod:inClass:inPackage:'
+]
+
+{ #category : 'building' }
+RwGsPatchSetAbstract >> addExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+
+	self subclassResponsibility: #'addExtendedInstanceMethod:inClass:inPackage:'
+]
+
+{ #category : 'building' }
 RwGsPatchSetAbstract >> addPatchedClassClassVariables: aClassDefinition inPackage: aPackageDefinition [
 
 	self subclassResponsibility: #'addPatchedClassClassVariables:inPackage:'

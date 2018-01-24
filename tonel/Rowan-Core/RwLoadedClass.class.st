@@ -41,13 +41,6 @@ RwLoadedClass >> isEmpty [
 ]
 
 { #category : 'accessing' }
-RwLoadedClass >> key [
-	"Answer some token that will uniquely identify me relative to any other LoadedClass in the same package."
-
-	self subclassResponsibility
-]
-
-{ #category : 'accessing' }
 RwLoadedClass >> loadedPackage [
 
 	^loadedPackage

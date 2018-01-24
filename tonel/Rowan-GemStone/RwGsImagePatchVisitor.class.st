@@ -31,20 +31,7 @@ RwGsImagePatchVisitor >> addAddedPackage: aPackageDefinition [
 	currentPackage := aPackageDefinition.
 	patchSet addAddedPackage: currentPackage.
 	self addClasses: currentPackage classDefinitions.
-	aPackageDefinition classExtensions do: 
-			[:classExtension |
-			classExtension classMethodDefinitions do: 
-					[:classMethodDefinition |
-					patchSet
-						addAddedClassMethod: classMethodDefinition
-						inClass: classExtension
-						inPackage: aPackageDefinition].
-			classExtension instanceMethodDefinitions do: 
-					[:instanceMethodDefinition |
-					patchSet
-						addAddedInstanceMethod: instanceMethodDefinition
-						inClass: classExtension
-						inPackage: aPackageDefinition]]
+	self addClassExtensions: currentPackage classExtensions
 ]
 
 { #category : 'private' }
@@ -63,6 +50,26 @@ RwGsImagePatchVisitor >> addClasses: classDefinitions [
 					[:instanceMethodDefinition |
 					patchSet
 						addAddedInstanceMethod: instanceMethodDefinition
+						inClass: classDefinition
+						inPackage: currentPackage]]
+]
+
+{ #category : 'private' }
+RwGsImagePatchVisitor >> addClassExtensions: classExtensions [
+
+	classExtensions do: 
+			[:classDefinition |
+			patchSet addExtendedClass: classDefinition inPackage: currentPackage.
+			classDefinition classMethodDefinitions do: 
+					[:classMethodDefinition |
+					patchSet
+						addExtendedClassMethod: classMethodDefinition
+						inClass: classDefinition
+						inPackage: currentPackage].
+			classDefinition instanceMethodDefinitions do: 
+					[:instanceMethodDefinition |
+					patchSet
+						addExtendedInstanceMethod: instanceMethodDefinition
 						inClass: classDefinition
 						inPackage: currentPackage]]
 ]

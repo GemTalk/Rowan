@@ -12,6 +12,15 @@ Class {
 	#category : 'Rowan-GemStone'
 }
 
+{ #category : 'queries' }
+RwGsLoadedClassExtension class >> existingOrNewForClass: extensionClass inPackageNamed: aName [
+
+	| package |
+	package := RwGsLoadedPackage existingPackageNamed: aName.
+	^ package loadedExtensionForClass: extensionClass 
+		
+]
+
 { #category : 'instance creation' }
 RwGsLoadedClassExtension class >> newForClass: aClass inPackage: aLoadedPackage [
 
@@ -56,7 +65,9 @@ RwGsLoadedClassExtension >> initializeForClass: aClass inPackage: aLoadedPackage
 	self initialize.
 	name := aClass name asString.
 	handle := aClass.
-	aLoadedPackage addLoadedClassExtension: self
+	aLoadedPackage addLoadedClassExtension: self.
+	self propertyAt: 'name' put: name.
+
 ]
 
 { #category : 'accessing' }

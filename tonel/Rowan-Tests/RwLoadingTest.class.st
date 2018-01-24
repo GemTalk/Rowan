@@ -81,11 +81,6 @@ RwLoadingTest >> applyDiffToImage: aPackageSetModification [
 	"work out the process handling that is needed in the face of new class versions"
 
 	| visitor patchSet |
-	false
-		ifTrue: [ 
-			"original api"
-			Rowan image applyModification: aPackageSetModification.
-			^ self ].
 	visitor := RwGsImagePatchVisitor new.
 	visitor visit: aPackageSetModification.
 	patchSet := visitor patchSet.
@@ -197,12 +192,12 @@ RwLoadingTest >> basicPackageDefinition: packageName [
 ]
 
 { #category : 'support - classExtensions definitions' }
-RwLoadingTest >> classExtentionsInstanceMethodsForClass2: className [
+RwLoadingTest >> classExtentionsInstanceMethodsForClass2: className inPackage: packageName [
 
 	^ self
 		methodDefsFromSpec:
 			{{#'foo'.
-			'accessing'.
+			'*', packageName.
 			'foo ^ ''foo'''}}
 ]
 
@@ -243,7 +238,7 @@ RwLoadingTest >> classExtionsClassDefinitions2: packageName className: className
 							(self propertiesForClassExtensionsNamed: className inPackage: packageName)
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions:
-							(self classExtentionsInstanceMethodsForClass2: className));
+							(self classExtentionsInstanceMethodsForClass2: className inPackage: packageName));
 		yourself
 ]
 

@@ -8,3 +8,9 @@ Class {
 	#superclass : 'RwClassDefinition',
 	#category : 'Rowan-Core'
 }
+
+{ #category : 'private' }
+RwClassExtensionDefinition >> _modificationClass [
+
+	^ RwClassExtensionModification
+]

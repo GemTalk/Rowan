@@ -25,6 +25,12 @@ RwClassDefinition class >> withProperties: propertiesDictionary classMethodDefin
 		yourself
 ]
 
+{ #category : 'private' }
+RwClassDefinition >> _modificationClass [
+
+	^ RwClassModification
+]
+
 { #category : 'accessing' }
 RwClassDefinition >> addClassMethodDefinition: aMethodDefinition [
 
@@ -70,7 +76,7 @@ RwClassDefinition >> classType [
 RwClassDefinition >> compareAgainstBase: aDefinition [
 
 	| modification instanceMethodsModification classMethodsModification |
-	modification := RwClassModification before: aDefinition after: self.
+	modification := self _modificationClass before: aDefinition after: self.
 	modification
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
 	instanceMethodsModification := RwMethodsModification new.
@@ -99,7 +105,7 @@ RwClassDefinition >> compareAgainstBaseForNewClassVersion: aDefinition [
 	"all unchanged and unremoved methods need to be applied to the patch"
 
 	| modification instanceMethodsModification classMethodsModification |
-	modification := RwClassModification before: aDefinition after: self.
+	modification := self _modificationClass before: aDefinition after: self.
 	false
 		ifTrue: [ 
 			modification

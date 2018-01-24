@@ -10,11 +10,14 @@ Class {
 		'packagesWithPropertyChanges',
 		'addedClasses',
 		'deletedClasses',
+		'deletedClassExtensions',
+		'extendedClasses',
 		'classesWithPropertyChanges',
 		'classesWithClassVariableChanges',
 		'classesWithNewVersions',
 		'addedMethods',
 		'deletedMethods',
+		'extendedMethods',
 		'methodsWithPropertyChanges',
 		'methodsNeedingRecompile',
 		'tempSymbols',
@@ -38,6 +41,11 @@ RwGsPatchSetBasic >> _classAdditionPatchClass [
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classDeletionPatchClass [
   ^ RwGsClassDeletionPatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _classExtensionPatchClass [
+	^ RwGsClassExtensionPatch
 ]
 
 { #category : 'private - patch class accessors' }
@@ -185,6 +193,40 @@ RwGsPatchSetBasic >> addDeletedPackage: packageDefinition [
 ]
 
 { #category : 'building' }
+RwGsPatchSetBasic >> addExtendedClass: aClassDefinition inPackage: aPackageDefinition [
+
+	extendedClasses
+		add:
+			(self _classExtensionPatchClass
+				for: aClassDefinition
+				inPackage: aPackageDefinition)
+]
+
+{ #category : 'building' }
+RwGsPatchSetBasic >> addExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+
+	extendedMethods
+		add:
+			(self _methodAdditionPatchClass
+				forMethod: aClassMethodDefinition
+				isMeta: true
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+]
+
+{ #category : 'building' }
+RwGsPatchSetBasic >> addExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+
+	extendedMethods
+		add:
+			(self _methodAdditionPatchClass
+				forMethod: anInstanceMethodDefinition
+				isMeta: false
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+]
+
+{ #category : 'building' }
 RwGsPatchSetBasic >> addPatchedClassClassVariables: aClassDefinition inPackage: aPackageDefinition [
 
 	classesWithClassVariableChanges
@@ -269,6 +311,7 @@ RwGsPatchSetBasic >> allPatchesAffectingLivePackagesDo: aBlock [
 	classesWithPropertyChanges.
 	deletedMethods.
 	addedMethods.
+	extendedMethods.
 	methodsNeedingRecompile.
 	methodsWithPropertyChanges}
 			do: [:patches | patches do: aBlock]
@@ -297,9 +340,9 @@ RwGsPatchSetBasic >> apply [
 	self
 		addAndUpdateLoadedPackages;
 		removeDeletedClassesFromSystem;
-		"removeDeletedClassExtensionsFromSystem;"
+		removeDeletedClassExtensionsFromSystem;
 		installAddedClasses;
-		"installAddedClassExtensions;"
+		installAddedClassExtensions;
 		"moveClassesBetweenSymbolDictionaries;"
 		"moveClassesBetweenPackages;"
 		updateSymbolAssociations;
@@ -308,7 +351,7 @@ RwGsPatchSetBasic >> apply [
 		"moveMethodsBetweenPackages;"
 		updateMethodProperties;
 		removeDeletedMethods;
-		"removeDeletedClassesAndExtensionsFromPackages;"
+		removeDeletedClassesAndExtensionsFromPackages;
 		markPackagesNotDirty;
 		removeDeletedPackages;
 		commit;
@@ -341,6 +384,7 @@ RwGsPatchSetBasic >> compileMethodPatch: aMethodAdditionPatch [
 RwGsPatchSetBasic >> compileMethods [
 
 	addedMethods do: [:each | self compileMethodPatch: each].
+	extendedMethods do: [:each | self compileMethodPatch: each].
 	methodsNeedingRecompile do: [:each | self compileMethodPatch: each]
 ]
 
@@ -415,12 +459,15 @@ RwGsPatchSetBasic >> initialize [
 	deletedPackages := Set new.
 	packagesWithPropertyChanges := Set new.
 	deletedClasses := Set new.
+	deletedClassExtensions := Set new.
 	addedClasses := Set new.
+	extendedClasses := Set new.
 	classesWithNewVersions := Set new.
 	classesWithClassVariableChanges := Set new.
 	classesWithPropertyChanges := Set new.
 	deletedMethods := Set new.
 	addedMethods := Set new.
+	extendedMethods := Set new.
 	methodsNeedingRecompile := Set new.
 	methodsWithPropertyChanges := Set new.
 	tempSymbols := SymbolDictionary new.
@@ -438,6 +485,12 @@ RwGsPatchSetBasic >> installAddedClasses [
 ]
 
 { #category : 'private - applying' }
+RwGsPatchSetBasic >> installAddedClassExtensions [
+
+	extendedClasses do: [ :each | each installClassExtensionInSystem ]
+]
+
+{ #category : 'private - applying' }
 RwGsPatchSetBasic >> markPackagesNotDirty [
 	"All affected packages are now consistent with the source, and should be marked not dirty."
 
@@ -448,6 +501,12 @@ RwGsPatchSetBasic >> markPackagesNotDirty [
 { #category : 'stubs' }
 RwGsPatchSetBasic >> migrateInstances [
 	"presumably migrate instances of changed classes ... noop for now"
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSetBasic >> removeDeletedClassesAndExtensionsFromPackages [
+
+	deletedClassExtensions, deletedClasses do: [:each | each deleteClassFromPackage ]
 ]
 
 { #category : 'private - applying' }
@@ -463,6 +522,14 @@ RwGsPatchSetBasic >> removeDeletedClassesFromTempSymbols [
 	"Deleted class names should not resolve during compilation."
 
 	deletedClasses do: [:each | tempSymbols removeKey: each className asSymbol]
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSetBasic >> removeDeletedClassExtensionsFromSystem [
+	"Remove the name binding from the SymbolDictionaries in the live SymbolList
+        Remove the LoadedClass from its LoadedPackage"
+
+	deletedClassExtensions do: [:each | each deleteClassExtenstionFromSystem ]
 ]
 
 { #category : 'private - applying' }
@@ -493,7 +560,7 @@ RwGsPatchSetBasic >> reportAnyErrors [
 RwGsPatchSetBasic >> runInitializers [
 	"run the class initialization methods as needed"
 
-	addedMethods, methodsNeedingRecompile do: [:methodPatch | methodPatch runInitializer ]
+	addedMethods, extendedMethods, methodsNeedingRecompile do: [:methodPatch | methodPatch runInitializer ]
 ]
 
 { #category : 'private - applying' }
@@ -549,6 +616,7 @@ RwGsPatchSetBasic >> updateMethodDictionaries [
    For methods that need recompiling updated the LoadedMethods registration. "
 
 	addedMethods do: [:each | each installMethod ].
+	extendedMethods do: [:each | each installMethod ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
 ]
 

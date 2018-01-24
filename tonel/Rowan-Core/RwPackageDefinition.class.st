@@ -68,7 +68,7 @@ RwPackageDefinition >> compareAgainstBase: aDefinition [
 	modification
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
 	classesModification := RwClassesModification new.
-	classExtensionsModification := RwClassesModification new.
+	classExtensionsModification := RwClassExtensionsModification new.
 	self
 		compareDictionary: classDefinitions
 		againstBaseDictionary: aDefinition classDefinitions
