@@ -76,13 +76,13 @@ RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivale
 		newClassInstVars: anArrayOfClassInstVars
 		newPools: anArrayOfPoolDicts
 		newClassVars: anArrayOfClassVars
-		suprBlock: [ :bool | supr := bool ]
-		optsBlock: [ :bool | opts := bool ]
-		ivsBlock: [ :bool | ivs := bool ]
-		civsBlock: [ :bool | civs := bool ]
-		poolsBlock: [ :bool | poolds := bool ]
-		cvarsBlock: [ :bool | cvars := bool ].
-	(supr or: [ opts or: [ ivs or: [ civs or: [ poolds or: [ cvars ] ] ] ] ])
+		suprBlock: [ :bool | supr := bool not ]
+		optsBlock: [ :bool | opts := bool not ]
+		ivsBlock: [ :bool | ivs := bool not ]
+		civsBlock: [ :bool | civs := bool not ]
+		poolsBlock: [ :bool | poolds := bool not ]
+		cvarsBlock: [ :bool | cvars := bool not ].
+	(supr or: [ opts or: [ ivs or: [ civs or: [ poolds ] ] ] ])
 		ifTrue: [ 
 			"new class version means that class vars will be patched (for free) before methods compiled"
 			patchedClassNewVersionsBlock value.
@@ -181,19 +181,6 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 			aRwGsPatchSet
 				addPatchedClassNewVersion: aClassModification
 				inPackage: aPackageDefinition ]
-]
-
-{ #category : 'actions' }
-RwGsClassVersioningPatch >> addToNewClassesByName: aDictionary [
-
-	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
-
-	| name |
-	name := self classDefinition key.
-	name ifNil: [ self error: 'Class definition with no name.' ].
-	(aDictionary includesKey: name)
-		ifTrue: [ self error: 'Duplicate name' ].
-	aDictionary at: name put: self
 ]
 
 { #category : 'accessing' }

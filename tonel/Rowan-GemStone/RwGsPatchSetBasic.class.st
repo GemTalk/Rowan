@@ -600,11 +600,12 @@ RwGsPatchSetBasic >> tempSymbols [
 
 { #category : 'private - applying' }
 RwGsPatchSetBasic >> updateClassProperties [
+
 	"For classes with changes that don't require versioning, 
 	update the properties in the class and the LoadedClasses as appropriate."
 
-	classesWithPropertyChanges do: [:each | 
-		each installPropertiesPatchFor: self ]
+	classesWithClassVariableChanges , classesWithPropertyChanges
+		do: [ :each | each installPropertiesPatchFor: self ]
 ]
 
 { #category : 'private - applying' }

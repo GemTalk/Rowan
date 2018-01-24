@@ -107,3 +107,24 @@ RwSymbolDictionaryTest >> testClassPropertiesPatch [
 	newClass := self _applyBenignPropertiesTo: existingClass.
 	dict updateClassProperties: newClass
 ]
+
+{ #category : 'tests' }
+RwSymbolDictionaryTest >> testClassVariableChangePatch [
+
+	"RwGsClassPropertiesPatch>>installPropertiesPatchFor:"
+
+	"add a packaged class to a RwPackageSymbolDictionary, then update properties (non-class version/class variable properties)"
+
+	| dict existingClass assoc packagName newClass |
+	existingClass := self
+		_createClassNamed: 'TestSymbolDictClass'
+		superclassName: 'Object'.
+	dict := RwPackageSymbolDictionary newNamed: #'CypressTestData'.
+	assoc := SymbolAssociation
+		newWithKey: existingClass name asSymbol
+		value: existingClass.
+	packagName := 'TestSymbolDictPackage'.
+	dict addClassAssociation: assoc toPackageNamed: packagName.
+	newClass := self _applyClassVariableChangeTo: existingClass.
+	dict updateClassProperties: newClass
+]

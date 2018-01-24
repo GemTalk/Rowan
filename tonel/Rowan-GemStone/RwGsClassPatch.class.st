@@ -45,8 +45,6 @@ RwGsClassPatch >> addToNewClassesByName: aDictionary [
 
 	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
 
-	"subclasses that do not"
-
 	| name |
 	name := classDefinition key.
 	name ifNil: [ self error: 'Class definition with no name.' ].
@@ -134,15 +132,10 @@ RwGsClassPatch >> className [
 { #category : 'actions' }
 RwGsClassPatch >> createClassFor: aPatchSet [
 
-	| createdClass superclass |
-	superclass := aPatchSet superclassNamed: classDefinition superclassName.
-	superclass 
-		ifNil: [ 
-			classDefinition superclassName = 'nil' 
-				ifFalse: [ self error: 'The class named ', classDefinition superclassName printString , ' does not exist.' ] ].
-	createdClass := self privateCreateClassWithSuperclass: superclass.
+	| createdClass |
+	createdClass := self privateCreateClassFor: aPatchSet.
 	aPatchSet createdClass: createdClass.
-	^createdClass
+	^ createdClass
 ]
 
 { #category : 'actions' }
@@ -188,6 +181,22 @@ RwGsClassPatch >> packageDefinition: newValue [
 RwGsClassPatch >> packageName [
 
 	^packageDefinition key
+]
+
+{ #category : 'private' }
+RwGsClassPatch >> privateCreateClassFor: aPatchSet [
+
+	| superclass |
+	superclass := aPatchSet superclassNamed: classDefinition superclassName.
+	superclass
+		ifNil: [ 
+			classDefinition superclassName = 'nil'
+				ifFalse: [ 
+					self
+						error:
+							'The class named ' , classDefinition superclassName printString
+								, ' does not exist.' ] ].
+	^ self privateCreateClassWithSuperclass: superclass
 ]
 
 { #category : 'private' }

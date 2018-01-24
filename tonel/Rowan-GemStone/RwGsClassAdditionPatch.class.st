@@ -34,17 +34,6 @@ RwGsClassAdditionPatch >> addClassToSymbolDictionary [
 ]
 
 { #category : 'actions' }
-RwGsClassAdditionPatch >> addToNewClassesByName: aDictionary [
-	"Dictionary is class name -> classAdditionPatch. Error on duplicate name."
-
-	| name |
-	name := classDefinition key.
-	name ifNil: [self error: 'Class definition with no name.'].
-	(aDictionary includesKey: name) ifTrue: [self error: 'Duplicate name'].
-	aDictionary at: name put: self
-]
-
-{ #category : 'actions' }
 RwGsClassAdditionPatch >> createAndInstallLoadedClass [
 	"Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
