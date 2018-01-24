@@ -153,7 +153,8 @@ RwGsImagePatchVisitor >> visitClassesModification: aClassesModification [
 { #category : 'visting' }
 RwGsImagePatchVisitor >> visitClassExtensionsModification: aClassModification [
 
-	self halt
+	aClassModification isEmpty
+		ifFalse: [ self halt ]
 ]
 
 { #category : 'visting' }
