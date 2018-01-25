@@ -10,6 +10,30 @@ RwGsLoadedSymbolDictClass class >> newForClass: aClass [
 	^self new initializeForClass: aClass
 ]
 
+{ #category : 'methods' }
+RwGsLoadedSymbolDictClass >> addLoadedClassMethod: aLoadedMethod [
+
+	self markPackageDirty.
+	loadedClassMethods at: aLoadedMethod key put: aLoadedMethod.
+	aLoadedMethod loadedClass: self
+]
+
+{ #category : 'methods' }
+RwGsLoadedSymbolDictClass >> addLoadedInstanceMethod: aLoadedMethod [
+
+	self markPackageDirty.
+	loadedInstanceMethods at: aLoadedMethod key put: aLoadedMethod.
+	aLoadedMethod loadedClass: self
+]
+
+{ #category : 'methods' }
+RwGsLoadedSymbolDictClass >> addLoadedMethod: aLoadedMethod [
+
+	aLoadedMethod classIsMeta
+		ifTrue: [self addLoadedClassMethod: aLoadedMethod]
+		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
+]
+
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> handleClassDeletion [
 

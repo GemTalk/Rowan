@@ -170,6 +170,49 @@ RwPackageSymbolDictionary >> deleteClassFromPackage: class [
 			self removeKey: loadedClass key asSymbol ]
 ]
 
+{ #category : 'method' }
+RwPackageSymbolDictionary >> installNewCompiledMethod: compiledMethod into: behavior protocol: protocolString toPackageNamed: packageName [
+
+	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension properties |
+	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	selector := compiledMethod selector.
+	methodDictionary at: selector put: compiledMethod.
+
+	protocolSymbol := protocolString asSymbol.
+	(behavior includesCategory: protocolSymbol)
+		ifFalse: [ behavior addCategory: protocolSymbol ].
+	behavior moveMethod: selector toCategory: protocolSymbol.
+
+	existing := RwGsLoadedMethod
+		existingForMethod: compiledMethod
+		ifAbsent: [ nil ].
+	existing
+		ifNotNil: [ self error: 'Internal error -- existing LoadedMethod found for new method.' ].
+	loadedMethod := RwGsLoadedMethod newNamed: selector.
+	loadedMethod
+		handle: compiledMethod;
+		classIsMeta: behavior isMeta.
+
+	loadedPackage := self packageRegistry
+		at: packageName
+		ifAbsent: [ 
+			self
+				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
+	loadedClassOrExtension := loadedPackage
+		classOrExtensionForClassNamed: behavior theNonMetaClass name asString
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
+
+	loadedClassOrExtension addLoadedMethod: loadedMethod.
+	properties := Dictionary new
+		at: 'selector' put: selector;
+		at: 'protocol' put: protocolSymbol;
+		yourself.
+	loadedMethod setPropertiesTo: properties
+]
+
 { #category : 'private' }
 RwPackageSymbolDictionary >> migrateFrom: anotherObject instVarMap: otherivi [
 
