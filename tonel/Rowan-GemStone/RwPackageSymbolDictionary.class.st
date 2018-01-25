@@ -2,7 +2,9 @@ Class {
 	#name : 'RwPackageSymbolDictionary',
 	#superclass : 'SymbolDictionary',
 	#instVars : [
-		'packageRegistry'
+		'packageRegistry',
+		'classRegistry',
+		'methodRegistry'
 	],
 	#category : 'Rowan-GemStone'
 }
@@ -20,6 +22,8 @@ RwPackageSymbolDictionary >> _initializeWithoutClear: newSize [
 
 	super _initializeWithoutClear: newSize.
 	packageRegistry := KeyValueDictionary new.
+	classRegistry := IdentityKeyValueDictionary new.	"keyed by class classHistory"
+	methodRegistry := IdentityKeyValueDictionary new.	"keyed by compiledMethod"
 	^ self
 ]
 
@@ -42,11 +46,9 @@ RwPackageSymbolDictionary >> _loadedClassFor: class noNewVersion: noNewVersionBl
 	| loadedClass classKey |
 	(class isKindOf: Class)
 		ifFalse: [ self error: 'internal error - expected a class' ].
-	self packageRegistry
-		detect: [ :loadedPackage | 
-			loadedClass := loadedPackage loadedClassForClass: class.
-			loadedClass ~~ RwLoadedThing absentToken ]
-		ifNone: [ 
+	loadedClass := classRegistry
+		at: class classHistory
+		ifAbsent: [ 
 			self
 				error:
 					'internal error - No package found for the class ' , class name printString ].
@@ -69,11 +71,11 @@ RwPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packageN
 
 	"a class association is being added to the named package in the receiver"
 
-	| package class loadedClass |
+	| loadedPackage class loadedClass |
 	class := assoc value.
 	(class isKindOf: Class)
 		ifFalse: [ self error: 'internal error - expected a class association' ].
-	package := self packageRegistry
+	loadedPackage := self packageRegistry
 		at: packageName
 		ifAbsent: [ 
 			self packageRegistry
@@ -86,12 +88,13 @@ RwPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packageN
 				error:
 					'internal error - there is an existing assocition with the same key: '
 						, assoc key printString ].
-	package loadedClasses
-		at: class name
+	classRegistry
+		at: class classHistory
 		ifAbsent: [ 
 			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
-			package addLoadedClass: loadedClass.
-			package loadedClassExtensions
+			loadedPackage addLoadedClass: loadedClass.
+			classRegistry at: class classHistory put: loadedClass.
+			loadedPackage loadedClassExtensions
 				at: class name
 				ifPresent: [ :loadedClassExtension | 
 					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
@@ -116,6 +119,49 @@ RwPackageSymbolDictionary >> addNewClassVersionToAssociation: newClass [
 			loadedClass handleClassDeletionOrNewVersion
 				ifTrue: [ loadedClass updatePropertiesFromClassFor: self ]
 				ifFalse: [ self error: 'internal error - new version of class not properly installed' ] ]
+]
+
+{ #category : 'method' }
+RwPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod into: behavior protocol: protocolString toPackageNamed: packageName [
+
+	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension properties |
+	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	selector := compiledMethod selector.
+	methodDictionary at: selector put: compiledMethod.
+
+	protocolSymbol := protocolString asSymbol.
+	(behavior includesCategory: protocolSymbol)
+		ifFalse: [ behavior addCategory: protocolSymbol ].
+	behavior moveMethod: selector toCategory: protocolSymbol.
+
+	existing := methodRegistry at: compiledMethod ifAbsent: [ nil ].
+	existing
+		ifNotNil: [ self error: 'Internal error -- existing LoadedMethod found for new method.' ].
+	loadedMethod := RwGsLoadedMethod newNamed: selector.
+	loadedMethod
+		handle: compiledMethod;
+		classIsMeta: behavior isMeta.
+
+	methodRegistry at: compiledMethod put: loadedMethod.
+
+	loadedPackage := self packageRegistry
+		at: packageName
+		ifAbsent: [ 
+			self
+				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
+	loadedClassOrExtension := loadedPackage
+		classOrExtensionForClassNamed: behavior theNonMetaClass name asString
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
+
+	loadedClassOrExtension addLoadedMethod: loadedMethod.
+	properties := Dictionary new
+		at: 'selector' put: selector;
+		at: 'protocol' put: protocolSymbol;
+		yourself.
+	loadedMethod setPropertiesTo: properties
 ]
 
 { #category : 'accessing' }
@@ -157,6 +203,21 @@ RwPackageSymbolDictionary >> at: key ifPresent: oneArgBlock ifAbsent: absentBloc
 	^ absentBlock value
 ]
 
+{ #category : 'private - migration avoidance' }
+RwPackageSymbolDictionary >> become: ignored [
+
+	"skip migration until the class definition settles down a bit"
+
+	
+]
+
+{ #category : 'accessing' }
+RwPackageSymbolDictionary >> classRegistry [
+
+   ^classRegistry
+
+]
+
 { #category : 'class' }
 RwPackageSymbolDictionary >> deleteClassFromPackage: class [
 
@@ -167,37 +228,29 @@ RwPackageSymbolDictionary >> deleteClassFromPackage: class [
 		noNewVersion: [ :loadedClass | 
 			"association for class is present, finish delete operation"
 			loadedClass removeFromLoaded.
+			classRegistry removeKey: class classHistory.
 			self removeKey: loadedClass key asSymbol ]
 ]
 
 { #category : 'method' }
-RwPackageSymbolDictionary >> installNewCompiledMethod: compiledMethod into: behavior protocol: protocolString toPackageNamed: packageName [
+RwPackageSymbolDictionary >> deleteCompiledMethod: compiledMethod from: behavior [
 
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension properties |
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	"delete a compiled method from behavior and remove it from the loaded things"
+
+	| selector loadedMethod loadedPackage loadedClassOrExtension |
 	selector := compiledMethod selector.
-	methodDictionary at: selector put: compiledMethod.
+	behavior removeSelector: selector asString environmentId: 0.
 
-	protocolSymbol := protocolString asSymbol.
-	(behavior includesCategory: protocolSymbol)
-		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
-
-	existing := RwGsLoadedMethod
-		existingForMethod: compiledMethod
-		ifAbsent: [ nil ].
-	existing
-		ifNotNil: [ self error: 'Internal error -- existing LoadedMethod found for new method.' ].
-	loadedMethod := RwGsLoadedMethod newNamed: selector.
-	loadedMethod
-		handle: compiledMethod;
-		classIsMeta: behavior isMeta.
-
-	loadedPackage := self packageRegistry
-		at: packageName
+	loadedMethod := methodRegistry
+		at: compiledMethod
 		ifAbsent: [ 
 			self
-				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
+				error:
+					'Internal error -- no existing LoadedMethod found for deleted method.' ].
+
+	methodRegistry removeKey: compiledMethod.
+
+	loadedPackage := loadedMethod loadedPackage.
 	loadedClassOrExtension := loadedPackage
 		classOrExtensionForClassNamed: behavior theNonMetaClass name asString
 		ifAbsent: [ 
@@ -205,16 +258,26 @@ RwPackageSymbolDictionary >> installNewCompiledMethod: compiledMethod into: beha
 				error:
 					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
 
-	loadedClassOrExtension addLoadedMethod: loadedMethod.
-	properties := Dictionary new
-		at: 'selector' put: selector;
-		at: 'protocol' put: protocolSymbol;
-		yourself.
-	loadedMethod setPropertiesTo: properties
+	loadedClassOrExtension removeLoadedMethod: loadedMethod
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
+RwPackageSymbolDictionary >> methodRegistry [
+
+   ^methodRegistry
+
+]
+
+{ #category : 'private - migration avoidance' }
 RwPackageSymbolDictionary >> migrateFrom: anotherObject instVarMap: otherivi [
+
+	"skip migration until the class definition settles down a bit"
+
+	
+]
+
+{ #category : 'private - migration avoidance' }
+RwPackageSymbolDictionary >> migrateInstances: instances to: anotherClass [
 
 	"skip migration until the class definition settles down a bit"
 
@@ -225,13 +288,6 @@ RwPackageSymbolDictionary >> migrateFrom: anotherObject instVarMap: otherivi [
 RwPackageSymbolDictionary >> packageRegistry [
 
    ^packageRegistry
-
-]
-
-{ #category : 'accessing' }
-RwPackageSymbolDictionary >> packageRegistry: anObject [
-
-   packageRegistry := anObject
 
 ]
 

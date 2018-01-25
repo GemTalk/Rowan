@@ -133,6 +133,14 @@ RwGsLoadedSymbolDictClass >> removeLoadedInstanceMethod: aLoadedMethod [
 		ifAbsent: [self error: 'Method not present in loadedClass']
 ]
 
+{ #category : 'methods' }
+RwGsLoadedSymbolDictClass >> removeLoadedMethod: aLoadedMethod [
+
+	aLoadedMethod classIsMeta
+		ifTrue: [self removeLoadedClassMethod: aLoadedMethod]
+		ifFalse: [self removeLoadedInstanceMethod: aLoadedMethod]
+]
+
 { #category : 'private' }
 RwGsLoadedSymbolDictClass >> resolveClassNamed: aName [
 	"If the given name is bound to a class in the environment of the current session, 
