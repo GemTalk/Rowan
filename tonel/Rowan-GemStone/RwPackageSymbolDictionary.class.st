@@ -24,7 +24,20 @@ RwPackageSymbolDictionary >> _initializeWithoutClear: newSize [
 ]
 
 { #category : 'private' }
-RwPackageSymbolDictionary >> _loadedClassFor: class do: aBlock [
+RwPackageSymbolDictionary >> _loadedClassFor: class noNewVersion: noNewVersionBlock [
+
+	self
+		_loadedClassFor: class
+		noNewVersion: noNewVersionBlock
+		newVersion: [ :loadedClass | 
+			self
+				error:
+					'internal error - the value associated with the key ' , class name printString
+						, ' is not identical to the given class' ]
+]
+
+{ #category : 'private' }
+RwPackageSymbolDictionary >> _loadedClassFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlock [
 
 	| loadedClass classKey |
 	(class isKindOf: Class)
@@ -39,15 +52,11 @@ RwPackageSymbolDictionary >> _loadedClassFor: class do: aBlock [
 					'internal error - No package found for the class ' , class name printString ].
 	classKey := loadedClass key asSymbol.
 	self
-		at: classKey
-		ifPresent: [ :theClass | 
-			theClass == class
-				ifTrue: [ ^ aBlock value: loadedClass ]
-				ifFalse: [ 
-					self
-						error:
-							'internal error - the value associated with the key '
-								, classKey asString printString , ' is not identical to the given class' ] ].
+		associationAt: classKey
+		ifPresent: [ :assoc | 
+			assoc value == class
+				ifTrue: [ ^ noNewVersionBlock cull: loadedClass cull: assoc ]
+				ifFalse: [ ^ newVersionBlock cull: loadedClass cull: assoc ] ].
 
 	self
 		error:
@@ -90,6 +99,55 @@ RwPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packageN
 	self add: assoc
 ]
 
+{ #category : 'class' }
+RwPackageSymbolDictionary >> addNewClassVersionToAssociation: newClass [
+
+	"a new class version is being added to the association in the receiver previously occupied by the original class"
+
+	self
+		_loadedClassFor: newClass
+		noNewVersion: [ 
+			"newClass is actually not a new class version of existing class, that's okay... update properties anyway"
+			self updateClassProperties: newClass.
+			^ self ]
+		newVersion: [ :loadedClass :assoc | 
+			"association for class is present, install in association and update the loadedthing"
+			assoc value: newClass.
+			loadedClass handleClassDeletionOrNewVersion
+				ifTrue: [ loadedClass updatePropertiesFromClassFor: self ]
+				ifFalse: [ self error: 'internal error - new version of class not properly installed' ] ]
+]
+
+{ #category : 'accessing' }
+RwPackageSymbolDictionary >> associationAt: aKey ifPresent: oneArgBlock [
+
+	"Lookup the given key in the receiver. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer nil."
+
+	| anAssoc |
+	anAssoc := self associationAt: aKey otherwise: nil.
+	anAssoc ifNotNil: [ ^ oneArgBlock value: anAssoc ].
+	^ nil
+]
+
+{ #category : 'accessing' }
+RwPackageSymbolDictionary >> associationAt: key ifPresent: oneArgBlock ifAbsent: absentBlock [
+
+	"Lookup the given key in the receiver. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer the value of absentBlock."
+
+	self associationAt: key ifPresent: [ :v | ^ oneArgBlock value: v ].
+	^ absentBlock value
+]
+
+{ #category : 'accessing' }
+RwPackageSymbolDictionary >> at: key ifPresent: aBlock [
+
+	"Lookup the given key in the receiver. If it is present, answer the value of evaluating the given block with the value associated with the key. Otherwise, answer nil."
+
+	| v |
+	v := self at: key ifAbsent: [ ^ nil ].
+	^ aBlock value: v
+]
+
 { #category : 'accessing' }
 RwPackageSymbolDictionary >> at: key ifPresent: oneArgBlock ifAbsent: absentBlock [
 
@@ -106,7 +164,7 @@ RwPackageSymbolDictionary >> deleteClassFromPackage: class [
 
 	self
 		_loadedClassFor: class
-		do: [ :loadedClass | 
+		noNewVersion: [ :loadedClass | 
 			"association for class is present, finish delete operation"
 			loadedClass removeFromLoaded.
 			self removeKey: loadedClass key asSymbol ]
@@ -143,7 +201,7 @@ RwPackageSymbolDictionary >> updateClassProperties: class [
 		ifFalse: [ self error: 'internal error - expected a class' ].
 	self
 		_loadedClassFor: class
-		do: [ :loadedClass | 
+		noNewVersion: [ :loadedClass | 
 			"association for class is present, update the loaded thing"
 			loadedClass updatePropertiesFromClassFor: self ]
 ]

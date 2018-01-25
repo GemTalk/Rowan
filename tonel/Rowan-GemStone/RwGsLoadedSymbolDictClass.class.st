@@ -19,6 +19,36 @@ RwGsLoadedSymbolDictClass >> handleClassDeletion [
 	loadedPackage ifNotNil: [ loadedPackage removeLoadedClass: self ]
 ]
 
+{ #category : 'private-updating' }
+RwGsLoadedSymbolDictClass >> handleClassDeletionOrNewVersion [
+	"The class is deleted if both:
+	* its name no longer resolves to a class in the classHistory of the class I remember.
+	* no class in the classHistory of the class I remember is accessible under its name.
+	If my name no longer resolves to my class, but another class in its classHistory does resolve,
+	consider it a class re-version or rename.
+	Answer true if the class still exists, false if it has been deleted."
+
+	| resolved thoseResolving |
+	resolved := self resolveClassNamed: name.
+	resolved == handle ifTrue: [^true].
+
+	"Has been deleted, renamed, or a new version under the same name.
+	Answer false if deleted, set handle and answer true otherwise."
+	thoseResolving := handle classHistory reverse
+				select: [:aClass | aClass == (self resolveClassNamed: aClass name)].
+	thoseResolving size = 0
+		ifTrue: 
+			[self handleClassDeletion.
+			^false].
+	thoseResolving size > 1
+		ifTrue: 
+			[RwNotification
+				signal: 'Class history with multiple "current" members found. One associated name is '
+						, name].
+	handle := thoseResolving first.
+	^true
+]
+
 { #category : 'initialization' }
 RwGsLoadedSymbolDictClass >> initialize [
 
@@ -77,6 +107,18 @@ RwGsLoadedSymbolDictClass >> removeLoadedInstanceMethod: aLoadedMethod [
 	self markPackageDirty.
 	loadedInstanceMethods removeKey: aLoadedMethod key
 		ifAbsent: [self error: 'Method not present in loadedClass']
+]
+
+{ #category : 'private' }
+RwGsLoadedSymbolDictClass >> resolveClassNamed: aName [
+	"If the given name is bound to a class in the environment of the current session, 
+	answer that class. Otherwise, answer nil."
+
+	| resolved |
+	resolved := GsCurrentSession currentSession objectNamed: aName.
+	^(resolved isBehavior and: [resolved isMeta not])
+		ifTrue: [resolved]
+		ifFalse: [nil]
 ]
 
 { #category : 'private' }
