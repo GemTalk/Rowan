@@ -471,7 +471,15 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 ]
 
 { #category : 'tests' }
-RwSymbolDictionaryTest >> testMethodExtensionPatch [
+RwSymbolDictionaryTest >> testMethodExtensionPatchInGlobalsExtension [
+
+	"extend a class that is NOT owned by user, i.e., the class is in Globals and the user is DataCurator"
+
+	
+]
+
+{ #category : 'tests' }
+RwSymbolDictionaryTest >> testMethodExtensionPatchInSymbolDictionaryExtension [
 
 	"RwGsClassExtensionPatch>>installClassExtensionInSystem"
 
@@ -538,6 +546,14 @@ RwSymbolDictionaryTest >> testMethodExtensionPatch [
 			packageName2}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
+]
+
+{ #category : 'tests' }
+RwSymbolDictionaryTest >> testMethodExtensionPatchInUserExtension [
+
+	"extend a class that is owned by user, but not in the same symbol dictionary as package"
+
+	
 ]
 
 { #category : 'tests' }
