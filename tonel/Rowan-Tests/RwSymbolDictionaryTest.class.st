@@ -423,9 +423,10 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 
 	"add a packaged class to a RwPackageSymbolDictionary, add a new method, then delete it."
 
-	| dict class assoc packageName compiledMethod className testClass testInstance |
+	| dict class assoc packageName compiledMethod className testClass testInstance expectedPackageSet superclassName loadedPackageSet diff |
 	className := 'TestSymbolDictClass'.
-	class := self _createClassNamed: className superclassName: 'Object'.
+	superclassName := 'Object'.
+	class := self _createClassNamed: className superclassName: superclassName.
 	dict := self
 		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
@@ -452,7 +453,17 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 
 	dict deleteCompiledMethod: compiledMethod from: class.
 
-	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood
+	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+
+	expectedPackageSet := self
+		packageSetDefinition: packageName
+		classNamed: className
+		super: superclassName
+		instanceMethods: Dictionary new
+		classMethods: Dictionary new.
+	loadedPackageSet := self definitionsOfLoadedPackages: {packageName}.
+	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
+	self assert: diff isEmpty
 ]
 
 { #category : 'tests' }
@@ -462,9 +473,10 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 
 	"add a packaged class to a RwPackageSymbolDictionary, add a new method, then change it's properties."
 
-	| dict class assoc packageName compiledMethod className testClass testInstance protocol x |
+	| dict class assoc packageName compiledMethod className testClass testInstance x superclassName expectedPackageSet methodSource methodProtocol methodSelector loadedPackageSet diff |
 	className := 'TestSymbolDictClass'.
-	class := self _createClassNamed: className superclassName: 'Object'.
+	superclassName := 'Object'.
+	class := self _createClassNamed: className superclassName: superclassName.
 	dict := self
 		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
@@ -476,26 +488,44 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 	testInstance := testClass new.
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
 
+	methodSelector := #'foo'.
+	methodSource := 'foo ^ ''foo'''.
+	methodProtocol := 'accessing'.
 	compiledMethod := self
 		_compileMethodIn: class
-		source: 'foo ^ ''foo'''
+		source: methodSource
 		dictionaries: GsCurrentSession currentSession symbolList.
 
-	protocol := 'accessing'.
 	dict
 		addNewCompiledMethod: compiledMethod
 		into: class
-		protocol: protocol
+		protocol: methodProtocol
 		toPackageNamed: packageName.
 
 	self assert: testInstance foo = 'foo'.
-	self assert: (x := testClass categoryOfSelector: #'foo') = protocol asSymbol.
+	self
+		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 
-	protocol := 'the accessing'.
-	dict moveCompiledMethod: compiledMethod toProtocol: protocol.
+	methodProtocol := 'the accessing'.
+	dict moveCompiledMethod: compiledMethod toProtocol: methodProtocol.
 
 	self assert: testInstance foo = 'foo'.
-	self assert: (testClass categoryOfSelector: #'foo') = protocol asSymbol
+	self assert: (testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
+
+	expectedPackageSet := self
+		packageSetDefinition: packageName
+		classNamed: className
+		super: superclassName
+		instanceMethods:
+			(self
+				methodDefsFromSpec:
+					{{methodSelector.
+					methodProtocol.
+					methodSource}})
+		classMethods: Dictionary new.
+	loadedPackageSet := self definitionsOfLoadedPackages: {packageName}.
+	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
+	self assert: diff isEmpty
 ]
 
 { #category : 'tests' }
@@ -505,9 +535,10 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 
 	"add a packaged class to a RwPackageSymbolDictionary, add a new method, then change it's source."
 
-	| dict class assoc packageName compiledMethod className testClass testInstance protocol x newCompiledMethod |
+	| dict class assoc packageName compiledMethod className testClass testInstance x newCompiledMethod superclassName methodSource methodProtocol methodSelector expectedPackageSet loadedPackageSet diff |
 	className := 'TestSymbolDictClass'.
-	class := self _createClassNamed: className superclassName: 'Object'.
+	superclassName := 'Object'.
+	class := self _createClassNamed: className superclassName: superclassName.
 	dict := self
 		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
@@ -519,28 +550,48 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 	testInstance := testClass new.
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
 
+	methodSelector := #'foo'.
+	methodSource := 'foo ^ ''foo'''.
+	methodProtocol := 'accessing'.
 	compiledMethod := self
 		_compileMethodIn: class
-		source: 'foo ^ ''foo'''
+		source: methodSource
 		dictionaries: GsCurrentSession currentSession symbolList.
 
-	protocol := 'accessing'.
 	dict
 		addNewCompiledMethod: compiledMethod
 		into: class
-		protocol: protocol
+		protocol: methodProtocol
 		toPackageNamed: packageName.
 
 	self assert: testInstance foo = 'foo'.
-	self assert: (x := testClass categoryOfSelector: #'foo') = protocol asSymbol.
+	self
+		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 
+	methodSource := 'foo ^ ''bar'''.
 	newCompiledMethod := self
 		_compileMethodIn: class
-		source: 'foo ^ ''bar'''
+		source: methodSource
 		dictionaries: GsCurrentSession currentSession symbolList.
 
 	dict addRecompiledMethod: newCompiledMethod.
 
 	self assert: testInstance foo = 'bar'.
-	self assert: (x := testClass categoryOfSelector: #'foo') = protocol asSymbol
+	self
+		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
+
+	expectedPackageSet := self
+		packageSetDefinition: packageName
+		classNamed: className
+		super: superclassName
+		instanceMethods:
+			(self
+				methodDefsFromSpec:
+					{{methodSelector.
+					methodProtocol.
+					methodSource}})
+		classMethods: Dictionary new.
+	loadedPackageSet := self definitionsOfLoadedPackages: {packageName}.
+	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
+	self assert: diff isEmpty
 ]
