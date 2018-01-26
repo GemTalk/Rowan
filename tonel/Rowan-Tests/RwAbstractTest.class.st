@@ -88,6 +88,23 @@ RwAbstractTest >> classDefinition: className super: superClassName inPackage: pa
 ]
 
 { #category : 'support' }
+RwAbstractTest >> classDefinition: className super: superClassName instanceMethods: instanceMethods classMethods: classMethods inPackage: packageName [
+
+	^ Dictionary new
+		at: className
+			put:
+				(RwClassDefinition
+						withProperties:
+							(self
+								propertiesForClassNamed: className
+								super: superClassName
+								inPackage: packageName)
+						classMethodDefinitions: classMethods
+						instanceMethodDefinitions: instanceMethods);
+		yourself
+]
+
+{ #category : 'support' }
 RwAbstractTest >> classDefinition: className super: superClassName instVars: instVars inPackage: packageName [
 
 	^ Dictionary new
@@ -109,6 +126,26 @@ RwAbstractTest >> classDefinition: className super: superClassName instVars: ins
 RwAbstractTest >> definitionsOfLoadedPackages: packageNames [
 
 	^ Rowan loadedPackageDefinitionsNamed: packageNames
+]
+
+{ #category : 'support' }
+RwAbstractTest >> methodDefsFromSpec: specArray [
+  | dict |
+  dict := Dictionary new.
+  specArray
+    do: [ :spec | 
+      | selector protocol source |
+      selector := (spec at: 1) asSymbol.
+      protocol := (spec at: 2) asString.
+      source := (spec at: 3) asString.
+      dict
+        at: selector
+        put:
+          (RwMethodDefinition
+            withProperties:
+              (Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
+            source: source) ].
+  ^ dict
 ]
 
 { #category : 'support' }
@@ -168,6 +205,21 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 				classDefinition: className
 				super: superClassName
 				comment: comment
+				inPackage: packageName)
+		classExtensions: Dictionary new
+]
+
+{ #category : 'support' }
+RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName instanceMethods: instanceMethods classMethods: classMethods [
+
+	^ RwPackageDefinition
+		withProperties: (Dictionary with: 'name' -> packageName)
+		classDefinitions:
+			(self
+				classDefinition: className
+				super: superClassName
+				instanceMethods: instanceMethods
+				classMethods: classMethods
 				inPackage: packageName)
 		classExtensions: Dictionary new
 ]
@@ -238,6 +290,20 @@ RwAbstractTest >> packageSetDefinition: packageName classNamed: className super:
 				classNamed: className
 				super: superClassName
 				comment: comment))
+		asDefinition
+]
+
+{ #category : 'support' }
+RwAbstractTest >> packageSetDefinition: packageName classNamed: className super: superClassName instanceMethods: instanceMethods classMethods: classMethods [
+
+	^ (RwPackageSetDefinition new
+		addPackage:
+			(self
+				packageDefinition: packageName
+				classNamed: className
+				super: superClassName
+				instanceMethods: instanceMethods
+				classMethods: classMethods))
 		asDefinition
 ]
 

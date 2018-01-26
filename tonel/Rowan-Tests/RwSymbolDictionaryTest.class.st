@@ -370,9 +370,10 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 
 	"add a packaged class to a RwPackageSymbolDictionary, then add a new method."
 
-	| dict class assoc packageName compiledMethod className testClass testInstance |
+	| dict class assoc packageName compiledMethod className testClass testInstance expectedPackageSet superclassName loadedPackageSet diff methodSource methodProtocol methodSelector |
 	className := 'TestSymbolDictClass'.
-	class := self _createClassNamed: className superclassName: 'Object'.
+	superclassName := 'Object'.
+	class := self _createClassNamed: className superclassName: superclassName.
 	dict := self
 		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
@@ -382,19 +383,37 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 	testClass := System myUserProfile symbolList objectNamed: className.
 	self assert: testClass == class.
 
+	methodSelector := #'foo'.
+	methodSource := 'foo ^ ''foo'''.
+	methodProtocol := 'accessing'.
 	compiledMethod := self
 		_compileMethodIn: class
-		source: 'foo ^ ''foo'''
+		source: methodSource
 		dictionaries: GsCurrentSession currentSession symbolList.
 
 	dict
 		addNewCompiledMethod: compiledMethod
 		into: class
-		protocol: 'accessing'
+		protocol: methodProtocol
 		toPackageNamed: packageName.
 
 	testInstance := testClass new.
-	self assert: testInstance foo = 'foo'
+	self assert: testInstance foo = 'foo'.
+
+	expectedPackageSet := self
+		packageSetDefinition: packageName
+		classNamed: className
+		super: superclassName
+		instanceMethods:
+			(self
+				methodDefsFromSpec:
+					{{methodSelector.
+					methodProtocol.
+					methodSource}})
+		classMethods: Dictionary new.
+	loadedPackageSet := self definitionsOfLoadedPackages: {packageName}.
+	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
+	self assert: diff isEmpty
 ]
 
 { #category : 'tests' }

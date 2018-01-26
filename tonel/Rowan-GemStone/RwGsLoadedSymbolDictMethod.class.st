@@ -4,9 +4,6 @@ The MethodRegistry maps GsNMethods to LoadedMethods.
 Class {
 	#name : 'RwGsLoadedSymbolDictMethod',
 	#superclass : 'RwLoadedMethod',
-	#classVars : [
-		'MethodRegistry'
-	],
 	#category : 'Rowan-GemStone'
 }
 
@@ -14,12 +11,11 @@ Class {
 RwGsLoadedSymbolDictMethod class >> forMethod: aGsNMethod [
 
 	| instance |
-	instance := self newNamed: aGsNMethod selector asString.
+	instance := self newNamed: aGsNMethod selector.
 	instance
 		handle: aGsNMethod;
-		updateForProtocolChange;
-		updateIsMetaFromImage.
-	^instance
+		updateFromHandle.
+	^ instance
 ]
 
 { #category : 'private' }
@@ -30,9 +26,10 @@ RwGsLoadedSymbolDictMethod >> definingPackageOfClass [
 
 { #category : 'accessing' }
 RwGsLoadedSymbolDictMethod >> key [
+
 	"Answer some token that will uniquely identify me relative to any other LoadedMethod in the same LoadedClass."
 
-	^name	"This is inadequate because the same selector can be defined in both class and metaclass."
+	^ name	"This is inadequate because the same selector can be defined in both class and metaclass?"
 ]
 
 { #category : 'accessing' }
@@ -56,7 +53,11 @@ RwGsLoadedSymbolDictMethod >> updateForProtocolChange [
 ]
 
 { #category : 'private-updating' }
-RwGsLoadedSymbolDictMethod >> updateIsMetaFromImage [
+RwGsLoadedSymbolDictMethod >> updateFromHandle [
 
+	"update method properties: selector and protocol, and classIsMeta"
+
+	self updateForProtocolChange.
+	self propertyAt: 'selector' put: handle selector asSymbol.
 	classIsMeta := handle inClass isMeta
 ]

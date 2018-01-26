@@ -1217,26 +1217,6 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames using: myPackageSet [
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet
 ]
 
-{ #category : 'support' }
-RwLoadingTest >> methodDefsFromSpec: specArray [
-  | dict |
-  dict := Dictionary new.
-  specArray
-    do: [ :spec | 
-      | selector protocol source |
-      selector := (spec at: 1) asSymbol.
-      protocol := (spec at: 2) asString.
-      source := (spec at: 3) asString.
-      dict
-        at: selector
-        put:
-          (RwMethodDefinition
-            withProperties:
-              (Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
-            source: source) ].
-  ^ dict
-]
-
 { #category : 'support - methodDeletion definitions' }
 RwLoadingTest >> methodDeletionClassMethodsForClass1: className [
   ^ self
