@@ -164,6 +164,42 @@ RwPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod into: behavior
 	loadedMethod setPropertiesTo: properties
 ]
 
+{ #category : 'method' }
+RwPackageSymbolDictionary >> addRecompiledMethod: newCompiledMethod [
+
+	"add a recompiled compiled method to behavior and update the loaded things"
+
+	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
+	selector := newCompiledMethod selector.
+	behavior := newCompiledMethod inClass.
+	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	oldCompiledMethod := methodDictionary
+		at: selector
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no existing CompileMethod found for patched method: '
+						, selector printString ].
+
+	oldCompiledMethod == newCompiledMethod
+		ifTrue: [ 
+			self
+				error:
+					'Internal error -- The new recompiled method is identical to the installed method '
+						, selector printString ].
+	methodDictionary at: selector put: newCompiledMethod.
+
+	loadedMethod := methodRegistry
+		at: oldCompiledMethod
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
+	methodRegistry removeKey: oldCompiledMethod.
+	loadedMethod handle: newCompiledMethod.
+	methodRegistry at: newCompiledMethod put: loadedMethod
+]
+
 { #category : 'accessing' }
 RwPackageSymbolDictionary >> associationAt: aKey ifPresent: oneArgBlock [
 
