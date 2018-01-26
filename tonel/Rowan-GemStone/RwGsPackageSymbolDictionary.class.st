@@ -66,7 +66,7 @@ RwGsPackageSymbolDictionary >> _loadedClassFor: class noNewVersion: noNewVersion
 				, classKey asString printString
 ]
 
-{ #category : 'class' }
+{ #category : 'class - patch api' }
 RwGsPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packageName [
 
 	"a class association is being added to the named package in the receiver"
@@ -103,7 +103,7 @@ RwGsPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packag
 	self add: assoc
 ]
 
-{ #category : 'class' }
+{ #category : 'class - patch api' }
 RwGsPackageSymbolDictionary >> addNewClassVersionToAssociation: newClass [
 
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
@@ -122,7 +122,7 @@ RwGsPackageSymbolDictionary >> addNewClassVersionToAssociation: newClass [
 				ifFalse: [ self error: 'internal error - new version of class not properly installed' ] ]
 ]
 
-{ #category : 'method' }
+{ #category : 'method - patch api' }
 RwGsPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod into: behavior protocol: protocolString toPackageNamed: packageName [
 
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension properties |
@@ -158,7 +158,7 @@ RwGsPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod into: behavi
 
 ]
 
-{ #category : 'method' }
+{ #category : 'method - patch api' }
 RwGsPackageSymbolDictionary >> addRecompiledMethod: newCompiledMethod [
 
 	"add a recompiled compiled method to behavior and update the loaded things"
@@ -248,7 +248,7 @@ RwGsPackageSymbolDictionary >> classRegistry [
 
 ]
 
-{ #category : 'class' }
+{ #category : 'class - patch api' }
 RwGsPackageSymbolDictionary >> deleteClassFromPackage: class [
 
 	"a class association is being deleted from the receiver remove it from the loaded things"
@@ -262,7 +262,7 @@ RwGsPackageSymbolDictionary >> deleteClassFromPackage: class [
 			self removeKey: loadedClass key asSymbol ]
 ]
 
-{ #category : 'method' }
+{ #category : 'method - patch api' }
 RwGsPackageSymbolDictionary >> deleteCompiledMethod: compiledMethod from: behavior [
 
 	"delete a compiled method from behavior and remove it from the loaded things"
@@ -314,7 +314,7 @@ RwGsPackageSymbolDictionary >> migrateInstances: instances to: anotherClass [
 	
 ]
 
-{ #category : 'method' }
+{ #category : 'method - patch api' }
 RwGsPackageSymbolDictionary >> moveCompiledMethod: compiledMethod toProtocol: newProtocol [
 
 	"delete a compiled method from behavior and remove it from the loaded things"
@@ -351,7 +351,7 @@ RwGsPackageSymbolDictionary >> packageRegistry [
 
 ]
 
-{ #category : 'class' }
+{ #category : 'class - patch api' }
 RwGsPackageSymbolDictionary >> updateClassProperties: class [
 
 	"class properties have changed, update the clas properties of the loaded things"

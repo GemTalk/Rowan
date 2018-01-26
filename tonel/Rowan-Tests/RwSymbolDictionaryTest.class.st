@@ -33,7 +33,7 @@ RwSymbolDictionaryTest >> _applyClassNewVersionChangesTo: existingClass [
 	superclass := System myUserProfile objectNamed: 'Association'.
 	newClass := superclass
 		subclass: existingClass name
-		instVarNames: #('ivar1')
+		instVarNames: self _instVars
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
@@ -105,6 +105,12 @@ RwSymbolDictionaryTest >> _createClassNamed: className superclassName: superclas
 		newVersionOf: nil
 		description: ''
 		options: #()
+]
+
+{ #category : 'private' }
+RwSymbolDictionaryTest >> _instVars [
+
+	^ #('ivar1')
 ]
 
 { #category : 'private' }
@@ -279,7 +285,7 @@ RwSymbolDictionaryTest >> testClassVariableChangePatch [
 
 	"add a packaged class to a RwPackageSymbolDictionary, then update class variable properties"
 
-	| dict class assoc packageName className testClass newClass expectedPackageSet superclassName loadedPackageSet diff |
+	| dict class assoc packageName className testClass newClass expectedPackageSet superclassName loadedPackageSet diff x y |
 	className := 'TestSymbolDictClass'.
 	superclassName := 'Object'.
 	class := self _createClassNamed: className superclassName: superclassName.
@@ -298,6 +304,11 @@ RwSymbolDictionaryTest >> testClassVariableChangePatch [
 
 	testClass := System myUserProfile symbolList objectNamed: className.
 	self assert: testClass == class.
+	self
+		assert:
+			(x := self _classVars)
+				=
+					(y := testClass _classVars keys asArray collect: [ :each | each asString ]).
 
 	expectedPackageSet := self
 		packageSetDefinition: packageName
@@ -316,25 +327,40 @@ RwSymbolDictionaryTest >> testClassVersioningPatch [
 
 	"add a packaged class to a RwPackageSymbolDictionary, then apply some new version inducing class changes"
 
-	| dict class assoc packagName className testClass newClass |
+	| dict class assoc packageName className testClass newClass expectedPackageSet loadedPackageSet diff superclassName x y |
 	className := 'TestSymbolDictClass'.
-	class := self _createClassNamed: className superclassName: 'Object'.
+	superclassName := 'Object'.
+	class := self _createClassNamed: className superclassName: superclassName.
 	dict := self
 		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
-	packagName := 'TestSymbolDictPackage'.
+	packageName := 'TestSymbolDictPackage'.
 
-	dict addClassAssociation: assoc toPackageNamed: packagName.
+	dict addClassAssociation: assoc toPackageNamed: packageName.
 
 	testClass := System myUserProfile symbolList objectNamed: className.
 	self assert: testClass == class.
 
 	newClass := self _applyClassNewVersionChangesTo: class.
 	dict addNewClassVersionToAssociation: newClass.
+	superclassName := 'Association'.
 
 	testClass := System myUserProfile symbolList objectNamed: className.
 	self assert: testClass ~~ class.
-	self assert: testClass == newClass
+	self assert: testClass == newClass.
+	self
+		assert:
+			(x := self _instVars)
+				= (y := testClass instVarNames collect: [ :each | each asString ]).
+
+	expectedPackageSet := self
+		packageSetDefinition: packageName
+		classNamed: className
+		super: superclassName
+		instVars: self _instVars.
+	loadedPackageSet := self definitionsOfLoadedPackages: {packageName}.
+	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
+	self assert: diff isEmpty
 ]
 
 { #category : 'tests' }

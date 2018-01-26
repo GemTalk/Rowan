@@ -88,6 +88,24 @@ RwAbstractTest >> classDefinition: className super: superClassName inPackage: pa
 ]
 
 { #category : 'support' }
+RwAbstractTest >> classDefinition: className super: superClassName instVars: instVars inPackage: packageName [
+
+	^ Dictionary new
+		at: className
+			put:
+				(RwClassDefinition
+						withProperties:
+							(self
+								propertiesForClassNamed: className
+								super: superClassName
+								instVars: instVars
+								inPackage: packageName)
+						classMethodDefinitions: Dictionary new
+						instanceMethodDefinitions: Dictionary new);
+		yourself
+]
+
+{ #category : 'support' }
 RwAbstractTest >> definitionsOfLoadedPackages: packageNames [
 
 	^ Rowan loadedPackageDefinitionsNamed: packageNames
@@ -155,6 +173,20 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 ]
 
 { #category : 'support' }
+RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName instVars: instVars [
+
+	^ RwPackageDefinition
+		withProperties: (Dictionary with: 'name' -> packageName)
+		classDefinitions:
+			(self
+				classDefinition: className
+				super: superClassName
+				instVars: instVars
+				inPackage: packageName)
+		classExtensions: Dictionary new
+]
+
+{ #category : 'support' }
 RwAbstractTest >> packageSetDefinition: packageName [
 
 	^ (RwPackageSetDefinition new addPackage: (self packageDefinition: packageName))
@@ -206,6 +238,19 @@ RwAbstractTest >> packageSetDefinition: packageName classNamed: className super:
 				classNamed: className
 				super: superClassName
 				comment: comment))
+		asDefinition
+]
+
+{ #category : 'support' }
+RwAbstractTest >> packageSetDefinition: packageName classNamed: className super: superClassName instVars: instVars [
+
+	^ (RwPackageSetDefinition new
+		addPackage:
+			(self
+				packageDefinition: packageName
+				classNamed: className
+				super: superClassName
+				instVars: instVars))
 		asDefinition
 ]
 
@@ -336,6 +381,24 @@ RwAbstractTest >> propertiesForClassNamed: className super: superClassName instv
 		pools: pools
 		type: type
 		gs_options: gs_options
+		inPackage: packageName
+]
+
+{ #category : 'support' }
+RwAbstractTest >> propertiesForClassNamed: className super: superClassName instVars: instVars inPackage: packageName [
+
+	^ self
+		propertiesForClassNamed: className
+		super: superClassName
+		instvars: instVars
+		classinstvars: {}
+		classvars: {}
+		category: nil
+		comment: nil
+		gs_SymbolDictionary: self _symbolDictionaryName asString
+		pools: {}
+		type: 'normal'
+		gs_options: {}
 		inPackage: packageName
 ]
 
