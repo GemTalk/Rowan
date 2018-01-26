@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwSymbolDictionaryTest',
-	#superclass : 'TestCase',
+	#superclass : 'RwAbstractTest',
 	#category : 'Rowan-Tests'
 }
 
@@ -18,7 +18,7 @@ RwSymbolDictionaryTest >> _applyBenignPropertiesTo: existingClass [
 		poolDictionaries: #()
 		inDictionary: nil
 		newVersionOf: existingClass
-		description: ''
+		description: self _classComment
 		options: #().
 	self assert: newClass == existingClass.	"not supposed to create a new class version"
 	^ newClass
@@ -54,7 +54,7 @@ RwSymbolDictionaryTest >> _applyClassVariableChangeTo: existingClass [
 	newClass := existingClass superclass
 		subclass: existingClass name
 		instVarNames: #()
-		classVars: #('ClassVar1')
+		classVars: self _classVars
 		classInstVars: #()
 		poolDictionaries: #()
 		inDictionary: nil
@@ -63,6 +63,18 @@ RwSymbolDictionaryTest >> _applyClassVariableChangeTo: existingClass [
 		options: #().
 	self assert: newClass == existingClass.	"not supposed to create a new class version"
 	^ newClass
+]
+
+{ #category : 'private' }
+RwSymbolDictionaryTest >> _classComment [
+
+	^ 'a comment'
+]
+
+{ #category : 'private' }
+RwSymbolDictionaryTest >> _classVars [
+
+	^ #('ClassVar1')
 ]
 
 { #category : 'private' }
@@ -115,21 +127,18 @@ RwSymbolDictionaryTest >> _newOrExistingPackageSymbolDictionaryNamed: dictName [
 			newDict ]
 ]
 
-{ #category : 'running' }
-RwSymbolDictionaryTest >> setUp [
+{ #category : 'support' }
+RwSymbolDictionaryTest >> definitionsOfLoadedPackages: packageNames [
 
-	"Remove the CypressTestData symbol dictionary, if present --- gets persistent and session symbol list"
+	"symbolDictionary based package definitions ... for now"
 
-	| user symList dict index |
-	user := System myUserProfile.
-	symList := user symbolList.
-
-	dict := symList objectNamed: #'CypressTestData'.
-	dict
-		ifNotNil: [ 
-			index := symList indexOf: dict.
-			index > 0
-				ifTrue: [ user removeDictionaryAt: index ] ]
+	| symbolDict loadedPackages |
+	symbolDict := self
+		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	loadedPackages := packageNames
+		collect: [ :packageName | symbolDict packageRegistry at: packageName ifAbsent: [  ] ].
+	^ (RwPackageSet withAll: (loadedPackages select: [ :each | each notNil ]))
+		asDefinition
 ]
 
 { #category : 'tests' }
@@ -139,17 +148,60 @@ RwSymbolDictionaryTest >> testClassAdditionPatch [
 
 	"add a packaged class to a RwPackageSymbolDictionary"
 
-	| dict class assoc packageName className testClass |
+	| dict class assoc packageName className superclassName testClass expectedPackageSet loadedPackageSet diff |
 	className := 'TestSymbolDictClass'.
-	class := self _createClassNamed: className superclassName: 'Object'.
-	dict := self _newOrExistingPackageSymbolDictionaryNamed: #'CypressTestData'.
+	superclassName := 'Object'.
+	class := self _createClassNamed: className superclassName: superclassName.
+	dict := self
+		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
 	packageName := 'TestSymbolDictPackage'.
 
 	dict addClassAssociation: assoc toPackageNamed: packageName.
 
 	testClass := System myUserProfile symbolList objectNamed: className.
-	self assert: testClass == class
+	self assert: testClass == class.
+
+	expectedPackageSet := self
+		packageSetDefinition: packageName
+		classNamed: className
+		super: superclassName.
+	loadedPackageSet := self definitionsOfLoadedPackages: {packageName}.
+	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
+	self assert: diff isEmpty
+]
+
+{ #category : 'tests' }
+RwSymbolDictionaryTest >> testClassAdditionPatchWithCategory [
+
+	"RwGsClassAdditionPatch>>installClassInSystem"
+
+	"add a packaged class to a RwPackageSymbolDictionary"
+
+	| dict class assoc packageName className superclassName testClass expectedPackageSet loadedPackageSet diff category |
+	className := 'TestSymbolDictClass'.
+	superclassName := 'Object'.
+	category := '*NotAPackageName'.
+	class := self _createClassNamed: className superclassName: superclassName.
+	class category: category.
+	dict := self
+		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
+	packageName := 'TestSymbolDictPackage'.
+
+	dict addClassAssociation: assoc toPackageNamed: packageName.
+
+	testClass := System myUserProfile symbolList objectNamed: className.
+	self assert: testClass == class.
+
+	expectedPackageSet := self
+		packageSetDefinition: packageName
+		classNamed: className
+		super: superclassName
+		category: category.
+	loadedPackageSet := self definitionsOfLoadedPackages: {packageName}.
+	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
+	self assert: diff isEmpty
 ]
 
 { #category : 'tests' }
@@ -159,14 +211,15 @@ RwSymbolDictionaryTest >> testClassDeletionPatch [
 
 	"add a packaged class to a RwPackageSymbolDictionary, then delete it"
 
-	| dict class assoc packagName className testClass |
+	| dict class assoc packageName className testClass expectedPackageSet loadedPackageSet diff |
 	className := 'TestSymbolDictClass'.
 	class := self _createClassNamed: className superclassName: 'Object'.
-	dict := self _newOrExistingPackageSymbolDictionaryNamed: #'CypressTestData'.
+	dict := self
+		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
-	packagName := 'TestSymbolDictPackage'.
+	packageName := 'TestSymbolDictPackage'.
 
-	dict addClassAssociation: assoc toPackageNamed: packagName.
+	dict addClassAssociation: assoc toPackageNamed: packageName.
 
 	testClass := System myUserProfile symbolList objectNamed: className.
 	self assert: testClass == class.
@@ -174,7 +227,12 @@ RwSymbolDictionaryTest >> testClassDeletionPatch [
 	dict deleteClassFromPackage: class.
 
 	testClass := System myUserProfile symbolList objectNamed: className.
-	self assert: testClass isNil
+	self assert: testClass isNil.
+
+	expectedPackageSet := self packageSetDefinition: packageName.
+	loadedPackageSet := self definitionsOfLoadedPackages: {packageName}.
+	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
+	self assert: diff isEmpty
 ]
 
 { #category : 'tests' }
@@ -184,10 +242,12 @@ RwSymbolDictionaryTest >> testClassPropertiesPatch [
 
 	"add a packaged class to a RwPackageSymbolDictionary, then update properties (non-class version/class variable properties)"
 
-	| dict class assoc packageName compiledMethod className testClass newClass |
+	| dict class assoc packageName compiledMethod className testClass newClass expectedPackageSet superclassName loadedPackageSet diff |
 	className := 'TestSymbolDictClass'.
+	superclassName := 'Object'.
 	class := self _createClassNamed: className superclassName: 'Object'.
-	dict := self _newOrExistingPackageSymbolDictionaryNamed: #'CypressTestData'.
+	dict := self
+		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc toPackageNamed: packageName.
@@ -199,7 +259,17 @@ RwSymbolDictionaryTest >> testClassPropertiesPatch [
 	dict updateClassProperties: newClass.
 
 	testClass := System myUserProfile symbolList objectNamed: className.
-	self assert: testClass == class
+	self assert: testClass == class.
+	self assert: testClass comment = self _classComment.
+
+	expectedPackageSet := self
+		packageSetDefinition: packageName
+		classNamed: className
+		super: superclassName
+		comment: self _classComment.
+	loadedPackageSet := self definitionsOfLoadedPackages: {packageName}.
+	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
+	self assert: diff isEmpty
 ]
 
 { #category : 'tests' }
@@ -209,14 +279,16 @@ RwSymbolDictionaryTest >> testClassVariableChangePatch [
 
 	"add a packaged class to a RwPackageSymbolDictionary, then update class variable properties"
 
-	| dict class assoc packagName className testClass newClass |
+	| dict class assoc packageName className testClass newClass expectedPackageSet superclassName loadedPackageSet diff |
 	className := 'TestSymbolDictClass'.
-	class := self _createClassNamed: className superclassName: 'Object'.
-	dict := self _newOrExistingPackageSymbolDictionaryNamed: #'CypressTestData'.
+	superclassName := 'Object'.
+	class := self _createClassNamed: className superclassName: superclassName.
+	dict := self
+		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
-	packagName := 'TestSymbolDictPackage'.
+	packageName := 'TestSymbolDictPackage'.
 
-	dict addClassAssociation: assoc toPackageNamed: packagName.
+	dict addClassAssociation: assoc toPackageNamed: packageName.
 
 	testClass := System myUserProfile symbolList objectNamed: className.
 	self assert: testClass == class.
@@ -225,7 +297,16 @@ RwSymbolDictionaryTest >> testClassVariableChangePatch [
 	dict updateClassProperties: newClass.
 
 	testClass := System myUserProfile symbolList objectNamed: className.
-	self assert: testClass == class
+	self assert: testClass == class.
+
+	expectedPackageSet := self
+		packageSetDefinition: packageName
+		classNamed: className
+		super: superclassName
+		classVars: self _classVars.
+	loadedPackageSet := self definitionsOfLoadedPackages: {packageName}.
+	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
+	self assert: diff isEmpty
 ]
 
 { #category : 'tests' }
@@ -238,7 +319,8 @@ RwSymbolDictionaryTest >> testClassVersioningPatch [
 	| dict class assoc packagName className testClass newClass |
 	className := 'TestSymbolDictClass'.
 	class := self _createClassNamed: className superclassName: 'Object'.
-	dict := self _newOrExistingPackageSymbolDictionaryNamed: #'CypressTestData'.
+	dict := self
+		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
 	packagName := 'TestSymbolDictPackage'.
 
@@ -265,7 +347,8 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 	| dict class assoc packageName compiledMethod className testClass testInstance |
 	className := 'TestSymbolDictClass'.
 	class := self _createClassNamed: className superclassName: 'Object'.
-	dict := self _newOrExistingPackageSymbolDictionaryNamed: #'CypressTestData'.
+	dict := self
+		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc toPackageNamed: packageName.
@@ -298,7 +381,8 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 	| dict class assoc packageName compiledMethod className testClass testInstance |
 	className := 'TestSymbolDictClass'.
 	class := self _createClassNamed: className superclassName: 'Object'.
-	dict := self _newOrExistingPackageSymbolDictionaryNamed: #'CypressTestData'.
+	dict := self
+		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc toPackageNamed: packageName.
@@ -336,7 +420,8 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 	| dict class assoc packageName compiledMethod className testClass testInstance protocol x |
 	className := 'TestSymbolDictClass'.
 	class := self _createClassNamed: className superclassName: 'Object'.
-	dict := self _newOrExistingPackageSymbolDictionaryNamed: #'CypressTestData'.
+	dict := self
+		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc toPackageNamed: packageName.
@@ -378,7 +463,8 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 	| dict class assoc packageName compiledMethod className testClass testInstance protocol x newCompiledMethod |
 	className := 'TestSymbolDictClass'.
 	class := self _createClassNamed: className superclassName: 'Object'.
-	dict := self _newOrExistingPackageSymbolDictionaryNamed: #'CypressTestData'.
+	dict := self
+		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc toPackageNamed: packageName.

@@ -93,6 +93,7 @@ RwGsPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packag
 		ifAbsent: [ 
 			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
 			loadedPackage addLoadedClass: loadedClass.
+			loadedClass updatePropertiesFromClassFor: self.
 			classRegistry at: class classHistory put: loadedClass.
 			loadedPackage loadedClassExtensions
 				at: class name

@@ -166,18 +166,16 @@ RwGsLoadedSymbolDictClass >> updateCategoryFromClass [
 	propertyName := 'category'.
 	absentToken := self absentToken.
 	oldValue := self propertyAt: propertyName.
-	newValue := handle category ifNil: [absentToken].
-	(newValue ~~ absentToken and: [newValue isEmpty])
-		ifTrue: [newValue := absentToken].
-
-	"Absent token must be compared by identity, because a comment of '<absent>' would be equal to no comment."
+	newValue := handle _classCategory ifNil: [ absentToken ].
+	(newValue ~~ absentToken and: [ newValue isEmpty ])
+		ifTrue: [ newValue := absentToken ].	"Absent token must be compared by identity, because a comment of '<absent>' would be equal to no comment."
 	(oldValue == absentToken | (newValue == absentToken)
-		ifTrue: [oldValue == newValue]
-		ifFalse: [oldValue = newValue])
-			ifFalse: 
-				[newValue == absentToken
-					ifTrue: [self removeProperty: propertyName]
-					ifFalse: [self propertyAt: propertyName put: newValue]]
+		ifTrue: [ oldValue == newValue ]
+		ifFalse: [ oldValue = newValue ])
+		ifFalse: [ 
+			newValue == absentToken
+				ifTrue: [ self removeProperty: propertyName ]
+				ifFalse: [ self propertyAt: propertyName put: newValue ] ]
 ]
 
 { #category : 'private-updating' }
