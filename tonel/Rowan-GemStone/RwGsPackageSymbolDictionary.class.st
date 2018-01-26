@@ -1,5 +1,5 @@
 Class {
-	#name : 'RwPackageSymbolDictionary',
+	#name : 'RwGsPackageSymbolDictionary',
 	#superclass : 'SymbolDictionary',
 	#instVars : [
 		'packageRegistry',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwPackageSymbolDictionary class >> newNamed: aSymbol [
+RwGsPackageSymbolDictionary class >> newNamed: aSymbol [
 
 	^ self new
 		name: aSymbol;
@@ -18,7 +18,7 @@ RwPackageSymbolDictionary class >> newNamed: aSymbol [
 ]
 
 { #category : 'private' }
-RwPackageSymbolDictionary >> _initializeWithoutClear: newSize [
+RwGsPackageSymbolDictionary >> _initializeWithoutClear: newSize [
 
 	super _initializeWithoutClear: newSize.
 	packageRegistry := KeyValueDictionary new.
@@ -28,7 +28,7 @@ RwPackageSymbolDictionary >> _initializeWithoutClear: newSize [
 ]
 
 { #category : 'private' }
-RwPackageSymbolDictionary >> _loadedClassFor: class noNewVersion: noNewVersionBlock [
+RwGsPackageSymbolDictionary >> _loadedClassFor: class noNewVersion: noNewVersionBlock [
 
 	self
 		_loadedClassFor: class
@@ -41,7 +41,7 @@ RwPackageSymbolDictionary >> _loadedClassFor: class noNewVersion: noNewVersionBl
 ]
 
 { #category : 'private' }
-RwPackageSymbolDictionary >> _loadedClassFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlock [
+RwGsPackageSymbolDictionary >> _loadedClassFor: class noNewVersion: noNewVersionBlock newVersion: newVersionBlock [
 
 	| loadedClass classKey |
 	(class isKindOf: Class)
@@ -67,7 +67,7 @@ RwPackageSymbolDictionary >> _loadedClassFor: class noNewVersion: noNewVersionBl
 ]
 
 { #category : 'class' }
-RwPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packageName [
+RwGsPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packageName [
 
 	"a class association is being added to the named package in the receiver"
 
@@ -103,7 +103,7 @@ RwPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packageN
 ]
 
 { #category : 'class' }
-RwPackageSymbolDictionary >> addNewClassVersionToAssociation: newClass [
+RwGsPackageSymbolDictionary >> addNewClassVersionToAssociation: newClass [
 
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
 
@@ -122,7 +122,7 @@ RwPackageSymbolDictionary >> addNewClassVersionToAssociation: newClass [
 ]
 
 { #category : 'method' }
-RwPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod into: behavior protocol: protocolString toPackageNamed: packageName [
+RwGsPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod into: behavior protocol: protocolString toPackageNamed: packageName [
 
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension properties |
 	methodDictionary := behavior persistentMethodDictForEnv: 0.
@@ -136,11 +136,8 @@ RwPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod into: behavior
 
 	existing := methodRegistry at: compiledMethod ifAbsent: [ nil ].
 	existing
-		ifNotNil: [ self error: 'Internal error -- existing LoadedMethod found for new method.' ].
-	loadedMethod := RwGsLoadedSymbolDictMethod newNamed: selector.
-	loadedMethod
-		handle: compiledMethod;
-		classIsMeta: behavior isMeta.
+		ifNotNil: [ self error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
+	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
 	methodRegistry at: compiledMethod put: loadedMethod.
 
@@ -149,23 +146,19 @@ RwPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod into: behavior
 		ifAbsent: [ 
 			self
 				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
+
 	loadedClassOrExtension := loadedPackage
 		classOrExtensionForClassNamed: behavior theNonMetaClass name asString
 		ifAbsent: [ 
 			self
 				error:
 					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
-
 	loadedClassOrExtension addLoadedMethod: loadedMethod.
-	properties := Dictionary new
-		at: 'selector' put: selector;
-		at: 'protocol' put: protocolSymbol;
-		yourself.
-	loadedMethod setPropertiesTo: properties
+
 ]
 
 { #category : 'method' }
-RwPackageSymbolDictionary >> addRecompiledMethod: newCompiledMethod [
+RwGsPackageSymbolDictionary >> addRecompiledMethod: newCompiledMethod [
 
 	"add a recompiled compiled method to behavior and update the loaded things"
 
@@ -201,7 +194,7 @@ RwPackageSymbolDictionary >> addRecompiledMethod: newCompiledMethod [
 ]
 
 { #category : 'accessing' }
-RwPackageSymbolDictionary >> associationAt: aKey ifPresent: oneArgBlock [
+RwGsPackageSymbolDictionary >> associationAt: aKey ifPresent: oneArgBlock [
 
 	"Lookup the given key in the receiver. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer nil."
 
@@ -212,7 +205,7 @@ RwPackageSymbolDictionary >> associationAt: aKey ifPresent: oneArgBlock [
 ]
 
 { #category : 'accessing' }
-RwPackageSymbolDictionary >> associationAt: key ifPresent: oneArgBlock ifAbsent: absentBlock [
+RwGsPackageSymbolDictionary >> associationAt: key ifPresent: oneArgBlock ifAbsent: absentBlock [
 
 	"Lookup the given key in the receiver. If it is present, answer the value of evaluating the oneArgBlock with the symbol association associated with the key, otherwise answer the value of absentBlock."
 
@@ -221,7 +214,7 @@ RwPackageSymbolDictionary >> associationAt: key ifPresent: oneArgBlock ifAbsent:
 ]
 
 { #category : 'accessing' }
-RwPackageSymbolDictionary >> at: key ifPresent: aBlock [
+RwGsPackageSymbolDictionary >> at: key ifPresent: aBlock [
 
 	"Lookup the given key in the receiver. If it is present, answer the value of evaluating the given block with the value associated with the key. Otherwise, answer nil."
 
@@ -231,7 +224,7 @@ RwPackageSymbolDictionary >> at: key ifPresent: aBlock [
 ]
 
 { #category : 'accessing' }
-RwPackageSymbolDictionary >> at: key ifPresent: oneArgBlock ifAbsent: absentBlock [
+RwGsPackageSymbolDictionary >> at: key ifPresent: oneArgBlock ifAbsent: absentBlock [
 
 	"Lookup the given key in the receiver. If it is present, answer the value of evaluating the oneArgBlock with the value associated with the key, otherwise answer the value of absentBlock."
 
@@ -240,7 +233,7 @@ RwPackageSymbolDictionary >> at: key ifPresent: oneArgBlock ifAbsent: absentBloc
 ]
 
 { #category : 'private - migration avoidance' }
-RwPackageSymbolDictionary >> become: ignored [
+RwGsPackageSymbolDictionary >> become: ignored [
 
 	"skip migration until the class definition settles down a bit"
 
@@ -248,14 +241,14 @@ RwPackageSymbolDictionary >> become: ignored [
 ]
 
 { #category : 'accessing' }
-RwPackageSymbolDictionary >> classRegistry [
+RwGsPackageSymbolDictionary >> classRegistry [
 
    ^classRegistry
 
 ]
 
 { #category : 'class' }
-RwPackageSymbolDictionary >> deleteClassFromPackage: class [
+RwGsPackageSymbolDictionary >> deleteClassFromPackage: class [
 
 	"a class association is being deleted from the receiver remove it from the loaded things"
 
@@ -269,7 +262,7 @@ RwPackageSymbolDictionary >> deleteClassFromPackage: class [
 ]
 
 { #category : 'method' }
-RwPackageSymbolDictionary >> deleteCompiledMethod: compiledMethod from: behavior [
+RwGsPackageSymbolDictionary >> deleteCompiledMethod: compiledMethod from: behavior [
 
 	"delete a compiled method from behavior and remove it from the loaded things"
 
@@ -298,14 +291,14 @@ RwPackageSymbolDictionary >> deleteCompiledMethod: compiledMethod from: behavior
 ]
 
 { #category : 'accessing' }
-RwPackageSymbolDictionary >> methodRegistry [
+RwGsPackageSymbolDictionary >> methodRegistry [
 
    ^methodRegistry
 
 ]
 
 { #category : 'private - migration avoidance' }
-RwPackageSymbolDictionary >> migrateFrom: anotherObject instVarMap: otherivi [
+RwGsPackageSymbolDictionary >> migrateFrom: anotherObject instVarMap: otherivi [
 
 	"skip migration until the class definition settles down a bit"
 
@@ -313,7 +306,7 @@ RwPackageSymbolDictionary >> migrateFrom: anotherObject instVarMap: otherivi [
 ]
 
 { #category : 'private - migration avoidance' }
-RwPackageSymbolDictionary >> migrateInstances: instances to: anotherClass [
+RwGsPackageSymbolDictionary >> migrateInstances: instances to: anotherClass [
 
 	"skip migration until the class definition settles down a bit"
 
@@ -321,7 +314,7 @@ RwPackageSymbolDictionary >> migrateInstances: instances to: anotherClass [
 ]
 
 { #category : 'method' }
-RwPackageSymbolDictionary >> moveCompiledMethod: compiledMethod toProtocol: newProtocol [
+RwGsPackageSymbolDictionary >> moveCompiledMethod: compiledMethod toProtocol: newProtocol [
 
 	"delete a compiled method from behavior and remove it from the loaded things"
 
@@ -351,14 +344,14 @@ RwPackageSymbolDictionary >> moveCompiledMethod: compiledMethod toProtocol: newP
 ]
 
 { #category : 'accessing' }
-RwPackageSymbolDictionary >> packageRegistry [
+RwGsPackageSymbolDictionary >> packageRegistry [
 
    ^packageRegistry
 
 ]
 
 { #category : 'class' }
-RwPackageSymbolDictionary >> updateClassProperties: class [
+RwGsPackageSymbolDictionary >> updateClassProperties: class [
 
 	"class properties have changed, update the clas properties of the loaded things"
 

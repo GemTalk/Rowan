@@ -97,6 +97,7 @@ RwSymbolDictionaryTest >> _createClassNamed: className superclassName: superclas
 
 { #category : 'private' }
 RwSymbolDictionaryTest >> _newOrExistingPackageSymbolDictionaryNamed: dictName [
+
 	| symbolName session symbolList association |
 	symbolName := dictName asSymbol.
 	session := GsCurrentSession currentSession.
@@ -105,7 +106,7 @@ RwSymbolDictionaryTest >> _newOrExistingPackageSymbolDictionaryNamed: dictName [
 		detect: [ :each | (each at: symbolName ifAbsent: [ nil ]) == each ]
 		ifNone: [ 
 			| newDict |
-			newDict := RwPackageSymbolDictionary new
+			newDict := RwGsPackageSymbolDictionary new
 				name: symbolName;
 				objectSecurityPolicy: symbolList objectSecurityPolicy;
 				yourself.
@@ -138,14 +139,14 @@ RwSymbolDictionaryTest >> testClassAdditionPatch [
 
 	"add a packaged class to a RwPackageSymbolDictionary"
 
-	| dict class assoc packagName className testClass |
+	| dict class assoc packageName className testClass |
 	className := 'TestSymbolDictClass'.
 	class := self _createClassNamed: className superclassName: 'Object'.
 	dict := self _newOrExistingPackageSymbolDictionaryNamed: #'CypressTestData'.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
-	packagName := 'TestSymbolDictPackage'.
+	packageName := 'TestSymbolDictPackage'.
 
-	dict addClassAssociation: assoc toPackageNamed: packagName.
+	dict addClassAssociation: assoc toPackageNamed: packageName.
 
 	testClass := System myUserProfile symbolList objectNamed: className.
 	self assert: testClass == class
