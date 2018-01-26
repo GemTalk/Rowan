@@ -137,7 +137,7 @@ RwPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod into: behavior
 	existing := methodRegistry at: compiledMethod ifAbsent: [ nil ].
 	existing
 		ifNotNil: [ self error: 'Internal error -- existing LoadedMethod found for new method.' ].
-	loadedMethod := RwGsLoadedMethod newNamed: selector.
+	loadedMethod := RwGsLoadedSymbolDictMethod newNamed: selector.
 	loadedMethod
 		handle: compiledMethod;
 		classIsMeta: behavior isMeta.
@@ -282,6 +282,36 @@ RwPackageSymbolDictionary >> migrateInstances: instances to: anotherClass [
 	"skip migration until the class definition settles down a bit"
 
 	
+]
+
+{ #category : 'method' }
+RwPackageSymbolDictionary >> moveCompiledMethod: compiledMethod toProtocol: newProtocol [
+
+	"delete a compiled method from behavior and remove it from the loaded things"
+
+	| behavior selector loadedMethod oldCat catSym catDict |
+	selector := compiledMethod selector.
+	behavior := compiledMethod inClass.
+
+	oldCat := behavior categoryOfSelector: selector environmentId: 0.
+	catSym := newProtocol asSymbol.
+	catDict := behavior _baseCategorysForStore: 0.
+	oldCat ifNotNil: [ (catDict at: oldCat) remove: selector ].
+	catDict
+		at: catSym
+		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
+	(catDict at: catSym) add: selector.
+
+	behavior moveMethod: selector toCategory: newProtocol environmentId: 0.
+
+	loadedMethod := methodRegistry
+		at: compiledMethod
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no existing LoadedMethod found for the compiledMethod.' ].
+
+	loadedMethod updateForProtocolChange
 ]
 
 { #category : 'accessing' }

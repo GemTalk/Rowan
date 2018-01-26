@@ -324,3 +324,45 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood
 ]
+
+{ #category : 'tests' }
+RwSymbolDictionaryTest >> testMethodPropertiesPatch [
+
+	"RwGsClassPropertiesPatch>>installPropertiesPatchFor:"
+
+	"add a packaged class to a RwPackageSymbolDictionary, add a new method, then change it's properties."
+
+	| dict class assoc packageName compiledMethod className testClass testInstance protocol x |
+	className := 'TestSymbolDictClass'.
+	class := self _createClassNamed: className superclassName: 'Object'.
+	dict := self _newOrExistingPackageSymbolDictionaryNamed: #'CypressTestData'.
+	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
+	packageName := 'TestSymbolDictPackage'.
+	dict addClassAssociation: assoc toPackageNamed: packageName.
+
+	testClass := System myUserProfile symbolList objectNamed: className.
+	self assert: testClass == class.
+	testInstance := testClass new.
+	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+
+	compiledMethod := self
+		_compileMethodIn: class
+		source: 'foo ^ ''foo'''
+		dictionaries: GsCurrentSession currentSession symbolList.
+
+	protocol := 'accessing'.
+	dict
+		addNewCompiledMethod: compiledMethod
+		into: class
+		protocol: protocol
+		toPackageNamed: packageName.
+
+	self assert: testInstance foo = 'foo'.
+	self assert: (x := testClass categoryOfSelector: #'foo') = protocol asSymbol.
+
+	protocol := 'the accessing'.
+	dict moveCompiledMethod: compiledMethod toProtocol: protocol.
+
+	self assert: testInstance foo = 'foo'.
+	self assert: (testClass categoryOfSelector: #'foo') = protocol asSymbol
+]
