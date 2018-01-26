@@ -106,7 +106,39 @@ RwGsPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packag
 { #category : 'method - patch api' }
 RwGsPackageSymbolDictionary >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
-	
+	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension properties |
+	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	selector := compiledMethod selector.
+	methodDictionary at: selector put: compiledMethod.
+
+	protocolSymbol := protocolString asSymbol.
+	(behavior includesCategory: protocolSymbol)
+		ifFalse: [ behavior addCategory: protocolSymbol ].
+	behavior moveMethod: selector toCategory: protocolSymbol.
+
+	existing := methodRegistry at: compiledMethod ifAbsent: [ nil ].
+	existing
+		ifNotNil: [ 
+			self
+				error:
+					'Internal error -- existing LoadedMethod found for extension compiled method.' ].
+	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
+
+	methodRegistry at: compiledMethod put: loadedMethod.
+
+	loadedPackage := self packageRegistry
+		at: packageName
+		ifAbsent: [ 
+			self
+				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
+
+	loadedClassOrExtension := loadedPackage
+		loadedClassExtensionForClass: behavior
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
+	loadedClassOrExtension addLoadedMethod: loadedMethod
 ]
 
 { #category : 'class - patch api' }
@@ -155,7 +187,7 @@ RwGsPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod for: behavio
 				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
 
 	loadedClassOrExtension := loadedPackage
-		classOrExtensionForClassNamed: behavior theNonMetaClass name asString
+		loadedClassForClass: behavior
 		ifAbsent: [ 
 			self
 				error:
@@ -287,7 +319,7 @@ RwGsPackageSymbolDictionary >> deleteCompiledMethod: compiledMethod from: behavi
 
 	loadedPackage := loadedMethod loadedPackage.
 	loadedClassOrExtension := loadedPackage
-		classOrExtensionForClassNamed: behavior theNonMetaClass name asString
+		classOrExtensionForClass: behavior
 		ifAbsent: [ 
 			self
 				error:

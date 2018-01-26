@@ -516,7 +516,7 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInSymbolDictionaryExtension [
 
 	dict
 		addExtensionCompiledMethod: compiledMethod
-		into: class
+		for: class
 		protocol: methodProtocol
 		toPackageNamed: packageName2.
 
