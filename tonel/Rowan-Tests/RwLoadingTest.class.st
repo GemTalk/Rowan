@@ -234,8 +234,7 @@ RwLoadingTest >> classExtionsClassDefinitions2: packageName className: className
 		at: className
 			put:
 				(RwClassExtensionDefinition
-						withProperties:
-							(self propertiesForClassExtensionsNamed: className inPackage: packageName)
+						withProperties: (self propertiesForClassExtensionNamed: className)
 						classMethodDefinitions: Dictionary new
 						instanceMethodDefinitions:
 							(self classExtentionsInstanceMethodsForClass2: className inPackage: packageName));

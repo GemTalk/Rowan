@@ -123,6 +123,19 @@ RwAbstractTest >> classDefinition: className super: superClassName instVars: ins
 ]
 
 { #category : 'support' }
+RwAbstractTest >> classExtensionDefinition: className instanceMethods: instanceMethods classMethods: classMethods [
+
+	^ Dictionary new
+		at: className
+			put:
+				(RwClassExtensionDefinition
+						withProperties: (self propertiesForClassExtensionNamed: className)
+						classMethodDefinitions: classMethods
+						instanceMethodDefinitions: instanceMethods);
+		yourself
+]
+
+{ #category : 'support' }
 RwAbstractTest >> definitionsOfLoadedPackages: packageNames [
 
 	^ Rowan loadedPackageDefinitionsNamed: packageNames
@@ -239,6 +252,19 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 ]
 
 { #category : 'support' }
+RwAbstractTest >> packageDefinition: packageName extendedClassNamed: className instanceMethods: instanceMethods classMethods: classMethods [
+
+	^ RwPackageDefinition
+		withProperties: (Dictionary with: 'name' -> packageName)
+		classDefinitions: Dictionary new
+		classExtensions:
+			(self
+				classExtensionDefinition: className
+				instanceMethods: instanceMethods
+				classMethods: classMethods)
+]
+
+{ #category : 'support' }
 RwAbstractTest >> packageSetDefinition: packageName [
 
 	^ (RwPackageSetDefinition new addPackage: (self packageDefinition: packageName))
@@ -321,7 +347,20 @@ RwAbstractTest >> packageSetDefinition: packageName classNamed: className super:
 ]
 
 { #category : 'support' }
-RwAbstractTest >> propertiesForClassExtensionsNamed: className inPackage: packageName [
+RwAbstractTest >> packageSetDefinition: packageName extendedClassNamed: className instanceMethods: instanceMethods classMethods: classMethods [
+
+	^ (RwPackageSetDefinition new
+		addPackage:
+			(self
+				packageDefinition: packageName
+				extendedClassNamed: className
+				instanceMethods: instanceMethods
+				classMethods: classMethods))
+		asDefinition
+]
+
+{ #category : 'support' }
+RwAbstractTest >> propertiesForClassExtensionNamed: className [
 
 	| dict |
 	dict := Dictionary new.

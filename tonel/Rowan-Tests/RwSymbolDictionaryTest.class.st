@@ -381,7 +381,9 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 	dict addClassAssociation: assoc toPackageNamed: packageName.
 
 	testClass := System myUserProfile symbolList objectNamed: className.
+	testInstance := testClass new.
 	self assert: testClass == class.
+	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
 
 	methodSelector := #'foo'.
 	methodSource := 'foo ^ ''foo'''.
@@ -393,12 +395,14 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 
 	dict
 		addNewCompiledMethod: compiledMethod
-		into: class
+		for: class
 		protocol: methodProtocol
 		toPackageNamed: packageName.
 
-	testInstance := testClass new.
 	self assert: testInstance foo = 'foo'.
+	self
+		assert:
+			(testClass categoryOfSelector: methodSelector) = methodProtocol asSymbol.
 
 	expectedPackageSet := self
 		packageSetDefinition: packageName
@@ -445,7 +449,7 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 
 	dict
 		addNewCompiledMethod: compiledMethod
-		into: class
+		for: class
 		protocol: 'accessing'
 		toPackageNamed: packageName.
 
@@ -462,6 +466,76 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 		instanceMethods: Dictionary new
 		classMethods: Dictionary new.
 	loadedPackageSet := self definitionsOfLoadedPackages: {packageName}.
+	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
+	self assert: diff isEmpty
+]
+
+{ #category : 'tests' }
+RwSymbolDictionaryTest >> testMethodExtensionPatch [
+
+	"RwGsClassExtensionPatch>>installClassExtensionInSystem"
+
+	"add a packaged class to a RwPackageSymbolDictionary, then add method to class using different package."
+
+	| dict class assoc packageName1 packageName2 compiledMethod className testClass testInstance expectedPackageSet expectedPackage1 expectedPackage2 superclassName loadedPackageSet diff methodSource methodProtocol methodSelector |
+	className := 'TestSymbolDictClass'.
+	superclassName := 'Object'.
+	class := self _createClassNamed: className superclassName: superclassName.
+	dict := self
+		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	assoc := SymbolAssociation newWithKey: class name asSymbol value: class.
+	packageName1 := 'TestSymbolDictPackage'.
+	packageName2 := 'TestSymbolDictExtensionPackage'.
+	dict addClassAssociation: assoc toPackageNamed: packageName1.
+
+	testClass := System myUserProfile symbolList objectNamed: className.
+	testInstance := testClass new.
+	self assert: testClass == class.
+	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
+
+	expectedPackage1 := self
+		packageSetDefinition: packageName1
+		classNamed: className
+		super: superclassName.
+
+	methodSelector := #'foo'.
+	methodSource := 'foo ^ ''foo'''.
+	methodProtocol := 'accessing'.
+	compiledMethod := self
+		_compileMethodIn: class
+		source: methodSource
+		dictionaries: GsCurrentSession currentSession symbolList.
+
+	dict
+		addExtensionCompiledMethod: compiledMethod
+		into: class
+		protocol: methodProtocol
+		toPackageNamed: packageName2.
+
+	self assert: testInstance foo = 'foo'.
+	self
+		assert:
+			(testClass categoryOfSelector: methodSelector) = methodProtocol asSymbol.
+
+	expectedPackage2 := self
+		packageSetDefinition: packageName2
+		extendClassNamed: className
+		instanceMethods:
+			(self
+				methodDefsFromSpec:
+					{{methodSelector.
+					methodProtocol.
+					methodSource}})
+		classMethods: Dictionary new.
+
+	expectedPackageSet := (RwPackageSetDefinition new
+		addPackage: expectedPackage1;
+		addPackage: expectedPackage2;
+		yourself) asDefinition.
+	loadedPackageSet := self
+		definitionsOfLoadedPackages:
+			{packageName1.
+			packageName2}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
 ]
@@ -498,7 +572,7 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 
 	dict
 		addNewCompiledMethod: compiledMethod
-		into: class
+		for: class
 		protocol: methodProtocol
 		toPackageNamed: packageName.
 
@@ -560,7 +634,7 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 
 	dict
 		addNewCompiledMethod: compiledMethod
-		into: class
+		for: class
 		protocol: methodProtocol
 		toPackageNamed: packageName.
 

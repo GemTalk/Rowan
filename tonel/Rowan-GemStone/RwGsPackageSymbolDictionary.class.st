@@ -103,6 +103,12 @@ RwGsPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packag
 	self add: assoc
 ]
 
+{ #category : 'method - patch api' }
+RwGsPackageSymbolDictionary >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
+
+	
+]
+
 { #category : 'class - patch api' }
 RwGsPackageSymbolDictionary >> addNewClassVersionToAssociation: newClass [
 
@@ -123,7 +129,7 @@ RwGsPackageSymbolDictionary >> addNewClassVersionToAssociation: newClass [
 ]
 
 { #category : 'method - patch api' }
-RwGsPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod into: behavior protocol: protocolString toPackageNamed: packageName [
+RwGsPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension properties |
 	methodDictionary := behavior persistentMethodDictForEnv: 0.
@@ -154,8 +160,7 @@ RwGsPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod into: behavi
 			self
 				error:
 					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
-	loadedClassOrExtension addLoadedMethod: loadedMethod.
-
+	loadedClassOrExtension addLoadedMethod: loadedMethod
 ]
 
 { #category : 'method - patch api' }
