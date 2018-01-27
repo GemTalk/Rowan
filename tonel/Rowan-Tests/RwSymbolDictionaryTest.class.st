@@ -387,17 +387,13 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 
 	methodSelector := #'foo'.
 	methodSource := 'foo ^ ''foo'''.
-	methodProtocol := 'accessing'.
+	methodProtocol := RwGsPackageSymbolDictionary defaultProtocolString.
 	compiledMethod := self
 		_compileMethodIn: class
 		source: methodSource
 		dictionaries: GsCurrentSession currentSession symbolList.
 
-	dict
-		addNewCompiledMethod: compiledMethod
-		for: class
-		protocol: methodProtocol
-		toPackageNamed: packageName.
+	dict addRecompiledMethod: compiledMethod.	"this should work, ends up using the package of the class"
 
 	self assert: testInstance foo = 'foo'.
 	self
@@ -667,6 +663,23 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 	dict addRecompiledMethod: newCompiledMethod.
 
 	self assert: testInstance foo = 'bar'.
+	self
+		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
+
+	methodSource := 'foo ^ ''who'''.
+	methodProtocol := 'the accessing'.
+	newCompiledMethod := self
+		_compileMethodIn: class
+		source: methodSource
+		dictionaries: GsCurrentSession currentSession symbolList.
+
+	dict
+		addNewCompiledMethod: newCompiledMethod
+		for: class
+		protocol: methodProtocol
+		toPackageNamed: packageName.	"account for using wrong method to update a method --- perhaps the selector is incorrect?"
+
+	self assert: testInstance foo = 'who'.
 	self
 		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 

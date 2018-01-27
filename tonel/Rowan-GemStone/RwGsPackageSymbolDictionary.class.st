@@ -9,6 +9,12 @@ Class {
 	#category : 'Rowan-GemStone'
 }
 
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> defaultProtocolString [
+
+	^ 'as yet unclassified'
+]
+
 { #category : 'instance creation' }
 RwGsPackageSymbolDictionary class >> newNamed: aSymbol [
 
@@ -129,8 +135,9 @@ RwGsPackageSymbolDictionary >> addExtensionCompiledMethod: compiledMethod for: b
 	loadedPackage := self packageRegistry
 		at: packageName
 		ifAbsent: [ 
-			self
-				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
+			self packageRegistry
+				at: packageName
+				put: (RwGSLoadedSymbolDictPackage newNamed: packageName) ].
 
 	loadedClassOrExtension := loadedPackage
 		loadedClassExtensionForClass: behavior
@@ -166,6 +173,14 @@ RwGsPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod for: behavio
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension properties |
 	methodDictionary := behavior persistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
+	methodDictionary
+		at: selector
+		ifPresent: [ :oldCompiledMethod | 
+			"there is an existing compiled method ... that means we're adding a recompiled methoded and moving it to the (possibly new) protocol"
+			^ self
+				addRecompiledMethod: compiledMethod;
+				moveCompiledMethod: compiledMethod toProtocol: protocolString;
+				yourself ].
 	methodDictionary at: selector put: compiledMethod.
 
 	protocolSymbol := protocolString asSymbol.
@@ -207,17 +222,23 @@ RwGsPackageSymbolDictionary >> addRecompiledMethod: newCompiledMethod [
 	oldCompiledMethod := methodDictionary
 		at: selector
 		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- no existing CompileMethod found for patched method: '
-						, selector printString ].
+			| loadedClass |
+			loadedClass := classRegistry
+				at: behavior theNonMetaClass classHistory
+				ifAbsent: [ 
+					self
+						error:
+							'Internal error -- The class is not in any known package and no package has been specified' ].
+			^ self
+				addNewCompiledMethod: newCompiledMethod
+				for: behavior
+				protocol: self class defaultProtocolString
+				toPackageNamed: loadedClass packageName ].
 
 	oldCompiledMethod == newCompiledMethod
 		ifTrue: [ 
-			self
-				error:
-					'Internal error -- The new recompiled method is identical to the installed method '
-						, selector printString ].
+			"exit early, no more work to be done"
+			^ self ].
 	methodDictionary at: selector put: newCompiledMethod.
 
 	loadedMethod := methodRegistry
