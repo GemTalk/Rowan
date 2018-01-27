@@ -13,10 +13,13 @@ Class {
 { #category : 'packages' }
 RwGsPatch >> markNotDirtyPackageNamed: packageName [
 
-	| loadedPackage |
-	loadedPackage := Rowan loadedPackageNamed: packageName
-				ifAbsent: 
-					[self error: 'Internal error -- attempt to manipulate nonexistent package.'].
+	| loadedPackage source |
+	source := Rowan configuration packageInfoSource.
+	loadedPackage := source == #'SymbolDictionary'
+		ifTrue: [ packageSymbolDictionary loadedPackageNamed: packageName ifAbsent: [  ] ]
+		ifFalse: [ Rowan loadedPackageNamed: packageName ifAbsent: [  ] ].
+	loadedPackage
+		ifNil: [ self error: 'Internal error -- attempt to manipulate nonexistent package.' ].
 	loadedPackage markNotDirty
 ]
 

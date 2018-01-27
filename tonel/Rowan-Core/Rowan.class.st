@@ -18,11 +18,19 @@ Class {
 
 { #category : 'public' }
 Rowan class >> addProject: aRwProjectSpecification [
-  "Register a project"
 
-  knownProjects
-    at: aRwProjectSpecification specName
-    put: aRwProjectSpecification
+	"Register a project"
+
+	| projectName |
+	projectName := aRwProjectSpecification specName knownProjects
+		at: projectName
+		ifPresent: [ :aLoadedProject | 
+			self
+				error:
+					'There is already a project named ' , projectName printString , ' registered' ].
+	knownProjects
+		at: projectName
+		put: (RwLoadedProject newForLoadSpecification: aRwProjectSpecification)
 ]
 
 { #category : 'public' }
@@ -83,7 +91,8 @@ Rowan class >> initialize [
 
 { #category : 'public' }
 Rowan class >> knownProjects [
-  ^ knownProjects
+
+	^ knownProjects
 ]
 
 { #category : 'public' }
@@ -192,10 +201,14 @@ Rowan class >> repositoryTools [
 
 { #category : 'private' }
 Rowan class >> updateLoadedPackages [
+
 	"Update all LoadedPackages and their contents, based on the configured packageInfoSource."
+
+	"If the source is Cypress or SymbolDictionary, no updating is needed -- 
+		the LoadedPackages *are* the authoritative source -- Category source requires updating"
 
 	| source |
 	source := configuration packageInfoSource.
-	"If the source is Cypress, no updating is needed -- the LoadedPackages *are* the authoritative source"
-	source == #Cypress ifFalse: [platform updateLoadedPackagesFrom: source]
+	source == #'Category'
+		ifTrue: [ platform updateLoadedPackagesFrom: source ]
 ]

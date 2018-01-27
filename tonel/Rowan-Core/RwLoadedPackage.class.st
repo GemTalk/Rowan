@@ -12,7 +12,8 @@ Class {
 		'commitId',
 		'loadedClasses',
 		'loadedClassExtensions',
-		'isDirty'
+		'isDirty',
+		'loadedProject'
 	],
 	#category : 'Rowan-Core'
 }
@@ -78,20 +79,22 @@ RwLoadedPackage >> loadedClasses [
 ]
 
 { #category : 'accessing' }
-RwLoadedPackage >> loadedClasses: newValue [
-	loadedClasses := newValue
-
-]
-
-{ #category : 'accessing' }
 RwLoadedPackage >> loadedClassExtensions [
 	^loadedClassExtensions
 
 ]
 
 { #category : 'accessing' }
-RwLoadedPackage >> loadedClassExtensions: newValue [
-	loadedClassExtensions := newValue
+RwLoadedPackage >> loadedProject [
+
+   ^loadedProject
+
+]
+
+{ #category : 'accessing' }
+RwLoadedPackage >> loadedProject: anObject [
+
+   loadedProject := anObject
 
 ]
 
@@ -112,7 +115,14 @@ RwLoadedPackage >> markNotDirty [
 { #category : 'private' }
 RwLoadedPackage >> markPackageDirty [
 
-	self markDirty
+	self markDirty.
+	loadedProject markProjectDirty
+]
+
+{ #category : 'accessing' }
+RwLoadedPackage >> projectName [
+
+	^ loadedProject name
 ]
 
 { #category : 'accessing' }
@@ -120,4 +130,11 @@ RwLoadedPackage >> removeLoadedClass: aLoadedClass [
 
 	self markDirty.
 	loadedClasses removeKey: aLoadedClass key
+]
+
+{ #category : 'accessing' }
+RwLoadedPackage >> removeLoadedClassExtension: aLoadedClassExtension [
+
+	self markDirty.
+	loadedClassExtensions removeKey: aLoadedClassExtension key
 ]

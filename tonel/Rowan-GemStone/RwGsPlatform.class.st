@@ -59,8 +59,8 @@ RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmen
 { #category : 'defaults' }
 RwGsPlatform >> defaultConfiguration [
 
-	^(RwConfiguration new)
-		packageInfoSource: #Category;
+	^ RwConfiguration new
+		packageInfoSource: #'SymbolDictionary';
 		yourself
 ]
 

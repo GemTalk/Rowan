@@ -42,7 +42,7 @@ RwAbstractTest >> assertAbsenceOfPackage: packageName [
 	| loadedPackage symbolDict |
 	symbolDict := self
 		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
-	loadedPackage := symbolDict packageRegistry at: packageName ifAbsent: [  ].
+	loadedPackage := symbolDict loadedPackageNamed: packageName ifAbsent: [  ].
 	self assert: loadedPackage equals: nil
 ]
 
@@ -172,7 +172,7 @@ RwAbstractTest >> definitionsOfLoadedPackages: packageNames [
 	symbolDict := self
 		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	loadedPackages := packageNames
-		collect: [ :packageName | symbolDict packageRegistry at: packageName ifAbsent: [  ] ].
+		collect: [ :packageName | symbolDict loadedPackageNamed: packageName ifAbsent: [  ] ].
 	^ (RwPackageSet withAll: (loadedPackages select: [ :each | each notNil ]))
 		asDefinition
 ]

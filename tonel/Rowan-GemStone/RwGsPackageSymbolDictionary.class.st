@@ -222,8 +222,8 @@ RwGsPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod for: behavio
 
 	methodRegistry at: compiledMethod put: loadedMethod.
 
-	loadedPackage := self packageRegistry
-		at: packageName
+	loadedPackage := self
+		loadedPackageNamed: packageName
 		ifAbsent: [ 
 			self
 				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
@@ -399,6 +399,12 @@ RwGsPackageSymbolDictionary >> deleteCompiledMethod: compiledMethod from: behavi
 					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
 
 	loadedClassOrExtension removeLoadedMethod: loadedMethod
+]
+
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary >> loadedPackageNamed: packageName ifAbsent: absentBlock [
+
+	^ packageRegistry at: packageName ifAbsent: absentBlock
 ]
 
 { #category : 'accessing' }

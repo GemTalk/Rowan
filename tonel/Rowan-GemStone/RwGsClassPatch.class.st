@@ -207,11 +207,11 @@ RwGsClassPatch >> privateCreateClassWithSuperclass: superclass [
 	classProperties := classDefinition properties.
 	packageName := packageDefinition key.
 	infoSource := Rowan configuration packageInfoSource.
-	category := infoSource == #Category
-				ifTrue: [packageName]
-				ifFalse: [classProperties at: 'category' ifAbsent: ['']].
+	category := infoSource == #'Category'
+		ifTrue: [ packageName ]
+		ifFalse: [ classProperties at: 'category' ifAbsent: [  ] ].
 	createdClass category: category.
-	^createdClass
+	^ createdClass
 ]
 
 { #category : 'accessing' }

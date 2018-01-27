@@ -9,7 +9,8 @@ Class {
 		'repoSpec',
 		'repoPath',
 		'comment',
-		'imageSpec'
+		'imageSpec',
+		'packageInfoSource'
 	],
 	#category : 'Rowan-Tode'
 }
@@ -85,13 +86,24 @@ RwProjectSpecification >> imageSpec [
   self subclassResponsibility: #'imageSpec'
 ]
 
+{ #category : 'accessing' }
+RwProjectSpecification >> imageSpec: anObject [
+
+   imageSpec := anObject
+
+]
+
 { #category : 'initialization' }
 RwProjectSpecification >> initialize [
-  super initialize.
-  comment := ''.
-  specsPath := 'specs'.
-  platformSpec := (Dictionary new at: 'gemstone' put: RwGemStoneSpecification new; yourself).
-  repoSpec := RwGitRepositorySpecification new
+
+	super initialize.
+	comment := ''.
+	specsPath := 'specs'.
+	platformSpec := Dictionary new
+		at: 'gemstone' put: RwGemStoneSpecification new;
+		yourself.
+	repoSpec := RwGitRepositorySpecification new.
+	packageInfoSource := #'SymbolDictionary'
 ]
 
 { #category : 'initialization' }
@@ -101,6 +113,19 @@ RwProjectSpecification >> initializeForImport [
   super initializeForImport.
   projectUrl := imageSpec := nil.
   repoSpec initializeForImport
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> packageInfoSource [
+
+	^ packageInfoSource
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> packageInfoSource: anObject [
+
+   packageInfoSource := anObject
+
 ]
 
 { #category : 'accessing' }
