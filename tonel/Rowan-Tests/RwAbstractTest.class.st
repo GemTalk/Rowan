@@ -252,7 +252,7 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 ]
 
 { #category : 'support' }
-RwAbstractTest >> packageDefinition: packageName extendedClassNamed: className instanceMethods: instanceMethods classMethods: classMethods [
+RwAbstractTest >> packageDefinition: packageName extendClassNamed: className instanceMethods: instanceMethods classMethods: classMethods [
 
 	^ RwPackageDefinition
 		withProperties: (Dictionary with: 'name' -> packageName)
@@ -347,13 +347,13 @@ RwAbstractTest >> packageSetDefinition: packageName classNamed: className super:
 ]
 
 { #category : 'support' }
-RwAbstractTest >> packageSetDefinition: packageName extendedClassNamed: className instanceMethods: instanceMethods classMethods: classMethods [
+RwAbstractTest >> packageSetDefinition: packageName extendClassNamed: className instanceMethods: instanceMethods classMethods: classMethods [
 
 	^ (RwPackageSetDefinition new
 		addPackage:
 			(self
 				packageDefinition: packageName
-				extendedClassNamed: className
+				extendClassNamed: className
 				instanceMethods: instanceMethods
 				classMethods: classMethods))
 		asDefinition

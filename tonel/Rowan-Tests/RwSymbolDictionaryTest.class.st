@@ -498,7 +498,7 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInSymbolDictionaryExtension [
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
 
 	expectedPackage1 := self
-		packageSetDefinition: packageName1
+		packageDefinition: packageName1
 		classNamed: className
 		super: superclassName.
 
@@ -522,7 +522,7 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInSymbolDictionaryExtension [
 			(testClass categoryOfSelector: methodSelector) = methodProtocol asSymbol.
 
 	expectedPackage2 := self
-		packageSetDefinition: packageName2
+		packageDefinition: packageName2
 		extendClassNamed: className
 		instanceMethods:
 			(self

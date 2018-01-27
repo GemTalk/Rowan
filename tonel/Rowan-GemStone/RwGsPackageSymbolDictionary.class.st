@@ -4,6 +4,7 @@ Class {
 	#instVars : [
 		'packageRegistry',
 		'classRegistry',
+		'classExtensionRegistry',
 		'methodRegistry'
 	],
 	#category : 'Rowan-GemStone'
@@ -29,6 +30,7 @@ RwGsPackageSymbolDictionary >> _initializeWithoutClear: newSize [
 	super _initializeWithoutClear: newSize.
 	packageRegistry := KeyValueDictionary new.
 	classRegistry := IdentityKeyValueDictionary new.	"keyed by class classHistory"
+	classExtensionRegistry := IdentityKeyValueDictionary new.	"keyed by class classHistory"
 	methodRegistry := IdentityKeyValueDictionary new.	"keyed by compiledMethod"
 	^ self
 ]
@@ -112,7 +114,7 @@ RwGsPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packag
 { #category : 'method - patch api' }
 RwGsPackageSymbolDictionary >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension properties |
+	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension properties |
 	methodDictionary := behavior persistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	methodDictionary at: selector put: compiledMethod.
@@ -139,13 +141,17 @@ RwGsPackageSymbolDictionary >> addExtensionCompiledMethod: compiledMethod for: b
 				at: packageName
 				put: (RwGSLoadedSymbolDictPackage newNamed: packageName) ].
 
-	loadedClassOrExtension := loadedPackage
+	loadedClassExtension := loadedPackage
 		loadedClassExtensionForClass: behavior
 		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
-	loadedClassOrExtension addLoadedMethod: loadedMethod
+			| class ext |
+			class := behavior theNonMetaClass.
+			ext := RwGsLoadedSymbolDictClassExtension
+				newForClass: class
+				inPackage: loadedPackage.
+			self classExtensionRegistry at: class classHistory put: ext.
+			ext ].
+	loadedClassExtension addLoadedMethod: loadedMethod
 ]
 
 { #category : 'class - patch api' }
@@ -297,6 +303,12 @@ RwGsPackageSymbolDictionary >> become: ignored [
 	"skip migration until the class definition settles down a bit"
 
 	
+]
+
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary >> classExtensionRegistry [
+
+	^ classExtensionRegistry
 ]
 
 { #category : 'accessing' }
