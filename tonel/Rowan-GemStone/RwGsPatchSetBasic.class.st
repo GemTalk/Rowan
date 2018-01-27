@@ -99,6 +99,14 @@ RwGsPatchSetBasic >> _methodDeletionPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _methodExtensionPatchClass [
+
+	^ packageSymbolDictionary
+		ifNotNil: [ packageSymbolDictionary _methodExtensionPatchClass ]
+		ifNil: [ RwGsMethodAdditionPatch ]
+]
+
+{ #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodPropertiesPatchClass [
 
 	^ packageSymbolDictionary
@@ -256,9 +264,11 @@ RwGsPatchSetBasic >> addExtendedClass: aClassDefinition inPackage: aPackageDefin
 
 	extendedClasses
 		add:
-			(self _classExtensionPatchClass
+			((self _classExtensionPatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }
@@ -266,7 +276,7 @@ RwGsPatchSetBasic >> addExtendedClassMethod: aClassMethodDefinition inClass: aCl
 
 	extendedMethods
 		add:
-			((self _methodAdditionPatchClass
+			((self _methodExtensionPatchClass
 				forMethod: aClassMethodDefinition
 				isMeta: true
 				inClass: aClassDefinition
@@ -280,7 +290,7 @@ RwGsPatchSetBasic >> addExtendedInstanceMethod: anInstanceMethodDefinition inCla
 
 	extendedMethods
 		add:
-			((self _methodAdditionPatchClass
+			((self _methodExtensionPatchClass
 				forMethod: anInstanceMethodDefinition
 				isMeta: false
 				inClass: aClassDefinition
