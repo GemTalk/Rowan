@@ -338,11 +338,14 @@ RwGsPatchSetBasic >> addPatchedClassMethodProperties: aClassMethodDefinition inC
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition [
-  classesWithNewVersions
-    add:
-      (self _classVersioningPatchClass
-        for: aClassModification
-        inPackage: aPackageDefinition)
+
+	classesWithNewVersions
+		add:
+			((self _classVersioningPatchClass
+				for: aClassModification
+				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }

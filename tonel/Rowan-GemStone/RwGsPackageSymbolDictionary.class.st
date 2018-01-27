@@ -48,6 +48,12 @@ RwGsPackageSymbolDictionary >> _classVariablePatchClass [
 	^ RwGsClassVariableChangeSymbolDictPatch
 ]
 
+{ #category : 'patch class accessors' }
+RwGsPackageSymbolDictionary >> _classVersioningPatchClass [
+
+	^ RwGsClassVersioningSymbolDictPatch
+]
+
 { #category : 'private' }
 RwGsPackageSymbolDictionary >> _initializeWithoutClear: newSize [
 
@@ -485,6 +491,16 @@ RwGsPackageSymbolDictionary >> ensureExtensionClassNamed: className existsForPac
 			self classExtensionRegistry
 				at: extensionClass classHistory
 				put: loadedClassExtension ]
+]
+
+{ #category : 'loaded queries' }
+RwGsPackageSymbolDictionary >> existingForClass: aClass [
+
+	"Answer the registered LoadedClass for the given class."
+
+	^ self
+		existingForClass: aClass
+		ifAbsent: [ self error: 'no loaded class found for ' , aClass name printString ]
 ]
 
 { #category : 'loaded queries' }
