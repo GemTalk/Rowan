@@ -19,6 +19,12 @@ RwGsImagePatchVisitor class >> new [
 	^super new initialize
 ]
 
+{ #category : 'instance creation' }
+RwGsImagePatchVisitor class >> newFor: aPackageSymbolDictionary [
+
+	^ super new initializeFor: aPackageSymbolDictionary
+]
+
 { #category : 'private' }
 RwGsImagePatchVisitor >> _patchSetClass [
 
@@ -129,6 +135,13 @@ RwGsImagePatchVisitor >> deletePackages: packageDefinitions [
 RwGsImagePatchVisitor >> initialize [
 
 	patchSet := self _patchSetClass new
+]
+
+{ #category : 'initialization' }
+RwGsImagePatchVisitor >> initializeFor: aPackageSymbolDictionary [
+
+	self initialize.
+	patchSet packageSymbolDictionary: aPackageSymbolDictionary
 ]
 
 { #category : 'accessing' }

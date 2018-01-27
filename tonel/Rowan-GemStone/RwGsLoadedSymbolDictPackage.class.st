@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwGSLoadedSymbolDictPackage',
+	#name : 'RwGsLoadedSymbolDictPackage',
 	#superclass : 'RwLoadedPackage',
 	#category : 'Rowan-GemStone'
 }
 
 { #category : 'queries' }
-RwGSLoadedSymbolDictPackage >> classOrExtensionForClass: behavior ifAbsent: absentBlock [
+RwGsLoadedSymbolDictPackage >> classOrExtensionForClass: behavior ifAbsent: absentBlock [
 
 	| className |
 	className := behavior theNonMetaClass name asString.
@@ -15,7 +15,7 @@ RwGSLoadedSymbolDictPackage >> classOrExtensionForClass: behavior ifAbsent: abse
 ]
 
 { #category : 'initialization' }
-RwGSLoadedSymbolDictPackage >> initialize [
+RwGsLoadedSymbolDictPackage >> initialize [
 
 	super initialize.
 	loadedClasses := KeyValueDictionary new.
@@ -25,14 +25,14 @@ RwGSLoadedSymbolDictPackage >> initialize [
 ]
 
 { #category : 'initialization' }
-RwGSLoadedSymbolDictPackage >> initializeForName: aName [
+RwGsLoadedSymbolDictPackage >> initializeForName: aName [
 
 	super initializeForName: aName.
 	properties at: 'name' put: aName
 ]
 
 { #category : 'queries' }
-RwGSLoadedSymbolDictPackage >> loadedClassExtensionForClass: aClass ifAbsent: absentBlock [
+RwGsLoadedSymbolDictPackage >> loadedClassExtensionForClass: aClass ifAbsent: absentBlock [
 
 	"If there is an existing extension for the given (non-meta) class in this package, answer it, otherwise the AbsentToken."
 
@@ -42,7 +42,7 @@ RwGSLoadedSymbolDictPackage >> loadedClassExtensionForClass: aClass ifAbsent: ab
 ]
 
 { #category : 'queries' }
-RwGSLoadedSymbolDictPackage >> loadedClassForClass: aClass ifAbsent: absentBlock [
+RwGsLoadedSymbolDictPackage >> loadedClassForClass: aClass ifAbsent: absentBlock [
 
 	"If there is an existing loadedClass for the given (non-meta) class in this package, answer it, otherwise the AbsentToken."
 

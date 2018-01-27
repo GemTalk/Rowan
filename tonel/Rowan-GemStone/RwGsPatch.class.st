@@ -4,6 +4,9 @@ Abstract. A patch is a single operation to be performed on a GemStone image (rep
 Class {
 	#name : 'RwGsPatch',
 	#superclass : 'Object',
+	#instVars : [
+		'packageSymbolDictionary'
+	],
 	#category : 'Rowan-GemStone'
 }
 
@@ -15,6 +18,20 @@ RwGsPatch >> markNotDirtyPackageNamed: packageName [
 				ifAbsent: 
 					[self error: 'Internal error -- attempt to manipulate nonexistent package.'].
 	loadedPackage markNotDirty
+]
+
+{ #category : 'accessing' }
+RwGsPatch >> packageSymbolDictionary [
+
+   ^packageSymbolDictionary
+
+]
+
+{ #category : 'accessing' }
+RwGsPatch >> packageSymbolDictionary: anObject [
+
+   packageSymbolDictionary := anObject
+
 ]
 
 { #category : 'utility' }

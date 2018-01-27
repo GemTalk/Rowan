@@ -22,7 +22,8 @@ Class {
 		'methodsNeedingRecompile',
 		'tempSymbols',
 		'createdClasses',
-		'errors'
+		'errors',
+		'packageSymbolDictionary'
 	],
 	#category : 'Rowan-GemStone'
 }
@@ -35,72 +36,110 @@ RwGsPatchSetBasic class >> new [
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classAdditionPatchClass [
-  ^ RwGsClassAdditionPatch
+
+	^ packageSymbolDictionary
+		ifNotNil: [ packageSymbolDictionary _classAdditionPatchClass ]
+		ifNil: [ RwGsClassAdditionPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classDeletionPatchClass [
-  ^ RwGsClassDeletionPatch
+
+	^ packageSymbolDictionary
+		ifNotNil: [ packageSymbolDictionary _classDeletionPatchClass ]
+		ifNil: [ RwGsClassDeletionPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classExtensionPatchClass [
-	^ RwGsClassExtensionPatch
+
+	^ packageSymbolDictionary
+		ifNotNil: [ packageSymbolDictionary _classExtensionPatchClass ]
+		ifNil: [ RwGsClassExtensionPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classPropertiesPatchClass [
-  ^ RwGsClassPropertiesPatch
+
+	^ packageSymbolDictionary
+		ifNotNil: [ packageSymbolDictionary _classPropertiesPatchClass ]
+		ifNil: [ RwGsClassPropertiesPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classVariablePatchClass [
 
-	^ RwGsClassVariableChangePatch
+	^ packageSymbolDictionary
+		ifNotNil: [ packageSymbolDictionary _classVariablePatchClass ]
+		ifNil: [ RwGsClassVariableChangePatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classVersioningPatchClass [
-  ^ RwGsClassVersioningPatch
+
+	^ packageSymbolDictionary
+		ifNotNil: [ packageSymbolDictionary _classVersioningPatchClass ]
+		ifNil: [ RwGsClassVersioningPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodAdditionPatchClass [
-  ^ RwGsMethodAdditionPatch
+
+	^ packageSymbolDictionary
+		ifNotNil: [ packageSymbolDictionary _methodAdditionPatchClass ]
+		ifNil: [ RwGsMethodAdditionPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodDeletionPatchClass [
-  ^ RwGsMethodDeletionPatch
+
+	^ packageSymbolDictionary
+		ifNotNil: [ packageSymbolDictionary _methodDeletionPatchClass ]
+		ifNil: [ RwGsMethodDeletionPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodPropertiesPatchClass [
-  ^ RwGsMethodPropertiesPatch
+
+	^ packageSymbolDictionary
+		ifNotNil: [ packageSymbolDictionary _methodPropertiesPatchClass ]
+		ifNil: [ RwGsMethodPropertiesPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodSourcePatchClass [
-  ^ RwGsMethodSourcePatch
+
+	^ packageSymbolDictionary
+		ifNotNil: [ packageSymbolDictionary _methodSourcePatchClass ]
+		ifNil: [ RwGsMethodSourcePatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _packageAdditionPatchClass [
-  ^ RwGsPackageAdditionPatch
+
+	^ packageSymbolDictionary
+		ifNotNil: [ packageSymbolDictionary _packageAdditionPatchClass ]
+		ifNil: [ RwGsPackageAdditionPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _packageDeletionPatchClass [
-  ^ RwGsPackageDeletionPatch
+
+	^ packageSymbolDictionary
+		ifNotNil: [ packageSymbolDictionary _packageDeletionPatchClass ]
+		ifNil: [ RwGsPackageDeletionPatch ]
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addAddedClass: aClassDefinition inPackage: aPackageDefinition [
-  addedClasses
-    add:
-      (self _classAdditionPatchClass
-        for: aClassDefinition
-        inPackage: aPackageDefinition)
+
+	addedClasses
+		add:
+			((self _classAdditionPatchClass
+				for: aClassDefinition
+				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'private - applying' }
@@ -112,29 +151,40 @@ RwGsPatchSetBasic >> addAddedClassesToTempSymbols [
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addAddedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-  addedMethods
-    add:
-      (self _methodAdditionPatchClass
-        forMethod: aClassMethodDefinition
-        isMeta: true
-        inClass: aClassDefinition
-        inPackage: aPackageDefinition)
+
+	addedMethods
+		add:
+			((self _methodAdditionPatchClass
+				forMethod: aClassMethodDefinition
+				isMeta: true
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addAddedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-  addedMethods
-    add:
-      (self _methodAdditionPatchClass
-        forMethod: anInstanceMethodDefinition
-        isMeta: false
-        inClass: aClassDefinition
-        inPackage: aPackageDefinition)
+
+	addedMethods
+		add:
+			((self _methodAdditionPatchClass
+				forMethod: anInstanceMethodDefinition
+				isMeta: false
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addAddedPackage: packageDefinition [
-  addedPackages add: (self _packageAdditionPatchClass for: packageDefinition)
+
+	addedPackages
+		add:
+			((self _packageAdditionPatchClass for: packageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'private - applying' }
@@ -207,11 +257,13 @@ RwGsPatchSetBasic >> addExtendedClassMethod: aClassMethodDefinition inClass: aCl
 
 	extendedMethods
 		add:
-			(self _methodAdditionPatchClass
+			((self _methodAdditionPatchClass
 				forMethod: aClassMethodDefinition
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }
@@ -219,11 +271,13 @@ RwGsPatchSetBasic >> addExtendedInstanceMethod: anInstanceMethodDefinition inCla
 
 	extendedMethods
 		add:
-			(self _methodAdditionPatchClass
+			((self _methodAdditionPatchClass
 				forMethod: anInstanceMethodDefinition
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }
@@ -501,6 +555,18 @@ RwGsPatchSetBasic >> markPackagesNotDirty [
 { #category : 'stubs' }
 RwGsPatchSetBasic >> migrateInstances [
 	"presumably migrate instances of changed classes ... noop for now"
+]
+
+{ #category : 'accessing' }
+RwGsPatchSetBasic >> packageSymbolDictionary [
+
+	^ packageSymbolDictionary
+]
+
+{ #category : 'accessing' }
+RwGsPatchSetBasic >> packageSymbolDictionary: aPackageSymbolDictionary [
+
+	packageSymbolDictionary := aPackageSymbolDictionary
 ]
 
 { #category : 'private - applying' }

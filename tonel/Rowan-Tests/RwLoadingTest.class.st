@@ -81,7 +81,9 @@ RwLoadingTest >> applyDiffToImage: aPackageSetModification [
 	"work out the process handling that is needed in the face of new class versions"
 
 	| visitor patchSet |
-	visitor := RwGsImagePatchVisitor new.
+	visitor := RwGsImagePatchVisitor
+		newFor:
+			(self _newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName).
 	visitor visit: aPackageSetModification.
 	patchSet := visitor patchSet.
 	patchSet classesWithNewVersions isEmpty
@@ -90,18 +92,12 @@ RwLoadingTest >> applyDiffToImage: aPackageSetModification [
 			^ self ].
 	patchSet classesWithNewVersions
 		do: [ :each | each newClassVersionPatches: aPackageSetModification patchSet: nil ].
-	visitor := RwGsImagePatchVisitor new.
+	visitor := RwGsImagePatchVisitor
+		newFor:
+			(self _newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName).
 	visitor visit: aPackageSetModification.
 	patchSet := visitor patchSet.
 	patchSet apply
-]
-
-{ #category : 'support' }
-RwLoadingTest >> assertAbsenceOfPackage: packageName [
-
-	| loadedPackage |
-	loadedPackage := Rowan loadedPackageNamed: packageName ifAbsent: [nil].
-	self assert: loadedPackage equals: nil
 ]
 
 { #category : 'support - basic definitions' }
@@ -1183,8 +1179,7 @@ RwLoadingTest >> instVarChangesClassDefinitions4: packageName [
 { #category : 'support' }
 RwLoadingTest >> loadAndTestPackagesNamed: packageNames before: beforePackageSet after: afterPackageSet [
 
-	|  imagePackageSet1 diff1 imagePackageSet2 diff2 |
-	Rowan updateLoadedPackages.
+	| imagePackageSet1 diff1 imagePackageSet2 diff2 |
 	imagePackageSet1 := self definitionsOfLoadedPackages: packageNames.
 	diff1 := beforePackageSet compareAgainstBase: imagePackageSet1.
 	self deny: diff1 isEmpty.
@@ -1198,7 +1193,6 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames before: beforePackageSet
 RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBeLoaded using: myPackageSet [
 
 	| imagePackageSet1 diff1 imagePackageSet2 diff2 |
-	Rowan updateLoadedPackages.
 	packagesShouldBeLoaded
 		ifFalse: [ packageNames do: [ :name | self assertAbsenceOfPackage: name ] ].
 	imagePackageSet1 := self definitionsOfLoadedPackages: packageNames.
@@ -1661,16 +1655,17 @@ RwLoadingTest >> singleClassVersionChangeClassDefinitions4: packageName classNam
 
 { #category : 'tests' }
 RwLoadingTest >> testBasicLoading [
-  "test loading a variety of different class types"
 
-  | packageName packageNames myPackageSet |
-  packageName := 'BasicTestPackage'.
-  packageNames := {packageName}.
-  myPackageSet := RwPackageSetDefinition new.
-  myPackageSet
-    addPackage: (self basicPackageDefinition: packageName);
-    yourself.
-  self loadAndTestPackagesNamed: packageNames using: myPackageSet
+	"test loading a variety of different class types"
+
+	| packageName packageNames myPackageSet |
+	packageName := 'BasicTestPackage'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage: (self basicPackageDefinition: packageName);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames using: myPackageSet
 ]
 
 { #category : 'tests' }

@@ -24,6 +24,12 @@ RwGsPackageSymbolDictionary class >> newNamed: aSymbol [
 		yourself
 ]
 
+{ #category : 'patch class accessors' }
+RwGsPackageSymbolDictionary >> _classAdditionPatchClass [
+
+	^ RwGsClassAdditionSymbolDictPatch
+]
+
 { #category : 'private' }
 RwGsPackageSymbolDictionary >> _initializeWithoutClear: newSize [
 
@@ -74,13 +80,26 @@ RwGsPackageSymbolDictionary >> _loadedClassFor: class noNewVersion: noNewVersion
 				, classKey asString printString
 ]
 
+{ #category : 'patch class accessors' }
+RwGsPackageSymbolDictionary >> _methodAdditionPatchClass [
+
+	^ RwGsMethodAdditionSymbolDictPatch
+]
+
+{ #category : 'patch class accessors' }
+RwGsPackageSymbolDictionary >> _packageAdditionPatchClass [
+
+	^ RwGsPackageAdditionSymbolDictPatch
+]
+
 { #category : 'class - patch api' }
-RwGsPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packageName [
+RwGsPackageSymbolDictionary >> addClassAssociation: assoc forClass: class toPackageNamed: packageName [
 
-	"a class association is being added to the named package in the receiver"
+	"Copy the name association to the correct 
+        SymbolDictionary in the live SymbolList.
+        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
-	| loadedPackage class loadedClass |
-	class := assoc value.
+	| loadedPackage loadedClass |
 	(class isKindOf: Class)
 		ifFalse: [ self error: 'internal error - expected a class association' ].
 	loadedPackage := self packageRegistry
@@ -88,7 +107,7 @@ RwGsPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packag
 		ifAbsent: [ 
 			self packageRegistry
 				at: packageName
-				put: (RwGSLoadedSymbolDictPackage newNamed: packageName) ].
+				put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
 	self
 		at: assoc key
 		ifPresent: [ 
@@ -108,6 +127,8 @@ RwGsPackageSymbolDictionary >> addClassAssociation: assoc toPackageNamed: packag
 				ifPresent: [ :loadedClassExtension | 
 					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
 					self halt ] ].
+
+	assoc value: class.
 	self add: assoc
 ]
 
@@ -139,7 +160,7 @@ RwGsPackageSymbolDictionary >> addExtensionCompiledMethod: compiledMethod for: b
 		ifAbsent: [ 
 			self packageRegistry
 				at: packageName
-				put: (RwGSLoadedSymbolDictPackage newNamed: packageName) ].
+				put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
 
 	loadedClassExtension := loadedPackage
 		loadedClassExtensionForClass: behavior
@@ -316,6 +337,25 @@ RwGsPackageSymbolDictionary >> classRegistry [
 
    ^classRegistry
 
+]
+
+{ #category : 'package - patch api' }
+RwGsPackageSymbolDictionary >> createLoadedPackageFromDefinition: packageDefinition [
+
+	self
+		createLoadedPackageNamed: packageDefinition key
+		properties: packageDefinition properties
+]
+
+{ #category : 'package - patch api' }
+RwGsPackageSymbolDictionary >> createLoadedPackageNamed: packageName properties: properties [
+
+	| existingLoadedPackage newLoadedPackage |
+	existingLoadedPackage := packageRegistry at: packageName ifAbsent: [ nil ].
+	existingLoadedPackage
+		ifNotNil: [ self error: 'Internal error -- Attempt to add a package that exists.' ].
+	newLoadedPackage := RwGsLoadedSymbolDictPackage newNamed: packageName.
+	newLoadedPackage setPropertiesTo: properties
 ]
 
 { #category : 'class - patch api' }
