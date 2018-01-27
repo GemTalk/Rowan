@@ -208,33 +208,42 @@ RwGsPatchSetBasic >> addCreatedClassesAndVersionsTo: newClassesByName [
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addDeletedClass: aClassDefinition inPackage: aPackageDefinition [
-  deletedClasses
-    add:
-      (self _classDeletionPatchClass
-        for: aClassDefinition
-        inPackage: aPackageDefinition)
+
+	deletedClasses
+		add:
+			((self _classDeletionPatchClass
+				for: aClassDefinition
+				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addDeletedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-  deletedMethods
-    add:
-      (self _methodDeletionPatchClass
-        forMethod: aClassMethodDefinition
-        isMeta: true
-        inClass: aClassDefinition
-        inPackage: aPackageDefinition)
+
+	deletedMethods
+		add:
+			((self _methodDeletionPatchClass
+				forMethod: aClassMethodDefinition
+				isMeta: true
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addDeletedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-  deletedMethods
-    add:
-      (self _methodDeletionPatchClass
-        forMethod: anInstanceMethodDefinition
-        isMeta: false
-        inClass: aClassDefinition
-        inPackage: aPackageDefinition)
+
+	deletedMethods
+		add:
+			((self _methodDeletionPatchClass
+				forMethod: anInstanceMethodDefinition
+				isMeta: false
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }

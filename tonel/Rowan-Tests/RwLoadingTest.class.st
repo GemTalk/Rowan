@@ -1173,19 +1173,6 @@ RwLoadingTest >> instVarChangesClassDefinitions4: packageName [
 ]
 
 { #category : 'support' }
-RwLoadingTest >> loadAndTestPackagesNamed: packageNames before: beforePackageSet after: afterPackageSet [
-
-	| imagePackageSet1 diff1 imagePackageSet2 diff2 |
-	imagePackageSet1 := self definitionsOfLoadedPackages: packageNames.
-	diff1 := beforePackageSet compareAgainstBase: imagePackageSet1.
-	self deny: diff1 isEmpty.
-	self applyDiffToImage: diff1.
-	imagePackageSet2 := self definitionsOfLoadedPackages: packageNames.
-	diff2 := afterPackageSet compareAgainstBase: imagePackageSet2.
-	self assert: diff2 isEmpty
-]
-
-{ #category : 'support' }
 RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBeLoaded using: myPackageSet [
 
 	| imagePackageSet1 diff1 imagePackageSet2 diff2 |
@@ -1737,10 +1724,7 @@ RwLoadingTest >> testClassDelete [
 						classDefinitions: Dictionary new
 						classExtensions: Dictionary new);
 		yourself.
-	self
-		loadAndTestPackagesNamed: packageNames
-		before: myPackageSet
-		after: RwPackageSetDefinition new.	"the package will be deleted after load when updatePackagesFromCategories is called, because last class with that category no longer exists -- implicit delete package"
+	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	self
 		assert:
 			(RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol) isNil

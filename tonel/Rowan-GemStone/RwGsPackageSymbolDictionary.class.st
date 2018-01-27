@@ -30,6 +30,12 @@ RwGsPackageSymbolDictionary >> _classAdditionPatchClass [
 	^ RwGsClassAdditionSymbolDictPatch
 ]
 
+{ #category : 'patch class accessors' }
+RwGsPackageSymbolDictionary >> _classDeletionPatchClass [
+
+	^ RwGsClassDeletionSymbolDictPatch 
+]
+
 { #category : 'private' }
 RwGsPackageSymbolDictionary >> _initializeWithoutClear: newSize [
 
@@ -84,6 +90,12 @@ RwGsPackageSymbolDictionary >> _loadedClassFor: class noNewVersion: noNewVersion
 RwGsPackageSymbolDictionary >> _methodAdditionPatchClass [
 
 	^ RwGsMethodAdditionSymbolDictPatch
+]
+
+{ #category : 'patch class accessors' }
+RwGsPackageSymbolDictionary >> _methodDeletionPatchClass [
+
+	^ RwGsMethodDeletionSymbolDictPatch
 ]
 
 { #category : 'patch class accessors' }
@@ -367,9 +379,21 @@ RwGsPackageSymbolDictionary >> deleteClassFromPackage: class [
 		_loadedClassFor: class
 		noNewVersion: [ :loadedClass | 
 			"association for class is present, finish delete operation"
-			loadedClass removeFromLoaded.
+			loadedClass removeFromLoaded: self.
 			classRegistry removeKey: class classHistory.
 			self removeKey: loadedClass key asSymbol ]
+]
+
+{ #category : 'class - patch api' }
+RwGsPackageSymbolDictionary >> deleteClassNamedFromPackage: className [
+
+	"a class association is being deleted from the receiver remove it from the loaded things"
+
+	| class |
+	class := self 
+		at: className asSymbol
+		ifAbsent: [ self error: 'No class found for the given class name: ', className printString ].
+	self deleteClassFromPackage: class
 ]
 
 { #category : 'method - patch api' }
@@ -396,9 +420,19 @@ RwGsPackageSymbolDictionary >> deleteCompiledMethod: compiledMethod from: behavi
 		ifAbsent: [ 
 			self
 				error:
-					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
+					'Internal error -- attempt to remove a method from a package in which its class is neither defined nor extended.' ].
 
 	loadedClassOrExtension removeLoadedMethod: loadedMethod
+]
+
+{ #category : 'method - patch api' }
+RwGsPackageSymbolDictionary >> deleteMethod: selector for: behavior [
+
+	| compiledMethod |
+
+	compiledMethod := behavior compiledMethodAt: selector.
+	self deleteCompiledMethod: compiledMethod from: behavior
+
 ]
 
 { #category : 'loaded queries' }

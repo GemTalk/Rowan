@@ -116,16 +116,17 @@ RwGsLoadedSymbolDictClass >> key [
 ]
 
 { #category : 'removing' }
-RwGsLoadedSymbolDictClass >> removeFromLoaded [
+RwGsLoadedSymbolDictClass >> removeFromLoaded: aPackageSymbolDictionary [
 
 	loadedInstanceMethods
 		valuesDo: [ :loadedInstanceMethod | 
 			self removeLoadedInstanceMethod: loadedInstanceMethod.
-			loadedInstanceMethod unregisterYourself ].
+			aPackageSymbolDictionary methodRegistry
+				removeKey: loadedInstanceMethod handle ].
 	loadedClassMethods
 		valuesDo: [ :loadedClassMethod | 
 			self removeLoadedClassMethod: loadedClassMethod.
-			loadedClassMethod unregisterYourself ].
+			aPackageSymbolDictionary methodRegistry removeKey: loadedClassMethod handle ].
 	self handleClassDeletion
 ]
 
