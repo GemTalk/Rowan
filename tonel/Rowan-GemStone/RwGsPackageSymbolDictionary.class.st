@@ -401,6 +401,14 @@ RwGsPackageSymbolDictionary >> deleteCompiledMethod: compiledMethod from: behavi
 	loadedClassOrExtension removeLoadedMethod: loadedMethod
 ]
 
+{ #category : 'loaded queries' }
+RwGsPackageSymbolDictionary >> existingForClass: aClass ifAbsent: absentBlock [
+
+	"Answer the registered LoadedClass for the given class."
+
+	^ classRegistry at: aClass classHistory ifAbsent: absentBlock
+]
+
 { #category : 'accessing' }
 RwGsPackageSymbolDictionary >> loadedPackageNamed: packageName ifAbsent: absentBlock [
 

@@ -124,14 +124,13 @@ RwSymbolDictionaryTest >> testClassAdditionPatch [
 	className := 'TestSymbolDictClass'.
 	superclassName := 'Object'.
 	class := self _createClassNamed: className superclassName: superclassName.
-	dict := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	expectedPackageSet := self
@@ -156,14 +155,13 @@ RwSymbolDictionaryTest >> testClassAdditionPatchWithCategory [
 	category := '*NotAPackageName'.
 	class := self _createClassNamed: className superclassName: superclassName.
 	class category: category.
-	dict := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	expectedPackageSet := self
@@ -186,19 +184,18 @@ RwSymbolDictionaryTest >> testClassDeletionPatch [
 	| dict class assoc packageName className testClass expectedPackageSet loadedPackageSet diff |
 	className := 'TestSymbolDictClass'.
 	class := self _createClassNamed: className superclassName: 'Object'.
-	dict := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	dict deleteClassFromPackage: class.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	self assert: testClass isNil.
 
 	expectedPackageSet := self packageSetDefinition: packageName.
@@ -218,19 +215,18 @@ RwSymbolDictionaryTest >> testClassPropertiesPatch [
 	className := 'TestSymbolDictClass'.
 	superclassName := 'Object'.
 	class := self _createClassNamed: className superclassName: 'Object'.
-	dict := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	newClass := self _applyBenignPropertiesTo: class.
 	dict updateClassProperties: newClass.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	self assert: testClass comment = self _classComment.
 
@@ -255,20 +251,19 @@ RwSymbolDictionaryTest >> testClassVariableChangePatch [
 	className := 'TestSymbolDictClass'.
 	superclassName := 'Object'.
 	class := self _createClassNamed: className superclassName: superclassName.
-	dict := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	newClass := self _applyClassVariableChangeTo: class.
 	dict updateClassProperties: newClass.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	self
 		assert:
@@ -297,21 +292,20 @@ RwSymbolDictionaryTest >> testClassVersioningPatch [
 	className := 'TestSymbolDictClass'.
 	superclassName := 'Object'.
 	class := self _createClassNamed: className superclassName: superclassName.
-	dict := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	newClass := self _applyClassNewVersionChangesTo: class.
 	dict addNewClassVersionToAssociation: newClass.
 	superclassName := 'Association'.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	self assert: testClass ~~ class.
 	self assert: testClass == newClass.
 	self
@@ -340,13 +334,12 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 	className := 'TestSymbolDictClass'.
 	superclassName := 'Object'.
 	class := self _createClassNamed: className superclassName: superclassName.
-	dict := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self assert: testClass == class.
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
@@ -393,13 +386,12 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 	className := 'TestSymbolDictClass'.
 	superclassName := 'Object'.
 	class := self _createClassNamed: className superclassName: superclassName.
-	dict := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	testInstance := testClass new.
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
@@ -451,14 +443,13 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInSymbolDictionaryExtension [
 	className := 'TestSymbolDictClass'.
 	superclassName := 'Object'.
 	class := self _createClassNamed: className superclassName: superclassName.
-	dict := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName1 := 'TestSymbolDictPackage'.
 	packageName2 := 'TestSymbolDictExtensionPackage'.
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName1.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self assert: testClass == class.
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
@@ -529,13 +520,12 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 	className := 'TestSymbolDictClass'.
 	superclassName := 'Object'.
 	class := self _createClassNamed: className superclassName: superclassName.
-	dict := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	testInstance := testClass new.
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
@@ -591,13 +581,12 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 	className := 'TestSymbolDictClass'.
 	superclassName := 'Object'.
 	class := self _createClassNamed: className superclassName: superclassName.
-	dict := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	testInstance := testClass new.
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.

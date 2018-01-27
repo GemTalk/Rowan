@@ -10,6 +10,18 @@ RwGsLoadedSymbolDictClass class >> newForClass: aClass [
 	^self new initializeForClass: aClass
 ]
 
+{ #category : 'private' }
+RwGsLoadedSymbolDictClass class >> resolveClassNamed: aSymbol [
+	"If the given symbol resolves in this session, *and* if what it resolves to is a class, answer that class.
+	Otherwise, answer nil."
+
+	| possibleClass |
+	possibleClass := GsCurrentSession currentSession objectNamed: aSymbol.
+	^(possibleClass isBehavior and: [possibleClass isMeta not])
+		ifTrue: [possibleClass]
+		ifFalse: [nil]
+]
+
 { #category : 'methods' }
 RwGsLoadedSymbolDictClass >> addLoadedClassMethod: aLoadedMethod [
 

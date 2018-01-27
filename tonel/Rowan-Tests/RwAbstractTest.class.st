@@ -31,6 +31,12 @@ RwAbstractTest >> _newOrExistingPackageSymbolDictionaryNamed: dictName [
 ]
 
 { #category : 'private' }
+RwAbstractTest >> _symbolDictionary [
+
+	^ self _newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName
+]
+
+{ #category : 'private' }
 RwAbstractTest >> _symbolDictionaryName [
 
 	^ #'CypressTestData'

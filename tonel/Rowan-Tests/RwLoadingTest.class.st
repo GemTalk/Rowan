@@ -81,9 +81,7 @@ RwLoadingTest >> applyDiffToImage: aPackageSetModification [
 	"work out the process handling that is needed in the face of new class versions"
 
 	| visitor patchSet |
-	visitor := RwGsImagePatchVisitor
-		newFor:
-			(self _newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName).
+	visitor := RwGsImagePatchVisitor newFor: self _symbolDictionary.
 	visitor visit: aPackageSetModification.
 	patchSet := visitor patchSet.
 	patchSet classesWithNewVersions isEmpty
@@ -92,9 +90,7 @@ RwLoadingTest >> applyDiffToImage: aPackageSetModification [
 			^ self ].
 	patchSet classesWithNewVersions
 		do: [ :each | each newClassVersionPatches: aPackageSetModification patchSet: nil ].
-	visitor := RwGsImagePatchVisitor
-		newFor:
-			(self _newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName).
+	visitor := RwGsImagePatchVisitor newFor: self _symbolDictionary.
 	visitor visit: aPackageSetModification.
 	patchSet := visitor patchSet.
 	patchSet apply
@@ -1670,75 +1666,84 @@ RwLoadingTest >> testBasicLoading [
 
 { #category : 'tests' }
 RwLoadingTest >> testClassAdd [
-  "test class addition"
 
-  | packageName packageNames myPackageSet className testClass testInstance loadedClass |
-  packageName := 'ClassAdditionTestPackage'.
-  className := 'TestClassAdditionClass'.
-  packageNames := {packageName}.
-  myPackageSet := RwPackageSetDefinition new.
-  myPackageSet
-    addPackage:
-        (self
-            methodDeletionPackageDefinition: packageName
-            className: className
-            instanceMethodDefinitions:
-              (self methodDeletionInstanceMethodsForClass1: className)
-            classMethodDefinitions:
-              (self methodDeletionClassMethodsForClass1: className));
-    yourself.
-  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-  loadedClass := RwGsLoadedClass
-    existingForClass: (RwGsLoadedClass resolveClassNamed: className asSymbol).
-  self assert: loadedClass ~= RwLoadedThing absentToken
+	"test class addition"
+
+	| packageName packageNames myPackageSet className testClass loadedClass |
+	packageName := 'ClassAdditionTestPackage'.
+	className := 'TestClassAdditionClass'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(self
+						methodDeletionPackageDefinition: packageName
+						className: className
+						instanceMethodDefinitions:
+							(self methodDeletionInstanceMethodsForClass1: className)
+						classMethodDefinitions:
+							(self methodDeletionClassMethodsForClass1: className));
+		yourself.
+	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	loadedClass := self _symbolDictionary
+		existingForClass: testClass
+		ifAbsent: [ 
+			"expected to find a loaded class"
+			self assert: false ].
+	self assert: testClass == loadedClass handle
 ]
 
 { #category : 'tests' }
 RwLoadingTest >> testClassDelete [
-  "test class deletion"
 
-  | packageName packageNames myPackageSet className testClass testInstance |
-  packageName := 'ClassDeletionTestPackage'.
-  className := 'TestClassDeletionClass'.
-  packageNames := {packageName}.
-  myPackageSet := RwPackageSetDefinition new.
-  myPackageSet
-    addPackage:
-        (self
-            methodDeletionPackageDefinition: packageName
-            className: className
-            instanceMethodDefinitions:
-              (self methodDeletionInstanceMethodsForClass1: className)
-            classMethodDefinitions:
-              (self methodDeletionClassMethodsForClass1: className));
-    yourself.
-  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-  testClass := System myUserProfile symbolList objectNamed: className.
-  testInstance := testClass new.
-  self
-    assert:
-        (testClass class compiledMethodAt: #'testClassMethod' otherwise: false) ~~ false;
-    assert: testClass testClassMethod;
-    assert: testClass testClassMethodSurvivor.
-  self
-    assert:
-        (testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) ~~ false;
-    assert: testInstance testInstanceMethod;
-    assert: testInstance testInstanceMethodSurvivor.
-  packageNames := {packageName}.
-  myPackageSet := RwPackageSetDefinition new.
+	"test class deletion"
+
+	| packageName packageNames myPackageSet className testClass testInstance |
+	packageName := 'ClassDeletionTestPackage'.
+	className := 'TestClassDeletionClass'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
-    addPackage:
-        (RwPackageDefinition
-            withProperties: (Dictionary with: 'name' -> packageName)
-            classDefinitions: Dictionary new
-            classExtensions: Dictionary new);
-    yourself.
-  self 
-		loadAndTestPackagesNamed: packageNames 
-		before: myPackageSet 
-		after: RwPackageSetDefinition new. "the package will be deleted after load when updatePackagesFromCategories is called, because last class with that category no longer exists -- implicit delete package"
-  self assert: (System myUserProfile symbolList objectNamed: className) isNil
+		addPackage:
+				(self
+						methodDeletionPackageDefinition: packageName
+						className: className
+						instanceMethodDefinitions:
+							(self methodDeletionInstanceMethodsForClass1: className)
+						classMethodDefinitions:
+							(self methodDeletionClassMethodsForClass1: className));
+		yourself.
+	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testInstance := testClass new.
+	self
+		assert:
+				(testClass class compiledMethodAt: #'testClassMethod' otherwise: false) ~~ false;
+		assert: testClass testClassMethod;
+		assert: testClass testClassMethodSurvivor.
+	self
+		assert:
+				(testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) ~~ false;
+		assert: testInstance testInstanceMethod;
+		assert: testInstance testInstanceMethodSurvivor.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions: Dictionary new
+						classExtensions: Dictionary new);
+		yourself.
+	self
+		loadAndTestPackagesNamed: packageNames
+		before: myPackageSet
+		after: RwPackageSetDefinition new.	"the package will be deleted after load when updatePackagesFromCategories is called, because last class with that category no longer exists -- implicit delete package"
+	self
+		assert:
+			(RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol) isNil
 ]
 
 { #category : 'tests' }
@@ -1764,7 +1769,7 @@ RwLoadingTest >> testClassExtension [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
-	testClass := System myUserProfile symbolList objectNamed: className.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self should: [ testInstance foo ] raise: MessageNotUnderstood.
 	packageNames := {packageName2}.
@@ -1786,69 +1791,72 @@ RwLoadingTest >> testClassExtension [
 
 { #category : 'tests' }
 RwLoadingTest >> testClassInitialization1 [
-  "test that class #initialize method is run when the class #initialize method is added"
 
-  | packageName packageNames myPackageSet className testClass |
-  packageName := 'ClassInitializationTestPackage'.
-  className := 'TestClassInitializationClass'.
-  packageNames := {packageName}.
-  myPackageSet := RwPackageSetDefinition new.
-  myPackageSet
-    addPackage:
-        (self
-            classInitializePackageDefinition: packageName
-            className: className
-            classMethodDefinitions:
-              (self classInitializationClassMethodsForClass1: className));
-    yourself.
-  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-  testClass := System myUserProfile symbolList objectNamed: className.
-  self assert: testClass classVar = 1.
-  self assert: testClass classInstVar1 = 1
+	"test that class #initialize method is run when the class #initialize method is added"
+
+	| packageName packageNames myPackageSet className testClass |
+	packageName := 'ClassInitializationTestPackage'.
+	className := 'TestClassInitializationClass'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(self
+						classInitializePackageDefinition: packageName
+						className: className
+						classMethodDefinitions:
+							(self classInitializationClassMethodsForClass1: className));
+		yourself.
+	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	self assert: testClass classVar = 1.
+	self assert: testClass classInstVar1 = 1
 ]
 
 { #category : 'tests' }
 RwLoadingTest >> testClassInitialization2 [
-  "test that class #initialize method is run when the class #initialize method is changed"
 
-  | packageName packageNames myPackageSet className testClass |
-  packageName := 'ClassInitializationTestPackage'.
-  className := 'TestClassInitializationClass'.
-  packageNames := {packageName}.
-  myPackageSet := RwPackageSetDefinition new.
-  myPackageSet
-    addPackage:
-        (self
-            classInitializePackageDefinition: packageName
-            className: className
-            classMethodDefinitions:
-              (self classInitializationClassMethodsForClass1: className));
-    yourself.
-  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-  testClass := System myUserProfile symbolList objectNamed: className.
-  self assert: testClass classVar = 1.
-  self assert: testClass classInstVar1 = 1.
-  self assert: testClass classInstVar2 isNil.	"update the initialization method ... #initialize should run again"
-  packageName := 'ClassInitializationTestPackage'.
-  className := 'TestClassInitializationClass'.
-  packageNames := {packageName}.
-  myPackageSet := RwPackageSetDefinition new.
-  myPackageSet
-    addPackage:
-        (self
-            classInitializePackageDefinition: packageName
-            className: className
-            classMethodDefinitions:
-              (self classInitializationClassMethodsForClass2: className));
-    yourself.
-  self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-  self assert: testClass classVar = 1.
-  self assert: testClass classInstVar1 = 1.
-  self assert: testClass classInstVar2 = 2
+	"test that class #initialize method is run when the class #initialize method is changed"
+
+	| packageName packageNames myPackageSet className testClass |
+	packageName := 'ClassInitializationTestPackage'.
+	className := 'TestClassInitializationClass'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(self
+						classInitializePackageDefinition: packageName
+						className: className
+						classMethodDefinitions:
+							(self classInitializationClassMethodsForClass1: className));
+		yourself.
+	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	self assert: testClass classVar = 1.
+	self assert: testClass classInstVar1 = 1.
+	self assert: testClass classInstVar2 isNil.	"update the initialization method ... #initialize should run again"
+	packageName := 'ClassInitializationTestPackage'.
+	className := 'TestClassInitializationClass'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(self
+						classInitializePackageDefinition: packageName
+						className: className
+						classMethodDefinitions:
+							(self classInitializationClassMethodsForClass2: className));
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+	self assert: testClass classVar = 1.
+	self assert: testClass classInstVar1 = 1.
+	self assert: testClass classInstVar2 = 2
 ]
 
 { #category : 'tests' }
 RwLoadingTest >> testClassInstVarChanges [
+
 	"characterize class inst var changes with respect to new version creation"
 
 	"as of GemStone 3.4, .... any change to the class inst vars creates a new class version"
@@ -1866,7 +1874,7 @@ RwLoadingTest >> testClassInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass1 := System myUserProfile symbolList objectNamed: className.
+	testClass1 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	civs1 := testClass1 _classInstVars copy.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -1877,7 +1885,7 @@ RwLoadingTest >> testClassInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := System myUserProfile symbolList objectNamed: className.
+	testClass2 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	civs2 := testClass2 _classInstVars copy.
 	self deny: testClass2 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -1889,7 +1897,7 @@ RwLoadingTest >> testClassInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass3 := System myUserProfile symbolList objectNamed: className.
+	testClass3 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	civs3 := testClass3 _classInstVars copy.
 	self deny: testClass3 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -1901,7 +1909,7 @@ RwLoadingTest >> testClassInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass4 := System myUserProfile symbolList objectNamed: className.
+	testClass4 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	civs4 := testClass4 _classInstVars copy.
 	self deny: testClass4 == testClass1
 ]
@@ -1994,6 +2002,7 @@ RwLoadingTest >> testClassPropertyChangesWithNoNewClassVersion [
 
 { #category : 'tests' }
 RwLoadingTest >> testClassVarChanges [
+
 	"characterize class var changes with respect to new version creation"
 
 	"as of GemStone 3.4, adding and removing Class Vars does not cause the 
@@ -2012,7 +2021,7 @@ RwLoadingTest >> testClassVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass1 := System myUserProfile symbolList objectNamed: className.
+	testClass1 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	cvs1 := testClass1 _classVars copy.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2023,7 +2032,7 @@ RwLoadingTest >> testClassVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := System myUserProfile symbolList objectNamed: className.
+	testClass2 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	cvs2 := testClass2 _classVars copy.
 	self assert: testClass2 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -2035,7 +2044,7 @@ RwLoadingTest >> testClassVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass3 := System myUserProfile symbolList objectNamed: className.
+	testClass3 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	cvs3 := testClass3 _classVars copy.
 	self assert: testClass3 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -2047,106 +2056,106 @@ RwLoadingTest >> testClassVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass4 := System myUserProfile symbolList objectNamed: className.
+	testClass4 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	cvs4 := testClass4 _classVars copy.
 	self assert: testClass4 == testClass1
 ]
 
 { #category : 'tests' }
 RwLoadingTest >> testCombinedChanges [
-  "single package update that includes an example of each kind of change supported"
 
-  | packageName packageNames myPackageSet className testClass testInstance classDefinitionsDictionary deletedClassName |
-  packageName := 'CombinedTestPackage'.
-  className := 'TestCombinedChangesClass'.
-  deletedClassName := 'TestClassDeletionClass'.
-  packageNames := {packageName}.
-  classDefinitionsDictionary := (self basicClassDefinitions: packageName)
-    at: className
-      put:
-        ((self
-            definitionOfMethodDeletionClassNamed: className
-            inPackage: packageName
-            instanceMethodDefinitions:
-              (self combinedInstanceMethodsForClass1: className)
-            classMethodDefinitions:
-              (self combinedClassMethodsForClass1: className))
-            properties:
-                (self
-                    propertiesOfClassInitializationClassNamed: className
-                    inPackage: packageName);
-            yourself);
-    at: deletedClassName
-      put:
-        ((self
-            definitionOfMethodDeletionClassNamed: deletedClassName
-            inPackage: packageName
-            instanceMethodDefinitions:
-              (self combinedInstanceMethodsForClass1: deletedClassName)
-            classMethodDefinitions:
-              (self combinedClassMethodsForClass1: deletedClassName))
-            properties:
-                (self
-                    propertiesOfClassInitializationClassNamed: deletedClassName
-                    inPackage: packageName);
-            yourself);
-    yourself.
-  myPackageSet := RwPackageSetDefinition new
-    addPackage:
-        (RwPackageDefinition
-            withProperties: (Dictionary with: 'name' -> packageName)
-            classDefinitions: classDefinitionsDictionary
-            classExtensions: Dictionary new);
-    yourself.
-  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-  testClass := System myUserProfile symbolList objectNamed: className.
-  testInstance := testClass new.
-  self
-    assert: testClass testClassMethod1;
-    assert: testClass testClassMethod2;
-    assert: testClass testClassMethod3 = 1;
-    assert: testInstance testInstanceMethod1;
-    assert: testInstance testInstanceMethod2;
-    assert: testInstance testInstanceMethod3 = 1.
-  packageNames := {packageName}.
-  classDefinitionsDictionary := (self basicClassDefinitions: packageName)
-    at: className
-      put:
-        ((self
-            definitionOfMethodDeletionClassNamed: className
-            inPackage: packageName
-            instanceMethodDefinitions:
-              (self combinedInstanceMethodsForClass2: className)
-            classMethodDefinitions:
-              (self combinedClassMethodsForClass2: className))
-            properties:
-                (self
-                    propertiesOfClassInitializationClassNamed: className
-                    inPackage: packageName);
-            yourself);
-    yourself.
-  myPackageSet := RwPackageSetDefinition new
-    addPackage:
-        (RwPackageDefinition
-            withProperties: (Dictionary with: 'name' -> packageName)
-            classDefinitions: classDefinitionsDictionary
-            classExtensions: Dictionary new);
-    yourself.
-  self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-  self
-    assert: testClass testClassMethod1;
-    assert:
-        (testClass class compiledMethodAt: #'testClassMethod2' otherwise: false)
-            == false;
-    assert: testClass testClassMethod3 = 2;
-    assert: testInstance testInstanceMethod1;
-    assert:
-        (testClass compiledMethodAt: #'testInstanceMethod2' otherwise: false) == false;
-    assert: testInstance testInstanceMethod3 = 2
+	"single package update that includes an example of each kind of change supported"
+
+	| packageName packageNames myPackageSet className testClass testInstance classDefinitionsDictionary deletedClassName |
+	packageName := 'CombinedTestPackage'.
+	className := 'TestCombinedChangesClass'.
+	deletedClassName := 'TestClassDeletionClass'.
+	packageNames := {packageName}.
+	classDefinitionsDictionary := (self basicClassDefinitions: packageName)
+		at: className
+			put:
+				((self
+						definitionOfMethodDeletionClassNamed: className
+						inPackage: packageName
+						instanceMethodDefinitions:
+							(self combinedInstanceMethodsForClass1: className)
+						classMethodDefinitions: (self combinedClassMethodsForClass1: className))
+						properties:
+								(self
+										propertiesOfClassInitializationClassNamed: className
+										inPackage: packageName);
+						yourself);
+		at: deletedClassName
+			put:
+				((self
+						definitionOfMethodDeletionClassNamed: deletedClassName
+						inPackage: packageName
+						instanceMethodDefinitions:
+							(self combinedInstanceMethodsForClass1: deletedClassName)
+						classMethodDefinitions:
+							(self combinedClassMethodsForClass1: deletedClassName))
+						properties:
+								(self
+										propertiesOfClassInitializationClassNamed: deletedClassName
+										inPackage: packageName);
+						yourself);
+		yourself.
+	myPackageSet := RwPackageSetDefinition new
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions: classDefinitionsDictionary
+						classExtensions: Dictionary new);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testInstance := testClass new.
+	self
+		assert: testClass testClassMethod1;
+		assert: testClass testClassMethod2;
+		assert: testClass testClassMethod3 = 1;
+		assert: testInstance testInstanceMethod1;
+		assert: testInstance testInstanceMethod2;
+		assert: testInstance testInstanceMethod3 = 1.
+	packageNames := {packageName}.
+	classDefinitionsDictionary := (self basicClassDefinitions: packageName)
+		at: className
+			put:
+				((self
+						definitionOfMethodDeletionClassNamed: className
+						inPackage: packageName
+						instanceMethodDefinitions:
+							(self combinedInstanceMethodsForClass2: className)
+						classMethodDefinitions: (self combinedClassMethodsForClass2: className))
+						properties:
+								(self
+										propertiesOfClassInitializationClassNamed: className
+										inPackage: packageName);
+						yourself);
+		yourself.
+	myPackageSet := RwPackageSetDefinition new
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions: classDefinitionsDictionary
+						classExtensions: Dictionary new);
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+	self
+		assert: testClass testClassMethod1;
+		assert:
+				(testClass class compiledMethodAt: #'testClassMethod2' otherwise: false)
+						== false;
+		assert: testClass testClassMethod3 = 2;
+		assert: testInstance testInstanceMethod1;
+		assert:
+				(testClass compiledMethodAt: #'testInstanceMethod2' otherwise: false) == false;
+		assert: testInstance testInstanceMethod3 = 2
 ]
 
 { #category : 'tests' }
 RwLoadingTest >> testInstVarChanges [
+
 	"characterize class inst var changes with respect to new version creation"
 
 	"as of GemStone 3.4, .... any change to the inst vars creates a new class version"
@@ -2164,7 +2173,7 @@ RwLoadingTest >> testInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass1 := System myUserProfile symbolList objectNamed: className.
+	testClass1 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	ivs1 := testClass1 _instVarNames copy.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2175,7 +2184,7 @@ RwLoadingTest >> testInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := System myUserProfile symbolList objectNamed: className.
+	testClass2 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	ivs2 := testClass2 _instVarNames copy.
 	self deny: testClass2 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -2187,7 +2196,7 @@ RwLoadingTest >> testInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass3 := System myUserProfile symbolList objectNamed: className.
+	testClass3 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	ivs3 := testClass3 _instVarNames copy.
 	self deny: testClass3 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -2199,115 +2208,118 @@ RwLoadingTest >> testInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass4 := System myUserProfile symbolList objectNamed: className.
+	testClass4 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	ivs4 := testClass4 _instVarNames copy.
 	self deny: testClass4 == testClass1
 ]
 
 { #category : 'tests' }
 RwLoadingTest >> testMethodDelete [
-  "test class and instance method deletion"
 
-  | packageName packageNames myPackageSet className testClass testInstance |
-  packageName := 'MethodDeletionTestPackage'.
-  className := 'TestMethodDeletionClass'.
-  packageNames := {packageName}.
-  myPackageSet := RwPackageSetDefinition new.
-  myPackageSet
-    addPackage:
-        (self
-            methodDeletionPackageDefinition: packageName
-            className: className
-            instanceMethodDefinitions:
-              (self methodDeletionInstanceMethodsForClass1: className)
-            classMethodDefinitions:
-              (self methodDeletionClassMethodsForClass1: className));
-    yourself.
-  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-  testClass := System myUserProfile symbolList objectNamed: className.
-  testInstance := testClass new.
-  self
-    assert:
-        (testClass class compiledMethodAt: #'testClassMethod' otherwise: false) ~~ false;
-    assert: testClass testClassMethod;
-    assert: testClass testClassMethodSurvivor.
-  self
-    assert:
-        (testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) ~~ false;
-    assert: testInstance testInstanceMethod;
-    assert: testInstance testInstanceMethodSurvivor.
-  packageNames := {packageName}.
-  myPackageSet := RwPackageSetDefinition new.
-  myPackageSet
-    addPackage:
-        (self
-            methodDeletionPackageDefinition: packageName
-            className: className
-            instanceMethodDefinitions:
-              (self methodDeletionInstanceMethodsForClass2: className)
-            classMethodDefinitions:
-              (self methodDeletionClassMethodsForClass2: className));
-    yourself.
-  self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-  self
-    assert:
-        (testClass class compiledMethodAt: #'testClassMethod' otherwise: false) == false;
-    assert: testClass testClassMethodSurvivor.
-  self
-    assert:
-        (testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) == false;
-    assert: testInstance testInstanceMethodSurvivor
+	"test class and instance method deletion"
+
+	| packageName packageNames myPackageSet className testClass testInstance |
+	packageName := 'MethodDeletionTestPackage'.
+	className := 'TestMethodDeletionClass'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(self
+						methodDeletionPackageDefinition: packageName
+						className: className
+						instanceMethodDefinitions:
+							(self methodDeletionInstanceMethodsForClass1: className)
+						classMethodDefinitions:
+							(self methodDeletionClassMethodsForClass1: className));
+		yourself.
+	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testInstance := testClass new.
+	self
+		assert:
+				(testClass class compiledMethodAt: #'testClassMethod' otherwise: false) ~~ false;
+		assert: testClass testClassMethod;
+		assert: testClass testClassMethodSurvivor.
+	self
+		assert:
+				(testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) ~~ false;
+		assert: testInstance testInstanceMethod;
+		assert: testInstance testInstanceMethodSurvivor.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(self
+						methodDeletionPackageDefinition: packageName
+						className: className
+						instanceMethodDefinitions:
+							(self methodDeletionInstanceMethodsForClass2: className)
+						classMethodDefinitions:
+							(self methodDeletionClassMethodsForClass2: className));
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+	self
+		assert:
+				(testClass class compiledMethodAt: #'testClassMethod' otherwise: false) == false;
+		assert: testClass testClassMethodSurvivor.
+	self
+		assert:
+				(testClass compiledMethodAt: #'testInstanceMethod' otherwise: false) == false;
+		assert: testInstance testInstanceMethodSurvivor
 ]
 
 { #category : 'tests' }
 RwLoadingTest >> testMethodProtocolChange [
-  "test class and instance method protocol changes"
 
-  | packageName packageNames myPackageSet className testClass testInstance |
-  packageName := 'MethodProtocolChangedTestPackage'.
-  className := 'TestMethodProtocolChangeClass'.
-  packageNames := {packageName}.
-  myPackageSet := RwPackageSetDefinition new.
-  myPackageSet
-    addPackage:
-        (self
-            methodProtocolChangePackageDefinition: packageName
-            className: className
-            instanceMethodDefinitions:
-              (self methodProtocolChangeInstanceMethodsForClass1: className)
-            classMethodDefinitions:
-              (self methodProtocolChangeClassMethodsForClass1: className));
-    yourself.
-  self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-  testClass := System myUserProfile symbolList objectNamed: className.
-  testInstance := testClass new.
-  self
-    assert: testClass testClassMethod1;
-    assert: testClass testClassMethod2;
-    assert: testInstance testInstanceMethod1;
-    assert: testInstance testInstanceMethod2.
-  packageNames := {packageName}.
-  myPackageSet := RwPackageSetDefinition new.
-  myPackageSet
-    addPackage:
-        (self
-            methodProtocolChangePackageDefinition: packageName
-            className: className
-            instanceMethodDefinitions:
-              (self methodProtocolChangeInstanceMethodsForClass2: className)
-            classMethodDefinitions:
-              (self methodProtocolChangeClassMethodsForClass2: className));
-    yourself.
-  self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-  self
-    assert: testClass testClassMethod1;
-    assert: testClass testClassMethod2;
-    assert: testInstance testInstanceMethod1;
-    assert: testInstance testInstanceMethod2
+	"test class and instance method protocol changes"
+
+	| packageName packageNames myPackageSet className testClass testInstance |
+	packageName := 'MethodProtocolChangedTestPackage'.
+	className := 'TestMethodProtocolChangeClass'.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(self
+						methodProtocolChangePackageDefinition: packageName
+						className: className
+						instanceMethodDefinitions:
+							(self methodProtocolChangeInstanceMethodsForClass1: className)
+						classMethodDefinitions:
+							(self methodProtocolChangeClassMethodsForClass1: className));
+		yourself.
+	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testInstance := testClass new.
+	self
+		assert: testClass testClassMethod1;
+		assert: testClass testClassMethod2;
+		assert: testInstance testInstanceMethod1;
+		assert: testInstance testInstanceMethod2.
+	packageNames := {packageName}.
+	myPackageSet := RwPackageSetDefinition new.
+	myPackageSet
+		addPackage:
+				(self
+						methodProtocolChangePackageDefinition: packageName
+						className: className
+						instanceMethodDefinitions:
+							(self methodProtocolChangeInstanceMethodsForClass2: className)
+						classMethodDefinitions:
+							(self methodProtocolChangeClassMethodsForClass2: className));
+		yourself.
+	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+	self
+		assert: testClass testClassMethod1;
+		assert: testClass testClassMethod2;
+		assert: testInstance testInstanceMethod1;
+		assert: testInstance testInstanceMethod2
 ]
 
 { #category : 'tests' }
 RwLoadingTest >> testPoolDictionaryChanges [
+
 	"characterize pool dictionary changes with respect to new version creation"
 
 	"as of GemStone 3.4, .... "
@@ -2326,7 +2338,7 @@ RwLoadingTest >> testPoolDictionaryChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass1 := System myUserProfile symbolList objectNamed: className.
+	testClass1 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	pds1 := testClass1 _poolDictionaries copy.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2338,7 +2350,7 @@ RwLoadingTest >> testPoolDictionaryChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := System myUserProfile symbolList objectNamed: className.
+	testClass2 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	pds2 := testClass2 _poolDictionaries copy.
 	self deny: testClass2 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -2351,7 +2363,7 @@ RwLoadingTest >> testPoolDictionaryChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass3 := System myUserProfile symbolList objectNamed: className.
+	testClass3 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	pds3 := testClass3 _poolDictionaries copy.
 	self deny: testClass3 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -2364,7 +2376,7 @@ RwLoadingTest >> testPoolDictionaryChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass4 := System myUserProfile symbolList objectNamed: className.
+	testClass4 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	pds4 := testClass4 _poolDictionaries copy.
 	self deny: testClass4 == testClass1
 ]
@@ -2406,7 +2418,7 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
-	testClass1 := System myUserProfile symbolList objectNamed: className.
+	testClass1 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
 	self assert: testInstance1 foo = 'foo'.
 	packageNames := {packageName}.
@@ -2422,7 +2434,7 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := System myUserProfile symbolList objectNamed: className.
+	testClass2 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
 	self assert: testInstance2 foo = 'foo'
@@ -2451,7 +2463,7 @@ RwLoadingTest >> testSingleClassVersionChange2 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
-	testClass1 := System myUserProfile symbolList objectNamed: className.
+	testClass1 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
 	self assert: testInstance1 foo = 'foo'.
 	packageNames := {packageName}.
@@ -2467,7 +2479,7 @@ RwLoadingTest >> testSingleClassVersionChange2 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := System myUserProfile symbolList objectNamed: className.
+	testClass2 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
 	self assert: testInstance2 foo = 'bar'
@@ -2496,7 +2508,7 @@ RwLoadingTest >> testSingleClassVersionChange3 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
-	testClass1 := System myUserProfile symbolList objectNamed: className.
+	testClass1 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
 	self assert: testInstance1 foo = 'foo'.
 	packageNames := {packageName}.
@@ -2512,7 +2524,7 @@ RwLoadingTest >> testSingleClassVersionChange3 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := System myUserProfile symbolList objectNamed: className.
+	testClass2 := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
 	self assert: testInstance2 foo = 'foo'

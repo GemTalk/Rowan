@@ -18,5 +18,7 @@ RwGsMethodAdditionSymbolDictPatch >> installMethod [
 		addNewCompiledMethod: compiledMethod
 		for: behavior
 		protocol: self propertiesProtocolName
-		toPackageNamed: packageDefinition key
+		toPackageNamed: packageDefinition key.
+	selector := compiledMethod selector.
+
 ]
