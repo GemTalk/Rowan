@@ -42,6 +42,12 @@ RwGsPackageSymbolDictionary >> _classExtensionPatchClass [
 	^ RwGsClassExtensionSymbolDictPatch
 ]
 
+{ #category : 'patch class accessors' }
+RwGsPackageSymbolDictionary >> _classVariablePatchClass [
+
+	^ RwGsClassVariableChangeSymbolDictPatch
+]
+
 { #category : 'private' }
 RwGsPackageSymbolDictionary >> _initializeWithoutClear: newSize [
 
@@ -108,6 +114,12 @@ RwGsPackageSymbolDictionary >> _methodDeletionPatchClass [
 RwGsPackageSymbolDictionary >> _methodExtensionPatchClass [
 
 	^ RwGsMethodExtensionSymbolDictPatch
+]
+
+{ #category : 'patch class accessors' }
+RwGsPackageSymbolDictionary >> _methodSourcePatchClass [
+
+	^ RwGsMethodSourceSymbolDictPatch
 ]
 
 { #category : 'patch class accessors' }

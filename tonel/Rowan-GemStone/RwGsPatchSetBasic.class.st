@@ -304,20 +304,25 @@ RwGsPatchSetBasic >> addPatchedClassClassVariables: aClassDefinition inPackage: 
 
 	classesWithClassVariableChanges
 		add:
-			(self _classVariablePatchClass
+			((self _classVariablePatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addPatchedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-  methodsNeedingRecompile
-    add:
-      (self _methodSourcePatchClass
-        forMethod: aClassMethodDefinition
-        isMeta: true
-        inClass: aClassDefinition
-        inPackage: aPackageDefinition)
+
+	methodsNeedingRecompile
+		add:
+			((self _methodSourcePatchClass
+				forMethod: aClassMethodDefinition
+				isMeta: true
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }
@@ -351,13 +356,16 @@ RwGsPatchSetBasic >> addPatchedClassProperties: aClassDefinition inPackage: aPac
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-  methodsNeedingRecompile
-    add:
-      (self _methodSourcePatchClass
-        forMethod: aInstanceMethodDefinition
-        isMeta: false
-        inClass: aClassDefinition
-        inPackage: aPackageDefinition)
+
+	methodsNeedingRecompile
+		add:
+			((self _methodSourcePatchClass
+				forMethod: aInstanceMethodDefinition
+				isMeta: false
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }

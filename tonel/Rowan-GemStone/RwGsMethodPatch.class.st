@@ -153,10 +153,11 @@ RwGsMethodPatch >> propertiesProtocolName [
 
 { #category : 'initializers' }
 RwGsMethodPatch >> runInitializer [
+
 	"execute class initialization methods"
 
-	(isMeta and: [ selector == #initialize ])
-		ifTrue: [ behavior theNonMetaClass initialize ]
+	(isMeta and: [ selector == #'initialize' ])
+		ifTrue: [ behavior thisClass initialize ]
 ]
 
 { #category : 'private-installing' }
