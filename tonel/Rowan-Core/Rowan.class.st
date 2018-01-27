@@ -22,7 +22,8 @@ Rowan class >> addProject: aRwProjectSpecification [
 	"Register a project"
 
 	| projectName |
-	projectName := aRwProjectSpecification specName knownProjects
+	projectName := aRwProjectSpecification specName.
+	knownProjects
 		at: projectName
 		ifPresent: [ :aLoadedProject | 
 			self
@@ -184,6 +185,16 @@ Rowan class >> projectNamed: aString ifAbsent: absentBlock [
 Rowan class >> projectTools [
 
 	^self platform projectTools
+]
+
+{ #category : 'public' }
+Rowan class >> removeProject: aRwProjectSpecification [
+
+	"remove a project"
+
+	| projectName |
+	projectName := aRwProjectSpecification specName.
+	knownProjects removeKey: projectName ifAbsent: [  ]
 ]
 
 { #category : 'public' }

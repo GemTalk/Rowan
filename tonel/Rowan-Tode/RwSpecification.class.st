@@ -100,6 +100,14 @@ RwSpecification >> register [
 ]
 
 { #category : 'registering' }
+RwSpecification >> registerForced [
+
+	(Rowan projectNamed: self specName ifAbsent: [  ])
+		ifNotNil: [ :anotherProject | Rowan removeProject: self ].
+	Rowan addProject: self
+]
+
+{ #category : 'registering' }
 RwSpecification >> unregister [
   Rowan knownProjects removeKey: self specName ifAbsent: [  ]
 ]

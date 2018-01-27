@@ -126,30 +126,32 @@ RwPackageReadWriteTest >> testFiletreeWriteRead [
 
 { #category : 'tests' }
 RwPackageReadWriteTest >> testSpecReadValidation [
-  | spec tool |
-  tool := Rowan projectTools read.
-  spec := RwPackageProjectSpecification new
-    specName: 'Empty';
-    register.
-  self should: [ tool validate: spec ] raise: Error.
-  spec specName: 'test spec for ' , self class name.
-  self should: [ tool validate: spec ] raise: Error.
-  spec repositoryRootPath: '/tmp/repo'.
-  tool validate: spec
+
+	| spec tool |
+	tool := Rowan projectTools read.
+	spec := RwPackageProjectSpecification new
+		specName: 'Empty';
+		registerForced.
+	self should: [ tool validate: spec ] raise: Error.
+	spec specName: 'test spec for ' , self class name.
+	self should: [ tool validate: spec ] raise: Error.
+	spec repositoryRootPath: '/tmp/repo'.
+	tool validate: spec
 ]
 
 { #category : 'tests' }
 RwPackageReadWriteTest >> testSpecWriteValidation [
-  | spec tool |
-  tool := Rowan projectTools write.
-  spec := RwPackageProjectSpecification new
-    specName: 'Empty';
-    register.
-  self should: [ tool validate: spec ] raise: Error.
-  spec specName: 'test spec for ' , self class name.
-  self should: [ tool validate: spec ] raise: Error.
-  spec repositoryRootPath: '/tmp/repo'.
-  tool validate: spec
+
+	| spec tool |
+	tool := Rowan projectTools write.
+	spec := RwPackageProjectSpecification new
+		specName: 'Empty';
+		registerForced.
+	self should: [ tool validate: spec ] raise: Error.
+	spec specName: 'test spec for ' , self class name.
+	self should: [ tool validate: spec ] raise: Error.
+	spec repositoryRootPath: '/tmp/repo'.
+	tool validate: spec
 ]
 
 { #category : 'tests' }
