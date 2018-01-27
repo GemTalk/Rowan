@@ -15,16 +15,22 @@ Class {
 RwGsMethodDeletionSymbolDictPatch >> deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
 
 	| className class |
-	classDefinition key ifNil: [ "class is being deleted ... we're cool" ^self ].
+	classDefinition key
+		ifNil: [ 
+			"class is being deleted ... we're cool"
+			^ self ].
 	className := classDefinition key asSymbol.
-	class := createdClasses at: className
-				ifAbsent: 
-					[tempSymbols at: className
-						ifAbsent: [self error: 'Cannot find class to delete method from.']].
-	behavior := isMeta ifTrue: [class class] ifFalse: [class].
+	class := createdClasses
+		at: className
+		ifAbsent: [ 
+			tempSymbols
+				at: className
+				ifAbsent: [ self error: 'Cannot find class to delete method from.' ] ].
+	behavior := isMeta
+		ifTrue: [ class class ]
+		ifFalse: [ class ].
 
-	packageSymbolDictionary deleteMethod: selector for: behavior.
-
+	packageSymbolDictionary deleteMethod: methodDefinition selector for: behavior
 ]
 
 { #category : 'initializers' }

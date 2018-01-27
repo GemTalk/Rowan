@@ -327,13 +327,16 @@ RwGsPatchSetBasic >> addPatchedClassMethod: aClassMethodDefinition inClass: aCla
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addPatchedClassMethodProperties: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
-  methodsWithPropertyChanges
-    add:
-      (self _methodPropertiesPatchClass
-        forMethod: aClassMethodDefinition
-        isMeta: true
-        inClass: aClassDefinition
-        inPackage: aPackageDefinition)
+
+	methodsWithPropertyChanges
+		add:
+			((self _methodPropertiesPatchClass
+				forMethod: aClassMethodDefinition
+				isMeta: true
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }
@@ -350,11 +353,14 @@ RwGsPatchSetBasic >> addPatchedClassNewVersion: aClassModification inPackage: aP
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addPatchedClassProperties: aClassDefinition inPackage: aPackageDefinition [
-  classesWithPropertyChanges
-    add:
-      (self _classPropertiesPatchClass
-        for: aClassDefinition
-        inPackage: aPackageDefinition)
+
+	classesWithPropertyChanges
+		add:
+			((self _classPropertiesPatchClass
+				for: aClassDefinition
+				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'building' }
@@ -373,13 +379,16 @@ RwGsPatchSetBasic >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass
 
 { #category : 'building' }
 RwGsPatchSetBasic >> addPatchedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+
 	methodsWithPropertyChanges
 		add:
-			(self _methodPropertiesPatchClass
+			((self _methodPropertiesPatchClass
 				forMethod: aInstanceMethodDefinition
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
+				packageSymbolDictionary: packageSymbolDictionary;
+				yourself)
 ]
 
 { #category : 'private - applying' }

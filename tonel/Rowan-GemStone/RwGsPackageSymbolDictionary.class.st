@@ -43,6 +43,12 @@ RwGsPackageSymbolDictionary >> _classExtensionPatchClass [
 ]
 
 { #category : 'patch class accessors' }
+RwGsPackageSymbolDictionary >> _classPropertiesPatchClass [
+
+	^ RwGsClassPropertiesSymDictPatch
+]
+
+{ #category : 'patch class accessors' }
 RwGsPackageSymbolDictionary >> _classVariablePatchClass [
 
 	^ RwGsClassVariableChangeSymbolDictPatch
@@ -120,6 +126,12 @@ RwGsPackageSymbolDictionary >> _methodDeletionPatchClass [
 RwGsPackageSymbolDictionary >> _methodExtensionPatchClass [
 
 	^ RwGsMethodExtensionSymbolDictPatch
+]
+
+{ #category : 'patch class accessors' }
+RwGsPackageSymbolDictionary >> _methodPropertiesPatchClass [
+
+	^ RwGsMethodPropertiesSymDictPatch
 ]
 
 { #category : 'patch class accessors' }
@@ -543,11 +555,24 @@ RwGsPackageSymbolDictionary >> migrateInstances: instances to: anotherClass [
 { #category : 'method - patch api' }
 RwGsPackageSymbolDictionary >> moveCompiledMethod: compiledMethod toProtocol: newProtocol [
 
-	"delete a compiled method from behavior and remove it from the loaded things"
+	"move a compiled method into a different protocol and update loaded things"
 
-	| behavior selector loadedMethod oldCat catSym catDict |
+	| behavior selector loadedMethod oldCat catSym catDict methodDictionary existingCompiledMethod |
 	selector := compiledMethod selector.
 	behavior := compiledMethod inClass.
+
+	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	existingCompiledMethod := methodDictionary
+		at: selector
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no existing CompileMethod found for patched method.' ].
+	existingCompiledMethod == compiledMethod
+		ifFalse: [ 
+			self
+				error:
+					'Internal error - the existingCompiledMethod is not identical to the compiled method arg' ].
 
 	oldCat := behavior categoryOfSelector: selector environmentId: 0.
 	catSym := newProtocol asSymbol.
