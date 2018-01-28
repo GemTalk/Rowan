@@ -6,27 +6,28 @@ Class {
 
 { #category : 'private' }
 RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPath useGit: useGit abort: abortBlock [
-  | utils gitTool |
-  utils := self fileUtilities.
-  gitTool := Rowan projectTools git.
-  (utils directoryExists: repoPath)
-    ifTrue: [ 
-      (self
-        confirm:
-          'There is already a directory named ' , repoPath printString
-            , '. The contents of the directory will be deleted if you continue.')
-        == true
-        ifFalse: [ ^ abortBlock value ].
-      utils deleteAll: repoPath ]
-    ifFalse: [ utils ensureDirectoryExists: repoPath ].
-  useGit
-    ifTrue: [ 
-      | gitRepoDir |
-      gitRepoDir := ServerFileDirectory on: repoPath.
-      (gitTool gitPresentIn: gitRepoDir)
-        ifFalse: [ 
-          "create a git repository"
-          gitTool gitinitIn: gitRepoDir with: '' ] ]
+
+	| utils gitTool |
+	utils := self fileUtilities.
+	gitTool := Rowan projectTools git.
+	(utils directoryExists: repoPath)
+		ifTrue: [ 
+			(self
+				confirm:
+					'There is already a directory named ' , repoPath printString
+						, '. The contents of the directory will be deleted if you continue.')
+				== true
+				ifFalse: [ ^ abortBlock value ].
+			utils deleteAll: repoPath ]
+		ifFalse: [ utils ensureDirectoryExists: repoPath ].
+	useGit
+		ifTrue: [ 
+			| gitRepoDir |
+			gitRepoDir := ServerFileDirectory on: repoPath.
+			(gitTool gitPresentIn: gitRepoDir)
+				ifFalse: [ 
+					"create a git repository"
+					gitTool gitinitIn: gitRepoDir with: '' ] ]
 ]
 
 { #category : 'smalltalk api' }

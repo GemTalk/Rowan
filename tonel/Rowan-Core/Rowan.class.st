@@ -29,9 +29,7 @@ Rowan class >> addProject: aRwProjectSpecification [
 			self
 				error:
 					'There is already a project named ' , projectName printString , ' registered' ].
-	knownProjects
-		at: projectName
-		put: (RwLoadedProject newForLoadSpecification: aRwProjectSpecification)
+	^ knownProjects at: projectName put: aRwProjectSpecification
 ]
 
 { #category : 'public' }
@@ -104,12 +102,11 @@ Rowan class >> knownRepositories [
 
 { #category : 'public' }
 Rowan class >> loadedPackageDefinitionsNamed: someNames [
+
 	"Answer a PackageSetDefinition containing packages with the given names in the image.
  	If any name is not a loaded package, that name is ignored."
 
 	^ (self loadedPackagesNamed: someNames) asDefinition
-		propertyAt: 'platform' put: platform;
-		yourself
 ]
 
 { #category : 'private' }

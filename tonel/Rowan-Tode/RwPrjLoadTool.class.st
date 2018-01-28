@@ -10,12 +10,34 @@ RwPrjLoadTool >> doUpdateLoadedPackageNames: aPackageNames [
 ]
 
 { #category : 'smalltalk api' }
-RwPrjLoadTool >> loadSpecification: aRwSpecification [
-	| packageSetToLoad loadedPackageSet diff |
+RwPrjLoadTool >> loadPackageDefinition: packageDefinition specification: aRwSpecification [
+
+	^ self
+		loadPackageDefinitions: {packageDefinition}
+		specification: aRwSpecification
+]
+
+{ #category : 'smalltalk api' }
+RwPrjLoadTool >> loadPackageDefinitions: packageDefinitions specification: aRwSpecification [
+
+	| packageSetToLoad |
 	self specification: aRwSpecification.
-	packageSetToLoad := Rowan projectTools read
-		readPackageSetForSpecification: specification.
-	loadedPackageSet := Rowan
+	packageSetToLoad := RwPackageSetDefinition new.
+	packageDefinitions do: [ :def | packageSetToLoad addPackage: def ].
+	^ self
+		loadPackageSetDefinition: packageSetToLoad
+		specification: aRwSpecification
+]
+
+{ #category : 'smalltalk api' }
+RwPrjLoadTool >> loadPackageSetDefinition: packageSetToLoad specification: aRwSpecification [
+
+	| loadedPackageSet diff symbolDict |
+	self specification: aRwSpecification.
+	symbolDict := self
+		_newOrExistingSymbolDictionaryNamed:
+			(aRwSpecification platformSpec at: 'gemstone') symbolDictName.
+	loadedPackageSet := symbolDict
 		loadedPackageDefinitionsNamed: packageSetToLoad packageNames.
 	diff := packageSetToLoad compareAgainstBase: loadedPackageSet.
 	diff isEmpty
@@ -24,7 +46,7 @@ RwPrjLoadTool >> loadSpecification: aRwSpecification [
 			msg := 'The project ' , specification specName , ' is already up to date'.
 			self inform: msg.
 			^ msg ].
-	Rowan image applyModification: diff.
+	Rowan image applyModification: diff for: symbolDict.
 	specification
 		updateLoadedCommitIdForTool: self;
 		updateLoadedPackageNamesTool: self
@@ -32,6 +54,18 @@ RwPrjLoadTool >> loadSpecification: aRwSpecification [
 				(Rowan loadedPackageDefinitionsNamed: packageSetToLoad packageNames)
 						packageNames.
 	^ diff
+]
+
+{ #category : 'smalltalk api' }
+RwPrjLoadTool >> loadSpecification: aRwSpecification [
+
+	| packageSetToLoad |
+	self specification: aRwSpecification.
+	packageSetToLoad := Rowan projectTools read
+		readPackageSetForSpecification: specification.
+	^ self
+		loadPackageSetDefinition: packageSetToLoad
+		specification: aRwSpecification
 ]
 
 { #category : 'smalltalk api' }

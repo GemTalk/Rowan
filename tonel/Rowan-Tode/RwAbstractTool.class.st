@@ -29,6 +29,37 @@ RwAbstractTool class >> git [
   ^ RwPrjGitTool new
 ]
 
+{ #category : 'private' }
+RwAbstractTool >> _newOrExistingSymbolDictionaryNamed: dictName [
+
+	"If the current session's transient symbol list includes a dictionary with the given name, answer it.
+	Otherwise, create one, add it to the end of both transient and persistent symbol lists, and answer it."
+
+	| symbolName session symbolList association |
+	symbolName := dictName asSymbol.
+	session := GsCurrentSession currentSession.
+	symbolList := session symbolList.
+	^ symbolList
+		detect: [ :each | (each at: symbolName ifAbsent: [ nil ]) == each ]
+		ifNone: [ 
+			| newDict |
+			newDict := RwGsPackageSymbolDictionary new
+				name: symbolName;
+				objectSecurityPolicy: symbolList objectSecurityPolicy;
+				yourself.
+			symbolList addLast: newDict.
+			session userProfile symbolList addLast: newDict.
+			newDict ]
+]
+
+{ #category : 'private' }
+RwAbstractTool >> _symbolDictionaryForSpecification [
+
+	^ self
+		_newOrExistingSymbolDictionaryNamed:
+			(specification platformSpec at: 'gemstone') symbolDictName
+]
+
 { #category : 'git' }
 RwAbstractTool >> doGitCommit: messageString [
   | gitTool gitRootDir commitMessageFileName status loadedCommitId |
@@ -57,10 +88,15 @@ RwAbstractTool >> doGitUpdateLoadedCommitId [
 
 { #category : 'git' }
 RwAbstractTool >> doGitUpdateLoadedCommitId: gitRootDir [
-  | gitTool loadedCommitId |
-  gitTool := self class git.
-  loadedCommitId := gitTool gitcommitShaIn: gitRootDir.
-  ^ specification imageSpec loadedCommitId: loadedCommitId
+
+	| gitTool loadedCommitId |
+	gitTool := self class git.
+	loadedCommitId := [ gitTool gitcommitShaIn: gitRootDir ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			^ nil ].
+	^ specification imageSpec loadedCommitId: loadedCommitId
 ]
 
 { #category : 'private' }

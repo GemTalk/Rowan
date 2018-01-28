@@ -27,19 +27,15 @@ RwClassModification >> acceptVisitor: aVisitor [
 RwClassModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage [
 
 	self isAddition
-		ifTrue: [ 
-			aPatchSet addAddedClass: self after inPackage: aPackage.
-			propertiesModification isEmpty
-				ifFalse: [self halt: 'Need to do something with modified properties'] ].
+		ifTrue: [ aPatchSet addAddedClass: self after inPackage: aPackage ].
 	self isDeletion
-		ifTrue: 
-			[ aPatchSet addDeletedClass: self before inPackage: aPackage ].
+		ifTrue: [ aPatchSet addDeletedClass: self before inPackage: aPackage ].
 	self isModification
 		ifTrue: [ 
-			RwGsClassVersioningPatch 
-				addPatchedClassModification: self 
-				inPackage: aPackage 
-				toPatchSet: aPatchSet ].
+			RwGsClassVersioningPatch
+				addPatchedClassModification: self
+				inPackage: aPackage
+				toPatchSet: aPatchSet ]
 ]
 
 { #category : 'Accessing' }

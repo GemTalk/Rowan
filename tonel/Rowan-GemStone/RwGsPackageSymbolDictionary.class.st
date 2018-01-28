@@ -64,7 +64,7 @@ RwGsPackageSymbolDictionary >> _classVersioningPatchClass [
 RwGsPackageSymbolDictionary >> _initializeWithoutClear: newSize [
 
 	super _initializeWithoutClear: newSize.
-	packageRegistry := KeyValueDictionary new.
+	packageRegistry := KeyValueDictionary new.	"keyed by package name"
 	classRegistry := IdentityKeyValueDictionary new.	"keyed by class classHistory"
 	classExtensionRegistry := IdentityKeyValueDictionary new.	"keyed by class classHistory"
 	methodRegistry := IdentityKeyValueDictionary new.	"keyed by compiledMethod"
@@ -409,7 +409,8 @@ RwGsPackageSymbolDictionary >> createLoadedPackageNamed: packageName properties:
 	existingLoadedPackage
 		ifNotNil: [ self error: 'Internal error -- Attempt to add a package that exists.' ].
 	newLoadedPackage := RwGsLoadedSymbolDictPackage newNamed: packageName.
-	newLoadedPackage setPropertiesTo: properties
+	newLoadedPackage setPropertiesTo: properties.
+	packageRegistry at: packageName put: newLoadedPackage
 ]
 
 { #category : 'class - patch api' }
@@ -523,10 +524,37 @@ RwGsPackageSymbolDictionary >> existingForClass: aClass ifAbsent: absentBlock [
 	^ classRegistry at: aClass classHistory ifAbsent: absentBlock
 ]
 
-{ #category : 'accessing' }
+{ #category : 'loaded queries' }
+RwGsPackageSymbolDictionary >> loadedPackageDefinitionNamed: packageName ifAbsent: absentBlock [
+
+	^ (self loadedPackageNamed: packageName ifAbsent: absentBlock) asDefinition
+]
+
+{ #category : 'loaded queries' }
+RwGsPackageSymbolDictionary >> loadedPackageDefinitionsNamed: someNames [
+
+	"Answer a PackageSetDefinition containing packages with the given names in the image.
+ 	If any name is not a loaded package, that name is ignored."
+
+	^ (self loadedPackagesNamed: someNames) asDefinition
+]
+
+{ #category : 'loaded queries' }
 RwGsPackageSymbolDictionary >> loadedPackageNamed: packageName ifAbsent: absentBlock [
 
 	^ packageRegistry at: packageName ifAbsent: absentBlock
+]
+
+{ #category : 'loaded queries' }
+RwGsPackageSymbolDictionary >> loadedPackagesNamed: someNames [
+
+	"Answer a PackageSet containing packages with the given names in the image.
+ 	If any name is not a loaded package, that name is ignored."
+
+	| loadedPackages |
+	loadedPackages := someNames
+		collect: [ :aName | self loadedPackageNamed: aName ifAbsent: [ nil ] ].
+	^ RwPackageSet withAll: (loadedPackages select: [ :each | each notNil ])
 ]
 
 { #category : 'accessing' }

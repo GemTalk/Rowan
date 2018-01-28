@@ -2,7 +2,8 @@ Extension { #name : 'RwClassDefinition' }
 
 { #category : '*rowan-cypress' }
 RwClassDefinition >> category [
-  ^ properties at: 'category'
+
+	^ properties at: 'category' ifAbsent: [  ]
 ]
 
 { #category : '*rowan-cypress' }

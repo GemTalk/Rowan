@@ -15,6 +15,14 @@ Class {
 	#category : 'Rowan-Tode'
 }
 
+{ #category : 'instance creation' }
+RwProjectSpecification class >> newNamed: aString [
+
+	^ self new
+		specName: aString;
+		yourself
+]
+
 { #category : 'private' }
 RwProjectSpecification >> _myUserProfile [
   ^ System myUserProfile

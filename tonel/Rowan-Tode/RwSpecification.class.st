@@ -104,7 +104,7 @@ RwSpecification >> registerForced [
 
 	(Rowan projectNamed: self specName ifAbsent: [  ])
 		ifNotNil: [ :anotherProject | Rowan removeProject: self ].
-	Rowan addProject: self
+	^ Rowan addProject: self
 ]
 
 { #category : 'registering' }
