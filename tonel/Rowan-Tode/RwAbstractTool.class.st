@@ -80,10 +80,15 @@ RwAbstractTool >> doGitCommit: messageString [
 
 { #category : 'git' }
 RwAbstractTool >> doGitUpdateLoadedCommitId [
-  | gitRootDir |
-  gitRootDir := ServerFileDirectory
-    on: specification repoSpec repositoryRootPath.
-  ^ self doGitUpdateLoadedCommitId: gitRootDir
+
+	| gitRootDir repoRootPath |
+	repoRootPath := specification repoSpec repositoryRootPath.
+	repoRootPath
+		ifNil: [ 
+			"in memory repo without a rootPath is legal"
+			^ nil ].
+	gitRootDir := ServerFileDirectory on: repoRootPath.
+	^ self doGitUpdateLoadedCommitId: gitRootDir
 ]
 
 { #category : 'git' }

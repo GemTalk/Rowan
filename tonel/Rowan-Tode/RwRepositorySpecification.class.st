@@ -67,3 +67,9 @@ RwRepositorySpecification >> updateLoadedCommitIdForTool: aRwTool [
 
   
 ]
+
+{ #category : 'accessing' }
+RwRepositorySpecification >> useGit [
+
+	^ false
+]

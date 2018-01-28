@@ -102,9 +102,3 @@ RwPrjLoadTool >> packageTools [
 
 	^self platform packageTools
 ]
-
-{ #category : 'smalltalk api' }
-RwPrjLoadTool >> validate: aRwSpecification [
-  super validate: aRwSpecification.
-  self validateForRead: aRwSpecification
-]

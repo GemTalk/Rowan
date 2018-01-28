@@ -53,7 +53,7 @@ RwProjectTest >> handleInformAsFailureDuring: aBlock [
 ]
 
 { #category : 'tests' }
-RwProjectTest >> testSimpleProject [
+RwProjectTest >> testSimpleProject1 [
 
 	| projectName projectSpec projectTools classDefinition packageSymbolDictionary packageDefinition packageSet |
 	projectName := 'Simple'.
@@ -106,6 +106,55 @@ RwProjectTest >> testSimpleProject [
 				specification: projectSpec ].
 
 	projectTools spec exportSpecification: projectSpec.
+	projectTools write writePackagesForSpecification: projectSpec.
+	projectTools commit
+		commitSpecification: projectSpec
+		message: 'Added Simple class'
+]
+
+{ #category : 'tests' }
+RwProjectTest >> testSimpleProject2 [
+
+	"Build our project in memory without committing to disk until we've created a classe, then write to disk."
+
+	| projectName projectSpec projectTools classDefinition packageDefinition packageSet |
+	projectName := 'Simple'.
+	projectTools := Rowan projectTools.
+	(Rowan projectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
+	projectSpec := Rowan projectTools spec
+		newPackageSpecNamed: projectName
+		useGit: true.
+	projectSpec
+		comment:
+				'This is a simple project created in memory first, then written to disk.';
+		packageNames: #('Simple-Core' 'Simple-Tests');
+		yourself.
+	(projectSpec platformSpec at: 'gemstone')
+		symbolDictName: self _symbolDictionaryName.
+	classDefinition := RwClassDefinition
+		newForClassNamed: 'Simple2'
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: 'I am a Simple2 class'
+		pools: #()
+		type: 'normal'.
+	packageDefinition := RwPackageDefinition newNamed: 'Simple-Core'.
+	packageDefinition addClassDefinition: classDefinition.
+	projectTools load
+		loadPackageDefinition: packageDefinition
+		specification: projectSpec.
+
+	self
+		handleConfirmationDuring: [ 
+			projectTools create
+				createPackageProjectFor: projectSpec
+				format: 'tonel'
+				root: '/tmp/rowanSimpleProject2/'
+				repoPath: 'src' ].
 	projectTools write writePackagesForSpecification: projectSpec.
 	projectTools commit
 		commitSpecification: projectSpec

@@ -59,17 +59,19 @@ RwProjectSpecification >> commitLogForTool: aRwTool limit: logLimit [
 
 { #category : 'exporting' }
 RwProjectSpecification >> export [
-  | url exportUrl exportSpec |
-  self repositoryUrl
-    ifNil: [ self error: 'exportToUrl: must be used if repositoryUrl has not been set' ].
-  url := RwUrl fromString: self repositoryUrl.
-  exportUrl := 'file:'
-    ,
-      (ServerFileDirectory on: url pathForDirectory) containingDirectory fullName
-    , '/' , self specsPath , '/'.
-  exportSpec := self copy.
-  exportSpec initializeForExport.	"clear fields that only apply to local image"
-  ^ exportSpec exportToUrl: exportUrl
+
+	| url exportUrl exportSpec exportPath |
+	self repositoryUrl
+		ifNil: [ self error: 'exportToUrl: must be used if repositoryUrl has not been set' ].
+	url := RwUrl fromString: self repositoryUrl.
+	exportPath := (ServerFileDirectory on: url pathForDirectory)
+		containingDirectory fullName , '/' , self specsPath , '/'.
+	(ServerFileDirectory on: exportPath) assureExistence.
+	exportUrl := 'file:' , exportPath.
+
+	exportSpec := self copy.
+	exportSpec initializeForExport.	"clear fields that only apply to local image"
+	^ exportSpec exportToUrl: exportUrl
 ]
 
 { #category : 'exporting' }
@@ -283,4 +285,10 @@ RwProjectSpecification >> updateLoadedPackageNamesTool: aRwTool packageNames: aP
   ^ self imageSpec
     updateLoadedPackageNamesTool: aRwTool
     packageNames: aPackageNames
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> useGit [
+
+	^ self repoSpec useGit
 ]

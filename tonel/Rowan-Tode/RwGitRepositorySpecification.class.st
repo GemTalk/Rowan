@@ -137,3 +137,9 @@ RwGitRepositorySpecification >> tagPattern: aString [
 RwGitRepositorySpecification >> updateLoadedCommitIdForTool: aRwTool [
   ^ aRwTool doGitUpdateLoadedCommitId
 ]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> useGit [
+
+	^ true
+]

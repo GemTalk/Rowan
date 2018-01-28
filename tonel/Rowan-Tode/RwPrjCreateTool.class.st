@@ -37,28 +37,44 @@ RwPrjCreateTool >> createMetacelloProject: projectName format: format root: root
 
 { #category : 'smalltalk api' }
 RwPrjCreateTool >> createPackageProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
-  | projectSpec utils rootRepoPath dirPath |
-  projectSpec := Rowan projectTools spec
-    newPackageSpecNamed: projectName
-    useGit: useGit.
-  utils := self fileUtilities.
-  rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
-  self _createProjectRepositoryDirectory: rootRepoPath useGit: useGit abort: [ ^ self ].
-  dirPath := rootRepoPath , utils pathNameDelimiter , repoPath.
-  utils ensureDirectoryExists: dirPath.
-  utils
-    writeStreamFor: '.cypress'
-    in: dirPath
-    do: [ :fileStream | fileStream nextPutAll: '{ #format : ' , format printString , '}' ].
-  dirPath := rootRepoPath , utils pathNameDelimiter , projectSpec specsPath.
-  utils ensureDirectoryExists: dirPath.
-  projectSpec
-    repositoryRootPath: rootRepoPath;
-    repoPath: repoPath;
-    repositoryUrl: 'cypress:' , rootRepoPath , '/' , repoPath , '/'.
-  projectSpec copy export.
-  projectSpec register.
-  ^ projectSpec
+
+	| projectSpec |
+	projectSpec := Rowan projectTools spec
+		newPackageSpecNamed: projectName
+		useGit: useGit.
+	^ self
+		createPackageProjectFor: projectSpec
+		format: format
+		root: rootPath
+		repoPath: repoPath
+]
+
+{ #category : 'smalltalk api' }
+RwPrjCreateTool >> createPackageProjectFor: projectSpec format: format root: rootPath repoPath: repoPath [
+
+	| projectName utils rootRepoPath dirPath useGit |
+	projectName := projectSpec specName.
+	useGit := projectSpec useGit.
+	utils := self fileUtilities.
+	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
+	self
+		_createProjectRepositoryDirectory: rootRepoPath
+		useGit: useGit
+		abort: [ ^ self ].
+	dirPath := rootRepoPath , utils pathNameDelimiter , repoPath.
+	utils ensureDirectoryExists: dirPath.
+	utils
+		writeStreamFor: '.cypress'
+		in: dirPath
+		do: [ :fileStream | fileStream nextPutAll: '{ #format : ' , format printString , '}' ].
+	dirPath := rootRepoPath , utils pathNameDelimiter , projectSpec specsPath.
+	utils ensureDirectoryExists: dirPath.
+	projectSpec
+		repositoryRootPath: rootRepoPath;
+		repoPath: repoPath;
+		repositoryUrl: 'cypress:' , rootRepoPath , '/' , repoPath , '/'.
+	projectSpec copy export.
+	^ projectSpec
 ]
 
 { #category : 'man page' }

@@ -15,6 +15,15 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwPackageDefinition class >> newNamed: packageName [
+
+	^ self
+		withProperties: (Dictionary with: 'name' -> packageName)
+		classDefinitions: Dictionary new
+		classExtensions: Dictionary new
+]
+
+{ #category : 'instance creation' }
 RwPackageDefinition class >> withProperties: properties classDefinitions: classDefinitions classExtensions: classExtensionDefinitions [
 
 	^(self basicNew)
