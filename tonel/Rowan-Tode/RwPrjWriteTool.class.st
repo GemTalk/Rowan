@@ -74,29 +74,34 @@ RwPrjWriteTool >> writePackagesForSpecUrl: aString [
 ]
 
 { #category : 'cypress api' }
-RwPrjWriteTool >> writeSpecification: aRwSpecification [ 
-  | packageManager repo |
-  self specification: aRwSpecification.
-  packageManager := CypressEnvironmentPackageManager new.
-  repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: specification repositoryUrl)
-    alias: ''.
-  packageManager
-    defaultSymbolDictionaryName:
-        (specification platformSpec at: 'gemstone') symbolDictName;
-    defaultSymbolList: GsCurrentSession currentSession symbolList.
-  self packageNames
-    do: [ :packageName | 
-      | package |
-      package := (CypressEnvironmentPackageDefinition named: packageName)
-        lookupSymbolList: GsCurrentSession currentSession symbolList;
-        yourself.
-      repo writePackageStructure: (CypressPackageStructure fromPackage: package) ].
-^ specification
+RwPrjWriteTool >> writeSpecification: aRwSpecification [
+
+	"CYPRESS API: this messge unconditionally uses #Category to interpret package membership --- useful for saving Rowan code during development ONLY"
+
+	| packageManager repo |
+	self specification: aRwSpecification.
+	packageManager := CypressEnvironmentPackageManager new.
+	repo := CypressAbstractRepository
+		onUrl: (CypressUrl absoluteFromText: specification repositoryUrl)
+		alias: ''.
+	packageManager
+		defaultSymbolDictionaryName:
+				(specification platformSpec at: 'gemstone') symbolDictName;
+		defaultSymbolList: GsCurrentSession currentSession symbolList.
+	self packageNames
+		do: [ :packageName | 
+			| package |
+			package := (CypressEnvironmentPackageDefinition named: packageName)
+				lookupSymbolList: GsCurrentSession currentSession symbolList;
+				yourself.
+			repo writePackageStructure: (CypressPackageStructure fromPackage: package) ].
+	^ specification
 ]
 
 { #category : 'cypress api' }
-RwPrjWriteTool >> writeSpecUrl: aString [ 
+RwPrjWriteTool >> writeSpecUrl: aString [
 
-^ self writeSpecification: (RwSpecification fromUrl: aString)
+	"CYPRESS API: this messge unconditionally uses #Category to interpret package membership --- useful for saving Rowan code during development ONLY"
+
+	^ self writeSpecification: (RwSpecification fromUrl: aString)
 ]
