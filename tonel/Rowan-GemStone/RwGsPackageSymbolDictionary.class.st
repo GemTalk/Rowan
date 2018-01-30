@@ -481,29 +481,40 @@ RwGsPackageSymbolDictionary >> deleteMethod: selector for: behavior [
 { #category : 'class - patch api' }
 RwGsPackageSymbolDictionary >> ensureExtensionClassNamed: className existsForPackageNamed: packageName [
 
-	| extensionClass loadedPackage loadedClassExtension |
-	extensionClass := self
-		at: className asSymbol
-		ifAbsent: [ 
+	| extensionClass loadedPackage loadedClassExtension dictsAndSymbols classSymDict |
+	extensionClass := Rowan globalNamed: className asSymbol.
+	extensionClass
+		ifNil: [ 
 			self
 				error:
 					'The extension class named ' , className printString , ' cannot be foud' ].
-	loadedPackage := self packageRegistry
-		at: packageName
-		ifAbsent: [ 
-			self packageRegistry
+	dictsAndSymbols := GsCurrentSession currentSession symbolList
+		dictionariesAndSymbolsOf: extensionClass.
+	dictsAndSymbols size > 1
+		ifTrue: [ self error: 'multi-homed class is not handled ... yet' ].
+	classSymDict := (dictsAndSymbols at: 1) at: 1.
+	classSymDict == self
+		ifTrue: [ 
+			"class lives in receiver"
+			loadedPackage := self packageRegistry
 				at: packageName
-				put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
+				ifAbsent: [ 
+					self packageRegistry
+						at: packageName
+						put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
 
-	loadedPackage
-		loadedClassExtensionForClass: extensionClass
-		ifAbsent: [ 
-			loadedClassExtension := RwGsLoadedSymbolDictClassExtension
-				newForClass: extensionClass
-				inPackage: loadedPackage.
-			self classExtensionRegistry
-				at: extensionClass classHistory
-				put: loadedClassExtension ]
+			loadedPackage
+				loadedClassExtensionForClass: extensionClass
+				ifAbsent: [ 
+					loadedClassExtension := RwGsLoadedSymbolDictClassExtension
+						newForClass: extensionClass
+						inPackage: loadedPackage.
+					self classExtensionRegistry
+						at: extensionClass classHistory
+						put: loadedClassExtension ] ]
+		ifFalse: [ 
+			"class lives in a different symbol dictionary than the receiver"
+			self halt ]
 ]
 
 { #category : 'loaded queries' }

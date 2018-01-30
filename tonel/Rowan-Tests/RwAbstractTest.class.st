@@ -555,6 +555,7 @@ RwAbstractTest >> setUp [
 	"Remove the CypressTestData symbol dictionary, if present --- gets persistent and session symbol list"
 
 	| user symList dict index |
+	super setUp.
 	user := System myUserProfile.
 	symList := user symbolList.
 

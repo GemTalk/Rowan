@@ -11,6 +11,12 @@ RwProjectTest >> _symbolDictionaryName [
 ]
 
 { #category : 'private' }
+RwProjectTest >> _symbolDictionaryName2 [
+
+	^ #'RowanTestData2'
+]
+
+{ #category : 'private' }
 RwProjectTest >> gsInteractionConfirmationHandler [
 
 	^ GsInteractionHandler new
@@ -50,6 +56,24 @@ RwProjectTest >> handleInformAsFailureDuring: aBlock [
 			ex
 				response:
 					(ex interaction interactWith: self gsInteractionInformFailureHandler) ]
+]
+
+{ #category : 'running' }
+RwProjectTest >> setUp [
+
+	"Remove the CypressTestData symbol dictionary, if present --- gets persistent and session symbol list"
+
+	| user symList dict index |
+	super setUp.
+	user := System myUserProfile.
+	symList := user symbolList.
+
+	dict := symList objectNamed: self _symbolDictionaryName2.
+	dict
+		ifNotNil: [ 
+			index := symList indexOf: dict.
+			index > 0
+				ifTrue: [ user removeDictionaryAt: index ] ]
 ]
 
 { #category : 'tests' }
@@ -134,6 +158,112 @@ RwProjectTest >> testProjectClassExtensions [
 	projectTools commit
 		commitPackagesForSpecification: projectSpec
 		message: 'Added Simple class and extension methods'
+]
+
+{ #category : 'tests' }
+RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
+
+	"Build our project in memory without committing to disk until we've created a class with methods, then write to disk."
+
+	| projectName1 projectName2 projectSpec1 projectSpec2 projectTools classDefinition packageDefinition1 packageDefinition2 className testClass testInstance classExtensionDefinition |
+	projectName1 := 'Simple'.
+	projectName2 := 'Simple Extensions'.
+	projectTools := Rowan projectTools.
+	(Rowan projectNamed: projectName1 ifAbsent: [  ])
+		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
+	(Rowan projectNamed: projectName2 ifAbsent: [  ])
+		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
+
+	projectSpec1 := projectTools spec
+		newPackageSpecNamed: projectName1
+		useGit: true.
+	projectSpec1
+		comment:
+				'This is a simple project created in memory first, then written to disk.';
+		packageNames: #('Simple-Core' 'Simple-Tests');
+		yourself.
+	(projectSpec1 platformSpec at: 'gemstone')
+		symbolDictName: self _symbolDictionaryName.
+
+	className := 'Simple'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #(#'civar1')
+		classvars: #()
+		category: nil
+		comment: 'I am a Simple class with extensions'
+		pools: #()
+		type: 'normal'.
+
+	packageDefinition1 := RwPackageDefinition newNamed: 'Simple-Core'.
+	packageDefinition1 addClassDefinition: classDefinition.
+	projectTools load
+		loadPackageDefinition: packageDefinition1
+		specification: projectSpec1.
+
+
+	projectSpec2 := projectTools spec
+		newPackageSpecNamed: projectName2
+		useGit: true.
+	projectSpec2
+		comment:
+				'This is a class extension project created in memory first, then written to disk. Uses a separate symbol dictionary from project 1';
+		packageNames: #('Simple-Extensions');
+		yourself.
+	(projectSpec2 platformSpec at: 'gemstone')
+		symbolDictName: self _symbolDictionaryName2.
+
+	classExtensionDefinition := RwClassExtensionDefinition
+		newForClassNamed: className.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'ivar1'
+						protocol: 'accessing'
+						source: 'ivar1 ^ivar1');
+		addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'initialize'
+						protocol: 'initialization'
+						source: 'initialize civar1 := 1.');
+		addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'civar1'
+						protocol: 'accessing'
+						source: 'civar1 ^civar1');
+		yourself.
+
+	packageDefinition2 := RwPackageDefinition newNamed: 'Simple-Extensions'.
+	packageDefinition2 addClassExtension: classExtensionDefinition.
+	projectTools load
+		loadPackageDefinition: packageDefinition2
+		specification: projectSpec2.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	self assert: testClass civar1 == 1.
+	testInstance := testClass new.
+	self assert: testInstance ivar1 isNil.
+
+	{projectSpec1.
+	projectSpec2}
+		do: [ :projectSpec | 
+			self
+				handleConfirmationDuring: [ 
+					projectTools create
+						createPackageProjectFor: projectSpec
+						format: 'tonel'
+						root: '/tmp/rowanExtensionProject/'
+						repoPath: 'src' ].
+			projectTools spec exportSpecification: projectSpec.
+			projectTools write writePackagesForSpecification: projectSpec.
+			projectTools commit
+				commitPackagesForSpecification: projectSpec
+				message:
+					'Added Simple class and extension methods for '
+						, projectSpec specName printString ]
 ]
 
 { #category : 'tests' }
