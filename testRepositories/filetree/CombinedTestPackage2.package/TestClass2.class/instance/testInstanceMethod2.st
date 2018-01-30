@@ -1,0 +1,2 @@
+accessing
+testInstanceMethod2 ^ classInstVar1

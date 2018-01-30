@@ -180,6 +180,16 @@ Rowan class >> platform [
 ]
 
 { #category : 'public' }
+Rowan class >> projectNamed: aString [
+
+	"Look up a project"
+
+	^ self
+		projectNamed: aString
+		ifAbsent: [ self error: 'Project ' , aString printString , ' not found' ]
+]
+
+{ #category : 'public' }
 Rowan class >> projectNamed: aString ifAbsent: absentBlock [
   "Look up a project"
 

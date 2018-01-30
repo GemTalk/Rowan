@@ -1,0 +1,14 @@
+{
+	"category" : "CombinedTestPackage2",
+	"classinstvars" : [
+		"classInstVar1",
+		"classInstVar2" ],
+	"classvars" : [
+		"ClassVar1" ],
+	"instvars" : [
+		"instVar1" ],
+	"name" : "TestClass2",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

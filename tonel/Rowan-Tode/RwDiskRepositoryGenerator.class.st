@@ -19,120 +19,161 @@ RwDiskRepositoryGenerator class >> generateForUrl: specNameOrUrl [
 ]
 
 { #category : 'definitions' }
-RwDiskRepositoryGenerator >> classMethodsForClass: className [
-  ^ self
-    methodDefsFromSpec:
-      {{#'testClassMethod'.
-      'class method to be deleted'.
-      'testClassMethod ^ true'}.
-      {#'testClassMethodSurvivor'.
-      'class method to be kept'.
-      'testClassMethodSurvivor ^ true'}}
+RwDiskRepositoryGenerator >> classExtensionMethodDefinitionsForClass: className inPackage: packageName [
+
+	^ self
+		methodDefsFromSpec:
+			{{#'testClassExtensionMethod1'.
+			('*' , packageName).
+			'testClassExtensionMethod1 ^ ClassinstVar2'}}
 ]
 
 { #category : 'definitions' }
-RwDiskRepositoryGenerator >> definitionOfClassNamed: className inPackage: packageName instanceMethodDefinitions: instanceMethodDefinitions classMethodDefinitions: classMethodDefinitions [
-  ^ RwClassDefinition
-    withProperties:
-      (self
-        propertiesForClassNamed: className
-        super: 'Object'
-        instvars: {}
-        classinstvars: {}
-        classvars: {}
-        type: 'normal'
-        gs_options: {}
-        inPackage: packageName)
-    classMethodDefinitions: classMethodDefinitions
-    instanceMethodDefinitions: instanceMethodDefinitions
+RwDiskRepositoryGenerator >> classMethodsForClass: className [
+
+	^ self
+		methodDefsFromSpec:
+			{{#'testClassMethod1'.
+			'accessing'.
+			'testClassMethod1 ^ ClassVar1'}.
+			{#'testClassMethod2'.
+			'accessing'.
+			'testClassMethod2 ^ true'}}
 ]
 
 { #category : 'generator' }
 RwDiskRepositoryGenerator >> generate: myLoadSpecification [
-  | myPackageSet |
-  myLoadSpecification repositoryUrl
-    ifNil: [ 
-      | url |
-      url := myLoadSpecification projectUrl asRwUrl.
-      url scheme = 'file'
-        ifFalse: [ 
-          self
-            error:
-              'if ' , myLoadSpecification specName printString
-                ,
-                  ' has not been attached to a cloned repository (repositoryUrl nonNil), then the projectUrl must be a file: url: '
-                , url printString ] ].
-  myPackageSet := self generatePackageSet.
-  Rowan projectTools writePackageSet: myPackageSet specification: myLoadSpecification
+
+	| myPackageSet |
+	myLoadSpecification repositoryUrl
+		ifNil: [ 
+			| url |
+			url := myLoadSpecification projectUrl asRwUrl.
+			url scheme = 'file'
+				ifFalse: [ 
+					self
+						error:
+							'if ' , myLoadSpecification specName printString
+								,
+									' has not been attached to a cloned repository (repositoryUrl nonNil), then the projectUrl must be a file: url: '
+								, url printString ] ].
+	myPackageSet := self generatePackageSet.
+	Rowan projectTools write
+		writePackageSet: myPackageSet
+		specification: myLoadSpecification
 ]
 
 { #category : 'generator' }
 RwDiskRepositoryGenerator >> generateForUrl: specNameOrUrl [
-  | url |
-  url := specNameOrUrl asRwUrl.
-  url scheme = 'file'
-    ifFalse: [ 
-      self
-        error:
-          'Must use a file: url for spec, since generator will write to the disk repository' ].
-  ^ self generate: (RwPackageTool fromUrl: url)
+
+	| url |
+	url := specNameOrUrl asRwUrl.
+	url scheme = 'file'
+		ifFalse: [ 
+			self
+				error:
+					'Must use a file: url for spec, since generator will write to the disk repository' ].
+	^ self generate: (RwSpecification fromUrl: url)
 ]
 
 { #category : 'generator' }
 RwDiskRepositoryGenerator >> generatePackageSet [
-  | packageName packageNames myPackageSet className1 className2 classDefinitionsDictionary |
-  packageName := 'CombinedTestPackage'.
-  className1 := 'TestClass1'.
-  className2 := 'TestClass2'.
-  packageNames := {packageName}.
-  classDefinitionsDictionary := Dictionary new
-    at: className1
-      put:
-        ((self
-            definitionOfClassNamed: className1
-            inPackage: packageName
-            instanceMethodDefinitions:
-              (self instanceMethodsForClass: className1)
-            classMethodDefinitions: (self classMethodsForClass: className1))
-            properties:
-                (self
-                    propertiesOfClassInitializationClassNamed: className1
-                    inPackage: packageName);
-            yourself);
-    at: className2
-      put:
-        ((self
-            definitionOfClassNamed: className2
-            inPackage: packageName
-            instanceMethodDefinitions:
-              (self instanceMethodsForClass: className2)
-            classMethodDefinitions: (self classMethodsForClass: className2))
-            properties:
-                (self
-                    propertiesOfClassInitializationClassNamed: className2
-                    inPackage: packageName);
-            yourself);
-    yourself.
-  myPackageSet := RwPackageSetDefinition new
-    addPackage:
-        (RwPackageDefinition
-            withProperties: (Dictionary with: 'name' -> packageName)
-            classDefinitions: classDefinitionsDictionary
-            classExtensions: Dictionary new);
-    yourself.
-  ^ myPackageSet
+
+	| packageName1 packageName2 packageNames myPackageSet className1 className2 classDefinitionsDictionary1 classDefinitionsDictionary2 classExtensionDefinitionsDictionary2 |
+	packageName1 := 'CombinedTestPackage1'.
+	packageName2 := 'CombinedTestPackage2'.
+	className1 := 'TestClass1'.
+	className2 := 'TestClass2'.
+	packageNames := {packageName1.
+	packageName2}.
+	classDefinitionsDictionary1 := Dictionary new
+		at: className1
+			put:
+				((RwClassDefinition
+						newForClassNamed: className1
+						super: 'Object'
+						instvars: #('instVar1')
+						classinstvars: #('classInstVar1' 'classInstVar2')
+						classvars: #('ClassVar1')
+						category: packageName1
+						comment:
+							'I am a class generated by Rowan tests. My name is ' , className1
+								, ', what''s yours?'
+						pools: #()
+						type: 'normal')
+						instanceMethodDefinitions: (self instanceMethodsForClass: className1);
+						classMethodDefinitions: (self classMethodsForClass: className1);
+						yourself);
+		yourself.
+	classDefinitionsDictionary2 := Dictionary new
+		at: className2
+			put:
+				((RwClassDefinition
+						newForClassNamed: className2
+						super: 'Object'
+						instvars: #('instVar1')
+						classinstvars: #('classInstVar1' 'classInstVar2')
+						classvars: #('ClassVar1')
+						category: packageName2
+						comment:
+							'I am a class generated by Rowan tests. My name is ' , className2
+								, ', what''s yours?'
+						pools: #()
+						type: 'normal')
+						instanceMethodDefinitions: (self instanceMethodsForClass: className2);
+						classMethodDefinitions: (self classMethodsForClass: className2);
+						yourself);
+		yourself.
+	classExtensionDefinitionsDictionary2 := Dictionary new
+		at: className1
+			put:
+				((RwClassExtensionDefinition newForClassNamed: className1)
+						classMethodDefinitions:
+								(self
+										classExtensionMethodDefinitionsForClass: className1
+										inPackage: packageName2);
+						instanceMethodDefinitions:
+								(self
+										instanceExtensionMethodDefinitionsForClass: className1
+										inPackage: packageName2);
+						yourself);
+		yourself.
+	myPackageSet := RwPackageSetDefinition new
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName1)
+						classDefinitions: classDefinitionsDictionary1
+						classExtensions: Dictionary new);
+		addPackage:
+				(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName2)
+						classDefinitions: classDefinitionsDictionary2
+						classExtensions: classExtensionDefinitionsDictionary2);
+		yourself.
+	^ myPackageSet
+]
+
+{ #category : 'definitions' }
+RwDiskRepositoryGenerator >> instanceExtensionMethodDefinitionsForClass: className inPackage: packageName [
+
+	^ self
+		methodDefsFromSpec:
+			{{#'testInstanceExtensionMethod1'.
+			('*' , packageName).
+			'testInstanceExtensionMethod1 ^ instVar1'}}
 ]
 
 { #category : 'definitions' }
 RwDiskRepositoryGenerator >> instanceMethodsForClass: className [
-  ^ self
-    methodDefsFromSpec:
-      {{#'testInstanceMethod'.
-      'instance method to be deleted'.
-      'testInstanceMethod ^ true'}.
-      {#'testInstanceMethodSurvivor'.
-      'instance method to be kept'.
-      'testInstanceMethodSurvivor ^ true'}}
+
+	^ self
+		methodDefsFromSpec:
+			{{#'testInstanceMethod1'.
+			'accessing'.
+			'testInstanceMethod1 ^ instVar1'}.
+			{#'testInstanceMethod2'.
+			'accessing'.
+			'testInstanceMethod2 ^ classInstVar1'}}
 ]
 
 { #category : 'definitions' }
@@ -153,60 +194,4 @@ RwDiskRepositoryGenerator >> methodDefsFromSpec: specArray [
               (Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
             source: source) ].
   ^ dict
-]
-
-{ #category : 'definitions' }
-RwDiskRepositoryGenerator >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars comment: comment gs_SymbolDictionary: ignored pools: pools type: type gs_options: gs_options inPackage: packageName [
-  | dict |
-  dict := Dictionary new.
-  dict
-    at: 'category' put: packageName;
-    at: 'classinstvars' put: classinstvars;
-    at: 'classvars' put: classvars;
-    at: 'comment' put: comment;
-    at: 'instvars' put: instvars;
-    at: 'name' put: className;
-    at: 'pools' put: pools;
-    at: 'superclass' put: superClassName;
-    at: 'type' put: type.
-  (gs_options _isArray and: [ gs_options isEmpty not ])
-    ifTrue: [ 
-      dict
-        at: 'gs_options'
-        put:
-          (gs_options collect: [ :each | each asString ]) asSortedCollection asArray ].
-  ^ dict
-]
-
-{ #category : 'definitions' }
-RwDiskRepositoryGenerator >> propertiesForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars type: type gs_options: gs_options inPackage: packageName [
-  ^ self
-    propertiesForClassNamed: className
-    super: superClassName
-    instvars: instvars
-    classinstvars: classinstvars
-    classvars: classvars
-    comment:
-      'I am a class generated by Cypress tests. My name is ' , className
-        , ', what''s yours?'
-    gs_SymbolDictionary: 'CypressTestData'
-    pools: {}
-    type: type
-    gs_options: gs_options
-    inPackage: packageName
-]
-
-{ #category : 'definitions' }
-RwDiskRepositoryGenerator >> propertiesOfClassInitializationClassNamed: className inPackage: packageName [
-  ^ self
-    propertiesForClassNamed: className
-    super: 'Object'
-    instvars: {}
-    classinstvars:
-      {'classInstVar1'.
-      'classInstVar2'}
-    classvars: {'ClassVar1'}
-    type: 'normal'
-    gs_options: {}
-    inPackage: packageName
 ]

@@ -1,0 +1,2 @@
+*CombinedTestPackage2
+testClassExtensionMethod1 ^ ClassinstVar2
