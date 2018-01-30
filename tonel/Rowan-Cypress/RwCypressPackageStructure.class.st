@@ -34,7 +34,31 @@ RwCypressPackageStructure >> fromPackage: aRwPackageDefinition [
 						put: methodStructure ].
 			self classes add: classStructure ].
 	aRwPackageDefinition classExtensions
-		do: [ :extensionDefinition | self error: 'not yet implemented' ].
+		do: [ :extensionDefinition | 
+			classStructure := (CypressClassStructure named: extensionDefinition name)
+				isClassExtension: true;
+				packageStructure: self.
+			extensionDefinition instanceMethodDefinitions
+				do: [ :methodDefinition | 
+					| methodStructure |
+					methodStructure := RwCypressMethodStructure new
+						fromRwInstanceMethodDefinition: methodDefinition;
+						packageStructure: self;
+						classStructure: classStructure.
+					classStructure instanceMethods
+						at: methodDefinition selector
+						put: methodStructure ].
+			extensionDefinition classMethodDefinitions
+				do: [ :methodDefinition | 
+					| methodStructure |
+					methodStructure := RwCypressMethodStructure new
+						fromRwClassMethodDefinition: methodDefinition;
+						packageStructure: self;
+						classStructure: classStructure.
+					classStructure classMethods
+						at: methodDefinition selector
+						put: methodStructure ].
+			self extensions add: classStructure ].
 	name := aRwPackageDefinition key , self packageExtension.
 	properties := Dictionary new
 ]
@@ -77,4 +101,37 @@ RwCypressPackageStructure >> rwSnapshot [
         asSortedCollection: [ :a :b | a selector <= b selector ])
         do: [ :methodStructure | definitions add: methodStructure asCypressMethodDefinition ] ].
   ^ rwPackageDefinition
+]
+
+{ #category : 'snapshotting' }
+RwCypressPackageStructure >> snapshot [
+
+	| definitions |
+	definitions := OrderedCollection new.
+	self classes
+		do: [ :classStructure | 
+			definitions add: classStructure asCypressClassDefinition.
+			(classStructure instanceMethods
+				asSortedCollection: [ :a :b | a selector <= b selector ])
+				do: [ :methodStructure | definitions add: methodStructure asCypressMethodDefinition ].
+			(classStructure classMethods
+				asSortedCollection: [ :a :b | a selector <= b selector ])
+				do: [ :methodStructure | definitions add: methodStructure asCypressMethodDefinition ] ].
+	self extensions
+		do: [ :classStructure | 
+			(classStructure instanceMethods
+				asSortedCollection: [ :a :b | a selector <= b selector ])
+				do: [ :methodStructure | 
+					| mdef |
+					mdef := methodStructure asCypressMethodDefinition.
+					mdef isExtensionMethod: true.
+					definitions add: mdef ].
+			(classStructure classMethods
+				asSortedCollection: [ :a :b | a selector <= b selector ])
+				do: [ :methodStructure | 
+					| mdef |
+					mdef := methodStructure asCypressMethodDefinition.
+					mdef isExtensionMethod: true.
+					definitions add: mdef ] ].
+	^ CypressSnapshot definitions: definitions
 ]
