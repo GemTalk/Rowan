@@ -72,6 +72,14 @@ RwGsPlatform >> fileUtilities [
 ]
 
 { #category : 'queries' }
+RwGsPlatform >> globalNamed: aString [
+
+	"Answer a global object with the given name.  If no object with the given name is found, returns nil."
+
+	^ GsCurrentSession currentSession objectNamed: aString
+]
+
+{ #category : 'queries' }
 RwGsPlatform >> image [
   "Answer the platform-specific object for querying the local image"
 

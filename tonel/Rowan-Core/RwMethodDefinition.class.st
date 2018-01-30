@@ -8,6 +8,15 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwMethodDefinition class >> newForSelector: selector protocol: protocol source: source [
+
+	^ self
+		withProperties:
+			(Dictionary with: 'selector' -> selector with: 'protocol' -> protocol)
+		source: source
+]
+
+{ #category : 'instance creation' }
 RwMethodDefinition class >> withProperties: propertiesDictionary source: sourceString [ 
 
 	^(self basicNew)

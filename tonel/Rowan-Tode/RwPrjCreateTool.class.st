@@ -39,9 +39,7 @@ RwPrjCreateTool >> createMetacelloProject: projectName format: format root: root
 RwPrjCreateTool >> createPackageProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
 
 	| projectSpec |
-	projectSpec := Rowan projectTools spec
-		newPackageSpecNamed: projectName
-		useGit: useGit.
+	projectSpec := self class spec newPackageSpecNamed: projectName useGit: useGit.
 	^ self
 		createPackageProjectFor: projectSpec
 		format: format

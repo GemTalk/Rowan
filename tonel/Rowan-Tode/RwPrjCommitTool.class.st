@@ -4,15 +4,20 @@ Class {
 	#category : 'Rowan-Tode'
 }
 
-{ #category : 'smalltalk api' }
+{ #category : 'cypress api' }
 RwPrjCommitTool >> commitPackagesForSpecification: aRwSpecification message: messageString [
-  "write out packages and commit repository"
 
-  self specification: aRwSpecification.
-  self class write writePackagesForSpecification: specification.
-  ^ Rowan repositoryTools commit
-    commitRepositoryForSpecification: specification
-    message: messageString
+	self specification: aRwSpecification.
+	specification canCommit
+		ifFalse: [ 
+			| msg |
+			msg := 'repository for ' , specification specName printString
+				,
+					' does not support commit operations. Source written to repository and skipping commit'.
+			self inform: msg.
+			^ msg ].
+	specification commitForTool: self message: messageString.
+	^ specification updateLoadedCommitIdForTool: self
 ]
 
 { #category : 'smalltalk api' }

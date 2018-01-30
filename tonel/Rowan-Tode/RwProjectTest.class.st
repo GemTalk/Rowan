@@ -55,6 +55,8 @@ RwProjectTest >> handleInformAsFailureDuring: aBlock [
 { #category : 'tests' }
 RwProjectTest >> testSimpleProject1 [
 
+	"Create project and build disk-based artifacts first, then create create a class and write changes to disk."
+
 	| projectName projectSpec projectTools classDefinition packageSymbolDictionary packageDefinition packageSet |
 	projectName := 'Simple'.
 	projectTools := Rowan projectTools.
@@ -78,8 +80,10 @@ RwProjectTest >> testSimpleProject1 [
 	packageSymbolDictionary := self
 		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
 	projectTools spec exportSpecification: projectSpec.
-	projectTools write writeSpecification: projectSpec.
-	projectTools commit commitSpecification: projectSpec message: 'Initial commit'.
+	projectTools write writePackagesForSpecification: projectSpec.
+	projectTools commit
+		commitPackagesForSpecification: projectSpec
+		message: 'Initial commit'.
 	self
 		handleInformAsFailureDuring: [ projectTools load loadSpecification: projectSpec ].
 
@@ -108,23 +112,22 @@ RwProjectTest >> testSimpleProject1 [
 	projectTools spec exportSpecification: projectSpec.
 	projectTools write writePackagesForSpecification: projectSpec.
 	projectTools commit
-		commitSpecification: projectSpec
+		commitPackagesForSpecification: projectSpec
 		message: 'Added Simple class'
 ]
 
 { #category : 'tests' }
 RwProjectTest >> testSimpleProject2 [
 
-	"Build our project in memory without committing to disk until we've created a classe, then write to disk."
+	"Build our project in memory without committing to disk until we've created a class, then write to disk."
 
 	| projectName projectSpec projectTools classDefinition packageDefinition packageSet |
 	projectName := 'Simple'.
 	projectTools := Rowan projectTools.
 	(Rowan projectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
-	projectSpec := Rowan projectTools spec
-		newPackageSpecNamed: projectName
-		useGit: true.
+
+	projectSpec := projectTools spec newPackageSpecNamed: projectName useGit: true.
 	projectSpec
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
@@ -132,6 +135,7 @@ RwProjectTest >> testSimpleProject2 [
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
 		symbolDictName: self _symbolDictionaryName.
+
 	classDefinition := RwClassDefinition
 		newForClassNamed: 'Simple2'
 		super: 'Object'
@@ -142,8 +146,10 @@ RwProjectTest >> testSimpleProject2 [
 		comment: 'I am a Simple2 class'
 		pools: #()
 		type: 'normal'.
+
 	packageDefinition := RwPackageDefinition newNamed: 'Simple-Core'.
 	packageDefinition addClassDefinition: classDefinition.
+
 	projectTools load
 		loadPackageDefinition: packageDefinition
 		specification: projectSpec.
@@ -155,8 +161,86 @@ RwProjectTest >> testSimpleProject2 [
 				format: 'tonel'
 				root: '/tmp/rowanSimpleProject2/'
 				repoPath: 'src' ].
+	projectTools spec exportSpecification: projectSpec.
 	projectTools write writePackagesForSpecification: projectSpec.
 	projectTools commit
-		commitSpecification: projectSpec
+		commitPackagesForSpecification: projectSpec
 		message: 'Added Simple class'
+]
+
+{ #category : 'tests' }
+RwProjectTest >> testSimpleProject3 [
+
+	"Build our project in memory without committing to disk until we've created a class with methods, then write to disk."
+
+	| projectName projectSpec projectTools classDefinition packageDefinition packageSet className testClass testInstance |
+	projectName := 'Simple'.
+	projectTools := Rowan projectTools.
+	(Rowan projectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
+
+	projectSpec := projectTools spec newPackageSpecNamed: projectName useGit: true.
+	projectSpec
+		comment:
+				'This is a simple project created in memory first, then written to disk.';
+		packageNames: #('Simple-Core' 'Simple-Tests');
+		yourself.
+	(projectSpec platformSpec at: 'gemstone')
+		symbolDictName: self _symbolDictionaryName.
+
+	className := 'Simple3'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #(#'civar1')
+		classvars: #()
+		category: nil
+		comment: 'I am a Simple3 class'
+		pools: #()
+		type: 'normal'.
+
+	classDefinition
+		addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'ivar1'
+						protocol: 'accessing'
+						source: 'ivar1 ^ivar1');
+		addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'initialize'
+						protocol: 'initialization'
+						source: 'initialize civar1 := 1.');
+		addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'civar1'
+						protocol: 'accessing'
+						source: 'civar1 ^civar1');
+		yourself.
+
+	packageDefinition := RwPackageDefinition newNamed: 'Simple-Core'.
+	packageDefinition addClassDefinition: classDefinition.
+
+	projectTools load
+		loadPackageDefinition: packageDefinition
+		specification: projectSpec.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	self assert: testClass civar1 == 1.
+	testInstance := testClass new.
+	self assert: testInstance ivar1 isNil.
+
+	self
+		handleConfirmationDuring: [ 
+			projectTools create
+				createPackageProjectFor: projectSpec
+				format: 'tonel'
+				root: '/tmp/rowanSimpleProject3/'
+				repoPath: 'src' ].
+	projectTools spec exportSpecification: projectSpec.
+	projectTools write writePackagesForSpecification: projectSpec.
+	projectTools commit
+		commitPackagesForSpecification: projectSpec
+		message: 'Added Simple3 class and methods'
 ]
