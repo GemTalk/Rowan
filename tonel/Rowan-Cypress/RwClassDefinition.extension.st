@@ -61,11 +61,6 @@ RwClassDefinition >> instVarNames [
 ]
 
 { #category : '*rowan-cypress' }
-RwClassDefinition >> name [
-  ^ self key
-]
-
-{ #category : '*rowan-cypress' }
 RwClassDefinition >> poolDictionaryNames [
   ^ properties at: 'pools'
 ]

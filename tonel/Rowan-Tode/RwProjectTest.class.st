@@ -53,6 +53,90 @@ RwProjectTest >> handleInformAsFailureDuring: aBlock [
 ]
 
 { #category : 'tests' }
+RwProjectTest >> testProjectClassExtensions [
+
+	"Build our project in memory without committing to disk until we've created a class with methods, then write to disk."
+
+	| projectName projectSpec projectTools classDefinition packageDefinition1 packageDefinition2 className testClass testInstance classExtensionDefinition |
+	projectName := 'Simple'.
+	projectTools := Rowan projectTools.
+	(Rowan projectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
+
+	projectSpec := projectTools spec newPackageSpecNamed: projectName useGit: true.
+	projectSpec
+		comment:
+				'This is a simple project created in memory first, then written to disk.';
+		packageNames: #('Simple-Core' 'Simple-Extensions' 'Simple-Tests');
+		yourself.
+	(projectSpec platformSpec at: 'gemstone')
+		symbolDictName: self _symbolDictionaryName.
+
+	className := 'Simple'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #(#'civar1')
+		classvars: #()
+		category: nil
+		comment: 'I am a Simple class with extensions'
+		pools: #()
+		type: 'normal'.
+
+	packageDefinition1 := RwPackageDefinition newNamed: 'Simple-Core'.
+	packageDefinition1 addClassDefinition: classDefinition.
+	projectTools load
+		loadPackageDefinition: packageDefinition1
+		specification: projectSpec.
+
+	classExtensionDefinition := RwClassExtensionDefinition
+		newForClassNamed: className.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'ivar1'
+						protocol: 'accessing'
+						source: 'ivar1 ^ivar1');
+		addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'initialize'
+						protocol: 'initialization'
+						source: 'initialize civar1 := 1.');
+		addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'civar1'
+						protocol: 'accessing'
+						source: 'civar1 ^civar1');
+		yourself.
+
+	packageDefinition2 := RwPackageDefinition newNamed: 'Simple-Extensions'.
+	packageDefinition2 addClassExtension: classExtensionDefinition.
+	projectTools load
+		loadPackageDefinition: packageDefinition2
+		specification: projectSpec.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	self assert: testClass civar1 == 1.
+	testInstance := testClass new.
+	self assert: testInstance ivar1 isNil.
+
+	self
+		handleConfirmationDuring: [ 
+			projectTools create
+				createPackageProjectFor: projectSpec
+				format: 'tonel'
+				root: '/tmp/rowanSimpleExtensionProject/'
+				repoPath: 'src' ].
+	projectTools spec exportSpecification: projectSpec.
+	projectTools write writePackagesForSpecification: projectSpec.
+	projectTools commit
+		commitPackagesForSpecification: projectSpec
+		message: 'Added Simple class and extension methods'
+]
+
+{ #category : 'tests' }
 RwProjectTest >> testSimpleProject1 [
 
 	"Create project and build disk-based artifacts first, then create create a class and write changes to disk."
