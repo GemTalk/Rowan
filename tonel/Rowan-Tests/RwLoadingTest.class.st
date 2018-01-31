@@ -1158,11 +1158,11 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBe
 	projectSpec := self projectLoadSpecFor: packageNames.
 	packagesShouldBeLoaded
 		ifFalse: [ packageNames do: [ :name | self assertAbsenceOfPackage: name ] ].
-	imagePackageSet1 := self definitionsOfLoadedPackages: packageNames.
+	imagePackageSet1 := Rowan loadedPackageDefinitionsNamed: packageNames.
 	diff1 := myPackageSet compareAgainstBase: imagePackageSet1.
 	self deny: diff1 isEmpty.
 	RwGsImage applyModification: diff1 for: projectSpec.
-	imagePackageSet2 := self definitionsOfLoadedPackages: packageNames.
+	imagePackageSet2 := Rowan loadedPackageDefinitionsNamed: packageNames.
 	diff2 := myPackageSet compareAgainstBase: imagePackageSet2.
 	self assert: diff2 isEmpty
 ]

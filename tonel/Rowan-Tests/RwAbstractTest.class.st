@@ -33,7 +33,7 @@ RwAbstractTest >> _newOrExistingPackageSymbolDictionaryNamed: dictName [
 { #category : 'private' }
 RwAbstractTest >> _symbolDictionary [
 
-	^ self _newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName
+	^ RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName
 ]
 
 { #category : 'private' }
@@ -42,12 +42,24 @@ RwAbstractTest >> _symbolDictionaryName [
 	^ #'CypressTestData'
 ]
 
+{ #category : 'private' }
+RwAbstractTest >> _symbolDictionaryName1 [
+
+	^ #'RowanTestData'
+]
+
+{ #category : 'private' }
+RwAbstractTest >> _symbolDictionaryName2 [
+
+	^ #'RowanTestData2'
+]
+
 { #category : 'support' }
 RwAbstractTest >> assertAbsenceOfPackage: packageName [
 
 	| loadedPackage symbolDict |
-	symbolDict := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+	symbolDict := RwGsImage
+		newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
 	loadedPackage := symbolDict loadedPackageNamed: packageName ifAbsent: [  ].
 	self assert: loadedPackage equals: nil
 ]
@@ -559,10 +571,14 @@ RwAbstractTest >> setUp [
 	user := System myUserProfile.
 	symList := user symbolList.
 
-	dict := symList objectNamed: self _symbolDictionaryName.
-	dict
-		ifNotNil: [ 
-			index := symList indexOf: dict.
-			index > 0
-				ifTrue: [ user removeDictionaryAt: index ] ]
+	{(self _symbolDictionaryName).
+	(self _symbolDictionaryName1).
+	(self _symbolDictionaryName2)}
+		do: [ :symDictName | 
+			dict := symList objectNamed: symDictName.
+			dict
+				ifNotNil: [ 
+					index := symList indexOf: dict.
+					index > 0
+						ifTrue: [ user removeDictionaryAt: index ] ] ]
 ]

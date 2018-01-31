@@ -37,14 +37,21 @@ RwGsImage class >> loadedPackageNamed: aName ifAbsent: absentBlock [
 
 	"scan the symbol list a RwLoadedPackage instance of the given name"
 
-	self symbolList do: [ :symbolDict | self error: 'not yet implmented' ]
+	self symbolList
+		do: [ :symbolDict | 
+			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
+				ifTrue: [ 
+					(symbolDict loadedPackageNamed: aName ifAbsent: [  ])
+						ifNotNil: [ :loadedPackage | ^ loadedPackage ] ] ].
+	^ absentBlock value
 ]
 
 { #category : 'querying' }
 RwGsImage class >> newOrExistingSymbolDictionaryNamed: dictName [
 
 	"If the current session's transient symbol list includes a dictionary with the given name, answer it.
-	Otherwise, create one, add it to the end of both transient and persistent symbol lists, and answer it."
+	Otherwise, create one, add it to the beginning of both transient and persistent symbol lists, and 
+	answer it."
 
 	| symbolName session symbolList association |
 	symbolName := dictName asSymbol.
@@ -58,7 +65,7 @@ RwGsImage class >> newOrExistingSymbolDictionaryNamed: dictName [
 				name: symbolName;
 				objectSecurityPolicy: symbolList objectSecurityPolicy;
 				yourself.
-			symbolList addLast: newDict.
+			symbolList insertObject: newDict at: 1.
 			session userProfile symbolList addLast: newDict.
 			newDict ]
 ]

@@ -5,18 +5,6 @@ Class {
 }
 
 { #category : 'private' }
-RwProjectTest >> _symbolDictionaryName [
-
-	^ #'RowanTestData'
-]
-
-{ #category : 'private' }
-RwProjectTest >> _symbolDictionaryName2 [
-
-	^ #'RowanTestData2'
-]
-
-{ #category : 'private' }
 RwProjectTest >> gsInteractionConfirmationHandler [
 
 	^ GsInteractionHandler new
@@ -94,7 +82,7 @@ RwProjectTest >> testProjectClassExtensions [
 		packageNames: #('Simple-Core' 'Simple-Extensions' 'Simple-Tests');
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
-		defaultSymbolDictName: self _symbolDictionaryName.
+		defaultSymbolDictName: self _symbolDictionaryName1.
 
 	className := 'Simple'.
 	classDefinition := RwClassDefinition
@@ -189,7 +177,7 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		packageNames: #('Simple-Core' 'Simple-Tests');
 		yourself.
 	(projectSpec1 platformSpec at: 'gemstone')
-		defaultSymbolDictName: self _symbolDictionaryName.
+		defaultSymbolDictName: self _symbolDictionaryName1.
 
 	className := 'Simple'.
 	classDefinition := RwClassDefinition
@@ -263,7 +251,7 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 	(Rowan projectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
 
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.	"ensure that the symbol dictionary exists and has been added the appropriate symbol lists (transient and persistent)"
+	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.	"ensure that the symbol dictionary exists and has been added the appropriate symbol lists (transient and persistent)"
 
 	projectSpec := projectTools spec newPackageSpecNamed: projectName useGit: true.
 	projectSpec
@@ -272,7 +260,7 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 		packageNames: #('Simple-Core1' 'Simple-Core2' 'Simple-Extensions1');
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
-		defaultSymbolDictName: self _symbolDictionaryName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
 		symbolDictName: self _symbolDictionaryName2 forPackageNamed: 'Simple-Core2'.
 
 	className1 := 'Simple1'.
@@ -308,7 +296,7 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 	self
 		assert:
 			(x := (dictionariesAndSymbols at: 1) at: 1)
-				== (y := Rowan globalNamed: self _symbolDictionaryName).
+				== (y := Rowan globalNamed: self _symbolDictionaryName1).
 
 	classDefinition := RwClassDefinition
 		newForClassNamed: className2
@@ -406,9 +394,9 @@ RwProjectTest >> testSimpleProject1 [
 		packageNames: #('Simple-Core' 'Simple-Tests');
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
-		defaultSymbolDictName: self _symbolDictionaryName.
-	packageSymbolDictionary := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
+		defaultSymbolDictName: self _symbolDictionaryName1.
+	packageSymbolDictionary := RwGsImage
+		newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 	projectTools spec exportSpecification: projectSpec.
 	projectTools write writePackagesForSpecification: projectSpec.
 	projectTools commit
@@ -464,7 +452,7 @@ RwProjectTest >> testSimpleProject2 [
 		packageNames: #('Simple-Core' 'Simple-Tests');
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
-		defaultSymbolDictName: self _symbolDictionaryName.
+		defaultSymbolDictName: self _symbolDictionaryName1.
 
 	classDefinition := RwClassDefinition
 		newForClassNamed: 'Simple2'
@@ -516,7 +504,7 @@ RwProjectTest >> testSimpleProject3 [
 		packageNames: #('Simple-Core' 'Simple-Tests');
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
-		defaultSymbolDictName: self _symbolDictionaryName.
+		defaultSymbolDictName: self _symbolDictionaryName1.
 
 	className := 'Simple3'.
 	classDefinition := RwClassDefinition
