@@ -263,6 +263,8 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 	(Rowan projectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
 
+	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.	"ensure that the symbol dictionary exists and has been added the appropriate symbol lists (transient and persistent)"
+
 	projectSpec := projectTools spec newPackageSpecNamed: projectName useGit: true.
 	projectSpec
 		comment:

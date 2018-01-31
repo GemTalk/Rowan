@@ -75,27 +75,6 @@ RwLoadingTest >> accessorMethodsForSimpleClassNamed: name [
 	^result
 ]
 
-{ #category : 'support' }
-RwLoadingTest >> applyDiffToImage: aPackageSetModification [
-
-	"work out the process handling that is needed in the face of new class versions"
-
-	| visitor patchSet |
-	visitor := RwGsImagePatchVisitor newFor: self _symbolDictionary.
-	visitor visit: aPackageSetModification.
-	patchSet := visitor patchSet.
-	patchSet classesWithNewVersions isEmpty
-		ifTrue: [ 
-			patchSet apply.
-			^ self ].
-	patchSet classesWithNewVersions
-		do: [ :each | each newClassVersionPatches: aPackageSetModification patchSet: nil ].
-	visitor := RwGsImagePatchVisitor newFor: self _symbolDictionary.
-	visitor visit: aPackageSetModification.
-	patchSet := visitor patchSet.
-	patchSet apply
-]
-
 { #category : 'support - basic definitions' }
 RwLoadingTest >> basicClassDefinitions: packageName [
   ^ Dictionary new
@@ -1175,13 +1154,14 @@ RwLoadingTest >> instVarChangesClassDefinitions4: packageName [
 { #category : 'support' }
 RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBeLoaded using: myPackageSet [
 
-	| imagePackageSet1 diff1 imagePackageSet2 diff2 |
+	| imagePackageSet1 diff1 imagePackageSet2 diff2 projectSpec |
+	projectSpec := self projectLoadSpecFor: packageNames.
 	packagesShouldBeLoaded
 		ifFalse: [ packageNames do: [ :name | self assertAbsenceOfPackage: name ] ].
 	imagePackageSet1 := self definitionsOfLoadedPackages: packageNames.
 	diff1 := myPackageSet compareAgainstBase: imagePackageSet1.
 	self deny: diff1 isEmpty.
-	self applyDiffToImage: diff1.
+	RwGsImage applyModification: diff1 for: projectSpec.
 	imagePackageSet2 := self definitionsOfLoadedPackages: packageNames.
 	diff2 := myPackageSet compareAgainstBase: imagePackageSet2.
 	self assert: diff2 isEmpty
@@ -1443,6 +1423,23 @@ RwLoadingTest >> poolDictionaryChangesClassDefinitions3: packageName [
 { #category : 'support - poolDictionaryChanges definitions' }
 RwLoadingTest >> poolDictionaryChangesClassDefinitions4: packageName [
 	^ self poolDictionaryChangeClassDefinitions4: packageName in: Dictionary new
+]
+
+{ #category : 'private' }
+RwLoadingTest >> projectLoadSpecFor: packageNames [
+
+	| projectSpec |
+	projectSpec := (Rowan projectTools spec
+		newPackageSpecNamed: 'RwloadingTest'
+		useGit: true)
+		comment:
+				'This is a simple project created in memory first, then written to disk.';
+		packageNames: packageNames;
+		yourself.
+	(projectSpec platformSpec at: 'gemstone')
+		defaultSymbolDictName: self _symbolDictionaryName.
+	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
+	^ projectSpec
 ]
 
 { #category : 'support' }

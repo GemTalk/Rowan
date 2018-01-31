@@ -5,7 +5,8 @@ Class {
 	#name : 'RwGsPatch',
 	#superclass : 'Object',
 	#instVars : [
-		'packageSymbolDictionary'
+		'projectLoadSpecification',
+		'packageDefinition'
 	],
 	#category : 'Rowan-GemStone'
 }
@@ -16,7 +17,7 @@ RwGsPatch >> markNotDirtyPackageNamed: packageName [
 	| loadedPackage source |
 	source := Rowan configuration packageInfoSource.
 	loadedPackage := source == #'SymbolDictionary'
-		ifTrue: [ packageSymbolDictionary loadedPackageNamed: packageName ifAbsent: [  ] ]
+		ifTrue: [ self packageSymbolDictionary loadedPackageNamed: packageName ifAbsent: [  ] ]
 		ifFalse: [ Rowan loadedPackageNamed: packageName ifAbsent: [  ] ].
 	loadedPackage
 		ifNil: [ self error: 'Internal error -- attempt to manipulate nonexistent package.' ].
@@ -24,22 +25,50 @@ RwGsPatch >> markNotDirtyPackageNamed: packageName [
 ]
 
 { #category : 'accessing' }
-RwGsPatch >> packageSymbolDictionary [
-
-   ^packageSymbolDictionary
+RwGsPatch >> packageDefinition [
+	^packageDefinition
 
 ]
 
 { #category : 'accessing' }
-RwGsPatch >> packageSymbolDictionary: anObject [
+RwGsPatch >> packageDefinition: newValue [
+	packageDefinition := newValue
 
-   packageSymbolDictionary := anObject
+]
+
+{ #category : 'accessing' }
+RwGsPatch >> packageName [
+
+	^packageDefinition key
+]
+
+{ #category : 'accessing' }
+RwGsPatch >> packageSymbolDictionary [
+
+	| symDictName |
+	symDictName := (self projectLoadSpecification platformSpec at: 'gemstone')
+		symbolDictNameForPackageNamed: self packageName.
+	^ RwGsImage objectNamed: symDictName asSymbol
+]
+
+{ #category : 'accessing' }
+RwGsPatch >> projectLoadSpecification [
+
+   ^projectLoadSpecification
+
+]
+
+{ #category : 'accessing' }
+RwGsPatch >> projectLoadSpecification: anObject [
+
+   projectLoadSpecification := anObject
 
 ]
 
 { #category : 'utility' }
 RwGsPatch >> resolveName: aName [
+
 	"Answer a SymbolAssociation for the given name."
 
-	^GsCurrentSession currentSession resolveSymbol: aName asSymbol
+	^ RwGsImage resolveName: aName
 ]

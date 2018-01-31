@@ -13,7 +13,7 @@ RwGsClassExtensionSymbolDictPatch >> installClassExtensionInSystem [
 	"The class must already exist.
         Create or update the LoadedClassExtension for the extended class."
 
-	packageSymbolDictionary
+	self packageSymbolDictionary
 		ensureExtensionClassNamed: self className
 		existsForPackageNamed: self packageName
 ]

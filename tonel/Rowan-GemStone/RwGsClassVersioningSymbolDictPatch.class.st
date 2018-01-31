@@ -207,7 +207,7 @@ RwGsClassVersioningSymbolDictPatch >> installNewClassVerionInSystem [
 	"Install the new class association in the symbolAssociation for the class.
 	 Update the LoadedClass with properties for the new classversion."
 
-	packageSymbolDictionary addNewClassVersionToAssociation: newClassVersion
+	self packageSymbolDictionary addNewClassVersionToAssociation: newClassVersion
 ]
 
 { #category : 'new version support' }
@@ -216,7 +216,7 @@ RwGsClassVersioningSymbolDictPatch >> newClassVersionPatches: aPackageSetModific
 	| existingClass loadedClassDefinition newVersionClassModification existingClassName |
 	existingClass := self oldClassVersion.
 	existingClassName := existingClass name asString.
-	loadedClassDefinition := (packageSymbolDictionary
+	loadedClassDefinition := (self packageSymbolDictionary
 		existingForClass: existingClass) asDefinition.
 	newVersionClassModification := self classDefinition
 		compareAgainstBaseForNewClassVersion: loadedClassDefinition.

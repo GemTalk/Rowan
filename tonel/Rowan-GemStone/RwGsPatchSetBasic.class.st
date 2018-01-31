@@ -23,7 +23,7 @@ Class {
 		'tempSymbols',
 		'createdClasses',
 		'errors',
-		'packageSymbolDictionary'
+		'projectLoadSpecification'
 	],
 	#category : 'Rowan-GemStone'
 }
@@ -37,104 +37,104 @@ RwGsPatchSetBasic class >> new [
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classAdditionPatchClass [
 
-	^ packageSymbolDictionary
-		ifNotNil: [ packageSymbolDictionary _classAdditionPatchClass ]
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | symDictClass _classAdditionPatchClass ]
 		ifNil: [ RwGsClassAdditionPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classDeletionPatchClass [
 
-	^ packageSymbolDictionary
-		ifNotNil: [ packageSymbolDictionary _classDeletionPatchClass ]
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | symDictClass _classDeletionPatchClass ]
 		ifNil: [ RwGsClassDeletionPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classExtensionPatchClass [
 
-	^ packageSymbolDictionary
-		ifNotNil: [ packageSymbolDictionary _classExtensionPatchClass ]
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | symDictClass _classExtensionPatchClass ]
 		ifNil: [ RwGsClassExtensionPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classPropertiesPatchClass [
 
-	^ packageSymbolDictionary
-		ifNotNil: [ packageSymbolDictionary _classPropertiesPatchClass ]
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | symDictClass _classPropertiesPatchClass ]
 		ifNil: [ RwGsClassPropertiesPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classVariablePatchClass [
 
-	^ packageSymbolDictionary
-		ifNotNil: [ packageSymbolDictionary _classVariablePatchClass ]
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | symDictClass _classVariablePatchClass ]
 		ifNil: [ RwGsClassVariableChangePatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _classVersioningPatchClass [
 
-	^ packageSymbolDictionary
-		ifNotNil: [ packageSymbolDictionary _classVersioningPatchClass ]
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | symDictClass _classVersioningPatchClass ]
 		ifNil: [ RwGsClassVersioningPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodAdditionPatchClass [
 
-	^ packageSymbolDictionary
-		ifNotNil: [ packageSymbolDictionary _methodAdditionPatchClass ]
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | symDictClass _methodAdditionPatchClass ]
 		ifNil: [ RwGsMethodAdditionPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodDeletionPatchClass [
 
-	^ packageSymbolDictionary
-		ifNotNil: [ packageSymbolDictionary _methodDeletionPatchClass ]
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | symDictClass _methodDeletionPatchClass ]
 		ifNil: [ RwGsMethodDeletionPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodExtensionPatchClass [
 
-	^ packageSymbolDictionary
-		ifNotNil: [ packageSymbolDictionary _methodExtensionPatchClass ]
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | symDictClass _methodExtensionPatchClass ]
 		ifNil: [ RwGsMethodAdditionPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodPropertiesPatchClass [
 
-	^ packageSymbolDictionary
-		ifNotNil: [ packageSymbolDictionary _methodPropertiesPatchClass ]
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | symDictClass _methodPropertiesPatchClass ]
 		ifNil: [ RwGsMethodPropertiesPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodSourcePatchClass [
 
-	^ packageSymbolDictionary
-		ifNotNil: [ packageSymbolDictionary _methodSourcePatchClass ]
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | symDictClass _methodSourcePatchClass ]
 		ifNil: [ RwGsMethodSourcePatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _packageAdditionPatchClass [
 
-	^ packageSymbolDictionary
-		ifNotNil: [ packageSymbolDictionary _packageAdditionPatchClass ]
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | symDictClass _packageAdditionPatchClass ]
 		ifNil: [ RwGsPackageAdditionPatch ]
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _packageDeletionPatchClass [
 
-	^ packageSymbolDictionary
-		ifNotNil: [ packageSymbolDictionary _packageDeletionPatchClass ]
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | symDictClass _packageDeletionPatchClass ]
 		ifNil: [ RwGsPackageDeletionPatch ]
 ]
 
@@ -146,7 +146,7 @@ RwGsPatchSetBasic >> addAddedClass: aClassDefinition inPackage: aPackageDefiniti
 			((self _classAdditionPatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -167,7 +167,7 @@ RwGsPatchSetBasic >> addAddedClassMethod: aClassMethodDefinition inClass: aClass
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -181,7 +181,7 @@ RwGsPatchSetBasic >> addAddedInstanceMethod: anInstanceMethodDefinition inClass:
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -191,7 +191,7 @@ RwGsPatchSetBasic >> addAddedPackage: packageDefinition [
 	addedPackages
 		add:
 			((self _packageAdditionPatchClass for: packageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -222,7 +222,7 @@ RwGsPatchSetBasic >> addDeletedClass: aClassDefinition inPackage: aPackageDefini
 			((self _classDeletionPatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -236,7 +236,7 @@ RwGsPatchSetBasic >> addDeletedClassMethod: aClassMethodDefinition inClass: aCla
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -250,7 +250,7 @@ RwGsPatchSetBasic >> addDeletedInstanceMethod: anInstanceMethodDefinition inClas
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -267,7 +267,7 @@ RwGsPatchSetBasic >> addExtendedClass: aClassDefinition inPackage: aPackageDefin
 			((self _classExtensionPatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -281,7 +281,7 @@ RwGsPatchSetBasic >> addExtendedClassMethod: aClassMethodDefinition inClass: aCl
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -295,7 +295,7 @@ RwGsPatchSetBasic >> addExtendedInstanceMethod: anInstanceMethodDefinition inCla
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -307,7 +307,7 @@ RwGsPatchSetBasic >> addPatchedClassClassVariables: aClassDefinition inPackage: 
 			((self _classVariablePatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -321,7 +321,7 @@ RwGsPatchSetBasic >> addPatchedClassMethod: aClassMethodDefinition inClass: aCla
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -335,7 +335,7 @@ RwGsPatchSetBasic >> addPatchedClassMethodProperties: aClassMethodDefinition inC
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -347,7 +347,7 @@ RwGsPatchSetBasic >> addPatchedClassNewVersion: aClassModification inPackage: aP
 			((self _classVersioningPatchClass
 				for: aClassModification
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -359,7 +359,7 @@ RwGsPatchSetBasic >> addPatchedClassProperties: aClassDefinition inPackage: aPac
 			((self _classPropertiesPatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -373,7 +373,7 @@ RwGsPatchSetBasic >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -387,7 +387,7 @@ RwGsPatchSetBasic >> addPatchedInstanceMethodProperties: aInstanceMethodDefiniti
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				packageSymbolDictionary: packageSymbolDictionary;
+				projectLoadSpecification: projectLoadSpecification;
 				yourself)
 ]
 
@@ -597,15 +597,21 @@ RwGsPatchSetBasic >> migrateInstances [
 ]
 
 { #category : 'accessing' }
-RwGsPatchSetBasic >> packageSymbolDictionary [
+RwGsPatchSetBasic >> packageSymbolDictionaryClass [
 
-	^ packageSymbolDictionary
+	^ projectLoadSpecification ifNotNil: [ RwGsPackageSymbolDictionary ]
 ]
 
 { #category : 'accessing' }
-RwGsPatchSetBasic >> packageSymbolDictionary: aPackageSymbolDictionary [
+RwGsPatchSetBasic >> projectLoadSpecification [
 
-	packageSymbolDictionary := aPackageSymbolDictionary
+	^ projectLoadSpecification
+]
+
+{ #category : 'accessing' }
+RwGsPatchSetBasic >> projectLoadSpecification: aRwProjectLoadSpecification [
+
+	projectLoadSpecification := aRwProjectLoadSpecification
 ]
 
 { #category : 'private - applying' }

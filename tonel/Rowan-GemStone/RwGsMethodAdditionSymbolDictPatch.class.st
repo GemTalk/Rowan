@@ -14,11 +14,10 @@ Class {
 { #category : 'installing' }
 RwGsMethodAdditionSymbolDictPatch >> installMethod [
 
-	packageSymbolDictionary
+	self packageSymbolDictionary
 		addNewCompiledMethod: compiledMethod
 		for: behavior
 		protocol: self propertiesProtocolName
-		toPackageNamed: packageDefinition key.
-	selector := compiledMethod selector.
-
+		toPackageNamed: self packageName.
+	selector := compiledMethod selector
 ]

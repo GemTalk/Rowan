@@ -30,7 +30,9 @@ RwGsMethodDeletionSymbolDictPatch >> deleteMethodNewClasses: createdClasses andE
 		ifTrue: [ class class ]
 		ifFalse: [ class ].
 
-	packageSymbolDictionary deleteMethod: methodDefinition selector for: behavior
+	self packageSymbolDictionary
+		deleteMethod: methodDefinition selector
+		for: behavior
 ]
 
 { #category : 'initializers' }

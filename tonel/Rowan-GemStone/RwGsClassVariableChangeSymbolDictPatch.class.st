@@ -41,5 +41,5 @@ RwGsClassVariableChangeSymbolDictPatch >> installPropertiesPatchFor: aPatchSet [
 			aPatchSet tempSymbols
 				at: className
 				ifAbsent: [ self error: 'Cannot find class to update properties for.' ] ].
-	packageSymbolDictionary updateClassProperties: existingClass
+	self packageSymbolDictionary updateClassProperties: existingClass
 ]

@@ -34,10 +34,10 @@ RwPrjLoadTool >> loadPackageSetDefinition: packageSetToLoad specification: aRwSp
 
 	| loadedPackageSet diff symbolDict |
 	self specification: aRwSpecification.
-	symbolDict := self
-		_newOrExistingSymbolDictionaryNamed:
+	symbolDict := RwGsImage
+		newOrExistingSymbolDictionaryNamed:
 			(aRwSpecification platformSpec at: 'gemstone') defaultSymbolDictName.
-	loadedPackageSet := symbolDict
+	loadedPackageSet := Rowan
 		loadedPackageDefinitionsNamed: packageSetToLoad packageNames.
 	diff := packageSetToLoad compareAgainstBase: loadedPackageSet.
 	diff isEmpty

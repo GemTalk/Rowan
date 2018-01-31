@@ -20,9 +20,9 @@ RwGsImagePatchVisitor class >> new [
 ]
 
 { #category : 'instance creation' }
-RwGsImagePatchVisitor class >> newFor: aPackageSymbolDictionary [
+RwGsImagePatchVisitor class >> newFor: aRwProjectLoadSpecification [
 
-	^ super new initializeFor: aPackageSymbolDictionary
+	^ super new initializeFor: aRwProjectLoadSpecification
 ]
 
 { #category : 'private' }
@@ -138,10 +138,10 @@ RwGsImagePatchVisitor >> initialize [
 ]
 
 { #category : 'initialization' }
-RwGsImagePatchVisitor >> initializeFor: aPackageSymbolDictionary [
+RwGsImagePatchVisitor >> initializeFor: aRwProjectLoadSpecification [
 
 	self initialize.
-	patchSet packageSymbolDictionary: aPackageSymbolDictionary
+	patchSet projectLoadSpecification: aRwProjectLoadSpecification
 ]
 
 { #category : 'accessing' }

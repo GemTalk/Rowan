@@ -15,13 +15,12 @@ Class {
 RwGsPackageAdditionPatch >> createLoadedPackage [
 
 	| packageName existingLoadedPackage newLoadedPackage |
-	packageName := packageDefinition key.
+	packageName := self packageName.
 	existingLoadedPackage := RwGsLoadedPackage
-				existingPackageNamed: packageName
-				ifAbsent: [nil].
+		existingPackageNamed: packageName
+		ifAbsent: [ nil ].
 	existingLoadedPackage
-		ifNotNil: 
-			[self error: 'Internal error -- Attempt to add a package that exists.'].
+		ifNotNil: [ self error: 'Internal error -- Attempt to add a package that exists.' ].
 	newLoadedPackage := RwGsLoadedPackage newNamed: packageName.
 	self updatePackageProperties
 ]

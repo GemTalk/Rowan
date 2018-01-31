@@ -2,18 +2,30 @@ Class {
 	#name : 'RwGemStoneSpecification',
 	#superclass : 'RwPlatformSpecification',
 	#instVars : [
+		'defaultMethodEnv',
 		'defaultSymbolDictName',
-		'packageNameToSymbolDictNameMap',
-		'userId',
-		'methodEnv'
+		'defaultUserId',
+		'packageNameToPlatformPropertiesMap'
 	],
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'accessing' }
+RwGemStoneSpecification >> defaultMethodEnv [
+
+	^ defaultMethodEnv ifNil: [ defaultMethodEnv := 0 ]
+]
+
+{ #category : 'accessing' }
+RwGemStoneSpecification >> defaultMethodEnv: anObject [
+
+	defaultMethodEnv := anObject
+]
+
+{ #category : 'accessing' }
 RwGemStoneSpecification >> defaultSymbolDictName [
 
-	^ defaultSymbolDictName
+	^ defaultSymbolDictName ifNil: [ 'UserGlobals' ]
 ]
 
 { #category : 'accessing' }
@@ -22,79 +34,95 @@ RwGemStoneSpecification >> defaultSymbolDictName: anObject [
 	defaultSymbolDictName := anObject
 ]
 
+{ #category : 'accessing' }
+RwGemStoneSpecification >> defaultUserId [
+
+	^ defaultUserId ifNil: [ defaultUserId := RwGsImage currentUserId ]
+]
+
+{ #category : 'accessing' }
+RwGemStoneSpecification >> defaultUserId: anObject [
+
+	defaultUserId := anObject
+]
+
 { #category : 'initialization' }
 RwGemStoneSpecification >> initialize [
 
 	super initialize.
 	defaultSymbolDictName := 'UserGlobals'.
-	packageNameToSymbolDictNameMap := Dictionary new
+	packageNameToPlatformPropertiesMap := Dictionary new
 ]
 
 { #category : 'accessing' }
-RwGemStoneSpecification >> methodEnv [
+RwGemStoneSpecification >> methodEnv: methodEnv forPackageNamed: packageName [
 
-   ^methodEnv ifNil: [ methodEnv := 0 ]
-
+	| packageProperties |
+	packageProperties := packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
+	packageProperties at: 'methodEnv' put: methodEnv
 ]
 
 { #category : 'accessing' }
-RwGemStoneSpecification >> methodEnv: anObject [
+RwGemStoneSpecification >> methodEnvForPackageNamed: packageName [
 
-   methodEnv := anObject
-
-]
-
-{ #category : 'accessing' }
-RwGemStoneSpecification >> packageNameToSymbolDictNameMap [
-
-	^ packageNameToSymbolDictNameMap
+	| packageProperties |
+	packageProperties := packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self defaultMethodEnv ].
+	^ packageProperties at: 'methodEnv' ifAbsent: [ ^ self defaultMethodEnv ]
 ]
 
 { #category : 'copying' }
 RwGemStoneSpecification >> postCopy [
-  "don't forget to copy any compound state objects"
 
-  super postCopy
+	"don't forget to copy any compound state objects"
+
+	super postCopy.
+	packageNameToPlatformPropertiesMap := packageNameToPlatformPropertiesMap copy.
+	packageNameToPlatformPropertiesMap
+		keysAndValuesDo: [ :key :value | packageNameToPlatformPropertiesMap at: key put: value copy ]
 ]
 
 { #category : 'accessing' }
-RwGemStoneSpecification >> symbolDictName [
+RwGemStoneSpecification >> symbolDictName: symbolDictName forPackageNamed: packageName [
 
-   ^symbolDictName
-
-]
-
-{ #category : 'accessing' }
-RwGemStoneSpecification >> symbolDictName: anObject [
-
-   symbolDictName := anObject
-
-]
-
-{ #category : 'accessing' }
-RwGemStoneSpecification >> symbolDictName: symbDictName forPackageNamed: packageName [
-
-	packageNameToSymbolDictNameMap at: packageName put: symbDictName
+	| packageProperties |
+	packageProperties := packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
+	packageProperties at: 'symbolDictName' put: symbolDictName
 ]
 
 { #category : 'accessing' }
 RwGemStoneSpecification >> symbolDictNameForPackageNamed: packageName [
 
-	^ packageNameToSymbolDictNameMap
+	| packageProperties |
+	packageProperties := packageNameToPlatformPropertiesMap
 		at: packageName
-		ifAbsent: [ self defaultSymbolDictName ]
+		ifAbsent: [ ^ self defaultSymbolDictName ].
+	^ packageProperties
+		at: 'symbolDictName'
+		ifAbsent: [ ^ self defaultSymbolDictName ]
 ]
 
 { #category : 'accessing' }
-RwGemStoneSpecification >> userId [
+RwGemStoneSpecification >> userId: userId forPackageNamed: packageName [
 
-   ^userId
-
+	| packageProperties |
+	packageProperties := packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
+	packageProperties at: 'userId' put: userId
 ]
 
 { #category : 'accessing' }
-RwGemStoneSpecification >> userId: anObject [
+RwGemStoneSpecification >> userIdForPackageNamed: packageName [
 
-   userId := anObject
-
+	| packageProperties |
+	packageProperties := packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self defaultUserId ].
+	^ packageProperties at: 'userId' ifAbsent: [ ^ self defaultUserId ]
 ]

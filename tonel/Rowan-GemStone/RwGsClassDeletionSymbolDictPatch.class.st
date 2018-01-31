@@ -31,5 +31,5 @@ RwGsClassDeletionSymbolDictPatch >> addToNewClassesByName: aDictionary [
 { #category : 'deleting' }
 RwGsClassDeletionSymbolDictPatch >> deleteClassFromSystem [
 
-	packageSymbolDictionary deleteClassNamedFromPackage: self className
+	self packageSymbolDictionary deleteClassNamedFromPackage: self className
 ]

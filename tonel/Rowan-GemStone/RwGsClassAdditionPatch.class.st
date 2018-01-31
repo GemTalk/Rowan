@@ -35,16 +35,15 @@ RwGsClassAdditionPatch >> addClassToSymbolDictionary [
 
 { #category : 'actions' }
 RwGsClassAdditionPatch >> createAndInstallLoadedClass [
+
 	"Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
 	| loadedClass loadedPackage |
 	loadedClass := RwGsLoadedClass newForClass: newClass.
 	loadedClass setPropertiesTo: classDefinition properties.
 	loadedPackage := RwGsLoadedPackage
-				existingPackageNamed: packageDefinition key
-				ifAbsent: 
-					[self
-						error: 'Internal error -- Attempt to add a class to a nonexistent package.'].
+		existingPackageNamed: self packageName
+		ifAbsent: [ self error: 'Internal error -- Attempt to add a class to a nonexistent package.' ].
 	loadedPackage addLoadedClass: loadedClass
 ]
 

@@ -9,8 +9,7 @@ Class {
 	#name : 'RwGsClassPatch',
 	#superclass : 'RwGsPatch',
 	#instVars : [
-		'classDefinition',
-		'packageDefinition'
+		'classDefinition'
 	],
 	#category : 'Rowan-GemStone'
 }
@@ -155,7 +154,7 @@ RwGsClassPatch >> existingSymbolDictionaryNamed: dictName [
 { #category : 'applying' }
 RwGsClassPatch >> markPackageNotDirty [
 
-	self markNotDirtyPackageNamed: packageDefinition key
+	self markNotDirtyPackageNamed: self packageName
 ]
 
 { #category : 'versioning' }
@@ -163,24 +162,6 @@ RwGsClassPatch >> oldClassVersion [
 	"The old version is what is currently bound to the class definition's name."
 
 	^ (self resolveName: classDefinition key) value
-]
-
-{ #category : 'accessing' }
-RwGsClassPatch >> packageDefinition [
-	^packageDefinition
-
-]
-
-{ #category : 'accessing' }
-RwGsClassPatch >> packageDefinition: newValue [
-	packageDefinition := newValue
-
-]
-
-{ #category : 'accessing' }
-RwGsClassPatch >> packageName [
-
-	^packageDefinition key
 ]
 
 { #category : 'private' }
@@ -202,13 +183,12 @@ RwGsClassPatch >> privateCreateClassFor: aPatchSet [
 { #category : 'private' }
 RwGsClassPatch >> privateCreateClassWithSuperclass: superclass [
 
-	| classProperties packageName infoSource category createdClass |
+	| classProperties infoSource category createdClass |
 	createdClass := self basicCreateClassWithSuperclass: superclass.
 	classProperties := classDefinition properties.
-	packageName := packageDefinition key.
 	infoSource := Rowan configuration packageInfoSource.
 	category := infoSource == #'Category'
-		ifTrue: [ packageName ]
+		ifTrue: [ self packageName ]
 		ifFalse: [ classProperties at: 'category' ifAbsent: [  ] ].
 	createdClass category: category.
 	^ createdClass

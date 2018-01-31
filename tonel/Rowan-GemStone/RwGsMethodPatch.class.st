@@ -12,7 +12,6 @@ Class {
 		'isMeta',
 		'methodDefinition',
 		'classDefinition',
-		'packageDefinition',
 		'behavior',
 		'selector',
 		'compiledMethod'
@@ -63,13 +62,14 @@ RwGsMethodPatch >> compileUsingNewClasses: createdClasses andExistingClasses: te
 
 { #category : 'private-testing' }
 RwGsMethodPatch >> isForExtensionMethod [
+
 	"Answer true if the method is not in the same package that defines the class."
 
 	| packageOfClass packageOfMethod loadedClass |
-	packageOfMethod := packageDefinition key.
+	packageOfMethod := self packageName.
 	loadedClass := RwGsLoadedClass existingForClass: behavior thisClass.
 	packageOfClass := loadedClass loadedPackage name.
-	^packageOfClass ~= packageOfMethod
+	^ packageOfClass ~= packageOfMethod
 ]
 
 { #category : 'accessing' }
@@ -80,25 +80,28 @@ RwGsMethodPatch >> isMeta: newValue [
 
 { #category : 'private' }
 RwGsMethodPatch >> loadedClassOrExtensionForMethod [
+
 	"The loaded class or extension should already exist."
 
-	| packageName loadedPackage className |
-	packageName := packageDefinition key.
-	loadedPackage := Rowan loadedPackageNamed: packageName
-				ifAbsent: 
-					[self
-						error: 'Internal error -- attempt to add a method to a nonexistent package.'].
+	| loadedPackage className |
+	loadedPackage := Rowan
+		loadedPackageNamed: self packageName
+		ifAbsent: [ 
+			self
+				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
 	className := classDefinition key.
-	^loadedPackage classOrExtensionForClassNamed: className
-		ifAbsent: 
-			[self
-				error: 'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.']
+	^ loadedPackage
+		classOrExtensionForClassNamed: className
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ]
 ]
 
 { #category : 'applying' }
 RwGsMethodPatch >> markPackageNotDirty [
 
-	self markNotDirtyPackageNamed: packageDefinition key
+	self markNotDirtyPackageNamed: self packageName
 ]
 
 { #category : 'accessing' }
@@ -113,23 +116,12 @@ RwGsMethodPatch >> methodDefinition: newValue [
 
 ]
 
-{ #category : 'accessing' }
-RwGsMethodPatch >> packageDefinition [
-	^packageDefinition
-
-]
-
-{ #category : 'accessing' }
-RwGsMethodPatch >> packageDefinition: newValue [
-	packageDefinition := newValue
-
-]
-
 { #category : 'private-installing' }
 RwGsMethodPatch >> packageProtocolName [
+
 	"If I'm for an extension method, my protocol in the image may need to be *<packageName>*."
 
-	^'*' , packageDefinition key
+	^ '*' , self packageName
 ]
 
 { #category : 'printing' }

@@ -120,8 +120,7 @@ Rowan class >> loadedPackageDefinitionsNamed: someNames [
 { #category : 'private' }
 Rowan class >> loadedPackageNamed: aName ifAbsent: absentBlock [
 
-	^platform loadedPackageClass existingPackageNamed: aName
-		ifAbsent: absentBlock
+	^ self image loadedPackageNamed: aName ifAbsent: absentBlock
 ]
 
 { #category : 'private' }

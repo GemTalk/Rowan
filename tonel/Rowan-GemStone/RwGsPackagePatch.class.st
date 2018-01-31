@@ -8,9 +8,6 @@ Object
 Class {
 	#name : 'RwGsPackagePatch',
 	#superclass : 'RwGsPatch',
-	#instVars : [
-		'packageDefinition'
-	],
 	#category : 'Rowan-GemStone'
 }
 
@@ -23,19 +20,7 @@ RwGsPackagePatch class >> for: aPackageDefinition [
 { #category : 'applying' }
 RwGsPackagePatch >> markPackageNotDirty [
 
-	self markNotDirtyPackageNamed: packageDefinition key
-]
-
-{ #category : 'accessing' }
-RwGsPackagePatch >> packageDefinition [
-
-	^packageDefinition
-]
-
-{ #category : 'accessing' }
-RwGsPackagePatch >> packageDefinition: aPackageDefinition [
-
-	packageDefinition := aPackageDefinition
+	self markNotDirtyPackageNamed: self packageName
 ]
 
 { #category : 'applying' }
@@ -43,8 +28,7 @@ RwGsPackagePatch >> updatePackageProperties [
 
 	| loadedPackage |
 	loadedPackage := RwGsLoadedPackage
-				existingPackageNamed: packageDefinition key
-				ifAbsent: 
-					[self error: 'Internal error. Attempt to update unregistered package.'].
-	loadedPackage setPropertiesTo: packageDefinition properties
+		existingPackageNamed: self packageName
+		ifAbsent: [ self error: 'Internal error. Attempt to update unregistered package.' ].
+	loadedPackage setPropertiesTo: self packageDefinition properties
 ]

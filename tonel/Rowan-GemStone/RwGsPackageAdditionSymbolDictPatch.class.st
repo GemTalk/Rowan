@@ -14,5 +14,6 @@ Class {
 { #category : 'applying' }
 RwGsPackageAdditionSymbolDictPatch >> createLoadedPackage [
 
-	packageSymbolDictionary createLoadedPackageFromDefinition: packageDefinition
+	self packageSymbolDictionary
+		createLoadedPackageFromDefinition: self packageDefinition
 ]

@@ -11,6 +11,78 @@ Class {
 }
 
 { #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _classAdditionPatchClass [
+
+	^ RwGsClassAdditionSymbolDictPatch
+]
+
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _classDeletionPatchClass [
+
+	^ RwGsClassDeletionSymbolDictPatch 
+]
+
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _classExtensionPatchClass [
+
+	^ RwGsClassExtensionSymbolDictPatch
+]
+
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _classPropertiesPatchClass [
+
+	^ RwGsClassPropertiesSymDictPatch
+]
+
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _classVariablePatchClass [
+
+	^ RwGsClassVariableChangeSymbolDictPatch
+]
+
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _classVersioningPatchClass [
+
+	^ RwGsClassVersioningSymbolDictPatch
+]
+
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _methodAdditionPatchClass [
+
+	^ RwGsMethodAdditionSymbolDictPatch
+]
+
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _methodDeletionPatchClass [
+
+	^ RwGsMethodDeletionSymbolDictPatch
+]
+
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _methodExtensionPatchClass [
+
+	^ RwGsMethodExtensionSymbolDictPatch
+]
+
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _methodPropertiesPatchClass [
+
+	^ RwGsMethodPropertiesSymDictPatch
+]
+
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _methodSourcePatchClass [
+
+	^ RwGsMethodSourceSymbolDictPatch
+]
+
+{ #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _packageAdditionPatchClass [
+
+	^ RwGsPackageAdditionSymbolDictPatch
+]
+
+{ #category : 'accessing' }
 RwGsPackageSymbolDictionary class >> defaultProtocolString [
 
 	^ 'as yet unclassified'
@@ -22,42 +94,6 @@ RwGsPackageSymbolDictionary class >> newNamed: aSymbol [
 	^ self new
 		name: aSymbol;
 		yourself
-]
-
-{ #category : 'patch class accessors' }
-RwGsPackageSymbolDictionary >> _classAdditionPatchClass [
-
-	^ RwGsClassAdditionSymbolDictPatch
-]
-
-{ #category : 'patch class accessors' }
-RwGsPackageSymbolDictionary >> _classDeletionPatchClass [
-
-	^ RwGsClassDeletionSymbolDictPatch 
-]
-
-{ #category : 'patch class accessors' }
-RwGsPackageSymbolDictionary >> _classExtensionPatchClass [
-
-	^ RwGsClassExtensionSymbolDictPatch
-]
-
-{ #category : 'patch class accessors' }
-RwGsPackageSymbolDictionary >> _classPropertiesPatchClass [
-
-	^ RwGsClassPropertiesSymDictPatch
-]
-
-{ #category : 'patch class accessors' }
-RwGsPackageSymbolDictionary >> _classVariablePatchClass [
-
-	^ RwGsClassVariableChangeSymbolDictPatch
-]
-
-{ #category : 'patch class accessors' }
-RwGsPackageSymbolDictionary >> _classVersioningPatchClass [
-
-	^ RwGsClassVersioningSymbolDictPatch
 ]
 
 { #category : 'private' }
@@ -108,42 +144,6 @@ RwGsPackageSymbolDictionary >> _loadedClassFor: class noNewVersion: noNewVersion
 		error:
 			'internal error - there is no assocation present in the receiver for the given class '
 				, classKey asString printString
-]
-
-{ #category : 'patch class accessors' }
-RwGsPackageSymbolDictionary >> _methodAdditionPatchClass [
-
-	^ RwGsMethodAdditionSymbolDictPatch
-]
-
-{ #category : 'patch class accessors' }
-RwGsPackageSymbolDictionary >> _methodDeletionPatchClass [
-
-	^ RwGsMethodDeletionSymbolDictPatch
-]
-
-{ #category : 'patch class accessors' }
-RwGsPackageSymbolDictionary >> _methodExtensionPatchClass [
-
-	^ RwGsMethodExtensionSymbolDictPatch
-]
-
-{ #category : 'patch class accessors' }
-RwGsPackageSymbolDictionary >> _methodPropertiesPatchClass [
-
-	^ RwGsMethodPropertiesSymDictPatch
-]
-
-{ #category : 'patch class accessors' }
-RwGsPackageSymbolDictionary >> _methodSourcePatchClass [
-
-	^ RwGsMethodSourceSymbolDictPatch
-]
-
-{ #category : 'patch class accessors' }
-RwGsPackageSymbolDictionary >> _packageAdditionPatchClass [
-
-	^ RwGsPackageAdditionSymbolDictPatch
 ]
 
 { #category : 'class - patch api' }

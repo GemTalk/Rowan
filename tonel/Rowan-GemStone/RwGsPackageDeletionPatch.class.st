@@ -14,13 +14,11 @@ Class {
 { #category : 'deleting' }
 RwGsPackageDeletionPatch >> deletePackage [
 
-	| packageName existingLoadedPackage |
-	packageName := packageDefinition key.
+	| existingLoadedPackage |
 	existingLoadedPackage := RwGsLoadedPackage
-				existingPackageNamed: packageName
-				ifAbsent: [nil].
+		existingPackageNamed: self packageName
+		ifAbsent: [ nil ].
 	existingLoadedPackage
-		ifNil: 
-			[self error: 'Internal error -- Attempt to delete a package that does not exist.'].
+		ifNil: [ self error: 'Internal error -- Attempt to delete a package that does not exist.' ].
 	existingLoadedPackage removeFromSystem
 ]
