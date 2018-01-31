@@ -83,6 +83,7 @@ RwProjectTest >> testProjectClassExtensions [
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName1.
+	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
 	className := 'Simple'.
 	classDefinition := RwClassDefinition
@@ -178,6 +179,7 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		yourself.
 	(projectSpec1 platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName1.
+	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
 	className := 'Simple'.
 	classDefinition := RwClassDefinition
@@ -208,6 +210,7 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		yourself.
 	(projectSpec2 platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName2.
+	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
 
 	classExtensionDefinition := RwClassExtensionDefinition
 		newForClassNamed: className.
