@@ -375,7 +375,7 @@ RwProjectTest >> testSimpleProject1 [
 
 	"Create project and build disk-based artifacts first, then create create a class and write changes to disk."
 
-	| projectName projectSpec projectTools classDefinition packageSymbolDictionary packageDefinition packageSet |
+	| projectName projectSpec projectTools classDefinition packageDefinition packageSet |
 	projectName := 'Simple'.
 	projectTools := Rowan projectTools.
 	(Rowan projectNamed: projectName ifAbsent: [  ])
@@ -395,8 +395,8 @@ RwProjectTest >> testSimpleProject1 [
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName1.
-	packageSymbolDictionary := RwGsImage
-		newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+
 	projectTools spec exportSpecification: projectSpec.
 	projectTools write writePackagesForSpecification: projectSpec.
 	projectTools commit
@@ -416,9 +416,10 @@ RwProjectTest >> testSimpleProject1 [
 		pools: #()
 		type: 'normal'.
 
-	packageDefinition := packageSymbolDictionary
-		loadedPackageDefinitionNamed: 'Simple-Core'
-		ifAbsent: [ self assert: false description: 'expected to find loaded package' ].
+	packageDefinition := (Rowan
+		loadedPackageNamed: 'Simple-Core'
+		ifAbsent: [ self assert: false description: 'expected to find loaded package' ])
+		asDefinition.
 	packageDefinition addClassDefinition: classDefinition.
 
 	self
@@ -453,6 +454,7 @@ RwProjectTest >> testSimpleProject2 [
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName1.
+	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
 	classDefinition := RwClassDefinition
 		newForClassNamed: 'Simple2'
@@ -505,6 +507,7 @@ RwProjectTest >> testSimpleProject3 [
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName1.
+	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
 	className := 'Simple3'.
 	classDefinition := RwClassDefinition

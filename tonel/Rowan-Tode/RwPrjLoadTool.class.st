@@ -32,11 +32,8 @@ RwPrjLoadTool >> loadPackageDefinitions: packageDefinitions specification: aRwSp
 { #category : 'smalltalk api' }
 RwPrjLoadTool >> loadPackageSetDefinition: packageSetToLoad specification: aRwSpecification [
 
-	| loadedPackageSet diff symbolDict |
+	| loadedPackageSet diff |
 	self specification: aRwSpecification.
-	symbolDict := RwGsImage
-		newOrExistingSymbolDictionaryNamed:
-			(aRwSpecification platformSpec at: 'gemstone') defaultSymbolDictName.
 	loadedPackageSet := Rowan
 		loadedPackageDefinitionsNamed: packageSetToLoad packageNames.
 	diff := packageSetToLoad compareAgainstBase: loadedPackageSet.
@@ -46,7 +43,7 @@ RwPrjLoadTool >> loadPackageSetDefinition: packageSetToLoad specification: aRwSp
 			msg := 'The project ' , specification specName , ' is already up to date'.
 			self inform: msg.
 			^ msg ].
-	Rowan image applyModification: diff for: symbolDict.
+	Rowan image applyModification: diff for: aRwSpecification.
 	specification
 		updateLoadedCommitIdForTool: self;
 		updateLoadedPackageNamesTool: self
