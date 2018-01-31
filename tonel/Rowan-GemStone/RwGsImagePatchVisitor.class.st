@@ -167,7 +167,6 @@ RwGsImagePatchVisitor >> visitClassesModification: aClassesModification [
 RwGsImagePatchVisitor >> visitClassExtensionsModification: aClassModification [
 
 	aClassModification isEmpty
-		ifTrue: [ self halt ]
 		ifFalse: [ self halt ]
 ]
 

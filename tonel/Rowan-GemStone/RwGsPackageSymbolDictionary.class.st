@@ -481,40 +481,32 @@ RwGsPackageSymbolDictionary >> deleteMethod: selector for: behavior [
 { #category : 'class - patch api' }
 RwGsPackageSymbolDictionary >> ensureExtensionClassNamed: className existsForPackageNamed: packageName [
 
-	| extensionClass loadedPackage loadedClassExtension dictsAndSymbols classSymDict |
-	extensionClass := Rowan globalNamed: className asSymbol.
-	extensionClass
-		ifNil: [ 
+	| extensionClass loadedPackage loadedClassExtension |
+	extensionClass := self
+		at: className asSymbol
+		ifAbsent: [ 
 			self
 				error:
-					'The extension class named ' , className printString , ' cannot be foud' ].
-	dictsAndSymbols := GsCurrentSession currentSession symbolList
-		dictionariesAndSymbolsOf: extensionClass.
-	dictsAndSymbols size > 1
-		ifTrue: [ self error: 'multi-homed class is not handled ... yet' ].
-	classSymDict := (dictsAndSymbols at: 1) at: 1.
-	classSymDict == self
-		ifTrue: [ 
-			"class lives in receiver"
-			loadedPackage := self packageRegistry
+					'The extension class named ' , className printString
+						, ' cannot be foud in this symbol dictionary (' , self name printString
+						,
+							'). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.' ].
+	loadedPackage := self packageRegistry
+		at: packageName
+		ifAbsent: [ 
+			self packageRegistry
 				at: packageName
-				ifAbsent: [ 
-					self packageRegistry
-						at: packageName
-						put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
+				put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
 
-			loadedPackage
-				loadedClassExtensionForClass: extensionClass
-				ifAbsent: [ 
-					loadedClassExtension := RwGsLoadedSymbolDictClassExtension
-						newForClass: extensionClass
-						inPackage: loadedPackage.
-					self classExtensionRegistry
-						at: extensionClass classHistory
-						put: loadedClassExtension ] ]
-		ifFalse: [ 
-			"class lives in a different symbol dictionary than the receiver"
-			self halt ]
+	loadedPackage
+		loadedClassExtensionForClass: extensionClass
+		ifAbsent: [ 
+			loadedClassExtension := RwGsLoadedSymbolDictClassExtension
+				newForClass: extensionClass
+				inPackage: loadedPackage.
+			self classExtensionRegistry
+				at: extensionClass classHistory
+				put: loadedClassExtension ]
 ]
 
 { #category : 'loaded queries' }

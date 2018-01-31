@@ -107,6 +107,12 @@ RwProjectTest >> testProjectClassExtensions [
 		comment: 'I am a Simple class with extensions'
 		pools: #()
 		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+				newForSelector: #'foo'
+				protocol: 'accessing'
+				source: 'foo ^ true').
 
 	packageDefinition1 := RwPackageDefinition newNamed: 'Simple-Core'.
 	packageDefinition1 addClassDefinition: classDefinition.
@@ -163,7 +169,7 @@ RwProjectTest >> testProjectClassExtensions [
 { #category : 'tests' }
 RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 
-	"Build our project in memory without committing to disk until we've created a class with methods, then write to disk."
+	"This test attempts to add extension methods to a class that is not in the dictionary that the package is being loaded into ... this should actually error out ... all definitions in a package should be applied to a single symbol dictionary ... create separate packages to do cross symbol dictionary updateds ... or possibly use session methods (yet to be determined."
 
 	| projectName1 projectName2 projectSpec1 projectSpec2 projectTools classDefinition packageDefinition1 packageDefinition2 className testClass testInstance classExtensionDefinition |
 	projectName1 := 'Simple'.
@@ -237,33 +243,13 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 
 	packageDefinition2 := RwPackageDefinition newNamed: 'Simple-Extensions'.
 	packageDefinition2 addClassExtension: classExtensionDefinition.
-	projectTools load
-		loadPackageDefinition: packageDefinition2
-		specification: projectSpec2.
-
-	testClass := Rowan globalNamed: className.
-	self assert: testClass notNil.
-	self assert: testClass civar1 == 1.
-	testInstance := testClass new.
-	self assert: testInstance ivar1 isNil.
-
-	{projectSpec1.
-	projectSpec2}
-		do: [ :projectSpec | 
-			self
-				handleConfirmationDuring: [ 
-					projectTools create
-						createPackageProjectFor: projectSpec
-						format: 'tonel'
-						root: '/tmp/rowanExtensionProject/'
-						repoPath: 'src' ].
-			projectTools spec exportSpecification: projectSpec.
-			projectTools write writePackagesForSpecification: projectSpec.
-			projectTools commit
-				commitPackagesForSpecification: projectSpec
-				message:
-					'Added Simple class and extension methods for '
-						, projectSpec specName printString ]
+	self
+		should: [ 
+			"class extensions need to be made by packages loaded into the symbol dictionary in which the class is defined"
+			projectTools load
+				loadPackageDefinition: packageDefinition2
+				specification: projectSpec2 ]
+		raise: Error
 ]
 
 { #category : 'tests' }
