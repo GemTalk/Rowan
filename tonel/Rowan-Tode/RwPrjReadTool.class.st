@@ -25,35 +25,32 @@ EXAMPLES
 
 { #category : 'smalltalk api' }
 RwPrjReadTool >> readPackageSetForSpecification: aRwSpecification [
-  | packageManager repo repositoryUrl readPackages |
-  self specification: aRwSpecification.
-  packageManager := CypressEnvironmentPackageManager new.
-  repositoryUrl := specification repositoryUrl
-    ifNil: [ 
-      ('cypress:' , specification repoSpec repositoryRootPath , '/'
-        , specification repoPath , '/') asRwUrl ]
-    ifNotNil: [ :urlString | urlString asRwUrl ].
-  repo := repositoryUrl asRwRepository.
-  packageManager
-    defaultSymbolDictionaryName:
-        (specification platformSpec at: 'gemstone') symbolDictName;
-    defaultSymbolList: GsCurrentSession currentSession symbolList.
-  readPackages := {}.
-  aRwSpecification packageNames
-    do: [ :packageName | 
-      | structureName reader snapshot packageDefinition |
-      structureName := packageName , repo packageExtension.
-      reader := repo reader.
-      reader
-        packageStructure: (RwCypressPackageStructure named: structureName);
-        packageDirectory:
-            (reader fileUtils
-                directoryFromPath: structureName
-                relativeTo: repo directoryPath);
-        readPackageStructure.
-      packageDefinition := reader packageStructure rwSnapshot.
-      readPackages add: packageDefinition ].
-  ^ (RwPackageSet withAll: readPackages) asDefinition
+
+	| packageManager repo repositoryUrl readPackages |
+	self specification: aRwSpecification.
+	packageManager := CypressEnvironmentPackageManager new.
+	repositoryUrl := specification repositoryUrl
+		ifNil: [ 
+			('cypress:' , specification repoSpec repositoryRootPath , '/'
+				, specification repoPath , '/') asRwUrl ]
+		ifNotNil: [ :urlString | urlString asRwUrl ].
+	repo := repositoryUrl asRwRepository.
+	readPackages := {}.
+	aRwSpecification packageNames
+		do: [ :packageName | 
+			| structureName reader snapshot packageDefinition |
+			structureName := packageName , repo packageExtension.
+			reader := repo reader.
+			reader
+				packageStructure: (RwCypressPackageStructure named: structureName);
+				packageDirectory:
+						(reader fileUtils
+								directoryFromPath: structureName
+								relativeTo: repo directoryPath);
+				readPackageStructure.
+			packageDefinition := reader packageStructure rwSnapshot.
+			readPackages add: packageDefinition ].
+	^ (RwPackageSet withAll: readPackages) asDefinition
 ]
 
 { #category : 'smalltalk api' }

@@ -57,7 +57,7 @@ RwAbstractTool >> _symbolDictionaryForSpecification [
 
 	^ self
 		_newOrExistingSymbolDictionaryNamed:
-			(specification platformSpec at: 'gemstone') symbolDictName
+			(specification platformSpec at: 'gemstone') defaultSymbolDictName
 ]
 
 { #category : 'git' }

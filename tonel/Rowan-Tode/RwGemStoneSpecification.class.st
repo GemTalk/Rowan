@@ -2,19 +2,32 @@ Class {
 	#name : 'RwGemStoneSpecification',
 	#superclass : 'RwPlatformSpecification',
 	#instVars : [
-		'symbolDictName',
+		'defaultSymbolDictName',
+		'packageNameToSymbolDictNameMap',
 		'userId',
 		'methodEnv'
 	],
 	#category : 'Rowan-Tode'
 }
 
+{ #category : 'accessing' }
+RwGemStoneSpecification >> defaultSymbolDictName [
+
+	^ defaultSymbolDictName
+]
+
+{ #category : 'accessing' }
+RwGemStoneSpecification >> defaultSymbolDictName: anObject [
+
+	defaultSymbolDictName := anObject
+]
+
 { #category : 'initialization' }
 RwGemStoneSpecification >> initialize [
 
 	super initialize.
-	symbolDictName := 'UserGlobals'.
-
+	defaultSymbolDictName := 'UserGlobals'.
+	packageNameToSymbolDictNameMap := Dictionary new
 ]
 
 { #category : 'accessing' }
@@ -29,6 +42,12 @@ RwGemStoneSpecification >> methodEnv: anObject [
 
    methodEnv := anObject
 
+]
+
+{ #category : 'accessing' }
+RwGemStoneSpecification >> packageNameToSymbolDictNameMap [
+
+	^ packageNameToSymbolDictNameMap
 ]
 
 { #category : 'copying' }
@@ -50,6 +69,20 @@ RwGemStoneSpecification >> symbolDictName: anObject [
 
    symbolDictName := anObject
 
+]
+
+{ #category : 'accessing' }
+RwGemStoneSpecification >> symbolDictName: symbDictName forPackageNamed: packageName [
+
+	packageNameToSymbolDictNameMap at: packageName put: symbDictName
+]
+
+{ #category : 'accessing' }
+RwGemStoneSpecification >> symbolDictNameForPackageNamed: packageName [
+
+	^ packageNameToSymbolDictNameMap
+		at: packageName
+		ifAbsent: [ self defaultSymbolDictName ]
 ]
 
 { #category : 'accessing' }

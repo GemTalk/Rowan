@@ -28,26 +28,23 @@ RwPrjWriteTool >> validate: aRwSpecification [
 
 { #category : 'smalltalk api' }
 RwPrjWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification [
-  | packageManager repo repositoryUrl |
-  self specification: aRwSpecification.
-  packageManager := CypressEnvironmentPackageManager new.
-  repositoryUrl := specification repositoryUrl
-    ifNil: [ 
-      specification repoSpec repositoryRootPath
-        ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
-        ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , specification repoPath , '/') asRwUrl ] ]
-    ifNotNil: [ :urlString | urlString asRwUrl ].
-  repo := repositoryUrl asRwRepository.
-  packageManager
-    defaultSymbolDictionaryName:
-        (specification platformSpec at: 'gemstone') symbolDictName;
-    defaultSymbolList: GsCurrentSession currentSession symbolList.
-  aRwPackageSet packages values
-    do: [ :rwPackage | 
-      | packageStructure |
-      packageStructure := RwCypressPackageStructure fromPackage: rwPackage.
-      repo writePackageStructure: packageStructure ].
-  ^ specification
+
+	| packageManager repo repositoryUrl |
+	self specification: aRwSpecification.
+	packageManager := CypressEnvironmentPackageManager new.
+	repositoryUrl := specification repositoryUrl
+		ifNil: [ 
+			specification repoSpec repositoryRootPath
+				ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
+				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , specification repoPath , '/') asRwUrl ] ]
+		ifNotNil: [ :urlString | urlString asRwUrl ].
+	repo := repositoryUrl asRwRepository.
+	aRwPackageSet packages values
+		do: [ :rwPackage | 
+			| packageStructure |
+			packageStructure := RwCypressPackageStructure fromPackage: rwPackage.
+			repo writePackageStructure: packageStructure ].
+	^ specification
 ]
 
 { #category : 'smalltalk api' }
@@ -84,10 +81,6 @@ RwPrjWriteTool >> writeSpecification: aRwSpecification [
 	repo := CypressAbstractRepository
 		onUrl: (CypressUrl absoluteFromText: specification repositoryUrl)
 		alias: ''.
-	packageManager
-		defaultSymbolDictionaryName:
-				(specification platformSpec at: 'gemstone') symbolDictName;
-		defaultSymbolList: GsCurrentSession currentSession symbolList.
 	self packageNames
 		do: [ :packageName | 
 			| package |

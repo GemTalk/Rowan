@@ -529,7 +529,8 @@ TDRowanTool >> prjrevert [
 
 { #category : 'prj commands' }
 TDRowanTool >> prjspec [
-  "
+
+	"
   prj spec [--name=<spec-name>] [--project=<project-url>] [--repository=<repository-url>] \
              [--comment=<comment-string>] [--repoPath=<repo-path>] [--specsPath=<specs-path>] \
              [<spec-url>]
@@ -548,122 +549,122 @@ TDRowanTool >> prjspec [
   prj spec [--export[=<export-url>]] [<spec-url>]
 "
 
-  | shouldRegister specification specTool specName |
-  specTool := Rowan projectTools spec.
-  shouldRegister := false.
-  self
-    getSubcommandOptsMixedLongShort:
-      {#('name' nil #'required').
-      #('type' nil #'required').
-      #('project' nil #'required').
-      #('repository' nil #'required').
-      #('symbolDict' nil #'required').
-      #('userId' nil #'required').
-      #('env' nil #'required').
-      #('packages' nil #'required').
-      #('loads' nil #'required').
-      #('baseline' nil #'required').
-      #('gitBranch' nil #'required').
-      #('gitSHA' nil #'required').
-      #('gitTag' nil #'required').
-      #('gitTagPattern' nil #'required').
-      #('gitRemote' nil #'required').
-      #('repoPath' nil #'required').
-      #('specsPath' nil #'required').
-      #('comment' nil #'required').
-      #('export' nil #'optional')}.
-  subOptions at: 'name' ifPresent: [ :arg | specName := arg ].
-  subArguments size = 0
-    ifTrue: [ 
-      "Creating a new spec object: --type required -- remaining required options a fuction of --type"
-      subOptions
-        at: 'type'
-        ifPresent: [ :arg | 
-          specName
-            ifNil: [ 
-              self
-                error:
-                  'Missing required option --name when no <spec-url> specified. See `man prj spec` for details.' ].
-          arg = 'project'
-            ifTrue: [ specification := specTool newProjectSpecNamed: specName useGit: true ]
-            ifFalse: [ 
-              arg = 'package'
-                ifTrue: [ specification := specTool newPackageSpecNamed: specName useGit: true ]
-                ifFalse: [ 
-                  self
-                    error:
-                      'Unrecognized --type ' , arg printString
-                        ,
-                          '. Should be ''project'' or ''package''. See `man prj spec` for details.' ] ].
-          shouldRegister := true ]
-        ifAbsent: [ 
-          self
-            error:
-              'Missing required option --type when no <spec-url> specified. See `man prj spec` for details.' ] ]
-    ifFalse: [ 
-      "Updating existing spec. If --name is used, copy existing spec."
-      specification := specTool specUrl: (subArguments at: 1).
-      subOptions
-        at: 'name'
-        ifPresent: [ :arg | 
-          specification specName = arg
-            ifFalse: [ 
-              specification := specification copy.
-              shouldRegister := true.
-              specification specName: specName ] ] ].
-  shouldRegister
-    ifTrue: [ specification register ].
-  subOptions at: 'project' ifPresent: [ :arg | specification projectUrl: arg ].
-  subOptions
-    at: 'repository'
-    ifPresent: [ :arg | specification repositoryUrl: arg ].
-  subOptions
-    at: 'symbolDict'
-    ifPresent: [ :arg | (specification platformSpec at: 'gemstone') symbolDictName: arg ].
-  subOptions
-    at: 'env'
-    ifPresent: [ :arg | (specification platformSpec at: 'gemstone') methodEnv: arg asNumber ].
-  subOptions
-    at: 'userId'
-    ifPresent: [ :arg | (specification platformSpec at: 'gemstone') userId: arg ].
-  subOptions
-    at: 'packages'
-    ifPresent: [ :arg | specification packageNames: arg evaluate ].
-  subOptions
-    at: 'loads'
-    ifPresent: [ :arg | specification packageNamesToLoad: arg evaluate ].
-  subOptions at: 'baseline' ifPresent: [ :arg | specification projectName: arg ].
-  subOptions
-    at: 'gitBranch'
-    ifPresent: [ :arg | specification repoSpec branch: arg ].
-  subOptions at: 'gitSHA' ifPresent: [ :arg | specification repoSpec SHA: arg ].
-  subOptions
-    at: 'gitTag'
-    ifPresent: [ :arg | specification repoSpec gitTag: arg ].
-  subOptions
-    at: 'gitTagPattern'
-    ifPresent: [ :arg | specification repoSpec gitTagPattern: arg ].
-  subOptions
-    at: 'gitRemote'
-    ifPresent: [ :arg | specification repoSpec gitRemote: arg ].
-  subOptions at: 'repoPath' ifPresent: [ :arg | specification repoPath: arg ].
-  subOptions at: 'specsPath' ifPresent: [ :arg | specification specsPath: arg ].
-  subOptions at: 'comment' ifPresent: [ :arg | specification comment: arg ].
-  subOptions
-    at: 'export'
-    ifPresent: [ :argOrNil | 
-      | exportUrl |
-      exportUrl := argOrNil.
-      exportUrl
-        ifNil: [ 
-          specification repositoryUrl
-            ifNil: [ 
-              self
-                error:
-                  '<exportUrl> must be specified if repository has not been cloned. See `man prj spec` for details.' ].
-          specTool exportSpecification: specification ]
-        ifNotNil: [ specTool exportSpecification: specification toUrl: exportUrl ] ].
-  ^ specification
+	| shouldRegister specification specTool specName |
+	specTool := Rowan projectTools spec.
+	shouldRegister := false.
+	self
+		getSubcommandOptsMixedLongShort:
+			{#('name' nil #'required').
+			#('type' nil #'required').
+			#('project' nil #'required').
+			#('repository' nil #'required').
+			#('symbolDict' nil #'required').
+			#('userId' nil #'required').
+			#('env' nil #'required').
+			#('packages' nil #'required').
+			#('loads' nil #'required').
+			#('baseline' nil #'required').
+			#('gitBranch' nil #'required').
+			#('gitSHA' nil #'required').
+			#('gitTag' nil #'required').
+			#('gitTagPattern' nil #'required').
+			#('gitRemote' nil #'required').
+			#('repoPath' nil #'required').
+			#('specsPath' nil #'required').
+			#('comment' nil #'required').
+			#('export' nil #'optional')}.
+	subOptions at: 'name' ifPresent: [ :arg | specName := arg ].
+	subArguments size = 0
+		ifTrue: [ 
+			"Creating a new spec object: --type required -- remaining required options a fuction of --type"
+			subOptions
+				at: 'type'
+				ifPresent: [ :arg | 
+					specName
+						ifNil: [ 
+							self
+								error:
+									'Missing required option --name when no <spec-url> specified. See `man prj spec` for details.' ].
+					arg = 'project'
+						ifTrue: [ specification := specTool newProjectSpecNamed: specName useGit: true ]
+						ifFalse: [ 
+							arg = 'package'
+								ifTrue: [ specification := specTool newPackageSpecNamed: specName useGit: true ]
+								ifFalse: [ 
+									self
+										error:
+											'Unrecognized --type ' , arg printString
+												,
+													'. Should be ''project'' or ''package''. See `man prj spec` for details.' ] ].
+					shouldRegister := true ]
+				ifAbsent: [ 
+					self
+						error:
+							'Missing required option --type when no <spec-url> specified. See `man prj spec` for details.' ] ]
+		ifFalse: [ 
+			"Updating existing spec. If --name is used, copy existing spec."
+			specification := specTool specUrl: (subArguments at: 1).
+			subOptions
+				at: 'name'
+				ifPresent: [ :arg | 
+					specification specName = arg
+						ifFalse: [ 
+							specification := specification copy.
+							shouldRegister := true.
+							specification specName: specName ] ] ].
+	shouldRegister
+		ifTrue: [ specification register ].
+	subOptions at: 'project' ifPresent: [ :arg | specification projectUrl: arg ].
+	subOptions
+		at: 'repository'
+		ifPresent: [ :arg | specification repositoryUrl: arg ].
+	subOptions
+		at: 'symbolDict'
+		ifPresent: [ :arg | (specification platformSpec at: 'gemstone') defaultSymbolDictName: arg ].
+	subOptions
+		at: 'env'
+		ifPresent: [ :arg | (specification platformSpec at: 'gemstone') methodEnv: arg asNumber ].
+	subOptions
+		at: 'userId'
+		ifPresent: [ :arg | (specification platformSpec at: 'gemstone') userId: arg ].
+	subOptions
+		at: 'packages'
+		ifPresent: [ :arg | specification packageNames: arg evaluate ].
+	subOptions
+		at: 'loads'
+		ifPresent: [ :arg | specification packageNamesToLoad: arg evaluate ].
+	subOptions at: 'baseline' ifPresent: [ :arg | specification projectName: arg ].
+	subOptions
+		at: 'gitBranch'
+		ifPresent: [ :arg | specification repoSpec branch: arg ].
+	subOptions at: 'gitSHA' ifPresent: [ :arg | specification repoSpec SHA: arg ].
+	subOptions
+		at: 'gitTag'
+		ifPresent: [ :arg | specification repoSpec gitTag: arg ].
+	subOptions
+		at: 'gitTagPattern'
+		ifPresent: [ :arg | specification repoSpec gitTagPattern: arg ].
+	subOptions
+		at: 'gitRemote'
+		ifPresent: [ :arg | specification repoSpec gitRemote: arg ].
+	subOptions at: 'repoPath' ifPresent: [ :arg | specification repoPath: arg ].
+	subOptions at: 'specsPath' ifPresent: [ :arg | specification specsPath: arg ].
+	subOptions at: 'comment' ifPresent: [ :arg | specification comment: arg ].
+	subOptions
+		at: 'export'
+		ifPresent: [ :argOrNil | 
+			| exportUrl |
+			exportUrl := argOrNil.
+			exportUrl
+				ifNil: [ 
+					specification repositoryUrl
+						ifNil: [ 
+							self
+								error:
+									'<exportUrl> must be specified if repository has not been cloned. See `man prj spec` for details.' ].
+					specTool exportSpecification: specification ]
+				ifNotNil: [ specTool exportSpecification: specification toUrl: exportUrl ] ].
+	^ specification
 ]
 
 { #category : 'prj commands' }
