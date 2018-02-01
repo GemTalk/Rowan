@@ -12,8 +12,8 @@ Class {
 { #category : 'accessing' }
 RwGitRepositorySpecification >> branch: aString [
 
-	self commitish: aString.
-	self commitishType: 'branch'
+	self committish: aString.
+	self committishType: 'branch'
 ]
 
 { #category : 'testing' }
@@ -27,17 +27,17 @@ RwGitRepositorySpecification >> commitForTool: aRwTool message: messageString [
 ]
 
 { #category : 'accessing' }
-RwGitRepositorySpecification >> commitishType [
+RwGitRepositorySpecification >> committishType [
 	" branch, SHA, tag, tagPattern"
 
-   ^commitishType
+   ^committishType
 
 ]
 
 { #category : 'accessing' }
-RwGitRepositorySpecification >> commitishType: anObject [
+RwGitRepositorySpecification >> committishType: anObject [
 
-   commitishType := anObject
+   committishType := anObject
 
 ]
 
@@ -115,22 +115,22 @@ RwGitRepositorySpecification >> remote: anObject [
 { #category : 'accessing' }
 RwGitRepositorySpecification >> SHA: aString [
 
-	self commitish: aString.
-	self commitishType: 'SHA'
+	self committish: aString.
+	self committishType: 'SHA'
 ]
 
 { #category : 'accessing' }
 RwGitRepositorySpecification >> tag: aString [
 
-	self commitish: aString.
-	self commitishType: 'tag'
+	self committish: aString.
+	self committishType: 'tag'
 ]
 
 { #category : 'accessing' }
 RwGitRepositorySpecification >> tagPattern: aString [
 
-	self commitish: aString.
-	self commitishType: 'tagPattern'
+	self committish: aString.
+	self committishType: 'tagPattern'
 ]
 
 { #category : 'actions' }
