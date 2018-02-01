@@ -15,7 +15,9 @@ RwGsClassExtensionSymbolDictPatch >> installClassExtensionInSystem [
 
 	((projectLoadSpecification platformSpec at: 'gemstone')
 		useSessionMethodsForExtensionsForPackageNamed: self packageName)
-		ifTrue: [ self error: 'not yet implemented' ]
+		ifTrue: [ 
+			false
+				ifTrue: [ self error: 'not yet implemented' ] ]
 		ifFalse: [ 
 			self packageSymbolDictionary
 				ensureExtensionClassNamed: self className

@@ -65,6 +65,12 @@ RwGsPackageSymbolDictionary class >> _methodExtensionPatchClass [
 ]
 
 { #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _methodExtensionSessionMethodsPatchClass [
+
+	^ RwGsMethodExtensionSessionMethodSymbolDictPatch
+]
+
+{ #category : 'accessing' }
 RwGsPackageSymbolDictionary class >> _methodPropertiesPatchClass [
 
 	^ RwGsMethodPropertiesSymDictPatch
@@ -525,6 +531,15 @@ RwGsPackageSymbolDictionary >> existingForClass: aClass ifAbsent: absentBlock [
 	"Answer the registered LoadedClass for the given class."
 
 	^ classRegistry at: aClass classHistory ifAbsent: absentBlock
+]
+
+{ #category : 'session methods' }
+RwGsPackageSymbolDictionary >> homeSessionMethods [
+
+	| package |
+	package := self at: GsPackage globalName otherwise: nil.
+	package ifNil: [ package := GsPackage installIn: self ].
+	^ package
 ]
 
 { #category : 'loaded queries' }

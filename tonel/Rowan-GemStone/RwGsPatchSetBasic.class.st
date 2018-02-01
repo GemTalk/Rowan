@@ -99,10 +99,14 @@ RwGsPatchSetBasic >> _methodDeletionPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _methodExtensionPatchClass [
+RwGsPatchSetBasic >> _methodExtensionPatchClass: packageName [
 
 	^ self packageSymbolDictionaryClass
-		ifNotNil: [ :symDictClass | symDictClass _methodExtensionPatchClass ]
+		ifNotNil: [ :symDictClass | 
+			((projectLoadSpecification platformSpec at: 'gemstone')
+				useSessionMethodsForExtensionsForPackageNamed: packageName)
+				ifTrue: [ symDictClass _methodExtensionSessionMethodsPatchClass ]
+				ifFalse: [ symDictClass _methodExtensionPatchClass ] ]
 		ifNil: [ RwGsMethodAdditionPatch ]
 ]
 
@@ -276,7 +280,7 @@ RwGsPatchSetBasic >> addExtendedClassMethod: aClassMethodDefinition inClass: aCl
 
 	extendedMethods
 		add:
-			((self _methodExtensionPatchClass
+			(((self _methodExtensionPatchClass: aPackageDefinition key)
 				forMethod: aClassMethodDefinition
 				isMeta: true
 				inClass: aClassDefinition
@@ -290,7 +294,7 @@ RwGsPatchSetBasic >> addExtendedInstanceMethod: anInstanceMethodDefinition inCla
 
 	extendedMethods
 		add:
-			((self _methodExtensionPatchClass
+			(((self _methodExtensionPatchClass: aPackageDefinition name)
 				forMethod: anInstanceMethodDefinition
 				isMeta: false
 				inClass: aClassDefinition
