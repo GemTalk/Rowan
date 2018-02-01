@@ -13,7 +13,11 @@ RwGsClassExtensionSymbolDictPatch >> installClassExtensionInSystem [
 	"The class must already exist.
         Create or update the LoadedClassExtension for the extended class."
 
-	self packageSymbolDictionary
-		ensureExtensionClassNamed: self className
-		existsForPackageNamed: self packageName
+	((projectLoadSpecification platformSpec at: 'gemstone')
+		useSessionMethodsForExtensionsForPackageNamed: self packageName)
+		ifTrue: [ self error: 'not yet implemented' ]
+		ifFalse: [ 
+			self packageSymbolDictionary
+				ensureExtensionClassNamed: self className
+				existsForPackageNamed: self packageName ]
 ]

@@ -449,8 +449,8 @@ RwProjectTest >> testProjectClassExtensionsInSessionMethods [
 	classDefinition2 := RwClassDefinition
 		newForClassNamed: className2
 		super: 'Association'
-		instvars: #('')
-		classinstvars: #(#'')
+		instvars: #()
+		classinstvars: #()
 		classvars: #()
 		category: nil
 		comment: 'I am a SimpleAssociation class'

@@ -5,6 +5,7 @@ Class {
 		'defaultMethodEnv',
 		'defaultSymbolDictName',
 		'defaultUserId',
+		'defaultUseSessionMethodsForExtensions',
 		'packageNameToPlatformPropertiesMap'
 	],
 	#category : 'Rowan-Tode'
@@ -17,9 +18,9 @@ RwGemStoneSpecification >> defaultMethodEnv [
 ]
 
 { #category : 'accessing' }
-RwGemStoneSpecification >> defaultMethodEnv: anObject [
+RwGemStoneSpecification >> defaultMethodEnv: anInteger [
 
-	defaultMethodEnv := anObject
+	defaultMethodEnv := anInteger
 ]
 
 { #category : 'accessing' }
@@ -29,9 +30,9 @@ RwGemStoneSpecification >> defaultSymbolDictName [
 ]
 
 { #category : 'accessing' }
-RwGemStoneSpecification >> defaultSymbolDictName: anObject [
+RwGemStoneSpecification >> defaultSymbolDictName: aString [
 
-	defaultSymbolDictName := anObject
+	defaultSymbolDictName := aString
 ]
 
 { #category : 'accessing' }
@@ -41,9 +42,22 @@ RwGemStoneSpecification >> defaultUserId [
 ]
 
 { #category : 'accessing' }
-RwGemStoneSpecification >> defaultUserId: anObject [
+RwGemStoneSpecification >> defaultUserId: aString [
 
-	defaultUserId := anObject
+	defaultUserId := aString
+]
+
+{ #category : 'accessing' }
+RwGemStoneSpecification >> defaultUseSessionMethodsForExtensions [
+
+	^ defaultUseSessionMethodsForExtensions
+		ifNil: [ defaultUseSessionMethodsForExtensions := false ]
+]
+
+{ #category : 'accessing' }
+RwGemStoneSpecification >> defaultUseSessionMethodsForExtensions: aBool [
+
+	defaultUseSessionMethodsForExtensions := aBool
 ]
 
 { #category : 'initialization' }
@@ -125,4 +139,26 @@ RwGemStoneSpecification >> userIdForPackageNamed: packageName [
 		at: packageName
 		ifAbsent: [ ^ self defaultUserId ].
 	^ packageProperties at: 'userId' ifAbsent: [ ^ self defaultUserId ]
+]
+
+{ #category : 'accessing' }
+RwGemStoneSpecification >> useSessionMethodsForExtensions: aBool forPackageNamed: packageName [
+
+	| packageProperties |
+	packageProperties := packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
+	packageProperties at: 'useSessionMethodsForExtensions' put: aBool
+]
+
+{ #category : 'accessing' }
+RwGemStoneSpecification >> useSessionMethodsForExtensionsForPackageNamed: packageName [
+
+	| packageProperties |
+	packageProperties := packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self defaultUseSessionMethodsForExtensions ].
+	^ packageProperties
+		at: 'useSessionMethodsForExtensions'
+		ifAbsent: [ ^ self defaultUseSessionMethodsForExtensions ]
 ]
