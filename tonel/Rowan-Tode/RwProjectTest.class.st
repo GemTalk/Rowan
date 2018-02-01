@@ -254,8 +254,6 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 	(Rowan projectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
 
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.	"ensure that the symbol dictionary exists and has been added the appropriate symbol lists (transient and persistent)"
-
 	projectSpec := projectTools spec newPackageSpecNamed: projectName useGit: true.
 	projectSpec
 		comment:
@@ -263,8 +261,12 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 		packageNames: #('Simple-Core1' 'Simple-Core2' 'Simple-Extensions1');
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
-		defaultSymbolDictName: self _symbolDictionaryName1;
-		symbolDictName: self _symbolDictionaryName2 forPackageNamed: 'Simple-Core2'.
+		defaultSymbolDictName: self _symbolDictionaryName2;
+		symbolDictName: self _symbolDictionaryName1 forPackageNamed: 'Simple-Core1';
+		symbolDictName: self _symbolDictionaryName1
+			forPackageNamed: 'Simple-Extensions1'.
+	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
 
 	className1 := 'Simple1'.
 	className2 := 'Simple2'.
@@ -356,7 +358,7 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 		loadPackageDefinition: packageDefinition3
 		specification: projectSpec.
 
-	self assert: testInstance1 civar1 = 1.
+	self assert: testClass1 civar1 = 1.
 
 	self
 		handleConfirmationDuring: [ 
