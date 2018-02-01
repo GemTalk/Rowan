@@ -34,8 +34,7 @@ RwLoadedProject >> initializeForClass: aClass [
 
 	self initialize.
 	self initializeForName: aClass name asString.
-	handle := aClass.
-	ClassRegistry at: aClass classHistory put: self
+	handle := aClass
 ]
 
 { #category : 'initialization' }
