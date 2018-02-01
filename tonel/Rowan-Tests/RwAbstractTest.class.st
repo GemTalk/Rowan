@@ -11,26 +11,6 @@ RwAbstractTest >> _classvars [
 ]
 
 { #category : 'private' }
-RwAbstractTest >> _newOrExistingPackageSymbolDictionaryNamed: dictName [
-
-	| symbolName session symbolList association |
-	symbolName := dictName asSymbol.
-	session := GsCurrentSession currentSession.
-	symbolList := session symbolList.
-	^ symbolList
-		detect: [ :each | (each at: symbolName ifAbsent: [ nil ]) == each ]
-		ifNone: [ 
-			| newDict |
-			newDict := RwGsPackageSymbolDictionary new
-				name: symbolName;
-				objectSecurityPolicy: symbolList objectSecurityPolicy;
-				yourself.
-			symbolList addLast: newDict.
-			session userProfile symbolList addLast: newDict.
-			newDict ]
-]
-
-{ #category : 'private' }
 RwAbstractTest >> _symbolDictionary [
 
 	^ RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName
@@ -181,18 +161,6 @@ RwAbstractTest >> classExtensionDefinition: className instanceMethods: instanceM
 						classMethodDefinitions: classMethods
 						instanceMethodDefinitions: instanceMethods);
 		yourself
-]
-
-{ #category : 'support' }
-RwAbstractTest >> definitionsOfLoadedPackages: packageNames [
-
-	| symbolDict loadedPackages |
-	symbolDict := self
-		_newOrExistingPackageSymbolDictionaryNamed: self _symbolDictionaryName.
-	loadedPackages := packageNames
-		collect: [ :packageName | symbolDict loadedPackageNamed: packageName ifAbsent: [  ] ].
-	^ (RwPackageSet withAll: (loadedPackages select: [ :each | each notNil ]))
-		asDefinition
 ]
 
 { #category : 'support' }

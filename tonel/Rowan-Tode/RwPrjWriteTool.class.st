@@ -85,7 +85,7 @@ RwPrjWriteTool >> writeSpecification: aRwSpecification [
 		do: [ :packageName | 
 			| package |
 			package := (CypressEnvironmentPackageDefinition named: packageName)
-				lookupSymbolList: GsCurrentSession currentSession symbolList;
+				lookupSymbolList: RwGsImage symbolList;
 				yourself.
 			repo writePackageStructure: (CypressPackageStructure fromPackage: package) ].
 	^ specification

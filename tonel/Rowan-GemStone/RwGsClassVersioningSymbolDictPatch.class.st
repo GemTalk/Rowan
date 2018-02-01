@@ -146,7 +146,7 @@ RwGsClassVersioningSymbolDictPatch >> addPatchedClassModification: aClassModific
 	dictName := aClassDefinition
 		propertyAt: 'gs_SymbolDictionary'
 		ifAbsent: [ 'UserGlobals' ].
-	dict := self existingSymbolDictionaryNamed: dictName.
+	dict := RwGsImage existingSymbolDictionaryNamed: dictName.
 	dict
 		ifNil: [ 
 			self

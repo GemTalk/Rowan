@@ -33,6 +33,18 @@ RwGsImage class >> currentUserId [
 ]
 
 { #category : 'querying' }
+RwGsImage class >> existingSymbolDictionaryNamed: dictName [
+
+	"If the current session's transient symbol list includes a dictionary with the given name, answer it. "
+
+	| symbolName |
+	symbolName := dictName asSymbol.
+	^ self symbolList
+		detect: [ :each | (each at: symbolName ifAbsent: [ nil ]) == each ]
+		ifNone: [ nil ]
+]
+
+{ #category : 'querying' }
 RwGsImage class >> loadedPackageNamed: aName ifAbsent: absentBlock [
 
 	"scan the symbol list a RwLoadedPackage instance of the given name"
@@ -77,6 +89,19 @@ RwGsImage class >> objectNamed: aSymbol [
  name.  If no object with the given name is found, returns nil."
 
 	^ GsCurrentSession currentSession symbolList objectNamed: aSymbol
+]
+
+{ #category : 'querying' }
+RwGsImage class >> resolveClassNamed: aName [
+
+	"If the given name is bound to a class in the environment of the current session, 
+	answer that class. Otherwise, answer nil."
+
+	| resolved |
+	resolved := self objectNamed: aName.
+	^ (resolved isBehavior and: [ resolved isMeta not ])
+		ifTrue: [ resolved ]
+		ifFalse: [ nil ]
 ]
 
 { #category : 'querying' }

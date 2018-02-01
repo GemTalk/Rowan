@@ -40,15 +40,19 @@ RwGsClassDeletionPatch >> deleteClassFromSystem [
 RwGsClassDeletionPatch >> removeClassFromSymbolDictionary [
 
 	| dictName dict |
-	dictName := classDefinition propertyAt: 'gs_SymbolDictionary'
-				ifAbsent: ['UserGlobals'].
-	dict := self existingSymbolDictionaryNamed: dictName.
-   dict ifNil: [ self error: 'internal error - symbolDictionary named: ', dictName printString, ' not found' ].
-	existingClass := dict 
-		removeKey: self className asSymbol 
-		ifAbsent: [
-			self error: 'Internal error. Attempt to delete class whose name is not bound.' ].
-
+	dictName := classDefinition
+		propertyAt: 'gs_SymbolDictionary'
+		ifAbsent: [ 'UserGlobals' ].
+	dict := RwGsImage existingSymbolDictionaryNamed: dictName.
+	dict
+		ifNil: [ 
+			self
+				error:
+					'internal error - symbolDictionary named: ' , dictName printString
+						, ' not found' ].
+	existingClass := dict
+		removeKey: self className asSymbol
+		ifAbsent: [ self error: 'Internal error. Attempt to delete class whose name is not bound.' ]
 ]
 
 { #category : 'actions' }

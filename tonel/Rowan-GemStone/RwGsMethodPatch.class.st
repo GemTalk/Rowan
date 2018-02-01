@@ -41,23 +41,26 @@ RwGsMethodPatch >> compileUsingNewClasses: createdClasses andExistingClasses: te
 
 	| className class sourceString symbolList protocol |
 	className := classDefinition key asSymbol.
-	class := createdClasses at: className
-				ifAbsent: 
-					[tempSymbols at: className
-						ifAbsent: [self error: 'Cannot find class to compile method in.']].
-	behavior := isMeta ifTrue: [class class] ifFalse: [class].
+	class := createdClasses
+		at: className
+		ifAbsent: [ 
+			tempSymbols
+				at: className
+				ifAbsent: [ self error: 'Cannot find class to compile method in.' ] ].
+	behavior := isMeta
+		ifTrue: [ class class ]
+		ifFalse: [ class ].
 	sourceString := methodDefinition source.
 	symbolList := SymbolList with: tempSymbols.
 	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
 	compiledMethod := behavior
-				compileMethod: sourceString
-				dictionaries: symbolList
-				category: protocol
-				intoMethodDict: false
-				intoCategories: nil
-				intoPragmas: nil
-				environmentId: 0
-
+		compileMethod: sourceString
+		dictionaries: symbolList
+		category: protocol
+		intoMethodDict: false
+		intoCategories: nil
+		intoPragmas: nil
+		environmentId: self methodEnvironmentId
 ]
 
 { #category : 'private-testing' }
@@ -114,6 +117,15 @@ RwGsMethodPatch >> methodDefinition [
 RwGsMethodPatch >> methodDefinition: newValue [
 	methodDefinition := newValue
 
+]
+
+{ #category : 'compiling' }
+RwGsMethodPatch >> methodEnvironmentId [
+
+	"use the project load spec package properties"
+
+	^ (self projectLoadSpecification platformSpec at: 'gemstone')
+		methodEnvForPackageNamed: self packageName
 ]
 
 { #category : 'private-installing' }

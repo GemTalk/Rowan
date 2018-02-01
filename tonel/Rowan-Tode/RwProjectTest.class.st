@@ -295,7 +295,7 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 	testInstance1 := testClass1 new.
 	self should: [ testInstance1 ivar1 ] raise: MessageNotUnderstood.
 
-	dictionariesAndSymbols := GsCurrentSession currentSession symbolList
+	dictionariesAndSymbols := RwGsImage symbolList
 		dictionariesAndSymbolsOf: testClass1.
 	self assert: dictionariesAndSymbols size = 1.
 	self
@@ -324,7 +324,7 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 	self assert: testClass1 notNil.
 	testInstance2 := testClass2 new.
 
-	dictionariesAndSymbols := GsCurrentSession currentSession symbolList
+	dictionariesAndSymbols := RwGsImage symbolList
 		dictionariesAndSymbolsOf: testClass2.
 	self assert: dictionariesAndSymbols size = 1.
 	self

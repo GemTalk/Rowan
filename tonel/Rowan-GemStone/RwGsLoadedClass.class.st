@@ -12,14 +12,15 @@ Class {
 
 { #category : 'enumeration' }
 RwGsLoadedClass class >> allClassesDo: aBlock [
+
 	"Iterate over all classes visible in the current session's transient symbol list, evaluating the block with each."
 
-	GsCurrentSession currentSession symbolList do: 
-			[:dict |
-			dict do: 
-					[:maybeClass |
-					(maybeClass isBehavior and: [maybeClass isMeta not])
-						ifTrue: [aBlock value: maybeClass]]]
+	RwGsImage symbolList
+		do: [ :dict | 
+			dict
+				do: [ :maybeClass | 
+					(maybeClass isBehavior and: [ maybeClass isMeta not ])
+						ifTrue: [ aBlock value: maybeClass ] ] ]
 ]
 
 { #category : 'enumeration' }
@@ -57,27 +58,16 @@ RwGsLoadedClass class >> newForClass: aClass [
 	^self new initializeForClass: aClass
 ]
 
-{ #category : 'private' }
-RwGsLoadedClass class >> resolveClassNamed: aSymbol [
-	"If the given symbol resolves in this session, *and* if what it resolves to is a class, answer that class.
-	Otherwise, answer nil."
-
-	| possibleClass |
-	possibleClass := GsCurrentSession currentSession objectNamed: aSymbol.
-	^(possibleClass isBehavior and: [possibleClass isMeta not])
-		ifTrue: [possibleClass]
-		ifFalse: [nil]
-]
-
 { #category : 'queries' }
 RwGsLoadedClass class >> symbolDictsForClass: aClass [
+
 	"Answer a sequenceable collection of SymbolDictionaries, among those in the current session's transient
 	symbol list, wherein the given class is present by its own name."
 
 	| className |
 	className := aClass name.
-	^GsCurrentSession currentSession symbolList
-		select: [:dict | (dict at: className ifAbsent: [nil]) == aClass]
+	^ RwGsImage symbolList
+		select: [ :dict | (dict at: className ifAbsent: [ nil ]) == aClass ]
 ]
 
 { #category : 'methods' }
@@ -115,6 +105,7 @@ RwGsLoadedClass >> handleClassDeletion [
 
 { #category : 'private-updating' }
 RwGsLoadedClass >> handleClassDeletionOrNewVersion [
+
 	"The class is deleted if both:
 	* its name no longer resolves to a class in the classHistory of the class I remember.
 	* no class in the classHistory of the class I remember is accessible under its name.
@@ -123,24 +114,24 @@ RwGsLoadedClass >> handleClassDeletionOrNewVersion [
 	Answer true if the class still exists, false if it has been deleted."
 
 	| resolved thoseResolving |
-	resolved := self resolveClassNamed: name.
-	resolved == handle ifTrue: [^true].
-
-	"Has been deleted, renamed, or a new version under the same name.
+	resolved := RwGsImage resolveClassNamed: name.
+	resolved == handle
+		ifTrue: [ ^ true ].	"Has been deleted, renamed, or a new version under the same name.
 	Answer false if deleted, set handle and answer true otherwise."
 	thoseResolving := handle classHistory reverse
-				select: [:aClass | aClass == (self resolveClassNamed: aClass name)].
+		select: [ :aClass | aClass == (RwGsImage resolveClassNamed: aClass name) ].
 	thoseResolving size = 0
-		ifTrue: 
-			[self handleClassDeletion.
-			^false].
+		ifTrue: [ 
+			self handleClassDeletion.
+			^ false ].
 	thoseResolving size > 1
-		ifTrue: 
-			[RwNotification
-				signal: 'Class history with multiple "current" members found. One associated name is '
-						, name].
+		ifTrue: [ 
+			RwNotification
+				signal:
+					'Class history with multiple "current" members found. One associated name is '
+						, name ].
 	handle := thoseResolving first.
-	^true
+	^ true
 ]
 
 { #category : 'initialization' }
@@ -208,18 +199,6 @@ RwGsLoadedClass >> removeLoadedMethod: aLoadedMethod [
 	aLoadedMethod classIsMeta
 		ifTrue: [self removeLoadedClassMethod: aLoadedMethod]
 		ifFalse: [self removeLoadedInstanceMethod: aLoadedMethod]
-]
-
-{ #category : 'private' }
-RwGsLoadedClass >> resolveClassNamed: aName [
-	"If the given name is bound to a class in the environment of the current session, 
-	answer that class. Otherwise, answer nil."
-
-	| resolved |
-	resolved := GsCurrentSession currentSession objectNamed: aName.
-	^(resolved isBehavior and: [resolved isMeta not])
-		ifTrue: [resolved]
-		ifFalse: [nil]
 ]
 
 { #category : 'private' }

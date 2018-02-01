@@ -17,18 +17,21 @@ Class {
 
 { #category : 'actions' }
 RwGsClassAdditionPatch >> addClassToSymbolDictionary [
+
 	"Add the name association to the correct 
         SymbolDictionary in the live SymbolList."
 
 	| dictName dict existingAssociation |
-	dictName := classDefinition propertyAt: 'gs_SymbolDictionary'
-				ifAbsent: ['UserGlobals'].
+	dictName := classDefinition
+		propertyAt: 'gs_SymbolDictionary'
+		ifAbsent: [ 'UserGlobals' ].
 	dict := self newOrExistingSymbolDictionaryNamed: dictName.
-	existingAssociation := dict associationAt: newClass name ifAbsent: [nil].
+	existingAssociation := dict associationAt: newClass name ifAbsent: [ nil ].
 	existingAssociation
-		ifNotNil: 
-			[self
-				error: 'Internal error. Attempt to install class whose name is already bound.'].
+		ifNotNil: [ 
+			self
+				error:
+					'Internal error. Attempt to install class whose name is already bound.' ].
 	symbolAssociation value: newClass.
 	dict add: symbolAssociation
 ]
@@ -76,6 +79,8 @@ RwGsClassAdditionPatch >> newOrExistingSymbolDictionaryNamed: dictName [
 
 	"If the current session's transient symbol list includes a dictionary with the given name, answer it.
 	Otherwise, create one, add it to the end of both transient and persistent symbol lists, and answer it."
+
+	"Do not use RwGsImage, because RwGsImage is oriented toward installing RwGsPackageSymbolDictionary at the moment"
 
 	| symbolName session symbolList association |
 	symbolName := dictName asSymbol.

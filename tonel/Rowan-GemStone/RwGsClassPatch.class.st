@@ -137,20 +137,6 @@ RwGsClassPatch >> createClassFor: aPatchSet [
 	^ createdClass
 ]
 
-{ #category : 'actions' }
-RwGsClassPatch >> existingSymbolDictionaryNamed: dictName [
-	"If the current session's transient symbol list includes a dictionary with the given name, answer it. "
-
-	| symbolName session symbolList association |
-	symbolName := dictName asSymbol.
-	session := GsCurrentSession currentSession.
-	symbolList := session symbolList.
-	^symbolList
-		detect: [:each | (each at: symbolName ifAbsent: [nil]) == each]
-		ifNone: 
-			[ nil ]
-]
-
 { #category : 'applying' }
 RwGsClassPatch >> markPackageNotDirty [
 

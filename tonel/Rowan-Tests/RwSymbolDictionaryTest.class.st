@@ -130,7 +130,7 @@ RwSymbolDictionaryTest >> testClassAdditionPatch [
 
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	expectedPackageSet := self
@@ -161,7 +161,7 @@ RwSymbolDictionaryTest >> testClassAdditionPatchWithCategory [
 
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	expectedPackageSet := self
@@ -190,12 +190,12 @@ RwSymbolDictionaryTest >> testClassDeletionPatch [
 
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	dict deleteClassFromPackage: class.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	self assert: testClass isNil.
 
 	expectedPackageSet := self packageSetDefinition: packageName.
@@ -220,13 +220,13 @@ RwSymbolDictionaryTest >> testClassPropertiesPatch [
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	newClass := self _applyBenignPropertiesTo: class.
 	dict updateClassProperties: newClass.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	self assert: testClass comment = self _classComment.
 
@@ -257,13 +257,13 @@ RwSymbolDictionaryTest >> testClassVariableChangePatch [
 
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	newClass := self _applyClassVariableChangeTo: class.
 	dict updateClassProperties: newClass.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	self
 		assert:
@@ -298,14 +298,14 @@ RwSymbolDictionaryTest >> testClassVersioningPatch [
 
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	newClass := self _applyClassNewVersionChangesTo: class.
 	dict addNewClassVersionToAssociation: newClass.
 	superclassName := 'Association'.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	self assert: testClass ~~ class.
 	self assert: testClass == newClass.
 	self
@@ -339,7 +339,7 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self assert: testClass == class.
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
@@ -350,7 +350,7 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 	compiledMethod := self
 		_compileMethodIn: class
 		source: methodSource
-		dictionaries: GsCurrentSession currentSession symbolList.
+		dictionaries: RwGsImage symbolList.
 
 	dict addRecompiledMethod: compiledMethod.	"this should work, ends up using the package of the class"
 
@@ -391,7 +391,7 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	testInstance := testClass new.
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
@@ -399,7 +399,7 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 	compiledMethod := self
 		_compileMethodIn: class
 		source: 'foo ^ ''foo'''
-		dictionaries: GsCurrentSession currentSession symbolList.
+		dictionaries: RwGsImage symbolList.
 
 	dict
 		addNewCompiledMethod: compiledMethod
@@ -449,7 +449,7 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInSymbolDictionaryExtension [
 	packageName2 := 'TestSymbolDictExtensionPackage'.
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName1.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self assert: testClass == class.
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
@@ -465,7 +465,7 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInSymbolDictionaryExtension [
 	compiledMethod := self
 		_compileMethodIn: class
 		source: methodSource
-		dictionaries: GsCurrentSession currentSession symbolList.
+		dictionaries: RwGsImage symbolList.
 
 	dict
 		addExtensionCompiledMethod: compiledMethod
@@ -525,7 +525,7 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	testInstance := testClass new.
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
@@ -536,7 +536,7 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 	compiledMethod := self
 		_compileMethodIn: class
 		source: methodSource
-		dictionaries: GsCurrentSession currentSession symbolList.
+		dictionaries: RwGsImage symbolList.
 
 	dict
 		addNewCompiledMethod: compiledMethod
@@ -586,7 +586,7 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 	packageName := 'TestSymbolDictPackage'.
 	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
 
-	testClass := RwGsLoadedSymbolDictClass resolveClassNamed: className asSymbol.
+	testClass := RwGsImage resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 	testInstance := testClass new.
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
@@ -597,7 +597,7 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 	compiledMethod := self
 		_compileMethodIn: class
 		source: methodSource
-		dictionaries: GsCurrentSession currentSession symbolList.
+		dictionaries: RwGsImage symbolList.
 
 	dict
 		addNewCompiledMethod: compiledMethod
@@ -613,7 +613,7 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 	newCompiledMethod := self
 		_compileMethodIn: class
 		source: methodSource
-		dictionaries: GsCurrentSession currentSession symbolList.
+		dictionaries: RwGsImage symbolList.
 
 	dict addRecompiledMethod: newCompiledMethod.
 
@@ -626,7 +626,7 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 	newCompiledMethod := self
 		_compileMethodIn: class
 		source: methodSource
-		dictionaries: GsCurrentSession currentSession symbolList.
+		dictionaries: RwGsImage symbolList.
 
 	dict
 		addNewCompiledMethod: newCompiledMethod
