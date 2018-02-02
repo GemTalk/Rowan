@@ -21,8 +21,6 @@ Rowan class >> addProject: aRwProjectSpecification [
 
 	"Register a project"
 
-	""
-
 	| projectName |
 	projectName := aRwProjectSpecification specName.
 	knownProjects
