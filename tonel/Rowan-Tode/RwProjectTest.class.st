@@ -479,6 +479,56 @@ RwProjectTest >> testProjectClassExtensionsInSessionMethods [
 ]
 
 { #category : 'tests' }
+RwProjectTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
+
+	"This test attempts to add extension methods to a class is in Globals --- a symbol dictionary owned by another user ... and the extension methods are kept in session methods in the package's symbol dictionary ..."
+
+	| projectName projectSpec projectTools packageDefinition className testClass testInstance classExtensionDefinition |
+	projectName := 'Simple'.
+	projectTools := Rowan projectTools.
+	(Rowan projectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
+
+	projectSpec := projectTools spec newPackageSpecNamed: projectName useGit: true.
+	projectSpec
+		comment:
+				'This is a simple project created in memory first, then written to disk.';
+		packageNames: #('Simple-Globals-Extensions');
+		yourself.
+	(projectSpec platformSpec at: 'gemstone')
+		defaultSymbolDictName: self _symbolDictionaryName;
+		useSessionMethodsForExtensions: true
+			forPackageNamed: 'Simple-Globals-Extensions'.
+	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
+
+	className := 'Object'.
+
+	classExtensionDefinition := RwClassExtensionDefinition
+		newForClassNamed: className.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'instanceFoo'
+						protocol: 'accessing'
+						source: 'instanceFoo ^''foo''');
+		addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'classFoo'
+						protocol: 'accessing'
+						source: 'classFoo ^''bar''');
+		yourself.
+
+	packageDefinition := RwPackageDefinition newNamed: 'Simple-Globals-Extensions'.
+	packageDefinition addClassExtension: classExtensionDefinition.
+	projectTools load
+		loadPackageDefinition: packageDefinition
+		specification: projectSpec.
+
+	self assert: Object classFoo = 'bar'.
+	self assert: Object new instanceFoo = 'foo'
+]
+
+{ #category : 'tests' }
 RwProjectTest >> testSimpleProject1 [
 
 	"Create project and build disk-based artifacts first, then create create a class and write changes to disk."

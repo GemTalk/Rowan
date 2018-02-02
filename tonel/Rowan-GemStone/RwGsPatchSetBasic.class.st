@@ -294,7 +294,7 @@ RwGsPatchSetBasic >> addExtendedInstanceMethod: anInstanceMethodDefinition inCla
 
 	extendedMethods
 		add:
-			(((self _methodExtensionPatchClass: aPackageDefinition name)
+			(((self _methodExtensionPatchClass: aPackageDefinition key)
 				forMethod: anInstanceMethodDefinition
 				isMeta: false
 				inClass: aClassDefinition
