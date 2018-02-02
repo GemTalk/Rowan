@@ -26,21 +26,6 @@ RwGitRepositorySpecification >> commitForTool: aRwTool message: messageString [
   ^ aRwTool doGitCommit: messageString
 ]
 
-{ #category : 'accessing' }
-RwGitRepositorySpecification >> committishType [
-	" branch, SHA, tag, tagPattern"
-
-   ^committishType
-
-]
-
-{ #category : 'accessing' }
-RwGitRepositorySpecification >> committishType: anObject [
-
-   committishType := anObject
-
-]
-
 { #category : 'actions' }
 RwGitRepositorySpecification >> commitLogForTool: aRwTool limit: logLimit [
   ^ aRwTool doGitCommitLog: logLimit
@@ -58,9 +43,10 @@ RwGitRepositorySpecification >> committish: anObject [
 
 { #category : 'accessing' }
 RwGitRepositorySpecification >> committishType [
-  " branch, SHA, tag, tagPattern"
 
-  ^ committishType
+	" branch, SHA, tag, tagPattern"
+
+	^ committishType
 ]
 
 { #category : 'accessing' }
