@@ -182,6 +182,12 @@ TDRowanTool >> pkgdiff [
 ]
 
 { #category : 'pkg commands' }
+TDRowanTool >> pkgedit [
+
+	
+]
+
+{ #category : 'pkg commands' }
 TDRowanTool >> pkglist [
   
 ]
