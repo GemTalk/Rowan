@@ -5,6 +5,23 @@ Class {
 }
 
 { #category : 'private' }
+RwPackageReadWriteTest >> basicPackageLoadSpec: packageNames packageNamesToLoad: packageNamesToLoad [
+  ^ RwPackageProjectSpecification new
+    specName: 'basic test spec';
+    packageNames: packageNames;
+    packageNamesToLoad: packageNamesToLoad;
+    repoSpec: RwDiskRepositorySpecification new;
+    yourself
+]
+
+{ #category : 'private' }
+RwPackageReadWriteTest >> basicPackageSet [
+  "this is the package set used to generate the test data in the testRepositories dir"
+
+  ^ RwDiskRepositoryGenerator new generatePackageSet
+]
+
+{ #category : 'private' }
 RwPackageReadWriteTest >> doTestReadWriteReadForFormat: format [
   | basicPackageSet readPackageSet myReadSpecification rowanSpec readPackageSet2 diff myWriteSpecification |
   basicPackageSet := self basicPackageSet.

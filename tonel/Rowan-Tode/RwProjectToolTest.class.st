@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwProjectTest',
-	#superclass : 'RwAbstractTest',
+	#name : 'RwProjectToolTest',
+	#superclass : 'RwToolTest',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'private' }
-RwProjectTest >> gsInteractionConfirmationHandler [
+RwProjectToolTest >> gsInteractionConfirmationHandler [
 
 	^ GsInteractionHandler new
 		defaultBlock: [ :ignored | self assert: false description: 'expected a confirmation' ];
@@ -14,7 +14,7 @@ RwProjectTest >> gsInteractionConfirmationHandler [
 ]
 
 { #category : 'private' }
-RwProjectTest >> gsInteractionInformFailureHandler [
+RwProjectToolTest >> gsInteractionInformFailureHandler [
 
 	^ GsInteractionHandler new
 		defaultBlock: [ :ignored | self assert: false description: 'unexpected internaction' ];
@@ -23,7 +23,7 @@ RwProjectTest >> gsInteractionInformFailureHandler [
 ]
 
 { #category : 'private' }
-RwProjectTest >> handleConfirmationDuring: aBlock [
+RwProjectToolTest >> handleConfirmationDuring: aBlock [
 
 	"expect a confirmation"
 
@@ -36,7 +36,7 @@ RwProjectTest >> handleConfirmationDuring: aBlock [
 ]
 
 { #category : 'private' }
-RwProjectTest >> handleInformAsFailureDuring: aBlock [
+RwProjectToolTest >> handleInformAsFailureDuring: aBlock [
 
 	aBlock
 		on: GsInteractionRequest
@@ -47,7 +47,7 @@ RwProjectTest >> handleInformAsFailureDuring: aBlock [
 ]
 
 { #category : 'running' }
-RwProjectTest >> setUp [
+RwProjectToolTest >> setUp [
 
 	"Remove the CypressTestData symbol dictionary, if present --- gets persistent and session symbol list"
 
@@ -65,7 +65,7 @@ RwProjectTest >> setUp [
 ]
 
 { #category : 'tests' }
-RwProjectTest >> testProjectClassExtensions [
+RwProjectToolTest >> testProjectClassExtensions [
 
 	"Build our project in memory without committing to disk until we've created a class with methods, then write to disk."
 
@@ -156,7 +156,7 @@ RwProjectTest >> testProjectClassExtensions [
 ]
 
 { #category : 'tests' }
-RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
+RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 
 	"This test attempts to add extension methods to a class that is not in the dictionary that the package is being loaded into ... this should actually error out ... all definitions in a package should be applied to a single symbol dictionary ... create separate packages to do cross symbol dictionary updateds ... or possibly use session methods (yet to be determined."
 
@@ -244,7 +244,7 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 ]
 
 { #category : 'tests' }
-RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay [
+RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay [
 
 	"Proper way to add extension methods to a class --- load spec expanded to allow user to specify per package symbol dictionaries ... symbolDictName redefined as defaultSymbolDictName."
 
@@ -376,7 +376,7 @@ RwProjectTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRightWay
 ]
 
 { #category : 'tests' }
-RwProjectTest >> testProjectClassExtensionsInSessionMethods [
+RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 
 	"This test attempts to add extension methods to a class that is not in the dictionary that the package is being loaded into ... and the extension methods are kept in session methods in the package's symbol dictionary ..."
 
@@ -479,7 +479,7 @@ RwProjectTest >> testProjectClassExtensionsInSessionMethods [
 ]
 
 { #category : 'tests' }
-RwProjectTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
+RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 
 	"This test attempts to add extension methods to a class is in Globals --- a symbol dictionary owned by another user ... and the extension methods are kept in session methods in the package's symbol dictionary ..."
 
@@ -529,7 +529,7 @@ RwProjectTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 ]
 
 { #category : 'tests' }
-RwProjectTest >> testSimpleProject1 [
+RwProjectToolTest >> testSimpleProject1 [
 
 	"Create project and build disk-based artifacts first, then create create a class and write changes to disk."
 
@@ -594,7 +594,7 @@ RwProjectTest >> testSimpleProject1 [
 ]
 
 { #category : 'tests' }
-RwProjectTest >> testSimpleProject2 [
+RwProjectToolTest >> testSimpleProject2 [
 
 	"Build our project in memory without committing to disk until we've created a class, then write to disk."
 
@@ -647,7 +647,7 @@ RwProjectTest >> testSimpleProject2 [
 ]
 
 { #category : 'tests' }
-RwProjectTest >> testSimpleProject3 [
+RwProjectToolTest >> testSimpleProject3 [
 
 	"Build our project in memory without committing to disk until we've created a class with methods, then write to disk."
 
