@@ -103,8 +103,7 @@ RwGemStoneSpecification >> postCopy [
 { #category : 'accessing' }
 RwGemStoneSpecification >> projectOwnerId [
 
-   ^projectOwnerId
-
+	^ projectOwnerId ifNil: [ RwGsImage currentUserId ]
 ]
 
 { #category : 'accessing' }
