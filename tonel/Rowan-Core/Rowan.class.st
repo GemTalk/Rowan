@@ -21,15 +21,7 @@ Rowan class >> addProject: aRwProjectSpecification [
 
 	"Register a project"
 
-	| projectName |
-	projectName := aRwProjectSpecification specName.
-	knownProjects
-		at: projectName
-		ifPresent: [ :aLoadedProject | 
-			self
-				error:
-					'There is already a project named ' , projectName printString , ' registered' ].
-	^ knownProjects at: projectName put: aRwProjectSpecification
+	^ self image addProject: aRwProjectSpecification
 ]
 
 { #category : 'public' }
@@ -190,9 +182,10 @@ Rowan class >> projectNamed: aString [
 
 { #category : 'public' }
 Rowan class >> projectNamed: aString ifAbsent: absentBlock [
-  "Look up a project"
 
-  ^ knownProjects at: aString ifAbsent: absentBlock
+	"Look up a project"
+
+	^ self image projectNamed: aString ifAbsent: absentBlock
 ]
 
 { #category : 'public tools' }
@@ -206,9 +199,7 @@ Rowan class >> removeProject: aRwProjectSpecification [
 
 	"remove a project"
 
-	| projectName |
-	projectName := aRwProjectSpecification specName.
-	knownProjects removeKey: projectName ifAbsent: [  ]
+	self image removeProject: aRwProjectSpecification
 ]
 
 { #category : 'public' }

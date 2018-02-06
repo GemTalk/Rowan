@@ -6,7 +6,8 @@ Class {
 		'defaultSymbolDictName',
 		'defaultUserId',
 		'defaultUseSessionMethodsForExtensions',
-		'packageNameToPlatformPropertiesMap'
+		'packageNameToPlatformPropertiesMap',
+		'projectOwnerId'
 	],
 	#category : 'Rowan-Tode'
 }
@@ -97,6 +98,20 @@ RwGemStoneSpecification >> postCopy [
 	packageNameToPlatformPropertiesMap := packageNameToPlatformPropertiesMap copy.
 	packageNameToPlatformPropertiesMap
 		keysAndValuesDo: [ :key :value | packageNameToPlatformPropertiesMap at: key put: value copy ]
+]
+
+{ #category : 'accessing' }
+RwGemStoneSpecification >> projectOwnerId [
+
+   ^projectOwnerId
+
+]
+
+{ #category : 'accessing' }
+RwGemStoneSpecification >> projectOwnerId: anObject [
+
+   projectOwnerId := anObject
+
 ]
 
 { #category : 'accessing' }

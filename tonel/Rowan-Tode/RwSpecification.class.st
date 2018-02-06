@@ -6,43 +6,44 @@ Class {
 
 { #category : 'instance creation' }
 RwSpecification class >> fromUrl: specNameOrUrl [
-  "self fromUrl: 'file:/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston'"
 
-  "self fromUrl: 'sampleLoadSpec'"
+	"self fromUrl: 'file:/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston'"
 
-  "self fromUrl: 'https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston'"
+	"self fromUrl: 'sampleLoadSpec'"
 
-  | url |
-  url := specNameOrUrl asRwUrl.
-  url schemeName isNil
-    ifTrue: [ 
-      ^ Rowan
-        projectNamed: specNameOrUrl
-        ifAbsent: [ self error: 'No project named ' , specNameOrUrl printString , ' found/' ] ].
-  url schemeName = 'file'
-    ifTrue: [ 
-      CypressFileUtilities current
-        readStreamFor: url fileName
-        in: url pathForDirectory
-        do: [ :stream | 
-          ^ (STON fromStream: stream)
-            initializeForImport;
-            projectUrl: specNameOrUrl;
-            yourself ] ].
-  url schemeName = 'https'
-    ifTrue: [ 
-      | contents client response |
-      GsSecureSocket disableCertificateVerificationOnClient.
-      client := ZnClient new.
-      response := client
-        beOneShot;
-        enforceHttpSuccess: true;
-        get: url.
-      ^ (STON fromString: response decodeFromUTF8)
-        initializeForImport;
-        projectUrl: specNameOrUrl;
-        yourself ].
-  self error: 'Unknown scheme: ' , url scheme printString
+	"self fromUrl: 'https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston'"
+
+	| url |
+	url := specNameOrUrl asRwUrl.
+	url schemeName isNil
+		ifTrue: [ 
+			^ Rowan
+				projectNamed: specNameOrUrl
+				ifAbsent: [ self error: 'No project named ' , specNameOrUrl printString , ' found' ] ].
+	url schemeName = 'file'
+		ifTrue: [ 
+			CypressFileUtilities current
+				readStreamFor: url fileName
+				in: url pathForDirectory
+				do: [ :stream | 
+					^ (STON fromStream: stream)
+						initializeForImport;
+						projectUrl: specNameOrUrl;
+						yourself ] ].
+	url schemeName = 'https'
+		ifTrue: [ 
+			| contents client response |
+			GsSecureSocket disableCertificateVerificationOnClient.
+			client := ZnClient new.
+			response := client
+				beOneShot;
+				enforceHttpSuccess: true;
+				get: url.
+			^ (STON fromString: response decodeFromUTF8)
+				initializeForImport;
+				projectUrl: specNameOrUrl;
+				yourself ].
+	self error: 'Unknown scheme: ' , url scheme printString
 ]
 
 { #category : 'initialization' }

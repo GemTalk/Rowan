@@ -71,6 +71,8 @@ RwPrjCreateTool >> createPackageProjectFor: projectSpec format: format root: roo
 		repositoryRootPath: rootRepoPath;
 		repoPath: repoPath;
 		repositoryUrl: 'cypress:' , rootRepoPath , '/' , repoPath , '/'.
+	(projectSpec platformSpec at: 'gemstone')
+		projectOwnerId: RwGsImage currentUserId.
 	projectSpec copy export.
 	^ projectSpec
 ]

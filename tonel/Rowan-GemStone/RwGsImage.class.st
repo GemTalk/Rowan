@@ -7,6 +7,32 @@ Class {
 	#category : 'Rowan-GemStone'
 }
 
+{ #category : 'private' }
+RwGsImage class >> _projectRegistry [
+
+	| ug |
+	ug := self objectNamed: #'UserGlobals'.
+	^ ug
+		at: #'RwGsProjectRegistry'
+		ifAbsent: [ ug at: #'RwGsProjectRegistry' put: StringKeyValueDictionary new ]
+]
+
+{ #category : 'querying' }
+RwGsImage class >> addProject: aRwProjectSpecification [
+
+	"Register a project"
+
+	| projectName |
+	projectName := aRwProjectSpecification specName.
+	self _projectRegistry
+		at: projectName
+		ifPresent: [ :aLoadedProject | 
+			self
+				error:
+					'There is already a project named ' , projectName printString , ' registered' ].
+	^ self _projectRegistry at: projectName put: aRwProjectSpecification
+]
+
 { #category : 'modifying image' }
 RwGsImage class >> applyModification: aPackageSetModification for: aRwProjectLoadSpecification [
 
@@ -89,6 +115,24 @@ RwGsImage class >> objectNamed: aSymbol [
  name.  If no object with the given name is found, returns nil."
 
 	^ GsCurrentSession currentSession symbolList objectNamed: aSymbol
+]
+
+{ #category : 'querying' }
+RwGsImage class >> projectNamed: aString ifAbsent: absentBlock [
+
+	"Look up a project"
+
+	^ self _projectRegistry at: aString ifAbsent: absentBlock
+]
+
+{ #category : 'querying' }
+RwGsImage class >> removeProject: aRwProjectSpecification [
+
+	"remove a project"
+
+	| projectName |
+	projectName := aRwProjectSpecification specName.
+	self _projectRegistry removeKey: projectName ifAbsent: [  ]
 ]
 
 { #category : 'querying' }
