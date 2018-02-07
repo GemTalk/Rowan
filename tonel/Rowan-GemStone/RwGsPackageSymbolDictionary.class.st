@@ -402,7 +402,7 @@ RwGsPackageSymbolDictionary >> classRegistry [
 { #category : 'package - patch api' }
 RwGsPackageSymbolDictionary >> createLoadedPackageFromDefinition: packageDefinition [
 
-	self
+	^ self
 		createLoadedPackageNamed: packageDefinition key
 		properties: packageDefinition properties
 ]
@@ -416,7 +416,8 @@ RwGsPackageSymbolDictionary >> createLoadedPackageNamed: packageName properties:
 		ifNotNil: [ self error: 'Internal error -- Attempt to add a package that exists.' ].
 	newLoadedPackage := RwGsLoadedSymbolDictPackage newNamed: packageName.
 	newLoadedPackage setPropertiesTo: properties.
-	packageRegistry at: packageName put: newLoadedPackage
+	packageRegistry at: packageName put: newLoadedPackage.
+	^ newLoadedPackage
 ]
 
 { #category : 'class - patch api' }

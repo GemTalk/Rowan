@@ -42,8 +42,7 @@ RwLoadedProject >> initializeForLoadSpecification: aLoadSpecification [
 
 	self initialize.
 	self initializeForName: aLoadSpecification specName.
-	handle := aLoadSpecification.
-	Rowan
+	handle := aLoadSpecification
 ]
 
 { #category : 'testing' }
