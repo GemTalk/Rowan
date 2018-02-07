@@ -162,6 +162,26 @@ RwGsImage class >> projectNamed: aString ifAbsent: absentBlock [
 ]
 
 { #category : 'querying' }
+RwGsImage class >> projectNames [
+
+	"Return list of project names"
+
+	| currentUserId projectNames |
+	currentUserId = self currentUserId.
+	projectNames := Set new.
+	projectNames addAll: self _projectRegistry keys.
+	AllUsers
+		do: [ :userProfile | 
+			| userId |
+			userId := userProfile userId.
+			userId ~= currentUserId
+				ifTrue: [ 
+					(self _projectRegistryForUserId: userId)
+						ifNotNil: [ :projectRegistry | projectNames addAll: projectRegistry keys ] ] ].
+	^ projectNames
+]
+
+{ #category : 'querying' }
 RwGsImage class >> removeProject: aRwProjectSpecification [
 
 	"remove a project"

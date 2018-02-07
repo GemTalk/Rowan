@@ -110,5 +110,6 @@ RwSpecification >> registerForced [
 
 { #category : 'registering' }
 RwSpecification >> unregister [
-  Rowan knownProjects removeKey: self specName ifAbsent: [  ]
+
+	Rowan removeProject: self
 ]

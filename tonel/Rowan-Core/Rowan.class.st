@@ -8,10 +8,8 @@ Class {
 	#name : 'Rowan',
 	#superclass : 'Object',
 	#classInstVars : [
-		'knownRepositories',
 		'configuration',
-		'platform',
-		'knownProjects'
+		'platform'
 	],
 	#category : 'Rowan-Core'
 }
@@ -22,15 +20,6 @@ Rowan class >> addProject: aRwProjectSpecification [
 	"Register a project"
 
 	^ self image addProject: aRwProjectSpecification
-]
-
-{ #category : 'public' }
-Rowan class >> addRepositoryNamed: urlString [
-	"Register a repository.
-	Note that duplicate registrations are ignored, since knownRepositories is a Set"
-
-	knownRepositories
-		add: (CypRepository onUrl: (CypUrl fromString: urlString))
 ]
 
 { #category : 'public' }
@@ -79,25 +68,12 @@ Rowan class >> image [
 
 { #category : 'private' }
 Rowan class >> initialize [
-  "Rowan initialize."
 
-  knownRepositories := Set new.
-  platform := RwPlatform current.
-  configuration := platform defaultConfiguration.
-  platform initialize.
-  knownProjects := Dictionary new
-]
+	"Rowan initialize."
 
-{ #category : 'public' }
-Rowan class >> knownProjects [
-
-	^ knownProjects
-]
-
-{ #category : 'public' }
-Rowan class >> knownRepositories [
-
-	^knownRepositories
+	platform := RwPlatform current.
+	configuration := platform defaultConfiguration.
+	platform initialize
 ]
 
 { #category : 'public' }
@@ -134,30 +110,6 @@ Rowan class >> loadedPackagesNamed: someNames [
 	^RwPackageSet withAll: (loadedPackages select: [:each | each notNil])
 ]
 
-{ #category : 'public' }
-Rowan class >> packageNamed: aName [
-	"Answer a PackageReference, if the given package name is unique in all registered repositories. If the name resolves 0 or >=2 times, error."
-
-	| token resolutions |
-	token := 'notFound'.
-	resolutions := (self knownRepositories
-				collect: [:repo | repo packageNamed: aName ifAbsent: [token]])
-					select: [:each | each ~~ token].
-	resolutions isEmpty ifTrue: [self error: 'Named package not found'].
-	resolutions size > 1
-		ifTrue: [self error: 'Package name is not unique in registered repositories.'].
-	^resolutions any
-]
-
-{ #category : 'public' }
-Rowan class >> packagesNamed: someNames [
-	"Create a PackageSet by names only, resolved from known repositories"
-
-	| packageRefs |
-	packageRefs := someNames collect: [:aName | self packageNamed: aName].
-	^RwPackageSet withAll: packageRefs
-]
-
 { #category : 'public tools' }
 Rowan class >> packageTools [
 
@@ -186,6 +138,14 @@ Rowan class >> projectNamed: aString ifAbsent: absentBlock [
 	"Look up a project"
 
 	^ self image projectNamed: aString ifAbsent: absentBlock
+]
+
+{ #category : 'public' }
+Rowan class >> projectNames [
+
+	"Return list of project names"
+
+	^ self image projectNames
 ]
 
 { #category : 'public tools' }

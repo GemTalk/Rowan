@@ -47,19 +47,20 @@ RwUrlTest >> sampleUrlStrings [
 
 { #category : 'tests' }
 RwUrlTest >> testAsRwRepository [
-  | repos loadSpec repoRoot testRepoPath |
-  loadSpec := Rowan projectTools registry registry at: 'Rowan' ifAbsent: [ ^ self ].
-  repoRoot := loadSpec repoSpec repositoryRootPath.
-  testRepoPath := repoRoot , '/testRepositories'.
-  repos := {('cypress:' , testRepoPath , '/cypress/').
-  ('filetree://' , testRepoPath , '/filetree/').
-  ('tonel:' , testRepoPath , '/tonel/')}
-    collect: [ :urlString | urlString -> urlString asRwRepository ].
-  repos
-    do: [ :assoc | 
-      | repo x y |
-      repo := assoc value.
-      self assert: (x := repo url) = (y := assoc key) ]
+
+	| repos loadSpec repoRoot testRepoPath |
+	loadSpec := Rowan projectNamed: 'Rowan' ifAbsent: [ ^ self ].
+	repoRoot := loadSpec repoSpec repositoryRootPath.
+	testRepoPath := repoRoot , '/testRepositories'.
+	repos := {('cypress:' , testRepoPath , '/cypress/').
+	('filetree://' , testRepoPath , '/filetree/').
+	('tonel:' , testRepoPath , '/tonel/')}
+		collect: [ :urlString | urlString -> urlString asRwRepository ].
+	repos
+		do: [ :assoc | 
+			| repo x y |
+			repo := assoc value.
+			self assert: (x := repo url) = (y := assoc key) ]
 ]
 
 { #category : 'tests' }

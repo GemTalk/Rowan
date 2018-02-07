@@ -28,12 +28,14 @@ EXAMPLES
 
 { #category : 'smalltalk api' }
 RwPrjRegistryTool >> registeredSpecNames [
-  ^ self registry keys
+
+	^ Rowan projectNames
 ]
 
 { #category : 'smalltalk api' }
 RwPrjRegistryTool >> registeredSpecs [
-  ^ self registry values
+
+	^ Rowan projectNames collect: [ :aString | Rowan projectNamed: aString ]
 ]
 
 { #category : 'smalltalk api' }
