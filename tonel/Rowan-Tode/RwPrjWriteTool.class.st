@@ -60,7 +60,7 @@ RwPrjWriteTool >> writePackagesForSpecification: aRwSpecification [
 	| packageSet |
 	self specification: aRwSpecification.
 	packageSet := self _symbolDictionaryForSpecification
-		loadedPackageDefinitionsNamed: specification packageNames.
+		loadedPackageDefinitionsNamed: specification packageNamesInLoadOrder.
 	self writePackageSet: packageSet specification: specification.
 	^ specification
 ]
@@ -68,6 +68,25 @@ RwPrjWriteTool >> writePackagesForSpecification: aRwSpecification [
 { #category : 'smalltalk api' }
 RwPrjWriteTool >> writePackagesForSpecUrl: aString [
   ^ self writePackagesForSpecification: (RwSpecification fromUrl: aString)
+]
+
+{ #category : 'smalltalk api' }
+RwPrjWriteTool >> writeProjectDefinition: projectDefinition [
+
+	| packageManager repo repositoryUrl |
+	packageManager := CypressEnvironmentPackageManager new.
+	repositoryUrl := projectDefinition repositoryUrl
+		ifNil: [ 
+			projectDefinition repositoryRootPath
+				ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
+				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , projectDefinition repoPath , '/') asRwUrl ] ]
+		ifNotNil: [ :urlString | urlString asRwUrl ].
+	repo := repositoryUrl asRwRepository.
+	(Rowan loadedPackagesForProject: projectDefinition)
+		do: [ :rwPackage | 
+			| packageStructure |
+			packageStructure := RwCypressPackageStructure fromPackage: rwPackage.
+			repo writePackageStructure: packageStructure ]
 ]
 
 { #category : 'cypress api' }

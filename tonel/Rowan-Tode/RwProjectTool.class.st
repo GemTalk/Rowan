@@ -191,7 +191,8 @@ RwProjectTool >> packageNames [
 
 { #category : 'operations for package specs' }
 RwProjectTool >> packageNamesForPackageSpec: aPackageSpec [
-  ^ aPackageSpec packageNames
+
+	^ aPackageSpec packageNamesInLoadOrder
 ]
 
 { #category : 'operations for project specs' }

@@ -477,18 +477,19 @@ TDRowanTool >> prjpush [
 
 { #category : 'prj commands' }
 TDRowanTool >> prjread [
-  "
+
+	"
   prj read <spec-url>
 "
 
-  | diffText |
-  self getSubcommandOptsMixedLongShort: {}.
-  subArguments size < 1
-    ifTrue: [ 
-      self
-        error:
-          'Missing required argument <spec-url>. See `man prj read` for details.' ].
-  ^ Rowan projectTools read readPackageSetForSpecUrl: (subArguments at: 1)
+	| diffText |
+	self getSubcommandOptsMixedLongShort: {}.
+	subArguments size < 1
+		ifTrue: [ 
+			self
+				error:
+					'Missing required argument <spec-url>. See `man prj read` for details.' ].
+	^ Rowan projectTools read readProjectSetForSpecUrl: (subArguments at: 1)
 ]
 
 { #category : 'prj commands' }
@@ -635,7 +636,7 @@ TDRowanTool >> prjspec [
 		ifPresent: [ :arg | (specification platformSpec at: 'gemstone') userId: arg ].
 	subOptions
 		at: 'packages'
-		ifPresent: [ :arg | specification packageNames: arg evaluate ].
+		ifPresent: [ :arg | specification packageNamesInLoadOrder: arg evaluate ].
 	subOptions
 		at: 'loads'
 		ifPresent: [ :arg | specification packageNamesToLoad: arg evaluate ].

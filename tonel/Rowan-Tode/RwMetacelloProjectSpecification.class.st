@@ -11,7 +11,8 @@ Class {
 
 { #category : 'accessing' }
 RwMetacelloProjectSpecification >> imageSpec [
-  ^ imageSpec ifNil: [ imageSpec := RwProjectImageSpecification new ]
+
+	^ imageSpec ifNil: [ imageSpec := RwMetacelloProjectImageSpecification new ]
 ]
 
 { #category : 'accessing' }

@@ -38,21 +38,22 @@ RwPrjCreateTool >> createMetacelloProject: projectName format: format root: root
 { #category : 'smalltalk api' }
 RwPrjCreateTool >> createPackageProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
 
-	| projectSpec |
-	projectSpec := self class spec newPackageSpecNamed: projectName useGit: useGit.
+	| projectDefinition |
+	projectDefinition := useGit
+		ifTrue: [ RwProjectDefinition newForGitPackageProjectNamed: projectName ].
 	^ self
-		createPackageProjectFor: projectSpec
+		createPackageProjectFor: projectDefinition
 		format: format
 		root: rootPath
 		repoPath: repoPath
 ]
 
 { #category : 'smalltalk api' }
-RwPrjCreateTool >> createPackageProjectFor: projectSpec format: format root: rootPath repoPath: repoPath [
+RwPrjCreateTool >> createPackageProjectFor: projectDefinition format: format root: rootPath repoPath: repoPath [
 
 	| projectName utils rootRepoPath dirPath useGit |
-	projectName := projectSpec specName.
-	useGit := projectSpec useGit.
+	projectName := projectDefinition name.
+	useGit := projectDefinition useGit.
 	utils := self fileUtilities.
 	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
 	self
@@ -65,16 +66,15 @@ RwPrjCreateTool >> createPackageProjectFor: projectSpec format: format root: roo
 		writeStreamFor: '.cypress'
 		in: dirPath
 		do: [ :fileStream | fileStream nextPutAll: '{ #format : ' , format printString , '}' ].
-	dirPath := rootRepoPath , utils pathNameDelimiter , projectSpec specsPath.
+	dirPath := rootRepoPath , utils pathNameDelimiter , projectDefinition specsPath.
 	utils ensureDirectoryExists: dirPath.
-	projectSpec
+	projectDefinition
 		repositoryRootPath: rootRepoPath;
 		repoPath: repoPath;
 		repositoryUrl: 'cypress:' , rootRepoPath , '/' , repoPath , '/'.
-	(projectSpec platformSpec at: 'gemstone')
-		projectOwnerId: RwGsImage currentUserId.
-	projectSpec copy export.
-	^ projectSpec
+	projectDefinition projectOwnerId: RwGsImage currentUserId.
+	projectDefinition specification copy export.
+	^ projectDefinition
 ]
 
 { #category : 'man page' }

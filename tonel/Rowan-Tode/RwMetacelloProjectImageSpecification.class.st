@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwProjectImageSpecification',
+	#name : 'RwMetacelloProjectImageSpecification',
 	#superclass : 'RwImageSpecification',
 	#category : 'Rowan-Tode'
 }
 
 { #category : 'copying' }
-RwProjectImageSpecification >> postCopy [
+RwMetacelloProjectImageSpecification >> postCopy [
   "don't forget to copy any compound state objects"
 
   super postCopy

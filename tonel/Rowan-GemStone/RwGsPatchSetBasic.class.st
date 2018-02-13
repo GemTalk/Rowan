@@ -5,9 +5,11 @@ Class {
 	#name : 'RwGsPatchSetBasic',
 	#superclass : 'RwGsPatchSetAbstract',
 	#instVars : [
+		'addedProjects',
 		'addedPackages',
 		'deletedPackages',
 		'packagesWithPropertyChanges',
+		'projectsWithPropertyChanges',
 		'addedClasses',
 		'deletedClasses',
 		'deletedClassExtensions',
@@ -23,7 +25,7 @@ Class {
 		'tempSymbols',
 		'createdClasses',
 		'errors',
-		'projectLoadSpecification'
+		'currentProjectDefinition'
 	],
 	#category : 'Rowan-GemStone'
 }
@@ -82,6 +84,13 @@ RwGsPatchSetBasic >> _classVersioningPatchClass [
 		ifNil: [ RwGsClassVersioningPatch ]
 ]
 
+{ #category : 'private - applying' }
+RwGsPatchSetBasic >> _currentProjectDefinition [
+
+	^ currentProjectDefinition
+		ifNil: [ currentProjectDefinition := Rowan projectNamed: '(NONE)' ]
+]
+
 { #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodAdditionPatchClass [
 
@@ -103,7 +112,7 @@ RwGsPatchSetBasic >> _methodExtensionPatchClass: packageName [
 
 	^ self packageSymbolDictionaryClass
 		ifNotNil: [ :symDictClass | 
-			((projectLoadSpecification platformSpec at: 'gemstone')
+			((self projectLoadSpecification platformSpec at: 'gemstone')
 				useSessionMethodsForExtensionsForPackageNamed: packageName)
 				ifTrue: [ symDictClass _methodExtensionSessionMethodsPatchClass ]
 				ifFalse: [ symDictClass _methodExtensionPatchClass ] ]
@@ -142,6 +151,12 @@ RwGsPatchSetBasic >> _packageDeletionPatchClass [
 		ifNil: [ RwGsPackageDeletionPatch ]
 ]
 
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _projectAdditionPatchClass [
+
+	^ RwGsProjectAdditionPatch
+]
+
 { #category : 'building' }
 RwGsPatchSetBasic >> addAddedClass: aClassDefinition inPackage: aPackageDefinition [
 
@@ -150,7 +165,7 @@ RwGsPatchSetBasic >> addAddedClass: aClassDefinition inPackage: aPackageDefiniti
 			((self _classAdditionPatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -171,7 +186,7 @@ RwGsPatchSetBasic >> addAddedClassMethod: aClassMethodDefinition inClass: aClass
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -185,17 +200,18 @@ RwGsPatchSetBasic >> addAddedInstanceMethod: anInstanceMethodDefinition inClass:
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addAddedPackage: packageDefinition [
+RwGsPatchSetBasic >> addAddedPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	addedPackages
 		add:
-			((self _packageAdditionPatchClass for: packageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+			((self _packageAdditionPatchClass for: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
@@ -206,6 +222,16 @@ RwGsPatchSetBasic >> addAndUpdateLoadedPackages [
 	addedPackages
 		do: [:packageAdditionPatch | packageAdditionPatch createLoadedPackage].
 	packagesWithPropertyChanges do: [:patch | patch updateLoadedPackage]
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSetBasic >> addAndUpdateLoadedProjects [
+
+	"Update the LoadedProjects to reflect the results of this patchSet. Does not update the other loadedThings."
+
+	addedProjects
+		do: [ :projectAdditionPatch | projectAdditionPatch createLoadedProject ].
+	projectsWithPropertyChanges do: [ :patch | patch updateLoadedProject ]
 ]
 
 { #category : 'private - applying' }
@@ -226,7 +252,7 @@ RwGsPatchSetBasic >> addDeletedClass: aClassDefinition inPackage: aPackageDefini
 			((self _classDeletionPatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -240,7 +266,7 @@ RwGsPatchSetBasic >> addDeletedClassMethod: aClassMethodDefinition inClass: aCla
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -254,7 +280,7 @@ RwGsPatchSetBasic >> addDeletedInstanceMethod: anInstanceMethodDefinition inClas
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -271,7 +297,7 @@ RwGsPatchSetBasic >> addExtendedClass: aClassDefinition inPackage: aPackageDefin
 			((self _classExtensionPatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -285,7 +311,7 @@ RwGsPatchSetBasic >> addExtendedClassMethod: aClassMethodDefinition inClass: aCl
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -299,7 +325,7 @@ RwGsPatchSetBasic >> addExtendedInstanceMethod: anInstanceMethodDefinition inCla
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -311,7 +337,7 @@ RwGsPatchSetBasic >> addPatchedClassClassVariables: aClassDefinition inPackage: 
 			((self _classVariablePatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -325,7 +351,7 @@ RwGsPatchSetBasic >> addPatchedClassMethod: aClassMethodDefinition inClass: aCla
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -339,7 +365,7 @@ RwGsPatchSetBasic >> addPatchedClassMethodProperties: aClassMethodDefinition inC
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -351,7 +377,7 @@ RwGsPatchSetBasic >> addPatchedClassNewVersion: aClassModification inPackage: aP
 			((self _classVersioningPatchClass
 				for: aClassModification
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -363,7 +389,7 @@ RwGsPatchSetBasic >> addPatchedClassProperties: aClassDefinition inPackage: aPac
 			((self _classPropertiesPatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -377,7 +403,7 @@ RwGsPatchSetBasic >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -391,7 +417,7 @@ RwGsPatchSetBasic >> addPatchedInstanceMethodProperties: aInstanceMethodDefiniti
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: projectLoadSpecification;
+				projectLoadSpecification: self projectLoadSpecification;
 				yourself)
 ]
 
@@ -435,6 +461,7 @@ RwGsPatchSetBasic >> apply [
 	self reportAnyErrors ifTrue: [^self].
 	"No errors -- go ahead and install what's been compiled."
 	self
+		addAndUpdateLoadedProjects;
 		addAndUpdateLoadedPackages;
 		removeDeletedClassesFromSystem;
 		removeDeletedClassExtensionsFromSystem;
@@ -553,8 +580,10 @@ RwGsPatchSetBasic >> createNewClassesAndClassVersions [
 RwGsPatchSetBasic >> initialize [
 
 	addedPackages := Set new.
+	addedProjects := Set new.
 	deletedPackages := Set new.
 	packagesWithPropertyChanges := Set new.
+	projectsWithPropertyChanges := Set new.
 	deletedClasses := Set new.
 	deletedClassExtensions := Set new.
 	addedClasses := Set new.
@@ -603,19 +632,13 @@ RwGsPatchSetBasic >> migrateInstances [
 { #category : 'accessing' }
 RwGsPatchSetBasic >> packageSymbolDictionaryClass [
 
-	^ projectLoadSpecification ifNotNil: [ RwGsPackageSymbolDictionary ]
+	^ currentProjectDefinition packageSymbolDictionaryClass
 ]
 
 { #category : 'accessing' }
 RwGsPatchSetBasic >> projectLoadSpecification [
 
-	^ projectLoadSpecification
-]
-
-{ #category : 'accessing' }
-RwGsPatchSetBasic >> projectLoadSpecification: aRwProjectLoadSpecification [
-
-	projectLoadSpecification := aRwProjectLoadSpecification
+	^ currentProjectDefinition specification
 ]
 
 { #category : 'private - applying' }

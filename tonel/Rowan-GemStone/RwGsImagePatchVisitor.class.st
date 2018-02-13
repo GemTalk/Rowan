@@ -6,6 +6,7 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'patchSet',
+		'currentProject',
 		'currentPackage',
 		'currentClass',
 		'currentMethod'
@@ -19,12 +20,6 @@ RwGsImagePatchVisitor class >> new [
 	^super new initialize
 ]
 
-{ #category : 'instance creation' }
-RwGsImagePatchVisitor class >> newFor: aRwProjectLoadSpecification [
-
-	^ super new initializeFor: aRwProjectLoadSpecification
-]
-
 { #category : 'private' }
 RwGsImagePatchVisitor >> _patchSetClass [
 
@@ -35,9 +30,16 @@ RwGsImagePatchVisitor >> _patchSetClass [
 RwGsImagePatchVisitor >> addAddedPackage: aPackageDefinition [
 
 	currentPackage := aPackageDefinition.
-	patchSet addAddedPackage: currentPackage.
+	patchSet addAddedPackage: currentPackage inProject: currentProject.
 	self addClasses: currentPackage classDefinitions.
 	self addClassExtensions: currentPackage classExtensions
+]
+
+{ #category : 'private' }
+RwGsImagePatchVisitor >> addAddedProject: aProjectDefinition [
+
+	currentProject := aProjectDefinition.
+	patchSet addAddedProject: currentProject
 ]
 
 { #category : 'private' }
@@ -137,13 +139,6 @@ RwGsImagePatchVisitor >> initialize [
 	patchSet := self _patchSetClass new
 ]
 
-{ #category : 'initialization' }
-RwGsImagePatchVisitor >> initializeFor: aRwProjectLoadSpecification [
-
-	self initialize.
-	patchSet projectLoadSpecification: aRwProjectLoadSpecification
-]
-
 { #category : 'accessing' }
 RwGsImagePatchVisitor >> patchSet [
 	^patchSet
@@ -234,6 +229,41 @@ RwGsImagePatchVisitor >> visitPackageSetModification: aPackageSetModification [
 
 	aPackageSetModification elementsModified
 		do: [:each | each acceptVisitor: self]
+]
+
+{ #category : 'visting' }
+RwGsImagePatchVisitor >> visitPackagesModification: aPackagesModification [
+
+	aPackagesModification elementsModified do: [ :each | each acceptVisitor: self ]
+]
+
+{ #category : 'visting' }
+RwGsImagePatchVisitor >> visitProjecteSetModification: aProjectSetModification [
+
+	aProjectSetModification elementsModified
+		do: [ :each | each acceptVisitor: self ]
+]
+
+{ #category : 'visting' }
+RwGsImagePatchVisitor >> visitProjectModification: aProjectModification [
+
+	| propertiesModification classesModification classExtensionsModification |
+	aProjectModification isAddition
+		ifTrue: [ 
+			self addAddedProject: aProjectModification after.
+			^ self ].
+	aProjectModification isDeletion
+		ifTrue: [ 
+			self addDeletedProject: aProjectModification before.
+			^ self ].
+	currentProject := aProjectModification after.
+	propertiesModification := aProjectModification propertiesModification.
+	propertiesModification isEmpty
+		ifFalse: [ 
+			RwGsProjectPropertiesPatch
+				forProjectProperties: propertiesModification
+				inProject: currentProject ].
+	aProjectModification packagesModification acceptVisitor: self
 ]
 
 { #category : 'visting' }

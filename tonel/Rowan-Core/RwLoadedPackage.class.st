@@ -73,6 +73,12 @@ RwLoadedPackage >> isEmpty [
 ]
 
 { #category : 'accessing' }
+RwLoadedPackage >> key [
+
+	^ name
+]
+
+{ #category : 'accessing' }
 RwLoadedPackage >> loadedClasses [
 	^loadedClasses
 

@@ -8,6 +8,25 @@ Class {
 }
 
 { #category : 'private' }
+RwGsImage class >> _loadedProjectRegistry [
+
+	^ self _loadedProjectRegistryForUserId: self currentUserId
+]
+
+{ #category : 'private' }
+RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
+
+	| ug |
+	ug := (AllUsers userWithId: aUserId) objectNamed: #'UserGlobals'.
+	^ ug
+		at: #'RwGsLoadedProjectRegistry'
+		ifAbsent: [ 
+			(self canWrite: ug)
+				ifFalse: [ ^ nil ].
+			ug at: #'RwGsLoadedProjectRegistry' put: StringKeyValueDictionary new ]
+]
+
+{ #category : 'private' }
 RwGsImage class >> _projectRegistry [
 
 	^ self _projectRegistryForUserId: self currentUserId
@@ -16,7 +35,12 @@ RwGsImage class >> _projectRegistry [
 { #category : 'private' }
 RwGsImage class >> _projectRegistryForUserId: aUserId [
 
+	"this is being left as is, because I am using Rowan to develop Rowan and eventually this guy should be deleted in favor of the _loadedProjectRegistryForUserId:"
+
 	| ug |
+	Transcript
+		cr;
+		show: 'remove me when Rowan spec is moved to loaded project registry'.
 	ug := (AllUsers userWithId: aUserId) objectNamed: #'UserGlobals'.
 	^ ug
 		at: #'RwGsProjectRegistry'
@@ -24,6 +48,24 @@ RwGsImage class >> _projectRegistryForUserId: aUserId [
 			(self canWrite: ug)
 				ifFalse: [ ^ nil ].
 			ug at: #'RwGsProjectRegistry' put: StringKeyValueDictionary new ]
+]
+
+{ #category : 'querying' }
+RwGsImage class >> addLoadedProject: aRwLoadedProject [
+
+	"Register a project"
+
+	| projectName projectRegistry |
+	projectName := aRwLoadedProject name.
+	projectRegistry := self
+		_loadedProjectRegistryForUserId: aRwLoadedProject projectOwnerId.
+	projectRegistry
+		at: projectName
+		ifPresent: [ :aLoadedProject | 
+			self
+				error:
+					'There is already a project named ' , projectName printString , ' registered' ].
+	^ projectRegistry at: projectName put: aRwLoadedProject
 ]
 
 { #category : 'querying' }
@@ -46,20 +88,20 @@ RwGsImage class >> addProject: aRwProjectSpecification [
 ]
 
 { #category : 'modifying image' }
-RwGsImage class >> applyModification: aPackageSetModification for: aRwProjectLoadSpecification [
+RwGsImage class >> applyModification: aProjectSetModification [
 
 	| visitor patchSet |
-	visitor := RwGsImagePatchVisitor newFor: aRwProjectLoadSpecification.
-	visitor visit: aPackageSetModification.
+	visitor := RwGsImagePatchVisitor new.
+	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
 	patchSet classesWithNewVersions isEmpty
 		ifTrue: [ 
 			patchSet apply.
 			^ self ].
 	patchSet classesWithNewVersions
-		do: [ :each | each newClassVersionPatches: aPackageSetModification patchSet: nil ].
-	visitor := RwGsImagePatchVisitor newFor: aRwProjectLoadSpecification.
-	visitor visit: aPackageSetModification.
+		do: [ :each | each newClassVersionPatches: aProjectSetModification patchSet: nil ].
+	visitor := RwGsImagePatchVisitor new.
+	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
 	patchSet apply
 ]
@@ -100,6 +142,33 @@ RwGsImage class >> loadedPackageNamed: aName ifAbsent: absentBlock [
 					(symbolDict loadedPackageNamed: aName ifAbsent: [  ])
 						ifNotNil: [ :loadedPackage | ^ loadedPackage ] ] ].
 	^ absentBlock value
+]
+
+{ #category : 'querying' }
+RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
+
+	"Look up a loaded project. First in current users project registry, then scan AllUsers for the project ... note that the user needs to be the project owner."
+
+	| currentUserId |
+	currentUserId := self currentUserId.
+	^ self _loadedProjectRegistry
+		at: aString
+		ifAbsent: [ 
+			AllUsers
+				do: [ :userProfile | 
+					| userId |
+					userId := userProfile userId.
+					userId ~= currentUserId
+						ifTrue: [ 
+							(self _loadedProjectRegistryForUserId: userId)
+								ifNotNil: [ :projectRegistry | 
+									projectRegistry
+										at: aString
+										ifPresent: [ :loadedProject | 
+											(loadedProject specification platformSpect at: 'gemstone') projectOwnerId
+												= userId
+												ifTrue: [ ^ loadedProject ] ] ] ] ].
+			^ absentBlock value ]
 ]
 
 { #category : 'querying' }
@@ -156,7 +225,7 @@ RwGsImage class >> projectNamed: aString ifAbsent: absentBlock [
 									projectRegistry
 										at: aString
 										ifPresent: [ :projectSpec | 
-											(projectSpec platformSpect at: 'gemstone') projectOwnerId = userId
+											(projectSpec platformSpec at: 'gemstone') projectOwnerId = userId
 												ifTrue: [ ^ projectSpec ] ] ] ] ].
 			^ absentBlock value ]
 ]

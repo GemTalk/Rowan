@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : 'smalltalk api' }
+RwPrjSpecTool >> exportProjectDefinition: projectDefinition [
+
+	self specification: projectDefinition specification.
+	^ specification export
+]
+
+{ #category : 'smalltalk api' }
 RwPrjSpecTool >> exportSpecification: aRwSpecification [
 
 	self specification: aRwSpecification.

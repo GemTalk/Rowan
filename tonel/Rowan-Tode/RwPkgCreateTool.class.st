@@ -35,46 +35,48 @@ RwPkgCreateTool >> createPackagesNamed: packageNames forProjectNamed: projectNam
 
 { #category : 'smalltalk api' }
 RwPkgCreateTool >> createPackagesNamed: packageNames forSpecification: projectSpec doCommit: doCommit commitMsg: commitMsg [
-  | originalPackageNames newPackageNames newPackageSet projectName |
-  projectName := projectSpec specName.
-  self _createLoadedPackagesNamed: packageNames.
-  originalPackageNames := projectSpec packageNames.
-  projectSpec packageNames: packageNames.
-  newPackageNames := packageNames
-    reject: [ :each | originalPackageNames includes: each ].
-  newPackageSet := RwPackageSetDefinition new.
-  newPackageNames
-    do: [ :packageName | 
-      "write empty packages to disk for each of new packages"
-      newPackageSet
-        addPackage:
-          (RwPackageDefinition
-            withProperties: (Dictionary with: 'name' -> packageName)
-            classDefinitions: Dictionary new
-            classExtensions: Dictionary new) ].
-  Rowan projectTools write
-    writePackageSet: newPackageSet
-    specification: projectSpec.
-  doCommit
-    ifFalse: [ ^ projectSpec ].
-  ^ Rowan repositoryTools commit
-    commitRepositoryForSpecification: projectSpec
-    message: commitMsg
+
+	| originalPackageNames newPackageNames newPackageSet projectName |
+	projectName := projectSpec specName.
+	self _createLoadedPackagesNamed: packageNames.
+	originalPackageNames := projectSpec packageNamesInLoadOrder.
+	projectSpec packageNamesInLoadOrder: packageNames.
+	newPackageNames := packageNames
+		reject: [ :each | originalPackageNames includes: each ].
+	newPackageSet := RwPackageSetDefinition new.
+	newPackageNames
+		do: [ :packageName | 
+			"write empty packages to disk for each of new packages"
+			newPackageSet
+				addPackage:
+					(RwPackageDefinition
+						withProperties: (Dictionary with: 'name' -> packageName)
+						classDefinitions: Dictionary new
+						classExtensions: Dictionary new) ].
+	Rowan projectTools write
+		writePackageSet: newPackageSet
+		specification: projectSpec.
+	doCommit
+		ifFalse: [ ^ projectSpec ].
+	^ Rowan repositoryTools commit
+		commitRepositoryForSpecification: projectSpec
+		message: commitMsg
 ]
 
 { #category : 'smalltalk api' }
 RwPkgCreateTool >> createToLoadPackagesNamed: toLoadPackageNames forProjectNamed: projectName [
-  | projectSpec existingPackageNames toLoad |
-  projectSpec := Rowan
-    projectNamed: projectName
-    ifAbsent: [ 
-      self
-        error:
-          'No project named ' , projectName printString , ' found in the registry' ].
-  existingPackageNames := projectSpec packageNames.
-  toLoad := toLoadPackageNames
-    select: [ :each | existingPackageNames includes: each ].
-  projectSpec toLoadPackageNames: toLoad
+
+	| projectSpec existingPackageNames toLoad |
+	projectSpec := Rowan
+		projectNamed: projectName
+		ifAbsent: [ 
+			self
+				error:
+					'No project named ' , projectName printString , ' found in the registry' ].
+	existingPackageNames := projectSpec packageNamesInLoadOrder.
+	toLoad := toLoadPackageNames
+		select: [ :each | existingPackageNames includes: each ].
+	projectSpec toLoadPackageNames: toLoad
 ]
 
 { #category : 'man page' }

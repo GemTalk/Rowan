@@ -6,7 +6,8 @@ Class {
 
 { #category : 'image' }
 RwPrjLoadTool >> doUpdateLoadedPackageNames: aPackageNames [
-  ^ specification imageSpec loadedPackages: aPackageNames
+
+	^ specification imageSpec loadedPackageNames: aPackageNames
 ]
 
 { #category : 'smalltalk api' }
@@ -35,7 +36,7 @@ RwPrjLoadTool >> loadPackageSetDefinition: packageSetToLoad specification: aRwSp
 	| loadedPackageSet diff |
 	self specification: aRwSpecification.
 	loadedPackageSet := Rowan
-		loadedPackageDefinitionsNamed: packageSetToLoad packageNames.
+		loadedPackageDefinitionsNamed: packageSetToLoad packageNamesInLoadOrder.
 	diff := packageSetToLoad compareAgainstBase: loadedPackageSet.
 	diff isEmpty
 		ifTrue: [ 
@@ -54,15 +55,39 @@ RwPrjLoadTool >> loadPackageSetDefinition: packageSetToLoad specification: aRwSp
 ]
 
 { #category : 'smalltalk api' }
-RwPrjLoadTool >> loadSpecification: aRwSpecification [
+RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 
-	| packageSetToLoad |
-	self specification: aRwSpecification.
-	packageSetToLoad := Rowan projectTools read
-		readPackageSetForSpecification: specification.
-	^ self
-		loadPackageSetDefinition: packageSetToLoad
-		specification: aRwSpecification
+	| projectSetDefinition |
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+
+	^ self loadProjectSetDefinition: projectSetDefinition
+]
+
+{ #category : 'smalltalk api' }
+RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad [
+
+	| loadedProjectSet diff |
+	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings
+		asProjectDefinitionSet.
+	diff := projectSetDefinitionToLoad compareAgainstBase: loadedProjectSet.
+	diff isEmpty
+		ifTrue: [ 
+			| msg |
+			msg := 'The projects are already up to date'.
+			self inform: msg.
+			^ msg ].
+	Rowan image applyModification: diff.
+	projectSetDefinitionToLoad definitions
+		do: [ :project | 
+			self specification: project specification.
+			project specification
+				updateLoadedCommitIdForTool: self;
+				updateLoadedPackageNamesTool: self
+					packageNames:
+						(Rowan loadedPackageDefinitionsNamed: project packageNames forProject: project)
+								definitionNames ].
+	^ diff
 ]
 
 { #category : 'smalltalk api' }

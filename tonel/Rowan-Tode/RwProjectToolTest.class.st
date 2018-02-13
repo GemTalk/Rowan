@@ -79,7 +79,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 	projectSpec
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNames: #('Simple-Core' 'Simple-Extensions' 'Simple-Tests');
+		packageNamesInLoadOrder: #('Simple-Core' 'Simple-Extensions' 'Simple-Tests');
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName1.
@@ -175,7 +175,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 	projectSpec1
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNames: #('Simple-Core' 'Simple-Tests');
+		packageNamesInLoadOrder: #('Simple-Core' 'Simple-Tests');
 		yourself.
 	(projectSpec1 platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName1.
@@ -206,7 +206,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 	projectSpec2
 		comment:
 				'This is a class extension project created in memory first, then written to disk. Uses a separate symbol dictionary from project 1';
-		packageNames: #('Simple-Extensions');
+		packageNamesInLoadOrder: #('Simple-Extensions');
 		yourself.
 	(projectSpec2 platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName2.
@@ -258,7 +258,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 	projectSpec
 		comment:
 				'This is a project created in memory first, then written to disk. There are three packages 21 of which creates classes in a different symbol dictionary.';
-		packageNames: #('Simple-Core1' 'Simple-Core2' 'Simple-Extensions1');
+		packageNamesInLoadOrder: #('Simple-Core1' 'Simple-Core2' 'Simple-Extensions1');
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName2;
@@ -390,7 +390,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 	projectSpec
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNames: #('Simple-Core' 'Simple-Extensions' 'Simple-Tests');
+		packageNamesInLoadOrder: #('Simple-Core' 'Simple-Extensions' 'Simple-Tests');
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName1;
@@ -493,7 +493,7 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 	projectSpec
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNames: #('Simple-Globals-Extensions');
+		packageNamesInLoadOrder: #('Simple-Globals-Extensions');
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName;
@@ -533,35 +533,45 @@ RwProjectToolTest >> testSimpleProject1 [
 
 	"Create project and build disk-based artifacts first, then create create a class and write changes to disk."
 
-	| projectName projectSpec projectTools classDefinition packageDefinition packageSet |
+	| projectName projectDefinition projectTools classDefinition packageDefinition packageNames loadedProject |
 	projectName := 'Simple'.
+	packageNames := #('Simple-Core' 'Simple-Tests').
 	projectTools := Rowan projectTools.
 	(Rowan projectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
 	self
 		handleConfirmationDuring: [ 
-			projectSpec := projectTools create
+			projectDefinition := projectTools create
 				createPackageProject: projectName
 				format: 'tonel'
 				root: '/tmp/rowanSimpleProject/'
 				repoPath: 'src'
 				useGit: true ].
-	projectSpec
+	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
-		packageNames: #('Simple-Core' 'Simple-Tests');
+		packageNamesInLoadOrder: packageNames;
 		yourself.
-	(projectSpec platformSpec at: 'gemstone')
-		defaultSymbolDictName: self _symbolDictionaryName1.
+	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
 	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
-	projectTools spec exportSpecification: projectSpec.
-	projectTools write writePackagesForSpecification: projectSpec.
+	projectTools spec exportProjectDefinition: projectDefinition.
+	projectTools write writeProjectDefinition: projectDefinition.
 	projectTools commit
-		commitPackagesForSpecification: projectSpec
+		commitProjectDefinition: projectDefinition
 		message: 'Initial commit'.
 	self
-		handleInformAsFailureDuring: [ projectTools load loadSpecification: projectSpec ].
+		handleInformAsFailureDuring: [ projectTools load loadProjectDefinition: projectDefinition ].
+
+	loadedProject := Rowan
+		loadedProjectNamed: projectName
+		ifAbsent: [ self assert: false description: 'expected to find loaded project' ].
+	packageNames
+		do: [ :packageName | 
+			"ensure that we have a loaded package for each of the packages"
+			Rowan
+				loadedPackageNamed: packageName
+				ifAbsent: [ self assert: false description: 'expected to find loaded package' ] ].
 
 	classDefinition := RwClassDefinition
 		newForClassNamed: 'Simple'
@@ -574,22 +584,17 @@ RwProjectToolTest >> testSimpleProject1 [
 		pools: #()
 		type: 'normal'.
 
-	packageDefinition := (Rowan
-		loadedPackageNamed: 'Simple-Core'
-		ifAbsent: [ self assert: false description: 'expected to find loaded package' ])
-		asDefinition.
+	packageDefinition := projectDefinition packageNamed: 'Simple-Core'.
 	packageDefinition addClassDefinition: classDefinition.
+	projectDefinition addPackage: packageDefinition.
 
 	self
-		handleInformAsFailureDuring: [ 
-			projectTools load
-				loadPackageDefinition: packageDefinition
-				specification: projectSpec ].
+		handleInformAsFailureDuring: [ projectTools load loadProjectDefinition: projectDefinition ].
 
-	projectTools spec exportSpecification: projectSpec.
-	projectTools write writePackagesForSpecification: projectSpec.
+	projectTools spec exportSpecification: projectDefinition specificationv.
+	projectTools write writeProjectDefinition: projectDefinition.
 	projectTools commit
-		commitPackagesForSpecification: projectSpec
+		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class'
 ]
 
@@ -608,7 +613,7 @@ RwProjectToolTest >> testSimpleProject2 [
 	projectSpec
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNames: #('Simple-Core' 'Simple-Tests');
+		packageNamesInLoadOrder: #('Simple-Core' 'Simple-Tests');
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName1.
@@ -661,7 +666,7 @@ RwProjectToolTest >> testSimpleProject3 [
 	projectSpec
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNames: #('Simple-Core' 'Simple-Tests');
+		packageNamesInLoadOrder: #('Simple-Core' 'Simple-Tests');
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName1.

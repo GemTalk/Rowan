@@ -23,9 +23,15 @@ RwGsPatchSetAbstract >> addAddedInstanceMethod: anInstanceMethodDefinition inCla
 ]
 
 { #category : 'building' }
-RwGsPatchSetAbstract >> addAddedPackage: aPackageDefinition [
+RwGsPatchSetAbstract >> addAddedPackage: aPackageDefinition inProject: aProjectDefinition [
 
-	self subclassResponsibility: #'addAddedPackage:'
+	self subclassResponsibility: #'addAddedPackage:inProject:'
+]
+
+{ #category : 'building' }
+RwGsPatchSetAbstract >> addAddedProject: aProjectDefinition [
+
+	self subclassResponsibility: #'addAddedProject:'
 ]
 
 { #category : 'building' }

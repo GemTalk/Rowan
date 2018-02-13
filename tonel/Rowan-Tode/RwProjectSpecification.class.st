@@ -126,6 +126,12 @@ RwProjectSpecification >> initializeForImport [
 ]
 
 { #category : 'accessing' }
+RwProjectSpecification >> loadedPackageNames [
+
+	^ self imageSpec loadedPackageNames
+]
+
+{ #category : 'accessing' }
 RwProjectSpecification >> packageInfoSource [
 
 	^ packageInfoSource

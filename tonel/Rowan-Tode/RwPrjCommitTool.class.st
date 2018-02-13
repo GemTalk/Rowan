@@ -32,6 +32,23 @@ RwPrjCommitTool >> commitPackagesForSpecUrl: aSpecUrlString message: messageStri
 		message: messageString
 ]
 
+{ #category : 'smalltalk api' }
+RwPrjCommitTool >> commitProjectDefinition: projectDefinition message: messageString [
+
+	"commit repository ... packages must be written out independently with write tool"
+
+	projectDefinition canCommit
+		ifFalse: [ 
+			| msg |
+			msg := 'repository for project ' , projectDefinition name printString
+				, ' does not support commit operations.'.
+			self inform: msg.
+			^ msg ].
+	self specification: projectDefinition specification.
+	specification commitForTool: self message: messageString.
+	^ specification updateLoadedCommitIdForTool: self
+]
+
 { #category : 'cypress api' }
 RwPrjCommitTool >> commitSpecification: aRwSpecification message: messageString [
 

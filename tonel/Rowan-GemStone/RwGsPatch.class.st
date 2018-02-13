@@ -6,7 +6,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'projectLoadSpecification',
-		'packageDefinition'
+		'packageDefinition',
+		'projectDefinition'
 	],
 	#category : 'Rowan-GemStone'
 }
@@ -46,9 +47,21 @@ RwGsPatch >> packageName [
 RwGsPatch >> packageSymbolDictionary [
 
 	| symDictName |
-	symDictName := (self projectLoadSpecification platformSpec at: 'gemstone')
+	symDictName := self projectDefinition
 		symbolDictNameForPackageNamed: self packageName.
 	^ RwGsImage objectNamed: symDictName asSymbol
+]
+
+{ #category : 'accessing' }
+RwGsPatch >> projectDefinition [
+	^projectDefinition
+
+]
+
+{ #category : 'accessing' }
+RwGsPatch >> projectDefinition: newValue [
+	projectDefinition := newValue
+
 ]
 
 { #category : 'accessing' }
@@ -63,6 +76,12 @@ RwGsPatch >> projectLoadSpecification: anObject [
 
    projectLoadSpecification := anObject
 
+]
+
+{ #category : 'accessing' }
+RwGsPatch >> projectName [
+
+	^projectDefinition key
 ]
 
 { #category : 'utility' }

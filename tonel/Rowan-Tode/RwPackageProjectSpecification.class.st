@@ -15,6 +15,7 @@ Class {
 	#superclass : 'RwProjectSpecification',
 	#instVars : [
 		'packageNames',
+		'packageNamesInLoadOrder',
 		'packageNamesToLoad'
 	],
 	#category : 'Rowan-Tode'
@@ -22,21 +23,8 @@ Class {
 
 { #category : 'accessing' }
 RwPackageProjectSpecification >> imageSpec [
-  ^ imageSpec ifNil: [ imageSpec := RwPackageImageSpecification new ]
-]
 
-{ #category : 'accessing' }
-RwPackageProjectSpecification >> packageNames [
-
-   ^packageNames ifNil: [ packageNames := #() ]
-
-]
-
-{ #category : 'accessing' }
-RwPackageProjectSpecification >> packageNames: anObject [
-
-   packageNames := anObject
-
+	^ imageSpec ifNil: [ imageSpec := RwPackageProjectImageSpecification new ]
 ]
 
 { #category : 'actions' }
@@ -45,10 +33,23 @@ RwPackageProjectSpecification >> packageNamesForTool: aRwTool [
 ]
 
 { #category : 'accessing' }
+RwPackageProjectSpecification >> packageNamesInLoadOrder [
+
+   ^packageNamesInLoadOrder
+
+]
+
+{ #category : 'accessing' }
+RwPackageProjectSpecification >> packageNamesInLoadOrder: anObject [
+
+   packageNamesInLoadOrder := anObject
+
+]
+
+{ #category : 'accessing' }
 RwPackageProjectSpecification >> packageNamesToLoad [
 
-   ^packageNamesToLoad ifNil: [ self packageNames ]
-
+	^ packageNamesToLoad ifNil: [ self packageNamesInLoadOrder ]
 ]
 
 { #category : 'accessing' }

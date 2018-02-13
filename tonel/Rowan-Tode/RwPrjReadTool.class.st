@@ -24,9 +24,9 @@ EXAMPLES
 ]
 
 { #category : 'smalltalk api' }
-RwPrjReadTool >> readPackageSetForSpecification: aRwSpecification [
+RwPrjReadTool >> readProjectSetForSpecification: aRwSpecification [
 
-	| packageManager repo repositoryUrl readPackages |
+	| packageManager repo repositoryUrl projectDefinition |
 	self specification: aRwSpecification.
 	packageManager := CypressEnvironmentPackageManager new.
 	repositoryUrl := specification repositoryUrl
@@ -35,8 +35,8 @@ RwPrjReadTool >> readPackageSetForSpecification: aRwSpecification [
 				, specification repoPath , '/') asRwUrl ]
 		ifNotNil: [ :urlString | urlString asRwUrl ].
 	repo := repositoryUrl asRwRepository.
-	readPackages := {}.
-	aRwSpecification packageNames
+	projectDefinition := RwProjectDefinition newForSpecification: aRwSpecification.
+	aRwSpecification packageNamesInLoadOrder
 		do: [ :packageName | 
 			| structureName reader snapshot packageDefinition |
 			structureName := packageName , repo packageExtension.
@@ -49,13 +49,14 @@ RwPrjReadTool >> readPackageSetForSpecification: aRwSpecification [
 								relativeTo: repo directoryPath);
 				readPackageStructure.
 			packageDefinition := reader packageStructure rwSnapshot.
-			readPackages add: packageDefinition ].
-	^ (RwPackageSet withAll: readPackages) asDefinition
+			projectDefinition addPackage: packageDefinition ].
+	^ RwProjectSetDefinition withAll: {projectDefinition}
 ]
 
 { #category : 'smalltalk api' }
-RwPrjReadTool >> readPackageSetForSpecUrl: aString [
-  ^ self readPackageSetForSpecification: (RwSpecification fromUrl: aString)
+RwPrjReadTool >> readProjectSetForSpecUrl: aString [
+
+	^ self readProjectSetForSpecification: (RwSpecification fromUrl: aString)
 ]
 
 { #category : 'validation' }

@@ -1434,7 +1434,7 @@ RwLoadingTest >> projectLoadSpecFor: packageNames [
 		useGit: true)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNames: packageNames;
+		packageNamesInLoadOrder: packageNames;
 		yourself.
 	(projectSpec platformSpec at: 'gemstone')
 		defaultSymbolDictName: self _symbolDictionaryName.
