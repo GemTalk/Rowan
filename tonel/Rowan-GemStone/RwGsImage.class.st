@@ -51,6 +51,26 @@ RwGsImage class >> _projectRegistryForUserId: aUserId [
 ]
 
 { #category : 'querying' }
+RwGsImage class >> _removeLoadedProject: aRwLoadedProject [
+
+	"note that it is not safe to just remove a loaded project from the registry, however this method is supplied as a convenience for tests"
+
+	| projectName projectRegistry |
+	projectName := aRwLoadedProject name.
+	projectRegistry := self
+		_loadedProjectRegistryForUserId: aRwLoadedProject projectOwnerId.
+	projectRegistry
+		at: projectName
+		ifPresent: [ :aLoadedProject | 
+			aLoadedProject == aRwLoadedProject
+				ifFalse: [ 
+					self
+						error:
+							'The specified project is not identical to the loaded project in the registry ... this is not expected' ].
+			projectRegistry removeKey: projectName ]
+]
+
+{ #category : 'querying' }
 RwGsImage class >> addLoadedProject: aRwLoadedProject [
 
 	"Register a project"

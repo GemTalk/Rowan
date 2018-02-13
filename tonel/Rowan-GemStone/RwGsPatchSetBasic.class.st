@@ -215,6 +215,14 @@ RwGsPatchSetBasic >> addAddedPackage: aPackageDefinition inProject: aProjectDefi
 				yourself)
 ]
 
+{ #category : 'building' }
+RwGsPatchSetBasic >> addAddedProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	addedProjects
+		add: (self _projectAdditionPatchClass for: aProjectDefinition) yourself
+]
+
 { #category : 'private - applying' }
 RwGsPatchSetBasic >> addAndUpdateLoadedPackages [
 	"Update the LoadedPackages to reflect the results of this patchSet. Does not update the other loadedThings."

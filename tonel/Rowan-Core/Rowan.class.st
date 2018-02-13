@@ -148,7 +148,9 @@ at this point ... unless there is a use case for loading a collection of package
 	loadedPackages := someNames
 		collect: [ :aName | self loadedPackageNamed: aName ifAbsent: [ nil ] ].
 	^ RwEntitySet
-		withAll: (loadedPackages select: [ :each | each notNil and: [ self halt ] ])
+		withAll:
+			(loadedPackages
+				select: [ :each | each notNil and: [ loadedPackages loadedProject name = projectDefinition name ] ])
 ]
 
 { #category : 'private' }
