@@ -251,10 +251,12 @@ RwGsImagePatchVisitor >> visitProjectModification: aProjectModification [
 	aProjectModification isAddition
 		ifTrue: [ 
 			self addAddedProject: aProjectModification after.
+			aProjectModification packagesModification acceptVisitor: self.
 			^ self ].
 	aProjectModification isDeletion
 		ifTrue: [ 
 			self addDeletedProject: aProjectModification before.
+			aProjectModification packagesModification acceptVisitor: self.
 			^ self ].
 	currentProject := aProjectModification after.
 	propertiesModification := aProjectModification propertiesModification.

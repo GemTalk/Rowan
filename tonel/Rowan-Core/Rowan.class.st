@@ -150,7 +150,9 @@ at this point ... unless there is a use case for loading a collection of package
 	^ RwEntitySet
 		withAll:
 			(loadedPackages
-				select: [ :each | each notNil and: [ loadedPackages loadedProject name = projectDefinition name ] ])
+				select: [ :loadedPackage | 
+					loadedPackage notNil
+						and: [ loadedPackage loadedProject name = projectDefinition name ] ])
 ]
 
 { #category : 'private' }

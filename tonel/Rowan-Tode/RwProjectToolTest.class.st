@@ -537,8 +537,12 @@ RwProjectToolTest >> testSimpleProject1 [
 	projectName := 'Simple'.
 	packageNames := #('Simple-Core' 'Simple-Tests').
 	projectTools := Rowan projectTools.
-	(Rowan projectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
+
+	{projectName}
+		do: [ :projectName | 
+			(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | RwGsImage _removeLoadedProject: loadedProject ] ].
+
 	self
 		handleConfirmationDuring: [ 
 			projectDefinition := projectTools create
@@ -586,7 +590,6 @@ RwProjectToolTest >> testSimpleProject1 [
 
 	packageDefinition := projectDefinition packageNamed: 'Simple-Core'.
 	packageDefinition addClassDefinition: classDefinition.
-	projectDefinition addPackage: packageDefinition.
 
 	self
 		handleInformAsFailureDuring: [ projectTools load loadProjectDefinition: projectDefinition ].

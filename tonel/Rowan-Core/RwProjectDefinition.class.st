@@ -132,6 +132,20 @@ RwProjectDefinition >> loadedPackageNames [
 ]
 
 { #category : 'accessing' }
+RwProjectDefinition >> packageNamed: aString [
+
+	^ self
+		packageNamed: aString
+		ifAbsent: [ self error: 'A package named ' , aString printString , ' was not found.' ]
+]
+
+{ #category : 'accessing' }
+RwProjectDefinition >> packageNamed: aString ifAbsent: absentBlock [
+
+	^ self packages at: aString ifAbsent: absentBlock
+]
+
+{ #category : 'accessing' }
 RwProjectDefinition >> packageNames [
   ^ self packages keys asArray
 ]
