@@ -25,37 +25,76 @@ RwMethodModification >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'patching' }
-RwMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage [
+RwMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage inProject: aProjectDefinition [
 
 	self isAddition
-		ifTrue: 
-			[	self isMeta
-					ifTrue: [ aPatchSet addAddedClassMethod: self after inClass: self classDefinition inPackage: aPackage ]
-					ifFalse: [ aPatchSet addAddedInstanceMethod: self after inClass: self classDefinition inPackage: aPackage ].
-				^self ].
+		ifTrue: [ 
+			self isMeta
+				ifTrue: [ 
+					aPatchSet
+						addAddedClassMethod: self after
+						inClass: self classDefinition
+						inPackage: aPackage
+						inProject: aProjectDefinition ]
+				ifFalse: [ 
+					aPatchSet
+						addAddedInstanceMethod: self after
+						inClass: self classDefinition
+						inPackage: aPackage
+						inProject: aProjectDefinition ].
+			^ self ].
 	self isDeletion
-		ifTrue: 
-			[	self isMeta
-					ifTrue: [ aPatchSet addDeletedClassMethod: self before inClass: self classDefinition inPackage: aPackage ]
-					ifFalse: [ aPatchSet addDeletedInstanceMethod: self before inClass: self classDefinition inPackage: aPackage ].
-				^self ].
+		ifTrue: [ 
+			self isMeta
+				ifTrue: [ 
+					aPatchSet
+						addDeletedClassMethod: self before
+						inClass: self classDefinition
+						inPackage: aPackage
+						inProject: aProjectDefinition ]
+				ifFalse: [ 
+					aPatchSet
+						addDeletedInstanceMethod: self before
+						inClass: self classDefinition
+						inPackage: aPackage
+						inProject: aProjectDefinition ].
+			^ self ].
 	self isModification
-		ifTrue: 
-			[	sourceModification isEmpty
-					ifFalse: [
-						self isMeta
-							ifTrue: [ aPatchSet addPatchedClassMethod: self after inClass: self classDefinition inPackage: aPackage ]
-							ifFalse: [ aPatchSet addPatchedInstanceMethod: self after inClass: self classDefinition inPackage: aPackage ] ].
-				propertiesModification isEmpty
-					ifFalse: [
-						self isMeta
-							ifTrue: [ aPatchSet addPatchedClassMethodProperties: self after inClass: self classDefinition inPackage: aPackage ]
-							ifFalse: [ aPatchSet addPatchedInstanceMethodProperties: self after inClass: self classDefinition inPackage: aPackage ] ] ]
-
+		ifTrue: [ 
+			sourceModification isEmpty
+				ifFalse: [ 
+					self isMeta
+						ifTrue: [ 
+							aPatchSet
+								addPatchedClassMethod: self after
+								inClass: self classDefinition
+								inPackage: aPackage
+								inProject: aProjectDefinition ]
+						ifFalse: [ 
+							aPatchSet
+								addPatchedInstanceMethod: self after
+								inClass: self classDefinition
+								inPackage: aPackage
+								inProject: aProjectDefinition ] ].
+			propertiesModification isEmpty
+				ifFalse: [ 
+					self isMeta
+						ifTrue: [ 
+							aPatchSet
+								addPatchedClassMethodProperties: self after
+								inClass: self classDefinition
+								inPackage: aPackage
+								inProject: aProjectDefinition ]
+						ifFalse: [ 
+							aPatchSet
+								addPatchedInstanceMethodProperties: self after
+								inClass: self classDefinition
+								inPackage: aPackage
+								inProject: aProjectDefinition ] ] ]
 ]
 
 { #category : 'patching' }
-RwMethodModification >> addModificationToPatchSetForNewClassVersion: aPatchSet inPackage: aPackage [
+RwMethodModification >> addModificationToPatchSetForNewClassVersion: aPatchSet inPackage: aPackage inProject: aProjectDefinition [
 
 	self isAddition
 		ifTrue: [ self error: 'internal error - unexpected method addition' ].
@@ -72,12 +111,14 @@ RwMethodModification >> addModificationToPatchSetForNewClassVersion: aPatchSet i
 							aPatchSet
 								addAddedClassMethod: self after
 								inClass: self classDefinition
-								inPackage: aPackage ]
+								inPackage: aPackage
+								inProject: aProjectDefinition ]
 						ifFalse: [ 
 							aPatchSet
 								addAddedInstanceMethod: self after
 								inClass: self classDefinition
-								inPackage: aPackage ].
+								inPackage: aPackage
+								inProject: aProjectDefinition ].
 					^ self ].
 			propertiesModification isEmpty
 				ifTrue: [ self error: 'internal error - unexpected empty method properties' ]
@@ -87,12 +128,14 @@ RwMethodModification >> addModificationToPatchSetForNewClassVersion: aPatchSet i
 							aPatchSet
 								addPatchedClassMethodProperties: self after
 								inClass: self classDefinition
-								inPackage: aPackage ]
+								inPackage: aPackage
+								inProject: aProjectDefinition ]
 						ifFalse: [ 
 							aPatchSet
 								addPatchedInstanceMethodProperties: self after
 								inClass: self classDefinition
-								inPackage: aPackage ] ] ]
+								inPackage: aPackage
+								inProject: aProjectDefinition ] ] ]
 ]
 
 { #category : 'Accessing' }

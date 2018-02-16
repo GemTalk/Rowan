@@ -18,15 +18,16 @@ Class {
 }
 
 { #category : 'patching' }
-RwGsClassVersioningSymbolDictPatch class >> addPatchedClassModification: aClassModification inPackage: aPackageDefinition toPatchSet: aRwGsPatchSet [
+RwGsClassVersioningSymbolDictPatch class >> addPatchedClassModification: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition toPatchSet: aRwGsPatchSet [
+
 	"Need to decide whether the patches in aClassModification warrant a new class version or 
 	 simple property changes."
 
-	^ (self new)
+	^ self new
 		addPatchedClassModification: aClassModification
-		inPackage: aPackageDefinition 
+		inPackage: aPackageDefinition
+		inProject: aProjectDefinition
 		toPatchSet: aRwGsPatchSet
-
 ]
 
 { #category : 'instance creation' }
@@ -136,7 +137,7 @@ RwGsClassVersioningSymbolDictPatch >> _newSubclassWithSuperclass: newSuperclass 
 ]
 
 { #category : 'patching' }
-RwGsClassVersioningSymbolDictPatch >> addPatchedClassModification: aClassModification inPackage: aPackageDefinition toPatchSet: aRwGsPatchSet [
+RwGsClassVersioningSymbolDictPatch >> addPatchedClassModification: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition toPatchSet: aRwGsPatchSet [
 
 	"Need to decide whether the patches in aClassModification warrant a new class version or 
 	 simple property changes."
@@ -172,15 +173,18 @@ RwGsClassVersioningSymbolDictPatch >> addPatchedClassModification: aClassModific
 		patchedClassProperties: [ 
 			aRwGsPatchSet
 				addPatchedClassProperties: aClassDefinition
-				inPackage: aPackageDefinition ]
+				inPackage: aPackageDefinition
+				inProject: aProjectDefinition ]
 		patchedClassVars: [ 
 			aRwGsPatchSet
 				addPatchedClassClassVariables: aClassDefinition
-				inPackage: aPackageDefinition ]
+				inPackage: aPackageDefinition
+				inProject: aProjectDefinition ]
 		patchedClassNewVersions: [ 
 			aRwGsPatchSet
 				addPatchedClassNewVersion: aClassModification
-				inPackage: aPackageDefinition ]
+				inPackage: aPackageDefinition
+				inProject: aProjectDefinition ]
 ]
 
 { #category : 'accessing' }

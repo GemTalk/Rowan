@@ -594,7 +594,7 @@ RwProjectToolTest >> testSimpleProject1 [
 	self
 		handleInformAsFailureDuring: [ projectTools load loadProjectDefinition: projectDefinition ].
 
-	projectTools spec exportSpecification: projectDefinition specificationv.
+	projectTools spec exportSpecification: projectDefinition specification.
 	projectTools write writeProjectDefinition: projectDefinition.
 	projectTools commit
 		commitProjectDefinition: projectDefinition

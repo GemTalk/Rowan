@@ -45,41 +45,59 @@ RwGsImagePatchVisitor >> addAddedProject: aProjectDefinition [
 { #category : 'private' }
 RwGsImagePatchVisitor >> addClasses: classDefinitions [
 
-	classDefinitions do: 
-			[:classDefinition |
-			patchSet addAddedClass: classDefinition inPackage: currentPackage.
-			classDefinition classMethodDefinitions do: 
-					[:classMethodDefinition |
+	classDefinitions
+		do: [ :classDefinition | 
+			patchSet
+				addAddedClass: classDefinition
+				inPackage: currentPackage
+				inProject: currentProject.
+			classDefinition classMethodDefinitions
+				do: [ :classMethodDefinition | 
 					patchSet
 						addAddedClassMethod: classMethodDefinition
 						inClass: classDefinition
-						inPackage: currentPackage].
-			classDefinition instanceMethodDefinitions do: 
-					[:instanceMethodDefinition |
+						inPackage: currentPackage
+						inProject: currentProject ].
+			classDefinition instanceMethodDefinitions
+				do: [ :instanceMethodDefinition | 
 					patchSet
 						addAddedInstanceMethod: instanceMethodDefinition
 						inClass: classDefinition
-						inPackage: currentPackage]]
+						inPackage: currentPackage
+						inProject: currentProject ] ]
 ]
 
 { #category : 'private' }
 RwGsImagePatchVisitor >> addClassExtensions: classExtensions [
 
-	classExtensions do: 
-			[:classDefinition |
-			patchSet addExtendedClass: classDefinition inPackage: currentPackage.
-			classDefinition classMethodDefinitions do: 
-					[:classMethodDefinition |
+	classExtensions
+		do: [ :classDefinition | 
+			patchSet
+				addExtendedClass: classDefinition
+				inPackage: currentPackage
+				inProject: currentProject.
+			classDefinition classMethodDefinitions
+				do: [ :classMethodDefinition | 
 					patchSet
 						addExtendedClassMethod: classMethodDefinition
 						inClass: classDefinition
-						inPackage: currentPackage].
-			classDefinition instanceMethodDefinitions do: 
-					[:instanceMethodDefinition |
+						inPackage: currentPackage
+						inProject: currentProject ].
+			classDefinition instanceMethodDefinitions
+				do: [ :instanceMethodDefinition | 
 					patchSet
 						addExtendedInstanceMethod: instanceMethodDefinition
 						inClass: classDefinition
-						inPackage: currentPackage]]
+						inPackage: currentPackage
+						inProject: currentProject ] ]
+]
+
+{ #category : 'private' }
+RwGsImagePatchVisitor >> addDeletedPackage: aPackageDefinition [
+
+	"see addAddedPackage:"
+
+	self halt
 ]
 
 { #category : 'private' }
@@ -92,45 +110,52 @@ RwGsImagePatchVisitor >> addPackages: packageDefinitions [
 { #category : 'private' }
 RwGsImagePatchVisitor >> deleteClasses: classDefinitions [
 
-	classDefinitions do: 
-			[:classDefinition |
-			patchSet addDeletedClass: classDefinition inPackage: currentPackage.
-			classDefinition classMethodDefinitions do: 
-					[:classMethodDefinition |
+	classDefinitions
+		do: [ :classDefinition | 
+			patchSet
+				addDeletedClass: classDefinition
+				inPackage: currentPackage
+				inProject: currentProject.
+			classDefinition classMethodDefinitions
+				do: [ :classMethodDefinition | 
 					patchSet
 						addDeletedClassMethod: classMethodDefinition
 						inClass: classDefinition
-						inPackage: currentPackage].
-			classDefinition instanceMethodDefinitions do: 
-					[:instanceMethodDefinition |
+						inPackage: currentPackage
+						inProject: currentProject ].
+			classDefinition instanceMethodDefinitions
+				do: [ :instanceMethodDefinition | 
 					patchSet
 						addDeletedInstanceMethod: instanceMethodDefinition
 						inClass: classDefinition
-						inPackage: currentPackage]]
+						inPackage: currentPackage
+						inProject: currentProject ] ]
 ]
 
 { #category : 'private' }
 RwGsImagePatchVisitor >> deletePackages: packageDefinitions [
 
-	packageDefinitions do: 
-			[:packageDefinition |
+	packageDefinitions
+		do: [ :packageDefinition | 
 			currentPackage := packageDefinition.
-			patchSet addDeletedPackage: currentPackage.
+			patchSet addDeletedPackage: currentPackage inProject: currentProject.
 			self deleteClasses: packageDefinition classDefinitions.
-			packageDefinition classExtensions do: 
-					[:classExtension |
-					classExtension classMethodDefinitions do: 
-							[:classMethodDefinition |
+			packageDefinition classExtensions
+				do: [ :classExtension | 
+					classExtension classMethodDefinitions
+						do: [ :classMethodDefinition | 
 							patchSet
 								addDeletedClassMethod: classMethodDefinition
 								inClass: classExtension
-								inPackage: packageDefinition].
-					classExtension instanceMethodDefinitions do: 
-							[:instanceMethodDefinition |
+								inPackage: packageDefinition
+								inProject: currentProject ].
+					classExtension instanceMethodDefinitions
+						do: [ :instanceMethodDefinition | 
 							patchSet
 								addDeletedInstanceMethod: instanceMethodDefinition
 								inClass: classExtension
-								inPackage: packageDefinition]]]
+								inPackage: packageDefinition
+								inProject: currentProject ] ] ]
 ]
 
 { #category : 'initialization' }
@@ -168,22 +193,22 @@ RwGsImagePatchVisitor >> visitClassExtensionsModification: aClassModification [
 { #category : 'visting' }
 RwGsImagePatchVisitor >> visitClassModification: aClassModification [
 
-	aClassModification 
-		addModificationToPatchSet: patchSet 
-		inPackage: currentPackage.
+	aClassModification
+		addModificationToPatchSet: patchSet
+		inPackage: currentPackage
+		inProject: currentProject.
 	currentClass := aClassModification after.
 	aClassModification instanceMethodsModification acceptVisitor: self.
 	aClassModification classMethodsModification acceptVisitor: self
-
 ]
 
 { #category : 'visting' }
 RwGsImagePatchVisitor >> visitMethodModification: aMethodModification [
 
-	aMethodModification 
-		addModificationToPatchSet: patchSet 
-		inPackage: currentPackage.
-
+	aMethodModification
+		addModificationToPatchSet: patchSet
+		inPackage: currentPackage
+		inProject: currentProject
 ]
 
 { #category : 'visting' }
@@ -192,6 +217,7 @@ RwGsImagePatchVisitor >> visitMethodModificationForNewClassVersion: aMethodModif
 	aMethodModification
 		addModificationToPatchSetForNewClassVersion: patchSet
 		inPackage: currentPackage
+		inProject: currentProject
 ]
 
 { #category : 'visting' }
@@ -206,20 +232,22 @@ RwGsImagePatchVisitor >> visitPackageModification: aPackageModification [
 
 	| propertiesModification classesModification classExtensionsModification |
 	aPackageModification isAddition
-		ifTrue: 
-			[self addAddedPackage: aPackageModification after.
-			^self].
+		ifTrue: [ 
+			self addAddedPackage: aPackageModification after.
+			^ self ].
 	aPackageModification isDeletion
-		ifTrue: 
-			[self addDeletedPackage: aPackageModification before.
-			^self].
+		ifTrue: [ 
+			patchSet addDeletedPackage: aPackageModification before.
+			^ self ].
 	currentPackage := aPackageModification after.
 	propertiesModification := aPackageModification propertiesModification.
 	propertiesModification isEmpty
-		ifFalse: 
-			[self halt: 'What do we do with this patch we''re creating here?'.
-			RwGsPackagePropertiesPatch forPackageProperties: propertiesModification
-				inPackage: currentPackage].
+		ifFalse: [ 
+			self halt: 'What do we do with this patch we''re creating here?'.
+			RwGsPackagePropertiesPatch
+				forPackageProperties: propertiesModification
+				inPackage: currentPackage
+				inProject: currentProject ].
 	aPackageModification classesModification acceptVisitor: self.
 	aPackageModification classExtensionsModification acceptVisitor: self
 ]

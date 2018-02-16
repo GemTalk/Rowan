@@ -88,7 +88,9 @@ RwGsPatchSetBasic >> _classVersioningPatchClass [
 RwGsPatchSetBasic >> _currentProjectDefinition [
 
 	^ currentProjectDefinition
-		ifNil: [ currentProjectDefinition := Rowan projectNamed: '(NONE)' ]
+		ifNil: [ 
+			self halt.
+			currentProjectDefinition := Rowan projectNamed: '(NONE)' ]
 ]
 
 { #category : 'private - patch class accessors' }
@@ -158,14 +160,15 @@ RwGsPatchSetBasic >> _projectAdditionPatchClass [
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addAddedClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addAddedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	addedClasses
 		add:
 			((self _classAdditionPatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
@@ -177,8 +180,9 @@ RwGsPatchSetBasic >> addAddedClassesToTempSymbols [
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addAddedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addAddedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	addedMethods
 		add:
 			((self _methodAdditionPatchClass
@@ -186,13 +190,14 @@ RwGsPatchSetBasic >> addAddedClassMethod: aClassMethodDefinition inClass: aClass
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: self aPackageDefinition;
 				yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addAddedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addAddedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	addedMethods
 		add:
 			((self _methodAdditionPatchClass
@@ -200,7 +205,7 @@ RwGsPatchSetBasic >> addAddedInstanceMethod: anInstanceMethodDefinition inClass:
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
@@ -253,34 +258,35 @@ RwGsPatchSetBasic >> addCreatedClassesAndVersionsTo: newClassesByName [
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addDeletedClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addDeletedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	deletedClasses
 		add:
 			((self _classDeletionPatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addDeletedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addDeletedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	deletedMethods
 		add:
 			((self _methodDeletionPatchClass
 				forMethod: aClassMethodDefinition
 				isMeta: true
 				inClass: aClassDefinition
-				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
-				yourself)
+				inPackage: aPackageDefinition) inProject: aProjectDefinition yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addDeletedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addDeletedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	deletedMethods
 		add:
 			((self _methodDeletionPatchClass
@@ -288,18 +294,25 @@ RwGsPatchSetBasic >> addDeletedInstanceMethod: anInstanceMethodDefinition inClas
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addDeletedPackage: packageDefinition [
-  deletedPackages add: (self _packageDeletionPatchClass for: packageDefinition)
+RwGsPatchSetBasic >> addDeletedPackage: packageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	deletedPackages
+		add:
+			((self _packageDeletionPatchClass for: packageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addExtendedClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addExtendedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	extendedClasses
 		add:
 			((self _classExtensionPatchClass
@@ -310,8 +323,9 @@ RwGsPatchSetBasic >> addExtendedClass: aClassDefinition inPackage: aPackageDefin
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	extendedMethods
 		add:
 			(((self _methodExtensionPatchClass: aPackageDefinition key)
@@ -319,13 +333,14 @@ RwGsPatchSetBasic >> addExtendedClassMethod: aClassMethodDefinition inClass: aCl
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	extendedMethods
 		add:
 			(((self _methodExtensionPatchClass: aPackageDefinition key)
@@ -338,20 +353,22 @@ RwGsPatchSetBasic >> addExtendedInstanceMethod: anInstanceMethodDefinition inCla
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedClassClassVariables: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addPatchedClassClassVariables: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	classesWithClassVariableChanges
 		add:
 			((self _classVariablePatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addPatchedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	methodsNeedingRecompile
 		add:
 			((self _methodSourcePatchClass
@@ -359,13 +376,14 @@ RwGsPatchSetBasic >> addPatchedClassMethod: aClassMethodDefinition inClass: aCla
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedClassMethodProperties: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addPatchedClassMethodProperties: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	methodsWithPropertyChanges
 		add:
 			((self _methodPropertiesPatchClass
@@ -373,37 +391,41 @@ RwGsPatchSetBasic >> addPatchedClassMethodProperties: aClassMethodDefinition inC
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
 
 	classesWithNewVersions
 		add:
 			((self _classVersioningPatchClass
 				for: aClassModification
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedClassProperties: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addPatchedClassProperties: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	classesWithPropertyChanges
 		add:
 			((self _classPropertiesPatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	methodsNeedingRecompile
 		add:
 			((self _methodSourcePatchClass
@@ -411,13 +433,14 @@ RwGsPatchSetBasic >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition [
+RwGsPatchSetBasic >> addPatchedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+	currentProjectDefinition := aProjectDefinition.
 	methodsWithPropertyChanges
 		add:
 			((self _methodPropertiesPatchClass
@@ -425,7 +448,7 @@ RwGsPatchSetBasic >> addPatchedInstanceMethodProperties: aInstanceMethodDefiniti
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
@@ -640,13 +663,13 @@ RwGsPatchSetBasic >> migrateInstances [
 { #category : 'accessing' }
 RwGsPatchSetBasic >> packageSymbolDictionaryClass [
 
-	^ currentProjectDefinition packageSymbolDictionaryClass
+	^ self _currentProjectDefinition packageSymbolDictionaryClass
 ]
 
 { #category : 'accessing' }
 RwGsPatchSetBasic >> projectLoadSpecification [
 
-	^ currentProjectDefinition specification
+	^ self _currentProjectDefinition specification
 ]
 
 { #category : 'private - applying' }
