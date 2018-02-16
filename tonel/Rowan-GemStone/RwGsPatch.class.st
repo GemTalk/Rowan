@@ -5,7 +5,6 @@ Class {
 	#name : 'RwGsPatch',
 	#superclass : 'Object',
 	#instVars : [
-		'projectLoadSpecification',
 		'packageDefinition',
 		'projectDefinition'
 	],
@@ -46,35 +45,24 @@ RwGsPatch >> packageName [
 { #category : 'accessing' }
 RwGsPatch >> packageSymbolDictionary [
 
-	| symDictName |
+	| symDictName symDict |
 	symDictName := self projectDefinition
 		symbolDictNameForPackageNamed: self packageName.
-	^ RwGsImage objectNamed: symDictName asSymbol
+	symDict := RwGsImage objectNamed: symDictName asSymbol.
+	(symDict isKindOf: RwGsPackageSymbolDictionary)
+		ifTrue: [ ^ symDict ].
+	^ RwGsImage newOrExistingSymbolDictionaryNamed: 'UnmanagedPackages'
 ]
 
 { #category : 'accessing' }
 RwGsPatch >> projectDefinition [
-	^projectDefinition
 
+	^ projectDefinition ifNil: [ RwUnmanagedProjectDefinition new ]
 ]
 
 { #category : 'accessing' }
 RwGsPatch >> projectDefinition: newValue [
 	projectDefinition := newValue
-
-]
-
-{ #category : 'accessing' }
-RwGsPatch >> projectLoadSpecification [
-
-   ^projectLoadSpecification
-
-]
-
-{ #category : 'accessing' }
-RwGsPatch >> projectLoadSpecification: anObject [
-
-   projectLoadSpecification := anObject
 
 ]
 

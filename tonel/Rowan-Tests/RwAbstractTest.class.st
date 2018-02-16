@@ -541,7 +541,8 @@ RwAbstractTest >> setUp [
 
 	{(self _symbolDictionaryName).
 	(self _symbolDictionaryName1).
-	(self _symbolDictionaryName2)}
+	(self _symbolDictionaryName2).
+	'UnmanagedPackages'}
 		do: [ :symDictName | 
 			dict := symList objectNamed: symDictName.
 			dict

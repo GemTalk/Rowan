@@ -52,6 +52,12 @@ RwLoadingTest class >> run [
 	^self suite run
 ]
 
+{ #category : 'private' }
+RwLoadingTest >> _symbolDictionaryName [
+
+	^ #'UnmanagedPackages'
+]
+
 { #category : 'support - simple definitions' }
 RwLoadingTest >> accessorMethodsForSimpleClassNamed: name [
 
@@ -1154,14 +1160,16 @@ RwLoadingTest >> instVarChangesClassDefinitions4: packageName [
 { #category : 'support' }
 RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBeLoaded using: myPackageSet [
 
-	| imagePackageSet1 diff1 imagePackageSet2 diff2 projectSpec |
-	projectSpec := self projectLoadSpecFor: packageNames.
+	| imagePackageSet1 diff1 imagePackageSet2 diff2 |
 	packagesShouldBeLoaded
 		ifFalse: [ packageNames do: [ :name | self assertAbsenceOfPackage: name ] ].
+
 	imagePackageSet1 := Rowan loadedPackageDefinitionsNamed: packageNames.
 	diff1 := myPackageSet compareAgainstBase: imagePackageSet1.
 	self deny: diff1 isEmpty.
-	RwGsImage applyModification: diff1 for: projectSpec.
+
+	Rowan packageTools load loadPackageSetDefinition: myPackageSet.
+
 	imagePackageSet2 := Rowan loadedPackageDefinitionsNamed: packageNames.
 	diff2 := myPackageSet compareAgainstBase: imagePackageSet2.
 	self assert: diff2 isEmpty
@@ -1426,20 +1434,20 @@ RwLoadingTest >> poolDictionaryChangesClassDefinitions4: packageName [
 ]
 
 { #category : 'private' }
-RwLoadingTest >> projectLoadSpecFor: packageNames [
+RwLoadingTest >> projectDefinitionFor: packageNames [
 
-	| projectSpec |
-	projectSpec := (Rowan projectTools spec
-		newPackageSpecNamed: 'RwloadingTest'
-		useGit: true)
+	| projectDefinition |
+	projectDefinition := (RwProjectDefinition
+		newForGitPackageProjectNamed: 'RwloadingTest')
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
 		packageNamesInLoadOrder: packageNames;
+		defaultSymbolDictName: self _symbolDictionaryName;
 		yourself.
-	(projectSpec platformSpec at: 'gemstone')
-		defaultSymbolDictName: self _symbolDictionaryName.
+
 	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
-	^ projectSpec
+
+	^ projectDefinition
 ]
 
 { #category : 'support' }

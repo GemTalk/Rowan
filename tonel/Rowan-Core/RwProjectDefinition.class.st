@@ -30,13 +30,13 @@ RwProjectDefinition class >> newForGitPackageProjectNamed: aString [
 { #category : 'instance creation' }
 RwProjectDefinition class >> newForSpecification: aRwSpecification [
 
-	^ self new
-		properties:
-				(Dictionary new
-						add: 'name' -> aRwSpecification specName;
-						add: 'spec' -> aRwSpecification;
-						yourself);
-		yourself
+	^ self
+		withProperties:
+			(Dictionary new
+				add: 'name' -> aRwSpecification specName;
+				add: 'spec' -> aRwSpecification;
+				yourself)
+		packageDefinitions: Dictionary new
 ]
 
 { #category : 'instance creation' }

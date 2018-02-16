@@ -13,7 +13,7 @@ RwGsClassExtensionSymbolDictPatch >> installClassExtensionInSystem [
 	"The class must already exist.
         Create or update the LoadedClassExtension for the extended class."
 
-	((projectLoadSpecification platformSpec at: 'gemstone')
+	(self projectDefinition
 		useSessionMethodsForExtensionsForPackageNamed: self packageName)
 		ifTrue: [ 
 			false

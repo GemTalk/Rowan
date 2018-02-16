@@ -118,9 +118,3 @@ EXAMPLES
   prj load --loads=`#( ''Rowan-Tode'')` Rowan		# load Rowan-Tode package in addition 
 '
 ]
-
-{ #category : 'public' }
-RwPrjLoadTool >> packageTools [
-
-	^self platform packageTools
-]

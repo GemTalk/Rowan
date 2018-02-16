@@ -11,6 +11,12 @@ Class {
 	#category : 'Rowan-Core'
 }
 
+{ #category : 'accessing' }
+RwProjectSetDefinition >> addProject: aDefinition [
+
+	self addDefinition: aDefinition
+]
+
 { #category : 'comparing' }
 RwProjectSetDefinition >> compareAgainstBase: aDefinition [
 

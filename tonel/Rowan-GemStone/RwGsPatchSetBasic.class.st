@@ -88,9 +88,7 @@ RwGsPatchSetBasic >> _classVersioningPatchClass [
 RwGsPatchSetBasic >> _currentProjectDefinition [
 
 	^ currentProjectDefinition
-		ifNil: [ 
-			self halt.
-			currentProjectDefinition := Rowan projectNamed: '(NONE)' ]
+		ifNil: [ currentProjectDefinition := Rowan loadedProjectNamed: '(NONE)' ifAbsent: [  ] ]
 ]
 
 { #category : 'private - patch class accessors' }
@@ -114,7 +112,7 @@ RwGsPatchSetBasic >> _methodExtensionPatchClass: packageName [
 
 	^ self packageSymbolDictionaryClass
 		ifNotNil: [ :symDictClass | 
-			((self projectLoadSpecification platformSpec at: 'gemstone')
+			(self projectDefinition
 				useSessionMethodsForExtensionsForPackageNamed: packageName)
 				ifTrue: [ symDictClass _methodExtensionSessionMethodsPatchClass ]
 				ifFalse: [ symDictClass _methodExtensionPatchClass ] ]
@@ -318,7 +316,7 @@ RwGsPatchSetBasic >> addExtendedClass: aClassDefinition inPackage: aPackageDefin
 			((self _classExtensionPatchClass
 				for: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
@@ -348,7 +346,7 @@ RwGsPatchSetBasic >> addExtendedInstanceMethod: anInstanceMethodDefinition inCla
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectLoadSpecification: self projectLoadSpecification;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
@@ -663,13 +661,9 @@ RwGsPatchSetBasic >> migrateInstances [
 { #category : 'accessing' }
 RwGsPatchSetBasic >> packageSymbolDictionaryClass [
 
-	^ self _currentProjectDefinition packageSymbolDictionaryClass
-]
-
-{ #category : 'accessing' }
-RwGsPatchSetBasic >> projectLoadSpecification [
-
-	^ self _currentProjectDefinition specification
+	^ self _currentProjectDefinition
+		ifNil: [ RwGsPackageSymbolDictionary ]
+		ifNotNil: [ :projectDefinition | projectDefinition packageSymbolDictionaryClass ]
 ]
 
 { #category : 'private - applying' }

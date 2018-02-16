@@ -18,6 +18,8 @@ RwGsPackageAdditionSymbolDictPatch >> createLoadedPackage [
 	loadedPackage := self packageSymbolDictionary
 		createLoadedPackageFromDefinition: self packageDefinition.
 
+	projectDefinition ifNil: [ ^ self ].
+
 	loadedProject := Rowan
 		loadedProjectNamed: projectDefinition name
 		ifAbsent: [ 

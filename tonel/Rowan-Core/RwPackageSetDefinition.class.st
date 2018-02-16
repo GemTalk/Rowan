@@ -11,6 +11,12 @@ Class {
 	#category : 'Rowan-Core'
 }
 
+{ #category : 'accessing' }
+RwPackageSetDefinition >> addPackage: aDefinition [
+
+	self addDefinition: aDefinition
+]
+
 { #category : 'comparing' }
 RwPackageSetDefinition >> compareAgainstBase: aDefinition [
 
@@ -25,4 +31,14 @@ RwPackageSetDefinition >> compareAgainstBase: aDefinition [
 		updateForClassMoves;
 		updateForMethodMoves.
 	^ result
+]
+
+{ #category : 'deriving' }
+RwPackageSetDefinition >> deriveLoadedThings [
+
+	^ RwEntitySet
+		withAll:
+			((self definitionNames
+				collect: [ :packageName | Rowan loadedPackageNamed: packageName ifAbsent: [  ] ])
+				select: [ :each | each notNil ])
 ]

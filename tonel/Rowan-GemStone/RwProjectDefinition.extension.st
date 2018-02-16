@@ -44,3 +44,10 @@ RwProjectDefinition >> symbolDictNameForPackageNamed: packageName [
 	^ (self specification platformSpec at: 'gemstone')
 		symbolDictNameForPackageNamed: packageName
 ]
+
+{ #category : '*rowan-gemstone' }
+RwProjectDefinition >> useSessionMethodsForExtensionsForPackageNamed: packageName [
+
+	^ (self specification platformSpec at: 'gemstone')
+		useSessionMethodsForExtensionsForPackageNamed: packageName
+]
