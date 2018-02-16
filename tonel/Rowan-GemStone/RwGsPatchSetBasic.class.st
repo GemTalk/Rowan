@@ -190,7 +190,7 @@ RwGsPatchSetBasic >> addAddedClassMethod: aClassMethodDefinition inClass: aClass
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
-				projectDefinition: self aPackageDefinition;
+				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 

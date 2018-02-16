@@ -14,6 +14,13 @@ RwProjectDefinition >> defaultSymbolDictName: symbolDictName [
 ]
 
 { #category : '*rowan-gemstone' }
+RwProjectDefinition >> methodEnvForPackageNamed: packageName [
+
+	^ (self specification platformSpec at: 'gemstone')
+		methodEnvForPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone' }
 RwProjectDefinition >> packageSymbolDictionaryClass [
 
 	^ RwGsPackageSymbolDictionary

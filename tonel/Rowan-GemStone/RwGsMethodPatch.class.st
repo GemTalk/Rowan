@@ -124,8 +124,7 @@ RwGsMethodPatch >> methodEnvironmentId [
 
 	"use the project load spec package properties"
 
-	^ (self projectLoadSpecification platformSpec at: 'gemstone')
-		methodEnvForPackageNamed: self packageName
+	^ self projectDefinition methodEnvForPackageNamed: self packageName
 ]
 
 { #category : 'private-installing' }

@@ -48,6 +48,12 @@ RwDefinitionSetDefinition >> deriveLoadedThings [
 	self subclassResponsibility: #'deriveLoadedThings'
 ]
 
+{ #category : 'enumerating' }
+RwDefinitionSetDefinition >> do: aBlock [
+
+	^ self definitions do: aBlock
+]
+
 { #category : 'initialization' }
 RwDefinitionSetDefinition >> initialize [
 

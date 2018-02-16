@@ -82,10 +82,11 @@ RwPrjWriteTool >> writeProjectDefinition: projectDefinition [
 				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , projectDefinition repoPath , '/') asRwUrl ] ]
 		ifNotNil: [ :urlString | urlString asRwUrl ].
 	repo := repositoryUrl asRwRepository.
-	(Rowan loadedPackagesForProject: projectDefinition)
-		do: [ :rwPackage | 
+	(Rowan loadedPackagesForProject: projectDefinition) asPackageDefinitionSet
+		do: [ :rwPackageDefinition | 
 			| packageStructure |
-			packageStructure := RwCypressPackageStructure fromPackage: rwPackage.
+			packageStructure := RwCypressPackageStructure
+				fromPackage: rwPackageDefinition.
 			repo writePackageStructure: packageStructure ]
 ]
 
