@@ -45,21 +45,11 @@ RwGsMethodExtensionSessionMethodSymbolDictPatch >> installMethod [
 
 	"expecting only a single method to be compiled here"
 
-	| dictsArray mDict cDict |
-	dictsArray := self packageSymbolDictionary homeSessionMethods
-		methodAndCategoryDictionaryFor: behavior.
-	mDict := dictsArray at: 1.
-	cDict := dictsArray at: 2.
-	catDict
-		keysAndValuesDo: [ :protocolSymbol :selectors | 
-			| symbolSet |
-			symbolSet := cDict
-				at: protocolSymbol
-				ifAbsent: [ cDict at: protocolSymbol put: SymbolSet new ].
-			symbolSet addAll: selectors ].
-	methDict
-		keysAndValuesDo: [ :sel :meth | 
-			mDict at: sel put: meth.
-			GsPackagePolicy current updateMethodLookupCacheFor: meth in: behavior.
-			selector := meth selector ]
+	compiledMethod := self packageSymbolDictionary
+		addExtensionSessionMethods: methDict
+		catDict: catDict
+		for: behavior
+		toPackageNamed: self packageName.
+
+	selector := compiledMethod selector
 ]

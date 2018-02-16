@@ -235,6 +235,60 @@ RwGsPackageSymbolDictionary >> addExtensionCompiledMethod: compiledMethod for: b
 	loadedClassExtension addLoadedMethod: loadedMethod
 ]
 
+{ #category : 'method - patch api' }
+RwGsPackageSymbolDictionary >> addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName [
+
+	"expecting only a single method to be in methDict/catDict"
+
+	| dictsArray mDict cDict existing loadedMethod loadedPackage loadedClassExtension compiledMethod |
+	dictsArray := self homeSessionMethods methodAndCategoryDictionaryFor: behavior.
+	mDict := dictsArray at: 1.
+	cDict := dictsArray at: 2.
+	catDict
+		keysAndValuesDo: [ :protocolSymbol :selectors | 
+			| symbolSet |
+			symbolSet := cDict
+				at: protocolSymbol
+				ifAbsent: [ cDict at: protocolSymbol put: SymbolSet new ].
+			symbolSet addAll: selectors ].
+	methDict
+		keysAndValuesDo: [ :sel :meth | 
+			mDict at: sel put: meth.
+			GsPackagePolicy current updateMethodLookupCacheFor: meth in: behavior.
+			compiledMethod := meth ].
+
+	existing := methodRegistry at: compiledMethod ifAbsent: [ nil ].
+	existing
+		ifNotNil: [ 
+			self
+				error:
+					'Internal error -- existing LoadedMethod found for extension compiled method.' ].
+	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
+
+	methodRegistry at: compiledMethod put: loadedMethod.
+
+	loadedPackage := self packageRegistry
+		at: packageName
+		ifAbsent: [ 
+			self packageRegistry
+				at: packageName
+				put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
+
+	loadedClassExtension := loadedPackage
+		loadedClassExtensionForClass: behavior
+		ifAbsent: [ 
+			| class ext |
+			class := behavior theNonMetaClass.
+			ext := RwGsLoadedSymbolDictClassExtension
+				newForClass: class
+				inPackage: loadedPackage.
+			self classExtensionRegistry at: class classHistory put: ext.
+			ext ].
+	loadedClassExtension addLoadedMethod: loadedMethod.
+
+	^ compiledMethod
+]
+
 { #category : 'class - patch api' }
 RwGsPackageSymbolDictionary >> addNewClassVersionToAssociation: newClass [
 

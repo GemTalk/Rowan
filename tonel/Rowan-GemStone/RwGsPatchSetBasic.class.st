@@ -88,7 +88,10 @@ RwGsPatchSetBasic >> _classVersioningPatchClass [
 RwGsPatchSetBasic >> _currentProjectDefinition [
 
 	^ currentProjectDefinition
-		ifNil: [ currentProjectDefinition := Rowan loadedProjectNamed: '(NONE)' ifAbsent: [  ] ]
+		ifNil: [ 
+			currentProjectDefinition := Rowan
+				loadedProjectNamed: '(NONE)'
+				ifAbsent: [ RwUnmanagedProjectDefinition new ] ]
 ]
 
 { #category : 'private - patch class accessors' }
@@ -112,7 +115,7 @@ RwGsPatchSetBasic >> _methodExtensionPatchClass: packageName [
 
 	^ self packageSymbolDictionaryClass
 		ifNotNil: [ :symDictClass | 
-			(self projectDefinition
+			(self _currentProjectDefinition
 				useSessionMethodsForExtensionsForPackageNamed: packageName)
 				ifTrue: [ symDictClass _methodExtensionSessionMethodsPatchClass ]
 				ifFalse: [ symDictClass _methodExtensionPatchClass ] ]
@@ -278,7 +281,9 @@ RwGsPatchSetBasic >> addDeletedClassMethod: aClassMethodDefinition inClass: aCla
 				forMethod: aClassMethodDefinition
 				isMeta: true
 				inClass: aClassDefinition
-				inPackage: aPackageDefinition) inProject: aProjectDefinition yourself)
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
 ]
 
 { #category : 'building' }
