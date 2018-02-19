@@ -491,22 +491,26 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 
 	"This test attempts to add extension methods to a class is in Globals --- a symbol dictionary owned by another user ... and the extension methods are kept in session methods in the package's symbol dictionary ..."
 
-	| projectName projectSpec projectTools packageDefinition className testClass testInstance classExtensionDefinition |
+	| projectName projectDefinition projectTools packageDefinition className testClass testInstance classExtensionDefinition packageNames |
 	projectName := 'Simple'.
+	packageNames := #('Simple-Globals-Extensions').
 	projectTools := Rowan projectTools.
-	(Rowan projectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
 
-	projectSpec := projectTools spec newPackageSpecNamed: projectName useGit: true.
-	projectSpec
+	{projectName}
+		do: [ :name | 
+			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+
+	projectDefinition := (RwProjectDefinition
+		newForGitPackageProjectNamed: projectName)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNamesInLoadOrder: #('Simple-Globals-Extensions');
-		yourself.
-	(projectSpec platformSpec at: 'gemstone')
+		packageNamesInLoadOrder: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName;
 		useSessionMethodsForExtensions: true
-			forPackageNamed: 'Simple-Globals-Extensions'.
+			forPackageNamed: 'Simple-Globals-Extensions';
+		yourself.
+
 	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
 
 	className := 'Object'.
@@ -526,11 +530,11 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 						source: 'classFoo ^''bar''');
 		yourself.
 
-	packageDefinition := RwPackageDefinition newNamed: 'Simple-Globals-Extensions'.
+	packageDefinition := projectDefinition
+		packageNamed: 'Simple-Globals-Extensions'.
 	packageDefinition addClassExtension: classExtensionDefinition.
-	projectTools load
-		loadPackageDefinition: packageDefinition
-		specification: projectSpec.
+
+	projectTools load loadProjectDefinition: projectDefinition.
 
 	self assert: Object classFoo = 'bar'.
 	self assert: Object new instanceFoo = 'foo'
