@@ -39,6 +39,14 @@ RwProjectDefinition >> projectOwnerId: aUserId [
 ]
 
 { #category : '*rowan-gemstone' }
+RwProjectDefinition >> symbolDictName: symbolDictName forPackageNamed: packageName [
+
+	(self specification platformSpec at: 'gemstone')
+		symbolDictName: symbolDictName
+		forPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone' }
 RwProjectDefinition >> symbolDictNameForPackageNamed: packageName [
 
 	^ (self specification platformSpec at: 'gemstone')

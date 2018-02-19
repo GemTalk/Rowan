@@ -79,9 +79,8 @@ RwProjectToolTest >> testProjectClassExtensions [
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
 
-	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
-	projectDefinition
+	projectDefinition := (RwProjectDefinition
+		newForGitPackageProjectNamed: projectName)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
 		packageNamesInLoadOrder: packageNames;
@@ -169,25 +168,27 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 
 	"This test attempts to add extension methods to a class that is not in the dictionary that the package is being loaded into ... this should actually error out ... all definitions in a package should be applied to a single symbol dictionary ... create separate packages to do cross symbol dictionary updateds ... or possibly use session methods (yet to be determined."
 
-	| projectName1 projectName2 projectSpec1 projectSpec2 projectTools classDefinition packageDefinition1 packageDefinition2 className testClass testInstance classExtensionDefinition |
+	| projectName1 projectName2 projectDefinition1 projectDefinition2 projectTools classDefinition packageDefinition1 packageNames1 packageDefinition2 packageNames2 className testClass testInstance classExtensionDefinition |
 	projectName1 := 'Simple'.
+	packageNames1 := #('Simple-Core' 'Simple-Tests').
 	projectName2 := 'Simple Extensions'.
+	packageNames2 := #('Simple-Extensions').
 	projectTools := Rowan projectTools.
-	(Rowan projectNamed: projectName1 ifAbsent: [  ])
-		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
-	(Rowan projectNamed: projectName2 ifAbsent: [  ])
-		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
 
-	projectSpec1 := projectTools spec
-		newPackageSpecNamed: projectName1
-		useGit: true.
-	projectSpec1
+	{projectName1.
+	projectName2}
+		do: [ :name | 
+			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+
+	projectDefinition1 := (RwProjectDefinition
+		newForGitPackageProjectNamed: projectName1)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
 		packageNamesInLoadOrder: #('Simple-Core' 'Simple-Tests');
+		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.
-	(projectSpec1 platformSpec at: 'gemstone')
-		defaultSymbolDictName: self _symbolDictionaryName1.
+
 	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
 	className := 'Simple'.
@@ -202,23 +203,19 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		pools: #()
 		type: 'normal'.
 
-	packageDefinition1 := RwPackageDefinition newNamed: 'Simple-Core'.
+	packageDefinition1 := projectDefinition1 packageNamed: 'Simple-Core'.
 	packageDefinition1 addClassDefinition: classDefinition.
-	projectTools load
-		loadPackageDefinition: packageDefinition1
-		specification: projectSpec1.
 
+	projectTools load loadProjectDefinition: projectDefinition1.
 
-	projectSpec2 := projectTools spec
-		newPackageSpecNamed: projectName2
-		useGit: true.
-	projectSpec2
+	projectDefinition2 := (RwProjectDefinition
+		newForGitPackageProjectNamed: projectName2)
 		comment:
 				'This is a class extension project created in memory first, then written to disk. Uses a separate symbol dictionary from project 1';
 		packageNamesInLoadOrder: #('Simple-Extensions');
+		defaultSymbolDictName: self _symbolDictionaryName2;
 		yourself.
-	(projectSpec2 platformSpec at: 'gemstone')
-		defaultSymbolDictName: self _symbolDictionaryName2.
+
 	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
 
 	classExtensionDefinition := RwClassExtensionDefinition
@@ -241,14 +238,12 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 						source: 'civar1 ^civar1');
 		yourself.
 
-	packageDefinition2 := RwPackageDefinition newNamed: 'Simple-Extensions'.
+	packageDefinition2 := projectDefinition2 packageNamed: 'Simple-Extensions'.
 	packageDefinition2 addClassExtension: classExtensionDefinition.
 	self
 		should: [ 
 			"class extensions need to be made by packages loaded into the symbol dictionary in which the class is defined"
-			projectTools load
-				loadPackageDefinition: packageDefinition2
-				specification: projectSpec2 ]
+			projectTools load loadProjectDefinition: projectDefinition2 ]
 		raise: Error
 ]
 
@@ -257,23 +252,27 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 
 	"Proper way to add extension methods to a class --- load spec expanded to allow user to specify per package symbol dictionaries ... symbolDictName redefined as defaultSymbolDictName."
 
-	| projectName projectSpec projectTools classDefinition packageDefinition1 packageDefinition2 packageDefinition3 className1 className2 testClass1 testClass2 testInstance1 testInstance2 classExtensionDefinition dictionariesAndSymbols x y |
+	| projectName projectDefinition projectTools classDefinition packageDefinition1 packageDefinition2 packageDefinition3 className1 className2 testClass1 testClass2 testInstance1 testInstance2 classExtensionDefinition dictionariesAndSymbols x y packageNames |
 	projectName := 'Simple'.
+	packageNames := #('Simple-Core1' 'Simple-Core2' 'Simple-Extensions1').
 	projectTools := Rowan projectTools.
-	(Rowan projectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
 
-	projectSpec := projectTools spec newPackageSpecNamed: projectName useGit: true.
-	projectSpec
+	{projectName}
+		do: [ :name | 
+			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+
+	projectDefinition := (RwProjectDefinition
+		newForGitPackageProjectNamed: projectName)
 		comment:
 				'This is a project created in memory first, then written to disk. There are three packages 21 of which creates classes in a different symbol dictionary.';
-		packageNamesInLoadOrder: #('Simple-Core1' 'Simple-Core2' 'Simple-Extensions1');
-		yourself.
-	(projectSpec platformSpec at: 'gemstone')
+		packageNamesInLoadOrder: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName2;
 		symbolDictName: self _symbolDictionaryName1 forPackageNamed: 'Simple-Core1';
 		symbolDictName: self _symbolDictionaryName1
-			forPackageNamed: 'Simple-Extensions1'.
+			forPackageNamed: 'Simple-Extensions1';
+		yourself.
+
 	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
 
@@ -291,11 +290,10 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 		pools: #()
 		type: 'normal'.
 
-	packageDefinition1 := RwPackageDefinition newNamed: 'Simple-Core1'.
+	packageDefinition1 := projectDefinition packageNamed: 'Simple-Core1'.
 	packageDefinition1 addClassDefinition: classDefinition.
-	projectTools load
-		loadPackageDefinition: packageDefinition1
-		specification: projectSpec.
+
+	projectTools load loadProjectDefinition: projectDefinition.
 
 	testClass1 := Rowan globalNamed: className1.
 	self assert: testClass1 notNil.
@@ -323,11 +321,10 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 		pools: #()
 		type: 'normal'.
 
-	packageDefinition2 := RwPackageDefinition newNamed: 'Simple-Core2'.
+	packageDefinition2 := projectDefinition packageNamed: 'Simple-Core2'.
 	packageDefinition2 addClassDefinition: classDefinition.
-	projectTools load
-		loadPackageDefinition: packageDefinition2
-		specification: projectSpec.
+
+	projectTools load loadProjectDefinition: projectDefinition.
 
 	testClass2 := Rowan globalNamed: className2.
 	self assert: testClass1 notNil.
@@ -361,25 +358,25 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 						source: 'civar1 ^civar1');
 		yourself.
 
-	packageDefinition3 := RwPackageDefinition newNamed: 'Simple-Extensions1'.
+	packageDefinition3 := projectDefinition packageNamed: 'Simple-Extensions1'.
 	packageDefinition3 addClassExtension: classExtensionDefinition.
-	projectTools load
-		loadPackageDefinition: packageDefinition3
-		specification: projectSpec.
+
+	projectTools load loadProjectDefinition: projectDefinition.
 
 	self assert: testClass1 civar1 = 1.
 
 	self
 		handleConfirmationDuring: [ 
 			projectTools create
-				createPackageProjectFor: projectSpec
+				createPackageProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanClassExtensionsProject/'
 				repoPath: 'src' ].
-	projectTools spec exportSpecification: projectSpec.
-	projectTools write writePackagesForSpecification: projectSpec.
+
+	projectTools spec exportProjectDefinition: projectDefinition.
+	projectTools write writeProjectDefinition: projectDefinition.
 	projectTools commit
-		commitPackagesForSpecification: projectSpec
+		commitProjectDefinition: projectDefinition
 		message:
 			'3 packages with extension methods for first package in third package.'
 ]
