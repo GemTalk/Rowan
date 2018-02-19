@@ -386,24 +386,28 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 
 	"This test attempts to add extension methods to a class that is not in the dictionary that the package is being loaded into ... and the extension methods are kept in session methods in the package's symbol dictionary ..."
 
-	| projectName projectSpec projectTools classDefinition1 classDefinition2 packageDefinition1 packageDefinition2 className1 className2 testClass1 testInstance1 testClass2 testInstance2 classExtensionDefinition |
+	| projectName projectDefinition projectTools classDefinition1 classDefinition2 packageDefinition1 packageDefinition2 className1 className2 testClass1 testInstance1 testClass2 testInstance2 classExtensionDefinition packageNames |
 	projectName := 'Simple'.
+	packageNames := #('Simple-Core' 'Simple-Extensions' 'Simple-Tests').
 	projectTools := Rowan projectTools.
-	(Rowan projectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
 
-	projectSpec := projectTools spec newPackageSpecNamed: projectName useGit: true.
-	projectSpec
+	{projectName}
+		do: [ :name | 
+			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+
+	projectDefinition := (RwProjectDefinition
+		newForGitPackageProjectNamed: projectName)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNamesInLoadOrder: #('Simple-Core' 'Simple-Extensions' 'Simple-Tests');
-		yourself.
-	(projectSpec platformSpec at: 'gemstone')
+		packageNamesInLoadOrder: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		symbolDictName: self _symbolDictionaryName2
 			forPackageNamed: 'Simple-Extensions';
 		defaultUseSessionMethodsForExtensions: false;
-		useSessionMethodsForExtensions: true forPackageNamed: 'Simple-Extensions'.
+		useSessionMethodsForExtensions: true forPackageNamed: 'Simple-Extensions';
+		yourself.
+
 	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
 
@@ -421,11 +425,10 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 		pools: #()
 		type: 'normal'.
 
-	packageDefinition1 := RwPackageDefinition newNamed: 'Simple-Core'.
+	packageDefinition1 := projectDefinition packageNamed: 'Simple-Core'.
 	packageDefinition1 addClassDefinition: classDefinition1.
-	projectTools load
-		loadPackageDefinition: packageDefinition1
-		specification: projectSpec.
+
+	projectTools load loadProjectDefinition: projectDefinition.
 
 	testClass1 := Rowan globalNamed: className1.
 	self assert: testClass1 notNil.
@@ -469,12 +472,11 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 				protocol: 'accessing'
 				source: 'foo ^ true').
 
-	packageDefinition2 := RwPackageDefinition newNamed: 'Simple-Extensions'.
+	packageDefinition2 := projectDefinition packageNamed: 'Simple-Extensions'.
 	packageDefinition2 addClassDefinition: classDefinition2.
 	packageDefinition2 addClassExtension: classExtensionDefinition.
-	projectTools load
-		loadPackageDefinition: packageDefinition2
-		specification: projectSpec.
+
+	projectTools load loadProjectDefinition: projectDefinition.
 
 	self assert: testClass1 civar1 == 1.
 	self assert: testInstance1 ivar1 isNil.

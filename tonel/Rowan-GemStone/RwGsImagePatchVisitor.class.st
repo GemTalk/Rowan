@@ -191,8 +191,20 @@ RwGsImagePatchVisitor >> visitClassExtensionModification: aClassExtensionModific
 		inPackage: currentPackage
 		inProject: currentProject.
 	currentClass := aClassExtensionModification after.
-	aClassExtensionModification instanceMethodsModification acceptVisitor: self.
-	aClassExtensionModification classMethodsModification acceptVisitor: self
+	currentClass classMethodDefinitions
+		do: [ :classMethodDefinition | 
+			patchSet
+				addExtendedClassMethod: classMethodDefinition
+				inClass: currentClass
+				inPackage: currentPackage
+				inProject: currentProject ].
+	currentClass instanceMethodDefinitions
+		do: [ :instanceMethodDefinition | 
+			patchSet
+				addExtendedInstanceMethod: instanceMethodDefinition
+				inClass: currentClass
+				inPackage: currentPackage
+				inProject: currentProject ]
 ]
 
 { #category : 'visting' }

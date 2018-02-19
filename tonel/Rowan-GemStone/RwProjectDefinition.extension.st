@@ -14,6 +14,13 @@ RwProjectDefinition >> defaultSymbolDictName: symbolDictName [
 ]
 
 { #category : '*rowan-gemstone' }
+RwProjectDefinition >> defaultUseSessionMethodsForExtensions: aBool [
+
+	(self specification platformSpec at: 'gemstone')
+		defaultUseSessionMethodsForExtensions: aBool
+]
+
+{ #category : '*rowan-gemstone' }
 RwProjectDefinition >> methodEnvForPackageNamed: packageName [
 
 	^ (self specification platformSpec at: 'gemstone')
@@ -51,6 +58,14 @@ RwProjectDefinition >> symbolDictNameForPackageNamed: packageName [
 
 	^ (self specification platformSpec at: 'gemstone')
 		symbolDictNameForPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone' }
+RwProjectDefinition >> useSessionMethodsForExtensions: aBool forPackageNamed: packageName [
+
+	(self specification platformSpec at: 'gemstone')
+		useSessionMethodsForExtensions: aBool
+		forPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone' }
