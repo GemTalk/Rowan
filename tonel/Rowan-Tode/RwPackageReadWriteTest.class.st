@@ -25,39 +25,39 @@ RwPackageReadWriteTest >> basicPackageSet [
 { #category : 'private' }
 RwPackageReadWriteTest >> doTestReadWriteReadForFormat: format [
 
-	| basicPackageSet readProjectSet myReadSpecification rowanSpec readProjectSet2 diff myWriteSpecification |
+	| basicPackageSet readPackageSet myReadSpecification rowanSpec readPackageSet2 diff myWriteSpecification |
 	basicPackageSet := self basicPackageSet.
 	rowanSpec := RwSpecification fromUrl: 'Rowan'.
 	myReadSpecification := self
 		setUpSpecificationForReadTest: basicPackageSet
 		rowanSpec: rowanSpec
 		repositoryFormat: format.
-	readProjectSet := Rowan projectTools read
-		readProjectSetForSpecUrl: myReadSpecification.
+	readPackageSet := Rowan packageTools read
+		readPackageSetForSpecification: myReadSpecification.
 	myWriteSpecification := self
-		setUpSpecificationForWriteTest: readProjectSet
+		setUpSpecificationForWriteTest: readPackageSet
 		rowanSpec: rowanSpec
 		repositoryFormat: format.
-	readProjectSet2 := self
-		doTestWriteRead: readProjectSet
+	readPackageSet2 := self
+		doTestWriteRead: readPackageSet
 		myWriteSpecification: myWriteSpecification
 		forFormat: format.
-	diff := readProjectSet2 compareAgainstBase: readProjectSet.
+	diff := readPackageSet2 compareAgainstBase: readPackageSet.
 	self assert: diff isEmpty
 ]
 
 { #category : 'private' }
 RwPackageReadWriteTest >> doTestWriteRead: writePackageSet myWriteSpecification: myWriteSpecification forFormat: format [
 
-	| readProjectSet diff |
+	| readPackageSet diff |
 	Rowan projectTools write
 		writePackageSet: writePackageSet
 		specification: myWriteSpecification.
-	readProjectSet := Rowan projectTools read
-		readProjectSetForSpecUrl: myWriteSpecification.
-	diff := writePackageSet compareAgainstBase: readProjectSet.
+	readPackageSet := Rowan packageTools read
+		readPackageSetForSpecification: myWriteSpecification.
+	diff := writePackageSet compareAgainstBase: readPackageSet.
 	self assert: diff isEmpty.
-	^ readProjectSet
+	^ readPackageSet
 ]
 
 { #category : 'private' }

@@ -50,7 +50,9 @@ RwPrjReadTool >> readProjectSetForSpecification: aRwSpecification [
 				readPackageStructure.
 			packageDefinition := reader packageStructure rwSnapshot.
 			projectDefinition addPackage: packageDefinition ].
-	^ RwProjectSetDefinition withAll: {projectDefinition}
+	^ RwProjectSetDefinition new
+		addProject: projectDefinition;
+		yourself
 ]
 
 { #category : 'smalltalk api' }

@@ -42,3 +42,9 @@ RwPackageSetDefinition >> deriveLoadedThings [
 				collect: [ :packageName | Rowan loadedPackageNamed: packageName ifAbsent: [  ] ])
 				select: [ :each | each notNil ])
 ]
+
+{ #category : 'accessing' }
+RwPackageSetDefinition >> packages [
+
+	^ self definitions
+]

@@ -39,3 +39,9 @@ RwProjectSetDefinition >> deriveLoadedThings [
 				collect: [ :projectName | Rowan loadedProjectNamed: projectName ifAbsent: [  ] ])
 				select: [ :each | each notNil ])
 ]
+
+{ #category : 'accessing' }
+RwProjectSetDefinition >> projects [
+
+	^ self definitions
+]
