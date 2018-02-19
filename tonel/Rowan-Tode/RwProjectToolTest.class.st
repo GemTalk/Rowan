@@ -69,20 +69,25 @@ RwProjectToolTest >> testProjectClassExtensions [
 
 	"Build our project in memory without committing to disk until we've created a class with methods, then write to disk."
 
-	| projectName projectSpec projectTools classDefinition packageDefinition1 packageDefinition2 className testClass testInstance classExtensionDefinition |
+	| projectName projectDefinition projectTools classDefinition packageDefinition1 packageDefinition2 className testClass testInstance classExtensionDefinition packageNames |
 	projectName := 'Simple'.
+	packageNames := #('Simple-Core' 'Simple-Extensions' 'Simple-Tests').
 	projectTools := Rowan projectTools.
-	(Rowan projectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :spec | projectTools unregister unregisterSpecification: spec ].
 
-	projectSpec := projectTools spec newPackageSpecNamed: projectName useGit: true.
-	projectSpec
+	{projectName}
+		do: [ :name | 
+			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+
+	projectDefinition := RwProjectDefinition
+		newForGitPackageProjectNamed: projectName.
+	projectDefinition
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNamesInLoadOrder: #('Simple-Core' 'Simple-Extensions' 'Simple-Tests');
+		packageNamesInLoadOrder: packageNames;
 		yourself.
-	(projectSpec platformSpec at: 'gemstone')
-		defaultSymbolDictName: self _symbolDictionaryName1.
+	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
+
 	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
 	className := 'Simple'.
@@ -103,11 +108,15 @@ RwProjectToolTest >> testProjectClassExtensions [
 				protocol: 'accessing'
 				source: 'foo ^ true').
 
-	packageDefinition1 := RwPackageDefinition newNamed: 'Simple-Core'.
+	packageDefinition1 := projectDefinition packageNamed: 'Simple-Core'.
 	packageDefinition1 addClassDefinition: classDefinition.
-	projectTools load
-		loadPackageDefinition: packageDefinition1
-		specification: projectSpec.
+
+	projectTools load loadProjectDefinition: projectDefinition.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	self assert: testInstance foo.
 
 	classExtensionDefinition := RwClassExtensionDefinition
 		newForClassNamed: className.
@@ -129,11 +138,10 @@ RwProjectToolTest >> testProjectClassExtensions [
 						source: 'civar1 ^civar1');
 		yourself.
 
-	packageDefinition2 := RwPackageDefinition newNamed: 'Simple-Extensions'.
+	packageDefinition2 := projectDefinition packageNamed: 'Simple-Extensions'.
 	packageDefinition2 addClassExtension: classExtensionDefinition.
-	projectTools load
-		loadPackageDefinition: packageDefinition2
-		specification: projectSpec.
+
+	projectTools load loadProjectDefinition: projectDefinition.
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
@@ -144,14 +152,15 @@ RwProjectToolTest >> testProjectClassExtensions [
 	self
 		handleConfirmationDuring: [ 
 			projectTools create
-				createPackageProjectFor: projectSpec
+				createPackageProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanSimpleExtensionProject/'
 				repoPath: 'src' ].
-	projectTools spec exportSpecification: projectSpec.
-	projectTools write writePackagesForSpecification: projectSpec.
+
+	projectTools spec exportProjectDefinition: projectDefinition.
+	projectTools write writeProjectDefinition: projectDefinition.
 	projectTools commit
-		commitPackagesForSpecification: projectSpec
+		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class and extension methods'
 ]
 

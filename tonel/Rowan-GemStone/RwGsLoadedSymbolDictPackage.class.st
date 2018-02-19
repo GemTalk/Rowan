@@ -34,7 +34,7 @@ RwGsLoadedSymbolDictPackage >> initializeForName: aName [
 { #category : 'queries' }
 RwGsLoadedSymbolDictPackage >> loadedClassExtensionForClass: aClass ifAbsent: absentBlock [
 
-	"If there is an existing extension for the given (non-meta) class in this package, answer it, otherwise the AbsentToken."
+	"If there is an existing extension for the given (non-meta) class in this package, answer it, otherwise invoke absentBlock."
 
 	^ loadedClassExtensions
 		at: aClass theNonMetaClass name asString
@@ -44,7 +44,17 @@ RwGsLoadedSymbolDictPackage >> loadedClassExtensionForClass: aClass ifAbsent: ab
 { #category : 'queries' }
 RwGsLoadedSymbolDictPackage >> loadedClassForClass: aClass ifAbsent: absentBlock [
 
-	"If there is an existing loadedClass for the given (non-meta) class in this package, answer it, otherwise the AbsentToken."
+	"If there is an existing loadedClass for the given (non-meta) class in this package, answer it, otherwise invoke absentBlock.."
 
 	^ loadedClasses at: aClass theNonMetaClass name asString ifAbsent: absentBlock
+]
+
+{ #category : 'queries' }
+RwGsLoadedSymbolDictPackage >> loadedClassOrClassExtensionForClass: aClass ifAbsent: absentBlock [
+
+	"If there is an existing loaded class or loaded class extesnion for the given (non-meta) class in this package, answer it, otherwise invoke absentBlock."
+
+	^ loadedClasses
+		at: aClass theNonMetaClass name asString
+		ifAbsent: [ self loadedClassExtensionForClass: aClass ifAbsent: absentBlock ]
 ]

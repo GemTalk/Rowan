@@ -9,3 +9,18 @@ RwClassExtensionModification >> acceptVisitor: aVisitor [
 
 	^aVisitor visitClassExtensionModification: self
 ]
+
+{ #category : 'patching' }
+RwClassExtensionModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage inProject: aProjectDefinition [
+
+	self isAddition
+		ifTrue: [ 
+			aPatchSet
+				addExtendedClass: self after
+				inPackage: aPackage
+				inProject: aProjectDefinition ].
+	self isDeletion
+		ifTrue: [ self halt: 'class extension should not be deleting anything ... I would think' ].
+	self isModification
+		ifTrue: [ self halt: 'class extension should not be modifying the class ... I would think' ]
+]

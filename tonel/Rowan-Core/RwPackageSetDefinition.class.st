@@ -44,6 +44,12 @@ RwPackageSetDefinition >> deriveLoadedThings [
 ]
 
 { #category : 'accessing' }
+RwPackageSetDefinition >> packageNames [
+
+	^ self definitionNames
+]
+
+{ #category : 'accessing' }
 RwPackageSetDefinition >> packages [
 
 	^ self definitions

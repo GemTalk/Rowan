@@ -142,18 +142,11 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	"Need to decide whether the patches in aClassModification warrant a new class version or 
 	 simple property changes."
 
-	| dictName dict existingClass newFormat aClassDefinition newSuperclass |
+	| dict existingClass newFormat aClassDefinition newSuperclass |
+	packageDefinition := aPackageDefinition.
+	projectDefinition := aProjectDefinition.
 	aClassDefinition := aClassModification after.
-	dictName := aClassDefinition
-		propertyAt: 'gs_SymbolDictionary'
-		ifAbsent: [ 'UserGlobals' ].
-	dict := RwGsImage existingSymbolDictionaryNamed: dictName.
-	dict
-		ifNil: [ 
-			self
-				error:
-					'internal error - symbolDictionary named: ' , dictName printString
-						, ' not found' ].
+	dict := self packageSymbolDictionary.
 	existingClass := dict
 		at: aClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].

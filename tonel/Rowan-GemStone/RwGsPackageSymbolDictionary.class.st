@@ -343,7 +343,7 @@ RwGsPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod for: behavio
 				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
 
 	loadedClassOrExtension := loadedPackage
-		loadedClassForClass: behavior
+		loadedClassOrClassExtensionForClass: behavior
 		ifAbsent: [ 
 			self
 				error:

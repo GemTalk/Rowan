@@ -41,6 +41,12 @@ RwProjectSetDefinition >> deriveLoadedThings [
 ]
 
 { #category : 'accessing' }
+RwProjectSetDefinition >> projectNames [
+
+	^ self definitionNames
+]
+
+{ #category : 'accessing' }
 RwProjectSetDefinition >> projects [
 
 	^ self definitions

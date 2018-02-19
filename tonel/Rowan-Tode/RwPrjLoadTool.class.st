@@ -36,7 +36,7 @@ RwPrjLoadTool >> loadPackageSetDefinition: packageSetToLoad specification: aRwSp
 	| loadedPackageSet diff |
 	self specification: aRwSpecification.
 	loadedPackageSet := Rowan
-		loadedPackageDefinitionsNamed: packageSetToLoad packageNamesInLoadOrder.
+		loadedPackageDefinitionsNamed: packageSetToLoad packageNames.
 	diff := packageSetToLoad compareAgainstBase: loadedPackageSet.
 	diff isEmpty
 		ifTrue: [ 

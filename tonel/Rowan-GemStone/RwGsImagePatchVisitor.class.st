@@ -184,10 +184,22 @@ RwGsImagePatchVisitor >> visitClassesModification: aClassesModification [
 ]
 
 { #category : 'visting' }
-RwGsImagePatchVisitor >> visitClassExtensionsModification: aClassModification [
+RwGsImagePatchVisitor >> visitClassExtensionModification: aClassExtensionModification [
 
-	aClassModification isEmpty
-		ifFalse: [ self halt ]
+	aClassExtensionModification
+		addModificationToPatchSet: patchSet
+		inPackage: currentPackage
+		inProject: currentProject.
+	currentClass := aClassExtensionModification after.
+	aClassExtensionModification instanceMethodsModification acceptVisitor: self.
+	aClassExtensionModification classMethodsModification acceptVisitor: self
+]
+
+{ #category : 'visting' }
+RwGsImagePatchVisitor >> visitClassExtensionsModification: aClassExtensionsModification [
+
+	aClassExtensionsModification elementsModified
+		do: [ :each | each acceptVisitor: self ]
 ]
 
 { #category : 'visting' }
