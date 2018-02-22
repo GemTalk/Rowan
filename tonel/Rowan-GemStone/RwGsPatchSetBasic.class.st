@@ -519,6 +519,16 @@ RwGsPatchSetBasic >> apply [
 		commit
 ]
 
+{ #category : 'public' }
+RwGsPatchSetBasic >> applyForNewClassVersions [
+
+	"ignore deleted methods when applying patches to new class version.
+		all methods effectively deleted from class when the new class version is created, "
+
+	deletedMethods := Set new.
+	self apply
+]
+
 { #category : 'accessing' }
 RwGsPatchSetBasic >> classesWithNewVersions [
 

@@ -214,34 +214,6 @@ RwGsClassVersioningSymbolDictPatch >> installNewClassVerionInSystem [
 	self packageSymbolDictionary addNewClassVersionToAssociation: newClassVersion
 ]
 
-{ #category : 'new version support' }
-RwGsClassVersioningSymbolDictPatch >> newClassVersionPatches: aPackageSetModification patchSet: newClassVersionPatchSet [
-
-	| existingClass loadedClassDefinition newVersionClassModification existingClassName |
-	existingClass := self oldClassVersion.
-	existingClassName := existingClass name asString.
-	loadedClassDefinition := (self packageSymbolDictionary
-		existingForClass: existingClass) asDefinition.
-	newVersionClassModification := self classDefinition
-		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
-	newVersionClassModification isEmpty
-		ifFalse: [ 
-			"only newVersionClassModification with substance need further processing"
-			aPackageSetModification elementsModified
-				do: [ :packageModification | 
-					| classesModified |
-					classesModified := packageModification classesModification elementsModified.
-					(classesModified at: existingClassName ifAbsent: [  ])
-						ifNil: [ 
-							self
-								error:
-									'internal error - missing class modification for '
-										, existingClassName printString ]
-						ifNotNil: [ :existingClassModification | 
-							existingClassModification
-								mergeForNewClassVersionWith: newVersionClassModification ] ] ]
-]
-
 { #category : 'accessing' }
 RwGsClassVersioningSymbolDictPatch >> oldClassDefinition [
 
@@ -254,4 +226,35 @@ RwGsClassVersioningSymbolDictPatch >> oldClassVersion [
 	"The old version is what is currently bound to the old class definition's name."
 
 	^ (self resolveName: self oldClassDefinition key) value
+]
+
+{ #category : 'new version support' }
+RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectSetModification [
+
+	| existingClass loadedClassDefinition newVersionClassModification existingClassName |
+	existingClass := self oldClassVersion.
+	existingClassName := existingClass name asString.
+	loadedClassDefinition := (self packageSymbolDictionary
+		existingForClass: existingClass) asDefinition.
+	newVersionClassModification := self classDefinition
+		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
+	newVersionClassModification isEmpty
+		ifFalse: [ 
+			"only newVersionClassModification with substance need further processing"
+			aProjectSetModification elementsModified
+				do: [ :projectModification | 
+					projectModification packagesModification elementsModified
+						do: [ :packageModification | 
+							| classesModified |
+							classesModified := packageModification classesModification
+								elementsModified.
+							(classesModified at: existingClassName ifAbsent: [  ])
+								ifNil: [ 
+									self
+										error:
+											'internal error - missing class modification for '
+												, existingClassName printString ]
+								ifNotNil: [ :existingClassModification | 
+									existingClassModification
+										mergeForNewClassVersionWith: newVersionClassModification ] ] ] ]
 ]

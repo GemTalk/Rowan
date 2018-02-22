@@ -155,3 +155,29 @@ RwDefinition >> propertyAt: aKey put: aValue [
 
 	^properties at: aKey put: aValue
 ]
+
+{ #category : 'private' }
+RwDefinition >> removeDefinition: aDefinition from: aDictionary [
+
+	| key |
+	key := aDefinition key.
+	aDictionary
+		removeKey: key
+		ifAbsent: [ self error: 'no definition for ' , key printString , ' found' ]
+]
+
+{ #category : 'private' }
+RwDefinition >> removeKey: key from: aDictionary [
+
+	aDictionary
+		removeKey: key
+		ifAbsent: [ self error: 'no definition for ' , key printString , ' found' ]
+]
+
+{ #category : 'private' }
+RwDefinition >> updateDefinition: aDefinition in: aDictionary [
+
+	| key |
+	key := aDefinition key.
+	aDictionary at: key put: aDefinition
+]

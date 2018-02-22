@@ -115,3 +115,21 @@ RwPackageDefinition >> key [
 
 	^self propertyAt: 'name' ifAbsent: [nil]
 ]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> removeClassDefinition: aClassDefinition [
+
+	self removeDefinition: aClassDefinition from: classDefinitions
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> removeClassNamed: className [
+
+	self removeKey: className from: classDefinitions
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> updateClassDefinition: aClassDefinition [
+
+	self updateDefinition: aClassDefinition in: classDefinitions
+]

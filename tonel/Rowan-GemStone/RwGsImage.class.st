@@ -119,11 +119,11 @@ RwGsImage class >> applyModification: aProjectSetModification [
 			patchSet apply.
 			^ self ].
 	patchSet classesWithNewVersions
-		do: [ :each | each newClassVersionPatches: aProjectSetModification patchSet: nil ].
+		do: [ :each | each updatePatchesForNewClassVersion: aProjectSetModification ].
 	visitor := RwGsImagePatchVisitor new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
-	patchSet apply
+	patchSet applyForNewClassVersions
 ]
 
 { #category : 'testing' }

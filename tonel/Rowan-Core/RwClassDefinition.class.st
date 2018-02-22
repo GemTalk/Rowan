@@ -50,6 +50,29 @@ RwClassDefinition >> classType [
 ]
 
 { #category : 'accessing' }
+RwClassDefinition >> classVarNames [
+  ^ properties at: 'classvars'
+]
+
+{ #category : 'accessing' }
+RwClassDefinition >> classVarNames: anArrayOfClassVarNames [
+
+	^ properties at: 'classvars' put: anArrayOfClassVarNames
+]
+
+{ #category : 'accessing' }
+RwClassDefinition >> instVarNames [
+
+	^ properties at: 'instvars'
+]
+
+{ #category : 'accessing' }
+RwClassDefinition >> instVarNames: arrayOfInstanceVariableNames [
+
+	^ properties at: 'instvars' put: arrayOfInstanceVariableNames
+]
+
+{ #category : 'accessing' }
 RwClassDefinition >> superclassName [
 
 	^self propertyAt: 'superclass' ifAbsent: [self propertyAt: 'super']

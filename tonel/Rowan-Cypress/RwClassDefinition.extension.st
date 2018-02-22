@@ -12,11 +12,6 @@ RwClassDefinition >> classInstVarNames [
 ]
 
 { #category : '*rowan-cypress' }
-RwClassDefinition >> classVarNames [
-  ^ properties at: 'classvars'
-]
-
-{ #category : '*rowan-cypress' }
 RwClassDefinition >> comment [
   ^ properties at: 'comment' ifAbsent: ['']
 ]
@@ -53,11 +48,6 @@ RwClassDefinition >> fromCypressClassStructure: aCypressClassStructure [
       self
         addClassMethodDefinition:
           (RwMethodDefinition fromCypressMethod: cypMethodDef) ]
-]
-
-{ #category : '*rowan-cypress' }
-RwClassDefinition >> instVarNames [
-  ^ properties at: 'instvars'
 ]
 
 { #category : '*rowan-cypress' }

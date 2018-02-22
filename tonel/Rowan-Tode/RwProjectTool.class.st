@@ -34,6 +34,12 @@ RwProjectTool class >> diff [
 ]
 
 { #category : 'commands' }
+RwProjectTool class >> edit [
+
+	^ RwPrjEditTool new
+]
+
+{ #category : 'commands' }
 RwProjectTool class >> install [
 	^ RwPrjInstallTool new
 ]

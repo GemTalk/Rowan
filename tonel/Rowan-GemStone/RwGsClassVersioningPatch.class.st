@@ -208,34 +208,6 @@ RwGsClassVersioningPatch >> installNewClassVerionInSystem [
 		updateLoadedClass
 ]
 
-{ #category : 'new version support' }
-RwGsClassVersioningPatch >> newClassVersionPatches: aPackageSetModification patchSet: newClassVersionPatchSet [
-
-	| existingClass loadedClassDefinition newVersionClassModification existingClassName |
-	existingClass := self oldClassVersion.
-	existingClassName := existingClass name asString.
-	loadedClassDefinition := (RwGsLoadedClass existingForClass: existingClass)
-		asDefinition.
-	newVersionClassModification := self classDefinition
-		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
-	newVersionClassModification isEmpty
-		ifFalse: [ 
-			"only newVersionClassModification with substance need further processing"
-			aPackageSetModification elementsModified
-				do: [ :packageModification | 
-					| classesModified |
-					classesModified := packageModification classesModification elementsModified.
-					(classesModified at: existingClassName ifAbsent: [  ])
-						ifNil: [ 
-							self
-								error:
-									'internal error - missing class modification for '
-										, existingClassName printString ]
-						ifNotNil: [ :existingClassModification | 
-							existingClassModification
-								mergeForNewClassVersionWith: newVersionClassModification ] ] ]
-]
-
 { #category : 'accessing' }
 RwGsClassVersioningPatch >> oldClassDefinition [
 
@@ -266,6 +238,34 @@ RwGsClassVersioningPatch >> updateLoadedClass [
 		ifFalse: [ 
 			self error: 'internal error - new version of class not properly installed'
 			 ]
+]
+
+{ #category : 'new version support' }
+RwGsClassVersioningPatch >> updatePatchesForNewClassVersion: aPackageSetModification [
+
+	| existingClass loadedClassDefinition newVersionClassModification existingClassName |
+	existingClass := self oldClassVersion.
+	existingClassName := existingClass name asString.
+	loadedClassDefinition := (RwGsLoadedClass existingForClass: existingClass)
+		asDefinition.
+	newVersionClassModification := self classDefinition
+		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
+	newVersionClassModification isEmpty
+		ifFalse: [ 
+			"only newVersionClassModification with substance need further processing"
+			aPackageSetModification elementsModified
+				do: [ :packageModification | 
+					| classesModified |
+					classesModified := packageModification classesModification elementsModified.
+					(classesModified at: existingClassName ifAbsent: [  ])
+						ifNil: [ 
+							self
+								error:
+									'internal error - missing class modification for '
+										, existingClassName printString ]
+						ifNotNil: [ :existingClassModification | 
+							existingClassModification
+								mergeForNewClassVersionWith: newVersionClassModification ] ] ]
 ]
 
 { #category : 'actions' }
