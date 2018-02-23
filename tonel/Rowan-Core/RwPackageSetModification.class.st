@@ -5,7 +5,7 @@ movedMethods are methods that have moved from a class definition to an extension
 "
 Class {
 	#name : 'RwPackageSetModification',
-	#superclass : 'RwElementsModification',
+	#superclass : 'RwEntitySetModification',
 	#instVars : [
 		'movedClasses',
 		'movedMethods'
@@ -121,6 +121,15 @@ RwPackageSetModification >> addMethodsRemovedByPackageModification: packageModif
 				classExtensionsModification
 		inPackage: packageModification before
 		toDictionary: dictionary
+]
+
+{ #category : 'enumerating' }
+RwPackageSetModification >> classesModifiedDo: aBlock [
+
+	"enumerate the classesModification dictionary of the receiver (package set modification or project set modification"
+
+	elementsModified
+		do: [ :packageModification | aBlock value: packageModification classesModification ]
 ]
 
 { #category : 'private - moves' }

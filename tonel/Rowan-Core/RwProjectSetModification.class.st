@@ -5,7 +5,7 @@ movedMethods are methods that have moved from a class definition to an extension
 "
 Class {
 	#name : 'RwProjectSetModification',
-	#superclass : 'RwElementsModification',
+	#superclass : 'RwEntitySetModification',
 	#category : 'Rowan-Core'
 }
 
@@ -13,4 +13,15 @@ Class {
 RwProjectSetModification >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitProjecteSetModification: self
+]
+
+{ #category : 'enumerating' }
+RwProjectSetModification >> classesModifiedDo: aBlock [
+
+	"enumerate the classesModification dictionary of the receiver (package set modification or project set modification"
+
+	elementsModified
+		do: [ :projectModification | 
+			projectModification packagesModification elementsModified
+				do: [ :packageModification | aBlock value: packageModification classesModification ] ]
 ]

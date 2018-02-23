@@ -229,7 +229,7 @@ RwGsClassVersioningSymbolDictPatch >> oldClassVersion [
 ]
 
 { #category : 'new version support' }
-RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectSetModification [
+RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectOrPackageSetModification [
 
 	| existingClass loadedClassDefinition newVersionClassModification existingClassName |
 	existingClass := self oldClassVersion.
@@ -241,20 +241,17 @@ RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectS
 	newVersionClassModification isEmpty
 		ifFalse: [ 
 			"only newVersionClassModification with substance need further processing"
-			aProjectSetModification elementsModified
-				do: [ :projectModification | 
-					projectModification packagesModification elementsModified
-						do: [ :packageModification | 
-							| classesModified |
-							classesModified := packageModification classesModification
-								elementsModified.
-							(classesModified at: existingClassName ifAbsent: [  ])
-								ifNil: [ 
-									self
-										error:
-											'internal error - missing class modification for '
-												, existingClassName printString ]
-								ifNotNil: [ :existingClassModification | 
-									existingClassModification
-										mergeForNewClassVersionWith: newVersionClassModification ] ] ] ]
+			aProjectOrPackageSetModification
+				classesModifiedDo: [ :classesModification | 
+					| classesModified |
+					classesModified := classesModification elementsModified.
+					(classesModified at: existingClassName ifAbsent: [  ])
+						ifNil: [ 
+							self
+								error:
+									'internal error - missing class modification for '
+										, existingClassName printString ]
+						ifNotNil: [ :existingClassModification | 
+							existingClassModification
+								mergeForNewClassVersionWith: newVersionClassModification ] ] ]
 ]
