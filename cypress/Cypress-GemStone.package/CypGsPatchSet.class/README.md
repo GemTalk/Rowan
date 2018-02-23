@@ -1,1 +1,0 @@
-A set of patches (changes) to be applied atomically (or as close to atomically as possible) to a GemStone repository.

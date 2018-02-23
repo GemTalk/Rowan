@@ -1,1 +1,0 @@
-Holds some number of PackageReferences or LoadedPackages to be operated on together.

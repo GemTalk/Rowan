@@ -1,1 +1,0 @@
-Test the former extensions of Cypress, which have been moved into Cypress for now.

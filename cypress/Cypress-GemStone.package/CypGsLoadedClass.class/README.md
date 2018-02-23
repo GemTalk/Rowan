@@ -1,1 +1,0 @@
-The class variable ClassRegistry holds a dictionary that maps ClassHistory -> LoadedClass for all non-meta classes that are known to be defined in a package.

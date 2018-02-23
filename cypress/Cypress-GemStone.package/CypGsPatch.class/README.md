@@ -1,1 +1,0 @@
-Abstract. A patch is a single operation to be performed on a GemStone image (repository).

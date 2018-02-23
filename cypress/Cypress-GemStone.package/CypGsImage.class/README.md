@@ -1,1 +1,0 @@
-Keeps track of what LoadedPackages are in the GemStone repository, and is the gateway for operations to query or change the image.
