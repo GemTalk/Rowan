@@ -6,7 +6,7 @@ rm -rf *.log *.out
 
 $GS_HOME/sys/local/bin/newBuild_snapshot
 
-todeIt $GEMSTONE_NAME project load Tonel
+todeIt $GEMSTONE_NAME project load --loads="\`#('monticello' 'monticello tests' 'cypress' 'cypress tests')\`" Tonel
 
 startTopaz $GEMSTONE_NAME -l << EOF
   set u SystemUser p swordfish
@@ -306,15 +306,15 @@ readPackageStructureForPackageNamed: packageName
 	^ CypressSnapshot definitions: reader definitions
 %
 
+
   run
   | packageManager repo |
-  packageManager := CypressEnvironmentPackageManager new.
+  packageManager := CypressPackageManager3 new.
   repo := CypressAbstractRepository
     onUrl: (CypressUrl absoluteFromText: 'tonel:$GS_HOME/shared/repos/Rowan/src/tonel/'  )
     alias: ''.
   packageManager
-    defaultSymbolDictionaryName: #'UserGlobals';
-    defaultSymbolList: System myUserProfile symbolList.
+    defaultSymbolDictionaryName: #'UserGlobals'.
   #('Cypress-Core' 'Rowan-Url' 'Rowan-Core' 'Rowan-GemStone' 'Rowan-Cypress' 'Rowan-Tests' 'Rowan-Tode')
     do: [ :packageName | 
       packageManager

@@ -14,7 +14,11 @@ cd GsDevKit_home
 . bin/defHOME_PATH.env    # define GS_HOME env var and put $GS_HOME into PATH
 installServerClient
 
+# create tode client
 createClient tode
+
+# create a Rowan stone
+createStone -f test_rowan_340 3.4.0
 
 # clone Rowan
 
@@ -25,8 +29,8 @@ git clone git@github.com:dalehenrich/Rowan.git
 
 $GS_HOME/shared/repos/Rowan/src/platforms/gemstone/gsdevkit/bin/setupRowanGsDevKit
 
-# create a Rowan stone
-$GS_HOME/shared/repos/Rowan/src/platforms/gemstone/gsdevkit/bin/createRowanStone_340 test_rowan_340
+# install Rowan into stone
+$GS_HOME/shared/repos/Rowan/src/platforms/gemstone/gsdevkit/bin/installRowan test_rowan_340
 
 ```
 

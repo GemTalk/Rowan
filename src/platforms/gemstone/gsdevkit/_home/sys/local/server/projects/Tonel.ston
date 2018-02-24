@@ -1,6 +1,6 @@
 TDObjectGatewayLeafNode{#name:'Tonel',#contents:'^ TDProjectSpecEntryDefinition new
     baseline: \'Tonel\'
-      repository: \'github://GsDevKit/tonel:gs_master/src\'
+      repository: \'github://GsDevKit/tonel:3.5.0/src\'
       loads: #(\'monticello\' \'monticello tests\' \'cypress\' \'cypress tests\');
     status: #(#\'active\');
     locked: false;
