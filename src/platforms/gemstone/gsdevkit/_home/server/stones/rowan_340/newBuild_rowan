@@ -310,7 +310,7 @@ readPackageStructureForPackageNamed: packageName
   | packageManager repo |
   packageManager := CypressEnvironmentPackageManager new.
   repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: 'tonel:/home/dhenrich/rogue/_homes/rogue/_issue_200/shared/repos/rowan/CypressReferenceImplementation/tonel/'  )
+    onUrl: (CypressUrl absoluteFromText: 'tonel:$GS_HOME/shared/repos/Rowan/src/tonel/'  )
     alias: ''.
   packageManager
     defaultSymbolDictionaryName: #'UserGlobals';

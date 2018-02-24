@@ -17,10 +17,12 @@ source $GS_HOME/bin/private/shFunctions
 path=`realpath $0`
 dir="$(dirname "$path")"
 
-$GS_HOME/bin/createStone -f $stone_name 3.4.0
+# $GS_HOME/bin/createStone -f $stone_name 3.4.0
 
-cp "${dir}/../_home/server/stones/rowan_340/*" "$GS_HOME/server/stones/$stone_name"
+cp ${dir}/../_home/server/stones/rowan_340/* $GS_HOME/server/stones/$stone_name
 
 $GS_HOME/bin/todeIt $stone_name project clone Tonel
 
+export GEMSTONE_NAME=$stone_name
 $GS_HOME/server/stones/$stone_name/newBuild_rowan
+
