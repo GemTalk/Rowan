@@ -19,6 +19,6 @@ source $GS_HOME/bin/private/shFunctions
 path=`realpath $0`
 dir="$(dirname "$path")"
 
-cp "${dir}/../_home/sys/local/bin/*" "$GS_HOME/sys/local/bin"
+cp ${dir}/../_home/sys/local/bin/* $GS_HOME/sys/local/bin
 
-cp "${dir}/../_home/sys/local/server/projects/Tonel.ston" "$GS_HOME/sys/local/server/projects"
+cp ${dir}/../_home/sys/local/server/projects/Tonel.ston $GS_HOME/sys/local/server/projects

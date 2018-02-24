@@ -2,10 +2,39 @@
 
 Rowan is a new project/package manager for Smalltalk that supports FileTree and Tonel repositories.
  
+##GemStone Installation
+
+### GsDevKit_home Rowan installation
+
+```
+# GsDevKit_home installation
+
+git clone https://github.com/GsDevKit/GsDevKit_home.git
+cd GsDevKit_home
+. bin/defHOME_PATH.env    # define GS_HOME env var and put $GS_HOME into PATH
+installServerClient
+
+createClient tode
+
+# clone Rowan
+
+cd shared/repos
+git clone git@github.com:dalehenrich/Rowan.git
+
+# setup GsDevKit_home for Rowan stones
+
+$GS_HOME/shared/repos/Rowan/src/platforms/gemstone/gsdevkit/bin/setupRowanGsDevKit
+
+# create a Rowan stone
+$GS_HOME/shared/repos/Rowan/src/platforms/gemstone/gsdevkit/bin/createRowanStone_340 test_rowan_340
+
+```
+
 ### License and Copyright
 
-The original work is copyright by GemTalk Systems, but is licensed under the MIT license.
-In other words, you are welcome to use it in almost any way you wish. See license.txt for details.
+Rowan is licensed under the MIT license.
+In other words, you are welcome to use it in almost any way you wish. 
+See LICENSE for details.
 
 ### Acknowledgements
 
