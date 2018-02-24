@@ -1,0 +1,26 @@
+#! /usr/bin/env bash
+#
+#=========================================================================
+# Copyright (c) 2018 GemTalk Systems, LLC <dhenrich@gemtalksystems.com>.
+#
+#   MIT license: https://github.com/dalehenrich/Rowan/blob/master/LICENSE
+#=========================================================================
+#
+# Run this script to create (or re-create) a stone. Specify the name of the
+#  stone on the command line
+#
+
+stone_name="$1"
+
+source $GS_HOME/bin/private/shFunctions
+
+path=`realpath $0`
+dir="$(dirname "$path")"
+
+$GS_HOME/bin/createStone -f $stone_name 3.4.0
+
+cp "${dir}/../_home/server/stones/rowan_340/*" "$GS_HOME/server/stones/$stone_name"
+
+$GS_HOME/bin/todeIt $stone_name project clone Tonel
+
+$GS_HOME/server/stones/$stone_name/newBuild_rowan

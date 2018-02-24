@@ -1,1 +1,1 @@
-# GemStone topaz bootstrap filein script for Rowan
+# Rowan bootstrap filein scripts for GemStone topaz

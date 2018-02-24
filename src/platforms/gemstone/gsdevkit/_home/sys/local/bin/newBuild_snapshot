@@ -1,0 +1,13 @@
+# expect $vers to be set by caller
+# expect caller to have run defStone.env as well
+
+set -e 
+
+rm -f backups/*.dbf 
+
+directoryPath="$GS_HOME/shared/pharo"
+${GS_HOME}/bin/private/installGci -f -d $directoryPath -t pharo $vers
+directoryPath="$GS_HOME/dev/clients/tode"
+${GS_HOME}/bin/private/installGci -f -d $directoryPath -t pharo $vers
+
+newExtent -t -s $GS_HOME/server/stones/$GEMSTONE_NAME/snapshots/extent0.tode.dbf $GEMSTONE_NAME
