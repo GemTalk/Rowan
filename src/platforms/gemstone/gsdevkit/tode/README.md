@@ -1,3 +1,1 @@
-# tODE development support scripts
-
-[tODE](https://github.com/dalehenrich/tode) scripts
+# [tODE](https://github.com/dalehenrich/tode) development support scripts

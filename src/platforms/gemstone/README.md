@@ -1,1 +1,1 @@
-# GemStone specific support 
+# Rowan support for GemStone

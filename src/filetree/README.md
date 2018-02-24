@@ -1,3 +1,1 @@
-# Rowan filetree source
-
-This directory contains the Rowan source in [filetree format](https://github.com/dalehenrich/filetree)
+# Rowan [filetree](https://github.com/dalehenrich/filetree) source
