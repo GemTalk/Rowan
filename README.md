@@ -23,7 +23,8 @@ git pull origin dev
 createClient tode
 
 # create a Rowan stone
-createStone -f test_rowan_340 3.4.0
+export rowan_stone_name=test_rowan_340
+createStone -f $rowan_stone_name 3.4.0
 
 # clone Rowan
 
@@ -35,8 +36,10 @@ git clone git@github.com:dalehenrich/Rowan.git
 $GS_HOME/shared/repos/Rowan/src/platforms/gemstone/gsdevkit/bin/setupRowanGsDevKit
 
 # install Rowan into stone
-$GS_HOME/shared/repos/Rowan/src/platforms/gemstone/gsdevkit/bin/installRowan test_rowan_340
+$GS_HOME/shared/repos/Rowan/src/platforms/gemstone/gsdevkit/bin/installRowan $rowan_stone_name
 
+# open tODE to do development
+startClient tode
 ```
 
 ## Acknowledgements
