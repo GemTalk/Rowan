@@ -306,6 +306,38 @@ readPackageStructureForPackageNamed: packageName
 	^ CypressSnapshot definitions: reader definitions
 %
 
+category: 'instance creation -- patch'
+classmethod: CypressClassDefinition
+name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment subclassType: subclassType options: optionsArray
+  ^ self
+    name: aClassName
+    superclassName: aSuperclassName
+    category: aCategory
+    instVarNames: someInstanceVariableNames
+    classInstVarNames: someClassInstanceVariableNames
+    classVarNames: someClassVariableNames
+    poolDictionaryNames: somePoolDictionaryNames
+    comment: aComment
+    subclassType: subclassType
+%
+
+category: 'utilities patch'
+classmethod: CypressGemStoneDirectoryUtilities
+readStreamFor: filePath do: aOneArgBlock
+
+	| file stream blockResult |
+	GsFile serverErrorString.
+	file := GsFile openReadOnServer: filePath.
+	GsFile serverErrorString ifNotNil: [ :errorMessage | self error: errorMessage ].
+	[ 
+	stream := ReadStreamPortable
+		on: (String withAll: file contents asByteArray decodeFromUTF8).
+	blockResult := aOneArgBlock value: stream ]
+		ensure: [ file close ].
+	^ blockResult
+%
+
+  commit
 
   run
   | packageManager repo |

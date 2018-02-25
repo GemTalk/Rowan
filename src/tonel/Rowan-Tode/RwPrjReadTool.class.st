@@ -26,9 +26,8 @@ EXAMPLES
 { #category : 'smalltalk api' }
 RwPrjReadTool >> readProjectSetForSpecification: aRwSpecification [
 
-	| packageManager repo repositoryUrl projectDefinition |
+	| repo repositoryUrl projectDefinition |
 	self specification: aRwSpecification.
-	packageManager := CypressEnvironmentPackageManager new.
 	repositoryUrl := specification repositoryUrl
 		ifNil: [ 
 			('cypress:' , specification repoSpec repositoryRootPath , '/'

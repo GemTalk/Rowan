@@ -1,0 +1,40 @@
+RwPackageProjectSpecification{
+	#specName : 'Rowan',
+	#projectUrl : 'https://github.com/dalehenrich/CypressReferenceImplementation',
+	#platformSpec : {
+		'gemstone' : RwGemStoneSpecification {
+			#defaultSymbolDictName : 'UserGlobals',
+			#projectOwnerId : 'DataCurator'
+		}
+	},
+	#specsPath : 'specs',
+	#repoSpec : RwGitRepositorySpecification {
+		#repositoryRootPath : '$GS_HOME/shared/repos/Rowan/',
+		#committish : 'master',
+		#committishType : 'branch'
+	},
+	#repoPath : 'tonel',
+	#comment : '',
+	#imageSpec : RwPackageImageSpecification {
+		#repositoryUrl : 'tonel:$GS_HOME/shared/repos/Rowan/tonel/'
+	},
+	#packageInfoSource : #Category,
+	#packageNamesInLoadOrder : [
+		'Cypress-Core',
+		'Rowan-Url',
+		'Rowan-Core',
+		'Rowan-GemStone',
+		'Rowan-Cypress',
+		'Rowan-Tests',
+		'Rowan-Tode'
+	],
+	#packageNamesToLoad : [
+		'Cypress-Core',
+		'Rowan-Url',
+		'Rowan-Core',
+		'Rowan-GemStone',
+		'Rowan-Cypress',
+		'Rowan-Tests'
+	]
+}	
+
