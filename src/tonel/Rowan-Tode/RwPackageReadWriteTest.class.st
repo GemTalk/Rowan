@@ -83,7 +83,7 @@ RwPackageReadWriteTest >> setUpSpecificationForReadTest: myPackageSet rowanSpec:
     setUpSpecificationForTest: myPackageSet
     rowanSpec: rowanSpec
     repositoryFormat: repositoryFormat
-    relativeRootPath: '/testRepositories/'
+    relativeRootPath: '/test/testRepositories/'
     cleanRoot: false
 ]
 
@@ -112,7 +112,7 @@ RwPackageReadWriteTest >> setUpSpecificationForWriteTest: myPackageSet rowanSpec
     setUpSpecificationForTest: myPackageSet
     rowanSpec: rowanSpec
     repositoryFormat: repositoryFormat
-    relativeRootPath: '/testRepositories/empty/'
+    relativeRootPath: '/test/testRepositories/empty/'
     cleanRoot: true
 ]
 
