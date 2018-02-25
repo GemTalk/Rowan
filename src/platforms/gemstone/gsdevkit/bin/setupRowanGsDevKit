@@ -25,6 +25,3 @@ cp ${dir}/../_home/sys/local/server/projects/Tonel.ston $GS_HOME/sys/local/serve
 
 cp -r ${dir}/../_home/sys/local/server/home/* $GS_HOME/sys/local/server/home
 
-cd $GS_HOME/shared/repos/tode
-git checkout dev
-git pull origin dev

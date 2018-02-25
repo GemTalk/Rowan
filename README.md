@@ -14,6 +14,11 @@ cd GsDevKit_home
 . bin/defHOME_PATH.env    # define GS_HOME env var and put $GS_HOME into PATH
 installServerClient
 
+# use dev branch of tode
+cd $GS_HOME/shared/repos/tode
+git checkout dev
+git pull origin dev
+
 # create tode client
 createClient tode
 
