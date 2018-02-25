@@ -9,7 +9,7 @@ RwPackageProjectSpecification{
 	},
 	#specsPath : 'specs',
 	#repoSpec : RwGitRepositorySpecification {
-		#repositoryRootPath : '$GS_HOME/shared/repos/Rowan/',
+		#repositoryRootPath : '$GS_HOME/shared/repos/Rowan',
 		#committish : 'master',
 		#committishType : 'branch'
 	},
