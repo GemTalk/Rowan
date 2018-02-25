@@ -1,0 +1,82 @@
+TDStringLeafNode{#name:'analysis',#contents:'dkh 12/30/2017 10:50
+--------------------
+Need to make sure that references to classes/globals from compiled methods are properly referencing the association in the original symbol dictionary and not the association in the temp symbol dictionary --- test needed
+
+dkh 12/30/2017 13:12
+--------------------
+method protocol rename on class and instance side
+
+dkh 1/1/2018 10:19
+------------------
+last extension method in package removed ...
+
+dkh 1/1/2018 10:31
+------------------
+explicit delete package with classes and extension methods
+
+dkh 1/1/2018 14:05
+------------------
+Should validate that method properties match method and package and class properties match package
+
+dkh 1/1/2018 15:00
+------------------
+For upgrade, need a mode where we force reload for all methods
+
+dkh 1/1/2018 15:00
+------------------
+1. method environment aware 
+2. alternate symbol dictionary aware 
+3. multi-user aware 
+
+dkh 1/2/2018 09:33
+------------------
+- For preserving non-standard properties from other platforms ... merge the properties from disk and image in preparation for a save ...
+- format file in all filetree/cypress repositories
+- allow Rowan to load Monticello packages/repos
+- RwLibrarian ... code librarian / Gofer api ... without Metacello for the moment ...
+
+dkh 1/2/2018 12:27
+------------------
+Introduce a load spec underneath the RwLibrarian ... merge specs concept ... load properties (user, symbolDictionaryName, env; sessionMethods, recompile), migration properties (migrate or not) ... store in ston on disk (path to .ston), in image (named specs), created dynamically by RwLibrarian (saveSpec, loadSpec, spec) ... or spec repository ...
+
+... no longer librarian but migrarion specs and session methods and recompile still need to be added
+
+dkh 1/9/2018 06:31
+------------------
+right now new version of class is added to patch set createdClasses, but that does not seem right ... it should be added to versionClasses ... I think that there will be subtle differences in how each of those changes need to be handled ... so it\'s best to treat them separately at the moment
+
+commit 939f317  is the first checkpoint commit ... read that commit comment for information about the suspicious changes I made ... I\'m about to do some things that are even more outrageous:)
+
+[1] https://github.com/dalehenrich/CypressReferenceImplementation/commit/939f3171111fd6db17451d637dba8e5563bd4012
+
+dkh 1/9/2018 06:46
+-------------------
+Overhaul the patchset/patch relationship ... review RwGsClassCreationPatch and make changes to allow additions and new versions to be tracked separately in the patch set ... review the patch set operations to see which ones are common ... I think it is better to track the versioned classes separately from the additions even if most of the operations are common at a minimum it will allow us to use more meaningful method names ... someplace we are going to have to treat changes new version, addition, class var(?) as a common set of operations because we have to do some things in hierarchy order ... and at this point those places need to be identified.
+
+
+dkh 1/10/2018 13:51
+--------------------
+
+Looks like Schema32TestCase>>schemaModification (ernie test) is a good test to use for Rowan as it tests a variety of type/option/property transitions ... when ready to graduate to options and failing installs
+
+dkh 1/10/2018 17:22
+-------------------
+Now that we\'ve got a name - derive - finish the work in progress which is to use the terms defined in the RwAbstractTool class command and apply those words to the 3 tool sets. Then carry on with coming up with more tests and flesh things out more ...
+
+dkh 1/11/2018 14:39
+-------------------
+if it\'s \"definitions everywhere\" then Rowan\'s api should consistenly return definitions
+
+dkh 1/12/2018 16:55
+-------------------
+test for empty comment String ...
+
+dkh 2/6/2018 20:20
+------------------
+Okay RwPackageSet may not be allowed or it may be allowed to be used as an alternative to project -based loading ... via the project spec, the RwProject nows the list of packages in the project and the list of loaded packages ... and of course RwProjectSet is the next logical progression ... so the RwProjectSet will be the first project loaded ... when metacello is used, we will only use Metacello to generate the packageSet ... linear load will have to be oksy ... but Metacello won\'t have to fetch the packages ....the loader will do that according to the project specification
+
+dkh 2/19/2018 08:40
+-------------------
+gs_SymbolDictionary is not going to be a property of a class definition anymore ... in Rowan the project definition controls the symbol dictionary that the class is installed in ...
+
+',#creationTime:DateAndTime['2017-12-30T10:49:57.82205295562744-08:00'],#modificationTime:DateAndTime['2018-02-19T08:41:14.99739789962769-08:00']}

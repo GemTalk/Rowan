@@ -1,0 +1,60 @@
+TDScriptLeafNode{#name:'rowan',#contents:'[ :topez :objIn :tokens :command :commandNode | 
+\t| opts args |
+\t\"for help: ./rowan -h\"
+\tcommand
+\t\tgetOptsMixedLongShort:
+\t\t\t{#(\'help\' $h #\'none\').
+\t\t\t#(\'clear\' nil #\'none\').
+\t\t\t#(\'generate\' nil #\'none\').
+\t\t\t#(\'reinit\' nil #\'none\')}
+\t\toptionsAndArguments: [ :options :operands | 
+\t\t\topts := options.
+\t\t\targs := operands ].
+\topts
+\t\tat: \'help\'
+\t\tifAbsent: [ 
+\t\t\t| res packageNames dir spec loadSpecUrl projectDir testsDir |
+\t\t\tpackageNames := #(\'Cypress-Core\' \'Rowan-Core\' \'Rowan-GemStone\' \'Rowan-Tests\' \'Rowan-Tode\').
+\t\t\tprojectDir := \'/export/foos1/users/dhenrich/dev/_home/shared/repos/rowan/CypressReferenceImplementation/\'.
+\t\t\tdir := projectDir , \'tonel/\'.
+\t\t\tloadSpecUrl := \'https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston\'.
+\t\t\topts
+\t\t\t\tat: \'reinit\'
+\t\t\t\tifPresent: [ :ignored | 
+\t\t\t\t\tRwGsLoadedClass initialize.
+\t\t\t\t\tRwGsLoadedMethod initialize.
+\t\t\t\t\tRwGsLoadedPackage initialize ].
+\t\t\topts
+\t\t\t\tat: \'clear\'
+\t\t\t\tifPresent: [ :ignored | res := ClassOrganizer clearCachedOrganizer ].
+\t\t\topts
+\t\t\t\tat: \'generate\'
+\t\t\t\tifPresent: [ :ignored | 
+\t\t\t\t\t| loadSpec projectTool packageSet |
+\t\t\t\t\tloadSpec := (Rowan projectNamed: \'Rowan\') copy.
+\t\t\t\t\ttestsDir := loadSpec repositoryRootPath , \'/\' , \'testRepositories/\'.
+\t\t\t\t\tprojectTool := Rowan projectTools.
+\t\t\t\t\tpackageSet := RwDiskRepositoryGenerator new generatePackageSet.
+\t\t\t\t\t#(\'filetree\' \'cypress\' \'tonel\')
+\t\t\t\t\t\tdo: [ :format | 
+\t\t\t\t\t\t\tloadSpec repositoryUrl: format , \':\' , testsDir , format , \'/\'.
+\t\t\t\t\t\t\tprojectTool write writePackageSet: packageSet specification: loadSpec ] ].
+\t\t\tres ]
+\t\tifPresent: [ :ignored | 
+\t\t\tTDManPage
+\t\t\t\tviewManPage:
+\t\t\t\t\t\'NAME
+  rowan - rowan script utility template
+SYNOPSIS
+  rowan [-h|--help]
+DESCRIPTION
+EXAMPLES
+  ./rowan --help
+  ./rowan -h
+
+  ./rowan --save
+  ./rowan --reinit
+  ./rowan --diff
+  ./rowan --spec
+\'
+\t\t\t\ttopez: topez ] ]',#creationTime:DateAndTime['2017-12-28T12:46:08.966979026794434-08:00'],#modificationTime:DateAndTime['2018-01-30T11:27:46.32978296279907-08:00']}

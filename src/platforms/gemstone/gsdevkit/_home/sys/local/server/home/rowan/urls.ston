@@ -1,0 +1,50 @@
+TDScriptLeafNode{#name:'urls',#contents:'[ :topez :objIn :tokens :command :commandNode | 
+  | opts args |
+  \"for help: ./urls -h\"
+  command
+    getOptsMixedLongShort: {#(\'help\' $h #\'none\')}
+    optionsAndArguments: [ :options :operands | 
+      opts := options.
+      args := operands ].
+  opts
+    at: \'help\'
+    ifAbsent: [ 
+      {(RwUrl fromString: \'file:$GS_HOME/shared/repos/rowan/sample/\').
+      (RwUrl fromString: \'cypress:$GS_HOME/shared/repos/rowan/sample/\').
+      (RwUrl fromString: \'filetree://$GS_HOME/shared/repos/rowan/sample/\').
+      (RwUrl fromString: \'tonel://$GS_HOME/shared/repos/rowan/sample/\').
+      (RwUrl
+        fromString:
+          \'https://raw.githubusercontent.com/dalehenrich/sample/master/specs/Sample.ston\').
+      (RwUrl
+        fromString:
+          \'smalltalk://dkh:pass@gitlab.ferlicot.fr:3456/Projet/Bazard:dev/src\').
+      (RwUrl
+        fromString:
+          \'smalltalk://git@git.gemtalksystems.com/btree340:dev/repository\').
+      (RwUrl
+        fromString:
+          \'smalltalk://git@github.com/GsDevKit/GsDevKit:350/repository\').
+      (RwUrl
+        fromString: \'smalltalk://github.com/GsDevKit/GsDevKit:350/repository\').
+      (RwUrl fromString: \'github://GsDevKit/GsDevKit:master/repository\').
+      (RwUrl
+        fromString: \'gitfiletree://gitlab.com/GsDevKit/GsDevKit:350/repository\').
+      \'--------\'.
+      \'git@github.com:dalehenrich/CypressReferenceImplementation.git\'.
+      \'git@git.gemtalksystems.com:gitolite-admin\'.
+      \'git@gitlab.ferlicot.fr:Projet/Bazard.git\'.
+      \'ssh://git@gitlab.ferlicot.fr:3456/Projet/Bazard.git\'} ]
+    ifPresent: [ :ignored | 
+      TDManPage
+        viewManPage:
+          \'NAME
+  urls - urls script utility template
+SYNOPSIS
+  urls [-h|--help]
+DESCRIPTION
+EXAMPLES
+  ./urls --help
+  ./urls -h
+\'
+        topez: topez ] ]',#creationTime:DateAndTime['2018-01-05T18:52:39.08728098869324-08:00'],#modificationTime:DateAndTime['2018-01-06T09:10:03.20182991027832-08:00']}

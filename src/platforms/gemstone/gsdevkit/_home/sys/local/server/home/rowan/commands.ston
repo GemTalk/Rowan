@@ -1,0 +1,20 @@
+TDTopezLeafNode{#name:'commands',#contents:'# repositoryUrl already set
+rowan clone --gitRoot=$GS_HOME/shared/repos/rowan Rowan\t\t\t\t\t\t\t\t\t# clone for Rowan already exists
+rowan clone --gitRoot=$GS_HOME/shared/repos/rowan/CypressReferenceImplementation Rowan\t# clone for another project is already there
+
+# create a sample spec
+rowan spec --name=Sample --project=https://github.com/dalehenrich/sample --repoPath=repository --specsPath=specs \\
+           --type=package --packages=`#(\'Sample-Core\' \'Sample-Tests\')` 
+\t\t\t--gitBranch=master --gitRemote=\'origin\'
+           --export=file:/export/foos1/users/dhenrich/git/sample/specs/
+
+rowan registry; edit
+
+rowan clone --gitRoot=$GS_HOME/shared/repos/rowan/CypressReferenceImplementation Sample\t# clone for another project is already there
+rowan clone --gitRoot=$GS_HOME/shared/repos/rowan Sample\t\t\t\t\t\t\t\t\t\t# clone for Sample should not exist 
+rowan clone --gitRoot=$GS_HOME/shared/repos/test Sample\t\t\t\t\t\t\t\t\t\t# clone for Sample should not exist (nor should junk)
+
+
+rowan clone --gitRoot=$GS_HOME/shared/repos/rowan https://raw.githubusercontent.com/dalehenrich/sample/master/specs/Sample.ston
+rowan load Sample
+',#creationTime:DateAndTime['2018-01-04T13:26:20.58832693099976-08:00'],#modificationTime:DateAndTime['2018-01-05T15:56:09.231930017471313-08:00']}

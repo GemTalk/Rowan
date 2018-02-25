@@ -1,0 +1,56 @@
+TDScriptLeafNode{#name:'example',#contents:'[ :topez :objIn :tokens :command :commandNode | 
+  | opts args |
+  \"for help: ./example -h\"
+  command
+    getOptsMixedLongShort:
+      {#(\'help\' $h #\'none\').
+      #(\'create\' nil #\'none\').
+      #(\'load\' nil #\'none\')}
+    optionsAndArguments: [ :options :operands | 
+      opts := options.
+      args := operands ].
+  opts
+    at: \'help\'
+    ifAbsent: [ 
+      | res |
+      opts
+        at: \'create\'
+        ifPresent: [ :ignored | 
+          | projectSpec |
+          projectSpec := Rowan projectTools create
+            createPackageProject: \'Foo\'
+            format: \'tonel\'
+            root: \'$GS_HOME/shared/repos/rowan\'
+            repoPath: \'src\'
+            useGit: true.
+          Rowan packageTools create
+            createPackagesNamed: #(\'Foo-Core\' \'Foo-Tests\')
+            forSpecification: projectSpec
+            doCommit: true
+            commitMsg: \'initial package list\'.
+          res := projectSpec ].
+      opts
+        at: \'load\'
+        ifPresent: [ :ignored | 
+          | specUrl dirPath |
+          specUrl := \'https://raw.githubusercontent.com/dalehenrich/sample/specs/Sample.ston\'.
+          dirPath := \'$GS_HOME/share/repos/rowan\'.
+          Rowan projectTools clone
+            cloneSpecUrl: specUrl
+            gitRootPath: dirPath
+            useSsh: true.
+          Rowan projectTools load loadSpecUrl: \'Sample\' ].
+      res ]
+    ifPresent: [ :ignored | 
+      TDManPage
+        viewManPage:
+          \'NAME
+  example - example script utility template
+SYNOPSIS
+  example [-h|--help]
+DESCRIPTION
+EXAMPLES
+  ./example --help
+  ./example -h
+\'
+        topez: topez ] ]',#creationTime:DateAndTime['2018-01-06T07:24:09.628905057907104-08:00'],#modificationTime:DateAndTime['2018-01-07T20:42:31.7317008972168-08:00']}

@@ -1,0 +1,38 @@
+TDScriptLeafNode{#name:'generate',#contents:'[ :topez :objIn :tokens :command :commandNode | 
+  | opts args |
+  \"for help: ./generate -h\"
+  command
+    getOptsMixedLongShort: {#(\'help\' $h #\'none\')}
+    optionsAndArguments: [ :options :operands | 
+      opts := options.
+      args := operands ].
+  opts
+    at: \'help\'
+    ifAbsent: [ 
+      | spec repositoryRootPath |
+repositoryRootPath := \'$GS_HOME/shared/repos/rowan/CypressReferenceImplementation\'.
+      spec := RwSpecification
+        fromUrl:
+          \'file:\', repositoryRootPath, \'/specs/Rowan.ston\'.
+      spec repoSpec
+        repositoryRootPath:
+          repositoryRootPath, \'/testRepositories/\'.
+      {\'cypress\'.
+      \'filetree\'.
+      \'tonel\'}
+        do: [ :repoPath | 
+          spec repoPath: repoPath.
+          RwDiskRepositoryGenerator generate: spec ] ]
+    ifPresent: [ :ignored | 
+      TDManPage
+        viewManPage:
+          \'NAME
+  generate - generate script utility template
+SYNOPSIS
+  generate [-h|--help]
+DESCRIPTION
+EXAMPLES
+  ./generate --help
+  ./generate -h
+\'
+        topez: topez ] ]',#creationTime:DateAndTime['2018-01-06T11:06:32.48184299468994-08:00'],#modificationTime:DateAndTime['2018-01-06T12:09:19.79152011871338-08:00']}

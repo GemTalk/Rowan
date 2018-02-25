@@ -15,8 +15,8 @@ RwPackageProjectSpecification{
 	},
 	#repoPath : 'tonel',
 	#comment : '',
-	#imageSpec : RwPackageImageSpecification {
-		#repositoryUrl : 'tonel:$GS_HOME/shared/repos/Rowan/tonel/'
+	#imageSpec : RwPackageProjectImageSpecification {
+		#repositoryUrl : 'tonel:$GS_HOME/shared/repos/Rowan/src/tonel/'
 	},
 	#packageInfoSource : #Category,
 	#packageNamesInLoadOrder : [

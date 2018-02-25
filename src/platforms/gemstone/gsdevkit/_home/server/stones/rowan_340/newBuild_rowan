@@ -356,9 +356,7 @@ readStreamFor: filePath do: aOneArgBlock
 %
 
   run
-  Rowan 
-    atClassInstVar: #knownProjects
-    put: (STON fromString: (GsFile openReadOnServer: '$GS_HOME/server/stones/rowan_340/projectSpec.ston') contentsOfEntireFile)
+  Rowan addProject: (STON fromString: (GsFile openReadOnServer: '$GS_HOME/server/stones/$GEMSTONE_NAME/rowanSpec.ston') contentsOfEntireFile)
 %
   commit
   exit
