@@ -2,7 +2,7 @@
 
 Rowan is a new project/package manager for Smalltalk that supports FileTree and Tonel repositories.
  
-##GemStone Installation
+## GemStone Installation
 
 ### GsDevKit_home Rowan installation
 
@@ -34,13 +34,7 @@ $GS_HOME/shared/repos/Rowan/src/platforms/gemstone/gsdevkit/bin/installRowan tes
 
 ```
 
-### License and Copyright
-
-Rowan is licensed under the MIT license.
-In other words, you are welcome to use it in almost any way you wish. 
-See LICENSE for details.
-
-### Acknowledgements
+## Acknowledgements
 
 Some portions of this reference implementation came from Pharo. Notably, the URL hierarchy of classes.
 In addition, some scattered methods also came from Pharo.
