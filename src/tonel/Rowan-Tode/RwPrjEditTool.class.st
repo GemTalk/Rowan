@@ -28,6 +28,46 @@ RwPrjEditTool >> addClass: classDefinition inPackageNamed: packageName inProject
 		inProject: (Rowan loadedProjectNamed: projectName) asDefinition
 ]
 
+{ #category : 'class extension editting' }
+RwPrjEditTool >> addClassExtension: classExtensionDefinition inPackageNamed: packageName inProject: projectDefinition [
+
+	"Add the given class extension definition to the named package in the given project. 
+		Return the projectDefinition"
+
+	| packageDefinition |
+	packageDefinition := projectDefinition packageNamed: packageName.
+	packageDefinition addClassExtension: classExtensionDefinition.
+	^ projectDefinition
+]
+
+{ #category : 'class extension editting' }
+RwPrjEditTool >> addClassExtension: classExtensionDefinition inPackageNamed: packageName inProjectNamed: projectName [
+
+	"Add the given class extension definition to the named package in the named project. 
+		Return a projectDefinition for the named project"
+
+	^ self
+		addClassExtension: classExtensionDefinition
+		inPackageNamed: packageName
+		inProject: (Rowan loadedProjectNamed: projectName) asDefinition
+]
+
+{ #category : 'class lookup' }
+RwPrjEditTool >> classDefinitionNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+
+	Rowan image
+		loadedClassNamed: className
+		ifFound: [ :loadedClass | 
+			| loadedPackage loadedProject |
+			loadedPackage := loadedClass loadedPackage.
+			loadedProject := loadedPackage loadedProject.
+			^ foundBlock
+				value: loadedClass asDefinition
+				value: loadedPackage asDefinition
+				value: loadedProject asDefinition ]
+		ifAbsent: absentBlock
+]
+
 { #category : 'class editing' }
 RwPrjEditTool >> removeClass: classDefinition fromPackageNamed: packageName inProject: projectDefinition [
 
