@@ -422,7 +422,7 @@ RwEditToolTest >> testUpdateClass [
 { #category : 'tests - classes' }
 RwEditToolTest >> testUpdateClassExtension [
 
-	| projectName packageNames packageName1 packageName2 packageName3 className projectTools projectDefinition classExtensionDefinition testClass testInstance |
+	| projectName packageNames packageName1 packageName2 packageName3 className projectTools projectDefinition classExtensionDefinition testClass testInstance classExtensionDefinitions |
 	projectName := 'SimpleClassExtension'.
 	packageName1 := 'Simple-Core'.
 	packageName2 := 'Simple-Extension1'.
@@ -459,15 +459,24 @@ RwEditToolTest >> testUpdateClassExtension [
 	self assert: testInstance ivar1 = 2.
 	self assert: (testInstance add: 1) = 3.
 
+	classExtensionDefinitions := {}.
 	projectTools := Rowan projectTools.
 	projectTools edit
 		classExtensionDefinitionsForClassNamed: className
 		ifFound: [ :classExtensionDef :packageDef :projectDef | 
-			projectDefinition := projectDef.
-			self halt ]
+			classExtensionDefinitions
+				add:
+					{classExtensionDef.
+					packageDef.
+					projectDef} ]
 		ifAbsent: [ 
 			self
 				assert: false
 				decription:
-					'expected class definition for class ' , className printString , ' not found.' ]
+					'expected class extension definitions for class ' , className printString
+						, ' not found.' ].
+	self
+		assert: classExtensionDefinitions size = 2
+		description:
+			'two packages contain extensions for this class ... classExtensionRegistry does not record multiple extensions correctly'
 ]

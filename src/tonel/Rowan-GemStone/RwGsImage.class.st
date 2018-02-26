@@ -151,6 +151,29 @@ RwGsImage class >> existingSymbolDictionaryNamed: dictName [
 ]
 
 { #category : 'querying' }
+RwGsImage class >> loadedClassExtensionsNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+
+	"scan the symbol list for a RwLoadedClassExtension instances of the given name"
+
+	| class history found |
+	class := self objectNamed: className.
+	class ifNil: [ ^ absentBlock value ].
+	history := class classHistory.
+	found := false.
+	self symbolList
+		do: [ :symbolDict | 
+			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
+				ifTrue: [ 
+					(symbolDict classExtensionRegistry at: history ifAbsent: [  ])
+						ifNotNil: [ :loadedClass | 
+							found := true.
+							foundBlock value: loadedClass ] ] ].
+	found
+		ifTrue: [ ^ self ].
+	^ absentBlock value
+]
+
+{ #category : 'querying' }
 RwGsImage class >> loadedClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
 
 	"scan the symbol list for a RwLoadedClass instance of the given name"
