@@ -52,6 +52,64 @@ RwEditToolTest >> _loadExtendedProjectDefinition: projectName packageNames: pack
 ]
 
 { #category : 'private' }
+RwEditToolTest >> _loadExtendedProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment className: className inPackageName: packageName1 extensionPackageNames: extensionPackageNames [
+
+	| projectDefinition classDefinition classExtensionDefinition projectTools |
+	projectTools := Rowan projectTools.
+
+	projectDefinition := self
+		_standardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'This is a simple project used to test class extension edit API'.
+
+	classDefinition := self _standardClassDefinition: className.
+
+	projectTools edit
+		addClass: classDefinition
+		inPackageNamed: packageName1
+		inProject: projectDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition
+		newForClassNamed: className.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'ivar1:'
+						protocol: 'accessing'
+						source: 'ivar1: anInteger ivar1 := anInteger');
+		addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'cadd:'
+						protocol: 'addition'
+						source: 'cadd: anInteger ^civar1 + anInteger');
+		yourself.
+
+	projectTools edit
+		addClassExtension: classExtensionDefinition
+		inPackageNamed: (extensionPackageNames at: 1)
+		inProject: projectDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition
+		newForClassNamed: className.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'add:'
+						protocol: 'addition'
+						source: 'add: anInteger ^ivar1 + anInteger');
+		yourself.
+
+	projectTools edit
+		addClassExtension: classExtensionDefinition
+		inPackageNamed: (extensionPackageNames at: 2)
+		inProject: projectDefinition.
+
+
+	projectTools load loadProjectDefinition: projectDefinition
+]
+
+{ #category : 'private' }
 RwEditToolTest >> _loadStandardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment className: className inPackageName: packageName [
 
 	| projectDefinition classDefinition projectTools |
@@ -181,6 +239,43 @@ RwEditToolTest >> testAddAndRemoveClass [
 ]
 
 { #category : 'tests - classes' }
+RwEditToolTest >> testAddClassExtension [
+
+	| projectName packageNames packageName1 packageName2 className projectTools projectDefinition classDefinition testClass testInstance |
+	projectName := 'SimpleClassExtension'.
+	packageName1 := 'Simple-Core'.
+	packageName2 := 'Simple-Extension'.
+	packageNames := {packageName1.
+	packageName2}.
+	className := 'SimpleEdit'.
+
+	{projectName}
+		do: [ :name | 
+			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+
+	self
+		_loadExtendedProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment:
+			'This is a simple project used to illustrate how to edit an existing class.'
+		className: className
+		inPackageName: packageName1
+		extensionPackageName: packageName2.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	self assert: testClass civar1 = 1.
+	self assert: (testClass cadd: 1) = 2.
+	self assert: testClass cvar1 = 2.
+	testInstance := testClass new.
+	testInstance ivar1: 2.
+	self assert: testInstance ivar1 = 2.
+	self assert: (testInstance add: 1) = 3
+]
+
+{ #category : 'tests - classes' }
 RwEditToolTest >> testAddUpdateAndRemoveClass [
 
 	| projectName projectDefinition projectTools packageNames classDefinition packageName testClass testInstance className |
@@ -256,43 +351,6 @@ RwEditToolTest >> testAddUpdateAndRemoveClass [
 ]
 
 { #category : 'tests - classes' }
-RwEditToolTest >> testExtendClass [
-
-	| projectName packageNames packageName1 packageName2 className projectTools projectDefinition classDefinition testClass testInstance |
-	projectName := 'SimpleClassExtension'.
-	packageName1 := 'Simple-Core'.
-	packageName2 := 'Simple-Extension'.
-	packageNames := {packageName1.
-	packageName2}.
-	className := 'SimpleEdit'.
-
-	{projectName}
-		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
-
-	self
-		_loadExtendedProjectDefinition: projectName
-		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName1
-		comment:
-			'This is a simple project used to illustrate how to edit an existing class.'
-		className: className
-		inPackageName: packageName1
-		extensionPackageName: packageName2.
-
-	testClass := Rowan globalNamed: className.
-	self assert: testClass notNil.
-	self assert: testClass civar1 = 1.
-	self assert: (testClass cadd: 1) = 2.
-	self assert: testClass cvar1 = 2.
-	testInstance := testClass new.
-	testInstance ivar1: 2.
-	self assert: testInstance ivar1 = 2.
-	self assert: (testInstance add: 1) = 3
-]
-
-{ #category : 'tests - classes' }
 RwEditToolTest >> testUpdateClass [
 
 	| projectName packageNames packageName className projectTools projectDefinition classDefinition testClass testInstance |
@@ -324,7 +382,7 @@ RwEditToolTest >> testUpdateClass [
 
 	projectTools := Rowan projectTools.
 	projectTools edit
-		classDefinitionNamed: className
+		classDefinitionsForClassNamed: className
 		ifFound: [ :classDef :packageDef :projectDef | 
 			projectDefinition := projectDef.
 			classDefinition := classDef ]
@@ -359,4 +417,57 @@ RwEditToolTest >> testUpdateClass [
 	self assert: testClass civar1 = 1.
 	testInstance := testClass new.
 	self should: [ testInstance ivar1 ] raise: MessageNotUnderstood
+]
+
+{ #category : 'tests - classes' }
+RwEditToolTest >> testUpdateClassExtension [
+
+	| projectName packageNames packageName1 packageName2 packageName3 className projectTools projectDefinition classExtensionDefinition testClass testInstance |
+	projectName := 'SimpleClassExtension'.
+	packageName1 := 'Simple-Core'.
+	packageName2 := 'Simple-Extension1'.
+	packageName3 := 'Simple-Extension2'.
+	packageNames := {packageName1.
+	packageName2.
+	packageName3}.
+	className := 'SimpleEdit'.
+
+	{projectName}
+		do: [ :name | 
+			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+
+	self
+		_loadExtendedProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment:
+			'This is a simple project used to illustrate how to edit an existing class.'
+		className: className
+		inPackageName: packageName1
+		extensionPackageNames:
+			{packageName2.
+			packageName3}.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	self assert: testClass civar1 = 1.
+	self assert: (testClass cadd: 1) = 2.
+	self assert: testClass cvar1 = 2.
+	testInstance := testClass new.
+	testInstance ivar1: 2.
+	self assert: testInstance ivar1 = 2.
+	self assert: (testInstance add: 1) = 3.
+
+	projectTools := Rowan projectTools.
+	projectTools edit
+		classExtensionDefinitionsForClassNamed: className
+		ifFound: [ :classExtensionDef :packageDef :projectDef | 
+			projectDefinition := projectDef.
+			self halt ]
+		ifAbsent: [ 
+			self
+				assert: false
+				decription:
+					'expected class definition for class ' , className printString , ' not found.' ]
 ]

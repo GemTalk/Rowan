@@ -53,7 +53,7 @@ RwPrjEditTool >> addClassExtension: classExtensionDefinition inPackageNamed: pac
 ]
 
 { #category : 'class lookup' }
-RwPrjEditTool >> classDefinitionNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+RwPrjEditTool >> classDefinitionsForClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
 
 	Rowan image
 		loadedClassNamed: className
