@@ -17,6 +17,17 @@ RwMethodDefinition class >> newForSelector: selector protocol: protocol source: 
 ]
 
 { #category : 'instance creation' }
+RwMethodDefinition class >> newForSource: methodSource protocol: protocol [
+
+	| selector |
+	selector := Rowan platform parseSelectorFrom: methodSource.
+	^ self
+		newForSelector: selector asSymbol
+		protocol: protocol
+		source: methodSource
+]
+
+{ #category : 'instance creation' }
 RwMethodDefinition class >> withProperties: propertiesDictionary source: sourceString [ 
 
 	^(self basicNew)

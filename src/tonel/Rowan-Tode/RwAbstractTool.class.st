@@ -37,6 +37,63 @@ RwAbstractTool >> _symbolDictionaryForSpecification [
 			(specification platformSpec at: 'gemstone') defaultSymbolDictName
 ]
 
+{ #category : 'class lookup' }
+RwAbstractTool >> classExtensionDefinitionsForClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+
+	Transcript
+		cr;
+		show:
+				'RwAbstractTool>>classExtensionDefinitionsForClassNamed:ifFound:ifAbsent: needs work'.
+	^ Rowan image
+		loadedClassExtensionsNamed: className
+		ifFound: [ :loadedClass | 
+			| loadedPackage loadedProject |
+			loadedPackage := loadedClass loadedPackage.
+			loadedProject := loadedPackage loadedProject.
+			foundBlock
+				value: loadedClass asDefinition
+				value: loadedPackage asDefinition
+				value: loadedProject asDefinition ]
+		ifAbsent: absentBlock
+]
+
+{ #category : 'class lookup' }
+RwAbstractTool >> definitionsForClassExtensionNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+
+	"there can be multiple class extensions associated with a single class and only one class extension is currently saved"
+
+	Transcript
+		cr;
+		show:
+				'RwAbstractTool>>classExtensionDefinitionsForClassNamed:ifFound:ifAbsent: needs work'.
+	^ Rowan image
+		loadedClassExtensionsNamed: className
+		ifFound: [ :loadedClass | 
+			| loadedPackage loadedProject |
+			loadedPackage := loadedClass loadedPackage.
+			loadedProject := loadedPackage loadedProject.
+			foundBlock
+				value: loadedClass asDefinition
+				value: loadedPackage asDefinition
+				value: loadedProject asDefinition ]
+		ifAbsent: absentBlock
+]
+
+{ #category : 'class lookup' }
+RwAbstractTool >> definitionsForClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+
+	Rowan image
+		loadedClassNamed: className
+		ifFound: [ :loadedClass | 
+			| loadedPackage projectDef packageDef classDef |
+			loadedPackage := loadedClass loadedPackage.
+			projectDef := loadedPackage loadedProject asDefinition.
+			packageDef := projectDef packageNamed: loadedPackage name.
+			classDef := packageDef classDefinitions at: loadedClass name.
+			^ foundBlock value: classDef value: packageDef value: projectDef ]
+		ifAbsent: absentBlock
+]
+
 { #category : 'git' }
 RwAbstractTool >> doGitCommit: messageString [
   | gitTool gitRootDir commitMessageFileName status loadedCommitId |

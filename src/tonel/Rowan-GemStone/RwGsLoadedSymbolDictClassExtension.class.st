@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwGsLoadedSymbolDictClassExtension',
-	#superclass : 'RwLoadedClass',
+	#superclass : 'RwLoadedClassExtension',
 	#category : 'Rowan-GemStone'
 }
 

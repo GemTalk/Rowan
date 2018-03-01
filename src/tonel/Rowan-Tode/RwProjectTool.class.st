@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : 'commands' }
+RwProjectTool class >> browser [
+
+	^ RwPrjBrowserTool new
+]
+
+{ #category : 'commands' }
 RwProjectTool class >> checkout [
 
 	^RwPrjCheckoutTool new

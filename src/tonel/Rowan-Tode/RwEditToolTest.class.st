@@ -382,7 +382,7 @@ RwEditToolTest >> testUpdateClass [
 
 	projectTools := Rowan projectTools.
 	projectTools edit
-		classDefinitionsForClassNamed: className
+		definitionsForClassNamed: className
 		ifFound: [ :classDef :packageDef :projectDef | 
 			projectDefinition := projectDef.
 			classDefinition := classDef ]
@@ -462,7 +462,7 @@ RwEditToolTest >> testUpdateClassExtension [
 	classExtensionDefinitions := {}.
 	projectTools := Rowan projectTools.
 	projectTools edit
-		classExtensionDefinitionsForClassNamed: className
+		definitionsForClassExtensionNamed: className
 		ifFound: [ :classExtensionDef :packageDef :projectDef | 
 			classExtensionDefinitions
 				add:

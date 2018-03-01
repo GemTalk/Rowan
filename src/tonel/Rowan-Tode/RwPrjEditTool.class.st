@@ -52,38 +52,6 @@ RwPrjEditTool >> addClassExtension: classExtensionDefinition inPackageNamed: pac
 		inProject: (Rowan loadedProjectNamed: projectName) asDefinition
 ]
 
-{ #category : 'class lookup' }
-RwPrjEditTool >> classDefinitionsForClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
-
-	Rowan image
-		loadedClassNamed: className
-		ifFound: [ :loadedClass | 
-			| loadedPackage loadedProject |
-			loadedPackage := loadedClass loadedPackage.
-			loadedProject := loadedPackage loadedProject.
-			^ foundBlock
-				value: loadedClass asDefinition
-				value: loadedPackage asDefinition
-				value: loadedProject asDefinition ]
-		ifAbsent: absentBlock
-]
-
-{ #category : 'class lookup' }
-RwPrjEditTool >> classExtensionDefinitionsForClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
-
-	^ Rowan image
-		loadedClassExtensionsNamed: className
-		ifFound: [ :loadedClass | 
-			| loadedPackage loadedProject |
-			loadedPackage := loadedClass loadedPackage.
-			loadedProject := loadedPackage loadedProject.
-			foundBlock
-				value: loadedClass asDefinition
-				value: loadedPackage asDefinition
-				value: loadedProject asDefinition ]
-		ifAbsent: absentBlock
-]
-
 { #category : 'class editing' }
 RwPrjEditTool >> removeClass: classDefinition fromPackageNamed: packageName inProject: projectDefinition [
 

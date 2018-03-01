@@ -22,5 +22,10 @@ RwClassExtensionModification >> addModificationToPatchSet: aPatchSet inPackage: 
 	self isDeletion
 		ifTrue: [ self halt: 'class extension should not be deleting anything ... I would think' ].
 	self isModification
-		ifTrue: [ self halt: 'class extension should not be modifying the class ... I would think' ]
+		ifTrue: [ 
+			RwGsClassVersioningPatch
+				addPatchedClassModification: self
+				inPackage: aPackage
+				inProject: aProjectDefinition
+				toPatchSet: aPatchSet ]
 ]
