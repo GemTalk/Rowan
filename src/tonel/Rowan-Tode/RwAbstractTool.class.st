@@ -38,44 +38,23 @@ RwAbstractTool >> _symbolDictionaryForSpecification [
 ]
 
 { #category : 'class lookup' }
-RwAbstractTool >> classExtensionDefinitionsForClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
-
-	Transcript
-		cr;
-		show:
-				'RwAbstractTool>>classExtensionDefinitionsForClassNamed:ifFound:ifAbsent: needs work'.
-	^ Rowan image
-		loadedClassExtensionsNamed: className
-		ifFound: [ :loadedClass | 
-			| loadedPackage loadedProject |
-			loadedPackage := loadedClass loadedPackage.
-			loadedProject := loadedPackage loadedProject.
-			foundBlock
-				value: loadedClass asDefinition
-				value: loadedPackage asDefinition
-				value: loadedProject asDefinition ]
-		ifAbsent: absentBlock
-]
-
-{ #category : 'class lookup' }
 RwAbstractTool >> definitionsForClassExtensionNamed: className ifFound: foundBlock ifAbsent: absentBlock [
 
 	"there can be multiple class extensions associated with a single class and only one class extension is currently saved"
 
-	Transcript
-		cr;
-		show:
-				'RwAbstractTool>>classExtensionDefinitionsForClassNamed:ifFound:ifAbsent: needs work'.
 	^ Rowan image
 		loadedClassExtensionsNamed: className
-		ifFound: [ :loadedClass | 
-			| loadedPackage loadedProject |
-			loadedPackage := loadedClass loadedPackage.
-			loadedProject := loadedPackage loadedProject.
-			foundBlock
-				value: loadedClass asDefinition
-				value: loadedPackage asDefinition
-				value: loadedProject asDefinition ]
+		ifFound: [ :loadedClassExtensionSet | 
+			loadedClassExtensionSet
+				do: [ :loadedClassExtension | 
+					| loadedPackage loadedProject |
+					loadedPackage := loadedClassExtension loadedPackage.
+					loadedProject := loadedPackage loadedProject.
+					foundBlock
+						value: loadedClassExtension asDefinition
+						value: loadedPackage asDefinition
+						value: loadedProject asDefinition ].
+			^ self ]
 		ifAbsent: absentBlock
 ]
 

@@ -230,7 +230,9 @@ RwGsPackageSymbolDictionary >> addExtensionCompiledMethod: compiledMethod for: b
 			ext := RwGsLoadedSymbolDictClassExtension
 				newForClass: class
 				inPackage: loadedPackage.
-			self classExtensionRegistry at: class classHistory put: ext.
+			(self classExtensionRegistry
+				at: class classHistory
+				ifAbsentPut: [ IdentitySet new ]) add: ext.
 			ext ].
 	loadedClassExtension addLoadedMethod: loadedMethod
 ]
@@ -282,7 +284,9 @@ RwGsPackageSymbolDictionary >> addExtensionSessionMethods: methDict catDict: cat
 			ext := RwGsLoadedSymbolDictClassExtension
 				newForClass: class
 				inPackage: loadedPackage.
-			self classExtensionRegistry at: class classHistory put: ext.
+			(self classExtensionRegistry
+				at: class classHistory
+				ifAbsentPut: [ IdentitySet new ]) add: ext.
 			ext ].
 	loadedClassExtension addLoadedMethod: loadedMethod.
 
@@ -565,9 +569,9 @@ RwGsPackageSymbolDictionary >> ensureExtensionClassNamed: className existsForPac
 			loadedClassExtension := RwGsLoadedSymbolDictClassExtension
 				newForClass: extensionClass
 				inPackage: loadedPackage.
-			self classExtensionRegistry
+			(self classExtensionRegistry
 				at: extensionClass classHistory
-				put: loadedClassExtension ]
+				ifAbsentPut: [ IdentitySet new ]) add: loadedClassExtension ]
 ]
 
 { #category : 'loaded queries' }

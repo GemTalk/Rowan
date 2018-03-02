@@ -159,17 +159,15 @@ RwGsImage class >> loadedClassExtensionsNamed: className ifFound: foundBlock ifA
 	class := self objectNamed: className.
 	class ifNil: [ ^ absentBlock value ].
 	history := class classHistory.
-	found := false.
+	found := IdentitySet new.
 	self symbolList
 		do: [ :symbolDict | 
 			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
 				ifTrue: [ 
 					(symbolDict classExtensionRegistry at: history ifAbsent: [  ])
-						ifNotNil: [ :loadedClass | 
-							found := true.
-							foundBlock value: loadedClass ] ] ].
-	found
-		ifTrue: [ ^ self ].
+						ifNotNil: [ :loadedClassExtensionSet | found addAll: loadedClassExtensionSet ] ] ].
+	found isEmpty
+		ifFalse: [ ^ foundBlock value: found ].
 	^ absentBlock value
 ]
 

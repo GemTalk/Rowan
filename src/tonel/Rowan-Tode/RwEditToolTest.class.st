@@ -478,5 +478,27 @@ RwEditToolTest >> testUpdateClassExtension [
 	self
 		assert: classExtensionDefinitions size = 2
 		description:
-			'two packages contain extensions for this class ... classExtensionRegistry does not record multiple extensions correctly'
+			'two packages contain extensions for this class ... classExtensionRegistry does not record multiple extensions correctly'.
+
+	classExtensionDefinitions
+		do: [ :ar | 
+			| classExtensionDef packageDef projectDef |
+			classExtensionDef := ar at: 1.
+			packageDef := ar at: 2.
+			projectDef := ar at: 3.
+			self assert: projectDef name = projectName.
+			self assert: (packageNames includes: packageDef name).
+			packageDef name = packageName2
+				ifTrue: [ 
+					self
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert:
+								(classExtensionDef instanceMethodDefinitions includesKey: #'ivar1:');
+						assert: classExtensionDef classMethodDefinitions size = 1;
+						assert: (classExtensionDef classMethodDefinitions includesKey: #'cadd:') ].
+			packageDef name = packageName3
+				ifTrue: [ 
+					self
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'add:') ] ]
 ]
