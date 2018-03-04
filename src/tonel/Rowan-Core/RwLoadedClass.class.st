@@ -40,6 +40,18 @@ RwLoadedClass >> isEmpty [
 	^loadedInstanceMethods isEmpty and: [loadedClassMethods isEmpty]
 ]
 
+{ #category : 'testing' }
+RwLoadedClass >> isLoadedClass [
+
+	^ true
+]
+
+{ #category : 'testing' }
+RwLoadedClass >> isLoadedClassExtension [
+
+	^ false
+]
+
 { #category : 'accessing' }
 RwLoadedClass >> loadedPackage [
 

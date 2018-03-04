@@ -19,6 +19,12 @@ RwAbstractClassDefinition class >> withProperties: propertiesDictionary classMet
 ]
 
 { #category : 'private' }
+RwAbstractClassDefinition >> _methodsModificationClass [
+
+	self subclassResponsibility: #'__methodsModificationClass'
+]
+
+{ #category : 'private' }
 RwAbstractClassDefinition >> _modificationClass [
 
 	self subclassResponsibility: #'_modificationClass'
@@ -65,8 +71,8 @@ RwAbstractClassDefinition >> compareAgainstBase: aDefinition [
 	modification := self _modificationClass before: aDefinition after: self.
 	modification
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
-	instanceMethodsModification := RwMethodsModification new.
-	classMethodsModification := RwMethodsModification new.
+	instanceMethodsModification := self _methodsModificationClass new.
+	classMethodsModification := self _methodsModificationClass new.
 	self
 		compareDictionary: instanceMethodDefinitions
 		againstBaseDictionary: aDefinition instanceMethodDefinitions
@@ -82,7 +88,7 @@ RwAbstractClassDefinition >> compareAgainstBase: aDefinition [
 	modification
 		instanceMethodsModification: instanceMethodsModification;
 		classMethodsModification: classMethodsModification.
-	^modification
+	^ modification
 ]
 
 { #category : 'comparing' }
@@ -92,8 +98,8 @@ RwAbstractClassDefinition >> compareAgainstBaseForNewClassVersion: aDefinition [
 
 	| modification instanceMethodsModification classMethodsModification |
 	modification := self _modificationClass before: aDefinition after: self.
-	instanceMethodsModification := RwMethodsModification new.
-	classMethodsModification := RwMethodsModification new.
+	instanceMethodsModification := self _methodsModificationClass new.
+	classMethodsModification := self _methodsModificationClass new.
 	self
 		compareDictionary: instanceMethodDefinitions
 		againstBaseDictionaryForNewClassVersion: aDefinition instanceMethodDefinitions

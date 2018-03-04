@@ -102,6 +102,42 @@ RwGsPackageSymbolDictionary class >> newNamed: aSymbol [
 		yourself
 ]
 
+{ #category : 'method - private api' }
+RwGsPackageSymbolDictionary >> _doDeleteCompiledMethod: compiledMethod from: behavior [
+
+	"delete a compiled method from behavior"
+
+	| selector |
+	selector := compiledMethod selector.
+	behavior removeSelector: selector asString environmentId: 0
+]
+
+{ #category : 'method - private api' }
+RwGsPackageSymbolDictionary >> _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior [
+
+	"remove a compiled method from loaded things"
+
+	| loadedMethod loadedPackage loadedClassOrExtension |
+	loadedMethod := methodRegistry
+		at: compiledMethod
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no existing LoadedMethod found for deleted method.' ].
+
+	methodRegistry removeKey: compiledMethod.
+
+	loadedPackage := loadedMethod loadedPackage.
+	loadedClassOrExtension := loadedPackage
+		classOrExtensionForClass: behavior
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- attempt to remove a method from a package in which its class is neither defined nor extended.' ].
+
+	loadedClassOrExtension removeLoadedMethod: loadedMethod
+]
+
 { #category : 'private' }
 RwGsPackageSymbolDictionary >> _initializeWithoutClear: newSize [
 
@@ -509,28 +545,9 @@ RwGsPackageSymbolDictionary >> deleteCompiledMethod: compiledMethod from: behavi
 
 	"delete a compiled method from behavior and remove it from the loaded things"
 
-	| selector loadedMethod loadedPackage loadedClassOrExtension |
-	selector := compiledMethod selector.
-	behavior removeSelector: selector asString environmentId: 0.
+	self _doDeleteCompiledMethod: compiledMethod from: behavior.
 
-	loadedMethod := methodRegistry
-		at: compiledMethod
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- no existing LoadedMethod found for deleted method.' ].
-
-	methodRegistry removeKey: compiledMethod.
-
-	loadedPackage := loadedMethod loadedPackage.
-	loadedClassOrExtension := loadedPackage
-		classOrExtensionForClass: behavior
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- attempt to remove a method from a package in which its class is neither defined nor extended.' ].
-
-	loadedClassOrExtension removeLoadedMethod: loadedMethod
+	self _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior
 ]
 
 { #category : 'method - patch api' }

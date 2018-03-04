@@ -5,6 +5,44 @@ Class {
 }
 
 { #category : 'private' }
+RwBrowserToolTest >> _assert: foundBlock forClassExtensionsIn: className [
+
+	self
+		_assert: foundBlock
+		forClassExtensionsIn: className
+		ifAbsent: [ 
+			self
+				assert: false
+				description:
+					'expected class extension definitions for class ' , className printString
+						, ' not found.' ]
+]
+
+{ #category : 'private' }
+RwBrowserToolTest >> _assert: foundBlock forClassExtensionsIn: className ifAbsent: absentBlock [
+
+	| projectTools |
+	projectTools := Rowan projectTools.
+	projectTools edit
+		definitionsForClassExtensionNamed: className
+		ifFound: foundBlock
+		ifAbsent: absentBlock
+]
+
+{ #category : 'private' }
+RwBrowserToolTest >> _assertNoClassExtensionsIn: className [
+
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			self
+				assert: false
+				description:
+					'No class extensions expected for class ' , className printString ]
+		forClassExtensionsIn: className
+		ifAbsent: [  ]
+]
+
+{ #category : 'private' }
 RwBrowserToolTest >> _expectedClassCreationTemplate [
 
 	^ 'RwClassDefinition
@@ -184,12 +222,14 @@ RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packa
 { #category : 'tests' }
 RwBrowserToolTest >> testAddMethod [
 
-	| projectName packageNames className packageName1 packageName2 testClass testInstance browserTool |
+	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool |
 	projectName := 'Simple Browser'.
 	packageName1 := 'Simple-Core'.
-	packageName2 := 'Simple-Extensions'.
+	packageName2 := 'Simple-Extensions1'.
+	packageName3 := 'Simple-Extensions2'.
 	packageNames := {packageName1.
-	packageName2}.
+	packageName2.
+	packageName3}.
 	className := 'SimpleBrowse'.
 	self
 		_loadStandardProjectDefinition: projectName
@@ -206,7 +246,7 @@ RwBrowserToolTest >> testAddMethod [
 		inProtocol: 'accessing'
 		forClassNamed: className
 		isMeta: false
-		inPackageNamed: packageName1.
+		inPackageNamed: packageName1.	"add method in the package of the class"
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
@@ -229,7 +269,7 @@ RwBrowserToolTest >> testAddMethod [
 		inProtocol: 'accessing'
 		forClassNamed: className
 		isMeta: false
-		inPackageNamed: packageName2.
+		inPackageNamed: packageName2.	"add method in a package as a class extension"
 
 	self assert: testInstance foo = 'baz'
 ]
@@ -276,4 +316,93 @@ RwBrowserToolTest >> testCreateClass [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil
+]
+
+{ #category : 'tests' }
+RwBrowserToolTest >> testMoveMethod [
+
+	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool projectTools |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageName2 := 'Simple-Extensions1'.
+	packageName3 := 'Simple-Extensions2'.
+	packageNames := {packageName1.
+	packageName2.
+	packageName3}.
+	className := 'SimpleBrowse'.
+	self
+		_loadStandardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	browserTool := Rowan projectTools browser.
+
+	browserTool
+		addMethod: 'ivar1: anInteger ivar1 := anInteger'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	testInstance ivar1: 3.
+	self assert: testInstance ivar1 = 3.
+	self should: [ testInstance foo ] raise: MessageNotUnderstood.
+	self _assertNoClassExtensionsIn: className.
+
+	browserTool
+		addMethod: 'foo ^''bar'''
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName2.	"add method in a package as a class extension"
+
+	self assert: testInstance foo = 'bar'.
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ].
+			packageDef name = packageName2
+				ifTrue: [ 
+					self
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ].
+			packageDef name = packageName3
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ] ]
+		forClassExtensionsIn: className.
+
+	browserTool
+		addMethod: 'foo ^''baz'''
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName2.	"change class extension method"
+
+	self assert: testInstance foo = 'baz'.
+
+	browserTool
+		addMethod: 'foo ^''bif'''
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName3.	"move method to another package as a class extension"
+
+	self assert: testInstance foo = 'bif'.
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ].
+			packageDef name = packageName2
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ].
+			packageDef name = packageName3
+				ifTrue: [ 
+					self
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
+		forClassExtensionsIn: className
 ]

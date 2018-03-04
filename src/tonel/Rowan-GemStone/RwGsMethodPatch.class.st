@@ -31,9 +31,28 @@ RwGsMethodPatch class >> forMethod: aMethodDefinition isMeta: isMeta inClass: aC
 ]
 
 { #category : 'accessing' }
+RwGsMethodPatch >> classDefinition [
+
+	^ classDefinition
+]
+
+{ #category : 'accessing' }
 RwGsMethodPatch >> classDefinition: newValue [
 	classDefinition := newValue
 
+]
+
+{ #category : 'accessing' }
+RwGsMethodPatch >> compiledMethod [
+
+	^ compiledMethod
+		ifNil: [ 
+			| methodDictionary |
+			methodDictionary := behavior persistentMethodDictForEnv: 0.
+			selector := methodDefinition selector.
+			compiledMethod := methodDictionary
+				at: selector
+				ifAbsent: [ self error: 'internal error - compiledmethod not present in method dictionary' ] ]
 ]
 
 { #category : 'compiling' }
@@ -161,6 +180,12 @@ RwGsMethodPatch >> runInitializer [
 
 	(isMeta and: [ selector == #'initialize' ])
 		ifTrue: [ behavior thisClass initialize ]
+]
+
+{ #category : 'accessing' }
+RwGsMethodPatch >> selector [
+
+	^ selector
 ]
 
 { #category : 'private-installing' }

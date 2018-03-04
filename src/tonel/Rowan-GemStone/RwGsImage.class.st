@@ -190,6 +190,28 @@ RwGsImage class >> loadedClassNamed: className ifFound: foundBlock ifAbsent: abs
 ]
 
 { #category : 'querying' }
+RwGsImage class >> loadedMethod: selector inClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+
+	"scan the symbol list for a RwLoadedMethod instances for the given selector in the named class"
+
+	| class compiledMethod |
+	class := self objectNamed: className.
+	class ifNil: [ ^ absentBlock value ].
+	compiledMethod := class
+		compiledMethodAt: selector asSymbol
+		environmentId: 0
+		otherwise: nil.
+	compiledMethod ifNil: [ ^ absentBlock value ].
+	self symbolList
+		do: [ :symbolDict | 
+			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
+				ifTrue: [ 
+					(symbolDict methodRegistry at: compiledMethod ifAbsent: [  ])
+						ifNotNil: [ :loadedMethod | foundBlock value: loadedMethod ] ] ].
+	^ absentBlock value
+]
+
+{ #category : 'querying' }
 RwGsImage class >> loadedPackageNamed: aName ifAbsent: absentBlock [
 
 	"scan the symbol list a RwLoadedPackage instance of the given name"

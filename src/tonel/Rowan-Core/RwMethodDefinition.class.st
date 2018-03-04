@@ -64,6 +64,17 @@ RwMethodDefinition >> compareAgainstBaseForNewClassVersion: aDefinition [
 ]
 
 { #category : 'comparing' }
+RwMethodDefinition >> compareExtensionMethodsAgainstBase: aDefinition [
+
+	| modification |
+	modification := RwExtensionMethodModification before: aDefinition after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition);
+		sourceModification: (self compareSourceAgainstBase: aDefinition).
+	^ modification
+]
+
+{ #category : 'comparing' }
 RwMethodDefinition >> compareSourceAgainstBase: aDefinition [
 
 	| modification |

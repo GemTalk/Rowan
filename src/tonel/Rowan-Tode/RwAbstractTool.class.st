@@ -47,13 +47,13 @@ RwAbstractTool >> definitionsForClassExtensionNamed: className ifFound: foundBlo
 		ifFound: [ :loadedClassExtensionSet | 
 			loadedClassExtensionSet
 				do: [ :loadedClassExtension | 
-					| loadedPackage loadedProject |
+					| loadedPackage projectDef packageDef classExtensionDef |
 					loadedPackage := loadedClassExtension loadedPackage.
-					loadedProject := loadedPackage loadedProject.
-					foundBlock
-						value: loadedClassExtension asDefinition
-						value: loadedPackage asDefinition
-						value: loadedProject asDefinition ].
+					projectDef := loadedPackage loadedProject asDefinition.
+					packageDef := projectDef packageNamed: loadedPackage name.
+					classExtensionDef := packageDef classExtensions
+						at: loadedClassExtension name.
+					foundBlock value: classExtensionDef value: packageDef value: projectDef ].
 			^ self ]
 		ifAbsent: absentBlock
 ]
@@ -70,6 +70,31 @@ RwAbstractTool >> definitionsForClassNamed: className ifFound: foundBlock ifAbse
 			packageDef := projectDef packageNamed: loadedPackage name.
 			classDef := packageDef classDefinitions at: loadedClass name.
 			^ foundBlock value: classDef value: packageDef value: projectDef ]
+		ifAbsent: absentBlock
+]
+
+{ #category : 'class lookup' }
+RwAbstractTool >> definitionsForMethod: selector inClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+
+	^ Rowan image
+		loadedMethod: selector
+		inClassNamed: className
+		ifFound: [ :loadedMethod | 
+			| loadedPackage loadedClass projectDef packageDef classDef classExtensionDef |
+			loadedPackage := loadedMethod loadedPackage.
+			loadedClass := loadedMethod loadedClass.
+			projectDef := loadedPackage loadedProject asDefinition.
+			packageDef := projectDef packageNamed: loadedPackage name.
+			loadedClass isLoadedClass
+				ifTrue: [ classDef := packageDef classDefinitions at: loadedClass name ]
+				ifFalse: [ classExtensionDef := packageDef classExtensions at: loadedClass name ].
+			foundBlock
+				value: loadedMethod asDefinition
+				value: classDef
+				value: classExtensionDef
+				value: packageDef
+				value: projectDef.
+			^ self ]
 		ifAbsent: absentBlock
 ]
 

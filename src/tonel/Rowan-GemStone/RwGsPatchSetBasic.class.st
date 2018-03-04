@@ -111,6 +111,18 @@ RwGsPatchSetBasic >> _methodDeletionPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _methodExtensionDeletionPatchClass: packageName [
+
+	^ self packageSymbolDictionaryClass
+		ifNotNil: [ :symDictClass | 
+			(self _currentProjectDefinition
+				useSessionMethodsForExtensionsForPackageNamed: packageName)
+				ifTrue: [ symDictClass _methodExtensionSessionMethodsDeletionPatchClass ]
+				ifFalse: [ symDictClass _methodDeletionPatchClass ] ]
+		ifNil: [ RwGsMethodDeletionPatch ]
+]
+
+{ #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodExtensionPatchClass: packageName [
 
 	^ self packageSymbolDictionaryClass
@@ -280,6 +292,36 @@ RwGsPatchSetBasic >> addDeletedClassMethod: aClassMethodDefinition inClass: aCla
 			((self _methodDeletionPatchClass
 				forMethod: aClassMethodDefinition
 				isMeta: true
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+]
+
+{ #category : 'building' }
+RwGsPatchSetBasic >> addDeletedExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	deletedMethods
+		add:
+			(((self _methodExtensionDeletionPatchClass: aPackageDefinition key)
+				forMethod: aClassMethodDefinition
+				isMeta: true
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+]
+
+{ #category : 'building' }
+RwGsPatchSetBasic >> addDeletedExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	deletedMethods
+		add:
+			(((self _methodExtensionDeletionPatchClass: aPackageDefinition key)
+				forMethod: anInstanceMethodDefinition
+				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
@@ -484,6 +526,7 @@ RwGsPatchSetBasic >> anyElementOfCollection: aCollection [
 
 { #category : 'public' }
 RwGsPatchSetBasic >> apply [
+
 	"Apply the changes I represent to the running image."
 
 	self
@@ -492,8 +535,8 @@ RwGsPatchSetBasic >> apply [
 		addAddedClassesToTempSymbols;
 		createNewClassesAndClassVersions;
 		compileMethods.
-	self reportAnyErrors ifTrue: [^self].
-	"No errors -- go ahead and install what's been compiled."
+	self reportAnyErrors
+		ifTrue: [ ^ self ].	"No errors -- go ahead and install what's been compiled."
 	self
 		addAndUpdateLoadedProjects;
 		addAndUpdateLoadedPackages;
@@ -501,22 +544,19 @@ RwGsPatchSetBasic >> apply [
 		removeDeletedClassExtensionsFromSystem;
 		installAddedClasses;
 		installAddedClassExtensions;
-		"moveClassesBetweenSymbolDictionaries;"
-		"moveClassesBetweenPackages;"
+		moveMethodsBetweenPackages;
 		updateSymbolAssociations;
 		updateClassProperties;
 		updateMethodDictionaries;
-		"moveMethodsBetweenPackages;"
 		updateMethodProperties;
 		removeDeletedMethods;
-		"removeDeletedClassesAndExtensionsFromPackages;"
 		markPackagesNotDirty;
 		removeDeletedPackages;
 		commit;
 		runInitializers;
 		commit;
 		migrateInstances;
-		commit
+		commit	"moveClassesBetweenSymbolDictionaries;"	"moveClassesBetweenPackages;"	"removeDeletedClassesAndExtensionsFromPackages;"
 ]
 
 { #category : 'public' }
@@ -671,6 +711,35 @@ RwGsPatchSetBasic >> markPackagesNotDirty [
 { #category : 'stubs' }
 RwGsPatchSetBasic >> migrateInstances [
 	"presumably migrate instances of changed classes ... noop for now"
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSetBasic >> moveMethodsBetweenPackages [
+
+	| deletedMethodsMap |
+	deletedMethods isEmpty
+		ifTrue: [ 
+			"no move without deleted methods"
+			^ self ].
+	deletedMethodsMap := Dictionary new.
+	deletedMethods
+		do: [ :patch | 
+			patch classDefinition key
+				ifNotNil: [ 
+					"nil key means that the class itself is being deleted"
+					(deletedMethodsMap
+						at: patch classDefinition key
+						ifAbsentPut: [ Dictionary new ]) at: patch methodDefinition key put: patch ] ].
+	addedMethods , extendedMethods
+		do: [ :patch | 
+			(deletedMethodsMap at: patch classDefinition key ifAbsent: [  ])
+				ifNotNil: [ :selectorMap | 
+					(selectorMap at: patch methodDefinition selector)
+						ifNotNil: [ :methodDeletionPatch | 
+							methodDeletionPatch
+								deleteLoadedMethodNewClasses: createdClasses
+								andExistingClasses: tempSymbols.
+							deletedMethods remove: methodDeletionPatch ] ] ]
 ]
 
 { #category : 'accessing' }

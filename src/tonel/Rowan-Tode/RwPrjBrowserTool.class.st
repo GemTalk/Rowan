@@ -7,26 +7,63 @@ Class {
 { #category : 'method creation' }
 RwPrjBrowserTool >> addMethod: methodSource inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName [
 
-	"If package name matches the name of the package of the class definition, then add the method 
+	"If the method is already installed in a different package, remove the method from that package.
+	 If package name matches the name of the package of the class definition, then add the method 
 		to the class definition.
 	 If there is no matching class extension or the package name does not match, add the method 
 		to a class extension in the named package."
 
-	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition |
-	projectTools := Rowan projectTools.
+	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition loadeMethodToBeRemoved |
+	projectSetDefinition := RwProjectSetDefinition new.
 
 	methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
+	Rowan image
+		loadedMethod: methodDef selector
+		inClassNamed: className
+		ifFound: [ :loadedMethod | loadeMethodToBeRemoved := loadedMethod ]
+		ifAbsent: [ 
+			"no pre-existing method for this selector installed"
+			 ].
 
+	projectTools := Rowan projectTools.
 	updateBlock := [ :cDef :pDef | 
+	loadeMethodToBeRemoved
+		ifNotNil: [ :loadedMethod | 
+			| loadedPackage |
+			loadedPackage := loadedMethod loadedPackage.
+			loadedPackage name = packageName
+				ifTrue: [ 
+					"loaded method being updated in same package, so no need to remove method definition from the package"
+					 ]
+				ifFalse: [ 
+					| loadedClass projectDef packageDef crDef |
+					"loaded method in different package than new version of method"
+					projectDef := loadedPackage loadedProject asDefinition.
+					projectDef name = pDef name
+						ifTrue: [ 
+							"both packages are in same project"
+							projectDef := pDef ]
+						ifFalse: [ 
+							"each package in a different project, will need to load loaded method project as well"
+							projectSetDefinition addProject: projectDef ].
+					packageDef := projectDef packageNamed: loadedPackage name.
+					loadedClass := loadedMethod loadedClass.
+					crDef := loadedClass isLoadedClass
+						ifTrue: [ packageDef classDefinitions at: loadedClass name ]
+						ifFalse: [ packageDef classExtensions at: loadedClass name ].
+					isMeta
+						ifTrue: [ crDef removeClassMethod: methodDef selector ]
+						ifFalse: [ crDef removeInstanceMethod: methodDef selector ] ] ].
 	isMeta
 		ifTrue: [ cDef updateClassMethodDefinition: methodDef ]
 		ifFalse: [ cDef updateInstanceMethodDefinition: methodDef ].
-	^ projectTools load loadProjectDefinition: pDef ].
+	projectSetDefinition addProject: pDef.
+	^ projectTools load loadProjectSetDefinition: projectSetDefinition ].
 
-	projectTools edit
+	self
 		definitionsForClassNamed: className
 		ifFound: [ :classDef :packageDef :projectDef | 
-			packageDef key = packageName
+			packageDef name = packageName
 				ifTrue: [ updateBlock value: classDef value: projectDef ]
 				ifFalse: [ 
 					"the named package is different from the class definition package"

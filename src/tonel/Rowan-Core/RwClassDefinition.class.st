@@ -37,6 +37,12 @@ RwClassDefinition class >> newForClassNamed: className super: superClassName ins
 ]
 
 { #category : 'private' }
+RwClassDefinition >> _methodsModificationClass [
+
+	^ RwMethodsModification
+]
+
+{ #category : 'private' }
 RwClassDefinition >> _modificationClass [
 
 	^ RwClassModification
