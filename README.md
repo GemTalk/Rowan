@@ -28,7 +28,7 @@ createStone -f $rowan_stone_name 3.4.0
 
 # clone Rowan
 
-cd shared/repos
+cd $GS_HOME/shared/repos
 git clone git@github.com:dalehenrich/Rowan.git
 
 # setup GsDevKit_home for Rowan stones
