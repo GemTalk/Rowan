@@ -9,6 +9,12 @@ RwGsLoadedSymbolDictPackage >> classOrExtensionForClass: behavior ifAbsent: abse
 
 	| className |
 	className := behavior theNonMetaClass name asString.
+	^ self classOrExtensionForClassNamed: className ifAbsent: absentBlock
+]
+
+{ #category : 'queries' }
+RwGsLoadedSymbolDictPackage >> classOrExtensionForClassNamed: className ifAbsent: absentBlock [
+
 	^ loadedClasses
 		at: className
 		ifAbsent: [ loadedClassExtensions at: className ifAbsent: absentBlock ]

@@ -370,7 +370,6 @@ RwBrowserToolTest >> testDeleteMethod [
 	packageName1 := 'Simple-Core'.
 	packageNames := {packageName1}.
 	className := 'SimpleBrowse'.
-	self halt.
 	self
 		_loadStandardProjectDefinition: projectName
 		packageNames: packageNames

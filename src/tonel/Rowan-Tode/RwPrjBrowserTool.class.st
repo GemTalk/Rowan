@@ -152,18 +152,31 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 
 	"Remove the given method selector from the class named className"
 
-	| loadedMethodToBeRemoved loadedPackage |
+	| loadedMethodToBeRemoved loadedPackage loadedClassOrExtension projectDef packageDef crDef |
 	Rowan image
 		loadedMethod: methodSelector
 		inClassNamed: className
-		ifFound: [ :loadedMethod | 
-			self halt.
-			loadedMethodToBeRemoved := loadedMethod ]
+		ifFound: [ :loadedMethod | loadedMethodToBeRemoved := loadedMethod ]
 		ifAbsent: [ 
 			self
 				error:
 					'No loaded method for ' , methodSelector printString , ' was found for class '
 						, className printString ].
 	loadedPackage := loadedMethodToBeRemoved loadedPackage.
-	self halt
+	loadedClassOrExtension := loadedPackage
+		classOrExtensionForClassNamed: className
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no class or extension for ' , className printString
+						, ' in package ' , loadedPackage name printString , '.' ].
+	projectDef := loadedPackage loadedProject asDefinition.
+	packageDef := projectDef packageNamed: loadedPackage name.
+	crDef := loadedClassOrExtension isLoadedClass
+		ifTrue: [ packageDef classDefinitions at: loadedClassOrExtension name ]
+		ifFalse: [ packageDef classExtensions at: loadedClassOrExtension name ].
+	isMeta
+		ifTrue: [ crDef removeClassMethod: methodSelector ]
+		ifFalse: [ crDef removeInstanceMethod: methodSelector ].
+	Rowan projectTools load loadProjectDefinition: projectDef
 ]
