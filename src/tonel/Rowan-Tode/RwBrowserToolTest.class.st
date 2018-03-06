@@ -283,7 +283,7 @@ RwBrowserToolTest >> testAddMethod [
 	browserTool := Rowan projectTools browser.
 
 	browserTool
-		addMethod: 'ivar1: anInteger ivar1 := anInteger'
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
 		inProtocol: 'accessing'
 		forClassNamed: className
 		isMeta: false
@@ -297,7 +297,7 @@ RwBrowserToolTest >> testAddMethod [
 	self should: [ testInstance foo ] raise: MessageNotUnderstood.
 
 	browserTool
-		addMethod: 'foo ^''bar'''
+		addOrUpdateMethod: 'foo ^''bar'''
 		inProtocol: 'accessing'
 		forClassNamed: className
 		isMeta: false
@@ -306,7 +306,7 @@ RwBrowserToolTest >> testAddMethod [
 	self assert: testInstance foo = 'bar'.
 
 	browserTool
-		addMethod: 'foo ^''baz'''
+		addOrUpdateMethod: 'foo ^''baz'''
 		inProtocol: 'accessing'
 		forClassNamed: className
 		isMeta: false
@@ -378,7 +378,7 @@ RwBrowserToolTest >> testMoveGlobalExtensionMethods [
 	browserTool := Rowan projectTools browser.
 
 	browserTool
-		addMethod: 'foo ^''bar'''
+		addOrUpdateMethod: 'foo ^''bar'''
 		inProtocol: 'accessing'
 		forClassNamed: className
 		isMeta: false
@@ -401,7 +401,7 @@ RwBrowserToolTest >> testMoveGlobalExtensionMethods [
 		forClassExtensionsIn: className.
 
 	browserTool
-		addMethod: 'foo ^''bif'''
+		addOrUpdateMethod: 'foo ^''bif'''
 		inProtocol: 'accessing'
 		forClassNamed: className
 		isMeta: false
@@ -444,7 +444,7 @@ RwBrowserToolTest >> testMoveMethod [
 	browserTool := Rowan projectTools browser.
 
 	browserTool
-		addMethod: 'ivar1: anInteger ivar1 := anInteger'
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
 		inProtocol: 'accessing'
 		forClassNamed: className
 		isMeta: false
@@ -459,7 +459,7 @@ RwBrowserToolTest >> testMoveMethod [
 	self _assertNoClassExtensionsIn: className.
 
 	browserTool
-		addMethod: 'foo ^''bar'''
+		addOrUpdateMethod: 'foo ^''bar'''
 		inProtocol: 'accessing'
 		forClassNamed: className
 		isMeta: false
@@ -480,7 +480,7 @@ RwBrowserToolTest >> testMoveMethod [
 		forClassExtensionsIn: className.
 
 	browserTool
-		addMethod: 'foo ^''baz'''
+		addOrUpdateMethod: 'foo ^''baz'''
 		inProtocol: 'accessing'
 		forClassNamed: className
 		isMeta: false
@@ -489,7 +489,7 @@ RwBrowserToolTest >> testMoveMethod [
 	self assert: testInstance foo = 'baz'.
 
 	browserTool
-		addMethod: 'foo ^''bif'''
+		addOrUpdateMethod: 'foo ^''bif'''
 		inProtocol: 'accessing'
 		forClassNamed: className
 		isMeta: false

@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'method creation' }
-RwPrjBrowserTool >> addMethod: methodSource inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName [
+RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName [
 
 	"If the method is already installed in a different package, remove the method from that package.
 	 If package name matches the name of the package of the class definition, then add the method 
