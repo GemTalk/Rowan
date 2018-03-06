@@ -90,7 +90,7 @@ RwBrowserToolTest >> _loadExtendedProjectDefinition: projectName packageNames: p
 	projectDefinition := self
 		_standardProjectDefinition: projectName
 		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName1
+		defaultSymbolDictName: defaultSymbolDictName
 		comment: 'This is a simple project used to test class extension edit API'.
 
 	classDefinition := self _standardClassDefinition: className.
@@ -151,7 +151,7 @@ RwBrowserToolTest >> _loadGlobalExtensionsProjectDefinition: projectName package
 	projectDefinition := self
 		_globalExtensionsProjectDefinition: projectName
 		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName1
+		defaultSymbolDictName: defaultSymbolDictName
 		comment:
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
@@ -171,7 +171,7 @@ RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNa
 	projectDefinition := self
 		_standardProjectDefinition: projectName
 		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName1
+		defaultSymbolDictName: defaultSymbolDictName
 		comment:
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
@@ -190,7 +190,7 @@ RwBrowserToolTest >> _loadStandardProjectDefinition: projectName packageNames: p
 	projectDefinition := self
 		_standardProjectDefinition: projectName
 		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName1
+		defaultSymbolDictName: defaultSymbolDictName
 		comment:
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
@@ -330,7 +330,7 @@ RwBrowserToolTest >> testClassCreationTemplate [
 { #category : 'tests' }
 RwBrowserToolTest >> testCreateClass [
 
-	| projectName packageNames className packageName classDefinition browserTool testClass |
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict |
 	projectName := 'Simple Browser'.
 	packageName := 'Simple-Core'.
 	packageNames := {packageName}.
@@ -356,7 +356,50 @@ RwBrowserToolTest >> testCreateClass [
 	browserTool createClass: classDefinition inPackageNamed: packageName.
 
 	testClass := Rowan globalNamed: className.
-	self assert: testClass notNil
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass
+]
+
+{ #category : 'tests' }
+RwBrowserToolTest >> testDeleteMethod [
+
+	| projectName packageNames className packageName1 testClass testInstance browserTool testSymDict |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageNames := {packageName1}.
+	className := 'SimpleBrowse'.
+	self halt.
+	self
+		_loadStandardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	browserTool := Rowan projectTools browser.
+
+	browserTool
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+	testInstance := testClass new.
+	testInstance ivar1: 3.
+	self assert: testInstance ivar1 = 3.
+
+	browserTool removeMethod: #'ivar1:' forClassNamed: className isMeta: false.
+
+	self should: [ testInstance ivar1: 2 ] raise: MessageNotUnderstood.
+	self assert: testInstance ivar1 = 3
 ]
 
 { #category : 'tests' }
@@ -424,7 +467,7 @@ RwBrowserToolTest >> testMoveGlobalExtensionMethods [
 { #category : 'tests' }
 RwBrowserToolTest >> testMoveMethod [
 
-	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool |
+	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool testSymDict |
 	projectName := 'Simple Browser'.
 	packageName1 := 'Simple-Core'.
 	packageName2 := 'Simple-Extensions1'.
@@ -452,6 +495,8 @@ RwBrowserToolTest >> testMoveMethod [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
 	testInstance := testClass new.
 	testInstance ivar1: 3.
 	self assert: testInstance ivar1 = 3.

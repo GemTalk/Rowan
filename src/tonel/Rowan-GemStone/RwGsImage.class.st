@@ -207,7 +207,7 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className ifFound: found
 			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
 				ifTrue: [ 
 					(symbolDict methodRegistry at: compiledMethod ifAbsent: [  ])
-						ifNotNil: [ :loadedMethod | foundBlock value: loadedMethod ] ] ].
+						ifNotNil: [ :loadedMethod | ^ foundBlock value: loadedMethod ] ] ].
 	^ absentBlock value
 ]
 

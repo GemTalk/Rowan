@@ -51,7 +51,7 @@ RwGsPatch >> packageSymbolDictionary [
 	symDict := RwGsImage objectNamed: symDictName asSymbol.
 	(symDict isKindOf: RwGsPackageSymbolDictionary)
 		ifTrue: [ ^ symDict ].
-	^ RwGsImage newOrExistingSymbolDictionaryNamed: 'UnmanagedPackages'
+	^ RwGsImage newOrExistingSymbolDictionaryNamed: symDictName
 ]
 
 { #category : 'accessing' }

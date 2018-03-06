@@ -13,21 +13,21 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClas
 	 If there is no matching class extension or the package name does not match, add the method 
 		to a class extension in the named package."
 
-	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition loadeMethodToBeRemoved |
+	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition loadedMethodToBeRemoved |
 	projectSetDefinition := RwProjectSetDefinition new.
 
 	methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
 	Rowan image
 		loadedMethod: methodDef selector
 		inClassNamed: className
-		ifFound: [ :loadedMethod | loadeMethodToBeRemoved := loadedMethod ]
+		ifFound: [ :loadedMethod | loadedMethodToBeRemoved := loadedMethod ]
 		ifAbsent: [ 
 			"no pre-existing method for this selector installed"
 			 ].
 
 	projectTools := Rowan projectTools.
 	updateBlock := [ :cDef :pDef | 
-	loadeMethodToBeRemoved
+	loadedMethodToBeRemoved
 		ifNotNil: [ :loadedMethod | 
 			| loadedPackage |
 			loadedPackage := loadedMethod loadedPackage.
@@ -145,4 +145,25 @@ RwPrjBrowserTool >> createClass: classDefinition inPackageNamed: packageName [
 		inProject: projectDefinition.
 
 	projectTools load loadProjectDefinition: projectDefinition
+]
+
+{ #category : 'method creation' }
+RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta: isMeta [
+
+	"Remove the given method selector from the class named className"
+
+	| loadedMethodToBeRemoved loadedPackage |
+	Rowan image
+		loadedMethod: methodSelector
+		inClassNamed: className
+		ifFound: [ :loadedMethod | 
+			self halt.
+			loadedMethodToBeRemoved := loadedMethod ]
+		ifAbsent: [ 
+			self
+				error:
+					'No loaded method for ' , methodSelector printString , ' was found for class '
+						, className printString ].
+	loadedPackage := loadedMethodToBeRemoved loadedPackage.
+	self halt
 ]
