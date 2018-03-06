@@ -135,6 +135,13 @@ RwGsPatchSetBasic >> _methodExtensionPatchClass: packageName [
 ]
 
 { #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _methodExtensionSessionMethodsDeletionPatchClass [
+
+	^ self packageSymbolDictionaryClass
+		_methodExtensionSessionMethodsDeletionPatchClass
+]
+
+{ #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodPropertiesPatchClass [
 
 	^ self packageSymbolDictionaryClass

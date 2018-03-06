@@ -52,7 +52,7 @@ RwGsMethodPatch >> compiledMethod [
 			selector := methodDefinition selector.
 			compiledMethod := methodDictionary
 				at: selector
-				ifAbsent: [ self error: 'internal error - compiledmethod not present in method dictionary' ] ]
+				ifAbsent: [ self error: 'internal error - compiled method not present in method dictionary' ] ]
 ]
 
 { #category : 'compiling' }

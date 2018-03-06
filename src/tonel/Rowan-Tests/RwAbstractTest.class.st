@@ -542,12 +542,16 @@ RwAbstractTest >> setUp [
 	{(self _symbolDictionaryName).
 	(self _symbolDictionaryName1).
 	(self _symbolDictionaryName2).
-	'UnmanagedPackages'}
+	#'UnmanagedPackages'}
 		do: [ :symDictName | 
 			dict := symList objectNamed: symDictName.
+
 			dict
 				ifNotNil: [ 
+					(dict at: GsPackagePolicy globalName otherwise: nil)
+						ifNotNil: [ :policy | policy disable ].
 					index := symList indexOf: dict.
 					index > 0
-						ifTrue: [ user removeDictionaryAt: index ] ] ]
+						ifTrue: [ user removeDictionaryAt: index ] ] ].
+	GsPackagePolicy current refreshSessionMethodDictionary
 ]
