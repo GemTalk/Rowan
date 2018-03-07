@@ -30,6 +30,30 @@ RwBrowserToolTest >> _assert: foundBlock forClassExtensionsIn: className ifAbsen
 ]
 
 { #category : 'private' }
+RwBrowserToolTest >> _assert: foundBlock forClassName: className ifAbsent: absentBlock [
+
+	| projectTools |
+	projectTools := Rowan projectTools.
+	projectTools edit
+		definitionsForClassNamed: className
+		ifFound: foundBlock
+		ifAbsent: absentBlock
+]
+
+{ #category : 'private' }
+RwBrowserToolTest >> _assert: foundBlock forClassNamed: className [
+
+	self
+		_assert: foundBlock
+		forClassName: className
+		ifAbsent: [ 
+			self
+				assert: false
+				description:
+					'expected class definitions for class ' , className printString , ' not found.' ]
+]
+
+{ #category : 'private' }
 RwBrowserToolTest >> _assertNoClassExtensionsIn: className [
 
 	self
@@ -363,6 +387,54 @@ RwBrowserToolTest >> testCreateClass [
 ]
 
 { #category : 'tests' }
+RwBrowserToolTest >> testDeleteGlobalExtensionMethod [
+
+	| projectName packageNames className packageName1 testClass testInstance browserTool testSymDict |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Global-Extensions1'.
+	packageNames := {packageName1}.
+	className := 'Object'.
+	self
+		_loadGlobalExtensionsProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	browserTool := Rowan projectTools browser.
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''bar'''
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add extension method to Object"
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	self assert: testInstance foo = 'bar'.
+
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
+		forClassExtensionsIn: className.
+
+	browserTool removeMethod: #'foo' forClassNamed: className isMeta: false.
+
+	self should: [ testInstance foo ] raise: MessageNotUnderstood.
+
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ] ]
+		forClassExtensionsIn: className
+]
+
+{ #category : 'tests' }
 RwBrowserToolTest >> testDeleteMethod [
 
 	| projectName packageNames className packageName1 testClass testInstance browserTool testSymDict |
@@ -377,6 +449,15 @@ RwBrowserToolTest >> testDeleteMethod [
 		comment: 'project for testing project browser api'
 		className: className
 		inPackageName: packageName1.
+
+	self
+		_assert: [ :classDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: classDef instanceMethodDefinitions size = 1;
+						assert: (classDef instanceMethodDefinitions includesKey: #'ivar1') ] ]
+		forClassNamed: className.
 
 	browserTool := Rowan projectTools browser.
 
@@ -395,10 +476,29 @@ RwBrowserToolTest >> testDeleteMethod [
 	testInstance ivar1: 3.
 	self assert: testInstance ivar1 = 3.
 
+	self
+		_assert: [ :classDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: classDef instanceMethodDefinitions size = 2;
+						assert: (classDef instanceMethodDefinitions includesKey: #'ivar1:') ] ]
+		forClassNamed: className.
+
+
 	browserTool removeMethod: #'ivar1:' forClassNamed: className isMeta: false.
 
 	self should: [ testInstance ivar1: 2 ] raise: MessageNotUnderstood.
-	self assert: testInstance ivar1 = 3
+	self assert: testInstance ivar1 = 3.
+
+	self
+		_assert: [ :classDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: classDef instanceMethodDefinitions size = 1;
+						assert: (classDef instanceMethodDefinitions includesKey: #'ivar1') ] ]
+		forClassNamed: className
 ]
 
 { #category : 'tests' }

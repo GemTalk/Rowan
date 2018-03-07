@@ -63,7 +63,6 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteMethodNewClasse
 	behavior := isMeta
 		ifTrue: [ class class ]
 		ifFalse: [ class ].
-	self halt.
 	self packageSymbolDictionary
 		deleteMethod: methodDefinition selector
 		for: behavior
