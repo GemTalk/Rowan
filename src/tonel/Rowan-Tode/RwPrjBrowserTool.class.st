@@ -148,6 +148,22 @@ RwPrjBrowserTool >> createClass: classDefinition inPackageNamed: packageName [
 ]
 
 { #category : 'method creation' }
+RwPrjBrowserTool >> removeClassNamed: className [
+
+	| loadedClass loadedPackage projectDef packageDef classDef |
+	Rowan image
+		loadedClassNamed: className
+		ifFound: [ :lc | loadedClass := lc ]
+		ifAbsent: [ self error: 'The class ' , className printString , ' was not found' ].
+	loadedPackage := loadedClass loadedPackage.
+	projectDef := loadedPackage loadedProject asDefinition.
+	packageDef := projectDef packageNamed: loadedPackage name.
+	classDef := packageDef classDefinitions at: loadedClass name.
+	packageDef removeClassDefinition: classDef.
+	Rowan projectTools load loadProjectDefinition: projectDef
+]
+
+{ #category : 'method creation' }
 RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta: isMeta [
 
 	"Remove the given method selector from the class named className"

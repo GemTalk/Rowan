@@ -203,6 +203,32 @@ RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNa
 ]
 
 { #category : 'private' }
+RwBrowserToolTest >> _loadSimpleProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment className: className inPackageName: packageName [
+
+	| projectDefinition classDefinition projectTools |
+	projectTools := Rowan projectTools.
+
+	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+
+	projectDefinition := self
+		_standardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictName
+		comment:
+			'This is a simple project used to work out a "classic" class browser-style API'.
+
+	classDefinition := self _simpleClassDefinition: className.
+
+	projectTools edit
+		addClass: classDefinition
+		inPackageNamed: packageName
+		inProject: projectDefinition.
+
+	^ projectTools load loadProjectDefinition: projectDefinition
+]
+
+{ #category : 'private' }
 RwBrowserToolTest >> _loadStandardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment className: className inPackageName: packageName [
 
 	| projectDefinition classDefinition projectTools |
@@ -229,10 +255,9 @@ RwBrowserToolTest >> _loadStandardProjectDefinition: projectName packageNames: p
 ]
 
 { #category : 'private' }
-RwBrowserToolTest >> _standardClassDefinition: className [
+RwBrowserToolTest >> _simpleClassDefinition: className [
 
-	| classDefinition |
-	classDefinition := RwClassDefinition
+	^ RwClassDefinition
 		newForClassNamed: className
 		super: 'Object'
 		instvars: #('ivar1')
@@ -241,7 +266,14 @@ RwBrowserToolTest >> _standardClassDefinition: className [
 		category: 'Simple Things'
 		comment: 'I am a SimpleEdit class'
 		pools: #()
-		type: 'normal'.
+		type: 'normal'
+]
+
+{ #category : 'private' }
+RwBrowserToolTest >> _standardClassDefinition: className [
+
+	| classDefinition |
+	classDefinition := self _simpleClassDefinition: className.
 
 	classDefinition
 		addInstanceMethodDefinition:
@@ -384,6 +416,41 @@ RwBrowserToolTest >> testCreateClass [
 
 	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
 	self assert: (testSymDict at: className) == testClass
+]
+
+{ #category : 'tests' }
+RwBrowserToolTest >> testDeleteClass [
+
+	| projectName packageNames className packageName1 testClass browserTool testSymDict |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageNames := {packageName1}.
+	className := 'SimpleBrowse'.
+	self
+		_loadSimpleProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	self
+		_assert: [ :classDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ self assert: classDef name = className ] ]
+		forClassNamed: className.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	browserTool := Rowan projectTools browser.
+
+	browserTool removeClassNamed: className.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass isNil
 ]
 
 { #category : 'tests' }
