@@ -57,6 +57,19 @@ RwProjectDefinition >> addPackage: aPackageDefinition [
 	packages at: key put: aPackageDefinition
 ]
 
+{ #category : 'accessing' }
+RwProjectDefinition >> addPackageNamed: packageName [
+
+	self addPackage: (RwPackageDefinition newNamed: packageName)
+]
+
+{ #category : 'accessing' }
+RwProjectDefinition >> addPackagesNamed: packageNames [
+
+	packageNames
+		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
+]
+
 { #category : 'properties' }
 RwProjectDefinition >> canCommit [
 

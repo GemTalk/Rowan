@@ -222,6 +222,16 @@ RwPrjBrowserTool >> addPackageNamed: packageName toProjectNamed: projectName [
 	Rowan projectTools load loadProjectDefinition: projectDefinition
 ]
 
+{ #category : 'package browsing' }
+RwPrjBrowserTool >> addPackagesNamed: packageNames toProjectNamed: projectName [
+
+	| projectDefinition |
+	projectDefinition := self _projectNamed: projectName.
+	packageNames
+		do: [ :packageName | projectDefinition addPackage: (RwPackageDefinition newNamed: packageName) ].
+	Rowan projectTools load loadProjectDefinition: projectDefinition
+]
+
 { #category : 'class browsing' }
 RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName category: category [
 
@@ -278,6 +288,16 @@ RwPrjBrowserTool >> createClass: classDefinition inPackageNamed: packageName [
 		inProject: projectDefinition.
 
 	projectTools load loadProjectDefinition: projectDefinition
+]
+
+{ #category : 'project browsing' }
+RwPrjBrowserTool >> createGitPackageProjectNamed: projectName [
+
+	| projectDefinition |
+	projectDefinition := RwProjectDefinition
+		newForGitPackageProjectNamed: projectName.
+	Rowan projectTools load loadProjectDefinition: projectDefinition.
+	^ projectDefinition
 ]
 
 { #category : 'project browsing' }
