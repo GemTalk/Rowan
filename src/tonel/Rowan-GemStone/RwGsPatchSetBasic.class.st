@@ -12,7 +12,6 @@ Class {
 		'projectsWithPropertyChanges',
 		'addedClasses',
 		'deletedClasses',
-		'deletedClassExtensions',
 		'extendedClasses',
 		'classesWithPropertyChanges',
 		'classesWithClassVariableChanges',
@@ -118,7 +117,7 @@ RwGsPatchSetBasic >> _methodExtensionDeletionPatchClass: packageName [
 			(self _currentProjectDefinition
 				useSessionMethodsForExtensionsForPackageNamed: packageName)
 				ifTrue: [ symDictClass _methodExtensionSessionMethodsDeletionPatchClass ]
-				ifFalse: [ symDictClass _methodDeletionPatchClass ] ]
+				ifFalse: [ symDictClass _methodExtensionDeletionPatchClass ] ]
 		ifNil: [ RwGsMethodDeletionPatch ]
 ]
 
@@ -535,7 +534,6 @@ RwGsPatchSetBasic >> anyElementOfCollection: aCollection [
 RwGsPatchSetBasic >> apply [
 
 	"Apply the changes I represent to the running image."
-
 	self
 		setupForApply;
 		removeDeletedClassesFromTempSymbols;
@@ -548,7 +546,7 @@ RwGsPatchSetBasic >> apply [
 		addAndUpdateLoadedProjects;
 		addAndUpdateLoadedPackages;
 		removeDeletedClassesFromSystem;
-		removeDeletedClassExtensionsFromSystem;
+		"removeDeletedClassExtensionsFromSystem;"
 		installAddedClasses;
 		installAddedClassExtensions;
 		"moveClassesBetweenSymbolDictionaries;"
@@ -679,7 +677,6 @@ RwGsPatchSetBasic >> initialize [
 	packagesWithPropertyChanges := Set new.
 	projectsWithPropertyChanges := Set new.
 	deletedClasses := Set new.
-	deletedClassExtensions := Set new.
 	addedClasses := Set new.
 	extendedClasses := Set new.
 	classesWithNewVersions := Set new.
@@ -773,14 +770,6 @@ RwGsPatchSetBasic >> removeDeletedClassesFromTempSymbols [
 	"Deleted class names should not resolve during compilation."
 
 	deletedClasses do: [:each | tempSymbols removeKey: each className asSymbol]
-]
-
-{ #category : 'private - applying' }
-RwGsPatchSetBasic >> removeDeletedClassExtensionsFromSystem [
-	"Remove the name binding from the SymbolDictionaries in the live SymbolList
-        Remove the LoadedClass from its LoadedPackage"
-
-	deletedClassExtensions do: [:each | each deleteClassExtenstionFromSystem ]
 ]
 
 { #category : 'private - applying' }

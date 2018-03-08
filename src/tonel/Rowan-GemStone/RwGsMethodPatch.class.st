@@ -160,11 +160,11 @@ RwGsMethodPatch >> printOn: aStream [
 	super printOn: aStream.
 	aStream
 		nextPutAll: ' for ';
-		nextPutAll: classDefinition key.
+		nextPutAll: classDefinition key asString.
 	isMeta ifTrue: [aStream nextPutAll: ' class'].
 	aStream
 		nextPutAll: '>>';
-		nextPutAll: methodDefinition key
+		nextPutAll: methodDefinition key asString
 ]
 
 { #category : 'private-installing' }

@@ -59,6 +59,12 @@ RwGsPackageSymbolDictionary class >> _methodDeletionPatchClass [
 ]
 
 { #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _methodExtensionDeletionPatchClass [
+
+	^ RwGsMethodDeletionSymbolDictPatch
+]
+
+{ #category : 'accessing' }
 RwGsPackageSymbolDictionary class >> _methodExtensionPatchClass [
 
 	^ RwGsMethodExtensionSymbolDictPatch

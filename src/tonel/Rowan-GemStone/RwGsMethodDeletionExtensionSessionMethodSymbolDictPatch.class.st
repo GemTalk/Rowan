@@ -20,6 +20,7 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> compiledMethod [
 					self
 						error:
 							'internal error - compiled session method not present in method dictionary' ] ]
+
 ]
 
 { #category : 'deleting' }
@@ -27,9 +28,10 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteLoadedMethodNew
 
 	| className class |
 	classDefinition key
- 		ifNil: [ 
- 			"class is being deleted ... we're cool"
- 			^ self ].	className := classDefinition key asSymbol.
+		ifNil: [ 
+			"class is being deleted ... we're cool"
+			^ self ].
+	className := classDefinition key asSymbol.
 	class := createdClasses
 		at: className
 		ifAbsent: [ 
@@ -50,9 +52,10 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteMethodNewClasse
 
 	| className class |
 	classDefinition key
- 		ifNil: [ 
- 			"class is being deleted ... we're cool"
- 			^ self ].	className := classDefinition key asSymbol.
+		ifNil: [ 
+			"class is being deleted ... we're cool"
+			^ self ].
+	className := classDefinition key asSymbol.
 	class := createdClasses
 		at: className
 		ifAbsent: [ 

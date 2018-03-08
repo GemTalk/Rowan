@@ -18,7 +18,7 @@ RwGsMethodDeletionSymbolDictPatch >> deleteLoadedMethodNewClasses: createdClasse
 	classDefinition key
 		ifNil: [ 
 			"class is being deleted ... we're cool"
-			^ self ].
+			^ self  ].
 	className := classDefinition key asSymbol.
 	class := createdClasses
 		at: className
@@ -42,7 +42,7 @@ RwGsMethodDeletionSymbolDictPatch >> deleteMethodNewClasses: createdClasses andE
 	classDefinition key
 		ifNil: [ 
 			"class is being deleted ... we're cool"
-			^ self ].
+			^ self  ].
 	className := classDefinition key asSymbol.
 	class := createdClasses
 		at: className
