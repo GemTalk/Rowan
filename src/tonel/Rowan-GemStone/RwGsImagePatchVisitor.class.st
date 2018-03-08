@@ -95,9 +95,7 @@ RwGsImagePatchVisitor >> addClassExtensions: classExtensions [
 { #category : 'private' }
 RwGsImagePatchVisitor >> addDeletedPackage: aPackageDefinition [
 
-	"see addAddedPackage:"
-
-	self halt
+	self deletePackages: {aPackageDefinition}
 ]
 
 { #category : 'private' }
@@ -265,7 +263,7 @@ RwGsImagePatchVisitor >> visitPackageModification: aPackageModification [
 			^ self ].
 	aPackageModification isDeletion
 		ifTrue: [ 
-			patchSet addDeletedPackage: aPackageModification before.
+			self addDeletedPackage: aPackageModification before.
 			^ self ].
 	currentPackage := aPackageModification after.
 	propertiesModification := aPackageModification propertiesModification.

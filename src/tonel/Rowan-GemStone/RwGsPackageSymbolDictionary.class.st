@@ -101,6 +101,12 @@ RwGsPackageSymbolDictionary class >> _packageAdditionPatchClass [
 ]
 
 { #category : 'accessing' }
+RwGsPackageSymbolDictionary class >> _packageDeletionPatchClass [
+
+	^ RwGsPackageDeletionSymbolDictPatch
+]
+
+{ #category : 'accessing' }
 RwGsPackageSymbolDictionary class >> defaultProtocolString [
 
 	^ 'as yet unclassified'
@@ -570,6 +576,16 @@ RwGsPackageSymbolDictionary >> deleteMethod: selector for: behavior [
 	compiledMethod := behavior compiledMethodAt: selector.
 	self deleteCompiledMethod: compiledMethod from: behavior
 
+]
+
+{ #category : 'method - patch api' }
+RwGsPackageSymbolDictionary >> deletePackage: packageName [
+
+	| loadedPackage |
+	loadedPackage := packageRegistry
+		removeKey: packageName
+		ifAbsent: [ self error: 'package ' , packageName printString , ' not found' ].
+	loadedPackage loadedProject removeLoadedPackage: loadedPackage
 ]
 
 { #category : 'class - patch api' }

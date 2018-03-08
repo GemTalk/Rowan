@@ -364,3 +364,14 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 		ifFalse: [ crDef removeInstanceMethod: methodSelector ].
 	Rowan projectTools load loadProjectDefinition: projectDef
 ]
+
+{ #category : 'package browsing' }
+RwPrjBrowserTool >> removePackageNamed: packageName [
+
+	| loadedPackage projectDef |
+	loadedPackage := self _loadedPackageNamed: packageName.
+	projectDef := loadedPackage loadedProject asDefinition.
+	projectDef packages removeKey: loadedPackage name.
+
+	Rowan projectTools load loadProjectDefinition: projectDef
+]
