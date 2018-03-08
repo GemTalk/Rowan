@@ -24,6 +24,14 @@ RwGsLoadedSymbolDictMethod >> definingPackageOfClass [
 	^loadedClass loadedPackage
 ]
 
+{ #category : 'private-updating' }
+RwGsLoadedSymbolDictMethod >> handleClassDeletion [
+
+	"The class to which I refer has been deleted, so I must unregister myself."
+
+	Rowan image removeLoadedMethodForCompileMethod: handle
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictMethod >> key [
 

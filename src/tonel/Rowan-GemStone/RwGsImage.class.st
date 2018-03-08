@@ -151,13 +151,11 @@ RwGsImage class >> existingSymbolDictionaryNamed: dictName [
 ]
 
 { #category : 'querying' }
-RwGsImage class >> loadedClassExtensionsNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+RwGsImage class >> loadedClassExtensionsForClass: class [
 
-	"scan the symbol list for a RwLoadedClassExtension instances of the given name"
+	"lookup the loadedClassExtensions for the given class"
 
-	| class history found |
-	class := self objectNamed: className.
-	class ifNil: [ ^ absentBlock value ].
+	| history found |
 	history := class classHistory.
 	found := IdentitySet new.
 	self symbolList
@@ -166,8 +164,37 @@ RwGsImage class >> loadedClassExtensionsNamed: className ifFound: foundBlock ifA
 				ifTrue: [ 
 					(symbolDict classExtensionRegistry at: history ifAbsent: [  ])
 						ifNotNil: [ :loadedClassExtensionSet | found addAll: loadedClassExtensionSet ] ] ].
+	^ found
+]
+
+{ #category : 'querying' }
+RwGsImage class >> loadedClassExtensionsNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+
+	"scan the symbol list for a RwLoadedClassExtension instances of the given name"
+
+	| class history found |
+	class := self objectNamed: className.
+	class ifNil: [ ^ absentBlock value ].
+	history := class classHistory.
+	found := self loadedClassExtensionsForClass: class.
 	found isEmpty
 		ifFalse: [ ^ foundBlock value: found ].
+	^ absentBlock value
+]
+
+{ #category : 'querying' }
+RwGsImage class >> loadedClassForClass: class ifAbsent: absentBlock [
+
+	"Lookup the given class in the classRegistry"
+
+	| history |
+	history := class classHistory.
+	self symbolList
+		do: [ :symbolDict | 
+			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
+				ifTrue: [ 
+					(symbolDict classRegistry at: history ifAbsent: [  ])
+						ifNotNil: [ :loadedClass | ^ loadedClass ] ] ].
 	^ absentBlock value
 ]
 
@@ -176,17 +203,13 @@ RwGsImage class >> loadedClassNamed: className ifFound: foundBlock ifAbsent: abs
 
 	"scan the symbol list for a RwLoadedClass instance of the given name"
 
-	| class history |
+	| class loadedClass |
 	class := self objectNamed: className.
 	class ifNil: [ ^ absentBlock value ].
-	history := class classHistory.
-	self symbolList
-		do: [ :symbolDict | 
-			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
-				ifTrue: [ 
-					(symbolDict classRegistry at: history ifAbsent: [  ])
-						ifNotNil: [ :loadedClass | ^ foundBlock value: loadedClass ] ] ].
-	^ absentBlock value
+	loadedClass := self
+		loadedClassForClass: class
+		ifAbsent: [ ^ absentBlock value ].
+	^ foundBlock value: loadedClass
 ]
 
 { #category : 'querying' }
@@ -331,6 +354,32 @@ RwGsImage class >> projectNames [
 					(self _projectRegistryForUserId: userId)
 						ifNotNil: [ :projectRegistry | projectNames addAll: projectRegistry keys ] ] ].
 	^ projectNames
+]
+
+{ #category : 'querying' }
+RwGsImage class >> removeLoadedClassExtensionsForClass: class [
+
+	"The class has or will be deleted from the system, remove the loadedClassExtensions that refer
+		to the given class"
+
+	| history |
+	history := class classHistory.
+	self symbolList
+		do: [ :symbolDict | 
+			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
+				ifTrue: [ symbolDict classExtensionRegistry removeKey: history ifAbsent: [  ] ] ]
+]
+
+{ #category : 'querying' }
+RwGsImage class >> removeLoadedMethodForCompileMethod: compiledMethod [
+
+	"The given compiled method is being removed from the system, remove the loadedMethod associated 
+		with the compiled method."
+
+	self symbolList
+		do: [ :symbolDict | 
+			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
+				ifTrue: [ symbolDict methodRegistry removeKey: compiledMethod ifAbsent: [  ] ] ]
 ]
 
 { #category : 'querying' }

@@ -34,6 +34,16 @@ RwGsLoadedSymbolDictClassExtension >> addLoadedMethod: aLoadedMethod [
 		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
 ]
 
+{ #category : 'private-updating' }
+RwGsLoadedSymbolDictClassExtension >> handleClassDeletion [
+
+	"The class to which I refer is or has been deleted. Clean up the loaded extension methods.
+		I expect the caller to remove me from the registry."
+
+	loadedInstanceMethods values , loadedClassMethods values
+		do: [ :loadedMethod | loadedMethod handleClassDeletion ]
+]
+
 { #category : 'initialization' }
 RwGsLoadedSymbolDictClassExtension >> initialize [
 
