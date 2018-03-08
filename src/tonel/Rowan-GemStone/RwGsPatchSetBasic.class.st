@@ -551,19 +551,22 @@ RwGsPatchSetBasic >> apply [
 		removeDeletedClassExtensionsFromSystem;
 		installAddedClasses;
 		installAddedClassExtensions;
+		"moveClassesBetweenSymbolDictionaries;"
+		"moveClassesBetweenPackages;"
 		moveMethodsBetweenPackages;
 		updateSymbolAssociations;
 		updateClassProperties;
 		updateMethodDictionaries;
 		updateMethodProperties;
 		removeDeletedMethods;
+		"removeDeletedClassesAndExtensionsFromPackages;"
 		markPackagesNotDirty;
 		removeDeletedPackages;
 		commit;
 		runInitializers;
 		commit;
 		migrateInstances;
-		commit	"moveClassesBetweenSymbolDictionaries;"	"moveClassesBetweenPackages;"	"removeDeletedClassesAndExtensionsFromPackages;"
+		commit
 ]
 
 { #category : 'public' }
@@ -729,7 +732,7 @@ RwGsPatchSetBasic >> moveMethodsBetweenPackages [
 			"no move without deleted methods"
 			^ self ].
 	deletedMethodsMap := Dictionary new.
-	deletedMethods
+	deletedMethods 
 		do: [ :patch | 
 			patch classDefinition key
 				ifNotNil: [ 
@@ -783,7 +786,8 @@ RwGsPatchSetBasic >> removeDeletedClassExtensionsFromSystem [
 { #category : 'private - applying' }
 RwGsPatchSetBasic >> removeDeletedMethods [
 
-	deletedMethods do: [:each | each deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]
+	deletedMethods
+		do: [ :each | each deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]
 ]
 
 { #category : 'private - applying' }

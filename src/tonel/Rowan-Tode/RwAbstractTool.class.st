@@ -74,11 +74,12 @@ RwAbstractTool >> definitionsForClassNamed: className ifFound: foundBlock ifAbse
 ]
 
 { #category : 'class lookup' }
-RwAbstractTool >> definitionsForMethod: selector inClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+RwAbstractTool >> definitionsForMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBlock ifAbsent: absentBlock [
 
 	^ Rowan image
 		loadedMethod: selector
 		inClassNamed: className
+		isMeta: isMeta
 		ifFound: [ :loadedMethod | 
 			| loadedPackage loadedClass projectDef packageDef classDef classExtensionDef |
 			loadedPackage := loadedMethod loadedPackage.

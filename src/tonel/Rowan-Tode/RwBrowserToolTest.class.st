@@ -54,6 +54,18 @@ RwBrowserToolTest >> _assert: foundBlock forClassNamed: className [
 ]
 
 { #category : 'private' }
+RwBrowserToolTest >> _assertForClassExtensionInClassWithHistory: classHistory ifPresent: presentBlock ifAbsent: absentBlock [
+
+	Rowan image symbolList
+		do: [ :symbolDict | 
+			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
+				ifTrue: [ 
+					(symbolDict classExtensionRegistry at: classHistory ifAbsent: [  ])
+						ifNotNil: [ :loadedClassExtensionSet | ^ presentBlock cull: loadedClassExtensionSet ] ] ].
+	^ absentBlock value
+]
+
+{ #category : 'private' }
 RwBrowserToolTest >> _assertNoClassExtensionsIn: className [
 
 	self
@@ -160,7 +172,7 @@ RwBrowserToolTest >> _loadExtendedProjectDefinition: projectName packageNames: p
 		inProject: projectDefinition.
 
 
-	^ projectTools load loadProjectDefinition: projectDefinition
+	projectTools load loadProjectDefinition: projectDefinition
 ]
 
 { #category : 'private' }
@@ -180,7 +192,7 @@ RwBrowserToolTest >> _loadGlobalExtensionsProjectDefinition: projectName package
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
 
-	^ projectTools load loadProjectDefinition: projectDefinition
+	projectTools load loadProjectDefinition: projectDefinition
 ]
 
 { #category : 'private' }
@@ -199,7 +211,7 @@ RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNa
 		comment:
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
-	^ projectTools load loadProjectDefinition: projectDefinition
+	projectTools load loadProjectDefinition: projectDefinition
 ]
 
 { #category : 'private' }
@@ -225,7 +237,7 @@ RwBrowserToolTest >> _loadSimpleProjectDefinition: projectName packageNames: pac
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	^ projectTools load loadProjectDefinition: projectDefinition
+	projectTools load loadProjectDefinition: projectDefinition
 ]
 
 { #category : 'private' }
@@ -251,7 +263,7 @@ RwBrowserToolTest >> _loadStandardProjectDefinition: projectName packageNames: p
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	^ projectTools load loadProjectDefinition: projectDefinition
+	projectTools load loadProjectDefinition: projectDefinition
 ]
 
 { #category : 'private' }
@@ -450,6 +462,106 @@ RwBrowserToolTest >> testDeleteClass [
 	browserTool removeClassNamed: className.
 
 	testClass := Rowan globalNamed: className.
+	self assert: testClass isNil
+]
+
+{ #category : 'tests' }
+RwBrowserToolTest >> testDeleteComplicatedClass [
+
+	"The class to be deleted is created in one project and extended by another project ... the method extensions are direct method extensions and session method extensions"
+
+	| projectName1 packageNames className1 className2 packageName1 packageName2 testClass browserTool testProjectDefinition testPackageNames classDefinition testInstance |
+	projectName1 := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageNames := {packageName1}.
+	className1 := 'SimpleBrowse1'.
+	className2 := 'SimpleBrowse2'.
+	self
+		_loadSimpleProjectDefinition: projectName1
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className1
+		inPackageName: packageName1.
+
+	testClass := Rowan globalNamed: className1.
+	self assert: testClass notNil.
+
+	browserTool := Rowan projectTools browser.
+
+	packageName2 := 'Simple-Extensions'.
+	browserTool addPackageNamed: packageName2 toProjectNamed: projectName1.	"new package packageName2"
+
+	packageNames := {packageName1.
+	packageName2}.
+	testProjectDefinition := browserTool projectNamed: projectName1.
+	testPackageNames := testProjectDefinition packageNames.
+	self assert: testPackageNames size = packageNames size.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: 'Fun stuff'
+		comment: 'just a class'
+		pools: #()
+		type: 'normal'.
+	browserTool createClass: classDefinition inPackageNamed: packageName2.	"new class className2"
+
+	testClass := Rowan globalNamed: className2.
+	self assert: testClass notNil.
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''foo'''
+		inProtocol: 'accessing'
+		forClassNamed: className1
+		isMeta: false
+		inPackageNamed: packageName2.	"extension method for className1"
+
+	testClass := Rowan globalNamed: className1.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	self assert: testInstance foo = 'foo'.
+
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ].
+			packageDef name = packageName2
+				ifTrue: [ 
+					self
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
+		forClassExtensionsIn: className1.
+
+
+
+	self
+		_assertForClassExtensionInClassWithHistory: testClass classHistory
+		ifPresent: [ :classExtensionSet | self assert: classExtensionSet size = 1 ]
+		ifAbsent: [ 
+			self
+				assert: false
+				description:
+					'Expected class extension for class ' , className1 printString , ' not present' ].
+
+
+	browserTool removeClassNamed: className1.	"remove class className1"
+
+	self
+		_assertForClassExtensionInClassWithHistory: testClass classHistory
+		ifPresent: [ :classExtensionSet | 
+			self
+				assert: false
+				description:
+					'Unexpected class extension for class ' , className1 printString , ' found' ]
+		ifAbsent: [ 
+			"expected result"
+			 ].
+
+	testClass := Rowan globalNamed: className1.
 	self assert: testClass isNil
 ]
 

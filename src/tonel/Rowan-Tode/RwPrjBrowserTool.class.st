@@ -4,7 +4,131 @@ Class {
 	#category : 'Rowan-Tode'
 }
 
-{ #category : 'method creation' }
+{ #category : 'private' }
+RwPrjBrowserTool >> _loadedClassExtensionsNamed: className [
+
+	^ self
+		_loadedClassExtensionsNamed: className
+		ifAbsent: [ 
+			self
+				error:
+					'No extensions for the class ' , className printString , ' were found' ]
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _loadedClassExtensionsNamed: className ifAbsent: absentBlock [
+
+	^ Rowan image
+		loadedClassExtensionsNamed: className
+		ifFound: [ :loadedClassExtensionSet | ^ loadedClassExtensionSet ]
+		ifAbsent: absentBlock
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _loadedClassNamed: className [
+
+	^ self
+		_loadedClassNamed: className
+		ifAbsent: [ self error: 'The class ' , className printString , ' was not found' ]
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _loadedClassNamed: className ifAbsent: absentBlock [
+
+	Rowan image
+		loadedClassNamed: className
+		ifFound: [ :loadedClass | ^ loadedClass ]
+		ifAbsent: absentBlock
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _loadedMethod: methodSelector inClassNamed: className isMeta: isMeta [
+
+	^ self
+		_loadedMethod: methodSelector
+		inClassNamed: className
+		isMeta: isMeta
+		ifAbsent: [ 
+			self
+				error:
+					'No loaded method for ' , methodSelector printString , ' was found for class '
+						, className printString ]
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _loadedMethod: methodSelector inClassNamed: className isMeta: isMeta ifAbsent: absentBlock [
+
+	^ Rowan image
+		loadedMethod: methodSelector
+		inClassNamed: className
+		isMeta: isMeta
+		ifFound: [ :loadedMethod | ^ loadedMethod ]
+		ifAbsent: absentBlock
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _loadedPackageNamed: packageName [
+
+	^ Rowan image
+		loadedPackageNamed: packageName
+		ifAbsent: [ self error: 'No package named ' , packageName printString , ' found' ]
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _loadedProjectForClassNamed: className [
+
+	^ (self _loadedClassNamed: className) loadedProject
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _loadedProjectForMethod: methodSelector inClassNamed: className isMeta: isMeta [
+
+	^ (self _loadedMethod: methodSelector inClassNamed: className isMeta: isMeta)
+		loadedProject
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _loadedProjectForPackageNamed: packageName [
+
+	^ (self _loadedPackageNamed: packageName) loadedProject
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _loadedProjectNamed: projectName [
+
+	^ Rowan image
+		loadedProjectNamed: projectName
+		ifAbsent: [ self error: 'No project named ' , projectName printString , ' found' ]
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _projectForClassNamed: className [
+
+	^ (self _loadedProjectForClassNamed: className) asDefinition
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _projectForMethod: methodSelector inClassNamed: className isMeta: isMeta [
+
+	^ (self
+		_loadedProjectForMethod: methodSelector
+		inClassNamed: className
+		isMeta: isMeta) asDefinition
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _projectForPackageNamed: packageName [
+
+	^ (self _loadedProjectForPackageNamed: packageName) asDefinition
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _projectNamed: projectName [
+
+	^ (self _loadedProjectNamed: projectName) asDefinition
+]
+
+{ #category : 'method browsing' }
 RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName [
 
 	"If the method is already installed in a different package, remove the method from that package.
@@ -17,10 +141,10 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClas
 	projectSetDefinition := RwProjectSetDefinition new.
 
 	methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
-	Rowan image
-		loadedMethod: methodDef selector
+	loadedMethodToBeRemoved := self
+		_loadedMethod: methodDef selector
 		inClassNamed: className
-		ifFound: [ :loadedMethod | loadedMethodToBeRemoved := loadedMethod ]
+		isMeta: isMeta
 		ifAbsent: [ 
 			"no pre-existing method for this selector installed"
 			 ].
@@ -89,7 +213,16 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClas
 	updateBlock value: classExtensionDef value: projectDefinition
 ]
 
-{ #category : 'class creation' }
+{ #category : 'package browsing' }
+RwPrjBrowserTool >> addPackageNamed: packageName toProjectNamed: projectName [
+
+	| projectDefinition |
+	projectDefinition := self _projectNamed: projectName.
+	projectDefinition addPackage: (RwPackageDefinition newNamed: packageName).
+	Rowan projectTools load loadProjectDefinition: projectDefinition
+]
+
+{ #category : 'class browsing' }
 RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName category: category [
 
 	| stream |
@@ -128,7 +261,7 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName category:
 	^ stream contents
 ]
 
-{ #category : 'class creation' }
+{ #category : 'class browsing' }
 RwPrjBrowserTool >> createClass: classDefinition inPackageNamed: packageName [
 
 	| loadedPackage projectDefinition projectTools |
@@ -147,37 +280,52 @@ RwPrjBrowserTool >> createClass: classDefinition inPackageNamed: packageName [
 	projectTools load loadProjectDefinition: projectDefinition
 ]
 
-{ #category : 'method creation' }
+{ #category : 'project browsing' }
+RwPrjBrowserTool >> projectNamed: projectName [
+
+	^ self _projectNamed: projectName
+]
+
+{ #category : 'class browsing' }
 RwPrjBrowserTool >> removeClassNamed: className [
 
-	| loadedClass loadedPackage projectDef packageDef classDef |
-	Rowan image
-		loadedClassNamed: className
-		ifFound: [ :lc | loadedClass := lc ]
-		ifAbsent: [ self error: 'The class ' , className printString , ' was not found' ].
+	| projectSetDefinition loadedClass loadedPackage projectDef packageDef classDef |
+	projectSetDefinition := RwProjectSetDefinition new.
+
+	loadedClass := self _loadedClassNamed: className.
 	loadedPackage := loadedClass loadedPackage.
-	projectDef := loadedPackage loadedProject asDefinition.
+	projectDef := loadedClass loadedProject asDefinition.
 	packageDef := projectDef packageNamed: loadedPackage name.
 	classDef := packageDef classDefinitions at: loadedClass name.
 	packageDef removeClassDefinition: classDef.
-	Rowan projectTools load loadProjectDefinition: projectDef
+	projectSetDefinition addProject: projectDef.
+
+	(self _loadedClassExtensionsNamed: className ifAbsent: [ #() ])
+		do: [ :loadedClassExtension | 
+			| loadedClassExtensionPackage ceProjectDef cePackageDef |
+			loadedClassExtensionPackage := loadedClassExtension loadedPackage.
+			ceProjectDef := loadedClassExtension loadedProject asDefinition.
+			ceProjectDef name = projectDef name
+				ifTrue: [ ceProjectDef := projectDef ]
+				ifFalse: [ projectSetDefinition addProject: ceProjectDef ].
+			cePackageDef := ceProjectDef packageNamed: loadedClassExtensionPackage name.
+			cePackageDef
+				removeClassExtension:
+					(cePackageDef classExtensions at: loadedClassExtension name) ].
+
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
 ]
 
-{ #category : 'method creation' }
+{ #category : 'method browsing' }
 RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta: isMeta [
 
 	"Remove the given method selector from the class named className"
 
 	| loadedMethodToBeRemoved loadedPackage loadedClassOrExtension projectDef packageDef crDef |
-	Rowan image
-		loadedMethod: methodSelector
+	loadedMethodToBeRemoved := self
+		_loadedMethod: methodSelector
 		inClassNamed: className
-		ifFound: [ :loadedMethod | loadedMethodToBeRemoved := loadedMethod ]
-		ifAbsent: [ 
-			self
-				error:
-					'No loaded method for ' , methodSelector printString , ' was found for class '
-						, className printString ].
+		isMeta: isMeta.
 	loadedPackage := loadedMethodToBeRemoved loadedPackage.
 	loadedClassOrExtension := loadedPackage
 		classOrExtensionForClassNamed: className

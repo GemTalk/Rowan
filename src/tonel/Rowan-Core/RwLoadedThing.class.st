@@ -82,6 +82,18 @@ RwLoadedThing >> initializeForName: aName [
 ]
 
 { #category : 'accessing' }
+RwLoadedThing >> loadedPackage [
+
+	^ self subclassResponsibility: #'loadedPackage'
+]
+
+{ #category : 'accessing' }
+RwLoadedThing >> loadedProject [
+
+	^ self loadedPackage loadedProject
+]
+
+{ #category : 'accessing' }
 RwLoadedThing >> name [
 
 	^name

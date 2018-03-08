@@ -190,14 +190,16 @@ RwGsImage class >> loadedClassNamed: className ifFound: foundBlock ifAbsent: abs
 ]
 
 { #category : 'querying' }
-RwGsImage class >> loadedMethod: selector inClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
+RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBlock ifAbsent: absentBlock [
 
 	"scan the symbol list for a RwLoadedMethod instances for the given selector in the named class"
 
-	| class compiledMethod |
-	class := self objectNamed: className.
-	class ifNil: [ ^ absentBlock value ].
-	compiledMethod := class
+	| behavior compiledMethod |
+	behavior := self objectNamed: className.
+	behavior ifNil: [ ^ absentBlock value ].
+	isMeta
+		ifTrue: [ behavior := behavior class ].
+	compiledMethod := behavior
 		compiledMethodAt: selector asSymbol
 		environmentId: 0
 		otherwise: nil.

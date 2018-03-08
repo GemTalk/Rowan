@@ -27,10 +27,9 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteLoadedMethodNew
 
 	| className class |
 	classDefinition key
-		ifNil: [ 
-			"class is being deleted ... we're cool"
-			^ self ].
-	className := classDefinition key asSymbol.
+ 		ifNil: [ 
+ 			"class is being deleted ... we're cool"
+ 			^ self ].	className := classDefinition key asSymbol.
 	class := createdClasses
 		at: className
 		ifAbsent: [ 
@@ -40,6 +39,7 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteLoadedMethodNew
 	behavior := isMeta
 		ifTrue: [ class class ]
 		ifFalse: [ class ].
+
 	self packageSymbolDictionary
 		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior
@@ -50,10 +50,9 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteMethodNewClasse
 
 	| className class |
 	classDefinition key
-		ifNil: [ 
-			"class is being deleted ... we're cool"
-			^ self ].
-	className := classDefinition key asSymbol.
+ 		ifNil: [ 
+ 			"class is being deleted ... we're cool"
+ 			^ self ].	className := classDefinition key asSymbol.
 	class := createdClasses
 		at: className
 		ifAbsent: [ 
@@ -63,6 +62,7 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteMethodNewClasse
 	behavior := isMeta
 		ifTrue: [ class class ]
 		ifFalse: [ class ].
+
 	self packageSymbolDictionary
 		deleteMethod: methodDefinition selector
 		for: behavior

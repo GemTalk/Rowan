@@ -20,7 +20,9 @@ RwClassExtensionModification >> addModificationToPatchSet: aPatchSet inPackage: 
 				inPackage: aPackage
 				inProject: aProjectDefinition ].
 	self isDeletion
-		ifTrue: [ self halt: 'class extension should not be deleting anything ... I would think' ].
+		ifTrue: [ 
+			"nothing interesting to do for deletion"
+			 ].
 	self isModification
 		ifTrue: [ 
 			"nothing interesting to do for modification"
