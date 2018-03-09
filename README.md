@@ -19,9 +19,6 @@ cd $GS_HOME/shared/repos/tode
 git checkout dev
 git pull origin dev
 
-# create tode client
-createClient tode
-
 # create a Rowan stone
 export rowan_stone_name=test_rowan_340
 createStone -f $rowan_stone_name 3.4.0
@@ -38,8 +35,6 @@ $GS_HOME/shared/repos/Rowan/src/platforms/gemstone/gsdevkit/bin/setupRowanGsDevK
 # install Rowan into stone
 $GS_HOME/shared/repos/Rowan/src/platforms/gemstone/gsdevkit/bin/installRowan $rowan_stone_name
 
-# open tODE to do development
-startClient tode
 ```
 
 ## Acknowledgements
