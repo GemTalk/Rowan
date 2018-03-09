@@ -833,10 +833,29 @@ RwBrowserToolTest >> testDeleteComplicatedPackage [
 						assert: false
 						description: 'no class methods should be present in the project structure' ] ].
 
+
+	GsPackagePolicy current
+		packages_Do: [ :gsPackage | 
+			gsPackage
+				behaviorAndMethodDictDo: [ :beh :methodDict | 
+					(beh == testClass or: [ beh class == testClass ])
+						ifTrue: [ self assert: (methodDict size = 1 and: [ methodDict includesKey: #'bar' ]) ] ] ].
+
 	browserTool removePackageNamed: packageName1.	"remove the package and unload definitions"
 
 
 	self should: [ Rowan image loadedPackageNamed: packageName1 ] raise: Error.
+
+	GsPackagePolicy current
+		packages_Do: [ :gsPackage | 
+			gsPackage
+				behaviorAndMethodDictDo: [ :beh :methodDict | 
+					(beh == testClass or: [ beh class == testClass ])
+						ifTrue: [ 
+							self
+								assert: false
+								description:
+									'Session methods should not be present for class ' , className1 printString ] ] ].
 
 	self
 		_assertForClassExtensionInClassWithHistory: testClass classHistory

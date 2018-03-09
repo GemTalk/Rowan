@@ -40,6 +40,11 @@ RwGsLoadedSymbolDictClass >> handleClassDeletion [
 	"The class to which I refer has been deleted, so I must unregister myself.
 	Normally, I will have a loadedPackage, but if something interrupted my initialization it might be nil."
 
+	GsPackagePolicy currentOrNil
+		ifNotNil: [ :pp | 
+			pp
+				removeAllMethodsFor: handle;
+				removeAllMethodsFor: handle class ].
 	(Rowan image loadedClassExtensionsForClass: handle)
 		do: [ :loadedClassExtension | loadedClassExtension handleClassDeletion ].
 	Rowan image removeLoadedClassExtensionsForClass: handle.
