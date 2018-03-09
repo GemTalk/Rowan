@@ -40,7 +40,7 @@ RwAbstractTool >> _symbolDictionaryForSpecification [
 { #category : 'class lookup' }
 RwAbstractTool >> definitionsForClassExtensionNamed: className ifFound: foundBlock ifAbsent: absentBlock [
 
-	"there can be multiple class extensions associated with a single class and only one class extension is currently saved"
+	"validate loaded class extension registry structure"
 
 	^ Rowan image
 		loadedClassExtensionsNamed: className

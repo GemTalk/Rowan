@@ -41,7 +41,9 @@ RwGsLoadedSymbolDictClassExtension >> handleClassDeletion [
 		I expect the caller to remove me from the registry."
 
 	loadedInstanceMethods values , loadedClassMethods values
-		do: [ :loadedMethod | loadedMethod handleClassDeletion ]
+		do: [ :loadedMethod | loadedMethod handleClassDeletion ].
+	false
+		ifTrue: [ self halt ]
 ]
 
 { #category : 'initialization' }

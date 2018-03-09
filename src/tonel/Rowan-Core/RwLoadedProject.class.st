@@ -79,6 +79,25 @@ RwLoadedProject >> loadedPackages: anObject [
 
 ]
 
+{ #category : 'enumeration' }
+RwLoadedProject >> loadedPackagesDo: loadedPackageBlock loadedClassedDo: loadedClassBlock loadedClassExtenstionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock [
+
+	loadedPackages
+		valuesDo: [ :loadedPackage | 
+			loadedPackageBlock cull: self cull: loadedPackage.
+			loadedPackage
+				loadedClassedDo: loadedClassBlock
+				loadedClassExtenstionsDo: loadedClassExtensionBlock
+				loadedInstanceMethodsDo: loadedInstanceMethodBlock
+				loadedClassMethodsDo: loadedClassMethodBlock ]
+]
+
+{ #category : 'accessing' }
+RwLoadedProject >> loadedProject [
+
+	^ self
+]
+
 { #category : 'accessing' }
 RwLoadedProject >> loadSpecification [
 

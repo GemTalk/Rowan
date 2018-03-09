@@ -237,6 +237,14 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 ]
 
 { #category : 'querying' }
+RwGsImage class >> loadedPackageNamed: aString [
+
+	^ self
+		loadedPackageNamed: aString
+		ifAbsent: [ self error: 'No loaded package named ' , aString printString , ' found' ]
+]
+
+{ #category : 'querying' }
 RwGsImage class >> loadedPackageNamed: aName ifAbsent: absentBlock [
 
 	"scan the symbol list a RwLoadedPackage instance of the given name"
@@ -248,6 +256,14 @@ RwGsImage class >> loadedPackageNamed: aName ifAbsent: absentBlock [
 					(symbolDict loadedPackageNamed: aName ifAbsent: [  ])
 						ifNotNil: [ :loadedPackage | ^ loadedPackage ] ] ].
 	^ absentBlock value
+]
+
+{ #category : 'querying' }
+RwGsImage class >> loadedProjectNamed: aString [
+
+	^ self
+		loadedProjectNamed: aString
+		ifAbsent: [ self error: 'No loaded project named ' , aString printString , ' found' ]
 ]
 
 { #category : 'querying' }

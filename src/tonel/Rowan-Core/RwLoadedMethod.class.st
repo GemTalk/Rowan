@@ -70,6 +70,12 @@ RwLoadedMethod >> propertiesForDefinition [
 ]
 
 { #category : 'accessing' }
+RwLoadedMethod >> selector [
+
+	^ properties at: 'selector'
+]
+
+{ #category : 'accessing' }
 RwLoadedMethod >> source [
 
 	self subclassResponsibility
