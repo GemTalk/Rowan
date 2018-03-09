@@ -42,8 +42,7 @@ RwGsLoadedSymbolDictClassExtension >> handleClassDeletion [
 
 	loadedInstanceMethods values , loadedClassMethods values
 		do: [ :loadedMethod | loadedMethod handleClassDeletion ].
-	false
-		ifTrue: [ self halt ]
+	self loadedPackage removeLoadedClassExtension: self
 ]
 
 { #category : 'initialization' }

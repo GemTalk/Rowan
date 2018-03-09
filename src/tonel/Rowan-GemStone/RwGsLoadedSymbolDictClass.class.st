@@ -40,10 +40,10 @@ RwGsLoadedSymbolDictClass >> handleClassDeletion [
 	"The class to which I refer has been deleted, so I must unregister myself.
 	Normally, I will have a loadedPackage, but if something interrupted my initialization it might be nil."
 
-	loadedPackage ifNotNil: [ loadedPackage removeLoadedClass: self ].
 	(Rowan image loadedClassExtensionsForClass: handle)
 		do: [ :loadedClassExtension | loadedClassExtension handleClassDeletion ].
-	Rowan image removeLoadedClassExtensionsForClass: handle
+	Rowan image removeLoadedClassExtensionsForClass: handle.
+	self loadedPackage removeLoadedClass: self
 ]
 
 { #category : 'private-updating' }
