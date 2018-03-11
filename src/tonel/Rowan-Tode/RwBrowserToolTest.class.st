@@ -212,6 +212,38 @@ RwBrowserToolTest >> _loadGlobalExtensionsProjectDefinition: projectName package
 ]
 
 { #category : 'private' }
+RwBrowserToolTest >> _loadMultiProjectDefinition: projectNames packageNames: packageNames defaultSymbolDictName: defaultSymbolDictNames comment: comments className: classNames inPackageName: classPackageNames [
+
+	| projectTools projectSetDefinition |
+	projectTools := Rowan projectTools.
+
+	projectSetDefinition := RwProjectSetDefinition new.
+
+	1 to: projectNames size do: [ :index | 
+		| projectDefinition classDefinition |
+		(Rowan loadedProjectNamed: (projectNames at: index) ifAbsent: [  ])
+			ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+
+		projectDefinition := self
+			_standardProjectDefinition: (projectNames at: index)
+			packageNames: (packageNames at: index)
+			defaultSymbolDictName: (defaultSymbolDictNames at: index)
+			comment:
+				'This is a simple project used to work out a "classic" class browser-style API'.
+
+		classDefinition := self _standardClassDefinition: (classNames at: index).
+
+		projectTools edit
+			addClass: classDefinition
+			inPackageNamed: (classPackageNames at: index)
+			inProject: projectDefinition.
+
+		projectSetDefinition addProject: projectDefinition ].
+
+	projectTools load loadProjectSetDefinition: projectSetDefinition
+]
+
+{ #category : 'private' }
 RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
 
 	| projectDefinition classDefinition projectTools |
@@ -486,7 +518,7 @@ RwBrowserToolTest >> testDeleteComplicatedClass [
 
 	"The class to be deleted is created in one project and extended by another project ... the method extensions are direct method extensions and session method extensions"
 
-	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 testClass browserTool testProjectDefinition testPackageNames classDefinition testInstance projectDefinition projectTools |
+	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 testClass browserTool testProjectDefinition testPackageNames classDefinition testInstance projectTools |
 	projectName1 := 'Simple Browser1'.
 	packageName1 := 'Simple1-Core'.
 	packageName2 := 'Simple1-Extensions'.
@@ -559,13 +591,16 @@ RwBrowserToolTest >> testDeleteComplicatedClass [
 	(Rowan loadedProjectNamed: projectName2 ifAbsent: [  ])
 		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
 
-	projectDefinition := (browserTool createGitPackageProjectNamed: projectName2)
-		addPackagesNamed: packageNames2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
-		defaultUseSessionMethodsForExtensions: true;
-		comment: 'another project for testing project browser api';
-		yourself.
-	projectTools load loadProjectDefinition: projectDefinition.	"create a second project for more extension methods"
+	browserTool
+		createGitPackageProjectNamed: projectName2
+		updateDefinition: [ :projectDef | 
+			"create a second project for more extension methods"
+			projectDef
+				addPackagesNamed: packageNames2;
+				defaultSymbolDictName: self _symbolDictionaryName1;
+				defaultUseSessionMethodsForExtensions: true;
+				comment: 'another project for testing project browser api';
+				yourself ].
 
 	testProjectDefinition := browserTool projectNamed: projectName2.
 	self
@@ -635,7 +670,7 @@ RwBrowserToolTest >> testDeleteComplicatedPackage [
 
 	"similar to testDeleteComplicatedClass ... but delete package that contains the class ... should be similar result"
 
-	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 browserTool classDefinition projectDefinition projectTools testClass testProjectDefinition testPackageNames theProjectNames thePackageNames |
+	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 browserTool classDefinition projectTools testClass testProjectDefinition testPackageNames theProjectNames thePackageNames |
 	projectName1 := 'Simple Browser1'.
 	packageName1 := 'Simple1-Core'.
 	packageName2 := 'Simple1-Extensions'.
@@ -683,13 +718,16 @@ RwBrowserToolTest >> testDeleteComplicatedPackage [
 	(Rowan loadedProjectNamed: projectName2 ifAbsent: [  ])
 		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
 
-	projectDefinition := (browserTool createGitPackageProjectNamed: projectName2)
-		addPackagesNamed: packageNames2;
-		defaultSymbolDictName: self _symbolDictionaryName1;
-		defaultUseSessionMethodsForExtensions: true;
-		comment: 'another project for testing project browser api';
-		yourself.
-	projectTools load loadProjectDefinition: projectDefinition.	"create a second project for more extension methods"
+	browserTool
+		createGitPackageProjectNamed: projectName2
+		updateDefinition: [ :projectDef | 
+			"create a second project for more extension methods"
+			projectDef
+				addPackagesNamed: packageNames2;
+				defaultSymbolDictName: self _symbolDictionaryName1;
+				defaultUseSessionMethodsForExtensions: true;
+				comment: 'another project for testing project browser api';
+				yourself ].
 
 	browserTool
 		addOrUpdateMethod: 'bar ^''bar'''
@@ -1314,4 +1352,139 @@ RwBrowserToolTest >> testMoveMethod [
 						assert: classExtensionDef instanceMethodDefinitions size = 1;
 						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
 		forClassExtensionsIn: className
+]
+
+{ #category : 'tests' }
+RwBrowserToolTest >> testNewClassVersion [
+
+	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance |
+	projectName1 := 'Simple NewVersion 1'.
+	projectName2 := 'Simple NewVersion 2'.
+	projectNames := {projectName1.
+	projectName2}.
+	project1PackageName1 := 'Simple1-Core'.
+	project1PackageName2 := 'Simple1-Extensions'.
+	project2PackageName1 := 'Simple2-Core'.
+	project2PackageName2 := 'Simple2-Extensions'.
+	packageNames := {{project1PackageName1.
+	project1PackageName2}.
+	{project2PackageName1.
+	project2PackageName2}}.
+	className1 := 'SimpleBrowseTest1'.
+	className2 := 'SimpleBrowseTest2'.
+	classNames := {className1.
+	className2}.
+	classPackageNames1 := 'Simple1-Core'.
+	classPackageNames2 := 'Simple2-Core'.
+	classPackageNames := {classPackageNames1.
+	classPackageNames2}.
+	defaultSymbolDictNames := {(self _symbolDictionaryName1).
+	(self _symbolDictionaryName2)}.
+	comments := {'new class version project 1'.
+	'new class version project2'}.
+	self
+		_loadMultiProjectDefinition: projectNames
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictNames
+		comment: comments
+		className: classNames
+		inPackageName: classPackageNames.
+
+	projectTools := Rowan projectTools.
+	browserTool := projectTools browser.
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''foo'''
+		inProtocol: 'accessing'
+		forClassNamed: className1
+		isMeta: false
+		inPackageNamed: project1PackageName2.	"extension method for className1 in projectName1"
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''foo'''
+		inProtocol: 'accessing'
+		forClassNamed: className1
+		isMeta: true
+		inPackageNamed: project1PackageName2.	"class extension method for className1 in projectName1"
+
+	browserTool
+		projectNamed: projectName2
+		updateDefinition: [ :projectDef | 
+			projectDef
+				useSessionMethodsForExtensions: true
+				forPackageNamed: project2PackageName2 ].
+
+	browserTool
+		addOrUpdateMethod: 'bar ^''bar'''
+		inProtocol: 'accessing'
+		forClassNamed: className1
+		isMeta: false
+		inPackageNamed: project2PackageName2.	"session method extension method for className1 in projectName2"
+
+	browserTool
+		addOrUpdateMethod: 'bar ^''bar'''
+		inProtocol: 'accessing'
+		forClassNamed: className1
+		isMeta: true
+		inPackageNamed: project2PackageName2.	"class session method extension method for className1 in projectName2"
+
+	testClass := Rowan globalNamed: className1.
+	self assert: testClass civar1 = 1.
+	self assert: testClass cvar1 = 2.
+	self assert: testClass foo = 'foo'.
+	self assert: testClass bar = 'bar'.
+	testInstance := testClass new.
+	self assert: testInstance ivar1 isNil.
+	self assert: testInstance foo = 'foo'.
+	self assert: testInstance bar = 'bar'.
+
+	browserTool
+		classNamed: className1
+		updateDefinition: [ :classDef | 
+			classDef
+				instVarNames: #();
+				removeInstanceMethod: #'ivar1';
+				classVarNames: #();
+				removeClassMethod: #'cvar1';
+				updateClassMethodDefinition:
+						(RwMethodDefinition
+								newForSelector: #'initialize'
+								protocol: 'initialization'
+								source: 'initialize civar1 := 1.');
+				yourself	"shouldn't there be a method to simply add method source and protocol to the class definition?" ].
+
+	self assert: testClass civar1 = 1.
+	self assert: testClass cvar1 = 2.
+	self assert: testClass foo = 'foo'.
+	self assert: testClass bar = 'bar'.
+	self assert: testInstance ivar1 isNil.
+	self assert: testInstance foo = 'foo'.
+	self assert: testInstance bar = 'bar'.
+
+	testNewClass := Rowan globalNamed: className1.
+	self assert: testNewClass ~~ testClass.
+	self assert: testNewClass civar1 = 1.
+	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
+	self assert: testNewClass foo = 'foo'.
+	self assert: testNewClass bar = 'bar'.
+	testNewInstance := testNewClass new.
+	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
+
+	self
+		should: [ 
+			browserTool
+				addOrUpdateMethod: 'ivar1 ^ivar1'
+				inProtocol: 'accessing'
+				forClassNamed: className1
+				isMeta: false
+				inPackageNamed: project2PackageName2 ]
+		raise: CompileError self
+		should: [ 
+			browserTool
+				addOrUpdateMethod: 'civar1 ^civar1'
+				inProtocol: 'accessing'
+				forClassNamed: className1
+				isMeta: true
+				inPackageNamed: project2PackageName2 ]
+		raise: CompileError
 ]

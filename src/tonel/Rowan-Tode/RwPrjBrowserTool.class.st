@@ -271,6 +271,25 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName category:
 	^ stream contents
 ]
 
+{ #category : 'definition updating' }
+RwPrjBrowserTool >> classNamed: className updateDefinition: updateBlock [
+
+	| projectDefinition classDefinition |
+	self class edit
+		definitionsForClassNamed: className
+		ifFound: [ :classDef :packageDef :projectDef | 
+			projectDefinition := projectDef.
+			classDefinition := classDef ]
+		ifAbsent: [ 
+			self
+				assert: false
+				decription:
+					'expected class definition for class ' , className printString , ' not found.' ].
+
+	updateBlock value: classDefinition.
+	self class load loadProjectDefinition: projectDefinition
+]
+
 { #category : 'class browsing' }
 RwPrjBrowserTool >> createClass: classDefinition inPackageNamed: packageName [
 
@@ -293,17 +312,51 @@ RwPrjBrowserTool >> createClass: classDefinition inPackageNamed: packageName [
 { #category : 'project browsing' }
 RwPrjBrowserTool >> createGitPackageProjectNamed: projectName [
 
+	self createGitPackageProjectNamed: projectName updateDefinition: [  ]
+]
+
+{ #category : 'definition updating' }
+RwPrjBrowserTool >> createGitPackageProjectNamed: projectName update: updateBlock [
+
 	| projectDefinition |
 	projectDefinition := RwProjectDefinition
 		newForGitPackageProjectNamed: projectName.
-	Rowan projectTools load loadProjectDefinition: projectDefinition.
-	^ projectDefinition
+	updateBlock cull: projectDefinition.
+	self class load loadProjectDefinition: projectDefinition
+]
+
+{ #category : 'definition updating' }
+RwPrjBrowserTool >> createGitPackageProjectNamed: projectName updateDefinition: updateBlock [
+
+	| projectDefinition |
+	projectDefinition := RwProjectDefinition
+		newForGitPackageProjectNamed: projectName.
+	updateBlock cull: projectDefinition.
+	self class load loadProjectDefinition: projectDefinition
 ]
 
 { #category : 'project browsing' }
 RwPrjBrowserTool >> projectNamed: projectName [
 
 	^ self _projectNamed: projectName
+]
+
+{ #category : 'definition updating' }
+RwPrjBrowserTool >> projectNamed: projectName update: updateBlock [
+
+	| projectDefinition |
+	projectDefinition := self _projectNamed: projectName.
+	updateBlock value: projectDefinition.
+	self class load loadProjectDefinition: projectDefinition
+]
+
+{ #category : 'definition updating' }
+RwPrjBrowserTool >> projectNamed: projectName updateDefinition: updateBlock [
+
+	| projectDefinition |
+	projectDefinition := self _projectNamed: projectName.
+	updateBlock value: projectDefinition.
+	self class load loadProjectDefinition: projectDefinition
 ]
 
 { #category : 'class browsing' }
