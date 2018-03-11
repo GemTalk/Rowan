@@ -243,15 +243,17 @@ RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectO
 			"only newVersionClassModification with substance need further processing"
 			aProjectOrPackageSetModification
 				classesModifiedDo: [ :classesModification | 
-					| classesModified |
-					classesModified := classesModification elementsModified.
-					(classesModified at: existingClassName ifAbsent: [  ])
-						ifNil: [ 
-							self
-								error:
-									'internal error - missing class modification for '
-										, existingClassName printString ]
-						ifNotNil: [ :existingClassModification | 
-							existingClassModification
-								mergeForNewClassVersionWith: newVersionClassModification ] ] ]
+					classesModification isEmpty
+						ifFalse: [ 
+							| classesModified |
+							classesModified := classesModification elementsModified.
+							(classesModified at: existingClassName ifAbsent: [  ])
+								ifNil: [ 
+									self
+										error:
+											'internal error - missing class modification for '
+												, existingClassName printString ]
+								ifNotNil: [ :existingClassModification | 
+									existingClassModification
+										mergeForNewClassVersionWith: newVersionClassModification ] ] ] ]
 ]

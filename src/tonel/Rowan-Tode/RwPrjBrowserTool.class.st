@@ -316,16 +316,6 @@ RwPrjBrowserTool >> createGitPackageProjectNamed: projectName [
 ]
 
 { #category : 'definition updating' }
-RwPrjBrowserTool >> createGitPackageProjectNamed: projectName update: updateBlock [
-
-	| projectDefinition |
-	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
-	updateBlock cull: projectDefinition.
-	self class load loadProjectDefinition: projectDefinition
-]
-
-{ #category : 'definition updating' }
 RwPrjBrowserTool >> createGitPackageProjectNamed: projectName updateDefinition: updateBlock [
 
 	| projectDefinition |
@@ -342,7 +332,7 @@ RwPrjBrowserTool >> projectNamed: projectName [
 ]
 
 { #category : 'definition updating' }
-RwPrjBrowserTool >> projectNamed: projectName update: updateBlock [
+RwPrjBrowserTool >> projectNamed: projectName updateDefinition: updateBlock [
 
 	| projectDefinition |
 	projectDefinition := self _projectNamed: projectName.
@@ -351,12 +341,17 @@ RwPrjBrowserTool >> projectNamed: projectName update: updateBlock [
 ]
 
 { #category : 'definition updating' }
-RwPrjBrowserTool >> projectNamed: projectName updateDefinition: updateBlock [
+RwPrjBrowserTool >> projectsNamed: projectNames updateDefinition: updateBlock [
 
-	| projectDefinition |
-	projectDefinition := self _projectNamed: projectName.
-	updateBlock value: projectDefinition.
-	self class load loadProjectDefinition: projectDefinition
+	| projectSetDefinition |
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectNames
+		do: [ :projectName | 
+			| projectDefinition |
+			projectDefinition := self _projectNamed: projectName.
+			updateBlock value: projectDefinition.
+			projectSetDefinition addProject: projectDefinition ].
+	self class load loadProjectSetDefinition: projectSetDefinition
 ]
 
 { #category : 'class browsing' }

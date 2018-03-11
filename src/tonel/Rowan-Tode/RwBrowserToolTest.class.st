@@ -1530,19 +1530,33 @@ RwBrowserToolTest >> testNewClassVersionB [
 	self assert: testInstance bar = 'bar'.
 
 	browserTool
-		classNamed: className1
-		updateDefinition: [ :classDef | 
-			classDef
-				instVarNames: #();
-				removeInstanceMethod: #'ivar1';
-				classVarNames: #();
-				removeClassMethod: #'cvar1';
-				updateClassMethodDefinition:
-						(RwMethodDefinition
-								newForSelector: #'initialize'
-								protocol: 'initialization'
-								source: 'initialize civar1 := 1.');
-				yourself	"shouldn't there be a method to simply add method source and protocol to the class definition?" ].
+		projectsNamed: projectNames
+		updateDefinition: [ :projectDef | 
+			projectDef name = projectName1
+				ifTrue: [ 
+					| packageDef classDef classExtensionDef |
+					packageDef := projectDef packageNamed: project1PackageName1.
+					classDef := packageDef classDefinitions at: className1.
+					classDef
+						instVarNames: #();
+						removeInstanceMethod: #'ivar1';
+						classVarNames: #();
+						removeClassMethod: #'cvar1';
+						updateClassMethodDefinition:
+								(RwMethodDefinition
+										newForSelector: #'initialize'
+										protocol: 'initialization'
+										source: 'initialize civar1 := 1.');
+						yourself.	"shouldn't there be a method to simply add method source and protocol to the class definition?"
+					packageDef := projectDef packageNamed: project1PackageName2.
+					classExtensionDef := packageDef classExtensions at: className1.
+					classExtensionDef removeInstanceMethod: #'foo' ].
+			projectDef name = projectName2
+				ifTrue: [ 
+					| packageDef classExtensionDef |
+					packageDef := projectDef packageNamed: project2PackageName2.
+					classExtensionDef := packageDef classExtensions at: className1.
+					classExtensionDef removeClassMethod: #'bar' ] ].
 
 	self assert: testClass civar1 = 1.
 	self assert: testClass cvar1 = 2.
@@ -1557,10 +1571,11 @@ RwBrowserToolTest >> testNewClassVersionB [
 	self assert: testNewClass civar1 = 1.
 	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
 	self assert: testNewClass foo = 'foo'.
-	self assert: testNewClass bar = 'bar'.
+	self should: [ testNewClass bar = 'bar' ] raise: MessageNotUnderstood.
 	testNewInstance := testNewClass new.
 	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
-
+	self should: [ testNewInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self assert: testNewInstance bar = 'bar'.
 	self
 		should: [ 
 			browserTool
