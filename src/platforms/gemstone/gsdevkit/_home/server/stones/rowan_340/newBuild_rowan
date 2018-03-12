@@ -9,8 +9,29 @@ $GS_HOME/sys/local/bin/newBuild_snapshot
 todeIt $GEMSTONE_NAME project load --loads="\`#('monticello' 'monticello tests' 'cypress' 'cypress tests')\`" Tonel
 
 startTopaz $GEMSTONE_NAME -l << EOF
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit 1
+
   set u SystemUser p swordfish
   login
+
+# disable the GsPackagePolicy restrictedClasses, so that GsNMethod extension
+#   methods can be included in the packages
+#
+run
+| cls index set |
+cls := GsPackagePolicy.
+index := cls class allInstVarNames indexOfIdentical: #'restrictedClasses'.
+set := cls instVarAt: index.
+set removeAll: set.
+
+(AllUsers userWithId: 'DataCurator') addPrivilege: #'CompilePrimitives'.
+System commit
+%
+
+
 
 category: 'Private'
 method: Class
@@ -278,6 +299,10 @@ EOF
 
 
 startTopaz $GEMSTONE_NAME -l << EOF
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit 1
 
   login
 
