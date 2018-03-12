@@ -39,6 +39,49 @@ RwGsClassVersioningSymbolDictPatch class >> for: aClassModification inPackage: a
 		yourself
 ]
 
+{ #category : 'new version support' }
+RwGsClassVersioningSymbolDictPatch >> _createMethodExtensionModificationForNewVersionOfClassNamed: className isMeta: isMeta loadedMethod: loadedMethod projectSetModification: aProjectSetModification [
+
+	| loadedProject loadedPackage loadedClassExtension projectModification packageModification classExtensionModification methodsModification methodDef source sourceModification modification |
+	loadedClassExtension := loadedMethod loadedClass.
+	loadedPackage := loadedMethod loadedPackage.
+	loadedProject := loadedMethod loadedProject.
+	projectModification := aProjectSetModification elementsModified
+		at: loadedProject name.
+	packageModification := projectModification packagesModification
+		elementsModified at: loadedPackage name.
+	classExtensionModification := packageModification classExtensionsModification
+		elementsModified at: className.
+	methodsModification := isMeta
+		ifTrue: [ classExtensionModification classMethodsModification elementsModified ]
+		ifFalse: [ classExtensionModification instanceMethodsModification elementsModified ].
+	(methodsModification at: loadedMethod selector ifAbsent: [  ])
+		ifNotNil: [ 
+			"should have been filtered out earlier"
+			self
+				error:
+					'Unexpected method modification for ' , loadedMethod selector printString ].
+
+	methodDef := loadedMethod asDefinition.
+	source := methodDef source.
+	sourceModification := RwSourceModification new
+		addElementModification:
+				(RwUnconditionalPropertyModification
+						key: 'source'
+						oldValue: source
+						newValue: source);
+		yourself.
+	modification := (RwMethodModificationForNewClassVersion
+		before: methodDef
+		after: methodDef)
+		isMeta: isMeta;
+		classDefinition: loadedClassExtension asDefinition;
+		propertiesModification: RwPropertiesModification new;
+		sourceModification: sourceModification;
+		yourself.
+	methodsModification at: loadedMethod selector put: modification
+]
+
 { #category : 'private' }
 RwGsClassVersioningSymbolDictPatch >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars patchedClassProperties: patchedClassPropertiesBlock patchedClassVars: patchedClassVarsBlock patchedClassNewVersions: patchedClassNewVersionsBlock [
 
@@ -272,27 +315,20 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForExtensionsI
 			selectorDict removeKey: patch methodDefinition selector ifAbsent: [  ] ].
 	extensionMap
 		valuesDo: [ :methodsDict | 
-			| selectorDict |
-			selectorDict := methodsDict at: 'instance' ifAbsent: [ emptyDict ].
-			selectorDict
+			(methodsDict at: 'instance' ifAbsent: [ emptyDict ])
 				valuesDo: [ :loadedMethod | 
-					| loadedProject loadedPackage loadedClassExtension projectModification packageModification classExtensionModification methodsModification modification |
-					loadedClassExtension := loadedMethod loadedClass.
-					loadedPackage := loadedMethod loadedPackage.
-					loadedProject := loadedMethod loadedProject.
-					projectModification := aProjectSetModification elementsModified
-						at: loadedProject name.
-					packageModification := projectModification packagesModification
-						elementsModified at: loadedPackage name.
-					classExtensionModification := packageModification
-						classExtensionsModification elementsModified at: className.
-					methodsModification := classExtensionModification
-						instanceMethodsModification elementsModified.
-					modification := RwMethodModificationForNewClassVersion.
-					false
-						ifTrue: [ 
-							self halt.
-							aProjectSetModification addElementModification: modification ] ] ]
+					self
+						_createMethodExtensionModificationForNewVersionOfClassNamed: className
+						isMeta: false
+						loadedMethod: loadedMethod
+						projectSetModification: aProjectSetModification ].
+			(methodsDict at: 'class' ifAbsent: [ emptyDict ])
+				valuesDo: [ :loadedMethod | 
+					self
+						_createMethodExtensionModificationForNewVersionOfClassNamed: className
+						isMeta: true
+						loadedMethod: loadedMethod
+						projectSetModification: aProjectSetModification ] ]
 ]
 
 { #category : 'new version support' }

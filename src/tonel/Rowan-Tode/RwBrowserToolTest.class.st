@@ -1595,7 +1595,7 @@ RwBrowserToolTest >> testNewClassVersionB [
 	self
 		should: [ 
 			browserTool
-				addOrUpdateMethod: 'civar1 ^civar1'
+				addOrUpdateMethod: 'cvar1 ^Cvar1'
 				inProtocol: 'accessing'
 				forClassNamed: className1
 				isMeta: true
