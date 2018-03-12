@@ -1485,14 +1485,14 @@ RwBrowserToolTest >> testNewClassVersionB [
 	browserTool := projectTools browser.
 
 	browserTool
-		addOrUpdateMethod: 'foo ^''foo'''
+		addOrUpdateMethod: 'foo "instance" ^''foo'''
 		inProtocol: 'accessing'
 		forClassNamed: className1
 		isMeta: false
 		inPackageNamed: project1PackageName2.	"extension method for className1 in projectName1"
 
 	browserTool
-		addOrUpdateMethod: 'foo ^''foo'''
+		addOrUpdateMethod: 'foo "class" ^''foo'''
 		inProtocol: 'accessing'
 		forClassNamed: className1
 		isMeta: true
@@ -1506,14 +1506,14 @@ RwBrowserToolTest >> testNewClassVersionB [
 				forPackageNamed: project2PackageName2 ].
 
 	browserTool
-		addOrUpdateMethod: 'bar ^''bar'''
+		addOrUpdateMethod: 'bar "instance" ^''bar'''
 		inProtocol: 'accessing'
 		forClassNamed: className1
 		isMeta: false
 		inPackageNamed: project2PackageName2.	"session method extension method for className1 in projectName2"
 
 	browserTool
-		addOrUpdateMethod: 'bar ^''bar'''
+		addOrUpdateMethod: 'bar "class" ^''bar'''
 		inProtocol: 'accessing'
 		forClassNamed: className1
 		isMeta: true

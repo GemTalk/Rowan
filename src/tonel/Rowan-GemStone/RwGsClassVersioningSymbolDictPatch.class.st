@@ -229,6 +229,57 @@ RwGsClassVersioningSymbolDictPatch >> oldClassVersion [
 ]
 
 { #category : 'new version support' }
+RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification patchSet: aPatchSet [
+
+	| className class found methodChanges methodDeletions extensionMap emptyDict |
+	className := classDefinition name.
+	class := Rowan image objectNamed: className.
+	extensionMap := Dictionary new.
+	emptyDict := Dictionary new.
+	(Rowan image loadedClassExtensionsForClass: class)
+		do: [ :loadedClassExtension | 
+			| dict |
+			dict := extensionMap at: className ifAbsentPut: [ Dictionary new ].
+			loadedClassExtension
+				loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :loadedMethod | 
+					(dict at: 'instance' ifAbsentPut: [ Dictionary new ])
+						at: loadedMethod selector
+						put: loadedMethod ]
+				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :loadedMethod | 
+					(dict at: 'class' ifAbsentPut: [ Dictionary new ])
+						at: loadedMethod selector
+						put: loadedMethod ] ].
+
+	aPatchSet
+		allPatchesAffectingLiveMethodsDo: [ :patch | 
+			| methodsDict selectorDict |
+			methodsDict := extensionMap
+				at: patch classDefinition name
+				ifAbsent: [ emptyDict ].
+			selectorDict := patch isMeta
+				ifTrue: [ methodsDict at: 'class' ifAbsent: [ emptyDict ] ]
+				ifFalse: [ methodsDict at: 'instance' ifAbsent: [ emptyDict ] ].
+			(selectorDict includesKey: patch methodDefinition selector)
+				ifTrue: [ self error: 'not yet implemented' ] ]
+		deletedMethodsDo: [ :patch | 
+			| methodsDict selectorDict |
+			methodsDict := extensionMap
+				at: patch classDefinition name
+				ifAbsent: [ emptyDict ].
+			selectorDict := patch isMeta
+				ifTrue: [ methodsDict at: 'class' ifAbsent: [ emptyDict ] ]
+				ifFalse: [ methodsDict at: 'instance' ifAbsent: [ emptyDict ] ].
+			selectorDict removeKey: patch methodDefinition selector ifAbsent: [  ] ].
+	extensionMap
+		valuesDo: [ :methodsDict | 
+			false
+				ifTrue: [ 
+					self
+						halt:
+							'The remaining loadedMethods need to have extension modifications added to aProjectSetModification as if it came from a diff ---> cleanest will be to force recompilation as if source changed for the method' ] ]
+]
+
+{ #category : 'new version support' }
 RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectOrPackageSetModification [
 
 	| existingClass loadedClassDefinition newVersionClassModification existingClassName |

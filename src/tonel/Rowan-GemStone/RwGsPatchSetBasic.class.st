@@ -504,6 +504,17 @@ RwGsPatchSetBasic >> addPatchedInstanceMethodProperties: aInstanceMethodDefiniti
 ]
 
 { #category : 'private - applying' }
+RwGsPatchSetBasic >> allPatchesAffectingLiveMethodsDo: liveMethodsBlock deletedMethodsDo: deletedMethodsBlock [
+
+	"Evaluate aBlock with every patch that can affect a method, traverse deletions separately."
+
+	{addedMethods.
+	extendedMethods.
+	methodsNeedingRecompile} do: [ :patches | patches do: liveMethodsBlock ].
+	deletedMethods do: deletedMethodsBlock
+]
+
+{ #category : 'private - applying' }
 RwGsPatchSetBasic >> allPatchesAffectingLivePackagesDo: aBlock [
 	"Evaluate aBlock with every patch that can affect a package without deleting it, which is a lot."
 

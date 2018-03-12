@@ -95,6 +95,12 @@ RwGsMethodPatch >> isForExtensionMethod [
 ]
 
 { #category : 'accessing' }
+RwGsMethodPatch >> isMeta [
+
+	^ isMeta
+]
+
+{ #category : 'accessing' }
 RwGsMethodPatch >> isMeta: newValue [
 	isMeta := newValue
 

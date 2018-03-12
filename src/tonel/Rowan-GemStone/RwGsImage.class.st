@@ -119,7 +119,11 @@ RwGsImage class >> applyModification: aProjectSetModification [
 			patchSet apply.
 			^ self ].
 	patchSet classesWithNewVersions
-		do: [ :each | each updatePatchesForNewClassVersion: aProjectSetModification ].
+		do: [ :each | 
+			each
+				updatePatchesForNewClassVersion: aProjectSetModification;
+				updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
+					patchSet: patchSet ].
 	visitor := RwGsImagePatchVisitor new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
@@ -172,10 +176,9 @@ RwGsImage class >> loadedClassExtensionsNamed: className ifFound: foundBlock ifA
 
 	"scan the symbol list for a RwLoadedClassExtension instances of the given name"
 
-	| class history found |
+	| class found |
 	class := self objectNamed: className.
 	class ifNil: [ ^ absentBlock value ].
-	history := class classHistory.
 	found := self loadedClassExtensionsForClass: class.
 	found isEmpty
 		ifFalse: [ ^ foundBlock value: found ].
