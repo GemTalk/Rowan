@@ -379,7 +379,7 @@ RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packa
 { #category : 'tests' }
 RwBrowserToolTest >> testAddMethod [
 
-	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool |
+	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool compiledMethod |
 	projectName := 'Simple Browser'.
 	packageName1 := 'Simple-Core'.
 	packageName2 := 'Simple-Extensions1'.
@@ -428,7 +428,14 @@ RwBrowserToolTest >> testAddMethod [
 		isMeta: false
 		inPackageNamed: packageName2.	"add method in a package as a class extension"
 
-	self assert: testInstance foo = 'baz'
+	self assert: testInstance foo = 'baz'.
+
+	self assert: testClass rowanProjectName = projectName.
+	self assert: testClass rowanPackageName = packageName1.
+
+	compiledMethod := testClass compiledMethodAt: #'foo'.
+	self assert: compiledMethod rowanProjectName = projectName.
+	self assert: compiledMethod rowanPackageName = packageName2
 ]
 
 { #category : 'tests' }

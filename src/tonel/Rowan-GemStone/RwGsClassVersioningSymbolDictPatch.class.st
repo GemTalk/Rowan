@@ -231,7 +231,7 @@ RwGsClassVersioningSymbolDictPatch >> oldClassVersion [
 { #category : 'new version support' }
 RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification patchSet: aPatchSet [
 
-	| className class found methodChanges methodDeletions extensionMap emptyDict |
+	| className class extensionMap emptyDict |
 	className := classDefinition name.
 	class := Rowan image objectNamed: className.
 	extensionMap := Dictionary new.
@@ -272,11 +272,27 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForExtensionsI
 			selectorDict removeKey: patch methodDefinition selector ifAbsent: [  ] ].
 	extensionMap
 		valuesDo: [ :methodsDict | 
-			false
-				ifTrue: [ 
-					self
-						halt:
-							'The remaining loadedMethods need to have extension modifications added to aProjectSetModification as if it came from a diff ---> cleanest will be to force recompilation as if source changed for the method' ] ]
+			| selectorDict |
+			selectorDict := methodsDict at: 'instance' ifAbsent: [ emptyDict ].
+			selectorDict
+				valuesDo: [ :loadedMethod | 
+					| loadedProject loadedPackage loadedClassExtension projectModification packageModification classExtensionModification methodsModification modification |
+					loadedClassExtension := loadedMethod loadedClass.
+					loadedPackage := loadedMethod loadedPackage.
+					loadedProject := loadedMethod loadedProject.
+					projectModification := aProjectSetModification elementsModified
+						at: loadedProject name.
+					packageModification := projectModification packagesModification
+						elementsModified at: loadedPackage name.
+					classExtensionModification := packageModification
+						classExtensionsModification elementsModified at: className.
+					methodsModification := classExtensionModification
+						instanceMethodsModification elementsModified.
+					modification := RwMethodModificationForNewClassVersion.
+					false
+						ifTrue: [ 
+							self halt.
+							aProjectSetModification addElementModification: modification ] ] ]
 ]
 
 { #category : 'new version support' }
