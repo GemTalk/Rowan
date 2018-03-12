@@ -240,6 +240,20 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 ]
 
 { #category : 'querying' }
+RwGsImage class >> loadedMethodForMethod: compiledMethod ifAbsent: absentBlock [
+
+	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
+
+	self symbolList
+		do: [ :symbolDict | 
+			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
+				ifTrue: [ 
+					(symbolDict methodRegistry at: compiledMethod ifAbsent: [  ])
+						ifNotNil: [ :loadedMethod | ^ loadedMethod ] ] ].
+	^ absentBlock value
+]
+
+{ #category : 'querying' }
 RwGsImage class >> loadedPackageNamed: aString [
 
 	^ self
