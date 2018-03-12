@@ -182,7 +182,7 @@ Rowan class >> packageTools [
 { #category : 'public' }
 Rowan class >> platform [
 
-	^platform
+	^ platform ifNil: [ platform := RwPlatform current ]
 ]
 
 { #category : 'public' }
