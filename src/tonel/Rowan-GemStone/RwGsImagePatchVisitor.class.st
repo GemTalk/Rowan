@@ -222,6 +222,15 @@ RwGsImagePatchVisitor >> visitExtensionMethodModification: anExtensionMethodModi
 ]
 
 { #category : 'visting' }
+RwGsImagePatchVisitor >> visitExtensionMethodModificationForNewClassVersion: aMethodModification [
+
+	aMethodModification
+		addExtensionModificationToPatchSetForNewClassVersion: patchSet
+		inPackage: currentPackage
+		inProject: currentProject
+]
+
+{ #category : 'visting' }
 RwGsImagePatchVisitor >> visitExtensionMethodsModification: anExtensionMethodsModification [
 
 	anExtensionMethodsModification elementsModified

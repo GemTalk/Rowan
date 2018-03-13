@@ -25,6 +25,51 @@ RwMethodModification >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'patching' }
+RwMethodModification >> addExtensionModificationToPatchSetForNewClassVersion: aPatchSet inPackage: aPackage inProject: aProjectDefinition [
+
+	self isAddition
+		ifTrue: [ self error: 'internal error - unexpected method addition' ].
+	self isDeletion
+		ifTrue: [ self error: 'internal error - unexpected method deletion' ].
+	self isModification
+		ifTrue: [ 
+			sourceModification isEmpty
+				ifTrue: [ self error: 'internal error - unexpected empty method source modification' ]
+				ifFalse: [ 
+					"treat like an addition, since it is an addition of a method to the new class version"
+					self isMeta
+						ifTrue: [ 
+							aPatchSet
+								addExtendedClassMethod: self after
+								inClass: self classDefinition
+								inPackage: aPackage
+								inProject: aProjectDefinition ]
+						ifFalse: [ 
+							aPatchSet
+								addExtendedInstanceMethod: self after
+								inClass: self classDefinition
+								inPackage: aPackage
+								inProject: aProjectDefinition ].
+					^ self ].
+			propertiesModification isEmpty
+				ifTrue: [ self error: 'internal error - unexpected empty method properties' ]
+				ifFalse: [ 
+					self isMeta
+						ifTrue: [ 
+							aPatchSet
+								addPatchedClassMethodProperties: self after
+								inClass: self classDefinition
+								inPackage: aPackage
+								inProject: aProjectDefinition ]
+						ifFalse: [ 
+							aPatchSet
+								addPatchedInstanceMethodProperties: self after
+								inClass: self classDefinition
+								inPackage: aPackage
+								inProject: aProjectDefinition ] ] ]
+]
+
+{ #category : 'patching' }
 RwMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage inProject: aProjectDefinition [
 
 	self isAddition

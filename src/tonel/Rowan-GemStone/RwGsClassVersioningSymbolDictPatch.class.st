@@ -71,7 +71,7 @@ RwGsClassVersioningSymbolDictPatch >> _createMethodExtensionModificationForNewVe
 						oldValue: source
 						newValue: source);
 		yourself.
-	modification := (RwMethodModificationForNewClassVersion
+	modification := (RwExtensionMethodModificationForNewClassVersion
 		before: methodDef
 		after: methodDef)
 		isMeta: isMeta;
