@@ -1455,7 +1455,7 @@ RwBrowserToolTest >> testNewClassVersionA [
 { #category : 'tests' }
 RwBrowserToolTest >> testNewClassVersionB [
 
-	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance |
+	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance sessionMethodsSeen |
 	projectName1 := 'Simple NewVersion 1'.
 	projectName2 := 'Simple NewVersion 2'.
 	projectNames := {projectName1.
@@ -1536,6 +1536,18 @@ RwBrowserToolTest >> testNewClassVersionB [
 	self assert: testInstance foo = 'foo'.
 	self assert: testInstance bar = 'bar'.
 
+
+	sessionMethodsSeen := false.
+	GsPackagePolicy current
+		packages_Do: [ :gsPackage | 
+			gsPackage
+				behaviorAndMethodDictDo: [ :beh :methodDict | 
+					(beh == testClass or: [ beh class == testClass ])
+						ifTrue: [ 
+							self assert: (methodDict includesKey: #'bar').
+							sessionMethodsSeen := true ] ] ].
+	self assert: sessionMethodsSeen.
+
 	browserTool
 		projectsNamed: projectNames
 		updateDefinition: [ :projectDef | 
@@ -1600,5 +1612,14 @@ RwBrowserToolTest >> testNewClassVersionB [
 				forClassNamed: className1
 				isMeta: true
 				inPackageNamed: project1PackageName2 ]
-		raise: CompileError
+		raise: CompileError.
+
+	sessionMethodsSeen := false.
+	GsPackagePolicy current
+		packages_Do: [ :gsPackage | 
+			gsPackage
+				behaviorAndMethodDictDo: [ :beh :methodDict | 
+					(beh == testNewClass or: [ beh class == testNewClass ])
+						ifTrue: [ sessionMethodsSeen := true ] ] ].
+	self assert: sessionMethodsSeen
 ]
