@@ -390,6 +390,14 @@ TDRowanTool >> prjdiff [
 
 { #category : 'prj commands' }
 TDRowanTool >> prjlist [
+
+	"
+  prj list
+"
+
+	self getSubcommandOptsMixedLongShort: {}.
+
+	^ Rowan projectTools list openProjectList: topez
 ]
 
 { #category : 'prj commands' }

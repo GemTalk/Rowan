@@ -26,13 +26,13 @@ RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
 			ug at: #'RwGsLoadedProjectRegistry' put: StringKeyValueDictionary new ]
 ]
 
-{ #category : 'private' }
+{ #category : 'cypress (old)' }
 RwGsImage class >> _projectRegistry [
 
 	^ self _projectRegistryForUserId: self currentUserId
 ]
 
-{ #category : 'private' }
+{ #category : 'cypress (old)' }
 RwGsImage class >> _projectRegistryForUserId: aUserId [
 
 	"this is being left as is, because I am using Rowan to develop Rowan and eventually this guy should be deleted in favor of the _loadedProjectRegistryForUserId:"
@@ -88,7 +88,7 @@ RwGsImage class >> addLoadedProject: aRwLoadedProject [
 	^ projectRegistry at: projectName put: aRwLoadedProject
 ]
 
-{ #category : 'querying' }
+{ #category : 'cypress (old)' }
 RwGsImage class >> addProject: aRwProjectSpecification [
 
 	"Register a project"
@@ -240,6 +240,19 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 ]
 
 { #category : 'querying' }
+RwGsImage class >> loadedMethodForMethod: compiledMethod [
+
+	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
+
+	^ self
+		loadedMethodForMethod: compiledMethod
+		ifAbsent: [ 
+			self
+				error:
+					'No loadedMethod found for the comiled method ' , compiledMethod printString ]
+]
+
+{ #category : 'querying' }
 RwGsImage class >> loadedMethodForMethod: compiledMethod ifAbsent: absentBlock [
 
 	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
@@ -311,6 +324,33 @@ RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 ]
 
 { #category : 'querying' }
+RwGsImage class >> loadedProjects [
+
+	"Return the list of loaded project in current users project registry and in AllUsers, where
+		the current user is the project owner."
+
+	| currentUserId loadedProjects |
+	loadedProjects := self _loadedProjectRegistry values.
+	currentUserId := self currentUserId.
+
+	AllUsers
+		do: [ :userProfile | 
+			| userId |
+			userId := userProfile userId.
+			userId ~= currentUserId
+				ifTrue: [ 
+					(self _loadedProjectRegistryForUserId: userId)
+						ifNotNil: [ :projectRegistry | 
+							loadedProjects
+								addAll:
+									(projectRegistry
+										select: [ :loadedProject | 
+											(loadedProject specification platformSpect at: 'gemstone') projectOwnerId
+												= userId ]) ] ] ].
+	^ loadedProjects
+]
+
+{ #category : 'querying' }
 RwGsImage class >> newOrExistingSymbolDictionaryNamed: dictName [
 
 	"If the current session's transient symbol list includes a dictionary with the given name, answer it.
@@ -343,7 +383,7 @@ RwGsImage class >> objectNamed: aSymbol [
 	^ GsCurrentSession currentSession symbolList objectNamed: aSymbol
 ]
 
-{ #category : 'querying' }
+{ #category : 'cypress (old)' }
 RwGsImage class >> projectNamed: aString ifAbsent: absentBlock [
 
 	"Look up a project. First in current users project registry, then scan AllUsers for the project ... note that the user needs to be the project owner."
@@ -369,7 +409,7 @@ RwGsImage class >> projectNamed: aString ifAbsent: absentBlock [
 			^ absentBlock value ]
 ]
 
-{ #category : 'querying' }
+{ #category : 'cypress (old)' }
 RwGsImage class >> projectNames [
 
 	"Return list of project names"
@@ -415,7 +455,7 @@ RwGsImage class >> removeLoadedMethodForCompileMethod: compiledMethod [
 				ifTrue: [ symbolDict methodRegistry removeKey: compiledMethod ifAbsent: [  ] ] ]
 ]
 
-{ #category : 'querying' }
+{ #category : 'cypress (old)' }
 RwGsImage class >> removeProject: aRwProjectSpecification [
 
 	"remove a project"

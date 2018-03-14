@@ -6,20 +6,35 @@ Class {
 
 { #category : 'man page' }
 RwPrjListTool >> manPage [
-  ^ TDManPage
-    commandName: 'xxx'
-    sourceMethod: self class name asString , '>>manPage'
-    fromString:
-      'NAME
-  prj xxx - xxx
+
+	^ TDManPage
+		commandName: 'list'
+		sourceMethod: self class name asString , '>>manPage'
+		fromString:
+			'NAME
+  prj list - List Rowan projects
 SYNOPSIS
-  prj xxx
+  prj list
 DESCRIPTION
+  The `prj list` command brings up a window on the list of Rowan projects. 
+
 EXAMPLES
-  prj xxx \
-    https://raw.githubusercontent.com/dalehenrich/CypressReferenceImplementation/rowan/rowanLoadSpec.ston
-  prj xxx \
-    file:$GS_HOME/shared/repos/rowan/CypressReferenceImplementation/rowanLoadSpec.ston
-  prj xxx rowanLoadSpec
+  prj list 
 '
+]
+
+{ #category : 'cypress api' }
+RwPrjListTool >> openProjectList: topez [
+
+	"the Cypress project list is using class categories and stylized method protocol for package 
+	membership. Once tODE supports first class projects and package browsing, this form will no 
+	longer be needed ... Cypress/Rowan projects are managed separately from standard Rowan projects"
+
+	| block |
+	block := [ Rowan image loadedProjects sortWithBlock: [ :a :b | a name <= b name ] ].
+	^ (TDRowanProjectBrowser new
+		topez: topez;
+		projectBlock: block;
+		windowLabel: 'Rowan Projects';
+		yourself) open
 ]

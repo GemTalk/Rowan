@@ -31,6 +31,14 @@ RwLoadedClassExtension >> classMethodDefinitions [
 	^self definitionsFor: loadedClassMethods
 ]
 
+{ #category : 'testing' }
+RwLoadedClassExtension >> includesSelector: aSelector isMeta: isMeta [
+
+	^ isMeta
+		ifTrue: [ loadedClassMethods includesKey: aSelector ]
+		ifFalse: [ loadedInstanceMethods includesKey: aSelector ]
+]
+
 { #category : 'private' }
 RwLoadedClassExtension >> instanceMethodDefinitions [
 
