@@ -1216,20 +1216,20 @@ RwBrowserToolTest >> testLoadMultiProjectDefs [
 	projectName2 := 'Simple MultiProject 2'.
 	projectNames := {projectName1.
 	projectName2}.
-	project1PackageName1 := 'Simple1-Core'.
-	project1PackageName2 := 'Simple1-Extensions'.
-	project2PackageName1 := 'Simple2-Core'.
-	project2PackageName2 := 'Simple2-Extensions'.
+	project1PackageName1 := 'Simple1M-Core'.
+	project1PackageName2 := 'Simple1M-Extensions'.
+	project2PackageName1 := 'Simple2M-Core'.
+	project2PackageName2 := 'Simple2M-Extensions'.
 	packageNames := {{project1PackageName1.
 	project1PackageName2}.
 	{project2PackageName1.
 	project2PackageName2}}.
-	className1 := 'SimpleBrowseTest1'.
-	className2 := 'SimpleBrowseTest2'.
+	className1 := 'SimpleMultiProject1'.
+	className2 := 'SimpleMultiProject2'.
 	classNames := {className1.
 	className2}.
-	classPackageNames1 := 'Simple1-Core'.
-	classPackageNames2 := 'Simple2-Core'.
+	classPackageNames1 := 'Simple1M-Core'.
+	classPackageNames2 := 'Simple2M-Core'.
 	classPackageNames := {classPackageNames1.
 	classPackageNames2}.
 	defaultSymbolDictNames := {(self _symbolDictionaryName1).
@@ -1415,20 +1415,20 @@ RwBrowserToolTest >> testNewClassVersionA [
 	projectName2 := 'Simple NewVersionA 2'.
 	projectNames := {projectName1.
 	projectName2}.
-	project1PackageName1 := 'Simple1-Core'.
-	project1PackageName2 := 'Simple1-Extensions'.
-	project2PackageName1 := 'Simple2-Core'.
-	project2PackageName2 := 'Simple2-Extensions'.
+	project1PackageName1 := 'Simple1A-Core'.
+	project1PackageName2 := 'Simple1A-Extensions'.
+	project2PackageName1 := 'Simple2A-Core'.
+	project2PackageName2 := 'Simple2A-Extensions'.
 	packageNames := {{project1PackageName1.
 	project1PackageName2}.
 	{project2PackageName1.
 	project2PackageName2}}.
-	className1 := 'SimpleBrowseTest1'.
-	className2 := 'SimpleBrowseTest2'.
+	className1 := 'SimpleNewVersionA1'.
+	className2 := 'SimpleNewVersionA2'.
 	classNames := {className1.
 	className2}.
-	classPackageNames1 := 'Simple1-Core'.
-	classPackageNames2 := 'Simple2-Core'.
+	classPackageNames1 := 'Simple1A-Core'.
+	classPackageNames2 := 'Simple2A-Core'.
 	classPackageNames := {classPackageNames1.
 	classPackageNames2}.
 	defaultSymbolDictNames := {(self _symbolDictionaryName1).
@@ -1506,20 +1506,20 @@ RwBrowserToolTest >> testNewClassVersionB [
 	projectName2 := 'Simple NewVersionB 2'.
 	projectNames := {projectName1.
 	projectName2}.
-	project1PackageName1 := 'Simple1-Core'.
-	project1PackageName2 := 'Simple1-Extensions'.
-	project2PackageName1 := 'Simple2-Core'.
-	project2PackageName2 := 'Simple2-Extensions'.
+	project1PackageName1 := 'Simple1B-Core'.
+	project1PackageName2 := 'Simple1B-Extensions'.
+	project2PackageName1 := 'Simple2B-Core'.
+	project2PackageName2 := 'Simple2B-Extensions'.
 	packageNames := {{project1PackageName1.
 	project1PackageName2}.
 	{project2PackageName1.
 	project2PackageName2}}.
-	className1 := 'SimpleBrowseTest1'.
-	className2 := 'SimpleBrowseTest2'.
+	className1 := 'SimpleNewVersionB1'.
+	className2 := 'SimpleNewVersionB2'.
 	classNames := {className1.
 	className2}.
-	classPackageNames1 := 'Simple1-Core'.
-	classPackageNames2 := 'Simple2-Core'.
+	classPackageNames1 := 'Simple1B-Core'.
+	classPackageNames2 := 'Simple2B-Core'.
 	classPackageNames := {classPackageNames1.
 	classPackageNames2}.
 	defaultSymbolDictNames := {(self _symbolDictionaryName1).
