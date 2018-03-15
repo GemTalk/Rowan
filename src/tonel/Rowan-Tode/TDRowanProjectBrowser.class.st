@@ -79,6 +79,45 @@ TDRowanProjectBrowser >> clientList: miniTool listElement: listElement [
 ]
 
 { #category : 'menu actions' }
+TDRowanProjectBrowser >> deleteAllProjectsMenuAction: listElement selectionIndex: selectionIndex [
+
+	"as long as all of the projects in the project tests have been created by tests, the method is safe to use"
+
+	| user symList |
+	user := System myUserProfile.
+	symList := user symbolList.
+	projects := projectBlock value.
+	projects
+		do: [ :loadedProject | 
+			| spec dict platformSpec symDictNames |
+			spec := loadedProject handle.
+			platformSpec := spec platformSpec at: 'gemstone'.
+			symDictNames := IdentitySet with: #'UnmanagedPackages'.
+			symDictNames add: platformSpec defaultSymbolDictName.
+			platformSpec packageNameToPlatformPropertiesMap values
+				do: [ :packageProperties | 
+					packageProperties
+						at: 'symbolDictName'
+						ifPresent: [ :name | symDictNames add: name ] ].
+			symDictNames remove: #'UserGlobals' ifAbsent: [  ].
+			symDictNames
+				do: [ :symDictName | 
+					dict := symList objectNamed: symDictName.
+					dict
+						ifNotNil: [ 
+							| index |
+							(dict at: GsPackagePolicy globalName otherwise: nil)
+								ifNotNil: [ :policy | policy disable ].
+							index := symList indexOf: dict.
+							index > 0
+								ifTrue: [ user removeDictionaryAt: index ] ] ].
+			RwGsImage _removeLoadedProject: loadedProject ].
+	GsPackagePolicy current refreshSessionMethodDictionary.
+	projects := projectBlock value.
+	^ #'refresh'
+]
+
+{ #category : 'menu actions' }
 TDRowanProjectBrowser >> inspectProjectSpecMenuAction: listElement selectionIndex: selectionIndex [
 
 	| loadedProject |
@@ -127,7 +166,9 @@ TDRowanProjectBrowser >> itemSelected: miniTool listElement: listElement selecte
 TDRowanProjectBrowser >> menuActionSpec: miniTool [
 
 	theMiniTool := miniTool.
-	^ {{('Browse'
+	^ {#('DELETE ALL' nil #'deleteAllProjectsMenuAction:selectionIndex:').
+	#('-').
+	{('Browse'
 		->
 			{#('project spec' nil #'inspectProjectSpecMenuAction:selectionIndex:' nil #'project' false).
 			#('-').

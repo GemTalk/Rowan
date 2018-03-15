@@ -10,6 +10,12 @@ Class {
 { #category : 'accessing' }
 TDRowanLoadedMethodDefinition >> emphasis [
 
+	"use emphasis to indicate Rowan project/package membership:
+		bold				- class and method are defined in the specified project
+		normal				- method is not defined the specified project
+		italic/underline	- method is an extension method for a class defined in the project
+"
+
 	self loadedClass
 		ifNotNil: [ 
 			(self loadedClass includesSelector: self selector isMeta: self isMeta)

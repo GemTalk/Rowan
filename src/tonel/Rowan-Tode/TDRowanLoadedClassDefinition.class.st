@@ -203,6 +203,14 @@ TDRowanLoadedClassDefinition >> classDefinitionFor: aClass inContext: aUserProfi
 { #category : 'accessing' }
 TDRowanLoadedClassDefinition >> emphasis [
 
+	"use emphasis to indicate Rowan project/package membership:
+		bold				- class is defined in the specified project
+		normal				- class is not defined the specified project and contains no extension methods
+							  defined in the project
+		italic/underline	- class is not defined in the specified project, but does contain
+							  extension methods defined in the project
+"
+
 	loadedClass
 		ifNil: [ 
 			loadedClassExtensions isEmpty

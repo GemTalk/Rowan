@@ -1209,6 +1209,52 @@ RwBrowserToolTest >> testDeletePackage [
 ]
 
 { #category : 'tests' }
+RwBrowserToolTest >> testLoadMultiProjectDefs [
+
+	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance |
+	projectName1 := 'Simple MultiProject 1'.
+	projectName2 := 'Simple MultiProject 2'.
+	projectNames := {projectName1.
+	projectName2}.
+	project1PackageName1 := 'Simple1-Core'.
+	project1PackageName2 := 'Simple1-Extensions'.
+	project2PackageName1 := 'Simple2-Core'.
+	project2PackageName2 := 'Simple2-Extensions'.
+	packageNames := {{project1PackageName1.
+	project1PackageName2}.
+	{project2PackageName1.
+	project2PackageName2}}.
+	className1 := 'SimpleBrowseTest1'.
+	className2 := 'SimpleBrowseTest2'.
+	classNames := {className1.
+	className2}.
+	classPackageNames1 := 'Simple1-Core'.
+	classPackageNames2 := 'Simple2-Core'.
+	classPackageNames := {classPackageNames1.
+	classPackageNames2}.
+	defaultSymbolDictNames := {(self _symbolDictionaryName1).
+	(self _symbolDictionaryName2)}.
+	comments := {'new class version project 1'.
+	'new class version project2'}.
+	self
+		_loadMultiProjectDefinition: projectNames
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictNames
+		comment: comments
+		className: classNames
+		inPackageName: classPackageNames.
+
+	projectTools := Rowan projectTools.
+	browserTool := projectTools browser.
+
+	testClass := Rowan globalNamed: className1.
+	self assert: testClass civar1 = 1.
+	self assert: testClass cvar1 = 2.
+	testInstance := testClass new.
+	self assert: testInstance ivar1 isNil
+]
+
+{ #category : 'tests' }
 RwBrowserToolTest >> testMoveGlobalExtensionMethods [
 
 	| projectName packageNames className packageName1 packageName2 testClass testInstance browserTool |
@@ -1365,8 +1411,8 @@ RwBrowserToolTest >> testMoveMethod [
 RwBrowserToolTest >> testNewClassVersionA [
 
 	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance |
-	projectName1 := 'Simple NewVersion 1'.
-	projectName2 := 'Simple NewVersion 2'.
+	projectName1 := 'Simple NewVersionA 1'.
+	projectName2 := 'Simple NewVersionA 2'.
 	projectNames := {projectName1.
 	projectName2}.
 	project1PackageName1 := 'Simple1-Core'.
@@ -1456,8 +1502,8 @@ RwBrowserToolTest >> testNewClassVersionA [
 RwBrowserToolTest >> testNewClassVersionB [
 
 	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance sessionMethodsSeen |
-	projectName1 := 'Simple NewVersion 1'.
-	projectName2 := 'Simple NewVersion 2'.
+	projectName1 := 'Simple NewVersionB 1'.
+	projectName2 := 'Simple NewVersionB 2'.
 	projectNames := {projectName1.
 	projectName2}.
 	project1PackageName1 := 'Simple1-Core'.

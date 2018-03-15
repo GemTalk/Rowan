@@ -89,6 +89,12 @@ RwGemStoneSpecification >> methodEnvForPackageNamed: packageName [
 	^ packageProperties at: 'methodEnv' ifAbsent: [ ^ self defaultMethodEnv ]
 ]
 
+{ #category : 'accessing' }
+RwGemStoneSpecification >> packageNameToPlatformPropertiesMap [
+
+	^ packageNameToPlatformPropertiesMap
+]
+
 { #category : 'copying' }
 RwGemStoneSpecification >> postCopy [
 
