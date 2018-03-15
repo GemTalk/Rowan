@@ -100,12 +100,12 @@ RwBrowserToolTest >> _expectedClassCreationTemplate [
 	^ 'RwClassDefinition
 	newForClassNamed: ''NameOfSubclass''
 	 super: Object
-	 instvars: #() 
-	 classinstvars: #() 
-	 classvars: #() 
-	 category: #() 
-	 comment: ''class comment'' 
-	 pools: #() 
+	 instvars: #()
+	 classinstvars: #()
+	 classvars: #()
+	 category: ''MyClasses''
+	 comment: ''class comment''
+	 pools: #()
 	 type: ''normal|variable|bytes'''
 ]
 
