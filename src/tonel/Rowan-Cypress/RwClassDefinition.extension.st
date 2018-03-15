@@ -7,6 +7,12 @@ RwClassDefinition >> category [
 ]
 
 { #category : '*rowan-cypress' }
+RwClassDefinition >> category: aString [
+
+	^ properties at: 'category' put: aString
+]
+
+{ #category : '*rowan-cypress' }
 RwClassDefinition >> classInstVarNames [
   ^ properties at: 'classinstvars'
 ]
