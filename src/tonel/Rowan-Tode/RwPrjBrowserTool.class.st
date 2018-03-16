@@ -35,7 +35,7 @@ RwPrjBrowserTool >> _loadedClassNamed: className [
 { #category : 'private' }
 RwPrjBrowserTool >> _loadedClassNamed: className ifAbsent: absentBlock [
 
-	Rowan image
+	^ Rowan image
 		loadedClassNamed: className
 		ifFound: [ :loadedClass | ^ loadedClass ]
 		ifAbsent: absentBlock
@@ -69,9 +69,15 @@ RwPrjBrowserTool >> _loadedMethod: methodSelector inClassNamed: className isMeta
 { #category : 'private' }
 RwPrjBrowserTool >> _loadedPackageNamed: packageName [
 
-	^ Rowan image
-		loadedPackageNamed: packageName
+	^ self
+		_loadedPackageNamed: packageName
 		ifAbsent: [ self error: 'No package named ' , packageName printString , ' found' ]
+]
+
+{ #category : 'private' }
+RwPrjBrowserTool >> _loadedPackageNamed: packageName ifAbsent: absentBlock [
+
+	^ Rowan image loadedPackageNamed: packageName ifAbsent: absentBlock
 ]
 
 { #category : 'private' }
@@ -274,17 +280,25 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName category:
 { #category : 'definition updating' }
 RwPrjBrowserTool >> classNamed: className updateDefinition: updateBlock [
 
+	^ self
+		classNamed: className
+		updateDefinition: updateBlock
+		ifAbsent: [ 
+			self
+				error:
+					'expected class definition for class ' , className printString , ' not found.' ]
+]
+
+{ #category : 'definition updating' }
+RwPrjBrowserTool >> classNamed: className updateDefinition: updateBlock ifAbsent: absentBlock [
+
 	| projectDefinition classDefinition |
 	self class edit
 		definitionsForClassNamed: className
 		ifFound: [ :classDef :packageDef :projectDef | 
 			projectDefinition := projectDef.
 			classDefinition := classDef ]
-		ifAbsent: [ 
-			self
-				assert: false
-				decription:
-					'expected class definition for class ' , className printString , ' not found.' ].
+		ifAbsent: [ ^ absentBlock value ].
 
 	updateBlock value: classDefinition.
 	self class load loadProjectDefinition: projectDefinition

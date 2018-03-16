@@ -83,3 +83,9 @@ RwClassDefinition >> superclassName [
 
 	^self propertyAt: 'superclass' ifAbsent: [self propertyAt: 'super']
 ]
+
+{ #category : 'accessing' }
+RwClassDefinition >> superclassName: aString [
+
+	^ self propertyAt: 'superclass' put: aString
+]

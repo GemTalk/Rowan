@@ -1,0 +1,1419 @@
+Class {
+	#name : 'RwBrowserToolApiTest',
+	#superclass : 'RwBrowserToolTest',
+	#category : 'Rowan-Tode'
+}
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testAddMethod [
+
+	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool compiledMethod |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageName2 := 'Simple-Extensions1'.
+	packageName3 := 'Simple-Extensions2'.
+	packageNames := {packageName1.
+	packageName2.
+	packageName3}.
+	className := 'SimpleBrowse'.
+	self
+		_loadStandardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	browserTool := Rowan projectTools browser.
+
+	browserTool
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	testInstance ivar1: 3.
+	self assert: testInstance ivar1 = 3.
+	self should: [ testInstance foo ] raise: MessageNotUnderstood.
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''bar'''
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName2.
+
+	self assert: testInstance foo = 'bar'.
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''baz'''
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName2.	"add method in a package as a class extension"
+
+	self assert: testInstance foo = 'baz'.
+
+	self assert: testClass rowanProjectName = projectName.
+	self assert: testClass rowanPackageName = packageName1.
+
+	compiledMethod := testClass compiledMethodAt: #'foo'.
+	self assert: compiledMethod rowanProjectName = projectName.
+	self assert: compiledMethod rowanPackageName = packageName2
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testClassCreationTemplate [
+
+	| template |
+	template := Rowan projectTools browser
+		classCreationTemplateForSubclassOf: 'Object'
+		category: 'MyClasses'.
+	self
+		assert: template = self _expectedClassCreationTemplate
+		description: 'incorrect class creation template'
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testCreateClass [
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowse'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testDeleteClass [
+
+	| projectName packageNames className packageName1 testClass browserTool testSymDict |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageNames := {packageName1}.
+	className := 'SimpleBrowse'.
+	self
+		_loadSimpleProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	self
+		_assert: [ :classDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ self assert: classDef name = className ] ]
+		forClassNamed: className.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	browserTool := Rowan projectTools browser.
+
+	browserTool removeClassNamed: className.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass isNil
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testDeleteComplicatedClass [
+
+	"The class to be deleted is created in one project and extended by another project ... the method extensions are direct method extensions and session method extensions"
+
+	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 testClass browserTool testProjectDefinition testPackageNames classDefinition testInstance projectTools |
+	projectName1 := 'Simple Browser1'.
+	packageName1 := 'Simple1-Core'.
+	packageName2 := 'Simple1-Extensions'.
+	packageNames1 := {packageName1}.
+	className1 := 'SimpleBrowse1'.
+	className2 := 'SimpleBrowse2'.
+	projectName2 := 'Simple Browser2'.
+	packageNames2 := {'Simple2-Extensions1'.
+	'Simple2-Extensions2'}.
+	self
+		_loadSimpleProjectDefinition: projectName1
+		packageNames: packageNames1
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className1
+		inPackageName: packageName1.
+
+	testClass := Rowan globalNamed: className1.
+	self assert: testClass notNil.
+
+	projectTools := Rowan projectTools.
+	browserTool := projectTools browser.
+
+	browserTool addPackageNamed: packageName2 toProjectNamed: projectName1.	"new package packageName2"
+
+	packageNames1 := {packageName1.
+	packageName2}.
+	testProjectDefinition := browserTool projectNamed: projectName1.
+	testPackageNames := testProjectDefinition packageNames.
+	self assert: testPackageNames size = packageNames1 size.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: 'Fun stuff'
+		comment: 'just a class'
+		pools: #()
+		type: 'normal'.
+	browserTool createClass: classDefinition inPackageNamed: packageName2.	"new class className2"
+
+	testClass := Rowan globalNamed: className2.
+	self assert: testClass notNil.
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''foo'''
+		inProtocol: 'accessing'
+		forClassNamed: className1
+		isMeta: false
+		inPackageNamed: packageName2.	"extension method for className1"
+
+	testClass := Rowan globalNamed: className1.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	self assert: testInstance foo = 'foo'.
+
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ].
+			packageDef name = packageName2
+				ifTrue: [ 
+					self
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
+		forClassExtensionsIn: className1.
+
+	(Rowan loadedProjectNamed: projectName2 ifAbsent: [  ])
+		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+
+	browserTool
+		createGitPackageProjectNamed: projectName2
+		updateDefinition: [ :projectDef | 
+			"create a second project for more extension methods"
+			projectDef
+				addPackagesNamed: packageNames2;
+				defaultSymbolDictName: self _symbolDictionaryName1;
+				defaultUseSessionMethodsForExtensions: true;
+				comment: 'another project for testing project browser api';
+				yourself ].
+
+	testProjectDefinition := browserTool projectNamed: projectName2.
+	self
+		assert:
+			testProjectDefinition defaultSymbolDictName = self _symbolDictionaryName1.
+
+	browserTool
+		addOrUpdateMethod: 'bar ^''bar'''
+		inProtocol: 'accessing'
+		forClassNamed: className1
+		isMeta: false
+		inPackageNamed: (packageNames2 at: 1).	"extension method for className1 in projectName2"
+
+	self assert: testInstance bar = 'bar'.
+
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: projectDef name = projectName1;
+						assert: classExtensionDef instanceMethodDefinitions size = 0 ].
+			packageDef name = packageName2
+				ifTrue: [ 
+					self
+						assert: projectDef name = projectName1;
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ].
+			packageDef name = (packageNames2 at: 1)
+				ifTrue: [ 
+					self
+						assert: projectDef name = projectName2;
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'bar') ] ]
+		forClassExtensionsIn: className1.
+
+
+	self
+		_assertForClassExtensionInClassWithHistory: testClass classHistory
+		ifPresent: [ :classExtensionSet | self assert: classExtensionSet size = 2 ]
+		ifAbsent: [ 
+			self
+				assert: false
+				description:
+					'Expected class extension for class ' , className1 printString , ' not present' ].
+
+
+	browserTool removeClassNamed: className1.	"remove class className1"
+
+	self
+		_assertForClassExtensionInClassWithHistory: testClass classHistory
+		ifPresent: [ :classExtensionSet | 
+			self
+				assert: false
+				description:
+					'Unexpected class extension for class ' , className1 printString , ' found' ]
+		ifAbsent: [ 
+			"expected result"
+			 ].
+
+	testClass := Rowan globalNamed: className1.
+	self assert: testClass isNil
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testDeleteComplicatedPackage [
+
+	"similar to testDeleteComplicatedClass ... but delete package that contains the class ... should be similar result"
+
+	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 browserTool classDefinition projectTools testClass testProjectDefinition testPackageNames theProjectNames thePackageNames |
+	projectName1 := 'Simple Browser1'.
+	packageName1 := 'Simple1-Core'.
+	packageName2 := 'Simple1-Extensions'.
+	packageNames1 := {packageName1}.
+	className1 := 'SimpleBrowse1'.
+	className2 := 'SimpleBrowse2'.
+	projectName2 := 'Simple Browser2'.
+	packageNames2 := {'Simple2-Extensions1'.
+	'Simple2-Extensions2'}.
+	self
+		_loadSimpleProjectDefinition: projectName1
+		packageNames: packageNames1
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className1
+		inPackageName: packageName1.
+
+	projectTools := Rowan projectTools.
+	browserTool := projectTools browser.
+
+	browserTool addPackageNamed: packageName2 toProjectNamed: projectName1.	"new package packageName2"
+
+	packageNames1 := {packageName1.
+	packageName2}.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: 'Fun stuff'
+		comment: 'just a class'
+		pools: #()
+		type: 'normal'.
+	browserTool createClass: classDefinition inPackageNamed: packageName2.	"new class className2"
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''foo'''
+		inProtocol: 'accessing'
+		forClassNamed: className1
+		isMeta: false
+		inPackageNamed: packageName2.	"extension method for className1"
+
+	(Rowan loadedProjectNamed: projectName2 ifAbsent: [  ])
+		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+
+	browserTool
+		createGitPackageProjectNamed: projectName2
+		updateDefinition: [ :projectDef | 
+			"create a second project for more extension methods"
+			projectDef
+				addPackagesNamed: packageNames2;
+				defaultSymbolDictName: self _symbolDictionaryName1;
+				defaultUseSessionMethodsForExtensions: true;
+				comment: 'another project for testing project browser api';
+				yourself ].
+
+	browserTool
+		addOrUpdateMethod: 'bar ^''bar'''
+		inProtocol: 'accessing'
+		forClassNamed: className1
+		isMeta: false
+		inPackageNamed: (packageNames2 at: 1).	"extension method for className1 in projectName2"
+
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			"validate loaded class extension registry structure"
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: projectDef name = projectName1;
+						assert: classExtensionDef instanceMethodDefinitions size = 0 ].
+			packageDef name = packageName2
+				ifTrue: [ 
+					self
+						assert: projectDef name = projectName1;
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ].
+			packageDef name = (packageNames2 at: 1)
+				ifTrue: [ 
+					self
+						assert: projectDef name = projectName2;
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'bar') ] ]
+		forClassExtensionsIn: className1.
+
+	testClass := Rowan globalNamed: className1.
+	self
+		_assertForClassExtensionInClassWithHistory: testClass classHistory
+		ifPresent: [ :classExtensionSet | self assert: classExtensionSet size = 2 ]
+		ifAbsent: [ 
+			self
+				assert: false
+				description:
+					'Expected class extension for class ' , className1 printString , ' not present' ].
+
+	theProjectNames := {projectName1.
+	projectName2}.
+	thePackageNames := packageNames1 , packageNames2.
+	theProjectNames
+		do: [ :projectName | 
+			| theLoadedProject theLoadedPackage theLoadedClassOrClassExtension |
+			"Traverse the loaded package structure and verify that it is valid"
+			theLoadedProject := Rowan image loadedProjectNamed: projectName.
+			theLoadedProject
+				loadedPackagesDo: [ :loadedProject :loadedPackage | 
+					self assert: theLoadedProject == loadedProject.
+					theLoadedPackage := loadedPackage.
+					self
+						assert:
+							(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
+					loadedProject name = projectName1
+						ifTrue: [ self assert: (packageNames1 includes: loadedPackage name) ].
+					loadedProject name = projectName2
+						ifTrue: [ self assert: (packageNames2 includes: loadedPackage name) ] ]
+				loadedClassedDo: [ :loadedProject :loadedPackage :loadedClass | 
+					self assert: theLoadedProject == loadedProject.
+					self assert: theLoadedPackage == loadedPackage.
+					self
+						assert:
+							(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
+					theLoadedClassOrClassExtension := loadedClass.
+					loadedProject name = projectName1
+						ifTrue: [ 
+							loadedPackage name = packageName1
+								ifTrue: [ self assert: loadedClass name = className1 ].
+							loadedPackage name = packageName2
+								ifTrue: [ self assert: loadedClass name = className2 ] ].
+					loadedProject name name = projectName2
+						ifTrue: [ 
+							loadedPackage name = (packageNames2 at: 1)
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'no classes expected in ' , (packageNames2 at: 1) printString ].
+							loadedPackage name = (packageNames2 at: 2)
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'no classes expected in ' , (packageNames2 at: 2) printString ] ] ]
+				loadedClassExtenstionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
+					self assert: theLoadedProject == loadedProject.
+					self assert: theLoadedPackage == loadedPackage.
+					self
+						assert:
+							(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
+					theLoadedClassOrClassExtension := loadedClassExtension.
+					loadedProject name = projectName1
+						ifTrue: [ 
+							loadedPackage name = packageName1
+								ifTrue: [ 
+									self
+										assert: false
+										description: 'no classes expected in ' , packageName1 printString ].
+							loadedPackage name = packageName2
+								ifTrue: [ self assert: loadedClassExtension name = className1 ] ].
+					loadedProject name name = projectName2
+						ifTrue: [ 
+							loadedPackage name = (packageNames2 at: 1)
+								ifTrue: [ self assert: loadedClassExtension name = className1 ].
+							loadedPackage name = (packageNames2 at: 2)
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'no classes expected in ' , (packageNames2 at: 2) printString ] ] ]
+				loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
+					self assert: theLoadedProject == loadedProject.
+					self assert: theLoadedPackage == loadedPackage.
+					self
+						assert:
+							(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
+					self assert: theLoadedClassOrClassExtension == loadedClassOrClassExtension.
+					loadedProject name = projectName1
+						ifTrue: [ 
+							loadedPackage name = packageName1
+								ifTrue: [ 
+									self
+										assert: false
+										description: 'no classes expected in ' , packageName1 printString ].
+							loadedPackage name = packageName2
+								ifTrue: [ self assert: loadedMethod selector = #'foo' ] ].
+					loadedProject name name = projectName2
+						ifTrue: [ 
+							loadedPackage name = (packageNames2 at: 1)
+								ifTrue: [ self assert: loadedMethod selector = #'bar' ].
+							loadedPackage name = (packageNames2 at: 2)
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'no classes expected in ' , (packageNames2 at: 2) printString ] ] ]
+				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
+					self
+						assert: false
+						description: 'no class methods should be present in the project structure' ] ].
+
+
+	GsPackagePolicy current
+		packages_Do: [ :gsPackage | 
+			gsPackage
+				behaviorAndMethodDictDo: [ :beh :methodDict | 
+					(beh == testClass or: [ beh class == testClass ])
+						ifTrue: [ self assert: (methodDict size = 1 and: [ methodDict includesKey: #'bar' ]) ] ] ].
+
+	browserTool removePackageNamed: packageName1.	"remove the package and unload definitions"
+
+
+	self should: [ Rowan image loadedPackageNamed: packageName1 ] raise: Error.
+
+	GsPackagePolicy current
+		packages_Do: [ :gsPackage | 
+			gsPackage
+				behaviorAndMethodDictDo: [ :beh :methodDict | 
+					(beh == testClass or: [ beh class == testClass ])
+						ifTrue: [ 
+							self
+								assert: false
+								description:
+									'Session methods should not be present for class ' , className1 printString ] ] ].
+
+	self
+		_assertForClassExtensionInClassWithHistory: testClass classHistory
+		ifPresent: [ :classExtensionSet | 
+			self
+				assert: false
+				description:
+					'Unexpected class extension for class ' , className1 printString , ' found' ]
+		ifAbsent: [ 
+			"expected result"
+			 ].
+
+	theProjectNames
+		do: [ :projectName | 
+			| theLoadedProject theLoadedPackage theLoadedClassOrClassExtension |
+			"Traverse the loaded package structure and verify that it is valid"
+			theLoadedProject := Rowan image loadedProjectNamed: projectName.
+			theLoadedProject
+				loadedPackagesDo: [ :loadedProject :loadedPackage | 
+					self assert: theLoadedProject == loadedProject.
+					theLoadedPackage := loadedPackage.
+					self
+						assert:
+							(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
+					loadedProject name = projectName1
+						ifTrue: [ 
+							loadedPackage name = packageName1
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'the package ' , packageName1 , ' should have been removed' ].
+							self assert: (packageNames1 includes: loadedPackage name) ].
+					loadedProject name = projectName2
+						ifTrue: [ self assert: (packageNames2 includes: loadedPackage name) ] ]
+				loadedClassedDo: [ :loadedProject :loadedPackage :loadedClass | 
+					self assert: theLoadedProject == loadedProject.
+					self assert: theLoadedPackage == loadedPackage.
+					self
+						assert:
+							(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
+					theLoadedClassOrClassExtension := loadedClass.
+					loadedProject name = projectName1
+						ifTrue: [ 
+							loadedPackage name = packageName1
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'the package ' , packageName1 printString
+												, ' had been removed no loadedClasses should be present.' ].
+							loadedPackage name = packageName2
+								ifTrue: [ self assert: loadedClass name = className2 ] ].
+					loadedProject name name = projectName2
+						ifTrue: [ 
+							loadedPackage name = (packageNames2 at: 1)
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'no classes expected in ' , (packageNames2 at: 1) printString ].
+							loadedPackage name = (packageNames2 at: 2)
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'no classes expected in ' , (packageNames2 at: 2) printString ] ] ]
+				loadedClassExtenstionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
+					self assert: theLoadedProject == loadedProject.
+					self assert: theLoadedPackage == loadedPackage.
+					self
+						assert:
+							(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
+					theLoadedClassOrClassExtension := loadedClassExtension.
+					loadedProject name = projectName1
+						ifTrue: [ 
+							loadedPackage name = packageName1
+								ifTrue: [ 
+									self
+										assert: false
+										description: 'no classes expected in ' , packageName1 printString ].
+							loadedPackage name = packageName2
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'The class ' , className1 printString
+												,
+													' was removed when packageName1 was removed - no extensions should be present' ] ].
+					loadedProject name name = projectName2
+						ifTrue: [ 
+							loadedPackage name = (packageNames2 at: 1)
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'The class ' , className1 printString
+												,
+													' was removed when packageName1 was removed - no extensions should be present' ].
+							loadedPackage name = (packageNames2 at: 2)
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'no classes expected in ' , (packageNames2 at: 2) printString ] ] ]
+				loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
+					self assert: theLoadedProject == loadedProject.
+					self assert: theLoadedPackage == loadedPackage.
+					self
+						assert:
+							(Rowan image loadedPackageNamed: loadedPackage name) == loadedPackage.
+					self assert: theLoadedClassOrClassExtension == loadedClassOrClassExtension.
+					loadedProject name = projectName1
+						ifTrue: [ 
+							loadedPackage name = packageName1
+								ifTrue: [ 
+									self
+										assert: false
+										description: 'no classes expected in ' , packageName1 printString ].
+							loadedPackage name = packageName2
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'The method #foo was removed when packageName1 was removed' ] ].
+					loadedProject name name = projectName2
+						ifTrue: [ 
+							loadedPackage name = (packageNames2 at: 1)
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'The method #bar was removed when packageName1 was removed' ].
+							loadedPackage name = (packageNames2 at: 2)
+								ifTrue: [ 
+									self
+										assert: false
+										description:
+											'no classes expected in ' , (packageNames2 at: 2) printString ] ] ]
+				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
+					self
+						assert: false
+						description: 'no class methods should be present in the project structure' ] ].
+
+	testClass := Rowan globalNamed: className1.
+	self assert: testClass isNil.
+	testProjectDefinition := browserTool projectNamed: projectName1.
+	testPackageNames := testProjectDefinition packageNames.
+	self assert: testPackageNames = {packageName2}
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testDeleteGlobalExtensionMethod [
+
+	| projectName packageNames className packageName1 testClass testInstance browserTool testSymDict |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Global-Extensions1'.
+	packageNames := {packageName1}.
+	className := 'Object'.
+	self
+		_loadGlobalExtensionsProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	browserTool := Rowan projectTools browser.
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''bar'''
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add extension method to Object"
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	self assert: testInstance foo = 'bar'.
+
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
+		forClassExtensionsIn: className.
+
+	browserTool removeMethod: #'foo' forClassNamed: className isMeta: false.
+
+	self should: [ testInstance foo ] raise: MessageNotUnderstood.
+
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ] ]
+		forClassExtensionsIn: className
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testDeleteMethod [
+
+	| projectName packageNames className packageName1 testClass testInstance browserTool testSymDict |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageNames := {packageName1}.
+	className := 'SimpleBrowse'.
+	self
+		_loadStandardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	self
+		_assert: [ :classDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: classDef instanceMethodDefinitions size = 1;
+						assert: (classDef instanceMethodDefinitions includesKey: #'ivar1') ] ]
+		forClassNamed: className.
+
+	browserTool := Rowan projectTools browser.
+
+	browserTool
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+	testInstance := testClass new.
+	testInstance ivar1: 3.
+	self assert: testInstance ivar1 = 3.
+
+	self
+		_assert: [ :classDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: classDef instanceMethodDefinitions size = 2;
+						assert: (classDef instanceMethodDefinitions includesKey: #'ivar1:') ] ]
+		forClassNamed: className.
+
+
+	browserTool removeMethod: #'ivar1:' forClassNamed: className isMeta: false.
+
+	self should: [ testInstance ivar1: 2 ] raise: MessageNotUnderstood.
+	self assert: testInstance ivar1 = 3.
+
+	self
+		_assert: [ :classDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: classDef instanceMethodDefinitions size = 1;
+						assert: (classDef instanceMethodDefinitions includesKey: #'ivar1') ] ]
+		forClassNamed: className
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testDeletePackage [
+
+	| projectName packageNames className packageName1 testClass browserTool testSymDict testProjectDefinition testPackageNames |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageNames := {packageName1}.
+	className := 'SimpleBrowse'.
+	self
+		_loadSimpleProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	self
+		_assert: [ :classDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ self assert: classDef name = className ] ]
+		forClassNamed: className.
+
+	browserTool := Rowan projectTools browser.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+	testProjectDefinition := browserTool projectNamed: projectName.
+	testPackageNames := testProjectDefinition packageNames.
+	self assert: testPackageNames = packageNames.
+
+	browserTool removePackageNamed: packageName1.	"remove the package and unload definitions"
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass isNil.
+	testProjectDefinition := browserTool projectNamed: projectName.
+	testPackageNames := testProjectDefinition packageNames.
+	self assert: testPackageNames isEmpty
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testLoadFullMultiProjectDefs [
+
+	"set up projects and packages for hybrid browser implementation"
+
+	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance |
+	projectName1 := 'Simple MultiProject 1'.
+	projectName2 := 'Simple MultiProject 2'.
+	projectNames := {projectName1.
+	projectName2}.
+	project1PackageName1 := 'Simple1M-Core'.
+	project1PackageName2 := 'Simple1M-Extensions'.
+	project2PackageName1 := 'Simple2M-Core'.
+	project2PackageName2 := 'Simple2M-Extensions'.
+	packageNames := {{project1PackageName1.
+	project1PackageName2}.
+	{project2PackageName1.
+	project2PackageName2}}.
+	className1 := 'SimpleMultiProject1'.
+	className2 := 'SimpleMultiProject2'.
+	classNames := {className1.
+	className2}.
+	classPackageNames1 := 'Simple1M-Core'.
+	classPackageNames2 := 'Simple2M-Core'.
+	classPackageNames := {classPackageNames1.
+	classPackageNames2}.
+	defaultSymbolDictNames := {(self _symbolDictionaryName1).
+	(self _symbolDictionaryName2)}.
+	comments := {'new class version project 1'.
+	'new class version project2'}.
+	self
+		_loadFullMultiProjectDefinition: projectNames
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictNames
+		comment: comments
+		className: classNames
+		inPackageName: classPackageNames.
+
+	projectTools := Rowan projectTools.
+	browserTool := projectTools browser.
+
+	testClass := Rowan globalNamed: className1.
+	self assert: testClass civar1 = 1.
+	self assert: testClass cvar1 = 2.
+	testInstance := testClass new.
+	self assert: testInstance ivar1 isNil.
+
+	browserTool
+		addOrUpdateMethod: 'foo "instance" ^''foo'''
+		inProtocol: '*' , project1PackageName2 asLowercase
+		forClassNamed: className1
+		isMeta: false
+		inPackageNamed: project1PackageName2.	"extension method for className1 in projectName1"
+
+	browserTool
+		addOrUpdateMethod: 'foo "class" ^''foo'''
+		inProtocol: '*' , project1PackageName2 asLowercase
+		forClassNamed: className1
+		isMeta: true
+		inPackageNamed: project1PackageName2.	"class extension method for className1 in projectName1"
+
+	browserTool
+		projectNamed: projectName2
+		updateDefinition: [ :projectDef | 
+			projectDef
+				useSessionMethodsForExtensions: true
+				forPackageNamed: project2PackageName2 ].
+
+	browserTool
+		addOrUpdateMethod: 'bar "instance" ^''bar'''
+		inProtocol: '*' , project2PackageName2 asLowercase
+		forClassNamed: className1
+		isMeta: false
+		inPackageNamed: project2PackageName2.	"session method extension method for className1 in projectName2"
+
+	browserTool
+		addOrUpdateMethod: 'bar "class" ^''bar'''
+		inProtocol: '*' , project2PackageName2 asLowercase
+		forClassNamed: className1
+		isMeta: true
+		inPackageNamed: project2PackageName2	"class session method extension method for className1 in projectName2"
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testLoadMultiProjectDefs [
+
+	"set up projects and packages for hybrid browser implementation"
+
+	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance |
+	projectName1 := 'Simple MultiProject 1'.
+	projectName2 := 'Simple MultiProject 2'.
+	projectNames := {projectName1.
+	projectName2}.
+	project1PackageName1 := 'Simple1M-Core'.
+	project1PackageName2 := 'Simple1M-Extensions'.
+	project2PackageName1 := 'Simple2M-Core'.
+	project2PackageName2 := 'Simple2M-Extensions'.
+	packageNames := {{project1PackageName1.
+	project1PackageName2}.
+	{project2PackageName1.
+	project2PackageName2}}.
+	className1 := 'SimpleMultiProject1'.
+	className2 := 'SimpleMultiProject2'.
+	classNames := {className1.
+	className2}.
+	classPackageNames1 := 'Simple1M-Core'.
+	classPackageNames2 := 'Simple2M-Core'.
+	classPackageNames := {classPackageNames1.
+	classPackageNames2}.
+	defaultSymbolDictNames := {(self _symbolDictionaryName1).
+	(self _symbolDictionaryName2)}.
+	comments := {'new class version project 1'.
+	'new class version project2'}.
+	self
+		_loadFullMultiProjectDefinition: projectNames
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictNames
+		comment: comments
+		className: classNames
+		inPackageName: classPackageNames.
+
+	projectTools := Rowan projectTools.
+	browserTool := projectTools browser.
+
+	testClass := Rowan globalNamed: className1.
+	self assert: testClass civar1 = 1.
+	self assert: testClass cvar1 = 2.
+	testInstance := testClass new.
+	self assert: testInstance ivar1 isNil.
+
+	browserTool
+		addOrUpdateMethod: 'foo "instance" ^''foo'''
+		inProtocol: '*' , project1PackageName2 asLowercase
+		forClassNamed: className1
+		isMeta: false
+		inPackageNamed: project1PackageName2.	"extension method for className1 in projectName1"
+
+	browserTool
+		addOrUpdateMethod: 'foo "class" ^''foo'''
+		inProtocol: '*' , project1PackageName2 asLowercase
+		forClassNamed: className1
+		isMeta: true
+		inPackageNamed: project1PackageName2.	"class extension method for className1 in projectName1"
+
+	browserTool
+		projectNamed: projectName2
+		updateDefinition: [ :projectDef | 
+			projectDef
+				useSessionMethodsForExtensions: true
+				forPackageNamed: project2PackageName2 ].
+
+	browserTool
+		addOrUpdateMethod: 'bar "instance" ^''bar'''
+		inProtocol: '*' , project2PackageName2 asLowercase
+		forClassNamed: className1
+		isMeta: false
+		inPackageNamed: project2PackageName2.	"session method extension method for className1 in projectName2"
+
+	browserTool
+		addOrUpdateMethod: 'bar "class" ^''bar'''
+		inProtocol: '*' , project2PackageName2 asLowercase
+		forClassNamed: className1
+		isMeta: true
+		inPackageNamed: project2PackageName2	"class session method extension method for className1 in projectName2"
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testMoveGlobalExtensionMethods [
+
+	| projectName packageNames className packageName1 packageName2 testClass testInstance browserTool |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Global-Extensions1'.
+	packageName2 := 'Simple-Global-Extensions2'.
+	packageNames := {packageName1.
+	packageName2}.
+	className := 'Object'.
+	self
+		_loadGlobalExtensionsProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	browserTool := Rowan projectTools browser.
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''bar'''
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add extension method to Object"
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testInstance := testClass new.
+	self assert: testInstance foo = 'bar'.
+
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ 
+					self
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ].
+			packageDef name = packageName2
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ] ]
+		forClassExtensionsIn: className.
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''bif'''
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName2.	"move method to another package as a class extension"
+
+	self assert: testInstance foo = 'bif'.
+
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ].
+			packageDef name = packageName2
+				ifTrue: [ 
+					self
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
+		forClassExtensionsIn: className
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testMoveMethod [
+
+	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool testSymDict |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageName2 := 'Simple-Extensions1'.
+	packageName3 := 'Simple-Extensions2'.
+	packageNames := {packageName1.
+	packageName2.
+	packageName3}.
+	className := 'SimpleBrowse'.
+	self
+		_loadStandardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	browserTool := Rowan projectTools browser.
+
+	browserTool
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+	testInstance := testClass new.
+	testInstance ivar1: 3.
+	self assert: testInstance ivar1 = 3.
+	self should: [ testInstance foo ] raise: MessageNotUnderstood.
+	self _assertNoClassExtensionsIn: className.
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''bar'''
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName2.	"add method in a package as a class extension"
+
+	self assert: testInstance foo = 'bar'.
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ].
+			packageDef name = packageName2
+				ifTrue: [ 
+					self
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ].
+			packageDef name = packageName3
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ] ]
+		forClassExtensionsIn: className.
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''baz'''
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName2.	"change class extension method"
+
+	self assert: testInstance foo = 'baz'.
+
+	browserTool
+		addOrUpdateMethod: 'foo ^''bif'''
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName3.	"move method to another package as a class extension"
+
+	self assert: testInstance foo = 'bif'.
+	self
+		_assert: [ :classExtensionDef :packageDef :projectDef | 
+			packageDef name = packageName1
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ].
+			packageDef name = packageName2
+				ifTrue: [ self assert: classExtensionDef instanceMethodDefinitions size = 0 ].
+			packageDef name = packageName3
+				ifTrue: [ 
+					self
+						assert: classExtensionDef instanceMethodDefinitions size = 1;
+						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
+		forClassExtensionsIn: className
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testNewClassVersionA [
+
+	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance |
+	projectName1 := 'Simple NewVersionA 1'.
+	projectName2 := 'Simple NewVersionA 2'.
+	projectNames := {projectName1.
+	projectName2}.
+	project1PackageName1 := 'Simple1A-Core'.
+	project1PackageName2 := 'Simple1A-Extensions'.
+	project2PackageName1 := 'Simple2A-Core'.
+	project2PackageName2 := 'Simple2A-Extensions'.
+	packageNames := {{project1PackageName1.
+	project1PackageName2}.
+	{project2PackageName1.
+	project2PackageName2}}.
+	className1 := 'SimpleNewVersionA1'.
+	className2 := 'SimpleNewVersionA2'.
+	classNames := {className1.
+	className2}.
+	classPackageNames1 := 'Simple1A-Core'.
+	classPackageNames2 := 'Simple2A-Core'.
+	classPackageNames := {classPackageNames1.
+	classPackageNames2}.
+	defaultSymbolDictNames := {(self _symbolDictionaryName1).
+	(self _symbolDictionaryName2)}.
+	comments := {'new class version project 1'.
+	'new class version project2'}.
+	self
+		_loadMultiProjectDefinition: projectNames
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictNames
+		comment: comments
+		className: classNames
+		inPackageName: classPackageNames.
+
+	projectTools := Rowan projectTools.
+	browserTool := projectTools browser.
+
+	testClass := Rowan globalNamed: className1.
+	self assert: testClass civar1 = 1.
+	self assert: testClass cvar1 = 2.
+	testInstance := testClass new.
+	self assert: testInstance ivar1 isNil.
+
+	browserTool
+		classNamed: className1
+		updateDefinition: [ :classDef | 
+			classDef
+				instVarNames: #();
+				removeInstanceMethod: #'ivar1';
+				classVarNames: #();
+				removeClassMethod: #'cvar1';
+				updateClassMethodDefinition:
+						(RwMethodDefinition
+								newForSelector: #'initialize'
+								protocol: 'initialization'
+								source: 'initialize civar1 := 1.');
+				yourself	"shouldn't there be a method to simply add method source and protocol to the class definition?" ].
+
+	self assert: testClass civar1 = 1.
+	self assert: testClass cvar1 = 2.
+	self assert: testInstance ivar1 isNil.
+
+	testNewClass := Rowan globalNamed: className1.
+	self assert: testNewClass ~~ testClass.
+	self assert: testNewClass civar1 = 1.
+	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
+	testNewInstance := testNewClass new.
+	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
+
+	self
+		should: [ 
+			browserTool
+				addOrUpdateMethod: 'ivar1 ^ivar1'
+				inProtocol: 'accessing'
+				forClassNamed: className1
+				isMeta: false
+				inPackageNamed: project1PackageName2 ]
+		raise: CompileError.
+	self
+		should: [ 
+			browserTool
+				addOrUpdateMethod: 'cvar1 ^Cvar1'
+				inProtocol: 'accessing'
+				forClassNamed: className1
+				isMeta: true
+				inPackageNamed: project1PackageName2 ]
+		raise: CompileError
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testNewClassVersionB [
+
+	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance sessionMethodsSeen |
+	projectName1 := 'Simple NewVersionB 1'.
+	projectName2 := 'Simple NewVersionB 2'.
+	projectNames := {projectName1.
+	projectName2}.
+	project1PackageName1 := 'Simple1B-Core'.
+	project1PackageName2 := 'Simple1B-Extensions'.
+	project2PackageName1 := 'Simple2B-Core'.
+	project2PackageName2 := 'Simple2B-Extensions'.
+	packageNames := {{project1PackageName1.
+	project1PackageName2}.
+	{project2PackageName1.
+	project2PackageName2}}.
+	className1 := 'SimpleNewVersionB1'.
+	className2 := 'SimpleNewVersionB2'.
+	classNames := {className1.
+	className2}.
+	classPackageNames1 := 'Simple1B-Core'.
+	classPackageNames2 := 'Simple2B-Core'.
+	classPackageNames := {classPackageNames1.
+	classPackageNames2}.
+	defaultSymbolDictNames := {(self _symbolDictionaryName1).
+	(self _symbolDictionaryName2)}.
+	comments := {'new class version project 1'.
+	'new class version project2'}.
+	self
+		_loadMultiProjectDefinition: projectNames
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictNames
+		comment: comments
+		className: classNames
+		inPackageName: classPackageNames.
+
+	projectTools := Rowan projectTools.
+	browserTool := projectTools browser.
+
+	browserTool
+		addOrUpdateMethod: 'foo "instance" ^''foo'''
+		inProtocol: 'accessing'
+		forClassNamed: className1
+		isMeta: false
+		inPackageNamed: project1PackageName2.	"extension method for className1 in projectName1"
+
+	browserTool
+		addOrUpdateMethod: 'foo "class" ^''foo'''
+		inProtocol: 'accessing'
+		forClassNamed: className1
+		isMeta: true
+		inPackageNamed: project1PackageName2.	"class extension method for className1 in projectName1"
+
+	browserTool
+		projectNamed: projectName2
+		updateDefinition: [ :projectDef | 
+			projectDef
+				useSessionMethodsForExtensions: true
+				forPackageNamed: project2PackageName2 ].
+
+	browserTool
+		addOrUpdateMethod: 'bar "instance" ^''bar'''
+		inProtocol: 'accessing'
+		forClassNamed: className1
+		isMeta: false
+		inPackageNamed: project2PackageName2.	"session method extension method for className1 in projectName2"
+
+	browserTool
+		addOrUpdateMethod: 'bar "class" ^''bar'''
+		inProtocol: 'accessing'
+		forClassNamed: className1
+		isMeta: true
+		inPackageNamed: project2PackageName2.	"class session method extension method for className1 in projectName2"
+
+	testClass := Rowan globalNamed: className1.
+	self assert: testClass civar1 = 1.
+	self assert: testClass cvar1 = 2.
+	self assert: testClass foo = 'foo'.
+	self assert: testClass bar = 'bar'.
+	testInstance := testClass new.
+	self assert: testInstance ivar1 isNil.
+	self assert: testInstance foo = 'foo'.
+	self assert: testInstance bar = 'bar'.
+
+
+	sessionMethodsSeen := false.
+	GsPackagePolicy current
+		packages_Do: [ :gsPackage | 
+			gsPackage
+				behaviorAndMethodDictDo: [ :beh :methodDict | 
+					(beh == testClass or: [ beh class == testClass ])
+						ifTrue: [ 
+							self assert: (methodDict includesKey: #'bar').
+							sessionMethodsSeen := true ] ] ].
+	self assert: sessionMethodsSeen.
+
+	browserTool
+		projectsNamed: projectNames
+		updateDefinition: [ :projectDef | 
+			projectDef name = projectName1
+				ifTrue: [ 
+					| packageDef classDef classExtensionDef |
+					packageDef := projectDef packageNamed: project1PackageName1.
+					classDef := packageDef classDefinitions at: className1.
+					classDef
+						instVarNames: #();
+						removeInstanceMethod: #'ivar1';
+						classVarNames: #();
+						removeClassMethod: #'cvar1';
+						updateClassMethodDefinition:
+								(RwMethodDefinition
+										newForSelector: #'initialize'
+										protocol: 'initialization'
+										source: 'initialize civar1 := 1.');
+						yourself.	"shouldn't there be a method to simply add method source and protocol to the class definition?"
+					packageDef := projectDef packageNamed: project1PackageName2.
+					classExtensionDef := packageDef classExtensions at: className1.
+					classExtensionDef removeInstanceMethod: #'foo' ].
+			projectDef name = projectName2
+				ifTrue: [ 
+					| packageDef classExtensionDef |
+					packageDef := projectDef packageNamed: project2PackageName2.
+					classExtensionDef := packageDef classExtensions at: className1.
+					classExtensionDef removeClassMethod: #'bar' ] ].
+
+	self assert: testClass civar1 = 1.
+	self assert: testClass cvar1 = 2.
+	self assert: testClass foo = 'foo'.
+	self assert: testClass bar = 'bar'.
+	self assert: testInstance ivar1 isNil.
+	self assert: testInstance foo = 'foo'.
+	self assert: testInstance bar = 'bar'.
+
+	testNewClass := Rowan globalNamed: className1.
+	self assert: testNewClass ~~ testClass.
+	self assert: testNewClass civar1 = 1.
+	self should: [ testNewClass cvar1 ] raise: MessageNotUnderstood.
+	self assert: testNewClass foo = 'foo'.
+	self should: [ testNewClass bar = 'bar' ] raise: MessageNotUnderstood.
+	testNewInstance := testNewClass new.
+	self should: [ testNewInstance ivar1 ] raise: MessageNotUnderstood.
+	self should: [ testNewInstance foo = 'foo' ] raise: MessageNotUnderstood.
+	self assert: testNewInstance bar = 'bar'.
+	self
+		should: [ 
+			browserTool
+				addOrUpdateMethod: 'ivar1 ^ivar1'
+				inProtocol: 'accessing'
+				forClassNamed: className1
+				isMeta: false
+				inPackageNamed: project1PackageName2 ]
+		raise: CompileError.
+	self
+		should: [ 
+			browserTool
+				addOrUpdateMethod: 'cvar1 ^Cvar1'
+				inProtocol: 'accessing'
+				forClassNamed: className1
+				isMeta: true
+				inPackageNamed: project1PackageName2 ]
+		raise: CompileError.
+
+	sessionMethodsSeen := false.
+	GsPackagePolicy current
+		packages_Do: [ :gsPackage | 
+			gsPackage
+				behaviorAndMethodDictDo: [ :beh :methodDict | 
+					(beh == testNewClass or: [ beh class == testNewClass ])
+						ifTrue: [ sessionMethodsSeen := true ] ] ].
+	self assert: sessionMethodsSeen
+]

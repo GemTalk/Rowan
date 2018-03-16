@@ -18,6 +18,12 @@ RwClassDefinition >> classInstVarNames [
 ]
 
 { #category : '*rowan-cypress' }
+RwClassDefinition >> classInstVarNames: anArray [
+
+	^ properties at: 'classinstvars' put: anArray
+]
+
+{ #category : '*rowan-cypress' }
 RwClassDefinition >> comment [
   ^ properties at: 'comment' ifAbsent: ['']
 ]

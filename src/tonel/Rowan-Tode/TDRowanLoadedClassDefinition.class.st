@@ -109,7 +109,7 @@ TDRowanLoadedClassDefinition >> classDefinitionFor: aClass inContext: aUserProfi
 	(aClass isBytes _and: [ aClass superClass isBytes not ])
 		ifTrue: [ 
 			result
-				addAll: ' byteSubclass: ''';
+				addAll: ' rwByteSubclass: ''';
 				addAll: className;
 				addLast: $'.
 			newByteSubclass := true ]
@@ -117,12 +117,12 @@ TDRowanLoadedClassDefinition >> classDefinitionFor: aClass inContext: aUserProfi
 			aClass _portableIsIndexable
 				ifTrue: [ 
 					result
-						addAll: ' indexableSubclass: ''';
+						addAll: ' rwIndexableSubclass: ''';
 						addAll: className;
 						addLast: $' ]
 				ifFalse: [ 
 					result
-						addAll: ' subclass: ''';
+						addAll: ' rwSubclass: ''';
 						addAll: className;
 						addLast: $' ] ].
 	newByteSubclass
