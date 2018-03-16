@@ -752,16 +752,20 @@ RwGsPatchSetBasic >> moveClassesBetweenPackages [
 			(deletedClassesMap at: patch classDefinition key ifAbsent: [  ])
 				ifNotNil: [ :deletedClassPatch | 
 					| modification loadedClass |
-					modification := patch classDefinition
-						compareAgainstBase: deletedClassPatch classDefinition.
-					modification isEmpty
-						ifFalse: [ self halt ].
 					loadedClass := image loadedClassNamed: patch classDefinition name.
 					loadedClass loadedPackage removeLoadedClass: loadedClass.
 					(image loadedPackageNamed: patch packageDefinition name)
 						addLoadedClass: loadedClass.
 					addedClasses remove: patch.
-					deletedClasses remove: deletedClassPatch ] ]
+					deletedClasses remove: deletedClassPatch.
+					modification := patch classDefinition
+						compareAgainstBase: deletedClassPatch classDefinition.
+					modification isEmpty
+						ifFalse: [ 
+							modification
+								addModificationToPatchSet: self
+								inPackage: patch packageDefinition
+								inProject: patch projectDefinition ] ] ]
 ]
 
 { #category : 'private - applying' }
