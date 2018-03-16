@@ -129,21 +129,6 @@ RwBrowserToolTest >> _basicClassDefinition: className superclass: superclass typ
 ]
 
 { #category : 'private' }
-RwBrowserToolTest >> _expectedClassCreationTemplate [
-
-	^ 'RwClassDefinition
-	newForClassNamed: ''NameOfSubclass''
-	 super: Object
-	 instvars: #()
-	 classinstvars: #()
-	 classvars: #()
-	 category: ''MyClasses''
-	 comment: ''class comment''
-	 pools: #()
-	 type: ''normal|variable|bytes'''
-]
-
-{ #category : 'private' }
 RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
 
 	| projectDefinition |

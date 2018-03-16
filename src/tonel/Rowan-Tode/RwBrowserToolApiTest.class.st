@@ -4,6 +4,63 @@ Class {
 	#category : 'Rowan-Tode'
 }
 
+{ #category : 'private' }
+RwBrowserToolApiTest >> _expectedClassCreationTemplate [
+
+	^ 'Object rwSubclass: ''NameOfSubclass''
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	category: ''MyClasses''
+	packageName: ''MyPackage''
+	options: #()
+'
+]
+
+{ #category : 'private' }
+RwBrowserToolApiTest >> _expectedCollectionCreationTemplate [
+
+	^ 'Object rwIndexableSubclass: ''Collection''
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: ''Globals''
+	category: ''Kernel''
+	packageName: ''(NONE)''
+	options: #()
+'
+]
+
+{ #category : 'private' }
+RwBrowserToolApiTest >> _expectedHybridByteArrayCreationTemplate [
+
+	^ 'SequenceableCollection rwByteSubclass: ''ByteArray''
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: ''Globals''
+	category: ''Kernel''
+	options: #()
+'
+]
+
+{ #category : 'private' }
+RwBrowserToolApiTest >> _expectedHybridClassCreationTemplate [
+
+	^ 'Object rwSubclass: ''NameOfSubclass''
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	category: ''MyClasses''
+	options: #()
+'
+]
+
 { #category : 'tests' }
 RwBrowserToolApiTest >> testAddMethod [
 
@@ -74,7 +131,29 @@ RwBrowserToolApiTest >> testClassCreationTemplate [
 		classCreationTemplateForSubclassOf: 'Object'
 		category: 'MyClasses'.
 	self
+		assert: template = self _expectedHybridClassCreationTemplate
+		description: 'incorrect class creation template'.
+
+	template := Rowan projectTools browser
+		classCreationTemplateForSubclassOf: 'Object'
+		category: 'MyClasses'
+		packageName: 'MyPackage'.
+	self
 		assert: template = self _expectedClassCreationTemplate
+		description: 'incorrect class creation template'.
+
+	template := Rowan projectTools browser
+		classCreationTemplateForClass: ByteArray
+		hybridBrowser: true.
+	self
+		assert: template = self _expectedHybridByteArrayCreationTemplate
+		description: 'incorrect class creation template'.
+
+	template := Rowan projectTools browser
+		classCreationTemplateForClass: Collection
+		hybridBrowser: false.
+	self
+		assert: template = self _expectedCollectionCreationTemplate
 		description: 'incorrect class creation template'
 ]
 

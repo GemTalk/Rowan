@@ -307,42 +307,150 @@ RwPrjBrowserTool >> addPackagesNamed: packageNames toProjectNamed: projectName [
 ]
 
 { #category : 'class browsing' }
+RwPrjBrowserTool >> classCreationTemplateForClass: aClass [
+
+	^ self classCreationTemplateForClass: aClass hybridBrowser: false
+]
+
+{ #category : 'class browsing' }
+RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridBrowser [
+
+	| result anArray lfsp newByteSubclass firstElement poolDicts civs superClass className |
+	result := String new.
+	superClass := aClass superclass.
+	className := aClass name asString.
+	result addAll: superClass name asString.
+	lfsp := Character lf asString
+		addAll: String tab;
+		yourself.
+	newByteSubclass := false.
+	(aClass isBytes _and: [ superClass isBytes not ])
+		ifTrue: [ 
+			result
+				addAll: ' rwByteSubclass: ''';
+				addAll: className;
+				addLast: $'.
+			newByteSubclass := true ]
+		ifFalse: [ 
+			aClass _portableIsIndexable
+				ifTrue: [ 
+					result
+						addAll: ' rwIndexableSubclass: ''';
+						addAll: className;
+						addLast: $' ]
+				ifFalse: [ 
+					result
+						addAll: ' rwSubclass: ''';
+						addAll: className;
+						addLast: $' ] ].
+	newByteSubclass
+		ifFalse: [ 
+			result
+				addAll: lfsp;
+				addAll: 'instVarNames: #(';
+				addAll: (aClass _instVarNamesWithSeparator: lfsp , '                 ');
+				add: $) ].
+	result
+		addAll: lfsp;
+		addLast: 'classVars: #('.
+	aClass _sortedClassVarNames
+		do: [ :aKey | 
+			result addLast: $ .
+			(aKey includesValue: $')
+				ifTrue: [ result addAll: aKey _asSource ]
+				ifFalse: [ result addAll: aKey ] ].
+	result addLast: $).
+	result
+		addAll: lfsp;
+		addLast: 'classInstVars: #('.
+	civs := aClass class allInstVarNames.
+	civs removeFrom: 1 to: aClass class superClass instSize.
+	civs
+		do: [ :civName | 
+			result addLast: $ .
+			(civName includesValue: $')
+				ifTrue: [ result addAll: civName _asSource ]
+				ifFalse: [ result addAll: civName ] ].
+	result addLast: $).
+	result
+		addAll: lfsp;
+		addAll: 'poolDictionaries: '.
+	result addAll: '#()'.	"ignored for now"
+	result
+		addAll: lfsp;
+		addAll: 'inDictionary: '.
+	anArray := System myUserProfile dictionaryAndSymbolOf: aClass.
+	(anArray == nil
+		or: [ (anArray at: 1) == GsPackagePolicy current homeSymbolDict ])
+		ifTrue: [ result addAll: '''''' ]
+		ifFalse: [ 
+			(anArray := System myUserProfile dictionaryAndSymbolOf: (anArray at: 1))
+				ifNil: [ result addAll: '''''' ]
+				ifNotNil: [ result addAll: (anArray at: 2) asString printString ] ].
+	result
+		addAll: lfsp;
+		addAll: 'category: '.
+	result addAll: aClass category printString.
+	hybridBrowser
+		ifFalse: [ 
+			result
+				addAll: lfsp;
+				addAll: 'packageName: '.
+			result addAll: aClass rowanPackageName printString ].
+	result
+		add: lfsp;
+		add: aClass _optionsForDefinition.
+	result add: Character lf.
+	^ result
+]
+
+{ #category : 'class browsing' }
 RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName category: category [
 
-	| stream |
-	stream := WriteStream on: String new.
-	stream
-		nextPutAll: RwClassDefinition name asString;
-		cr;
-		tab;
-		nextPutAll: 'newForClassNamed: ''NameOfSubclass''';
-		cr;
-		tab;
-		nextPutAll: ' super: ' , superclassName;
-		cr;
-		tab;
-		nextPutAll: ' instvars: #()';
-		cr;
-		tab;
-		nextPutAll: ' classinstvars: #()';
-		cr;
-		tab;
-		nextPutAll: ' classvars: #()';
-		cr;
-		tab;
-		nextPutAll: ' category: ' , category printString;
-		cr;
-		tab;
-		nextPutAll: ' comment: ''class comment''';
-		cr;
-		tab;
-		nextPutAll: ' pools: #()';
-		cr;
-		tab;
-		nextPutAll: ' type: ''normal|variable|bytes''';
-		yourself.
+	^ self
+		classCreationTemplateForSubclassOf: superclassName
+		category: category
+		packageName: nil
+]
 
-	^ stream contents
+{ #category : 'class browsing' }
+RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName category: category packageName: packageName [
+
+	| result anArray lfsp firstElement poolDicts civs superClass className |
+	result := String new.
+	superClass := Rowan image objectNamed: superclassName.
+	className := 'NameOfSubclass'.
+	result addAll: superclassName.
+	lfsp := Character lf asString
+		addAll: String tab;
+		yourself.
+	result
+		addAll: ' rwSubclass: ';
+		addAll: className printString;
+		addAll: lfsp;
+		addAll: 'instVarNames: #()';
+		addAll: lfsp;
+		addLast: 'classVars: #()';
+		addAll: lfsp;
+		addLast: 'classInstVars: #()';
+		addAll: lfsp;
+		addAll: 'poolDictionaries: #()';
+		addAll: lfsp;
+		addAll: 'inDictionary: UserGlobals';
+		addAll: lfsp;
+		addAll: 'category: ';
+		addAll: category printString.
+	packageName
+		ifNotNil: [ 
+			result
+				addAll: lfsp;
+				addAll: 'packageName: '.
+			result addAll: packageName printString ].
+	result
+		add: lfsp;
+		add: 'options: #()';
+		add: Character lf.
+	^ result
 ]
 
 { #category : 'definition updating' }
