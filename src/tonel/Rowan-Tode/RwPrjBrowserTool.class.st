@@ -35,10 +35,7 @@ RwPrjBrowserTool >> _loadedClassNamed: className [
 { #category : 'private' }
 RwPrjBrowserTool >> _loadedClassNamed: className ifAbsent: absentBlock [
 
-	^ Rowan image
-		loadedClassNamed: className
-		ifFound: [ :loadedClass | ^ loadedClass ]
-		ifAbsent: absentBlock
+	^ Rowan image loadedClassNamed: className ifAbsent: absentBlock
 ]
 
 { #category : 'private' }

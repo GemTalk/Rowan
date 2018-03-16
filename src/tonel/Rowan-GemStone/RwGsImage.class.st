@@ -202,6 +202,23 @@ RwGsImage class >> loadedClassForClass: class ifAbsent: absentBlock [
 ]
 
 { #category : 'querying' }
+RwGsImage class >> loadedClassNamed: className [
+
+	^ self
+		loadedClassNamed: className
+		ifAbsent: [ self error: 'loaded class named ' , className printString , ' not found.' ]
+]
+
+{ #category : 'querying' }
+RwGsImage class >> loadedClassNamed: className ifAbsent: absentBlock [
+
+	^ self
+		loadedClassNamed: className
+		ifFound: [ :loadedClass | ^ loadedClass ]
+		ifAbsent: absentBlock
+]
+
+{ #category : 'querying' }
 RwGsImage class >> loadedClassNamed: className ifFound: foundBlock ifAbsent: absentBlock [
 
 	"scan the symbol list for a RwLoadedClass instance of the given name"

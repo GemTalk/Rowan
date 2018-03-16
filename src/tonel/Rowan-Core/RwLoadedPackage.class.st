@@ -155,12 +155,14 @@ RwLoadedPackage >> projectName [
 RwLoadedPackage >> removeLoadedClass: aLoadedClass [
 
 	self markDirty.
-	loadedClasses removeKey: aLoadedClass key
+	loadedClasses removeKey: aLoadedClass key.
+	aLoadedClass loadedPackage: nil
 ]
 
 { #category : 'accessing' }
 RwLoadedPackage >> removeLoadedClassExtension: aLoadedClassExtension [
 
 	self markDirty.
-	loadedClassExtensions removeKey: aLoadedClassExtension key
+	loadedClassExtensions removeKey: aLoadedClassExtension key.
+	aLoadedClassExtension loadedPackage: nil
 ]

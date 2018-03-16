@@ -547,6 +547,7 @@ RwGsPatchSetBasic >> apply [
 	"Apply the changes I represent to the running image."
 	self
 		setupForApply;
+		moveClassesBetweenPackages;
 		removeDeletedClassesFromTempSymbols;
 		addAddedClassesToTempSymbols;
 		createNewClassesAndClassVersions;
@@ -561,7 +562,6 @@ RwGsPatchSetBasic >> apply [
 		installAddedClasses;
 		installAddedClassExtensions;
 		"moveClassesBetweenSymbolDictionaries;"
-		"moveClassesBetweenPackages;"
 		moveMethodsBetweenPackages;
 		updateSymbolAssociations;
 		updateClassProperties;
@@ -729,6 +729,39 @@ RwGsPatchSetBasic >> markPackagesNotDirty [
 { #category : 'stubs' }
 RwGsPatchSetBasic >> migrateInstances [
 	"presumably migrate instances of changed classes ... noop for now"
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSetBasic >> moveClassesBetweenPackages [
+
+	| deletedClassesMap image |
+	deletedClasses isEmpty
+		ifTrue: [ 
+			"no move without deleted classes"
+			^ self ].
+	deletedClassesMap := Dictionary new.
+	deletedClasses
+		do: [ :patch | 
+			patch classDefinition key
+				ifNotNil: [ 
+					"nil key means that the class itself is being deleted"
+					deletedClassesMap at: patch classDefinition key put: patch ] ].
+	image := Rowan image.
+	addedClasses copy
+		do: [ :patch | 
+			(deletedClassesMap at: patch classDefinition key ifAbsent: [  ])
+				ifNotNil: [ :deletedClassPatch | 
+					| modification loadedClass |
+					modification := patch classDefinition
+						compareAgainstBase: deletedClassPatch classDefinition.
+					modification isEmpty
+						ifFalse: [ self halt ].
+					loadedClass := image loadedClassNamed: patch classDefinition name.
+					loadedClass loadedPackage removeLoadedClass: loadedClass.
+					(image loadedPackageNamed: patch packageDefinition name)
+						addLoadedClass: loadedClass.
+					addedClasses remove: patch.
+					deletedClasses remove: deletedClassPatch ] ]
 ]
 
 { #category : 'private - applying' }
