@@ -7,7 +7,7 @@ Class {
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridClassCreation [
 
-	| byteClass indexableClass normalClass projectName packageNames packageName1 packageName2 symbolDict  |
+	| byteClass indexableClass normalClass projectName packageNames packageName1 packageName2 |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -18,13 +18,11 @@ RwHybridBrowserToolTest >> testHybridClassCreation [
 		packageNames: packageNames
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project'.
-	symbolDict := Rowan image objectNamed: self _symbolDictionaryName1.
 	byteClass := Object
 		rwByteSubclass: 'SimpleHybridByte1'
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: symbolDict
 		category: packageName1
 		options: #().
 	self assert: byteClass rowanPackageName = packageName1.
@@ -35,7 +33,6 @@ RwHybridBrowserToolTest >> testHybridClassCreation [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: symbolDict
 		category: packageName1
 		options: #().
 	self assert: indexableClass rowanPackageName = packageName1.
@@ -46,18 +43,15 @@ RwHybridBrowserToolTest >> testHybridClassCreation [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: symbolDict
 		category: packageName1
 		options: #().
-	self assert: normalClass rowanPackageName = packageName1.
-
-
+	self assert: normalClass rowanPackageName = packageName1
 ]
 
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridCompileMethod [
 
-	| normalClass projectName packageNames packageName1 packageName2 symbolDict movedNormalClass fooMethod barMethod normalInstance |
+	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass fooMethod barMethod normalInstance |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -68,14 +62,12 @@ RwHybridBrowserToolTest >> testHybridCompileMethod [
 		packageNames: packageNames
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project'.
-	symbolDict := Rowan image objectNamed: self _symbolDictionaryName1.
 	normalClass := Object
 		rwSubclass: 'SimpleHybridNormal1'
 		instVarNames: #()
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: symbolDict
 		category: packageName1
 		options: #().
 	self assert: normalClass rowanPackageName = packageName1.
@@ -99,7 +91,7 @@ RwHybridBrowserToolTest >> testHybridCompileMethod [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveClassToPackage [
 
-	| normalClass projectName packageNames packageName1 packageName2 symbolDict movedNormalClass |
+	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -110,14 +102,12 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackage [
 		packageNames: packageNames
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project'.
-	symbolDict := Rowan image objectNamed: self _symbolDictionaryName1.
 	normalClass := Object
 		rwSubclass: 'SimpleHybridNormal1'
 		instVarNames: #()
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: symbolDict
 		category: packageName1
 		options: #().
 	self assert: normalClass rowanPackageName = packageName1.
@@ -128,7 +118,6 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackage [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: symbolDict
 		category: packageName2
 		options: #().
 	self assert: movedNormalClass == normalClass.
@@ -138,7 +127,7 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackage [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveClassToPackageWithClassModifications [
 
-	| normalClass projectName packageNames packageName1 packageName2 symbolDict movedNormalClass |
+	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -149,14 +138,12 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageWithClassModifications [
 		packageNames: packageNames
 		defaultSymbolDictName: self _symbolDictionaryName1
 		comment: 'hybrid browser project'.
-	symbolDict := Rowan image objectNamed: self _symbolDictionaryName1.
 	normalClass := Object
 		rwSubclass: 'SimpleHybridNormal1'
 		instVarNames: #()
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: symbolDict
 		category: packageName1
 		options: #().
 	self assert: normalClass rowanPackageName = packageName1.
@@ -167,7 +154,6 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageWithClassModifications [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		inDictionary: symbolDict
 		category: packageName2
 		options: #().
 	self assert: movedNormalClass ~= normalClass.

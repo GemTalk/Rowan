@@ -8,7 +8,7 @@ Class {
 RwGsLoadedSymbolDictPackage >> classOrExtensionForClass: behavior ifAbsent: absentBlock [
 
 	| className |
-	className := behavior theNonMetaClass name asString.
+	className := behavior thisClass name asString.
 	^ self classOrExtensionForClassNamed: className ifAbsent: absentBlock
 ]
 
@@ -43,7 +43,7 @@ RwGsLoadedSymbolDictPackage >> loadedClassExtensionForClass: aClass ifAbsent: ab
 	"If there is an existing extension for the given (non-meta) class in this package, answer it, otherwise invoke absentBlock."
 
 	^ loadedClassExtensions
-		at: aClass theNonMetaClass name asString
+		at: aClass thisClass name asString
 		ifAbsent: absentBlock
 ]
 
@@ -52,7 +52,7 @@ RwGsLoadedSymbolDictPackage >> loadedClassForClass: aClass ifAbsent: absentBlock
 
 	"If there is an existing loadedClass for the given (non-meta) class in this package, answer it, otherwise invoke absentBlock.."
 
-	^ loadedClasses at: aClass theNonMetaClass name asString ifAbsent: absentBlock
+	^ loadedClasses at: aClass thisClass name asString ifAbsent: absentBlock
 ]
 
 { #category : 'queries' }
@@ -61,6 +61,6 @@ RwGsLoadedSymbolDictPackage >> loadedClassOrClassExtensionForClass: aClass ifAbs
 	"If there is an existing loaded class or loaded class extesnion for the given (non-meta) class in this package, answer it, otherwise invoke absentBlock."
 
 	^ loadedClasses
-		at: aClass theNonMetaClass name asString
+		at: aClass thisClass name asString
 		ifAbsent: [ self loadedClassExtensionForClass: aClass ifAbsent: absentBlock ]
 ]

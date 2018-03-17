@@ -1,7 +1,7 @@
 Extension { #name : 'Class' }
 
 { #category : '*rowan-gemstone' }
-Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aSymbolDictionary category: aCategoryName options: optionsArray [
+Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName options: optionsArray [
 
 	^ Rowan projectTools browser
 		addOrUpdateClassDefinition: aString
@@ -11,14 +11,13 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 		classVars: anArrayOfClassVars
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
-		inDictionary: aSymbolDictionary
 		category: aCategoryName
 		packageName: aCategoryName
 		options: optionsArray
 ]
 
 { #category : '*rowan-gemstone' }
-Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aSymbolDictionary category: aCategoryName packageName: aPackageName options: optionsArray [
+Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName options: optionsArray [
 
 	^ Rowan projectTools browser
 		addOrUpdateClassDefinition: aString
@@ -28,14 +27,13 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 		classVars: anArrayOfClassVars
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
-		inDictionary: aSymbolDictionary
 		category: aCategoryName
 		packageName: aPackageName
 		options: optionsArray
 ]
 
 { #category : '*rowan-gemstone' }
-Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aSymbolDictionary category: aCategoryName options: optionsArray [
+Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName options: optionsArray [
 
 	^ Rowan projectTools browser
 		addOrUpdateClassDefinition: aString
@@ -45,14 +43,13 @@ Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: 
 		classVars: anArrayOfClassVars
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
-		inDictionary: aSymbolDictionary
 		category: aCategoryName
 		packageName: aCategoryName
 		options: optionsArray
 ]
 
 { #category : '*rowan-gemstone' }
-Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aSymbolDictionary category: aCategoryName packageName: aPackageName options: optionsArray [
+Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName options: optionsArray [
 
 	^ Rowan projectTools browser
 		addOrUpdateClassDefinition: aString
@@ -62,14 +59,13 @@ Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: 
 		classVars: anArrayOfClassVars
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
-		inDictionary: aSymbolDictionary
 		category: aCategoryName
 		packageName: aPackageName
 		options: optionsArray
 ]
 
 { #category : '*rowan-gemstone' }
-Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aSymbolDictionary category: aCategoryName options: optionsArray [
+Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName options: optionsArray [
 
 	^ Rowan projectTools browser
 		addOrUpdateClassDefinition: aString
@@ -79,14 +75,13 @@ Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOf
 		classVars: anArrayOfClassVars
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
-		inDictionary: aSymbolDictionary
 		category: aCategoryName
 		packageName: aCategoryName
 		options: optionsArray
 ]
 
 { #category : '*rowan-gemstone' }
-Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aSymbolDictionary category: aCategoryName packageName: aPackageName options: optionsArray [
+Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName options: optionsArray [
 
 	^ Rowan projectTools browser
 		addOrUpdateClassDefinition: aString
@@ -96,7 +91,6 @@ Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOf
 		classVars: anArrayOfClassVars
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
-		inDictionary: aSymbolDictionary
 		category: aCategoryName
 		packageName: aPackageName
 		options: optionsArray
