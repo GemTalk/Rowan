@@ -177,7 +177,11 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 			aRwGsPatchSet
 				addPatchedClassNewVersion: aClassModification
 				inPackage: aPackageDefinition
-				inProject: aProjectDefinition ]
+				inProject: aProjectDefinition.
+			(ClassOrganizer new subclassesOf: existingClass)
+				do: [ :subclass | 
+					false
+						ifTrue: [ self halt ] ] ]
 ]
 
 { #category : 'accessing' }
