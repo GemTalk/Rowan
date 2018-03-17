@@ -64,7 +64,7 @@ RwBrowserToolApiTest >> _expectedHybridClassCreationTemplate [
 { #category : 'tests' }
 RwBrowserToolApiTest >> testAddMethod [
 
-	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool compiledMethod |
+	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool compiledMethod gsNMethod |
 	projectName := 'Simple Browser'.
 	packageName1 := 'Simple-Core'.
 	packageName2 := 'Simple-Extensions1'.
@@ -106,7 +106,7 @@ RwBrowserToolApiTest >> testAddMethod [
 
 	self assert: testInstance foo = 'bar'.
 
-	browserTool
+	gsNMethod := browserTool
 		addOrUpdateMethod: 'foo ^''baz'''
 		inProtocol: 'accessing'
 		forClassNamed: className
@@ -119,6 +119,7 @@ RwBrowserToolApiTest >> testAddMethod [
 	self assert: testClass rowanPackageName = packageName1.
 
 	compiledMethod := testClass compiledMethodAt: #'foo'.
+	self assert: gsNMethod == compiledMethod.
 	self assert: compiledMethod rowanProjectName = projectName.
 	self assert: compiledMethod rowanPackageName = packageName2
 ]

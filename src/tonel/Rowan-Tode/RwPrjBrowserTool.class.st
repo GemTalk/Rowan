@@ -203,13 +203,44 @@ RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass:
 ]
 
 { #category : 'method browsing' }
+RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageName forClassNamed: className isMeta: isMeta [
+
+	"If the method is already installed in a different package, remove the method from that package.
+	 If package name matches the name of the package of the class definition, then add the method 
+		to the class definition.
+	 If there is no matching class extension or the package name does not match, add the method 
+		to a class extension in the named package.
+	 Return the resulting compiled method"
+
+	"a hybrid package name has a leading '*' followed by the name of a package ... 
+ 		where the hybrid package name is not expected to preserve case"
+
+	| loadedPackage |
+	loadedPackage := Rowan
+		loadedHybridPackageNamed: hybridPackageName
+		ifAbsent: [ 
+			self
+				error:
+					'A package for hybrid package name ' , hybridPackageName printString
+						, ' was not found.' ].
+
+	^ self
+		addOrUpdateMethod: methodSource
+		inProtocol: hybridPackageName
+		forClassNamed: className
+		isMeta: isMeta
+		inPackageNamed: loadedPackage name
+]
+
+{ #category : 'method browsing' }
 RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClassNamed: className isMeta: isMeta inPackageNamed: packageName [
 
 	"If the method is already installed in a different package, remove the method from that package.
 	 If package name matches the name of the package of the class definition, then add the method 
 		to the class definition.
 	 If there is no matching class extension or the package name does not match, add the method 
-		to a class extension in the named package."
+		to a class extension in the named package.
+	 Return the resulting compiled method"
 
 	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition loadedMethodToBeRemoved |
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -256,13 +287,15 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClas
 		ifTrue: [ cDef updateClassMethodDefinition: methodDef ]
 		ifFalse: [ cDef updateInstanceMethodDefinition: methodDef ].
 	projectSetDefinition addProject: pDef.
-	^ projectTools load loadProjectSetDefinition: projectSetDefinition ].
+	projectTools load loadProjectSetDefinition: projectSetDefinition.
+	(self _loadedMethod: methodDef selector inClassNamed: className isMeta: isMeta)
+		handle ].
 
 	self
 		definitionsForClassNamed: className
 		ifFound: [ :classDef :packageDef :projectDef | 
 			packageDef name = packageName
-				ifTrue: [ updateBlock value: classDef value: projectDef ]
+				ifTrue: [ ^ updateBlock value: classDef value: projectDef ]
 				ifFalse: [ 
 					"the named package is different from the class definition package"
 					 ] ]
@@ -284,7 +317,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClas
 			packageDefinition addClassExtension: classExtensionDef.
 			classExtensionDef ].
 
-	updateBlock value: classExtensionDef value: projectDefinition
+	^ updateBlock value: classExtensionDef value: projectDefinition
 ]
 
 { #category : 'package browsing' }

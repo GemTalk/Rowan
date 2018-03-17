@@ -233,6 +233,23 @@ RwGsImage class >> loadedClassNamed: className ifFound: foundBlock ifAbsent: abs
 ]
 
 { #category : 'querying' }
+RwGsImage class >> loadedHybridPackageNamed: aHybridName ifAbsent: absentBlock [
+
+	"scan the symbol list a RwLoadedPackage instance of the given hybrid name"
+
+	"a hybrid package name has a leading '*' followed by the name of a package ... 
+		where the hybrid package name is not expected to preserve case"
+
+	self symbolList
+		do: [ :symbolDict | 
+			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
+				ifTrue: [ 
+					(symbolDict loadedHybridPackageNamed: aHybridName ifAbsent: [  ])
+						ifNotNil: [ :loadedPackage | ^ loadedPackage ] ] ].
+	^ absentBlock value
+]
+
+{ #category : 'querying' }
 RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta ifFound: foundBlock ifAbsent: absentBlock [
 
 	"scan the symbol list for a RwLoadedMethod instances for the given selector in the named class"

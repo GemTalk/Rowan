@@ -76,6 +76,12 @@ Rowan class >> initialize [
 	platform initialize
 ]
 
+{ #category : 'private' }
+Rowan class >> loadedHybridPackageNamed: aName ifAbsent: absentBlock [
+
+	^ self image loadedHybridPackageNamed: aName ifAbsent: absentBlock
+]
+
 { #category : 'public' }
 Rowan class >> loadedPackageDefinitionsNamed: someNames [
 

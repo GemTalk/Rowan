@@ -647,6 +647,25 @@ RwGsPackageSymbolDictionary >> homeSessionMethods [
 ]
 
 { #category : 'loaded queries' }
+RwGsPackageSymbolDictionary >> loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock [
+
+	| packageName |
+	(hybridPackageName at: 1) = $*
+		ifFalse: [ 
+			self
+				error:
+					'Improperly formed hybrid package name' , hybridPackageName printString
+						, '. Expected a leading ''*''' ].
+	packageName := (hybridPackageName copyFrom: 2 to: hybridPackageName size)
+		asLowercase.
+	packageRegistry keys
+		do: [ :key | 
+			key asLowercase = packageName
+				ifTrue: [ ^ packageRegistry at: key ] ].
+	^ absentBlock value
+]
+
+{ #category : 'loaded queries' }
 RwGsPackageSymbolDictionary >> loadedPackageDefinitionNamed: packageName ifAbsent: absentBlock [
 
 	^ (self loadedPackageNamed: packageName ifAbsent: absentBlock) asDefinition
