@@ -186,8 +186,8 @@ RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass:
 									packageProjectDef := loadedPackage loadedProject asDefinition.
 									projectSetDef addProject: packageProjectDef.
 									packageProjectDef packageNamed: packageName ].
-							thePackageDef addClassDefinition: classDef.
-							self class load loadProjectSetDefinition: projectSetDef ] ]
+							thePackageDef addClassDefinition: classDef ].
+					self class load loadProjectSetDefinition: projectSetDef ]
 				ifAbsent: [ 
 					"shouldn't happen ... loadedClass known to exist"
 					self error: 'unexpected missing class ' , className printString ] ].
