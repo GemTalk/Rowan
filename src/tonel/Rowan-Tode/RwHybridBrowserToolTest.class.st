@@ -161,9 +161,9 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageWithClassModifications [
 ]
 
 { #category : 'tests' }
-RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclasses [
+RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesA [
 
-	| class subclass projectName packageNames packageName1 newClassVersion |
+	| class subclass projectName packageNames packageName1 newClassVersion newSubclassVersion |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageNames := {packageName1}.
@@ -201,5 +201,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclasses [
 		options: #().
 
 	self assert: newClassVersion ~~ class.
-	self assert: subclass superClass == newClassVersion
+	newSubclassVersion := Rowan image objectNamed: subclass name.
+	self assert: newSubclassVersion ~~ subclass.
+	self assert: newSubclassVersion superClass == newClassVersion
 ]

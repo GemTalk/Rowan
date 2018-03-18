@@ -1,6 +1,12 @@
 Extension { #name : 'RwClassDefinition' }
 
 { #category : '*rowan-gemstone' }
+RwClassDefinition >> _modificationForcingNewClassVersion [
+
+	^ RwClassModificationForcingNewClassVersion
+]
+
+{ #category : '*rowan-gemstone' }
 RwClassDefinition >> gs_options: optionsArray [
 
 	(optionsArray _isArray and: [ optionsArray isEmpty not ])

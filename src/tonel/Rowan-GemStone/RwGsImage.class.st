@@ -123,6 +123,8 @@ RwGsImage class >> applyModification: aProjectSetModification [
 			each
 				updatePatchesForNewClassVersion: aProjectSetModification;
 				updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
+					patchSet: patchSet;
+				updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
 					patchSet: patchSet ].
 	visitor := RwGsImagePatchVisitor new.
 	visitor visit: aProjectSetModification.

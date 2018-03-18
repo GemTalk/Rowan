@@ -172,7 +172,41 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForExtensionsI
 ]
 
 { #category : 'new version support' }
-RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectOrPackageSetModification [
+RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification patchSet: patchSet [
+
+	| subclassesOfClassWithNewVersions existingClass classesWithNewVersions |
+	existingClass := self oldClassVersion.
+	subclassesOfClassWithNewVersions := IdentitySet new.
+	subclassesOfClassWithNewVersions
+		addAll: (ClassOrganizer new subclassesOf: existingClass).
+	classesWithNewVersions := patchSet classesWithNewVersions
+		collect: [ :patch | patch oldClassVersion ].
+	subclassesOfClassWithNewVersions removeAllPresent: classesWithNewVersions.
+	subclassesOfClassWithNewVersions
+		do: [ :subclass | 
+			| loadedClassDefinition subclassName newVersionClassModification |
+			subclassName := subclass name asString.
+			loadedClassDefinition := (self packageSymbolDictionary
+				existingForClass: subclass) asDefinition.
+			newVersionClassModification := loadedClassDefinition
+				modificationForcingNewVersion.
+			aProjectSetModification
+				classesModifiedDo: [ :classesModification | 
+					classesModification isEmpty
+						ifTrue: [ self error: 'unexpected empty class modification' ]
+						ifFalse: [ 
+							| classesModified |
+							classesModified := classesModification elementsModified.
+							(classesModified at: subclassName ifAbsent: [  ])
+								ifNil: [ classesModified at: subclassName put: newVersionClassModification ]
+								ifNotNil: [ :existingClassModification | 
+									self halt: 'let''s see how this plays out'.
+									existingClassModification
+										mergeForNewClassVersionWith: newVersionClassModification ] ] ] ]
+]
+
+{ #category : 'new version support' }
+RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectSetModification [
 
 	| existingClass loadedClassDefinition newVersionClassModification existingClassName |
 	existingClass := self oldClassVersion.
@@ -184,7 +218,7 @@ RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectO
 	newVersionClassModification isEmpty
 		ifFalse: [ 
 			"only newVersionClassModification with substance need further processing"
-			aProjectOrPackageSetModification
+			aProjectSetModification
 				classesModifiedDo: [ :classesModification | 
 					classesModification isEmpty
 						ifFalse: [ 

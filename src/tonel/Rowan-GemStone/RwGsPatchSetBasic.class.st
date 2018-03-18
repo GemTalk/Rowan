@@ -870,10 +870,14 @@ RwGsPatchSetBasic >> setupForApply [
 { #category : 'patch access' }
 RwGsPatchSetBasic >> superclassNamed: aName [
 
-	^createdClasses at: aName
-		ifAbsent: 
-			[tempSymbols at: aName asSymbol
-				ifAbsent: [self error: 'Superclass not found.']]
+	| superclassName |
+	superclassName := aName asSymbol.
+	^ createdClasses
+		at: superclassName
+		ifAbsent: [ 
+			tempSymbols
+				at: superclassName
+				ifAbsent: [ self error: 'Superclass not found: ' , aName printString ] ]
 ]
 
 { #category : 'patch access' }

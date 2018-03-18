@@ -30,6 +30,19 @@ RwGsClassVersioningPatch class >> addPatchedClassModification: aClassModificatio
 		toPatchSet: aRwGsPatchSet
 ]
 
+{ #category : 'patching' }
+RwGsClassVersioningPatch class >> addPatchedClassModificationForcingNewClassVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition toPatchSet: aRwGsPatchSet [
+
+	"Need to decide whether the patches in aClassModification warrant a new class version or 
+	 simple property changes."
+
+	^ self new
+		addPatchedClassModificationForcingNewClassVersion: aClassModification
+		inPackage: aPackageDefinition
+		inProject: aProjectDefinition
+		toPatchSet: aRwGsPatchSet
+]
+
 { #category : 'instance creation' }
 RwGsClassVersioningPatch class >> for: aClassModification inPackage: aPackageDefinition [
 
@@ -177,11 +190,26 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 			aRwGsPatchSet
 				addPatchedClassNewVersion: aClassModification
 				inPackage: aPackageDefinition
-				inProject: aProjectDefinition.
-			(ClassOrganizer new subclassesOf: existingClass)
-				do: [ :subclass | 
-					false
-						ifTrue: [ self halt ] ] ]
+				inProject: aProjectDefinition ]
+]
+
+{ #category : 'patching' }
+RwGsClassVersioningPatch >> addPatchedClassModificationForcingNewClassVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition toPatchSet: aRwGsPatchSet [
+
+	"Uncontitionally create a new class version"
+
+	| dict existingClass newFormat aClassDefinition newSuperclass |
+	packageDefinition := aPackageDefinition.
+	projectDefinition := aProjectDefinition.
+	aClassDefinition := aClassModification after.
+	dict := self packageSymbolDictionary.
+	existingClass := dict
+		at: aClassDefinition name asSymbol
+		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
+	aRwGsPatchSet
+		addPatchedClassNewVersion: aClassModification
+		inPackage: aPackageDefinition
+		inProject: aProjectDefinition
 ]
 
 { #category : 'accessing' }

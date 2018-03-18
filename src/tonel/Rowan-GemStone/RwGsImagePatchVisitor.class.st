@@ -213,6 +213,15 @@ RwGsImagePatchVisitor >> visitClassModification: aClassModification [
 ]
 
 { #category : 'visting' }
+RwGsImagePatchVisitor >> visitClassModificationForcingNewVersion: aClassModification [
+
+	aClassModification
+		addModificationForcingNewClassVersionToPatchSet: patchSet
+		inPackage: currentPackage
+		inProject: currentProject
+]
+
+{ #category : 'visting' }
 RwGsImagePatchVisitor >> visitExtensionMethodModification: anExtensionMethodModification [
 
 	anExtensionMethodModification
