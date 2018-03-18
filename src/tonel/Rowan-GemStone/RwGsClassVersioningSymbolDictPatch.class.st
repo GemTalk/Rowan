@@ -178,7 +178,7 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 	existingClass := self oldClassVersion.
 	subclassesOfClassWithNewVersions := IdentitySet new.
 	subclassesOfClassWithNewVersions
-		addAll: (ClassOrganizer new subclassesOf: existingClass).
+		addAll: (ClassOrganizer new allSubclassesOf: existingClass).
 	classesWithNewVersions := patchSet classesWithNewVersions
 		collect: [ :patch | patch oldClassVersion ].
 	subclassesOfClassWithNewVersions removeAllPresent: classesWithNewVersions.
