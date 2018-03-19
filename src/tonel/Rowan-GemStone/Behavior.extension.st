@@ -6,7 +6,7 @@ Behavior >> rwCompileMethod: sourceString category: aCategoryString [
 	^ Rowan projectTools browser
 		addOrUpdateMethod: sourceString
 		inProtocol: aCategoryString
-		forClassNamed: self name asString
+		forClassNamed: self thisClass name asString
 		isMeta: self isMeta
 ]
 
