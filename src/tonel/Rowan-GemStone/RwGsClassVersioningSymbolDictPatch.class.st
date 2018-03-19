@@ -26,7 +26,7 @@ RwGsClassVersioningSymbolDictPatch class >> for: aClassModification inPackage: a
 		yourself
 ]
 
-{ #category : 'new version support' }
+{ #category : 'private' }
 RwGsClassVersioningSymbolDictPatch >> _createMethodExtensionModificationForNewVersionOfClassNamed: className isMeta: isMeta loadedMethod: loadedMethod projectSetModification: aProjectSetModification [
 
 	| loadedProject loadedPackage loadedClassExtension projectModification packageModification classExtensionModification methodsModification methodDef source sourceModification modification |
@@ -67,6 +67,66 @@ RwGsClassVersioningSymbolDictPatch >> _createMethodExtensionModificationForNewVe
 		sourceModification: sourceModification;
 		yourself.
 	methodsModification at: loadedMethod selector put: modification
+]
+
+{ #category : 'private' }
+RwGsClassVersioningSymbolDictPatch >> _updateNewClassVersionPatchesForClass: class in: aProjectSetModification patchSet: aPatchSet [
+
+	| className extensionMap emptyDict |
+	className := class name asString.
+	extensionMap := Dictionary new.
+	emptyDict := Dictionary new.
+	(Rowan image loadedClassExtensionsForClass: class)
+		do: [ :loadedClassExtension | 
+			| dict |
+			dict := extensionMap at: className ifAbsentPut: [ Dictionary new ].
+			loadedClassExtension
+				loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :loadedMethod | 
+					(dict at: 'instance' ifAbsentPut: [ Dictionary new ])
+						at: loadedMethod selector
+						put: loadedMethod ]
+				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :loadedMethod | 
+					(dict at: 'class' ifAbsentPut: [ Dictionary new ])
+						at: loadedMethod selector
+						put: loadedMethod ] ].
+	extensionMap isEmpty
+		ifTrue: [ ^ self ].
+	aPatchSet
+		allPatchesAffectingLiveMethodsDo: [ :patch | 
+			| methodsDict selectorDict |
+			methodsDict := extensionMap
+				at: patch classDefinition name
+				ifAbsent: [ emptyDict ].
+			selectorDict := patch isMeta
+				ifTrue: [ methodsDict at: 'class' ifAbsent: [ emptyDict ] ]
+				ifFalse: [ methodsDict at: 'instance' ifAbsent: [ emptyDict ] ].
+			(selectorDict includesKey: patch methodDefinition selector)
+				ifTrue: [ self error: 'not yet implemented' ] ]
+		deletedMethodsDo: [ :patch | 
+			| methodsDict selectorDict |
+			methodsDict := extensionMap
+				at: patch classDefinition name
+				ifAbsent: [ emptyDict ].
+			selectorDict := patch isMeta
+				ifTrue: [ methodsDict at: 'class' ifAbsent: [ emptyDict ] ]
+				ifFalse: [ methodsDict at: 'instance' ifAbsent: [ emptyDict ] ].
+			selectorDict removeKey: patch methodDefinition selector ifAbsent: [  ] ].
+	extensionMap
+		valuesDo: [ :methodsDict | 
+			(methodsDict at: 'instance' ifAbsent: [ emptyDict ])
+				valuesDo: [ :loadedMethod | 
+					self
+						_createMethodExtensionModificationForNewVersionOfClassNamed: className
+						isMeta: false
+						loadedMethod: loadedMethod
+						projectSetModification: aProjectSetModification ].
+			(methodsDict at: 'class' ifAbsent: [ emptyDict ])
+				valuesDo: [ :loadedMethod | 
+					self
+						_createMethodExtensionModificationForNewVersionOfClassNamed: className
+						isMeta: true
+						loadedMethod: loadedMethod
+						projectSetModification: aProjectSetModification ] ]
 ]
 
 { #category : 'accessing' }
@@ -114,61 +174,13 @@ RwGsClassVersioningSymbolDictPatch >> oldClassVersion [
 { #category : 'new version support' }
 RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification patchSet: aPatchSet [
 
-	| className class extensionMap emptyDict |
+	| className class |
 	className := classDefinition name.
 	class := Rowan image objectNamed: className.
-	extensionMap := Dictionary new.
-	emptyDict := Dictionary new.
-	(Rowan image loadedClassExtensionsForClass: class)
-		do: [ :loadedClassExtension | 
-			| dict |
-			dict := extensionMap at: className ifAbsentPut: [ Dictionary new ].
-			loadedClassExtension
-				loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :loadedMethod | 
-					(dict at: 'instance' ifAbsentPut: [ Dictionary new ])
-						at: loadedMethod selector
-						put: loadedMethod ]
-				loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClass :loadedMethod | 
-					(dict at: 'class' ifAbsentPut: [ Dictionary new ])
-						at: loadedMethod selector
-						put: loadedMethod ] ].
-
-	aPatchSet
-		allPatchesAffectingLiveMethodsDo: [ :patch | 
-			| methodsDict selectorDict |
-			methodsDict := extensionMap
-				at: patch classDefinition name
-				ifAbsent: [ emptyDict ].
-			selectorDict := patch isMeta
-				ifTrue: [ methodsDict at: 'class' ifAbsent: [ emptyDict ] ]
-				ifFalse: [ methodsDict at: 'instance' ifAbsent: [ emptyDict ] ].
-			(selectorDict includesKey: patch methodDefinition selector)
-				ifTrue: [ self error: 'not yet implemented' ] ]
-		deletedMethodsDo: [ :patch | 
-			| methodsDict selectorDict |
-			methodsDict := extensionMap
-				at: patch classDefinition name
-				ifAbsent: [ emptyDict ].
-			selectorDict := patch isMeta
-				ifTrue: [ methodsDict at: 'class' ifAbsent: [ emptyDict ] ]
-				ifFalse: [ methodsDict at: 'instance' ifAbsent: [ emptyDict ] ].
-			selectorDict removeKey: patch methodDefinition selector ifAbsent: [  ] ].
-	extensionMap
-		valuesDo: [ :methodsDict | 
-			(methodsDict at: 'instance' ifAbsent: [ emptyDict ])
-				valuesDo: [ :loadedMethod | 
-					self
-						_createMethodExtensionModificationForNewVersionOfClassNamed: className
-						isMeta: false
-						loadedMethod: loadedMethod
-						projectSetModification: aProjectSetModification ].
-			(methodsDict at: 'class' ifAbsent: [ emptyDict ])
-				valuesDo: [ :loadedMethod | 
-					self
-						_createMethodExtensionModificationForNewVersionOfClassNamed: className
-						isMeta: true
-						loadedMethod: loadedMethod
-						projectSetModification: aProjectSetModification ] ]
+	self
+		_updateNewClassVersionPatchesForClass: class
+		in: aProjectSetModification
+		patchSet: aPatchSet
 ]
 
 { #category : 'new version support' }
@@ -189,7 +201,7 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 			loadedClassDefinition := (self packageSymbolDictionary
 				existingForClass: subclass) asDefinition.
 			newVersionClassModification := loadedClassDefinition
-				modificationForcingNewVersion.
+				compareAgainstBaseForcingNewClassVersion: loadedClassDefinition.
 			aProjectSetModification
 				classesModifiedDo: [ :classesModification | 
 					classesModification isEmpty
@@ -198,11 +210,18 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 							| classesModified |
 							classesModified := classesModification elementsModified.
 							(classesModified at: subclassName ifAbsent: [  ])
-								ifNil: [ classesModified at: subclassName put: newVersionClassModification ]
+								ifNil: [ 
+									classesModified at: subclassName put: newVersionClassModification.
+									newVersionClassModification
+										mergeForNewClassVersionWith: newVersionClassModification ]
 								ifNotNil: [ :existingClassModification | 
 									self halt: 'let''s see how this plays out'.
 									existingClassModification
-										mergeForNewClassVersionWith: newVersionClassModification ] ] ] ]
+										mergeForNewClassVersionWith: newVersionClassModification ] ] ].
+			self
+				_updateNewClassVersionPatchesForClass: subclass
+				in: aProjectSetModification
+				patchSet: patchSet ]
 ]
 
 { #category : 'new version support' }
