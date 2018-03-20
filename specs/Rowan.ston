@@ -16,6 +16,7 @@ RwPackageLoadSpecification {
 		'Cypress-Core',
 		'Rowan-Url',
 		'Rowan-Core',
+		'Rowan-Definitions',
 		'Rowan-GemStone',
 		'Rowan-Cypress',
 		'Rowan-Tests',
@@ -25,6 +26,7 @@ RwPackageLoadSpecification {
 		'Cypress-Core',
 		'Rowan-Url',
 		'Rowan-Core',
+		'Rowan-Definitions',
 		'Rowan-GemStone',
 		'Rowan-Cypress',
 		'Rowan-Tests'

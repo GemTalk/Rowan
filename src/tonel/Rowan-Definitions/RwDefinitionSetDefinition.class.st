@@ -11,7 +11,7 @@ Class {
 	#instVars : [
 		'definitions'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Definitions'
 }
 
 { #category : 'accessing' }

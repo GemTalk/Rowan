@@ -5,7 +5,7 @@ Class {
 		'classMethodDefinitions',
 		'instanceMethodDefinitions'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Definitions'
 }
 
 { #category : 'instance creation' }

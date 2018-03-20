@@ -6,7 +6,7 @@ Properties must include 'name', the name of the class to be extended, but should
 Class {
 	#name : 'RwClassExtensionDefinition',
 	#superclass : 'RwAbstractClassDefinition',
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Definitions'
 }
 
 { #category : 'instance creation' }

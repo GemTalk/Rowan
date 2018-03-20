@@ -6,48 +6,51 @@ Object
 
 "
 Class {
-	#name : 'RwProjectSetDefinition',
+	#name : 'RwPackageSetDefinition',
 	#superclass : 'RwDefinitionSetDefinition',
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Definitions'
 }
 
 { #category : 'accessing' }
-RwProjectSetDefinition >> addProject: aDefinition [
+RwPackageSetDefinition >> addPackage: aDefinition [
 
 	self addDefinition: aDefinition
 ]
 
 { #category : 'comparing' }
-RwProjectSetDefinition >> compareAgainstBase: aDefinition [
+RwPackageSetDefinition >> compareAgainstBase: aDefinition [
 
 	| result |
-	result := RwProjectSetModification new.
+	result := RwPackageSetModification new.
 	self
 		compareDictionary: definitions
 		againstBaseDictionary: aDefinition definitions
 		into: result
-		elementClass: RwProjectDefinition.
+		elementClass: RwPackageDefinition.
+	result
+		updateForClassMoves;
+		updateForMethodMoves.
 	^ result
 ]
 
 { #category : 'deriving' }
-RwProjectSetDefinition >> deriveLoadedThings [
+RwPackageSetDefinition >> deriveLoadedThings [
 
 	^ RwEntitySet
 		withAll:
 			((self definitionNames
-				collect: [ :projectName | Rowan loadedProjectNamed: projectName ifAbsent: [  ] ])
+				collect: [ :packageName | Rowan loadedPackageNamed: packageName ifAbsent: [  ] ])
 				select: [ :each | each notNil ])
 ]
 
 { #category : 'accessing' }
-RwProjectSetDefinition >> projectNames [
+RwPackageSetDefinition >> packageNames [
 
 	^ self definitionNames
 ]
 
 { #category : 'accessing' }
-RwProjectSetDefinition >> projects [
+RwPackageSetDefinition >> packages [
 
 	^ self definitions
 ]
