@@ -372,7 +372,7 @@ readStreamFor: filePath do: aOneArgBlock
     alias: ''.
   packageManager
     defaultSymbolDictionaryName: #'UserGlobals'.
-  #('Cypress-Core' 'Rowan-Url' 'Rowan-Core' 'Rowan-GemStone' 'Rowan-Cypress' 'Rowan-Tests' 'Rowan-Tode')
+  #('Cypress-Core' 'Rowan-Url' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone' 'Rowan-Cypress' 'Rowan-Tests' 'Rowan-Tode' 'Rowan-Services')
     do: [ :packageName | 
       packageManager
         addResolvedReference:

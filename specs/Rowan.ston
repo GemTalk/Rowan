@@ -18,10 +18,10 @@ RwPackageLoadSpecification {
 		'Rowan-Core',
 		'Rowan-Definitions',
 		'Rowan-GemStone',
-		'Rowan-Services',
 		'Rowan-Cypress',
 		'Rowan-Tests',
-		'Rowan-Tode'
+		'Rowan-Tode',
+		'Rowan-Services'
 	],
 	#packageNamesToLoad : [
 		'Cypress-Core',
@@ -29,7 +29,6 @@ RwPackageLoadSpecification {
 		'Rowan-Core',
 		'Rowan-Definitions',
 		'Rowan-GemStone',
-		'Rowan-Services',
 		'Rowan-Cypress',
 		'Rowan-Tests'
 	]
