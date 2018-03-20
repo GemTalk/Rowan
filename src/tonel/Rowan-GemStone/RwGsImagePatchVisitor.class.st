@@ -218,10 +218,7 @@ RwGsImagePatchVisitor >> visitClassModificationForcingNewVersion: aClassModifica
 	aClassModification
 		addModificationForcingNewClassVersionToPatchSet: patchSet
 		inPackage: currentPackage
-		inProject: currentProject.
-	currentClass := aClassModification after.
-	aClassModification instanceMethodsModification acceptVisitor: self.
-	aClassModification classMethodsModification acceptVisitor: self
+		inProject: currentProject
 ]
 
 { #category : 'visting' }

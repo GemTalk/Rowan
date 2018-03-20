@@ -9,6 +9,18 @@ Class {
 }
 
 { #category : 'examples' }
+RowanPackageDefinitionService >> createPackageNamed: thePackageName inProject: projectName [
+
+	| projectService |
+	packageName := thePackageName. 
+	projectService := RowanProjectDefinitionService new.
+	projectDefinition := projectService createProjectNamed: projectName .
+	projectDefinition addPackageNamed: packageName.
+	self projectTools load loadProjectDefinition: projectDefinition.
+
+]
+
+{ #category : 'examples' }
 RowanPackageDefinitionService >> createSamplePackage [
 
 	"assume that the sample project & symbol dictionary 
