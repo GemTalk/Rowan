@@ -18,6 +18,7 @@ RwPackageLoadSpecification {
 		'Rowan-Core',
 		'Rowan-Definitions',
 		'Rowan-GemStone',
+		'Rowan-Services',
 		'Rowan-Cypress',
 		'Rowan-Tests',
 		'Rowan-Tode'
@@ -28,6 +29,7 @@ RwPackageLoadSpecification {
 		'Rowan-Core',
 		'Rowan-Definitions',
 		'Rowan-GemStone',
+		'Rowan-Services',
 		'Rowan-Cypress',
 		'Rowan-Tests'
 	]
