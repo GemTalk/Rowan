@@ -37,6 +37,21 @@ $GS_HOME/shared/repos/Rowan/src/platforms/gemstone/gsdevkit/bin/installRowan $ro
 
 ```
 
+### Rowan Smalltalk scripts
+```Smalltalk
+"git pull for Rowan project"
+Rowan projectTools pull pullSpecUrl: 'Rowan'.
+
+"write changed packages and commit Rowan project"
+Rowan projectTools commit
+	commitSpecUrl: 'Rowan'
+	message: 'example commit message'.
+
+"git push for Rowan project"
+Rowan projectTools push pushSpecUrl: 'Rowan'.
+
+```
+
 ## Acknowledgements
 
 Some portions of this reference implementation came from Pharo. Notably, the URL hierarchy of classes.

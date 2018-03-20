@@ -8,7 +8,7 @@ Methods are their own definitions: classMethodDefinitions instanceMethodDefiniti
 Class {
 	#name : 'RwClassDefinition',
 	#superclass : 'RwAbstractClassDefinition',
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Definitions'
 }
 
 { #category : 'instance creation' }

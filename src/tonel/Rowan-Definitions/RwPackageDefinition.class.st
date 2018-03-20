@@ -11,7 +11,7 @@ Class {
 		'classDefinitions',
 		'classExtensions'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Definitions'
 }
 
 { #category : 'instance creation' }

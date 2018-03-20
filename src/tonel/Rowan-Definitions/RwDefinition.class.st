@@ -14,7 +14,7 @@ Class {
 	#instVars : [
 		'properties'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Definitions'
 }
 
 { #category : 'instance creation' }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'source'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Definitions'
 }
 
 { #category : 'instance creation' }
