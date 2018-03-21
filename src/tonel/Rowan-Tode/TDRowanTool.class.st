@@ -124,8 +124,6 @@ TDRowanTool >> pkgcommit [
   pkg commit --message=<message-ref> [--push[=remote]] <package-name> <spec-url>
 "
 
-	""
-
 	| commitMessage specUrlString commitResult packageNames |
 	self
 		getSubcommandOptsMixedLongShort:
