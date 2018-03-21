@@ -37,7 +37,23 @@ $GS_HOME/shared/repos/Rowan/src/platforms/gemstone/gsdevkit/bin/installRowan $ro
 
 ```
 
-### Rowan Smalltalk scripts
+### Rowan Package Smalltalk scripts
+```Smalltalk
+"git pull for Rowan project"
+Rowan projectTools pull pullSpecUrl: 'Rowan'.
+
+"write listed packages and commit Rowan project"
+Rowan packageTools commit
+	commitSpecUrl: 'Rowan'
+	packageNames: #('Rowan-Services')
+	message: 'example commit message'.
+
+"git push for Rowan project"
+Rowan projectTools push pushSpecUrl: 'Rowan'.
+
+```
+
+### Rowan Project Smalltalk scripts
 ```Smalltalk
 "git pull for Rowan project"
 Rowan projectTools pull pullSpecUrl: 'Rowan'.
@@ -51,6 +67,7 @@ Rowan projectTools commit
 Rowan projectTools push pushSpecUrl: 'Rowan'.
 
 ```
+
 
 ## Acknowledgements
 
