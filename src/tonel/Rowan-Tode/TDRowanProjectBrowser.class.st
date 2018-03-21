@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'projects',
 		'projectBlock',
-		'selectedProjectName'
+		'selectedProjectName',
+		'projectTool'
 	],
 	#category : 'Rowan-Tode'
 }
@@ -12,40 +13,33 @@ Class {
 { #category : 'menu actions' }
 TDRowanProjectBrowser >> browseProjectClassesMenuAction: listElement selectionIndex: selectionIndex [
 
-	| loadedProject block |
+	| projectDef block |
 	selectionIndex = 0
 		ifTrue: [ ^ false ].
-	loadedProject := self projects at: selectionIndex.
-	block := [ 
-	| classDefinitionMap |
-	classDefinitionMap := Dictionary new.
-	loadedProject loadedPackages
-		do: [ :loadedPackage | 
-			loadedPackage loadedClasses values
-				do: [ :rowanLoadedClass | 
-					classDefinitionMap
-						at: rowanLoadedClass name
-						put:
-							(TDRowanLoadedClassDefinition new
-								className: rowanLoadedClass name;
-								loadedClass: rowanLoadedClass;
-								yourself) ].
-			loadedPackage loadedClassExtensions values
-				do: [ :rowanLoadedClassExtension | 
-					(classDefinitionMap at: rowanLoadedClassExtension name ifAbsent: [  ])
-						ifNil: [ 
-							classDefinitionMap
-								at: rowanLoadedClassExtension name
-								put:
-									(TDRowanLoadedClassDefinition new
-										className: rowanLoadedClassExtension name;
-										addLoadedClassExtension: rowanLoadedClassExtension;
-										yourself) ]
-						ifNotNil: [ :classDefinition | classDefinition addLoadedClassExtension: rowanLoadedClassExtension ] ] ].
-	classDefinitionMap values sortWithBlock: [ :a :b | a className <= b className ] ].
+	projectDef := self projects at: selectionIndex.
+	block := [ projectDef classDefinitions ].
 	^ (listElement topez toolInstanceFor: 'browse')
 		browseClassesBlock: block
-		label: 'Classes in ' , loadedProject name
+		windowName: #'rowanClasses'
+		location: #'app4'
+		label: 'Classes in ' , projectDef projectName
+]
+
+{ #category : 'menu actions' }
+TDRowanProjectBrowser >> browseProjectPackagesMenuAction: listElement selectionIndex: selectionIndex [
+
+	| projectDef block |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	projectDef := self projects at: selectionIndex.
+	block := [ 
+	projectDef packageDefinitions
+		sortWithBlock: [ :a :b | a packageName <= b packageName ] ].
+	^ (TDRowanPackageBrowser new
+		topez: topez;
+		packageBlock: block;
+		windowLabel: projectDef projectName , ' Packages';
+		yourself) open
 ]
 
 { #category : 'tools' }
@@ -58,9 +52,9 @@ TDRowanProjectBrowser >> clientList: miniTool listElement: listElement [
 	selectedProjectIndex := nil.
 	count := 1.
 	projects
-		do: [ :loadedProject | 
+		do: [ :projectDef | 
 			| projectName |
-			projectName := loadedProject name.
+			projectName := projectDef projectName.
 			selectedProjectName = projectName
 				ifTrue: [ selectedProjectIndex := count ].
 			count := count + 1.
@@ -135,6 +129,7 @@ TDRowanProjectBrowser >> itemSelected: miniTool listElement: listElement selecte
 	selectedProjectName := nil.
 	(index == 0 or: [ index > self projects size ])
 		ifTrue: [ ^ false ].
+	self browseProjectClassesMenuAction: listElement selectionIndex: index.
 	loadedProject := self projects at: index.
 	selectedProjectName := loadedProject name.
 	enabled := {#'rowanProject'.
@@ -174,7 +169,7 @@ TDRowanProjectBrowser >> menuActionSpec: miniTool [
 			#('-').
 			#('classes' nil #'browseProjectClassesMenuAction:selectionIndex:' nil #'loadedProject' false).
 			#('-').
-			#('packages' nil #'browseProjectPackagesMenuAction:selectionIndex:' nil #'metacelloProject' false).
+			#('packages' nil #'browseProjectPackagesMenuAction:selectionIndex:' nil #'loadedProject' false).
 			#('repositories' nil #'browseProjectRepositoriesMenuAction:selectionIndex:' nil #'metacelloProject' false).
 			#('-').
 			#('tests' nil #'testProjectMenuAction:selectionIndex:' nil #'loadedProject' false)})}.
@@ -230,6 +225,18 @@ TDRowanProjectBrowser >> projects: anObject [
 
    projects := anObject
 
+]
+
+{ #category : 'accessing' }
+TDRowanProjectBrowser >> projectTool [
+
+	^ projectTool
+]
+
+{ #category : 'accessing' }
+TDRowanProjectBrowser >> projectTool: anObject [
+
+	projectTool := anObject
 ]
 
 { #category : 'accessing' }

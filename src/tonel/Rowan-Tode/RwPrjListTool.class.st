@@ -31,10 +31,23 @@ RwPrjListTool >> openProjectList: topez [
 	longer be needed ... Cypress/Rowan projects are managed separately from standard Rowan projects"
 
 	| block |
-	block := [ Rowan image loadedProjects sortWithBlock: [ :a :b | a name <= b name ] ].
+	block := [ 
+	(Rowan image loadedProjects
+		collect: [ :each | 
+			TDRowanProjectDefinition new
+				projectName: each name;
+				yourself ])
+		sortWithBlock: [ :a :b | a projectName <= b projectName ] ].
 	^ (TDRowanProjectBrowser new
 		topez: topez;
 		projectBlock: block;
+		projectTool: self;
 		windowLabel: 'Rowan Projects';
 		yourself) open
+]
+
+{ #category : 'browsing' }
+RwPrjListTool >> projectBrowseProjectPackagesFor: loadedProject [
+
+	self halt
 ]
