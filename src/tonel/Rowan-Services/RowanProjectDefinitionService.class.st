@@ -4,7 +4,7 @@ Class {
 	#category : 'Rowan-Services'
 }
 
-{ #category : 'rowan' }
+{ #category : 'examples' }
 RowanProjectDefinitionService >> createProjectNamed: projectName [ 
 
 	| projectDefinition |
@@ -19,7 +19,7 @@ RowanProjectDefinitionService >> createProjectNamed: projectName [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'examples' }
 RowanProjectDefinitionService >> createProjectNamed: projectName in: symbolDictionaryName [
 
 	| projectDefinition |
@@ -43,7 +43,7 @@ RowanProjectDefinitionService >> createSampleProject [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'examples' }
 RowanProjectDefinitionService >> removeProjectNamed: projectName [ 
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].

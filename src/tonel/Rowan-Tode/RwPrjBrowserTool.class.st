@@ -279,13 +279,19 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
  		where the hybrid package name is not expected to preserve case"
 
 	| loadedPackage |
-	loadedPackage := Rowan
-		loadedHybridPackageNamed: hybridPackageName
-		ifAbsent: [ 
-			self
-				error:
-					'A package for hybrid package name ' , hybridPackageName printString
-						, ' was not found.' ].
+	loadedPackage := (hybridPackageName at: 1) = $*
+		ifTrue: [ 
+			Rowan
+				loadedHybridPackageNamed: hybridPackageName
+				ifAbsent: [ 
+					self
+						error:
+							'A package for hybrid package name ' , hybridPackageName printString
+								, ' was not found.' ] ]
+		ifFalse: [ 
+			| loadedClass |
+			loadedClass := Rowan image loadedClassNamed: className.
+			loadedClass loadedPackage ].
 
 	^ self
 		addOrUpdateMethod: methodSource

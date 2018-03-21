@@ -7,6 +7,14 @@ Class {
 	#category : 'Rowan-Tode'
 }
 
+{ #category : 'compiling' }
+TDRowanLoadedMethodDefinition >> compile: source classified: methodProtocol [
+
+	| meth |
+	meth := self theBehavior rwCompileMethod: source category: methodProtocol.
+	^ meth selector
+]
+
 { #category : 'accessing' }
 TDRowanLoadedMethodDefinition >> emphasis [
 
