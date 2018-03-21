@@ -139,7 +139,7 @@ TDRowanTool >> pkgcommit [
 			self
 				error:
 					'Missing required arguments <package-name>... . See `man pkg commit` for details.' ].
-	specUrlString := subArguments at: subArguments aize.
+	specUrlString := subArguments at: subArguments size.
 	packageNames := subArguments copyFrom: 1 to: subArguments size - 1.
 	subOptions
 		at: 'message'
