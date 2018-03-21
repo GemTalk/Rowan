@@ -119,7 +119,48 @@ TDRowanTool >> clasdiff [
 
 { #category : 'pkg commands' }
 TDRowanTool >> pkgcommit [
-  
+
+	"
+  pkg commit --message=<message-ref> [--push[=remote]] <package-name> <spec-url>
+"
+
+	| commitMessage specUrlString commitResult packageNames |
+	self
+		getSubcommandOptsMixedLongShort:
+			{#('message' nil #'required').
+			#('push' nil #'optional')}.
+	subArguments size < 1
+		ifTrue: [ 
+			self
+				error:
+					'Missing required arguments <package-name>... <spec-url>. See `man pkg commit` for details.' ].
+	subArguments size = 1
+		ifTrue: [ 
+			self
+				error:
+					'Missing required arguments <package-name>... . See `man pkg commit` for details.' ].
+	specUrlString := subArguments at: subArguments aize.
+	packageNames := subArguments copyFrom: 1 to: subArguments size - 1.
+	subOptions
+		at: 'message'
+		ifPresent: [ :arg | commitMessage := arg ]
+		ifAbsent: [ 
+			commitMessage := (GsMultiLineTextInteraction
+				prompt: 'Please enter a commit message for project: ' , specUrlString
+				template: '') signal.
+			commitMessage
+				ifNil: [ ^ self inform: 'Commit aborted ... no commit message' ] ].
+	commitResult := Rowan packageTools commit
+		commitSpecUrl: specUrlString
+		packageNames: packageNames
+		message: commitMessage.
+	subOptions
+		at: 'push'
+		ifPresent: [ :argOrNil | 
+			^ argOrNil
+				ifNil: [ Rowan projectTools push pushSpecUrl: specUrlString ]
+				ifNotNil: [ Rowan projectTools push pushSpecUrl: specUrlString remote: argOrNil ] ].
+	^ commitResult
 ]
 
 { #category : 'pkg commands' }
