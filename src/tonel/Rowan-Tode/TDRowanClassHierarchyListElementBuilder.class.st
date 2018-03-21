@@ -80,7 +80,7 @@ TDRowanClassHierarchyListElementBuilder >> itemSelected: listElement at: index s
 			| hierarchyClientElement |
 			hierarchyClientElement := classDef
 				clientElementUsing:
-					((TDEditorSpec topez: listElement topez editorAspect: #'classicHierarchyList')
+					((TDEditorSpec topez: listElement topez editorAspect: #'rowanHierarchyList')
 						windowName: #'hierarchy';
 						yourself).
 			selectedClass := classDef theClass.

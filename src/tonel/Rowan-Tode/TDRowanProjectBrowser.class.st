@@ -82,8 +82,9 @@ TDRowanProjectBrowser >> deleteAllProjectsMenuAction: listElement selectionIndex
 	symList := user symbolList.
 	projects := projectBlock value.
 	projects
-		do: [ :loadedProject | 
-			| spec dict platformSpec symDictNames |
+		do: [ :projectDef | 
+			| spec dict platformSpec symDictNames loadedProject |
+			loadedProject := projectDef loadedProject.
 			spec := loadedProject handle.
 			platformSpec := spec platformSpec at: 'gemstone'.
 			symDictNames := IdentitySet with: #'UnmanagedPackages'.
@@ -129,7 +130,9 @@ TDRowanProjectBrowser >> itemSelected: miniTool listElement: listElement selecte
 	selectedProjectName := nil.
 	(index == 0 or: [ index > self projects size ])
 		ifTrue: [ ^ false ].
-	self browseProjectClassesMenuAction: listElement selectionIndex: index.
+	self
+		browseProjectPackagesMenuAction: listElement selectionIndex: index;
+		browseProjectClassesMenuAction: listElement selectionIndex: index.
 	loadedProject := self projects at: index.
 	selectedProjectName := loadedProject name.
 	enabled := {#'rowanProject'.

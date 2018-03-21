@@ -36,9 +36,28 @@ RwGsClassVersioningSymbolDictPatch >> _createMethodExtensionModificationForNewVe
 	projectModification := aProjectSetModification elementsModified
 		at: loadedProject name.
 	packageModification := projectModification packagesModification
-		elementsModified at: loadedPackage name.
+		elementsModified
+		at: loadedPackage name
+		ifAbsentPut: [ 
+			| def |
+			"arrange for a new package to be added"
+			def := loadedPackage asDefinition.
+			(RwPackageModification before: def after: def)
+				classesModification: RwClassesModification new;
+				classExtensionsModification: RwClassExtensionsModification new;
+				yourself ].
 	classExtensionModification := packageModification classExtensionsModification
-		elementsModified at: className.
+		elementsModified
+		at: className
+		ifAbsentPut: [ 
+			| def |
+			def := (loadedPackage loadedClassExtensions at: className) asDefinition.
+			(RwClassExtensionModification
+				before: RwClassExtensionDefinition new
+				after: def)
+				instanceMethodsModification: RwExtensionMethodsModification new;
+				classMethodsModification: RwExtensionMethodsModification new;
+				yourself ].
 	methodsModification := isMeta
 		ifTrue: [ classExtensionModification classMethodsModification elementsModified ]
 		ifFalse: [ classExtensionModification instanceMethodsModification elementsModified ].
@@ -205,7 +224,9 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 			aProjectSetModification
 				classesModifiedDo: [ :classesModification | 
 					classesModification isEmpty
-						ifTrue: [ self error: 'unexpected empty class modification' ]
+						ifTrue: [ 
+							"this is not unexpected ... not all packages in the project set are expected to have class modifications with new versions"
+							 ]
 						ifFalse: [ 
 							| classesModified |
 							classesModified := classesModification elementsModified.
