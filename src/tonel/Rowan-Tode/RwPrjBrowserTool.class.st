@@ -172,6 +172,7 @@ RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass:
 						classVarNames: anArrayOfClassVars;
 						classInstVarNames: anArrayOfClassInstVars;
 						gs_options: optionsArray;
+						category: category;
 						yourself.
 					loadedClass packageName = packageName
 						ifFalse: [ 
@@ -243,6 +244,7 @@ RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass:
 						classVarNames: anArrayOfClassVars;
 						classInstVarNames: anArrayOfClassInstVars;
 						gs_options: optionsArray;
+						category: category;
 						yourself.
 					loadedClass packageName = packageName
 						ifFalse: [ 
@@ -478,22 +480,27 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 		addAll: lfsp;
 		addAll: 'poolDictionaries: '.
 	result addAll: '#()'.	"ignored for now"
-	result
-		addAll: lfsp;
-		addAll: 'inDictionary: '.
-	anArray := System myUserProfile dictionaryAndSymbolOf: aClass.
-	(anArray == nil
-		or: [ (anArray at: 1) == GsPackagePolicy current homeSymbolDict ])
-		ifTrue: [ result addAll: '''''' ]
-		ifFalse: [ 
-			(anArray := System myUserProfile dictionaryAndSymbolOf: (anArray at: 1))
-				ifNil: [ result addAll: '''''' ]
-				ifNotNil: [ result addAll: (anArray at: 2) asString printString ] ].
+	false
+		ifTrue: [ 
+			"don't want inDictionary: as part of the class creation, because the project 
+				specifies the class to symbol dictionary mapping, but I don't want to 
+				lose the logic quite yet"
+			result
+				addAll: lfsp;
+				addAll: 'inDictionary: '.
+			anArray := System myUserProfile dictionaryAndSymbolOf: aClass.
+			(anArray == nil
+				or: [ (anArray at: 1) == GsPackagePolicy current homeSymbolDict ])
+				ifTrue: [ result addAll: '''''' ]
+				ifFalse: [ 
+					(anArray := System myUserProfile dictionaryAndSymbolOf: (anArray at: 1))
+						ifNil: [ result addAll: '''''' ]
+						ifNotNil: [ result addAll: (anArray at: 2) asString printString ] ] ].
 	result
 		addAll: lfsp;
 		addAll: 'category: '.
 	result addAll: aClass category printString.
-	hybridBrowser
+	(hybridBrowser and: [ aClass rowanPackageName = aClass category ])
 		ifFalse: [ 
 			result
 				addAll: lfsp;
@@ -518,36 +525,83 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName category:
 { #category : 'class browsing' }
 RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName category: category packageName: packageName [
 
-	| result anArray lfsp firstElement poolDicts civs superClass className |
+	^ self
+		classCreationTemplateForSubclassOf: superclassName
+		className: 'NameOfSubclass'
+		category: category
+		packageName: packageName
+]
+
+{ #category : 'class browsing' }
+RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className: className category: category [
+
+	^ self
+		classCreationTemplateForSubclassOf: superclassName
+		className: className
+		category: category
+		packageName: nil
+]
+
+{ #category : 'class browsing' }
+RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className: className category: category packageName: packageName [
+
+	^ self
+		classCreationTemplateForSubclassOf: superclassName
+		className: className
+		type: 'normal'
+		category: category
+		packageName: packageName
+]
+
+{ #category : 'class browsing' }
+RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className: className type: classType category: category packageName: packageNameOrNil [
+
+	"classType may be 'normal', 'bytes', or 'variable'"
+
+	| result anArray lfsp firstElement poolDicts civs superClass |
 	result := String new.
 	superClass := Rowan image objectNamed: superclassName.
-	className := 'NameOfSubclass'.
 	result addAll: superclassName.
 	lfsp := Character lf asString
 		addAll: String tab;
 		yourself.
+	classType = 'normal'
+		ifTrue: [ result addAll: ' rwSubclass: ' ].
+	classType = 'variable'
+		ifTrue: [ result addAll: ' rwIndexableSubclass: ' ].
+	classType = 'bytes'
+		ifTrue: [ result addAll: ' rwByteSubclass: ' ].
+	result addAll: className printString.
+	classType ~= 'bytes'
+		ifTrue: [ 
+			result
+				addAll: lfsp;
+				addAll: 'instVarNames: #()' ].
 	result
-		addAll: ' rwSubclass: ';
-		addAll: className printString;
-		addAll: lfsp;
-		addAll: 'instVarNames: #()';
 		addAll: lfsp;
 		addLast: 'classVars: #()';
 		addAll: lfsp;
 		addLast: 'classInstVars: #()';
 		addAll: lfsp;
-		addAll: 'poolDictionaries: #()';
-		addAll: lfsp;
-		addAll: 'inDictionary: UserGlobals';
+		addAll: 'poolDictionaries: #()'.
+	false
+		ifTrue: [ 
+			"don't want inDictionary: as part of the class creation, because the project 
+				specifies the class to symbol dictionary mapping, but I don't want to 
+				lose the logic quite yet"
+			result
+				addAll: lfsp;
+				addAll: 'inDictionary: UserGlobals' ].
+	result
 		addAll: lfsp;
 		addAll: 'category: ';
 		addAll: category printString.
-	packageName
+	packageNameOrNil
 		ifNotNil: [ 
 			result
 				addAll: lfsp;
 				addAll: 'packageName: '.
-			result addAll: packageName printString ].
+			result addAll: packageNameOrNil printString ].
 	result
 		add: lfsp;
 		add: 'options: #()';

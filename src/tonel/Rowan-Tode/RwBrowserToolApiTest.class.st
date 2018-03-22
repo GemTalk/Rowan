@@ -12,7 +12,6 @@ RwBrowserToolApiTest >> _expectedClassCreationTemplate [
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	inDictionary: UserGlobals
 	category: ''MyClasses''
 	packageName: ''MyPackage''
 	options: #()
@@ -27,7 +26,6 @@ RwBrowserToolApiTest >> _expectedCollectionCreationTemplate [
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	inDictionary: ''Globals''
 	category: ''Kernel''
 	packageName: ''(NONE)''
 	options: #()
@@ -41,8 +39,8 @@ RwBrowserToolApiTest >> _expectedHybridByteArrayCreationTemplate [
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	inDictionary: ''Globals''
 	category: ''Kernel''
+	packageName: ''(NONE)''
 	options: #()
 '
 ]
@@ -55,7 +53,6 @@ RwBrowserToolApiTest >> _expectedHybridClassCreationTemplate [
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	inDictionary: UserGlobals
 	category: ''MyClasses''
 	options: #()
 '
@@ -127,7 +124,7 @@ RwBrowserToolApiTest >> testAddMethod [
 { #category : 'tests' }
 RwBrowserToolApiTest >> testClassCreationTemplate [
 
-	| template |
+	| template x |
 	template := Rowan projectTools browser
 		classCreationTemplateForSubclassOf: 'Object'
 		category: 'MyClasses'.
@@ -147,7 +144,14 @@ RwBrowserToolApiTest >> testClassCreationTemplate [
 		classCreationTemplateForClass: ByteArray
 		hybridBrowser: true.
 	self
-		assert: template = self _expectedHybridByteArrayCreationTemplate
+		assert: template = (x := self _expectedHybridByteArrayCreationTemplate)
+		description: 'incorrect class creation template'.
+
+	template := Rowan projectTools browser
+		classCreationTemplateForClass: ByteArray
+		hybridBrowser: false.
+	self
+		assert: template = (x := self _expectedHybridByteArrayCreationTemplate)
 		description: 'incorrect class creation template'.
 
 	template := Rowan projectTools browser
