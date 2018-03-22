@@ -8,6 +8,17 @@ Class {
 	#category : 'Rowan-Services'
 }
 
+{ #category : 'rowan' }
+RowanPackageDefinitionService >> createPackageNamed: aString inProject: projectName [
+	| projectService | 
+	packageName := aString.
+	projectService := RowanProjectDefinitionService new.
+	projectDefinition := projectService createProjectNamed: projectName.  
+	projectDefinition addPackageNamed: packageName.
+	self projectTools load loadProjectDefinition: projectDefinition.
+
+]
+
 { #category : 'examples' }
 RowanPackageDefinitionService >> createSamplePackage [
 
