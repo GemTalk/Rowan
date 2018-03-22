@@ -36,19 +36,7 @@ RowanMethodDefinitionService >> addOrUpdateMethod [
 		self browserTool
                    addOrUpdateMethod: source
                    inProtocol: category
-                   forClassNamed: classService name
-                   isMeta: meta
-                   inPackageNamed: self classService packageName
-
-]
-
-{ #category : 'rowan' }
-RowanMethodDefinitionService >> addOrUpdateMethod2 [
-
-		self browserTool
-                   addOrUpdateMethod: source
-                   inProtocol: category
-                   forClassNamed: classService name
+                   forClassNamed: self classService name
                    isMeta: meta
                    inPackageNamed: self classService packageName
 

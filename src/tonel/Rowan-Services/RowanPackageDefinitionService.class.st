@@ -10,7 +10,7 @@ Class {
 
 { #category : 'rowan' }
 RowanPackageDefinitionService >> createPackageNamed: aString inProject: projectName [
-	| projectService | 
+	| projectService | self halt. 
 	packageName := aString.
 	projectService := RowanProjectDefinitionService new.
 	projectDefinition := projectService createProjectNamed: projectName.  
