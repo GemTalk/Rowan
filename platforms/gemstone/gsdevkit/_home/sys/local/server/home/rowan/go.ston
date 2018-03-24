@@ -1,0 +1,7 @@
+TDTopezLeafNode{#name:'go',#contents:'eval `RBConfigurableFormatter indentString: String tab; formatCommentWithStatements: true; retainBlankLinesBetweenStatements: true; newLinesAfterMethodPattern: 2`
+limit format true
+test class RwLoadingTest RwUrlTest RwPackageReadWriteTest RwSymbolDictionaryTest RwProjectToolTest RwEditToolTest RwPackageToolTest RwProjectSetTest RwHybridBrowserToolTest RwBrowserToolApiTest
+
+browse categories
+# browse symbolDict CypressTestData
+browse method --spec ',#creationTime:DateAndTime['2017-12-28T17:30:44.84678602218628-08:00'],#modificationTime:DateAndTime['2018-03-23T19:22:25.70532608032227-07:00']}
