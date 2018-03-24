@@ -3,14 +3,15 @@ Class {
 	#superclass : 'RowanDefinitionService',
 	#instVars : [
 		'projectDefinition',
-		'packageName'
+		'packageName',
+		'name'
 	],
 	#category : 'Rowan-Services'
 }
 
 { #category : 'rowan' }
 RowanPackageDefinitionService >> createPackageNamed: aString inProject: projectName [
-	| projectService | self halt. 
+	| projectService | 
 	packageName := aString.
 	projectService := RowanProjectDefinitionService new.
 	projectDefinition := projectService createProjectNamed: projectName.  
@@ -31,6 +32,25 @@ RowanPackageDefinitionService >> createSamplePackage [
 	projectDefinition addPackageNamed: self samplePackageName.
 	packageName := self samplePackageName.
 	self projectTools load loadProjectDefinition: projectDefinition.
+
+]
+
+{ #category : 'rowan' }
+RowanPackageDefinitionService >> genericClassCreationTemplate [
+
+	^self browserTool classCreationTemplateForSubclassOf: 'Object' category: name packageName: name
+
+]
+
+{ #category : 'Accessing' }
+RowanPackageDefinitionService >> name [
+	^name
+
+]
+
+{ #category : 'Updating' }
+RowanPackageDefinitionService >> name: newValue [
+	name := newValue
 
 ]
 
