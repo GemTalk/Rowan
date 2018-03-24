@@ -7,6 +7,13 @@ Class {
 	#category : 'Rowan-Services'
 }
 
+{ #category : 'other' }
+RowanDefinitionService class >> rowanFixMe [
+
+	"send this message to see everywhere that GS_Jade should be fixed"
+
+]
+
 { #category : 'examples' }
 RowanDefinitionService class >> sampleService [
 

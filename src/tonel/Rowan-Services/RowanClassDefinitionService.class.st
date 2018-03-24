@@ -17,13 +17,36 @@ Class {
 }
 
 { #category : 'instance creation' }
-RowanClassDefinitionService class >> forClassNamed: className package: packageName [
+RowanClassDefinitionService class >> forClassNamed: className [ 
 
 	| inst |
 	inst := RowanClassDefinitionService new. 
-	inst name: className;
-		packageName: packageName.
+	inst name: className.
 	^inst
+
+]
+
+{ #category : 'instance creation' }
+RowanClassDefinitionService class >> forClassNamed: className package: packageName [
+
+	| inst |
+	inst := self forClassNamed: className.
+	inst packageName: packageName.
+	^inst
+
+]
+
+{ #category : 'rowan' }
+RowanClassDefinitionService >> classCreationTemplate [
+
+	^self browserTool classCreationTemplateForClass: self classFromName hybridBrowser: true.
+
+]
+
+{ #category : 'private' }
+RowanClassDefinitionService >> classFromName [
+
+	^(System myUserProfile resolveSymbol: name asSymbol) value
 
 ]
 
