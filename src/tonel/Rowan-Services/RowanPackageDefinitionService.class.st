@@ -9,6 +9,29 @@ Class {
 	#category : 'Rowan-Services'
 }
 
+{ #category : 'instance creation' }
+RowanPackageDefinitionService class >> forPackageNamed: packageName [
+
+	| inst |
+	inst := self new. 
+	inst packageName: packageName.
+	^inst
+
+]
+
+{ #category : 'rowan' }
+RowanPackageDefinitionService >> createPackage [
+	| projectService existingPackage |
+	self rowanFixMe. "should not use the sample project eventually"
+	projectService := RowanProjectDefinitionService new.
+	projectDefinition := projectService createProjectNamed: self sampleProjectName.  
+	existingPackage := Rowan image loadedPackageNamed: packageName ifAbsent:[
+		projectDefinition addPackageNamed: packageName.
+		^self projectTools load loadProjectDefinition: projectDefinition.].
+	(Rowan image loadedProjectNamed: projectDefinition name) addLoadedPackage: existingPackage
+
+]
+
 { #category : 'rowan' }
 RowanPackageDefinitionService >> createPackageNamed: aString inProject: projectName [
 	| projectService | 
@@ -39,6 +62,36 @@ RowanPackageDefinitionService >> createSamplePackage [
 RowanPackageDefinitionService >> genericClassCreationTemplate [
 
 	^self browserTool classCreationTemplateForSubclassOf: 'Object' category: name packageName: name
+
+]
+
+{ #category : 'rowan' }
+RowanPackageDefinitionService >> loadedClassDefinitions [
+
+	^self loadedClasses collect:[:loadedClass | loadedClass asDefinition]
+
+]
+
+{ #category : 'rowan' }
+RowanPackageDefinitionService >> loadedClasses [
+
+	| loadedPackage |
+	loadedPackage := Rowan image loadedPackageNamed: packageName ifAbsent:[^Array new].
+	^loadedPackage loadedClasses
+
+]
+
+{ #category : 'rowan' }
+RowanPackageDefinitionService >> loadedClassHandles [
+
+	^self loadedClasses collect:[:loadedClass | loadedClass handle]
+
+]
+
+{ #category : 'rowan' }
+RowanPackageDefinitionService >> loadedClassNames [
+
+	^self loadedClasses collect:[:loadedClass | loadedClass name]
 
 ]
 
@@ -89,5 +142,15 @@ RowanPackageDefinitionService >> samplePackageName [
 RowanPackageDefinitionService >> sampleProjectName [
 
 	^projectDefinition name
+
+]
+
+{ #category : 'rowan' }
+RowanPackageDefinitionService >> unloadPackage [
+
+	| package project |
+	package := Rowan image loadedPackageNamed: packageName.
+	project := Rowan image loadedProjectNamed: package projectName.
+	project removeLoadedPackage: package.
 
 ]
