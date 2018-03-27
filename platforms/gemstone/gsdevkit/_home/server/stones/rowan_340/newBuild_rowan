@@ -6,8 +6,6 @@ rm -rf *.log *.out
 
 $GS_HOME/sys/local/bin/newBuild_snapshot
 
-todeIt $GEMSTONE_NAME project load --loads="\`#('monticello' 'monticello tests' 'cypress' 'cypress tests')\`" Tonel
-
 startTopaz $GEMSTONE_NAME -l << EOF
 
   iferr 1 stk
@@ -31,7 +29,8 @@ set removeAll: set.
 System commit
 %
 
-
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/ston/bootstrapStonSupport.topaz
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/bootstrapTonelSupport.topaz
 
 category: 'Private'
 method: Class
