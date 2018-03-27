@@ -1,0 +1,34 @@
+!=========================================================================
+! Copyright (C) GemTalk Systems 1986-2017.  All Rights Reserved.
+!
+! Bootstrap Cypress Support. Once installed, code can be loaded from
+!    https://github.com/rjsargent/CypressReferenceImplementation
+!    using Cypress itself.
+!
+! Once Metacello is bootstrapped, the following Smalltalk can be run
+!    to update Cypress (recommended):
+!
+!  Metacello new
+!    baseline: 'Cypress';
+!    repository: 'gitcypress://github.com/rjsargent/CypressReferenceImplementation/cypress/';
+!    load.
+!
+!=========================================================================
+
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Definitions.gs
+errorCount
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Structure.gs
+errorCount
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-GemStoneFileServer.gs
+errorCount
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Network-Url.gs
+errorCount
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-MesssageDigest.gs
+errorCount
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-PackageManagement.gs
+errorCount
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Environmental-Tools.gs
+errorCount
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Comparison.gs
+errorCount
+
