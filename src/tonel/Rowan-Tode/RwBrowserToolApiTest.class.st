@@ -5,6 +5,20 @@ Class {
 }
 
 { #category : 'private' }
+RwBrowserToolApiTest >> _expectedAssociationCreationTemplate [
+
+	^ 'Object subclass: ''Association''
+	instVarNames: #( key value)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: ''Kernel''
+	inDictionary: Globals
+	options: #()
+'
+]
+
+{ #category : 'private' }
 RwBrowserToolApiTest >> _expectedClassCreationTemplate [
 
 	^ 'Object rwSubclass: ''NameOfSubclass''
@@ -21,13 +35,13 @@ RwBrowserToolApiTest >> _expectedClassCreationTemplate [
 { #category : 'private' }
 RwBrowserToolApiTest >> _expectedCollectionCreationTemplate [
 
-	^ 'Object rwIndexableSubclass: ''Collection''
+	^ 'Object indexableSubclass: ''Collection''
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
 	category: ''Kernel''
-	packageName: ''(NONE)''
+	inDictionary: Globals
 	options: #()
 '
 ]
@@ -35,12 +49,12 @@ RwBrowserToolApiTest >> _expectedCollectionCreationTemplate [
 { #category : 'private' }
 RwBrowserToolApiTest >> _expectedHybridByteArrayCreationTemplate [
 
-	^ 'SequenceableCollection rwByteSubclass: ''ByteArray''
+	^ 'SequenceableCollection byteSubclass: ''ByteArray''
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
 	category: ''Kernel''
-	packageName: ''(NONE)''
+	inDictionary: Globals
 	options: #()
 '
 ]
@@ -159,6 +173,13 @@ RwBrowserToolApiTest >> testClassCreationTemplate [
 		hybridBrowser: false.
 	self
 		assert: template = self _expectedCollectionCreationTemplate
+		description: 'incorrect class creation template'.
+
+	template := Rowan projectTools browser
+		classCreationTemplateForClass: Association
+		hybridBrowser: false.
+	self
+		assert: template = (x := self _expectedAssociationCreationTemplate)
 		description: 'incorrect class creation template'
 ]
 

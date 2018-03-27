@@ -244,6 +244,14 @@ Rowan class >> repositoryTools [
 	^self platform repositoryTools
 ]
 
+{ #category : 'public' }
+Rowan class >> unpackagedName [
+
+	"Answer the name used for unpackaged projects and packages"
+
+	^ '(NONE)'
+]
+
 { #category : 'private' }
 Rowan class >> updateLoadedPackages [
 
