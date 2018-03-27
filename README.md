@@ -102,6 +102,8 @@ Rowan projectTools commit
 "git push for Rowan project"
 Rowan projectTools push pushSpecUrl: 'Rowan'.
 
+"in-image changes"
+(Rowan projectTools diff diffSpecUrl: 'Rowan') asString.
 ```
 
 
