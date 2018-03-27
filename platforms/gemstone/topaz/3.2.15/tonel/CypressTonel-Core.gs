@@ -363,6 +363,15 @@ packageName: aString
       (self fileUtils directoryFromPath: packageName relativeTo: self directoryPath)
 %
 
+category: 'reading'
+method: TonelCypressReader
+readPackageStructure
+  self loadDefinitions.
+  ^ packageStructure
+    fromSnapshot: definitions;
+    yourself
+%
+
 ! Class Implementation for TonelCypressWriter
 
 ! ------------------- Class methods for TonelCypressWriter
