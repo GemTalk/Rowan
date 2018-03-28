@@ -29,13 +29,6 @@ RwClassDefinition >> comment [
 ]
 
 { #category : '*rowan-cypress' }
-RwClassDefinition class >> fromCypressClassStructure: aCypressClassStructure [
-  ^ self new
-    fromCypressClassStructure: aCypressClassStructure;
-    yourself
-]
-
-{ #category : '*rowan-cypress' }
 RwClassDefinition >> fromCypressClassStructure: aCypressClassStructure [
   properties
     at: 'category' put: aCypressClassStructure category;
@@ -60,6 +53,13 @@ RwClassDefinition >> fromCypressClassStructure: aCypressClassStructure [
       self
         addClassMethodDefinition:
           (RwMethodDefinition fromCypressMethod: cypMethodDef) ]
+]
+
+{ #category : '*rowan-cypress' }
+RwClassDefinition class >> fromCypressClassStructure: aCypressClassStructure [
+  ^ self new
+    fromCypressClassStructure: aCypressClassStructure;
+    yourself
 ]
 
 { #category : '*rowan-cypress' }
