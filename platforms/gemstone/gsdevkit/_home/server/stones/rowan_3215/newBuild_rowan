@@ -33,6 +33,42 @@ input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/bootst
 input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/ston/bootstrapStonSupport.topaz
 input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/bootstrapTonelSupport.topaz
 
+# Do not issue error if aSelector is not in an existing category - necessary for atomic load of method
+#
+category: 'Updating Categories'
+method: Behavior
+moveMethod: aSelector toCategory: categoryName environmentId: envId
+
+	"Moves the method aSelector (a String) from its current category to the
+ specified category (also a String).  If either aSelector or categoryName is
+ not in the receiver's method dictionary, or if aSelector is already in
+ categoryName, generates an error..
+ This method does not account for selectors inherited from superclasses."
+
+	| selSym catSym oldCat |
+	self _validatePrivilege
+		ifFalse: [ ^ nil ].
+	(self includesCategory: categoryName environmentId: envId)
+		ifFalse: [ ^ self _categoryNotFound: categoryName ].
+	oldCat := self categoryOfSelector: aSelector environmentId: envId.
+"
+	oldCat ifNil: [ ^ self _error: #'classErrSelectorNotFound' args: {aSelector} ].
+"
+	catSym := categoryName asSymbol.
+	selSym := aSelector asSymbol.
+
+	(envId ~~ 0
+		or: [ self canWriteMethods or: [ GsPackagePolicy current enabled not ] ])
+		ifTrue: [ 
+			| catDict |
+			catDict := self _baseCategorysForStore: envId.
+			oldCat ifNotNil: [(catDict at: oldCat) remove: selSym].
+			(catDict at: catSym) add: selSym ]
+		ifFalse: [ GsPackagePolicy current moveSelector: selSym toCategory: catSym for: self ].
+	self _needsAnnouncement
+		ifTrue: [ self _announceMethodMoved: (self compiledMethodAt: selSym) oldCategory: oldCat ]
+%
+
 # Patch bug 47413
 #
 category: 'Private'
