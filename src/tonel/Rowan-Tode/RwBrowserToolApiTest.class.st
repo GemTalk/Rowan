@@ -946,7 +946,7 @@ RwBrowserToolApiTest >> testLoadFullMultiProjectDefs [
 
 	"set up projects and packages for hybrid browser implementation"
 
-	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance |
+	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance rpn |
 	projectName1 := 'Simple MultiProject 1'.
 	projectName2 := 'Simple MultiProject 2'.
 	projectNames := {projectName1.
@@ -978,6 +978,12 @@ RwBrowserToolApiTest >> testLoadFullMultiProjectDefs [
 		comment: comments
 		className: classNames
 		inPackageName: classPackageNames.
+
+	rpn := Rowan projectNames.
+	projectNames do: [ :projectName | self assert: (rpn includes: projectName) ].
+	rpn := Rowan packageNames.
+	packageNames
+		do: [ :packageNameAr | packageNameAr do: [ :packageName | self assert: (rpn includes: packageName) ] ].
 
 	projectTools := Rowan projectTools.
 	browserTool := projectTools browser.
@@ -1021,7 +1027,13 @@ RwBrowserToolApiTest >> testLoadFullMultiProjectDefs [
 		inProtocol: '*' , project2PackageName2 asLowercase
 		forClassNamed: className1
 		isMeta: true
-		inPackageNamed: project2PackageName2	"class session method extension method for className1 in projectName2"
+		inPackageNamed: project2PackageName2.	"class session method extension method for className1 in projectName2"
+
+	rpn := Rowan projectNames.
+	projectNames do: [ :projectName | self assert: (rpn includes: projectName) ].
+	rpn := Rowan packageNames.
+	packageNames
+		do: [ :packageNameAr | packageNameAr do: [ :packageName | self assert: (rpn includes: packageName) ] ]
 ]
 
 { #category : 'tests' }

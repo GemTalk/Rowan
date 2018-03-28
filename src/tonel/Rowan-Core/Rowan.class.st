@@ -179,6 +179,14 @@ Rowan class >> loadedProjectsNamed: someNames [
 	^ RwEntitySet withAll: (loadedProjects select: [ :each | each notNil ])
 ]
 
+{ #category : 'public' }
+Rowan class >> packageNames [
+
+	"Return list of package names"
+
+	^ self image packageNames
+]
+
 { #category : 'public tools' }
 Rowan class >> packageTools [
 

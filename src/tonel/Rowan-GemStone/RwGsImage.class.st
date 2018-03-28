@@ -420,6 +420,18 @@ RwGsImage class >> objectNamed: aSymbol [
 ]
 
 { #category : 'cypress (old)' }
+RwGsImage class >> packageNames [
+
+	"Return list of package names"
+
+	| packageNames |
+	packageNames := Set new.
+	self loadedProjects
+		collect: [ :loadedProject | packageNames addAll: loadedProject packageNames ].
+	^ packageNames
+]
+
+{ #category : 'cypress (old)' }
 RwGsImage class >> projectNamed: aString ifAbsent: absentBlock [
 
 	"Look up a project. First in current users project registry, then scan AllUsers for the project ... note that the user needs to be the project owner."
@@ -450,19 +462,7 @@ RwGsImage class >> projectNames [
 
 	"Return list of project names"
 
-	| currentUserId projectNames |
-	currentUserId = self currentUserId.
-	projectNames := Set new.
-	projectNames addAll: self _projectRegistry keys.
-	AllUsers
-		do: [ :userProfile | 
-			| userId |
-			userId := userProfile userId.
-			userId ~= currentUserId
-				ifTrue: [ 
-					(self _projectRegistryForUserId: userId)
-						ifNotNil: [ :projectRegistry | projectNames addAll: projectRegistry keys ] ] ].
-	^ projectNames
+	^ self loadedProjects collect: [ :loadedProject | loadedProject name ]
 ]
 
 { #category : 'querying' }
