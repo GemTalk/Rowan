@@ -33,9 +33,28 @@ input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/bootst
 input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/ston/bootstrapStonSupport.topaz
 input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/bootstrapTonelSupport.topaz
 
+# new method compatable with 3.4 and 3.5
+#
+category: 'Rowan 3.4 compatability method'
+classmethod: GsPackagePolicy
+currentOrNil
+
+	"Returns nil or the previously installed and enabled GsPackagePolicy."
+
+	| pp |
+	pp := ((GsSession currentSession objectNamed: #'UserGlobals') ifNil: [ ^ nil ])
+		at: self globalName
+		otherwise: nil.
+	pp
+		ifNotNil: [ 
+			pp enabled
+				ifTrue: [ ^ pp ] ].
+	^ nil
+%
+
 # Do not issue error if aSelector is not in an existing category - necessary for atomic load of method
 #
-category: 'Updating Categories'
+category: 'Rowan 3.4 compatibility method'
 method: Behavior
 moveMethod: aSelector toCategory: categoryName environmentId: envId
 
