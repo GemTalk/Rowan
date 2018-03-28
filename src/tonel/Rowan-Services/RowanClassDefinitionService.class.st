@@ -11,7 +11,8 @@ Class {
 		'subclassType',
 		'poolDictionaryNames',
 		'classType',
-		'packageService'
+		'packageService',
+		'meta'
 	],
 	#category : 'Rowan-Services'
 }
@@ -22,6 +23,17 @@ RowanClassDefinitionService class >> forClassNamed: className [
 	| inst |
 	inst := self new. 
 	inst name: className.
+	^inst
+
+]
+
+{ #category : 'instance creation' }
+RowanClassDefinitionService class >> forClassNamed: className meta: aBoolean [
+
+	| inst |
+	inst := self new. 
+	inst name: className;
+		meta: aBoolean.
 	^inst
 
 ]
@@ -135,6 +147,20 @@ RowanClassDefinitionService >> instVarNames: newValue [
 
 ]
 
+{ #category : 'other' }
+RowanClassDefinitionService >> meta [
+
+	^meta
+
+]
+
+{ #category : 'other' }
+RowanClassDefinitionService >> meta: anObject [
+
+	meta := anObject
+
+]
+
 { #category : 'Accessing' }
 RowanClassDefinitionService >> name [
 	^name
@@ -183,6 +209,13 @@ RowanClassDefinitionService >> poolDictionaryNames [
 { #category : 'Updating' }
 RowanClassDefinitionService >> poolDictionaryNames: newValue [
 	poolDictionaryNames := newValue
+
+]
+
+{ #category : 'rowan' }
+RowanClassDefinitionService >> removeSelector: selector [
+
+	self browserTool removeMethod: selector forClassNamed: name isMeta: meta
 
 ]
 

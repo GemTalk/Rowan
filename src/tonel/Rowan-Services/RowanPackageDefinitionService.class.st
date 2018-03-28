@@ -22,7 +22,7 @@ RowanPackageDefinitionService class >> forPackageNamed: packageName [
 { #category : 'rowan' }
 RowanPackageDefinitionService >> createPackage [
 	| projectService existingPackage |
-	self rowanFixMe. "should not use the sample project eventually"
+	self rowanFixMe. "Eventually, should not use the sample project or loaded projects directly "
 	projectService := RowanProjectDefinitionService new.
 	projectDefinition := projectService createProjectNamed: self sampleProjectName.  
 	existingPackage := Rowan image loadedPackageNamed: packageName ifAbsent:[
@@ -59,9 +59,16 @@ RowanPackageDefinitionService >> createSamplePackage [
 ]
 
 { #category : 'rowan' }
+RowanPackageDefinitionService >> deletePackage [
+
+	self browserTool removePackageNamed: packageName.
+
+]
+
+{ #category : 'rowan' }
 RowanPackageDefinitionService >> genericClassCreationTemplate [
 
-	^self browserTool classCreationTemplateForSubclassOf: 'Object' category: name packageName: name
+	^self browserTool classCreationTemplateForSubclassOf: 'Object' category: name packageName: nil
 
 ]
 
@@ -131,6 +138,13 @@ RowanPackageDefinitionService >> projectDefinition: newValue [
 
 ]
 
+{ #category : 'rowan' }
+RowanPackageDefinitionService >> removeClassNamed: className [
+
+	self browserTool removeClassNamed: className
+
+]
+
 { #category : 'examples' }
 RowanPackageDefinitionService >> samplePackageName [
 	
@@ -142,15 +156,5 @@ RowanPackageDefinitionService >> samplePackageName [
 RowanPackageDefinitionService >> sampleProjectName [
 
 	^projectDefinition name
-
-]
-
-{ #category : 'rowan' }
-RowanPackageDefinitionService >> unloadPackage [
-
-	| package project |
-	package := Rowan image loadedPackageNamed: packageName.
-	project := Rowan image loadedProjectNamed: package projectName.
-	project removeLoadedPackage: package.
 
 ]
