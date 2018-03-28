@@ -124,6 +124,14 @@ RwLoadedProject >> markProjectDirty [
 	self markDirty
 ]
 
+{ #category : 'accessing' }
+RwLoadedProject >> packageNames [
+
+	"Return list of package names in the receiver"
+
+	^ self loadedPackages collect: [ :each | each name ]
+]
+
 { #category : 'definitions' }
 RwLoadedProject >> propertiesForDefinition [
 

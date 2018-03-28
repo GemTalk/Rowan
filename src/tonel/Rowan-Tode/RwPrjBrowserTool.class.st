@@ -419,7 +419,7 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass [
 { #category : 'class browsing' }
 RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridBrowser [
 
-	| result anArray lfsp newByteSubclass firstElement poolDicts civs superClass className |
+	| result anArray lfsp newByteSubclass firstElement poolDicts civs superClass className thePackageName nonRowanClass |
 	result := String new.
 	superClass := aClass superclass.
 	className := aClass name asString.
@@ -428,23 +428,31 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 		addAll: String tab;
 		yourself.
 	newByteSubclass := false.
+	thePackageName := aClass rowanPackageName.
+	nonRowanClass := thePackageName = Rowan unpackagedName.
 	(aClass isBytes _and: [ superClass isBytes not ])
 		ifTrue: [ 
+			nonRowanClass
+				ifTrue: [ result addAll: ' byteSubclass: ''' ]
+				ifFalse: [ result addAll: ' rwByteSubclass: ''' ].
 			result
-				addAll: ' rwByteSubclass: ''';
 				addAll: className;
 				addLast: $'.
 			newByteSubclass := true ]
 		ifFalse: [ 
 			aClass _portableIsIndexable
 				ifTrue: [ 
+					nonRowanClass
+						ifTrue: [ result addAll: ' indexableSubclass: ''' ]
+						ifFalse: [ result addAll: ' rwIndexableSubclass: ''' ].
 					result
-						addAll: ' rwIndexableSubclass: ''';
 						addAll: className;
 						addLast: $' ]
 				ifFalse: [ 
+					nonRowanClass
+						ifTrue: [ result addAll: ' subclass: ''' ]
+						ifFalse: [ result addAll: ' rwSubclass: ''' ].
 					result
-						addAll: ' rwSubclass: ''';
 						addAll: className;
 						addLast: $' ] ].
 	newByteSubclass
@@ -480,11 +488,13 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 		addAll: lfsp;
 		addAll: 'poolDictionaries: '.
 	result addAll: '#()'.	"ignored for now"
-	false
+	result
+		addAll: lfsp;
+		addAll: 'category: '.
+	result addAll: aClass category printString.
+	nonRowanClass
 		ifTrue: [ 
-			"don't want inDictionary: as part of the class creation, because the project 
-				specifies the class to symbol dictionary mapping, but I don't want to 
-				lose the logic quite yet"
+			"if the class is unpackaged, then we need to provide for the specification of symbol dictionary into which the class will be installed"
 			result
 				addAll: lfsp;
 				addAll: 'inDictionary: '.
@@ -495,17 +505,14 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 				ifFalse: [ 
 					(anArray := System myUserProfile dictionaryAndSymbolOf: (anArray at: 1))
 						ifNil: [ result addAll: '''''' ]
-						ifNotNil: [ result addAll: (anArray at: 2) asString printString ] ] ].
-	result
-		addAll: lfsp;
-		addAll: 'category: '.
-	result addAll: aClass category printString.
-	(hybridBrowser and: [ aClass rowanPackageName = aClass category ])
+						ifNotNil: [ result addAll: (anArray at: 2) asString ] ] ]
 		ifFalse: [ 
-			result
-				addAll: lfsp;
-				addAll: 'packageName: '.
-			result addAll: aClass rowanPackageName printString ].
+			(hybridBrowser and: [ thePackageName = aClass category ])
+				ifFalse: [ 
+					result
+						addAll: lfsp;
+						addAll: 'packageName: '.
+					result addAll: thePackageName printString ] ].
 	result
 		add: lfsp;
 		add: aClass _optionsForDefinition.

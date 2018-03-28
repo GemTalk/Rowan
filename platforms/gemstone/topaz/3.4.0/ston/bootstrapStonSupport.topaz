@@ -1,0 +1,11 @@
+!=========================================================================
+! Copyright (C) GemTalk Systems 2017.  All Rights Reserved.
+!=========================================================================
+
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.4.0/ston/STON-Core.gs
+errorCount
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.4.0/ston/STON-GemStoneBase-Core.gs
+errorCount
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.4.0/ston/STON-GemStoneCommon-Core.gs
+errorCount
+

@@ -6,8 +6,6 @@ rm -rf *.log *.out
 
 $GS_HOME/sys/local/bin/newBuild_snapshot
 
-todeIt $GEMSTONE_NAME project load --loads="\`#('monticello' 'monticello tests' 'cypress' 'cypress tests')\`" Tonel
-
 startTopaz $GEMSTONE_NAME -l << EOF
 
   iferr 1 stk
@@ -31,11 +29,15 @@ set removeAll: set.
 System commit
 %
 
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/bootstrapCypressSupport.topaz
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/ston/bootstrapStonSupport.topaz
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/bootstrapTonelSupport.topaz
 
-
+# Patch bug 47413
+#
 category: 'Private'
 method: Class
-_equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary isKernel: isKernelBool
+_equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary constraints: aConstraint isKernel: isKernelBool
 
 	"oldClass is equivalent to the subclass that would be created using
  the other arguments if 
@@ -43,7 +45,8 @@ _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: option
    and class instVar names match exactly ,
    and the classVars in oldClass can be modified to add/remove Associations 
      to match anArrayOfClassVars ,
-   and pool dictionaries match exactly
+   and pool dictionaries match exactly,
+   and (constraints match exactly  or( aConstraint size == 0 and oldClass has a reserved oop))
 
   With respect to options and format, oldClass is equivalent if
     The state of format bits dbTransient, instancesNonPersistent, instancesInvariant  
@@ -62,7 +65,7 @@ _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: option
     classVars having modifiable Associations may be removed from oldClass 
 "
 
-	| oldOk fmtArr nam supr opts ivs civs poolds cvars cvarsArray |
+	| oldOk fmtArr nam supr opts ivs civs poolds cvars constr cvarsArray |
 	fmtArr := self _validateOptions: optionsArray withFormat: theFormat.
 	(oldClass isKindOf: Class)
 		ifFalse: [ oldClass _validateClass: Class ].
@@ -74,8 +77,13 @@ _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: option
 	poolds := oldClass _poolDictsEqual: anArrayOfPoolDicts.
 	cvars := oldClass
 		_classVarsChangableTo: (cvarsArray := anArrayOfClassVars copy).
+	constr := (isKernelBool and: [ aConstraint size == 0 ])
+		ifTrue: [ true ]
+		ifFalse: [ oldClass _constraintsEqual: aConstraint ].
 	oldOk := nam
-		and: [ supr and: [ opts and: [ ivs and: [ civs and: [ poolds and: [ cvars ] ] ] ] ] ].
+		and: [ 
+			supr
+				and: [ opts and: [ ivs and: [ civs and: [ poolds and: [ cvars and: [ constr ] ] ] ] ] ] ].
 	oldOk
 		ifTrue: [ 
 			| oldVal newName |
@@ -102,22 +110,15 @@ _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: option
 							'_equivalentSubclass false, nam:' , nam asString , ' supr:' , supr asString
 								, ' opts:' , opts asString , ' ivs:' , ivs asString , ' civs:'
 								, civs asString , ' poolds:' , poolds asString , ' cvars:'
-								, cvars asString ] ].
+								, cvars asString , ' constr:' , constr asString ] ].
 	^ false
 %
 
+# Patch for bug 47433
+#
 category: 'Private'
 method: Class
-_subclass: className 
-instVarNames: anArrayOfInstvarNames 
-format: theFormat 
-classVars: anArrayOfClassVars 
-classInstVars: anArrayOfClassInstVars 
-poolDictionaries: anArrayOfPoolDicts 
-inDictionary: aDictionary 
-inClassHistory: aClassHistory 
-description: aDescription 
-options: optionsArray
+_subclass: className instVarNames: anArrayOfInstvarNames format: theFormat constraints: theConstraints classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
 
 	"The preferred private subclass creation method.
  optionsArray is an Array of Symbols containing zero or more of  
@@ -132,94 +133,131 @@ options: optionsArray
  current version of the class.
 "
 
-	| cvDict result theName ivNames theHist poolDicts modifiableBool fmtArr fmt nCivs sza szb civNames |
-	self _validatePrivilege ifFalse: [^nil].
+	| cvDict result theName ivNames classCon conEle conEleEle theHist poolDicts modifiableBool fmtArr fmt nCivs sza szb civNames |
+	self _validatePrivilege
+		ifFalse: [ ^ nil ].
 	className _isOneByteString
-		ifFalse: [(className _validateClass: CharacterCollection) ifFalse: [^nil]].
+		ifFalse: [ 
+			(className _validateClass: CharacterCollection)
+				ifFalse: [ ^ nil ] ].
 	self subclassesDisallowed
-		ifTrue: [^self _error: #classErrSubclassDisallowed].
+		ifTrue: [ ^ self _error: #'classErrSubclassDisallowed' ].
 	anArrayOfClassInstVars
-		ifNotNil: 
-			[anArrayOfClassInstVars _isArray
-				ifFalse: [(anArrayOfClassInstVars _validateClass: Array) ifFalse: [^nil]]].
+		ifNotNil: [ 
+			anArrayOfClassInstVars _isArray
+				ifFalse: [ 
+					(anArrayOfClassInstVars _validateClass: Array)
+						ifFalse: [ ^ nil ] ] ].
 	aDictionary
-		ifNotNil: [(aDictionary _validateClass: SymbolDictionary) ifFalse: [^nil]].
+		ifNotNil: [ 
+			(aDictionary _validateClass: SymbolDictionary)
+				ifFalse: [ ^ nil ] ].
 	fmtArr := self _validateOptions: optionsArray withFormat: theFormat.
 	fmt := fmtArr at: 1.
 	modifiableBool := fmtArr at: 2.
-	(self instancesInvariant and: [(fmt bitAnd: 16r8) == 0])
-		ifTrue: [^self _error: #classErrInvariantSuperClass].
+	(self instancesInvariant and: [ (fmt bitAnd: 16r8) == 0 ])
+		ifTrue: [ ^ self _error: #'classErrInvariantSuperClass' ].
 	anArrayOfInstvarNames _isArray
-		ifFalse: [(anArrayOfInstvarNames _validateClass: Array) ifFalse: [^nil]].
+		ifFalse: [ 
+			(anArrayOfInstvarNames _validateClass: Array)
+				ifFalse: [ ^ nil ] ].
 	ivNames := {}.
-	1 to: anArrayOfInstvarNames size
-		do: [:j | ivNames add: (anArrayOfInstvarNames at: j)].
+	1 to: anArrayOfInstvarNames size do: [ :j | ivNames add: (anArrayOfInstvarNames at: j) ].
+	theConstraints _isArray
+		ifFalse: [ classCon := theConstraints ]
+		ifTrue: [ 
+			classCon := theConstraints class new.
+			1 to: theConstraints size do: [ :j | 
+				conEle := theConstraints at: j.
+				conEle _isArray
+					ifFalse: [ classCon add: conEle ]
+					ifTrue: [ 
+						| temp |
+						temp := conEle class new.
+						1 to: conEle size do: [ :k | 
+							conEleEle := conEle at: k.
+							(conEleEle isKindOf: CharacterCollection)
+								ifTrue: [ temp add: conEleEle asSymbol ]
+								ifFalse: [ temp add: conEleEle ] ].
+						classCon add: temp ] ] ].
 	nCivs := anArrayOfClassInstVars size.
 	civNames := anArrayOfClassInstVars.
 	nCivs ~~ 0
-		ifTrue: 
-			[| aSet |
+		ifTrue: [ 
+			| aSet |
 			civNames := Array new: nCivs.
 			aSet := IdentitySet new.
-			1 to: nCivs
-				do: 
-					[:k |
-					| aName |
-					aName := (anArrayOfClassInstVars at: k) asSymbol.
-					self class _validateNewClassInstVar: aName.
-					civNames at: k put: aName.
-					aSet add: aName.
-					aSet size < k
-						ifTrue: 
-							[ImproperOperation
-								signal: 'array of new class instanceVariables contains a duplicate '
-										, aName printString]]].
-
-	"Gs64 v3.0 , cvDict and poolDicts maybe nil from caller,
+			1 to: nCivs do: [ :k | 
+				| aName |
+				aName := (anArrayOfClassInstVars at: k) asSymbol.
+				self class _validateNewClassInstVar: aName.
+				civNames at: k put: aName.
+				aSet add: aName.
+				aSet size < k
+					ifTrue: [ 
+						ImproperOperation
+							signal:
+								'array of new class instanceVariables contains a duplicate ' , aName printString ] ] ].	"Gs64 v3.0 , cvDict and poolDicts maybe nil from caller,
     and will be converted to nil if caller passed an empty Array."
-	cvDict := self _makeClassVarDict: anArrayOfClassVars.
-
-	"undo the compiler's canonicalization of empty arrays (fix bug 14103) "
+	cvDict := self _makeClassVarDict: anArrayOfClassVars.	"undo the compiler's canonicalization of empty arrays (fix bug 14103) "
 	poolDicts := anArrayOfPoolDicts.
-	(poolDicts _isArray and: [poolDicts size == 0]) ifTrue: [poolDicts := nil].
+	(poolDicts _isArray and: [ poolDicts size == 0 ])
+		ifTrue: [ poolDicts := nil ].
 	theName := className asSymbol.
 	result := self
-				_subclass: theName
-				instVarNames: ivNames
-				format: fmt
-				classVars: cvDict
-				poolDictionaries: poolDicts
-				classInstanceVars: civNames.
-	modifiableBool ifTrue: [result _subclasses: IdentitySet new].
-	subclasses ifNotNil: [subclasses add: result].
-	aDictionary ifNotNil: [aDictionary at: theName put: result].
+		_subclass: theName
+		instVarNames: ivNames
+		format: fmt
+		constraints: classCon
+		classVars: cvDict
+		poolDictionaries: poolDicts
+		classInstanceVars: civNames.
+	modifiableBool
+		ifTrue: [ result _subclasses: IdentitySet new ].
+	subclasses ifNotNil: [ subclasses add: result ].
+	aDictionary ifNotNil: [ aDictionary at: theName put: result ].
+
 	result extraDict: SymbolDictionary new.
 	result _commentOrDescription: aDescription.
 	theHist := aClassHistory.
-	theHist ifNil: [theHist := ClassHistory new name: className].
-	theHist notEmpty ifTrue: [result category: theHist current _classCategory].
+	theHist ifNil: [ theHist := ClassHistory new name: className ].
+	theHist notEmpty
+		ifTrue: [ result category: theHist current _classCategory ].
 	theHist add: result.
 	result classHistory: theHist.
 	result timeStamp: DateTime now.
 	result userId: System myUserProfile userId.
+
 	sza := self class instSize + anArrayOfClassInstVars size.
 	szb := result class instSize.
 	sza == szb
-		ifFalse: 
-			[InternalError
-				signal: 'prim 233: inconsistent class instance variables, superClass+args=>'
-						, sza asString , '  newClass=>'
-						, szb asString].
-	modifiableBool ifFalse: [result immediateInvariant].
+		ifFalse: [ 
+			InternalError
+				signal:
+					'prim 233: inconsistent class instance variables, superClass+args=>'
+						, sza asString , '  newClass=>' , szb asString ].
+
+	modifiableBool
+		ifFalse: [ result immediateInvariant ].
 	result copyVariables.
 	self _clearCachedOrganizer.
-	(fmtArr at: 3) ifTrue: [GsFile gciLogServer: 'created class ' , className].
-	^result
+	(fmtArr at: 3)
+		ifTrue: [ GsFile gciLogServer: 'created class ' , className ].
+	^ result
 %
 
+# Patch bug 47403
+#
 category: 'Subclass Creation'
 method: Class
-byteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary newVersionOf: oldClass description: aDescription options: optionsArray
+byteSubclass: aString
+classVars: anArrayOfClassVars
+classInstVars: anArrayOfClassInstVars
+poolDictionaries: anArrayOfPoolDicts
+inDictionary: aDictionary
+newVersionOf: oldClass
+description: aDescription
+options: optionsArray
 
 	"Creates and returns a new byte subclass of the receiver.  You are not
  permitted to modify the new class after it is created.  If the receiver is not
@@ -246,20 +284,17 @@ byteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClas
 	| hist fmt descr |
 	aDictionary
 		ifNotNil: [ 
-			(aDictionary _validateClass: SymbolDictionary)
-				ifFalse: [ ^ nil ] ].
-	self instSize ~~ 0
-		ifTrue: [ ^ self _error: #'classErrByteObjInstVars' ].
+			(aDictionary _validateClass: SymbolDictionary) ifFalse: [^nil] ].
+	self instSize ~~ 0 ifTrue: [^self _error: #classErrByteObjInstVars].
 	self isNsc
-		ifTrue: [ 
-			^ aString
-				_error: #'classErrBadFormat'
-				with: 'cannot create byte subclass of Nsc class' ].
+		ifTrue: 
+			[^aString _error: #classErrBadFormat
+				with: 'cannot create byte subclass of Nsc class'].
 	fmt := (format bitAnd: 16r3 bitInvert) bitOr: 16r1 + 16r4.
 	descr := aDescription.
 	oldClass
-		ifNotNil: [ 
-			(self
+		ifNotNil: 
+			[(self
 				_equivalentSubclass: oldClass
 				superCls: self
 				name: aString
@@ -270,20 +305,17 @@ byteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClas
 				newPools: anArrayOfPoolDicts
 				newClassVars: anArrayOfClassVars
 				inDict: aDictionary
-				isKernel: false)
-				ifTrue: [ 
-					oldClass _commentOrDescription: aDescription.
-					^ oldClass	"avoid creation of a new version" ].
+				constraints: #() isKernel: false ) 
+					ifTrue: 
+						[oldClass _commentOrDescription: aDescription.
+						^oldClass	"avoid creation of a new version" ].
 			hist := oldClass classHistory.
-			descr
-				ifNil: [ 
-					descr := [ oldClass comment ]
-						on: Error
-						do: [ :ex | 'old comment not available' ] ] ].
-	^ self
+			descr ifNil: [descr := oldClass comment]].
+	^self
 		_subclass: aString
 		instVarNames: #()
 		format: fmt
+		constraints: #()
 		classVars: anArrayOfClassVars
 		classInstVars: anArrayOfClassInstVars
 		poolDictionaries: anArrayOfPoolDicts
@@ -304,65 +336,8 @@ startTopaz $GEMSTONE_NAME -l << EOF
   iferr 2 stack
   iferr 3 exit 1
 
+# usually DataCurator
   login
-
-# patch
-
-category: '*Cypress-Base-ExtensionMethods'
-method: String
-_writeCypressJsonOn: aStream indent: startIndent
-
-	"Private method which may be removed in a future GemStone version."
-
-	aStream nextPutAll: '"'.
-	aStream nextPutAll: (CypressObject normalizeLineEndingsOf: self).
-	aStream nextPutAll: '"'
-%
-
-category: 'reading'
-method: CypressTonelRepository
-readPackageStructureForPackageNamed: packageName
-
-	| reader |
-	reader := self reader
-		packageName: packageName;
-		loadDefinitions;
-		yourself.
-	^ CypressSnapshot definitions: reader definitions
-%
-
-category: 'instance creation -- patch'
-classmethod: CypressClassDefinition
-name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment subclassType: subclassType options: optionsArray
-  ^ self
-    name: aClassName
-    superclassName: aSuperclassName
-    category: aCategory
-    instVarNames: someInstanceVariableNames
-    classInstVarNames: someClassInstanceVariableNames
-    classVarNames: someClassVariableNames
-    poolDictionaryNames: somePoolDictionaryNames
-    comment: aComment
-    subclassType: subclassType
-%
-
-category: 'utilities patch'
-classmethod: CypressGemStoneDirectoryUtilities
-readStreamFor: filePath do: aOneArgBlock
-
-	| file stream blockResult |
-	GsFile serverErrorString.
-	file := GsFile openReadOnServer: filePath.
-	GsFile serverErrorString ifNotNil: [ :errorMessage | self error: errorMessage ].
-	[ 
-	stream := ReadStreamPortable
-		on: (String withAll: file contents asByteArray decodeFromUTF8).
-	blockResult := aOneArgBlock value: stream ]
-		ensure: [ file close ].
-	^ blockResult
-%
-
-  commit
 
   run
   | packageManager repo |

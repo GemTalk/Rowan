@@ -6,8 +6,6 @@ rm -rf *.log *.out
 
 $GS_HOME/sys/local/bin/newBuild_snapshot
 
-todeIt $GEMSTONE_NAME project load --loads="\`#('monticello' 'monticello tests' 'cypress' 'cypress tests')\`" Tonel
-
 startTopaz $GEMSTONE_NAME -l << EOF
 
   iferr 1 stk
@@ -31,8 +29,11 @@ set removeAll: set.
 System commit
 %
 
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/ston/bootstrapStonSupport.topaz
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/bootstrapTonelSupport.topaz
 
-
+# Patch bug 47413
+#
 category: 'Private'
 method: Class
 _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary isKernel: isKernelBool
@@ -106,6 +107,8 @@ _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: option
 	^ false
 %
 
+# Patch for bug 47433
+#
 category: 'Private'
 method: Class
 _subclass: className 
@@ -217,6 +220,8 @@ options: optionsArray
 	^result
 %
 
+# Patch bug 47403
+#
 category: 'Subclass Creation'
 method: Class
 byteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary newVersionOf: oldClass description: aDescription options: optionsArray

@@ -89,7 +89,7 @@ RwGsPatchSetBasic >> _currentProjectDefinition [
 	^ currentProjectDefinition
 		ifNil: [ 
 			currentProjectDefinition := Rowan
-				loadedProjectNamed: '(NONE)'
+				loadedProjectNamed: Rowan unpackagedName
 				ifAbsent: [ RwUnmanagedProjectDefinition new ] ]
 ]
 

@@ -179,6 +179,14 @@ Rowan class >> loadedProjectsNamed: someNames [
 	^ RwEntitySet withAll: (loadedProjects select: [ :each | each notNil ])
 ]
 
+{ #category : 'public' }
+Rowan class >> packageNames [
+
+	"Return list of package names"
+
+	^ self image packageNames
+]
+
 { #category : 'public tools' }
 Rowan class >> packageTools [
 
@@ -242,6 +250,14 @@ Rowan class >> repositoryNamed: urlString [
 Rowan class >> repositoryTools [
 
 	^self platform repositoryTools
+]
+
+{ #category : 'public' }
+Rowan class >> unpackagedName [
+
+	"Answer the name used for unpackaged projects and packages"
+
+	^ '(NONE)'
 ]
 
 { #category : 'private' }
