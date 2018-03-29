@@ -21,13 +21,15 @@ RwPackageProjectSpecification{
 	#packageInfoSource : #Category,
 	#packageNamesInLoadOrder : [
 		'Cypress-Core',
+		'GemStone-Interactions',
 		'Rowan-Url',
 		'Rowan-Core',
 		'Rowan-Definitions',
 		'Rowan-GemStone',
 		'Rowan-Cypress',
-		'Rowan-Tests',
+		'Rowan-Tools',
 		'Rowan-Tode',
+		'Rowan-Tests',
 		'Rowan-Services'
 	],
 	#packageNamesToLoad : [
@@ -38,6 +40,7 @@ RwPackageProjectSpecification{
 		'Rowan-GemStone',
 		'Rowan-Services',
 		'Rowan-Cypress',
+		'Rowan-Tools',
 		'Rowan-Tests'
 	]
 }	

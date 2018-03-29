@@ -864,7 +864,7 @@ privateInitializeFromText: aString
 			bare := bare copyFrom: schemeName size + 2 to: bare size.
 			"A proper file URL then has two slashes before host,
 			A malformed URL is interpreted as using syntax file:<path>."
-			(bare indexOfSubCollection: '//') = 1
+			(bare indexOfSubCollection: '//' startingAt: 1 ifAbsent: [ 0 ]) = 1
 				ifTrue: 
 					[i := bare indexOf: $/ startingAt: 3.
 					i = 0
@@ -1179,7 +1179,7 @@ privateInitializeFromText: aString
 					schemeName := 'http']].
 
 	"remove leading // if it's there"
-	(remainder indexOfSubCollection: '//') = 1
+	(remainder indexOfSubCollection: '//' startingAt: 1 ifAbsent: [ 0 ]) = 1
 		ifTrue: [remainder := remainder copyFrom: 3 to: remainder size].
 
 	"get the query"
@@ -1247,7 +1247,7 @@ privateInitializeFromText: aString relativeTo: aUrl
 	schemeName := aUrl schemeName.
 
 	"a leading // means the authority is specified, meaning it is absolute"
-	(remainder indexOfSubCollection: '//') = 1
+	(remainder indexOfSubCollection: '//' startingAt: 1 ifAbsent: [ 0 ]) = 1
 		ifTrue: [^self privateInitializeFromText: aString].
 
 	"otherwise, use the same authority"
@@ -1264,7 +1264,7 @@ privateInitializeFromText: aString relativeTo: aUrl
 			remainder := remainder copyFrom: 1 to: ind - 1].
 
 	"get the path"
-	(remainder indexOfSubCollection: '/') = 1
+	(remainder indexOfSubCollection: '/' startingAt: 1 ifAbsent: [ 0 ]) = 1
 		ifTrue: [basePath := #()]
 		ifFalse: [basePath := aUrl path].
 	path := self privateParsePath: remainder relativeTo: basePath

@@ -2,6 +2,8 @@
 ! Copyright (C) GemTalk Systems 2017.  All Rights Reserved.
 !=========================================================================
 
+output push tonel.out
+
 input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/Tonel-Core.gs
 errorCount
 input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/Tonel-GemStoneCommon-Core.gs
@@ -15,3 +17,4 @@ input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/Tonel-Cy
 input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/Tonel-GemStone-Tests.gs
 errorCount
 
+output pop

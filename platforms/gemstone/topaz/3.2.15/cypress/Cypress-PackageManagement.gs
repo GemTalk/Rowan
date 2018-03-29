@@ -2595,7 +2595,7 @@ isGitRepository: aDirectory
 
   | gitPath |
   gitPath := self gitCommand: #('rev-parse' '--show-toplevel') in: aDirectory.
-  (gitPath indexOfSubCollection: 'fatal:') = 1
+  (gitPath indexOfSubCollection: 'fatal:' startingAt: 1 ifAbsent: [ 0 ]) = 1
     ifTrue: [ ^ false ].
   ^ true
 %
@@ -2769,7 +2769,7 @@ initializeConflictingPackageNames
 				put: (knownPackages keys select: 
 							[:knownName |
 							knownName ~= each name
-								and: [(knownName indexOfSubCollection: each name , '-') = 1]])].
+								and: [(knownName indexOfSubCollection: each name , '-' startingAt: 1 ifAbsent: [ 0 ]) = 1]])].
 	conflictingPackages := conflictingPackages reject: [:each | each isEmpty].
 	conflictingPackages
 		keysAndValuesDo: [:package :conflicts | package beConflictedWith: conflicts]
@@ -2821,7 +2821,7 @@ initializeQualifiedPackageNames
 				put: (knownPackages keys select: 
 							[:knownName |
 							knownName ~= each name
-								and: [(each name indexOfSubCollection: knownName , '-') = 1]])].
+								and: [(each name indexOfSubCollection: knownName , '-' startingAt: 1 ifAbsent: [ 0 ]) = 1]])].
 	qualifiedPackages := qualifiedPackages reject: [:each | each isEmpty].
 	qualifiedPackages
 		keysAndValuesDo: [:package :baseNames | package beQualifiedNameOf: baseNames]
@@ -3244,7 +3244,7 @@ findPackagesConflictingWith: aKnownPackageInformation
 	^self packageInformationList select: 
 			[:each |
 			aKnownPackageInformation name ~= each name and: 
-					[(aKnownPackageInformation name indexOfSubCollection: each name , '-') = 1]]
+					[(aKnownPackageInformation name indexOfSubCollection: each name , '-' startingAt: 1 ifAbsent: [ 0 ]) = 1]]
 %
 
 category: 'Accessing - private'
@@ -3254,7 +3254,7 @@ findPackagesEclipsedBy: aKnownPackageInformation
 	^self packageInformationList select: 
 			[:each |
 			aKnownPackageInformation name ~= each name and: 
-					[(each name indexOfSubCollection: aKnownPackageInformation name , '-') = 1]]
+					[(each name indexOfSubCollection: aKnownPackageInformation name , '-' startingAt: 1 ifAbsent: [ 0 ]) = 1]]
 %
 
 category: 'Initializing - private'

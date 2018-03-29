@@ -676,7 +676,7 @@ classesInPackageNamed: aString
 									[| candidateName |
 									candidateName := each category asLowercase.
 									candidateName = packageName
-										or: [(candidateName indexOfSubCollection: packageName , '-') = 1]]])].
+										or: [(candidateName indexOfSubCollection: packageName , '-' startingAt: 1 ifAbsent: [ 0 ]) = 1]]])].
 	^classes sortAscending: #('name')
 %
 
@@ -2314,7 +2314,7 @@ addExtensionMethodsFromClass: aClass toMap: classMap
 	aClass categorysDo: 
 			[:category :selectors |
 			(category asLowercase
-				indexOfSubCollection: '*' , self basePackageName asLowercase) = 1
+				indexOfSubCollection: '*' , self basePackageName asLowercase startingAt: 1 ifAbsent: [ 0 ]) = 1
 				ifTrue: [map at: category put: selectors asSortedCollection]].
 	map keys asSortedCollection do: 
 			[:category |

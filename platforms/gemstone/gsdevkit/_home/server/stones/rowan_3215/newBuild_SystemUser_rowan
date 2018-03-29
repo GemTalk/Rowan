@@ -1,0 +1,736 @@
+set -e
+. defStone.env
+export vers="3.2.15"
+
+rm -rf *.log *.out
+
+newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
+
+startTopaz $GEMSTONE_NAME -l << EOF
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 commit
+  iferr 4 exit 1
+
+  set u SystemUser p swordfish
+  login
+
+# disable the GsPackagePolicy restrictedClasses, so that GsNMethod extension
+#   methods can be included in the packages
+#
+run
+| cls index set |
+cls := GsPackagePolicy.
+index := cls class allInstVarNames indexOfIdentical: #'restrictedClasses'.
+set := cls instVarAt: index.
+set removeAll: set.
+
+(AllUsers userWithId: 'DataCurator') addPrivilege: #'CompilePrimitives'.
+System commit
+%
+
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/bootstrapCypressSupport.topaz
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/ston/bootstrapStonSupport.topaz
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/bootstrapTonelSupport.topaz
+
+commit
+
+# Define some Globals just to get through the load ...
+run
+UserGlobals at: #ServerDirectory put: nil. "remaining references are related to git support ... allow the methods to be loaded for now"
+%
+
+commit
+category: 'Rowan compatability method'
+method: CharacterCollection
+endsWith: suffix
+
+	"Answer whether the tail end of the receiver is the same as suffix.
+	 The comparison is case-sensitive."
+
+	| ofs |
+	suffix size == 0
+		ifTrue: [ ^ false ].
+	(ofs := self size - suffix size) < 0
+		ifTrue: [ ^ false ].
+	^ self at: ofs + 1 equals: suffix	"
+  'Elvis' endsWith: 'vis'
+  'Elvis' endsWith: ''
+"
+%
+method: SequenceableCollection
+writeStream
+
+	^ WriteStreamPortable on: self
+%
+method: CharacterCollection
+trimLeft: aLeftBlock right: aRightBlock
+
+	"Trim characters satisfying the condition given in aLeftBlock from the left side and aRightBlock from the right sides of the receiving string."
+
+	| left right |
+	left := 1.
+	right := self size.
+	[ left <= right and: [ aLeftBlock value: (self at: left) ] ]
+		whileTrue: [ left := left + 1 ].
+	[ left <= right and: [ aRightBlock value: (self at: right) ] ]
+		whileTrue: [ right := right - 1 ].
+	^ self copyFrom: left to: right
+%
+method: CharacterCollection
+trimBoth: aBlock
+
+	"Trim characters satisfying the condition given in aBlock from both sides of the receiving string."
+
+	^ self trimLeft: aBlock right: aBlock
+%
+method: CharacterCollection
+trimBoth
+
+	"Trim separators from both sides of the receiving string."
+
+	^ self trimBoth: [ :char | char isSeparator ]
+%
+method: CharacterCollection
+trimLeft: aBlock
+
+	"Trim characters satisfying the condition given in aBlock from the left side of the receiving string."
+
+	^ self trimLeft: aBlock right: [ :char | false ]
+%
+method: CharacterCollection
+trimLeft
+
+	"Trim separators from the left side of the receiving string."
+
+	^ self trimLeft: [ :char | char isSeparator ]
+%
+method: SequenceableCollection
+second
+
+	"Answer the second element of the receiver.
+	Raise an error if there are not enough elements."
+
+	^ self at: 2
+%
+method: SequenceableCollection
+fourth
+
+	"Answer the fourth element of the receiver.
+	Raise an error if there are not enough elements."
+
+	^ self at: 4
+%
+method: SequenceableCollection
+fifth
+
+	"Answer the fifth element of the receiver.
+	Raise an error if there are not enough elements."
+
+	^ self at: 5
+%
+method: SequenceableCollection
+sixth
+
+	"Answer the sixth element of the receiver.
+	Raise an error if there are not enough elements."
+
+	^ self at: 6
+%
+method: SequenceableCollection
+allButLast: n
+
+	"Answer a copy of the receiver containing all but the last n
+	elements. Raise an error if there are not enough elements."
+
+	^ self copyFrom: 1 to: self size - n
+%
+method: SequenceableCollection
+allButLast
+
+	"Answer a copy of the receiver containing all but the last
+	element. Raise an error if there are not enough elements."
+
+	^ self allButLast: 1
+%
+method: CharacterCollection
+substrings: separators 
+	"Answer an array containing the substrings in the receiver separated 
+	by the elements of separators."
+	| result sourceStream subStringStream |
+	
+	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])
+		ifFalse: [ ^ self error: 'separators must be Characters.' ].
+	sourceStream := self readStream.
+	result := OrderedCollection new.
+	subStringStream := String new writeStream.
+	[ sourceStream atEnd ] whileFalse: [
+		| char |
+		char := sourceStream next.
+		(separators includes: char)
+			ifTrue: [
+				subStringStream isEmpty ifFalse: [
+					result add: subStringStream contents.
+					subStringStream := String new writeStream ] ]
+			ifFalse: [
+				subStringStream nextPut: char ] ].
+	subStringStream isEmpty ifFalse: [
+		result add: subStringStream contents ].
+	^ result asArray
+%
+method: Collection
+ifNotEmpty: aBlock
+
+	^ self size == 0
+		ifFalse: [ aBlock cull: self ]
+%
+method: ExecBlock
+cull: anArg
+
+	"Return the value of the receiver evaluated with 0 or 1 arguments. If the block
+   expects 1 argument pass anArg as the value of the argument"
+
+	^ self argumentCount == 0
+		ifTrue: [ self value ]
+		ifFalse: [ self value: anArg ]
+%
+method: ExecBlock
+cull: firstArg cull: secondArg
+
+	"Return the value of the receiver evaluated with between 0 and 2 arguments,
+   discarding arguments not needed by the receiver."
+
+	| nargs |
+	(nargs := self argumentCount) < 2
+		ifTrue: [ 
+			nargs == 1
+				ifTrue: [ ^ self value: firstArg ].
+			^ self value ].
+	^ self value: firstArg value: secondArg
+%
+method: Object
+putOn: aStream
+
+	^ aStream nextPut: self
+%
+method: SequenceableCollection
+putOn: aStream
+
+	self do: [ :each | each putOn: aStream ]
+%
+method: CharacterCollection
+putOn: aStream
+
+	^ aStream nextPutAll: self
+%
+method: Stream
+<< items
+
+	items putOn: self
+%
+method: Object
+isCollection
+
+	"Return true if the receiver is some sort of Collection and responds to basic collection messages such as #size and #do:"
+
+	^ false
+%
+method: Collection
+isCollection
+
+	"Return true if the receiver is some sort of Collection and responds to basic collection messages such as #size and #do:"
+
+	^ true
+%
+method: Collection
+sort: aSortBlock
+
+	"Sort this array using aSortBlock. The block should take two arguments
+	and return true if the first element should preceed the second one."
+
+	^ self sortWithBlock: aSortBlock
+%
+method: SequenceableCollection
+sort
+
+	"Sort this array into ascending order using the '<=' operator."
+
+	^ self sort: [ :a :b | a <= b ]
+%
+method: CharacterCollection
+withoutGemstoneLineEndings
+
+	"assume the string is textual, and that CR, LF, and CRLF are all 
+	valid line endings.  Remove each occurence. "
+
+	| cr lf crlf inPos outPos outString lineEndPos newOutPos |
+	cr := Character cr.
+	lf := Character lf.
+	crlf := ByteArray new.
+	crlf
+		add: cr asciiValue;
+		add: lf asciiValue.
+
+	inPos := 1.
+	outPos := 1.
+	outString := self class _newString: self size.
+
+	[ 
+	lineEndPos := self indexOfAnyOf: crlf startingAt: inPos ifAbsent: [ 0 ].
+	lineEndPos ~= 0 ]
+		whileTrue: [ 
+			newOutPos := outPos + (lineEndPos - inPos + 1).
+			outString
+				replaceFrom: outPos
+				to: newOutPos - 2
+				with: self
+				startingAt: inPos.
+			outPos := newOutPos - 1.
+
+			((self at: lineEndPos) = cr
+				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) = lf ] ])
+				ifTrue: [ 
+					"CRLF ending"
+					inPos := lineEndPos + 2 ]
+				ifFalse: [ 
+					"CR or LF ending"
+					inPos := lineEndPos + 1 ] ].	"no more line endings.  copy the rest"
+	newOutPos := outPos + (self size - inPos + 1).
+	outString
+		replaceFrom: outPos
+		to: newOutPos - 1
+		with: self
+		startingAt: inPos.
+
+	^ outString copyFrom: 1 to: newOutPos - 1
+%
+method: CharacterCollection
+indexOfAnyOf: aByteArray startingAt: start ifAbsent: aBlock
+
+	"returns the index of the first character in the given set, starting from start"
+
+	| ans |
+	ans := self class
+		findFirstInString: self
+		inSet: aByteArray asByteArray byteArrayMap
+		startingAt: start.
+	ans = 0
+		ifTrue: [ ^ aBlock value ]
+		ifFalse: [ ^ ans ]
+%
+method: ByteArray
+byteArrayMap
+
+	"return a ByteArray mapping each ascii value to a 1 if that ascii value is in the set, and a 0 if it isn't.  Intended for use by primitives only"
+
+	| map |
+	map := ByteArray new: 256 withAll: 0.
+	self do: [ :ascii | map at: ascii + 1 put: 1 ].
+	^ map
+%
+classmethod: SequenceableCollection
+new: size withAll: value
+
+	"Answer an instance of me, with number of elements equal to size, each 
+	of which refers to the argument, value."
+
+	^ (self new: size)
+		atAllPut: value;
+		yourself
+%
+classmethod: CharacterCollection
+findFirstInString: aString inSet: inclusionMap startingAt: start
+
+	"Trivial, non-primitive version"
+
+	| i stringSize ascii |
+	inclusionMap size ~= 256
+		ifTrue: [ ^ 0 ].
+
+	i := start.
+	stringSize := aString size.
+	[ 
+	i <= stringSize
+		and: [ 
+			ascii := (aString at: i) asciiValue.
+			ascii < 256
+				ifTrue: [ (inclusionMap at: ascii + 1) = 0 ]
+				ifFalse: [ true ] ] ]
+		whileTrue: [ i := i + 1 ].
+
+	i > stringSize
+		ifTrue: [ ^ 0 ].
+	^ i
+%
+
+# new method compatable with 3.4 and 3.5
+#
+category: 'Rowan 3.4 compatability method'
+classmethod: GsPackagePolicy
+currentOrNil
+
+	"Returns nil or the previously installed and enabled GsPackagePolicy."
+
+	| pp |
+	pp := ((GsSession currentSession objectNamed: #'UserGlobals') ifNil: [ ^ nil ])
+		at: self globalName
+		otherwise: nil.
+	pp
+		ifNotNil: [ 
+			pp enabled
+				ifTrue: [ ^ pp ] ].
+	^ nil
+%
+
+# Do not issue error if aSelector is not in an existing category - necessary for atomic load of method
+#
+category: 'Rowan 3.4 compatibility method'
+method: Behavior
+moveMethod: aSelector toCategory: categoryName environmentId: envId
+
+	"Moves the method aSelector (a String) from its current category to the
+ specified category (also a String).  If either aSelector or categoryName is
+ not in the receiver's method dictionary, or if aSelector is already in
+ categoryName, generates an error..
+ This method does not account for selectors inherited from superclasses."
+
+	| selSym catSym oldCat |
+	self _validatePrivilege
+		ifFalse: [ ^ nil ].
+	(self includesCategory: categoryName environmentId: envId)
+		ifFalse: [ ^ self _categoryNotFound: categoryName ].
+	oldCat := self categoryOfSelector: aSelector environmentId: envId.
+"
+	oldCat ifNil: [ ^ self _error: #'classErrSelectorNotFound' args: {aSelector} ].
+"
+	catSym := categoryName asSymbol.
+	selSym := aSelector asSymbol.
+
+	(envId ~~ 0
+		or: [ self canWriteMethods or: [ GsPackagePolicy current enabled not ] ])
+		ifTrue: [ 
+			| catDict |
+			catDict := self _baseCategorysForStore: envId.
+			oldCat ifNotNil: [(catDict at: oldCat) remove: selSym].
+			(catDict at: catSym) add: selSym ]
+		ifFalse: [ GsPackagePolicy current moveSelector: selSym toCategory: catSym for: self ].
+	self _needsAnnouncement
+		ifTrue: [ self _announceMethodMoved: (self compiledMethodAt: selSym) oldCategory: oldCat ]
+%
+
+# Patch bug 47413
+#
+category: 'Private'
+method: Class
+_equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary constraints: aConstraint isKernel: isKernelBool
+
+	"oldClass is equivalent to the subclass that would be created using
+ the other arguments if 
+     instVar names match exactly ,
+   and class instVar names match exactly ,
+   and the classVars in oldClass can be modified to add/remove Associations 
+     to match anArrayOfClassVars ,
+   and pool dictionaries match exactly,
+   and (constraints match exactly  or( aConstraint size == 0 and oldClass has a reserved oop))
+
+  With respect to options and format, oldClass is equivalent if
+    The state of format bits dbTransient, instancesNonPersistent, instancesInvariant  
+     match exactly ,
+    and subclassesDisallowed cannot be set in the new subclass if it not set in oldClass ,
+    and modifiable  cannot be set if it is not set in oldClass  ,
+    and  (SELF_CAN_BE_SPECIAL, NSC_DUPLICATES, INDEXABLE, IMPLEMENTATION, NO_STRUCT_UPDATE bits)
+        of the formats must match exactly.
+
+  If all other equivalence tests pass, the following changes to oldClass may be 
+  made to match the arguments and avoid creating a new subclass
+    subclassesDisallowed bit may be cleared in format of oldClass 
+    traverseByCallback bit may be set or cleared in format of oldClass
+    oldClass may be changed from modifiable to not modifiable (by sending immediateInvariant)
+    classVars may be added to oldClass 
+    classVars having modifiable Associations may be removed from oldClass 
+"
+
+	| oldOk fmtArr nam supr opts ivs civs poolds cvars constr cvarsArray |
+	fmtArr := self _validateOptions: optionsArray withFormat: theFormat.
+	(oldClass isKindOf: Class)
+		ifFalse: [ oldClass _validateClass: Class ].
+	nam := oldClass name asString = aString asString.
+	supr := oldClass superClass == actualSelf.
+	opts := oldClass _optionsChangableTo: fmtArr.
+	ivs := oldClass _instVarsEqual: anArrayOfInstvarNames.
+	civs := oldClass class _instVarsEqual: anArrayOfClassInstVars.
+	poolds := oldClass _poolDictsEqual: anArrayOfPoolDicts.
+	cvars := oldClass
+		_classVarsChangableTo: (cvarsArray := anArrayOfClassVars copy).
+	constr := (isKernelBool and: [ aConstraint size == 0 ])
+		ifTrue: [ true ]
+		ifFalse: [ oldClass _constraintsEqual: aConstraint ].
+	oldOk := nam
+		and: [ 
+			supr
+				and: [ opts and: [ ivs and: [ civs and: [ poolds and: [ cvars and: [ constr ] ] ] ] ] ] ].
+	oldOk
+		ifTrue: [ 
+			| oldVal newName |
+			aDictionary
+				ifNotNil: [ 
+					newName := aString asSymbol.
+					oldVal := aDictionary at: newName otherwise: nil.
+					oldVal == oldClass
+						ifFalse: [ 
+							ImproperOperation
+								signal:
+									'no new subclass needed, but aDictionary at: oldClass name ~~ oldClass'.
+							^ false ] ].
+			oldClass _adjustOptions: optionsArray formatArr: fmtArr.
+			oldClass _adjustClassVars: cvarsArray.
+			(fmtArr at: 3)
+				ifTrue: [ GsFile gciLogServer: 'class ' , aString , ' equivalent to reqested class' ].
+			^ true ]
+		ifFalse: [ 
+			(fmtArr at: 3)
+				ifTrue: [ 
+					GsFile
+						gciLogServer:
+							'_equivalentSubclass false, nam:' , nam asString , ' supr:' , supr asString
+								, ' opts:' , opts asString , ' ivs:' , ivs asString , ' civs:'
+								, civs asString , ' poolds:' , poolds asString , ' cvars:'
+								, cvars asString , ' constr:' , constr asString ] ].
+	^ false
+%
+
+# Patch for bug 47433
+#
+category: 'Private'
+method: Class
+_subclass: className instVarNames: anArrayOfInstvarNames format: theFormat constraints: theConstraints classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
+
+	"The preferred private subclass creation method.
+ optionsArray is an Array of Symbols containing zero or more of  
+   #noInheritOptions,  #subclassesDisallowed, #disallowGciStore, #modifiable , 
+   #traverseByCallback 
+ and at most one of 
+   #dbTransient, #instancesNonPersistent, #instancesInvariant .
+ If present, #noInheritOptions must be the first element and it causes
+ none of subclassesDisallowed, disallowGciStore, traverseByCallback,
+         dbTransient, instancesNonPersistent, instancesInvariant 
+ to be inherited from the superclass, nor copied from the
+ current version of the class.
+"
+
+	| cvDict result theName ivNames classCon conEle conEleEle theHist poolDicts modifiableBool fmtArr fmt nCivs sza szb civNames |
+	self _validatePrivilege
+		ifFalse: [ ^ nil ].
+	className _isOneByteString
+		ifFalse: [ 
+			(className _validateClass: CharacterCollection)
+				ifFalse: [ ^ nil ] ].
+	self subclassesDisallowed
+		ifTrue: [ ^ self _error: #'classErrSubclassDisallowed' ].
+	anArrayOfClassInstVars
+		ifNotNil: [ 
+			anArrayOfClassInstVars _isArray
+				ifFalse: [ 
+					(anArrayOfClassInstVars _validateClass: Array)
+						ifFalse: [ ^ nil ] ] ].
+	aDictionary
+		ifNotNil: [ 
+			(aDictionary _validateClass: SymbolDictionary)
+				ifFalse: [ ^ nil ] ].
+	fmtArr := self _validateOptions: optionsArray withFormat: theFormat.
+	fmt := fmtArr at: 1.
+	modifiableBool := fmtArr at: 2.
+	(self instancesInvariant and: [ (fmt bitAnd: 16r8) == 0 ])
+		ifTrue: [ ^ self _error: #'classErrInvariantSuperClass' ].
+	anArrayOfInstvarNames _isArray
+		ifFalse: [ 
+			(anArrayOfInstvarNames _validateClass: Array)
+				ifFalse: [ ^ nil ] ].
+	ivNames := {}.
+	1 to: anArrayOfInstvarNames size do: [ :j | ivNames add: (anArrayOfInstvarNames at: j) ].
+	theConstraints _isArray
+		ifFalse: [ classCon := theConstraints ]
+		ifTrue: [ 
+			classCon := theConstraints class new.
+			1 to: theConstraints size do: [ :j | 
+				conEle := theConstraints at: j.
+				conEle _isArray
+					ifFalse: [ classCon add: conEle ]
+					ifTrue: [ 
+						| temp |
+						temp := conEle class new.
+						1 to: conEle size do: [ :k | 
+							conEleEle := conEle at: k.
+							(conEleEle isKindOf: CharacterCollection)
+								ifTrue: [ temp add: conEleEle asSymbol ]
+								ifFalse: [ temp add: conEleEle ] ].
+						classCon add: temp ] ] ].
+	nCivs := anArrayOfClassInstVars size.
+	civNames := anArrayOfClassInstVars.
+	nCivs ~~ 0
+		ifTrue: [ 
+			| aSet |
+			civNames := Array new: nCivs.
+			aSet := IdentitySet new.
+			1 to: nCivs do: [ :k | 
+				| aName |
+				aName := (anArrayOfClassInstVars at: k) asSymbol.
+				self class _validateNewClassInstVar: aName.
+				civNames at: k put: aName.
+				aSet add: aName.
+				aSet size < k
+					ifTrue: [ 
+						ImproperOperation
+							signal:
+								'array of new class instanceVariables contains a duplicate ' , aName printString ] ] ].	"Gs64 v3.0 , cvDict and poolDicts maybe nil from caller,
+    and will be converted to nil if caller passed an empty Array."
+	cvDict := self _makeClassVarDict: anArrayOfClassVars.	"undo the compiler's canonicalization of empty arrays (fix bug 14103) "
+	poolDicts := anArrayOfPoolDicts.
+	(poolDicts _isArray and: [ poolDicts size == 0 ])
+		ifTrue: [ poolDicts := nil ].
+	theName := className asSymbol.
+	result := self
+		_subclass: theName
+		instVarNames: ivNames
+		format: fmt
+		constraints: classCon
+		classVars: cvDict
+		poolDictionaries: poolDicts
+		classInstanceVars: civNames.
+	modifiableBool
+		ifTrue: [ result _subclasses: IdentitySet new ].
+	subclasses ifNotNil: [ subclasses add: result ].
+	aDictionary ifNotNil: [ aDictionary at: theName put: result ].
+
+	result extraDict: SymbolDictionary new.
+	result _commentOrDescription: aDescription.
+	theHist := aClassHistory.
+	theHist ifNil: [ theHist := ClassHistory new name: className ].
+	theHist notEmpty
+		ifTrue: [ result category: theHist current _classCategory ].
+	theHist add: result.
+	result classHistory: theHist.
+	result timeStamp: DateTime now.
+	result userId: System myUserProfile userId.
+
+	sza := self class instSize + anArrayOfClassInstVars size.
+	szb := result class instSize.
+	sza == szb
+		ifFalse: [ 
+			InternalError
+				signal:
+					'prim 233: inconsistent class instance variables, superClass+args=>'
+						, sza asString , '  newClass=>' , szb asString ].
+
+	modifiableBool
+		ifFalse: [ result immediateInvariant ].
+	result copyVariables.
+	self _clearCachedOrganizer.
+	(fmtArr at: 3)
+		ifTrue: [ GsFile gciLogServer: 'created class ' , className ].
+	^ result
+%
+
+# Patch bug 47403
+#
+category: 'Subclass Creation'
+method: Class
+byteSubclass: aString
+classVars: anArrayOfClassVars
+classInstVars: anArrayOfClassInstVars
+poolDictionaries: anArrayOfPoolDicts
+inDictionary: aDictionary
+newVersionOf: oldClass
+description: aDescription
+options: optionsArray
+
+	"Creates and returns a new byte subclass of the receiver.  You are not
+ permitted to modify the new class after it is created.  If the receiver is not
+ some kind of String class, then instances of the new class store and return
+ SmallIntegers in the range 0 - 255.
+
+ This method generates an error if instances of the receiver are of special
+ storage format, if they are NSCs, or if they have instance variables.
+
+ optionsArray is an Array of Symbols containing zero or more of  
+   #noInheritOptions,  #subclassesDisallowed, #disallowGciStore, #modifiable , 
+   #traverseByCallback 
+ and at most one of 
+   #dbTransient, #instancesNonPersistent, #instancesInvariant
+ If present, #noInheritOptions must be the first element and it causes
+ none of subclassesDisallowed, disallowGciStore, traverseByCallback,
+         dbTransient, instancesNonPersistent, instancesInvariant 
+ to be inherited from the superclass, nor copied from the
+ current version of the class.
+
+ Returns oldClass if it would be equivalent to the requested new class.
+ (See Class(C)>>comment). "
+
+	| hist fmt descr |
+	aDictionary
+		ifNotNil: [ 
+			(aDictionary _validateClass: SymbolDictionary) ifFalse: [^nil] ].
+	self instSize ~~ 0 ifTrue: [^self _error: #classErrByteObjInstVars].
+	self isNsc
+		ifTrue: 
+			[^aString _error: #classErrBadFormat
+				with: 'cannot create byte subclass of Nsc class'].
+	fmt := (format bitAnd: 16r3 bitInvert) bitOr: 16r1 + 16r4.
+	descr := aDescription.
+	oldClass
+		ifNotNil: 
+			[(self
+				_equivalentSubclass: oldClass
+				superCls: self
+				name: aString
+				newOpts: optionsArray
+				newFormat: fmt
+				newInstVars: #()
+				newClassInstVars: anArrayOfClassInstVars
+				newPools: anArrayOfPoolDicts
+				newClassVars: anArrayOfClassVars
+				inDict: aDictionary
+				constraints: #() isKernel: false ) 
+					ifTrue: 
+						[oldClass _commentOrDescription: aDescription.
+						^oldClass	"avoid creation of a new version" ].
+			hist := oldClass classHistory.
+			descr ifNil: [descr := oldClass comment]].
+	^self
+		_subclass: aString
+		instVarNames: #()
+		format: fmt
+		constraints: #()
+		classVars: anArrayOfClassVars
+		classInstVars: anArrayOfClassInstVars
+		poolDictionaries: anArrayOfPoolDicts
+		inDictionary: aDictionary
+		inClassHistory: hist
+		description: descr
+		options: optionsArray
+%
+
+  commit
+   run
+  | packageManager repo |
+  packageManager := CypressPackageManager3 new.
+  repo := CypressAbstractRepository
+    onUrl: (CypressUrl absoluteFromText: 'tonel:$GS_HOME/shared/repos/Rowan/src/tonel/'  )
+    alias: ''.
+  packageManager
+    defaultSymbolDictionaryName: #'Globals'.
+  #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-Services')
+    do: [ :packageName | 
+      packageManager
+        addResolvedReference:
+          (CypressResolvedReference name: packageName repository: repo) ].
+  packageManager loadResolvedReferences
+%
+
+  run
+  Rowan addProject: (STON fromString: (GsFile openReadOnServer: '$GS_HOME/server/stones/$GEMSTONE_NAME/rowanSpec.ston') contentsOfEntireFile)
+%
+  commit
+  exit
+EOF
