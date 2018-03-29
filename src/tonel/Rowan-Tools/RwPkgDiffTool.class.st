@@ -44,22 +44,6 @@ RwPkgDiffTool >> diffSpecUrl: aString packageName: packageName [
 		packageName: packageName
 ]
 
-{ #category : 'man page' }
-RwPkgDiffTool >> manPage [
-  ^ TDManPage
-    commandName: 'xxx'
-    sourceMethod: self class name asString , '>>manPage'
-    fromString:
-      'NAME
-  pkg xxx - xxx
-SYNOPSIS
-  pkg xxx
-DESCRIPTION
-EXAMPLES
-  pkg xxx 
-'
-]
-
 { #category : 'smalltalk api' }
 RwPkgDiffTool >> patchSpecification: aRwSpecification packageName: packageName [
 

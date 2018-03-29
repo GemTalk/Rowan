@@ -4,22 +4,6 @@ Class {
 	#category : 'Rowan-Tools'
 }
 
-{ #category : 'man page' }
-RwPrjUnregisterTool >> manPage [
-  ^ TDManPage
-    commandName: 'unregister'
-    sourceMethod: self class name asString , '>>manPage'
-    fromString:
-      'NAME
-  prj unregister - xxx
-SYNOPSIS
-  prj unregister <spec-url>
-DESCRIPTION
-EXAMPLES
-  prj unregister Rowan
-'
-]
-
 { #category : 'smalltalk api' }
 RwPrjUnregisterTool >> unregisterSpecification: aRwSpecification [
 

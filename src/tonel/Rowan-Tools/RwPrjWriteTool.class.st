@@ -4,22 +4,6 @@ Class {
 	#category : 'Rowan-Tools'
 }
 
-{ #category : 'man page' }
-RwPrjWriteTool >> manPage [
-	^ TDManPage
-		commandName: 'write'
-		sourceMethod: self class name asString , '>>manPage'
-		fromString:
-			'NAME
-  prj write - Write project to disk and commit repository
-SYNOPSIS
-  prj write <spec-url>
-DESCRIPTION
-EXAMPLES
-  prj write Rowan
-'
-]
-
 { #category : 'smalltalk api' }
 RwPrjWriteTool >> validate: aRwSpecification [
   super validate: aRwSpecification.

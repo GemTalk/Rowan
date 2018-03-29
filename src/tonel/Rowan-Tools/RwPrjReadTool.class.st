@@ -4,25 +4,6 @@ Class {
 	#category : 'Rowan-Tools'
 }
 
-{ #category : 'man page' }
-RwPrjReadTool >> manPage [
-	^ TDManPage
-		commandName: 'read'
-		sourceMethod: self class name asString , '>>manPage'
-		fromString:
-			'NAME
-  prj read - Read project from repository (disk -> defs)
-SYNOPSIS
-  prj read <spec-url>
-DESCRIPTION
-
-  Read the packages specified in the spec and return an RwPackageSet of packages.
-
-EXAMPLES
-  prj read Rowan
-'
-]
-
 { #category : 'smalltalk api' }
 RwPrjReadTool >> readProjectSetForSpecification: aRwSpecification [
 
