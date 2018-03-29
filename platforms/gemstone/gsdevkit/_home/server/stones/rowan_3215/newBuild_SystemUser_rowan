@@ -38,7 +38,7 @@ commit
 
 # Define some Globals just to get through the load ...
 run
-UserGlobals at: #ServerDirectory put: nil. "remaining references are related to git support ... allow the methods to be loaded for now"
+UserGlobals at: #ServerFileDirectory put: nil. "remaining references are related to git support ... allow the methods to be loaded for now"
 %
 
 commit
