@@ -59,15 +59,12 @@ RwGsImage class >> _removeLoadedProject: aRwLoadedProject [
 	projectName := aRwLoadedProject name.
 	projectRegistry := self
 		_loadedProjectRegistryForUserId: aRwLoadedProject projectOwnerId.
-	projectRegistry
-		at: projectName
-		ifPresent: [ :aLoadedProject | 
-			aLoadedProject == aRwLoadedProject
-				ifFalse: [ 
-					self
-						error:
-							'The specified project is not identical to the loaded project in the registry ... this is not expected' ].
-			projectRegistry removeKey: projectName ]
+	(projectRegistry at: projectName ifAbsent: [ ^ nil ]) == aRwLoadedProject
+		ifFalse: [ 
+			self
+				error:
+					'The specified project is not identical to the loaded project in the registry ... this is not expected' ].
+	projectRegistry removeKey: projectName
 ]
 
 { #category : 'querying' }
@@ -81,11 +78,10 @@ RwGsImage class >> addLoadedProject: aRwLoadedProject [
 		_loadedProjectRegistryForUserId: aRwLoadedProject projectOwnerId.
 	projectRegistry
 		at: projectName
-		ifPresent: [ :aLoadedProject | 
-			self
-				error:
-					'There is already a project named ' , projectName printString , ' registered' ].
-	^ projectRegistry at: projectName put: aRwLoadedProject
+		ifAbsent: [ ^ projectRegistry at: projectName put: aRwLoadedProject ].
+	self
+		error:
+			'There is already a project named ' , projectName printString , ' registered'
 ]
 
 { #category : 'cypress (old)' }
@@ -100,11 +96,10 @@ RwGsImage class >> addProject: aRwProjectSpecification [
 			(aRwProjectSpecification platformSpec at: 'gemstone') projectOwnerId.
 	projectRegistry
 		at: projectName
-		ifPresent: [ :aLoadedProject | 
-			self
-				error:
-					'There is already a project named ' , projectName printString , ' registered' ].
-	^ projectRegistry at: projectName put: aRwProjectSpecification
+		ifAbsent: [ ^ projectRegistry at: projectName put: aRwProjectSpecification ].
+	self
+		error:
+			'There is already a project named ' , projectName printString , ' registered'
 ]
 
 { #category : 'modifying image' }
@@ -350,9 +345,8 @@ RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 						ifTrue: [ 
 							(self _loadedProjectRegistryForUserId: userId)
 								ifNotNil: [ :projectRegistry | 
-									projectRegistry
-										at: aString
-										ifPresent: [ :loadedProject | 
+									(projectRegistry at: aString ifAbsent: [  ])
+										ifNotNil: [ :loadedProject | 
 											(loadedProject specification platformSpect at: 'gemstone') projectOwnerId
 												= userId
 												ifTrue: [ ^ loadedProject ] ] ] ] ].
@@ -449,9 +443,8 @@ RwGsImage class >> projectNamed: aString ifAbsent: absentBlock [
 						ifTrue: [ 
 							(self _projectRegistryForUserId: userId)
 								ifNotNil: [ :projectRegistry | 
-									projectRegistry
-										at: aString
-										ifPresent: [ :projectSpec | 
+									(projectRegistry at: aString ifAbsent: [  ])
+										ifNotNil: [ :projectSpec | 
 											(projectSpec platformSpec at: 'gemstone') projectOwnerId = userId
 												ifTrue: [ ^ projectSpec ] ] ] ] ].
 			^ absentBlock value ]
