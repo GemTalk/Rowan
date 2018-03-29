@@ -101,8 +101,3 @@ RwPrjGitTool >> gitrevparseShowTopLevelIn: aDirectory [
 RwPrjGitTool >> performOnServer: command logging: logging [
   ^ self tdGitTool performOnServer: command logging: logging
 ]
-
-{ #category : 'accessing' }
-RwPrjGitTool >> tdGitTool [
-  ^ tdGitTool ifNil: [ tdGitTool := TDGitTool new ]
-]
