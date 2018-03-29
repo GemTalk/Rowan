@@ -275,8 +275,6 @@ comment
 			stream skip: 1.
 			eatNext := false ] ].
 	
-	self flag: #todo. "This is a hack to make my clean algoritm for bodies work also for 
-	comments. I need to refactor the 'eat enter' part out to use just that."
 	^ self 
 		removeFrom: '"',result contents,'"' 
 		enclosingStart: $" 

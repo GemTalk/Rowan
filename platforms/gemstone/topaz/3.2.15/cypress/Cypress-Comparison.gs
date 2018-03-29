@@ -174,7 +174,7 @@ comparingPackages: someNames fromDirectory: aDirectory
 			diskSnapshots at: packageName put: reader packageStructure snapshot.
 			modTime := System
 						performOnServer: 'stat --printf=%y ' , reader packageDirectory.
-			modTimestamp := (modTime indexOfSubCollection: 'stat:') = 1
+			modTimestamp := (modTime indexOfSubCollection: 'stat:' startingAt: 1 ifAbsent: [ 0 ]) = 1
 						ifTrue: [nil]
 						ifFalse: [self dateAndTimeFromUnixFormatString: modTime].
 			diskTimestamps at: packageName put: modTimestamp.

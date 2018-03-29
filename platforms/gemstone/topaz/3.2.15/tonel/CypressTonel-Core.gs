@@ -155,9 +155,10 @@ category: 'accessing'
 classmethod: TonelCypressReader
 definitionOrders
 	"Used to sort definitions inside a snapshot"
-	^ Dictionary newFromPairs: { 
-		CypressMethodDefinition. 			1.
-		CypressClassDefinition. 			2 }
+	^ Dictionary new
+		at: CypressMethodDefinition put: 1;
+		at: CypressClassDefinition put: 2;
+		yourself
 %
 
 category: 'definition creation'
@@ -457,7 +458,6 @@ method: TonelCypressWriter
 writePackage: aPackageName
 	"I'm assuming first category is actually the package"
 	packageDir := aPackageName.
-	self flag: #todo. "this is lame... removing and rewriting full package needs to be rethink :)"
 	(self fileUtils directoryExists: self packageDir) ifTrue: [ 
 		self fileUtils deleteAll: self packageDir ].  
 	self fileUtils ensureDirectoryExists: self packageDir.

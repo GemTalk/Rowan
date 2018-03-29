@@ -15,6 +15,8 @@
 !
 !=========================================================================
 
+output push cypress.out
+
 input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Definitions.gs
 errorCount
 input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Structure.gs
@@ -32,3 +34,4 @@ errorCount
 input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Comparison.gs
 errorCount
 
+output pop
