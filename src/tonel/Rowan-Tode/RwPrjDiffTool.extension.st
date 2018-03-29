@@ -1,6 +1,43 @@
 Extension { #name : 'RwPrjDiffTool' }
 
 { #category : '*rowan-tode' }
+RwPrjDiffTool >> diffSpecification: aRwSpecification [
+
+	| repo stream diffy patch diffTool |
+	super specification: aRwSpecification.
+	stream := TextStream on: Text new.
+	repo := CypressAbstractRepository
+		onUrl: (CypressUrl absoluteFromText: specification repositoryUrl)
+		alias: ''.
+	diffTool := Rowan packageTools diff.
+	self packageNames
+		do: [ :packageName | 
+			| diskSnapshot imageSnapshot |
+			diskSnapshot := repo readPackageStructureForPackageNamed: packageName.
+			imageSnapshot := (CypressPackageDefinition named: packageName) snapshot.
+			patch := diffTool
+				patchSpecification: aRwSpecification
+				packageName: packageName.
+			patch operations isEmpty
+				ifTrue: [ 
+					stream
+						nextPutAll:
+								('==================== ' , packageName , ' NO CHANGES  ====================')
+										asText allBold;
+						cr ]
+				ifFalse: [ 
+					stream
+						nextPutAll:
+								('==================== ' , packageName
+										, ' (-) --> disk (+)  ====================') asText allBold;
+						cr.
+					diffy := MCDiffyTextWriter on: stream.
+					diffy writePatch: patch.
+					stream cr ] ].
+	^ stream contents
+]
+
+{ #category : '*rowan-tode' }
 RwPrjDiffTool >> manPage [
   ^ TDManPage
     commandName: 'diff'
