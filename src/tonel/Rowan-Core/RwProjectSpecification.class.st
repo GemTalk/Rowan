@@ -64,9 +64,8 @@ RwProjectSpecification >> export [
 	self repositoryUrl
 		ifNil: [ self error: 'exportToUrl: must be used if repositoryUrl has not been set' ].
 	url := RwUrl fromString: self repositoryUrl.
-	exportPath := (ServerFileDirectory on: url pathForDirectory)
-		containingDirectory fullName , '/' , self specsPath , '/'.
-	(ServerFileDirectory on: exportPath) assureExistence.
+	exportPath := self repositoryRootPath , '/' , self specsPath , '/'.
+	CypressFileUtilities current ensureDirectoryExists: exportPath.
 	exportUrl := 'file:' , exportPath.
 
 	exportSpec := self copy.
