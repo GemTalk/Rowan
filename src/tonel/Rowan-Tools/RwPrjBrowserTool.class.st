@@ -616,6 +616,47 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 	^ result
 ]
 
+{ #category : 'class browsing' }
+RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className: className type: classType instanceVariablesString: instanceVariablesString classVariablesString: classVariablesString classInstanceVariablesString: classInstanceVariablesString poolDictionariesString: poolDictionariesString comment: comment category: category [
+
+	"classType may be 'normal', 'bytes', or 'variable'"
+
+	| result anArray lfsp firstElement poolDicts civs |
+	result := String new.
+	result addAll: superclassName.
+	lfsp := Character lf asString
+		addAll: String tab;
+		yourself.
+	classType = 'normal'
+		ifTrue: [ result addAll: ' rwSubclass: ' ].
+	classType = 'variable'
+		ifTrue: [ result addAll: ' rwIndexableSubclass: ' ].
+	classType = 'bytes'
+		ifTrue: [ result addAll: ' rwByteSubclass: ' ].
+	result addAll: className printString.
+	classType ~= 'bytes'
+		ifTrue: [ 
+			result
+				addAll: lfsp;
+				addAll: 'instVarNames: #(' , instanceVariablesString , ')' ].
+	result
+		addAll: lfsp;
+		addLast: 'classVars: #(' , classVariablesString , ')';
+		addAll: lfsp;
+		addLast: 'classInstVars: #(' , classInstanceVariablesString , ')';
+		addAll: lfsp;
+		addAll: 'poolDictionaries: #(' , poolDictionariesString , ')'.
+	result
+		addAll: lfsp;
+		addAll: 'category: ';
+		addAll: category printString.
+	result
+		add: lfsp;
+		add: 'options: #()';
+		add: Character lf.
+	^ result
+]
+
 { #category : 'definition updating' }
 RwPrjBrowserTool >> classNamed: className updateDefinition: updateBlock [
 
