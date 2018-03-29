@@ -36,6 +36,12 @@ input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/bootstra
 
 commit
 
+# Define some Globals just to get through the load ...
+run
+UserGlobals at: #ServerDirectory put: nil. "remaining references are related to git support ... allow the methods to be loaded for now"
+%
+
+commit
 category: 'Rowan compatability method'
 method: CharacterCollection
 endsWith: suffix
@@ -713,7 +719,7 @@ options: optionsArray
     onUrl: (CypressUrl absoluteFromText: 'tonel:$GS_HOME/shared/repos/Rowan/src/tonel/'  )
     alias: ''.
   packageManager
-    defaultSymbolDictionaryName: #'UserGlobals'.
+    defaultSymbolDictionaryName: #'Globals'.
   #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-Services')
     do: [ :packageName | 
       packageManager
