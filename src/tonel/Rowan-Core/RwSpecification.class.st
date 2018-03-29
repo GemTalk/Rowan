@@ -34,7 +34,7 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 		ifTrue: [ 
 			| contents client response |
 			GsSecureSocket disableCertificateVerificationOnClient.
-			client := ZnClient new.
+			client := (System myUserProfile symbolList objectNamed: 'ZnClient') new.
 			response := client
 				beOneShot;
 				enforceHttpSuccess: true;
