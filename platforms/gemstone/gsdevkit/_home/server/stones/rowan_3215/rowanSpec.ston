@@ -21,6 +21,7 @@ RwPackageProjectSpecification{
 	#packageInfoSource : #Category,
 	#packageNamesInLoadOrder : [
 		'Cypress-Core',
+		'GemStone-Interactions',
 		'Rowan-Url',
 		'Rowan-Core',
 		'Rowan-Definitions',
