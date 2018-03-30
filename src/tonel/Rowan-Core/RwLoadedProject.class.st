@@ -11,7 +11,10 @@ Class {
 { #category : 'instance creation' }
 RwLoadedProject class >> newForLoadSpecification: aLoadSpecification [
 
-	^ self new initializeForLoadSpecification: aLoadSpecification
+	^ self new
+		initialize;
+		initializeForLoadSpecification: aLoadSpecification;
+		yourself
 ]
 
 { #category : 'accessing' }

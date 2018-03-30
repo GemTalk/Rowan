@@ -1,6 +1,36 @@
 Extension { #name : 'RwPrjDiffTool' }
 
 { #category : '*rowan-tode' }
+RwPrjDiffTool >> diffForProjectName: projectName [
+
+	| loadedProject stream diffy patch diffTool |
+	loadedProject := Rowan image loadedProjectNamed: projectName.
+	super specification: loadedProject specification.
+	stream := TextStream on: Text new.
+	diffTool := Rowan packageTools diff.
+	self packageNames
+		do: [ :packageName | 
+			patch := diffTool patchForPackageName: packageName.
+			patch operations isEmpty
+				ifTrue: [ 
+					stream
+						nextPutAll:
+								('==================== ' , packageName , ' NO CHANGES  ====================')
+										asText allBold;
+						cr ]
+				ifFalse: [ 
+					stream
+						nextPutAll:
+								('==================== ' , packageName
+										, ' (-) --> disk (+)  ====================') asText allBold;
+						cr.
+					diffy := MCDiffyTextWriter on: stream.
+					diffy writePatch: patch.
+					stream cr ] ].
+	^ stream contents
+]
+
+{ #category : '*rowan-tode' }
 RwPrjDiffTool >> diffSpecification: aRwSpecification [
 
 	| repo stream diffy patch diffTool |

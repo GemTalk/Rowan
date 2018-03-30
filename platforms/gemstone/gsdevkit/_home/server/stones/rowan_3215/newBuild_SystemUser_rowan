@@ -15,17 +15,10 @@ startTopaz $GEMSTONE_NAME -l << EOF
   set u SystemUser p swordfish
   login
 
-# disable the GsPackagePolicy restrictedClasses, so that GsNMethod extension
-#   methods can be included in the packages
+# enable GsPackagePolicy
 #
 run
-| cls index set |
-cls := GsPackagePolicy.
-index := cls class allInstVarNames indexOfIdentical: #'restrictedClasses'.
-set := cls instVarAt: index.
-set removeAll: set.
-
-(AllUsers userWithId: 'DataCurator') addPrivilege: #'CompilePrimitives'.
+GsPackagePolicy current enable.
 System commit
 %
 

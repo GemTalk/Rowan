@@ -20,3 +20,12 @@ Behavior >> rwCompileMethod: sourceString category: aCategoryString packageName:
 		isMeta: self isMeta
 		inPackageNamed: packageName
 ]
+
+{ #category : '*rowan-gemstone' }
+Behavior >> rwRemoveSelector: methodSelector [
+
+	^ Rowan projectTools browser
+		removeMethod: methodSelector
+		forClassNamed: self thisClass name asString
+		isMeta: self isMeta
+]

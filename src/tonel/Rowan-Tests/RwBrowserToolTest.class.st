@@ -150,6 +150,34 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 ]
 
 { #category : 'private' }
+RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment format: format root: rootPath repoPath: repoPath [
+
+	| projectDefinition classDefinition projectTools |
+	projectTools := Rowan projectTools.
+
+	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+
+	projectDefinition := RwProjectDefinition
+		newForGitPackageProjectNamed: projectName.
+	projectDefinition
+		comment: comment;
+		packageNamesInLoadOrder: packageNames;
+		yourself.
+	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
+
+	self
+		handleConfirmationDuring: [ 
+			projectTools create
+				createPackageProjectFor: projectDefinition
+				format: format
+				root: rootPath
+				repoPath: repoPath ].
+
+	projectTools load loadProjectDefinition: projectDefinition
+]
+
+{ #category : 'private' }
 RwBrowserToolTest >> _loadExtendedProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment className: className inPackageName: packageName1 extensionPackageNames: extensionPackageNames [
 
 	| projectDefinition classDefinition classExtensionDefinition projectTools |
