@@ -35,7 +35,7 @@ RowanProjectDefinitionService >> createProjectNamed: projectName in: symbolDicti
 
 	self rowanFixMe. "Dale doesn't like Rowan projectNames"
 	(Rowan projectNames includes: projectName) ifFalse:[
-		self browserTool createGitPackageProjectNamed: projectName updateDefinition: [:pd |  self halt. 
+		self browserTool createGitPackageProjectNamed: projectName updateDefinition: [:pd | 
 				pd defaultSymbolDictName: symbolDictionaryName; comment:  'Sample Rowan Project'] ].
 
 ]
