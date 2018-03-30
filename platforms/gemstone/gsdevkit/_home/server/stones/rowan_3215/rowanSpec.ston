@@ -30,7 +30,8 @@ RwPackageProjectSpecification{
 		'Rowan-Tools',
 		'Rowan-Tode',
 		'Rowan-Tests',
-		'Rowan-Services'
+		'Rowan-Services',
+		'Rowan-3215'
 	],
 	#packageNamesToLoad : [
 		'Cypress-Core',

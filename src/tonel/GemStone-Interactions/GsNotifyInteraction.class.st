@@ -11,7 +11,7 @@ GsNotifyInteraction >> defaultActionBlock [
   defaultActionBlock
     ifNil: [ 
       ^ [ :interactionRequest | 
-      (ObjectLogEntry interaction: self printString object: self) addToLog.
+      Transcript cr; show: self printString.
       self okResponse ] ].
   ^ defaultActionBlock
 ]

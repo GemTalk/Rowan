@@ -154,11 +154,6 @@ RwAbstractTool >> help [
 	^self manPage asText
 ]
 
-{ #category : 'man page' }
-RwAbstractTool >> manPage [
-  self subclassResponsibility: #'manPage'
-]
-
 { #category : 'smalltalk api' }
 RwAbstractTool >> specification: aRwSpecification [
   self validate: aRwSpecification.

@@ -411,7 +411,7 @@ startTopaz $GEMSTONE_NAME -l << EOF
 %
 
   run
-  Rowan addProject: (STON fromString: (GsFile openReadOnServer: '$GS_HOME/server/stones/$GEMSTONE_NAME/rowanSpec.ston') contentsOfEntireFile)
+  Rowan addProject: (STON fromString: (GsFile openReadOnServer: '$GS_HOME/server/stones/$GEMSTONE_NAME/rowanSpec.ston') contents)
 %
   commit
   exit

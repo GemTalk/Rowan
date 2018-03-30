@@ -10,8 +10,7 @@ startTopaz $GEMSTONE_NAME -l << EOF
 
   iferr 1 stk
   iferr 2 stack
-  iferr 3 commit
-  iferr 4 exit 1
+  iferr 3 exit 1
 
   set u SystemUser p swordfish
   login
@@ -38,7 +37,7 @@ commit
 
 # Define some Globals just to get through the load ...
 run
-UserGlobals at: #ServerDirectory put: nil. "remaining references are related to git support ... allow the methods to be loaded for now"
+UserGlobals at: #ServerFileDirectory put: nil. "remaining references are related to git support ... allow the methods to be loaded for now"
 %
 
 commit
@@ -58,6 +57,77 @@ endsWith: suffix
   'Elvis' endsWith: 'vis'
   'Elvis' endsWith: ''
 "
+%
+method: SequenceableCollection
+beginsWith: aSequenceableCollection
+
+	(aSequenceableCollection isEmpty
+		or: [ self size < aSequenceableCollection size ])
+		ifTrue: [ ^ false ].
+	aSequenceableCollection
+		withIndexDo: [ :each :index | 
+			(self at: index) ~= each
+				ifTrue: [ ^ false ] ].
+	^ true
+%
+method: SequenceableCollection
+withIndexDo: elementAndIndexBlock
+
+	"Just like with:do: except that the iteration index supplies the second argument to the block."
+
+	1 to: self size do: [ :index | elementAndIndexBlock value: (self at: index) value: index ]
+%
+method: CharacterCollection
+unescapePercents
+
+	"change each %XY substring to the character with ASCII value XY in hex.  This is the opposite of #encodeForHTTP"
+
+	| ans c asciiVal pos oldPos specialChars |
+	ans _ WriteStream on: String new.
+	oldPos _ 1.
+	specialChars _ '+%'.
+
+	[ 
+	pos _ self indexOfAnyOf: specialChars startingAt: oldPos.
+	pos > 0 ]
+		whileTrue: [ 
+			ans nextPutAll: (self copyFrom: oldPos to: pos - 1).
+			c _ self at: pos.
+			c = $+
+				ifTrue: [ ans nextPut: $  ]
+				ifFalse: [ 
+					(c = $% and: [ pos + 2 <= self size ])
+						ifTrue: [ 
+							asciiVal _ ((self at: pos + 1) asUppercase digitValueInRadix: 16) * 16
+								+ ((self at: pos + 2) asUppercase digitValueInRadix: 16).
+							pos _ pos + 2.
+							asciiVal > 255
+								ifTrue: [ ^ self ].	"not really an escaped string"
+							ans nextPut: (Character value: asciiVal) ]
+						ifFalse: [ ans nextPut: c ] ].
+			oldPos _ pos + 1 ].
+	ans nextPutAll: (self copyFrom: oldPos to: self size).
+	^ ans contents
+%
+method: CharacterCollection
+indexOfAnyOf: specialChars startingAt: oldPos
+
+	oldPos to: self size do: [ :i | 
+		(specialChars includes: (self at: i))
+			ifTrue: [ ^ i ] ].
+	^ 0
+%
+method: SequenceableCollection
+copyUpTo: anObject
+
+	"Answer all elements up to but not including anObject. If there
+  is no such object, answer a copy of the receiver."
+
+	| idx |
+	idx := self indexOf: anObject startingAt: 1.
+	idx == 0
+		ifTrue: [ ^ self copy ]
+		ifFalse: [ ^ self copyFrom: 1 to: idx - 1 ]
 %
 method: SequenceableCollection
 writeStream
@@ -720,7 +790,7 @@ options: optionsArray
     alias: ''.
   packageManager
     defaultSymbolDictionaryName: #'Globals'.
-  #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-Services')
+  #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-Services' 'Rowan-3215')
     do: [ :packageName | 
       packageManager
         addResolvedReference:
@@ -729,8 +799,9 @@ options: optionsArray
 %
 
   run
-  Rowan addProject: (STON fromString: (GsFile openReadOnServer: '$GS_HOME/server/stones/$GEMSTONE_NAME/rowanSpec.ston') contentsOfEntireFile)
+  Rowan addProject: (STON fromString: (GsFile openReadOnServer: '$GS_HOME/server/stones/$GEMSTONE_NAME/rowanSpec.ston') contents)
 %
   commit
   exit
 EOF
+

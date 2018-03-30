@@ -777,7 +777,7 @@ RwGsPatchSetBasic >> moveMethodsBetweenPackages [
 			"no move without deleted methods"
 			^ self ].
 	deletedMethodsMap := Dictionary new.
-	deletedMethods 
+	deletedMethods
 		do: [ :patch | 
 			patch classDefinition key
 				ifNotNil: [ 
@@ -785,7 +785,9 @@ RwGsPatchSetBasic >> moveMethodsBetweenPackages [
 					(deletedMethodsMap
 						at: patch classDefinition key
 						ifAbsentPut: [ Dictionary new ]) at: patch methodDefinition key put: patch ] ].
-	addedMethods , extendedMethods
+	(addedMethods copy
+		addAll: extendedMethods;
+		yourself)
 		do: [ :patch | 
 			(deletedMethodsMap at: patch classDefinition key ifAbsent: [  ])
 				ifNotNil: [ :selectorMap | 
@@ -847,9 +849,13 @@ RwGsPatchSetBasic >> reportAnyErrors [
 
 { #category : 'private - applying' }
 RwGsPatchSetBasic >> runInitializers [
+
 	"run the class initialization methods as needed"
 
-	addedMethods, extendedMethods, methodsNeedingRecompile do: [:methodPatch | methodPatch runInitializer ]
+	(addedMethods copy
+		addAll: extendedMethods;
+		addAll: methodsNeedingRecompile;
+		yourself) do: [ :methodPatch | methodPatch runInitializer ]
 ]
 
 { #category : 'private - applying' }
@@ -896,8 +902,9 @@ RwGsPatchSetBasic >> updateClassProperties [
 	"For classes with changes that don't require versioning, 
 	update the properties in the class and the LoadedClasses as appropriate."
 
-	classesWithClassVariableChanges , classesWithPropertyChanges
-		do: [ :each | each installPropertiesPatchFor: self ]
+	(classesWithClassVariableChanges copy
+		addAll: classesWithPropertyChanges;
+		yourself) do: [ :each | each installPropertiesPatchFor: self ]
 ]
 
 { #category : 'private - applying' }

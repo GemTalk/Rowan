@@ -27,19 +27,3 @@ RwRepCommitTool >> commitRepositoryForSpecUrl: aSpecUrlString message: messageSt
     commitRepositoryForSpecification: (RwSpecification fromUrl: aSpecUrlString)
     message: messageString
 ]
-
-{ #category : 'man page' }
-RwRepCommitTool >> manPage [
-  ^ TDManPage
-    commandName: 'xxx'
-    sourceMethod: self class name asString , '>>manPage'
-    fromString:
-      'NAME
-  rep xxx - xxx
-SYNOPSIS
-  rep xxx
-DESCRIPTION
-EXAMPLES
-  rep xxx 
-'
-]

@@ -498,14 +498,10 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 			result
 				addAll: lfsp;
 				addAll: 'inDictionary: '.
-			anArray := System myUserProfile dictionaryAndSymbolOf: aClass.
-			(anArray == nil
-				or: [ (anArray at: 1) == GsPackagePolicy current homeSymbolDict ])
+			anArray := System myUserProfile dictionariesAndSymbolsOf: aClass.
+			anArray isEmpty
 				ifTrue: [ result addAll: '''''' ]
-				ifFalse: [ 
-					(anArray := System myUserProfile dictionaryAndSymbolOf: (anArray at: 1))
-						ifNil: [ result addAll: '''''' ]
-						ifNotNil: [ result addAll: (anArray at: 2) asString ] ] ]
+				ifFalse: [ result addAll: ((anArray at: 1) at: 1) name asString ] ]
 		ifFalse: [ 
 			(hybridBrowser and: [ thePackageName = aClass category ])
 				ifFalse: [ 
@@ -591,14 +587,6 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 		addLast: 'classInstVars: #()';
 		addAll: lfsp;
 		addAll: 'poolDictionaries: #()'.
-	false
-		ifTrue: [ 
-			"don't want inDictionary: as part of the class creation, because the project 
-				specifies the class to symbol dictionary mapping, but I don't want to 
-				lose the logic quite yet"
-			result
-				addAll: lfsp;
-				addAll: 'inDictionary: UserGlobals' ].
 	result
 		addAll: lfsp;
 		addAll: 'category: ';
