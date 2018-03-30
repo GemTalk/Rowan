@@ -236,9 +236,8 @@ RwGsPackageSymbolDictionary >> addClassAssociation: assoc forClass: class toPack
 			loadedPackage addLoadedClass: loadedClass.
 			loadedClass updatePropertiesFromClassFor: self.
 			classRegistry at: class classHistory put: loadedClass.
-			loadedPackage loadedClassExtensions
-				at: class name
-				ifPresent: [ :loadedClassExtension | 
+			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
+				ifNotNil: [ :loadedClassExtension | 
 					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
 					self halt ] ].
 
@@ -372,9 +371,8 @@ RwGsPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod for: behavio
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension properties |
 	methodDictionary := behavior persistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
-	methodDictionary
-		at: selector
-		ifPresent: [ :oldCompiledMethod | 
+	(methodDictionary at: selector ifAbsent: [  ])
+		ifNotNil: [ :oldCompiledMethod | 
 			"there is an existing compiled method ... that means we're adding a recompiled methoded and moving it to the (possibly new) protocol"
 			^ self
 				addRecompiledMethod: compiledMethod;
