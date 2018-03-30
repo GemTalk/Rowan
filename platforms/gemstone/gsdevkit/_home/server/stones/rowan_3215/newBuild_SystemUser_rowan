@@ -790,7 +790,7 @@ options: optionsArray
     alias: ''.
   packageManager
     defaultSymbolDictionaryName: #'Globals'.
-  #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-Services')
+  #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-Services' 'Rowan-3215')
     do: [ :packageName | 
       packageManager
         addResolvedReference:
