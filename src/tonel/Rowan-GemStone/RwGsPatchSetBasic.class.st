@@ -777,7 +777,7 @@ RwGsPatchSetBasic >> moveMethodsBetweenPackages [
 			"no move without deleted methods"
 			^ self ].
 	deletedMethodsMap := Dictionary new.
-	deletedMethods 
+	deletedMethods
 		do: [ :patch | 
 			patch classDefinition key
 				ifNotNil: [ 
@@ -785,7 +785,9 @@ RwGsPatchSetBasic >> moveMethodsBetweenPackages [
 					(deletedMethodsMap
 						at: patch classDefinition key
 						ifAbsentPut: [ Dictionary new ]) at: patch methodDefinition key put: patch ] ].
-	addedMethods , extendedMethods
+	(addedMethods copy
+		addAll: extendedMethods;
+		yourself)
 		do: [ :patch | 
 			(deletedMethodsMap at: patch classDefinition key ifAbsent: [  ])
 				ifNotNil: [ :selectorMap | 
