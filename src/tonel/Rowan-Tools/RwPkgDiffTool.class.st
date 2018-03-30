@@ -7,13 +7,15 @@ Class {
 { #category : 'smalltalk api' }
 RwPkgDiffTool >> patchForPackageName: packageName [
 
-| loadedPackage loadedProject |
+	| loadedPackage loadedProject repo diskSnapshot imageSnapshot |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
-	^ self
-		patchSpecification: loadedProject asDefinition specification
-		packageName: packageName
-
+	super specification: loadedProject specification.
+	repo := specification repositoryUrl asRwRepository.
+	diskSnapshot := repo readPackageStructureForPackageNamed: packageName.
+	imageSnapshot := (RwCypressPackageStructure
+		fromPackage: loadedPackage asDefinition) snapshot.
+	^ CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot
 ]
 
 { #category : 'smalltalk api' }
@@ -26,9 +28,8 @@ RwPkgDiffTool >> patchSpecification: aRwSpecification packageName: packageName [
 		alias: ''.
 
 	diskSnapshot := repo readPackageStructureForPackageNamed: packageName.
-	imageSnapshot := (CypressPackageDefinition named: packageName)  snapshot.
+	imageSnapshot := (CypressPackageDefinition named: packageName) snapshot.
 	^ CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot
-
 ]
 
 { #category : 'smalltalk api' }

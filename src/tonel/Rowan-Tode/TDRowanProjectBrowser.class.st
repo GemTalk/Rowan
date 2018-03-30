@@ -113,6 +113,22 @@ TDRowanProjectBrowser >> deleteAllProjectsMenuAction: listElement selectionIndex
 ]
 
 { #category : 'menu actions' }
+TDRowanProjectBrowser >> diffMenuAction: listElement selectionIndex: selectionIndex [
+
+	| projectDef diffText |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	projectDef := self projects at: selectionIndex.
+	diffText := Rowan projectTools diff diffForProjectName: projectDef projectName.
+	diffText
+		editUsing:
+			((TDEditorSpec topez: topez editorAspect: #'edit')
+				windowName: #'mcDiff';
+				yourself).
+	^ #'refreshView'
+]
+
+{ #category : 'menu actions' }
 TDRowanProjectBrowser >> inspectProjectSpecMenuAction: listElement selectionIndex: selectionIndex [
 
 	| loadedProject |

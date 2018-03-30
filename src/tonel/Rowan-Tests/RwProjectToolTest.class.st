@@ -4,66 +4,6 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
-{ #category : 'private' }
-RwProjectToolTest >> gsInteractionConfirmationHandler [
-
-	^ GsInteractionHandler new
-		defaultBlock: [ :ignored | self assert: false description: 'expected a confirmation' ];
-		confirmBlock: [ :interaction | interaction ok ];
-		yourself
-]
-
-{ #category : 'private' }
-RwProjectToolTest >> gsInteractionInformFailureHandler [
-
-	^ GsInteractionHandler new
-		defaultBlock: [ :ignored | self assert: false description: 'unexpected internaction' ];
-		informBlock: [ :interaction | self assert: false description: 'unexpected inform' ];
-		yourself
-]
-
-{ #category : 'private' }
-RwProjectToolTest >> handleConfirmationDuring: aBlock [
-
-	"expect a confirmation"
-
-	aBlock
-		on: GsInteractionRequest
-		do: [ :ex | 
-			ex
-				response:
-					(ex interaction interactWith: self gsInteractionConfirmationHandler) ]
-]
-
-{ #category : 'private' }
-RwProjectToolTest >> handleInformAsFailureDuring: aBlock [
-
-	aBlock
-		on: GsInteractionRequest
-		do: [ :ex | 
-			ex
-				response:
-					(ex interaction interactWith: self gsInteractionInformFailureHandler) ]
-]
-
-{ #category : 'running' }
-RwProjectToolTest >> setUp [
-
-	"Remove the CypressTestData symbol dictionary, if present --- gets persistent and session symbol list"
-
-	| user symList dict index |
-	super setUp.
-	user := System myUserProfile.
-	symList := user symbolList.
-
-	dict := symList objectNamed: self _symbolDictionaryName2.
-	dict
-		ifNotNil: [ 
-			index := symList indexOf: dict.
-			index > 0
-				ifTrue: [ user removeDictionaryAt: index ] ]
-]
-
 { #category : 'tests' }
 RwProjectToolTest >> testProjectClassExtensions [
 

@@ -12,6 +12,15 @@ RwPrjSpecTool >> exportProjectDefinition: projectDefinition [
 ]
 
 { #category : 'smalltalk api' }
+RwPrjSpecTool >> exportProjectNamed: projectName [
+
+	| loadedProject |
+	loadedProject := Rowan image loadedProjectNamed: projectName.
+	self specification: loadedProject specification.
+	^ specification export
+]
+
+{ #category : 'smalltalk api' }
 RwPrjSpecTool >> exportSpecification: aRwSpecification [
 
 	self specification: aRwSpecification.
