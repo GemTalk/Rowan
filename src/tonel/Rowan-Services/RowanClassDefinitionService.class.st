@@ -50,7 +50,7 @@ RowanClassDefinitionService class >> forClassNamed: className package: packageNa
 
 { #category : 'rowan' }
 RowanClassDefinitionService >> classCreationTemplate [
-
+	
 	^self browserTool classCreationTemplateForClass: self classFromName hybridBrowser: true.
 
 ]
@@ -215,7 +215,7 @@ RowanClassDefinitionService >> poolDictionaryNames: newValue [
 { #category : 'rowan' }
 RowanClassDefinitionService >> removeSelector: selector [
 
-	self browserTool removeMethod: selector forClassNamed: name isMeta: meta
+	self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta
 
 ]
 

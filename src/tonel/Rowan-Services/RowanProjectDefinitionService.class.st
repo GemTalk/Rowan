@@ -1,8 +1,27 @@
 Class {
 	#name : 'RowanProjectDefinitionService',
 	#superclass : 'RowanDefinitionService',
+	#instVars : [
+		'name',
+		'sha',
+		'branch'
+	],
 	#category : 'Rowan-Services'
 }
+
+{ #category : 'other' }
+RowanProjectDefinitionService >> branch [
+
+	^branch
+
+]
+
+{ #category : 'other' }
+RowanProjectDefinitionService >> branch: anObject [
+
+	branch := anObject
+
+]
 
 { #category : 'examples' }
 RowanProjectDefinitionService >> createProjectNamed: projectName [ 
@@ -14,13 +33,10 @@ RowanProjectDefinitionService >> createProjectNamed: projectName [
 { #category : 'examples' }
 RowanProjectDefinitionService >> createProjectNamed: projectName in: symbolDictionaryName [
 
-	| projectDefinition |
-	projectDefinition := (Rowan loadedProjectNamed: projectName ifAbsent:[
-		self projectTools load loadProjectDefinition: (RwProjectDefinition newForGitPackageProjectNamed: projectName)]) asDefinition.
-	projectDefinition 
-		comment: 'Sample Rowan Project';
-		defaultSymbolDictName: symbolDictionaryName.
-	^projectDefinition
+	self rowanFixMe. "Dale doesn't like Rowan projectNames"
+	(Rowan projectNames includes: projectName) ifFalse:[
+		self browserTool createGitPackageProjectNamed: projectName updateDefinition: [:pd | 
+				pd defaultSymbolDictName: symbolDictionaryName; comment:  'Sample Rowan Project'] ].
 
 ]
 
@@ -30,6 +46,27 @@ RowanProjectDefinitionService >> createSampleProject [
 	self removeProjectNamed: self sampleProjectName.
 	self createSampleSymbolDictionary.
 	^self createProjectNamed: self sampleProjectName in: self sampleSymbolDictionaryName
+
+]
+
+{ #category : 'other' }
+RowanProjectDefinitionService >> name [
+
+	^name
+
+]
+
+{ #category : 'other' }
+RowanProjectDefinitionService >> name: anObject [
+
+	name := anObject
+
+]
+
+{ #category : 'rowan' }
+RowanProjectDefinitionService >> projectNames [
+
+	^Rowan projectNames collect: [:string | self class new name: string]
 
 ]
 
@@ -44,5 +81,19 @@ RowanProjectDefinitionService >> removeProjectNamed: projectName [
 RowanProjectDefinitionService >> sampleProjectName [
 	
 	^'SampleProjectName'
+
+]
+
+{ #category : 'other' }
+RowanProjectDefinitionService >> sha [
+
+	^sha
+
+]
+
+{ #category : 'other' }
+RowanProjectDefinitionService >> sha: anObject [
+
+	sha := anObject
 
 ]

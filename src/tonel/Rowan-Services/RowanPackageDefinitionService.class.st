@@ -21,14 +21,11 @@ RowanPackageDefinitionService class >> forPackageNamed: packageName [
 
 { #category : 'rowan' }
 RowanPackageDefinitionService >> createPackage [
-	| projectService existingPackage |
-	self rowanFixMe. "Eventually, should not use the sample project or loaded projects directly "
+	| projectService |
 	projectService := RowanProjectDefinitionService new.
-	projectDefinition := projectService createProjectNamed: self sampleProjectName.  
-	existingPackage := Rowan image loadedPackageNamed: packageName ifAbsent:[
-		projectDefinition addPackageNamed: packageName.
-		^self projectTools load loadProjectDefinition: projectDefinition.].
-	(Rowan image loadedProjectNamed: projectDefinition name) addLoadedPackage: existingPackage
+	projectService createProjectNamed: self sampleProjectName.  
+	(Rowan packageNames includes: packageName) ifFalse:[
+		self browserTool addPackageNamed: packageName toProjectNamed: self sampleProjectName].
 
 ]
 
@@ -155,6 +152,6 @@ RowanPackageDefinitionService >> samplePackageName [
 { #category : 'examples' }
 RowanPackageDefinitionService >> sampleProjectName [
 
-	^projectDefinition name
+	^'SampleProjectName'
 
 ]
