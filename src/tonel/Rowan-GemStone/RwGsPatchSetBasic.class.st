@@ -847,9 +847,13 @@ RwGsPatchSetBasic >> reportAnyErrors [
 
 { #category : 'private - applying' }
 RwGsPatchSetBasic >> runInitializers [
+
 	"run the class initialization methods as needed"
 
-	addedMethods, extendedMethods, methodsNeedingRecompile do: [:methodPatch | methodPatch runInitializer ]
+	(addedMethods copy
+		addAll: extendedMethods;
+		addAll: methodsNeedingRecompile;
+		yourself) do: [ :methodPatch | methodPatch runInitializer ]
 ]
 
 { #category : 'private - applying' }
@@ -896,8 +900,9 @@ RwGsPatchSetBasic >> updateClassProperties [
 	"For classes with changes that don't require versioning, 
 	update the properties in the class and the LoadedClasses as appropriate."
 
-	classesWithClassVariableChanges , classesWithPropertyChanges
-		do: [ :each | each installPropertiesPatchFor: self ]
+	(classesWithClassVariableChanges copy
+		addAll: classesWithPropertyChanges;
+		yourself) do: [ :each | each installPropertiesPatchFor: self ]
 ]
 
 { #category : 'private - applying' }
