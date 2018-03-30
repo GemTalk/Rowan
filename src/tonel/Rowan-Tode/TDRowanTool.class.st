@@ -745,18 +745,19 @@ TDRowanTool >> prjunregister [
 
 { #category : 'prj commands' }
 TDRowanTool >> prjwrite [
-  "
+
+	"
   prj write <spec-url>
 "
 
-  | diffText |
-  self getSubcommandOptsMixedLongShort: {}.
-  subArguments size < 1
-    ifTrue: [ 
-      self
-        error:
-          'Missing required argument <spec-url>. See `man prj write` for details.' ].
-  ^ Rowan projectTools write writePackagesForSpecUrl: (subArguments at: 1)
+	| diffText |
+	self getSubcommandOptsMixedLongShort: {}.
+	subArguments size < 1
+		ifTrue: [ 
+			self
+				error:
+					'Missing required argument <spec-url>. See `man prj write` for details.' ].
+	^ Rowan projectTools write writeSpecUrl: (subArguments at: 1)
 ]
 
 { #category : 'rep commands' }
