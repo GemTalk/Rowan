@@ -24,7 +24,6 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName [
 				readPackageStructure.
 			packageDefinition := reader packageStructure rwSnapshot.
 			projectDefinition addOrUpdatePackage: packageDefinition ].
-	self halt.
 	^ RwProjectSetDefinition new
 		addProject: projectDefinition;
 		yourself
