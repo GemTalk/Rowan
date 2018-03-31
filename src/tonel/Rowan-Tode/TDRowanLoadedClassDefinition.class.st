@@ -31,7 +31,10 @@ TDRowanLoadedClassDefinition class >> initialize [
 			aspect: #'rowanProtocolSelectors';
 		registerEditorClass: TDRowanMethodDefinitionElementBuilder
 			for: TDRowanLoadedMethodDefinition
-			aspect: #'method';
+			aspect: #'rowanMethod';
+		registerEditorClass: TDRowanMethodDefinitionElementBuilder
+			for: TDMethodTemplateDefinition
+			aspect: #'rowanMethod';
 		yourself
 ]
 

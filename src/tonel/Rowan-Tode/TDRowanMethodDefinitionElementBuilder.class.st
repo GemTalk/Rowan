@@ -6,14 +6,15 @@ Class {
 
 { #category : 'method source' }
 TDRowanMethodDefinitionElementBuilder >> compileSource: theSource [
-  | selector newSelector |
-  selector := self selector.
-  newSelector := self object
-    compile: theSource withGemstoneLineEndings
-    classified: self methodProtocol.
-  (selector asSymbol ~~ newSelector or: [ self object username notNil ])
-    ifTrue: [ self differentMethodCreated: newSelector ].
-  ^ newSelector
+
+	| selector newSelector |
+	selector := self selector.
+	newSelector := self object
+		rwCompile: theSource withGemstoneLineEndings
+		classified: self methodProtocol.
+	(selector asSymbol ~~ newSelector or: [ self object username notNil ])
+		ifTrue: [ self differentMethodCreated: newSelector ].
+	^ newSelector
 ]
 
 { #category : 'accessing' }
@@ -26,11 +27,11 @@ TDRowanMethodDefinitionElementBuilder >> editorWindowLabel [
 { #category : 'accessing' }
 TDRowanMethodDefinitionElementBuilder >> packageName [
 
-	^ self object loadedPackage name
+	^ self object rowanPackageName
 ]
 
 { #category : 'accessing' }
 TDRowanMethodDefinitionElementBuilder >> projectName [
 
-	^ self object loadedProject name
+	^ self object rowanProjectName
 ]

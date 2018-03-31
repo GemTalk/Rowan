@@ -9,11 +9,8 @@ TDRowanClassDefinitionClientElementBuilder >> elementSource [
 
 	(self object isKindOf: TDRowanLoadedClassDefinition)
 		ifTrue: [ 
-			| def |
-			def := self object.
-			^ def
-				classDefinitionFor: self theClass
-				inContext: System myUserProfile
-				superClassName: self theClass superClass name asString ].
+			^ Rowan projectTools browser
+				classCreationTemplateForClass: self theClass
+				hybridBrowser: true ].
 	^ self theClass definition
 ]

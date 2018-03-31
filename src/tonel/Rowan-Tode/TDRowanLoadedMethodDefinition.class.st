@@ -37,6 +37,22 @@ TDRowanLoadedMethodDefinition >> emphasis [
 	^ {(TextEmphasis normal)}
 ]
 
+{ #category : 'as yet unclassified' }
+TDRowanLoadedMethodDefinition >> itemSelected: topez [
+
+	"select the method"
+
+	| method |
+	method := self method.
+	TDMethodDefinition selectMethod: method topez: topez.
+	self
+		editUsing:
+			((TDEditorSpec topez: topez editorAspect: #'rowanMethod')
+				windowName: #'method';
+				yourself).
+	^ nil
+]
+
 { #category : 'accessing' }
 TDRowanLoadedMethodDefinition >> loadedClass [
 
@@ -65,6 +81,24 @@ TDRowanLoadedMethodDefinition >> loadedPackage [
 TDRowanLoadedMethodDefinition >> loadedProject [
 
 	^ self loadedMethod loadedProject
+]
+
+{ #category : 'accessing' }
+TDRowanLoadedMethodDefinition >> rowanPackageName [
+
+	^ self loadedPackage name
+]
+
+{ #category : 'accessing' }
+TDRowanLoadedMethodDefinition >> rowanProjectName [
+
+	^ self loadedProject name
+]
+
+{ #category : 'compiling' }
+TDRowanLoadedMethodDefinition >> rwCompile: source classified: methodProtocol [
+
+	^ self compile: source classified: methodProtocol
 ]
 
 { #category : 'accessing' }
