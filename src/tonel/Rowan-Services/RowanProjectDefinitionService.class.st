@@ -6,8 +6,25 @@ Class {
 		'sha',
 		'branch'
 	],
+	#classVars : [
+		'DefaultProjectName'
+	],
 	#category : 'Rowan-Services'
 }
+
+{ #category : 'accessing' }
+RowanProjectDefinitionService class >> defaultProjectName [
+
+	^DefaultProjectName
+
+]
+
+{ #category : 'accessing' }
+RowanProjectDefinitionService class >> defaultProjectName: aString [
+
+	DefaultProjectName := aString
+
+]
 
 { #category : 'other' }
 RowanProjectDefinitionService >> branch [
@@ -46,6 +63,20 @@ RowanProjectDefinitionService >> createSampleProject [
 	self removeProjectNamed: self sampleProjectName.
 	self createSampleSymbolDictionary.
 	^self createProjectNamed: self sampleProjectName in: self sampleSymbolDictionaryName
+
+]
+
+{ #category : 'accessing' }
+RowanProjectDefinitionService >> defaultProjectName [
+
+	^self class defaultProjectName
+
+]
+
+{ #category : 'accessing' }
+RowanProjectDefinitionService >> defaultProjectName: aString [
+
+	self class defaultProjectName: aString
 
 ]
 
