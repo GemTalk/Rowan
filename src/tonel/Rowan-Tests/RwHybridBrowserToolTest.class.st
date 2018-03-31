@@ -603,13 +603,10 @@ RwHybridBrowserToolTest >> testHybridPackagePatch [
 		options: #().
 	self assert: normalClass rowanPackageName = packageName1.
 
-	fooMethod := normalClass
-		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName1 asLowercase.
+	fooMethod := normalClass rwCompileMethod: 'foo ^''foo''' category: 'accessing'.
 	barMethod := normalClass class
 		rwCompileMethod: 'bar ^''bar'''
-		category: 'accessing'
-		packageName: packageName2.
+		category: '*' , packageName2 asLowercase.
 
 	self assert: normalClass bar = 'bar'.
 	normalInstance := normalClass new.
@@ -635,14 +632,13 @@ RwHybridBrowserToolTest >> testHybridPackagePatch [
 
 	fooMethod := normalClass
 		rwCompileMethod: 'foo "comment" ^''foo'''
-		category: '*' , packageName1 asLowercase.	"change method"
+		category: 'accessing'.	"change method"
 	ivar1Method := normalClass
 		rwCompileMethod: 'ivar1 ^ivar1'
-		category: '*' , packageName1 asLowercase.	"add new instance method"
+		category: 'accessing'.	"add new instance method"
 	bazMethod := normalClass class
 		rwCompileMethod: 'baz ^''baz'''
-		category: 'accessing'
-		packageName: packageName2.	"add new class-side method"
+		category: '*' , packageName2 asLowercase.	"add new class-side method"
 	normalClass class rwRemoveSelector: #'bar'.	"remove existing method"
 
 	self assert: normalInstance foo = 'foo'.
