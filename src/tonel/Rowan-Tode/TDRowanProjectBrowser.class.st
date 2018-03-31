@@ -209,36 +209,23 @@ TDRowanProjectBrowser >> menuActionSpec: miniTool [
 	{('Browse'
 		->
 			{#('project spec' nil #'inspectProjectSpecMenuAction:selectionIndex:' nil #'project' false).
-			#('-').
-			#('classes' nil #'browseProjectClassesMenuAction:selectionIndex:' nil #'loadedProject' false).
-			#('-').
-			#('packages' nil #'browseProjectPackagesMenuAction:selectionIndex:' nil #'loadedProject' false).
-			#('repositories' nil #'browseProjectRepositoriesMenuAction:selectionIndex:' nil #'metacelloProject' false).
-			#('-').
 			#('tests' nil #'testProjectMenuAction:selectionIndex:' nil #'loadedProject' false)})}.
 	#('-').
 	{('Git'
 		->
-			{#('branches' nil #'gitBranchesMenuAction:selectionIndex:' nil #'gitProject' false).
-			#('checkout' nil #'gitCheckoutMenuAction:selectionIndex:' nil #'gitProject' false).
-			#('clone' nil #'cloneProjectMenuAction:selectionIndex:' nil #'gitBasedProject' false).
-			#('diff' nil #'gitDiffMenuAction:selectionIndex:' nil #'gitProject' false).
-			#('diff (cached)' nil #'gitDiffCachedMenuAction:selectionIndex:' nil #'gitProject' false).
-			#('fetch' nil #'gitFetchMenuAction:selectionIndex:' nil #'gitProject' false).
-			#('pull' nil #'gitPullProjectMenuAction:selectionIndex:' nil #'nonDirtyGitProject' false).
-			#('reset' nil #'gitResetProjectMenuAction:selectionIndex:' nil #'gitProject' false).
-			#('status' nil #'gitStatusMenuAction:selectionIndex:' nil #'gitProject' false)})}.
+			{#('branches' nil #'gitBranchesMenuAction:selectionIndex:').
+			#('checkout' nil #'gitCheckoutMenuAction:selectionIndex:').
+			#('pull' nil #'gitPullProjectMenuAction:selectionIndex:').
+			#('status' nil #'gitStatusMenuAction:selectionIndex:')})}.
 	#('-').
-	#('changes' nil #'diffMenuAction:selectionIndex:' nil #'repoBasedProject' false).
-	#('load' nil #'loadProjectMenuAction:selectionIndex:' nil #'metacelloProject' false).
-	#('log' nil #'commitLogMenuAction:selectionIndex:' nil #'loggableProject' false).
-	#('merge' nil #'gitMergeProjectMenuAction:selectionIndex:' nil #'nonDirtyGitProject' false).
-	#('push' nil #'gitPushProjectMenuAction:selectionIndex:' nil #'nonDirtyGitProject' false).
-	#('refresh (unloaded)' nil #'refreshProjectEntriesMenuAction:selectionIndex:').
-	#('revert' nil #'revertProjectMenuAction:selectionIndex:' nil #'dirtyProject' false).
-	#('save' nil #'commitProjectMenuAction:selectionIndex:' nil #'writableRepoBasedProject' false).
-	#('skew diff' nil #'gitVersionSkewDiffMenuAction:selectionIndex:' nil #'versionSkew' false).
-	#('skew save' nil #'gitVersionSkewSaveProjectMenuAction:selectionIndex:' nil #'versionSkew' false)}
+	#('changes' nil #'diffMenuAction:selectionIndex:').
+	#('load' nil #'loadProjectMenuAction:selectionIndex:').
+	#('log' nil #'commitLogMenuAction:selectionIndex:').
+	#('push' nil #'gitPushProjectMenuAction:selectionIndex:').
+	#('revert' nil #'revertProjectMenuAction:selectionIndex:').
+	#('save' nil #'commitProjectMenuAction:selectionIndex:').
+	#('skew diff' nil #'gitVersionSkewDiffMenuAction:selectionIndex:').
+	#('skew save' nil #'gitVersionSkewSaveProjectMenuAction:selectionIndex:')}
 		, self standardMenuActionSpec
 ]
 
