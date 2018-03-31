@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwPrjReflectionTool',
+	#name : 'RwPrjQueryTool',
 	#superclass : 'RwProjectTool',
 	#category : 'Rowan-Tools'
 }
 
 { #category : 'smalltalk API' }
-RwPrjReflectionTool >> classesForProjectNamed: projectName [
+RwPrjQueryTool >> classesForProjectNamed: projectName [
 
 	| loadedProject classes |
 	classes := IdentitySet new.
@@ -18,7 +18,7 @@ RwPrjReflectionTool >> classesForProjectNamed: projectName [
 ]
 
 { #category : 'smalltalk API' }
-RwPrjReflectionTool >> classExtensionsForProjectNamed: projectName [
+RwPrjQueryTool >> classExtensionsForProjectNamed: projectName [
 
 	| loadedProject classExtensions |
 	classExtensions := IdentitySet new.

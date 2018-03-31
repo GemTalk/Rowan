@@ -1,7 +1,7 @@
-Extension { #name : 'RwPrjReflectionTool' }
+Extension { #name : 'RwPrjQueryTool' }
 
 { #category : '*rowan-tode' }
-RwPrjReflectionTool >> manPage [
+RwPrjQueryTool >> manPage [
 
 	^ TDManPage
 		commandName: 'reflect'

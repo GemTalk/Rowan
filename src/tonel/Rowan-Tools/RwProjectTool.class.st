@@ -81,14 +81,14 @@ RwProjectTool class >> push [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> read [
-  ^ RwPrjReadTool new
+RwProjectTool class >> query [
+
+	^ RwPrjQueryTool new
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> reflect [
-
-	^ RwPrjReflectionTool new
+RwProjectTool class >> read [
+  ^ RwPrjReadTool new
 ]
 
 { #category : 'commands' }
