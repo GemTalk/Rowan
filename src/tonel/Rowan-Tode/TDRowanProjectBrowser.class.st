@@ -208,8 +208,8 @@ TDRowanProjectBrowser >> menuActionSpec: miniTool [
 	#('-').
 	{('Browse'
 		->
-			{#('project spec' nil #'inspectProjectSpecMenuAction:selectionIndex:' nil #'project' false).
-			#('tests' nil #'testProjectMenuAction:selectionIndex:' nil #'loadedProject' false)})}.
+			{#('project spec' nil #'inspectProjectSpecMenuAction:selectionIndex:').
+			#('tests' nil #'testProjectMenuAction:selectionIndex:')})}.
 	#('-').
 	{('Git'
 		->
@@ -267,6 +267,26 @@ TDRowanProjectBrowser >> projectTool [
 TDRowanProjectBrowser >> projectTool: anObject [
 
 	projectTool := anObject
+]
+
+{ #category : 'menu actions' }
+TDRowanProjectBrowser >> testProjectMenuAction: listElement selectionIndex: selectionIndex [
+
+	| projectDef testClasses suite |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	projectDef := self projects at: selectionIndex.
+	suite := TestSuite named: projectDef projectName , ' tests'.
+	projectDef classDefinitions
+		do: [ :classDefinition | 
+			| cl |
+			cl := classDefinition theClass.
+			(cl inheritsFrom: TestCase)
+				ifTrue: [ 
+					cl isAbstract
+						ifFalse: [ suite addTests: cl suite tests ] ] ].
+	(listElement topez toolInstanceFor: 'test') browseTestSuite: suite.
+	^ true
 ]
 
 { #category : 'accessing' }
