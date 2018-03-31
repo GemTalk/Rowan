@@ -70,3 +70,11 @@ RwPrjSpecTool >> newProjectSpecNamed: aString useGit: useGit [
   spec repoSpec: RwDiskRepositorySpecification new.
   ^ spec
 ]
+
+{ #category : 'smalltalk api' }
+RwPrjSpecTool >> specForProjectNamed: projectName [
+
+	| loadedProject |
+	loadedProject := Rowan image loadedProjectNamed: projectName.
+	^ loadedProject specification
+]

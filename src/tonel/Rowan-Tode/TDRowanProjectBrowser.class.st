@@ -155,11 +155,11 @@ TDRowanProjectBrowser >> diffMenuAction: listElement selectionIndex: selectionIn
 { #category : 'menu actions' }
 TDRowanProjectBrowser >> inspectProjectSpecMenuAction: listElement selectionIndex: selectionIndex [
 
-	| loadedProject |
+	| projectDef |
 	selectionIndex = 0
 		ifTrue: [ ^ false ].
-	loadedProject := self projects at: selectionIndex.
-	loadedProject loadedProject specification inspect.
+	projectDef := self projects at: selectionIndex.
+	(Rowan projectTools spec specForProjectNamed: projectDef projectName) inspect.
 	^ true
 ]
 
@@ -272,19 +272,12 @@ TDRowanProjectBrowser >> projectTool: anObject [
 { #category : 'menu actions' }
 TDRowanProjectBrowser >> testProjectMenuAction: listElement selectionIndex: selectionIndex [
 
-	| projectDef testClasses suite |
+	| projectDef suite |
 	selectionIndex = 0
 		ifTrue: [ ^ false ].
 	projectDef := self projects at: selectionIndex.
-	suite := TestSuite named: projectDef projectName , ' tests'.
-	projectDef classDefinitions
-		do: [ :classDefinition | 
-			| cl |
-			cl := classDefinition theClass.
-			(cl inheritsFrom: TestCase)
-				ifTrue: [ 
-					cl isAbstract
-						ifFalse: [ suite addTests: cl suite tests ] ] ].
+	suite := Rowan projectTools test
+		testSuiteForProjectNamed: projectDef projectName.
 	(listElement topez toolInstanceFor: 'test') browseTestSuite: suite.
 	^ true
 ]

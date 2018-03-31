@@ -86,6 +86,12 @@ RwProjectTool class >> read [
 ]
 
 { #category : 'commands' }
+RwProjectTool class >> reflect [
+
+	^ RwPrjReflectionTool new
+]
+
+{ #category : 'commands' }
 RwProjectTool class >> register [
   ^ RwPrjRegisterTool new
 ]
