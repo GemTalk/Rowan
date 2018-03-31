@@ -49,6 +49,14 @@ RwProjectDefinition class >> withProperties: properties packageDefinitions: pack
 ]
 
 { #category : 'accessing' }
+RwProjectDefinition >> addOrUpdatePackage: aPackageDefinition [
+
+	| key |
+	key := aPackageDefinition key.
+	packages at: key put: aPackageDefinition
+]
+
+{ #category : 'accessing' }
 RwProjectDefinition >> addPackage: aPackageDefinition [
 
 	| key |

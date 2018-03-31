@@ -153,6 +153,17 @@ TDRowanProjectBrowser >> diffMenuAction: listElement selectionIndex: selectionIn
 ]
 
 { #category : 'menu actions' }
+TDRowanProjectBrowser >> inspectLoadedProjectMenuAction: listElement selectionIndex: selectionIndex [
+
+	| projectDef |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	projectDef := self projects at: selectionIndex.
+	projectDef loadedProject inspect.
+	^ true
+]
+
+{ #category : 'menu actions' }
 TDRowanProjectBrowser >> inspectProjectSpecMenuAction: listElement selectionIndex: selectionIndex [
 
 	| projectDef |
@@ -200,6 +211,18 @@ TDRowanProjectBrowser >> itemSelected: miniTool listElement: listElement selecte
 			disabled}
 ]
 
+{ #category : 'menu actions' }
+TDRowanProjectBrowser >> loadProjectMenuAction: listElement selectionIndex: selectionIndex [
+
+	| projectDef loads |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	projectDef := self projects at: selectionIndex.
+	Rowan projectTools load loadProjectNamed: projectDef projectName.
+	listElement topez commitTransaction.
+	^ #'refreshView'
+]
+
 { #category : 'menu action specs' }
 TDRowanProjectBrowser >> menuActionSpec: miniTool [
 
@@ -209,6 +232,7 @@ TDRowanProjectBrowser >> menuActionSpec: miniTool [
 	{('Browse'
 		->
 			{#('project spec' nil #'inspectProjectSpecMenuAction:selectionIndex:').
+			#('loaded project' nil #'inspectLoadedProjectMenuAction:selectionIndex:').
 			#('tests' nil #'testProjectMenuAction:selectionIndex:')})}.
 	#('-').
 	{('Git'

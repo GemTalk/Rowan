@@ -5,6 +5,32 @@ Class {
 }
 
 { #category : 'smalltalk api' }
+RwPrjReadTool >> readProjectSetForProjectNamed: projectName [
+
+	| projectDefinition repo |
+	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	repo := projectDefinition repositoryUrl asRwRepository.
+	projectDefinition packageNamesInLoadOrder
+		do: [ :packageName | 
+			| structureName reader packageDefinition |
+			structureName := packageName , repo packageExtension.
+			reader := repo reader.
+			reader
+				packageStructure: (RwCypressPackageStructure named: structureName);
+				packageDirectory:
+						(reader fileUtils
+								directoryFromPath: structureName
+								relativeTo: repo directoryPath);
+				readPackageStructure.
+			packageDefinition := reader packageStructure rwSnapshot.
+			projectDefinition addOrUpdatePackage: packageDefinition ].
+	self halt.
+	^ RwProjectSetDefinition new
+		addProject: projectDefinition;
+		yourself
+]
+
+{ #category : 'smalltalk api' }
 RwPrjReadTool >> readProjectSetForSpecification: aRwSpecification [
 
 	| repo repositoryUrl projectDefinition |
