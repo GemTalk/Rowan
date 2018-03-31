@@ -21,11 +21,12 @@ RowanPackageDefinitionService class >> forPackageNamed: packageName [
 
 { #category : 'rowan' }
 RowanPackageDefinitionService >> createPackage [
-	| projectService |
+	| projectService default |
+	default := RowanProjectDefinitionService defaultProjectName.
 	projectService := RowanProjectDefinitionService new.
-	projectService createProjectNamed: self sampleProjectName.  
+	projectService createProjectNamed: default.  
 	(Rowan packageNames includes: packageName) ifFalse:[
-		self browserTool addPackageNamed: packageName toProjectNamed: self sampleProjectName].
+		self browserTool addPackageNamed: packageName toProjectNamed: default].
 
 ]
 
