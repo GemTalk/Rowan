@@ -73,6 +73,30 @@ TDRowanProjectBrowser >> clientList: miniTool listElement: listElement [
 ]
 
 { #category : 'menu actions' }
+TDRowanProjectBrowser >> commitProjectMenuAction: listElement selectionIndex: selectionIndex [
+
+	| projectDef commitMessage |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	projectDef := self projects at: selectionIndex.
+	commitMessage := (GsMultiLineTextInteraction
+		prompt: 'Please enter a commit message for project: ' , projectDef projectName
+		template: '') signal.
+	commitMessage
+		ifNil: [ 
+			Transcript
+				cr;
+				show: 'Project save aborted...'.
+			^ false ].
+	Rowan projectTools write writeProjectNamed: projectDef projectName.
+	Rowan projectTools commit
+		commitProjectNamed: projectDef projectName
+		message: commitMessage.
+	listElement topez commitTransaction.
+	^ #'refreshView'
+]
+
+{ #category : 'menu actions' }
 TDRowanProjectBrowser >> deleteAllProjectsMenuAction: listElement selectionIndex: selectionIndex [
 
 	"as long as all of the projects in the project tests have been created by tests, the method is safe to use"
@@ -135,7 +159,7 @@ TDRowanProjectBrowser >> inspectProjectSpecMenuAction: listElement selectionInde
 	selectionIndex = 0
 		ifTrue: [ ^ false ].
 	loadedProject := self projects at: selectionIndex.
-	loadedProject specification inspect.
+	loadedProject loadedProject specification inspect.
 	^ true
 ]
 
