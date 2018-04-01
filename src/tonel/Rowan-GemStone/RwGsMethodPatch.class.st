@@ -58,17 +58,9 @@ RwGsMethodPatch >> compiledMethod [
 { #category : 'compiling' }
 RwGsMethodPatch >> compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols [
 
-	| className class sourceString symbolList protocol |
-	className := classDefinition key asSymbol.
-	class := createdClasses
-		at: className
-		ifAbsent: [ 
-			tempSymbols
-				at: className
-				ifAbsent: [ self error: 'Cannot find class to compile method in.' ] ].
-	behavior := isMeta
-		ifTrue: [ class class ]
-		ifFalse: [ class ].
+	| sourceString symbolList protocol |
+	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
+
 	sourceString := methodDefinition source.
 	symbolList := SymbolList with: tempSymbols.
 	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.
@@ -158,6 +150,26 @@ RwGsMethodPatch >> packageProtocolName [
 	"If I'm for an extension method, my protocol in the image may need to be *<packageName>*."
 
 	^ '*' , self packageName
+]
+
+{ #category : '*rowan-gemstone' }
+RwGsMethodPatch >> primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols [
+
+	| className class |
+	classDefinition key
+		ifNil: [ 
+			"class is being deleted ... we're done"
+			^ self ].
+	className := classDefinition key asSymbol.
+	class := createdClasses
+		at: className
+		ifAbsent: [ 
+			tempSymbols
+				at: className
+				ifAbsent: [ self error: 'Cannot find class to delete method from.' ] ].
+	behavior := isMeta
+		ifTrue: [ class class ]
+		ifFalse: [ class ]
 ]
 
 { #category : 'printing' }

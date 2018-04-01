@@ -17,17 +17,9 @@ RwGsMethodPropertiesSymDictPatch >> installPropertiesPatchNewClasses: createdCla
 
 	" update method protocol and update loadedMethod with new compiled method"
 
-	| className class methodDictionary oldCompiledMethod |
-	className := classDefinition key asSymbol.
-	class := createdClasses
-		at: className
-		ifAbsent: [ 
-			tempSymbols
-				at: className
-				ifAbsent: [ self error: 'Cannot find class to update protocol for.' ] ].
-	behavior := isMeta
-		ifTrue: [ class class ]
-		ifFalse: [ class ].
+	| methodDictionary oldCompiledMethod |
+	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
+
 	methodDictionary := behavior persistentMethodDictForEnv: 0.
 	selector := methodDefinition selector.
 	oldCompiledMethod := methodDictionary

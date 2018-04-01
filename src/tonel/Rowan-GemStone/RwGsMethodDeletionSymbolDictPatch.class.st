@@ -19,9 +19,7 @@ RwGsMethodDeletionSymbolDictPatch >> deleteLoadedMethodNewClasses: createdClasse
 			"class is being deleted ... we're done"
 			^ self ].
 
-	self
-		primeCompiledMethodNewClasses: createdClasses
-		andExistingClasses: tempSymbols.
+	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
 
 	self packageSymbolDictionary
 		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
@@ -35,9 +33,7 @@ RwGsMethodDeletionSymbolDictPatch >> deleteMethodNewClasses: createdClasses andE
 		ifNil: [ 
 			"class is being deleted ... we're done"
 			^ self ].
-	self
-		primeCompiledMethodNewClasses: createdClasses
-		andExistingClasses: tempSymbols.
+	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
 
 	self packageSymbolDictionary
 		deleteMethod: methodDefinition selector
@@ -52,26 +48,6 @@ RwGsMethodDeletionSymbolDictPatch >> deleteNewVersionMethodNewClasses: createdCl
 	self packageSymbolDictionary
 		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior
-]
-
-{ #category : 'deleting' }
-RwGsMethodDeletionSymbolDictPatch >> primeCompiledMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
-
-	| className class |
-	classDefinition key
-		ifNil: [ 
-			"class is being deleted ... we're done"
-			^ self ].
-	className := classDefinition key asSymbol.
-	class := createdClasses
-		at: className
-		ifAbsent: [ 
-			tempSymbols
-				at: className
-				ifAbsent: [ self error: 'Cannot find class to delete method from.' ] ].
-	behavior := isMeta
-		ifTrue: [ class class ]
-		ifFalse: [ class ]
 ]
 
 { #category : 'initializers' }

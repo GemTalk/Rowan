@@ -815,10 +815,7 @@ RwGsPatchSetBasic >> packageSymbolDictionaryClass [
 RwGsPatchSetBasic >> recordCompiledForNewClassVersionDeletions [
 
 	deleteNewVersionMethods
-		do: [ :each | 
-			each
-				primeCompiledMethodNewClasses: createdClasses
-				andExistingClasses: tempSymbols ]
+		do: [ :each | each primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols ]
 ]
 
 { #category : 'private - applying' }

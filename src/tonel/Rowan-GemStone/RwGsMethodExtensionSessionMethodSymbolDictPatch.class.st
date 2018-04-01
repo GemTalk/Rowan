@@ -13,17 +13,9 @@ Class {
 { #category : 'compiling' }
 RwGsMethodExtensionSessionMethodSymbolDictPatch >> compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols [
 
-	| className class sourceString symbolList protocol pragmaDict |
-	className := classDefinition key asSymbol.
-	class := createdClasses
-		at: className
-		ifAbsent: [ 
-			tempSymbols
-				at: className
-				ifAbsent: [ self error: 'Cannot find class to compile method in.' ] ].
-	behavior := isMeta
-		ifTrue: [ class class ]
-		ifFalse: [ class ].
+	| sourceString symbolList protocol |
+	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
+
 	sourceString := methodDefinition source.
 	symbolList := SymbolList with: tempSymbols.
 	protocol := (methodDefinition propertyAt: 'protocol') asSymbol.

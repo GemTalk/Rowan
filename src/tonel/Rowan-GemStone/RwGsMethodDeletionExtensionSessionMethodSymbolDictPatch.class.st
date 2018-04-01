@@ -31,16 +31,8 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteMethodNewClasse
 		ifNil: [ 
 			"class is being deleted ... we're cool"
 			^ self ].
-	className := classDefinition key asSymbol.
-	class := createdClasses
-		at: className
-		ifAbsent: [ 
-			tempSymbols
-				at: className
-				ifAbsent: [ self error: 'Cannot find class to delete method from.' ] ].
-	behavior := isMeta
-		ifTrue: [ class class ]
-		ifFalse: [ class ].
+
+	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
 
 	self packageSymbolDictionary
 		deleteMethod: methodDefinition selector
