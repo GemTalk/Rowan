@@ -18,6 +18,7 @@ Class {
 		'classesWithNewVersions',
 		'addedMethods',
 		'deletedMethods',
+		'deleteNewVersionMethods',
 		'extendedMethods',
 		'methodsWithPropertyChanges',
 		'methodsNeedingRecompile',
@@ -550,6 +551,7 @@ RwGsPatchSetBasic >> apply [
 		moveClassesBetweenPackages;
 		removeDeletedClassesFromTempSymbols;
 		addAddedClassesToTempSymbols;
+		recordCompiledForNewClassVersionDeletions;
 		createNewClassesAndClassVersions;
 		compileMethods.
 	self reportAnyErrors
@@ -584,6 +586,7 @@ RwGsPatchSetBasic >> applyForNewClassVersions [
 	"ignore deleted methods when applying patches to new class version.
 		all methods effectively deleted from class when the new class version is created, "
 
+	deleteNewVersionMethods := deletedMethods.
 	deletedMethods := Set new.
 	self apply
 ]
@@ -694,6 +697,7 @@ RwGsPatchSetBasic >> initialize [
 	classesWithClassVariableChanges := Set new.
 	classesWithPropertyChanges := Set new.
 	deletedMethods := Set new.
+	deleteNewVersionMethods := Set new.
 	addedMethods := Set new.
 	extendedMethods := Set new.
 	methodsNeedingRecompile := Set new.
@@ -808,6 +812,16 @@ RwGsPatchSetBasic >> packageSymbolDictionaryClass [
 ]
 
 { #category : 'private - applying' }
+RwGsPatchSetBasic >> recordCompiledForNewClassVersionDeletions [
+
+	deleteNewVersionMethods
+		do: [ :each | 
+			each
+				primeCompiledMethodNewClasses: createdClasses
+				andExistingClasses: tempSymbols ]
+]
+
+{ #category : 'private - applying' }
 RwGsPatchSetBasic >> removeDeletedClassesFromSystem [
 	"Remove the name binding from the SymbolDictionaries in the live SymbolList
         Remove the LoadedClass from its LoadedPackage"
@@ -826,7 +840,12 @@ RwGsPatchSetBasic >> removeDeletedClassesFromTempSymbols [
 RwGsPatchSetBasic >> removeDeletedMethods [
 
 	deletedMethods
-		do: [ :each | each deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]
+		do: [ :each | each deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ].
+	deleteNewVersionMethods
+		do: [ :each | 
+			each
+				deleteNewVersionMethodNewClasses: createdClasses
+				andExistingClasses: tempSymbols ]
 ]
 
 { #category : 'private - applying' }

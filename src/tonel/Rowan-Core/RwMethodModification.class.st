@@ -216,7 +216,7 @@ RwMethodModification >> isMeta: newValue [
 { #category : 'merging' }
 RwMethodModification >> mergeForNewClassVersionWith: aMethodModification [
 
-	"merge aMethodModification modifictions into the receiver"
+	"validate that this is a proper modification"
 
 	self sourceModification isEmpty
 		ifTrue: [ 
