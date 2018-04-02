@@ -239,17 +239,16 @@ TDRowanProjectBrowser >> menuActionSpec: miniTool [
 		->
 			{#('branches' nil #'gitBranchesMenuAction:selectionIndex:').
 			#('checkout' nil #'gitCheckoutMenuAction:selectionIndex:').
+			#('merge' nil #'gitMergeProjectMenuAction:selectionIndex:').
 			#('pull' nil #'gitPullProjectMenuAction:selectionIndex:').
+			#('push' nil #'gitPushProjectMenuAction:selectionIndex:').
 			#('status' nil #'gitStatusMenuAction:selectionIndex:')})}.
 	#('-').
 	#('changes' nil #'diffMenuAction:selectionIndex:').
 	#('load' nil #'loadProjectMenuAction:selectionIndex:').
 	#('log' nil #'commitLogMenuAction:selectionIndex:').
-	#('push' nil #'gitPushProjectMenuAction:selectionIndex:').
-	#('revert' nil #'revertProjectMenuAction:selectionIndex:').
-	#('save' nil #'commitProjectMenuAction:selectionIndex:').
-	#('skew diff' nil #'gitVersionSkewDiffMenuAction:selectionIndex:').
-	#('skew save' nil #'gitVersionSkewSaveProjectMenuAction:selectionIndex:')}
+
+	#('save' nil #'commitProjectMenuAction:selectionIndex:')}
 		, self standardMenuActionSpec
 ]
 
