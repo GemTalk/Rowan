@@ -67,12 +67,15 @@ RwAbstractClassDefinition >> classMethodDefinitions: dictionaryOfDefinitions [
 { #category : 'comparing' }
 RwAbstractClassDefinition >> compareAgainstBase: aDefinition [
 
-	| modification instanceMethodsModification classMethodsModification |
+	| modification instanceMethodsModification classMethodsModification className |
 	modification := self _modificationClass before: aDefinition after: self.
 	modification
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
-	instanceMethodsModification := self _methodsModificationClass new.
-	classMethodsModification := self _methodsModificationClass new.
+	className := self key ifNil: [ aDefinition key ].
+	instanceMethodsModification := self _methodsModificationClass
+		extendedClassName: className.
+	classMethodsModification := self _methodsModificationClass
+		extendedClassName: className.
 	self
 		compareDictionary: instanceMethodDefinitions
 		againstBaseDictionary: aDefinition instanceMethodDefinitions
@@ -98,8 +101,10 @@ RwAbstractClassDefinition >> compareAgainstBaseForNewClassVersion: aDefinition [
 
 	| modification instanceMethodsModification classMethodsModification |
 	modification := self _modificationClass before: aDefinition after: self.
-	instanceMethodsModification := self _methodsModificationClass new.
-	classMethodsModification := self _methodsModificationClass new.
+	instanceMethodsModification := self _methodsModificationClass
+		extendedClassName: self key.
+	classMethodsModification := self _methodsModificationClass
+		extendedClassName: self key.
 	self
 		compareDictionary: instanceMethodDefinitions
 		againstBaseDictionaryForNewClassVersion: aDefinition instanceMethodDefinitions

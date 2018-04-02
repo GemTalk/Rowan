@@ -55,8 +55,10 @@ RwGsClassVersioningSymbolDictPatch >> _createMethodExtensionModificationForNewVe
 			(RwClassExtensionModification
 				before: RwClassExtensionDefinition new
 				after: def)
-				instanceMethodsModification: RwExtensionMethodsModification new;
-				classMethodsModification: RwExtensionMethodsModification new;
+				instanceMethodsModification:
+						(RwExtensionMethodsModification extendedClassName: className);
+				classMethodsModification:
+						(RwExtensionMethodsModification extendedClassName: className);
 				yourself ].
 	methodsModification := isMeta
 		ifTrue: [ classExtensionModification classMethodsModification elementsModified ]

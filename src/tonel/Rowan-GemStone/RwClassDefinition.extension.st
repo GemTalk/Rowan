@@ -15,8 +15,10 @@ RwClassDefinition >> compareAgainstBaseForcingNewClassVersion: aDefinition [
 	modification := self _modificationForcingNewClassVersion
 		before: aDefinition
 		after: self.
-	instanceMethodsModification := self _methodsModificationClass new.
-	classMethodsModification := self _methodsModificationClass new.
+	instanceMethodsModification := self _methodsModificationClass
+		extendedClassName: self key.
+	classMethodsModification := self _methodsModificationClass
+		extendedClassName: self key.
 	self
 		compareDictionary: instanceMethodDefinitions
 		againstBaseDictionaryForNewClassVersion: aDefinition instanceMethodDefinitions

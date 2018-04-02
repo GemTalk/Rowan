@@ -7,6 +7,12 @@ Class {
 	#category : 'Rowan-Core'
 }
 
+{ #category : 'instance creation' }
+RwMethodsModification class >> extendedClassName: ignored [
+
+	^ self new
+]
+
 { #category : 'visiting' }
 RwMethodsModification >> acceptVisitor: aVisitor [
 

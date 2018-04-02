@@ -306,7 +306,7 @@ RwGsPatchSetBasic >> addDeletedClassMethod: aClassMethodDefinition inClass: aCla
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addDeletedExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSetBasic >> addDeletedExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition named: className inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	deletedMethods
@@ -316,12 +316,13 @@ RwGsPatchSetBasic >> addDeletedExtendedClassMethod: aClassMethodDefinition inCla
 				isMeta: true
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
+				extendedClassName: className;
 				projectDefinition: aProjectDefinition;
 				yourself)
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addDeletedExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSetBasic >> addDeletedExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition named: className inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	deletedMethods
@@ -331,6 +332,7 @@ RwGsPatchSetBasic >> addDeletedExtendedInstanceMethod: anInstanceMethodDefinitio
 				isMeta: false
 				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
+				extendedClassName: className;
 				projectDefinition: aProjectDefinition;
 				yourself)
 ]
@@ -586,8 +588,16 @@ RwGsPatchSetBasic >> applyForNewClassVersions [
 	"ignore deleted methods when applying patches to new class version.
 		all methods effectively deleted from class when the new class version is created, "
 
-	deleteNewVersionMethods := deletedMethods.
-	deletedMethods := Set new.
+	| classNames |
+	classNames := Set new.
+	classesWithNewVersions
+		do: [ :patch | classNames add: patch classDefinition key ].
+	deletedMethods copy
+		do: [ :patch | 
+			(classNames includes: patch className)
+				ifTrue: [ 
+					deleteNewVersionMethods add: patch.
+					deletedMethods remove: patch ] ].
 	self apply
 ]
 

@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch',
-	#superclass : 'RwGsMethodDeletionSymbolDictPatch',
+	#superclass : 'RwGsMethodDeletionExtensionSymbolDictPatch',
 	#category : 'Rowan-GemStone'
 }
 

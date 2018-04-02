@@ -43,6 +43,12 @@ RwGsMethodPatch >> classDefinition: newValue [
 ]
 
 { #category : 'accessing' }
+RwGsMethodPatch >> className [
+
+	^ self classDefinition key
+]
+
+{ #category : 'accessing' }
 RwGsMethodPatch >> compiledMethod [
 
 	^ compiledMethod
@@ -178,8 +184,9 @@ RwGsMethodPatch >> printOn: aStream [
 	super printOn: aStream.
 	aStream
 		nextPutAll: ' for ';
-		nextPutAll: classDefinition key asString.
-	isMeta ifTrue: [aStream nextPutAll: ' class'].
+		nextPutAll: self className asString.
+	isMeta
+		ifTrue: [ aStream nextPutAll: ' class' ].
 	aStream
 		nextPutAll: '>>';
 		nextPutAll: methodDefinition key asString

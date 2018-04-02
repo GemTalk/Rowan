@@ -1,6 +1,9 @@
 Class {
 	#name : 'RwExtensionMethodModification',
 	#superclass : 'RwMethodModification',
+	#instVars : [
+		'extendedClassName'
+	],
 	#category : 'Rowan-Core'
 }
 
@@ -36,12 +39,14 @@ RwExtensionMethodModification >> addModificationToPatchSet: aPatchSet inPackage:
 					aPatchSet
 						addDeletedExtendedClassMethod: self before
 						inClass: self classDefinition
+						named: self extendedClassName
 						inPackage: aPackage
 						inProject: aProjectDefinition ]
 				ifFalse: [ 
 					aPatchSet
 						addDeletedExtendedInstanceMethod: self before
 						inClass: self classDefinition
+						named: self extendedClassName
 						inPackage: aPackage
 						inProject: aProjectDefinition ].
 			^ self ].
@@ -77,4 +82,18 @@ RwExtensionMethodModification >> addModificationToPatchSet: aPatchSet inPackage:
 								inClass: self classDefinition
 								inPackage: aPackage
 								inProject: aProjectDefinition ] ] ]
+]
+
+{ #category : 'accessing' }
+RwExtensionMethodModification >> extendedClassName [
+
+   ^extendedClassName
+
+]
+
+{ #category : 'accessing' }
+RwExtensionMethodModification >> extendedClassName: anObject [
+
+   extendedClassName := anObject
+
 ]

@@ -29,7 +29,7 @@ RwGsMethodDeletionSymbolDictPatch >> deleteLoadedMethodNewClasses: createdClasse
 { #category : 'deleting' }
 RwGsMethodDeletionSymbolDictPatch >> deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
 
-	classDefinition key
+	self className
 		ifNil: [ 
 			"class is being deleted ... we're done"
 			^ self ].
