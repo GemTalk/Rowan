@@ -101,41 +101,40 @@ RwAbstractTool >> definitionsForMethod: selector inClassNamed: className isMeta:
 
 { #category : 'git' }
 RwAbstractTool >> doGitCommit: messageString [
-  | gitTool gitRootDir commitMessageFileName status loadedCommitId |
-  gitTool := self class git.
-  gitRootDir := ServerFileDirectory
-    on: specification repoSpec repositoryRootPath.
-  commitMessageFileName := gitTool createTmpFileWith: messageString.
-  gitTool gitaddIn: gitRootDir with: '.'.
-  gitTool gitcommitIn: gitRootDir with: '-a --file=' , commitMessageFileName.
-  status := gitTool gitlogIn: gitRootDir with: '-1'.
-  Transcript
-    cr;
-    show: '==============';
-    cr;
-    show: status.
-  ^ status
+
+	| gitTool gitRootPath commitMessageFileName status loadedCommitId |
+	gitTool := self class git.
+	gitRootPath := specification repoSpec repositoryRootPath.
+	commitMessageFileName := gitTool createTmpFileWith: messageString.
+	gitTool gitaddIn: gitRootPath with: '.'.
+	gitTool gitcommitIn: gitRootPath with: '-a --file=' , commitMessageFileName.
+	status := gitTool gitlogIn: gitRootPath with: '-1'.
+	Transcript
+		cr;
+		show: '==============';
+		cr;
+		show: status.
+	^ status
 ]
 
 { #category : 'git' }
 RwAbstractTool >> doGitUpdateLoadedCommitId [
 
-	| gitRootDir repoRootPath |
+	| repoRootPath |
 	repoRootPath := specification repoSpec repositoryRootPath.
 	repoRootPath
 		ifNil: [ 
 			"in memory repo without a rootPath is legal"
 			^ nil ].
-	gitRootDir := ServerFileDirectory on: repoRootPath.
-	^ self doGitUpdateLoadedCommitId: gitRootDir
+	^ self doGitUpdateLoadedCommitId: repoRootPath
 ]
 
 { #category : 'git' }
-RwAbstractTool >> doGitUpdateLoadedCommitId: gitRootDir [
+RwAbstractTool >> doGitUpdateLoadedCommitId: gitRootPath [
 
 	| gitTool loadedCommitId |
 	gitTool := self class git.
-	loadedCommitId := [ gitTool gitcommitShaIn: gitRootDir ]
+	loadedCommitId := [ gitTool gitcommitShaIn: gitRootPath ]
 		on: Error
 		do: [ :ignored | 
 			"most likely no commits yet"

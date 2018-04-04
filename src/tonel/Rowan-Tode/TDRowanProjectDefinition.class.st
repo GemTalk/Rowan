@@ -82,3 +82,9 @@ TDRowanProjectDefinition >> projectName: anObject [
    projectName := anObject
 
 ]
+
+{ #category : 'accessing' }
+TDRowanProjectDefinition >> repositoryRootPath [
+
+	^ self loadedProject asDefinition repositoryRootPath
+]

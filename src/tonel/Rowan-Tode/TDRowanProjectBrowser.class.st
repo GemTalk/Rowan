@@ -94,7 +94,7 @@ TDRowanProjectBrowser >> commitLogMenuAction: listElement selectionIndex: select
 	logString
 		editUsing:
 			((TDEditorSpec topez: topez editorAspect: #'edit')
-				windowName: #'mcDiff';
+				windowName: #'gitStatus';
 				yourself).
 	^ true
 ]
@@ -177,6 +177,24 @@ TDRowanProjectBrowser >> diffMenuAction: listElement selectionIndex: selectionIn
 				windowName: #'mcDiff';
 				yourself).
 	^ #'refreshView'
+]
+
+{ #category : 'menu actions (git)' }
+TDRowanProjectBrowser >> gitBranchesMenuAction: listElement selectionIndex: selectionIndex [
+
+	| projectDef gitRepoPath gitTool response |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	projectDef := self projects at: selectionIndex.
+	gitRepoPath := projectDef repositoryRootPath.
+	gitTool := Rowan projectTools git.
+	response := gitTool gitbranchIn: gitRepoPath with: '-a -v'.
+	response
+		editUsing:
+			((TDEditorSpec topez: topez editorAspect: #'edit')
+				windowName: #'gitStatus';
+				yourself).
+	^ true
 ]
 
 { #category : 'menu actions' }
