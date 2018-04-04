@@ -11,50 +11,6 @@ RwPrjLoadTool >> doUpdateLoadedPackageNames: aPackageNames [
 ]
 
 { #category : 'smalltalk api' }
-RwPrjLoadTool >> loadPackageDefinition: packageDefinition specification: aRwSpecification [
-
-	^ self
-		loadPackageDefinitions: {packageDefinition}
-		specification: aRwSpecification
-]
-
-{ #category : 'smalltalk api' }
-RwPrjLoadTool >> loadPackageDefinitions: packageDefinitions specification: aRwSpecification [
-
-	| packageSetToLoad |
-	self specification: aRwSpecification.
-	packageSetToLoad := RwPackageSetDefinition new.
-	packageDefinitions do: [ :def | packageSetToLoad addPackage: def ].
-	^ self
-		loadPackageSetDefinition: packageSetToLoad
-		specification: aRwSpecification
-]
-
-{ #category : 'smalltalk api' }
-RwPrjLoadTool >> loadPackageSetDefinition: packageSetToLoad specification: aRwSpecification [
-
-	| loadedPackageSet diff |
-	self specification: aRwSpecification.
-	loadedPackageSet := Rowan
-		loadedPackageDefinitionsNamed: packageSetToLoad packageNames.
-	diff := packageSetToLoad compareAgainstBase: loadedPackageSet.
-	diff isEmpty
-		ifTrue: [ 
-			| msg |
-			msg := 'The project ' , specification specName , ' is already up to date'.
-			self inform: msg.
-			^ msg ].
-	Rowan image applyModification: diff for: aRwSpecification.
-	specification
-		updateLoadedCommitIdForTool: self;
-		updateLoadedPackageNamesTool: self
-			packageNames:
-				(Rowan loadedPackageDefinitionsNamed: packageSetToLoad packageNames)
-						packageNames.
-	^ diff
-]
-
-{ #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 
 	| projectSetDefinition |

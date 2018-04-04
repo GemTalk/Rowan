@@ -10,7 +10,8 @@ Class {
 
 { #category : 'accessing' }
 RwImageSpecification >> loadedCommitId [
-  ^ loadedCommitId
+
+	^ loadedCommitId ifNil: [ '' ]
 ]
 
 { #category : 'accessing' }
