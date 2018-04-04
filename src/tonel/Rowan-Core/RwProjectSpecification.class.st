@@ -125,6 +125,12 @@ RwProjectSpecification >> initializeForImport [
 ]
 
 { #category : 'accessing' }
+RwProjectSpecification >> loadedCommitId [
+
+	^ self imageSpec loadedCommitId
+]
+
+{ #category : 'accessing' }
 RwProjectSpecification >> loadedPackageNames [
 
 	^ self imageSpec loadedPackageNames

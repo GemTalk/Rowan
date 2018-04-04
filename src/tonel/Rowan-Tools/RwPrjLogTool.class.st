@@ -5,6 +5,15 @@ Class {
 }
 
 { #category : 'smalltalk api' }
+RwPrjLogTool >> commitLogProjectNamed: projectName limit: logLimit [
+
+	| loadedProject |
+	loadedProject := Rowan image loadedProjectNamed: projectName.
+	self specification: loadedProject specification.
+	^ specification commitLogForTool: self limit: logLimit
+]
+
+{ #category : 'smalltalk api' }
 RwPrjLogTool >> commitLogSpecification: aRwSpecification limit: logLimit [
   self specification: aRwSpecification.
   ^ specification commitLogForTool: self limit: logLimit
