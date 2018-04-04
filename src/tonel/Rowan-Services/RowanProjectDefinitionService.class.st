@@ -40,6 +40,13 @@ RowanProjectDefinitionService >> branch: anObject [
 
 ]
 
+{ #category : 'rowan' }
+RowanProjectDefinitionService >> changes [
+	
+	^(Rowan projectTools diff diffSpecUrl: name) asString.
+
+]
+
 { #category : 'examples' }
 RowanProjectDefinitionService >> createProjectNamed: projectName [ 
 

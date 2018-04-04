@@ -117,21 +117,19 @@ RowanDefinitionService >> rowanFixMe [
 { #category : 'rowan' }
 RowanDefinitionService >> rowanLoadedPackageNames [
 
-	| stream loadedProjects |
+	| stream packages |
 	self rowanFixMe.	"handle modified package display"
 	stream := WriteStream on: String new.
-	loadedProjects := Rowan image loadedProjects.
-	loadedProjects do: 
-			[:project |
-			project loadedPackages do: 
+	packages := Rowan packageNames.
+	packages do: 
 					[:package |
 					stream
-						nextPutAll: package name;
+						nextPutAll: package;
 						tab;
 						nextPut: $N;
 						tab;
-						nextPutAll: package name;
-						lf]].
+						nextPutAll: package;
+						lf].
 	^stream contents
 
 ]
