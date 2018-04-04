@@ -384,7 +384,7 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
 			loadedPackage name = packageName1
 				ifTrue: [ 
-					self assert: false description: 'no instance methods expected in '.
+					self assert: false description: 'no instance methods expected in ',
 					packageName1 ].
 			loadedPackage name = packageName2
 				ifTrue: [ self assert: (#(#'bar') includes: loadedMethod selector) ] ] ].
@@ -504,7 +504,7 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
 			loadedPackage name = packageName1
 				ifTrue: [ 
-					self assert: false description: 'no instance methods expected in '.
+					self assert: false description: 'no instance methods expected in ',
 					packageName1 ].
 			loadedPackage name = packageName2
 				ifTrue: [ self assert: (#(#'baz') includes: loadedMethod selector) ] ].
@@ -1134,7 +1134,7 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
 			loadedPackage name = packageName1
 				ifTrue: [ 
-					self assert: false description: 'no instance methods expected in '.
+					self assert: false description: 'no instance methods expected in ',
 					packageName1 ].
 			loadedPackage name = packageName2
 				ifTrue: [ self assert: (#(#'bar') includes: loadedMethod selector) ] ] ].
@@ -1223,7 +1223,7 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
 			loadedPackage name = packageName1
 				ifTrue: [ 
-					self assert: false description: 'no instance methods expected in '.
+					self assert: false description: 'no instance methods expected in ',
 					packageName1 ].
 			loadedPackage name = packageName2
 				ifTrue: [ self assert: (#(#'baz') includes: loadedMethod selector) ] ].
