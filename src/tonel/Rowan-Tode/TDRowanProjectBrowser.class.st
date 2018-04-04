@@ -197,6 +197,49 @@ TDRowanProjectBrowser >> gitBranchesMenuAction: listElement selectionIndex: sele
 	^ true
 ]
 
+{ #category : 'menu actions (git)' }
+TDRowanProjectBrowser >> gitCheckoutMenuAction: listElement selectionIndex: selectionIndex [
+
+	| projectDef gitRepoPath gitTool response checkoutArgs |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	projectDef := self projects at: selectionIndex.
+	gitRepoPath := projectDef repositoryRootPath.
+	checkoutArgs := (GsTextInteraction
+		prompt: 'Enter checkout commit or branch'
+		template: 'branch | -b newBranch commitish | -b newBranch | args') signal.
+	checkoutArgs ifNil: [ ^ false ].
+	gitTool := Rowan projectTools git.
+	response := gitTool gitcheckoutIn: gitRepoPath with: checkoutArgs.
+	response
+		editUsing:
+			((TDEditorSpec topez: topez editorAspect: #'edit')
+				windowName: #'gitStatus';
+				yourself).
+	^ #'refreshView'
+]
+
+{ #category : 'menu actions (git)' }
+TDRowanProjectBrowser >> gitPullProjectMenuAction: listElement selectionIndex: selectionIndex [
+
+	| rowanProject response gitRootPath gitTool |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	rowanProject := (self projects at: selectionIndex) rowanProject.
+	gitRootPath := rowanProject repositoryRootPath.
+	gitTool := Rowan projectTools git.
+	response := gitTool
+		gitpullIn: gitRootPath
+		remote: rowanProject remote
+		branch: rowanProject currentBranchName.
+	response
+		editUsing:
+			((TDEditorSpec topez: topez editorAspect: #'edit')
+				windowName: #'gitStatus';
+				yourself).
+	^ #'refreshView'
+]
+
 { #category : 'menu actions' }
 TDRowanProjectBrowser >> inspectLoadedProjectMenuAction: listElement selectionIndex: selectionIndex [
 
@@ -274,6 +317,11 @@ TDRowanProjectBrowser >> menuActionSpec: miniTool [
 	theMiniTool := miniTool.
 	^ {#('DELETE ALL' nil #'deleteAllProjectsMenuAction:selectionIndex:').
 	#('-').
+	{('New'
+		->
+			{#('Github project' nil #'newGitHubProjectSpecMenuAction:selectionIndex:').
+			#('disk-based project' nil #'newDiskProjectSpecMenuAction:selectionIndex:')})}.
+	#('-').
 	{('Browse'
 		->
 			{#('project spec' nil #'inspectProjectSpecMenuAction:selectionIndex:').
@@ -284,7 +332,6 @@ TDRowanProjectBrowser >> menuActionSpec: miniTool [
 		->
 			{#('branches' nil #'gitBranchesMenuAction:selectionIndex:').
 			#('checkout' nil #'gitCheckoutMenuAction:selectionIndex:').
-			#('merge' nil #'gitMergeProjectMenuAction:selectionIndex:').
 			#('pull' nil #'gitPullProjectMenuAction:selectionIndex:').
 			#('push' nil #'gitPushProjectMenuAction:selectionIndex:').
 			#('status' nil #'gitStatusMenuAction:selectionIndex:')})}.
@@ -295,6 +342,29 @@ TDRowanProjectBrowser >> menuActionSpec: miniTool [
 
 	#('save' nil #'commitProjectMenuAction:selectionIndex:')} , {#('-')}
 		, self standardMenuActionSpec
+]
+
+{ #category : 'menu actions' }
+TDRowanProjectBrowser >> newGitHubProjectSpecMenuAction: listElement selectionIndex: selectionIndex [
+
+	| specUrlString spec projectTools |
+	specUrlString := (GsTextInteraction
+		prompt: 'Please enter an url for the project spec'
+		template:
+			'https://raw.githubusercontent.com/dalehenrich/sample/master/specs/Sample.ston')
+		signal.
+	specUrlString
+		ifNil: [ 
+			Transcript
+				cr;
+				show: 'New github project aborted...'.
+			^ false ].
+	projectTools := Rowan projectTools.
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: '$GS_HOME/shared/repos/'
+		useSsh: true.
+	^ #'refreshView'
 ]
 
 { #category : 'accessing' }

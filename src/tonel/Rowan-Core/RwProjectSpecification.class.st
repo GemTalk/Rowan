@@ -117,11 +117,12 @@ RwProjectSpecification >> initialize [
 
 { #category : 'initialization' }
 RwProjectSpecification >> initializeForImport [
-  "if spec has been imorted, clear out any of the fields that represent local disk state"
 
-  super initializeForImport.
-  projectUrl := imageSpec := nil.
-  repoSpec initializeForImport
+	"if spec has been imorted, clear out any of the fields that represent local disk state"
+
+	super initializeForImport.
+	imageSpec := nil.
+	repoSpec initializeForImport
 ]
 
 { #category : 'accessing' }
@@ -205,6 +206,12 @@ RwProjectSpecification >> pullForTool: aRwTool remote: remoteString [
 { #category : 'actions' }
 RwProjectSpecification >> pushForTool: aRwTool remote: remoteString [
   ^ self repoSpec pushForTool: aRwTool remote: remoteString
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> remote [
+
+	^ self repoSpec remote
 ]
 
 { #category : 'accessing' }

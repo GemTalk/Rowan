@@ -23,6 +23,12 @@ RwProject >> comment [
 ]
 
 { #category : 'accessing' }
+RwProject >> currentBranchName [
+
+	^ Rowan projectTools git gitBranchNameIn: self repositoryRootPath
+]
+
+{ #category : 'accessing' }
 RwProject >> definedClasses [
 
 	^ self _projectTools query classForProjectNamed: self name
@@ -56,6 +62,12 @@ RwProject >> packages [
 RwProject >> project [
 
 	^ self
+]
+
+{ #category : 'properties' }
+RwProject >> remote [
+
+	^ self _specification remote
 ]
 
 { #category : 'properties' }

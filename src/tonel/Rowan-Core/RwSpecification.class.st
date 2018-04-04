@@ -15,12 +15,12 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 
 	| url |
 	url := specNameOrUrl asRwUrl.
-	url schemeName isNil
+	url scheme isNil
 		ifTrue: [ 
 			^ Rowan
 				projectNamed: specNameOrUrl
 				ifAbsent: [ self error: 'No project named ' , specNameOrUrl printString , ' found' ] ].
-	url schemeName = 'file'
+	url scheme = 'file'
 		ifTrue: [ 
 			CypressFileUtilities current
 				readStreamFor: url fileName
@@ -30,7 +30,7 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 						initializeForImport;
 						projectUrl: specNameOrUrl;
 						yourself ] ].
-	url schemeName = 'https'
+	url scheme asString = 'https'
 		ifTrue: [ 
 			| contents client response |
 			GsSecureSocket disableCertificateVerificationOnClient.
@@ -41,7 +41,6 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 				get: url.
 			^ (STON fromString: response decodeFromUTF8)
 				initializeForImport;
-				projectUrl: specNameOrUrl;
 				yourself ].
 	self error: 'Unknown scheme: ' , url scheme printString
 ]
@@ -97,7 +96,10 @@ RwSpecification >> projectUrl: ignored [
 
 { #category : 'registering' }
 RwSpecification >> register [
-  Rowan addProject: self
+
+	| newLoadedProject |
+	newLoadedProject := RwGsLoadedProject newForLoadSpecification: self.
+	RwGsImage addLoadedProject: newLoadedProject
 ]
 
 { #category : 'registering' }

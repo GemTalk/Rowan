@@ -119,6 +119,18 @@ RwPrjGitTool >> gitPresentIn: gitRepoPath [
 ]
 
 { #category : 'smalltalk api' }
+RwPrjGitTool >> gitpullIn: gitRepoPath [
+
+	^ self gitpullIn: gitRepoPath with: ''
+]
+
+{ #category : 'smalltalk api' }
+RwPrjGitTool >> gitpullIn: gitRepoPath remote: remoteName branch: branchName [
+
+	^ self gitpullIn: gitRepoPath with: remoteName , ' ' , branchName
+]
+
+{ #category : 'smalltalk api' }
 RwPrjGitTool >> gitpullIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'pull' in: gitRepoPath with: args

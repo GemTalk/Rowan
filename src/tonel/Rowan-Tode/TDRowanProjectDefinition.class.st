@@ -48,7 +48,7 @@ TDRowanProjectDefinition >> label [
 { #category : 'accessing' }
 TDRowanProjectDefinition >> loadedCommitId [
 
-	^ self loadedProject asDefinition loadedCommitId
+	^ self rowanProject loadedCommitId
 ]
 
 { #category : 'accessing' }
@@ -86,5 +86,11 @@ TDRowanProjectDefinition >> projectName: anObject [
 { #category : 'accessing' }
 TDRowanProjectDefinition >> repositoryRootPath [
 
-	^ self loadedProject asDefinition repositoryRootPath
+	^ self rowanProject repositoryRootPath
+]
+
+{ #category : 'accessing' }
+TDRowanProjectDefinition >> rowanProject [
+
+	^ RwProject newNamed: self projectName
 ]

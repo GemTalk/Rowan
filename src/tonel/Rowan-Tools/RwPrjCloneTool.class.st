@@ -62,6 +62,7 @@ RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath 
 
 	| gitTool response projectUrl gitRepoPath cloneUrl cloneOption checkout |
 	self specification: aRwSpecification.
+	self halt.
 	projectUrl := RwUrl fromString: specification projectUrl.
 	gitRepoPath := gitRootPath , '/' , projectUrl path last.
 	self
