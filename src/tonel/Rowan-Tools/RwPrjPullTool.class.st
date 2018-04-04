@@ -6,16 +6,16 @@ Class {
 
 { #category : 'git' }
 RwPrjPullTool >> doGitPull: remote [
-  | gitTool gitRootDir |
-  gitTool := self class git.
-  gitRootDir := ServerFileDirectory
-    on: specification repoSpec repositoryRootPath.
-  ^ remote isEmpty
-    ifTrue: [ gitTool gitpullIn: gitRootDir with: '' ]
-    ifFalse: [ 
-      | currentBranchName |
-      currentBranchName := gitTool gitBranchNameIn: gitRootDir.
-      gitTool gitpullIn: gitRootDir with: remote , ' ' , currentBranchName ]
+
+	| gitTool gitRootPath |
+	gitTool := self class git.
+	gitRootPath := specification repoSpec repositoryRootPath.
+	^ remote isEmpty
+		ifTrue: [ gitTool gitpullIn: gitRootPath with: '' ]
+		ifFalse: [ 
+			| currentBranchName |
+			currentBranchName := gitTool gitBranchNameIn: gitRootPath.
+			gitTool gitpullIn: gitRootPath with: remote , ' ' , currentBranchName ]
 ]
 
 { #category : 'smalltalk api' }

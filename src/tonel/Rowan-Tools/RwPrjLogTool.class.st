@@ -5,6 +5,15 @@ Class {
 }
 
 { #category : 'smalltalk api' }
+RwPrjLogTool >> commitLogProjectNamed: projectName limit: logLimit [
+
+	| loadedProject |
+	loadedProject := Rowan image loadedProjectNamed: projectName.
+	self specification: loadedProject specification.
+	^ specification commitLogForTool: self limit: logLimit
+]
+
+{ #category : 'smalltalk api' }
 RwPrjLogTool >> commitLogSpecification: aRwSpecification limit: logLimit [
   self specification: aRwSpecification.
   ^ specification commitLogForTool: self limit: logLimit
@@ -19,9 +28,9 @@ RwPrjLogTool >> commitLogSpecUrl: aString limit: logLimit [
 
 { #category : 'git' }
 RwPrjLogTool >> doGitCommitLog: logLimit [
-  | gitTool gitRootDir |
-  gitTool := self class git.
-  gitRootDir := ServerFileDirectory
-    on: specification repoSpec repositoryRootPath.
-  ^ gitTool gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: gitRootDir
+
+	| gitTool gitRootPath |
+	gitTool := self class git.
+	gitRootPath := specification repoSpec repositoryRootPath.
+	^ gitTool gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: gitRootPath
 ]

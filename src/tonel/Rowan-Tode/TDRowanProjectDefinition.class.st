@@ -46,6 +46,12 @@ TDRowanProjectDefinition >> label [
 ]
 
 { #category : 'accessing' }
+TDRowanProjectDefinition >> loadedCommitId [
+
+	^ self loadedProject asDefinition loadedCommitId
+]
+
+{ #category : 'accessing' }
 TDRowanProjectDefinition >> loadedProject [
 
 	^ Rowan image loadedProjectNamed: self projectName
@@ -75,4 +81,10 @@ TDRowanProjectDefinition >> projectName: anObject [
 
    projectName := anObject
 
+]
+
+{ #category : 'accessing' }
+TDRowanProjectDefinition >> repositoryRootPath [
+
+	^ self loadedProject asDefinition repositoryRootPath
 ]

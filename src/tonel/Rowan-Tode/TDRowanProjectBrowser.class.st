@@ -45,12 +45,13 @@ TDRowanProjectBrowser >> browseProjectPackagesMenuAction: listElement selectionI
 { #category : 'tools' }
 TDRowanProjectBrowser >> clientList: miniTool listElement: listElement [
 
-	| labels selectedProjectIndex projectList count |
+	| max labels selectedProjectIndex projectList count |
 	theMiniTool := miniTool.
 	projects := projectBlock value.
 	labels := {}.
 	selectedProjectIndex := nil.
 	count := 1.
+	max := 0.
 	projects
 		do: [ :projectDef | 
 			| projectName |
@@ -61,15 +62,41 @@ TDRowanProjectBrowser >> clientList: miniTool listElement: listElement [
 			labels
 				add:
 					{projectName.
-					{(TextEmphasis bold)}} ].
+					(projectDef loadedCommitId).
+					{(TextEmphasis bold)}}.
+			max := max max: projectName size ].
+	max := max + 2.
 	projectList := labels
 		collect: [ :ar | 
-			| nm textAttributes |
+			| nm textAttributes sha stream |
+			stream := WriteStream on: String new.
 			nm := ar at: 1.
-			textAttributes := ar at: 2.
-
-			Text string: nm attributes: textAttributes ].
+			sha := ar at: 2.
+			textAttributes := ar at: 3.
+			stream
+				nextPutAll: nm;
+				space: max - nm size;
+				nextPutAll: sha.
+			Text string: stream contents attributes: textAttributes ].
 	^ projectList -> selectedProjectIndex
+]
+
+{ #category : 'menu actions' }
+TDRowanProjectBrowser >> commitLogMenuAction: listElement selectionIndex: selectionIndex [
+
+	| projectDef logString |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	projectDef := self projects at: selectionIndex.
+	logString := Rowan projectTools log
+		commitLogProjectNamed: projectDef projectName
+		limit: 100.
+	logString
+		editUsing:
+			((TDEditorSpec topez: topez editorAspect: #'edit')
+				windowName: #'gitStatus';
+				yourself).
+	^ true
 ]
 
 { #category : 'menu actions' }
@@ -150,6 +177,24 @@ TDRowanProjectBrowser >> diffMenuAction: listElement selectionIndex: selectionIn
 				windowName: #'mcDiff';
 				yourself).
 	^ #'refreshView'
+]
+
+{ #category : 'menu actions (git)' }
+TDRowanProjectBrowser >> gitBranchesMenuAction: listElement selectionIndex: selectionIndex [
+
+	| projectDef gitRepoPath gitTool response |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	projectDef := self projects at: selectionIndex.
+	gitRepoPath := projectDef repositoryRootPath.
+	gitTool := Rowan projectTools git.
+	response := gitTool gitbranchIn: gitRepoPath with: '-a -v'.
+	response
+		editUsing:
+			((TDEditorSpec topez: topez editorAspect: #'edit')
+				windowName: #'gitStatus';
+				yourself).
+	^ true
 ]
 
 { #category : 'menu actions' }
@@ -239,17 +284,16 @@ TDRowanProjectBrowser >> menuActionSpec: miniTool [
 		->
 			{#('branches' nil #'gitBranchesMenuAction:selectionIndex:').
 			#('checkout' nil #'gitCheckoutMenuAction:selectionIndex:').
+			#('merge' nil #'gitMergeProjectMenuAction:selectionIndex:').
 			#('pull' nil #'gitPullProjectMenuAction:selectionIndex:').
+			#('push' nil #'gitPushProjectMenuAction:selectionIndex:').
 			#('status' nil #'gitStatusMenuAction:selectionIndex:')})}.
 	#('-').
 	#('changes' nil #'diffMenuAction:selectionIndex:').
 	#('load' nil #'loadProjectMenuAction:selectionIndex:').
 	#('log' nil #'commitLogMenuAction:selectionIndex:').
-	#('push' nil #'gitPushProjectMenuAction:selectionIndex:').
-	#('revert' nil #'revertProjectMenuAction:selectionIndex:').
-	#('save' nil #'commitProjectMenuAction:selectionIndex:').
-	#('skew diff' nil #'gitVersionSkewDiffMenuAction:selectionIndex:').
-	#('skew save' nil #'gitVersionSkewSaveProjectMenuAction:selectionIndex:')}
+
+	#('save' nil #'commitProjectMenuAction:selectionIndex:')} , {#('-')}
 		, self standardMenuActionSpec
 ]
 

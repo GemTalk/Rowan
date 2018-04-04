@@ -29,9 +29,9 @@ input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/bootstra
 commit
 
 # Define some Globals just to get through the load ...
-run
-UserGlobals at: #ServerFileDirectory put: nil. "remaining references are related to git support ... allow the methods to be loaded for now"
-%
+#run
+#UserGlobals at: #ServerFileDirectory put: nil. "remaining references are related to git support ... allow the methods to be loaded for now"
+#%
 
 commit
 category: 'Rowan compatability method'

@@ -22,12 +22,10 @@ RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPath useGit: useGit ab
 		ifFalse: [ utils ensureDirectoryExists: repoPath ].
 	useGit
 		ifTrue: [ 
-			| gitRepoDir |
-			gitRepoDir := ServerFileDirectory on: repoPath.
-			(gitTool gitPresentIn: gitRepoDir)
+			(gitTool gitPresentIn: repoPath)
 				ifFalse: [ 
 					"create a git repository"
-					gitTool gitinitIn: gitRepoDir with: '' ] ]
+					gitTool gitinitIn: repoPath with: '' ] ]
 ]
 
 { #category : 'smalltalk api' }

@@ -147,6 +147,12 @@ RwProjectDefinition >> keys [
 ]
 
 { #category : 'properties' }
+RwProjectDefinition >> loadedCommitId [
+
+	^ self specification loadedCommitId
+]
+
+{ #category : 'properties' }
 RwProjectDefinition >> loadedPackageNames [
 
 	^ self specification loadedPackageNames
