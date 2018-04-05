@@ -5,6 +5,7 @@ Class {
 		'specName',
 		'projectUrl',
 		'platformSpec',
+		'configsPath',
 		'specsPath',
 		'repoSpec',
 		'repoPath',
@@ -55,6 +56,12 @@ RwProjectSpecification >> commitForTool: aRwTool message: messageString [
 { #category : 'actions' }
 RwProjectSpecification >> commitLogForTool: aRwTool limit: logLimit [
   ^ self repoSpec commitLogForTool: aRwTool limit: logLimit
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> configsPath [
+
+	^ configsPath ifNil: [ configsPath := 'configs' ]
 ]
 
 { #category : 'exporting' }
@@ -282,8 +289,7 @@ RwProjectSpecification >> specName: anObject [
 { #category : 'accessing' }
 RwProjectSpecification >> specsPath [
 
-   ^specsPath
-
+	^ specsPath ifNil: [ specsPath := 'specs' ]
 ]
 
 { #category : 'accessing' }
