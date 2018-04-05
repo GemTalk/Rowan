@@ -279,30 +279,33 @@ TDRowanProjectBrowser >> gitPushProjectMenuAction: listElement selectionIndex: s
 
 { #category : 'menu actions (git)' }
 TDRowanProjectBrowser >> gitStatusMenuAction: listElement selectionIndex: selectionIndex [
-  | registration status report commitLog |
-  selectionIndex = 0
-    ifTrue: [ ^ false ].
-  registration := self projects at: selectionIndex.
-  report := '======== Modifications ========' copy.
-  status := self projectTool projectStatus: registration args: '--porcelain'.
-  commitLog := self projectTool
-    projectCommitLogEntries: registration
-    commitish: registration versionString
-    logLimit: 1.
-  report
-    add: String lf;
-    add: status;
-    add: String lf;
-    add: '======== Last commit ========';
-    add: String lf;
-    add: commitLog.
-  report
-    editUsing:
-      ((TDEditorSpec topez: listElement topez editorAspect: #'edit')
-        windowName: #'commitLog';
-        windowLabel: 'Status for ' , registration projectName;
-        yourself).
-  ^ true
+
+	| rowanProject status report commitLog gitTool gitRootPath |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	rowanProject := (self projects at: selectionIndex) rowanProject.
+	report := '======== Modifications ========' copy.
+	gitRootPath := rowanProject repositoryRootPath.
+	gitTool := Rowan projectTools git.
+	status := gitTool gitstatusIn: gitRootPath with: '--porcelain'.
+	commitLog := gitTool
+		gitlogFull: rowanProject repositoryCommitId
+		limit: 1
+		gitRepoDirectory: gitRootPath.
+	report
+		add: String lf;
+		add: status;
+		add: String lf;
+		add: '======== Last commit ========';
+		add: String lf;
+		add: commitLog.
+	report
+		editUsing:
+			((TDEditorSpec topez: listElement topez editorAspect: #'edit')
+				windowName: #'commitLog';
+				windowLabel: 'Status for ' , rowanProject name;
+				yourself).
+	^ true
 ]
 
 { #category : 'menu actions' }

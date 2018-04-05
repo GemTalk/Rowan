@@ -92,6 +92,16 @@ RwPrjGitTool >> gitinitIn: dirPath with: args [
 ]
 
 { #category : 'smalltalk api' }
+RwPrjGitTool >> gitlogFull: commitish limit: limit gitRepoDirectory: gitRepoPath [
+
+	| commitLog |
+	commitLog := self
+		gitlogIn: gitRepoPath
+		with: ' -' , limit printString , ' ' , commitish.
+	^ commitLog
+]
+
+{ #category : 'smalltalk api' }
 RwPrjGitTool >> gitlogIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'log' in: gitRepoPath with: args
@@ -155,6 +165,12 @@ RwPrjGitTool >> gitrevparseShowTopLevelIn: dirPath [
 	| command |
 	command := 'set -e; cd ' , dirPath , '; git rev-parse --show-toplevel'.
 	^ self performOnServer: command logging: true
+]
+
+{ #category : 'smalltalk api' }
+RwPrjGitTool >> gitstatusIn: gitRepoPath with: args [
+
+	^ self performGitCommand: 'status' in: gitRepoPath with: args
 ]
 
 { #category : 'private' }
