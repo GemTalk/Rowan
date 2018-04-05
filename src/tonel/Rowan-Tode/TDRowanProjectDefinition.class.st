@@ -39,6 +39,12 @@ TDRowanProjectDefinition >> classDefinitions [
 		sortWithBlock: [ :a :b | a className <= b className ]
 ]
 
+{ #category : 'testing' }
+TDRowanProjectDefinition >> isDirty [
+
+	^ self loadedProject isDirty
+]
+
 { #category : 'accessing' }
 TDRowanProjectDefinition >> label [
 

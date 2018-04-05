@@ -50,6 +50,16 @@ RwLoadedProject >> initializeForLoadSpecification: aLoadSpecification [
 ]
 
 { #category : 'testing' }
+RwLoadedProject >> isDirty [
+
+	self loadedPackages
+		do: [ :loadedPackage | 
+			loadedPackage isDirty
+				ifTrue: [ ^ true ] ].
+	^ false
+]
+
+{ #category : 'testing' }
 RwLoadedProject >> isEmpty [
 
 	^ loadedPackages isEmpty

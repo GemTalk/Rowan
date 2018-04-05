@@ -58,6 +58,8 @@ TDRowanProjectBrowser >> clientList: miniTool listElement: listElement [
 			projectName := projectDef projectName.
 			selectedProjectName = projectName
 				ifTrue: [ selectedProjectIndex := count ].
+			projectDef isDirty
+				ifTrue: [ projectName := '+ ' , projectName ].
 			count := count + 1.
 			labels
 				add:

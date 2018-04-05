@@ -67,6 +67,12 @@ RwLoadedPackage >> classOrExtensionForClassNamed: className ifAbsent: absentBloc
 ]
 
 { #category : 'testing' }
+RwLoadedPackage >> isDirty [
+
+	^ isDirty
+]
+
+{ #category : 'testing' }
 RwLoadedPackage >> isEmpty [
 
 	^loadedClasses isEmpty and: [loadedClassExtensions isEmpty]
