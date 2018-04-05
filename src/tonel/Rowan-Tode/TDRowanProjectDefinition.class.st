@@ -90,6 +90,12 @@ TDRowanProjectDefinition >> projectName: anObject [
 ]
 
 { #category : 'accessing' }
+TDRowanProjectDefinition >> repositoryCommitId [
+
+	^ self rowanProject repositoryCommitId
+]
+
+{ #category : 'accessing' }
 TDRowanProjectDefinition >> repositoryRootPath [
 
 	^ self rowanProject repositoryRootPath

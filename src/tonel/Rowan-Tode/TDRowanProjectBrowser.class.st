@@ -54,18 +54,28 @@ TDRowanProjectBrowser >> clientList: miniTool listElement: listElement [
 	max := 0.
 	projects
 		do: [ :projectDef | 
-			| projectName |
+			| projectName emphasis sha repostioryCommitId loadedCommitId |
 			projectName := projectDef projectName.
 			selectedProjectName = projectName
 				ifTrue: [ selectedProjectIndex := count ].
 			projectDef isDirty
 				ifTrue: [ projectName := '+ ' , projectName ].
 			count := count + 1.
+			loadedCommitId := projectDef loadedCommitId.
+			repostioryCommitId := projectDef repositoryCommitId.
+			loadedCommitId = repostioryCommitId
+				ifTrue: [ 
+					emphasis := {(TextEmphasis bold)}.
+					sha := loadedCommitId ]
+				ifFalse: [ 
+					emphasis := {(TextEmphasis bold).
+					(TextColor red)}.
+					sha := loadedCommitId , ' ^ ' , repostioryCommitId ].
 			labels
 				add:
 					{projectName.
-					(projectDef loadedCommitId).
-					{(TextEmphasis bold)}}.
+					sha.
+					emphasis}.
 			max := max max: projectName size ].
 	max := max + 2.
 	projectList := labels
@@ -244,6 +254,55 @@ TDRowanProjectBrowser >> gitPullProjectMenuAction: listElement selectionIndex: s
 				windowName: #'gitStatus';
 				yourself).
 	^ #'refreshView'
+]
+
+{ #category : 'menu actions (git)' }
+TDRowanProjectBrowser >> gitPushProjectMenuAction: listElement selectionIndex: selectionIndex [
+
+	| rowanProject response gitRootPath gitTool |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	rowanProject := (self projects at: selectionIndex) rowanProject.
+	gitRootPath := rowanProject repositoryRootPath.
+	gitTool := Rowan projectTools git.
+	response := gitTool
+		gitpushIn: gitRootPath
+		remote: rowanProject remote
+		branch: rowanProject currentBranchName.
+	response
+		editUsing:
+			((TDEditorSpec topez: topez editorAspect: #'edit')
+				windowName: #'gitStatus';
+				yourself).
+	^ #'refreshView'
+]
+
+{ #category : 'menu actions (git)' }
+TDRowanProjectBrowser >> gitStatusMenuAction: listElement selectionIndex: selectionIndex [
+  | registration status report commitLog |
+  selectionIndex = 0
+    ifTrue: [ ^ false ].
+  registration := self projects at: selectionIndex.
+  report := '======== Modifications ========' copy.
+  status := self projectTool projectStatus: registration args: '--porcelain'.
+  commitLog := self projectTool
+    projectCommitLogEntries: registration
+    commitish: registration versionString
+    logLimit: 1.
+  report
+    add: String lf;
+    add: status;
+    add: String lf;
+    add: '======== Last commit ========';
+    add: String lf;
+    add: commitLog.
+  report
+    editUsing:
+      ((TDEditorSpec topez: listElement topez editorAspect: #'edit')
+        windowName: #'commitLog';
+        windowLabel: 'Status for ' , registration projectName;
+        yourself).
+  ^ true
 ]
 
 { #category : 'menu actions' }

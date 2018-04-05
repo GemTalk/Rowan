@@ -70,6 +70,12 @@ RwProject >> remote [
 	^ self _specification remote
 ]
 
+{ #category : 'accessing' }
+RwProject >> repositoryCommitId [
+
+	^ Rowan projectTools git gitcommitShaIn: self repositoryRootPath
+]
+
 { #category : 'properties' }
 RwProject >> repositoryRootPath [
 

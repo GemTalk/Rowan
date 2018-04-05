@@ -88,7 +88,8 @@ RwGitRepositorySpecification >> pushForTool: aRwTool remote: remoteString [
 
 { #category : 'accessing' }
 RwGitRepositorySpecification >> remote [
-  ^ remote ifNil: [ '' ]
+
+	^ remote ifNil: [ 'origin' ]
 ]
 
 { #category : 'accessing' }

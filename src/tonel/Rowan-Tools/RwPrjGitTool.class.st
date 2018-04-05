@@ -137,6 +137,12 @@ RwPrjGitTool >> gitpullIn: gitRepoPath with: args [
 ]
 
 { #category : 'smalltalk api' }
+RwPrjGitTool >> gitpushIn: gitRepoPath remote: remoteName branch: branchName [
+
+	^ self gitpushIn: gitRepoPath with: remoteName , ' ' , branchName
+]
+
+{ #category : 'smalltalk api' }
 RwPrjGitTool >> gitpushIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'push' in: gitRepoPath with: args
