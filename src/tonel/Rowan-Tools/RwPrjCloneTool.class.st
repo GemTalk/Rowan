@@ -62,9 +62,8 @@ RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath 
 
 	| gitTool response projectUrl gitRepoPath cloneUrl cloneOption checkout |
 	self specification: aRwSpecification.
-	self halt.
 	projectUrl := RwUrl fromString: specification projectUrl.
-	gitRepoPath := gitRootPath , '/' , projectUrl path last.
+	gitRepoPath := gitRootPath , '/' , projectUrl segments last.
 	self
 		_validateForGitRootPathForSpecification: gitRootPath
 		gitRepoDir: gitRepoPath
@@ -77,8 +76,8 @@ RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath 
 	cloneUrl := useSsh
 		ifTrue: [ 'git@' , projectUrl authority , ':' ]
 		ifFalse: [ 'https://' , projectUrl authority , '/' ].
-	cloneUrl := cloneUrl , (projectUrl path at: 1) , '/' , (projectUrl path at: 2)
-		, '.git'.
+	cloneUrl := cloneUrl , (projectUrl segments at: 1) , '/'
+		, (projectUrl segments at: 2) , '.git'.
 	cloneOption := ' --no-checkout '.
 	checkout := specification repoSpec committish.
 	checkout ifNil: [ cloneOption := '' ].

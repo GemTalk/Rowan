@@ -138,16 +138,20 @@ TDRowanProjectBrowser >> deleteAllProjectsMenuAction: listElement selectionIndex
 			loadedProject := projectDef loadedProject.
 			spec := loadedProject handle.
 			platformSpec := spec platformSpec at: 'gemstone'.
-			symDictNames := IdentitySet with: #'UnmanagedPackages'.
+			symDictNames := Set with: 'UnmanagedPackages'.
 			symDictNames add: platformSpec defaultSymbolDictName.
 			platformSpec packageNameToPlatformPropertiesMap values
 				do: [ :packageProperties | 
 					packageProperties
 						at: 'symbolDictName'
 						ifPresent: [ :name | symDictNames add: name ] ].
-			symDictNames remove: #'UserGlobals' ifAbsent: [  ].
+			#('Globals' 'UserGlobals' 'Published')
+				do: [ :reservedName | symDictNames remove: reservedName ifAbsent: [  ] ].
 			symDictNames
 				do: [ :symDictName | 
+					(#('Globals' 'UserGlobals' 'Published') includes: symDictName asString)
+						ifTrue: [ self halt ].
+
 					dict := symList objectNamed: symDictName.
 					dict
 						ifNotNil: [ 

@@ -12,7 +12,8 @@ RwPkgDiffTool >> patchForPackageName: packageName [
 	loadedProject := loadedPackage loadedProject.
 	super specification: loadedProject specification.
 	repo := specification repositoryUrl asRwRepository.
-	diskSnapshot := repo readPackageStructureForPackageNamed: packageName.
+	diskSnapshot := (repo readPackageStructureForPackageNamed: packageName)
+		snapshot.
 	imageSnapshot := (RwCypressPackageStructure
 		fromPackage: loadedPackage asDefinition) snapshot.
 	^ CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot

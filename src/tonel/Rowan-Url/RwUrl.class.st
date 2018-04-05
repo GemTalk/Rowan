@@ -164,14 +164,15 @@ RwUrl >> createRwCypressRepositoryForPath: repositoryDirectoryPath [
 
 { #category : 'rowan support' }
 RwUrl >> createRwFiletreeRepositoryForPath: repositoryDirectoryPath [
-  ^ CypressFileSystemRepository new
-    initializeDefaultRepositoryProperties;
-    initializeForDirectory: repositoryDirectoryPath;
-    codeFormatProperty: 'FileTree';
-    strictCodeFormat: false;
-    initializeReaderAndWriterClasses;
-    url: self printString;
-    yourself
+
+	^ CypressFileSystemRepository new
+		initializeDefaultRepositoryProperties;
+		initializeForDirectory: repositoryDirectoryPath;
+		codeFormatProperty: 'FileTree';
+		strictCodeFormat: false;
+		initializeReaderAndWriterClasses;
+		url: self printString;
+		yourself
 ]
 
 { #category : 'rowan support' }
