@@ -1,5 +1,5 @@
 Class {
-	#name : 'RowanDefinitionService',
+	#name : 'RowanService',
 	#superclass : 'Object',
 	#instVars : [
 		'definition'
@@ -8,35 +8,35 @@ Class {
 }
 
 { #category : 'other' }
-RowanDefinitionService class >> rowanFixMe [
+RowanService class >> rowanFixMe [
 
 	"send this message to see everywhere that GS_Jade should be fixed"
 
 ]
 
 { #category : 'examples' }
-RowanDefinitionService class >> sampleService [
+RowanService class >> sampleService [
 
 	^self new sampleService
 
 ]
 
 { #category : 'rowan' }
-RowanDefinitionService >> browserTool [
+RowanService >> browserTool [
 
 	^self projectTools browser
 
 ]
 
 { #category : 'symbol dictionaries' }
-RowanDefinitionService >> createDefaultSymbolDictionary [
+RowanService >> createDefaultSymbolDictionary [
 
 	^self createSymbolDictionaryNamed: self defaultSymbolDictionaryName
 
 ]
 
 { #category : 'samples' }
-RowanDefinitionService >> createSampleSymbolDictionary [
+RowanService >> createSampleSymbolDictionary [
 
 	self removeSymbolDictionaryNamed: self sampleSymbolDictionaryName.
 	self createSymbolDictionaryNamed: self sampleSymbolDictionaryName
@@ -44,7 +44,7 @@ RowanDefinitionService >> createSampleSymbolDictionary [
 ]
 
 { #category : 'symbol dictionaries' }
-RowanDefinitionService >> createSymbolDictionaryNamed: aName [
+RowanService >> createSymbolDictionaryNamed: aName [
 
 	| dictionary size | 
 	dictionary := RwGsPackageSymbolDictionary new. 
@@ -56,49 +56,49 @@ RowanDefinitionService >> createSymbolDictionaryNamed: aName [
 ]
 
 { #category : 'symbol dictionaries' }
-RowanDefinitionService >> defaultSymbolDictionary [
+RowanService >> defaultSymbolDictionary [
 
 	^self symbolDictionaryNamed: self defaultSymbolDictionaryName
 
 ]
 
 { #category : 'symbol dictionaries' }
-RowanDefinitionService >> defaultSymbolDictionaryName [
+RowanService >> defaultSymbolDictionaryName [
 
 	^'RowanProjects'
 
 ]
 
 { #category : 'rowan' }
-RowanDefinitionService >> definitionClass [
+RowanService >> definitionClass [
 
 	^self subclassResponsibility
 
 ]
 
 { #category : 'rowan' }
-RowanDefinitionService >> definitionClassName [
+RowanService >> definitionClassName [
 
 	^self definitionClass name
 
 ]
 
 { #category : 'rowan' }
-RowanDefinitionService >> projectTools [
+RowanService >> projectTools [
 
 	^Rowan projectTools
 
 ]
 
 { #category : 'samples' }
-RowanDefinitionService >> removeSampleSymbolDictionary [
+RowanService >> removeSampleSymbolDictionary [
 
 	self removeSymbolDictionaryNamed: self sampleSymbolDictionaryName.
 
 ]
 
 { #category : 'symbol dictionaries' }
-RowanDefinitionService >> removeSymbolDictionaryNamed: aName [
+RowanService >> removeSymbolDictionaryNamed: aName [
 
 	| index |
 	index := System myUserProfile symbolList names indexOf: aName asSymbol.
@@ -108,14 +108,14 @@ RowanDefinitionService >> removeSymbolDictionaryNamed: aName [
 ]
 
 { #category : 'other' }
-RowanDefinitionService >> rowanFixMe [
+RowanService >> rowanFixMe [
 		
 	"marker for all things broken in Rowan"
 
 ]
 
 { #category : 'rowan' }
-RowanDefinitionService >> rowanLoadedPackageNames [
+RowanService >> rowanLoadedPackageNames [
 
 	| stream packages |
 	self rowanFixMe.	"handle modified package display"
@@ -135,14 +135,14 @@ RowanDefinitionService >> rowanLoadedPackageNames [
 ]
 
 { #category : 'samples' }
-RowanDefinitionService >> sampleSymbolDictionaryName [
+RowanService >> sampleSymbolDictionaryName [
 
 	^'SampleSymbolDictionaryName'
 
 ]
 
 { #category : 'symbol dictionaries' }
-RowanDefinitionService >> symbolDictionaryNamed: aName [
+RowanService >> symbolDictionaryNamed: aName [
 
 	|  index |
 	index := System myUserProfile symbolList names indexOf: aName asSymbol.
