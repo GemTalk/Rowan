@@ -38,6 +38,7 @@ TDRowanProjectBrowser >> browseProjectPackagesMenuAction: listElement selectionI
 	^ (TDRowanPackageBrowser new
 		topez: topez;
 		packageBlock: block;
+		projectDef: projectDef;
 		windowLabel: projectDef projectName , ' Packages';
 		yourself) open
 ]
@@ -63,7 +64,7 @@ TDRowanProjectBrowser >> clientList: miniTool listElement: listElement [
 			count := count + 1.
 			loadedCommitId := projectDef loadedCommitId.
 			repostioryCommitId := projectDef repositoryCommitId.
-			loadedCommitId = repostioryCommitId
+			(loadedCommitId isEmpty or: [ loadedCommitId = repostioryCommitId ])
 				ifTrue: [ 
 					emphasis := {(TextEmphasis bold)}.
 					sha := loadedCommitId ]
@@ -410,6 +411,52 @@ TDRowanProjectBrowser >> menuActionSpec: miniTool [
 
 	#('save' nil #'commitProjectMenuAction:selectionIndex:')} , {#('-')}
 		, self standardMenuActionSpec
+]
+
+{ #category : 'menu actions' }
+TDRowanProjectBrowser >> newDiskProjectSpecMenuAction: listElement selectionIndex: selectionIndex [
+
+	| spec projectName utils repositoryRootPath dirPath repoPath gitTool |
+	projectName := (GsTextInteraction
+		prompt: 'Enter the project name'
+		template: 'newProject') signal.
+	projectName
+		ifNil: [ 
+			Transcript
+				cr;
+				show: 'New project aborted...'.
+			^ false ].
+	utils := Rowan fileUtilities.
+	repositoryRootPath := '$GS_HOME/shared/repos/' , projectName.
+	repoPath := 'src'.
+	spec := RwPackageProjectSpecification new
+		specName: projectName;
+		repositoryRootPath: '$GS_HOME/shared/repos/' , projectName;
+		repoPath: repoPath;
+		repositoryUrl: 'cypress:' , repositoryRootPath , '/' , repoPath , '/';
+		yourself.
+	(spec platformSpec at: 'gemstone')
+		projectOwnerId: RwGsImage currentUserId;
+		defaultSymbolDictName: 'tODE_Rowan_Projects';
+		yourself.
+	Rowan projectTools create
+		_createProjectRepositoryDirectory: repositoryRootPath
+		useGit: true
+		abort: [ ^ self ].
+	dirPath := repositoryRootPath , utils pathNameDelimiter , spec repoPath.
+	utils ensureDirectoryExists: dirPath.
+	utils
+		writeStreamFor: '.cypress'
+		in: dirPath
+		do: [ :fileStream | fileStream nextPutAll: '{ #format : ' , 'tonel' printString , '}' ].
+	dirPath := repositoryRootPath , utils pathNameDelimiter , spec specsPath.
+	utils ensureDirectoryExists: dirPath.
+	spec register.
+	spec copy export.
+	gitTool := Rowan projectTools git.
+	gitTool gitaddIn: repositoryRootPath with: '.'.
+	gitTool gitcommitIn: repositoryRootPath with: '-m"initial commit from Rowan"'.
+	^ #'refreshView'
 ]
 
 { #category : 'menu actions' }

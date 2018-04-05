@@ -4,10 +4,35 @@ Class {
 	#instVars : [
 		'packages',
 		'packageBlock',
-		'selectedPackageName'
+		'selectedPackageName',
+		'projectDef'
 	],
 	#category : 'Rowan-Tode'
 }
+
+{ #category : 'menu actions' }
+TDRowanPackageBrowser >> addClassMenuAction: listElement selectionIndex: selectionIndex [
+
+	| classDefinitionString packageDef classDefTemplate |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	packageDef := self packages at: selectionIndex.
+	classDefTemplate := Rowan projectTools browser
+		classCreationTemplateForSubclassOf: 'Object'
+		className: 'newClass'
+		category: packageDef packageName.
+	classDefinitionString := (GsMultiLineTextInteraction
+		prompt: 'Define class: '
+		template: classDefTemplate) signal.
+	classDefinitionString
+		ifNil: [ 
+			Transcript
+				cr;
+				show: 'add class aborted...'.
+			^ false ].
+	listElement topez createClassFrom: classDefinitionString.
+	^ #'refreshView'
+]
 
 { #category : 'menu actions' }
 TDRowanPackageBrowser >> browsePackageClassesMenuAction: listElement selectionIndex: selectionIndex [
@@ -64,6 +89,34 @@ TDRowanPackageBrowser >> itemSelected: miniTool listElement: listElement selecte
 	^ true
 ]
 
+{ #category : 'menu action specs' }
+TDRowanPackageBrowser >> menuActionSpec: miniTool [
+
+	theMiniTool := miniTool.
+	^ {#('new package' nil #'newPackageMenuAction:selectionIndex:').
+	#('add class to package' nil #'addClassMenuAction:selectionIndex:')} , {#('-')}
+		, self standardMenuActionSpec
+]
+
+{ #category : 'menu actions' }
+TDRowanPackageBrowser >> newPackageMenuAction: listElement selectionIndex: selectionIndex [
+
+	| packageName |
+	packageName := (GsTextInteraction
+		prompt: 'Enter the package name'
+		template: self projectDef projectName , '-Core') signal.
+	packageName
+		ifNil: [ 
+			Transcript
+				cr;
+				show: 'New package aborted...'.
+			^ false ].
+	Rowan projectTools browser
+		addPackageNamed: packageName
+		toProjectNamed: self projectDef projectName.
+	^ #'refreshView'
+]
+
 { #category : 'accessing' }
 TDRowanPackageBrowser >> packageBlock [
 
@@ -90,6 +143,18 @@ TDRowanPackageBrowser >> packages: anObject [
 
    packages := anObject
 
+]
+
+{ #category : 'accessing' }
+TDRowanPackageBrowser >> projectDef [
+
+	^ projectDef
+]
+
+{ #category : 'accessing' }
+TDRowanPackageBrowser >> projectDef: anObject [
+
+	projectDef := anObject
 ]
 
 { #category : 'accessing' }
