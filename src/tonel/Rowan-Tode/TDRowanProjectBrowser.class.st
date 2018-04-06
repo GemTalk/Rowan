@@ -462,11 +462,15 @@ TDRowanProjectBrowser >> newDiskProjectSpecMenuAction: listElement selectionInde
 { #category : 'menu actions' }
 TDRowanProjectBrowser >> newGitHubProjectSpecMenuAction: listElement selectionIndex: selectionIndex [
 
+	"https://raw.githubusercontent.com/dalehenrich/RowanSample1/master/specs/RowanSample1.ston"
+
+	"file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSampler/specs/RowanSample1.ston"
+
 	| specUrlString spec projectTools |
 	specUrlString := (GsTextInteraction
 		prompt: 'Please enter an url for the project spec'
 		template:
-			'https://raw.githubusercontent.com/dalehenrich/sample/master/specs/Sample.ston')
+			'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSampler/specs/RowanSample1.ston')
 		signal.
 	specUrlString
 		ifNil: [ 
