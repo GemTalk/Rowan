@@ -1,6 +1,6 @@
 Class {
-	#name : 'RowanMethodDefinitionService',
-	#superclass : 'RowanDefinitionService',
+	#name : 'RowanMethodService',
+	#superclass : 'RowanService',
 	#instVars : [
 		'source',
 		'selector',
@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-RowanMethodDefinitionService class >> source: source selector: selector category: category className: className packageName: packageName meta: boolString [
+RowanMethodService class >> source: source selector: selector category: category className: className packageName: packageName meta: boolString [
 
 	| service |
 	service := self new. 
@@ -31,7 +31,7 @@ RowanMethodDefinitionService class >> source: source selector: selector category
 ]
 
 { #category : 'rowan' }
-RowanMethodDefinitionService >> addOrUpdateMethod [
+RowanMethodService >> addOrUpdateMethod [
 
 		self browserTool
                    addOrUpdateMethod: source
@@ -43,55 +43,55 @@ RowanMethodDefinitionService >> addOrUpdateMethod [
 ]
 
 { #category : 'rowan' }
-RowanMethodDefinitionService >> browserTool [
+RowanMethodService >> browserTool [
 
 	^Rowan projectTools browser.
 
 ]
 
 { #category : 'Accessing' }
-RowanMethodDefinitionService >> category [
+RowanMethodService >> category [
 	^category
 
 ]
 
 { #category : 'Updating' }
-RowanMethodDefinitionService >> category: newValue [
+RowanMethodService >> category: newValue [
 	category := newValue
 
 ]
 
 { #category : 'Accessing' }
-RowanMethodDefinitionService >> className [
+RowanMethodService >> className [
 	^className
 
 ]
 
 { #category : 'Updating' }
-RowanMethodDefinitionService >> className: newValue [
+RowanMethodService >> className: newValue [
 	className := newValue
 
 ]
 
 { #category : 'Accessing' }
-RowanMethodDefinitionService >> classService [
+RowanMethodService >> classService [
 
-	^classService ifNil:[classService := RowanClassDefinitionService forClassNamed: className package: packageName]
+	^classService ifNil:[classService := RowanClassService forClassNamed: className package: packageName]
 
 ]
 
 { #category : 'Updating' }
-RowanMethodDefinitionService >> classService: newValue [
+RowanMethodService >> classService: newValue [
 	classService := newValue
 
 ]
 
 { #category : 'examples' }
-RowanMethodDefinitionService >> createSampleMethod [
+RowanMethodService >> createSampleMethod [
            
            |   classDefinition | 
 		
-			classService := RowanClassDefinitionService new.
+			classService := RowanClassService new.
 			classDefinition := classService createSampleClass. 
 			source := self sampleMethodSource.
 			category := 'sample'.
@@ -101,57 +101,57 @@ RowanMethodDefinitionService >> createSampleMethod [
 ]
 
 { #category : 'rowan' }
-RowanMethodDefinitionService >> definitionClass [
+RowanMethodService >> definitionClass [
 
 	^RwMethodDefinition
 
 ]
 
 { #category : 'Accessing' }
-RowanMethodDefinitionService >> meta [
+RowanMethodService >> meta [
 	^meta printString
 
 ]
 
 { #category : 'Updating' }
-RowanMethodDefinitionService >> meta: newValue [
+RowanMethodService >> meta: newValue [
 	meta := newValue == 'true'
 
 ]
 
 { #category : 'Accessing' }
-RowanMethodDefinitionService >> methodDefinitions [
+RowanMethodService >> methodDefinitions [
 	^methodDefinitions
 
 ]
 
 { #category : 'Updating' }
-RowanMethodDefinitionService >> methodDefinitions: newValue [
+RowanMethodService >> methodDefinitions: newValue [
 	methodDefinitions := newValue
 
 ]
 
 { #category : 'Accessing' }
-RowanMethodDefinitionService >> packageName [
+RowanMethodService >> packageName [
 	^packageName
 
 ]
 
 { #category : 'Updating' }
-RowanMethodDefinitionService >> packageName: newValue [
+RowanMethodService >> packageName: newValue [
 	packageName := newValue
 
 ]
 
 { #category : 'examples' }
-RowanMethodDefinitionService >> sampleClassInstance [
+RowanMethodService >> sampleClassInstance [
 
 	^classService sampleClassInstance
 
 ]
 
 { #category : 'examples' }
-RowanMethodDefinitionService >> sampleDefinition [
+RowanMethodService >> sampleDefinition [
 
 	definition := self definitionClass newForSelector: 'sampleMethod' protocol: 'sampleProtocol' source: self sampleMethodSource.
 	source := definition source.
@@ -161,7 +161,7 @@ RowanMethodDefinitionService >> sampleDefinition [
 ]
 
 { #category : 'examples' }
-RowanMethodDefinitionService >> sampleDefinitions [
+RowanMethodService >> sampleDefinitions [
 	
 	methodDefinitions := Array with: self sampleDefinition.
 	^methodDefinitions
@@ -169,42 +169,42 @@ RowanMethodDefinitionService >> sampleDefinitions [
 ]
 
 { #category : 'examples' }
-RowanMethodDefinitionService >> sampleMethodSelector [
+RowanMethodService >> sampleMethodSelector [
 
 	^'sampleMethod'
 
 ]
 
 { #category : 'examples' }
-RowanMethodDefinitionService >> sampleMethodSource [
+RowanMethodService >> sampleMethodSource [
 
 	^'sampleMethod ^''some text'''.
 
 ]
 
 { #category : 'Accessing' }
-RowanMethodDefinitionService >> selector [
+RowanMethodService >> selector [
 
 	^selector
 
 ]
 
 { #category : 'Accessing' }
-RowanMethodDefinitionService >> selector: aSymbol [
+RowanMethodService >> selector: aSymbol [
 
 	selector := aSymbol
 
 ]
 
 { #category : 'Accessing' }
-RowanMethodDefinitionService >> source [
+RowanMethodService >> source [
 
 	^source
 
 ]
 
 { #category : 'Accessing' }
-RowanMethodDefinitionService >> source: aString [
+RowanMethodService >> source: aString [
 	
 	source := aString
 

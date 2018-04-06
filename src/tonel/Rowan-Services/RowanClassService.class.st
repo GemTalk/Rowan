@@ -1,6 +1,6 @@
 Class {
-	#name : 'RowanClassDefinitionService',
-	#superclass : 'RowanDefinitionService',
+	#name : 'RowanClassService',
+	#superclass : 'RowanService',
 	#instVars : [
 		'name',
 		'comment',
@@ -18,7 +18,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-RowanClassDefinitionService class >> forClassNamed: className [ 
+RowanClassService class >> forClassNamed: className [ 
 
 	| inst |
 	inst := self new. 
@@ -28,7 +28,7 @@ RowanClassDefinitionService class >> forClassNamed: className [
 ]
 
 { #category : 'instance creation' }
-RowanClassDefinitionService class >> forClassNamed: className meta: aBoolean [
+RowanClassService class >> forClassNamed: className meta: aBoolean [
 
 	| inst |
 	inst := self new. 
@@ -39,7 +39,7 @@ RowanClassDefinitionService class >> forClassNamed: className meta: aBoolean [
 ]
 
 { #category : 'instance creation' }
-RowanClassDefinitionService class >> forClassNamed: className package: packageName [
+RowanClassService class >> forClassNamed: className package: packageName [
 
 	| inst |
 	inst := self forClassNamed: className.
@@ -49,72 +49,72 @@ RowanClassDefinitionService class >> forClassNamed: className package: packageNa
 ]
 
 { #category : 'rowan' }
-RowanClassDefinitionService >> classCreationTemplate [
+RowanClassService >> classCreationTemplate [
 	
 	^self browserTool classCreationTemplateForClass: self classFromName hybridBrowser: true.
 
 ]
 
 { #category : 'private' }
-RowanClassDefinitionService >> classFromName [
+RowanClassService >> classFromName [
 
 	^(System myUserProfile resolveSymbol: name asSymbol) value
 
 ]
 
 { #category : 'Accessing' }
-RowanClassDefinitionService >> classInstVarNames [
+RowanClassService >> classInstVarNames [
 	^classInstVarNames
 
 ]
 
 { #category : 'Updating' }
-RowanClassDefinitionService >> classInstVarNames: newValue [
+RowanClassService >> classInstVarNames: newValue [
 	classInstVarNames := newValue
 
 ]
 
 { #category : 'Accessing' }
-RowanClassDefinitionService >> classType [
+RowanClassService >> classType [
 	^classType
 
 ]
 
 { #category : 'Updating' }
-RowanClassDefinitionService >> classType: newValue [
+RowanClassService >> classType: newValue [
 	classType := newValue
 
 ]
 
 { #category : 'Accessing' }
-RowanClassDefinitionService >> classVarNames [
+RowanClassService >> classVarNames [
 	^classVarNames
 
 ]
 
 { #category : 'Updating' }
-RowanClassDefinitionService >> classVarNames: newValue [
+RowanClassService >> classVarNames: newValue [
 	classVarNames := newValue
 
 ]
 
 { #category : 'Accessing' }
-RowanClassDefinitionService >> comment [
+RowanClassService >> comment [
 	^comment
 
 ]
 
 { #category : 'Updating' }
-RowanClassDefinitionService >> comment: newValue [
+RowanClassService >> comment: newValue [
 	comment := newValue
 
 ]
 
 { #category : 'examples' }
-RowanClassDefinitionService >> createSampleClass [
+RowanClassService >> createSampleClass [
 
 	| classDefinition |
-	packageService := RowanPackageDefinitionService new. 
+	packageService := RowanPackageService new. 
 	packageService createSamplePackage.
 	classDefinition := RwClassDefinition
 		newForClassNamed: self sampleClassName
@@ -136,91 +136,91 @@ RowanClassDefinitionService >> createSampleClass [
 ]
 
 { #category : 'Accessing' }
-RowanClassDefinitionService >> instVarNames [
+RowanClassService >> instVarNames [
 	^instVarNames
 
 ]
 
 { #category : 'Updating' }
-RowanClassDefinitionService >> instVarNames: newValue [
+RowanClassService >> instVarNames: newValue [
 	instVarNames := newValue
 
 ]
 
 { #category : 'other' }
-RowanClassDefinitionService >> meta [
+RowanClassService >> meta [
 
 	^meta
 
 ]
 
 { #category : 'other' }
-RowanClassDefinitionService >> meta: anObject [
+RowanClassService >> meta: anObject [
 
 	meta := anObject
 
 ]
 
 { #category : 'Accessing' }
-RowanClassDefinitionService >> name [
+RowanClassService >> name [
 	^name
 
 ]
 
 { #category : 'Updating' }
-RowanClassDefinitionService >> name: newValue [
+RowanClassService >> name: newValue [
 	name := newValue
 
 ]
 
 { #category : 'examples' }
-RowanClassDefinitionService >> packageName [
+RowanClassService >> packageName [
 	
 	^packageService packageName
 
 ]
 
 { #category : 'examples' }
-RowanClassDefinitionService >> packageName: packageName [
+RowanClassService >> packageName: packageName [
 	
-	packageService ifNil:[packageService := RowanPackageDefinitionService new packageName: packageName].
+	packageService ifNil:[packageService := RowanPackageService new packageName: packageName].
 	^packageService packageName
 
 ]
 
 { #category : 'Accessing' }
-RowanClassDefinitionService >> packageService [
+RowanClassService >> packageService [
 	^packageService
 
 ]
 
 { #category : 'Updating' }
-RowanClassDefinitionService >> packageService: newValue [
+RowanClassService >> packageService: newValue [
 	packageService := newValue
 
 ]
 
 { #category : 'Accessing' }
-RowanClassDefinitionService >> poolDictionaryNames [
+RowanClassService >> poolDictionaryNames [
 	^poolDictionaryNames
 
 ]
 
 { #category : 'Updating' }
-RowanClassDefinitionService >> poolDictionaryNames: newValue [
+RowanClassService >> poolDictionaryNames: newValue [
 	poolDictionaryNames := newValue
 
 ]
 
 { #category : 'rowan' }
-RowanClassDefinitionService >> removeSelector: selector [
+RowanClassService >> removeSelector: selector [
 
 	self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta
 
 ]
 
 { #category : 'examples' }
-RowanClassDefinitionService >> sampleClass [
+RowanClassService >> sampleClass [
 	"return the actual resolved class"
 	
 	^(GsSession currentSession resolveSymbol: self sampleClassName) value
@@ -228,46 +228,46 @@ RowanClassDefinitionService >> sampleClass [
 ]
 
 { #category : 'examples' }
-RowanClassDefinitionService >> sampleClassInstance [
+RowanClassService >> sampleClassInstance [
 
 	^self sampleClass new
 
 ]
 
 { #category : 'examples' }
-RowanClassDefinitionService >> sampleClassName [
+RowanClassService >> sampleClassName [
 	
 	^'SampleClassName'
 
 ]
 
 { #category : 'examples' }
-RowanClassDefinitionService >> samplePackageName [
+RowanClassService >> samplePackageName [
 	
 	^packageService samplePackageName
 
 ]
 
 { #category : 'Accessing' }
-RowanClassDefinitionService >> subclassType [
+RowanClassService >> subclassType [
 	^subclassType
 
 ]
 
 { #category : 'Updating' }
-RowanClassDefinitionService >> subclassType: newValue [
+RowanClassService >> subclassType: newValue [
 	subclassType := newValue
 
 ]
 
 { #category : 'Accessing' }
-RowanClassDefinitionService >> superclassName [
+RowanClassService >> superclassName [
 	^superclassName
 
 ]
 
 { #category : 'Updating' }
-RowanClassDefinitionService >> superclassName: newValue [
+RowanClassService >> superclassName: newValue [
 	superclassName := newValue
 
 ]
