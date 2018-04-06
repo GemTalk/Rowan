@@ -26,13 +26,11 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> compiledMethod [
 { #category : 'deleting' }
 RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
 
-	| className class |
-	classDefinition key
-		ifNil: [ 
-			"class is being deleted ... we're cool"
-			^ self ].
-
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ 
+			"class cannot be found, so the method is already gone"
+			^ self ].
 
 	self packageSymbolDictionary
 		deleteMethod: methodDefinition selector

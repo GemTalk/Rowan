@@ -19,6 +19,8 @@ RwGsMethodPropertiesPatch >> installPropertiesPatchNewClasses: createdClasses an
 
 	| methodDictionary oldCompiledMethod loadedMethod |
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
 	methodDictionary := behavior persistentMethodDictForEnv: 0.
 	selector := methodDefinition selector.

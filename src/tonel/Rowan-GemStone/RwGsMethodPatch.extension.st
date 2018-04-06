@@ -14,7 +14,9 @@ RwGsMethodPatch >> primeBehaviorNewClasses: createdClasses andExistingClasses: t
 		ifAbsent: [ 
 			tempSymbols
 				at: className
-				ifAbsent: [ self error: 'Cannot find class to delete method from.' ] ].
+				ifAbsent: [ 
+					"cannot find class ... caller can decide whether or not that is a problem"
+					^ self ] ].
 	behavior := isMeta
 		ifTrue: [ class class ]
 		ifFalse: [ class ]

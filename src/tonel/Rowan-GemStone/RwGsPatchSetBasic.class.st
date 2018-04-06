@@ -562,7 +562,7 @@ RwGsPatchSetBasic >> apply [
 		addAndUpdateLoadedProjects;
 		addAndUpdateLoadedPackages;
 		removeDeletedClassesFromSystem;
-		"removeDeletedClassExtensionsFromSystem;"
+		"removeDeletedClassExtensionsFromSystem;" 
 		installAddedClasses;
 		installAddedClassExtensions;
 		"moveClassesBetweenSymbolDictionaries;"
