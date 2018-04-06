@@ -47,12 +47,6 @@ RwPackageProjectSpecification >> packageNamesInLoadOrder: anObject [
 ]
 
 { #category : 'accessing' }
-RwPackageProjectSpecification >> packageNamesToLoad [
-
-	^ packageNamesToLoad ifNil: [ self packageNamesInLoadOrder ]
-]
-
-{ #category : 'accessing' }
 RwPackageProjectSpecification >> packageNamesToLoad: anObject [
 
    packageNamesToLoad := anObject

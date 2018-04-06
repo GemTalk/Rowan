@@ -120,7 +120,7 @@ Rowan class >> loadedPackagesForProject: projectDefinition [
 	"Answer a PackageSet containing packages for the given project definition."
 
 	^ self
-		loadedPackagesNamed: projectDefinition loadedPackageNames
+		loadedPackagesNamed: projectDefinition packageNames
 		forProject: projectDefinition
 ]
 

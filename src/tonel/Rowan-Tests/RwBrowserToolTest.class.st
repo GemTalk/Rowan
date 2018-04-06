@@ -162,7 +162,6 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 		newForGitPackageProjectNamed: projectName.
 	projectDefinition
 		comment: comment;
-		packageNamesInLoadOrder: packageNames;
 		yourself.
 	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
 
@@ -174,6 +173,8 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 				root: rootPath
 				repoPath: repoPath ].
 
+	packageNames
+		do: [ :packageName | projectDefinition addPackageNamed: packageName ].
 	projectTools load loadProjectDefinition: projectDefinition
 ]
 

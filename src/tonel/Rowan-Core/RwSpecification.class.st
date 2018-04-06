@@ -28,7 +28,6 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 				do: [ :stream | 
 					^ (STON fromStream: stream)
 						initializeForImport;
-						projectUrl: specNameOrUrl;
 						yourself ] ].
 	url scheme asString = 'https'
 		ifTrue: [ 

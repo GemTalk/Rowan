@@ -152,12 +152,6 @@ RwProjectDefinition >> loadedCommitId [
 	^ self specification loadedCommitId
 ]
 
-{ #category : 'properties' }
-RwProjectDefinition >> loadedPackageNames [
-
-	^ self specification loadedPackageNames
-]
-
 { #category : 'accessing' }
 RwProjectDefinition >> packageNamed: aString [
 

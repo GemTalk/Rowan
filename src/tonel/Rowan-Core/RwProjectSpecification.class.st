@@ -5,6 +5,7 @@ Class {
 		'specName',
 		'projectUrl',
 		'platformSpec',
+		'configsPath',
 		'specsPath',
 		'repoSpec',
 		'repoPath',
@@ -55,6 +56,12 @@ RwProjectSpecification >> commitForTool: aRwTool message: messageString [
 { #category : 'actions' }
 RwProjectSpecification >> commitLogForTool: aRwTool limit: logLimit [
   ^ self repoSpec commitLogForTool: aRwTool limit: logLimit
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> configsPath [
+
+	^ configsPath ifNil: [ configsPath := 'configs' ]
 ]
 
 { #category : 'exporting' }
@@ -129,12 +136,6 @@ RwProjectSpecification >> initializeForImport [
 RwProjectSpecification >> loadedCommitId [
 
 	^ self imageSpec loadedCommitId
-]
-
-{ #category : 'accessing' }
-RwProjectSpecification >> loadedPackageNames [
-
-	^ self imageSpec loadedPackageNames
 ]
 
 { #category : 'accessing' }
@@ -282,8 +283,7 @@ RwProjectSpecification >> specName: anObject [
 { #category : 'accessing' }
 RwProjectSpecification >> specsPath [
 
-   ^specsPath
-
+	^ specsPath ifNil: [ specsPath := 'specs' ]
 ]
 
 { #category : 'accessing' }
@@ -296,13 +296,6 @@ RwProjectSpecification >> specsPath: anObject [
 { #category : 'actions' }
 RwProjectSpecification >> updateLoadedCommitIdForTool: aRwTool [
   ^ self repoSpec updateLoadedCommitIdForTool: aRwTool
-]
-
-{ #category : 'actions' }
-RwProjectSpecification >> updateLoadedPackageNamesTool: aRwTool packageNames: aPackageNames [
-  ^ self imageSpec
-    updateLoadedPackageNamesTool: aRwTool
-    packageNames: aPackageNames
 ]
 
 { #category : 'accessing' }

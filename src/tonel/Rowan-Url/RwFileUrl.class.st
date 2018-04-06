@@ -344,3 +344,9 @@ RwFileUrl >> schemeName [
 	^self class schemeName
 
 ]
+
+{ #category : 'accessing' }
+RwFileUrl >> segments [
+
+	^ path
+]

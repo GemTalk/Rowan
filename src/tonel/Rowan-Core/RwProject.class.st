@@ -49,7 +49,7 @@ RwProject >> loadedCommitId [
 { #category : 'accessing' }
 RwProject >> packageNames [
 
-	^ self _specification loadedPackageNames
+	^ self _loadedProject packageNames
 ]
 
 { #category : 'accessing' }
