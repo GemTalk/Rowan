@@ -35,6 +35,9 @@ TDRowanLoadedClassDefinition class >> initialize [
 		registerEditorClass: TDRowanMethodDefinitionElementBuilder
 			for: TDMethodTemplateDefinition
 			aspect: #'rowanMethod';
+		registerEditorClass: TDRowanClassAndMethodDefinitionsElementBuilder
+			for: Collection
+			aspect: #'rowanDefinitionList';
 		yourself
 ]
 

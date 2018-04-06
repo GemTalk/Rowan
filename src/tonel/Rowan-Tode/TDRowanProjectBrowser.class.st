@@ -19,7 +19,7 @@ TDRowanProjectBrowser >> browseProjectClassesMenuAction: listElement selectionIn
 	projectDef := self projects at: selectionIndex.
 	block := [ projectDef classDefinitions ].
 	^ (listElement topez toolInstanceFor: 'browse')
-		browseClassesBlock: block
+		browseRowanClassesBlock: block
 		windowName: #'rowanClasses'
 		location: #'app4'
 		label: 'Classes in ' , projectDef projectName

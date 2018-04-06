@@ -43,7 +43,7 @@ TDRowanPackageBrowser >> browsePackageClassesMenuAction: listElement selectionIn
 	packageDef := self packages at: selectionIndex.
 	block := [ packageDef classDefinitions ].
 	^ (listElement topez toolInstanceFor: 'browse')
-		browseClassesBlock: block
+		browseRowanClassesBlock: block
 		windowName: #'rowanClasses'
 		location: #'app4'
 		label: 'Classes in ' , packageDef packageName
@@ -94,7 +94,8 @@ TDRowanPackageBrowser >> menuActionSpec: miniTool [
 
 	theMiniTool := miniTool.
 	^ {#('new package' nil #'newPackageMenuAction:selectionIndex:').
-	#('add class to package' nil #'addClassMenuAction:selectionIndex:')} , {#('-')}
+	#('add class to package' nil #'addClassMenuAction:selectionIndex:').
+	#('remove package' nil #'removePackageMenuAction:selectionIndex:')} , {#('-')}
 		, self standardMenuActionSpec
 ]
 
@@ -155,6 +156,17 @@ TDRowanPackageBrowser >> projectDef [
 TDRowanPackageBrowser >> projectDef: anObject [
 
 	projectDef := anObject
+]
+
+{ #category : 'menu actions' }
+TDRowanPackageBrowser >> removePackageMenuAction: listElement selectionIndex: selectionIndex [
+
+	| classDefinitionString packageDef classDefTemplate |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	packageDef := self packages at: selectionIndex.
+	Rowan projectTools browser removePackageNamed: packageDef packageName.
+	^ #'refreshView'
 ]
 
 { #category : 'accessing' }
