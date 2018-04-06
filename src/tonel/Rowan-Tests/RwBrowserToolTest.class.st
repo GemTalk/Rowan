@@ -156,7 +156,7 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 	projectTools := Rowan projectTools.
 
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := RwProjectDefinition
 		newForGitPackageProjectNamed: projectName.
@@ -185,7 +185,7 @@ RwBrowserToolTest >> _loadExtendedProjectDefinition: projectName packageNames: p
 	projectTools := Rowan projectTools.
 
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := self
 		_standardProjectDefinition: projectName
@@ -250,7 +250,7 @@ RwBrowserToolTest >> _loadFullMultiProjectDefinition: projectNames packageNames:
 	1 to: projectNames size do: [ :index | 
 		| projectDefinition classDefinition |
 		(Rowan loadedProjectNamed: (projectNames at: index) ifAbsent: [  ])
-			ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 		projectDefinition := self
 			_standardProjectDefinition: (projectNames at: index)
@@ -310,7 +310,7 @@ RwBrowserToolTest >> _loadGlobalExtensionsProjectDefinition: projectName package
 	projectTools := Rowan projectTools.
 
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := self
 		_globalExtensionsProjectDefinition: projectName
@@ -334,7 +334,7 @@ RwBrowserToolTest >> _loadMultiProjectDefinition: projectNames packageNames: pac
 	1 to: projectNames size do: [ :index | 
 		| projectDefinition classDefinition |
 		(Rowan loadedProjectNamed: (projectNames at: index) ifAbsent: [  ])
-			ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 		projectDefinition := self
 			_standardProjectDefinition: (projectNames at: index)
@@ -362,7 +362,7 @@ RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNa
 	projectTools := Rowan projectTools.
 
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := self
 		_standardProjectDefinition: projectName
@@ -381,7 +381,7 @@ RwBrowserToolTest >> _loadSimpleProjectDefinition: projectName packageNames: pac
 	projectTools := Rowan projectTools.
 
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := self
 		_standardProjectDefinition: projectName
@@ -407,7 +407,7 @@ RwBrowserToolTest >> _loadStandardProjectDefinition: projectName packageNames: p
 	projectTools := Rowan projectTools.
 
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := self
 		_standardProjectDefinition: projectName

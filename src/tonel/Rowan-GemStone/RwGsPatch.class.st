@@ -48,10 +48,10 @@ RwGsPatch >> packageSymbolDictionary [
 	| symDictName symDict |
 	symDictName := self projectDefinition
 		symbolDictNameForPackageNamed: self packageName.
-	symDict := RwGsImage objectNamed: symDictName asSymbol.
+	symDict := Rowan image objectNamed: symDictName asSymbol.
 	(symDict isKindOf: RwGsPackageSymbolDictionary)
 		ifTrue: [ ^ symDict ].
-	^ RwGsImage newOrExistingSymbolDictionaryNamed: symDictName
+	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
 ]
 
 { #category : 'accessing' }
@@ -77,5 +77,5 @@ RwGsPatch >> resolveName: aName [
 
 	"Answer a SymbolAssociation for the given name."
 
-	^ RwGsImage resolveName: aName
+	^ Rowan image resolveName: aName
 ]

@@ -43,7 +43,7 @@ RwGsClassDeletionPatch >> removeClassFromSymbolDictionary [
 	dictName := classDefinition
 		propertyAt: 'gs_SymbolDictionary'
 		ifAbsent: [ 'UserGlobals' ].
-	dict := RwGsImage existingSymbolDictionaryNamed: dictName.
+	dict := Rowan image existingSymbolDictionaryNamed: dictName.
 	dict
 		ifNil: [ 
 			self

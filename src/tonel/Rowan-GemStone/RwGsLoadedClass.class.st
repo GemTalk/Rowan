@@ -15,7 +15,7 @@ RwGsLoadedClass class >> allClassesDo: aBlock [
 
 	"Iterate over all classes visible in the current session's transient symbol list, evaluating the block with each."
 
-	RwGsImage symbolList
+	Rowan image symbolList
 		do: [ :dict | 
 			dict
 				do: [ :maybeClass | 
@@ -66,7 +66,7 @@ RwGsLoadedClass class >> symbolDictsForClass: aClass [
 
 	| className |
 	className := aClass name.
-	^ RwGsImage symbolList
+	^ Rowan image symbolList
 		select: [ :dict | (dict at: className ifAbsent: [ nil ]) == aClass ]
 ]
 
@@ -115,12 +115,12 @@ RwGsLoadedClass >> handleClassDeletionOrNewVersion [
 	Answer true if the class still exists, false if it has been deleted."
 
 	| resolved thoseResolving |
-	resolved := RwGsImage resolveClassNamed: name.
+	resolved := Rowan image resolveClassNamed: name.
 	resolved == handle
 		ifTrue: [ ^ true ].	"Has been deleted, renamed, or a new version under the same name.
 	Answer false if deleted, set handle and answer true otherwise."
 	thoseResolving := handle classHistory reverse
-		select: [ :aClass | aClass == (RwGsImage resolveClassNamed: aClass name) ].
+		select: [ :aClass | aClass == (Rowan image resolveClassNamed: aClass name) ].
 	thoseResolving size = 0
 		ifTrue: [ 
 			self handleClassDeletion.

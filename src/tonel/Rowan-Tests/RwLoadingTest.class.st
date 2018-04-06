@@ -1449,7 +1449,7 @@ RwLoadingTest >> projectDefinitionFor: packageNames [
 		defaultSymbolDictName: self _symbolDictionaryName;
 		yourself.
 
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
 
 	^ projectDefinition
 ]
@@ -1682,7 +1682,7 @@ RwLoadingTest >> testClassAdd [
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
 
-	testClass := RwGsImage resolveClassNamed: className asSymbol.
+	testClass := Rowan image resolveClassNamed: className asSymbol.
 	loadedClass := self _symbolDictionary
 		existingForClass: testClass
 		ifAbsent: [ 
@@ -1712,7 +1712,7 @@ RwLoadingTest >> testClassDelete [
 							(self methodDeletionClassMethodsForClass1: className));
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass := RwGsImage resolveClassNamed: className asSymbol.
+	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self
 		assert:
@@ -1734,7 +1734,7 @@ RwLoadingTest >> testClassDelete [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	self assert: (RwGsImage resolveClassNamed: className asSymbol) isNil
+	self assert: (Rowan image resolveClassNamed: className asSymbol) isNil
 ]
 
 { #category : 'tests' }
@@ -1760,7 +1760,7 @@ RwLoadingTest >> testClassExtension [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
-	testClass := RwGsImage resolveClassNamed: className asSymbol.
+	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self should: [ testInstance foo ] raise: MessageNotUnderstood.
 	packageNames := {packageName2}.
@@ -1799,7 +1799,7 @@ RwLoadingTest >> testClassInitialization1 [
 							(self classInitializationClassMethodsForClass1: className));
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass := RwGsImage resolveClassNamed: className asSymbol.
+	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass classVar = 1.
 	self assert: testClass classInstVar1 = 1
 ]
@@ -1823,7 +1823,7 @@ RwLoadingTest >> testClassInitialization2 [
 							(self classInitializationClassMethodsForClass1: className));
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass := RwGsImage resolveClassNamed: className asSymbol.
+	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass classVar = 1.
 	self assert: testClass classInstVar1 = 1.
 	self assert: testClass classInstVar2 isNil.	"update the initialization method ... #initialize should run again"
@@ -1865,7 +1865,7 @@ RwLoadingTest >> testClassInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass1 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	civs1 := testClass1 _classInstVars copy.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -1876,7 +1876,7 @@ RwLoadingTest >> testClassInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	civs2 := testClass2 _classInstVars copy.
 	self deny: testClass2 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -1888,7 +1888,7 @@ RwLoadingTest >> testClassInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass3 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass3 := Rowan image resolveClassNamed: className asSymbol.
 	civs3 := testClass3 _classInstVars copy.
 	self deny: testClass3 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -1900,7 +1900,7 @@ RwLoadingTest >> testClassInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass4 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass4 := Rowan image resolveClassNamed: className asSymbol.
 	civs4 := testClass4 _classInstVars copy.
 	self deny: testClass4 == testClass1
 ]
@@ -2012,7 +2012,7 @@ RwLoadingTest >> testClassVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass1 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	cvs1 := testClass1 _classVars copy.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2023,7 +2023,7 @@ RwLoadingTest >> testClassVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	cvs2 := testClass2 _classVars copy.
 	self assert: testClass2 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -2035,7 +2035,7 @@ RwLoadingTest >> testClassVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass3 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass3 := Rowan image resolveClassNamed: className asSymbol.
 	cvs3 := testClass3 _classVars copy.
 	self assert: testClass3 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -2047,7 +2047,7 @@ RwLoadingTest >> testClassVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass4 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass4 := Rowan image resolveClassNamed: className asSymbol.
 	cvs4 := testClass4 _classVars copy.
 	self assert: testClass4 == testClass1
 ]
@@ -2099,7 +2099,7 @@ RwLoadingTest >> testCombinedChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass := RwGsImage resolveClassNamed: className asSymbol.
+	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self
 		assert: testClass testClassMethod1;
@@ -2164,7 +2164,7 @@ RwLoadingTest >> testInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass1 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	ivs1 := testClass1 _instVarNames copy.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2175,7 +2175,7 @@ RwLoadingTest >> testInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	ivs2 := testClass2 _instVarNames copy.
 	self deny: testClass2 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -2187,7 +2187,7 @@ RwLoadingTest >> testInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass3 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass3 := Rowan image resolveClassNamed: className asSymbol.
 	ivs3 := testClass3 _instVarNames copy.
 	self deny: testClass3 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -2199,7 +2199,7 @@ RwLoadingTest >> testInstVarChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass4 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass4 := Rowan image resolveClassNamed: className asSymbol.
 	ivs4 := testClass4 _instVarNames copy.
 	self deny: testClass4 == testClass1
 ]
@@ -2225,7 +2225,7 @@ RwLoadingTest >> testMethodDelete [
 							(self methodDeletionClassMethodsForClass1: className));
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass := RwGsImage resolveClassNamed: className asSymbol.
+	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self
 		assert:
@@ -2281,7 +2281,7 @@ RwLoadingTest >> testMethodProtocolChange [
 							(self methodProtocolChangeClassMethodsForClass1: className));
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass := RwGsImage resolveClassNamed: className asSymbol.
+	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
 	self
 		assert: testClass testClassMethod1;
@@ -2329,7 +2329,7 @@ RwLoadingTest >> testPoolDictionaryChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
-	testClass1 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	pds1 := testClass1 _poolDictionaries copy.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2341,7 +2341,7 @@ RwLoadingTest >> testPoolDictionaryChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	pds2 := testClass2 _poolDictionaries copy.
 	self deny: testClass2 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -2354,7 +2354,7 @@ RwLoadingTest >> testPoolDictionaryChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass3 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass3 := Rowan image resolveClassNamed: className asSymbol.
 	pds3 := testClass3 _poolDictionaries copy.
 	self deny: testClass3 == testClass1.
 	myPackageSet := RwPackageSetDefinition new.
@@ -2367,7 +2367,7 @@ RwLoadingTest >> testPoolDictionaryChanges [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass4 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass4 := Rowan image resolveClassNamed: className asSymbol.
 	pds4 := testClass4 _poolDictionaries copy.
 	self deny: testClass4 == testClass1
 ]
@@ -2409,7 +2409,7 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
-	testClass1 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
 	self assert: testInstance1 foo = 'foo'.
 	packageNames := {packageName}.
@@ -2425,7 +2425,7 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
 	self assert: testInstance2 foo = 'foo'
@@ -2454,7 +2454,7 @@ RwLoadingTest >> testSingleClassVersionChange2 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
-	testClass1 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
 	self assert: testInstance1 foo = 'foo'.
 	packageNames := {packageName}.
@@ -2470,7 +2470,7 @@ RwLoadingTest >> testSingleClassVersionChange2 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
 	self assert: testInstance2 foo = 'bar'
@@ -2499,7 +2499,7 @@ RwLoadingTest >> testSingleClassVersionChange3 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
-	testClass1 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
 	self assert: testInstance1 foo = 'foo'.
 	packageNames := {packageName}.
@@ -2515,7 +2515,7 @@ RwLoadingTest >> testSingleClassVersionChange3 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
-	testClass2 := RwGsImage resolveClassNamed: className asSymbol.
+	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
 	self assert: testInstance2 foo = 'foo'

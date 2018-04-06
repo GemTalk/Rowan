@@ -17,7 +17,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 	{projectName}
 		do: [ :name | 
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
 		newForGitPackageProjectNamed: projectName)
@@ -27,7 +27,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 		yourself.
 	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
 
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
 	className := 'Simple'.
 	classDefinition := RwClassDefinition
@@ -119,7 +119,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 	projectName2}
 		do: [ :name | 
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition1 := (RwProjectDefinition
 		newForGitPackageProjectNamed: projectName1)
@@ -129,7 +129,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.
 
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
 	className := 'Simple'.
 	classDefinition := RwClassDefinition
@@ -156,7 +156,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		defaultSymbolDictName: self _symbolDictionaryName2;
 		yourself.
 
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
 
 	classExtensionDefinition := RwClassExtensionDefinition
 		newForClassNamed: className.
@@ -200,7 +200,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 	{projectName}
 		do: [ :name | 
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
 		newForGitPackageProjectNamed: projectName)
@@ -213,8 +213,8 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 			forPackageNamed: 'Simple-Extensions1';
 		yourself.
 
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
 
 	className1 := 'Simple1'.
 	className2 := 'Simple2'.
@@ -242,7 +242,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 	testInstance1 := testClass1 new.
 	self should: [ testInstance1 ivar1 ] raise: MessageNotUnderstood.
 
-	dictionariesAndSymbols := RwGsImage symbolList
+	dictionariesAndSymbols := Rowan image symbolList
 		dictionariesAndSymbolsOf: testClass1.
 	self assert: dictionariesAndSymbols size = 1.
 	self
@@ -270,7 +270,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 	self assert: testClass1 notNil.
 	testInstance2 := testClass2 new.
 
-	dictionariesAndSymbols := RwGsImage symbolList
+	dictionariesAndSymbols := Rowan image symbolList
 		dictionariesAndSymbolsOf: testClass2.
 	self assert: dictionariesAndSymbols size = 1.
 	self
@@ -334,7 +334,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 	{projectName}
 		do: [ :name | 
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
 		newForGitPackageProjectNamed: projectName)
@@ -348,8 +348,8 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 		useSessionMethodsForExtensions: true forPackageNamed: 'Simple-Extensions';
 		yourself.
 
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
 
 	className1 := 'Simple'.
 	className2 := 'SimpleAssociation'.
@@ -439,7 +439,7 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 	{projectName}
 		do: [ :name | 
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
 		newForGitPackageProjectNamed: projectName)
@@ -451,7 +451,7 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 			forPackageNamed: 'Simple-Globals-Extensions';
 		yourself.
 
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
 
 	className := 'Object'.
 
@@ -493,7 +493,7 @@ RwProjectToolTest >> testSimpleProject1 [
 	{projectName}
 		do: [ :name | 
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	self
 		handleConfirmationDuring: [ 
@@ -509,7 +509,7 @@ RwProjectToolTest >> testSimpleProject1 [
 		packageNamesInLoadOrder: packageNames;
 		yourself.
 	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.
@@ -566,7 +566,7 @@ RwProjectToolTest >> testSimpleProject2 [
 	{projectName}
 		do: [ :name | 
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := RwProjectDefinition
 		newForGitPackageProjectNamed: projectName.
@@ -577,7 +577,7 @@ RwProjectToolTest >> testSimpleProject2 [
 		yourself.
 	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
 
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
 	classDefinition := RwClassDefinition
 		newForClassNamed: 'Simple2'
@@ -623,7 +623,7 @@ RwProjectToolTest >> testSimpleProject3 [
 	{projectName}
 		do: [ :name | 
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := RwProjectDefinition
 		newForGitPackageProjectNamed: projectName.
@@ -634,7 +634,7 @@ RwProjectToolTest >> testSimpleProject3 [
 		yourself.
 	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
 
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
 	className := 'Simple3'.
 	classDefinition := RwClassDefinition

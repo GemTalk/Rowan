@@ -98,7 +98,7 @@ RwSpecification >> register [
 
 	| newLoadedProject |
 	newLoadedProject := RwGsLoadedProject newForLoadSpecification: self.
-	RwGsImage addLoadedProject: newLoadedProject
+	Rowan image addLoadedProject: newLoadedProject
 ]
 
 { #category : 'registering' }

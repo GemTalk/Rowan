@@ -200,7 +200,7 @@ RwEditToolTest >> testAddAndRemoveClass [
 	{projectName}
 		do: [ :name | 
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := self
 		_standardProjectDefinition: projectName
@@ -252,7 +252,7 @@ RwEditToolTest >> testAddClassExtension [
 	{projectName}
 		do: [ :name | 
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	self
 		_loadExtendedProjectDefinition: projectName
@@ -287,7 +287,7 @@ RwEditToolTest >> testAddUpdateAndRemoveClass [
 	{projectName}
 		do: [ :name | 
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := self
 		_standardProjectDefinition: projectName
@@ -362,7 +362,7 @@ RwEditToolTest >> testUpdateClass [
 	{projectName}
 		do: [ :name | 
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	self
 		_loadStandardProjectDefinition: projectName
@@ -435,7 +435,7 @@ RwEditToolTest >> testUpdateClassExtension [
 	{projectName}
 		do: [ :name | 
 			(Rowan loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ] ].
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	self
 		_loadExtendedProjectDefinition: projectName

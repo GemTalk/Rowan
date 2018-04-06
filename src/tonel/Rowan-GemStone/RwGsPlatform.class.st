@@ -76,7 +76,7 @@ RwGsPlatform >> globalNamed: aString [
 
 	"Answer a global object with the given name.  If no object with the given name is found, returns nil."
 
-	^ RwGsImage objectNamed: aString
+	^ Rowan image objectNamed: aString
 ]
 
 { #category : 'queries' }
@@ -116,7 +116,7 @@ RwGsPlatform >> parseSelectorFrom: methodString [
 	meth := self
 		_parseMethod: methodString
 		category: #'xyzzy'
-		using: RwGsImage symbolList
+		using: self image symbolList
 		environmentId: 0.
 	meth class ~~ GsNMethod
 		ifTrue: [ 

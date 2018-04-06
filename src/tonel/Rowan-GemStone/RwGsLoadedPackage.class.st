@@ -19,7 +19,7 @@ RwGsLoadedPackage class >> allClassesDo: aBlock [
 
 	"Iterate over all classes visible in the current session's transient symbol list, evaluating the block with each."
 
-	RwGsImage symbolList
+	Rowan image symbolList
 		do: [ :dict | 
 			dict
 				do: [ :maybeClass | 

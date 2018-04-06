@@ -15,7 +15,7 @@ RwUnmanagedProjectDefinition >> methodEnvForPackageNamed: packageName [
 { #category : '*rowan-gemstone' }
 RwUnmanagedProjectDefinition >> projectOwnerId [
 
-	^ RwGsImage currentUserId
+	^ Rowan image currentUserId
 ]
 
 { #category : '*rowan-gemstone' }

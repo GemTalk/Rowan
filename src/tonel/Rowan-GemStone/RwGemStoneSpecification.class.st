@@ -39,7 +39,7 @@ RwGemStoneSpecification >> defaultSymbolDictName: aString [
 { #category : 'accessing' }
 RwGemStoneSpecification >> defaultUserId [
 
-	^ defaultUserId ifNil: [ defaultUserId := RwGsImage currentUserId ]
+	^ defaultUserId ifNil: [ defaultUserId := Rowan image currentUserId ]
 ]
 
 { #category : 'accessing' }
@@ -109,7 +109,7 @@ RwGemStoneSpecification >> postCopy [
 { #category : 'accessing' }
 RwGemStoneSpecification >> projectOwnerId [
 
-	^ projectOwnerId ifNil: [ RwGsImage currentUserId ]
+	^ projectOwnerId ifNil: [ Rowan image currentUserId ]
 ]
 
 { #category : 'accessing' }

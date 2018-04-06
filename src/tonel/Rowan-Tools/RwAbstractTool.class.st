@@ -32,7 +32,7 @@ RwAbstractTool class >> git [
 { #category : 'private' }
 RwAbstractTool >> _symbolDictionaryForSpecification [
 
-	^ RwGsImage
+	^ Rowan image
 		newOrExistingSymbolDictionaryNamed:
 			(specification platformSpec at: 'gemstone') defaultSymbolDictName
 ]

@@ -16,7 +16,7 @@ RwGsClassExtensionSymbolDictPatch >> installClassExtensionInSystem [
 	(self projectDefinition
 		useSessionMethodsForExtensionsForPackageNamed: self packageName)
 		ifTrue: [ 
-			(RwGsImage resolveClassNamed: self className)
+			(Rowan image resolveClassNamed: self className)
 				ifNil: [ 
 					self
 						error:

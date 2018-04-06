@@ -329,7 +329,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 		forClassExtensionsIn: className1.
 
 	(Rowan loadedProjectNamed: projectName2 ifAbsent: [  ])
-		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	browserTool
 		createGitPackageProjectNamed: projectName2
@@ -456,7 +456,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 		inPackageNamed: packageName2.	"extension method for className1"
 
 	(Rowan loadedProjectNamed: projectName2 ifAbsent: [  ])
-		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	browserTool
 		createGitPackageProjectNamed: projectName2

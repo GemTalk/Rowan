@@ -13,7 +13,7 @@ RwAbstractTest >> _classvars [
 { #category : 'private' }
 RwAbstractTest >> _symbolDictionary [
 
-	^ RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName
+	^ Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName
 ]
 
 { #category : 'private' }
@@ -38,7 +38,7 @@ RwAbstractTest >> _symbolDictionaryName2 [
 RwAbstractTest >> assertAbsenceOfPackage: packageName [
 
 	| loadedPackage symbolDict |
-	symbolDict := RwGsImage
+	symbolDict := Rowan image
 		newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
 	loadedPackage := symbolDict loadedPackageNamed: packageName ifAbsent: [  ].
 	self assert: loadedPackage equals: nil

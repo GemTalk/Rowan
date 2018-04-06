@@ -18,10 +18,10 @@ RwProjectSetTest >> testProjectSetLoad1 [
 	projectNames
 		do: [ :projectName | 
 			(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-				ifNotNil: [ :loadedProject | RwGsImage _removeLoadedProject: loadedProject ] ].
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
-	RwGsImage newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 

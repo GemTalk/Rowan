@@ -18,7 +18,7 @@ RwPkgWriteTool >> writeSpecification: aRwSpecification packageNames: packageName
 		do: [ :packageName | 
 			| package |
 			package := (CypressPackageDefinition named: packageName)
-				lookupSymbolList: RwGsImage symbolList;
+				lookupSymbolList: Rowan image symbolList;
 				yourself.
 			repo writePackageStructure: (CypressPackageStructure fromPackage: package) ].
 	^ specification

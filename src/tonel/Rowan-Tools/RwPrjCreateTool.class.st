@@ -70,7 +70,7 @@ RwPrjCreateTool >> createPackageProjectFor: projectDefinition format: format roo
 		repositoryRootPath: rootRepoPath;
 		repoPath: repoPath;
 		repositoryUrl: 'cypress:' , rootRepoPath , '/' , repoPath , '/'.
-	projectDefinition projectOwnerId: RwGsImage currentUserId.
+	projectDefinition projectOwnerId: Rowan image currentUserId.
 	projectDefinition specification copy export.
 	^ projectDefinition
 ]

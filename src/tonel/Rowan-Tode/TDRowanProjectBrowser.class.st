@@ -174,7 +174,7 @@ TDRowanProjectBrowser >> deleteAllProjectsMenuAction: listElement selectionIndex
 							index := symList indexOf: dict.
 							index > 0
 								ifTrue: [ user removeDictionaryAt: index ] ] ].
-			RwGsImage _removeLoadedProject: loadedProject ].
+			Rowan image _removeLoadedProject: loadedProject ].
 	GsPackagePolicy current refreshSessionMethodDictionary.
 	projects := projectBlock value.
 	^ #'refresh'
@@ -436,7 +436,7 @@ TDRowanProjectBrowser >> newDiskProjectSpecMenuAction: listElement selectionInde
 		repositoryUrl: 'cypress:' , repositoryRootPath , '/' , repoPath , '/';
 		yourself.
 	(spec platformSpec at: 'gemstone')
-		projectOwnerId: RwGsImage currentUserId;
+		projectOwnerId: Rowan image currentUserId;
 		defaultSymbolDictName: 'tODE_Rowan_Projects';
 		yourself.
 	Rowan projectTools create
