@@ -532,6 +532,8 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridDeletePackage [
 
+	"add 2 classes in 2 packages, extend each class from the other package ... remove the package"
+
 	| normalClass projectName packageNames packageName1 packageName2 otherClass className1 className2 theLoadedProject theLoadedPackage theLoadedClassOrClassExtension classNames |
 	className1 := 'SimpleHybridNormal1'.
 	className2 := 'SimpleHybridOther1'.
