@@ -4,12 +4,6 @@ Class {
 	#category : 'Rowan-Tools'
 }
 
-{ #category : 'image' }
-RwPrjLoadTool >> doUpdateLoadedPackageNames: aPackageNames [
-
-	^ specification imageSpec loadedPackageNames: aPackageNames
-]
-
 { #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 
@@ -48,12 +42,7 @@ RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad [
 	projectSetDefinitionToLoad definitions
 		do: [ :project | 
 			self specification: project specification.
-			project specification
-				updateLoadedCommitIdForTool: self;
-				updateLoadedPackageNamesTool: self
-					packageNames:
-						(Rowan loadedPackageDefinitionsNamed: project packageNames forProject: project)
-								definitionNames ].
+			project specification updateLoadedCommitIdForTool: self ].
 	^ diff
 ]
 

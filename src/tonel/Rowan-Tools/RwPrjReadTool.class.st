@@ -10,7 +10,7 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName [
 	| projectDefinition repo |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	repo := projectDefinition repositoryUrl asRwRepository.
-	projectDefinition packageNamesInLoadOrder
+	repo packageNames
 		do: [ :packageName | 
 			| structureName reader packageDefinition |
 			structureName := packageName , repo packageExtension.
@@ -41,7 +41,7 @@ RwPrjReadTool >> readProjectSetForSpecification: aRwSpecification [
 		ifNotNil: [ :urlString | urlString asRwUrl ].
 	repo := repositoryUrl asRwRepository.
 	projectDefinition := RwProjectDefinition newForSpecification: aRwSpecification.
-	aRwSpecification packageNamesInLoadOrder
+	repo packageNames
 		do: [ :packageName | 
 			| structureName reader snapshot packageDefinition |
 			structureName := packageName , repo packageExtension.

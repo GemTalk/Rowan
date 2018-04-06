@@ -169,55 +169,6 @@ TDRowanTool >> pkgcopy [
 ]
 
 { #category : 'pkg commands' }
-TDRowanTool >> pkgcreate [
-  "
-  pkg create [--commit[=<commit-message>] [--toLoad] --project=<project-name>] <package-name>...
-"
-
-  | doCommit commitMsg projectName tool toLoad |
-  toLoad := doCommit := false.
-  self
-    getSubcommandOptsMixedLongShort:
-      {#('project' nil #'required').
-      #('commit' nil #'optional').
-      #('toLoad' nil #'none')}.
-  subOptions
-    at: 'project'
-    ifPresent: [ :arg | 
-      projectName := arg.
-      subOptions
-        at: 'commit'
-        ifPresent: [ :arg | 
-          doCommit := true.
-          arg
-            ifNil: [ 
-              commitMsg := (GsMultiLineTextInteraction
-                prompt:
-                  'Please enter a commit message for project: ' , projectName
-                template: '') signal.
-              commitMsg
-                ifNil: [ 
-                  | msg |
-                  msg := 'pkg create aborted ... no commit message'.
-                  self inform: msg.
-                  ^ msg ] ]
-            ifNotNil: [ commitMsg := arg ] ].
-      subOptions at: 'toLoad' ifPresent: [ :ignored | toLoad := true ] ].
-  tool := Rowan packageTools create.
-  ^ projectName
-    ifNil: [ tool createPackagesNamed: subArguments ]
-    ifNotNil: [ 
-      toLoad
-        ifTrue: [ tool tool createToLoadPackagesNamed: subArguments forProjectNamed: projectName ]
-        ifFalse: [ 
-          tool
-            createPackagesNamed: subArguments
-            forProjectNamed: projectName
-            doCommit: doCommit
-            commitMsg: commitMsg ] ]
-]
-
-{ #category : 'pkg commands' }
 TDRowanTool >> pkgdiff [
   
 ]

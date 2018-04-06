@@ -16,7 +16,7 @@ RwPkgReadTool >> readPackageSetForSpecification: aRwSpecification [
 		ifNotNil: [ :urlString | urlString asRwUrl ].
 	repo := repositoryUrl asRwRepository.
 	readPackages := {}.
-	aRwSpecification packageNamesInLoadOrder
+	repo packageNames
 		do: [ :packageName | 
 			| structureName reader snapshot packageDefinition |
 			structureName := packageName , repo packageExtension.

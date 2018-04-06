@@ -139,12 +139,6 @@ RwProjectSpecification >> loadedCommitId [
 ]
 
 { #category : 'accessing' }
-RwProjectSpecification >> loadedPackageNames [
-
-	^ self imageSpec loadedPackageNames
-]
-
-{ #category : 'accessing' }
 RwProjectSpecification >> packageInfoSource [
 
 	^ packageInfoSource
@@ -302,13 +296,6 @@ RwProjectSpecification >> specsPath: anObject [
 { #category : 'actions' }
 RwProjectSpecification >> updateLoadedCommitIdForTool: aRwTool [
   ^ self repoSpec updateLoadedCommitIdForTool: aRwTool
-]
-
-{ #category : 'actions' }
-RwProjectSpecification >> updateLoadedPackageNamesTool: aRwTool packageNames: aPackageNames [
-  ^ self imageSpec
-    updateLoadedPackageNamesTool: aRwTool
-    packageNames: aPackageNames
 ]
 
 { #category : 'accessing' }

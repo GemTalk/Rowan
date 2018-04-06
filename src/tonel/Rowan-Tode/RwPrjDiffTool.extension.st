@@ -8,7 +8,7 @@ RwPrjDiffTool >> diffForProjectName: projectName [
 	super specification: loadedProject specification.
 	stream := TextStream on: Text new.
 	diffTool := Rowan packageTools diff.
-	self packageNames
+	loadedProject packageNames
 		do: [ :packageName | 
 			patch := diffTool patchForPackageName: packageName.
 			patch operations isEmpty

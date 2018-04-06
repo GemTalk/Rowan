@@ -133,11 +133,16 @@ RwProjectTool class >> write [
 
 { #category : 'smalltalk api' }
 RwProjectTool >> packageNames [
-  ^ specification packageNamesForTool: self
+
+	"this guy should go away when Rowan is developed in Rowan"
+
+	^ specification packageNamesForTool: self
 ]
 
 { #category : 'operations for package specs' }
 RwProjectTool >> packageNamesForPackageSpec: aPackageSpec [
+
+	"this should go away when Rowan is developed in Rowan"
 
 	^ aPackageSpec packageNamesInLoadOrder
 ]
