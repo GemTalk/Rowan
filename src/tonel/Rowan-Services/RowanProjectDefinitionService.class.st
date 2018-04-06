@@ -1,6 +1,6 @@
 Class {
-	#name : 'RowanProjectService',
-	#superclass : 'RowanService',
+	#name : 'RowanProjectDefinitionService',
+	#superclass : 'RowanDefinitionService',
 	#instVars : [
 		'name',
 		'sha',
@@ -13,49 +13,49 @@ Class {
 }
 
 { #category : 'accessing' }
-RowanProjectService class >> defaultProjectName [
+RowanProjectDefinitionService class >> defaultProjectName [
 
 	^DefaultProjectName
 
 ]
 
 { #category : 'accessing' }
-RowanProjectService class >> defaultProjectName: aString [
+RowanProjectDefinitionService class >> defaultProjectName: aString [
 
 	DefaultProjectName := aString
 
 ]
 
 { #category : 'other' }
-RowanProjectService >> branch [
+RowanProjectDefinitionService >> branch [
 
 	^branch
 
 ]
 
 { #category : 'other' }
-RowanProjectService >> branch: anObject [
+RowanProjectDefinitionService >> branch: anObject [
 
 	branch := anObject
 
 ]
 
 { #category : 'rowan' }
-RowanProjectService >> changes [
+RowanProjectDefinitionService >> changes [
 	
 	^(Rowan projectTools diff diffSpecUrl: name) asString.
 
 ]
 
 { #category : 'examples' }
-RowanProjectService >> createProjectNamed: projectName [ 
+RowanProjectDefinitionService >> createProjectNamed: projectName [ 
 
 	^self createProjectNamed: projectName in: self sampleSymbolDictionaryName.
 
 ]
 
 { #category : 'examples' }
-RowanProjectService >> createProjectNamed: projectName in: symbolDictionaryName [
+RowanProjectDefinitionService >> createProjectNamed: projectName in: symbolDictionaryName [
 
 	self rowanFixMe. "Dale doesn't like Rowan projectNames"
 	(Rowan projectNames includes: projectName) ifFalse:[
@@ -65,7 +65,7 @@ RowanProjectService >> createProjectNamed: projectName in: symbolDictionaryName 
 ]
 
 { #category : 'examples' }
-RowanProjectService >> createSampleProject [
+RowanProjectDefinitionService >> createSampleProject [
 
 	self removeProjectNamed: self sampleProjectName.
 	self createSampleSymbolDictionary.
@@ -74,70 +74,63 @@ RowanProjectService >> createSampleProject [
 ]
 
 { #category : 'accessing' }
-RowanProjectService >> defaultProjectName [
+RowanProjectDefinitionService >> defaultProjectName [
 
 	^self class defaultProjectName
 
 ]
 
 { #category : 'accessing' }
-RowanProjectService >> defaultProjectName: aString [
+RowanProjectDefinitionService >> defaultProjectName: aString [
 
 	self class defaultProjectName: aString
 
 ]
 
-{ #category : 'rowan' }
-RowanProjectService >> definition [
-
-	^(Rowan image loadedProjectNamed: name) asDefinition
-
-]
-
 { #category : 'other' }
-RowanProjectService >> name [
+RowanProjectDefinitionService >> name [
 
 	^name
 
 ]
 
 { #category : 'other' }
-RowanProjectService >> name: anObject [
+RowanProjectDefinitionService >> name: anObject [
 
 	name := anObject
 
 ]
 
 { #category : 'rowan' }
-RowanProjectService >> projectNames [
+RowanProjectDefinitionService >> projectNames [
 
 	^Rowan projectNames collect: [:string | self class new name: string]
 
 ]
 
 { #category : 'examples' }
-RowanProjectService >> removeProjectNamed: projectName [ 
+RowanProjectDefinitionService >> removeProjectNamed: projectName [ 
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
 
 ]
 
 { #category : 'examples' }
-RowanProjectService >> sampleProjectName [
+RowanProjectDefinitionService >> sampleProjectName [
 	
 	^'SampleProjectName'
 
 ]
 
 { #category : 'other' }
-RowanProjectService >> sha [
+RowanProjectDefinitionService >> sha [
 
 	^sha
 
 ]
 
 { #category : 'other' }
-RowanProjectService >> sha: anObject [
+RowanProjectDefinitionService >> sha: anObject [
 
 	sha := anObject
 

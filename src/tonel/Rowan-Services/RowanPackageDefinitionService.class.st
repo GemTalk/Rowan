@@ -1,6 +1,6 @@
 Class {
-	#name : 'RowanPackageService',
-	#superclass : 'RowanService',
+	#name : 'RowanPackageDefinitionService',
+	#superclass : 'RowanDefinitionService',
 	#instVars : [
 		'projectDefinition',
 		'packageName',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-RowanPackageService class >> forPackageNamed: packageName [
+RowanPackageDefinitionService class >> forPackageNamed: packageName [
 
 	| inst |
 	inst := self new. 
@@ -20,7 +20,7 @@ RowanPackageService class >> forPackageNamed: packageName [
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> createPackage [
+RowanPackageDefinitionService >> createPackage [
 	| projectService default |
 	default := RowanProjectDefinitionService defaultProjectName.
 	projectService := RowanProjectDefinitionService new.
@@ -31,7 +31,7 @@ RowanPackageService >> createPackage [
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> createPackageNamed: aString inProject: projectName [
+RowanPackageDefinitionService >> createPackageNamed: aString inProject: projectName [
 	| projectService | 
 	packageName := aString.
 	projectService := RowanProjectDefinitionService new.
@@ -42,7 +42,7 @@ RowanPackageService >> createPackageNamed: aString inProject: projectName [
 ]
 
 { #category : 'examples' }
-RowanPackageService >> createSamplePackage [
+RowanPackageDefinitionService >> createSamplePackage [
 
 	"assume that the sample project & symbol dictionary 
 	were already removed"
@@ -57,35 +57,28 @@ RowanPackageService >> createSamplePackage [
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> definition [
-
-	^(Rowan image loadedPackageNamed: name) asDefinition
-
-]
-
-{ #category : 'rowan' }
-RowanPackageService >> deletePackage [
+RowanPackageDefinitionService >> deletePackage [
 
 	self browserTool removePackageNamed: packageName.
 
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> genericClassCreationTemplate [
+RowanPackageDefinitionService >> genericClassCreationTemplate [
 
 	^self browserTool classCreationTemplateForSubclassOf: 'Object' category: name packageName: nil
 
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> loadedClassDefinitions [
+RowanPackageDefinitionService >> loadedClassDefinitions [
 
 	^self loadedClasses collect:[:loadedClass | loadedClass asDefinition]
 
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> loadedClasses [
+RowanPackageDefinitionService >> loadedClasses [
 
 	| loadedPackage |
 	loadedPackage := Rowan image loadedPackageNamed: packageName ifAbsent:[^Array new].
@@ -94,71 +87,71 @@ RowanPackageService >> loadedClasses [
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> loadedClassHandles [
+RowanPackageDefinitionService >> loadedClassHandles [
 
 	^self loadedClasses collect:[:loadedClass | loadedClass handle]
 
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> loadedClassNames [
+RowanPackageDefinitionService >> loadedClassNames [
 
 	^self loadedClasses collect:[:loadedClass | loadedClass name]
 
 ]
 
 { #category : 'Accessing' }
-RowanPackageService >> name [
+RowanPackageDefinitionService >> name [
 	^name
 
 ]
 
 { #category : 'Updating' }
-RowanPackageService >> name: newValue [
+RowanPackageDefinitionService >> name: newValue [
 	name := newValue
 
 ]
 
 { #category : 'Accessing' }
-RowanPackageService >> packageName [
+RowanPackageDefinitionService >> packageName [
 	^packageName
 
 ]
 
 { #category : 'Updating' }
-RowanPackageService >> packageName: newValue [
+RowanPackageDefinitionService >> packageName: newValue [
 	packageName := newValue
 
 ]
 
 { #category : 'Accessing' }
-RowanPackageService >> projectDefinition [
+RowanPackageDefinitionService >> projectDefinition [
 	^projectDefinition
 
 ]
 
 { #category : 'Updating' }
-RowanPackageService >> projectDefinition: newValue [
+RowanPackageDefinitionService >> projectDefinition: newValue [
 	projectDefinition := newValue
 
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> removeClassNamed: className [
+RowanPackageDefinitionService >> removeClassNamed: className [
 
 	self browserTool removeClassNamed: className
 
 ]
 
 { #category : 'examples' }
-RowanPackageService >> samplePackageName [
+RowanPackageDefinitionService >> samplePackageName [
 	
 	^'SamplePackageName'
 
 ]
 
 { #category : 'examples' }
-RowanPackageService >> sampleProjectName [
+RowanPackageDefinitionService >> sampleProjectName [
 
 	^'SampleProjectName'
 
