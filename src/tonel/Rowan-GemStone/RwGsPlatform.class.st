@@ -5,8 +5,23 @@ A GsPlatform is the gateway object for requesting platform-specific actions.
 Class {
 	#name : 'RwGsPlatform',
 	#superclass : 'RwPlatform',
+	#instVars : [
+		'alternateImageClass'
+	],
 	#category : 'Rowan-GemStone'
 }
+
+{ #category : 'private' }
+RwGsPlatform >> _alternateImageClass [
+
+	^ alternateImageClass
+]
+
+{ #category : 'private' }
+RwGsPlatform >> _alternateImageClass: anImageClass [
+
+	alternateImageClass := anImageClass
+]
 
 { #category : 'private' }
 RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId [
@@ -81,9 +96,10 @@ RwGsPlatform >> globalNamed: aString [
 
 { #category : 'queries' }
 RwGsPlatform >> image [
-  "Answer the platform-specific object for querying the local image"
 
-  ^ RwGsImage
+	"Answer the platform-specific object for querying the local image"
+
+	^ alternateImageClass ifNil: [ RwGsImage ]
 ]
 
 { #category : 'initialization' }

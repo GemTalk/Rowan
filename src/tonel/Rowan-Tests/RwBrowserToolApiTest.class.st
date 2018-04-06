@@ -848,7 +848,6 @@ RwBrowserToolApiTest >> testDeleteMethod [
 		comment: 'project for testing project browser api'
 		className: className
 		inPackageName: packageName1.
-
 	self
 		_assert: [ :classDef :packageDef :projectDef | 
 			packageDef name = packageName1

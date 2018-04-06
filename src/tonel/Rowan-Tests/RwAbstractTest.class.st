@@ -553,5 +553,14 @@ RwAbstractTest >> setUp [
 					index := symList indexOf: dict.
 					index > 0
 						ifTrue: [ user removeDictionaryAt: index ] ] ].
-	GsPackagePolicy current refreshSessionMethodDictionary
+	GsPackagePolicy current refreshSessionMethodDictionary.
+
+	Rowan platform _alternateImageClass: Rowan image testImageClass
+]
+
+{ #category : 'running' }
+RwAbstractTest >> tearDown [
+
+	super tearDown.
+	Rowan platform _alternateImageClass: nil
 ]
