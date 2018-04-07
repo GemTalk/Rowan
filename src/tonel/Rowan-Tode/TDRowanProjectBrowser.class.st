@@ -11,6 +11,14 @@ Class {
 }
 
 { #category : 'menu actions' }
+TDRowanProjectBrowser >> bootstrapLoadMenuAction: listElement selectionIndex: selectionIndex [
+
+	[ ^ self loadProjectMenuAction: listElement selectionIndex: selectionIndex ]
+		on: RwExistingAssociationWithSameKeyNotification
+		do: [ :ex | ex resume ]
+]
+
+{ #category : 'menu actions' }
 TDRowanProjectBrowser >> browseProjectClassesMenuAction: listElement selectionIndex: selectionIndex [
 
 	| projectDef block |
@@ -406,6 +414,7 @@ TDRowanProjectBrowser >> menuActionSpec: miniTool [
 		->
 			{#('project spec' nil #'inspectProjectSpecMenuAction:selectionIndex:').
 			#('loaded project' nil #'inspectLoadedProjectMenuAction:selectionIndex:').
+			#('bootstrap load' nil #'bootstrapLoadMenuAction:selectionIndex:').
 			#('tests' nil #'testProjectMenuAction:selectionIndex:')})}.
 	#('-').
 	{('Git'

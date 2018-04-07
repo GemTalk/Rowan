@@ -284,10 +284,12 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 	self
 		_symbolDictionaryAt: assoc key
 		ifPresent: [ 
-			self
-				error:
+			(RwExistingAssociationWithSameKeyNotification new
+				errorMessage:
 					'internal error - there is an existing assocition with the same key: '
-						, assoc key printString ].
+						, assoc key printString)
+				signal.
+			self _symbolDictionary removeKey: assoc key ].
 	classRegistry
 		at: class classHistory
 		ifAbsent: [ 
