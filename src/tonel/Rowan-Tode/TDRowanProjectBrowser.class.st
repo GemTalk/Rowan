@@ -176,6 +176,8 @@ TDRowanProjectBrowser >> deleteAllProjectsMenuAction: listElement selectionIndex
 								ifTrue: [ user removeDictionaryAt: index ] ] ].
 			Rowan image _removeLoadedProject: loadedProject ].
 	GsPackagePolicy current refreshSessionMethodDictionary.
+	ClassOrganizer clearCachedOrganizer.
+	(Rowan image objectNamed: 'RwAbstractTest') ifNotNil: [ :cl | cl cleanup ].
 	projects := projectBlock value.
 	^ #'refresh'
 ]
