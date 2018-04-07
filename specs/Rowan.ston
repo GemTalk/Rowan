@@ -11,6 +11,6 @@
 		#committish : 'master',
 		#committishType : 'branch'
 	},
-	#repoPath : 'tonel',
+	#repoPath : 'src/tonel',
 	#comment : ''
 }
