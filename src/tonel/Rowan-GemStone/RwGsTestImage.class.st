@@ -22,3 +22,15 @@ RwGsTestImage class >> _loadedTestProjectRegistryForUserId: aUserId [
 				ifFalse: [ ^ nil ].
 			ug at: #'RwGsTestLoadedProjectRegistry' put: StringKeyValueDictionary new ]
 ]
+
+{ #category : 'accessing' }
+RwGsTestImage class >> resetTestProjectRegistry [
+
+	"self resetTestProjectRegistry"
+
+	"drop any projects that may be present test project registry"
+
+	((AllUsers userWithId: self currentUserId) objectNamed: #'UserGlobals')
+		removeKey: #'RwGsTestLoadedProjectRegistry'
+		ifAbsent: [  ]
+]
