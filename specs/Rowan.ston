@@ -3,7 +3,7 @@
 	#projectUrl : 'https://github.com/dalehenrich/Rowan',
 	#platformSpec : {
 		'gemstone' : RwGemStoneSpecification {
-			#defaultSymbolDictName : 'UserGlobals',
+			#defaultSymbolDictName : 'RowanGlobals',
 			#defaultUseSessionMethodsForExtensions : true }
 	},
 	#specsPath : 'specs',
