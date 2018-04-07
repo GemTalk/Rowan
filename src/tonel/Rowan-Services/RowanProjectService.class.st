@@ -94,6 +94,13 @@ RowanProjectService >> definition [
 
 ]
 
+{ #category : 'rowan' }
+RowanProjectService >> loadProjectNamed: aName [
+
+		Rowan projectTools load loadProjectNamed: aName
+
+]
+
 { #category : 'other' }
 RowanProjectService >> name [
 
@@ -109,6 +116,17 @@ RowanProjectService >> name: anObject [
 ]
 
 { #category : 'rowan' }
+RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
+	"set useSsh to false to clone using https:"
+
+	Rowan projectTools clone
+		cloneSpecUrl: url
+		gitRootPath: rootPath
+		useSsh: useSsh.
+
+]
+
+{ #category : 'rowan' }
 RowanProjectService >> projectNames [
 
 	^Rowan projectNames collect: [:string | self class new name: string]
@@ -118,7 +136,7 @@ RowanProjectService >> projectNames [
 { #category : 'examples' }
 RowanProjectService >> removeProjectNamed: projectName [ 
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | RwGsImage _removeLoadedProject: project ].
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 ]
 
