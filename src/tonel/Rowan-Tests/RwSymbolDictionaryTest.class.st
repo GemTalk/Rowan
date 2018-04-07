@@ -128,7 +128,10 @@ RwSymbolDictionaryTest >> testClassAdditionPatch [
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 
-	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
+	dict rowanSymbolDictionaryRegistry
+		addClassAssociation: assoc
+		forClass: class
+		toPackageNamed: packageName.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
@@ -159,7 +162,10 @@ RwSymbolDictionaryTest >> testClassAdditionPatchWithCategory [
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 
-	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
+	dict rowanSymbolDictionaryRegistry
+		addClassAssociation: assoc
+		forClass: class
+		toPackageNamed: packageName.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
@@ -188,12 +194,15 @@ RwSymbolDictionaryTest >> testClassDeletionPatch [
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 
-	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
+	dict rowanSymbolDictionaryRegistry
+		addClassAssociation: assoc
+		forClass: class
+		toPackageNamed: packageName.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
-	dict deleteClassFromPackage: class.
+	dict rowanSymbolDictionaryRegistry deleteClassFromPackage: class.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass isNil.
@@ -218,13 +227,16 @@ RwSymbolDictionaryTest >> testClassPropertiesPatch [
 	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
-	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
+	dict rowanSymbolDictionaryRegistry
+		addClassAssociation: assoc
+		forClass: class
+		toPackageNamed: packageName.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	newClass := self _applyBenignPropertiesTo: class.
-	dict updateClassProperties: newClass.
+	dict rowanSymbolDictionaryRegistry updateClassProperties: newClass.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
@@ -255,13 +267,16 @@ RwSymbolDictionaryTest >> testClassVariableChangePatch [
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 
-	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
+	dict rowanSymbolDictionaryRegistry
+		addClassAssociation: assoc
+		forClass: class
+		toPackageNamed: packageName.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	newClass := self _applyClassVariableChangeTo: class.
-	dict updateClassProperties: newClass.
+	dict rowanSymbolDictionaryRegistry updateClassProperties: newClass.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
@@ -296,13 +311,16 @@ RwSymbolDictionaryTest >> testClassVersioningPatch [
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
 
-	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
+	dict rowanSymbolDictionaryRegistry
+		addClassAssociation: assoc
+		forClass: class
+		toPackageNamed: packageName.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
 
 	newClass := self _applyClassNewVersionChangesTo: class.
-	dict addNewClassVersionToAssociation: newClass.
+	dict rowanSymbolDictionaryRegistry addNewClassVersionToAssociation: newClass.
 	superclassName := 'Association'.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
@@ -337,7 +355,10 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
-	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
+	dict rowanSymbolDictionaryRegistry
+		addClassAssociation: assoc
+		forClass: class
+		toPackageNamed: packageName.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
@@ -346,13 +367,13 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 
 	methodSelector := #'foo'.
 	methodSource := 'foo ^ ''foo'''.
-	methodProtocol := RwGsPackageSymbolDictionary defaultProtocolString.
+	methodProtocol := RwGsSymbolDictionaryRegistry defaultProtocolString.
 	compiledMethod := self
 		_compileMethodIn: class
 		source: methodSource
 		dictionaries: Rowan image symbolList.
 
-	dict addRecompiledMethod: compiledMethod.	"this should work, ends up using the package of the class"
+	dict rowanSymbolDictionaryRegistry addRecompiledMethod: compiledMethod.	"this should work, ends up using the package of the class"
 
 	self assert: testInstance foo = 'foo'.
 	self
@@ -389,7 +410,10 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
-	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
+	dict rowanSymbolDictionaryRegistry
+		addClassAssociation: assoc
+		forClass: class
+		toPackageNamed: packageName.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
@@ -401,7 +425,7 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 		source: 'foo ^ ''foo'''
 		dictionaries: Rowan image symbolList.
 
-	dict
+	dict rowanSymbolDictionaryRegistry
 		addNewCompiledMethod: compiledMethod
 		for: class
 		protocol: 'accessing'
@@ -409,7 +433,9 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 
 	self assert: testInstance foo = 'foo'.
 
-	dict deleteCompiledMethod: compiledMethod from: class.
+	dict rowanSymbolDictionaryRegistry
+		deleteCompiledMethod: compiledMethod
+		from: class.
 
 	self should: [ testInstance foo = 'foo' ] raise: MessageNotUnderstood.
 
@@ -447,7 +473,10 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInSymbolDictionaryExtension [
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName1 := 'TestSymbolDictPackage'.
 	packageName2 := 'TestSymbolDictExtensionPackage'.
-	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName1.
+	dict rowanSymbolDictionaryRegistry
+		addClassAssociation: assoc
+		forClass: class
+		toPackageNamed: packageName1.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	testInstance := testClass new.
@@ -467,7 +496,7 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInSymbolDictionaryExtension [
 		source: methodSource
 		dictionaries: Rowan image symbolList.
 
-	dict
+	dict rowanSymbolDictionaryRegistry
 		addExtensionCompiledMethod: compiledMethod
 		for: class
 		protocol: methodProtocol
@@ -523,7 +552,10 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
-	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
+	dict rowanSymbolDictionaryRegistry
+		addClassAssociation: assoc
+		forClass: class
+		toPackageNamed: packageName.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
@@ -538,7 +570,7 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 		source: methodSource
 		dictionaries: Rowan image symbolList.
 
-	dict
+	dict rowanSymbolDictionaryRegistry
 		addNewCompiledMethod: compiledMethod
 		for: class
 		protocol: methodProtocol
@@ -549,7 +581,9 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 		assert: (x := testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
 
 	methodProtocol := 'the accessing'.
-	dict moveCompiledMethod: compiledMethod toProtocol: methodProtocol.
+	dict rowanSymbolDictionaryRegistry
+		moveCompiledMethod: compiledMethod
+		toProtocol: methodProtocol.
 
 	self assert: testInstance foo = 'foo'.
 	self assert: (testClass categoryOfSelector: #'foo') = methodProtocol asSymbol.
@@ -584,7 +618,10 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 	dict := self _symbolDictionary.
 	assoc := SymbolAssociation newWithKey: class name asSymbol value: nil.
 	packageName := 'TestSymbolDictPackage'.
-	dict addClassAssociation: assoc forClass: class toPackageNamed: packageName.
+	dict rowanSymbolDictionaryRegistry
+		addClassAssociation: assoc
+		forClass: class
+		toPackageNamed: packageName.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass == class.
@@ -599,7 +636,7 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 		source: methodSource
 		dictionaries: Rowan image symbolList.
 
-	dict
+	dict rowanSymbolDictionaryRegistry
 		addNewCompiledMethod: compiledMethod
 		for: class
 		protocol: methodProtocol
@@ -615,7 +652,7 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 		source: methodSource
 		dictionaries: Rowan image symbolList.
 
-	dict addRecompiledMethod: newCompiledMethod.
+	dict rowanSymbolDictionaryRegistry addRecompiledMethod: newCompiledMethod.
 
 	self assert: testInstance foo = 'bar'.
 	self
@@ -628,7 +665,7 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 		source: methodSource
 		dictionaries: Rowan image symbolList.
 
-	dict
+	dict rowanSymbolDictionaryRegistry
 		addNewCompiledMethod: newCompiledMethod
 		for: class
 		protocol: methodProtocol

@@ -161,9 +161,9 @@ RwGsImage class >> loadedClassExtensionsForClass: class [
 	found := IdentitySet new.
 	self symbolList
 		do: [ :symbolDict | 
-			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
-				ifTrue: [ 
-					(symbolDict classExtensionRegistry at: history ifAbsent: [  ])
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry classExtensionRegistry at: history ifAbsent: [  ])
 						ifNotNil: [ :loadedClassExtensionSet | found addAll: loadedClassExtensionSet ] ] ].
 	^ found
 ]
@@ -191,9 +191,9 @@ RwGsImage class >> loadedClassForClass: class ifAbsent: absentBlock [
 	history := class classHistory.
 	self symbolList
 		do: [ :symbolDict | 
-			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
-				ifTrue: [ 
-					(symbolDict classRegistry at: history ifAbsent: [  ])
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry classRegistry at: history ifAbsent: [  ])
 						ifNotNil: [ :loadedClass | ^ loadedClass ] ] ].
 	^ absentBlock value
 ]
@@ -239,9 +239,9 @@ RwGsImage class >> loadedHybridPackageNamed: aHybridName ifAbsent: absentBlock [
 
 	self symbolList
 		do: [ :symbolDict | 
-			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
-				ifTrue: [ 
-					(symbolDict loadedHybridPackageNamed: aHybridName ifAbsent: [  ])
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry loadedHybridPackageNamed: aHybridName ifAbsent: [  ])
 						ifNotNil: [ :loadedPackage | ^ loadedPackage ] ] ].
 	^ absentBlock value
 ]
@@ -263,9 +263,9 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 	compiledMethod ifNil: [ ^ absentBlock value ].
 	self symbolList
 		do: [ :symbolDict | 
-			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
-				ifTrue: [ 
-					(symbolDict methodRegistry at: compiledMethod ifAbsent: [  ])
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry methodRegistry at: compiledMethod ifAbsent: [  ])
 						ifNotNil: [ :loadedMethod | ^ foundBlock value: loadedMethod ] ] ].
 	^ absentBlock value
 ]
@@ -290,9 +290,9 @@ RwGsImage class >> loadedMethodForMethod: compiledMethod ifAbsent: absentBlock [
 
 	self symbolList
 		do: [ :symbolDict | 
-			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
-				ifTrue: [ 
-					(symbolDict methodRegistry at: compiledMethod ifAbsent: [  ])
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry methodRegistry at: compiledMethod ifAbsent: [  ])
 						ifNotNil: [ :loadedMethod | ^ loadedMethod ] ] ].
 	^ absentBlock value
 ]
@@ -312,9 +312,9 @@ RwGsImage class >> loadedPackageNamed: aName ifAbsent: absentBlock [
 
 	self symbolList
 		do: [ :symbolDict | 
-			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
-				ifTrue: [ 
-					(symbolDict loadedPackageNamed: aName ifAbsent: [  ])
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry loadedPackageNamed: aName ifAbsent: [  ])
 						ifNotNil: [ :loadedPackage | ^ loadedPackage ] ] ].
 	^ absentBlock value
 ]
@@ -387,21 +387,24 @@ RwGsImage class >> newOrExistingSymbolDictionaryNamed: dictName [
 	Otherwise, create one, add it to the beginning of both transient and persistent symbol lists, and 
 	answer it."
 
-	| symbolName session symbolList |
+	| symbolName session symbolList symbolDict |
 	symbolName := dictName asSymbol.
 	session := GsCurrentSession currentSession.
 	symbolList := session symbolList.
-	^ symbolList
+	symbolDict := symbolList
 		detect: [ :each | (each at: symbolName ifAbsent: [ nil ]) == each ]
 		ifNone: [ 
-			| newDict |
-			newDict := RwGsPackageSymbolDictionary new
+			| newDict size |
+			newDict := SymbolDictionary new
 				name: symbolName;
 				objectSecurityPolicy: symbolList objectSecurityPolicy;
 				yourself.
-			symbolList insertObject: newDict at: 1.
-			session userProfile symbolList addLast: newDict.
-			newDict ]
+			size := System myUserProfile symbolList size.
+			System myUserProfile insertDictionary: newDict at: size + 1.
+			newDict ].
+	symbolDict rowanSymbolDictionaryRegistry
+		ifNil: [ RwGsSymbolDictionaryRegistry installIn: symbolDict ].
+	^ symbolDict
 ]
 
 { #category : 'querying' }
@@ -468,8 +471,8 @@ RwGsImage class >> removeLoadedClassExtensionsForClass: class [
 	history := class classHistory.
 	self symbolList
 		do: [ :symbolDict | 
-			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
-				ifTrue: [ symbolDict classExtensionRegistry removeKey: history ifAbsent: [  ] ] ]
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | registry classExtensionRegistry removeKey: history ifAbsent: [  ] ] ]
 ]
 
 { #category : 'querying' }
@@ -480,8 +483,8 @@ RwGsImage class >> removeLoadedMethodForCompileMethod: compiledMethod [
 
 	self symbolList
 		do: [ :symbolDict | 
-			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
-				ifTrue: [ symbolDict methodRegistry removeKey: compiledMethod ifAbsent: [  ] ] ]
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | registry methodRegistry removeKey: compiledMethod ifAbsent: [  ] ] ]
 ]
 
 { #category : 'cypress (old)' }

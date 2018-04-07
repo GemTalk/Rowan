@@ -17,7 +17,7 @@ RwGsPatch >> markNotDirtyPackageNamed: packageName [
 	| loadedPackage source |
 	source := Rowan configuration packageInfoSource.
 	loadedPackage := source == #'SymbolDictionary'
-		ifTrue: [ self packageSymbolDictionary loadedPackageNamed: packageName ifAbsent: [  ] ]
+		ifTrue: [ self symbolDictionaryRegistry loadedPackageNamed: packageName ifAbsent: [  ] ]
 		ifFalse: [ Rowan loadedPackageNamed: packageName ifAbsent: [  ] ].
 	loadedPackage
 		ifNil: [ self error: 'Internal error -- attempt to manipulate nonexistent package.' ].
@@ -49,8 +49,8 @@ RwGsPatch >> packageSymbolDictionary [
 	symDictName := self projectDefinition
 		symbolDictNameForPackageNamed: self packageName.
 	symDict := Rowan image objectNamed: symDictName asSymbol.
-	(symDict isKindOf: RwGsPackageSymbolDictionary)
-		ifTrue: [ ^ symDict ].
+	symDict
+		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
 	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
 ]
 
@@ -78,4 +78,22 @@ RwGsPatch >> resolveName: aName [
 	"Answer a SymbolAssociation for the given name."
 
 	^ Rowan image resolveName: aName
+]
+
+{ #category : 'accessing' }
+RwGsPatch >> symbolDictionary [
+
+	| symDictName symDict |
+	symDictName := self projectDefinition
+		symbolDictNameForPackageNamed: self packageName.
+	symDict := Rowan image objectNamed: symDictName asSymbol.
+	symDict
+		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
+	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
+]
+
+{ #category : 'accessing' }
+RwGsPatch >> symbolDictionaryRegistry [
+
+	^ self symbolDictionary rowanSymbolDictionaryRegistry
 ]

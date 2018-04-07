@@ -159,7 +159,7 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
 	aClassDefinition := aClassModification after.
-	dict := self packageSymbolDictionary.
+	dict := self symbolDictionary.
 	existingClass := dict
 		at: aClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
@@ -202,7 +202,7 @@ RwGsClassVersioningPatch >> addPatchedClassModificationForcingNewClassVersion: a
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
 	aClassDefinition := aClassModification after.
-	dict := self packageSymbolDictionary.
+	dict := self symbolDictionary.
 	existingClass := dict
 		at: aClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].

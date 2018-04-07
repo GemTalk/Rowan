@@ -55,7 +55,7 @@ RwLoadingTest class >> run [
 { #category : 'private' }
 RwLoadingTest >> _symbolDictionaryName [
 
-	^ #'UnmanagedPackages'
+	^ self _unmanagedDictionaryName
 ]
 
 { #category : 'support - simple definitions' }
@@ -1683,7 +1683,7 @@ RwLoadingTest >> testClassAdd [
 	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
 
 	testClass := Rowan image resolveClassNamed: className asSymbol.
-	loadedClass := self _symbolDictionary
+	loadedClass := self _symbolDictionary rowanSymbolDictionaryRegistry
 		existingForClass: testClass
 		ifAbsent: [ 
 			"expected to find a loaded class"

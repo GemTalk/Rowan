@@ -315,12 +315,13 @@ RwGsLoadedSymbolDictClass >> updatePoolDictionaryNamesFromClass [
 ]
 
 { #category : 'private-updating' }
-RwGsLoadedSymbolDictClass >> updatePropertiesFromClassFor: aSymbolDictionary [
+RwGsLoadedSymbolDictClass >> updatePropertiesFromClassFor: aSymbolDictionaryRegistry [
 
 	"Update my properties from the class. Leave unknown properties alone, they may apply to another platform."
 
 	self
-		updateSymbolDictionaryFromClassFor: aSymbolDictionary;
+		updateSymbolDictionaryFromClassFor:
+				aSymbolDictionaryRegistry _symbolDictionary;
 		updateClassNameFromClass;
 		updateSuperclassNameFromClass;
 		updateInstvarNamesFromClass;

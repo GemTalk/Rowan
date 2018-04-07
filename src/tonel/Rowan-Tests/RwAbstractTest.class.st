@@ -22,6 +22,12 @@ RwAbstractTest class >> _symbolDictionaryName2 [
 	^ #'RowanTestData2'
 ]
 
+{ #category : 'private' }
+RwAbstractTest class >> _unmanagedDictionaryName [
+
+	^ #'UnmanagedPackages'
+]
+
 { #category : 'cleanup' }
 RwAbstractTest class >> cleanup [
 
@@ -34,7 +40,7 @@ RwAbstractTest class >> cleanup [
 	{(self _symbolDictionaryName).
 	(self _symbolDictionaryName1).
 	(self _symbolDictionaryName2).
-	#'UnmanagedPackages'}
+	(self _unmanagedDictionaryName)}
 		do: [ :symDictName | 
 			dict := symList objectNamed: symDictName.
 
@@ -79,13 +85,21 @@ RwAbstractTest >> _symbolDictionaryName2 [
 	^ self class _symbolDictionaryName2
 ]
 
+{ #category : 'private' }
+RwAbstractTest >> _unmanagedDictionaryName [
+
+	^ self class _unmanagedDictionaryName
+]
+
 { #category : 'support' }
 RwAbstractTest >> assertAbsenceOfPackage: packageName [
 
 	| loadedPackage symbolDict |
 	symbolDict := Rowan image
 		newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
-	loadedPackage := symbolDict loadedPackageNamed: packageName ifAbsent: [  ].
+	loadedPackage := symbolDict rowanSymbolDictionaryRegistry
+		loadedPackageNamed: packageName
+		ifAbsent: [  ].
 	self assert: loadedPackage equals: nil
 ]
 

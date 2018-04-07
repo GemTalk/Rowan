@@ -70,9 +70,9 @@ RwBrowserToolTest >> _assertForClassExtensionInClassWithHistory: classHistory if
 	found := IdentitySet new.
 	Rowan image symbolList
 		do: [ :symbolDict | 
-			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
-				ifTrue: [ 
-					(symbolDict classExtensionRegistry at: classHistory ifAbsent: [  ])
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry classExtensionRegistry at: classHistory ifAbsent: [  ])
 						ifNotNil: [ :loadedClassExtensionSet | found addAll: loadedClassExtensionSet ] ] ].
 	found isEmpty
 		ifFalse: [ ^ presentBlock cull: found ].
