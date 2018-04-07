@@ -375,7 +375,13 @@ TDRowanProjectBrowser >> loadProjectMenuAction: listElement selectionIndex: sele
 	selectionIndex = 0
 		ifTrue: [ ^ false ].
 	projectDef := self projects at: selectionIndex.
-	Rowan projectTools load loadProjectNamed: projectDef projectName.
+	[ Rowan projectTools load loadProjectNamed: projectDef projectName ]
+		on: Warning
+		do: [ :ex | 
+			Transcript
+				cr;
+				show: ex description.
+			ex resume: true ].
 	listElement topez commitTransaction.
 	^ #'refreshView'
 ]
