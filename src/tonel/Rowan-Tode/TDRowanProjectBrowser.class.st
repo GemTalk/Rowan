@@ -375,7 +375,10 @@ TDRowanProjectBrowser >> loadProjectMenuAction: listElement selectionIndex: sele
 	selectionIndex = 0
 		ifTrue: [ ^ false ].
 	projectDef := self projects at: selectionIndex.
-	[ Rowan projectTools load loadProjectNamed: projectDef projectName ]
+	[ 
+	Rowan projectTools load
+		loadProjectNamed: projectDef projectName
+		withConfiguration: 'Default' ]
 		on: Warning
 		do: [ :ex | 
 			Transcript

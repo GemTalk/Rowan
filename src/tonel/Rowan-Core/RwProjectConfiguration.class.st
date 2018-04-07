@@ -11,6 +11,39 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwProjectConfiguration class >> fromUrl: specNameOrUrl [
+
+	"self fromUrl: 'file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSample1/configs/Default.ston'"
+
+	| url |
+	url := specNameOrUrl asRwUrl.
+	url scheme isNil
+		ifTrue: [ self error: 'scheme must be file: or https:' ].
+	url scheme = 'file'
+		ifTrue: [ 
+			CypressFileUtilities current
+				readStreamFor: url fileName
+				in: url pathForDirectory
+				do: [ :stream | 
+					^ (STON fromStream: stream)
+						initializeForImport;
+						yourself ] ].
+	url scheme asString = 'https'
+		ifTrue: [ 
+			| client response |
+			GsSecureSocket disableCertificateVerificationOnClient.
+			client := (System myUserProfile symbolList objectNamed: 'ZnClient') new.
+			response := client
+				beOneShot;
+				enforceHttpSuccess: true;
+				get: url.
+			^ (STON fromString: response decodeFromUTF8)
+				initializeForImport;
+				yourself ].
+	self error: 'Unknown scheme: ' , url scheme printString
+]
+
+{ #category : 'instance creation' }
 RwProjectConfiguration class >> newNamed: aName for: projectName [
 
 	^ self new
@@ -118,10 +151,20 @@ RwProjectConfiguration >> exportToUrl: fileUrl [
 
 { #category : 'initialization' }
 RwProjectConfiguration >> initializeForExport [
-  "if spec is to be exported, clear out any of the fields that represent state that should 
+
+	"if spec is to be exported, clear out any of the fields that represent state that should 
 	not be shared"
 
-  projectName := nil
+	self initializeForImport
+]
+
+{ #category : 'initialization' }
+RwProjectConfiguration >> initializeForImport [
+
+	"if spec has been imported, clear out any of the fields that represent state that should 
+	not be shared"
+
+	projectName := nil
 ]
 
 { #category : 'accessing' }
@@ -136,6 +179,14 @@ RwProjectConfiguration >> name: anObject [
 
    name := anObject
 
+]
+
+{ #category : 'accessing' }
+RwProjectConfiguration >> packageNames [
+
+	"for now, we assume that the names in configNames are all package names, eventually they may be names of other configs"
+
+	^ self configNames
 ]
 
 { #category : 'accessing' }
