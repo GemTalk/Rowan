@@ -31,7 +31,7 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 						yourself ] ].
 	url scheme asString = 'https'
 		ifTrue: [ 
-			| contents client response |
+			| client response |
 			GsSecureSocket disableCertificateVerificationOnClient.
 			client := (System myUserProfile symbolList objectNamed: 'ZnClient') new.
 			response := client

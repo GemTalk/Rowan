@@ -261,7 +261,7 @@ RwGsLoadedClass >> updateClassTypeFromClass [
 
 	"Must be in-synch with RwGsClassCreationPatch>>basicCreateClassFor:"
 
-	| propertyName oldValue newValue changed |
+	| propertyName oldValue newValue |
 	propertyName := 'type'.
 	oldValue := self propertyAt: propertyName.
 	newValue := handle isBytesOrSpecial
@@ -375,7 +375,7 @@ RwGsLoadedClass >> updateOptionsFromClass [
 	Not all combinations are legal, but we don't have to worry about that here, since we're getting the values
 	from the image, and the image is trusted to only have valid values."
 
-	| propertyName oldValue newValue changed |
+	| propertyName oldValue newValue |
 	propertyName := 'gs_options'.
 	oldValue := self propertyAt: propertyName.
 	newValue := (handle _optionsArray collect: [:option | option asString])
@@ -427,7 +427,7 @@ RwGsLoadedClass >> updateSuperclassNameFromClass [
   oldName := self propertyAt: 'superclass'.
   newName := handle superclass
     ifNil: [ 'nil' ]
-    ifNotNil: [ :super | super name asString ].
+    ifNotNil: [ :superclass | superclass name asString ].
   oldName = newName
     ifFalse: [ self propertyAt: 'superclass' put: newName ]
 ]

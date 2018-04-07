@@ -70,7 +70,7 @@ CypCypress1PackageReader >> readClassPropertiesFromDirectoryEntries: entries [
 { #category : 'private' }
 CypCypress1PackageReader >> readMethodDefinitionFrom: aStream [
 
-	| properties notice category source selector |
+	| properties source selector |
 	properties := Dictionary new.
 	(aStream peekFor: $")
 		ifTrue: [aStream nextLine]
@@ -95,7 +95,7 @@ CypCypress1PackageReader >> readMethodDefinitionsFor: classDefinition in: entrie
 
 	entries do: 
 			[:entry |
-			| methods isMeta |
+			| isMeta |
 			(entry endsWith: '/instance') ifTrue: [isMeta := false].
 			(entry endsWith: '/class') ifTrue: [isMeta := true].
 			isMeta

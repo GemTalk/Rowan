@@ -82,7 +82,7 @@ RwPrjEditTool >> removeClassNamed: className fromPackageNamed: packageName inPro
 	"Remove the named class definition from the named package in the given project. 
 		Return the projectDefinition"
 
-	| packageDefinition classDefinition |
+	| packageDefinition |
 	packageDefinition := projectDefinition packageNamed: packageName.
 	packageDefinition removeClassNamed: className.
 	^ projectDefinition

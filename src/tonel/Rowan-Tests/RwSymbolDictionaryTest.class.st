@@ -211,7 +211,7 @@ RwSymbolDictionaryTest >> testClassPropertiesPatch [
 
 	"add a packaged class to a RwPackageSymbolDictionary, then update properties (non-class version/class variable properties)"
 
-	| dict class assoc packageName compiledMethod className testClass newClass expectedPackageSet superclassName loadedPackageSet diff |
+	| dict class assoc packageName className testClass newClass expectedPackageSet superclassName loadedPackageSet diff |
 	className := 'TestSymbolDictClass'.
 	superclassName := 'Object'.
 	class := self _createClassNamed: className superclassName: 'Object'.

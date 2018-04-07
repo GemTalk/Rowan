@@ -3,7 +3,7 @@ Extension { #name : 'CypressClassDefinition' }
 { #category : '*rowan-tools' }
 CypressClassDefinition >> definitionString [
 
-	| stream classType type |
+	| classType type |
 	type := self subclassType.
 	type = ''
 		ifTrue: [ classType := 'normal' ]

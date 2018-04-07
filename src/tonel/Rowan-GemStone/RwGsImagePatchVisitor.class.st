@@ -277,7 +277,7 @@ RwGsImagePatchVisitor >> visitMethodsModification: aMethodsModification [
 { #category : 'visting' }
 RwGsImagePatchVisitor >> visitPackageModification: aPackageModification [
 
-	| propertiesModification classesModification classExtensionsModification |
+	| propertiesModification |
 	aPackageModification isAddition
 		ifTrue: [ 
 			self addAddedPackage: aPackageModification after.
@@ -322,7 +322,7 @@ RwGsImagePatchVisitor >> visitProjecteSetModification: aProjectSetModification [
 { #category : 'visting' }
 RwGsImagePatchVisitor >> visitProjectModification: aProjectModification [
 
-	| propertiesModification classesModification classExtensionsModification |
+	| propertiesModification |
 	aProjectModification isAddition
 		ifTrue: [ 
 			self addAddedProject: aProjectModification after.

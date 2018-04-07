@@ -419,7 +419,7 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass [
 { #category : 'class browsing' }
 RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridBrowser [
 
-	| result anArray lfsp newByteSubclass firstElement poolDicts civs superClass className thePackageName nonRowanClass |
+	| result anArray lfsp newByteSubclass civs superClass className thePackageName nonRowanClass |
 	result := String new.
 	superClass := aClass superclass.
 	className := aClass name asString.
@@ -609,7 +609,7 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 
 	"classType may be 'normal', 'bytes', or 'variable'"
 
-	| result anArray lfsp firstElement poolDicts civs |
+	| result lfsp |
 	result := String new.
 	result addAll: superclassName.
 	lfsp := Character lf asString

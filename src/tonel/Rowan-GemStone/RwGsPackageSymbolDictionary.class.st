@@ -248,7 +248,7 @@ RwGsPackageSymbolDictionary >> addClassAssociation: assoc forClass: class toPack
 { #category : 'method - patch api' }
 RwGsPackageSymbolDictionary >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension properties |
+	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
 	methodDictionary := behavior persistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	methodDictionary at: selector put: compiledMethod.
@@ -368,7 +368,7 @@ RwGsPackageSymbolDictionary >> addNewClassVersionToAssociation: newClass [
 { #category : 'method - patch api' }
 RwGsPackageSymbolDictionary >> addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension properties |
+	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
 	methodDictionary := behavior persistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	(methodDictionary at: selector ifAbsent: [  ])

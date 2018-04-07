@@ -79,7 +79,7 @@ RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivale
         of the formats must match exactly.
 "
 
-	| supr opts ivs civs poolds cvars ans cvarsOnly cvarsPatched |
+	| supr opts ivs civs poolds cvars cvarsPatched |
 	cvarsPatched := anArrayOfClassVars isEmpty not.
 	self
 		_newSubclassWithSuperclass: newSuperclass
@@ -198,7 +198,7 @@ RwGsClassVersioningPatch >> addPatchedClassModificationForcingNewClassVersion: a
 
 	"Uncontitionally create a new class version"
 
-	| dict existingClass newFormat aClassDefinition newSuperclass |
+	| dict existingClass aClassDefinition |
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
 	aClassDefinition := aClassModification after.

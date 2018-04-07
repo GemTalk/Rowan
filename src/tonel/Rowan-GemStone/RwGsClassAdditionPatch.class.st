@@ -82,7 +82,7 @@ RwGsClassAdditionPatch >> newOrExistingSymbolDictionaryNamed: dictName [
 
 	"Do not use RwGsImage, because RwGsImage is oriented toward installing RwGsPackageSymbolDictionary at the moment"
 
-	| symbolName session symbolList association |
+	| symbolName session symbolList |
 	symbolName := dictName asSymbol.
 	session := GsCurrentSession currentSession.
 	symbolList := session symbolList.

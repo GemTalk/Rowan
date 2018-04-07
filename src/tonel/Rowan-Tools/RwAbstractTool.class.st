@@ -102,7 +102,7 @@ RwAbstractTool >> definitionsForMethod: selector inClassNamed: className isMeta:
 { #category : 'git' }
 RwAbstractTool >> doGitCommit: messageString [
 
-	| gitTool gitRootPath commitMessageFileName status loadedCommitId |
+	| gitTool gitRootPath commitMessageFileName status |
 	gitTool := self class git.
 	gitRootPath := specification repoSpec repositoryRootPath.
 	commitMessageFileName := gitTool createTmpFileWith: messageString.

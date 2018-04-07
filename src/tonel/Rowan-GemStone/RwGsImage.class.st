@@ -339,16 +339,16 @@ RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 		ifAbsent: [ 
 			AllUsers
 				do: [ :userProfile | 
-					| userId |
-					userId := userProfile userId.
-					userId ~= currentUserId
+					| aUserId |
+					aUserId := userProfile userId.
+					aUserId ~= currentUserId
 						ifTrue: [ 
-							(self _loadedProjectRegistryForUserId: userId)
+							(self _loadedProjectRegistryForUserId: aUserId)
 								ifNotNil: [ :projectRegistry | 
 									(projectRegistry at: aString ifAbsent: [  ])
 										ifNotNil: [ :loadedProject | 
 											(loadedProject specification platformSpect at: 'gemstone') projectOwnerId
-												= userId
+												= aUserId
 												ifTrue: [ ^ loadedProject ] ] ] ] ].
 			^ absentBlock value ]
 ]
@@ -365,18 +365,18 @@ RwGsImage class >> loadedProjects [
 
 	AllUsers
 		do: [ :userProfile | 
-			| userId |
-			userId := userProfile userId.
-			userId ~= currentUserId
+			| aUserId |
+			aUserId := userProfile userId.
+			aUserId ~= currentUserId
 				ifTrue: [ 
-					(self _loadedProjectRegistryForUserId: userId)
+					(self _loadedProjectRegistryForUserId: aUserId)
 						ifNotNil: [ :projectRegistry | 
 							loadedProjects
 								addAll:
 									(projectRegistry
 										select: [ :loadedProject | 
 											(loadedProject specification platformSpect at: 'gemstone') projectOwnerId
-												= userId ]) ] ] ].
+												= aUserId ]) ] ] ].
 	^ loadedProjects
 ]
 
@@ -387,7 +387,7 @@ RwGsImage class >> newOrExistingSymbolDictionaryNamed: dictName [
 	Otherwise, create one, add it to the beginning of both transient and persistent symbol lists, and 
 	answer it."
 
-	| symbolName session symbolList association |
+	| symbolName session symbolList |
 	symbolName := dictName asSymbol.
 	session := GsCurrentSession currentSession.
 	symbolList := session symbolList.
@@ -437,15 +437,15 @@ RwGsImage class >> projectNamed: aString ifAbsent: absentBlock [
 		ifAbsent: [ 
 			AllUsers
 				do: [ :userProfile | 
-					| userId |
-					userId := userProfile userId.
-					userId ~= currentUserId
+					| aUserId |
+					aUserId := userProfile userId.
+					aUserId ~= currentUserId
 						ifTrue: [ 
-							(self _projectRegistryForUserId: userId)
+							(self _projectRegistryForUserId: aUserId)
 								ifNotNil: [ :projectRegistry | 
 									(projectRegistry at: aString ifAbsent: [  ])
 										ifNotNil: [ :projectSpec | 
-											(projectSpec platformSpec at: 'gemstone') projectOwnerId = userId
+											(projectSpec platformSpec at: 'gemstone') projectOwnerId = aUserId
 												ifTrue: [ ^ projectSpec ] ] ] ] ].
 			^ absentBlock value ]
 ]

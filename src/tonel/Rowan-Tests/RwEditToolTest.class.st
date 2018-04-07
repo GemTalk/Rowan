@@ -241,7 +241,7 @@ RwEditToolTest >> testAddAndRemoveClass [
 { #category : 'tests - classes' }
 RwEditToolTest >> testAddClassExtension [
 
-	| projectName packageNames packageName1 packageName2 className projectTools projectDefinition classDefinition testClass testInstance |
+	| projectName packageNames packageName1 packageName2 className testClass testInstance |
 	projectName := 'SimpleClassExtension'.
 	packageName1 := 'Simple-Core'.
 	packageName2 := 'Simple-Extension'.
@@ -422,7 +422,7 @@ RwEditToolTest >> testUpdateClass [
 { #category : 'tests - classes' }
 RwEditToolTest >> testUpdateClassExtension [
 
-	| projectName packageNames packageName1 packageName2 packageName3 className projectTools projectDefinition classExtensionDefinition testClass testInstance classExtensionDefinitions |
+	| projectName packageNames packageName1 packageName2 packageName3 className projectTools testClass testInstance classExtensionDefinitions |
 	projectName := 'SimpleClassExtension'.
 	packageName1 := 'Simple-Core'.
 	packageName2 := 'Simple-Extension1'.

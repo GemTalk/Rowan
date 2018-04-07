@@ -89,24 +89,24 @@ RwGsLoadedPackage class >> scanForNewClassesByCategories [
 
 { #category : 'private' }
 RwGsLoadedPackage class >> scanForNewMethodsByProtocols [
+
 	"If we do not have a LoadedMethod for a method in the system, create one and put it in a package
 	based on its protocol."
 
-	RwGsLoadedMethod allMethodsDo:
-			[:method |
+	RwGsLoadedMethod
+		allMethodsDo: [ :method | 
 			| loadedMethod |
 			loadedMethod := RwGsLoadedMethod existingForMethod: method.
 			loadedMethod == AbsentToken
-				ifTrue: 
-					[| class loadedClass package |
+				ifTrue: [ 
+					| class loadedClass |
 					class := method inClass.
 					loadedClass := RwGsLoadedClass existingForClass: class.
 					loadedClass == AbsentToken
-						ifTrue: [self error: 'Classes should have been scanned before methods.'].
-					loadedMethod := RwGsLoadedMethod forMethod: method.
-					"Initially, put the method in the package of its class. If this is wrong, updating from protocol will fix it."
+						ifTrue: [ self error: 'Classes should have been scanned before methods.' ].
+					loadedMethod := RwGsLoadedMethod forMethod: method.	"Initially, put the method in the package of its class. If this is wrong, updating from protocol will fix it."
 					loadedClass addLoadedMethod: loadedMethod.
-					loadedMethod updateFromImageProtocols]]
+					loadedMethod updateFromImageProtocols ] ]
 ]
 
 { #category : 'updating' }

@@ -9,7 +9,7 @@ CypressTonelRepository >> packageNames [
 	utils := self fileUtils.
 	^ (((utils directoryEntriesFrom: self directoryPath , '*')
 		reject: [ :each | 
-			| name aGsFileStat |
+			| aGsFileStat |
 			aGsFileStat := GsFile _stat: each isLstat: false.
 			aGsFileStat _isSmallInteger
 				ifTrue: [ false ]

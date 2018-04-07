@@ -152,7 +152,7 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 { #category : 'private' }
 RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment format: format root: rootPath repoPath: repoPath [
 
-	| projectDefinition classDefinition projectTools |
+	| projectDefinition projectTools |
 	projectTools := Rowan projectTools.
 
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
@@ -358,7 +358,7 @@ RwBrowserToolTest >> _loadMultiProjectDefinition: projectNames packageNames: pac
 { #category : 'private' }
 RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
 
-	| projectDefinition classDefinition projectTools |
+	| projectDefinition projectTools |
 	projectTools := Rowan projectTools.
 
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])

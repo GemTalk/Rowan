@@ -43,7 +43,7 @@ RwPrjReadTool >> readProjectSetForSpecification: aRwSpecification [
 	projectDefinition := RwProjectDefinition newForSpecification: aRwSpecification.
 	repo packageNames
 		do: [ :packageName | 
-			| structureName reader snapshot packageDefinition |
+			| structureName reader packageDefinition |
 			structureName := packageName , repo packageExtension.
 			reader := repo reader.
 			reader

@@ -33,7 +33,7 @@ RwFiletreeUrl >> privateInitializeFromText: aString [
   "Calculate host and path from a file URL in String format.
 	Some malformed formats are allowed and interpreted by guessing."
 
-  | schemeName pathString bare i |
+  | schemeName pathString bare |
   host := ''.
   bare := aString trimSeparators.
   schemeName := RwUrl schemeNameForString: bare.

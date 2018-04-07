@@ -1909,7 +1909,7 @@ RwLoadingTest >> testClassInstVarChanges [
 RwLoadingTest >> testClassPropertyChangesWithNewClassVersion1 [
 	"test class property changes that result in new class versions"
 
-	| packageName packageNames myPackageSet className |
+	| packageName packageNames myPackageSet |
 	packageName := 'NewClassVersionChangesTestPackage'.
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
@@ -1939,7 +1939,7 @@ RwLoadingTest >> testClassPropertyChangesWithNewClassVersion2 [
 
 	"add methods that reference the new class properties"
 
-	| packageName packageNames myPackageSet className |
+	| packageName packageNames myPackageSet |
 	packageName := 'NewClassVersionChangesTestPackage'.
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
@@ -1967,7 +1967,7 @@ RwLoadingTest >> testClassPropertyChangesWithNewClassVersion2 [
 RwLoadingTest >> testClassPropertyChangesWithNoNewClassVersion [
 	"test class property changes that do no result in new class versions"
 
-	| packageName packageNames myPackageSet className |
+	| packageName packageNames myPackageSet |
 	packageName := 'ClassPropertyChangesTestPackage'.
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.

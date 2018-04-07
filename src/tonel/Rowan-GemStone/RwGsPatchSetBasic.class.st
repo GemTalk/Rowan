@@ -633,7 +633,7 @@ RwGsPatchSetBasic >> createClassesFromWorklist: workList andClassesByName: newCl
 	"Pick one class or class version from the workList and create it, creating any superclasses or superclass versions that are to be created.
 	Remove any classes created from the workList."
 
-	| className patch superclassName |
+	| className |
 	className := self anyElementOfCollection: workList.
 	className ifNil: [self error: 'Empty WorkList.'].
 	self

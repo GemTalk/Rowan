@@ -371,7 +371,7 @@ TDRowanProjectBrowser >> itemSelected: miniTool listElement: listElement selecte
 { #category : 'menu actions' }
 TDRowanProjectBrowser >> loadProjectMenuAction: listElement selectionIndex: selectionIndex [
 
-	| projectDef loads |
+	| projectDef |
 	selectionIndex = 0
 		ifTrue: [ ^ false ].
 	projectDef := self projects at: selectionIndex.
@@ -472,7 +472,7 @@ TDRowanProjectBrowser >> newGitHubProjectSpecMenuAction: listElement selectionIn
 
 	"file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSampler/specs/RowanSample1.ston"
 
-	| specUrlString spec projectTools |
+	| specUrlString projectTools |
 	specUrlString := (GsTextInteraction
 		prompt: 'Please enter an url for the project spec'
 		template:

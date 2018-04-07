@@ -155,7 +155,7 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplateB [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridCompileMethod [
 
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass fooMethod barMethod normalInstance |
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -195,7 +195,7 @@ RwHybridBrowserToolTest >> testHybridCompileMethod [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridCompileMethodRemove [
 
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass fooMethod barMethod normalInstance |
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
