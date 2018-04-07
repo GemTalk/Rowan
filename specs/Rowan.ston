@@ -1,4 +1,4 @@
-RwPackageLoadSpecification {
+ RwSimpleProjectSpecification{
 	#specName : 'Rowan',
 	#projectUrl : 'https://github.com/dalehenrich/Rowan',
 	#platformSpec : {
