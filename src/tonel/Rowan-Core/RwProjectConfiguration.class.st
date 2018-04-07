@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'name',
 		'projectName',
-		'configNames'
+		'configNames',
+		'comment'
 	],
 	#category : 'Rowan-Core'
 }
@@ -55,15 +56,36 @@ RwProjectConfiguration >> addConfig: configName [
 ]
 
 { #category : 'accessing' }
+RwProjectConfiguration >> comment [
+
+   ^comment
+
+]
+
+{ #category : 'accessing' }
+RwProjectConfiguration >> comment: anObject [
+
+   comment := anObject
+
+]
+
+{ #category : 'accessing' }
 RwProjectConfiguration >> configNames [
 
 	^ configNames ifNil: [ configNames := Set new ]
 ]
 
+{ #category : 'accessing' }
+RwProjectConfiguration >> configNames: anObject [
+
+   configNames := anObject
+
+]
+
 { #category : 'exporting' }
 RwProjectConfiguration >> export [
 
-	| url exportUrl exportPath |
+	| url exportUrl exportPath export |
 	self _repositoryUrl
 		ifNil: [ self error: 'exportToUrl: must be used if repositoryUrl has not been set' ].
 	url := RwUrl fromString: self _repositoryUrl.
@@ -71,7 +93,9 @@ RwProjectConfiguration >> export [
 	Rowan fileUtilities ensureDirectoryExists: exportPath.
 	exportUrl := 'file:' , exportPath.
 
-	^ self exportToUrl: exportUrl
+	export := self copy.
+	export initializeForExport.
+	^ export exportToUrl: exportUrl
 ]
 
 { #category : 'exporting' }
@@ -90,6 +114,14 @@ RwProjectConfiguration >> exportToUrl: fileUrl [
 					stream nextPutAll: string.
 					^ self ] ].
 	^ nil	"otherwise a noop"
+]
+
+{ #category : 'initialization' }
+RwProjectConfiguration >> initializeForExport [
+  "if spec is to be exported, clear out any of the fields that represent state that should 
+	not be shared"
+
+  projectName := nil
 ]
 
 { #category : 'accessing' }
