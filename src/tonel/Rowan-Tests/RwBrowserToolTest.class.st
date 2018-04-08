@@ -375,6 +375,26 @@ RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNa
 ]
 
 { #category : 'private' }
+RwBrowserToolTest >> _loadSessionMethodExtensionProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
+
+	| projectDefinition projectTools |
+	projectTools := Rowan projectTools.
+
+	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	projectDefinition := self
+		_standardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictName
+		defaultUseSessionMethodsForExtensions: true
+		comment:
+			'This is a simple project used to work out a "classic" class browser-style API'.
+
+	projectTools load loadProjectDefinition: projectDefinition
+]
+
+{ #category : 'private' }
 RwBrowserToolTest >> _loadSimpleProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment className: className inPackageName: packageName [
 
 	| projectDefinition classDefinition projectTools |
@@ -476,12 +496,24 @@ RwBrowserToolTest >> _standardClassDefinition: className [
 { #category : 'private' }
 RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
 
+	^ self
+		_standardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictName
+		defaultUseSessionMethodsForExtensions: false
+		comment: comment
+]
+
+{ #category : 'private' }
+RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions comment: comment [
+
 	| projectDefinition |
 	projectDefinition := RwProjectDefinition
 		newForGitPackageProjectNamed: projectName.
 	projectDefinition
 		comment: comment;
 		packageNamesInLoadOrder: packageNames;
+		defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions;
 		yourself.
 	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
 

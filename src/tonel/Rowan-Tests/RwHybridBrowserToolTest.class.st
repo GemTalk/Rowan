@@ -626,6 +626,48 @@ RwHybridBrowserToolTest >> testHybridDeletePackage [
 ]
 
 { #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridModifyExtensionCompileMethod [
+
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod normalInstance protocol x |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions'.
+	packageNames := {packageName1.
+	packageName2}.
+	self
+		_loadSessionMethodExtensionProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: normalClass rowanPackageName = packageName1.
+
+	protocol := '*' , packageName2 asLowercase.
+
+	fooMethod := normalClass rwCompileMethod: 'foo ^''foo''' category: protocol.
+
+	normalInstance := normalClass new.
+	self assert: normalInstance foo = 'foo'.
+	self assert: (x := normalClass categoryOfSelector: #'foo') asString = protocol.
+	self assert: fooMethod rowanPackageName = packageName2.
+
+	fooMethod := normalClass rwCompileMethod: 'foo ^''bar''' category: protocol.
+
+	self assert: (x := normalInstance foo) = 'bar'.
+	self assert: (x := normalClass categoryOfSelector: #'foo') asString = protocol.
+	self assert: fooMethod rowanPackageName = packageName2.
+	self halt
+]
+
+{ #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveClassToPackage [
 
 	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass |
