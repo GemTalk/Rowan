@@ -160,7 +160,7 @@ RwGsMethodPatch >> packageProtocolName [
 	^ '*' , self packageName
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : 'private' }
 RwGsMethodPatch >> primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols [
 
 	| className class |
