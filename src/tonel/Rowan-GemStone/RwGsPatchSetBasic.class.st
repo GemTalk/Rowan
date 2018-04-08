@@ -489,6 +489,21 @@ RwGsPatchSetBasic >> addPatchedClassProperties: aClassDefinition inPackage: aPac
 ]
 
 { #category : 'building' }
+RwGsPatchSetBasic >> addPatchedExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	methodsNeedingRecompile
+		add:
+			(((self _methodExtensionSourcePatchClass: aPackageDefinition key)
+				forMethod: aClassMethodDefinition
+				isMeta: true
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+]
+
+{ #category : 'building' }
 RwGsPatchSetBasic >> addPatchedExtendedInstanceMethod: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.

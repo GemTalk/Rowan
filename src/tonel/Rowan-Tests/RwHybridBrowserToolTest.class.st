@@ -679,7 +679,7 @@ RwHybridBrowserToolTest >> testHybridDeletePackage [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridModifyExtensionCompileMethod [
 
-	| normalClass projectName packageNames packageName1 packageName2 fooMethod normalInstance protocol x |
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod normalInstance protocol x barMethod |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -704,6 +704,15 @@ RwHybridBrowserToolTest >> testHybridModifyExtensionCompileMethod [
 	protocol := '*' , packageName2 asLowercase.
 
 	fooMethod := normalClass rwCompileMethod: 'foo ^''foo''' category: protocol.
+	barMethod := normalClass class
+		rwCompileMethod: 'bar ^''bar'''
+		category: protocol.
+
+	self assert: normalClass bar = 'bar'.
+	self
+		assert:
+			(x := normalClass class categoryOfSelector: #'bar') asString = protocol.
+	self assert: barMethod rowanPackageName = packageName2.
 
 	normalInstance := normalClass new.
 	self assert: normalInstance foo = 'foo'.
@@ -714,7 +723,17 @@ RwHybridBrowserToolTest >> testHybridModifyExtensionCompileMethod [
 
 	self assert: (x := normalInstance foo) = 'bar'.
 	self assert: (x := normalClass categoryOfSelector: #'foo') asString = protocol.
-	self assert: fooMethod rowanPackageName = packageName2
+	self assert: fooMethod rowanPackageName = packageName2.
+
+	barMethod := normalClass class
+		rwCompileMethod: 'bar ^''foo'''
+		category: protocol.
+
+	self assert: (x := normalClass bar) = 'foo'.
+	self
+		assert:
+			(x := normalClass class categoryOfSelector: #'bar') asString = protocol.
+	self assert: barMethod rowanPackageName = packageName2
 ]
 
 { #category : 'tests' }
