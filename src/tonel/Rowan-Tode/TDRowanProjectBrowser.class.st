@@ -414,8 +414,13 @@ TDRowanProjectBrowser >> menuActionSpec: miniTool [
 		->
 			{#('project spec' nil #'inspectProjectSpecMenuAction:selectionIndex:').
 			#('loaded project' nil #'inspectLoadedProjectMenuAction:selectionIndex:').
-			#('bootstrap load' nil #'bootstrapLoadMenuAction:selectionIndex:').
+
 			#('tests' nil #'testProjectMenuAction:selectionIndex:')})}.
+	#('-').
+	{('Bootstrap'
+		->
+			{#('bootstrap load' nil #'bootstrapLoadMenuAction:selectionIndex:').
+			#('write' nil #'writeMenuAction:selectionIndex:')})}.
 	#('-').
 	{('Git'
 		->
@@ -570,4 +575,16 @@ TDRowanProjectBrowser >> windowName [
 
 	windowName ifNil: [ windowName := #'rowanProjects' ].
 	^ windowName
+]
+
+{ #category : 'menu actions' }
+TDRowanProjectBrowser >> writeMenuAction: listElement selectionIndex: selectionIndex [
+
+	| projectDef |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	projectDef := self projects at: selectionIndex.
+	Rowan projectTools write writeProjectNamed: projectDef projectName.
+	listElement topez commitTransaction.
+	^ #'refreshView'
 ]
