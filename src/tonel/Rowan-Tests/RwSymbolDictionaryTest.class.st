@@ -373,7 +373,11 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 		source: methodSource
 		dictionaries: Rowan image symbolList.
 
-	dict rowanSymbolDictionaryRegistry addRecompiledMethod: compiledMethod.	"this should work, ends up using the package of the class"
+	dict rowanSymbolDictionaryRegistry
+		addNewCompiledMethod: compiledMethod
+		for: class
+		protocol: methodProtocol
+		toPackageNamed: packageName.
 
 	self assert: testInstance foo = 'foo'.
 	self

@@ -142,6 +142,18 @@ RwGsPatchSetBasic >> _methodExtensionSessionMethodsDeletionPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _methodExtensionSourcePatchClass: packageName [
+
+	^ self symbolDictionaryRegistryClass
+		ifNotNil: [ :registryClass | 
+			(self _currentProjectDefinition
+				useSessionMethodsForExtensionsForPackageNamed: packageName)
+				ifTrue: [ registryClass _methodExtensionSessionMethodSourcePatchClass ]
+				ifFalse: [ registryClass _methodSourcePatchClass ] ]
+		ifNil: [ RwGsMethodSourcePatch ]
+]
+
+{ #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodPropertiesPatchClass [
 
 	^ self symbolDictionaryRegistryClass
@@ -471,6 +483,21 @@ RwGsPatchSetBasic >> addPatchedClassProperties: aClassDefinition inPackage: aPac
 		add:
 			((self _classPropertiesPatchClass
 				for: aClassDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+]
+
+{ #category : 'building' }
+RwGsPatchSetBasic >> addPatchedExtendedInstanceMethod: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	methodsNeedingRecompile
+		add:
+			(((self _methodExtensionSourcePatchClass: aPackageDefinition key)
+				forMethod: aInstanceMethodDefinition
+				isMeta: false
+				inClass: aClassDefinition
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)

@@ -78,6 +78,12 @@ RwGsSymbolDictionaryRegistry class >> _methodExtensionSessionMethodsDeletionPatc
 ]
 
 { #category : 'accessing' }
+RwGsSymbolDictionaryRegistry class >> _methodExtensionSessionMethodSourcePatchClass [
+
+	^ RwGsMethodExtensionSessionMethodSourceSymbolDictPatch
+]
+
+{ #category : 'accessing' }
 RwGsSymbolDictionaryRegistry class >> _methodExtensionSessionMethodsPatchClass [
 
 	^ RwGsMethodExtensionSessionMethodSymbolDictPatch
@@ -480,24 +486,53 @@ RwGsSymbolDictionaryRegistry >> addRecompiledMethod: newCompiledMethod [
 	oldCompiledMethod := methodDictionary
 		at: selector
 		ifAbsent: [ 
-			| loadedClass |
-			loadedClass := classRegistry
-				at: behavior theNonMetaClass classHistory
-				ifAbsent: [ 
-					self
-						error:
-							'Internal error -- The class is not in any known package and no package has been specified' ].
-			^ self
-				addNewCompiledMethod: newCompiledMethod
-				for: behavior
-				protocol: self class defaultProtocolString
-				toPackageNamed: loadedClass packageName ].
+			self
+				error:
+					'Internal error -- expected an existing compiled method in the method dictionary' ].
 
 	oldCompiledMethod == newCompiledMethod
 		ifTrue: [ 
 			"exit early, no more work to be done"
 			^ self ].
 	methodDictionary at: selector put: newCompiledMethod.
+
+	loadedMethod := methodRegistry
+		at: oldCompiledMethod
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
+	methodRegistry removeKey: oldCompiledMethod.
+	loadedMethod handle: newCompiledMethod.
+	methodRegistry at: newCompiledMethod put: loadedMethod
+]
+
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry >> addRecompiledSessionMethodMethod: newCompiledMethod [
+
+	"add a recompiled session method compiled method to behavior and update the loaded things"
+
+	| selector behavior dictsArray mDict cDict oldCompiledMethod loadedMethod |
+	selector := newCompiledMethod selector.
+	behavior := newCompiledMethod inClass.
+	dictsArray := self homeSessionMethods methodAndCategoryDictionaryFor: behavior.
+	mDict := dictsArray at: 1.
+	cDict := dictsArray at: 2.
+	oldCompiledMethod := mDict
+		at: selector
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- expected an existing compiled method in the session method method dictionary' ].
+
+	oldCompiledMethod == newCompiledMethod
+		ifTrue: [ 
+			"exit early, no more work to be done"
+			^ self ].
+	mDict at: selector put: newCompiledMethod.
+	GsPackagePolicy current
+		updateMethodLookupCacheFor: newCompiledMethod
+		in: behavior.
 
 	loadedMethod := methodRegistry
 		at: oldCompiledMethod
