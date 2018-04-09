@@ -8,7 +8,7 @@ Class {
 RwPrjCloneTool >> _validateForGitRootPathForSpecification: gitRootPath gitRepoDir: gitRepoPath useSsh: useSsh ifDone: doneBlock [
 
 	| gitTool response command cdResponse |
-	gitTool := self class git.
+	gitTool := Rowan gitTools.
 	specification repositoryUrl
 		ifNotNil: [ :repoUrlString | 
 			| repoUrl |
@@ -73,7 +73,7 @@ RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath 
 			"done block is invoked when it is not necessary to perform further processing. Typically,
 		the clone is already present."
 			^ msg ].
-	gitTool := self class git.
+	gitTool := Rowan gitTools.
 	cloneUrl := useSsh
 		ifTrue: [ 'git@' , projectUrl authority , ':' ]
 		ifFalse: [ 'https://' , projectUrl authority , '/' ].

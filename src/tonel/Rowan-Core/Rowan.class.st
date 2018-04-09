@@ -51,6 +51,12 @@ Rowan class >> fileUtilities [
 	^platform fileUtilities
 ]
 
+{ #category : 'public tools' }
+Rowan class >> gitTools [
+
+	^ self platform gitTools
+]
+
 { #category : 'public' }
 Rowan class >> globalNamed: aName [
 

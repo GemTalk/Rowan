@@ -26,7 +26,8 @@ Class {
 
 { #category : 'commands' }
 RwAbstractTool class >> git [
-  ^ RwPrjGitTool new
+
+	^ RwGitTool new
 ]
 
 { #category : 'private' }
@@ -103,7 +104,7 @@ RwAbstractTool >> definitionsForMethod: selector inClassNamed: className isMeta:
 RwAbstractTool >> doGitCommit: messageString [
 
 	| gitTool gitRootPath commitMessageFileName status |
-	gitTool := self class git.
+	gitTool := Rowan gitTools.
 	gitRootPath := specification repoSpec repositoryRootPath.
 	commitMessageFileName := gitTool createTmpFileWith: messageString.
 	gitTool gitaddIn: gitRootPath with: '.'.
@@ -133,7 +134,7 @@ RwAbstractTool >> doGitUpdateLoadedCommitId [
 RwAbstractTool >> doGitUpdateLoadedCommitId: gitRootPath [
 
 	| gitTool loadedCommitId |
-	gitTool := self class git.
+	gitTool := Rowan gitTools.
 	loadedCommitId := [ gitTool gitcommitShaIn: gitRootPath ]
 		on: Error
 		do: [ :ignored | 

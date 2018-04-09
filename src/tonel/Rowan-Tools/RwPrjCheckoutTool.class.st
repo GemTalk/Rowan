@@ -19,7 +19,7 @@ RwPrjCheckoutTool >> checkoutSpecification: aRwSpecification [
 			^ msg ]
 		ifNotNil: [ 
 			| gitTool gitRepoPath |
-			gitTool := self class git.
+			gitTool := Rowan gitTools.
 			gitRepoPath := specification repoSpec repositoryRootPath.
 			gitTool gitcheckoutIn: gitRepoPath with: checkout ].
 	^ specification

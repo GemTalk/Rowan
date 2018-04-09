@@ -214,7 +214,7 @@ TDRowanProjectBrowser >> gitBranchesMenuAction: listElement selectionIndex: sele
 		ifTrue: [ ^ false ].
 	projectDef := self projects at: selectionIndex.
 	gitRepoPath := projectDef repositoryRootPath.
-	gitTool := Rowan projectTools git.
+	gitTool := Rowan gitTools.
 	response := gitTool gitbranchIn: gitRepoPath with: '-a -v'.
 	response
 		editUsing:
@@ -236,7 +236,7 @@ TDRowanProjectBrowser >> gitCheckoutMenuAction: listElement selectionIndex: sele
 		prompt: 'Enter checkout commit or branch'
 		template: 'branch | -b newBranch commitish | -b newBranch | args') signal.
 	checkoutArgs ifNil: [ ^ false ].
-	gitTool := Rowan projectTools git.
+	gitTool := Rowan gitTools.
 	response := gitTool gitcheckoutIn: gitRepoPath with: checkoutArgs.
 	response
 		editUsing:
@@ -254,7 +254,7 @@ TDRowanProjectBrowser >> gitPullProjectMenuAction: listElement selectionIndex: s
 		ifTrue: [ ^ false ].
 	rowanProject := (self projects at: selectionIndex) rowanProject.
 	gitRootPath := rowanProject repositoryRootPath.
-	gitTool := Rowan projectTools git.
+	gitTool := Rowan gitTools.
 	response := gitTool
 		gitpullIn: gitRootPath
 		remote: rowanProject remote
@@ -275,7 +275,7 @@ TDRowanProjectBrowser >> gitPushProjectMenuAction: listElement selectionIndex: s
 		ifTrue: [ ^ false ].
 	rowanProject := (self projects at: selectionIndex) rowanProject.
 	gitRootPath := rowanProject repositoryRootPath.
-	gitTool := Rowan projectTools git.
+	gitTool := Rowan gitTools.
 	response := gitTool
 		gitpushIn: gitRootPath
 		remote: rowanProject remote
@@ -291,26 +291,14 @@ TDRowanProjectBrowser >> gitPushProjectMenuAction: listElement selectionIndex: s
 { #category : 'menu actions (git)' }
 TDRowanProjectBrowser >> gitStatusMenuAction: listElement selectionIndex: selectionIndex [
 
-	| rowanProject status report commitLog gitTool gitRootPath |
+	| rowanProject status gitTool gitRootPath |
 	selectionIndex = 0
 		ifTrue: [ ^ false ].
 	rowanProject := (self projects at: selectionIndex) rowanProject.
-	report := '======== Modifications ========' copy.
 	gitRootPath := rowanProject repositoryRootPath.
-	gitTool := Rowan projectTools git.
+	gitTool := Rowan gitTools.
 	status := gitTool gitstatusIn: gitRootPath with: '--porcelain'.
-	commitLog := gitTool
-		gitlogFull: rowanProject repositoryCommitId
-		limit: 1
-		gitRepoDirectory: gitRootPath.
-	report
-		add: String lf;
-		add: status;
-		add: String lf;
-		add: '======== Last commit ========';
-		add: String lf;
-		add: commitLog.
-	report
+	status
 		editUsing:
 			((TDEditorSpec topez: listElement topez editorAspect: #'edit')
 				windowName: #'commitLog';
@@ -478,7 +466,7 @@ TDRowanProjectBrowser >> newDiskProjectSpecMenuAction: listElement selectionInde
 	utils ensureDirectoryExists: dirPath.
 	spec register.
 	spec copy export.
-	gitTool := Rowan projectTools git.
+	gitTool := Rowan gitTools.
 	gitTool gitaddIn: repositoryRootPath with: '.'.
 	gitTool gitcommitIn: repositoryRootPath with: '-m"initial commit from Rowan"'.
 	^ #'refreshView'

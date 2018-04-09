@@ -1,14 +1,11 @@
 Class {
-	#name : 'RwPrjGitTool',
-	#superclass : 'RwProjectTool',
-	#instVars : [
-		'tdGitTool'
-	],
+	#name : 'RwGitTool',
+	#superclass : 'RwAbstractTool',
 	#category : 'Rowan-Tools'
 }
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> createTmpFileWith: fileContents [
+RwGitTool >> createTmpFileWith: fileContents [
 
 	| file filename |
 	filename := '/tmp/commitMessage'.
@@ -22,19 +19,19 @@ RwPrjGitTool >> createTmpFileWith: fileContents [
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitaddIn: gitRepoPath with: args [
+RwGitTool >> gitaddIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'add' in: gitRepoPath with: args
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitbranchIn: gitRepoPath with: args [
+RwGitTool >> gitbranchIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'branch' in: gitRepoPath with: args
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitBranchNameIn: gitRepoPath [
+RwGitTool >> gitBranchNameIn: gitRepoPath [
 
 	"return current branch for git repository located at gitPath"
 
@@ -45,19 +42,19 @@ RwPrjGitTool >> gitBranchNameIn: gitRepoPath [
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitcheckoutIn: gitRepoPath with: args [
+RwGitTool >> gitcheckoutIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'checkout' in: gitRepoPath with: args
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitcloneIn: gitRootPath with: args [
+RwGitTool >> gitcloneIn: gitRootPath with: args [
 
 	^ self gitcloneIn: gitRootPath with: args logging: true
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitcloneIn: gitRootPath with: gitArgs logging: logging [
+RwGitTool >> gitcloneIn: gitRootPath with: gitArgs logging: logging [
 
 	| commandBase command gitCommand |
 	gitCommand := 'clone'.
@@ -67,13 +64,13 @@ RwPrjGitTool >> gitcloneIn: gitRootPath with: gitArgs logging: logging [
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitcommitIn: gitRepoPath with: args [
+RwGitTool >> gitcommitIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'commit' in: gitRepoPath with: args
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitcommitShaIn: gitRepoPath [
+RwGitTool >> gitcommitShaIn: gitRepoPath [
 
 	| result |
 	gitRepoPath ifNil: [ ^ '' ].
@@ -84,7 +81,7 @@ RwPrjGitTool >> gitcommitShaIn: gitRepoPath [
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitinitIn: dirPath with: args [
+RwGitTool >> gitinitIn: dirPath with: args [
 
 	| command |
 	command := 'set -e; cd ' , dirPath , '; git init ' , args.
@@ -92,7 +89,7 @@ RwPrjGitTool >> gitinitIn: dirPath with: args [
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitlogFull: commitish limit: limit gitRepoDirectory: gitRepoPath [
+RwGitTool >> gitlogFull: commitish limit: limit gitRepoDirectory: gitRepoPath [
 
 	| commitLog |
 	commitLog := self
@@ -102,13 +99,13 @@ RwPrjGitTool >> gitlogFull: commitish limit: limit gitRepoDirectory: gitRepoPath
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitlogIn: gitRepoPath with: args [
+RwGitTool >> gitlogIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'log' in: gitRepoPath with: args
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitlogtool: commitish limit: limit gitRepoDirectory: gitRepoPath [
+RwGitTool >> gitlogtool: commitish limit: limit gitRepoDirectory: gitRepoPath [
 
 	^ self
 		gitlogIn: gitRepoPath
@@ -117,7 +114,7 @@ RwPrjGitTool >> gitlogtool: commitish limit: limit gitRepoDirectory: gitRepoPath
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitPresentIn: gitRepoPath [
+RwGitTool >> gitPresentIn: gitRepoPath [
 
 	| gitHome command cdResponse |
 	[ 
@@ -130,37 +127,37 @@ RwPrjGitTool >> gitPresentIn: gitRepoPath [
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitpullIn: gitRepoPath [
+RwGitTool >> gitpullIn: gitRepoPath [
 
 	^ self gitpullIn: gitRepoPath with: ''
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitpullIn: gitRepoPath remote: remoteName branch: branchName [
+RwGitTool >> gitpullIn: gitRepoPath remote: remoteName branch: branchName [
 
 	^ self gitpullIn: gitRepoPath with: remoteName , ' ' , branchName
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitpullIn: gitRepoPath with: args [
+RwGitTool >> gitpullIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'pull' in: gitRepoPath with: args
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitpushIn: gitRepoPath remote: remoteName branch: branchName [
+RwGitTool >> gitpushIn: gitRepoPath remote: remoteName branch: branchName [
 
 	^ self gitpushIn: gitRepoPath with: remoteName , ' ' , branchName
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitpushIn: gitRepoPath with: args [
+RwGitTool >> gitpushIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'push' in: gitRepoPath with: args
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitrevparseShowTopLevelIn: dirPath [
+RwGitTool >> gitrevparseShowTopLevelIn: dirPath [
 
 	| command |
 	command := 'set -e; cd ' , dirPath , '; git rev-parse --show-toplevel'.
@@ -168,13 +165,13 @@ RwPrjGitTool >> gitrevparseShowTopLevelIn: dirPath [
 ]
 
 { #category : 'smalltalk api' }
-RwPrjGitTool >> gitstatusIn: gitRepoPath with: args [
+RwGitTool >> gitstatusIn: gitRepoPath with: args [
 
 	^ self performGitCommand: 'status' in: gitRepoPath with: args
 ]
 
 { #category : 'private' }
-RwPrjGitTool >> performGitCommand: gitCommand in: gitRepoPath with: gitArgs [
+RwGitTool >> performGitCommand: gitCommand in: gitRepoPath with: gitArgs [
 
 	^ self
 		performGitCommand: gitCommand
@@ -185,7 +182,7 @@ RwPrjGitTool >> performGitCommand: gitCommand in: gitRepoPath with: gitArgs [
 ]
 
 { #category : 'private' }
-RwPrjGitTool >> performGitCommand: gitCommand in: gitRepoPath worktree: workTreePath with: gitArgs logging: logging [
+RwGitTool >> performGitCommand: gitCommand in: gitRepoPath worktree: workTreePath with: gitArgs logging: logging [
 
 	"unconditional cd to work-tree because of git pull problem with git prior to 1.7.7.2"
 
@@ -197,7 +194,7 @@ RwPrjGitTool >> performGitCommand: gitCommand in: gitRepoPath worktree: workTree
 ]
 
 { #category : 'private' }
-RwPrjGitTool >> performOnServer: commandLine logging: logging [
+RwGitTool >> performOnServer: commandLine logging: logging [
   | result |
   result := self
     performOnServer: commandLine
@@ -231,7 +228,7 @@ RwPrjGitTool >> performOnServer: commandLine logging: logging [
 ]
 
 { #category : 'private' }
-RwPrjGitTool >> performOnServer: commandLine status: statusBlock [
+RwGitTool >> performOnServer: commandLine status: statusBlock [
   | performOnServerStatusArray |
   performOnServerStatusArray := System _performOnServer: commandLine.
   ^ statusBlock value: performOnServerStatusArray

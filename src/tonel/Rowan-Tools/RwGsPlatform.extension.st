@@ -1,6 +1,14 @@
 Extension { #name : 'RwGsPlatform' }
 
 { #category : '*rowan-tools' }
+RwGsPlatform >> gitTools [
+
+	"Answer the platform-specific class for git tools"
+
+	^ RwGitTool new
+]
+
+{ #category : '*rowan-tools' }
 RwGsPlatform >> packageTools [
 	"Answer the platform-specific class for package tools"
 

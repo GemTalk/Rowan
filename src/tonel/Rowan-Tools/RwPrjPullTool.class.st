@@ -8,7 +8,7 @@ Class {
 RwPrjPullTool >> doGitPull: remote [
 
 	| gitTool gitRootPath |
-	gitTool := self class git.
+	gitTool := Rowan gitTools.
 	gitRootPath := specification repoSpec repositoryRootPath.
 	^ remote isEmpty
 		ifTrue: [ gitTool gitpullIn: gitRootPath with: '' ]
