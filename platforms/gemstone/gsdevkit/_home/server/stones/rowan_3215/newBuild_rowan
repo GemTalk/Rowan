@@ -33,6 +33,25 @@ input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/bootst
 input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/ston/bootstrapStonSupport.topaz
 input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/bootstrapTonelSupport.topaz
 
+# patch CypressClassDefinition>>createOrReviseClass for loading Rowan
+#
+category: 'Rowan patch'
+method: CypressClassDefinition
+createOrReviseClass
+
+	^ self subclassType = ''
+		ifTrue: [ self createOrReviseRegularClass ]
+		ifFalse: [ 
+			self subclassType = 'byteSubclass'
+				ifTrue: [ self createOrReviseByteClass ]
+				ifFalse: [ 
+					| typ |
+					typ := self subclassType.
+					(typ = 'indexableSubclass' or: [typ = #'variable' ])
+						ifTrue: [ self createOrReviseIndexableClass ]
+						ifFalse: [ self error: 'unknown subclass type: ' , self subclassType printString ] ] ]
+%
+
 # new method compatable with 3.4 and 3.5
 #
 category: 'Rowan 3.4 compatability method'
