@@ -38,14 +38,15 @@ RwPrjCloneTool >> _validateForGitRootPathForSpecification: gitRootPath gitRepoDi
 			response = cdResponse
 				ifTrue: [ 
 					| msg |
-					msg := 'A clone for ' , specification specName printString
-						, ' already exists in ' , gitRepoPath printString
-						, '. Updating spec repositoryUrl and skipping clone.'.
-					self inform: msg.
 					specification
 						repositoryUrl:
 							'cypress:' , gitRepoPath , '/' , specification repoPath , '/'.
 					specification repositoryRootPath: gitRepoPath.
+					msg := 'The project is registered with the system, however, A clone for '
+						, specification specName printString , ' already exists in '
+						, gitRepoPath printString , ', so the clone operation is being skipped'
+						, ' and the project will reference the existing location.'.
+					self inform: msg.
 					doneBlock value: msg ] ]
 				on: Error
 				do: [ :ignored | 
