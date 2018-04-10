@@ -8,12 +8,12 @@ Class {
 RwRowanSample2Test >> _migrationClassMap [
 
 	^ {#(#'RowanSample2' #(#'ivar0')).
-	#(#'RowanSample2A' #(#'a' #'ivar1')).
-	#(#'RowanSample2C' #(#'c' #'ivar2')).
-	#(#'RowanSample2D' #(#'d' #'ivar2')).
-	#(#'RowanSample2B' #(#'b' #'ivar1')).
-	#(#'RowanSample2E' #(#'e' #'ivar2')).
-	#(#'RowanSample2F' #(#'f' #'ivar2'))}
+	#(#'RowanSample2A' #(#'ivar0' #'a' #'ivar1')).
+	#(#'RowanSample2C' #(#'ivar0' #'a' #'ivar1' #'c' #'ivar2')).
+	#(#'RowanSample2D' #(#'ivar0' #'a' #'ivar1' #'d' #'ivar2')).
+	#(#'RowanSample2B' #(#'ivar0' #'b' #'ivar1')).
+	#(#'RowanSample2E' #(#'ivar0' #'b' #'ivar1' #'e' #'ivar2')).
+	#(#'RowanSample2F' #(#'ivar0' #'b' #'ivar1' #'f' #'ivar2'))}
 ]
 
 { #category : 'private' }
@@ -63,21 +63,25 @@ RwRowanSample2Test >> testAutomaticMigration [
 			instance := class new.
 			ivs := ar at: 2.
 			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
-			instanceMap at: instance put: ar ].
+			instanceMap at: instance put: ar -> class ].
 
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
 	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
 
 	instanceMap
-		keysAndValuesDo: [ :instance :ar | 
-			| ivNames |
+		keysAndValuesDo: [ :instance :assoc | 
+			| ivNames ar oldClass className class |
+			ar := assoc key.
+			oldClass := assoc value.
+			className := ar at: 1.
+			class := Rowan globalNamed: className.
+			self assert: oldClass ~= class.
+			self assert: instance class == class.
 			ivNames := ar at: 2.
 			1 to: ivNames size do: [ :index | 
 				| ivName |
 				ivName := ivNames at: index.
-				index == 1
-					ifTrue: [ self assert: (instance perform: ivName) == ivName ]
-					ifFalse: [ self assert: (instance perform: ivName) isNil ] ] ]
+				self assert: (instance perform: ivName) isNil ] ]
 ]
 
 { #category : 'tests' }
@@ -119,23 +123,25 @@ RwRowanSample2Test >> testNoMigration [
 			instance := class new.
 			ivs := ar at: 2.
 			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
-			instanceMap at: instance put: ar ].
+			instanceMap at: instance put: ar -> class ].
 
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
 	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
 
 	instanceMap
-		keysAndValuesDo: [ :instance :ar | 
-			| ivNames |
+		keysAndValuesDo: [ :instance :assoc | 
+			| ivNames ar oldClass className class |
+			ar := assoc key.
+			oldClass := assoc value.
+			className := ar at: 1.
+			class := Rowan globalNamed: className.
+			self assert: oldClass ~= class.
+			self assert: instance class == oldClass.
 			ivNames := ar at: 2.
 			1 to: ivNames size do: [ :index | 
 				| ivName |
 				ivName := ivNames at: index.
-				(index = ivNames size or: [ index == 1 ])
-					ifTrue: [ 
-						"last iv slot is not niled out on migration interestingly enough"
-						self assert: (instance perform: ivName) == ivName ]
-					ifFalse: [ self assert: (instance perform: ivName) isNil ] ] ]
+				self assert: (instance perform: ivName) == ivName ] ]
 ]
 
 { #category : 'tests' }
