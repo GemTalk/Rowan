@@ -28,6 +28,25 @@ input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/bootstra
 
 commit
 
+# patch CypressClassDefinition>>createOrReviseClass for loading Rowan
+#
+category: 'Rowan patch'
+method: CypressClassDefinition
+createOrReviseClass
+
+	^ self subclassType = ''
+		ifTrue: [ self createOrReviseRegularClass ]
+		ifFalse: [ 
+			self subclassType = 'byteSubclass'
+				ifTrue: [ self createOrReviseByteClass ]
+				ifFalse: [ 
+					| typ |
+					typ := self subclassType.
+					(typ = 'indexableSubclass' or: [typ = #'variable' ])
+						ifTrue: [ self createOrReviseIndexableClass ]
+						ifFalse: [ self error: 'unknown subclass type: ' , self subclassType printString ] ] ]
+%
+
 # Define some Globals just to get through the load ...
 #run
 #UserGlobals at: #ServerFileDirectory put: nil. "remaining references are related to git support ... allow the methods to be loaded for now"
