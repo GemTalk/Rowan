@@ -1,30 +1,3 @@
-"
-3.2.15:
-
-listInstances:
-listInstances:limit:
-listInstances:limit:toDirectory:withMaxThreads:maxCpuUsage:
-listInstances:limit:toDirectory:withMaxThreads:maxCpuUsage:memoryOnly:
-listInstances:toDirectory:
-listInstancesInMemory:
-listInstancesInPageOrder:toFile:
-listInstancesInPageOrder:toFile:withMaxThreads:maxCpuUsage:
-listInstancesToHiddenSet:
-listInstancesToHiddenSet:withMaxThreads:maxCpuUsage:
-
-3.4.0
-listInstances:
-listInstances:limit:
-listInstances:limit:toDirectory:withMaxThreads:maxCpuUsage:
-listInstances:limit:toDirectory:withMaxThreads:maxCpuUsage:memoryOnly:
-listInstances:toDirectory:
-listInstancesInMemory:
-listInstancesInPageOrder:toFile:
-listInstancesInPageOrder:toFile:withMaxThreads:maxCpuUsage:
-listInstancesToHiddenSet:
-listInstancesToHiddenSet:withMaxThreads:maxCpuUsage:
-
-"
 Class {
 	#name : 'RwGsInstanceMigrator',
 	#superclass : 'Object',
