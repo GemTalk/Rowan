@@ -43,7 +43,7 @@ RowanProjectService >> branch: anObject [
 { #category : 'rowan' }
 RowanProjectService >> changes [
 	
-	^(Rowan projectTools diff diffSpecUrl: name) asString.
+	^(Rowan projectTools diff diffForProjectName: name) asString
 
 ]
 
@@ -160,5 +160,11 @@ RowanProjectService >> sha [
 RowanProjectService >> sha: anObject [
 
 	sha := anObject
+
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> write [
+	Rowan projectTools write writeProjectNamed: 'Rowan'
 
 ]
