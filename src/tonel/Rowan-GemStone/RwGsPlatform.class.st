@@ -6,7 +6,8 @@ Class {
 	#name : 'RwGsPlatform',
 	#superclass : 'RwPlatform',
 	#instVars : [
-		'alternateImageClass'
+		'alternateImageClass',
+		'enableInstanceMigration'
 	],
 	#category : 'Rowan-GemStone'
 }
@@ -77,6 +78,18 @@ RwGsPlatform >> defaultConfiguration [
 	^ RwConfiguration new
 		packageInfoSource: #'SymbolDictionary';
 		yourself
+]
+
+{ #category : 'queries' }
+RwGsPlatform >> enableInstanceMigration [
+
+	^ enableInstanceMigration ifNil: [ false ]
+]
+
+{ #category : 'queries' }
+RwGsPlatform >> enableInstanceMigration: aBool [
+
+	enableInstanceMigration := aBool
 ]
 
 { #category : 'queries' }

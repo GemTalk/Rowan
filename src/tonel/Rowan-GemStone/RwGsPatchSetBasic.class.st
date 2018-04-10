@@ -5,6 +5,7 @@ Class {
 	#name : 'RwGsPatchSetBasic',
 	#superclass : 'RwGsPatchSetAbstract',
 	#instVars : [
+		'instanceMigrationEnabled',
 		'addedProjects',
 		'addedPackages',
 		'deletedPackages',
@@ -625,12 +626,13 @@ RwGsPatchSetBasic >> apply [
 ]
 
 { #category : 'public' }
-RwGsPatchSetBasic >> applyForNewClassVersions [
+RwGsPatchSetBasic >> applyForNewClassVersions: enableInstanceMigration [
 
 	"ignore deleted methods when applying patches to new class version.
 		all methods effectively deleted from class when the new class version is created, "
 
 	| classNames |
+	instanceMigrationEnabled := enableInstanceMigration.
 	classNames := Set new.
 	classesWithNewVersions
 		do: [ :patch | classNames add: patch classDefinition key ].
@@ -774,6 +776,12 @@ RwGsPatchSetBasic >> installAddedClassExtensions [
 	extendedClasses do: [ :each | each installClassExtensionInSystem ]
 ]
 
+{ #category : 'accessing' }
+RwGsPatchSetBasic >> instanceMigrationEnabled [
+
+	^ instanceMigrationEnabled ifNil: [ ^ false ]
+]
+
 { #category : 'private - applying' }
 RwGsPatchSetBasic >> markPackagesNotDirty [
 	"All affected packages are now consistent with the source, and should be marked not dirty."
@@ -782,9 +790,14 @@ RwGsPatchSetBasic >> markPackagesNotDirty [
 		allPatchesAffectingLivePackagesDo: [:patch | patch markPackageNotDirty]
 ]
 
-{ #category : 'stubs' }
+{ #category : 'private - applying' }
 RwGsPatchSetBasic >> migrateInstances [
-	"presumably migrate instances of changed classes ... noop for now"
+
+	"conditionally migrate instances of classes with new versions"
+
+	self instanceMigrationEnabled
+		ifFalse: [ ^ self ].
+	self halt
 ]
 
 { #category : 'private - applying' }

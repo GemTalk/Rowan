@@ -40,6 +40,14 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName [
 { #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad [
 
+	^ self
+		loadProjectSetDefinition: projectSetDefinitionToLoad
+		enableInstanceMigration: Rowan platform enableInstanceMigration
+]
+
+{ #category : 'smalltalk api' }
+RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad enableInstanceMigration: enableInstanceMigration [
+
 	| loadedProjectSet diff |
 	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings
 		asProjectDefinitionSet.
@@ -50,7 +58,9 @@ RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad [
 			msg := 'The projects are already up to date'.
 			self inform: msg.
 			^ msg ].
-	Rowan image applyModification: diff.
+	Rowan image
+		applyModification: diff
+		enableInstanceMigration: enableInstanceMigration.
 	projectSetDefinitionToLoad definitions
 		do: [ :project | 
 			self specification: project specification.

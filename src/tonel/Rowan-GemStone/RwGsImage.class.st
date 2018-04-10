@@ -103,7 +103,7 @@ RwGsImage class >> addProject: aRwProjectSpecification [
 ]
 
 { #category : 'modifying image' }
-RwGsImage class >> applyModification: aProjectSetModification [
+RwGsImage class >> applyModification: aProjectSetModification enableInstanceMigration: enableInstanceMigration [
 
 	| visitor patchSet |
 	visitor := RwGsImagePatchVisitor new.
@@ -124,7 +124,7 @@ RwGsImage class >> applyModification: aProjectSetModification [
 	visitor := RwGsImagePatchVisitor new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
-	patchSet applyForNewClassVersions
+	patchSet applyForNewClassVersions: enableInstanceMigration
 ]
 
 { #category : 'testing' }
