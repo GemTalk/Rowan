@@ -26,6 +26,18 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed [
 ]
 
 { #category : 'smalltalk api' }
+RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName [
+
+	"load the named project from disk"
+
+	| projectSetDefinition |
+	projectSetDefinition := self class read
+		readProjectSetForProjectNamed: projectNamed
+		withConfiguration: configName.
+	^ self loadProjectSetDefinition: projectSetDefinition
+]
+
+{ #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad [
 
 	| loadedProjectSet diff |

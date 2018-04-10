@@ -7,7 +7,7 @@ Class {
 { #category : 'smalltalk api' }
 RwClsDiffTool >> patchClass: aClass1 with: aClass2 [
 
-	| patch classDef1 package1 classDef2 package2 |
+	| classDef1 package1 classDef2 package2 |
 	classDef1 := (RwGsLoadedClass existingForClass: aClass1) asDefinition.
 	package1 := RwPackageDefinition
 		withProperties: (Dictionary with: 'name' -> aClass1 name)

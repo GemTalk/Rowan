@@ -70,9 +70,9 @@ RwBrowserToolTest >> _assertForClassExtensionInClassWithHistory: classHistory if
 	found := IdentitySet new.
 	Rowan image symbolList
 		do: [ :symbolDict | 
-			(symbolDict isKindOf: RwGsPackageSymbolDictionary)
-				ifTrue: [ 
-					(symbolDict classExtensionRegistry at: classHistory ifAbsent: [  ])
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry classExtensionRegistry at: classHistory ifAbsent: [  ])
 						ifNotNil: [ :loadedClassExtensionSet | found addAll: loadedClassExtensionSet ] ] ].
 	found isEmpty
 		ifFalse: [ ^ presentBlock cull: found ].
@@ -152,7 +152,7 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 { #category : 'private' }
 RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment format: format root: rootPath repoPath: repoPath [
 
-	| projectDefinition classDefinition projectTools |
+	| projectDefinition projectTools |
 	projectTools := Rowan projectTools.
 
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
@@ -358,7 +358,7 @@ RwBrowserToolTest >> _loadMultiProjectDefinition: projectNames packageNames: pac
 { #category : 'private' }
 RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
 
-	| projectDefinition classDefinition projectTools |
+	| projectDefinition projectTools |
 	projectTools := Rowan projectTools.
 
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
@@ -368,6 +368,26 @@ RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNa
 		_standardProjectDefinition: projectName
 		packageNames: packageNames
 		defaultSymbolDictName: defaultSymbolDictName
+		comment:
+			'This is a simple project used to work out a "classic" class browser-style API'.
+
+	projectTools load loadProjectDefinition: projectDefinition
+]
+
+{ #category : 'private' }
+RwBrowserToolTest >> _loadSessionMethodExtensionProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
+
+	| projectDefinition projectTools |
+	projectTools := Rowan projectTools.
+
+	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	projectDefinition := self
+		_standardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictName
+		defaultUseSessionMethodsForExtensions: true
 		comment:
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
@@ -476,12 +496,24 @@ RwBrowserToolTest >> _standardClassDefinition: className [
 { #category : 'private' }
 RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
 
+	^ self
+		_standardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictName
+		defaultUseSessionMethodsForExtensions: false
+		comment: comment
+]
+
+{ #category : 'private' }
+RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions comment: comment [
+
 	| projectDefinition |
 	projectDefinition := RwProjectDefinition
 		newForGitPackageProjectNamed: projectName.
 	projectDefinition
 		comment: comment;
 		packageNamesInLoadOrder: packageNames;
+		defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions;
 		yourself.
 	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
 

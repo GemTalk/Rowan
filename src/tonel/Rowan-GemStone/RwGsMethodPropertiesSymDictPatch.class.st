@@ -31,7 +31,7 @@ RwGsMethodPropertiesSymDictPatch >> installPropertiesPatchNewClasses: createdCla
 				error:
 					'Internal error -- no existing CompileMethod found for patched method.' ].
 
-	self packageSymbolDictionary
+	self symbolDictionaryRegistry
 		moveCompiledMethod: oldCompiledMethod
 		toProtocol: self propertiesProtocolName
 ]

@@ -155,7 +155,7 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplateB [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridCompileMethod [
 
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass fooMethod barMethod normalInstance |
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -193,9 +193,60 @@ RwHybridBrowserToolTest >> testHybridCompileMethod [
 ]
 
 { #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridCompileMethodMoveToProtocol [
+
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance x |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions'.
+	packageNames := {packageName1.
+	packageName2}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: normalClass rowanPackageName = packageName1.
+
+	fooMethod := normalClass
+		rwCompileMethod: 'foo ^''foo'''
+		category: '*' , packageName1 asLowercase.
+	barMethod := normalClass class
+		rwCompileMethod: 'bar ^''bar'''
+		category: 'accessing'.
+
+	self assert: normalClass bar = 'bar'.
+	normalInstance := normalClass new.
+	self assert: normalInstance foo = 'foo'.
+	self
+		assert:
+			(x := normalClass class categoryOfSelector: #'bar') asString = 'accessing'.
+	self assert: fooMethod rowanPackageName = packageName1.
+	self assert: barMethod rowanPackageName = packageName1.
+
+	barMethod := normalClass class
+		rwCompileMethod: 'bar "" ^''bar'''
+		category: 'new category'.
+
+	self assert: normalClass bar = 'bar'.
+	self
+		assert:
+			(x := normalClass class categoryOfSelector: #'bar') asString = 'new category'.
+	self assert: barMethod rowanPackageName = packageName1
+]
+
+{ #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridCompileMethodRemove [
 
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass fooMethod barMethod normalInstance |
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -384,8 +435,9 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
 			loadedPackage name = packageName1
 				ifTrue: [ 
-					self assert: false description: 'no instance methods expected in ',
-					packageName1 ].
+					self
+						assert: false
+						description: 'no instance methods expected in ' , packageName1 ].
 			loadedPackage name = packageName2
 				ifTrue: [ self assert: (#(#'bar') includes: loadedMethod selector) ] ] ].
 
@@ -504,14 +556,15 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
 			loadedPackage name = packageName1
 				ifTrue: [ 
-					self assert: false description: 'no instance methods expected in ',
-					packageName1 ].
+					self
+						assert: false
+						description: 'no instance methods expected in ' , packageName1 ].
 			loadedPackage name = packageName2
 				ifTrue: [ self assert: (#(#'baz') includes: loadedMethod selector) ] ].
 
 	projectTools load loadProjectNamed: projectName.	"restore original state of project"
 
-	normalClass1 := Rowan image objectNamed: className1.
+	normalClass1 := Rowan globalNamed: className1.
 	normalInstance1 := normalClass1 new.
 
 	self assert: normalClass1 bar = 'bar'.
@@ -520,7 +573,7 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 	self should: [ normalClass1 baz = 'baz' ] raise: MessageNotUnderstood.
 
 	oldNormalClass2 := normalClass2.
-	normalClass2 := Rowan image objectNamed: className2.
+	normalClass2 := Rowan globalNamed: className2.
 	self assert: oldNormalClass2 == normalClass2.
 	normalInstance2 := normalClass2 new.
 	self should: [ normalInstance2 biz ] raise: MessageNotUnderstood.
@@ -582,8 +635,8 @@ RwHybridBrowserToolTest >> testHybridDeletePackage [
 
 	Rowan projectTools browser removePackageNamed: packageName1.
 
-	self assert: (Rowan image objectNamed: className1) isNil.
-	self assert: (Rowan image objectNamed: className2) == otherClass.
+	self assert: (Rowan globalNamed: className1) isNil.
+	self assert: (Rowan globalNamed: className2) == otherClass.
 	self should: [ otherClass new foo ] raise: MessageNotUnderstood.
 
 	theLoadedProject := Rowan image loadedProjectNamed: projectName.	"Traverse the loaded thing structure and verify that it matches the expected structure"
@@ -623,6 +676,66 @@ RwHybridBrowserToolTest >> testHybridDeletePackage [
 		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
 			self assert: false description: 'no class methods expected in class'.
 			loadedClassOrClassExtension name ]
+]
+
+{ #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridModifyExtensionCompileMethod [
+
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod normalInstance protocol x barMethod |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions'.
+	packageNames := {packageName1.
+	packageName2}.
+	self
+		_loadSessionMethodExtensionProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: normalClass rowanPackageName = packageName1.
+
+	protocol := '*' , packageName2 asLowercase.
+
+	fooMethod := normalClass rwCompileMethod: 'foo ^''foo''' category: protocol.
+	barMethod := normalClass class
+		rwCompileMethod: 'bar ^''bar'''
+		category: protocol.
+
+	self assert: normalClass bar = 'bar'.
+	self
+		assert:
+			(x := normalClass class categoryOfSelector: #'bar') asString = protocol.
+	self assert: barMethod rowanPackageName = packageName2.
+
+	normalInstance := normalClass new.
+	self assert: normalInstance foo = 'foo'.
+	self assert: (x := normalClass categoryOfSelector: #'foo') asString = protocol.
+	self assert: fooMethod rowanPackageName = packageName2.
+
+	fooMethod := normalClass rwCompileMethod: 'foo ^''bar''' category: protocol.
+
+	self assert: (x := normalInstance foo) = 'bar'.
+	self assert: (x := normalClass categoryOfSelector: #'foo') asString = protocol.
+	self assert: fooMethod rowanPackageName = packageName2.
+
+	barMethod := normalClass class
+		rwCompileMethod: 'bar ^''foo'''
+		category: protocol.
+
+	self assert: (x := normalClass bar) = 'foo'.
+	self
+		assert:
+			(x := normalClass class categoryOfSelector: #'bar') asString = protocol.
+	self assert: barMethod rowanPackageName = packageName2
 ]
 
 { #category : 'tests' }
@@ -738,7 +851,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesA [
 		options: #().
 
 	self assert: newClassVersion ~~ class.
-	newSubclassVersion := Rowan image objectNamed: subclass name.
+	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
 	self assert: newSubclassVersion superClass == newClassVersion
 ]
@@ -795,7 +908,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsA [
 		options: #().
 
 	self assert: newClassVersion ~~ class.
-	newSubclassVersion := Rowan image objectNamed: subclass name.
+	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
 	self assert: newSubclassVersion superClass == newClassVersion.
 	self assert: newSubclassVersion foo = 'foo'.
@@ -850,7 +963,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsB [
 		options: #().
 
 	self assert: newClassVersion ~~ class.
-	newSubclassVersion := Rowan image objectNamed: subclass name.
+	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
 	self assert: newSubclassVersion superClass == newClassVersion.
 	self assert: newSubclassVersion foo = 'foo'.
@@ -909,7 +1022,7 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesAndMethodsC [
 		options: #().
 
 	self assert: newClassVersion ~~ class.
-	newSubclassVersion := Rowan image objectNamed: subclass name.
+	newSubclassVersion := Rowan globalNamed: subclass name.
 	self assert: newSubclassVersion ~~ subclass.
 	self assert: newSubclassVersion superClass == newClassVersion.
 	self assert: newSubclassVersion foo = 'foo'.
@@ -989,19 +1102,19 @@ RwHybridBrowserToolTest >> testHybridNewClassVersionWithSubclassesB [
 		options: #().
 
 	self assert: newClassVersion ~~ class.
-	newSubclassVersion1 := Rowan image objectNamed: subclass1 name.
+	newSubclassVersion1 := Rowan globalNamed: subclass1 name.
 	self assert: newSubclassVersion1 ~~ subclass1.
 	self assert: newSubclassVersion1 superClass == newClassVersion.
 
-	newSubclassVersion2 := Rowan image objectNamed: subclass2 name.
+	newSubclassVersion2 := Rowan globalNamed: subclass2 name.
 	self assert: newSubclassVersion2 ~~ subclass2.
 	self assert: newSubclassVersion2 superClass == newSubclassVersion1.
 
-	newSubclassVersion3 := Rowan image objectNamed: subclass3 name.
+	newSubclassVersion3 := Rowan globalNamed: subclass3 name.
 	self assert: newSubclassVersion3 ~~ subclass3.
 	self assert: newSubclassVersion3 superClass == newSubclassVersion2.
 
-	newSubclassVersion4 := Rowan image objectNamed: subclass4 name.
+	newSubclassVersion4 := Rowan globalNamed: subclass4 name.
 	self assert: newSubclassVersion4 ~~ subclass4.
 	self assert: newSubclassVersion4 superClass == newSubclassVersion3
 ]
@@ -1230,8 +1343,9 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
 			loadedPackage name = packageName1
 				ifTrue: [ 
-					self assert: false description: 'no instance methods expected in ',
-					packageName1 ].
+					self
+						assert: false
+						description: 'no instance methods expected in ' , packageName1 ].
 			loadedPackage name = packageName2
 				ifTrue: [ self assert: (#(#'bar') includes: loadedMethod selector) ] ] ].
 
@@ -1319,14 +1433,15 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 		loadedClassMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
 			loadedPackage name = packageName1
 				ifTrue: [ 
-					self assert: false description: 'no instance methods expected in ',
-					packageName1 ].
+					self
+						assert: false
+						description: 'no instance methods expected in ' , packageName1 ].
 			loadedPackage name = packageName2
 				ifTrue: [ self assert: (#(#'baz') includes: loadedMethod selector) ] ].
 
 	projectTools load loadProjectNamed: projectName.	"restore original state of project"
 
-	normalClass := Rowan image objectNamed: className.
+	normalClass := Rowan globalNamed: className.
 	normalInstance := normalClass new.
 
 	self assert: normalClass bar = 'bar'.

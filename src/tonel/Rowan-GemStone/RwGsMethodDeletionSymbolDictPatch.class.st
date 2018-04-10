@@ -20,7 +20,7 @@ RwGsMethodDeletionSymbolDictPatch >> deleteLoadedMethodNewClasses: createdClasse
 			"class cannot be found, so the method is already gone"
 			^ self ].
 
-	self packageSymbolDictionary
+	self symbolDictionaryRegistry
 		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior
 ]
@@ -34,7 +34,7 @@ RwGsMethodDeletionSymbolDictPatch >> deleteMethodNewClasses: createdClasses andE
 			"class is being deleted, nothing else to do"
 			^ self ].
 
-	self packageSymbolDictionary
+	self symbolDictionaryRegistry
 		deleteMethod: methodDefinition selector
 		for: behavior
 ]
@@ -44,7 +44,7 @@ RwGsMethodDeletionSymbolDictPatch >> deleteNewVersionMethodNewClasses: createdCl
 
 	"remove the method from deleted things"
 
-	self packageSymbolDictionary
+	self symbolDictionaryRegistry
 		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior
 ]

@@ -108,7 +108,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 
 	"This test attempts to add extension methods to a class that is not in the dictionary that the package is being loaded into ... this should actually error out ... all definitions in a package should be applied to a single symbol dictionary ... create separate packages to do cross symbol dictionary updateds ... or possibly use session methods (yet to be determined."
 
-	| projectName1 projectName2 projectDefinition1 projectDefinition2 projectTools classDefinition packageDefinition1 packageNames1 packageDefinition2 packageNames2 className testClass testInstance classExtensionDefinition |
+	| projectName1 projectName2 projectDefinition1 projectDefinition2 projectTools classDefinition packageDefinition1 packageNames1 packageDefinition2 packageNames2 className classExtensionDefinition |
 	projectName1 := 'Simple'.
 	packageNames1 := #('Simple-Core' 'Simple-Tests').
 	projectName2 := 'Simple Extensions'.
@@ -431,7 +431,7 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 
 	"This test attempts to add extension methods to a class is in Globals --- a symbol dictionary owned by another user ... and the extension methods are kept in session methods in the package's symbol dictionary ..."
 
-	| projectName projectDefinition projectTools packageDefinition className testClass testInstance classExtensionDefinition packageNames |
+	| projectName projectDefinition projectTools packageDefinition className classExtensionDefinition packageNames |
 	projectName := 'Simple'.
 	packageNames := #('Simple-Globals-Extensions').
 	projectTools := Rowan projectTools.

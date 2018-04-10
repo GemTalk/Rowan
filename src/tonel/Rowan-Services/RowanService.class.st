@@ -46,13 +46,12 @@ RowanService >> createSampleSymbolDictionary [
 { #category : 'symbol dictionaries' }
 RowanService >> createSymbolDictionaryNamed: aName [
 
-	| dictionary size | 
-	dictionary := RwGsPackageSymbolDictionary new. 
-	dictionary at: aName asSymbol put: dictionary. 
+	| dictionary size |
+	dictionary := SymbolDictionary new.
+	dictionary at: aName asSymbol put: dictionary.
 	size := System myUserProfile symbolList size.
 	System myUserProfile insertDictionary: dictionary at: size + 1.
-	^dictionary
-
+	^ dictionary
 ]
 
 { #category : 'symbol dictionaries' }

@@ -14,7 +14,7 @@ Class {
 { #category : 'installing' }
 RwGsMethodAdditionSymbolDictPatch >> installMethod [
 
-	self packageSymbolDictionary
+	self symbolDictionaryRegistry
 		addNewCompiledMethod: compiledMethod
 		for: behavior
 		protocol: self propertiesProtocolName

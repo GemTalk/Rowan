@@ -57,13 +57,13 @@ RwExtensionMethodModification >> addModificationToPatchSet: aPatchSet inPackage:
 					self isMeta
 						ifTrue: [ 
 							aPatchSet
-								addPatchedClassMethod: self after
+								addPatchedExtendedClassMethod: self after
 								inClass: self classDefinition
 								inPackage: aPackage
 								inProject: aProjectDefinition ]
 						ifFalse: [ 
 							aPatchSet
-								addPatchedInstanceMethod: self after
+								addPatchedExtendedInstanceMethod: self after
 								inClass: self classDefinition
 								inPackage: aPackage
 								inProject: aProjectDefinition ] ].
@@ -72,13 +72,13 @@ RwExtensionMethodModification >> addModificationToPatchSet: aPatchSet inPackage:
 					self isMeta
 						ifTrue: [ 
 							aPatchSet
-								addPatchedClassMethodProperties: self after
+								addPatchedExtendedClassMethodProperties: self after
 								inClass: self classDefinition
 								inPackage: aPackage
 								inProject: aProjectDefinition ]
 						ifFalse: [ 
 							aPatchSet
-								addPatchedInstanceMethodProperties: self after
+								addPatchedExtendedInstanceMethodProperties: self after
 								inClass: self classDefinition
 								inPackage: aPackage
 								inProject: aProjectDefinition ] ] ]

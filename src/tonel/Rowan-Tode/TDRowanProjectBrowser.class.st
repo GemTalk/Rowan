@@ -11,6 +11,14 @@ Class {
 }
 
 { #category : 'menu actions' }
+TDRowanProjectBrowser >> bootstrapLoadMenuAction: listElement selectionIndex: selectionIndex [
+
+	[ ^ self loadProjectMenuAction: listElement selectionIndex: selectionIndex ]
+		on: RwExistingAssociationWithSameKeyNotification
+		do: [ :ex | ex resume ]
+]
+
+{ #category : 'menu actions' }
 TDRowanProjectBrowser >> browseProjectClassesMenuAction: listElement selectionIndex: selectionIndex [
 
 	| projectDef block |
@@ -55,7 +63,7 @@ TDRowanProjectBrowser >> clientList: miniTool listElement: listElement [
 	max := 0.
 	projects
 		do: [ :projectDef | 
-			| projectName emphasis sha repostioryCommitId loadedCommitId |
+			| projectName emphasis sha repostioryCommitId loadedCommitId branch |
 			projectName := projectDef projectName.
 			selectedProjectName = projectName
 				ifTrue: [ selectedProjectIndex := count ].
@@ -63,11 +71,14 @@ TDRowanProjectBrowser >> clientList: miniTool listElement: listElement [
 				ifTrue: [ projectName := '+ ' , projectName ].
 			count := count + 1.
 			loadedCommitId := projectDef loadedCommitId.
+			branch := projectDef currentBranchName.
+			branch isEmpty
+				ifFalse: [ branch := ' [' , branch , ']' ].
 			repostioryCommitId := projectDef repositoryCommitId.
 			(loadedCommitId isEmpty or: [ loadedCommitId = repostioryCommitId ])
 				ifTrue: [ 
 					emphasis := {(TextEmphasis bold)}.
-					sha := loadedCommitId ]
+					sha := loadedCommitId , branch ]
 				ifFalse: [ 
 					emphasis := {(TextEmphasis bold).
 					(TextColor red)}.
@@ -176,6 +187,8 @@ TDRowanProjectBrowser >> deleteAllProjectsMenuAction: listElement selectionIndex
 								ifTrue: [ user removeDictionaryAt: index ] ] ].
 			Rowan image _removeLoadedProject: loadedProject ].
 	GsPackagePolicy current refreshSessionMethodDictionary.
+	ClassOrganizer clearCachedOrganizer.
+	(Rowan image objectNamed: 'RwAbstractTest') ifNotNil: [ :cl | cl cleanup ].
 	projects := projectBlock value.
 	^ #'refresh'
 ]
@@ -204,7 +217,7 @@ TDRowanProjectBrowser >> gitBranchesMenuAction: listElement selectionIndex: sele
 		ifTrue: [ ^ false ].
 	projectDef := self projects at: selectionIndex.
 	gitRepoPath := projectDef repositoryRootPath.
-	gitTool := Rowan projectTools git.
+	gitTool := Rowan gitTools.
 	response := gitTool gitbranchIn: gitRepoPath with: '-a -v'.
 	response
 		editUsing:
@@ -226,7 +239,7 @@ TDRowanProjectBrowser >> gitCheckoutMenuAction: listElement selectionIndex: sele
 		prompt: 'Enter checkout commit or branch'
 		template: 'branch | -b newBranch commitish | -b newBranch | args') signal.
 	checkoutArgs ifNil: [ ^ false ].
-	gitTool := Rowan projectTools git.
+	gitTool := Rowan gitTools.
 	response := gitTool gitcheckoutIn: gitRepoPath with: checkoutArgs.
 	response
 		editUsing:
@@ -244,7 +257,7 @@ TDRowanProjectBrowser >> gitPullProjectMenuAction: listElement selectionIndex: s
 		ifTrue: [ ^ false ].
 	rowanProject := (self projects at: selectionIndex) rowanProject.
 	gitRootPath := rowanProject repositoryRootPath.
-	gitTool := Rowan projectTools git.
+	gitTool := Rowan gitTools.
 	response := gitTool
 		gitpullIn: gitRootPath
 		remote: rowanProject remote
@@ -265,7 +278,7 @@ TDRowanProjectBrowser >> gitPushProjectMenuAction: listElement selectionIndex: s
 		ifTrue: [ ^ false ].
 	rowanProject := (self projects at: selectionIndex) rowanProject.
 	gitRootPath := rowanProject repositoryRootPath.
-	gitTool := Rowan projectTools git.
+	gitTool := Rowan gitTools.
 	response := gitTool
 		gitpushIn: gitRootPath
 		remote: rowanProject remote
@@ -281,26 +294,14 @@ TDRowanProjectBrowser >> gitPushProjectMenuAction: listElement selectionIndex: s
 { #category : 'menu actions (git)' }
 TDRowanProjectBrowser >> gitStatusMenuAction: listElement selectionIndex: selectionIndex [
 
-	| rowanProject status report commitLog gitTool gitRootPath |
+	| rowanProject status gitTool gitRootPath |
 	selectionIndex = 0
 		ifTrue: [ ^ false ].
 	rowanProject := (self projects at: selectionIndex) rowanProject.
-	report := '======== Modifications ========' copy.
 	gitRootPath := rowanProject repositoryRootPath.
-	gitTool := Rowan projectTools git.
+	gitTool := Rowan gitTools.
 	status := gitTool gitstatusIn: gitRootPath with: '--porcelain'.
-	commitLog := gitTool
-		gitlogFull: rowanProject repositoryCommitId
-		limit: 1
-		gitRepoDirectory: gitRootPath.
-	report
-		add: String lf;
-		add: status;
-		add: String lf;
-		add: '======== Last commit ========';
-		add: String lf;
-		add: commitLog.
-	report
+	status
 		editUsing:
 			((TDEditorSpec topez: listElement topez editorAspect: #'edit')
 				windowName: #'commitLog';
@@ -371,11 +372,20 @@ TDRowanProjectBrowser >> itemSelected: miniTool listElement: listElement selecte
 { #category : 'menu actions' }
 TDRowanProjectBrowser >> loadProjectMenuAction: listElement selectionIndex: selectionIndex [
 
-	| projectDef loads |
+	| projectDef |
 	selectionIndex = 0
 		ifTrue: [ ^ false ].
 	projectDef := self projects at: selectionIndex.
-	Rowan projectTools load loadProjectNamed: projectDef projectName.
+	[ 
+	Rowan projectTools load
+		loadProjectNamed: projectDef projectName
+		withConfiguration: 'Default' ]
+		on: Warning
+		do: [ :ex | 
+			Transcript
+				cr;
+				show: ex description.
+			ex resume: true ].
 	listElement topez commitTransaction.
 	^ #'refreshView'
 ]
@@ -395,7 +405,13 @@ TDRowanProjectBrowser >> menuActionSpec: miniTool [
 		->
 			{#('project spec' nil #'inspectProjectSpecMenuAction:selectionIndex:').
 			#('loaded project' nil #'inspectLoadedProjectMenuAction:selectionIndex:').
+
 			#('tests' nil #'testProjectMenuAction:selectionIndex:')})}.
+	#('-').
+	{('Bootstrap'
+		->
+			{#('bootstrap load' nil #'bootstrapLoadMenuAction:selectionIndex:').
+			#('write' nil #'writeMenuAction:selectionIndex:')})}.
 	#('-').
 	{('Git'
 		->
@@ -453,7 +469,7 @@ TDRowanProjectBrowser >> newDiskProjectSpecMenuAction: listElement selectionInde
 	utils ensureDirectoryExists: dirPath.
 	spec register.
 	spec copy export.
-	gitTool := Rowan projectTools git.
+	gitTool := Rowan gitTools.
 	gitTool gitaddIn: repositoryRootPath with: '.'.
 	gitTool gitcommitIn: repositoryRootPath with: '-m"initial commit from Rowan"'.
 	^ #'refreshView'
@@ -466,7 +482,7 @@ TDRowanProjectBrowser >> newGitHubProjectSpecMenuAction: listElement selectionIn
 
 	"file:/home/dhenrich/rogue/_homes/rogue/_home/shared/repos/RowanSampler/specs/RowanSample1.ston"
 
-	| specUrlString spec projectTools |
+	| specUrlString projectTools |
 	specUrlString := (GsTextInteraction
 		prompt: 'Please enter an url for the project spec'
 		template:
@@ -550,4 +566,16 @@ TDRowanProjectBrowser >> windowName [
 
 	windowName ifNil: [ windowName := #'rowanProjects' ].
 	^ windowName
+]
+
+{ #category : 'menu actions' }
+TDRowanProjectBrowser >> writeMenuAction: listElement selectionIndex: selectionIndex [
+
+	| projectDef |
+	selectionIndex = 0
+		ifTrue: [ ^ false ].
+	projectDef := self projects at: selectionIndex.
+	Rowan projectTools write writeProjectNamed: projectDef projectName.
+	listElement topez commitTransaction.
+	^ #'refreshView'
 ]

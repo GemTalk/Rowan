@@ -22,7 +22,7 @@ RwGsClassExtensionSymbolDictPatch >> installClassExtensionInSystem [
 						error:
 							'The extension class named ' , self className printString , ' cannot be found.' ] ]
 		ifFalse: [ 
-			self packageSymbolDictionary
+			self symbolDictionaryRegistry
 				ensureExtensionClassNamed: self className
 				existsForPackageNamed: self packageName ]
 ]

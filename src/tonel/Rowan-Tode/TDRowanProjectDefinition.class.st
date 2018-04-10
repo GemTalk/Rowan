@@ -39,6 +39,12 @@ TDRowanProjectDefinition >> classDefinitions [
 		sortWithBlock: [ :a :b | a className <= b className ]
 ]
 
+{ #category : 'accessing' }
+TDRowanProjectDefinition >> currentBranchName [
+
+	^ self rowanProject currentBranchName
+]
+
 { #category : 'testing' }
 TDRowanProjectDefinition >> isDirty [
 

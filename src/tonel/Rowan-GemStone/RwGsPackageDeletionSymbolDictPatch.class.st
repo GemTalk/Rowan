@@ -14,5 +14,5 @@ Class {
 { #category : 'deleting' }
 RwGsPackageDeletionSymbolDictPatch >> deletePackage [
 
-	self packageSymbolDictionary deletePackage: packageDefinition name
+	self symbolDictionaryRegistry deletePackage: packageDefinition name
 ]

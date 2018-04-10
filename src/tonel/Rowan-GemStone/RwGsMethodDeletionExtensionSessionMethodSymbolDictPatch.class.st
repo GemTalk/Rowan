@@ -10,7 +10,7 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> compiledMethod [
 	^ compiledMethod
 		ifNil: [ 
 			| dictsArray mDict |
-			dictsArray := self packageSymbolDictionary homeSessionMethods
+			dictsArray := self symbolDictionaryRegistry homeSessionMethods
 				methodAndCategoryDictionaryFor: behavior.
 			mDict := dictsArray at: 1.
 			selector := methodDefinition selector.
@@ -20,7 +20,6 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> compiledMethod [
 					self
 						error:
 							'internal error - compiled session method not present in method dictionary' ] ]
-
 ]
 
 { #category : 'deleting' }
@@ -32,7 +31,7 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteMethodNewClasse
 			"class cannot be found, so the method is already gone"
 			^ self ].
 
-	self packageSymbolDictionary
+	self symbolDictionaryRegistry
 		deleteMethod: methodDefinition selector
 		for: behavior
 ]

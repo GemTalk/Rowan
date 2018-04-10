@@ -29,37 +29,38 @@ RwClassDefinition >> comment [
 ]
 
 { #category : '*rowan-cypress' }
+RwClassDefinition >> fromCypressClassStructure: aCypressClassStructure [
+
+	properties
+		at: 'category' put: aCypressClassStructure category;
+		at: 'classinstvars' put: aCypressClassStructure classInstanceVariableNames;
+		at: 'classvars' put: aCypressClassStructure classVariableNames;
+		at: 'comment' put: aCypressClassStructure comment;
+		at: 'instvars' put: aCypressClassStructure instanceVariableNames;
+		at: 'name' put: aCypressClassStructure className;
+		at: 'pools' put: aCypressClassStructure poolDictionaryNames;
+		at: 'superclass' put: aCypressClassStructure superclassName;
+		yourself.
+	aCypressClassStructure subclassType isEmpty
+		ifTrue: [ properties at: 'type' put: 'normal' ]
+		ifFalse: [ properties at: 'type' put: aCypressClassStructure subclassType asString ].
+	aCypressClassStructure instanceMethods
+		do: [ :cypMethodDef | 
+			self
+				addInstanceMethodDefinition:
+					(RwMethodDefinition fromCypressMethod: cypMethodDef) ].
+	aCypressClassStructure classMethods
+		do: [ :cypMethodDef | 
+			self
+				addClassMethodDefinition:
+					(RwMethodDefinition fromCypressMethod: cypMethodDef) ]
+]
+
+{ #category : '*rowan-cypress' }
 RwClassDefinition class >> fromCypressClassStructure: aCypressClassStructure [
   ^ self new
     fromCypressClassStructure: aCypressClassStructure;
     yourself
-]
-
-{ #category : '*rowan-cypress' }
-RwClassDefinition >> fromCypressClassStructure: aCypressClassStructure [
-  properties
-    at: 'category' put: aCypressClassStructure category;
-    at: 'classinstvars' put: aCypressClassStructure classInstanceVariableNames;
-    at: 'classvars' put: aCypressClassStructure classVariableNames;
-    at: 'comment' put: aCypressClassStructure comment;
-    at: 'instvars' put: aCypressClassStructure instanceVariableNames;
-    at: 'name' put: aCypressClassStructure className;
-    at: 'pools' put: aCypressClassStructure poolDictionaryNames;
-    at: 'superclass' put: aCypressClassStructure superclassName;
-    yourself.
-  aCypressClassStructure subclassType isEmpty
-    ifTrue: [ properties at: 'type' put: 'normal' ]
-    ifFalse: [ properties at: 'type' put: aCypressClassStructure subclassType ].
-  aCypressClassStructure instanceMethods
-    do: [ :cypMethodDef | 
-      self
-        addInstanceMethodDefinition:
-          (RwMethodDefinition fromCypressMethod: cypMethodDef) ].
-  aCypressClassStructure classMethods
-    do: [ :cypMethodDef | 
-      self
-        addClassMethodDefinition:
-          (RwMethodDefinition fromCypressMethod: cypMethodDef) ]
 ]
 
 { #category : '*rowan-cypress' }

@@ -29,7 +29,7 @@ RwGsClassAdditionSymbolDictPatch >> installClassInSystem [
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
-	self packageSymbolDictionary
+	self symbolDictionaryRegistry
 		addClassAssociation: symbolAssociation
 		forClass: newClass
 		toPackageNamed: self packageName

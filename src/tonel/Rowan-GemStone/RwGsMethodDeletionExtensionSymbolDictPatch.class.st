@@ -26,7 +26,7 @@ RwGsMethodDeletionExtensionSymbolDictPatch >> extendedClassName: anObject [
 	extendedClassName := anObject
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : 'private' }
 RwGsMethodDeletionExtensionSymbolDictPatch >> primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols [
 
 	| className class |

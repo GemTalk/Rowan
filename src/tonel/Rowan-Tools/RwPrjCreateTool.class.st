@@ -9,7 +9,7 @@ RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPath useGit: useGit ab
 
 	| utils gitTool |
 	utils := self fileUtilities.
-	gitTool := Rowan projectTools git.
+	gitTool := Rowan gitTools.
 	(utils directoryExists: repoPath)
 		ifTrue: [ 
 			(self

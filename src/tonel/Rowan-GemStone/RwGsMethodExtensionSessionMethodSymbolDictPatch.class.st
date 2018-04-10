@@ -39,7 +39,7 @@ RwGsMethodExtensionSessionMethodSymbolDictPatch >> installMethod [
 
 	"expecting only a single method to be compiled here"
 
-	compiledMethod := self packageSymbolDictionary
+	compiledMethod := self symbolDictionaryRegistry
 		addExtensionSessionMethods: methDict
 		catDict: catDict
 		for: behavior

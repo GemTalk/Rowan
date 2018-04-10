@@ -175,7 +175,7 @@ RwGsClassVersioningSymbolDictPatch >> installNewClassVerionInSystem [
 	"Install the new class association in the symbolAssociation for the class.
 	 Update the LoadedClass with properties for the new classversion."
 
-	self packageSymbolDictionary addNewClassVersionToAssociation: newClassVersion
+	self symbolDictionaryRegistry addNewClassVersionToAssociation: newClassVersion
 ]
 
 { #category : 'accessing' }
@@ -197,7 +197,7 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForExtensionsI
 
 	| className class |
 	className := classDefinition name.
-	class := Rowan image objectNamed: className.
+	class := Rowan globalNamed: className.
 	self
 		_updateNewClassVersionPatchesForClass: class
 		in: aProjectSetModification
@@ -219,7 +219,7 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 		do: [ :subclass | 
 			| loadedClassDefinition subclassName newVersionClassModification |
 			subclassName := subclass name asString.
-			loadedClassDefinition := (self packageSymbolDictionary
+			loadedClassDefinition := (self symbolDictionaryRegistry
 				existingForClass: subclass) asDefinition.
 			newVersionClassModification := loadedClassDefinition
 				compareAgainstBaseForcingNewClassVersion: loadedClassDefinition.
@@ -238,9 +238,14 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 									newVersionClassModification
 										mergeForNewClassVersionWith: newVersionClassModification ]
 								ifNotNil: [ :existingClassModification | 
-									self halt: 'let''s see how this plays out'.
-									existingClassModification
-										mergeForNewClassVersionWith: newVersionClassModification ] ] ].
+									existingClassModification isDeletion
+										ifTrue: [ 
+											"a deletion is not unexpected ... "
+											 ]
+										ifFalse: [ 
+											self halt: 'let''s see how this plays out'.
+											existingClassModification
+												mergeForNewClassVersionWith: newVersionClassModification ] ] ] ].
 			self
 				_updateNewClassVersionPatchesForClass: subclass
 				in: aProjectSetModification
@@ -253,7 +258,7 @@ RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectS
 	| existingClass loadedClassDefinition newVersionClassModification existingClassName |
 	existingClass := self oldClassVersion.
 	existingClassName := existingClass name asString.
-	loadedClassDefinition := (self packageSymbolDictionary
+	loadedClassDefinition := (self symbolDictionaryRegistry
 		existingForClass: existingClass) asDefinition.
 	newVersionClassModification := self classDefinition
 		compareAgainstBaseForNewClassVersion: loadedClassDefinition.

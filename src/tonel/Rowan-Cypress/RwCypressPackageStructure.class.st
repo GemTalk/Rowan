@@ -81,7 +81,7 @@ RwCypressPackageStructure >> fromSnapshot: snapshot [
 { #category : 'snapshotting' }
 RwCypressPackageStructure >> rwSnapshot [
 
-	| definitions rwPackageDefinition |
+	| rwPackageDefinition |
 	rwPackageDefinition := RwPackageDefinition new
 		properties:
 			(Dictionary new

@@ -28,12 +28,6 @@ RwProjectDefinition >> methodEnvForPackageNamed: packageName [
 ]
 
 { #category : '*rowan-gemstone' }
-RwProjectDefinition >> packageSymbolDictionaryClass [
-
-	^ RwGsPackageSymbolDictionary
-]
-
-{ #category : '*rowan-gemstone' }
 RwProjectDefinition >> projectOwnerId [
 
 	^ (self specification platformSpec at: 'gemstone') projectOwnerId
@@ -43,6 +37,12 @@ RwProjectDefinition >> projectOwnerId [
 RwProjectDefinition >> projectOwnerId: aUserId [
 
 	(self specification platformSpec at: 'gemstone') projectOwnerId: aUserId
+]
+
+{ #category : '*rowan-gemstone' }
+RwProjectDefinition >> symbolDictionaryRegistryClass [
+
+	^ RwGsSymbolDictionaryRegistry
 ]
 
 { #category : '*rowan-gemstone' }

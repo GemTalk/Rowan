@@ -30,7 +30,7 @@ RwPrjLogTool >> commitLogSpecUrl: aString limit: logLimit [
 RwPrjLogTool >> doGitCommitLog: logLimit [
 
 	| gitTool gitRootPath |
-	gitTool := self class git.
+	gitTool := Rowan gitTools.
 	gitRootPath := specification repoSpec repositoryRootPath.
 	^ gitTool gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: gitRootPath
 ]

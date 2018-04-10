@@ -25,7 +25,7 @@ RwProject >> comment [
 { #category : 'accessing' }
 RwProject >> currentBranchName [
 
-	^ Rowan projectTools git gitBranchNameIn: self repositoryRootPath
+	^ Rowan gitTools gitBranchNameIn: self repositoryRootPath
 ]
 
 { #category : 'accessing' }
@@ -73,7 +73,7 @@ RwProject >> remote [
 { #category : 'accessing' }
 RwProject >> repositoryCommitId [
 
-	^ Rowan projectTools git gitcommitShaIn: self repositoryRootPath
+	^ Rowan gitTools gitcommitShaIn: self repositoryRootPath
 ]
 
 { #category : 'properties' }

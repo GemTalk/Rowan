@@ -5,6 +5,57 @@ Class {
 }
 
 { #category : 'private' }
+RwAbstractTest class >> _symbolDictionaryName [
+
+	^ #'CypressTestData'
+]
+
+{ #category : 'private' }
+RwAbstractTest class >> _symbolDictionaryName1 [
+
+	^ #'RowanTestData'
+]
+
+{ #category : 'private' }
+RwAbstractTest class >> _symbolDictionaryName2 [
+
+	^ #'RowanTestData2'
+]
+
+{ #category : 'private' }
+RwAbstractTest class >> _unmanagedDictionaryName [
+
+	^ #'UnmanagedPackages'
+]
+
+{ #category : 'cleanup' }
+RwAbstractTest class >> cleanup [
+
+	"self cleanup"
+
+	| user symList dict index |
+	user := System myUserProfile.
+	symList := user symbolList.
+
+	{(self _symbolDictionaryName).
+	(self _symbolDictionaryName1).
+	(self _symbolDictionaryName2).
+	(self _unmanagedDictionaryName)}
+		do: [ :symDictName | 
+			dict := symList objectNamed: symDictName.
+
+			dict
+				ifNotNil: [ 
+					(dict at: GsPackagePolicy globalName otherwise: nil)
+						ifNotNil: [ :policy | policy disable ].
+					index := symList indexOf: dict.
+					index > 0
+						ifTrue: [ user removeDictionaryAt: index ] ] ].
+	GsPackagePolicy current refreshSessionMethodDictionary.
+	ClassOrganizer clearCachedOrganizer
+]
+
+{ #category : 'private' }
 RwAbstractTest >> _classvars [
 
 	^ #('ClassVar1')
@@ -19,19 +70,25 @@ RwAbstractTest >> _symbolDictionary [
 { #category : 'private' }
 RwAbstractTest >> _symbolDictionaryName [
 
-	^ #'CypressTestData'
+	^ self class _symbolDictionaryName
 ]
 
 { #category : 'private' }
 RwAbstractTest >> _symbolDictionaryName1 [
 
-	^ #'RowanTestData'
+	^ self class _symbolDictionaryName1
 ]
 
 { #category : 'private' }
 RwAbstractTest >> _symbolDictionaryName2 [
 
-	^ #'RowanTestData2'
+	^ self class _symbolDictionaryName2
+]
+
+{ #category : 'private' }
+RwAbstractTest >> _unmanagedDictionaryName [
+
+	^ self class _unmanagedDictionaryName
 ]
 
 { #category : 'support' }
@@ -40,7 +97,9 @@ RwAbstractTest >> assertAbsenceOfPackage: packageName [
 	| loadedPackage symbolDict |
 	symbolDict := Rowan image
 		newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
-	loadedPackage := symbolDict loadedPackageNamed: packageName ifAbsent: [  ].
+	loadedPackage := symbolDict rowanSymbolDictionaryRegistry
+		loadedPackageNamed: packageName
+		ifAbsent: [  ].
 	self assert: loadedPackage equals: nil
 ]
 
@@ -532,28 +591,8 @@ RwAbstractTest >> propertiesForClassNamed: className super: superClassName instV
 { #category : 'running' }
 RwAbstractTest >> setUp [
 
-	"Remove the CypressTestData symbol dictionary, if present --- gets persistent and session symbol list"
-
-	| user symList dict index |
 	super setUp.
-	user := System myUserProfile.
-	symList := user symbolList.
-
-	{(self _symbolDictionaryName).
-	(self _symbolDictionaryName1).
-	(self _symbolDictionaryName2).
-	#'UnmanagedPackages'}
-		do: [ :symDictName | 
-			dict := symList objectNamed: symDictName.
-
-			dict
-				ifNotNil: [ 
-					(dict at: GsPackagePolicy globalName otherwise: nil)
-						ifNotNil: [ :policy | policy disable ].
-					index := symList indexOf: dict.
-					index > 0
-						ifTrue: [ user removeDictionaryAt: index ] ] ].
-	GsPackagePolicy current refreshSessionMethodDictionary.
+	self class cleanup.
 
 	Rowan platform _alternateImageClass: Rowan image testImageClass
 ]

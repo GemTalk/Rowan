@@ -7,7 +7,7 @@ Class {
 { #category : 'tests' }
 RwProjectSetTest >> testProjectSetLoad1 [
 
-	| projectTools projectName1 projectName2 projectDefinition1 projectDefinition2 projectSetDefinition projectRegistry projectNames loadedProjects |
+	| projectTools projectName1 projectName2 projectDefinition1 projectDefinition2 projectSetDefinition projectNames loadedProjects |
 	projectTools := Rowan projectTools.
 	projectName1 := 'Simple1'.
 	projectName2 := 'Simple2'.

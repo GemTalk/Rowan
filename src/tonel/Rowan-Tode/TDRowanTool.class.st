@@ -482,7 +482,6 @@ TDRowanTool >> prjread [
   prj read <spec-url>
 "
 
-	| diffText |
 	self getSubcommandOptsMixedLongShort: {}.
 	subArguments size < 1
 		ifTrue: [ 
@@ -701,7 +700,6 @@ TDRowanTool >> prjwrite [
   prj write <spec-url>
 "
 
-	| diffText |
 	self getSubcommandOptsMixedLongShort: {}.
 	subArguments size < 1
 		ifTrue: [ 

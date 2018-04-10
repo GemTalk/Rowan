@@ -18,7 +18,7 @@ RwPkgReadTool >> readPackageSetForSpecification: aRwSpecification [
 	readPackages := {}.
 	repo packageNames
 		do: [ :packageName | 
-			| structureName reader snapshot packageDefinition |
+			| structureName reader packageDefinition |
 			structureName := packageName , repo packageExtension.
 			reader := repo reader.
 			reader

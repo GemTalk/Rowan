@@ -788,7 +788,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 { #category : 'tests' }
 RwBrowserToolApiTest >> testDeleteGlobalExtensionMethod [
 
-	| projectName packageNames className packageName1 testClass testInstance browserTool testSymDict |
+	| projectName packageNames className packageName1 testClass testInstance browserTool |
 	projectName := 'Simple Browser'.
 	packageName1 := 'Simple-Global-Extensions1'.
 	packageNames := {packageName1}.
@@ -1040,7 +1040,7 @@ RwBrowserToolApiTest >> testLoadMultiProjectDefs [
 
 	"set up projects and packages for hybrid browser implementation"
 
-	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance testNewClass testNewInstance |
+	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1 project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames defaultSymbolDictNames comments projectTools browserTool testClass testInstance |
 	projectName1 := 'Simple MultiProject 1'.
 	projectName2 := 'Simple MultiProject 2'.
 	projectNames := {projectName1.

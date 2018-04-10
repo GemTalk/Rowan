@@ -16,7 +16,7 @@ TDRowanClassProtocolListElementBuilder >> browseSelectorListFor: protocolDefinit
 
 { #category : 'accessing' }
 TDRowanClassProtocolListElementBuilder >> clientList: listElement [
-  | appEnv items ar className isMeta selectors |
+  | appEnv items ar className isMeta |
   listElement ifNotNil: [ appEnv := listElement topez applicationEnvironment ].
   ar := {(self allProtocol)}
     ,

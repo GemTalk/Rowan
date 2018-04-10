@@ -62,7 +62,7 @@ RwPackageReadWriteTest >> doTestWriteRead: writePackageSet myWriteSpecification:
 
 { #category : 'private' }
 RwPackageReadWriteTest >> doTestWriteReadForFormat: format [
-  | writePackageSet myWriteSpecification rowanSpec readPackageSet diff |
+  | writePackageSet myWriteSpecification rowanSpec |
   writePackageSet := self basicPackageSet.
   rowanSpec := RwSpecification fromUrl: 'Rowan'.
   myWriteSpecification := self

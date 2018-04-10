@@ -30,6 +30,39 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName [
 ]
 
 { #category : 'smalltalk api' }
+RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfiguration: configName [
+
+	| projectDefinition repo packageNames spec url config |
+	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	spec := projectDefinition specification.
+	url := 'file:' , spec repositoryRootPath , '/' , spec configsPath , '/'
+		, configName , '.ston'.
+	[ config := RwProjectConfiguration fromUrl: url ]
+		on: Error
+		do: [ :ignored | 
+			self halt.
+			^ self readProjectSetForProjectNamed: projectName ].
+	repo := projectDefinition repositoryUrl asRwRepository.
+	config packageNames
+		do: [ :packageName | 
+			| structureName reader packageDefinition |
+			structureName := packageName , repo packageExtension.
+			reader := repo reader.
+			reader
+				packageStructure: (RwCypressPackageStructure named: structureName);
+				packageDirectory:
+						(reader fileUtils
+								directoryFromPath: structureName
+								relativeTo: repo directoryPath);
+				readPackageStructure.
+			packageDefinition := reader packageStructure rwSnapshot.
+			projectDefinition addOrUpdatePackage: packageDefinition ].
+	^ RwProjectSetDefinition new
+		addProject: projectDefinition;
+		yourself
+]
+
+{ #category : 'smalltalk api' }
 RwPrjReadTool >> readProjectSetForSpecification: aRwSpecification [
 
 	| repo repositoryUrl projectDefinition |
@@ -43,7 +76,7 @@ RwPrjReadTool >> readProjectSetForSpecification: aRwSpecification [
 	projectDefinition := RwProjectDefinition newForSpecification: aRwSpecification.
 	repo packageNames
 		do: [ :packageName | 
-			| structureName reader snapshot packageDefinition |
+			| structureName reader packageDefinition |
 			structureName := packageName , repo packageExtension.
 			reader := repo reader.
 			reader

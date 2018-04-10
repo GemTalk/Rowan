@@ -39,5 +39,5 @@ RwGsClassPropertiesSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 			self
 				error:
 					'internal error - class changed during class property update ... should have been a class versioning patch' ].
-	self packageSymbolDictionary updateClassProperties: existingClass
+	self symbolDictionaryRegistry updateClassProperties: existingClass
 ]

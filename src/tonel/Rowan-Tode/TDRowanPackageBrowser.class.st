@@ -161,7 +161,7 @@ TDRowanPackageBrowser >> projectDef: anObject [
 { #category : 'menu actions' }
 TDRowanPackageBrowser >> removePackageMenuAction: listElement selectionIndex: selectionIndex [
 
-	| classDefinitionString packageDef classDefTemplate |
+	| packageDef |
 	selectionIndex = 0
 		ifTrue: [ ^ false ].
 	packageDef := self packages at: selectionIndex.

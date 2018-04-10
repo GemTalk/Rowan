@@ -1,9 +1,9 @@
- RwSimpleProjectSpecification{
-	#specName : 'Rowan',
-	#projectUrl : 'https://github.com/dalehenrich/Rowan',
+ RwPackageProjectSpecification{
+	#specName : 'RowanSample2',
+	#projectUrl : 'https://github.com/dalehenrich/RowanSample2',
 	#platformSpec : {
 		'gemstone' : RwGemStoneSpecification {
-			#defaultSymbolDictName : 'UserGlobals',
+			#defaultSymbolDictName : 'SampleSymbolDict',
 			#defaultUseSessionMethodsForExtensions : true }
 	},
 	#specsPath : 'specs',
@@ -11,6 +11,6 @@
 		#committish : 'master',
 		#committishType : 'branch'
 	},
-	#repoPath : 'src/tonel',
+	#repoPath : 'src',
 	#comment : ''
 }
