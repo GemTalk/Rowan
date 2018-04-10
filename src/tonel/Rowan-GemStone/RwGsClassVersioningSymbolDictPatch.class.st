@@ -197,7 +197,7 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForExtensionsI
 
 	| className class |
 	className := classDefinition name.
-	class := Rowan image objectNamed: className.
+	class := Rowan globalNamed: className.
 	self
 		_updateNewClassVersionPatchesForClass: class
 		in: aProjectSetModification

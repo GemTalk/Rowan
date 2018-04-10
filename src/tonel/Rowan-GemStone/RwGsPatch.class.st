@@ -48,7 +48,7 @@ RwGsPatch >> packageSymbolDictionary [
 	| symDictName symDict |
 	symDictName := self projectDefinition
 		symbolDictNameForPackageNamed: self packageName.
-	symDict := Rowan image objectNamed: symDictName asSymbol.
+	symDict := Rowan globalNamed: symDictName asSymbol.
 	symDict
 		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
 	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
@@ -86,7 +86,7 @@ RwGsPatch >> symbolDictionary [
 	| symDictName symDict |
 	symDictName := self projectDefinition
 		symbolDictNameForPackageNamed: self packageName.
-	symDict := Rowan image objectNamed: symDictName asSymbol.
+	symDict := Rowan globalNamed: symDictName asSymbol.
 	symDict
 		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
 	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName

@@ -5,6 +5,18 @@ Class {
 }
 
 { #category : 'private' }
+RwRowanSample2Test >> _migrationClassMap [
+
+	^ {#(#'RowanSample2' #(#'ivar0')).
+	#(#'RowanSample2A' #(#'a' #'ivar1')).
+	#(#'RowanSample2C' #(#'c' #'ivar2')).
+	#(#'RowanSample2D' #(#'d' #'ivar2')).
+	#(#'RowanSample2B' #(#'b' #'ivar1')).
+	#(#'RowanSample2E' #(#'e' #'ivar2')).
+	#(#'RowanSample2F' #(#'f' #'ivar2'))}
+]
+
+{ #category : 'private' }
 RwRowanSample2Test >> _rowanSample2SpecificationUrl [
 
 	| rowanSpec |
@@ -17,7 +29,7 @@ RwRowanSample2Test >> testAutomaticMigration [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after automtic migration the permanent instance variables (a-f) should retain the values, while the moved instance variables (ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample2Class subclasses rowanSample1Spec |
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample2Class subclasses rowanSample1Spec instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
@@ -42,16 +54,32 @@ RwRowanSample2Test >> testAutomaticMigration [
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
 	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
 
-	rowanSample2Class := Rowan image objectNamed: 'RowanSample2'.
-	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
-	self assert: subclasses size = 6.
+	instanceMap := IdentityKeyValueDictionary new.
+	self _migrationClassMap
+		do: [ :ar | 
+			| className ivs class instance |
+			className := ar at: 1.
+			class := Rowan globalNamed: className.
+			instance := class new.
+			ivs := ar at: 2.
+			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
+			instanceMap at: instance put: ar ].
 
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_0'.
+	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
 	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
 
-	rowanSample2Class := Rowan image objectNamed: 'RowanSample2'.
-	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
-	self assert: subclasses size = 0
+	instanceMap
+		keysAndValuesDo: [ :instance :ar | 
+			| ivNames |
+			ivNames := ar at: 2.
+			1 to: ivNames size do: [ :index | 
+				| ivName |
+				ivName := ivNames at: index.
+				(index = ivNames size or: [ index == 1 ])
+					ifTrue: [ 
+						"last iv slot is not niled out on migration interestingly enough"
+						self assert: (instance perform: ivName) == ivName ]
+					ifFalse: [ self assert: (instance perform: ivName) isNil ] ] ]
 ]
 
 { #category : 'tests' }
@@ -59,7 +87,7 @@ RwRowanSample2Test >> testNoMigration [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample2Class subclasses rowanSample1Spec |
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample2Class subclasses rowanSample1Spec instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
@@ -84,16 +112,32 @@ RwRowanSample2Test >> testNoMigration [
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
 	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
 
-	rowanSample2Class := Rowan image objectNamed: 'RowanSample2'.
-	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
-	self assert: subclasses size = 6.
+	instanceMap := IdentityKeyValueDictionary new.
+	self _migrationClassMap
+		do: [ :ar | 
+			| className ivs class instance |
+			className := ar at: 1.
+			class := Rowan globalNamed: className.
+			instance := class new.
+			ivs := ar at: 2.
+			ivs do: [ :ivName | instance perform: ivName , ':' with: ivName ].
+			instanceMap at: instance put: ar ].
 
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_0'.
+	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
 	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
 
-	rowanSample2Class := Rowan image objectNamed: 'RowanSample2'.
-	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
-	self assert: subclasses size = 0
+	instanceMap
+		keysAndValuesDo: [ :instance :ar | 
+			| ivNames |
+			ivNames := ar at: 2.
+			1 to: ivNames size do: [ :index | 
+				| ivName |
+				ivName := ivNames at: index.
+				(index = ivNames size or: [ index == 1 ])
+					ifTrue: [ 
+						"last iv slot is not niled out on migration interestingly enough"
+						self assert: (instance perform: ivName) == ivName ]
+					ifFalse: [ self assert: (instance perform: ivName) isNil ] ] ]
 ]
 
 { #category : 'tests' }
@@ -148,14 +192,14 @@ RwRowanSample2Test >> testRemoveSubclassOfClassWithNewVersion [
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
 	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
 
-	rowanSample2Class := Rowan image objectNamed: 'RowanSample2'.
+	rowanSample2Class := Rowan globalNamed: 'RowanSample2'.
 	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
 	self assert: subclasses size = 6.
 
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_0'.
 	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
 
-	rowanSample2Class := Rowan image objectNamed: 'RowanSample2'.
+	rowanSample2Class := Rowan globalNamed: 'RowanSample2'.
 	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
 	self assert: subclasses size = 0
 ]
