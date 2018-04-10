@@ -48,8 +48,8 @@ set removeAll: set.
 System commit
 %
 
-input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/ston/bootstrapStonSupport.topaz
-input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/tonel/bootstrapTonelSupport.topaz
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.4.0/ston/bootstrapStonSupport.topaz
+input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.4.0/tonel/bootstrapTonelSupport.topaz
 
 # Patch bug 47413
 #

@@ -46,8 +46,5 @@ RwProjectSetTest >> testProjectSetLoad1 [
 			(loadedProjects := Rowan loadedProjectsNamed: projectNames) size
 				= projectNames size.
 	loadedProjects entities
-		do: [ :loadedProject | self assert: (projectNames includes: loadedProject name) ].
-
-	{(UserGlobals at: #'RwGsProjectRegistry').
-	(UserGlobals at: #'RwGsLoadedProjectRegistry')}
+		do: [ :loadedProject | self assert: (projectNames includes: loadedProject name) ]
 ]
