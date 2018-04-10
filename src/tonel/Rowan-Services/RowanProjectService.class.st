@@ -97,7 +97,9 @@ RowanProjectService >> definition [
 { #category : 'rowan' }
 RowanProjectService >> loadProjectNamed: aName [
 
-		Rowan projectTools load loadProjectNamed: aName
+	[Rowan projectTools load loadProjectNamed: aName withConfiguration: 'Default'] 
+		on: RwExistingAssociationWithSameKeyNotification, Warning
+		do: [ :ex | (ex isKindOf: Warning) ifTrue:[Transcript cr; show: ex description]. ex resume ]	
 
 ]
 
