@@ -26,6 +26,19 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed [
 ]
 
 { #category : 'smalltalk api' }
+RwPrjLoadTool >> loadProjectNamed: projectNamed instanceMigrator: instanceMigrator [
+
+	"load the named project from disk"
+
+	| projectSetDefinition |
+	projectSetDefinition := self class read
+		readProjectSetForProjectNamed: projectNamed.
+	^ self
+		loadProjectSetDefinition: projectSetDefinition
+		instanceMigrator: instanceMigrator
+]
+
+{ #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName [
 
 	"load the named project from disk"
@@ -38,15 +51,29 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName [
 ]
 
 { #category : 'smalltalk api' }
+RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName instanceMigrator: instanceMigrator [
+
+	"load the named project from disk"
+
+	| projectSetDefinition |
+	projectSetDefinition := self class read
+		readProjectSetForProjectNamed: projectNamed
+		withConfiguration: configName.
+	^ self
+		loadProjectSetDefinition: projectSetDefinition
+		instanceMigrator: instanceMigrator
+]
+
+{ #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad [
 
 	^ self
 		loadProjectSetDefinition: projectSetDefinitionToLoad
-		enableInstanceMigration: Rowan platform enableInstanceMigration
+		instanceMigrator: Rowan platform instanceMigrator
 ]
 
 { #category : 'smalltalk api' }
-RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad enableInstanceMigration: enableInstanceMigration [
+RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator [
 
 	| loadedProjectSet diff |
 	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings
@@ -58,9 +85,7 @@ RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad enableInst
 			msg := 'The projects are already up to date'.
 			self inform: msg.
 			^ msg ].
-	Rowan image
-		applyModification: diff
-		enableInstanceMigration: enableInstanceMigration.
+	Rowan image applyModification: diff instanceMigrator: instanceMigrator.
 	projectSetDefinitionToLoad definitions
 		do: [ :project | 
 			self specification: project specification.

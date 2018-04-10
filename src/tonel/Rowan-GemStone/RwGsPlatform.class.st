@@ -7,7 +7,8 @@ Class {
 	#superclass : 'RwPlatform',
 	#instVars : [
 		'alternateImageClass',
-		'enableInstanceMigration'
+		'enableInstanceMigration',
+		'instanceMigrator'
 	],
 	#category : 'Rowan-GemStone'
 }
@@ -81,18 +82,6 @@ RwGsPlatform >> defaultConfiguration [
 ]
 
 { #category : 'queries' }
-RwGsPlatform >> enableInstanceMigration [
-
-	^ enableInstanceMigration ifNil: [ false ]
-]
-
-{ #category : 'queries' }
-RwGsPlatform >> enableInstanceMigration: aBool [
-
-	enableInstanceMigration := aBool
-]
-
-{ #category : 'queries' }
 RwGsPlatform >> fileUtilities [
   "Answer the platform-specific object for accessing files and directories"
 
@@ -121,6 +110,19 @@ RwGsPlatform >> initialize [
 	RwGsLoadedPackage initialize.
 	RwGsLoadedClass initialize.
 	RwGsLoadedMethod initialize
+]
+
+{ #category : 'queries' }
+RwGsPlatform >> instanceMigrator [
+
+	^ instanceMigrator
+		ifNil: [ instanceMigrator := RwGsInstanceMigrator noMigration ]
+]
+
+{ #category : 'queries' }
+RwGsPlatform >> instanceMigrator: anInstanceMigrator [
+
+	instanceMigrator := anInstanceMigrator
 ]
 
 { #category : 'queries' }

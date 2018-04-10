@@ -5,7 +5,7 @@ Class {
 	#name : 'RwGsPatchSetBasic',
 	#superclass : 'RwGsPatchSetAbstract',
 	#instVars : [
-		'instanceMigrationEnabled',
+		'instanceMigrator',
 		'addedProjects',
 		'addedPackages',
 		'deletedPackages',
@@ -626,13 +626,13 @@ RwGsPatchSetBasic >> apply [
 ]
 
 { #category : 'public' }
-RwGsPatchSetBasic >> applyForNewClassVersions: enableInstanceMigration [
+RwGsPatchSetBasic >> applyForNewClassVersions: anInstanceMigrator [
 
 	"ignore deleted methods when applying patches to new class version.
 		all methods effectively deleted from class when the new class version is created, "
 
 	| classNames |
-	instanceMigrationEnabled := enableInstanceMigration.
+	instanceMigrator := anInstanceMigrator.
 	classNames := Set new.
 	classesWithNewVersions
 		do: [ :patch | classNames add: patch classDefinition key ].
@@ -777,9 +777,9 @@ RwGsPatchSetBasic >> installAddedClassExtensions [
 ]
 
 { #category : 'accessing' }
-RwGsPatchSetBasic >> instanceMigrationEnabled [
+RwGsPatchSetBasic >> instanceMigrator [
 
-	^ instanceMigrationEnabled ifNil: [ ^ false ]
+	^ instanceMigrator
 ]
 
 { #category : 'private - applying' }
@@ -795,9 +795,15 @@ RwGsPatchSetBasic >> migrateInstances [
 
 	"conditionally migrate instances of classes with new versions"
 
-	self instanceMigrationEnabled
-		ifFalse: [ ^ self ].
-	self halt
+	| classList |
+	classList := classesWithNewVersions collect: [ :patch | patch newClassVersion ].
+	classList isEmpty
+		ifTrue: [ ^ self ].
+	instanceMigrator
+		ifNil: [ 
+			"if instanceMigrator is not set, then we are not ready to do instance migration on this pass"
+			^ self ].
+	instanceMigrator migrateInstancesOf: classList
 ]
 
 { #category : 'private - applying' }

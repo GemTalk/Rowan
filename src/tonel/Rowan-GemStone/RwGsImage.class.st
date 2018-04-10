@@ -127,6 +127,31 @@ RwGsImage class >> applyModification: aProjectSetModification enableInstanceMigr
 	patchSet applyForNewClassVersions: enableInstanceMigration
 ]
 
+{ #category : 'modifying image' }
+RwGsImage class >> applyModification: aProjectSetModification instanceMigrator: instanceMigrator [
+
+	| visitor patchSet |
+	visitor := RwGsImagePatchVisitor new.
+	visitor visit: aProjectSetModification.
+	patchSet := visitor patchSet.
+	patchSet classesWithNewVersions isEmpty
+		ifTrue: [ 
+			patchSet apply.
+			^ self ].
+	patchSet classesWithNewVersions
+		do: [ :each | 
+			each
+				updatePatchesForNewClassVersion: aProjectSetModification;
+				updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
+					patchSet: patchSet;
+				updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
+					patchSet: patchSet ].
+	visitor := RwGsImagePatchVisitor new.
+	visitor visit: aProjectSetModification.
+	patchSet := visitor patchSet.
+	patchSet applyForNewClassVersions: instanceMigrator
+]
+
 { #category : 'testing' }
 RwGsImage class >> canWrite: anObject [
 

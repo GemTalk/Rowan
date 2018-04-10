@@ -52,7 +52,10 @@ RwRowanSample2Test >> testAutomaticMigration [
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
+	projectTools load
+		loadProjectNamed: projectName
+		withConfiguration: 'Default'
+		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -66,7 +69,10 @@ RwRowanSample2Test >> testAutomaticMigration [
 			instanceMap at: instance put: ar -> class ].
 
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
-	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
+	projectTools load
+		loadProjectNamed: projectName
+		withConfiguration: 'Default'
+		instanceMigrator: RwGsInstanceMigrator aggressiveHiddenSetMigration.
 
 	instanceMap
 		keysAndValuesDo: [ :instance :assoc | 
