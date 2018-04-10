@@ -238,9 +238,14 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 									newVersionClassModification
 										mergeForNewClassVersionWith: newVersionClassModification ]
 								ifNotNil: [ :existingClassModification | 
-									self halt: 'let''s see how this plays out'.
-									existingClassModification
-										mergeForNewClassVersionWith: newVersionClassModification ] ] ].
+									existingClassModification isDeletion
+										ifTrue: [ 
+											"a deletion is not unexpected ... "
+											 ]
+										ifFalse: [ 
+											self halt: 'let''s see how this plays out'.
+											existingClassModification
+												mergeForNewClassVersionWith: newVersionClassModification ] ] ] ].
 			self
 				_updateNewClassVersionPatchesForClass: subclass
 				in: aProjectSetModification
