@@ -75,10 +75,8 @@ RwRowanSample2Test >> testAutomaticMigration [
 			1 to: ivNames size do: [ :index | 
 				| ivName |
 				ivName := ivNames at: index.
-				(index = ivNames size or: [ index == 1 ])
-					ifTrue: [ 
-						"last iv slot is not niled out on migration interestingly enough"
-						self assert: (instance perform: ivName) == ivName ]
+				index == 1
+					ifTrue: [ self assert: (instance perform: ivName) == ivName ]
 					ifFalse: [ self assert: (instance perform: ivName) isNil ] ] ]
 ]
 
