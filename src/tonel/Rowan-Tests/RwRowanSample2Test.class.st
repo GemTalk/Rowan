@@ -13,6 +13,90 @@ RwRowanSample2Test >> _rowanSample2SpecificationUrl [
 ]
 
 { #category : 'tests' }
+RwRowanSample2Test >> testAutomaticMigration [
+
+	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after automtic migration the permanent instance variables (a-f) should retain the values, while the moved instance variables (ivar0-ivar2) should be niled out"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample2Class subclasses rowanSample1Spec |
+	projectName := 'RowanSample2'.
+	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	specUrlString := self _rowanSample2SpecificationUrl.
+	projectTools := Rowan projectTools.
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
+		useSsh: true.
+
+	rowanSample1Spec := (Rowan image loadedProjectNamed: projectName) specification.
+	(rowanSample1Spec platformSpec at: 'gemstone')
+		projectOwnerId: Rowan image currentUserId;
+		defaultSymbolDictName: self _symbolDictionaryName;
+		yourself.
+
+	gitRootPath := rowanSample1Spec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
+	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
+
+	rowanSample2Class := Rowan image objectNamed: 'RowanSample2'.
+	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
+	self assert: subclasses size = 6.
+
+	gitTool gitcheckoutIn: gitRootPath with: 'migration_0'.
+	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
+
+	rowanSample2Class := Rowan image objectNamed: 'RowanSample2'.
+	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
+	self assert: subclasses size = 0
+]
+
+{ #category : 'tests' }
+RwRowanSample2Test >> testNoMigration [
+
+	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample2Class subclasses rowanSample1Spec |
+	projectName := 'RowanSample2'.
+	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	specUrlString := self _rowanSample2SpecificationUrl.
+	projectTools := Rowan projectTools.
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
+		useSsh: true.
+
+	rowanSample1Spec := (Rowan image loadedProjectNamed: projectName) specification.
+	(rowanSample1Spec platformSpec at: 'gemstone')
+		projectOwnerId: Rowan image currentUserId;
+		defaultSymbolDictName: self _symbolDictionaryName;
+		yourself.
+
+	gitRootPath := rowanSample1Spec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
+	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
+
+	rowanSample2Class := Rowan image objectNamed: 'RowanSample2'.
+	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
+	self assert: subclasses size = 6.
+
+	gitTool gitcheckoutIn: gitRootPath with: 'migration_0'.
+	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
+
+	rowanSample2Class := Rowan image objectNamed: 'RowanSample2'.
+	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
+	self assert: subclasses size = 0
+]
+
+{ #category : 'tests' }
 RwRowanSample2Test >> testRemoveSubclassOfClassWithNewVersion [
 
 	"#RowanSample2 project

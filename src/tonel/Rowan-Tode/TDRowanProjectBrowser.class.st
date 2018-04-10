@@ -63,7 +63,7 @@ TDRowanProjectBrowser >> clientList: miniTool listElement: listElement [
 	max := 0.
 	projects
 		do: [ :projectDef | 
-			| projectName emphasis sha repostioryCommitId loadedCommitId |
+			| projectName emphasis sha repostioryCommitId loadedCommitId branch |
 			projectName := projectDef projectName.
 			selectedProjectName = projectName
 				ifTrue: [ selectedProjectIndex := count ].
@@ -71,11 +71,14 @@ TDRowanProjectBrowser >> clientList: miniTool listElement: listElement [
 				ifTrue: [ projectName := '+ ' , projectName ].
 			count := count + 1.
 			loadedCommitId := projectDef loadedCommitId.
+			branch := projectDef currentBranchName.
+			branch isEmpty
+				ifFalse: [ branch := ' [' , branch , ']' ].
 			repostioryCommitId := projectDef repositoryCommitId.
 			(loadedCommitId isEmpty or: [ loadedCommitId = repostioryCommitId ])
 				ifTrue: [ 
 					emphasis := {(TextEmphasis bold)}.
-					sha := loadedCommitId ]
+					sha := loadedCommitId , branch ]
 				ifFalse: [ 
 					emphasis := {(TextEmphasis bold).
 					(TextColor red)}.

@@ -83,6 +83,15 @@ TDRowanLoadedMethodDefinition >> loadedProject [
 	^ self loadedMethod loadedProject
 ]
 
+{ #category : 'removal' }
+TDRowanLoadedMethodDefinition >> removeFromSystem: topez [
+
+	^ Rowan projectTools browser
+		removeMethod: self selector
+		forClassNamed: self className
+		isMeta: self isMeta
+]
+
 { #category : 'accessing' }
 TDRowanLoadedMethodDefinition >> rowanPackageName [
 
