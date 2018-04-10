@@ -10,6 +10,7 @@ Class {
 	#superclass : 'RwGsClassPatch',
 	#instVars : [
 		'classModification',
+		'oldClassVersion',
 		'newClassVersion',
 		'symbolAssociation'
 	],
@@ -162,6 +163,7 @@ RwGsClassVersioningSymbolDictPatch >> createClassFor: aPatchSet [
 	"we're using createClassFor: to apply the class modifications to the existing class
 	oldClassVersion and produce a new class version"
 
+	oldClassVersion := self oldClassVersion.	"grab the class version BEFORE creating newClassVersion ...it may be needed later"
 	newClassVersion := super createClassFor: aPatchSet.
 	symbolAssociation := self resolveName: newClassVersion name.
 	^ newClassVersion
@@ -193,6 +195,7 @@ RwGsClassVersioningSymbolDictPatch >> oldClassVersion [
 
 	"The old version is what is currently bound to the old class definition's name."
 
+	oldClassVersion ifNotNil: [ ^ oldClassVersion ].
 	^ (self resolveName: self oldClassDefinition key) value
 ]
 

@@ -795,15 +795,15 @@ RwGsPatchSetBasic >> migrateInstances [
 
 	"conditionally migrate instances of classes with new versions"
 
-	| classList |
-	classList := classesWithNewVersions collect: [ :patch | patch newClassVersion ].
-	classList isEmpty
+	| classSet |
+	classSet := classesWithNewVersions collect: [ :patch | patch oldClassVersion ].
+	classSet isEmpty
 		ifTrue: [ ^ self ].
 	instanceMigrator
 		ifNil: [ 
 			"if instanceMigrator is not set, then we are not ready to do instance migration on this pass"
 			^ self ].
-	instanceMigrator migrateInstancesOf: classList
+	instanceMigrator migrateInstancesOf: classSet asArray
 ]
 
 { #category : 'private - applying' }

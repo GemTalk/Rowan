@@ -30,30 +30,16 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'migrationEnabled',
-		'instanceLimit',
 		'maxThreads',
-		'maxCpuPercentage',
-		'useHiddenSet'
+		'maxCpuPercentage'
 	],
 	#category : 'Rowan-GemStone'
 }
 
 { #category : 'instance creation' }
-RwGsInstanceMigrator class >> aggressiveHiddenSetMigration [
-
-	^ self new
-		instanceLimit: 0;
-		maxThreads: SystemRepository _aggressiveMaxThreadCount;
-		maxCpuPercentage: 95;
-		useHiddenSet: true;
-		yourself
-]
-
-{ #category : 'instance creation' }
 RwGsInstanceMigrator class >> aggressiveMigration [
 
 	^ self new
-		instanceLimit: 0;
 		maxThreads: SystemRepository _aggressiveMaxThreadCount;
 		maxCpuPercentage: 95;
 		yourself
@@ -71,19 +57,6 @@ RwGsInstanceMigrator class >> noMigration [
 	^ self new
 		migrationEnabled: false;
 		yourself
-]
-
-{ #category : 'accessing' }
-RwGsInstanceMigrator >> instanceLimit [
-
-	^ instanceLimit ifNil: [ 0 ]
-]
-
-{ #category : 'accessing' }
-RwGsInstanceMigrator >> instanceLimit: anObject [
-
-   instanceLimit := anObject
-
 ]
 
 { #category : 'accessing' }
@@ -113,19 +86,30 @@ RwGsInstanceMigrator >> maxThreads: anObject [
 ]
 
 { #category : 'migration' }
-RwGsInstanceMigrator >> migrateInstancesOf: aClassList [
+RwGsInstanceMigrator >> migrateInstancesOf: aClassArray [
 
+	| instancesArray classCount |
 	self migrationEnabled
 		ifFalse: [ ^ self ].
-	self useHiddenSet
-		ifTrue: [ ^ self migrateUsingHiddentSetInstancesOf: aClassList ].
-	self halt
-]
-
-{ #category : 'migration' }
-RwGsInstanceMigrator >> migrateUsingHiddentSetInstancesOf: aClassList [
-
-	self halt
+	System commit.
+	instancesArray := SystemRepository
+		listInstances: aClassArray
+		limit: 0
+		toDirectory: nil
+		withMaxThreads: self maxThreads
+		maxCpuUsage: self maxCpuPercentage
+		memoryOnly: false.
+	classCount := 1.
+	1 to: instancesArray size by: 2 do: [ :index | 
+		| class instances history instanceCount |
+		class := aClassArray at: classCount.
+		instanceCount := instancesArray at: index.
+		instances := instancesArray at: index + 1.
+		history := class classHistory.
+		instanceCount > 0
+			ifTrue: [ class migrateInstances: instances to: history last ].
+		[ 1 < history size ] whileTrue: [ history first removeFromClassHistory ].
+		classCount := classCount + 1 ]
 ]
 
 { #category : 'accessing' }
@@ -138,18 +122,5 @@ RwGsInstanceMigrator >> migrationEnabled [
 RwGsInstanceMigrator >> migrationEnabled: anObject [
 
    migrationEnabled := anObject
-
-]
-
-{ #category : 'accessing' }
-RwGsInstanceMigrator >> useHiddenSet [
-
-	^ useHiddenSet ifNil: [ false ]
-]
-
-{ #category : 'accessing' }
-RwGsInstanceMigrator >> useHiddenSet: anObject [
-
-   useHiddenSet := anObject
 
 ]

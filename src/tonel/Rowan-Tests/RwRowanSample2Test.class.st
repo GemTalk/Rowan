@@ -72,7 +72,7 @@ RwRowanSample2Test >> testAutomaticMigration [
 	projectTools load
 		loadProjectNamed: projectName
 		withConfiguration: 'Default'
-		instanceMigrator: RwGsInstanceMigrator aggressiveHiddenSetMigration.
+		instanceMigrator: RwGsInstanceMigrator aggressiveMigration.
 
 	instanceMap
 		keysAndValuesDo: [ :instance :assoc | 
@@ -87,7 +87,7 @@ RwRowanSample2Test >> testAutomaticMigration [
 			1 to: ivNames size do: [ :index | 
 				| ivName |
 				ivName := ivNames at: index.
-				self assert: (instance perform: ivName) isNil ] ]
+				self assert: (instance perform: ivName) == ivName ] ]
 ]
 
 { #category : 'tests' }
