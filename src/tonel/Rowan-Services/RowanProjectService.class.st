@@ -47,6 +47,16 @@ RowanProjectService >> changes [
 
 ]
 
+{ #category : 'rowan' }
+RowanProjectService >> commitWithMessage: message [
+
+	Rowan projectTools write writeProjectNamed: name.
+	Rowan projectTools commit
+		commitProjectNamed: name
+		message: message.
+
+]
+
 { #category : 'examples' }
 RowanProjectService >> createProjectNamed: projectName [ 
 
@@ -164,7 +174,15 @@ RowanProjectService >> sha: anObject [
 ]
 
 { #category : 'rowan' }
+RowanProjectService >> unload [
+
+	| loadedProject |
+	loadedProject := Rowan image loadedProjects select:[:proj | proj name = name].
+
+]
+
+{ #category : 'rowan' }
 RowanProjectService >> write [
-	Rowan projectTools write writeProjectNamed: 'Rowan'
+	Rowan projectTools write writeProjectNamed: name
 
 ]
