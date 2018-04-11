@@ -424,9 +424,7 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 	superClass := aClass superclass.
 	className := aClass name asString.
 	result addAll: superClass name asString.
-	lfsp := Character lf asString
-		addAll: String tab;
-		yourself.
+	lfsp := Character lf asString tab.
 	newByteSubclass := false.
 	thePackageName := aClass rowanPackageName.
 	nonRowanClass := thePackageName = Rowan unpackagedName.
@@ -565,9 +563,7 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 	result := String new.
 	superClass := Rowan image objectNamed: superclassName.
 	result addAll: superclassName.
-	lfsp := Character lf asString
-		addAll: String tab;
-		yourself.
+	lfsp := Character lf asString tab.
 	classType = 'normal'
 		ifTrue: [ result addAll: ' rwSubclass: ' ].
 	classType = 'variable'
@@ -612,9 +608,7 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 	| result lfsp |
 	result := String new.
 	result addAll: superclassName.
-	lfsp := Character lf asString
-		addAll: String tab;
-		yourself.
+	lfsp := Character lf asString tab.
 	classType = 'normal'
 		ifTrue: [ result addAll: ' rwSubclass: ' ].
 	classType = 'variable'
