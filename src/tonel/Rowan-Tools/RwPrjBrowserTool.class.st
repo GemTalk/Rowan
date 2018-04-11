@@ -423,7 +423,9 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 	result := String new.
 	superClass := aClass superclass.
 	className := aClass name asString.
-	result addAll: superClass name asString.
+	superClass
+		ifNil: [ result addAll: 'nil' ]
+		ifNotNil: [ result addAll: superClass name asString ].
 	lfsp := Character lf asString tab.
 	newByteSubclass := false.
 	thePackageName := aClass rowanPackageName.
