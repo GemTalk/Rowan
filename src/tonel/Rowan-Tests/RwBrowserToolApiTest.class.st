@@ -540,7 +540,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 								ifTrue: [ self assert: loadedClass name = className1 ].
 							loadedPackage name = packageName2
 								ifTrue: [ self assert: loadedClass name = className2 ] ].
-					loadedProject name name = projectName2
+					loadedProject name = projectName2
 						ifTrue: [ 
 							loadedPackage name = (packageNames2 at: 1)
 								ifTrue: [ 
@@ -570,7 +570,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 										description: 'no classes expected in ' , packageName1 printString ].
 							loadedPackage name = packageName2
 								ifTrue: [ self assert: loadedClassExtension name = className1 ] ].
-					loadedProject name name = projectName2
+					loadedProject name = projectName2
 						ifTrue: [ 
 							loadedPackage name = (packageNames2 at: 1)
 								ifTrue: [ self assert: loadedClassExtension name = className1 ].
@@ -596,7 +596,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 										description: 'no classes expected in ' , packageName1 printString ].
 							loadedPackage name = packageName2
 								ifTrue: [ self assert: loadedMethod selector = #'foo' ] ].
-					loadedProject name name = projectName2
+					loadedProject name = projectName2
 						ifTrue: [ 
 							loadedPackage name = (packageNames2 at: 1)
 								ifTrue: [ self assert: loadedMethod selector = #'bar' ].
@@ -687,7 +687,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 												, ' had been removed no loadedClasses should be present.' ].
 							loadedPackage name = packageName2
 								ifTrue: [ self assert: loadedClass name = className2 ] ].
-					loadedProject name name = projectName2
+					loadedProject name = projectName2
 						ifTrue: [ 
 							loadedPackage name = (packageNames2 at: 1)
 								ifTrue: [ 
@@ -723,7 +723,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 											'The class ' , className1 printString
 												,
 													' was removed when packageName1 was removed - no extensions should be present' ] ].
-					loadedProject name name = projectName2
+					loadedProject name = projectName2
 						ifTrue: [ 
 							loadedPackage name = (packageNames2 at: 1)
 								ifTrue: [ 
@@ -759,7 +759,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 										assert: false
 										description:
 											'The method #foo was removed when packageName1 was removed' ] ].
-					loadedProject name name = projectName2
+					loadedProject name = projectName2
 						ifTrue: [ 
 							loadedPackage name = (packageNames2 at: 1)
 								ifTrue: [ 
