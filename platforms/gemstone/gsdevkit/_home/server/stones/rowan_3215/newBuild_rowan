@@ -107,6 +107,19 @@ moveMethod: aSelector toCategory: categoryName environmentId: envId
 		ifTrue: [ self _announceMethodMoved: (self compiledMethodAt: selSym) oldCategory: oldCat ]
 %
 
+classmethod: GsFile
+_stat: aName  isLstat: aBoolean 
+
+"uses the server file system access. 
+ Returns a SmallInteger errno value if an error occurs or 
+ or if aName is not a valid file or directory. Otherwise
+ returns a new instance of GsFileStat. "
+<primitive: 757>
+aName _validateClass: String .
+aBoolean _validateClass: Boolean .
+self _primitiveFailed: #stat:isLstat: args: { aName . aBoolean }
+%
+
 # Patch bug 47413
 #
 category: 'Private'

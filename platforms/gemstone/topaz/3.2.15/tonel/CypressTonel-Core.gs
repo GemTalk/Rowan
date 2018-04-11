@@ -241,7 +241,7 @@ category: 'private'
 method: TonelCypressReader
 categoriesFrom: aCollection
   ^ ((aCollection select: [ :each | each isClassDefinition ])
-    collect: [ :each | each category asSymbol ]) asSet sorted: [ :a :b | a < b ]
+    collect: [ :each | each category asSymbol ]) asSet sortWithBlock: [ :a :b | a < b ]
 %
 
 category: 'parser support'

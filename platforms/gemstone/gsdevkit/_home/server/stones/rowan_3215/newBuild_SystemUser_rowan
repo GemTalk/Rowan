@@ -53,7 +53,107 @@ createOrReviseClass
 #%
 
 commit
+
+category: 'Rowan 3.4 compatibility method'
+classmethod: GsFile
+_stat: aName  isLstat: aBoolean 
+
+"uses the server file system access. 
+ Returns a SmallInteger errno value if an error occurs or 
+ or if aName is not a valid file or directory. Otherwise
+ returns a new instance of GsFileStat. "
+<primitive: 757>
+aName _validateClass: String .
+aBoolean _validateClass: Boolean .
+self _primitiveFailed: #stat:isLstat: args: { aName . aBoolean }
+%
+
 category: 'Rowan compatability method'
+method: CharacterCollection
+findString: subString startingAt: startIndex caseSensitive: aBoolean
+
+	^ self _findString: subString startingAt: startIndex ignoreCase: aBoolean not
+%
+
+method: CharacterCollection
+withGemstoneLineEndings
+
+	"assume the string is textual, and that CR, LF, and CRLF are all 
+  valid line endings.  Replace each occurence with a single LF"
+
+	| cr lf crlf inPos outPos outString lineEndPos newOutPos |
+	cr := Character cr.
+	lf := Character lf.
+	crlf := ByteArray new.
+	crlf
+		add: cr asciiValue;
+		add: lf asciiValue.
+
+	inPos := 1.
+	outPos := 1.
+	outString := self class _newString: self size.
+
+	[ 
+	lineEndPos := self indexOfAnyOf: crlf startingAt: inPos ifAbsent: [ 0 ].
+	lineEndPos ~= 0 ]
+		whileTrue: [ 
+			newOutPos := outPos + (lineEndPos - inPos + 1).
+			outString
+				replaceFrom: outPos
+				to: newOutPos - 2
+				with: self
+				startingAt: inPos.
+			outString at: newOutPos - 1 put: lf.
+			outPos := newOutPos.
+
+			((self at: lineEndPos) = cr
+				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) = lf ] ])
+				ifTrue: [ 
+					"CRLF ending"
+					inPos := lineEndPos + 2 ]
+				ifFalse: [ 
+					"CR or LF ending"
+					inPos := lineEndPos + 1 ] ].	"no more line endings.  copy the rest"
+	newOutPos := outPos + (self size - inPos + 1).
+	outString
+		replaceFrom: outPos
+		to: newOutPos - 1
+		with: self
+		startingAt: inPos.
+
+	^ outString copyFrom: 1 to: newOutPos - 1
+%
+
+method: Symbol
+keywords
+
+	"Answer an array of the keywords that compose the receiver."
+
+	| kwd char keywords |
+	keywords := Array new.
+			kwd := WriteStream on: String new.
+			1 to: self size do: [ :i | 
+				kwd nextPut: (char := self at: i).
+				char = $:
+					ifTrue: [ 
+						keywords add: kwd contents.
+						kwd reset ] ].
+			kwd position = 1
+				ifFalse: [ keywords add: kwd contents ].
+	(keywords size >= 1 and: [ (keywords at: 1) = ':' ])
+		ifTrue: [ 
+			"Has an initial keyword, as in #:if:then:else:"
+			keywords := keywords allButFirst ].
+	(keywords size >= 2 and: [ (keywords at: keywords size - 1) = ':' ])
+		ifTrue: [ 
+			"Has a final keyword, as in #nextPut::andCR"
+			keywords := keywords
+				copyReplaceFrom: keywords size - 1
+				to: keywords size
+				with: {(':' , keywords last)} ].
+	^ keywords
+%
+
 method: CharacterCollection
 endsWith: suffix
 
@@ -69,6 +169,12 @@ endsWith: suffix
   'Elvis' endsWith: 'vis'
   'Elvis' endsWith: ''
 "
+%
+method: Collection
+select: selectBlock thenDo: doBlock
+  "Utility method to improve readability."
+
+  ^ (self select: selectBlock) do: doBlock
 %
 method: SequenceableCollection
 beginsWith: aSequenceableCollection
@@ -187,6 +293,20 @@ trimLeft
 	"Trim separators from the left side of the receiving string."
 
 	^ self trimLeft: [ :char | char isSeparator ]
+%
+method: CharacterCollection
+trimRight: aBlock
+
+	"Trim characters satisfying the condition given in aBlock from the right side of the receiving string."
+
+	^ self trimLeft: [ :char | false ] right: aBlock
+%
+method: CharacterCollection
+trimRight
+
+	"Trim separators from the right side of the receiving string."
+
+	^ self trimRight: [ :char | char isSeparator ]
 %
 method: SequenceableCollection
 second
