@@ -438,7 +438,7 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 				addLast: $'.
 			newByteSubclass := true ]
 		ifFalse: [ 
-			aClass _portableIsIndexable
+			aClass isIndexable
 				ifTrue: [ 
 					nonRowanClass
 						ifTrue: [ result addAll: ' indexableSubclass: ''' ]
