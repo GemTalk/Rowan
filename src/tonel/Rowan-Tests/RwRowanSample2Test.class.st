@@ -213,3 +213,107 @@ RwRowanSample2Test >> testRemoveSubclassOfClassWithNewVersion [
 	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
 	self assert: subclasses size = 0
 ]
+
+{ #category : 'tests' }
+RwRowanSample2Test >> testSampleCompoundConfiguration [
+
+	"SampleCompound configuration is an instance of RwProjectCompoundConfiguration"
+
+	"(RwProjectCompoundConfiguration newNamed: 'SampleCompound' for: 'RowanSample2')
+		packageNames: #();
+		configurationNames: #('SampleCore' 'SampleTest');
+		exportToUrl: 'file:$GS_HOME/shared/repos/RowanSample2/configs/';
+		yourself.
+(RwProjectCompoundConfiguration newNamed: 'SampleCore' for: 'RowanSample2')
+		packageNames: #('RowanSample2-Core');
+		exportToUrl: 'file:$GS_HOME/shared/repos/RowanSample2/configs/';
+		yourself.
+(RwProjectCompoundConfiguration newNamed: 'SampleTest' for: 'RowanSample2')
+		packageNames: #('RowanSample2-Test');
+		exportToUrl: 'file:$GS_HOME/shared/repos/RowanSample2/configs/';
+		yourself.
+"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec project x |
+	projectName := 'RowanSample2'.
+	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	specUrlString := self _rowanSample2SpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSample1Spec := (Rowan image loadedProjectNamed: projectName) specification.
+	(rowanSample1Spec platformSpec at: 'gemstone')
+		projectOwnerId: Rowan image currentUserId;
+		defaultSymbolDictName: self _symbolDictionaryName;
+		yourself.
+
+	gitRootPath := rowanSample1Spec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: gitRootPath with: 'master'.
+	projectTools load
+		loadProjectNamed: projectName
+		withConfiguration: 'SampleCompound'
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	project := RwProject newNamed: projectName.
+	self
+		assert:
+			(x := project packageNames asArray sortWithBlock: [ :a :b | a < b ])
+				= #('RowanSample2-Core' 'RowanSample2-Test')
+]
+
+{ #category : 'tests' }
+RwRowanSample2Test >> testSampleDefaultConfiguration [
+
+	"SampleDefault configuration is an instance of RwProjectConfiguration"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec project x |
+	projectName := 'RowanSample2'.
+	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	specUrlString := self _rowanSample2SpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSample1Spec := (Rowan image loadedProjectNamed: projectName) specification.
+	(rowanSample1Spec platformSpec at: 'gemstone')
+		projectOwnerId: Rowan image currentUserId;
+		defaultSymbolDictName: self _symbolDictionaryName;
+		yourself.
+
+	gitRootPath := rowanSample1Spec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: gitRootPath with: 'master'.
+	projectTools load
+		loadProjectNamed: projectName
+		withConfiguration: 'SampleDefault'
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	project := RwProject newNamed: projectName.
+	self assert: (x := project packageNames) = #('RowanSample2-Core')
+]

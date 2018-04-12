@@ -32,18 +32,19 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName [
 { #category : 'smalltalk api' }
 RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfiguration: configName [
 
-	| projectDefinition repo packageNames spec url config |
+	| projectDefinition repo spec url config |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	spec := projectDefinition specification.
 	url := 'file:' , spec repositoryRootPath , '/' , spec configsPath , '/'
 		, configName , '.ston'.
-	[ config := RwProjectConfiguration fromUrl: url ]
+	[ config := RwAbstractProjectConfiguration fromUrl: url ]
 		on: Error
 		do: [ :ignored | 
 			self halt.
 			^ self readProjectSetForProjectNamed: projectName ].
 	repo := projectDefinition repositoryUrl asRwRepository.
-	config packageNames
+	config projectName: projectName.
+	config resolvePackageNames
 		do: [ :packageName | 
 			| structureName reader packageDefinition |
 			structureName := packageName , repo packageExtension.

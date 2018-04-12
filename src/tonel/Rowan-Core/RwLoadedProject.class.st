@@ -142,7 +142,7 @@ RwLoadedProject >> packageNames [
 
 	"Return list of package names in the receiver"
 
-	^ self loadedPackages collect: [ :each | each name ]
+	^ self loadedPackages keys asArray
 ]
 
 { #category : 'definitions' }
