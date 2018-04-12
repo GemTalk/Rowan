@@ -372,7 +372,7 @@ RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 								ifNotNil: [ :projectRegistry | 
 									(projectRegistry at: aString ifAbsent: [  ])
 										ifNotNil: [ :loadedProject | 
-											(loadedProject specification platformSpect at: 'gemstone') projectOwnerId
+											(loadedProject specification platformSpec at: 'gemstone') projectOwnerId
 												= aUserId
 												ifTrue: [ ^ loadedProject ] ] ] ] ].
 			^ absentBlock value ]
@@ -400,7 +400,7 @@ RwGsImage class >> loadedProjects [
 								addAll:
 									(projectRegistry
 										select: [ :loadedProject | 
-											(loadedProject specification platformSpect at: 'gemstone') projectOwnerId
+											(loadedProject specification platformSpec at: 'gemstone') projectOwnerId
 												= aUserId ]) ] ] ].
 	^ loadedProjects
 ]
