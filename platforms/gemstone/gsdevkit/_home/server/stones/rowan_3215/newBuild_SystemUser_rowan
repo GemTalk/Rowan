@@ -953,6 +953,7 @@ options: optionsArray
 
   commit
    run
+  "Bootstrap Rowan into image"
   | packageManager repo |
   packageManager := CypressPackageManager3 new.
   repo := CypressAbstractRepository
@@ -967,11 +968,34 @@ options: optionsArray
           (CypressResolvedReference name: packageName repository: repo) ].
   packageManager loadResolvedReferences
 %
+  commit
 
+# Install Rowan using Rowan
   run
-  Rowan addProject: (STON fromString: (GsFile openReadOnServer: '$GS_HOME/server/stones/$GEMSTONE_NAME/rowanSpec.ston') contents)
+  "Register Rowan in loaded project"
+  | specification gitRepoPath |
+  specification := RwSpecification fromUrl: 'file:$GS_HOME/shared/repos/Rowan/specs/Rowan_SystemUser_3215.ston'.
+  gitRepoPath := '$GS_HOME/shared/repos/Rowan'.
+  specification
+    repositoryRootPath: gitRepoPath;
+    repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
+    register.
+  "load Rowan"
+  [ 
+    Rowan projectTools load
+      loadProjectNamed: 'Rowan'
+      withConfiguration: 'Gs3215' ]
+        on: Warning, RwExistingAssociationWithSameKeyNotification
+        do: [ :ex | 
+          (ex isKindOf: Warning)
+            ifTrue: [
+              Transcript
+                cr;
+                show: ex description ].
+          ex resume: true ].
 %
   commit
+
   exit
 EOF
 

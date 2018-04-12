@@ -1,0 +1,10 @@
+RwProjectCompoundConfiguration{
+	#name : 'Gs34x',
+	#packageNames : Set [
+                'GemStone-Interactions',
+	],
+	#configurationNames : [
+		'Common'
+	],
+	#comment : '3.4.x config for Rowan'
+}

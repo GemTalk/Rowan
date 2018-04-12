@@ -1,0 +1,16 @@
+ RwSimpleProjectSpecification{
+	#specName : 'Rowan',
+	#projectUrl : 'https://github.com/dalehenrich/Rowan',
+	#platformSpec : {
+		'gemstone' : RwGemStoneSpecification {
+			#defaultSymbolDictName : 'Globals',
+			#defaultUseSessionMethodsForExtensions : true }
+	},
+	#specsPath : 'specs',
+	#repoSpec : RwGitRepositorySpecification {
+		#committish : 'master',
+		#committishType : 'branch'
+	},
+	#repoPath : 'src/tonel',
+	#comment : ''
+}

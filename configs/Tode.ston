@@ -1,0 +1,10 @@
+RwProjectCompoundConfiguration{
+	#name : 'Tode',
+	#packageNames : Set [
+		'Rowan-Tode'
+	],
+	#configurationNames : [
+		'Common'
+	],
+	#comment : 'Config for loading Rowan with tODE support'
+}

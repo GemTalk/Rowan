@@ -1,16 +1,11 @@
-RwProjectConfiguration {
+RwProjectCompoundConfiguration{
 	#name : 'Gs3215',
-	#configNames : Set [
-		'Rowan-Url',
+	#packageNames : Set [
 		'Rowan-3215',
-		'Rowan-Cypress',
-		'Rowan-Definitions',
-		'Rowan-Services',
-		'Rowan-Core',
-		'Rowan-GemStone',
-		'Cypress-Core',
-		'Rowan-Tests',
-		'Rowan-Tools'
+                'GemStone-Interactions'
 	],
-	#comment : '3.2.15 config for Rowan. Differences from Default: include Rowan-3215 and do not load Rowan-Tode'
+	#configurationNames : [
+		'Common'
+	],
+	#comment : '3.2.15 config for Rowan'
 }
