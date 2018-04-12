@@ -61,7 +61,7 @@ RwPrjCloneTool >> _validateForGitRootPathForSpecification: gitRootPath gitRepoDi
 { #category : 'smalltalk api' }
 RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath useSsh: useSsh [
 
-	| gitTool response projectUrl gitRepoPath cloneUrl cloneOption checkout |
+	| gitTool response projectUrl gitRepoPath cloneUrl cloneOption checkout segments |
 	self specification: aRwSpecification.
 	projectUrl := RwUrl fromString: specification projectUrl.
 	gitRepoPath := gitRootPath , '/' , projectUrl segments last.
@@ -77,8 +77,10 @@ RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath 
 	cloneUrl := useSsh
 		ifTrue: [ 'git@' , projectUrl authority , ':' ]
 		ifFalse: [ 'https://' , projectUrl authority , '/' ].
-	cloneUrl := cloneUrl , (projectUrl segments at: 1) , '/'
-		, (projectUrl segments at: 2) , '.git'.
+	segments := projectUrl segments.
+	cloneUrl := segments size = 1
+		ifTrue: [ cloneUrl , (segments at: 1) , '.git' ]
+		ifFalse: [ cloneUrl , (segments at: 1) , '/' , (projectUrl segments at: 2) , '.git' ].
 	cloneOption := ' --no-checkout '.
 	checkout := specification repoSpec committish.
 	checkout ifNil: [ cloneOption := '' ].
