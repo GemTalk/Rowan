@@ -57,13 +57,6 @@ RwClassDefinition >> fromCypressClassStructure: aCypressClassStructure [
 ]
 
 { #category : '*rowan-cypress' }
-RwClassDefinition class >> fromCypressClassStructure: aCypressClassStructure [
-  ^ self new
-    fromCypressClassStructure: aCypressClassStructure;
-    yourself
-]
-
-{ #category : '*rowan-cypress' }
 RwClassDefinition >> poolDictionaryNames [
   ^ properties at: 'pools'
 ]
@@ -75,4 +68,11 @@ RwClassDefinition >> subclassType [
   type = 'normal'
     ifTrue: [ ^ '' ].
   ^ type
+]
+
+{ #category : '*rowan-cypress' }
+RwClassDefinition class >> fromCypressClassStructure: aCypressClassStructure [
+  ^ self new
+    fromCypressClassStructure: aCypressClassStructure;
+    yourself
 ]
