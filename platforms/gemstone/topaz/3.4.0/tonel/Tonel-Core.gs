@@ -924,7 +924,7 @@ writeClassSideMethodDefinitions: aClassDefinition on: aStream
 			each isMethodDefinition 
 			and: [ each className = aClassDefinition className
 			and: [ each classIsMeta ] ] ])
-		sorted: [ :a :b | a selector < b selector ])
+		sorted: [ :a :b | a selector _unicodeLessThan: b selector ])
 		do: [ :each | 
 			self writeMethodDefinition: each parent: aClassDefinition on: aStream ]
 %
@@ -939,7 +939,7 @@ writeExtensionMethods: methods className: className
     do: [ :s | 
       s << 'Extension '
         << (self toSTON: {(#'name' -> className asSymbol)} asDictionary) << nl.
-      (methods sorted: [ :a :b | a selector < b selector ])
+      (methods sorted: [ :a :b | a selector _unicodeLessThan: b selector ])
         do: [ :each | self writeMethodDefinition: each on: s ] ]
 %
 
@@ -951,7 +951,7 @@ writeInstanceSideMethodDefinitions: aClassDefinition on: aStream
 			each isMethodDefinition 
 			and: [ each className = aClassDefinition className
 			and: [ each classIsMeta not ] ] ])
-		sorted: [ :a :b | a selector < b selector ])
+		sorted: [ :a :b | a selector _unicodeLessThan: b selector ])
 		do: [ :each | 
 			self writeMethodDefinition: each parent: aClassDefinition on: aStream ]
 
