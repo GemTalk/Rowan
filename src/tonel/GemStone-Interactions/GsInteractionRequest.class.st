@@ -1,6 +1,7 @@
 Class {
 	#name : 'GsInteractionRequest',
 	#superclass : 'Notification',
+	#type : 'variable',
 	#instVars : [
 		'interaction'
 	],
