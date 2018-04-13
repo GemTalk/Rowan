@@ -941,11 +941,12 @@ writeExtensionMethods: methods className: className
 			s << 'Extension '
 				<< (self toSTON: {(#'name' -> className asSymbol)} asDictionary) << nl.
 			((methods select: [ :m | m classIsMeta not ])
-				sorted: [ :a :b | a selector  _unicodeLessThan: b selector ])
+				sortWithBlock: [ :a :b | a selector  _unicodeLessThan: b selector ])
 				do: [ :each | self writeMethodDefinition: each on: s ].
 			((methods select: [ :m | m classIsMeta ])
-				sorted: [ :a :b | a selector  _unicodeLessThan: b selector ])
+				sortWithBlock: [ :a :b | a selector  _unicodeLessThan: b selector ])
 				do: [ :each | self writeMethodDefinition: each on: s ] ]
+
 %
 
 category: 'private writing'
