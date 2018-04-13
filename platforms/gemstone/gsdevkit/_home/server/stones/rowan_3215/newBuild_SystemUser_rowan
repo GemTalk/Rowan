@@ -996,6 +996,19 @@ options: optionsArray
 %
   commit
 
+  logout
+  set u DataCurator p swordfish
+  login
+
+# enable GsPackagePolicy
+#
+run
+GsPackagePolicy current enable.
+System commit
+%
+  commit
+  logout
+
   exit
 EOF
 
