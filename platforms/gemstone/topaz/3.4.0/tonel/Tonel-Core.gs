@@ -932,15 +932,20 @@ writeClassSideMethodDefinitions: aClassDefinition on: aStream
 category: 'writing'
 method: TonelWriter
 writeExtensionMethods: methods className: className
-  | nl |
-  nl := self newLine.
-  self packageWriter
-    writePackageFileNamed: className , '.extension.st'
-    do: [ :s | 
-      s << 'Extension '
-        << (self toSTON: {(#'name' -> className asSymbol)} asDictionary) << nl.
-      (methods sorted: [ :a :b | a selector _unicodeLessThan: b selector ])
-        do: [ :each | self writeMethodDefinition: each on: s ] ]
+
+	| nl |
+	nl := self newLine.
+	self packageWriter
+		writePackageFileNamed: className , '.extension.st'
+		do: [ :s | 
+			s << 'Extension '
+				<< (self toSTON: {(#'name' -> className asSymbol)} asDictionary) << nl.
+			((methods select: [ :m | m classIsMeta not ])
+				sorted: [ :a :b | a selector  _unicodeLessThan: b selector ])
+				do: [ :each | self writeMethodDefinition: each on: s ].
+			((methods select: [ :m | m classIsMeta ])
+				sorted: [ :a :b | a selector  _unicodeLessThan: b selector ])
+				do: [ :each | self writeMethodDefinition: each on: s ] ]
 %
 
 category: 'private writing'
