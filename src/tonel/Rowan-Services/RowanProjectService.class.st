@@ -49,11 +49,12 @@ RowanProjectService >> changes [
 
 { #category : 'rowan' }
 RowanProjectService >> commitWithMessage: message [
-
+	
 	Rowan projectTools write writeProjectNamed: name.
 	Rowan projectTools commit
 		commitProjectNamed: name
-		message: message.
+		message: message. 
+	System commitTransaction.
 
 ]
 
@@ -142,6 +143,20 @@ RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 RowanProjectService >> projectNames [
 
 	^Rowan projectNames collect: [:string | self class new name: string]
+
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> pullFromGit [
+
+	self halt.
+
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> pushToGit [
+
+	self halt.
 
 ]
 
