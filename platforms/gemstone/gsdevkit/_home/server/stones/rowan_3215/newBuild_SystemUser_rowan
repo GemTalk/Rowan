@@ -131,14 +131,14 @@ keywords
 
 	| kwd char keywords |
 	keywords := Array new.
-			kwd := WriteStream on: String new.
+			kwd := WriteStreamPortable on: String new.
 			1 to: self size do: [ :i | 
 				kwd nextPut: (char := self at: i).
 				char = $:
 					ifTrue: [ 
 						keywords add: kwd contents.
 						kwd reset ] ].
-			kwd position = 1
+			kwd position = 0
 				ifFalse: [ keywords add: kwd contents ].
 	(keywords size >= 1 and: [ (keywords at: 1) = ':' ])
 		ifTrue: [ 
