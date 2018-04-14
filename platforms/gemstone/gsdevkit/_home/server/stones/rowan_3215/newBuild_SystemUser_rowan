@@ -979,6 +979,7 @@ options: optionsArray
 #
 run
 GsPackagePolicy current enable.
+UserGlobals at: #rowanCompile put: true.
 System commit
 %
   commit

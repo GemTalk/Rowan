@@ -1001,7 +1001,7 @@ name: aClassName superclassName: aSuperclassName category: aCategory instVarName
 		poolDictionaryNames: (somePoolDictionaryNames asArray
 				collect: [:each | each asString])
 		comment: (self normalizeLineEndingsOf: aComment)
-		subclassType: subclassType
+		subclassType: subclassType asString
 %
 
 category: 'private'
@@ -1205,7 +1205,9 @@ createOrReviseClass
 			[self subclassType = 'byteSubclass'
 				ifTrue: [self createOrReviseByteClass]
 				ifFalse: 
-					[self subclassType = 'indexableSubclass'
+					[| typ |
+					typ := self subclassType.
+                                        (typ = 'indexableSubclass' or: [ typ = 'variable' ])
 						ifTrue: [self createOrReviseIndexableClass]
 						ifFalse: 
 							[self error: 'unknown subclass type: ' , self subclassType printString]]]
@@ -1353,7 +1355,7 @@ name: aClassName superclassName: aSuperclassName category: aCategory instVarName
 	classVarNames := someClassVariableNames.
 	poolDictionaryNames := somePoolDictionaryNames.
 	comment := aComment.
-	subclassType := aSubclassType
+	subclassType := aSubclassType asString
 %
 
 category: 'loading'
