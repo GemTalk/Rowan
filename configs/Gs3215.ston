@@ -2,6 +2,7 @@ RwProjectCompoundConfiguration{
 	#name : 'Gs3215',
 	#packageNames : Set [
 		'Rowan-3215',
+		'Rowan-3.4CompatFor3.2.15',
                 'GemStone-Interactions'
 	],
 	#configurationNames : [
