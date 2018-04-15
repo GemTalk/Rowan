@@ -1,6 +1,9 @@
 Class {
 	#name : 'RwPackageReadWriteTest',
 	#superclass : 'RwToolTest',
+	#instVars : [
+		'officialRowanProjectInstance'
+	],
 	#category : 'Rowan-Tests'
 }
 
@@ -27,7 +30,7 @@ RwPackageReadWriteTest >> doTestReadWriteReadForFormat: format [
 
 	| basicPackageSet readPackageSet myReadSpecification rowanSpec readPackageSet2 diff myWriteSpecification |
 	basicPackageSet := self basicPackageSet.
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	rowanSpec := officialRowanProjectInstance specification.
 	myReadSpecification := self
 		setUpSpecificationForReadTest: basicPackageSet
 		rowanSpec: rowanSpec
@@ -44,6 +47,7 @@ RwPackageReadWriteTest >> doTestReadWriteReadForFormat: format [
 		forFormat: format.
 	diff := readPackageSet2 compareAgainstBase: readPackageSet.
 	self assert: diff isEmpty
+
 ]
 
 { #category : 'private' }
@@ -64,7 +68,7 @@ RwPackageReadWriteTest >> doTestWriteRead: writePackageSet myWriteSpecification:
 RwPackageReadWriteTest >> doTestWriteReadForFormat: format [
   | writePackageSet myWriteSpecification rowanSpec |
   writePackageSet := self basicPackageSet.
-  rowanSpec := RwSpecification fromUrl: 'Rowan'.
+  rowanSpec :=  officialRowanProjectInstance specification.
   myWriteSpecification := self
     setUpSpecificationForWriteTest: writePackageSet
     rowanSpec: rowanSpec
@@ -73,6 +77,15 @@ RwPackageReadWriteTest >> doTestWriteReadForFormat: format [
     doTestWriteRead: writePackageSet
     myWriteSpecification: myWriteSpecification
     forFormat: format
+
+]
+
+{ #category : 'running' }
+RwPackageReadWriteTest >> setUp [
+
+	super setUp.
+	officialRowanProjectInstance := Rowan image _projectForNonTestProject: 'Rowan'
+
 ]
 
 { #category : 'private' }

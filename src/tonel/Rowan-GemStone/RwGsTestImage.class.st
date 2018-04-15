@@ -24,6 +24,17 @@ RwGsTestImage class >> _loadedTestProjectRegistryForUserId: aUserId [
 ]
 
 { #category : 'accessing' }
+RwGsTestImage class >> _projectForNonTestProject: projectName [
+
+	" this is a method that should only need to be used by tests ... and then sparingly"
+
+	| projectRegistry |
+	projectRegistry := super _loadedProjectRegistryForUserId: self currentUserId.
+	^ (projectRegistry at: projectName ifAbsent: [  ])
+
+]
+
+{ #category : 'accessing' }
 RwGsTestImage class >> resetTestProjectRegistry [
 
 	"self resetTestProjectRegistry"
