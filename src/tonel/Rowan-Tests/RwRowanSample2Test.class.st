@@ -20,35 +20,39 @@ RwRowanSample2Test >> _migrationClassMap [
 RwRowanSample2Test >> _rowanSample2_bitbucketSpecificationUrl [
 
 	| rowanSpec |
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	^ 'file:' , rowanSpec repositoryRootPath
 		, '/test/specs/RowanSample2_bitbucket.ston'
+
 ]
 
 { #category : 'private' }
 RwRowanSample2Test >> _rowanSample2_gitlabSpecificationUrl [
 
 	| rowanSpec |
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	^ 'file:' , rowanSpec repositoryRootPath
 		, '/test/specs/RowanSample2_gitlab.ston'
+
 ]
 
 { #category : 'private' }
 RwRowanSample2Test >> _rowanSample2_gitoliteSpecificationUrl [
 
 	| rowanSpec |
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	^ 'file:' , rowanSpec repositoryRootPath
 		, '/test/specs/RowanSample2_gitolite.ston'
+
 ]
 
 { #category : 'private' }
 RwRowanSample2Test >> _rowanSample2SpecificationUrl [
 
 	| rowanSpec |
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	^ 'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample2.ston'
+
 ]
 
 { #category : 'tests' }
@@ -56,12 +60,12 @@ RwRowanSample2Test >> testAutomaticMigration [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after automtic migration the permanent instance variables (a-f) should retain the values, while the moved instance variables (ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample2Class subclasses rowanSample1Spec instanceMap |
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+  	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
@@ -121,6 +125,7 @@ RwRowanSample2Test >> testAutomaticMigration [
 				| ivName |
 				ivName := ivNames at: index.
 				self assert: (instance perform: ivName) == ivName ] ]
+
 ]
 
 { #category : 'tests' }
@@ -128,12 +133,12 @@ RwRowanSample2Test >> testNoMigration [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample2Class subclasses rowanSample1Spec instanceMap |
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
@@ -187,6 +192,7 @@ RwRowanSample2Test >> testNoMigration [
 				| ivName |
 				ivName := ivNames at: index.
 				self assert: (instance perform: ivName) == ivName ] ]
+
 ]
 
 { #category : 'tests' }
@@ -194,12 +200,12 @@ RwRowanSample2Test >> testNoMigration_bitbucket [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample2Class subclasses rowanSample1Spec instanceMap |
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample2_bitbucketSpecificationUrl.
 	projectTools := Rowan projectTools.
 
@@ -253,6 +259,7 @@ RwRowanSample2Test >> testNoMigration_bitbucket [
 				| ivName |
 				ivName := ivNames at: index.
 				self assert: (instance perform: ivName) == ivName ] ]
+
 ]
 
 { #category : 'tests' }
@@ -260,12 +267,12 @@ RwRowanSample2Test >> testNoMigration_gitlab [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample2Class subclasses rowanSample1Spec instanceMap |
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample2_gitlabSpecificationUrl.
 	projectTools := Rowan projectTools.
 
@@ -319,6 +326,7 @@ RwRowanSample2Test >> testNoMigration_gitlab [
 				| ivName |
 				ivName := ivNames at: index.
 				self assert: (instance perform: ivName) == ivName ] ]
+
 ]
 
 { #category : 'tests' }
@@ -326,12 +334,12 @@ RwRowanSample2Test >> testNoMigration_gitolite [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample2Class subclasses rowanSample1Spec instanceMap |
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample2_gitoliteSpecificationUrl.
 	projectTools := Rowan projectTools.
 
@@ -385,6 +393,7 @@ RwRowanSample2Test >> testNoMigration_gitolite [
 				| ivName |
 				ivName := ivNames at: index.
 				self assert: (instance perform: ivName) == ivName ] ]
+
 ]
 
 { #category : 'tests' }
@@ -419,7 +428,7 @@ RwRowanSample2Test >> testRemoveSubclassOfClassWithNewVersion [
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 	projectTools clone
@@ -449,6 +458,7 @@ RwRowanSample2Test >> testRemoveSubclassOfClassWithNewVersion [
 	rowanSample2Class := Rowan globalNamed: 'RowanSample2'.
 	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
 	self assert: subclasses size = 0
+
 ]
 
 { #category : 'tests' }
@@ -474,9 +484,9 @@ RwRowanSample2Test >> testSampleCompoundConfiguration [
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec project x |
 	projectName := 'RowanSample2'.
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
@@ -510,6 +520,7 @@ RwRowanSample2Test >> testSampleCompoundConfiguration [
 		assert:
 			(x := project packageNames asArray sortWithBlock: [ :a :b | a < b ])
 				= #('RowanSample2-Core' 'RowanSample2-Test')
+
 ]
 
 { #category : 'tests' }
@@ -520,9 +531,9 @@ RwRowanSample2Test >> testSampleDefaultConfiguration [
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec project x |
 	projectName := 'RowanSample2'.
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
@@ -553,6 +564,7 @@ RwRowanSample2Test >> testSampleDefaultConfiguration [
 
 	project := RwProject newNamed: projectName.
 	self assert: (x := project packageNames) = #('RowanSample2-Core')
+
 ]
 
 { #category : 'tests' }
@@ -563,9 +575,9 @@ RwRowanSample2Test >> testSampleTestConfiguration [
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec project x |
 	projectName := 'RowanSample2'.
 	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
-	rowanSpec := RwSpecification fromUrl: 'Rowan'.
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
@@ -599,4 +611,5 @@ RwRowanSample2Test >> testSampleTestConfiguration [
 		assert:
 			(x := project packageNames asArray sortWithBlock: [ :a :b | a < b ])
 				= #('RowanSample2-Core' 'RowanSample2-Test')
+
 ]

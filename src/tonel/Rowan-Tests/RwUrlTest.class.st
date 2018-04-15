@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwUrlTest',
-	#superclass : 'TestCase',
+	#superclass : 'RwAbstractTest',
 	#category : 'Rowan-Tests'
 }
 
@@ -48,8 +48,9 @@ RwUrlTest >> sampleUrlStrings [
 { #category : 'tests' }
 RwUrlTest >> testAsRwRepository [
 
-	| repos loadSpec repoRoot testRepoPath |
-	loadSpec := Rowan projectNamed: 'Rowan' ifAbsent: [ ^ self ].
+	| repos loadSpec repoRoot testRepoPath loadedProject |
+	loadedProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	loadSpec := loadedProject specification.
 	repoRoot := loadSpec repoSpec repositoryRootPath.
 	testRepoPath := repoRoot , '/testRepositories'.
 	repos := {('cypress:' , testRepoPath , '/cypress/').
@@ -61,6 +62,7 @@ RwUrlTest >> testAsRwRepository [
 			| repo x y |
 			repo := assoc value.
 			self assert: (x := repo url) = (y := assoc key) ]
+
 ]
 
 { #category : 'tests' }

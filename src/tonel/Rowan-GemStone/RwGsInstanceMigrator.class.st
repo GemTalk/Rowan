@@ -81,8 +81,9 @@ RwGsInstanceMigrator >> migrateInstancesOf: aClassArray [
 		history := class classHistory.
 		instanceCount > 0
 			ifTrue: [ class migrateInstances: instances to: history last ].
-		[ 1 < history size ] whileTrue: [ history first removeFromClassHistory ].
+		[ 1 < history size ] whileTrue: [ | cl | cl := history first. cl classHistory removeVersion: cl ].
 		classCount := classCount + 1 ]
+
 ]
 
 { #category : 'accessing' }
