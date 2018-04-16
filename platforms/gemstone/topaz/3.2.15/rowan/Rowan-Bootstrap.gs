@@ -559,7 +559,7 @@ currentOrNil
   [ 
     Rowan projectTools load
       loadProjectNamed: 'Rowan'
-      withConfiguration: 'Gs3215' ]
+      withConfiguration: 'Default' ]
         on: Warning, RwExistingAssociationWithSameKeyNotification
         do: [ :ex | 
           (ex isKindOf: Warning)
