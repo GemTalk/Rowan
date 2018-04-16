@@ -6,9 +6,12 @@ Rowan is a new project/package manager for Smalltalk that supports FileTree and 
 
 ### GemStone 3.2.15 SystemUser
 ```
-export ROWAN_HOME=<path-to-Rowan-repository>
+cd <working area>
+git clone git@github.com:dalehenrich/Rowan.git
+cd Rowan
+export ROWAN_HOME=`pwd`
 
-<start-topaz>
+<start-topaz and setup stone params>
 
 # script logs in as SystemUser and DataCurator
 input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/install.tpz
