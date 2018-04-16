@@ -17,21 +17,21 @@
 
 output push cypress.out
 
-input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Definitions.gs
+input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Definitions.gs
 errorCount
-input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Structure.gs
+input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Structure.gs
 errorCount
-input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-GemStoneFileServer.gs
+input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/cypress/Cypress-GemStoneFileServer.gs
 errorCount
-input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Network-Url.gs
+input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Network-Url.gs
 errorCount
-input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-MesssageDigest.gs
+input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/cypress/Cypress-MesssageDigest.gs
 errorCount
-input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-PackageManagement.gs
+input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/cypress/Cypress-PackageManagement.gs
 errorCount
-input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Environmental-Tools.gs
+input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Environmental-Tools.gs
 errorCount
-input $GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Comparison.gs
+input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/cypress/Cypress-Comparison.gs
 errorCount
 
 output pop

@@ -1,0 +1,10 @@
+!=========================================================================
+! Copyright (C) GemTalk Systems 2018.  All Rights Reserved.
+!=========================================================================
+
+output push rowan.out
+
+input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/rowan/Rowan-Bootstrap.gs
+errorCount
+
+output pop

@@ -1,0 +1,17 @@
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit 1
+
+  set u SystemUser p swordfish
+  login
+
+  input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/cypress/bootstrapCypressSupport.topaz
+  input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/ston/bootstrapStonSupport.topaz
+  input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/tonel/bootstrapTonelSupport.topaz
+  commit
+
+  logout
+  input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/rowan/bootstrapRowanSupport.topaz
+  errorCount
+
