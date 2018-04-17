@@ -11,6 +11,8 @@ git clone git@github.com:dalehenrich/Rowan.git
 cd Rowan
 export ROWAN_HOME=`pwd`
 
+# (re)Start netldi (so that ROWAN_HOME is defined in gem environment for Jadeite)
+
 <start-topaz and setup stone params>
 
 # script logs in as SystemUser and DataCurator
@@ -28,7 +30,13 @@ createStone -f $rowan_stone_name 3.2.15
 cd $GS_HOME/shared/repos
 git clone git@github.com:dalehenrich/Rowan.git
 
-GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/installRowan $rowan_stone_name
+cat -- >> $GS_HOME/server/stones/$rowan_stone_name/custome_stone.env << EOF
+export ROWAN_HOME=$GS_HOME/shared/repos/Rowan
+EOF
+stopNetldi $rowan_stone_name
+startNetldi $rowan_stone_name
+
+$GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/installRowan $rowan_stone_name
 ```
 
 ## Acknowledgements
