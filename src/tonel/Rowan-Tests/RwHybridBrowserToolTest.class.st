@@ -339,9 +339,17 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 		options: #().
 	self assert: normalClass1 rowanPackageName = packageName1.
 
-	normalClass1 compileMethod:  'foo ^''foo''' 
-dictionaries: GsCurrentSession currentSession symbolList
-category: 'accessing'.
+	false ifTrue: [
+	"Why doesn't this test fail sooner, when foo is created incorrectly"
+	normalClass1 
+		compileMethod:  'foo ^''foo''' 
+		dictionaries: GsCurrentSession currentSession symbolList
+		category: 'accessing'
+		environmentId: 0]
+		ifFalse: [ 
+	normalClass1 
+		rwCompileMethod:  'foo ^''foo''' 
+		category: 'accessing'].
 	normalClass1 class
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
@@ -582,7 +590,6 @@ category: 'accessing'.
 	self should: [ normalInstance2 biff ] raise: MessageNotUnderstood.
 
 	writtenStateValidationBlock value	"verify that original state is restored"
-. self halt
 
 ]
 

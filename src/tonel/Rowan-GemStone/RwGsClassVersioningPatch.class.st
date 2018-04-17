@@ -170,7 +170,7 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	self
 		_newSubclassWithSuperclass: newSuperclass
 		isEquivalentToSubclass: existingClass
-		newOpts: (aClassDefinition propertyAt: 'gs_options' ifAbsent: [ #() ])
+		newOpts: ((aClassDefinition propertyAt: 'gs_options' ifAbsent: [ #() ]) collect: [:each | each asSymbol])
 		newFormat: newFormat
 		newInstVars: aClassDefinition instVarNames
 		newClassInstVars: aClassDefinition classInstVarNames
@@ -191,6 +191,7 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 				addPatchedClassNewVersion: aClassModification
 				inPackage: aPackageDefinition
 				inProject: aProjectDefinition ]
+
 ]
 
 { #category : 'patching' }
