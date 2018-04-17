@@ -160,10 +160,12 @@ RowanProjectService >> pushToGit [
 
 ]
 
-{ #category : 'examples' }
-RowanProjectService >> removeProjectNamed: projectName [ 
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+{ #category : 'rowan' }
+RowanProjectService >> removeProjectNamed: projectName [
+   "remove project"
+ 
+    (Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+      ifNotNil: [ :project | Rowan image _removeLoadedProject: project ]
 
 ]
 
