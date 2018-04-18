@@ -545,7 +545,7 @@ currentOrNil
 %
   commit
 
-  exit 1
+exit 1
 
 # Install Rowan using Rowan
   run

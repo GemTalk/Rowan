@@ -623,6 +623,7 @@ RwGsPatchSetBasic >> apply [
 		commit;
 		migrateInstances;
 		commit
+
 ]
 
 { #category : 'public' }

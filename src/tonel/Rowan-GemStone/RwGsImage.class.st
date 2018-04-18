@@ -8,6 +8,21 @@ Class {
 }
 
 { #category : 'private' }
+RwGsImage class >> _bootstrapApplyModification: aProjectSetModification instanceMigrator: instanceMigrator [
+
+	| visitor patchSet |
+	visitor := RwGsImageRowanBootstrapPatchVisitor new.
+	visitor visit: aProjectSetModification.
+	patchSet := visitor patchSet.
+	patchSet classesWithNewVersions isEmpty
+		ifTrue: [ 
+			patchSet apply.
+			^ self ].
+	self error: 'Did not expect new class versions during a _bootstrap load'
+
+]
+
+{ #category : 'private' }
 RwGsImage class >> _loadedProjectRegistry [
 
 	^ self _loadedProjectRegistryForUserId: self currentUserId
