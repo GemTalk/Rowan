@@ -267,8 +267,10 @@ RwGsSymbolDictionaryRegistry >> _symbolDictionaryAt: key ifPresent: oneArgBlock 
 
 	"Lookup the given key in the receiver's symbolDictionary. If it is present, answer the value of evaluating the oneArgBlock with the value associated with the key, otherwise answer the value of absentBlock."
 
-	self at: key ifPresent: [ :v | ^ oneArgBlock cull: v ].
-	^ absentBlock value
+	| v |
+	v := self _symbolDictionary at: key ifAbsent: [ ^absentBlock value ].
+	^ oneArgBlock cull: v
+
 ]
 
 { #category : 'private' }
@@ -287,15 +289,7 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 			self packageRegistry
 				at: packageName
 				put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
-	self
-		_symbolDictionaryAt: assoc key
-		ifPresent: [ :exitingClass |
-			(RwExistingAssociationWithSameKeyNotification new
-				errorMessage:
-					'internal error - there is an existing assocition with the same key: '
-						, assoc key printString)
-				signal.
-			self _symbolDictionary removeKey: assoc key ].
+
 	classRegistry
 		at: class classHistory
 		ifAbsent: [ 
@@ -308,8 +302,20 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
 					self halt ] ].
 
-	assoc value: class.
-	self _symbolDictionary add: assoc
+	self _symbolDictionaryAt: assoc key 
+		ifPresent: [ 
+			"If there is an existing association and we decide to install the class anyway (bootstrapping Rowan 
+				is the primary use case), then we need to use the existing association which may have references
+				in compiled methods"
+			(RwExistingAssociationWithSameKeyNotification new
+				errorMessage:
+					'internal error - there is an existing assocition with the same key: '
+						, assoc key printString)
+				signal.
+			(self _symbolDictionary associationAt: assoc key) value: class ]
+		ifAbsent: [
+			assoc value: class.
+			self _symbolDictionary add: assoc]
 
 ]
 
