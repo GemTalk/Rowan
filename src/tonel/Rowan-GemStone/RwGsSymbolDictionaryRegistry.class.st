@@ -289,7 +289,7 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 				put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
 	self
 		_symbolDictionaryAt: assoc key
-		ifPresent: [ 
+		ifPresent: [ :exitingClass |
 			(RwExistingAssociationWithSameKeyNotification new
 				errorMessage:
 					'internal error - there is an existing assocition with the same key: '
@@ -310,6 +310,7 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 
 	assoc value: class.
 	self _symbolDictionary add: assoc
+
 ]
 
 { #category : 'private' }
