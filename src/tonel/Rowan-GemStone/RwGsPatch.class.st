@@ -14,14 +14,12 @@ Class {
 { #category : 'packages' }
 RwGsPatch >> markNotDirtyPackageNamed: packageName [
 
-	| loadedPackage source |
-	source := Rowan configuration packageInfoSource.
-	loadedPackage := source == #'SymbolDictionary'
-		ifTrue: [ self symbolDictionaryRegistry loadedPackageNamed: packageName ifAbsent: [  ] ]
-		ifFalse: [ Rowan loadedPackageNamed: packageName ifAbsent: [  ] ].
+	| loadedPackage |
+	loadedPackage := self symbolDictionaryRegistry loadedPackageNamed: packageName ifAbsent: [  ].
 	loadedPackage
 		ifNil: [ self error: 'Internal error -- attempt to manipulate nonexistent package.' ].
 	loadedPackage markNotDirty
+
 ]
 
 { #category : 'accessing' }
@@ -86,10 +84,11 @@ RwGsPatch >> symbolDictionary [
 	| symDictName symDict |
 	symDictName := self projectDefinition
 		symbolDictNameForPackageNamed: self packageName.
-	symDict := Rowan globalNamed: symDictName asSymbol.
+	symDict := GsCurrentSession currentSession symbolList objectNamed: symDictName asSymbol.
 	symDict
 		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
 	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
+
 ]
 
 { #category : 'accessing' }
