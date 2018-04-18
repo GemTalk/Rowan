@@ -23,6 +23,7 @@ RwGsPatchSetRowanBootstrap >> apply [
 		addAndUpdateLoadedPackages;
 		removeDeletedClassesFromSystem;
 		"removeDeletedClassExtensionsFromSystem;" 
+		installAddedClasses;
 		"moveClassesBetweenSymbolDictionaries;"
 		moveMethodsBetweenPackages;
 		updateSymbolAssociations;
@@ -31,7 +32,7 @@ RwGsPatchSetRowanBootstrap >> apply [
 		updateMethodProperties;
 		removeDeletedMethods;
 
-		installAddedClasses;
+		installClassInSystem;
 		installAddedClassExtensions;
 
 		"removeDeletedClassesAndExtensionsFromPackages;"
@@ -42,5 +43,19 @@ RwGsPatchSetRowanBootstrap >> apply [
 		commit;
 		migrateInstances;
 		commit
+
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSetRowanBootstrap >> installAddedClasses [
+
+	addedClasses do: [:each | each createAndInstallLoadedClass]
+
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSetRowanBootstrap >> installClassInSystem [
+
+	addedClasses do: [:each | each addClassToSymbolDictionary]
 
 ]

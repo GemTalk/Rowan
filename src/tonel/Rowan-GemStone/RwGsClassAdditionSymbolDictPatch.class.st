@@ -16,6 +16,24 @@ Class {
 }
 
 { #category : 'actions' }
+RwGsClassAdditionSymbolDictPatch >> addClassToSymbolDictionary [
+
+	self symbolDictionaryRegistry
+		addClassToSymbolDictionaryForClassAssociation: symbolAssociation 
+		forClass: newClass
+
+]
+
+{ #category : 'actions' }
+RwGsClassAdditionSymbolDictPatch >> createAndInstallLoadedClass [
+
+	self symbolDictionaryRegistry
+		createAndInstallLoadedClassForClass: newClass 
+		toPackageNamed: self packageName
+
+]
+
+{ #category : 'actions' }
 RwGsClassAdditionSymbolDictPatch >> createClassFor: aPatchSet [
 	newClass := super createClassFor: aPatchSet.
 	symbolAssociation := aPatchSet tempAssociationFor: newClass name.
