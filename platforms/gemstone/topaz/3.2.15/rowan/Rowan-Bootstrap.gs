@@ -566,6 +566,18 @@ currentOrNil
             cr;
             show: ex description .
           ex resume: true ].
+  true
+    ifTrue: [
+      | incorrectlyPackaged |
+      "quick and dirty validation that Rowan loaded with Rowan is correct"
+      incorrectlyPackaged := (ClassOrganizer new classes 
+	select: [:cl | 
+		(cl name asString beginsWith: 'Rw') 
+			or: [cl name asString beginsWith: 'Rowan' ]])
+	select: [:cl | 
+		(Rowan image loadedClassNamed: cl name asString ifAbsent: [])
+			handle ~~ cl ].
+      incorrectlyPackaged isEmpty ifFalse: [ self error: 'Rowan is not correctly packaged' ] ]
 %
   commit
 
