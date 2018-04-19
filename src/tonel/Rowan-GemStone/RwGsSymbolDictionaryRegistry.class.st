@@ -301,15 +301,9 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 					self halt ] ].
 
 	self _symbolDictionaryAt: assoc key 
-		ifPresent: [ 
-			"If there is an existing association and we decide to install the class anyway (bootstrapping Rowan 
-				is the primary use case), then we need to use the existing association which may have references
-				in compiled methods"
-			(RwExistingAssociationWithSameKeyNotification new
-				errorMessage:
-					'internal error - there is an existing assocition with the same key: '
-						, assoc key printString)
-				signal.
+		ifPresent: [
+			"If there is an existing association, then we need to use the existing association which may have references
+				in compiled methods --- bootstrapping Rowan in Rowan is only valid use case"
 			(self _symbolDictionary associationAt: assoc key) value: class ]
 		ifAbsent: [
 			assoc value: class.
