@@ -1,6 +1,6 @@
 Extension { #name : 'CypressClassDefinition' }
 
- #category : '*rowan-cypress' }
+{ #category : '*rowan-cypress' }
 CypressClassDefinition >> accept: aVisitor [
 	aVisitor visitClassDefinition: self.
 
@@ -18,12 +18,29 @@ CypressClassDefinition >> hasClassInstanceVariables [
 	^ self classInstVarNames isEmpty not
 ]
 
-{ #category : '*rowan-cypress' }
+{ #category : '*rowan-tode' }
 CypressClassDefinition >> printDefinitionOn: stream [
 
         stream
             nextPutAll: self superclassName;
             space;
+            nextPutAll: self classCreationSelector;
+            nextPut: $# ;
+            nextPutAll: self className;
+            cr; tab.
+        stream
+            nextPutAll: 'instanceVariableNames: ';
+            store: self instanceVariablesString;
+            cr; tab;
+            nextPutAll: 'classVariableNames: ';
+            store: self classVariablesString;
+            cr; tab;
+            nextPutAll: 'poolDictionaries: ';
+            store: self poolDictionariesString;
+            cr; tab;
+            nextPutAll: 'category: ';
+            store: self category asString 
+
 ]
 
 { #category : '*rowan-cypress' }
