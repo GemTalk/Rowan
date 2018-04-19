@@ -302,29 +302,8 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 
 	self _symbolDictionaryAt: assoc key 
 		ifPresent: [ 
-			"If there is an existing association and we decide to install the class anyway (bootstrapping Rowan 
-				is the primary use case), then we need to use the existing association which may have references
-				in compiled methods"
-			(RwExistingAssociationWithSameKeyNotification new
-				errorMessage:
-					'internal error - there is an existing assocition with the same key: '
-						, assoc key printString)
-				signal.
-			(self _symbolDictionary associationAt: assoc key) value: class ]
-		ifAbsent: [
-			assoc value: class.
-			self _symbolDictionary add: assoc]
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addClassToSymbolDictionaryForClassAssociation: assoc forClass: class [ 
-
-	self _symbolDictionaryAt: assoc key 
-		ifPresent: [ 
-			"If there is an existing association, then we need to use the existing association which may have references
-				in compiled methods --- bootstrapping Rowan in Rowan is only valid use case"
-			(self _symbolDictionary associationAt: assoc key) value: class ]
+			(RwExistingAssociationWithSameKeyNotification new 
+				errorMessage: 'internal error - there is an existing assocition with the same key: ' , assoc key printString) signal ]
 		ifAbsent: [
 			assoc value: class.
 			self _symbolDictionary add: assoc]
@@ -574,35 +553,6 @@ RwGsSymbolDictionaryRegistry >> classExtensionRegistry [
 RwGsSymbolDictionaryRegistry >> classRegistry [
 
    ^classRegistry
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry >> createAndInstallLoadedClassForClass: class toPackageNamed: packageName [
-
-	"Copy the name association to the correct 
-        SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
-
-	| loadedPackage loadedClass |
-	loadedPackage := self packageRegistry
-		at: packageName
-		ifAbsent: [ 
-			self packageRegistry
-				at: packageName
-				put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
-
-	classRegistry
-		at: class classHistory
-		ifAbsent: [ 
-			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
-			loadedPackage addLoadedClass: loadedClass.
-			loadedClass updatePropertiesFromClassFor: self.
-			classRegistry at: class classHistory put: loadedClass.
-			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
-				ifNotNil: [ :loadedClassExtension | 
-					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
-					self halt ] ].
 
 ]
 

@@ -30,7 +30,9 @@ RwPrjLoadTool >> _bootstrapLoadProjectSetDefinition: projectSetDefinitionToLoad 
 			msg := 'The projects are already up to date'.
 			self inform: msg.
 			^ msg ].
-	Rowan image _bootstrapApplyModification: diff instanceMigrator: instanceMigrator.
+	[ Rowan image _bootstrapApplyModification: diff instanceMigrator: instanceMigrator ]
+		on: RwExistingAssociationWithSameKeyNotification
+		do: [:ex | ex resume ].
 	projectSetDefinitionToLoad definitions
 		do: [ :project | 
 			self specification: project specification.

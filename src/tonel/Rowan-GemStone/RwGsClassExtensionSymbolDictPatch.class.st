@@ -15,9 +15,9 @@ RwGsClassExtensionSymbolDictPatch >> installClassExtensionInSystem [
 
 	(self projectDefinition
 		useSessionMethodsForExtensionsForPackageNamed: self packageName)
-		ifTrue: [ | resolved |
-			((resolved := GsCurrentSession currentSession symbolList objectNamed: self className asSymbol) notNil and: [resolved isBehavior and: [ resolved isMeta not ]])
-				ifFalse: [ 
+		ifTrue: [
+			(Rowan image resolveClassNamed: self className)
+				ifNil: [ 
 					self
 						error:
 							'The extension class named ' , self className printString , ' cannot be found.' ] ]
