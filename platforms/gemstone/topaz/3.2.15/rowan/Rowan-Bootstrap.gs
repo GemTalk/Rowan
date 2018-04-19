@@ -545,8 +545,6 @@ currentOrNil
 %
   commit
 
-exit 1
-
 # Install Rowan using Rowan
   run
   "Register Rowan in loaded project"
@@ -562,13 +560,11 @@ exit 1
     Rowan projectTools load
       _bootstrapLoadProjectNamed: 'Rowan'
       withConfiguration: 'Default' ]
-        on: Warning, RwExistingAssociationWithSameKeyNotification
+        on: Warning
         do: [ :ex | 
-          (ex isKindOf: Warning)
-            ifTrue: [
-              Transcript
-                cr;
-                show: ex description ].
+          Transcript
+            cr;
+            show: ex description .
           ex resume: true ].
 %
   commit
