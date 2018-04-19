@@ -29,14 +29,7 @@ RowanProjectService class >> defaultProjectName: aString [
 { #category : 'other' }
 RowanProjectService >> branch [
 
-	^branch
-
-]
-
-{ #category : 'other' }
-RowanProjectService >> branch: anObject [
-
-	branch := anObject
+	^(RwProject newNamed: name) currentBranchName
 
 ]
 
@@ -106,6 +99,13 @@ RowanProjectService >> definition [
 ]
 
 { #category : 'rowan' }
+RowanProjectService >> isSkew [
+
+	^self sha ~= self repositorySha
+
+]
+
+{ #category : 'rowan' }
 RowanProjectService >> loadProjectNamed: aName [
 
 	[Rowan projectTools load loadProjectNamed: aName withConfiguration: 'Default'] 
@@ -140,6 +140,28 @@ RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 ]
 
 { #category : 'rowan' }
+RowanProjectService >> packageNameString [
+	"return a string showing the package names for a project"
+
+	| ws packageNames |
+	ws := WriteStream on: String new.
+	ws
+		nextPutAll: 'Packages for project: ' , name;
+		cr.
+	packageNames := Set new.
+	packageNames addAll: (Rowan image loadedProjectNamed: name) packageNames.
+	packageNames asSortedCollection do: 
+			[:packageName |
+			ws
+				cr; 
+				tab;
+				nextPutAll: packageName
+			].
+	^ws contents
+
+]
+
+{ #category : 'rowan' }
 RowanProjectService >> projectNames [
 
 	^Rowan projectNames collect: [:string | self class new name: string]
@@ -160,10 +182,19 @@ RowanProjectService >> pushToGit [
 
 ]
 
-{ #category : 'examples' }
-RowanProjectService >> removeProjectNamed: projectName [ 
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+{ #category : 'rowan' }
+RowanProjectService >> removeProjectNamed: projectName [
+   "remove project"
+ 
+    (Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+      ifNotNil: [ :project | Rowan image _removeLoadedProject: project ]
+
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> repositorySha [
+
+	^(RwProject newNamed: name) repositoryCommitId
 
 ]
 
@@ -177,14 +208,7 @@ RowanProjectService >> sampleProjectName [
 { #category : 'other' }
 RowanProjectService >> sha [
 
-	^sha
-
-]
-
-{ #category : 'other' }
-RowanProjectService >> sha: anObject [
-
-	sha := anObject
+	^(RwProject newNamed: name) loadedCommitId
 
 ]
 

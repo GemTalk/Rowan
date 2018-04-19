@@ -20,6 +20,14 @@ RowanPackageService class >> forPackageNamed: packageName [
 ]
 
 { #category : 'rowan' }
+RowanPackageService >> changes [
+   "diffForPackageName: not implemented yet"
+ 
+   ^ (Rowan packageTools diff diffForPackageName: name) asString
+
+]
+
+{ #category : 'rowan' }
 RowanPackageService >> createPackage [
 	| projectService default |
 	default := RowanProjectService defaultProjectName.
