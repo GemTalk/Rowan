@@ -1,6 +1,6 @@
 Extension { #name : 'Class' }
 
-{ #category : '*rowan-3.4compatfor3.2.15' }
+{ #category : '*rowan-gemstone-3215' }
 Class >> _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary constraints: aConstraint isKernel: isKernelBool [
 
 	"Backport of bugfix for Bug47413"
@@ -81,7 +81,7 @@ Class >> _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpt
 
 ]
 
-{ #category : '*rowan-3.4compatfor3.2.15' }
+{ #category : '*rowan-gemstone-3215' }
 Class >> _subclass: className instVarNames: anArrayOfInstvarNames format: theFormat constraints: theConstraints classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray [
 
 	"Backport of bugfix for Bug47433"
@@ -213,7 +213,7 @@ Class >> _subclass: className instVarNames: anArrayOfInstvarNames format: theFor
 
 ]
 
-{ #category : '*rowan-3.4compatfor3.2.15' }
+{ #category : '*rowan-gemstone-3215' }
 Class >> byteSubclass: aString
 classVars: anArrayOfClassVars
 classInstVars: anArrayOfClassInstVars

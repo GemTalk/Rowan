@@ -1,6 +1,6 @@
 Extension { #name : 'CharacterCollection' }
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 CharacterCollection >> asRwRepository [
 
 	"return a platform appropriate repository for the repository identified in the receiver"
@@ -8,7 +8,7 @@ CharacterCollection >> asRwRepository [
 	^ self asRwUrl asRwRepository
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 CharacterCollection >> asRwUrl [
 
 	""

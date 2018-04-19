@@ -1,6 +1,6 @@
 Extension { #name : 'Behavior' }
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 Behavior >> rwCompileMethod: sourceString category: aCategoryString [
 
 	^ Rowan projectTools browser
@@ -10,7 +10,7 @@ Behavior >> rwCompileMethod: sourceString category: aCategoryString [
 		isMeta: self isMeta
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 Behavior >> rwCompileMethod: sourceString category: aCategoryString packageName: packageName [
 
 	^ Rowan projectTools browser
@@ -21,7 +21,7 @@ Behavior >> rwCompileMethod: sourceString category: aCategoryString packageName:
 		inPackageNamed: packageName
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 Behavior >> rwRemoveSelector: methodSelector [
 
 	^ Rowan projectTools browser

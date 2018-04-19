@@ -1,12 +1,12 @@
 Extension { #name : 'RwClassDefinition' }
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 RwClassDefinition >> _modificationForcingNewClassVersion [
 
 	^ RwClassModificationForcingNewClassVersion
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 RwClassDefinition >> compareAgainstBaseForcingNewClassVersion: aDefinition [
 
 	"all unchanged and unremoved methods need to be applied to the patch"
@@ -37,7 +37,7 @@ RwClassDefinition >> compareAgainstBaseForcingNewClassVersion: aDefinition [
 	^ modification
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 RwClassDefinition >> gs_options: optionsArray [
 
 	(optionsArray _isArray and: [ optionsArray isEmpty not ])

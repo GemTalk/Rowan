@@ -1,6 +1,6 @@
 Extension { #name : 'CypressHierarchicalUrl' }
 
-{ #category : '*rowan-3215' }
+{ #category : '*rowan-gemstone-3215' }
 CypressHierarchicalUrl >> segments [
 	^ path
 ]

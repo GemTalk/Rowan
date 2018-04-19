@@ -1,6 +1,6 @@
 Extension { #name : 'GsNMethod' }
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 GsNMethod >> rowanPackageName [
 
 	"answer the name of the package that the receiver is a member of. Answer `Rowan unpackagedName` if 
@@ -13,7 +13,7 @@ GsNMethod >> rowanPackageName [
 	^ loadedMethod loadedPackage name
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 GsNMethod >> rowanProjectName [
 
 	"answer the name of the project that the receiver is a member of. Answer `Rowan unpackagedName` if 

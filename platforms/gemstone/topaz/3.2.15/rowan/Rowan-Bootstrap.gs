@@ -536,7 +536,7 @@ currentOrNil
     alias: ''.
   packageManager
     defaultSymbolDictionaryName: #'Globals'.
-  #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-Services' 'Rowan-3215' 'Rowan-3.4CompatFor3.2.15')
+  #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-Services' 'Rowan-GemStone-3215')
     do: [ :packageName | 
       packageManager
         addResolvedReference:

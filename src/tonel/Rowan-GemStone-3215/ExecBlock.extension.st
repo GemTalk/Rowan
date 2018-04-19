@@ -1,6 +1,6 @@
 Extension { #name : 'ExecBlock' }
 
-{ #category : '*rowan-3.4compatfor3.2.15' }
+{ #category : '*rowan-gemstone-3215' }
 ExecBlock >> cull: anArg [
 
 	"Return the value of the receiver evaluated with 0 or 1 arguments. If the block
@@ -12,7 +12,7 @@ ExecBlock >> cull: anArg [
 
 ]
 
-{ #category : '*rowan-3.4compatfor3.2.15' }
+{ #category : '*rowan-gemstone-3215' }
 ExecBlock >> cull: firstArg cull: secondArg [
 
 	"Return the value of the receiver evaluated with between 0 and 2 arguments,
@@ -28,7 +28,7 @@ ExecBlock >> cull: firstArg cull: secondArg [
 
 ]
 
-{ #category : '*rowan-3.4compatfor3.2.15' }
+{ #category : '*rowan-gemstone-3215' }
 ExecBlock >> cull: firstArg cull: secondArg cull: thirdArg [
 
 	"Return the value of the receiver evaluated with between 0 and 3 arguments,
@@ -46,7 +46,7 @@ ExecBlock >> cull: firstArg cull: secondArg cull: thirdArg [
 
 ]
 
-{ #category : '*rowan-3.4compatfor3.2.15' }
+{ #category : '*rowan-gemstone-3215' }
 ExecBlock >> cull: firstArg cull: secondArg cull: thirdArg cull: fourthArg [
 
 	"Return the value of the receiver evaluate with between 0 and 4 arguments,

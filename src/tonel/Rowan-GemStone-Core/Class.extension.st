@@ -1,6 +1,6 @@
 Extension { #name : 'Class' }
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 Class >> rowanPackageName [
 
 	"answer the name of the package that the receiver is a member of. Answer 'Rowan unpackagedName` if 
@@ -13,7 +13,7 @@ Class >> rowanPackageName [
 	^ loadedClass loadedPackage name
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 Class >> rowanProjectName [
 
 	"answer the name of the project that the receiver is a member of. Answer `Rowan unpackagedName` if 
@@ -26,7 +26,7 @@ Class >> rowanProjectName [
 	^ loadedClass loadedProject name
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName options: optionsArray [
 
 	^ Rowan projectTools browser
@@ -42,7 +42,7 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 		options: optionsArray
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName options: optionsArray [
 
 	^ Rowan projectTools browser
@@ -58,7 +58,7 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 		options: optionsArray
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName options: optionsArray [
 
 	^ Rowan projectTools browser
@@ -74,7 +74,7 @@ Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: 
 		options: optionsArray
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName options: optionsArray [
 
 	^ Rowan projectTools browser
@@ -90,7 +90,7 @@ Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: 
 		options: optionsArray
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName options: optionsArray [
 
 	^ Rowan projectTools browser
@@ -106,7 +106,7 @@ Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOf
 		options: optionsArray
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName options: optionsArray [
 
 	^ Rowan projectTools browser

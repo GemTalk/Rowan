@@ -6,7 +6,7 @@ RwProjectConfiguration {
 		'Rowan-Definitions',
 		'Rowan-Services',
 		'Rowan-Core',
-		'Rowan-GemStone',
+		'Rowan-GemStone-Core',
 		'Cypress-Core',
 		'Rowan-Tests',
 		'Rowan-Tools'

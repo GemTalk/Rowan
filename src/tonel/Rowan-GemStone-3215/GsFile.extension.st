@@ -1,6 +1,6 @@
 Extension { #name : 'GsFile' }
 
-{ #category : '*rowan-3.4compatfor3.2.15' }
+{ #category : '*rowan-gemstone-3215' }
 GsFile class >> _stat: aName  isLstat: aBoolean [ 
 
 "uses the server file system access. 

@@ -1,6 +1,6 @@
 Extension { #name : 'Behavior' }
 
-{ #category : '*rowan-3.4compatfor3.2.15' }
+{ #category : '*rowan-gemstone-3215' }
 Behavior >> moveMethod: aSelector toCategory: categoryName environmentId: envId [
 
 	"Moves the method aSelector (a String) from its current category to the
