@@ -1,6 +1,6 @@
 Extension { #name : 'CypressAddition' }
 
-{ #category : '*rowan-tode' }
+{ #category : '*rowan-cypress' }
 CypressAddition >> isAddition [
   ^ true
 ]

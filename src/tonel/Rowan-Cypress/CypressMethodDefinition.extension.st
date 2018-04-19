@@ -1,6 +1,6 @@
 Extension { #name : 'CypressMethodDefinition' }
 
-{ #category : '*rowan-tode' }
+{ #category : '*rowan-cypress' }
 CypressMethodDefinition >> accept: aVisitor [
 	^ aVisitor visitMethodDefinition: self
 ]

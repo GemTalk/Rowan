@@ -1,5 +1,31 @@
 Extension { #name : 'CypressClassDefinition' }
 
+ #category : '*rowan-cypress' }
+CypressClassDefinition >> accept: aVisitor [
+	aVisitor visitClassDefinition: self.
+
+]
+
+{ #category : '*rowan-cypress' }
+CypressClassDefinition >> commentStamp [
+
+	^ ''
+]
+
+{ #category : '*rowan-cypress' }
+CypressClassDefinition >> hasClassInstanceVariables [
+
+	^ self classInstVarNames isEmpty not
+]
+
+{ #category : '*rowan-cypress' }
+CypressClassDefinition >> printDefinitionOn: stream [
+
+        stream
+            nextPutAll: self superclassName;
+            space;
+]
+
 { #category : '*rowan-cypress' }
 CypressClassDefinition >> createOrReviseClass [
 

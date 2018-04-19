@@ -1,21 +1,21 @@
 Extension { #name : 'CypressPatchOperation' }
 
-{ #category : '*rowan-tode' }
+{ #category : '*rowan-cypress' }
 CypressPatchOperation >> <= other [
 	^ self definition <= other definition
 ]
 
-{ #category : '*rowan-tode' }
+{ #category : '*rowan-cypress' }
 CypressPatchOperation >> isAddition [
 	^ false
 ]
 
-{ #category : '*rowan-tode' }
+{ #category : '*rowan-cypress' }
 CypressPatchOperation >> isModification [
 	^ false
 ]
 
-{ #category : '*rowan-tode' }
+{ #category : '*rowan-cypress' }
 CypressPatchOperation >> isRemoval [
 	^ false
 ]
