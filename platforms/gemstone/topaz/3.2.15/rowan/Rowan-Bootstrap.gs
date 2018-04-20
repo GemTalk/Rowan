@@ -547,25 +547,27 @@ currentOrNil
 
 # Install Rowan using Rowan
   run
-  "Register Rowan in loaded project"
-  | specification gitRepoPath |
-  specification := RwSpecification fromUrl: 'file:$ROWAN_HOME/specs/Rowan_SystemUser_3215.ston'.
-  gitRepoPath := '$ROWAN_HOME'.
-  specification
-    repositoryRootPath: gitRepoPath;
-    repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
-    register.
-  "load Rowan"
-  [ 
-    Rowan projectTools load
-      _bootstrapLoadProjectNamed: 'Rowan'
-      withConfiguration: 'Default' ]
+  | installBlock |
+  installBlock := [:specPath |
+    | specification gitRepoPath |
+    specification := RwSpecification fromUrl: specPath.
+    gitRepoPath := '$ROWAN_HOME'.
+    specification
+      repositoryRootPath: gitRepoPath;
+      repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
+      register.
+    [ 
+      Rowan projectTools load
+        _bootstrapLoadProjectNamed: specification specName
+        withConfiguration: 'Default' ]
         on: Warning
         do: [ :ex | 
           Transcript
             cr;
             show: ex description .
-          ex resume: true ].
+          ex resume: true ] ].
+  "Bootstrap loaded things for Rowan"
+  installBlock value: value: 'file:$ROWAN_HOME/specs/Rowan_SystemUser.ston'.
   true
     ifTrue: [
       | incorrectlyPackaged |
@@ -577,7 +579,14 @@ currentOrNil
 	select: [:cl | 
 		(Rowan image loadedClassNamed: cl name asString ifAbsent: [])
 			handle ~~ cl ].
-      incorrectlyPackaged isEmpty ifFalse: [ self error: 'Rowan is not correctly packaged' ] ]
+      incorrectlyPackaged isEmpty ifFalse: [ self error: 'Rowan is not correctly packaged' ] ].
+
+  "Bootstrap loaded things for Cypress"
+  installBlock value: value: 'file:$ROWAN_HOME/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'.
+  "Bootstrap loaded things for STON"
+  installBlock value: value: 'file:$ROWAN_HOME/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'.
+  "Bootstrap loaded things for Tonel"
+  installBlock value: value: 'file:$ROWAN_HOME/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'.
 %
   commit
 

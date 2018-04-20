@@ -1,0 +1,8 @@
+RwProjectCompoundConfiguration{
+	#name : 'Default',
+	#packageNames : Set [ ],
+	#configurationNames : [
+		'Gs3215'
+	],
+	#comment : 'For now we load Gs3215 by default'
+}

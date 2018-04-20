@@ -1,0 +1,14 @@
+RwProjectConfiguration {
+	#name : 'Common',
+	#configNames : Set [
+		'Cypress-Comparison',
+		'Cypress-Definitions',
+		'Cypress-Environment-Tools',
+		'Cypress-GemStoneFileServer',
+		'Cypress-MessageDigest',
+		'Cypress-Network-Url',
+		'Cypress-PackageManagement',
+		'Cypress-Structure'
+	],
+	#comment : 'Common set of packages '
+}

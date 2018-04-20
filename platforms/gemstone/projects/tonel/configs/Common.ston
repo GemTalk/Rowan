@@ -1,0 +1,14 @@
+RwProjectConfiguration {
+	#name : 'Common',
+	#configNames : Set [
+		'CypressTonel-Core',
+		'CypressTonel-GemStone-Tests',
+		'CypressTonel-Tests',
+		'Tonel-Core',
+		'Tonel-Cypress-Tests',
+		'Tonel-GemStone-Tests',
+		'Tonel-GemStoneCommon-Core',
+		'Tonel-Tests'
+	],
+	#comment : 'Common set of packages '
+}

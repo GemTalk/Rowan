@@ -1,0 +1,8 @@
+RwProjectCompoundConfiguration{
+	#name : 'Gs3215',
+	#packageNames : Set [ ],
+	#configurationNames : [
+		'Common'
+	],
+	#comment : '3.2.15 config for Rowan'
+}

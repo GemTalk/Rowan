@@ -1,17 +1,16 @@
-RwPackageProjectSpecification{
-	#specName : 'Rowan',
+ RwSimpleProjectSpecification{
+	#specName : 'Cypress',
 	#projectUrl : 'https://github.com/dalehenrich/Rowan',
 	#platformSpec : {
 		'gemstone' : RwGemStoneSpecification {
 			#defaultSymbolDictName : 'Globals',
-			#defaultUseSessionMethodsForExtensions : true }
+			#defaultUseSessionMethodsForExtensions : false }
 	},
-	#specsPath : 'specs',
+	#specsPath : 'platforms/gemstone/projects/Cypress/specs',
 	#repoSpec : RwGitRepositorySpecification {
-		#committish : 'gs_3215',
+		#committish : 'master',
 		#committishType : 'branch'
 	},
-	#repoPath : 'src/tonel',
+	#repoPath : 'platforms/gemstone/projects/Cypress/src',
 	#comment : ''
-}	
-
+}
