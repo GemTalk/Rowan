@@ -7,11 +7,11 @@
 			#defaultUseSessionMethodsForExtensions : false }
 	},
 	#specsPath : 'platforms/gemstone/projects/cypress/specs',
-	#configsPath : 'platforms/gemstone/projects/Cypress/configs',
+	#configsPath : 'platforms/gemstone/projects/cypress/configs',
 	#repoSpec : RwGitRepositorySpecification {
 		#committish : 'master',
 		#committishType : 'branch'
 	},
-	#repoPath : 'platforms/gemstone/projects/Cypress/src',
+	#repoPath : 'platforms/gemstone/projects/cypress/src',
 	#comment : ''
 }

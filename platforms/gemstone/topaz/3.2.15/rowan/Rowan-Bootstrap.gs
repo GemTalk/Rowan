@@ -545,8 +545,6 @@ currentOrNil
 %
   commit
 
-exit 1
-
 # Install Rowan using Rowan
   run
   | installBlock |
@@ -588,7 +586,7 @@ exit 1
   "Bootstrap loaded things for STON"
   installBlock value: 'file:$ROWAN_HOME/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'.
   "Bootstrap loaded things for Tonel"
-  installBlock value: 'file:$ROWAN_HOME/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'.
+  installBlock value: 'file:$ROWAN_HOME/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'.
 %
   commit
 
