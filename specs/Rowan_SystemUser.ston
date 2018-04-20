@@ -7,6 +7,7 @@
 			#defaultUseSessionMethodsForExtensions : false }
 	},
 	#specsPath : 'specs',
+	#configsPath : 'configs',
 	#repoSpec : RwGitRepositorySpecification {
 		#committish : 'master',
 		#committishType : 'branch'

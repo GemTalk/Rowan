@@ -6,7 +6,8 @@
 			#defaultSymbolDictName : 'Globals',
 			#defaultUseSessionMethodsForExtensions : false }
 	},
-	#specsPath : 'platforms/gemstone/projects/Cypress/specs',
+	#specsPath : 'platforms/gemstone/projects/cypress/specs',
+	#configsPath : 'platforms/gemstone/projects/Cypress/configs',
 	#repoSpec : RwGitRepositorySpecification {
 		#committish : 'master',
 		#committishType : 'branch'

@@ -545,6 +545,8 @@ currentOrNil
 %
   commit
 
+exit 1
+
 # Install Rowan using Rowan
   run
   | installBlock |
@@ -567,7 +569,7 @@ currentOrNil
             show: ex description .
           ex resume: true ] ].
   "Bootstrap loaded things for Rowan"
-  installBlock value: value: 'file:$ROWAN_HOME/specs/Rowan_SystemUser.ston'.
+  installBlock value: 'file:$ROWAN_HOME/specs/Rowan_SystemUser.ston'.
   true
     ifTrue: [
       | incorrectlyPackaged |
@@ -582,11 +584,11 @@ currentOrNil
       incorrectlyPackaged isEmpty ifFalse: [ self error: 'Rowan is not correctly packaged' ] ].
 
   "Bootstrap loaded things for Cypress"
-  installBlock value: value: 'file:$ROWAN_HOME/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'.
+  installBlock value: 'file:$ROWAN_HOME/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'.
   "Bootstrap loaded things for STON"
-  installBlock value: value: 'file:$ROWAN_HOME/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'.
+  installBlock value: 'file:$ROWAN_HOME/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'.
   "Bootstrap loaded things for Tonel"
-  installBlock value: value: 'file:$ROWAN_HOME/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'.
+  installBlock value: 'file:$ROWAN_HOME/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'.
 %
   commit
 

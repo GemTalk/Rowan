@@ -7,6 +7,7 @@
 			#defaultUseSessionMethodsForExtensions : false }
 	},
 	#specsPath : 'platforms/gemstone/projects/tonel/specs',
+	#configsPath : 'platforms/gemstone/projects/tonel/configs',
 	#repoSpec : RwGitRepositorySpecification {
 		#committish : 'master',
 		#committishType : 'branch'
