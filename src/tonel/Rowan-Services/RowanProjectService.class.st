@@ -181,7 +181,7 @@ RowanProjectService >> projectNames [
 RowanProjectService >> pullFromGit [
 
 	| project |
-	project := RwProject named: name. 
+	project := RwProject newNamed: name. 
 	Rowan gitTools
 		gitPullIn: project repositoryRootPath
 		remote: project remote
@@ -193,7 +193,7 @@ RowanProjectService >> pullFromGit [
 RowanProjectService >> pushToGit [
 
 	| project |
-	project := RwProject named: name. 
+	project := RwProject newNamed: name. 
 	Rowan gitTools
 		gitPushIn: project repositoryRootPath
 		remote: project remote
