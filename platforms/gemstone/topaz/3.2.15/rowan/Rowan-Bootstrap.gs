@@ -545,30 +545,40 @@ currentOrNil
 %
   commit
 
-# Install Rowan using Rowan
+# Install Rowan, Cypress, STON, and Tonel using Rowan
   run
-  | installBlock |
-  installBlock := [:specPath |
-    | specification gitRepoPath |
-    specification := RwSpecification fromUrl: specPath.
-    gitRepoPath := '$ROWAN_HOME'.
-    specification
-      repositoryRootPath: gitRepoPath;
-      repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
-      register.
+  | projectSetDefinition gitRepoPath |
+  projectSetDefinition := RwProjectSetDefinition new.
+  gitRepoPath := '$ROWAN_HOME'.
+  #(
+    'file:$ROWAN_HOME/specs/Rowan_SystemUser.ston'
+    'file:$ROWAN_HOME/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'
+    'file:$ROWAN_HOME/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'
+    'file:$ROWAN_HOME/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston') 
+    do: [:specUrl |
+      "load all of the packages from disk, so that we're not actually using Cypress, STON, 
+       and Tonel while created loaded things for Rowan"
+      | specification |
+      specification := RwSpecification fromUrl: specUrl.
+      specification
+        repositoryRootPath: gitRepoPath;
+        repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
+        register.
+      (Rowan projectTools read 
+        readProjectSetForProjectNamed: specification specName withConfiguration: 'Default')
+          do: [:projectDefinition |
+            projectSetDefinition addProject: projectDefinition ] ].
     [ 
       Rowan projectTools load
-        _bootstrapLoadProjectNamed: specification specName
-        withConfiguration: 'Default' ]
-        on: Warning
-        do: [ :ex | 
-          Transcript
-            cr;
-            show: ex description .
-          ex resume: true ] ].
-  "Bootstrap loaded things for Rowan"
-  installBlock value: 'file:$ROWAN_HOME/specs/Rowan_SystemUser.ston'.
-  true
+        _bootstrapLoadProjectSetDefinition: projectSetDefinition 
+        instanceMigrator: Rowan platform instanceMigrator ]
+      on: Warning
+      do: [ :ex | 
+        Transcript
+          cr;
+          show: ex description .
+        ex resume: true ].
+   true
     ifTrue: [
       | incorrectlyPackaged |
       "quick and dirty validation that Rowan loaded with Rowan is correct"
@@ -580,13 +590,6 @@ currentOrNil
 		(Rowan image loadedClassNamed: cl name asString ifAbsent: [])
 			handle ~~ cl ].
       incorrectlyPackaged isEmpty ifFalse: [ self error: 'Rowan is not correctly packaged' ] ].
-
-  "Bootstrap loaded things for Cypress"
-  installBlock value: 'file:$ROWAN_HOME/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'.
-  "Bootstrap loaded things for STON"
-  installBlock value: 'file:$ROWAN_HOME/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'.
-  "Bootstrap loaded things for Tonel"
-  installBlock value: 'file:$ROWAN_HOME/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'.
 %
   commit
 
