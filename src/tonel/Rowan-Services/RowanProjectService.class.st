@@ -114,6 +114,15 @@ RowanProjectService >> loadProjectNamed: aName [
 
 ]
 
+{ #category : 'rowan' }
+RowanProjectService >> log [
+
+	^Rowan projectTools log
+		commitLogProjectNamed: name
+		limit: 25
+
+]
+
 { #category : 'other' }
 RowanProjectService >> name [
 
@@ -141,7 +150,7 @@ RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 
 { #category : 'rowan' }
 RowanProjectService >> packageNameString [
-	"return a string showing the package names for a project"
+		"return a string showing the package names for a project"
 
 	| ws packageNames |
 	ws := WriteStream on: String new.
@@ -171,14 +180,24 @@ RowanProjectService >> projectNames [
 { #category : 'rowan' }
 RowanProjectService >> pullFromGit [
 
-	self halt.
+	| project |
+	project := RwProject named: name. 
+	Rowan gitTools
+		gitPullIn: project repositoryRootPath
+		remote: project remote
+		branch: project currentBranchName
 
 ]
 
 { #category : 'rowan' }
 RowanProjectService >> pushToGit [
 
-	self halt.
+	| project |
+	project := RwProject named: name. 
+	Rowan gitTools
+		gitPushIn: project repositoryRootPath
+		remote: project remote
+		branch: project currentBranchName
 
 ]
 
