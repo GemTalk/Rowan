@@ -1,7 +1,7 @@
 	"STON packager - write STON as a Rowan Package "
 	| repo |
 	repo := CypressAbstractRepository
-		onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_HOME/platforms/gemstone/src/ston/')
+		onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_HOME/platforms/gemstone/projects/ston/src/')
 		alias: ''.
 	#('STON-Core' 'STON-GemStoneBase' 'STON-GemStoneCommon')
 		do: [ :packageName | 
