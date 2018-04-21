@@ -14,6 +14,7 @@ exception:			the Error which occurred while trying to apply the Patch Operation.
 Class {
 	#name : 'CypressLoaderErrorNotification',
 	#superclass : 'Notification',
+	#type : 'variable',
 	#instVars : [
 		'exception',
 		'patchOperation'

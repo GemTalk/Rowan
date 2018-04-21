@@ -5,5 +5,6 @@ I happen whenever the parsing of a tonel file is broken in someway.
 Class {
 	#name : 'TonelParseError',
 	#superclass : 'Error',
+	#type : 'variable',
 	#category : 'Tonel-Core'
 }
