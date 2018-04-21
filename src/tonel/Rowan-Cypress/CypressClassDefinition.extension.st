@@ -13,6 +13,23 @@ CypressClassDefinition >> commentStamp [
 ]
 
 { #category : '*rowan-cypress' }
+CypressClassDefinition >> createOrReviseClass [
+
+	^ self subclassType = ''
+		ifTrue: [ self createOrReviseRegularClass ]
+		ifFalse: [ 
+			self subclassType = 'byteSubclass'
+				ifTrue: [ self createOrReviseByteClass ]
+				ifFalse: [ 
+					| typ |
+					typ := self subclassType.
+					(typ = 'indexableSubclass' or: [ typ = 'variable' ])
+						ifTrue: [ self createOrReviseIndexableClass ]
+						ifFalse: [ self error: 'unknown subclass type: ' , self subclassType printString ] ] ]
+
+]
+
+{ #category : '*rowan-cypress' }
 CypressClassDefinition >> hasClassInstanceVariables [
 
 	^ self classInstVarNames isEmpty not
@@ -40,23 +57,6 @@ CypressClassDefinition >> printDefinitionOn: stream [
             cr; tab;
             nextPutAll: 'category: ';
             store: self category asString 
-
-]
-
-{ #category : '*rowan-cypress' }
-CypressClassDefinition >> createOrReviseClass [
-
-	^ self subclassType = ''
-		ifTrue: [ self createOrReviseRegularClass ]
-		ifFalse: [ 
-			self subclassType = 'byteSubclass'
-				ifTrue: [ self createOrReviseByteClass ]
-				ifFalse: [ 
-					| typ |
-					typ := self subclassType.
-					(typ = 'indexableSubclass' or: [ typ = 'variable' ])
-						ifTrue: [ self createOrReviseIndexableClass ]
-						ifFalse: [ self error: 'unknown subclass type: ' , self subclassType printString ] ] ]
 
 ]
 
