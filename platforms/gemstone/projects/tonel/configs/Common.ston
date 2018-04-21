@@ -8,6 +8,7 @@ RwProjectConfiguration {
 		'Tonel-Cypress-Tests',
 		'Tonel-GemStone-Tests',
 		'Tonel-GemStoneCommon-Core',
+		'Tonel-GemStone-Kernel',
 		'Tonel-Tests'
 	],
 	#comment : 'Common set of packages '
