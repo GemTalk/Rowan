@@ -3,9 +3,9 @@ RwProjectConfiguration {
 	#configNames : Set [
 		'Cypress-Comparison',
 		'Cypress-Definitions',
-		'Cypress-Environment-Tools',
+		'Cypress-Environmental-Tools',
 		'Cypress-GemStoneFileServer',
-		'Cypress-MessageDigest',
+		'Cypress-MesssageDigest',
 		'Cypress-Network-Url',
 		'Cypress-PackageManagement',
 		'Cypress-Structure'
