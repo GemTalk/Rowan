@@ -745,44 +745,56 @@ RwPrjBrowserTool >> projectsNamed: projectNames updateDefinition: updateBlock [
 { #category : 'class browsing' }
 RwPrjBrowserTool >> removeClassNamed: className [
 
-	| projectSetDefinition loadedClass loadedPackage projectDef packageDef classDef |
+	| projectSetDefinition loadedClass loadedClassProjectDef  loadedClassProjectDefName loadedClassExtensions |
 	projectSetDefinition := RwProjectSetDefinition new.
 
-	loadedClass := self 
-		_loadedClassNamed: className 
-		ifAbsent: [
-			| theClass |
-			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackage class ', className printString.
-			"Notification resumed, so continue with removal ..."
-			theClass := Rowan image objectNamed: className.
-			(System myUserProfile dictionariesAndSymbolsOf: theClass)
-				do: [:ar | | dict key |
-					"brute force removal of the class from system dictionaries"
-					dict := ar at: 1.	
-					key := ar at: 2.
-					dict removeKey: key ].
-			^ self ].
-	loadedPackage := loadedClass loadedPackage.
-	projectDef := loadedClass loadedProject asDefinition.
-	packageDef := projectDef packageNamed: loadedPackage name.
-	classDef := packageDef classDefinitions at: loadedClass name.
-	packageDef removeClassDefinition: classDef.
-	projectSetDefinition addProject: projectDef.
+	loadedClass := self _loadedClassNamed: className ifAbsent: [ ].
+	loadedClassExtensions := self _loadedClassExtensionsNamed: className ifAbsent: [ #() ].
 
-	(self _loadedClassExtensionsNamed: className ifAbsent: [ #() ])
+	loadedClass 
+		ifNil: [
+			"Give developer a chance to handle and abort the removal of unpackaged class"
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackaged class ', className printString.
+			"Notification resumed, so continue with removal ..." ]
+		ifNotNil: [
+			| loadedPackage projectDef packageDef classDef |
+			loadedPackage := loadedClass loadedPackage.
+			projectDef := loadedClass loadedProject asDefinition.
+			packageDef := projectDef packageNamed: loadedPackage name.
+			classDef := packageDef classDefinitions at: loadedClass name.
+			packageDef removeClassDefinition: classDef.
+			projectSetDefinition addProject: projectDef.
+			loadedClassProjectDef := projectDef.
+			loadedClassProjectDefName := projectDef name ].
+
+	loadedClassExtensions
 		do: [ :loadedClassExtension | 
 			| loadedClassExtensionPackage ceProjectDef cePackageDef |
 			loadedClassExtensionPackage := loadedClassExtension loadedPackage.
 			ceProjectDef := loadedClassExtension loadedProject asDefinition.
-			ceProjectDef name = projectDef name
-				ifTrue: [ ceProjectDef := projectDef ]
+			ceProjectDef name = loadedClassProjectDefName
+				ifTrue: [
+					"extensions defined in same project as the class itself, entry already exists in projectSetDefinition"
+					ceProjectDef := loadedClassProjectDef ]
 				ifFalse: [ projectSetDefinition addProject: ceProjectDef ].
 			cePackageDef := ceProjectDef packageNamed: loadedClassExtensionPackage name.
 			cePackageDef
 				removeClassExtension:
 					(cePackageDef classExtensions at: loadedClassExtension name) ].
 
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	loadedClass 
+		ifNil: [
+			"need to do the actual removal of the unpackaged class after Rowan has done it's job"
+			| theClass |
+			theClass := Rowan image objectNamed: className.
+			(System myUserProfile dictionariesAndSymbolsOf: theClass)
+				do: [:ar | | dict key |
+					"brute force removal of the class from system dictionaries"
+					dict := ar at: 1.	
+					key := ar at: 2.
+					dict removeKey: key ] ]
 
 ]
 
