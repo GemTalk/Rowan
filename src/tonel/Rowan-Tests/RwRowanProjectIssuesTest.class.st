@@ -63,7 +63,6 @@ RwRowanProjectIssuesTest >> testIssue72_removeClass [
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		category: 'Issue72'
 		inDictionary: self _symbolDictionary
 		options: #().
 
