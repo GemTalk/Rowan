@@ -292,7 +292,15 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 								, ' was not found.' ] ]
 		ifFalse: [ 
 			| loadedClass |
-			loadedClass := Rowan image loadedClassNamed: className ifAbsent: [].
+			loadedClass := Rowan image 
+				loadedClassNamed: className 
+				ifAbsent: [
+					(RwPerformingUnpackagedEditNotification signal: 
+						'You are adding an unpackaged method to the class ', 
+						className printString, 
+						'. Are you sure that you want to continue.' )
+						ifTrue: [ self halt ]
+						ifFalse: [ self error: 'Attempt to add unpackage method to the class ', className printString ]].
 			loadedClass loadedPackage ].
 
 	^ self

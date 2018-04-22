@@ -11,7 +11,7 @@ Class {
 { #category : 'handling' }
 RwPerformingUnpackagedEditNotification >> defaultAction [
 
-	self inform: self informMessage
+	^ self confirm: self informMessage
 
 ]
 
@@ -23,8 +23,16 @@ RwPerformingUnpackagedEditNotification >> informMessage [
 ]
 
 { #category : 'accessing' }
-RwPerformingUnpackagedEditNotification >> informMessagee: anObject [
+RwPerformingUnpackagedEditNotification >> informMessage: anObject [
 
    informMessage := anObject
+
+]
+
+{ #category : 'signalling' }
+RwPerformingUnpackagedEditNotification >> signal: aMessage [
+
+	self informMessage: aMessage.
+	^ self signal
 
 ]
