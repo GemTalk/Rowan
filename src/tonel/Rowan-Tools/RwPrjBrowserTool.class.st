@@ -497,10 +497,6 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 		addAll: lfsp;
 		addAll: 'poolDictionaries: '.
 	result addAll: '#()'.	"ignored for now"
-	result
-		addAll: lfsp;
-		addAll: 'category: '.
-	result addAll: aClass category printString.
 	nonRowanClass
 		ifTrue: [ 
 			"if the class is unpackaged, then we need to provide for the specification of symbol dictionary into which the class will be installed"
@@ -512,6 +508,10 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 				ifTrue: [ result addAll: '''''' ]
 				ifFalse: [ result addAll: ((anArray at: 1) at: 1) name asString ] ]
 		ifFalse: [ 
+			result
+				addAll: lfsp;
+				addAll: 'category: '.
+			result addAll: aClass category printString.
 			(hybridBrowser and: [ thePackageName = aClass category ])
 				ifFalse: [ 
 					result
@@ -523,6 +523,7 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 		add: aClass _optionsForDefinition.
 	result add: Character lf.
 	^ result
+
 ]
 
 { #category : 'class browsing' }
