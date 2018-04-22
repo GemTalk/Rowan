@@ -94,19 +94,46 @@ RwRowanProjectIssuesTest >> testIssue72_removeClass [
 RwRowanProjectIssuesTest >> testIssue72_removeClassWithExtensions [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
-	"nothing special really needed when adding/updating an uppackaged class, just use the standard class creation protocol"
+	"Need to worry about removing an unpackaged class that has extension methods"
 
-	| className |
+	| className theClass projectName packageName packageNames x |
+
 	className := 'Issue72TestClass'.
-	Object subclass: className
+	theClass := Object subclass: className
 		instVarNames: #()
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
 		inDictionary: self _symbolDictionary
 		options: #().
+	self assert: (Rowan image objectNamed: className) notNil.
+	self assert: (Rowan image loadedClassNamed: className ifAbsent: []) isNil.
+	self assert: (Rowan image loadedClassExtensionsForClass: theClass) isEmpty.
 
-	Rowan projectTools browser removeClassNamed: className.
+	projectName := 'Issue72Project'.
+	packageName := 'Issue72Project-Extensions'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'issue 72 project'.
+
+	theClass rwCompileMethod: 'bar ^''bar'''
+				category: '*', packageName asLowercase.
+
+	self assert: (Rowan image objectNamed: className) notNil.
+	self assert: (Rowan image loadedClassNamed: className ifAbsent: []) isNil.
+	self assert: (Rowan image loadedClassExtensionsForClass: theClass) notEmpty.
+
+	[
+		"handle notification and complete removal"
+		Rowan projectTools browser removeClassNamed: className  ]
+			on: RwPerformingUnpackagedEditNotification
+			do: [:ex | ex resume ].
+	self assert: (Rowan image objectNamed: className) isNil.
+	self assert: (Rowan image loadedClassNamed: className ifAbsent: []) isNil.
+	self assert: (x := Rowan image loadedClassExtensionsForClass: theClass) isEmpty.
 
 ]
 

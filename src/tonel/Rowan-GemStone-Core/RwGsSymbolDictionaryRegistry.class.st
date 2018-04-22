@@ -687,7 +687,7 @@ RwGsSymbolDictionaryRegistry >> ensureExtensionClassNamed: className existsForPa
 			self
 				error:
 					'The extension class named ' , className printString
-						, ' cannot be foud in this symbol dictionary (' , self name printString
+						, ' cannot be found in this symbol dictionary (' , self _symbolDictionary name printString
 						,
 							'). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.' ].
 	loadedPackage := self packageRegistry
@@ -706,6 +706,7 @@ RwGsSymbolDictionaryRegistry >> ensureExtensionClassNamed: className existsForPa
 			(self classExtensionRegistry
 				at: extensionClass classHistory
 				ifAbsentPut: [ IdentitySet new ]) add: loadedClassExtension ]
+
 ]
 
 { #category : 'loaded queries' }
