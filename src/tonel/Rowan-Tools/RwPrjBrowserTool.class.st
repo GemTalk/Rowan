@@ -780,7 +780,11 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 	loadedMethodToBeRemoved := self
 		_loadedMethod: methodSelector
 		inClassNamed: className
-		isMeta: isMeta.
+		isMeta: isMeta
+		ifAbsent: [
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackage method in the class ', className printString.
+			"Notification resumed, so continue with removal"
+			^ (Rowan image objectNamed: className) removeSelector: methodSelector ].
 	loadedPackage := loadedMethodToBeRemoved loadedPackage.
 	loadedClassOrExtension := loadedPackage
 		classOrExtensionForClassNamed: className
@@ -798,6 +802,7 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 		ifTrue: [ crDef removeClassMethod: methodSelector ]
 		ifFalse: [ crDef removeInstanceMethod: methodSelector ].
 	Rowan projectTools load loadProjectDefinition: projectDef
+
 ]
 
 { #category : 'package browsing' }
