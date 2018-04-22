@@ -748,7 +748,20 @@ RwPrjBrowserTool >> removeClassNamed: className [
 	| projectSetDefinition loadedClass loadedPackage projectDef packageDef classDef |
 	projectSetDefinition := RwProjectSetDefinition new.
 
-	loadedClass := self _loadedClassNamed: className.
+	loadedClass := self 
+		_loadedClassNamed: className 
+		ifAbsent: [
+			| theClass |
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackage class ', className printString.
+			"Notification resumed, so continue with removal ..."
+			theClass := Rowan image objectNamed: className.
+			(System myUserProfile dictionariesAndSymbolsOf: theClass)
+				do: [:ar | | dict key |
+					"brute force removal of the class from system dictionaries"
+					dict := ar at: 1.	
+					key := ar at: 2.
+					dict removeKey: key ].
+			^ self ].
 	loadedPackage := loadedClass loadedPackage.
 	projectDef := loadedClass loadedProject asDefinition.
 	packageDef := projectDef packageNamed: loadedPackage name.
@@ -770,6 +783,7 @@ RwPrjBrowserTool >> removeClassNamed: className [
 					(cePackageDef classExtensions at: loadedClassExtension name) ].
 
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
+
 ]
 
 { #category : 'method browsing' }
