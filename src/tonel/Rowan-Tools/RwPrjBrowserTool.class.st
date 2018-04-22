@@ -292,7 +292,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 								, ' was not found.' ] ]
 		ifFalse: [ 
 			| loadedClass |
-			loadedClass := Rowan image loadedClassNamed: className.
+			loadedClass := Rowan image loadedClassNamed: className ifAbsent: [].
 			loadedClass loadedPackage ].
 
 	^ self
@@ -301,6 +301,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 		forClassNamed: className
 		isMeta: isMeta
 		inPackageNamed: loadedPackage name
+
 ]
 
 { #category : 'method browsing' }
