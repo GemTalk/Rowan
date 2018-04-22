@@ -8,26 +8,7 @@ Class {
 RwRowanProjectIssuesTest >> testIssue72_addMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
-	| projectName packageNames packageName1 theClass x |
-	projectName := 'Issue72Project'.
-	packageName1 := 'Issue72-Core'.
-	packageNames := {packageName1}.
-	self
-		_loadProjectDefinition: projectName
-		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName1
-		comment: 'hybrid browser project'.
-
-	theClass := Object
-		rwSubclass: 'Issue72Class'
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-	self assert: theClass rowanPackageName = packageName1.
-
+	| x |
 	self 
 		should: [
 			"add an unpackaged method - expect error"
@@ -70,28 +51,29 @@ RwRowanProjectIssuesTest >> testIssue72_addMethod [
 ]
 
 { #category : 'tests' }
-RwRowanProjectIssuesTest >> testIssue72_removeMethod [
+RwRowanProjectIssuesTest >> testIssue72_removeClass [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
-	| projectName packageNames packageName1 theClass |
-	projectName := 'Issue72Project'.
-	packageName1 := 'Issue72-Core'.
-	packageNames := {packageName1}.
-	self
-		_loadProjectDefinition: projectName
-		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName1
-		comment: 'hybrid browser project'.
+	"nothing special really needed when adding/updating an uppackaged class, just use the standard class creation protocol"
 
-	theClass := Object
-		rwSubclass: 'Issue72Class'
+	| className |
+	className := 'Issue72TestClass'.
+	Object subclass: className
 		instVarNames: #()
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
-		category: packageName1
+		category: 'Issue72'
+		inDictionary: self _symbolDictionary
 		options: #().
-	self assert: theClass rowanPackageName = packageName1.
+
+	Rowan projectTools browser removeClassNamed: className.
+
+]
+
+{ #category : 'tests' }
+RwRowanProjectIssuesTest >> testIssue72_removeMethod [
+	"https://github.com/dalehenrich/Rowan/issues/72"
 
 	[
 		"add unpackaged method"
@@ -128,26 +110,6 @@ RwRowanProjectIssuesTest >> testIssue72_removeMethod [
 { #category : 'tests' }
 RwRowanProjectIssuesTest >> testIssue72_updateMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
-
-	| projectName packageNames packageName1 theClass |
-	projectName := 'Issue72Project'.
-	packageName1 := 'Issue72-Core'.
-	packageNames := {packageName1}.
-	self
-		_loadProjectDefinition: projectName
-		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName1
-		comment: 'hybrid browser project'.
-
-	theClass := Object
-		rwSubclass: 'Issue72Class'
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-	self assert: theClass rowanPackageName = packageName1.
 
 	[
 		"add unpackaged method"
