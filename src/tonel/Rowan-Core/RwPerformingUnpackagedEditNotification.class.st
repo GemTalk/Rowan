@@ -11,7 +11,14 @@ Class {
 { #category : 'handling' }
 RwPerformingUnpackagedEditNotification >> defaultAction [
 
-	^ self confirm: self informMessage
+	^ self error: self errorMessage
+
+]
+
+{ #category : 'accessing' }
+RwPerformingUnpackagedEditNotification >> errorMessage [
+
+   ^self informMessage
 
 ]
 

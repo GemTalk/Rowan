@@ -295,16 +295,12 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 			loadedClass := Rowan image 
 				loadedClassNamed: className 
 				ifAbsent: [
-					(RwPerformingUnpackagedEditNotification signal: 
-						'You are adding an unpackaged method to the class ', 
-						className printString, 
-						'. Are you sure that you want to continue?' )
-						ifTrue: [
-							^ (Rowan image objectNamed: className)
-								compileMethod: methodSource
-								dictionaries: GsCurrentSession currentSession symbolList
-								category: hybridPackageName ]
-						ifFalse: [ self error: 'Attempt to add unpackage method to the class ', className printString ]].
+					RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify an unpackage method in the class ', className printString.
+					"Notification resumed, so continue with add/modify"
+					^ (Rowan image objectNamed: className)
+						compileMethod: methodSource
+						dictionaries: GsCurrentSession currentSession symbolList
+						category: hybridPackageName].
 			loadedClass loadedPackage ].
 
 	^ self

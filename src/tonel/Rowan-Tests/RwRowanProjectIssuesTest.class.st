@@ -5,10 +5,10 @@ Class {
 }
 
 { #category : 'tests' }
-RwRowanProjectIssuesTest >> testIssue72 [
+RwRowanProjectIssuesTest >> testIssue72_addMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
-	| projectName packageNames packageName1 theClass |
+	| projectName packageNames packageName1 theClass x |
 	projectName := 'Issue72Project'.
 	packageName1 := 'Issue72-Core'.
 	packageNames := {packageName1}.
@@ -41,18 +41,17 @@ RwRowanProjectIssuesTest >> testIssue72 [
 				category: 'accessing' ]
 		raise: Error.
 
+	(Object compiledMethodAt: #bar environmentId: 0 otherwise: nil)
+		ifNotNil: [ Object removeSelector: #'bar' ].
 
-	self 
-		should: [ 
-			[
-			"handle notification and abort the operation"
-			Object
-				rwCompileMethod: 'bar ^''bar'''
-				category: 'accessing' ]
-					on: RwPerformingUnpackagedEditNotification
-					do: [:ex |
-						ex resume: false ] ]
-		raise: Error.
+	[
+		"handle notification and abort the operation"
+		Object
+			rwCompileMethod: 'bar ^''bar'''
+			category: 'accessing' ]
+		on: RwPerformingUnpackagedEditNotification
+		do: [:ex | "abort"].
+	self assert: (x := Object compiledMethodAt: #bar environmentId: 0 otherwise: nil) isNil.
 
 	[
 		"handle notification and complete operation"
@@ -60,9 +59,8 @@ RwRowanProjectIssuesTest >> testIssue72 [
 			rwCompileMethod: 'bar ^''bar'''
 			category: 'accessing' ]
 		on: RwPerformingUnpackagedEditNotification
-		do: [:ex |
-			ex resume: true.
-			self assert: Object new bar = 'bar'.
-			Object removeSelector: #'bar'].
+		do: [:ex | ex resume ].
+	self assert: Object new bar = 'bar'.
+	Object removeSelector: #'bar'
 
 ]
