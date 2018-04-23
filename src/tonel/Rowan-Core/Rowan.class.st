@@ -221,7 +221,8 @@ Rowan class >> projectNamed: aString ifAbsent: absentBlock [
 
 	"Look up a project"
 
-	^ self loadedProjectNamed: aString ifAbsent: absentBlock
+	^ self image projectNamed: aString ifAbsent: absentBlock
+
 ]
 
 { #category : 'public' }

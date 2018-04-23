@@ -17,8 +17,8 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 	url := specNameOrUrl asRwUrl.
 	url scheme isNil
 		ifTrue: [ 
-			^ Rowan
-				projectNamed: specNameOrUrl
+			^ Rowan 
+				loadedProjectNamed: specNameOrUrl
 				ifAbsent: [ self error: 'No project named ' , specNameOrUrl printString , ' found' ] ].
 	url scheme = 'file'
 		ifTrue: [ 
@@ -42,6 +42,7 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 				initializeForImport;
 				yourself ].
 	self error: 'Unknown scheme: ' , url scheme printString
+
 ]
 
 { #category : 'initialization' }
