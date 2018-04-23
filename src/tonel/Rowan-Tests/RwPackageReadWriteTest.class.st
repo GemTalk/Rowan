@@ -12,10 +12,10 @@ RwPackageReadWriteTest >> basicPackageLoadSpec: packageNames packageNamesToLoad:
 
 	^ RwPackageProjectSpecification new
 		specName: 'basic test spec';
-		packageNamesInLoadOrder: packageNames;
 		packageNamesToLoad: packageNamesToLoad;
 		repoSpec: RwDiskRepositorySpecification new;
 		yourself
+
 ]
 
 { #category : 'private' }

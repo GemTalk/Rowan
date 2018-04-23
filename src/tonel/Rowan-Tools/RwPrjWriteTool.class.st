@@ -38,22 +38,6 @@ RwPrjWriteTool >> writePackageSet: aRwPackageSet specUrl: aString [
 ]
 
 { #category : 'smalltalk api' }
-RwPrjWriteTool >> writePackagesForSpecification: aRwSpecification [
-
-	| packageSet |
-	self specification: aRwSpecification.
-	packageSet := self _symbolDictionaryForSpecification
-		loadedPackageDefinitionsNamed: specification packageNamesInLoadOrder.
-	self writePackageSet: packageSet specification: specification.
-	^ specification
-]
-
-{ #category : 'smalltalk api' }
-RwPrjWriteTool >> writePackagesForSpecUrl: aString [
-  ^ self writePackagesForSpecification: (RwSpecification fromUrl: aString)
-]
-
-{ #category : 'smalltalk api' }
 RwPrjWriteTool >> writeProjectDefinition: projectDefinition [
 
 	| repo repositoryUrl |
@@ -91,32 +75,4 @@ RwPrjWriteTool >> writeProjectNamed: projectName [
 			packageStructure := RwCypressPackageStructure
 				fromPackage: rwPackageDefinition.
 			repo writePackageStructure: packageStructure ]
-]
-
-{ #category : 'cypress api' }
-RwPrjWriteTool >> writeSpecification: aRwSpecification [
-
-	"CYPRESS API: this messge unconditionally uses #Category to interpret package membership --- useful for saving Rowan code during development ONLY"
-
-	| repo |
-	self specification: aRwSpecification.
-	repo := CypressAbstractRepository
-		onUrl: (CypressUrl absoluteFromText: specification repositoryUrl)
-		alias: ''.
-	self packageNames
-		do: [ :packageName | 
-			| package |
-			package := (CypressPackageDefinition named: packageName)
-				lookupSymbolList: Rowan image symbolList;
-				yourself.
-			repo writePackageStructure: (CypressPackageStructure fromPackage: package) ].
-	^ specification
-]
-
-{ #category : 'cypress api' }
-RwPrjWriteTool >> writeSpecUrl: aString [
-
-	"CYPRESS API: this messge unconditionally uses #Category to interpret package membership --- useful for saving Rowan code during development ONLY"
-
-	^ self writeSpecification: (RwSpecification fromUrl: aString)
 ]

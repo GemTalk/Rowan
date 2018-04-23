@@ -132,27 +132,6 @@ RwProjectTool class >> write [
 ]
 
 { #category : 'smalltalk api' }
-RwProjectTool >> packageNames [
-
-	"this guy should go away when Rowan is developed in Rowan"
-
-	^ specification packageNamesForTool: self
-]
-
-{ #category : 'operations for package specs' }
-RwProjectTool >> packageNamesForPackageSpec: aPackageSpec [
-
-	"this should go away when Rowan is developed in Rowan"
-
-	^ aPackageSpec packageNamesInLoadOrder
-]
-
-{ #category : 'operations for project specs' }
-RwProjectTool >> packageNamesForProjectSpec: aProjectSpec [
-  self halt: 'not yet implemented'
-]
-
-{ #category : 'smalltalk api' }
 RwProjectTool >> repositoryUrl [
   ^ self specification repositoryUrl
 ]

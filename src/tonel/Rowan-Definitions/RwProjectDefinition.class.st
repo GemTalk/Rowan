@@ -172,17 +172,10 @@ RwProjectDefinition >> packageNames [
 ]
 
 { #category : 'properties' }
-RwProjectDefinition >> packageNamesInLoadOrder [
-
-	^ self specification packageNamesInLoadOrder
-]
-
-{ #category : 'properties' }
 RwProjectDefinition >> packageNamesInLoadOrder: packageNamesInLoadOrder [
 
 	packageNamesInLoadOrder
-		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ].
-	self specification packageNamesInLoadOrder: packageNamesInLoadOrder
+		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
 ]
 
 { #category : 'accessing' }

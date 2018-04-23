@@ -43,11 +43,6 @@ RwMetacelloProjectSpecification >> locked: anObject [
 
 ]
 
-{ #category : 'actions' }
-RwMetacelloProjectSpecification >> packageNamesForTool: aRwTool [
-  ^ aRwTool packageNamesForProjectSpec: self
-]
-
 { #category : 'accessing' }
 RwMetacelloProjectSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
 
