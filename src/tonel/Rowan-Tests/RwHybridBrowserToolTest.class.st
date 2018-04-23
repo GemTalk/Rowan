@@ -339,17 +339,9 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 		options: #().
 	self assert: normalClass1 rowanPackageName = packageName1.
 
-	false ifTrue: [
-	"Why doesn't this test fail sooner, when foo is created incorrectly"
-	normalClass1 
-		compileMethod:  'foo ^''foo''' 
-		dictionaries: GsCurrentSession currentSession symbolList
-		category: 'accessing'
-		environmentId: 0]
-		ifFalse: [ 
 	normalClass1 
 		rwCompileMethod:  'foo ^''foo''' 
-		category: 'accessing'].
+		category: 'accessing'.
 	normalClass1 class
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName2 asLowercase.
@@ -590,48 +582,6 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 	self should: [ normalInstance2 biff ] raise: MessageNotUnderstood.
 
 	writtenStateValidationBlock value	"verify that original state is restored"
-
-]
-
-{ #category : 'tests - packages' }
-RwHybridBrowserToolTest >> testHybridComplicatedProjectLoadBug [
-
-	"Write project to disk, make a few modifications and then reload the project from disk"
-
-	| fooMethod normalClass1 normalClass2 projectName packageNames packageName1 packageName2 normalInstance1 normalInstance2 projectTools className1 className2 theLoadedProject theLoadedPackage theLoadedClassOrClassExtension writtenStateValidationBlock classNames oldNormalClass2 |
-	projectName := 'HybridPatchProjectA'.
-	packageName1 := 'Hybrid-Patch-Core'.
-	packageName2 := 'Hybrid-Patch-Extensions'.
-	packageNames := {packageName1.
-	packageName2}.
-	self
-		_loadDiskProjectDefinition: projectName
-		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName1
-		comment: 'hybrid browser project package patch test'
-		format: 'tonel'
-		root: '/tmp/rowanHybridPatchProject/'
-		repoPath: 'src'.
-	className1 := 'SimpleHybridNormalReload1'.
-	className2 := 'SimpleHybridNormalReload2'.
-	classNames := {className1.
-	className2}.
-
-	normalClass1 := Object
-		rwSubclass: className1
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-	self assert: normalClass1 rowanPackageName = packageName1.
-
-	fooMethod := normalClass1 compileMethod:  'foo ^''foo''' 
-dictionaries: GsCurrentSession currentSession symbolList
-category: 'accessing'
-environmentId: 0.
-self assert: fooMethod rowanPackageName = packageName1.
 
 ]
 

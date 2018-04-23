@@ -8,7 +8,7 @@ CypressClassDefinition >> definitionString [
 	type = ''
 		ifTrue: [ classType := 'normal' ]
 		ifFalse: [ 
-			type = 'indexableSubclass'
+			(type = 'indexableSubclass' or: [ type = 'variable' ])
 				ifTrue: [ classType := 'variable' ]
 				ifFalse: [ 
 					type = 'byteSubclass'
@@ -24,4 +24,5 @@ CypressClassDefinition >> definitionString [
 		poolDictionariesString: self poolDictionariesString
 		comment: self comment printString
 		category: self category printString
+
 ]

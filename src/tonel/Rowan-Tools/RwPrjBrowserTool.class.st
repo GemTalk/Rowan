@@ -292,7 +292,15 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 								, ' was not found.' ] ]
 		ifFalse: [ 
 			| loadedClass |
-			loadedClass := Rowan image loadedClassNamed: className.
+			loadedClass := Rowan image 
+				loadedClassNamed: className 
+				ifAbsent: [
+					RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify an unpackage method in the class ', className printString.
+					"Notification resumed, so continue with add/modify"
+					^ (Rowan image objectNamed: className)
+						compileMethod: methodSource
+						dictionaries: GsCurrentSession currentSession symbolList
+						category: hybridPackageName].
 			loadedClass loadedPackage ].
 
 	^ self
@@ -301,6 +309,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 		forClassNamed: className
 		isMeta: isMeta
 		inPackageNamed: loadedPackage name
+
 ]
 
 { #category : 'method browsing' }
@@ -488,10 +497,6 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 		addAll: lfsp;
 		addAll: 'poolDictionaries: '.
 	result addAll: '#()'.	"ignored for now"
-	result
-		addAll: lfsp;
-		addAll: 'category: '.
-	result addAll: aClass category printString.
 	nonRowanClass
 		ifTrue: [ 
 			"if the class is unpackaged, then we need to provide for the specification of symbol dictionary into which the class will be installed"
@@ -503,6 +508,10 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 				ifTrue: [ result addAll: '''''' ]
 				ifFalse: [ result addAll: ((anArray at: 1) at: 1) name asString ] ]
 		ifFalse: [ 
+			result
+				addAll: lfsp;
+				addAll: 'category: '.
+			result addAll: aClass category printString.
 			(hybridBrowser and: [ thePackageName = aClass category ])
 				ifFalse: [ 
 					result
@@ -514,6 +523,7 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 		add: aClass _optionsForDefinition.
 	result add: Character lf.
 	^ result
+
 ]
 
 { #category : 'class browsing' }
@@ -735,31 +745,57 @@ RwPrjBrowserTool >> projectsNamed: projectNames updateDefinition: updateBlock [
 { #category : 'class browsing' }
 RwPrjBrowserTool >> removeClassNamed: className [
 
-	| projectSetDefinition loadedClass loadedPackage projectDef packageDef classDef |
+	| projectSetDefinition loadedClass loadedClassProjectDef  loadedClassProjectDefName loadedClassExtensions |
 	projectSetDefinition := RwProjectSetDefinition new.
 
-	loadedClass := self _loadedClassNamed: className.
-	loadedPackage := loadedClass loadedPackage.
-	projectDef := loadedClass loadedProject asDefinition.
-	packageDef := projectDef packageNamed: loadedPackage name.
-	classDef := packageDef classDefinitions at: loadedClass name.
-	packageDef removeClassDefinition: classDef.
-	projectSetDefinition addProject: projectDef.
+	loadedClass := self _loadedClassNamed: className ifAbsent: [ ].
+	loadedClassExtensions := self _loadedClassExtensionsNamed: className ifAbsent: [ #() ].
 
-	(self _loadedClassExtensionsNamed: className ifAbsent: [ #() ])
+	loadedClass 
+		ifNil: [
+			"Give developer a chance to handle and abort the removal of unpackaged class"
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackaged class ', className printString.
+			"Notification resumed, so continue with removal ..." ]
+		ifNotNil: [
+			| loadedPackage projectDef packageDef classDef |
+			loadedPackage := loadedClass loadedPackage.
+			projectDef := loadedClass loadedProject asDefinition.
+			packageDef := projectDef packageNamed: loadedPackage name.
+			classDef := packageDef classDefinitions at: loadedClass name.
+			packageDef removeClassDefinition: classDef.
+			projectSetDefinition addProject: projectDef.
+			loadedClassProjectDef := projectDef.
+			loadedClassProjectDefName := projectDef name ].
+
+	loadedClassExtensions
 		do: [ :loadedClassExtension | 
 			| loadedClassExtensionPackage ceProjectDef cePackageDef |
 			loadedClassExtensionPackage := loadedClassExtension loadedPackage.
 			ceProjectDef := loadedClassExtension loadedProject asDefinition.
-			ceProjectDef name = projectDef name
-				ifTrue: [ ceProjectDef := projectDef ]
+			ceProjectDef name = loadedClassProjectDefName
+				ifTrue: [
+					"extensions defined in same project as the class itself, entry already exists in projectSetDefinition"
+					ceProjectDef := loadedClassProjectDef ]
 				ifFalse: [ projectSetDefinition addProject: ceProjectDef ].
 			cePackageDef := ceProjectDef packageNamed: loadedClassExtensionPackage name.
 			cePackageDef
 				removeClassExtension:
 					(cePackageDef classExtensions at: loadedClassExtension name) ].
 
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	loadedClass 
+		ifNil: [
+			"need to do the actual removal of the unpackaged class after Rowan has done it's job"
+			| theClass |
+			theClass := Rowan image objectNamed: className.
+			(System myUserProfile dictionariesAndSymbolsOf: theClass)
+				do: [:ar | | dict key |
+					"brute force removal of the class from system dictionaries"
+					dict := ar at: 1.	
+					key := ar at: 2.
+					dict removeKey: key ] ]
+
 ]
 
 { #category : 'method browsing' }
@@ -771,7 +807,11 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 	loadedMethodToBeRemoved := self
 		_loadedMethod: methodSelector
 		inClassNamed: className
-		isMeta: isMeta.
+		isMeta: isMeta
+		ifAbsent: [
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackage method in the class ', className printString.
+			"Notification resumed, so continue with removal"
+			^ (Rowan image objectNamed: className) removeSelector: methodSelector ].
 	loadedPackage := loadedMethodToBeRemoved loadedPackage.
 	loadedClassOrExtension := loadedPackage
 		classOrExtensionForClassNamed: className
@@ -789,6 +829,7 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 		ifTrue: [ crDef removeClassMethod: methodSelector ]
 		ifFalse: [ crDef removeInstanceMethod: methodSelector ].
 	Rowan projectTools load loadProjectDefinition: projectDef
+
 ]
 
 { #category : 'package browsing' }
