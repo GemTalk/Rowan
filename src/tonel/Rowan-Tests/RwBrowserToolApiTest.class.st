@@ -12,10 +12,10 @@ RwBrowserToolApiTest >> _expectedAssociationCreationTemplate [
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	category: ''Kernel''
 	inDictionary: Globals
 	options: #()
 '
+
 ]
 
 { #category : 'private' }
@@ -40,10 +40,10 @@ RwBrowserToolApiTest >> _expectedCollectionCreationTemplate [
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	category: ''Kernel''
 	inDictionary: Globals
 	options: #()
 '
+
 ]
 
 { #category : 'private' }
@@ -53,10 +53,10 @@ RwBrowserToolApiTest >> _expectedHybridByteArrayCreationTemplate [
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	category: ''Kernel''
 	inDictionary: Globals
 	options: #()
 '
+
 ]
 
 { #category : 'private' }
