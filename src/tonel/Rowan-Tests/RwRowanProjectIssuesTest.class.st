@@ -4,7 +4,7 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
-{ #category : 'tests' }
+{ #category : 'tests - issue 72' }
 RwRowanProjectIssuesTest >> testIssue72_addMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
@@ -50,7 +50,7 @@ RwRowanProjectIssuesTest >> testIssue72_addMethod [
 
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - issue 72' }
 RwRowanProjectIssuesTest >> testIssue72_removeClass [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
@@ -90,13 +90,13 @@ RwRowanProjectIssuesTest >> testIssue72_removeClass [
 
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - issue 72' }
 RwRowanProjectIssuesTest >> testIssue72_removeClassWithExtensions [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
 	"Need to worry about removing an unpackaged class that has extension methods"
 
-	| className theClass projectName packageName packageNames x |
+	| className theClass projectName packageName packageNames |
 
 	className := 'Issue72TestClass'.
 	theClass := Object subclass: className
@@ -108,7 +108,7 @@ RwRowanProjectIssuesTest >> testIssue72_removeClassWithExtensions [
 		options: #().
 	self assert: (Rowan image objectNamed: className) notNil.
 	self assert: (Rowan image loadedClassNamed: className ifAbsent: []) isNil.
-	self assert: (Rowan image loadedClassExtensionsForClass: theClass) isEmpty.
+	self assert: ((Rowan image loadedClassExtensionsForClass: theClass) select: [:each | each isEmpty not ]) isEmpty.
 
 	projectName := 'Issue72Project'.
 	packageName := 'Issue72Project-Extensions'.
@@ -124,7 +124,7 @@ RwRowanProjectIssuesTest >> testIssue72_removeClassWithExtensions [
 
 	self assert: (Rowan image objectNamed: className) notNil.
 	self assert: (Rowan image loadedClassNamed: className ifAbsent: []) isNil.
-	self assert: (Rowan image loadedClassExtensionsForClass: theClass) notEmpty.
+	self assert: ((Rowan image loadedClassExtensionsForClass: theClass) select: [:each | each isEmpty not ]) notEmpty.
 
 	[
 		"handle notification and complete removal"
@@ -133,11 +133,11 @@ RwRowanProjectIssuesTest >> testIssue72_removeClassWithExtensions [
 			do: [:ex | ex resume ].
 	self assert: (Rowan image objectNamed: className) isNil.
 	self assert: (Rowan image loadedClassNamed: className ifAbsent: []) isNil.
-	self assert: (x := Rowan image loadedClassExtensionsForClass: theClass) isEmpty.
+	self assert: ((Rowan image loadedClassExtensionsForClass: theClass) select: [:each | each isEmpty not ]) isEmpty.
 
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - issue 72' }
 RwRowanProjectIssuesTest >> testIssue72_removeMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
@@ -173,7 +173,7 @@ RwRowanProjectIssuesTest >> testIssue72_removeMethod [
 
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - issue 72' }
 RwRowanProjectIssuesTest >> testIssue72_updateMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
