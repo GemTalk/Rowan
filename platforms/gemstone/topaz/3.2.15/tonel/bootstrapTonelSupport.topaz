@@ -2,7 +2,7 @@
 ! Copyright (C) GemTalk Systems 2017.  All Rights Reserved.
 !=========================================================================
 
-output push tonel.ot
+output push tonel.out
 
 input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/tonel/Tonel-Core.gs
 errorCount
