@@ -282,6 +282,4 @@ RwRowanProjectIssuesTest >> testIssue91 [
 	self assert: testInstance foo = 'bar'.
 	self assert: fooMethod rowanPackageName = packageName2.
 
-self halt.
-
 ]
