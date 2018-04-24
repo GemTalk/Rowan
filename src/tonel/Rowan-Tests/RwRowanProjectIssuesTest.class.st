@@ -31,6 +31,25 @@ RwRowanProjectIssuesTest >> _addClassNamed: className toPackageNamed: packageNam
 ]
 
 { #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _addOrUpdateMethod: methodSource forBehavior: theBehavior inPackage: packageName inProjectNamed: projectName [
+
+	"validate the dirty state of project before and after method is added or updated"
+
+	| project |
+
+	project := RwProject newNamed: projectName.
+
+	self deny: project isDirty.
+
+	theBehavior
+		rwCompileMethod: methodSource
+		category:  '*' , packageName asLowercase.
+
+	self assert: project isDirty.
+
+]
+
+{ #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _addPackageNamed: packageName toProjectNamed: projectName [
 
 	"validate the dirty state of project before and after add package call"
@@ -110,6 +129,23 @@ RwRowanProjectIssuesTest >> _removePackageNamed: packageName from: projectName [
 
 	(Rowan image loadedPackageNamed: packageName ifAbsent: [])
 		ifNotNil: [:loadedPackage | self assert: false description: 'unexpected loaded package ', packageName printString ].
+
+	self assert: project isDirty.
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _removeSelector: selector fromBehavior: theBehavior inProjectNamed: projectName [
+
+	"validate the dirty state of project before and after method is removed"
+
+	| project |
+
+	project := RwProject newNamed: projectName.
+
+	self deny: project isDirty.
+
+	theBehavior rwRemoveSelector: selector.
 
 	self assert: project isDirty.
 
@@ -216,6 +252,52 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveClass [
 	self _writeProjectNamed: projectName.
 
 	self _removeClassNamed: className fromProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+]
+
+{ #category : 'tests-issue 24' }
+RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveMethods [
+
+	| projectName packageName className theClass |
+	projectName := 'Issue24_addUpdateRemoveClass'.
+	packageName := 'Issue24-Core'.
+	className := 'Issue24Class'.
+
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+
+	self _writeProjectNamed: projectName.
+
+	self _addPackageNamed: packageName toProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	theClass := self _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass class inPackage: packageName inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	self _addOrUpdateMethod:  'foo ^''bar''' forBehavior: theClass inPackage: packageName inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	self _addOrUpdateMethod:  'foo ^''bar''' forBehavior: theClass class inPackage: packageName inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	self _removeSelector: #foo fromBehavior: theClass inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	self _removeSelector: #foo fromBehavior: theClass class inProjectNamed: projectName.
 
 	self _writeProjectNamed: projectName.
 
