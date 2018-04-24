@@ -4,37 +4,150 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
-{ #category : 'tests-issue 24' }
-RwRowanProjectIssuesTest >> testIssue24_addClass [
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _addPackageNamed: packageName toProjectNamed: projectName [
+
+	"validate the dirty state of project before and after add package call"
+
+	| project |
+
+	project := RwProject newNamed: projectName.
+
+	self deny: project isDirty.
+
+	Rowan projectTools browser addPackageNamed: packageName toProjectNamed: projectName.
+
+	self assert: project isDirty.
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPath [
+
+	| projectDefinition project |
+
+	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	projectDefinition := self
+		_standardProjectDefinition: projectName
+		packageNames: #()
+		defaultSymbolDictName:self _symbolDictionaryName
+		comment:
+			'Basic project ', projectName printString.
+
+	self
+		handleConfirmationDuring: [
+			Rowan projectTools create 
+				createPackageProjectFor: projectDefinition 
+				format: 'tonel' 
+				root:rootPath 
+				repoPath: 'src' ].
+
+	Rowan projectTools load loadProjectDefinition: projectDefinition.
+
+	project := RwProject newNamed: projectName.
+
+	self assert: project isDirty. "a project is dirty if it has changes that are not written to disk"
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _removePackageNamed: packageName from: projectName [
+
+	"validate the dirty state of project before and after remove package call"
+
+	| project |
+
+	project := RwProject newNamed: projectName.
+
+	self deny: project isDirty.
+
+	Rowan projectTools browser removePackageNamed: packageName.
+
+	self assert: project isDirty.
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _writeProjectNamed: projectName [
+
+	"validate the dirty state of project before and after write"
+
+	| project |
+
+	project := RwProject newNamed: projectName.
+
+	self assert: project isDirty. "a project is dirty if it has changes that are not written to disk"
+
+	Rowan projectTools write writeProjectNamed: projectName.
+
+	self deny: project isDirty. "a project is not dirty if it has been written to disk"
 
 ]
 
 { #category : 'tests-issue 24' }
 RwRowanProjectIssuesTest >> testIssue24_addProject [
 
-	| projectName projectTools project |
+	| projectName |
 	projectName := 'Issue24_addProject'.
-	projectTools := Rowan projectTools.
 
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ]. "ensure project is not present, before creating"
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
-	self
-		handleConfirmationDuring: [
-			projectTools create 
-				createLoadedProject: projectName 
-				format: 'tonel' 
-				root: '/tmp/rowanIssuesProject/' 
-				repoPath: 'src' 
-				useGit: true ].
+	self _writeProjectNamed: projectName
+
+]
+
+{ #category : 'tests-issue 24' }
+RwRowanProjectIssuesTest >> testIssue24_addRemovePackage [
+
+	| projectName packageName |
+	projectName := 'Issue24_addProject'.
+	packageName := 'Issue24-Core'.
+
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+
+	self _writeProjectNamed: projectName.
+
+	self _addPackageNamed: packageName toProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	self _removePackageNamed: packageName from: projectName.
+
+	self _writeProjectNamed: projectName.
+
+]
+
+{ #category : 'tests-issue 24' }
+RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveClass [
+
+	| projectName packageName className theClass project |
+	projectName := 'Issue24_addProject'.
+	packageName := 'Issue24-Core'.
+
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+
+	self _writeProjectNamed: projectName.
+
+	self _addPackageNamed: packageName toProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	self deny: project isDirty.
+
+	className := 'Issue24Class'.
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
 
 	project := RwProject newNamed: projectName.
-
-	self assert: project isDirty. "a project is dirty if it has changes that are not written to disk"
-
-	projectTools write writeProjectNamed: projectName.
-
-	self deny: project isDirty. "a project is not dirty if it has been written to disk"
+	self assert: project isDirty.
 
 ]
 

@@ -197,6 +197,23 @@ RwProjectDefinition >> printOn: aStream [
 	aStream nextPutAll: self asString
 ]
 
+{ #category : 'accessing' }
+RwProjectDefinition >> removePackage: aPackageDefinition [
+
+	| key |
+	key := aPackageDefinition key.
+	(packages includesKey: key) ifFalse: [self error: 'Package not present.'].
+	packages at: key put: aPackageDefinition
+
+]
+
+{ #category : 'accessing' }
+RwProjectDefinition >> removePackageNamed: packageName [
+
+	^self removePackage: (self packageNamed: packageName)
+
+]
+
 { #category : 'properties' }
 RwProjectDefinition >> repoPath [
 
