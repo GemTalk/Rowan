@@ -147,8 +147,7 @@ RwLoadedPackage >> markNotDirty [
 { #category : 'private' }
 RwLoadedPackage >> markPackageDirty [
 
-	self markDirty.
-	loadedProject markProjectDirty
+	self markDirty
 ]
 
 { #category : 'accessing' }

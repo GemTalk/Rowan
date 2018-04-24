@@ -31,14 +31,9 @@ RwPrjWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification
 ]
 
 { #category : 'smalltalk api' }
-RwPrjWriteTool >> writePackageSet: aRwPackageSet specUrl: aString [
-  ^ self
-    writePackageSet: aRwPackageSet
-    specification: (RwSpecification fromUrl: aString)
-]
-
-{ #category : 'smalltalk api' }
 RwPrjWriteTool >> writeProjectDefinition: projectDefinition [
+	"project defintion does not necessarily represent a loaded project, so the loaded projects and packages 
+		will not be marked not dirty"
 
 	| repo repositoryUrl |
 	repositoryUrl := projectDefinition repositoryUrl
@@ -54,12 +49,13 @@ RwPrjWriteTool >> writeProjectDefinition: projectDefinition [
 			packageStructure := RwCypressPackageStructure
 				fromPackage: rwPackageDefinition.
 			repo writePackageStructure: packageStructure ]
+
 ]
 
 { #category : 'smalltalk api' }
 RwPrjWriteTool >> writeProjectNamed: projectName [
 
-	| loadedProject repo repositoryUrl projectDefinition |
+	| loadedProject repo repositoryUrl projectDefinition packageDefinitionSet loadedPackages |
 	loadedProject := Rowan image loadedProjectNamed: projectName.
 	projectDefinition := loadedProject asDefinition.
 	repositoryUrl := projectDefinition repositoryUrl
@@ -69,10 +65,16 @@ RwPrjWriteTool >> writeProjectNamed: projectName [
 				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , projectDefinition repoPath , '/') asRwUrl ] ]
 		ifNotNil: [ :urlString | urlString asRwUrl ].
 	repo := repositoryUrl asRwRepository.
-	(Rowan loadedPackagesForProject: projectDefinition) asPackageDefinitionSet
+	loadedPackages := Rowan loadedPackagesForProject: projectDefinition.
+	packageDefinitionSet := loadedPackages asPackageDefinitionSet.
+	packageDefinitionSet
 		do: [ :rwPackageDefinition | 
 			| packageStructure |
 			packageStructure := RwCypressPackageStructure
 				fromPackage: rwPackageDefinition.
-			repo writePackageStructure: packageStructure ]
+			repo writePackageStructure: packageStructure ].
+	"loaded project and loaded packages written to disk - mark them not dirty"
+	loadedProject markNotDirty.
+	loadedPackages do: [:loadedPackage | loadedPackage markNotDirty ].
+
 ]
