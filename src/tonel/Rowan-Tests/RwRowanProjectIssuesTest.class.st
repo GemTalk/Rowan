@@ -65,6 +65,9 @@ RwRowanProjectIssuesTest >> _removePackageNamed: packageName from: projectName [
 
 	Rowan projectTools browser removePackageNamed: packageName.
 
+	(Rowan image loadedPackageNamed: packageName ifAbsent: [])
+		ifNotNil: [:loadedPackage | self assert: false description: 'unexpected loaded package ', packageName printString ].
+
 	self assert: project isDirty.
 
 ]
@@ -102,7 +105,7 @@ RwRowanProjectIssuesTest >> testIssue24_addProject [
 RwRowanProjectIssuesTest >> testIssue24_addRemovePackage [
 
 	| projectName packageName |
-	projectName := 'Issue24_addProject'.
+	projectName := 'Issue24_addRemovePackage'.
 	packageName := 'Issue24-Core'.
 
 	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
@@ -123,7 +126,7 @@ RwRowanProjectIssuesTest >> testIssue24_addRemovePackage [
 RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveClass [
 
 	| projectName packageName className theClass project |
-	projectName := 'Issue24_addProject'.
+	projectName := 'Issue24_addUpdateRemoveClass'.
 	packageName := 'Issue24-Core'.
 
 	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.

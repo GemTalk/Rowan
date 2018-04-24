@@ -203,7 +203,7 @@ RwProjectDefinition >> removePackage: aPackageDefinition [
 	| key |
 	key := aPackageDefinition key.
 	(packages includesKey: key) ifFalse: [self error: 'Package not present.'].
-	packages at: key put: aPackageDefinition
+	packages removeKey: key
 
 ]
 
