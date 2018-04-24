@@ -653,8 +653,13 @@ RwGsPatchSetBasic >> classesWithNewVersions [
 
 { #category : 'private - applying' }
 RwGsPatchSetBasic >> commit [
+	"I don't think I like the idea that we commit during a load ... the developer should always be in control of
+		when a commit is performed ... automatic instance migration does do commits, however, it is a developer
+		choice to do the commits ... if an error occurs after a commit is performed, I am concerned that the loaded 
+		state of system will be corrupted ... "
 
-	System commit
+	false ifTrue: [ System commit ]
+
 ]
 
 { #category : 'private - applying' }
