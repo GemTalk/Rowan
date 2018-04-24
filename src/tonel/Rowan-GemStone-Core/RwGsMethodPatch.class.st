@@ -126,12 +126,6 @@ RwGsMethodPatch >> loadedClassOrExtensionForMethod [
 					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ]
 ]
 
-{ #category : 'applying' }
-RwGsMethodPatch >> markPackageNotDirty [
-
-	self markNotDirtyPackageNamed: self packageName
-]
-
 { #category : 'accessing' }
 RwGsMethodPatch >> methodDefinition [
 	^methodDefinition

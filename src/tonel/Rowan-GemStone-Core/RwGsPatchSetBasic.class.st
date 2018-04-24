@@ -616,7 +616,6 @@ RwGsPatchSetBasic >> apply [
 		updateMethodProperties;
 		removeDeletedMethods;
 		"removeDeletedClassesAndExtensionsFromPackages;"
-		markPackagesNotDirty;
 		removeDeletedPackages;
 		commit;
 		runInitializers;
@@ -781,14 +780,6 @@ RwGsPatchSetBasic >> installAddedClassExtensions [
 RwGsPatchSetBasic >> instanceMigrator [
 
 	^ instanceMigrator
-]
-
-{ #category : 'private - applying' }
-RwGsPatchSetBasic >> markPackagesNotDirty [
-	"All affected packages are now consistent with the source, and should be marked not dirty."
-
-	self
-		allPatchesAffectingLivePackagesDo: [:patch | patch markPackageNotDirty]
 ]
 
 { #category : 'private - applying' }

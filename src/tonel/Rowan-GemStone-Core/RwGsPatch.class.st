@@ -11,17 +11,6 @@ Class {
 	#category : 'Rowan-GemStone'
 }
 
-{ #category : 'packages' }
-RwGsPatch >> markNotDirtyPackageNamed: packageName [
-
-	| loadedPackage |
-	loadedPackage := self symbolDictionaryRegistry loadedPackageNamed: packageName ifAbsent: [  ].
-	loadedPackage
-		ifNil: [ self error: 'Internal error -- attempt to manipulate nonexistent package.' ].
-	loadedPackage markNotDirty
-
-]
-
 { #category : 'accessing' }
 RwGsPatch >> packageDefinition [
 	^packageDefinition
