@@ -29,6 +29,21 @@ RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPath useGit: useGit ab
 ]
 
 { #category : 'smalltalk api' }
+RwPrjCreateTool >> createLoadedProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
+
+	| projectDefinition |
+	projectDefinition := useGit
+		ifTrue: [ RwProjectDefinition newForGitPackageProjectNamed: projectName ].
+	self
+		createPackageProjectFor: projectDefinition
+		format: format
+		root: rootPath
+		repoPath: repoPath.
+	^ self class load loadProjectDefinition: projectDefinition
+
+]
+
+{ #category : 'smalltalk api' }
 RwPrjCreateTool >> createMetacelloProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
   self halt: 'not implemented ... yet'
 ]
@@ -73,4 +88,18 @@ RwPrjCreateTool >> createPackageProjectFor: projectDefinition format: format roo
 	projectDefinition projectOwnerId: Rowan image currentUserId.
 	projectDefinition specification copy export.
 	^ projectDefinition
+]
+
+{ #category : 'smalltalk api' }
+RwPrjCreateTool >> createProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
+
+	| projectDefinition |
+	projectDefinition := useGit
+		ifTrue: [ RwProjectDefinition newForGitPackageProjectNamed: projectName ].
+	^ self
+		createPackageProjectFor: projectDefinition
+		format: format
+		root: rootPath
+		repoPath: repoPath
+
 ]

@@ -4,6 +4,40 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
+{ #category : 'tests-issue 24' }
+RwRowanProjectIssuesTest >> testIssue24_addClass [
+
+]
+
+{ #category : 'tests-issue 24' }
+RwRowanProjectIssuesTest >> testIssue24_addProject [
+
+	| projectName projectTools project |
+	projectName := 'Issue24_addProject'.
+	projectTools := Rowan projectTools.
+
+	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ]. "ensure project is not present, before creating"
+
+	self
+		handleConfirmationDuring: [
+			projectTools create 
+				createLoadedProject: projectName 
+				format: 'tonel' 
+				root: '/tmp/rowanIssuesProject/' 
+				repoPath: 'src' 
+				useGit: true ].
+
+	project := RwProject newNamed: projectName.
+
+	self assert: project isDirty. "a project is dirty if it has changes that are not written to disk"
+
+	projectTools write writeProjectNamed: projectName.
+
+	self deny: project isDirty. "a project is not dirty if it has been written to disk"
+
+]
+
 { #category : 'tests - issue 72' }
 RwRowanProjectIssuesTest >> testIssue72_addMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
