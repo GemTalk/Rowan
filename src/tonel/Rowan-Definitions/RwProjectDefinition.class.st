@@ -21,10 +21,11 @@ RwProjectDefinition class >> newForGitMetacelloProjectNamed: aString [
 RwProjectDefinition class >> newForGitPackageProjectNamed: aString [
 
 	| spec |
-	spec := RwPackageProjectSpecification new
+	spec := RwSimpleProjectSpecification new
 		specName: aString;
 		yourself.
 	^ self newForSpecification: spec
+
 ]
 
 { #category : 'instance creation' }
