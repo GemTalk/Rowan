@@ -298,7 +298,8 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
 				ifNotNil: [ :loadedClassExtension | 
 					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
-					self halt ] ].
+					"have yet to come with a test case that takes this path"
+					self error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ] ].
 
 	self _symbolDictionaryAt: assoc key 
 		ifPresent: [
@@ -596,7 +597,8 @@ RwGsSymbolDictionaryRegistry >> createAndInstallLoadedClassForClass: class toPac
 			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
 				ifNotNil: [ :loadedClassExtension | 
 					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
-					self halt ] ].
+					"have yet to come with a test case that takes this path"
+					self error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ] ].
 
 ]
 

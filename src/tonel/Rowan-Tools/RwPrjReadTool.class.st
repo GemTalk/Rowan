@@ -40,7 +40,6 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfiguration: c
 	[ config := RwAbstractProjectConfiguration fromUrl: url ]
 		on: Error
 		do: [ :ignored | 
-			self halt.
 			^ self readProjectSetForProjectNamed: projectName ].
 	repo := projectDefinition repositoryUrl asRwRepository.
 	config projectName: projectName.
@@ -61,6 +60,7 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfiguration: c
 	^ RwProjectSetDefinition new
 		addProject: projectDefinition;
 		yourself
+
 ]
 
 { #category : 'smalltalk api' }
