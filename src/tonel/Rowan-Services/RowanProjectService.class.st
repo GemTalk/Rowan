@@ -149,6 +149,12 @@ RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 ]
 
 { #category : 'rowan' }
+RowanProjectService >> packageNames [
+	^(Rowan image loadedProjectNamed: name) packageNames.
+
+]
+
+{ #category : 'rowan' }
 RowanProjectService >> packageNameString [
 		"return a string showing the package names for a project"
 
