@@ -13,6 +13,8 @@ export ROWAN_HOME=`pwd`
 
 # (re)Start netldi (so that ROWAN_HOME is defined in gem environment for Jadeite)
 
+# when updating, you want to do a `git pull origin master` before running the install 
+
 <start-topaz and setup stone params>
 
 # script logs in as SystemUser and DataCurator
