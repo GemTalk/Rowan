@@ -5,6 +5,32 @@ Class {
 }
 
 { #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName [
+
+	"validate the dirty state of project before and after class is added"
+
+	| project theClass |
+
+	project := RwProject newNamed: projectName.
+
+	self deny: project isDirty.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
+
+	self assert: project isDirty.
+
+	^theClass
+
+]
+
+{ #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _addPackageNamed: packageName toProjectNamed: projectName [
 
 	"validate the dirty state of project before and after add package call"
@@ -53,6 +79,23 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPat
 ]
 
 { #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _removeClassNamed: className fromProjectNamed: projectName [
+
+	"validate the dirty state of project before and after class is added"
+
+	| project |
+
+	project := RwProject newNamed: projectName.
+
+	self deny: project isDirty.
+
+	Rowan projectTools browser removeClassNamed: className.
+
+	self assert: project isDirty.
+
+]
+
+{ #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _removePackageNamed: packageName from: projectName [
 
 	"validate the dirty state of project before and after remove package call"
@@ -69,6 +112,32 @@ RwRowanProjectIssuesTest >> _removePackageNamed: packageName from: projectName [
 		ifNotNil: [:loadedPackage | self assert: false description: 'unexpected loaded package ', packageName printString ].
 
 	self assert: project isDirty.
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _updateClassNamed: className toPackageNamed: packageName inProjectNamed: projectName [
+
+	"validate the dirty state of project before and after class is added"
+
+	| project theClass |
+
+	project := RwProject newNamed: projectName.
+
+	self deny: project isDirty.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #(ivar1)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
+
+	self assert: project isDirty.
+
+	^theClass
 
 ]
 
@@ -125,9 +194,10 @@ RwRowanProjectIssuesTest >> testIssue24_addRemovePackage [
 { #category : 'tests-issue 24' }
 RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveClass [
 
-	| projectName packageName className theClass project |
+	| projectName packageName className  |
 	projectName := 'Issue24_addUpdateRemoveClass'.
 	packageName := 'Issue24-Core'.
+	className := 'Issue24Class'.
 
 	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
@@ -137,20 +207,17 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveClass [
 
 	self _writeProjectNamed: projectName.
 
-	self deny: project isDirty.
+	self _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName.
 
-	className := 'Issue24Class'.
-	theClass := Object
-		rwSubclass: className
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName
-		options: #().
+	self _writeProjectNamed: projectName.
 
-	project := RwProject newNamed: projectName.
-	self assert: project isDirty.
+	self _updateClassNamed: className toPackageNamed: packageName inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	self _removeClassNamed: className fromProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
 
 ]
 
