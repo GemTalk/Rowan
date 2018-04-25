@@ -616,7 +616,6 @@ RwGsPatchSetBasic >> apply [
 		updateMethodProperties;
 		removeDeletedMethods;
 		"removeDeletedClassesAndExtensionsFromPackages;"
-		markPackagesNotDirty;
 		removeDeletedPackages;
 		commit;
 		runInitializers;

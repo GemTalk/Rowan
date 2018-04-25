@@ -48,7 +48,6 @@ RwGsPatchSetRowanBootstrap >> apply [
 		installAddedClassExtensions;
 
 		"removeDeletedClassesAndExtensionsFromPackages;"
-		markPackagesNotDirty;
 		removeDeletedPackages;
 		commit;
 		runInitializers;
