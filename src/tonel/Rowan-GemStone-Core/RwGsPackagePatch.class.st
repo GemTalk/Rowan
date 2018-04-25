@@ -18,12 +18,6 @@ RwGsPackagePatch class >> for: aPackageDefinition [
 ]
 
 { #category : 'applying' }
-RwGsPackagePatch >> markPackageNotDirty [
-
-	self markNotDirtyPackageNamed: self packageName
-]
-
-{ #category : 'applying' }
 RwGsPackagePatch >> updatePackageProperties [
 
 	| loadedPackage |

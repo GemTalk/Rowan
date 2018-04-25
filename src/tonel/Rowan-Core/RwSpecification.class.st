@@ -77,11 +77,6 @@ RwSpecification >> initializeForImport [
   
 ]
 
-{ #category : 'actions' }
-RwSpecification >> packageNamesForTool: aRwTool [
-  self subclassResponsibility: #'packageNamesForTool:'
-]
-
 { #category : 'copying' }
 RwSpecification >> postCopy [
   "don't forget to copy any compound state objects"

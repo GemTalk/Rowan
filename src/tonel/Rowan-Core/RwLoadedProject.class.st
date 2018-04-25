@@ -39,7 +39,9 @@ RwLoadedProject >> asDefinition [
 RwLoadedProject >> initialize [
 
 	super initialize.
-	loadedPackages := KeyValueDictionary new
+	loadedPackages := KeyValueDictionary new.
+	isDirty := true. "a project is dirty if it has changes that are not written to disk"
+
 ]
 
 { #category : 'initialization' }
@@ -52,11 +54,15 @@ RwLoadedProject >> initializeForLoadSpecification: aLoadSpecification [
 { #category : 'testing' }
 RwLoadedProject >> isDirty [
 
+	"a project is dirty if it has changes that are not written to disk, or it's packages have changes that are not written to  disk."
+
+	isDirty ifTrue: [ ^ true].
 	self loadedPackages
 		do: [ :loadedPackage | 
 			loadedPackage isDirty
 				ifTrue: [ ^ true ] ].
 	^ false
+
 ]
 
 { #category : 'testing' }
@@ -127,8 +133,9 @@ RwLoadedProject >> markDirty [
 { #category : 'private' }
 RwLoadedProject >> markNotDirty [
 	"I have been changed to be consistent with my source, so mark not dirty."
-
+self halt.
 	isDirty := false
+
 ]
 
 { #category : 'private' }

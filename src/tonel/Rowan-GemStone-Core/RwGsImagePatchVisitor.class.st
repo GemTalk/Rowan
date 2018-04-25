@@ -346,11 +346,13 @@ RwGsImagePatchVisitor >> visitProjectModification: aProjectModification [
 { #category : 'visting' }
 RwGsImagePatchVisitor >> visitPropertiesModification: aPropertiesModification [
 
-	self halt
+	self error: 'internal error - not yet implemented'
+
 ]
 
 { #category : 'visting' }
 RwGsImagePatchVisitor >> visitSourceModification: aSourceModification [
 
-	self halt
+	self error: 'internal error - not yet implemented'
+
 ]

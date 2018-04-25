@@ -137,12 +137,6 @@ RwGsClassPatch >> createClassFor: aPatchSet [
 	^ createdClass
 ]
 
-{ #category : 'applying' }
-RwGsClassPatch >> markPackageNotDirty [
-
-	self markNotDirtyPackageNamed: self packageName
-]
-
 { #category : 'versioning' }
 RwGsClassPatch >> oldClassVersion [
 	"The old version is what is currently bound to the class definition's name."

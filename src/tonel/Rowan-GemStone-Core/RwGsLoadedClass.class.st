@@ -169,6 +169,7 @@ RwGsLoadedClass >> key [
 { #category : 'removing' }
 RwGsLoadedClass >> removeFromSystem [
 
+	self markPackageDirty.
 	loadedInstanceMethods valuesDo: [: loadedInstanceMethod |
 		self removeLoadedInstanceMethod: loadedInstanceMethod.
 		loadedInstanceMethod unregisterYourself ].
@@ -176,6 +177,7 @@ RwGsLoadedClass >> removeFromSystem [
 		self removeLoadedClassMethod: loadedClassMethod.
 		loadedClassMethod unregisterYourself ].
 	self handleClassDeletion
+
 ]
 
 { #category : 'methods' }

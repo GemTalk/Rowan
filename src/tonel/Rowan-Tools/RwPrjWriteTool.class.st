@@ -31,30 +31,9 @@ RwPrjWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification
 ]
 
 { #category : 'smalltalk api' }
-RwPrjWriteTool >> writePackageSet: aRwPackageSet specUrl: aString [
-  ^ self
-    writePackageSet: aRwPackageSet
-    specification: (RwSpecification fromUrl: aString)
-]
-
-{ #category : 'smalltalk api' }
-RwPrjWriteTool >> writePackagesForSpecification: aRwSpecification [
-
-	| packageSet |
-	self specification: aRwSpecification.
-	packageSet := self _symbolDictionaryForSpecification
-		loadedPackageDefinitionsNamed: specification packageNamesInLoadOrder.
-	self writePackageSet: packageSet specification: specification.
-	^ specification
-]
-
-{ #category : 'smalltalk api' }
-RwPrjWriteTool >> writePackagesForSpecUrl: aString [
-  ^ self writePackagesForSpecification: (RwSpecification fromUrl: aString)
-]
-
-{ #category : 'smalltalk api' }
 RwPrjWriteTool >> writeProjectDefinition: projectDefinition [
+	"project defintion does not necessarily represent a loaded project, so the loaded projects and packages 
+		will not be marked not dirty"
 
 	| repo repositoryUrl |
 	repositoryUrl := projectDefinition repositoryUrl
@@ -70,12 +49,13 @@ RwPrjWriteTool >> writeProjectDefinition: projectDefinition [
 			packageStructure := RwCypressPackageStructure
 				fromPackage: rwPackageDefinition.
 			repo writePackageStructure: packageStructure ]
+
 ]
 
 { #category : 'smalltalk api' }
 RwPrjWriteTool >> writeProjectNamed: projectName [
 
-	| loadedProject repo repositoryUrl projectDefinition |
+	| loadedProject repo repositoryUrl projectDefinition packageDefinitionSet loadedPackages |
 	loadedProject := Rowan image loadedProjectNamed: projectName.
 	projectDefinition := loadedProject asDefinition.
 	repositoryUrl := projectDefinition repositoryUrl
@@ -85,38 +65,16 @@ RwPrjWriteTool >> writeProjectNamed: projectName [
 				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , projectDefinition repoPath , '/') asRwUrl ] ]
 		ifNotNil: [ :urlString | urlString asRwUrl ].
 	repo := repositoryUrl asRwRepository.
-	(Rowan loadedPackagesForProject: projectDefinition) asPackageDefinitionSet
+	loadedPackages := Rowan loadedPackagesForProject: projectDefinition.
+	packageDefinitionSet := loadedPackages asPackageDefinitionSet.
+	packageDefinitionSet
 		do: [ :rwPackageDefinition | 
 			| packageStructure |
 			packageStructure := RwCypressPackageStructure
 				fromPackage: rwPackageDefinition.
-			repo writePackageStructure: packageStructure ]
-]
+			repo writePackageStructure: packageStructure ].
+	"loaded project and loaded packages written to disk - mark them not dirty"
+	loadedProject markNotDirty.
+	loadedPackages do: [:loadedPackage | loadedPackage markNotDirty ].
 
-{ #category : 'cypress api' }
-RwPrjWriteTool >> writeSpecification: aRwSpecification [
-
-	"CYPRESS API: this messge unconditionally uses #Category to interpret package membership --- useful for saving Rowan code during development ONLY"
-
-	| repo |
-	self specification: aRwSpecification.
-	repo := CypressAbstractRepository
-		onUrl: (CypressUrl absoluteFromText: specification repositoryUrl)
-		alias: ''.
-	self packageNames
-		do: [ :packageName | 
-			| package |
-			package := (CypressPackageDefinition named: packageName)
-				lookupSymbolList: Rowan image symbolList;
-				yourself.
-			repo writePackageStructure: (CypressPackageStructure fromPackage: package) ].
-	^ specification
-]
-
-{ #category : 'cypress api' }
-RwPrjWriteTool >> writeSpecUrl: aString [
-
-	"CYPRESS API: this messge unconditionally uses #Category to interpret package membership --- useful for saving Rowan code during development ONLY"
-
-	^ self writeSpecification: (RwSpecification fromUrl: aString)
 ]

@@ -44,6 +44,13 @@ RwProject >> extendedClasses [
 	^ self _projectTools query classExtensionsForProjectNamed: self name
 ]
 
+{ #category : 'testing' }
+RwProject >> isDirty [
+
+	^self _loadedProject isDirty
+
+]
+
 { #category : 'properties' }
 RwProject >> loadedCommitId [
 

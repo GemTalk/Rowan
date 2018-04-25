@@ -21,10 +21,11 @@ RwProjectDefinition class >> newForGitMetacelloProjectNamed: aString [
 RwProjectDefinition class >> newForGitPackageProjectNamed: aString [
 
 	| spec |
-	spec := RwPackageProjectSpecification new
+	spec := RwSimpleProjectSpecification new
 		specName: aString;
 		yourself.
 	^ self newForSpecification: spec
+
 ]
 
 { #category : 'instance creation' }
@@ -172,17 +173,10 @@ RwProjectDefinition >> packageNames [
 ]
 
 { #category : 'properties' }
-RwProjectDefinition >> packageNamesInLoadOrder [
-
-	^ self specification packageNamesInLoadOrder
-]
-
-{ #category : 'properties' }
 RwProjectDefinition >> packageNamesInLoadOrder: packageNamesInLoadOrder [
 
 	packageNamesInLoadOrder
-		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ].
-	self specification packageNamesInLoadOrder: packageNamesInLoadOrder
+		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
 ]
 
 { #category : 'accessing' }
@@ -201,6 +195,23 @@ RwProjectDefinition >> packages: aPackageDefinitionDictionary [
 RwProjectDefinition >> printOn: aStream [
 
 	aStream nextPutAll: self asString
+]
+
+{ #category : 'accessing' }
+RwProjectDefinition >> removePackage: aPackageDefinition [
+
+	| key |
+	key := aPackageDefinition key.
+	(packages includesKey: key) ifFalse: [self error: 'Package not present.'].
+	packages removeKey: key
+
+]
+
+{ #category : 'accessing' }
+RwProjectDefinition >> removePackageNamed: packageName [
+
+	^self removePackage: (self packageNamed: packageName)
+
 ]
 
 { #category : 'properties' }

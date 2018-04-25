@@ -27,25 +27,6 @@ RwPackageProjectSpecification >> imageSpec [
 	^ imageSpec ifNil: [ imageSpec := RwPackageProjectImageSpecification new ]
 ]
 
-{ #category : 'actions' }
-RwPackageProjectSpecification >> packageNamesForTool: aRwTool [
-  ^ aRwTool packageNamesForPackageSpec: self
-]
-
-{ #category : 'accessing' }
-RwPackageProjectSpecification >> packageNamesInLoadOrder [
-
-   ^packageNamesInLoadOrder
-
-]
-
-{ #category : 'accessing' }
-RwPackageProjectSpecification >> packageNamesInLoadOrder: anObject [
-
-   packageNamesInLoadOrder := anObject
-
-]
-
 { #category : 'accessing' }
 RwPackageProjectSpecification >> packageNamesToLoad: anObject [
 
