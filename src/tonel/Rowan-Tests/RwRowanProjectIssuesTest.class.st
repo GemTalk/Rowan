@@ -16,11 +16,14 @@ RwRowanProjectIssuesTest >> _addClassNamed: className toPackageNamed: packageNam
 
 	"validate the dirty state of project before and after class is added"
 
-	| project theClass |
+	| project package theClass |
 
 	project := RwProject newNamed: projectName.
+	package := RwPackage newNamed: packageName.
 
-	validate ifTrue: [ self deny: project isDirty ].
+	validate ifTrue: [ 
+		self deny: project isDirty.
+		self deny: package isDirty ].
 
 	theClass := Object
 		rwSubclass: className
@@ -31,7 +34,9 @@ RwRowanProjectIssuesTest >> _addClassNamed: className toPackageNamed: packageNam
 		category: packageName
 		options: #().
 
-	validate ifTrue: [ self assert: project isDirty ].
+	validate ifTrue: [ 
+		self assert: project isDirty.
+		self assert: package isDirty ].
 
 	^theClass
 
@@ -49,17 +54,22 @@ RwRowanProjectIssuesTest >> _addOrUpdateMethod: methodSource forBehavior: theBeh
 
 	"validate the dirty state of project before and after method is added or updated"
 
-	| project |
+	| project package |
 
 	project := RwProject newNamed: projectName.
+	package := RwPackage newNamed: packageName.
 
-	validate ifTrue: [ self deny: project isDirty ].
+	validate ifTrue: [ 
+		self deny: project isDirty.
+		self deny: package isDirty].
 
 	theBehavior
 		rwCompileMethod: methodSource
 		category:  '*' , packageName asLowercase.
 
-	validate ifTrue: [ self assert: project isDirty ].
+	validate ifTrue: [ 
+		self assert: project isDirty.
+		self assert: package isDirty ].
 
 ]
 
@@ -137,15 +147,20 @@ RwRowanProjectIssuesTest >> _removeClassNamed: className fromProjectNamed: proje
 
 	"validate the dirty state of project before and after class is added"
 
-	| project |
+	| project package |
 
 	project := RwProject newNamed: projectName.
+	package := RwPackage newNamed: (Rowan globalNamed: className) rowanPackageName.
 
-	validate ifTrue: [ self deny: project isDirty ].
+	validate ifTrue: [ 
+		self deny: project isDirty.
+		self deny: package isDirty ].
 
 	Rowan projectTools browser removeClassNamed: className.
 
-	validate ifTrue: [ self assert: project isDirty ].
+	validate ifTrue: [ 
+		self assert: project isDirty.
+		self assert: package isDirty ].
 
 ]
 
@@ -212,11 +227,14 @@ RwRowanProjectIssuesTest >> _updateClassNamed: className toPackageNamed: package
 
 	"validate the dirty state of project before and after class is added"
 
-	| project theClass |
+	| project package theClass |
 
 	project := RwProject newNamed: projectName.
+	package := RwPackage newNamed: packageName.
 
-	validate ifTrue: [ self deny: project isDirty ].
+	validate ifTrue: [ 
+		self deny: project isDirty.
+		self deny: package isDirty ].
 
 	theClass := Object
 		rwSubclass: className
@@ -227,7 +245,9 @@ RwRowanProjectIssuesTest >> _updateClassNamed: className toPackageNamed: package
 		category: packageName
 		options: #().
 
-	validate ifTrue: [ self assert: project isDirty ].
+	validate ifTrue: [ 
+		self assert: project isDirty.
+		self assert: package isDirty ].
 
 	^theClass
 
