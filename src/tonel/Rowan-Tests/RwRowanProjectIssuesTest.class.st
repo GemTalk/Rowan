@@ -49,7 +49,7 @@ RwRowanProjectIssuesTest >> _addOrUpdateMethod: methodSource forBehavior: theBeh
 
 ]
 
-{ #category : 'private-issue 24' }
+{ #category : 'private' }
 RwRowanProjectIssuesTest >> _addOrUpdateMethod: methodSource forBehavior: theBehavior inPackage: packageName inProjectNamed: projectName validate: validate [
 
 	"validate the dirty state of project before and after method is added or updated"
@@ -63,9 +63,15 @@ RwRowanProjectIssuesTest >> _addOrUpdateMethod: methodSource forBehavior: theBeh
 		self deny: project isDirty.
 		self deny: package isDirty].
 
-	theBehavior
-		rwCompileMethod: methodSource
-		category:  '*' , packageName asLowercase.
+	theBehavior rowanPackageName = packageName
+		ifTrue: [
+			theBehavior
+				rwCompileMethod: methodSource
+				category:  'other' ]
+		ifFalse: [
+			theBehavior
+				rwCompileMethod: methodSource
+				category:  '*' , packageName asLowercase ].
 
 	validate ifTrue: [ 
 		self assert: project isDirty.
@@ -622,10 +628,10 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 	self _addOrUpdateMethod: 'cvar2 ^CVar2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'cvar1: anInt CVar1 := anInt' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'cvar2: anInt CVar2 := anInt' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
-	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
 	self assert: theClass cvar1 = 1.
-	self assert: theClass cvar2 isNil.
+	self assert: theClass cvar2 = 2.
 
 	theClass 
 		cvar1: 3;
@@ -635,7 +641,7 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 
 	"initialize method not changed and moved to new package"
 self halt.
-	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
 
 	self assert: theClass cvar1 = 3.
 	self assert: theClass cvar2 = 4.
