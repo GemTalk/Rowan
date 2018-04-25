@@ -439,6 +439,38 @@ RwRowanProjectIssuesTest >> testIssue24_loadProject [
 
 ]
 
+{ #category : 'tests-issue 24' }
+RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenPackages [
+
+	"move a class from one package to another"
+	self assert: false
+
+]
+
+{ #category : 'tests-issue 24' }
+RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenProjects [
+
+	"move a class from one project to another"
+	self assert: false
+
+]
+
+{ #category : 'tests-issue 24' }
+RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenPackages [
+
+	"move a method from one package to another"
+	self assert: false
+
+]
+
+{ #category : 'tests-issue 24' }
+RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenProjects [
+
+	"move a method from one package to another"
+	self assert: false
+
+]
+
 { #category : 'tests-issue 41' }
 RwRowanProjectIssuesTest >> testIssue41_addUpdateInitializeExtensionMethods [
 
@@ -468,6 +500,28 @@ RwRowanProjectIssuesTest >> testIssue41_addUpdateInitializeExtensionMethods [
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
+
+]
+
+{ #category : 'tests-issue 41' }
+RwRowanProjectIssuesTest >> testIssue41_interactiveAddUpdateInitializeExtensionMethods [
+
+	"https://github.com/dalehenrich/Rowan/issues/41"
+
+	"Interactive updates to methods should not trigger initialization"
+
+	self assert: false
+
+]
+
+{ #category : 'tests-issue 41' }
+RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethodToPackage [
+
+	"https://github.com/dalehenrich/Rowan/issues/41"
+
+	"Interactive move of methods should not trigger initialization"
+
+	self assert: false
 
 ]
 
