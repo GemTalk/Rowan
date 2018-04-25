@@ -640,7 +640,6 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 	self assert: theClass cvar2 = 4.
 
 	"initialize method not changed and moved to new package"
-self halt.
 	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
 	self assert: theClass cvar1 = 3.

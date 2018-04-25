@@ -762,9 +762,11 @@ RwGsPatchSetBasic >> initialize [
 	extendedMethods := Set new.
 	methodsNeedingRecompile := Set new.
 	methodsWithPropertyChanges := Set new.
+	pureMovedMethods := Set new.
 	tempSymbols := SymbolDictionary new.
 	createdClasses := Dictionary new.
 	errors := Set new
+
 ]
 
 { #category : 'private - applying' }
@@ -876,7 +878,7 @@ RwGsPatchSetBasic >> moveMethodsBetweenPackages [
 								ifTrue: [ 
 									"the source is identical ... so it is a pure move of the method ... record this fact
 										for operations that care. "
-									self halt ] ] ] ]
+									pureMovedMethods add: patch ] ] ] ]
 
 ]
 
@@ -940,7 +942,11 @@ RwGsPatchSetBasic >> runInitializers [
 	(addedMethods copy
 		addAll: extendedMethods;
 		addAll: methodsNeedingRecompile;
-		yourself) do: [ :methodPatch | methodPatch runInitializer ]
+		yourself) do: [ :methodPatch | 
+			"a pure move, is a method that moved between packages with no change in source ... do not run initialize method in this case"
+			(pureMovedMethods includes: methodPatch) 
+				ifFalse: [ methodPatch runInitializer ] ]
+
 ]
 
 { #category : 'private - applying' }
