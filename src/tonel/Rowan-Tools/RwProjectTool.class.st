@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : 'commands' }
+RwProjectTool class >> audit [
+
+	^ RwPrjAuditTool new
+
+]
+
+{ #category : 'commands' }
 RwProjectTool class >> browser [
 
 	^ RwPrjBrowserTool new
