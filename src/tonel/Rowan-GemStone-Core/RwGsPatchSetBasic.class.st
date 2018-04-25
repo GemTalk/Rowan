@@ -863,7 +863,7 @@ RwGsPatchSetBasic >> moveMethodsBetweenPackages [
 		do: [ :patch | 
 			(deletedMethodsMap at: patch classDefinition key ifAbsent: [  ])
 				ifNotNil: [ :selectorMap | 
-					(selectorMap at: patch methodDefinition selector)
+					(selectorMap at: patch methodDefinition selector ifAbsent: [])
 						ifNotNil: [ :methodDeletionPatch | 
 							methodDeletionPatch
 								deleteLoadedMethodNewClasses: createdClasses
