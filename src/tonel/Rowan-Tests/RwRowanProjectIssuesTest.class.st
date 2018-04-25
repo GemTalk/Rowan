@@ -239,7 +239,7 @@ RwRowanProjectIssuesTest >> _updateClassNamed: className toPackageNamed: package
 	theClass := Object
 		rwSubclass: className
 		instVarNames: #(ivar1)
-		classVars: #()
+		classVars: #(CVar1 CVar2)
 		classInstVars: #()
 		poolDictionaries: #()
 		category: packageName
@@ -439,7 +439,39 @@ RwRowanProjectIssuesTest >> testIssue24_loadProject [
 
 ]
 
-{ #category : 'tests - issue 72' }
+{ #category : 'tests-issue 41' }
+RwRowanProjectIssuesTest >> testIssue41 [
+
+	"https://github.com/dalehenrich/Rowan/issues/41"
+
+	"Are extension method initialization methods run correctly for add and update"
+
+	| projectName packageName1 packageName2 className theClass  |
+	projectName := 'Issue41_project'.
+	packageName1 := 'Issue41-Core'.
+	packageName2 := 'Issue41-Extensions'.
+	className := 'Issue41Class'.
+
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
+	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
+	theClass := self _updateClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName validate: false.
+
+	self _addOrUpdateMethod: 'cvar1 ^CVar1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	self _addOrUpdateMethod: 'cvar2 ^CVar2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+
+	self assert: theClass cvar1 = 1.
+	self assert: theClass cvar2 isNil.
+
+	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+
+	self assert: theClass cvar1 = 1.
+	self assert: theClass cvar2 = 2.
+
+]
+
+{ #category : 'tests-issue 72' }
 RwRowanProjectIssuesTest >> testIssue72_addMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
@@ -485,7 +517,7 @@ RwRowanProjectIssuesTest >> testIssue72_addMethod [
 
 ]
 
-{ #category : 'tests - issue 72' }
+{ #category : 'tests-issue 72' }
 RwRowanProjectIssuesTest >> testIssue72_removeClass [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
@@ -525,7 +557,7 @@ RwRowanProjectIssuesTest >> testIssue72_removeClass [
 
 ]
 
-{ #category : 'tests - issue 72' }
+{ #category : 'tests-issue 72' }
 RwRowanProjectIssuesTest >> testIssue72_removeClassWithExtensions [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
@@ -572,7 +604,7 @@ RwRowanProjectIssuesTest >> testIssue72_removeClassWithExtensions [
 
 ]
 
-{ #category : 'tests - issue 72' }
+{ #category : 'tests-issue 72' }
 RwRowanProjectIssuesTest >> testIssue72_removeMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
@@ -608,7 +640,7 @@ RwRowanProjectIssuesTest >> testIssue72_removeMethod [
 
 ]
 
-{ #category : 'tests - issue 72' }
+{ #category : 'tests-issue 72' }
 RwRowanProjectIssuesTest >> testIssue72_updateMethod [
 	"https://github.com/dalehenrich/Rowan/issues/72"
 
