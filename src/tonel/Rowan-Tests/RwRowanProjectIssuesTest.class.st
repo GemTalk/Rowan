@@ -7,13 +7,20 @@ Class {
 { #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName [
 
+	^ self _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName validate: true
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName validate: validate [
+
 	"validate the dirty state of project before and after class is added"
 
 	| project theClass |
 
 	project := RwProject newNamed: projectName.
 
-	self deny: project isDirty.
+	validate ifTrue: [ self deny: project isDirty ].
 
 	theClass := Object
 		rwSubclass: className
@@ -24,7 +31,7 @@ RwRowanProjectIssuesTest >> _addClassNamed: className toPackageNamed: packageNam
 		category: packageName
 		options: #().
 
-	self assert: project isDirty.
+	validate ifTrue: [ self assert: project isDirty ].
 
 	^theClass
 
@@ -33,24 +40,38 @@ RwRowanProjectIssuesTest >> _addClassNamed: className toPackageNamed: packageNam
 { #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _addOrUpdateMethod: methodSource forBehavior: theBehavior inPackage: packageName inProjectNamed: projectName [
 
+	^ self _addOrUpdateMethod: methodSource forBehavior: theBehavior inPackage: packageName inProjectNamed: projectName validate: true
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _addOrUpdateMethod: methodSource forBehavior: theBehavior inPackage: packageName inProjectNamed: projectName validate: validate [
+
 	"validate the dirty state of project before and after method is added or updated"
 
 	| project |
 
 	project := RwProject newNamed: projectName.
 
-	self deny: project isDirty.
+	validate ifTrue: [ self deny: project isDirty ].
 
 	theBehavior
 		rwCompileMethod: methodSource
 		category:  '*' , packageName asLowercase.
 
-	self assert: project isDirty.
+	validate ifTrue: [ self assert: project isDirty ].
 
 ]
 
 { #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _addPackageNamed: packageName toProjectNamed: projectName [
+
+	^ self _addPackageNamed: packageName toProjectNamed: projectName validate: true
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _addPackageNamed: packageName toProjectNamed: projectName validate: validate [
 
 	"validate the dirty state of project before and after add package call"
 
@@ -58,16 +79,23 @@ RwRowanProjectIssuesTest >> _addPackageNamed: packageName toProjectNamed: projec
 
 	project := RwProject newNamed: projectName.
 
-	self deny: project isDirty.
+	validate ifTrue: [ self deny: project isDirty ].
 
 	Rowan projectTools browser addPackageNamed: packageName toProjectNamed: projectName.
 
-	self assert: project isDirty.
+	validate ifTrue: [ self assert: project isDirty ].
 
 ]
 
 { #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPath [
+
+	^ self _createLoadedProjectNamed: projectName root: rootPath validate: true
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPath validate: validate [
 
 	| projectDefinition project |
 
@@ -93,12 +121,19 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPat
 
 	project := RwProject newNamed: projectName.
 
-	self assert: project isDirty. "a project is dirty if it has changes that are not written to disk"
+	validate ifTrue: [ self assert: project isDirty ]. "a project is dirty if it has changes that are not written to disk"
 
 ]
 
 { #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _removeClassNamed: className fromProjectNamed: projectName [
+
+	^ self _removeClassNamed: className fromProjectNamed: projectName validate: true
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _removeClassNamed: className fromProjectNamed: projectName validate: validate [
 
 	"validate the dirty state of project before and after class is added"
 
@@ -106,16 +141,23 @@ RwRowanProjectIssuesTest >> _removeClassNamed: className fromProjectNamed: proje
 
 	project := RwProject newNamed: projectName.
 
-	self deny: project isDirty.
+	validate ifTrue: [ self deny: project isDirty ].
 
 	Rowan projectTools browser removeClassNamed: className.
 
-	self assert: project isDirty.
+	validate ifTrue: [ self assert: project isDirty ].
 
 ]
 
 { #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _removePackageNamed: packageName from: projectName [
+
+	^ self _removePackageNamed: packageName from: projectName validate: true
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _removePackageNamed: packageName from: projectName validate: validate [
 
 	"validate the dirty state of project before and after remove package call"
 
@@ -123,19 +165,26 @@ RwRowanProjectIssuesTest >> _removePackageNamed: packageName from: projectName [
 
 	project := RwProject newNamed: projectName.
 
-	self deny: project isDirty.
+	validate ifTrue: [ self deny: project isDirty ].
 
 	Rowan projectTools browser removePackageNamed: packageName.
 
 	(Rowan image loadedPackageNamed: packageName ifAbsent: [])
 		ifNotNil: [:loadedPackage | self assert: false description: 'unexpected loaded package ', packageName printString ].
 
-	self assert: project isDirty.
+	validate ifTrue: [ self assert: project isDirty ].
 
 ]
 
 { #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _removeSelector: selector fromBehavior: theBehavior inProjectNamed: projectName [
+
+	^ self _removeSelector: selector fromBehavior: theBehavior inProjectNamed: projectName validate: true
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _removeSelector: selector fromBehavior: theBehavior inProjectNamed: projectName validate: validate [
 
 	"validate the dirty state of project before and after method is removed"
 
@@ -143,16 +192,23 @@ RwRowanProjectIssuesTest >> _removeSelector: selector fromBehavior: theBehavior 
 
 	project := RwProject newNamed: projectName.
 
-	self deny: project isDirty.
+	validate ifTrue: [ self deny: project isDirty ].
 
 	theBehavior rwRemoveSelector: selector.
 
-	self assert: project isDirty.
+	validate ifTrue: [ self assert: project isDirty ].
 
 ]
 
 { #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _updateClassNamed: className toPackageNamed: packageName inProjectNamed: projectName [
+
+	^ self _updateClassNamed: className toPackageNamed: packageName inProjectNamed: projectName validate: true
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _updateClassNamed: className toPackageNamed: packageName inProjectNamed: projectName validate: validate [
 
 	"validate the dirty state of project before and after class is added"
 
@@ -160,7 +216,7 @@ RwRowanProjectIssuesTest >> _updateClassNamed: className toPackageNamed: package
 
 	project := RwProject newNamed: projectName.
 
-	self deny: project isDirty.
+	validate ifTrue: [ self deny: project isDirty ].
 
 	theClass := Object
 		rwSubclass: className
@@ -171,7 +227,7 @@ RwRowanProjectIssuesTest >> _updateClassNamed: className toPackageNamed: package
 		category: packageName
 		options: #().
 
-	self assert: project isDirty.
+	validate ifTrue: [ self assert: project isDirty ].
 
 	^theClass
 
@@ -180,17 +236,24 @@ RwRowanProjectIssuesTest >> _updateClassNamed: className toPackageNamed: package
 { #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _writeProjectNamed: projectName [
 
+	^ self _writeProjectNamed: projectName validate: true
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _writeProjectNamed: projectName validate: validate [
+
 	"validate the dirty state of project before and after write"
 
 	| project |
 
 	project := RwProject newNamed: projectName.
 
-	self assert: project isDirty. "a project is dirty if it has changes that are not written to disk"
+	validate ifTrue: [ self assert: project isDirty ]. "a project is dirty if it has changes that are not written to disk"
 
 	Rowan projectTools write writeProjectNamed: projectName.
 
-	self deny: project isDirty. "a project is not dirty if it has been written to disk"
+	validate ifTrue: [ self deny: project isDirty ]. "a project is not dirty if it has been written to disk"
 
 ]
 
@@ -261,7 +324,7 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveClass [
 RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveMethods [
 
 	| projectName packageName className theClass |
-	projectName := 'Issue24_addUpdateRemoveClass'.
+	projectName := 'Issue24_addUpdateRemoveMethods'.
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
@@ -300,6 +363,39 @@ RwRowanProjectIssuesTest >> testIssue24_addUpdateRemoveMethods [
 	self _removeSelector: #foo fromBehavior: theClass class inProjectNamed: projectName.
 
 	self _writeProjectNamed: projectName.
+
+]
+
+{ #category : 'tests-issue 24' }
+RwRowanProjectIssuesTest >> testIssue24_loadProject [
+
+	| projectName packageName className theClass project |
+	projectName := 'Issue24_loadProject'.
+	packageName := 'Issue24-Core'.
+	className := 'Issue24Class'.
+
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'  validate: false.
+	self _addPackageNamed: packageName toProjectNamed: projectName  validate: false.
+	theClass := self _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName  validate: false.
+	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName inProjectNamed: projectName  validate: false.
+	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass class inPackage: packageName inProjectNamed: projectName  validate: false.
+	self _writeProjectNamed: projectName  validate: false.
+
+	project := RwProject newNamed: projectName.
+
+	self deny: project isDirty.
+
+	Rowan projectTools load loadProjectNamed: projectName.
+
+	self deny: project isDirty.
+
+	self _addOrUpdateMethod:  'foo ^''bar''' forBehavior: theClass class inPackage: packageName inProjectNamed: projectName  validate: true.
+
+	self assert: project isDirty.
+
+	Rowan projectTools loadProjectNamed: projectName.
+
+	self deny: project isDirty.
 
 ]
 
