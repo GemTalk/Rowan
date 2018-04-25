@@ -27,3 +27,10 @@ RwPackage >> extendedClasses [
 
 	^ self _packageTools query classExtensionsForPackageNamed: self name
 ]
+
+{ #category : 'testing' }
+RwPackage >> isDirty [
+
+	^self _loadedPackage isDirty
+
+]
