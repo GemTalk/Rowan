@@ -23,6 +23,7 @@ Class {
 		'extendedMethods',
 		'methodsWithPropertyChanges',
 		'methodsNeedingRecompile',
+		'pureMovedMethods',
 		'tempSymbols',
 		'createdClasses',
 		'errors',
@@ -865,10 +866,18 @@ RwGsPatchSetBasic >> moveMethodsBetweenPackages [
 				ifNotNil: [ :selectorMap | 
 					(selectorMap at: patch methodDefinition selector ifAbsent: [])
 						ifNotNil: [ :methodDeletionPatch | 
+							| methodMod |
 							methodDeletionPatch
 								deleteLoadedMethodNewClasses: createdClasses
 								andExistingClasses: tempSymbols.
-							deletedMethods remove: methodDeletionPatch ] ] ]
+							deletedMethods remove: methodDeletionPatch.
+							methodMod := patch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
+							(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
+								ifTrue: [ 
+									"the source is identical ... so it is a pure move of the method ... record this fact
+										for operations that care. "
+									self halt ] ] ] ]
+
 ]
 
 { #category : 'private - applying' }
