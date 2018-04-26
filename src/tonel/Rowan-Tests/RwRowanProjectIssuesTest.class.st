@@ -315,11 +315,11 @@ RwRowanProjectIssuesTest >> _writeProjectNamed: projectName validate: validate [
 ]
 
 { #category : 'tests-issue 114' }
-RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter [
+RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_1 [
 
 	"https://github.com/dalehenrich/Rowan/issues/114"
 
-	"new class version and changes in other packages"
+	"new class version of superclass and new method in subclass"
 
 	| projectName packageName1 packageName2 theClass1 theClass2 projectDefinition classDefinition |
 	projectName := 'Issue114_project'.
@@ -357,6 +357,40 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter [
 	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
 			on: RwExecuteClassInitializeMethodsAfterLoadNotification
 			do: [:ex | ex resume: true ].
+
+]
+
+{ #category : 'tests-issue 114' }
+RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_2 [
+
+	"https://github.com/dalehenrich/Rowan/issues/114"
+
+	"new class version of superclass and changed comment in subclass"
+
+
+	self assert: false
+
+]
+
+{ #category : 'tests-issue 114' }
+RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_3 [
+
+	"https://github.com/dalehenrich/Rowan/issues/114"
+
+	"existing method in subclass, new class version of superclass and new method in subclass"
+
+self assert: false
+
+]
+
+{ #category : 'tests-issue 114' }
+RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_4 [
+
+	"https://github.com/dalehenrich/Rowan/issues/114"
+
+	"existing method in subclass, new class version of superclass, new method and new comment in subclass -- combo"
+
+self assert: false
 
 ]
 
