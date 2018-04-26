@@ -5,6 +5,36 @@ Class {
 }
 
 { #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridClassComment [
+
+	| normalClass projectName packageNames packageName comment |
+	projectName := 'Hybrid Project A'.
+	packageName := 'HybridA-Core'.
+	packageNames := {packageName}.
+	comment := 'a comment'.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
+	self assert: normalClass rowanPackageName = packageName.
+
+	normalClass rwComment: comment.
+	self assert: normalClass comment = comment
+
+]
+
+{ #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridClassCreation [
 
 	| byteClass indexableClass normalClass projectName packageNames packageName1 packageName2 |

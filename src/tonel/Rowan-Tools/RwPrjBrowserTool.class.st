@@ -843,3 +843,25 @@ RwPrjBrowserTool >> removePackageNamed: packageName [
 	Rowan projectTools load loadProjectDefinition: projectDef
 
 ]
+
+{ #category : 'class browsing' }
+RwPrjBrowserTool >> updateClassComment: aString forClassNamed: className [ 
+
+	"update the comment of the named class"
+
+	| loadedClass projectDefinition packageDefinition classDefinition |
+	loadedClass := Rowan image 
+		loadedClassNamed: className 
+		ifAbsent: [
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify an unpackage method in the class ', className printString.
+			"Notification resumed, so continue with add/modify"
+			^ (Rowan globalNamed: className) comment: aString ].
+
+	projectDefinition := loadedClass loadedProject asDefinition.
+	packageDefinition := projectDefinition packageNamed: loadedClass loadedPackage name.
+	classDefinition := packageDefinition classDefinitions at: loadedClass name.
+	classDefinition comment: aString.
+
+	self class load loadProjectDefinition: projectDefinition.
+
+]

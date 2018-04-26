@@ -33,6 +33,15 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 ]
 
 { #category : '*rowan-gemstone-core' }
+Class >> rwComment: aString [
+
+	^ Rowan projectTools browser
+		updateClassComment: aString
+		forClassNamed: self thisClass name asString
+
+]
+
+{ #category : '*rowan-gemstone-core' }
 Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName options: optionsArray [
 
 	^ Rowan projectTools browser
