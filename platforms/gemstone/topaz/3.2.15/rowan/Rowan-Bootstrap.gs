@@ -569,9 +569,15 @@ currentOrNil
           do: [:projectDefinition |
             projectSetDefinition addProject: projectDefinition ] ].
     [ 
-      Rowan projectTools load
+      [ Rowan projectTools load
         _bootstrapLoadProjectSetDefinition: projectSetDefinition 
         instanceMigrator: Rowan platform instanceMigrator ]
+          on: RwExecuteClassInitializeMethodsAfterLoadNotification
+          do: [:ex | ex resume: true ].
+        "loaded project and loaded packages read from disk - mark them not dirty"
+        projectSetDefinition deriveLoadedThings do: [:loadedProject |
+          loadedProject markNotDirty.
+          loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ] ]
       on: Warning
       do: [ :ex | 
         Transcript
