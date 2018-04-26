@@ -446,6 +446,7 @@ RwGsLoadedClass >> updateSymbolDictionaryFromClass [
 			[RwNotification
 				signal: 'Class resolved in more than one SymbolDictionary. Using first found.'].
 	newName := dicts first name.
-	oldName := self propertyAt: 'SymbolDictionary'.
+	oldName := self propertyAt: 'gs_SymbolDictionary'.
 	oldName = newName ifFalse: [self symbolDictionaryName: newName]
+
 ]
