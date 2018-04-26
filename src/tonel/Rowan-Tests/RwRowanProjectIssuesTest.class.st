@@ -394,15 +394,22 @@ RwRowanProjectIssuesTest >> testIssue114_missingClassModification [
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
 
+	self assert: theClass1 new foo = 1.
+	self assert: theClass2 new foo = 1.
+
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	classDefinition := (projectDefinition packageNamed: packageName1) classDefinitions at:  'Issue114Class_1'.
 	classDefinition instVarNames: #(ivar1).	"new class version"
 	classDefinition updateInstanceMethodDefinition:  (RwMethodDefinition
-						newForSelector: #'ivar1'
+						newForSelector: #'foo'
 						protocol: 'accessing'
 						source: 'foo ^2').
+	classDefinition updateInstanceMethodDefinition:  (RwMethodDefinition
+						newForSelector: #'ivar1'
+						protocol: 'accessing'
+						source: 'ivar1 ^ivar1').
 	classDefinition := (projectDefinition packageNamed: packageName2) classDefinitions at:  'Issue114Class_2'.
-	classDefinition instVarNames: #().	"new class version"
+	classDefinition instVarNames: #().
 	classDefinition updateInstanceMethodDefinition:  (RwMethodDefinition
 						newForSelector: #'foo'
 						protocol: 'accessing'
@@ -410,6 +417,12 @@ RwRowanProjectIssuesTest >> testIssue114_missingClassModification [
 	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
 			on: RwExecuteClassInitializeMethodsAfterLoadNotification
 			do: [:ex | ex resume: true ].
+
+	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
+	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
+	self assert: theClass1 new foo = 2.
+	self assert: theClass1 new ivar1 isNil.
+	self assert: theClass2 new foo = 2.
 
 ]
 
