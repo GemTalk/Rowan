@@ -35,7 +35,9 @@ RwClassDefinition >> fromCypressClassStructure: aCypressClassStructure [
 		at: 'category' put: aCypressClassStructure category;
 		at: 'classinstvars' put: aCypressClassStructure classInstanceVariableNames;
 		at: 'classvars' put: aCypressClassStructure classVariableNames;
-		at: 'comment' put: aCypressClassStructure comment;
+		yourself.
+	aCypressClassStructure comment ifNotNil: [ :cmt | properties at: 'comment' put: cmt ].
+	properties
 		at: 'instvars' put: aCypressClassStructure instanceVariableNames;
 		at: 'name' put: aCypressClassStructure className;
 		at: 'pools' put: aCypressClassStructure poolDictionaryNames;
@@ -54,6 +56,7 @@ RwClassDefinition >> fromCypressClassStructure: aCypressClassStructure [
 			self
 				addClassMethodDefinition:
 					(RwMethodDefinition fromCypressMethod: cypMethodDef) ]
+
 ]
 
 { #category : '*rowan-cypress' }

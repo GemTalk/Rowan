@@ -84,16 +84,27 @@ RwDefinition >> comparePropertiesAgainstBase: aDefinition [
 	keys addAll: aDefinition properties keys.
 	keys do: 
 			[:key |
-			| before after |
-			before := aDefinition propertyAt: key ifAbsent: [nil].
-			after := self propertyAt: key ifAbsent: [nil].
-			before = after
-				ifFalse: 
-					[modification addElementModification: (RwPropertyModification
+			(self excludedProperties includes: key)
+				ifFalse: [ 
+					| before after |
+					before := aDefinition propertyAt: key ifAbsent: [nil].
+					after := self propertyAt: key ifAbsent: [nil].
+					before = after
+						ifFalse: 
+							[modification addElementModification: (RwPropertyModification
 								key: key
 								oldValue: before
-								newValue: after)]].
+								newValue: after) ]]].
 	^modification
+
+]
+
+{ #category : 'comparing' }
+RwDefinition >> excludedProperties [
+	"return a list of properties that should be ignored when comparing"
+
+	^ #()
+
 ]
 
 { #category : 'initialization' }
