@@ -4,6 +4,37 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
+{ #category : 'private' }
+RwRowanProjectIssuesTest >> _addClassNamed: className superclassName: superclassName classVars: classVars toPackageNamed: packageName inProjectNamed: projectName validate: validate [
+
+	"validate the dirty state of project before and after class is added"
+
+	| project package theClass |
+
+	project := RwProject newNamed: projectName.
+	package := RwPackage newNamed: packageName.
+
+	validate ifTrue: [ 
+		self deny: project isDirty.
+		self deny: package isDirty ].
+
+	theClass := (Rowan globalNamed: superclassName)
+		rwSubclass: className
+		instVarNames: #()
+		classVars: classVars
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName
+		options: #().
+
+	validate ifTrue: [ 
+		self assert: project isDirty.
+		self assert: package isDirty ].
+
+	^theClass
+
+]
+
 { #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName [
 
@@ -474,6 +505,46 @@ RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenProjects [
 
 	"move a method from one package to another"
 	self assert: false
+
+]
+
+{ #category : 'tests-issue 40' }
+RwRowanProjectIssuesTest >> testIssue40 [
+
+	"https://github.com/dalehenrich/Rowan/issues/40"
+
+	| projectName packageName theClass1 theClass2 |
+	projectName := 'Issue40_project'.
+	packageName := 'Issue40-Core'.
+
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _addPackageNamed: packageName toProjectNamed: projectName validate: false.
+
+	theClass1 := self 
+		_addClassNamed: 'Issue40Class_1' 
+		superclassName: 'Object' 
+		classVars: #( CVar1 )
+		toPackageNamed: packageName 
+		inProjectNamed: projectName 
+		validate: false.
+
+	theClass2 := self 
+		_addClassNamed: 'Issue40Class_2' 
+		superclassName: 'Issue40Class_1' 
+		classVars: #( CVar2 )
+		toPackageNamed: packageName 
+		inProjectNamed: projectName 
+		validate: false.
+	self _addOrUpdateMethod: 'cvar1 ^CVar1' forBehavior: theClass2 class inPackage: packageName inProjectNamed: projectName validate: false.
+	self _addOrUpdateMethod: 'cvar2 ^CVar2' forBehavior: theClass2 class inPackage: packageName inProjectNamed: projectName validate: false.
+
+	[ self _addOrUpdateMethod: 'initialize CVar2 := CVar1 + 1' forBehavior: theClass2 class inPackage: packageName inProjectNamed: projectName validate: false.
+	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass1 class inPackage: packageName inProjectNamed: projectName validate: false  ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
+
+	self assert: theClass2 cvar1 = 1.
+	self assert: theClass2 cvar2 = 2.
 
 ]
 
