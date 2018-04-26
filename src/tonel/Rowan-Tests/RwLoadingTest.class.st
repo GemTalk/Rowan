@@ -1172,11 +1172,14 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBe
 	diff1 := myPackageSet compareAgainstBase: imagePackageSet1.
 	self deny: diff1 isEmpty.
 
-	Rowan packageTools load loadPackageSetDefinition: myPackageSet.
+	[ Rowan packageTools load loadPackageSetDefinition: myPackageSet ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 
 	imagePackageSet2 := Rowan loadedPackageDefinitionsNamed: packageNames.
 	diff2 := myPackageSet compareAgainstBase: imagePackageSet2.
 	self assert: diff2 isEmpty
+
 ]
 
 { #category : 'support' }
@@ -1798,10 +1801,13 @@ RwLoadingTest >> testClassInitialization1 [
 						classMethodDefinitions:
 							(self classInitializationClassMethodsForClass1: className));
 		yourself.
-	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+	[ self loadAndTestPackagesNamed: packageNames using: myPackageSet ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass classVar = 1.
 	self assert: testClass classInstVar1 = 1
+
 ]
 
 { #category : 'tests' }

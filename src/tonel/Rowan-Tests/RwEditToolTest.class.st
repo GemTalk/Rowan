@@ -48,7 +48,10 @@ RwEditToolTest >> _loadExtendedProjectDefinition: projectName packageNames: pack
 		inPackageNamed: packageName2
 		inProject: projectDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
+
 ]
 
 { #category : 'private' }
@@ -106,7 +109,10 @@ RwEditToolTest >> _loadExtendedProjectDefinition: projectName packageNames: pack
 		inProject: projectDefinition.
 
 
-	projectTools load loadProjectDefinition: projectDefinition
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
+
 ]
 
 { #category : 'private' }
@@ -129,7 +135,10 @@ RwEditToolTest >> _loadStandardProjectDefinition: projectName packageNames: pack
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
+
 ]
 
 { #category : 'private' }
@@ -217,7 +226,9 @@ RwEditToolTest >> testAddAndRemoveClass [
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition.
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
@@ -232,10 +243,13 @@ RwEditToolTest >> testAddAndRemoveClass [
 		fromPackageNamed: packageName
 		inProject: projectDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition.
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass isNil
+
 ]
 
 { #category : 'tests - classes' }
@@ -304,7 +318,9 @@ RwEditToolTest >> testAddUpdateAndRemoveClass [
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition.
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
@@ -348,6 +364,7 @@ RwEditToolTest >> testAddUpdateAndRemoveClass [
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass isNil
+
 ]
 
 { #category : 'tests - classes' }
