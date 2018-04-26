@@ -497,12 +497,17 @@ RwRowanProjectIssuesTest >> testIssue41_addUpdateInitializeExtensionMethods [
 
 	self _addOrUpdateMethod: 'cvar1 ^CVar1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'cvar2 ^CVar2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
-	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	
+	[ self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 isNil.
 
-	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	[ self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
@@ -514,9 +519,36 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveAddUpdateInitializeExtensionM
 
 	"https://github.com/dalehenrich/Rowan/issues/41"
 
-	"Interactive updates to methods should not trigger initialization"
+	"Are extension method initialization methods run correctly for add and update - interactive edits should not trigger updates "
 
-	self assert: false
+	| projectName packageName1 packageName2 className theClass  |
+	projectName := 'Issue41_project'.
+	packageName1 := 'Issue41-Core'.
+	packageName2 := 'Issue41-Extensions'.
+	className := 'Issue41Class'.
+
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
+	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
+	theClass := self _updateClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName validate: false.
+
+	self _addOrUpdateMethod: 'cvar1 ^CVar1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	self _addOrUpdateMethod: 'cvar2 ^CVar2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	
+	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+
+	self assert: theClass cvar1 isNil.
+	self assert: theClass cvar2 isNil.
+
+	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+
+	self assert: theClass cvar1 isNil.
+	self assert: theClass cvar2 isNil.
+
+	theClass initialize.
+
+	self assert: theClass cvar1 = 1.
+	self assert: theClass cvar2 = 2.
 
 ]
 
@@ -525,9 +557,83 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 
 	"https://github.com/dalehenrich/Rowan/issues/41"
 
-	"Interactive move of methods should not trigger initialization"
+	"Are extension method initialization methods run correctly for add and update"
 
-	self assert: false
+	| projectName packageName1 packageName2 packageName3 className theClass  |
+	projectName := 'Issue41_project'.
+	packageName1 := 'Issue41-Core'.
+	packageName2 := 'Issue41-Extensions1'.
+	packageName3 := 'Issue41-Extensions2'.
+	className := 'Issue41Class'.
+
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
+	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
+	self _addPackageNamed: packageName3 toProjectNamed: projectName validate: false.
+	theClass := self _updateClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName validate: false.
+
+	self _addOrUpdateMethod: 'cvar1 ^CVar1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	self _addOrUpdateMethod: 'cvar2 ^CVar2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	self _addOrUpdateMethod: 'cvar1: anInt CVar1 := anInt' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	self _addOrUpdateMethod: 'cvar2: anInt CVar2 := anInt' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	
+	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+
+	self assert: theClass cvar1 isNil.
+	self assert: theClass cvar2 isNil.
+
+	theClass 
+		cvar1: 3;
+		cvar2: 4.
+	self assert: theClass cvar1 = 3.
+	self assert: theClass cvar2 = 4.
+
+	"initialize method changed in same package"
+	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+
+	self assert: theClass cvar1 = 3.
+	self assert: theClass cvar2 = 4.
+
+	theClass 
+		cvar1: 5;
+		cvar2: 6.
+	self assert: theClass cvar1 = 5.
+	self assert: theClass cvar2 = 6.
+
+	"initialize method changed and moved to new package"
+	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
+
+	self assert: theClass cvar1 = 5.
+	self assert: theClass cvar2 = 6.
+
+	theClass 
+		cvar1: 5;
+		cvar2: 6.
+	self assert: theClass cvar1 = 5.
+	self assert: theClass cvar2 = 6.
+
+	"initialize method not changed and left in same package"
+	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
+
+	self assert: theClass cvar1 = 5.
+	self assert: theClass cvar2 = 6.
+
+	theClass 
+		cvar1: 5;
+		cvar2: 6.
+	self assert: theClass cvar1 = 5.
+	self assert: theClass cvar2 = 6.
+
+	"initialize method not changed and moved to new package"
+	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+
+	self assert: theClass cvar1 = 5.
+	self assert: theClass cvar2 = 6.
+
+	theClass initialize.
+
+	self assert: theClass cvar1 = 1.
+	self assert: theClass cvar2 = 2.
 
 ]
 
@@ -555,7 +661,10 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 	self _addOrUpdateMethod: 'cvar2 ^CVar2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'cvar1: anInt CVar1 := anInt' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'cvar2: anInt CVar2 := anInt' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
-	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	
+	[ self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 isNil.
@@ -566,8 +675,10 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 	self assert: theClass cvar1 = 3.
 	self assert: theClass cvar2 = 4.
 
-	"initialize method changed in same package"
-	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	[	"initialize method changed in same package"
+		self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false ]
+			on: RwExecuteClassInitializeMethodsAfterLoadNotification
+			do: [:ex | ex resume: true ].
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
@@ -578,8 +689,10 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 	self assert: theClass cvar1 = 5.
 	self assert: theClass cvar2 = 6.
 
-	"initialize method changed and moved to new package"
-	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
+	[	"initialize method changed and moved to new package"
+		self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false ]
+			on: RwExecuteClassInitializeMethodsAfterLoadNotification
+			do: [:ex | ex resume: true ].
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
@@ -590,17 +703,18 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 	self assert: theClass cvar1 = 5.
 	self assert: theClass cvar2 = 6.
 
-	"initialize method not changed and left in same package"
-	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
+	[	"initialize method not changed and left in same package"
+		self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false ]
+			on: RwExecuteClassInitializeMethodsAfterLoadNotification
+			do: [:ex | ex resume: true ].
 
 	self assert: theClass cvar1 = 5.
 	self assert: theClass cvar2 = 6.
 
-	theClass 
-		cvar1: 5;
-		cvar2: 6.
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
+	theClass initialize.
+
+	self assert: theClass cvar1 = 1.
+	self assert: theClass cvar2 = 2.
 
 ]
 
@@ -628,7 +742,10 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 	self _addOrUpdateMethod: 'cvar2 ^CVar2' forBehavior: theClass class inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'cvar1: anInt CVar1 := anInt' forBehavior: theClass class inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'cvar2: anInt CVar2 := anInt' forBehavior: theClass class inPackage: packageName1 inProjectNamed: projectName validate: false.
-	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName1 inProjectNamed: projectName validate: false.
+
+	[ self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName1 inProjectNamed: projectName validate: false ]
+			on: RwExecuteClassInitializeMethodsAfterLoadNotification
+			do: [:ex | ex resume: true ].
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
@@ -639,11 +756,18 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 	self assert: theClass cvar1 = 3.
 	self assert: theClass cvar2 = 4.
 
-	"initialize method not changed and moved to new package"
-	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+	[	"initialize method not changed and moved to new package"
+		self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false ]
+			on: RwExecuteClassInitializeMethodsAfterLoadNotification
+			do: [:ex | ex resume: true ].
 
 	self assert: theClass cvar1 = 3.
 	self assert: theClass cvar2 = 4.
+
+	theClass initialize.
+
+	self assert: theClass cvar1 = 1.
+	self assert: theClass cvar2 = 2.
 
 ]
 

@@ -52,58 +52,83 @@ RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 { #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectNamed: projectNamed [
 
-	"load the named project from disk, mark the loaded projects not dirty"
+	"load the named project from disk, mark the loaded projects not dirty and run initializers"
 
 	| projectSetDefinition res |
 	projectSetDefinition := self class read
 		readProjectSetForProjectNamed: projectNamed.
-	res := self loadProjectSetDefinition: projectSetDefinition.
+	[ res := self loadProjectSetDefinition: projectSetDefinition ]
+			on: RwExecuteClassInitializeMethodsAfterLoadNotification
+			do: [:ex | ex resume: true ].
 	"loaded project and loaded packages read from disk - mark them not dirty"
 	projectSetDefinition deriveLoadedThings do: [:loadedProject |
 		loadedProject markNotDirty.
 		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
 	^ res
 
-
 ]
 
 { #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectNamed: projectNamed instanceMigrator: instanceMigrator [
 
-	"load the named project from disk"
+	"load the named project from disk, mark the loaded projects not dirty and run initializers"
 
-	| projectSetDefinition |
+	| projectSetDefinition res |
 	projectSetDefinition := self class read
 		readProjectSetForProjectNamed: projectNamed.
-	^ self
+	[ res := self
 		loadProjectSetDefinition: projectSetDefinition
-		instanceMigrator: instanceMigrator
+		instanceMigrator: instanceMigrator ]
+			on: RwExecuteClassInitializeMethodsAfterLoadNotification
+			do: [:ex | ex resume: true ].
+	"loaded project and loaded packages read from disk - mark them not dirty"
+	projectSetDefinition deriveLoadedThings do: [:loadedProject |
+		loadedProject markNotDirty.
+		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
+	^ res
+
 ]
 
 { #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName [
 
-	"load the named project from disk"
+	"load the named project from disk, mark the loaded projects not dirty and run initializers"
 
-	| projectSetDefinition |
+	| projectSetDefinition res |
 	projectSetDefinition := self class read
 		readProjectSetForProjectNamed: projectNamed
 		withConfiguration: configName.
-	^ self loadProjectSetDefinition: projectSetDefinition
+	[ res := self loadProjectSetDefinition: projectSetDefinition  ]
+			on: RwExecuteClassInitializeMethodsAfterLoadNotification
+			do: [:ex | ex resume: true ].
+	"loaded project and loaded packages read from disk - mark them not dirty"
+	projectSetDefinition deriveLoadedThings do: [:loadedProject |
+		loadedProject markNotDirty.
+		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
+	^ res
+
 ]
 
 { #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName instanceMigrator: instanceMigrator [
 
-	"load the named project from disk"
+	"load the named project from disk, mark the loaded projects not dirty and run initializers"
 
-	| projectSetDefinition |
+	| projectSetDefinition res |
 	projectSetDefinition := self class read
 		readProjectSetForProjectNamed: projectNamed
 		withConfiguration: configName.
-	^ self
+	[ res := self
 		loadProjectSetDefinition: projectSetDefinition
-		instanceMigrator: instanceMigrator
+		instanceMigrator: instanceMigrator ]
+			on: RwExecuteClassInitializeMethodsAfterLoadNotification
+			do: [:ex | ex resume: true ].
+	"loaded project and loaded packages read from disk - mark them not dirty"
+	projectSetDefinition deriveLoadedThings do: [:loadedProject |
+		loadedProject markNotDirty.
+		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
+	^ res
+
 ]
 
 { #category : 'smalltalk api' }

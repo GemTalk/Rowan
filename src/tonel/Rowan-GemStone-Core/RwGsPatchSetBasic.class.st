@@ -945,7 +945,9 @@ RwGsPatchSetBasic >> runInitializers [
 		yourself) do: [ :methodPatch | 
 			"a pure move, is a method that moved between packages with no change in source ... do not run initialize method in this case"
 			(pureMovedMethods includes: methodPatch) 
-				ifFalse: [ methodPatch runInitializer ] ]
+				ifFalse: [ 
+					RwExecuteClassInitializeMethodsAfterLoadNotification signal 
+						ifTrue: [ methodPatch runInitializer ] ] ]
 
 ]
 
