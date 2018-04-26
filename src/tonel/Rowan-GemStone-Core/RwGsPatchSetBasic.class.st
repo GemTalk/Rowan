@@ -769,10 +769,16 @@ RwGsPatchSetBasic >> createdClass: aClass [
 
 	| className |
 	className := aClass name.
-	(createdClasses includesKey: className)
-		ifTrue: [self error: 'Duplicate class creation'].
-	createdClasses
-		add: (SymbolAssociation newWithKey: className value: aClass)
+	(createdClasses at: className ifAbsent: [ ])
+		ifNil: [ 
+			createdClasses
+				add: (SymbolAssociation newWithKey: className value: aClass) ]
+		ifNotNil: [:cl | 
+			cl == aClass
+				ifFalse: [ 
+					"new version created, update entry in createdClasses"
+					createdClasses at: className put: aClass ] ]
+
 ]
 
 { #category : 'accessing' }

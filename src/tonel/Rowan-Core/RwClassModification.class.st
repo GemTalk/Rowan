@@ -92,8 +92,6 @@ RwClassModification >> mergeForNewClassVersionWith: aClassModification [
 
 	"merge aClassModification modifictions into the receiver"
 
-	after == aClassModification after
-		ifFalse: [ self error: 'internal error - both modifications must share a common after' ].
 	aClassModification propertiesModification isEmpty
 		ifFalse: [ 
 			self
@@ -103,4 +101,5 @@ RwClassModification >> mergeForNewClassVersionWith: aClassModification [
 		mergeForNewClassVersionWith: aClassModification instanceMethodsModification.
 	classMethodsModification
 		mergeForNewClassVersionWith: aClassModification classMethodsModification
+
 ]

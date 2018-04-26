@@ -358,6 +358,9 @@ RwRowanProjectIssuesTest >> testIssue114_bothModificationsMustShareCommonAfter_1
 			on: RwExecuteClassInitializeMethodsAfterLoadNotification
 			do: [:ex | ex resume: true ].
 
+	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
+	self assert: theClass2 new ivar1 isNil.
+
 ]
 
 { #category : 'tests-issue 114' }
