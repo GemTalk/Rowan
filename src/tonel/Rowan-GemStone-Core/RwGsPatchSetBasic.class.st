@@ -32,6 +32,67 @@ Class {
 	#category : 'Rowan-GemStone'
 }
 
+{ #category : 'private - method initialization order' }
+RwGsPatchSetBasic class >> _anyElementOf: aCollection ifEmpty: aBlock [
+	aCollection do: [ :each | ^ each ].
+	^ aBlock value
+
+]
+
+{ #category : 'private - method initialization order' }
+RwGsPatchSetBasic class >> _orderBySuperclass: aClass from: toBeOrdered into: order ignoring: processed [
+  "Private. Add to 'order', superclasses first, aClass and any of its superclasses 
+	that appear in 'toBeOrdered' but do not appear in 'processed'.
+	Remove from 'toBeOrdered' any class added to 'ordered'.
+	Any class seen, add to 'processed' whether or not added to 'order'."
+
+  | superclass |
+  superclass := aClass superclass.
+  superclass isNil | (processed includes: superclass)
+    ifFalse: [ 
+      self
+        _orderBySuperclass: superclass
+        from: toBeOrdered
+        into: order
+        ignoring: processed ].
+  processed add: aClass.
+  (toBeOrdered includes: aClass)
+    ifTrue: [ 
+      toBeOrdered remove: aClass.
+      order add: aClass ]
+
+]
+
+{ #category : 'private - method initialization order' }
+RwGsPatchSetBasic class >> anyElementOf: aCollection ifEmpty: aBlock [
+	aCollection do: [ :each | ^ each ].
+	^ aBlock value
+
+]
+
+{ #category : 'private - method initialization order' }
+RwGsPatchSetBasic class >> methodPatchesInInitializationOrder: methodPatches [
+
+	"Returns acollection of the specified methodPatches ordered in superclass order, which is sufficient for initialization order."
+
+	| order toBeOrdered processed aClass patchMap |
+	patchMap := IdentityKeyValueDictionary new.
+	methodPatches do: [:methodPatch |
+		patchMap at: methodPatch behavior thisClass put: methodPatch ].
+	toBeOrdered := patchMap keys asIdentitySet.
+	order := OrderedCollection new.
+	processed := IdentitySet new.
+	[ (aClass := self _anyElementOf: toBeOrdered ifEmpty: [ nil ]) isNil ]
+		whileFalse: [ 
+			self
+				_orderBySuperclass: aClass
+				from: toBeOrdered
+				into: order
+				ignoring: processed ].
+  ^ (order collect: [:orderedClass | patchMap at: orderedClass ifAbsent: []]) select: [:patch | patch notNil ]
+
+]
+
 { #category : 'instance creation' }
 RwGsPatchSetBasic class >> new [
 
@@ -939,10 +1000,16 @@ RwGsPatchSetBasic >> runInitializers [
 
 	"run the class initialization methods as needed"
 
-	(addedMethods copy
+	| methodPatches orderedMethodPatches |
+	methodPatches := (addedMethods copy
 		addAll: extendedMethods;
 		addAll: methodsNeedingRecompile;
-		yourself) do: [ :methodPatch | 
+		yourself) select: [:each | each isAnInitializer ].
+	methodPatches isEmpty ifTrue: [ ^ self ].
+	orderedMethodPatches :=  (self class respondsTo: #methodPatchesInInitializationOrder:)
+		ifTrue: [ self class methodPatchesInInitializationOrder: methodPatches ]
+		ifFalse: [ methodPatches ].
+	orderedMethodPatches do: [ :methodPatch | 
 			"a pure move, is a method that moved between packages with no change in source ... do not run initialize method in this case"
 			(pureMovedMethods includes: methodPatch) 
 				ifFalse: [ 

@@ -50,6 +50,15 @@ RwGsMethodDeletionSymbolDictPatch >> deleteNewVersionMethodNewClasses: createdCl
 ]
 
 { #category : 'initializers' }
+RwGsMethodDeletionSymbolDictPatch >> isAnInitializer [
+
+	"answer true if I represent a class initialization method"
+
+	^ false
+
+]
+
+{ #category : 'initializers' }
 RwGsMethodDeletionSymbolDictPatch >> runInitializer [
 	"noop"
 ]

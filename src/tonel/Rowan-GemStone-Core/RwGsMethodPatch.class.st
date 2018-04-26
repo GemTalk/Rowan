@@ -31,6 +31,13 @@ RwGsMethodPatch class >> forMethod: aMethodDefinition isMeta: isMeta inClass: aC
 ]
 
 { #category : 'accessing' }
+RwGsMethodPatch >> behavior [
+
+	^ behavior
+
+]
+
+{ #category : 'accessing' }
 RwGsMethodPatch >> classDefinition [
 
 	^ classDefinition
@@ -80,6 +87,15 @@ RwGsMethodPatch >> compileUsingNewClasses: createdClasses andExistingClasses: te
 		intoCategories: nil
 		intoPragmas: nil
 		environmentId: self methodEnvironmentId
+]
+
+{ #category : 'initializers' }
+RwGsMethodPatch >> isAnInitializer [
+
+	"answer true if I represent a class initialization method"
+
+	^ isMeta and: [ selector == #'initialize' ]
+
 ]
 
 { #category : 'private-testing' }
@@ -201,8 +217,9 @@ RwGsMethodPatch >> runInitializer [
 
 	"execute class initialization methods"
 
-	(isMeta and: [ selector == #'initialize' ])
+	self isAnInitializer
 		ifTrue: [ behavior thisClass initialize ]
+
 ]
 
 { #category : 'accessing' }

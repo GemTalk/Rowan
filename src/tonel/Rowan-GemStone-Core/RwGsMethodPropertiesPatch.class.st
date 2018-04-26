@@ -41,6 +41,15 @@ RwGsMethodPropertiesPatch >> installPropertiesPatchNewClasses: createdClasses an
 ]
 
 { #category : 'initializers' }
+RwGsMethodPropertiesPatch >> isAnInitializer [
+
+	"answer true if I represent a class initialization method"
+
+	^ false
+
+]
+
+{ #category : 'initializers' }
 RwGsMethodPropertiesPatch >> runInitializer [
 	"noop"
 ]

@@ -513,7 +513,7 @@ RwRowanProjectIssuesTest >> testIssue40 [
 
 	"https://github.com/dalehenrich/Rowan/issues/40"
 
-	| projectName packageName theClass1 theClass2 |
+	| projectName packageName theClass1 theClass2 projectDefinition classDefinition |
 	projectName := 'Issue40_project'.
 	packageName := 'Issue40-Core'.
 
@@ -535,13 +535,25 @@ RwRowanProjectIssuesTest >> testIssue40 [
 		toPackageNamed: packageName 
 		inProjectNamed: projectName 
 		validate: false.
+
 	self _addOrUpdateMethod: 'cvar1 ^CVar1' forBehavior: theClass2 class inPackage: packageName inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'cvar2 ^CVar2' forBehavior: theClass2 class inPackage: packageName inProjectNamed: projectName validate: false.
 
-	[ self _addOrUpdateMethod: 'initialize CVar2 := CVar1 + 1' forBehavior: theClass2 class inPackage: packageName inProjectNamed: projectName validate: false.
-	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass1 class inPackage: packageName inProjectNamed: projectName validate: false  ]
-		on: RwExecuteClassInitializeMethodsAfterLoadNotification
-		do: [:ex | ex resume: true ].
+	"add both class initializationMethods at once, so that order will be important - probably random order, unfortunately"
+	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at:  'Issue40Class_1'.
+	classDefinition addClassMethodDefinition: (RwMethodDefinition
+						newForSelector: #'initialize'
+						protocol: 'initialization'
+						source: 'initialize CVar1 := 1.').
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at:  'Issue40Class_2'.
+	classDefinition addClassMethodDefinition: (RwMethodDefinition
+						newForSelector: #'initialize'
+						protocol: 'initialization'
+						source: 'initialize CVar2 := CVar1 + 1.').
+	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+			on: RwExecuteClassInitializeMethodsAfterLoadNotification
+			do: [:ex | ex resume: true ].
 
 	self assert: theClass2 cvar1 = 1.
 	self assert: theClass2 cvar2 = 2.

@@ -37,6 +37,15 @@ RwGsMethodPropertiesSymDictPatch >> installPropertiesPatchNewClasses: createdCla
 ]
 
 { #category : 'initializers' }
+RwGsMethodPropertiesSymDictPatch >> isAnInitializer [
+
+	"answer true if I represent a class initialization method"
+
+	^ false
+
+]
+
+{ #category : 'initializers' }
 RwGsMethodPropertiesSymDictPatch >> runInitializer [
 	"noop"
 ]

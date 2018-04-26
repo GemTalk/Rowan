@@ -39,6 +39,15 @@ RwGsMethodDeletionPatch >> deleteMethodNewClasses: createdClasses andExistingCla
 ]
 
 { #category : 'initializers' }
+RwGsMethodDeletionPatch >> isAnInitializer [
+
+	"answer true if I represent a class initialization method"
+
+	^ false
+
+]
+
+{ #category : 'initializers' }
 RwGsMethodDeletionPatch >> runInitializer [
 	"noop"
 ]
