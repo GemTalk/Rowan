@@ -314,6 +314,52 @@ RwRowanProjectIssuesTest >> _writeProjectNamed: projectName validate: validate [
 
 ]
 
+{ #category : 'tests-issue 114' }
+RwRowanProjectIssuesTest >> testIssue114 [
+
+	"https://github.com/dalehenrich/Rowan/issues/114"
+
+	"new class version and changes in other packages"
+
+	| projectName packageName1 packageName2 theClass1 theClass2 projectDefinition classDefinition |
+	projectName := 'Issue114_project'.
+	packageName1 := 'Issue114-Core1'.
+	packageName1 := 'Issue114-Core2'.
+
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
+	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
+
+	theClass1 := self 
+		_addClassNamed: 'Issue114Class_1' 
+		superclassName: 'Object' 
+		classVars: #(  )
+		toPackageNamed: packageName1 
+		inProjectNamed: projectName 
+		validate: false.
+
+	theClass2 := self 
+		_addClassNamed: 'Issue114Class_2' 
+		superclassName: 'Issue114Class_1' 
+		classVars: #(  )
+		toPackageNamed: packageName2
+		inProjectNamed: projectName
+		validate: false.
+
+	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	classDefinition := (projectDefinition packageNamed: packageName1) classDefinitions at:  'Issue114Class_1'.
+	classDefinition instVarNames: #(ivar1).	"new class version"
+	classDefinition := (projectDefinition packageNamed: packageName2) classDefinitions at:  'Issue114Class_2'.
+	classDefinition addInstanceMethodDefinition:  (RwMethodDefinition
+						newForSelector: #'ivar1'
+						protocol: 'accessing'
+						source: 'ivar1 ^ivar1') .
+	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+			on: RwExecuteClassInitializeMethodsAfterLoadNotification
+			do: [:ex | ex resume: true ].
+
+]
+
 { #category : 'tests-issue 24' }
 RwRowanProjectIssuesTest >> testIssue24_addProject [
 
