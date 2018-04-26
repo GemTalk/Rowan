@@ -64,13 +64,6 @@ RwGsPatchSetBasic class >> _orderBySuperclass: aClass from: toBeOrdered into: or
 ]
 
 { #category : 'private - method initialization order' }
-RwGsPatchSetBasic class >> anyElementOf: aCollection ifEmpty: aBlock [
-	aCollection do: [ :each | ^ each ].
-	^ aBlock value
-
-]
-
-{ #category : 'private - method initialization order' }
 RwGsPatchSetBasic class >> methodPatchesInInitializationOrder: methodPatches [
 
 	"Returns acollection of the specified methodPatches ordered in superclass order, which is sufficient for initialization order."
