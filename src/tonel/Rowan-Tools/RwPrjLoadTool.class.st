@@ -13,9 +13,7 @@ RwPrjLoadTool >> _bootstrapLoadProjectNamed: projectNamed withConfiguration: con
 	projectSetDefinition := self class read
 		readProjectSetForProjectNamed: projectNamed
 		withConfiguration: configName.
-	[ res := self _bootstrapLoadProjectSetDefinition: projectSetDefinition instanceMigrator: Rowan platform instanceMigrator ]
-			on: RwExecuteClassInitializeMethodsAfterLoadNotification
-			do: [:ex | ex resume: true ].
+	res := self _bootstrapLoadProjectSetDefinition: projectSetDefinition instanceMigrator: Rowan platform instanceMigrator.
 	"loaded project and loaded packages read from disk - mark them not dirty"
 	projectSetDefinition deriveLoadedThings do: [:loadedProject |
 		loadedProject markNotDirty.

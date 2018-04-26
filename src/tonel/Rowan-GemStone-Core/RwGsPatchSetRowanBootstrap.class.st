@@ -70,3 +70,23 @@ RwGsPatchSetRowanBootstrap >> installClassInSystem [
 	addedClasses do: [:each | each addClassToSymbolDictionary]
 
 ]
+
+{ #category : 'private - applying' }
+RwGsPatchSetRowanBootstrap >> runInitializers [
+
+	"run the class initialization methods as needed"
+
+	| methodPatches orderedMethodPatches |
+	methodPatches := (addedMethods copy
+		addAll: extendedMethods;
+		addAll: methodsNeedingRecompile;
+		yourself) select: [:each | each isAnInitializer ].
+	methodPatches isEmpty ifTrue: [ ^ self ].
+	orderedMethodPatches :=  (self class respondsTo: #methodPatchesInInitializationOrder:)
+		ifTrue: [ self class methodPatchesInInitializationOrder: methodPatches ]
+		ifFalse: [ methodPatches ].
+	orderedMethodPatches do: [ :methodPatch | 
+			"unconditional initialization during bootstrap"
+			 methodPatch runInitializer ]
+
+]
