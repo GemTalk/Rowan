@@ -34,9 +34,31 @@ RowanProjectService >> branch [
 ]
 
 { #category : 'rowan' }
+RowanProjectService >> branches [
+
+	| project branches |
+
+	project := (RwProject newNamed: name). 
+	branches := Rowan gitTools gitbranchIn: project repositoryRootPath with: ' --list'.
+	^branches
+
+]
+
+{ #category : 'rowan' }
 RowanProjectService >> changes [
 	
 	^(Rowan projectTools diff diffForProjectName: name) asString
+
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> checkout: branchName [
+
+	| project branches |
+
+	project := (RwProject newNamed: name). 
+	branches := Rowan gitTools gitcheckoutIn: project repositoryRootPath with: branchName.
+	^branches
 
 ]
 

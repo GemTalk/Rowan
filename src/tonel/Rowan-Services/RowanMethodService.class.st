@@ -143,6 +143,14 @@ RowanMethodService >> packageName: newValue [
 
 ]
 
+{ #category : 'rowan' }
+RowanMethodService >> removeSelector: sel class: clsName [
+	
+	self rowanFixMe. "combine remove methods variants"
+	self browserTool removeMethod: sel asSymbol forClassNamed: (clsName subStrings first) isMeta: (clsName subStrings size = 2)
+
+]
+
 { #category : 'examples' }
 RowanMethodService >> sampleClassInstance [
 
