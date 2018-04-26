@@ -250,13 +250,13 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 											"a deletion is not unexpected ... "
 											 ]
 										ifFalse: [ 
-											self halt: 'let''s see how this plays out'.
 											existingClassModification
 												mergeForNewClassVersionWith: newVersionClassModification ] ] ] ].
 			self
 				_updateNewClassVersionPatchesForClass: subclass
 				in: aProjectSetModification
 				patchSet: patchSet ]
+
 ]
 
 { #category : 'new version support' }
@@ -279,12 +279,9 @@ RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectS
 							| classesModified |
 							classesModified := classesModification elementsModified.
 							(classesModified at: existingClassName ifAbsent: [  ])
-								ifNil: [ 
-									self
-										error:
-											'internal error - missing class modification for '
-												, existingClassName printString ]
+								ifNil: [ "not unexpected ... if there are multiple packages involved" ]
 								ifNotNil: [ :existingClassModification | 
 									existingClassModification
 										mergeForNewClassVersionWith: newVersionClassModification ] ] ] ]
+
 ]
