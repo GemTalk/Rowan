@@ -1,6 +1,6 @@
 Extension { #name : 'RwPlatform' }
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 RwPlatform class >> forGemStone [
 
 	| platformClass |

@@ -1,24 +1,24 @@
 Extension { #name : 'RwPackage' }
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 RwPackage >> methodEnv [
 
 	^ self _gemstonePlatformSpec methodEnvForPackageNamed: self name
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 RwPackage >> symbolDictName [
 
 	^ self _gemstonePlatformSpec symbolDictNameForPackageNamed: self name
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 RwPackage >> userId [
 
 	^ self _gemstonePlatformSpec userIdForPackageNamed: self name
 ]
 
-{ #category : '*rowan-gemstone' }
+{ #category : '*rowan-gemstone-core' }
 RwPackage >> useSessionMethodsForExtensions [
 
 	^ self _gemstonePlatformSpec
