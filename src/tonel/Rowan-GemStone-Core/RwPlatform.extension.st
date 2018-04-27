@@ -1,7 +1,9 @@
 Extension { #name : 'RwPlatform' }
 
 { #category : '*rowan-gemstone-core' }
-RwPlatform class >> forGemStone [
+RwPlatform class >> current [
 
-	^ UserGlobals at: #RwUserPlatformInstance ifAbsentPut: [ RwGsPlatform new ]
+	^ (System myUserProfile objectNamed: 'UserGlobals') 
+		at: #RwUserPlatformInstance 
+		ifAbsentPut: [ RwGsPlatform new ]
 ]

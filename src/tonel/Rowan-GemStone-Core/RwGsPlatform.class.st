@@ -107,9 +107,6 @@ RwGsPlatform >> image [
 { #category : 'initialization' }
 RwGsPlatform >> initialize [
 
-	RwGsLoadedPackage initialize.
-	RwGsLoadedClass initialize.
-	RwGsLoadedMethod initialize
 ]
 
 { #category : 'queries' }
