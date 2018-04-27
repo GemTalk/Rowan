@@ -219,6 +219,15 @@ RowanClassService >> removeSelector: selector [
 
 ]
 
+{ #category : 'rowan' }
+RowanClassService >> removeSelector: selector ifAbsent: absentBlock [
+
+	(self classFromName compiledMethodAt: selector otherwise: nil) isNil ifTrue:[ ^absentBlock value ].
+	self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta
+
+
+]
+
 { #category : 'examples' }
 RowanClassService >> sampleClass [
 	"return the actual resolved class"
