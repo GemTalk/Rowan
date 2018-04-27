@@ -94,7 +94,6 @@ GsConfirmInteraction >> defaultActionBlock [
   defaultActionBlock
     ifNil: [ 
       ^ [ :interactionRequest | 
-		self halt. 
       Transcript cr; show: self printString.
       self cancelResponse ] ].
   ^ defaultActionBlock
