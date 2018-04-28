@@ -103,7 +103,8 @@ RwClassModification >> mergeForExistingClassWith: anExistingClassModification [
 	instanceMethodsModification
 		mergeForExistingClassWith: anExistingClassModification instanceMethodsModification.
 	classMethodsModification
-		mergeForExistingClassWith: anExistingClassModification classMethodsModification
+		mergeForExistingClassWith: anExistingClassModification classMethodsModification.
+	after := anExistingClassModification after
 
 ]
 

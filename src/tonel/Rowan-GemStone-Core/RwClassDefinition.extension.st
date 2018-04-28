@@ -15,6 +15,8 @@ RwClassDefinition >> compareAgainstBaseForcingNewClassVersion: aDefinition [
 	modification := self _modificationForcingNewClassVersion
 		before: aDefinition
 		after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
 	instanceMethodsModification := self _methodsModificationClass
 		extendedClassName: self key.
 	classMethodsModification := self _methodsModificationClass
@@ -35,6 +37,7 @@ RwClassDefinition >> compareAgainstBaseForcingNewClassVersion: aDefinition [
 		instanceMethodsModification: instanceMethodsModification;
 		classMethodsModification: classMethodsModification.
 	^ modification
+
 ]
 
 { #category : '*rowan-gemstone-core' }
