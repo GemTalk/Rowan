@@ -1241,15 +1241,69 @@ RwRowanProjectIssuesTest >> testIssue24_loadProject [
 RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenPackages [
 
 	"move a class from one package to another"
-	self assert: false
+
+	| projectName packageName1 packageName2 className testClass |
+	projectName := 'Issue24_moveClassBetweenPackages'.
+	packageName1 := 'Issue24-Core1'.
+	packageName2 := 'Issue24-Core2'.
+	className := 'Issue24Class'.
+
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+
+	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
+	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
+
+	self _writeProjectNamed: projectName.
+
+	self _addClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass rowanPackageName = packageName1.
+
+	self _updateClassNamed: className toPackageNamed: packageName2 inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass rowanPackageName = packageName2
 
 ]
 
 { #category : 'tests-issue 24' }
 RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenProjects [
 
-	"move a class from one project to another"
-	self assert: false
+	| projectName1 projectName2 packageName1 packageName2 className testClass |
+	projectName1 := 'Issue24_moveClassBetweenProjects1'.
+	projectName2 := 'Issue24_moveClassBetweenProjects2'.
+	packageName1 := 'Issue24-Core1'.
+	packageName2 := 'Issue24-Core2'.
+	className := 'Issue24Class'.
+
+	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1/'.
+	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2/'.
+
+	self _addPackageNamed: packageName1 toProjectNamed: projectName1 validate: false.
+	self _addPackageNamed: packageName2 toProjectNamed: projectName2 validate: false.
+
+	self _writeProjectNamed: projectName1.
+	self _writeProjectNamed: projectName2.
+
+	self _addClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName1.
+
+	self _writeProjectNamed: projectName1.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass rowanPackageName = packageName1.
+
+	self _updateClassNamed: className toPackageNamed: packageName2 inProjectNamed: projectName2.
+
+	self _writeProjectNamed: projectName1.
+	self _writeProjectNamed: projectName2.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass rowanPackageName = packageName2
 
 ]
 
@@ -1257,7 +1311,30 @@ RwRowanProjectIssuesTest >> testIssue24_moveClassBetweenProjects [
 RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenPackages [
 
 	"move a method from one package to another"
-	self assert: false
+
+	| projectName packageName1 packageName2 className theClass |
+
+	projectName := 'Issue24_moveMethodBetweenPackages'.
+	packageName1 := 'Issue24-Core1'.
+	packageName2 := 'Issue24-Core2'.
+	className := 'Issue24Class'.
+
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+
+	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
+	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
+
+	self _writeProjectNamed: projectName.
+
+	theClass := self _addClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName.
+
+	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName1 inProjectNamed: projectName validate: false.
+
+	self _writeProjectNamed: projectName.
+
+	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName2 inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
 
 ]
 
@@ -1265,7 +1342,33 @@ RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenPackages [
 RwRowanProjectIssuesTest >> testIssue24_moveMethodBetweenProjects [
 
 	"move a method from one package to another"
-	self assert: false
+
+	| projectName1 projectName2 packageName1 packageName2 className theClass |
+	projectName1 := 'Issue24_moveMethodBetweenProjects1'.
+	projectName2 := 'Issue24_moveMethodBetweenProjects2'.
+	packageName1 := 'Issue24-Core1'.
+	packageName2 := 'Issue24-Core2'.
+	className := 'Issue24Class'.
+
+	self _createLoadedProjectNamed: projectName1 root: '/tmp/rowanIssuesProject1/'.
+	self _createLoadedProjectNamed: projectName2 root: '/tmp/rowanIssuesProject2/'.
+
+	self _addPackageNamed: packageName1 toProjectNamed: projectName1 validate: false.
+	self _addPackageNamed: packageName2 toProjectNamed: projectName2 validate: false.
+
+	self _writeProjectNamed: projectName1.
+	self _writeProjectNamed: projectName2.
+
+	theClass := self _addClassNamed: className toPackageNamed: packageName1 inProjectNamed: projectName1.
+
+	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName1 inProjectNamed: projectName1 validate: false.
+
+	self _writeProjectNamed: projectName1.
+
+	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName2 inProjectNamed: projectName2.
+
+	self _writeProjectNamed: projectName1.
+	self _writeProjectNamed: projectName2.
 
 ]
 
