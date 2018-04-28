@@ -11,7 +11,7 @@ RwGsTestImage class >> _loadedProjectNamedForNonTestProjects: aString ifAbsent: 
 
 	| currentUserId |
 	currentUserId := self currentUserId.
-	^ self _loadedProjectRegistry
+	^ (super _loadedProjectRegistryForUserId: currentUserId)
 		at: aString
 		ifAbsent: [ 
 			AllUsers
@@ -20,13 +20,10 @@ RwGsTestImage class >> _loadedProjectNamedForNonTestProjects: aString ifAbsent: 
 					aUserId := userProfile userId.
 					aUserId ~= currentUserId
 						ifTrue: [ 
-							(self _loadedProjectRegistryForUserId: aUserId)
+							(super _loadedProjectRegistryForUserId: aUserId)
 								ifNotNil: [ :projectRegistry | 
 									(projectRegistry at: aString ifAbsent: [  ])
-										ifNotNil: [ :loadedProject | 
-											(loadedProject specification platformSpec at: 'gemstone') projectOwnerId
-												= aUserId
-												ifTrue: [ ^ loadedProject ] ] ] ] ].
+										ifNotNil: [ :loadedProject | ^ loadedProject ] ] ] ].
 			^ absentBlock value ]
 
 ]
