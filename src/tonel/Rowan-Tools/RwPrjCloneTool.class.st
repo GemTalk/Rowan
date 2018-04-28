@@ -42,10 +42,11 @@ RwPrjCloneTool >> _validateForGitRootPathForSpecification: gitRootPath gitRepoDi
 						repositoryUrl:
 							'cypress:' , gitRepoPath , '/' , specification repoPath , '/'.
 					specification repositoryRootPath: gitRepoPath.
-					msg := 'The project is registered with the system, however, A clone for '
+					msg := 'A clone for '
 						, specification specName printString , ' already exists in '
 						, gitRepoPath printString , ', so the clone operation is being skipped'
-						, ' and the project will reference the existing location.'.
+						, '
+The project project has been registered with Rowan at the existing location .'.
 					self inform: msg.
 					doneBlock value: msg ] ]
 				on: Error
@@ -56,6 +57,7 @@ RwPrjCloneTool >> _validateForGitRootPathForSpecification: gitRootPath gitRepoDi
 								, gitRepoPath printString ] ].
 	(Rowan fileUtilities directoryExists: gitRootPath)
 		ifFalse: [ Rowan fileUtilities ensureDirectoryExists: gitRootPath ]
+
 ]
 
 { #category : 'smalltalk api' }
