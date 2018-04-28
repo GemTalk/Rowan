@@ -16,12 +16,14 @@ RwProjectSetModification >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'enumerating' }
-RwProjectSetModification >> classesModifiedDo: aBlock [
+RwProjectSetModification >> classesModificationAndPackageModificationAndProjectModificationDo: aBlock [
 
-	"enumerate the classesModification dictionary of the receiver (package set modification or project set modification"
+	"enumerate the classesModification in the packagesModification in the projectModification in the receiver.
+		The classesModification, packageModification, and projectModification are arguments to the block. "
 
 	elementsModified
 		do: [ :projectModification | 
 			projectModification packagesModification elementsModified
-				do: [ :packageModification | aBlock value: packageModification classesModification ] ]
+				do: [ :packageModification | aBlock cull: packageModification classesModification cull: packageModification cull: projectModification ] ]
+
 ]
