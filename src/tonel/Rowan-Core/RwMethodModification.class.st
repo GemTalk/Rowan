@@ -147,39 +147,20 @@ RwMethodModification >> addModificationToPatchSetForNewClassVersion: aPatchSet i
 		ifTrue: [ self error: 'internal error - unexpected method deletion' ].
 	self isModification
 		ifTrue: [ 
-			sourceModification isEmpty
+			"treat like an addition, since this ends up being an addition of a method to the new class version"
+			self isMeta
+				ifTrue: [ 
+					aPatchSet
+						addAddedClassMethod: self after
+						inClass: self classDefinition
+						inPackage: aPackage
+						inProject: aProjectDefinition ]
 				ifFalse: [ 
-					"treat like an addition, since it is an addition of a method to the new class version"
-					self isMeta
-						ifTrue: [ 
-							aPatchSet
-								addAddedClassMethod: self after
-								inClass: self classDefinition
-								inPackage: aPackage
-								inProject: aProjectDefinition ]
-						ifFalse: [ 
-							aPatchSet
-								addAddedInstanceMethod: self after
-								inClass: self classDefinition
-								inPackage: aPackage
-								inProject: aProjectDefinition ].
-					^ self ].
-			propertiesModification isEmpty
-				ifTrue: [ self error: 'internal error - unexpected empty method properties' ]
-				ifFalse: [ 
-					self isMeta
-						ifTrue: [ 
-							aPatchSet
-								addPatchedClassMethodProperties: self after
-								inClass: self classDefinition
-								inPackage: aPackage
-								inProject: aProjectDefinition ]
-						ifFalse: [ 
-							aPatchSet
-								addPatchedInstanceMethodProperties: self after
-								inClass: self classDefinition
-								inPackage: aPackage
-								inProject: aProjectDefinition ] ] ]
+					aPatchSet
+						addAddedInstanceMethod: self after
+						inClass: self classDefinition
+						inPackage: aPackage
+						inProject: aProjectDefinition ] ].
 
 ]
 
