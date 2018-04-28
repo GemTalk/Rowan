@@ -148,7 +148,6 @@ RwMethodModification >> addModificationToPatchSetForNewClassVersion: aPatchSet i
 	self isModification
 		ifTrue: [ 
 			sourceModification isEmpty
-				ifTrue: [ self error: 'internal error - unexpected empty method source modification' ]
 				ifFalse: [ 
 					"treat like an addition, since it is an addition of a method to the new class version"
 					self isMeta
@@ -181,6 +180,7 @@ RwMethodModification >> addModificationToPatchSetForNewClassVersion: aPatchSet i
 								inClass: self classDefinition
 								inPackage: aPackage
 								inProject: aProjectDefinition ] ] ]
+
 ]
 
 { #category : 'converting' }

@@ -2415,9 +2415,12 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
+
 	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
 	self assert: testInstance1 foo = 'foo'.
+	self assert: (testClass1 categoryOfSelector: #foo) = #'accessing'.
+
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2431,10 +2434,13 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+
 	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance2 foo = 'foo'
+	self assert: testInstance2 foo = 'foo'.
+	self assert: (testClass2 categoryOfSelector: #foo) = #'accessing'.
+
 ]
 
 { #category : 'tests' }
@@ -2460,9 +2466,12 @@ RwLoadingTest >> testSingleClassVersionChange2 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
+
 	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
 	self assert: testInstance1 foo = 'foo'.
+	self assert: (testClass1 categoryOfSelector: #foo) = #'accessing'.
+
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2476,10 +2485,13 @@ RwLoadingTest >> testSingleClassVersionChange2 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+
 	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance2 foo = 'bar'
+	self assert: testInstance2 foo = 'bar'.
+	self assert: (testClass2 categoryOfSelector: #foo) = #'accessing'.
+
 ]
 
 { #category : 'tests' }
@@ -2505,9 +2517,12 @@ RwLoadingTest >> testSingleClassVersionChange3 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
+
 	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
 	self assert: testInstance1 foo = 'foo'.
+	self assert: (testClass1 categoryOfSelector: #foo) = #'accessing'.
+
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2521,8 +2536,11 @@ RwLoadingTest >> testSingleClassVersionChange3 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+
 	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance2 foo = 'foo'
+	self assert: testInstance2 foo = 'foo'.
+	self assert: (testClass2 categoryOfSelector: #foo) = #'fooing'.
+
 ]
