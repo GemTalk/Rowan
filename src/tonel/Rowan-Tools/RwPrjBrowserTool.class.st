@@ -755,7 +755,7 @@ RwPrjBrowserTool >> removeClassNamed: className [
 		ifNil: [
 			"Give developer a chance to handle and abort the removal of unpackaged class"
 			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackaged class ', className printString.
-			"Notification resumed, so continue with removal ..." ]
+			"Notification resumed, so continue with removal ... actual removal is performed below"]
 		ifNotNil: [
 			| loadedPackage projectDef packageDef classDef |
 			loadedPackage := loadedClass loadedPackage.
@@ -789,7 +789,7 @@ RwPrjBrowserTool >> removeClassNamed: className [
 			"need to do the actual removal of the unpackaged class after Rowan has done it's job"
 			| theClass |
 			theClass := Rowan image objectNamed: className.
-			(System myUserProfile dictionariesAndSymbolsOf: theClass)
+			(GsCurrentSession currentSession symbolList dictionariesAndSymbolsOf: theClass)
 				do: [:ar | | dict key |
 					"brute force removal of the class from system dictionaries"
 					dict := ar at: 1.	
