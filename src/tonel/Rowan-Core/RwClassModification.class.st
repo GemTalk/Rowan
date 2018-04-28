@@ -88,6 +88,26 @@ RwClassModification >> isEmpty [
 ]
 
 { #category : 'merging' }
+RwClassModification >> mergeForExistingClassWith: anExistingClassModification [
+
+	"merge aClassModification modifictions into the receiver"
+
+	anExistingClassModification propertiesModification isEmpty
+		ifFalse: [
+			self propertiesModification isEmpty
+				ifFalse: [  
+					self
+						error:
+					'internal error - my class modification  for a new class version is not expected to have properties'].
+			propertiesModification := anExistingClassModification propertiesModification copy ].
+	instanceMethodsModification
+		mergeForExistingClassWith: anExistingClassModification instanceMethodsModification.
+	classMethodsModification
+		mergeForExistingClassWith: anExistingClassModification classMethodsModification
+
+]
+
+{ #category : 'merging' }
 RwClassModification >> mergeForNewClassVersionWith: aClassModification [
 
 	"merge aClassModification modifictions into the receiver"

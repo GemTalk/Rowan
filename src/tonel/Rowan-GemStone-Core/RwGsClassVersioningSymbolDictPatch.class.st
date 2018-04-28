@@ -243,7 +243,7 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 									| classesModified |
 									classesModified := classesModification elementsModified.
 									(classesModified at: subclassName ifAbsent: [  ])
-										ifNil: [ 
+										ifNil: [
 											classesModified at: subclassName put: newVersionClassModification.
 											newVersionClassModification
 												mergeForNewClassVersionWith: newVersionClassModification ]
@@ -252,9 +252,15 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 												ifTrue: [ 
 													"a deletion is not unexpected ... "
 													]
-												ifFalse: [ 
-													existingClassModification
-														mergeForNewClassVersionWith: newVersionClassModification ] ] ] ] ].
+												ifFalse: [
+													newVersionClassModification mergeForExistingClassWith: existingClassModification.
+													classesModified at: subclassName put: newVersionClassModification ] ] ] ] 
+						ifFalse: [
+							classesModification isEmpty
+								ifFalse: [| classesModified |
+									classesModified := classesModification elementsModified.
+									(classesModified at: subclassName ifAbsent: [  ])
+										ifNil: []] ] ].
 			self
 				_updateNewClassVersionPatchesForClass: subclass
 				in: aProjectSetModification
@@ -280,16 +286,14 @@ RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectS
 			"only newVersionClassModification with substance need further processing"
 			aProjectSetModification
 				classesModificationAndPackageModificationAndProjectModificationDo: [ :classesModification :packageModification | 
-					true "packageModification key = loadedPackageName"
-						ifTrue: [ 
-							classesModification isEmpty
-								ifFalse: [ 
-									| classesModified |
-									classesModified := classesModification elementsModified.
-									(classesModified at: existingClassName ifAbsent: [  ])
-										ifNil: [ "not unexpected ... if there are multiple packages involved" ]
-										ifNotNil: [ :existingClassModification | 
-											existingClassModification
-												mergeForNewClassVersionWith: newVersionClassModification ] ] ] ] ]
+					classesModification isEmpty
+						ifFalse: [ 
+							| classesModified |
+							classesModified := classesModification elementsModified.
+							(classesModified at: existingClassName ifAbsent: [  ])
+								ifNil: [ "not unexpected ... if there are multiple packages involved" ]
+								ifNotNil: [ :existingClassModification | 
+									newVersionClassModification mergeForExistingClassWith: existingClassModification.
+									classesModified at: existingClassName put: newVersionClassModification. ] ] ] ]
 
 ]
