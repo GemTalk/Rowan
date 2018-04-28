@@ -4,6 +4,33 @@ Class {
 	#category : 'Rowan-GemStone'
 }
 
+{ #category : 'querying' }
+RwGsTestImage class >> _loadedProjectNamedForNonTestProjects: aString ifAbsent: absentBlock [
+
+	"Look up a loaded project. First in current users project registry, then scan AllUsers for the project ... note that the user needs to be the project owner."
+
+	| currentUserId |
+	currentUserId := self currentUserId.
+	^ self _loadedProjectRegistry
+		at: aString
+		ifAbsent: [ 
+			AllUsers
+				do: [ :userProfile | 
+					| aUserId |
+					aUserId := userProfile userId.
+					aUserId ~= currentUserId
+						ifTrue: [ 
+							(self _loadedProjectRegistryForUserId: aUserId)
+								ifNotNil: [ :projectRegistry | 
+									(projectRegistry at: aString ifAbsent: [  ])
+										ifNotNil: [ :loadedProject | 
+											(loadedProject specification platformSpec at: 'gemstone') projectOwnerId
+												= aUserId
+												ifTrue: [ ^ loadedProject ] ] ] ] ].
+			^ absentBlock value ]
+
+]
+
 { #category : 'private' }
 RwGsTestImage class >> _loadedProjectRegistryForUserId: aUserId [
 
@@ -28,9 +55,7 @@ RwGsTestImage class >> _projectForNonTestProject: projectName [
 
 	" this is a method that should only need to be used by tests ... and then sparingly"
 
-	| projectRegistry |
-	projectRegistry := super _loadedProjectRegistryForUserId: self currentUserId.
-	^ (projectRegistry at: projectName ifAbsent: [  ])
+	^self _loadedProjectNamedForNonTestProjects: projectName ifAbsent: [self error: 'no project ', projectName printString, ' found.']
 
 ]
 
