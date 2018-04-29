@@ -88,6 +88,7 @@ RwGsImage class >> addLoadedProject: aRwLoadedProject [
 	"Register a project"
 
 	| projectName projectRegistry |
+	aRwLoadedProject projectOwnerId: self currentUserId.
 	projectName := aRwLoadedProject name.
 	projectRegistry := self
 		_loadedProjectRegistryForUserId: aRwLoadedProject projectOwnerId.
@@ -97,6 +98,7 @@ RwGsImage class >> addLoadedProject: aRwLoadedProject [
 	self
 		error:
 			'There is already a project named ' , projectName printString , ' registered'
+
 ]
 
 { #category : 'cypress (old)' }
@@ -386,11 +388,9 @@ RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 							(self _loadedProjectRegistryForUserId: aUserId)
 								ifNotNil: [ :projectRegistry | 
 									(projectRegistry at: aString ifAbsent: [  ])
-										ifNotNil: [ :loadedProject | 
-											(loadedProject specification platformSpec at: 'gemstone') projectOwnerId
-												= aUserId
-												ifTrue: [ ^ loadedProject ] ] ] ] ].
+										ifNotNil: [ :loadedProject | ^ loadedProject ] ] ] ].
 			^ absentBlock value ]
+
 ]
 
 { #category : 'querying' }

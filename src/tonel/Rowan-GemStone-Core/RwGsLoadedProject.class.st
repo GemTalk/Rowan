@@ -34,6 +34,13 @@ RwGsLoadedProject >> projectOwnerId [
 	^ (self specification platformSpec at: 'gemstone') projectOwnerId
 ]
 
+{ #category : 'specifiction' }
+RwGsLoadedProject >> projectOwnerId: aUserId [
+
+	^ (self specification platformSpec at: 'gemstone') projectOwnerId: aUserId
+
+]
+
 { #category : 'definitions' }
 RwGsLoadedProject >> propertiesForDefinition [
 
