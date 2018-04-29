@@ -819,6 +819,7 @@ RwGsPatchSetBasic >> initialize [
 	classesWithPropertyChanges := Set new.
 	deletedMethods := Set new.
 	deleteNewVersionMethods := Set new.
+	movedDeletedMethods := Set new.
 	addedMethods := Set new.
 	extendedMethods := Set new.
 	methodsNeedingRecompile := Set new.
@@ -934,6 +935,7 @@ RwGsPatchSetBasic >> moveMethodsBetweenPackages [
 								deleteLoadedMethodNewClasses: createdClasses
 								andExistingClasses: tempSymbols.
 							deletedMethods remove: methodDeletionPatch.
+							movedDeletedMethods add: methodDeletionPatch.
 							methodMod := patch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
 							(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
 								ifTrue: [ 
@@ -1081,11 +1083,22 @@ RwGsPatchSetBasic >> updateMethodDictionaries [
 	copy from temporary methodDictionaries to live methodDictionaries
 	For added methods, create LoadedMethods and add to the appropriate LoadedClass
 	or LoadedExtension
-   For methods that need recompiling updated the LoadedMethods registration. "
+	For methods that are moved between packages, the delete from the source package
+		has already been perfomed so installing the new method requires special
+		processing (installMovedDeletedMethod).
+	For methods that need recompiling updated the LoadedMethods registration. "
 
-	addedMethods do: [:each | each installMethod ].
+	| movedDeletedMethodMap |
+	movedDeletedMethodMap := Dictionary new.
+	movedDeletedMethods do: [:each | 
+		movedDeletedMethodMap at: each selector put: each ].
+	addedMethods do: [:each | 
+		(movedDeletedMethodMap at: each methodDefinition selector ifAbsent: [])
+			ifNil: [ each installMethod ]
+			ifNotNil: [ each installMovedDeletedMethod ] ].
 	extendedMethods do: [:each | each installMethod ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
+
 ]
 
 { #category : 'private - applying' }

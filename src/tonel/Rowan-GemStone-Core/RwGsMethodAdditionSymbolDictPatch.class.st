@@ -21,3 +21,15 @@ RwGsMethodAdditionSymbolDictPatch >> installMethod [
 		toPackageNamed: self packageName.
 	selector := compiledMethod selector
 ]
+
+{ #category : 'installing' }
+RwGsMethodAdditionSymbolDictPatch >> installMovedDeletedMethod [
+
+	self symbolDictionaryRegistry
+		addMovedDeletedMethod: compiledMethod
+		for: behavior
+		protocol: self propertiesProtocolName
+		toPackageNamed: self packageName.
+	selector := compiledMethod selector
+
+]

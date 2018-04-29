@@ -322,7 +322,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClas
 		to a class extension in the named package.
 	 Return the resulting compiled method"
 
-	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition loadedMethodToBeRemoved loadedClass |
+	| projectTools loadedPackage classExtensionDef methodDef updateBlock projectDefinition packageDefinition projectSetDefinition loadedMethodToBeRemoved |
 	projectSetDefinition := RwProjectSetDefinition new.
 
 	methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
@@ -335,7 +335,6 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClas
 			 ].
 
 	projectTools := Rowan projectTools.
-	loadedClass := self _loadedClassNamed: className.
 	updateBlock := [ :cDef :pDef | 
 	loadedMethodToBeRemoved
 		ifNil: [
