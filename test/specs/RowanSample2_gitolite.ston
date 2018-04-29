@@ -1,4 +1,4 @@
- RwPackageProjectSpecification{
+ RwSimpleProjectSpecification{
 	#specName : 'RowanSample2',
 	#projectUrl : 'https://git.gemtalksystems.com:/RowanSample2',
 	#platformSpec : {

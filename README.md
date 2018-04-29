@@ -5,40 +5,27 @@ Rowan is a new project/package manager for Smalltalk that supports FileTree and 
 ## GemStone Installation
 
 ### GemStone 3.2.15 SystemUser
+Installation instructions assume that you have registered SSH Keys with your GitHub account. See [Connecting to GitHub with SSH](https://help.github.com/articles/connecting-to-github-with-ssh/) for more information:
+
 ```
-cd <working area>
+# Choose a standard location on disk where you will locate your GitHub project clones
+#  and define the ROWAN_PROJECTS_HOME env var to reference this directory.
+#  By default Rowan will clone GitHub projects into this directory. The directory may
+#  be shared by multiple stones.
+#
+cd <GitHub clones directory>
+export ROWAN_PROJECTS_HOME=`pwd`
 git clone git@github.com:dalehenrich/Rowan.git
-cd Rowan
-export ROWAN_HOME=`pwd`
 
 # (re)Start netldi (so that ROWAN_HOME is defined in gem environment for Jadeite)
 
-# when updating, you want to do a `git pull origin master` before running the install 
+# When updating, you do a "git pull origin master" before running the install. 
+#  Alternately you may use the "Pull from Git" menu item in Jadeite
 
 <start-topaz and setup stone params>
 
 # script logs in as SystemUser and DataCurator
-input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/install.tpz
-```
-
-### GsDevKit 3.2.15 SystemUser
-After [installing GsDevKit_home](https://github.com/GsDevKit/GsDevKit_home#installation):
-```
-export rowan_stone_name=rowan_3215
-createStone -f $rowan_stone_name 3.2.15
-
-# clone Rowan
-
-cd $GS_HOME/shared/repos
-git clone git@github.com:dalehenrich/Rowan.git
-
-cat -- >> $GS_HOME/server/stones/$rowan_stone_name/custome_stone.env << EOF
-export ROWAN_HOME=$GS_HOME/shared/repos/Rowan
-EOF
-stopNetldi $rowan_stone_name
-startNetldi $rowan_stone_name
-
-$GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/installRowan $rowan_stone_name
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/install.tpz
 ```
 
 ## Acknowledgements

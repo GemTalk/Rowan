@@ -1,4 +1,4 @@
- RwPackageProjectSpecification{
+ RwSimpleProjectSpecification{
 	#specName : 'RowanSample2',
 	#projectUrl : 'https://bitbucket.org/dalehenrich/RowanSample2',
 	#platformSpec : {

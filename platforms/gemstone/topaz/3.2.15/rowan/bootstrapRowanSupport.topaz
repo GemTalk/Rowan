@@ -4,7 +4,7 @@
 
 output push rowan.out
 
-input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/rowan/Rowan-Bootstrap.gs
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/rowan/Rowan-Bootstrap.gs
 errorCount
 
 output pop
