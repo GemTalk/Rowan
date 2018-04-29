@@ -20,6 +20,7 @@ Class {
 		'addedMethods',
 		'deletedMethods',
 		'deleteNewVersionMethods',
+		'movedDeletedMethods',
 		'extendedMethods',
 		'methodsWithPropertyChanges',
 		'methodsNeedingRecompile',

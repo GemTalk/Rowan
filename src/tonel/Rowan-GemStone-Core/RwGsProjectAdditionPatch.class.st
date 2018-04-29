@@ -8,7 +8,7 @@ Object
 Class {
 	#name : 'RwGsProjectAdditionPatch',
 	#superclass : 'RwGsProjectPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'applying' }
