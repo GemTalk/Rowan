@@ -400,20 +400,24 @@ RwGsImage class >> loadedProjects [
 	"Return the list of loaded project in current users project registry and in AllUsers, where
 		the current user is the project owner."
 
-	| currentUserId loadedProjects |
+	| currentUserId loadedProjects visibleUserIds |
 	loadedProjects := self _loadedProjectRegistry values.
 	currentUserId := self currentUserId.
+
+	visibleUserIds := (System myUserProfile symbolList collect: [:each | each objectSecurityPolicy owner userId]) asSet asArray.
 
 	AllUsers
 		do: [ :userProfile | 
 			| aUserId |
 			aUserId := userProfile userId.
-			aUserId ~= currentUserId
-				ifTrue: [ 
-					(self _loadedProjectRegistryForUserId: aUserId)
-						ifNotNil: [ :projectRegistry | 
-							loadedProjects
-								addAll: projectRegistry values ] ] ].
+			(visibleUserIds includes: aUserId)
+				ifTrue: [
+					aUserId ~= currentUserId
+						ifTrue: [ 
+							(self _loadedProjectRegistryForUserId: aUserId)
+								ifNotNil: [ :projectRegistry | 
+									loadedProjects
+										addAll: projectRegistry values ] ] ] ].
 	^ loadedProjects
 
 ]
