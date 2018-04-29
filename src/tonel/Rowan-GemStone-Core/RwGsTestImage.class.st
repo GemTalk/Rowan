@@ -42,9 +42,10 @@ RwGsTestImage class >> _loadedTestProjectRegistryForUserId: aUserId [
 	^ ug
 		at: #'RwGsTestLoadedProjectRegistry'
 		ifAbsent: [ 
-			(self canWrite: ug)
+			(self currentUserId = aUserId)
 				ifFalse: [ ^ nil ].
 			ug at: #'RwGsTestLoadedProjectRegistry' put: StringKeyValueDictionary new ]
+
 ]
 
 { #category : 'accessing' }

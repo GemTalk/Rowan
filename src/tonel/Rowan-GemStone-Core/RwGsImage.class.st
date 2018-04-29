@@ -61,9 +61,10 @@ RwGsImage class >> _projectRegistryForUserId: aUserId [
 	^ ug
 		at: #'RwGsProjectRegistry'
 		ifAbsent: [ 
-			(self canWrite: ug)
+			(self currentUserId = aUserId)
 				ifFalse: [ ^ nil ].
 			ug at: #'RwGsProjectRegistry' put: StringKeyValueDictionary new ]
+
 ]
 
 { #category : 'querying' }
