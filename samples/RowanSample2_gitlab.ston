@@ -1,0 +1,16 @@
+ RwSimpleProjectSpecification{
+	#specName : 'RowanSample2',
+	#projectUrl : 'https://gitlab.com/dalehenrichs/RowanSample2',
+	#platformSpec : {
+		'gemstone' : RwGemStoneSpecification {
+			#defaultSymbolDictName : 'SampleSymbolDict',
+			#defaultUseSessionMethodsForExtensions : true }
+	},
+	#specsPath : 'specs',
+	#repoSpec : RwGitRepositorySpecification {
+		#committish : 'master',
+		#committishType : 'branch'
+	},
+	#repoPath : 'src',
+	#comment : ''
+}
