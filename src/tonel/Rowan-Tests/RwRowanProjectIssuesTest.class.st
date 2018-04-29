@@ -1075,6 +1075,57 @@ RwRowanProjectIssuesTest >> testIssue114_missingClassModification [
 
 ]
 
+{ #category : 'tests-issue 123' }
+RwRowanProjectIssuesTest >> testIssue123 [
+	"https://github.com/dalehenrich/Rowan/issues/123"
+
+"
+    Create class Issue91 in Package RowanSample1-XXX.
+    Add extension method category, *rowansample1-extensions, in class Issue91
+    Add method extendedMethod in new category.
+    Verify by Show Changes that RowanSample1-Extensions package shows the new method was added.
+    Using the class definition template, create a new version of Issue91 with new inst var 'abc' in RowanSample1-Extensions
+    Verify Issue91 has moved to RowanSample1-Extensions package.
+    Bug is that method extendedMethod was not brought into the new class version. No methods are shown.
+"
+
+	| projectName packageName1 packageName2 className theClass  |
+	projectName := 'Issue123_Project'.
+	packageName1 := 'Issue123-Core'.
+	packageName2 := 'Issue123-Extensions'.
+	className := 'Issue123Class'.
+
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+
+	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
+	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+
+	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass  inPackage: packageName2 inProjectNamed: projectName validate: false.
+
+	self assert: theClass new foo = 1.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #( ivar1 )
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName2
+		options: #().
+
+	self assert: theClass new foo = 1.
+
+]
+
 { #category : 'tests-issue 24' }
 RwRowanProjectIssuesTest >> testIssue24_addProject [
 
