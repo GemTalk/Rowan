@@ -412,12 +412,9 @@ RwGsImage class >> loadedProjects [
 					(self _loadedProjectRegistryForUserId: aUserId)
 						ifNotNil: [ :projectRegistry | 
 							loadedProjects
-								addAll:
-									(projectRegistry
-										select: [ :loadedProject | 
-											(loadedProject specification platformSpec at: 'gemstone') projectOwnerId
-												= aUserId ]) ] ] ].
+								addAll: projectRegistry values ] ] ].
 	^ loadedProjects
+
 ]
 
 { #category : 'querying' }
