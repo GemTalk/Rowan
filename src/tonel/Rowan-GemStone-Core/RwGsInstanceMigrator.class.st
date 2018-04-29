@@ -6,7 +6,7 @@ Class {
 		'maxThreads',
 		'maxCpuPercentage'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'instance creation' }

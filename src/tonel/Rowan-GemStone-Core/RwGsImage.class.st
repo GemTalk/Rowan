@@ -4,7 +4,7 @@ Keeps track of what LoadedPackages are in the GemStone repository, and is the ga
 Class {
 	#name : 'RwGsImage',
 	#superclass : 'Object',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private' }

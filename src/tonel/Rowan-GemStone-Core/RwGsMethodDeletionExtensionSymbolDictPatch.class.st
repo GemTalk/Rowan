@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'extendedClassName'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'accessing' }

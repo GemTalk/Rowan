@@ -8,7 +8,7 @@ Object
 Class {
 	#name : 'RwGsMethodDeletionPatch',
 	#superclass : 'RwGsMethodPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private-deleting' }

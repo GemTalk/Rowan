@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGsLoadedProject',
 	#superclass : 'RwLoadedProject',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private' }

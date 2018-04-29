@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGsPatchSetRowanBootstrap',
 	#superclass : 'RwGsPatchSetBasic',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private - applying' }

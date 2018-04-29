@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGsLoadedSymbolDictClass',
 	#superclass : 'RwLoadedClass',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'instance creation' }

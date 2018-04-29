@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGsImageRowanBootstrapPatchVisitor',
 	#superclass : 'RwGsImagePatchVisitor',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private' }

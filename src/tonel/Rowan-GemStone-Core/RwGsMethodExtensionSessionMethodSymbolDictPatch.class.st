@@ -7,7 +7,7 @@ Class {
 		'catDict',
 		'pArray'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'compiling' }

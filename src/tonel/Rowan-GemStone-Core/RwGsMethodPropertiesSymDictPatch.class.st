@@ -9,7 +9,7 @@ Object
 Class {
 	#name : 'RwGsMethodPropertiesSymDictPatch',
 	#superclass : 'RwGsMethodPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'installing' }

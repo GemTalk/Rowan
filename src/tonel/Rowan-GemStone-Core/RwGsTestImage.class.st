@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGsTestImage',
 	#superclass : 'RwGsImage',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'querying' }

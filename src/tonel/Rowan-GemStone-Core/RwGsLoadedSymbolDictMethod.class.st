@@ -4,7 +4,7 @@ The MethodRegistry maps GsNMethods to LoadedMethods.
 Class {
 	#name : 'RwGsLoadedSymbolDictMethod',
 	#superclass : 'RwLoadedMethod',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'instance creation' }

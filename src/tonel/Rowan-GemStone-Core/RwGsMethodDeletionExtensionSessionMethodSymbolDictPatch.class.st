@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch',
 	#superclass : 'RwGsMethodDeletionExtensionSymbolDictPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'accessing' }

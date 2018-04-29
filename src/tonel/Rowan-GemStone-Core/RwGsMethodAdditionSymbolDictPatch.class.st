@@ -8,7 +8,7 @@ Object
 Class {
 	#name : 'RwGsMethodAdditionSymbolDictPatch',
 	#superclass : 'RwGsMethodPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'installing' }

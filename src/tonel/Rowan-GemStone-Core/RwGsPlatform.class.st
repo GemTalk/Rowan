@@ -10,7 +10,7 @@ Class {
 		'enableInstanceMigration',
 		'instanceMigrator'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private' }

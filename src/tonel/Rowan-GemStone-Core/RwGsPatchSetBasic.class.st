@@ -29,7 +29,7 @@ Class {
 		'errors',
 		'currentProjectDefinition'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private - method initialization order' }

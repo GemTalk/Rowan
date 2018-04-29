@@ -8,7 +8,7 @@ Object
 Class {
 	#name : 'RwGsPackageAdditionPatch',
 	#superclass : 'RwGsPackagePatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'applying' }

@@ -8,7 +8,7 @@ Object
 Class {
 	#name : 'RwGsMethodAdditionPatch',
 	#superclass : 'RwGsMethodPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private-installing' }

@@ -16,7 +16,7 @@ Class {
 		'selector',
 		'compiledMethod'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'instance creation' }

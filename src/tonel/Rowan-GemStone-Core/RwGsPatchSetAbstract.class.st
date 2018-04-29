@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGsPatchSetAbstract',
 	#superclass : 'Object',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'building' }

@@ -8,7 +8,7 @@ Object
 Class {
 	#name : 'RwGsMethodDeletionSymbolDictPatch',
 	#superclass : 'RwGsMethodPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'deleting' }

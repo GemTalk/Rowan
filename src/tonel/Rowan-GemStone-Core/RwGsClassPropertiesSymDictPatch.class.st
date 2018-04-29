@@ -9,7 +9,7 @@ Object
 Class {
 	#name : 'RwGsClassPropertiesSymDictPatch',
 	#superclass : 'RwGsClassPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'actions' }

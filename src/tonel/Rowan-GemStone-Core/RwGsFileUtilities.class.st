@@ -8,7 +8,7 @@ Object
 Class {
 	#name : 'RwGsFileUtilities',
 	#superclass : 'RwFileUtilities',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private' }

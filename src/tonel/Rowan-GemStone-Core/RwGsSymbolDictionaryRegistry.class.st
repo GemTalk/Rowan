@@ -8,7 +8,7 @@ Class {
 		'classExtensionRegistry',
 		'methodRegistry'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'accessing' }
