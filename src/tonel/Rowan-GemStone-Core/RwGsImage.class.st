@@ -36,9 +36,10 @@ RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
 	^ ug
 		at: #'RwGsLoadedProjectRegistry'
 		ifAbsent: [ 
-			(self canWrite: ug)
+			(self currentUserId = aUserId)
 				ifFalse: [ ^ nil ].
 			ug at: #'RwGsLoadedProjectRegistry' put: StringKeyValueDictionary new ]
+
 ]
 
 { #category : 'cypress (old)' }
