@@ -405,7 +405,8 @@ RwGsImage class >> loadedProjects [
 	loadedProjects := self _loadedProjectRegistry values.
 	currentUserId := self currentUserId.
 
-	visibleUserIds := (System myUserProfile symbolList collect: [:each | each objectSecurityPolicy owner userId]) asSet asArray.
+	visibleUserIds := ((System myUserProfile symbolList select: [:each | each objectSecurityPolicy notNil])
+								collect: [:each | each objectSecurityPolicy owner userId]) asSet asArray.
 
 	AllUsers
 		do: [ :userProfile | 
