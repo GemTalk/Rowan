@@ -532,7 +532,7 @@ currentOrNil
   | packageManager repo |
   packageManager := CypressPackageManager3 new.
   repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_HOME/src/tonel/'  )
+    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
     alias: ''.
   packageManager
     defaultSymbolDictionaryName: #'Globals'.
