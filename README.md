@@ -17,7 +17,7 @@ cd <GitHub clones directory>
 export ROWAN_PROJECTS_HOME=`pwd`
 git clone git@github.com:dalehenrich/Rowan.git
 
-# (re)Start netldi (so that ROWAN_HOME is defined in gem environment for Jadeite)
+# (re)Start netldi (so that ROWAN_PROJECTS_HOME is defined in gem environment for Jadeite)
 
 # When updating, you do a "git pull origin master" before running the install. 
 #  Alternately you may use the "Pull from Git" menu item in Jadeite
