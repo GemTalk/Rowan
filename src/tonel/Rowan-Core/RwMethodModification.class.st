@@ -141,11 +141,9 @@ RwMethodModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage
 { #category : 'patching' }
 RwMethodModification >> addModificationToPatchSetForNewClassVersion: aPatchSet inPackage: aPackage inProject: aProjectDefinition [
 
-	self isAddition
-		ifTrue: [ self error: 'internal error - unexpected method addition' ].
 	self isDeletion
 		ifTrue: [ self error: 'internal error - unexpected method deletion' ].
-	self isModification
+	(self isAddition or: [ self isModification ])
 		ifTrue: [ 
 			"treat like an addition, since this ends up being an addition of a method to the new class version"
 			self isMeta

@@ -649,7 +649,7 @@ RwGsPatchSetBasic >> apply [
 	"Apply the changes I represent to the running image."
 	self
 		setupForApply;
-		moveClassesBetweenPackages;
+		"moveClassesBetweenPackages; --- needs to be called BEFORE apply for new version processing"
 		removeDeletedClassesFromTempSymbols;
 		addAddedClassesToTempSymbols;
 		recordCompiledForNewClassVersionDeletions;
@@ -899,10 +899,13 @@ RwGsPatchSetBasic >> moveClassesBetweenPackages [
 						compareAgainstBase: deletedClassPatch classDefinition.
 					modification isEmpty
 						ifFalse: [ 
+
+"... we need to arrange for the deletedClassPatch to be applied as well (remove from package -- maybe we leave it in?"
 							modification
 								addModificationToPatchSet: self
 								inPackage: patch packageDefinition
 								inProject: patch projectDefinition ] ] ]
+
 ]
 
 { #category : 'private - applying' }

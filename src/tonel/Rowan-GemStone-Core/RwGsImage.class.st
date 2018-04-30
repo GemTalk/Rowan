@@ -128,6 +128,7 @@ RwGsImage class >> applyModification: aProjectSetModification enableInstanceMigr
 	visitor := RwGsImagePatchVisitor new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
+	patchSet moveClassesBetweenPackages. "updates classesWithNewVersions, if a move is detected"
 	patchSet classesWithNewVersions isEmpty
 		ifTrue: [ 
 			patchSet apply.
@@ -144,6 +145,7 @@ RwGsImage class >> applyModification: aProjectSetModification enableInstanceMigr
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
 	patchSet applyForNewClassVersions: enableInstanceMigration
+
 ]
 
 { #category : 'modifying image' }
@@ -153,6 +155,7 @@ RwGsImage class >> applyModification: aProjectSetModification instanceMigrator: 
 	visitor := RwGsImagePatchVisitor new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
+	patchSet moveClassesBetweenPackages. "updates classesWithNewVersions, if a move is detected"
 	patchSet classesWithNewVersions isEmpty
 		ifTrue: [ 
 			patchSet apply.
@@ -169,6 +172,7 @@ RwGsImage class >> applyModification: aProjectSetModification instanceMigrator: 
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
 	patchSet applyForNewClassVersions: instanceMigrator
+
 ]
 
 { #category : 'testing' }

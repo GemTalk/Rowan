@@ -95,10 +95,7 @@ RwClassModification >> mergeForExistingClassWith: anExistingClassModification [
 	anExistingClassModification propertiesModification isEmpty
 		ifFalse: [
 			self propertiesModification isEmpty
-				ifFalse: [  
-					self
-						error:
-					'internal error - my class modification  for a new class version is not expected to have properties'].
+				ifFalse: ["the properties modification for the receiver can be safely ignored" ].
 			propertiesModification := anExistingClassModification propertiesModification copy ].
 	instanceMethodsModification
 		mergeForExistingClassWith: anExistingClassModification instanceMethodsModification.

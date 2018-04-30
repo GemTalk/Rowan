@@ -22,7 +22,7 @@ RwGsPatchSetRowanBootstrap >> apply [
 	"Apply the changes I represent to the running image."
 	self
 		setupForApply;
-		moveClassesBetweenPackages;
+		"moveClassesBetweenPackages; --- needs to be called BEFORE apply for new version processing" 
 		removeDeletedClassesFromTempSymbols;
 		addAddedClassesToTempSymbols;
 		recordCompiledForNewClassVersionDeletions;
