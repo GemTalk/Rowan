@@ -13,6 +13,7 @@ Class {
 		'projectsWithPropertyChanges',
 		'addedClasses',
 		'deletedClasses',
+		'movedDeletedClasses',
 		'extendedClasses',
 		'classesWithPropertyChanges',
 		'classesWithClassVariableChanges',
@@ -817,6 +818,7 @@ RwGsPatchSetBasic >> initialize [
 	classesWithNewVersions := Set new.
 	classesWithClassVariableChanges := Set new.
 	classesWithPropertyChanges := Set new.
+	movedDeletedClasses := Set new.
 	deletedMethods := Set new.
 	deleteNewVersionMethods := Set new.
 	movedDeletedMethods := Set new.
@@ -895,16 +897,23 @@ RwGsPatchSetBasic >> moveClassesBetweenPackages [
 						addLoadedClass: loadedClass.
 					addedClasses remove: patch.
 					deletedClasses remove: deletedClassPatch.
+					movedDeletedClasses add: {deletedClassPatch. patch}.
 					modification := patch classDefinition
 						compareAgainstBase: deletedClassPatch classDefinition.
 					modification isEmpty
 						ifFalse: [ 
-
+"actually, I must modify the modifications here, similar to what goes on when we deal with new class versions"
 "... we need to arrange for the deletedClassPatch to be applied as well (remove from package -- maybe we leave it in?"
 							modification
 								addModificationToPatchSet: self
 								inPackage: patch packageDefinition
 								inProject: patch projectDefinition ] ] ]
+
+]
+
+{ #category : 'accessing' }
+RwGsPatchSetBasic >> movedDeletedClasses [
+	^ movedDeletedClasses
 
 ]
 

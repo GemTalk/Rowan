@@ -136,7 +136,8 @@ RwGsImage class >> applyModification: aProjectSetModification enableInstanceMigr
 	patchSet classesWithNewVersions
 		do: [ :each | 
 			each
-				updatePatchesForNewClassVersion: aProjectSetModification;
+				updatePatchesForNewClassVersion: aProjectSetModification 
+					patchSet: patchSet;
 				updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
 					patchSet: patchSet;
 				updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
@@ -163,7 +164,8 @@ RwGsImage class >> applyModification: aProjectSetModification instanceMigrator: 
 	patchSet classesWithNewVersions
 		do: [ :each | 
 			each
-				updatePatchesForNewClassVersion: aProjectSetModification;
+				updatePatchesForNewClassVersion: aProjectSetModification 
+					patchSet: patchSet;
 				updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
 					patchSet: patchSet;
 				updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
