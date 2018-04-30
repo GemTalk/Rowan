@@ -549,12 +549,12 @@ currentOrNil
   run
   | projectSetDefinition gitRepoPath |
   projectSetDefinition := RwProjectSetDefinition new.
-  gitRepoPath := '$ROWAN_HOME'.
+  gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
   #(
-    'file:$ROWAN_HOME/specs/Rowan_SystemUser.ston'
-    'file:$ROWAN_HOME/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'
-    'file:$ROWAN_HOME/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'
-    'file:$ROWAN_HOME/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston') 
+    'file:$ROWAN_PROJECTS_HOME/Rowan/specs/Rowan_SystemUser.ston'
+    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'
+    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'
+    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston') 
     do: [:specUrl |
       "load all of the packages from disk, so that we're not actually using Cypress, STON, 
        and Tonel while created loaded things for Rowan"
