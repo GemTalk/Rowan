@@ -20,8 +20,21 @@ jadeite_tag="$2"
 #    Jadeite_runtime directory  plus any .pdf documents preset (expect at 
 #    least one PDF file)
 #
+rowan_tag="$1"
+jadeite_tag="$2"
+
 commit_match_tag() {
   git describe --match "$1" HEAD
+}
+validate_tag() {
+  projectName="$1"
+  tagName="$2"
+  pushd $projectName
+    git checkout master
+    theTag=`commit_match_tag "$rowan_tag"`
+    theCommit=`git rev-parse --short HEAD`
+  popd
+  echo " $projectName	-->	$theTag ::	$theCommit" >> manifest.txt
 }
 
 cd $ROWAN_PROJECTS_HOME/Rowan/staging
@@ -33,10 +46,6 @@ cd $ROWAN_PROJECTS_HOME/Rowan/staging
 #git clone git@github.com:dalehenrich/RowanSample1.git
 #git clone git@github.com:dalehenrich/RowanSample2.git
 
-rm -rf Rowan
+rm -rf Rowan manifest.txt
 git clone git@github.com:dalehenrich/Rowan.git
-cd Rowan
-git checkout master
-commit_match_tag "v0.0.2-alpha"
-
-
+validate_tag Rowan "$rowan_tag"
