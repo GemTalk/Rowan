@@ -53,15 +53,7 @@ validate_tag() {
     fi
     theCommit=`git rev-parse --short HEAD`
   popd
-  # echo " $label${pad}	-->	$theTag ::	$theCommit" >> manifest.txt
   padded_manifest_line "$label" "$theTag" "$theCommit"
-#  line='---------------|--'
-#  PROC_NAME=$label
-#  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
-#  PROC_NAME=$theTag
-#  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
-#  PROC_NAME=$theCommit
-#  printf "%s%s \n" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
 }
 
 cd $ROWAN_PROJECTS_HOME/Rowan/staging
