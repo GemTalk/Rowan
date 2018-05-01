@@ -26,6 +26,15 @@ jadeite_tag="$2"
 commit_match_tag() {
   git describe --match "$1" HEAD
 }
+padded_manifest_line() {
+  line='---------------|--'
+  PROC_NAME=$1
+  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
+  PROC_NAME=$2
+  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
+  PROC_NAME=$3
+  printf "%s%s \n" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
+}
 validate_tag() {
   projectName="$1"
   label="$2"
@@ -45,13 +54,14 @@ validate_tag() {
     theCommit=`git rev-parse --short HEAD`
   popd
   # echo " $label${pad}	-->	$theTag ::	$theCommit" >> manifest.txt
-  line='---------------|--'
-  PROC_NAME=$label
-  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
-  PROC_NAME=$theTag
-  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
-  PROC_NAME=$theCommit
-  printf "%s%s \n" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
+  padded_manifest_line "$label" "$theTag" "$theCommit"
+#  line='---------------|--'
+#  PROC_NAME=$label
+#  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
+#  PROC_NAME=$theTag
+#  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
+#  PROC_NAME=$theCommit
+#  printf "%s%s \n" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
 }
 
 cd $ROWAN_PROJECTS_HOME/Rowan/staging
@@ -64,6 +74,9 @@ cd $ROWAN_PROJECTS_HOME/Rowan/staging
 #git clone git@github.com:dalehenrich/RowanSample2.git
 
 rm -rf manifest.txt
+
+padded_manifest_line "Project" "Tag" "SHA"
+echo "---------------|-----------------|-----------------|--" >> manifest.txt
 validate_tag Rowan Rowan "$rowan_tag"
 validate_tag Jade Jadeite "$jadeite_tag"
 validate_tag RowanSample1 RowanSample1
