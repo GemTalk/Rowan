@@ -28,13 +28,23 @@ commit_match_tag() {
 }
 validate_tag() {
   projectName="$1"
-  tagName="$2"
+  label="$2"
+  tagName="$3"
+  theTag=""
+  pad=""
+  if [ "$projectName" = "Rowan" ] ; then
+    pad="	"
+  fi
   pushd $projectName
     git checkout master
-    theTag=`commit_match_tag "$rowan_tag"`
+    if [ "$tagName"x != "x" ] ; then
+      theTag=`commit_match_tag "$tagName"`
+    else
+      theTag="	"
+    fi
     theCommit=`git rev-parse --short HEAD`
   popd
-  echo " $projectName	-->	$theTag ::	$theCommit" >> manifest.txt
+  echo " $label${pad}	-->	$theTag ::	$theCommit" >> manifest.txt
 }
 
 cd $ROWAN_PROJECTS_HOME/Rowan/staging
@@ -46,6 +56,8 @@ cd $ROWAN_PROJECTS_HOME/Rowan/staging
 #git clone git@github.com:dalehenrich/RowanSample1.git
 #git clone git@github.com:dalehenrich/RowanSample2.git
 
-rm -rf Rowan manifest.txt
-git clone git@github.com:dalehenrich/Rowan.git
-validate_tag Rowan "$rowan_tag"
+rm -rf manifest.txt
+validate_tag Rowan Rowan "$rowan_tag"
+validate_tag Jade Jadeite "$jadeite_tag"
+validate_tag RowanSample1 RowanSample1
+validate_tag RowanSample2 RowanSample2
