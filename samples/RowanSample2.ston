@@ -6,11 +6,12 @@
 			#defaultSymbolDictName : 'SampleSymbolDict',
 			#defaultUseSessionMethodsForExtensions : true }
 	},
-	#specsPath : 'specs',
 	#repoSpec : RwGitRepositorySpecification {
-		#committish : 'master',
+		#committish : 'sample',
 		#committishType : 'branch'
 	},
-	#repoPath : 'src',
-	#comment : ''
+	#configsPath : 'rowan/configs',
+	#repoPath : 'rowan/src',
+	#specsPath : 'rowan/specs',
+	#comment : 'Simple sample project that can be used when getting started with Jadeite and Rowan'
 }
