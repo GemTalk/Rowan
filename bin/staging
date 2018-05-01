@@ -19,6 +19,7 @@ jadeite_tag="$2"
 # 5. zip up the Rowan, RowanSample1, and RowanSample2 projects, the 
 #    Jadeite_runtime directory  plus any .pdf documents preset (expect at 
 #    least one PDF file)
+# 6. Archive the zip file and stage for delivery
 #
 rowan_tag="$1"
 jadeite_tag="$2"
