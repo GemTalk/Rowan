@@ -40,11 +40,18 @@ validate_tag() {
     if [ "$tagName"x != "x" ] ; then
       theTag=`commit_match_tag "$tagName"`
     else
-      theTag="	"
+      theTag="-"
     fi
     theCommit=`git rev-parse --short HEAD`
   popd
-  echo " $label${pad}	-->	$theTag ::	$theCommit" >> manifest.txt
+  # echo " $label${pad}	-->	$theTag ::	$theCommit" >> manifest.txt
+  line='---------------|--'
+  PROC_NAME=$label
+  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
+  PROC_NAME=$theTag
+  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
+  PROC_NAME=$theCommit
+  printf "%s%s \n" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
 }
 
 cd $ROWAN_PROJECTS_HOME/Rowan/staging
