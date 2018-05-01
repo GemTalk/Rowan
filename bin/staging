@@ -27,7 +27,7 @@ commit_match_tag() {
   git describe --match "$1" HEAD
 }
 padded_manifest_line() {
-  line='---------------|--'
+  line='               |  '
   PROC_NAME=$1
   printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
   PROC_NAME=$2
@@ -67,8 +67,10 @@ cd $ROWAN_PROJECTS_HOME/Rowan/staging
 
 rm -rf manifest.txt
 
+echo "                    Edelweiss" >> manifest.txt
+echo "---------------|-----------------|-----------------|" >> manifest.txt
 padded_manifest_line "Project" "Tag" "SHA"
-echo "---------------|-----------------|-----------------|--" >> manifest.txt
+echo "---------------|-----------------|-----------------|" >> manifest.txt
 validate_tag Rowan Rowan "$rowan_tag"
 validate_tag Jade Jadeite "$jadeite_tag"
 validate_tag RowanSample1 RowanSample1
