@@ -7,8 +7,6 @@
 
 set -e
 
-rowan_tag="$1$pdfFilename"
-
 #
 # 1. clone the Rowan, Jade (Jadeite), RowanSample1, and RowanSample2 projects
 # 2. confirm that the master branches of Rowan and Jade are on the correct tag
@@ -60,19 +58,18 @@ validate_tag() {
 
 cd $ROWAN_PROJECTS_HOME/Rowan/packing
 
-#rm -rf Rowan Jade RowanSample1 RowanSample2 MANIFEST.TXT Jadeite_runtime_*
-#
-#git clone git@github.com:dalehenrich/Rowan.git
-#git clone git@github.com:ericwinger/Jade.git
-#git clone git@github.com:dalehenrich/RowanSample1.git
-#git clone git@github.com:dalehenrich/RowanSample2.git
+rm -rf Rowan Jade RowanSample1 RowanSample2 MANIFEST.TXT Jadeite_runtime_* *.zip
 
-rm -rf MANIFEST.TXT Jadeite_runtime_* *.zip
+git clone git@github.com:dalehenrich/Rowan.git
+git clone git@github.com:ericwinger/Jade.git
+git clone git@github.com:dalehenrich/RowanSample1.git
+git clone git@github.com:dalehenrich/RowanSample2.git
+
+# rm -rf MANIFEST.TXT Jadeite_runtime_* *.zip
 
 echo "------------------------------" >> MANIFEST.TXT
 echo "  Git clone directories" >> MANIFEST.TXT
 echo "------------------------------" >> MANIFEST.TXT
-#echo "---------------|-----------------|-----------------|" >> MANIFEST.TXT
 padded_manifest_line "Git_Project" "Tag" "SHA"
 echo "---------------|-----------------|-----------------|" >> MANIFEST.TXT
 validate_tag Rowan Rowan "$rowan_tag"
