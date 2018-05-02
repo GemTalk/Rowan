@@ -56,7 +56,7 @@ validate_tag() {
   padded_manifest_line "$label" "$theTag" "$theCommit"
 }
 
-cd $ROWAN_PROJECTS_HOME/Rowan/staging
+cd $ROWAN_PROJECTS_HOME/Rowan/packing
 
 #rm -rf Rowan Jade RowanSample1 RowanSample2 MANIFEST.TXT Jadeite_runtime_*
 #
