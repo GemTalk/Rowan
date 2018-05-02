@@ -7,13 +7,13 @@
 
 set -e
 
-rowan_tag="$1"
+rowan_tag="$1$pdfFilename"
 
 #
 # 1. clone the Rowan, Jade (Jadeite), RowanSample1, and RowanSample2 projects
 # 2. confirm that the master branches of Rowan and Jade are on the correct tag
 # 3. Create Jadeite runtime directory (Jadeite_runtime)
-# 4. create manifest.txt and list the sha of the commit for each of the git 
+# 4. create MANIFEST.TXT and list the sha of the commit for each of the git 
 #    projects along with the name of the file or directory
 # 5. zip up the Rowan, RowanSample1, and RowanSample2 projects, the 
 #    Jadeite_runtime directory  plus any .pdf documents present (only expect 
@@ -29,11 +29,11 @@ commit_match_tag() {
 padded_manifest_line() {
   line='               |  '
   PROC_NAME="$1"
-  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
+  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> MANIFEST.TXT
   PROC_NAME="$2"
-  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
+  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> MANIFEST.TXT
   PROC_NAME="$3"
-  printf "%s%s \n" $PROC_NAME "${line:${#PROC_NAME}}" >> manifest.txt
+  printf "%s%s \n" $PROC_NAME "${line:${#PROC_NAME}}" >> MANIFEST.TXT
 }
 validate_tag() {
   projectName="$1"
@@ -58,21 +58,21 @@ validate_tag() {
 
 cd $ROWAN_PROJECTS_HOME/Rowan/staging
 
-#rm -rf Rowan Jade RowanSample1 RowanSample2 manifest.txt Jadeite_runtime_*
+#rm -rf Rowan Jade RowanSample1 RowanSample2 MANIFEST.TXT Jadeite_runtime_*
 #
 #git clone git@github.com:dalehenrich/Rowan.git
 #git clone git@github.com:ericwinger/Jade.git
 #git clone git@github.com:dalehenrich/RowanSample1.git
 #git clone git@github.com:dalehenrich/RowanSample2.git
 
-rm -rf manifest.txt Jadeite_runtime_* *.zip
+rm -rf MANIFEST.TXT Jadeite_runtime_* *.zip
 
-echo "------------------------------" >> manifest.txt
-echo "  Git clones file(s)" >> manifest.txt
-echo "------------------------------" >> manifest.txt
-#echo "---------------|-----------------|-----------------|" >> manifest.txt
+echo "------------------------------" >> MANIFEST.TXT
+echo "  Git clone directories" >> MANIFEST.TXT
+echo "------------------------------" >> MANIFEST.TXT
+#echo "---------------|-----------------|-----------------|" >> MANIFEST.TXT
 padded_manifest_line "Git_Project" "Tag" "SHA"
-echo "---------------|-----------------|-----------------|" >> manifest.txt
+echo "---------------|-----------------|-----------------|" >> MANIFEST.TXT
 validate_tag Rowan Rowan "$rowan_tag"
 validate_tag RowanSample1 RowanSample1
 validate_tag RowanSample2 RowanSample2
@@ -84,23 +84,24 @@ pushd Jade/runtime
   cp -r * ../../${jadeite_runtime_dirName}
 popd
 
-echo "" >> manifest.txt
-echo "------------------------------" >> manifest.txt
-echo "  Jadeite runtime directory" >> manifest.txt
-echo "------------------------------" >> manifest.txt
-echo "Jadeite_runtime_${jadeite_tag}" >> manifest.txt
+echo "" >> MANIFEST.TXT
+echo "------------------------------" >> MANIFEST.TXT
+echo "  Jadeite runtime directory" >> MANIFEST.TXT
+echo "------------------------------" >> MANIFEST.TXT
+echo "Jadeite_runtime_${jadeite_tag}" >> MANIFEST.TXT
 
-echo "" >> manifest.txt
-echo "------------------------------" >> manifest.txt
-echo "  README file(s)" >> manifest.txt
-echo "------------------------------" >> manifest.txt
+echo "" >> MANIFEST.TXT
+echo "------------------------------" >> MANIFEST.TXT
+echo "  doc file(s)" >> MANIFEST.TXT
+echo "------------------------------" >> MANIFEST.TXT
 count=0
 for entry in `pwd`/*.pdf
 do
   pdfFilename=$(basename "$entry")
-  echo "$pdfFilename" >> manifest.txt
+  echo "$pdfFilename" >> MANIFEST.TXT
   count=$((count + 1))
 done
+echo "MANIFEST.TXT" >>  MANIFEST.TXT
 
 if [ $count -ne 1 ] ; then
   echo "Expected only a single pdf file, found $count"
@@ -110,4 +111,4 @@ fi
 # create zip file
 base="${pdfFilename%.*}"
 
-zip -r ${base}.zip manifest.txt ${jadeite_runtime_dirName} *.pdf Rowan RowanSample1 RowanSample2
+zip -r ${base}.zip MANIFEST.TXT ${jadeite_runtime_dirName} *.pdf Rowan RowanSample1 RowanSample2
