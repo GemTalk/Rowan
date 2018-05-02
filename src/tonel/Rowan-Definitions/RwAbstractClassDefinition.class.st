@@ -207,6 +207,13 @@ RwAbstractClassDefinition >> key [
 ]
 
 { #category : 'accessing' }
+RwAbstractClassDefinition >> name: aString [
+
+	properties at: 'name' put: aString
+
+]
+
+{ #category : 'accessing' }
 RwAbstractClassDefinition >> removeClassMethod: selector [
 
 	| definition |

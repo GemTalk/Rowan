@@ -689,6 +689,44 @@ RwPrjBrowserTool >> classNamed: className updateDefinition: updateBlock ifAbsent
 ]
 
 { #category : 'class browsing' }
+RwPrjBrowserTool >> copyClassNamed: className to: newName [
+
+	"we can make copy extensions optional if necessary"
+
+	| loadedClass classDef loadedPackage projectDef packageDef  projectSetDefinition|
+	(self _loadedClassNamed: newName ifAbsent:  [])
+		ifNotNil: [ self error: 'There is already a class named ', newName printString, ' in the system.' ].
+	loadedClass := self 
+		_loadedClassNamed: className 
+		ifAbsent: [  self error: 'No loaded class named: ', className printString , ' found.' ].
+	projectSetDefinition := RwProjectSetDefinition new.
+	loadedPackage := loadedClass loadedPackage.
+	projectDef := loadedPackage loadedProject asDefinition.
+	packageDef := projectDef packageNamed: loadedPackage name.
+	classDef := loadedClass asDefinition.
+	classDef name: newName.
+	packageDef addClassDefinition: classDef.
+	projectSetDefinition addProject: projectDef.
+
+	(self _loadedClassExtensionsNamed: className ifAbsent: [ #() ])
+		do: [:loadedClassExtension | 
+			| classExtDef |
+			loadedPackage := loadedClassExtension loadedPackage.
+			projectDef := loadedPackage loadedProject asDefinition.
+
+			packageDef := projectDef packageNamed: loadedPackage name.
+			classExtDef := loadedClassExtension asDefinition.
+			classExtDef name: newName.
+			packageDef addClassExtension: classExtDef.
+			(projectSetDefinition projectNames includes: projectDef name)
+				ifFalse: [ projectSetDefinition addProject: projectDef ] ].
+	Rowan projectTools load loadProjectDefinition: projectDef.
+
+	^ Rowan globalNamed: newName
+
+]
+
+{ #category : 'class browsing' }
 RwPrjBrowserTool >> createClass: classDefinition inPackageNamed: packageName [
 
 	| loadedPackage projectDefinition projectTools |
