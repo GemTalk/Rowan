@@ -893,6 +893,17 @@ RwPrjBrowserTool >> removePackageNamed: packageName [
 ]
 
 { #category : 'class browsing' }
+RwPrjBrowserTool >> renameClassNamed: className to: newName [
+
+	| newClass |
+
+	newClass := self copyClassNamed: className to: newName.
+	self removeClassNamed: className.
+	^newClass
+
+]
+
+{ #category : 'class browsing' }
 RwPrjBrowserTool >> updateClassComment: aString forClassNamed: className [ 
 
 	"update the comment of the named class"
