@@ -20,6 +20,8 @@ rowan_tag="$1$pdfFilename"
 #     one PDF file)
 # 6. Archive the zip file and stage for delivery
 #
+# Alpha1: $ROWAN_PROJECTS_HOME/Rowan/bin/staging v0.0.2-alpha Alpha1.0
+#
 rowan_tag="$1"
 jadeite_tag="$2"
 
