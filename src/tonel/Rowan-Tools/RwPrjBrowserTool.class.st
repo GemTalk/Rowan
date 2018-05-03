@@ -819,7 +819,7 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 				ifFalse: [ clsDef instanceMethodDefinitions at: methodSelector ].
 			methodDef protocol: hybridPackageName ]
 		ifFalse: [
-			"method is moving to a different package"
+			"method is moving to a different package and the destination will be a class extension"
 
 			| destProjectDef destPackageDef destClsDef srcPackageDef  srcClsDef |
 			destinationLoadedPackage loadedProject name = projectDef name 
@@ -835,9 +835,7 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 
 			destPackageDef := destProjectDef packageNamed: destinationLoadedPackage name. 
 
-			destClsDef := loadedClassOrExtension isLoadedClass
-				ifTrue: [ destPackageDef classDefinitions at: className ]
-				ifFalse: [ destPackageDef classExtensions at: className ifAbsent: [ RwClassExtensionDefinition newForClassNamed: className ] ].
+			destClsDef := destPackageDef classExtensions at: className ifAbsent: [ RwClassExtensionDefinition newForClassNamed: className ].
 			isMeta
 				ifTrue: [
 					methodDef := srcClsDef classMethodDefinitions at: methodSelector.
