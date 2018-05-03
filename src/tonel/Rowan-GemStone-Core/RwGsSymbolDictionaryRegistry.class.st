@@ -921,6 +921,51 @@ RwGsSymbolDictionaryRegistry >> moveCompiledMethod: compiledMethod toProtocol: n
 	loadedMethod updateForProtocolChange
 ]
 
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry >> moveSessionMethodCompiledMethod: compiledMethod toProtocol: newProtocol [
+
+	"move a compiled method into a different protocol and update loaded things"
+
+	| behavior selector loadedMethod oldCat catSym catDict methodDictionary existingCompiledMethod |
+	selector := compiledMethod selector.
+	behavior := compiledMethod inClass.
+
+	methodDictionary := behavior persistentMethodDictForEnv: 0.
+self halt.
+	existingCompiledMethod := methodDictionary
+		at: selector
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no existing CompileMethod found for patched method.' ].
+	existingCompiledMethod == compiledMethod
+		ifFalse: [ 
+			self
+				error:
+					'Internal error - the existingCompiledMethod is not identical to the compiled method arg' ].
+
+	oldCat := behavior categoryOfSelector: selector environmentId: 0.
+	catSym := newProtocol asSymbol.
+	catDict := behavior _baseCategorysForStore: 0.
+	oldCat ifNotNil: [ (catDict at: oldCat) remove: selector ].
+	catDict
+		at: catSym
+		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
+	(catDict at: catSym) add: selector.
+
+	behavior moveMethod: selector toCategory: newProtocol environmentId: 0.
+
+	loadedMethod := methodRegistry
+		at: compiledMethod
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no existing LoadedMethod found for the compiledMethod.' ].
+
+	loadedMethod updateForProtocolChange
+
+]
+
 { #category : 'accessing' }
 RwGsSymbolDictionaryRegistry >> packageRegistry [
 
