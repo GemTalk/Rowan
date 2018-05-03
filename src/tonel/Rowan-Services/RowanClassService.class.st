@@ -258,9 +258,9 @@ RowanClassService >> samplePackageName [
 ]
 
 { #category : 'rowan' }
-RowanClassService >> subclassCreationTemplate: packageName [
-	
-	^self browserTool classCreationTemplateForSubclassOf: name category: String new packageName: packageName
+RowanClassService >> subclassCreationTemplate [
+
+	^self browserTool classCreationTemplateForSubclassOf: name className: 'NewSubclass' category: self classFromName rowanPackageName
 
 ]
 
