@@ -1,6 +1,25 @@
   set u SystemUser p swordfish
   login
 
+# Create RowanUser
+#
+expectvalue %String
+run
+| up |
+up := AllUsers detect: [ :x | x userId asString = 'RowanUser' ] ifNone: [nil].
+up ifNotNil:[ ^ 'RowanUser UserProfile exists' ].
+
+up := AllUsers addNewUserWithId:'RowanUser'
+                         password: 'swordfish' 
+                         createNewSecurityPolicy: true .
+#('CodeModification' 'UserPassword' 'OtherPassword' 'CompilePrimitives') 
+  do: [:privilege | up addPrivilege: privilege ].
+up addGroup: 'DataCuratorGroup'.
+Globals at: #RowanUserObjectSecurityPolicy put: up defaultObjectSecurityPolicy .
+^ ' created RowanUser'.
+%
+commit
+
 # enable GsPackagePolicy
 #
   run
@@ -545,6 +564,10 @@ currentOrNil
 %
   commit
 
+  logout
+  set u RowanUser p swordfish
+  login
+
 # Install Rowan, Cypress, STON, and Tonel using Rowan
   run
   | projectSetDefinition gitRepoPath |
@@ -552,9 +575,63 @@ currentOrNil
   gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
   #(
     'file:$ROWAN_PROJECTS_HOME/Rowan/specs/Rowan_SystemUser.ston'
+   ) 
+    do: [:specUrl |
+      "load all of the packages from disk, so that we're not actually using Cypress, STON, 
+       and Tonel while created loaded things for Rowan"
+      | specification |
+      specification := RwSpecification fromUrl: specUrl.
+      specification
+        repositoryRootPath: gitRepoPath;
+        repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
+        register.
+      (Rowan projectTools read 
+        readProjectSetForProjectNamed: specification specName withConfiguration: 'Default')
+          do: [:projectDefinition |
+            projectSetDefinition addProject: projectDefinition ] ].
+    [ 
+      Rowan projectTools load
+        _bootstrapLoadProjectSetDefinition: projectSetDefinition 
+        instanceMigrator: Rowan platform instanceMigrator.
+      "loaded project and loaded packages read from disk - mark them not dirty"
+      projectSetDefinition deriveLoadedThings do: [:loadedProject |
+        loadedProject markNotDirty.
+        loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ] ]
+      on: Warning
+      do: [ :ex | 
+        Transcript
+          cr;
+          show: ex description .
+        ex resume: true ].
+   true
+    ifTrue: [
+      | incorrectlyPackaged |
+      "quick and dirty validation that Rowan loaded with Rowan is correct"
+      incorrectlyPackaged := (ClassOrganizer new classes 
+	select: [:cl | 
+		(cl name asString beginsWith: 'Rw') 
+			or: [cl name asString beginsWith: 'Rowan' ]])
+	select: [:cl | 
+		(Rowan image loadedClassNamed: cl name asString ifAbsent: [])
+			handle ~~ cl ].
+      incorrectlyPackaged isEmpty ifFalse: [ self error: 'Rowan is not correctly packaged' ] ].
+%
+  commit
+
+  logout
+  set u SystemUser p swordfish
+  login
+
+# Install Rowan, Cypress, STON, and Tonel using Rowan
+  run
+  | projectSetDefinition gitRepoPath |
+  projectSetDefinition := RwProjectSetDefinition new.
+  gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
+  #(
     'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'
     'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'
-    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston') 
+    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'
+   ) 
     do: [:specUrl |
       "load all of the packages from disk, so that we're not actually using Cypress, STON, 
        and Tonel while created loaded things for Rowan"
