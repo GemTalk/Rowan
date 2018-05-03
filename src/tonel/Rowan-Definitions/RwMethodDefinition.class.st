@@ -125,6 +125,20 @@ RwMethodDefinition >> key [
 ]
 
 { #category : 'accessing' }
+RwMethodDefinition >> protocol [
+
+	^properties at: 'protocol'
+
+]
+
+{ #category : 'accessing' }
+RwMethodDefinition >> protocol: aString [
+
+	properties at: 'protocol' put: aString
+
+]
+
+{ #category : 'accessing' }
 RwMethodDefinition >> selector [
 
 	^properties at: 'selector'
