@@ -6,23 +6,20 @@ Class {
 		'sha',
 		'branch'
 	],
-	#classVars : [
-		'DefaultProjectName'
-	],
 	#category : 'Rowan-Services'
 }
 
 { #category : 'accessing' }
 RowanProjectService class >> defaultProjectName [
 
-	^DefaultProjectName
+	^RowanServicePreferences current defaultProjectName
 
 ]
 
 { #category : 'accessing' }
 RowanProjectService class >> defaultProjectName: aString [
 
-	DefaultProjectName := aString
+	RowanServicePreferences current defaultProjectName: aString
 
 ]
 
