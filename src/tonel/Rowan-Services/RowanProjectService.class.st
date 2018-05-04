@@ -118,6 +118,13 @@ RowanProjectService >> definition [
 ]
 
 { #category : 'rowan' }
+RowanProjectService >> isDirty [
+
+	^(RwProject newNamed: name) isDirty
+
+]
+
+{ #category : 'rowan' }
 RowanProjectService >> isSkew [
 
 	^self sha ~= self repositorySha

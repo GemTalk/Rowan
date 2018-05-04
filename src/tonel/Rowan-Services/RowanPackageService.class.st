@@ -86,6 +86,13 @@ RowanPackageService >> genericClassCreationTemplate [
 ]
 
 { #category : 'rowan' }
+RowanPackageService >> isDirty [
+
+	^(RwPackage newNamed: name) isDirty
+
+]
+
+{ #category : 'rowan' }
 RowanPackageService >> loadedClassDefinitions [
 
 	^self loadedClasses collect:[:loadedClass | loadedClass asDefinition]
