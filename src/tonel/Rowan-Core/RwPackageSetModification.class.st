@@ -124,12 +124,25 @@ RwPackageSetModification >> addMethodsRemovedByPackageModification: packageModif
 ]
 
 { #category : 'enumerating' }
-RwPackageSetModification >> classesModifiedDo: aBlock [
+RwPackageSetModification >> classesModificationAndPackageModificationAndProjectModificationDo: aBlock [
 
-	"enumerate the classesModification dictionary of the receiver (package set modification or project set modification"
+	"enumerate the classesModification in the packagesModification in the projectModification in the receiver.
+		The classesModification, packageModification are arguments to the block. "
 
 	elementsModified
-		do: [ :packageModification | aBlock value: packageModification classesModification ]
+		do: [ :packageModification | aBlock cull: packageModification classesModification cull: packageModification  ]
+
+]
+
+{ #category : 'enumerating' }
+RwPackageSetModification >> classesModificationAndPackageModificationDo: aBlock [
+
+	"enumerate the classesModification in the packagesModification in the receiver.
+		The classesModification and ppackageModification are arguments to the block. "
+
+	elementsModified
+		do: [ :packageModification | aBlock cull: packageModification classesModification cull: packageModification  ]
+
 ]
 
 { #category : 'private - moves' }

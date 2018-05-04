@@ -1172,11 +1172,14 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBe
 	diff1 := myPackageSet compareAgainstBase: imagePackageSet1.
 	self deny: diff1 isEmpty.
 
-	Rowan packageTools load loadPackageSetDefinition: myPackageSet.
+	[ Rowan packageTools load loadPackageSetDefinition: myPackageSet ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 
 	imagePackageSet2 := Rowan loadedPackageDefinitionsNamed: packageNames.
 	diff2 := myPackageSet compareAgainstBase: imagePackageSet2.
 	self assert: diff2 isEmpty
+
 ]
 
 { #category : 'support' }
@@ -1798,10 +1801,13 @@ RwLoadingTest >> testClassInitialization1 [
 						classMethodDefinitions:
 							(self classInitializationClassMethodsForClass1: className));
 		yourself.
-	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+	[ self loadAndTestPackagesNamed: packageNames using: myPackageSet ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 	testClass := Rowan image resolveClassNamed: className asSymbol.
 	self assert: testClass classVar = 1.
 	self assert: testClass classInstVar1 = 1
+
 ]
 
 { #category : 'tests' }
@@ -2409,9 +2415,12 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
+
 	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
 	self assert: testInstance1 foo = 'foo'.
+	self assert: (testClass1 categoryOfSelector: #foo) = #'accessing'.
+
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2425,10 +2434,13 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+
 	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance2 foo = 'foo'
+	self assert: testInstance2 foo = 'foo'.
+	self assert: (testClass2 categoryOfSelector: #foo) = #'accessing'.
+
 ]
 
 { #category : 'tests' }
@@ -2454,9 +2466,12 @@ RwLoadingTest >> testSingleClassVersionChange2 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
+
 	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
 	self assert: testInstance1 foo = 'foo'.
+	self assert: (testClass1 categoryOfSelector: #foo) = #'accessing'.
+
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2470,10 +2485,13 @@ RwLoadingTest >> testSingleClassVersionChange2 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+
 	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance2 foo = 'bar'
+	self assert: testInstance2 foo = 'bar'.
+	self assert: (testClass2 categoryOfSelector: #foo) = #'accessing'.
+
 ]
 
 { #category : 'tests' }
@@ -2499,9 +2517,12 @@ RwLoadingTest >> testSingleClassVersionChange3 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
+
 	testClass1 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance1 := testClass1 new.
 	self assert: testInstance1 foo = 'foo'.
+	self assert: (testClass1 categoryOfSelector: #foo) = #'accessing'.
+
 	packageNames := {packageName}.
 	myPackageSet := RwPackageSetDefinition new.
 	myPackageSet
@@ -2515,8 +2536,11 @@ RwLoadingTest >> testSingleClassVersionChange3 [
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
+
 	testClass2 := Rowan image resolveClassNamed: className asSymbol.
 	testInstance2 := testClass2 new.
 	self deny: testClass2 == testClass1.
-	self assert: testInstance2 foo = 'foo'
+	self assert: testInstance2 foo = 'foo'.
+	self assert: (testClass2 categoryOfSelector: #foo) = #'fooing'.
+
 ]

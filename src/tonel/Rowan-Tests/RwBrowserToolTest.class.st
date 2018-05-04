@@ -236,7 +236,10 @@ RwBrowserToolTest >> _loadExtendedProjectDefinition: projectName packageNames: p
 		inProject: projectDefinition.
 
 
-	projectTools load loadProjectDefinition: projectDefinition
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
+
 ]
 
 { #category : 'private' }
@@ -300,7 +303,10 @@ RwBrowserToolTest >> _loadFullMultiProjectDefinition: projectNames packageNames:
 							inPackageNamed: (classPackageNames at: index)
 							inProject: projectDefinition ] ] ].
 
-	projectTools load loadProjectSetDefinition: projectSetDefinition
+	[ projectTools load loadProjectSetDefinition: projectSetDefinition  ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
+
 ]
 
 { #category : 'private' }
@@ -352,7 +358,10 @@ RwBrowserToolTest >> _loadMultiProjectDefinition: projectNames packageNames: pac
 
 		projectSetDefinition addProject: projectDefinition ].
 
-	projectTools load loadProjectSetDefinition: projectSetDefinition
+	[ projectTools load loadProjectSetDefinition: projectSetDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
+
 ]
 
 { #category : 'private' }
@@ -443,7 +452,10 @@ RwBrowserToolTest >> _loadStandardProjectDefinition: projectName packageNames: p
 		inPackageNamed: packageName
 		inProject: projectDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
+
 ]
 
 { #category : 'private' }

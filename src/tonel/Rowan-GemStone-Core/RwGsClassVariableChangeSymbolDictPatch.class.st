@@ -8,7 +8,7 @@ Object
 Class {
 	#name : 'RwGsClassVariableChangeSymbolDictPatch',
 	#superclass : 'RwGsClassPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'actions' }

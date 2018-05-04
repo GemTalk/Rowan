@@ -1,0 +1,113 @@
+#! /usr/bin/env bash
+#=========================================================================
+# Copyright (c) 2018 GemTalk Systems, LLC <dhenrich@gemtalksystems.com>.
+#
+#   MIT license: https://github.com/dalehenrich/Rowan/blob/master/LICENSE
+#=========================================================================
+
+set -e
+
+#
+# 1. clone the Rowan, Jade (Jadeite), RowanSample1, and RowanSample2 projects
+# 2. confirm that the master branches of Rowan and Jade are on the correct tag
+# 3. Create Jadeite runtime directory (Jadeite_runtime)
+# 4. create MANIFEST.TXT and list the sha of the commit for each of the git 
+#    projects along with the name of the file or directory
+# 5. zip up the Rowan, RowanSample1, and RowanSample2 projects, the 
+#    Jadeite_runtime directory  plus any .pdf documents present (only expect 
+#     one PDF file)
+# 6. Archive the zip file and stage for delivery
+#
+# Alpha1: $ROWAN_PROJECTS_HOME/Rowan/bin/staging v0.0.2-alpha Alpha1.0
+#
+rowan_tag="$1"
+jadeite_tag="$2"
+
+commit_match_tag() {
+  git describe --match "$1" HEAD
+}
+padded_manifest_line() {
+  line='               |  '
+  PROC_NAME="$1"
+  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> MANIFEST.TXT
+  PROC_NAME="$2"
+  printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> MANIFEST.TXT
+  PROC_NAME="$3"
+  printf "%s%s \n" $PROC_NAME "${line:${#PROC_NAME}}" >> MANIFEST.TXT
+}
+validate_tag() {
+  projectName="$1"
+  label="$2"
+  tagName="$3"
+  theTag=""
+  pad=""
+  if [ "$projectName" = "Rowan" ] ; then
+    pad="	"
+  fi
+  pushd $projectName
+    git checkout master
+    if [ "$tagName"x != "x" ] ; then
+      theTag=`commit_match_tag "$tagName"`
+    else
+      theTag="-"
+    fi
+    theCommit=`git rev-parse --short HEAD`
+  popd
+  padded_manifest_line "$label" "$theTag" "$theCommit"
+}
+
+cd $ROWAN_PROJECTS_HOME/Rowan/packing
+
+rm -rf Rowan Jade RowanSample1 RowanSample2 MANIFEST.TXT Jadeite_runtime_* *.zip
+
+git clone git@github.com:dalehenrich/Rowan.git
+git clone git@github.com:ericwinger/Jade.git
+git clone git@github.com:dalehenrich/RowanSample1.git
+git clone git@github.com:dalehenrich/RowanSample2.git
+
+# rm -rf MANIFEST.TXT Jadeite_runtime_* *.zip
+
+echo "------------------------------" >> MANIFEST.TXT
+echo "  Git clone directories" >> MANIFEST.TXT
+echo "------------------------------" >> MANIFEST.TXT
+padded_manifest_line "Git_Project" "Tag" "SHA"
+echo "---------------|-----------------|-----------------|" >> MANIFEST.TXT
+validate_tag Rowan Rowan "$rowan_tag"
+validate_tag RowanSample1 RowanSample1
+validate_tag RowanSample2 RowanSample2
+
+# create Jadeite runtime directory
+jadeite_runtime_dirName="Jadeite_runtime_${jadeite_tag}"
+mkdir "$jadeite_runtime_dirName"
+pushd Jade/runtime
+  cp -r * ../../${jadeite_runtime_dirName}
+popd
+
+echo "" >> MANIFEST.TXT
+echo "------------------------------" >> MANIFEST.TXT
+echo "  Jadeite runtime directory" >> MANIFEST.TXT
+echo "------------------------------" >> MANIFEST.TXT
+echo "Jadeite_runtime_${jadeite_tag}" >> MANIFEST.TXT
+
+echo "" >> MANIFEST.TXT
+echo "------------------------------" >> MANIFEST.TXT
+echo "  doc file(s)" >> MANIFEST.TXT
+echo "------------------------------" >> MANIFEST.TXT
+count=0
+for entry in `pwd`/*.pdf
+do
+  pdfFilename=$(basename "$entry")
+  echo "$pdfFilename" >> MANIFEST.TXT
+  count=$((count + 1))
+done
+echo "MANIFEST.TXT" >>  MANIFEST.TXT
+
+if [ $count -ne 1 ] ; then
+  echo "Expected only a single pdf file, found $count"
+  exit 1
+fi
+
+# create zip file
+base="${pdfFilename%.*}"
+
+zip -r ${base}.zip MANIFEST.TXT ${jadeite_runtime_dirName} *.pdf Rowan RowanSample1 RowanSample2

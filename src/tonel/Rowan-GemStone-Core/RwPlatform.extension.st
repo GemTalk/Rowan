@@ -1,13 +1,9 @@
 Extension { #name : 'RwPlatform' }
 
-{ #category : '*rowan-gemstone' }
-RwPlatform class >> forGemStone [
+{ #category : '*rowan-gemstone-core' }
+RwPlatform class >> current [
 
-	| platformClass |
-	platformClass := RwPlatformSpecificNameResolver
-				resolve: 'RwGsPlatform'
-				ifAbsent: 
-					[self
-						error: 'The CypressGemStone prerequisite package does not seem to be installed.'].
-	^platformClass new
+	^ (System myUserProfile objectNamed: 'UserGlobals') 
+		at: #RwUserPlatformInstance 
+		ifAbsentPut: [ RwGsPlatform new ]
 ]

@@ -9,7 +9,7 @@ Object
 Class {
 	#name : 'RwGsLoadedClassExtension',
 	#superclass : 'RwLoadedClassExtension',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'queries' }

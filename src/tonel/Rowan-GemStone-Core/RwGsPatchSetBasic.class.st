@@ -13,6 +13,7 @@ Class {
 		'projectsWithPropertyChanges',
 		'addedClasses',
 		'deletedClasses',
+		'movedDeletedClasses',
 		'extendedClasses',
 		'classesWithPropertyChanges',
 		'classesWithClassVariableChanges',
@@ -20,16 +21,72 @@ Class {
 		'addedMethods',
 		'deletedMethods',
 		'deleteNewVersionMethods',
+		'movedDeletedMethods',
 		'extendedMethods',
 		'methodsWithPropertyChanges',
 		'methodsNeedingRecompile',
+		'pureMovedMethods',
 		'tempSymbols',
 		'createdClasses',
 		'errors',
 		'currentProjectDefinition'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
+
+{ #category : 'private - method initialization order' }
+RwGsPatchSetBasic class >> _anyElementOf: aCollection ifEmpty: aBlock [
+	aCollection do: [ :each | ^ each ].
+	^ aBlock value
+
+]
+
+{ #category : 'private - method initialization order' }
+RwGsPatchSetBasic class >> _orderBySuperclass: aClass from: toBeOrdered into: order ignoring: processed [
+  "Private. Add to 'order', superclasses first, aClass and any of its superclasses 
+	that appear in 'toBeOrdered' but do not appear in 'processed'.
+	Remove from 'toBeOrdered' any class added to 'ordered'.
+	Any class seen, add to 'processed' whether or not added to 'order'."
+
+  | superclass |
+  superclass := aClass superclass.
+  superclass isNil | (processed includes: superclass)
+    ifFalse: [ 
+      self
+        _orderBySuperclass: superclass
+        from: toBeOrdered
+        into: order
+        ignoring: processed ].
+  processed add: aClass.
+  (toBeOrdered includes: aClass)
+    ifTrue: [ 
+      toBeOrdered remove: aClass.
+      order add: aClass ]
+
+]
+
+{ #category : 'private - method initialization order' }
+RwGsPatchSetBasic class >> methodPatchesInInitializationOrder: methodPatches [
+
+	"Returns acollection of the specified methodPatches ordered in superclass order, which is sufficient for initialization order."
+
+	| order toBeOrdered processed aClass patchMap |
+	patchMap := IdentityKeyValueDictionary new.
+	methodPatches do: [:methodPatch |
+		patchMap at: methodPatch behavior thisClass put: methodPatch ].
+	toBeOrdered := patchMap keys asIdentitySet.
+	order := OrderedCollection new.
+	processed := IdentitySet new.
+	[ (aClass := self _anyElementOf: toBeOrdered ifEmpty: [ nil ]) isNil ]
+		whileFalse: [ 
+			self
+				_orderBySuperclass: aClass
+				from: toBeOrdered
+				into: order
+				ignoring: processed ].
+  ^ (order collect: [:orderedClass | patchMap at: orderedClass ifAbsent: []]) select: [:patch | patch notNil ]
+
+]
 
 { #category : 'instance creation' }
 RwGsPatchSetBasic class >> new [
@@ -593,7 +650,7 @@ RwGsPatchSetBasic >> apply [
 	"Apply the changes I represent to the running image."
 	self
 		setupForApply;
-		moveClassesBetweenPackages;
+		"moveClassesBetweenPackages; --- needs to be called BEFORE apply for new version processing"
 		removeDeletedClassesFromTempSymbols;
 		addAddedClassesToTempSymbols;
 		recordCompiledForNewClassVersionDeletions;
@@ -714,10 +771,16 @@ RwGsPatchSetBasic >> createdClass: aClass [
 
 	| className |
 	className := aClass name.
-	(createdClasses includesKey: className)
-		ifTrue: [self error: 'Duplicate class creation'].
-	createdClasses
-		add: (SymbolAssociation newWithKey: className value: aClass)
+	(createdClasses at: className ifAbsent: [ ])
+		ifNil: [ 
+			createdClasses
+				add: (SymbolAssociation newWithKey: className value: aClass) ]
+		ifNotNil: [:cl | 
+			cl == aClass
+				ifFalse: [ 
+					"new version created, update entry in createdClasses"
+					createdClasses at: className put: aClass ] ]
+
 ]
 
 { #category : 'accessing' }
@@ -755,15 +818,19 @@ RwGsPatchSetBasic >> initialize [
 	classesWithNewVersions := Set new.
 	classesWithClassVariableChanges := Set new.
 	classesWithPropertyChanges := Set new.
+	movedDeletedClasses := Set new.
 	deletedMethods := Set new.
 	deleteNewVersionMethods := Set new.
+	movedDeletedMethods := Set new.
 	addedMethods := Set new.
 	extendedMethods := Set new.
 	methodsNeedingRecompile := Set new.
 	methodsWithPropertyChanges := Set new.
+	pureMovedMethods := Set new.
 	tempSymbols := SymbolDictionary new.
 	createdClasses := Dictionary new.
 	errors := Set new
+
 ]
 
 { #category : 'private - applying' }
@@ -830,14 +897,24 @@ RwGsPatchSetBasic >> moveClassesBetweenPackages [
 						addLoadedClass: loadedClass.
 					addedClasses remove: patch.
 					deletedClasses remove: deletedClassPatch.
+					movedDeletedClasses add: {deletedClassPatch. patch}.
 					modification := patch classDefinition
 						compareAgainstBase: deletedClassPatch classDefinition.
 					modification isEmpty
 						ifFalse: [ 
+"actually, I must modify the modifications here, similar to what goes on when we deal with new class versions"
+"... we need to arrange for the deletedClassPatch to be applied as well (remove from package -- maybe we leave it in?"
 							modification
 								addModificationToPatchSet: self
 								inPackage: patch packageDefinition
 								inProject: patch projectDefinition ] ] ]
+
+]
+
+{ #category : 'accessing' }
+RwGsPatchSetBasic >> movedDeletedClasses [
+	^ movedDeletedClasses
+
 ]
 
 { #category : 'private - applying' }
@@ -865,10 +942,19 @@ RwGsPatchSetBasic >> moveMethodsBetweenPackages [
 				ifNotNil: [ :selectorMap | 
 					(selectorMap at: patch methodDefinition selector ifAbsent: [])
 						ifNotNil: [ :methodDeletionPatch | 
+							| methodMod |
 							methodDeletionPatch
 								deleteLoadedMethodNewClasses: createdClasses
 								andExistingClasses: tempSymbols.
-							deletedMethods remove: methodDeletionPatch ] ] ]
+							deletedMethods remove: methodDeletionPatch.
+							movedDeletedMethods add: methodDeletionPatch.
+							methodMod := patch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
+							(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
+								ifTrue: [ 
+									"the source is identical ... so it is a pure move of the method ... record this fact
+										for operations that care. "
+									pureMovedMethods add: patch ] ] ] ]
+
 ]
 
 { #category : 'private - applying' }
@@ -928,10 +1014,22 @@ RwGsPatchSetBasic >> runInitializers [
 
 	"run the class initialization methods as needed"
 
-	(addedMethods copy
+	| methodPatches orderedMethodPatches |
+	methodPatches := (addedMethods copy
 		addAll: extendedMethods;
 		addAll: methodsNeedingRecompile;
-		yourself) do: [ :methodPatch | methodPatch runInitializer ]
+		yourself) select: [:each | each isAnInitializer ].
+	methodPatches isEmpty ifTrue: [ ^ self ].
+	orderedMethodPatches :=  (self class respondsTo: #methodPatchesInInitializationOrder:)
+		ifTrue: [ self class methodPatchesInInitializationOrder: methodPatches ]
+		ifFalse: [ methodPatches ].
+	orderedMethodPatches do: [ :methodPatch | 
+			"a pure move, is a method that moved between packages with no change in source ... do not run initialize method in this case"
+			(pureMovedMethods includes: methodPatch) 
+				ifFalse: [ 
+					RwExecuteClassInitializeMethodsAfterLoadNotification signal 
+						ifTrue: [ methodPatch runInitializer ] ] ]
+
 ]
 
 { #category : 'private - applying' }
@@ -997,11 +1095,22 @@ RwGsPatchSetBasic >> updateMethodDictionaries [
 	copy from temporary methodDictionaries to live methodDictionaries
 	For added methods, create LoadedMethods and add to the appropriate LoadedClass
 	or LoadedExtension
-   For methods that need recompiling updated the LoadedMethods registration. "
+	For methods that are moved between packages, the delete from the source package
+		has already been perfomed so installing the new method requires special
+		processing (installMovedDeletedMethod).
+	For methods that need recompiling updated the LoadedMethods registration. "
 
-	addedMethods do: [:each | each installMethod ].
+	| movedDeletedMethodMap |
+	movedDeletedMethodMap := Dictionary new.
+	movedDeletedMethods do: [:each | 
+		movedDeletedMethodMap at: each selector put: each ].
+	addedMethods do: [:each | 
+		(movedDeletedMethodMap at: each methodDefinition selector ifAbsent: [])
+			ifNil: [ each installMethod ]
+			ifNotNil: [ each installMovedDeletedMethod ] ].
 	extendedMethods do: [:each | each installMethod ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
+
 ]
 
 { #category : 'private - applying' }

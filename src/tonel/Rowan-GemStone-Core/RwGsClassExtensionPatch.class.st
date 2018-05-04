@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'patchClass'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'actions' }

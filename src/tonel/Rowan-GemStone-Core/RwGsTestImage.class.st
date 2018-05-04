@@ -1,8 +1,32 @@
 Class {
 	#name : 'RwGsTestImage',
 	#superclass : 'RwGsImage',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
+
+{ #category : 'querying' }
+RwGsTestImage class >> _loadedProjectNamedForNonTestProjects: aString ifAbsent: absentBlock [
+
+	"Look up a loaded project. First in current users project registry, then scan AllUsers for the project ... note that the user needs to be the project owner."
+
+	| currentUserId |
+	currentUserId := self currentUserId.
+	^ (super _loadedProjectRegistryForUserId: currentUserId)
+		at: aString
+		ifAbsent: [ 
+			AllUsers
+				do: [ :userProfile | 
+					| aUserId |
+					aUserId := userProfile userId.
+					aUserId ~= currentUserId
+						ifTrue: [ 
+							(super _loadedProjectRegistryForUserId: aUserId)
+								ifNotNil: [ :projectRegistry | 
+									(projectRegistry at: aString ifAbsent: [  ])
+										ifNotNil: [ :loadedProject | ^ loadedProject ] ] ] ].
+			^ absentBlock value ]
+
+]
 
 { #category : 'private' }
 RwGsTestImage class >> _loadedProjectRegistryForUserId: aUserId [
@@ -18,9 +42,10 @@ RwGsTestImage class >> _loadedTestProjectRegistryForUserId: aUserId [
 	^ ug
 		at: #'RwGsTestLoadedProjectRegistry'
 		ifAbsent: [ 
-			(self canWrite: ug)
+			(self currentUserId = aUserId)
 				ifFalse: [ ^ nil ].
 			ug at: #'RwGsTestLoadedProjectRegistry' put: StringKeyValueDictionary new ]
+
 ]
 
 { #category : 'accessing' }
@@ -28,9 +53,7 @@ RwGsTestImage class >> _projectForNonTestProject: projectName [
 
 	" this is a method that should only need to be used by tests ... and then sparingly"
 
-	| projectRegistry |
-	projectRegistry := super _loadedProjectRegistryForUserId: self currentUserId.
-	^ (projectRegistry at: projectName ifAbsent: [  ])
+	^self _loadedProjectNamedForNonTestProjects: projectName ifAbsent: [self error: 'no project ', projectName printString, ' found.']
 
 ]
 

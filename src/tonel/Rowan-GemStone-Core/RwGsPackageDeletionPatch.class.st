@@ -8,7 +8,7 @@ Object
 Class {
 	#name : 'RwGsPackageDeletionPatch',
 	#superclass : 'RwGsPackagePatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'deleting' }

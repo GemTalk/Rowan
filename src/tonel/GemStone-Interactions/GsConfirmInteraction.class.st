@@ -97,6 +97,7 @@ GsConfirmInteraction >> defaultActionBlock [
       Transcript cr; show: self printString.
       self cancelResponse ] ].
   ^ defaultActionBlock
+
 ]
 
 { #category : 'interacting' }

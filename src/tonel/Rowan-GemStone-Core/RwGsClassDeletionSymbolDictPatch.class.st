@@ -11,7 +11,7 @@ Class {
 	#instVars : [
 		'existingClass'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'instance creation' }

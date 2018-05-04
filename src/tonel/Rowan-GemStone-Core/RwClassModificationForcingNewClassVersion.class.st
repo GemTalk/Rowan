@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwClassModificationForcingNewClassVersion',
 	#superclass : 'RwClassModification',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'visiting' }

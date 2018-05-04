@@ -8,8 +8,7 @@ Class {
 	#name : 'Rowan',
 	#superclass : 'Object',
 	#classInstVars : [
-		'configuration',
-		'platform'
+		'configuration'
 	],
 	#category : 'Rowan-Core'
 }
@@ -41,14 +40,14 @@ Rowan class >> diffPackages: beforePackages with: afterPackages [
 { #category : 'private' }
 Rowan class >> existingOrNewLoadedPackageNamed: aName [
 
-	^platform loadedPackageClass existingOrNewPackageNamed: aName
+	^self platform loadedPackageClass existingOrNewPackageNamed: aName
 ]
 
 { #category : 'private' }
 Rowan class >> fileUtilities [
 	"Private to the Cypress system."
 
-	^platform fileUtilities
+	^self platform fileUtilities
 ]
 
 { #category : 'public tools' }
@@ -69,7 +68,7 @@ Rowan class >> globalNamed: aName [
 Rowan class >> image [
 	"Private to the Cypress system."
 
-	^platform image
+	^self platform image
 ]
 
 { #category : 'private' }
@@ -77,9 +76,8 @@ Rowan class >> initialize [
 
 	"Rowan initialize."
 
-	platform := RwPlatform current.
-	configuration := platform defaultConfiguration.
-	platform initialize
+	configuration := self platform defaultConfiguration.
+	self platform initialize
 ]
 
 { #category : 'private' }
@@ -117,7 +115,7 @@ Rowan class >> loadedPackageNamed: aName ifAbsent: absentBlock [
 Rowan class >> loadedPackageOfClass: aClass [
 	"If the given class is in a package, answer that LoadedPackage. If not, answer nil."
 
-	^platform loadedPackageOfClass: aClass
+	^self platform loadedPackageOfClass: aClass
 ]
 
 { #category : 'public' }
@@ -202,7 +200,7 @@ Rowan class >> packageTools [
 { #category : 'public' }
 Rowan class >> platform [
 
-	^ platform ifNil: [ platform := RwPlatform current ]
+	^ RwPlatform current
 ]
 
 { #category : 'public' }
@@ -279,5 +277,5 @@ Rowan class >> updateLoadedPackages [
 	| source |
 	source := configuration packageInfoSource.
 	source == #'Category'
-		ifTrue: [ platform updateLoadedPackagesFrom: source ]
+		ifTrue: [ self platform updateLoadedPackagesFrom: source ]
 ]

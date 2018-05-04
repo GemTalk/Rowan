@@ -8,7 +8,7 @@ Object
 Class {
 	#name : 'RwGsMethodAdditionSymbolDictPatch',
 	#superclass : 'RwGsMethodPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'installing' }
@@ -20,4 +20,16 @@ RwGsMethodAdditionSymbolDictPatch >> installMethod [
 		protocol: self propertiesProtocolName
 		toPackageNamed: self packageName.
 	selector := compiledMethod selector
+]
+
+{ #category : 'installing' }
+RwGsMethodAdditionSymbolDictPatch >> installMovedDeletedMethod [
+
+	self symbolDictionaryRegistry
+		addMovedDeletedMethod: compiledMethod
+		for: behavior
+		protocol: self propertiesProtocolName
+		toPackageNamed: self packageName.
+	selector := compiledMethod selector
+
 ]

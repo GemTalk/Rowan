@@ -5,7 +5,7 @@ This is the GemStone-specific one.
 Class {
 	#name : 'RwPlatformSpecificNameResolver',
 	#superclass : 'Object',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'queries' }

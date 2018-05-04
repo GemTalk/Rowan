@@ -88,12 +88,28 @@ RwClassModification >> isEmpty [
 ]
 
 { #category : 'merging' }
+RwClassModification >> mergeForExistingClassWith: anExistingClassModification [
+
+	"merge aClassModification modifictions into the receiver"
+
+	anExistingClassModification propertiesModification isEmpty
+		ifFalse: [
+			self propertiesModification isEmpty
+				ifFalse: ["the properties modification for the receiver can be safely ignored" ].
+			propertiesModification := anExistingClassModification propertiesModification copy ].
+	instanceMethodsModification
+		mergeForExistingClassWith: anExistingClassModification instanceMethodsModification.
+	classMethodsModification
+		mergeForExistingClassWith: anExistingClassModification classMethodsModification.
+	after := anExistingClassModification after
+
+]
+
+{ #category : 'merging' }
 RwClassModification >> mergeForNewClassVersionWith: aClassModification [
 
 	"merge aClassModification modifictions into the receiver"
 
-	after == aClassModification after
-		ifFalse: [ self error: 'internal error - both modifications must share a common after' ].
 	aClassModification propertiesModification isEmpty
 		ifFalse: [ 
 			self
@@ -103,4 +119,5 @@ RwClassModification >> mergeForNewClassVersionWith: aClassModification [
 		mergeForNewClassVersionWith: aClassModification instanceMethodsModification.
 	classMethodsModification
 		mergeForNewClassVersionWith: aClassModification classMethodsModification
+
 ]

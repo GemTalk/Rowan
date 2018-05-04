@@ -8,7 +8,7 @@ Object
 Class {
 	#name : 'RwGsMethodDeletionSymbolDictPatch',
 	#superclass : 'RwGsMethodPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'deleting' }
@@ -47,6 +47,15 @@ RwGsMethodDeletionSymbolDictPatch >> deleteNewVersionMethodNewClasses: createdCl
 	self symbolDictionaryRegistry
 		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior
+]
+
+{ #category : 'initializers' }
+RwGsMethodDeletionSymbolDictPatch >> isAnInitializer [
+
+	"answer true if I represent a class initialization method"
+
+	^ false
+
 ]
 
 { #category : 'initializers' }

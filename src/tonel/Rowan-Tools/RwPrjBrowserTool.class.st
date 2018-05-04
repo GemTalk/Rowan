@@ -337,17 +337,24 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClas
 	projectTools := Rowan projectTools.
 	updateBlock := [ :cDef :pDef | 
 	loadedMethodToBeRemoved
+		ifNil: [
+			"no method needs to be remove, just add the method to the class or extension def"
+			isMeta
+				ifTrue: [ cDef addClassMethodDefinition: methodDef ]
+				ifFalse: [ cDef addInstanceMethodDefinition: methodDef ] ]
 		ifNotNil: [ :loadedMethod | 
-			| loadedPackage |
-			loadedPackage := loadedMethod loadedPackage.
-			loadedPackage name = packageName
+			| loadedPackageForMethod |
+			loadedPackageForMethod := loadedMethod loadedPackage.
+			loadedPackageForMethod name = packageName
 				ifTrue: [ 
-					"loaded method being updated in same package, so no need to remove method definition from the package"
-					 ]
+					"loaded method being updated in same package, sjust update the method def"
+					isMeta
+						ifTrue: [ cDef updateClassMethodDefinition: methodDef ]
+						ifFalse: [ cDef updateInstanceMethodDefinition: methodDef ] ]
 				ifFalse: [ 
-					| loadedClass projectDef packageDef crDef |
+					| loadedClassOrExtension projectDef packageDef crDef |
 					"loaded method in different package than new version of method"
-					projectDef := loadedPackage loadedProject asDefinition.
+					projectDef := loadedPackageForMethod loadedProject asDefinition.
 					projectDef name = pDef name
 						ifTrue: [ 
 							"both packages are in same project"
@@ -355,17 +362,19 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClas
 						ifFalse: [ 
 							"each package in a different project, will need to load loaded method project as well"
 							projectSetDefinition addProject: projectDef ].
-					packageDef := projectDef packageNamed: loadedPackage name.
-					loadedClass := loadedMethod loadedClass.
-					crDef := loadedClass isLoadedClass
-						ifTrue: [ packageDef classDefinitions at: loadedClass name ]
-						ifFalse: [ packageDef classExtensions at: loadedClass name ].
+					packageDef := projectDef packageNamed: loadedPackageForMethod name.
+					loadedClassOrExtension := loadedMethod loadedClass.
+					crDef := loadedClassOrExtension isLoadedClass
+						ifTrue: [ packageDef classDefinitions at: loadedClassOrExtension name ]
+						ifFalse: [ packageDef classExtensions at: loadedClassOrExtension name ].
+					"remove the method from one package and add it to the other"
 					isMeta
-						ifTrue: [ crDef removeClassMethod: methodDef selector ]
-						ifFalse: [ crDef removeInstanceMethod: methodDef selector ] ] ].
-	isMeta
-		ifTrue: [ cDef updateClassMethodDefinition: methodDef ]
-		ifFalse: [ cDef updateInstanceMethodDefinition: methodDef ].
+						ifTrue: [ 
+							crDef removeClassMethod: methodDef selector.
+							cDef addClassMethodDefinition: methodDef  ]
+						ifFalse: [ 
+							crDef removeInstanceMethod: methodDef selector.
+							cDef addInstanceMethodDefinition: methodDef  ] ] ].
 	projectSetDefinition addProject: pDef.
 	projectTools load loadProjectSetDefinition: projectSetDefinition.
 	(self _loadedMethod: methodDef selector inClassNamed: className isMeta: isMeta)
@@ -398,6 +407,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClas
 			classExtensionDef ].
 
 	^ updateBlock value: classExtensionDef value: projectDefinition
+
 ]
 
 { #category : 'package browsing' }
@@ -755,7 +765,7 @@ RwPrjBrowserTool >> removeClassNamed: className [
 		ifNil: [
 			"Give developer a chance to handle and abort the removal of unpackaged class"
 			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackaged class ', className printString.
-			"Notification resumed, so continue with removal ..." ]
+			"Notification resumed, so continue with removal ... actual removal is performed below"]
 		ifNotNil: [
 			| loadedPackage projectDef packageDef classDef |
 			loadedPackage := loadedClass loadedPackage.
@@ -789,7 +799,7 @@ RwPrjBrowserTool >> removeClassNamed: className [
 			"need to do the actual removal of the unpackaged class after Rowan has done it's job"
 			| theClass |
 			theClass := Rowan image objectNamed: className.
-			(System myUserProfile dictionariesAndSymbolsOf: theClass)
+			(GsCurrentSession currentSession symbolList dictionariesAndSymbolsOf: theClass)
 				do: [:ar | | dict key |
 					"brute force removal of the class from system dictionaries"
 					dict := ar at: 1.	
@@ -841,5 +851,27 @@ RwPrjBrowserTool >> removePackageNamed: packageName [
 	projectDef removePackageNamed: loadedPackage name.
 
 	Rowan projectTools load loadProjectDefinition: projectDef
+
+]
+
+{ #category : 'class browsing' }
+RwPrjBrowserTool >> updateClassComment: aString forClassNamed: className [ 
+
+	"update the comment of the named class"
+
+	| loadedClass projectDefinition packageDefinition classDefinition |
+	loadedClass := Rowan image 
+		loadedClassNamed: className 
+		ifAbsent: [
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify an unpackage method in the class ', className printString.
+			"Notification resumed, so continue with add/modify"
+			^ (Rowan globalNamed: className) comment: aString ].
+
+	projectDefinition := loadedClass loadedProject asDefinition.
+	packageDefinition := projectDefinition packageNamed: loadedClass loadedPackage name.
+	classDefinition := packageDefinition classDefinitions at: loadedClass name.
+	classDefinition comment: aString.
+
+	self class load loadProjectDefinition: projectDefinition.
 
 ]

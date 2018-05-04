@@ -11,7 +11,7 @@ Class {
 	#instVars : [
 		'propertiesModification'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'instance creation' }

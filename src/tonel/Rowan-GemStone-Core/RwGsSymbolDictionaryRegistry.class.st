@@ -8,7 +8,7 @@ Class {
 		'classExtensionRegistry',
 		'methodRegistry'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'accessing' }
@@ -425,6 +425,65 @@ RwGsSymbolDictionaryRegistry >> addExtensionSessionMethods: methDict catDict: ca
 	loadedClassExtension addLoadedMethod: loadedMethod.
 
 	^ compiledMethod
+]
+
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry >> addMovedDeletedMethod: newCompiledMethod [
+
+	"add a recompiled compiled method that was previously removed from loaded things
+		to behavior and update the loaded things appropriately"
+
+	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
+	selector := newCompiledMethod selector.
+	behavior := newCompiledMethod inClass.
+	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	oldCompiledMethod := methodDictionary
+		at: selector
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- expected an existing compiled method in the method dictionary' ].
+
+	oldCompiledMethod == newCompiledMethod
+		ifTrue: [ 
+			"exit early, no more work to be done"
+			^ self ].
+	methodDictionary at: selector put: newCompiledMethod.
+
+	loadedMethod := methodRegistry
+		at: oldCompiledMethod
+		ifAbsent: [].
+	loadedMethod ifNotNil: [  
+			self
+				error:
+					'Internal error -- unexpected loaded method found - deleteMethod processing should have removed the loaded method already' ].
+
+	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: newCompiledMethod.
+
+	methodRegistry at: newCompiledMethod put: loadedMethod.
+
+]
+
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry >> addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
+
+	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
+		back using specialized processing"
+
+	| methodDictionary selector |
+	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	selector := compiledMethod selector.
+	methodDictionary 
+		at: selector 
+		ifAbsent: [  
+			self
+				error:
+					'Internal error -- attempt to move a method that does not exist'  ].
+	^ self
+		addMovedDeletedMethod: compiledMethod;
+		moveCompiledMethod: compiledMethod toProtocol: protocolString;
+		yourself
+
 ]
 
 { #category : 'private' }

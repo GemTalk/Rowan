@@ -12,7 +12,7 @@ Class {
 		'newClass',
 		'symbolAssociation'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'actions' }

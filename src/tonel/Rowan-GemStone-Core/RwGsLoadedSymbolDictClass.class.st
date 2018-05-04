@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGsLoadedSymbolDictClass',
 	#superclass : 'RwLoadedClass',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'instance creation' }
@@ -350,7 +350,8 @@ RwGsLoadedSymbolDictClass >> updateSymbolDictionaryFromClassFor: aSymbolDictiona
 
 	| newName oldName |
 	newName := aSymbolDictionary name.
-	oldName := self propertyAt: 'SymbolDictionary'.
+	oldName := self propertyAt: 'gs_SymbolDictionary'.
 	oldName = newName
 		ifFalse: [ self symbolDictionaryName: newName ]
+
 ]

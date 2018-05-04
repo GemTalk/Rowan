@@ -8,7 +8,7 @@ Object
 Class {
 	#name : 'RwGsPackagePatch',
 	#superclass : 'RwGsPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'instance creation' }

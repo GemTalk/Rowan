@@ -67,6 +67,12 @@ RwClassDefinition >> classVarNames: anArrayOfClassVarNames [
 ]
 
 { #category : 'accessing' }
+RwClassDefinition >> comment: aString [
+  properties at: 'comment' put: aString
+
+]
+
+{ #category : 'accessing' }
 RwClassDefinition >> instVarNames [
 
 	^ properties at: 'instvars'

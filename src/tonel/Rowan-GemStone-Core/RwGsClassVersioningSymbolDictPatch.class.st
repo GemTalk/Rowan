@@ -14,7 +14,7 @@ Class {
 		'newClassVersion',
 		'symbolAssociation'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'instance creation' }
@@ -224,67 +224,116 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 	subclassesOfClassWithNewVersions removeAllPresent: classesWithNewVersions.
 	subclassesOfClassWithNewVersions
 		do: [ :subclass | 
-			| loadedClassDefinition subclassName newVersionClassModification |
+			| loadedClass loadedPackageName loadedClassDefinition subclassName newVersionClassModification |
 			subclassName := subclass name asString.
-			loadedClassDefinition := (self symbolDictionaryRegistry
-				existingForClass: subclass) asDefinition.
+			loadedClass := self symbolDictionaryRegistry existingForClass: subclass.
+			loadedClassDefinition := loadedClass asDefinition.
+			loadedPackageName := loadedClass loadedPackage name.
 			newVersionClassModification := loadedClassDefinition
 				compareAgainstBaseForcingNewClassVersion: loadedClassDefinition.
 			aProjectSetModification
-				classesModifiedDo: [ :classesModification | 
-					classesModification isEmpty
-						ifTrue: [ 
-							"this is not unexpected ... not all packages in the project set are expected to have class modifications with new versions"
-							 ]
-						ifFalse: [ 
-							| classesModified |
-							classesModified := classesModification elementsModified.
-							(classesModified at: subclassName ifAbsent: [  ])
-								ifNil: [ 
-									classesModified at: subclassName put: newVersionClassModification.
-									newVersionClassModification
-										mergeForNewClassVersionWith: newVersionClassModification ]
-								ifNotNil: [ :existingClassModification | 
-									existingClassModification isDeletion
-										ifTrue: [ 
-											"a deletion is not unexpected ... "
-											 ]
-										ifFalse: [ 
-											self halt: 'let''s see how this plays out'.
-											existingClassModification
-												mergeForNewClassVersionWith: newVersionClassModification ] ] ] ].
+				classesModificationAndPackageModificationAndProjectModificationDo: [ :classesModification :packageModification |  
+					packageModification key = loadedPackageName
+						ifTrue: [
+							classesModification isEmpty
+								ifTrue: [ 
+									"this is not unexpected ... not all packages in the project set are expected to have class modifications with new versions"
+									]
+								ifFalse: [ 
+									| classesModified |
+									classesModified := classesModification elementsModified.
+									(classesModified at: subclassName ifAbsent: [  ])
+										ifNil: [
+											classesModified at: subclassName put: newVersionClassModification.
+											newVersionClassModification
+												mergeForNewClassVersionWith: newVersionClassModification ]
+										ifNotNil: [ :existingClassModification | 
+											existingClassModification isDeletion
+												ifTrue: [ 
+													"a deletion is not unexpected ... "
+													]
+												ifFalse: [
+													newVersionClassModification mergeForExistingClassWith: existingClassModification.
+													classesModified at: subclassName put: newVersionClassModification ] ] ] ] 
+						ifFalse: [
+							classesModification isEmpty
+								ifFalse: [| classesModified |
+									classesModified := classesModification elementsModified.
+									(classesModified at: subclassName ifAbsent: [  ])
+										ifNil: []] ] ].
 			self
 				_updateNewClassVersionPatchesForClass: subclass
 				in: aProjectSetModification
 				patchSet: patchSet ]
+
 ]
 
 { #category : 'new version support' }
 RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectSetModification [
 
-	| existingClass loadedClassDefinition newVersionClassModification existingClassName |
+	| existingClass loadedClass loadedPackageName loadedClassDefinition newVersionClassModification existingClassName |
+self halt. "delete this guy if things work out"
 	existingClass := self oldClassVersion.
 	existingClassName := existingClass name asString.
-	loadedClassDefinition := (self symbolDictionaryRegistry
-		existingForClass: existingClass) asDefinition.
+
+	loadedClass := self symbolDictionaryRegistry existingForClass: existingClass.
+	loadedClassDefinition := loadedClass asDefinition.
+	loadedPackageName := loadedClass loadedPackage name.
+
 	newVersionClassModification := self classDefinition
 		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
 	newVersionClassModification isEmpty
 		ifFalse: [ 
 			"only newVersionClassModification with substance need further processing"
 			aProjectSetModification
-				classesModifiedDo: [ :classesModification | 
+				classesModificationAndPackageModificationAndProjectModificationDo: [ :classesModification :packageModification | 
 					classesModification isEmpty
 						ifFalse: [ 
 							| classesModified |
 							classesModified := classesModification elementsModified.
 							(classesModified at: existingClassName ifAbsent: [  ])
-								ifNil: [ 
-									self
-										error:
-											'internal error - missing class modification for '
-												, existingClassName printString ]
+								ifNil: [ "not unexpected ... if there are multiple packages involved" ]
 								ifNotNil: [ :existingClassModification | 
-									existingClassModification
-										mergeForNewClassVersionWith: newVersionClassModification ] ] ] ]
+									newVersionClassModification mergeForExistingClassWith: existingClassModification.
+									classesModified at: existingClassName put: newVersionClassModification. ] ] ] ]
+
+]
+
+{ #category : 'new version support' }
+RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectSetModification patchSet: patchSet [
+
+	| existingClass loadedClass loadedPackageName loadedClassDefinition newVersionClassModification existingClassName movedDeletedMap |
+	movedDeletedMap := Dictionary new.
+	patchSet movedDeletedClasses do: [:ar | movedDeletedMap at: (ar at: 1) classDefinition key put: ar ].
+	existingClass := self oldClassVersion.
+	existingClassName := existingClass name asString.
+
+	loadedClass := self symbolDictionaryRegistry existingForClass: existingClass.
+	loadedClassDefinition := loadedClass asDefinition.
+	loadedPackageName := loadedClass loadedPackage name.
+
+	newVersionClassModification := self classDefinition
+		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
+	newVersionClassModification isEmpty
+		ifFalse: [ 
+			"only newVersionClassModification with substance need further processing"
+			aProjectSetModification
+				classesModificationAndPackageModificationAndProjectModificationDo: [ :classesModification :packageModification | 
+					classesModification isEmpty
+						ifFalse: [ 
+							| classesModified |
+							classesModified := classesModification elementsModified.
+							(classesModified at: existingClassName ifAbsent: [  ])
+								ifNil: [ "not unexpected ... if there are multiple packages involved" ]
+								ifNotNil: [ :existingClassModification | 
+									| deleteClassModification |
+									deleteClassModification := false.
+									(movedDeletedMap at: existingClassName ifAbsent: []) ifNotNil: [:ar | 
+										deleteClassModification := (ar at: 1) packageDefinition name = packageModification after name ].
+									deleteClassModification
+										ifTrue: [classesModified removeKey: existingClassName]
+										ifFalse: [
+											newVersionClassModification mergeForExistingClassWith: existingClassModification.
+											classesModified at: existingClassName put: newVersionClassModification ] ] ] ] ]
+
 ]

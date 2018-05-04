@@ -9,7 +9,7 @@ Object
 Class {
 	#name : 'RwGsMethodPropertiesSymDictPatch',
 	#superclass : 'RwGsMethodPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'installing' }
@@ -34,6 +34,15 @@ RwGsMethodPropertiesSymDictPatch >> installPropertiesPatchNewClasses: createdCla
 	self symbolDictionaryRegistry
 		moveCompiledMethod: oldCompiledMethod
 		toProtocol: self propertiesProtocolName
+]
+
+{ #category : 'initializers' }
+RwGsMethodPropertiesSymDictPatch >> isAnInitializer [
+
+	"answer true if I represent a class initialization method"
+
+	^ false
+
 ]
 
 { #category : 'initializers' }

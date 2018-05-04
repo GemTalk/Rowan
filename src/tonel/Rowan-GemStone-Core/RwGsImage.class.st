@@ -4,7 +4,7 @@ Keeps track of what LoadedPackages are in the GemStone repository, and is the ga
 Class {
 	#name : 'RwGsImage',
 	#superclass : 'Object',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private' }
@@ -36,9 +36,10 @@ RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
 	^ ug
 		at: #'RwGsLoadedProjectRegistry'
 		ifAbsent: [ 
-			(self canWrite: ug)
+			(self currentUserId = aUserId)
 				ifFalse: [ ^ nil ].
 			ug at: #'RwGsLoadedProjectRegistry' put: StringKeyValueDictionary new ]
+
 ]
 
 { #category : 'cypress (old)' }
@@ -60,9 +61,10 @@ RwGsImage class >> _projectRegistryForUserId: aUserId [
 	^ ug
 		at: #'RwGsProjectRegistry'
 		ifAbsent: [ 
-			(self canWrite: ug)
+			(self currentUserId = aUserId)
 				ifFalse: [ ^ nil ].
 			ug at: #'RwGsProjectRegistry' put: StringKeyValueDictionary new ]
+
 ]
 
 { #category : 'querying' }
@@ -88,6 +90,7 @@ RwGsImage class >> addLoadedProject: aRwLoadedProject [
 	"Register a project"
 
 	| projectName projectRegistry |
+	aRwLoadedProject projectOwnerId: self currentUserId.
 	projectName := aRwLoadedProject name.
 	projectRegistry := self
 		_loadedProjectRegistryForUserId: aRwLoadedProject projectOwnerId.
@@ -97,6 +100,7 @@ RwGsImage class >> addLoadedProject: aRwLoadedProject [
 	self
 		error:
 			'There is already a project named ' , projectName printString , ' registered'
+
 ]
 
 { #category : 'cypress (old)' }
@@ -124,6 +128,7 @@ RwGsImage class >> applyModification: aProjectSetModification enableInstanceMigr
 	visitor := RwGsImagePatchVisitor new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
+	patchSet moveClassesBetweenPackages. "updates classesWithNewVersions, if a move is detected"
 	patchSet classesWithNewVersions isEmpty
 		ifTrue: [ 
 			patchSet apply.
@@ -131,7 +136,8 @@ RwGsImage class >> applyModification: aProjectSetModification enableInstanceMigr
 	patchSet classesWithNewVersions
 		do: [ :each | 
 			each
-				updatePatchesForNewClassVersion: aProjectSetModification;
+				updatePatchesForNewClassVersion: aProjectSetModification 
+					patchSet: patchSet;
 				updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
 					patchSet: patchSet;
 				updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
@@ -140,6 +146,7 @@ RwGsImage class >> applyModification: aProjectSetModification enableInstanceMigr
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
 	patchSet applyForNewClassVersions: enableInstanceMigration
+
 ]
 
 { #category : 'modifying image' }
@@ -149,6 +156,7 @@ RwGsImage class >> applyModification: aProjectSetModification instanceMigrator: 
 	visitor := RwGsImagePatchVisitor new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
+	patchSet moveClassesBetweenPackages. "updates classesWithNewVersions, if a move is detected"
 	patchSet classesWithNewVersions isEmpty
 		ifTrue: [ 
 			patchSet apply.
@@ -156,7 +164,8 @@ RwGsImage class >> applyModification: aProjectSetModification instanceMigrator: 
 	patchSet classesWithNewVersions
 		do: [ :each | 
 			each
-				updatePatchesForNewClassVersion: aProjectSetModification;
+				updatePatchesForNewClassVersion: aProjectSetModification 
+					patchSet: patchSet;
 				updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
 					patchSet: patchSet;
 				updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
@@ -165,6 +174,7 @@ RwGsImage class >> applyModification: aProjectSetModification instanceMigrator: 
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
 	patchSet applyForNewClassVersions: instanceMigrator
+
 ]
 
 { #category : 'testing' }
@@ -386,11 +396,9 @@ RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 							(self _loadedProjectRegistryForUserId: aUserId)
 								ifNotNil: [ :projectRegistry | 
 									(projectRegistry at: aString ifAbsent: [  ])
-										ifNotNil: [ :loadedProject | 
-											(loadedProject specification platformSpec at: 'gemstone') projectOwnerId
-												= aUserId
-												ifTrue: [ ^ loadedProject ] ] ] ] ].
+										ifNotNil: [ :loadedProject | ^ loadedProject ] ] ] ].
 			^ absentBlock value ]
+
 ]
 
 { #category : 'querying' }
@@ -399,25 +407,27 @@ RwGsImage class >> loadedProjects [
 	"Return the list of loaded project in current users project registry and in AllUsers, where
 		the current user is the project owner."
 
-	| currentUserId loadedProjects |
+	| currentUserId loadedProjects visibleUserIds |
 	loadedProjects := self _loadedProjectRegistry values.
 	currentUserId := self currentUserId.
+
+	visibleUserIds := ((System myUserProfile symbolList select: [:each | each objectSecurityPolicy notNil])
+								collect: [:each | each objectSecurityPolicy owner userId]) asSet asArray.
 
 	AllUsers
 		do: [ :userProfile | 
 			| aUserId |
 			aUserId := userProfile userId.
-			aUserId ~= currentUserId
-				ifTrue: [ 
-					(self _loadedProjectRegistryForUserId: aUserId)
-						ifNotNil: [ :projectRegistry | 
-							loadedProjects
-								addAll:
-									(projectRegistry
-										select: [ :loadedProject | 
-											(loadedProject specification platformSpec at: 'gemstone') projectOwnerId
-												= aUserId ]) ] ] ].
+			(visibleUserIds includes: aUserId)
+				ifTrue: [
+					aUserId ~= currentUserId
+						ifTrue: [ 
+							(self _loadedProjectRegistryForUserId: aUserId)
+								ifNotNil: [ :projectRegistry | 
+									loadedProjects
+										addAll: projectRegistry values ] ] ] ].
 	^ loadedProjects
+
 ]
 
 { #category : 'querying' }

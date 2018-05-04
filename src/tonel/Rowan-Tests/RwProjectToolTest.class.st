@@ -80,7 +80,9 @@ RwProjectToolTest >> testProjectClassExtensions [
 	packageDefinition2 := projectDefinition packageNamed: 'Simple-Extensions'.
 	packageDefinition2 addClassExtension: classExtensionDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition.
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
@@ -101,6 +103,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class and extension methods'
+
 ]
 
 { #category : 'tests' }
@@ -301,7 +304,9 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 	packageDefinition3 := projectDefinition packageNamed: 'Simple-Extensions1'.
 	packageDefinition3 addClassExtension: classExtensionDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition.
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 
 	self assert: testClass1 civar1 = 1.
 
@@ -319,6 +324,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 		commitProjectDefinition: projectDefinition
 		message:
 			'3 packages with extension methods for first package in third package.'
+
 ]
 
 { #category : 'tests' }
@@ -416,7 +422,9 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 	packageDefinition2 addClassDefinition: classDefinition2.
 	packageDefinition2 addClassExtension: classExtensionDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition.
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 
 	self assert: testClass1 civar1 == 1.
 	self assert: testInstance1 ivar1 isNil.
@@ -424,6 +432,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 	self assert: testClass2 notNil.
 	testInstance2 := testClass2 new.
 	self assert: testInstance2 foo
+
 ]
 
 { #category : 'tests' }
@@ -669,7 +678,9 @@ RwProjectToolTest >> testSimpleProject3 [
 	packageDefinition := projectDefinition packageNamed: 'Simple-Core'.
 	packageDefinition addClassDefinition: classDefinition.
 
-	projectTools load loadProjectDefinition: projectDefinition.
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: true ].
 
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
@@ -690,4 +701,5 @@ RwProjectToolTest >> testSimpleProject3 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple3 class and methods'
+
 ]

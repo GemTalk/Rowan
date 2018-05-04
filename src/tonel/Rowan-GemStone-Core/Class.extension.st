@@ -1,32 +1,6 @@
 Extension { #name : 'Class' }
 
 { #category : '*rowan-gemstone-core' }
-Class >> rowanPackageName [
-
-	"answer the name of the package that the receiver is a member of. Answer 'Rowan unpackagedName` if 
-		the receiver is not a member of any package"
-
-	| loadedClass |
-	loadedClass := Rowan image
-		loadedClassForClass: self
-		ifAbsent: [ ^ Rowan unpackagedName ].
-	^ loadedClass loadedPackage name
-]
-
-{ #category : '*rowan-gemstone-core' }
-Class >> rowanProjectName [
-
-	"answer the name of the project that the receiver is a member of. Answer `Rowan unpackagedName` if 
-		the receiver is not a member of any project"
-
-	| loadedClass |
-	loadedClass := Rowan image
-		loadedClassForClass: self
-		ifAbsent: [ ^ Rowan unpackagedName ].
-	^ loadedClass loadedProject name
-]
-
-{ #category : '*rowan-gemstone-core' }
 Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName options: optionsArray [
 
 	^ Rowan projectTools browser
@@ -56,6 +30,15 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 		category: aCategoryName
 		packageName: aPackageName
 		options: optionsArray
+]
+
+{ #category : '*rowan-gemstone-core' }
+Class >> rwComment: aString [
+
+	^ Rowan projectTools browser
+		updateClassComment: aString
+		forClassNamed: self thisClass name asString
+
 ]
 
 { #category : '*rowan-gemstone-core' }

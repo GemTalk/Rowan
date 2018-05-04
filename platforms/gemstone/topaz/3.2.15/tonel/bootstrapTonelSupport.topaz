@@ -4,17 +4,17 @@
 
 output push tonel.out
 
-input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/tonel/Tonel-Core.gs
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/tonel/Tonel-Core.gs
 errorCount
-input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/tonel/Tonel-GemStoneCommon-Core.gs
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/tonel/Tonel-GemStoneCommon-Core.gs
 errorCount
-input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/tonel/CypressTonel-Core.gs
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/tonel/CypressTonel-Core.gs
 
-input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/tonel/Tonel-Tests.gs
-input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/tonel/CypressTonel-Tests.gs
-input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/tonel/CypressTonel-GemStone-Tests.gs
-input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/tonel/Tonel-Cypress-Tests.gs
-input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/tonel/Tonel-GemStone-Tests.gs
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/tonel/Tonel-Tests.gs
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/tonel/CypressTonel-Tests.gs
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/tonel/CypressTonel-GemStone-Tests.gs
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/tonel/Tonel-Cypress-Tests.gs
+input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/tonel/Tonel-GemStone-Tests.gs
 errorCount
 
 output pop

@@ -8,7 +8,7 @@ Object
 Class {
 	#name : 'RwGsMethodDeletionPatch',
 	#superclass : 'RwGsMethodPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private-deleting' }
@@ -36,6 +36,15 @@ RwGsMethodDeletionPatch >> deleteMethodNewClasses: createdClasses andExistingCla
 		updateMethodDictionary;
 		updateProtocol;
 		deleteLoadedMethod
+]
+
+{ #category : 'initializers' }
+RwGsMethodDeletionPatch >> isAnInitializer [
+
+	"answer true if I represent a class initialization method"
+
+	^ false
+
 ]
 
 { #category : 'initializers' }

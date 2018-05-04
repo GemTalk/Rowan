@@ -7,7 +7,7 @@ Class {
 	#classVars : [
 		'MethodRegistry'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'enumeration' }

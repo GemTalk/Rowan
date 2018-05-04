@@ -9,7 +9,7 @@ export ROWAN_HOME="$(dirname $0)/../../../../"
 startTopaz $GEMSTONE_NAME -l << EOF
 
 
-  input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/install.tpz
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/install.tpz
 
   exit
 EOF

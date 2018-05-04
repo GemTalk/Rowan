@@ -532,7 +532,7 @@ currentOrNil
   | packageManager repo |
   packageManager := CypressPackageManager3 new.
   repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_HOME/src/tonel/'  )
+    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
     alias: ''.
   packageManager
     defaultSymbolDictionaryName: #'Globals'.
@@ -549,12 +549,12 @@ currentOrNil
   run
   | projectSetDefinition gitRepoPath |
   projectSetDefinition := RwProjectSetDefinition new.
-  gitRepoPath := '$ROWAN_HOME'.
+  gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
   #(
-    'file:$ROWAN_HOME/specs/Rowan_SystemUser.ston'
-    'file:$ROWAN_HOME/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'
-    'file:$ROWAN_HOME/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'
-    'file:$ROWAN_HOME/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston') 
+    'file:$ROWAN_PROJECTS_HOME/Rowan/specs/Rowan_SystemUser.ston'
+    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'
+    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'
+    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston') 
     do: [:specUrl |
       "load all of the packages from disk, so that we're not actually using Cypress, STON, 
        and Tonel while created loaded things for Rowan"
@@ -571,7 +571,11 @@ currentOrNil
     [ 
       Rowan projectTools load
         _bootstrapLoadProjectSetDefinition: projectSetDefinition 
-        instanceMigrator: Rowan platform instanceMigrator ]
+        instanceMigrator: Rowan platform instanceMigrator.
+      "loaded project and loaded packages read from disk - mark them not dirty"
+      projectSetDefinition deriveLoadedThings do: [:loadedProject |
+        loadedProject markNotDirty.
+        loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ] ]
       on: Warning
       do: [ :ex | 
         Transcript

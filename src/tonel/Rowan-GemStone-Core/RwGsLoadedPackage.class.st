@@ -11,7 +11,7 @@ Class {
 	#classVars : [
 		'PackageRegistry'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private' }

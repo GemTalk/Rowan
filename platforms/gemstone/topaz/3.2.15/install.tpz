@@ -6,12 +6,12 @@
   set u SystemUser p swordfish
   login
 
-  input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/cypress/bootstrapCypressSupport.topaz
-  input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/ston/bootstrapStonSupport.topaz
-  input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/tonel/bootstrapTonelSupport.topaz
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/cypress/bootstrapCypressSupport.topaz
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/ston/bootstrapStonSupport.topaz
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/tonel/bootstrapTonelSupport.topaz
   commit
 
   logout
-  input $ROWAN_HOME/platforms/gemstone/topaz/3.2.15/rowan/bootstrapRowanSupport.topaz
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/rowan/bootstrapRowanSupport.topaz
   errorCount
 

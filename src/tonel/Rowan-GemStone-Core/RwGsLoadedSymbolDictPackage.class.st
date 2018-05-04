@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGsLoadedSymbolDictPackage',
 	#superclass : 'RwLoadedPackage',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'queries' }

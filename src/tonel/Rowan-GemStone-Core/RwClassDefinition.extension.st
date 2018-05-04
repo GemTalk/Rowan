@@ -15,6 +15,8 @@ RwClassDefinition >> compareAgainstBaseForcingNewClassVersion: aDefinition [
 	modification := self _modificationForcingNewClassVersion
 		before: aDefinition
 		after: self.
+	modification
+		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
 	instanceMethodsModification := self _methodsModificationClass
 		extendedClassName: self key.
 	classMethodsModification := self _methodsModificationClass
@@ -35,6 +37,17 @@ RwClassDefinition >> compareAgainstBaseForcingNewClassVersion: aDefinition [
 		instanceMethodsModification: instanceMethodsModification;
 		classMethodsModification: classMethodsModification.
 	^ modification
+
+]
+
+{ #category : '*rowan-gemstone-core' }
+RwClassDefinition >> excludedProperties [
+	"return a list of properties that should be ignored when comparing"
+
+	"gs_SymbolDictionary is only used internally for recording the symbol dictionary where a class is installed - ignored for comparison purposes"
+
+	^ #('gs_SymbolDictionary')
+
 ]
 
 { #category : '*rowan-gemstone-core' }

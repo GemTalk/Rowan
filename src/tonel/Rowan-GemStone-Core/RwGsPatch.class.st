@@ -8,7 +8,7 @@ Class {
 		'packageDefinition',
 		'projectDefinition'
 	],
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'accessing' }

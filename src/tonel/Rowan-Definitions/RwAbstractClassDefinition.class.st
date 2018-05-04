@@ -121,6 +121,7 @@ RwAbstractClassDefinition >> compareAgainstBaseForNewClassVersion: aDefinition [
 		instanceMethodsModification: instanceMethodsModification;
 		classMethodsModification: classMethodsModification.
 	^ modification
+
 ]
 
 { #category : 'comparing' }

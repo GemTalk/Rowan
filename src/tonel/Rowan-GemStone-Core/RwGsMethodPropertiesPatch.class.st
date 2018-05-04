@@ -9,7 +9,7 @@ Object
 Class {
 	#name : 'RwGsMethodPropertiesPatch',
 	#superclass : 'RwGsMethodPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'installing' }
@@ -38,6 +38,15 @@ RwGsMethodPropertiesPatch >> installPropertiesPatchNewClasses: createdClasses an
 				error:
 					'Internal error -- no existing LoadedMethod found for patched method.' ].
 	loadedMethod setPropertiesTo: methodDefinition properties
+]
+
+{ #category : 'initializers' }
+RwGsMethodPropertiesPatch >> isAnInitializer [
+
+	"answer true if I represent a class initialization method"
+
+	^ false
+
 ]
 
 { #category : 'initializers' }

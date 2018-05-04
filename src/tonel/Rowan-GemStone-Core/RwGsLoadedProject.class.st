@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGsLoadedProject',
 	#superclass : 'RwLoadedProject',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private' }
@@ -32,6 +32,13 @@ self halt.
 RwGsLoadedProject >> projectOwnerId [
 
 	^ (self specification platformSpec at: 'gemstone') projectOwnerId
+]
+
+{ #category : 'specifiction' }
+RwGsLoadedProject >> projectOwnerId: aUserId [
+
+	^ (self specification platformSpec at: 'gemstone') projectOwnerId: aUserId
+
 ]
 
 { #category : 'definitions' }

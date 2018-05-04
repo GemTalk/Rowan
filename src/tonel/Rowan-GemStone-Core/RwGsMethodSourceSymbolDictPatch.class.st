@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwGsMethodSourceSymbolDictPatch',
 	#superclass : 'RwGsMethodPatch',
-	#category : 'Rowan-GemStone'
+	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'installing' }
