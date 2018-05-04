@@ -61,6 +61,16 @@ Behavior >> rwMoveMethod: methodSelector toCategory: categoryName [
 ]
 
 { #category : '*rowan-gemstone-core' }
+Behavior >> rwRemoveCategory: categoryName [
+
+	^ Rowan projectTools browser
+		removeProtocol: categoryName 
+		fromClassNamed:  self thisClass name asString
+		isMeta: self isMeta
+
+]
+
+{ #category : '*rowan-gemstone-core' }
 Behavior >> rwRemoveSelector: methodSelector [
 
 	^ Rowan projectTools browser
