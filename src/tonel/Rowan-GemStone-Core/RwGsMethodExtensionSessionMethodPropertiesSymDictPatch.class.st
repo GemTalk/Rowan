@@ -7,6 +7,6 @@ Class {
 { #category : 'installing' }
 RwGsMethodExtensionSessionMethodPropertiesSymDictPatch >> installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols [
 
-self halt
+	^ super installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols
 
 ]
