@@ -7,10 +7,7 @@ rm -rf tranlogs/*.dbf
 ./startStone
 
 $GEMSTONE/bin/topaz -l << EOF
-  login
-
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/install.tpz
-  commit 
   errorCount
   exit
 EOF
@@ -20,8 +17,8 @@ $GEMSTONE/bin/topaz -l << EOF
 
 run
   #(
-    'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1/ston'
-    'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample2/ston'
+    'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston'
+    'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample2.ston'
   ) do: [:url |
     Rowan projectTools clone
       cloneSpecUrl: url
@@ -32,7 +29,17 @@ run
   commit
 
 run
+  false  "set to true to load the projects into the image"
+    ifTrue: [ 
+      #(
+        'RowanSample1'
+        'RowanSample2'
+      ) do: [:projectName |
+        Rowan projectTools load loadProjectNamed: projectName withConfiguration: 'Default'
+      ] ]
 %
+  commit
+
   errorCount
   exit
 EOF
