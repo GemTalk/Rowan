@@ -1054,12 +1054,14 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageWithClassModifications [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveMethod [
 
-	|  normalClass projectName packageNames packageName1 packageName2 className |
+	|  normalClass projectName packageNames packageName1 packageName2 packageName3 className |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
-	packageName2 := 'HybridA-Extensions'.
+	packageName2 := 'HybridA-Extensions1'.
+	packageName3 := 'HybridA-Extensions2'.
 	packageNames := {packageName1.
-	packageName2}.
+	packageName2.
+	packageName3}.
 	className :=  'SimpleHybridNormal1'.
 
 	self
@@ -1101,6 +1103,16 @@ RwHybridBrowserToolTest >> testHybridMoveMethod [
 	self assert: (normalClass categoryOfSelector: #foo) = #accessing.
 	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName2 asLowercase) asSymbol.
 	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName2 asLowercase) asSymbol.
+
+	Rowan projectTools browser
+		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
+		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
+		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName3 asLowercase);
+		yourself.
+
+	self assert: (normalClass categoryOfSelector: #foo) = ( '*' , packageName3 asLowercase) asSymbol.
+	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName3 asLowercase) asSymbol.
+	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName3 asLowercase) asSymbol.
 
 ]
 
