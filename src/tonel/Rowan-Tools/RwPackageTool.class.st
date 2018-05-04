@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : 'commands' }
+RwPackageTool class >> audit [
+  ^ RwPkgAuditTool new
+
+]
+
+{ #category : 'commands' }
 RwPackageTool class >> commit [
   ^ RwPkgCommitTool new
 ]
