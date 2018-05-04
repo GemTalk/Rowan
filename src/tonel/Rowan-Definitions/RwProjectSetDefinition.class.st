@@ -43,6 +43,13 @@ RwProjectSetDefinition >> deriveLoadedThings [
 ]
 
 { #category : 'accessing' }
+RwProjectSetDefinition >> projectNamed: projectName ifAbsent: absentBlock [
+
+	^ self definitionWithKey: projectName ifAbsent: absentBlock
+
+]
+
+{ #category : 'accessing' }
 RwProjectSetDefinition >> projectNames [
 
 	^ self definitionNames

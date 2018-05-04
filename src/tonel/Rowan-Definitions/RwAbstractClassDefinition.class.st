@@ -207,13 +207,22 @@ RwAbstractClassDefinition >> key [
 ]
 
 { #category : 'accessing' }
+RwAbstractClassDefinition >> name: aString [
+
+	properties at: 'name' put: aString
+
+]
+
+{ #category : 'accessing' }
 RwAbstractClassDefinition >> removeClassMethod: selector [
 
 	| definition |
 	definition := classMethodDefinitions
 		at: selector
 		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ].
-	self removeDefinition: definition from: classMethodDefinitions
+	self removeDefinition: definition from: classMethodDefinitions.
+	^ definition
+
 ]
 
 { #category : 'accessing' }
@@ -223,7 +232,9 @@ RwAbstractClassDefinition >> removeInstanceMethod: selector [
 	definition := instanceMethodDefinitions
 		at: selector
 		ifAbsent: [ self error: 'No method definition for ' , selector printString , ' found.' ].
-	self removeDefinition: definition from: instanceMethodDefinitions
+	self removeDefinition: definition from: instanceMethodDefinitions.
+	^ definition
+
 ]
 
 { #category : 'accessing' }
