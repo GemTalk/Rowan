@@ -125,7 +125,7 @@ RowanService >> rowanLoadedPackageNames [
 					stream
 						nextPutAll: package;
 						tab;
-						nextPut: $N;
+						nextPut: ((RwPackage newNamed: package) isDirty ifTrue:[$Y] ifFalse:[$N]);
 						tab;
 						nextPutAll: package;
 						lf].
