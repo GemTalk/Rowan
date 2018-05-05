@@ -36,7 +36,7 @@ RowanProjectService >> branches [
 	| project branches |
 
 	project := (RwProject newNamed: name). 
-	branches := Rowan gitTools gitbranchIn: project repositoryRootPath with: ' --list'.
+	branches := Rowan gitTools gitbranchIn: project repositoryRootPath with: ''.
 	^branches
 
 ]
