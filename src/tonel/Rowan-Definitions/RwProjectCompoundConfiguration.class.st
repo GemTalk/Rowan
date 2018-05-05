@@ -5,7 +5,7 @@ Class {
 		'packageNames',
 		'configurationNames'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Definitions'
 }
 
 { #category : 'private' }
