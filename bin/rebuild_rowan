@@ -16,15 +16,17 @@ $GEMSTONE/bin/topaz -l << EOF
   login
 
 run
-  #(
-    'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston'
-    'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample2.ston'
-  ) do: [:url |
-    Rowan projectTools clone
-      cloneSpecUrl: url
-      gitRootPath: '$ROWAN_PROJECTS_HOME'
-      useSsh: true.
-  ]
+  true
+    ifTrue: [ 
+      #(
+        'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston'
+        'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample2.ston'
+      ) do: [:url |
+        Rowan projectTools clone
+          cloneSpecUrl: url
+          gitRootPath: '$ROWAN_PROJECTS_HOME'
+          useSsh: true.
+      ] ]
 %
   commit
 
