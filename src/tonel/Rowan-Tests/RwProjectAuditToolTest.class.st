@@ -337,7 +337,7 @@ RwProjectAuditToolTest >> testMissingMethods [
 	theClass compileMissingAccessingMethods. "this should add: #bar #bar:"
 
 
-	((Rowan image loadedPackageNamed: 'AuditTests') loadedClassForClass: ClassForAudit ifAbsent: [nil error: 'expected a class']) 
+	((Rowan image loadedPackageNamed: 'AuditTests') loadedClassForClass: theClass ifAbsent: [nil error: 'expected a class']) 
 			loadedInstanceMethodsDo: [:anLMethod | (anLMethod name isEquivalent: 'bar') ifTrue: [self error: 'bar was compiled without Rowan']] 
 			loadedClassMethodsDo: [:cMethod | "do nothing"].
 
