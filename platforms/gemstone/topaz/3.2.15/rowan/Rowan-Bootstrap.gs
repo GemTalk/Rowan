@@ -529,12 +529,13 @@ currentOrNil
   commit
 
   run
-	| session symbolList symbolDict size |
+	| session symbolList |
+	session := GsCurrentSession currentSession.
+	symbolList := session symbolList.
 	#( #RowanPrivate #RowanPublic #RowanClient)
 		do: [:symbolName | 
-			session := GsCurrentSession currentSession.
-			symbolList := session symbolList.
-			SymbolDictionary new
+			| newDict size |
+			newDict := SymbolDictionary new
 				name: symbolName;
 				objectSecurityPolicy: symbolList objectSecurityPolicy;
 				yourself.
@@ -552,14 +553,21 @@ currentOrNil
     alias: ''.
   packageManager
     defaultSymbolDictionaryName: #'RowanPrivate'.
-  #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' )
+  #(  )
     do: [ :packageName | 
       packageManager
         addResolvedReference:
           (CypressResolvedReference name: packageName repository: repo) ].
   packageManager loadResolvedReferences.
+%
+  commit
 
+   run
+  | packageManager repo |
   packageManager := CypressPackageManager3 new.
+  repo := CypressAbstractRepository
+    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
+    alias: ''.
   packageManager
     defaultSymbolDictionaryName: #'RowanPublic'.
   #('Rowan-Public')
@@ -568,21 +576,18 @@ currentOrNil
         addResolvedReference:
           (CypressResolvedReference name: packageName repository: repo) ].
   packageManager loadResolvedReferences.
+%
+  commit
 
-  packageManager := CypressPackageManager3 new.
+   run
+  | packageManager repo |
+ packageManager := CypressPackageManager3 new.
+  repo := CypressAbstractRepository
+    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
+    alias: ''.
   packageManager
     defaultSymbolDictionaryName: #'RowanPrivate'.
-  #('Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-GemStone-3215')
-    do: [ :packageName | 
-      packageManager
-        addResolvedReference:
-          (CypressResolvedReference name: packageName repository: repo) ].
-  packageManager loadResolvedReferences.
-
-  packageManager := CypressPackageManager3 new.
-  packageManager
-    defaultSymbolDictionaryName: #'RowanClient'.
-  #('Rowan-Services')
+  #('Rowan-Initialize' 'Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-GemStone-3215')
     do: [ :packageName | 
       packageManager
         addResolvedReference:
@@ -590,6 +595,25 @@ currentOrNil
   packageManager loadResolvedReferences.
 %
   commit
+
+  run
+  | packageManager repo |
+  packageManager := CypressPackageManager3 new.
+  repo := CypressAbstractRepository
+    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
+    alias: ''.
+  packageManager
+    defaultSymbolDictionaryName: #'RowanClient'.
+  #('Rowan-Services' 'Rowan-ServicesTests')
+    do: [ :packageName | 
+      packageManager
+        addResolvedReference:
+          (CypressResolvedReference name: packageName repository: repo) ].
+  packageManager loadResolvedReferences.
+%
+  commit
+
+exit 1 # bomb out for now
 
 # Install Rowan, Cypress, STON, and Tonel using Rowan
   run

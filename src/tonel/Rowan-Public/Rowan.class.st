@@ -72,15 +72,6 @@ Rowan class >> image [
 ]
 
 { #category : 'private' }
-Rowan class >> initialize [
-
-	"Rowan initialize."
-
-	configuration := self platform defaultConfiguration.
-	self platform initialize
-]
-
-{ #category : 'private' }
 Rowan class >> loadedHybridPackageNamed: aName ifAbsent: absentBlock [
 
 	^ self image loadedHybridPackageNamed: aName ifAbsent: absentBlock
@@ -141,7 +132,7 @@ at this point ... unless there is a use case for loading a collection of package
 	self updateLoadedPackages.
 	loadedPackages := someNames
 		collect: [ :aName | self loadedPackageNamed: aName ifAbsent: [ nil ] ].
-	^ RwEntitySet withAll: (loadedPackages select: [ :each | each notNil ])
+	^ (self globalNamed: 'RwEntitySet') withAll: (loadedPackages select: [ :each | each notNil ])
 ]
 
 { #category : 'public' }
@@ -157,7 +148,7 @@ at this point ... unless there is a use case for loading a collection of package
 	self updateLoadedPackages.
 	loadedPackages := someNames
 		collect: [ :aName | self loadedPackageNamed: aName ifAbsent: [ nil ] ].
-	^ RwEntitySet
+	^ (self globalNamed: 'RwEntitySet')
 		withAll:
 			(loadedPackages
 				select: [ :loadedPackage | 
@@ -180,7 +171,7 @@ Rowan class >> loadedProjectsNamed: someNames [
 	| loadedProjects |
 	loadedProjects := someNames
 		collect: [ :aName | self loadedProjectNamed: aName ifAbsent: [ nil ] ].
-	^ RwEntitySet withAll: (loadedProjects select: [ :each | each notNil ])
+	^ (self globalNamed: 'RwEntitySet') withAll: (loadedProjects select: [ :each | each notNil ])
 ]
 
 { #category : 'public' }
@@ -249,7 +240,7 @@ Rowan class >> removeProject: aRwProjectSpecification [
 Rowan class >> repositoryNamed: urlString [
 	"Answer a Repository"
 
-	^CypRepository onUrl: (CypUrl fromString: urlString)
+	^(self globalNamed: 'CypRepository') onUrl: ((self globalNamed: 'CypUrl') fromString: urlString)
 ]
 
 { #category : 'public tools' }

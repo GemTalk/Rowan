@@ -3,8 +3,14 @@
 	#projectUrl : 'https://github.com/dalehenrich/Rowan',
 	#platformSpec : {
 		'gemstone' : RwGemStoneSpecification {
-			#defaultSymbolDictName : 'Globals',
-			#defaultUseSessionMethodsForExtensions : false }
+			#defaultSymbolDictName : 'RowanPrivate',
+			#defaultUseSessionMethodsForExtensions : false,
+			#packageNameToPlatformPropertiesMap : {
+				#'Rowan-Public' : 'RowanPublic',
+				#'Rowan-Initialize' : 'RowanPublic',
+				#'Rowan-Services' : 'RowanClient'
+			}
+		 }
 	},
 	#specsPath : 'specs',
 	#configsPath : 'configs',
