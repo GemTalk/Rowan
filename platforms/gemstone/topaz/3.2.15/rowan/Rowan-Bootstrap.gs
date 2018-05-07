@@ -527,6 +527,22 @@ currentOrNil
 %
 
   commit
+
+  run
+	| session symbolList symbolDict size |
+	#( #RowanPrivate #RowanPublic #RowanClient)
+		do: [:symbolName | 
+			session := GsCurrentSession currentSession.
+			symbolList := session symbolList.
+			SymbolDictionary new
+				name: symbolName;
+				objectSecurityPolicy: symbolList objectSecurityPolicy;
+				yourself.
+			size := System myUserProfile symbolList size.
+			System myUserProfile insertDictionary: newDict at: size + 1 ].
+%
+  commit
+
    run
   "Bootstrap Rowan into image"
   | packageManager repo |
@@ -535,13 +551,43 @@ currentOrNil
     onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
     alias: ''.
   packageManager
-    defaultSymbolDictionaryName: #'Globals'.
-  #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-Services' 'Rowan-GemStone-3215')
+    defaultSymbolDictionaryName: #'RowanPrivate'.
+  #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' )
     do: [ :packageName | 
       packageManager
         addResolvedReference:
           (CypressResolvedReference name: packageName repository: repo) ].
-  packageManager loadResolvedReferences
+  packageManager loadResolvedReferences.
+
+  packageManager := CypressPackageManager3 new.
+  packageManager
+    defaultSymbolDictionaryName: #'RowanPublic'.
+  #('Rowan-Public')
+    do: [ :packageName | 
+      packageManager
+        addResolvedReference:
+          (CypressResolvedReference name: packageName repository: repo) ].
+  packageManager loadResolvedReferences.
+
+  packageManager := CypressPackageManager3 new.
+  packageManager
+    defaultSymbolDictionaryName: #'RowanPrivate'.
+  #('Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-GemStone-3215')
+    do: [ :packageName | 
+      packageManager
+        addResolvedReference:
+          (CypressResolvedReference name: packageName repository: repo) ].
+  packageManager loadResolvedReferences.
+
+  packageManager := CypressPackageManager3 new.
+  packageManager
+    defaultSymbolDictionaryName: #'RowanClient'.
+  #('Rowan-Services')
+    do: [ :packageName | 
+      packageManager
+        addResolvedReference:
+          (CypressResolvedReference name: packageName repository: repo) ].
+  packageManager loadResolvedReferences.
 %
   commit
 

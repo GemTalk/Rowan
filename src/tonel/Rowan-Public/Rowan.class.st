@@ -10,7 +10,7 @@ Class {
 	#classInstVars : [
 		'configuration'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Public'
 }
 
 { #category : 'public' }
