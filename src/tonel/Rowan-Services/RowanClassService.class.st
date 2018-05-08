@@ -22,7 +22,7 @@ RowanClassService class >> forClassNamed: className [
 
 	| inst |
 	inst := self new. 
-	inst name: className.
+	inst name: className subStrings first.
 	^inst
 
 ]
@@ -31,9 +31,8 @@ RowanClassService class >> forClassNamed: className [
 RowanClassService class >> forClassNamed: className meta: aBoolean [
 
 	| inst |
-	inst := self new. 
-	inst name: className;
-		meta: aBoolean.
+	inst := self forClassNamed: className.
+	inst meta: aBoolean.
 	^inst
 
 ]
@@ -221,10 +220,11 @@ RowanClassService >> removeSelector: selector [
 
 { #category : 'rowan' }
 RowanClassService >> removeSelector: selector ifAbsent: absentBlock [
-
-	(self classFromName compiledMethodAt: selector otherwise: nil) isNil ifTrue:[ ^absentBlock value ].
+	| theClass |
+	theClass := self classFromName. 
+	meta ifTrue: [theClass := theClass class].
+	(theClass compiledMethodAt: selector otherwise: nil) isNil ifTrue:[ ^absentBlock value ].
 	self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta
-
 
 ]
 
