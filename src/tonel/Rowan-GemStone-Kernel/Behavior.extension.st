@@ -1,6 +1,6 @@
 Extension { #name : 'Behavior' }
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Behavior >> rowanPackageName [
 
 	"answer the name of the package that the receiver is a member of. Answer 'Rowan unpackagedName` if 
@@ -14,7 +14,7 @@ Behavior >> rowanPackageName [
 
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Behavior >> rowanProjectName [
 
 	"answer the name of the project that the receiver is a member of. Answer `Rowan unpackagedName` if 
@@ -28,7 +28,7 @@ Behavior >> rowanProjectName [
 
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Behavior >> rwCompileMethod: sourceString category: aCategoryString [
 
 	^ Rowan projectTools browser
@@ -38,7 +38,7 @@ Behavior >> rwCompileMethod: sourceString category: aCategoryString [
 		isMeta: self isMeta
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Behavior >> rwCompileMethod: sourceString category: aCategoryString packageName: packageName [
 
 	^ Rowan projectTools browser
@@ -49,7 +49,7 @@ Behavior >> rwCompileMethod: sourceString category: aCategoryString packageName:
 		inPackageNamed: packageName
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Behavior >> rwMoveMethod: methodSelector toCategory: categoryName [
 
 	^ Rowan projectTools browser
@@ -60,7 +60,7 @@ Behavior >> rwMoveMethod: methodSelector toCategory: categoryName [
 
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Behavior >> rwRemoveCategory: categoryName [
 
 	^ Rowan projectTools browser
@@ -70,7 +70,7 @@ Behavior >> rwRemoveCategory: categoryName [
 
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Behavior >> rwRemoveSelector: methodSelector [
 
 	^ Rowan projectTools browser

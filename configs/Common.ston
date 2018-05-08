@@ -3,6 +3,7 @@ RwProjectConfiguration {
 	#configNames : Set [
 		'Rowan-Url',
 		'Rowan-Cypress',
+		'Rowan-CypressKernel',
 		'Rowan-Definitions',
 		'Rowan-Services',
 		'Rowan-ServicesTests',

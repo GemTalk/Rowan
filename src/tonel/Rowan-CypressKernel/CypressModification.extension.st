@@ -1,6 +1,6 @@
 Extension { #name : 'CypressModification' }
 
-{ #category : '*rowan-cypress' }
+{ #category : '*rowan-cypresskernel' }
 CypressModification >> isModification [
   ^ true
 ]

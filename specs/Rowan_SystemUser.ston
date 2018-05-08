@@ -6,6 +6,9 @@
 			#defaultSymbolDictName : 'RowanPrivate',
 			#defaultUseSessionMethodsForExtensions : false,
 			#packageNameToPlatformPropertiesMap : {
+				'Rowan-CypressKernel' : { 'symbolDictName' : 'Globals' },
+				'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
+				'GemStone-InteractionsKernel' : { 'symbolDictName' : 'Globals' },
 				'Rowan-Public' : { 'symbolDictName' : 'RowanPublic' },
 				'Rowan-Initialize' : { 'symbolDictName' : 'RowanPublic' },
 				'Rowan-Services' : { 'symbolDictName' : 'RowanClient' }
@@ -21,3 +24,4 @@
 	#repoPath : 'src/tonel',
 	#comment : ''
 }
+

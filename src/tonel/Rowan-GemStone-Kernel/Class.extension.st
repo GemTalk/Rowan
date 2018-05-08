@@ -1,6 +1,6 @@
 Extension { #name : 'Class' }
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName options: optionsArray [
 
 	^ Rowan projectTools browser
@@ -16,7 +16,7 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 		options: optionsArray
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName options: optionsArray [
 
 	^ Rowan projectTools browser
@@ -32,7 +32,7 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 		options: optionsArray
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Class >> rwComment: aString [
 
 	^ Rowan projectTools browser
@@ -41,7 +41,7 @@ Class >> rwComment: aString [
 
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName options: optionsArray [
 
 	^ Rowan projectTools browser
@@ -57,7 +57,7 @@ Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: 
 		options: optionsArray
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName options: optionsArray [
 
 	^ Rowan projectTools browser
@@ -73,7 +73,7 @@ Class >> rwIndexableSubclass: aString instVarNames: anArrayOfStrings classVars: 
 		options: optionsArray
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName options: optionsArray [
 
 	^ Rowan projectTools browser
@@ -89,7 +89,7 @@ Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOf
 		options: optionsArray
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName options: optionsArray [
 
 	^ Rowan projectTools browser

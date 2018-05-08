@@ -1,6 +1,6 @@
 Extension { #name : 'SymbolDictionary' }
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-kernel' }
 SymbolDictionary >> rowanSymbolDictionaryRegistry [
 
 	"answer the RwGsSymbolDictionaryRegistry instance installed in the receiver, otherwise answer nil"

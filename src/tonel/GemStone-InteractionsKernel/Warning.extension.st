@@ -1,6 +1,6 @@
 Extension { #name : 'Warning' }
 
-{ #category : '*gemstone-interactions' }
+{ #category : '*gemstone-interactionskernel' }
 Warning >> defaultAction [
   "The user should be notified of the occurrence of an exceptional
 	occurrence and given an option of continuing or aborting the

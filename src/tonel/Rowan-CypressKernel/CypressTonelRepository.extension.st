@@ -1,6 +1,6 @@
 Extension { #name : 'CypressTonelRepository' }
 
-{ #category : '*rowan-cypress' }
+{ #category : '*rowan-cypresskernel' }
 CypressTonelRepository >> packageNames [
 
 	"only directories with a package.st file in them"

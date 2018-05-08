@@ -1,18 +1,18 @@
 Extension { #name : 'CypressClassDefinition' }
 
-{ #category : '*rowan-cypress' }
+{ #category : '*rowan-cypresskernel' }
 CypressClassDefinition >> accept: aVisitor [
 	aVisitor visitClassDefinition: self.
 
 ]
 
-{ #category : '*rowan-cypress' }
+{ #category : '*rowan-cypresskernel' }
 CypressClassDefinition >> commentStamp [
 
 	^ ''
 ]
 
-{ #category : '*rowan-cypress' }
+{ #category : '*rowan-cypresskernel' }
 CypressClassDefinition >> createOrReviseClass [
 
 	^ self subclassType = ''
@@ -29,13 +29,13 @@ CypressClassDefinition >> createOrReviseClass [
 
 ]
 
-{ #category : '*rowan-cypress' }
+{ #category : '*rowan-cypresskernel' }
 CypressClassDefinition >> hasClassInstanceVariables [
 
 	^ self classInstVarNames isEmpty not
 ]
 
-{ #category : '*rowan-tode' }
+{ #category : '*rowan-cypresskernel' }
 CypressClassDefinition >> printDefinitionOn: stream [
 
         stream

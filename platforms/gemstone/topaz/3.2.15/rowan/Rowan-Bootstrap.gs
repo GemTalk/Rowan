@@ -613,6 +613,23 @@ currentOrNil
 %
   commit
 
+  run
+  | packageManager repo |
+  packageManager := CypressPackageManager3 new.
+  repo := CypressAbstractRepository
+    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
+    alias: ''.
+  packageManager
+    defaultSymbolDictionaryName: #'Globals'.
+  #('GemStone-InteractionsKernel' 'Rowan-GemStone-Kernel' 'Rowan-CypressKernel')
+    do: [ :packageName | 
+      packageManager
+        addResolvedReference:
+          (CypressResolvedReference name: packageName repository: repo) ].
+  packageManager loadResolvedReferences.
+%
+  commit
+
 # Install Rowan, Cypress, STON, and Tonel using Rowan
   run
   | projectSetDefinition gitRepoPath |
