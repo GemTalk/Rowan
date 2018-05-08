@@ -544,106 +544,65 @@ currentOrNil
 %
   commit
 
-   run
-  "Bootstrap Rowan into image"
-  | packageManager repo |
-  packageManager := CypressPackageManager3 new.
-  repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
-    alias: ''.
-  packageManager
-    defaultSymbolDictionaryName: #'RowanPrivate'.
-  #(  )
-    do: [ :packageName | 
-      packageManager
-        addResolvedReference:
-          (CypressResolvedReference name: packageName repository: repo) ].
-  packageManager loadResolvedReferences.
-%
-  commit
-
-   run
-  | packageManager repo |
-  packageManager := CypressPackageManager3 new.
-  repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
-    alias: ''.
-  packageManager
-    defaultSymbolDictionaryName: #'RowanPublic'.
-  #('Rowan-Public')
-    do: [ :packageName | 
-      packageManager
-        addResolvedReference:
-          (CypressResolvedReference name: packageName repository: repo) ].
-  packageManager loadResolvedReferences.
+# Bootstrap Rowan into image
+  run
+  UserGlobals 
+    at: #CypressBootstrapRowanBlock 
+    put: [:symbolDictName :packageNames  |
+    | packageManager repo |
+    packageManager := CypressPackageManager3 new.
+    repo := CypressAbstractRepository
+      onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
+      alias: ''.
+    packageManager
+      defaultSymbolDictionaryName: symbolDictName asSymbol.
+    packageNames
+      do: [ :packageName | 
+        packageManager
+          addResolvedReference:
+            (CypressResolvedReference name: packageName repository: repo) ].
+    packageManager loadResolvedReferences ].
 %
   commit
 
    run
-  | packageManager repo |
- packageManager := CypressPackageManager3 new.
-  repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
-    alias: ''.
-  packageManager
-    defaultSymbolDictionaryName: #'RowanPrivate'.
-  #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Url3215' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' )
-    do: [ :packageName | 
-      packageManager
-        addResolvedReference:
-          (CypressResolvedReference name: packageName repository: repo) ].
-  packageManager loadResolvedReferences.
+  CypressBootstrapRowanBlock 
+    value: 'RowanPublic'
+    value: #('Rowan-Public'). 		"Populate with public Rowan classes"
+%
+  commit
+
+   run
+  CypressBootstrapRowanBlock 
+    value: 'RowanPrivate'
+    value: #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Url3215' 
+      'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress' 
+      'Rowan-Tools' 'Rowan-Tests').	"Populate with Rowan implementation classes"
 %
   commit
 
   run
-  | packageManager repo |
-  packageManager := CypressPackageManager3 new.
-  repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
-    alias: ''.
-  packageManager
-    defaultSymbolDictionaryName: #'RowanPublic'.
-  #('Rowan-GemStone-Public' 'Rowan-Initialize')
-    do: [ :packageName | 
-      packageManager
-        addResolvedReference:
-          (CypressResolvedReference name: packageName repository: repo) ].
-  packageManager loadResolvedReferences.
+  CypressBootstrapRowanBlock 
+    value: 'RowanPublic'
+    value: #('Rowan-GemStone-Public' 
+      'Rowan-Initialize').		"Extension methods for public Rowan classes"
 %
   commit
 
   run
-  | packageManager repo |
-  packageManager := CypressPackageManager3 new.
-  repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
-    alias: ''.
-  packageManager
-    defaultSymbolDictionaryName: #'RowanClient'.
-  #('Rowan-Services' 'Rowan-ServicesTests')
-    do: [ :packageName | 
-      packageManager
-        addResolvedReference:
-          (CypressResolvedReference name: packageName repository: repo) ].
-  packageManager loadResolvedReferences.
+  CypressBootstrapRowanBlock 
+    value: 'RowanClient'
+    value: #('Rowan-Services' 
+      'Rowan-ServicesTests').		"Populate with Jadeite client classes"
 %
   commit
 
   run
-  | packageManager repo |
-  packageManager := CypressPackageManager3 new.
-  repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
-    alias: ''.
-  packageManager
-    defaultSymbolDictionaryName: #'Globals'.
-  #('GemStone-InteractionsKernel' 'Rowan-GemStone-Kernel' 'Rowan-CypressKernel' 'Rowan-ToolsKernel' 'Rowan-GemStone-3215')
-    do: [ :packageName | 
-      packageManager
-        addResolvedReference:
-          (CypressResolvedReference name: packageName repository: repo) ].
-  packageManager loadResolvedReferences.
+  CypressBootstrapRowanBlock 
+    value: 'Globals'
+    value: #('GemStone-InteractionsKernel' 'Rowan-GemStone-Kernel' 'Rowan-CypressKernel' 
+      'Rowan-ToolsKernel' 
+      'Rowan-GemStone-3215').		"Extension methods for GemStone kernel classes"
 %
   commit
 
