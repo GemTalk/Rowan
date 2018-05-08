@@ -11,7 +11,7 @@ RwGsPatchSetRowanBootstrap >> addAddedClassesToTempSymbols [
 	addedClasses do: [:patch | | assoc symDict |
 		symDict := patch symbolDictionary.
 		assoc := symDict associationAt: patch className asSymbol otherwise: nil.
-		assoc ifNil: [ self error: 'expected class ', patch className printString ,' to exist during bootstrap step' ].
+		assoc ifNil: [ self error: 'expected class ', patch className printString ,' to exist during bootstrap step in symbol dictionary ', symDict name asString, '.' ].
 		tempSymbols addAssociation: assoc ]
 
 ]
