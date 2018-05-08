@@ -663,6 +663,16 @@ currentOrNil
 %
   commit
 
+# Workaround for Issue #162
+   run
+  | rowanAssoc |
+  rowanAssoc := RowanPublic associationAt: #Rowan.
+  Globals add: rowanAssoc.
+  RowanClient associationsDo: [:assoc |
+    Globals add: assoc ].
+%
+  commit
+
   logout
   set u DataCurator p swordfish
   login
