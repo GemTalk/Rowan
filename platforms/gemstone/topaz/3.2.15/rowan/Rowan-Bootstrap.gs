@@ -669,7 +669,7 @@ currentOrNil
   rowanAssoc := RowanPublic associationAt: #Rowan.
   Globals add: rowanAssoc.
   RowanClient associationsDo: [:assoc |
-    Globals add: assoc ].
+    assoc value isBehavior ifTrue: [ Globals add: assoc ] ].
 %
   commit
 
