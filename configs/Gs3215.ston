@@ -2,9 +2,9 @@ RwProjectCompoundConfiguration{
 	#name : 'Gs3215',
 	#packageNames : Set [
 		'Rowan-GemStone-3215',
-		'Rowan-Url3215',
-                'GemStone-Interactions',
-		'GemStone-InteractionsKernel'
+		'Rowan-Url-3215',
+                'GemStone-Interactions-Core',
+		'GemStone-Interactions-Kernel'
 	],
 	#configurationNames : [
 		'Common'

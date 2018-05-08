@@ -1,9 +1,9 @@
 RwProjectConfiguration {
 	#name : 'Common',
 	#configNames : Set [
-		'Rowan-Url',
-		'Rowan-Cypress',
-		'Rowan-CypressKernel',
+		'Rowan-Url-Core',
+		'Rowan-Cypress-Core',
+		'Rowan-Cypress-Kernel',
 		'Rowan-Definitions',
 		'Rowan-Services',
 		'Rowan-ServicesTests',
@@ -15,8 +15,8 @@ RwProjectConfiguration {
 		'Rowan-GemStone-Public',
 		'Cypress-Core',
 		'Rowan-Tests',
-		'Rowan-Tools',
-		'Rowan-ToolsKernel'
+		'Rowan-Tools-Core',
+		'Rowan-Tools-Kernel'
 	],
 	#comment : 'Common set of packages '
 }

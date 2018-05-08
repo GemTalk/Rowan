@@ -6,10 +6,10 @@
 			#defaultSymbolDictName : 'RowanPrivate',
 			#defaultUseSessionMethodsForExtensions : false,
 			#packageNameToPlatformPropertiesMap : {
-				'Rowan-CypressKernel' : { 'symbolDictName' : 'Globals' },
+				'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
 				'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
-				'Rowan-ToolsKernel' : { 'symbolDictName' : 'Globals' },
-				'GemStone-InteractionsKernel' : { 'symbolDictName' : 'Globals' },
+				'Rowan-Tool-sKernel' : { 'symbolDictName' : 'Globals' },
+				'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
 				'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
 				'Rowan-GemStone-Public' : { 'symbolDictName' : 'RowanPublic' },
 				'Rowan-Public' : { 'symbolDictName' : 'RowanPublic' },

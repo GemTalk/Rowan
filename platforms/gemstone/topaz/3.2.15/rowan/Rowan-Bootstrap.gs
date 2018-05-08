@@ -575,9 +575,9 @@ currentOrNil
    run
   CypressBootstrapRowanBlock 
     value: 'RowanPrivate'
-    value: #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Url3215' 
-      'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress' 
-      'Rowan-Tools' 'Rowan-Tests').	"Populate with Rowan implementation classes"
+    value: #('Cypress-Core' 'GemStone-Interactions-Core' 'Rowan-Url-Core' 'Rowan-Url-3215' 
+      'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 
+      'Rowan-Tools-Core' 'Rowan-Tests').	"Populate with Rowan implementation classes"
 %
   commit
 
@@ -600,9 +600,14 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'Globals'
-    value: #('GemStone-InteractionsKernel' 'Rowan-GemStone-Kernel' 'Rowan-CypressKernel' 
-      'Rowan-ToolsKernel' 
+    value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel' 
+      'Rowan-Tools-Kernel' 
       'Rowan-GemStone-3215').		"Extension methods for GemStone kernel classes"
+%
+  commit
+
+   run
+  UserGlobals removeKey: #CypressBootstrapRowanBlock.
 %
   commit
 
