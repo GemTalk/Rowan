@@ -613,8 +613,6 @@ currentOrNil
 %
   commit
 
-exit 1 # bomb out for now
-
 # Install Rowan, Cypress, STON, and Tonel using Rowan
   run
   | projectSetDefinition gitRepoPath |
