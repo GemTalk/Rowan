@@ -587,7 +587,24 @@ currentOrNil
     alias: ''.
   packageManager
     defaultSymbolDictionaryName: #'RowanPrivate'.
-  #('Rowan-Initialize' 'Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-GemStone-3215')
+  #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Url3215' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' )
+    do: [ :packageName | 
+      packageManager
+        addResolvedReference:
+          (CypressResolvedReference name: packageName repository: repo) ].
+  packageManager loadResolvedReferences.
+%
+  commit
+
+  run
+  | packageManager repo |
+  packageManager := CypressPackageManager3 new.
+  repo := CypressAbstractRepository
+    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
+    alias: ''.
+  packageManager
+    defaultSymbolDictionaryName: #'RowanPublic'.
+  #('Rowan-GemStone-Public' 'Rowan-Initialize')
     do: [ :packageName | 
       packageManager
         addResolvedReference:
@@ -621,7 +638,7 @@ currentOrNil
     alias: ''.
   packageManager
     defaultSymbolDictionaryName: #'Globals'.
-  #('GemStone-InteractionsKernel' 'Rowan-GemStone-Kernel' 'Rowan-CypressKernel')
+  #('GemStone-InteractionsKernel' 'Rowan-GemStone-Kernel' 'Rowan-CypressKernel' 'Rowan-ToolsKernel' 'Rowan-GemStone-3215')
     do: [ :packageName | 
       packageManager
         addResolvedReference:

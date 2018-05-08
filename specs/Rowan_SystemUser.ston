@@ -8,7 +8,10 @@
 			#packageNameToPlatformPropertiesMap : {
 				'Rowan-CypressKernel' : { 'symbolDictName' : 'Globals' },
 				'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
+				'Rowan-ToolsKernel' : { 'symbolDictName' : 'Globals' },
 				'GemStone-InteractionsKernel' : { 'symbolDictName' : 'Globals' },
+				'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
+				'Rowan-GemStone-Public' : { 'symbolDictName' : 'RowanPublic' },
 				'Rowan-Public' : { 'symbolDictName' : 'RowanPublic' },
 				'Rowan-Initialize' : { 'symbolDictName' : 'RowanPublic' },
 				'Rowan-Services' : { 'symbolDictName' : 'RowanClient' }

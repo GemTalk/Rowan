@@ -1,6 +1,6 @@
 Extension { #name : 'CypressClassDefinition' }
 
-{ #category : '*rowan-tools' }
+{ #category : '*rowan-toolskernel' }
 CypressClassDefinition >> definitionString [
 
 	| classType type |

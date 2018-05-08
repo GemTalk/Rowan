@@ -1,6 +1,6 @@
 Extension { #name : 'CypressMethodDefinition' }
 
-{ #category : '*rowan-tools' }
+{ #category : '*rowan-toolskernel' }
 CypressMethodDefinition >> timeStamp [
 
 	"fake out a timeStamp for GsJade package changes browser... should not end up being 

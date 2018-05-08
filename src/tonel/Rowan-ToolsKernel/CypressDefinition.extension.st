@@ -1,6 +1,6 @@
 Extension { #name : 'CypressDefinition' }
 
-{ #category : '*rowan-tools' }
+{ #category : '*rowan-toolskernel' }
 CypressDefinition >> isOrganizationDefinition [
   ^false
 
