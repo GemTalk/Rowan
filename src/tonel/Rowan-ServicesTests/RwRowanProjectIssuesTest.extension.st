@@ -1,4 +1,4 @@
-Extension { #name : 'RwRowanProjectIssuesTests' }
+Extension { #name : 'RwRowanProjectIssuesTest' }
 
 { #category : '*rowan-servicestests' }
 RwRowanProjectIssuesTest >> testIssue150_branches [
@@ -38,4 +38,3 @@ RwRowanProjectIssuesTest >> testIssue150_branches [
 		yourself
 
 ]
-

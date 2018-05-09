@@ -83,7 +83,7 @@ RwProjectSpecification >> export [
 { #category : 'exporting' }
 RwProjectSpecification >> exportToUrl: fileUrl [
   | url |
-  url := CypUrl fromString: fileUrl.
+  url := RwUrl fromString: fileUrl.
   url schemeName = 'file'
     ifTrue: [ 
       CypressFileUtilities current
@@ -95,6 +95,7 @@ RwProjectSpecification >> exportToUrl: fileUrl [
           stream nextPutAll: string.
           ^ self ] ].
   ^ nil	"otherwise a noop"
+
 ]
 
 { #category : 'accessing' }
