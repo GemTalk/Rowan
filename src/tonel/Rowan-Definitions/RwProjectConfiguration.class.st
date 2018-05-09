@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'configNames'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Definitions'
 }
 
 { #category : 'configs' }
