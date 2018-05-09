@@ -1,5 +1,5 @@
 Class {
 	#name : 'RwPkgAuditTool',
-	#superclass : 'Object',
+	#superclass : 'RwAbstractTool',
 	#category : 'Rowan-Tools'
 }
