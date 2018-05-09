@@ -5,6 +5,29 @@ Class {
 }
 
 { #category : 'private-issue 24' }
+RwProjectAuditToolTest >> _addClassExtensionNamed: className toPackageNamed: packageName inProjectNamed: projectName [
+
+	^ self _addClassExtensionNamed: className toPackageNamed: packageName inProjectNamed: projectName validate: true
+
+]
+
+{ #category : 'private-issue 24' }
+RwProjectAuditToolTest >> _addClassExtensionNamed: className toPackageNamed: packageName inProjectNamed: projectName validate: validate [
+
+	"since we create class extension no warries about package"
+ | theClass |
+
+	theClass := 
+		Object
+		subclass: className
+		instVarNames: #(bar)
+		inDictionary: (GsSession currentSession symbolList resolveSymbol: #UserGlobals) value.
+
+	theClass addCategory:(self _categoryFromPackageName: packageName)
+
+]
+
+{ #category : 'private-issue 24' }
 RwProjectAuditToolTest >> _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName [
 
 	^ self _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName validate: true
@@ -65,7 +88,7 @@ RwProjectAuditToolTest >> _addOrUpdateMethod: methodSource forBehavior: theBehav
 
 	theBehavior
 		rwCompileMethod: methodSource
-		category:  '*' , packageName asLowercase.
+		category:  (self _categoryFromPackageName: packageName).
 
 	validate ifTrue: [ 
 		self assert: project isDirty.
@@ -94,6 +117,13 @@ RwProjectAuditToolTest >> _addPackageNamed: packageName toProjectNamed: projectN
 	Rowan projectTools browser addPackageNamed: packageName toProjectNamed: projectName.
 
 	validate ifTrue: [ self assert: project isDirty ].
+
+]
+
+{ #category : 'private-issue 24' }
+RwProjectAuditToolTest >> _categoryFromPackageName: aPackageName [
+
+	^'*', aPackageName asLowercase
 
 ]
 
@@ -307,13 +337,63 @@ RwProjectAuditToolTest >> _writeProjectNamed: projectName validate: validate [
 ]
 
 { #category : 'tests' }
+RwProjectAuditToolTest >> testClassExtension [
+
+	| projectName packageName  classExtensionName  theClassExtension x |
+	projectName := 'Audit_addUpdateRemoveMethods'.
+	packageName := 'AuditTests'.
+	classExtensionName := 'String'.
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
+	self _writeProjectNamed: projectName.
+	self _addPackageNamed: packageName toProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	theClassExtension := String"self _addClassExtensionNamed: classExtensionName toPackageNamed: packageName inProjectNamed: projectName".
+
+	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClassExtension inPackage: packageName inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClassExtension class inPackage: packageName inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	theClassExtension compileMissingAccessingMethods. "this should add: #bar #bar: ouside of rowan"
+
+	((Rowan image loadedPackageNamed: 'AuditTests') loadedClassForClass: (GsSession currentSession resolveSymbol: classExtensionName asSymbol) value ifAbsent: [nil]) 
+			ifNotNil: [nil error: 'ClassExtension should not be present in Rowan'].
+
+	self assert: (x := RwPkgAuditTool new auditForPackageName:  'AuditTests') size = 0.
+		
+
+
+"	self _addOrUpdateMethod:  'foo ^''bar''' forBehavior: theClass inPackage: packageName inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	self _addOrUpdateMethod:  'foo ^''bar''' forBehavior: theClass class inPackage: packageName inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	self _removeSelector: #foo fromBehavior: theClass inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+
+	self _removeSelector: #foo fromBehavior: theClass class inProjectNamed: projectName.
+
+	self _writeProjectNamed: projectName.
+"
+
+]
+
+{ #category : 'tests' }
 RwProjectAuditToolTest >> testMissingMethods [
 
-	| projectName packageName className theClass  x |
+	| projectName packageName className  theClass  x |
 	projectName := 'Audit_addUpdateRemoveMethods'.
 	packageName := 'AuditTests'.
 	className := 'ClassForAudit'.
-
 	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'.
 
 	self _writeProjectNamed: projectName.
@@ -337,7 +417,7 @@ RwProjectAuditToolTest >> testMissingMethods [
 	theClass compileMissingAccessingMethods. "this should add: #bar #bar:"
 
 
-	((Rowan image loadedPackageNamed: 'AuditTests') loadedClassForClass: (GsSession currentSession resolveSymbol: #ClassForAudit) ifAbsent: [nil error: 'expected a class']) 
+	((Rowan image loadedPackageNamed: 'AuditTests') loadedClassForClass: (GsSession currentSession resolveSymbol: className asSymbol) value ifAbsent: [nil error: 'expected a class']) 
 			loadedInstanceMethodsDo: [:anLMethod | (anLMethod name isEquivalent: 'bar') ifTrue: [self error: 'bar was compiled without Rowan']] 
 			loadedClassMethodsDo: [:cMethod | "do nothing"].
 

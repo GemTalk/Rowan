@@ -24,7 +24,7 @@ RwPkgAuditTool >> auditLoadedClass: aLoadedClass [
 
 	res := Array new.
 	(GsSession currentSession resolveSymbol: aLoadedClass name) 
-		ifNil: [res add: aLoadedClass]
+		ifNil: [res add: aLoadedClass] "there is no matching Class for LoadedClass"
 		ifNotNil: [:bhv | 
 						(x := (aBehavior := bhv value) selectors reject: [:e | aLoadedClass includesSelector: e isMeta: false]) do: [:aSelector |
 								res add: (aBehavior compiledMethodAt: aSelector ).
@@ -50,21 +50,12 @@ Transcript show: 'Missing ', aLoadedMethod printString]]
 { #category : 'other' }
 RwPkgAuditTool >> auditLoadedClassExtenstion: aLoadedClass [
 "look for methods compiled into class without Rowan API"
-| res x aBehavior |
+| res  aBehavior |
 
 	res := Array new.
 	(GsSession currentSession resolveSymbol: aLoadedClass name) 
-		ifNil: [res add: aLoadedClass]
-		ifNotNil: [:bhv | 
-						(x := (aBehavior := bhv value) selectors reject: [:e | aLoadedClass includesSelector: e isMeta: false]) do: [:aSelector |
-								res add: (aBehavior compiledMethodAt: aSelector ).
-Transcript show: 'Missing ', aSelector printString
-						].
-						(x := (aBehavior := bhv value ) class  selectors reject: [:e | aLoadedClass includesSelector: e isMeta: true]) do: [:aSelector |
-								res add: (aBehavior class compiledMethodAt: aSelector  ).
-Transcript show: 'Missing ', aSelector printString
-						].
-	].
+		ifNil: [res add: aLoadedClass]"there is no matching actual class for loaded class"
+		ifNotNil: [:bhv | aBehavior := bhv value ].
 "look for methods removed outside of Rowan API"
 	aBehavior notNil ifTrue: [
 		aLoadedClass 
