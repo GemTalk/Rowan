@@ -575,7 +575,7 @@ currentOrNil
    run
   CypressBootstrapRowanBlock 
     value: 'RowanPrivate'
-    value: #('Cypress-Core' 'GemStone-Interactions-Core' 'Rowan-Url-Core' 'Rowan-Url-3215' 
+    value: #('GemStone-Interactions-Core' 'Rowan-Url-Core' 'Rowan-Url-3215' 
       'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 
       'Rowan-Tools-Core' 'Rowan-Tests').	"Populate with Rowan implementation classes"
 %

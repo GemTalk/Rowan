@@ -13,7 +13,6 @@ RwProjectConfiguration {
 		'Rowan-GemStone-Core',
 		'Rowan-GemStone-Kernel',
 		'Rowan-GemStone-Public',
-		'Cypress-Core',
 		'Rowan-Tests',
 		'Rowan-Tools-Core',
 		'Rowan-Tools-Kernel'
