@@ -689,6 +689,49 @@ RwPrjBrowserTool >> classNamed: className updateDefinition: updateBlock ifAbsent
 ]
 
 { #category : 'class browsing' }
+RwPrjBrowserTool >> copyClassNamed: className to: newName [
+
+	"we can make copy extensions optional if necessary"
+
+	| loadedClass classDef loadedPackage projectDef packageDef  projectSetDefinition |
+	(self _loadedClassNamed: newName ifAbsent:  [])
+		ifNotNil: [ self error: 'There is already a class named ', newName printString, ' in the system.' ].
+	loadedClass := self 
+		_loadedClassNamed: className 
+		ifAbsent: [  self error: 'No loaded class named: ', className printString , ' found.' ].
+	projectSetDefinition := RwProjectSetDefinition new.
+	loadedPackage := loadedClass loadedPackage.
+	projectDef := loadedPackage loadedProject asDefinition.
+	packageDef := projectDef packageNamed: loadedPackage name.
+	classDef := loadedClass asDefinition.
+	classDef name: newName.
+	packageDef addClassDefinition: classDef.
+	projectSetDefinition addProject: projectDef.
+
+	(self _loadedClassExtensionsNamed: className ifAbsent: [ #() ])
+		do: [:loadedClassExtension | 
+			| classExtDef loadedProject |
+			loadedPackage := loadedClassExtension loadedPackage.
+			loadedProject := loadedPackage loadedProject.
+			projectDef := projectSetDefinition
+				projectNamed: loadedPackage loadedProject name
+				ifAbsent: [ 
+					projectDef := loadedProject asDefinition.
+					projectSetDefinition addProject: projectDef.
+					projectDef ].
+
+			packageDef := projectDef packageNamed: loadedPackage name.
+			classExtDef := loadedClassExtension asDefinition.
+			classExtDef name: newName.
+			packageDef addClassExtension: classExtDef ].
+
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	^ Rowan globalNamed: newName
+
+]
+
+{ #category : 'class browsing' }
 RwPrjBrowserTool >> createClass: classDefinition inPackageNamed: packageName [
 
 	| loadedPackage projectDefinition projectTools |
@@ -721,6 +764,90 @@ RwPrjBrowserTool >> createGitPackageProjectNamed: projectName updateDefinition: 
 		newForGitPackageProjectNamed: projectName.
 	updateBlock cull: projectDefinition.
 	self class load loadProjectDefinition: projectDefinition
+]
+
+{ #category : 'method browsing' }
+RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: isMeta toProtocol: hybridPackageName [
+
+	"hybridPackageName is expected to be an existing protocol in className"
+
+	| loadedMethodToBeMoved loadedPackage loadedClassOrExtension projectDef packageDef clsDef projectSetDefinition destinationLoadedPackage methodDef |
+
+	loadedMethodToBeMoved := self
+		_loadedMethod: methodSelector
+		inClassNamed: className
+		isMeta: isMeta
+		ifAbsent: [
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to move an unpackaged method in the class ', className printString.
+			"Notification resumed, so continue with move"
+			^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
+	loadedPackage := loadedMethodToBeMoved loadedPackage.
+
+	destinationLoadedPackage := (hybridPackageName at: 1) = $*
+		ifTrue: [ 
+			Rowan
+				loadedHybridPackageNamed: hybridPackageName
+				ifAbsent: [ 
+					self
+						error:
+							'A package for hybrid package name ' , hybridPackageName printString
+								, ' was not found.' ] ]
+		ifFalse: [ loadedPackage ].
+
+	loadedClassOrExtension := loadedPackage
+		classOrExtensionForClassNamed: className
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no class or extension for ' , className printString
+						, ' in package ' , loadedPackage name printString , '.' ].
+
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectDef := loadedPackage loadedProject asDefinition.
+	packageDef := projectDef packageNamed: loadedPackage name.
+	clsDef := loadedClassOrExtension isLoadedClass
+		ifTrue: [ packageDef classDefinitions at: className ]
+		ifFalse: [ packageDef classExtensions at: className ].
+
+	projectSetDefinition addProject: projectDef.
+	destinationLoadedPackage name = loadedPackage name
+		ifTrue: [
+			"method is not moving to a different package, only need to change the protocol for the method"
+
+			methodDef := isMeta
+				ifTrue: [ clsDef classMethodDefinitions at: methodSelector ]
+				ifFalse: [ clsDef instanceMethodDefinitions at: methodSelector ].
+			methodDef protocol: hybridPackageName ]
+		ifFalse: [
+			"method is moving to a different package and the destination will be a class extension"
+
+			| destProjectDef destPackageDef destClsDef srcPackageDef  srcClsDef |
+			destinationLoadedPackage loadedProject name = projectDef name 
+				ifTrue: [ destProjectDef := projectDef ]
+				ifFalse: [ 
+					"method is moving to a different project"
+					destProjectDef := destinationLoadedPackage loadedProject asDefinition.
+					projectSetDefinition addProject: destProjectDef ].
+			srcPackageDef := projectDef packageNamed: loadedPackage name.
+			srcClsDef := loadedClassOrExtension isLoadedClass
+				ifTrue: [ srcPackageDef classDefinitions at: className ]
+				ifFalse: [ srcPackageDef classExtensions at: className ].
+
+			destPackageDef := destProjectDef packageNamed: destinationLoadedPackage name. 
+
+			destClsDef := destPackageDef classExtensions at: className ifAbsent: [ RwClassExtensionDefinition newForClassNamed: className ].
+			isMeta
+				ifTrue: [
+					methodDef := srcClsDef classMethodDefinitions at: methodSelector.
+					methodDef protocol: hybridPackageName.
+					destClsDef addClassMethodDefinition: methodDef ]
+				ifFalse: [ 
+					methodDef := srcClsDef instanceMethodDefinitions at: methodSelector.
+					methodDef protocol: hybridPackageName.
+					destClsDef addInstanceMethodDefinition: methodDef ] ].
+
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
 ]
 
 { #category : 'project browsing' }
@@ -819,7 +946,7 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 		inClassNamed: className
 		isMeta: isMeta
 		ifAbsent: [
-			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackage method in the class ', className printString.
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackaged method in the class ', className printString.
 			"Notification resumed, so continue with removal"
 			^ (Rowan image objectNamed: className) removeSelector: methodSelector ].
 	loadedPackage := loadedMethodToBeRemoved loadedPackage.
@@ -851,6 +978,89 @@ RwPrjBrowserTool >> removePackageNamed: packageName [
 	projectDef removePackageNamed: loadedPackage name.
 
 	Rowan projectTools load loadProjectDefinition: projectDef
+
+]
+
+{ #category : 'class browsing' }
+RwPrjBrowserTool >> removeProtocol: hybridPackageName fromClassNamed: className isMeta: isMeta [
+
+	"hybridPackageName is expected to be an existing protocol in className, that may or may not be empty"
+
+	| projectSetDefinition loadedClass theClass theBehavior loadedPackage |
+	projectSetDefinition := RwProjectSetDefinition new.
+
+	loadedClass := self _loadedClassNamed: className ifAbsent: [ ].
+
+	loadedPackage := (hybridPackageName at: 1) = $*
+		ifTrue: [ 
+			Rowan
+				loadedHybridPackageNamed: hybridPackageName
+				ifAbsent: [ 
+					self
+						error:
+							'A package for hybrid package name ' , hybridPackageName printString
+								, ' was not found.' ] ]
+		ifFalse: [ loadedClass loadedPackage ].
+
+	theClass := Rowan image objectNamed: className.
+	theBehavior := isMeta
+		ifTrue: [ theClass class ]
+		ifFalse: [ theClass ].
+
+	(((theBehavior selectorsIn: hybridPackageName)
+		collect: [:methodSelector |
+			self
+				_loadedMethod: methodSelector
+				inClassNamed: className
+				isMeta: isMeta
+				ifAbsent: [
+					RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackaged method in the class ', className printString.
+					"Notification resumed, so continue with removal"
+					(Rowan image objectNamed: className) removeSelector: methodSelector.
+					nil "no loaded method involved" ] ]) select: [:each | each notNil ])
+			do: [:loadedMethodToBeRemoved |
+				| loadedClassOrExtension projectDef crDef packageDef methodSelector | 
+
+				methodSelector := loadedMethodToBeRemoved selector.
+				loadedPackage == loadedMethodToBeRemoved loadedPackage
+					ifFalse: [ self error: 'Internal error -- the loaded package of a method to be removed does not match the expected loaded package' ].
+				loadedClassOrExtension := loadedPackage
+					classOrExtensionForClassNamed: className
+					ifAbsent: [ 
+						self
+							error:
+								'Internal error -- no class or extension for ' , className printString
+									, ' in package ' , loadedPackage name printString , '.' ].
+				projectDef := projectSetDefinition
+					projectNamed: loadedPackage loadedProject name
+					ifAbsent: [ 
+						projectDef := loadedPackage loadedProject asDefinition.
+						projectSetDefinition addProject: projectDef.
+						projectDef ].
+				packageDef := projectDef packageNamed: loadedPackage name.
+				crDef := loadedClassOrExtension isLoadedClass
+					ifTrue: [ packageDef classDefinitions at: loadedClassOrExtension name ]
+					ifFalse: [ packageDef classExtensions at: loadedClassOrExtension name ].
+				isMeta
+					ifTrue: [ crDef removeClassMethod: methodSelector ]
+					ifFalse: [ crDef removeInstanceMethod: methodSelector ] ].
+
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	"Rowan does not automatically remove empty method categories ... just removes methods,
+		we need to clean up after Rowan is done."
+	theBehavior removeCategory: hybridPackageName asSymbol
+
+]
+
+{ #category : 'class browsing' }
+RwPrjBrowserTool >> renameClassNamed: className to: newName [
+
+	| newClass |
+
+	newClass := self copyClassNamed: className to: newName.
+	self removeClassNamed: className.
+	^newClass
 
 ]
 

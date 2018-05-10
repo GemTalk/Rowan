@@ -134,6 +134,28 @@ RwRowanProjectIssuesTest >> _addPackageNamed: packageName toProjectNamed: projec
 
 ]
 
+{ #category : 'private-issue 150' }
+RwRowanProjectIssuesTest >> _cloneGitRepositoryFor: projectName projectUrlString: projectUrlString [
+
+	| rowanSpec projectTools gitRootPath |
+	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/issues/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: projectUrlString
+		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
+		useSsh: true.
+
+]
+
 { #category : 'private-issue 24' }
 RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPath [
 
@@ -142,7 +164,7 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPat
 ]
 
 { #category : 'private-issue 24' }
-RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPath validate: validate [
+RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPath symbolDictionaryName: symbolDictionaryName validate: validate [
 
 	| projectDefinition project |
 
@@ -152,7 +174,7 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPat
 	projectDefinition := self
 		_standardProjectDefinition: projectName
 		packageNames: #()
-		defaultSymbolDictName:self _symbolDictionaryName
+		defaultSymbolDictName: symbolDictionaryName
 		comment:
 			'Basic project ', projectName printString.
 
@@ -169,6 +191,17 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPat
 	project := RwProject newNamed: projectName.
 
 	validate ifTrue: [ self assert: project isDirty ]. "a project is dirty if it has changes that are not written to disk"
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPath validate: validate [
+
+	^ self 
+		_createLoadedProjectNamed: projectName 
+		root: rootPath 
+		symbolDictionaryName: self _symbolDictionaryName 
+		validate: validate
 
 ]
 
@@ -1573,6 +1606,92 @@ RwRowanProjectIssuesTest >> testIssue125_3 [
 
 	self assert: theClass new foo = 1.
 	self assert: (theClass categoryOfSelector: #foo) asString = ('*' , packageName3 asLowercase).
+
+]
+
+{ #category : 'tests-issue 150' }
+RwRowanProjectIssuesTest >> testIssue150_branches [
+
+	"https://github.com/dalehenrich/Rowan/issues/150"
+
+	"The issue #150 tests are mainly aimed at verifying that the given commands do not fail - ensuring that git version supports the
+		commands and arguments used by Jadeite. "
+
+	| rowanSpec projectName service testBranch testClass |
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectName := 'RowanSample3'.
+	self 
+		_cloneGitRepositoryFor: projectName 
+		projectUrlString:  'file:' , rowanSpec repositoryRootPath , '/samples/', projectName, '.ston'.
+
+	service := RowanProjectService new
+		name: projectName;
+		yourself.
+
+	"service newGitProject: url root: rootPath useSsh: true." "same Rowan api call used in _cloneGitRepositoryFor:projectUrlString:"
+	testBranch := 'issue_150'.
+	service branches;
+		checkout: testBranch;
+		branch;
+		repositorySha;
+		log;
+		pullFromGit;
+		yourself.
+	Rowan projectTools load loadProjectNamed: projectName.
+	testClass := Rowan globalNamed: 'RowanSample3'.
+	testClass rwCompileMethod: 'foo "', DateAndTime now printString, '"^''foo''' category: 'accessing'.
+	service
+		commitWithMessage: 'a commit';
+		pushToGit;
+		yourself
+
+]
+
+{ #category : 'tests-issue 165' }
+RwRowanProjectIssuesTest >> testIssue165 [
+
+	"https://github.com/dalehenrich/Rowan/issues/165"
+
+	| projectName packageName1 className symDictName theClass theSymbolDict myUserProfile mySymbolList theSymDictIndex | 
+	projectName := 'Issue165_Project'.
+	packageName1 := 'Issue165-Core'.
+	className := 'Issue165Class'.
+	symDictName := self _symbolDictionaryName2.
+
+	self 
+		_createLoadedProjectNamed: projectName 
+		root: '/tmp/rowanIssuesProject/' 
+		symbolDictionaryName: symDictName 
+		validate: false.
+
+	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	theClass rwCompileMethod: 'foo ^1' category: 'accessing'.
+
+	theSymbolDict := Rowan globalNamed: symDictName.
+	self assert: theSymbolDict class == SymbolDictionary.			"symbol dictionary is accessible in my symbol list"
+
+	self assert: (Rowan projectNames includes: projectName).		"project is visible"
+	self assert: (Rowan packageNames includes: packageName1).	"package is visible"
+	self assert: (Rowan globalNamed: className) notNil.				"class is visible"
+
+	myUserProfile := System myUserProfile.
+	mySymbolList := System myUserProfile symbolList.
+	theSymDictIndex := mySymbolList indexOf: theSymbolDict.
+	myUserProfile removeDictionaryAt: theSymDictIndex.				"remove symbol dictionary from my symbol list"
+
+	self assert: (Rowan projectNames includes: projectName).		"project is visible"
+	self deny: (Rowan packageNames includes: packageName1).	"package is NOT visible"
+	self deny: (Rowan globalNamed: className) notNil.				"class is NOT visible"
 
 ]
 

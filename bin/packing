@@ -18,7 +18,7 @@ set -e
 #     one PDF file)
 # 6. Archive the zip file and stage for delivery
 #
-# Alpha1: $ROWAN_PROJECTS_HOME/Rowan/bin/staging v0.0.2-alpha Alpha1.0
+# Alpha1: $ROWAN_PROJECTS_HOME/Rowan/bin/packing v0.0.2-alpha Alpha1.0
 #
 rowan_tag="$1"
 jadeite_tag="$2"
@@ -55,15 +55,29 @@ validate_tag() {
   popd
   padded_manifest_line "$label" "$theTag" "$theCommit"
 }
+clone_entire_git_repo() {
+  # clones the entire git repository including all branches
+  url="$1"
+  dir="$2"
+  # mkdir $dir
+  git clone --bare $url $dir/.git
+  pushd $dir
+  git config --bool core.bare false
+  git checkout master
+  popd
+}
 
 cd $ROWAN_PROJECTS_HOME/Rowan/packing
 
 rm -rf Rowan Jade RowanSample1 RowanSample2 MANIFEST.TXT Jadeite_runtime_* *.zip
 
-git clone git@github.com:dalehenrich/Rowan.git
-git clone git@github.com:ericwinger/Jade.git
-git clone git@github.com:dalehenrich/RowanSample1.git
-git clone git@github.com:dalehenrich/RowanSample2.git
+# Clone Rowan include all branches (complete copy of github repo)
+clone_entire_git_repo git@github.com:dalehenrich/Rowan.git Rowan
+# Clone Jade, avoid downloading old .exe files ... only need latest runtime dir
+git clone --branch master --depth 1 git@github.com:ericwinger/Jade.git
+# Clone entire RowanSample1 and RowanSample2 repos
+clone_entire_git_repo git@github.com:dalehenrich/RowanSample1.git RowanSample1
+clone_entire_git_repo git@github.com:dalehenrich/RowanSample2.git RowanSample2
 
 # rm -rf MANIFEST.TXT Jadeite_runtime_* *.zip
 

@@ -35,6 +35,62 @@ RwHybridBrowserToolTest >> testHybridClassComment [
 ]
 
 { #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridClassCopy [
+
+	|  normalClass projectName packageNames packageName1 packageName2 comment newClassName newClass className |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions'.
+	packageNames := {packageName1.
+	packageName2}.
+	comment := 'a comment'.
+	className :=  'SimpleHybridNormal1'.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #(foo)
+		classVars: #(Bar)
+		classInstVars: #(baz)
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: normalClass rowanPackageName = packageName1.
+
+	normalClass
+		rwCompileMethod: 'foo ^foo'
+		category: '*' , packageName2 asLowercase.
+	normalClass class
+		rwCompileMethod: 'bar ^Bar'
+		category: 'accessing'.
+	normalClass class
+		rwCompileMethod: 'baz ^baz'
+		category: 'accessing'.
+	normalClass rwComment: comment.
+
+	self assert: normalClass new foo isNil.
+	self assert: normalClass bar isNil.
+	self assert: normalClass baz isNil.
+	self assert: normalClass comment = comment.
+
+	newClassName := 'SimpleHybridNormal1Copy'.
+	newClass := Rowan projectTools browser copyClassNamed: className to: newClassName.
+
+	self assert: newClass new foo isNil.
+	self assert: newClass bar isNil.
+	self assert: newClass baz isNil.
+	self assert: newClass comment = comment.
+
+	self assert: (Rowan globalNamed: className) == normalClass
+
+]
+
+{ #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridClassCreation [
 
 	| byteClass indexableClass normalClass projectName packageNames packageName1 packageName2 |
@@ -180,6 +236,62 @@ RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplateB [
 	variableClass := template evaluate.
 	self assert: variableClass rowanPackageName = packageName1.
 	self assert: variableClass category = category
+]
+
+{ #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridClassRename [
+
+	|  normalClass projectName packageNames packageName1 packageName2 comment newClassName newClass className |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions'.
+	packageNames := {packageName1.
+	packageName2}.
+	comment := 'a comment'.
+	className :=  'SimpleHybridNormal1'.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #(foo)
+		classVars: #(Bar)
+		classInstVars: #(baz)
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: normalClass rowanPackageName = packageName1.
+
+	normalClass
+		rwCompileMethod: 'foo ^foo'
+		category: '*' , packageName1 asLowercase.
+	normalClass class
+		rwCompileMethod: 'bar ^Bar'
+		category: 'accessing'.
+	normalClass class
+		rwCompileMethod: 'baz ^baz'
+		category: 'accessing'.
+	normalClass rwComment: comment.
+
+	self assert: normalClass new foo isNil.
+	self assert: normalClass bar isNil.
+	self assert: normalClass baz isNil.
+	self assert: normalClass comment = comment.
+
+	newClassName := 'SimpleHybridNormal1Copy'.
+	newClass := Rowan projectTools browser renameClassNamed: className to: newClassName.
+
+	self assert: newClass new foo isNil.
+	self assert: newClass bar isNil.
+	self assert: newClass baz isNil.
+	self assert: newClass comment = comment.
+
+	self assert: (Rowan globalNamed: className) isNil
+
 ]
 
 { #category : 'tests' }
@@ -333,6 +445,102 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove [
 
 	self should: [ normalClass bar ] raise: MessageNotUnderstood.
 	self should: [ normalInstance foo ] raise: MessageNotUnderstood
+]
+
+{ #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridComplicatedClassCopy [
+
+	| projectNames projectName1 projectName2 packageNames project1PackageName1 project1PackageName2 project2PackageName1
+		project2PackageName2 className1 className2 classNames classPackageNames1 classPackageNames2 classPackageNames 
+		defaultSymbolDictNames comments newClassName testClass meth newClass |
+
+	projectName1 := 'HybridClassCopy1'.
+	projectName2 := 'HybridClassCopy2'.
+	projectNames := {projectName1.
+	projectName2}.
+	project1PackageName1 := 'ClassCopy1-Core'.
+	project1PackageName2 := 'ClassCopy12-Extensions'.
+	project2PackageName1 := 'ClassCopy2-Core'.
+	project2PackageName2 := 'ClassCopy2-Extensions'.
+	packageNames := {{project1PackageName1.
+	project1PackageName2}.
+	{project2PackageName1.
+	project2PackageName2}}.
+	className1 := 'HybridCopyClass1'.
+	className2 := 'HybridCopyClass2'.
+	newClassName := 'HybridCopyClass1Copy'.
+	classNames := {className1.
+	className2}.
+	classPackageNames1 := 'ClassCopy1-Core'.
+	classPackageNames2 := 'ClassCopy2-Core'.
+	classPackageNames := {classPackageNames1.
+	classPackageNames2}.
+	defaultSymbolDictNames := {(self _symbolDictionaryName1).
+	(self _symbolDictionaryName1)}.
+	comments := {'new class version project 1'.
+	'new class version project2'}.
+	self
+		_loadMultiProjectDefinition: projectNames
+		packageNames: packageNames
+		defaultSymbolDictName: defaultSymbolDictNames
+		comment: comments
+		className: classNames
+		inPackageName: classPackageNames.
+
+	testClass := Rowan globalNamed: className1.
+
+	meth := testClass
+		rwCompileMethod: 'foo ^1'
+		category: '*' , project1PackageName2 asLowercase.
+	self assert: meth rowanPackageName = project1PackageName2. 
+	meth := testClass class
+		rwCompileMethod: 'fooClass ^1'
+		category: '*' , project1PackageName2 asLowercase.
+	self assert: meth rowanPackageName = project1PackageName2. 
+	meth := testClass
+		rwCompileMethod: 'bar ^1'
+		category: '*' , project2PackageName2 asLowercase.
+	self assert: meth rowanPackageName = project2PackageName2. 
+	meth := testClass class
+		rwCompileMethod: 'barClass ^1'
+		category: '*' , project2PackageName2 asLowercase.
+	self assert: meth rowanPackageName = project2PackageName2. 
+
+	self assert: testClass notNil.
+	self assert: testClass cvar1 = 2.
+	self assert: testClass civar1 = 1.
+	self assert: testClass fooClass = 1.
+	self assert: testClass barClass = 1.
+
+	self assert: testClass new ivar1 isNil.
+	self assert: testClass new foo = 1.
+	self assert: testClass new bar = 1.
+
+	self assert: (testClass categoryOfSelector: #foo) = ( '*' , project1PackageName2 asLowercase) asSymbol.
+	self assert: (testClass class categoryOfSelector: #fooClass) = ( '*' , project1PackageName2 asLowercase) asSymbol.
+	self assert: (testClass categoryOfSelector: #bar) = ( '*' , project2PackageName2 asLowercase) asSymbol.
+	self assert: (testClass class categoryOfSelector: #barClass) = ( '*' , project2PackageName2 asLowercase) asSymbol.
+
+	newClass := Rowan projectTools browser copyClassNamed: className1 to: newClassName.
+	newClass initialize.
+
+	self assert: newClass == (Rowan globalNamed: newClassName).
+
+	self assert: newClass ~~ testClass.
+	self assert: newClass cvar1 = 2.
+	self assert: newClass civar1 = 1.
+	self assert: newClass fooClass = 1.
+	self assert: newClass barClass = 1.
+
+	self assert: newClass new ivar1 isNil.
+	self assert: newClass new foo = 1.
+	self assert: newClass new bar = 1.
+
+	self assert: (newClass categoryOfSelector: #foo) = ( '*' , project1PackageName2 asLowercase) asSymbol.
+	self assert: (newClass class categoryOfSelector: #fooClass) = ( '*' , project1PackageName2 asLowercase) asSymbol.
+	self assert: (newClass categoryOfSelector: #bar) = ( '*' , project2PackageName2 asLowercase) asSymbol.
+	self assert: (newClass class categoryOfSelector: #barClass) = ( '*' , project2PackageName2 asLowercase) asSymbol.
+
 ]
 
 { #category : 'tests - packages' }
@@ -841,6 +1049,189 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageWithClassModifications [
 		options: #().
 	self assert: movedNormalClass ~= normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2
+]
+
+{ #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridMoveMethod [
+
+	|  normalClass projectName packageNames packageName1 packageName2 packageName3 className |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions1'.
+	packageName3 := 'HybridA-Extensions2'.
+	packageNames := {packageName1.
+	packageName2.
+	packageName3}.
+	className :=  'SimpleHybridNormal1'.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #(foo)
+		classVars: #(Bar)
+		classInstVars: #(baz)
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: normalClass rowanPackageName = packageName1.
+
+	normalClass
+		rwCompileMethod: 'foo ^foo'
+		category: '*' , packageName2 asLowercase.
+	normalClass
+		rwCompileMethod: 'bar ^Bar'
+		category: 'accessing'.
+	normalClass class
+		rwCompileMethod: 'baz ^baz'
+		category: 'accessing'.
+
+	self assert: (normalClass categoryOfSelector: #foo) = ( '*' , packageName2 asLowercase) asSymbol.
+	self assert: (normalClass categoryOfSelector: #bar) = #accessing.
+	self assert: (normalClass class categoryOfSelector: #baz) = #accessing.
+
+	Rowan projectTools browser
+		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: 'accessing';
+		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName2 asLowercase);
+		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName2 asLowercase);
+		yourself.
+
+	self assert: (normalClass categoryOfSelector: #foo) = #accessing.
+	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName2 asLowercase) asSymbol.
+	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName2 asLowercase) asSymbol.
+
+	Rowan projectTools browser
+		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
+		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
+		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName3 asLowercase);
+		yourself.
+
+	self assert: (normalClass categoryOfSelector: #foo) = ( '*' , packageName3 asLowercase) asSymbol.
+	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName3 asLowercase) asSymbol.
+	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName3 asLowercase) asSymbol.
+
+]
+
+{ #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridMoveMethodFromSessionMethodsIntoSessionMethods [
+
+	|  normalClass projectName packageNames packageName1 packageName2 packageName3 className |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions1'.
+	packageName3 := 'HybridA-Extensions2'.
+	packageNames := {packageName1.
+	packageName2.
+	packageName3}.
+	className :=  'SimpleHybridNormal1'.
+
+	self
+		_loadSessionMethodExtensionProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #(foo)
+		classVars: #(Bar)
+		classInstVars: #(baz)
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: normalClass rowanPackageName = packageName1.
+
+	normalClass
+		rwCompileMethod: 'foo ^foo'
+		category: '*' , packageName2 asLowercase.
+	normalClass
+		rwCompileMethod: 'bar ^Bar'
+		category: 'accessing'.
+	normalClass class
+		rwCompileMethod: 'baz ^baz'
+		category: 'accessing'.
+
+	self assert: (normalClass categoryOfSelector: #foo) = ( '*' , packageName2 asLowercase) asSymbol.
+	self assert: (normalClass categoryOfSelector: #bar) = #accessing.
+	self assert: (normalClass class categoryOfSelector: #baz) = #accessing.
+
+	Rowan projectTools browser
+		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName2 asLowercase);
+		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName2 asLowercase);
+		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: 'accessing';
+		yourself.
+
+	self assert: (normalClass categoryOfSelector: #foo) = #accessing.
+	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName2 asLowercase) asSymbol.
+	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName2 asLowercase) asSymbol.
+
+	Rowan projectTools browser
+		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
+		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName3 asLowercase);
+		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
+		yourself.
+
+	self assert: (normalClass categoryOfSelector: #foo) = ( '*' , packageName3 asLowercase) asSymbol.
+	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName3 asLowercase) asSymbol.
+	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName3 asLowercase) asSymbol.
+
+]
+
+{ #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridMoveMethodIntoSessionMethods [
+
+	|  normalClass projectName packageNames packageName1 packageName2 className |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions'.
+	packageNames := {packageName1.
+	packageName2}.
+	className :=  'SimpleHybridNormal1'.
+
+	self
+		_loadSessionMethodExtensionProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #(foo)
+		classVars: #(Bar)
+		classInstVars: #(baz)
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: normalClass rowanPackageName = packageName1.
+
+	normalClass
+		rwCompileMethod: 'foo ^foo'
+		category: '*' , packageName2 asLowercase.
+	normalClass
+		rwCompileMethod: 'bar ^Bar'
+		category: 'accessing'.
+	normalClass class
+		rwCompileMethod: 'baz ^baz'
+		category: 'accessing'.
+
+	self assert: (normalClass categoryOfSelector: #foo) = ( '*' , packageName2 asLowercase) asSymbol.
+	self assert: (normalClass categoryOfSelector: #bar) = #accessing.
+	self assert: (normalClass class categoryOfSelector: #baz) = #accessing.
+
+	Rowan projectTools browser
+		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName2 asLowercase);
+		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName2 asLowercase);
+		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: 'accessing';
+		yourself.
+
+	self assert: (normalClass categoryOfSelector: #foo) = #accessing.
+	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName2 asLowercase) asSymbol.
+	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName2 asLowercase) asSymbol.
+
 ]
 
 { #category : 'tests' }
@@ -1362,4 +1753,83 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 	self should: [ normalClass baz = 'baz' ] raise: MessageNotUnderstood.
 
 	writtenStateValidationBlock value	"verify that original state is restored"
+]
+
+{ #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridRemoveCategory [
+
+	|  normalClass projectName packageNames packageName1 packageName2 className |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions1'.
+	packageNames := {packageName1.
+	packageName2}.
+	className :=  'SimpleHybridNormal1'.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'hybrid browser project'.
+
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #(foo fah)
+		classVars: #(Bar)
+		classInstVars: #(baz)
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: normalClass rowanPackageName = packageName1.
+
+	normalClass
+		rwCompileMethod: 'foo1 ^foo'
+		category: '*' , packageName2 asLowercase.
+	normalClass
+		rwCompileMethod: 'foo2 ^foo'
+		category: '*' , packageName2 asLowercase.
+	normalClass class
+		rwCompileMethod: 'fah1 ^baz'
+		category: '*' , packageName2 asLowercase.
+	normalClass class
+		rwCompileMethod: 'fah2 ^Bar'
+		category: '*' , packageName2 asLowercase.
+	normalClass
+		rwCompileMethod: 'bar1 ^Bar'
+		category: 'accessing'.
+	normalClass class
+		rwCompileMethod: 'bar2 ^baz'
+		category: 'accessing'.
+	normalClass
+		rwCompileMethod: 'bee1 ^Bar'
+		category: 'accessing'.
+	normalClass class
+		rwCompileMethod: 'bee2 ^baz'
+		category: 'accessing'.
+
+	self assert: (normalClass categoryOfSelector: #foo1) = ( '*' , packageName2 asLowercase) asSymbol.
+	self assert: (normalClass categoryOfSelector: #foo2) = ( '*' , packageName2 asLowercase) asSymbol.
+	self assert: (normalClass class categoryOfSelector: #fah1) = ( '*' , packageName2 asLowercase) asSymbol.
+	self assert: (normalClass class categoryOfSelector: #fah2) = ( '*' , packageName2 asLowercase) asSymbol.
+	self assert: (normalClass categoryOfSelector: #bar1) = #accessing.
+	self assert: (normalClass class categoryOfSelector: #bar2) = #accessing.
+	self assert: (normalClass categoryOfSelector: #bee1) = #accessing.
+	self assert: (normalClass class categoryOfSelector: #bee2) = #accessing.
+
+	self assert: normalClass categoryNames size = 2.
+	self assert: normalClass class categoryNames size = 2.
+
+	normalClass
+		rwRemoveCategory: 'accessing';
+		rwRemoveCategory: ( '*' , packageName2 asLowercase);
+		yourself.
+
+	normalClass class
+		rwRemoveCategory: 'accessing';
+		rwRemoveCategory: ( '*' , packageName2 asLowercase);
+		yourself.
+
+	self assert: normalClass categoryNames size = 0.
+	self assert: normalClass class categoryNames size = 0.
+
 ]
