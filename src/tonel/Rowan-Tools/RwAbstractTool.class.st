@@ -107,8 +107,8 @@ RwAbstractTool >> doGitCommit: messageString [
 	gitTool := Rowan gitTools.
 	gitRootPath := specification repoSpec repositoryRootPath.
 	commitMessageFileName := gitTool createTmpFileWith: messageString.
-	gitTool gitaddIn: gitRootPath with: '.'.
-	gitTool gitcommitIn: gitRootPath with: '-a --file=' , commitMessageFileName.
+	gitTool gitaddIn: gitRootPath with: '-A .'.
+	gitTool gitcommitIn: gitRootPath with: '--file=' , commitMessageFileName.
 	status := gitTool gitlogIn: gitRootPath with: '-1'.
 	Transcript
 		cr;
@@ -116,6 +116,7 @@ RwAbstractTool >> doGitCommit: messageString [
 		cr;
 		show: status.
 	^ status
+
 ]
 
 { #category : 'git' }

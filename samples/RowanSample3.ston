@@ -1,17 +1,17 @@
  RwSimpleProjectSpecification{
-	#specName : 'RowanSample1',
-	#projectUrl : 'https://github.com/dalehenrich/RowanSample1',
+	#specName : 'RowanSample3',
+	#projectUrl : 'https://github.com/dalehenrich/RowanSample3',
 	#platformSpec : {
 		'gemstone' : RwGemStoneSpecification {
 			#defaultSymbolDictName : 'SampleSymbolDict',
-			#defaultUseSessionMethodsForExtensions : false }
+			#defaultUseSessionMethodsForExtensions : true }
 	},
 	#repoSpec : RwGitRepositorySpecification {
-		#committish : 'sample',
+		#committish : 'issue150',
 		#committishType : 'branch'
 	},
 	#configsPath : 'rowan/configs',
 	#repoPath : 'rowan/src',
 	#specsPath : 'rowan/specs',
-	#comment : 'Sample project to be used as an example project when first getting started with Jadeite and Rowan.'
+	#comment : 'Simple sample project that can be used when getting started with Jadeite and Rowan'
 }

@@ -469,13 +469,23 @@ RwGsImage class >> objectNamed: aSymbol [
 { #category : 'cypress (old)' }
 RwGsImage class >> packageNames [
 
-	"Return list of package names"
+	"Return list of package names. All sytem projects are visible, but not all packages of visible projects
+		are visible."
 
-	| packageNames |
+	| packageNames visiblePackageNames |
 	packageNames := Set new.
+	visiblePackageNames := Set new.
+	(self symbolList select: [:symDict | 
+		symDict rowanSymbolDictionaryRegistry notNil])
+		do: [:symDict | 
+			visiblePackageNames 
+				addAll: symDict rowanSymbolDictionaryRegistry packageRegistry keys ].
 	self loadedProjects
-		collect: [ :loadedProject | packageNames addAll: loadedProject packageNames ].
+		do: [ :loadedProject | 
+			loadedProject packageNames do: [:packageName |
+				(visiblePackageNames includes: packageName) ifTrue: [ packageNames add: packageName ] ] ].
 	^ packageNames
+
 ]
 
 { #category : 'cypress (old)' }

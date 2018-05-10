@@ -90,6 +90,13 @@ RwGsSymbolDictionaryRegistry class >> _methodExtensionSessionMethodsPatchClass [
 ]
 
 { #category : 'accessing' }
+RwGsSymbolDictionaryRegistry class >> _methodExtensionSessionMethodsPropertiesPatchClass [
+
+	^ RwGsMethodExtensionSessionMethodPropertiesSymDictPatch
+
+]
+
+{ #category : 'accessing' }
 RwGsSymbolDictionaryRegistry class >> _methodPropertiesPatchClass [
 
 	^ RwGsMethodPropertiesSymDictPatch

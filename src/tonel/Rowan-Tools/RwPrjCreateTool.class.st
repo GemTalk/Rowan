@@ -76,7 +76,7 @@ RwPrjCreateTool >> createPackageProjectFor: projectDefinition format: format roo
 	dirPath := rootRepoPath , utils pathNameDelimiter , repoPath.
 	utils ensureDirectoryExists: dirPath.
 	utils
-		writeStreamFor: '.cypress'
+		writeStreamFor: 'properties.st'
 		in: dirPath
 		do: [ :fileStream | fileStream nextPutAll: '{ #format : ' , format printString , '}' ].
 	dirPath := rootRepoPath , utils pathNameDelimiter , projectDefinition specsPath.
@@ -88,6 +88,7 @@ RwPrjCreateTool >> createPackageProjectFor: projectDefinition format: format roo
 	projectDefinition projectOwnerId: Rowan image currentUserId.
 	projectDefinition specification copy export.
 	^ projectDefinition
+
 ]
 
 { #category : 'smalltalk api' }

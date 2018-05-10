@@ -50,6 +50,27 @@ Behavior >> rwCompileMethod: sourceString category: aCategoryString packageName:
 ]
 
 { #category : '*rowan-gemstone-core' }
+Behavior >> rwMoveMethod: methodSelector toCategory: categoryName [
+
+	^ Rowan projectTools browser
+		moveMethod: methodSelector
+		forClassNamed: self thisClass name asString
+		isMeta: self isMeta
+		toProtocol: categoryName
+
+]
+
+{ #category : '*rowan-gemstone-core' }
+Behavior >> rwRemoveCategory: categoryName [
+
+	^ Rowan projectTools browser
+		removeProtocol: categoryName 
+		fromClassNamed:  self thisClass name asString
+		isMeta: self isMeta
+
+]
+
+{ #category : '*rowan-gemstone-core' }
 Behavior >> rwRemoveSelector: methodSelector [
 
 	^ Rowan projectTools browser

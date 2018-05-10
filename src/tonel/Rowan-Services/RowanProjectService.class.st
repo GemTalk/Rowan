@@ -6,23 +6,20 @@ Class {
 		'sha',
 		'branch'
 	],
-	#classVars : [
-		'DefaultProjectName'
-	],
 	#category : 'Rowan-Services'
 }
 
 { #category : 'accessing' }
 RowanProjectService class >> defaultProjectName [
 
-	^DefaultProjectName
+	^RowanServicePreferences current defaultProjectName
 
 ]
 
 { #category : 'accessing' }
 RowanProjectService class >> defaultProjectName: aString [
 
-	DefaultProjectName := aString
+	RowanServicePreferences current defaultProjectName: aString
 
 ]
 
@@ -39,7 +36,7 @@ RowanProjectService >> branches [
 	| project branches |
 
 	project := (RwProject newNamed: name). 
-	branches := Rowan gitTools gitbranchIn: project repositoryRootPath with: ' --list'.
+	branches := Rowan gitTools gitbranchIn: project repositoryRootPath with: ''.
 	^branches
 
 ]
@@ -117,6 +114,13 @@ RowanProjectService >> defaultProjectName: aString [
 RowanProjectService >> definition [
 
 	^(Rowan image loadedProjectNamed: name) asDefinition
+
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> isDirty [
+
+	^(RwProject newNamed: name) isDirty
 
 ]
 

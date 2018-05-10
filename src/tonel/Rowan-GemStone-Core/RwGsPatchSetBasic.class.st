@@ -193,10 +193,30 @@ RwGsPatchSetBasic >> _methodExtensionPatchClass: packageName [
 ]
 
 { #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _methodExtensionPropertiesPatchClass:  packageName [
+
+	^ self symbolDictionaryRegistryClass
+		ifNotNil: [ :registryClass | 
+			(self _currentProjectDefinition
+				useSessionMethodsForExtensionsForPackageNamed: packageName)
+				ifTrue: [ registryClass _methodExtensionSessionMethodsPropertiesPatchClass ]
+				ifFalse: [ registryClass _methodPropertiesPatchClass ] ]
+		ifNil: [ RwGsMethodPropertiesPatch ]
+
+]
+
+{ #category : 'private - patch class accessors' }
 RwGsPatchSetBasic >> _methodExtensionSessionMethodsDeletionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		_methodExtensionSessionMethodsDeletionPatchClass
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSetBasic >> _methodExtensionSessionMethodsPropertiesPatchClass [
+
+	^ self symbolDictionaryRegistryClass _methodExtensionSessionMethodsPropertiesPatchClass
+
 ]
 
 { #category : 'private - patch class accessors' }
@@ -562,6 +582,22 @@ RwGsPatchSetBasic >> addPatchedExtendedClassMethod: aClassMethodDefinition inCla
 ]
 
 { #category : 'building' }
+RwGsPatchSetBasic >> addPatchedExtendedClassMethodProperties: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	methodsWithPropertyChanges
+		add:
+			(((self _methodExtensionPropertiesPatchClass: aPackageDefinition key)
+				forMethod: aClassMethodDefinition
+				isMeta: true
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+
+]
+
+{ #category : 'building' }
 RwGsPatchSetBasic >> addPatchedExtendedInstanceMethod: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
@@ -574,6 +610,22 @@ RwGsPatchSetBasic >> addPatchedExtendedInstanceMethod: aInstanceMethodDefinition
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
+]
+
+{ #category : 'building' }
+RwGsPatchSetBasic >> addPatchedExtendedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	methodsWithPropertyChanges
+		add:
+			(((self _methodExtensionPropertiesPatchClass: aPackageDefinition key)
+				forMethod: aInstanceMethodDefinition
+				isMeta: false
+				inClass: aClassDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+
 ]
 
 { #category : 'building' }
