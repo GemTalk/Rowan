@@ -33,6 +33,15 @@ STONTestUser class >> dummy [
 		yourself
 ]
 
+{ #category : 'instance creation' }
+STONTestUser class >> new [
+
+	^ self basicNew
+		initialize;
+		yourself
+
+]
+
 { #category : 'ston-core' }
 STONTestUser class >> stonName [
 	^ #TestUser
@@ -68,8 +77,8 @@ STONTestUser >> hash [
 
 { #category : 'initialize-release' }
 STONTestUser >> initialize [ 
-	super initialize.
 	enabled := true
+
 ]
 
 { #category : 'accessing' }
