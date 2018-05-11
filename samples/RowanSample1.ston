@@ -4,7 +4,7 @@
 	#platformSpec : {
 		'gemstone' : RwGemStoneSpecification {
 			#defaultSymbolDictName : 'SampleSymbolDict',
-			#defaultUseSessionMethodsForExtensions : true }
+			#defaultUseSessionMethodsForExtensions : false }
 	},
 	#repoSpec : RwGitRepositorySpecification {
 		#committish : 'sample',
