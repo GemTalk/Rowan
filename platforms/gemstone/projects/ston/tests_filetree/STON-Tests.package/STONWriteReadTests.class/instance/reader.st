@@ -1,3 +1,0 @@
-private
-reader
-  ^ STONReader new
