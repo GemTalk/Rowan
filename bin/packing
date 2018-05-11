@@ -64,13 +64,13 @@ validate_tag() {
     pad="	"
   fi
   pushd $projectName
-    git checkout master
     head="HEAD"		# tag is on current commit
     if [ "$projectName" = "Jade" ] ; then
       git fetch --tags
       head="HEAD~1"	#tag is on the previous commit for Jadeite"
     fi
     if [ "$tagName"x != "x" ] ; then
+      git checkout master
       theTag=`commit_match_tag "$tagName" "$head"`
       if [ "${theTag}" != "${tagName}" ] ; then
         printf "${ANSI_RED} latest tag (${theTag}) for $projectName does not match expected tag (${tagName}) ${ANSI_RESET}\n"
