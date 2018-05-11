@@ -616,22 +616,25 @@ currentOrNil
   | projectSetDefinition gitRepoPath |
   projectSetDefinition := RwProjectSetDefinition new.
   gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
-  #(
-    'file:$ROWAN_PROJECTS_HOME/Rowan/specs/Rowan_SystemUser.ston'
-    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'
-    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'
-    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston') 
-    do: [:specUrl |
+  {
+    {'file:$ROWAN_PROJECTS_HOME/Rowan/specs/Rowan_SystemUser.ston'. 'Default'}.
+    {'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
+    {'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'. 'Bootstrap'}.
+    {'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'. 'Default'}.
+  } 
+    do: [:ar |
       "load all of the packages from disk, so that we're not actually using Cypress, STON, 
        and Tonel while created loaded things for Rowan"
-      | specification |
+      | specification specUrl configName |
+      specUrl := ar at: 1.
+      configName := ar at: 2.
       specification := RwSpecification fromUrl: specUrl.
       specification
         repositoryRootPath: gitRepoPath;
         repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
         register.
       (Rowan projectTools read 
-        readProjectSetForProjectNamed: specification specName withConfiguration: 'Default')
+        readProjectSetForProjectNamed: specification specName withConfiguration: configName)
           do: [:projectDefinition |
             projectSetDefinition addProject: projectDefinition ] ].
     [ 

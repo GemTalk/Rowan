@@ -1,0 +1,8 @@
+RwProjectCompoundConfiguration{
+	#name : 'Bootstrap',
+	#packageNames : Set [ ],
+	#configurationNames : [
+		'Gs3215'
+	],
+	#comment : 'During Bootstrap load Gs3215 only'
+}
