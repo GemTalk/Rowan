@@ -1,0 +1,14 @@
+{
+	"category" : "STON-UTF8-Tests",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "dkh 06/26/2015 11:34",
+	"instvars" : [
+		 ],
+	"name" : "STONUtf8WriterTests",
+	"pools" : [
+		 ],
+	"super" : "STONWriterTests",
+	"type" : "normal" }

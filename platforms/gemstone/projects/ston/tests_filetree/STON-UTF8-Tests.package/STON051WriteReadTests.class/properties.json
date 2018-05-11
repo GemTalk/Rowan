@@ -1,0 +1,14 @@
+{
+	"category" : "STON-UTF8-Tests",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "STON051WriteReadTests",
+	"pools" : [
+		 ],
+	"super" : "STONWriteReadTests",
+	"type" : "normal" }

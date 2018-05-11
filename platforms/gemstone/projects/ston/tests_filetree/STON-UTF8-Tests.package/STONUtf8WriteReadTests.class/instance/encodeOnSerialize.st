@@ -1,0 +1,3 @@
+private
+encodeOnSerialize
+  ^ true

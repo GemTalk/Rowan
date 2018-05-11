@@ -1,0 +1,9 @@
+{
+	"class" : {
+		 },
+	"instance" : {
+		"encodeOnSerialize" : "dkh 06/26/2015 17:03",
+		"reader" : "dkh 06/26/2015 16:31",
+		"testDoubleQuotedString" : "dkh 06/26/2015 16:47",
+		"testString" : "dkh 06/29/2015 10:06",
+		"writer" : "dkh 06/26/2015 16:28" } }

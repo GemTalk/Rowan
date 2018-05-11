@@ -1,0 +1,3 @@
+private
+writer
+  ^ STONWriter new
