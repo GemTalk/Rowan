@@ -532,7 +532,7 @@ currentOrNil
 	| session symbolList |
 	session := GsCurrentSession currentSession.
 	symbolList := session symbolList.
-	#( #RowanPrivate #RowanPublic #RowanClient)
+	#( #RowanPrivate #RowanPublic #RowanClient #RowanLoader)
 		do: [:symbolName | 
 			| newDict size |
 			newDict := SymbolDictionary new
@@ -586,6 +586,13 @@ currentOrNil
     value: 'RowanPublic'
     value: #('Rowan-GemStone-Public' 
       'Rowan-Initialize').		"Extension methods for public Rowan classes"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanLoader'
+    value: #('Rowan-GemStone-Loader').		"GemStone Rowan loader classes"
 %
   commit
 
