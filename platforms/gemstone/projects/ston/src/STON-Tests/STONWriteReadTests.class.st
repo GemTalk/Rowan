@@ -110,8 +110,9 @@ STONWriteReadTests >> testAssociations [
 { #category : 'tests' }
 STONWriteReadTests >> testCharacters [
 	| characters |
-	characters := STON listClass withAll: ($a to: $z), ($A to: $Z).
+	characters := STON listClass withAll: {$a. $b. $m. $z}, {$A. $B. $M. $Z}.
 	self serializeAndMaterialize: characters
+
 ]
 
 { #category : 'tests' }
