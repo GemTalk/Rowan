@@ -3,15 +3,8 @@ Extension { #name : 'RwClassModificationForcingNewClassVersion' }
 { #category : '*rowan-gemstone-loader-extensions' }
 RwClassModificationForcingNewClassVersion >> addModificationForcingNewClassVersionToPatchSet: aPatchSet inPackage: aPackage inProject: aProjectDefinition [
 
-	self isAddition
-		ifTrue: [ self error: 'unexpected addition for modification forcing new class version' ].
-	self isDeletion
-		ifTrue: [ self error: 'unexpected deletion for modification forcing new class version' ].
-	self isModification
-		ifTrue: [ 
-			RwGsClassVersioningPatch
-				addPatchedClassModificationForcingNewClassVersion: self
-				inPackage: aPackage
-				inProject: aProjectDefinition
-				toPatchSet: aPatchSet ]
+	aPatchSet
+		addForcingNewClassVersionModification: self 
+		toPatchSetInPackage: aPackage 
+		inProject: aProjectDefinition
 ]
