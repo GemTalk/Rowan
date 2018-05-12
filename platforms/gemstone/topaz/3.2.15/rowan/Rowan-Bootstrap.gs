@@ -552,7 +552,7 @@ currentOrNil
     | packageManager repo |
     packageManager := CypressPackageManager3 new.
     repo := CypressAbstractRepository
-      onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
+      onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/rowan/src/'  )
       alias: ''.
     packageManager
       defaultSymbolDictionaryName: symbolDictName asSymbol.
@@ -631,7 +631,7 @@ currentOrNil
   projectSetDefinition := RwProjectSetDefinition new.
   gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
   {
-    {'file:$ROWAN_PROJECTS_HOME/Rowan/specs/Rowan_SystemUser.ston'. 'Default'}.
+    {'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan_SystemUser.ston'. 'Default'}.
     {'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
     {'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'. 'Bootstrap'}.
     {'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'. 'Default'}.

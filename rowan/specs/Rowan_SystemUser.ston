@@ -20,13 +20,13 @@
 			}
 		 }
 	},
-	#specsPath : 'specs',
-	#configsPath : 'configs',
 	#repoSpec : RwGitRepositorySpecification {
 		#committish : 'master',
 		#committishType : 'branch'
 	},
-	#repoPath : 'src/tonel',
+	#configsPath : 'rowan/configs',
+	#repoPath : 'rowan/src/',
+	#specsPath : 'rowan/specs',
 	#comment : ''
 }
 
