@@ -8,21 +8,6 @@ Class {
 }
 
 { #category : 'private' }
-RwGsImage class >> _bootstrapApplyModification: aProjectSetModification instanceMigrator: instanceMigrator [
-
-	| visitor patchSet |
-	visitor := RwGsImageRowanBootstrapPatchVisitor new.
-	visitor visit: aProjectSetModification.
-	patchSet := visitor patchSet.
-	patchSet classesWithNewVersions isEmpty
-		ifTrue: [ 
-			patchSet apply.
-			^ self ].
-	self error: 'Did not expect new class versions during a _bootstrap load'
-
-]
-
-{ #category : 'private' }
 RwGsImage class >> _loadedProjectRegistry [
 
 	^ self _loadedProjectRegistryForUserId: self currentUserId
@@ -119,62 +104,6 @@ RwGsImage class >> addProject: aRwProjectSpecification [
 	self
 		error:
 			'There is already a project named ' , projectName printString , ' registered'
-]
-
-{ #category : 'modifying image' }
-RwGsImage class >> applyModification: aProjectSetModification enableInstanceMigration: enableInstanceMigration [
-
-	| visitor patchSet |
-	visitor := RwGsImagePatchVisitor new.
-	visitor visit: aProjectSetModification.
-	patchSet := visitor patchSet.
-	patchSet moveClassesBetweenPackages. "updates classesWithNewVersions, if a move is detected"
-	patchSet classesWithNewVersions isEmpty
-		ifTrue: [ 
-			patchSet apply.
-			^ self ].
-	patchSet classesWithNewVersions
-		do: [ :each | 
-			each
-				updatePatchesForNewClassVersion: aProjectSetModification 
-					patchSet: patchSet;
-				updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
-					patchSet: patchSet;
-				updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
-					patchSet: patchSet ].
-	visitor := RwGsImagePatchVisitor new.
-	visitor visit: aProjectSetModification.
-	patchSet := visitor patchSet.
-	patchSet applyForNewClassVersions: enableInstanceMigration
-
-]
-
-{ #category : 'modifying image' }
-RwGsImage class >> applyModification: aProjectSetModification instanceMigrator: instanceMigrator [
-
-	| visitor patchSet |
-	visitor := RwGsImagePatchVisitor new.
-	visitor visit: aProjectSetModification.
-	patchSet := visitor patchSet.
-	patchSet moveClassesBetweenPackages. "updates classesWithNewVersions, if a move is detected"
-	patchSet classesWithNewVersions isEmpty
-		ifTrue: [ 
-			patchSet apply.
-			^ self ].
-	patchSet classesWithNewVersions
-		do: [ :each | 
-			each
-				updatePatchesForNewClassVersion: aProjectSetModification 
-					patchSet: patchSet;
-				updateNewClassVersionPatchesForExtensionsIn: aProjectSetModification
-					patchSet: patchSet;
-				updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
-					patchSet: patchSet ].
-	visitor := RwGsImagePatchVisitor new.
-	visitor visit: aProjectSetModification.
-	patchSet := visitor patchSet.
-	patchSet applyForNewClassVersions: instanceMigrator
-
 ]
 
 { #category : 'testing' }
