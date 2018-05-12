@@ -1,6 +1,6 @@
 Extension { #name : 'RwClassModification' }
 
-{ #category : '*rowan-gemstone-loader' }
+{ #category : '*rowan-gemstone-loader-extensions' }
 RwClassModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage inProject: aProjectDefinition [
 
 	self isAddition

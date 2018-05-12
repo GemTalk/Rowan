@@ -1,6 +1,6 @@
 Extension { #name : 'RwGsImage' }
 
-{ #category : '*rowan-gemstone-loader' }
+{ #category : '*rowan-gemstone-loader-extensions' }
 RwGsImage class >> _bootstrapApplyModification: aProjectSetModification instanceMigrator: instanceMigrator [
 
 	| visitor patchSet |
@@ -15,7 +15,7 @@ RwGsImage class >> _bootstrapApplyModification: aProjectSetModification instance
 
 ]
 
-{ #category : '*rowan-gemstone-loader' }
+{ #category : '*rowan-gemstone-loader-extensions' }
 RwGsImage class >> applyModification: aProjectSetModification enableInstanceMigration: enableInstanceMigration [
 
 	| visitor patchSet |
@@ -43,7 +43,7 @@ RwGsImage class >> applyModification: aProjectSetModification enableInstanceMigr
 
 ]
 
-{ #category : '*rowan-gemstone-loader' }
+{ #category : '*rowan-gemstone-loader-extensions' }
 RwGsImage class >> applyModification: aProjectSetModification instanceMigrator: instanceMigrator [
 
 	| visitor patchSet |

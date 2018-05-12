@@ -591,8 +591,15 @@ currentOrNil
 
   run
   CypressBootstrapRowanBlock 
-    value: 'RowanPrivate'
+    value: 'RowanLoader'
     value: #('Rowan-GemStone-Loader').		"GemStone Rowan loader classes"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanPrivate'
+    value: #('Rowan-GemStone-Loader-Extensions').		"GemStone Rowan loader classes"
 %
   commit
 
