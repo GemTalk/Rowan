@@ -258,7 +258,7 @@ STONReaderTests >> testString [
   self
     assert:
       (x := self materialize: '''\u00E9l\u00E8ve en Fran\u00E7ais''')
-        = '?l?ve en Fran?ais'.
+        = 'élève en Français'.
   self
 	assert:
 		(x := self
