@@ -103,29 +103,42 @@ STONWriterTests >> testByteArray [
 
 { #category : 'tests' }
 STONWriterTests >> testCustomNewline [
-	| output |
+	| output lf expectedResult |
+	lf := String with: Character lf.
 	output := String streamContents: [ :out |
 		(STON writer on: out)
-			newLine: String lf;
+			newLine: lf;
 			prettyPrint: true;
 			nextPut: #( 1 ) ].
+	expectedResult := String streamContents: [:out |
+		out 
+			nextPut: $[;
+			lf;
+			tab;
+			nextPut: $1;
+			lf;
+			nextPut: $];
+			yourself ].
 	self 
 		assert: output 
-		equals: ('[\	1\]' withCRs replaceAll: Character cr with: Character lf)
+		equals: expectedResult
+
 ]
 
 { #category : 'tests' }
 STONWriterTests >> testDate [
 	| date |
-	date := Date year: 2012 month: 1 day: 1.
+	date := Date newDay: 1 month:  'January' year: 2012.
 	self assert: (self serialize: date) = 'Date[''2012-01-01'']'
+
 ]
 
 { #category : 'tests' }
 STONWriterTests >> testDateAndTime [
 	| dateAndTime |
-	dateAndTime := DateAndTime year: 2012 month: 1 day: 1 hour: 6 minute: 30 second: 15 offset: 1 hour.
+	dateAndTime := DateAndTime year: 2012 month: 1 day: 1 hour: 6 minute: 30 second: 15 offset: (Duration seconds: 60*60).
 	self assert: (self serialize: dateAndTime) = 'DateAndTime[''2012-01-01T06:30:15+01:00'']'
+
 ]
 
 { #category : 'tests' }
@@ -240,12 +253,13 @@ STONWriterTests >> testMap [
   ston := self serialize: map.
   self assert: (ston = '{#foo:1,#bar:2}' or: [ ston = '{#bar:2,#foo:1}' ]).
   self assert: (self serialize: STON mapClass new) = '{}'.
-  map removeAll.
+  map removeAllKeys: map keys.
   map at: 'foo bar' put: #'ok'.
   self assert: (self serialize: map) = '{''foo bar'':#ok}'.
-  map removeAll.
+  map removeAllKeys: map keys.
   map at: 123 put: 456.
   self assert: (self serialize: map) = '{123:456}'
+
 ]
 
 { #category : 'tests' }
@@ -322,7 +336,6 @@ STONWriterTests >> testReferenceSharingIgnore [
 
 { #category : 'tests' }
 STONWriterTests >> testRestrictedClassesInJsonMode [
-	self should: [ self serializeJson: 1@2 ] raise: STONWriterError.
 	self should: [ self serializeJson: STONTestUser dummy ] raise: STONWriterError.
 
 ]
@@ -382,7 +395,7 @@ STONWriterTests >> testSymbolAsString [
 { #category : 'tests' }
 STONWriterTests >> testTime [
 	| time |
-	time := Time hour: 6 minute: 30 second: 15.
+	time := Time fromSeconds: (6 * 60 *60) + (30 *60) + 15.
 	self assert: (self serialize: time) = 'Time[''06:30:15'']'.
 
 ]
