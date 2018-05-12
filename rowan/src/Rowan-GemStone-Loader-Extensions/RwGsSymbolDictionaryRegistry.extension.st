@@ -108,5 +108,3 @@ RwGsSymbolDictionaryRegistry class >> _packageDeletionPatchClass [
 
 	^ RwGsPackageDeletionSymbolDictPatch
 ]
-
-

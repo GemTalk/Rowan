@@ -70,5 +70,3 @@ RwGsImage class >> applyModification: aProjectSetModification instanceMigrator: 
 	patchSet applyForNewClassVersions: instanceMigrator
 
 ]
-
-

@@ -357,6 +357,34 @@ RwGsPatchSet >> addAndUpdateLoadedProjects [
 	projectsWithPropertyChanges do: [ :patch | patch updateLoadedProject ]
 ]
 
+{ #category : 'modification dispatching' }
+RwGsPatchSet >> addClassModification: aRwClassModification toPatchSetInPackage: aPackage inProject: aProjectDefinition [
+
+	"Double dispatch from aRwClassModification ... needed to isolate the loader methods from meaningful changes 
+		while updating the loader using the loader"
+
+	aRwClassModification isAddition
+		ifTrue: [ 
+			self
+				addAddedClass: aRwClassModification after
+				inPackage: aPackage
+				inProject: aProjectDefinition ].
+	aRwClassModification isDeletion
+		ifTrue: [ 
+			self
+				addDeletedClass: aRwClassModification before
+				inPackage: aPackage
+				inProject: aProjectDefinition ].
+	aRwClassModification isModification
+		ifTrue: [ 
+			RwGsClassVersioningPatch
+				addPatchedClassModification: aRwClassModification
+				inPackage: aPackage
+				inProject: aProjectDefinition
+				toPatchSet: self ]
+
+]
+
 { #category : 'private - applying' }
 RwGsPatchSet >> addCreatedClassesAndVersionsTo: newClassesByName [
 
@@ -494,6 +522,26 @@ RwGsPatchSet >> addExtendedInstanceMethod: anInstanceMethodDefinition inClass: a
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
+]
+
+{ #category : 'modification dispatching' }
+RwGsPatchSet >> addForcingNewClassVersionModification: aRwClassModificationForcingNewClassVersion toPatchSetInPackage: aPackage inProject: aProjectDefinition [
+
+	"Double dispatch from aRwClassModificationForcingNewClassVersion ... needed to isolate the loader methods from meaningful changes 
+		while updating the loader using the loader"
+
+	aRwClassModificationForcingNewClassVersion isAddition
+		ifTrue: [ self error: 'unexpected addition for modification forcing new class version' ].
+	aRwClassModificationForcingNewClassVersion isDeletion
+		ifTrue: [ self error: 'unexpected deletion for modification forcing new class version' ].
+	aRwClassModificationForcingNewClassVersion isModification
+		ifTrue: [ 
+			RwGsClassVersioningPatch
+				addPatchedClassModificationForcingNewClassVersion: aRwClassModificationForcingNewClassVersion
+				inPackage: aPackage
+				inProject: aProjectDefinition
+				toPatchSet: self ]
+
 ]
 
 { #category : 'building' }

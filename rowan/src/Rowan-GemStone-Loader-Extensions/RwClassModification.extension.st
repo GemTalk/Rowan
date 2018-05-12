@@ -23,5 +23,3 @@ RwClassModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage 
 				inProject: aProjectDefinition
 				toPatchSet: aPatchSet ]
 ]
-
-
