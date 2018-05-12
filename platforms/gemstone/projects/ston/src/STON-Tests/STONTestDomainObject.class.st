@@ -31,17 +31,21 @@ Class {
 
 { #category : 'instance creation' }
 STONTestDomainObject class >> dummy [
+	| random atRandom atRandomIndex |
+	random :=  HostRandom new.
+	atRandom := [:anInt | (random next * anInt) truncated + 1 ].
+	atRandomIndex := [:coll | coll at: (atRandom value: coll size) ].
 	^ self new
-		integer: 999999 atRandom;
-		float: 999 atRandom / Float pi;
-		boolean: #(true false) atRandom;
-		bytes: (ByteArray streamContents: [ :out | 32 timesRepeat: [ out nextPut: 255 atRandom ] ]);
-		description: (String streamContents: [ :out | 16 atRandom timesRepeat: [ out nextPutAll: 'Blah' ] ]);
-		color: #(#red #green #blue) atRandom;
+		integer: (atRandom value: 999999);
+		float: (atRandom value: 999) / Float pi;
+		boolean: (atRandomIndex value: #(true false));
+		bytes: (ByteArray streamContents: [ :out | 32 timesRepeat: [ out nextPut: (atRandom value: 255) ] ]);
+		description: (String streamContents: [ :out | (atRandom value: 16) timesRepeat: [ out nextPutAll: 'Blah' ] ]);
+		color: (atRandomIndex value: #(#red #green #blue));
 		tags: (Array 
-			with: #(#one #two #three) atRandom
- 			with: #(#alpha #beta #gamma) atRandom 
-			with: #(#low #medium #high) atRandom);
+			with: (atRandomIndex value: #(#one #two #three))
+ 			with: (atRandomIndex value: #(#alpha #beta #gamma)) 
+			with: (atRandomIndex value: #(#low #medium #high)));
 		yourself
 
 ]

@@ -22,15 +22,18 @@ Class {
 STONTestUser class >> dummy [
 	"self dummy"
 	
-	| username password |
+	| username password random atRandom |
+	random :=  HostRandom new.
+	atRandom := [:anInt | (random next * anInt) truncated + 1 ].
 	username := String streamContents: [ :stream |
-		stream << 'user'; print: 999 atRandom; << '@company'; print: 99 atRandom; << '.com' ].
+		stream << 'user'; print: (atRandom value: 999); << '@company'; print: (atRandom value: 99); << '.com' ].
 	password := String streamContents: [ :stream |
-		stream << 'secret'; print: 999 atRandom ].
+		stream << 'secret'; print:  (atRandom value: 999) ].
 	^ self new
 		username: username;
 		password: password;
 		yourself
+
 ]
 
 { #category : 'instance creation' }
