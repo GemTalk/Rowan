@@ -598,7 +598,7 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'RowanPrivate'
-    value: #('Rowan-GemStone-Loader-Extensions').		"GemStone Rowan loader classes"
+    value: #('Rowan-GemStone-Loader-Extensions').	"Extension methods in non-loader classes"
 %
   commit
 

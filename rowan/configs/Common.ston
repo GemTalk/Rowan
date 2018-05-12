@@ -13,7 +13,7 @@ RwProjectConfiguration {
 		'Rowan-GemStone-Core',
 		'Rowan-GemStone-Kernel',
 		'Rowan-GemStone-Loader',
-		'Rowan-GemStone-Extensions',
+		'Rowan-GemStone-Loader-Extensions',
 		'Rowan-Tests',
 		'Rowan-Tools-Core',
 		'Rowan-Tools-Kernel'
