@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwGsPatchSetRowanBootstrap',
-	#superclass : 'RwGsPatchSetBasic',
+	#superclass : 'RwGsPatchSet',
 	#category : 'Rowan-GemStone-Loader'
 }
 

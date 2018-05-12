@@ -2,8 +2,8 @@
 A set of patches (changes) to be applied atomically (or as close to atomically as possible) to a GemStone repository.
 "
 Class {
-	#name : 'RwGsPatchSetBasic',
-	#superclass : 'RwGsPatchSetAbstract',
+	#name : 'RwGsPatchSet',
+	#superclass : 'Object',
 	#instVars : [
 		'instanceMigrator',
 		'addedProjects',
@@ -15,7 +15,7 @@ Class {
 		'deletedClasses',
 		'movedDeletedClasses',
 		'extendedClasses',
-		'classesWithPropertyChanges',
+		'classsesWithPropertyChanges',
 		'classesWithClassVariableChanges',
 		'classesWithNewVersions',
 		'addedMethods',
@@ -35,14 +35,14 @@ Class {
 }
 
 { #category : 'private - method initialization order' }
-RwGsPatchSetBasic class >> _anyElementOf: aCollection ifEmpty: aBlock [
+RwGsPatchSet class >> _anyElementOf: aCollection ifEmpty: aBlock [
 	aCollection do: [ :each | ^ each ].
 	^ aBlock value
 
 ]
 
 { #category : 'private - method initialization order' }
-RwGsPatchSetBasic class >> _orderBySuperclass: aClass from: toBeOrdered into: order ignoring: processed [
+RwGsPatchSet class >> _orderBySuperclass: aClass from: toBeOrdered into: order ignoring: processed [
   "Private. Add to 'order', superclasses first, aClass and any of its superclasses 
 	that appear in 'toBeOrdered' but do not appear in 'processed'.
 	Remove from 'toBeOrdered' any class added to 'ordered'.
@@ -66,7 +66,7 @@ RwGsPatchSetBasic class >> _orderBySuperclass: aClass from: toBeOrdered into: or
 ]
 
 { #category : 'private - method initialization order' }
-RwGsPatchSetBasic class >> methodPatchesInInitializationOrder: methodPatches [
+RwGsPatchSet class >> methodPatchesInInitializationOrder: methodPatches [
 
 	"Returns acollection of the specified methodPatches ordered in superclass order, which is sufficient for initialization order."
 
@@ -89,13 +89,13 @@ RwGsPatchSetBasic class >> methodPatchesInInitializationOrder: methodPatches [
 ]
 
 { #category : 'instance creation' }
-RwGsPatchSetBasic class >> new [
+RwGsPatchSet class >> new [
 
 	^super new initialize
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _classAdditionPatchClass [
+RwGsPatchSet >> _classAdditionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | registryClass _classAdditionPatchClass ]
@@ -103,7 +103,7 @@ RwGsPatchSetBasic >> _classAdditionPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _classDeletionPatchClass [
+RwGsPatchSet >> _classDeletionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | registryClass _classDeletionPatchClass ]
@@ -111,7 +111,7 @@ RwGsPatchSetBasic >> _classDeletionPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _classExtensionPatchClass [
+RwGsPatchSet >> _classExtensionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | registryClass _classExtensionPatchClass ]
@@ -119,7 +119,7 @@ RwGsPatchSetBasic >> _classExtensionPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _classPropertiesPatchClass [
+RwGsPatchSet >> _classPropertiesPatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | registryClass _classPropertiesPatchClass ]
@@ -127,7 +127,7 @@ RwGsPatchSetBasic >> _classPropertiesPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _classVariablePatchClass [
+RwGsPatchSet >> _classVariablePatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | registryClass _classVariablePatchClass ]
@@ -135,7 +135,7 @@ RwGsPatchSetBasic >> _classVariablePatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _classVersioningPatchClass [
+RwGsPatchSet >> _classVersioningPatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | registryClass _classVersioningPatchClass ]
@@ -143,7 +143,7 @@ RwGsPatchSetBasic >> _classVersioningPatchClass [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> _currentProjectDefinition [
+RwGsPatchSet >> _currentProjectDefinition [
 
 	^ currentProjectDefinition
 		ifNil: [ 
@@ -153,7 +153,7 @@ RwGsPatchSetBasic >> _currentProjectDefinition [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _methodAdditionPatchClass [
+RwGsPatchSet >> _methodAdditionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | registryClass _methodAdditionPatchClass ]
@@ -161,7 +161,7 @@ RwGsPatchSetBasic >> _methodAdditionPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _methodDeletionPatchClass [
+RwGsPatchSet >> _methodDeletionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | registryClass _methodDeletionPatchClass ]
@@ -169,7 +169,7 @@ RwGsPatchSetBasic >> _methodDeletionPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _methodExtensionDeletionPatchClass: packageName [
+RwGsPatchSet >> _methodExtensionDeletionPatchClass: packageName [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | 
@@ -181,7 +181,7 @@ RwGsPatchSetBasic >> _methodExtensionDeletionPatchClass: packageName [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _methodExtensionPatchClass: packageName [
+RwGsPatchSet >> _methodExtensionPatchClass: packageName [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | 
@@ -193,7 +193,7 @@ RwGsPatchSetBasic >> _methodExtensionPatchClass: packageName [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _methodExtensionPropertiesPatchClass:  packageName [
+RwGsPatchSet >> _methodExtensionPropertiesPatchClass:  packageName [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | 
@@ -206,21 +206,21 @@ RwGsPatchSetBasic >> _methodExtensionPropertiesPatchClass:  packageName [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _methodExtensionSessionMethodsDeletionPatchClass [
+RwGsPatchSet >> _methodExtensionSessionMethodsDeletionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		_methodExtensionSessionMethodsDeletionPatchClass
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _methodExtensionSessionMethodsPropertiesPatchClass [
+RwGsPatchSet >> _methodExtensionSessionMethodsPropertiesPatchClass [
 
 	^ self symbolDictionaryRegistryClass _methodExtensionSessionMethodsPropertiesPatchClass
 
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _methodExtensionSourcePatchClass: packageName [
+RwGsPatchSet >> _methodExtensionSourcePatchClass: packageName [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | 
@@ -232,7 +232,7 @@ RwGsPatchSetBasic >> _methodExtensionSourcePatchClass: packageName [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _methodPropertiesPatchClass [
+RwGsPatchSet >> _methodPropertiesPatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | registryClass _methodPropertiesPatchClass ]
@@ -240,7 +240,7 @@ RwGsPatchSetBasic >> _methodPropertiesPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _methodSourcePatchClass [
+RwGsPatchSet >> _methodSourcePatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | registryClass _methodSourcePatchClass ]
@@ -248,7 +248,7 @@ RwGsPatchSetBasic >> _methodSourcePatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _packageAdditionPatchClass [
+RwGsPatchSet >> _packageAdditionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | registryClass _packageAdditionPatchClass ]
@@ -256,7 +256,7 @@ RwGsPatchSetBasic >> _packageAdditionPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _packageDeletionPatchClass [
+RwGsPatchSet >> _packageDeletionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
 		ifNotNil: [ :registryClass | registryClass _packageDeletionPatchClass ]
@@ -264,13 +264,13 @@ RwGsPatchSetBasic >> _packageDeletionPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
-RwGsPatchSetBasic >> _projectAdditionPatchClass [
+RwGsPatchSet >> _projectAdditionPatchClass [
 
 	^ RwGsProjectAdditionPatch
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addAddedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addAddedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	addedClasses
@@ -283,14 +283,14 @@ RwGsPatchSetBasic >> addAddedClass: aClassDefinition inPackage: aPackageDefiniti
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> addAddedClassesToTempSymbols [
+RwGsPatchSet >> addAddedClassesToTempSymbols [
 	"Just need the names for now, they don't need to resolve to anything in particular."
 
 	addedClasses do: [:each | tempSymbols at: each className asSymbol put: nil]
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addAddedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addAddedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	addedMethods
@@ -305,7 +305,7 @@ RwGsPatchSetBasic >> addAddedClassMethod: aClassMethodDefinition inClass: aClass
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addAddedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addAddedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	addedMethods
@@ -320,7 +320,7 @@ RwGsPatchSetBasic >> addAddedInstanceMethod: anInstanceMethodDefinition inClass:
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addAddedPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addAddedPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	addedPackages
@@ -331,7 +331,7 @@ RwGsPatchSetBasic >> addAddedPackage: aPackageDefinition inProject: aProjectDefi
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addAddedProject: aProjectDefinition [
+RwGsPatchSet >> addAddedProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	addedProjects
@@ -339,7 +339,7 @@ RwGsPatchSetBasic >> addAddedProject: aProjectDefinition [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> addAndUpdateLoadedPackages [
+RwGsPatchSet >> addAndUpdateLoadedPackages [
 	"Update the LoadedPackages to reflect the results of this patchSet. Does not update the other loadedThings."
 
 	addedPackages
@@ -348,7 +348,7 @@ RwGsPatchSetBasic >> addAndUpdateLoadedPackages [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> addAndUpdateLoadedProjects [
+RwGsPatchSet >> addAndUpdateLoadedProjects [
 
 	"Update the LoadedProjects to reflect the results of this patchSet. Does not update the other loadedThings."
 
@@ -358,7 +358,7 @@ RwGsPatchSetBasic >> addAndUpdateLoadedProjects [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> addCreatedClassesAndVersionsTo: newClassesByName [
+RwGsPatchSet >> addCreatedClassesAndVersionsTo: newClassesByName [
 
 	addedClasses do: [ :each | each addToNewClassesByName: newClassesByName ].
 	classesWithClassVariableChanges
@@ -368,7 +368,7 @@ RwGsPatchSetBasic >> addCreatedClassesAndVersionsTo: newClassesByName [
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addDeletedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addDeletedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	deletedClasses
@@ -381,7 +381,7 @@ RwGsPatchSetBasic >> addDeletedClass: aClassDefinition inPackage: aPackageDefini
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addDeletedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addDeletedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	deletedMethods
@@ -396,7 +396,7 @@ RwGsPatchSetBasic >> addDeletedClassMethod: aClassMethodDefinition inClass: aCla
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addDeletedExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition named: className inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addDeletedExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition named: className inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	deletedMethods
@@ -412,7 +412,7 @@ RwGsPatchSetBasic >> addDeletedExtendedClassMethod: aClassMethodDefinition inCla
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addDeletedExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition named: className inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addDeletedExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition named: className inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	deletedMethods
@@ -428,7 +428,7 @@ RwGsPatchSetBasic >> addDeletedExtendedInstanceMethod: anInstanceMethodDefinitio
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addDeletedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addDeletedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	deletedMethods
@@ -443,7 +443,7 @@ RwGsPatchSetBasic >> addDeletedInstanceMethod: anInstanceMethodDefinition inClas
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addDeletedPackage: packageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addDeletedPackage: packageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	deletedPackages
@@ -454,7 +454,7 @@ RwGsPatchSetBasic >> addDeletedPackage: packageDefinition inProject: aProjectDef
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addExtendedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addExtendedClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	extendedClasses
@@ -467,7 +467,7 @@ RwGsPatchSetBasic >> addExtendedClass: aClassDefinition inPackage: aPackageDefin
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	extendedMethods
@@ -482,7 +482,7 @@ RwGsPatchSetBasic >> addExtendedClassMethod: aClassMethodDefinition inClass: aCl
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addExtendedInstanceMethod: anInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	extendedMethods
@@ -497,7 +497,7 @@ RwGsPatchSetBasic >> addExtendedInstanceMethod: anInstanceMethodDefinition inCla
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedClassClassVariables: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addPatchedClassClassVariables: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	classesWithClassVariableChanges
@@ -510,7 +510,7 @@ RwGsPatchSetBasic >> addPatchedClassClassVariables: aClassDefinition inPackage: 
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addPatchedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	methodsNeedingRecompile
@@ -525,7 +525,7 @@ RwGsPatchSetBasic >> addPatchedClassMethod: aClassMethodDefinition inClass: aCla
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedClassMethodProperties: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addPatchedClassMethodProperties: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	methodsWithPropertyChanges
@@ -540,7 +540,7 @@ RwGsPatchSetBasic >> addPatchedClassMethodProperties: aClassMethodDefinition inC
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 
@@ -554,7 +554,7 @@ RwGsPatchSetBasic >> addPatchedClassNewVersion: aClassModification inPackage: aP
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedClassProperties: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addPatchedClassProperties: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	classesWithPropertyChanges
@@ -567,7 +567,7 @@ RwGsPatchSetBasic >> addPatchedClassProperties: aClassDefinition inPackage: aPac
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addPatchedExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	methodsNeedingRecompile
@@ -582,7 +582,7 @@ RwGsPatchSetBasic >> addPatchedExtendedClassMethod: aClassMethodDefinition inCla
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedExtendedClassMethodProperties: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addPatchedExtendedClassMethodProperties: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	methodsWithPropertyChanges
@@ -598,7 +598,7 @@ RwGsPatchSetBasic >> addPatchedExtendedClassMethodProperties: aClassMethodDefini
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedExtendedInstanceMethod: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addPatchedExtendedInstanceMethod: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	methodsNeedingRecompile
@@ -613,7 +613,7 @@ RwGsPatchSetBasic >> addPatchedExtendedInstanceMethod: aInstanceMethodDefinition
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedExtendedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addPatchedExtendedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	methodsWithPropertyChanges
@@ -629,7 +629,7 @@ RwGsPatchSetBasic >> addPatchedExtendedInstanceMethodProperties: aInstanceMethod
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	methodsNeedingRecompile
@@ -644,7 +644,7 @@ RwGsPatchSetBasic >> addPatchedInstanceMethod: aInstanceMethodDefinition inClass
 ]
 
 { #category : 'building' }
-RwGsPatchSetBasic >> addPatchedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+RwGsPatchSet >> addPatchedInstanceMethodProperties: aInstanceMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
 	methodsWithPropertyChanges
@@ -659,7 +659,7 @@ RwGsPatchSetBasic >> addPatchedInstanceMethodProperties: aInstanceMethodDefiniti
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> allPatchesAffectingLiveMethodsDo: liveMethodsBlock deletedMethodsDo: deletedMethodsBlock [
+RwGsPatchSet >> allPatchesAffectingLiveMethodsDo: liveMethodsBlock deletedMethodsDo: deletedMethodsBlock [
 
 	"Evaluate aBlock with every patch that can affect a method, traverse deletions separately."
 
@@ -670,7 +670,7 @@ RwGsPatchSetBasic >> allPatchesAffectingLiveMethodsDo: liveMethodsBlock deletedM
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> allPatchesAffectingLivePackagesDo: aBlock [
+RwGsPatchSet >> allPatchesAffectingLivePackagesDo: aBlock [
 	"Evaluate aBlock with every patch that can affect a package without deleting it, which is a lot."
 
 	
@@ -689,7 +689,7 @@ RwGsPatchSetBasic >> allPatchesAffectingLivePackagesDo: aBlock [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> anyElementOfCollection: aCollection [
+RwGsPatchSet >> anyElementOfCollection: aCollection [
 	"if aCollection is empty, answer nil. Otherwise, answer the first in enumeration order (which is unspecified for unordered collections)."
 
 	aCollection do: [:each | ^each].
@@ -697,7 +697,7 @@ RwGsPatchSetBasic >> anyElementOfCollection: aCollection [
 ]
 
 { #category : 'public' }
-RwGsPatchSetBasic >> apply [
+RwGsPatchSet >> apply [
 
 	"Apply the changes I represent to the running image."
 	self
@@ -735,7 +735,7 @@ RwGsPatchSetBasic >> apply [
 ]
 
 { #category : 'public' }
-RwGsPatchSetBasic >> applyForNewClassVersions: anInstanceMigrator [
+RwGsPatchSet >> applyForNewClassVersions: anInstanceMigrator [
 
 	"ignore deleted methods when applying patches to new class version.
 		all methods effectively deleted from class when the new class version is created, "
@@ -755,13 +755,13 @@ RwGsPatchSetBasic >> applyForNewClassVersions: anInstanceMigrator [
 ]
 
 { #category : 'accessing' }
-RwGsPatchSetBasic >> classesWithNewVersions [
+RwGsPatchSet >> classesWithNewVersions [
 
 	^ classesWithNewVersions
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> commit [
+RwGsPatchSet >> commit [
 	"I don't think I like the idea that we commit during a load ... the developer should always be in control of
 		when a commit is performed ... automatic instance migration does do commits, however, it is a developer
 		choice to do the commits ... if an error occurs after a commit is performed, I am concerned that the loaded 
@@ -772,14 +772,14 @@ RwGsPatchSetBasic >> commit [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> compileMethodPatch: aMethodAdditionPatch [
+RwGsPatchSet >> compileMethodPatch: aMethodAdditionPatch [
 
 	aMethodAdditionPatch compileUsingNewClasses: createdClasses
 		andExistingClasses: tempSymbols
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> compileMethods [
+RwGsPatchSet >> compileMethods [
 
 	addedMethods do: [:each | self compileMethodPatch: each].
 	extendedMethods do: [:each | self compileMethodPatch: each].
@@ -787,7 +787,7 @@ RwGsPatchSetBasic >> compileMethods [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> createClassesFromWorklist: workList andClassesByName: newClassesByName [
+RwGsPatchSet >> createClassesFromWorklist: workList andClassesByName: newClassesByName [
 	"Pick one class or class version from the workList and create it, creating any superclasses or superclass versions that are to be created.
 	Remove any classes created from the workList."
 
@@ -801,7 +801,7 @@ RwGsPatchSetBasic >> createClassesFromWorklist: workList andClassesByName: newCl
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> createClassNamed: className fromWorkList: workList andClassesByName: newClassesByName [
+RwGsPatchSet >> createClassNamed: className fromWorkList: workList andClassesByName: newClassesByName [
 	"Create the named class from the workList, creating any superclasses or superclass versions that are to be created.
 	Remove any classes created from the workList."
 
@@ -819,7 +819,7 @@ RwGsPatchSetBasic >> createClassNamed: className fromWorkList: workList andClass
 ]
 
 { #category : 'patch access' }
-RwGsPatchSetBasic >> createdClass: aClass [
+RwGsPatchSet >> createdClass: aClass [
 
 	| className |
 	className := aClass name.
@@ -836,12 +836,12 @@ RwGsPatchSetBasic >> createdClass: aClass [
 ]
 
 { #category : 'accessing' }
-RwGsPatchSetBasic >> createdClasses [
+RwGsPatchSet >> createdClasses [
 	^ createdClasses
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> createNewClassesAndClassVersions [
+RwGsPatchSet >> createNewClassesAndClassVersions [
 
 	"Who: Added classes and classes with new versions and classes with class variable changes
 	   How: Create the new class or class version. Superclass by identity, not name resolution.
@@ -857,7 +857,7 @@ RwGsPatchSetBasic >> createNewClassesAndClassVersions [
 ]
 
 { #category : 'initialization' }
-RwGsPatchSetBasic >> initialize [
+RwGsPatchSet >> initialize [
 
 	addedPackages := Set new.
 	addedProjects := Set new.
@@ -886,7 +886,7 @@ RwGsPatchSetBasic >> initialize [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> installAddedClasses [
+RwGsPatchSet >> installAddedClasses [
 	"Copy the name association from TempSymbols to the correct 
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
@@ -895,19 +895,19 @@ RwGsPatchSetBasic >> installAddedClasses [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> installAddedClassExtensions [
+RwGsPatchSet >> installAddedClassExtensions [
 
 	extendedClasses do: [ :each | each installClassExtensionInSystem ]
 ]
 
 { #category : 'accessing' }
-RwGsPatchSetBasic >> instanceMigrator [
+RwGsPatchSet >> instanceMigrator [
 
 	^ instanceMigrator
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> migrateInstances [
+RwGsPatchSet >> migrateInstances [
 
 	"conditionally migrate instances of classes with new versions"
 
@@ -923,7 +923,7 @@ RwGsPatchSetBasic >> migrateInstances [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> moveClassesBetweenPackages [
+RwGsPatchSet >> moveClassesBetweenPackages [
 
 	| deletedClassesMap image |
 	deletedClasses isEmpty
@@ -964,13 +964,13 @@ RwGsPatchSetBasic >> moveClassesBetweenPackages [
 ]
 
 { #category : 'accessing' }
-RwGsPatchSetBasic >> movedDeletedClasses [
+RwGsPatchSet >> movedDeletedClasses [
 	^ movedDeletedClasses
 
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> moveMethodsBetweenPackages [
+RwGsPatchSet >> moveMethodsBetweenPackages [
 
 	| deletedMethodsMap |
 	deletedMethods isEmpty
@@ -1010,14 +1010,14 @@ RwGsPatchSetBasic >> moveMethodsBetweenPackages [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> recordCompiledForNewClassVersionDeletions [
+RwGsPatchSet >> recordCompiledForNewClassVersionDeletions [
 
 	deleteNewVersionMethods
 		do: [ :each | each primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols ]
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> removeDeletedClassesFromSystem [
+RwGsPatchSet >> removeDeletedClassesFromSystem [
 	"Remove the name binding from the SymbolDictionaries in the live SymbolList
         Remove the LoadedClass from its LoadedPackage"
 
@@ -1025,14 +1025,14 @@ RwGsPatchSetBasic >> removeDeletedClassesFromSystem [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> removeDeletedClassesFromTempSymbols [
+RwGsPatchSet >> removeDeletedClassesFromTempSymbols [
 	"Deleted class names should not resolve during compilation."
 
 	deletedClasses do: [:each | tempSymbols removeKey: each className asSymbol]
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> removeDeletedMethods [
+RwGsPatchSet >> removeDeletedMethods [
 
 	deletedMethods
 		do: [ :each | each deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ].
@@ -1044,13 +1044,13 @@ RwGsPatchSetBasic >> removeDeletedMethods [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> removeDeletedPackages [
+RwGsPatchSet >> removeDeletedPackages [
 
 	deletedPackages do: [:each | each deletePackage ]
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> reportAnyErrors [
+RwGsPatchSet >> reportAnyErrors [
 	"We're currently not collecting errors, but once we do, this will be the place they are reported.
 	Answer true if errors detected (and exception resumed), false otherwise."
 
@@ -1062,7 +1062,7 @@ RwGsPatchSetBasic >> reportAnyErrors [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> runInitializers [
+RwGsPatchSet >> runInitializers [
 
 	"run the class initialization methods as needed"
 
@@ -1085,7 +1085,7 @@ RwGsPatchSetBasic >> runInitializers [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> setupForApply [
+RwGsPatchSet >> setupForApply [
 
 	"Copy the entire namespace from the user's transient SymbolList into a temporary SymbolDictionary in a temporary 
 	SymbolList, the tempSymbols. The tempSymbols, once suitably modified, will be used as the environment in which 
@@ -1100,7 +1100,7 @@ RwGsPatchSetBasic >> setupForApply [
 ]
 
 { #category : 'patch access' }
-RwGsPatchSetBasic >> superclassNamed: aName [
+RwGsPatchSet >> superclassNamed: aName [
 
 	| superclassName |
 	superclassName := aName asSymbol.
@@ -1113,7 +1113,7 @@ RwGsPatchSetBasic >> superclassNamed: aName [
 ]
 
 { #category : 'accessing' }
-RwGsPatchSetBasic >> symbolDictionaryRegistryClass [
+RwGsPatchSet >> symbolDictionaryRegistryClass [
 
 	^ self _currentProjectDefinition
 		ifNil: [ RwGsSymbolDictionaryRegistry ]
@@ -1121,17 +1121,17 @@ RwGsPatchSetBasic >> symbolDictionaryRegistryClass [
 ]
 
 { #category : 'patch access' }
-RwGsPatchSetBasic >> tempAssociationFor: aName [
+RwGsPatchSet >> tempAssociationFor: aName [
 	^ tempSymbols associationAt: aName
 ]
 
 { #category : 'accessing' }
-RwGsPatchSetBasic >> tempSymbols [
+RwGsPatchSet >> tempSymbols [
 	^ tempSymbols
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> updateClassProperties [
+RwGsPatchSet >> updateClassProperties [
 
 	"For classes with changes that don't require versioning, 
 	update the properties in the class and the LoadedClasses as appropriate."
@@ -1142,7 +1142,7 @@ RwGsPatchSetBasic >> updateClassProperties [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> updateMethodDictionaries [
+RwGsPatchSet >> updateMethodDictionaries [
 	"For added methods and methods that need recompiling,
 	copy from temporary methodDictionaries to live methodDictionaries
 	For added methods, create LoadedMethods and add to the appropriate LoadedClass
@@ -1166,14 +1166,14 @@ RwGsPatchSetBasic >> updateMethodDictionaries [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> updateMethodProperties [
+RwGsPatchSet >> updateMethodProperties [
 
 	methodsWithPropertyChanges
 		do: [:each | each installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols ]
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSetBasic >> updateSymbolAssociations [
+RwGsPatchSet >> updateSymbolAssociations [
 	"Install new class versions."
 
 	classesWithNewVersions do: [:each | each installNewClassVerionInSystem ]

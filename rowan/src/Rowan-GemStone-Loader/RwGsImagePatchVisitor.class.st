@@ -23,7 +23,7 @@ RwGsImagePatchVisitor class >> new [
 { #category : 'private' }
 RwGsImagePatchVisitor >> _patchSetClass [
 
-	^ RwGsPatchSetBasic
+	^ RwGsPatchSet
 ]
 
 { #category : 'private' }
