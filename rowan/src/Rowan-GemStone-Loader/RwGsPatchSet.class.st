@@ -98,48 +98,54 @@ RwGsPatchSet class >> new [
 RwGsPatchSet >> _classAdditionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
-		ifNotNil: [ :registryClass | registryClass _classAdditionPatchClass ]
+		ifNotNil: [ :registryClass | RwGsClassAdditionSymbolDictPatch ]
 		ifNil: [ RwGsClassAdditionPatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet >> _classDeletionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
-		ifNotNil: [ :registryClass | registryClass _classDeletionPatchClass ]
+		ifNotNil: [ :registryClass |RwGsClassDeletionSymbolDictPatch ]
 		ifNil: [ RwGsClassDeletionPatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet >> _classExtensionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
-		ifNotNil: [ :registryClass | registryClass _classExtensionPatchClass ]
+		ifNotNil: [ :registryClass | RwGsClassExtensionSymbolDictPatch ]
 		ifNil: [ RwGsClassExtensionPatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet >> _classPropertiesPatchClass [
 
 	^ self symbolDictionaryRegistryClass
-		ifNotNil: [ :registryClass | registryClass _classPropertiesPatchClass ]
+		ifNotNil: [ :registryClass | RwGsClassPropertiesSymDictPatch ]
 		ifNil: [ RwGsClassPropertiesPatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet >> _classVariablePatchClass [
 
 	^ self symbolDictionaryRegistryClass
-		ifNotNil: [ :registryClass | registryClass _classVariablePatchClass ]
+		ifNotNil: [ :registryClass | RwGsClassVariableChangeSymbolDictPatch ]
 		ifNil: [ RwGsClassVariableChangePatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet >> _classVersioningPatchClass [
 
 	^ self symbolDictionaryRegistryClass
-		ifNotNil: [ :registryClass | registryClass _classVersioningPatchClass ]
+		ifNotNil: [ :registryClass | RwGsClassVersioningSymbolDictPatch ]
 		ifNil: [ RwGsClassVersioningPatch ]
+
 ]
 
 { #category : 'private - applying' }
@@ -156,16 +162,18 @@ RwGsPatchSet >> _currentProjectDefinition [
 RwGsPatchSet >> _methodAdditionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
-		ifNotNil: [ :registryClass | registryClass _methodAdditionPatchClass ]
+		ifNotNil: [ :registryClass | RwGsMethodAdditionSymbolDictPatch ]
 		ifNil: [ RwGsMethodAdditionPatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet >> _methodDeletionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
-		ifNotNil: [ :registryClass | registryClass _methodDeletionPatchClass ]
+		ifNotNil: [ :registryClass | RwGsMethodDeletionSymbolDictPatch ]
 		ifNil: [ RwGsMethodDeletionPatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }
@@ -175,9 +183,10 @@ RwGsPatchSet >> _methodExtensionDeletionPatchClass: packageName [
 		ifNotNil: [ :registryClass | 
 			(self _currentProjectDefinition
 				useSessionMethodsForExtensionsForPackageNamed: packageName)
-				ifTrue: [ registryClass _methodExtensionSessionMethodsDeletionPatchClass ]
-				ifFalse: [ registryClass _methodExtensionDeletionPatchClass ] ]
+				ifTrue: [ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch ]
+				ifFalse: [ RwGsMethodDeletionExtensionSymbolDictPatch ] ]
 		ifNil: [ RwGsMethodDeletionPatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }
@@ -187,9 +196,10 @@ RwGsPatchSet >> _methodExtensionPatchClass: packageName [
 		ifNotNil: [ :registryClass | 
 			(self _currentProjectDefinition
 				useSessionMethodsForExtensionsForPackageNamed: packageName)
-				ifTrue: [ registryClass _methodExtensionSessionMethodsPatchClass ]
-				ifFalse: [ registryClass _methodExtensionPatchClass ] ]
+				ifTrue: [ RwGsMethodExtensionSessionMethodSymbolDictPatch ]
+				ifFalse: [ RwGsMethodExtensionSymbolDictPatch ] ]
 		ifNil: [ RwGsMethodAdditionPatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }
@@ -199,23 +209,9 @@ RwGsPatchSet >> _methodExtensionPropertiesPatchClass:  packageName [
 		ifNotNil: [ :registryClass | 
 			(self _currentProjectDefinition
 				useSessionMethodsForExtensionsForPackageNamed: packageName)
-				ifTrue: [ registryClass _methodExtensionSessionMethodsPropertiesPatchClass ]
-				ifFalse: [ registryClass _methodPropertiesPatchClass ] ]
+				ifTrue: [ RwGsMethodExtensionSessionMethodPropertiesSymDictPatch ]
+				ifFalse: [ RwGsMethodPropertiesSymDictPatch ] ]
 		ifNil: [ RwGsMethodPropertiesPatch ]
-
-]
-
-{ #category : 'private - patch class accessors' }
-RwGsPatchSet >> _methodExtensionSessionMethodsDeletionPatchClass [
-
-	^ self symbolDictionaryRegistryClass
-		_methodExtensionSessionMethodsDeletionPatchClass
-]
-
-{ #category : 'private - patch class accessors' }
-RwGsPatchSet >> _methodExtensionSessionMethodsPropertiesPatchClass [
-
-	^ self symbolDictionaryRegistryClass _methodExtensionSessionMethodsPropertiesPatchClass
 
 ]
 
@@ -226,41 +222,46 @@ RwGsPatchSet >> _methodExtensionSourcePatchClass: packageName [
 		ifNotNil: [ :registryClass | 
 			(self _currentProjectDefinition
 				useSessionMethodsForExtensionsForPackageNamed: packageName)
-				ifTrue: [ registryClass _methodExtensionSessionMethodSourcePatchClass ]
-				ifFalse: [ registryClass _methodSourcePatchClass ] ]
+				ifTrue: [ RwGsMethodExtensionSessionMethodSourceSymbolDictPatch ]
+				ifFalse: [ RwGsMethodSourceSymbolDictPatch ] ]
 		ifNil: [ RwGsMethodSourcePatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet >> _methodPropertiesPatchClass [
 
 	^ self symbolDictionaryRegistryClass
-		ifNotNil: [ :registryClass | registryClass _methodPropertiesPatchClass ]
+		ifNotNil: [ :registryClass | RwGsMethodPropertiesSymDictPatch ]
 		ifNil: [ RwGsMethodPropertiesPatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet >> _methodSourcePatchClass [
 
 	^ self symbolDictionaryRegistryClass
-		ifNotNil: [ :registryClass | registryClass _methodSourcePatchClass ]
+		ifNotNil: [ :registryClass | RwGsMethodSourceSymbolDictPatch ]
 		ifNil: [ RwGsMethodSourcePatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet >> _packageAdditionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
-		ifNotNil: [ :registryClass | registryClass _packageAdditionPatchClass ]
+		ifNotNil: [ :registryClass | RwGsPackageAdditionSymbolDictPatch ]
 		ifNil: [ RwGsPackageAdditionPatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }
 RwGsPatchSet >> _packageDeletionPatchClass [
 
 	^ self symbolDictionaryRegistryClass
-		ifNotNil: [ :registryClass | registryClass _packageDeletionPatchClass ]
+		ifNotNil: [ :registryClass | RwGsPackageDeletionSymbolDictPatch ]
 		ifNil: [ RwGsPackageDeletionPatch ]
+
 ]
 
 { #category : 'private - patch class accessors' }

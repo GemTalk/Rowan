@@ -520,4 +520,3 @@ RwGsImage class >> symbolList [
 
 	^ GsCurrentSession currentSession symbolList
 ]
-
