@@ -5,7 +5,7 @@
 #   MIT license: https://github.com/dalehenrich/Rowan/blob/master/LICENSE
 #=========================================================================
 
-set -e
+set -ex
 
 #
 # 1. clone the Rowan, Jade (Jadeite), RowanSample1, and RowanSample2 projects
@@ -116,8 +116,6 @@ popd
 pushd RowanSample2
   git checkout sample
 popd
-
-# rm -rf MANIFEST.TXT Jadeite_runtime_* *.zip
 
 echo "------------------------------" >> MANIFEST.TXT
 echo "  Git clone directories" >> MANIFEST.TXT
