@@ -11,6 +11,7 @@
 				'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
 				'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
 				'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
+				'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
 				'Rowan-GemStone-Public' : { 'symbolDictName' : 'RowanPublic' },
 				'Rowan-Public' : { 'symbolDictName' : 'RowanPublic' },
 				'Rowan-Initialize' : { 'symbolDictName' : 'RowanPublic' },
