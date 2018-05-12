@@ -15,7 +15,7 @@ Class {
 		'deletedClasses',
 		'movedDeletedClasses',
 		'extendedClasses',
-		'classsesWithPropertyChanges',
+		'classesWithPropertyChanges',
 		'classesWithClassVariableChanges',
 		'classesWithNewVersions',
 		'addedMethods',
