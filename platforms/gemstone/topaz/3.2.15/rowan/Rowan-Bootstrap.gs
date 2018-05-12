@@ -565,14 +565,14 @@ currentOrNil
 %
   commit
 
-   run
+  run
   CypressBootstrapRowanBlock 
     value: 'RowanPublic'
     value: #('Rowan-Public'). 		"Populate with public Rowan classes"
 %
   commit
 
-   run
+  run
   CypressBootstrapRowanBlock 
     value: 'RowanPrivate'
     value: #('GemStone-Interactions-Core' 'Rowan-Url-Core' 'Rowan-Url-3215' 
@@ -584,8 +584,7 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'RowanPublic'
-    value: #('Rowan-GemStone-Public' 
-      'Rowan-Initialize').		"Extension methods for public Rowan classes"
+    value: #('Rowan-Initialize').             "Extension methods for public Rowan classes"
 %
   commit
 
@@ -620,7 +619,7 @@ currentOrNil
 %
   commit
 
-   run
+  run
   UserGlobals removeKey: #CypressBootstrapRowanBlock.
 %
   commit

@@ -1,6 +1,6 @@
 Extension { #name : 'RwPlatform' }
 
-{ #category : '*rowan-gemstone-public' }
+{ #category : '*rowan-gemstone-core' }
 RwPlatform class >> current [
 
 	^ (System myUserProfile objectNamed: 'UserGlobals') 

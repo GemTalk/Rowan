@@ -189,12 +189,6 @@ Rowan class >> packageTools [
 ]
 
 { #category : 'public' }
-Rowan class >> platform [
-
-	^ RwPlatform current
-]
-
-{ #category : 'public' }
 Rowan class >> projectNamed: aString [
 
 	"Look up a project"

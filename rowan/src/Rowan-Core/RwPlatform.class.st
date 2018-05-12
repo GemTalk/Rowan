@@ -5,7 +5,7 @@ and locates other services that are dialect-specific.
 Class {
 	#name : 'RwPlatform',
 	#superclass : 'Object',
-	#category : 'Rowan-Public'
+	#category : 'Rowan-Core'
 }
 
 { #category : 'unknown' }

@@ -13,7 +13,6 @@
 				'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
 				'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
 				'Rowan-GemStone-Loader-Extensions' : { 'symbolDictName' : 'RowanPrivate' },
-				'Rowan-GemStone-Public' : { 'symbolDictName' : 'RowanPublic' },
 				'Rowan-Public' : { 'symbolDictName' : 'RowanPublic' },
 				'Rowan-Initialize' : { 'symbolDictName' : 'RowanPublic' },
 				'Rowan-Services' : { 'symbolDictName' : 'RowanClient' }

@@ -12,7 +12,6 @@ RwProjectConfiguration {
 		'Rowan-Core',
 		'Rowan-GemStone-Core',
 		'Rowan-GemStone-Kernel',
-		'Rowan-GemStone-Public',
 		'Rowan-GemStone-Loader',
 		'Rowan-GemStone-Extensions',
 		'Rowan-Tests',
