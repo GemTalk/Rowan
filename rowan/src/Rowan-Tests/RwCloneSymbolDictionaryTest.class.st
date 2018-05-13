@@ -4,14 +4,24 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
+{ #category : 'Testing' }
+RwCloneSymbolDictionaryTest class >> shouldInheritSelectors [
+
+	^false
+
+]
+
 { #category : 'tests' }
 RwCloneSymbolDictionaryTest >> testSimpleSystemDictionaryClone [
 
-	| projectName packageName1 className symDictName theOriginalClass theSymbolDict validationBlock | 
+	| projectName packageName1 className symDictName theOriginalClass theSymbolDict validationBlock clonedSymbolDict 
+		clonedClass clonedSymDictName | 
+
 	projectName := 'SystemDictionaryClone_Project'.
 	packageName1 := 'SystemDictionaryClone-Core'.
 	className := 'SystemDictionaryCloneClass'.
 	symDictName := self _symbolDictionaryName2.
+	clonedSymDictName :=  (symDictName, '_CLONE') asSymbol.
 
 	self 
 		_createLoadedProjectNamed: projectName 
@@ -50,5 +60,15 @@ RwCloneSymbolDictionaryTest >> testSimpleSystemDictionaryClone [
 
 	validationBlock value: theOriginalClass.
 	theSymbolDict := Rowan globalNamed: symDictName.
+
+	clonedSymbolDict := theSymbolDict _rowanCloneSymbolDictionaryNamed: clonedSymDictName symbolList: GsCurrentSession currentSession symbolList.
+	self assert: clonedSymbolDict name == clonedSymDictName.
+
+	clonedClass := clonedSymbolDict at: className asSymbol.
+
+	self assert: clonedClass ~~ theOriginalClass.
+	self assert: clonedClass classHistory ~~ theOriginalClass classHistory.
+
+	validationBlock value: clonedClass.
 
 ]
