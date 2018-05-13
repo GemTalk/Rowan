@@ -52,7 +52,7 @@ SymbolDictionary >> _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbol
 			clonedClasses do: [:ar | | x clonedClass oldClass |
 				clonedClass := ar at: 1.
 				oldClass := ar at: 2.
-				(x := clonedClass _copyMethodsAndVariablesFrom: oldClass except: nil dictionaries: symbolList)
+				(x := clonedClass _rowanCopyMethodsAndVariablesFrom: oldClass dictionaries: symbolList)
 					isEmpty 
 						ifFalse: [ self error: 'failed to compile methods in the cloned class ', oldClass name asString printString ] ] ] 
 		ensure: [ 
