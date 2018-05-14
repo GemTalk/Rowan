@@ -47,25 +47,6 @@ Rowan class >> image [
 	^self platform image
 ]
 
-{ #category : 'public' }
-Rowan class >> loadedPackageDefinitionsNamed: someNames [
-
-	"Answer a PackageSetDefinition containing packages with the given names in the image.
- 	If any name is not a loaded package, that name is ignored."
-
-	^ (self loadedPackagesNamed: someNames) asPackageDefinitionSet
-]
-
-{ #category : 'public' }
-Rowan class >> loadedPackageDefinitionsNamed: someNames forProject: projectDefinition [
-
-	"Answer a PackageSetDefinition containing packages with the given names in the image.
- 	If any name is not a loaded package, that name is ignored."
-
-	^ (self loadedPackagesNamed: someNames forProject: projectDefinition)
-		asPackageDefinitionSet
-]
-
 { #category : 'private' }
 Rowan class >> loadedPackageNamed: aName ifAbsent: absentBlock [
 
@@ -77,53 +58,6 @@ Rowan class >> loadedPackageOfClass: aClass [
 	"If the given class is in a package, answer that LoadedPackage. If not, answer nil."
 
 	^self platform loadedPackageOfClass: aClass
-]
-
-{ #category : 'public' }
-Rowan class >> loadedPackagesForProject: projectDefinition [
-
-	"Answer a PackageSet containing packages for the given project definition."
-
-	^ self
-		loadedPackagesNamed: projectDefinition packageNames
-		forProject: projectDefinition
-]
-
-{ #category : 'public' }
-Rowan class >> loadedPackagesNamed: someNames [
-
-	"Answer a PackageSet containing packages with the given names in the image.
- 	If any name is not a loaded package, that name is ignored."
-
-	"very likely we should be dealing with a project name 
-at this point ... unless there is a use case for loading a collection of packages without directly using the project interface --- loaded packages do know what project they belong to ... so there might be something done behind the scenes"
-
-	| loadedPackages |
-	self updateLoadedPackages.
-	loadedPackages := someNames
-		collect: [ :aName | self loadedPackageNamed: aName ifAbsent: [ nil ] ].
-	^ (self globalNamed: 'RwEntitySet') withAll: (loadedPackages select: [ :each | each notNil ])
-]
-
-{ #category : 'public' }
-Rowan class >> loadedPackagesNamed: someNames forProject: projectDefinition [
-
-	"Answer a PackageSet containing packages with the given names in the image.
- 	If any name is not a loaded package, that name is ignored."
-
-	"very likely we should be dealing with a project name 
-at this point ... unless there is a use case for loading a collection of packages without directly using the project interface --- loaded packages do know what project they belong to ... so there might be something done behind the scenes"
-
-	| loadedPackages |
-	self updateLoadedPackages.
-	loadedPackages := someNames
-		collect: [ :aName | self loadedPackageNamed: aName ifAbsent: [ nil ] ].
-	^ (self globalNamed: 'RwEntitySet')
-		withAll:
-			(loadedPackages
-				select: [ :loadedPackage | 
-					loadedPackage notNil
-						and: [ loadedPackage loadedProject name = projectDefinition name ] ])
 ]
 
 { #category : 'private' }

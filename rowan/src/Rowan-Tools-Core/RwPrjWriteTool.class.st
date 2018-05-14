@@ -4,6 +4,40 @@ Class {
 	#category : 'Rowan-Tools-Core'
 }
 
+{ #category : 'private' }
+RwPrjWriteTool >> _loadedPackagesForProject: projectDefinition [
+
+	"Answer a PackageSet containing packages for the given project definition."
+
+	^ self
+		_loadedPackagesNamed: projectDefinition packageNames
+		forProject: projectDefinition
+
+]
+
+{ #category : 'private' }
+RwPrjWriteTool >> _loadedPackagesNamed: someNames forProject: projectDefinition [
+
+	"Answer a PackageSet containing packages with the given names in the image.
+ 	If any name is not a loaded package, that name is ignored."
+
+	"very likely we should be dealing with a project name at this point ... unless there is a use 
+		case for loading a collection of packages without directly using the project interface 
+		--- loaded packages do know what project they belong to ... so there might be something 
+		done behind the scenes"
+
+	| loadedPackages |
+	loadedPackages := someNames
+		collect: [ :aName | Rowan image loadedPackageNamed: aName ifAbsent: [ nil ] ].
+	^ (Rowan globalNamed: 'RwEntitySet')
+		withAll:
+			(loadedPackages
+				select: [ :loadedPackage | 
+					loadedPackage notNil
+						and: [ loadedPackage loadedProject name = projectDefinition name ] ])
+
+]
+
 { #category : 'smalltalk api' }
 RwPrjWriteTool >> validate: aRwSpecification [
   super validate: aRwSpecification.
@@ -43,7 +77,7 @@ RwPrjWriteTool >> writeProjectDefinition: projectDefinition [
 				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , projectDefinition repoPath , '/') asRwUrl ] ]
 		ifNotNil: [ :urlString | urlString asRwUrl ].
 	repo := repositoryUrl asRwRepository.
-	(Rowan loadedPackagesForProject: projectDefinition) asPackageDefinitionSet
+	(self _loadedPackagesForProject: projectDefinition) asPackageDefinitionSet
 		do: [ :rwPackageDefinition | 
 			| packageStructure |
 			packageStructure := RwCypressPackageStructure
@@ -65,7 +99,7 @@ RwPrjWriteTool >> writeProjectNamed: projectName [
 				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , projectDefinition repoPath , '/') asRwUrl ] ]
 		ifNotNil: [ :urlString | urlString asRwUrl ].
 	repo := repositoryUrl asRwRepository.
-	loadedPackages := Rowan loadedPackagesForProject: projectDefinition.
+	loadedPackages := self _loadedPackagesForProject: projectDefinition.
 	packageDefinitionSet := loadedPackages asPackageDefinitionSet.
 	packageDefinitionSet
 		do: [ :rwPackageDefinition | 

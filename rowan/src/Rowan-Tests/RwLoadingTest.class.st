@@ -1168,7 +1168,7 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBe
 	packagesShouldBeLoaded
 		ifFalse: [ packageNames do: [ :name | self assertAbsenceOfPackage: name ] ].
 
-	imagePackageSet1 := Rowan loadedPackageDefinitionsNamed: packageNames.
+	imagePackageSet1 := self _loadedPackageDefinitionsNamed: packageNames.
 	diff1 := myPackageSet compareAgainstBase: imagePackageSet1.
 	self deny: diff1 isEmpty.
 
@@ -1176,7 +1176,7 @@ RwLoadingTest >> loadAndTestPackagesNamed: packageNames loaded: packagesShouldBe
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
 		do: [:ex | ex resume: true ].
 
-	imagePackageSet2 := Rowan loadedPackageDefinitionsNamed: packageNames.
+	imagePackageSet2 := self _loadedPackageDefinitionsNamed: packageNames.
 	diff2 := myPackageSet compareAgainstBase: imagePackageSet2.
 	self assert: diff2 isEmpty
 

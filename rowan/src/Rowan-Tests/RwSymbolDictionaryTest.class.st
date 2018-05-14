@@ -140,9 +140,10 @@ RwSymbolDictionaryTest >> testClassAdditionPatch [
 		packageSetDefinition: packageName
 		classNamed: className
 		super: superclassName.
-	loadedPackageSet := Rowan loadedPackageDefinitionsNamed: {packageName}.
+	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -175,9 +176,10 @@ RwSymbolDictionaryTest >> testClassAdditionPatchWithCategory [
 		classNamed: className
 		super: superclassName
 		category: category.
-	loadedPackageSet := Rowan loadedPackageDefinitionsNamed: {packageName}.
+	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -208,9 +210,10 @@ RwSymbolDictionaryTest >> testClassDeletionPatch [
 	self assert: testClass isNil.
 
 	expectedPackageSet := self packageSetDefinition: packageName.
-	loadedPackageSet := Rowan loadedPackageDefinitionsNamed: {packageName}.
+	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -247,9 +250,10 @@ RwSymbolDictionaryTest >> testClassPropertiesPatch [
 		classNamed: className
 		super: superclassName
 		comment: self _classComment.
-	loadedPackageSet := Rowan loadedPackageDefinitionsNamed: {packageName}.
+	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -291,9 +295,10 @@ RwSymbolDictionaryTest >> testClassVariableChangePatch [
 		classNamed: className
 		super: superclassName
 		classVars: self _classVars.
-	loadedPackageSet := Rowan loadedPackageDefinitionsNamed: {packageName}.
+	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -336,9 +341,10 @@ RwSymbolDictionaryTest >> testClassVersioningPatch [
 		classNamed: className
 		super: superclassName
 		instVars: self _instVars.
-	loadedPackageSet := Rowan loadedPackageDefinitionsNamed: {packageName}.
+	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -395,9 +401,10 @@ RwSymbolDictionaryTest >> testMethodAdditionPatch [
 					methodProtocol.
 					methodSource}})
 		classMethods: Dictionary new.
-	loadedPackageSet := Rowan loadedPackageDefinitionsNamed: {packageName}.
+	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -449,9 +456,10 @@ RwSymbolDictionaryTest >> testMethodDeletionPatch [
 		super: superclassName
 		instanceMethods: Dictionary new
 		classMethods: Dictionary new.
-	loadedPackageSet := Rowan loadedPackageDefinitionsNamed: {packageName}.
+	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -526,12 +534,12 @@ RwSymbolDictionaryTest >> testMethodExtensionPatchInSymbolDictionaryExtension [
 		addPackage: expectedPackage1;
 		addPackage: expectedPackage2;
 		yourself) asDefinition.
-	loadedPackageSet := Rowan
-		loadedPackageDefinitionsNamed:
+	loadedPackageSet := self _loadedPackageDefinitionsNamed:
 			{packageName1.
 			packageName2}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -603,9 +611,10 @@ RwSymbolDictionaryTest >> testMethodPropertiesPatch [
 					methodProtocol.
 					methodSource}})
 		classMethods: Dictionary new.
-	loadedPackageSet := Rowan loadedPackageDefinitionsNamed: {packageName}.
+	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
+
 ]
 
 { #category : 'tests' }
@@ -690,7 +699,8 @@ RwSymbolDictionaryTest >> testMethodSourcePatch [
 					methodProtocol.
 					methodSource}})
 		classMethods: Dictionary new.
-	loadedPackageSet := Rowan loadedPackageDefinitionsNamed: {packageName}.
+	loadedPackageSet := self _loadedPackageDefinitionsNamed: {packageName}.
 	diff := expectedPackageSet compareAgainstBase: loadedPackageSet.
 	self assert: diff isEmpty
+
 ]
