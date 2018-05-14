@@ -14,33 +14,9 @@ Class {
 }
 
 { #category : 'public' }
-Rowan class >> addProject: aRwProjectSpecification [
-
-	"Register a project"
-
-	^ self image addProject: aRwProjectSpecification
-]
-
-{ #category : 'public' }
 Rowan class >> configuration [
 
 	^configuration
-]
-
-{ #category : 'public' }
-Rowan class >> diffPackages: beforePackages with: afterPackages [
-	"Compare two PackageSets, answering a PackageSetModification"
-
-	| beforeDefinition afterDefinition |
-	beforeDefinition := beforePackages asDefinition.
-	afterDefinition := afterPackages asDefinition.
-	^afterDefinition compareAgainstBase: beforeDefinition
-]
-
-{ #category : 'private' }
-Rowan class >> existingOrNewLoadedPackageNamed: aName [
-
-	^self platform loadedPackageClass existingOrNewPackageNamed: aName
 ]
 
 { #category : 'private' }
@@ -69,12 +45,6 @@ Rowan class >> image [
 	"Private to the Cypress system."
 
 	^self platform image
-]
-
-{ #category : 'private' }
-Rowan class >> loadedHybridPackageNamed: aName ifAbsent: absentBlock [
-
-	^ self image loadedHybridPackageNamed: aName ifAbsent: absentBlock
 ]
 
 { #category : 'public' }
@@ -132,7 +102,8 @@ at this point ... unless there is a use case for loading a collection of package
 	self updateLoadedPackages.
 	loadedPackages := someNames
 		collect: [ :aName | self loadedPackageNamed: aName ifAbsent: [ nil ] ].
-	^ (self globalNamed: 'RwEntitySet') withAll: (loadedPackages select: [ :each | each notNil ])
+	^ RwEntitySet withAll: (loadedPackages select: [ :each | each notNil ])
+
 ]
 
 { #category : 'public' }
@@ -200,15 +171,6 @@ Rowan class >> projectNamed: aString [
 ]
 
 { #category : 'public' }
-Rowan class >> projectNamed: aString ifAbsent: absentBlock [
-
-	"Look up a project"
-
-	^ self image projectNamed: aString ifAbsent: absentBlock
-
-]
-
-{ #category : 'public' }
 Rowan class >> projectNames [
 
 	"Return list of project names"
@@ -220,14 +182,6 @@ Rowan class >> projectNames [
 Rowan class >> projectTools [
 
 	^self platform projectTools
-]
-
-{ #category : 'public' }
-Rowan class >> removeProject: aRwProjectSpecification [
-
-	"remove a project"
-
-	self image removeProject: aRwProjectSpecification
 ]
 
 { #category : 'public' }

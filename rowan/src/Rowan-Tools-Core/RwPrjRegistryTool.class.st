@@ -15,8 +15,3 @@ RwPrjRegistryTool >> registeredSpecs [
 
 	^ Rowan projectNames collect: [ :aString | Rowan projectNamed: aString ]
 ]
-
-{ #category : 'smalltalk api' }
-RwPrjRegistryTool >> registry [
-  ^ Rowan knownProjects
-]

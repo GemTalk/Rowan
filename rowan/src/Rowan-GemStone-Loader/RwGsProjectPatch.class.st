@@ -21,8 +21,9 @@ RwGsProjectPatch class >> for: aProjectDefinition [
 RwGsProjectPatch >> updateProjectProperties [
 
 	| loadedProject |
-	loadedProject := Rowan
+	loadedProject := Rowan image
 		loadedProjectNamed: self projectName
 		ifAbsent: [ self error: 'Internal error. Attempt to update unregistered project.' ].
 	loadedProject setPropertiesTo: self projectDefinition properties
+
 ]

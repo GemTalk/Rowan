@@ -38,8 +38,9 @@ RwProjectSetDefinition >> deriveLoadedThings [
 	^ RwEntitySet
 		withAll:
 			((self definitionNames
-				collect: [ :projectName | Rowan loadedProjectNamed: projectName ifAbsent: [  ] ])
+				collect: [ :projectName | Rowan image loadedProjectNamed: projectName ifAbsent: [  ] ])
 				select: [ :each | each notNil ])
+
 ]
 
 { #category : 'accessing' }

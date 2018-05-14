@@ -17,7 +17,7 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 	url := specNameOrUrl asRwUrl.
 	url scheme isNil
 		ifTrue: [ 
-			^ Rowan 
+			^ Rowan image
 				loadedProjectNamed: specNameOrUrl
 				ifAbsent: [ self error: 'No project named ' , specNameOrUrl printString , ' found' ] ].
 	url scheme = 'file'
@@ -95,18 +95,4 @@ RwSpecification >> register [
 	| newLoadedProject |
 	newLoadedProject := RwGsLoadedProject newForLoadSpecification: self.
 	Rowan image addLoadedProject: newLoadedProject
-]
-
-{ #category : 'registering' }
-RwSpecification >> registerForced [
-
-	(Rowan projectNamed: self specName ifAbsent: [  ])
-		ifNotNil: [ :anotherProject | Rowan removeProject: self ].
-	^ Rowan addProject: self
-]
-
-{ #category : 'registering' }
-RwSpecification >> unregister [
-
-	Rowan removeProject: self
 ]

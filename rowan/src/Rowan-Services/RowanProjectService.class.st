@@ -237,7 +237,7 @@ RowanProjectService >> pushToGit [
 RowanProjectService >> removeProjectNamed: projectName [
    "remove project"
  
-    (Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+    (Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
       ifNotNil: [ :project | Rowan image _removeLoadedProject: project ]
 
 ]

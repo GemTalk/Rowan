@@ -62,7 +62,7 @@ RwRowanSample2Test >> testAutomaticMigration [
 
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec instanceMap |
 	projectName := 'RowanSample2'.
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
   	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.

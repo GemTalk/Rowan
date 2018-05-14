@@ -128,7 +128,7 @@ RwGsMethodPatch >> loadedClassOrExtensionForMethod [
 	"The loaded class or extension should already exist."
 
 	| loadedPackage className |
-	loadedPackage := Rowan
+	loadedPackage := Rowan image
 		loadedPackageNamed: self packageName
 		ifAbsent: [ 
 			self
@@ -140,6 +140,7 @@ RwGsMethodPatch >> loadedClassOrExtensionForMethod [
 			self
 				error:
 					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ]
+
 ]
 
 { #category : 'accessing' }

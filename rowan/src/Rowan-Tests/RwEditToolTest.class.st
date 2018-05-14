@@ -265,7 +265,7 @@ RwEditToolTest >> testAddClassExtension [
 
 	{projectName}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	self
@@ -287,6 +287,7 @@ RwEditToolTest >> testAddClassExtension [
 	testInstance ivar1: 2.
 	self assert: testInstance ivar1 = 2.
 	self assert: (testInstance add: 1) = 3
+
 ]
 
 { #category : 'tests - classes' }

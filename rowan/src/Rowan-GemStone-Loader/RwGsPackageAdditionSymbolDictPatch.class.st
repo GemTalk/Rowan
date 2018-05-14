@@ -20,7 +20,7 @@ RwGsPackageAdditionSymbolDictPatch >> createLoadedPackage [
 
 	projectDefinition ifNil: [ ^ self ].
 
-	loadedProject := Rowan
+	loadedProject := Rowan image
 		loadedProjectNamed: projectDefinition name
 		ifAbsent: [ 
 			self
@@ -28,4 +28,5 @@ RwGsPackageAdditionSymbolDictPatch >> createLoadedPackage [
 					'expected a loaded project named ' , projectDefinition name printString ].
 
 	loadedProject addLoadedPackage: loadedPackage
+
 ]

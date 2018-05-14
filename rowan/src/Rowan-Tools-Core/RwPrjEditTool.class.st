@@ -25,7 +25,8 @@ RwPrjEditTool >> addClass: classDefinition inPackageNamed: packageName inProject
 	^ self
 		addClass: classDefinition
 		inPackageNamed: packageName
-		inProject: (Rowan loadedProjectNamed: projectName) asDefinition
+		inProject: (Rowan image loadedProjectNamed: projectName) asDefinition
+
 ]
 
 { #category : 'class extension editting' }
@@ -49,7 +50,8 @@ RwPrjEditTool >> addClassExtension: classExtensionDefinition inPackageNamed: pac
 	^ self
 		addClassExtension: classExtensionDefinition
 		inPackageNamed: packageName
-		inProject: (Rowan loadedProjectNamed: projectName) asDefinition
+		inProject: (Rowan image loadedProjectNamed: projectName) asDefinition
+
 ]
 
 { #category : 'class editing' }
@@ -73,7 +75,8 @@ RwPrjEditTool >> removeClass: classDefinition fromPackageNamed: packageName inPr
 	^ self
 		removeClass: classDefinition
 		fromPackageNamed: packageName
-		inProject: (Rowan loadedProjectNamed: projectName) asDefinition
+		inProject: (Rowan image loadedProjectNamed: projectName) asDefinition
+
 ]
 
 { #category : 'class editing' }
@@ -97,7 +100,8 @@ RwPrjEditTool >> removeClassNamed: className fromPackageNamed: packageName inPro
 	^ self
 		removeClassNamed: className
 		fromPackageNamed: packageName
-		inProject: (Rowan loadedProjectNamed: projectName) asDefinition
+		inProject: (Rowan image loadedProjectNamed: projectName) asDefinition
+
 ]
 
 { #category : 'class editing' }
@@ -121,5 +125,6 @@ RwPrjEditTool >> updateOrAddClass: classDefinition inPackageNamed: packageName i
 	^ self
 		updateOrAddClass: classDefinition
 		inPackageNamed: packageName
-		inProject: (Rowan loadedProjectNamed: projectName) asDefinition
+		inProject: (Rowan image loadedProjectNamed: projectName) asDefinition
+
 ]

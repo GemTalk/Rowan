@@ -33,25 +33,6 @@ RwGsImage class >> _projectRegistry [
 	^ self _projectRegistryForUserId: self currentUserId
 ]
 
-{ #category : 'cypress (old)' }
-RwGsImage class >> _projectRegistryForUserId: aUserId [
-
-	"this is being left as is, because I am using Rowan to develop Rowan and eventually this guy should be deleted in favor of the _loadedProjectRegistryForUserId:"
-
-	| ug |
-	Transcript
-		cr;
-		show: 'remove me when Rowan spec is moved to loaded project registry'.
-	ug := (AllUsers userWithId: aUserId) objectNamed: #'UserGlobals'.
-	^ ug
-		at: #'RwGsProjectRegistry'
-		ifAbsent: [ 
-			(self currentUserId = aUserId)
-				ifFalse: [ ^ nil ].
-			ug at: #'RwGsProjectRegistry' put: StringKeyValueDictionary new ]
-
-]
-
 { #category : 'querying' }
 RwGsImage class >> _removeLoadedProject: aRwLoadedProject [
 
@@ -86,24 +67,6 @@ RwGsImage class >> addLoadedProject: aRwLoadedProject [
 		error:
 			'There is already a project named ' , projectName printString , ' registered'
 
-]
-
-{ #category : 'cypress (old)' }
-RwGsImage class >> addProject: aRwProjectSpecification [
-
-	"Register a project"
-
-	| projectName projectRegistry |
-	projectName := aRwProjectSpecification specName.
-	projectRegistry := self
-		_projectRegistryForUserId:
-			(aRwProjectSpecification platformSpec at: 'gemstone') projectOwnerId.
-	projectRegistry
-		at: projectName
-		ifAbsent: [ ^ projectRegistry at: projectName put: aRwProjectSpecification ].
-	self
-		error:
-			'There is already a project named ' , projectName printString , ' registered'
 ]
 
 { #category : 'testing' }
@@ -418,31 +381,6 @@ RwGsImage class >> packageNames [
 ]
 
 { #category : 'cypress (old)' }
-RwGsImage class >> projectNamed: aString ifAbsent: absentBlock [
-
-	"Look up a project. First in current users project registry, then scan AllUsers for the project ... note that the user needs to be the project owner."
-
-	| currentUserId |
-	currentUserId = self currentUserId.
-	^ self _projectRegistry
-		at: aString
-		ifAbsent: [ 
-			AllUsers
-				do: [ :userProfile | 
-					| aUserId |
-					aUserId := userProfile userId.
-					aUserId ~= currentUserId
-						ifTrue: [ 
-							(self _projectRegistryForUserId: aUserId)
-								ifNotNil: [ :projectRegistry | 
-									(projectRegistry at: aString ifAbsent: [  ])
-										ifNotNil: [ :projectSpec | 
-											(projectSpec platformSpec at: 'gemstone') projectOwnerId = aUserId
-												ifTrue: [ ^ projectSpec ] ] ] ] ].
-			^ absentBlock value ]
-]
-
-{ #category : 'cypress (old)' }
 RwGsImage class >> projectNames [
 
 	"Return list of project names"
@@ -474,20 +412,6 @@ RwGsImage class >> removeLoadedMethodForCompileMethod: compiledMethod [
 		do: [ :symbolDict | 
 			symbolDict rowanSymbolDictionaryRegistry
 				ifNotNil: [ :registry | registry methodRegistry removeKey: compiledMethod ifAbsent: [  ] ] ]
-]
-
-{ #category : 'cypress (old)' }
-RwGsImage class >> removeProject: aRwProjectSpecification [
-
-	"remove a project"
-
-	| projectName |
-	projectName := aRwProjectSpecification specName.
-	(self
-		_projectRegistryForUserId:
-			(aRwProjectSpecification platformSpec at: 'gemstone') projectOwnerId)
-		removeKey: projectName
-		ifAbsent: [  ]
 ]
 
 { #category : 'querying' }

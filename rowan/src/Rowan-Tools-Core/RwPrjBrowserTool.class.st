@@ -283,7 +283,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 	| loadedPackage |
 	loadedPackage := (hybridPackageName at: 1) = $*
 		ifTrue: [ 
-			Rowan
+			Rowan image
 				loadedHybridPackageNamed: hybridPackageName
 				ifAbsent: [ 
 					self
@@ -391,7 +391,7 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClas
 		ifAbsent: [ 
 			"no loaded class definition, so we probably need to add a class extension"
 			 ].
-	loadedPackage := Rowan
+	loadedPackage := Rowan image
 		loadedPackageNamed: packageName
 		ifAbsent: [ self error: 'A package named ' , packageName printString , ' was not found.' ].
 	projectDefinition := loadedPackage loadedProject asDefinition.
@@ -581,7 +581,7 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 
 	"classType may be 'normal', 'bytes', or 'variable'"
 
-	| result anArray lfsp firstElement poolDicts civs superClass |
+	| result lfsp superClass |
 	result := String new.
 	superClass := Rowan image objectNamed: superclassName.
 	result addAll: superclassName.
@@ -620,6 +620,7 @@ RwPrjBrowserTool >> classCreationTemplateForSubclassOf: superclassName className
 		add: 'options: #()';
 		add: Character lf.
 	^ result
+
 ]
 
 { #category : 'class browsing' }
@@ -785,7 +786,7 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 
 	destinationLoadedPackage := (hybridPackageName at: 1) = $*
 		ifTrue: [ 
-			Rowan
+			Rowan image
 				loadedHybridPackageNamed: hybridPackageName
 				ifAbsent: [ 
 					self
@@ -948,7 +949,7 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 		ifAbsent: [
 			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackaged method in the class ', className printString.
 			"Notification resumed, so continue with removal"
-			^ (Rowan image objectNamed: className) removeSelector: methodSelector ].
+			^ (Rowan globalNamed: className) removeSelector: methodSelector ].
 	loadedPackage := loadedMethodToBeRemoved loadedPackage.
 	loadedClassOrExtension := loadedPackage
 		classOrExtensionForClassNamed: className
@@ -993,7 +994,7 @@ RwPrjBrowserTool >> removeProtocol: hybridPackageName fromClassNamed: className 
 
 	loadedPackage := (hybridPackageName at: 1) = $*
 		ifTrue: [ 
-			Rowan
+			Rowan image
 				loadedHybridPackageNamed: hybridPackageName
 				ifAbsent: [ 
 					self

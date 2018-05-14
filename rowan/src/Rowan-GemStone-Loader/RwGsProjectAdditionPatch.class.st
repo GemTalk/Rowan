@@ -16,7 +16,7 @@ RwGsProjectAdditionPatch >> createLoadedProject [
 
 	| projectName existingLoadedProject newLoadedProject |
 	projectName := self projectName.
-	existingLoadedProject := Rowan
+	existingLoadedProject := Rowan image
 		loadedProjectNamed: projectName
 		ifAbsent: [ nil ].
 	existingLoadedProject
@@ -25,6 +25,7 @@ RwGsProjectAdditionPatch >> createLoadedProject [
 		newForLoadSpecification: projectDefinition specification.
 	Rowan image addLoadedProject: newLoadedProject.
 	self updateProjectProperties
+
 ]
 
 { #category : 'applying' }

@@ -138,7 +138,7 @@ RwRowanProjectIssuesTest >> _addPackageNamed: packageName toProjectNamed: projec
 RwRowanProjectIssuesTest >> _cloneGitRepositoryFor: projectName projectUrlString: projectUrlString [
 
 	| rowanSpec projectTools gitRootPath |
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
@@ -168,7 +168,7 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPat
 
 	| projectDefinition project |
 
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	projectDefinition := self
@@ -1307,7 +1307,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsAndSubclass
      Using the class definition template, create a new version of Issue91 with new inst var 'abc' in RowanSample1-Extensions
 "
 
-	| projectName packageName1 packageName2 className1 className2 theClass1  theClass2 |
+	| projectName packageName1 packageName2 className1 className2 theClass1  theClass2 x |
 	projectName := 'Issue123_Project'.
 	packageName1 := 'Issue123-Core'.
 	packageName2 := 'Issue123-Extensions'.
@@ -1362,11 +1362,11 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsAndSubclass
 	self assert: theClass1 rowanPackageName = packageName2.
 	self assert: (theClass1 categoryOfSelector: #foo) asString = 'other'.
 	self assert: (theClass1 compiledMethodAt: #foo) rowanPackageName = packageName2.
-	self assert: (Rowan globalNamed: className2) ~~ theClass2.
+	self assert: (x := Rowan globalNamed: className2) ~~ theClass2.
 	theClass2 := Rowan globalNamed: className2.
 	self assert: theClass2 new foo = 1.
 	self assert: theClass2 category = packageName1.
-	self assert: theClass2 rowanPackageName = packageName1.
+	self assert: theClass2 rowanPackageName = packageName1
 
 ]
 

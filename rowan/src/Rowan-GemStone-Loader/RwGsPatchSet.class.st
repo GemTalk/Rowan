@@ -137,9 +137,10 @@ RwGsPatchSet >> _currentProjectDefinition [
 
 	^ currentProjectDefinition
 		ifNil: [ 
-			currentProjectDefinition := Rowan
+			currentProjectDefinition := Rowan image
 				loadedProjectNamed: Rowan unpackagedName
 				ifAbsent: [ RwUnmanagedProjectDefinition new ] ]
+
 ]
 
 { #category : 'private - patch class accessors' }
