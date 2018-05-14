@@ -102,8 +102,7 @@ at this point ... unless there is a use case for loading a collection of package
 	self updateLoadedPackages.
 	loadedPackages := someNames
 		collect: [ :aName | self loadedPackageNamed: aName ifAbsent: [ nil ] ].
-	^ RwEntitySet withAll: (loadedPackages select: [ :each | each notNil ])
-
+	^ (self globalNamed: 'RwEntitySet') withAll: (loadedPackages select: [ :each | each notNil ])
 ]
 
 { #category : 'public' }
