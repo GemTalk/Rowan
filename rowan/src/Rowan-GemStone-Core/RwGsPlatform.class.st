@@ -129,13 +129,6 @@ RwGsPlatform >> loadedPackageClass [
 	^RwGsLoadedPackage
 ]
 
-{ #category : 'queries' }
-RwGsPlatform >> loadedPackageOfClass: aClass [
-	"If the given class is in a package, answer that LoadedPackage. If not, answer nil."
-
-	^self loadedPackageClass loadedPackageOfClass: aClass
-]
-
 { #category : 'parsing' }
 RwGsPlatform >> parseSelectorFrom: methodString [
 

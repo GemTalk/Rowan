@@ -13,5 +13,6 @@ RwPrjRegistryTool >> registeredSpecNames [
 { #category : 'smalltalk api' }
 RwPrjRegistryTool >> registeredSpecs [
 
-	^ Rowan projectNames collect: [ :aString | Rowan projectNamed: aString ]
+	^ Rowan projectNames collect: [ :aString | Rowan image loadedProjectNamed: aString ]
+
 ]

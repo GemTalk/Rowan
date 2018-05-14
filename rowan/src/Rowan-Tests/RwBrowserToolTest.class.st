@@ -155,7 +155,7 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 	| projectDefinition projectTools |
 	projectTools := Rowan projectTools.
 
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := RwProjectDefinition
@@ -176,6 +176,7 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 	packageNames
 		do: [ :packageName | projectDefinition addPackageNamed: packageName ].
 	projectTools load loadProjectDefinition: projectDefinition
+
 ]
 
 { #category : 'private' }
@@ -184,7 +185,7 @@ RwBrowserToolTest >> _loadExtendedProjectDefinition: projectName packageNames: p
 	| projectDefinition classDefinition classExtensionDefinition projectTools |
 	projectTools := Rowan projectTools.
 
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := self
@@ -252,7 +253,7 @@ RwBrowserToolTest >> _loadFullMultiProjectDefinition: projectNames packageNames:
 
 	1 to: projectNames size do: [ :index | 
 		| projectDefinition classDefinition |
-		(Rowan loadedProjectNamed: (projectNames at: index) ifAbsent: [  ])
+		(Rowan image loadedProjectNamed: (projectNames at: index) ifAbsent: [  ])
 			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 		projectDefinition := self
@@ -315,7 +316,7 @@ RwBrowserToolTest >> _loadGlobalExtensionsProjectDefinition: projectName package
 	| projectDefinition projectTools |
 	projectTools := Rowan projectTools.
 
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := self
@@ -327,6 +328,7 @@ RwBrowserToolTest >> _loadGlobalExtensionsProjectDefinition: projectName package
 
 
 	projectTools load loadProjectDefinition: projectDefinition
+
 ]
 
 { #category : 'private' }
@@ -339,7 +341,7 @@ RwBrowserToolTest >> _loadMultiProjectDefinition: projectNames packageNames: pac
 
 	1 to: projectNames size do: [ :index | 
 		| projectDefinition classDefinition |
-		(Rowan loadedProjectNamed: (projectNames at: index) ifAbsent: [  ])
+		(Rowan image loadedProjectNamed: (projectNames at: index) ifAbsent: [  ])
 			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 		projectDefinition := self
@@ -370,7 +372,7 @@ RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNa
 	| projectDefinition projectTools |
 	projectTools := Rowan projectTools.
 
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := self
@@ -381,6 +383,7 @@ RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNa
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
 	projectTools load loadProjectDefinition: projectDefinition
+
 ]
 
 { #category : 'private' }
@@ -389,7 +392,7 @@ RwBrowserToolTest >> _loadSessionMethodExtensionProjectDefinition: projectName p
 	| projectDefinition projectTools |
 	projectTools := Rowan projectTools.
 
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := self
@@ -401,6 +404,7 @@ RwBrowserToolTest >> _loadSessionMethodExtensionProjectDefinition: projectName p
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
 	projectTools load loadProjectDefinition: projectDefinition
+
 ]
 
 { #category : 'private' }
@@ -409,7 +413,7 @@ RwBrowserToolTest >> _loadSimpleProjectDefinition: projectName packageNames: pac
 	| projectDefinition classDefinition projectTools |
 	projectTools := Rowan projectTools.
 
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := self
@@ -427,6 +431,7 @@ RwBrowserToolTest >> _loadSimpleProjectDefinition: projectName packageNames: pac
 		inProject: projectDefinition.
 
 	projectTools load loadProjectDefinition: projectDefinition
+
 ]
 
 { #category : 'private' }
@@ -435,7 +440,7 @@ RwBrowserToolTest >> _loadStandardProjectDefinition: projectName packageNames: p
 	| projectDefinition classDefinition projectTools |
 	projectTools := Rowan projectTools.
 
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := self

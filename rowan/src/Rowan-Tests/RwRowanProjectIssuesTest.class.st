@@ -2528,7 +2528,7 @@ RwRowanProjectIssuesTest >> testIssue91 [
 
 	{projectName}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	self

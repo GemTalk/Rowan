@@ -17,7 +17,7 @@ RwProjectSetTest >> testProjectSetLoad1 [
 
 	projectNames
 		do: [ :projectName | 
-			(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
@@ -43,8 +43,9 @@ RwProjectSetTest >> testProjectSetLoad1 [
 
 	self
 		assert:
-			(loadedProjects := Rowan loadedProjectsNamed: projectNames) size
+			(loadedProjects := self _loadedProjectsNamed: projectNames) size
 				= projectNames size.
 	loadedProjects entities
 		do: [ :loadedProject | self assert: (projectNames includes: loadedProject name) ]
+
 ]

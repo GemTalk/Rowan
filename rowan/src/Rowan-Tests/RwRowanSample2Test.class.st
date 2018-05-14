@@ -135,7 +135,7 @@ RwRowanSample2Test >> testNoMigration [
 
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec instanceMap |
 	projectName := 'RowanSample2'.
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
@@ -202,7 +202,7 @@ RwRowanSample2Test >> testNoMigration_bitbucket [
 
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec instanceMap |
 	projectName := 'RowanSample2'.
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
@@ -269,7 +269,7 @@ RwRowanSample2Test >> testNoMigration_gitlab [
 
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec instanceMap |
 	projectName := 'RowanSample2'.
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
@@ -336,7 +336,7 @@ RwRowanSample2Test >> testNoMigration_gitolite [
 
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec instanceMap |
 	projectName := 'RowanSample2'.
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
@@ -425,7 +425,7 @@ RwRowanSample2Test >> testRemoveSubclassOfClassWithNewVersion [
 
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample2Class subclasses rowanSample1Spec |
 	projectName := 'RowanSample2'.
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
@@ -483,7 +483,7 @@ RwRowanSample2Test >> testSampleCompoundConfiguration [
 
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec project x |
 	projectName := 'RowanSample2'.
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
@@ -530,7 +530,7 @@ RwRowanSample2Test >> testSampleDefaultConfiguration [
 
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample1Spec project x |
 	projectName := 'RowanSample2'.
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.

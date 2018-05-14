@@ -328,7 +328,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
 		forClassExtensionsIn: className1.
 
-	(Rowan loadedProjectNamed: projectName2 ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName2 ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	browserTool
@@ -403,6 +403,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 
 	testClass := Rowan globalNamed: className1.
 	self assert: testClass isNil
+
 ]
 
 { #category : 'tests' }
@@ -455,7 +456,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 		isMeta: false
 		inPackageNamed: packageName2.	"extension method for className1"
 
-	(Rowan loadedProjectNamed: projectName2 ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName2 ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	browserTool
@@ -783,6 +784,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 	testProjectDefinition := browserTool projectNamed: projectName1.
 	testPackageNames := testProjectDefinition packageNames.
 	self assert: testPackageNames = {packageName2}
+
 ]
 
 { #category : 'tests' }

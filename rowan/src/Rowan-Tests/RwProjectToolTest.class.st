@@ -16,7 +16,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 
 	{projectName}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
@@ -121,7 +121,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 	{projectName1.
 	projectName2}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition1 := (RwProjectDefinition
@@ -188,6 +188,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 			"class extensions need to be made by packages loaded into the symbol dictionary in which the class is defined"
 			projectTools load loadProjectDefinition: projectDefinition2 ]
 		raise: Error
+
 ]
 
 { #category : 'tests' }
@@ -202,7 +203,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 
 	{projectName}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
@@ -339,7 +340,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 
 	{projectName}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
@@ -447,7 +448,7 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 
 	{projectName}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
@@ -487,6 +488,7 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 
 	self assert: Object classFoo = 'bar'.
 	self assert: Object new instanceFoo = 'foo'
+
 ]
 
 { #category : 'tests' }
@@ -501,7 +503,7 @@ RwProjectToolTest >> testSimpleProject1 [
 
 	{projectName}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	self
@@ -528,13 +530,13 @@ RwProjectToolTest >> testSimpleProject1 [
 	self
 		handleInformAsFailureDuring: [ projectTools load loadProjectDefinition: projectDefinition ].
 
-	loadedProject := Rowan
+	loadedProject := Rowan image
 		loadedProjectNamed: projectName
 		ifAbsent: [ self assert: false description: 'expected to find loaded project' ].
 	packageNames
 		do: [ :packageName | 
 			"ensure that we have a loaded package for each of the packages"
-			Rowan
+			Rowan image
 				loadedPackageNamed: packageName
 				ifAbsent: [ self assert: false description: 'expected to find loaded package' ] ].
 
@@ -560,6 +562,7 @@ RwProjectToolTest >> testSimpleProject1 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class'
+
 ]
 
 { #category : 'tests' }
@@ -574,7 +577,7 @@ RwProjectToolTest >> testSimpleProject2 [
 
 	{projectName}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := RwProjectDefinition
@@ -617,6 +620,7 @@ RwProjectToolTest >> testSimpleProject2 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class'
+
 ]
 
 { #category : 'tests' }
@@ -631,7 +635,7 @@ RwProjectToolTest >> testSimpleProject3 [
 
 	{projectName}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := RwProjectDefinition

@@ -208,7 +208,7 @@ RwEditToolTest >> testAddAndRemoveClass [
 
 	{projectName}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := self
@@ -301,7 +301,7 @@ RwEditToolTest >> testAddUpdateAndRemoveClass [
 
 	{projectName}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := self
@@ -379,7 +379,7 @@ RwEditToolTest >> testUpdateClass [
 
 	{projectName}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	self
@@ -435,6 +435,7 @@ RwEditToolTest >> testUpdateClass [
 	self assert: testClass civar1 = 1.
 	testInstance := testClass new.
 	self should: [ testInstance ivar1 ] raise: MessageNotUnderstood
+
 ]
 
 { #category : 'tests - classes' }
@@ -452,7 +453,7 @@ RwEditToolTest >> testUpdateClassExtension [
 
 	{projectName}
 		do: [ :name | 
-			(Rowan loadedProjectNamed: name ifAbsent: [  ])
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	self
@@ -519,4 +520,5 @@ RwEditToolTest >> testUpdateClassExtension [
 					self
 						assert: classExtensionDef instanceMethodDefinitions size = 1;
 						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'add:') ] ]
+
 ]
