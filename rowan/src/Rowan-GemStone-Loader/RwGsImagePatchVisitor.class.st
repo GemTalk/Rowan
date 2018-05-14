@@ -290,13 +290,11 @@ RwGsImagePatchVisitor >> visitPackageModification: aPackageModification [
 	propertiesModification := aPackageModification propertiesModification.
 	propertiesModification isEmpty
 		ifFalse: [ 
-			self halt: 'What do we do with this patch we''re creating here?'.
-			RwGsPackagePropertiesPatch
-				forPackageProperties: propertiesModification
-				inPackage: currentPackage
-				inProject: currentProject ].
+			"https://github.com/dalehenrich/Rowan/issues/180"
+			self error: 'internal error - unexpected non-empty package properties modification. See Issue #180' ].
 	aPackageModification classesModification acceptVisitor: self.
 	aPackageModification classExtensionsModification acceptVisitor: self
+
 ]
 
 { #category : 'visting' }
@@ -337,10 +335,10 @@ RwGsImagePatchVisitor >> visitProjectModification: aProjectModification [
 	propertiesModification := aProjectModification propertiesModification.
 	propertiesModification isEmpty
 		ifFalse: [ 
-			RwGsProjectPropertiesPatch
-				forProjectProperties: propertiesModification
-				inProject: currentProject ].
+			"https://github.com/dalehenrich/Rowan/issues/180"
+			self error: 'internal error - unexpected non-empty project properties modification. See Issue #180'  ].
 	aProjectModification packagesModification acceptVisitor: self
+
 ]
 
 { #category : 'visting' }
