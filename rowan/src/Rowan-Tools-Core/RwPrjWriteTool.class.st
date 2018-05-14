@@ -29,7 +29,7 @@ RwPrjWriteTool >> _loadedPackagesNamed: someNames forProject: projectDefinition 
 	| loadedPackages |
 	loadedPackages := someNames
 		collect: [ :aName | Rowan image loadedPackageNamed: aName ifAbsent: [ nil ] ].
-	^ (Rowan globalNamed: 'RwEntitySet')
+	^ RwEntitySet
 		withAll:
 			(loadedPackages
 				select: [ :loadedPackage | 

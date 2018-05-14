@@ -94,7 +94,7 @@ at this point ... unless there is a use case for loading a collection of package
 	| loadedPackages |
 	loadedPackages := someNames
 		collect: [ :aName | Rowan image loadedPackageNamed: aName ifAbsent: [ nil ] ].
-	^ (Rowan globalNamed: 'RwEntitySet') withAll: (loadedPackages select: [ :each | each notNil ])
+	^ RwEntitySet withAll: (loadedPackages select: [ :each | each notNil ])
 
 ]
 
@@ -107,7 +107,7 @@ RwAbstractTest >> _loadedProjectsNamed: someNames [
 	| loadedProjects |
 	loadedProjects := someNames
 		collect: [ :aName | Rowan image loadedProjectNamed: aName ifAbsent: [ nil ] ].
-	^ (Rowan globalNamed: 'RwEntitySet') withAll: (loadedProjects select: [ :each | each notNil ])
+	^ RwEntitySet withAll: (loadedProjects select: [ :each | each notNil ])
 
 ]
 
