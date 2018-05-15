@@ -89,7 +89,7 @@ RwSpecification >> projectUrl: ignored [
   
 ]
 
-{ #category : 'registering' }
+{ #category : '*rowan-gemstone-core' }
 RwSpecification >> register [
 
 	| newLoadedProject |
