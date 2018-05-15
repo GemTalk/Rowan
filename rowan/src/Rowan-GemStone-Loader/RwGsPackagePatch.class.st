@@ -16,13 +16,3 @@ RwGsPackagePatch class >> for: aPackageDefinition [
 
 	^self new packageDefinition: aPackageDefinition
 ]
-
-{ #category : 'applying' }
-RwGsPackagePatch >> updatePackageProperties [
-
-	| loadedPackage |
-	loadedPackage := RwGsLoadedPackage
-		existingPackageNamed: self packageName
-		ifAbsent: [ self error: 'Internal error. Attempt to update unregistered package.' ].
-	loadedPackage setPropertiesTo: self packageDefinition properties
-]

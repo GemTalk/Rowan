@@ -98,18 +98,6 @@ RwGsMethodPatch >> isAnInitializer [
 
 ]
 
-{ #category : 'private-testing' }
-RwGsMethodPatch >> isForExtensionMethod [
-
-	"Answer true if the method is not in the same package that defines the class."
-
-	| packageOfClass packageOfMethod loadedClass |
-	packageOfMethod := self packageName.
-	loadedClass := RwGsLoadedClass existingForClass: behavior thisClass.
-	packageOfClass := loadedClass loadedPackage name.
-	^ packageOfClass ~= packageOfMethod
-]
-
 { #category : 'accessing' }
 RwGsMethodPatch >> isMeta [
 
@@ -227,17 +215,6 @@ RwGsMethodPatch >> runInitializer [
 RwGsMethodPatch >> selector [
 
 	^ selector
-]
-
-{ #category : 'private-installing' }
-RwGsMethodPatch >> setProtocol [
-	"If I'm an extension method, my protocol in the image may need to be *<packageName>."
-
-	self
-		setProtocolTo: (Rowan configuration needsPackageProtocolNames
-				& self isForExtensionMethod
-					ifTrue: [self packageProtocolName]
-					ifFalse: [self propertiesProtocolName])
 ]
 
 { #category : 'private-installing' }

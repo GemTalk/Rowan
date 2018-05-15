@@ -231,16 +231,6 @@ RwGsClassVersioningPatch >> createClassFor: aPatchSet [
 	^ newClassVersion
 ]
 
-{ #category : 'patching' }
-RwGsClassVersioningPatch >> installNewClassVerionInSystem [
-	"Install the new class association in the symbolAssociation for the class.
-	 Update the LoadedClass with properties for the new classversion."
-
-	self
-		updateSymbolAssociation;
-		updateLoadedClass
-]
-
 { #category : 'accessing' }
 RwGsClassVersioningPatch >> oldClassDefinition [
 
@@ -253,52 +243,6 @@ RwGsClassVersioningPatch >> oldClassVersion [
 	"The old version is what is currently bound to the old class definition's name."
 
 	^ (self resolveName: self oldClassDefinition key) value
-]
-
-{ #category : 'actions' }
-RwGsClassVersioningPatch >> updateLoadedClass [
-	"Refresh the class properties if a new class version was created."
-
-	| loadedClass |
-	oldClassVersion == newClassVersion
-		ifTrue: [ ^ self ].
-	loadedClass := RwGsLoadedClass existingForClass: oldClassVersion.
-	loadedClass handleClassDeletionOrNewVersion
-		ifTrue: [ 
-			loadedClass
-				updatePropertiesFromClass;
-				updateForCategoryChange ]
-		ifFalse: [ 
-			self error: 'internal error - new version of class not properly installed'
-			 ]
-]
-
-{ #category : 'new version support' }
-RwGsClassVersioningPatch >> updatePatchesForNewClassVersion: aPackageSetModification [
-
-	| existingClass loadedClassDefinition newVersionClassModification existingClassName |
-	existingClass := self oldClassVersion.
-	existingClassName := existingClass name asString.
-	loadedClassDefinition := (RwGsLoadedClass existingForClass: existingClass)
-		asDefinition.
-	newVersionClassModification := self classDefinition
-		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
-	newVersionClassModification isEmpty
-		ifFalse: [ 
-			"only newVersionClassModification with substance need further processing"
-			aPackageSetModification elementsModified
-				do: [ :packageModification | 
-					| classesModified |
-					classesModified := packageModification classesModification elementsModified.
-					(classesModified at: existingClassName ifAbsent: [  ])
-						ifNil: [ 
-							self
-								error:
-									'internal error - missing class modification for '
-										, existingClassName printString ]
-						ifNotNil: [ :existingClassModification | 
-							existingClassModification
-								mergeForNewClassVersionWith: newVersionClassModification ] ] ]
 ]
 
 { #category : 'actions' }

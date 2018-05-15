@@ -122,13 +122,6 @@ RwGsPlatform >> instanceMigrator: anInstanceMigrator [
 	instanceMigrator := anInstanceMigrator
 ]
 
-{ #category : 'queries' }
-RwGsPlatform >> loadedPackageClass [
-	"Answer the platform-specific class for LoadedPackage"
-
-	^RwGsLoadedPackage
-]
-
 { #category : 'parsing' }
 RwGsPlatform >> parseSelectorFrom: methodString [
 
@@ -148,16 +141,4 @@ RwGsPlatform >> parseSelectorFrom: methodString [
 	meth selector asString ]
 		on: CompileError
 		do: [ :ex | ex return: '_____could_not_parse_selector_from_method_source_____' ]
-]
-
-{ #category : 'actions' }
-RwGsPlatform >> updateLoadedPackagesFrom: source [
-	"For GemStone, valid sources are #Category and #SymbolDictionary"
-
-	source == #Category
-		ifTrue: [RwGsLoadedPackage updateAllFromCategories]
-		ifFalse: 
-			[source == #SymbolDictionary
-				ifTrue: [RwGsLoadedPackage updateAllFromSymbolDictionaries]
-				ifFalse: [self error: 'Invalid packageInfoSource for GemStone.']]
 ]
