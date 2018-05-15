@@ -126,6 +126,7 @@ RwGsClassPatch >> classDefinition: newValue [
 RwGsClassPatch >> className [
 
 	^classDefinition key
+
 ]
 
 { #category : 'actions' }

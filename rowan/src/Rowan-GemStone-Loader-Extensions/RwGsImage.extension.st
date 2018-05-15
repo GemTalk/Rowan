@@ -22,13 +22,12 @@ RwGsImage class >> _cloneRowanLoaderSymbolDictionary [
 		in a separate symbol dictionary and then use the isolated copy to execute the update."
 
 	| rowanLoaderSymbolDict clonedSymDictName clonedSymDict |
-Transcript cr; show: 'CLONING ROWANLOADER'.
 	rowanLoaderSymbolDict := Rowan globalNamed: 'RowanLoader'.
 	clonedSymDictName := #'RowanLoader_cloned'.
 	clonedSymDict := rowanLoaderSymbolDict 
 		_rowanCloneSymbolDictionaryNamed: clonedSymDictName 
 		symbolList: GsCurrentSession currentSession symbolList.
-Transcript show: ' --> ', clonedSymDict asOop printString.
+	Transcript cr; show: 'RowanLoader symbol dictionary cloned'.
 	^ clonedSymDict
 
 ]
@@ -36,7 +35,12 @@ Transcript show: ' --> ', clonedSymDict asOop printString.
 { #category : '*rowan-gemstone-loader-extensions' }
 RwGsImage class >> _shouldCloneRowanLoader: aProjectSetModification [
 
-	^false
+	"When modifications are made to the Rowan-GemStone-Loader package in the Rowan project, we need to clone the RowanLoader symbol dictionary"
+
+	| projectModification packageModification |
+	projectModification := aProjectSetModification elementsModified at: 'Rowan' ifAbsent: [ ^ false ].
+	packageModification := projectModification packagesModification elementsModified at: 'Rowan-GemStone-Loader' ifAbsent: [ ^ false ].
+	^ packageModification isEmpty not
 
 ]
 
