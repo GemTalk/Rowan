@@ -13,6 +13,13 @@ Class {
 	#category : 'Rowan-Public'
 }
 
+{ #category : 'public client services' }
+Rowan class >> classServiceClass [
+
+	^ self platform classServiceClass
+
+]
+
 { #category : 'public' }
 Rowan class >> configuration [
 
@@ -47,12 +54,26 @@ Rowan class >> image [
 	^self platform image
 ]
 
+{ #category : 'public client services' }
+Rowan class >> methodServiceClass [
+
+	^ self platform methodServiceClass
+
+]
+
 { #category : 'public' }
 Rowan class >> packageNames [
 
 	"Return list of package names"
 
 	^ self image packageNames
+]
+
+{ #category : 'public client services' }
+Rowan class >> packageServiceClass [
+
+	^ self platform packageServiceClass
+
 ]
 
 { #category : 'public tools' }
@@ -67,6 +88,13 @@ Rowan class >> projectNames [
 	"Return list of project names"
 
 	^ self image projectNames
+]
+
+{ #category : 'public client services' }
+Rowan class >> projectServiceClass [
+
+	^ self platform projectServiceClass
+
 ]
 
 { #category : 'public tools' }
