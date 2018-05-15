@@ -35,7 +35,7 @@ RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmen
 	undefinedSymbols := SymbolDictionary new name: #UndefinedSymbols.
 	undefinedSymbolList := SymbolList with: undefinedSymbols.
 	^
-	[self class
+	[UndefinedObject
 		compileMethod: source
 		dictionaries: aSymbolList
 		category: cat
@@ -59,7 +59,7 @@ RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmen
 								["attempt auto-define of undefined symbols"
 								symbols do: [:sym | undefinedSymbols at: sym put: nil].
 								
-								[^self class
+								[^UndefinedObject
 									compileMethod: source
 									dictionaries: aSymbolList , undefinedSymbolList
 									category: cat
