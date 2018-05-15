@@ -97,7 +97,7 @@ clone_entire_git_repo() {
   popd
 }
 
-cd $ROWAN_PROJECTS_HOME/Rowan/packing
+cd $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/packing
 
 rm -rf Rowan Jade RowanSample1 RowanSample2 MANIFEST.TXT Jadeite_runtime_* *.zip
 
