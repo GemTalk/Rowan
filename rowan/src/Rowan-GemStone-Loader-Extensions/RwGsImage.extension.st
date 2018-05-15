@@ -34,21 +34,28 @@ Transcript show: ' --> ', clonedSymDict asOop printString.
 ]
 
 { #category : '*rowan-gemstone-loader-extensions' }
+RwGsImage class >> _shouldCloneRowanLoader: aProjectSetModification [
+
+	^false
+
+]
+
+{ #category : '*rowan-gemstone-loader-extensions' }
 RwGsImage class >> applyModification: aProjectSetModification instanceMigrator: instanceMigrator [
 
-	true
+	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
-			self 
-				applyModification: aProjectSetModification 
-				visitorClass: RwGsImagePatchVisitor 
-				instanceMigrator: instanceMigrator ]
-		ifFalse: [ 
 			| visitorClass |
 			visitorClass := self _cloneRowanLoaderSymbolDictionary at: #RwGsImagePatchVisitor.
 			self 
 				applyModification: aProjectSetModification 
 				visitorClass:visitorClass 
-				instanceMigrator: instanceMigrator]
+				instanceMigrator: instanceMigrator ]
+		ifFalse: [ 
+			self 
+				applyModification: aProjectSetModification 
+				visitorClass: RwGsImagePatchVisitor 
+				instanceMigrator: instanceMigrator ]
 
 ]
 
