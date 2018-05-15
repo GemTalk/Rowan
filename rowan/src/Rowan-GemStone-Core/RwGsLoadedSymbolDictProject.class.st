@@ -1,11 +1,11 @@
 Class {
 	#name : 'RwGsLoadedProject',
-	#superclass : 'RwLoadedProject',
+	#superclass : 'RwLoadedSymbolDictProject',
 	#category : 'Rowan-GemStone-Core'
 }
 
 { #category : 'private' }
-RwGsLoadedProject >> markDirty [
+RwGsLoadedSymbolDictProject >> markDirty [
 	"I have been changed independent of a change to my repository, and therefore may be out of sync with my repository"
 
 	isDirty := true
@@ -13,7 +13,7 @@ RwGsLoadedProject >> markDirty [
 ]
 
 { #category : 'private' }
-RwGsLoadedProject >> markNotDirty [
+RwGsLoadedSymbolDictProject >> markNotDirty [
 	"I have been changed to be consistent with my source, so mark not dirty."
 
 	isDirty := false
@@ -21,7 +21,7 @@ RwGsLoadedProject >> markNotDirty [
 ]
 
 { #category : 'private' }
-RwGsLoadedProject >> markProjectDirty [
+RwGsLoadedSymbolDictProject >> markProjectDirty [
 
 self halt.
 	self markDirty
@@ -29,20 +29,20 @@ self halt.
 ]
 
 { #category : 'specifiction' }
-RwGsLoadedProject >> projectOwnerId [
+RwGsLoadedSymbolDictProject >> projectOwnerId [
 
 	^ (self specification platformSpec at: 'gemstone') projectOwnerId
 ]
 
 { #category : 'specifiction' }
-RwGsLoadedProject >> projectOwnerId: aUserId [
+RwGsLoadedSymbolDictProject >> projectOwnerId: aUserId [
 
 	^ (self specification platformSpec at: 'gemstone') projectOwnerId: aUserId
 
 ]
 
 { #category : 'definitions' }
-RwGsLoadedProject >> propertiesForDefinition [
+RwGsLoadedSymbolDictProject >> propertiesForDefinition [
 
 	| props |
 	props := super propertiesForDefinition.
@@ -51,7 +51,7 @@ RwGsLoadedProject >> propertiesForDefinition [
 ]
 
 { #category : 'properties' }
-RwGsLoadedProject >> specification [
+RwGsLoadedSymbolDictProject >> specification [
 
 	^ handle
 ]
