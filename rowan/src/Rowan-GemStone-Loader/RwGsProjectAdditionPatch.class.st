@@ -21,7 +21,7 @@ RwGsProjectAdditionPatch >> createLoadedProject [
 		ifAbsent: [ nil ].
 	existingLoadedProject
 		ifNotNil: [ self error: 'Internal error -- Attempt to add a project that exists.' ].
-	newLoadedProject := RwGsLoadedProject
+	newLoadedProject := RwGsLoadedSymbolDictProject
 		newForLoadSpecification: projectDefinition specification.
 	Rowan image addLoadedProject: newLoadedProject.
 	self updateProjectProperties

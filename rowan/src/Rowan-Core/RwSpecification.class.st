@@ -93,6 +93,6 @@ RwSpecification >> projectUrl: ignored [
 RwSpecification >> register [
 
 	| newLoadedProject |
-	newLoadedProject := RwGsLoadedProject newForLoadSpecification: self.
+	newLoadedProject := RwGsLoadedSymbolDictProject newForLoadSpecification: self.
 	Rowan image addLoadedProject: newLoadedProject
 ]

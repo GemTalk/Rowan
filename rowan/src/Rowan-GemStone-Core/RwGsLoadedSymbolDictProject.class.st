@@ -1,6 +1,6 @@
 Class {
-	#name : 'RwGsLoadedProject',
-	#superclass : 'RwLoadedSymbolDictProject',
+	#name : 'RwGsLoadedSymbolDictProject',
+	#superclass : 'RwLoadedProject',
 	#category : 'Rowan-GemStone-Core'
 }
 
