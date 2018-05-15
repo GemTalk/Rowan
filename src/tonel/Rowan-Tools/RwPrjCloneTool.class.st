@@ -65,8 +65,7 @@ RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath 
 
 	| gitTool response projectUrl gitRepoPath cloneUrl cloneOption checkout segments |
 	self specification: aRwSpecification.
-	projectUrl := RwUrl fromString: specification projectUrl.
-	gitRepoPath := gitRootPath , '/' , projectUrl segments last.
+	gitRepoPath := gitRootPath , '/' , aRwSpecification specName.
 	self
 		_validateForGitRootPathForSpecification: gitRootPath
 		gitRepoDir: gitRepoPath
@@ -76,6 +75,7 @@ RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath 
 		the clone is already present."
 			^ msg ].
 	gitTool := Rowan gitTools.
+	projectUrl := RwUrl fromString: specification projectUrl.
 	cloneUrl := useSsh
 		ifTrue: [ 'git@' , projectUrl authority , ':' ]
 		ifFalse: [ 'https://' , projectUrl authority , '/' ].
@@ -93,6 +93,7 @@ RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath 
 	checkout
 		ifNotNil: [ Rowan projectTools checkout checkoutSpecification: specification ].
 	^ specification
+
 ]
 
 { #category : 'smalltalk api' }
