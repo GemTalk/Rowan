@@ -6,7 +6,7 @@ Class {
 		'packageName',
 		'name'
 	],
-	#category : 'Rowan-Services'
+	#category : 'Rowan-Services-Core'
 }
 
 { #category : 'instance creation' }

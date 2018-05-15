@@ -1,6 +1,6 @@
 Extension { #name : 'RwRowanProjectIssuesTest' }
 
-{ #category : '*rowan-servicestests' }
+{ #category : '*rowan-services-tests' }
 RwRowanProjectIssuesTest >> testIssue150_branches [
 
 	"https://github.com/dalehenrich/Rowan/issues/150"

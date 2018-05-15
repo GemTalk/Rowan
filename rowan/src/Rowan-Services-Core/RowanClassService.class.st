@@ -14,7 +14,7 @@ Class {
 		'packageService',
 		'meta'
 	],
-	#category : 'Rowan-Services'
+	#category : 'Rowan-Services-Core'
 }
 
 { #category : 'instance creation' }

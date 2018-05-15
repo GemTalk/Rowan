@@ -15,7 +15,7 @@
 				'Rowan-GemStone-Loader-Extensions' : { 'symbolDictName' : 'RowanPrivate' },
 				'Rowan-Public' : { 'symbolDictName' : 'RowanPublic' },
 				'Rowan-Initialize' : { 'symbolDictName' : 'RowanPublic' },
-				'Rowan-Services' : { 'symbolDictName' : 'RowanClient' }
+				'Rowan-Services-Core' : { 'symbolDictName' : 'RowanClient' }
 			}
 		 }
 	},

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'defaultProjectName'
 	],
-	#category : 'Rowan-Services'
+	#category : 'Rowan-Services-Core'
 }
 
 { #category : 'accessing' }

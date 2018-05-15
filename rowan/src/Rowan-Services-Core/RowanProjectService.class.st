@@ -6,7 +6,7 @@ Class {
 		'sha',
 		'branch'
 	],
-	#category : 'Rowan-Services'
+	#category : 'Rowan-Services-Core'
 }
 
 { #category : 'accessing' }

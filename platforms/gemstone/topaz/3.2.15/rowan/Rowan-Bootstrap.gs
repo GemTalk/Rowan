@@ -605,8 +605,9 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'RowanClient'
-    value: #('Rowan-Services' 
-      'Rowan-ServicesTests').		"Populate with Jadeite client classes"
+    value: #('Rowan-Services-Core' 
+      'Rowan-Services-Extensions',
+      'Rowan-Services-Tests').		"Populate with Jadeite client classes"
 %
   commit
 
