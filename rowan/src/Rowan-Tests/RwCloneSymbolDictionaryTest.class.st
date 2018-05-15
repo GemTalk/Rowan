@@ -212,6 +212,18 @@ RwCloneSymbolDictionaryTest >> testMultiDependentClassSystemDictionaryClone [
 ]
 
 { #category : 'tests' }
+RwCloneSymbolDictionaryTest >> testRowanLoaderSystemDictionaryClone [
+
+	| rowanLoaderSymbolDict clonedSymDictName clonedSymbolDict |
+	rowanLoaderSymbolDict := Rowan globalNamed: 'RowanLoader'.
+	clonedSymDictName := #'RowanLoader_cloned'.
+	clonedSymbolDict := rowanLoaderSymbolDict 
+		_rowanCloneSymbolDictionaryNamed: clonedSymDictName 
+		symbolList: GsCurrentSession currentSession symbolList.
+
+]
+
+{ #category : 'tests' }
 RwCloneSymbolDictionaryTest >> testSimpleSystemDictionaryClone [
 
 	| projectName packageName1 className symDictName theOriginalClass theSymbolDict validationBlock clonedSymbolDict 
