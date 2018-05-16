@@ -3,7 +3,7 @@
 	#projectUrl : 'https://github.com/dalehenrich/Rowan',
 	#platformSpec : {
 		'gemstone' : RwGemStoneSpecification {
-			#defaultSymbolDictName : 'RowanPrivate',
+			#defaultSymbolDictName : 'RowanKernel',
 			#defaultUseSessionMethodsForExtensions : false,
 			#packageNameToPlatformPropertiesMap : {
 				'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
@@ -11,11 +11,7 @@
 				'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
 				'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
 				'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
-				'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
-				'Rowan-GemStone-Loader-Extensions' : { 'symbolDictName' : 'RowanPrivate' },
-				'Rowan-Public' : { 'symbolDictName' : 'RowanPublic' },
-				'Rowan-Initialize' : { 'symbolDictName' : 'RowanPublic' },
-				'Rowan-Services-Core' : { 'symbolDictName' : 'RowanClient' }
+				'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' }
 			}
 		 }
 	},

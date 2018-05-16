@@ -10,7 +10,7 @@ Class {
 	#classInstVars : [
 		'configuration'
 	],
-	#category : 'Rowan-Public'
+	#category : 'Rowan-Core'
 }
 
 { #category : 'public client services' }
@@ -54,6 +54,15 @@ Rowan class >> image [
 	^self platform image
 ]
 
+{ #category : 'initialization' }
+Rowan class >> initialize [
+
+	"Rowan initialize."
+
+	configuration := self platform defaultConfiguration.
+	self platform initialize
+]
+
 { #category : 'public client services' }
 Rowan class >> methodServiceClass [
 
@@ -82,6 +91,11 @@ Rowan class >> packageTools [
 	^self platform packageTools
 ]
 
+{ #category : 'private' }
+Rowan class >> platform [
+
+	^ RwPlatform current
+]
 { #category : 'public' }
 Rowan class >> projectNames [
 

@@ -532,7 +532,7 @@ currentOrNil
 	| session symbolList |
 	session := GsCurrentSession currentSession.
 	symbolList := session symbolList.
-	#( #RowanPrivate #RowanPublic #RowanClient #RowanLoader)
+	#( #RowanKernel #RowanLoader)
 		do: [:symbolName | 
 			| newDict size |
 			newDict := SymbolDictionary new
@@ -567,24 +567,14 @@ currentOrNil
 
   run
   CypressBootstrapRowanBlock 
-    value: 'RowanPublic'
-    value: #('Rowan-Public'). 		"Populate with public Rowan classes"
-%
-  commit
-
-  run
-  CypressBootstrapRowanBlock 
-    value: 'RowanPrivate'
+    value: 'RowanKernel'
     value: #('GemStone-Interactions-Core' 'Rowan-Url-Core' 'Rowan-Url-3215' 
       'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 
-      'Rowan-Tools-Core' 'Rowan-Tests').	"Populate with Rowan implementation classes"
-%
-  commit
-
-  run
-  CypressBootstrapRowanBlock 
-    value: 'RowanPublic'
-    value: #('Rowan-Initialize').             "Extension methods for public Rowan classes"
+      'Rowan-Tools-Core',
+      'Rowan-Tests',
+      'Rowan-Services-Core',
+      'Rowan-Services-Extensions',
+      'Rowan-Services-Tests').	"Populate with Rowan implementation classes"
 %
   commit
 
@@ -597,17 +587,8 @@ currentOrNil
 
   run
   CypressBootstrapRowanBlock 
-    value: 'RowanPrivate'
+    value: 'RowanKernel'
     value: #('Rowan-GemStone-Loader-Extensions').	"Extension methods in non-loader classes"
-%
-  commit
-
-  run
-  CypressBootstrapRowanBlock 
-    value: 'RowanClient'
-    value: #('Rowan-Services-Core' 
-      'Rowan-Services-Extensions',
-      'Rowan-Services-Tests').		"Populate with Jadeite client classes"
 %
   commit
 
@@ -685,9 +666,9 @@ currentOrNil
 # 
    run
   | rowanAssoc |
-  rowanAssoc := RowanPublic associationAt: #Rowan.
+  rowanAssoc := RowanKernel associationAt: #Rowan.
   Published add: rowanAssoc.
-  RwPlatform reset.
+  RwPlatform reset.  "bootstrapping creates a new class version, need to clear cache"
 %
   commit
 
@@ -697,11 +678,11 @@ currentOrNil
 #   and not Globals
 #
    run
-  | rowanAssoc |
-  rowanAssoc := RowanPublic associationAt: #Rowan.
-  Globals add: rowanAssoc.
-  RowanClient associationsDo: [:assoc |
-    assoc value isBehavior ifTrue: [ Globals add: assoc ] ].
+  #(Rowan RowanClassService RowanMethodService RowanPackageService RowanProjectService 
+    RowanService RowanServicePreferences) do: [:className |
+      | assoc |
+      assoc := RowanKernel associationAt: className.
+      Globals add: assoc ].
 %
   commit
 

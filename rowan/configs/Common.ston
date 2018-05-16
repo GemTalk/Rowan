@@ -8,8 +8,6 @@ RwProjectConfiguration {
 		'Rowan-Services-Extensions',
 		'Rowan-Services-Core',
 		'Rowan-Services-Tests',
-		'Rowan-Initialize',
-		'Rowan-Public',
 		'Rowan-Core',
 		'Rowan-GemStone-Core',
 		'Rowan-GemStone-Kernel',
