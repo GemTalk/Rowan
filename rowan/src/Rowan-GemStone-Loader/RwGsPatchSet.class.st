@@ -29,7 +29,8 @@ Class {
 		'tempSymbols',
 		'createdClasses',
 		'errors',
-		'currentProjectDefinition'
+		'currentProjectDefinition',
+		'addedInstanceVariable'
 	],
 	#category : 'Rowan-GemStone-Loader'
 }
@@ -722,6 +723,7 @@ RwGsPatchSet >> apply [
 		updateSymbolAssociations;
 		updateClassProperties;
 		updateMethodDictionaries;
+		addedMethod;
 		updateMethodProperties;
 		removeDeletedMethods;
 		"removeDeletedClassesAndExtensionsFromPackages;"
@@ -732,6 +734,12 @@ RwGsPatchSet >> apply [
 		migrateInstances;
 		commit
 
+]
+
+{ #category : 'testing' }
+RwGsPatchSet >> addedMethod [
+
+	"do nothing"
 ]
 
 { #category : 'public' }
