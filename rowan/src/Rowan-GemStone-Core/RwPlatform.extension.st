@@ -7,3 +7,11 @@ RwPlatform class >> current [
 		at: #RwUserPlatformInstance 
 		ifAbsentPut: [ RwGsPlatform new ]
 ]
+
+{ #category : '*rowan-gemstone-core' }
+RwPlatform class >> reset [
+
+	^ (System myUserProfile objectNamed: 'UserGlobals') 
+		removeKey: #RwUserPlatformInstance 
+		ifAbsent: [ ]
+]

@@ -680,7 +680,22 @@ currentOrNil
 %
   commit
 
-# Workaround for Issue #162
+# Install Rowan class in Published symbol dict, so it is availailable to all users
+#   clear RwPlatform cache so we get fresh copy on startup, if needed
+# 
+   run
+  | rowanAssoc |
+  rowanAssoc := RowanPublic associationAt: #Rowan.
+  Published add: rowanAssoc.
+  RwPlatform reset.
+%
+  commit
+
+# Workaround needed until Jadeite class refs are routed through Rowan
+#   Issue #141 (indirect references of RowanClient classes through Rowan) 
+#   and Issue #187 #   (revolve references to Rowan when it is in Published 
+#   and not Globals
+#
    run
   | rowanAssoc |
   rowanAssoc := RowanPublic associationAt: #Rowan.
