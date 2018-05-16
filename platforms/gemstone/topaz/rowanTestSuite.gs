@@ -11,7 +11,8 @@ suite := TestSuite named: 'Rowan tests'.
 	RwHybridBrowserToolTest.
 	RwBrowserToolApiTest.
 	RwRowanSample2Test.
-	RwRowanProjectIssuesTest} do: [ :cl | suite addTests: cl suite tests ].
+	RwRowanProjectIssuesTest.
+	RwCloneSymbolDictionaryTest} do: [ :cl | suite addTests: cl suite tests ].
 	res := suite run.
 
 strm := WriteStream on: String new.
