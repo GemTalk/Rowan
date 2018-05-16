@@ -1,0 +1,12 @@
+RwProjectCompoundConfiguration{
+	#name : 'Tests',
+	#packageNames : [
+		'CypressTonel-Tests',
+		'CypressTonel-GemStone-Tests',
+		'Tonel-Cypress-Tests',
+		'Tonel-GemStone-Tests',
+		'Tonel-Tests'
+	],
+	#configurationNames : [ ],
+	#comment : 'Tonel test packages'
+}

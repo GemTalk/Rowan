@@ -1,0 +1,9 @@
+RwProjectCompoundConfiguration{
+	#name : 'Tests',
+	#packageNames : [
+		'STON-Tests',
+		'STON-GemStone-Tests'
+	],
+	#configurationNames : [ ],
+	#comment : 'STON test packages'
+}

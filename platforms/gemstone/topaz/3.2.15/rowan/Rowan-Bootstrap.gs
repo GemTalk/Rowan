@@ -527,21 +527,101 @@ currentOrNil
 %
 
   commit
-   run
-  "Bootstrap Rowan into image"
-  | packageManager repo |
-  packageManager := CypressPackageManager3 new.
-  repo := CypressAbstractRepository
-    onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/src/tonel/'  )
-    alias: ''.
-  packageManager
-    defaultSymbolDictionaryName: #'Globals'.
-  #('Cypress-Core' 'GemStone-Interactions' 'Rowan-Url' 'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress' 'Rowan-Tools' 'Rowan-Tests' 'Rowan-Services' 'Rowan-GemStone-3215')
-    do: [ :packageName | 
-      packageManager
-        addResolvedReference:
-          (CypressResolvedReference name: packageName repository: repo) ].
-  packageManager loadResolvedReferences
+
+  run
+	| session symbolList |
+	session := GsCurrentSession currentSession.
+	symbolList := session symbolList.
+	#( #RowanPrivate #RowanPublic #RowanClient #RowanLoader)
+		do: [:symbolName | 
+			| newDict size |
+			newDict := SymbolDictionary new
+				name: symbolName;
+				objectSecurityPolicy: symbolList objectSecurityPolicy;
+				yourself.
+			size := System myUserProfile symbolList size.
+			System myUserProfile insertDictionary: newDict at: size + 1 ].
+%
+  commit
+
+# Bootstrap Rowan into image
+  run
+  UserGlobals 
+    at: #CypressBootstrapRowanBlock 
+    put: [:symbolDictName :packageNames  |
+    | packageManager repo |
+    packageManager := CypressPackageManager3 new.
+    repo := CypressAbstractRepository
+      onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/rowan/src/'  )
+      alias: ''.
+    packageManager
+      defaultSymbolDictionaryName: symbolDictName asSymbol.
+    packageNames
+      do: [ :packageName | 
+        packageManager
+          addResolvedReference:
+            (CypressResolvedReference name: packageName repository: repo) ].
+    packageManager loadResolvedReferences ].
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanPublic'
+    value: #('Rowan-Public'). 		"Populate with public Rowan classes"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanPrivate'
+    value: #('GemStone-Interactions-Core' 'Rowan-Url-Core' 'Rowan-Url-3215' 
+      'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 
+      'Rowan-Tools-Core' 'Rowan-Tests').	"Populate with Rowan implementation classes"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanPublic'
+    value: #('Rowan-Initialize').             "Extension methods for public Rowan classes"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanLoader'
+    value: #('Rowan-GemStone-Loader').		"GemStone Rowan loader classes"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanPrivate'
+    value: #('Rowan-GemStone-Loader-Extensions').	"Extension methods in non-loader classes"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanClient'
+    value: #('Rowan-Services-Core' 
+      'Rowan-Services-Extensions',
+      'Rowan-Services-Tests').		"Populate with Jadeite client classes"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'Globals'
+    value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel' 
+      'Rowan-Tools-Kernel' 
+      'Rowan-GemStone-3215').		"Extension methods for GemStone kernel classes"
+%
+  commit
+
+  run
+  UserGlobals removeKey: #CypressBootstrapRowanBlock.
 %
   commit
 
@@ -550,22 +630,25 @@ currentOrNil
   | projectSetDefinition gitRepoPath |
   projectSetDefinition := RwProjectSetDefinition new.
   gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
-  #(
-    'file:$ROWAN_PROJECTS_HOME/Rowan/specs/Rowan_SystemUser.ston'
-    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'
-    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'
-    'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston') 
-    do: [:specUrl |
+  {
+    {'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan_SystemUser.ston'. 'Default'}.
+    {'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
+    {'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'. 'Bootstrap'}.
+    {'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'. 'Bootstrap'}.
+  } 
+    do: [:ar |
       "load all of the packages from disk, so that we're not actually using Cypress, STON, 
        and Tonel while created loaded things for Rowan"
-      | specification |
+      | specification specUrl configName |
+      specUrl := ar at: 1.
+      configName := ar at: 2.
       specification := RwSpecification fromUrl: specUrl.
       specification
         repositoryRootPath: gitRepoPath;
         repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
         register.
       (Rowan projectTools read 
-        readProjectSetForProjectNamed: specification specName withConfiguration: 'Default')
+        readProjectSetForProjectNamed: specification specName withConfiguration: configName)
           do: [:projectDefinition |
             projectSetDefinition addProject: projectDefinition ] ].
     [ 
@@ -594,6 +677,31 @@ currentOrNil
 		(Rowan image loadedClassNamed: cl name asString ifAbsent: [])
 			handle ~~ cl ].
       incorrectlyPackaged isEmpty ifFalse: [ self error: 'Rowan is not correctly packaged' ] ].
+%
+  commit
+
+# Install Rowan class in Published symbol dict, so it is availailable to all users
+#   clear RwPlatform cache so we get fresh copy on startup, if needed
+# 
+   run
+  | rowanAssoc |
+  rowanAssoc := RowanPublic associationAt: #Rowan.
+  Published add: rowanAssoc.
+  RwPlatform reset.
+%
+  commit
+
+# Workaround needed until Jadeite class refs are routed through Rowan
+#   Issue #141 (indirect references of RowanClient classes through Rowan) 
+#   and Issue #187 #   (revolve references to Rowan when it is in Published 
+#   and not Globals
+#
+   run
+  | rowanAssoc |
+  rowanAssoc := RowanPublic associationAt: #Rowan.
+  Globals add: rowanAssoc.
+  RowanClient associationsDo: [:assoc |
+    assoc value isBehavior ifTrue: [ Globals add: assoc ] ].
 %
   commit
 
