@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'name',
 		'sha',
-		'branch'
+		'branch',
+		'isSkew',
+		'isDirty'
 	],
 	#category : 'Rowan-Services'
 }
@@ -23,10 +25,17 @@ RowanProjectService class >> defaultProjectName: aString [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 RowanProjectService >> branch [
 
 	^(RwProject newNamed: name) currentBranchName
+
+]
+
+{ #category : 'accessing' }
+RowanProjectService >> branch: anObject [
+
+	branch := anObject
 
 ]
 
@@ -124,6 +133,13 @@ RowanProjectService >> isDirty [
 
 ]
 
+{ #category : 'accessing' }
+RowanProjectService >> isDirty: aBoolean [
+
+	isDirty := aBoolean.
+
+]
+
 { #category : 'rowan' }
 RowanProjectService >> isSkew [
 
@@ -149,14 +165,14 @@ RowanProjectService >> log [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 RowanProjectService >> name [
 
 	^name
 
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 RowanProjectService >> name: anObject [
 
 	name := anObject
@@ -203,9 +219,16 @@ RowanProjectService >> packageNameString [
 ]
 
 { #category : 'rowan' }
-RowanProjectService >> projectNames [
+RowanProjectService >> projects [
 
-	^Rowan projectNames collect: [:string | self class new name: string]
+		^Rowan projectNames collect: 
+			[:string |
+			| service |
+			service := self class new name: string. 
+			service 
+				sha: service rowanSha;
+				branch: service rowanBranch;
+				isDirty: service rowanDirty]
 
 ]
 
@@ -249,6 +272,34 @@ RowanProjectService >> repositorySha [
 
 ]
 
+{ #category : 'rowan' }
+RowanProjectService >> rowanBranch [
+
+	^(RwProject newNamed: name) currentBranchName
+
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> rowanDirty [
+
+	^(RwProject newNamed: name) isDirty
+
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> rowanSha [
+
+	^(RwProject newNamed: name) loadedCommitId
+
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> rowanSkew [
+
+	^self sha ~= self repositorySha
+
+]
+
 { #category : 'examples' }
 RowanProjectService >> sampleProjectName [
 	
@@ -256,10 +307,20 @@ RowanProjectService >> sampleProjectName [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 RowanProjectService >> sha [
 
 	^(RwProject newNamed: name) loadedCommitId
+
+]
+
+{ #category : 'accessing' }
+RowanProjectService >> sha: anObject [
+
+	"because skew is intimately associated with sha
+	set it here" 
+	sha := anObject.
+	isSkew := self rowanSkew
 
 ]
 

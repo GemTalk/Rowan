@@ -21,6 +21,13 @@ Rowan class >> addProject: aRwProjectSpecification [
 	^ self image addProject: aRwProjectSpecification
 ]
 
+{ #category : 'services temporary' }
+Rowan class >> classServiceClass [
+
+	^System myUserProfile symbolList objectNamed: #RowanClassService
+
+]
+
 { #category : 'public' }
 Rowan class >> configuration [
 
@@ -183,12 +190,26 @@ Rowan class >> loadedProjectsNamed: someNames [
 	^ RwEntitySet withAll: (loadedProjects select: [ :each | each notNil ])
 ]
 
+{ #category : 'services temporary' }
+Rowan class >> methodServiceClass [
+
+	^System myUserProfile symbolList objectNamed: #RowanMethodService
+
+]
+
 { #category : 'public' }
 Rowan class >> packageNames [
 
 	"Return list of package names"
 
 	^ self image packageNames
+]
+
+{ #category : 'services temporary' }
+Rowan class >> packageServiceClass [
+
+	^System myUserProfile symbolList objectNamed: #RowanPackageService
+
 ]
 
 { #category : 'public tools' }
@@ -229,6 +250,13 @@ Rowan class >> projectNames [
 	"Return list of project names"
 
 	^ self image projectNames
+]
+
+{ #category : 'services temporary' }
+Rowan class >> projectServiceClass [
+
+	^System myUserProfile symbolList objectNamed: #RowanProjectService
+
 ]
 
 { #category : 'public tools' }
