@@ -47,6 +47,19 @@ RowanClassService class >> forClassNamed: className package: packageName [
 
 ]
 
+{ #category : 'examples' }
+RowanClassService class >> sampleServiceString [
+	| service |
+	service := RowanClassService new.
+	service
+		name: 'TestingSton';
+		comment: 'this is the comment';
+		instVarNames: (Array with: 'firstIV' with: 'secondIv');
+		meta: false.
+	^STON toString: service
+
+]
+
 { #category : 'rowan' }
 RowanClassService >> classCreationTemplate [
 	

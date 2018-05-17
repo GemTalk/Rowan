@@ -140,6 +140,16 @@ RowanService >> sampleSymbolDictionaryName [
 
 ]
 
+{ #category : 'replication' }
+RowanService >> stonStringFor: anObject [
+
+	"return a string representing a complete object structure
+	suitable for replicating on the client."
+
+	^STON toString: anObject
+
+]
+
 { #category : 'symbol dictionaries' }
 RowanService >> symbolDictionaryNamed: aName [
 
