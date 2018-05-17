@@ -96,6 +96,7 @@ Rowan class >> platform [
 
 	^ RwPlatform current
 ]
+
 { #category : 'public' }
 Rowan class >> projectNames [
 

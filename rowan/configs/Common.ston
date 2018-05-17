@@ -5,6 +5,7 @@ RwProjectConfiguration {
 		'Rowan-Cypress-Core',
 		'Rowan-Cypress-Kernel',
 		'Rowan-Definitions',
+		'Rowan-Deprecated',
 		'Rowan-Services-Extensions',
 		'Rowan-Services-Core',
 		'Rowan-Services-Tests',
