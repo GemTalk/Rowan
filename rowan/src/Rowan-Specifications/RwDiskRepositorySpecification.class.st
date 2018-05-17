@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwDiskRepositorySpecification',
 	#superclass : 'RwRepositorySpecification',
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Specifications'
 }
 
 { #category : 'copying' }

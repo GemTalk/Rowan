@@ -10,6 +10,8 @@
 		'Rowan-Services-Core',
 		'Rowan-Services-Tests',
 		'Rowan-Core',
+		'Rowan-Specifications',
+		'Rowan-Configurations',
 		'Rowan-GemStone-Core',
 		'Rowan-GemStone-Kernel',
 		'Rowan-GemStone-Loader',

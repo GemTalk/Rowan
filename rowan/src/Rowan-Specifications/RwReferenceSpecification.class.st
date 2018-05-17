@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'referenceUrl'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Specifications'
 }
 
 { #category : 'accessing' }

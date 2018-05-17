@@ -5,7 +5,7 @@ Class {
 		'loadedCommitId',
 		'repositoryUrl'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Specifications'
 }
 
 { #category : 'accessing' }

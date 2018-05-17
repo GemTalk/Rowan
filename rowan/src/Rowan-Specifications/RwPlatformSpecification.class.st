@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwPlatformSpecification',
 	#superclass : 'RwSpecification',
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Specifications'
 }
 
 { #category : 'copying' }

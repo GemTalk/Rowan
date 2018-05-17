@@ -6,7 +6,7 @@ Class {
 		'committishType',
 		'remote'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Specifications'
 }
 
 { #category : 'accessing' }

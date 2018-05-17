@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'repositoryRootPath'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Specifications'
 }
 
 { #category : 'testing' }

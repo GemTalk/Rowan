@@ -13,7 +13,7 @@ RwPackageLoadSpecification new
 Class {
 	#name : 'RwSimpleProjectSpecification',
 	#superclass : 'RwProjectSpecification',
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Specifications'
 }
 
 { #category : 'accessing' }

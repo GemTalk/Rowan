@@ -13,7 +13,7 @@ Class {
 		'imageSpec',
 		'packageInfoSource'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Specifications'
 }
 
 { #category : 'instance creation' }

@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwMetacelloProjectImageSpecification',
 	#superclass : 'RwImageSpecification',
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Specifications'
 }
 
 { #category : 'copying' }

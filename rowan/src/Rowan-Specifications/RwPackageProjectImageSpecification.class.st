@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'loadedPackageNames'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Specifications'
 }
 
 { #category : 'accessing' }

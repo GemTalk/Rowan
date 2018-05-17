@@ -6,7 +6,7 @@ Class {
 		'comment',
 		'projectName'
 	],
-	#category : 'Rowan-Definitions'
+	#category : 'Rowan-Configurations'
 }
 
 { #category : 'instance creation' }

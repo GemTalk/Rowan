@@ -6,7 +6,7 @@ Class {
 		'loads',
 		'locked'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Specifications'
 }
 
 { #category : 'accessing' }

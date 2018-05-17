@@ -570,9 +570,9 @@ currentOrNil
     value: 'RowanKernel'
     value: #('GemStone-Interactions-Core' 'Rowan-Url-Core' 'Rowan-Url-3215' 
       'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 
-      'Rowan-Tools-Core', 'Rowan-Deprecated', 'Rowan-Tests',
-      'Rowan-Services-Core',
-      'Rowan-Services-Extensions',
+      'Rowan-Tools-Core' 'Rowan-Deprecated' 'Rowan-Tests'
+      'Rowan-Services-Core' 'Rowan-Configurations' 'Rowan-Specifications'
+      'Rowan-Services-Extensions'
       'Rowan-Services-Tests').	"Populate with Rowan implementation classes"
 %
   commit

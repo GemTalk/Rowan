@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwSpecification',
 	#superclass : 'Object',
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Specifications'
 }
 
 { #category : 'instance creation' }
