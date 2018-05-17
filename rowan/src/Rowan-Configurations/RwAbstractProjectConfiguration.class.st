@@ -9,6 +9,15 @@ Class {
 	#category : 'Rowan-Configurations'
 }
 
+{ #category : 'private' }
+RwAbstractProjectConfiguration class >> _readStonFrom: stream [
+
+	^ (STON fromStream: stream)
+			initializeForImport;
+			yourself
+
+]
+
 { #category : 'instance creation' }
 RwAbstractProjectConfiguration class >> fromUrl: specNameOrUrl [
 
@@ -23,10 +32,7 @@ RwAbstractProjectConfiguration class >> fromUrl: specNameOrUrl [
 			CypressFileUtilities current
 				readStreamFor: url fileName
 				in: url pathForDirectory
-				do: [ :stream | 
-					^ (STON fromStream: stream)
-						initializeForImport;
-						yourself ] ].
+				do: [ :stream | ^ self _readStonFrom: stream ] ].
 	url scheme asString = 'https'
 		ifTrue: [ 
 			| client response |
@@ -36,10 +42,9 @@ RwAbstractProjectConfiguration class >> fromUrl: specNameOrUrl [
 				beOneShot;
 				enforceHttpSuccess: true;
 				get: url.
-			^ (STON fromString: response decodeFromUTF8)
-				initializeForImport;
-				yourself ].
+			^ self _readStonFrom: response decodeFromUTF8 ].
 	self error: 'Unknown scheme: ' , url scheme printString
+
 ]
 
 { #category : 'instance creation' }
