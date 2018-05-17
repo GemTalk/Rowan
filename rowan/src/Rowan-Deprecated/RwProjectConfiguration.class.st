@@ -1,3 +1,8 @@
+"
+The class RwProjectConfiguration is deprecated in favor of the class RwProjectCompoundConfiguration.
+
+This class will be removed from the system prior to final release.
+"
 Class {
 	#name : 'RwProjectConfiguration',
 	#superclass : 'RwAbstractProjectConfiguration',
@@ -6,6 +11,31 @@ Class {
 	],
 	#category : 'Rowan-Deprecated'
 }
+
+{ #category : 'instance creation' }
+RwProjectConfiguration class >> fromSton: stonReader [
+
+	self deprecated: 'The class RwProjectConfiguration is deprecated. Use the class RwProjectCompoundConfiguration instead'.
+	^ super fromSton: stonReader
+
+]
+
+{ #category : 'instance creation' }
+RwProjectConfiguration class >> fromUrl: specNameOrUrl [
+
+	self deprecated: 'The class RwProjectConfiguration is deprecated. Use the class RwProjectCompoundConfiguration instead'.
+	^ super fromUrl: specNameOrUrl
+
+]
+
+{ #category : 'instance creation' }
+RwProjectConfiguration class >> newNamed: aName for: projectName [
+
+
+	self deprecated: 'The class RwProjectConfiguration is deprecated. Use the class RwProjectCompoundConfiguration instead'.
+	^ super newNamed: aName for: projectName
+
+]
 
 { #category : 'configs' }
 RwProjectConfiguration >> addConfig: configName [
