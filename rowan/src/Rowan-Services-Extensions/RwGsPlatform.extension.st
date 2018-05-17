@@ -27,3 +27,10 @@ RwGsPlatform >> projectServiceClass [
 	^ RowanProjectService
 
 ]
+
+{ #category : '*rowan-services-extensions' }
+RwGsPlatform >> serviceClass [
+
+	^ RowanService
+
+]
