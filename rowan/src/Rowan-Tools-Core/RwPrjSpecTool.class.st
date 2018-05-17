@@ -60,18 +60,6 @@ RwPrjSpecTool >> newPackageSpecNamed: aString useGit: useGit [
 ]
 
 { #category : 'smalltalk api' }
-RwPrjSpecTool >> newProjectSpecNamed: aString useGit: useGit [
-  | spec |
-  spec := RwMetacelloProjectSpecification new
-    specName: aString;
-    yourself.
-  useGit
-    ifTrue: [ ^ spec ].
-  spec repoSpec: RwDiskRepositorySpecification new.
-  ^ spec
-]
-
-{ #category : 'smalltalk api' }
 RwPrjSpecTool >> specForProjectNamed: projectName [
 
 	| loadedProject |

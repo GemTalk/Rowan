@@ -8,16 +8,6 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwProjectDefinition class >> newForGitMetacelloProjectNamed: aString [
-
-	| spec |
-	spec := RwMetacelloProjectSpecification new
-		specName: aString;
-		yourself.
-	^ self newForSpecification: spec
-]
-
-{ #category : 'instance creation' }
 RwProjectDefinition class >> newForGitPackageProjectNamed: aString [
 
 	| spec |
