@@ -118,6 +118,13 @@ Rowan class >> projectTools [
 	^self platform projectTools
 ]
 
+{ #category : 'public client services' }
+Rowan class >> serviceClass [
+
+	^ self platform serviceClass
+
+]
+
 { #category : 'public' }
 Rowan class >> unpackagedName [
 

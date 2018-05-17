@@ -676,14 +676,13 @@ currentOrNil
 #   and Issue #187 #   (revolve references to Rowan when it is in Published 
 #   and not Globals
 #
-   run
-  #(Rowan RowanClassService RowanMethodService RowanPackageService RowanProjectService 
-    RowanService RowanServicePreferences) do: [:className |
-      | assoc |
-      assoc := RowanKernel associationAt: className.
-      Globals add: assoc ].
-%
-  commit
+#   run
+#  #( RowanService ) do: [:className |
+#      | assoc |
+#      assoc := RowanKernel associationAt: className.
+#      Globals add: assoc ].
+#%
+#  commit
 
   logout
   set u DataCurator p swordfish
