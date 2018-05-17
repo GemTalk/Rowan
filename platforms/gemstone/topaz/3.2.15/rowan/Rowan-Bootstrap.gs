@@ -671,19 +671,6 @@ currentOrNil
 %
   commit
 
-# Workaround needed until Jadeite class refs are routed through Rowan
-#   Issue #141 (indirect references of RowanClient classes through Rowan) 
-#   and Issue #187 #   (revolve references to Rowan when it is in Published 
-#   and not Globals
-#
-#   run
-#  #( RowanService ) do: [:className |
-#      | assoc |
-#      assoc := RowanKernel associationAt: className.
-#      Globals add: assoc ].
-#%
-#  commit
-
   logout
   set u DataCurator p swordfish
   login
