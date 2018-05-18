@@ -1093,10 +1093,14 @@ RwGsPatchSet >> setupForApply [
 
 	| symbolList |
 	tempSymbols := SymbolDictionary new.
-	symbolList := Rowan image symbolList.	"If there are any duplicated symbols, we only want the one that will be found first one, 
+	symbolList := Rowan image symbolList.	
+	"If there are any duplicated symbols, we only want the one that will be found first one, 
 	so we copy in reverse order of search order, thereby overwriting later definitions with earlier ones."
 	symbolList
-		reverseDo: [ :dict | dict keysAndValuesDo: [ :aKey :aValue | tempSymbols at: aKey put: aValue ] ]
+		reverseDo: [ :dict | 
+			"Need to preserve association identity, tempSymbols is used for compiling methods"
+			dict associationsDo: [ :assoc | tempSymbols add: assoc ] ]
+
 ]
 
 { #category : 'patch access' }
