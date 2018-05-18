@@ -109,10 +109,20 @@ RowanPackageService >> loadedClasses [
 ]
 
 { #category : 'rowan' }
+RowanPackageService >> loadedClassExtensions [
+
+	| loadedPackage |
+	loadedPackage := Rowan image loadedPackageNamed: packageName ifAbsent:[^Array new].
+	^loadedPackage loadedClassExtensions
+
+]
+
+{ #category : 'rowan' }
 RowanPackageService >> loadedClassHandles [
-
-	^self loadedClasses collect:[:loadedClass | loadedClass handle]
-
+	| classes |
+	classes := self loadedClasses collect:[:loadedClass | loadedClass handle].
+	classes addAll: (self loadedClassExtensions collect:[:extension | extension handle]).
+	^classes
 ]
 
 { #category : 'rowan' }
