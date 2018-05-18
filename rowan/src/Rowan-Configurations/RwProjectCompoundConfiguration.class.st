@@ -23,6 +23,13 @@ RwProjectCompoundConfiguration >> _configurations [
 				yourself ]
 ]
 
+{ #category : 'visiting' }
+RwProjectCompoundConfiguration >> acceptVisitor: aVisitor [
+
+	^aVisitor visitProjectCompoundConfiguration: self
+
+]
+
 { #category : 'accessing' }
 RwProjectCompoundConfiguration >> configurationNames [
 

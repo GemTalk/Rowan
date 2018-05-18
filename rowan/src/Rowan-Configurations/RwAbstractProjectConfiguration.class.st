@@ -12,9 +12,12 @@ Class {
 { #category : 'private' }
 RwAbstractProjectConfiguration class >> _readStonFrom: stream [
 
-	^ (STON fromStream: stream)
-			initializeForImport;
-			yourself
+	| reader | 
+	(reader := STONReader on: stream)
+		allowComplexMapKeys: true.
+	^reader next
+		initializeForImport;
+		yourself
 
 ]
 
@@ -85,6 +88,13 @@ RwAbstractProjectConfiguration >> _repositoryUrl [
 RwAbstractProjectConfiguration >> _specification [
 
 	^ self _loadedProject specification
+]
+
+{ #category : 'visiting' }
+RwAbstractProjectConfiguration >> acceptVisitor: aVisitor [
+
+	^ self subclassResponsibility: #acceptVisitor:
+
 ]
 
 { #category : 'accessing' }

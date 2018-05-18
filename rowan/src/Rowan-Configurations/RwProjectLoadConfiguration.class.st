@@ -8,14 +8,23 @@ Class {
 	#category : 'Rowan-Configurations'
 }
 
-{ #category : 'private' }
-RwProjectLoadConfiguration class >> _readStonFrom: stream [
+{ #category : 'visiting' }
+RwProjectLoadConfiguration >> acceptVisitor: aVisitor [
 
-	| reader | 
-	(reader := STONReader on: stream)
-		allowComplexMapKeys: true.
-	^reader next
-		initializeForImport;
-		yourself
+	^aVisitor visitProjectLoadConfiguration: self
+
+]
+
+{ #category : 'accessing' }
+RwProjectLoadConfiguration >> conditionalPackageMapSpecs [
+
+	^conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
+
+]
+
+{ #category : 'accessing' }
+RwProjectLoadConfiguration >> conditionalPackages [
+
+	^conditionalPackages ifNil: [ conditionalPackages := Dictionary new ]
 
 ]
