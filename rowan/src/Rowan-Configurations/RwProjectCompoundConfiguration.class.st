@@ -12,6 +12,7 @@ Class {
 RwProjectCompoundConfiguration >> _configurations [
 
 	| spec urlBase |
+	self configurationNames isEmpty ifTrue: [ ^ #() ].
 	spec := self _specification.
 	urlBase := 'file:' , spec repositoryRootPath , '/' , spec configsPath , '/'.
 	^ self configurationNames
@@ -21,6 +22,7 @@ RwProjectCompoundConfiguration >> _configurations [
 			(RwAbstractProjectConfiguration fromUrl: url)
 				projectName: self projectName;
 				yourself ]
+
 ]
 
 { #category : 'visiting' }

@@ -39,10 +39,7 @@
 					'Rowan-GemStone-Loader',
 					'Rowan-GemStone-Loader-Extensions'
 					],
-				#configurationNames : [ 
-					'Tonel',
-					'STON'
-					]
+				#configurationNames : [ ]
 				},
 			'tests' : {
 				#packageNames : [

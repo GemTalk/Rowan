@@ -23,6 +23,13 @@ RwProjectConfigurationVisitor >> initialize [
 
 ]
 
+{ #category : 'accessing' }
+RwProjectConfigurationVisitor >> packageNames [
+
+	^ packageNames
+
+]
+
 { #category : 'public' }
 RwProjectConfigurationVisitor >> visit: aProjectConfiguration [
 
@@ -35,14 +42,11 @@ RwProjectConfigurationVisitor >> visitProjectCompoundConfiguration: aProjectComp
 
 	(visitedConfigurationNames includes: aProjectCompoundConfiguration name)
 		ifTrue: [ ^ self ].
+
 	visitedConfigurationNames add:  aProjectCompoundConfiguration name. 
-	packageNames addAll: aProjectCompoundConfiguration packageNames
+	packageNames addAll: aProjectCompoundConfiguration packageNames.
 
-]
-
-{ #category : 'visiting' }
-RwProjectConfigurationVisitor >> visitProjectLoadConfiguration: aProjecLoadConfiguration [
-
-self halt.
+	aProjectCompoundConfiguration _configurations
+		do: [:config | config acceptVisitor: self ].
 
 ]
