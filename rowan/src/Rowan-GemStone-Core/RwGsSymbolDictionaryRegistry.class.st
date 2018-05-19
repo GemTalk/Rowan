@@ -516,6 +516,43 @@ RwGsSymbolDictionaryRegistry >> addRecompiledSessionMethodMethod: newCompiledMet
 	methodRegistry at: newCompiledMethod put: loadedMethod
 ]
 
+{ #category : 'method - adopt api' }
+RwGsSymbolDictionaryRegistry >> adoptCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
+
+	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
+	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	selector := compiledMethod selector.
+	compiledMethod == (methodDictionary at: selector ifAbsent: [ self error: 'expected an existing compiled method' ])
+		ifFalse: [ self error: 'The given compiled method does not the existing compiled method in the class.' ].
+
+	protocolSymbol := protocolString asSymbol.
+	(behavior includesCategory: protocolSymbol)
+		ifFalse: [ behavior addCategory: protocolSymbol ].
+	behavior moveMethod: selector toCategory: protocolSymbol.
+
+	existing := methodRegistry at: compiledMethod ifAbsent: [ nil ].
+	existing
+		ifNotNil: [ self error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
+	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
+
+	methodRegistry at: compiledMethod put: loadedMethod.
+
+	loadedPackage := self
+		loadedPackageNamed: packageName
+		ifAbsent: [ 
+			self
+				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
+
+	loadedClassOrExtension := loadedPackage
+		loadedClassOrClassExtensionForClass: behavior
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
+	loadedClassOrExtension addLoadedMethod: loadedMethod
+
+]
+
 { #category : 'accessing' }
 RwGsSymbolDictionaryRegistry >> classExtensionRegistry [
 
