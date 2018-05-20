@@ -517,9 +517,18 @@ RwGsSymbolDictionaryRegistry >> addRecompiledSessionMethodMethod: newCompiledMet
 ]
 
 { #category : 'method - adopt api' }
-RwGsSymbolDictionaryRegistry >> adoptCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
+RwGsSymbolDictionaryRegistry >> adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior protocol: protocolString toPackageNamed: packageName [
 
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
+	classExtension
+		ifTrue: [
+			"to adopt and extension method, it is much less complicated" 
+			^ self 
+				addExtensionCompiledMethod: compiledMethod 
+				for: behavior 
+				protocol: protocolString 
+				toPackageNamed: packageName ].
+
 	methodDictionary := behavior persistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	compiledMethod == (methodDictionary at: selector ifAbsent: [ self error: 'expected an existing compiled method' ])

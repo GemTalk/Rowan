@@ -5,11 +5,27 @@ Class {
 }
 
 { #category : 'smalltalk api' }
-RwPkgAdoptTool >> adoptClassNamed: className  intoPackageNamed: packageName [
+RwPkgAdoptTool >> adoptClassExtensionNamed: className  instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: packageName [
 
-	"adopt the class named <className> and it's methods into the package named <packageName>"
+	"adopt extension methods for the class named <className> into the package named <packageName>"
 
-	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry |
+	self 
+		adoptClassNamed: className 
+		classExtension: true 
+		instanceSelectors: instanceSelectors 
+		classSelectors: classSelectors 
+		intoPackageNamed: packageName
+
+]
+
+{ #category : 'smalltalk api' }
+RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: packageName [
+
+	"adopt the methods for class named <className> and it's methods into the package named <packageName>, 
+		if it is not a <classExtension>, adopt the class into the package as well"
+
+	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
+		theBehavior |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
@@ -32,21 +48,64 @@ RwPkgAdoptTool >> adoptClassNamed: className  intoPackageNamed: packageName [
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	registry
-		addClassAssociation: (theSymbolDictionary associationAt: theClass name) 
-		forClass: theClass 
-		toPackageNamed: packageName.
+	classExtension
+		ifFalse: [
+			registry
+				addClassAssociation: (theSymbolDictionary associationAt: theClass name) 
+				forClass: theClass 
+				toPackageNamed: packageName ].
 
-	{theClass. theClass class}
-		do: [:theBehavior |
-			theBehavior selectors
-				do: [:selector | | theCompiledMethod |
-					theCompiledMethod := theBehavior compiledMethodAt: selector.
-					registry
-						adoptCompiledMethod: theCompiledMethod 
-						for: theBehavior 
-						protocol: (theBehavior categoryOfSelector: selector) 
-						toPackageNamed: packageName ] ]
+	theBehavior := theClass.
+	instanceSelectors do: [:methodSelector |
+		| theCompiledMethod |
+		theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
+		registry
+			adoptCompiledMethod: theCompiledMethod
+			classExtension: classExtension
+			for: theBehavior 
+			protocol: (theBehavior categoryOfSelector: methodSelector) 
+			toPackageNamed: packageName ].
+
+	theBehavior := theClass class.
+	classSelectors do: [:methodSelector |
+		| theCompiledMethod |
+		theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
+		registry
+			adoptCompiledMethod: theCompiledMethod 
+			classExtension: classExtension
+			for: theBehavior 
+			protocol: (theBehavior categoryOfSelector: methodSelector) 
+			toPackageNamed: packageName ].
+
+]
+
+{ #category : 'smalltalk api' }
+RwPkgAdoptTool >> adoptClassNamed: className  instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: packageName [
+
+	"adopt the class named <className> and it's methods into the package named <packageName>"
+
+	self 
+		adoptClassNamed: className 
+		classExtension: false 
+		instanceSelectors: instanceSelectors 
+		classSelectors: classSelectors 
+		intoPackageNamed: packageName
+
+]
+
+{ #category : 'smalltalk api' }
+RwPkgAdoptTool >> adoptClassNamed: className  intoPackageNamed: packageName [
+
+	"adopt the class named <className> and it's methods into the package named <packageName>"
+
+	| theClass |
+
+	theClass := Rowan globalNamed: className.
+	self 
+		adoptClassNamed: className 
+		instanceSelectors: theClass selectors 
+		classSelectors: theClass class selectors 
+		intoPackageNamed: packageName
 
 ]
 

@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : 'commands' }
+RwProjectTool class >> adopt [
+
+	^ RwPrjAdoptTool new
+
+]
+
+{ #category : 'commands' }
 RwProjectTool class >> browser [
 
 	^ RwPrjBrowserTool new
