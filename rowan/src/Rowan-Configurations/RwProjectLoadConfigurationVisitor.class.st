@@ -16,6 +16,4 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjecLoadC
 
 	visitedConfigurationNames add:  aProjecLoadConfiguration name. 
 
-self halt.
-
 ]

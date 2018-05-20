@@ -246,8 +246,6 @@ RwGsLoadedSymbolDictClass >> updateCommentFromClass [
 	absentToken := self absentToken.
 	oldValue := self propertyAt: propertyName.
 	newValue := (handle _extraDictAt: #comment) ifNil: [absentToken].
-	(newValue ~~ absentToken and: [newValue isEmpty])
-		ifTrue: [newValue := absentToken].
 
 	"Absent token must be compared by identity, because a comment of '<absent>' would be equal to no comment."
 	(oldValue == absentToken | (newValue == absentToken)
@@ -257,6 +255,7 @@ RwGsLoadedSymbolDictClass >> updateCommentFromClass [
 				[newValue == absentToken
 					ifTrue: [self removeProperty: propertyName]
 					ifFalse: [self propertyAt: propertyName put: newValue]]
+
 ]
 
 { #category : 'private-updating' }

@@ -12,7 +12,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 
 	| projectTools projectName1 projectName2 projectDefinition1 projectDefinition2 projectSetDefinition projectNames
 		classDefinition packageNames1 packageNames2 classNames1 classNames2 classExtensionDefinition 
-		symDict1 symDict2 symbolList theClass loadedProjectSet diff |
+		symDict1 symDict2 symbolList theClass loadedProjectSet diff classComment |
 
 	projectTools := Rowan projectTools.
 	projectName1 := 'AdoptProject1'.
@@ -23,6 +23,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 	packageNames2 := #('Adopt2-Core' 'Adopt2-Extensions').
 	classNames1 := #('Adopt1Class1').
 	classNames2 := #('Adopt2Class1').
+	classComment := 'a comment'.
 
 	projectNames
 		do: [ :projectName | 
@@ -66,7 +67,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 		classinstvars: #()
 		classvars: #()
 		category: (packageNames1 at: 1)
-		comment: ''
+		comment: classComment
 		pools: #()
 		type: 'normal'.
 	classDefinition
@@ -74,12 +75,12 @@ RwProjectSetTest >> testProjectAdoptTool [
 			(RwMethodDefinition
 				newForSelector: #'instanceFoo'
 				protocol: 'accessing'
-				source: 'instanceFoo ^ true');
+				source: 'instanceFoo ^true');
 		addClassMethodDefinition:
 			(RwMethodDefinition
 				newForSelector: #'classFoo'
 				protocol: 'accessing'
-				source: 'classFoo ^ true').
+				source: 'classFoo ^true').
 
 	(projectDefinition1 packageNamed: (packageNames1 at: 1))
 		addClassDefinition: classDefinition.
@@ -111,7 +112,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 		classinstvars: #()
 		classvars: #()
 		category: (packageNames2 at: 1)
-		comment: ''
+		comment: classComment
 		pools: #()
 		type: 'normal'.
 	classDefinition
@@ -119,12 +120,12 @@ RwProjectSetTest >> testProjectAdoptTool [
 			(RwMethodDefinition
 				newForSelector: #'instanceBar'
 				protocol: 'accessing'
-				source: 'instanceBar ^ true');
+				source: 'instanceBar ^true');
 		addClassMethodDefinition:
 			(RwMethodDefinition
 				newForSelector: #'classBar'
 				protocol: 'accessing'
-				source: 'classBar ^ true').
+				source: 'classBar ^true').
 
 	(projectDefinition2 packageNamed: (packageNames2 at: 1))
 		addClassDefinition: classDefinition.
@@ -158,7 +159,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 			inDictionary: symDict1
 			options: #().
 	theClass 
-		comment: '';
+		comment: classComment;
 		category: (packageNames1 at: 1).
 	theClass
 		compileMethod: 'instanceFoo ^true'
@@ -184,7 +185,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 			inDictionary: symDict2
 			options: #().
 	theClass 
-		comment: '';
+		comment: classComment;
 		category: (packageNames2 at: 1).
 	theClass
 		compileMethod: 'instanceBar ^true'
