@@ -258,6 +258,14 @@ second
 	^ self at: 2
 %
 method: SequenceableCollection
+third
+
+	"Answer the third element of the receiver.
+	Raise an error if there are not enough elements."
+
+	^ self at: 3
+%
+method: SequenceableCollection
 fourth
 
 	"Answer the fourth element of the receiver.
