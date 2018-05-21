@@ -26,6 +26,13 @@ RwDefinition class >> new [
 ]
 
 { #category : 'private' }
+RwDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
+
+	^ propertyValue = baseValue
+
+]
+
+{ #category : 'private' }
 RwDefinition >> addDefinition: aDefinition to: aDictionary [
 
 	| key |
@@ -89,7 +96,7 @@ RwDefinition >> comparePropertiesAgainstBase: aDefinition [
 					| before after |
 					before := aDefinition propertyAt: key ifAbsent: [nil].
 					after := self propertyAt: key ifAbsent: [nil].
-					before = after
+					(self _compareProperty: key propertyVaue: before againstBaseValue: after)
 						ifFalse: 
 							[modification addElementModification: (RwPropertyModification
 								key: key

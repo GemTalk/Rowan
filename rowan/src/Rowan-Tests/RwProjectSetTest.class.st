@@ -23,7 +23,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 	packageNames2 := #('Adopt2-Core' 'Adopt2-Extensions').
 	classNames1 := #('Adopt1Class1').
 	classNames2 := #('Adopt2Class1').
-	classComment := 'a comment'.
+	classComment := ''.
 
 	projectNames
 		do: [ :projectName | 

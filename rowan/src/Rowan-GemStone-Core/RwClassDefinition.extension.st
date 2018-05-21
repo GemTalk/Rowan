@@ -1,6 +1,18 @@
 Extension { #name : 'RwClassDefinition' }
 
 { #category : '*rowan-gemstone-core' }
+RwClassDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
+
+	propertyKey = 'comment' ifFalse: [ ^super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue ].
+	propertyValue = baseValue
+		ifTrue: [ ^ true ]
+		ifFalse: [ 
+			"empty or nil comments need to compare equal in GemStone"
+			^(propertyValue == nil or: [ propertyValue isEmpty]) and: [ baseValue == nil or: [ baseValue isEmpty] ] ]
+
+]
+
+{ #category : '*rowan-gemstone-core' }
 RwClassDefinition >> _modificationForcingNewClassVersion [
 
 	^ RwClassModificationForcingNewClassVersion
