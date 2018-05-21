@@ -31,7 +31,7 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 
 	
 	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := (gemstoneSpec symbolDictNameForPackageNamed: packageName) asSymbol.
 
 	theClass := Rowan globalNamed: className.
 	(Rowan image symbolList dictionariesAndSymbolsOf: theClass)
