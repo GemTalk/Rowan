@@ -605,47 +605,48 @@ currentOrNil
 %
   commit
 
-# Install Rowan, Cypress, STON, and Tonel using Rowan
+# Install Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
+#  methods into the correct package structure
   run
-  | projectSetDefinition gitRepoPath |
-  projectSetDefinition := RwProjectSetDefinition new.
-  gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
-  {
-    {'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan_SystemUser.ston'. 'Default'}.
-    {'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
-    {'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'. 'Bootstrap'}.
-    {'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'. 'Bootstrap'}.
-  } 
-    do: [:ar |
-      "load all of the packages from disk, so that we're not actually using Cypress, STON, 
-       and Tonel while created loaded things for Rowan"
-      | specification specUrl configName |
-      specUrl := ar at: 1.
-      configName := ar at: 2.
-      specification := RwSpecification fromUrl: specUrl.
-      specification
-        repositoryRootPath: gitRepoPath;
-        repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
-        register.
-      (Rowan projectTools read 
-        readProjectSetForProjectNamed: specification specName withConfiguration: configName)
-          do: [:projectDefinition |
-            projectSetDefinition addProject: projectDefinition ] ].
-    [ 
-      Rowan projectTools load
-        _bootstrapLoadProjectSetDefinition: projectSetDefinition 
-        instanceMigrator: Rowan platform instanceMigrator.
-      "loaded project and loaded packages read from disk - mark them not dirty"
-      projectSetDefinition deriveLoadedThings do: [:loadedProject |
-        loadedProject markNotDirty.
-        loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ] ]
-      on: Warning
-      do: [ :ex | 
-        Transcript
-          cr;
-          show: ex description .
-        ex resume: true ].
-   true
+ 	| projectSetDefinition gitRepoPath packageCreateTool |
+	projectSetDefinition := RwProjectSetDefinition new.
+	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
+	{
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan_SystemUser.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'. 'Bootstrap'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'. 'Bootstrap'}.
+	} 
+	do: [:ar |
+		"Read project and packages from disk, creating a projectSetDefinition with all 4 projects"
+		| specification specUrl configName |
+		specUrl := ar at: 1.
+		configName := ar at: 2.
+		specification := RwSpecification fromUrl: specUrl.
+		specification
+			repositoryRootPath: gitRepoPath;
+			repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
+			register. "Create each of the loaded projects"
+		(Rowan projectTools read 
+		readProjectSetForProjectNamed: specification specName withConfiguration: configName)
+			do: [:projectDefinition |
+				projectSetDefinition addProject: projectDefinition ] ].
+
+	packageCreateTool := Rowan packageTools create.
+	projectSetDefinition projects 
+		do: [:projectDefinition |
+			"The loaded project was created by the earlier #register,
+				traverse the package definitions and create loaded packages for each"
+			| specification projectName |
+			projectName := projectDefinition name.
+			specification := (Rowan image loadedProjectNamed: projectName) specification.
+			projectDefinition packageNames
+				do: [:packageName |
+					packageCreateTool createLoadedPackageNamed: packageName inProjectNamed: projectName ] ].
+	"Adopt the project set definition"
+	Rowan projectTools adopt adoptProjectSetDefinition: projectSetDefinition.
+
+  true
     ifTrue: [
       | incorrectlyPackaged |
       "quick and dirty validation that Rowan loaded with Rowan is correct"
@@ -661,13 +662,11 @@ currentOrNil
   commit
 
 # Install Rowan class in Published symbol dict, so it is availailable to all users
-#   clear RwPlatform cache so we get fresh copy on startup, if needed
 # 
    run
   | rowanAssoc |
   rowanAssoc := RowanKernel associationAt: #Rowan.
   Published add: rowanAssoc.
-  RwPlatform reset.  "bootstrapping creates a new class version, need to clear cache"
 %
   commit
 

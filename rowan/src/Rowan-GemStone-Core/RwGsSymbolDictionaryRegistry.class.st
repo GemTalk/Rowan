@@ -179,12 +179,7 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
 	| loadedPackage loadedClass |
-	loadedPackage := self packageRegistry
-		at: packageName
-		ifAbsent: [ 
-			self packageRegistry
-				at: packageName
-				put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
+	loadedPackage := self existingOrNewLoadedPackageNamed: packageName.
 
 	classRegistry
 		at: class classHistory
@@ -247,12 +242,7 @@ RwGsSymbolDictionaryRegistry >> addExtensionCompiledMethod: compiledMethod for: 
 
 	methodRegistry at: compiledMethod put: loadedMethod.
 
-	loadedPackage := self packageRegistry
-		at: packageName
-		ifAbsent: [ 
-			self packageRegistry
-				at: packageName
-				put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
+	loadedPackage := self existingOrNewLoadedPackageNamed: packageName.
 
 	loadedClassExtension := loadedPackage
 		loadedClassExtensionForClass: behavior
@@ -267,6 +257,7 @@ RwGsSymbolDictionaryRegistry >> addExtensionCompiledMethod: compiledMethod for: 
 				ifAbsentPut: [ IdentitySet new ]) add: ext.
 			ext ].
 	loadedClassExtension addLoadedMethod: loadedMethod
+
 ]
 
 { #category : 'private' }
@@ -301,12 +292,7 @@ RwGsSymbolDictionaryRegistry >> addExtensionSessionMethods: methDict catDict: ca
 
 	methodRegistry at: compiledMethod put: loadedMethod.
 
-	loadedPackage := self packageRegistry
-		at: packageName
-		ifAbsent: [ 
-			self packageRegistry
-				at: packageName
-				put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
+	loadedPackage := self existingOrNewLoadedPackageNamed: packageName.
 
 	loadedClassExtension := loadedPackage
 		loadedClassExtensionForClass: behavior
@@ -323,6 +309,7 @@ RwGsSymbolDictionaryRegistry >> addExtensionSessionMethods: methDict catDict: ca
 	loadedClassExtension addLoadedMethod: loadedMethod.
 
 	^ compiledMethod
+
 ]
 
 { #category : 'private' }
@@ -583,12 +570,7 @@ RwGsSymbolDictionaryRegistry >> createAndInstallLoadedClassForClass: class toPac
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
 	| loadedPackage loadedClass |
-	loadedPackage := self packageRegistry
-		at: packageName
-		ifAbsent: [ 
-			self packageRegistry
-				at: packageName
-				put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
+	loadedPackage := self existingOrNewLoadedPackageNamed: packageName.
 
 	classRegistry
 		at: class classHistory
@@ -695,12 +677,7 @@ RwGsSymbolDictionaryRegistry >> ensureExtensionClassNamed: className existsForPa
 						, ' cannot be found in this symbol dictionary (' , self _symbolDictionary name printString
 						,
 							'). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.' ].
-	loadedPackage := self packageRegistry
-		at: packageName
-		ifAbsent: [ 
-			self packageRegistry
-				at: packageName
-				put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
+	loadedPackage := self existingOrNewLoadedPackageNamed: packageName.
 
 	loadedPackage
 		loadedClassExtensionForClass: extensionClass
@@ -730,6 +707,18 @@ RwGsSymbolDictionaryRegistry >> existingForClass: aClass ifAbsent: absentBlock [
 	"Answer the registered LoadedClass for the given class."
 
 	^ classRegistry at: aClass classHistory ifAbsent: absentBlock
+]
+
+{ #category : 'package - creation api' }
+RwGsSymbolDictionaryRegistry >> existingOrNewLoadedPackageNamed: packageName [
+
+	^ self packageRegistry
+			at: packageName
+			ifAbsent: [ 
+				self packageRegistry
+					at: packageName
+					put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
+
 ]
 
 { #category : 'session methods' }
@@ -829,6 +818,15 @@ RwGsSymbolDictionaryRegistry >> moveCompiledMethod: compiledMethod toProtocol: n
 					'Internal error -- no existing LoadedMethod found for the compiledMethod.' ].
 
 	loadedMethod updateForProtocolChange
+]
+
+{ #category : 'package - creation api' }
+RwGsSymbolDictionaryRegistry >> newLoadedPackageNamed: packageName [
+
+	(self packageRegistry includesKey: packageName)
+		ifTrue: [ self error: 'The package ', packageName printString, ' already exists' ].
+	^ self existingOrNewLoadedPackageNamed: packageName
+
 ]
 
 { #category : 'accessing' }
