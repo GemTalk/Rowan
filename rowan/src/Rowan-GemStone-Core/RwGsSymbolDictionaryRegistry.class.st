@@ -206,6 +206,17 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 ]
 
 { #category : 'private' }
+RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPackageNamed: packageName implementationClass: implementationClass [
+
+	"Copy the name association to the correct 
+        SymbolDictionary in the live SymbolList.
+        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
+
+	^ implementationClass addClassAssociation: assoc forClass: class toPackageNamed: packageName instance: self
+
+]
+
+{ #category : 'private' }
 RwGsSymbolDictionaryRegistry >> addClassToSymbolDictionaryForClassAssociation: assoc forClass: class [ 
 
 	self _symbolDictionaryAt: assoc key 

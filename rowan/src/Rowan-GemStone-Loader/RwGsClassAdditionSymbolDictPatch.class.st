@@ -51,6 +51,8 @@ RwGsClassAdditionSymbolDictPatch >> installClassInSystem [
 		addClassAssociation: symbolAssociation
 		forClass: newClass
 		toPackageNamed: self packageName
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+
 ]
 
 { #category : 'accessing' }
