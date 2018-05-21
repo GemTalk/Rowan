@@ -1,3 +1,6 @@
+"
+Simple object with the results of the Jadeite command.
+"
 Class {
 	#name : 'RowanCommandResult',
 	#superclass : 'Object',
@@ -11,5 +14,10 @@ Class {
 RowanCommandResult class >> new [
 
 	^super new initialize
+
+]
+
+{ #category : 'initialization' }
+RowanCommandResult >> initialize [
 
 ]
