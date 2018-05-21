@@ -13,7 +13,7 @@ RwPkgCreateTool >> createLoadedPackageNamed: packageName inProjectNamed: project
 	spec := (Rowan image loadedProjectNamed: projectName) specification.
 	gemstoneSpec := spec platformSpec at: 'gemstone'.
 	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
-	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
+	theSymbolDictionary := Rowan image newOrExistingSymbolDictionaryNamed: packageSymDictName.
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 	registry newLoadedPackageNamed: packageName
 
