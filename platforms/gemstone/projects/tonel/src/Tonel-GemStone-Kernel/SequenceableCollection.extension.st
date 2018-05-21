@@ -91,6 +91,16 @@ SequenceableCollection >> sort [
 ]
 
 { #category : '*tonel-gemstone-kernel' }
+SequenceableCollection >> third [
+
+	"Answer the third element of the receiver.
+	Raise an error if there are not enough elements."
+
+	^ self at: 3
+
+]
+
+{ #category : '*tonel-gemstone-kernel' }
 SequenceableCollection >> withIndexDo: elementAndIndexBlock [
 
 	"Just like with:do: except that the iteration index supplies the second argument to the block."
