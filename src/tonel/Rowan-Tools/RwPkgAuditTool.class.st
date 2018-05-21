@@ -1,6 +1,5 @@
 Class {
 	#name : 'RwPkgAuditTool',
-<<<<<<< HEAD
 	#superclass : 'RwPackageTool',
 	#category : 'Rowan-Tools'
 }
@@ -68,8 +67,5 @@ Transcript show: 'Missing ', aLoadedMethod printString]]
 	^res
 
 ]
-=======
-	#superclass : 'RwAbstractTool',
-	#category : 'Rowan-Tools'
-}
->>>>>>> f89027672bee8dfdcc858dec73a8f3b5525450fb
+
+
