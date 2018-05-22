@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwSemanticVersionNumberTestCase',
-	#superclass : 'RwCommonVersionNumberTestCase',
+	#superclass : 'TestCase',
 	#category : 'Rowan-Tests'
 }
 
@@ -18,6 +18,37 @@ RwSemanticVersionNumberTestCase >> sampleVersionStrings [
         ,
             #('1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-beta.2' '1.0.0-beta.11' '1.0.0-rc.1' '1.0.0-rc.1+build.1' '1.0.0' '1.0.0+0.3.7' '1.3.7+build' '1.3.7+build.2.b8f12d7' '1.3.7+build.11.e0f985a')
         , #('1.0.0-alp-h-a' '1.0.0-r-c.1' '1.0.0+alp-h-a' '1.0.0+r-c.1')
+
+]
+
+{ #category : 'test alpha/numeric version numbers' }
+RwSemanticVersionNumberTestCase >> testAlphaNumericVersion1 [
+
+	"Use numeric comparison for pure numbers. If you non-numeric version separate with '-'"
+	
+	| x y |
+	self assert: ((x := self versionClass fromString: '2.9.0') < (y := self versionClass fromString: '2.10.0')).
+
+]
+
+{ #category : 'test alpha/numeric version numbers' }
+RwSemanticVersionNumberTestCase >> testAlphaNumericVersion2 [
+
+	self assert: ((self versionClass fromString: '2.9.0-alpha.2') < (self versionClass fromString: '2.9.0-alpha.3')).
+
+]
+
+{ #category : 'test alpha/numeric version numbers' }
+RwSemanticVersionNumberTestCase >> testAlphaNumericVersion3 [
+
+	self assert: ((self versionClass fromString: '2.9.9-alpha.2') < (self versionClass fromString: '2.9.10')).
+
+]
+
+{ #category : 'test alpha/numeric version numbers' }
+RwSemanticVersionNumberTestCase >> testAlphaNumericVersion4 [
+
+	self assert: ((self versionClass fromString: '2.9.9-alpha.2') < (self versionClass fromString: '2.9.9')).
 
 ]
 
@@ -82,6 +113,35 @@ RwSemanticVersionNumberTestCase >> testSemanticVersioningSubsetCompliance [
 ]
 
 { #category : 'tests' }
+RwSemanticVersionNumberTestCase >> testVersion01 [
+
+	self assert: ((self versionClass fromString: '1.1.1') versionString = '1.1.1')
+
+]
+
+{ #category : 'tests' }
+RwSemanticVersionNumberTestCase >> testVersion02 [
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.1.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 = v1).	
+	self assert: (v2 = v2).
+	self assert: (v1 > v2)
+
+]
+
+{ #category : 'tests' }
+RwSemanticVersionNumberTestCase >> testVersion04 [
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 > v2)
+
+]
+
+{ #category : 'tests' }
 RwSemanticVersionNumberTestCase >> testVersion05 [
     | v1 v2 |
     v1 := self versionClass fromString: '3.0.0'.
@@ -117,6 +177,13 @@ RwSemanticVersionNumberTestCase >> testVersion10 [
 { #category : 'tests' }
 RwSemanticVersionNumberTestCase >> testVersion12 [
     self deny: (self versionClass fromString: '1.0.0') <= (self versionClass fromString: '0.7.0')
+
+]
+
+{ #category : 'tests' }
+RwSemanticVersionNumberTestCase >> testVersion14 [
+
+	self assert: ((self versionClass fromString: '2.9.0-alpha02') < (self versionClass fromString: '2.9.0-alpha03')).
 
 ]
 
