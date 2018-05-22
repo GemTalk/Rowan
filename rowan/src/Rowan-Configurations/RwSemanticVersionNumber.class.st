@@ -396,7 +396,7 @@ RwSemanticVersionNumber class >> fromString: aString forPattern: forPattern [
     ifFalse: [ preRelease - 1 ].
   versionString := aString copyFrom: 1 to: normalEnd.
   identifierCount := 0.
-  (versionString findTokens: '.')
+  (versionString substrings: '.')
     do: [ :subString | 
       | integer |
       forPattern
@@ -419,7 +419,7 @@ RwSemanticVersionNumber class >> fromString: aString forPattern: forPattern [
   preRelease > 0
     ifTrue: [ 
       versionString := aString copyFrom: preRelease + 1 to: preReleaseEnd.
-      (versionString findTokens: '.')
+      (versionString substrings: '.')
         do: [ :subString | 
           (forPattern or: [ self isSemanticIdentifier: subString ])
             ifFalse: [ 
@@ -432,7 +432,7 @@ RwSemanticVersionNumber class >> fromString: aString forPattern: forPattern [
   build > 0
     ifTrue: [ 
       versionString := aString copyFrom: build + 1 to: aString size.
-      (versionString findTokens: '.')
+      (versionString substrings: '.')
         do: [ :subString | 
           (forPattern or: [ self isSemanticIdentifier: subString ])
             ifFalse: [ 
@@ -623,7 +623,7 @@ RwSemanticVersionNumber >> compareLessThan: myComponents other: otherComponents 
                 ifTrue: [ count := count + 1 ]
                 ifFalse: [ more := false ] ].
     count < commonSize
-        ifTrue: [ ^ (myComponents at: count + 1) metacelloSemanticVersionComponentLessThan: (otherComponents at: count + 1) ].
+        ifTrue: [ ^ (myComponents at: count + 1) rwSemanticVersionComponentLessThan: (otherComponents at: count + 1) ].
     mySize < aSize
         ifTrue: [ 
             mySize = 0

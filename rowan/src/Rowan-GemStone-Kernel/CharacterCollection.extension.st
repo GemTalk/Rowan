@@ -9,6 +9,13 @@ CharacterCollection >> asRwRepository [
 ]
 
 { #category : '*rowan-gemstone-kernel' }
+CharacterCollection >> asRwSemanticVersionNumber [
+
+	^ RwSemanticVersionNumber fromString: self
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
 CharacterCollection >> asRwUrl [
 
 	""
@@ -39,6 +46,30 @@ CharacterCollection >> indexOfAnyOf: aByteArray startingAt: start ifAbsent: aBlo
 	ans = 0
 		ifTrue: [ ^ aBlock value ]
 		ifFalse: [ ^ ans ]
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+CharacterCollection >> rwSemanticIntegerLessThanSelf: anInteger [
+
+	"integer version components are never leass than a string version component"
+	"anInteger < '' -> false"
+
+  ^ false
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+CharacterCollection >> rwSemanticStringLessThanSelf: aString [
+
+	^ aString < self
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+CharacterCollection >> rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent [
+
+	^ aRwSemanticVersonComponent rwSemanticStringLessThanSelf: self
 
 ]
 
