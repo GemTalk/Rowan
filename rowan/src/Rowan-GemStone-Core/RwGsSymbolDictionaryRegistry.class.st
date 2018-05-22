@@ -41,7 +41,7 @@ RwGsSymbolDictionaryRegistry class >> newForSymbolDictionary: aSymbolDictionary 
 		yourself
 ]
 
-{ #category : 'accessing' }
+{ #category : '*rowan-gemstone-loader-extensions' }
 RwGsSymbolDictionaryRegistry class >> registry_ImplementationClass [
 
 	^ RwGsSymbolDictionaryRegistry_Implementation
