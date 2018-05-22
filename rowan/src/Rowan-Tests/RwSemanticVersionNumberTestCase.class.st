@@ -4,6 +4,13 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
+{ #category : 'Tests' }
+RwSemanticVersionNumberTestCase class >> shouldInheritSelectors [
+
+	^true
+
+]
+
 { #category : 'tests' }
 RwSemanticVersionNumberTestCase >> sampleVersionStrings [
     ^ #('1.0.0+-' '1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-0.3.7' '1.0.0-x.7.z.92')
@@ -16,27 +23,21 @@ RwSemanticVersionNumberTestCase >> sampleVersionStrings [
 
 { #category : 'tests' }
 RwSemanticVersionNumberTestCase >> testEqualityComparison [
-    self deny: '1.0.0+-' asSemanticVersionNumber = '1.0.0--' asSemanticVersionNumber.
-    self sampleVersionStrings
-        do: [ :versionString | self assert: versionString asSemanticVersionNumber = versionString asSemanticVersionNumber ]
-
-]
-
-{ #category : 'test matching' }
-RwSemanticVersionNumberTestCase >> testInvalidSpecialMatch [
-    self should: [ (self versionClass fromString: '1.1.1') match: '?.?.?' ] raise: Error
+    self deny: '1.0.0+-' asRwSemanticVersionNumber = '1.0.0--' asRwSemanticVersionNumber.
+	self assert: '1.0.0+-' asRwSemanticVersionNumber = '1.0.0+a' asRwSemanticVersionNumber.
+	self sampleVersionStrings
+        do: [ :versionString | self assert: versionString asRwSemanticVersionNumber = versionString asRwSemanticVersionNumber ]
 
 ]
 
 { #category : 'tests' }
 RwSemanticVersionNumberTestCase >> testLessThanComparison [
-    self assert: '1.0.0-rc.1+build.1' asSemanticVersionNumber < '1.0.0' asSemanticVersionNumber.
+    self assert: '1.0.0-rc.1+build.1' asRwSemanticVersionNumber < '1.0.0' asRwSemanticVersionNumber.
     self
-        assert: '1.0.0-rc.1+build.1' asSemanticVersionNumber < '1.0.0+build.0' asSemanticVersionNumber.
-    self assert: '1.0.0-alpha.1' asSemanticVersionNumber < '1.0.0-0.3.7' asSemanticVersionNumber.
-    self assert: '1.0.0-alpha' asSemanticVersionNumber < '1.0.0-alpha.1' asSemanticVersionNumber.
-    self assert: '1.0.0+-' asSemanticVersionNumber < '1.0.0+a' asSemanticVersionNumber.
-    self assert: '1.0.0-0.3.7' asSemanticVersionNumber < '1.0.0-x.7.z.92' asSemanticVersionNumber
+        assert: '1.0.0-rc.1+build.1' asRwSemanticVersionNumber < '1.0.0+build.0' asRwSemanticVersionNumber.
+    self assert:  '1.0.0-0.3.7' asRwSemanticVersionNumber < '1.0.0-alpha.1' asRwSemanticVersionNumber.
+    self assert: '1.0.0-alpha' asRwSemanticVersionNumber < '1.0.0-alpha.1' asRwSemanticVersionNumber.
+    self assert: '1.0.0-0.3.7' asRwSemanticVersionNumber < '1.0.0-x.7.z.92' asRwSemanticVersionNumber
 
 ]
 
@@ -44,27 +45,20 @@ RwSemanticVersionNumberTestCase >> testLessThanComparison [
 RwSemanticVersionNumberTestCase >> testPrinting [
     | x vrsn |
     self sampleVersionStrings
-        do: [ :versionString | self assert: versionString = (x := (vrsn := versionString asSemanticVersionNumber) printString) ]
+        do: [ :versionString | self assert: versionString = (x := (vrsn := versionString asRwSemanticVersionNumber) printString) ]
 
 ]
 
 { #category : 'tests' }
 RwSemanticVersionNumberTestCase >> testSemanticVersioning [
-    self validateSemanticVersionStrings: #('1.0.0-rc.1+build.1' '1.0.0-rc.1+build.2' '1.0.0-rc.2+build.0').
-    self validateSemanticVersionStrings: #('1.0.0-rc.1+build.1' '1.0.0+build.0').
-    self validateSemanticVersionStrings: #('1.0.0-alpha' '1.0.0-1').
-    self validateSemanticVersionStrings: #('1.0.0-1' '1.0.0+alpha').
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0-rc.1.0' '1.0.0-rc.2').
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0').
+    self validateSemanticVersionStrings: #('1.0.0-1' '1.0.0-alpha').
     self validateSemanticVersionStrings: #('1.0.0-alpha' '1.0.0+1').
-    self validateSemanticVersionStrings: #('1.0.0+alpha' '1.0.0+1').
+    self validateSemanticVersionStrings: #('1.0.0' '1.0.1').
     self validateSemanticVersionStrings: #('1.0.0--' '1.0.0-a').
-    self validateSemanticVersionStrings: #('1.0.0+-' '1.0.0+a').
-    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0' '1.0.0+build.1').
-    self validateSemanticVersionStrings: #('1.0.0-rc.1+build.1' '1.0.0-rc.1+build.2' '1.0.0-rc.2+build.3').
-    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0-rc.1+build.2' '1.0.0-rc.2').
-    self validateSemanticVersionStrings: #('1.0.0-rc.1+build.1' '1.0.0-rc.1+build.2' '1.0.0-rc.2').
-    self validateSemanticVersionStrings: #('1.0.0-rc.1+build.1' '1.0.0-rc.1+build.2' '1.0.0-rc.2+build.2').
-    self validateSemanticVersionStrings: #('1.0.0-rc.1+build.1' '1.0.0' '1.0.0+build.0').
-    self validateSemanticVersionStrings: #('1.0.0+10000' '1.0.0+a').
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0' '1.0.1').
+    self validateSemanticVersionStrings: #('1.0.0-rc.1' '1.0.0-rc.2' '1.0.0-rc.3').
     self validateSemanticVersionStrings: #('1.0.0-10000' '1.0.0-a')
 
 ]
@@ -73,27 +67,7 @@ RwSemanticVersionNumberTestCase >> testSemanticVersioning [
 RwSemanticVersionNumberTestCase >> testSemanticVersioningSpecItem10 [
     "[Semantic Versioning 2.0.0-rc.1](http://semver.org/)"
 
-    self validateSemanticVersionStrings: #('1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-0.3.7' '1.0.0-x.7.z.92')
-
-]
-
-{ #category : 'tests' }
-RwSemanticVersionNumberTestCase >> testSemanticVersioningSpecItem11 [
-    "[Semantic Versioning 2.0.0-rc.1](http://semver.org/)"
-
-    self validateSemanticVersionStrings: #('1.0.0+build.1' '1.3.7+build.11.e0f985a')
-
-]
-
-{ #category : 'tests' }
-RwSemanticVersionNumberTestCase >> testSemanticVersioningSpecItem12 [
-    "According to [Semantic Versioning 2.0.0-rc.1](http://semver.org/), the following expression should be true:
-	1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0-rc.1+build.1 < 1.0.0 < 
-		1.0.0+0.3.7 < 1.3.7+build < 1.3.7+build.2.b8f12d7 < 1.3.7+build.11.e0f985a"
-
-    self
-        validateSemanticVersionStrings:
-            #('1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-beta.2' '1.0.0-beta.11' '1.0.0-rc.1' '1.0.0-rc.1+build.1' '1.0.0' '1.0.0+0.3.7' '1.3.7+build' '1.3.7+build.2.b8f12d7' '1.3.7+build.11.e0f985a')
+    self validateSemanticVersionStrings: #( '1.0.0-0.3.7' '1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-x.7.z.92')
 
 ]
 
@@ -104,34 +78,6 @@ RwSemanticVersionNumberTestCase >> testSemanticVersioningSubsetCompliance [
     self
         validateSemanticVersionStrings:
             #('1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-beta.2' '1.0.0-beta.11' '1.0.0-rc.1' '1.0.0')
-
-]
-
-{ #category : 'test matching' }
-RwSemanticVersionNumberTestCase >> testSpecialMatch [
-    self assert: ((self versionClass fromString: '1.1.0') match: '?').
-    self assert: ((self versionClass fromString: '1.0.0-alpha') match: '?').
-    self assert: ((self versionClass fromString: '1.0.0-rc.1+build.1') match: '?').
-    self assert: ((self versionClass fromString: '1.1.0') match: '*.*.?').
-    self assert: ((self versionClass fromString: '1.3.7+build.2.b8f12d7') match: '?').
-    self assert: ((self versionClass fromString: '1.3.7+build.11.e0f985a') match: '?').
-    self deny: ((self versionClass fromString: '1.1.0') match: '*.*.*-?').
-    self deny: ((self versionClass fromString: '1.1.0') match: '*.*.*+?').
-    self assert: ((self versionClass fromString: '1.1.1') match: '*.?')
-
-]
-
-{ #category : 'test matching' }
-RwSemanticVersionNumberTestCase >> testStandardMatch [
-    self assert: ((self versionClass fromString: '1.0.0+alpha5.0') match: '1.0.0+alpha#.0').
-    self assert: ((self versionClass fromString: '1.1.1') match: '*.*.*').
-    self deny: ((self versionClass fromString: '1.1.1') match: '*.*').
-    self assert: ((self versionClass fromString: '1.1.0') match: '1.1.*').
-    self assert: ((self versionClass fromString: '1.1.0') match: '1.#.*').
-    self deny: ((self versionClass fromString: '1.10.0+build.0') match: '1.#.*').
-    self assert: ((self versionClass fromString: '1.0.0-alpha5.0') match: '1.0.0-alpha#.0').
-    self assert: ((self versionClass fromString: '1.0.0-alpha5+build5.0') match: '1.0.0-alpha5+build#.0').
-    self deny: ((self versionClass fromString: '1.0.0-alpha10.0') match: '1.0.0-alpha#.0')
 
 ]
 
@@ -199,9 +145,8 @@ RwSemanticVersionNumberTestCase >> testVersion18 [
     | x y |
     self deny: (x := self versionClass fromString: '1.0.0') < (y := self versionClass fromString: '1.0.0-0').
     self assert: (x := self versionClass fromString: '1.0.0') > (y := self versionClass fromString: '1.0.0-0').
-    self assert: (x := self versionClass fromString: '1.0.0') < (y := self versionClass fromString: '1.0.0+0').
-    self deny: (x := self versionClass fromString: '1.0.0') > (y := self versionClass fromString: '1.0.0+0')
-
+    self assert: (x := self versionClass fromString: '1.0.0') = (y := self versionClass fromString: '1.0.0+0').
+ 
 ]
 
 { #category : 'tests' }
@@ -213,7 +158,7 @@ RwSemanticVersionNumberTestCase >> testVersion19 [
 { #category : 'tests' }
 RwSemanticVersionNumberTestCase >> validateSemanticVersionStrings: versionStrings [
     | versions version |
-    versions := versionStrings collect: [ :each | each asSemanticVersionNumber ].
+    versions := versionStrings collect: [ :each | each asRwSemanticVersionNumber ].
     version := versions at: 1.
     2 to: versions size do: [ :index | 
         | nextVersion |

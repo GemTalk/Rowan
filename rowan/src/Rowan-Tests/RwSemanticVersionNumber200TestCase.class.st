@@ -3,7 +3,7 @@ The tests in this class were extracted from the examples in Semantic Version Spe
 "
 Class {
 	#name : 'RwSemanticVersionNumber200TestCase',
-	#superclass : 'RwCommonVersionNumberTestCase',
+	#superclass : 'TestCase',
 	#category : 'Rowan-Tests'
 }
 

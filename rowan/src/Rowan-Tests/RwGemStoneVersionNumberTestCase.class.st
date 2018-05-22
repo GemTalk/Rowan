@@ -4,6 +4,13 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
+{ #category : 'Tests' }
+RwGemStoneVersionNumberTestCase class >> shouldInheritSelectors [
+
+	^true
+
+]
+
 { #category : 'test approximately greater than' }
 RwGemStoneVersionNumberTestCase >> testApproxVersion01 [
 

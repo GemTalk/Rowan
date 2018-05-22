@@ -64,7 +64,7 @@ RwGemStoneVersionNumber class >> fromString: aString [
 
 	| new components |
 	components := OrderedCollection new.
-	(aString findTokens: '.') do: [:subString | | strs |
+	(aString substrings: '.') do: [:subString | | strs |
 		strs := subString findTokens: '-'.
 		"first subString token could be an integer"
 		components add: (self extractNumericComponent: strs first).
