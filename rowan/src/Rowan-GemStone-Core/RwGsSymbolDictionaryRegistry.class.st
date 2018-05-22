@@ -41,13 +41,6 @@ RwGsSymbolDictionaryRegistry class >> newForSymbolDictionary: aSymbolDictionary 
 		yourself
 ]
 
-{ #category : '*rowan-gemstone-loader-extensions' }
-RwGsSymbolDictionaryRegistry class >> registry_ImplementationClass [
-
-	^ RwGsSymbolDictionaryRegistry_Implementation
-
-]
-
 { #category : 'method - private api' }
 RwGsSymbolDictionaryRegistry >> _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior [
 
