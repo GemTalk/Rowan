@@ -10,8 +10,8 @@ Class {
 
 { #category : 'initialization' }
 RowanMethodsUpdate >> initialize [
-
-	methodFilters := IdentitySet new
+	super initialize.
+	methodFilters := IdentitySet new.
 
 ]
 
@@ -41,7 +41,21 @@ RowanMethodsUpdate >> updateMethodCategories [
 
 ]
 
-{ #category : 'initialization' }
+{ #category : 'updating' }
+RowanMethodsUpdate >> updateMethodPragmas [
+
+	| currentClass |
+	currentClass := ((self objectInBaseNamed: #'Pragma') notNil and: [selections notEmpty]) ifTrue: [selections first] ifFalse: [nil].
+	methodFilters := IdentitySet new.
+	currentClass notNil ifTrue: [
+		(currentClass methodDictForEnv: 0) do: [:each | methodFilters addAll: each pragmas].
+	].
+	methodFilters := methodFilters collect: [:each | each keyword].
+	methodFilters := methodFilters asSortedCollection: [:a :b | a > b].
+
+]
+
+{ #category : 'updating' }
 RowanMethodsUpdate >> updateMethodSelections: oldSelections hasCategoryOverride: override [
 
 	selections := oldSelections.
@@ -60,6 +74,24 @@ RowanMethodsUpdate >> updateMethodSelections: oldSelections override: override [
 	mySelections := methodFilters select: [:each | mySelections includes: each asString].
 	mySelections notEmpty ifTrue: [methodFilters := mySelections].
 	self writeList: mySelections.
+
+]
+
+{ #category : 'updating' }
+RowanMethodsUpdate >> updateMethodVariables [
+
+	| currentClass |
+	currentClass := classes notEmpty ifTrue: [classes last] ifFalse: [nil].
+	methodFilters := OrderedCollection new.
+	[
+		currentClass notNil.
+	] whileTrue: [
+		methodFilters
+			addAll: currentClass instVarNames reverse;
+			add: ' ' , currentClass name;
+			yourself.
+		currentClass := currentClass superclass.
+	].
 
 ]
 
