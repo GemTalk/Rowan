@@ -616,7 +616,7 @@ currentOrNil
 # Install Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
 #  methods into the correct package structure
   run
- 	| projectSetDefinition gitRepoPath packageCreateTool |
+ 	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool |
 	projectSetDefinition := RwProjectSetDefinition new.
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
 	{
@@ -653,6 +653,19 @@ currentOrNil
 					packageCreateTool createLoadedPackageNamed: packageName inProjectNamed: projectName ] ].
 	"Adopt the project set definition"
 	Rowan projectTools adopt adoptProjectSetDefinition: projectSetDefinition.
+
+	projectLoadTool := Rowan projectTools load.
+	projectSetDefinition projects 
+		do: [:projectDefinition |
+			"make sure that the loaded SHA is set for each project"
+			projectLoadTool specification: projectDefinition specification.
+			projectDefinition specification updateLoadedCommitIdForTool: projectLoadTool ].
+
+	projectSetDefinition deriveLoadedThings do: [:loadedProject |
+		"mark projects and packages not dirty"
+		loadedProject markNotDirty.
+		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
+	
 
   true
     ifTrue: [
