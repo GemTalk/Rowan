@@ -557,15 +557,14 @@ RwSemanticVersionNumber >> buildVersion: anObject [
 ]
 
 { #category : 'private' }
-RwSemanticVersionNumber >> compareEqualTo: aMetacelloVersionNumber [
-    aMetacelloVersionNumber species = self species
+RwSemanticVersionNumber >> compareEqualTo: aRwSemanticVersionNumber [
+    aRwSemanticVersionNumber species = self species
         ifFalse: [ ^ false ].
-    (self compareEqualTo: self normalVersion other: aMetacelloVersionNumber normalVersion)
+    (self compareEqualTo: self normalVersion other: aRwSemanticVersionNumber normalVersion)
         ifFalse: [ ^ false ].
-    (self compareEqualTo: self preReleaseVersion other: aMetacelloVersionNumber preReleaseVersion)
+    (self compareEqualTo: self preReleaseVersion other: aRwSemanticVersionNumber preReleaseVersion)
         ifFalse: [ ^ false ].
-    ^ self compareEqualTo: self buildVersion other: aMetacelloVersionNumber buildVersion
-
+    ^ true
 ]
 
 { #category : 'private' }
@@ -582,12 +581,12 @@ RwSemanticVersionNumber >> compareEqualTo: myComponents other: otherComponents [
 ]
 
 { #category : 'private' }
-RwSemanticVersionNumber >> compareLessThan: aMetacelloVersionNumber [
+RwSemanticVersionNumber >> compareLessThan: aRwSemanticVersionNumber [
     | myComponents otherComponents defaultResult |
-    aMetacelloVersionNumber species = self species
+    aRwSemanticVersionNumber species = self species
         ifFalse: [ ^ false ].
     myComponents := self normalVersion.
-    otherComponents := aMetacelloVersionNumber normalVersion.
+    otherComponents := aRwSemanticVersionNumber normalVersion.
     defaultResult := true.
     (self compareEqualTo: myComponents other: otherComponents)
         ifTrue: [ defaultResult := false ]
@@ -595,18 +594,13 @@ RwSemanticVersionNumber >> compareLessThan: aMetacelloVersionNumber [
             (self compareLessThan: myComponents other: otherComponents version: #'normal')
                 ifFalse: [ ^ false ] ].
     myComponents := self preReleaseVersion.
-    otherComponents := aMetacelloVersionNumber preReleaseVersion.
+    otherComponents := aRwSemanticVersionNumber preReleaseVersion.
     (self compareEqualTo: myComponents other: otherComponents)
         ifTrue: [ 
             myComponents size > 0
                 ifTrue: [ defaultResult := false ] ]
         ifFalse: [ ^ self compareLessThan: myComponents other: otherComponents version: #'preRelease' ].
-    myComponents := self buildVersion.
-    otherComponents := aMetacelloVersionNumber buildVersion.
-    ^ (self compareEqualTo: myComponents other: otherComponents)
-        ifTrue: [ defaultResult ]
-        ifFalse: [ self compareLessThan: myComponents other: otherComponents version: #'build' ]
-
+    ^ defaultResult
 ]
 
 { #category : 'private' }
