@@ -9,9 +9,10 @@ Integer >> rwSemanticIntegerLessThanSelf: anInteger [
 
 { #category : '*rowan-gemstone-kernel' }
 Integer >> rwSemanticStringLessThanSelf:  aString [
-  "string version components are always '<' integer component"
+  "integers have greater precedence than strings"
+	" aString < anInteger -> false"
 
-  ^ true
+  ^ false
 
 ]
 

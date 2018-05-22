@@ -52,8 +52,8 @@ CharacterCollection >> indexOfAnyOf: aByteArray startingAt: start ifAbsent: aBlo
 { #category : '*rowan-gemstone-kernel' }
 CharacterCollection >> rwSemanticIntegerLessThanSelf: anInteger [
 
-	"integer version components are never leass than a string version component"
-	"anInteger < '' -> true"
+	"integers have greater precedence than strings"
+	"anInteger < aString-> true"
 
   ^ true
 
