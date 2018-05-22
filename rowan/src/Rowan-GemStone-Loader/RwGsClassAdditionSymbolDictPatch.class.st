@@ -21,6 +21,7 @@ RwGsClassAdditionSymbolDictPatch >> addClassToSymbolDictionary [
 	self symbolDictionaryRegistry
 		addClassToSymbolDictionaryForClassAssociation: symbolAssociation 
 		forClass: newClass
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
 
 ]
 
@@ -30,6 +31,7 @@ RwGsClassAdditionSymbolDictPatch >> createAndInstallLoadedClass [
 	self symbolDictionaryRegistry
 		createAndInstallLoadedClassForClass: newClass 
 		toPackageNamed: self packageName
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
 
 ]
 

@@ -18,6 +18,8 @@ RwGsMethodExtensionSymbolDictPatch >> installMethod [
 		addExtensionCompiledMethod: compiledMethod
 		for: behavior
 		protocol: self propertiesProtocolName
-		toPackageNamed: self packageName.
+		toPackageNamed: self packageName
+		 implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 	selector := compiledMethod selector
+
 ]

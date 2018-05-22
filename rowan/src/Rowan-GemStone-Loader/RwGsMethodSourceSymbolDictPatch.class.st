@@ -9,6 +9,7 @@ RwGsMethodSourceSymbolDictPatch >> installSourcePatch [
 
 	" update methodDictionary and update loadedMethod with new compiled method"
 
-	self symbolDictionaryRegistry addRecompiledMethod: compiledMethod.
+	self symbolDictionaryRegistry addRecompiledMethod: compiledMethod implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 	selector := compiledMethod selector
+
 ]

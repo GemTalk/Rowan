@@ -42,39 +42,23 @@ RwGsSymbolDictionaryRegistry class >> newForSymbolDictionary: aSymbolDictionary 
 ]
 
 { #category : 'method - private api' }
-RwGsSymbolDictionaryRegistry >> _doDeleteCompiledMethod: compiledMethod from: behavior [
-
-	"delete a compiled method from behavior"
-
-	| selector |
-	selector := compiledMethod selector.
-	behavior removeSelector: selector asString environmentId: 0
-]
-
-{ #category : 'method - private api' }
 RwGsSymbolDictionaryRegistry >> _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior [
 
 	"remove a compiled method from loaded things"
 
-	| loadedMethod loadedPackage loadedClassOrExtension |
-	loadedMethod := methodRegistry
-		at: compiledMethod
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- no existing LoadedMethod found for deleted method.' ].
+	^ RwGsSymbolDictionaryRegistry_Implementation _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: self
 
-	methodRegistry removeKey: compiledMethod.
+]
 
-	loadedPackage := loadedMethod loadedPackage.
-	loadedClassOrExtension := loadedPackage
-		classOrExtensionForClass: behavior
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- attempt to remove a method from a package in which its class is neither defined nor extended.' ].
+{ #category : 'method - private api' }
+RwGsSymbolDictionaryRegistry >> _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior implementationClass: implementationClass [
 
-	loadedClassOrExtension removeLoadedMethod: loadedMethod
+	"remove a compiled method from loaded things"
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: self
+
 ]
 
 { #category : 'private' }
@@ -178,30 +162,7 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
-	| loadedPackage loadedClass |
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName.
-
-	classRegistry
-		at: class classHistory
-		ifAbsent: [ 
-			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
-			loadedPackage addLoadedClass: loadedClass.
-			loadedClass updatePropertiesFromClassFor: self.
-			classRegistry at: class classHistory put: loadedClass.
-			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
-				ifNotNil: [ :loadedClassExtension | 
-					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
-					"have yet to come with a test case that takes this path"
-					self error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ] ].
-
-	self _symbolDictionaryAt: assoc key 
-		ifPresent: [
-			"If there is an existing association, then we need to use the existing association which may have references
-				in compiled methods --- bootstrapping Rowan in Rowan is only valid use case"
-			(self _symbolDictionary associationAt: assoc key) value: class ]
-		ifAbsent: [
-			assoc value: class.
-			self _symbolDictionary add: assoc]
+	^ RwGsSymbolDictionaryRegistry_Implementation addClassAssociation: assoc forClass: class toPackageNamed: packageName instance: self
 
 ]
 
@@ -212,6 +173,8 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
 	^ implementationClass addClassAssociation: assoc forClass: class toPackageNamed: packageName instance: self
 
 ]
@@ -219,55 +182,32 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry >> addClassToSymbolDictionaryForClassAssociation: assoc forClass: class [ 
 
-	self _symbolDictionaryAt: assoc key 
-		ifPresent: [ 
-			"If there is an existing association, then we need to use the existing association which may have references
-				in compiled methods --- bootstrapping Rowan in Rowan is only valid use case"
-			(self _symbolDictionary associationAt: assoc key) value: class ]
-		ifAbsent: [
-			assoc value: class.
-			self _symbolDictionary add: assoc]
+	^ RwGsSymbolDictionaryRegistry_Implementation addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  instance: self
+
+]
+
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry >> addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  implementationClass: implementationClass [
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  instance: self
 
 ]
 
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
-	selector := compiledMethod selector.
-	methodDictionary at: selector put: compiledMethod.
+	^ RwGsSymbolDictionaryRegistry_Implementation addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
 
-	protocolSymbol := protocolString asSymbol.
-	(behavior includesCategory: protocolSymbol)
-		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+]
 
-	existing := methodRegistry at: compiledMethod ifAbsent: [ nil ].
-	existing
-		ifNotNil: [ 
-			self
-				error:
-					'Internal error -- existing LoadedMethod found for extension compiled method.' ].
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass [
 
-	methodRegistry at: compiledMethod put: loadedMethod.
+	"Use for calls from classes in Rowan-GemStone-Loader package"
 
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName.
-
-	loadedClassExtension := loadedPackage
-		loadedClassExtensionForClass: behavior
-		ifAbsent: [ 
-			| class ext |
-			class := behavior theNonMetaClass.
-			ext := RwGsLoadedSymbolDictClassExtension
-				newForClass: class
-				inPackage: loadedPackage.
-			(self classExtensionRegistry
-				at: class classHistory
-				ifAbsentPut: [ IdentitySet new ]) add: ext.
-			ext ].
-	loadedClassExtension addLoadedMethod: loadedMethod
+	^ implementationClass addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
 
 ]
 
@@ -276,87 +216,18 @@ RwGsSymbolDictionaryRegistry >> addExtensionSessionMethods: methDict catDict: ca
 
 	"expecting only a single method to be in methDict/catDict"
 
-	| dictsArray mDict cDict existing loadedMethod loadedPackage loadedClassExtension compiledMethod |
-	dictsArray := self homeSessionMethods methodAndCategoryDictionaryFor: behavior.
-	mDict := dictsArray at: 1.
-	cDict := dictsArray at: 2.
-	catDict
-		keysAndValuesDo: [ :protocolSymbol :selectors | 
-			| symbolSet |
-			symbolSet := cDict
-				at: protocolSymbol
-				ifAbsent: [ cDict at: protocolSymbol put: SymbolSet new ].
-			symbolSet addAll: selectors ].
-	methDict
-		keysAndValuesDo: [ :sel :meth | 
-			mDict at: sel put: meth.
-			GsPackagePolicy current updateMethodLookupCacheFor: meth in: behavior.
-			compiledMethod := meth ].
-
-	existing := methodRegistry at: compiledMethod ifAbsent: [ nil ].
-	existing
-		ifNotNil: [ 
-			self
-				error:
-					'Internal error -- existing LoadedMethod found for extension compiled method.' ].
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
-
-	methodRegistry at: compiledMethod put: loadedMethod.
-
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName.
-
-	loadedClassExtension := loadedPackage
-		loadedClassExtensionForClass: behavior
-		ifAbsent: [ 
-			| class ext |
-			class := behavior theNonMetaClass.
-			ext := RwGsLoadedSymbolDictClassExtension
-				newForClass: class
-				inPackage: loadedPackage.
-			(self classExtensionRegistry
-				at: class classHistory
-				ifAbsentPut: [ IdentitySet new ]) add: ext.
-			ext ].
-	loadedClassExtension addLoadedMethod: loadedMethod.
-
-	^ compiledMethod
+	^ RwGsSymbolDictionaryRegistry_Implementation addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName instance: self
 
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addMovedDeletedMethod: newCompiledMethod [
+RwGsSymbolDictionaryRegistry >> addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName implementationClass: implementationClass [
 
-	"add a recompiled compiled method that was previously removed from loaded things
-		to behavior and update the loaded things appropriately"
+	"expecting only a single method to be in methDict/catDict"
 
-	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
-	selector := newCompiledMethod selector.
-	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
-	oldCompiledMethod := methodDictionary
-		at: selector
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- expected an existing compiled method in the method dictionary' ].
+	"Use for calls from classes in Rowan-GemStone-Loader package"
 
-	oldCompiledMethod == newCompiledMethod
-		ifTrue: [ 
-			"exit early, no more work to be done"
-			^ self ].
-	methodDictionary at: selector put: newCompiledMethod.
-
-	loadedMethod := methodRegistry
-		at: oldCompiledMethod
-		ifAbsent: [].
-	loadedMethod ifNotNil: [  
-			self
-				error:
-					'Internal error -- unexpected loaded method found - deleteMethod processing should have removed the loaded method already' ].
-
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: newCompiledMethod.
-
-	methodRegistry at: newCompiledMethod put: loadedMethod.
+	^ implementationClass addExtensionSessionMethods: methDict catDict: catDict for: behavior toPackageNamed: packageName instance: self
 
 ]
 
@@ -366,19 +237,19 @@ RwGsSymbolDictionaryRegistry >> addMovedDeletedMethod: compiledMethod for: behav
 	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
 		back using specialized processing"
 
-	| methodDictionary selector |
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
-	selector := compiledMethod selector.
-	methodDictionary 
-		at: selector 
-		ifAbsent: [  
-			self
-				error:
-					'Internal error -- attempt to move a method that does not exist'  ].
-	^ self
-		addMovedDeletedMethod: compiledMethod;
-		moveCompiledMethod: compiledMethod toProtocol: protocolString;
-		yourself
+	^ RwGsSymbolDictionaryRegistry_Implementation addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
+
+]
+
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry >> addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass [
+
+	"there is an existing compiled method that has already been deleted from another package ... so we're adding it
+		back using specialized processing"
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
 
 ]
 
@@ -387,60 +258,35 @@ RwGsSymbolDictionaryRegistry >> addNewClassVersionToAssociation: newClass [
 
 	"a new class version is being added to the association in the receiver previously occupied by the original class"
 
-	self
-		_loadedClassFor: newClass
-		noNewVersion: [ 
-			"newClass is actually not a new class version of existing class, that's okay... update properties anyway"
-			self updateClassProperties: newClass.
-			^ self ]
-		newVersion: [ :loadedClass :assoc | 
-			"association for class is present, install in association and update the loadedthing"
-			assoc value: newClass.
-			loadedClass handleClassDeletionOrNewVersion
-				ifTrue: [ loadedClass updatePropertiesFromClassFor: self ]
-				ifFalse: [ self error: 'internal error - new version of class not properly installed' ] ]
+	^ RwGsSymbolDictionaryRegistry_Implementation addNewClassVersionToAssociation: newClass instance: self
+
+]
+
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry >> addNewClassVersionToAssociation: newClass implementationClass: implementationClass [
+
+	"a new class version is being added to the association in the receiver previously occupied by the original class"
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass addNewClassVersionToAssociation: newClass instance: self
+
 ]
 
 { #category : 'private' }
 RwGsSymbolDictionaryRegistry >> addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
-	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
-	selector := compiledMethod selector.
-	(methodDictionary at: selector ifAbsent: [  ])
-		ifNotNil: [ :oldCompiledMethod | 
-			"there is an existing compiled method ... that means we're adding a recompiled methoded and moving it to the (possibly new) protocol"
-			^ self
-				addRecompiledMethod: compiledMethod;
-				moveCompiledMethod: compiledMethod toProtocol: protocolString;
-				yourself ].
-	methodDictionary at: selector put: compiledMethod.
+	^ RwGsSymbolDictionaryRegistry_Implementation addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
 
-	protocolSymbol := protocolString asSymbol.
-	(behavior includesCategory: protocolSymbol)
-		ifFalse: [ behavior addCategory: protocolSymbol ].
-	behavior moveMethod: selector toCategory: protocolSymbol.
+]
 
-	existing := methodRegistry at: compiledMethod ifAbsent: [ nil ].
-	existing
-		ifNotNil: [ self error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
-	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry >> addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName implementationClass: implementationClass [
 
-	methodRegistry at: compiledMethod put: loadedMethod.
+	"Use for calls from classes in Rowan-GemStone-Loader package"
 
-	loadedPackage := self
-		loadedPackageNamed: packageName
-		ifAbsent: [ 
-			self
-				error: 'Internal error -- attempt to add a method to a nonexistent package.' ].
+	^ implementationClass addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
 
-	loadedClassOrExtension := loadedPackage
-		loadedClassOrClassExtensionForClass: behavior
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
-	loadedClassOrExtension addLoadedMethod: loadedMethod
 ]
 
 { #category : 'private' }
@@ -448,32 +294,19 @@ RwGsSymbolDictionaryRegistry >> addRecompiledMethod: newCompiledMethod [
 
 	"add a recompiled compiled method to behavior and update the loaded things"
 
-	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
-	selector := newCompiledMethod selector.
-	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
-	oldCompiledMethod := methodDictionary
-		at: selector
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- expected an existing compiled method in the method dictionary' ].
+	^ RwGsSymbolDictionaryRegistry_Implementation addRecompiledMethod: newCompiledMethod instance: self
 
-	oldCompiledMethod == newCompiledMethod
-		ifTrue: [ 
-			"exit early, no more work to be done"
-			^ self ].
-	methodDictionary at: selector put: newCompiledMethod.
+]
 
-	loadedMethod := methodRegistry
-		at: oldCompiledMethod
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-	methodRegistry removeKey: oldCompiledMethod.
-	loadedMethod handle: newCompiledMethod.
-	methodRegistry at: newCompiledMethod put: loadedMethod
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry >> addRecompiledMethod: newCompiledMethod implementationClass: implementationClass [
+
+	"add a recompiled compiled method to behavior and update the loaded things"
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass addRecompiledMethod: newCompiledMethod instance: self
+
 ]
 
 { #category : 'private' }
@@ -481,37 +314,19 @@ RwGsSymbolDictionaryRegistry >> addRecompiledSessionMethodMethod: newCompiledMet
 
 	"add a recompiled session method compiled method to behavior and update the loaded things"
 
-	| selector behavior dictsArray mDict cDict oldCompiledMethod loadedMethod |
-	selector := newCompiledMethod selector.
-	behavior := newCompiledMethod inClass.
-	dictsArray := self homeSessionMethods methodAndCategoryDictionaryFor: behavior.
-	mDict := dictsArray at: 1.
-	cDict := dictsArray at: 2.
-	oldCompiledMethod := mDict
-		at: selector
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- expected an existing compiled method in the session method method dictionary' ].
+	^ RwGsSymbolDictionaryRegistry_Implementation addRecompiledSessionMethodMethod: newCompiledMethod instance: self
 
-	oldCompiledMethod == newCompiledMethod
-		ifTrue: [ 
-			"exit early, no more work to be done"
-			^ self ].
-	mDict at: selector put: newCompiledMethod.
-	GsPackagePolicy current
-		updateMethodLookupCacheFor: newCompiledMethod
-		in: behavior.
+]
 
-	loadedMethod := methodRegistry
-		at: oldCompiledMethod
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- no existing LoadedMethod found for the old compiledMethod.' ].
-	methodRegistry removeKey: oldCompiledMethod.
-	loadedMethod handle: newCompiledMethod.
-	methodRegistry at: newCompiledMethod put: loadedMethod
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry >> addRecompiledSessionMethodMethod: newCompiledMethod implementationClass: implementationClass [
+
+	"add a recompiled session method compiled method to behavior and update the loaded things"
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass addRecompiledSessionMethodMethod: newCompiledMethod instance: self
+
 ]
 
 { #category : 'method - adopt api' }
@@ -580,43 +395,53 @@ RwGsSymbolDictionaryRegistry >> createAndInstallLoadedClassForClass: class toPac
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
-	| loadedPackage loadedClass |
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName.
+	^ RwGsSymbolDictionaryRegistry_Implementation createAndInstallLoadedClassForClass: class toPackageNamed: packageName instance: self
 
-	classRegistry
-		at: class classHistory
-		ifAbsent: [ 
-			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
-			loadedPackage addLoadedClass: loadedClass.
-			loadedClass updatePropertiesFromClassFor: self.
-			classRegistry at: class classHistory put: loadedClass.
-			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
-				ifNotNil: [ :loadedClassExtension | 
-					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
-					"have yet to come with a test case that takes this path"
-					self error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ] ].
+]
+
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry >> createAndInstallLoadedClassForClass: class toPackageNamed: packageName implementationClass: implementationClass [
+
+	"Copy the name association to the correct 
+        SymbolDictionary in the live SymbolList.
+        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass createAndInstallLoadedClassForClass: class toPackageNamed: packageName instance: self
 
 ]
 
 { #category : 'package - patch api' }
 RwGsSymbolDictionaryRegistry >> createLoadedPackageFromDefinition: packageDefinition [
 
-	^ self
-		createLoadedPackageNamed: packageDefinition key
-		properties: packageDefinition properties
+	^ RwGsSymbolDictionaryRegistry_Implementation createLoadedPackageFromDefinition: packageDefinition instance: self
+
+]
+
+{ #category : 'package - patch api' }
+RwGsSymbolDictionaryRegistry >> createLoadedPackageFromDefinition: packageDefinition implementationClass: implementationClass [
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass createLoadedPackageFromDefinition: packageDefinition instance: self
+
 ]
 
 { #category : 'package - patch api' }
 RwGsSymbolDictionaryRegistry >> createLoadedPackageNamed: packageName properties: properties [
 
-	| existingLoadedPackage newLoadedPackage |
-	existingLoadedPackage := packageRegistry at: packageName ifAbsent: [ nil ].
-	existingLoadedPackage
-		ifNotNil: [ self error: 'Internal error -- Attempt to add a package that exists.' ].
-	newLoadedPackage := RwGsLoadedSymbolDictPackage newNamed: packageName.
-	newLoadedPackage setPropertiesTo: properties.
-	packageRegistry at: packageName put: newLoadedPackage.
-	^ newLoadedPackage
+	^ RwGsSymbolDictionaryRegistry_Implementation createLoadedPackageNamed: packageName properties: properties instance: self
+
+]
+
+{ #category : 'package - patch api' }
+RwGsSymbolDictionaryRegistry >> createLoadedPackageNamed: packageName properties: properties  implementationClass: implementationClass [
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass createLoadedPackageNamed: packageName properties: properties instance: self
+
 ]
 
 { #category : 'class - patch api' }
@@ -624,13 +449,19 @@ RwGsSymbolDictionaryRegistry >> deleteClassFromPackage: class [
 
 	"a class association is being deleted from the receiver remove it from the loaded things"
 
-	self
-		_loadedClassFor: class
-		noNewVersion: [ :loadedClass | 
-			"association for class is present, finish delete operation"
-			loadedClass removeFromLoaded: self.
-			classRegistry removeKey: class classHistory.
-			self _symbolDictionary removeKey: loadedClass key asSymbol ]
+	^ RwGsSymbolDictionaryRegistry_Implementation deleteClassFromPackage: class instance: self
+
+]
+
+{ #category : 'class - patch api' }
+RwGsSymbolDictionaryRegistry >> deleteClassFromPackage: class implementationClass: implementationClass [
+
+	"a class association is being deleted from the receiver remove it from the loaded things"
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass deleteClassFromPackage: class instance: self
+
 ]
 
 { #category : 'class - patch api' }
@@ -638,11 +469,19 @@ RwGsSymbolDictionaryRegistry >> deleteClassNamedFromPackage: className [
 
 	"a class association is being deleted from the receiver remove it from the loaded things"
 
-	| class |
-	class := self _symbolDictionary
-		at: className asSymbol
-		ifAbsent: [ self error: 'No class found for the given class name: ' , className printString ].
-	self deleteClassFromPackage: class
+	^ RwGsSymbolDictionaryRegistry_Implementation deleteClassNamedFromPackage: className instance: self
+
+]
+
+{ #category : 'class - patch api' }
+RwGsSymbolDictionaryRegistry >> deleteClassNamedFromPackage: className implementationClass: implementationClass [
+
+	"a class association is being deleted from the receiver remove it from the loaded things"
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass deleteClassNamedFromPackage: className instance: self
+
 ]
 
 { #category : 'method - patch api' }
@@ -650,18 +489,34 @@ RwGsSymbolDictionaryRegistry >> deleteCompiledMethod: compiledMethod from: behav
 
 	"delete a compiled method from behavior and remove it from the loaded things"
 
-	self _doDeleteCompiledMethod: compiledMethod from: behavior.
+	^ RwGsSymbolDictionaryRegistry_Implementation deleteCompiledMethod: compiledMethod from: behavior instance: self
 
-	self _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior
+]
+
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry >> deleteCompiledMethod: compiledMethod from: behavior implementationClass: implementationClass [
+
+	"delete a compiled method from behavior and remove it from the loaded things"
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass deleteCompiledMethod: compiledMethod from: behavior instance: self
+
 ]
 
 { #category : 'method - patch api' }
 RwGsSymbolDictionaryRegistry >> deleteMethod: selector for: behavior [
 
-	| compiledMethod |
+	^ RwGsSymbolDictionaryRegistry_Implementation deleteMethod: selector for: behavior instance: self
 
-	compiledMethod := behavior compiledMethodAt: selector.
-	self deleteCompiledMethod: compiledMethod from: behavior
+]
+
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry >> deleteMethod: selector for: behavior implementationClass: implementationClass [
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass deleteMethod: selector for: behavior instance: self
 
 ]
 
@@ -678,27 +533,16 @@ RwGsSymbolDictionaryRegistry >> deletePackage: packageName [
 { #category : 'class - patch api' }
 RwGsSymbolDictionaryRegistry >> ensureExtensionClassNamed: className existsForPackageNamed: packageName [
 
-	| extensionClass loadedPackage loadedClassExtension |
-	extensionClass := self _symbolDictionary
-		at: className asSymbol
-		ifAbsent: [ 
-			self
-				error:
-					'The extension class named ' , className printString
-						, ' cannot be found in this symbol dictionary (' , self _symbolDictionary name printString
-						,
-							'). Packages that extend a class must be loaded into the symbol dictionary in which the class is installed.' ].
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName.
+	^ RwGsSymbolDictionaryRegistry_Implementation ensureExtensionClassNamed: className existsForPackageNamed: packageName instance: self
 
-	loadedPackage
-		loadedClassExtensionForClass: extensionClass
-		ifAbsent: [ 
-			loadedClassExtension := RwGsLoadedSymbolDictClassExtension
-				newForClass: extensionClass
-				inPackage: loadedPackage.
-			(self classExtensionRegistry
-				at: extensionClass classHistory
-				ifAbsentPut: [ IdentitySet new ]) add: loadedClassExtension ]
+]
+
+{ #category : 'class - patch api' }
+RwGsSymbolDictionaryRegistry >> ensureExtensionClassNamed: className existsForPackageNamed: packageName implementationClass: implementationClass [
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass ensureExtensionClassNamed: className existsForPackageNamed: packageName instance: self
 
 ]
 
@@ -723,12 +567,14 @@ RwGsSymbolDictionaryRegistry >> existingForClass: aClass ifAbsent: absentBlock [
 { #category : 'package - creation api' }
 RwGsSymbolDictionaryRegistry >> existingOrNewLoadedPackageNamed: packageName [
 
-	^ self packageRegistry
-			at: packageName
-			ifAbsent: [ 
-				self packageRegistry
-					at: packageName
-					put: (RwGsLoadedSymbolDictPackage newNamed: packageName) ].
+	^ RwGsSymbolDictionaryRegistry_Implementation packageRegistry existingOrNewLoadedPackageNamed: self
+
+]
+
+{ #category : 'package - creation api' }
+RwGsSymbolDictionaryRegistry >> existingOrNewLoadedPackageNamed: packageName implementationClass: implementationClass [
+
+	^ implementationClass packageRegistry existingOrNewLoadedPackageNamed: self
 
 ]
 
@@ -753,32 +599,33 @@ RwGsSymbolDictionaryRegistry >> initialize [
 { #category : 'loaded queries' }
 RwGsSymbolDictionaryRegistry >> loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock [
 
-	| packageName |
-	(hybridPackageName at: 1) = $*
-		ifFalse: [ 
-			self
-				error:
-					'Improperly formed hybrid package name' , hybridPackageName printString
-						, '. Expected a leading ''*''' ].
-	packageName := (hybridPackageName copyFrom: 2 to: hybridPackageName size)
-		asLowercase.
-	packageRegistry keys
-		do: [ :key | 
-			key asLowercase = packageName
-				ifTrue: [ ^ packageRegistry at: key ] ].
-	^ absentBlock value
+	^ RwGsSymbolDictionaryRegistry_Implementation loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock instance: self
+
 ]
 
 { #category : 'loaded queries' }
-RwGsSymbolDictionaryRegistry >> loadedPackageDefinitionNamed: packageName ifAbsent: absentBlock [
+RwGsSymbolDictionaryRegistry >> loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock implementationClass: implementationClass [
 
-	^ (self loadedPackageNamed: packageName ifAbsent: absentBlock) asDefinition
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass loadedHybridPackageNamed: hybridPackageName ifAbsent: absentBlock instance: self
+
 ]
 
 { #category : 'loaded queries' }
 RwGsSymbolDictionaryRegistry >> loadedPackageNamed: packageName ifAbsent: absentBlock [
 
-	^ packageRegistry at: packageName ifAbsent: absentBlock
+	^ RwGsSymbolDictionaryRegistry_Implementation loadedPackageNamed: packageName ifAbsent: absentBlock instance: self
+
+]
+
+{ #category : 'loaded queries' }
+RwGsSymbolDictionaryRegistry >> loadedPackageNamed: packageName ifAbsent: absentBlock implementationClass: implementationClass [
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass loadedPackageNamed: packageName ifAbsent: absentBlock instance: self
+
 ]
 
 { #category : 'accessing' }
@@ -793,50 +640,32 @@ RwGsSymbolDictionaryRegistry >> moveCompiledMethod: compiledMethod toProtocol: n
 
 	"move a compiled method into a different protocol and update loaded things"
 
-	| behavior selector loadedMethod oldCat catSym catDict methodDictionary existingCompiledMethod |
-	selector := compiledMethod selector.
-	behavior := compiledMethod inClass.
+	^ RwGsSymbolDictionaryRegistry_Implementation moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: self
 
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
-	existingCompiledMethod := methodDictionary
-		at: selector
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- no existing CompileMethod found for patched method.' ].
-	existingCompiledMethod == compiledMethod
-		ifFalse: [ 
-			self
-				error:
-					'Internal error - the existingCompiledMethod is not identical to the compiled method arg' ].
+]
 
-	oldCat := behavior categoryOfSelector: selector environmentId: 0.
-	catSym := newProtocol asSymbol.
-	catDict := behavior _baseCategorysForStore: 0.
-	oldCat ifNotNil: [ (catDict at: oldCat) remove: selector ].
-	catDict
-		at: catSym
-		ifAbsent: [ behavior addCategory: newProtocol environmentId: 0 ].
-	(catDict at: catSym) add: selector.
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry >> moveCompiledMethod: compiledMethod toProtocol: newProtocol implementationClass: implementationClass [
 
-	behavior moveMethod: selector toCategory: newProtocol environmentId: 0.
+	"move a compiled method into a different protocol and update loaded things"
 
-	loadedMethod := methodRegistry
-		at: compiledMethod
-		ifAbsent: [ 
-			self
-				error:
-					'Internal error -- no existing LoadedMethod found for the compiledMethod.' ].
+	"Use for calls from classes in Rowan-GemStone-Loader package"
 
-	loadedMethod updateForProtocolChange
+	^ implementationClass moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: self
+
 ]
 
 { #category : 'package - creation api' }
 RwGsSymbolDictionaryRegistry >> newLoadedPackageNamed: packageName [
 
-	(self packageRegistry includesKey: packageName)
-		ifTrue: [ self error: 'The package ', packageName printString, ' already exists' ].
-	^ self existingOrNewLoadedPackageNamed: packageName
+	^ RwGsSymbolDictionaryRegistry_Implementation newLoadedPackageNamed: packageName instance: self
+
+]
+
+{ #category : 'package - creation api' }
+RwGsSymbolDictionaryRegistry >> newLoadedPackageNamed: packageName implementationClass: implementationClass [
+
+	^ implementationClass newLoadedPackageNamed: packageName instance: self
 
 ]
 
@@ -852,11 +681,17 @@ RwGsSymbolDictionaryRegistry >> updateClassProperties: class [
 
 	"class properties have changed, update the clas properties of the loaded things"
 
-	(class isKindOf: Class)
-		ifFalse: [ self error: 'internal error - expected a class' ].
-	self
-		_loadedClassFor: class
-		noNewVersion: [ :loadedClass | 
-			"association for class is present, update the loaded thing"
-			loadedClass updatePropertiesFromClassFor: self ]
+	^ RwGsSymbolDictionaryRegistry_Implementation updateClassProperties: class instance: self
+
+]
+
+{ #category : 'class - patch api' }
+RwGsSymbolDictionaryRegistry >> updateClassProperties: class  implementationClass: implementationClass [
+
+	"class properties have changed, update the clas properties of the loaded things"
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass updateClassProperties: class instance: self
+
 ]
