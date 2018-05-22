@@ -10,7 +10,15 @@ RwProjectConfigurationsTest >> _expectedCompoundPackageNames [
 	^ #( 'Rowan-Configurations' 'Rowan-Core' 'Rowan-Cypress-Core' 'Rowan-Cypress-Kernel' 'Rowan-Definitions' 
 			'Rowan-Deprecated' 'Rowan-GemStone-Core' 'Rowan-GemStone-Kernel' 'Rowan-GemStone-Loader' 
 			'Rowan-GemStone-Loader-Extensions' 'Rowan-Services-Core' 'Rowan-Services-Extensions' 'Rowan-Services-Tests' 
-			'Rowan-Specifications' 'Rowan-Tests' 'Rowan-Tools-Core' 'Rowan-Tools-Kernel' 'Rowan-Url-Core')
+			'Rowan-Specifications' 'Rowan-Tests' 'Rowan-Tools-Core' 'Rowan-Tools-Kernel' 'Rowan-Url-Core') sort
+
+]
+
+{ #category : 'private' }
+RwProjectConfigurationsTest >> _expectedLoadPackageNames_common [
+
+	^ #('Rowan-Url-Core' 'Rowan-Cypress-Core' 'Rowan-Cypress-Kernel' 'Rowan-Definitions' 'Rowan-Specifications' 'Rowan-Configurations'
+			'Rowan-Core' 'Rowan-Tools-Core' 'Rowan-Tools-Kernel' 'Rowan-Tests') sort
 
 ]
 
@@ -68,7 +76,7 @@ RwProjectConfigurationsTest >> testVisitProjectCompoundConfiguration [
 ]
 
 { #category : 'tests' }
-RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration [
+RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_common [
 
 	| url rowanSpec config visitor packageNames |
 	rowanSpec := self _rowanProjectSpecification.
@@ -76,11 +84,14 @@ RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration [
 
 	config := RwAbstractProjectConfiguration fromUrl: url.
 
-	visitor := RwProjectLoadConfigurationVisitor new.
+	visitor := RwProjectLoadConfigurationVisitor new
+		platformAttributes: #('common');
+		groupNames: #('core' 'tests');
+		yourself.
 	visitor visit: config.
 
 	packageNames := visitor packageNames asArray sort.
 
-	self assert: packageNames = self _expectedLoadPackageNames.
+	self assert: packageNames = self _expectedLoadPackageNames_common.
 
 ]
