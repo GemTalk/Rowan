@@ -17,6 +17,18 @@ RowanClassHierarchyUpdate >> addSelectionHierarchyFor: aClass [
 ]
 
 { #category : 'accessing' }
+RowanClassHierarchyUpdate >> allClasses [
+
+	| allClasses |
+ 
+	allClasses := Set new. 
+	classes do:[:hierarchy | 
+		allClasses addAll: hierarchy]. 
+	^allClasses asArray
+
+]
+
+{ #category : 'accessing' }
 RowanClassHierarchyUpdate >> hierarchyFor: aClass [
 	| currentClass hierarchy |
 	currentClass := aClass.

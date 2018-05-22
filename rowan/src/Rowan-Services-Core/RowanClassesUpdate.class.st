@@ -15,6 +15,13 @@ RowanClassesUpdate >> classes [
 
 ]
 
+{ #category : 'accessing' }
+RowanClassesUpdate >> classes: anArray [
+
+	classes := anArray
+
+]
+
 { #category : 'private' }
 RowanClassesUpdate >> historyOf: aClass [
 

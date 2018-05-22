@@ -24,11 +24,6 @@ RowanClassInfoUpdate >> comment: aString [
 
 ]
 
-{ #category : 'other' }
-RowanClassInfoUpdate >> initialize [
-
-]
-
 { #category : 'accessing' }
 RowanClassInfoUpdate >> oop: aNumber [
 
