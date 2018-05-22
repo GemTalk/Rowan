@@ -1,42 +1,7 @@
 "
-# Metacello version format
+# GemStone version format
 
-Thanks to [Mozilla Toolkit version format](https://developer.mozilla.org/en/Toolkit_version_format) for inspiration.
-
-##Version Format
-A version string consists of one or more version parts, separated with dots or dashes.
-
-A version part with a leading dot is numeric. A version part with a leading dash is string.
-
-The rationale behind splitting a version part into a sequence of strings and numbers is that when comparing version parts, the numeric parts are compared as numbers, e.g. '1.0-pre.1' < '1.0-pre.10', while the strings are compared bytewise. See the next section for details on how versions are compared.
-
-##Comparing versions
-
-When two version strings are compared, their version parts are compared left to right. Empty parts are ignored.
-
-If at some point a version part of one version string is greater than the corresponding version part of another version string, then the first version string is greater than the other one.
-
-If a version string has extra parts and the common parts are equal, the shorter version string is less than the longer version string (1.0 is less than 1.0.0).
-
-Otherwise, the version strings are equal. 
-
-##Comparing version parts
-
-Version parts are also compared left to right, A string-part that exists is always less-then a nonexisting string-part (1.6-a is less than 1.6).
-
-Examples
-
-```
-1 == 1. < 1.0 == 1..--0
-< 1.1-a < 1.1-aa < 1.1-ab < 1.1-b < 1.1-c
-< 1.1-pre < 1.1-pre.0 
-< 1.1-pre.1-a < 1.1-pre.1-aa < 1.1-pre.1-b < 1.1-pre.1
-< 1.1-pre.2
-< 1.1-pre.10
-< 1.1 < 1.1.0 < 1.1.00
-< 1.10
-< 2.0
-```
+GemStone versions are simply an unbounded collection of $. separated positive integers.
 "
 Class {
 	#name : 'RwGemStoneVersionNumber',
@@ -45,33 +10,13 @@ Class {
 	#category : 'Rowan-Configurations'
 }
 
-{ #category : 'private' }
-RwGemStoneVersionNumber class >> extractNumericComponent: subString [
-	"$. separated components are integers"
-
-	| number |
-	number := [subString asNumber] 
-						on: Error 
-						do: [:ex | ex return: subString ].
-	^number asString = subString
-		ifTrue: [ number ]
-		ifFalse: [ subString ]
-
-]
-
 { #category : 'instance creation' }
 RwGemStoneVersionNumber class >> fromString: aString [
 
 	| new components |
 	components := OrderedCollection new.
-	(aString substrings: '.') do: [:subString | | strs |
-		strs := subString findTokens: '-'.
-		"first subString token could be an integer"
-		components add: (self extractNumericComponent: strs first).
-		strs size > 1
-			ifTrue: [
-				"remaining are uncoditionally Strings, because of leading $-"
-				components addAll: strs allButFirst ]].
+	(aString substrings: '.') do: [:subString | 
+		components add: subString asNumber].
 	new := self new: components size.
 	1 to: components size do: [:i | new at: i put: (components at: i) ].
 	^new
@@ -242,53 +187,6 @@ RwGemStoneVersionNumber >> copyFrom: start to: stop [
 
 ]
 
-{ #category : 'operations' }
-RwGemStoneVersionNumber >> decrementMajorVersion [
-  self decrementVersionAt: 1
-
-]
-
-{ #category : 'operations' }
-RwGemStoneVersionNumber >> decrementMinorVersion [
-  self size < 2
-    ifTrue: [ self at: 2 put: 0 ].
-  self decrementVersionAt: 2
-
-]
-
-{ #category : 'operations' }
-RwGemStoneVersionNumber >> decrementMinorVersionNumber [
-	| int |
-	self size to: 1 by: -1 do: [ :index | 
-		(int := self at: index) isString
-			ifFalse: [ 
-				int > 0
-					ifTrue: [ self at: index put: int - 1 ].
-				^ self ] ]
-
-]
-
-{ #category : 'operations' }
-RwGemStoneVersionNumber >> decrementPatchVersion [
-  self size < 2
-    ifTrue: [ self at: 2 put: 0 ].
-  self size < 3
-    ifTrue: [ self at: 3 put: 0 ].
-  self decrementVersionAt: 3
-
-]
-
-{ #category : 'private' }
-RwGemStoneVersionNumber >> decrementVersionAt: index [
-  | int |
-  int := self at: index.
-  (int := self at: index) isString
-    ifFalse: [ 
-      int > 0
-        ifTrue: [ self at: index put: int - 1 ] ]
-
-]
-
 { #category : 'enumerating' }
 RwGemStoneVersionNumber >> do: aBlock [ 
 	"Refer to the comment in Collection|do:."
@@ -339,99 +237,6 @@ hashValue := 4459.
   ].
 
 ^ hashValue abs
-
-]
-
-{ #category : 'operations' }
-RwGemStoneVersionNumber >> incrementMajorVersion [
-  self incrementVersionAt: 1
-
-]
-
-{ #category : 'operations' }
-RwGemStoneVersionNumber >> incrementMinorVersion [
-  self size < 2
-    ifTrue: [ self at: 2 put: 0 ].
-  self incrementVersionAt: 2
-
-]
-
-{ #category : 'operations' }
-RwGemStoneVersionNumber >> incrementMinorVersionNumber [
-
-	| int |
-	self size to: 1 by: -1 do: [:index | 
-		(int := self at: index) isString 
-			ifFalse: [ 
-				self at: index put: int + 1.
-				^self ]].
-
-]
-
-{ #category : 'operations' }
-RwGemStoneVersionNumber >> incrementPatchVersion [
-  self size < 2
-    ifTrue: [ self at: 2 put: 0 ].
-  self size < 3
-    ifTrue: [ self at: 3 put: 0 ].
-  self incrementVersionAt: 3
-
-]
-
-{ #category : 'private' }
-RwGemStoneVersionNumber >> incrementVersionAt: index [
-  | int |
-  int := self at: index.
-  (int := self at: index) isString
-    ifFalse: [ self at: index put: int + 1 ]
-
-]
-
-{ #category : 'comparing' }
-RwGemStoneVersionNumber >> match: aVersionPattern [
-	"Answer whether the version number of the receiver matches the given pattern string.
-
-	 A Metacello version number is made up of version sequences delimited by the characters $. and $-.
-	 The $. introduces a numeric version sequence and $- introduces an alphanumeric version sequence.
-	 
-	 A version pattern is made up of version pattern match sequences. also delimited by the characters $. 
-	 and $-.. Each pattern match sequence is tested against the corresponding version sequence of the 
-	 receiver, using the 'standard' pattern matching rules. All sequences must answer true for a match.
-	
-	 The special pattern sequence '?' is a match for the corresponding version sequence and all subsequent 
-	 version sequences. '?' as the version pattern matches all versions. No more version pattern 
-	 sequences are permitted once the '?' sequence is used. If used, it is the last version pattern
-	 sequence. "
-	
-	| patternVersion mySize patternSize |
-	patternVersion := aVersionPattern asRwGemStoneVersionNumber.
-	mySize := self size.
-	patternSize := patternVersion size.
-	mySize = patternSize 
-		ifFalse: [ 
-			mySize < patternSize ifTrue: [ ^false ].
-			(patternVersion at: patternSize) ~= '?' ifTrue: [ ^false ].
-			mySize := patternSize ].
-	1 to: mySize do: [:i | | pattern |
-		pattern := (patternVersion at: i) asString.
-		pattern = '?'
-			ifTrue: [i = mySize ifFalse: [ ^self error: 'Invalid version match pattern: ', aVersionPattern printString ]]
-			ifFalse: [ (pattern match: (self at: i) asString)  ifFalse: [ ^false ]]].
-	^true
-"
-  '1.1.1' asRwGemStoneVersionNumber match: '*.*.*'. -> true
-  '1.1.1' asRwGemStoneVersionNumber match: '*.#.*'. -> true
-  '1.10.1' asRwGemStoneVersionNumber match: '*.#.*'. -> false
-  '1.1.1' asRwGemStoneVersionNumber match: '*.*'. -> false
-  '1.1.1' asRwGemStoneVersionNumber match: '*.?'. -> true
-  '1.0' asRwGemStoneVersionNumber match: '1.?'. -> true
-  '2.0' asRwGemStoneVersionNumber match: '1.?'. -> false
-  '1.1.1' asRwGemStoneVersionNumber match: '?'. -> true
-  '1' asRwGemStoneVersionNumber match: '*.?'. -> false
-  '1-alpha5.0' asRwGemStoneVersionNumber match: '1-alpha*.?'. -> true
-  '1-alpha15.0.1' asRwGemStoneVersionNumber match: '1-alpha*.?'. -> true
-  '1.1' asRwGemStoneVersionNumber match: '?.?'. -> ERROR: invalid version match pattern
-"
 
 ]
 

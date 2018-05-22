@@ -1,6 +1,13 @@
 Extension { #name : 'CharacterCollection' }
 
 { #category : '*rowan-gemstone-kernel' }
+CharacterCollection >> asRwGemStoneVersionNumber [
+
+	^ RwGemStoneVersionNumber fromString: self
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
 CharacterCollection >> asRwRepository [
 
 	"return a platform appropriate repository for the repository identified in the receiver"
