@@ -150,13 +150,14 @@ precedence than a smaller set, if all of the preceding identifiers are equal.
 Example: 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta <
 1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0.
 	"
-	| v1 v2 v3 |
-	v1 := '1.9.0' asRwSemanticVersionNumber.
-	v2 := '1.10.0' asRwSemanticVersionNumber.
-	v3 := '1.11.0' asRwSemanticVersionNumber.
 
-	self assert: v1 < v2.
-	self assert: v2 < v3.
-	self assert: v1 < v3.
+	| vrsna vrsnb |
+	#( '1.0.0-alpha' '1.0.0-alpha.1' '1.0.0-alpha.beta' '1.0.0-beta' '1.0.0-beta.2' '1.0.0-beta.11' '1.0.0-rc.1' '1.0.0')
+		do: [:str |
+			vrsnb := str asRwSemanticVersionNumber.
+			self assert: vrsnb printString = str.
+			self assert: vrsnb = vrsnb.
+			vrsna ifNotNil: [ self assert: vrsna < vrsnb ].
+			vrsna := vrsnb ].
 
 ]

@@ -53,9 +53,9 @@ CharacterCollection >> indexOfAnyOf: aByteArray startingAt: start ifAbsent: aBlo
 CharacterCollection >> rwSemanticIntegerLessThanSelf: anInteger [
 
 	"integer version components are never leass than a string version component"
-	"anInteger < '' -> false"
+	"anInteger < '' -> true"
 
-  ^ false
+  ^ true
 
 ]
 

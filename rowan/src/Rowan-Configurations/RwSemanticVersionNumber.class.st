@@ -496,10 +496,10 @@ RwSemanticVersionNumber class >> validateVersionNumber: svn against: aString [
 ]
 
 { #category : 'comparing' }
-RwSemanticVersionNumber >> < aMetacelloVersionNumber [
-    aMetacelloVersionNumber species = self species
+RwSemanticVersionNumber >> < aRwSemanticVersionNumber [
+    aRwSemanticVersionNumber species = self species
         ifFalse: [ ^ false ].
-    ^ self compareLessThan: aMetacelloVersionNumber
+    ^ self compareLessThan: aRwSemanticVersionNumber
 
 ]
 
