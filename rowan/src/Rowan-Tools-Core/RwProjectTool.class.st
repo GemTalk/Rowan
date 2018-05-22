@@ -7,7 +7,7 @@ Class {
 { #category : 'commands' }
 RwProjectTool class >> audit [
 
-	^ RwPrjAuditTool new
+	^RwPrjAuditTool new
 
 ]
 
