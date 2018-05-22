@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwGemStoneVersionNumberTestCase',
-	#superclass : 'RwCommonVersionNumberTestCase',
+	#superclass : 'TestCase',
 	#category : 'Rowan-Tests'
 }
 
@@ -8,6 +8,16 @@ Class {
 RwGemStoneVersionNumberTestCase class >> shouldInheritSelectors [
 
 	^true
+
+]
+
+{ #category : 'test alpha/numeric version numbers' }
+RwGemStoneVersionNumberTestCase >> testAlphaNumericVersion1 [
+
+	"Use numeric comparison for pure numbers. If you non-numeric version separate with '-'"
+	
+	| x y |
+	self assert: ((x := self versionClass fromString: '2.9.0') < (y := self versionClass fromString: '2.10.0')).
 
 ]
 
@@ -35,67 +45,28 @@ RwGemStoneVersionNumberTestCase >> testApproxVersion03 [
 { #category : 'tests' }
 RwGemStoneVersionNumberTestCase >> testCollapseZeros [
 
-	self assert: (RwGemStoneVersionNumber fromString: '1.0-beta.24.0.1') collapseZeros printString = '1-beta.24.0.1'.
-	self assert: (RwGemStoneVersionNumber fromString: '1.0-beta.24.0.0.1') collapseZeros printString = '1-beta.24.0.0.1'.
-	self assert: (RwGemStoneVersionNumber fromString: '1.0.0-beta.24.0.0.1') collapseZeros printString = '1-beta.24.0.0.1'.
+	self assert: (RwGemStoneVersionNumber fromString: '1.0') collapseZeros printString = '1'.
+	self assert: (RwGemStoneVersionNumber fromString: '1.0') collapseZeros printString = '1'.
+	self assert: (RwGemStoneVersionNumber fromString: '1.0.0') collapseZeros printString = '1'.
 
 ]
 
-{ #category : 'tests version increment/decrement' }
-RwGemStoneVersionNumberTestCase >> testIncrementDecrementVersionNumber [
-  | version |
-  super testIncrementDecrementVersionNumber.
-  version := '1' asRwGemStoneVersionNumber.
-  self assert: version incrementMinorVersionNumber asString = '2'.
-  self assert: version decrementMinorVersionNumber asString = '1'.
-  version := '1.0' asRwGemStoneVersionNumber.
-  self assert: version incrementMinorVersionNumber asString = '1.1'.
-  self assert: version decrementMinorVersionNumber asString = '1.0'.
-  version := '1.0.0' asRwGemStoneVersionNumber.
-  self assert: version incrementMinorVersionNumber asString = '1.0.1'.
-  self assert: version decrementMinorVersionNumber asString = '1.0.0'.
-  version := '1.0.0.0' asRwGemStoneVersionNumber.
-  self assert: version incrementMinorVersionNumber asString = '1.0.0.1'.
-  self assert: version decrementMinorVersionNumber asString = '1.0.0.0'
+{ #category : 'tests' }
+RwGemStoneVersionNumberTestCase >> testVersion01 [
+
+	self assert: ((self versionClass fromString: '1.1.1') versionString = '1.1.1')
 
 ]
 
-{ #category : 'test matching' }
-RwGemStoneVersionNumberTestCase >> testInvalidSpecialMatch [
+{ #category : 'tests' }
+RwGemStoneVersionNumberTestCase >> testVersion02 [
 
-	self 
-		should: [ ((self versionClass fromString: '1.1') match: '?.?') ]
-		raise: Error.
-
-]
-
-{ #category : 'test matching' }
-RwGemStoneVersionNumberTestCase >> testSpecialMatch [
-
-	self assert: ((self versionClass fromString: '1.1') match: '?').
-	self assert: ((self versionClass fromString: 'alpha') match: '?').
-	self assert: ((self versionClass fromString: '1.1.1.1.1') match: '?').
-	self assert: ((self versionClass fromString: '1.alpha5') match: '?').
-	self assert: ((self versionClass fromString: '1.1') match: '*.?').
-	self assert: ((self versionClass fromString: '1.1') match: '?').
-	self assert: ((self versionClass fromString: '10.1.1.1.1') match: '?').
-	self deny: ((self versionClass fromString: '1.1') match: '*.*.?').
-	self assert: ((self versionClass fromString: '1.1.1') match: '*.?').
-
-]
-
-{ #category : 'test matching' }
-RwGemStoneVersionNumberTestCase >> testStandardMatch [
-
-	self assert: ((self versionClass fromString: '1.1.1') match: '*.*.*').
-	self deny: ((self versionClass fromString: '1.1.1') match: '*.*').
-	self assert: ((self versionClass fromString: '1.1.0') match: '1.1.*').
-	self assert: ((self versionClass fromString: '1.1.0') match: '1.#.*').
-	self deny: ((self versionClass fromString: '1.10.0') match: '1.#.*').
-	self assert: ((self versionClass fromString: '1-alpha5.0') match: '1-alpha#.0').
-	self assert: ((self versionClass fromString: '1.alpha5.0') match: '1-alpha#.0').
-	self assert: ((self versionClass fromString: '1.alpha5.0') match: '1.alpha#.0').
-	self deny: ((self versionClass fromString: '1-alpha10.0') match: '1-alpha#.0').
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.1.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 = v1).	
+	self assert: (v2 = v2).
+	self assert: (v1 > v2)
 
 ]
 
@@ -104,6 +75,16 @@ RwGemStoneVersionNumberTestCase >> testVersion03 [
 
 	| v1 v2 |
 	v1 := self versionClass fromString: '1.0.0.1'.
+	v2 := self versionClass fromString: '1.0.0'.
+	self assert: (v1 > v2)
+
+]
+
+{ #category : 'tests' }
+RwGemStoneVersionNumberTestCase >> testVersion04 [
+
+	| v1 v2 |
+	v1 := self versionClass fromString: '1.0.1'.
 	v2 := self versionClass fromString: '1.0.0'.
 	self assert: (v1 > v2)
 
@@ -135,16 +116,6 @@ RwGemStoneVersionNumberTestCase >> testVersion07 [
 	| v1 v2 |
 	v1 := self versionClass fromString: '3.0.0'.
 	v2 := self versionClass fromString: '2'.
-	self assert: (v1 > v2)
-
-]
-
-{ #category : 'tests' }
-RwGemStoneVersionNumberTestCase >> testVersion08 [
-
-	| v1 v2 |
-	v1 := self versionClass fromString: '1.0a6'.
-	v2 := self versionClass fromString: '1.0a5'.
 	self assert: (v1 > v2)
 
 ]
@@ -202,29 +173,10 @@ RwGemStoneVersionNumberTestCase >> testVersion13 [
 ]
 
 { #category : 'tests' }
-RwGemStoneVersionNumberTestCase >> testVersion15 [
-
-	self assert: ((self versionClass fromString: '1.0-beta.0') < (self versionClass fromString: '1.0-beta.1')).
-
-]
-
-{ #category : 'tests' }
-RwGemStoneVersionNumberTestCase >> testVersion16 [
-    self assert: (self versionClass fromString: '1.0-beta.0') < (self versionClass fromString: '1.0').
-    self assert: (self versionClass fromString: '1.0-beta.0') < (self versionClass fromString: '1.0.0').
-    self assert: (self versionClass fromString: '1.0-beta.0') < (self versionClass fromString: '1.0.0.0')
-
-]
-
-{ #category : 'tests' }
 RwGemStoneVersionNumberTestCase >> testVersion17 [
 
 	self assert: ((self versionClass fromString: '1.0') = (self versionClass fromString: '1.0.0')).
 	self assert: ((self versionClass fromString: '1') = (self versionClass fromString: '1.0')).
-	self assert: ((self versionClass fromString: '1') > (self versionClass fromString: '1-0')).
-	self assert: ((self versionClass fromString: '1') > (self versionClass fromString: '1.0-beta.0')).
-	self assert: ((self versionClass fromString: '1') > (self versionClass fromString: '1-beta.0')).
-	self assert: ((self versionClass fromString: '1') > (self versionClass fromString: '1-beta')).
 
 ]
 
@@ -233,13 +185,6 @@ RwGemStoneVersionNumberTestCase >> testVersion18 [
 
 	self deny: ((self versionClass fromString: '1.0') < (self versionClass fromString: '1')).
 	self deny: ((self versionClass fromString: '1.0') < (self versionClass fromString: '1-0')).
-
-]
-
-{ #category : 'tests' }
-RwGemStoneVersionNumberTestCase >> testVersion19 [
-
-	self assert: ((self versionClass fromString: '1.0-beta.0') < (self versionClass fromString: '1')).
 
 ]
 
@@ -263,10 +208,8 @@ RwGemStoneVersionNumberTestCase >> testVersion21 [
 { #category : 'tests' }
 RwGemStoneVersionNumberTestCase >> testVersion24 [
 
-	self assert: (RwGemStoneVersionNumber fromString: '3.0.3.-rc.1') ~= (RwGemStoneVersionNumber fromString: '3.0.0.3-rc.1').
 	self assert: (RwGemStoneVersionNumber fromString: '1.0.0.1.0.0') = (RwGemStoneVersionNumber fromString: '1.0.0.1').
 	self assert: (RwGemStoneVersionNumber fromString: '1.0.0.1') ~= (RwGemStoneVersionNumber fromString: '1..1').
-
 
 ]
 

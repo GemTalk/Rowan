@@ -148,8 +148,7 @@ RwGemStoneVersionNumber >> compareLessThan: aRwGemStoneVersionNumber [
 			ifFalse: [ more := false ]].
 	count < commonSize
 		ifTrue: [ 
-			^(self at: count + 1) 
-				metacelloVersionComponentLessThan: (aRwGemStoneVersionNumber at: count + 1) ].
+			^(self at: count + 1) < (aRwGemStoneVersionNumber at: count + 1) ].
 	mySize < aSize
 		ifTrue: [ 
 			mySize = 0 ifTrue: [ ^true ].
