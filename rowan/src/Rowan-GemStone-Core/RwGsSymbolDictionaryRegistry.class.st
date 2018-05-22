@@ -567,14 +567,14 @@ RwGsSymbolDictionaryRegistry >> existingForClass: aClass ifAbsent: absentBlock [
 { #category : 'package - creation api' }
 RwGsSymbolDictionaryRegistry >> existingOrNewLoadedPackageNamed: packageName [
 
-	^ RwGsSymbolDictionaryRegistry_Implementation packageRegistry existingOrNewLoadedPackageNamed: self
+	^ RwGsSymbolDictionaryRegistry_Implementation existingOrNewLoadedPackageNamed: packageName instance: self
 
 ]
 
 { #category : 'package - creation api' }
 RwGsSymbolDictionaryRegistry >> existingOrNewLoadedPackageNamed: packageName implementationClass: implementationClass [
 
-	^ implementationClass packageRegistry existingOrNewLoadedPackageNamed: self
+	^ implementationClass existingOrNewLoadedPackageNamed: packageName instance: self
 
 ]
 
