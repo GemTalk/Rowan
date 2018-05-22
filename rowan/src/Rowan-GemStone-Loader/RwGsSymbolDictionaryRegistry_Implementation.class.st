@@ -144,8 +144,8 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _loadedClassFor: class noNe
 					'internal error - No package found for the class ' , class name printString ].
 	classKey := loadedClass key asSymbol.
 	self
-		_symbolDictionary: self _symbolDictionary
-		ssociationAt: classKey
+		_symbolDictionary: registryInstance _symbolDictionary
+		associationAt: classKey
 		ifPresent: [ :assoc | 
 			assoc value == class
 				ifTrue: [ ^ noNewVersionBlock cull: loadedClass cull: assoc ]
@@ -221,7 +221,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 		ifAbsent: [ 
 			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
 			loadedPackage addLoadedClass: loadedClass.
-			loadedClass updatePropertiesFromClassFor: self.
+			loadedClass updatePropertiesFromClassFor: registryInstance.
 			registryInstance classRegistry at: class classHistory put: loadedClass.
 			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
 				ifNotNil: [ :loadedClassExtension | 
@@ -390,7 +390,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addNewClassVersionToAssocia
 			"association for class is present, install in association and update the loadedthing"
 			assoc value: newClass.
 			loadedClass handleClassDeletionOrNewVersion
-				ifTrue: [ loadedClass updatePropertiesFromClassFor: self ]
+				ifTrue: [ loadedClass updatePropertiesFromClassFor: registryInstance ]
 				ifFalse: [ registryInstance error: 'internal error - new version of class not properly installed' ] ]
 		instance: registryInstance
 
