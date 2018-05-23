@@ -3,7 +3,9 @@ Class {
 	#superclass : 'RowanClassesUpdate',
 	#instVars : [
 		'methods',
-		'methodFilters'
+		'methodFilters',
+		'selectors',
+		'selectedClass'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -19,6 +21,20 @@ RowanMethodsUpdate >> initialize [
 RowanMethodsUpdate >> methodFilters [
 
 	^methodFilters
+
+]
+
+{ #category : 'accessing' }
+RowanMethodsUpdate >> selectedClass:  aClass [
+
+	selectedClass := aClass
+
+]
+
+{ #category : 'private' }
+RowanMethodsUpdate >> selectedClassOverridesSelector: aSymbol [
+
+	^selectedClass superclass notNil and: [selectedClass superclass canUnderstand: aSymbol].
 
 ]
 
@@ -125,5 +141,30 @@ RowanMethodsUpdate >> writeSelectionsTo: writeStream [
 
 	selections do: [:each | writeStream nextPutAll: each; tab].
 	writeStream lf.
+
+]
+
+{ #category : 'jade' }
+RowanMethodsUpdate >> writeSelectorsTo: writeStream [
+
+	| isTestClass gsPackagePolicy anySatisfy |
+	selectors := selectors asSortedCollection. 
+	anySatisfy := false.
+	selectedClass _allSuperList do: [:each | 
+		anySatisfy := anySatisfy or: [each name = #'TestCase'].
+	].
+	isTestClass := anySatisfy ifTrue: [$T] ifFalse: [$F].
+	gsPackagePolicy := nil. "Think this is Monticello"
+	selectors := selectors asSortedCollection.
+	selectors do: [:each | 	"JadeSystemBrowserPresenter>>#'updateMethodList' "
+		writeStream 
+"1"		nextPutAll: each; tab;
+"2"		nextPut: ((self selectedClassOverridesSelector: each) ifTrue: [$T] ifFalse: [$F]); tab;
+"3"		nextPut: isTestClass; tab;
+"4"		nextPut: $F; tab;
+"5"		nextPutAll: each; tab;	
+		lf.
+	].
+	writeStream nextPut: $%; lf.
 
 ]
