@@ -71,8 +71,8 @@
 		[ 'gs3.2.15.x' ] : {
                         'core': {
 				#packageNames : [
-					'Rowan-GemStone-3215x',
-					'Rowan-Url-3215x'
+					'Rowan-GemStone-3215.x',
+					'Rowan-Url-3215.x'
 					],
 				#configurationNames : [ ]
 				}
@@ -82,6 +82,15 @@
 				#packageNames : [
 					'Rowan-GemStone-3215x17',
 					'Rowan-Url-3215x17'
+					],
+				#configurationNames : [ ]
+				}
+			},
+		[ 'gs3.2.[15-]' ] : {
+                        'core': {
+				#packageNames : [
+					'Rowan-GemStone-3215x',
+					'Rowan-Url-3215x'
 					],
 				#configurationNames : [ ]
 				}
