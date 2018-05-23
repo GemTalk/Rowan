@@ -1,21 +1,6 @@
 Extension { #name : 'RwGsImage' }
 
 { #category : '*rowan-gemstone-loader-extensions' }
-RwGsImage class >> _bootstrapApplyModification: aProjectSetModification instanceMigrator: instanceMigrator [
-
-	| visitor patchSet |
-	visitor := RwGsImageRowanBootstrapPatchVisitor new.
-	visitor visit: aProjectSetModification.
-	patchSet := visitor patchSet.
-	patchSet classesWithNewVersions isEmpty
-		ifTrue: [ 
-			patchSet apply.
-			^ self ].
-	self error: 'Did not expect new class versions during a _bootstrap load'
-
-]
-
-{ #category : '*rowan-gemstone-loader-extensions' }
 RwGsImage class >> _cloneRowanLoaderSymbolDictionary [
 
 	"in order to cleanly update Rowan using Rowan, it is necessary to isolate a copy of all of the loader code
