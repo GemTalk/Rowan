@@ -5,6 +5,15 @@ Class {
 }
 
 { #category : 'private' }
+RwRowanSample4Test >> _rowanSample4LoadSpecificationUrl [
+
+	| rowanSpec |
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	^ 'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample4_load.ston'
+
+]
+
+{ #category : 'private' }
 RwRowanSample4Test >> _rowanSample4SpecificationUrl [
 
 	| rowanSpec |
@@ -15,8 +24,6 @@ RwRowanSample4Test >> _rowanSample4SpecificationUrl [
 
 { #category : 'tests' }
 RwRowanSample4Test >> testSampleCompoundConfiguration [
-
-	"SampleCompound configuration is an instance of RwProjectCompoundConfiguration"
 
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x |
 	projectName := 'RowanSample4'.
@@ -57,5 +64,50 @@ RwRowanSample4Test >> testSampleCompoundConfiguration [
 		assert:
 			(x := project packageNames asArray sort)
 				= #('RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests') sort
+
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testSampleProjectLoadConfiguration [
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath gemStoneVersion |
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'master'.
+
+	gemStoneVersion := System stoneVersionReport at: 'gsVersion'.
+
+	projectTools load
+		loadProjectNamed: projectName
+		withConfiguration: 'Load'
+		withPlatformAttributes: { 'common'. 'gemstone'. gemStoneVersion asRwGemStoneVersionNumber}
+		withGroups: #('core' 'tests' )
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	project := RwProject newNamed: projectName.
+	self
+		assert:
+			(x := project packageNames asArray sort)
+				= #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests') sort
 
 ]

@@ -74,6 +74,13 @@ RwProjectConfigurationsTest >> _expectedLoadPackageNames_gs3_3_0 [
 ]
 
 { #category : 'private' }
+RwProjectConfigurationsTest >> _expectedRowanSampleProject4_LoadPackageNames [
+
+	^ #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests') sort
+
+]
+
+{ #category : 'private' }
 RwProjectConfigurationsTest >> _rowanProjectSpecification [
 
 	^ (Rowan image loadedProjectNamed: 'Rowan') specification
@@ -105,6 +112,29 @@ RwProjectConfigurationsTest >> testBasicProjectLoadConfiguration [
 	config := RwAbstractProjectConfiguration fromUrl: url.
 
 	self assert: config class == RwProjectLoadConfiguration
+
+]
+
+{ #category : 'tests' }
+RwProjectConfigurationsTest >> testRowanSample4ProjectLoadConfiguration [
+
+	| configurationUrl rowanSpec config visitor packageNames gemStoneVersion |
+
+	rowanSpec := self _rowanProjectSpecification.
+	configurationUrl := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanSampleProject4_LoadConfiguration.ston'.
+
+	config := RwAbstractProjectConfiguration fromUrl: configurationUrl.
+
+	gemStoneVersion := System stoneVersionReport at: 'gsVersion'.
+	visitor := RwProjectLoadConfigurationVisitor new
+		platformAttributes: { 'common'. 'gemstone'. gemStoneVersion asRwGemStoneVersionNumber};
+		groupNames: #('core' 'tests');
+		yourself.
+	visitor visit: config.
+
+	packageNames := visitor packageNames asArray sort.
+
+	self assert: packageNames = self _expectedRowanSampleProject4_LoadPackageNames.
 
 ]
 
