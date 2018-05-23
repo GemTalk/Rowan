@@ -24,7 +24,7 @@ RwRowanSample4Test >> testSampleCompoundConfiguration [
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	specUrlString := self _rowanSample2SpecificationUrl.
+	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
 
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
@@ -49,13 +49,13 @@ RwRowanSample4Test >> testSampleCompoundConfiguration [
 	gitTool gitcheckoutIn: gitRootPath with: 'master'.
 	projectTools load
 		loadProjectNamed: projectName
-		withConfiguration: 'Default'
+		withConfiguration: 'Test'
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	project := RwProject newNamed: projectName.
 	self
 		assert:
-			(x := project packageNames asArray sortWithBlock: [ :a :b | a < b ])
-				= #('RowanSample2-Core')
+			(x := project packageNames asArray sort)
+				= #('RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests') sort
 
 ]
