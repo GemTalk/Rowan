@@ -192,7 +192,7 @@ RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_2_14 [
 { #category : 'tests' }
 RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_2_15 [
 
-	| url rowanSpec config visitor packageNames |
+	| url rowanSpec config visitor packageNames x |
 	rowanSpec := self _rowanProjectSpecification.
 	url := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanProjectLoadConfiguration.ston'.
 
@@ -206,14 +206,14 @@ RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_2_15 [
 
 	packageNames := visitor packageNames asArray sort.
 
-	self assert: packageNames = self _expectedLoadPackageNames_gs3_2_15.
+	self assert: packageNames = (x := self _expectedLoadPackageNames_gs3_2_15).
 
 ]
 
 { #category : 'tests' }
 RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_2_16 [
 
-	| url rowanSpec config visitor packageNames |
+	| url rowanSpec config visitor packageNames x |
 	rowanSpec := self _rowanProjectSpecification.
 	url := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanProjectLoadConfiguration.ston'.
 
@@ -227,7 +227,7 @@ RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_2_16 [
 
 	packageNames := visitor packageNames asArray sort.
 
-	self assert: packageNames = self _expectedLoadPackageNames_gs3_2_16.
+	self assert: packageNames = (x := self _expectedLoadPackageNames_gs3_2_16).
 
 ]
 

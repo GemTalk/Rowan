@@ -28,6 +28,33 @@ RwProjectLoadConfiguration >> _platformPatternMatcherFor: pattern [
 					yourself ].
 	"GemStone version pattern"
 	versionPattern := (pattern copyFrom: 3 to: pattern size) substrings: '.'.
+	(versionPattern last includesString: '[')
+		ifTrue: [ 
+			| vpSize gsVersion1 gsVersion2 rangePattern dashIndex |
+			"range pattern"
+			vpSize := versionPattern size.
+			gsVersion1 := RwGemStoneVersionNumber new: vpSize .
+			1 to: vpSize - 1
+				do: [:index | gsVersion1 at: index put: (versionPattern at: index) asInteger ].
+			gsVersion1 at: vpSize put: 0.
+			rangePattern := (versionPattern at: vpSize) trimBoth.
+			(((rangePattern at: 1) = $[) and: [ (rangePattern at: rangePattern size) = $] ])
+				ifFalse: [ self error: 'Poorly formed GemStone version range pattern ', rangePattern printString, ' in ', pattern printString ].
+			rangePattern := rangePattern copyFrom: 2 to: rangePattern size -1.
+			dashIndex := rangePattern indexOf: $-.
+			dashIndex <= 1
+				ifTrue: [ self error: 'Invalid version range pattern missing range begin' , rangePattern printString, ' in ', pattern printString ].
+			dashIndex = rangePattern size
+				ifTrue: [ self error: 'Invalid version range pattern missing range end' , rangePattern printString, ' in ', pattern printString ].
+			"closed range"
+			gsVersion1 at: vpSize put: (rangePattern copyFrom: 1 to: dashIndex -1) asInteger.
+			gsVersion2 := gsVersion1 copy.
+			gsVersion2 at: vpSize put: (rangePattern copyFrom: dashIndex + 1 to: rangePattern size) asInteger.
+			^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
+					pattern: gsVersion1;
+					pattern2: gsVersion2;
+					patternMatchBlock: [:a :b :c | (a <= b) & (b <= c ) ];
+					yourself ].
 	versionPattern last = 'x' 
 		ifFalse: [
 			"specific version number match, use ="
@@ -35,43 +62,10 @@ RwProjectLoadConfiguration >> _platformPatternMatcherFor: pattern [
 					pattern: (pattern copyFrom: 3 to: pattern size) asRwGemStoneVersionNumber;
 					patternMatchBlock: [:a :b | a = b ];
 					yourself ].
-	(pattern includesString: '[')
-		ifTrue: [ 
-			| vpSize gsVersion1 gsVersion2 rangePattern dashIndex |
-			"range pattern"
-			vpSize := versionPattern size.
-			gsVersion1 := RwGemStoneVersionNumber new: (vpSize - 1).
-			1 to: vpSize - 2
-				do: [:index | gsVersion1 at: index put: (versionPattern at: index) asInteger ].
-			gsVersion1 at: vpSize -1 put: 0.
-			rangePattern := (versionPattern at: vpSize - 1) trimBoth.
-			(((rangePattern at: 1) = $[) and: [ (rangePattern at: rangePattern size) = $] ])
-				ifFalse: [ self error: 'Poorly formed GemStone version range pattern ', rangePattern printString ].
-			rangePattern := rangePattern copyFrom: 2 to: rangePattern size -1.
-			dashIndex := rangePattern indexOf: $-.
-			dashIndex = rangePattern size
-				ifTrue: [ 
-					"open ended range use ~>"
-					^ RwGemStoneVersionConfigurationPlatformAttributeMatcher new
-						pattern:
-							(gsVersion1 
-								at: vpSize -1 put: (rangePattern copyFrom: 1 to: rangePattern size -1) asInteger;
-								yourself);
-						patternMatchBlock: [:a :b | b ~> a ];
-						yourself ].
-			"closed range"
-			gsVersion1 at: vpSize -1 put: (rangePattern copyFrom: 1 to: dashIndex -1) asInteger.
-			gsVersion2 := gsVersion1 copy.
-			gsVersion2 at: vpSize -1 put: (rangePattern copyFrom: dashIndex + 1 to: rangePattern size) asInteger.
-			^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
-					pattern: gsVersion1;
-					pattern2: gsVersion2;
-					patternMatchBlock: [:a :b :c | (a <= b) & (b <= c ) ];
-					yourself ].
 	" 'gs', <gemstone-version-number> , '.x'"
 	"no range pattern - use ~> comparison"
 	^ RwGemStoneVersionConfigurationPlatformAttributeMatcher new
-			pattern: (pattern copyFrom: 3 to: pattern size - 2) asRwGemStoneVersionNumber;
+			pattern: ((pattern copyFrom: 3 to: pattern size - 2), '.0') asRwGemStoneVersionNumber;
 			patternMatchBlock: [:a :b | b ~> a ];
 			yourself
 

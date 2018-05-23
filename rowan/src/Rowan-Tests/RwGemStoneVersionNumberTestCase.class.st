@@ -46,7 +46,7 @@ RwGemStoneVersionNumberTestCase >> testApproxVersion03 [
 RwGemStoneVersionNumberTestCase >> testApproxVersion04 [
 
 	self assert: '3.2.0' asRwGemStoneVersionNumber approximateBase asString = '3.3'.
-	self assert: '3.2' asRwGemStoneVersionNumber approximateBase asString = '3.3'.
+	self assert: '3.2' asRwGemStoneVersionNumber approximateBase asString = '4'.
 
 ]
 
