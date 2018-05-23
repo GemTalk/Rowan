@@ -85,9 +85,16 @@
 					],
 				#configurationNames : [ ]
 				}
+			},
+		[ 'gs3.3.x' ] : {
+                        'core': {
+				#packageNames : [
+					'Rowan-GemStone-33',
+					'Rowan-Url-33'
+					],
+				#configurationNames : [ ]
+				}
 			}
-
-
 		},
 	#conditionalPackageMapSpecs : {
 		[ 'gemstone' ] : {

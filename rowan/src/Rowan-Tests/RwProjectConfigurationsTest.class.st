@@ -32,11 +32,44 @@ RwProjectConfigurationsTest >> _expectedLoadPackageNames_gemstone [
 ]
 
 { #category : 'private' }
+RwProjectConfigurationsTest >> _expectedLoadPackageNames_gs3_2_14 [
+
+	^ (self _expectedLoadPackageNames_gemstone , 
+			#('Rowan-GemStone-32' 'Rowan-Url-32' 'GemStone-Interactions-Core' 'GemStone-Interactions-Kernel') ) sort
+
+]
+
+{ #category : 'private' }
 RwProjectConfigurationsTest >> _expectedLoadPackageNames_gs3_2_15 [
 
 	^ (self _expectedLoadPackageNames_gemstone , 
 			#('Rowan-GemStone-3215' 'Rowan-Url-3215' 'Rowan-GemStone-3215x' 'Rowan-Url-3215x' 'Rowan-GemStone-3215x17'
 					'Rowan-Url-3215x17' 'Rowan-GemStone-32' 'Rowan-Url-32' 'GemStone-Interactions-Core' 'GemStone-Interactions-Kernel') ) sort
+
+]
+
+{ #category : 'private' }
+RwProjectConfigurationsTest >> _expectedLoadPackageNames_gs3_2_16 [
+
+	^ (self _expectedLoadPackageNames_gemstone , 
+			#('Rowan-GemStone-3215x' 'Rowan-Url-3215x' 'Rowan-GemStone-3215x17'
+					'Rowan-Url-3215x17' 'Rowan-GemStone-32' 'Rowan-Url-32' 'GemStone-Interactions-Core' 'GemStone-Interactions-Kernel') ) sort
+
+]
+
+{ #category : 'private' }
+RwProjectConfigurationsTest >> _expectedLoadPackageNames_gs3_2_18 [
+
+	^ (self _expectedLoadPackageNames_gemstone , 
+			#('Rowan-GemStone-3215x' 'Rowan-Url-3215x' 'Rowan-GemStone-32' 'Rowan-Url-32' 'GemStone-Interactions-Core' 'GemStone-Interactions-Kernel') ) sort
+
+]
+
+{ #category : 'private' }
+RwProjectConfigurationsTest >> _expectedLoadPackageNames_gs3_3_0 [
+
+	^ (self _expectedLoadPackageNames_gemstone , 
+			#( 'Rowan-GemStone-33' 'Rowan-Url-33' ) ) sort
 
 ]
 
@@ -136,6 +169,27 @@ RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gemstone [
 ]
 
 { #category : 'tests' }
+RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_2_14 [
+
+	| url rowanSpec config visitor packageNames |
+	rowanSpec := self _rowanProjectSpecification.
+	url := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanProjectLoadConfiguration.ston'.
+
+	config := RwAbstractProjectConfiguration fromUrl: url.
+
+	visitor := RwProjectLoadConfigurationVisitor new
+		platformAttributes: { 'common'. 'gemstone'. '3.2.14' asRwGemStoneVersionNumber};
+		groupNames: #('core' 'tests');
+		yourself.
+	visitor visit: config.
+
+	packageNames := visitor packageNames asArray sort.
+
+	self assert: packageNames = self _expectedLoadPackageNames_gs3_2_14.
+
+]
+
+{ #category : 'tests' }
 RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_2_15 [
 
 	| url rowanSpec config visitor packageNames |
@@ -153,5 +207,68 @@ RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_2_15 [
 	packageNames := visitor packageNames asArray sort.
 
 	self assert: packageNames = self _expectedLoadPackageNames_gs3_2_15.
+
+]
+
+{ #category : 'tests' }
+RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_2_16 [
+
+	| url rowanSpec config visitor packageNames |
+	rowanSpec := self _rowanProjectSpecification.
+	url := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanProjectLoadConfiguration.ston'.
+
+	config := RwAbstractProjectConfiguration fromUrl: url.
+
+	visitor := RwProjectLoadConfigurationVisitor new
+		platformAttributes: { 'common'. 'gemstone'. '3.2.16' asRwGemStoneVersionNumber};
+		groupNames: #('core' 'tests');
+		yourself.
+	visitor visit: config.
+
+	packageNames := visitor packageNames asArray sort.
+
+	self assert: packageNames = self _expectedLoadPackageNames_gs3_2_16.
+
+]
+
+{ #category : 'tests' }
+RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_2_18 [
+
+	| url rowanSpec config visitor packageNames |
+	rowanSpec := self _rowanProjectSpecification.
+	url := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanProjectLoadConfiguration.ston'.
+
+	config := RwAbstractProjectConfiguration fromUrl: url.
+
+	visitor := RwProjectLoadConfigurationVisitor new
+		platformAttributes: { 'common'. 'gemstone'. '3.2.18' asRwGemStoneVersionNumber};
+		groupNames: #('core' 'tests');
+		yourself.
+	visitor visit: config.
+
+	packageNames := visitor packageNames asArray sort.
+
+	self assert: packageNames = self _expectedLoadPackageNames_gs3_2_18.
+
+]
+
+{ #category : 'tests' }
+RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_3_0 [
+
+	| url rowanSpec config visitor packageNames |
+	rowanSpec := self _rowanProjectSpecification.
+	url := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanProjectLoadConfiguration.ston'.
+
+	config := RwAbstractProjectConfiguration fromUrl: url.
+
+	visitor := RwProjectLoadConfigurationVisitor new
+		platformAttributes: { 'common'. 'gemstone'. '3.3.0' asRwGemStoneVersionNumber};
+		groupNames: #('core' 'tests');
+		yourself.
+	visitor visit: config.
+
+	packageNames := visitor packageNames asArray sort.
+
+	self assert: packageNames = self _expectedLoadPackageNames_gs3_3_0.
 
 ]

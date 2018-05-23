@@ -42,6 +42,14 @@ RwGemStoneVersionNumberTestCase >> testApproxVersion03 [
 
 ]
 
+{ #category : 'test approximately greater than' }
+RwGemStoneVersionNumberTestCase >> testApproxVersion04 [
+
+	self assert: '3.2.0' asRwGemStoneVersionNumber approximateBase asString = '3.3'.
+	self assert: '3.2' asRwGemStoneVersionNumber approximateBase asString = '3.3'.
+
+]
+
 { #category : 'tests' }
 RwGemStoneVersionNumberTestCase >> testCollapseZeros [
 
