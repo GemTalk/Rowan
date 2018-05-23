@@ -52,7 +52,7 @@ RwProjectConfigurationsTest >> _expectedLoadPackageNames_gs3_2_15 [
 RwProjectConfigurationsTest >> _expectedLoadPackageNames_gs3_2_16 [
 
 	^ (self _expectedLoadPackageNames_gemstone , 
-			#('Rowan-GemStone-3215x' 'Rowan-Url-3215x' 'Rowan-GemStone-3215x17'
+			#( 'Rowan-GemStone-3215x17'
 					'Rowan-Url-3215x17' 'Rowan-GemStone-32' 'Rowan-Url-32' 'GemStone-Interactions-Core' 'GemStone-Interactions-Kernel') ) sort
 
 ]
@@ -61,7 +61,7 @@ RwProjectConfigurationsTest >> _expectedLoadPackageNames_gs3_2_16 [
 RwProjectConfigurationsTest >> _expectedLoadPackageNames_gs3_2_18 [
 
 	^ (self _expectedLoadPackageNames_gemstone , 
-			#('Rowan-GemStone-3215x' 'Rowan-Url-3215x' 'Rowan-GemStone-32' 'Rowan-Url-32' 'GemStone-Interactions-Core' 'GemStone-Interactions-Kernel') ) sort
+			#('Rowan-GemStone-32' 'Rowan-Url-32' 'GemStone-Interactions-Core' 'GemStone-Interactions-Kernel') ) sort
 
 ]
 
@@ -234,7 +234,7 @@ RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_2_16 [
 { #category : 'tests' }
 RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_2_18 [
 
-	| url rowanSpec config visitor packageNames |
+	| url rowanSpec config visitor packageNames x |
 	rowanSpec := self _rowanProjectSpecification.
 	url := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanProjectLoadConfiguration.ston'.
 
@@ -248,14 +248,14 @@ RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_2_18 [
 
 	packageNames := visitor packageNames asArray sort.
 
-	self assert: packageNames = self _expectedLoadPackageNames_gs3_2_18.
+	self assert: packageNames = (x := self _expectedLoadPackageNames_gs3_2_18).
 
 ]
 
 { #category : 'tests' }
 RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_3_0 [
 
-	| url rowanSpec config visitor packageNames |
+	| url rowanSpec config visitor packageNames x |
 	rowanSpec := self _rowanProjectSpecification.
 	url := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanProjectLoadConfiguration.ston'.
 
@@ -269,6 +269,6 @@ RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gs3_3_0 [
 
 	packageNames := visitor packageNames asArray sort.
 
-	self assert: packageNames = self _expectedLoadPackageNames_gs3_3_0.
+	self assert: packageNames = (x := self _expectedLoadPackageNames_gs3_3_0).
 
 ]

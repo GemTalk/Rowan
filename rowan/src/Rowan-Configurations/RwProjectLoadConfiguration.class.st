@@ -18,7 +18,7 @@ RwProjectLoadConfiguration >> _platformPatternMatcherFor: pattern [
 		or RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher
 	"
 
-	| versionPattern |
+	| versionPattern gsVersion1 gsVersion2 |
 	(pattern beginsWith: 'gs')
 		ifFalse: [ 
 			"simple equality match"
@@ -30,7 +30,7 @@ RwProjectLoadConfiguration >> _platformPatternMatcherFor: pattern [
 	versionPattern := (pattern copyFrom: 3 to: pattern size) substrings: '.'.
 	(versionPattern last includesString: '[')
 		ifTrue: [ 
-			| vpSize gsVersion1 gsVersion2 rangePattern dashIndex |
+			| vpSize rangePattern dashIndex |
 			"range pattern"
 			vpSize := versionPattern size.
 			gsVersion1 := RwGemStoneVersionNumber new: vpSize .
@@ -63,10 +63,14 @@ RwProjectLoadConfiguration >> _platformPatternMatcherFor: pattern [
 					patternMatchBlock: [:a :b | a = b ];
 					yourself ].
 	" 'gs', <gemstone-version-number> , '.x'"
-	"no range pattern - use ~> comparison"
-	^ RwGemStoneVersionConfigurationPlatformAttributeMatcher new
-			pattern: (pattern copyFrom: 3 to: pattern size - 2) asRwGemStoneVersionNumber;
-			patternMatchBlock: [:a :b | b ~> a ];
+	"match all values in x field"
+	gsVersion1 := (pattern copyFrom: 3 to: pattern size - 2) asRwGemStoneVersionNumber.
+	gsVersion2 := gsVersion1 copy.
+	gsVersion2 at: gsVersion2 size put: (gsVersion2 at: gsVersion2 size) + 1.
+	^ RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher new
+			pattern: gsVersion1;
+			pattern2: gsVersion2;
+			patternMatchBlock: [:a :b :c | (a <= b) & (b < c ) ];
 			yourself
 
 ]
