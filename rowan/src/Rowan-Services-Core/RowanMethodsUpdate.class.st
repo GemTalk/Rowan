@@ -5,10 +5,27 @@ Class {
 		'methods',
 		'methodFilters',
 		'selectors',
-		'selectedClass'
+		'selectedClass',
+		'selectedSelectors',
+		'inheritedClasses',
+		'inheritedClass'
 	],
 	#category : 'Rowan-Services-Core'
 }
+
+{ #category : 'accessing' }
+RowanMethodsUpdate >> inheritedClass: aString [
+
+	inheritedClass := aString
+
+]
+
+{ #category : 'accessing' }
+RowanMethodsUpdate >> inheritedClasses: aCollection [
+
+	inheritedClasses := aCollection
+
+]
 
 { #category : 'initialization' }
 RowanMethodsUpdate >> initialize [
@@ -39,9 +56,37 @@ RowanMethodsUpdate >> selectedClassOverridesSelector: aSymbol [
 ]
 
 { #category : 'accessing' }
+RowanMethodsUpdate >> selectedSelectors [
+
+	^selectedSelectors
+
+]
+
+{ #category : 'accessing' }
+RowanMethodsUpdate >> selectedSelectors: aCollection [
+
+	selectedSelectors := aCollection
+
+]
+
+{ #category : 'accessing' }
 RowanMethodsUpdate >> selections [
 
 	^selections
+
+]
+
+{ #category : 'accessing' }
+RowanMethodsUpdate >> selectors [
+
+	^selectors
+
+]
+
+{ #category : 'accessing' }
+RowanMethodsUpdate >> selectors: aCollection [
+
+	selectors := aCollection
 
 ]
 
@@ -88,7 +133,6 @@ RowanMethodsUpdate >> updateMethodSelections: oldSelections override: override [
 	mySelections := oldSelections.
 	override notNil ifTrue: [mySelections := Array with: override].
 	mySelections := methodFilters select: [:each | mySelections includes: each asString].
-	mySelections notEmpty ifTrue: [methodFilters := mySelections].
 	self writeList: mySelections.
 
 ]
@@ -108,6 +152,21 @@ RowanMethodsUpdate >> updateMethodVariables [
 			yourself.
 		currentClass := currentClass superclass.
 	].
+
+]
+
+{ #category : 'jade' }
+RowanMethodsUpdate >> writeInheritedClassesTo: writeStream [
+
+	inheritedClasses do: [:each | writeStream nextPutAll: each; tab].
+	writeStream lf.
+
+]
+
+{ #category : 'jade' }
+RowanMethodsUpdate >> writeInheritedClassTo: writeStream [
+
+	writeStream nextPutAll: inheritedClass; lf.
 
 ]
 
@@ -137,6 +196,14 @@ RowanMethodsUpdate >> writeMethodsTo: writeStream [
 ]
 
 { #category : 'jade' }
+RowanMethodsUpdate >> writeSelectedSelectorsTo: writeStream [
+
+	selectedSelectors do: [:each | writeStream nextPutAll: each; tab].
+	writeStream lf.
+
+]
+
+{ #category : 'jade' }
 RowanMethodsUpdate >> writeSelectionsTo: writeStream [
 
 	selections do: [:each | writeStream nextPutAll: each; tab].
@@ -147,15 +214,12 @@ RowanMethodsUpdate >> writeSelectionsTo: writeStream [
 { #category : 'jade' }
 RowanMethodsUpdate >> writeSelectorsTo: writeStream [
 
-	| isTestClass gsPackagePolicy anySatisfy |
-	selectors := selectors asSortedCollection. 
+	| isTestClass anySatisfy |
 	anySatisfy := false.
 	selectedClass _allSuperList do: [:each | 
 		anySatisfy := anySatisfy or: [each name = #'TestCase'].
 	].
 	isTestClass := anySatisfy ifTrue: [$T] ifFalse: [$F].
-	gsPackagePolicy := nil. "Think this is Monticello"
-	selectors := selectors asSortedCollection.
 	selectors do: [:each | 	"JadeSystemBrowserPresenter>>#'updateMethodList' "
 		writeStream 
 "1"		nextPutAll: each; tab;
