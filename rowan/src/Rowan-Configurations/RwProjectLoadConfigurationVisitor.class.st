@@ -27,10 +27,19 @@ RwProjectLoadConfigurationVisitor >> _configurations: configDirPath [
 ]
 
 { #category : 'private' }
+RwProjectLoadConfigurationVisitor >> _matchPlatformAttributes: platformPattern [
+
+	self platformAttributes do: [:anObject |
+		(platformPattern match: anObject) ifTrue: [ ^true ] ].
+	^false
+
+]
+
+{ #category : 'private' }
 RwProjectLoadConfigurationVisitor >> _platformAttributeMatchIn: platformList [
 
 	platformList do: [:platformPattern |
-		(self platformAttributes includes: platformPattern) 
+		(self _matchPlatformAttributes: platformPattern) 
 			ifTrue: [ ^true ] ].
 	^false
 
@@ -104,8 +113,8 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjecLoadC
 
 	visitedConfigurationNames add:  aProjecLoadConfiguration name. 
 
-	aProjecLoadConfiguration conditionalPackages keysAndValuesDo: [:platformList :groupMap | 
-		(self _platformAttributeMatchIn: platformList)
+	aProjecLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
+		(self _platformAttributeMatchIn: platformMatchers)
 			ifTrue: [
 				groupMap keysAndValuesDo: [:group :map |
 					(self groupNames includes: group)

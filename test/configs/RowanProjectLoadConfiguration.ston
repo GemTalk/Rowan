@@ -48,17 +48,46 @@
 				#configurationNames : [ ]
 				}
 			},
-		[ 'gs3.2.[15-].x' ] : {
+		[ 'gs3.2.x' ] : {
                         'core': {
 				#packageNames : [
-					'Rowan-GemStone-3215',
-					'Rowan-Url-3215',
+					'Rowan-GemStone-32',
+					'Rowan-Url-32',
                 			'GemStone-Interactions-Core',
 					'GemStone-Interactions-Kernel'
 					],
 				#configurationNames : [ ]
 				}
+			},
+		[ 'gs3.2.15' ] : {
+                        'core': {
+				#packageNames : [
+					'Rowan-GemStone-3215',
+					'Rowan-Url-3215'
+					],
+				#configurationNames : [ ]
+				}
+			},
+		[ 'gs3.2.[15-].x' ] : {
+                        'core': {
+				#packageNames : [
+					'Rowan-GemStone-3215x',
+					'Rowan-Url-3215x'
+					],
+				#configurationNames : [ ]
+				}
+			},
+		[ 'gs3.2.[15-17].x' ] : {
+                        'core': {
+				#packageNames : [
+					'Rowan-GemStone-3215x17',
+					'Rowan-Url-3215x17'
+					],
+				#configurationNames : [ ]
+				}
 			}
+
+
 		},
 	#conditionalPackageMapSpecs : {
 		[ 'gemstone' ] : {

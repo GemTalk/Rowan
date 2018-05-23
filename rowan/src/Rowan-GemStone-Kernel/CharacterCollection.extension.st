@@ -57,6 +57,20 @@ CharacterCollection >> indexOfAnyOf: aByteArray startingAt: start ifAbsent: aBlo
 ]
 
 { #category : '*rowan-gemstone-kernel' }
+CharacterCollection >> rwPlatformAttributeMatchForGemStoneVersion: anRwGemStoneVersionConfigurationPlatformAttributeMatcher [
+
+	^ anRwGemStoneVersionConfigurationPlatformAttributeMatcher matchString: self
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+CharacterCollection >> rwPlatformAttributeMatchForString: anRwStringConfigurationPlatformAttributeMatcher [
+
+	^ anRwStringConfigurationPlatformAttributeMatcher matchString: self
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
 CharacterCollection >> rwSemanticIntegerLessThanSelf: anInteger [
 
 	"integers have greater precedence than strings"
