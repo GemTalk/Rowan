@@ -48,9 +48,23 @@ RowanMethodUpdate >> classOop: anObject [
 ]
 
 { #category : 'accessing' }
+RowanMethodUpdate >> compilationWarnings: aString [
+
+	compilationWarnings := aString
+
+]
+
+{ #category : 'accessing' }
 RowanMethodUpdate >> editable: anObject [
 
 	editable := anObject
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> firstSendOffsets [
+
+	^firstSendOffsets
 
 ]
 
@@ -97,17 +111,25 @@ RowanMethodUpdate >> source: anObject [
 
 ]
 
+{ #category : 'accessing' }
+RowanMethodUpdate >> stepPoints [
+
+	^stepPoints
+
+]
+
 { #category : 'jade' }
 RowanMethodUpdate >> writeMethodTo: writeStream [
-	| x  |
+		
 		writeStream 	"Line 1 for GsMethod (line 3 for JadeSystemBrowserPresenter)"
 "1"		nextPutAll: classOop; tab;
-"2"		nextPutAll: className printString; tab;
-"3"		nextPutAll: methodOop printString; tab;
-"4"		nextPutAll: ((x := selector) isNil ifFalse: [x] ifTrue: ['']); tab;
+"2"		nextPutAll: className; tab;
+"3"		nextPutAll: methodOop; tab;
+"4"		nextPutAll: (selector ifNil:[String new]); tab;
 "5"		nextPutAll: category; tab;
 "6"		nextPutAll: editable; tab;
 		lf.
+
 	
 	"Method source"
 	writeStream nextPutAll: source.
@@ -123,7 +145,7 @@ RowanMethodUpdate >> writeMethodTo: writeStream [
 			tab].
 	writeStream lf.
 
-	firstSendOffsets keysAndValuesDo:[:key :value |
+	stepPoints keysAndValuesDo:[:key :value |
 		writeStream 
 			nextPutAll: key
 			space;
@@ -137,8 +159,9 @@ RowanMethodUpdate >> writeMethodTo: writeStream [
 	writeStream lf.
 
 	"original method"
-	writeStream nextPutAll: originalMethodSource.
-	(originalMethodSource notEmpty and: [originalMethodSource last = Character lf]) ifFalse: [writeStream lf].
+	originalMethodSource notNil ifTrue:[
+		writeStream nextPutAll: originalMethodSource.
+		(originalMethodSource notEmpty and: [originalMethodSource last = Character lf]) ifFalse: [writeStream lf]].
 	writeStream nextPut: $%; lf.
 
 	"compilation warnings"
