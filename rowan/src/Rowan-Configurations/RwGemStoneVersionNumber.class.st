@@ -62,8 +62,9 @@ RwGemStoneVersionNumber >> ~> aRwGemStoneVersionNumber [
 { #category : 'accessing' }
 RwGemStoneVersionNumber >> approximateBase [
 
-	| base |
-	base := self copyFrom: 1 to: self size - 1.
+	| base condensed |
+	condensed := self collapseZeros.
+	base := condensed copyFrom: 1 to: condensed size - 1.
 	base at: base size put: (base at: base size) + 1.
 	^base
 
@@ -86,7 +87,7 @@ RwGemStoneVersionNumber >> asString [
 
 { #category : 'private' }
 RwGemStoneVersionNumber >> collapseZeros [
-	"the rule must be that zeros can be collapsed as long as the series of zeros ends in a string term"
+	"the rule must be that zeros can be collapsed as long as the series of zeros ends in a 0"
 
 	| collection newSize new j lastElementIsStringOrZero canCollapse |
 	(self size = 0 or: [ self at: 1 ]) == 0

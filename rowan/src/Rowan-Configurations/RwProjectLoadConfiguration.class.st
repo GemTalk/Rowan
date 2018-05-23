@@ -65,7 +65,7 @@ RwProjectLoadConfiguration >> _platformPatternMatcherFor: pattern [
 	" 'gs', <gemstone-version-number> , '.x'"
 	"no range pattern - use ~> comparison"
 	^ RwGemStoneVersionConfigurationPlatformAttributeMatcher new
-			pattern: ((pattern copyFrom: 3 to: pattern size - 2), '.0') asRwGemStoneVersionNumber;
+			pattern: (pattern copyFrom: 3 to: pattern size - 2) asRwGemStoneVersionNumber;
 			patternMatchBlock: [:a :b | b ~> a ];
 			yourself
 
