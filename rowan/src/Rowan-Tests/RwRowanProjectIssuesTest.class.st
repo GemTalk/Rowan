@@ -1661,8 +1661,8 @@ RwRowanProjectIssuesTest >> testIssue198A [
 
 	"https://github.com/dalehenrich/Rowan/issues/198"
 
-	"in attempting to reproduce issue #198, hit this bug ... to be fair the original bug involved a more complicated class hierarchy and class
-		history than I've developed so far -- see testIssue198B for the ongoing attempt to reproduce the bug. "
+	"in attempting to reproduce issue #198, hit this issue. See https://github.com/dalehenrich/Rowan/issues/198#issuecomment-391831224
+		for characterization."
 
 	"subclass of class with new version, which is referenced by a method in a third class, is moved to a different package ... 
 		failure occurs when the new superclass version and move to different package occurs in one atomic load. "
@@ -1727,7 +1727,7 @@ RwRowanProjectIssuesTest >> testIssue198B [
 
 	| projectName projectNames packageName1 packageName2 className1 className2 className3 theClass 
 		theSubclass theReferenceClass projectDefinition theClassDefinition theSubclassDefinition 
-		packageDefinition1 packageDefinition2 |
+		packageDefinition1 packageDefinition2 theReferenceClassDefinition |
 
 	projectName := 'Issue198Project'.
 	projectNames := {projectName}.
@@ -1770,10 +1770,6 @@ RwRowanProjectIssuesTest >> testIssue198B [
 		category: packageName1
 		options: #().
 
-	theReferenceClass rwCompileMethod: 'boom ^ ', className1 category: 'accessing'.
-
-	"write to disk...?"
-
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	packageDefinition1 := projectDefinition packageNamed: packageName1.
 	packageDefinition2 := projectDefinition packageNamed: packageName2.
@@ -1781,18 +1777,18 @@ RwRowanProjectIssuesTest >> testIssue198B [
 	theClassDefinition := packageDefinition1 classDefinitions at: className1.
 	theClassDefinition instVarNames: #( 'ivar1').																	"force new version of className1 and className2"
 
-	false ifTrue: [ "bug does not occur if there is load at this point..."
-	Rowan projectTools load loadProjectDefinition: projectDefinition.
-	].
-
 	theSubclassDefinition := packageDefinition1 classDefinitions at: className2.
 	packageDefinition1 classDefinitions removeKey: theSubclassDefinition key.
 	packageDefinition2 classDefinitions at: theSubclassDefinition key put: theSubclassDefinition.	"move subclass to different package"
 
-	"write to disk...?"
+	theReferenceClassDefinition := packageDefinition1 classDefinitions at: className3.
+	theReferenceClassDefinition addInstanceMethodDefinition: 
+		(RwMethodDefinition
+						newForSelector: #'boom'
+						protocol: 'accessing'
+						source: 'boom ^ ', className2).																"add method referencing moved class"
 
-	"load from disk ...?"
-	Rowan projectTools load loadProjectDefinition: projectDefinition.
+	Rowan projectTools load loadProjectDefinition: projectDefinition.										"BOOM"
 
 ]
 
