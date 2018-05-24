@@ -239,6 +239,7 @@ RwGsPatchSet >> addAddedClassesToTempSymbols [
 	"Just need the names for now, they don't need to resolve to anything in particular."
 
 	addedClasses do: [:each | tempSymbols at: each className asSymbol put: nil]
+
 ]
 
 { #category : 'building' }
@@ -940,7 +941,7 @@ RwGsPatchSet >> moveClassesBetweenPackages [
 	image := Rowan image.
 	addedClasses copy
 		do: [ :patch | 
-			(deletedClassesMap at: patch classDefinition key ifAbsent: [  ])
+			(deletedClassesMap at: patch classDefinition key ifAbsent: [ ])
 				ifNotNil: [ :deletedClassPatch | 
 					| modification loadedClass |
 					loadedClass := image loadedClassNamed: patch classDefinition name.
@@ -954,8 +955,7 @@ RwGsPatchSet >> moveClassesBetweenPackages [
 						compareAgainstBase: deletedClassPatch classDefinition.
 					modification isEmpty
 						ifFalse: [ 
-"actually, I must modify the modifications here, similar to what goes on when we deal with new class versions"
-"... we need to arrange for the deletedClassPatch to be applied as well (remove from package -- maybe we leave it in?"
+							"we must modify the modifications here, similar to what goes on when we deal with new class versions"
 							modification
 								addModificationToPatchSet: self
 								inPackage: patch packageDefinition
