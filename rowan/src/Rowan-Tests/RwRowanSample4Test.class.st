@@ -70,7 +70,7 @@ RwRowanSample4Test >> testSampleCompoundConfiguration [
 { #category : 'tests' }
 RwRowanSample4Test >> testSampleProjectLoadConfiguration [
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath gemStoneVersion |
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath |
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
@@ -95,13 +95,8 @@ RwRowanSample4Test >> testSampleProjectLoadConfiguration [
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: repoRootPath with: 'master'.
 
-	gemStoneVersion := System stoneVersionReport at: 'gsVersion'.
-
 	projectTools load
 		loadProjectNamed: projectName
-		withConfiguration: 'Load'
-		withPlatformAttributes: { 'common'. 'gemstone'. gemStoneVersion asRwGemStoneVersionNumber}
-		withGroups: #('core' 'tests' )
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	project := RwProject newNamed: projectName.
