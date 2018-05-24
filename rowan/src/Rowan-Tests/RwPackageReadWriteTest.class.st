@@ -10,6 +10,9 @@ Class {
 { #category : 'private' }
 RwPackageReadWriteTest >> basicPackageLoadSpec: packageNames packageNamesToLoad: packageNamesToLoad [
 
+	"The class RwPackageProjectSpecification is deprecated .... will eventually need to convert this to use
+		RwSimpleProjectSpecification and configurations"
+
 	^ RwPackageProjectSpecification new
 		specName: 'basic test spec';
 		packageNamesToLoad: packageNamesToLoad;
