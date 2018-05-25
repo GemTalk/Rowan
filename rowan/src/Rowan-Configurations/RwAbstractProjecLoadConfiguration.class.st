@@ -1,5 +1,5 @@
 Class {
-	#name : 'RwAbstractProjecLoadtConfiguration',
+	#name : 'RwAbstractProjecLoadConfiguration',
 	#superclass : 'RwAbstractProjectConfiguration',
 	#instVars : [
 		'conditionalPackages'

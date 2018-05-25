@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwProjectLoadConfiguration',
-	#superclass : 'RwAbstractProjecLoadtConfiguration',
+	#superclass : 'RwAbstractProjecLoadConfiguration',
 	#instVars : [
 		'definedGroupNames',
 		'conditionalPackageMatchers',
