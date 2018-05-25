@@ -55,7 +55,7 @@ RwGsImage class >> applyModification: aProjectSetModification visitorClass: visi
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
-	patchSet moveClassesBetweenPackages. "updates classesWithNewVersions, if a move is detected"
+	patchSet moveClassesBetweenPackages.
 	patchSet classesWithNewVersions isEmpty
 		ifTrue: [ 
 			patchSet apply.
@@ -72,6 +72,7 @@ RwGsImage class >> applyModification: aProjectSetModification visitorClass: visi
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
+	patchSet moveClassesWithNewVersionsBetweenPackages.
 	patchSet applyForNewClassVersions: instanceMigrator
 
 ]
