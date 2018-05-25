@@ -2,19 +2,9 @@ Class {
 	#name : 'RowanMethodUpdate',
 	#superclass : 'RowanCommandResult',
 	#instVars : [
-		'classOop',
-		'className',
-		'methodOop',
-		'selector',
-		'category',
-		'editable',
-		'source',
+		'gsMethod',
 		'firstSendOffsets',
-		'stepPoints',
-		'breakPoints',
-		'originalMethodSource',
 		'method',
-		'compilationWarnings',
 		'isOverride',
 		'isTestClass'
 	],
@@ -22,44 +12,72 @@ Class {
 }
 
 { #category : 'accessing' }
+RowanMethodUpdate >> breakPoints [
+	
+	^gsMethod breakPoints
+
+]
+
+{ #category : 'accessing' }
 RowanMethodUpdate >> breakPoints: anObject [
 
-	breakPoints := anObject
+	gsMethod breakPoints: anObject
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> category [
+
+	^gsMethod category
 
 ]
 
 { #category : 'accessing' }
 RowanMethodUpdate >> category: anObject [
 
-	category := anObject
+	gsMethod category: anObject
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> className [
+
+	^gsMethod behaviorName
 
 ]
 
 { #category : 'accessing' }
 RowanMethodUpdate >> className: anObject [
 
-	className := anObject
+	gsMethod behaviorName: anObject
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> classOop [
+
+	^gsMethod behavior
 
 ]
 
 { #category : 'accessing' }
 RowanMethodUpdate >> classOop: anObject [
 
-	classOop := anObject
+	gsMethod behavior: anObject.
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> compilationWarnings [
+
+	^gsMethod warnings
 
 ]
 
 { #category : 'accessing' }
 RowanMethodUpdate >> compilationWarnings: aString [
 
-	compilationWarnings := aString
-
-]
-
-{ #category : 'accessing' }
-RowanMethodUpdate >> editable: anObject [
-
-	editable := anObject
+	gsMethod warnings: aString
 
 ]
 
@@ -74,7 +92,14 @@ RowanMethodUpdate >> firstSendOffsets [
 RowanMethodUpdate >> initialize [
 
 	firstSendOffsets := Dictionary new.
-	stepPoints := Dictionary new.
+	gsMethod := RowanGsMethod new.
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> isOverride [
+
+	^isOverride
 
 ]
 
@@ -82,6 +107,27 @@ RowanMethodUpdate >> initialize [
 RowanMethodUpdate >> isOverride: anObject [
 
 	isOverride := anObject
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> isReadOnly [
+
+	^gsMethod isReadOnly
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> isReadOnly: anObject [
+
+	gsMethod isReadOnly: anObject
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> isTestClass [
+
+	^isTestClass
 
 ]
 
@@ -100,37 +146,72 @@ RowanMethodUpdate >> method: anObject [
 ]
 
 { #category : 'accessing' }
+RowanMethodUpdate >> methodOop [
+
+	^gsMethod oopType
+
+]
+
+{ #category : 'accessing' }
 RowanMethodUpdate >> methodOop: anObject [
 
-	methodOop := anObject
+	gsMethod oopType: anObject
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> originalMethodSource [
+
+	 ^gsMethod originalSource
 
 ]
 
 { #category : 'accessing' }
 RowanMethodUpdate >> originalMethodSource: anObject [
 
-	 originalMethodSource := anObject
+	gsMethod originalSource: anObject
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> selector [
+
+	^gsMethod name
 
 ]
 
 { #category : 'accessing' }
 RowanMethodUpdate >> selector: anObject [
 
-	selector := anObject
+	gsMethod name: anObject
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> source [
+
+	^gsMethod source
 
 ]
 
 { #category : 'accessing' }
 RowanMethodUpdate >> source: anObject [
 
-	source := anObject
+	gsMethod source: anObject
 
 ]
 
 { #category : 'accessing' }
 RowanMethodUpdate >> stepPoints [
 
-	^stepPoints
+	^gsMethod stepPoints
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> stepPoints: anObject [
+
+	gsMethod stepPoints: anObject
 
 ]
 
@@ -138,22 +219,22 @@ RowanMethodUpdate >> stepPoints [
 RowanMethodUpdate >> writeMethodTo: writeStream [
 		
 		writeStream 	"Line 1 for GsMethod (line 3 for JadeSystemBrowserPresenter)"
-"1"		nextPutAll: classOop; tab;
-"2"		nextPutAll: className; tab;
-"3"		nextPutAll: methodOop; tab;
-"4"		nextPutAll: (selector ifNil:[String new]); tab;
-"5"		nextPutAll: category; tab;
-"6"		nextPutAll: editable; tab;
+"1"		nextPutAll: self classOop; tab;
+"2"		nextPutAll: self className; tab;
+"3"		nextPutAll: self methodOop; tab;
+"4"		nextPutAll: (self selector ifNil:[String new]); tab;
+"5"		nextPutAll: self category; tab;
+"6"		nextPutAll: self isReadOnly; tab;
 		lf.
 
 	
 	"Method source"
-	writeStream nextPutAll: source.
-	source last = Character lf ifFalse: [writeStream lf].
+	writeStream nextPutAll: self source.
+	self source last = Character lf ifFalse: [writeStream lf].
 	writeStream nextPut: $%; lf.	"Lines 2-N"
 
 	"unimplemented selectors"			"https://github.com/jgfoster/Jade/issues/117"
-	firstSendOffsets keysAndValuesDo:[:offset :sel |
+	self firstSendOffsets keysAndValuesDo:[:offset :sel |
 		writeStream 
 			nextPutAll: offset printString;
 			space;
@@ -161,7 +242,7 @@ RowanMethodUpdate >> writeMethodTo: writeStream [
 			tab].
 	writeStream lf.
 
-	stepPoints keysAndValuesDo:[:key :value |
+	self stepPoints keysAndValuesDo:[:key :value |
 		writeStream 
 			nextPutAll: key
 			space;
@@ -169,18 +250,18 @@ RowanMethodUpdate >> writeMethodTo: writeStream [
 			tab].
 	writeStream lf.
 	
-	breakPoints do:[:bp | 
+	self breakPoints do:[:bp | 
 		writeStream nextPutAll: bp printString
 		tab].
 	writeStream lf.
 
 	"original method"
-	originalMethodSource notNil ifTrue:[
-		writeStream nextPutAll: originalMethodSource.
-		(originalMethodSource notEmpty and: [originalMethodSource last = Character lf]) ifFalse: [writeStream lf]].
+	self originalMethodSource notNil ifTrue:[
+		writeStream nextPutAll: self originalMethodSource.
+		(self originalMethodSource notEmpty and: [self originalMethodSource last = Character lf]) ifFalse: [writeStream lf]].
 	writeStream nextPut: $%; lf.
 
 	"compilation warnings"
-	writeStream nextPutAll: compilationWarnings; nextPut: $%; lf.
+	writeStream nextPutAll: self compilationWarnings; nextPut: $%; lf.
 
 ]

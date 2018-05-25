@@ -8,8 +8,7 @@ Class {
 		'selectedClass',
 		'selectedSelectors',
 		'inheritedClasses',
-		'inheritedClass',
-		'methodUpdates'
+		'inheritedClass'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -32,7 +31,7 @@ RowanMethodsUpdate >> inheritedClasses: aCollection [
 RowanMethodsUpdate >> initialize [
 	super initialize.
 	methodFilters := IdentitySet new.
-	methodUpdates := Array new
+	methods := Array new.
 
 ]
 
@@ -154,7 +153,7 @@ RowanMethodsUpdate >> updateMethodsInfo [
 			isTestClass: isTestClass;
 			isOverride: (self selectedClassOverridesSelector: selector).
 		methods add: update. 
-		]
+		].
 
 ]
 
@@ -211,8 +210,16 @@ RowanMethodsUpdate >> writeMethodFiltersTo: writeStream [
 { #category : 'jade' }
 RowanMethodsUpdate >> writeMethodsTo: writeStream [
 
-	methods do: [:each | writeStream nextPutAll: each; tab].
-	writeStream lf.
+	methods do: [:methodUpdate | 	
+		writeStream 
+"1"		nextPutAll: methodUpdate selector; tab;
+"2"		nextPut: (methodUpdate isOverride ifTrue: [$T] ifFalse: [$F]); tab;
+"3"		nextPut: (methodUpdate isTestClass ifTrue: [$T] ifFalse: [$F]); tab;
+"4"		nextPut: $F; tab;
+"5"		nextPutAll: methodUpdate selector; tab;	
+		lf.
+	].
+	writeStream nextPut: $%; lf.
 
 ]
 
@@ -229,27 +236,5 @@ RowanMethodsUpdate >> writeSelectionsTo: writeStream [
 
 	selections do: [:each | writeStream nextPutAll: each; tab].
 	writeStream lf.
-
-]
-
-{ #category : 'jade' }
-RowanMethodsUpdate >> writeSelectorsTo: writeStream [
-
-	| isTestClass anySatisfy |
-	anySatisfy := false.
-	selectedClass _allSuperList do: [:each | 
-		anySatisfy := anySatisfy or: [each name = #'TestCase'].
-	].
-	isTestClass := anySatisfy ifTrue: [$T] ifFalse: [$F].
-	selectors do: [:each | 	"JadeSystemBrowserPresenter>>#'updateMethodList' "
-		writeStream 
-"1"		nextPutAll: each; tab;
-"2"		nextPut: ((self selectedClassOverridesSelector: each) ifTrue: [$T] ifFalse: [$F]); tab;
-"3"		nextPut: isTestClass; tab;
-"4"		nextPut: $F; tab;
-"5"		nextPutAll: each; tab;	
-		lf.
-	].
-	writeStream nextPut: $%; lf.
 
 ]
