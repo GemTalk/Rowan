@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwNestedProjectLoadConfiguration',
-	#superclass : 'RwAbstractProjecLoadConfiguration',
+	#superclass : 'RwAbstractProjectLoadConfiguration',
 	#category : 'Rowan-Configurations'
 }
 
