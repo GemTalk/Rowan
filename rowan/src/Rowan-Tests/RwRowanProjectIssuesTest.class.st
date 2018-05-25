@@ -1715,6 +1715,8 @@ RwRowanProjectIssuesTest >> testIssue198A [
 
 	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
+	self assert: theSubclass rowanPackageName = packageName2.
+
 ]
 
 { #category : 'tests-issue 198' }
@@ -1790,7 +1792,8 @@ RwRowanProjectIssuesTest >> testIssue198B [
 
 	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
-	self assert: (Rowan globalNamed: className3) new boom == (Rowan globalNamed: className2)
+	self assert: (Rowan globalNamed: className3) new boom == (Rowan globalNamed: className2).
+	self assert: theSubclass rowanPackageName = packageName2.
 
 ]
 

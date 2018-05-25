@@ -95,6 +95,8 @@ RwRowanSample4Test >> testSampleProjectLoadConfiguration [
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: repoRootPath with: 'master'.
 
+	self assert: false.			"cruft left in UserGlobals at the moment ... this test is a work in progress anyway"
+
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.

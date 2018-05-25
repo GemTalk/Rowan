@@ -14,7 +14,6 @@ Class {
 		'addedClasses',
 		'deletedClasses',
 		'movedDeletedClasses',
-		'movedDeletedClassesWithNewVersions',
 		'extendedClasses',
 		'classesWithPropertyChanges',
 		'classesWithClassVariableChanges',
@@ -240,7 +239,6 @@ RwGsPatchSet >> addAddedClassesToTempSymbols [
 	"Just need the names for now, they don't need to resolve to anything in particular."
 
 	addedClasses do: [:each | tempSymbols at: each className asSymbol put: nil].
-	movedDeletedClassesWithNewVersions do: [:each | tempSymbols at: each classDefinition key asSymbol put: nil].
 
 ]
 
@@ -874,7 +872,6 @@ RwGsPatchSet >> initialize [
 	classesWithClassVariableChanges := Set new.
 	classesWithPropertyChanges := Set new.
 	movedDeletedClasses := Set new.
-	movedDeletedClassesWithNewVersions := Set new.
 	deletedMethods := Set new.
 	deleteNewVersionMethods := Set new.
 	movedDeletedMethods := Set new.
@@ -967,30 +964,23 @@ RwGsPatchSet >> moveClassesBetweenPackages [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSet >> moveClassesWithNewVersionsBetweenPackages: originalMovedDeletedClasses [
+RwGsPatchSet >> moveClassesWithNewVersionsBetweenPackages [
 
 	"only called when there are classes with new versions"
 
-	"collect list of patches for classes with new versions that are also in originalMovedDelectedClasses (from the original pass that detected classes
-		with new versions)."
+	"remove the class deletion patch from deletedClasses for classes with new versions.
+		presence of a deletedClass patch for a class with new versions is indicative of a move
+		and delete is (obviously) undesirable when the class is being moved ... the new version 
+		of the class will be created in the new package."
 
-	"remove the class deletion patch from deletedClasses for moved classes with new versions "
-
-	| moveDeletedClassesMap deletedClassesMap | 
-	moveDeletedClassesMap := Dictionary new.
-	originalMovedDeletedClasses do: [:ar |
-		| classAdditionPatch |
-		classAdditionPatch := (ar at: 2).
-		moveDeletedClassesMap at: classAdditionPatch classDefinition key put: classAdditionPatch ].
+	| deletedClassesMap | 
 	deletedClassesMap := Dictionary new.
 	deletedClasses do: [:patch | deletedClassesMap at: patch classDefinition key put: patch ].
 	classesWithNewVersions do: [:patch | 
-		(moveDeletedClassesMap at: patch classDefinition key ifAbsent: [ ])
-			ifNotNil: [ 
 				(deletedClassesMap at: patch classDefinition key ifAbsent: [])
 					ifNotNil: [:deletePatch |
 						deletedClasses remove: deletePatch.
-						false ifTrue: [ movedDeletedClassesWithNewVersions add: patch ] ] ] ].
+						] ].
 
 ]
 

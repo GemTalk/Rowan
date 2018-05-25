@@ -51,7 +51,7 @@ RwGsImage class >> applyModification: aProjectSetModification instanceMigrator: 
 { #category : '*rowan-gemstone-loader-extensions' }
 RwGsImage class >> applyModification: aProjectSetModification visitorClass: visitorClass instanceMigrator: instanceMigrator [
 
-	| visitor patchSet movedDeletedClasses |
+	| visitor patchSet |
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
@@ -69,11 +69,10 @@ RwGsImage class >> applyModification: aProjectSetModification visitorClass: visi
 					patchSet: patchSet;
 				updateNewClassVersionPatchesForSubclassesIn: aProjectSetModification
 					patchSet: patchSet ].
-	movedDeletedClasses := patchSet movedDeletedClasses.
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
-	patchSet moveClassesWithNewVersionsBetweenPackages: movedDeletedClasses.
+	patchSet moveClassesWithNewVersionsBetweenPackages.
 	patchSet applyForNewClassVersions: instanceMigrator
 
 ]
