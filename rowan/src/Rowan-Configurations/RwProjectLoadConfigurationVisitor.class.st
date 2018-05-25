@@ -1,7 +1,9 @@
 Class {
 	#name : 'RwProjectLoadConfigurationVisitor',
-	#superclass : 'RwProjectConfigurationVisitor',
+	#superclass : 'Object',
 	#instVars : [
+		'packageNames',
+		'visitedConfigurationNames',
 		'platformAttributes',
 		'groupNames',
 		'configurationNames',
@@ -9,6 +11,13 @@ Class {
 	],
 	#category : 'Rowan-Configurations'
 }
+
+{ #category : 'instance creation' }
+RwProjectLoadConfigurationVisitor class >> new [
+
+	^super new initialize
+
+]
 
 { #category : 'private' }
 RwProjectLoadConfigurationVisitor >> _configurations: configDirPath [
@@ -83,11 +92,19 @@ RwProjectLoadConfigurationVisitor >> groupNames: aColl [
 { #category : 'initialization' }
 RwProjectLoadConfigurationVisitor >> initialize [
 
-	super initialize.
+	packageNames := Set new.
+	visitedConfigurationNames := Set new.
 	configurationNames := Set new.
 	platformAttributes := #().
 	groupNames := #().
 	configurationBasePath := ''
+
+]
+
+{ #category : 'accessing' }
+RwProjectLoadConfigurationVisitor >> packageNames [
+
+	^ packageNames
 
 ]
 
@@ -102,6 +119,27 @@ RwProjectLoadConfigurationVisitor >> platformAttributes [
 RwProjectLoadConfigurationVisitor >> platformAttributes: aColl [
 
 	platformAttributes := aColl
+
+]
+
+{ #category : 'visiting' }
+RwProjectLoadConfigurationVisitor >> visit: aProjectConfiguration [
+
+	^aProjectConfiguration acceptVisitor: self
+
+]
+
+{ #category : 'visiting' }
+RwProjectLoadConfigurationVisitor >> visitProjectCompoundConfiguration: aProjectCompoundConfiguration [
+
+	(visitedConfigurationNames includes: aProjectCompoundConfiguration name)
+		ifTrue: [ ^ self ].
+
+	visitedConfigurationNames add:  aProjectCompoundConfiguration name. 
+	packageNames addAll: aProjectCompoundConfiguration packageNames.
+
+	aProjectCompoundConfiguration _configurations
+		do: [:config | config acceptVisitor: self ].
 
 ]
 

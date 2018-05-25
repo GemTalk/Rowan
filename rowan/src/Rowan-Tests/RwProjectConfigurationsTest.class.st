@@ -147,7 +147,7 @@ RwProjectConfigurationsTest >> testVisitProjectCompoundConfiguration [
 
 	config := RwAbstractProjectConfiguration fromUrl: url.
 
-	visitor := RwProjectConfigurationVisitor new.
+	visitor := RwProjectLoadConfigurationVisitor new.
 	visitor visit: config.
 
 	packageNames := visitor packageNames asArray sort.

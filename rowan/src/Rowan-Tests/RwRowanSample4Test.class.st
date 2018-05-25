@@ -95,6 +95,7 @@ RwRowanSample4Test >> testSampleProjectLoadConfiguration [
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: repoRootPath with: 'master'.
 
+	self halt.
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.

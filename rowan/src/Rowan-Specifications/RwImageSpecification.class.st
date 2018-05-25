@@ -49,12 +49,6 @@ RwImageSpecification >> loadedGroupNames: aCollection [
 
 ]
 
-{ #category : 'accessing' }
-RwImageSpecification >> loadedPackages [
-
-	^ self subclassResponsibility
-]
-
 { #category : 'copying' }
 RwImageSpecification >> postCopy [
   "don't forget to copy any compound state objects"

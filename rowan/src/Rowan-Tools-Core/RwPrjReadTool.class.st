@@ -57,7 +57,7 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName [
 
 ]
 
-{ #category : 'smalltalk api' }
+{ #category : 'deprecation candidates' }
 RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfiguration: configName [
 
 	| projectDefinition repo spec url config |
