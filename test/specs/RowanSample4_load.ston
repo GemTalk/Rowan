@@ -4,7 +4,7 @@
 	#configsPath : 'rowan/configs',
 	#repoPath : 'rowan/src',
 	#specsPath : 'rowan/specs',
-	#defaultConfigurationNames : [ 'Load' ].
-	#defaultGroups : [ 'core', tests' ]
+	#defaultConfigurationNames : [ 'Load' ],
+	#defaultGroupNames : [ 'core', 'tests' ],
 	#comment : 'Sample project to be used as an example project when first getting started with Jadeite and Rowan.'
 }

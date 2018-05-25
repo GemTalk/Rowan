@@ -3,7 +3,6 @@ Class {
 	#superclass : 'RwSpecification',
 	#instVars : [
 		'loadedCommitId',
-		'loadedConfigurationName',
 		'loadedConfigurationNames',
 		'loadedGroupNames',
 		'repositoryUrl'
