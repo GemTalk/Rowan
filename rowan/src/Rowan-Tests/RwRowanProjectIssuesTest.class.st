@@ -1788,7 +1788,9 @@ RwRowanProjectIssuesTest >> testIssue198B [
 						protocol: 'accessing'
 						source: 'boom ^ ', className2).																"add method referencing moved class"
 
-	Rowan projectTools load loadProjectDefinition: projectDefinition.										"BOOM"
+	Rowan projectTools load loadProjectDefinition: projectDefinition.
+
+	self assert: (Rowan globalNamed: className3) new boom == (Rowan globalNamed: className2)
 
 ]
 
