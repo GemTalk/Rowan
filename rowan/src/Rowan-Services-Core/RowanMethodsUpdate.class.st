@@ -8,7 +8,8 @@ Class {
 		'selectedClass',
 		'selectedSelectors',
 		'inheritedClasses',
-		'inheritedClass'
+		'inheritedClass',
+		'methodUpdates'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -31,6 +32,7 @@ RowanMethodsUpdate >> inheritedClasses: aCollection [
 RowanMethodsUpdate >> initialize [
 	super initialize.
 	methodFilters := IdentitySet new.
+	methodUpdates := Array new
 
 ]
 
@@ -134,6 +136,25 @@ RowanMethodsUpdate >> updateMethodSelections: oldSelections override: override [
 	override notNil ifTrue: [mySelections := Array with: override].
 	mySelections := methodFilters select: [:each | mySelections includes: each asString].
 	self writeList: mySelections.
+
+]
+
+{ #category : 'updating' }
+RowanMethodsUpdate >> updateMethodsInfo [
+
+	selectors do:[:selector |
+		| isTestClass update |
+
+		isTestClass := false.
+		selectedClass _allSuperList do: [:each | 
+			isTestClass := isTestClass or: [each name = #'TestCase'].
+		].
+		update := RowanMethodUpdate new. 
+		update selector: selector;
+			isTestClass: isTestClass;
+			isOverride: (self selectedClassOverridesSelector: selector).
+		methods add: update. 
+		]
 
 ]
 

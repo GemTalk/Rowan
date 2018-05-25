@@ -14,7 +14,9 @@ Class {
 		'breakPoints',
 		'originalMethodSource',
 		'method',
-		'compilationWarnings'
+		'compilationWarnings',
+		'isOverride',
+		'isTestClass'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -73,6 +75,20 @@ RowanMethodUpdate >> initialize [
 
 	firstSendOffsets := Dictionary new.
 	stepPoints := Dictionary new.
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> isOverride: anObject [
+
+	isOverride := anObject
+
+]
+
+{ #category : 'accessing' }
+RowanMethodUpdate >> isTestClass: anObject [
+
+	isTestClass := anObject
 
 ]
 
