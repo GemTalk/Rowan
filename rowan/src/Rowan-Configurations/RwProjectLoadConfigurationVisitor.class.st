@@ -47,6 +47,7 @@ RwProjectLoadConfigurationVisitor >> _matchPlatformAttributes: platformPattern [
 { #category : 'private' }
 RwProjectLoadConfigurationVisitor >> _platformAttributeMatchIn: platformList [
 
+self halt.
 	platformList do: [:platformPattern |
 		(self _matchPlatformAttributes: platformPattern) 
 			ifTrue: [ ^true ] ].
@@ -159,6 +160,10 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjecLoadC
 						ifTrue: [ 
 							self packageNames addAll: (map at: #packageNames).
 							self configurationNames addAll: (map at: #configurationNames) ] ] ] ].
+
+	aProjecLoadConfiguration conditionalPackageMapSpecMatchers keysAndValuesDo: [:platformMatchers :packageMapSpecsMap | 
+		(self _platformAttributeMatchIn: platformMatchers)
+			ifTrue: [self halt]].
 
 	(self _configurations: self configurationBasePath, '/')
 		do: [:config | config acceptVisitor: self ].

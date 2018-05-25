@@ -81,19 +81,26 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfiguration: c
 { #category : 'smalltalk api' }
 RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfigurations: configNames groupNames: groupNames [
 
-	| projectDefinition repo spec url config configName |
+	| projectDefinition repo spec url packageNames visitor configs |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	spec := projectDefinition specification.
-	configNames size > 1 ifTrue: [ self halt ].
-	configName := configNames first. "a little duct tape while the interface is in flux"
-	url := 'file:' , spec repositoryRootPath , '/' , spec configsPath , '/'
-		, configName , '.ston'.
-	config := RwAbstractProjectConfiguration fromUrl: url.
+	visitor := RwProjectLoadConfigurationVisitor new
+		platformAttributes: Rowan platformConfigurationAttributes;
+		groupNames: groupNames;
+		yourself.
+	configs := configNames collect: [:configName |
+		| config |
+		url := 'file:' , spec repositoryRootPath , '/' , spec configsPath , '/'
+			, configName , '.ston'.
+		config := RwAbstractProjectConfiguration fromUrl: url.
+		config projectName: projectName.
+		visitor visit: config ].
 	repo := projectDefinition repositoryUrl asRwRepository.
-	config projectName: projectName.
+self halt.
+	packageNames := visitor packageNames.	
 	^ self 
 		_readProjectSetForProjectDefinition: projectDefinition 
-		packageNames: config resolvePackageNames 
+		packageNames: packageNames 
 		fromRepo: repo
 
 ]

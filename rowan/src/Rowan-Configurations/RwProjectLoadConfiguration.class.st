@@ -1,10 +1,11 @@
 Class {
 	#name : 'RwProjectLoadConfiguration',
-	#superclass : 'RwAbstractProjectConfiguration',
+	#superclass : 'RwAbstractProjecLoadtConfiguration',
 	#instVars : [
-		'conditionalPackages',
+		'definedGroupNames',
 		'conditionalPackageMatchers',
-		'conditionalPackageMapSpecs'
+		'conditionalPackageMapSpecs',
+		'conditionalPackageMapSpecMatchers'
 	],
 	#category : 'Rowan-Configurations'
 }
@@ -86,7 +87,20 @@ RwProjectLoadConfiguration >> _platformPatternMatcherFor: pattern [
 { #category : 'visiting' }
 RwProjectLoadConfiguration >> acceptVisitor: aVisitor [
 
-	^aVisitor visitProjectLoadConfiguration: self
+	^aVisitor visitNestedProjectLoadConfiguration: self
+
+]
+
+{ #category : 'accessing' }
+RwProjectLoadConfiguration >> conditionalPackageMapSpecMatchers [
+
+	conditionalPackageMapSpecMatchers ifNotNil: [:val | ^ val ]. 
+	conditionalPackageMapSpecMatchers := Dictionary new.
+	self conditionalPackageMapSpecs keysAndValuesDo: [:platformPatterns :packageMapSpecsMap |
+		conditionalPackageMapSpecMatchers
+			at: (platformPatterns collect: [:pattern | self _platformPatternMatcherFor: pattern ])
+			put: packageMapSpecsMap ].
+	^ conditionalPackageMapSpecMatchers
 
 ]
 
@@ -114,5 +128,12 @@ RwProjectLoadConfiguration >> conditionalPackageMatchers [
 RwProjectLoadConfiguration >> conditionalPackages [
 
 	^conditionalPackages ifNil: [ conditionalPackages := Dictionary new ]
+
+]
+
+{ #category : 'accessing' }
+RwProjectLoadConfiguration >> definedGroupNames [
+
+	^definedGroupNames ifNil: [ definedGroupNames := {} ]
 
 ]
