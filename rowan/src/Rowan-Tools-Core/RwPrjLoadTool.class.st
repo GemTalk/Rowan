@@ -4,46 +4,6 @@ Class {
 	#category : 'Rowan-Tools-Core'
 }
 
-{ #category : 'private' }
-RwPrjLoadTool >> _bootstrapLoadProjectNamed: projectNamed withConfiguration: configName [
-
-	"load the named project from disk"
-
-	| projectSetDefinition res |
-	projectSetDefinition := self class read
-		readProjectSetForProjectNamed: projectNamed
-		withConfiguration: configName.
-	res := self _bootstrapLoadProjectSetDefinition: projectSetDefinition instanceMigrator: Rowan platform instanceMigrator.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	projectSetDefinition deriveLoadedThings do: [:loadedProject |
-		loadedProject markNotDirty.
-		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
-	^ res
-
-]
-
-{ #category : 'private' }
-RwPrjLoadTool >> _bootstrapLoadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator [
-
-	| loadedProjectSet diff |
-	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings
-		asProjectDefinitionSet.
-	diff := projectSetDefinitionToLoad compareAgainstBase: loadedProjectSet.
-	diff isEmpty
-		ifTrue: [ 
-			| msg |
-			msg := 'The projects are already up to date'.
-			self inform: msg.
-			^ msg ].
-	Rowan image _bootstrapApplyModification: diff instanceMigrator: instanceMigrator.
-	projectSetDefinitionToLoad definitions
-		do: [ :project | 
-			self specification: project specification.
-			project specification updateLoadedCommitIdForTool: self ].
-	^ diff
-
-]
-
 { #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 
