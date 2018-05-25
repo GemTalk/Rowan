@@ -219,15 +219,14 @@ RowanMethodUpdate >> stepPoints: anObject [
 RowanMethodUpdate >> writeMethodTo: writeStream [
 		
 		writeStream 	"Line 1 for GsMethod (line 3 for JadeSystemBrowserPresenter)"
-"1"		nextPutAll: self classOop; tab;
+"1"		nextPutAll: self classOop printString; tab;
 "2"		nextPutAll: self className; tab;
-"3"		nextPutAll: self methodOop; tab;
+"3"		nextPutAll: self methodOop printString; tab;
 "4"		nextPutAll: (self selector ifNil:[String new]); tab;
 "5"		nextPutAll: self category; tab;
-"6"		nextPutAll: self isReadOnly; tab;
+"6"		nextPutAll: self isReadOnly asString; tab;
 		lf.
 
-	
 	"Method source"
 	writeStream nextPutAll: self source.
 	self source last = Character lf ifFalse: [writeStream lf].
@@ -246,7 +245,7 @@ RowanMethodUpdate >> writeMethodTo: writeStream [
 		writeStream 
 			nextPutAll: key
 			space;
-			nextPutAll: value;
+			nextPutAll: value; 
 			tab].
 	writeStream lf.
 	
