@@ -11,7 +11,7 @@ Class {
 		'repoPath',
 		'comment',
 		'imageSpec',
-		'defaultConfigurationName',
+		'defaultConfigurationNames',
 		'defaultGroupNames'
 	],
 	#category : 'Rowan-Specifications'
@@ -66,9 +66,9 @@ RwProjectSpecification >> configsPath [
 ]
 
 { #category : 'accessing' }
-RwProjectSpecification >> defaultConfigurationName [
+RwProjectSpecification >> defaultConfigurationNames [
 
-	^ defaultConfigurationName
+	^ defaultConfigurationNames
 
 ]
 
@@ -155,9 +155,9 @@ RwProjectSpecification >> loadedCommitId [
 ]
 
 { #category : 'accessing' }
-RwProjectSpecification >> loadedConfigurationName [
+RwProjectSpecification >> loadedConfigurationNames [
 
-	^ self imageSpec loadedConfigurationName
+	^ self imageSpec loadedConfigurationNames
 
 ]
 

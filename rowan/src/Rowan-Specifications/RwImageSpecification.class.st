@@ -4,6 +4,7 @@ Class {
 	#instVars : [
 		'loadedCommitId',
 		'loadedConfigurationName',
+		'loadedConfigurationNames',
 		'loadedGroupNames',
 		'repositoryUrl'
 	],
@@ -22,16 +23,16 @@ RwImageSpecification >> loadedCommitId: anObject [
 ]
 
 { #category : 'accessing' }
-RwImageSpecification >> loadedConfigurationName [
+RwImageSpecification >> loadedConfigurationNames [
 
-	^ loadedConfigurationName
+	^ loadedConfigurationNames
 
 ]
 
 { #category : 'accessing' }
-RwImageSpecification >> loadedConfigurationName: aString [
+RwImageSpecification >> loadedConfigurationNames: aCollection [
 
-	loadedConfigurationName := aString
+	loadedConfigurationNames := aCollection
 
 ]
 

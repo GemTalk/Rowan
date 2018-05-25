@@ -33,19 +33,19 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName [
 	| projectDefinition repo spec packageNames |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	spec := projectDefinition specification.
-	spec loadedConfigurationName
-		ifNotNil: [:configName |
+	spec loadedConfigurationNames
+		ifNotNil: [:configNames |
 			"project has been loaded previously, use the loaded config and group names"
 			^ self 
 					readProjectSetForProjectNamed: projectName
-					withConfiguration: configName
+					withConfigurations: configNames
 					groupNames: spec loadedGroupNames ].
-	spec defaultConfigurationName
-		ifNotNil: [:configName |
+	spec defaultConfigurationNames
+		ifNotNil: [:configNames |
 			"project has not been loaded previously use the default config and group names from the spec"
 			^ self 
 					readProjectSetForProjectNamed: projectName
-					withConfiguration: configName
+					withConfigurations: configNames
 					groupNames: spec defaultGroupNames ].
 	"no configuration associated with the project, load all of the packages in the repository"
 	repo := projectDefinition repositoryUrl asRwRepository.
@@ -79,11 +79,13 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfiguration: c
 ]
 
 { #category : 'smalltalk api' }
-RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfiguration: configName groupNames: groupNames [
+RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfigurations: configNames groupNames: groupNames [
 
-	| projectDefinition repo spec url config |
+	| projectDefinition repo spec url config configName |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	spec := projectDefinition specification.
+	configNames size > 1 ifTrue: [ self halt ].
+	configName := configNames first. "a little duct tape while the interface is in flux"
 	url := 'file:' , spec repositoryRootPath , '/' , spec configsPath , '/'
 		, configName , '.ston'.
 	config := RwAbstractProjectConfiguration fromUrl: url.
