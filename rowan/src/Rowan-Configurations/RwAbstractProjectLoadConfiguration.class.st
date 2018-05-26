@@ -3,7 +3,9 @@ Class {
 	#superclass : 'RwAbstractProjectConfiguration',
 	#instVars : [
 		'conditionalPackages',
-		'conditionalPackageMatchers'
+		'conditionalPackageMatchers',
+		'conditionalPackageMapSpecs',
+		'conditionalPackageMapSpecMatchers'
 	],
 	#category : 'Rowan-Configurations'
 }
@@ -90,10 +92,9 @@ RwAbstractProjectLoadConfiguration >> acceptCompoundVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectLoadConfiguration >> conditionalPackageMapSpecs [
-	"No conditional package map specs by default"
+RwProjectLoadConfiguration >> conditionalPackageMapSpecs [
 
-	^ Dictionary new
+	^conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
 
 ]
 

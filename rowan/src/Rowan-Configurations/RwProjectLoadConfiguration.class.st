@@ -3,9 +3,7 @@ Class {
 	#superclass : 'RwAbstractProjectLoadConfiguration',
 	#instVars : [
 		'definedGroupNames',
-		'configurationNames',
-		'conditionalPackageMapSpecs',
-		'conditionalPackageMapSpecMatchers'
+		'configurationNames'
 	],
 	#category : 'Rowan-Configurations'
 }
@@ -27,13 +25,6 @@ RwProjectLoadConfiguration >> conditionalPackageMapSpecMatchers [
 			at: (self _platformPatternMatcherFor: platformPattern)
 			put: packageMapSpecsMap ].
 	^ conditionalPackageMapSpecMatchers
-
-]
-
-{ #category : 'accessing' }
-RwProjectLoadConfiguration >> conditionalPackageMapSpecs [
-
-	^conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
 
 ]
 
