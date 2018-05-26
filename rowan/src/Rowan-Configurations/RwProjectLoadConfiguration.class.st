@@ -3,7 +3,6 @@ Class {
 	#superclass : 'RwAbstractProjectLoadConfiguration',
 	#instVars : [
 		'definedGroupNames',
-		'conditionalPackageMatchers',
 		'conditionalPackageMapSpecs',
 		'conditionalPackageMapSpecMatchers'
 	],

@@ -2,7 +2,9 @@ Class {
 	#name : 'RwAbstractProjectLoadConfiguration',
 	#superclass : 'RwAbstractProjectConfiguration',
 	#instVars : [
-		'conditionalPackages'
+		'conditionalPackages',
+		'conditionalPackageMatchers'
+
 	],
 	#category : 'Rowan-Configurations'
 }
