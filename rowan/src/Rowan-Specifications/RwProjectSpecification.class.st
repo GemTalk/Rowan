@@ -135,6 +135,7 @@ RwProjectSpecification >> initialize [
 		at: 'gemstone' put: RwGemStoneSpecification new;
 		yourself.
 	repoSpec := RwGitRepositorySpecification new.
+	version := self currentVersion
 
 ]
 

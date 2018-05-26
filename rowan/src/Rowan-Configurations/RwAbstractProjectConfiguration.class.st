@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'name',
 		'comment',
-		'projectName'
+		'projectName',
+		'version'
 	],
 	#category : 'Rowan-Configurations'
 }
@@ -111,6 +112,19 @@ RwAbstractProjectConfiguration >> comment: anObject [
 
 ]
 
+{ #category : 'private' }
+RwAbstractProjectConfiguration >> currentVersion [
+
+	"
+		0.1.0 - initial version for specs
+	"
+
+	"concrete subclasses, will override as needed"
+
+	^ '0.1.0'
+
+]
+
 { #category : 'exporting' }
 RwAbstractProjectConfiguration >> export [
 
@@ -148,7 +162,9 @@ RwAbstractProjectConfiguration >> exportToUrl: fileUrl [
 { #category : 'initialization' }
 RwAbstractProjectConfiguration >> initialize [
 
-	comment := ''
+	comment := ''.
+	version := self currentVersion
+
 ]
 
 { #category : 'initialization' }
@@ -157,7 +173,11 @@ RwAbstractProjectConfiguration >> initializeForExport [
 	"if spec is to be exported, clear out any of the fields that represent state that should 
 	not be shared"
 
-	self initializeForImport
+	| vrsn |
+	vrsn := version.
+	self initializeForImport.
+	version := vrsn.		"preserve version number for export"
+
 ]
 
 { #category : 'initialization' }
@@ -166,7 +186,8 @@ RwAbstractProjectConfiguration >> initializeForImport [
 	"if spec has been imported, clear out any of the fields that represent state that should 
 	not be shared"
 
-	projectName := nil
+	version := projectName := nil
+
 ]
 
 { #category : 'accessing' }
@@ -212,4 +233,14 @@ RwAbstractProjectConfiguration >> resolvePackageNames: visitedConfigurationNames
 		Do not visit configurations already listed in visitedConfigurationNames "
 
 	self subclassResponsibility: #'resolvePackageNames:'
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectConfiguration >> version [
+	"answer the version of the class --- used to mark the version of the class for objects written to disk"
+
+	"see currentVersion method for list of versions"
+
+	^ version
+
 ]
