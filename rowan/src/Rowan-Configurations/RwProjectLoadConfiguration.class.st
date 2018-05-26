@@ -3,6 +3,7 @@ Class {
 	#superclass : 'RwAbstractProjectLoadConfiguration',
 	#instVars : [
 		'definedGroupNames',
+		'configurationNames',
 		'conditionalPackageMapSpecs',
 		'conditionalPackageMapSpecMatchers'
 	],
@@ -33,6 +34,13 @@ RwProjectLoadConfiguration >> conditionalPackageMapSpecMatchers [
 RwProjectLoadConfiguration >> conditionalPackageMapSpecs [
 
 	^conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
+
+]
+
+{ #category : 'accessing' }
+RwProjectLoadConfiguration >> configurationNames [
+
+	^configurationNames ifNil: [ configurationNames := {} ]
 
 ]
 

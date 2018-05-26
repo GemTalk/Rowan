@@ -1,10 +1,6 @@
- RwProjectLoadConfiguration{
-	#name : 'Rowan',
+ RwNestedProjectLoadConfiguration{
+	#name : 'RowanNestedCoreProjectLoadConfiguration',
 	#version : '0.1.0',
-	#definedGroupNames : {
-		'core' : [],
-		'tests' : [ 'core' ]
-		},
 	#conditionalPackages : {
 		[ 'common' ] : {
                         'core': {
@@ -20,18 +16,6 @@
 					'Rowan-Tools-Kernel'
 					],
 				#configurationNames : [ ]
-				},
-			'tests' : {
-				#packageNames : [
-					'Rowan-Tests'
-					],
-				#configurationNames : [ ]
-				},
-			'deprecated' : {
-				#packageNames : [
-					'Rowan-Deprecated'
-					],
-				#configurationNames : [ ]
 				}
 			},
 		[ 'gemstone' ] : {
@@ -43,12 +27,6 @@
 					'Rowan-GemStone-Kernel',
 					'Rowan-GemStone-Loader',
 					'Rowan-GemStone-Loader-Extensions'
-					],
-				#configurationNames : [ ]
-				},
-			'tests' : {
-				#packageNames : [
-					'Rowan-Services-Tests'
 					],
 				#configurationNames : [ ]
 				}

@@ -1,134 +1,26 @@
  RwProjectLoadConfiguration{
-	#name : 'Rowan',
+	#name : 'RowanNestedProjectLoadConfiguration',
 	#version : '0.1.0',
 	#definedGroupNames : {
-		'core' : [],
+		'core' : [ ],
+		'deprecated' : [ ],
 		'tests' : [ 'core' ]
 		},
+	#configurationNames : [ 
+		'RowanNestedCoreProjectLoadConfiguration', 
+		'RowanNestedTestsProjectLoadConfiguration'
+		],
 	#conditionalPackages : {
 		[ 'common' ] : {
-                        'core': {
-				#packageNames : [
-					'Rowan-Url-Core',
-					'Rowan-Cypress-Core',
-					'Rowan-Cypress-Kernel',
-					'Rowan-Definitions',
-					'Rowan-Specifications',
-					'Rowan-Configurations',
-					'Rowan-Core',
-					'Rowan-Tools-Core',
-					'Rowan-Tools-Kernel'
-					],
-				#configurationNames : [ ]
-				},
-			'tests' : {
-				#packageNames : [
-					'Rowan-Tests'
-					],
-				#configurationNames : [ ]
-				},
 			'deprecated' : {
 				#packageNames : [
 					'Rowan-Deprecated'
 					],
 				#configurationNames : [ ]
 				}
-			},
-		[ 'gemstone' ] : {
-                        'core': {
-				#packageNames : [
-					'Rowan-Services-Extensions',
-					'Rowan-Services-Core',
-					'Rowan-GemStone-Core',
-					'Rowan-GemStone-Kernel',
-					'Rowan-GemStone-Loader',
-					'Rowan-GemStone-Loader-Extensions'
-					],
-				#configurationNames : [ ]
-				},
-			'tests' : {
-				#packageNames : [
-					'Rowan-Services-Tests'
-					],
-				#configurationNames : [ ]
-				}
-			},
-		[ 'gs3.2.x' ] : {
-                        'core': {
-				#packageNames : [
-					'Rowan-GemStone-32',
-					'Rowan-Url-32',
-                			'GemStone-Interactions-Core',
-					'GemStone-Interactions-Kernel'
-					],
-				#configurationNames : [ ]
-				}
-			},
-		[ 'gs3.2.15' ] : {
-                        'core': {
-				#packageNames : [
-					'Rowan-GemStone-3215',
-					'Rowan-Url-3215'
-					],
-				#configurationNames : [ ]
-				}
-			},
-		[ 'gs3.2.15.x' ] : {
-                        'core': {
-				#packageNames : [
-					'Rowan-GemStone-3215.x',
-					'Rowan-Url-3215.x'
-					],
-				#configurationNames : [ ]
-				}
-			},
-		[ 'gs3.2.[15-17]' ] : {
-                        'core': {
-				#packageNames : [
-					'Rowan-GemStone-3215x17',
-					'Rowan-Url-3215x17'
-					],
-				#configurationNames : [ ]
-				}
-			},
-		[ 'gs3.2.[15-]' ] : {
-                        'core': {
-				#packageNames : [
-					'Rowan-GemStone-3215x',
-					'Rowan-Url-3215x'
-					],
-				#configurationNames : [ ]
-				}
-			},
-		[ 'gs3.3.x' ] : {
-                        'core': {
-				#packageNames : [
-					'Rowan-GemStone-33',
-					'Rowan-Url-33'
-					],
-				#configurationNames : [ ]
-				}
 			}
 		},
 	#conditionalPackageMapSpecs : {
-		'gemstone' : {
-			'SystemUser' : {
-				#defaultSymbolDictName : 'RowanKernel',
-				#defaultUseSessionMethodsForExtensions : false,
-				#packageNameToPlatformPropertiesMap : {
-					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
-					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
-					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
-					'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
-					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
-					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' }
-					}
-			},
-			'default' : {
-				#defaultSymbolDictName : 'UserGlobals',
-				#defaultUseSessionMethodsForExtensions : false
-				}
-			}
 		},
 	#comment : ''
 }

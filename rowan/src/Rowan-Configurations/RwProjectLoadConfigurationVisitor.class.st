@@ -6,6 +6,7 @@ Class {
 		'packageMapSpecs',
 		'visitedConfigurationNames',
 		'platformAttributes',
+		'definedGroupNames',
 		'groupNames',
 		'configurationNames',
 		'configurationBasePath'
@@ -189,6 +190,12 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjecLoadC
 
 	visitedConfigurationNames add:  aProjecLoadConfiguration name. 
 
+	definedGroupNames := aProjecLoadConfiguration definedGroupNames.
+	groupNames := groupNames asSet.
+	self groupNames copy do: [:groupName |
+		"make sure that required groups are included in group names"
+		groupNames addAll: (definedGroupNames at: groupName ifAbsent: [ #() ]) ].
+
 	self _processConditionalPackageNames: aProjecLoadConfiguration.
 
 	currentUserId := Rowan image currentUserId.
@@ -200,6 +207,7 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjecLoadC
 					at: currentUserId 
 					ifAbsent: [ packageMapSpecsMap at: 'default'  ifAbsent: [] ] ] ].
 
+	self configurationNames addAll: aProjecLoadConfiguration configurationNames.
 	(self _configurations: self configurationBasePath, '/')
 		do: [:config | config acceptNestedVisitor: self ].
 

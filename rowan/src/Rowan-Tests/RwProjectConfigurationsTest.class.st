@@ -154,15 +154,17 @@ RwProjectConfigurationsTest >> testRowanSample4ProjectLoadConfiguration [
 { #category : 'tests' }
 RwProjectConfigurationsTest >> testVisitNestedProjectLoadConfiguration_common [
 
-	| url rowanSpec config visitor packageNames |
+	| url rowanSpec config visitor packageNames configurationBasePath |
 	rowanSpec := self _rowanProjectSpecification.
-	url := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanTopLevelProjectLoadConfiguration.ston'.
+	configurationBasePath :=  rowanSpec repositoryRootPath , '/test/configs/'.
+	url := 'file:' , configurationBasePath, 'RowanNestedProjectLoadConfiguration.ston'.
 
 	config := RwAbstractProjectConfiguration fromUrl: url.
 
 	visitor := RwProjectLoadConfigurationVisitor new
 		platformAttributes: #('common');
 		groupNames: #('core' 'tests');
+		configurationBasePath: configurationBasePath;
 		yourself.
 	visitor visit: config.
 
