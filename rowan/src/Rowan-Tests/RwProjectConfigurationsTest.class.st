@@ -118,7 +118,7 @@ RwProjectConfigurationsTest >> testBasicProjectLoadConfiguration [
 { #category : 'tests' }
 RwProjectConfigurationsTest >> testRowanSample4ProjectLoadConfiguration [
 
-	| configurationUrl rowanSpec config visitor packageNames gemStoneVersion |
+	| configurationUrl rowanSpec config visitor packageNames gemStoneVersion packageMapSpecs packagePropertiesMap|
 
 	rowanSpec := self _rowanProjectSpecification.
 	configurationUrl := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanSampleProject4_LoadConfiguration.ston'.
@@ -135,6 +135,19 @@ RwProjectConfigurationsTest >> testRowanSample4ProjectLoadConfiguration [
 	packageNames := visitor packageNames asArray sort.
 
 	self assert: packageNames = self _expectedRowanSampleProject4_LoadPackageNames.
+
+	packageMapSpecs := visitor packageMapSpecs.
+	self assert: packageMapSpecs notNil.
+
+	self assert: (packageMapSpecs at: #'defaultSymbolDictName') = 'RowanSample4SymbolDict'.
+	self assert: (packageMapSpecs at: #'defaultUseSessionMethodsForExtensions') = false.
+
+	packagePropertiesMap := packageMapSpecs at: #packageNameToPlatformPropertiesMap.
+	#('RowanSample4-GemStone') 
+		do: [:packageName | 
+			| map | 
+			map := packagePropertiesMap at: packageName.
+			self assert: (map at: 'symbolDictName') = 'RowanSample4DictionarySymbolDict' ].
 
 ]
 
@@ -201,7 +214,7 @@ RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_common [
 { #category : 'tests' }
 RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gemstone [
 
-	| url rowanSpec config visitor packageNames |
+	| url rowanSpec config visitor packageNames packageMapSpecs packagePropertiesMap |
 	rowanSpec := self _rowanProjectSpecification.
 	url := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanProjectLoadConfiguration.ston'.
 
@@ -214,8 +227,32 @@ RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gemstone [
 	visitor visit: config.
 
 	packageNames := visitor packageNames asArray sort.
-
 	self assert: packageNames = self _expectedLoadPackageNames_gemstone.
+
+	packageMapSpecs := visitor packageMapSpecs.
+	self assert: packageMapSpecs notNil.
+
+	Rowan image currentUserId = 'SystemUser'
+		ifTrue: [
+			self assert: (packageMapSpecs at: #'defaultSymbolDictName') = 'RowanKernel'.
+			self assert: (packageMapSpecs at: #'defaultUseSessionMethodsForExtensions') = false.
+
+			packagePropertiesMap := packageMapSpecs at: #packageNameToPlatformPropertiesMap.
+			#('Rowan-Cypress-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Tools-Kernel' 'GemStone-Interactions-Kernel' 'Rowan-GemStone-3215') 
+				do: [:packageName | 
+					| map | 
+					map := packagePropertiesMap at: packageName.
+					self assert: (map at: 'symbolDictName') = 'Globals' ].
+
+			#('Rowan-GemStone-Loader') 
+				do: [:packageName | 
+					| map | 
+					map := packagePropertiesMap at: packageName.
+					self assert: (map at: 'symbolDictName') = 'RowanLoader' ] ]
+		ifFalse: [
+			"default"
+			self assert: (packageMapSpecs at: #'defaultSymbolDictName') = 'UserGlobals'.
+			self assert: (packageMapSpecs at: #'defaultUseSessionMethodsForExtensions') = false ]
 
 ]
 

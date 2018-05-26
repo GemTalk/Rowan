@@ -3,6 +3,7 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'packageNames',
+		'packageMapSpecs',
 		'visitedConfigurationNames',
 		'platformAttributes',
 		'groupNames',
@@ -116,6 +117,13 @@ RwProjectLoadConfigurationVisitor >> initialize [
 ]
 
 { #category : 'accessing' }
+RwProjectLoadConfigurationVisitor >> packageMapSpecs [
+
+	^ packageMapSpecs
+
+]
+
+{ #category : 'accessing' }
 RwProjectLoadConfigurationVisitor >> packageNames [
 
 	^ packageNames
@@ -175,6 +183,7 @@ RwProjectLoadConfigurationVisitor >> visitProjectCompoundConfiguration: aProject
 { #category : 'visiting' }
 RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjecLoadConfiguration [
 
+	| currentUserId |
 	(visitedConfigurationNames includes: aProjecLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
@@ -182,9 +191,14 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjecLoadC
 
 	self _processConditionalPackageNames: aProjecLoadConfiguration.
 
+	currentUserId := Rowan image currentUserId.
 	aProjecLoadConfiguration conditionalPackageMapSpecMatchers keysAndValuesDo: [:platformMatcher :packageMapSpecsMap | 
 		(self _platformAttributeMatchIn: {platformMatcher})
-			ifTrue: []].
+			ifTrue: [
+				packageMapSpecs ifNotNil: [ self halt ].
+				packageMapSpecs := packageMapSpecsMap 
+					at: currentUserId 
+					ifAbsent: [ packageMapSpecsMap at: 'default'  ifAbsent: [] ] ] ].
 
 	(self _configurations: self configurationBasePath, '/')
 		do: [:config | config acceptVisitor: self ].
