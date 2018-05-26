@@ -87,7 +87,7 @@ RwProjectLoadConfiguration >> _platformPatternMatcherFor: pattern [
 { #category : 'visiting' }
 RwProjectLoadConfiguration >> acceptVisitor: aVisitor [
 
-	^aVisitor visitNestedProjectLoadConfiguration: self
+	^aVisitor visitProjectLoadConfiguration: self
 
 ]
 
@@ -121,13 +121,6 @@ RwProjectLoadConfiguration >> conditionalPackageMatchers [
 			at: (platformPatterns collect: [:pattern | self _platformPatternMatcherFor: pattern ])
 			put: groupMap ].
 	^ conditionalPackageMatchers
-
-]
-
-{ #category : 'accessing' }
-RwProjectLoadConfiguration >> conditionalPackages [
-
-	^conditionalPackages ifNil: [ conditionalPackages := Dictionary new ]
 
 ]
 

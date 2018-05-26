@@ -4,6 +4,13 @@ Class {
 	#category : 'Rowan-Configurations'
 }
 
+{ #category : 'visiting' }
+RwNestedProjectLoadConfiguration >> acceptVisitor: aVisitor [
+
+	^aVisitor visitNestedProjectLoadConfiguration: self
+
+]
+
 { #category : 'accessing' }
 RwNestedProjectLoadConfiguration >> conditionalPackageMapSpecs [
 	"No conditional package map specs in nested configs"

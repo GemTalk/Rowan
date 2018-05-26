@@ -131,6 +131,28 @@ RwProjectLoadConfigurationVisitor >> visit: aProjectConfiguration [
 ]
 
 { #category : 'visiting' }
+RwProjectLoadConfigurationVisitor >> visitNestedProjectLoadConfiguration: aNestedProjecLoadConfiguration [
+
+	(visitedConfigurationNames includes: aNestedProjecLoadConfiguration name)
+		ifTrue: [ ^ self ].
+
+	visitedConfigurationNames add:  aNestedProjecLoadConfiguration name. 
+
+	aNestedProjecLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
+		(self _platformAttributeMatchIn: platformMatchers)
+			ifTrue: [
+				groupMap keysAndValuesDo: [:group :map |
+					(self groupNames includes: group)
+						ifTrue: [ 
+							self packageNames addAll: (map at: #packageNames).
+							self configurationNames addAll: (map at: #configurationNames) ] ] ] ].
+
+	(self _configurations: self configurationBasePath, '/')
+		do: [:config | config acceptVisitor: self ].
+
+]
+
+{ #category : 'visiting' }
 RwProjectLoadConfigurationVisitor >> visitProjectCompoundConfiguration: aProjectCompoundConfiguration [
 
 	(visitedConfigurationNames includes: aProjectCompoundConfiguration name)
