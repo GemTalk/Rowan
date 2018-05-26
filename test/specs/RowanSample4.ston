@@ -1,5 +1,6 @@
  RwSimpleProjectSpecification{
 	#specName : 'RowanSample4',
+	#version : '0.1.0',
 	#projectUrl : 'https://github.com/dalehenrich/RowanSample4',
 	#platformSpec : {
 		'gemstone' : RwGemStoneSpecification {

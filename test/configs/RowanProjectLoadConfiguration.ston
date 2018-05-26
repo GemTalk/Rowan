@@ -1,5 +1,6 @@
  RwProjectLoadConfiguration{
 	#name : 'Rowan',
+	#version : '0.1.0',
 	#definedGroupNames : {
 		'core' : [],
 		'tests' : [ 'core' ]
