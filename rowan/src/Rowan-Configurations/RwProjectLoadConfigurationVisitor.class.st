@@ -55,6 +55,20 @@ self halt.
 
 ]
 
+{ #category : 'private' }
+RwProjectLoadConfigurationVisitor >> _processConditionalPackageNames: aProjectLoadConfiguraiton [
+
+	aProjectLoadConfiguraiton conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
+		(self _platformAttributeMatchIn: platformMatchers)
+			ifTrue: [
+				groupMap keysAndValuesDo: [:group :map |
+					(self groupNames includes: group)
+						ifTrue: [ 
+							self packageNames addAll: (map at: #packageNames).
+							self configurationNames addAll: (map at: #configurationNames) ] ] ] ].
+
+]
+
 { #category : 'accessing' }
 RwProjectLoadConfigurationVisitor >> configurationBasePath [
 
@@ -138,14 +152,7 @@ RwProjectLoadConfigurationVisitor >> visitNestedProjectLoadConfiguration: aNeste
 
 	visitedConfigurationNames add:  aNestedProjecLoadConfiguration name. 
 
-	aNestedProjecLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
-		(self _platformAttributeMatchIn: platformMatchers)
-			ifTrue: [
-				groupMap keysAndValuesDo: [:group :map |
-					(self groupNames includes: group)
-						ifTrue: [ 
-							self packageNames addAll: (map at: #packageNames).
-							self configurationNames addAll: (map at: #configurationNames) ] ] ] ].
+	self _processConditionalPackageNames: aNestedProjecLoadConfiguration.
 
 	(self _configurations: self configurationBasePath, '/')
 		do: [:config | config acceptVisitor: self ].
@@ -174,14 +181,7 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjecLoadC
 
 	visitedConfigurationNames add:  aProjecLoadConfiguration name. 
 
-	aProjecLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
-		(self _platformAttributeMatchIn: platformMatchers)
-			ifTrue: [
-				groupMap keysAndValuesDo: [:group :map |
-					(self groupNames includes: group)
-						ifTrue: [ 
-							self packageNames addAll: (map at: #packageNames).
-							self configurationNames addAll: (map at: #configurationNames) ] ] ] ].
+	self _processConditionalPackageNames: aProjecLoadConfiguration.
 
 	aProjecLoadConfiguration conditionalPackageMapSpecMatchers keysAndValuesDo: [:platformMatchers :packageMapSpecsMap | 
 		(self _platformAttributeMatchIn: platformMatchers)
