@@ -5,8 +5,15 @@ Class {
 }
 
 { #category : 'visiting' }
-RwNestedProjectLoadConfiguration >> acceptVisitor: aVisitor [
+RwNestedProjectLoadConfiguration >> acceptNestedVisitor: aVisitor [
 
 	^aVisitor visitNestedProjectLoadConfiguration: self
+
+]
+
+{ #category : 'visiting' }
+RwNestedProjectLoadConfiguration >> acceptVisitor: aVisitor [
+
+	^self error: 'nested configuration cannot be used as a top-level configuration. The receiver is nested inside of project load configurations'
 
 ]

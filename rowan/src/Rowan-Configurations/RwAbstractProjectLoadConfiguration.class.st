@@ -82,6 +82,13 @@ RwAbstractProjectLoadConfiguration >> _platformPatternMatcherFor: pattern [
 
 ]
 
+{ #category : 'visiting' }
+RwAbstractProjectLoadConfiguration >> acceptCompoundVisitor: aVisitor [
+
+	self error: 'project load configurations may not be nested inside of compound configurations'
+
+]
+
 { #category : 'accessing' }
 RwAbstractProjectLoadConfiguration >> conditionalPackageMapSpecs [
 	"No conditional package map specs by default"

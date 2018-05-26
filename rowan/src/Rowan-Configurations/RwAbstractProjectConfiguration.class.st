@@ -92,6 +92,20 @@ RwAbstractProjectConfiguration >> _specification [
 ]
 
 { #category : 'visiting' }
+RwAbstractProjectConfiguration >> acceptCompoundVisitor: aVisitor [
+
+	^ self subclassResponsibility: #acceptCompoundVisitor:
+
+]
+
+{ #category : 'visiting' }
+RwAbstractProjectConfiguration >> acceptNestedVisitor: aVisitor [
+
+	^ self subclassResponsibility: #acceptNestedVisitor:
+
+]
+
+{ #category : 'visiting' }
 RwAbstractProjectConfiguration >> acceptVisitor: aVisitor [
 
 	^ self subclassResponsibility: #acceptVisitor:

@@ -162,7 +162,7 @@ RwProjectLoadConfigurationVisitor >> visitNestedProjectLoadConfiguration: aNeste
 	self _processConditionalPackageNames: aNestedProjecLoadConfiguration.
 
 	(self _configurations: self configurationBasePath, '/')
-		do: [:config | config acceptVisitor: self ].
+		do: [:config | config acceptNestedVisitor: self ].
 
 ]
 
@@ -176,7 +176,7 @@ RwProjectLoadConfigurationVisitor >> visitProjectCompoundConfiguration: aProject
 	packageNames addAll: aProjectCompoundConfiguration packageNames.
 
 	aProjectCompoundConfiguration _configurations
-		do: [:config | config acceptVisitor: self ].
+		do: [:config | config acceptCompoundVisitor: self ].
 
 ]
 
@@ -201,6 +201,6 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjecLoadC
 					ifAbsent: [ packageMapSpecsMap at: 'default'  ifAbsent: [] ] ] ].
 
 	(self _configurations: self configurationBasePath, '/')
-		do: [:config | config acceptVisitor: self ].
+		do: [:config | config acceptNestedVisitor: self ].
 
 ]

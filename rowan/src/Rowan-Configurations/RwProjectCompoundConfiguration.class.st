@@ -26,9 +26,16 @@ RwProjectCompoundConfiguration >> _configurations [
 ]
 
 { #category : 'visiting' }
-RwProjectCompoundConfiguration >> acceptVisitor: aVisitor [
+RwProjectCompoundConfiguration >> acceptCompoundVisitor: aVisitor [
 
 	^aVisitor visitProjectCompoundConfiguration: self
+
+]
+
+{ #category : 'visiting' }
+RwProjectCompoundConfiguration >> acceptVisitor: aVisitor [
+
+	^self acceptCompoundVisitor: aVisitor
 
 ]
 
