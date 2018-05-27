@@ -2,8 +2,7 @@ Class {
 	#name : 'RwProjectCompoundConfiguration',
 	#superclass : 'RwAbstractProjectConfiguration',
 	#instVars : [
-		'packageNames',
-		'configurationNames'
+		'packageNames'
 	],
 	#category : 'Rowan-Configurations'
 }
@@ -36,20 +35,6 @@ RwProjectCompoundConfiguration >> acceptCompoundVisitor: aVisitor [
 RwProjectCompoundConfiguration >> acceptVisitor: aVisitor [
 
 	^self acceptCompoundVisitor: aVisitor
-
-]
-
-{ #category : 'accessing' }
-RwProjectCompoundConfiguration >> configurationNames [
-
-   ^configurationNames
-
-]
-
-{ #category : 'accessing' }
-RwProjectCompoundConfiguration >> configurationNames: anObject [
-
-   configurationNames := anObject
 
 ]
 

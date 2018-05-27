@@ -2,8 +2,7 @@ Class {
 	#name : 'RwProjectLoadConfiguration',
 	#superclass : 'RwAbstractProjectLoadConfiguration',
 	#instVars : [
-		'definedGroupNames',
-		'configurationNames'
+		'definedGroupNames'
 	],
 	#category : 'Rowan-Configurations'
 }
@@ -29,9 +28,9 @@ RwProjectLoadConfiguration >> conditionalPackageMapSpecMatchers [
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfiguration >> configurationNames [
+RwProjectLoadConfiguration >> conditionalPackageMapSpecs [
 
-	^configurationNames ifNil: [ configurationNames := {} ]
+	^conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
 
 ]
 
@@ -39,5 +38,12 @@ RwProjectLoadConfiguration >> configurationNames [
 RwProjectLoadConfiguration >> definedGroupNames [
 
 	^definedGroupNames ifNil: [ definedGroupNames := {} ]
+
+]
+
+{ #category : 'accessing' }
+RwProjectLoadConfiguration >> definedGroupNames: aColl [
+
+	definedGroupNames := aColl
 
 ]

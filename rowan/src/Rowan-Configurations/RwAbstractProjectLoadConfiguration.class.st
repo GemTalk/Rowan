@@ -92,13 +92,6 @@ RwAbstractProjectLoadConfiguration >> acceptCompoundVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfiguration >> conditionalPackageMapSpecs [
-
-	^conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
-
-]
-
-{ #category : 'accessing' }
 RwAbstractProjectLoadConfiguration >> conditionalPackageMatchers [
 
 	conditionalPackageMatchers ifNotNil: [:val | ^ val ]. 

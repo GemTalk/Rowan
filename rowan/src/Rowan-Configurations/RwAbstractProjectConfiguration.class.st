@@ -5,7 +5,8 @@ Class {
 		'name',
 		'comment',
 		'projectName',
-		'version'
+		'version',
+		'configurationNames'
 	],
 	#category : 'Rowan-Configurations'
 }
@@ -123,6 +124,20 @@ RwAbstractProjectConfiguration >> comment [
 RwAbstractProjectConfiguration >> comment: anObject [
 
    comment := anObject
+
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectConfiguration >> configurationNames [
+
+   ^configurationNames
+
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectConfiguration >> configurationNames: anObject [
+
+   configurationNames := anObject
 
 ]
 
