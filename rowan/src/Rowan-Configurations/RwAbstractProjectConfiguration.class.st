@@ -130,7 +130,7 @@ RwAbstractProjectConfiguration >> comment: anObject [
 { #category : 'accessing' }
 RwAbstractProjectConfiguration >> configurationNames [
 
-   ^configurationNames
+   ^ configurationNames ifNil: [ Set new ]
 
 ]
 
@@ -192,7 +192,8 @@ RwAbstractProjectConfiguration >> exportToUrl: fileUrl [
 RwAbstractProjectConfiguration >> initialize [
 
 	comment := ''.
-	version := self currentVersion
+	version := self currentVersion.
+	configurationNames := Set new
 
 ]
 
@@ -271,5 +272,12 @@ RwAbstractProjectConfiguration >> version [
 	"see currentVersion method for list of versions"
 
 	^ version
+
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectConfiguration >> version: aString [
+
+	self error: 'Do not use version: ... the version should only be set when read from disk using STON'
 
 ]

@@ -30,14 +30,14 @@ RwProjectLoadConfiguration >> conditionalPackageMapSpecMatchers [
 { #category : 'accessing' }
 RwProjectLoadConfiguration >> conditionalPackageMapSpecs [
 
-	^conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
+	^ conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
 
 ]
 
 { #category : 'accessing' }
 RwProjectLoadConfiguration >> definedGroupNames [
 
-	^definedGroupNames ifNil: [ definedGroupNames := {} ]
+	^ definedGroupNames ifNil: [ definedGroupNames :=  Set new ]
 
 ]
 
@@ -45,5 +45,14 @@ RwProjectLoadConfiguration >> definedGroupNames [
 RwProjectLoadConfiguration >> definedGroupNames: aColl [
 
 	definedGroupNames := aColl
+
+]
+
+{ #category : 'initialization' }
+RwProjectLoadConfiguration >> initialize [
+
+	super initialize.
+	definedGroupNames := Set new.
+	conditionalPackageMapSpecs := Dictionary new
 
 ]

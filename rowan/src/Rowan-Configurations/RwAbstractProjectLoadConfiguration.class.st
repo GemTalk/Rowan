@@ -107,7 +107,7 @@ RwAbstractProjectLoadConfiguration >> conditionalPackageMatchers [
 { #category : 'accessing' }
 RwAbstractProjectLoadConfiguration >> conditionalPackages [
 
-	^conditionalPackages ifNil: [ conditionalPackages := Dictionary new ]
+	^ conditionalPackages ifNil: [ conditionalPackages := Dictionary new ]
 
 ]
 
@@ -116,5 +116,13 @@ RwAbstractProjectLoadConfiguration >> definedGroupNames [
 	"Empty list by default"
 
 	^ #()
+
+]
+
+{ #category : 'initialization' }
+RwAbstractProjectLoadConfiguration >> initialize [
+
+	super initialize.
+	conditionalPackages := Dictionary new
 
 ]

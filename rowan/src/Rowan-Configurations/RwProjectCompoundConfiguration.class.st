@@ -43,7 +43,7 @@ RwProjectCompoundConfiguration >> initialize [
 
 	super initialize.
 	packageNames := Set new.
-	configurationNames := Set new
+
 ]
 
 { #category : 'accessing' }
