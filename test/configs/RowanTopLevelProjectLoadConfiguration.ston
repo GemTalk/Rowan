@@ -3,7 +3,7 @@
 	#version : '0.1.0',
 	#definedGroupNames : {
 		'core' : [ ],
-		'deprecated' : [ 'core' ],
+		'deprecated' : [ ],
 		'tests' : [ 'core' ]
 		},
 	#configurationNames : [ 

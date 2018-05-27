@@ -23,6 +23,35 @@ RwProjectConfigurationsTest >> _expectedLoadPackageNames_common [
 ]
 
 { #category : 'private' }
+RwProjectConfigurationsTest >> _expectedLoadPackageNames_common_core [
+
+	^ #('Rowan-Url-Core' 'Rowan-Cypress-Core' 'Rowan-Cypress-Kernel' 'Rowan-Definitions' 'Rowan-Specifications' 'Rowan-Configurations'
+			'Rowan-Core' 'Rowan-Tools-Core' 'Rowan-Tools-Kernel') sort
+
+]
+
+{ #category : 'private' }
+RwProjectConfigurationsTest >> _expectedLoadPackageNames_common_core_tests [
+
+	^ (self _expectedLoadPackageNames_common_core, #('Rowan-Tests')) sort
+
+]
+
+{ #category : 'private' }
+RwProjectConfigurationsTest >> _expectedLoadPackageNames_common_deprecated [
+
+	^ (self _expectedLoadPackageNames_common_core , #('Rowan-Deprecated')) sort
+
+]
+
+{ #category : 'private' }
+RwProjectConfigurationsTest >> _expectedLoadPackageNames_common_tests [
+
+	^ self _expectedLoadPackageNames_common_core_tests
+
+]
+
+{ #category : 'private' }
 RwProjectConfigurationsTest >> _expectedLoadPackageNames_gemstone [
 
 	^ (self _expectedLoadPackageNames_common , 
@@ -152,12 +181,35 @@ RwProjectConfigurationsTest >> testRowanSample4ProjectLoadConfiguration [
 ]
 
 { #category : 'tests' }
-RwProjectConfigurationsTest >> testVisitNestedProjectLoadConfiguration_common [
+RwProjectConfigurationsTest >> testVisitNestedProjectLoadConfiguration_common_core [
 
 	| url rowanSpec config visitor packageNames configurationBasePath |
 	rowanSpec := self _rowanProjectSpecification.
 	configurationBasePath :=  rowanSpec repositoryRootPath , '/test/configs/'.
-	url := 'file:' , configurationBasePath, 'RowanNestedProjectLoadConfiguration.ston'.
+	url := 'file:' , configurationBasePath, 'RowanTopLevelProjectLoadConfiguration.ston'.
+
+	config := RwAbstractProjectConfiguration fromUrl: url.
+
+	visitor := RwProjectLoadConfigurationVisitor new
+		platformAttributes: #('common');
+		groupNames: #('core');
+		configurationBasePath: configurationBasePath;
+		yourself.
+	visitor visit: config.
+
+	packageNames := visitor packageNames asArray sort.
+
+	self assert: packageNames = self _expectedLoadPackageNames_common_core.
+
+]
+
+{ #category : 'tests' }
+RwProjectConfigurationsTest >> testVisitNestedProjectLoadConfiguration_common_core_tests [
+
+	| url rowanSpec config visitor packageNames configurationBasePath |
+	rowanSpec := self _rowanProjectSpecification.
+	configurationBasePath :=  rowanSpec repositoryRootPath , '/test/configs/'.
+	url := 'file:' , configurationBasePath, 'RowanTopLevelProjectLoadConfiguration.ston'.
 
 	config := RwAbstractProjectConfiguration fromUrl: url.
 
@@ -170,7 +222,53 @@ RwProjectConfigurationsTest >> testVisitNestedProjectLoadConfiguration_common [
 
 	packageNames := visitor packageNames asArray sort.
 
-	self assert: packageNames = self _expectedLoadPackageNames_common.
+	self assert: packageNames = self _expectedLoadPackageNames_common_core_tests.
+
+]
+
+{ #category : 'tests' }
+RwProjectConfigurationsTest >> testVisitNestedProjectLoadConfiguration_common_deprecated [
+
+	| url rowanSpec config visitor packageNames configurationBasePath |
+	rowanSpec := self _rowanProjectSpecification.
+	configurationBasePath :=  rowanSpec repositoryRootPath , '/test/configs/'.
+	url := 'file:' , configurationBasePath, 'RowanTopLevelProjectLoadConfiguration.ston'.
+
+	config := RwAbstractProjectConfiguration fromUrl: url.
+
+	visitor := RwProjectLoadConfigurationVisitor new
+		platformAttributes: #('common');
+		groupNames: #('deprecated');
+		configurationBasePath: configurationBasePath;
+		yourself.
+	visitor visit: config.
+
+	packageNames := visitor packageNames asArray sort.
+
+	self assert: packageNames = self _expectedLoadPackageNames_common_deprecated.
+
+]
+
+{ #category : 'tests' }
+RwProjectConfigurationsTest >> testVisitNestedProjectLoadConfiguration_common_tests [
+
+	| url rowanSpec config visitor packageNames configurationBasePath |
+	rowanSpec := self _rowanProjectSpecification.
+	configurationBasePath :=  rowanSpec repositoryRootPath , '/test/configs/'.
+	url := 'file:' , configurationBasePath, 'RowanTopLevelProjectLoadConfiguration.ston'.
+
+	config := RwAbstractProjectConfiguration fromUrl: url.
+
+	visitor := RwProjectLoadConfigurationVisitor new
+		platformAttributes: #('common');
+		groupNames: #('tests');
+		configurationBasePath: configurationBasePath;
+		yourself.
+	visitor visit: config.
+
+	packageNames := visitor packageNames asArray sort.
+
+	self assert: packageNames = self _expectedLoadPackageNames_common_tests.
 
 ]
 

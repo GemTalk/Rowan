@@ -22,7 +22,7 @@ RwProjectLoadConfigurationVisitor class >> new [
 ]
 
 { #category : 'private' }
-RwProjectLoadConfigurationVisitor >> _configurations: configDirPath [
+RwProjectLoadConfigurationVisitor >> _configurations: configDirPath forProject: aProjectName [
 
 	| urlBase |
 	self configurationNames isEmpty ifTrue: [ ^ #() ].
@@ -32,7 +32,7 @@ RwProjectLoadConfigurationVisitor >> _configurations: configDirPath [
 			| url |
 			url := urlBase , configName , '.ston'.
 			(RwAbstractProjectConfiguration fromUrl: url)
-				projectName: self projectName;
+				projectName: aProjectName;
 				yourself ]
 
 ]
@@ -153,16 +153,16 @@ RwProjectLoadConfigurationVisitor >> visit: aProjectConfiguration [
 ]
 
 { #category : 'visiting' }
-RwProjectLoadConfigurationVisitor >> visitNestedProjectLoadConfiguration: aNestedProjecLoadConfiguration [
+RwProjectLoadConfigurationVisitor >> visitNestedProjectLoadConfiguration: aNestedProjectLoadConfiguration [
 
-	(visitedConfigurationNames includes: aNestedProjecLoadConfiguration name)
+	(visitedConfigurationNames includes: aNestedProjectLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
-	visitedConfigurationNames add:  aNestedProjecLoadConfiguration name. 
+	visitedConfigurationNames add:  aNestedProjectLoadConfiguration name. 
 
-	self _processConditionalPackageNames: aNestedProjecLoadConfiguration.
+	self _processConditionalPackageNames: aNestedProjectLoadConfiguration.
 
-	(self _configurations: self configurationBasePath, '/')
+	(self _configurations: self configurationBasePath, '/' forProject: aNestedProjectLoadConfiguration projectName)
 		do: [:config | config acceptNestedVisitor: self ].
 
 ]
@@ -182,24 +182,24 @@ RwProjectLoadConfigurationVisitor >> visitProjectCompoundConfiguration: aProject
 ]
 
 { #category : 'visiting' }
-RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjecLoadConfiguration [
+RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjectLoadConfiguration [
 
 	| currentUserId |
-	(visitedConfigurationNames includes: aProjecLoadConfiguration name)
+	(visitedConfigurationNames includes: aProjectLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
-	visitedConfigurationNames add:  aProjecLoadConfiguration name. 
+	visitedConfigurationNames add:  aProjectLoadConfiguration name. 
 
-	definedGroupNames := aProjecLoadConfiguration definedGroupNames.
+	definedGroupNames := aProjectLoadConfiguration definedGroupNames.
 	groupNames := groupNames asSet.
 	self groupNames copy do: [:groupName |
 		"make sure that required groups are included in group names"
 		groupNames addAll: (definedGroupNames at: groupName ifAbsent: [ #() ]) ].
 
-	self _processConditionalPackageNames: aProjecLoadConfiguration.
+	self _processConditionalPackageNames: aProjectLoadConfiguration.
 
 	currentUserId := Rowan image currentUserId.
-	aProjecLoadConfiguration conditionalPackageMapSpecMatchers keysAndValuesDo: [:platformMatcher :packageMapSpecsMap | 
+	aProjectLoadConfiguration conditionalPackageMapSpecMatchers keysAndValuesDo: [:platformMatcher :packageMapSpecsMap | 
 		(self _platformAttributeMatchIn: {platformMatcher})
 			ifTrue: [
 				packageMapSpecs ifNotNil: [ self halt ].
@@ -207,8 +207,8 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjecLoadC
 					at: currentUserId 
 					ifAbsent: [ packageMapSpecsMap at: 'default'  ifAbsent: [] ] ] ].
 
-	self configurationNames addAll: aProjecLoadConfiguration configurationNames.
-	(self _configurations: self configurationBasePath, '/')
+	self configurationNames addAll: aProjectLoadConfiguration configurationNames.
+	(self _configurations: self configurationBasePath, '/' forProject: aProjectLoadConfiguration projectName)
 		do: [:config | config acceptNestedVisitor: self ].
 
 ]
