@@ -103,6 +103,14 @@ RwProjectConfigurationsTest >> _expectedLoadPackageNames_gs3_3_0 [
 ]
 
 { #category : 'private' }
+RwProjectConfigurationsTest >> _expectedRowan_LoadPackageNames [
+
+	^ (self _expectedLoadPackageNames_gemstone , 
+			#('Rowan-GemStone-3215' 'Rowan-Url-3215' 'GemStone-Interactions-Core' 'GemStone-Interactions-Kernel') ) sort
+
+]
+
+{ #category : 'private' }
 RwProjectConfigurationsTest >> _expectedRowanSampleProject4_LoadPackageNames [
 
 	^ #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests') sort
@@ -141,6 +149,45 @@ RwProjectConfigurationsTest >> testBasicProjectLoadConfiguration [
 	config := RwAbstractProjectConfiguration fromUrl: url.
 
 	self assert: config class == RwProjectLoadConfiguration
+
+]
+
+{ #category : 'tests' }
+RwProjectConfigurationsTest >> testRowanLoadConfiguration [
+
+	| configurationBasePath configurationUrl rowanSpec config visitor packageNames gemStoneVersion packageMapSpecs packagePropertiesMap x |
+
+	rowanSpec := self _rowanProjectSpecification.
+
+	configurationBasePath :=  rowanSpec repositoryRootPath , '/rowan/configs/'.
+	configurationUrl := 'file:' , configurationBasePath, 'Load.ston'.
+
+	config := RwAbstractProjectConfiguration fromUrl: configurationUrl.
+
+	gemStoneVersion := System stoneVersionReport at: 'gsVersion'.
+	visitor := RwProjectLoadConfigurationVisitor new
+		platformAttributes: { 'common'. 'gemstone'. gemStoneVersion asRwGemStoneVersionNumber};
+		groupNames: #('core' 'tests');
+		configurationBasePath: configurationBasePath;
+		yourself.
+	visitor visit: config.
+
+	packageNames := visitor packageNames asArray sort.
+
+	self assert: packageNames = (x := self _expectedRowan_LoadPackageNames).
+
+	packageMapSpecs := visitor packageMapSpecs.
+	self assert: packageMapSpecs notNil.
+
+	self assert: (packageMapSpecs at: #'defaultSymbolDictName') = 'RowanKernel'.
+	self assert: (packageMapSpecs at: #'defaultUseSessionMethodsForExtensions') = false.
+
+	packagePropertiesMap := packageMapSpecs at: #packageNameToPlatformPropertiesMap.
+	#('Rowan-GemStone-Loader') 
+		do: [:packageName | 
+			| map | 
+			map := packagePropertiesMap at: packageName.
+			self assert: (map at: 'symbolDictName') = 'RowanLoader' ].
 
 ]
 

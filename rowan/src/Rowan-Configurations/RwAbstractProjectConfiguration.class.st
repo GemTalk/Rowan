@@ -18,7 +18,7 @@ RwAbstractProjectConfiguration class >> _readStonFrom: stream [
 	(reader := STONReader on: stream)
 		allowComplexMapKeys: true.
 	^reader next
-		initializeForImport;
+		initializeForExport;
 		yourself
 
 ]

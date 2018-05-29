@@ -620,26 +620,32 @@ currentOrNil
 	projectSetDefinition := RwProjectSetDefinition new.
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
 	{
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan_SystemUser.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'. 'Bootstrap'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'. 'Bootstrap'}.
 	} 
 	do: [:ar |
 		"Read project and packages from disk, creating a projectSetDefinition with all 4 projects"
-		| specification specUrl configName |
+		| specification specUrl readTool |
 		specUrl := ar at: 1.
-		configName := ar at: 2.
 		specification := RwSpecification fromUrl: specUrl.
 		specification
 			repositoryRootPath: gitRepoPath;
 			repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
 			register. "Create each of the loaded projects"
-		(Rowan projectTools read 
-		readProjectSetForProjectNamed: specification specName withConfiguration: configName)
-			do: [:projectDefinition |
-				projectSetDefinition addProject: projectDefinition ] ].
-
+		readTool := Rowan projectTools read.
+		ar size = 1
+			ifTrue: [
+				(readTool readProjectSetForProjectNamed: specification specName)
+					do: [:projectDefinition |
+						projectSetDefinition addProject: projectDefinition ] ]
+			ifFalse: [
+				| configName |
+				configName := ar at: 2.
+				(readTool readProjectSetForProjectNamed: specification specName withConfiguration: configName)
+					do: [:projectDefinition |
+						projectSetDefinition addProject: projectDefinition ] ] ].
 	packageCreateTool := Rowan packageTools create.
 	projectSetDefinition projects 
 		do: [:projectDefinition |

@@ -95,8 +95,8 @@ RwProjectLoadConfigurationVisitor >> _processConditionalPackageNames: aProjectLo
 				groupMap keysAndValuesDo: [:group :map |
 					(self groupNames includes: group)
 						ifTrue: [ 
-							self packageNames addAll: (map at: #packageNames).
-							self configurationNames addAll: (map at: #configurationNames) ] ] ] ].
+							self packageNames addAll: (map at: #packageNames ifAbsent: [ #() ]).
+							self configurationNames addAll: (map at: #configurationNames ifAbsent: [ #()] ) ] ] ] ].
 
 ]
 
@@ -194,9 +194,6 @@ RwProjectLoadConfigurationVisitor >> visitNestedProjectLoadConfiguration: aNeste
 	self _processConditionalPackageNames: aNestedProjectLoadConfiguration.
 
 	self _processConditionalPackageMapSpecs: aNestedProjectLoadConfiguration.
-
-	(self _configurations: self configurationBasePath, '/' forProject: aNestedProjectLoadConfiguration projectName)
-		do: [:config | config acceptNestedVisitor: self ].
 
 	self configurationNames addAll: aNestedProjectLoadConfiguration configurationNames.
 	(self _configurations: self configurationBasePath, '/' forProject: aNestedProjectLoadConfiguration projectName)
