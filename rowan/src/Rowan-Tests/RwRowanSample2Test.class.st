@@ -462,68 +462,6 @@ RwRowanSample2Test >> testRemoveSubclassOfClassWithNewVersion [
 ]
 
 { #category : 'tests' }
-RwRowanSample2Test >> testSampleCompoundConfiguration [
-
-	"SampleCompound configuration is an instance of RwProjectCompoundConfiguration"
-
-	"(RwProjectCompoundConfiguration newNamed: 'SampleCompound' for: 'RowanSample2')
-		packageNames: #();
-		configurationNames: #('SampleCore' 'SampleTest');
-		exportToUrl: 'file:$GS_HOME/shared/repos/RowanSample2/configs/';
-		yourself.
-(RwProjectCompoundConfiguration newNamed: 'SampleCore' for: 'RowanSample2')
-		packageNames: #('RowanSample2-Core');
-		exportToUrl: 'file:$GS_HOME/shared/repos/RowanSample2/configs/';
-		yourself.
-(RwProjectCompoundConfiguration newNamed: 'SampleTest' for: 'RowanSample2')
-		packageNames: #('RowanSample2-Test');
-		exportToUrl: 'file:$GS_HOME/shared/repos/RowanSample2/configs/';
-		yourself.
-"
-
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x |
-	projectName := 'RowanSample2'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	specUrlString := self _rowanSample2SpecificationUrl.
-	projectTools := Rowan projectTools.
-
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
-
-	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
-		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
-
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
-
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	(rowanSampleSpec platformSpec at: 'gemstone')
-		projectOwnerId: Rowan image currentUserId;
-		defaultSymbolDictName: self _symbolDictionaryName;
-		yourself.
-
-	gitRootPath := rowanSampleSpec repositoryRootPath.
-
-	gitTool := projectTools git.
-	gitTool gitcheckoutIn: gitRootPath with: 'migration_0'.
-	projectTools load
-		loadProjectNamed: projectName
-		withConfiguration: 'SampleCompound'
-		instanceMigrator: RwGsInstanceMigrator noMigration.
-
-	project := RwProject newNamed: projectName.
-	self
-		assert:
-			(x := project packageNames asArray sortWithBlock: [ :a :b | a < b ])
-				= #('RowanSample2-Core')
-
-]
-
-{ #category : 'tests' }
 RwRowanSample2Test >> testSampleDefaultConfiguration [
 
 	"SampleDefault configuration is an instance of RwProjectConfiguration"
@@ -559,7 +497,7 @@ RwRowanSample2Test >> testSampleDefaultConfiguration [
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_0'.
 	projectTools load
 		loadProjectNamed: projectName
-		withConfiguration: 'SampleDefault'
+		withConfiguration: 'Default'
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	project := RwProject newNamed: projectName.

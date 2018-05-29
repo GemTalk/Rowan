@@ -81,23 +81,25 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfiguration: c
 { #category : 'smalltalk api' }
 RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfigurations: configNames groupNames: groupNames [
 
-	| projectDefinition repo spec url packageNames visitor configs |
+	| projectDefinition repo spec url packageNames visitor configs configDirectory |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	spec := projectDefinition specification.
 	visitor := RwProjectLoadConfigurationVisitor new
 		platformAttributes: Rowan platformConfigurationAttributes;
 		groupNames: groupNames;
 		yourself.
-	configs := configNames collect: [:configName |
-		| config |
-		url := 'file:' , spec repositoryRootPath , '/' , spec configsPath , '/'
-			, configName , '.ston'.
-		config := RwAbstractProjectConfiguration fromUrl: url.
-		config projectName: projectName.
-		visitor visit: config ].
 	repo := projectDefinition repositoryUrl asRwRepository.
-self halt.
-	packageNames := visitor packageNames.	
+	configDirectory := spec repositoryRootPath , '/' , spec configsPath , '/'.
+	(Rowan fileUtilities directoryExists: configDirectory)
+		ifTrue: [ 
+			configs := configNames collect: [:configName |
+				| config |
+				url := 'file:' , configDirectory, configName , '.ston'.
+				config := RwAbstractProjectConfiguration fromUrl: url.
+				config projectName: projectName.
+				visitor visit: config ].
+			packageNames := visitor packageNames ]
+		ifFalse: [ packageNames := projectDefinition packageNames ].	
 	^ self 
 		_readProjectSetForProjectDefinition: projectDefinition 
 		packageNames: packageNames 
