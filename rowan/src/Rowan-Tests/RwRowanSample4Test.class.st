@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : 'private' }
+RwRowanSample4Test class >> _symbolDictionaryNames [
+
+	^ 	super _symbolDictionaryNames, #(#'RowanSample4SymbolDict' #'RowanSample4DictionarySymbolDict')
+
+]
+
+{ #category : 'private' }
 RwRowanSample4Test >> _rowanSample4LoadSpecificationUrl [
 
 	| rowanSpec |
@@ -95,7 +102,6 @@ RwRowanSample4Test >> testSampleProjectLoadConfiguration [
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: repoRootPath with: 'master'.
 
-	self halt.
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.

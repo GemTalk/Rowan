@@ -23,6 +23,16 @@ RwAbstractTest class >> _symbolDictionaryName2 [
 ]
 
 { #category : 'private' }
+RwAbstractTest class >> _symbolDictionaryNames [
+
+	^ 	{(self _symbolDictionaryName).
+		(self _symbolDictionaryName1).
+		(self _symbolDictionaryName2).
+		(self _unmanagedDictionaryName)}
+
+]
+
+{ #category : 'private' }
 RwAbstractTest class >> _unmanagedDictionaryName [
 
 	^ #'UnmanagedPackages'
@@ -38,10 +48,7 @@ RwAbstractTest class >> cleanup [
 	symListP := user symbolList.
 	symListT := GsCurrentSession currentSession symbolList.
 
-	{(self _symbolDictionaryName).
-	(self _symbolDictionaryName1).
-	(self _symbolDictionaryName2).
-	(self _unmanagedDictionaryName)}
+	self _symbolDictionaryNames
 		do: [ :symDictName | 
 			dictP := symListP objectNamed: symDictName.
 			dictP

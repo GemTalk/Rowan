@@ -6,6 +6,7 @@ Class {
 		'packageMapSpecs',
 		'visitedConfigurationNames',
 		'platformAttributes',
+		'projectSpec',
 		'definedGroupNames',
 		'groupNames',
 		'configurationNames',
@@ -57,9 +58,41 @@ RwProjectLoadConfigurationVisitor >> _platformAttributeMatchIn: platformMatchers
 ]
 
 { #category : 'private' }
-RwProjectLoadConfigurationVisitor >> _processConditionalPackageNames: aProjectLoadConfiguraiton [
+RwProjectLoadConfigurationVisitor >> _processConditionalPackageMapSpecs: aProjectLoadConfiguration [
 
-	aProjectLoadConfiguraiton conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
+	| currentUserId |
+	currentUserId := Rowan image currentUserId.
+	aProjectLoadConfiguration conditionalPackageMapSpecMatchers keysAndValuesDo: [:platformMatcher :packageMapSpecsMap | 
+		(self _platformAttributeMatchIn: {platformMatcher})
+			ifTrue: [
+				(packageMapSpecsMap 
+					at: currentUserId 
+					ifAbsent: [ packageMapSpecsMap at: 'default'  ifAbsent: [] ])
+						ifNotNil: [:thePackageMapSpecs |
+							| platformSpec |
+							platformSpec := (self projectSpec platformSpec at: 'gemstone').
+							(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
+								ifNotNil: [:name | platformSpec defaultSymbolDictName: name ].
+							(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
+								ifNotNil: [:boolean | 
+									platformSpec defaultUseSessionMethodsForExtensions: boolean  ].
+							(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
+								ifNotNil: [:map | 
+									map keysAndValuesDo: [:packageName :propMap | 
+										propMap keysAndValuesDo: [:propertyName :propertyValue |
+											propertyName = 'symbolDictName'
+												ifTrue: [ platformSpec symbolDictName: propertyValue forPackageNamed: packageName ].
+											propertyName = 'userId'
+												ifTrue: [ platformSpec userId: propertyValue forPackageNamed: packageName ].
+											propertyName = 'useSessionMethodsForExtensions'
+												ifTrue: [ platformSpec useSessionMethodsForExtensions: propertyValue forPackageNamed: packageName ] ] ] ] ] ] ]
+
+]
+
+{ #category : 'private' }
+RwProjectLoadConfigurationVisitor >> _processConditionalPackageNames: aProjectLoadConfiguration [
+
+	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
 		(self _platformAttributeMatchIn: platformMatchers)
 			ifTrue: [
 				groupMap keysAndValuesDo: [:group :map |
@@ -145,6 +178,20 @@ RwProjectLoadConfigurationVisitor >> platformAttributes: aColl [
 
 ]
 
+{ #category : 'accessing' }
+RwProjectLoadConfigurationVisitor >> projectSpec [
+
+	^ projectSpec
+
+]
+
+{ #category : 'accessing' }
+RwProjectLoadConfigurationVisitor >> projectSpec: aSpec [
+
+	projectSpec := aSpec
+
+]
+
 { #category : 'visiting' }
 RwProjectLoadConfigurationVisitor >> visit: aProjectConfiguration [
 
@@ -162,6 +209,12 @@ RwProjectLoadConfigurationVisitor >> visitNestedProjectLoadConfiguration: aNeste
 
 	self _processConditionalPackageNames: aNestedProjectLoadConfiguration.
 
+	self _processConditionalPackageMapSpecs: aNestedProjectLoadConfiguration.
+
+	(self _configurations: self configurationBasePath, '/' forProject: aNestedProjectLoadConfiguration projectName)
+		do: [:config | config acceptNestedVisitor: self ].
+
+	self configurationNames addAll: aNestedProjectLoadConfiguration configurationNames.
 	(self _configurations: self configurationBasePath, '/' forProject: aNestedProjectLoadConfiguration projectName)
 		do: [:config | config acceptNestedVisitor: self ].
 
@@ -184,7 +237,6 @@ RwProjectLoadConfigurationVisitor >> visitProjectCompoundConfiguration: aProject
 { #category : 'visiting' }
 RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjectLoadConfiguration [
 
-	| currentUserId |
 	(visitedConfigurationNames includes: aProjectLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
@@ -198,14 +250,7 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjectLoad
 
 	self _processConditionalPackageNames: aProjectLoadConfiguration.
 
-	currentUserId := Rowan image currentUserId.
-	aProjectLoadConfiguration conditionalPackageMapSpecMatchers keysAndValuesDo: [:platformMatcher :packageMapSpecsMap | 
-		(self _platformAttributeMatchIn: {platformMatcher})
-			ifTrue: [
-				packageMapSpecs ifNotNil: [ self halt ].
-				packageMapSpecs := packageMapSpecsMap 
-					at: currentUserId 
-					ifAbsent: [ packageMapSpecsMap at: 'default'  ifAbsent: [] ] ] ].
+	self _processConditionalPackageMapSpecs: aProjectLoadConfiguration.
 
 	self configurationNames addAll: aProjectLoadConfiguration configurationNames.
 	(self _configurations: self configurationBasePath, '/' forProject: aProjectLoadConfiguration projectName)

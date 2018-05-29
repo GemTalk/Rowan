@@ -15,26 +15,6 @@ RwProjectLoadConfiguration >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfiguration >> conditionalPackageMapSpecMatchers [
-
-	conditionalPackageMapSpecMatchers ifNotNil: [:val | ^ val ]. 
-	conditionalPackageMapSpecMatchers := Dictionary new.
-	self conditionalPackageMapSpecs keysAndValuesDo: [:platformPattern :packageMapSpecsMap |
-		conditionalPackageMapSpecMatchers
-			at: (self _platformPatternMatcherFor: platformPattern)
-			put: packageMapSpecsMap ].
-	^ conditionalPackageMapSpecMatchers
-
-]
-
-{ #category : 'accessing' }
-RwProjectLoadConfiguration >> conditionalPackageMapSpecs [
-
-	^ conditionalPackageMapSpecs ifNil: [ conditionalPackageMapSpecs := Dictionary new ]
-
-]
-
-{ #category : 'accessing' }
 RwProjectLoadConfiguration >> definedGroupNames [
 
 	^ definedGroupNames ifNil: [ definedGroupNames :=  Set new ]
@@ -52,7 +32,6 @@ RwProjectLoadConfiguration >> definedGroupNames: aColl [
 RwProjectLoadConfiguration >> initialize [
 
 	super initialize.
-	definedGroupNames := Set new.
-	conditionalPackageMapSpecs := Dictionary new
+	definedGroupNames := Set new
 
 ]
