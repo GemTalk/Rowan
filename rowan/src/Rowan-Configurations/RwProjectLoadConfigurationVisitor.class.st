@@ -6,7 +6,6 @@ Class {
 		'packageMapSpecs',
 		'visitedConfigurationNames',
 		'platformAttributes',
-		'projectSpec',
 		'definedGroupNames',
 		'groupNames',
 		'configurationNames',
@@ -62,30 +61,28 @@ RwProjectLoadConfigurationVisitor >> _processConditionalPackageMapSpecs: aProjec
 
 	| currentUserId |
 	currentUserId := Rowan image currentUserId.
-	aProjectLoadConfiguration conditionalPackageMapSpecMatchers keysAndValuesDo: [:platformMatcher :packageMapSpecsMap | 
+	aProjectLoadConfiguration conditionalPackageMapSpecMatchers keysAndValuesDo: [:platformMatcher :thePackageMapSpecsMap | 
 		(self _platformAttributeMatchIn: {platformMatcher})
 			ifTrue: [
-				(packageMapSpecsMap 
+				(thePackageMapSpecsMap 
 					at: currentUserId 
-					ifAbsent: [ packageMapSpecsMap at: 'default'  ifAbsent: [] ])
+					ifAbsent: [ thePackageMapSpecsMap at: 'default'  ifAbsent: [] ])
 						ifNotNil: [:thePackageMapSpecs |
-							| platformSpec |
-							platformSpec := (self projectSpec platformSpec at: 'gemstone').
 							(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
-								ifNotNil: [:name | platformSpec defaultSymbolDictName: name ].
+								ifNotNil: [:name | packageMapSpecs at: #defaultSymbolDictName put: name ].
 							(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
-								ifNotNil: [:boolean | 
-									platformSpec defaultUseSessionMethodsForExtensions: boolean  ].
+								ifNotNil: [:boolean | packageMapSpecs at: #defaultUseSessionMethodsForExtensions put: boolean  ].
 							(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
-								ifNotNil: [:map | 
-									map keysAndValuesDo: [:packageName :propMap | 
-										propMap keysAndValuesDo: [:propertyName :propertyValue |
-											propertyName = 'symbolDictName'
-												ifTrue: [ platformSpec symbolDictName: propertyValue forPackageNamed: packageName ].
-											propertyName = 'userId'
-												ifTrue: [ platformSpec userId: propertyValue forPackageNamed: packageName ].
-											propertyName = 'useSessionMethodsForExtensions'
-												ifTrue: [ platformSpec useSessionMethodsForExtensions: propertyValue forPackageNamed: packageName ] ] ] ] ] ] ]
+								ifNotNil: [:theMap | 
+									| map |
+									map := packageMapSpecs at: #packageNameToPlatformPropertiesMap ifAbsentPut: [ Dictionary new ].
+									theMap keysAndValuesDo: [:thePackageName :thePropMap | 
+										thePropMap keysAndValuesDo: [:thePropertyName :thePropertyValue |
+											| packageMap |
+											packageMap  := map at: thePackageName ifAbsentPut: [ Dictionary new ].
+											(#('symbolDictName' 'userId' 'useSessionMethodsForExtensions' ) includes: thePropertyName)
+												ifTrue: [ packageMap at: thePropertyName put: thePropertyValue  ] 
+												ifFalse: [ self error: 'Unrecognized property name ', thePropertyName printString, ' in package name to properties map' ] ] ] ] ] ] ]
 
 ]
 
@@ -146,7 +143,8 @@ RwProjectLoadConfigurationVisitor >> initialize [
 	configurationNames := Set new.
 	platformAttributes := #().
 	groupNames := #().
-	configurationBasePath := ''
+	configurationBasePath := ''.
+	packageMapSpecs := Dictionary new.
 
 ]
 
@@ -175,20 +173,6 @@ RwProjectLoadConfigurationVisitor >> platformAttributes [
 RwProjectLoadConfigurationVisitor >> platformAttributes: aColl [
 
 	platformAttributes := aColl
-
-]
-
-{ #category : 'accessing' }
-RwProjectLoadConfigurationVisitor >> projectSpec [
-
-	^ projectSpec
-
-]
-
-{ #category : 'accessing' }
-RwProjectLoadConfigurationVisitor >> projectSpec: aSpec [
-
-	projectSpec := aSpec
 
 ]
 
