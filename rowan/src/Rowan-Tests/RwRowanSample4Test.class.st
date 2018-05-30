@@ -265,6 +265,8 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
 
+	self assert: (x := newClass rowanPackageName) = 'RowanSample4-NewPackage'.
+
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_185_4'.				"Simply rename RowanSample4-NewPackage to RowanSample4-RenamedPackage (no symbol dictionary move)"
 
 	projectTools load
@@ -276,7 +278,9 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 	self assert: newClass new foo = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
-	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict'
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict'.
+
+	self assert: (x := newClass rowanPackageName) = 'RowanSample4-RenamedPackage'
 
 ]
 
