@@ -64,6 +64,15 @@ RwClassDefinition >> gs_options: optionsArray [
 ]
 
 { #category : '*rowan-gemstone-core' }
+RwClassDefinition >> gs_symbolDictionary [
+
+	^ self properties
+		at: 'gs_SymbolDictionary'
+		ifAbsent: []
+
+]
+
+{ #category : '*rowan-gemstone-core' }
 RwClassDefinition >> gs_symbolDictionary: aSymbolDictionaryName [
 
 	self properties

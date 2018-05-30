@@ -155,11 +155,12 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	"Need to decide whether the patches in aClassModification warrant a new class version or 
 	 simple property changes."
 
-	| dict existingClass newFormat aClassDefinition newSuperclassAssoc |
+	| dict existingClass newFormat afterClassDefinition beforeClassDefinition newSuperclassAssoc |
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
-	aClassDefinition := aClassModification after.
-	(newSuperclassAssoc := self resolveName: aClassDefinition superclassName)
+	afterClassDefinition := aClassModification after.
+	beforeClassDefinition := aClassModification before.
+	(newSuperclassAssoc := self resolveName: afterClassDefinition superclassName)
 		ifNil: [
 			"new superclass does not currently exist ... so it will be a new class, which means a new class version, guaranteed"
 			aRwGsPatchSet
@@ -167,30 +168,30 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 				inPackage: aPackageDefinition
 				inProject: aProjectDefinition.
 			^ self ].
-	dict := self symbolDictionary.
+	dict := Rowan image symbolList objectNamed: beforeClassDefinition gs_symbolDictionary.
 	existingClass := dict
-		at: aClassDefinition name asSymbol
+		at: beforeClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
 	newFormat := self
 		_classFormat: existingClass superclass format
-		forSubclassType: aClassDefinition classType.
+		forSubclassType: afterClassDefinition classType.
 	self
 		_newSubclassWithSuperclass: newSuperclassAssoc value
 		isEquivalentToSubclass: existingClass
-		newOpts: ((aClassDefinition propertyAt: 'gs_options' ifAbsent: [ #() ]) collect: [:each | each asSymbol])
+		newOpts: ((afterClassDefinition propertyAt: 'gs_options' ifAbsent: [ #() ]) collect: [:each | each asSymbol])
 		newFormat: newFormat
-		newInstVars: aClassDefinition instVarNames
-		newClassInstVars: aClassDefinition classInstVarNames
-		newPools: aClassDefinition poolDictionaryNames
-		newClassVars: aClassDefinition classVarNames
+		newInstVars: afterClassDefinition instVarNames
+		newClassInstVars: afterClassDefinition classInstVarNames
+		newPools: afterClassDefinition poolDictionaryNames
+		newClassVars: afterClassDefinition classVarNames
 		patchedClassProperties: [ 
 			aRwGsPatchSet
-				addPatchedClassProperties: aClassDefinition
+				addPatchedClassProperties: afterClassDefinition
 				inPackage: aPackageDefinition
 				inProject: aProjectDefinition ]
 		patchedClassVars: [ 
 			aRwGsPatchSet
-				addPatchedClassClassVariables: aClassDefinition
+				addPatchedClassClassVariables: afterClassDefinition
 				inPackage: aPackageDefinition
 				inProject: aProjectDefinition ]
 		patchedClassNewVersions: [ 
@@ -206,18 +207,19 @@ RwGsClassVersioningPatch >> addPatchedClassModificationForcingNewClassVersion: a
 
 	"Uncontitionally create a new class version"
 
-	| dict existingClass aClassDefinition |
+	| dict existingClass beforeClassDefinition |
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
-	aClassDefinition := aClassModification after.
-	dict := self symbolDictionary.
+	beforeClassDefinition := aClassModification before.
+	dict := Rowan image symbolList objectNamed: beforeClassDefinition gs_symbolDictionary.
 	existingClass := dict
-		at: aClassDefinition name asSymbol
+		at: beforeClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
 	aRwGsPatchSet
 		addPatchedClassNewVersion: aClassModification
 		inPackage: aPackageDefinition
 		inProject: aProjectDefinition
+
 ]
 
 { #category : 'accessing' }
