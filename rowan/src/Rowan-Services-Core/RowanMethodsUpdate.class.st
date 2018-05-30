@@ -94,10 +94,10 @@ RowanMethodsUpdate >> selectors: aCollection [
 { #category : 'updating' }
 RowanMethodsUpdate >> updateMethodCategories [
 
-	classes do: [:each | 
+	self classesFromNames do: [:each | 
 		each 
 			env: 0 
-			categorysDo:[ :category :selectors | methodFilters add: category ].
+			categorysDo:[ :category :sels | methodFilters add: category ].
 	].
 	methodFilters isEmpty ifTrue: [methodFilters := #(#'other')].
 
@@ -161,7 +161,7 @@ RowanMethodsUpdate >> updateMethodsInfo [
 RowanMethodsUpdate >> updateMethodVariables [
 
 	| currentClass |
-	currentClass := classes notEmpty ifTrue: [classes last] ifFalse: [nil].
+	currentClass := classNames notEmpty ifTrue: [self classesFromNames last] ifFalse: [nil].
 	methodFilters := OrderedCollection new.
 	[
 		currentClass notNil.

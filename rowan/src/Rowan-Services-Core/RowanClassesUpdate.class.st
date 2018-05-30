@@ -2,23 +2,30 @@ Class {
 	#name : 'RowanClassesUpdate',
 	#superclass : 'RowanCommandResult',
 	#instVars : [
-		'classes',
-		'selections'
+		'selections',
+		'classNames'
 	],
 	#category : 'Rowan-Services-Core'
 }
 
 { #category : 'accessing' }
-RowanClassesUpdate >> classes [
+RowanClassesUpdate >> classesFromNames [
 
-	^classes
+	^classNames collect:[:name | self objectInBaseNamed: (name subStrings first)]
 
 ]
 
 { #category : 'accessing' }
-RowanClassesUpdate >> classes: anArray [
+RowanClassesUpdate >> classNames [
 
-	classes := anArray
+	^classNames
+
+]
+
+{ #category : 'accessing' }
+RowanClassesUpdate >> classNamesFrom: theClasses [
+	"store the class name for transport to the client"
+	classNames := theClasses collect:[:class | class name]
 
 ]
 
@@ -36,16 +43,15 @@ RowanClassesUpdate >> historyOf: aClass [
 { #category : 'initialization' }
 RowanClassesUpdate >> initialize [
 
-	classes := Array new.
+	classNames := Array new.
 	selections := Array new.
 
 ]
 
-{ #category : 'jade' }
+{ #category : 'private' }
 RowanClassesUpdate >> objectInBaseNamed: aString [
 
-	^[(SymbolList withAll: self class sharedPools) objectNamed: aString asSymbol] on: Error do: [:ex | ex return: nil].
-
+	^System myUserProfile symbolList objectNamed: aString asSymbol
 
 ]
 
@@ -73,7 +79,7 @@ RowanClassesUpdate >> writeClass: aClass to: writeStream [
 { #category : 'jade' }
 RowanClassesUpdate >> writeClassesTo: writeStream [
 
-	classes do:[:aClass | 
+	self classesFromNames do:[:aClass | 
 		self writeClass: aClass to: writeStream
 	].
 	writeStream lf.

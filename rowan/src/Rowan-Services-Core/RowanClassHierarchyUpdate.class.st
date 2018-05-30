@@ -6,7 +6,7 @@ Class {
 
 { #category : 'accessing' }
 RowanClassHierarchyUpdate >> addHierarchyFor: aClass [
-	classes add: (self hierarchyFor: aClass).
+	classNames add: ((self hierarchyFor: aClass) collect:[:class | class name]).
 
 ]
 
@@ -22,8 +22,8 @@ RowanClassHierarchyUpdate >> allClasses [
 	| allClasses |
  
 	allClasses := Set new. 
-	classes do:[:hierarchy | 
-		allClasses addAll: hierarchy]. 
+	classNames do:[:hierarchy | 
+		allClasses addAll: (hierarchy collect: [:name | self objectInBaseNamed: name])]. 
 	^allClasses asArray
 
 ]
@@ -43,9 +43,9 @@ RowanClassHierarchyUpdate >> hierarchyFor: aClass [
 { #category : 'jade' }
 RowanClassHierarchyUpdate >> writeHierarchyTo: writeStream [
 	
-	classes do:[:hierarchy |
-		hierarchy do:[:aClass | 
-			self writeClass: aClass to: writeStream].
+	classNames do:[:hierarchy |
+		hierarchy do:[:name | 
+			self writeClass: (self objectInBaseNamed: name) to: writeStream].
 		writeStream lf].
 	writeStream nextPut: $%; lf.
 
