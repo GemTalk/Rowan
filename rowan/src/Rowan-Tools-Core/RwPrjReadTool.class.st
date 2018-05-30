@@ -81,14 +81,14 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfiguration: c
 { #category : 'smalltalk api' }
 RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfigurations: configNames groupNames: groupNames [
 
-	| projectDefinition repo spec url packageNames  configDirectory |
+	| projectDefinition repo spec url packageNames  configDirectory projectSetDefinition packageMapSpecs |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	spec := projectDefinition specification.
 	repo := projectDefinition repositoryUrl asRwRepository.
 	configDirectory := spec repositoryRootPath , '/' , spec configsPath , '/'.
 	(Rowan fileUtilities directoryExists: configDirectory)
 		ifTrue: [ 
-			| visitor configs thePackageMapSpecs gemstoneSpec |
+			| visitor configs |
 			visitor := RwProjectLoadConfigurationVisitor new
 				platformAttributes: Rowan platformConfigurationAttributes;
 				groupNames: groupNames;
@@ -101,28 +101,20 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfigurations: 
 				config projectName: projectName.
 				visitor visit: config ].
 			packageNames := visitor packageNames.
-			thePackageMapSpecs := visitor packageMapSpecs.
-			gemstoneSpec := spec platformSpec at: 'gemstone'.
-			(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
-				ifNotNil: [:name | gemstoneSpec defaultSymbolDictName: name ].
-			(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
-				ifNotNil: [:boolean | 
-					gemstoneSpec defaultUseSessionMethodsForExtensions: boolean  ].
-			(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
-				ifNotNil: [:map | 
-					map keysAndValuesDo: [:packageName :propMap | 
-						propMap keysAndValuesDo: [:propertyName :propertyValue |
-							propertyName = 'symbolDictName'
-								ifTrue: [ gemstoneSpec symbolDictName: propertyValue forPackageNamed: packageName ].
-							propertyName = 'userId'
-								ifTrue: [ gemstoneSpec userId: propertyValue forPackageNamed: packageName ].
-							propertyName = 'useSessionMethodsForExtensions'
-								ifTrue: [ gemstoneSpec useSessionMethodsForExtensions: propertyValue forPackageNamed: packageName ] ] ] ] ]
-		ifFalse: [ packageNames := projectDefinition packageNames ].	
-	^ self 
+			packageMapSpecs := visitor packageMapSpecs ]
+		ifFalse: [ 
+			packageNames := projectDefinition packageNames.
+			packageMapSpecs := Dictionary new ].	
+	projectSetDefinition := self 
 		_readProjectSetForProjectDefinition: projectDefinition 
 		packageNames: packageNames 
-		fromRepo: repo
+		fromRepo: repo.
+	((projectSetDefinition properties at: 'loadedProjectInfo' ifAbsentPut: [Dictionary new])
+		at: projectName ifAbsentPut: [ Dictionary new ])
+			at: 'loadedConfigurationNames' put: configNames;
+			at: 'loadedGroupNames' put: groupNames;
+			at: 'packageMapSpecs' put: packageMapSpecs.
+	^ projectSetDefinition
 
 ]
 

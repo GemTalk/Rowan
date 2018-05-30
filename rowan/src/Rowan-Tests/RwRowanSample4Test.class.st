@@ -110,6 +110,10 @@ RwRowanSample4Test >> testSampleProjectLoadConfiguration [
 	self
 		assert:
 			(x := project packageNames asArray sort)
-				= #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests') sort
+				= #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests') sort.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	self assert: (x := rowanSampleSpec loadedGroupNames) = #('core' 'tests').
+	self assert: (x := rowanSampleSpec loadedConfigurationNames) = #('Load').
 
 ]
