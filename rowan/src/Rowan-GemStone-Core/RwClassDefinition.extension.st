@@ -53,16 +53,6 @@ RwClassDefinition >> compareAgainstBaseForcingNewClassVersion: aDefinition [
 ]
 
 { #category : '*rowan-gemstone-core' }
-RwClassDefinition >> excludedProperties [
-	"return a list of properties that should be ignored when comparing"
-
-	"gs_SymbolDictionary is only used internally for recording the symbol dictionary where a class is installed - ignored for comparison purposes"
-
-	^ #('gs_SymbolDictionary')
-
-]
-
-{ #category : '*rowan-gemstone-core' }
 RwClassDefinition >> gs_options: optionsArray [
 
 	(optionsArray _isArray and: [ optionsArray isEmpty not ])
@@ -71,4 +61,13 @@ RwClassDefinition >> gs_options: optionsArray [
 				at: 'gs_options'
 				put:
 					(optionsArray collect: [ :each | each asString ]) asSortedCollection asArray ]
+]
+
+{ #category : '*rowan-gemstone-core' }
+RwClassDefinition >> gs_symbolDictionary: aSymbolDictionaryName [
+
+	self properties
+		at: 'gs_SymbolDictionary'
+		put: aSymbolDictionaryName asString
+
 ]

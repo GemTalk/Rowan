@@ -71,6 +71,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 		pools: #()
 		type: 'normal'.
 	classDefinition
+		gs_symbolDictionary: self _symbolDictionaryName1;
 		addInstanceMethodDefinition:
 			(RwMethodDefinition
 				newForSelector: #'instanceFoo'
@@ -116,6 +117,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 		pools: #()
 		type: 'normal'.
 	classDefinition
+		gs_symbolDictionary: self _symbolDictionaryName2;
 		addInstanceMethodDefinition:
 			(RwMethodDefinition
 				newForSelector: #'instanceBar'
@@ -289,6 +291,7 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 		pools: #()
 		type: 'normal'.
 	classDefinition
+		gs_symbolDictionary: self _symbolDictionaryName1;
 		addInstanceMethodDefinition:
 			(RwMethodDefinition
 				newForSelector: #'instanceFoo'
@@ -334,6 +337,7 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 		pools: #()
 		type: 'normal'.
 	classDefinition
+		gs_symbolDictionary: self _symbolDictionaryName2;
 		addInstanceMethodDefinition:
 			(RwMethodDefinition
 				newForSelector: #'instanceBar'
