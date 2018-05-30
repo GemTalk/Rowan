@@ -95,6 +95,13 @@ RwGemStoneSpecification >> packageNameToPlatformPropertiesMap [
 	^ packageNameToPlatformPropertiesMap
 ]
 
+{ #category : 'accessing' }
+RwGemStoneSpecification >> packageNameToPlatformPropertiesMap: aDictionary [
+
+	packageNameToPlatformPropertiesMap := aDictionary
+
+]
+
 { #category : 'copying' }
 RwGemStoneSpecification >> postCopy [
 

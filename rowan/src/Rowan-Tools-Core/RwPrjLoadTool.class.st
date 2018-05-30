@@ -120,15 +120,7 @@ RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad instanceMi
 				ifNotNil: [:boolean | 
 					gemstoneSpec defaultUseSessionMethodsForExtensions: boolean  ].
 			(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
-				ifNotNil: [:map | 
-					map keysAndValuesDo: [:packageName :propMap | 
-						propMap keysAndValuesDo: [:propertyName :propertyValue |
-							propertyName = 'symbolDictName'
-								ifTrue: [ gemstoneSpec symbolDictName: propertyValue forPackageNamed: packageName ].
-							propertyName = 'userId'
-								ifTrue: [ gemstoneSpec userId: propertyValue forPackageNamed: packageName ].
-							propertyName = 'useSessionMethodsForExtensions'
-								ifTrue: [ gemstoneSpec useSessionMethodsForExtensions: propertyValue forPackageNamed: packageName ] ] ] ] ].
+				ifNotNil: [:map | gemstoneSpec packageNameToPlatformPropertiesMap: map] ].
 	Rowan image applyModification: diff instanceMigrator: instanceMigrator.
 	projectSetDefinitionToLoad definitions
 		do: [ :project | 
