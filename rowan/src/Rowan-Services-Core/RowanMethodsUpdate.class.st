@@ -71,13 +71,6 @@ RowanMethodsUpdate >> selectedSelectors: aCollection [
 ]
 
 { #category : 'accessing' }
-RowanMethodsUpdate >> selections [
-
-	^selections
-
-]
-
-{ #category : 'accessing' }
 RowanMethodsUpdate >> selectors [
 
 	^selectors
@@ -107,7 +100,7 @@ RowanMethodsUpdate >> updateMethodCategories [
 RowanMethodsUpdate >> updateMethodPragmas [
 
 	| currentClass |
-	currentClass := ((self objectInBaseNamed: #'Pragma') notNil and: [selections notEmpty]) ifTrue: [selections first] ifFalse: [nil].
+	currentClass := ((self objectInBaseNamed: #'Pragma') notNil and: [self selectionNames notEmpty]) ifTrue: [self objectInBaseNamed: self selectionNames first] ifFalse: [nil].
 	methodFilters := IdentitySet new.
 	currentClass notNil ifTrue: [
 		(currentClass methodDictForEnv: 0) do: [:each | methodFilters addAll: each pragmas].
@@ -120,10 +113,10 @@ RowanMethodsUpdate >> updateMethodPragmas [
 { #category : 'updating' }
 RowanMethodsUpdate >> updateMethodSelections: oldSelections hasCategoryOverride: override [
 
-	selections := oldSelections.
-	override notNil ifTrue: [selections := Array with: override].
-	selections := methodFilters select: [:each | selections includes: each asString].
-	selections notEmpty ifTrue: [methodFilters := selections].
+	self selections: oldSelections.
+	override notNil ifTrue: [self selections: (Array with: override)].
+	self selections: (methodFilters select: [:each | self selectionNames includes: each asString]).
+	self selectionNames notEmpty ifTrue: [methodFilters := self selectionNamesAsSymbols].
 
 ]
 
@@ -234,7 +227,7 @@ RowanMethodsUpdate >> writeSelectedSelectorsTo: writeStream [
 { #category : 'jade' }
 RowanMethodsUpdate >> writeSelectionsTo: writeStream [
 
-	selections do: [:each | writeStream nextPutAll: each; tab].
+	self selectionNames do: [:each | writeStream nextPutAll: each; tab].
 	writeStream lf.
 
 ]

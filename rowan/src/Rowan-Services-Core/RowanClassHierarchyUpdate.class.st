@@ -12,7 +12,7 @@ RowanClassHierarchyUpdate >> addHierarchyFor: aClass [
 
 { #category : 'accessing' }
 RowanClassHierarchyUpdate >> addSelectionHierarchyFor: aClass [
-	selections addAll: (self hierarchyFor: aClass)
+	self selections addAll: ((self hierarchyFor: aClass) collect:[:class | class asString])
 
 ]
 

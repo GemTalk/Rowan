@@ -2,8 +2,8 @@ Class {
 	#name : 'RowanClassesUpdate',
 	#superclass : 'RowanCommandResult',
 	#instVars : [
-		'selections',
-		'classNames'
+		'classNames',
+		'selectionNames'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -44,7 +44,7 @@ RowanClassesUpdate >> historyOf: aClass [
 RowanClassesUpdate >> initialize [
 
 	classNames := Array new.
-	selections := Array new.
+	selectionNames := Array new.
 
 ]
 
@@ -56,9 +56,30 @@ RowanClassesUpdate >> objectInBaseNamed: aString [
 ]
 
 { #category : 'accessing' }
+RowanClassesUpdate >> selectionNames [
+
+	^selectionNames
+
+]
+
+{ #category : 'accessing' }
+RowanClassesUpdate >> selectionNamesAsSymbols [
+
+	^self selectionNames collect:[:string | string asSymbol]
+
+]
+
+{ #category : 'accessing' }
 RowanClassesUpdate >> selections [
 
-	^selections
+	^selectionNames
+
+]
+
+{ #category : 'accessing' }
+RowanClassesUpdate >> selections: aCollection [
+
+	selectionNames := aCollection.
 
 ]
 
@@ -89,8 +110,8 @@ RowanClassesUpdate >> writeClassesTo: writeStream [
 { #category : 'jade' }
 RowanClassesUpdate >> writeSelectionsTo: writeStream [
 
-	selections do:[:aClass | 
-		self writeClass: aClass to: writeStream].
+	self selectionNames do:[:name | 
+		self writeClass: (self objectInBaseNamed: (name subStrings first)) to: writeStream].
 	writeStream lf.
 
 ]
@@ -103,7 +124,8 @@ RowanClassesUpdate >> writeTestCaseInfoTo: writeStream [
 	testCaseClass isNil ifTrue: [
 		false printOn: writeStream.
 	] ifFalse: [
-		(selections allSatisfy: [:each | each  inheritsFrom: testCaseClass]) printOn: writeStream.
+		(self selectionNames allSatisfy: [:each | (self objectInBaseNamed: each)  inheritsFrom: testCaseClass]) printOn: writeStream.
 	].
 	writeStream lf.
+
 ]
