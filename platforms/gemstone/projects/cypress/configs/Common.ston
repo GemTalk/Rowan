@@ -1,7 +1,7 @@
-RwProjectConfiguration {
+ RwProjectCompoundConfiguration{
 	#name : 'Common',
 	#version : '0.1.0',
-	#configNames : Set [
+	#packageNames : Set [
 		'Cypress-Comparison',
 		'Cypress-Definitions',
 		'Cypress-Environmental-Tools',
