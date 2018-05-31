@@ -616,7 +616,7 @@ currentOrNil
 # Install Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
 #  methods into the correct package structure
   run
- 	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool |
+ 	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo |
 	projectSetDefinition := RwProjectSetDefinition new.
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
 	{
@@ -637,15 +637,40 @@ currentOrNil
 		readTool := Rowan projectTools read.
 		ar size = 1
 			ifTrue: [
-				(readTool readProjectSetForProjectNamed: specification specName)
+				| theProjectSetDefinition |
+				theProjectSetDefinition := readTool readProjectSetForProjectNamed: specification specName.
+				theProjectSetDefinition
 					do: [:projectDefinition |
-						projectSetDefinition addProject: projectDefinition ] ]
+						projectSetDefinition addProject: projectDefinition ].
+				projectSetDefinition properties: theProjectSetDefinition properties ]
 			ifFalse: [
 				| configName |
 				configName := ar at: 2.
 				(readTool readProjectSetForProjectNamed: specification specName withConfiguration: configName)
 					do: [:projectDefinition |
 						projectSetDefinition addProject: projectDefinition ] ] ].
+
+	loadedProjectInfo := projectSetDefinition properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
+	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
+			projectName = 'Rowan'
+				ifTrue: [ 
+					"install the packageMapSpecs for this load into the specification prior to the load"
+					| projectDefinition spec gemstoneSpec thePackageMapSpecs |
+					projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
+					spec := projectDefinition specification.
+					thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
+					gemstoneSpec := spec platformSpec at: 'gemstone'.
+					(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
+						ifNotNil: [:name | gemstoneSpec defaultSymbolDictName: name ].
+					(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
+						ifNotNil: [:boolean | 
+							gemstoneSpec defaultUseSessionMethodsForExtensions: boolean  ].
+					(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
+						ifNotNil: [:map | gemstoneSpec packageNameToPlatformPropertiesMap: map] ] ].
+
+	Rowan image newOrExistingSymbolDictionaryNamed: 'RowanKernel'.
+	Rowan image newOrExistingSymbolDictionaryNamed: 'RowanLoader'.
+
 	packageCreateTool := Rowan packageTools create.
 	projectSetDefinition projects 
 		do: [:projectDefinition |
@@ -657,15 +682,24 @@ currentOrNil
 			projectDefinition packageNames
 				do: [:packageName |
 					packageCreateTool createLoadedPackageNamed: packageName inProjectNamed: projectName ] ].
+
 	"Adopt the project set definition"
 	Rowan projectTools adopt adoptProjectSetDefinition: projectSetDefinition.
 
 	projectLoadTool := Rowan projectTools load.
+
 	projectSetDefinition projects 
 		do: [:projectDefinition |
 			"make sure that the loaded SHA is set for each project"
 			projectLoadTool specification: projectDefinition specification.
-			projectDefinition specification updateLoadedCommitIdForTool: projectLoadTool ].
+			projectDefinition specification updateLoadedCommitIdForTool: projectLoadTool.
+			projectDefinition name = 'Rowan'
+				ifTrue: [
+					(loadedProjectInfo at: projectDefinition name ifAbsent: [])
+						ifNotNil: [:map |
+							projectDefinition specification imageSpec
+								loadedConfigurationNames: (map at: 'loadedConfigurationNames');
+								loadedGroupNames: (map at: 'loadedGroupNames') ] ] ].
 
 	projectSetDefinition deriveLoadedThings do: [:loadedProject |
 		"mark projects and packages not dirty"
