@@ -16,6 +16,7 @@ Class {
 		'movedDeletedClasses',
 		'extendedClasses',
 		'classesWithPropertyChanges',
+		'classesWithSymbolDictionaryChanges',
 		'classesWithClassVariableChanges',
 		'classesWithNewVersions',
 		'addedMethods',
@@ -117,6 +118,13 @@ RwGsPatchSet >> _classExtensionPatchClass [
 RwGsPatchSet >> _classPropertiesPatchClass [
 
 	^ RwGsClassPropertiesSymDictPatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSet >> _classSymbolDictionaryMovePatchClass [
+
+	^ RwGsClassSymbolDictionaryMoveSymDictPatch
+
 ]
 
 { #category : 'private - patch class accessors' }
@@ -568,6 +576,20 @@ RwGsPatchSet >> addPatchedClassProperties: aClassDefinition inPackage: aPackageD
 ]
 
 { #category : 'building' }
+RwGsPatchSet >> addPatchedClassSymbolDictionaryMove: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	classesWithSymbolDictionaryChanges
+		add:
+			((self _classSymbolDictionaryMovePatchClass
+				for: aClassModification
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+
+]
+
+{ #category : 'building' }
 RwGsPatchSet >> addPatchedExtendedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
@@ -718,7 +740,7 @@ RwGsPatchSet >> apply [
 		"removeDeletedClassExtensionsFromSystem;" 
 		installAddedClasses;
 		installAddedClassExtensions;
-		"moveClassesBetweenSymbolDictionaries;"
+		moveClassesBetweenSymbolDictionaries;
 		moveMethodsBetweenPackages;
 		updateSymbolAssociations;
 		updateClassProperties;
@@ -871,6 +893,7 @@ RwGsPatchSet >> initialize [
 	classesWithNewVersions := Set new.
 	classesWithClassVariableChanges := Set new.
 	classesWithPropertyChanges := Set new.
+	classesWithSymbolDictionaryChanges := Set new.
 	movedDeletedClasses := Set new.
 	deletedMethods := Set new.
 	deleteNewVersionMethods := Set new.
@@ -960,6 +983,13 @@ RwGsPatchSet >> moveClassesBetweenPackages [
 								addModificationToPatchSet: self
 								inPackage: patch packageDefinition
 								inProject: patch projectDefinition ] ] ]
+
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet >> moveClassesBetweenSymbolDictionaries [
+
+	classesWithSymbolDictionaryChanges do: [:each | each installSymbolDictionaryPatchFor: self ].
 
 ]
 

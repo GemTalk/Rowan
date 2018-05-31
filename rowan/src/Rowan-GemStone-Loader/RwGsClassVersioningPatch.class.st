@@ -185,6 +185,14 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 		newPools: afterClassDefinition poolDictionaryNames
 		newClassVars: afterClassDefinition classVarNames
 		patchedClassProperties: [ 
+			| afterSymDict |
+			afterSymDict := afterClassDefinition gs_symbolDictionary ifNil: [ self symbolDictionary name asString ].
+			beforeClassDefinition gs_symbolDictionary ~= afterSymDict
+				ifTrue: [
+					aRwGsPatchSet
+						addPatchedClassSymbolDictionaryMove: aClassModification
+						inPackage: aPackageDefinition
+						inProject: aProjectDefinition ].
 			aRwGsPatchSet
 				addPatchedClassProperties: afterClassDefinition
 				inPackage: aPackageDefinition
