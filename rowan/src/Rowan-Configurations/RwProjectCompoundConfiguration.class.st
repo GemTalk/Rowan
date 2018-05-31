@@ -2,8 +2,7 @@ Class {
 	#name : 'RwProjectCompoundConfiguration',
 	#superclass : 'RwAbstractProjectConfiguration',
 	#instVars : [
-		'packageNames',
-		'configurationNames'
+		'packageNames'
 	],
 	#category : 'Rowan-Configurations'
 }
@@ -12,6 +11,7 @@ Class {
 RwProjectCompoundConfiguration >> _configurations [
 
 	| spec urlBase |
+	self configurationNames isEmpty ifTrue: [ ^ #() ].
 	spec := self _specification.
 	urlBase := 'file:' , spec repositoryRootPath , '/' , spec configsPath , '/'.
 	^ self configurationNames
@@ -21,19 +21,20 @@ RwProjectCompoundConfiguration >> _configurations [
 			(RwAbstractProjectConfiguration fromUrl: url)
 				projectName: self projectName;
 				yourself ]
-]
-
-{ #category : 'accessing' }
-RwProjectCompoundConfiguration >> configurationNames [
-
-   ^configurationNames
 
 ]
 
-{ #category : 'accessing' }
-RwProjectCompoundConfiguration >> configurationNames: anObject [
+{ #category : 'visiting' }
+RwProjectCompoundConfiguration >> acceptCompoundVisitor: aVisitor [
 
-   configurationNames := anObject
+	^aVisitor visitProjectCompoundConfiguration: self
+
+]
+
+{ #category : 'visiting' }
+RwProjectCompoundConfiguration >> acceptVisitor: aVisitor [
+
+	^self acceptCompoundVisitor: aVisitor
 
 ]
 
@@ -42,7 +43,7 @@ RwProjectCompoundConfiguration >> initialize [
 
 	super initialize.
 	packageNames := Set new.
-	configurationNames := Set new
+
 ]
 
 { #category : 'accessing' }

@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : 'commands' }
+RwPackageTool class >> adopt [
+  ^ RwPkgAdoptTool new
+
+]
+
+{ #category : 'commands' }
 RwPackageTool class >> commit [
   ^ RwPkgCommitTool new
 ]

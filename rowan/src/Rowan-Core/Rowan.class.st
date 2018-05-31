@@ -98,6 +98,15 @@ Rowan class >> platform [
 ]
 
 { #category : 'public' }
+Rowan class >> platformConfigurationAttributes [
+
+	"Return list of platform-specific configuration attributes"
+
+	^ self platform platformConfigurationAttributes
+
+]
+
+{ #category : 'public' }
 Rowan class >> projectNames [
 
 	"Return list of project names"

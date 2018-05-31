@@ -23,6 +23,8 @@ RwGsMethodDeletionSymbolDictPatch >> deleteLoadedMethodNewClasses: createdClasse
 	self symbolDictionaryRegistry
 		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+
 ]
 
 { #category : 'deleting' }
@@ -37,6 +39,7 @@ RwGsMethodDeletionSymbolDictPatch >> deleteMethodNewClasses: createdClasses andE
 	self symbolDictionaryRegistry
 		deleteMethod: methodDefinition selector
 		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
 ]
 
 { #category : 'deleting' }
@@ -47,6 +50,7 @@ RwGsMethodDeletionSymbolDictPatch >> deleteNewVersionMethodNewClasses: createdCl
 	self symbolDictionaryRegistry
 		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
 		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
 ]
 
 { #category : 'initializers' }

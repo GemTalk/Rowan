@@ -44,11 +44,6 @@ RwPrjCreateTool >> createLoadedProject: projectName format: format root: rootPat
 ]
 
 { #category : 'smalltalk api' }
-RwPrjCreateTool >> createMetacelloProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
-  self halt: 'not implemented ... yet'
-]
-
-{ #category : 'smalltalk api' }
 RwPrjCreateTool >> createPackageProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
 
 	| projectDefinition |

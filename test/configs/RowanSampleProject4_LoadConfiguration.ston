@@ -1,0 +1,51 @@
+ RwProjectLoadConfiguration{
+	#name : 'Rowan',
+	#version : '0.1.0',
+	#definedGroupNames : {
+		'core' : [],
+		'tests' : [ 'core' ]
+		},
+	#conditionalPackages: {
+		[ 'common' ] : {
+                        'core': {
+				#packageNames : [
+					'RowanSample4-Core',
+					'RowanSample4-Extensions'
+					],
+				#configurationNames : [ ]
+				},
+			'tests' : {
+				#packageNames : [
+					'RowanSample4-Tests'
+					],
+				#configurationNames : [ ]
+				}
+			},
+		[ 'gs3.2.[15-]' ] : {
+                        'core': {
+				#packageNames : [
+					'RowanSample4-GemStone'
+					],
+				#configurationNames : [ ]
+					},
+			'tests' : {
+				#packageNames : [
+					'RowanSample4-GemStone-Tests'
+					],
+				#configurationNames : [ ]
+				}
+			}
+		},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'default' : {
+				#defaultSymbolDictName : 'RowanSample4SymbolDict',
+				#defaultUseSessionMethodsForExtensions : false,
+				#packageNameToPlatformPropertiesMap : {
+					'RowanSample4-GemStone' : { 'symbolDictName' : 'RowanSample4DictionarySymbolDict' }
+					}
+				}
+			}
+		},
+	#comment : ''
+}

@@ -4,46 +4,6 @@ Class {
 	#category : 'Rowan-Tools-Core'
 }
 
-{ #category : 'private' }
-RwPrjLoadTool >> _bootstrapLoadProjectNamed: projectNamed withConfiguration: configName [
-
-	"load the named project from disk"
-
-	| projectSetDefinition res |
-	projectSetDefinition := self class read
-		readProjectSetForProjectNamed: projectNamed
-		withConfiguration: configName.
-	res := self _bootstrapLoadProjectSetDefinition: projectSetDefinition instanceMigrator: Rowan platform instanceMigrator.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	projectSetDefinition deriveLoadedThings do: [:loadedProject |
-		loadedProject markNotDirty.
-		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
-	^ res
-
-]
-
-{ #category : 'private' }
-RwPrjLoadTool >> _bootstrapLoadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator [
-
-	| loadedProjectSet diff |
-	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings
-		asProjectDefinitionSet.
-	diff := projectSetDefinitionToLoad compareAgainstBase: loadedProjectSet.
-	diff isEmpty
-		ifTrue: [ 
-			| msg |
-			msg := 'The projects are already up to date'.
-			self inform: msg.
-			^ msg ].
-	Rowan image _bootstrapApplyModification: diff instanceMigrator: instanceMigrator.
-	projectSetDefinitionToLoad definitions
-		do: [ :project | 
-			self specification: project specification.
-			project specification updateLoadedCommitIdForTool: self ].
-	^ diff
-
-]
-
 { #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 
@@ -59,18 +19,7 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed [
 
 	"load the named project from disk, mark the loaded projects not dirty and run initializers"
 
-	| projectSetDefinition res |
-	projectSetDefinition := self class read
-		readProjectSetForProjectNamed: projectNamed.
-	[ res := self loadProjectSetDefinition: projectSetDefinition ]
-			on: RwExecuteClassInitializeMethodsAfterLoadNotification
-			do: [:ex | ex resume: true ].
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	projectSetDefinition deriveLoadedThings do: [:loadedProject |
-		loadedProject markNotDirty.
-		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
-	^ res
-
+	^ self loadProjectNamed: projectNamed instanceMigrator: Rowan platform instanceMigrator
 ]
 
 { #category : 'smalltalk api' }
@@ -94,7 +43,7 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed instanceMigrator: instanceMigrat
 
 ]
 
-{ #category : 'smalltalk api' }
+{ #category : 'deprecation candidates' }
 RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName [
 
 	"load the named project from disk, mark the loaded projects not dirty and run initializers"
@@ -114,7 +63,7 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName [
 
 ]
 
-{ #category : 'smalltalk api' }
+{ #category : 'deprecation candidates' }
 RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName instanceMigrator: instanceMigrator [
 
 	"load the named project from disk, mark the loaded projects not dirty and run initializers"
@@ -147,7 +96,7 @@ RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad [
 { #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator [
 
-	| loadedProjectSet diff |
+	| loadedProjectSet diff loadedProjectInfo| 
 	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings
 		asProjectDefinitionSet.
 	diff := projectSetDefinitionToLoad compareAgainstBase: loadedProjectSet.
@@ -157,12 +106,33 @@ RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad instanceMi
 			msg := 'The projects are already up to date'.
 			self inform: msg.
 			^ msg ].
+	loadedProjectInfo := projectSetDefinitionToLoad properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
+	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
+			"install the packageMapSpecs for this load into the specification prior to the load"
+			| projectDefinition spec gemstoneSpec thePackageMapSpecs |
+			projectDefinition := projectSetDefinitionToLoad projectNamed: projectName ifAbsent: [].
+			spec := projectDefinition specification.
+			thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
+			gemstoneSpec := spec platformSpec at: 'gemstone'.
+			(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
+				ifNotNil: [:name | gemstoneSpec defaultSymbolDictName: name ].
+			(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
+				ifNotNil: [:boolean | 
+					gemstoneSpec defaultUseSessionMethodsForExtensions: boolean  ].
+			(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
+				ifNotNil: [:map | gemstoneSpec packageNameToPlatformPropertiesMap: map] ].
 	Rowan image applyModification: diff instanceMigrator: instanceMigrator.
 	projectSetDefinitionToLoad definitions
 		do: [ :project | 
 			self specification: project specification.
-			project specification updateLoadedCommitIdForTool: self ].
+			project specification updateLoadedCommitIdForTool: self.
+			(loadedProjectInfo at: project name ifAbsent: [])
+				ifNotNil: [:map |
+					project specification imageSpec
+						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
+						loadedGroupNames: (map at: 'loadedGroupNames') ]].
 	^ diff
+
 ]
 
 { #category : 'smalltalk api' }

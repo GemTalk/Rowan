@@ -16,7 +16,8 @@ RwGsPackageAdditionSymbolDictPatch >> createLoadedPackage [
 
 	| loadedPackage loadedProject |
 	loadedPackage := self symbolDictionaryRegistry
-		createLoadedPackageFromDefinition: self packageDefinition.
+		createLoadedPackageFromDefinition: self packageDefinition
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 
 	projectDefinition ifNil: [ ^ self ].
 

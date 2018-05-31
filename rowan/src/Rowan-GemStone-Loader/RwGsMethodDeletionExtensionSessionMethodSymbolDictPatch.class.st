@@ -34,6 +34,8 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteMethodNewClasse
 	self symbolDictionaryRegistry
 		deleteMethod: methodDefinition selector
 		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+
 ]
 
 { #category : 'deleting' }

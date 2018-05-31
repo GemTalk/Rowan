@@ -48,18 +48,6 @@ RwPrjSpecTool >> exportSpecUrl: aString toUrl: exportUrl [
 ]
 
 { #category : 'smalltalk api' }
-RwPrjSpecTool >> newPackageSpecNamed: aString useGit: useGit [
-  | spec |
-  spec := RwPackageProjectSpecification new
-    specName: aString;
-    yourself.
-  useGit
-    ifTrue: [ ^ spec ].
-  spec repoSpec: RwDiskRepositorySpecification new.
-  ^ spec
-]
-
-{ #category : 'smalltalk api' }
 RwPrjSpecTool >> specForProjectNamed: projectName [
 
 	| loadedProject |

@@ -4,10 +4,24 @@ Class {
 	#instVars : [
 		'name',
 		'comment',
-		'projectName'
+		'projectName',
+		'version',
+		'configurationNames'
 	],
 	#category : 'Rowan-Configurations'
 }
+
+{ #category : 'private' }
+RwAbstractProjectConfiguration class >> _readStonFrom: stream [
+
+	| reader | 
+	(reader := STONReader on: stream)
+		allowComplexMapKeys: true.
+	^reader next
+		initializeForExport;
+		yourself
+
+]
 
 { #category : 'instance creation' }
 RwAbstractProjectConfiguration class >> fromUrl: specNameOrUrl [
@@ -23,10 +37,7 @@ RwAbstractProjectConfiguration class >> fromUrl: specNameOrUrl [
 			CypressFileUtilities current
 				readStreamFor: url fileName
 				in: url pathForDirectory
-				do: [ :stream | 
-					^ (STON fromStream: stream)
-						initializeForImport;
-						yourself ] ].
+				do: [ :stream | ^ self _readStonFrom: stream ] ].
 	url scheme asString = 'https'
 		ifTrue: [ 
 			| client response |
@@ -36,10 +47,9 @@ RwAbstractProjectConfiguration class >> fromUrl: specNameOrUrl [
 				beOneShot;
 				enforceHttpSuccess: true;
 				get: url.
-			^ (STON fromString: response decodeFromUTF8)
-				initializeForImport;
-				yourself ].
+			^ self _readStonFrom: response decodeFromUTF8 ].
 	self error: 'Unknown scheme: ' , url scheme printString
+
 ]
 
 { #category : 'instance creation' }
@@ -82,6 +92,27 @@ RwAbstractProjectConfiguration >> _specification [
 	^ self _loadedProject specification
 ]
 
+{ #category : 'visiting' }
+RwAbstractProjectConfiguration >> acceptCompoundVisitor: aVisitor [
+
+	^ self subclassResponsibility: #acceptCompoundVisitor:
+
+]
+
+{ #category : 'visiting' }
+RwAbstractProjectConfiguration >> acceptNestedVisitor: aVisitor [
+
+	^ self subclassResponsibility: #acceptNestedVisitor:
+
+]
+
+{ #category : 'visiting' }
+RwAbstractProjectConfiguration >> acceptVisitor: aVisitor [
+
+	^ self subclassResponsibility: #acceptVisitor:
+
+]
+
 { #category : 'accessing' }
 RwAbstractProjectConfiguration >> comment [
 
@@ -93,6 +124,33 @@ RwAbstractProjectConfiguration >> comment [
 RwAbstractProjectConfiguration >> comment: anObject [
 
    comment := anObject
+
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectConfiguration >> configurationNames [
+
+   ^ configurationNames ifNil: [ Set new ]
+
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectConfiguration >> configurationNames: anObject [
+
+   configurationNames := anObject
+
+]
+
+{ #category : 'private' }
+RwAbstractProjectConfiguration >> currentVersion [
+
+	"
+		0.1.0 - initial version for specs
+	"
+
+	"concrete subclasses, will override as needed"
+
+	^ '0.1.0'
 
 ]
 
@@ -133,7 +191,10 @@ RwAbstractProjectConfiguration >> exportToUrl: fileUrl [
 { #category : 'initialization' }
 RwAbstractProjectConfiguration >> initialize [
 
-	comment := ''
+	comment := ''.
+	version := self currentVersion.
+	configurationNames := Set new
+
 ]
 
 { #category : 'initialization' }
@@ -142,7 +203,11 @@ RwAbstractProjectConfiguration >> initializeForExport [
 	"if spec is to be exported, clear out any of the fields that represent state that should 
 	not be shared"
 
-	self initializeForImport
+	| vrsn |
+	vrsn := version.
+	self initializeForImport.
+	version := vrsn.		"preserve version number for export"
+
 ]
 
 { #category : 'initialization' }
@@ -151,7 +216,8 @@ RwAbstractProjectConfiguration >> initializeForImport [
 	"if spec has been imported, clear out any of the fields that represent state that should 
 	not be shared"
 
-	projectName := nil
+	version := projectName := nil
+
 ]
 
 { #category : 'accessing' }
@@ -197,4 +263,21 @@ RwAbstractProjectConfiguration >> resolvePackageNames: visitedConfigurationNames
 		Do not visit configurations already listed in visitedConfigurationNames "
 
 	self subclassResponsibility: #'resolvePackageNames:'
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectConfiguration >> version [
+	"answer the version of the class --- used to mark the version of the class for objects written to disk"
+
+	"see currentVersion method for list of versions"
+
+	^ version
+
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectConfiguration >> version: aString [
+
+	self error: 'Do not use version: ... the version should only be set when read from disk using STON'
+
 ]

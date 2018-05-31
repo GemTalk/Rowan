@@ -3,6 +3,8 @@ Class {
 	#superclass : 'RwSpecification',
 	#instVars : [
 		'loadedCommitId',
+		'loadedConfigurationNames',
+		'loadedGroupNames',
 		'repositoryUrl'
 	],
 	#category : 'Rowan-Specifications'
@@ -20,9 +22,31 @@ RwImageSpecification >> loadedCommitId: anObject [
 ]
 
 { #category : 'accessing' }
-RwImageSpecification >> loadedPackages [
+RwImageSpecification >> loadedConfigurationNames [
 
-	^ self subclassResponsibility
+	^ loadedConfigurationNames
+
+]
+
+{ #category : 'accessing' }
+RwImageSpecification >> loadedConfigurationNames: aCollection [
+
+	loadedConfigurationNames := aCollection
+
+]
+
+{ #category : 'accessing' }
+RwImageSpecification >> loadedGroupNames [
+
+	^ loadedGroupNames
+
+]
+
+{ #category : 'accessing' }
+RwImageSpecification >> loadedGroupNames: aCollection [
+
+	loadedGroupNames := aCollection
+
 ]
 
 { #category : 'copying' }

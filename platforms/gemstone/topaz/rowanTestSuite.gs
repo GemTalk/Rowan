@@ -13,7 +13,8 @@ suite := TestSuite named: 'Rowan tests'.
 	RwRowanSample2Test.
 	RwRowanProjectIssuesTest.
 	RwCloneSymbolDictionaryTest.
-	RwRowanIssue188Test} do: [ :cl | suite addTests: cl suite tests ].
+	RwRowanIssue188Test.
+	RwProjectConfigurationsTest} do: [ :cl | suite addTests: cl suite tests ].
 	res := suite run.
 
 strm := WriteStream on: String new.

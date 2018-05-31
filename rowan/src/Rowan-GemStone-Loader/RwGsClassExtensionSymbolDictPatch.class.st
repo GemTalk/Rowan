@@ -24,6 +24,7 @@ RwGsClassExtensionSymbolDictPatch >> installClassExtensionInSystem [
 		ifFalse: [ 
 			self symbolDictionaryRegistry
 				ensureExtensionClassNamed: self className
-				existsForPackageNamed: self packageName ]
+				existsForPackageNamed: self packageName
+				implementationClass: RwGsSymbolDictionaryRegistry_Implementation ]
 
 ]

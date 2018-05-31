@@ -1,5 +1,6 @@
 RwProjectConfiguration {
 	#name : 'Common',
+	#version : '0.1.0',
 	#configNames : Set [
 		'CypressTonel-Core',
 		'Tonel-Core',

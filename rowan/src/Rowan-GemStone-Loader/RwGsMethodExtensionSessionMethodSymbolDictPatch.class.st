@@ -43,7 +43,9 @@ RwGsMethodExtensionSessionMethodSymbolDictPatch >> installMethod [
 		addExtensionSessionMethods: methDict
 		catDict: catDict
 		for: behavior
-		toPackageNamed: self packageName.
+		toPackageNamed: self packageName
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 
 	selector := compiledMethod selector
+
 ]
