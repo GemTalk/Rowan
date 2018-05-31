@@ -180,22 +180,6 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addClassToSymbolDictionaryForClassAssociation: assoc forClass: class [ 
-
-	^ self class registry_ImplementationClass addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  instance: self
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  implementationClass: implementationClass [
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  instance: self
-
-]
-
-{ #category : 'private' }
 RwGsSymbolDictionaryRegistry >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
 	^ self class registry_ImplementationClass addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self

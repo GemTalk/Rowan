@@ -16,16 +16,6 @@ Class {
 }
 
 { #category : 'actions' }
-RwGsClassAdditionSymbolDictPatch >> addClassToSymbolDictionary [
-
-	self symbolDictionaryRegistry
-		addClassToSymbolDictionaryForClassAssociation: symbolAssociation 
-		forClass: newClass
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
-]
-
-{ #category : 'actions' }
 RwGsClassAdditionSymbolDictPatch >> createAndInstallLoadedClass [
 
 	self symbolDictionaryRegistry

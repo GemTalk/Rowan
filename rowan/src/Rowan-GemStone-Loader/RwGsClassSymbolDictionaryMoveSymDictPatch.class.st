@@ -28,9 +28,20 @@ RwGsClassSymbolDictionaryMoveSymDictPatch >> classModification: aClassModificati
 { #category : 'installing' }
 RwGsClassSymbolDictionaryMoveSymDictPatch >> installSymbolDictionaryPatchFor: aPatchSet [
 
-	| before |
+	| before originalSymbolDictionary assoc newSymbolDictionary theClass registry |
+	theClass := Rowan globalNamed: classDefinition name.
 	before := classModification before.
-
-self halt.
+	originalSymbolDictionary := Rowan globalNamed: before gs_symbolDictionary.
+	assoc := originalSymbolDictionary associationAt: before key asSymbol.
+	registry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
+	registry deleteClassNamedFromPackage: classDefinition name implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+	newSymbolDictionary := Rowan globalNamed: ((projectDefinition specification platformSpec at: 'gemstone')
+				symbolDictNameForPackageNamed: packageDefinition name) .
+	registry := newSymbolDictionary rowanSymbolDictionaryRegistry.
+	registry 
+		addClassAssociation: assoc 
+			forClass: theClass 
+			toPackageNamed: packageDefinition name
+			implementationClass: RwGsSymbolDictionaryRegistry_Implementation
 
 ]
