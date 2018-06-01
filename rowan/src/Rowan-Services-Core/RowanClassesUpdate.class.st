@@ -10,8 +10,13 @@ Class {
 
 { #category : 'accessing' }
 RowanClassesUpdate >> classesFromNames [
-
-	^classNames collect:[:name | self objectInBaseNamed: (name subStrings first)]
+	| result |
+	result := classNames collect:[:name | 
+		| cls |
+		cls := self objectInBaseNamed: (name subStrings first).
+		name subStrings size = 2 "meta" ifTrue:[cls := cls class.].
+		cls].
+	^result
 
 ]
 

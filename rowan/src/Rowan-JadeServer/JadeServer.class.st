@@ -4525,7 +4525,7 @@ JadeServer >> sbUpdateMethods [
 
 	| selectors methodUpdate |
 	selectedClass isNil ifTrue: [^self].
-	methodUpdate := RowanMethodsUpdate new selectedClass: selectedClass.
+	methodUpdate := RowanMethodsUpdate new selectedClass: selectedClass name.
 	methodFilterType = 'categoryList' ifTrue: [selectors := self sbUpdateMethodsByCategories] ifFalse: [
 	methodFilterType = 'variableList' ifTrue: [selectors := self sbUpdateMethodsByVariables] ifFalse: [
 	methodFilterType = 'pragmaList' ifTrue: [selectors := self sbUpdateMethodsByPragmas] ifFalse: [
@@ -5237,6 +5237,7 @@ JadeServer >> systemBrowserSTONA: aString [
 { #category : 'category' }
 JadeServer >> systemBrowserUpdate [
 
+	RowanCommandResult initializeResults. 
 	writeStream nextPutAll: 'update'; lf.
 	self 
 		sbUpdatePackagesOrDictionaries;
@@ -5247,7 +5248,6 @@ JadeServer >> systemBrowserUpdate [
 		sbUpdateMethodFilter;
 		sbUpdateMethods;
 		yourself.
-
 
 ]
 

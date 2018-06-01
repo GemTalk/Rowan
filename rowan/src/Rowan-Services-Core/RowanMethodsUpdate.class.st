@@ -43,16 +43,23 @@ RowanMethodsUpdate >> methodFilters [
 ]
 
 { #category : 'accessing' }
-RowanMethodsUpdate >> selectedClass:  aClass [
+RowanMethodsUpdate >> selectedClass [
 
-	selectedClass := aClass
+	^self objectInBaseNamed: (selectedClass subStrings first)
 
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
+RowanMethodsUpdate >> selectedClass:  aString [
+
+	selectedClass := aString
+
+]
+
+{ #category : 'testing' }
 RowanMethodsUpdate >> selectedClassOverridesSelector: aSymbol [
 
-	^selectedClass superclass notNil and: [selectedClass superclass canUnderstand: aSymbol].
+	^self selectedClass superclass notNil and: [self selectedClass superclass canUnderstand: aSymbol].
 
 ]
 
@@ -138,7 +145,7 @@ RowanMethodsUpdate >> updateMethodsInfo [
 		| isTestClass update |
 
 		isTestClass := false.
-		selectedClass _allSuperList do: [:each | 
+		self selectedClass _allSuperList do: [:each | 
 			isTestClass := isTestClass or: [each name = #'TestCase'].
 		].
 		update := RowanMethodUpdate new. 
@@ -153,7 +160,7 @@ RowanMethodsUpdate >> updateMethodsInfo [
 { #category : 'updating' }
 RowanMethodsUpdate >> updateMethodVariables [
 
-	| currentClass |
+	| currentClass | 
 	currentClass := classNames notEmpty ifTrue: [self classesFromNames last] ifFalse: [nil].
 	methodFilters := OrderedCollection new.
 	[
