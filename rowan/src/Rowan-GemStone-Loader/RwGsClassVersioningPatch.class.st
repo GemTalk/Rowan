@@ -198,11 +198,27 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 				inPackage: aPackageDefinition
 				inProject: aProjectDefinition ]
 		patchedClassVars: [ 
+			| afterSymDict |
+			afterSymDict := afterClassDefinition gs_symbolDictionary ifNil: [ self symbolDictionary name asString ].
+			beforeClassDefinition gs_symbolDictionary ~= afterSymDict
+				ifTrue: [
+					aRwGsPatchSet
+						addPatchedClassSymbolDictionaryMove: aClassModification
+						inPackage: aPackageDefinition
+						inProject: aProjectDefinition ].
 			aRwGsPatchSet
 				addPatchedClassClassVariables: afterClassDefinition
 				inPackage: aPackageDefinition
 				inProject: aProjectDefinition ]
 		patchedClassNewVersions: [ 
+			| afterSymDict |
+			afterSymDict := afterClassDefinition gs_symbolDictionary ifNil: [ self symbolDictionary name asString ].
+			beforeClassDefinition gs_symbolDictionary ~= afterSymDict
+				ifTrue: [
+					aRwGsPatchSet
+						addPatchedClassSymbolDictionaryMove: aClassModification
+						inPackage: aPackageDefinition
+						inProject: aProjectDefinition ].
 			aRwGsPatchSet
 				addPatchedClassNewVersion: aClassModification
 				inPackage: aPackageDefinition
