@@ -4,6 +4,7 @@
 	#definedGroupNames : {
 		'core' : [ ],
 		'deprecated' : [ 'core' ],
+		'jadeServer' : [ 'core' ],
 		'tests' : [ 'core' ]
 		},
 	#configurationNames : [ 
@@ -41,5 +42,7 @@
 		},
 	#comment : 'Rowan load configuration with two nested configuration: Kernel and Tests. The following groups are defined:
 	core 	- encompasses the basic Rowan functionality
+	deprecated - funcionality that is scheduled to be removed from system before final release
+	jadeServer - the JadeServer client support classes for "pyrite"
 	tests	- includes Rowan test cases'
 }

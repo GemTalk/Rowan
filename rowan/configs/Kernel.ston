@@ -27,6 +27,11 @@
 					'Rowan-GemStone-Loader',
 					'Rowan-GemStone-Loader-Extensions'
 					]
+				}'
+			'jadeServer' : {
+				#packageNames : [
+					'Rowan-JadeServer'
+					]
 				}
 			},
 		[ 'gs3.[2-]' ] : {
