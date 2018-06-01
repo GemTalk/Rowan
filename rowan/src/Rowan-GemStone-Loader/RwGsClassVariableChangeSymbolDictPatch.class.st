@@ -26,6 +26,7 @@ RwGsClassVariableChangeSymbolDictPatch >> createClassFor: aPatchSet [
 				error:
 					'internal error - unexpected new class version for class variable modification' ].
 	^ oldClassVersion
+
 ]
 
 { #category : 'installing' }
@@ -42,6 +43,5 @@ RwGsClassVariableChangeSymbolDictPatch >> installPropertiesPatchFor: aPatchSet [
 				at: className
 				ifAbsent: [ self error: 'Cannot find class to update properties for.' ] ].
 	self symbolDictionaryRegistry updateClassProperties: existingClass  implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
 
 ]

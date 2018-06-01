@@ -240,6 +240,7 @@ RwGsPatchSet >> addAddedClass: aClassDefinition inPackage: aPackageDefinition in
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
+
 ]
 
 { #category : 'private - applying' }

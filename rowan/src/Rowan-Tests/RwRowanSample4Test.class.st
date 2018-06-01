@@ -108,7 +108,9 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict [
 	self assert: newClass new foo = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
-	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
 
 ]
 
@@ -193,7 +195,9 @@ RwRowanSample4Test >> testIssue185_move_newClassVariable_to_symbolDict [
 	self assert: newClass new foo = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
-	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
 
 ]
 
@@ -278,7 +282,9 @@ RwRowanSample4Test >> testIssue185_move_newClassVersion_to_symbolDict [
 	self assert: newClass new foo = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
-	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
 
 ]
 
@@ -363,7 +369,9 @@ RwRowanSample4Test >> testIssue185_rename_package_move_class [
 	self assert: newClass new foo = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
-	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
 
 ]
 
@@ -448,7 +456,9 @@ RwRowanSample4Test >> testIssue185_rename_package_move_classVariable [
 	self assert: newClass new foo = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
-	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
 
 ]
 
@@ -523,7 +533,6 @@ RwRowanSample4Test >> testIssue185_rename_package_move_newClassVersion [
 
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_185_6'.				"Rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
 																								move new version of NewRowanSample4 to RowanSample4SymbolDict"
-
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
@@ -535,7 +544,9 @@ RwRowanSample4Test >> testIssue185_rename_package_move_newClassVersion [
 	self assert: newClass new foo = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
-	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4SymbolDict'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
 
 ]
 
@@ -622,7 +633,9 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict'.
 
-	self assert: (x := newClass rowanPackageName) = 'RowanSample4-RenamedPackage'
+	self assert: (x := newClass rowanPackageName) = 'RowanSample4-RenamedPackage'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
 
 ]
 
