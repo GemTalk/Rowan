@@ -4,7 +4,14 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#category : 'Rowan-JadeServer'
+	#pools : [
+		'UserGlobals',
+		'Globals',
+		'Published',
+		'RowanKernel',
+		'RowanLoader'
+	],
+	#category : 'nil'
 }
 
 { #category : 'category' }
@@ -541,16 +548,17 @@ JadeServer64bit3x >> sbUpdateMethodBreakPointsFor: aMethod [
 { #category : 'category' }
 JadeServer64bit3x >> sbUpdateMethodPragmas [
 
-	| currentClass |
-	currentClass := ((self objectInBaseNamed: #'Pragma') notNil and: [selectedClass notNil]) ifTrue: [selectedClass] ifFalse: [nil].
-	methodFilters := IdentitySet new.
-	currentClass notNil ifTrue: [
-		(currentClass methodDictForEnv: environment) do: [:each | methodFilters addAll: each pragmas].
-	].
-	methodFilters := methodFilters collect: [:each | each keyword].
-	methodFilters := methodFilters asSortedCollection: [:a :b | a > b].
-	self writeList: methodFilters.
-	self sbUpdateMethodFilterSelections.
+	| methodUpdate |
+	methodUpdate := RowanMethodsUpdate new. 
+	selectedClass notNil ifTrue:[
+		methodUpdate selections add: selectedClass asString].
+	methodUpdate updateMethodPragmas.
+	methodUpdate writeMethodFiltersTo: writeStream. 
+	methodUpdate updateMethodSelections: self nextLineAsList 
+		hasCategoryOverride: (selections at: #'methodCategory' ifAbsent: [nil]).
+	methodFilters := methodUpdate methodFilters.
+	methodUpdate writeSelectionsTo: writeStream. 
+
 
 
 ]

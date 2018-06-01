@@ -1,7 +1,14 @@
 Class {
 	#name : 'JadeServer64bit',
 	#superclass : 'JadeServer',
-	#category : 'Rowan-JadeServer'
+	#pools : [
+		'UserGlobals',
+		'Globals',
+		'Published',
+		'RowanKernel',
+		'RowanLoader'
+	],
+	#category : 'nil'
 }
 
 { #category : 'category' }
@@ -211,6 +218,19 @@ JadeServer64bit >> systemBrowser: aString [
 
 	[
 		^super systemBrowser: aString.
+	] on: Error do: [:ex |
+		readStream := nil.
+		ex pass.
+	].
+
+
+]
+
+{ #category : 'category' }
+JadeServer64bit >> systemBrowserSTON: aString [
+
+	[
+		^super systemBrowserSTON: aString.
 	] on: Error do: [:ex |
 		readStream := nil.
 		ex pass.
