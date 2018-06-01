@@ -1,14 +1,7 @@
 Class {
 	#name : 'JadeServer64bit24',
 	#superclass : 'JadeServer64bit',
-	#pools : [
-		'UserGlobals',
-		'Globals',
-		'Published',
-		'RowanKernel',
-		'RowanLoader'
-	],
-	#category : 'nil'
+	#category : 'Rowan-JadeServer'
 }
 
 { #category : 'category' }

@@ -4,14 +4,7 @@ Class {
 	#instVars : [
 		'environment'
 	],
-	#pools : [
-		'UserGlobals',
-		'Globals',
-		'Published',
-		'RowanKernel',
-		'RowanLoader'
-	],
-	#category : 'nil'
+	#category : 'Rowan-JadeServer'
 }
 
 { #category : 'category' }
