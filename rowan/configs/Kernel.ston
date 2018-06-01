@@ -27,7 +27,7 @@
 					'Rowan-GemStone-Loader',
 					'Rowan-GemStone-Loader-Extensions'
 					]
-				}'
+				},
 			'jadeServer' : {
 				#packageNames : [
 					'Rowan-JadeServer'
@@ -55,6 +55,7 @@
 		'gemstone' : {
 			'SystemUser' : {
 				#packageNameToPlatformPropertiesMap : {
+					'Rowan-JadeServer' : { 'symbolDictName' : 'UserGlobals'},
 					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
