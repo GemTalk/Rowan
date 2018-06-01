@@ -609,6 +609,14 @@ currentOrNil
   commit
 
   run
+  CypressBootstrapRowanBlock
+    value: 'UserGlobals'
+    value: #( 'Rowan-JadeServer').           "install JadeServer classes"
+%
+  commit
+
+
+  run
   UserGlobals removeKey: #CypressBootstrapRowanBlock.
 %
   commit

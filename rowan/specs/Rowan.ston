@@ -10,7 +10,7 @@
 	#repoPath : 'rowan/src/',
 	#specsPath : 'rowan/specs',
 	#defaultConfigurationNames : [ 'Load' ],
-	#defaultGroupNames : [ 'core', 'tests', 'deprecated' ],
-	#comment : 'Standard Rowan load specification'
+	#defaultGroupNames : [ 'core', 'tests', 'deprecated', 'jadeServer' ],
+	#comment : 'JadeServer Rowan load specification'
 }
 
