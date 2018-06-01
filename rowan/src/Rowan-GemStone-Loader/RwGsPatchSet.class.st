@@ -238,7 +238,8 @@ RwGsPatchSet >> addAddedClass: aClassDefinition inPackage: aPackageDefinition in
 RwGsPatchSet >> addAddedClassesToTempSymbols [
 	"Just need the names for now, they don't need to resolve to anything in particular."
 
-	addedClasses do: [:each | tempSymbols at: each className asSymbol put: nil]
+	addedClasses do: [:each | tempSymbols at: each className asSymbol put: nil].
+
 ]
 
 { #category : 'building' }
@@ -940,7 +941,7 @@ RwGsPatchSet >> moveClassesBetweenPackages [
 	image := Rowan image.
 	addedClasses copy
 		do: [ :patch | 
-			(deletedClassesMap at: patch classDefinition key ifAbsent: [  ])
+			(deletedClassesMap at: patch classDefinition key ifAbsent: [ ])
 				ifNotNil: [ :deletedClassPatch | 
 					| modification loadedClass |
 					loadedClass := image loadedClassNamed: patch classDefinition name.
@@ -954,12 +955,32 @@ RwGsPatchSet >> moveClassesBetweenPackages [
 						compareAgainstBase: deletedClassPatch classDefinition.
 					modification isEmpty
 						ifFalse: [ 
-"actually, I must modify the modifications here, similar to what goes on when we deal with new class versions"
-"... we need to arrange for the deletedClassPatch to be applied as well (remove from package -- maybe we leave it in?"
+							"we must modify the modifications here, similar to what goes on when we deal with new class versions"
 							modification
 								addModificationToPatchSet: self
 								inPackage: patch packageDefinition
 								inProject: patch projectDefinition ] ] ]
+
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet >> moveClassesWithNewVersionsBetweenPackages [
+
+	"only called when there are classes with new versions"
+
+	"remove the class deletion patch from deletedClasses for classes with new versions.
+		presence of a deletedClass patch for a class with new versions is indicative of a move
+		and delete is (obviously) undesirable when the class is being moved ... the new version 
+		of the class will be created in the new package."
+
+	| deletedClassesMap | 
+	deletedClassesMap := Dictionary new.
+	deletedClasses do: [:patch | deletedClassesMap at: patch classDefinition key put: patch ].
+	classesWithNewVersions do: [:patch | 
+				(deletedClassesMap at: patch classDefinition key ifAbsent: [])
+					ifNotNil: [:deletePatch |
+						deletedClasses remove: deletePatch.
+						] ].
 
 ]
 
@@ -1093,10 +1114,14 @@ RwGsPatchSet >> setupForApply [
 
 	| symbolList |
 	tempSymbols := SymbolDictionary new.
-	symbolList := Rowan image symbolList.	"If there are any duplicated symbols, we only want the one that will be found first one, 
+	symbolList := Rowan image symbolList.	
+	"If there are any duplicated symbols, we only want the one that will be found first one, 
 	so we copy in reverse order of search order, thereby overwriting later definitions with earlier ones."
 	symbolList
-		reverseDo: [ :dict | dict keysAndValuesDo: [ :aKey :aValue | tempSymbols at: aKey put: aValue ] ]
+		reverseDo: [ :dict | 
+			"Need to preserve association identity, tempSymbols is used for compiling methods"
+			dict associationsDo: [ :assoc | tempSymbols add: assoc ] ]
+
 ]
 
 { #category : 'patch access' }

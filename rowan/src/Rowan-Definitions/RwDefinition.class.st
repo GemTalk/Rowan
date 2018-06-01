@@ -26,6 +26,13 @@ RwDefinition class >> new [
 ]
 
 { #category : 'private' }
+RwDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
+
+	^ propertyValue = baseValue
+
+]
+
+{ #category : 'private' }
 RwDefinition >> addDefinition: aDefinition to: aDictionary [
 
 	| key |
@@ -84,26 +91,16 @@ RwDefinition >> comparePropertiesAgainstBase: aDefinition [
 	keys addAll: aDefinition properties keys.
 	keys do: 
 			[:key |
-			(self excludedProperties includes: key)
-				ifFalse: [ 
-					| before after |
-					before := aDefinition propertyAt: key ifAbsent: [nil].
-					after := self propertyAt: key ifAbsent: [nil].
-					before = after
-						ifFalse: 
-							[modification addElementModification: (RwPropertyModification
-								key: key
-								oldValue: before
-								newValue: after) ]]].
+				| before after |
+				before := aDefinition propertyAt: key ifAbsent: [nil].
+				after := self propertyAt: key ifAbsent: [nil].
+				(self _compareProperty: key propertyVaue: before againstBaseValue: after)
+					ifFalse: 
+						[modification addElementModification: (RwPropertyModification
+							key: key
+							oldValue: before
+							newValue: after)]].
 	^modification
-
-]
-
-{ #category : 'comparing' }
-RwDefinition >> excludedProperties [
-	"return a list of properties that should be ignored when comparing"
-
-	^ #()
 
 ]
 

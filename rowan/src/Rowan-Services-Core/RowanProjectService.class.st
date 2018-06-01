@@ -150,9 +150,9 @@ RowanProjectService >> isSkew [
 { #category : 'rowan' }
 RowanProjectService >> loadProjectNamed: aName [
 
-	[Rowan projectTools load loadProjectNamed: aName withConfiguration: 'Default'] 
+	[Rowan projectTools load loadProjectNamed: aName] 
 		on: RwExistingAssociationWithSameKeyNotification, Warning
-		do: [ :ex | (ex isKindOf: Warning) ifTrue:[Transcript cr; show: ex description]. ex resume ]	
+		do: [ :ex | (ex isKindOf: Warning) ifTrue:[Transcript cr; show: ex description]. ex resume ]
 
 ]
 

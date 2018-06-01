@@ -18,7 +18,7 @@ Class {
 		'packageNamesInLoadOrder',
 		'packageNamesToLoad'
 	],
-	#category : 'Rowan-Specifications'
+	#category : 'Rowan-Deprecated'
 }
 
 { #category : 'accessing' }

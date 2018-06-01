@@ -11,7 +11,8 @@ Class {
 		'repoPath',
 		'comment',
 		'imageSpec',
-		'packageInfoSource'
+		'defaultConfigurationNames',
+		'defaultGroupNames'
 	],
 	#category : 'Rowan-Specifications'
 }
@@ -62,6 +63,20 @@ RwProjectSpecification >> commitLogForTool: aRwTool limit: logLimit [
 RwProjectSpecification >> configsPath [
 
 	^ configsPath ifNil: [ configsPath := 'configs' ]
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> defaultConfigurationNames [
+
+	^ defaultConfigurationNames
+
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> defaultGroupNames [
+
+	^ defaultGroupNames
+
 ]
 
 { #category : 'exporting' }
@@ -120,7 +135,10 @@ RwProjectSpecification >> initialize [
 		at: 'gemstone' put: RwGemStoneSpecification new;
 		yourself.
 	repoSpec := RwGitRepositorySpecification new.
-	packageInfoSource := #'SymbolDictionary'
+	version := self currentVersion.
+	defaultConfigurationNames := #('Default').
+	defaultGroupNames := #('default').
+
 ]
 
 { #category : 'initialization' }
@@ -140,15 +158,16 @@ RwProjectSpecification >> loadedCommitId [
 ]
 
 { #category : 'accessing' }
-RwProjectSpecification >> packageInfoSource [
+RwProjectSpecification >> loadedConfigurationNames [
 
-	^ packageInfoSource
+	^ self imageSpec loadedConfigurationNames
+
 ]
 
 { #category : 'accessing' }
-RwProjectSpecification >> packageInfoSource: anObject [
+RwProjectSpecification >> loadedGroupNames [
 
-   packageInfoSource := anObject
+	^ self imageSpec loadedGroupNames
 
 ]
 

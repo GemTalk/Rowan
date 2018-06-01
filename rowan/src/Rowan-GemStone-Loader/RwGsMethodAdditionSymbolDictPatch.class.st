@@ -18,8 +18,10 @@ RwGsMethodAdditionSymbolDictPatch >> installMethod [
 		addNewCompiledMethod: compiledMethod
 		for: behavior
 		protocol: self propertiesProtocolName
-		toPackageNamed: self packageName.
+		toPackageNamed: self packageName
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 	selector := compiledMethod selector
+
 ]
 
 { #category : 'installing' }
@@ -29,7 +31,8 @@ RwGsMethodAdditionSymbolDictPatch >> installMovedDeletedMethod [
 		addMovedDeletedMethod: compiledMethod
 		for: behavior
 		protocol: self propertiesProtocolName
-		toPackageNamed: self packageName.
+		toPackageNamed: self packageName
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 	selector := compiledMethod selector
 
 ]

@@ -34,6 +34,8 @@ RwGsMethodPropertiesSymDictPatch >> installPropertiesPatchNewClasses: createdCla
 	self symbolDictionaryRegistry
 		moveCompiledMethod: oldCompiledMethod
 		toProtocol: self propertiesProtocolName
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+
 ]
 
 { #category : 'initializers' }

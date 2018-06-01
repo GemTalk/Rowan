@@ -1,0 +1,18 @@
+ RwSimpleProjectSpecification{
+	#specName : 'RowanSample4',
+	#version : '0.1.0',
+	#projectUrl : 'https://github.com/dalehenrich/RowanSample4',
+	#platformSpec : {
+		'gemstone' : RwGemStoneSpecification {
+			#defaultSymbolDictName : 'SampleSymbolDict',
+			#defaultUseSessionMethodsForExtensions : false }
+	},
+	#repoSpec : RwGitRepositorySpecification {
+		#committish : 'master',
+		#committishType : 'branch'
+	},
+	#configsPath : 'rowan/configs',
+	#repoPath : 'rowan/src',
+	#specsPath : 'rowan/specs',
+	#comment : 'Sample project to be used as an example project when first getting started with Jadeite and Rowan.'
+}

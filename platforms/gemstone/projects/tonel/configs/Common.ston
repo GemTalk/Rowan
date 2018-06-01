@@ -1,6 +1,7 @@
-RwProjectConfiguration {
+ RwProjectCompoundConfiguration{
 	#name : 'Common',
-	#configNames : Set [
+	#version : '0.1.0',
+	#packageNames : Set [
 		'CypressTonel-Core',
 		'Tonel-Core',
 		'Tonel-GemStoneCommon-Core',

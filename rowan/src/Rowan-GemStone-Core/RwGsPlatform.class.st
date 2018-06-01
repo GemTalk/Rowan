@@ -142,3 +142,15 @@ RwGsPlatform >> parseSelectorFrom: methodString [
 		on: CompileError
 		do: [ :ex | ex return: '_____could_not_parse_selector_from_method_source_____' ]
 ]
+
+{ #category : 'queries' }
+RwGsPlatform >> platformConfigurationAttributes [
+	"Answer the configuration attributes. Currently 'common' is the only shared attribute."
+
+	"subclasses need to override and provide additional platform-specific attributes"
+
+	| gemStoneVersion |
+	gemStoneVersion := System stoneVersionReport at: 'gsVersion'.
+	^ super platformConfigurationAttributes, {'gemstone'. gemStoneVersion asRwGemStoneVersionNumber}
+
+]

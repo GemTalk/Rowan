@@ -1,6 +1,9 @@
 Class {
 	#name : 'RwSpecification',
 	#superclass : 'Object',
+	#instVars : [
+		'version'
+	],
 	#category : 'Rowan-Specifications'
 }
 
@@ -45,17 +48,20 @@ RwSpecification class >> fromUrl: specNameOrUrl [
 
 ]
 
-{ #category : 'initialization' }
-RwSpecification class >> initialize [
-  "self initialize"
-
-  
-]
-
 { #category : 'instance creation' }
 RwSpecification class >> new [
 
 	^self basicNew initialize
+]
+
+{ #category : 'private' }
+RwSpecification >> currentVersion [
+	"
+		0.1.0 - initial version for specs
+		0.2.0 - defaultConfigurationNames and defaultGroupNames i.v. added to RwProjectSpecification
+	"
+	^ '0.2.0'
+
 ]
 
 { #category : 'initialization' }
@@ -67,14 +73,20 @@ RwSpecification >> initialize [
 RwSpecification >> initializeForExport [
   "if spec has been exported, clear out any of the fields that represent local disk state"
 
-  ^ self initializeForImport
+	| vrsn |
+	vrsn := version.
+	self initializeForImport.
+	version := vrsn	"preserve version number for export"
+
 ]
 
 { #category : 'initialization' }
 RwSpecification >> initializeForImport [
-  "if spec has been imported, clear out any of the fields that represent local disk state"
 
+  "if spec has been imported, clear out any of the fields that represent local disk state"
   
+	version := nil
+
 ]
 
 { #category : 'copying' }
@@ -95,4 +107,17 @@ RwSpecification >> register [
 	| newLoadedProject |
 	newLoadedProject := RwGsLoadedSymbolDictProject newForLoadSpecification: self.
 	Rowan image addLoadedProject: newLoadedProject
+]
+
+{ #category : 'accessing' }
+RwSpecification >> version [
+	"answer the version of the class --- used to mark the version of the class for objects written to disk"
+
+	"see currentVersion method for list of versions"
+
+	"currently RwProjectSpecification is the only instance being versioned as it represents the version of the whole structure, 
+		but I don't want to rule out the possiblity that other specs may need to be independently versioned."
+
+	^ version
+
 ]

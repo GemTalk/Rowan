@@ -8,11 +8,12 @@ Class {
 	#category : 'Rowan-Core'
 }
 
-{ #category : 'unknown' }
+{ #category : 'queries' }
 RwPlatform >> fileUtilities [
 	"Answer the platform-specific object for accessing files and directories"
 
-	self subclassResponsibility
+	self subclassResponsibility: #fileUtilities
+
 ]
 
 { #category : 'queries' }
@@ -27,12 +28,24 @@ RwPlatform >> globalNamed: aString [
 RwPlatform >> loadedPackageClass [
 	"Answer the platform-specific class for LoadedPackage"
 
-	self subclassResponsibility
+	self subclassResponsibility: #'loadedPackageClass'
+
+]
+
+{ #category : 'queries' }
+RwPlatform >> platformConfigurationAttributes [
+	"Answer the configuration attributes. Currently 'common' is the only shared attribute."
+
+	"subclasses need to override and provide additional platform-specific attributes"
+
+	^ #('common')
+
 ]
 
 { #category : 'queries' }
 RwPlatform >> tools [
 	"Answer the platform-specific class for tools"
 
-	self subclassResponsibility
+	self subclassResponsibility: #tools
+
 ]

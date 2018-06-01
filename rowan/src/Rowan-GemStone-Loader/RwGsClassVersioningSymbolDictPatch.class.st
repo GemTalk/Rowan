@@ -175,7 +175,8 @@ RwGsClassVersioningSymbolDictPatch >> installNewClassVerionInSystem [
 	"Install the new class association in the symbolAssociation for the class.
 	 Update the LoadedClass with properties for the new classversion."
 
-	self symbolDictionaryRegistry addNewClassVersionToAssociation: newClassVersion
+	self symbolDictionaryRegistry addNewClassVersionToAssociation: newClassVersion implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+
 ]
 
 { #category : 'versioning' }
@@ -265,37 +266,6 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 				_updateNewClassVersionPatchesForClass: subclass
 				in: aProjectSetModification
 				patchSet: patchSet ]
-
-]
-
-{ #category : 'new version support' }
-RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectSetModification [
-
-	| existingClass loadedClass loadedPackageName loadedClassDefinition newVersionClassModification existingClassName |
-self halt. "delete this guy if things work out"
-	existingClass := self oldClassVersion.
-	existingClassName := existingClass name asString.
-
-	loadedClass := self symbolDictionaryRegistry existingForClass: existingClass.
-	loadedClassDefinition := loadedClass asDefinition.
-	loadedPackageName := loadedClass loadedPackage name.
-
-	newVersionClassModification := self classDefinition
-		compareAgainstBaseForNewClassVersion: loadedClassDefinition.
-	newVersionClassModification isEmpty
-		ifFalse: [ 
-			"only newVersionClassModification with substance need further processing"
-			aProjectSetModification
-				classesModificationAndPackageModificationAndProjectModificationDo: [ :classesModification :packageModification | 
-					classesModification isEmpty
-						ifFalse: [ 
-							| classesModified |
-							classesModified := classesModification elementsModified.
-							(classesModified at: existingClassName ifAbsent: [  ])
-								ifNil: [ "not unexpected ... if there are multiple packages involved" ]
-								ifNotNil: [ :existingClassModification | 
-									newVersionClassModification mergeForExistingClassWith: existingClassModification.
-									classesModified at: existingClassName put: newVersionClassModification. ] ] ] ]
 
 ]
 

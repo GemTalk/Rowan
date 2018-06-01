@@ -155,10 +155,18 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	"Need to decide whether the patches in aClassModification warrant a new class version or 
 	 simple property changes."
 
-	| dict existingClass newFormat aClassDefinition newSuperclass |
+	| dict existingClass newFormat aClassDefinition newSuperclassAssoc |
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
 	aClassDefinition := aClassModification after.
+	(newSuperclassAssoc := self resolveName: aClassDefinition superclassName)
+		ifNil: [
+			"new superclass does not currently exist ... so it will be a new class, which means a new class version, guaranteed"
+			aRwGsPatchSet
+				addPatchedClassNewVersion: aClassModification
+				inPackage: aPackageDefinition
+				inProject: aProjectDefinition.
+			^ self ].
 	dict := self symbolDictionary.
 	existingClass := dict
 		at: aClassDefinition name asSymbol
@@ -166,9 +174,8 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	newFormat := self
 		_classFormat: existingClass superclass format
 		forSubclassType: aClassDefinition classType.
-	newSuperclass := (self resolveName: aClassDefinition superclassName) value.
 	self
-		_newSubclassWithSuperclass: newSuperclass
+		_newSubclassWithSuperclass: newSuperclassAssoc value
 		isEquivalentToSubclass: existingClass
 		newOpts: ((aClassDefinition propertyAt: 'gs_options' ifAbsent: [ #() ]) collect: [:each | each asSymbol])
 		newFormat: newFormat

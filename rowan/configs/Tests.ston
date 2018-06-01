@@ -1,0 +1,15 @@
+ RwNestedProjectLoadConfiguration{
+	#name : 'Tests',
+	#version : '0.1.0',
+	#conditionalPackages : {
+		[ 'gemstone' ] : {
+			'tests' : {
+				#packageNames : [
+					'Rowan-Tests',
+					'Rowan-Services-Tests'
+					]
+				}
+			}
+		},
+	#comment : 'Rowan tests configuration'
+}
