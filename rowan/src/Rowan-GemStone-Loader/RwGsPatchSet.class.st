@@ -966,7 +966,18 @@ RwGsPatchSet >> moveClassesBetweenPackages [
 	addedClasses copy
 		do: [ :addedClassPatch | 
 			(deletedClassesMap at: addedClassPatch classDefinition key ifAbsent: [ ])
-				ifNotNil: [ :deletedClassPatch | movedDeletedClasses add: {deletedClassPatch. addedClassPatch} ] ]
+				ifNotNil: [ :deletedClassPatch | 
+					| modification |
+					movedDeletedClasses add: {deletedClassPatch. addedClassPatch}.
+					modification := addedClassPatch classDefinition
+						compareAgainstBase: deletedClassPatch classDefinition.
+					modification isEmpty
+						ifFalse: [ 
+							"we must modify the modifications here, similar to what goes on when we deal with new class versions"
+							modification
+								addModificationToPatchSet: self
+								inPackage: addedClassPatch packageDefinition
+								inProject: addedClassPatch projectDefinition ] ] ]
 
 ]
 
