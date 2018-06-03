@@ -635,7 +635,7 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 
 	self assert: (x := newClass rowanPackageName) = 'RowanSample4-RenamedPackage'.
 
-	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
+	self deny: ((Rowan globalNamed: 'RowanSample4SymbolDict') includesKey: #'NewRowanSample4')
 
 ]
 
