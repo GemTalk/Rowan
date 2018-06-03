@@ -1066,6 +1066,7 @@ RwGsPatchSet >> moveClassesWithNewVersionsBetweenPackages [
 		of the class will be created in the new package."
 
 	| deletedClassesMap | 
+	self moveClassesBetweenPackages.
 	deletedClassesMap := Dictionary new.
 	deletedClasses do: [:patch | 
 		deletedClassesMap at: patch classDefinition key put: patch ].
