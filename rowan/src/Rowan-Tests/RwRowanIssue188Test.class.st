@@ -4,6 +4,13 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
+{ #category : 'Testing' }
+RwRowanIssue188Test class >> shouldInheritSelectors [
+
+	^false
+
+]
+
 { #category : 'private' }
 RwRowanIssue188Test >> _createBaselineClassesInSingleLoad: projectName packageName: packageName classNames: classNames [
 
