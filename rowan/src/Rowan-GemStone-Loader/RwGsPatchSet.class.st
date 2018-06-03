@@ -248,7 +248,9 @@ RwGsPatchSet >> addAddedClass: aClassDefinition inPackage: aPackageDefinition in
 RwGsPatchSet >> addAddedClassesToTempSymbols [
 	"Just need the names for now, they don't need to resolve to anything in particular."
 
-	addedClasses do: [:each | tempSymbols at: each className asSymbol put: nil].
+	addedClasses do: [:patch | 
+		(movedAddedClasses includes: patch)
+			ifFalse: [ tempSymbols at: patch className asSymbol put: nil ] ].
 
 ]
 
@@ -351,11 +353,14 @@ RwGsPatchSet >> addClassModification: aRwClassModification toPatchSetInPackage: 
 { #category : 'private - applying' }
 RwGsPatchSet >> addCreatedClassesAndVersionsTo: newClassesByName [
 
-	addedClasses do: [ :each | each addToNewClassesByName: newClassesByName ].
+	addedClasses do: [ :patch | 
+		(movedAddedClasses includes: patch)
+			ifFalse: [ patch addToNewClassesByName: newClassesByName ] ].
 	classesWithClassVariableChanges
 		do: [ :each | each addToNewClassesByName: newClassesByName ].
 	classesWithNewVersions
 		do: [ :each | each addToNewClassesByName: newClassesByName ]
+
 ]
 
 { #category : 'building' }
@@ -736,6 +741,7 @@ RwGsPatchSet >> apply [
 	self reportAnyErrors
 		ifTrue: [ ^ self ].	"No errors -- go ahead and install what's been compiled."
 	self
+		doMoveClassesBetweenPackages;
 		addAndUpdateLoadedProjects;
 		addAndUpdateLoadedPackages;
 		removeDeletedClassesFromSystem;
@@ -881,6 +887,21 @@ RwGsPatchSet >> createNewClassesAndClassVersions [
 		whileFalse: [ self createClassesFromWorklist: workList andClassesByName: newClassesByName ]
 ]
 
+{ #category : 'private - applying' }
+RwGsPatchSet >> doMoveClassesBetweenPackages [
+
+	| image |
+	image := Rowan image.
+	movedAddedClasses 
+		do: [:patch |
+			| loadedClass |
+				loadedClass := image loadedClassNamed: patch classDefinition name.
+				loadedClass loadedPackage removeLoadedClass: loadedClass.
+				(image loadedPackageNamed: patch packageDefinition name)
+					addLoadedClass: loadedClass ].
+
+]
+
 { #category : 'initialization' }
 RwGsPatchSet >> initialize [
 
@@ -918,7 +939,10 @@ RwGsPatchSet >> installAddedClasses [
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
-	addedClasses do: [:each | each installClassInSystem]
+	addedClasses do: [:patch | 
+		(movedAddedClasses includes: patch)
+			ifFalse: [ patch installClassInSystem ] ]
+
 ]
 
 { #category : 'private - applying' }
@@ -1043,12 +1067,11 @@ RwGsPatchSet >> moveClassesWithNewVersionsBetweenPackages [
 
 	| deletedClassesMap | 
 	deletedClassesMap := Dictionary new.
-	deletedClasses do: [:patch | deletedClassesMap at: patch classDefinition key put: patch ].
+	deletedClasses do: [:patch | 
+		deletedClassesMap at: patch classDefinition key put: patch ].
 	classesWithNewVersions do: [:patch | 
 				(deletedClassesMap at: patch classDefinition key ifAbsent: [])
-					ifNotNil: [:deletePatch |
-						deletedClasses remove: deletePatch.
-						] ].
+					ifNotNil: [:deletePatch | deletedClasses remove: deletePatch ] ].
 
 ]
 
@@ -1116,14 +1139,20 @@ RwGsPatchSet >> removeDeletedClassesFromSystem [
 	"Remove the name binding from the SymbolDictionaries in the live SymbolList
         Remove the LoadedClass from its LoadedPackage"
 
-	deletedClasses do: [:each | each deleteClassFromSystem ]
+	deletedClasses do: [:patch | 
+		(movedDeletedClasses includes: patch)
+			ifFalse: [ patch deleteClassFromSystem ] ]
+
 ]
 
 { #category : 'private - applying' }
 RwGsPatchSet >> removeDeletedClassesFromTempSymbols [
 	"Deleted class names should not resolve during compilation."
 
-	deletedClasses do: [:each | tempSymbols removeKey: each className asSymbol]
+	deletedClasses do: [:patch | 
+		(movedDeletedClasses includes: patch)
+			ifFalse: [ tempSymbols removeKey: patch className asSymbol ] ]
+
 ]
 
 { #category : 'private - applying' }
