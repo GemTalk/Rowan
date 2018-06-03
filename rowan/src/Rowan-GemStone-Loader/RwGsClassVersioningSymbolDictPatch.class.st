@@ -294,7 +294,7 @@ RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectS
 
 	| existingClass loadedClass loadedPackageName loadedClassDefinition newVersionClassModification existingClassName movedDeletedMap |
 	movedDeletedMap := Dictionary new.
-	patchSet movedDeletedClasses do: [:ar | movedDeletedMap at: (ar at: 1) classDefinition key put: ar ].
+	patchSet movedDeletedClasses do: [:patch | movedDeletedMap at: patch classDefinition key put: patch ].
 	existingClass := self oldClassVersion.
 	existingClassName := existingClass name asString.
 
@@ -318,8 +318,8 @@ RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectS
 								ifNotNil: [ :existingClassModification | 
 									| deleteClassModification |
 									deleteClassModification := false.
-									(movedDeletedMap at: existingClassName ifAbsent: []) ifNotNil: [:ar | 
-										deleteClassModification := (ar at: 1) packageDefinition name = packageModification after name ].
+									(movedDeletedMap at: existingClassName ifAbsent: []) ifNotNil: [:patch | 
+										deleteClassModification := patch packageDefinition name = packageModification after name ].
 									deleteClassModification
 										ifTrue: [classesModified removeKey: existingClassName]
 										ifFalse: [

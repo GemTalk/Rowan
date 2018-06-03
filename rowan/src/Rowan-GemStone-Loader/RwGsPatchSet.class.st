@@ -13,6 +13,7 @@ Class {
 		'projectsWithPropertyChanges',
 		'addedClasses',
 		'deletedClasses',
+		'movedAddedClasses',
 		'movedDeletedClasses',
 		'extendedClasses',
 		'classesWithPropertyChanges',
@@ -895,6 +896,7 @@ RwGsPatchSet >> initialize [
 	classesWithClassVariableChanges := Set new.
 	classesWithPropertyChanges := Set new.
 	classesWithSymbolDictionaryChanges := Set new.
+	movedAddedClasses := Set new.
 	movedDeletedClasses := Set new.
 	deletedMethods := Set new.
 	deleteNewVersionMethods := Set new.
@@ -968,7 +970,8 @@ RwGsPatchSet >> moveClassesBetweenPackages [
 			(deletedClassesMap at: addedClassPatch classDefinition key ifAbsent: [ ])
 				ifNotNil: [ :deletedClassPatch | 
 					| modification |
-					movedDeletedClasses add: {deletedClassPatch. addedClassPatch}.
+					movedDeletedClasses add: deletedClassPatch.
+					movedAddedClasses add: addedClassPatch.
 					modification := addedClassPatch classDefinition
 						compareAgainstBase: deletedClassPatch classDefinition.
 					modification isEmpty
@@ -1046,6 +1049,12 @@ RwGsPatchSet >> moveClassesWithNewVersionsBetweenPackages [
 					ifNotNil: [:deletePatch |
 						deletedClasses remove: deletePatch.
 						] ].
+
+]
+
+{ #category : 'accessing' }
+RwGsPatchSet >> movedAddedClasses [
+	^ movedAddedClasses
 
 ]
 
