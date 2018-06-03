@@ -964,6 +964,29 @@ RwGsPatchSet >> moveClassesBetweenPackages [
 					deletedClassesMap at: patch classDefinition key put: patch ] ].
 	image := Rowan image.
 	addedClasses copy
+		do: [ :addedClassPatch | 
+			(deletedClassesMap at: addedClassPatch classDefinition key ifAbsent: [ ])
+				ifNotNil: [ :deletedClassPatch | movedDeletedClasses add: {deletedClassPatch. addedClassPatch} ] ]
+
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet >> moveClassesBetweenPackagesX [
+
+	| deletedClassesMap image |
+	deletedClasses isEmpty
+		ifTrue: [ 
+			"no move without deleted classes"
+			^ self ].
+	deletedClassesMap := Dictionary new.
+	deletedClasses
+		do: [ :patch | 
+			patch classDefinition key
+				ifNotNil: [ 
+					"nil key means that the class itself is being deleted"
+					deletedClassesMap at: patch classDefinition key put: patch ] ].
+	image := Rowan image.
+	addedClasses copy
 		do: [ :patch | 
 			(deletedClassesMap at: patch classDefinition key ifAbsent: [ ])
 				ifNotNil: [ :deletedClassPatch | 

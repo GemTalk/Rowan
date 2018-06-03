@@ -1049,6 +1049,7 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageWithClassModifications [
 		options: #().
 	self assert: movedNormalClass ~= normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2
+
 ]
 
 { #category : 'tests' }
