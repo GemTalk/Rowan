@@ -48,3 +48,8 @@ RowanCommandResult class >> results [
 RowanCommandResult >> initialize [
 
 ]
+
+{ #category : 'private' }
+RowanCommandResult >> rowanFixMe [
+
+]

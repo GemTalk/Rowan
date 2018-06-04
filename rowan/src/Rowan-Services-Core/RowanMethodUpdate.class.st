@@ -13,7 +13,7 @@ Class {
 
 { #category : 'accessing' }
 RowanMethodUpdate >> breakPoints [
-	
+
 	^gsMethod breakPoints
 
 ]
@@ -21,7 +21,7 @@ RowanMethodUpdate >> breakPoints [
 { #category : 'accessing' }
 RowanMethodUpdate >> breakPoints: anObject [
 
-	gsMethod breakPoints: anObject
+	gsMethod breakPoints: anObject asArray
 
 ]
 
@@ -140,7 +140,7 @@ RowanMethodUpdate >> isTestClass: anObject [
 
 { #category : 'accessing' }
 RowanMethodUpdate >> method: anObject [
-
+	
 	method := anObject
 
 ]

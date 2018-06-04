@@ -113,7 +113,7 @@ RowanMethodsUpdate >> updateMethodPragmas [
 		(currentClass methodDictForEnv: 0) do: [:each | methodFilters addAll: each pragmas].
 	].
 	methodFilters := methodFilters collect: [:each | each keyword].
-	methodFilters := methodFilters asSortedCollection: [:a :b | a > b].
+	methodFilters := (methodFilters asSortedCollection: [:a :b | a > b]) asArray.  "SortedCollections cannot be grown in Dolphin Smalltalk"
 
 ]
 

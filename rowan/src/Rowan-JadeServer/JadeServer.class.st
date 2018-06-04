@@ -240,7 +240,7 @@ JadeServer >> _describeMethod: aMethod [
 	"Nice to add packageName and mcTimestamp"
 
 	| allSelectors class list oldGsMethod string methodUpdate |
-	methodUpdate := RowanMethodUpdate new method: aMethod. 
+	methodUpdate := RowanMethodUpdate new. 
 	self environment: (self environmentForMethod: aMethod).
 		
 	methodUpdate 	"Line 1 for GsMethod (line 3 for JadeSystemBrowserPresenter)"
@@ -4315,7 +4315,9 @@ JadeServer >> sbUpdateClassHierarchy [
 { #category : 'category' }
 JadeServer >> sbUpdateClassInfo [
 	| classComment classInfoUpdate |
-	selectedClass isNil ifTrue: [^self sbClassTemplate].
+	selectedClass isNil ifTrue: [
+		^self sbClassTemplate. 
+].
 	classInfoUpdate := RowanClassInfoUpdate new. 
 	classInfoUpdate oop: (self oopOf: selectedClass).
 	classInfoUpdate template: (Rowan classServiceClass forClassNamed: selectedClass name)
@@ -4413,7 +4415,7 @@ JadeServer >> sbUpdateDictionaries [
 						add: (self oopOf: eachAssociation) printString.
 		globalsUpdate globals add: globalsArray. 
 	].
-	globalsUpdate writeGlobalsTo: writeStream.
+	globalsUpdate writeGlobalsTo: writeStream. 
 	
 
 
@@ -4530,7 +4532,7 @@ JadeServer >> sbUpdateMethods [
 	methodFilterType = 'variableList' ifTrue: [selectors := self sbUpdateMethodsByVariables] ifFalse: [
 	methodFilterType = 'pragmaList' ifTrue: [selectors := self sbUpdateMethodsByPragmas] ifFalse: [
 		self error: 'Unrecognized methodFilterType: ' , methodFilterType printString]]].
-	methodUpdate selectors: selectors asSortedCollection.
+	methodUpdate selectors: selectors asSortedCollection asArray.
 	methodUpdate updateMethodsInfo.
 	methodUpdate writeMethodsTo: writeStream. 
 	self sbUpdateMethodSelectionsIn: methodUpdate
@@ -4762,6 +4764,7 @@ JadeServer >> sbUpdatePackagesOrDictionaries [
 JadeServer >> sbUpdateSuperclass [
 
 	| class tabName selected index superclassUpdate |
+
 	superclassUpdate := RowanSuperclassUpdate new.
 	tabName := self nextLine. 
 	(#('default' 'instanceTab' 'classTab') includes: tabName) ifFalse: [self error: 'Unexpected token!'].
@@ -4769,7 +4772,7 @@ JadeServer >> sbUpdateSuperclass [
 		tabName := (selectedClass notNil and: [selectedClass selectors isEmpty and: [selectedClass class selectors notEmpty]]) 
 			ifTrue: ['classTab']
 			ifFalse: ['instanceTab'].
-	].
+	]. 
 	superclassUpdate tabName: tabName. 
 	superclassUpdate writeTabNameTo: writeStream.
 	selectedClass notNil ifTrue: [
@@ -4797,6 +4800,9 @@ JadeServer >> sbUpdateSuperclass [
 		superclassUpdate selections add: selectedClass asString.
 	].
 	superclassUpdate writeSelectionsTo: writeStream. 
+
+
+
 
 
 ]
@@ -5248,6 +5254,7 @@ JadeServer >> systemBrowserUpdate [
 		sbUpdateMethodFilter;
 		sbUpdateMethods;
 		yourself.
+	
 
 ]
 

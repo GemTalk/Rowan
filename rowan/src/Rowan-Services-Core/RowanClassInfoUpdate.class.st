@@ -46,24 +46,8 @@ RowanClassInfoUpdate >> template: anObject [
 ]
 
 { #category : 'jade' }
-RowanClassInfoUpdate >> writeClassInfoOn: writeStream [
-
-	writeStream
-		nextPutAll: oop printString;
-		lf;
-		nextPutAll: template;
-		nextPut: $%;
-		nextPutAll: (category ifNil:[String new]);
-		lf;
-		nextPutAll: (comment ifNil:[String new]);
-		nextPut: $%;
-		lf
-
-]
-
-{ #category : 'jade' }
 RowanClassInfoUpdate >> writeInfoOn: writeStream [
-
+	 self rowanFixMe. "Reinstate comment and category"
 	writeStream
 		nextPutAll: oop printString; 
 		lf;
@@ -72,11 +56,10 @@ RowanClassInfoUpdate >> writeInfoOn: writeStream [
 		nextPutAll: template;
 		nextPut: $);
 		lf;
-		nextPutAll: (category ifNil:[String new]);
+		nextPutAll: String new;
 		nextPut: $%;
 		lf;
-		nextPutAll: (comment ifNil:[String new]);
-		lf; 
+		nextPutAll: String new;
 		nextPut: $%;
 		lf.
 

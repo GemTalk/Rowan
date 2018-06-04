@@ -54,7 +54,7 @@ RowanGsMethod >> breakPoints [
 { #category : 'accessing' }
 RowanGsMethod >> breakPoints: anObject [
 
-	breakPoints := anObject
+	breakPoints := anObject asArray
 
 ]
 
