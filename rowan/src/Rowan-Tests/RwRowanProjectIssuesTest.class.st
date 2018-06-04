@@ -1781,7 +1781,8 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 
 	"https://github.com/dalehenrich/Rowan/issues/185"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
+		ar oldClass |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core'.
 	packageName2 := 'Issue185-RenamedCore'.
@@ -1819,18 +1820,32 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
+	self assert: ar size = 1.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName1 asSymbol.
+
 
 	projectSetDefinition := RwProjectSetDefinition new.
+
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
 		removePackageNamed: packageName1;
-		addPackageNamed: packageName2.
+		addPackageNamed: packageName2;
+		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2.
+
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
+
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
+	self assert: ar size = 1.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
+
+	self assert: class == oldClass.
 
 ]
 

@@ -155,7 +155,7 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	"Need to decide whether the patches in aClassModification warrant a new class version or 
 	 simple property changes."
 
-	| dict existingClass newFormat afterClassDefinition beforeClassDefinition newSuperclassAssoc afterSymDict |
+	| dict existingClass newFormat afterClassDefinition beforeClassDefinition newSuperclassAssoc afterSymDict beforeSymDict |
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
 	afterClassDefinition := aClassModification after.
@@ -176,7 +176,8 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 		_classFormat: existingClass superclass format
 		forSubclassType: afterClassDefinition classType.
 	afterSymDict := afterClassDefinition gs_symbolDictionary ifNil: [ self symbolDictionary name asString ].
-	(beforeClassDefinition gs_symbolDictionary) ~= afterSymDict
+	beforeSymDict := beforeClassDefinition gs_symbolDictionary.
+	beforeSymDict ~= afterSymDict
 		ifTrue: [
 			aRwGsPatchSet
 				addPatchedClassSymbolDictionaryMove: aClassModification
