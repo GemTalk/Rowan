@@ -1240,14 +1240,19 @@ RwGsPatchSet >> updateMethodDictionaries [
 		processing (installMovedDeletedMethod).
 	For methods that need recompiling updated the LoadedMethods registration. "
 
-	| movedDeletedMethodMap |
+	| movedDeletedMethodMap movedClassesMap |
 	movedDeletedMethodMap := Dictionary new.
 	movedDeletedMethods do: [:each | 
 		movedDeletedMethodMap at: each selector put: each ].
+	movedClassesMap := Dictionary new.
+	movedAddedClasses do: [:patch |
+		movedClassesMap at: patch classDefinition key put: patch ].
 	addedMethods do: [:each | 
-		(movedDeletedMethodMap at: each methodDefinition selector ifAbsent: [])
-			ifNil: [ each installMethod ]
-			ifNotNil: [ each installMovedDeletedMethod ] ].
+		(movedClassesMap includesKey: each classDefinition key)
+			ifFalse: [ 
+				(movedDeletedMethodMap at: each methodDefinition selector ifAbsent: [])
+					ifNil: [ each installMethod ]
+					ifNotNil: [ each installMovedDeletedMethod ] ] ].
 	extendedMethods do: [:each | each installMethod ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
 
