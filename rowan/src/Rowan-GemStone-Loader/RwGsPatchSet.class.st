@@ -9,7 +9,6 @@ Class {
 		'addedProjects',
 		'addedPackages',
 		'deletedPackages',
-		'packagesWithPropertyChanges',
 		'projectsWithPropertyChanges',
 		'addedClasses',
 		'deletedClasses',
@@ -308,8 +307,8 @@ RwGsPatchSet >> addAndUpdateLoadedPackages [
 	"Update the LoadedPackages to reflect the results of this patchSet. Does not update the other loadedThings."
 
 	addedPackages
-		do: [:packageAdditionPatch | packageAdditionPatch createLoadedPackage].
-	packagesWithPropertyChanges do: [:patch | patch updateLoadedPackage]
+		do: [:packageAdditionPatch | packageAdditionPatch createLoadedPackage]
+
 ]
 
 { #category : 'private - applying' }
@@ -705,7 +704,6 @@ RwGsPatchSet >> allPatchesAffectingLivePackagesDo: aBlock [
 
 	
 	{addedPackages.
-	packagesWithPropertyChanges.
 	deletedClasses.
 	addedClasses.
 	classesWithNewVersions.
@@ -716,6 +714,7 @@ RwGsPatchSet >> allPatchesAffectingLivePackagesDo: aBlock [
 	methodsNeedingRecompile.
 	methodsWithPropertyChanges}
 			do: [:patches | patches do: aBlock]
+
 ]
 
 { #category : 'private - applying' }
@@ -741,13 +740,13 @@ RwGsPatchSet >> apply [
 	self reportAnyErrors
 		ifTrue: [ ^ self ].	"No errors -- go ahead and install what's been compiled."
 	self
-		doMoveClassesBetweenPackages;
 		addAndUpdateLoadedProjects;
 		addAndUpdateLoadedPackages;
 		removeDeletedClassesFromSystem;
 		"removeDeletedClassExtensionsFromSystem;" 
 		installAddedClasses;
 		installAddedClassExtensions;
+		doMoveClassesBetweenPackages;
 		moveClassesBetweenSymbolDictionaries;
 		moveMethodsBetweenPackages;
 		updateSymbolAssociations;
@@ -915,7 +914,6 @@ RwGsPatchSet >> initialize [
 	addedPackages := Set new.
 	addedProjects := Set new.
 	deletedPackages := Set new.
-	packagesWithPropertyChanges := Set new.
 	projectsWithPropertyChanges := Set new.
 	deletedClasses := Set new.
 	addedClasses := Set new.
