@@ -1858,7 +1858,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	"initial load uses custom symbol dictionary, second load uses default symbol dictionary"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		ar oldClass |
+		ar oldClass x y |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core'.
 	packageName2 := 'Issue185-RenamedCore'.
@@ -1873,7 +1873,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 		newForGitPackageProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		defaultSymbolDictName: self _symbolDictionaryName1;
-		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2;
+		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName1;
 		yourself.
 
 	classDefinition := RwClassDefinition
@@ -1898,7 +1898,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	self assert: class rowanPackageName = packageName1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
-	self assert: (ar first at: 1) name = self _symbolDictionaryName1 asSymbol.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 
@@ -1918,7 +1918,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	self assert: class rowanPackageName = packageName2.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
-	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
+	self assert: (x := (ar first at: 1) name) = (y := self _symbolDictionaryName1 asSymbol).
 
 	self assert: class == oldClass.
 

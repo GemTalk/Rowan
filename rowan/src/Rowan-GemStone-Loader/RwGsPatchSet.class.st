@@ -1220,6 +1220,7 @@ RwGsPatchSet >> updateClassProperties [
 	(classesWithClassVariableChanges copy
 		addAll: classesWithPropertyChanges;
 		yourself) do: [ :each | each installPropertiesPatchFor: self ]
+
 ]
 
 { #category : 'private - applying' }
