@@ -1013,7 +1013,7 @@ RwBrowserToolApiTest >> testLoadFullMultiProjectDefs [
 		projectNamed: projectName2
 		updateDefinition: [ :projectDef | 
 			projectDef
-				useSessionMethodsForExtensions: true
+				setUseSessionMethodsForExtensions: true
 				forPackageNamed: project2PackageName2 ].
 
 	browserTool
@@ -1035,6 +1035,7 @@ RwBrowserToolApiTest >> testLoadFullMultiProjectDefs [
 	rpn := Rowan packageNames.
 	packageNames
 		do: [ :packageNameAr | packageNameAr do: [ :packageName | self assert: (rpn includes: packageName) ] ]
+
 ]
 
 { #category : 'tests' }
@@ -1102,7 +1103,7 @@ RwBrowserToolApiTest >> testLoadMultiProjectDefs [
 		projectNamed: projectName2
 		updateDefinition: [ :projectDef | 
 			projectDef
-				useSessionMethodsForExtensions: true
+				setUseSessionMethodsForExtensions: true
 				forPackageNamed: project2PackageName2 ].
 
 	browserTool
@@ -1118,6 +1119,7 @@ RwBrowserToolApiTest >> testLoadMultiProjectDefs [
 		forClassNamed: className1
 		isMeta: true
 		inPackageNamed: project2PackageName2	"class session method extension method for className1 in projectName2"
+
 ]
 
 { #category : 'tests' }
@@ -1421,7 +1423,7 @@ RwBrowserToolApiTest >> testNewClassVersionB [
 		projectNamed: projectName2
 		updateDefinition: [ :projectDef | 
 			projectDef
-				useSessionMethodsForExtensions: true
+				setUseSessionMethodsForExtensions: true
 				forPackageNamed: project2PackageName2 ].
 
 	browserTool
@@ -1534,4 +1536,5 @@ RwBrowserToolApiTest >> testNewClassVersionB [
 					(beh == testNewClass or: [ beh class == testNewClass ])
 						ifTrue: [ sessionMethodsSeen := true ] ] ].
 	self assert: sessionMethodsSeen
+
 ]

@@ -40,17 +40,27 @@ RwProjectDefinition >> projectOwnerId: aUserId [
 ]
 
 { #category : '*rowan-gemstone-core' }
-RwProjectDefinition >> symbolDictionaryRegistryClass [
+RwProjectDefinition >> setSymbolDictName: symbolDictName forPackageNamed: packageName [
 
-	^ RwGsSymbolDictionaryRegistry
+	(self specification platformSpec at: 'gemstone')
+		setSymbolDictName: symbolDictName
+		forPackageNamed: packageName
+
 ]
 
 { #category : '*rowan-gemstone-core' }
-RwProjectDefinition >> symbolDictName: symbolDictName forPackageNamed: packageName [
+RwProjectDefinition >> setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
 
 	(self specification platformSpec at: 'gemstone')
-		symbolDictName: symbolDictName
+		setUseSessionMethodsForExtensions: aBool
 		forPackageNamed: packageName
+
+]
+
+{ #category : '*rowan-gemstone-core' }
+RwProjectDefinition >> symbolDictionaryRegistryClass [
+
+	^ RwGsSymbolDictionaryRegistry
 ]
 
 { #category : '*rowan-gemstone-core' }
@@ -58,14 +68,6 @@ RwProjectDefinition >> symbolDictNameForPackageNamed: packageName [
 
 	^ (self specification platformSpec at: 'gemstone')
 		symbolDictNameForPackageNamed: packageName
-]
-
-{ #category : '*rowan-gemstone-core' }
-RwProjectDefinition >> useSessionMethodsForExtensions: aBool forPackageNamed: packageName [
-
-	(self specification platformSpec at: 'gemstone')
-		useSessionMethodsForExtensions: aBool
-		forPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-core' }

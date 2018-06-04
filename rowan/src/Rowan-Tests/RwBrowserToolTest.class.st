@@ -143,10 +143,11 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 	packageNames
 		do: [ :packageName | 
 			projectDefinition
-				useSessionMethodsForExtensions: true
+				setUseSessionMethodsForExtensions: true
 				forPackageNamed: packageName ].
 
 	^ projectDefinition
+
 ]
 
 { #category : 'private' }

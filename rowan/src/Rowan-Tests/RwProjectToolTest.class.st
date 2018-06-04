@@ -212,8 +212,8 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 				'This is a project created in memory first, then written to disk. There are three packages 21 of which creates classes in a different symbol dictionary.';
 		packageNamesInLoadOrder: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName2;
-		symbolDictName: self _symbolDictionaryName1 forPackageNamed: 'Simple-Core1';
-		symbolDictName: self _symbolDictionaryName1
+		setSymbolDictName: self _symbolDictionaryName1 forPackageNamed: 'Simple-Core1';
+		setSymbolDictName: self _symbolDictionaryName1
 			forPackageNamed: 'Simple-Extensions1';
 		yourself.
 
@@ -349,10 +349,10 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 				'This is a simple project created in memory first, then written to disk.';
 		packageNamesInLoadOrder: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
-		symbolDictName: self _symbolDictionaryName2
+		setSymbolDictName: self _symbolDictionaryName2
 			forPackageNamed: 'Simple-Extensions';
 		defaultUseSessionMethodsForExtensions: false;
-		useSessionMethodsForExtensions: true forPackageNamed: 'Simple-Extensions';
+		setUseSessionMethodsForExtensions: true forPackageNamed: 'Simple-Extensions';
 		yourself.
 
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
@@ -457,7 +457,7 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 				'This is a simple project created in memory first, then written to disk.';
 		packageNamesInLoadOrder: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName;
-		useSessionMethodsForExtensions: true
+		setUseSessionMethodsForExtensions: true
 			forPackageNamed: 'Simple-Globals-Extensions';
 		yourself.
 
