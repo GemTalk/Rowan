@@ -155,7 +155,7 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	"Need to decide whether the patches in aClassModification warrant a new class version or 
 	 simple property changes."
 
-	| dict existingClass newFormat afterClassDefinition beforeClassDefinition newSuperclassAssoc |
+	| dict existingClass newFormat afterClassDefinition beforeClassDefinition newSuperclassAssoc afterSymDict |
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
 	afterClassDefinition := aClassModification after.
@@ -175,6 +175,13 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	newFormat := self
 		_classFormat: existingClass superclass format
 		forSubclassType: afterClassDefinition classType.
+	afterSymDict := afterClassDefinition gs_symbolDictionary ifNil: [ self symbolDictionary name asString ].
+	(beforeClassDefinition gs_symbolDictionary) ~= afterSymDict
+		ifTrue: [
+			aRwGsPatchSet
+				addPatchedClassSymbolDictionaryMove: aClassModification
+				inPackage: aPackageDefinition
+				inProject: aProjectDefinition ].
 	self
 		_newSubclassWithSuperclass: newSuperclassAssoc value
 		isEquivalentToSubclass: existingClass
@@ -185,40 +192,16 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 		newPools: afterClassDefinition poolDictionaryNames
 		newClassVars: afterClassDefinition classVarNames
 		patchedClassProperties: [ 
-			| afterSymDict |
-			afterSymDict := afterClassDefinition gs_symbolDictionary ifNil: [ self symbolDictionary name asString ].
-			(beforeClassDefinition gs_symbolDictionary) ~= afterSymDict
-				ifTrue: [
-					aRwGsPatchSet
-						addPatchedClassSymbolDictionaryMove: aClassModification
-						inPackage: aPackageDefinition
-						inProject: aProjectDefinition ].
 			aRwGsPatchSet
 				addPatchedClassProperties: afterClassDefinition
 				inPackage: aPackageDefinition
 				inProject: aProjectDefinition ]
 		patchedClassVars: [ 
-			| afterSymDict |
-			afterSymDict := afterClassDefinition gs_symbolDictionary ifNil: [ self symbolDictionary name asString ].
-			beforeClassDefinition gs_symbolDictionary ~= afterSymDict
-				ifTrue: [
-					aRwGsPatchSet
-						addPatchedClassSymbolDictionaryMove: aClassModification
-						inPackage: aPackageDefinition
-						inProject: aProjectDefinition ].
 			aRwGsPatchSet
 				addPatchedClassClassVariables: afterClassDefinition
 				inPackage: aPackageDefinition
 				inProject: aProjectDefinition ]
 		patchedClassNewVersions: [ 
-			| afterSymDict |
-			afterSymDict := afterClassDefinition gs_symbolDictionary ifNil: [ self symbolDictionary name asString ].
-			beforeClassDefinition gs_symbolDictionary ~= afterSymDict
-				ifTrue: [
-					aRwGsPatchSet
-						addPatchedClassSymbolDictionaryMove: aClassModification
-						inPackage: aPackageDefinition
-						inProject: aProjectDefinition ].
 			aRwGsPatchSet
 				addPatchedClassNewVersion: aClassModification
 				inPackage: aPackageDefinition

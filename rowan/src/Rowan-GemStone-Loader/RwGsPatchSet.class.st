@@ -1014,46 +1014,6 @@ RwGsPatchSet >> moveClassesBetweenPackages [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSet >> moveClassesBetweenPackagesX [
-
-	| deletedClassesMap image |
-	deletedClasses isEmpty
-		ifTrue: [ 
-			"no move without deleted classes"
-			^ self ].
-	deletedClassesMap := Dictionary new.
-	deletedClasses
-		do: [ :patch | 
-			patch classDefinition key
-				ifNotNil: [ 
-					"nil key means that the class itself is being deleted"
-					deletedClassesMap at: patch classDefinition key put: patch ] ].
-	image := Rowan image.
-	addedClasses copy
-		do: [ :patch | 
-			(deletedClassesMap at: patch classDefinition key ifAbsent: [ ])
-				ifNotNil: [ :deletedClassPatch | 
-					| modification loadedClass |
-					loadedClass := image loadedClassNamed: patch classDefinition name.
-					loadedClass loadedPackage removeLoadedClass: loadedClass.
-					(image loadedPackageNamed: patch packageDefinition name)
-						addLoadedClass: loadedClass.
-					addedClasses remove: patch.
-					deletedClasses remove: deletedClassPatch.
-					movedDeletedClasses add: {deletedClassPatch. patch}.
-					modification := patch classDefinition
-						compareAgainstBase: deletedClassPatch classDefinition.
-					modification isEmpty
-						ifFalse: [ 
-							"we must modify the modifications here, similar to what goes on when we deal with new class versions"
-							modification
-								addModificationToPatchSet: self
-								inPackage: patch packageDefinition
-								inProject: patch projectDefinition ] ] ]
-
-]
-
-{ #category : 'private - applying' }
 RwGsPatchSet >> moveClassesBetweenSymbolDictionaries [
 
 	classesWithSymbolDictionaryChanges do: [:each | each installSymbolDictionaryPatchFor: self ].
