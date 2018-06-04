@@ -1023,8 +1023,8 @@ RwGsPatchSet >> moveClassesBetweenSymbolDictionaries [
 { #category : 'private - applying' }
 RwGsPatchSet >> moveClassesWithNewVersionsBetweenPackages [
 
+	self doMoveClassesBetweenPackages: classesWithNewVersions.
 	self moveClassesBetweenPackages.
-	self doMoveClassesBetweenPackages: classesWithNewVersions
 
 ]
 
