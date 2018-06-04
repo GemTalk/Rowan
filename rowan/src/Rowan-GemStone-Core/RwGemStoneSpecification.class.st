@@ -133,6 +133,11 @@ RwGemStoneSpecification >> setSymbolDictName: symbolDictName forPackageNamed: pa
 	packageProperties := packageNameToPlatformPropertiesMap
 		at: packageName
 		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
+	symbolDictName 
+		ifNil: [
+			"remove the entry if it exists"
+			packageProperties removeKey: 'symbolDictName' ifAbsent: [].
+			^self ].
 	packageProperties at: 'symbolDictName' put: symbolDictName
 
 ]
@@ -144,6 +149,11 @@ RwGemStoneSpecification >> setUseSessionMethodsForExtensions: aBool forPackageNa
 	packageProperties := packageNameToPlatformPropertiesMap
 		at: packageName
 		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
+	aBool 
+		ifNil: [
+			"remove the entry if it exists"
+			packageProperties removeKey: 'useSessionMethodsForExtensions' ifAbsent: [].
+			^self ].
 	packageProperties at: 'useSessionMethodsForExtensions' put: aBool
 
 ]
