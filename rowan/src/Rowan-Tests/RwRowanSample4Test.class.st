@@ -360,7 +360,6 @@ RwRowanSample4Test >> testIssue185_rename_package_move_class [
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_185_2'.				"Rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
 																								move NewRowanSample4 to RowanSample4SymbolDict"
 
-self halt.
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.

@@ -323,6 +323,21 @@ RwGsImage class >> loadedProjects [
 ]
 
 { #category : 'querying' }
+RwGsImage class >> loadedRegistryForPackageNamed:  aName [
+
+	"scan the symbol list for a RwLoadedPackage instance of the given name and return the registry"
+
+	self symbolList
+		do: [ :symbolDict | 
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry loadedPackageNamed: aName ifAbsent: [  ])
+						ifNotNil: [ :loadedPackage | ^ registry ] ] ].
+	^self error: 'The package ', aName printString, ' was not found'
+
+]
+
+{ #category : 'querying' }
 RwGsImage class >> newOrExistingSymbolDictionaryNamed: dictName [
 
 	"If the current session's transient symbol list includes a dictionary with the given name, answer it.

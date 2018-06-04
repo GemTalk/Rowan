@@ -1043,7 +1043,7 @@ RwGsPatchSet >> movedDeletedClasses [
 { #category : 'private - applying' }
 RwGsPatchSet >> moveMethodsBetweenPackages [
 
-	| deletedMethodsMap |
+	| deletedMethodsMap movedClassesMap |
 	deletedMethods isEmpty
 		ifTrue: [ 
 			"no move without deleted methods"
@@ -1057,26 +1057,32 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 					(deletedMethodsMap
 						at: patch classDefinition key
 						ifAbsentPut: [ Dictionary new ]) at: patch methodDefinition key put: patch ] ].
+	movedClassesMap := Dictionary new.
+	movedAddedClasses do: [:patch |
+		movedClassesMap at: patch classDefinition key put: patch ].
 	(addedMethods copy
 		addAll: extendedMethods;
 		yourself)
 		do: [ :patch | 
-			(deletedMethodsMap at: patch classDefinition key ifAbsent: [  ])
-				ifNotNil: [ :selectorMap | 
-					(selectorMap at: patch methodDefinition selector ifAbsent: [])
-						ifNotNil: [ :methodDeletionPatch | 
-							| methodMod |
-							methodDeletionPatch
-								deleteLoadedMethodNewClasses: createdClasses
-								andExistingClasses: tempSymbols.
-							deletedMethods remove: methodDeletionPatch.
-							movedDeletedMethods add: methodDeletionPatch.
-							methodMod := patch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
-							(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
-								ifTrue: [ 
-									"the source is identical ... so it is a pure move of the method ... record this fact
-										for operations that care. "
-									pureMovedMethods add: patch ] ] ] ]
+					(deletedMethodsMap at: patch classDefinition key ifAbsent: [  ])
+						ifNotNil: [ :selectorMap | 
+							(selectorMap at: patch methodDefinition selector ifAbsent: [])
+								ifNotNil: [ :methodDeletionPatch | 
+									deletedMethods remove: methodDeletionPatch.
+									(movedClassesMap includesKey: patch classDefinition key)
+										ifFalse: [
+											"Only worry about methods that were moved outside of moved classes"
+											| methodMod |
+											methodDeletionPatch
+												deleteLoadedMethodNewClasses: createdClasses
+												andExistingClasses: tempSymbols.
+											movedDeletedMethods add: methodDeletionPatch.
+											methodMod := patch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
+											(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
+												ifTrue: [ 
+													"the source is identical ... so it is a pure move of the method ... record this fact
+														for operations that care. "
+													pureMovedMethods add: patch ] ] ] ] ]
 
 ]
 
