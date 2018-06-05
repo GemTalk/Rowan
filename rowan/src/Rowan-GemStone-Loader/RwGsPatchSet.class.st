@@ -1051,7 +1051,7 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 		addAll: extendedMethods;
 		yourself)
 		do: [ :methodAdditionPatch | 
-					(deletedMethodsMap at: methodAdditionPatch classDefinition key ifAbsent: [  ])
+					(deletedMethodsMap at: methodAdditionPatch className ifAbsent: [  ])
 						ifNotNil: [ :isMetaMap |
 							(isMetaMap at: methodAdditionPatch isMeta ifAbsent: [])
 								ifNotNil: [:selectorMap | 
@@ -1059,9 +1059,11 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 										ifNotNil: [ :methodDeletionPatch | 
 											| methodMod |
 											deletedMethods remove: methodDeletionPatch. "suspicious ... but needed to get back to parity?"
-											methodDeletionPatch
-												deleteLoadedMethodNewClasses: createdClasses
-												andExistingClasses: tempSymbols.
+											(movedClassesMap includesKey: methodDeletionPatch className)
+												ifFalse: [ 
+												methodDeletionPatch
+													deleteLoadedMethodNewClasses: createdClasses
+													andExistingClasses: tempSymbols ].
 											((movedMethodsMap at: methodAdditionPatch className ifAbsentPut: [ Dictionary new ])
 												at: methodAdditionPatch isMeta ifAbsentPut: [Dictionary new ])
 													at: methodAdditionPatch methodDefinition selector put: {methodAdditionPatch. methodDeletionPatch}.
@@ -1106,12 +1108,15 @@ RwGsPatchSet >> removeDeletedClassesFromTempSymbols [
 RwGsPatchSet >> removeDeletedMethods [
 
 	deletedMethods
-		do: [ :each | each deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ].
+		do: [ :methodDeletionPatch | 
+			(movedClassesMap includesKey: methodDeletionPatch className)
+				ifFalse: [ methodDeletionPatch deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ] ].
 	deleteNewVersionMethods
 		do: [ :each | 
 			each
 				deleteNewVersionMethodNewClasses: createdClasses
 				andExistingClasses: tempSymbols ]
+
 ]
 
 { #category : 'private - applying' }
