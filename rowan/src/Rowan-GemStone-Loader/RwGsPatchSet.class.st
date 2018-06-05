@@ -1043,7 +1043,7 @@ RwGsPatchSet >> movedDeletedClasses [
 { #category : 'private - applying' }
 RwGsPatchSet >> moveMethodsBetweenPackages [
 
-	| deletedMethodsMap movedClassesMap |
+	| deletedMethodsMap |
 	deletedMethods isEmpty
 		ifTrue: [ 
 			"no move without deleted methods"
@@ -1057,9 +1057,6 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 					(deletedMethodsMap
 						at: patch classDefinition key
 						ifAbsentPut: [ Dictionary new ]) at: patch methodDefinition key put: patch ] ].
-	movedClassesMap := Dictionary new.
-	movedAddedClasses do: [:patch |
-		movedClassesMap at: patch classDefinition key put: patch ].
 	(addedMethods copy
 		addAll: extendedMethods;
 		yourself)
@@ -1068,21 +1065,18 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 						ifNotNil: [ :selectorMap | 
 							(selectorMap at: patch methodDefinition selector ifAbsent: [])
 								ifNotNil: [ :methodDeletionPatch | 
+									| methodMod |
 									deletedMethods remove: methodDeletionPatch.
-									(movedClassesMap includesKey: patch classDefinition key)
-										ifFalse: [
-											"Only worry about methods that were moved outside of moved classes"
-											| methodMod |
-											methodDeletionPatch
-												deleteLoadedMethodNewClasses: createdClasses
-												andExistingClasses: tempSymbols.
-											movedDeletedMethods add: methodDeletionPatch.
-											methodMod := patch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
-											(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
-												ifTrue: [ 
-													"the source is identical ... so it is a pure move of the method ... record this fact
-														for operations that care. "
-													pureMovedMethods add: patch ] ] ] ] ]
+									methodDeletionPatch
+										deleteLoadedMethodNewClasses: createdClasses
+										andExistingClasses: tempSymbols.
+									movedDeletedMethods add: methodDeletionPatch.
+									methodMod := patch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
+									(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
+										ifTrue: [ 
+											"the source is identical ... so it is a pure move of the method ... record this fact
+												for operations that care. "
+											pureMovedMethods add: patch ] ] ] ]
 
 ]
 
@@ -1240,19 +1234,14 @@ RwGsPatchSet >> updateMethodDictionaries [
 		processing (installMovedDeletedMethod).
 	For methods that need recompiling updated the LoadedMethods registration. "
 
-	| movedDeletedMethodMap movedClassesMap |
+	| movedDeletedMethodMap  |
 	movedDeletedMethodMap := Dictionary new.
 	movedDeletedMethods do: [:each | 
 		movedDeletedMethodMap at: each selector put: each ].
-	movedClassesMap := Dictionary new.
-	movedAddedClasses do: [:patch |
-		movedClassesMap at: patch classDefinition key put: patch ].
 	addedMethods do: [:each | 
-		(movedClassesMap includesKey: each classDefinition key)
-			ifFalse: [ 
-				(movedDeletedMethodMap at: each methodDefinition selector ifAbsent: [])
-					ifNil: [ each installMethod ]
-					ifNotNil: [ each installMovedDeletedMethod ] ] ].
+		(movedDeletedMethodMap at: each methodDefinition selector ifAbsent: [])
+			ifNil: [ each installMethod ]
+			ifNotNil: [ each installMovedDeletedMethod ] ].
 	extendedMethods do: [:each | each installMethod ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
 
