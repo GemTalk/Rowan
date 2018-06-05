@@ -1229,9 +1229,6 @@ RwGsPatchSet >> updateMethodDictionaries [
 	copy from temporary methodDictionaries to live methodDictionaries
 	For added methods, create LoadedMethods and add to the appropriate LoadedClass
 	or LoadedExtension
-	For methods that are moved between packages, the delete from the source package
-		has already been perfomed so installing the new method requires special
-		processing (installMovedDeletedMethod).
 	For methods that need recompiling updated the LoadedMethods registration. "
 
 	addedMethods do: [:patch | 
@@ -1242,8 +1239,7 @@ RwGsPatchSet >> updateMethodDictionaries [
 					ifNil: [ patch installMethod ]
 					ifNotNil: [ :selectorMap |
 						(selectorMap at: patch methodDefinition selector ifAbsent: [])
-							ifNil: [ patch installMethod ]
-							ifNotNil: [ patch installMovedDeletedMethod ] ] ] ].
+							ifNil: [ patch installMethod ] ] ] ].
 	extendedMethods do: [:each | each installMethod ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
 
