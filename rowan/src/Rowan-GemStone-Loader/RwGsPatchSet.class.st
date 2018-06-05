@@ -1021,7 +1021,9 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 			"no move without deleted methods"
 			^ self ].
 	deletedMethodsMap := Dictionary new.
-	deletedMethods
+	(deletedMethods copy
+		addAll: deleteNewVersionMethods;
+		yourself)
 		do: [ :patch | 
 			patch classDefinition key
 				ifNotNil: [ 
@@ -1039,7 +1041,7 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 									(selectorMap at: methodAdditionPatch methodDefinition selector ifAbsent: [])
 										ifNotNil: [ :methodDeletionPatch | 
 											| methodMod |
-											deletedMethods remove: methodDeletionPatch. "suspicious ... but needed to get back to parity?"
+											deletedMethods remove: methodDeletionPatch ifAbsent: [].
 											((movedMethodsMap at: methodAdditionPatch className ifAbsentPut: [ Dictionary new ])
 												at: methodAdditionPatch isMeta ifAbsentPut: [Dictionary new ])
 													at: methodAdditionPatch methodDefinition selector put: {methodAdditionPatch. methodDeletionPatch}.
@@ -1106,10 +1108,12 @@ RwGsPatchSet >> removeDeletedMethods [
 				ifTrue: [ methodDeletionPatch deleteMovedMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]
 				ifFalse: [ methodDeletionPatch deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ] ].
 	deleteNewVersionMethods
-		do: [ :each | 
-			each
-				deleteNewVersionMethodNewClasses: createdClasses
-				andExistingClasses: tempSymbols ]
+		do: [ :methodDeletionPatch | 
+			(movedClassesMap includesKey: methodDeletionPatch className)
+				ifFalse: [ 
+					methodDeletionPatch
+						deleteNewVersionMethodNewClasses: createdClasses
+						andExistingClasses: tempSymbols ] ]
 
 ]
 
