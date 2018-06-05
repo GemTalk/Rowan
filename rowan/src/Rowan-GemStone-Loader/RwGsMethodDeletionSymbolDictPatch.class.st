@@ -43,6 +43,22 @@ RwGsMethodDeletionSymbolDictPatch >> deleteMethodNewClasses: createdClasses andE
 ]
 
 { #category : 'deleting' }
+RwGsMethodDeletionSymbolDictPatch >> deleteMovedMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
+
+	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ 
+			"class is being deleted, nothing else to do"
+			^ self ].
+
+	self symbolDictionaryRegistry
+		deleteMovedMethod: methodDefinition selector
+		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+
+]
+
+{ #category : 'deleting' }
 RwGsMethodDeletionSymbolDictPatch >> deleteNewVersionMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
 
 	"remove the method from deleted things"

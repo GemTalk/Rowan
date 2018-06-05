@@ -1110,6 +1110,7 @@ RwGsPatchSet >> removeDeletedMethods [
 	deletedMethods
 		do: [ :methodDeletionPatch | 
 			(movedClassesMap includesKey: methodDeletionPatch className)
+				ifTrue: [ methodDeletionPatch deleteMovedMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]
 				ifFalse: [ methodDeletionPatch deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ] ].
 	deleteNewVersionMethods
 		do: [ :each | 
