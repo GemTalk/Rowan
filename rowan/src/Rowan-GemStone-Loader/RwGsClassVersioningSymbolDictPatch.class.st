@@ -294,7 +294,7 @@ RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectS
 
 	| existingClass loadedClass loadedPackageName loadedClassDefinition newVersionClassModification existingClassName movedDeletedMap |
 	movedDeletedMap := Dictionary new.
-	patchSet movedDeletedClasses do: [:patch | movedDeletedMap at: patch classDefinition key put: patch ].
+	patchSet movedClassesMap keysAndValuesDo: [:className :ar | movedDeletedMap at: className put: (ar at: 2) ].
 	existingClass := self oldClassVersion.
 	existingClassName := existingClass name asString.
 

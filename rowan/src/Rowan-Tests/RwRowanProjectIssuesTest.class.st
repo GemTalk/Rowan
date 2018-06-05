@@ -2043,7 +2043,12 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 			(RwMethodDefinition
 					newForSelector: #'method2'
 					protocol: 'accessing'
-					source: 'method2 ^2').
+					source: 'method2 ^2');
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method3'
+					protocol: 'accessing'
+					source: 'method3 ^3').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
@@ -2077,7 +2082,12 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 			(RwMethodDefinition
 					newForSelector: #'method3'
 					protocol: 'accessing'
-					source: 'method3 ^3').
+					source: 'method3 ^5');
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method4'
+					protocol: 'accessing'
+					source: 'method4 ^4').
 
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
@@ -2090,7 +2100,8 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	self assert: (x := (ar first at: 1) name) = (y := self _symbolDictionaryName1 asSymbol).
 	self assert: class new method1 = 1.
 	self should: [ class new method2 = 2 ] raise: MessageNotUnderstood.
-	self assert: class new method3 = 3.
+	self assert: class new method3 = 5.
+	self assert: class new method4 = 4.
 
 	self assert: class == oldClass.
 

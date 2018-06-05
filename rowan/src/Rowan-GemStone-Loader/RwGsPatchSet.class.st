@@ -12,8 +12,7 @@ Class {
 		'projectsWithPropertyChanges',
 		'addedClasses',
 		'deletedClasses',
-		'movedAddedClasses',
-		'movedDeletedClasses',
+		'movedClassesMap',
 		'extendedClasses',
 		'classesWithPropertyChanges',
 		'classesWithSymbolDictionaryChanges',
@@ -22,7 +21,7 @@ Class {
 		'addedMethods',
 		'deletedMethods',
 		'deleteNewVersionMethods',
-		'movedDeletedMethods',
+		'movedMethodsMap',
 		'extendedMethods',
 		'methodsWithPropertyChanges',
 		'methodsNeedingRecompile',
@@ -248,7 +247,7 @@ RwGsPatchSet >> addAddedClassesToTempSymbols [
 	"Just need the names for now, they don't need to resolve to anything in particular."
 
 	addedClasses do: [:patch | 
-		(movedAddedClasses includes: patch)
+		(movedClassesMap includesKey: patch className)
 			ifFalse: [ tempSymbols at: patch className asSymbol put: nil ] ].
 
 ]
@@ -353,7 +352,7 @@ RwGsPatchSet >> addClassModification: aRwClassModification toPatchSetInPackage: 
 RwGsPatchSet >> addCreatedClassesAndVersionsTo: newClassesByName [
 
 	addedClasses do: [ :patch | 
-		(movedAddedClasses includes: patch)
+		(movedClassesMap includesKey: patch className)
 			ifFalse: [ patch addToNewClassesByName: newClassesByName ] ].
 	classesWithClassVariableChanges
 		do: [ :each | each addToNewClassesByName: newClassesByName ].
@@ -889,7 +888,7 @@ RwGsPatchSet >> createNewClassesAndClassVersions [
 { #category : 'private - applying' }
 RwGsPatchSet >> doMoveClassesBetweenPackages [
 
-	self doMoveClassesBetweenPackages: movedAddedClasses
+	self doMoveClassesBetweenPackages: (movedClassesMap values collect: [:ar | ar at: 1])
 
 ]
 
@@ -922,11 +921,10 @@ RwGsPatchSet >> initialize [
 	classesWithClassVariableChanges := Set new.
 	classesWithPropertyChanges := Set new.
 	classesWithSymbolDictionaryChanges := Set new.
-	movedAddedClasses := Set new.
-	movedDeletedClasses := Set new.
+	movedClassesMap := Dictionary new.
 	deletedMethods := Set new.
 	deleteNewVersionMethods := Set new.
-	movedDeletedMethods := Set new.
+	movedMethodsMap := Dictionary new.
 	addedMethods := Set new.
 	extendedMethods := Set new.
 	methodsNeedingRecompile := Set new.
@@ -945,7 +943,7 @@ RwGsPatchSet >> installAddedClasses [
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
 	addedClasses do: [:patch | 
-		(movedAddedClasses includes: patch)
+		(movedClassesMap includesKey: patch className)
 			ifFalse: [ patch installClassInSystem ] ]
 
 ]
@@ -999,8 +997,7 @@ RwGsPatchSet >> moveClassesBetweenPackages [
 			(deletedClassesMap at: addedClassPatch classDefinition key ifAbsent: [ ])
 				ifNotNil: [ :deletedClassPatch | 
 					| modification |
-					movedDeletedClasses add: deletedClassPatch.
-					movedAddedClasses add: addedClassPatch.
+					movedClassesMap at: addedClassPatch className put: {addedClassPatch. deletedClassPatch}.
 					modification := addedClassPatch classDefinition
 						compareAgainstBase: deletedClassPatch classDefinition.
 					modification isEmpty
@@ -1029,14 +1026,8 @@ RwGsPatchSet >> moveClassesWithNewVersionsBetweenPackages [
 ]
 
 { #category : 'accessing' }
-RwGsPatchSet >> movedAddedClasses [
-	^ movedAddedClasses
-
-]
-
-{ #category : 'accessing' }
-RwGsPatchSet >> movedDeletedClasses [
-	^ movedDeletedClasses
+RwGsPatchSet >> movedClassesMap [
+	^ movedClassesMap
 
 ]
 
@@ -1060,23 +1051,23 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 	(addedMethods copy
 		addAll: extendedMethods;
 		yourself)
-		do: [ :patch | 
-					(deletedMethodsMap at: patch classDefinition key ifAbsent: [  ])
+		do: [ :methodAdditionPatch | 
+					(deletedMethodsMap at: methodAdditionPatch classDefinition key ifAbsent: [  ])
 						ifNotNil: [ :selectorMap | 
-							(selectorMap at: patch methodDefinition selector ifAbsent: [])
+							(selectorMap at: methodAdditionPatch methodDefinition selector ifAbsent: [])
 								ifNotNil: [ :methodDeletionPatch | 
 									| methodMod |
-									deletedMethods remove: methodDeletionPatch.
 									methodDeletionPatch
 										deleteLoadedMethodNewClasses: createdClasses
 										andExistingClasses: tempSymbols.
-									movedDeletedMethods add: methodDeletionPatch.
-									methodMod := patch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
+									(movedMethodsMap at: methodAdditionPatch className ifAbsentPut: [ Dictionary new ])
+										at: methodAdditionPatch selector put: {methodAdditionPatch. methodDeletionPatch}.
+									methodMod := methodAdditionPatch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
 									(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
 										ifTrue: [ 
 											"the source is identical ... so it is a pure move of the method ... record this fact
 												for operations that care. "
-											pureMovedMethods add: patch ] ] ] ]
+											pureMovedMethods add: methodAdditionPatch ] ] ] ]
 
 ]
 
@@ -1093,7 +1084,7 @@ RwGsPatchSet >> removeDeletedClassesFromSystem [
         Remove the LoadedClass from its LoadedPackage"
 
 	deletedClasses do: [:patch | 
-		(movedDeletedClasses includes: patch)
+		(movedClassesMap includesKey: patch className)
 			ifFalse: [ patch deleteClassFromSystem ] ]
 
 ]
@@ -1103,7 +1094,7 @@ RwGsPatchSet >> removeDeletedClassesFromTempSymbols [
 	"Deleted class names should not resolve during compilation."
 
 	deletedClasses do: [:patch | 
-		(movedDeletedClasses includes: patch)
+		(movedClassesMap includesKey: patch className)
 			ifFalse: [ tempSymbols removeKey: patch className asSymbol ] ]
 
 ]
@@ -1234,14 +1225,13 @@ RwGsPatchSet >> updateMethodDictionaries [
 		processing (installMovedDeletedMethod).
 	For methods that need recompiling updated the LoadedMethods registration. "
 
-	| movedDeletedMethodMap  |
-	movedDeletedMethodMap := Dictionary new.
-	movedDeletedMethods do: [:each | 
-		movedDeletedMethodMap at: each selector put: each ].
-	addedMethods do: [:each | 
-		(movedDeletedMethodMap at: each methodDefinition selector ifAbsent: [])
-			ifNil: [ each installMethod ]
-			ifNotNil: [ each installMovedDeletedMethod ] ].
+	addedMethods do: [:patch | 
+		(movedMethodsMap at: patch className ifAbsent: [])
+			ifNil: [ patch installMethod ]
+			ifNotNil: [ :selectorMap |
+				(selectorMap at: patch methodDefinition selector ifAbsent: [])
+					ifNil: [ patch installMethod ]
+					ifNotNil: [ patch installMovedDeletedMethod ] ] ].
 	extendedMethods do: [:each | each installMethod ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
 
