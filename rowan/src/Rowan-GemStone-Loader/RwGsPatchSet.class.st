@@ -1044,31 +1044,33 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 		do: [ :patch | 
 			patch classDefinition key
 				ifNotNil: [ 
-					"nil key means that the class itself is being deleted"
-					(deletedMethodsMap
-						at: patch classDefinition key
-						ifAbsentPut: [ Dictionary new ]) at: patch methodDefinition key put: patch ] ].
+					((deletedMethodsMap at: patch classDefinition key ifAbsentPut: [ Dictionary new ]) 
+						at: patch isMeta ifAbsentPut: [Dictionary new ])
+							at: patch methodDefinition key put: patch ] ].
 	(addedMethods copy
 		addAll: extendedMethods;
 		yourself)
 		do: [ :methodAdditionPatch | 
 					(deletedMethodsMap at: methodAdditionPatch classDefinition key ifAbsent: [  ])
-						ifNotNil: [ :selectorMap | 
-							(selectorMap at: methodAdditionPatch methodDefinition selector ifAbsent: [])
-								ifNotNil: [ :methodDeletionPatch | 
-									| methodMod |
-									deletedMethods remove: methodDeletionPatch. "suspicious ... but needed to get back to parity?"
-									methodDeletionPatch
-										deleteLoadedMethodNewClasses: createdClasses
-										andExistingClasses: tempSymbols.
-									(movedMethodsMap at: methodAdditionPatch className ifAbsentPut: [ Dictionary new ])
-										at: methodAdditionPatch methodDefinition selector put: {methodAdditionPatch. methodDeletionPatch}.
-									methodMod := methodAdditionPatch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
-									(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
-										ifTrue: [ 
-											"the source is identical ... so it is a pure move of the method ... record this fact
-												for operations that care. "
-											pureMovedMethods add: methodAdditionPatch ] ] ] ]
+						ifNotNil: [ :isMetaMap |
+							(isMetaMap at: methodAdditionPatch isMeta ifAbsent: [])
+								ifNotNil: [:selectorMap | 
+									(selectorMap at: methodAdditionPatch methodDefinition selector ifAbsent: [])
+										ifNotNil: [ :methodDeletionPatch | 
+											| methodMod |
+											deletedMethods remove: methodDeletionPatch. "suspicious ... but needed to get back to parity?"
+											methodDeletionPatch
+												deleteLoadedMethodNewClasses: createdClasses
+												andExistingClasses: tempSymbols.
+											((movedMethodsMap at: methodAdditionPatch className ifAbsentPut: [ Dictionary new ])
+												at: methodAdditionPatch isMeta ifAbsentPut: [Dictionary new ])
+													at: methodAdditionPatch methodDefinition selector put: {methodAdditionPatch. methodDeletionPatch}.
+											methodMod := methodAdditionPatch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
+											(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
+												ifTrue: [ 
+													"the source is identical ... so it is a pure move of the method ... record this fact
+														for operations that care. "
+													pureMovedMethods add: methodAdditionPatch ] ] ] ] ]
 
 ]
 
@@ -1229,10 +1231,13 @@ RwGsPatchSet >> updateMethodDictionaries [
 	addedMethods do: [:patch | 
 		(movedMethodsMap at: patch className ifAbsent: [])
 			ifNil: [ patch installMethod ]
-			ifNotNil: [ :selectorMap |
-				(selectorMap at: patch methodDefinition selector ifAbsent: [])
+			ifNotNil: [ :isMetaMap |
+				(isMetaMap at: patch isMeta ifAbsent: [])
 					ifNil: [ patch installMethod ]
-					ifNotNil: [ patch installMovedDeletedMethod ] ] ].
+					ifNotNil: [ :selectorMap |
+						(selectorMap at: patch methodDefinition selector ifAbsent: [])
+							ifNil: [ patch installMethod ]
+							ifNotNil: [ patch installMovedDeletedMethod ] ] ] ].
 	extendedMethods do: [:each | each installMethod ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
 

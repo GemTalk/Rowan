@@ -2000,7 +2000,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 ]
 
 { #category : 'tests-issue 185' }
-RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict_add_and_remove_methods [
+RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict_add_remove_and_remove_methods [
 
 	"https://github.com/dalehenrich/Rowan/issues/185"
 
@@ -2078,6 +2078,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 
 	classDefinition
 		removeInstanceMethod: #method2;
+		removeInstanceMethod: #method3;
 		addInstanceMethodDefinition:
 			(RwMethodDefinition
 					newForSelector: #'method3'
