@@ -1059,11 +1059,6 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 										ifNotNil: [ :methodDeletionPatch | 
 											| methodMod |
 											deletedMethods remove: methodDeletionPatch. "suspicious ... but needed to get back to parity?"
-											(movedClassesMap includesKey: methodDeletionPatch className)
-												ifFalse: [ 
-												methodDeletionPatch
-													deleteLoadedMethodNewClasses: createdClasses
-													andExistingClasses: tempSymbols ].
 											((movedMethodsMap at: methodAdditionPatch className ifAbsentPut: [ Dictionary new ])
 												at: methodAdditionPatch isMeta ifAbsentPut: [Dictionary new ])
 													at: methodAdditionPatch methodDefinition selector put: {methodAdditionPatch. methodDeletionPatch}.

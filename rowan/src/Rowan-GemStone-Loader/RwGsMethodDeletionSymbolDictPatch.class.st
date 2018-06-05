@@ -12,22 +12,6 @@ Class {
 }
 
 { #category : 'deleting' }
-RwGsMethodDeletionSymbolDictPatch >> deleteLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ 
-			"class cannot be found, so the method is already gone"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
-]
-
-{ #category : 'deleting' }
 RwGsMethodDeletionSymbolDictPatch >> deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
 
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
