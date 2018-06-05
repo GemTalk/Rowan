@@ -1534,7 +1534,7 @@ RwRowanProjectIssuesTest >> testIssue125_2 [
 		addPatchedExtendedClassMethodProperties:inClass:inPackage:inProject:
 		addPatchedExtendedInstanceMethodProperties:inClass:inPackage:inProject:
 	"
-	| projectName packageName1 packageName2 className theClass  |
+	| projectName packageName1 packageName2 className theClass  x |
 	projectName := 'Issue125_Project'.
 	packageName1 := 'Issue125-Core'.
 	packageName2 := 'Issue125-Extensions'.
@@ -1561,7 +1561,7 @@ RwRowanProjectIssuesTest >> testIssue125_2 [
 	theClass rwCompileMethod: 'foo ^1' category: 'accessing'.
 
 	self assert: theClass new foo = 1.
-	self assert: (theClass categoryOfSelector: #foo) asString = 'accessing'
+	self assert: (x := (theClass categoryOfSelector: #foo) asString) = 'accessing'
 
 ]
 

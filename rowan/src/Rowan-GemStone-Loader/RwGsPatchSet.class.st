@@ -698,25 +698,6 @@ RwGsPatchSet >> allPatchesAffectingLiveMethodsDo: liveMethodsBlock deletedMethod
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSet >> allPatchesAffectingLivePackagesDo: aBlock [
-	"Evaluate aBlock with every patch that can affect a package without deleting it, which is a lot."
-
-	
-	{addedPackages.
-	deletedClasses.
-	addedClasses.
-	classesWithNewVersions.
-	classesWithPropertyChanges.
-	deletedMethods.
-	addedMethods.
-	extendedMethods.
-	methodsNeedingRecompile.
-	methodsWithPropertyChanges}
-			do: [:patches | patches do: aBlock]
-
-]
-
-{ #category : 'private - applying' }
 RwGsPatchSet >> anyElementOfCollection: aCollection [
 	"if aCollection is empty, answer nil. Otherwise, answer the first in enumeration order (which is unspecified for unordered collections)."
 
@@ -1063,6 +1044,23 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 												at: methodAdditionPatch isMeta ifAbsentPut: [Dictionary new ])
 													at: methodAdditionPatch methodDefinition selector put: {methodAdditionPatch. methodDeletionPatch}.
 											methodMod := methodAdditionPatch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
+											methodMod isEmpty
+												ifFalse: [
+													methodMod propertiesModification isEmpty
+														ifFalse: [									 
+															methodAdditionPatch isMeta
+																ifTrue: [ 
+																	self
+																		addPatchedClassMethodProperties: methodMod after
+																		inClass: methodAdditionPatch classDefinition
+																		inPackage: methodAdditionPatch packageDefinition
+																		inProject: methodAdditionPatch projectDefinition ]
+																ifFalse: [ 
+																	self
+																		addPatchedInstanceMethodProperties: methodMod after
+																		inClass: methodAdditionPatch classDefinition
+																		inPackage: methodAdditionPatch packageDefinition
+																		inProject: methodAdditionPatch projectDefinition ] ] ].
 											(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
 												ifTrue: [ 
 													"the source is identical ... so it is a pure move of the method ... record this fact
