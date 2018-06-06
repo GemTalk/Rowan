@@ -1719,6 +1719,233 @@ RwRowanProjectIssuesTest >> testIssue185_move_class_to_package [
 ]
 
 { #category : 'tests-issue 185' }
+RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_1 [
+
+	"https://github.com/dalehenrich/Rowan/issues/185"
+
+	"simplified version of RwRowanProjectIssuesTest>>testIssue41_interactiveMoveInitializeExtensionMethodToPackage"
+
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
+		classExtensionDefinition packageName3 loadedPackage loadedClassExtensions |
+	projectName := 'Issue185'.
+	packageName1 := 'Issue185-Core1'.
+	packageName2 := 'Issue185-Core2'.
+	packageName3 := 'Issue185-Core3'.
+	className := 'Issue185Class'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	projectDefinition1 := (RwProjectDefinition
+		newForGitPackageProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		addPackageNamed: packageName3;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: 'accessing'
+					source: 'method1 ^1').
+
+	packageDefinition := projectDefinition1 packageNamed: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+
+	"create extension method in different package"
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'mover'
+					protocol: '*', packageName2 asLowercase
+					source: 'mover ^2').
+
+	packageDefinition := projectDefinition1 packageNamed: packageName2.
+	packageDefinition addClassExtension: classExtensionDefinition.
+
+	"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition1.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	"validate"
+	class := Rowan globalNamed: className.
+	self assert: class rowanPackageName = packageName1.
+	self assert: class new method1 = 1.
+	self assert: class new mover = 2.
+
+	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
+	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName2.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: ((loadedClassExtensions at: className) instanceMethodDefinitions includesKey: #mover).
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName3.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
+
+	"move the method to new package"
+	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
+
+	packageDefinition := projectDefinition2 packageNamed: packageName2.
+	packageDefinition classExtensions removeKey: className.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'mover'
+					protocol: '*', packageName3 asLowercase
+					source: 'mover ^3').
+
+	packageDefinition := projectDefinition2 packageNamed: packageName3.
+	packageDefinition addClassExtension: classExtensionDefinition.
+
+	"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition2.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	"validate"
+	self assert: class rowanPackageName = packageName1.
+	self assert: class new method1 = 1.
+	self assert: class new mover = 2.
+
+	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
+	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName2.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName3.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: ((loadedClassExtensions at: className) instanceMethodDefinitions includesKey: #mover).
+
+]
+
+{ #category : 'tests-issue 185' }
+RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_2 [
+
+	"https://github.com/dalehenrich/Rowan/issues/185"
+
+	"simplified version of RwRowanProjectIssuesTest>>testIssue41_interactiveMoveInitializeExtensionMethodToPackage"
+
+	| projectName  packageName1 packageName2 projectDefinition1 classDefinition packageDefinition className projectSetDefinition class
+		classExtensionDefinition packageName3 loadedPackage loadedClassExtensions |
+	projectName := 'Issue185'.
+	packageName1 := 'Issue185-Core1'.
+	packageName2 := 'Issue185-Core2'.
+	packageName3 := 'Issue185-Core3'.
+	className := 'Issue185Class'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	projectDefinition1 := (RwProjectDefinition
+		newForGitPackageProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		addPackageNamed: packageName3;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: 'accessing'
+					source: 'method1 ^1').
+
+	packageDefinition := projectDefinition1 packageNamed: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+
+	"create extension method in different package"
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'mover'
+					protocol: '*', packageName2 asLowercase
+					source: 'mover ^2').
+
+	packageDefinition := projectDefinition1 packageNamed: packageName2.
+	packageDefinition addClassExtension: classExtensionDefinition.
+
+	"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition1.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	"validate"
+	class := Rowan globalNamed: className.
+	self assert: class rowanPackageName = packageName1.
+	self assert: class new method1 = 1.
+	self assert: class new mover = 2.
+
+	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName2 asLowercase).
+	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName2.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: ((loadedClassExtensions at: className) instanceMethodDefinitions includesKey: #mover).
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName3.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
+
+	"move the method to new package"
+	class 
+		rwCompileMethod: 'mover ^2'
+		category:  '*' , packageName3 asLowercase.
+
+	"validate"
+	self assert: class rowanPackageName = packageName1.
+	self assert: class new method1 = 1.
+	self assert: class new mover = 2.
+
+	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
+	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName3.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: ((loadedClassExtensions at: className) instanceMethodDefinitions includesKey: #mover).
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName2.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
+
+]
+
+{ #category : 'tests-issue 185' }
 RwRowanProjectIssuesTest >> testIssue185_rename_package [
 
 	"https://github.com/dalehenrich/Rowan/issues/185"
@@ -2821,6 +3048,7 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	self _addOrUpdateMethod: 'cvar1: anInt CVar1 := anInt' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'cvar2: anInt CVar2 := anInt' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 	
+	"create initialize package as an extension method"
 	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
 	self assert: theClass cvar1 isNil.
@@ -2852,7 +3080,7 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	self assert: theClass cvar1 = 5.
 	self assert: theClass cvar2 = 6.
 
-	"initialize method changed and moved to new package"
+	"initialize method not changed and moved to new package"
 	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName3.
