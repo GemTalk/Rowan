@@ -1728,7 +1728,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_1 
 	"use RwClassExtensionDefinition>>removeKey: to do final update (source changed)--- definition comparison bug (see testIssue206_move_extension_method_to_new_package_1)"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		classExtensionDefinition packageName3 loadedPackage loadedClassExtensions |
+		classExtensionDefinition packageName3 loadedPackage loadedClassExtensions x |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core1'.
 	packageName2 := 'Issue185-Core2'.
@@ -1827,18 +1827,18 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_1 
 	"validate"
 	self assert: class rowanPackageName = packageName1.
 	self assert: class new method1 = 1.
-	self assert: class new mover = 2.
+	self assert: class new mover = 3.
 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
 
-	loadedPackage := Rowan image loadedPackageNamed: packageName2.
-	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
-
 	loadedPackage := Rowan image loadedPackageNamed: packageName3.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
 	self assert: ((loadedClassExtensions at: className) instanceMethodDefinitions includesKey: #mover).
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName2.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: (x := loadedClassExtensions at: className ifAbsent: []) isNil.
 
 ]
 
@@ -2064,13 +2064,13 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_3 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
 
-	loadedPackage := Rowan image loadedPackageNamed: packageName2.
-	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
-
 	loadedPackage := Rowan image loadedPackageNamed: packageName3.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
 	self assert: ((loadedClassExtensions at: className) instanceMethodDefinitions includesKey: #mover).
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName2.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
 
 ]
 
@@ -2188,13 +2188,13 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_4 
 	self assert: (class categoryOfSelector: #mover) asString = ('*', packageName3 asLowercase).
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
 
-	loadedPackage := Rowan image loadedPackageNamed: packageName2.
-	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
-
 	loadedPackage := Rowan image loadedPackageNamed: packageName3.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
 	self assert: ((loadedClassExtensions at: className) instanceMethodDefinitions includesKey: #mover).
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName2.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
 
 ]
 
