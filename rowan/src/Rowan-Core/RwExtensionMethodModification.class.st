@@ -86,7 +86,7 @@ RwExtensionMethodModification >> addModificationToPatchSet: aPatchSet inPackage:
 
 { #category : 'accessing' }
 RwExtensionMethodModification >> classDefinition: aClassDefinition [
-	aClassDefinition name isNil ifTrue: [self halt].
+	false ifTrue: [ aClassDefinition name isNil ifTrue: [self halt]].
 	classDefinition := aClassDefinition
 
 ]
