@@ -2052,7 +2052,6 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_3 
 	packageDefinition addClassExtension: classExtensionDefinition.
 
 	"load"
-self halt.
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
