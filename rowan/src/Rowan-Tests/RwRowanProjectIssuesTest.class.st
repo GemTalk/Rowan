@@ -2803,7 +2803,7 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 
 	"Are extension method initialization methods run correctly for add and update"
 
-	| projectName packageName1 packageName2 packageName3 className theClass  |
+	| projectName packageName1 packageName2 packageName3 className theClass loadedPackage loadedClassExtensions |
 	projectName := 'Issue41_project'.
 	packageName1 := 'Issue41-Core'.
 	packageName2 := 'Issue41-Extensions1'.
@@ -2835,6 +2835,14 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	"initialize method changed in same package"
 	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
+	loadedPackage := Rowan image loadedPackageNamed: packageName2.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: ((loadedClassExtensions at: className) classMethodDefinitions includesKey: #initialize).
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName3.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
+
 	self assert: theClass cvar1 = 3.
 	self assert: theClass cvar2 = 4.
 
@@ -2846,6 +2854,14 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 
 	"initialize method changed and moved to new package"
 	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName3.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self assert: ((loadedClassExtensions at: className) classMethodDefinitions includesKey: #initialize).
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName2.
+	loadedClassExtensions := loadedPackage loadedClassExtensions.
+	self deny: ((loadedClassExtensions at: className) classMethodDefinitions includesKey: #initialize).
 
 	self assert: theClass cvar1 = 5.
 	self assert: theClass cvar2 = 6.
