@@ -970,9 +970,7 @@ RwGsPatchSet >> moveClassesBetweenPackages [
 		do: [ :patch | 
 			patch classDefinition key
 				ifNil: [ self halt ]
-				ifNotNil: [ 
-					"nil key means that the class itself is being deleted"
-					deletedClassesMap at: patch classDefinition key put: patch ] ].
+				ifNotNil: [ deletedClassesMap at: patch classDefinition key put: patch ] ].
 
 	image := Rowan image.
 	addedClasses copy
@@ -1029,7 +1027,8 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 		do: [ :patch | 
 			| className |
 			className := patch classDefinition key.
-			(className isNil or: [ deletedClassesMap includesKey:className ])
+			(className isNil 
+				or: [ (movedClassesMap includesKey: className) not and: [ deletedClassesMap includesKey:className ] ])
 				ifFalse: [ 
 					((deletedMethodsMap at: className ifAbsentPut: [ Dictionary new ]) 
 						at: patch isMeta ifAbsentPut: [Dictionary new ])
@@ -1110,11 +1109,11 @@ RwGsPatchSet >> removeDeletedMethods [
 		do: [ :methodDeletionPatch | 
 			| className |
 			className := methodDeletionPatch className.
-			(deletedClassesMap includesKey: className)
+			(movedClassesMap includesKey: className)
+				ifTrue: [ methodDeletionPatch deleteMovedMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]
 				ifFalse: [ 
-					(movedClassesMap includesKey: className)
-						ifTrue: [ methodDeletionPatch deleteMovedMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]
-						ifFalse: [ methodDeletionPatch deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ] ] ].
+					(deletedClassesMap includesKey: className)
+						ifFalse: [methodDeletionPatch deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ] ] ].
 	deleteNewVersionMethods
 		do: [ :methodDeletionPatch | 
 			(movedClassesMap includesKey: methodDeletionPatch className)
