@@ -505,6 +505,15 @@ RwGsSymbolDictionaryRegistry >> deleteMethod: selector for: behavior implementat
 ]
 
 { #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry >> deleteMovedLoadedMethod: selector for: behavior implementationClass: implementationClass [
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass deleteMovedLoadedMethod: selector for: behavior instance: self
+
+]
+
+{ #category : 'method - patch api' }
 RwGsSymbolDictionaryRegistry >> deleteMovedMethod: selector for: behavior implementationClass: implementationClass [
 
 	"Use for calls from classes in Rowan-GemStone-Loader package"

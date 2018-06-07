@@ -613,6 +613,17 @@ RwGsSymbolDictionaryRegistry_Implementation class >> deleteMovedCompiledMethod: 
 ]
 
 { #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> deleteMovedLoadedMethod: selector for: behavior instance: registryInstance [
+
+	| compiledMethod |
+
+	compiledMethod := behavior compiledMethodAt: selector.
+	self _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: registryInstance.
+	^ registryInstance
+
+]
+
+{ #category : 'method - patch api' }
 RwGsSymbolDictionaryRegistry_Implementation class >> deleteMovedMethod: selector for: behavior instance: registryInstance [
 
 	| compiledMethod |

@@ -21,6 +21,7 @@ Class {
 		'classesWithNewVersions',
 		'addedMethods',
 		'deletedMethods',
+		'deletedExtensionMethods',
 		'deleteNewVersionMethods',
 		'movedMethodsMap',
 		'extendedMethods',
@@ -731,6 +732,7 @@ RwGsPatchSet >> apply [
 		moveClassesBetweenSymbolDictionaries;
 		updateSymbolAssociations;
 		updateClassProperties;
+		deleteMovedLoadedExtensionMethods;
 		updateMethodDictionaries;
 		updateMethodProperties;
 		removeDeletedMethods;
@@ -867,6 +869,14 @@ RwGsPatchSet >> createNewClassesAndClassVersions [
 ]
 
 { #category : 'private - applying' }
+RwGsPatchSet >> deleteMovedLoadedExtensionMethods [
+
+	deletedExtensionMethods
+		do: [ :methodDeletionPatch | methodDeletionPatch deleteMovedLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols ].
+
+]
+
+{ #category : 'private - applying' }
 RwGsPatchSet >> doMoveClassesBetweenPackages [
 
 	self doMoveClassesBetweenPackages: (movedClassesMap values collect: [:ar | ar at: 1])
@@ -904,6 +914,7 @@ RwGsPatchSet >> initialize [
 	classesWithSymbolDictionaryChanges := Set new.
 	movedClassesMap := Dictionary new.
 	deletedMethods := Set new.
+	deletedExtensionMethods := Set new.
 	deleteNewVersionMethods := Set new.
 	movedMethodsMap := Dictionary new.
 	addedMethods := Set new.
@@ -1045,6 +1056,8 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 										ifNotNil: [ :methodDeletionPatch | 
 											| methodMod |
 											deletedMethods remove: methodDeletionPatch ifAbsent: [].
+											(extendedMethods includes: methodAdditionPatch)
+												ifTrue: [ deletedExtensionMethods add: methodDeletionPatch ].
 											((movedMethodsMap at: methodAdditionPatch className ifAbsentPut: [ Dictionary new ])
 												at: methodAdditionPatch isMeta ifAbsentPut: [Dictionary new ])
 													at: methodAdditionPatch methodDefinition selector put: {methodAdditionPatch. methodDeletionPatch}.
