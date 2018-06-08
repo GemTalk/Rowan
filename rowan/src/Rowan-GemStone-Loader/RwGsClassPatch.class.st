@@ -108,6 +108,7 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 								options: gs_options ]
 						ifFalse: [ self error: 'Unknown class type' ] ] ].
 	^ createdClass
+
 ]
 
 { #category : 'accessing' }

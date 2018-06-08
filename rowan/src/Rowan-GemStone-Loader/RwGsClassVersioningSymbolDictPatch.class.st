@@ -169,6 +169,26 @@ RwGsClassVersioningSymbolDictPatch >> createClassFor: aPatchSet [
 	^ newClassVersion
 ]
 
+{ #category : 'accessing' }
+RwGsClassVersioningSymbolDictPatch >> existingSymbolDictionary [
+	"answer the current symbol dictionary for the class ... before being (potentially) moved to a different symbolDictionary"
+
+	| symDictName symDict |
+	symDictName := classModification before gs_symbolDictionary.
+	symDict := GsCurrentSession currentSession symbolList objectNamed: symDictName asSymbol.
+	symDict
+		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
+	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
+
+]
+
+{ #category : 'accessing' }
+RwGsClassVersioningSymbolDictPatch >> existingSymbolDictionaryRegistry [
+
+	^ self existingSymbolDictionary rowanSymbolDictionaryRegistry
+
+]
+
 { #category : 'patching' }
 RwGsClassVersioningSymbolDictPatch >> installNewClassVerionInSystem [
 
@@ -227,7 +247,7 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 		do: [ :subclass | 
 			| loadedClass loadedPackageName loadedClassDefinition subclassName newVersionClassModification |
 			subclassName := subclass name asString.
-			loadedClass := self symbolDictionaryRegistry existingForClass: subclass.
+			loadedClass := self existingSymbolDictionaryRegistry existingForClass: subclass.
 			loadedClassDefinition := loadedClass asDefinition.
 			loadedPackageName := loadedClass loadedPackage name.
 			newVersionClassModification := loadedClassDefinition
@@ -274,11 +294,11 @@ RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectS
 
 	| existingClass loadedClass loadedPackageName loadedClassDefinition newVersionClassModification existingClassName movedDeletedMap |
 	movedDeletedMap := Dictionary new.
-	patchSet movedDeletedClasses do: [:ar | movedDeletedMap at: (ar at: 1) classDefinition key put: ar ].
+	patchSet movedClassesMap keysAndValuesDo: [:className :ar | movedDeletedMap at: className put: (ar at: 2) ].
 	existingClass := self oldClassVersion.
 	existingClassName := existingClass name asString.
 
-	loadedClass := self symbolDictionaryRegistry existingForClass: existingClass.
+	loadedClass := self existingSymbolDictionaryRegistry existingForClass: existingClass.
 	loadedClassDefinition := loadedClass asDefinition.
 	loadedPackageName := loadedClass loadedPackage name.
 
@@ -298,8 +318,8 @@ RwGsClassVersioningSymbolDictPatch >> updatePatchesForNewClassVersion: aProjectS
 								ifNotNil: [ :existingClassModification | 
 									| deleteClassModification |
 									deleteClassModification := false.
-									(movedDeletedMap at: existingClassName ifAbsent: []) ifNotNil: [:ar | 
-										deleteClassModification := (ar at: 1) packageDefinition name = packageModification after name ].
+									(movedDeletedMap at: existingClassName ifAbsent: []) ifNotNil: [:patch | 
+										deleteClassModification := patch packageDefinition name = packageModification after name ].
 									deleteClassModification
 										ifTrue: [classesModified removeKey: existingClassName]
 										ifFalse: [

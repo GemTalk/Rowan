@@ -244,23 +244,6 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry_Implementation class >> addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  instance: registryInstance [
-
-	self 
-		_symbolDictionary: registryInstance _symbolDictionary
-		at: assoc key 
-		ifPresent: [ 
-			"If there is an existing association, then we need to use the existing association which may have references
-				in compiled methods --- bootstrapping Rowan in Rowan is only valid use case"
-			(registryInstance _symbolDictionary associationAt: assoc key) value: class ]
-		ifAbsent: [
-			assoc value: class.
-			registryInstance _symbolDictionary add: assoc].
-	^ registryInstance
-
-]
-
-{ #category : 'private' }
 RwGsSymbolDictionaryRegistry_Implementation class >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance [
 
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
@@ -614,6 +597,39 @@ RwGsSymbolDictionaryRegistry_Implementation class >> deleteMethod: selector for:
 
 	compiledMethod := behavior compiledMethodAt: selector.
 	self deleteCompiledMethod: compiledMethod from: behavior instance: registryInstance.
+	^ registryInstance
+
+]
+
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> deleteMovedCompiledMethod: compiledMethod from: behavior instance: registryInstance [
+
+	"delete a compiled method from behavior - moved method already removed from the loaded things"
+
+	self _doDeleteCompiledMethod: compiledMethod from: behavior instance: registryInstance.
+
+	^ registryInstance
+
+]
+
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> deleteMovedLoadedMethod: selector for: behavior instance: registryInstance [
+
+	| compiledMethod |
+
+	compiledMethod := behavior compiledMethodAt: selector.
+	self _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: registryInstance.
+	^ registryInstance
+
+]
+
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> deleteMovedMethod: selector for: behavior instance: registryInstance [
+
+	| compiledMethod |
+
+	compiledMethod := behavior compiledMethodAt: selector.
+	self deleteMovedCompiledMethod: compiledMethod from: behavior instance: registryInstance.
 	^ registryInstance
 
 ]

@@ -127,13 +127,35 @@ RwGemStoneSpecification >> projectOwnerId: anObject [
 ]
 
 { #category : 'accessing' }
-RwGemStoneSpecification >> symbolDictName: symbolDictName forPackageNamed: packageName [
+RwGemStoneSpecification >> setSymbolDictName: symbolDictName forPackageNamed: packageName [
 
 	| packageProperties |
 	packageProperties := packageNameToPlatformPropertiesMap
 		at: packageName
 		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
+	symbolDictName 
+		ifNil: [
+			"remove the entry if it exists"
+			packageProperties removeKey: 'symbolDictName' ifAbsent: [].
+			^self ].
 	packageProperties at: 'symbolDictName' put: symbolDictName
+
+]
+
+{ #category : 'accessing' }
+RwGemStoneSpecification >> setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
+
+	| packageProperties |
+	packageProperties := packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
+	aBool 
+		ifNil: [
+			"remove the entry if it exists"
+			packageProperties removeKey: 'useSessionMethodsForExtensions' ifAbsent: [].
+			^self ].
+	packageProperties at: 'useSessionMethodsForExtensions' put: aBool
+
 ]
 
 { #category : 'accessing' }
@@ -166,16 +188,6 @@ RwGemStoneSpecification >> userIdForPackageNamed: packageName [
 		at: packageName
 		ifAbsent: [ ^ self defaultUserId ].
 	^ packageProperties at: 'userId' ifAbsent: [ ^ self defaultUserId ]
-]
-
-{ #category : 'accessing' }
-RwGemStoneSpecification >> useSessionMethodsForExtensions: aBool forPackageNamed: packageName [
-
-	| packageProperties |
-	packageProperties := packageNameToPlatformPropertiesMap
-		at: packageName
-		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
-	packageProperties at: 'useSessionMethodsForExtensions' put: aBool
 ]
 
 { #category : 'accessing' }

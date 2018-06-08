@@ -7,6 +7,11 @@ Class {
 { #category : 'private' }
 RwPrjReadTool >> _readProjectSetForProjectDefinition: projectDefinition packageNames: packageNames fromRepo: repo [
 
+	projectDefinition packageNames do: [:packageName | 
+		(packageNames includes: packageName) 
+			ifFalse: [ 
+				"deleted package"
+				projectDefinition removePackageNamed: packageName ] ].
 	packageNames
 		do: [ :packageName | 
 			| structureName reader packageDefinition |
@@ -88,13 +93,13 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfigurations: 
 	configDirectory := spec repositoryRootPath , '/' , spec configsPath , '/'.
 	(Rowan fileUtilities directoryExists: configDirectory)
 		ifTrue: [ 
-			| visitor configs |
+			| visitor |
 			visitor := RwProjectLoadConfigurationVisitor new
 				platformAttributes: Rowan platformConfigurationAttributes;
 				groupNames: groupNames;
 				configurationBasePath: configDirectory;
 				yourself.
-			configs := configNames collect: [:configName |
+			configNames do: [:configName |
 				| config |
 				url := 'file:' , configDirectory, configName , '.ston'.
 				config := RwAbstractProjectConfiguration fromUrl: url.

@@ -23,6 +23,17 @@ RwClassExtensionDefinition class >> newForClassNamed: className [
 ]
 
 { #category : 'private' }
+RwClassExtensionDefinition >> _classNameForCompare: aDefinition [
+
+	^ self key ifNil: 
+		[ | cName |
+		cName := aDefinition key.
+		self name: cName.
+		cName ]
+
+]
+
+{ #category : 'private' }
 RwClassExtensionDefinition >> _methodsModificationClass [
 
 	^ RwExtensionMethodsModification

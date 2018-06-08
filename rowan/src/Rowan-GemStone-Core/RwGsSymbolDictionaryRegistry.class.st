@@ -180,22 +180,6 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 ]
 
 { #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addClassToSymbolDictionaryForClassAssociation: assoc forClass: class [ 
-
-	^ self class registry_ImplementationClass addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  instance: self
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  implementationClass: implementationClass [
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  instance: self
-
-]
-
-{ #category : 'private' }
 RwGsSymbolDictionaryRegistry >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName [
 
 	^ self class registry_ImplementationClass addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: self
@@ -517,6 +501,24 @@ RwGsSymbolDictionaryRegistry >> deleteMethod: selector for: behavior implementat
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
 	^ implementationClass deleteMethod: selector for: behavior instance: self
+
+]
+
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry >> deleteMovedLoadedMethod: selector for: behavior implementationClass: implementationClass [
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass deleteMovedLoadedMethod: selector for: behavior instance: self
+
+]
+
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry >> deleteMovedMethod: selector for: behavior implementationClass: implementationClass [
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass deleteMovedMethod: selector for: behavior instance: self
 
 ]
 

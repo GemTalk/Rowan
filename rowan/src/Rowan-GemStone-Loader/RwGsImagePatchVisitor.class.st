@@ -33,6 +33,7 @@ RwGsImagePatchVisitor >> addAddedPackage: aPackageDefinition [
 	patchSet addAddedPackage: currentPackage inProject: currentProject.
 	self addClasses: currentPackage classDefinitions.
 	self addClassExtensions: currentPackage classExtensions
+
 ]
 
 { #category : 'private' }
