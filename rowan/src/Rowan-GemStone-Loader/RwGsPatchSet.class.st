@@ -733,9 +733,9 @@ RwGsPatchSet >> apply [
 		updateSymbolAssociations;
 		updateClassProperties;
 		deleteMovedLoadedExtensionMethods;
+		removeDeletedMethods;
 		updateMethodDictionaries;
 		updateMethodProperties;
-		removeDeletedMethods;
 		"removeDeletedClassesAndExtensionsFromPackages;"
 		removeDeletedPackages;
 		commit;
@@ -1026,7 +1026,7 @@ RwGsPatchSet >> movedClassesMap [
 { #category : 'private - applying' }
 RwGsPatchSet >> moveMethodsBetweenPackages [
 
-	| deletedMethodsMap |
+	| deletedMethodsMap symDictClassMoves |
 	deletedMethods isEmpty
 		ifTrue: [ 
 			"no move without deleted methods"
@@ -1044,6 +1044,7 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 					((deletedMethodsMap at: className ifAbsentPut: [ Dictionary new ]) 
 						at: patch isMeta ifAbsentPut: [Dictionary new ])
 							at: patch methodDefinition key put: patch ] ].
+	symDictClassMoves := classesWithSymbolDictionaryChanges collect: [:each | each classDefinition name].
 	(addedMethods copy
 		addAll: extendedMethods;
 		yourself)
@@ -1055,12 +1056,14 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 									(selectorMap at: methodAdditionPatch methodDefinition selector ifAbsent: [])
 										ifNotNil: [ :methodDeletionPatch | 
 											| methodMod |
-											deletedMethods remove: methodDeletionPatch ifAbsent: [].
 											(extendedMethods includes: methodAdditionPatch)
 												ifTrue: [ deletedExtensionMethods add: methodDeletionPatch ].
-											((movedMethodsMap at: methodAdditionPatch className ifAbsentPut: [ Dictionary new ])
-												at: methodAdditionPatch isMeta ifAbsentPut: [Dictionary new ])
-													at: methodAdditionPatch methodDefinition selector put: {methodAdditionPatch. methodDeletionPatch}.
+											(symDictClassMoves includes: methodAdditionPatch className)
+												ifFalse: [ 
+													deletedMethods remove: methodDeletionPatch ifAbsent: [].
+													((movedMethodsMap at: methodAdditionPatch className ifAbsentPut: [ Dictionary new ])
+														at: methodAdditionPatch isMeta ifAbsentPut: [Dictionary new ])
+															at: methodAdditionPatch methodDefinition selector put: {methodAdditionPatch. methodDeletionPatch} ].
 											methodMod := methodAdditionPatch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
 											methodMod isEmpty
 												ifFalse: [
