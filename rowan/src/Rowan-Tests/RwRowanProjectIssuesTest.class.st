@@ -1838,7 +1838,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_1 
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self assert: (x := loadedClassExtensions at: className ifAbsent: []) isNil.
+	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new]) instanceMethodDefinitions includesKey: #mover).
 
 ]
 
@@ -1852,7 +1852,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_2 
 	"use Behavior>>rwCompileMethod:category: to do final update (testIssue185_move_extension_method_to_new_package_1 exposes a bug)"
 
 	| projectName  packageName1 packageName2 projectDefinition1 classDefinition packageDefinition className projectSetDefinition class
-		classExtensionDefinition packageName3 loadedPackage loadedClassExtensions |
+		classExtensionDefinition packageName3 loadedPackage loadedClassExtensions x |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core1'.
 	packageName2 := 'Issue185-Core2'.
@@ -1945,7 +1945,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_2 
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
+	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new]) instanceMethodDefinitions includesKey: #mover).
 
 ]
 
@@ -1960,7 +1960,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_3 
 
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		classExtensionDefinition packageName3 loadedPackage loadedClassExtensions |
+		classExtensionDefinition packageName3 loadedPackage loadedClassExtensions x |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core1'.
 	packageName2 := 'Issue185-Core2'.
@@ -2070,7 +2070,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_3 
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
+	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new]) instanceMethodDefinitions includesKey: #mover).
 
 ]
 
@@ -2084,7 +2084,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_4 
 	"use RwClassExtensionDefinition>>removeKey: to do final update (source not changed) --- definition comparison bug?"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		classExtensionDefinition packageName3 loadedPackage loadedClassExtensions |
+		classExtensionDefinition packageName3 loadedPackage loadedClassExtensions x |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core1'.
 	packageName2 := 'Issue185-Core2'.
@@ -2194,7 +2194,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_4 
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
+	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new]) instanceMethodDefinitions includesKey: #mover).
 
 ]
 
