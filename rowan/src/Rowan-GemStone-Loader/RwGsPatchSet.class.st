@@ -1056,37 +1056,44 @@ RwGsPatchSet >> moveMethodsBetweenPackages [
 									(selectorMap at: methodAdditionPatch methodDefinition selector ifAbsent: [])
 										ifNotNil: [ :methodDeletionPatch | 
 											| methodMod |
-											(extendedMethods includes: methodAdditionPatch)
-												ifTrue: [ deletedExtensionMethods add: methodDeletionPatch ].
 											(symDictClassMoves includes: methodAdditionPatch className)
 												ifFalse: [ 
+													"If a class is moved to a package that is in the SAME symbol dictionary, we can afford to make certain optimizations
+														and avoid excessive method churn, by skipping the step of deleting/installing methods from/to the class that is moved,
+														since the classes are already present in the class method dictionary ... we do have to update the loaded packages 
+														structure.
+
+														deletedExtensionMethods, movedMethodsMap and pureMoveMethods are used to make sure that the loaded things
+															are properly updated, and that the appropriate steps are skipped in a safe manner."
+													(extendedMethods includes: methodAdditionPatch)
+														ifTrue: [ deletedExtensionMethods add: methodDeletionPatch ].
 													deletedMethods remove: methodDeletionPatch ifAbsent: [].
 													((movedMethodsMap at: methodAdditionPatch className ifAbsentPut: [ Dictionary new ])
 														at: methodAdditionPatch isMeta ifAbsentPut: [Dictionary new ])
-															at: methodAdditionPatch methodDefinition selector put: {methodAdditionPatch. methodDeletionPatch} ].
-											methodMod := methodAdditionPatch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
-											methodMod isEmpty
-												ifFalse: [
-													methodMod propertiesModification isEmpty
-														ifFalse: [									 
-															methodAdditionPatch isMeta
-																ifTrue: [ 
-																	self
-																		addPatchedClassMethodProperties: methodMod after
-																		inClass: methodAdditionPatch classDefinition
-																		inPackage: methodAdditionPatch packageDefinition
-																		inProject: methodAdditionPatch projectDefinition ]
-																ifFalse: [ 
-																	self
-																		addPatchedInstanceMethodProperties: methodMod after
-																		inClass: methodAdditionPatch classDefinition
-																		inPackage: methodAdditionPatch packageDefinition
-																		inProject: methodAdditionPatch projectDefinition ] ] ].
-											(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
-												ifTrue: [ 
-													"the source is identical ... so it is a pure move of the method ... record this fact
-														for operations that care. "
-													pureMovedMethods add: methodAdditionPatch ] ] ] ] ]
+															at: methodAdditionPatch methodDefinition selector put: {methodAdditionPatch. methodDeletionPatch}.
+													methodMod := methodAdditionPatch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
+													methodMod isEmpty
+														ifFalse: [
+															methodMod propertiesModification isEmpty
+																ifFalse: [									 
+																	methodAdditionPatch isMeta
+																		ifTrue: [ 
+																			self
+																				addPatchedClassMethodProperties: methodMod after
+																				inClass: methodAdditionPatch classDefinition
+																				inPackage: methodAdditionPatch packageDefinition
+																				inProject: methodAdditionPatch projectDefinition ]
+																		ifFalse: [ 
+																			self
+																				addPatchedInstanceMethodProperties: methodMod after
+																				inClass: methodAdditionPatch classDefinition
+																				inPackage: methodAdditionPatch packageDefinition
+																				inProject: methodAdditionPatch projectDefinition ] ] ].
+													(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
+														ifTrue: [ 
+															"the source is identical ... so it is a pure move of the method ... record this fact
+																for operations that care. "
+															pureMovedMethods add: methodAdditionPatch ] ] ] ] ] ]
 
 ]
 
