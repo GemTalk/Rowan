@@ -233,8 +233,13 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 		_symbolDictionary: registryInstance _symbolDictionary 
 		at: assoc key 
 		ifPresent: [
-			"If there is an existing association, then we need to use the existing association which may have references
-				in compiled methods --- bootstrapping Rowan in Rowan is only valid use case"
+			(RwExistingAssociationWithSameKeyNotification new
+				errorMessage: 'Found an existing association in the ',  
+						registryInstance _symbolDictionary asString printString, 
+						' symbol dictionary with a duplicate key ',
+						assoc key printString, 
+						' while attempting to add the class' )
+				signal.
 			(registryInstance _symbolDictionary associationAt: assoc key) value: class ]
 		ifAbsent: [
 			assoc value: class.

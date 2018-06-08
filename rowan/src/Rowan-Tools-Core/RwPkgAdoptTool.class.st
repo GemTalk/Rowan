@@ -50,10 +50,12 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 
 	classExtension
 		ifFalse: [
-			registry
+			[ registry
 				addClassAssociation: (theSymbolDictionary associationAt: theClass name) 
 				forClass: theClass 
-				toPackageNamed: packageName ].
+				toPackageNamed: packageName ]
+					on: RwExistingAssociationWithSameKeyNotification
+					do: [:ex | ex resume ] ].
 
 	theBehavior := theClass.
 	instanceSelectors do: [:methodSelector |
