@@ -235,10 +235,10 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 		ifPresent: [
 			(RwExistingAssociationWithSameKeyNotification new
 				errorMessage: 'Found an existing association in the ',  
-						registryInstance _symbolDictionary asString printString, 
+						registryInstance _symbolDictionary name asString printString, 
 						' symbol dictionary with a duplicate key ',
 						assoc key printString, 
-						' while attempting to add the class' )
+						' while attempting to add a new class association' )
 				signal.
 			(registryInstance _symbolDictionary associationAt: assoc key) value: class ]
 		ifAbsent: [
