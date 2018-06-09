@@ -1,6 +1,6 @@
 Extension { #name : 'STONReader' }
 
-{ #category : '*ston-gemstonebase-core' }
+{ #category : '*ston-gemstonebase' }
 STONReader >> lookupClass: name [
   ^ (System myUserProfile objectNamed: name asSymbol)
     ifNil: [ classes at: name ifAbsentPut: [ (ClassOrganizer new allSubclassesOf: Object)
@@ -9,7 +9,7 @@ STONReader >> lookupClass: name [
 
 ]
 
-{ #category : '*ston-gemstonebase-core' }
+{ #category : '*ston-gemstonebase' }
 STONReader class >> new [
   ^ self basicNew
     initialize;

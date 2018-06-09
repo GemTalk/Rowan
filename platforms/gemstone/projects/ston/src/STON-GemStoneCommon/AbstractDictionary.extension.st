@@ -1,6 +1,6 @@
 Extension { #name : 'AbstractDictionary' }
 
-{ #category : '*ston-gemstonecommon-core' }
+{ #category : '*ston-gemstonecommon' }
 AbstractDictionary >> stonOn: stonWriter [
 	"Instances of STON mapClass will be encoded directly, without a class tag.
 	Other (sub)classes will be encoded with a class tag and will use a map representation. "
@@ -15,7 +15,7 @@ AbstractDictionary >> stonOn: stonWriter [
 
 ]
 
-{ #category : '*ston-gemstonecommon-core' }
+{ #category : '*ston-gemstonecommon' }
 AbstractDictionary >> stonProcessSubObjects: block [
 	"Execute block to (potentially) change each of my subObjects.
 	In general, all instance and indexable variables are processed.
@@ -29,7 +29,7 @@ AbstractDictionary >> stonProcessSubObjects: block [
 
 ]
 
-{ #category : '*ston-gemstonecommon-core' }
+{ #category : '*ston-gemstonecommon' }
 AbstractDictionary class >> fromSton: stonReader [
 	"Instances of STON mapClass will be read directly and won't arrive here.
 	Other (sub)classes will use this method."

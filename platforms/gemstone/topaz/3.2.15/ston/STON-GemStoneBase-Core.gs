@@ -6,7 +6,7 @@
 
 doit
 | packageName |
-packageName := 'STON-GemStoneBase-Core'.
+packageName := 'STON-GemStoneBase'.
 System myUserProfile symbolList do: [:symDict |
 	symDict do: [:possibleClass |
 			| toRemove |
@@ -47,7 +47,7 @@ true.
 
 ! ------------------- Instance methods for ByteArray
 
-category: '*ston-gemstonebase-core'
+category: '*ston-gemstonebase'
 method: ByteArray
 readHexFrom: aStream
   "Initialize the receiver from a hexadecimal string representation"
@@ -80,7 +80,7 @@ expected' ].
 
 ! ------------------- Instance methods for CharacterCollection
 
-category: '*ston-gemstonebase-core'
+category: '*ston-gemstonebase'
 method: CharacterCollection
 isString
   ^ true
@@ -90,13 +90,13 @@ isString
 
 ! ------------------- Instance methods for Object
 
-category: '*ston-gemstonebase-core'
+category: '*ston-gemstonebase'
 method: Object
 isNumber
   ^ self _isNumber
 %
 
-category: '*ston-gemstonebase-core'
+category: '*ston-gemstonebase'
 method: Object
 isString
   ^ false
@@ -125,7 +125,7 @@ streamContents: blockWithArg
 
 ! ------------------- Class methods for STONReader
 
-category: '*ston-gemstonebase-core'
+category: '*ston-gemstonebase'
 classmethod: STONReader
 new
   ^ self basicNew
@@ -135,7 +135,7 @@ new
 
 ! ------------------- Instance methods for STONReader
 
-category: '*ston-gemstonebase-core'
+category: '*ston-gemstonebase'
 method: STONReader
 lookupClass: name
   ^ (System myUserProfile objectNamed: name asSymbol)
@@ -148,7 +148,7 @@ lookupClass: name
 
 ! ------------------- Class methods for STONStreamWriter
 
-category: '*ston-gemstonebase-core'
+category: '*ston-gemstonebase'
 classmethod: STONStreamWriter
 new
   ^ self basicNew
@@ -160,7 +160,7 @@ new
 
 ! ------------------- Class methods for STONWriter
 
-category: '*ston-gemstonebase-core'
+category: '*ston-gemstonebase'
 classmethod: STONWriter
 new
   ^ self basicNew
@@ -170,7 +170,7 @@ new
 
 ! ------------------- Instance methods for STONWriter
 
-category: '*ston-gemstonebase-core'
+category: '*ston-gemstonebase'
 method: STONWriter
 writeFloat: float
   writeStream nextPutAll: float asString

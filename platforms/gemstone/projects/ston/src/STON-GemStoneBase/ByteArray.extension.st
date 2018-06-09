@@ -1,6 +1,6 @@
 Extension { #name : 'ByteArray' }
 
-{ #category : '*ston-gemstonebase-core' }
+{ #category : '*ston-gemstonebase' }
 ByteArray >> readHexFrom: aStream [
   "Initialize the receiver from a hexadecimal string representation"
 

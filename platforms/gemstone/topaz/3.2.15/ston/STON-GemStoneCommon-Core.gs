@@ -6,7 +6,7 @@
 
 doit
 | packageName |
-packageName := 'STON-GemStoneCommon-Core'.
+packageName := 'STON-GemStoneCommon'.
 System myUserProfile symbolList do: [:symDict |
 	symDict do: [:possibleClass |
 			| toRemove |
@@ -47,7 +47,7 @@ true.
 
 ! ------------------- Class methods for AbstractDictionary
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 classmethod: AbstractDictionary
 fromSton: stonReader
 	"Instances of STON mapClass will be read directly and won't arrive here.
@@ -62,7 +62,7 @@ fromSton: stonReader
 
 ! ------------------- Instance methods for AbstractDictionary
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: AbstractDictionary
 stonOn: stonWriter
 	"Instances of STON mapClass will be encoded directly, without a class tag.
@@ -77,7 +77,7 @@ stonOn: stonWriter
 				do: [ stonWriter encodeMap: self ] ]
 %
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: AbstractDictionary
 stonProcessSubObjects: block
 	"Execute block to (potentially) change each of my subObjects.
@@ -95,7 +95,7 @@ stonProcessSubObjects: block
 
 ! ------------------- Instance methods for ByteArray
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: ByteArray
 stonOn: stonWriter
   "Use a hex representation"
@@ -107,13 +107,13 @@ stonOn: stonWriter
 
 ! ------------------- Instance methods for CharacterCollection
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: CharacterCollection
 stonContainSubObjects
   ^ false
 %
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: CharacterCollection
 stonOn: stonWriter
 
@@ -126,7 +126,7 @@ stonOn: stonWriter
 
 ! ------------------- Instance methods for CollisionBucket
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: CollisionBucket
 stonContainSubObjects 
 	^false
@@ -136,7 +136,7 @@ stonContainSubObjects
 
 ! ------------------- Class methods for Date
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 classmethod: Date
 fromSton: stonReader
 
@@ -145,7 +145,7 @@ fromSton: stonReader
 
 ! ------------------- Instance methods for Date
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: Date
 stonOn: stonWriter
   "Use an ISO style YYYYMMDD representation"
@@ -159,7 +159,7 @@ stonOn: stonWriter
 
 ! ------------------- Instance methods for DateAndTime
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: DateAndTime
 stonOn: stonWriter
 	"Use an ISO representation with all details"
@@ -173,7 +173,7 @@ stonOn: stonWriter
 
 ! ------------------- Instance methods for Object
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: Object
 stonProcessSubObjects: block
   "Execute block to (potentially) change each of my subObjects.
@@ -189,7 +189,7 @@ stonProcessSubObjects: block
 
 ! ------------------- Instance methods for STONReader
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: STONReader
 optimizeForLargeStructures
   "nothing special for GemStone"
@@ -200,7 +200,7 @@ optimizeForLargeStructures
 
 ! ------------------- Class methods for STONWriter
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 classmethod: STONWriter
 findFirstInString: aString inSet: inclusionMap startingAt: start
   "Trivial, non-primitive version"
@@ -221,7 +221,7 @@ findFirstInString: aString inSet: inclusionMap startingAt: start
 
 ! ------------------- Instance methods for STONWriter
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: STONWriter
 encodeCharacter: char
   | code encoding |
@@ -244,7 +244,7 @@ encodeCharacter: char
       writeStream nextPutAll: encoding ]
 %
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: STONWriter
 isSimpleSymbol: symbol
   symbol isEmpty
@@ -255,7 +255,7 @@ isSimpleSymbol: symbol
     startingAt: 1) = 0
 %
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: STONWriter
 optimizeForLargeStructures
   "nothing special for GemStone"
@@ -266,7 +266,7 @@ optimizeForLargeStructures
 
 ! ------------------- Class methods for Time
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 classmethod: Time
 fromSton: stonReader
   ^ self fromString: stonReader parseListSingleton usingFormat: #($: true false)
@@ -274,7 +274,7 @@ fromSton: stonReader
 
 ! ------------------- Instance methods for Time
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: Time
 stonOn: stonWriter
   "Use an ISO style HH:MM:SS representation"
@@ -288,7 +288,7 @@ stonOn: stonWriter
 
 ! ------------------- Instance methods for UnorderedCollection
 
-category: '*ston-gemstonecommon-core'
+category: '*ston-gemstonecommon'
 method: UnorderedCollection
 stonProcessSubObjects: block
 	"Execute block to (potentially) change each of my subObjects.

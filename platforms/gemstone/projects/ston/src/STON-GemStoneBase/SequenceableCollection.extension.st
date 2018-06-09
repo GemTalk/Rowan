@@ -1,6 +1,6 @@
 Extension { #name : 'SequenceableCollection' }
 
-{ #category : '*STON-GemStoneBase-Core' }
+{ #category : '*STON-GemStoneBase' }
 SequenceableCollection class >> new: newSize streamContents: blockWithArg [
   | stream |
   stream := WriteStreamPortable on: (self new: newSize).
@@ -9,7 +9,7 @@ SequenceableCollection class >> new: newSize streamContents: blockWithArg [
 
 ]
 
-{ #category : '*STON-GemStoneBase-Core' }
+{ #category : '*STON-GemStoneBase' }
 SequenceableCollection class >> streamContents: blockWithArg [
   ^ self new: 100 streamContents: blockWithArg
 
