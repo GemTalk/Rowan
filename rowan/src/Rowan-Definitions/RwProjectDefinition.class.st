@@ -181,6 +181,14 @@ RwProjectDefinition >> packages: aPackageDefinitionDictionary [
 	packages := aPackageDefinitionDictionary
 ]
 
+{ #category : 'copying' }
+RwProjectDefinition >> postCopy [
+
+	super postCopy.
+	packages := packages copy
+
+]
+
 { #category : 'printing' }
 RwProjectDefinition >> printOn: aStream [
 

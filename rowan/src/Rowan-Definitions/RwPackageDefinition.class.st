@@ -116,6 +116,15 @@ RwPackageDefinition >> key [
 	^self propertyAt: 'name' ifAbsent: [nil]
 ]
 
+{ #category : 'copying' }
+RwPackageDefinition >> postCopy [
+
+	super postCopy.
+	classDefinitions := classDefinitions copy.
+	classExtensions := classExtensions copy
+
+]
+
 { #category : 'accessing' }
 RwPackageDefinition >> removeClassDefinition: aClassDefinition [
 

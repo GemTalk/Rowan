@@ -5,6 +5,44 @@ Class {
 }
 
 { #category : 'smalltalk api' }
+RwPrjLoadTool >> _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator originalProjectSet: originalProjectSet processedClassNames: processedClassNames [
+	| copiedProjectSetDef theClassName theClass projectDef theLoadedProject loadedClass packageDef |
+	[ ^ self
+		loadProjectSetDefinition: projectSetDefinition
+		instanceMigrator: instanceMigrator ]
+			on: RwExistingVisitorAddingExistingClassNotification
+			do: [:ex | 
+				theClassName := ex classDefinition name.
+				(processedClassNames includes: theClassName) ifTrue: [ ex resume ].
+				theClass := Rowan globalNamed: theClassName.
+				theClass isBehavior ifFalse: [ self halt. ex pass ].
+				theLoadedProject := Rowan image loadedProjectNamed: theClass rowanProjectName.
+				(theLoadedProject isNil 
+					or: [(originalProjectSet projectNamed: theLoadedProject name ifAbsent: []) notNil]) 
+						ifTrue: [ 
+							"the loaded project should not be nil - if it is, pass the notification.
+								if original project set contains the project, then there is something fishy going on - don't continue"
+							ex loadedProject: theLoadedProject.
+							ex pass ].
+				copiedProjectSetDef := projectSetDefinition copy.
+				"a project in the original project set is taking ownership of an already  loaded class,
+					remove the class from the original project's package and attempt a reload"
+				projectDef := copiedProjectSetDef 
+					projectNamed: theLoadedProject name
+					ifAbsent: [ 
+						projectDef := theLoadedProject asDefinition.
+						copiedProjectSetDef addProject: projectDef.
+						projectDef ].
+				loadedClass := Rowan image loadedClassNamed: theClassName.
+				packageDef := projectDef packageNamed: loadedClass loadedPackage name.
+				packageDef removeClassNamed: theClassName.
+				processedClassNames add: theClassName ].
+	"trim the stack"
+	^ self _doProjectSetLoad: copiedProjectSetDef instanceMigrator: instanceMigrator originalProjectSet: originalProjectSet processedClassNames: processedClassNames
+
+]
+
+{ #category : 'smalltalk api' }
 RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 
 	| projectSetDefinition |
@@ -30,11 +68,11 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed instanceMigrator: instanceMigrat
 	| projectSetDefinition res |
 	projectSetDefinition := self class read
 		readProjectSetForProjectNamed: projectNamed.
-	[ res := self
-		loadProjectSetDefinition: projectSetDefinition
-		instanceMigrator: instanceMigrator ]
-			on: RwExecuteClassInitializeMethodsAfterLoadNotification
-			do: [:ex | ex resume: true ].
+	res := self 
+		_doProjectSetLoad: projectSetDefinition
+		instanceMigrator: instanceMigrator 
+		originalProjectSet: projectSetDefinition 
+		processedClassNames: Set new.
 	"loaded project and loaded packages read from disk - mark them not dirty"
 	projectSetDefinition deriveLoadedThings do: [:loadedProject |
 		loadedProject markNotDirty.

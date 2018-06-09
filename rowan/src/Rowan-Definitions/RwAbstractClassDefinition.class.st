@@ -221,6 +221,15 @@ RwAbstractClassDefinition >> name: aString [
 
 ]
 
+{ #category : 'copying' }
+RwAbstractClassDefinition >> postCopy [
+
+	super postCopy.
+	classMethodDefinitions :=  classMethodDefinitions copy.
+	instanceMethodDefinitions := instanceMethodDefinitions copy
+
+]
+
 { #category : 'accessing' }
 RwAbstractClassDefinition >> removeClassMethod: selector [
 
