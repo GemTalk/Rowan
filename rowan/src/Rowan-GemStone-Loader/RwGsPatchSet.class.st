@@ -250,7 +250,11 @@ RwGsPatchSet >> addAddedClassesToTempSymbols [
 
 	addedClasses do: [:patch | 
 		(movedClassesMap includesKey: patch className)
-			ifFalse: [ tempSymbols at: patch className asSymbol put: nil ] ].
+			ifFalse: [
+				| key |
+				key :=  patch className asSymbol.
+				(tempSymbols includesKey: key) ifTrue: [ self error: 'Encountered an existing association for a new class ', key asString ].
+				tempSymbols at: key put: nil ] ].
 
 ]
 

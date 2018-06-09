@@ -216,7 +216,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 	| loadedPackage loadedClass |
 	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
 
-	registryInstance classRegistry
+	loadedClass := registryInstance classRegistry
 		at: class classHistory
 		ifAbsent: [ 
 			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
