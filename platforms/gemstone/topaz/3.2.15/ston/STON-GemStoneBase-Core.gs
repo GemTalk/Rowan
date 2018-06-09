@@ -106,7 +106,7 @@ isString
 
 ! ------------------- Class methods for SequenceableCollection
 
-category: '*STON-GemStoneBase-Core'
+category: '*STON-GemStoneBase'
 classmethod: SequenceableCollection
 new: newSize streamContents: blockWithArg
   | stream |
@@ -115,7 +115,7 @@ new: newSize streamContents: blockWithArg
   ^ stream contents
 %
 
-category: '*STON-GemStoneBase-Core'
+category: '*STON-GemStoneBase'
 classmethod: SequenceableCollection
 streamContents: blockWithArg
   ^ self new: 100 streamContents: blockWithArg
@@ -139,9 +139,14 @@ category: '*ston-gemstonebase'
 method: STONReader
 lookupClass: name
   ^ (System myUserProfile objectNamed: name asSymbol)
-    ifNil: [ classes at: name ifAbsentPut: [ (ClassOrganizer new allSubclassesOf: Object)
-            detect: [ :cls | cls stonName == name ]
-            ifNone: [ self error: 'Cannot resolve class named ' , name printString ] ] ]
+    ifNil: [ 
+		(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanKernel')
+			ifNotNil: [:rowanSymbolDictionary |
+				(rowanSymbolDictionary at: name asSymbol ifAbsent: [])
+					ifNotNil: [:cls | ^cls ] ])
+						ifNil: [ classes at: name ifAbsentPut: [ (ClassOrganizer new allSubclassesOf: Object)
+								detect: [ :cls | cls stonName == name ]
+								ifNone: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ]
 %
 
 ! Class Extension for STONStreamWriter

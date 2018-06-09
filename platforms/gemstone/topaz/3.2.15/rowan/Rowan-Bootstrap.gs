@@ -490,6 +490,7 @@ new: size withAll: value
 		atAllPut: value;
 		yourself
 %
+category: '*ston-gemstonecommon'
 classmethod: CharacterCollection
 findFirstInString: aString inSet: inclusionMap startingAt: start
 
