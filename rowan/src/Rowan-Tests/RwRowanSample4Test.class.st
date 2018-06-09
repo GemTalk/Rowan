@@ -656,8 +656,15 @@ RwRowanSample4Test >> testIssue208_adopt_load [
 	"Using non-Rowan api, create the classes in the appropriate symbol dictionaries, adopt into Primer project, then load branch issue_208_0 ...
 		the primer project should be empty"
 
+		"Create classes in a couple of symbol dictionaries"
+		"Create and load the primer project ... with two packages (one for each symbol dictionary) into which the classes will be adopted"
+		"Adopt the classes into the primer project"
+		"load the RowanSample4 project from disk - overly the correct project structure over the primer project classes"
+		"validate that the primer project packages are empty"
+
 	| primerProjectName specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec repoRootPath symDictName1 
-		symDictName2 symDict theClass instanceMethod classMethod symbolList projectDefinition primerPackageName1 primerPackageName2 primerProject |
+		symDictName2 symDict theClass instanceMethod classMethod symbolList projectDefinition primerPackageName1 primerPackageName2 
+		loadedPrimerProject |
 
 	projectTools := Rowan projectTools.
 	primerProjectName := 'PrimerSample4'.
@@ -708,7 +715,7 @@ RwRowanSample4Test >> testIssue208_adopt_load [
 		category: 'accessing'
 		environmentId: 0.
 
-	"Create and load the primer project ... with two packages into which the classes will be adopted"
+	"Create and load the primer project ... with two packages (one for each symbol dictionary) into which the classes will be adopted"
 	projectDefinition := RwProjectDefinition
 		newForGitPackageProjectNamed: primerProjectName.
 	projectDefinition
@@ -724,7 +731,7 @@ RwRowanSample4Test >> testIssue208_adopt_load [
 		adoptSymbolDictionaryNamed: symDictName1 intoPackageNamed: primerPackageName1;
 		adoptSymbolDictionaryNamed: symDictName2 intoPackageNamed: primerPackageName2.
 
-	"now load the RowanSample4 project from disk"
+	"load the RowanSample4 project from disk - overly the correct project structure over the primer project classes"
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample4_208_LoadSpecificationUrl.
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
@@ -745,8 +752,11 @@ RwRowanSample4Test >> testIssue208_adopt_load [
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
-	"The primer project should be empty"
-	primerProject := Rowan image loadedProjectNamed: primerProjectName.
+	"validate that the primer project packages are empty"
+	loadedPrimerProject := Rowan image loadedProjectNamed: primerProjectName.
+	loadedPrimerProject loadedPackages 
+		do: [:loadedPackage |
+			self assert: loadedPackage isEmpty ]
 
 ]
 
