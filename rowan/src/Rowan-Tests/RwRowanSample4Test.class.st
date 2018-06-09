@@ -748,8 +748,6 @@ RwRowanSample4Test >> testIssue208_adopt_load [
 	"The primer project should be empty"
 	primerProject := Rowan image loadedProjectNamed: primerProjectName.
 
-self halt.
-
 ]
 
 { #category : 'tests' }
