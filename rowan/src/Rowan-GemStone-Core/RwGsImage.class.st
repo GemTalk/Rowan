@@ -296,28 +296,14 @@ RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 { #category : 'querying' }
 RwGsImage class >> loadedProjects [
 
-	"Return the list of loaded project in current users project registry and in AllUsers, where
-		the current user is the project owner."
+	"Return the list of loaded projects based on the projects that are visible in the current transient symbol list."
 
-	| currentUserId loadedProjects visibleUserIds |
-	loadedProjects := self _loadedProjectRegistry values.
-	currentUserId := self currentUserId.
-
-	visibleUserIds := ((System myUserProfile symbolList select: [:each | each objectSecurityPolicy notNil])
-								collect: [:each | each objectSecurityPolicy owner userId]) asSet asArray.
-
-	AllUsers
-		do: [ :userProfile | 
-			| aUserId |
-			aUserId := userProfile userId.
-			(visibleUserIds includes: aUserId)
-				ifTrue: [
-					aUserId ~= currentUserId
-						ifTrue: [ 
-							(self _loadedProjectRegistryForUserId: aUserId)
-								ifNotNil: [ :projectRegistry | 
-									loadedProjects
-										addAll: projectRegistry values ] ] ] ].
+	| loadedProjects |
+	loadedProjects := IdentitySet new.
+	self symbolList do: [:symDict | 
+		symDict rowanSymbolDictionaryRegistry
+			ifNotNil: [:registry | 
+				loadedProjects addAll: (registry packageRegistry values collect: [:loadedPackage | loadedPackage loadedProject ]) ] ].
 	^ loadedProjects
 
 ]
