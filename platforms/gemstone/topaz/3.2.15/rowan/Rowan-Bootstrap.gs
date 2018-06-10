@@ -9,7 +9,7 @@
   System commit
 %
 
-category: 'Rowan compatability method'
+category: '*tonel-gemstone-kernel'
 method: CharacterCollection
 findString: subString startingAt: startIndex caseSensitive: aBoolean
 
