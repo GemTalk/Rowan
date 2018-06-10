@@ -756,7 +756,10 @@ RwRowanSample4Test >> testIssue208_adopt_load [
 	loadedPrimerProject := Rowan image loadedProjectNamed: primerProjectName.
 	loadedPrimerProject loadedPackages 
 		do: [:loadedPackage |
-			self assert: loadedPackage isEmpty ]
+			self assert: loadedPackage isEmpty ].
+
+	self assert: loadedPrimerProject isDirty.
+	self deny: (Rowan image loadedProjectNamed: projectName) isDirty
 
 ]
 
