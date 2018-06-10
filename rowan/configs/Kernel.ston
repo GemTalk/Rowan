@@ -13,6 +13,7 @@
 					'Rowan-Configurations',
 					'Rowan-Core',
 					'Rowan-Tools-Core',
+					'Rowan-Tools-Extensions',
 					'Rowan-Tools-Kernel'
 					]
 				}
@@ -55,7 +56,8 @@
 					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
 					'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
-					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' }
+					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
+					'Rowan-Tools-Core' : { 'symbolDictName' : 'RowanTools' }
 					}
 				}
 			}
