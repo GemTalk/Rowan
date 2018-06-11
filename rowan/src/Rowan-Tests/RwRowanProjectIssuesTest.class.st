@@ -3022,6 +3022,95 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 
 ]
 
+{ #category : 'tests-issue 215' }
+RwRowanProjectIssuesTest >> testIssue215_move_class_and_extension_method_to_new_symbol_dict [
+
+	"https://github.com/dalehenrich/Rowan/issues/215"
+
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
+		classExtensionDefinition oldClass |
+	projectName := 'Issue215'.
+	packageName1 := 'Issue215-Core1'.
+	packageName2 := 'Issue215-Core2'.
+	className := 'Issue215Class'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	projectDefinition1 := (RwProjectDefinition
+		newForGitPackageProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		setSymbolDictName: self _symbolDictionaryName1
+			forPackageNamed: packageName1;
+		setSymbolDictName: self _symbolDictionaryName1
+			forPackageNamed: packageName2;
+		yourself.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+
+	packageDefinition := projectDefinition1 packageNamed: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+
+	"create extension method in different package"
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+				newForSelector: #'mover'
+				protocol: 'accessing'
+			source: 'mover ^2').
+
+	packageDefinition := projectDefinition1 packageNamed: packageName2.
+	packageDefinition addClassExtension: classExtensionDefinition.
+
+	"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition1.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+self halt.
+
+	"validate"
+	class := Rowan globalNamed: className.
+	self assert: class rowanPackageName = packageName1.
+	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
+	self assert: class new mover = 2.
+
+	"move the class and the extension methods to new package in different symbol dictionary"
+	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	projectDefinition2
+		setSymbolDictName: self _symbolDictionaryName2
+			forPackageNamed: packageName1;
+		setSymbolDictName: self _symbolDictionaryName2
+			forPackageNamed: packageName2.
+
+	"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition2.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+self halt.
+
+	"validate"
+	oldClass := class.
+	class := Rowan globalNamed: className.
+	self assert: class == oldClass.
+	self assert: class rowanPackageName = packageName1.
+	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
+	self assert: class new mover = 2.
+
+]
+
 { #category : 'tests-issue 24' }
 RwRowanProjectIssuesTest >> testIssue24_addProject [
 
