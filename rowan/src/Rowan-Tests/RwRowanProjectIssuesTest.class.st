@@ -3135,6 +3135,18 @@ RwRowanProjectIssuesTest >> testIssue215_move_class_and_extension_method_to_new_
 
 ]
 
+{ #category : 'tests-issue 217' }
+RwRowanProjectIssuesTest >> testIssue217 [
+
+	"https://github.com/dalehenrich/Rowan/issues/217"
+
+	| spec specExportString |
+	spec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specExportString := STON toStringPretty: spec.
+	self assert: (specExportString includes: Character lf).
+
+]
+
 { #category : 'tests-issue 24' }
 RwRowanProjectIssuesTest >> testIssue24_addProject [
 
