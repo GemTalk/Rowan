@@ -213,6 +213,21 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 ]
 
 { #category : 'querying' }
+RwGsImage class >> loadedMethodAndSymbolDicitonaryForMethod: compiledMethod ifPresent: presentBlock ifAbsent: absentBlock [
+
+        "scan the symbol list for a RwLoadedMethod instances for the given compiled method"
+
+        self symbolList
+                do: [ :symbolDict |
+                        symbolDict rowanSymbolDictionaryRegistry
+                                ifNotNil: [ :registry |
+                                        (registry methodRegistry at: compiledMethod ifAbsent: [  ])
+                                                ifNotNil: [ :loadedMethod | ^ presentBlock value: symbolDict value: loadedMethod ] ] ].
+        ^ absentBlock value
+
+]
+
+{ #category : 'querying' }
 RwGsImage class >> loadedMethodForMethod: compiledMethod [
 
 	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
