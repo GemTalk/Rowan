@@ -513,7 +513,7 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 			result
 				addAll: lfsp;
 				addAll: 'inDictionary: '.
-			anArray := System myUserProfile dictionariesAndSymbolsOf: aClass.
+			anArray := Rowan image symbolList dictionariesAndSymbolsOf: aClass.
 			anArray isEmpty
 				ifTrue: [ result addAll: '''''' ]
 				ifFalse: [ result addAll: ((anArray at: 1) at: 1) name asString ] ]

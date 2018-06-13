@@ -373,7 +373,8 @@ RwGsImage class >> objectNamed: aSymbol [
 	"Returns the first object in the current session's symbol list that has the given
  name.  If no object with the given name is found, returns nil."
 
-	^ GsCurrentSession currentSession symbolList objectNamed: aSymbol
+	^ self symbolList objectNamed: aSymbol
+
 ]
 
 { #category : 'cypress (old)' }

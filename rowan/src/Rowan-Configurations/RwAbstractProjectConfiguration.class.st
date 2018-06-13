@@ -42,7 +42,7 @@ RwAbstractProjectConfiguration class >> fromUrl: specNameOrUrl [
 		ifTrue: [ 
 			| client response |
 			GsSecureSocket disableCertificateVerificationOnClient.
-			client := (System myUserProfile symbolList objectNamed: 'ZnClient') new.
+			client := (Rowan globalNamed: 'ZnClient') new.
 			response := client
 				beOneShot;
 				enforceHttpSuccess: true;
