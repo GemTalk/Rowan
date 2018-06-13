@@ -10,6 +10,12 @@ RwProject >> _loadedProject [
 	^ Rowan image loadedProjectNamed: self name
 ]
 
+{ #category : 'private' }
+RwProject >> _specification [
+
+	^ self _loadedProject specification
+]
+
 { #category : 'properties' }
 RwProject >> canCommit [
 
@@ -73,6 +79,14 @@ RwProject >> packages [
 RwProject >> project [
 
 	^ self
+]
+
+{ #category : 'project creation' }
+RwProject >> register [
+	"Create a loaded project based on the receiver's properties in the image."
+
+	self _specification register
+
 ]
 
 { #category : 'properties' }
