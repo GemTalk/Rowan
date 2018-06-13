@@ -1674,8 +1674,8 @@ RwRowanProjectIssuesTest >> testIssue185_move_class_to_package [
 
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
-		addPackageNamed: packageName1;
+		newForGitBasedProjectNamed: projectName)
+		newForGitBasedProjectNamed: packageName1;
 		addPackageNamed: packageName2;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.
@@ -1741,7 +1741,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_1 
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
 		addPackageNamed: packageName3;
@@ -1865,7 +1865,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_2 
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
 		addPackageNamed: packageName3;
@@ -1973,7 +1973,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_3 
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
 		addPackageNamed: packageName3;
@@ -2097,7 +2097,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_4 
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
 		addPackageNamed: packageName3;
@@ -2216,7 +2216,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package [
 
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.
@@ -2276,7 +2276,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.
@@ -2350,7 +2350,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName1;
@@ -2424,7 +2424,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName1;
@@ -2497,7 +2497,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName1;
@@ -2609,7 +2609,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName1;
@@ -2951,7 +2951,7 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
 		addPackageNamed: packageName3;
@@ -3042,7 +3042,7 @@ RwRowanProjectIssuesTest >> testIssue215_move_class_and_extension_method_to_new_
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
 		setSymbolDictName: self _symbolDictionaryName1

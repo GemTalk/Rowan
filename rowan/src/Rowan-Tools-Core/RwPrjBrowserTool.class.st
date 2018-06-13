@@ -762,9 +762,10 @@ RwPrjBrowserTool >> createGitPackageProjectNamed: projectName updateDefinition: 
 
 	| projectDefinition |
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
+		newForGitBasedProjectNamed: projectName.
 	updateBlock cull: projectDefinition.
 	self class load loadProjectDefinition: projectDefinition
+
 ]
 
 { #category : 'method browsing' }

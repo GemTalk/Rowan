@@ -8,6 +8,17 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwProjectDefinition class >> newForGitBasedProjectNamed: aString [
+
+	| spec |
+	spec := RwSimpleProjectSpecification new
+		specName: aString;
+		yourself.
+	^ self newForSpecification: spec
+
+]
+
+{ #category : '*rowan-deprecated' }
 RwProjectDefinition class >> newForGitPackageProjectNamed: aString [
 
 	| spec |

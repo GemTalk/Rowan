@@ -20,7 +20,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
 		packageNamesInLoadOrder: packageNames;
@@ -125,7 +125,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName1)
+		newForGitBasedProjectNamed: projectName1)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
 		packageNamesInLoadOrder: #('Simple-Core' 'Simple-Tests');
@@ -152,7 +152,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 	projectTools load loadProjectDefinition: projectDefinition1.
 
 	projectDefinition2 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName2)
+		newForGitBasedProjectNamed: projectName2)
 		comment:
 				'This is a class extension project created in memory first, then written to disk. Uses a separate symbol dictionary from project 1';
 		packageNamesInLoadOrder: #('Simple-Extensions');
@@ -207,7 +207,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		comment:
 				'This is a project created in memory first, then written to disk. There are three packages 21 of which creates classes in a different symbol dictionary.';
 		packageNamesInLoadOrder: packageNames;
@@ -344,7 +344,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
 		packageNamesInLoadOrder: packageNames;
@@ -452,7 +452,7 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
 		packageNamesInLoadOrder: packageNames;
@@ -581,7 +581,7 @@ RwProjectToolTest >> testSimpleProject2 [
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
+		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
@@ -639,7 +639,7 @@ RwProjectToolTest >> testSimpleProject3 [
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
+		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		comment:
 				'This is a simple project created in memory first, then written to disk.';

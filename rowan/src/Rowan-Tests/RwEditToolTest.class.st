@@ -187,7 +187,7 @@ RwEditToolTest >> _standardProjectDefinition: projectName packageNames: packageN
 
 	| projectDefinition |
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
+		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		comment: comment;
 		packageNamesInLoadOrder: packageNames;
@@ -195,6 +195,7 @@ RwEditToolTest >> _standardProjectDefinition: projectName packageNames: packageN
 	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
 
 	^ projectDefinition
+
 ]
 
 { #category : 'tests - classes' }

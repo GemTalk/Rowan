@@ -717,7 +717,7 @@ RwRowanSample4Test >> testIssue208_adopt_load [
 
 	"Create and load the primer project ... with two packages (one for each symbol dictionary) into which the classes will be adopted"
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: primerProjectName.
+		newForGitBasedProjectNamed: primerProjectName.
 	projectDefinition
 		addPackageNamed: primerPackageName1;
 		addPackageNamed: primerPackageName2;
@@ -824,7 +824,7 @@ RwRowanSample4Test >> testIssue210 [
 
 	"Create and load the primer project ... with two packages into which the classes will be adopted"
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: primerProjectName.
+		newForGitBasedProjectNamed: primerProjectName.
 	projectDefinition
 		addPackageNamed: primerPackageName1;
 		addPackageNamed: primerPackageName2;

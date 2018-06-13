@@ -133,7 +133,7 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 
 	| projectDefinition |
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
+		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		comment: comment;
 		packageNamesInLoadOrder: packageNames;
@@ -160,7 +160,7 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
+		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		comment: comment;
 		yourself.
@@ -527,7 +527,7 @@ RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packa
 
 	| projectDefinition |
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
+		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		comment: comment;
 		packageNamesInLoadOrder: packageNames;
@@ -536,4 +536,5 @@ RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packa
 	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
 
 	^ projectDefinition
+
 ]

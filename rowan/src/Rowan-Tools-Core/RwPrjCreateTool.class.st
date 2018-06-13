@@ -33,7 +33,7 @@ RwPrjCreateTool >> createLoadedProject: projectName format: format root: rootPat
 
 	| projectDefinition |
 	projectDefinition := useGit
-		ifTrue: [ RwProjectDefinition newForGitPackageProjectNamed: projectName ].
+		ifTrue: [ RwProjectDefinition newForGitBasedProjectNamed: projectName ].
 	self
 		createPackageProjectFor: projectDefinition
 		format: format
@@ -48,12 +48,13 @@ RwPrjCreateTool >> createPackageProject: projectName format: format root: rootPa
 
 	| projectDefinition |
 	projectDefinition := useGit
-		ifTrue: [ RwProjectDefinition newForGitPackageProjectNamed: projectName ].
+		ifTrue: [ RwProjectDefinition newForGitBasedProjectNamed: projectName ].
 	^ self
 		createPackageProjectFor: projectDefinition
 		format: format
 		root: rootPath
 		repoPath: repoPath
+
 ]
 
 { #category : 'smalltalk api' }
@@ -91,7 +92,7 @@ RwPrjCreateTool >> createProject: projectName format: format root: rootPath repo
 
 	| projectDefinition |
 	projectDefinition := useGit
-		ifTrue: [ RwProjectDefinition newForGitPackageProjectNamed: projectName ].
+		ifTrue: [ RwProjectDefinition newForGitBasedProjectNamed: projectName ].
 	^ self
 		createPackageProjectFor: projectDefinition
 		format: format
