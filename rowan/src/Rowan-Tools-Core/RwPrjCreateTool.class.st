@@ -28,36 +28,31 @@ RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPath useGit: useGit ab
 					gitTool gitinitIn: repoPath with: '' ] ]
 ]
 
-{ #category : 'smalltalk api' }
+{ #category : '*rowan-deprecated' }
 RwPrjCreateTool >> createLoadedProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
 
 	| projectDefinition |
-	projectDefinition := useGit
-		ifTrue: [ RwProjectDefinition newForGitBasedProjectNamed: projectName ].
-	self
-		createPackageProjectFor: projectDefinition
-		format: format
-		root: rootPath
-		repoPath: repoPath.
+	projectDefinition := self createProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit.
 	^ self class load loadProjectDefinition: projectDefinition
 
 ]
 
-{ #category : 'smalltalk api' }
+{ #category : '*rowan-deprecated' }
 RwPrjCreateTool >> createPackageProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
 
 	| projectDefinition |
 	projectDefinition := useGit
-		ifTrue: [ RwProjectDefinition newForGitBasedProjectNamed: projectName ].
+		ifTrue: [ RwProjectDefinition newForGitBasedProjectNamed: projectName ]
+		ifFalse: [ RwProjectDefinition newForDiskBasedProjectNamed: projectName ].
 	^ self
-		createPackageProjectFor: projectDefinition
+		createProjectFor: projectDefinition
 		format: format
 		root: rootPath
 		repoPath: repoPath
 
 ]
 
-{ #category : 'smalltalk api' }
+{ #category : '*rowan-deprecated' }
 RwPrjCreateTool >> createPackageProjectFor: projectDefinition format: format root: rootPath repoPath: repoPath [
 
 	| projectName utils rootRepoPath dirPath useGit |
@@ -92,11 +87,42 @@ RwPrjCreateTool >> createProject: projectName format: format root: rootPath repo
 
 	| projectDefinition |
 	projectDefinition := useGit
-		ifTrue: [ RwProjectDefinition newForGitBasedProjectNamed: projectName ].
+		ifTrue: [ RwProjectDefinition newForGitBasedProjectNamed: projectName ]
+		ifFalse: [ RwProjectDefinition newForDiskBasedProjectNamed: projectName ].
 	^ self
-		createPackageProjectFor: projectDefinition
+		createProjectFor: projectDefinition
 		format: format
 		root: rootPath
 		repoPath: repoPath
+
+]
+
+{ #category : 'smalltalk api' }
+RwPrjCreateTool >> createProjectFor: projectDefinition format: format root: rootPath repoPath: repoPath [
+
+	| projectName utils rootRepoPath dirPath useGit |
+	projectName := projectDefinition name.
+	useGit := projectDefinition useGit.
+	utils := self fileUtilities.
+	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
+	self
+		_createProjectRepositoryDirectory: rootRepoPath
+		useGit: useGit
+		abort: [ ^ self ].
+	dirPath := rootRepoPath , utils pathNameDelimiter , repoPath.
+	utils ensureDirectoryExists: dirPath.
+	utils
+		writeStreamFor: 'properties.st'
+		in: dirPath
+		do: [ :fileStream | fileStream nextPutAll: '{ #format : ' , format printString , '}' ].
+	dirPath := rootRepoPath , utils pathNameDelimiter , projectDefinition specsPath.
+	utils ensureDirectoryExists: dirPath.
+	projectDefinition
+		repositoryRootPath: rootRepoPath;
+		repoPath: repoPath;
+		repositoryUrl: 'cypress:' , rootRepoPath , '/' , repoPath , '/'.
+	projectDefinition projectOwnerId: Rowan image currentUserId.
+	projectDefinition specification copy export.
+	^ projectDefinition
 
 ]

@@ -8,6 +8,18 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwProjectDefinition class >> newForDiskBasedProjectNamed: aString [
+
+	| spec |
+	spec := RwSimpleProjectSpecification new
+		specName: aString;
+		repoSpec: RwDiskRepositorySpecification new;
+		yourself.
+	^ self newForSpecification: spec
+
+]
+
+{ #category : 'instance creation' }
 RwProjectDefinition class >> newForGitBasedProjectNamed: aString [
 
 	| spec |

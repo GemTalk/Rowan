@@ -93,7 +93,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 	self
 		handleConfirmationDuring: [ 
 			projectTools create
-				createPackageProjectFor: projectDefinition
+				createProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanSimpleExtensionProject/'
 				repoPath: 'src' ].
@@ -314,7 +314,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 	self
 		handleConfirmationDuring: [ 
 			projectTools create
-				createPackageProjectFor: projectDefinition
+				createProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanClassExtensionsProject/'
 				repoPath: 'src' ].
@@ -509,7 +509,7 @@ RwProjectToolTest >> testSimpleProject1 [
 	self
 		handleConfirmationDuring: [ 
 			projectDefinition := projectTools create
-				createPackageProject: projectName
+				createProject: projectName
 				format: 'tonel'
 				root: '/tmp/rowanSimpleProject/'
 				repoPath: 'src'
@@ -610,7 +610,7 @@ RwProjectToolTest >> testSimpleProject2 [
 	self
 		handleConfirmationDuring: [ 
 			projectTools create
-				createPackageProjectFor: projectDefinition
+				createProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanSimpleProject2/'
 				repoPath: 'src' ].
@@ -695,7 +695,7 @@ RwProjectToolTest >> testSimpleProject3 [
 	self
 		handleConfirmationDuring: [ 
 			projectTools create
-				createPackageProjectFor: projectDefinition
+				createProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanSimpleProject3/'
 				repoPath: 'src' ].

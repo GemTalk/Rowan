@@ -70,6 +70,15 @@ RwGsFileUtilities class >> deleteAll: aDirectory rejecting: rejectBlock [
 ]
 
 { #category : 'utilities' }
+RwGsFileUtilities class >> deleteDirectory: aDirectory [
+  "Delete the named directory and all of it contents"
+
+	self deleteAll: aDirectory.
+   GsFile removeServerDirectory: aDirectory
+
+]
+
+{ #category : 'utilities' }
 RwGsFileUtilities class >> directoryEntriesFrom: aDirectory [
 	"Answer fully qualified paths to the contents of aDirectory."
 

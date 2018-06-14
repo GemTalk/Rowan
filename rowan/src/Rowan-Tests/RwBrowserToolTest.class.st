@@ -169,7 +169,7 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 	self
 		handleConfirmationDuring: [ 
 			projectTools create
-				createPackageProjectFor: projectDefinition
+				createProjectFor: projectDefinition
 				format: format
 				root: rootPath
 				repoPath: repoPath ].

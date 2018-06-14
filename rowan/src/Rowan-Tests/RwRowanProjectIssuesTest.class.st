@@ -181,7 +181,7 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPat
 	self
 		handleConfirmationDuring: [
 			Rowan projectTools create 
-				createPackageProjectFor: projectDefinition 
+				createProjectFor: projectDefinition 
 				format: 'tonel' 
 				root:rootPath 
 				repoPath: 'src' ].
