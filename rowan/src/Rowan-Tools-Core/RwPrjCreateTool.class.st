@@ -170,7 +170,7 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format [
 	self
 		_createProjectRepositoryDirectory: rootRepoPath
 		useGit: useGit
-		abort: [ ^ self ].
+		abort: [ ^ projectDefinition ].
 	projectDefinition repositoryUrl: 'cypress:' , rootRepoPath , '/' , projectDefinition repoPath , '/'.
 
 	dirPath := rootRepoPath , utils pathNameDelimiter , projectDefinition repoPath.
@@ -185,6 +185,17 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format [
 	projectDefinition specification copy export.
 
 	^ projectDefinition
+
+]
+
+{ #category : 'smalltalk api' }
+RwPrjCreateTool >> createProjectFor: projectDefinition format: format root: rootPath [
+
+	| projectName utils |
+	projectName := projectDefinition name.
+	utils := self fileUtilities.
+	projectDefinition repositoryRootPath:  rootPath , utils pathNameDelimiter , projectName.
+	^ self createProjectFor: projectDefinition format: format
 
 ]
 

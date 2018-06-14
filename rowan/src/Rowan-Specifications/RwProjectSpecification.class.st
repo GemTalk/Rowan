@@ -30,6 +30,15 @@ RwProjectSpecification >> _myUserProfile [
   ^ System myUserProfile
 ]
 
+{ #category : 'converting' }
+RwProjectSpecification >> asDefinition [
+
+	"answer an RwProjectDefintion created using the reciever"
+
+	^RwProjectDefinition newForSpecification: self
+
+]
+
 { #category : 'testing' }
 RwProjectSpecification >> canCommit [
   ^ self repositoryUrl notNil and: [ self repoSpec canCommit ]
