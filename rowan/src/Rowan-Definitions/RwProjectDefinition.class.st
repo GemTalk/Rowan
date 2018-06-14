@@ -185,7 +185,15 @@ RwProjectDefinition >> packageNames [
   ^ self packages keys asArray
 ]
 
-{ #category : 'properties' }
+{ #category : 'accessing' }
+RwProjectDefinition >> packageNames: packageNames [
+
+	packageNames
+		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
+
+]
+
+{ #category : '*rowan-deprecated' }
 RwProjectDefinition >> packageNamesInLoadOrder: packageNamesInLoadOrder [
 
 	packageNamesInLoadOrder
