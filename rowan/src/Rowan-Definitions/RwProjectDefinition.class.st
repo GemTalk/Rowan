@@ -127,6 +127,20 @@ RwProjectDefinition >> compareAgainstBase: aDefinition [
 	^ modification
 ]
 
+{ #category : 'properties' }
+RwProjectDefinition >> configsPath [
+
+	^ self specification configsPath
+
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> configsPath: aDirectoryPathString [
+
+	self specification configsPath: aDirectoryPathString
+
+]
+
 { #category : 'accessing' }
 RwProjectDefinition >> definitionWithKey: aKey ifAbsent: absentBlock [
 
@@ -250,9 +264,10 @@ RwProjectDefinition >> repoPath [
 ]
 
 { #category : 'properties' }
-RwProjectDefinition >> repoPath: repoPath [
+RwProjectDefinition >> repoPath: aDirectoryPathString [
 
-	self specification repoPath: repoPath
+	self specification repoPath: aDirectoryPathString
+
 ]
 
 { #category : 'properties' }
@@ -289,6 +304,13 @@ RwProjectDefinition >> specification [
 RwProjectDefinition >> specsPath [
 
 	^ self specification specsPath
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> specsPath: aDirectoryPathString [
+
+	self specification specsPath: aDirectoryPathString
+
 ]
 
 { #category : 'properties' }

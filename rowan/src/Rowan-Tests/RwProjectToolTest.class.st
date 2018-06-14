@@ -96,7 +96,9 @@ RwProjectToolTest >> testProjectClassExtensions [
 				createProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanSimpleExtensionProject/'
-				repoPath: 'src' ].
+				configsPath: 'configs'
+				repoPath: 'src' 
+				specsPath: 'specs' ].
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.
@@ -317,7 +319,9 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 				createProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanClassExtensionsProject/'
-				repoPath: 'src' ].
+				configsPath: 'configs'
+				repoPath: 'src' 
+				specsPath: 'specs' ].
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.
@@ -509,11 +513,12 @@ RwProjectToolTest >> testSimpleProject1 [
 	self
 		handleConfirmationDuring: [ 
 			projectDefinition := projectTools create
-				createProject: projectName
+				createGitBasedProject: projectName
 				format: 'tonel'
 				root: '/tmp/rowanSimpleProject/'
+				configsPath: 'configs'
 				repoPath: 'src'
-				useGit: true ].
+				specsPath: 'specs' ].
 	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
@@ -613,7 +618,9 @@ RwProjectToolTest >> testSimpleProject2 [
 				createProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanSimpleProject2/'
-				repoPath: 'src' ].
+				configsPath: 'configs'
+				repoPath: 'src' 
+				specsPath: 'specs' ].
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.
@@ -698,7 +705,9 @@ RwProjectToolTest >> testSimpleProject3 [
 				createProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanSimpleProject3/'
-				repoPath: 'src' ].
+				configsPath: 'configs'
+				repoPath: 'src' 
+				specsPath: 'specs' ].
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.

@@ -151,7 +151,7 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 ]
 
 { #category : 'private' }
-RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment format: format root: rootPath repoPath: repoPath [
+RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment format: format root: rootPath [
 
 	| projectDefinition projectTools |
 	projectTools := Rowan projectTools.
@@ -172,7 +172,9 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 				createProjectFor: projectDefinition
 				format: format
 				root: rootPath
-				repoPath: repoPath ].
+				configsPath: 'configs'
+				repoPath: 'src' 
+				specsPath: 'specs' ].
 
 	packageNames
 		do: [ :packageName | projectDefinition addPackageNamed: packageName ].

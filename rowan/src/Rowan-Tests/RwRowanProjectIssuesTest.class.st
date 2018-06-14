@@ -184,7 +184,9 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPat
 				createProjectFor: projectDefinition 
 				format: 'tonel' 
 				root:rootPath 
-				repoPath: 'src' ].
+				configsPath: 'configs'
+				repoPath: 'src' 
+				specsPath: 'specs' ].
 
 	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
@@ -1675,7 +1677,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_class_to_package [
 
 	projectDefinition1 := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
-		newForGitBasedProjectNamed: packageName1;
+		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.

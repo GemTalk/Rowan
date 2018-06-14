@@ -62,7 +62,15 @@ RwProjectSpecification >> commitLogForTool: aRwTool limit: logLimit [
 { #category : 'accessing' }
 RwProjectSpecification >> configsPath [
 
-	^ configsPath ifNil: [ configsPath := 'configs' ]
+	^ configsPath ifNil: [ configsPath := 'rowan/configs' ]
+
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> configsPath: anObject [
+
+   configsPath := anObject
+
 ]
 
 { #category : 'accessing' }
@@ -238,7 +246,7 @@ RwProjectSpecification >> remote [
 { #category : 'accessing' }
 RwProjectSpecification >> repoPath [
 
-   ^repoPath
+   ^repoPath ifNil: [ repoPath := 'rowan/src' ]
 
 ]
 
@@ -303,7 +311,8 @@ RwProjectSpecification >> specName: anObject [
 { #category : 'accessing' }
 RwProjectSpecification >> specsPath [
 
-	^ specsPath ifNil: [ specsPath := 'specs' ]
+	^ specsPath ifNil: [ specsPath := 'rowan/specs' ]
+
 ]
 
 { #category : 'accessing' }
