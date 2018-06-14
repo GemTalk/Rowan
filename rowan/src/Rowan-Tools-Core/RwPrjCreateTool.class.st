@@ -167,10 +167,13 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format [
 	useGit := projectDefinition useGit.
 	rootRepoPath := projectDefinition repositoryRootPath.
 	utils := self fileUtilities.
+
 	self
 		_createProjectRepositoryDirectory: rootRepoPath
 		useGit: useGit
-		abort: [ ^ projectDefinition ].
+		abort: [ 
+			projectDefinition specification register.
+			^ projectDefinition ].
 	projectDefinition repositoryUrl: 'cypress:' , rootRepoPath , '/' , projectDefinition repoPath , '/'.
 
 	dirPath := rootRepoPath , utils pathNameDelimiter , projectDefinition repoPath.
@@ -180,9 +183,14 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format [
 		in: dirPath
 		do: [ :fileStream | fileStream nextPutAll: '{ #format : ' , format printString , '}' ].
 
-	dirPath := rootRepoPath , utils pathNameDelimiter , projectDefinition specsPath.
-	utils ensureDirectoryExists: dirPath.
-	projectDefinition specification copy export.
+	{projectDefinition configsPath. projectDefinition repoPath. projectDefinition specsPath }
+		do: [ :path |
+			dirPath := rootRepoPath , utils pathNameDelimiter , path.
+			utils ensureDirectoryExists: dirPath ].
+
+	projectDefinition specification export.
+	projectDefinition configuration export.
+	projectDefinition specification register.
 
 	^ projectDefinition
 
