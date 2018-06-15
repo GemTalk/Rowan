@@ -192,8 +192,8 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format [
 			utils ensureDirectoryExists: dirPath ].
 
 	projectDefinition specification export.
-	projectDefinition configuration export.
 	projectDefinition specification register.
+	projectDefinition configuration export.
 
 	^ projectDefinition
 
