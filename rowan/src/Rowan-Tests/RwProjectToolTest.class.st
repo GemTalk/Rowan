@@ -514,6 +514,7 @@ RwProjectToolTest >> testSimpleProject1 [
 		handleConfirmationDuring: [ 
 			projectDefinition := projectTools create
 				createGitBasedProject: projectName
+				packageNames: packageNames
 				format: 'tonel'
 				root: '/tmp/rowanSimpleProject/'
 				configsPath: 'configs'
@@ -522,7 +523,6 @@ RwProjectToolTest >> testSimpleProject1 [
 	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
-		packageNamesInLoadOrder: packageNames;
 		yourself.
 	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.

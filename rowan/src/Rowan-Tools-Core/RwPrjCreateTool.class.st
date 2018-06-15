@@ -29,10 +29,12 @@ RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPath useGit: useGit ab
 ]
 
 { #category : 'smalltalk api' }
-RwPrjCreateTool >> createDiskBasedProject: projectName format: format root: rootPath [
+RwPrjCreateTool >> createDiskBasedProject: projectName packageNames: packageNames format: format root: rootPath [
 
 	| projectDefinition |
-	projectDefinition := RwProjectDefinition newForDiskBasedProjectNamed: projectName.
+	projectDefinition := (RwProjectDefinition newForDiskBasedProjectNamed: projectName)
+		packageNames: packageNames;
+		yourself.
 	^ self
 		createProjectFor: projectDefinition 
 		format: format 
@@ -44,12 +46,13 @@ RwPrjCreateTool >> createDiskBasedProject: projectName format: format root: root
 ]
 
 { #category : 'smalltalk api' }
-RwPrjCreateTool >> createDiskBasedProject: projectName format: format root: rootPath configsPath: configsPath repoPath: repoPath specsPath: specsPath [
+RwPrjCreateTool >> createDiskBasedProject: projectName packageNames: packageNames format: format root: rootPath configsPath: configsPath repoPath: repoPath specsPath: specsPath [
 
 	| utils rootRepoPath projectDefinition |
 	utils := self fileUtilities.
 	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
 	projectDefinition := (RwProjectDefinition newForDiskBasedProjectNamed: projectName)
+		packageNames: packageNames;
 		configsPath: configsPath;
 		repoPath: repoPath;
 		specsPath: specsPath;
@@ -63,10 +66,12 @@ RwPrjCreateTool >> createDiskBasedProject: projectName format: format root: root
 ]
 
 { #category : 'smalltalk api' }
-RwPrjCreateTool >> createGitBasedProject: projectName format: format root: rootPath [
+RwPrjCreateTool >> createGitBasedProject: projectName packageNames: packageNames format: format root: rootPath [
 
 	| projectDefinition |
-	projectDefinition := RwProjectDefinition newForGitBasedProjectNamed: projectName.
+	projectDefinition := (RwProjectDefinition newForGitBasedProjectNamed: projectName)
+		packageNames: packageNames;
+		yourself.
 	^ self
 		createProjectFor: projectDefinition 
 		format: format 
@@ -78,12 +83,13 @@ RwPrjCreateTool >> createGitBasedProject: projectName format: format root: rootP
 ]
 
 { #category : 'smalltalk api' }
-RwPrjCreateTool >> createGitBasedProject: projectName format: format root: rootPath configsPath: configsPath repoPath: repoPath specsPath: specsPath [
+RwPrjCreateTool >> createGitBasedProject: projectName packageNames: packageNames format: format root: rootPath configsPath: configsPath repoPath: repoPath specsPath: specsPath [
 
 	| utils rootRepoPath projectDefinition |
 	utils := self fileUtilities.
 	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
 	projectDefinition := (RwProjectDefinition newForGitBasedProjectNamed: projectName)
+		packageNames: packageNames;
 		configsPath: configsPath;
 		repoPath: repoPath;
 		specsPath: specsPath;
@@ -163,4 +169,3 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format root: root
 	^ self createProjectFor: projectDefinition format: format
 
 ]
-

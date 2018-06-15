@@ -58,8 +58,8 @@ RwPrjCreateTool >> createPackageProjectFor: projectDefinition format: format roo
 RwPrjCreateTool >> createProject: projectName format: format root: rootPath repoPath: repoPath useGit: useGit [
 
 	^ useGit
-		ifTrue: [ self createGitBasedProject: projectName format: format root: rootPath configsPath: 'configs' repoPath: repoPath specsPath: 'specs' ]
-		ifFalse: [ self createDiskBasedProject: projectName format: format root: rootPath configsPath: 'configs' repoPath: repoPath specsPath: 'specs' ].
+		ifTrue: [ self createGitBasedProject: projectName packageNames: #() format: format root: rootPath configsPath: 'configs' repoPath: repoPath specsPath: 'specs' ]
+		ifFalse: [ self createDiskBasedProject: projectName packageNames: #() format: format root: rootPath configsPath: 'configs' repoPath: repoPath specsPath: 'specs' ].
 
 ]
 
@@ -75,4 +75,3 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format root: root
 	^ self createProjectFor: projectDefinition format: format
 
 ]
-
