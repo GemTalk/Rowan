@@ -166,7 +166,8 @@ RwProjectSpecification >> initializeForImport [
 	"if spec has been imorted, clear out any of the fields that represent local disk state"
 
 	super initializeForImport.
-	platformSpec := imageSpec := nil.
+	platformSpec := Dictionary new.
+	imageSpec := nil.
 	repoSpec initializeForImport
 
 ]
