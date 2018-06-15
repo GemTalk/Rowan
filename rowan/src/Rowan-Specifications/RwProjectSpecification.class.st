@@ -166,8 +166,7 @@ RwProjectSpecification >> initializeForImport [
 	"if spec has been imorted, clear out any of the fields that represent local disk state"
 
 	super initializeForImport.
-	platformSpec := Dictionary new.
-	imageSpec := nil.
+	platformSpec := imageSpec := nil.
 	repoSpec initializeForImport
 
 ]
@@ -201,7 +200,10 @@ RwProjectSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
 { #category : 'accessing' }
 RwProjectSpecification >> platformSpec [
 
-   ^platformSpec
+   ^platformSpec ifNil: [ 
+		platformSpec := Dictionary new
+			at: 'gemstone' put: RwGemStoneSpecification new;
+			yourself ].
 
 ]
 
