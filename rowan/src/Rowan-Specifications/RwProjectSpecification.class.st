@@ -161,12 +161,23 @@ RwProjectSpecification >> initialize [
 ]
 
 { #category : 'initialization' }
+RwProjectSpecification >> initializeForExport [
+
+	"before spec is exported, clear out any of the fields that are not to be included"
+
+	super initializeForExport.
+	platformSpec := nil.
+	repoSpec initializeForExport
+
+]
+
+{ #category : 'initialization' }
 RwProjectSpecification >> initializeForImport [
 
-	"if spec has been imorted, clear out any of the fields that represent local disk state"
+	"if spec has been imported, clear out any of the fields that represent local disk state"
 
 	super initializeForImport.
-	platformSpec := imageSpec := nil.
+	imageSpec := nil.
 	repoSpec initializeForImport
 
 ]
