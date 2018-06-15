@@ -193,7 +193,7 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format [
 
 	projectDefinition specification export.
 	projectDefinition specification register.
-	projectDefinition configuration export.
+	projectDefinition configurationTemplate export.
 
 	^ projectDefinition
 

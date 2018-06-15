@@ -142,7 +142,7 @@ RwProjectDefinition >> configsPath: aDirectoryPathString [
 ]
 
 { #category : 'properties' }
-RwProjectDefinition >> configuration [
+RwProjectDefinition >> configurationTemplate [
 
 	"Return a generic RwProjectLoadConfiguration based on the list of packages in the reciever"
 
@@ -161,7 +161,10 @@ RwProjectDefinition >> configuration [
 		at: { 'common' }
 		put: (Dictionary new
 				at: (groupNames at: 1)
-					put: self packageNames;
+					put: (Dictionary new
+								at: #packageNames
+								put: self packageNames;
+								yourself);
 				yourself).
 	^ config
 
