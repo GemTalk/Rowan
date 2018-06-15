@@ -16,6 +16,11 @@
 					'Rowan-Tools-Extensions',
 					'Rowan-Tools-Kernel'
 					]
+				},
+			'deprecated' : {
+				#packageNames : [
+					'Rowan-Tools-Deprecated'
+					]
 				}
 			},
 		[ 'gemstone' ] : {
@@ -57,7 +62,8 @@
 					'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
-					'Rowan-Tools-Core' : { 'symbolDictName' : 'RowanTools' }
+					'Rowan-Tools-Core' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Tools-Deprecated' : { 'symbolDictName' : 'RowanTools' }
 					}
 				}
 			}

@@ -589,7 +589,7 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'RowanTools'
-    value: #('Rowan-Tools-Core').		"Rowan Tools"
+    value: #('Rowan-Tools-Core' 'Rowan-Tools-Deprecated').		"Rowan Tools"
 %
   commit
 
