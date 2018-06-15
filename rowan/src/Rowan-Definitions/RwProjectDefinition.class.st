@@ -141,6 +141,32 @@ RwProjectDefinition >> configsPath: aDirectoryPathString [
 
 ]
 
+{ #category : 'properties' }
+RwProjectDefinition >> configuration [
+
+	"Return a generic RwProjectLoadConfiguration based on the list of packages in the reciever"
+
+	| config groupNames |
+	config := RwProjectLoadConfiguration new
+		name: 'Default';
+		projectName: self specification specName;
+		yourself.
+	groupNames := self specification defaultGroupNames.
+	groupNames
+		do: [:groupName |
+			config definedGroupNames
+				at: groupName 
+				put: {} ].
+	config conditionalPackages
+		at: { 'common' }
+		put: (Dictionary new
+				at: (groupNames at: 1)
+					put: self packageNames;
+				yourself).
+	^ config
+
+]
+
 { #category : 'accessing' }
 RwProjectDefinition >> definitionWithKey: aKey ifAbsent: absentBlock [
 

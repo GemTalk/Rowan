@@ -53,13 +53,20 @@ RwAbstractProjectConfiguration class >> fromUrl: specNameOrUrl [
 ]
 
 { #category : 'instance creation' }
+RwAbstractProjectConfiguration class >> new [
+
+	^self basicNew initialize
+
+]
+
+{ #category : 'instance creation' }
 RwAbstractProjectConfiguration class >> newNamed: aName for: projectName [
 
 	^ self new
-		initialize;
 		name: aName;
 		projectName: projectName;
 		yourself
+
 ]
 
 { #category : 'private' }

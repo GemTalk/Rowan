@@ -147,7 +147,9 @@ RwProjectSpecification >> initialize [
 
 	super initialize.
 	comment := ''.
-	specsPath := 'specs'.
+	configsPath := 'rowan/configs'.
+	repoPath := 'rowan/src'.
+	specsPath := 'rowan/specs'.
 	platformSpec := Dictionary new
 		at: 'gemstone' put: RwGemStoneSpecification new;
 		yourself.
@@ -164,8 +166,9 @@ RwProjectSpecification >> initializeForImport [
 	"if spec has been imorted, clear out any of the fields that represent local disk state"
 
 	super initializeForImport.
-	imageSpec := nil.
+	platformSpec := imageSpec := nil.
 	repoSpec initializeForImport
+
 ]
 
 { #category : 'accessing' }
