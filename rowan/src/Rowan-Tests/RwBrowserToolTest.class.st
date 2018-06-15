@@ -159,12 +159,11 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	projectDefinition := RwProjectDefinition
-		newForGitBasedProjectNamed: projectName.
-	projectDefinition
+	projectDefinition := (RwProjectDefinition newForGitBasedProjectNamed: projectName)
 		comment: comment;
+		defaultSymbolDictName: defaultSymbolDictName;
+		packageNames: packageNames;
 		yourself.
-	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
 
 	self
 		handleConfirmationDuring: [ 
@@ -176,8 +175,6 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 				repoPath: 'src' 
 				specsPath: 'specs' ].
 
-	packageNames
-		do: [ :packageName | projectDefinition addPackageNamed: packageName ].
 	projectTools load loadProjectDefinition: projectDefinition
 
 ]
@@ -532,7 +529,7 @@ RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packa
 		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		comment: comment;
-		packageNamesInLoadOrder: packageNames;
+		packageNames: packageNames;
 		defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions;
 		yourself.
 	projectDefinition defaultSymbolDictName: defaultSymbolDictName.

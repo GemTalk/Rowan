@@ -23,7 +23,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 		newForGitBasedProjectNamed: projectName)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNamesInLoadOrder: packageNames;
+		packageNames: packageNames;
 		yourself.
 	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
 

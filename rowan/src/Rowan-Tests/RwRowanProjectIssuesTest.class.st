@@ -157,14 +157,7 @@ RwRowanProjectIssuesTest >> _cloneGitRepositoryFor: projectName projectUrlString
 ]
 
 { #category : 'private-issue 24' }
-RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPath [
-
-	^ self _createLoadedProjectNamed: projectName root: rootPath validate: true
-
-]
-
-{ #category : 'private-issue 24' }
-RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPath symbolDictionaryName: symbolDictionaryName validate: validate [
+RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName packageNames: packageNames root: rootPath symbolDictionaryName: symbolDictionaryName validate: validate [
 
 	| projectDefinition project |
 
@@ -173,7 +166,7 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPat
 
 	projectDefinition := self
 		_standardProjectDefinition: projectName
-		packageNames: #()
+		packageNames: packageNames
 		defaultSymbolDictName: symbolDictionaryName
 		comment:
 			'Basic project ', projectName printString.
@@ -193,6 +186,32 @@ RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPat
 	project := RwProject newNamed: projectName.
 
 	validate ifTrue: [ self assert: project isDirty ]. "a project is dirty if it has changes that are not written to disk"
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName packageNames: packageNames root: rootPath validate: validate [
+
+	^ self 
+		_createLoadedProjectNamed: projectName
+		packageNames: packageNames
+		root: rootPath 
+		symbolDictionaryName: self _symbolDictionaryName 
+		validate: validate
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPath [
+
+	^ self _createLoadedProjectNamed: projectName root: rootPath validate: true
+
+]
+
+{ #category : 'private-issue 24' }
+RwRowanProjectIssuesTest >> _createLoadedProjectNamed: projectName root: rootPath symbolDictionaryName: symbolDictionaryName validate: validate [
+
+	^ self _createLoadedProjectNamed: projectName packageNames: #() root: rootPath symbolDictionaryName: symbolDictionaryName validate: validate
 
 ]
 
@@ -3266,8 +3285,7 @@ RwRowanProjectIssuesTest >> testIssue24_loadProject [
 	packageName := 'Issue24-Core'.
 	className := 'Issue24Class'.
 
-	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/'  validate: false.
-	self _addPackageNamed: packageName toProjectNamed: projectName  validate: false.
+	self _createLoadedProjectNamed: projectName packageNames: {packageName} root: '/tmp/rowanIssuesProject/'  validate: false.
 	theClass := self _addClassNamed: className toPackageNamed: packageName inProjectNamed: projectName  validate: false.
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass inPackage: packageName inProjectNamed: projectName  validate: false.
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClass class inPackage: packageName inProjectNamed: projectName  validate: false.
