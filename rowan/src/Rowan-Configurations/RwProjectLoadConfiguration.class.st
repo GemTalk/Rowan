@@ -17,7 +17,7 @@ RwProjectLoadConfiguration >> acceptVisitor: aVisitor [
 { #category : 'accessing' }
 RwProjectLoadConfiguration >> definedGroupNames [
 
-	^ definedGroupNames ifNil: [ definedGroupNames :=  Set new ]
+	^ definedGroupNames ifNil: [ definedGroupNames :=  Dictionary new ]
 
 ]
 
@@ -32,6 +32,6 @@ RwProjectLoadConfiguration >> definedGroupNames: aColl [
 RwProjectLoadConfiguration >> initialize [
 
 	super initialize.
-	definedGroupNames := Set new
+	definedGroupNames := Dictionary new
 
 ]
