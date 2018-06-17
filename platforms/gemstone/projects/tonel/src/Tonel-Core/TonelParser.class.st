@@ -501,8 +501,10 @@ TonelParser >> typeDef [
 			normalizedMetadata := Dictionary new.
 			typeMetadata keysAndValuesDo: [:key :value |
 				normalizedMetadata at: key asLowercase asSymbol put: value ].
-			normalizedMetadata ]
-	}
+			normalizedMetadata ] 
+	} 
+	
+		
 
 ]
 

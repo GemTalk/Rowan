@@ -210,6 +210,11 @@ TonelWriter >> typeClassDefinitionOf: aClassDefinition [
 	(aClassDefinition classInstVarNames)
 		ifNotEmpty: [ :vars | definition at: #classInstVars put: vars asArray ].
 
+false ifTrue: [
+	(aClassDefinition gs_options)
+		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
+].
+
 	definition 		
 		at: #category put: aClassDefinition category asSymbol.
 	
