@@ -65,7 +65,7 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 	| type oldVersion createdClass gs_options |
 	type := classDefinition classType.
 	oldVersion := self oldClassVersion.
-	gs_options := (classDefinition propertyAt: 'gs_options' ifAbsent: [ #() ])
+	gs_options := (classDefinition gs_options)
 		collect: [ :each | each asSymbol ].
 	createdClass := type = 'normal'
 		ifTrue: [ 

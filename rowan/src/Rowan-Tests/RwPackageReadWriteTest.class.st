@@ -67,6 +67,7 @@ RwPackageReadWriteTest >> doTestReadWriteReadForFormat: format [
 RwPackageReadWriteTest >> doTestWriteRead: writePackageSet myWriteSpecification: myWriteSpecification forFormat: format [
 
 	| readPackageSet diff |
+self halt.
 	Rowan projectTools write
 		writePackageSet: writePackageSet
 		specification: myWriteSpecification.
@@ -75,6 +76,7 @@ RwPackageReadWriteTest >> doTestWriteRead: writePackageSet myWriteSpecification:
 	diff := writePackageSet compareAgainstBase: readPackageSet.
 	self assert: diff isEmpty.
 	^ readPackageSet
+
 ]
 
 { #category : 'private' }
