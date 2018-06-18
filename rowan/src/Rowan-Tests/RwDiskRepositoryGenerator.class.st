@@ -108,6 +108,7 @@ RwDiskRepositoryGenerator >> generatePackageSet [
 						instanceMethodDefinitions: (self instanceMethodsForClass: className1);
 						classMethodDefinitions: (self classMethodsForClass: className1);
 						gs_options: self gs_options;
+						gs_constraints: self gs_constraints;
 						yourself);
 		yourself.
 	classDefinitionsDictionary2 := Dictionary new

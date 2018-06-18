@@ -1071,28 +1071,28 @@ category: 'accessing'
 method: CypressClassDefinition
 gs_constraints
 
-	^gs_constraints
+	^gs_constraints ifNil: [ gs_constraints := #() ]
 %
 
 category: 'accessing'
 method: CypressClassDefinition
 gs_constraints: aCollection
 
-	^gs_constraints := aCollection
+	gs_constraints := aCollection
 %
 
 category: 'accessing'
 method: CypressClassDefinition
 gs_options
 
-	^gs_options
+	^gs_options ifNil: [ gs_options := #() ]
 %
 
 category: 'accessing'
 method: CypressClassDefinition
 gs_options: aCollection
 
-	^gs_options := aCollection
+	gs_options := aCollection
 %
 
 category: 'visiting'
