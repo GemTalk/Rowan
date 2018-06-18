@@ -6,6 +6,9 @@ Class {
 		'classDefinition',
 		'loadedProject'
 	],
+	#gs_options : [
+		'disallowGciStore'
+	],
 	#category : 'Rowan-Core'
 }
 

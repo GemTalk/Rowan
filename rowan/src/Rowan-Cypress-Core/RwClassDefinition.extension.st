@@ -42,6 +42,8 @@ RwClassDefinition >> fromCypressClassStructure: aCypressClassStructure [
 		at: 'name' put: aCypressClassStructure className;
 		at: 'pools' put: aCypressClassStructure poolDictionaryNames;
 		at: 'superclass' put: aCypressClassStructure superclassName;
+		at: 'gs_options' put: aCypressClassStructure gs_options;
+		at: 'gs_constraints' put: aCypressClassStructure gs_constraints;
 		yourself.
 	aCypressClassStructure subclassType isEmpty
 		ifTrue: [ properties at: 'type' put: 'normal' ]

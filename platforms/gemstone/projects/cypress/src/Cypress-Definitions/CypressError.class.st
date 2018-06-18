@@ -5,5 +5,8 @@ Class {
 	#name : 'CypressError',
 	#superclass : 'Error',
 	#type : 'variable',
+	#gs_options : [
+		'disallowGciStore'
+	],
 	#category : 'Cypress-Definitions'
 }

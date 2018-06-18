@@ -403,6 +403,26 @@ CypressClassDefinition >> name: aClassName superclassName: aSuperclassName categ
 
 ]
 
+{ #category : 'initialization' }
+CypressClassDefinition >> name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames 
+	classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames 
+	poolDictionaryNames: somePoolDictionaryNames gs_options: someGs_options gs_constraints: someGs_constraints
+	comment: aComment subclassType: aSubclassType [
+
+	name := aClassName.
+	superclassName := aSuperclassName.
+	category := aCategory.
+	instVarNames := someInstanceVariableNames.
+	classInstVarNames := someClassInstanceVariableNames.
+	classVarNames := someClassVariableNames.
+	poolDictionaryNames := somePoolDictionaryNames.
+	gs_options := someGs_options.
+	gs_constraints := someGs_constraints.
+	comment := aComment.
+	subclassType := aSubclassType asString
+
+]
+
 { #category : 'loading' }
 CypressClassDefinition >> poolDictionariesForNames: pdNames [
   | ar existingDict symList sharedPool |

@@ -34,7 +34,7 @@ RwPackageReadWriteTest >> basicTonelPackageSet [
 
   ^ RwDiskRepositoryGenerator new
 		gs_options: #(instancesInvariant);
-		gs_constraints: { { 'instVar1', 'Object' } };
+		gs_constraints: { { 'instVar1'. 'Object' } };
 		generatePackageSet
 
 ]

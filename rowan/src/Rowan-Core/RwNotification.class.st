@@ -5,5 +5,8 @@ Class {
 	#name : 'RwNotification',
 	#superclass : 'Notification',
 	#type : 'variable',
+	#gs_options : [
+		'disallowGciStore'
+	],
 	#category : 'Rowan-Core'
 }

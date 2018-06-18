@@ -21,6 +21,9 @@ Class {
 		'exception',
 		'patchOperation'
 	],
+	#gs_options : [
+		'disallowGciStore'
+	],
 	#category : 'Cypress-Definitions'
 }
 
