@@ -23,7 +23,6 @@ RwTonelUrl class >> schemeName [
 RwTonelUrl >> asRwRepository [
   "return a platform appropriate repository for the repository located in the directory referenced by the receiver"
 
-true ifTrue: [ ^ super asRwRepository ].
   ^ self createRwTonelRepositoryForPath: self pathForDirectory
 
 ]
