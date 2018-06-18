@@ -14,7 +14,9 @@ Class {
 		'name',
 		'poolDictionaryNames',
 		'subclassType',
-		'superclassName'
+		'superclassName',
+		'gs_options',
+		'gs_constraints'
 	],
 	#category : 'Cypress-Definitions'
 }
@@ -296,6 +298,34 @@ CypressClassDefinition >> failedCompiledMethods: someCompiledMethods [
 
 	someCompiledMethods isEmpty ifTrue: [^self].
 	self halt: 'not implemented yet'
+
+]
+
+{ #category : 'accessing' }
+CypressClassDefinition >> gs_constraints [
+
+	^gs_constraints ifNil: [ gs_constraints := #() ]
+
+]
+
+{ #category : 'accessing' }
+CypressClassDefinition >> gs_constraints: aCollection [
+
+	gs_constraints := aCollection
+
+]
+
+{ #category : 'accessing' }
+CypressClassDefinition >> gs_options [
+
+	^gs_options ifNil: [ gs_options := #() ]
+
+]
+
+{ #category : 'accessing' }
+CypressClassDefinition >> gs_options: aCollection [
+
+	gs_options := aCollection
 
 ]
 

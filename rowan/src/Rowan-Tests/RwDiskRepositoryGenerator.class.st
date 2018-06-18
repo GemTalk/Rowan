@@ -2,7 +2,8 @@ Class {
 	#name : 'RwDiskRepositoryGenerator',
 	#superclass : 'Object',
 	#instVars : [
-		'gs_options'
+		'gs_options',
+		'gs_constraints'
 	],
 	#category : 'Rowan-Tests'
 }
@@ -155,6 +156,20 @@ RwDiskRepositoryGenerator >> generatePackageSet [
 						classExtensions: classExtensionDefinitionsDictionary2);
 		yourself.
 	^ myPackageSet
+
+]
+
+{ #category : 'accessing' }
+RwDiskRepositoryGenerator >> gs_constraints [
+
+	^gs_constraints ifNil: [ #() ]
+
+]
+
+{ #category : 'accessing' }
+RwDiskRepositoryGenerator >> gs_constraints: constraintsArray [
+
+	gs_constraints := constraintsArray
 
 ]
 

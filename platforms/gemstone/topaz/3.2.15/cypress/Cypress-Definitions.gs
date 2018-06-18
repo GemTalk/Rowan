@@ -122,7 +122,7 @@ true.
 doit
 (CypressDefinition
 	subclass: 'CypressClassDefinition'
-	instVarNames: #( category classInstVarNames classVarNames comment defaultSymbolDictionaryName instVarNames name poolDictionaryNames subclassType superclassName )
+	instVarNames: #( category classInstVarNames classVarNames comment defaultSymbolDictionaryName instVarNames name poolDictionaryNames subclassType superclassName gs_options gs_constraints)
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -1065,6 +1065,34 @@ method: CypressClassDefinition
 category
 
 	^category
+%
+
+category: 'accessing'
+method: CypressClassDefinition
+gs_constraints
+
+	^gs_constraints
+%
+
+category: 'accessing'
+method: CypressClassDefinition
+gs_constraints: aCollection
+
+	^gs_constraints := aCollection
+%
+
+category: 'accessing'
+method: CypressClassDefinition
+gs_options
+
+	^gs_options
+%
+
+category: 'accessing'
+method: CypressClassDefinition
+gs_options: aCollection
+
+	^gs_options := aCollection
 %
 
 category: 'visiting'
