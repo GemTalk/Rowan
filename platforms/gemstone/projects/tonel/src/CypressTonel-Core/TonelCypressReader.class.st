@@ -59,6 +59,8 @@ TonelCypressReader class >> newClassDefinitionFrom: anArray [
     classInstVarNames: (metadata at: #'classinstvars' ifAbsent: [ #() ])
     classVarNames: (metadata at: #'classvars' ifAbsent: [ #() ])
     poolDictionaryNames: (metadata at: #'pools' ifAbsent: [ #() ])
+    gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ])
+    gs_constraints: (metadata at: #'gs_constraints' ifAbsent: [ #() ])
     comment: (anArray second ifNil: [ '' ])
     type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol
 
