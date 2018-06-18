@@ -37,13 +37,13 @@ RwClassDefinition >> fromCypressClassStructure: aCypressClassStructure [
 		at: 'classvars' put: aCypressClassStructure classVariableNames;
 		yourself.
 	aCypressClassStructure comment ifNotNil: [ :cmt | properties at: 'comment' put: cmt ].
+	aCypressClassStructure gs_options isEmpty ifFalse: [ properties at: 'gs_options' put: aCypressClassStructure gs_options ].
+	aCypressClassStructure gs_constraints isEmpty ifFalse: [ properties at: 'gs_constraints' put: aCypressClassStructure gs_constraints ].
 	properties
 		at: 'instvars' put: aCypressClassStructure instanceVariableNames;
 		at: 'name' put: aCypressClassStructure className;
 		at: 'pools' put: aCypressClassStructure poolDictionaryNames;
 		at: 'superclass' put: aCypressClassStructure superclassName;
-		at: 'gs_options' put: aCypressClassStructure gs_options;
-		at: 'gs_constraints' put: aCypressClassStructure gs_constraints;
 		yourself.
 	aCypressClassStructure subclassType isEmpty
 		ifTrue: [ properties at: 'type' put: 'normal' ]

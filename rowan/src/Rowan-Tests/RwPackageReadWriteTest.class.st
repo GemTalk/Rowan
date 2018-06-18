@@ -68,7 +68,6 @@ RwPackageReadWriteTest >> doTestReadWriteReadForFormat: format [
 RwPackageReadWriteTest >> doTestWriteRead: writePackageSet myWriteSpecification: myWriteSpecification forFormat: format [
 
 	| readPackageSet diff |
-self halt.
 	Rowan projectTools write
 		writePackageSet: writePackageSet
 		specification: myWriteSpecification.

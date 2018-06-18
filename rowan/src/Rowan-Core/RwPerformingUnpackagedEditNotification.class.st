@@ -5,6 +5,9 @@ Class {
 	#instVars : [
 		'informMessage'
 	],
+	#gs_options : [
+		'disallowGciStore'
+	],
 	#category : 'Rowan-Core'
 }
 

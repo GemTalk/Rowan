@@ -59,5 +59,3 @@ CypressClassDefinition >> printDefinitionOn: stream [
             store: self category asString 
 
 ]
-
-
