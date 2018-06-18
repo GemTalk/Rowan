@@ -152,6 +152,7 @@ CypressClassStructure >> fromClassDefinition: classDefinition [
 		subclassType: classDefinition subclassType;
 		gs_options: classDefinition gs_options;
 		gs_constraints: classDefinition gs_constraints
+
 ]
 
 { #category : 'accessing' }

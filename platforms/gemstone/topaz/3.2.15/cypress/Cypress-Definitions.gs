@@ -1373,6 +1373,26 @@ name
 
 category: 'initialization'
 method: CypressClassDefinition
+name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames 
+	classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames 
+	poolDictionaryNames: somePoolDictionaryNames gs_options: someGs_options gs_constraints: someGs_constraints
+	comment: aComment subclassType: aSubclassType
+
+	name := aClassName.
+	superclassName := aSuperclassName.
+	category := aCategory.
+	instVarNames := someInstanceVariableNames.
+	classInstVarNames := someClassInstanceVariableNames.
+	classVarNames := someClassVariableNames.
+	poolDictionaryNames := somePoolDictionaryNames.
+	gs_options := someGs_options.
+	gs_constraints := someGs_constraints.
+	comment := aComment.
+	subclassType := aSubclassType asString
+%
+
+category: 'initialization'
+method: CypressClassDefinition
 name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment subclassType: aSubclassType
 
 	name := aClassName.

@@ -8,9 +8,6 @@ Class {
 	#instVars : [
 		'requirementsMap'
 	],
-	#gs_options : [
-		'disallowGciStore'
-	],
 	#category : 'Cypress-Definitions'
 }
 
