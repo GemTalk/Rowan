@@ -263,6 +263,24 @@ RwGsLoadedSymbolDictClass >> updateCommentFromClass [
 ]
 
 { #category : 'private-updating' }
+RwGsLoadedSymbolDictClass >> updateConstraintsFromClass [
+	| propertyName oldValue newValue |
+	propertyName := 'gs_constraints'.
+	oldValue := self propertyAt: propertyName.
+	newValue := (handle _rwSortedConstraints collect: [:ar | {(ar at: 1) asString . (ar at: 2) name asString }])
+				asArray.
+	newValue isEmpty ifTrue: [newValue := self absentToken].
+
+	"Since the absent token is not equal to any other valid value, we can skip the identity check in this case."
+	oldValue = newValue
+		ifFalse: 
+			[newValue == self absentToken
+				ifTrue: [self removeProperty: propertyName]
+				ifFalse: [self propertyAt: propertyName put: newValue]]
+
+]
+
+{ #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> updateInstvarNamesFromClass [
 	"Order of instvars does not matter to Cypress (at least not in GemStone) so we keep the instvar names sorted."
 
@@ -333,8 +351,10 @@ RwGsLoadedSymbolDictClass >> updatePropertiesFromClassFor: aSymbolDictionaryRegi
 		updatePoolDictionaryNamesFromClass;
 		updateClassTypeFromClass;
 		updateOptionsFromClass;
+		updateConstraintsFromClass;
 		updateCommentFromClass;
 		updateCategoryFromClass
+
 ]
 
 { #category : 'private-updating' }

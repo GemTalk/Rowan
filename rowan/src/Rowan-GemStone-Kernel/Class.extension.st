@@ -6,22 +6,17 @@ Class >> _rwDefinitionOfConstraints [
  deprecated and not enforced, but may still be useful for some purposes.
  Returns a string of the form
      constraints: { <Array of instance-variable-symbol/class-name pairs> }
- or
-     constraints: <class name> "
+ "
 
-| result  aConstraint firstElement |
+| result firstElement constraintArray |
 result := String new.
 
 result add: 'constraints: '.
 ( constraints isKindOf: Array ) ifTrue: [
+	constraintArray := self _rwSortedConstraints.
     result addAll: '{ '.
     firstElement := true.
-    1 to: self instSize do: [ :x |
-      aConstraint := constraints atOrNil: x .
-      ((aConstraint ~~ nil _and: [aConstraint ~~ Object])
-          _and:[ superClass == nil
-            _or:[ (superClass _namedIvConstraintAt: x) ~~ aConstraint ]] )
-      ifTrue: [
+    constraintArray do: [ :ar |
         " if not the first constraint, prefix with a period to separate
           from the last constraint "
         firstElement ifFalse: [
@@ -30,34 +25,38 @@ result add: 'constraints: '.
         ifTrue: [
           firstElement := false
         ].
-        result add: '{ #'; add: (instVarNames at: x) ;
-              add: ' . '; add: aConstraint name; addLast: $} .
-      ]
-    ].
-    aConstraint:= self varyingConstraint .
-    ( (aConstraint ~~ Object) _and:
-        [(superClass varyingConstraint) ~~ aConstraint] )
-    ifTrue:[
-      firstElement ifFalse: [
-          result add: ' . '; lf; add: '                '
-      ]
-      ifTrue: [
-        firstElement := false
+        result add: '{ #'; add: (ar at: 1) ;
+              add: ' . '; add: (ar at: 2) name; addLast: $} .
       ].
-      result add: '   "the elements"  '; add: aConstraint name
-    ].
     result add: ' }'.
   ]
   ifFalse: [
-    constraints class class == Metaclass3 ifTrue: [
-      result add: constraints name.
-    ]
-    ifFalse: [
-      result add: ' nil'
-    ].
+   self error: 'not yet supported'
   ].
 
 ^result
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+Class >> _rwSortedConstraints [
+
+|   aConstraint constraintArray |
+( constraints isKindOf: Array ) ifTrue: [
+	constraintArray := {}.
+    1 to: self instSize do: [ :x |
+      aConstraint := constraints atOrNil: x .
+      ((aConstraint ~~ nil _and: [aConstraint ~~ Object])
+          _and:[ superClass == nil
+            _or:[ (superClass _namedIvConstraintAt: x) ~~ aConstraint ]] )
+      ifTrue: [ constraintArray add: {(instVarNames at: x) . aConstraint } ] ].
+	constraintArray := constraintArray sort: [:ar1 :ar2 | (ar1 at: 1) <= (ar2 at: 1) ].
+  ]
+  ifFalse: [
+   self error: 'not yet supported'
+  ].
+
+^constraintArray
 
 ]
 
