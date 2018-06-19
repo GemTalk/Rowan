@@ -273,7 +273,7 @@ RwGsLoadedSymbolDictClass >> updateConstraintsFromClass [
 			newValue := (sortedConstraints collect: [:ar | 
 					(ar isKindOf: Array )
 						ifTrue: [ {(ar at: 1) asString . (ar at: 2) name asString } ]
-						ifFales: [ 
+						ifFalse: [ 
 							"varyingConstraint"
 							ar name asString ] ]) asArray.
 			newValue isEmpty ifTrue: [newValue := self absentToken] ]
