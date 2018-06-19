@@ -39,6 +39,26 @@ RwGsClassPatch >> _classFormat: fmt forSubclassType: classType [
 						ifFalse: [self error: 'Unknown class type']]]
 ]
 
+{ #category : 'private' }
+RwGsClassPatch >> _gemStoneConstraintsFrom:	gs_constraints [
+	"reify the constraints array converting to references to instvar names and classes"
+
+	(gs_constraints isKindOf: Array)
+		ifTrue: [ 
+			gs_constraints isEmpty
+				ifTrue: [^ #() ]
+				ifFalse: [
+					| theConstraints |
+					 theConstraints := {}.
+					gs_constraints do: [ :ar | 
+						(ar isKindOf: Array)
+							ifTrue: [ theConstraints add: { (ar at: 1) . Rowan globalNamed: (ar at: 2) } ]
+							ifFalse: [ theConstraints add: (Rowan globalNamed: ar) ] ].
+					^ theConstraints ] ]
+		ifFalse: [ ^ Rowan globalNamed: gs_constraints ].
+
+]
+
 { #category : 'actions' }
 RwGsClassPatch >> addToNewClassesByName: aDictionary [
 
@@ -62,23 +82,12 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 
 	"Must be in-synch with RwGsLoadedClass>>updateClassTypeFromClass"
 
-	| type oldVersion createdClass gs_options gs_constraints theConstraints |
+	| type oldVersion createdClass gs_options theConstraints |
 	type := classDefinition classType.
 	oldVersion := self oldClassVersion.
 	gs_options := (classDefinition gs_options)
 		collect: [ :each | each asSymbol ].
-	gs_constraints := classDefinition gs_constraints.
-	(gs_constraints isKindOf: Array)
-		ifTrue: [ 
-			gs_constraints isEmpty
-				ifTrue: [ theConstraints := #() ]
-				ifFalse: [
-					 theConstraints := {}.
-					gs_constraints do: [ :ar | 
-						(ar isKindOf: Array)
-							ifTrue: [ theConstraints add: { (ar at: 1) . Rowan globalNamed: (ar at: 2) } ]
-							ifFalse: [ theConstraints add: (Rowan globalNamed: ar) ] ] ] ]
-		ifFalse: [ theConstraints := Rowan globalNamed: gs_constraints ].
+	theConstraints := self _gemStoneConstraintsFrom:	classDefinition gs_constraints.
 	createdClass := type = 'normal'
 		ifTrue: [ 
 			superclass

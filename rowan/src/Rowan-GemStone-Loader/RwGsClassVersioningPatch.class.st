@@ -93,7 +93,7 @@ patchedClassProperties: patchedClassPropertiesBlock patchedClassVars: patchedCla
 		newClassInstVars: anArrayOfClassInstVars
 		newPools: anArrayOfPoolDicts
 		newClassVars: anArrayOfClassVars
-		 newConstraints: aConstraint
+		newConstraints: (self _gemStoneConstraintsFrom: aConstraint)
 		suprBlock: [ :bool | supr := bool not ]
 		optsBlock: [ :bool | opts := bool not ]
 		ivsBlock: [ :bool | ivs := bool not ]
