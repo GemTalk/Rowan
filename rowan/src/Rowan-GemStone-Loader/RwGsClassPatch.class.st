@@ -68,12 +68,17 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 	gs_options := (classDefinition gs_options)
 		collect: [ :each | each asSymbol ].
 	gs_constraints := classDefinition gs_constraints.
-	gs_constraints isEmpty
-		ifTrue: [ theConstraints := #() ]
-		ifFalse: [
-			 theConstraints := {}.
-			gs_constraints do: [ :ar | 
-				theConstraints add: { (ar at: 1) . Rowan globalNamed: (ar at: 2) } ] ].
+	(gs_constraints isKindOf: Array)
+		ifTrue: [ 
+			gs_constraints isEmpty
+				ifTrue: [ theConstraints := #() ]
+				ifFalse: [
+					 theConstraints := {}.
+					gs_constraints do: [ :ar | 
+						(ar isKindOf: Array)
+							ifTrue: [ theConstraints add: { (ar at: 1) . Rowan globalNamed: (ar at: 2) } ]
+							ifFalse: [ theConstraints add: (Rowan globalNamed: ar) ] ] ] ]
+		ifFalse: [ theConstraints := Rowan globalNamed: gs_constraints ].
 	createdClass := type = 'normal'
 		ifTrue: [ 
 			superclass

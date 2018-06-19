@@ -143,9 +143,17 @@ RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass:
 		ifFalse: [ self error: 'poolDictionaries not supported yet' ].
 	loadedClass := self _loadedClassNamed: className ifAbsent: [  ].
 	theOptions := optionsArray collect: [:each | each asString ].
-	theConstraints := {}.
-	constraintsArray do: [:ar |
-		theConstraints add: { (ar at: 1) asString . (ar at: 2) name asString } ].
+	(constraintsArray isKindOf: Array)
+		ifTrue: [
+			theConstraints := {}.
+			constraintsArray do: [:ar |
+				(ar isKindOf: Array)
+					ifTrue: [ theConstraints add: { (ar at: 1) asString . (ar at: 2) name asString } ]
+					ifFalse: [ theConstraints add: ar name asString ] ] ]
+		ifFalse: [
+			theConstraints := constraintsArray
+				ifNil: [ #() ]
+				ifNotNil: [ constraintsArray ]].
 	loadedClass
 		ifNil: [ 
 			| classDef |
