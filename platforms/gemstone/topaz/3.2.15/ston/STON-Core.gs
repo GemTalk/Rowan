@@ -1185,7 +1185,7 @@ category: 'initialize-release'
 method: STONWriter
 initialize
   prettyPrint := false.
-  newLine := String with: Character cr.
+  newLine := String with: Character lf.
   level := 0.
   referencePolicy := #'normal'.
   jsonMode := false.

@@ -125,6 +125,14 @@ RwDefinition >> key [
 	self subclassResponsibility
 ]
 
+{ #category : 'copying' }
+RwDefinition >> postCopy [
+
+	super postCopy.
+	properties := properties copy
+
+]
+
 { #category : 'printing' }
 RwDefinition >> printOn: aStream [
 

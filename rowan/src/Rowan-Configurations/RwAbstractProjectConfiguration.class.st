@@ -42,7 +42,7 @@ RwAbstractProjectConfiguration class >> fromUrl: specNameOrUrl [
 		ifTrue: [ 
 			| client response |
 			GsSecureSocket disableCertificateVerificationOnClient.
-			client := (System myUserProfile symbolList objectNamed: 'ZnClient') new.
+			client := (Rowan globalNamed: 'ZnClient') new.
 			response := client
 				beOneShot;
 				enforceHttpSuccess: true;
@@ -53,13 +53,20 @@ RwAbstractProjectConfiguration class >> fromUrl: specNameOrUrl [
 ]
 
 { #category : 'instance creation' }
+RwAbstractProjectConfiguration class >> new [
+
+	^self basicNew initialize
+
+]
+
+{ #category : 'instance creation' }
 RwAbstractProjectConfiguration class >> newNamed: aName for: projectName [
 
 	^ self new
-		initialize;
 		name: aName;
 		projectName: projectName;
 		yourself
+
 ]
 
 { #category : 'private' }

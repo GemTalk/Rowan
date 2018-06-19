@@ -50,10 +50,12 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 
 	classExtension
 		ifFalse: [
-			registry
+			[ registry
 				addClassAssociation: (theSymbolDictionary associationAt: theClass name) 
 				forClass: theClass 
-				toPackageNamed: packageName ].
+				toPackageNamed: packageName ]
+					on: RwExistingAssociationWithSameKeyNotification
+					do: [:ex | ex resume ] ].
 
 	theBehavior := theClass.
 	instanceSelectors do: [:methodSelector |
@@ -141,5 +143,56 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 		for: theBehavior 
 		protocol: protocolString 
 		toPackageNamed: packageName
+
+]
+
+{ #category : 'smalltalk api' }
+RwPkgAdoptTool >> adoptSymbolDictionary: symbolDictionary intoPackageNamed: packageName [
+
+	"create loaded classes in the loaded package <packageName> for the unpackaged classes in <symbolDictionary>"
+
+	symbolDictionary keysAndValuesDo: [:className :object |
+		object isBehavior
+			ifTrue: [ 
+				object rowanPackageName = Rowan unpackagedName
+					ifTrue: [ self adoptClassNamed: className asString intoPackageNamed: packageName ] ] ]
+.
+
+]
+
+{ #category : 'smalltalk api' }
+RwPkgAdoptTool >> adoptSymbolDictionaryNamed: symDictName intoPackageNamed: packageName [
+
+	"create loaded classes in the loaded package <packageName> for the unpackaged classes in the symbol dictionary named <symDictName>"
+
+	^ self adoptSymbolDictionary: (Rowan globalNamed: symDictName) intoPackageNamed: packageName
+
+]
+
+{ #category : 'smalltalk api' }
+RwPkgAdoptTool >> adoptSymbolList: symbolList excluding: excludedSymbolDictionaries intoPackagesNamed: packageNameMap [
+
+	"create loaded classes for the unpackaged classes in each of the symbol dictionaries in symbolList, except for those listed in
+		<excludedSymbolDictionaries>. The loaded classes should be created in the package associated with the name of the symbol 
+		dictionary in <packageNameMap>"
+
+	symbolList do: [:symbolDict |
+		(excludedSymbolDictionaries includes: symbolDict)
+			ifFalse: [ self adoptSymbolDictionary: symbolDict intoPackageNamed: (packageNameMap at: symbolDict name asString) ] ]
+
+]
+
+{ #category : 'smalltalk api' }
+RwPkgAdoptTool >> adoptSymbolList: symbolList excludingSymbolDictsNamed: excludedSymbolDictionaryNames intoPackagesNamed: packageNameMap [
+
+	"create loaded classes for the unpackaged classes in each of the symbol dictionaries in symbolList, except for those named in
+		<excludedSymbolDictionaryNames>. The loaded classes should be created in the package associated with the name of the symbol 
+		dictionary in <packageNameMap>"
+
+	symbolList do: [:symbolDict |
+		| symDictName |
+		symDictName := symbolDict name asString.
+		(excludedSymbolDictionaryNames includes: symDictName)
+			ifFalse: [ self adoptSymbolDictionary: symbolDict intoPackageNamed: (packageNameMap at: symDictName) ] ]
 
 ]

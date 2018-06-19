@@ -1,6 +1,6 @@
 Extension { #name : 'CharacterCollection' }
 
-{ #category : '*ston-gemstonebase-core' }
+{ #category : '*ston-gemstonebase' }
 CharacterCollection >> isString [
   ^ true
 

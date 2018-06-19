@@ -30,6 +30,15 @@ RwProjectSpecification >> _myUserProfile [
   ^ System myUserProfile
 ]
 
+{ #category : 'converting' }
+RwProjectSpecification >> asDefinition [
+
+	"answer an RwProjectDefintion created using the reciever"
+
+	^RwProjectDefinition newForSpecification: self
+
+]
+
 { #category : 'testing' }
 RwProjectSpecification >> canCommit [
   ^ self repositoryUrl notNil and: [ self repoSpec canCommit ]
@@ -62,7 +71,15 @@ RwProjectSpecification >> commitLogForTool: aRwTool limit: logLimit [
 { #category : 'accessing' }
 RwProjectSpecification >> configsPath [
 
-	^ configsPath ifNil: [ configsPath := 'configs' ]
+	^ configsPath ifNil: [ configsPath := 'rowan/configs' ]
+
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> configsPath: anObject [
+
+   configsPath := anObject
+
 ]
 
 { #category : 'accessing' }
@@ -130,7 +147,9 @@ RwProjectSpecification >> initialize [
 
 	super initialize.
 	comment := ''.
-	specsPath := 'specs'.
+	configsPath := 'rowan/configs'.
+	repoPath := 'rowan/src'.
+	specsPath := 'rowan/specs'.
 	platformSpec := Dictionary new
 		at: 'gemstone' put: RwGemStoneSpecification new;
 		yourself.
@@ -142,13 +161,25 @@ RwProjectSpecification >> initialize [
 ]
 
 { #category : 'initialization' }
+RwProjectSpecification >> initializeForExport [
+
+	"before spec is exported, clear out any of the fields that are not to be included"
+
+	super initializeForExport.
+	platformSpec := nil.
+	repoSpec initializeForExport
+
+]
+
+{ #category : 'initialization' }
 RwProjectSpecification >> initializeForImport [
 
-	"if spec has been imorted, clear out any of the fields that represent local disk state"
+	"if spec has been imported, clear out any of the fields that represent local disk state"
 
 	super initializeForImport.
 	imageSpec := nil.
 	repoSpec initializeForImport
+
 ]
 
 { #category : 'accessing' }
@@ -180,7 +211,10 @@ RwProjectSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
 { #category : 'accessing' }
 RwProjectSpecification >> platformSpec [
 
-   ^platformSpec
+   ^platformSpec ifNil: [ 
+		platformSpec := Dictionary new
+			at: 'gemstone' put: RwGemStoneSpecification new;
+			yourself ].
 
 ]
 
@@ -238,7 +272,7 @@ RwProjectSpecification >> remote [
 { #category : 'accessing' }
 RwProjectSpecification >> repoPath [
 
-   ^repoPath
+   ^repoPath ifNil: [ repoPath := 'rowan/src' ]
 
 ]
 
@@ -303,7 +337,8 @@ RwProjectSpecification >> specName: anObject [
 { #category : 'accessing' }
 RwProjectSpecification >> specsPath [
 
-	^ specsPath ifNil: [ specsPath := 'specs' ]
+	^ specsPath ifNil: [ specsPath := 'rowan/specs' ]
+
 ]
 
 { #category : 'accessing' }

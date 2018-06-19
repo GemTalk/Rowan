@@ -149,7 +149,6 @@ CypressHierarchicalUrl >> printOn: aStream [
 
 { #category : 'parsing' }
 CypressHierarchicalUrl >> privateInitializeFromText: aString [
-
 	| remainder ind specifiedSchemeName |
 	remainder := aString.
 	schemeName

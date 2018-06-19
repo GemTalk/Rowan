@@ -5,6 +5,9 @@ Class {
 	#instVars : [
 		'interaction'
 	],
+	#gs_options : [
+		'disallowGciStore'
+	],
 	#category : 'GemStone-Interactions-Core'
 }
 

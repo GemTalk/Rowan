@@ -495,7 +495,13 @@ TonelParser >> typeDef [
 		self separator. 
 		self type. 
 		self separator. 
-		self try: [ self metadata ] 
+		self try: [ 
+			| typeMetadata normalizedMetadata |
+			typeMetadata := self metadata.
+			normalizedMetadata := Dictionary new.
+			typeMetadata keysAndValuesDo: [:key :value |
+				normalizedMetadata at: key asLowercase asSymbol put: value ].
+			normalizedMetadata ] 
 	} 
 	
 		

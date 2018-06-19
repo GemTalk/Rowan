@@ -133,7 +133,7 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 
 	| projectDefinition |
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
+		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		comment: comment;
 		packageNamesInLoadOrder: packageNames;
@@ -151,7 +151,7 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 ]
 
 { #category : 'private' }
-RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment format: format root: rootPath repoPath: repoPath [
+RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment format: format root: rootPath [
 
 	| projectDefinition projectTools |
 	projectTools := Rowan projectTools.
@@ -159,23 +159,22 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
-	projectDefinition
+	projectDefinition := (RwProjectDefinition newForGitBasedProjectNamed: projectName)
 		comment: comment;
+		defaultSymbolDictName: defaultSymbolDictName;
+		packageNames: packageNames;
 		yourself.
-	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
 
 	self
 		handleConfirmationDuring: [ 
 			projectTools create
-				createPackageProjectFor: projectDefinition
+				createProjectFor: projectDefinition
 				format: format
 				root: rootPath
-				repoPath: repoPath ].
+				configsPath: 'configs'
+				repoPath: 'src' 
+				specsPath: 'specs' ].
 
-	packageNames
-		do: [ :packageName | projectDefinition addPackageNamed: packageName ].
 	projectTools load loadProjectDefinition: projectDefinition
 
 ]
@@ -527,13 +526,14 @@ RwBrowserToolTest >> _standardProjectDefinition: projectName packageNames: packa
 
 	| projectDefinition |
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
+		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		comment: comment;
-		packageNamesInLoadOrder: packageNames;
+		packageNames: packageNames;
 		defaultUseSessionMethodsForExtensions: defaultUseSessionMethodsForExtensions;
 		yourself.
 	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
 
 	^ projectDefinition
+
 ]

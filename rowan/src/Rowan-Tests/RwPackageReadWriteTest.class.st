@@ -29,6 +29,17 @@ RwPackageReadWriteTest >> basicPackageSet [
 ]
 
 { #category : 'private' }
+RwPackageReadWriteTest >> basicTonelPackageSet [
+  "this is the package set used to generate the test data in the testRepositories dir"
+
+  ^ RwDiskRepositoryGenerator new
+		gs_options: #(instancesInvariant);
+		gs_constraints: { { 'instVar1'. 'Object' } };
+		generatePackageSet
+
+]
+
+{ #category : 'private' }
 RwPackageReadWriteTest >> doTestReadWriteReadForFormat: format [
 
 	| basicPackageSet readPackageSet myReadSpecification rowanSpec readPackageSet2 diff myWriteSpecification |
@@ -65,12 +76,13 @@ RwPackageReadWriteTest >> doTestWriteRead: writePackageSet myWriteSpecification:
 	diff := writePackageSet compareAgainstBase: readPackageSet.
 	self assert: diff isEmpty.
 	^ readPackageSet
+
 ]
 
 { #category : 'private' }
 RwPackageReadWriteTest >> doTestWriteReadForFormat: format [
   | writePackageSet myWriteSpecification rowanSpec |
-  writePackageSet := self basicPackageSet.
+  writePackageSet := format = 'tonel' ifTrue: [ self basicTonelPackageSet ] ifFalse: [ self basicPackageSet ].
   rowanSpec :=  officialRowanProjectInstance specification.
   myWriteSpecification := self
     setUpSpecificationForWriteTest: writePackageSet

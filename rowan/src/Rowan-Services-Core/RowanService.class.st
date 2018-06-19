@@ -153,11 +153,12 @@ RowanService >> stonStringFor: anObject [
 { #category : 'symbol dictionaries' }
 RowanService >> symbolDictionaryNamed: aName [
 
-	|  index |
-	index := System myUserProfile symbolList names indexOf: aName asSymbol.
+	| symbolList  index |
+	symbolList := Rowan image symbolList.
+	index :=symbolList names indexOf: aName asSymbol.
 	^index ~= 0
 		ifTrue:[
-			System myUserProfile symbolList at: index]
+			symbolList at: index]
 		ifFalse:[
 			self createSymbolDictionaryNamed: aName].
 

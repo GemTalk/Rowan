@@ -9,7 +9,7 @@ Class {
 
 { #category : 'accessing' }
 RowanServicePreferences class >> current [
-	^(System myUserProfile objectNamed: 'UserGlobals') 
+	^(Rowan globalNamed: 'UserGlobals') 
 		at: #RowanServicePrefs 
 		ifAbsentPut: [ self new ]
 

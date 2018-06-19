@@ -33,12 +33,6 @@ RowanInterface >> _projectTools [
 	^ Rowan projectTools
 ]
 
-{ #category : 'private' }
-RowanInterface >> _specification [
-
-	^ self _loadedProject specification
-]
-
 { #category : 'accessing' }
 RowanInterface >> classes [
 

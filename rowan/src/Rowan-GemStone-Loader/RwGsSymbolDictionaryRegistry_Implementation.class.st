@@ -216,7 +216,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 	| loadedPackage loadedClass |
 	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
 
-	registryInstance classRegistry
+	loadedClass := registryInstance classRegistry
 		at: class classHistory
 		ifAbsent: [ 
 			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
@@ -232,9 +232,16 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 	self 
 		_symbolDictionary: registryInstance _symbolDictionary 
 		at: assoc key 
-		ifPresent: [
-			"If there is an existing association, then we need to use the existing association which may have references
-				in compiled methods --- bootstrapping Rowan in Rowan is only valid use case"
+		ifPresent: [:theClass |
+			theClass ~~ class
+				ifTrue: [
+					(RwExistingAssociationWithSameKeyNotification new
+						errorMessage: 'Found an existing association in the ',  
+								registryInstance _symbolDictionary name asString printString, 
+								' symbol dictionary with a duplicate key ',
+								assoc key printString, 
+								' while attempting to add a new class' )
+						signal ].
 			(registryInstance _symbolDictionary associationAt: assoc key) value: class ]
 		ifAbsent: [
 			assoc value: class.

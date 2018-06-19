@@ -53,6 +53,34 @@ RwClassDefinition >> compareAgainstBaseForcingNewClassVersion: aDefinition [
 ]
 
 { #category : '*rowan-gemstone-core' }
+RwClassDefinition >> gs_constraints [
+
+	^self properties
+				at: 'gs_constraints'
+				ifAbsent: [ #() ]
+
+]
+
+{ #category : '*rowan-gemstone-core' }
+RwClassDefinition >> gs_constraints: constraintsArray [
+
+	(constraintsArray _isArray and: [ constraintsArray isEmpty not ])
+		ifTrue: [ 
+			self properties
+				at: 'gs_constraints'
+				put: constraintsArray ]
+]
+
+{ #category : '*rowan-gemstone-core' }
+RwClassDefinition >> gs_options [
+
+	^self properties
+				at: 'gs_options'
+				ifAbsent: [ #() ]
+
+]
+
+{ #category : '*rowan-gemstone-core' }
 RwClassDefinition >> gs_options: optionsArray [
 
 	(optionsArray _isArray and: [ optionsArray isEmpty not ])

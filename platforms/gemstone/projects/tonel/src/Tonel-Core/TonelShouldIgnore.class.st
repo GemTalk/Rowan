@@ -8,5 +8,8 @@ Class {
 	#name : 'TonelShouldIgnore',
 	#superclass : 'Notification',
 	#type : 'variable',
+	#gs_options : [
+		'disallowGciStore'
+	],
 	#category : 'Tonel-Core'
 }

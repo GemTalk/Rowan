@@ -186,7 +186,7 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	self
 		_newSubclassWithSuperclass: newSuperclassAssoc value
 		isEquivalentToSubclass: existingClass
-		newOpts: ((afterClassDefinition propertyAt: 'gs_options' ifAbsent: [ #() ]) collect: [:each | each asSymbol])
+		newOpts: (afterClassDefinition gs_options collect: [:each | each asSymbol])
 		newFormat: newFormat
 		newInstVars: afterClassDefinition instVarNames
 		newClassInstVars: afterClassDefinition classInstVarNames

@@ -101,14 +101,6 @@ RwSpecification >> projectUrl: ignored [
   
 ]
 
-{ #category : '*rowan-gemstone-core' }
-RwSpecification >> register [
-
-	| newLoadedProject |
-	newLoadedProject := RwGsLoadedSymbolDictProject newForLoadSpecification: self.
-	Rowan image addLoadedProject: newLoadedProject
-]
-
 { #category : 'accessing' }
 RwSpecification >> version [
 	"answer the version of the class --- used to mark the version of the class for objects written to disk"

@@ -46,3 +46,14 @@ RwGsMethodDeletionExtensionSymbolDictPatch >> primeBehaviorNewClasses: createdCl
 		ifTrue: [ class class ]
 		ifFalse: [ class ]
 ]
+
+{ #category : 'accessing' }
+RwGsMethodDeletionExtensionSymbolDictPatch >> symbolDictionary [
+        "For deleting methods, we have to find the symbol dictionary where the loaded method is currently stored ... "
+
+        Rowan image 
+                loadedMethodAndSymbolDicitonaryForMethod: self compiledMethod 
+                ifPresent: [ :symbolDict :loadedMethod | ^ symbolDict ]
+                ifAbsent: [ self error: 'internal error - no symbol dictionary found for the method ', methodDefinition selector printString ]
+
+]

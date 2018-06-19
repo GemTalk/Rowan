@@ -6,5 +6,8 @@ Class {
 	#name : 'TonelParseError',
 	#superclass : 'Error',
 	#type : 'variable',
+	#gs_options : [
+		'disallowGciStore'
+	],
 	#category : 'Tonel-Core'
 }

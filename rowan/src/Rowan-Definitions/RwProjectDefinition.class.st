@@ -8,6 +8,29 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwProjectDefinition class >> newForDiskBasedProjectNamed: aString [
+
+	| spec |
+	spec := RwSimpleProjectSpecification new
+		specName: aString;
+		repoSpec: RwDiskRepositorySpecification new;
+		yourself.
+	^ self newForSpecification: spec
+
+]
+
+{ #category : 'instance creation' }
+RwProjectDefinition class >> newForGitBasedProjectNamed: aString [
+
+	| spec |
+	spec := RwSimpleProjectSpecification new
+		specName: aString;
+		yourself.
+	^ self newForSpecification: spec
+
+]
+
+{ #category : '*rowan-deprecated' }
 RwProjectDefinition class >> newForGitPackageProjectNamed: aString [
 
 	| spec |
@@ -104,6 +127,49 @@ RwProjectDefinition >> compareAgainstBase: aDefinition [
 	^ modification
 ]
 
+{ #category : 'properties' }
+RwProjectDefinition >> configsPath [
+
+	^ self specification configsPath
+
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> configsPath: aDirectoryPathString [
+
+	self specification configsPath: aDirectoryPathString
+
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> configurationTemplate [
+
+	"Return a generic RwProjectLoadConfiguration based on the list of packages in the reciever"
+
+	| config groupNames |
+	config := RwProjectLoadConfiguration new
+		name: 'Default';
+		projectName: self specification specName;
+		yourself.
+	groupNames := self specification defaultGroupNames.
+	groupNames
+		do: [:groupName |
+			config definedGroupNames
+				at: groupName 
+				put: {} ].
+	config conditionalPackages
+		at: { 'common' }
+		put: (Dictionary new
+				at: (groupNames at: 1)
+					put: (Dictionary new
+								at: #packageNames
+								put: self packageNames;
+								yourself);
+				yourself).
+	^ config
+
+]
+
 { #category : 'accessing' }
 RwProjectDefinition >> definitionWithKey: aKey ifAbsent: absentBlock [
 
@@ -162,7 +228,15 @@ RwProjectDefinition >> packageNames [
   ^ self packages keys asArray
 ]
 
-{ #category : 'properties' }
+{ #category : 'accessing' }
+RwProjectDefinition >> packageNames: packageNames [
+
+	packageNames
+		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
+
+]
+
+{ #category : '*rowan-deprecated' }
 RwProjectDefinition >> packageNamesInLoadOrder: packageNamesInLoadOrder [
 
 	packageNamesInLoadOrder
@@ -179,6 +253,14 @@ RwProjectDefinition >> packages [
 RwProjectDefinition >> packages: aPackageDefinitionDictionary [
 
 	packages := aPackageDefinitionDictionary
+]
+
+{ #category : 'copying' }
+RwProjectDefinition >> postCopy [
+
+	super postCopy.
+	packages := packages copy
+
 ]
 
 { #category : 'printing' }
@@ -211,9 +293,10 @@ RwProjectDefinition >> repoPath [
 ]
 
 { #category : 'properties' }
-RwProjectDefinition >> repoPath: repoPath [
+RwProjectDefinition >> repoPath: aDirectoryPathString [
 
-	self specification repoPath: repoPath
+	self specification repoPath: aDirectoryPathString
+
 ]
 
 { #category : 'properties' }
@@ -250,6 +333,13 @@ RwProjectDefinition >> specification [
 RwProjectDefinition >> specsPath [
 
 	^ self specification specsPath
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> specsPath: aDirectoryPathString [
+
+	self specification specsPath: aDirectoryPathString
+
 ]
 
 { #category : 'properties' }
