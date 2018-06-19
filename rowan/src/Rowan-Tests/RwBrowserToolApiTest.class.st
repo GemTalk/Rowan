@@ -292,7 +292,7 @@ RwBrowserToolApiTest >> testCreateClassWithOptions [
 	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
 	self assert: (testSymDict at: className) == testClass.
 
-	self assert: testClass new isInvariant
+	self assert: testClass instancesInvariant
 
 ]
 
