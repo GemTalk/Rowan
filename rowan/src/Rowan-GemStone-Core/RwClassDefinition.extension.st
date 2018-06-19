@@ -62,12 +62,13 @@ RwClassDefinition >> gs_constraints [
 ]
 
 { #category : '*rowan-gemstone-core' }
-RwClassDefinition >> gs_constraints: anArray [
+RwClassDefinition >> gs_constraints: constraintsArray [
 
-	^self properties
+	(constraintsArray _isArray and: [ constraintsArray isEmpty not ])
+		ifTrue: [ 
+			self properties
 				at: 'gs_constraints'
-				put: anArray
-
+				put: constraintsArray ]
 ]
 
 { #category : '*rowan-gemstone-core' }
