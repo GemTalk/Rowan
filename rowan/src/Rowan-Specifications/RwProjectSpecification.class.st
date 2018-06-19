@@ -114,12 +114,18 @@ RwProjectSpecification >> export [
 
 { #category : 'exporting' }
 RwProjectSpecification >> exportToUrl: fileUrl [
+	^ self exportToUrl: fileUrl as: self specName , '.ston'
+
+]
+
+{ #category : 'exporting' }
+RwProjectSpecification >> exportToUrl: fileUrl as: fileName [
   | url |
   url := RwUrl fromString: fileUrl.
   url schemeName = 'file'
     ifTrue: [ 
       CypressFileUtilities current
-        writeStreamFor: self specName , '.ston'
+        writeStreamFor: fileName
         in: url pathForDirectory
         do: [ :stream | 
           | string |
