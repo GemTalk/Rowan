@@ -93,7 +93,7 @@ patchedClassProperties: patchedClassPropertiesBlock patchedClassVars: patchedCla
 		newClassInstVars: anArrayOfClassInstVars
 		newPools: anArrayOfPoolDicts
 		newClassVars: anArrayOfClassVars
-		newConstraints: (self _gemStoneConstraintsFrom: aConstraint)
+		newConstraints: aConstraint
 		suprBlock: [ :bool | supr := bool not ]
 		optsBlock: [ :bool | opts := bool not ]
 		ivsBlock: [ :bool | ivs := bool not ]
@@ -308,6 +308,7 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 		newClassInstVars: afterClassDefinition classInstVarNames
 		newPools: afterClassDefinition poolDictionaryNames
 		newClassVars: afterClassDefinition classVarNames
+		newConstraints: (self _gemStoneConstraintsFrom: afterClassDefinition gs_constraints)
 		patchedClassProperties: [ 
 			aRwGsPatchSet
 				addPatchedClassProperties: afterClassDefinition
