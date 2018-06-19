@@ -4086,6 +4086,7 @@ RwRowanProjectIssuesTest >> testIssue91 [
 		poolDictionaries: #()
 		category: 'Simple Things'
 		packageName: 'Issue91-Core'
+		constraints: #()
 		options: #().
 
 	self assert: newClass ~~ testClass.
