@@ -134,7 +134,7 @@ RwPrjBrowserTool >> _projectNamed: projectName [
 { #category : 'class browsing' }
 RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category packageName: packageName constraints: constraintsArray options: optionsArray [
 
-	| loadedPackage loadedProject loadedClass |
+	| loadedPackage loadedProject loadedClass theOptions theConstraints |
 	loadedPackage := self
 		_loadedPackageNamed: packageName
 		ifAbsent: [ self error: 'No package named ' , packageName printString , ' found' ].
@@ -142,6 +142,10 @@ RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass:
 	anArrayOfPoolDicts isEmpty
 		ifFalse: [ self error: 'poolDictionaries not supported yet' ].
 	loadedClass := self _loadedClassNamed: className ifAbsent: [  ].
+	theOptions := optionsArray collect: [:each | each asString ].
+	theConstraints := {}.
+	constraintsArray do: [:ar |
+		theConstraints add: { (ar at: 1) asString . (ar at: 2) name asString } ].
 	loadedClass
 		ifNil: [ 
 			| classDef |
@@ -156,8 +160,8 @@ RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass:
 				comment: nil
 				pools: #()
 				type: type.
-			classDef gs_options: optionsArray.
-			classDef gs_constraints: constraintsArray.
+			classDef gs_options: theOptions.
+			classDef gs_constraints: theConstraints.
 			self createClass: classDef inPackageNamed: packageName ]
 		ifNotNil: [ 
 			self class edit
@@ -172,8 +176,8 @@ RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass:
 						instVarNames: anArrayOfStrings;
 						classVarNames: anArrayOfClassVars;
 						classInstVarNames: anArrayOfClassInstVars;
-						gs_options: optionsArray;
-						gs_constraints: constraintsArray;
+						gs_options: theOptions;
+						gs_constraints: theConstraints;
 						category: category;
 						yourself.
 					loadedClass packageName = packageName
