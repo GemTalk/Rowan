@@ -264,12 +264,23 @@ RwGsLoadedSymbolDictClass >> updateCommentFromClass [
 
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> updateConstraintsFromClass [
-	| propertyName oldValue newValue |
+	| propertyName oldValue newValue sortedConstraints |
 	propertyName := 'gs_constraints'.
 	oldValue := self propertyAt: propertyName.
-	newValue := (handle _rwSortedConstraints collect: [:ar | {(ar at: 1) asString . (ar at: 2) name asString }])
-				asArray.
-	newValue isEmpty ifTrue: [newValue := self absentToken].
+	sortedConstraints := handle _rwSortedConstraints.
+	(sortedConstraints isKindOf: Array ) 
+		ifTrue: [
+			newValue := (sortedConstraints collect: [:ar | 
+					(ar isKindOf: Array )
+						ifTrue: [ {(ar at: 1) asString . (ar at: 2) name asString } ]
+						ifFales: [ 
+							"varyingConstraint"
+							ar name asString ] ]) asArray.
+			newValue isEmpty ifTrue: [newValue := self absentToken] ]
+		ifFalse: [
+			newValue :=  sortedConstraints 
+				ifNil: [ self absentToken ]
+				ifNotNil: [ sortedConstraints ] ].
 
 	"Since the absent token is not equal to any other valid value, we can skip the identity check in this case."
 	oldValue = newValue

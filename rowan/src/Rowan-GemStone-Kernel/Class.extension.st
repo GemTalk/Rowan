@@ -25,13 +25,23 @@ result add: 'constraints: '.
         ifTrue: [
           firstElement := false
         ].
-        result add: '{ #'; add: (ar at: 1) ;
-              add: ' . '; add: (ar at: 2) name; addLast: $} .
+		(ar  isKindOf: Array ) 
+			ifTrue: [
+				result add: '{ #'; add: (ar at: 1) ;
+					add: ' . '; add: (ar at: 2) name; addLast: $} ]
+			ifFalse: [ 
+				"varyingConstraint"
+				result add: ar name ].
       ].
     result add: ' }'.
   ]
   ifFalse: [
-   self error: 'not yet supported'
+    constraints class class == Metaclass3 ifTrue: [
+      result add: constraints name.
+    ]
+    ifFalse: [
+      result add: ' nil'
+    ].
   ].
 
 ^result
@@ -51,9 +61,19 @@ Class >> _rwSortedConstraints [
             _or:[ (superClass _namedIvConstraintAt: x) ~~ aConstraint ]] )
       ifTrue: [ constraintArray add: {(instVarNames at: x) . aConstraint } ] ].
 	constraintArray := constraintArray sort: [:ar1 :ar2 | (ar1 at: 1) <= (ar2 at: 1) ].
+
+    aConstraint:= self varyingConstraint .
+    ( (aConstraint ~~ Object) _and:
+        [(superClass varyingConstraint) ~~ aConstraint] )
+		ifTrue: [ constraintArray add: aConstraint ]
   ]
   ifFalse: [
-   self error: 'not yet supported'
+    constraints class class == Metaclass3 ifTrue: [
+      ^ constraints
+    ]
+    ifFalse: [
+      ^nil
+    ].
   ].
 
 ^constraintArray
