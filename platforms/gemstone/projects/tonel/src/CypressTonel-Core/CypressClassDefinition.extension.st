@@ -70,6 +70,25 @@ CypressClassDefinition class >> name: aClassName superclassName: aSuperclassName
 ]
 
 { #category : '*cypresstonel-core' }
+CypressClassDefinition class >> name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment type: type [
+  | st |
+  st := type.
+  st == #'normal'
+    ifTrue: [ st := '' ].
+  ^ self
+    name: aClassName
+    superclassName: aSuperclassName
+    category: aCategory
+    instVarNames: someInstanceVariableNames
+    classInstVarNames: someClassInstanceVariableNames
+    classVarNames: someClassVariableNames
+    poolDictionaryNames: somePoolDictionaryNames
+    comment: aComment
+    subclassType: st
+
+]
+
+{ #category : '*cypresstonel-core' }
 CypressClassDefinition class >> name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames 
 	classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames 
 	poolDictionaryNames: somePoolDictionaryNames gs_options: gs_options gs_constraints: gs_constraints comment: aComment 
@@ -91,25 +110,6 @@ CypressClassDefinition class >> name: aClassName superclassName: aSuperclassName
 		gs_constraints: gs_constraints
 		comment: (self normalizeLineEndingsOf: aComment)
 		subclassType: subclassType asString
-
-]
-
-{ #category : '*cypresstonel-core' }
-CypressClassDefinition class >> name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames poolDictionaryNames: somePoolDictionaryNames comment: aComment type: type [
-  | st |
-  st := type.
-  st == #'normal'
-    ifTrue: [ st := '' ].
-  ^ self
-    name: aClassName
-    superclassName: aSuperclassName
-    category: aCategory
-    instVarNames: someInstanceVariableNames
-    classInstVarNames: someClassInstanceVariableNames
-    classVarNames: someClassVariableNames
-    poolDictionaryNames: somePoolDictionaryNames
-    comment: aComment
-    subclassType: st
 
 ]
 

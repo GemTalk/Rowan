@@ -53,7 +53,10 @@ RwGsClassVersioningPatch class >> for: aClassModification inPackage: aPackageDef
 ]
 
 { #category : 'private' }
-RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars patchedClassProperties: patchedClassPropertiesBlock patchedClassVars: patchedClassVarsBlock patchedClassNewVersions: patchedClassNewVersionsBlock [
+RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass 
+newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars 
+newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars newConstraints: aConstraint
+patchedClassProperties: patchedClassPropertiesBlock patchedClassVars: patchedClassVarsBlock patchedClassNewVersions: patchedClassNewVersionsBlock [
 
 	" based on Class>>_equivalentSubclass:superCls:name:newOpts:newFormat:newInstVars:newClassInstVars:newPools:newClassVars:inDict:isKernel: and ultimately needs to be rolled back into base, so that class creation and Rowan use the same new class version rules.
 "
@@ -79,7 +82,7 @@ RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivale
         of the formats must match exactly.
 "
 
-	| supr opts ivs civs poolds cvars cvarsPatched |
+	| supr opts ivs civs poolds cvars cons cvarsPatched |
 	cvarsPatched := anArrayOfClassVars isEmpty not.
 	self
 		_newSubclassWithSuperclass: newSuperclass
@@ -90,13 +93,15 @@ RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivale
 		newClassInstVars: anArrayOfClassInstVars
 		newPools: anArrayOfPoolDicts
 		newClassVars: anArrayOfClassVars
+		newConstraints: aConstraint
 		suprBlock: [ :bool | supr := bool not ]
 		optsBlock: [ :bool | opts := bool not ]
 		ivsBlock: [ :bool | ivs := bool not ]
 		civsBlock: [ :bool | civs := bool not ]
 		poolsBlock: [ :bool | poolds := bool not ]
-		cvarsBlock: [ :bool | cvars := bool not ].
-	(supr or: [ opts or: [ ivs or: [ civs or: [ poolds ] ] ] ])
+		cvarsBlock: [ :bool | cvars := bool not ]
+		consBlock:  [ :bool | cons := bool not ].
+	(supr or: [ opts or: [ ivs or: [ civs or: [ poolds or: [ cons ] ] ] ] ])
 		ifTrue: [ 
 			"new class version means that class vars will be patched (for free) before methods compiled"
 			patchedClassNewVersionsBlock value.
@@ -108,10 +113,14 @@ RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivale
 		ifFalse: [ 
 			"class property changes that do not affect method compilation"
 			patchedClassPropertiesBlock value ]
+
 ]
 
 { #category : 'private' }
-RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars suprBlock: suprBlock optsBlock: optsBlock ivsBlock: ivsBlock civsBlock: civsBlock poolsBlock: poolsBlock cvarsBlock: cvarsBlock [
+RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass 
+newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars 
+newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars newConstraints: aConstraint 
+suprBlock: suprBlock optsBlock: optsBlock ivsBlock: ivsBlock civsBlock: civsBlock poolsBlock: poolsBlock cvarsBlock: cvarsBlock consBlock: consBlock [
 
 	" based on Class>>_equivalentSubclass:superCls:name:newOpts:newFormat:newInstVars:newClassInstVars:newPools:newClassVars:inDict:isKernel: and ultimately needs to be rolled back into base, so that class creation and Rowan use the same new class version rules.
 "
@@ -146,7 +155,9 @@ RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivale
 	ivsBlock value: (oldClass _instVarsEqual: anArrayOfInstvarNames).
 	civsBlock value: (oldClass class _instVarsEqual: anArrayOfClassInstVars).
 	poolsBlock value: (oldClass _poolDictsEqual: anArrayOfPoolDicts).
-	cvarsBlock value: (oldClass _classVarsChangableTo: anArrayOfClassVars copy)
+	cvarsBlock value: (oldClass _classVarsChangableTo: anArrayOfClassVars copy).
+	consBlock value: (aConstraint size = 0 or: [oldClass _constraintsEqual: aConstraint ])
+
 ]
 
 { #category : 'patching' }
@@ -192,6 +203,7 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 		newClassInstVars: afterClassDefinition classInstVarNames
 		newPools: afterClassDefinition poolDictionaryNames
 		newClassVars: afterClassDefinition classVarNames
+		newConstraints: (self _gemStoneConstraintsFrom: afterClassDefinition gs_constraints)
 		patchedClassProperties: [ 
 			aRwGsPatchSet
 				addPatchedClassProperties: afterClassDefinition
