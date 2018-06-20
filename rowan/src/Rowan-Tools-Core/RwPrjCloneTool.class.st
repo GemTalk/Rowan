@@ -63,8 +63,19 @@ The project project has been registered with Rowan at the existing location .'.
 { #category : 'smalltalk api' }
 RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath useSsh: useSsh [
 
+	^ self cloneSpecification: aRwSpecification gitRootPath: gitRootPath useSsh: useSsh registerProject: true
+
+]
+
+{ #category : 'smalltalk api' }
+RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPath useSsh: useSsh registerProject: registerProject [
+
 	| gitTool response projectUrl gitRepoPath cloneUrl cloneOption checkout segments |
-	self specification: aRwSpecification.
+	registerProject
+		ifTrue: [ 
+			"Register project show that is shows up as a loaded project in project list ... ready to be explicitly loaded"
+			self specification: aRwSpecification ]
+		ifFalse: [ specification := aRwSpecification ].
 	gitRepoPath := gitRootPath , '/' , aRwSpecification specName.
 	self
 		_validateForGitRootPathForSpecification: gitRootPath

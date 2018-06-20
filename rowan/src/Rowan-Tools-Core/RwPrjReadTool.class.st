@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'private' }
-RwPrjReadTool >> _readProjectSetForProjectDefinition: projectDefinition packageNames: packageNames fromRepo: repo [
+RwPrjReadTool >> _readProjectDefinition: projectDefinition packageNames: packageNames fromRepo: repo [
 
 	projectDefinition packageNames do: [:packageName | 
 		(packageNames includes: packageName) 
@@ -26,9 +26,31 @@ RwPrjReadTool >> _readProjectSetForProjectDefinition: projectDefinition packageN
 				readPackageStructure.
 			packageDefinition := reader packageStructure rwSnapshot.
 			projectDefinition addOrUpdatePackage: packageDefinition ].
+	^ projectDefinition
+
+]
+
+{ #category : 'private' }
+RwPrjReadTool >> _readProjectSetForProjectDefinition: projectDefinition packageNames: packageNames fromRepo: repo [
+
+	self _readProjectDefinition: projectDefinition packageNames: packageNames fromRepo: repo.
 	^ RwProjectSetDefinition new
 		addProject: projectDefinition;
 		yourself
+
+]
+
+{ #category : 'smalltalk api' }
+RwPrjReadTool >> readProjectDefinition: projectDefinition [
+	"read all of the packages in the existing Rowan project associated with the given project definition"
+
+	|  repo packageNames |
+	repo := projectDefinition repositoryUrl asRwRepository.
+	packageNames := repo packageNames.
+	^ self 
+		_readProjectDefinition: projectDefinition 
+		packageNames: packageNames
+		fromRepo: repo
 
 ]
 
