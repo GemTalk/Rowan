@@ -149,8 +149,7 @@ RwPrjCreateTool >> createGitBasedProjectDefinition: projectName packageNames: pa
 { #category : 'project definition creation' }
 RwPrjCreateTool >> createProjectDefinitionFromSpecUrl: fileUrlOrString [
 	"Answer a project definition based on the given <fileUrlOrString> 
-		<fileUrlOrString> is expected to be an RwFileUrl for a project spec _in_ an existing Rowan project.
-	Read the packages from disk into the project definition"
+		<fileUrlOrString> is expected to be an RwFileUrl for a project spec _in_ an existing Rowan project"
 
 	| fileUrl spec specsPath specFilePath index projectRootPath |
 	fileUrl := fileUrlOrString asRwUrl.
@@ -168,8 +167,7 @@ RwPrjCreateTool >> createProjectDefinitionFromSpecUrl: fileUrlOrString [
 { #category : 'project definition creation' }
 RwPrjCreateTool >> createProjectDefinitionFromSpecUrl: fileUrlOrString projectRootPath: projectRootPath [
 	"Answer a project definition based on the spec given in <fileUrlOrString> 
-		<projectRootPath> is the path to the root directory of the Rowan project.
-	Read the packages from disk into the project definition"
+		<projectRootPath> is the path to the root directory of the Rowan project"
 
 	| path fileUrl spec projectDefinition |
 	fileUrl := fileUrlOrString asRwUrl.
@@ -191,10 +189,24 @@ RwPrjCreateTool >> createProjectDefinitionFromSpecUrl: fileUrlOrString projectRo
 ]
 
 { #category : 'loaded project creation' }
+RwPrjCreateTool >> createProjectFor: projectDefinition [
+
+	"Create a new loaded project based on the given project definition. If the project exists on disk it will be used, if the project 
+		does not exist on disk it will be created."
+
+	"If project does not exist on disk, create project on disk using tonel format"
+
+	^ self createProjectFor: projectDefinition format: 'tonel'
+
+]
+
+{ #category : 'loaded project creation' }
 RwPrjCreateTool >> createProjectFor: projectDefinition format: format [
 
 	"Create a new loaded project based on the given project definition. If the project exists on disk it will be used, if the project 
 		does not exist on disk it will be created."
+
+	"format is only used if project does not exist on disk"
 
 	| projectName rootRepoPath dirPath useGit utils repositoryUrl |
 	projectName := projectDefinition name.
@@ -265,5 +277,17 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format root: root
 		repositoryRootPath: rootPath , utils pathNameDelimiter , projectName;
 		projectOwnerId: Rowan image currentUserId.
 	^ self createProjectFor: projectDefinition format: format
+
+]
+
+{ #category : 'loaded project creation' }
+RwPrjCreateTool >> createProjectFromSpecUrl: fileUrlOrString [
+
+	"Create a new loaded project based on the given <fileUrlOrString>. If the project exists on disk it will be used, if the project 
+		does not exist on disk it will be created."
+
+	| projectDefinition |
+	projectDefinition := self createProjectDefinitionFromSpecUrl: fileUrlOrString.
+	^ self createProjectFor: projectDefinition
 
 ]
