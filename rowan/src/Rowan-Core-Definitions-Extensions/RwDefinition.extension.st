@@ -21,5 +21,3 @@ RwDefinition >> comparePropertiesAgainstBase: aDefinition [
 	^modification
 
 ]
-
-

@@ -8,4 +8,3 @@ Rowan class >> initialize [
 	configuration := self platform defaultConfiguration.
 	self platform initialize
 ]
-

@@ -1,1 +1,1 @@
-Package { #name : 'Rowan-GemStone-Definitions-Extensions' }
+Package { #name : 'Rowan-Core-Definitions-Extensions' }

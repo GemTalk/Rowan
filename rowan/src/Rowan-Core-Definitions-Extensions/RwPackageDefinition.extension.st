@@ -24,4 +24,3 @@ RwPackageDefinition >> compareAgainstBase: aDefinition [
 		classExtensionsModification: classExtensionsModification.
 	^modification
 ]
-

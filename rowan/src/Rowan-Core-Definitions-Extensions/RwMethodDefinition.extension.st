@@ -71,5 +71,3 @@ RwMethodDefinition >> compareSourceAgainstBaseForNewClassVersion: aDefinition [
 				newValue: after).
 	^ modification
 ]
-
-

@@ -15,5 +15,3 @@ RwPackageSetDefinition >> compareAgainstBase: aDefinition [
 		updateForMethodMoves.
 	^ result
 ]
-
-

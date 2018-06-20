@@ -16,5 +16,3 @@ RwProjectDefinition >> compareAgainstBase: aDefinition [
 	modification packagesModification: packagesModification.
 	^ modification
 ]
-
-

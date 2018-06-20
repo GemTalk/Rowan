@@ -12,4 +12,3 @@ RwProjectSetDefinition >> compareAgainstBase: aDefinition [
 		elementClass: RwProjectDefinition.
 	^ result
 ]
-

@@ -1,6 +1,13 @@
 Extension { #name : 'RwProjectDefinition' }
 
 { #category : '*rowan-definitions-deprecated' }
+RwProjectDefinition >> packageNamesInLoadOrder: packageNamesInLoadOrder [
+
+	packageNamesInLoadOrder
+		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
+]
+
+{ #category : '*rowan-definitions-deprecated' }
 RwProjectDefinition class >> newForGitPackageProjectNamed: aString [
 
 	| spec |
@@ -10,11 +17,3 @@ RwProjectDefinition class >> newForGitPackageProjectNamed: aString [
 	^ self newForSpecification: spec
 
 ]
-
-{ #category : '*rowan-definitions-deprecated' }
-RwProjectDefinition >> packageNamesInLoadOrder: packageNamesInLoadOrder [
-
-	packageNamesInLoadOrder
-		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
-]
-

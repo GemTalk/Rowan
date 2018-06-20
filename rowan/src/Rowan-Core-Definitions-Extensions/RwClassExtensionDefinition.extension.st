@@ -11,5 +11,3 @@ RwClassExtensionDefinition >> _modificationClass [
 
 	^ RwClassExtensionModification
 ]
-
-

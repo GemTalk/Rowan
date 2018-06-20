@@ -7,4 +7,3 @@ RwFileUrl >> asSpecification [
   ^ RwSpecification fromUrl: self
 
 ]
-

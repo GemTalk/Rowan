@@ -1,14 +1,4 @@
-Extension { #name : 'RowanProjectSpecification' }
-
-{ #category : '*rowan-gemstone-specifications-extensions' }
-RwProjectSpecification >> platformSpec [
-
-   ^platformSpec ifNil: [ 
-		platformSpec := Dictionary new
-			at: 'gemstone' put: RwGemStoneSpecification new;
-			yourself ].
-
-]
+Extension { #name : 'RwProjectSpecification' }
 
 { #category : '*rowan-gemstone-specifications-extensions' }
 RwProjectSpecification >> initialize [
@@ -28,3 +18,12 @@ RwProjectSpecification >> initialize [
 
 ]
 
+{ #category : '*rowan-gemstone-specifications-extensions' }
+RwProjectSpecification >> platformSpec [
+
+   ^platformSpec ifNil: [ 
+		platformSpec := Dictionary new
+			at: 'gemstone' put: RwGemStoneSpecification new;
+			yourself ].
+
+]
