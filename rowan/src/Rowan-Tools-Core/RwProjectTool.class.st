@@ -5,13 +5,6 @@ Class {
 }
 
 { #category : 'commands' }
-RwProjectTool class >> adapt [
-
-	^ RwPrjAdaptTool new
-
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> adopt [
 
 	^ RwPrjAdoptTool new
@@ -103,6 +96,13 @@ RwProjectTool class >> query [
 { #category : 'commands' }
 RwProjectTool class >> read [
   ^ RwPrjReadTool new
+]
+
+{ #category : 'commands' }
+RwProjectTool class >> reconcile [
+
+	^ RwPrjReconcileTool new
+
 ]
 
 { #category : 'commands' }
