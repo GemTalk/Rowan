@@ -17,19 +17,6 @@ RwProjectSetDefinition >> addProject: aDefinition [
 	self addDefinition: aDefinition
 ]
 
-{ #category : 'comparing' }
-RwProjectSetDefinition >> compareAgainstBase: aDefinition [
-
-	| result |
-	result := RwProjectSetModification new.
-	self
-		compareDictionary: definitions
-		againstBaseDictionary: aDefinition definitions
-		into: result
-		elementClass: RwProjectDefinition.
-	^ result
-]
-
 { #category : 'deriving' }
 RwProjectSetDefinition >> deriveLoadedThings [
 

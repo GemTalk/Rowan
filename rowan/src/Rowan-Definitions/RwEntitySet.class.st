@@ -9,7 +9,7 @@ Class {
 	#instVars : [
 		'entities'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Definitions'
 }
 
 { #category : 'instance creation' }

@@ -33,18 +33,6 @@ RwClassExtensionDefinition >> _classNameForCompare: aDefinition [
 
 ]
 
-{ #category : 'private' }
-RwClassExtensionDefinition >> _methodsModificationClass [
-
-	^ RwExtensionMethodsModification
-]
-
-{ #category : 'private' }
-RwClassExtensionDefinition >> _modificationClass [
-
-	^ RwClassExtensionModification
-]
-
 { #category : 'comparing' }
 RwClassExtensionDefinition >> compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass isMeta: isClassMeta [
 

@@ -1,6 +1,6 @@
 Extension { #name : 'RwPackageDefinition' }
 
-{ #category : '*rowan-cypress-core' }
+{ #category : '*rowan-cypress-definitions' }
 RwPackageDefinition >> name [
   ^ self key
 ]

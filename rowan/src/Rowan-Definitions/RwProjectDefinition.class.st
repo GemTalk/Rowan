@@ -30,17 +30,6 @@ RwProjectDefinition class >> newForGitBasedProjectNamed: aString [
 
 ]
 
-{ #category : '*rowan-deprecated' }
-RwProjectDefinition class >> newForGitPackageProjectNamed: aString [
-
-	| spec |
-	spec := RwSimpleProjectSpecification new
-		specName: aString;
-		yourself.
-	^ self newForSpecification: spec
-
-]
-
 { #category : 'instance creation' }
 RwProjectDefinition class >> newForSpecification: aRwSpecification [
 
@@ -108,23 +97,6 @@ RwProjectDefinition >> comment [
 RwProjectDefinition >> comment: aString [
 
 	self specification comment: aString
-]
-
-{ #category : 'comparing' }
-RwProjectDefinition >> compareAgainstBase: aDefinition [
-
-	| modification packagesModification |
-	modification := RwProjectModification before: aDefinition after: self.
-	modification
-		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
-	packagesModification := RwPackagesModification new.
-	self
-		compareDictionary: packages
-		againstBaseDictionary: aDefinition packages
-		into: packagesModification
-		elementClass: RwPackageDefinition.
-	modification packagesModification: packagesModification.
-	^ modification
 ]
 
 { #category : 'properties' }
@@ -234,13 +206,6 @@ RwProjectDefinition >> packageNames: packageNames [
 	packageNames
 		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
 
-]
-
-{ #category : '*rowan-deprecated' }
-RwProjectDefinition >> packageNamesInLoadOrder: packageNamesInLoadOrder [
-
-	packageNamesInLoadOrder
-		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
 ]
 
 { #category : 'accessing' }

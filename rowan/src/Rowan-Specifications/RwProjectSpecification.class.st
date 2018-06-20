@@ -149,24 +149,6 @@ RwProjectSpecification >> imageSpec: anObject [
 ]
 
 { #category : 'initialization' }
-RwProjectSpecification >> initialize [
-
-	super initialize.
-	comment := ''.
-	configsPath := 'rowan/configs'.
-	repoPath := 'rowan/src'.
-	specsPath := 'rowan/specs'.
-	platformSpec := Dictionary new
-		at: 'gemstone' put: RwGemStoneSpecification new;
-		yourself.
-	repoSpec := RwGitRepositorySpecification new.
-	version := self currentVersion.
-	defaultConfigurationNames := #('Default').
-	defaultGroupNames := #('default').
-
-]
-
-{ #category : 'initialization' }
 RwProjectSpecification >> initializeForExport [
 
 	"before spec is exported, clear out any of the fields that are not to be included"
@@ -212,16 +194,6 @@ RwProjectSpecification >> loadedGroupNames [
 RwProjectSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
 
 	self subclassResponsibility: #packageOrGroupNamesToLoad:
-]
-
-{ #category : 'accessing' }
-RwProjectSpecification >> platformSpec [
-
-   ^platformSpec ifNil: [ 
-		platformSpec := Dictionary new
-			at: 'gemstone' put: RwGemStoneSpecification new;
-			yourself ].
-
 ]
 
 { #category : 'accessing' }
