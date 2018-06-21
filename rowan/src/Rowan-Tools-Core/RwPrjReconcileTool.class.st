@@ -49,27 +49,34 @@ RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
 					packageDef: packageDef 
 					projectDef: projectDef 
 					classNotFound: [:theClassDef  | missing add: theClassDef ] 
-					ifCorrect: [:theClassDef :expectedSymDictName | "ignored"] 
-					ifInCorrect: [:theClassDef :expectedSymDictName :actualSymDictName | wrong add: theClassDef ] ].
+					ifCorrect: [:theClassDef | "ignored"] 
+					ifInCorrect: [:theClassDef :expectedSymDictName :actualSymDictName | wrong add: theClassDef -> {expectedSymDictName. actualSymDictName } ] ].
 			packageDef classExtensions values do: [:classDef |
 				self 
 					_checkExpectedSymbolDictForClassDefinition: classDef 
 					packageDef: packageDef 
 					projectDef: projectDef 
 					classNotFound: [:theClassDef  | missing add: theClassDef ] 
-					ifCorrect: [:theClassDef :expectedSymDictName | stay add: theClassDef] 
+					ifCorrect: [:theClassDef | stay add: theClassDef] 
 					ifInCorrect: [:theClassDef :expectedSymDictName :actualSymDictName | move add: theClassDef ] ] ] ].
 
-	^{ move . stay. missing . wrong }
+	^{ projectDefinitionSet. move . stay. missing . wrong }
 
 ]
 
 { #category : 'smalltalk api' }
 RwPrjReconcileTool >> reconcileProjectFromSpecUrl: specUrl [
-	| projectDefinition projectDefinitionSet projectTools |
+	| projectDefinition projectDefinitionSet projectTools loadedProjectInfo |
 	projectTools := Rowan projectTools.
 	projectDefinition := projectTools create createProjectDefinitionFromSpecUrl: specUrl.
 	projectDefinitionSet := projectTools read readProjectSetForProjectDefinition: projectDefinition.
+
+	loadedProjectInfo := projectDefinitionSet properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
+	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
+			"install the packageMapSpecs for this load into the specification prior to the reconcile"
+			(projectDefinitionSet projectNamed: projectName ifAbsent: [])
+				updateGsPlatformSpecLoadedProjectInfo: projectInfo ].
+
 	^ self reconcileProjectDefinitionSet: projectDefinitionSet
 
 ]
