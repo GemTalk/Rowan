@@ -9,6 +9,17 @@ Class {
 }
 
 { #category : 'queries' }
+RwPlatform >> basePlatformAttribute [
+	"Answer the generic configuration attribute for the platform"
+
+	"Examples include: 'gemstone', 'pharo', 'squeak'"
+
+
+	self subclassResponsibility: #basePlatformAttribute
+
+]
+
+{ #category : 'queries' }
 RwPlatform >> fileUtilities [
 	"Answer the platform-specific object for accessing files and directories"
 

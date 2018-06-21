@@ -114,6 +114,19 @@ RwProjectDefinition >> configsPath: aDirectoryPathString [
 ]
 
 { #category : 'properties' }
+RwProjectDefinition >> configurationExportUrl [
+
+	"Return an RwFileUrl suitable for saving the receiver's configuration in the appropriate configs directory"
+
+	| exportPath |
+	self repositoryUrl
+		ifNil: [ self error: 'RepositoryUrl has not been set. Receiver has not bee associated with an existing Rowan project on disk.' ].
+	exportPath := self repositoryRootPath , '/' , self configsPath , '/'.
+	^('file:' , exportPath) asRwUrl
+
+]
+
+{ #category : 'properties' }
 RwProjectDefinition >> configurationTemplate [
 
 	"Return a generic RwProjectLoadConfiguration based on the list of packages in the reciever"
@@ -130,7 +143,7 @@ RwProjectDefinition >> configurationTemplate [
 				at: groupName 
 				put: {} ].
 	config conditionalPackages
-		at: { 'common' }
+		at: { Rowan platform basePlatformAttribute }
 		put: (Dictionary new
 				at: (groupNames at: 1)
 					put: (Dictionary new

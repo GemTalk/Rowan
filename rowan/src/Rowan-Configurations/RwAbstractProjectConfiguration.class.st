@@ -164,10 +164,7 @@ RwAbstractProjectConfiguration >> currentVersion [
 { #category : 'exporting' }
 RwAbstractProjectConfiguration >> export [
 
-	| url exportUrl exportPath export |
-	self _repositoryUrl
-		ifNil: [ self error: 'exportToUrl: must be used if repositoryUrl has not been set' ].
-	url := RwUrl fromString: self _repositoryUrl.
+	|  exportUrl exportPath export |
 	exportPath := self _repositoryRootPath , '/' , self _configsPath , '/'.
 	Rowan fileUtilities ensureDirectoryExists: exportPath.
 	exportUrl := 'file:' , exportPath.
@@ -175,13 +172,14 @@ RwAbstractProjectConfiguration >> export [
 	export := self copy.
 	export initializeForExport.
 	^ export exportToUrl: exportUrl
+
 ]
 
 { #category : 'exporting' }
 RwAbstractProjectConfiguration >> exportToUrl: fileUrl [
 
 	| url |
-	url := RwUrl fromString: fileUrl.
+	url := fileUrl asRwUrl.
 	url schemeName = 'file'
 		ifTrue: [ 
 			Rowan fileUtilities
@@ -193,6 +191,7 @@ RwAbstractProjectConfiguration >> exportToUrl: fileUrl [
 					stream nextPutAll: string.
 					^ self ] ].
 	^ nil	"otherwise a noop"
+
 ]
 
 { #category : 'initialization' }
