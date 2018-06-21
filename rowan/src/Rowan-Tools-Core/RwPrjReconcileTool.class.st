@@ -35,16 +35,18 @@ RwPrjReconcileTool >> _moveClassExtension: theClassDef toNewPackageClonedFrom: p
 			projectDef addPackage: pDef.
 			pDef ].
 	packageDef removeClassExtension: theClassDef.
-	newPackageDef addClassExtension: theClassDef
+	newPackageDef addClassExtension: theClassDef.
+	^ newPackageDef
 
 ]
 
 { #category : 'smalltalk api' }
 RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
-	| projectTools movedSpecs |
+	| projectTools movedClassExtensions newPackageDefMap movedPackageDefMap |
 	projectTools := Rowan projectTools.
 
-	movedSpecs := Array new.
+	movedPackageDefMap := Dictionary new.
+	movedClassExtensions := Set new.
 	projectDefinitionSet projects do: [:projectDef |
 		| visitor spec visitedConfigurationMap packageToConfigurationMap |
 		spec := projectDef specification.
@@ -64,13 +66,8 @@ RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
 					classNotFound: [:theClassDef  | self error: 'The class ', theClassDef name printString, ' not found' ] 
 					ifCorrect: [:theClassDef | "ignored" ] 
 					ifIncorrect: [:theClassDef :expectedSymDictName :actualSymDictName | 
-						self error: 'The class ', 
-							theClassDef name printString, 
-							' is in the wrong symbol dictionary. It is in the ', 
-							actualSymDictName printString, 
-							' symbol dictionary. It is expected to be in the ', 
-								expectedSymDictName printSring, 
-							' symbol dictioanry.'] ].
+						"the class is defined in the actualSymDictName and that's where the package should be loaded"
+						(movedPackageDefMap at: packageDef name ifAbsentPut: [ Set new ]) add: {theClassDef . packageDef . actualSymDictName . projectDef }] ].
 			packageDef classExtensions values do: [:classDef |
 				self 
 					_checkExpectedSymbolDictForClassDefinition: classDef 
@@ -79,15 +76,22 @@ RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
 					classNotFound: [:theClassDef  | self error: 'The class to be extended ', theClassDef name printString, ' not found'  ] 
 					ifCorrect: [:theClassDef | "ignored" ] 
 					ifIncorrect: [:theClassDef :expectedSymDictName :actualSymDictName | 
-						"the class is in the actualSymDictName and that's where the package should be loaded"
-						movedSpecs add: {theClassDef . packageDef . actualSymDictName . projectDef }] ] ] ].
-	movedSpecs do: [:ar |
-		self 
-			_moveClassExtension: (ar at: 1) 
-			toNewPackageClonedFrom: (ar at: 2) 
-			inSymbolDictionary: (ar at: 3) 
-			inProject: (ar at: 4) ].
-	^ movedSpecs
+						"the class extension is in the actualSymDictName and that's where the package should be loaded"
+						movedClassExtensions add: {theClassDef . packageDef . actualSymDictName . projectDef } ] ] ] ].
+	newPackageDefMap := Dictionary new.
+	movedClassExtensions do: [:ar |
+		| theClassDef packageDef actualSymDictName projectDef  newPackageDef|
+		theClassDef := ar at: 1.
+		packageDef := ar at: 2.
+		actualSymDictName := ar at: 3.
+		projectDef := ar at: 4.
+		newPackageDef := self 
+			_moveClassExtension: theClassDef 
+			toNewPackageClonedFrom: packageDef 
+			inSymbolDictionary: actualSymDictName 
+			inProject: projectDef.
+		(newPackageDefMap at: newPackageDef name ifAbsentPut: [ Set new ]) add: ar ].
+	^ newPackageDefMap
 
 ]
 
