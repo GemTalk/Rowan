@@ -23,26 +23,25 @@ RwPrjReconcileTool >> _checkExpectedSymbolDictForClassDefinition: classDef packa
 ]
 
 { #category : 'smalltalk api' }
-RwPrjReconcileTool >> reconcileProjectFromSpecUrl: specUrl [
-	| projectDefinition projectSet projectTools spec visitor  visitedConfigurationMap packageToConfigurationMap move stay missing wrong |
+RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
+	| projectTools move stay missing wrong |
 	projectTools := Rowan projectTools.
-	projectDefinition := projectTools create createProjectDefinitionFromSpecUrl: specUrl.
-	spec := projectDefinition specification.
-	projectSet := projectTools read readProjectSetForProjectDefinition: projectDefinition.
-	visitor := projectTools read 
-		_visitConfigurations: RwProjectLoadConfigurationAnalysisVisitor 
-		forProjectDefinition: projectDefinition 
-		withConfigurations: spec defaultConfigurationNames 
-		groupNames: spec defaultGroupNames.
-	visitedConfigurationMap := visitor visitedConfigurationMap.
-	packageToConfigurationMap  := visitor packageToConfigurationMap.
 
 	move := Array new.
 	stay := Array new.
 	missing := Array new.
 	wrong := Array new.
 
-	projectSet projects do: [:projectDef |
+	projectDefinitionSet projects do: [:projectDef |
+		| visitor spec visitedConfigurationMap packageToConfigurationMap |
+		spec := projectDef specification.
+		visitor := projectTools read 
+			_visitConfigurations: RwProjectLoadConfigurationAnalysisVisitor 
+			forProjectDefinition: projectDef
+			withConfigurations: spec defaultConfigurationNames 
+			groupNames: spec defaultGroupNames.
+		visitedConfigurationMap := visitor visitedConfigurationMap.
+		packageToConfigurationMap  := visitor packageToConfigurationMap.
 		projectDef packages values do: [:packageDef |
 			packageDef classDefinitions values do: [:classDef |
 				self 
@@ -61,6 +60,16 @@ RwPrjReconcileTool >> reconcileProjectFromSpecUrl: specUrl [
 					ifCorrect: [:theClassDef :expectedSymDictName | stay add: theClassDef] 
 					ifInCorrect: [:theClassDef :expectedSymDictName :actualSymDictName | move add: theClassDef ] ] ] ].
 
-	^{projectSet . visitor . move . stay. missing . wrong }
+	^{ move . stay. missing . wrong }
+
+]
+
+{ #category : 'smalltalk api' }
+RwPrjReconcileTool >> reconcileProjectFromSpecUrl: specUrl [
+	| projectDefinition projectDefinitionSet projectTools |
+	projectTools := Rowan projectTools.
+	projectDefinition := projectTools create createProjectDefinitionFromSpecUrl: specUrl.
+	projectDefinitionSet := projectTools read readProjectSetForProjectDefinition: projectDefinition.
+	^ self reconcileProjectDefinitionSet: projectDefinitionSet
 
 ]
