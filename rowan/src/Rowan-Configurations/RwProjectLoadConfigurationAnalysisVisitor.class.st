@@ -34,3 +34,17 @@ RwProjectLoadConfigurationAnalysisVisitor >> initialize [
 	packageToConfigurationMap := Dictionary new
 
 ]
+
+{ #category : 'accessing' }
+RwProjectLoadConfigurationAnalysisVisitor >> packageToConfigurationMap [ 
+
+	^ packageToConfigurationMap
+
+]
+
+{ #category : 'accessing' }
+RwProjectLoadConfigurationAnalysisVisitor >> visitedConfigurationMap [ 
+
+	^ visitedConfigurationMap
+
+]
