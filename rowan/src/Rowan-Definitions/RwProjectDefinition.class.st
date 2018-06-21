@@ -138,10 +138,7 @@ RwProjectDefinition >> configurationTemplate [
 		yourself.
 	groupNames := self specification defaultGroupNames.
 	groupNames
-		do: [:groupName |
-			config definedGroupNames
-				at: groupName 
-				put: {} ].
+		do: [:groupName | config addDefinedGroupName: groupName ].
 	config conditionalPackages
 		at: { Rowan platform basePlatformAttribute }
 		put: (Dictionary new
