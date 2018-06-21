@@ -79,7 +79,8 @@ RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
 					classNotFound: [:theClassDef  | self error: 'The class to be extended ', theClassDef name printString, ' not found'  ] 
 					ifCorrect: [:theClassDef | "ignored" ] 
 					ifIncorrect: [:theClassDef :expectedSymDictName :actualSymDictName | 
-						movedSpecs add: {theClassDef . packageDef . expectedSymDictName . projectDef }] ] ] ].
+						"the class is in the actualSymDictName and that's where the package should be loaded"
+						movedSpecs add: {theClassDef . packageDef . actualSymDictName . projectDef }] ] ] ].
 	movedSpecs do: [:ar |
 		self 
 			_moveClassExtension: (ar at: 1) 
