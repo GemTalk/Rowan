@@ -22,6 +22,13 @@ RwProjectLoadConfigurationVisitor class >> new [
 ]
 
 { #category : 'private' }
+RwProjectLoadConfigurationVisitor >> _addPackageNames: somePackageNames for: aConfiguration [
+
+	self packageNames addAll: somePackageNames
+
+]
+
+{ #category : 'private' }
 RwProjectLoadConfigurationVisitor >> _configurations: configDirPath forProject: aProjectName [
 
 	| urlBase |
@@ -95,8 +102,15 @@ RwProjectLoadConfigurationVisitor >> _processConditionalPackageNames: aProjectLo
 				groupMap keysAndValuesDo: [:group :map |
 					(self groupNames includes: group)
 						ifTrue: [ 
-							self packageNames addAll: (map at: #packageNames ifAbsent: [ #() ]).
+							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
 							self configurationNames addAll: (map at: #configurationNames ifAbsent: [ #()] ) ] ] ] ].
+
+]
+
+{ #category : 'private' }
+RwProjectLoadConfigurationVisitor >> _visited: aConfiguration [
+
+	visitedConfigurationNames add:  aConfiguration name.
 
 ]
 
@@ -189,7 +203,7 @@ RwProjectLoadConfigurationVisitor >> visitNestedProjectLoadConfiguration: aNeste
 	(visitedConfigurationNames includes: aNestedProjectLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
-	visitedConfigurationNames add:  aNestedProjectLoadConfiguration name. 
+	self _visited: aNestedProjectLoadConfiguration. 
 
 	self _processConditionalPackageNames: aNestedProjectLoadConfiguration.
 
@@ -207,8 +221,9 @@ RwProjectLoadConfigurationVisitor >> visitProjectCompoundConfiguration: aProject
 	(visitedConfigurationNames includes: aProjectCompoundConfiguration name)
 		ifTrue: [ ^ self ].
 
-	visitedConfigurationNames add:  aProjectCompoundConfiguration name. 
-	packageNames addAll: aProjectCompoundConfiguration packageNames.
+	self _visited: aProjectCompoundConfiguration. 
+
+	self _addPackageNames: aProjectCompoundConfiguration packageNames for: aProjectCompoundConfiguration.
 
 	aProjectCompoundConfiguration _configurations
 		do: [:config | config acceptCompoundVisitor: self ].
@@ -221,7 +236,7 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjectLoad
 	(visitedConfigurationNames includes: aProjectLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
-	visitedConfigurationNames add:  aProjectLoadConfiguration name. 
+	self _visited: aProjectLoadConfiguration. 
 
 	definedGroupNames := aProjectLoadConfiguration definedGroupNames.
 	groupNames := groupNames asSet.

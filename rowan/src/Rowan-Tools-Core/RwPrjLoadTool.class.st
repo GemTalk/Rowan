@@ -59,26 +59,17 @@ RwPrjLoadTool >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceM
 	loadedProjectInfo := projectSetDefinitionToLoad properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
 	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
 			"install the packageMapSpecs for this load into the specification prior to the load"
-			| projectDefinition spec gemstoneSpec thePackageMapSpecs |
+			| projectDefinition |
 			projectDefinition := projectSetDefinitionToLoad projectNamed: projectName ifAbsent: [].
-			spec := projectDefinition specification.
-			thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
-			gemstoneSpec := spec platformSpec at: 'gemstone'.
-			(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
-				ifNotNil: [:name | gemstoneSpec defaultSymbolDictName: name ].
-			(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
-				ifNotNil: [:boolean | 
-					gemstoneSpec defaultUseSessionMethodsForExtensions: boolean  ].
-			(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
-				ifNotNil: [:map | gemstoneSpec packageNameToPlatformPropertiesMap: map] ].
+			projectDefinition updateGsPlatformSpecLoadedProjectInfo: projectInfo ].
 	Rowan image applyModification: diff instanceMigrator: instanceMigrator.
 	projectSetDefinitionToLoad definitions
-		do: [ :project | 
-			self specification: project specification.
-			project specification updateLoadedCommitIdForTool: self.
-			(loadedProjectInfo at: project name ifAbsent: [])
+		do: [ :projectDef | 
+			self specification: projectDef specification.
+			projectDef specification updateLoadedCommitIdForTool: self.
+			(loadedProjectInfo at: projectDef name ifAbsent: [])
 				ifNotNil: [:map |
-					project specification imageSpec
+					projectDef specification imageSpec
 						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
 						loadedGroupNames: (map at: 'loadedGroupNames') ]].
 	^ diff
