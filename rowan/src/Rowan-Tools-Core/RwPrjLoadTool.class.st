@@ -4,7 +4,7 @@ Class {
 	#category : 'Rowan-Tools-Core'
 }
 
-{ #category : 'smalltalk api' }
+{ #category : 'private' }
 RwPrjLoadTool >> _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator originalProjectSet: originalProjectSet processedClassNames: processedClassNames [
 	| copiedProjectSetDef theClassName theClass projectDef theLoadedProject loadedClass packageDef |
 	[ ^ self
@@ -43,7 +43,7 @@ RwPrjLoadTool >> _doProjectSetLoad: projectSetDefinition instanceMigrator: insta
 
 ]
 
-{ #category : 'smalltalk api' }
+{ #category : 'private' }
 RwPrjLoadTool >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator [
 
 	| loadedProjectSet diff loadedProjectInfo| 
@@ -85,7 +85,7 @@ RwPrjLoadTool >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceM
 
 ]
 
-{ #category : 'smalltalk api' }
+{ #category : 'load project definitions' }
 RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 
 	| projectSetDefinition |
@@ -95,7 +95,28 @@ RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 	^ self loadProjectSetDefinition: projectSetDefinition
 ]
 
-{ #category : 'smalltalk api' }
+{ #category : 'load project by spec url' }
+RwPrjLoadTool >> loadProjectFromSpecUrl: fileUrlOrString [
+
+	| projectDefinition projectSetDefinitionToLoad |
+	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString.
+	projectSetDefinitionToLoad := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
+	^ self loadProjectSetDefinition: projectSetDefinitionToLoad
+
+]
+
+{ #category : 'load project by spec url' }
+RwPrjLoadTool >> loadProjectFromSpecUrl: fileUrlOrString  projectRootPath: projectRootPath [
+
+	| projectDefinition projectSetDefinitionToLoad |
+
+	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString projectRootPath: projectRootPath.
+	projectSetDefinitionToLoad := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
+	^ self loadProjectSetDefinition: projectSetDefinitionToLoad
+
+]
+
+{ #category : 'load project by name' }
 RwPrjLoadTool >> loadProjectNamed: projectNamed [
 
 	"load the named project from disk, mark the loaded projects not dirty and run initializers"
@@ -103,7 +124,7 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed [
 	^ self loadProjectNamed: projectNamed instanceMigrator: Rowan platform instanceMigrator
 ]
 
-{ #category : 'smalltalk api' }
+{ #category : 'load project by name' }
 RwPrjLoadTool >> loadProjectNamed: projectNamed instanceMigrator: instanceMigrator [
 
 	"load the named project from disk, mark the loaded projects not dirty and run initializers"
@@ -166,7 +187,7 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName in
 
 ]
 
-{ #category : 'smalltalk api' }
+{ #category : 'load project definitions' }
 RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad [
 
 	^ self
@@ -174,18 +195,16 @@ RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad [
 		instanceMigrator: Rowan platform instanceMigrator
 ]
 
-{ #category : 'smalltalk api' }
+{ #category : 'load project definitions' }
 RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinition instanceMigrator: instanceMigrator [
 
-	^ self
-		_doProjectSetLoad: projectSetDefinition 
+	"NOTE: when loading a definition into a stone, the loaded things are not marked as non-dirty ... dirty state is relative to the disk image for a
+		project and a definition can have come from anywhere"
+
+	^ self 
+		_doProjectSetLoad: projectSetDefinition
 		instanceMigrator: instanceMigrator 
 		originalProjectSet: projectSetDefinition 
 		processedClassNames: Set new
 
-]
-
-{ #category : 'smalltalk api' }
-RwPrjLoadTool >> loadSpecUrl: aString [
-  ^ self loadSpecification: (RwSpecification fromUrl: aString)
 ]
