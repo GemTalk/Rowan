@@ -40,7 +40,7 @@ RwPrjReadTool >> _readProjectSetForProjectDefinition: projectDefinition packageN
 
 ]
 
-{ #category : 'load project definitions' }
+{ #category : 'read project definitions' }
 RwPrjReadTool >> readProjectDefinition: projectDefinition [
 	"read all of the packages in the existing Rowan project associated with the given project definition"
 
@@ -54,7 +54,7 @@ RwPrjReadTool >> readProjectDefinition: projectDefinition [
 
 ]
 
-{ #category : 'load project definitions' }
+{ #category : 'read project definitions' }
 RwPrjReadTool >> readProjectSetForProjectDefinition: projectDefinition [
 
 	| repo spec packageNames |
@@ -83,7 +83,7 @@ RwPrjReadTool >> readProjectSetForProjectDefinition: projectDefinition [
 
 ]
 
-{ #category : 'load project definitions' }
+{ #category : 'read project definitions' }
 RwPrjReadTool >> readProjectSetForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames [
 
 	| projectName repo spec url packageNames configDirectory projectSetDefinition packageMapSpecs |
@@ -123,7 +123,7 @@ RwPrjReadTool >> readProjectSetForProjectDefinition: projectDefinition withConfi
 
 ]
 
-{ #category : 'load project by name' }
+{ #category : 'read project by name' }
 RwPrjReadTool >> readProjectSetForProjectNamed: projectName [
 
 	| projectDefinition |
@@ -153,7 +153,7 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfiguration: c
 
 ]
 
-{ #category : 'load project by name' }
+{ #category : 'read project by name' }
 RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfigurations: configNames groupNames: groupNames [
 
 	| projectDefinition |
