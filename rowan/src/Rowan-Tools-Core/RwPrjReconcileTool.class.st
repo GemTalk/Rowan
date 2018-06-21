@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'private' }
-RwPrjReconcileTool >> _checkExpectedSymbolDictForClassDefinition: classDef packageDef: packageDef projectDef: projectDef classNotFound: classNotFoundBlock ifCorrect: correctBlock ifInCorrect: incorrectBlock [
+RwPrjReconcileTool >> _checkExpectedSymbolDictForClassDefinition: classDef packageDef: packageDef projectDef: projectDef classNotFound: classNotFoundBlock ifCorrect: correctBlock ifIncorrect: incorrectBlock [
 	| class ar symDict expectedSymDictName actualSymDictName |
 	class := Rowan globalNamed: classDef name.
 	class
@@ -22,16 +22,29 @@ RwPrjReconcileTool >> _checkExpectedSymbolDictForClassDefinition: classDef packa
 
 ]
 
+{ #category : 'private' }
+RwPrjReconcileTool >> _moveClassExtension: theClassDef toNewPackageClonedFrom: packageDef inSymbolDictionary: expectedSymDictName inProject: projectDef [
+
+	| newPackageName newPackageDef |
+	newPackageName := packageDef name, '_ext_', expectedSymDictName.
+	newPackageDef := projectDef 
+		packageNamed: newPackageName 
+		ifAbsent: [ 
+			| pDef |
+			pDef := RwPackageDefinition newNamed: newPackageName.
+			projectDef addPackage: pDef.
+			pDef ].
+	packageDef removeClassExtension: theClassDef.
+	newPackageDef addClassExtension: theClassDef
+
+]
+
 { #category : 'smalltalk api' }
 RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
-	| projectTools move stay missing wrong |
+	| projectTools movedSpecs |
 	projectTools := Rowan projectTools.
 
-	move := Array new.
-	stay := Array new.
-	missing := Array new.
-	wrong := Array new.
-
+	movedSpecs := Array new.
 	projectDefinitionSet projects do: [:projectDef |
 		| visitor spec visitedConfigurationMap packageToConfigurationMap |
 		spec := projectDef specification.
@@ -48,19 +61,32 @@ RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
 					_checkExpectedSymbolDictForClassDefinition: classDef 
 					packageDef: packageDef 
 					projectDef: projectDef 
-					classNotFound: [:theClassDef  | missing add: theClassDef ] 
-					ifCorrect: [:theClassDef | "ignored"] 
-					ifInCorrect: [:theClassDef :expectedSymDictName :actualSymDictName | wrong add: theClassDef -> {expectedSymDictName. actualSymDictName } ] ].
+					classNotFound: [:theClassDef  | self error: 'The class ', theClassDef name printString, ' not found' ] 
+					ifCorrect: [:theClassDef | "ignored" ] 
+					ifIncorrect: [:theClassDef :expectedSymDictName :actualSymDictName | 
+						self error: 'The class ', 
+							theClassDef name printString, 
+							' is in the wrong symbol dictionary. It is in the ', 
+							actualSymDictName printString, 
+							' symbol dictionary. It is expected to be in the ', 
+								expectedSymDictName printSring, 
+							' symbol dictioanry.'] ].
 			packageDef classExtensions values do: [:classDef |
 				self 
 					_checkExpectedSymbolDictForClassDefinition: classDef 
 					packageDef: packageDef 
 					projectDef: projectDef 
-					classNotFound: [:theClassDef  | missing add: theClassDef ] 
-					ifCorrect: [:theClassDef | stay add: theClassDef] 
-					ifInCorrect: [:theClassDef :expectedSymDictName :actualSymDictName | move add: theClassDef ] ] ] ].
-
-	^{ projectDefinitionSet. move . stay. missing . wrong }
+					classNotFound: [:theClassDef  | self error: 'The class to be extended ', theClassDef name printString, ' not found'  ] 
+					ifCorrect: [:theClassDef | "ignored" ] 
+					ifIncorrect: [:theClassDef :expectedSymDictName :actualSymDictName | 
+						movedSpecs add: {theClassDef . packageDef . expectedSymDictName . projectDef }] ] ] ].
+	movedSpecs do: [:ar |
+		self 
+			_moveClassExtension: (ar at: 1) 
+			toNewPackageClonedFrom: (ar at: 2) 
+			inSymbolDictionary: (ar at: 3) 
+			inProject: (ar at: 4) ].
+	^ movedSpecs
 
 ]
 
@@ -77,6 +103,7 @@ RwPrjReconcileTool >> reconcileProjectFromSpecUrl: specUrl [
 			(projectDefinitionSet projectNamed: projectName ifAbsent: [])
 				updateGsPlatformSpecLoadedProjectInfo: projectInfo ].
 
-	^ self reconcileProjectDefinitionSet: projectDefinitionSet
+	self reconcileProjectDefinitionSet: projectDefinitionSet.
+	^ projectDefinition
 
 ]
