@@ -876,15 +876,7 @@ RwGsPatchSet >> createNewClassesAndClassVersions [
 RwGsPatchSet >> deleteMovedLoadedExtensionMethods [
 
 	deletedExtensionMethods
-		do: [ :methodDeletionPatch | 
-			(movedMethodsMap at: methodDeletionPatch className ifAbsent: [])
-				ifNil: [ methodDeletionPatch deleteMovedLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]
-				ifNotNil: [:isMetaMap | 
-					(isMetaMap at: methodDeletionPatch isMeta ifAbsent: [])
-						ifNil: [ methodDeletionPatch deleteMovedLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols]
-						ifNotNil: [:selectorMap |
-							(selectorMap at: methodDeletionPatch methodDefinition selector ifAbsent: [])
-								ifNil: [ methodDeletionPatch deleteMovedLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]]]]
+		do: [:methodDeletionPatch | methodDeletionPatch deleteMovedLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]
 
 ]
 
