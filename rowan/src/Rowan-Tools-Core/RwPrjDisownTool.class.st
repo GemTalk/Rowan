@@ -7,7 +7,8 @@ Class {
 { #category : 'classes' }
 RwPrjDisownTool >> disownClassNamed: className [
 
-	"Remove the specified class and all of it's packaged instance and class methods from the loaded things."
+	"Remove the specified class and all of it's packaged instance and class methods from the loaded things. Methods that are not in the same package as
+		the class are not disowned. "
 
 	"The classes and methods are not removed from the system"
 
@@ -33,7 +34,7 @@ RwPrjDisownTool >> disownClassNamed: className [
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	registry deleteClassFromLoadedThings: theClass
+	registry disownClass: theClass
 
 ]
 

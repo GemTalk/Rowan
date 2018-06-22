@@ -431,15 +431,6 @@ RwGsSymbolDictionaryRegistry >> createLoadedPackageNamed: packageName properties
 ]
 
 { #category : 'class - patch api' }
-RwGsSymbolDictionaryRegistry >> deleteClassFromLoadedThings: class [
-
-	"a class association is being deleted from the receiver remove it from the loaded things"
-
-	^ self class registry_ImplementationClass deleteClassFromLoadedThings: class instance: self
-
-]
-
-{ #category : 'class - patch api' }
 RwGsSymbolDictionaryRegistry >> deleteClassFromPackage: class [
 
 	"a class association is being deleted from the receiver remove it from the loaded things"
@@ -541,6 +532,15 @@ RwGsSymbolDictionaryRegistry >> deletePackage: packageName [
 		removeKey: packageName
 		ifAbsent: [ self error: 'package ' , packageName printString , ' not found' ].
 	loadedPackage loadedProject removeLoadedPackage: loadedPackage
+]
+
+{ #category : 'class disown api' }
+RwGsSymbolDictionaryRegistry >> disownClass: class [
+
+	"Remove the specified class and all of it's packaged instance and class methods from the loaded things."
+
+	^ self class registry_ImplementationClass disownClass: class instance: self
+
 ]
 
 { #category : 'class - patch api' }

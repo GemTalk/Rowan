@@ -66,7 +66,7 @@ RwDisownToolApiTest >> testDisownClass2 [
 
 	"disown a class with a method and an extenstion method"
 
-	| projectTools packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass |
+	| projectTools packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass x |
 	projectTools := Rowan projectTools.
 	packageTools := Rowan packageTools.
 	projectName := 'Disown Browser'.
@@ -114,7 +114,7 @@ RwDisownToolApiTest >> testDisownClass2 [
 	self assert: theClass new bar = 'bar'.
 	self assert: theClass rowanPackageName = Rowan unpackagedName.
 	self assert: fooMethod rowanPackageName = Rowan unpackagedName.
-	self assert: barMethod rowanPackageName = Rowan unpackagedName.
+	self assert: (x := barMethod rowanPackageName) = packageName2.
 
 	packageTools adopt
 		adoptClassNamed: className  intoPackageNamed: packageName1.
@@ -125,7 +125,7 @@ RwDisownToolApiTest >> testDisownClass2 [
 	self assert: theClass new bar = 'bar'.
 	self assert: theClass rowanPackageName = packageName1.
 	self assert: fooMethod rowanPackageName = packageName1.
-	self assert: barMethod rowanPackageName = packageName1.	"yeah this isn't the original package:)"
+	self assert: barMethod rowanPackageName = packageName2.
 
 ]
 

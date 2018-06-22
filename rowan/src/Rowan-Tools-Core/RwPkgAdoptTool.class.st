@@ -22,7 +22,9 @@ RwPkgAdoptTool >> adoptClassExtensionNamed: className  instanceSelectors: instan
 RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: packageName [
 
 	"adopt the methods for class named <className> and it's methods into the package named <packageName>, 
-		if it is not a <classExtension>, adopt the class into the package as well"
+		if it is not a <classExtension>, adopt the class into the package as well."
+
+	"Ignore packaged instance and class methods"
 
 	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
 		theBehavior |
@@ -86,6 +88,8 @@ RwPkgAdoptTool >> adoptClassNamed: className  instanceSelectors: instanceSelecto
 
 	"adopt the class named <className> and it's methods into the package named <packageName>"
 
+	"Ignore packaged instance and class methods"
+	
 	self 
 		adoptClassNamed: className 
 		classExtension: false 
@@ -99,6 +103,8 @@ RwPkgAdoptTool >> adoptClassNamed: className  instanceSelectors: instanceSelecto
 RwPkgAdoptTool >> adoptClassNamed: className  intoPackageNamed: packageName [
 
 	"adopt the class named <className> and it's methods into the package named <packageName>"
+
+	"Ignore packaged instance and class methods"
 
 	| theClass |
 
