@@ -26,7 +26,7 @@ RwPrjReconcileTool >> _checkExpectedSymbolDictForClassDefinition: classDef packa
 RwPrjReconcileTool >> _moveClassExtension: theClassExtension toNewPackageClonedFrom: packageDef inSymbolDictionary: expectedSymDictName inProject: projectDef [
 
 	| newPackageName newPackageDef |
-	newPackageName := packageDef name, '_ext_', expectedSymDictName.
+	newPackageName := packageDef name, '-ext-', expectedSymDictName.
 	newPackageDef := projectDef 
 		packageNamed: newPackageName 
 		ifAbsent: [ 
