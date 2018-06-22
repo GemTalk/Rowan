@@ -338,7 +338,9 @@ RwGsSymbolDictionaryRegistry >> adoptCompiledMethod: compiledMethod classExtensi
 
 	existing := methodRegistry at: compiledMethod ifAbsent: [ nil ].
 	existing
-		ifNotNil: [ self error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
+		ifNotNil: [
+			"existing LoadedMethod found for compiled method ... ignore already packaged methods"
+			^ self ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
 	methodRegistry at: compiledMethod put: loadedMethod.

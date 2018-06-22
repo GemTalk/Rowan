@@ -241,8 +241,8 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 								' symbol dictionary with a duplicate key ',
 								assoc key printString, 
 								' while attempting to add a new class' )
-						signal ].
-			(registryInstance _symbolDictionary associationAt: assoc key) value: class ]
+						signal.
+					(registryInstance _symbolDictionary associationAt: assoc key) value: class ] ]
 		ifAbsent: [
 			assoc value: class.
 			registryInstance _symbolDictionary add: assoc].
