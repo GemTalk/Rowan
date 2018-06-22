@@ -23,7 +23,7 @@ RwPrjReconcileTool >> _checkExpectedSymbolDictForClassDefinition: classDef packa
 ]
 
 { #category : 'private' }
-RwPrjReconcileTool >> _moveClassExtension: theClassDef toNewPackageClonedFrom: packageDef inSymbolDictionary: expectedSymDictName inProject: projectDef [
+RwPrjReconcileTool >> _moveClassExtension: theClassExtension toNewPackageClonedFrom: packageDef inSymbolDictionary: expectedSymDictName inProject: projectDef [
 
 	| newPackageName newPackageDef |
 	newPackageName := packageDef name, '_ext_', expectedSymDictName.
@@ -34,30 +34,21 @@ RwPrjReconcileTool >> _moveClassExtension: theClassDef toNewPackageClonedFrom: p
 			pDef := RwPackageDefinition newNamed: newPackageName.
 			projectDef addPackage: pDef.
 			pDef ].
-	packageDef removeClassExtension: theClassDef.
-	newPackageDef addClassExtension: theClassDef.
+	packageDef removeClassExtension: theClassExtension.
+	newPackageDef addClassExtension: theClassExtension.
 	^ newPackageDef
 
 ]
 
 { #category : 'smalltalk api' }
 RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
-	| projectTools movedClassExtensions newPackageDefMap movedPackageDefMap packageNameToSymbolDictNameMap |
-	projectTools := Rowan projectTools.
+	| movedClassExtensions packageNameToSymbolDictNameMap configExportMap |
 
-	movedPackageDefMap := Dictionary new.
+	configExportMap := Dictionary new.
 	movedClassExtensions := Set new.
 	packageNameToSymbolDictNameMap := Dictionary new.
 	projectDefinitionSet projects do: [:projectDef |
-		| visitor spec visitedConfigurationMap packageToConfigurationMap config |
-		spec := projectDef specification.
-		visitor := projectTools read 
-			_visitConfigurations: RwProjectLoadConfigurationAnalysisVisitor 
-			forProjectDefinition: projectDef
-			withConfigurations: spec defaultConfigurationNames 
-			groupNames: spec defaultGroupNames.
-		visitedConfigurationMap := visitor visitedConfigurationMap.
-		packageToConfigurationMap  := visitor packageToConfigurationMap.
+		| config |
 		projectDef packages values do: [:packageDef |
 			packageDef classDefinitions values do: [:classDef |
 				self 
@@ -69,7 +60,7 @@ RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
 						(packageNameToSymbolDictNameMap at: packageDef name ifAbsentPut: [ IdentitySet new ]) add: actualSymDictName asSymbol ] 
 					ifIncorrect: [:theClassDef :expectedSymDictName :actualSymDictName | 
 						"the class is defined in the actualSymDictName and that's where the package should be loaded"
-						(movedPackageDefMap at: packageDef name ifAbsentPut: [ Set new ]) add: {theClassDef . packageDef . actualSymDictName . projectDef } ] ].
+						(packageNameToSymbolDictNameMap at: packageDef name ifAbsentPut: [ IdentitySet new ]) add: actualSymDictName asSymbol ] ].
 			packageDef classExtensions values do: [:classDef |
 				self 
 					_checkExpectedSymbolDictForClassDefinition: classDef 
@@ -81,7 +72,6 @@ RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
 					ifIncorrect: [:theClassDef :expectedSymDictName :actualSymDictName | 
 						"the class extension is in the actualSymDictName and that's where the package should be loaded"
 						movedClassExtensions add: {theClassDef . packageDef . actualSymDictName . projectDef } ] ] ].
-		newPackageDefMap := Dictionary new.
 		movedClassExtensions do: [:ar |
 			| theClassDef packageDef actualSymDictName theProjectDef  newPackageDef|
 			theClassDef := ar at: 1.
@@ -93,23 +83,22 @@ RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
 				toNewPackageClonedFrom: packageDef 
 				inSymbolDictionary: actualSymDictName 
 				inProject: theProjectDef.
-			(newPackageDefMap at: newPackageDef name ifAbsentPut: [ Set new ]) add: ar.
 			(packageNameToSymbolDictNameMap at: newPackageDef name ifAbsentPut: [ IdentitySet new ]) add: actualSymDictName asSymbol  ].
 		config := projectDef configurationTemplate.
-packageNameToSymbolDictNameMap keysAndValuesDo: [:packageName :symDictNames |
-	symDictNames size > 1 ifTrue: [ self error: 'More than one symbol dictionary associated with package ', packageName printString ].
-    config 
-		conditionalPackageMapSpecsAtGemStoneUserId: Rowan image currentUserId 
-		andPackageName: packageName 
-		setSymbolDictNameTo: symDictNames any ].
-
-self halt. ].
+		packageNameToSymbolDictNameMap keysAndValuesDo: [:packageName :symDictNames |
+			symDictNames size > 1 ifTrue: [ self error: 'More than one symbol dictionary associated with package ', packageName printString ].
+			config 
+				conditionalPackageMapSpecsAtGemStoneUserId: Rowan image currentUserId 
+				andPackageName: packageName 
+				setSymbolDictNameTo: symDictNames any ].
+		configExportMap at: config put: projectDef configurationExportUrl ].
+	^ configExportMap
 
 ]
 
 { #category : 'smalltalk api' }
-RwPrjReconcileTool >> reconcileProjectFromSpecUrl: specUrl [
-	| projectDefinition projectDefinitionSet projectTools loadedProjectInfo |
+RwPrjReconcileTool >> reconcileProjectFromSpecUrl: specUrl writeProject: writeProjectBool [
+	| projectDefinition projectDefinitionSet projectTools loadedProjectInfo configExportMap |
 	projectTools := Rowan projectTools.
 	projectDefinition := projectTools create createProjectDefinitionFromSpecUrl: specUrl.
 	projectDefinitionSet := projectTools read readProjectSetForProjectDefinition: projectDefinition.
@@ -120,7 +109,12 @@ RwPrjReconcileTool >> reconcileProjectFromSpecUrl: specUrl [
 			(projectDefinitionSet projectNamed: projectName ifAbsent: [])
 				updateGsPlatformSpecLoadedProjectInfo: projectInfo ].
 
-	self reconcileProjectDefinitionSet: projectDefinitionSet.
+	configExportMap := self reconcileProjectDefinitionSet: projectDefinitionSet.
+	writeProjectBool
+		ifTrue: [
+			configExportMap keysAndValuesDo: [:config :exportUrl |
+				config copy initializeForExport exportToUrl: exportUrl ].
+			projectTools write writeProjectDefinition: projectDefinition ].
 	^ projectDefinition
 
 ]
