@@ -137,7 +137,7 @@ RwAbstractProjectConfiguration >> comment: anObject [
 { #category : 'accessing' }
 RwAbstractProjectConfiguration >> configurationNames [
 
-   ^ configurationNames ifNil: [ Set new ]
+   ^ configurationNames ifNil: [ Array new ]
 
 ]
 
@@ -199,7 +199,6 @@ RwAbstractProjectConfiguration >> initialize [
 
 	comment := ''.
 	version := self currentVersion.
-	configurationNames := Set new
 
 ]
 

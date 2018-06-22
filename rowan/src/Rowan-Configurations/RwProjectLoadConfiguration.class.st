@@ -19,16 +19,16 @@ RwProjectLoadConfiguration >> addDefinedGroupName: groupName [
 
 	"add a group that does not include any other groups"
 
-	self addDefinedGroupName: groupName includes: #()
+	self addDefinedGroupName: groupName includeGroups: #()
 
 ]
 
 { #category : 'accessing' }
-RwProjectLoadConfiguration >> addDefinedGroupName: groupName includes: includedGroups [
+RwProjectLoadConfiguration >> addDefinedGroupName: groupName includeGroups: includedGroups [
 
 	"add a group that does not include any other groups"
 
-	self definedGroupNames at: groupName put: includedGroups
+	self definedGroupNames at: groupName put: includedGroups asArray sort
 
 ]
 
@@ -43,13 +43,5 @@ RwProjectLoadConfiguration >> definedGroupNames [
 RwProjectLoadConfiguration >> definedGroupNames: aColl [
 
 	definedGroupNames := aColl
-
-]
-
-{ #category : 'initialization' }
-RwProjectLoadConfiguration >> initialize [
-
-	super initialize.
-	definedGroupNames := Dictionary new
 
 ]
