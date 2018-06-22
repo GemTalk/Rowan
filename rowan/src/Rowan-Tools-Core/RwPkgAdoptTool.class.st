@@ -150,14 +150,15 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	theClass rowanProjectName = Rowan unpackagedName
-		ifFalse: [ self error: 'The class ', className printString, ' is already packaged ... no need to adopt' ].
-
 	theBehavior := isMeta
 		ifTrue: [ theClass class ]
 		ifFalse: [ theClass ].
 
 	theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
+
+	theCompiledMethod rowanProjectName = Rowan unpackagedName
+		ifFalse: [ self error: 'The method ', className printString, '>>', methodSelector asString, ' is already packaged ... no need to adopt' ].
+
 	registry
 		addExtensionCompiledMethod: theCompiledMethod 
 		for: theBehavior 

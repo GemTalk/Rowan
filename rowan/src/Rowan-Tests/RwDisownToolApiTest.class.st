@@ -6,8 +6,9 @@ Class {
 
 { #category : 'tests' }
 RwDisownToolApiTest >> testDisownMethod [
-	| projectTools projectName packageNames className packageName theClass fooMethod |
+	| projectTools packageTools projectName packageNames className packageName theClass fooMethod |
 	projectTools := Rowan projectTools.
+	packageTools := Rowan packageTools.
 	projectName := 'DisProject'.
 	packageName := 'Disown-Core'.
 	packageNames := {packageName}.
@@ -34,6 +35,7 @@ RwDisownToolApiTest >> testDisownMethod [
 		category: '*' , packageName asLowercase.
 
 	self assert: theClass new foo = 'foo'.
+	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
 
 	projectTools disown
@@ -42,9 +44,10 @@ RwDisownToolApiTest >> testDisownMethod [
 	theClass := Rowan globalNamed: className.
 	self assert: theClass notNil.
 	self assert: theClass new foo = 'foo'.
+	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = Rowan unpackagedName.
 
-	projectTools disown
+	packageTools adopt
 		adoptMethod: #foo inClassNamed: className isMeta: false  intoPackageNamed: packageName.
 
 	theClass := Rowan globalNamed: className.
