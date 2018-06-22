@@ -36,6 +36,11 @@ RwPrjReconcileTool >> _moveClassExtension: theClassExtension toNewPackageClonedF
 			pDef ].
 	packageDef removeClassExtension: theClassExtension.
 	newPackageDef addClassExtension: theClassExtension.
+	"update the method categories --- hybrid only ... but that is what we're doing"
+	theClassExtension instanceMethodDefinitions values do: [:methodDef |
+		methodDef protocol: '*', newPackageName ].
+	theClassExtension classMethodDefinitions values do: [:methodDef |
+		methodDef protocol: '*', newPackageName ].
 	^ newPackageDef
 
 ]
