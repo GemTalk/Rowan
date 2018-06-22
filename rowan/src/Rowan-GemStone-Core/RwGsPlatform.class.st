@@ -156,6 +156,6 @@ RwGsPlatform >> parseSelectorFrom: methodString [
 RwGsPlatform >> platformConfigurationAttributes [
 	"Answer the configuration attributes for the current platform."
 
-	^ super platformConfigurationAttributes, {self basePlatformAttribute. System stoneVersionReport at: 'gsVersion'}
+	^ super platformConfigurationAttributes, {self basePlatformAttribute. (System stoneVersionReport at: 'gsVersion') asRwGemStoneVersionNumber}
 
 ]
