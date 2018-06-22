@@ -677,6 +677,23 @@ RwGsSymbolDictionaryRegistry_Implementation class >> disownClass: class instance
 
 ]
 
+{ #category : 'class disown api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> disownClassExtensions: class forLoadedPackage: loadedPackage instance: registryInstance [
+
+	"Remove the extension methods in the class for the given package"
+
+	| loadedClassExtension |
+	loadedClassExtension := loadedPackage
+		loadedClassExtensionForClass: class
+		ifAbsent: [ self error: 'No class extensions found for the class ', class name asString printString, ' in the package ', loadedPackage name printString ].
+	
+	loadedClassExtension disownFromLoaded: registryInstance.
+	registryInstance classExtensionRegistry removeKey: class classHistory.
+
+	^ registryInstance
+
+]
+
 { #category : 'class - patch api' }
 RwGsSymbolDictionaryRegistry_Implementation class >> ensureExtensionClassNamed: className existsForPackageNamed: packageName instance: registryInstance [
 

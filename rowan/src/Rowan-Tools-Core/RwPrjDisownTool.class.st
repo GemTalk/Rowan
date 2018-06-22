@@ -4,6 +4,39 @@ Class {
 	#category : 'Rowan-Tools-Core'
 }
 
+{ #category : 'methods' }
+RwPrjDisownTool >> disownClassExtensionMethodsInClassNamed: className forPackageNamed: packageName [
+
+	"Remove the extension methods in the named class for the named package"
+
+	"The methods are not removed from the system"
+
+	"use:
+		Rowan packageTools adopt
+			adoptClassExtensionNamed: className  instanceSelectors: <instanceSelectors> classSelectors: <classSelectors> intoPackageNamed: packageName: packageName
+	to restore the classes and methods to the loaded things"
+
+	| loadedPackage loadedProject loadedClassExtension gemstoneSpec packageSymDictName theClass theSymbolDictionary registry |
+	theClass := Rowan globalNamed: className.
+
+	loadedClassExtension := (Rowan image loadedClassExtensionsForClass: theClass) 
+		detect: [:classExtension |  classExtension loadedPackage name = packageName ]
+		ifNone: [ self error: 'No class extensions for the package ' , packageName printString, ' found in the class ' , className printString ].
+
+	loadedPackage := loadedClassExtension loadedPackage.
+	loadedProject := loadedPackage loadedProject.
+
+	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
+	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+
+	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
+
+	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
+
+	registry disownClassExtensions: theClass forLoadedPackage: loadedPackage
+
+]
+
 { #category : 'classes' }
 RwPrjDisownTool >> disownClassNamed: className [
 
