@@ -136,7 +136,7 @@ RwAbstractProjectLoadConfiguration >> conditionalPackageMapSpecsAtGemStoneUserId
 		at: userId ifAbsentPut: [ Dictionary new ])
 			at: #packageNameToPlatformPropertiesMap ifAbsentPut: [ Dictionary new ])
 				at: packageName ifAbsentPut: [ Dictionary new ])
-					at: 'symbolDictName' put: symbolDictName
+					at: 'symbolDictName' put: symbolDictName asString
 
 ]
 
@@ -145,7 +145,7 @@ RwAbstractProjectLoadConfiguration >> conditionalPackageMapSpecsAtGemStoneUserId
 
 	((self conditionalPackageMapSpecs at: 'gemstone' ifAbsentPut: [ Dictionary new ])
 		at: userId ifAbsentPut: [ Dictionary new ])
-			at: #defaultSymbolDictName put: defaultSymbolDictName
+			at: #defaultSymbolDictName put: defaultSymbolDictName asString
 
 ]
 

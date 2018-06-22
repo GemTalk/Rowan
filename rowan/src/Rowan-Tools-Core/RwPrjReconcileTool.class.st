@@ -96,6 +96,13 @@ RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
 			(newPackageDefMap at: newPackageDef name ifAbsentPut: [ Set new ]) add: ar.
 			(packageNameToSymbolDictNameMap at: newPackageDef name ifAbsentPut: [ IdentitySet new ]) add: actualSymDictName asSymbol  ].
 		config := projectDef configurationTemplate.
+packageNameToSymbolDictNameMap keysAndValuesDo: [:packageName :symDictNames |
+	symDictNames size > 1 ifTrue: [ self error: 'More than one symbol dictionary associated with package ', packageName printString ].
+    config 
+		conditionalPackageMapSpecsAtGemStoneUserId: Rowan image currentUserId 
+		andPackageName: packageName 
+		setSymbolDictNameTo: symDictNames any ].
+
 self halt. ].
 
 ]
