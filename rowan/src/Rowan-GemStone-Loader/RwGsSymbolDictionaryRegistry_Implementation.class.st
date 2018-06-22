@@ -73,6 +73,23 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _addMovedDeletedMethod: new
 
 ]
 
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry_Implementation class >> _doDeleteClassFromLoadedThings: class removeClassFromSystem: removeClassFromSystem instance: registryInstance [
+
+	"a class association is being deleted from the receiver remove it from the loaded things. Conditionally remove class from system"
+
+	self
+		_loadedClassFor: class
+		noNewVersion: [ :loadedClass | 
+			"association for class is present, finish delete operation"
+			loadedClass removeFromLoaded: registryInstance.
+			registryInstance classRegistry removeKey: class classHistory.
+			removeClassFromSystem ifTrue: [ registryInstance _symbolDictionary removeKey: loadedClass key asSymbol ] ]
+		instance: registryInstance.
+	^ registryInstance
+
+]
+
 { #category : 'method - private api' }
 RwGsSymbolDictionaryRegistry_Implementation class >> _doDeleteCompiledMethod: compiledMethod from: behavior instance: registryInstance [
 
@@ -555,19 +572,20 @@ RwGsSymbolDictionaryRegistry_Implementation class >> createLoadedPackageNamed: p
 ]
 
 { #category : 'class - patch api' }
-RwGsSymbolDictionaryRegistry_Implementation class >> deleteClassFromPackage: class instance: registryInstance [
+RwGsSymbolDictionaryRegistry_Implementation class >> deleteClassFromLoadedThings: class instance: registryInstance [
 
 	"a class association is being deleted from the receiver remove it from the loaded things"
 
-	self
-		_loadedClassFor: class
-		noNewVersion: [ :loadedClass | 
-			"association for class is present, finish delete operation"
-			loadedClass removeFromLoaded: registryInstance.
-			registryInstance classRegistry removeKey: class classHistory.
-			registryInstance _symbolDictionary removeKey: loadedClass key asSymbol ]
-		instance: registryInstance.
-	^ registryInstance
+	^ self _doDeleteClassFromLoadedThings: class removeClassFromSystem: false instance: registryInstance
+
+]
+
+{ #category : 'class - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> deleteClassFromPackage: class instance: registryInstance [
+
+	"a class association is being deleted from the receiver remove it from the loaded things and remove class from system"
+
+	^ self _doDeleteClassFromLoadedThings: class removeClassFromSystem: false instance: registryInstance
 
 ]
 
