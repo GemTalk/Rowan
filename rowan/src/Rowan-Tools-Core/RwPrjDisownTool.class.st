@@ -4,7 +4,7 @@ Class {
 	#category : 'Rowan-Tools-Core'
 }
 
-{ #category : 'methods' }
+{ #category : 'classes' }
 RwPrjDisownTool >> disownClassExtensionMethodsInClassNamed: className forPackageNamed: packageName [
 
 	"Remove the extension methods in the named class for the named package"
@@ -105,4 +105,40 @@ RwPrjDisownTool >> disownMethod: methodSelector inClassNamed: className isMeta: 
 
 	registry _doDeleteCompiledMethodFromLoadedThings: theCompiledMethod for: theBehavior
 
+]
+
+{ #category : 'packages' }
+RwPrjDisownTool >> disownPackageNamed: packageName [
+
+	"Remove the classes and methods managed by the package from the loaded things."
+
+	"The classes and methods are not removed from the system"
+
+	"Use the adopt tool to restore the classes and methods to the loaded things"
+
+	| loadedPackage loadedProject gemstoneSpec packageSymDictName theSymbolDictionary registry  |
+
+	loadedPackage := Rowan image loadedPackageNamed: packageName.
+	loadedProject := loadedPackage loadedProject.
+
+	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
+	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+
+	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
+
+	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
+
+	loadedPackage loadedClasses values
+		do: [:loadedClass | 
+			| class |
+			class := Rowan globalNamed: loadedClass key.
+			loadedClass disownFromLoaded: registry.
+			registry classRegistry removeKey: class classHistory ].
+
+	loadedPackage loadedClassExtensions values 
+		do: [:loadedClassExtension | 
+			| class |
+			class := Rowan globalNamed: loadedClassExtension key.
+			loadedClassExtension disownFromLoaded: registry.
+			registry classExtensionRegistry removeKey: class classHistory].
 ]
