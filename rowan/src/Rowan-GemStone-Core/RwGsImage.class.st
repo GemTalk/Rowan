@@ -328,13 +328,17 @@ RwGsImage class >> loadedProjects [
 
 	"Return the list of loaded projects based on the projects that are visible in the current transient symbol list."
 
-	| loadedProjects |
+	| loadedProjects allLoadedProjectNames |
+	allLoadedProjectNames := self _loadedProjectRegistry values collect: [:each | each name ].
 	loadedProjects := (self _loadedProjectRegistryForUserId: self currentUserId) values asIdentitySet.
 	self symbolList do: [:symDict | 
 		symDict rowanSymbolDictionaryRegistry
 			ifNotNil: [:registry |  | projects |
 				projects := registry packageRegistry values collect: [:loadedPackage | loadedPackage loadedProject ].
-				projects := projects reject: [:each | each isNil or: [ (self loadedProjectNamed: each name ifAbsent: []) isNil ] ].
+				projects := projects 
+					reject: [:each | 
+						each isNil or: [ (allLoadedProjectNames includes: each name) not 
+										or: [ (self loadedProjectNamed: each name ifAbsent: []) isNil ] ] ].
 				loadedProjects addAll: projects ] ].
 	^ loadedProjects
 
