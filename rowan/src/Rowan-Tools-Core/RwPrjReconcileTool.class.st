@@ -118,7 +118,7 @@ RwPrjReconcileTool >> reconcileProjectFromSpecUrl: specUrl writeProject: writePr
 	writeProjectBool
 		ifTrue: [
 			configExportMap keysAndValuesDo: [:config :exportUrl |
-				config copy initializeForExport exportToUrl: exportUrl ].
+				config exportToUrl: exportUrl ].
 			projectTools write writeProjectDefinition: projectDefinition ].
 	^ projectDefinition
 

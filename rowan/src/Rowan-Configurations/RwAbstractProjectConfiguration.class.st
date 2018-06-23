@@ -18,7 +18,7 @@ RwAbstractProjectConfiguration class >> _readStonFrom: stream [
 	(reader := STONReader on: stream)
 		allowComplexMapKeys: true.
 	^reader next
-		initializeForExport;
+		initializeForImport;
 		yourself
 
 ]
@@ -73,6 +73,25 @@ RwAbstractProjectConfiguration class >> newNamed: aName for: projectName [
 RwAbstractProjectConfiguration >> _configsPath [
 
 	^ self _specification configsPath
+]
+
+{ #category : 'exporting' }
+RwAbstractProjectConfiguration >> _exportToUrl: fileUrl [
+
+	| url |
+	url := fileUrl asRwUrl.
+	url schemeName = 'file'
+		ifTrue: [ 
+			Rowan fileUtilities
+				writeStreamFor: self name , '.ston'
+				in: url pathForDirectory
+				do: [ :stream | 
+					| string |
+					string := STON toStringPretty: self.
+					stream nextPutAll: string.
+					^ self ] ].
+	^ nil	"otherwise a noop"
+
 ]
 
 { #category : 'private' }
@@ -168,9 +187,6 @@ RwAbstractProjectConfiguration >> export [
 	exportPath := self _repositoryRootPath , '/' , self _configsPath , '/'.
 	Rowan fileUtilities ensureDirectoryExists: exportPath.
 	exportUrl := 'file:' , exportPath.
-
-	export := self copy.
-	export initializeForExport.
 	^ export exportToUrl: exportUrl
 
 ]
@@ -178,19 +194,9 @@ RwAbstractProjectConfiguration >> export [
 { #category : 'exporting' }
 RwAbstractProjectConfiguration >> exportToUrl: fileUrl [
 
-	| url |
-	url := fileUrl asRwUrl.
-	url schemeName = 'file'
-		ifTrue: [ 
-			Rowan fileUtilities
-				writeStreamFor: self name , '.ston'
-				in: url pathForDirectory
-				do: [ :stream | 
-					| string |
-					string := STON toStringPretty: self.
-					stream nextPutAll: string.
-					^ self ] ].
-	^ nil	"otherwise a noop"
+	^ self copy
+		initializeForExport;
+		_exportToUrl: fileUrl
 
 ]
 
@@ -208,10 +214,7 @@ RwAbstractProjectConfiguration >> initializeForExport [
 	"if spec is to be exported, clear out any of the fields that represent state that should 
 	not be shared"
 
-	| vrsn |
-	vrsn := version.
-	self initializeForImport.
-	version := vrsn.		"preserve version number for export"
+	projectName := nil
 
 ]
 
@@ -221,7 +224,7 @@ RwAbstractProjectConfiguration >> initializeForImport [
 	"if spec has been imported, clear out any of the fields that represent state that should 
 	not be shared"
 
-	version := projectName := nil
+	projectName := nil
 
 ]
 

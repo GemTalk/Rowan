@@ -73,11 +73,6 @@ RwSpecification >> initialize [
 RwSpecification >> initializeForExport [
   "if spec has been exported, clear out any of the fields that represent local disk state"
 
-	| vrsn |
-	vrsn := version.
-	self initializeForImport.
-	version := vrsn	"preserve version number for export"
-
 ]
 
 { #category : 'initialization' }
@@ -85,7 +80,6 @@ RwSpecification >> initializeForImport [
 
   "if spec has been imported, clear out any of the fields that represent local disk state"
   
-	version := nil
 
 ]
 

@@ -25,6 +25,30 @@ RwProjectSpecification class >> newNamed: aString [
 		yourself
 ]
 
+{ #category : 'exporting' }
+RwProjectSpecification >> _exportToUrl: fileUrl [
+	^ self _exportToUrl: fileUrl as: self specName , '.ston'
+
+]
+
+{ #category : 'exporting' }
+RwProjectSpecification >> _exportToUrl: fileUrl as: fileName [
+  | url |
+  url := RwUrl fromString: fileUrl.
+  url schemeName = 'file'
+    ifTrue: [ 
+      CypressFileUtilities current
+        writeStreamFor: fileName
+        in: url pathForDirectory
+        do: [ :stream | 
+          | string |
+          string := STON toStringPretty: self.
+          stream nextPutAll: string.
+          ^ self ] ].
+  ^ nil	"otherwise a noop"
+
+]
+
 { #category : 'private' }
 RwProjectSpecification >> _myUserProfile [
   ^ System myUserProfile
@@ -99,40 +123,32 @@ RwProjectSpecification >> defaultGroupNames [
 { #category : 'exporting' }
 RwProjectSpecification >> export [
 
-	| url exportUrl exportSpec exportPath |
+	| url exportUrl exportPath |
 	self repositoryUrl
 		ifNil: [ self error: 'exportToUrl: must be used if repositoryUrl has not been set' ].
 	url := RwUrl fromString: self repositoryUrl.
 	exportPath := self repositoryRootPath , '/' , self specsPath , '/'.
 	CypressFileUtilities current ensureDirectoryExists: exportPath.
 	exportUrl := 'file:' , exportPath.
+	^ self exportToUrl: exportUrl
 
-	exportSpec := self copy.
-	exportSpec initializeForExport.	"clear fields that only apply to local image"
-	^ exportSpec exportToUrl: exportUrl
 ]
 
 { #category : 'exporting' }
 RwProjectSpecification >> exportToUrl: fileUrl [
-	^ self exportToUrl: fileUrl as: self specName , '.ston'
+
+	^ self copy;
+		initializeForExport;
+		_exportToUrl: fileUrl
 
 ]
 
 { #category : 'exporting' }
 RwProjectSpecification >> exportToUrl: fileUrl as: fileName [
-  | url |
-  url := RwUrl fromString: fileUrl.
-  url schemeName = 'file'
-    ifTrue: [ 
-      CypressFileUtilities current
-        writeStreamFor: fileName
-        in: url pathForDirectory
-        do: [ :stream | 
-          | string |
-          string := STON toStringPretty: self.
-          stream nextPutAll: string.
-          ^ self ] ].
-  ^ nil	"otherwise a noop"
+
+	^ self copy;
+		initializeForExport;
+		_exportToUrl: fileUrl as: fileName
 
 ]
 
@@ -154,7 +170,8 @@ RwProjectSpecification >> initializeForExport [
 	"before spec is exported, clear out any of the fields that are not to be included"
 
 	super initializeForExport.
-	platformSpec := nil.
+	imageSpec := nil.
+	platformSpec keysAndValuesDo: [:each | each initializeForExport ].
 	repoSpec initializeForExport
 
 ]
@@ -166,6 +183,7 @@ RwProjectSpecification >> initializeForImport [
 
 	super initializeForImport.
 	imageSpec := nil.
+	platformSpec keysAndValuesDo: [:each | each initializeForImport ].
 	repoSpec initializeForImport
 
 ]
