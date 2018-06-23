@@ -527,11 +527,8 @@ RwGsSymbolDictionaryRegistry >> deleteMovedMethod: selector for: behavior implem
 { #category : 'method - patch api' }
 RwGsSymbolDictionaryRegistry >> deletePackage: packageName [
 
-	| loadedPackage |
-	loadedPackage := packageRegistry
-		removeKey: packageName
-		ifAbsent: [ self error: 'package ' , packageName printString , ' not found' ].
-	loadedPackage loadedProject removeLoadedPackage: loadedPackage
+	^  self class registry_ImplementationClass deletePackage: packageName instance: self
+
 ]
 
 { #category : 'class disown api' }

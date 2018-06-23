@@ -9,8 +9,7 @@ RwDisownToolApiTest >> testDisownClass1 [
 
 	"disown a class with a method"
 
-	| projectTools packageTools projectName packageNames className packageName theClass fooMethod |
-	projectTools := Rowan projectTools.
+	| packageTools projectName packageNames className packageName theClass fooMethod |
 	packageTools := Rowan packageTools.
 	projectName := 'DisProject'.
 	packageName := 'Disown-Core'.
@@ -41,7 +40,7 @@ RwDisownToolApiTest >> testDisownClass1 [
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
 
-	projectTools disown
+	packageTools disown
 		disownClassNamed: className.
 
 	theClass := Rowan globalNamed: className.
@@ -66,8 +65,7 @@ RwDisownToolApiTest >> testDisownClass2 [
 
 	"disown a class with a method and an extenstion method"
 
-	| projectTools packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass x |
-	projectTools := Rowan projectTools.
+	| packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass x |
 	packageTools := Rowan packageTools.
 	projectName := 'Disown Browser'.
 	packageName1 := 'Disown-Core'.
@@ -105,7 +103,7 @@ RwDisownToolApiTest >> testDisownClass2 [
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
 
-	projectTools disown
+	packageTools disown
 		disownClassNamed: className.
 
 	theClass := Rowan globalNamed: className.
@@ -134,8 +132,7 @@ RwDisownToolApiTest >> testDisownExtensionMethods [
 
 	"disown extension methods in a class"
 
-	| projectTools packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass |
-	projectTools := Rowan projectTools.
+	| packageTools projectName packageNames className packageName1 packageName2 barMethod fooMethod theClass |
 	packageTools := Rowan packageTools.
 	projectName := 'Disown Browser'.
 	packageName1 := 'Disown-Core'.
@@ -173,7 +170,7 @@ RwDisownToolApiTest >> testDisownExtensionMethods [
 	self assert: fooMethod rowanPackageName = packageName1.
 	self assert: barMethod rowanPackageName = packageName2.
 
-	projectTools disown
+	packageTools disown
 		disownClassExtensionMethodsInClassNamed: className forPackageNamed: packageName2.
 
 	theClass := Rowan globalNamed: className.
@@ -199,8 +196,7 @@ RwDisownToolApiTest >> testDisownExtensionMethods [
 
 { #category : 'tests' }
 RwDisownToolApiTest >> testDisownMethod [
-	| projectTools packageTools projectName packageNames className packageName theClass fooMethod package |
-	projectTools := Rowan projectTools.
+	| packageTools projectName packageNames className packageName theClass fooMethod package |
 	packageTools := Rowan packageTools.
 	projectName := 'DisProject'.
 	packageName := 'Disown-Core'.
@@ -232,7 +228,7 @@ RwDisownToolApiTest >> testDisownMethod [
 	self assert: theClass rowanPackageName = packageName.
 	self assert: fooMethod rowanPackageName = packageName.
 
-	projectTools disown
+	packageTools disown
 		disownMethod: #foo inClassNamed: className isMeta: false.
 
 	theClass := Rowan globalNamed: className.
