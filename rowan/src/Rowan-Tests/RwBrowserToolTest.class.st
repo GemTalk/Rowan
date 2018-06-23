@@ -367,6 +367,23 @@ RwBrowserToolTest >> _loadMultiProjectDefinition: projectNames packageNames: pac
 ]
 
 { #category : 'private' }
+RwBrowserToolTest >> _loadPackageMappedProjectDefinition: projectName packageNameMap: packageNameMap defaultSymbolDictName: defaultSymbolDictName [
+	| projectDefinition projectTools |
+	projectTools := Rowan projectTools.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
+
+	projectDefinition := self
+		_standardProjectDefinition: projectName 
+		packageNameMap: packageNameMap 
+		defaultSymbolDictName: defaultSymbolDictName.
+
+	projectTools load loadProjectDefinition: projectDefinition
+
+]
+
+{ #category : 'private' }
 RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment [
 
 	| projectDefinition projectTools |
