@@ -399,7 +399,9 @@ RwBrowserToolTest >> _loadProjectDefinition: projectName packageNames: packageNa
 		comment:
 			'This is a simple project used to work out a "classic" class browser-style API'.
 
-	projectTools load loadProjectDefinition: projectDefinition
+	projectTools load loadProjectDefinition: projectDefinition.
+
+	^ projectDefinition
 
 ]
 

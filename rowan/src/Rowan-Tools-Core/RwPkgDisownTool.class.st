@@ -116,17 +116,10 @@ RwPkgDisownTool >> disownPackageNamed: packageName [
 
 	"Use the adopt tool to restore the classes and methods to the loaded things"
 
-	| loadedPackage loadedProject gemstoneSpec packageSymDictName theSymbolDictionary registry  |
+	| loadedPackage registry |
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
-	loadedProject := loadedPackage loadedProject.
-
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
-
-	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
-
-	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
+	registry :=Rowan image loadedRegistryForPackageNamed: packageName.
 
 	loadedPackage loadedClasses values
 		do: [:loadedClass | 
