@@ -140,7 +140,7 @@ method: STONReader
 lookupClass: name
   ^ (System myUserProfile objectNamed: name asSymbol)
     ifNil: [ 
-		(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanKernel')
+		(((AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools')
 			ifNotNil: [:rowanSymbolDictionary |
 				(rowanSymbolDictionary at: name asSymbol ifAbsent: [])
 					ifNotNil: [:cls | ^cls ] ])
