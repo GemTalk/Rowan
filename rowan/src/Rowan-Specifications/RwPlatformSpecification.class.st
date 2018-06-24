@@ -3,4 +3,3 @@ Class {
 	#superclass : 'RwSpecification',
 	#category : 'Rowan-Specifications'
 }
-

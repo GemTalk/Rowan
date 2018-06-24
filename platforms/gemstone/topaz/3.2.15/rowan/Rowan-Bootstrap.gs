@@ -605,8 +605,8 @@ currentOrNil
   CypressBootstrapRowanBlock 
     value: 'RowanTools'
     value: #('Rowan-Tools-Core' 'Rowan-Tools-Deprecated' 'Rowan-Definitions-Deprecated'
-	'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions-Extensions' 
-	'Rowan-GemStone-Specifications-Extensions'
+	'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions' 
+	'Rowan-GemStone-Specifications'
 	).	"Rowan Tools"
 %
   commit

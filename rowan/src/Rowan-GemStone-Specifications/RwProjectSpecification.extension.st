@@ -1,6 +1,6 @@
 Extension { #name : 'RwProjectSpecification' }
 
-{ #category : '*rowan-gemstone-specifications-extensions' }
+{ #category : '*rowan-gemstone-specifications' }
 RwProjectSpecification >> initialize [
 
 	super initialize.
@@ -18,7 +18,7 @@ RwProjectSpecification >> initialize [
 
 ]
 
-{ #category : '*rowan-gemstone-specifications-extensions' }
+{ #category : '*rowan-gemstone-specifications' }
 RwProjectSpecification >> platformSpec [
 
    ^platformSpec ifNil: [ 

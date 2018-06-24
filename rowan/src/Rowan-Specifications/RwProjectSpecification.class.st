@@ -26,16 +26,6 @@ RwProjectSpecification class >> newNamed: aString [
 		yourself
 ]
 
-{ #category : 'private' }
-RwSpecification >> currentVersion [
-	"
-		0.1.0 - initial version for specs
-		0.2.0 - defaultConfigurationNames and defaultGroupNames i.v. added to RwProjectSpecification
-	"
-	^ '0.2.0'
-
-]
-
 { #category : 'exporting' }
 RwProjectSpecification >> _exportToUrl: fileUrl [
 	^ self _exportToUrl: fileUrl as: self specName , '.ston'
@@ -367,7 +357,7 @@ RwProjectSpecification >> useGit [
 ]
 
 { #category : 'accessing' }
- RwProjectSpecification>> version [
+RwProjectSpecification >> version [
 	"answer the version of the class --- used to mark the version of the class for objects written to disk"
 
 	"see currentVersion method for list of versions"
