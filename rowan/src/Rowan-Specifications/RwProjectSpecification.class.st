@@ -148,7 +148,7 @@ RwProjectSpecification >> export [
 { #category : 'exporting' }
 RwProjectSpecification >> exportToUrl: fileUrl [
 
-	^ self copy;
+	^ self copy
 		initializeForExport;
 		_exportToUrl: fileUrl
 
@@ -157,7 +157,7 @@ RwProjectSpecification >> exportToUrl: fileUrl [
 { #category : 'exporting' }
 RwProjectSpecification >> exportToUrl: fileUrl as: fileName [
 
-	^ self copy;
+	^ self copy
 		initializeForExport;
 		_exportToUrl: fileUrl as: fileName
 
