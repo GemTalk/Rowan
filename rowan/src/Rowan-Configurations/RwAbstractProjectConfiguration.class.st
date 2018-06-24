@@ -187,7 +187,7 @@ RwAbstractProjectConfiguration >> export [
 	exportPath := self _repositoryRootPath , '/' , self _configsPath , '/'.
 	Rowan fileUtilities ensureDirectoryExists: exportPath.
 	exportUrl := 'file:' , exportPath.
-	^ export exportToUrl: exportUrl
+	^ self exportToUrl: exportUrl
 
 ]
 

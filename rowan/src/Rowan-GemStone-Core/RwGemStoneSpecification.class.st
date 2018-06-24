@@ -65,8 +65,16 @@ RwGemStoneSpecification >> defaultUseSessionMethodsForExtensions: aBool [
 RwGemStoneSpecification >> initialize [
 
 	super initialize.
-	defaultSymbolDictName := 'UserGlobals'.
 	packageNameToPlatformPropertiesMap := Dictionary new
+]
+
+{ #category : 'initialization' }
+RwGemStoneSpecification >> initializeForExport [
+  "if spec has been exported, clear out any of the fields that represent local disk state"
+
+	super initializeForExport.
+	projectOwnerId := nil.
+
 ]
 
 { #category : 'accessing' }
