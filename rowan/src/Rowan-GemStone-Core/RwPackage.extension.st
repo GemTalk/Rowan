@@ -13,12 +13,6 @@ RwPackage >> symbolDictName [
 ]
 
 { #category : '*rowan-gemstone-core' }
-RwPackage >> userId [
-
-	^ self _gemstonePlatformSpec userIdForPackageNamed: self name
-]
-
-{ #category : '*rowan-gemstone-core' }
 RwPackage >> useSessionMethodsForExtensions [
 
 	^ self _gemstonePlatformSpec

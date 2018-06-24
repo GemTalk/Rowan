@@ -33,7 +33,7 @@
 				#defaultSymbolDictName : 'RowanKernel',
 				#defaultUseSessionMethodsForExtensions : false
 				},
-			'default' : {
+			'allusers' : {
 				#defaultSymbolDictName : 'UserGlobals',
 				#defaultUseSessionMethodsForExtensions : false
 				}
