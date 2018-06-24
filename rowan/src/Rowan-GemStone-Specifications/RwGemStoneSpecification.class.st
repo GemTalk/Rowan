@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'defaultMethodEnv',
 		'defaultSymbolDictName',
-		'defaultUserId',
 		'defaultUseSessionMethodsForExtensions',
 		'packageNameToPlatformPropertiesMap',
 		'projectOwnerId'
@@ -34,18 +33,6 @@ RwGemStoneSpecification >> defaultSymbolDictName [
 RwGemStoneSpecification >> defaultSymbolDictName: aString [
 
 	defaultSymbolDictName := aString
-]
-
-{ #category : 'accessing' }
-RwGemStoneSpecification >> defaultUserId [
-
-	^ defaultUserId ifNil: [ defaultUserId := Rowan image currentUserId ]
-]
-
-{ #category : 'accessing' }
-RwGemStoneSpecification >> defaultUserId: aString [
-
-	defaultUserId := aString
 ]
 
 { #category : 'accessing' }
@@ -186,16 +173,6 @@ RwGemStoneSpecification >> userId: userId forPackageNamed: packageName [
 		at: packageName
 		ifAbsent: [ packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
 	packageProperties at: 'userId' put: userId
-]
-
-{ #category : 'accessing' }
-RwGemStoneSpecification >> userIdForPackageNamed: packageName [
-
-	| packageProperties |
-	packageProperties := packageNameToPlatformPropertiesMap
-		at: packageName
-		ifAbsent: [ ^ self defaultUserId ].
-	^ packageProperties at: 'userId' ifAbsent: [ ^ self defaultUserId ]
 ]
 
 { #category : 'accessing' }
