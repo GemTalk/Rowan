@@ -103,7 +103,7 @@
 					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' }
 					}
 			},
-			'default' : {
+			'allusers' : {
 				#defaultSymbolDictName : 'UserGlobals',
 				#defaultUseSessionMethodsForExtensions : false
 				}
