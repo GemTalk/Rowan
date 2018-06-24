@@ -70,6 +70,21 @@ RwPrjCreateTool >> createDiskBasedProject: projectName packageNames: packageName
 ]
 
 { #category : 'project definition creation' }
+RwPrjCreateTool >> createDiskBasedProjectDefinition: projectName packageNames: packageNames format: format root: rootPath [
+	"Create a new project definition for a disk-based Rowan project with the given attributes"
+
+	| utils rootRepoPath |
+	utils := self fileUtilities.
+	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
+	^ (RwProjectDefinition newForDiskBasedProjectNamed: projectName)
+		packageNames: packageNames;
+		repositoryRootPath: rootRepoPath;
+		projectOwnerId: Rowan image currentUserId;
+		yourself.
+
+]
+
+{ #category : 'project definition creation' }
 RwPrjCreateTool >> createDiskBasedProjectDefinition: projectName packageNames: packageNames format: format root: rootPath configsPath: configsPath repoPath: repoPath specsPath: specsPath [
 	"Create a new project definition for a disk-based Rowan project with the given attributes"
 
@@ -125,6 +140,21 @@ RwPrjCreateTool >> createGitBasedProject: projectName packageNames: packageNames
 	^ self
 		createProjectFor: projectDefinition 
 		format: format
+
+]
+
+{ #category : 'project definition creation' }
+RwPrjCreateTool >> createGitBasedProjectDefinition: projectName packageNames: packageNames format: format root: rootPath [
+	"Create a new project definition for a git-based Rowan project with the given attributes"
+
+	| utils rootRepoPath |
+	utils := self fileUtilities.
+	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
+	^(RwProjectDefinition newForGitBasedProjectNamed: projectName)
+		packageNames: packageNames;
+		repositoryRootPath: rootRepoPath;
+		projectOwnerId: Rowan image currentUserId;
+		yourself.
 
 ]
 
