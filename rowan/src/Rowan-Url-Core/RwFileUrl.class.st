@@ -80,14 +80,6 @@ RwFileUrl >> asRwRepository [
   ^ self createRwRepositoryForPath: self pathForDirectory
 ]
 
-{ #category : 'converting' }
-RwFileUrl >> asSpecification [
-  "Answer an RwSpecification "
-
-  ^ RwSpecification fromUrl: self
-
-]
-
 { #category : 'accessing' }
 RwFileUrl >> fileName [
 	"Return the last part of the path,

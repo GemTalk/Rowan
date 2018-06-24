@@ -1,6 +1,6 @@
 Extension { #name : 'RwMethodDefinition' }
 
-{ #category : '*rowan-cypress-core' }
+{ #category : '*rowan-cypress-definitions' }
 RwMethodDefinition >> fromCypressMethod: cypMethodDef [
   properties
     at: 'selector' put: cypMethodDef selector asSymbol;
@@ -9,7 +9,7 @@ RwMethodDefinition >> fromCypressMethod: cypMethodDef [
   self source: cypMethodDef source
 ]
 
-{ #category : '*rowan-cypress-core' }
+{ #category : '*rowan-cypress-definitions' }
 RwMethodDefinition class >> fromCypressMethod: cypMethodDef [
   ^ self new
     fromCypressMethod: cypMethodDef;

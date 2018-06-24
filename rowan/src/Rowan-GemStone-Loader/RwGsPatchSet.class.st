@@ -876,7 +876,7 @@ RwGsPatchSet >> createNewClassesAndClassVersions [
 RwGsPatchSet >> deleteMovedLoadedExtensionMethods [
 
 	deletedExtensionMethods
-		do: [ :methodDeletionPatch | methodDeletionPatch deleteMovedLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols ].
+		do: [:methodDeletionPatch | methodDeletionPatch deleteMovedLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]
 
 ]
 

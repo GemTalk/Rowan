@@ -94,6 +94,21 @@ RwGsImage class >> existingSymbolDictionaryNamed: dictName [
 ]
 
 { #category : 'querying' }
+RwGsImage class >> loadedClassAndSymbolDicitonaryForClass: class ifPresent: presentBlock ifAbsent: absentBlock [
+
+        "scan the symbol list for a RwLoadedClass instances for the given compiled method"
+
+        self symbolList
+                do: [ :symbolDict |
+                        symbolDict rowanSymbolDictionaryRegistry
+                                ifNotNil: [ :registry |
+                                        (registry classRegistry at: class classHistory ifAbsent: [  ])
+                                                ifNotNil: [ :loadedClass | ^ presentBlock value: symbolDict value: loadedClass ] ] ].
+        ^ absentBlock value
+
+]
+
+{ #category : 'querying' }
 RwGsImage class >> loadedClassExtensionsForClass: class [
 
 	"lookup the loadedClassExtensions for the given class"
@@ -313,13 +328,17 @@ RwGsImage class >> loadedProjects [
 
 	"Return the list of loaded projects based on the projects that are visible in the current transient symbol list."
 
-	| loadedProjects |
+	| loadedProjects allLoadedProjectNames |
+	allLoadedProjectNames := self _loadedProjectRegistry values collect: [:each | each name ].
 	loadedProjects := (self _loadedProjectRegistryForUserId: self currentUserId) values asIdentitySet.
 	self symbolList do: [:symDict | 
 		symDict rowanSymbolDictionaryRegistry
 			ifNotNil: [:registry |  | projects |
 				projects := registry packageRegistry values collect: [:loadedPackage | loadedPackage loadedProject ].
-				projects := projects reject: [:each | each isNil or: [ (self loadedProjectNamed: each name ifAbsent: []) isNil ] ].
+				projects := projects 
+					reject: [:each | 
+						each isNil or: [ (allLoadedProjectNames includes: each name) not 
+										or: [ (self loadedProjectNamed: each name ifAbsent: []) isNil ] ] ].
 				loadedProjects addAll: projects ] ].
 	^ loadedProjects
 

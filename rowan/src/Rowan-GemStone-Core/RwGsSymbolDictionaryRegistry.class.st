@@ -338,7 +338,9 @@ RwGsSymbolDictionaryRegistry >> adoptCompiledMethod: compiledMethod classExtensi
 
 	existing := methodRegistry at: compiledMethod ifAbsent: [ nil ].
 	existing
-		ifNotNil: [ self error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
+		ifNotNil: [
+			"existing LoadedMethod found for compiled method ... ignore already packaged methods"
+			^ self ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
 	methodRegistry at: compiledMethod put: loadedMethod.
@@ -525,11 +527,35 @@ RwGsSymbolDictionaryRegistry >> deleteMovedMethod: selector for: behavior implem
 { #category : 'method - patch api' }
 RwGsSymbolDictionaryRegistry >> deletePackage: packageName [
 
-	| loadedPackage |
-	loadedPackage := packageRegistry
-		removeKey: packageName
-		ifAbsent: [ self error: 'package ' , packageName printString , ' not found' ].
-	loadedPackage loadedProject removeLoadedPackage: loadedPackage
+	^  self class registry_ImplementationClass deletePackage: packageName instance: self
+
+]
+
+{ #category : 'class disown api' }
+RwGsSymbolDictionaryRegistry >> disownClass: class [
+
+	"Remove the specified class and all of it's packaged instance and class methods from the loaded things."
+
+	^ self class registry_ImplementationClass disownClass: class instance: self
+
+]
+
+{ #category : 'class disown api' }
+RwGsSymbolDictionaryRegistry >> disownClassExtensions: class forLoadedPackage: loadedPackage [
+
+	"Remove the extension methods in the named class for the named package"
+
+	^ self class registry_ImplementationClass disownClassExtensions: class forLoadedPackage: loadedPackage instance: self
+
+]
+
+{ #category : 'class disown api' }
+RwGsSymbolDictionaryRegistry >> disownClassExtensions: class forPackageNamed: packageName [
+
+	"Remove the extension methods in the named class for the named package"
+
+	^ self class registry_ImplementationClass disownClassExtensions: class forPackageNamed: packageName instance: self
+
 ]
 
 { #category : 'class - patch api' }

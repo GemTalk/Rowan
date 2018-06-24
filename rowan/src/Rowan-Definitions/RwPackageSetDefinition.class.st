@@ -17,22 +17,6 @@ RwPackageSetDefinition >> addPackage: aDefinition [
 	self addDefinition: aDefinition
 ]
 
-{ #category : 'comparing' }
-RwPackageSetDefinition >> compareAgainstBase: aDefinition [
-
-	| result |
-	result := RwPackageSetModification new.
-	self
-		compareDictionary: definitions
-		againstBaseDictionary: aDefinition definitions
-		into: result
-		elementClass: RwPackageDefinition.
-	result
-		updateForClassMoves;
-		updateForMethodMoves.
-	^ result
-]
-
 { #category : 'deriving' }
 RwPackageSetDefinition >> deriveLoadedThings [
 

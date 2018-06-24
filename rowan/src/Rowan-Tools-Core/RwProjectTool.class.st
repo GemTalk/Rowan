@@ -47,6 +47,13 @@ RwProjectTool class >> diff [
 ]
 
 { #category : 'commands' }
+RwProjectTool class >> disown [
+
+	^ RwPrjDisownTool new
+
+]
+
+{ #category : 'commands' }
 RwProjectTool class >> edit [
 
 	^ RwPrjEditTool new
@@ -96,6 +103,13 @@ RwProjectTool class >> query [
 { #category : 'commands' }
 RwProjectTool class >> read [
   ^ RwPrjReadTool new
+]
+
+{ #category : 'commands' }
+RwProjectTool class >> reconcile [
+
+	^ RwPrjReconcileTool new
+
 ]
 
 { #category : 'commands' }

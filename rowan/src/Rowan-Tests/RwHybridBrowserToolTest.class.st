@@ -4,6 +4,23 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
+{ #category : 'private' }
+RwHybridBrowserToolTest >> _standardProjectDefinition: projectName packageNameMap: packageNameMap defaultSymbolDictName: defaultSymbolDictName [
+
+	| projectDefinition |
+	projectDefinition := RwProjectDefinition
+		newForGitBasedProjectNamed: projectName.
+	packageNameMap keysAndValuesDo: [:packageName :symDictName |
+		projectDefinition
+			addPackageNamed: packageName;
+			setSymbolDictName: symDictName forPackageNamed: packageName
+			yourself ].
+	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
+
+	^ projectDefinition
+
+]
+
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridClassComment [
 
@@ -1012,6 +1029,49 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackage [
 		options: #().
 	self assert: movedNormalClass == normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2
+]
+
+{ #category : 'tests' }
+RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict [
+
+	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap |
+	projectName := 'Hybrid Project A'.
+	packageName1 := 'HybridA-Core'.
+	packageName2 := 'HybridA-Extensions'.
+	packageNames := {packageName1.
+	packageName2}.
+	packageNameMap := Dictionary new
+		at: packageName1 put: self _symbolDictionaryName1;
+		at: packageName2 put: self _symbolDictionaryName2;
+		yourself.
+
+	self
+		_loadPackageMappedProjectDefinition: projectName 
+		packageNameMap: packageNameMap 
+		defaultSymbolDictName: self _symbolDictionaryName1.
+
+	normalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: normalClass rowanPackageName = packageName1.
+
+	movedNormalClass := Object
+		rwSubclass: 'SimpleHybridNormal1'
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName2
+		options: #().
+	self assert: movedNormalClass == normalClass.
+	self assert: movedNormalClass rowanPackageName = packageName2
+
+
 ]
 
 { #category : 'tests' }

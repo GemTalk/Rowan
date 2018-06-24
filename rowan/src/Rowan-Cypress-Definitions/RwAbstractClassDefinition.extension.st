@@ -1,6 +1,6 @@
 Extension { #name : 'RwAbstractClassDefinition' }
 
-{ #category : '*rowan-cypress-core' }
+{ #category : '*rowan-cypress-definitions' }
 RwAbstractClassDefinition >> name [
   ^ self key
 ]

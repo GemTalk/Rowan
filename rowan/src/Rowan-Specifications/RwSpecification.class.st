@@ -1,9 +1,6 @@
 Class {
 	#name : 'RwSpecification',
 	#superclass : 'Object',
-	#instVars : [
-		'version'
-	],
 	#category : 'Rowan-Specifications'
 }
 
@@ -73,11 +70,6 @@ RwSpecification >> initialize [
 RwSpecification >> initializeForExport [
   "if spec has been exported, clear out any of the fields that represent local disk state"
 
-	| vrsn |
-	vrsn := version.
-	self initializeForImport.
-	version := vrsn	"preserve version number for export"
-
 ]
 
 { #category : 'initialization' }
@@ -85,7 +77,6 @@ RwSpecification >> initializeForImport [
 
   "if spec has been imported, clear out any of the fields that represent local disk state"
   
-	version := nil
 
 ]
 
@@ -99,17 +90,4 @@ RwSpecification >> postCopy [
 { #category : 'accessing' }
 RwSpecification >> projectUrl: ignored [
   
-]
-
-{ #category : 'accessing' }
-RwSpecification >> version [
-	"answer the version of the class --- used to mark the version of the class for objects written to disk"
-
-	"see currentVersion method for list of versions"
-
-	"currently RwProjectSpecification is the only instance being versioned as it represents the version of the whole structure, 
-		but I don't want to rule out the possiblity that other specs may need to be independently versioned."
-
-	^ version
-
 ]

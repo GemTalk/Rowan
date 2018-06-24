@@ -22,7 +22,9 @@ RwPkgAdoptTool >> adoptClassExtensionNamed: className  instanceSelectors: instan
 RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: packageName [
 
 	"adopt the methods for class named <className> and it's methods into the package named <packageName>, 
-		if it is not a <classExtension>, adopt the class into the package as well"
+		if it is not a <classExtension>, adopt the class into the package as well."
+
+	"Ignore packaged instance and class methods"
 
 	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
 		theBehavior |
@@ -86,6 +88,8 @@ RwPkgAdoptTool >> adoptClassNamed: className  instanceSelectors: instanceSelecto
 
 	"adopt the class named <className> and it's methods into the package named <packageName>"
 
+	"Ignore packaged instance and class methods"
+	
 	self 
 		adoptClassNamed: className 
 		classExtension: false 
@@ -100,6 +104,8 @@ RwPkgAdoptTool >> adoptClassNamed: className  intoPackageNamed: packageName [
 
 	"adopt the class named <className> and it's methods into the package named <packageName>"
 
+	"Ignore packaged instance and class methods"
+
 	| theClass |
 
 	theClass := Rowan globalNamed: className.
@@ -107,6 +113,26 @@ RwPkgAdoptTool >> adoptClassNamed: className  intoPackageNamed: packageName [
 		adoptClassNamed: className 
 		instanceSelectors: theClass selectors 
 		classSelectors: theClass class selectors 
+		intoPackageNamed: packageName
+
+]
+
+{ #category : 'smalltalk api' }
+RwPkgAdoptTool >> adoptMethod: methodSelector inClassNamed: className  isMeta: isMeta intoPackageNamed: packageName [
+
+	"adopt the method <methodSelector> in class named <className> and it's methods into the package named <packageName>"
+
+	| theClass theBehavior protocolString  |
+	theClass := Rowan globalNamed: className.
+	theBehavior := isMeta
+		ifTrue: [ theClass class ]
+		ifFalse: [ theClass ].
+	protocolString := (theBehavior categoryOfSelector: methodSelector asSymbol) asString. 
+	self 
+		adoptMethod: methodSelector 
+		protocol: protocolString 
+		inClassNamed: className  
+		isMeta: isMeta 
 		intoPackageNamed: packageName
 
 ]
@@ -130,14 +156,15 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	theClass rowanProjectName = Rowan unpackagedName
-		ifFalse: [ self error: 'The class ', className printString, ' is already packaged ... no need to adopt' ].
-
 	theBehavior := isMeta
 		ifTrue: [ theClass class ]
 		ifFalse: [ theClass ].
 
 	theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
+
+	theCompiledMethod rowanProjectName = Rowan unpackagedName
+		ifFalse: [ self error: 'The method ', className printString, '>>', methodSelector asString, ' is already packaged ... no need to adopt' ].
+
 	registry
 		addExtensionCompiledMethod: theCompiledMethod 
 		for: theBehavior 

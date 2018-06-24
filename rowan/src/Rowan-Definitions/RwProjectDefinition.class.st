@@ -30,17 +30,6 @@ RwProjectDefinition class >> newForGitBasedProjectNamed: aString [
 
 ]
 
-{ #category : '*rowan-deprecated' }
-RwProjectDefinition class >> newForGitPackageProjectNamed: aString [
-
-	| spec |
-	spec := RwSimpleProjectSpecification new
-		specName: aString;
-		yourself.
-	^ self newForSpecification: spec
-
-]
-
 { #category : 'instance creation' }
 RwProjectDefinition class >> newForSpecification: aRwSpecification [
 
@@ -110,23 +99,6 @@ RwProjectDefinition >> comment: aString [
 	self specification comment: aString
 ]
 
-{ #category : 'comparing' }
-RwProjectDefinition >> compareAgainstBase: aDefinition [
-
-	| modification packagesModification |
-	modification := RwProjectModification before: aDefinition after: self.
-	modification
-		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
-	packagesModification := RwPackagesModification new.
-	self
-		compareDictionary: packages
-		againstBaseDictionary: aDefinition packages
-		into: packagesModification
-		elementClass: RwPackageDefinition.
-	modification packagesModification: packagesModification.
-	^ modification
-]
-
 { #category : 'properties' }
 RwProjectDefinition >> configsPath [
 
@@ -142,6 +114,19 @@ RwProjectDefinition >> configsPath: aDirectoryPathString [
 ]
 
 { #category : 'properties' }
+RwProjectDefinition >> configurationExportUrl [
+
+	"Return an RwFileUrl suitable for saving the receiver's configuration in the appropriate configs directory"
+
+	| exportPath |
+	self repositoryUrl
+		ifNil: [ self error: 'RepositoryUrl has not been set. Receiver has not bee associated with an existing Rowan project on disk.' ].
+	exportPath := self repositoryRootPath , '/' , self configsPath , '/'.
+	^('file:' , exportPath) asRwUrl
+
+]
+
+{ #category : 'properties' }
 RwProjectDefinition >> configurationTemplate [
 
 	"Return a generic RwProjectLoadConfiguration based on the list of packages in the reciever"
@@ -153,19 +138,11 @@ RwProjectDefinition >> configurationTemplate [
 		yourself.
 	groupNames := self specification defaultGroupNames.
 	groupNames
-		do: [:groupName |
-			config definedGroupNames
-				at: groupName 
-				put: {} ].
-	config conditionalPackages
-		at: { 'common' }
-		put: (Dictionary new
-				at: (groupNames at: 1)
-					put: (Dictionary new
-								at: #packageNames
-								put: self packageNames;
-								yourself);
-				yourself).
+		do: [:groupName | config addDefinedGroupName: groupName ].
+	config 
+		conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+		andGroup: (groupNames at: 1) 
+		addPackageNames: self packageNames.
 	^ config
 
 ]
@@ -234,13 +211,6 @@ RwProjectDefinition >> packageNames: packageNames [
 	packageNames
 		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
 
-]
-
-{ #category : '*rowan-deprecated' }
-RwProjectDefinition >> packageNamesInLoadOrder: packageNamesInLoadOrder [
-
-	packageNamesInLoadOrder
-		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
 ]
 
 { #category : 'accessing' }

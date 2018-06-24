@@ -3,6 +3,7 @@ Class {
 	#superclass : 'RwSpecification',
 	#instVars : [
 		'specName',
+		'version',
 		'projectUrl',
 		'platformSpec',
 		'configsPath',
@@ -23,6 +24,30 @@ RwProjectSpecification class >> newNamed: aString [
 	^ self new
 		specName: aString;
 		yourself
+]
+
+{ #category : 'exporting' }
+RwProjectSpecification >> _exportToUrl: fileUrl [
+	^ self _exportToUrl: fileUrl as: self specName , '.ston'
+
+]
+
+{ #category : 'exporting' }
+RwProjectSpecification >> _exportToUrl: fileUrl as: fileName [
+  | url |
+  url := RwUrl fromString: fileUrl.
+  url schemeName = 'file'
+    ifTrue: [ 
+      CypressFileUtilities current
+        writeStreamFor: fileName
+        in: url pathForDirectory
+        do: [ :stream | 
+          | string |
+          string := STON toStringPretty: self.
+          stream nextPutAll: string.
+          ^ self ] ].
+  ^ nil	"otherwise a noop"
+
 ]
 
 { #category : 'private' }
@@ -99,40 +124,32 @@ RwProjectSpecification >> defaultGroupNames [
 { #category : 'exporting' }
 RwProjectSpecification >> export [
 
-	| url exportUrl exportSpec exportPath |
+	| url exportUrl exportPath |
 	self repositoryUrl
 		ifNil: [ self error: 'exportToUrl: must be used if repositoryUrl has not been set' ].
 	url := RwUrl fromString: self repositoryUrl.
 	exportPath := self repositoryRootPath , '/' , self specsPath , '/'.
 	CypressFileUtilities current ensureDirectoryExists: exportPath.
 	exportUrl := 'file:' , exportPath.
+	^ self exportToUrl: exportUrl
 
-	exportSpec := self copy.
-	exportSpec initializeForExport.	"clear fields that only apply to local image"
-	^ exportSpec exportToUrl: exportUrl
 ]
 
 { #category : 'exporting' }
 RwProjectSpecification >> exportToUrl: fileUrl [
-	^ self exportToUrl: fileUrl as: self specName , '.ston'
+
+	^ self copy
+		initializeForExport;
+		_exportToUrl: fileUrl
 
 ]
 
 { #category : 'exporting' }
 RwProjectSpecification >> exportToUrl: fileUrl as: fileName [
-  | url |
-  url := RwUrl fromString: fileUrl.
-  url schemeName = 'file'
-    ifTrue: [ 
-      CypressFileUtilities current
-        writeStreamFor: fileName
-        in: url pathForDirectory
-        do: [ :stream | 
-          | string |
-          string := STON toStringPretty: self.
-          stream nextPutAll: string.
-          ^ self ] ].
-  ^ nil	"otherwise a noop"
+
+	^ self copy
+		initializeForExport;
+		_exportToUrl: fileUrl as: fileName
 
 ]
 
@@ -149,30 +166,13 @@ RwProjectSpecification >> imageSpec: anObject [
 ]
 
 { #category : 'initialization' }
-RwProjectSpecification >> initialize [
-
-	super initialize.
-	comment := ''.
-	configsPath := 'rowan/configs'.
-	repoPath := 'rowan/src'.
-	specsPath := 'rowan/specs'.
-	platformSpec := Dictionary new
-		at: 'gemstone' put: RwGemStoneSpecification new;
-		yourself.
-	repoSpec := RwGitRepositorySpecification new.
-	version := self currentVersion.
-	defaultConfigurationNames := #('Default').
-	defaultGroupNames := #('default').
-
-]
-
-{ #category : 'initialization' }
 RwProjectSpecification >> initializeForExport [
 
 	"before spec is exported, clear out any of the fields that are not to be included"
 
 	super initializeForExport.
-	platformSpec := nil.
+	imageSpec := nil.
+	platformSpec valuesDo: [:each | each initializeForExport ].
 	repoSpec initializeForExport
 
 ]
@@ -184,6 +184,7 @@ RwProjectSpecification >> initializeForImport [
 
 	super initializeForImport.
 	imageSpec := nil.
+	platformSpec valuesDo: [:each | each initializeForImport ].
 	repoSpec initializeForImport
 
 ]
@@ -212,16 +213,6 @@ RwProjectSpecification >> loadedGroupNames [
 RwProjectSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
 
 	self subclassResponsibility: #packageOrGroupNamesToLoad:
-]
-
-{ #category : 'accessing' }
-RwProjectSpecification >> platformSpec [
-
-   ^platformSpec ifNil: [ 
-		platformSpec := Dictionary new
-			at: 'gemstone' put: RwGemStoneSpecification new;
-			yourself ].
-
 ]
 
 { #category : 'accessing' }
@@ -363,4 +354,17 @@ RwProjectSpecification >> updateLoadedCommitIdForTool: aRwTool [
 RwProjectSpecification >> useGit [
 
 	^ self repoSpec useGit
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> version [
+	"answer the version of the class --- used to mark the version of the class for objects written to disk"
+
+	"see currentVersion method for list of versions"
+
+	"currently RwProjectSpecification is the only instance being versioned as it represents the version of the whole structure, 
+		but I don't want to rule out the possiblity that other specs may need to be independently versioned."
+
+	^ version
+
 ]
