@@ -735,6 +735,17 @@ RwPrjBrowserTool >> createGitPackageProjectNamed: projectName updateDefinition: 
 
 ]
 
+{ #category : 'project browsing' }
+RwPrjBrowserTool >> exposeRowanToolsSymbolDictionary [
+
+	| transient size dict |
+	transient := Rowan image symbolList.
+	size := transient size.
+	dict := (AllUsers userWithId: 'SystemUser') objectNamed: 'RowanTools'.
+	transient insertObject: dict at: size + 1.
+
+]
+
 { #category : 'method browsing' }
 RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: isMeta toProtocol: hybridPackageName [
 
