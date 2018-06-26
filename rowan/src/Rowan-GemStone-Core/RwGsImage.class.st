@@ -16,8 +16,13 @@ RwGsImage class >> _loadedProjectRegistry [
 { #category : 'private' }
 RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
 
-	| ug |
-	ug := (AllUsers userWithId: aUserId) objectNamed: #'UserGlobals'.
+	| userProfile ug |
+	userProfile := AllUsers userWithId: aUserId.
+	userProfile defaultObjectSecurityPolicy currentUserCanRead
+		ifFalse: [
+			"do not have permissions to read objects created by <aUserId>"
+			^ nil ].
+	ug := userProfile objectNamed: #'UserGlobals'.
 	^ ug
 		at: #'RwGsLoadedProjectRegistry'
 		ifAbsent: [ 
@@ -308,18 +313,12 @@ RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 	currentUserId := self currentUserId.
 	^ self _loadedProjectRegistry
 		at: aString
-		ifAbsent: [ 
-			AllUsers
-				do: [ :userProfile | 
-					| aUserId |
-					aUserId := userProfile userId.
-					aUserId ~= currentUserId
-						ifTrue: [ 
-							(self _loadedProjectRegistryForUserId: aUserId)
-								ifNotNil: [ :projectRegistry | 
-									(projectRegistry at: aString ifAbsent: [  ])
-										ifNotNil: [ :loadedProject | ^ loadedProject ] ] ] ].
-			^ absentBlock value ]
+		ifAbsent: [
+			| matchingProjects |
+			matchingProjects := self loadedProjects select: [:each | each name = aString ].
+			matchingProjects size > 1 ifTrue: [ self error: 'Multiple projects with same name available from symbol dictionaries in symbol list' ].
+			matchingProjects size = 0 ifTrue: [ ^ absentBlock value ].
+			matchingProjects any ]
 
 ]
 
@@ -338,12 +337,7 @@ RwGsImage class >> loadedProjects [
 				do: [:loadedPackage | 
 					"visible loaded projects"
 					loadedProjects add: loadedPackage loadedProject ] ].
-	loadedProjects := loadedProjects 
-		reject: [:loadedProject | 
-			"if a package is visible in the symbol list (visible package registries), but the loaded project
-				is not in one of the loaded project registries, then ignore the project"
-			(self loadedProjectNamed: loadedProject name ifAbsent: []) isNil ].
-	^ loadedProjects
+	^loadedProjects
 
 ]
 
