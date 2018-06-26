@@ -326,20 +326,23 @@ RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 { #category : 'querying' }
 RwGsImage class >> loadedProjects [
 
-	"Return the list of loaded projects based on the projects that are visible in the current transient symbol list."
+	"Return the list of loaded projects based on the packages that are visible in the current transient symbol list."
 
-	| loadedProjects allLoadedProjectNames |
-	allLoadedProjectNames := self _loadedProjectRegistry values collect: [:each | each name ].
-	loadedProjects := (self _loadedProjectRegistryForUserId: self currentUserId) values asIdentitySet.
-	self symbolList do: [:symDict | 
-		symDict rowanSymbolDictionaryRegistry
-			ifNotNil: [:registry |  | projects |
-				projects := registry packageRegistry values collect: [:loadedPackage | loadedPackage loadedProject ].
-				projects := projects 
-					reject: [:each | 
-						each isNil or: [ (allLoadedProjectNames includes: each name) not 
-										or: [ (self loadedProjectNamed: each name ifAbsent: []) isNil ] ] ].
-				loadedProjects addAll: projects ] ].
+	| loadedProjects |
+	loadedProjects := (self _loadedProjectRegistryForUserId: self currentUserId) values asIdentitySet. "list of projects created by current user"
+	(self symbolList select: [:symDict | 
+		symDict rowanSymbolDictionaryRegistry notNil])
+		do: [:symDict | 
+			"visible loaded packages"
+			symDict rowanSymbolDictionaryRegistry packageRegistry values 
+				do: [:loadedPackage | 
+					"visible loaded projects"
+					loadedProjects add: loadedPackage loadedProject ] ].
+	loadedProjects := loadedProjects 
+		reject: [:loadedProject | 
+			"if a package is visible in the symbol list (visible package registries), but the loaded project
+				is not in one of the loaded project registries, then ignore the project"
+			(self loadedProjectNamed: loadedProject name ifAbsent: []) isNil ].
 	^ loadedProjects
 
 ]
