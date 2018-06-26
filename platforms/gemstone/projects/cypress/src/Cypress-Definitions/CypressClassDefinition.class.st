@@ -14,7 +14,9 @@ Class {
 		'name',
 		'poolDictionaryNames',
 		'subclassType',
-		'superclassName'
+		'superclassName',
+		'gs_options',
+		'gs_constraints'
 	],
 	#category : 'Cypress-Definitions'
 }
@@ -299,6 +301,34 @@ CypressClassDefinition >> failedCompiledMethods: someCompiledMethods [
 
 ]
 
+{ #category : 'accessing' }
+CypressClassDefinition >> gs_constraints [
+
+	^gs_constraints ifNil: [ gs_constraints := #() ]
+
+]
+
+{ #category : 'accessing' }
+CypressClassDefinition >> gs_constraints: aCollection [
+
+	gs_constraints := aCollection
+
+]
+
+{ #category : 'accessing' }
+CypressClassDefinition >> gs_options [
+
+	^gs_options ifNil: [ gs_options := #() ]
+
+]
+
+{ #category : 'accessing' }
+CypressClassDefinition >> gs_options: aCollection [
+
+	gs_options := aCollection
+
+]
+
 { #category : 'comparing' }
 CypressClassDefinition >> hash [
 
@@ -368,6 +398,26 @@ CypressClassDefinition >> name: aClassName superclassName: aSuperclassName categ
 	classInstVarNames := someClassInstanceVariableNames.
 	classVarNames := someClassVariableNames.
 	poolDictionaryNames := somePoolDictionaryNames.
+	comment := aComment.
+	subclassType := aSubclassType asString
+
+]
+
+{ #category : 'initialization' }
+CypressClassDefinition >> name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames 
+	classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames 
+	poolDictionaryNames: somePoolDictionaryNames gs_options: someGs_options gs_constraints: someGs_constraints
+	comment: aComment subclassType: aSubclassType [
+
+	name := aClassName.
+	superclassName := aSuperclassName.
+	category := aCategory.
+	instVarNames := someInstanceVariableNames.
+	classInstVarNames := someClassInstanceVariableNames.
+	classVarNames := someClassVariableNames.
+	poolDictionaryNames := somePoolDictionaryNames.
+	gs_options := someGs_options.
+	gs_constraints := someGs_constraints.
 	comment := aComment.
 	subclassType := aSubclassType asString
 

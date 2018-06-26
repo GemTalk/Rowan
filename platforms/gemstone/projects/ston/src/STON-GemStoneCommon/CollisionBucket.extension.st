@@ -1,6 +1,6 @@
 Extension { #name : 'CollisionBucket' }
 
-{ #category : '*ston-gemstonecommon-core' }
+{ #category : '*ston-gemstonecommon' }
 CollisionBucket >> stonContainSubObjects [ 
 	^false
 

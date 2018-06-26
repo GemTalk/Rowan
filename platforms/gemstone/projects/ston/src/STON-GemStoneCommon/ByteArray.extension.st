@@ -1,6 +1,6 @@
 Extension { #name : 'ByteArray' }
 
-{ #category : '*ston-gemstonecommon-core' }
+{ #category : '*ston-gemstonecommon' }
 ByteArray >> stonOn: stonWriter [
   "Use a hex representation"
 

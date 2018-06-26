@@ -9,6 +9,9 @@ Class {
 	#instVars : [
 		'streamPosition'
 	],
+	#gs_options : [
+		'disallowGciStore'
+	],
 	#category : 'STON-Core'
 }
 

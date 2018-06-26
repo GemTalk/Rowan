@@ -1,0 +1,45 @@
+ RwProjectLoadConfiguration{
+	#name : 'Load',
+	#version : '0.1.0',
+	#definedGroupNames : {
+		'core' : [ ],
+		'deprecated' : [ 'core' ],
+		'tests' : [ 'core' ]
+		},
+	#configurationNames : [ 
+		'Kernel', 
+		'Tests'
+		],
+	#conditionalPackages : {
+		[ 'common' ] : {
+			'deprecated' : {
+				#packageNames : [
+					'Rowan-Deprecated'
+					]
+				}
+			},
+		[ 'tode' ] : {
+			'core' : {
+				#packageNames : [
+					'Rowan-Tode'
+					]
+				}
+			}
+
+		},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultSymbolDictName : 'RowanKernel',
+				#defaultUseSessionMethodsForExtensions : false
+				},
+			'allusers' : {
+				#defaultSymbolDictName : 'UserGlobals',
+				#defaultUseSessionMethodsForExtensions : false
+				}
+			}
+		},
+	#comment : 'Rowan load configuration with two nested configuration: Kernel and Tests. The following groups are defined:
+	core 	- encompasses the basic Rowan functionality
+	tests	- includes Rowan test cases'
+}

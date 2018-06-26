@@ -1,12 +1,12 @@
 Extension { #name : 'CharacterCollection' }
 
-{ #category : '*ston-gemstonecommon-core' }
+{ #category : '*ston-gemstonecommon' }
 CharacterCollection >> stonContainSubObjects [
   ^ false
 
 ]
 
-{ #category : '*ston-gemstonecommon-core' }
+{ #category : '*ston-gemstonecommon' }
 CharacterCollection >> stonOn: stonWriter [
 
         self isSymbol

@@ -1,6 +1,6 @@
 Extension { #name : 'STONStreamWriter' }
 
-{ #category : '*ston-gemstonebase-core' }
+{ #category : '*ston-gemstonebase' }
 STONStreamWriter class >> new [
   ^ self basicNew
     initialize;

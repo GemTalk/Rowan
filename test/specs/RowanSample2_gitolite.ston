@@ -1,16 +1,18 @@
  RwSimpleProjectSpecification{
 	#specName : 'RowanSample2',
+	#version : '0.1.0',
 	#projectUrl : 'https://git.gemtalksystems.com:/RowanSample2',
 	#platformSpec : {
 		'gemstone' : RwGemStoneSpecification {
 			#defaultSymbolDictName : 'SampleSymbolDict',
 			#defaultUseSessionMethodsForExtensions : true }
 	},
-	#specsPath : 'specs',
 	#repoSpec : RwGitRepositorySpecification {
 		#committish : 'master',
 		#committishType : 'branch'
 	},
+	#configsPath : 'configs',
 	#repoPath : 'src',
+	#specsPath : 'specs',
 	#comment : 'fake project url, until git@git.gemtalksystems.com:RowanSample2.git is properly handled by url parser'
 }

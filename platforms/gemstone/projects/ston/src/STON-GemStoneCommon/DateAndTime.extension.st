@@ -1,6 +1,6 @@
 Extension { #name : 'DateAndTime' }
 
-{ #category : '*ston-gemstonecommon-core' }
+{ #category : '*ston-gemstonecommon' }
 DateAndTime >> stonOn: stonWriter [
 	"Use an ISO representation with all details"
 	

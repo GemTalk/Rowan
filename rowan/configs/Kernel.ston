@@ -1,0 +1,88 @@
+ RwNestedProjectLoadConfiguration{
+	#name : 'Kernel',
+	#version : '0.1.0',
+	#conditionalPackages : {
+		[ 'common' ] : {
+                        'core': {
+				#packageNames : [
+					'Rowan-Kernel',
+					'Rowan-Url-Core',
+					'Rowan-Url-Extensions',
+					'Rowan-Cypress-Core',
+					'Rowan-Cypress-Kernel',
+					'Rowan-Definitions',
+					'Rowan-Core-Definitions-Extensions',
+					'Rowan-Cypress-Definitions',
+					'Rowan-Specifications',
+					'Rowan-Core-Definitions-Extensions',
+					'Rowan-Configurations',
+					'Rowan-Core',
+					'Rowan-Tools-Core',
+					'Rowan-Tools-Extensions',
+					'Rowan-Tools-Kernel'
+					]
+				},
+			'deprecated' : {
+				#packageNames : [
+					'Rowan-Tools-Deprecated',
+					'Rowan-Definitions-Deprecated'
+					]
+				}
+			},
+		[ 'gemstone' ] : {
+                        'core': {
+				#packageNames : [
+					'Rowan-Services-Extensions',
+					'Rowan-Services-Core',
+					'Rowan-GemStone-Core',
+					'Rowan-GemStone-Kernel',
+					'Rowan-GemStone-Loader',
+					'Rowan-GemStone-Loader-Extensions',
+					'Rowan-GemStone-Definitions',
+					'Rowan-GemStone-Specifications'
+					]
+				}
+			},
+		[ 'gs3.[2-]' ] : {
+                        'core': {
+				#packageNames : [
+                			'GemStone-Interactions-Core',
+					'GemStone-Interactions-Kernel'
+					]
+				}
+			},
+		[ 'gs3.2.[15-]' ] : {
+                        'core': {
+				#packageNames : [
+					'Rowan-GemStone-3215',
+					'Rowan-Url-3215'
+					]
+				}
+			}
+		},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
+					'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
+					'Rowan-Definitions' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Core-Definitions-Extensions' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Configurations' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Specifications' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-Definitions' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-Specifications' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Definitions-Deprecated' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Cypress-Definitions' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Tools-Core' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Tools-Deprecated' : { 'symbolDictName' : 'RowanTools' }
+					}
+				}
+			}
+		},
+	#comment : 'Rowan kernel configuration'
+}

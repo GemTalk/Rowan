@@ -1,0 +1,11 @@
+ RwSimpleProjectSpecification{
+	#specName : 'RowanSample4',
+	#version : '0.2.0',
+	#projectUrl : 'https://github.com/dalehenrich/RowanSample4',
+	#configsPath : 'rowan/configs',
+	#repoPath : 'rowan/src',
+	#specsPath : 'rowan/specs',
+	#defaultConfigurationNames : [ 'Load' ],
+	#defaultGroupNames : [ 'tests' ],
+	#comment : 'Sample project to be used as an example project when first getting started with Jadeite and Rowan.'
+}

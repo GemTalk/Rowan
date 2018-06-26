@@ -1,0 +1,16 @@
+ RwSimpleProjectSpecification{
+	#specName : 'Rowan',
+	#version : '0.2.0',
+	#projectUrl : 'https://github.com/dalehenrich/Rowan',
+	#repoSpec : RwGitRepositorySpecification {
+		#committish : 'master',
+		#committishType : 'branch'
+	},
+	#configsPath : 'rowan/configs',
+	#repoPath : 'rowan/src/',
+	#specsPath : 'rowan/specs',
+	#defaultConfigurationNames : [ 'Load' ],
+	#defaultGroupNames : [ 'core', 'tests', 'deprecated' ],
+	#comment : 'Standard Rowan load specification'
+}
+

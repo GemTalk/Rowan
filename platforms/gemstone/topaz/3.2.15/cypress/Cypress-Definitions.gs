@@ -122,7 +122,7 @@ true.
 doit
 (CypressDefinition
 	subclass: 'CypressClassDefinition'
-	instVarNames: #( category classInstVarNames classVarNames comment defaultSymbolDictionaryName instVarNames name poolDictionaryNames subclassType superclassName )
+	instVarNames: #( category classInstVarNames classVarNames comment defaultSymbolDictionaryName instVarNames name poolDictionaryNames subclassType superclassName gs_options gs_constraints)
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -1067,6 +1067,34 @@ category
 	^category
 %
 
+category: 'accessing'
+method: CypressClassDefinition
+gs_constraints
+
+	^gs_constraints ifNil: [ gs_constraints := #() ]
+%
+
+category: 'accessing'
+method: CypressClassDefinition
+gs_constraints: aCollection
+
+	gs_constraints := aCollection
+%
+
+category: 'accessing'
+method: CypressClassDefinition
+gs_options
+
+	^gs_options ifNil: [ gs_options := #() ]
+%
+
+category: 'accessing'
+method: CypressClassDefinition
+gs_options: aCollection
+
+	gs_options := aCollection
+%
+
 category: 'visiting'
 method: CypressClassDefinition
 classDefinition: classBlock methodDefinition: methodBlock
@@ -1341,6 +1369,26 @@ method: CypressClassDefinition
 name
 
 	^name
+%
+
+category: 'initialization'
+method: CypressClassDefinition
+name: aClassName superclassName: aSuperclassName category: aCategory instVarNames: someInstanceVariableNames 
+	classInstVarNames: someClassInstanceVariableNames classVarNames: someClassVariableNames 
+	poolDictionaryNames: somePoolDictionaryNames gs_options: someGs_options gs_constraints: someGs_constraints
+	comment: aComment subclassType: aSubclassType
+
+	name := aClassName.
+	superclassName := aSuperclassName.
+	category := aCategory.
+	instVarNames := someInstanceVariableNames.
+	classInstVarNames := someClassInstanceVariableNames.
+	classVarNames := someClassVariableNames.
+	poolDictionaryNames := somePoolDictionaryNames.
+	gs_options := someGs_options.
+	gs_constraints := someGs_constraints.
+	comment := aComment.
+	subclassType := aSubclassType asString
 %
 
 category: 'initialization'

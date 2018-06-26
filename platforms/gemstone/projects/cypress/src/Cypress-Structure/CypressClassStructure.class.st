@@ -34,6 +34,8 @@ CypressClassStructure >> asCypressClassDefinition [
 		classInstVarNames: self classInstanceVariableNames
 		classVarNames: self classVariableNames
 		poolDictionaryNames: self poolDictionaryNames
+		gs_options: self gs_options
+		gs_constraints: self gs_constraints
 		comment: self comment
 		subclassType: self subclassType
 
@@ -147,7 +149,37 @@ CypressClassStructure >> fromClassDefinition: classDefinition [
 		classInstanceVariableNames: classDefinition classInstVarNames;
 		classVariableNames: classDefinition classVarNames;
 		poolDictionaryNames: classDefinition poolDictionaryNames;
-		subclassType: classDefinition subclassType.
+		subclassType: classDefinition subclassType;
+		gs_options: classDefinition gs_options;
+		gs_constraints: classDefinition gs_constraints
+
+]
+
+{ #category : 'accessing' }
+CypressClassStructure >> gs_constraints [
+
+	^self properties at: 'gs_constraints' ifAbsent: [#()]
+
+]
+
+{ #category : 'accessing' }
+CypressClassStructure >> gs_constraints: anConstraintsArray [
+
+	^self properties at: 'gs_constraints' put: anConstraintsArray
+
+]
+
+{ #category : 'accessing' }
+CypressClassStructure >> gs_options [
+
+	^self properties at: 'gs_options' ifAbsent: [#()]
+
+]
+
+{ #category : 'accessing' }
+CypressClassStructure >> gs_options: anOptionsArray [
+
+	^self properties at: 'gs_options' put: anOptionsArray
 
 ]
 

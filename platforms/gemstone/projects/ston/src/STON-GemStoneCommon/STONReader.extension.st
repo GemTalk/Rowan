@@ -1,6 +1,6 @@
 Extension { #name : 'STONReader' }
 
-{ #category : '*ston-gemstonecommon-core' }
+{ #category : '*ston-gemstonecommon' }
 STONReader >> optimizeForLargeStructures [
   "nothing special for GemStone"
 
