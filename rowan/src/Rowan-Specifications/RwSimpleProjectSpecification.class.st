@@ -15,9 +15,3 @@ Class {
 	#superclass : 'RwProjectSpecification',
 	#category : 'Rowan-Specifications'
 }
-
-{ #category : 'accessing' }
-RwSimpleProjectSpecification >> imageSpec [
-
-	^ imageSpec ifNil: [ imageSpec := RwSimpleProjectImageSpecification new ]
-]

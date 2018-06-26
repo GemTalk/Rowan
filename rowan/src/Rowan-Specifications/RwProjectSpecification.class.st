@@ -155,7 +155,9 @@ RwProjectSpecification >> exportToUrl: fileUrl as: fileName [
 
 { #category : 'accessing' }
 RwProjectSpecification >> imageSpec [
-  self subclassResponsibility: #'imageSpec'
+
+	^ imageSpec ifNil: [ imageSpec := RwSimpleProjectImageSpecification new ]
+
 ]
 
 { #category : 'accessing' }
