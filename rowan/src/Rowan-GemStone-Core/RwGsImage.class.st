@@ -16,8 +16,13 @@ RwGsImage class >> _loadedProjectRegistry [
 { #category : 'private' }
 RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
 
-	| ug |
-	ug := (AllUsers userWithId: aUserId) objectNamed: #'UserGlobals'.
+	| userProfile ug |
+	userProfile := AllUsers userWithId: aUserId.
+	userProfile defaultObjectSecurityPolicy currentUserCanRead
+		ifFalse: [
+			"do not have permissions to read objects created by <aUserId>"
+			^ nil ].
+	ug := userProfile objectNamed: #'UserGlobals'.
 	^ ug
 		at: #'RwGsLoadedProjectRegistry'
 		ifAbsent: [ 
@@ -311,14 +316,16 @@ RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 		ifAbsent: [ 
 			AllUsers
 				do: [ :userProfile | 
-					| aUserId |
-					aUserId := userProfile userId.
-					aUserId ~= currentUserId
-						ifTrue: [ 
-							(self _loadedProjectRegistryForUserId: aUserId)
-								ifNotNil: [ :projectRegistry | 
-									(projectRegistry at: aString ifAbsent: [  ])
-										ifNotNil: [ :loadedProject | ^ loadedProject ] ] ] ].
+					userProfile defaultObjectSecurityPolicy currentUserCanRead
+						ifTrue: [
+							| aUserId |
+							aUserId := userProfile userId.
+							aUserId ~= currentUserId
+								ifTrue: [ 
+									(self _loadedProjectRegistryForUserId: aUserId)
+										ifNotNil: [ :projectRegistry | 
+											(projectRegistry at: aString ifAbsent: [  ])
+												ifNotNil: [ :loadedProject | ^ loadedProject ] ] ] ] ].
 			^ absentBlock value ]
 
 ]
