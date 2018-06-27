@@ -133,7 +133,7 @@ echo "---------------|-----------------|-----------------|" >> MANIFEST.TXT
 validate_tag Rowan Rowan "$rowan_tag"
 validate_tag RowanSample1 RowanSample1
 validate_tag RowanSample2 RowanSample2
-validate_tag RowanSample2 RowanSample4
+validate_tag RowanSample4 RowanSample4
 validate_tag Jade Jade "$jadeite_tag"
 
 # create Jadeite runtime directory
