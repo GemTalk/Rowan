@@ -14,6 +14,24 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'testing' }
+RowanMethodsUpdate >> filterSelections [
+
+	"intention revealing"
+
+	^selectionNames
+
+]
+
+{ #category : 'testing' }
+RowanMethodsUpdate >> filterSelections: aCollection [
+
+	"intention revealing"
+
+	selectionNames := aCollection
+
+]
+
 { #category : 'accessing' }
 RowanMethodsUpdate >> inheritedClass: aString [
 
@@ -112,6 +130,12 @@ RowanMethodsUpdate >> updateMethodCategories [
 ]
 
 { #category : 'updating' }
+RowanMethodsUpdate >> updateMethodFilterSelections: oldSelections hasCategoryOverride: override [
+	self filterSelections: (oldSelections collect:[:sel | sel asSymbol]).
+
+]
+
+{ #category : 'updating' }
 RowanMethodsUpdate >> updateMethodPragmas [
 
 	| currentClass |
@@ -122,25 +146,6 @@ RowanMethodsUpdate >> updateMethodPragmas [
 	].
 	methodFilters := methodFilters collect: [:each | each keyword].
 	methodFilters := (methodFilters asSortedCollection: [:a :b | a > b]) asArray.  "SortedCollections cannot be grown in Dolphin Smalltalk"
-
-]
-
-{ #category : 'updating' }
-RowanMethodsUpdate >> updateMethodSelections: oldSelections hasCategoryOverride: override [
-	self selections: oldSelections.
-	override notNil ifTrue: [self selections: (Array with: override)].
-	self selections: (methodFilters select: [:each | self selectionNames includes: each asString]).
-
-]
-
-{ #category : 'updating' }
-RowanMethodsUpdate >> updateMethodSelections: oldSelections override: override [
-
-	| mySelections | 
-	mySelections := oldSelections.
-	override notNil ifTrue: [mySelections := Array with: override].
-	mySelections := methodFilters select: [:each | mySelections includes: each asString].
-	self writeList: mySelections.
 
 ]
 

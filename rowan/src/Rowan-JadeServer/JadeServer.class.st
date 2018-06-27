@@ -4461,23 +4461,10 @@ JadeServer >> sbUpdateMethodCategories [
 	methodCommandResult classNamesFrom: classList. 
 	methodCommandResult updateMethodCategories; 
 		writeMethodCategoriesTo: writeStream. 
-	methodCommandResult updateMethodSelections: self nextLineAsList 
+	methodCommandResult updateMethodFilterSelections: self nextLineAsList 
 			hasCategoryOverride: (selections at: #'methodCategory' ifAbsent: [nil]).
 	methodFilters := methodCommandResult methodFilters.
 	methodCommandResult writeSelectionsTo: writeStream.
-
-]
-
-{ #category : 'category' }
-JadeServer >> sbUpdateMethodCategories: methodUpdate [
-
-	methodUpdate classNamesFrom: classList. 
-	methodUpdate updateMethodCategories; 
-		writeMethodCategoriesTo: writeStream. 
-	methodUpdate updateMethodSelections: self nextLineAsList 
-			hasCategoryOverride: (selections at: #'methodCategory' ifAbsent: [nil]).
-	methodFilters := methodUpdate methodFilters.
-	methodUpdate writeSelectionsTo: writeStream.
 
 ]
 
@@ -4634,7 +4621,7 @@ JadeServer >> sbUpdateMethodVariables [
 	methodCommandResult classNamesFrom: classList. 
 	methodCommandResult updateMethodVariables. 
 	methodCommandResult writeMethodFiltersTo: writeStream. 
-	methodCommandResult updateMethodSelections: self nextLineAsList 
+	methodCommandResult updateMethodFilterSelections: self nextLineAsList 
 		hasCategoryOverride: (selections at: #'methodCategory' ifAbsent: [nil]).
 	methodFilters := methodCommandResult methodFilters.
 	methodCommandResult writeSelectionsTo: writeStream. 

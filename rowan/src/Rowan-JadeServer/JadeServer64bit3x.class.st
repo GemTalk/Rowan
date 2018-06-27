@@ -545,7 +545,7 @@ JadeServer64bit3x >> sbUpdateMethodPragmas [
 		methodCommandResult selections add: selectedClass asString].
 	methodCommandResult updateMethodPragmas.
 	methodCommandResult writeMethodFiltersTo: writeStream. 
-	methodCommandResult updateMethodSelections: self nextLineAsList 
+	methodCommandResult updateMethodFilterSelections: self nextLineAsList 
 		hasCategoryOverride: (selections at: #'methodCategory' ifAbsent: [nil]).
 	methodFilters := methodCommandResult methodFilters.
 	methodCommandResult writeSelectionsTo: writeStream. 
