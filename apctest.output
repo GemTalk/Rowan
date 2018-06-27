@@ -1,0 +1,17 @@
+
+
+2018-06-12 10:02:49 apctest 3.14.12 (29 March 2014) debian
+Checking configuration ...
+sharenet.type = Network & ShareUPS Disabled
+cable.type = USB Cable
+mode.type = USB UPS Driver
+Setting up the port ...
+Doing prep_device() ...
+
+You are using a USB cable type, so I'm entering USB test mode
+Hello, this is the apcupsd Cable Test program.
+This part of apctest is for testing USB UPSes.
+
+Getting UPS capabilities...apctest FATAL ERROR in linux-usb.c at line 588
+Cannot init USB HID report. ERR=Bad file descriptor
+apctest error termination completed

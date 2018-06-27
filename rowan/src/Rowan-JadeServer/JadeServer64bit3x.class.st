@@ -541,16 +541,14 @@ JadeServer64bit3x >> sbUpdateMethodBreakPointsFor: aMethod [
 { #category : 'category' }
 JadeServer64bit3x >> sbUpdateMethodPragmas [
 
-	| methodUpdate |
-	methodUpdate := RowanMethodsUpdate new. 
 	selectedClass notNil ifTrue:[
-		methodUpdate selections add: selectedClass asString].
-	methodUpdate updateMethodPragmas.
-	methodUpdate writeMethodFiltersTo: writeStream. 
-	methodUpdate updateMethodSelections: self nextLineAsList 
+		methodCommandResult selections add: selectedClass asString].
+	methodCommandResult updateMethodPragmas.
+	methodCommandResult writeMethodFiltersTo: writeStream. 
+	methodCommandResult updateMethodSelections: self nextLineAsList 
 		hasCategoryOverride: (selections at: #'methodCategory' ifAbsent: [nil]).
-	methodFilters := methodUpdate methodFilters.
-	methodUpdate writeSelectionsTo: writeStream. 
+	methodFilters := methodCommandResult methodFilters.
+	methodCommandResult writeSelectionsTo: writeStream. 
 
 
 

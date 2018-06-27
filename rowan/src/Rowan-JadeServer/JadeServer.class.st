@@ -9,7 +9,8 @@ Class {
 		'selectedClass',
 		'methodFilterType',
 		'methodFilters',
-		'selections'
+		'selections',
+		'methodCommandResult'
 	],
 	#classVars : [
 		'ExternalInteger',
@@ -3895,10 +3896,8 @@ JadeServer >> sbReadMethodFilter [
 	| pieces |
 	pieces := self nextLine subStrings: Character tab.
 	methodFilterType := pieces at: 1.
-	writeStream 
-		nextPutAll: methodFilterType; tab;
-		nextPutAll: self environment printString; 
-		lf.
+	methodCommandResult type: methodFilterType.
+	methodCommandResult writeTypeTo: writeStream
 
 
 ]
@@ -4459,22 +4458,32 @@ JadeServer >> sbUpdateMethodBreakPointsFor: aMethod [
 { #category : 'category' }
 JadeServer >> sbUpdateMethodCategories [
 
-	| methodUpdate | 
-	methodUpdate := RowanMethodsUpdate new.  
+	methodCommandResult classNamesFrom: classList. 
+	methodCommandResult updateMethodCategories; 
+		writeMethodCategoriesTo: writeStream. 
+	methodCommandResult updateMethodSelections: self nextLineAsList 
+			hasCategoryOverride: (selections at: #'methodCategory' ifAbsent: [nil]).
+	methodFilters := methodCommandResult methodFilters.
+	methodCommandResult writeSelectionsTo: writeStream.
+
+]
+
+{ #category : 'category' }
+JadeServer >> sbUpdateMethodCategories: methodUpdate [
+
 	methodUpdate classNamesFrom: classList. 
 	methodUpdate updateMethodCategories; 
 		writeMethodCategoriesTo: writeStream. 
 	methodUpdate updateMethodSelections: self nextLineAsList 
 			hasCategoryOverride: (selections at: #'methodCategory' ifAbsent: [nil]).
 	methodFilters := methodUpdate methodFilters.
-	methodUpdate writeSelectionsTo: writeStream. 
+	methodUpdate writeSelectionsTo: writeStream.
 
 ]
 
 { #category : 'category' }
 JadeServer >> sbUpdateMethodFilter [
-
-	self sbReadMethodFilter.
+	
 	selectedClass isNil ifTrue: [^self].
 	methodFilterType = 'categoryList' ifTrue: [^self sbUpdateMethodCategories].
 	methodFilterType = 'variableList' ifTrue: [^self sbUpdateMethodVariables].
@@ -4525,17 +4534,16 @@ JadeServer >> sbUpdateMethodPragmas [
 { #category : 'category' }
 JadeServer >> sbUpdateMethods [
 
-	| selectors methodUpdate |
+	| selectors |
 	selectedClass isNil ifTrue: [^self].
-	methodUpdate := RowanMethodsUpdate new selectedClass: selectedClass name.
 	methodFilterType = 'categoryList' ifTrue: [selectors := self sbUpdateMethodsByCategories] ifFalse: [
 	methodFilterType = 'variableList' ifTrue: [selectors := self sbUpdateMethodsByVariables] ifFalse: [
 	methodFilterType = 'pragmaList' ifTrue: [selectors := self sbUpdateMethodsByPragmas] ifFalse: [
 		self error: 'Unrecognized methodFilterType: ' , methodFilterType printString]]].
-	methodUpdate selectors: selectors asSortedCollection asArray.
-	methodUpdate updateMethodsInfo.
-	methodUpdate writeMethodsTo: writeStream. 
-	self sbUpdateMethodSelectionsIn: methodUpdate
+	methodCommandResult selectors: selectors asSortedCollection asArray.
+	methodCommandResult updateMethodsInfo.
+	methodCommandResult writeMethodsTo: writeStream. 
+	self sbUpdateMethodSelectionsIn: methodCommandResult
 
 
 ]
@@ -4623,15 +4631,13 @@ JadeServer >> sbUpdateMethodStepPointsFor: aMethod [
 { #category : 'category' }
 JadeServer >> sbUpdateMethodVariables [
 
-	| methodUpdate |
-	methodUpdate := RowanMethodsUpdate new. 
-	methodUpdate classNamesFrom: classList. 
-	methodUpdate updateMethodVariables. 
-	methodUpdate writeMethodFiltersTo: writeStream. 
-	methodUpdate updateMethodSelections: self nextLineAsList 
+	methodCommandResult classNamesFrom: classList. 
+	methodCommandResult updateMethodVariables. 
+	methodCommandResult writeMethodFiltersTo: writeStream. 
+	methodCommandResult updateMethodSelections: self nextLineAsList 
 		hasCategoryOverride: (selections at: #'methodCategory' ifAbsent: [nil]).
-	methodFilters := methodUpdate methodFilters.
-	methodUpdate writeSelectionsTo: writeStream. 
+	methodFilters := methodCommandResult methodFilters.
+	methodCommandResult writeSelectionsTo: writeStream. 
 
 
 
@@ -4786,7 +4792,7 @@ JadeServer >> sbUpdateSuperclass [
 		class notNil.
 	] whileTrue: [
 		classList add: class.
-		superclassUpdate classNames add: class name. 
+		superclassUpdate classNames add: class name asString. 
 		class := self environmentSuperClassFor: class.
 	].
 	superclassUpdate writeClassesTo: writeStream.
@@ -4799,11 +4805,7 @@ JadeServer >> sbUpdateSuperclass [
 		selectedClass := classList first.
 		superclassUpdate selections add: selectedClass asString.
 	].
-	superclassUpdate writeSelectionsTo: writeStream. 
-
-
-
-
+	superclassUpdate writeSelectionsTo: writeStream.
 
 ]
 
@@ -5249,11 +5251,16 @@ JadeServer >> systemBrowserUpdate [
 		sbUpdatePackagesOrDictionaries;
 		sbUpdateClassCategories;
 		sbUpdateClasses;
-		sbUpdateClassInfo;
-		sbUpdateSuperclass;
-		sbUpdateMethodFilter;
-		sbUpdateMethods;
-		yourself.
+		sbUpdateClassInfo; 
+		sbUpdateSuperclass. 
+		methodCommandResult := RowanMethodsUpdate new. 
+		self sbReadMethodFilter.
+		selectedClass isNil ifFalse:[
+			methodCommandResult selectedClass: selectedClass name.
+			self
+				sbUpdateMethodFilter;
+				sbUpdateMethods]
+
 	
 
 ]

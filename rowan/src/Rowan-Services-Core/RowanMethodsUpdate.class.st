@@ -8,7 +8,8 @@ Class {
 		'selectedClass',
 		'selectedSelectors',
 		'inheritedClasses',
-		'inheritedClass'
+		'inheritedClass',
+		'type'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -91,6 +92,13 @@ RowanMethodsUpdate >> selectors: aCollection [
 
 ]
 
+{ #category : 'accessing' }
+RowanMethodsUpdate >> type: anObject [
+
+	type := anObject
+
+]
+
 { #category : 'updating' }
 RowanMethodsUpdate >> updateMethodCategories [
 
@@ -119,11 +127,9 @@ RowanMethodsUpdate >> updateMethodPragmas [
 
 { #category : 'updating' }
 RowanMethodsUpdate >> updateMethodSelections: oldSelections hasCategoryOverride: override [
-
 	self selections: oldSelections.
 	override notNil ifTrue: [self selections: (Array with: override)].
 	self selections: (methodFilters select: [:each | self selectionNames includes: each asString]).
-	self selectionNames notEmpty ifTrue: [methodFilters := self selectionNamesAsSymbols].
 
 ]
 
@@ -236,5 +242,15 @@ RowanMethodsUpdate >> writeSelectionsTo: writeStream [
 
 	self selectionNames do: [:each | writeStream nextPutAll: each; tab].
 	writeStream lf.
+
+]
+
+{ #category : 'jade' }
+RowanMethodsUpdate >> writeTypeTo: writeStream [
+
+	writeStream 
+		nextPutAll: type; tab;
+		nextPutAll: '0';  "environment default"
+		lf.
 
 ]
