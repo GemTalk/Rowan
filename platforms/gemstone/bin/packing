@@ -22,6 +22,7 @@ set -e
 #
 # Alpha1: $ROWAN_PROJECTS_HOME/Rowan/bin/packing v0.0.2-alpha Alpha1.0
 # Alpha2: $ROWAN_PROJECTS_HOME/Rowan/bin/packing Edelweiss-Alpha2-CANDIOATE v0.0.3-alpha Alpha2.0 
+# Alpha8: $ROWAN_PROJECTS_HOME/Rowan/bin/packing Edelweiss-Alpha8 v0.3.1-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
@@ -103,7 +104,7 @@ clone_entire_git_repo() {
 
 cd $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/packing
 
-rm -rf Rowan Jade RowanSample1 RowanSample2 MANIFEST.TXT Jadeite_runtime_* *.zip
+rm -rf Rowan Jade RowanSample1 RowanSample2 RowanSample4 MANIFEST.TXT Jadeite_runtime_* *.zip
 
 # Clone Rowan include all branches (complete copy of github repo)
 clone_entire_git_repo git@github.com:dalehenrich/Rowan.git Rowan
@@ -112,6 +113,7 @@ git clone --branch master --depth 2 git@github.com:ericwinger/Jade.git
 # Clone entire RowanSample1 and RowanSample2 repos
 clone_entire_git_repo git@github.com:dalehenrich/RowanSample1.git RowanSample1
 clone_entire_git_repo git@github.com:dalehenrich/RowanSample2.git RowanSample2
+clone_entire_git_repo git@github.com:dalehenrich/RowanSample4.git RowanSample4
 
 # checkout sample branch in RowanSample1 and RowanSample2
 pushd RowanSample1
@@ -131,6 +133,7 @@ echo "---------------|-----------------|-----------------|" >> MANIFEST.TXT
 validate_tag Rowan Rowan "$rowan_tag"
 validate_tag RowanSample1 RowanSample1
 validate_tag RowanSample2 RowanSample2
+validate_tag RowanSample2 RowanSample4
 validate_tag Jade Jade "$jadeite_tag"
 
 # create Jadeite runtime directory
@@ -175,7 +178,7 @@ cp $sett_zip_location .
 
 # create zip file
 
-zip -r ${base_label}.zip MANIFEST.TXT ${jadeite_runtime_dirName} ${sett_zip} *.pdf Rowan RowanSample1 RowanSample2
+zip -r ${base_label}.zip MANIFEST.TXT ${jadeite_runtime_dirName} ${sett_zip} *.pdf Rowan RowanSample1 RowanSample2 RowanSample4
 
 printf "${ANSI_GREEN}Successful creation of ${base_label}.zip ${ANSI_RESET}\n"
 
