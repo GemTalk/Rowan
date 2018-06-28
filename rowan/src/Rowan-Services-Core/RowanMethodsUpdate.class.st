@@ -132,6 +132,7 @@ RowanMethodsUpdate >> updateMethodCategories [
 { #category : 'updating' }
 RowanMethodsUpdate >> updateMethodFilterSelections: oldSelections hasCategoryOverride: override [
 	self filterSelections: (oldSelections collect:[:sel | sel asSymbol]).
+	methodFilters := self filterSelections
 
 ]
 

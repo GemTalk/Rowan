@@ -563,7 +563,7 @@ JadeServer64bit3x >> sbUpdateMethodsByCategories [
 		(eachClass selectorsForEnvironment: environment) do: [:eachSelector |
 			| category |
 			category := eachClass categoryOfSelector: eachSelector environmentId: environment.
-			((category isNil and: [methodFilters includes: #'other']) or: [methodFilters includes: category]) ifTrue: [
+			((category isNil and: [methodFilters includes: #'other']) or: [methodFilters includes: category asSymbol]) ifTrue: [
 				| method |
 				method := eachClass compiledMethodAt: eachSelector environmentId: environment.
 				method isRubyBridgeMethod ifFalse: [
@@ -573,7 +573,6 @@ JadeServer64bit3x >> sbUpdateMethodsByCategories [
 		].
 	].
 	^selectors.
-
 
 ]
 
