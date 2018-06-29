@@ -148,7 +148,7 @@ RwProjectLoadConfigurationVisitor >> groupNames [
 { #category : 'accessing' }
 RwProjectLoadConfigurationVisitor >> groupNames: aColl [
 
-	groupNames := aColl
+	groupNames := aColl copy
 
 ]
 
@@ -159,7 +159,7 @@ RwProjectLoadConfigurationVisitor >> initialize [
 	visitedConfigurationNames := Set new.
 	configurationNames := Set new.
 	platformAttributes := #().
-	groupNames := #().
+	groupNames := {}.
 	configurationBasePath := ''.
 	packageMapSpecs := Dictionary new.
 
