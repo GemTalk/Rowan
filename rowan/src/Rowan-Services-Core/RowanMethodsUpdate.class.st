@@ -62,6 +62,13 @@ RowanMethodsUpdate >> methodFilters [
 ]
 
 { #category : 'accessing' }
+RowanMethodsUpdate >> methods [
+
+	^methods
+
+]
+
+{ #category : 'accessing' }
 RowanMethodsUpdate >> selectedClass [
 
 	^self objectInBaseNamed: (selectedClass subStrings first)
@@ -132,7 +139,6 @@ RowanMethodsUpdate >> updateMethodCategories [
 { #category : 'updating' }
 RowanMethodsUpdate >> updateMethodFilterSelections: oldSelections hasCategoryOverride: override [
 	self filterSelections: (oldSelections collect:[:sel | sel asSymbol]).
-	methodFilters := self filterSelections
 
 ]
 
@@ -160,7 +166,7 @@ RowanMethodsUpdate >> updateMethodsInfo [
 		self selectedClass _allSuperList do: [:each | 
 			isTestClass := isTestClass or: [each name = #'TestCase'].
 		].
-		update := RowanMethodUpdate new. 
+		update := methods detect:[:methodUpdate | methodUpdate selector = selector] ifNone:[RowanMethodUpdate new].
 		update selector: selector;
 			isTestClass: isTestClass;
 			isOverride: (self selectedClassOverridesSelector: selector).

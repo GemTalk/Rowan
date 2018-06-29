@@ -241,7 +241,9 @@ JadeServer >> _describeMethod: aMethod [
 	"Nice to add packageName and mcTimestamp"
 
 	| allSelectors class list oldGsMethod string methodUpdate |
-	methodUpdate := RowanMethodUpdate new. 
+
+	methodUpdate := methodCommandResult isNil ifTrue:[RowanMethodUpdate new]
+		ifFalse:[methodCommandResult methods detect:[:update | update selector = aMethod selector]].
 	self environment: (self environmentForMethod: aMethod).
 		
 	methodUpdate 	"Line 1 for GsMethod (line 3 for JadeSystemBrowserPresenter)"
@@ -4422,23 +4424,23 @@ JadeServer >> sbUpdateDictionaries [
 ]
 
 { #category : 'category' }
-JadeServer >> sbUpdateMethod: methodUpdate [
+JadeServer >> sbUpdateMethod [
 
 	| classes method names selection aSymbol |
 
-	aSymbol := methodUpdate selectedSelectors first. 
+	aSymbol := methodCommandResult selectedSelectors first. 
 
 	"Inherited implimentors"
 	classes := self sbUpdateMethodInheritedImplementationsOf: aSymbol.
 	names := classes collect: [:each | each name asString].
-	methodUpdate inheritedClasses: names. 
-	methodUpdate writeInheritedClassesTo: writeStream.  "Line 1"
+	methodCommandResult inheritedClasses: names. 
+	methodCommandResult writeInheritedClassesTo: writeStream.  "Line 1"
 
 	"Which inherited implementation is selected?"
 	selection := self nextLine.
 	(names includes: selection) ifFalse: [selection := names last].
-	methodUpdate inheritedClass: selection.
-	methodUpdate writeInheritedClassTo: writeStream.	"Line 2"
+	methodCommandResult inheritedClass: selection.
+	methodCommandResult writeInheritedClassTo: writeStream.	"Line 2"
 
 	method := self compiledMethodAt: aSymbol inClass: (classes detect: [:each | each name asString = selection]).
 	self _describeMethod: method.
@@ -4463,7 +4465,7 @@ JadeServer >> sbUpdateMethodCategories [
 		writeMethodCategoriesTo: writeStream. 
 	methodCommandResult updateMethodFilterSelections: self nextLineAsList 
 			hasCategoryOverride: (selections at: #'methodCategory' ifAbsent: [nil]).
-	methodFilters := methodCommandResult methodFilters.
+	methodFilters := methodCommandResult selectionNames.
 	methodCommandResult writeSelectionsTo: writeStream.
 
 ]
@@ -4530,7 +4532,7 @@ JadeServer >> sbUpdateMethods [
 	methodCommandResult selectors: selectors asSortedCollection asArray.
 	methodCommandResult updateMethodsInfo.
 	methodCommandResult writeMethodsTo: writeStream. 
-	self sbUpdateMethodSelectionsIn: methodCommandResult
+	self sbUpdateMethodSelections
 
 
 ]
@@ -4542,7 +4544,7 @@ JadeServer >> sbUpdateMethodsByCategories [
 	selectors := IdentitySet new.
 	classList do: [:eachClass |
 		eachClass selectors do: [:eachSelector |
-			(methodFilters includes: (self _behavior: eachClass categoryOfSelector: eachSelector)) ifTrue: [selectors add: eachSelector].
+			( methodFilters includes: (self _behavior: eachClass categoryOfSelector: eachSelector)) ifTrue: [selectors add: eachSelector].
 		].
 	].
 	^selectors.
@@ -4575,16 +4577,16 @@ JadeServer >> sbUpdateMethodsByVariables [
 ]
 
 { #category : 'category' }
-JadeServer >> sbUpdateMethodSelectionsIn: methodUpdate [
+JadeServer >> sbUpdateMethodSelections [
 
 	| priorSelections override newSelections aList |
-	aList := methodUpdate selectors asArray. 
+	aList := methodCommandResult selectors asArray. 
 	priorSelections := self nextLineAsList.
 	(override := selections at: #'method' ifAbsent: [nil]) notNil ifTrue: [priorSelections := Array with: override].
 	newSelections := aList select: [:each | priorSelections includes: each asString].
-	methodUpdate selectedSelectors: newSelections. 
-	methodUpdate writeSelectedSelectorsTo: writeStream.
-	newSelections size = 1 ifTrue: [self sbUpdateMethod: methodUpdate].
+	methodCommandResult selectedSelectors: newSelections. 
+	methodCommandResult writeSelectedSelectorsTo: writeStream.
+	newSelections size = 1 ifTrue: [self sbUpdateMethod].
 
 
 
@@ -4623,7 +4625,7 @@ JadeServer >> sbUpdateMethodVariables [
 	methodCommandResult writeMethodFiltersTo: writeStream. 
 	methodCommandResult updateMethodFilterSelections: self nextLineAsList 
 		hasCategoryOverride: (selections at: #'methodCategory' ifAbsent: [nil]).
-	methodFilters := methodCommandResult methodFilters.
+	methodFilters := methodCommandResult selectionNames.
 	methodCommandResult writeSelectionsTo: writeStream. 
 
 

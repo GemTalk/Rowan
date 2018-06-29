@@ -547,7 +547,7 @@ JadeServer64bit3x >> sbUpdateMethodPragmas [
 	methodCommandResult writeMethodFiltersTo: writeStream. 
 	methodCommandResult updateMethodFilterSelections: self nextLineAsList 
 		hasCategoryOverride: (selections at: #'methodCategory' ifAbsent: [nil]).
-	methodFilters := methodCommandResult methodFilters.
+	methodFilters := methodCommandResult selectionNames.
 	methodCommandResult writeSelectionsTo: writeStream. 
 
 
@@ -563,7 +563,7 @@ JadeServer64bit3x >> sbUpdateMethodsByCategories [
 		(eachClass selectorsForEnvironment: environment) do: [:eachSelector |
 			| category |
 			category := eachClass categoryOfSelector: eachSelector environmentId: environment.
-			((category isNil and: [methodFilters includes: #'other']) or: [methodFilters includes: category asSymbol]) ifTrue: [
+			((category isNil and: [ methodFilters includes: #'other']) or: [ methodFilters includes: category asSymbol]) ifTrue: [
 				| method |
 				method := eachClass compiledMethodAt: eachSelector environmentId: environment.
 				method isRubyBridgeMethod ifFalse: [
@@ -586,7 +586,7 @@ JadeServer64bit3x >> sbUpdateMethodsByPragmas [
 		| gsMethod |
 		gsMethod := selectedClass compiledMethodAt: eachSelector environmentId: environment.
 		gsMethod pragmas do: [:eachPragma | 
-			(methodFilters includes: eachPragma keyword) ifTrue: [selectors add: eachSelector].
+			( methodFilters includes: eachPragma keyword) ifTrue: [selectors add: eachSelector].
 		].
 	].
 	^selectors.
