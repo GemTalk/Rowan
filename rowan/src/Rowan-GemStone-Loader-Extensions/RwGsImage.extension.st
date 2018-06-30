@@ -31,7 +31,6 @@ RwGsImage class >> _shouldCloneRowanLoader: aProjectSetModification [
 
 { #category : '*rowan-gemstone-loader-extensions' }
 RwGsImage class >> applyModification_254: aProjectSetModification instanceMigrator: instanceMigrator [
-
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
 			| visitorClass |
@@ -43,7 +42,7 @@ RwGsImage class >> applyModification_254: aProjectSetModification instanceMigrat
 		ifFalse: [ 
 			self 
 				applyModification_254: aProjectSetModification 
-				visitorClass: RwGsImagePatchVisitor 
+				visitorClass: RwGsImagePatchVisitor_254 
 				instanceMigrator: instanceMigrator ]
 
 ]

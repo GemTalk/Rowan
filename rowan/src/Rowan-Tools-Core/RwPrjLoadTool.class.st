@@ -88,7 +88,7 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 	| loadedProjectSet diff loadedProjectInfo| 
 	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings
 		asProjectDefinitionSet.
-	diff := projectSetDefinitionToLoad compareAgainstBase: loadedProjectSet.
+	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectSet.
 	diff isEmpty
 		ifTrue: [ 
 			| msg |

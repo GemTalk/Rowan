@@ -320,8 +320,15 @@ RwGsImagePatchVisitor_254 >> visitPackagesModification: aPackagesModification [
 { #category : 'visting' }
 RwGsImagePatchVisitor_254 >> visitProjecteSetModification: aProjectSetModification [
 
+	aProjectSetModification 
+		movedPackages do: [:movedPackage | 
+			"not a thing right now https://github.com/dalehenrich/Rowan/issues/254" 
+			self error: 'internal error - moved packages not yet implemented' ].
+	aProjectSetModification movedClasses do: [:movedClass | self halt ].
+	aProjectSetModification movedMethods do: [:movedMethod | self halt ].
 	aProjectSetModification elementsModified
 		do: [ :each | each acceptVisitor: self ]
+
 ]
 
 { #category : 'visting' }

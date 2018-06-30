@@ -715,6 +715,7 @@ RwGsPatchSet_254 >> anyElementOfCollection: aCollection [
 RwGsPatchSet_254 >> apply [
 
 	"Apply the changes I represent to the running image."
+true ifTrue: [ self halt].
 	self
 		setupForApply;
 		removeDeletedClassesFromTempSymbols;
@@ -984,7 +985,6 @@ RwGsPatchSet_254 >> moveClassesBetweenPackages [
 	deletedClasses
 		do: [ :patch | 
 			patch classDefinition key
-				ifNil: [ self halt ]
 				ifNotNil: [ deletedClassesMap at: patch classDefinition key put: patch ] ].
 
 	image := Rowan image.
