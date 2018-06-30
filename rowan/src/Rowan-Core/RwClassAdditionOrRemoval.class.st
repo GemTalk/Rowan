@@ -8,6 +8,7 @@ Class {
 	#name : 'RwClassAdditionOrRemoval',
 	#superclass : 'Object',
 	#instVars : [
+		'projectDefinition',
 		'packageDefinition',
 		'classKey',
 		'classesModification'
@@ -23,6 +24,18 @@ RwClassAdditionOrRemoval class >> packageDefinition: aPackageDefinition classKey
 		classKey: aClassKey;
 		classesModification: aClassesModification;
 		yourself
+]
+
+{ #category : 'instance creation' }
+RwClassAdditionOrRemoval class >> projectDefinition: aProjectDefinition packageDefinition: aPackageDefinition classKey: aClassKey classesModification: aClassesModification [
+
+	^(self new)
+		projectDefinition: aProjectDefinition;
+		packageDefinition: aPackageDefinition;
+		classKey: aClassKey;
+		classesModification: aClassesModification;
+		yourself
+
 ]
 
 { #category : 'Accessing' }
@@ -58,5 +71,17 @@ RwClassAdditionOrRemoval >> packageDefinition [
 { #category : 'Updating' }
 RwClassAdditionOrRemoval >> packageDefinition: newValue [
 	packageDefinition := newValue
+
+]
+
+{ #category : 'Accessing' }
+RwClassAdditionOrRemoval >> projectDefinition [
+	^projectDefinition
+
+]
+
+{ #category : 'Updating' }
+RwClassAdditionOrRemoval >> projectDefinition: newValue [
+	projectDefinition := newValue
 
 ]

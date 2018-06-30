@@ -147,20 +147,25 @@ RwProjectSetModification >> findAddedClasses [
 	| addedClasses |
 	addedClasses := Dictionary new.
 	elementsModified do: 
-			[:packageModification |
-			| classesModification |
-			classesModification := packageModification classesModification.
-			classesModification elementsModified do: 
-					[:classModification |
-					classModification before isEmpty
-						ifTrue: 
-							[| newClass |
-							newClass := classModification after.
-							addedClasses at: newClass key
-								put: (RwClassAdditionOrRemoval
-										packageDefinition: packageModification before
-										classKey: newClass key
-										classesModification: classesModification)]]].
+			[:projectModification |
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified do: 
+				[:packageModification |
+				| classesModification |
+				classesModification := packageModification classesModification.
+				classesModification elementsModified do: 
+						[:classModification |
+						classModification before isEmpty
+							ifTrue: 
+								[| newClass |
+								newClass := classModification after.
+								addedClasses at: newClass key
+									put: (RwClassAdditionOrRemoval
+											projectDefinition: projectModification before
+											packageDefinition: packageModification before
+											classKey: newClass key
+											classesModification: classesModification)]]]].
 	^addedClasses
 
 ]
@@ -172,9 +177,13 @@ RwProjectSetModification >> findAddedMethods [
 	| addedMethods |
 	addedMethods := Dictionary new.
 	elementsModified do: 
-			[:packageModification |
-			self addMethodsAddedByPackageModification: packageModification
-				toDictionary: addedMethods].
+			[:projectModification |
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified do: 
+				[:packageModification |
+				self addMethodsAddedByPackageModification: packageModification
+					toDictionary: addedMethods] ].
 	^addedMethods
 
 ]
@@ -185,20 +194,25 @@ RwProjectSetModification >> findRemovedClasses [
 	| removedClasses |
 	removedClasses := Dictionary new.
 	elementsModified do: 
-			[:packageModification |
-			| classesModification |
-			classesModification := packageModification classesModification.
-			classesModification elementsModified do: 
-					[:classModification |
-					classModification after isEmpty
-						ifTrue: 
-							[| oldClass |
-							oldClass := classModification before.
-							removedClasses at: oldClass key
-								put: (RwClassAdditionOrRemoval
-										packageDefinition: packageModification after
-										classKey: oldClass key
-										classesModification: classesModification)]]].
+			[:projectModification |
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified do: 
+				[:packageModification |
+				| classesModification |
+				classesModification := packageModification classesModification.
+				classesModification elementsModified do: 
+						[:classModification |
+						classModification after isEmpty
+							ifTrue: 
+								[| oldClass |
+								oldClass := classModification before.
+								removedClasses at: oldClass key
+									put: (RwClassAdditionOrRemoval
+											projectDefinition: projectModification before
+											packageDefinition: packageModification after
+											classKey: oldClass key
+											classesModification: classesModification)]]]].
 	^removedClasses
 
 ]
@@ -210,10 +224,24 @@ RwProjectSetModification >> findRemovedMethods [
 	| removedMethods |
 	removedMethods := Dictionary new.
 	elementsModified do: 
-			[:packageModification |
-			self addMethodsRemovedByPackageModification: packageModification
-				toDictionary: removedMethods].
+			[:projectModification |
+			| packagesModification |
+			packagesModification := projectModification packagesModification.
+			packagesModification elementsModified do: 
+				[:packageModification |
+				self addMethodsRemovedByPackageModification: packageModification
+					toDictionary: removedMethods]].
 	^removedMethods
+
+]
+
+{ #category : 'initialization' }
+RwProjectSetModification >> initialize [
+
+	super initialize.
+	movedPackages := Set new.
+	movedClasses := Set new.
+	movedMethods := Set new
 
 ]
 
@@ -236,7 +264,9 @@ RwProjectSetModification >> updateForClassMoveFrom: removal to: addition [
 				classBefore: oldDefinition
 				classAfter: newDefinition
 				packageBefore: removal packageDefinition
-				packageAfter: addition packageDefinition).
+				packageAfter: addition packageDefinition
+				projectBefore: removal projectDefinition
+				projectAfter: addition projectDefinition).
 
 	"Does the class have other modifications that need to be recorded?"
 	classModification := newDefinition compareAgainstBase: oldDefinition.

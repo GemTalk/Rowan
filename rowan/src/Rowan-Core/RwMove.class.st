@@ -2,10 +2,10 @@ Class {
 	#name : 'RwMove',
 	#superclass : 'Object',
 	#instVars : [
-		'packageBefore',
-		'packageAfter',
 		'projectBefore',
-		'projectAfter'
+		'projectAfter',
+		'packageBefore',
+		'packageAfter'
 	],
 	#category : 'Rowan-Core'
 }

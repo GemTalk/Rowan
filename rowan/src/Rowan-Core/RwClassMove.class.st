@@ -22,6 +22,20 @@ RwClassMove class >> classBefore: beforeClassDefinition classAfter: afterClassDe
 		yourself
 ]
 
+{ #category : 'instance creation' }
+RwClassMove class >> classBefore: beforeClassDefinition classAfter: afterClassDefinition packageBefore: beforePackageDefinition packageAfter: afterPackageDefinition projectBefore: beforeProjectDefinition projectAfter: afterProjectDefinition [
+
+	^(self new)
+		classBefore: beforeClassDefinition;
+		classAfter: afterClassDefinition;
+		packageBefore: beforePackageDefinition;
+		packageAfter: afterPackageDefinition;
+		projectBefore: beforeProjectDefinition;
+		projectAfter: afterProjectDefinition;
+		yourself
+
+]
+
 { #category : 'Accessing' }
 RwClassMove >> classAfter [
 	^classAfter

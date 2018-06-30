@@ -233,12 +233,6 @@ RwProjectDefinition >> postCopy [
 
 ]
 
-{ #category : 'printing' }
-RwProjectDefinition >> printOn: aStream [
-
-	aStream nextPutAll: self asString
-]
-
 { #category : 'accessing' }
 RwProjectDefinition >> removePackage: aPackageDefinition [
 

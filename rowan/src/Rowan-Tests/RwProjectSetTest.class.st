@@ -440,7 +440,8 @@ RwProjectSetTest >> testProjectSet_issue_254_move_class_between_packages [
 
 	"https://github.com/dalehenrich/Rowan/issues/254"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
+		className projectSetDefinition class loadedProjectSet diff |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -474,6 +475,7 @@ RwProjectSetTest >> testProjectSet_issue_254_move_class_between_packages [
 
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
+
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	class := Rowan globalNamed: className.
@@ -489,6 +491,15 @@ RwProjectSetTest >> testProjectSet_issue_254_move_class_between_packages [
 	packageDefinition addClassDefinition: classDefinition.
 
 	projectSetDefinition addDefinition: projectDefinition2.
+
+true ifTrue: [
+"just for debugging the actual class move"
+	loadedProjectSet := projectSetDefinition deriveLoadedThings
+		asProjectDefinitionSet.
+	diff := projectSetDefinition compareAgainstBase_254: loadedProjectSet.
+].
+self halt.
+
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	class := Rowan globalNamed: className.
