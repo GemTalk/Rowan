@@ -31,8 +31,6 @@ RwGsImagePatchVisitor_254 >> addAddedPackage: aPackageDefinition [
 
 	currentPackage := aPackageDefinition.
 	patchSet addAddedPackage: currentPackage inProject: currentProject.
-	self addClasses: currentPackage classDefinitions.
-	self addClassExtensions: currentPackage classExtensions
 
 ]
 
@@ -102,14 +100,9 @@ RwGsImagePatchVisitor_254 >> addClassExtensions: classExtensions [
 { #category : 'private' }
 RwGsImagePatchVisitor_254 >> addDeletedPackage: aPackageDefinition [
 
-	self deletePackages: {aPackageDefinition}
-]
+	currentPackage := aPackageDefinition.
+	patchSet addDeletedPackage: currentPackage inProject: currentProject
 
-{ #category : 'private' }
-RwGsImagePatchVisitor_254 >> addPackages: packageDefinitions [
-
-	packageDefinitions
-		do: [:packageDefinition | self addAddedpackage: packageDefinition]
 ]
 
 { #category : 'private' }
@@ -135,32 +128,6 @@ RwGsImagePatchVisitor_254 >> deleteClasses: classDefinitions [
 						inClass: classDefinition
 						inPackage: currentPackage
 						inProject: currentProject ] ]
-]
-
-{ #category : 'private' }
-RwGsImagePatchVisitor_254 >> deletePackages: packageDefinitions [
-
-	packageDefinitions
-		do: [ :packageDefinition | 
-			currentPackage := packageDefinition.
-			patchSet addDeletedPackage: currentPackage inProject: currentProject.
-			self deleteClasses: packageDefinition classDefinitions.
-			packageDefinition classExtensions
-				do: [ :classExtension | 
-					classExtension classMethodDefinitions
-						do: [ :classMethodDefinition | 
-							patchSet
-								addDeletedClassMethod: classMethodDefinition
-								inClass: classExtension
-								inPackage: packageDefinition
-								inProject: currentProject ].
-					classExtension instanceMethodDefinitions
-						do: [ :instanceMethodDefinition | 
-							patchSet
-								addDeletedInstanceMethod: instanceMethodDefinition
-								inClass: classExtension
-								inPackage: packageDefinition
-								inProject: currentProject ] ] ]
 ]
 
 { #category : 'initialization' }
@@ -217,6 +184,7 @@ RwGsImagePatchVisitor_254 >> visitClassModification: aClassModification [
 	currentClass := aClassModification after.
 	aClassModification instanceMethodsModification acceptVisitor: self.
 	aClassModification classMethodsModification acceptVisitor: self
+
 ]
 
 { #category : 'visting' }
@@ -286,19 +254,13 @@ RwGsImagePatchVisitor_254 >> visitPackageModification: aPackageModification [
 
 	| propertiesModification |
 	aPackageModification isAddition
-		ifTrue: [ 
-			self addAddedPackage: aPackageModification after.
-			^ self ].
+		ifTrue: [ self addAddedPackage: aPackageModification after ].
 	aPackageModification isDeletion
-		ifTrue: [ 
-			self addDeletedPackage: aPackageModification before.
-			^ self ].
+		ifTrue: [ self addDeletedPackage: aPackageModification before ].
 	currentPackage := aPackageModification after.
 	propertiesModification := aPackageModification propertiesModification.
 	propertiesModification isEmpty
-		ifFalse: [ 
-			"https://github.com/dalehenrich/Rowan/issues/180"
-			self error: 'internal error - unexpected non-empty package properties modification. See Issue #180' ].
+		ifFalse: [ "https://github.com/dalehenrich/Rowan/issues/180: noop"].
 	aPackageModification classesModification acceptVisitor: self.
 	aPackageModification classExtensionsModification acceptVisitor: self
 

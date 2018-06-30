@@ -381,6 +381,7 @@ RwGsPatchSet_254 >> addDeletedClass: aClassDefinition inPackage: aPackageDefinit
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
+
 ]
 
 { #category : 'building' }

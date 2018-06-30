@@ -160,8 +160,8 @@ RwProjectSetModification >> findAddedClasses [
 								newClass := classModification after.
 								addedClasses at: newClass key
 									put: (RwClassAdditionOrRemoval
-											projectDefinition: projectModification before
-											packageDefinition: packageModification before
+											projectDefinition: projectModification after
+											packageDefinition: packageModification after
 											classKey: newClass key
 											classesModification: classesModification)]]]].
 	^addedClasses
@@ -208,7 +208,7 @@ RwProjectSetModification >> findRemovedClasses [
 								removedClasses at: oldClass key
 									put: (RwClassAdditionOrRemoval
 											projectDefinition: projectModification before
-											packageDefinition: packageModification after
+											packageDefinition: packageModification before
 											classKey: oldClass key
 											classesModification: classesModification)]]]].
 	^removedClasses
