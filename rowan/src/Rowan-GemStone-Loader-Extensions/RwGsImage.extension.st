@@ -35,7 +35,7 @@ RwGsImage class >> applyModification_254: aProjectSetModification instanceMigrat
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
 			| visitorClass |
-			visitorClass := self _cloneRowanLoaderSymbolDictionary at: #RwGsImagePatchVisitor.
+			visitorClass := self _cloneRowanLoaderSymbolDictionary at: #RwGsImagePatchVisitor_254.
 			self 
 				applyModification_254: aProjectSetModification 
 				visitorClass:visitorClass 
