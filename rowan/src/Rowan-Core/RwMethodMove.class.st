@@ -3,15 +3,13 @@ Represents a move of a method from a class definition to a class extension, or f
 "
 Class {
 	#name : 'RwMethodMove',
-	#superclass : 'Object',
+	#superclass : 'RwMove',
 	#instVars : [
 		'methodBefore',
 		'methodAfter',
+		'isMeta',
 		'classOrExtensionBefore',
-		'classOrExtensionAfter',
-		'packageBefore',
-		'packageAfter',
-		'isMeta'
+		'classOrExtensionAfter'
 	],
 	#category : 'Rowan-Core'
 }
@@ -36,7 +34,7 @@ RwMethodMove >> classOrExtensionAfter [
 
 ]
 
-{ #category : 'Updating' }
+{ #category : 'Accessing' }
 RwMethodMove >> classOrExtensionAfter: newValue [
 	classOrExtensionAfter := newValue
 
@@ -45,12 +43,6 @@ RwMethodMove >> classOrExtensionAfter: newValue [
 { #category : 'Accessing' }
 RwMethodMove >> classOrExtensionBefore [
 	^classOrExtensionBefore
-
-]
-
-{ #category : 'Updating' }
-RwMethodMove >> classOrExtensionBefore: newValue [
-	classOrExtensionBefore := newValue
 
 ]
 
@@ -87,29 +79,5 @@ RwMethodMove >> methodBefore [
 { #category : 'Updating' }
 RwMethodMove >> methodBefore: newValue [
 	methodBefore := newValue
-
-]
-
-{ #category : 'Accessing' }
-RwMethodMove >> packageAfter [
-	^packageAfter
-
-]
-
-{ #category : 'Updating' }
-RwMethodMove >> packageAfter: newValue [
-	packageAfter := newValue
-
-]
-
-{ #category : 'Accessing' }
-RwMethodMove >> packageBefore [
-	^packageBefore
-
-]
-
-{ #category : 'Updating' }
-RwMethodMove >> packageBefore: newValue [
-	packageBefore := newValue
 
 ]
