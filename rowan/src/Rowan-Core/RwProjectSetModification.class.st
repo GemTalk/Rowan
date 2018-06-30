@@ -7,9 +7,7 @@ Class {
 	#name : 'RwProjectSetModification',
 	#superclass : 'RwEntitySetModification',
 	#instVars : [
-		'movedPackages',
-		'movedClasses',
-		'movedMethods'
+		'movedPackages'
 	],
 	#category : 'Rowan-Core'
 }
@@ -242,6 +240,13 @@ RwProjectSetModification >> initialize [
 	movedPackages := Set new.
 	movedClasses := Set new.
 	movedMethods := Set new
+
+]
+
+{ #category : 'accessing' }
+RwProjectSetModification >> movedPackages [
+
+	^ movedPackages
 
 ]
 

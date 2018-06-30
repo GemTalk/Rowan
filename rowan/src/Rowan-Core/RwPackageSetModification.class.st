@@ -6,10 +6,6 @@ movedMethods are methods that have moved from a class definition to an extension
 Class {
 	#name : 'RwPackageSetModification',
 	#superclass : 'RwEntitySetModification',
-	#instVars : [
-		'movedClasses',
-		'movedMethods'
-	],
 	#category : 'Rowan-Core'
 }
 
