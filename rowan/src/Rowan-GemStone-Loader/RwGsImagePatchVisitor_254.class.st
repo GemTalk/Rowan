@@ -324,7 +324,8 @@ RwGsImagePatchVisitor_254 >> visitProjecteSetModification: aProjectSetModificati
 		movedPackages do: [:movedPackage | 
 			"not a thing right now https://github.com/dalehenrich/Rowan/issues/254" 
 			self error: 'internal error - moved packages not yet implemented' ].
-	aProjectSetModification movedClasses do: [:movedClass | self halt ].
+	aProjectSetModification movedClasses do: [:movedClass | 
+		movedClass addMovedClassToPatchSet: patchSet ].
 	aProjectSetModification movedMethods do: [:movedMethod | self halt ].
 	aProjectSetModification elementsModified
 		do: [ :each | each acceptVisitor: self ]

@@ -12,7 +12,7 @@ Class {
 		'projectsWithPropertyChanges',
 		'addedClasses',
 		'deletedClasses',
-		'deletedClassesMap',
+		'movedClasses',
 		'movedClassesMap',
 		'extendedClasses',
 		'classesWithPropertyChanges',
@@ -249,12 +249,10 @@ RwGsPatchSet_254 >> addAddedClassesToTempSymbols [
 	"Just need the names for now, they don't need to resolve to anything in particular."
 
 	addedClasses do: [:patch | 
-		(movedClassesMap includesKey: patch className)
-			ifFalse: [
-				| key |
-				key :=  patch className asSymbol.
-				(tempSymbols includesKey: key) ifTrue: [ self error: 'Encountered an existing association for a new class ', key asString ].
-				tempSymbols at: key put: nil ] ].
+		| key |
+		key :=  patch className asSymbol.
+		(tempSymbols includesKey: key) ifTrue: [ self error: 'Encountered an existing association for a new class ', key asString ].
+		tempSymbols at: key put: nil ].
 
 ]
 
@@ -357,9 +355,7 @@ RwGsPatchSet_254 >> addClassModification: aRwClassModification toPatchSetInPacka
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> addCreatedClassesAndVersionsTo: newClassesByName [
 
-	addedClasses do: [ :patch | 
-		(movedClassesMap includesKey: patch className)
-			ifFalse: [ patch addToNewClassesByName: newClassesByName ] ].
+	addedClasses do: [ :patch | patch addToNewClassesByName: newClassesByName ].
 	classesWithClassVariableChanges
 		do: [ :each | each addToNewClassesByName: newClassesByName ].
 	classesWithNewVersions
@@ -715,7 +711,7 @@ RwGsPatchSet_254 >> anyElementOfCollection: aCollection [
 RwGsPatchSet_254 >> apply [
 
 	"Apply the changes I represent to the running image."
-true ifTrue: [ self halt].
+false ifTrue: [ self halt].
 	self
 		setupForApply;
 		removeDeletedClassesFromTempSymbols;
@@ -939,9 +935,7 @@ RwGsPatchSet_254 >> installAddedClasses [
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
-	addedClasses do: [:patch | 
-		(movedClassesMap includesKey: patch className)
-			ifFalse: [ patch installClassInSystem ] ]
+	addedClasses do: [:patch |  patch installClassInSystem ]
 
 ]
 
@@ -974,39 +968,6 @@ RwGsPatchSet_254 >> migrateInstances [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSet_254 >> moveClassesBetweenPackages [
-
-	| image |
-	deletedClassesMap := Dictionary new.
-	deletedClasses isEmpty
-		ifTrue: [ 
-			"no move without deleted classes"
-			^ self ].
-	deletedClasses
-		do: [ :patch | 
-			patch classDefinition key
-				ifNotNil: [ deletedClassesMap at: patch classDefinition key put: patch ] ].
-
-	image := Rowan image.
-	addedClasses copy
-		do: [ :addedClassPatch | 
-			(deletedClassesMap at: addedClassPatch classDefinition key ifAbsent: [ ])
-				ifNotNil: [ :deletedClassPatch | 
-					| modification |
-					movedClassesMap at: addedClassPatch className put: {addedClassPatch. deletedClassPatch}.
-					modification := addedClassPatch classDefinition
-						compareAgainstBase: deletedClassPatch classDefinition.
-					modification isEmpty
-						ifFalse: [ 
-							"we must modify the modifications here, similar to what goes on when we deal with new class versions"
-							modification
-								addModificationToPatchSet: self
-								inPackage: addedClassPatch packageDefinition
-								inProject: addedClassPatch projectDefinition ] ] ]
-
-]
-
-{ #category : 'private - applying' }
 RwGsPatchSet_254 >> moveClassesBetweenSymbolDictionaries [
 
 	classesWithSymbolDictionaryChanges do: [:each | each installSymbolDictionaryPatchFor: self ].
@@ -1017,7 +978,6 @@ RwGsPatchSet_254 >> moveClassesBetweenSymbolDictionaries [
 RwGsPatchSet_254 >> moveClassesWithNewVersionsBetweenPackages [
 
 	self doMoveClassesBetweenPackages: classesWithNewVersions.
-	self moveClassesBetweenPackages.
 
 ]
 
@@ -1042,8 +1002,7 @@ RwGsPatchSet_254 >> moveMethodsBetweenPackages [
 		do: [ :patch | 
 			| className |
 			className := patch classDefinition key.
-			(className isNil 
-				or: [ (movedClassesMap includesKey: className) not and: [ deletedClassesMap includesKey:className ] ])
+			className isNil
 				ifFalse: [ 
 					((deletedMethodsMap at: className ifAbsentPut: [ Dictionary new ]) 
 						at: patch isMeta ifAbsentPut: [Dictionary new ])
@@ -1113,9 +1072,7 @@ RwGsPatchSet_254 >> removeDeletedClassesFromSystem [
 	"Remove the name binding from the SymbolDictionaries in the live SymbolList
         Remove the LoadedClass from its LoadedPackage"
 
-	deletedClasses do: [:patch | 
-		(movedClassesMap includesKey: patch className)
-			ifFalse: [ patch deleteClassFromSystem ] ]
+	deletedClasses do: [:patch | patch deleteClassFromSystem ]
 
 ]
 
@@ -1123,9 +1080,7 @@ RwGsPatchSet_254 >> removeDeletedClassesFromSystem [
 RwGsPatchSet_254 >> removeDeletedClassesFromTempSymbols [
 	"Deleted class names should not resolve during compilation."
 
-	deletedClasses do: [:patch | 
-		(movedClassesMap includesKey: patch className)
-			ifFalse: [ tempSymbols removeKey: patch className asSymbol ] ]
+	deletedClasses do: [:patch | tempSymbols removeKey: patch className asSymbol ]
 
 ]
 
@@ -1136,18 +1091,12 @@ RwGsPatchSet_254 >> removeDeletedMethods [
 		do: [ :methodDeletionPatch | 
 			| className |
 			className := methodDeletionPatch className.
-			(movedClassesMap includesKey: className)
-				ifTrue: [ methodDeletionPatch deleteMovedMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]
-				ifFalse: [ 
-					(deletedClassesMap includesKey: className)
-						ifFalse: [methodDeletionPatch deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ] ] ].
+			methodDeletionPatch deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols ].
 	deleteNewVersionMethods
 		do: [ :methodDeletionPatch | 
-			(movedClassesMap includesKey: methodDeletionPatch className)
-				ifFalse: [ 
-					methodDeletionPatch
-						deleteNewVersionMethodNewClasses: createdClasses
-						andExistingClasses: tempSymbols ] ]
+			methodDeletionPatch
+				deleteNewVersionMethodNewClasses: createdClasses
+				andExistingClasses: tempSymbols  ]
 
 ]
 
