@@ -63,7 +63,6 @@ RwMoveTest >> testProjectSet_move_class_between_packages [
 
 	projectSetDefinition addDefinition: projectDefinition2.
 
-self halt.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	class := Rowan globalNamed: className.
@@ -79,7 +78,7 @@ RwMoveTest >> testProjectSet_move_class_between_packages_issue_254 [
 	"https://github.com/dalehenrich/Rowan/issues/254"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class |
+		className projectSetDefinition class x |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -133,6 +132,6 @@ RwMoveTest >> testProjectSet_move_class_between_packages_issue_254 [
 	Rowan projectTools load loadProjectSetDefinition_254: projectSetDefinition.
 
 	class := Rowan globalNamed: className.
-	self assert: class rowanPackageName = packageName2.
+	self assert: (x := class rowanPackageName) = packageName2.
 
 ]
