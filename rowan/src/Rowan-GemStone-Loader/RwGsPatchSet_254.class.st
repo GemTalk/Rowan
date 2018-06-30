@@ -352,6 +352,13 @@ RwGsPatchSet_254 >> addClassModification: aRwClassModification toPatchSetInPacka
 
 ]
 
+{ #category : 'building' }
+RwGsPatchSet_254 >> addClassMove: aRwClassMove [
+
+	movedClasses add: aRwClassMove
+
+]
+
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> addCreatedClassesAndVersionsTo: newClassesByName [
 
@@ -880,7 +887,15 @@ RwGsPatchSet_254 >> deleteMovedLoadedExtensionMethods [
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> doMoveClassesBetweenPackages [
 
-	self doMoveClassesBetweenPackages: (movedClassesMap values collect: [:ar | ar at: 1])
+	| image |
+	image := Rowan image.
+	movedClasses 
+		do: [:aClassMove |
+			| loadedClass |
+			loadedClass := image loadedClassNamed: aClassMove classBefore name.
+			loadedClass loadedPackage removeLoadedClass: loadedClass.
+			(image loadedPackageNamed: aClassMove packageAfter name)
+				addLoadedClass: loadedClass ].
 
 ]
 
@@ -913,6 +928,7 @@ RwGsPatchSet_254 >> initialize [
 	classesWithClassVariableChanges := Set new.
 	classesWithPropertyChanges := Set new.
 	classesWithSymbolDictionaryChanges := Set new.
+	movedClasses := Set new.
 	movedClassesMap := Dictionary new.
 	deletedMethods := Set new.
 	deletedExtensionMethods := Set new.
