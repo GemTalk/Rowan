@@ -151,7 +151,7 @@ RwMoveTest >> testProjectSet_move_class_between_packages_and_symbolDict_issue_25
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		ar oldClass |
+		ar oldClass loadedClass |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -214,6 +214,8 @@ RwMoveTest >> testProjectSet_move_class_between_packages_and_symbolDict_issue_25
 	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
 
 	self assert: class == oldClass.
+
+	loadedClass := Rowan image loadedClassNamed: className. "no error is success"
 
 ]
 
@@ -448,7 +450,7 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		ar oldClass |
+		ar oldClass loadedClass |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -509,6 +511,9 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition_254: projectSetDefinition.
 
+	loadedClass := Rowan image loadedClassNamed: className.
+	loadedClass loadedInstanceMethods includesKey: #method1.
+
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
@@ -516,6 +521,7 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
 	self assert: ar size = 1.
 	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
+
 
 	self assert: class == oldClass.
 
@@ -529,7 +535,7 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_issue_254 [
 	"https://github.com/dalehenrich/Rowan/issues/254"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass |
+		className projectSetDefinition class oldClass loadedClass |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -594,6 +600,9 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_issue_254 [
 	self assert: class == oldClass.
 	self assert: class rowanPackageName = packageName2.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName2.
+
+	loadedClass := Rowan image loadedClassNamed: className.
+	loadedClass loadedInstanceMethods includesKey: #method1.
 
 ]
 

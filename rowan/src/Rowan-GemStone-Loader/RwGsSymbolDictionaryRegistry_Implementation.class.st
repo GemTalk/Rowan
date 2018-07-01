@@ -761,6 +761,43 @@ RwGsSymbolDictionaryRegistry_Implementation class >> loadedPackageNamed: package
 
 ]
 
+{ #category : 'class symbol dict - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> moveClassAssoc: assoc from: oldRegistry to: newRegistry classMove: classMove [
+	" move class from <oldRegistry> to <newRegistry> which includes moveing the loaded methods associated with the class"
+
+	"extension methods will be dealt with later"
+
+	| theClass className loadedClass theBehavior |
+
+	theClass := assoc value.
+	theBehavior := theClass class.
+
+	className := classMove classBefore name.
+
+	oldRegistry 
+		deleteClassNamedFromPackage: className 
+		implementationClass: self.
+
+	newRegistry 
+		addClassAssociation: assoc 
+			forClass: theClass 
+			toPackageNamed: classMove packageAfter name
+			implementationClass: self.
+
+	loadedClass := Rowan image loadedClassNamed: className.
+	loadedClass loadedInstanceMethods values do: [:loadedMethod |
+		| compiledMethod |
+		compiledMethod := theClass compiledMethodAt: loadedMethod selector asSymbol.
+		oldRegistry methodRegistry removeKey: compiledMethod.
+		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
+	loadedClass loadedClassMethods values do: [:loadedMethod |
+		| compiledMethod |
+		compiledMethod := theBehavior compiledMethodAt: loadedMethod selector asSymbol.
+		oldRegistry methodRegistry removeKey: compiledMethod.
+		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
+
+]
+
 { #category : 'method - patch api' }
 RwGsSymbolDictionaryRegistry_Implementation class >> moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryInstance [
 

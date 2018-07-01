@@ -896,7 +896,7 @@ RwGsPatchSet_254 >> doMoveClassesBetweenPackages [
 			loadedClass := image loadedClassNamed: aClassMove classBefore name.
 			loadedClass loadedPackage removeLoadedClass: loadedClass.
 			(image loadedPackageNamed: aClassMove packageAfter name)
-				addLoadedClass: loadedClass ].
+				addLoadedClass: loadedClass ]
 
 ]
 
@@ -972,7 +972,13 @@ RwGsPatchSet_254 >> migrateInstances [
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> moveClassesBetweenSymbolDictionaries [
 
-	classesWithSymbolDictionaryChanges do: [:each | each installSymbolDictionaryPatchFor: self ].
+	classesWithSymbolDictionaryChanges do: [:each | 
+		| className classMove |
+		className := each classDefinition name.
+		classMove := movedClassesMap 
+			at: className 
+			ifAbsent: [ self error: 'internal error - symbol dictionary move for ', className printString, ' without entry in moved classes'].
+		each installSymbolDictionaryPatchFor: self classMove: classMove ].
 
 ]
 
@@ -1152,6 +1158,11 @@ RwGsPatchSet_254 >> setupForApply [
 		reverseDo: [ :dict | 
 			"Need to preserve association identity, tempSymbols is used for compiling methods"
 			dict associationsDo: [ :assoc | tempSymbols add: assoc ] ].
+
+	movedClasses do: [:movedClass | 
+		movedClassesMap 
+			at: movedClass classBefore name 
+			put: movedClass ].
 
 ]
 
