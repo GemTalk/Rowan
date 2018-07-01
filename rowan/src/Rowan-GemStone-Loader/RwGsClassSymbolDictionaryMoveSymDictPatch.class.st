@@ -47,7 +47,14 @@ RwGsClassSymbolDictionaryMoveSymDictPatch >> installSymbolDictionaryPatchFor: aP
 ]
 
 { #category : 'installing' }
-RwGsClassSymbolDictionaryMoveSymDictPatch >> installSymbolDictionaryPatchFor: aPatchSet classMove: classMove [
+RwGsClassSymbolDictionaryMoveSymDictPatch >> installSymbolDictionaryPatchFor: aPatchSet classMove: aClassMove [
+
+	RwGsSymbolDictionaryRegistry_Implementation moveClassFor: aClassMove
+
+]
+
+{ #category : 'installing' }
+RwGsClassSymbolDictionaryMoveSymDictPatch >> installSymbolDictionaryPatchForX: aPatchSet classMove: classMove [
 
 	| before originalSymbolDictionary assoc newSymbolDictionary theClass oldRegistry newRegistry 
 		loadedClass theBehavior |
@@ -69,7 +76,6 @@ RwGsClassSymbolDictionaryMoveSymDictPatch >> installSymbolDictionaryPatchFor: aP
 			implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 "need to move the instance and class methods for the loaded Class ... extension methods?"
 	loadedClass := Rowan image loadedClassNamed: classMove classBefore name.
-self halt.
 	loadedClass loadedInstanceMethods values do: [:loadedMethod |
 		| compiledMethod |
 		compiledMethod := theClass compiledMethodAt: loadedMethod selector asSymbol.
@@ -81,5 +87,12 @@ self halt.
 		compiledMethod := theBehavior compiledMethodAt: loadedMethod selector asSymbol.
 		oldRegistry methodRegistry removeKey: compiledMethod.
 		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
+
+]
+
+{ #category : 'installing' }
+RwGsClassSymbolDictionaryMoveSymDictPatch >> installSymbolDictionaryPatchForY: aPatchSet classMove: aClassMove [
+
+	RwGsSymbolDictionaryRegistry_Implementation moveClassFor: aClassMove
 
 ]

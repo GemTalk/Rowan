@@ -762,29 +762,43 @@ RwGsSymbolDictionaryRegistry_Implementation class >> loadedPackageNamed: package
 ]
 
 { #category : 'class symbol dict - patch api' }
-RwGsSymbolDictionaryRegistry_Implementation class >> moveClassAssoc: assoc from: oldRegistry to: newRegistry classMove: classMove [
+RwGsSymbolDictionaryRegistry_Implementation class >> moveClassFor: classMove [
 	" move class from <oldRegistry> to <newRegistry> which includes moveing the loaded methods associated with the class"
+
+	"loaded things are handled elsewhere, just need to update the various registries ... and move the association"
 
 	"extension methods will be dealt with later"
 
-	| theClass className loadedClass theBehavior |
+	| originalSymbolDictionary newSymbolDictionary before assoc theClass loadedClass theBehavior oldRegistry newRegistry |
 
+	before := classMove classBefore.
+	originalSymbolDictionary := Rowan globalNamed: before gs_symbolDictionary.
+	assoc := originalSymbolDictionary associationAt: before key asSymbol.
 	theClass := assoc value.
 	theBehavior := theClass class.
+	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	className := classMove classBefore name.
+	newSymbolDictionary := Rowan globalNamed: ((classMove projectAfter specification platformSpec at: 'gemstone')
+				symbolDictNameForPackageNamed: classMove packageAfter name) .
+	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	oldRegistry 
-		deleteClassNamedFromPackage: className 
-		implementationClass: self.
+	loadedClass := oldRegistry classRegistry removeKey: theClass classHistory.
+	originalSymbolDictionary removeKey: assoc key.
 
-	newRegistry 
-		addClassAssociation: assoc 
-			forClass: theClass 
-			toPackageNamed: classMove packageAfter name
-			implementationClass: self.
+	self 
+		_symbolDictionary: newSymbolDictionary 
+		at: assoc key 
+		ifPresent: [:class |
+			theClass ~~ class
+				ifTrue: [ self error: ' internal error - found an existing association in the ',  
+								newSymbolDictionary name asString printString, 
+								' symbol dictionary with a duplicate key ',
+								assoc key printString, 
+								' while attempting to move class ', assoc key asString printString ] ]
+		ifAbsent: [ newSymbolDictionary add: assoc ].
 
-	loadedClass := Rowan image loadedClassNamed: className.
+	newRegistry classRegistry at: theClass classHistory put: loadedClass.
+
 	loadedClass loadedInstanceMethods values do: [:loadedMethod |
 		| compiledMethod |
 		compiledMethod := theClass compiledMethodAt: loadedMethod selector asSymbol.
