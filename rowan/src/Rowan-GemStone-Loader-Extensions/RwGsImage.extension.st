@@ -70,7 +70,6 @@ RwGsImage class >> applyModification_254: aProjectSetModification visitorClass: 
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
 	newClassVersionPatchSet := visitor patchSet.
-	newClassVersionPatchSet moveClassesWithNewVersionsBetweenPackages.
 	newClassVersionPatchSet applyForNewClassVersions: instanceMigrator
 
 ]

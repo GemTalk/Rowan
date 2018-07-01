@@ -900,21 +900,6 @@ RwGsPatchSet_254 >> doMoveClassesBetweenPackages [
 
 ]
 
-{ #category : 'private - applying' }
-RwGsPatchSet_254 >> doMoveClassesBetweenPackages: patches [
-
-	| image |
-	image := Rowan image.
-	patches 
-		do: [:patch |
-			| loadedClass |
-				loadedClass := image loadedClassNamed: patch classDefinition name.
-				loadedClass loadedPackage removeLoadedClass: loadedClass.
-				(image loadedPackageNamed: patch packageDefinition name)
-					addLoadedClass: loadedClass ].
-
-]
-
 { #category : 'initialization' }
 RwGsPatchSet_254 >> initialize [
 
@@ -988,13 +973,6 @@ RwGsPatchSet_254 >> migrateInstances [
 RwGsPatchSet_254 >> moveClassesBetweenSymbolDictionaries [
 
 	classesWithSymbolDictionaryChanges do: [:each | each installSymbolDictionaryPatchFor: self ].
-
-]
-
-{ #category : 'private - applying' }
-RwGsPatchSet_254 >> moveClassesWithNewVersionsBetweenPackages [
-
-	self doMoveClassesBetweenPackages: classesWithNewVersions.
 
 ]
 

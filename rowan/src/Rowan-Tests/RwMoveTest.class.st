@@ -424,8 +424,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages_and_symbolD
 	self assert: ar size = 1.
 	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
 
-	self assert: class ~~ oldClass.
-self halt.
+	self assert: class ~~ oldClass
 
 ]
 
@@ -501,8 +500,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages_and_symbolD
 	self assert: ar size = 1.
 	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
 
-	self assert: class ~~ oldClass.
-self halt.
+	self assert: class ~~ oldClass
 
 ]
 
