@@ -217,7 +217,7 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed instanceMigrator: instanceMigrat
 	projectSetDefinition := self class read
 		readProjectSetForProjectNamed: projectNamed.
 	res := self 
-		_doProjectSetLoad: projectSetDefinition
+		_doProjectSetLoad_254: projectSetDefinition
 		instanceMigrator: instanceMigrator 
 		originalProjectSet: projectSetDefinition 
 		processedClassNames: Set new.
@@ -300,6 +300,7 @@ RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinitionToLoad [
 	^ self
 		loadProjectSetDefinition: projectSetDefinitionToLoad
 		instanceMigrator: Rowan platform instanceMigrator
+
 ]
 
 { #category : 'load project definitions' }
@@ -309,7 +310,7 @@ RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinition instanceMigrator
 		project and a definition can have come from anywhere"
 
 	^ self 
-		_doProjectSetLoad: projectSetDefinition
+		_doProjectSetLoad_254: projectSetDefinition
 		instanceMigrator: instanceMigrator 
 		originalProjectSet: projectSetDefinition 
 		processedClassNames: Set new
