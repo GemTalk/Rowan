@@ -4750,6 +4750,9 @@ JadeServer >> sbUpdatePackagesOrDictionaries [
 	classList := OrderedCollection new.
 	selectedTab = 'dictionaryList' ifTrue: [^self sbUpdateDictionaries].
 	selectedTab = 'packageList' ifTrue: [^self sbUpdatePackages].
+	selectedTab = 'projectList' ifTrue:[
+		self sbUpdatePackages. 
+		^self updateProjects].
 	self error: 'unexpected token'.
 
 
@@ -5250,8 +5253,6 @@ JadeServer >> systemBrowserUpdate [
 				sbUpdateMethodFilter;
 				sbUpdateMethods]
 
-	
-
 ]
 
 { #category : 'category' }
@@ -5299,6 +5300,18 @@ JadeServer >> terminate: aGsProcess [
 	aGsProcess terminate.
 	(Delay forMilliseconds: 10) wait.	"allow forked processes to finish"
 
+
+]
+
+{ #category : 'category' }
+JadeServer >> updateProjects [
+	
+	| update |
+	update := RowanProjectsUpdate new. 
+	RowanProjectService new projects do:[:service | 
+		service isDirty ifTrue:[
+			update modifiedProjects add: service name]. 
+			update projects add: service name].
 
 ]
 
