@@ -928,7 +928,7 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 
 			loadedClassOrExtension removeLoadedMethod: loadedMethod.
 
-			registry := (Rowan globalNamed: classOrExtensionDef gs_symbolDictionary) rowanSymbolDictionaryRegistry.
+			registry := image loadedRegistryForPackageNamed: loadedPackage name.
             compiledMethod := loadedMethod handle.
 			registry methodRegistry removeKey: compiledMethod.
 
