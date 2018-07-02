@@ -21,14 +21,11 @@ Class {
 		'classesWithNewVersions',
 		'addedMethods',
 		'deletedMethods',
-		'deletedExtensionMethods',
 		'deleteNewVersionMethods',
 		'movedMethods',
-		'movedMethodsMap',
 		'extendedMethods',
 		'methodsWithPropertyChanges',
 		'methodsNeedingRecompile',
-		'pureMovedMethods',
 		'tempSymbols',
 		'createdClasses',
 		'errors',
@@ -734,7 +731,6 @@ false ifTrue: [ self halt].
 		addAddedClassesToTempSymbols;
 		recordCompiledForNewClassVersionDeletions;
 		createNewClassesAndClassVersions;
-		moveMethodsBetweenPackages;
 		compileMethods.
 	self reportAnyErrors
 		ifTrue: [ ^ self ].	"No errors -- go ahead and install what's been compiled."
@@ -750,7 +746,6 @@ false ifTrue: [ self halt].
 		moveClassesBetweenSymbolDictionaries;
 		updateSymbolAssociations;
 		updateClassProperties;
-		deleteMovedLoadedExtensionMethods;
 		removeDeletedMethods;
 		updateMethodDictionaries;
 		updateMethodProperties;
@@ -887,14 +882,6 @@ RwGsPatchSet_254 >> createNewClassesAndClassVersions [
 ]
 
 { #category : 'private - applying' }
-RwGsPatchSet_254 >> deleteMovedLoadedExtensionMethods [
-
-	deletedExtensionMethods
-		do: [:methodDeletionPatch | methodDeletionPatch deleteMovedLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols ]
-
-]
-
-{ #category : 'private - applying' }
 RwGsPatchSet_254 >> doMoveClassesBetweenPackages [
 
 	| image |
@@ -981,15 +968,12 @@ RwGsPatchSet_254 >> initialize [
 	movedClasses := Set new.
 	movedClassesMap := Dictionary new.
 	deletedMethods := Set new.
-	deletedExtensionMethods := Set new.
 	deleteNewVersionMethods := Set new.
 	movedMethods := Set new.
-	movedMethodsMap := Dictionary new.
 	addedMethods := Set new.
 	extendedMethods := Set new.
 	methodsNeedingRecompile := Set new.
 	methodsWithPropertyChanges := Set new.
-	pureMovedMethods := Set new.
 	tempSymbols := SymbolDictionary new.
 	createdClasses := Dictionary new.
 	errors := Set new
@@ -1050,79 +1034,6 @@ RwGsPatchSet_254 >> moveClassesBetweenSymbolDictionaries [
 { #category : 'accessing' }
 RwGsPatchSet_254 >> movedClassesMap [
 	^ movedClassesMap
-
-]
-
-{ #category : 'private - applying' }
-RwGsPatchSet_254 >> moveMethodsBetweenPackages [
-
-	| deletedMethodsMap symDictClassMoves |
-	deletedMethods isEmpty
-		ifTrue: [ 
-			"no move without deleted methods"
-			^ self ].
-	deletedMethodsMap := Dictionary new.
-	(deletedMethods copy
-		addAll: deleteNewVersionMethods;
-		yourself)
-		do: [ :patch | 
-			| className |
-			className := patch classDefinition key.
-			className isNil
-				ifFalse: [ 
-					((deletedMethodsMap at: className ifAbsentPut: [ Dictionary new ]) 
-						at: patch isMeta ifAbsentPut: [Dictionary new ])
-							at: patch methodDefinition key put: patch ] ].
-	symDictClassMoves := classesWithSymbolDictionaryChanges collect: [:each | each classDefinition name].
-	(addedMethods copy
-		addAll: extendedMethods;
-		yourself)
-		do: [ :methodAdditionPatch | 
-					(deletedMethodsMap at: methodAdditionPatch className ifAbsent: [  ])
-						ifNotNil: [ :isMetaMap |
-							(isMetaMap at: methodAdditionPatch isMeta ifAbsent: [])
-								ifNotNil: [:selectorMap | 
-									(selectorMap at: methodAdditionPatch methodDefinition selector ifAbsent: [])
-										ifNotNil: [ :methodDeletionPatch | 
-											| methodMod |
-											(symDictClassMoves includes: methodAdditionPatch className)
-												ifFalse: [ 
-													"If a class is moved to a package that is in the SAME symbol dictionary, we can afford to make certain optimizations
-														and avoid excessive method churn, by skipping the step of deleting/installing methods from/to the class that is moved,
-														since the classes are already present in the class method dictionary ... we do have to update the loaded packages 
-														structure.
-
-														deletedExtensionMethods, movedMethodsMap and pureMoveMethods are used to make sure that the loaded things
-															are properly updated, and that the appropriate steps are skipped in a safe manner."
-													(extendedMethods includes: methodAdditionPatch)
-														ifTrue: [ deletedExtensionMethods add: methodDeletionPatch ].
-													deletedMethods remove: methodDeletionPatch ifAbsent: [].
-													((movedMethodsMap at: methodAdditionPatch className ifAbsentPut: [ Dictionary new ])
-														at: methodAdditionPatch isMeta ifAbsentPut: [Dictionary new ])
-															at: methodAdditionPatch methodDefinition selector put: {methodAdditionPatch. methodDeletionPatch}.
-													methodMod := methodAdditionPatch methodDefinition compareAgainstBase: methodDeletionPatch methodDefinition.
-													methodMod isEmpty
-														ifFalse: [
-															methodMod propertiesModification isEmpty
-																ifFalse: [									 
-																	methodAdditionPatch isMeta
-																		ifTrue: [ 
-																			self
-																				addPatchedClassMethodProperties: methodMod after
-																				inClass: methodAdditionPatch classDefinition
-																				inPackage: methodAdditionPatch packageDefinition
-																				inProject: methodAdditionPatch projectDefinition ]
-																		ifFalse: [ 
-																			self
-																				addPatchedInstanceMethodProperties: methodMod after
-																				inClass: methodAdditionPatch classDefinition
-																				inPackage: methodAdditionPatch packageDefinition
-																				inProject: methodAdditionPatch projectDefinition ] ] ].
-													(methodMod isEmpty or: [ methodMod sourceModification isEmpty ])
-														ifTrue: [ 
-															"the source is identical ... so it is a pure move of the method ... record this fact
-																for operations that care. "
-															pureMovedMethods add: methodAdditionPatch ] ] ] ] ] ]
 
 ]
 
@@ -1199,11 +1110,8 @@ RwGsPatchSet_254 >> runInitializers [
 		ifTrue: [ self class methodPatchesInInitializationOrder: methodPatches ]
 		ifFalse: [ methodPatches ].
 	orderedMethodPatches do: [ :methodPatch | 
-			"a pure move, is a method that moved between packages with no change in source ... do not run initialize method in this case"
-			(pureMovedMethods includes: methodPatch) 
-				ifFalse: [ 
-					RwExecuteClassInitializeMethodsAfterLoadNotification signal 
-						ifTrue: [ methodPatch runInitializer ] ] ]
+			RwExecuteClassInitializeMethodsAfterLoadNotification signal 
+				ifTrue: [ methodPatch runInitializer ] ]
 
 ]
 
@@ -1282,15 +1190,7 @@ RwGsPatchSet_254 >> updateMethodDictionaries [
 	or LoadedExtension
 	For methods that need recompiling updated the LoadedMethods registration. "
 
-	addedMethods do: [:patch | 
-		(movedMethodsMap at: patch className ifAbsent: [])
-			ifNil: [ patch installMethod ]
-			ifNotNil: [ :isMetaMap |
-				(isMetaMap at: patch isMeta ifAbsent: [])
-					ifNil: [ patch installMethod ]
-					ifNotNil: [ :selectorMap |
-						(selectorMap at: patch methodDefinition selector ifAbsent: [])
-							ifNil: [ patch installMethod ] ] ] ].
+	addedMethods do: [:patch | patch installMethod ].
 	extendedMethods do: [:each | each installMethod ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
 
