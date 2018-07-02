@@ -23,6 +23,7 @@ Class {
 		'deletedMethods',
 		'deletedExtensionMethods',
 		'deleteNewVersionMethods',
+		'movedMethods',
 		'movedMethodsMap',
 		'extendedMethods',
 		'methodsWithPropertyChanges',
@@ -521,6 +522,13 @@ RwGsPatchSet_254 >> addForcingNewClassVersionModification: aRwClassModificationF
 ]
 
 { #category : 'building' }
+RwGsPatchSet_254 >> addMethodMove: aRwMethodMove [
+
+	movedMethods add: aRwMethodMove
+
+]
+
+{ #category : 'building' }
 RwGsPatchSet_254 >> addPatchedClassClassVariables: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
@@ -919,6 +927,7 @@ RwGsPatchSet_254 >> initialize [
 	deletedMethods := Set new.
 	deletedExtensionMethods := Set new.
 	deleteNewVersionMethods := Set new.
+	movedMethods := Set new.
 	movedMethodsMap := Dictionary new.
 	addedMethods := Set new.
 	extendedMethods := Set new.

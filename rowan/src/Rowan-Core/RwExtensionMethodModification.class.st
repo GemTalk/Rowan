@@ -84,6 +84,13 @@ RwExtensionMethodModification >> addModificationToPatchSet: aPatchSet inPackage:
 								inProject: aProjectDefinition ] ] ]
 ]
 
+{ #category : 'converting' }
+RwExtensionMethodModification >> asExtensionMethodModification [
+
+	^ self
+
+]
+
 { #category : 'accessing' }
 RwExtensionMethodModification >> classDefinition: aClassDefinition [
 	classDefinition := aClassDefinition

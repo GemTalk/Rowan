@@ -29,7 +29,7 @@ RwProjectSetModification >> addMethodsAddedByClassesOrExtensionsModification: cl
 						instanceMethodsModification.
 			classMethodsModification elementsModified do: 
 					[:methodModification |
-					methodModification before
+					methodModification before key
 						ifNil: 
 							[| newMethod |
 							newMethod := methodModification after.
@@ -42,10 +42,10 @@ RwProjectSetModification >> addMethodsAddedByClassesOrExtensionsModification: cl
 										methodsModification: classMethodsModification)]].
 			instanceMethodsModification elementsModified do: 
 					[:methodModification |
-					methodModification before
+					methodModification before key
 						ifNil: 
 							[| newMethod |
-						newMethod := methodModification after.
+							newMethod := methodModification after.
 							dictionary at: classModification key -> false -> newMethod key
 								put: (RwMethodAdditionOrRemoval
 										packageDefinition: package
@@ -82,7 +82,7 @@ RwProjectSetModification >> addMethodsRemovedByClassesOrExtensionsModification: 
 						instanceMethodsModification.
 			classMethodsModification elementsModified do: 
 					[:methodModification |
-					methodModification after
+					methodModification after key
 						ifNil: 
 							[| oldMethod |
 							oldMethod := methodModification before.
@@ -95,7 +95,7 @@ RwProjectSetModification >> addMethodsRemovedByClassesOrExtensionsModification: 
 										methodsModification: classMethodsModification)]].
 			instanceMethodsModification elementsModified do: 
 					[:methodModification |
-					methodModification after
+					methodModification after key
 						ifNil: 
 							[| oldMethod |
 							oldMethod := methodModification before.
@@ -297,7 +297,7 @@ RwProjectSetModification >> updateForClassMoves [
 ]
 
 { #category : 'private - moves' }
-RwProjectSetModification >> updateForMethodMoveFrom: removal to: addition [
+RwProjectSetModification >> updateForMethodMoveFrom: removal to: addition  isMeta: isMeta [
 	"Transform the given removal and addition to a move."
 
 	| oldDefinition newDefinition methodModification |
@@ -322,6 +322,9 @@ RwProjectSetModification >> updateForMethodMoveFrom: removal to: addition [
 
 	"Does the method have other modifications that need to be recorded?"
 	methodModification := newDefinition compareAgainstBase: oldDefinition.
+	methodModification 
+		isMeta: isMeta;
+		classDefinition: addition classDefinitionOrExtension.
 	methodModification isEmpty
 		ifFalse: 
 			[addition methodsModification addElementModification: methodModification]
@@ -341,6 +344,6 @@ RwProjectSetModification >> updateForMethodMoves [
 			[:key :addition |
 			| removal |
 			removal := methodRemovals at: key ifAbsent: [nil].
-			removal ifNotNil: [self updateForMethodMoveFrom: removal to: addition]]
+			removal ifNotNil: [ self updateForMethodMoveFrom: removal to: addition isMeta: key key value]]
 
 ]

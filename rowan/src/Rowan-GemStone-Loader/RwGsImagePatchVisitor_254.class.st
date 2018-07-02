@@ -288,7 +288,8 @@ RwGsImagePatchVisitor_254 >> visitProjecteSetModification: aProjectSetModificati
 			self error: 'internal error - moved packages not yet implemented' ].
 	aProjectSetModification movedClasses do: [:movedClass | 
 		movedClass addMovedClassToPatchSet: patchSet ].
-	aProjectSetModification movedMethods do: [:movedMethod | self halt ].
+	aProjectSetModification movedMethods do: [:movedMethod | 
+		movedMethod addMovedMethodToPatchSet: patchSet ].
 	aProjectSetModification elementsModified
 		do: [ :each | each acceptVisitor: self ]
 

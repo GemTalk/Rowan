@@ -34,7 +34,7 @@ RwMethodMove >> classOrExtensionAfter [
 
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Updating' }
 RwMethodMove >> classOrExtensionAfter: newValue [
 	classOrExtensionAfter := newValue
 
@@ -43,6 +43,12 @@ RwMethodMove >> classOrExtensionAfter: newValue [
 { #category : 'Accessing' }
 RwMethodMove >> classOrExtensionBefore [
 	^classOrExtensionBefore
+
+]
+
+{ #category : 'Updating' }
+RwMethodMove >> classOrExtensionBefore: newValue [
+	classOrExtensionBefore := newValue
 
 ]
 
