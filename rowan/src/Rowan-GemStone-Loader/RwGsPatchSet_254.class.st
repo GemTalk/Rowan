@@ -1022,12 +1022,11 @@ RwGsPatchSet_254 >> migrateInstances [
 RwGsPatchSet_254 >> moveClassesBetweenSymbolDictionaries [
 
 	classesWithSymbolDictionaryChanges do: [:each | 
-		| className classMove |
+		| className |
 		className := each classDefinition name.
-		classMove := movedClassesMap 
-			at: className 
-			ifAbsent: [ self error: 'internal error - symbol dictionary move for ', className printString, ' without entry in moved classes'].
-		each installSymbolDictionaryPatchFor: self classMove: classMove ].
+		(movedClassesMap at: className ifAbsent: [])
+				ifNil: [ each installSymbolDictionaryPatchFor_254: self ]
+				ifNotNil: [:classMove | each installSymbolDictionaryPatchFor: self classMove: classMove ] ].
 
 ]
 

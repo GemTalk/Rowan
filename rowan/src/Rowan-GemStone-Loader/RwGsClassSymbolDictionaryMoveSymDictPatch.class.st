@@ -18,10 +18,24 @@ RwGsClassSymbolDictionaryMoveSymDictPatch class >> for: aClassModification inPac
 ]
 
 { #category : 'accessing' }
+RwGsClassSymbolDictionaryMoveSymDictPatch >> classModification [
+
+	^classModification
+
+]
+
+{ #category : 'accessing' }
 RwGsClassSymbolDictionaryMoveSymDictPatch >> classModification: aClassModification [
 
 	classModification := aClassModification.
 	classDefinition := classModification after
+
+]
+
+{ #category : 'installing' }
+RwGsClassSymbolDictionaryMoveSymDictPatch >> installSymbolDictionaryPatchFor_254: aPatchSet [
+
+	RwGsSymbolDictionaryRegistry_Implementation movePatchFor: self
 
 ]
 
