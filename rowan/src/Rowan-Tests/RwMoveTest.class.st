@@ -744,7 +744,7 @@ RwMoveTest >> testProjectSet_move_method_between_packages [
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.
@@ -870,7 +870,7 @@ RwMoveTest >> testProjectSet_move_method_between_packages_issue_254 [
 		instvars: #()
 		classinstvars: #()
 		classvars: #()
-		category: nil
+		category: packageName1
 		comment: ''
 		pools: #()
 		type: 'normal'.

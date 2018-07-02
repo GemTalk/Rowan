@@ -45,7 +45,7 @@ RwProjectSetModification >> addMethodsAddedByClassesOrExtensionsModification: cl
 					methodModification before
 						ifNil: 
 							[| newMethod |
-							newMethod := methodModification after.
+						newMethod := methodModification after.
 							dictionary at: classModification key -> false -> newMethod key
 								put: (RwMethodAdditionOrRemoval
 										packageDefinition: package
@@ -58,7 +58,6 @@ RwProjectSetModification >> addMethodsAddedByClassesOrExtensionsModification: cl
 
 { #category : 'private - moves' }
 RwProjectSetModification >> addMethodsAddedByPackageModification: packageModification toDictionary: dictionary [
-
 	self
 		addMethodsAddedByClassesOrExtensionsModification: packageModification
 				classesModification
