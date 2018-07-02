@@ -33,13 +33,6 @@ RwGsClassSymbolDictionaryMoveSymDictPatch >> classModification: aClassModificati
 ]
 
 { #category : 'installing' }
-RwGsClassSymbolDictionaryMoveSymDictPatch >> installSymbolDictionaryPatchFor_254: aPatchSet [
-
-	RwGsSymbolDictionaryRegistry_Implementation movePatchFor: self
-
-]
-
-{ #category : 'installing' }
 RwGsClassSymbolDictionaryMoveSymDictPatch >> installSymbolDictionaryPatchFor: aPatchSet [
 
 	| before originalSymbolDictionary assoc newSymbolDictionary theClass registry |

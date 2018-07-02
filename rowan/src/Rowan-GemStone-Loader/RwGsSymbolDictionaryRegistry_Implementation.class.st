@@ -857,57 +857,6 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveCompiledMethod: compile
 
 ]
 
-{ #category : 'class symbol dict - patch api' }
-RwGsSymbolDictionaryRegistry_Implementation class >> movePatchFor: symDictMovePatch [
-	" move class from <oldRegistry> to <newRegistry> which includes moveing the loaded methods associated with the class"
-
-	"loaded things are handled elsewhere, just need to update the various registries ... and move the association"
-
-	"extension methods will be dealt with later"
-
-	| originalSymbolDictionary newSymbolDictionary before assoc theClass loadedClass theBehavior oldRegistry newRegistry |
-
-	before := symDictMovePatch classModification before.
-	originalSymbolDictionary := Rowan globalNamed: before gs_symbolDictionary.
-	assoc := originalSymbolDictionary associationAt: before key asSymbol.
-	theClass := assoc value.
-	theBehavior := theClass class.
-	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
-
-	newSymbolDictionary := Rowan globalNamed: ((symDictMovePatch projectDefinition specification platformSpec at: 'gemstone')
-				symbolDictNameForPackageNamed: symDictMovePatch packageDefinition name) .
-	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
-
-	loadedClass := oldRegistry classRegistry removeKey: theClass classHistory.
-	originalSymbolDictionary removeKey: assoc key.
-
-	self 
-		_symbolDictionary: newSymbolDictionary 
-		at: assoc key 
-		ifPresent: [:class |
-			theClass ~~ class
-				ifTrue: [ self error: ' internal error - found an existing association in the ',  
-								newSymbolDictionary name asString printString, 
-								' symbol dictionary with a duplicate key ',
-								assoc key printString, 
-								' while attempting to move class ', assoc key asString printString ] ]
-		ifAbsent: [ newSymbolDictionary add: assoc ].
-
-	newRegistry classRegistry at: theClass classHistory put: loadedClass.
-
-	loadedClass loadedInstanceMethods values do: [:loadedMethod |
-		| compiledMethod |
-		compiledMethod := theClass compiledMethodAt: loadedMethod selector asSymbol.
-		oldRegistry methodRegistry removeKey: compiledMethod.
-		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
-	loadedClass loadedClassMethods values do: [:loadedMethod |
-		| compiledMethod |
-		compiledMethod := theBehavior compiledMethodAt: loadedMethod selector asSymbol.
-		oldRegistry methodRegistry removeKey: compiledMethod.
-		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
-
-]
-
 { #category : 'package - creation api' }
 RwGsSymbolDictionaryRegistry_Implementation class >> newLoadedPackageNamed: packageName instance: registryInstance [
 

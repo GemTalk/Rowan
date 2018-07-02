@@ -1025,7 +1025,7 @@ RwGsPatchSet_254 >> moveClassesBetweenSymbolDictionaries [
 		| className |
 		className := each classDefinition name.
 		(movedClassesMap at: className ifAbsent: [])
-				ifNil: [ each installSymbolDictionaryPatchFor_254: self ]
+				ifNil: [ each installSymbolDictionaryPatchFor: self ]
 				ifNotNil: [:classMove | each installSymbolDictionaryPatchFor: self classMove: classMove ] ].
 
 ]
