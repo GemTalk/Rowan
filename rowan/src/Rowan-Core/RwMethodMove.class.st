@@ -28,6 +28,23 @@ RwMethodMove class >> methodBefore: beforeMethodDefinition methodAfter: afterMet
 		yourself
 ]
 
+{ #category : 'unknown' }
+RwMethodMove class >> methodBefore: beforeMethodDefinition methodAfter: afterMethodDefinition classOrExtensionBefore: beforeClassDefinitionOrExtension classOrExtensionAfter: afterClassDefinitionOrExtension packageBefore: beforePackageDefinition packageAfter: afterPackageDefinition projectBefore: beforeProjectDefinition projectAfter: afterProjectDefinition isMeta: isMeta [
+
+	^(self new)
+		methodBefore: beforeMethodDefinition;
+		methodAfter: afterMethodDefinition;
+		classOrExtensionBefore: beforeClassDefinitionOrExtension;
+		classOrExtensionAfter: afterClassDefinitionOrExtension;
+		packageBefore: beforePackageDefinition;
+		packageAfter: afterPackageDefinition;
+		projectBefore: beforeProjectDefinition;
+		projectAfter: afterProjectDefinition;
+		isMeta: isMeta;
+		yourself
+
+]
+
 { #category : 'Accessing' }
 RwMethodMove >> classOrExtensionAfter [
 	^classOrExtensionAfter

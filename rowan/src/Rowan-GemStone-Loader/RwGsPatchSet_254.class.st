@@ -746,6 +746,7 @@ false ifTrue: [ self halt].
 		installAddedClasses;
 		installAddedClassExtensions;
 		doMoveClassesBetweenPackages;
+		doMoveMethodsBetweenPackages;
 		moveClassesBetweenSymbolDictionaries;
 		updateSymbolAssociations;
 		updateClassProperties;
@@ -905,6 +906,61 @@ RwGsPatchSet_254 >> doMoveClassesBetweenPackages [
 			loadedClass loadedPackage removeLoadedClass: loadedClass.
 			(image loadedPackageNamed: aClassMove packageAfter name)
 				addLoadedClass: loadedClass ]
+
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
+"
+			| loadedClass |
+			loadedClass := image loadedClassNamed: aClassMove classBefore name.
+			loadedClass loadedPackage removeLoadedClass: loadedClass.
+			(image loadedPackageNamed: aClassMove packageAfter name)
+				addLoadedClass: loadedClass ]
+
+"
+	| image |
+	image := Rowan image.
+	movedMethods 
+		do: [:aMethodMove |
+			| packageDef classOrExtensionDef loadedPackage loadedClassOrExtension loadedMethods loadedMethod compiledMethod registry |
+			packageDef := aMethodMove packageBefore.
+			classOrExtensionDef := aMethodMove classOrExtensionBefore.
+			loadedPackage := image loadedPackageNamed: packageDef name.
+			loadedClassOrExtension := loadedPackage 
+				classOrExtensionForClassNamed: classOrExtensionDef name 
+				ifAbsent: [ 
+					self error: 'internal error - no loaded class or extension found for class ', 
+						classOrExtensionDef name printString, 
+						'  in package ', 
+						packageDef name printString ].
+			loadedMethods := aMethodMove isMeta
+				ifTrue: [ loadedClassOrExtension loadedClassMethods ]
+				ifFalse: [ loadedClassOrExtension loadedInstanceMethods ].
+			loadedMethod := loadedMethods at: aMethodMove methodBefore selector.
+
+			loadedClassOrExtension removeLoadedMethod: loadedMethod.
+
+			registry := (Rowan globalNamed: classOrExtensionDef gs_symbolDictionary) rowanSymbolDictionaryRegistry.
+            compiledMethod := loadedMethod handle.
+			registry methodRegistry removeKey: compiledMethod.
+
+			packageDef := aMethodMove packageAfter.
+			classOrExtensionDef := aMethodMove classOrExtensionAfter.
+			loadedPackage := image loadedPackageNamed: packageDef name.
+			loadedClassOrExtension := loadedPackage 
+				classOrExtensionForClassNamed: classOrExtensionDef name 
+				ifAbsent: [ 
+					self error: 'internal error - no loaded class or extension found for class ', 
+						classOrExtensionDef name printString, 
+						'  in package ', 
+						packageDef name printString ].
+
+			loadedClassOrExtension addLoadedMethod: loadedMethod.
+
+			registry := (Rowan globalNamed: ((aMethodMove projectAfter specification platformSpec at: 'gemstone')
+				symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
+			registry methodRegistry at: compiledMethod put: loadedMethod ]
 
 ]
 

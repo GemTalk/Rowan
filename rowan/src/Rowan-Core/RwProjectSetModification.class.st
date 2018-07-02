@@ -19,7 +19,7 @@ RwProjectSetModification >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'private - moves' }
-RwProjectSetModification >> addMethodsAddedByClassesOrExtensionsModification: classesOrExtensionsModification inPackage: package toDictionary: dictionary [
+RwProjectSetModification >> addMethodsAddedByClassesOrExtensionsModification: classesOrExtensionsModification inPackage: package inProject: project toDictionary: dictionary [
 
 	classesOrExtensionsModification elementsModified do: 
 			[:classModification |
@@ -35,6 +35,7 @@ RwProjectSetModification >> addMethodsAddedByClassesOrExtensionsModification: cl
 							newMethod := methodModification after.
 							dictionary at: classModification key -> true -> newMethod key
 								put: (RwMethodAdditionOrRemoval
+										projectDefinition: project
 										packageDefinition: package
 										classDefinitionOrExtension: classModification after
 										methodKey: newMethod key
@@ -48,6 +49,7 @@ RwProjectSetModification >> addMethodsAddedByClassesOrExtensionsModification: cl
 							newMethod := methodModification after.
 							dictionary at: classModification key -> false -> newMethod key
 								put: (RwMethodAdditionOrRemoval
+										projectDefinition: project
 										packageDefinition: package
 										classDefinitionOrExtension: classModification after
 										methodKey: newMethod key
@@ -57,22 +59,24 @@ RwProjectSetModification >> addMethodsAddedByClassesOrExtensionsModification: cl
 ]
 
 { #category : 'private - moves' }
-RwProjectSetModification >> addMethodsAddedByPackageModification: packageModification toDictionary: dictionary [
+RwProjectSetModification >> addMethodsAddedByPackageModification: packageModification inProject: projectModification toDictionary: dictionary [
 	self
 		addMethodsAddedByClassesOrExtensionsModification: packageModification
 				classesModification
 		inPackage: packageModification after
+		inProject: projectModification after
 		toDictionary: dictionary.
 	self
 		addMethodsAddedByClassesOrExtensionsModification: packageModification
 				classExtensionsModification
 		inPackage: packageModification after
+		inProject: projectModification after
 		toDictionary: dictionary
 
 ]
 
 { #category : 'private - moves' }
-RwProjectSetModification >> addMethodsRemovedByClassesOrExtensionsModification: classesOrExtensionsModification inPackage: package toDictionary: dictionary [
+RwProjectSetModification >> addMethodsRemovedByClassesOrExtensionsModification: classesOrExtensionsModification inPackage: package inProject: project toDictionary: dictionary [
 
 	classesOrExtensionsModification elementsModified do: 
 			[:classModification |
@@ -88,6 +92,7 @@ RwProjectSetModification >> addMethodsRemovedByClassesOrExtensionsModification: 
 							oldMethod := methodModification before.
 							dictionary at: classModification key -> true -> oldMethod key
 								put: (RwMethodAdditionOrRemoval
+										projectDefinition: project
 										packageDefinition: package
 										classDefinitionOrExtension: classModification before
 										methodKey: oldMethod key
@@ -101,6 +106,7 @@ RwProjectSetModification >> addMethodsRemovedByClassesOrExtensionsModification: 
 							oldMethod := methodModification before.
 							dictionary at: classModification key -> false -> oldMethod key
 								put: (RwMethodAdditionOrRemoval
+										projectDefinition: project
 										packageDefinition: package
 										classDefinitionOrExtension: classModification after
 										methodKey: oldMethod key
@@ -110,17 +116,19 @@ RwProjectSetModification >> addMethodsRemovedByClassesOrExtensionsModification: 
 ]
 
 { #category : 'private - moves' }
-RwProjectSetModification >> addMethodsRemovedByPackageModification: packageModification toDictionary: dictionary [
+RwProjectSetModification >> addMethodsRemovedByPackageModification: packageModification inProject: projectModification toDictionary: dictionary [
 
 	self
 		addMethodsRemovedByClassesOrExtensionsModification: packageModification
 				classesModification
 		inPackage: packageModification before
+		inProject: projectModification before
 		toDictionary: dictionary.
 	self
 		addMethodsRemovedByClassesOrExtensionsModification: packageModification
 				classExtensionsModification
 		inPackage: packageModification before
+		inProject: projectModification before
 		toDictionary: dictionary
 
 ]
@@ -180,6 +188,7 @@ RwProjectSetModification >> findAddedMethods [
 			packagesModification elementsModified do: 
 				[:packageModification |
 				self addMethodsAddedByPackageModification: packageModification
+					inProject: projectModification
 					toDictionary: addedMethods] ].
 	^addedMethods
 
@@ -227,6 +236,7 @@ RwProjectSetModification >> findRemovedMethods [
 			packagesModification elementsModified do: 
 				[:packageModification |
 				self addMethodsRemovedByPackageModification: packageModification
+					inProject: projectModification
 					toDictionary: removedMethods]].
 	^removedMethods
 
@@ -318,6 +328,8 @@ RwProjectSetModification >> updateForMethodMoveFrom: removal to: addition  isMet
 				classOrExtensionAfter: addition classDefinitionOrExtension
 				packageBefore: removal packageDefinition
 				packageAfter: addition packageDefinition
+				projectBefore: removal projectDefinition
+				projectAfter: addition projectDefinition
 				isMeta: addition isMeta).
 
 	"Does the method have other modifications that need to be recorded?"
