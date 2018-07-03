@@ -743,10 +743,10 @@ false ifTrue: [ self halt].
 		removeDeletedClassesFromSystem;
 		"removeDeletedClassExtensionsFromSystem;" 
 		installAddedClasses;
+		moveClassesBetweenSymbolDictionaries;
 		installAddedClassExtensions;
 		doMoveClassesBetweenPackages;
 		doMoveMethodsBetweenPackages;
-		moveClassesBetweenSymbolDictionaries;
 		updateSymbolAssociations;
 		updateClassProperties;
 		removeDeletedMethods;
