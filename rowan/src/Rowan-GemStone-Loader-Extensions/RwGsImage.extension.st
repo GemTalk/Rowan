@@ -58,6 +58,7 @@ RwGsImage class >> applyModification_254: aProjectSetModification visitorClass: 
 		ifTrue: [ 
 			patchSet apply.
 			^ self ].
+	patchSet setupForNewClassVersionUpdates.
 	patchSet classesWithNewVersions
 		do: [ :each | 
 			each

@@ -1147,10 +1147,24 @@ RwGsPatchSet_254 >> setupForApply [
 			"Need to preserve association identity, tempSymbols is used for compiling methods"
 			dict associationsDo: [ :assoc | tempSymbols add: assoc ] ].
 
+	self setupForMovedClasses
+
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_254 >> setupForMovedClasses [
+
 	movedClasses do: [:movedClass | 
 		movedClassesMap 
 			at: movedClass classBefore name 
 			put: movedClass ].
+
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_254 >> setupForNewClassVersionUpdates [
+
+	self setupForMovedClasses
 
 ]
 

@@ -1456,7 +1456,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
      Using the class definition template, create a new version of Issue91 with new inst var 'abc' in RowanSample1-Extensions
 "
 
-	| projectName packageName1 packageName2 className theClass  |
+	| projectName packageName1 packageName2 className theClass oldClass |
 	projectName := 'Issue123_Project'.
 	packageName1 := 'Issue123-Core'.
 	packageName2 := 'Issue123-Extensions'.
@@ -1484,6 +1484,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 	self assert: (theClass categoryOfSelector: #foo) asString = 'other'.
 	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName1.
 
+	oldClass := theClass.
 	theClass := Object
 		rwSubclass: className
 		instVarNames: #( ivar1 )
@@ -1493,6 +1494,7 @@ RwRowanProjectIssuesTest >> testIssue123_moveExistingClassWithMethodsToNewPackag
 		category: packageName2
 		options: #().
 
+	self assert: oldClass ~= theClass.
 	self assert: theClass new foo = 1.
 	self assert: theClass new foo = 1.
 	self assert: theClass category = packageName2.
