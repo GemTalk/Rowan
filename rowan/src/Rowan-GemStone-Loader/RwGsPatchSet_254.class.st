@@ -330,6 +330,9 @@ RwGsPatchSet_254 >> addClassModification: aRwClassModification toPatchSetInPacka
 
 	aRwClassModification isAddition
 		ifTrue: [ 
+			"https://github.com/dalehenrich/Rowan/issues/210 - make sure that the added classes are not already loaded
+				in a project that is not included in this load"
+			(Rowan globalNamed: aRwClassModification after name) ifNotNil: [:global | (RwExistingVisitorAddingExistingClassNotification new classDefinition: aRwClassModification after) signal ].
 			self
 				addAddedClass: aRwClassModification after
 				inPackage: aPackage
@@ -898,14 +901,7 @@ RwGsPatchSet_254 >> doMoveClassesBetweenPackages [
 
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
-"
-			| loadedClass |
-			loadedClass := image loadedClassNamed: aClassMove classBefore name.
-			loadedClass loadedPackage removeLoadedClass: loadedClass.
-			(image loadedPackageNamed: aClassMove packageAfter name)
-				addLoadedClass: loadedClass ]
 
-"
 	| image |
 	image := Rowan image.
 	movedMethods 
@@ -935,18 +931,38 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 			packageDef := aMethodMove packageAfter.
 			classOrExtensionDef := aMethodMove classOrExtensionAfter.
 			loadedPackage := image loadedPackageNamed: packageDef name.
+			registry := (Rowan globalNamed: ((aMethodMove projectAfter specification platformSpec at: 'gemstone')
+				symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
 			loadedClassOrExtension := loadedPackage 
 				classOrExtensionForClassNamed: classOrExtensionDef name 
 				ifAbsent: [ 
-					self error: 'internal error - no loaded class or extension found for class ', 
-						classOrExtensionDef name printString, 
-						'  in package ', 
-						packageDef name printString ].
+					classOrExtensionDef isClassExtension
+						ifTrue: [ 
+							"add a new class extension on demand"
+							(aMethodMove projectAfter
+								useSessionMethodsForExtensionsForPackageNamed: aMethodMove packageAfter name)
+								ifTrue: [ | resolved |
+									((resolved := GsCurrentSession currentSession symbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
+										and: [resolved isBehavior and: [ resolved isMeta not ]])
+										ifFalse: [ 
+											self
+												error:
+													'The extension class named ' , self className printString , ' cannot be found.' ].
+"logic is not quite correct here ... need to create a lodedClassExtension for this puppy ... deferring session method work to a later date"
+"https://github.com/dalehenrich/Rowan/issues/254"]
+								ifFalse: [							registry
+									ensureExtensionClassNamed: classOrExtensionDef name
+									existsForPackageNamed: packageDef name
+									implementationClass: RwGsSymbolDictionaryRegistry_Implementation ].
+							loadedPackage loadedClassExtensions at: classOrExtensionDef name ]
+						ifFalse: [ 
+							self error: 'internal error - no loaded class found for class ', 
+								classOrExtensionDef name printString, 
+								'  in package ', 
+								packageDef name printString ] ].
 
 			loadedClassOrExtension addLoadedMethod: loadedMethod.
 
-			registry := (Rowan globalNamed: ((aMethodMove projectAfter specification platformSpec at: 'gemstone')
-				symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
 			registry methodRegistry at: compiledMethod put: loadedMethod ]
 
 ]

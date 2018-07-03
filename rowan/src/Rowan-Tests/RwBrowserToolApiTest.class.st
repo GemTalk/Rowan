@@ -1232,7 +1232,7 @@ RwBrowserToolApiTest >> testLoadMultiProjectDefs [
 ]
 
 { #category : 'tests' }
-RwBrowserToolApiTest >> testMoveGlobalExtensionMethods [
+RwBrowserToolApiTest >> testMoveGlobalExtensionSessionMethods [
 
 	| projectName packageNames className packageName1 packageName2 testClass testInstance browserTool |
 	projectName := 'Simple Browser'.
@@ -1291,6 +1291,7 @@ RwBrowserToolApiTest >> testMoveGlobalExtensionMethods [
 						assert: classExtensionDef instanceMethodDefinitions size = 1;
 						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
 		forClassExtensionsIn: className
+
 ]
 
 { #category : 'tests' }
