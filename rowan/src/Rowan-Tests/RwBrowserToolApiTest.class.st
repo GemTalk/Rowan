@@ -336,7 +336,8 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 
 	"The class to be deleted is created in one project and extended by another project ... the method extensions are direct method extensions and session method extensions"
 
-	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 testClass browserTool testProjectDefinition testPackageNames classDefinition testInstance projectTools |
+	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 testClass browserTool 
+		testProjectDefinition testPackageNames classDefinition testInstance projectTools symDict registry|
 	projectName1 := 'Simple Browser1'.
 	packageName1 := 'Simple1-Core'.
 	packageName2 := 'Simple1-Extensions'.
@@ -464,7 +465,21 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 				assert: false
 				description:
 					'Expected class extension for class ' , className1 printString , ' not present' ].
+	symDict := Rowan globalNamed: self _symbolDictionaryName.
+	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 2.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 1.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 1.
 
 	browserTool removeClassNamed: className1.	"remove class className1"
 
@@ -480,7 +495,23 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 			 ].
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass isNil
+	self assert: testClass isNil.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 1.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
 
 ]
 

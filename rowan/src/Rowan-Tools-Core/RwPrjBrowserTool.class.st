@@ -866,13 +866,14 @@ RwPrjBrowserTool >> removeClassNamed: className [
 	projectSetDefinition := RwProjectSetDefinition new.
 
 	loadedClass := self _loadedClassNamed: className ifAbsent: [ ].
-	loadedClassExtensions := self _loadedClassExtensionsNamed: className ifAbsent: [ #() ].
+	loadedClassExtensions := #(). "only apply if the class itself is not managed by Rowan"
 
 	loadedClass 
 		ifNil: [
 			"Give developer a chance to handle and abort the removal of unpackaged class"
 			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackaged class ', className printString.
-			"Notification resumed, so continue with removal ... actual removal is performed below"]
+			"Notification resumed, so continue with removal ... actual removal is performed below"
+				loadedClassExtensions := self _loadedClassExtensionsNamed: className ifAbsent: [ #() ] ]
 		ifNotNil: [
 			| loadedPackage projectDef packageDef classDef |
 			loadedPackage := loadedClass loadedPackage.
