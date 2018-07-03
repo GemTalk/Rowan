@@ -60,18 +60,22 @@ RwProjectSetModification >> addMethodsAddedByClassesOrExtensionsModification: cl
 
 { #category : 'private - moves' }
 RwProjectSetModification >> addMethodsAddedByPackageModification: packageModification inProject: projectModification toDictionary: dictionary [
-	self
-		addMethodsAddedByClassesOrExtensionsModification: packageModification
-				classesModification
-		inPackage: packageModification after
-		inProject: projectModification after
-		toDictionary: dictionary.
-	self
-		addMethodsAddedByClassesOrExtensionsModification: packageModification
-				classExtensionsModification
-		inPackage: packageModification after
-		inProject: projectModification after
-		toDictionary: dictionary
+
+	packageModification after key notNil
+	ifTrue: [ 
+		"ignore additions for packages that have been removed"
+		self
+			addMethodsAddedByClassesOrExtensionsModification: packageModification
+					classesModification
+			inPackage: packageModification after
+			inProject: projectModification after
+			toDictionary: dictionary.
+		self
+			addMethodsAddedByClassesOrExtensionsModification: packageModification
+					classExtensionsModification
+			inPackage: packageModification after
+			inProject: projectModification after
+			toDictionary: dictionary]
 
 ]
 
@@ -81,57 +85,58 @@ RwProjectSetModification >> addMethodsRemovedByClassesOrExtensionsModification: 
 	classesOrExtensionsModification elementsModified do: 
 			[:classModification |
 			| classMethodsModification instanceMethodsModification |
-			classModification after isEmpty
-				ifTrue: [
-					classMethodsModification := classModification classMethodsModification.
-					instanceMethodsModification := classModification
-								instanceMethodsModification.
-					classMethodsModification elementsModified do: 
-							[:methodModification |
-							methodModification after key
-								ifNil: 
-									[| oldMethod |
-									oldMethod := methodModification before.
-									dictionary at: classModification key -> true -> oldMethod key
-										put: (RwMethodAdditionOrRemoval
-												projectDefinition: project
-												packageDefinition: package
-												classDefinitionOrExtension: classModification before
-												methodKey: oldMethod key
-												isMeta: true
-												methodsModification: classMethodsModification)]].
-					instanceMethodsModification elementsModified do: 
-							[:methodModification |
-							methodModification after key
-								ifNil: 
-									[| oldMethod |
-									oldMethod := methodModification before.
-									dictionary at: classModification key -> false -> oldMethod key
-										put: (RwMethodAdditionOrRemoval
-												projectDefinition: project
-												packageDefinition: package
-												classDefinitionOrExtension: classModification after
-												methodKey: oldMethod key
-												isMeta: false
-												methodsModification: instanceMethodsModification)]]]]
+			classMethodsModification := classModification classMethodsModification.
+			instanceMethodsModification := classModification
+						instanceMethodsModification.
+			classMethodsModification elementsModified do: 
+					[:methodModification |
+					methodModification after key
+						ifNil: 
+							[| oldMethod |
+							oldMethod := methodModification before.
+							dictionary at: classModification key -> true -> oldMethod key
+								put: (RwMethodAdditionOrRemoval
+										projectDefinition: project
+										packageDefinition: package
+										classDefinitionOrExtension: classModification before
+										methodKey: oldMethod key
+										isMeta: true
+										methodsModification: classMethodsModification)]].
+			instanceMethodsModification elementsModified do: 
+					[:methodModification |
+					methodModification after key
+						ifNil: 
+							[| oldMethod |
+							oldMethod := methodModification before.
+							dictionary at: classModification key -> false -> oldMethod key
+								put: (RwMethodAdditionOrRemoval
+										projectDefinition: project
+										packageDefinition: package
+										classDefinitionOrExtension: classModification after
+										methodKey: oldMethod key
+										isMeta: false
+										methodsModification: instanceMethodsModification)]]]
 
 ]
 
 { #category : 'private - moves' }
 RwProjectSetModification >> addMethodsRemovedByPackageModification: packageModification inProject: projectModification toDictionary: dictionary [
 
-	self
-		addMethodsRemovedByClassesOrExtensionsModification: packageModification
-				classesModification
-		inPackage: packageModification before
-		inProject: projectModification before
-		toDictionary: dictionary.
-	self
-		addMethodsRemovedByClassesOrExtensionsModification: packageModification
-				classExtensionsModification
-		inPackage: packageModification before
-		inProject: projectModification before
-		toDictionary: dictionary
+	packageModification before key notNil
+	ifTrue: [ 
+		"ignore removals for packages that have been added"
+		self
+			addMethodsRemovedByClassesOrExtensionsModification: packageModification
+					classesModification
+			inPackage: packageModification before
+			inProject: projectModification before
+			toDictionary: dictionary.
+		self
+			addMethodsRemovedByClassesOrExtensionsModification: packageModification
+					classExtensionsModification
+			inPackage: packageModification before
+			inProject: projectModification before
+			toDictionary: dictionary ]
 
 ]
 
