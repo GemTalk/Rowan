@@ -3755,7 +3755,7 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 	"simplification of RwRowanSample4Test>>testIssue208_adopt_load"
 
 	| projectName1 projectName2 packageName1 packageName2 packageName3 className projectDefinition1 classDefinition
-		packageDefinition projectSetDefinition projectDefinition2 classExtensionDefinition |
+		packageDefinition projectSetDefinition projectDefinition2 classExtensionDefinition class ar symDict registry oldClass |
 	projectName1 := 'Issue208_moveMethodBetweenProjects1'.
 	projectName2 := 'Issue208_moveMethodBetweenProjects2'.
 	packageName1 := 'Issue208-Core1'.
@@ -3800,6 +3800,15 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validation"
+	class := Rowan globalNamed: className.
+	self assert: class rowanPackageName = packageName1.
+	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
+	self assert: class new method1 = 1.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
+	self assert: ar size = 1.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName1 asSymbol.
+
 "create project2"
 	projectDefinition2 := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName2)
@@ -3829,6 +3838,33 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validation"
+	oldClass := class.
+	class := Rowan globalNamed: className.
+	self assert: oldClass == class.
+	self assert: class rowanPackageName = packageName2.
+	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName3.
+	self assert: class new method1 = 1.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
+	self assert: ar size = 1.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 1.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName2.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 1.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 1.
 
 ]
 
