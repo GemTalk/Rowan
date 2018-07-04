@@ -4416,7 +4416,7 @@ RwRowanProjectIssuesTest >> testIssue255_external_constraints [
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
 	| projectName  packageName projectDefinition classDefinition1 classDefinition2 classDefinition3 packageDefinition className1 className2 projectSetDefinition 
-		class1 class2 className3 |
+		class1 class2 className3 class3 |
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
 	className1 := 'Issue255Class1'.
@@ -4428,7 +4428,7 @@ RwRowanProjectIssuesTest >> testIssue255_external_constraints [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-
+"create project"
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName;
@@ -4477,10 +4477,82 @@ RwRowanProjectIssuesTest >> testIssue255_external_constraints [
 		addClassDefinition: classDefinition2;
 		addClassDefinition: classDefinition3.
 
+"load"	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class1 := Rowan globalNamed: className1.
+	class2 := Rowan globalNamed: className2.
+	class3 := Rowan globalNamed: className3.
+	self assert: class1 rowanPackageName = packageName.
+	self assert: class2 rowanPackageName = packageName.
+	self assert: (class1 _constraintOn: #ivar1) == Association.
+	self assert: (class2 _constraintOn: #ivar2) == Array.
+	self assert: class3 _varyingConstraint == SmallInteger
+
+]
+
+{ #category : 'tests-issue 255' }
+RwRowanProjectIssuesTest >> testIssue255_internal_constraints_1 [
+
+	"reproduce bug"
+	"https://github.com/dalehenrich/Rowan/issues/255"
+
+	| projectName  packageName projectDefinition classDefinition1 classDefinition2 packageDefinition className1 className2 projectSetDefinition 
+		class1 class2 |
+	projectName := 'Issue255'.
+	packageName := 'Issue255-Core'.
+	className1 := 'Issue255Class1'.
+	className2 := 'Issue255Class2'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	classDefinition1 := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #(ivar1)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition1 gs_constraints: { { 'ivar1' . className2 } }.
+
+	classDefinition2 := RwClassDefinition
+		newForClassNamed: className2
+		super: 'Object'
+		instvars: #(ivar2)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition2 gs_constraints: { { 'ivar2' . className1 } }.
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+	packageDefinition 
+		addClassDefinition: classDefinition1;
+		addClassDefinition: classDefinition2.
+
+"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
 	class1 := Rowan globalNamed: className1.
 	class2 := Rowan globalNamed: className2.
 	self assert: class1 rowanPackageName = packageName.
@@ -4489,9 +4561,9 @@ RwRowanProjectIssuesTest >> testIssue255_external_constraints [
 ]
 
 { #category : 'tests-issue 255' }
-RwRowanProjectIssuesTest >> testIssue255_internal_constraints [
+RwRowanProjectIssuesTest >> testIssue255_internal_constraints_2 [
 
-	"reproduce bug"
+	"varian of bug"
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
 	| projectName  packageName projectDefinition classDefinition1 classDefinition2 classDefinition3 packageDefinition className1 className2 projectSetDefinition 
@@ -4507,7 +4579,7 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints [
 			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
 				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
 
-
+"create project"
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName;
@@ -4556,15 +4628,80 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints [
 		addClassDefinition: classDefinition2;
 		addClassDefinition: classDefinition3.
 
+"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
 	class1 := Rowan globalNamed: className1.
 	class2 := Rowan globalNamed: className2.
 	self assert: class1 rowanPackageName = packageName.
 	self assert: class2 rowanPackageName = packageName.
 self halt.
+
+]
+
+{ #category : 'tests-issue 255' }
+RwRowanProjectIssuesTest >> testIssue255_modification [
+
+	"test modifying constraints"
+	"https://github.com/dalehenrich/Rowan/issues/255"
+
+	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 projectSetDefinition class1 |
+	projectName := 'Issue255'.
+	packageName := 'Issue255-Core'.
+	className1 := 'Issue255Class1'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	classDefinition1 := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #(ivar1 ivar2)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition1 gs_constraints: { { 'ivar1' . 'Association' } }.
+
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+	packageDefinition 
+		addClassDefinition: classDefinition1.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class1 := Rowan globalNamed: className1.
+	self assert: class1 rowanPackageName = packageName.
+	self assert: (class1 _constraintOn: #ivar1) = Association.
+
+"modify constraints"
+	classDefinition1 gs_constraints: { { 'ivar1' . 'Association' } . { 'ivar2' . 'SmallInteger' } }.
+
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class1 := Rowan globalNamed: className1.
+	self assert: class1 rowanPackageName = packageName.
+	self assert: (class1 _constraintOn: #ivar1) = Association.
+	self assert: (class1 _constraintOn: #ivar2) = SmallInteger.
 
 ]
 
