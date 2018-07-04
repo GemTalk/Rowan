@@ -588,6 +588,7 @@ RwGsPatchSet_254 >> addPatchedClassNewVersion: aClassModification inPackage: aPa
 { #category : 'building' }
 RwGsPatchSet_254 >> addPatchedClassProperties: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 	currentProjectDefinition := aProjectDefinition.
 	classesWithPropertyChanges
 		add:
@@ -596,6 +597,7 @@ RwGsPatchSet_254 >> addPatchedClassProperties: aClassDefinition inPackage: aPack
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
+
 ]
 
 { #category : 'building' }

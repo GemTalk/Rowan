@@ -204,11 +204,13 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 		newPools: afterClassDefinition poolDictionaryNames
 		newClassVars: afterClassDefinition classVarNames
 		newConstraints: (self _gemStoneConstraintsFrom: afterClassDefinition gs_constraints)
-		patchedClassProperties: [ 
-			aRwGsPatchSet
-				addPatchedClassProperties: afterClassDefinition
-				inPackage: aPackageDefinition
-				inProject: aProjectDefinition ]
+		patchedClassProperties: [
+			aClassModification propertiesModification isEmpty
+				ifFalse: [ 
+					aRwGsPatchSet
+						addPatchedClassProperties: afterClassDefinition
+						inPackage: aPackageDefinition
+						inProject: aProjectDefinition ] ]
 		patchedClassVars: [ 
 			aRwGsPatchSet
 				addPatchedClassClassVariables: afterClassDefinition
