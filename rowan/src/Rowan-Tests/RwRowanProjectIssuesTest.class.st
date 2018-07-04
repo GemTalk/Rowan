@@ -4649,6 +4649,8 @@ RwRowanProjectIssuesTest >> testIssue255_modification [
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
 	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 projectSetDefinition class1 |
+UserGlobals at: #ConditionalHalt put: false.
+
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
 	className1 := 'Issue255Class1'.
@@ -4695,6 +4697,8 @@ RwRowanProjectIssuesTest >> testIssue255_modification [
 "modify constraints"
 	classDefinition1 gs_constraints: { { 'ivar1' . 'Association' } . { 'ivar2' . 'SmallInteger' } }.
 
+"load"
+UserGlobals at: #ConditionalHalt put: true.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
