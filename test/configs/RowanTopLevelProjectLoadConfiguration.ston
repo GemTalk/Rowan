@@ -2,6 +2,9 @@
 	#name : 'RowanNestedProjectLoadConfiguration',
 	#version : '0.1.0',
 	#definedGroupNames : {
+		'Master' : [ 'Core', 'Deprecated'],
+		'Core' : [ 'core' ],
+		'Deprecated' : [ 'deprecated' ],
 		'core' : [ ],
 		'deprecated' : [ 'core' ],
 		'tests' : [ 'core' ]
