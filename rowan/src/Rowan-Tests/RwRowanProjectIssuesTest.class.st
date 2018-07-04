@@ -4638,7 +4638,6 @@ RwRowanProjectIssuesTest >> testIssue255_internal_constraints_2 [
 	class2 := Rowan globalNamed: className2.
 	self assert: class1 rowanPackageName = packageName.
 	self assert: class2 rowanPackageName = packageName.
-self halt.
 
 ]
 
@@ -4698,7 +4697,7 @@ UserGlobals at: #ConditionalHalt put: false.
 	classDefinition1 gs_constraints: { { 'ivar1' . 'Association' } . { 'ivar2' . 'SmallInteger' } }.
 
 "load"
-UserGlobals at: #ConditionalHalt put: true.
+UserGlobals at: #ConditionalHalt put: false.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
