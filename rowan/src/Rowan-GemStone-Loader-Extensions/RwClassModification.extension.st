@@ -6,5 +6,6 @@ RwClassModification >> addModificationToPatchSet: aPatchSet inPackage: aPackage 
 	aPatchSet
 		addClassModification: self 
 		toPatchSetInPackage: aPackage 
-		inProject: aProjectDefinition
+		inProject: aProjectDefinition.
+
 ]

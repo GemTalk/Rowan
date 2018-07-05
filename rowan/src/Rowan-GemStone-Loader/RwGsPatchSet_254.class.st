@@ -344,7 +344,14 @@ RwGsPatchSet_254 >> addClassModification: aRwClassModification toPatchSetInPacka
 			self
 				addAddedClass: aRwClassModification after
 				inPackage: aPackage
-				inProject: aProjectDefinition ].
+				inProject: aProjectDefinition.
+			(aRwClassModification propertiesModification elementsModified at: 'gs_constraints' ifAbsent: [])
+				ifNotNil: [:constraints |  
+					"arrange to add constraints to a newly created class - constraints not created during class creation"
+					self 
+						addPatchedClassConstraints: aRwClassModification after 
+						inPackage: aPackage 
+						inProject: aProjectDefinition ] ].
 	aRwClassModification isDeletion
 		ifTrue: [ 
 			self
@@ -612,7 +619,6 @@ RwGsPatchSet_254 >> addPatchedClassNewVersion: aClassModification inPackage: aPa
 { #category : 'building' }
 RwGsPatchSet_254 >> addPatchedClassProperties: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
-(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 	currentProjectDefinition := aProjectDefinition.
 	classesWithPropertyChanges
 		add:

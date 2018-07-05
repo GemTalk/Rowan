@@ -19,7 +19,6 @@ RwGsClassVariableChangeSymbolDictPatch >> createClassFor: aPatchSet [
 
 	| oldClassVersion newClassVersion |
 	oldClassVersion := self oldClassVersion.
-(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 	newClassVersion := self privateCreateClassFor: aPatchSet.
 	oldClassVersion == newClassVersion
 		ifFalse: [ 

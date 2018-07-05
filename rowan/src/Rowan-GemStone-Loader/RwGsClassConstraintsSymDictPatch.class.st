@@ -25,7 +25,7 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 			aPatchSet tempSymbols
 				at: className
 				ifAbsent: [ self error: 'Cannot find class to update properties for.' ] ].
-self halt. "instead of calling createClassFor: ... do update the constraints directly adding and removing as necessary ..."
+self error: 'stop here'. "instead of calling createClassFor: ... do update the constraints directly adding and removing as necessary ..."
 "still need to worry about how constraints will be handled for new class versions"
 	createdClass := self createClassFor: aPatchSet.	"use createClassFor:, but not expected to create new class version"
 	createdClass == existingClass

@@ -4416,8 +4416,7 @@ RwRowanProjectIssuesTest >> testIssue255_class_modification_constraints [
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
 	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 
-		projectSetDefinition class1 oldClass |
-UserGlobals at: #ConditionalHalt put: false.
+		projectSetDefinition class1 oldClass x |
 
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
@@ -4440,13 +4439,11 @@ UserGlobals at: #ConditionalHalt put: false.
 		super: 'Object'
 		instvars: #(ivar1)
 		classinstvars: #()
-		classvars: #(Cvar1)
+		classvars: #()
 		category: 'category'
 		comment: 'comment'
 		pools: #()
 		type: 'normal'.
-"	classDefinition1 gs_constraints: { { 'ivar1' . 'Association' } }."
-
 
 	packageDefinition := projectDefinition packageNamed: packageName.
 	packageDefinition 
@@ -4460,18 +4457,37 @@ UserGlobals at: #ConditionalHalt put: false.
 "validate"
 	class1 := Rowan globalNamed: className1.
 	self assert: class1 instVarNames = #(ivar1).
-	self assert: class1 classVarNames = #(Cvar1).
+	self assert: (x := class1 classVarNames asSortedCollection) = #() asSortedCollection.
 	self assert: class1 category = 'category'.
 	self assert: class1 comment = 'comment'.
-	self assert: (class1 _constraintsEqual: #()).
+
+"modify class -- no new version"
+	classDefinition1
+		classVarNames: #(Cvar1 Cvar2 Cvar3);
+		category: 'newer category';
+		comment: 'newer comment';
+		gs_constraints: { { 'ivar1' . 'Association' } }.
+
+"load"
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	oldClass := class1.
+	class1 := Rowan globalNamed: className1.
+	self assert: oldClass == class1.
+	self assert: class1 instVarNames = #(ivar1).
+	self assert: (x := class1 classVarNames asSortedCollection) = #(Cvar1 Cvar2 Cvar3) asSortedCollection.
+	self assert: class1 category = 'newer category'.
+	self assert: class1 comment = 'newer comment'.
+	self assert: (class1 _constraintsEqual: { { #'ivar1' . Association } }).
 
 "modify class -- new version"
 	classDefinition1
 		instVarNames: #(ivar1 ivar2);
-		classVarNames: #(Cvar1 Cvar2);
+		classVarNames: #(Cvar1 Cvar2 Cvar3);
 		category: 'new category';
 		comment: 'new comment';
-		gs_constraints: { { 'ivar1' . 'Association' } }.
+		gs_constraints: { { 'ivar1' . 'Association' } . { 'ivar2' . 'Number' } }.
 
 "load"
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
@@ -4481,30 +4497,9 @@ UserGlobals at: #ConditionalHalt put: false.
 	class1 := Rowan globalNamed: className1.
 	self assert: oldClass ~~ class1.
 	self assert: class1 instVarNames = #(ivar1 ivar2).
-	self assert: class1 classVarNames = #(Cvar1 Cvar2).
+	self assert: (x := class1 classVarNames asSortedCollection) = #(Cvar1 Cvar2 Cvar3) asSortedCollection.
 	self assert: class1 category = 'new category'.
 	self assert: class1 comment = 'new comment'.
-	self assert: (class1 _constraintsEqual: { { #'ivar1' . Association } }).
-	
-"modify class -- no new version"
-	classDefinition1
-		classVarNames: #(Cvar1 Cvar2 Cvar3);
-		category: 'newer category';
-		comment: 'newer comment';
-		gs_constraints: { { 'ivar1' . 'Association' } . { 'ivar2' . 'Number' } }.
-
-"load"
-UserGlobals at: #ConditionalHalt put: false.
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-
-"validate"
-	oldClass := class1.
-	class1 := Rowan globalNamed: className1.
-	self assert: oldClass == class1.
-	self assert: class1 instVarNames = #(ivar1 ivar2).
-	self assert: class1 classVarNames = #(Cvar1 Cvar2 Cvar3).
-	self assert: class1 category = 'newer category'.
-	self assert: class1 comment = 'newer comment'.
 	self assert: (class1 _constraintsEqual: { { #'ivar1' . Association } . { #'ivar2' . Number } }).
 
 ]
@@ -4517,7 +4512,6 @@ RwRowanProjectIssuesTest >> testIssue255_class_modification_no_constraints [
 
 	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 
 		projectSetDefinition class1 oldClass x |
-UserGlobals at: #ConditionalHalt put: false.
 
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
@@ -4569,7 +4563,6 @@ UserGlobals at: #ConditionalHalt put: false.
 		comment: 'newer comment'.
 
 "load"
-UserGlobals at: #ConditionalHalt put: false.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
@@ -4637,7 +4630,7 @@ UserGlobals at: #ConditionalHalt put: false.
 		comment: ''
 		pools: #()
 		type: 'normal'.
-"	classDefinition1 gs_constraints: { { 'ivar1' . 'Association' } }."
+	classDefinition1 gs_constraints: { { 'ivar1' . 'Association' } }.
 
 
 	packageDefinition := projectDefinition packageNamed: packageName.
@@ -4651,7 +4644,7 @@ UserGlobals at: #ConditionalHalt put: false.
 
 "validate"
 	class1 := Rowan globalNamed: className1.
-	self deny: (class1 _constraintsEqual: { { 'ivar1' . Association } })
+	self assert: (class1 _constraintsEqual: { { 'ivar1' . Association } })
 
 ]
 

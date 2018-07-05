@@ -82,13 +82,11 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 
 	"Must be in-synch with RwGsLoadedClass>>updateClassTypeFromClass"
 
-	| type oldVersion createdClass gs_options theConstraints |
-(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
+	| type oldVersion createdClass gs_options |
 	type := classDefinition classType.
 	oldVersion := self oldClassVersion.
 	gs_options := (classDefinition gs_options)
 		collect: [ :each | each asSymbol ].
-	theConstraints := self _gemStoneConstraintsFrom: classDefinition gs_constraints.
 	createdClass := type = 'normal'
 		ifTrue: [ 
 			superclass
