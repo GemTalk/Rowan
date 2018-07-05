@@ -52,7 +52,7 @@ RwGsClassPatch >> _gemStoneConstraintsFrom:	gs_constraints [
 					 theConstraints := {}.
 					gs_constraints do: [ :ar | 
 						(ar isKindOf: Array)
-							ifTrue: [ theConstraints add: { (ar at: 1) . Rowan globalNamed: (ar at: 2) } ]
+							ifTrue: [ theConstraints add: { (ar at: 1) asSymbol . Rowan globalNamed: (ar at: 2) } ]
 							ifFalse: [ theConstraints add: (Rowan globalNamed: ar) ] ].
 					^ theConstraints ] ]
 		ifFalse: [ ^ Rowan globalNamed: gs_constraints ].
@@ -100,7 +100,6 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 				inDictionary: nil
 				newVersionOf: oldVersion
 				description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
-				constraints: theConstraints
 				options: gs_options ]
 		ifFalse: [ 
 			type = 'variable'
@@ -114,7 +113,6 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 						inDictionary: nil
 						newVersionOf: oldVersion
 						description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
-						constraints: theConstraints
 						options: gs_options ]
 				ifFalse: [ 
 					type = 'bytes'

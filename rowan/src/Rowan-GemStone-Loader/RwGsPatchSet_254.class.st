@@ -18,6 +18,7 @@ Class {
 		'classesWithPropertyChanges',
 		'classesWithSymbolDictionaryChanges',
 		'classesWithClassVariableChanges',
+		'classesWithConstraintChanges',
 		'classesWithNewVersions',
 		'addedMethods',
 		'deletedMethods',
@@ -98,6 +99,13 @@ RwGsPatchSet_254 class >> new [
 RwGsPatchSet_254 >> _classAdditionPatchClass [
 
 	^ RwGsClassAdditionSymbolDictPatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSet_254 >> _classConstraintPatchClass [
+
+	^ RwGsClassConstraintsSymDictPatch
+
 ]
 
 { #category : 'private - patch class accessors' }
@@ -542,6 +550,20 @@ RwGsPatchSet_254 >> addPatchedClassClassVariables: aClassDefinition inPackage: a
 ]
 
 { #category : 'building' }
+RwGsPatchSet_254 >> addPatchedClassConstraints: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	classesWithConstraintChanges
+		add:
+			((self _classConstraintPatchClass
+				for: aClassDefinition
+				inPackage: aPackageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+
+]
+
+{ #category : 'building' }
 RwGsPatchSet_254 >> addPatchedClassMethod: aClassMethodDefinition inClass: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
@@ -574,6 +596,7 @@ RwGsPatchSet_254 >> addPatchedClassMethodProperties: aClassMethodDefinition inCl
 { #category : 'building' }
 RwGsPatchSet_254 >> addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition [
 
+(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 	currentProjectDefinition := aProjectDefinition.
 
 	classesWithNewVersions
@@ -583,6 +606,7 @@ RwGsPatchSet_254 >> addPatchedClassNewVersion: aClassModification inPackage: aPa
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
+
 ]
 
 { #category : 'building' }
@@ -982,6 +1006,7 @@ RwGsPatchSet_254 >> initialize [
 	classesWithNewVersions := Set new.
 	classesWithClassVariableChanges := Set new.
 	classesWithPropertyChanges := Set new.
+	classesWithConstraintChanges := Set new.
 	classesWithSymbolDictionaryChanges := Set new.
 	movedClasses := Set new.
 	movedClassesMap := Dictionary new.
@@ -1209,6 +1234,7 @@ RwGsPatchSet_254 >> updateClassProperties [
 
 	(classesWithClassVariableChanges copy
 		addAll: classesWithPropertyChanges;
+		addAll: classesWithConstraintChanges;
 		yourself) do: [ :each | each installPropertiesPatchFor: self ]
 
 ]
