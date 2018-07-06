@@ -148,7 +148,7 @@ RwProjectLoadConfigurationVisitor >> groupNames [
 { #category : 'accessing' }
 RwProjectLoadConfigurationVisitor >> groupNames: aColl [
 
-	groupNames := aColl
+	groupNames := aColl copy
 
 ]
 
@@ -159,7 +159,7 @@ RwProjectLoadConfigurationVisitor >> initialize [
 	visitedConfigurationNames := Set new.
 	configurationNames := Set new.
 	platformAttributes := #().
-	groupNames := #().
+	groupNames := {}.
 	configurationBasePath := ''.
 	packageMapSpecs := Dictionary new.
 
@@ -236,16 +236,23 @@ RwProjectLoadConfigurationVisitor >> visitProjectCompoundConfiguration: aProject
 { #category : 'visiting' }
 RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjectLoadConfiguration [
 
+	| seedGroupNames |
 	(visitedConfigurationNames includes: aProjectLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
 	self _visited: aProjectLoadConfiguration. 
 
 	definedGroupNames := aProjectLoadConfiguration definedGroupNames.
-	groupNames := groupNames asSet.
-	self groupNames copy do: [:groupName |
-		"make sure that required groups are included in group names"
-		groupNames addAll: (definedGroupNames at: groupName ifAbsent: [ #() ]) ].
+	seedGroupNames := groupNames asSet copy.
+	[seedGroupNames isEmpty ]
+		whileFalse: [ 
+			seedGroupNames copy do: [:groupName |
+				| referencedGroupNames |
+				"make sure that required groups are included in group names, recursively"
+				seedGroupNames remove: groupName.
+				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
+				groupNames addAll: referencedGroupNames.
+				seedGroupNames addAll: referencedGroupNames ] ].
 
 	self _processConditionalPackageNames: aProjectLoadConfiguration.
 

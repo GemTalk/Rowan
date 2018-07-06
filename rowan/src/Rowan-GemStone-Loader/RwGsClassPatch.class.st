@@ -52,7 +52,7 @@ RwGsClassPatch >> _gemStoneConstraintsFrom:	gs_constraints [
 					 theConstraints := {}.
 					gs_constraints do: [ :ar | 
 						(ar isKindOf: Array)
-							ifTrue: [ theConstraints add: { (ar at: 1) . Rowan globalNamed: (ar at: 2) } ]
+							ifTrue: [ theConstraints add: { (ar at: 1) asSymbol . Rowan globalNamed: (ar at: 2) } ]
 							ifFalse: [ theConstraints add: (Rowan globalNamed: ar) ] ].
 					^ theConstraints ] ]
 		ifFalse: [ ^ Rowan globalNamed: gs_constraints ].
@@ -82,12 +82,14 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 
 	"Must be in-synch with RwGsLoadedClass>>updateClassTypeFromClass"
 
-	| type oldVersion createdClass gs_options theConstraints |
+	| type oldVersion createdClass gs_options oldConstraints |
 	type := classDefinition classType.
 	oldVersion := self oldClassVersion.
+	oldConstraints := oldVersion
+		ifNil: [ #() ]
+		ifNotNil: [ oldVersion _rwSortedConstraints ].
 	gs_options := (classDefinition gs_options)
 		collect: [ :each | each asSymbol ].
-	theConstraints := self _gemStoneConstraintsFrom:	classDefinition gs_constraints.
 	createdClass := type = 'normal'
 		ifTrue: [ 
 			superclass
@@ -99,7 +101,7 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 				inDictionary: nil
 				newVersionOf: oldVersion
 				description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
-				constraints: theConstraints
+				constraints: oldConstraints
 				options: gs_options ]
 		ifFalse: [ 
 			type = 'variable'
@@ -113,7 +115,7 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 						inDictionary: nil
 						newVersionOf: oldVersion
 						description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
-						constraints: theConstraints
+						constraints: oldConstraints
 						options: gs_options ]
 				ifFalse: [ 
 					type = 'bytes'
