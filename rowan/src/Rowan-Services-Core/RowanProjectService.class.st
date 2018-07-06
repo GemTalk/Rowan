@@ -6,7 +6,8 @@ Class {
 		'sha',
 		'branch',
 		'isSkew',
-		'isDirty'
+		'isDirty',
+		'packages'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -329,6 +330,19 @@ RowanProjectService >> unload [
 
 	| loadedProject |
 	loadedProject := Rowan image loadedProjects select:[:proj | proj name = name].
+
+]
+
+{ #category : 'update' }
+RowanProjectService >> update [
+	"update project service for transport to client"
+
+	packages := self packageNames.
+	isDirty := self isDirty. 
+	isSkew := self isSkew.
+	sha := self rowanSha.
+	branch := self rowanBranch.
+	RowanCommandResult addResult: self
 
 ]
 

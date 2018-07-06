@@ -2,7 +2,8 @@ Class {
 	#name : 'RowanService',
 	#superclass : 'Object',
 	#instVars : [
-		'definition'
+		'definition',
+		'updates'
 	],
 	#category : 'Rowan-Services-Core'
 }
