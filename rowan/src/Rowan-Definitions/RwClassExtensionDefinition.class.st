@@ -51,3 +51,9 @@ RwClassExtensionDefinition >> compareDictionary: myDictionary againstBaseDiction
 			modification isEmpty
 				ifFalse: [ anElementsModification addElementModification: modification ] ]
 ]
+
+{ #category : 'testing' }
+RwClassExtensionDefinition >> isClassExtension [
+	^ true
+
+]

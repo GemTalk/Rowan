@@ -201,6 +201,12 @@ RwAbstractClassDefinition >> instanceMethodDefinitions: dictionaryOfDefinitions 
 ]
 
 { #category : 'testing' }
+RwAbstractClassDefinition >> isClassExtension [
+	^ false
+
+]
+
+{ #category : 'testing' }
 RwAbstractClassDefinition >> isEmpty [
 	"Answer true if this definition does not actually define anything."
 

@@ -420,7 +420,8 @@ RwGsImage class >> projectNames [
 
 	"Return list of project names"
 
-	^ self loadedProjects collect: [ :loadedProject | loadedProject name ]
+	^ (self loadedProjects collect: [ :loadedProject | loadedProject name ]) asArray
+
 ]
 
 { #category : 'querying' }

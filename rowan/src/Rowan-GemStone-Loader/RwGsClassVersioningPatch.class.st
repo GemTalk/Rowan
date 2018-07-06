@@ -56,7 +56,10 @@ RwGsClassVersioningPatch class >> for: aClassModification inPackage: aPackageDef
 RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass 
 newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars 
 newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars newConstraints: aConstraint
-patchedClassProperties: patchedClassPropertiesBlock patchedClassVars: patchedClassVarsBlock patchedClassNewVersions: patchedClassNewVersionsBlock [
+patchedClassProperties: patchedClassPropertiesBlock 
+patchedConstraints: patchedConstraintsBlock 
+patchedClassVars: patchedClassVarsBlock 
+patchedClassNewVersions: patchedClassNewVersionsBlock [
 
 	" based on Class>>_equivalentSubclass:superCls:name:newOpts:newFormat:newInstVars:newClassInstVars:newPools:newClassVars:inDict:isKernel: and ultimately needs to be rolled back into base, so that class creation and Rowan use the same new class version rules.
 "
@@ -83,7 +86,7 @@ patchedClassProperties: patchedClassPropertiesBlock patchedClassVars: patchedCla
 "
 
 	| supr opts ivs civs poolds cvars cons cvarsPatched |
-	cvarsPatched := anArrayOfClassVars isEmpty not.
+	cvarsPatched := (anArrayOfClassVars asSortedCollection = oldClass classVarNames asSortedCollection) not.
 	self
 		_newSubclassWithSuperclass: newSuperclass
 		isEquivalentToSubclass: oldClass
@@ -101,7 +104,7 @@ patchedClassProperties: patchedClassPropertiesBlock patchedClassVars: patchedCla
 		poolsBlock: [ :bool | poolds := bool not ]
 		cvarsBlock: [ :bool | cvars := bool not ]
 		consBlock:  [ :bool | cons := bool not ].
-	(supr or: [ opts or: [ ivs or: [ civs or: [ poolds or: [ cons ] ] ] ] ])
+	(supr or: [ opts or: [ ivs or: [ civs or: [ poolds or: [cvars ] ] ] ] ])
 		ifTrue: [ 
 			"new class version means that class vars will be patched (for free) before methods compiled"
 			patchedClassNewVersionsBlock value.
@@ -109,10 +112,13 @@ patchedClassProperties: patchedClassPropertiesBlock patchedClassVars: patchedCla
 	cvarsPatched
 		ifTrue: [ 
 			"have to patch class variables BEFORE methods are compiled"
-			patchedClassVarsBlock value ]
-		ifFalse: [ 
-			"class property changes that do not affect method compilation"
-			patchedClassPropertiesBlock value ]
+			patchedClassVarsBlock value ].
+	cons
+		ifTrue: [
+			"constraint changes are added in separate step after all classes have been created"
+			patchedConstraintsBlock value ].
+	"class property changes that do not affect method compilation"
+	patchedClassPropertiesBlock value
 
 ]
 
@@ -204,11 +210,18 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 		newPools: afterClassDefinition poolDictionaryNames
 		newClassVars: afterClassDefinition classVarNames
 		newConstraints: (self _gemStoneConstraintsFrom: afterClassDefinition gs_constraints)
-		patchedClassProperties: [ 
+		patchedClassProperties: [
+			aClassModification propertiesModification isEmpty
+				ifFalse: [ 
+					aRwGsPatchSet
+						addPatchedClassProperties: afterClassDefinition
+						inPackage: aPackageDefinition
+						inProject: aProjectDefinition ] ]
+		patchedConstraints: [
 			aRwGsPatchSet
-				addPatchedClassProperties: afterClassDefinition
-				inPackage: aPackageDefinition
-				inProject: aProjectDefinition ]
+						addPatchedClassConstraints: afterClassDefinition
+						inPackage: aPackageDefinition
+						inProject: aProjectDefinition ]
 		patchedClassVars: [ 
 			aRwGsPatchSet
 				addPatchedClassClassVariables: afterClassDefinition

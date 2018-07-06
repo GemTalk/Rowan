@@ -21,7 +21,8 @@ run
 	RwRowanSample4Test.
 	RwAdoptToolApiTest.
 	RwProjectToolTest.
-	RwDisownToolApiTest.} do: [ :cl | suite addTests: cl suite tests ].
+	RwDisownToolApiTest.
+	RwMoveTest.} do: [ :cl | suite addTests: cl suite tests ].
 	res := suite run.
 
 strm := WriteStream on: String new.

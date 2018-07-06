@@ -26,8 +26,11 @@ RwExtensionMethodsModification >> addElementModification: aModification [
 
 	aModification isEmpty
 		ifFalse: [ 
-			aModification extendedClassName: self extendedClassName.
-			elementsModified at: aModification key put: aModification ]
+			| anExtensionModification |
+			anExtensionModification := aModification asExtensionMethodModification.
+			anExtensionModification extendedClassName: self extendedClassName.
+			elementsModified at: anExtensionModification key put: anExtensionModification ]
+
 ]
 
 { #category : 'accessing' }

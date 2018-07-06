@@ -63,6 +63,20 @@ RwLoadedClassExtension >> isLoadedClassExtension [
 	^ true
 ]
 
+{ #category : 'accessing' }
+RwLoadedClassExtension >> loadedClassMethods [
+
+	^ loadedClassMethods
+
+]
+
+{ #category : 'accessing' }
+RwLoadedClassExtension >> loadedInstanceMethods [ 
+
+	^ loadedInstanceMethods
+
+]
+
 { #category : 'enumeration' }
 RwLoadedClassExtension >> loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock [
 

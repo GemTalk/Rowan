@@ -10,8 +10,6 @@ RwPackageSetDefinition >> compareAgainstBase: aDefinition [
 		againstBaseDictionary: aDefinition definitions
 		into: result
 		elementClass: RwPackageDefinition.
-	result
-		updateForClassMoves;
-		updateForMethodMoves.
 	^ result
+
 ]

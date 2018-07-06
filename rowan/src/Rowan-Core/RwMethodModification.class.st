@@ -163,6 +163,18 @@ RwMethodModification >> addModificationToPatchSetForNewClassVersion: aPatchSet i
 ]
 
 { #category : 'converting' }
+RwMethodModification >> asExtensionMethodModification [
+
+	^ (RwExtensionMethodModification before: before after: after)
+		isMeta: self isMeta;
+		propertiesModification: propertiesModification;
+		sourceModification: sourceModification;
+		classDefinition: self classDefinition;
+		yourself
+
+]
+
+{ #category : 'converting' }
 RwMethodModification >> asMethodModificationForNewClassVersion [
 
 	^ (RwMethodModificationForNewClassVersion before: before after: after)

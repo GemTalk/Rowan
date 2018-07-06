@@ -13,8 +13,8 @@ RwProjectSpecification >> initialize [
 		yourself.
 	repoSpec := RwGitRepositorySpecification new.
 	version := self currentVersion.
-	defaultConfigurationNames := #('Default').
-	defaultGroupNames := #('default').
+	defaultConfigurationNames := {'Default'}.
+	defaultGroupNames := {'default'}.
 
 ]
 
