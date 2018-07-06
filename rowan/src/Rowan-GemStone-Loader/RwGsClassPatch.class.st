@@ -82,9 +82,12 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 
 	"Must be in-synch with RwGsLoadedClass>>updateClassTypeFromClass"
 
-	| type oldVersion createdClass gs_options |
+	| type oldVersion createdClass gs_options oldConstraints |
 	type := classDefinition classType.
 	oldVersion := self oldClassVersion.
+	oldConstraints := oldVersion
+		ifNil: [ #() ]
+		ifNotNil: [ oldVersion _rwSortedConstraints ].
 	gs_options := (classDefinition gs_options)
 		collect: [ :each | each asSymbol ].
 	createdClass := type = 'normal'
@@ -98,6 +101,7 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 				inDictionary: nil
 				newVersionOf: oldVersion
 				description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+				constraints: oldConstraints
 				options: gs_options ]
 		ifFalse: [ 
 			type = 'variable'
@@ -111,6 +115,7 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 						inDictionary: nil
 						newVersionOf: oldVersion
 						description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+						constraints: oldConstraints
 						options: gs_options ]
 				ifFalse: [ 
 					type = 'bytes'

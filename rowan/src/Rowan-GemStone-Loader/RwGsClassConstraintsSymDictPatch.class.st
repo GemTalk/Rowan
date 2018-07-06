@@ -55,7 +55,7 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 	theConstraints do: [:arrayOrVaryingConstraintClass |
 		arrayOrVaryingConstraintClass _isArray
 			ifTrue: [ theConstraintsMap at: (arrayOrVaryingConstraintClass at: 1) put: (arrayOrVaryingConstraintClass at: 2) ]
-			ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass at: 1. ] ].
+			ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass ] ].
 	keys := existingConstraintsMap keys copy.
 	keys addAll: theConstraintsMap keys.
 	self _installMutableConstraintsArrayFor: existingClass.
