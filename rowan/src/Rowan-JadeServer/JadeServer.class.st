@@ -5311,7 +5311,7 @@ JadeServer >> updateProjects [
 	RowanProjectService new projects do:[:service | 
 		service isDirty ifTrue:[
 			update modifiedProjects add: service name]. 
-			update projects add: service name].
+			update projects add: service].
 
 ]
 
