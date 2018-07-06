@@ -4602,8 +4602,6 @@ RwRowanProjectIssuesTest >> testIssue255_constraints [
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
 	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 projectSetDefinition class1 |
-UserGlobals at: #ConditionalHalt put: false.
-
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
 	className1 := 'Issue255Class1'.
@@ -4623,7 +4621,7 @@ UserGlobals at: #ConditionalHalt put: false.
 	classDefinition1 := RwClassDefinition
 		newForClassNamed: className1
 		super: 'Object'
-		instvars: #(ivar1 ivar2)
+		instvars: #(ivar1)
 		classinstvars: #()
 		classvars: #()
 		category: nil
@@ -4644,7 +4642,7 @@ UserGlobals at: #ConditionalHalt put: false.
 
 "validate"
 	class1 := Rowan globalNamed: className1.
-	self assert: (class1 _constraintsEqual: { { 'ivar1' . Association } })
+	self assert: (class1 _constraintsEqual: { { #'ivar1' . Association } })
 
 ]
 
@@ -4887,7 +4885,6 @@ RwRowanProjectIssuesTest >> testIssue255_modification [
 	"https://github.com/dalehenrich/Rowan/issues/255"
 
 	| projectName  packageName projectDefinition classDefinition1 packageDefinition className1 projectSetDefinition class1 |
-UserGlobals at: #ConditionalHalt put: false.
 
 	projectName := 'Issue255'.
 	packageName := 'Issue255-Core'.
@@ -4924,7 +4921,6 @@ UserGlobals at: #ConditionalHalt put: false.
 "load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
-UserGlobals at: #ConditionalHalt put: false.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
@@ -4936,7 +4932,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	classDefinition1 gs_constraints: { { 'ivar1' . 'Association' } . { 'ivar2' . 'SmallInteger' } }.
 
 "load"
-UserGlobals at: #ConditionalHalt put: false.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"

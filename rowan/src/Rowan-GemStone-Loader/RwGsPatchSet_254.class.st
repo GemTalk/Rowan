@@ -603,7 +603,6 @@ RwGsPatchSet_254 >> addPatchedClassMethodProperties: aClassMethodDefinition inCl
 { #category : 'building' }
 RwGsPatchSet_254 >> addPatchedClassNewVersion: aClassModification inPackage: aPackageDefinition inProject: aProjectDefinition [
 
-(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 	currentProjectDefinition := aProjectDefinition.
 
 	classesWithNewVersions

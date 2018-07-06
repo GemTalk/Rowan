@@ -81,6 +81,49 @@ otherCvs ifNotNil:[ | destCvs |
 ]
 
 { #category : '*rowan-gemstone-kernel' }
+Behavior >> _rwInstVar: aString constrainTo: aClass [
+"Copy of instVar:constratinTo: without requiring that class be mutable"
+
+"Changes the receiver's constraint on the instance variable named
+ aString to aClass.
+
+ The argument aString must be the name of an instance variable defined in the
+ receiver or inherited from a superclass.  aClass must be a kind of Class.
+ The receiver, and any subclasses for which a constraint change will result,
+ must be modifiable; otherwise, an error will be generated.
+
+ If the superclass of the receiver has a constraint on the same instance
+ variable, then aClass must be identical to, or a subclass of, that inherited
+ constraint.
+
+ For each of the receiver's subclasses, if the constraint on the specified
+ instance variable is aClass or is a subclass of aClass, then that constraint
+ will be unchanged.  Otherwise, the subclass's constraint will be changed to
+ aClass."
+
+| ivInfo offset mySubclasses |
+self deprecated: 'Behavior>>instVar:constrainTo: deprecated, Constraints are no longer supported'.
+self _validatePrivilege ifFalse:[ ^ nil ].
+aClass _validateIsClass ifFalse:[ ^ nil ].
+(Symbol _existingWithAll: aString) ifNotNil:[ :aSymbol |
+  ivInfo := self _ivOffsetAndConstraint: aSymbol .
+].
+ivInfo ifNil:[ ^ self _error: #classErrNotAVar args:{ aString } ] .
+offset := ivInfo at: 1 .
+(aClass validateSubclassOf: (self superClass _namedIvConstraintAtOffset: offset)) ifFalse:[
+  ^ nil
+].
+false ifTrue: [ self isModifiable ifFalse:[ ^ self validateIsModifiable ] ].
+mySubclasses := self subclasses .
+mySubclasses do:[:x|
+  (x _validateNewInheritedConstraint:aClass atOffset:offset) ifFalse:[ ^ nil ]
+] .
+self _newConstraint: aClass atOffset: offset .
+mySubclasses do:[:x| x _newInheritedConstraint: aClass atOffset: offset ] .
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
 Behavior >> rowanPackageName [
 
 	"answer the name of the package that the receiver is a member of. Answer 'Rowan unpackagedName` if 
