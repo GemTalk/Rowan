@@ -219,6 +219,13 @@ RowanProjectService >> packageNameString [
 
 ]
 
+{ #category : 'accessing' }
+RowanProjectService >> packageServices [
+
+	^self packageNames collect:[:packageName | RowanPackageService forPackageNamed: packageName]
+
+]
+
 { #category : 'rowan' }
 RowanProjectService >> projects [
 
@@ -337,7 +344,7 @@ RowanProjectService >> unload [
 RowanProjectService >> update [
 	"update project service for transport to client"
 
-	packages := self packageNames.
+	packages := self packageServices.
 	isDirty := self isDirty. 
 	isSkew := self isSkew.
 	sha := self rowanSha.

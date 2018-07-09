@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'projectDefinition',
 		'packageName',
-		'name'
+		'name',
+		'isDirty'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -13,8 +14,10 @@ Class {
 RowanPackageService class >> forPackageNamed: packageName [
 
 	| inst |
-	inst := self new. 
-	inst packageName: packageName.
+	inst := self new.  
+	inst name: packageName.
+	packageName isNil ifFalse:[
+		inst isDirty. "lazy initialize"].
 	^inst
 
 ]
@@ -33,18 +36,18 @@ RowanPackageService >> createPackage [
 	default := RowanProjectService defaultProjectName.
 	projectService := RowanProjectService new.
 	projectService createProjectNamed: default.  
-	(Rowan packageNames includes: packageName) ifFalse:[
-		self browserTool addPackageNamed: packageName toProjectNamed: default].
+	(Rowan packageNames includes: name) ifFalse:[
+		self browserTool addPackageNamed: name toProjectNamed: default].
 
 ]
 
 { #category : 'rowan' }
 RowanPackageService >> createPackageNamed: aString inProject: projectName [
 	| projectService | 
-	packageName := aString.
+	name := aString.
 	projectService := RowanProjectService new.
 	projectDefinition := projectService createProjectNamed: projectName.  
-	projectDefinition addPackageNamed: packageName.
+	projectDefinition addPackageNamed: name.
 	self projectTools load loadProjectDefinition: projectDefinition.
 
 ]
@@ -59,7 +62,7 @@ RowanPackageService >> createSamplePackage [
 	projectService := RowanProjectService new.
 	projectDefinition := projectService createSampleProject.  
 	projectDefinition addPackageNamed: self samplePackageName.
-	packageName := self samplePackageName.
+	name := self samplePackageName.
 	self projectTools load loadProjectDefinition: projectDefinition.
 
 ]
@@ -74,7 +77,7 @@ RowanPackageService >> definition [
 { #category : 'rowan' }
 RowanPackageService >> deletePackage [
 
-	self browserTool removePackageNamed: packageName.
+	self browserTool removePackageNamed: name.
 
 ]
 
@@ -88,7 +91,7 @@ RowanPackageService >> genericClassCreationTemplate [
 { #category : 'rowan' }
 RowanPackageService >> isDirty [
 
-	^(RwPackage newNamed: name) isDirty
+	^isDirty isNil ifTrue:[isDirty := self rowanDirty]
 
 ]
 
@@ -103,7 +106,7 @@ RowanPackageService >> loadedClassDefinitions [
 RowanPackageService >> loadedClasses [
 
 	| loadedPackage |
-	loadedPackage := Rowan image loadedPackageNamed: packageName ifAbsent:[^Array new].
+	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^Array new].
 	^loadedPackage loadedClasses
 
 ]
@@ -112,7 +115,7 @@ RowanPackageService >> loadedClasses [
 RowanPackageService >> loadedClassExtensions [
 
 	| loadedPackage |
-	loadedPackage := Rowan image loadedPackageNamed: packageName ifAbsent:[^Array new].
+	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^Array new].
 	^loadedPackage loadedClassExtensions
 
 ]
@@ -146,13 +149,13 @@ RowanPackageService >> name: newValue [
 
 { #category : 'Accessing' }
 RowanPackageService >> packageName [
-	^packageName
+	^name
 
 ]
 
 { #category : 'Updating' }
 RowanPackageService >> packageName: newValue [
-	packageName := newValue
+	name := newValue
 
 ]
 
@@ -172,6 +175,13 @@ RowanPackageService >> projectDefinition: newValue [
 RowanPackageService >> removeClassNamed: className [
 
 	self browserTool removeClassNamed: className
+
+]
+
+{ #category : 'rowan' }
+RowanPackageService >> rowanDirty [
+
+	^(RwPackage newNamed: name) isDirty
 
 ]
 

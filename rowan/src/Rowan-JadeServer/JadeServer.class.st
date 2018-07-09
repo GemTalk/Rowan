@@ -4719,7 +4719,7 @@ JadeServer >> sbUpdatePackages [
 	modifiedList := (fullList select: [:each | (each at: 2) = 'Y']) collect: [:each | each at: 3].
 	fullList := fullList collect: [:each | each at: 3].
 	packagesUpdate modifiedPackages addAll: modifiedList. 
-	packagesUpdate packages addAll: fullList. 
+	packagesUpdate packages addAll: (fullList collect: [:packageName | RowanPackageService forPackageNamed: packageName]) . 
 	packagesUpdate writePackagesTo: writeStream. 
 	packagesUpdate writeModifiedPackagesTo: writeStream. 
 	newSelections := oldSelections select: [:each | fullList includes: each].

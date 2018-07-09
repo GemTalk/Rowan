@@ -50,7 +50,7 @@ RowanPackageUpdate >> writeModifiedPackagesTo: writeStream [
 { #category : 'jade' }
 RowanPackageUpdate >> writePackagesTo: writeStream [
 
-	packages do: [:each | writeStream nextPutAll: each; tab].
+	packages do: [:each | writeStream nextPutAll: each name; tab].
 	writeStream lf.
 
 ]
