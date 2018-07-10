@@ -12,7 +12,10 @@ Class {
 		'poolDictionaryNames',
 		'classType',
 		'packageService',
-		'meta'
+		'meta',
+		'isExtension',
+		'version',
+		'versions'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -20,9 +23,12 @@ Class {
 { #category : 'instance creation' }
 RowanClassService class >> forClassNamed: className [ 
 
-	| inst |
+	| inst theClass |
 	inst := self new. 
 	inst name: className subStrings first.
+	theClass := inst classFromName. 
+	inst versions: theClass classHistory size. 
+	inst version: (theClass classHistory indexOf: theClass).
 	^inst
 
 ]
@@ -147,6 +153,13 @@ RowanClassService >> createSampleClass [
 
 ]
 
+{ #category : 'initialization' }
+RowanClassService >> initialize [
+
+	isExtension := false.
+
+]
+
 { #category : 'Accessing' }
 RowanClassService >> instVarNames [
 	^instVarNames
@@ -156,6 +169,13 @@ RowanClassService >> instVarNames [
 { #category : 'Updating' }
 RowanClassService >> instVarNames: newValue [
 	instVarNames := newValue
+
+]
+
+{ #category : 'Updating' }
+RowanClassService >> isExtension: boolean [
+
+	isExtension := boolean
 
 ]
 
@@ -298,5 +318,29 @@ RowanClassService >> superclassName [
 { #category : 'Updating' }
 RowanClassService >> superclassName: newValue [
 	superclassName := newValue
+
+]
+
+{ #category : 'Accessing' }
+RowanClassService >> version [
+	^version
+
+]
+
+{ #category : 'Updating' }
+RowanClassService >> version: newValue [
+	version := newValue
+
+]
+
+{ #category : 'Accessing' }
+RowanClassService >> versions [
+	^versions
+
+]
+
+{ #category : 'Updating' }
+RowanClassService >> versions: newValue [
+	versions := newValue
 
 ]

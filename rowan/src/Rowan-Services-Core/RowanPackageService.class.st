@@ -5,7 +5,8 @@ Class {
 		'projectDefinition',
 		'packageName',
 		'name',
-		'isDirty'
+		'isDirty',
+		'classes'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -122,10 +123,11 @@ RowanPackageService >> loadedClassExtensions [
 
 { #category : 'rowan' }
 RowanPackageService >> loadedClassHandles [
-	| classes |
-	classes := self loadedClasses collect:[:loadedClass | loadedClass handle].
-	classes addAll: (self loadedClassExtensions collect:[:extension | extension handle]).
-	^classes
+	| loadedClasses |
+	loadedClasses := self loadedClasses collect:[:loadedClass | loadedClass handle].
+	loadedClasses addAll: (self loadedClassExtensions collect:[:extension | extension handle]).
+	^loadedClasses
+
 ]
 
 { #category : 'rowan' }
@@ -196,5 +198,16 @@ RowanPackageService >> samplePackageName [
 RowanPackageService >> sampleProjectName [
 
 	^'SampleProjectName'
+
+]
+
+{ #category : 'Updating' }
+RowanPackageService >> update [
+	"update project service for transport to client"
+	classes := (self loadedClassNames keys collect:[:string | RowanClassService forClassNamed: string]) asArray.
+	classes addAll: (self loadedClassExtensions keys collect:[:string | 
+		(RowanClassService forClassNamed: string) isExtension: true]).
+	isDirty := self isDirty. 
+	RowanCommandResult addResult: self
 
 ]

@@ -8,6 +8,13 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'instance creation' }
+RowanService class >> new [
+
+	^super new initialize
+
+]
+
 { #category : 'other' }
 RowanService class >> rowanFixMe [
 
@@ -80,6 +87,11 @@ RowanService >> definitionClass [
 RowanService >> definitionClassName [
 
 	^self definitionClass name
+
+]
+
+{ #category : 'initialization' }
+RowanService >> initialize [
 
 ]
 
