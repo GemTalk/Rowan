@@ -5306,6 +5306,7 @@ JadeServer >> terminate: aGsProcess [
 { #category : 'category' }
 JadeServer >> updateFromSton: stonString [
 	| updates |
+	RowanCommandResult initializeResults. 
 	updates := (STON fromString: stonString).
 	updates do: [:update |
 		update update].

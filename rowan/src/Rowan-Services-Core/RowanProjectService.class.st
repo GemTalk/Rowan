@@ -343,7 +343,6 @@ RowanProjectService >> unload [
 { #category : 'update' }
 RowanProjectService >> update [
 	"update project service for transport to client"
-
 	packages := self packageServices.
 	isDirty := self isDirty. 
 	isSkew := self isSkew.
