@@ -15,7 +15,11 @@ Class {
 		'meta',
 		'isExtension',
 		'version',
-		'versions'
+		'versions',
+		'oop',
+		'template',
+		'filters',
+		'filterType'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -23,13 +27,7 @@ Class {
 { #category : 'instance creation' }
 RowanClassService class >> forClassNamed: className [ 
 
-	| inst theClass |
-	inst := self new. 
-	inst name: className subStrings first.
-	theClass := inst classFromName. 
-	inst versions: theClass classHistory size. 
-	inst version: (theClass classHistory indexOf: theClass).
-	^inst
+	^self new forClassNamed: className
 
 ]
 
@@ -50,19 +48,6 @@ RowanClassService class >> forClassNamed: className package: packageName [
 	inst := self forClassNamed: className.
 	inst packageName: packageName.
 	^inst
-
-]
-
-{ #category : 'examples' }
-RowanClassService class >> sampleServiceString [
-	| service |
-	service := RowanClassService new.
-	service
-		name: 'TestingSton';
-		comment: 'this is the comment';
-		instVarNames: (Array with: 'firstIV' with: 'secondIv');
-		meta: false.
-	^STON toString: service
 
 ]
 
@@ -153,6 +138,49 @@ RowanClassService >> createSampleClass [
 
 ]
 
+{ #category : 'Accessing' }
+RowanClassService >> filters [
+	^filters
+
+]
+
+{ #category : 'Updating' }
+RowanClassService >> filters: newValue [
+	filters := newValue
+
+]
+
+{ #category : 'Accessing' }
+RowanClassService >> filterType [
+	^filterType
+
+]
+
+{ #category : 'Updating' }
+RowanClassService >> filterType: newValue [
+	filterType := newValue
+
+]
+
+{ #category : 'instance creation' }
+RowanClassService >> forClassNamed: className [ 
+
+	| theClass |
+	name := className. 
+	theClass := self classFromName. 
+	versions := theClass classHistory size.
+	version := theClass classHistory indexOf: theClass.
+	template := self classCreationTemplate.
+	self setComment.
+	oop := theClass asOop.
+	filters := SortedCollection new.
+	filterType isNil ifTrue: [filterType := 'categories'].
+	filterType = 'categories'
+		ifTrue: [theClass env: 0 categorysDo: [:category :selector | filters add: category]].
+	filters := filters asArray.
+
+]
+
 { #category : 'initialization' }
 RowanClassService >> initialize [
 
@@ -179,14 +207,14 @@ RowanClassService >> isExtension: boolean [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'Accessing' }
 RowanClassService >> meta [
 
 	^meta
 
 ]
 
-{ #category : 'other' }
+{ #category : 'Updating' }
 RowanClassService >> meta: anObject [
 
 	meta := anObject
@@ -202,6 +230,18 @@ RowanClassService >> name [
 { #category : 'Updating' }
 RowanClassService >> name: newValue [
 	name := newValue
+
+]
+
+{ #category : 'Accessing' }
+RowanClassService >> oop [
+	^oop
+
+]
+
+{ #category : 'Updating' }
+RowanClassService >> oop: newValue [
+	oop := newValue
 
 ]
 
@@ -290,6 +330,24 @@ RowanClassService >> samplePackageName [
 
 ]
 
+{ #category : 'Accessing' }
+RowanClassService >> setComment [
+
+	| theClass |
+	theClass := self classFromName.
+	(theClass canUnderstand: #comment)
+		ifTrue: [comment := theClass comment]
+		ifFalse: 
+			[(theClass canUnderstand: #description)
+					ifTrue: 
+						[| description |
+						description := theClass description.
+						description class name = #GsClassDocumentation
+							ifTrue: [comment := description detailsAboutClass]]].
+	comment isNil ifTrue: [comment := String new].
+
+]
+
 { #category : 'rowan' }
 RowanClassService >> subclassCreationTemplate [
 
@@ -318,6 +376,18 @@ RowanClassService >> superclassName [
 { #category : 'Updating' }
 RowanClassService >> superclassName: newValue [
 	superclassName := newValue
+
+]
+
+{ #category : 'Accessing' }
+RowanClassService >> template [
+	^template
+
+]
+
+{ #category : 'Updating' }
+RowanClassService >> template: newValue [
+	template := newValue
 
 ]
 

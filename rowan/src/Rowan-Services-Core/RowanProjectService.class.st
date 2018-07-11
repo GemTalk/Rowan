@@ -29,6 +29,7 @@ RowanProjectService class >> defaultProjectName: aString [
 { #category : 'accessing' }
 RowanProjectService >> branch [
 
+	name isNil ifTrue:[^String new].
 	^(RwProject newNamed: name) currentBranchName
 
 ]
@@ -130,6 +131,7 @@ RowanProjectService >> definition [
 { #category : 'rowan' }
 RowanProjectService >> isDirty [
 
+	name isNil ifTrue:[^false].
 	^(RwProject newNamed: name) isDirty
 
 ]
@@ -143,7 +145,7 @@ RowanProjectService >> isDirty: aBoolean [
 
 { #category : 'rowan' }
 RowanProjectService >> isSkew [
-
+	name isNil ifTrue:[^false].
 	^self sha ~= self repositorySha
 
 ]
@@ -193,7 +195,16 @@ RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 
 { #category : 'rowan' }
 RowanProjectService >> packageNames [
-	^(Rowan image loadedProjectNamed: name) packageNames.
+	"if no project is selected, return all package names"
+	^name isNil ifTrue:[
+		| packageNames |
+		packageNames := Array new.
+		Rowan image loadedProjects do:[:project |
+				packageNames addAll: project packageNames].
+		packageNames
+		]
+	ifFalse:[
+		(Rowan image loadedProjectNamed: name) packageNames]
 
 ]
 
@@ -282,7 +293,8 @@ RowanProjectService >> repositorySha [
 
 { #category : 'rowan' }
 RowanProjectService >> rowanBranch [
-
+	
+	name isNil ifTrue:[^String new].
 	^(RwProject newNamed: name) currentBranchName
 
 ]
@@ -297,6 +309,7 @@ RowanProjectService >> rowanDirty [
 { #category : 'rowan' }
 RowanProjectService >> rowanSha [
 
+	name isNil ifTrue:[^0].
 	^(RwProject newNamed: name) loadedCommitId
 
 ]
@@ -318,6 +331,7 @@ RowanProjectService >> sampleProjectName [
 { #category : 'accessing' }
 RowanProjectService >> sha [
 
+	name isNil ifTrue:[^0].
 	^(RwProject newNamed: name) loadedCommitId
 
 ]

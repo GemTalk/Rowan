@@ -203,7 +203,6 @@ RowanPackageService >> sampleProjectName [
 
 { #category : 'Updating' }
 RowanPackageService >> update [
-	"update project service for transport to client"
 	classes := (self loadedClassNames keys collect:[:string | RowanClassService forClassNamed: string]) asArray.
 	classes addAll: (self loadedClassExtensions keys collect:[:string | 
 		(RowanClassService forClassNamed: string) isExtension: true]).
