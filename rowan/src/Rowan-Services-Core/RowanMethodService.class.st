@@ -9,7 +9,9 @@ Class {
 		'category',
 		'packageName',
 		'className',
-		'meta'
+		'meta',
+		'hasSupers',
+		'hasSubs'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -18,6 +20,7 @@ Class {
 RowanMethodService class >> source: source selector: selector category: category className: className packageName: packageName meta: boolString [
 
 	| service |
+	self rowanFixMe. "Need to include super and sub implementors"
 	service := self new. 
 	service 
 		source: source;
@@ -104,6 +107,43 @@ RowanMethodService >> createSampleMethod [
 RowanMethodService >> definitionClass [
 
 	^RwMethodDefinition
+
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> hasSubs [
+
+	^hasSubs
+
+]
+
+{ #category : 'Updating' }
+RowanMethodService >> hasSubs: aBoolean [
+
+	hasSubs := aBoolean
+
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> hasSupers [
+
+	^hasSupers
+
+]
+
+{ #category : 'Updating' }
+RowanMethodService >> hasSupers: aBoolean [
+
+	hasSupers := aBoolean
+
+]
+
+{ #category : 'initialization' }
+RowanMethodService >> initialize [
+
+	super initialize. 
+	hasSupers := false. 
+	hasSubs := false.
 
 ]
 

@@ -18,8 +18,10 @@ Class {
 		'versions',
 		'oop',
 		'template',
+		'allFilters',
 		'filters',
-		'filterType'
+		'filterType',
+		'methods'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -168,16 +170,7 @@ RowanClassService >> forClassNamed: className [
 	| theClass |
 	name := className. 
 	theClass := self classFromName. 
-	versions := theClass classHistory size.
-	version := theClass classHistory indexOf: theClass.
-	template := self classCreationTemplate.
-	self setComment.
-	oop := theClass asOop.
-	filters := SortedCollection new.
-	filterType isNil ifTrue: [filterType := 'categories'].
-	filterType = 'categories'
-		ifTrue: [theClass env: 0 categorysDo: [:category :selector | filters add: category]].
-	filters := filters asArray.
+	self refreshFrom: theClass.
 
 ]
 
@@ -281,6 +274,35 @@ RowanClassService >> poolDictionaryNames [
 { #category : 'Updating' }
 RowanClassService >> poolDictionaryNames: newValue [
 	poolDictionaryNames := newValue
+
+]
+
+{ #category : 'Updating' }
+RowanClassService >> refreshFrom: theClass [
+	| classOrMeta theFilters |
+	versions := theClass classHistory size.
+	version := theClass classHistory indexOf: theClass.
+	template := self classCreationTemplate.
+	self setComment.
+	oop := theClass asOop.
+	theFilters := SortedCollection new.
+	filterType isNil ifTrue: [filterType := 'categories'].
+	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
+	filterType = 'categories'
+		ifTrue: [classOrMeta env: 0 categorysDo: [:category :selector | theFilters add: category]].
+	allFilters := theFilters asArray.
+	methods := SortedCollection sortBlock: [:x :y | x selector < y selector].
+	methods addAll: (classOrMeta selectors collect:[:sel | 
+			| method |
+			method := classOrMeta compiledMethodAt: sel. 
+			RowanMethodService 
+				source: method sourceString 
+				selector: sel 
+				category: (classOrMeta categoryOfSelector: sel) 
+				className: name 
+				packageName: theClass rowanPackageName 
+				meta: meta]).
+	methods := methods asArray
 
 ]
 
@@ -388,6 +410,16 @@ RowanClassService >> template [
 { #category : 'Updating' }
 RowanClassService >> template: newValue [
 	template := newValue
+
+]
+
+{ #category : 'Updating' }
+RowanClassService >> update [
+
+	| theClass |
+	theClass := self classFromName. 
+	self refreshFrom: theClass.
+	RowanCommandResult addResult: self
 
 ]
 
