@@ -185,7 +185,8 @@ RowanMethodService >> meta [
 
 { #category : 'Updating' }
 RowanMethodService >> meta: aBoolean [
-	meta := aBoolean
+	"allow nil parameter for now" 
+	meta := aBoolean == true
 
 ]
 
