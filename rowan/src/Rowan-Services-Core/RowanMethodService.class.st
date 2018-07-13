@@ -11,10 +11,23 @@ Class {
 		'className',
 		'meta',
 		'hasSupers',
-		'hasSubs'
+		'hasSubs',
+		'organizer'
 	],
 	#category : 'Rowan-Services-Core'
 }
+
+{ #category : 'instance creation' }
+RowanMethodService class >> forSelector: sel class: theClass meta: boolean organizer: organizer [
+
+	| service |
+	service := self new. 
+	service selector: sel;
+		meta: boolean.
+	service forClass: theClass organizer: organizer.
+	^service
+
+]
 
 { #category : 'instance creation' }
 RowanMethodService class >> source: source selector: selector category: category className: className packageName: packageName meta: boolString [
@@ -110,6 +123,23 @@ RowanMethodService >> definitionClass [
 
 ]
 
+{ #category : 'initialization' }
+RowanMethodService >> forClass: theClass organizer: theOrganizer [
+	"assume meta and selector are set"
+
+	| classOrMeta method |
+	organizer := theOrganizer. 
+	classOrMeta := meta ifTrue:[theClass class] ifFalse:[theClass]. 
+	method := classOrMeta compiledMethodAt: selector.
+	source := method sourceString.
+	category := classOrMeta categoryOfSelector: selector.
+	className := theClass name. 
+	packageName := theClass rowanPackageName. 
+	self setSupersAndSubsFor: theClass.
+	organizer := nil. "Trying to ston replicate the organizer will fail."
+
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> hasSubs [
 
@@ -154,8 +184,8 @@ RowanMethodService >> meta [
 ]
 
 { #category : 'Updating' }
-RowanMethodService >> meta: newValue [
-	meta := newValue == 'true'
+RowanMethodService >> meta: aBoolean [
+	meta := aBoolean
 
 ]
 
@@ -241,6 +271,20 @@ RowanMethodService >> selector [
 RowanMethodService >> selector: aSymbol [
 
 	selector := aSymbol
+
+]
+
+{ #category : 'initialization' }
+RowanMethodService >> setSupersAndSubsFor: theClass [
+
+	| theSuper |
+	theSuper := theClass superClass. 
+	hasSupers := false. 
+	[theSuper notNil and:[hasSupers not]] whileTrue:[
+		hasSupers := theSuper canUnderstand: selector.
+		theSuper := theSuper superClass].
+	(organizer allSubclassesOf: theClass) do:[:cls |
+		(hasSubs := cls canUnderstand: selector) ifTrue:[^self]].
 
 ]
 

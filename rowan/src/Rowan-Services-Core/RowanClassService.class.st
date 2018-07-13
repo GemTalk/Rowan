@@ -279,7 +279,7 @@ RowanClassService >> poolDictionaryNames: newValue [
 
 { #category : 'Updating' }
 RowanClassService >> refreshFrom: theClass [
-	| classOrMeta theFilters |
+	| classOrMeta theFilters organizer |
 	versions := theClass classHistory size.
 	version := theClass classHistory indexOf: theClass.
 	template := self classCreationTemplate.
@@ -290,19 +290,13 @@ RowanClassService >> refreshFrom: theClass [
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	filterType = 'categories'
 		ifTrue: [classOrMeta env: 0 categorysDo: [:category :selector | theFilters add: category]].
-	allFilters := theFilters asArray.
+	allFilters := theFilters asOrderedCollection.
 	methods := SortedCollection sortBlock: [:x :y | x selector < y selector].
+	organizer := ClassOrganizer new.
 	methods addAll: (classOrMeta selectors collect:[:sel | 
-			| method |
-			method := classOrMeta compiledMethodAt: sel. 
 			RowanMethodService 
-				source: method sourceString 
-				selector: sel 
-				category: (classOrMeta categoryOfSelector: sel) 
-				className: name 
-				packageName: theClass rowanPackageName 
-				meta: meta]).
-	methods := methods asArray
+				forSelector: sel class: theClass meta: meta organizer: organizer]).
+	methods := methods asOrderedCollection
 
 ]
 
