@@ -115,12 +115,45 @@ offset := ivInfo at: 1 .
 ].
 false ifTrue: [ self isModifiable ifFalse:[ ^ self validateIsModifiable ] ].
 mySubclasses := self subclasses .
-mySubclasses do:[:x|
+false ifTrue: [mySubclasses do:[:x|
   (x _validateNewInheritedConstraint:aClass atOffset:offset) ifFalse:[ ^ nil ]
-] .
-self _newConstraint: aClass atOffset: offset .
-mySubclasses do:[:x| x _newInheritedConstraint: aClass atOffset: offset ] .
+] ].
+self _rwNewConstraint: aClass atOffset: offset .
+mySubclasses do:[:x| x _rwNewInheritedConstraint: aClass atOffset: offset ] .
 
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+Behavior >> _rwNewConstraint: aClass atOffset: offset [
+
+	| oldConstraintsArray newConstraintsArray constraintsIndex instanceVariableNames |
+	oldConstraintsArray := self _constraints.
+	newConstraintsArray := oldConstraintsArray copy.
+	instanceVariableNames := self class allInstVarNames.
+	constraintsIndex := instanceVariableNames indexOf: #constraints.
+	self _unsafeAt: constraintsIndex put: newConstraintsArray.
+
+	self _newConstraint: aClass atOffset: offset.
+
+	self _constraints immediateInvariant
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+Behavior >> _rwNewInheritedConstraint: aClass atOffset: offset [
+
+"Change the constraint for offset to aClass if that offset is not
+ already constrained to be a subclass of aClass.  Assume all
+ variance and error checks have been done."
+
+self _validatePrivilege ifTrue:[ 
+  ((self _constraintAt: offset ) isSubclassOf: aClass ) ifFalse:[
+    self _rwNewConstraint: aClass atOffset: offset .
+    self subclasses do:[:aSubcls|
+       aSubcls _rwNewInheritedConstraint: aClass atOffset: offset ].
+  ] .
+]
+ 
 ]
 
 { #category : '*rowan-gemstone-kernel' }

@@ -58,7 +58,7 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 			ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass ] ].
 	keys := existingConstraintsMap keys copy.
 	keys addAll: theConstraintsMap keys.
-	self _installMutableConstraintsArrayFor: existingClass.
+	false ifTrue: [ self _installMutableConstraintsArrayFor: existingClass ].
 	keys do: [:key | 
 		| existingConstraint theConstraint |
 		existingConstraint := existingConstraintsMap at: key ifAbsent: [].
@@ -83,7 +83,7 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 		ifFalse: [
 			"change the varying constraint"
 			existingClass _setVaryingConstraint: theVaryingConstraint ].
-	self _makeConstraintsArrayInvariantFor: existingClass.
+	false ifTrue: [ self _makeConstraintsArrayInvariantFor: existingClass ].
 	self symbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 
 ]
