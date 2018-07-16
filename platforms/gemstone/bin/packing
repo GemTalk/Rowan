@@ -23,6 +23,7 @@ set -e
 # Alpha1: $ROWAN_PROJECTS_HOME/Rowan/bin/packing v0.0.2-alpha Alpha1.0
 # Alpha2: $ROWAN_PROJECTS_HOME/Rowan/bin/packing Edelweiss-Alpha2-CANDIOATE v0.0.3-alpha Alpha2.0 
 # Alpha8: $ROWAN_PROJECTS_HOME/Rowan/bin/packing Edelweiss-Alpha8 v0.3.1-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
+# Alpha9: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha9 v0.4.0-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
