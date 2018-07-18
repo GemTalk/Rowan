@@ -136,7 +136,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	className := theClass name. 
 	packageName := theClass rowanPackageName. 
 	self setSupersAndSubsFor: theClass.
-	organizer := nil. "Trying to ston replicate the organizer will fail."
+	organizer := nil. "replicating the organizer with ston will fail."
 
 ]
 
@@ -285,7 +285,7 @@ RowanMethodService >> setSupersAndSubsFor: theClass [
 		hasSupers := theSuper canUnderstand: selector.
 		theSuper := theSuper superClass].
 	(organizer allSubclassesOf: theClass) do:[:cls |
-		(hasSubs := cls canUnderstand: selector) ifTrue:[^self]].
+		(hasSubs := cls includesSelector: selector) ifTrue:[^self]].
 
 ]
 
@@ -300,5 +300,10 @@ RowanMethodService >> source [
 RowanMethodService >> source: aString [
 	
 	source := aString
+
+]
+
+{ #category : 'Updating' }
+RowanMethodService >> update [
 
 ]

@@ -92,7 +92,7 @@ RowanPackageService >> genericClassCreationTemplate [
 { #category : 'rowan' }
 RowanPackageService >> isDirty [
 
-	^isDirty isNil ifTrue:[isDirty := self rowanDirty]
+	^isDirty := self rowanDirty
 
 ]
 
@@ -206,7 +206,7 @@ RowanPackageService >> update [
 	classes := (self loadedClassNames keys collect:[:string | RowanClassService forClassNamed: string]) asArray.
 	classes addAll: (self loadedClassExtensions keys collect:[:string | 
 		(RowanClassService forClassNamed: string) isExtension: true]).
-	isDirty := self isDirty. 
+	self isDirty. 
 	RowanCommandResult addResult: self
 
 ]
