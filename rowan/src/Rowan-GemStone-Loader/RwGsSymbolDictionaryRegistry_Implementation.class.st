@@ -688,7 +688,8 @@ RwGsSymbolDictionaryRegistry_Implementation class >> disownClassExtensions: clas
 		ifAbsent: [ self error: 'No class extensions found for the class ', class name asString printString, ' in the package ', loadedPackage name printString ].
 	
 	loadedClassExtension disownFromLoaded: registryInstance.
-	registryInstance classExtensionRegistry removeKey: class classHistory.
+
+	loadedPackage removeLoadedClassExtension: loadedClassExtension.
 
 	^ registryInstance
 
