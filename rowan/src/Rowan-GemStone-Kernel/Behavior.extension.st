@@ -113,11 +113,7 @@ offset := ivInfo at: 1 .
 (aClass validateSubclassOf: (self superClass _namedIvConstraintAtOffset: offset)) ifFalse:[
   ^ nil
 ].
-false ifTrue: [ self isModifiable ifFalse:[ ^ self validateIsModifiable ] ].
 mySubclasses := self subclasses .
-false ifTrue: [mySubclasses do:[:x|
-  (x _validateNewInheritedConstraint:aClass atOffset:offset) ifFalse:[ ^ nil ]
-] ].
 self _rwNewConstraint: aClass atOffset: offset .
 mySubclasses do:[:x| x _rwNewInheritedConstraint: aClass atOffset: offset ] .
 

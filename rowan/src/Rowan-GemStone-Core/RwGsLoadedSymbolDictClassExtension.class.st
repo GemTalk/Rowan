@@ -47,14 +47,9 @@ RwGsLoadedSymbolDictClassExtension >> disownFromLoaded: aPackageSymbolDictionary
 			self removeLoadedClassMethod: loadedClassMethod.
 			aPackageSymbolDictionary methodRegistry removeKey: loadedClassMethod handle ].
 
-false
-ifTrue: [ 
-	aPackageSymbolDictionary classExtensionRegistry removeKey: handle classHistory.
- ] ifFalse: [ 
-			(aPackageSymbolDictionary classExtensionRegistry at: handle classHistory) remove: self.
-			(aPackageSymbolDictionary classExtensionRegistry at: handle classHistory) isEmpty
-				ifTrue: [ aPackageSymbolDictionary classExtensionRegistry removeKey: handle classHistory ].
-]
+	(aPackageSymbolDictionary classExtensionRegistry at: handle classHistory) remove: self.
+	(aPackageSymbolDictionary classExtensionRegistry at: handle classHistory) isEmpty
+		ifTrue: [ aPackageSymbolDictionary classExtensionRegistry removeKey: handle classHistory ].
 
 ]
 

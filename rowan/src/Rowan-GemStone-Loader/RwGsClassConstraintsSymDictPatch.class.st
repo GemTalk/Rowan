@@ -4,25 +4,6 @@ Class {
 	#category : 'Rowan-GemStone-Loader'
 }
 
-{ #category : 'private' }
-RwGsClassConstraintsSymDictPatch >> _installMutableConstraintsArrayFor: aClass [
-
-	| oldConstraintsArray newConstraintsArray constraintsIndex instanceVariableNames |
-	oldConstraintsArray := aClass _constraints.
-	newConstraintsArray := oldConstraintsArray copy.
-	instanceVariableNames := aClass class allInstVarNames.
-	constraintsIndex := instanceVariableNames indexOf: #constraints.
-	aClass _unsafeAt: constraintsIndex put: newConstraintsArray.
-
-]
-
-{ #category : 'private' }
-RwGsClassConstraintsSymDictPatch >> _makeConstraintsArrayInvariantFor: aClass [
-
-	aClass _constraints immediateInvariant
-
-]
-
 { #category : 'actions' }
 RwGsClassConstraintsSymDictPatch >> addToNewClassesByName: aDictionary [
 
@@ -58,7 +39,6 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 			ifFalse: [ theVaryingConstraint := arrayOrVaryingConstraintClass ] ].
 	keys := existingConstraintsMap keys copy.
 	keys addAll: theConstraintsMap keys.
-	false ifTrue: [ self _installMutableConstraintsArrayFor: existingClass ].
 	keys do: [:key | 
 		| existingConstraint theConstraint |
 		existingConstraint := existingConstraintsMap at: key ifAbsent: [].
@@ -83,7 +63,6 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 		ifFalse: [
 			"change the varying constraint"
 			existingClass _setVaryingConstraint: theVaryingConstraint ].
-	false ifTrue: [ self _makeConstraintsArrayInvariantFor: existingClass ].
 	self symbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 
 ]
