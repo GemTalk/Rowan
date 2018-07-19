@@ -12,7 +12,9 @@ Class {
 		'meta',
 		'hasSupers',
 		'hasSubs',
-		'organizer'
+		'organizer',
+		'compilationWarnings',
+		'isExtension'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -78,6 +80,13 @@ RowanMethodService >> category: newValue [
 ]
 
 { #category : 'Accessing' }
+RowanMethodService >> classFromName [
+
+	^(System myUserProfile resolveSymbol: className asSymbol) value
+
+]
+
+{ #category : 'Accessing' }
 RowanMethodService >> className [
 	^className
 
@@ -99,6 +108,24 @@ RowanMethodService >> classService [
 { #category : 'Updating' }
 RowanMethodService >> classService: newValue [
 	classService := newValue
+
+]
+
+{ #category : 'method compilation' }
+RowanMethodService >> compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol [
+	"returns (nil -> anArrayOfErrors) or (aGsNMethod -> compilerWarnings) or (aGsNMethod -> nil)"
+
+	| method warnings |
+	
+	[[method := aBehavior rwCompileMethod: methodString category: categorySymbol] on: CompileError
+		do: [:ex | ^nil -> (ex gsArguments at: 1)]]
+			on: CompileWarning
+			do: 
+				[:ex |
+				warnings := ex gsArguments at: 1.
+				ex resume].
+	^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] on: Error
+		do: [:ex | ex return: method -> warnings]
 
 ]
 
@@ -136,6 +163,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	className := theClass name. 
 	packageName := theClass rowanPackageName. 
 	self setSupersAndSubsFor: theClass.
+	isExtension := self rowanIsExtension. 
 	organizer := nil. "replicating the organizer with ston will fail."
 
 ]
@@ -191,6 +219,13 @@ RowanMethodService >> meta: aBoolean [
 ]
 
 { #category : 'Accessing' }
+RowanMethodService >> method [
+
+	^self classFromName compiledMethodAt: selector otherwise: nil
+
+]
+
+{ #category : 'Accessing' }
 RowanMethodService >> methodDefinitions [
 	^methodDefinitions
 
@@ -199,6 +234,17 @@ RowanMethodService >> methodDefinitions [
 { #category : 'Updating' }
 RowanMethodService >> methodDefinitions: newValue [
 	methodDefinitions := newValue
+
+]
+
+{ #category : 'testing' }
+RowanMethodService >> needsRecompile [
+
+	| theMethod |
+	theMethod := self method. 
+	^theMethod isNil or:[
+		theMethod sourceString ~= source or:[
+		(self classFromName categoryOfSelector: selector) ~= category]]
 
 ]
 
@@ -214,11 +260,30 @@ RowanMethodService >> packageName: newValue [
 
 ]
 
+{ #category : 'method compilation' }
+RowanMethodService >> removeMethod [
+
+	| clsService notRemoved |
+	clsService := self classService. 
+	notRemoved := Array new. 
+	clsService removeSelector: selector ifAbsent:[notRemoved add: selector].
+	notRemoved isEmpty ifFalse:[
+		self error: 'These selectors were not removed - ', notRemoved printString]
+
+]
+
 { #category : 'rowan' }
 RowanMethodService >> removeSelector: sel class: clsName [
 	
 	self rowanFixMe. "combine remove methods variants"
 	self browserTool removeMethod: sel asSymbol forClassNamed: (clsName subStrings first) isMeta: (clsName subStrings size = 2)
+
+]
+
+{ #category : 'rowan' }
+RowanMethodService >> rowanIsExtension [
+
+	^Rowan projectTools browser isExtensionMethod: selector asString forClassNamed: className asString isMeta: meta
 
 ]
 
@@ -261,6 +326,28 @@ RowanMethodService >> sampleMethodSource [
 
 ]
 
+{ #category : 'method compilation' }
+RowanMethodService >> saveMethod [
+
+	| behavior compilationResult gsNMethod |
+	behavior := self classFromName.
+	category := category ifNil: ['other'].
+	compilationResult := self		
+		compileMethod: source 
+		behavior: behavior 
+		symbolList: System myUserProfile symbolList
+		inCategory: category asSymbol.
+	(gsNMethod := compilationResult key) isNil ifTrue: [
+		System
+			signal: 1001 
+			args: (Array with: compilationResult value)
+			signalDictionary: GemStoneError.
+	].
+	category := behavior categoryOfSelector: gsNMethod selector. 
+	compilationWarnings := compilationResult value
+
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> selector [
 
@@ -289,6 +376,15 @@ RowanMethodService >> setSupersAndSubsFor: theClass [
 
 ]
 
+{ #category : 'testing' }
+RowanMethodService >> shouldDelete [
+
+	| theMethod |
+	theMethod := self method.
+	theMethod isNil ifTrue:[^false].
+	^theMethod source isNil
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> source [
 
@@ -303,7 +399,16 @@ RowanMethodService >> source: aString [
 
 ]
 
-{ #category : 'Updating' }
-RowanMethodService >> update [
+{ #category : 'testing' }
+RowanMethodService >> test [
 
+	^5
+]
+
+{ #category : 'updates' }
+RowanMethodService >> update [
+	self shouldDelete ifTrue:[
+		^self removeMethod].
+	self needsRecompile ifTrue:[
+		^self saveMethod].
 ]

@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'definition',
-		'updates'
+		'updates',
+		'command'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -33,6 +34,20 @@ RowanService class >> sampleService [
 RowanService >> browserTool [
 
 	^self projectTools browser
+
+]
+
+{ #category : 'accessing' }
+RowanService >> command [
+
+	^command
+
+]
+
+{ #category : 'accessing' }
+RowanService >> command: aSymbol [
+
+	command := aSymbol
 
 ]
 

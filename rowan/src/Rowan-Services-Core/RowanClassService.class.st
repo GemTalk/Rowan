@@ -37,7 +37,7 @@ RowanClassService class >> forClassNamed: className [
 RowanClassService class >> forClassNamed: className meta: aBoolean [
 
 	| inst |
-	inst := self forClassNamed: className.
+	inst := self forClassNamed: className subStrings first.
 	inst meta: aBoolean.
 	^inst
 
@@ -277,7 +277,7 @@ RowanClassService >> poolDictionaryNames: newValue [
 
 ]
 
-{ #category : 'Updating' }
+{ #category : 'updates' }
 RowanClassService >> refreshFrom: theClass [
 	| classOrMeta theFilters organizer |
 	versions := theClass classHistory size.
@@ -297,6 +297,15 @@ RowanClassService >> refreshFrom: theClass [
 			RowanMethodService 
 				forSelector: sel class: theClass meta: meta organizer: organizer]).
 	methods := methods asOrderedCollection
+
+]
+
+{ #category : 'updates' }
+RowanClassService >> removeMethods [
+
+	methods do: [:methodService |
+		methodService source: nil]. 
+	self updateClass.
 
 ]
 
@@ -407,13 +416,20 @@ RowanClassService >> template: newValue [
 
 ]
 
-{ #category : 'Updating' }
+{ #category : 'updates' }
 RowanClassService >> update [
+
+	command ifNil:[ self updateClass] ifNotNil: [:meth | self perform: meth].
+	RowanCommandResult addResult: self
+
+]
+
+{ #category : 'updates' }
+RowanClassService >> updateClass [
 
 	| theClass |
 	theClass := self classFromName. 
 	self refreshFrom: theClass.
-	RowanCommandResult addResult: self
 
 ]
 
