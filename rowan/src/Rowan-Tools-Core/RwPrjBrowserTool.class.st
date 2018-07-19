@@ -749,7 +749,7 @@ RwPrjBrowserTool >> exposeRowanToolsSymbolDictionary [
 { #category : 'method browsing' }
 RwPrjBrowserTool >> isExtensionMethod: methodSelector forClassNamed: className isMeta: isMeta [
 
-	"Answer true if the specified method is an extension method"
+	"Answer true if the specified method is a Rowan extension method"
 
 	| loadedMethod loadedClassOrExtension loadedPackage |
 
@@ -757,7 +757,9 @@ RwPrjBrowserTool >> isExtensionMethod: methodSelector forClassNamed: className i
 		_loadedMethod: methodSelector
 		inClassNamed: className
 		isMeta: isMeta
-		ifAbsent: [ self error: 'No loaded method ', methodSelector printString, ' found for class ', (className, (isMeta ifTrue: [' class'] ifFalse: [''])) printString ].
+		ifAbsent: [ 
+			"No loaded method found ... it is not an extension method"
+			^ false ].
 	loadedPackage := loadedMethod loadedPackage.
 
 	loadedClassOrExtension := loadedPackage

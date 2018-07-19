@@ -45,57 +45,64 @@ RwPrjReconcileTool >> _moveClassExtension: theClassExtension toNewPackageClonedF
 
 ]
 
+{ #category : 'private' }
+RwPrjReconcileTool >> _moveClassExtension: theClassExtension toNewPackageNamed: newPackageName clonedFrom: packageDef inProject: projectDef [
+
+	| newPackageDef |
+	newPackageDef := projectDef 
+		packageNamed: newPackageName 
+		ifAbsent: [ 
+			| pDef |
+			pDef := RwPackageDefinition newNamed: newPackageName.
+			projectDef addPackage: pDef.
+			pDef ].
+	packageDef removeClassExtension: theClassExtension.
+	newPackageDef addClassExtension: theClassExtension.
+	"update the method categories --- hybrid only ... but that is what we're doing"
+	theClassExtension instanceMethodDefinitions values do: [:methodDef |
+		methodDef protocol: '*', newPackageName ].
+	theClassExtension classMethodDefinitions values do: [:methodDef |
+		methodDef protocol: '*', newPackageName ].
+	^ newPackageDef
+
+]
+
 { #category : 'smalltalk api' }
 RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet [
-	| movedClassExtensions packageNameToSymbolDictNameMap configExportMap |
+
+	| movedClassExtensions newPackages configExportMap |
 
 	configExportMap := Dictionary new.
 	movedClassExtensions := Set new.
-	packageNameToSymbolDictNameMap := Dictionary new.
+	newPackages := Set new.
 	projectDefinitionSet projects do: [:projectDef |
 		| config |
 		projectDef packages values do: [:packageDef |
-			packageDef classDefinitions values do: [:classDef |
-				self 
-					_checkExpectedSymbolDictForClassDefinition: classDef 
-					packageDef: packageDef 
-					projectDef: projectDef 
-					classNotFound: [:theClassDef  | self error: 'The class ', theClassDef name printString, ' not found' ] 
-					ifCorrect: [:theClassDef :actualSymDictName | 
-						(packageNameToSymbolDictNameMap at: packageDef name ifAbsentPut: [ IdentitySet new ]) add: actualSymDictName asSymbol ] 
-					ifIncorrect: [:theClassDef :expectedSymDictName :actualSymDictName | 
-						"the class is defined in the actualSymDictName and that's where the package should be loaded"
-						(packageNameToSymbolDictNameMap at: packageDef name ifAbsentPut: [ IdentitySet new ]) add: actualSymDictName asSymbol ] ].
 			packageDef classExtensions values do: [:classDef |
-				self 
-					_checkExpectedSymbolDictForClassDefinition: classDef 
-					packageDef: packageDef 
-					projectDef: projectDef 
-					classNotFound: [:theClassDef  | self error: 'The class to be extended ', theClassDef name printString, ' not found'  ] 
-					ifCorrect: [:theClassDef :actualSymDictName | 
-						(packageNameToSymbolDictNameMap at: packageDef name ifAbsentPut: [ IdentitySet new ]) add: actualSymDictName asSymbol ] 
-					ifIncorrect: [:theClassDef :expectedSymDictName :actualSymDictName | 
-						"the class extension is in the actualSymDictName and that's where the package should be loaded"
-						movedClassExtensions add: {theClassDef . packageDef . actualSymDictName . projectDef } ] ] ].
+				(Globals 
+					at: classDef name asSymbol 
+					ifAbsent: [])
+						ifNotNil: [ 
+							"the class extension is for a class that is Globals, so it needs to be moved to a new Globals extension package"
+							movedClassExtensions add: {classDef . packageDef . projectDef } ] ] ].
 		movedClassExtensions do: [:ar |
-			| theClassDef packageDef actualSymDictName theProjectDef  newPackageDef|
+			| theClassDef packageDef theProjectDef  newPackageName |
 			theClassDef := ar at: 1.
 			packageDef := ar at: 2.
-			actualSymDictName := ar at: 3.
-			theProjectDef := ar at: 4.
-			newPackageDef := self 
+			theProjectDef := ar at: 3.
+			newPackageName :=  packageDef name , '-Globals'.
+			self 
 				_moveClassExtension: theClassDef 
-				toNewPackageClonedFrom: packageDef 
-				inSymbolDictionary: actualSymDictName 
+				toNewPackageNamed: packageDef name , '-Globals'
+				clonedFrom: packageDef 
 				inProject: theProjectDef.
-			(packageNameToSymbolDictNameMap at: newPackageDef name ifAbsentPut: [ IdentitySet new ]) add: actualSymDictName asSymbol  ].
+			newPackages add: newPackageName ].
 		config := projectDef configurationTemplate.
-		packageNameToSymbolDictNameMap keysAndValuesDo: [:packageName :symDictNames |
-			symDictNames size > 1 ifTrue: [ self error: 'More than one symbol dictionary associated with package ', packageName printString ].
+		newPackages do: [:packageName |
 			config 
 				conditionalPackageMapSpecsAtGemStoneUserId: Rowan image currentUserId 
 				andPackageName: packageName 
-				setSymbolDictNameTo: symDictNames any ].
+				setSymbolDictNameTo: 'Globals' ].
 		configExportMap at: config put: projectDef configurationExportUrl ].
 	^ configExportMap
 
@@ -168,6 +175,7 @@ RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
 				inSymbolDictionary: actualSymDictName 
 				inProject: theProjectDef.
 			(packageNameToSymbolDictNameMap at: newPackageDef name ifAbsentPut: [ IdentitySet new ]) add: actualSymDictName asSymbol  ].
+self halt.
 		config := projectDef configurationTemplate.
 		packageNameToSymbolDictNameMap keysAndValuesDo: [:packageName :symDictNames |
 			symDictNames size > 1 ifTrue: [ self error: 'More than one symbol dictionary associated with package ', packageName printString ].

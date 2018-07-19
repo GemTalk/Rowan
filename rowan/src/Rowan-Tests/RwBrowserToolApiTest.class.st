@@ -1052,7 +1052,7 @@ RwBrowserToolApiTest >> testDeletePackage [
 ]
 
 { #category : 'tests' }
-RwBrowserToolApiTest >> testIsExtenstionMethod [
+RwBrowserToolApiTest >> testIsExtensionMethod [
 
 	| projectName packageNames className packageName1 packageName2   browserTool |
 	projectName := 'Simple Browser'.
@@ -1104,6 +1104,8 @@ RwBrowserToolApiTest >> testIsExtenstionMethod [
 
 	self assert: (browserTool isExtensionMethod: 'foo' forClassNamed: className isMeta: false).
 	self assert: (browserTool isExtensionMethod: 'baz' forClassNamed: className isMeta: true).
+
+	self deny: (browserTool isExtensionMethod: 'yourself' forClassNamed: 'Object' isMeta: false). "not rowanized at moment"
 
 ]
 

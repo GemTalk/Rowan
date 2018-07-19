@@ -22,7 +22,8 @@ run
 	RwAdoptToolApiTest.
 	RwProjectToolTest.
 	RwDisownToolApiTest.
-	RwMoveTest.} do: [ :cl | suite addTests: cl suite tests ].
+	RwMoveTest.
+	RwReconcileToolApiTest. } do: [ :cl | suite addTests: cl suite tests ].
 	res := suite run.
 
 strm := WriteStream on: String new.
