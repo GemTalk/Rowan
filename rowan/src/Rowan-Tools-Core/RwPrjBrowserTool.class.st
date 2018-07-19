@@ -747,6 +747,32 @@ RwPrjBrowserTool >> exposeRowanToolsSymbolDictionary [
 ]
 
 { #category : 'method browsing' }
+RwPrjBrowserTool >> isExtensionMethod: methodSelector forClassNamed: className isMeta: isMeta [
+
+	"Answer true if the specified method is an extension method"
+
+	| loadedMethod loadedClassOrExtension loadedPackage |
+
+	loadedMethod := self
+		_loadedMethod: methodSelector
+		inClassNamed: className
+		isMeta: isMeta
+		ifAbsent: [ self error: 'No loaded method ', methodSelector printString, ' found for class ', (className, (isMeta ifTrue: [' class'] ifFalse: [''])) printString ].
+	loadedPackage := loadedMethod loadedPackage.
+
+	loadedClassOrExtension := loadedPackage
+		classOrExtensionForClassNamed: className
+		ifAbsent: [ 
+			self
+				error:
+					'Internal error -- no class or extension for ' , className printString
+						, ' in package ' , loadedPackage name printString , '.' ].
+
+	^loadedClassOrExtension isLoadedClassExtension
+
+]
+
+{ #category : 'method browsing' }
 RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: isMeta toProtocol: hybridPackageName [
 
 	"hybridPackageName is expected to be an existing protocol in className"
