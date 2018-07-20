@@ -36,9 +36,10 @@ RwGsSymbolDictionaryRegistry class >> installIn: aSymbolDictionary [
 RwGsSymbolDictionaryRegistry class >> newForSymbolDictionary: aSymbolDictionary [
 
 	^ self new
-		initialize;
 		_symbolDictionary: aSymbolDictionary;
+		initialize;
 		yourself
+
 ]
 
 { #category : 'method - private api' }
@@ -618,10 +619,18 @@ RwGsSymbolDictionaryRegistry >> homeSessionMethods [
 { #category : 'initialization' }
 RwGsSymbolDictionaryRegistry >> initialize [
 
+	| symbolDictObjectSecurityPolicy |
 	packageRegistry := KeyValueDictionary new.	"keyed by package name"
 	classRegistry := IdentityKeyValueDictionary new.	"keyed by class classHistory"
 	classExtensionRegistry := IdentityKeyValueDictionary new.	"keyed by class classHistory"
-	methodRegistry := IdentityKeyValueDictionary new	"keyed by compiledMethod"
+	methodRegistry := IdentityKeyValueDictionary new.	"keyed by compiledMethod"
+
+	symbolDictObjectSecurityPolicy := symbolDictionary objectSecurityPolicy.
+	packageRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
+	classRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
+	classExtensionRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
+	methodRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
+
 ]
 
 { #category : 'loaded queries' }
