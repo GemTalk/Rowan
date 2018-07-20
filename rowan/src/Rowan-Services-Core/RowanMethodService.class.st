@@ -14,7 +14,8 @@ Class {
 		'hasSubs',
 		'organizer',
 		'compilationWarnings',
-		'isExtension'
+		'isExtension',
+		'inSelectedPackage'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -161,7 +162,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	source := method sourceString.
 	category := classOrMeta categoryOfSelector: selector.
 	className := theClass name. 
-	packageName := theClass rowanPackageName. 
+	packageName := method rowanPackageName. 
 	self setSupersAndSubsFor: theClass.
 	isExtension := self rowanIsExtension. 
 	organizer := nil. "replicating the organizer with ston will fail."
@@ -382,7 +383,8 @@ RowanMethodService >> shouldDelete [
 	| theMethod |
 	theMethod := self method.
 	theMethod isNil ifTrue:[^false].
-	^theMethod source isNil
+	^source isNil
+
 ]
 
 { #category : 'Accessing' }

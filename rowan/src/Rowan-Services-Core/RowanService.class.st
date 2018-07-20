@@ -107,7 +107,6 @@ RowanService >> definitionClassName [
 
 { #category : 'initialization' }
 RowanService >> initialize [
-
 ]
 
 { #category : 'rowan' }

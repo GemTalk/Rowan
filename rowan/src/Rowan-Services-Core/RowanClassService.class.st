@@ -21,7 +21,8 @@ Class {
 		'allFilters',
 		'filters',
 		'filterType',
-		'methods'
+		'methods',
+		'selectedPackageServices'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -304,7 +305,8 @@ RowanClassService >> refreshFrom: theClass [
 RowanClassService >> removeMethods [
 
 	methods do: [:methodService |
-		methodService source: nil]. 
+		methodService source: nil.
+		methodService update]. 
 	self updateClass.
 
 ]
@@ -419,7 +421,7 @@ RowanClassService >> template: newValue [
 { #category : 'updates' }
 RowanClassService >> update [
 
-	command ifNil:[ self updateClass] ifNotNil: [:meth | self perform: meth].
+	command ifNil:[ self updateClass] ifNotNil: [:symbol | self perform: symbol].
 	RowanCommandResult addResult: self
 
 ]
