@@ -205,7 +205,11 @@ RowanPackageService >> sampleProjectName [
 RowanPackageService >> update [
 	classes := (self loadedClassNames keys collect:[:string | RowanClassService forClassNamed: string]) asArray.
 	classes addAll: (self loadedClassExtensions keys collect:[:string | 
-		(RowanClassService forClassNamed: string) isExtension: true]).
+		| classService | 
+		classService := (RowanClassService forClassNamed: string) 
+			isExtension: true.
+		classService definedPackageName: (Rowan image loadedClassForClass: classService classFromName ifAbsent: [nil]) packageName]).
+	classes do: [:clsService | clsService packageName: self name]. 
 	self isDirty. 
 	RowanCommandResult addResult: self
 

@@ -11,7 +11,6 @@ Class {
 		'subclassType',
 		'poolDictionaryNames',
 		'classType',
-		'packageService',
 		'meta',
 		'isExtension',
 		'version',
@@ -22,7 +21,9 @@ Class {
 		'filters',
 		'filterType',
 		'methods',
-		'selectedPackageServices'
+		'selectedPackageServices',
+		'packageName',
+		'definedPackageName'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -116,28 +117,10 @@ RowanClassService >> comment: newValue [
 
 ]
 
-{ #category : 'examples' }
-RowanClassService >> createSampleClass [
+{ #category : 'Updating' }
+RowanClassService >> definedPackageName: newValue [
 
-	| classDefinition |
-	packageService := RowanPackageService new. 
-	packageService createSamplePackage.
-	classDefinition := RwClassDefinition
-		newForClassNamed: self sampleClassName
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: String new
-		comment: 'Sample Rowan Class'
-		pools: #()
-		type: 'normal'.
-	name := classDefinition name.
-	self projectTools edit addClass: classDefinition
-		inPackageNamed: packageService samplePackageName
-		inProject: packageService projectDefinition.
-	self projectTools load loadProjectDefinition: packageService projectDefinition.
-	^classDefinition
+	definedPackageName := newValue
 
 ]
 
@@ -242,27 +225,14 @@ RowanClassService >> oop: newValue [
 { #category : 'examples' }
 RowanClassService >> packageName [
 	
-	^packageService packageName
+	^packageName
 
 ]
 
 { #category : 'examples' }
-RowanClassService >> packageName: packageName [
+RowanClassService >> packageName: pkgName [
 	
-	packageService ifNil:[packageService := RowanPackageService new packageName: packageName].
-	^packageService packageName
-
-]
-
-{ #category : 'Accessing' }
-RowanClassService >> packageService [
-	^packageService
-
-]
-
-{ #category : 'Updating' }
-RowanClassService >> packageService: newValue [
-	packageService := newValue
+	packageName := pkgName
 
 ]
 
@@ -353,7 +323,7 @@ RowanClassService >> sampleClassName [
 { #category : 'examples' }
 RowanClassService >> samplePackageName [
 	
-	^packageService samplePackageName
+	^'SamplePackageName'
 
 ]
 
