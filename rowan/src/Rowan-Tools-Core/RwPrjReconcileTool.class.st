@@ -68,17 +68,7 @@ RwPrjReconcileTool >> _moveClassExtension: theClassExtension toNewPackageNamed: 
 ]
 
 { #category : 'smalltalk api' }
-RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet [
-
-	^ self
-		reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet 
-		defaultGroupName: 'default' 
-		globalsGroupName: 'globals'
-
-]
-
-{ #category : 'smalltalk api' }
-RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet defaultGroupName: defaultGroupName globalsGroupName: globalsGroupName [
+RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet defaultGroupName: defaultGroupName globalsGroupName: globalsGroupName globalsUserId: globalsUserId [
 
 	| configExportMap |
 	configExportMap := Dictionary new.
@@ -122,7 +112,7 @@ RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectDefinitionSet: pro
 				addPackageNames: globalPackageNames.
 		globalPackageNames do: [:packageName |
 			config 
-				conditionalPackageMapSpecsAtGemStoneUserId: Rowan image currentUserId 
+				conditionalPackageMapSpecsAtGemStoneUserId: globalsUserId 
 				andPackageName: packageName 
 				setSymbolDictNameTo: 'Globals' ].
 		configExportMap at: config put: projectDef configurationExportUrl ].
@@ -131,7 +121,7 @@ RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectDefinitionSet: pro
 ]
 
 { #category : 'smalltalk api' }
-RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectFromSpecUrl: specUrl defaultGroupName: defaultGroupName globalsGroupName: globalsGroupName writeProject: writeProjectBool [
+RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectFromSpecUrl: specUrl defaultGroupName: defaultGroupName globalsGroupName: globalsGroupName  globalsUserId: globalsUserId writeProject: writeProjectBool [
 	| projectDefinition projectDefinitionSet projectTools loadedProjectInfo configExportMap |
 	projectTools := Rowan projectTools.
 	projectDefinition := projectTools create createProjectDefinitionFromSpecUrl: specUrl.
@@ -143,24 +133,17 @@ RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectFromSpecUrl: specU
 			(projectDefinitionSet projectNamed: projectName ifAbsent: [])
 				updateGsPlatformSpecLoadedProjectInfo: projectInfo ].
 
-	configExportMap := self reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet defaultGroupName: defaultGroupName globalsGroupName: globalsGroupName.
+	configExportMap := self 
+		reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet 
+		defaultGroupName: defaultGroupName 
+		globalsGroupName: globalsGroupName  
+		globalsUserId: globalsUserId.
 	writeProjectBool
 		ifTrue: [
 			configExportMap keysAndValuesDo: [:config :exportUrl |
 				config exportToUrl: exportUrl ].
 			projectTools write writeProjectDefinition: projectDefinition ].
 	^ projectDefinition
-
-]
-
-{ #category : 'smalltalk api' }
-RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectFromSpecUrl: specUrl writeProject: writeProjectBool [
-
-	^ self
-		reconcileGlobalClassExtensionsForProjectFromSpecUrl: specUrl 
-		defaultGroupName: 'default' 
-		globalsGroupName: 'globals' 
-		writeProject: writeProjectBool
 
 ]
 

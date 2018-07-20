@@ -111,7 +111,10 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 		yourself.
 
 	Rowan projectTools reconcile
-		reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet.
+		reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet
+		defaultGroupName: 'default' 
+		globalsGroupName: 'globals' 
+		globalsUserId: 'SystemUser'.
 
 "validate"
 
