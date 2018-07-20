@@ -70,13 +70,23 @@ RwPrjReconcileTool >> _moveClassExtension: theClassExtension toNewPackageNamed: 
 { #category : 'smalltalk api' }
 RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet [
 
-	| movedClassExtensions newPackages configExportMap |
+	^ self
+		reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet 
+		defaultGroupName: 'default' 
+		globalsGroupName: 'globals'
 
+]
+
+{ #category : 'smalltalk api' }
+RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet defaultGroupName: defaultGroupName globalsGroupName: globalsGroupName [
+
+	| configExportMap |
 	configExportMap := Dictionary new.
-	movedClassExtensions := Set new.
-	newPackages := Set new.
 	projectDefinitionSet projects do: [:projectDef |
-		| config |
+		| config movedClassExtensions globalPackageNames originalPackageNames |
+		movedClassExtensions := Set new.
+		globalPackageNames := Set new.
+		originalPackageNames := projectDef packageNames.
 		projectDef packages values do: [:packageDef |
 			packageDef classExtensions values do: [:classDef |
 				(Globals 
@@ -96,9 +106,21 @@ RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectDefinitionSet: pro
 				toNewPackageNamed: packageDef name , '-Globals'
 				clonedFrom: packageDef 
 				inProject: theProjectDef.
-			newPackages add: newPackageName ].
-		config := projectDef configurationTemplate.
-		newPackages do: [:packageName |
+			globalPackageNames add: newPackageName ].
+		config := RwProjectLoadConfiguration new
+			name: 'Default';
+			projectName: projectDef name;
+			yourself.
+		{ defaultGroupName . globalsGroupName }
+			do: [:groupName | config addDefinedGroupName: groupName ].
+		config 
+			conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+				andGroup: defaultGroupName 
+				addPackageNames: originalPackageNames;
+			conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+				andGroup: globalsGroupName 
+				addPackageNames: globalPackageNames.
+		globalPackageNames do: [:packageName |
 			config 
 				conditionalPackageMapSpecsAtGemStoneUserId: Rowan image currentUserId 
 				andPackageName: packageName 
@@ -109,7 +131,7 @@ RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectDefinitionSet: pro
 ]
 
 { #category : 'smalltalk api' }
-RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectFromSpecUrl: specUrl writeProject: writeProjectBool [
+RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectFromSpecUrl: specUrl defaultGroupName: defaultGroupName globalsGroupName: globalsGroupName writeProject: writeProjectBool [
 	| projectDefinition projectDefinitionSet projectTools loadedProjectInfo configExportMap |
 	projectTools := Rowan projectTools.
 	projectDefinition := projectTools create createProjectDefinitionFromSpecUrl: specUrl.
@@ -121,13 +143,24 @@ RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectFromSpecUrl: specU
 			(projectDefinitionSet projectNamed: projectName ifAbsent: [])
 				updateGsPlatformSpecLoadedProjectInfo: projectInfo ].
 
-	configExportMap := self reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet.
+	configExportMap := self reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet defaultGroupName: defaultGroupName globalsGroupName: globalsGroupName.
 	writeProjectBool
 		ifTrue: [
 			configExportMap keysAndValuesDo: [:config :exportUrl |
 				config exportToUrl: exportUrl ].
 			projectTools write writeProjectDefinition: projectDefinition ].
 	^ projectDefinition
+
+]
+
+{ #category : 'smalltalk api' }
+RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectFromSpecUrl: specUrl writeProject: writeProjectBool [
+
+	^ self
+		reconcileGlobalClassExtensionsForProjectFromSpecUrl: specUrl 
+		defaultGroupName: 'default' 
+		globalsGroupName: 'globals' 
+		writeProject: writeProjectBool
 
 ]
 
