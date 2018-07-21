@@ -15,7 +15,8 @@ Class {
 		'organizer',
 		'compilationWarnings',
 		'isExtension',
-		'inSelectedPackage'
+		'inSelectedPackage',
+		'references'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -58,6 +59,16 @@ RowanMethodService >> addOrUpdateMethod [
                    forClassNamed: self classService name
                    isMeta: meta
                    inPackageNamed: self classService packageName
+
+]
+
+{ #category : 'queries' }
+RowanMethodService >> allReferences [
+
+	| methods |
+	methods := organizer allReferencesTo: selector.
+	references := methods collect:[:gsNMethod | 
+			self class forSelector: gsNMethod selector class: gsNMethod inClass meta: gsNMethod inClass isMeta organizer: organizer].
 
 ]
 
@@ -258,6 +269,22 @@ RowanMethodService >> packageName [
 { #category : 'Updating' }
 RowanMethodService >> packageName: newValue [
 	packageName := newValue
+
+]
+
+{ #category : 'replication' }
+RowanMethodService >> postCommandExecutionUsing: anObject [
+	"remove the organizer before replication" 
+
+	organizer := nil
+
+]
+
+{ #category : 'replication' }
+RowanMethodService >> preCommandExecutionUsing: anOrganizer [
+	"use an existing organizer as needed" 
+
+	organizer := anOrganizer
 
 ]
 

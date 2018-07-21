@@ -109,6 +109,16 @@ RowanService >> definitionClassName [
 RowanService >> initialize [
 ]
 
+{ #category : 'replication' }
+RowanService >> postCommandExecutionUsing: anObject [
+
+]
+
+{ #category : 'replication' }
+RowanService >> preCommandExecutionUsing: anObject [
+
+]
+
 { #category : 'rowan' }
 RowanService >> projectTools [
 
