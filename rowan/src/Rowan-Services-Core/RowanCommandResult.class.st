@@ -15,7 +15,7 @@ Class {
 
 { #category : 'accessing' }
 RowanCommandResult class >> addResult: aResult [
-
+	aResult command: nil. 
 	self results add: aResult
 
 ]
@@ -41,6 +41,13 @@ RowanCommandResult class >> new [
 RowanCommandResult class >> results [
 
 	^Results ifNil:[Results := Array new]
+
+]
+
+{ #category : 'accessing' }
+RowanCommandResult >> command: anObject [
+
+	"results don't have commands"
 
 ]
 

@@ -279,18 +279,6 @@ RowanMethodService >> packageName: newValue [
 
 ]
 
-{ #category : 'method compilation' }
-RowanMethodService >> removeMethod [
-
-	| clsService notRemoved |
-	clsService := self classService. 
-	notRemoved := Array new. 
-	clsService removeSelector: selector ifAbsent:[notRemoved add: selector].
-	notRemoved isEmpty ifFalse:[
-		self error: 'These selectors were not removed - ', notRemoved printString]
-
-]
-
 { #category : 'replication' }
 RowanMethodService >> removeOrganizer [
 
@@ -403,16 +391,6 @@ RowanMethodService >> setSupersAndSubsFor: theClass [
 
 ]
 
-{ #category : 'testing' }
-RowanMethodService >> shouldDelete [
-
-	| theMethod |
-	theMethod := self method.
-	theMethod isNil ifTrue:[^false].
-	^source isNil
-
-]
-
 { #category : 'Accessing' }
 RowanMethodService >> source [
 
@@ -427,16 +405,9 @@ RowanMethodService >> source: aString [
 
 ]
 
-{ #category : 'testing' }
-RowanMethodService >> test [
-
-	^5
-]
-
 { #category : 'updates' }
 RowanMethodService >> update [
-	self shouldDelete ifTrue:[
-		^self removeMethod].
 	self needsRecompile ifTrue:[
 		^self saveMethod].
+
 ]

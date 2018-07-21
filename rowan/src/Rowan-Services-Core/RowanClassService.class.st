@@ -274,9 +274,13 @@ RowanClassService >> refreshFrom: theClass [
 { #category : 'updates' }
 RowanClassService >> removeMethods [
 
+
+	| notRemoved |
+	notRemoved := Array new. 
 	methods do: [:methodService |
-		methodService source: nil.
-		methodService update]. 
+		self removeSelector: methodService selector ifAbsent:[notRemoved add: methodService selector]].
+	notRemoved isEmpty ifFalse:[
+		self error: 'These selectors were not removed - ', notRemoved printString].
 	self updateClass.
 
 ]
@@ -410,7 +414,7 @@ RowanClassService >> updateClass [
 	| theClass |
 	theClass := self classFromName. 
 	self refreshFrom: theClass.
-
+	RowanCommandResult addResult: self
 ]
 
 { #category : 'Accessing' }
