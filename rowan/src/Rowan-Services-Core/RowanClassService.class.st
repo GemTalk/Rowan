@@ -281,6 +281,14 @@ RowanClassService >> removeMethods [
 
 ]
 
+{ #category : 'replication' }
+RowanClassService >> removeOrganizer [
+
+	methods ifNotNil:[
+		methods do: [:methodService | methodService removeOrganizer]]
+
+]
+
 { #category : 'rowan' }
 RowanClassService >> removeSelector: selector [
 

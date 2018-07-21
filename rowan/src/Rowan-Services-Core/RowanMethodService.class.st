@@ -66,9 +66,10 @@ RowanMethodService >> addOrUpdateMethod [
 RowanMethodService >> allReferences [
 
 	| methods |
-	methods := organizer allReferencesTo: selector.
-	references := methods collect:[:gsNMethod | 
+	methods := organizer sendersOf: selector.
+	references := methods first collect:[:gsNMethod | 
 			self class forSelector: gsNMethod selector class: gsNMethod inClass meta: gsNMethod inClass isMeta organizer: organizer].
+	RowanCommandResult addResult: self
 
 ]
 
@@ -175,8 +176,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	className := theClass name. 
 	packageName := method rowanPackageName. 
 	self setSupersAndSubsFor: theClass.
-	isExtension := self rowanIsExtension. 
-	organizer := nil. "replicating the organizer with ston will fail."
+	isExtension := self rowanIsExtension.
 
 ]
 
@@ -260,6 +260,13 @@ RowanMethodService >> needsRecompile [
 
 ]
 
+{ #category : 'replication' }
+RowanMethodService >> offerOrganizer: anOrganizer [
+
+	organizer := anOrganizer
+
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> packageName [
 	^packageName
@@ -272,22 +279,6 @@ RowanMethodService >> packageName: newValue [
 
 ]
 
-{ #category : 'replication' }
-RowanMethodService >> postCommandExecutionUsing: anObject [
-	"remove the organizer before replication" 
-
-	organizer := nil
-
-]
-
-{ #category : 'replication' }
-RowanMethodService >> preCommandExecutionUsing: anOrganizer [
-	"use an existing organizer as needed" 
-
-	organizer := anOrganizer
-
-]
-
 { #category : 'method compilation' }
 RowanMethodService >> removeMethod [
 
@@ -297,6 +288,14 @@ RowanMethodService >> removeMethod [
 	clsService removeSelector: selector ifAbsent:[notRemoved add: selector].
 	notRemoved isEmpty ifFalse:[
 		self error: 'These selectors were not removed - ', notRemoved printString]
+
+]
+
+{ #category : 'replication' }
+RowanMethodService >> removeOrganizer [
+
+	references ifNotNil: [references do: [:methodService | methodService removeOrganizer]].
+	organizer := nil
 
 ]
 

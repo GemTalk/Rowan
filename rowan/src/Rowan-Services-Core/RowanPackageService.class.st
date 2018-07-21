@@ -180,6 +180,14 @@ RowanPackageService >> removeClassNamed: className [
 
 ]
 
+{ #category : 'replication' }
+RowanPackageService >> removeOrganizer [
+
+	classes ifNotNil: [
+		classes do: [:classService | classService removeOrganizer]]
+
+]
+
 { #category : 'rowan' }
 RowanPackageService >> rowanDirty [
 

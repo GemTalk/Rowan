@@ -5310,9 +5310,9 @@ JadeServer >> updateFromSton: stonString [
 	services := (STON fromString: stonString).
 	organizer := ClassOrganizer new.
 	services do: [:service |
-		service preCommandExecutionUsing: organizer.
+		service offerOrganizer: organizer.
 		service command ifNil: [service update] ifNotNil: [service perform: service command].
-		service postCommandExecutionUsing: organizer].
+		service removeOrganizer].
 	^STON toString: RowanCommandResult results
 
 ]

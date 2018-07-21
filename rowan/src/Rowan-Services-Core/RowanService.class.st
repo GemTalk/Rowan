@@ -110,12 +110,11 @@ RowanService >> initialize [
 ]
 
 { #category : 'replication' }
-RowanService >> postCommandExecutionUsing: anObject [
+RowanService >> offerOrganizer: anOrganizer [
 
-]
-
-{ #category : 'replication' }
-RowanService >> preCommandExecutionUsing: anObject [
+	"some services would like an organizer. 
+	Since creation is expensive, offer one from
+	the outside"
 
 ]
 
@@ -123,6 +122,15 @@ RowanService >> preCommandExecutionUsing: anObject [
 RowanService >> projectTools [
 
 	^Rowan projectTools
+
+]
+
+{ #category : 'replication' }
+RowanService >> removeOrganizer [
+
+	"we don't want to replicate a ClassOrganizer
+	with STON. Therefore tell each service to
+	remove uses as it sees fit"
 
 ]
 
