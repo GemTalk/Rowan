@@ -194,12 +194,15 @@ RwProjectSpecification >> initializeForImport [
 { #category : 'accessing' }
 RwProjectSpecification >> loadedCommitId [
 
+	imageSpec ifNil: [ ^ '' ].
 	^ self imageSpec loadedCommitId
+
 ]
 
 { #category : 'accessing' }
 RwProjectSpecification >> loadedConfigurationNames [
 
+	imageSpec ifNil: [ ^ #() ].
 	^ self imageSpec loadedConfigurationNames
 
 ]
@@ -207,6 +210,7 @@ RwProjectSpecification >> loadedConfigurationNames [
 { #category : 'accessing' }
 RwProjectSpecification >> loadedGroupNames [
 
+	imageSpec ifNil: [ ^ #() ].
 	^ self imageSpec loadedGroupNames
 
 ]
