@@ -219,6 +219,84 @@ RwBrowserToolApiTest >> testCreateClass [
 ]
 
 { #category : 'tests' }
+RwBrowserToolApiTest >> testCreateClassWithConstraints [
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithConstraints'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { {'ivar1' . 'Integer'} }.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: (x := testClass _constraintOn: #ivar1) = Integer
+
+]
+
+{ #category : 'tests' }
+RwBrowserToolApiTest >> testCreateClassWithOptions [
+
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict |
+	projectName := 'Simple Browser'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	className := 'SimpleBrowseWithOptions'.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a SimpleEdit class'
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_options: #(instancesInvariant).
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
+	self assert: (testSymDict at: className) == testClass.
+
+	self assert: testClass instancesInvariant
+
+]
+
+{ #category : 'tests' }
 RwBrowserToolApiTest >> testDeleteClass [
 
 	| projectName packageNames className packageName1 testClass browserTool testSymDict |
@@ -258,7 +336,8 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 
 	"The class to be deleted is created in one project and extended by another project ... the method extensions are direct method extensions and session method extensions"
 
-	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 testClass browserTool testProjectDefinition testPackageNames classDefinition testInstance projectTools |
+	| projectName1 projectName2 packageNames1 packageNames2 className1 className2 packageName1 packageName2 testClass browserTool 
+		testProjectDefinition testPackageNames classDefinition testInstance projectTools symDict registry|
 	projectName1 := 'Simple Browser1'.
 	packageName1 := 'Simple1-Core'.
 	packageName2 := 'Simple1-Extensions'.
@@ -386,7 +465,21 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 				assert: false
 				description:
 					'Expected class extension for class ' , className1 printString , ' not present' ].
+	symDict := Rowan globalNamed: self _symbolDictionaryName.
+	registry := symDict rowanSymbolDictionaryRegistry.
 
+	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 2.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 1.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 1.
 
 	browserTool removeClassNamed: className1.	"remove class className1"
 
@@ -402,7 +495,23 @@ RwBrowserToolApiTest >> testDeleteComplicatedClass [
 			 ].
 
 	testClass := Rowan globalNamed: className1.
-	self assert: testClass isNil
+	self assert: testClass isNil.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 1.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
 
 ]
 
@@ -943,6 +1052,64 @@ RwBrowserToolApiTest >> testDeletePackage [
 ]
 
 { #category : 'tests' }
+RwBrowserToolApiTest >> testIsExtensionMethod [
+
+	| projectName packageNames className packageName1 packageName2   browserTool |
+	projectName := 'Simple Browser'.
+	packageName1 := 'Simple-Core'.
+	packageName2 := 'Simple-Extensions1'.
+	packageNames := {packageName1.
+	packageName2}.
+	className := 'SimpleBrowse'.
+	self
+		_loadStandardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'
+		className: className
+		inPackageName: packageName1.
+
+	browserTool := Rowan projectTools browser.
+
+	browserTool
+		addOrUpdateMethod: 'ivar1: anInteger ivar1 := anInteger'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	browserTool
+		addOrUpdateMethod: 'bar ^1'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: true
+		inPackageNamed: packageName1.	"add method in the package of the class"
+
+	self deny: (browserTool isExtensionMethod: 'ivar1' forClassNamed: className isMeta: false).
+	self deny: (browserTool isExtensionMethod: 'bar' forClassNamed: className isMeta: true).
+
+	browserTool
+		addOrUpdateMethod: 'foo ^1'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: false
+		inPackageNamed: packageName2.	"add method in a package as a class extension"
+
+	browserTool
+		addOrUpdateMethod: 'baz ^1'
+		inProtocol: 'accessing'
+		forClassNamed: className
+		isMeta: true
+		inPackageNamed: packageName2.	"add method in a package as a class extension"
+
+	self assert: (browserTool isExtensionMethod: 'foo' forClassNamed: className isMeta: false).
+	self assert: (browserTool isExtensionMethod: 'baz' forClassNamed: className isMeta: true).
+
+	self deny: (browserTool isExtensionMethod: 'yourself' forClassNamed: 'Object' isMeta: false). "not rowanized at moment"
+
+]
+
+{ #category : 'tests' }
 RwBrowserToolApiTest >> testLoadFullMultiProjectDefs [
 
 	"set up projects and packages for hybrid browser implementation"
@@ -1013,7 +1180,7 @@ RwBrowserToolApiTest >> testLoadFullMultiProjectDefs [
 		projectNamed: projectName2
 		updateDefinition: [ :projectDef | 
 			projectDef
-				useSessionMethodsForExtensions: true
+				setUseSessionMethodsForExtensions: true
 				forPackageNamed: project2PackageName2 ].
 
 	browserTool
@@ -1035,6 +1202,7 @@ RwBrowserToolApiTest >> testLoadFullMultiProjectDefs [
 	rpn := Rowan packageNames.
 	packageNames
 		do: [ :packageNameAr | packageNameAr do: [ :packageName | self assert: (rpn includes: packageName) ] ]
+
 ]
 
 { #category : 'tests' }
@@ -1102,7 +1270,7 @@ RwBrowserToolApiTest >> testLoadMultiProjectDefs [
 		projectNamed: projectName2
 		updateDefinition: [ :projectDef | 
 			projectDef
-				useSessionMethodsForExtensions: true
+				setUseSessionMethodsForExtensions: true
 				forPackageNamed: project2PackageName2 ].
 
 	browserTool
@@ -1118,10 +1286,11 @@ RwBrowserToolApiTest >> testLoadMultiProjectDefs [
 		forClassNamed: className1
 		isMeta: true
 		inPackageNamed: project2PackageName2	"class session method extension method for className1 in projectName2"
+
 ]
 
 { #category : 'tests' }
-RwBrowserToolApiTest >> testMoveGlobalExtensionMethods [
+RwBrowserToolApiTest >> testMoveGlobalExtensionSessionMethods [
 
 	| projectName packageNames className packageName1 packageName2 testClass testInstance browserTool |
 	projectName := 'Simple Browser'.
@@ -1180,6 +1349,7 @@ RwBrowserToolApiTest >> testMoveGlobalExtensionMethods [
 						assert: classExtensionDef instanceMethodDefinitions size = 1;
 						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
 		forClassExtensionsIn: className
+
 ]
 
 { #category : 'tests' }
@@ -1421,7 +1591,7 @@ RwBrowserToolApiTest >> testNewClassVersionB [
 		projectNamed: projectName2
 		updateDefinition: [ :projectDef | 
 			projectDef
-				useSessionMethodsForExtensions: true
+				setUseSessionMethodsForExtensions: true
 				forPackageNamed: project2PackageName2 ].
 
 	browserTool
@@ -1534,4 +1704,5 @@ RwBrowserToolApiTest >> testNewClassVersionB [
 					(beh == testNewClass or: [ beh class == testNewClass ])
 						ifTrue: [ sessionMethodsSeen := true ] ] ].
 	self assert: sessionMethodsSeen
+
 ]

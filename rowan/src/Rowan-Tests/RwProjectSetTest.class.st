@@ -36,20 +36,20 @@ RwProjectSetTest >> testProjectAdoptTool [
 	projectSetDefinition := RwProjectSetDefinition new.
 
 	projectDefinition1 := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName1.
+		newForGitBasedProjectNamed: projectName1.
 	projectDefinition1
 		packageNamesInLoadOrder: packageNames1;
 		defaultSymbolDictName: self _symbolDictionaryName1;
-		symbolDictName: self _symbolDictionaryName2 forPackageNamed: (packageNames1 at: 2).
+		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: (packageNames1 at: 2).
 
 	projectSetDefinition addDefinition: projectDefinition1.
 
 	projectDefinition2 := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName2.
+		newForGitBasedProjectNamed: projectName2.
 	projectDefinition2
 		packageNamesInLoadOrder: packageNames2;
 		defaultSymbolDictName: self _symbolDictionaryName2;
-		symbolDictName: self _symbolDictionaryName1 forPackageNamed: (packageNames2 at: 2).
+		setSymbolDictName: self _symbolDictionaryName1 forPackageNamed: (packageNames2 at: 2).
 	projectSetDefinition addDefinition: projectDefinition2.
 
 	projectTools load loadProjectSetDefinition: projectSetDefinition. "create loaded project and empty loaded packages"
@@ -249,18 +249,18 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 	projectSetDefinition := RwProjectSetDefinition new.
 
 	projectDefinition1 := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName1.
+		newForGitBasedProjectNamed: projectName1.
 	projectDefinition1
 		defaultSymbolDictName: self _symbolDictionaryName1;
-		symbolDictName: self _symbolDictionaryName2 forPackageNamed: (packageNames1 at: 2).
+		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: (packageNames1 at: 2).
 
 	projectSetDefinition addDefinition: projectDefinition1.
 
 	projectDefinition2 := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName2.
+		newForGitBasedProjectNamed: projectName2.
 	projectDefinition2
 		defaultSymbolDictName: self _symbolDictionaryName2;
-		symbolDictName: self _symbolDictionaryName1 forPackageNamed: (packageNames2 at: 2).
+		setSymbolDictName: self _symbolDictionaryName1 forPackageNamed: (packageNames2 at: 2).
 	projectSetDefinition addDefinition: projectDefinition2.
 
 	"create projects with no packages"
@@ -457,14 +457,14 @@ RwProjectSetTest >> testProjectSetLoad1 [
 	projectSetDefinition := RwProjectSetDefinition new.
 
 	projectDefinition1 := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName1.
+		newForGitBasedProjectNamed: projectName1.
 	projectDefinition1
 		packageNamesInLoadOrder: #('Simple1-Core');
 		defaultSymbolDictName: self _symbolDictionaryName1.
 	projectSetDefinition addDefinition: projectDefinition1.
 
 	projectDefinition2 := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName2.
+		newForGitBasedProjectNamed: projectName2.
 	projectDefinition2
 		packageNamesInLoadOrder: #('Simple2-Core');
 		defaultSymbolDictName: self _symbolDictionaryName2.

@@ -5,10 +5,12 @@
 #   MIT license: https://github.com/dalehenrich/Rowan/blob/master/LICENSE
 #=========================================================================
 
-set -ex
+set -e
 
+# Usage:
+#  $ROWAN_PROJECTS_HOME/Rowan/bin/packing <base_label> <rowan_tag> <jadeite_tag> <location_of_sett_zip>
 #
-# 1. clone the Rowan, Jade (Jadeite), RowanSample1, and RowanSample2 projects
+# 1. clone the Rowan, Jade (Jadeite), RowanSample1, RowanSample2, RowanSample4, and RowanSample6 projects
 # 2. confirm that the master branches of Rowan and Jade are on the correct tag
 # 3. Create Jadeite runtime directory (Jadeite_runtime)
 # 4. create MANIFEST.TXT and list the sha of the commit for each of the git 
@@ -20,6 +22,10 @@ set -ex
 #
 # Alpha1: $ROWAN_PROJECTS_HOME/Rowan/bin/packing v0.0.2-alpha Alpha1.0
 # Alpha2: $ROWAN_PROJECTS_HOME/Rowan/bin/packing Edelweiss-Alpha2-CANDIOATE v0.0.3-alpha Alpha2.0 
+# Alpha8: $ROWAN_PROJECTS_HOME/Rowan/bin/packing Edelweiss-Alpha8 v0.3.1-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
+# Alpha9: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha9 v0.4.0-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
+# Alpha10: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha10 v0.4.1-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
+# Alpha12: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha12 v0.4.3-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
@@ -32,6 +38,8 @@ if [ "$base_label"x = "x" ] ; then
 fi
 rowan_tag="$2"
 jadeite_tag="$3"
+sett_zip_location="$4"
+sett_zip=$(basename ${sett_zip_location})
 
 commit_match_tag() {
   targetTag="$1"
@@ -99,15 +107,17 @@ clone_entire_git_repo() {
 
 cd $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/packing
 
-rm -rf Rowan Jade RowanSample1 RowanSample2 MANIFEST.TXT Jadeite_runtime_* *.zip
+rm -rf Rowan Jade RowanSample1 RowanSample2 RowanSample4 RowanSample6 MANIFEST.TXT Jadeite_runtime_* *.zip
 
 # Clone Rowan include all branches (complete copy of github repo)
 clone_entire_git_repo git@github.com:dalehenrich/Rowan.git Rowan
 # Clone Jade, avoid downloading old .exe files ... only need latest runtime dir
 git clone --branch master --depth 2 git@github.com:ericwinger/Jade.git
-# Clone entire RowanSample1 and RowanSample2 repos
+# Clone entire RowanSample1, RowanSample2, RowanSample4 and RowanSample6 repos
 clone_entire_git_repo git@github.com:dalehenrich/RowanSample1.git RowanSample1
 clone_entire_git_repo git@github.com:dalehenrich/RowanSample2.git RowanSample2
+clone_entire_git_repo git@github.com:dalehenrich/RowanSample4.git RowanSample4
+clone_entire_git_repo git@github.com:dalehenrich/RowanSample6.git RowanSample6
 
 # checkout sample branch in RowanSample1 and RowanSample2
 pushd RowanSample1
@@ -117,6 +127,8 @@ pushd RowanSample2
   git checkout sample
 popd
 
+# rm -rf MANIFEST.TXT Jadeite_runtime_* *.zip
+
 echo "------------------------------" >> MANIFEST.TXT
 echo "  Git clone directories" >> MANIFEST.TXT
 echo "------------------------------" >> MANIFEST.TXT
@@ -125,6 +137,8 @@ echo "---------------|-----------------|-----------------|" >> MANIFEST.TXT
 validate_tag Rowan Rowan "$rowan_tag"
 validate_tag RowanSample1 RowanSample1
 validate_tag RowanSample2 RowanSample2
+validate_tag RowanSample4 RowanSample4
+validate_tag RowanSample6 RowanSample6
 validate_tag Jade Jade "$jadeite_tag"
 
 # create Jadeite runtime directory
@@ -139,6 +153,12 @@ echo "------------------------------" >> MANIFEST.TXT
 echo "  Jadeite runtime directory" >> MANIFEST.TXT
 echo "------------------------------" >> MANIFEST.TXT
 echo "Jadeite_runtime_${jadeite_tag}" >> MANIFEST.TXT
+
+echo "" >> MANIFEST.TXT
+echo "------------------------------" >> MANIFEST.TXT
+echo "  SETT release " >> MANIFEST.TXT
+echo "------------------------------" >> MANIFEST.TXT
+echo "${sett_zip} " >> MANIFEST.TXT
 
 echo "" >> MANIFEST.TXT
 echo "------------------------------" >> MANIFEST.TXT
@@ -158,9 +178,17 @@ if [ $count -lt 1 ] ; then
   exit 1
 fi
 
+# Copy SETT 
+cp $sett_zip_location .
+
 # create zip file
 
-zip -r ${base_label}.zip MANIFEST.TXT ${jadeite_runtime_dirName} *.pdf Rowan RowanSample1 RowanSample2
+zip -r ${base_label}.zip MANIFEST.TXT ${jadeite_runtime_dirName} ${sett_zip} *.pdf Rowan RowanSample1 RowanSample2 RowanSample4 RowanSample6
+
+# create sha256 file
+
+sha256sum ${base_label}.zip > ${base_label}.sha256
+sha256sum -c ${base_label}.sha256
 
 printf "${ANSI_GREEN}Successful creation of ${base_label}.zip ${ANSI_RESET}\n"
 

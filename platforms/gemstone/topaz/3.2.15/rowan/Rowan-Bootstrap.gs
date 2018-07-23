@@ -9,7 +9,7 @@
   System commit
 %
 
-category: 'Rowan compatability method'
+category: '*tonel-gemstone-kernel'
 method: CharacterCollection
 findString: subString startingAt: startIndex caseSensitive: aBoolean
 
@@ -490,6 +490,7 @@ new: size withAll: value
 		atAllPut: value;
 		yourself
 %
+category: '*ston-gemstonecommon'
 classmethod: CharacterCollection
 findFirstInString: aString inSet: inclusionMap startingAt: start
 
@@ -540,7 +541,7 @@ currentOrNil
 	| session symbolList |
 	session := GsCurrentSession currentSession.
 	symbolList := session symbolList.
-	#( #RowanKernel #RowanLoader)
+	#( #RowanKernel #RowanLoader #RowanTools)
 		do: [:symbolName | 
 			| newDict size |
 			newDict := SymbolDictionary new
@@ -573,29 +574,64 @@ currentOrNil
 %
   commit
 
+# Define the classes needed by definitions, configurations and specifications
   run
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
-    value: #('GemStone-Interactions-Core' 'Rowan-Url-Core' 'Rowan-Url-3215' 
-      'Rowan-Core' 'Rowan-Definitions' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 
-      'Rowan-Tools-Core' 'Rowan-Deprecated' 'Rowan-Tests'
-      'Rowan-Services-Core' 'Rowan-Configurations' 'Rowan-Specifications'
+    value: #('Rowan-Kernel' 'Rowan-Url-Core').
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanTools'
+    value: #('Rowan-Definitions' 'Rowan-Configurations' 'Rowan-Specifications' 
+	).	"Rowan Definitions, Configurations and Specifications"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanKernel'
+    value: #('GemStone-Interactions-Core' 'Rowan-Url-3215' 
+      'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 'Rowan-Core-Definitions-Extensions'
+      'Rowan-Services-Core' 'Rowan-Url-Extensions'
       'Rowan-Services-Extensions'
-      'Rowan-Services-Tests').	"Populate with Rowan implementation classes"
+	).	"Populate with Rowan implementation classes"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanTools'
+    value: #('Rowan-Tools-Core' 'Rowan-Tools-Deprecated' 'Rowan-Definitions-Deprecated'
+	'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions' 
+	'Rowan-GemStone-Specifications'
+	).	"Rowan Tools"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanKernel'
+    value: #('Rowan-Tools-Extensions' 'Rowan-Deprecated' 'Rowan-Tests' 'Rowan-Services-Tests'	
+	).	"Tool extension methods for RowanKernel classes "
 %
   commit
 
   run
   CypressBootstrapRowanBlock 
     value: 'RowanLoader'
-    value: #('Rowan-GemStone-Loader').		"GemStone Rowan loader classes"
+    value: #('Rowan-GemStone-Loader'
+	).		"GemStone Rowan loader classes"
 %
   commit
 
   run
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
-    value: #('Rowan-GemStone-Loader-Extensions').	"Extension methods in non-loader classes"
+    value: #('Rowan-GemStone-Loader-Extensions'
+	).	"Extension methods in non-loader classes"
 %
   commit
 
@@ -604,7 +640,8 @@ currentOrNil
     value: 'Globals'
     value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel' 
       'Rowan-Tools-Kernel' 
-      'Rowan-GemStone-3215').		"Extension methods for GemStone kernel classes"
+      'Rowan-GemStone-3215'
+	).		"Extension methods for GemStone kernel classes"
 %
   commit
 
@@ -678,6 +715,7 @@ currentOrNil
 
 	Rowan image newOrExistingSymbolDictionaryNamed: 'RowanKernel'.
 	Rowan image newOrExistingSymbolDictionaryNamed: 'RowanLoader'.
+	Rowan image newOrExistingSymbolDictionaryNamed: 'RowanTools'.
 
 	packageCreateTool := Rowan packageTools create.
 	projectSetDefinition projects 

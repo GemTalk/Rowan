@@ -10,7 +10,7 @@ RwProjectConfigurationsTest >> _expectedCompoundPackageNames [
 	^ #( 'Rowan-Configurations' 'Rowan-Core' 'Rowan-Cypress-Core' 'Rowan-Cypress-Kernel' 'Rowan-Definitions' 
 			'Rowan-Deprecated' 'Rowan-GemStone-Core' 'Rowan-GemStone-Kernel' 'Rowan-GemStone-Loader' 
 			'Rowan-GemStone-Loader-Extensions' 'Rowan-Services-Core' 'Rowan-Services-Extensions' 'Rowan-Services-Tests' 
-			'Rowan-Specifications' 'Rowan-Tests' 'Rowan-Tools-Core' 'Rowan-Tools-Kernel' 'Rowan-Url-Core') sort
+			'Rowan-Specifications' 'Rowan-Tests' 'Rowan-Tools-Core' 'Rowan-Tools-Extensions' 'Rowan-Tools-Kernel' 'Rowan-Url-Core') sort
 
 ]
 
@@ -18,7 +18,7 @@ RwProjectConfigurationsTest >> _expectedCompoundPackageNames [
 RwProjectConfigurationsTest >> _expectedLoadPackageNames_common [
 
 	^ #('Rowan-Url-Core' 'Rowan-Cypress-Core' 'Rowan-Cypress-Kernel' 'Rowan-Definitions' 'Rowan-Specifications' 'Rowan-Configurations'
-			'Rowan-Core' 'Rowan-Tools-Core' 'Rowan-Tools-Kernel' 'Rowan-Tests') sort
+			'Rowan-Core' 'Rowan-Tools-Core' 'Rowan-Tools-Kernel' 'Rowan-Tools-Extensions' 'Rowan-Tests') sort
 
 ]
 
@@ -26,7 +26,7 @@ RwProjectConfigurationsTest >> _expectedLoadPackageNames_common [
 RwProjectConfigurationsTest >> _expectedLoadPackageNames_common_core [
 
 	^ #('Rowan-Url-Core' 'Rowan-Cypress-Core' 'Rowan-Cypress-Kernel' 'Rowan-Definitions' 'Rowan-Specifications' 'Rowan-Configurations'
-			'Rowan-Core' 'Rowan-Tools-Core' 'Rowan-Tools-Kernel') sort
+			'Rowan-Core' 'Rowan-Tools-Core' 'Rowan-Tools-Extensions' 'Rowan-Tools-Kernel') sort
 
 ]
 
@@ -106,7 +106,9 @@ RwProjectConfigurationsTest >> _expectedLoadPackageNames_gs3_3_0 [
 RwProjectConfigurationsTest >> _expectedRowan_LoadPackageNames [
 
 	^ (self _expectedLoadPackageNames_gemstone , 
-			#('Rowan-GemStone-3215' 'Rowan-Url-3215' 'GemStone-Interactions-Core' 'GemStone-Interactions-Kernel') ) sort
+			#('Rowan-GemStone-3215' 'Rowan-Url-3215' 'GemStone-Interactions-Core' 'GemStone-Interactions-Kernel' 'Rowan-Url-Extensions' 'Rowan-Kernel' 
+				'Rowan-GemStone-Specifications' 'Rowan-Core-Definitions-Extensions' 
+				'Rowan-GemStone-Definitions' 'Rowan-Cypress-Definitions' ) ) sort
 
 ]
 
@@ -149,6 +151,57 @@ RwProjectConfigurationsTest >> testBasicProjectLoadConfiguration [
 	config := RwAbstractProjectConfiguration fromUrl: url.
 
 	self assert: config class == RwProjectLoadConfiguration
+
+]
+
+{ #category : 'tests' }
+RwProjectConfigurationsTest >> testProjectCompoundConfigurationApi [
+
+	| packageNames config visitor x packageMapSpecs packagePropertiesMap map |
+	packageNames :=  #('p1' 'p2').
+	config := RwProjectLoadConfiguration new
+		name: 'Testing';
+		addDefinedGroupName: 'core';
+		addDefinedGroupName: 'deprecated' includeGroups: #( 'core' );
+		addDefinedGroupName: 'tests' includeGroups: #( 'deprecated' 'core'  );
+		conditionalPackagesAtConditions: {'common'}
+			andGroup: 'core' 
+			addPackageNames: packageNames;
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+			setDefaultSymbolDictNameTo: 'RowanKernel';
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+			andPackageName: (packageNames at: 1)
+			setSymbolDictNameTo: 'SymDict1';
+		conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' 
+			andPackageName: (packageNames at: 2)
+			setSymbolDictNameTo: 'SymDict2';
+		yourself.
+	visitor := RwProjectLoadConfigurationVisitor new
+		platformAttributes: { 'common'. 'gemstone'. (System stoneVersionReport at: 'gsVersion') asRwGemStoneVersionNumber};
+		groupNames: #('core' 'tests');
+		yourself.
+	visitor visit: config.
+
+	self assert: (x := visitor packageNames asArray sort) = packageNames.
+
+	packageMapSpecs := visitor packageMapSpecs.
+	self assert: packageMapSpecs notNil.
+
+	self assert: (packageMapSpecs at: #'defaultSymbolDictName') = 'RowanKernel'.
+
+	packagePropertiesMap := packageMapSpecs at: #packageNameToPlatformPropertiesMap.
+
+	map := packagePropertiesMap at: (packageNames at: 1).
+	self assert: (map at: 'symbolDictName') = 'SymDict1'.
+
+	map := packagePropertiesMap at: (packageNames at: 2).
+	self assert: (map at: 'symbolDictName') = 'SymDict2'.
+
+	map := config conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' andPackageName: (packageNames at: 1).
+	self assert: (map at: 'symbolDictName') = 'SymDict1'.
+
+	map := config conditionalPackageMapSpecsAtGemStoneUserId: 'SystemUser' andPackageName: (packageNames at: 2).
+	self assert: (map at: 'symbolDictName') = 'SymDict2'.
 
 ]
 
@@ -316,6 +369,31 @@ RwProjectConfigurationsTest >> testVisitNestedProjectLoadConfiguration_common_te
 	packageNames := visitor packageNames asArray sort.
 
 	self assert: packageNames = self _expectedLoadPackageNames_common_tests.
+
+]
+
+{ #category : 'tests' }
+RwProjectConfigurationsTest >> testVisitNestedProjectLoadConfiguration_Master [
+
+	"https://github.com/dalehenrich/Rowan/issues/252"
+
+	| url rowanSpec config visitor packageNames configurationBasePath |
+	rowanSpec := self _rowanProjectSpecification.
+	configurationBasePath :=  rowanSpec repositoryRootPath , '/test/configs/'.
+	url := 'file:' , configurationBasePath, 'RowanTopLevelProjectLoadConfiguration.ston'.
+
+	config := RwAbstractProjectConfiguration fromUrl: url.
+
+	visitor := RwProjectLoadConfigurationVisitor new
+		platformAttributes: #('common');
+		groupNames: #('Master');
+		configurationBasePath: configurationBasePath;
+		yourself.
+	visitor visit: config.
+
+	packageNames := visitor packageNames asArray sort.
+
+	self assert: packageNames = self _expectedLoadPackageNames_common_deprecated.
 
 ]
 

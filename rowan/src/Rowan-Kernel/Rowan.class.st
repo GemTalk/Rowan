@@ -10,7 +10,7 @@ Class {
 	#classInstVars : [
 		'configuration'
 	],
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Kernel'
 }
 
 { #category : 'public client services' }
@@ -52,15 +52,6 @@ Rowan class >> image [
 	"Private to the Cypress system."
 
 	^self platform image
-]
-
-{ #category : 'initialization' }
-Rowan class >> initialize [
-
-	"Rowan initialize."
-
-	configuration := self platform defaultConfiguration.
-	self platform initialize
 ]
 
 { #category : 'public client services' }

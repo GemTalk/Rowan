@@ -5,6 +5,78 @@ Class {
 }
 
 { #category : 'tests' }
+RwProjectToolTest >> testDiskSimpleProject1 [
+
+	"Create project and build disk-based artifacts first, then create create a class and write changes to disk."
+
+	| projectName projectDefinition projectTools classDefinition packageDefinition packageNames loadedProject |
+	projectName := 'Simple'.
+	packageNames := #('Simple-Core' 'Simple-Tests').
+	projectTools := Rowan projectTools.
+
+	{projectName}
+		do: [ :name | 
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
+
+	self
+		handleConfirmationDuring: [ 
+			projectDefinition := projectTools create
+				createDiskBasedProject: projectName
+				packageNames: packageNames
+				format: 'tonel'
+				root: '/tmp/rowanSimpleProject/'].
+	projectDefinition
+		comment:
+				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
+		yourself.
+	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
+	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
+
+	projectTools spec exportProjectDefinition: projectDefinition.
+	projectTools write writeProjectDefinition: projectDefinition.
+	projectTools commit
+		commitProjectDefinition: projectDefinition
+		message: 'Initial commit'.
+	self
+		handleInformAsFailureDuring: [ projectTools load loadProjectDefinition: projectDefinition ].
+
+	loadedProject := Rowan image
+		loadedProjectNamed: projectName
+		ifAbsent: [ self assert: false description: 'expected to find loaded project' ].
+	packageNames
+		do: [ :packageName | 
+			"ensure that we have a loaded package for each of the packages"
+			Rowan image
+				loadedPackageNamed: packageName
+				ifAbsent: [ self assert: false description: 'expected to find loaded package' ] ].
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: 'Simple'
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: 'I am a Simple class'
+		pools: #()
+		type: 'normal'.
+
+	packageDefinition := projectDefinition packageNamed: 'Simple-Core'.
+	packageDefinition addClassDefinition: classDefinition.
+
+	self
+		handleInformAsFailureDuring: [ projectTools load loadProjectDefinition: projectDefinition ].
+
+	projectTools spec exportSpecification: projectDefinition specification.
+	projectTools write writeProjectDefinition: projectDefinition.
+	projectTools commit
+		commitProjectDefinition: projectDefinition
+		message: 'Added Simple class'
+
+]
+
+{ #category : 'tests' }
 RwProjectToolTest >> testProjectClassExtensions [
 
 	"Build our project in memory without committing to disk until we've created a class with methods, then write to disk."
@@ -20,10 +92,10 @@ RwProjectToolTest >> testProjectClassExtensions [
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNamesInLoadOrder: packageNames;
+		packageNames: packageNames;
 		yourself.
 	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
 
@@ -93,10 +165,12 @@ RwProjectToolTest >> testProjectClassExtensions [
 	self
 		handleConfirmationDuring: [ 
 			projectTools create
-				createPackageProjectFor: projectDefinition
+				createProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanSimpleExtensionProject/'
-				repoPath: 'src' ].
+				configsPath: 'configs'
+				repoPath: 'src' 
+				specsPath: 'specs' ].
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.
@@ -125,7 +199,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition1 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName1)
+		newForGitBasedProjectNamed: projectName1)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
 		packageNamesInLoadOrder: #('Simple-Core' 'Simple-Tests');
@@ -152,7 +226,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 	projectTools load loadProjectDefinition: projectDefinition1.
 
 	projectDefinition2 := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName2)
+		newForGitBasedProjectNamed: projectName2)
 		comment:
 				'This is a class extension project created in memory first, then written to disk. Uses a separate symbol dictionary from project 1';
 		packageNamesInLoadOrder: #('Simple-Extensions');
@@ -207,13 +281,13 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		comment:
 				'This is a project created in memory first, then written to disk. There are three packages 21 of which creates classes in a different symbol dictionary.';
 		packageNamesInLoadOrder: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName2;
-		symbolDictName: self _symbolDictionaryName1 forPackageNamed: 'Simple-Core1';
-		symbolDictName: self _symbolDictionaryName1
+		setSymbolDictName: self _symbolDictionaryName1 forPackageNamed: 'Simple-Core1';
+		setSymbolDictName: self _symbolDictionaryName1
 			forPackageNamed: 'Simple-Extensions1';
 		yourself.
 
@@ -314,10 +388,12 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 	self
 		handleConfirmationDuring: [ 
 			projectTools create
-				createPackageProjectFor: projectDefinition
+				createProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanClassExtensionsProject/'
-				repoPath: 'src' ].
+				configsPath: 'configs'
+				repoPath: 'src' 
+				specsPath: 'specs' ].
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.
@@ -344,15 +420,15 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
 		packageNamesInLoadOrder: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
-		symbolDictName: self _symbolDictionaryName2
+		setSymbolDictName: self _symbolDictionaryName2
 			forPackageNamed: 'Simple-Extensions';
 		defaultUseSessionMethodsForExtensions: false;
-		useSessionMethodsForExtensions: true forPackageNamed: 'Simple-Extensions';
+		setUseSessionMethodsForExtensions: true forPackageNamed: 'Simple-Extensions';
 		yourself.
 
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
@@ -452,12 +528,12 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := (RwProjectDefinition
-		newForGitPackageProjectNamed: projectName)
+		newForGitBasedProjectNamed: projectName)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
 		packageNamesInLoadOrder: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName;
-		useSessionMethodsForExtensions: true
+		setUseSessionMethodsForExtensions: true
 			forPackageNamed: 'Simple-Globals-Extensions';
 		yourself.
 
@@ -509,15 +585,13 @@ RwProjectToolTest >> testSimpleProject1 [
 	self
 		handleConfirmationDuring: [ 
 			projectDefinition := projectTools create
-				createPackageProject: projectName
+				createGitBasedProject: projectName
+				packageNames: packageNames
 				format: 'tonel'
-				root: '/tmp/rowanSimpleProject/'
-				repoPath: 'src'
-				useGit: true ].
+				root: '/tmp/rowanSimpleProject/' ].
 	projectDefinition
 		comment:
 				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
-		packageNamesInLoadOrder: packageNames;
 		yourself.
 	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
@@ -581,7 +655,7 @@ RwProjectToolTest >> testSimpleProject2 [
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
+		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
@@ -610,10 +684,12 @@ RwProjectToolTest >> testSimpleProject2 [
 	self
 		handleConfirmationDuring: [ 
 			projectTools create
-				createPackageProjectFor: projectDefinition
+				createProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanSimpleProject2/'
-				repoPath: 'src' ].
+				configsPath: 'configs'
+				repoPath: 'src' 
+				specsPath: 'specs' ].
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.
@@ -639,7 +715,7 @@ RwProjectToolTest >> testSimpleProject3 [
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
+		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
@@ -695,10 +771,12 @@ RwProjectToolTest >> testSimpleProject3 [
 	self
 		handleConfirmationDuring: [ 
 			projectTools create
-				createPackageProjectFor: projectDefinition
+				createProjectFor: projectDefinition
 				format: 'tonel'
 				root: '/tmp/rowanSimpleProject3/'
-				repoPath: 'src' ].
+				configsPath: 'configs'
+				repoPath: 'src' 
+				specsPath: 'specs' ].
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.

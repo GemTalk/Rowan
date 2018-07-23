@@ -5,8 +5,19 @@ and locates other services that are dialect-specific.
 Class {
 	#name : 'RwPlatform',
 	#superclass : 'Object',
-	#category : 'Rowan-Core'
+	#category : 'Rowan-Kernel'
 }
+
+{ #category : 'queries' }
+RwPlatform >> basePlatformAttribute [
+	"Answer the generic configuration attribute for the platform"
+
+	"Examples include: 'gemstone', 'pharo', 'squeak'"
+
+
+	self subclassResponsibility: #basePlatformAttribute
+
+]
 
 { #category : 'queries' }
 RwPlatform >> fileUtilities [

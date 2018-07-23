@@ -91,7 +91,7 @@ RwAbstractProjectLoadConfiguration >> acceptCompoundVisitor: aVisitor [
 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'private' }
 RwAbstractProjectLoadConfiguration >> conditionalPackageMapSpecMatchers [
 
 	conditionalPackageMapSpecMatchers ifNotNil: [:val | ^ val ]. 
@@ -112,6 +112,44 @@ RwAbstractProjectLoadConfiguration >> conditionalPackageMapSpecs [
 ]
 
 { #category : 'accessing' }
+RwAbstractProjectLoadConfiguration >> conditionalPackageMapSpecsAtGemStoneUserId: userId [ 
+
+	^ ((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
+		at: userId ifAbsent: [ ^ Dictionary new ])
+
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadConfiguration >> conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName [
+
+	^ (((self conditionalPackageMapSpecs at: 'gemstone' ifAbsent: [ ^ Dictionary new ])
+		at: userId ifAbsentPut: [ ^ Dictionary new ])
+			at: #packageNameToPlatformPropertiesMap ifAbsent: [ ^ Dictionary new ])
+				at: packageName ifAbsent: [ ^ Dictionary new ]
+
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadConfiguration >> conditionalPackageMapSpecsAtGemStoneUserId: userId andPackageName: packageName setSymbolDictNameTo: symbolDictName [
+
+	((((self conditionalPackageMapSpecs at: 'gemstone' ifAbsentPut: [ Dictionary new ])
+		at: userId ifAbsentPut: [ Dictionary new ])
+			at: #packageNameToPlatformPropertiesMap ifAbsentPut: [ Dictionary new ])
+				at: packageName ifAbsentPut: [ Dictionary new ])
+					at: 'symbolDictName' put: symbolDictName asString
+
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadConfiguration >> conditionalPackageMapSpecsAtGemStoneUserId: userId setDefaultSymbolDictNameTo: defaultSymbolDictName [
+
+	((self conditionalPackageMapSpecs at: 'gemstone' ifAbsentPut: [ Dictionary new ])
+		at: userId ifAbsentPut: [ Dictionary new ])
+			at: #defaultSymbolDictName put: defaultSymbolDictName asString
+
+]
+
+{ #category : 'private' }
 RwAbstractProjectLoadConfiguration >> conditionalPackageMatchers [
 
 	conditionalPackageMatchers ifNotNil: [:val | ^ val ]. 
@@ -132,6 +170,28 @@ RwAbstractProjectLoadConfiguration >> conditionalPackages [
 ]
 
 { #category : 'accessing' }
+RwAbstractProjectLoadConfiguration >> conditionalPackagesAtConditions: conditions andGroup: groupName [
+
+	| thePackageNameMap |
+	thePackageNameMap := (self conditionalPackages at: conditions asArray sort ifAbsent: [ ^ Set new])
+		at: groupName ifAbsent: [ ^ Set new ].
+	^ (thePackageNameMap at: #packageNames ifAbsent: [ Set new ]) asSet
+
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectLoadConfiguration >> conditionalPackagesAtConditions: conditions andGroup: groupName addPackageNames: packageNames [
+
+	| thePackageNames thePackageNameMap |
+	thePackageNameMap := (self conditionalPackages at: conditions asArray sort ifAbsentPut: [ Dictionary new])
+		at: groupName ifAbsentPut: [ Dictionary new ].
+	thePackageNames := (thePackageNameMap at: #packageNames ifAbsentPut: [ Set new ]) asSet.
+	thePackageNames addAll: packageNames.
+	thePackageNameMap at: #packageNames put: thePackageNames asArray sort
+
+]
+
+{ #category : 'accessing' }
 RwAbstractProjectLoadConfiguration >> definedGroupNames [
 	"Empty list by default"
 
@@ -140,10 +200,12 @@ RwAbstractProjectLoadConfiguration >> definedGroupNames [
 ]
 
 { #category : 'initialization' }
-RwAbstractProjectLoadConfiguration >> initialize [
+RwAbstractProjectLoadConfiguration >> initializeForExport [
 
-	super initialize.
-	conditionalPackages := Dictionary new.
-	conditionalPackageMapSpecs := Dictionary new
+	"if spec is to be exported, clear out any of the fields that represent state that should 
+	not be shared"
+
+	super initializeForExport.
+	conditionalPackageMatchers :=  conditionalPackageMapSpecMatchers := nil
 
 ]

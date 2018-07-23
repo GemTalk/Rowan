@@ -34,6 +34,21 @@ RwGsLoadedSymbolDictClass >> addLoadedMethod: aLoadedMethod [
 		ifFalse: [self addLoadedInstanceMethod: aLoadedMethod]
 ]
 
+{ #category : 'removing' }
+RwGsLoadedSymbolDictClass >> disownFromLoaded: aPackageSymbolDictionary [
+
+	loadedInstanceMethods
+		valuesDo: [ :loadedInstanceMethod | 
+			self removeLoadedInstanceMethod: loadedInstanceMethod.
+			aPackageSymbolDictionary methodRegistry
+				removeKey: loadedInstanceMethod handle ].
+	loadedClassMethods
+		valuesDo: [ :loadedClassMethod | 
+			self removeLoadedClassMethod: loadedClassMethod.
+			aPackageSymbolDictionary methodRegistry removeKey: loadedClassMethod handle ].
+
+]
+
 { #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> handleClassDeletion [
 
@@ -115,16 +130,9 @@ RwGsLoadedSymbolDictClass >> key [
 { #category : 'removing' }
 RwGsLoadedSymbolDictClass >> removeFromLoaded: aPackageSymbolDictionary [
 
-	loadedInstanceMethods
-		valuesDo: [ :loadedInstanceMethod | 
-			self removeLoadedInstanceMethod: loadedInstanceMethod.
-			aPackageSymbolDictionary methodRegistry
-				removeKey: loadedInstanceMethod handle ].
-	loadedClassMethods
-		valuesDo: [ :loadedClassMethod | 
-			self removeLoadedClassMethod: loadedClassMethod.
-			aPackageSymbolDictionary methodRegistry removeKey: loadedClassMethod handle ].
+	self disownFromLoaded: aPackageSymbolDictionary.
 	self handleClassDeletion
+
 ]
 
 { #category : 'methods' }
@@ -263,6 +271,35 @@ RwGsLoadedSymbolDictClass >> updateCommentFromClass [
 ]
 
 { #category : 'private-updating' }
+RwGsLoadedSymbolDictClass >> updateConstraintsFromClass [
+	| propertyName oldValue newValue sortedConstraints |
+	propertyName := 'gs_constraints'.
+	oldValue := self propertyAt: propertyName.
+	sortedConstraints := handle _rwSortedConstraints.
+	(sortedConstraints isKindOf: Array ) 
+		ifTrue: [
+			newValue := (sortedConstraints collect: [:ar | 
+					(ar isKindOf: Array )
+						ifTrue: [ {(ar at: 1) asString . (ar at: 2) name asString } ]
+						ifFalse: [ 
+							"varyingConstraint"
+							ar name asString ] ]) asArray.
+			newValue isEmpty ifTrue: [newValue := self absentToken] ]
+		ifFalse: [
+			newValue :=  sortedConstraints 
+				ifNil: [ self absentToken ]
+				ifNotNil: [ sortedConstraints ] ].
+
+	"Since the absent token is not equal to any other valid value, we can skip the identity check in this case."
+	oldValue = newValue
+		ifFalse: 
+			[newValue == self absentToken
+				ifTrue: [self removeProperty: propertyName]
+				ifFalse: [self propertyAt: propertyName put: newValue]]
+
+]
+
+{ #category : 'private-updating' }
 RwGsLoadedSymbolDictClass >> updateInstvarNamesFromClass [
 	"Order of instvars does not matter to Cypress (at least not in GemStone) so we keep the instvar names sorted."
 
@@ -333,8 +370,10 @@ RwGsLoadedSymbolDictClass >> updatePropertiesFromClassFor: aSymbolDictionaryRegi
 		updatePoolDictionaryNamesFromClass;
 		updateClassTypeFromClass;
 		updateOptionsFromClass;
+		updateConstraintsFromClass;
 		updateCommentFromClass;
 		updateCategoryFromClass
+
 ]
 
 { #category : 'private-updating' }

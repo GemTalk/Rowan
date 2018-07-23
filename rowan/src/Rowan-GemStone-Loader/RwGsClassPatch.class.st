@@ -39,6 +39,26 @@ RwGsClassPatch >> _classFormat: fmt forSubclassType: classType [
 						ifFalse: [self error: 'Unknown class type']]]
 ]
 
+{ #category : 'private' }
+RwGsClassPatch >> _gemStoneConstraintsFrom:	gs_constraints [
+	"reify the constraints array converting to references to instvar names and classes"
+
+	(gs_constraints isKindOf: Array)
+		ifTrue: [ 
+			gs_constraints isEmpty
+				ifTrue: [^ #() ]
+				ifFalse: [
+					| theConstraints |
+					 theConstraints := {}.
+					gs_constraints do: [ :ar | 
+						(ar isKindOf: Array)
+							ifTrue: [ theConstraints add: { (ar at: 1) asSymbol . Rowan globalNamed: (ar at: 2) } ]
+							ifFalse: [ theConstraints add: (Rowan globalNamed: ar) ] ].
+					^ theConstraints ] ]
+		ifFalse: [ ^ Rowan globalNamed: gs_constraints ].
+
+]
+
 { #category : 'actions' }
 RwGsClassPatch >> addToNewClassesByName: aDictionary [
 
@@ -62,10 +82,13 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 
 	"Must be in-synch with RwGsLoadedClass>>updateClassTypeFromClass"
 
-	| type oldVersion createdClass gs_options |
+	| type oldVersion createdClass gs_options oldConstraints |
 	type := classDefinition classType.
 	oldVersion := self oldClassVersion.
-	gs_options := (classDefinition propertyAt: 'gs_options' ifAbsent: [ #() ])
+	oldConstraints := oldVersion
+		ifNil: [ #() ]
+		ifNotNil: [ oldVersion _rwSortedConstraints ].
+	gs_options := (classDefinition gs_options)
 		collect: [ :each | each asSymbol ].
 	createdClass := type = 'normal'
 		ifTrue: [ 
@@ -78,6 +101,7 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 				inDictionary: nil
 				newVersionOf: oldVersion
 				description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+				constraints: oldConstraints
 				options: gs_options ]
 		ifFalse: [ 
 			type = 'variable'
@@ -91,6 +115,7 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 						inDictionary: nil
 						newVersionOf: oldVersion
 						description: (classDefinition propertyAt: 'comment' ifAbsent: [ '' ])
+						constraints: oldConstraints
 						options: gs_options ]
 				ifFalse: [ 
 					type = 'bytes'
@@ -108,6 +133,7 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 								options: gs_options ]
 						ifFalse: [ self error: 'Unknown class type' ] ] ].
 	^ createdClass
+
 ]
 
 { #category : 'accessing' }

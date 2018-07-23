@@ -237,6 +237,8 @@ asCypressClassDefinition
 		classInstVarNames: self classInstanceVariableNames
 		classVarNames: self classVariableNames
 		poolDictionaryNames: self poolDictionaryNames
+		gs_options: self gs_options
+		gs_constraints: self gs_constraints
 		comment: self comment
 		subclassType: self subclassType
 %
@@ -269,6 +271,34 @@ method: CypressClassStructure
 classInstanceVariableNames: someStrings
 
 	^self properties at: 'classinstvars' put: someStrings
+%
+
+category: 'accessing'
+method: CypressClassStructure
+gs_constraints
+
+	^self properties at: 'gs_constraints' ifAbsent: [#()]
+%
+
+category: 'accessing'
+method: CypressClassStructure
+gs_constraints: anConstraintsArray
+
+	^self properties at: 'gs_constraints' put: anConstraintsArray
+%
+
+category: 'accessing'
+method: CypressClassStructure
+gs_options
+
+	^self properties at: 'gs_options' ifAbsent: [#()]
+%
+
+category: 'accessing'
+method: CypressClassStructure
+gs_options: anOptionsArray
+
+	^self properties at: 'gs_options' put: anOptionsArray
 %
 
 category: 'converting'
@@ -350,7 +380,9 @@ fromClassDefinition: classDefinition
 		classInstanceVariableNames: classDefinition classInstVarNames;
 		classVariableNames: classDefinition classVarNames;
 		poolDictionaryNames: classDefinition poolDictionaryNames;
-		subclassType: classDefinition subclassType.
+		subclassType: classDefinition subclassType;
+		gs_options: classDefinition gs_options;
+		gs_constraints: classDefinition gs_constraints
 %
 
 category: 'querying'
@@ -700,10 +732,13 @@ packageName
 	| extension extensionSize stopIndex |
 	extension := self packageExtension.
 	extensionSize := extension size.
-	stopIndex := self name
-				indexOfSubCollection: extension
-				startingAt: self name size - extensionSize + 1
-				ifAbsent: [self name size + 1].
+	stopIndex :=  extensionSize < self name size
+		ifTrue: [
+			self name
+					indexOfSubCollection: extension
+					startingAt: self name size - extensionSize + 1
+					ifAbsent: [ self name size + 1 ] ]
+		ifFalse: [  self name size + 1 ].
 	^self name copyFrom: 1 to: stopIndex - 1
 %
 

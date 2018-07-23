@@ -7,12 +7,6 @@ RwProject >> defaultSymbolDictName [
 ]
 
 { #category : '*rowan-gemstone-core' }
-RwProject >> defaultUserId [
-
-	^ self _gemstonePlatformSpec defaultUserId
-]
-
-{ #category : '*rowan-gemstone-core' }
 RwProject >> defaultUseSessionMethodsForExtensions [
 
 	^ self _gemstonePlatformSpec defaultUseSessionMethodsForExtensions
@@ -28,12 +22,6 @@ RwProject >> methodEnvForPackageNamed: packageName [
 RwProject >> symbolDictNameForPackageNamed: packageName [
 
 	^ self _gemstonePlatformSpec symbolDictNameForPackageNamed: packageName
-]
-
-{ #category : '*rowan-gemstone-core' }
-RwProject >> userIdForPackageNamed: packageName [
-
-	^ self _gemstonePlatformSpec userIdForPackageNamed: packageName
 ]
 
 { #category : '*rowan-gemstone-core' }

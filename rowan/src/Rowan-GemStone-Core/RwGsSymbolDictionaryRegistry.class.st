@@ -36,9 +36,10 @@ RwGsSymbolDictionaryRegistry class >> installIn: aSymbolDictionary [
 RwGsSymbolDictionaryRegistry class >> newForSymbolDictionary: aSymbolDictionary [
 
 	^ self new
-		initialize;
 		_symbolDictionary: aSymbolDictionary;
+		initialize;
 		yourself
+
 ]
 
 { #category : 'method - private api' }
@@ -176,22 +177,6 @@ RwGsSymbolDictionaryRegistry >> addClassAssociation: assoc forClass: class toPac
 	"Use for calls from classes in Rowan-GemStone-Loader package"
 
 	^ implementationClass addClassAssociation: assoc forClass: class toPackageNamed: packageName instance: self
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addClassToSymbolDictionaryForClassAssociation: assoc forClass: class [ 
-
-	^ self class registry_ImplementationClass addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  instance: self
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry >> addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  implementationClass: implementationClass [
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  instance: self
 
 ]
 
@@ -354,7 +339,9 @@ RwGsSymbolDictionaryRegistry >> adoptCompiledMethod: compiledMethod classExtensi
 
 	existing := methodRegistry at: compiledMethod ifAbsent: [ nil ].
 	existing
-		ifNotNil: [ self error: 'Internal error -- existing LoadedMethod found for compiled method.' ].
+		ifNotNil: [
+			"existing LoadedMethod found for compiled method ... ignore already packaged methods"
+			^ self ].
 	loadedMethod := RwGsLoadedSymbolDictMethod forMethod: compiledMethod.
 
 	methodRegistry at: compiledMethod put: loadedMethod.
@@ -521,13 +508,55 @@ RwGsSymbolDictionaryRegistry >> deleteMethod: selector for: behavior implementat
 ]
 
 { #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry >> deleteMovedLoadedMethod: selector for: behavior implementationClass: implementationClass [
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass deleteMovedLoadedMethod: selector for: behavior instance: self
+
+]
+
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry >> deleteMovedMethod: selector for: behavior implementationClass: implementationClass [
+
+	"Use for calls from classes in Rowan-GemStone-Loader package"
+
+	^ implementationClass deleteMovedMethod: selector for: behavior instance: self
+
+]
+
+{ #category : 'method - patch api' }
 RwGsSymbolDictionaryRegistry >> deletePackage: packageName [
 
-	| loadedPackage |
-	loadedPackage := packageRegistry
-		removeKey: packageName
-		ifAbsent: [ self error: 'package ' , packageName printString , ' not found' ].
-	loadedPackage loadedProject removeLoadedPackage: loadedPackage
+	^  self class registry_ImplementationClass deletePackage: packageName instance: self
+
+]
+
+{ #category : 'class disown api' }
+RwGsSymbolDictionaryRegistry >> disownClass: class [
+
+	"Remove the specified class and all of it's packaged instance and class methods from the loaded things."
+
+	^ self class registry_ImplementationClass disownClass: class instance: self
+
+]
+
+{ #category : 'class disown api' }
+RwGsSymbolDictionaryRegistry >> disownClassExtensions: class forLoadedPackage: loadedPackage [
+
+	"Remove the extension methods in the named class for the named package"
+
+	^ self class registry_ImplementationClass disownClassExtensions: class forLoadedPackage: loadedPackage instance: self
+
+]
+
+{ #category : 'class disown api' }
+RwGsSymbolDictionaryRegistry >> disownClassExtensions: class forPackageNamed: packageName [
+
+	"Remove the extension methods in the named class for the named package"
+
+	^ self class registry_ImplementationClass disownClassExtensions: class forPackageNamed: packageName instance: self
+
 ]
 
 { #category : 'class - patch api' }
@@ -590,10 +619,18 @@ RwGsSymbolDictionaryRegistry >> homeSessionMethods [
 { #category : 'initialization' }
 RwGsSymbolDictionaryRegistry >> initialize [
 
+	| symbolDictObjectSecurityPolicy |
 	packageRegistry := KeyValueDictionary new.	"keyed by package name"
 	classRegistry := IdentityKeyValueDictionary new.	"keyed by class classHistory"
 	classExtensionRegistry := IdentityKeyValueDictionary new.	"keyed by class classHistory"
-	methodRegistry := IdentityKeyValueDictionary new	"keyed by compiledMethod"
+	methodRegistry := IdentityKeyValueDictionary new.	"keyed by compiledMethod"
+
+	symbolDictObjectSecurityPolicy := symbolDictionary objectSecurityPolicy.
+	packageRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
+	classRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
+	classExtensionRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
+	methodRegistry objectSecurityPolicy: symbolDictObjectSecurityPolicy.
+
 ]
 
 { #category : 'loaded queries' }

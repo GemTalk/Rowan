@@ -19,6 +19,13 @@ RwAbstractClassDefinition class >> withProperties: propertiesDictionary classMet
 ]
 
 { #category : 'private' }
+RwAbstractClassDefinition >> _classNameForCompare: aDefinition [
+
+	^ self key ifNil: [ aDefinition key ]
+
+]
+
+{ #category : 'private' }
 RwAbstractClassDefinition >> _methodsModificationClass [
 
 	self subclassResponsibility: #'__methodsModificationClass'
@@ -71,7 +78,7 @@ RwAbstractClassDefinition >> compareAgainstBase: aDefinition [
 	modification := self _modificationClass before: aDefinition after: self.
 	modification
 		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
-	className := self key ifNil: [ aDefinition key ].
+	className := self _classNameForCompare: aDefinition.
 	instanceMethodsModification := self _methodsModificationClass
 		extendedClassName: className.
 	classMethodsModification := self _methodsModificationClass
@@ -92,6 +99,7 @@ RwAbstractClassDefinition >> compareAgainstBase: aDefinition [
 		instanceMethodsModification: instanceMethodsModification;
 		classMethodsModification: classMethodsModification.
 	^ modification
+
 ]
 
 { #category : 'comparing' }
@@ -193,6 +201,12 @@ RwAbstractClassDefinition >> instanceMethodDefinitions: dictionaryOfDefinitions 
 ]
 
 { #category : 'testing' }
+RwAbstractClassDefinition >> isClassExtension [
+	^ false
+
+]
+
+{ #category : 'testing' }
 RwAbstractClassDefinition >> isEmpty [
 	"Answer true if this definition does not actually define anything."
 
@@ -210,6 +224,15 @@ RwAbstractClassDefinition >> key [
 RwAbstractClassDefinition >> name: aString [
 
 	properties at: 'name' put: aString
+
+]
+
+{ #category : 'copying' }
+RwAbstractClassDefinition >> postCopy [
+
+	super postCopy.
+	classMethodDefinitions :=  classMethodDefinitions copy.
+	instanceMethodDefinitions := instanceMethodDefinitions copy
 
 ]
 

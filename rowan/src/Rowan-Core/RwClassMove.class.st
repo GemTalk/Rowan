@@ -3,12 +3,10 @@ Represents the move of a class definition from one package to another.
 "
 Class {
 	#name : 'RwClassMove',
-	#superclass : 'Object',
+	#superclass : 'RwMove',
 	#instVars : [
 		'classBefore',
-		'classAfter',
-		'packageBefore',
-		'packageAfter'
+		'classAfter'
 	],
 	#category : 'Rowan-Core'
 }
@@ -22,6 +20,20 @@ RwClassMove class >> classBefore: beforeClassDefinition classAfter: afterClassDe
 		packageBefore: beforePackageDefinition;
 		packageAfter: afterPackageDefinition;
 		yourself
+]
+
+{ #category : 'instance creation' }
+RwClassMove class >> classBefore: beforeClassDefinition classAfter: afterClassDefinition packageBefore: beforePackageDefinition packageAfter: afterPackageDefinition projectBefore: beforeProjectDefinition projectAfter: afterProjectDefinition [
+
+	^(self new)
+		classBefore: beforeClassDefinition;
+		classAfter: afterClassDefinition;
+		packageBefore: beforePackageDefinition;
+		packageAfter: afterPackageDefinition;
+		projectBefore: beforeProjectDefinition;
+		projectAfter: afterProjectDefinition;
+		yourself
+
 ]
 
 { #category : 'Accessing' }
@@ -45,29 +57,5 @@ RwClassMove >> classBefore [
 { #category : 'Updating' }
 RwClassMove >> classBefore: newValue [
 	classBefore := newValue
-
-]
-
-{ #category : 'Accessing' }
-RwClassMove >> packageAfter [
-	^packageAfter
-
-]
-
-{ #category : 'Updating' }
-RwClassMove >> packageAfter: newValue [
-	packageAfter := newValue
-
-]
-
-{ #category : 'Accessing' }
-RwClassMove >> packageBefore [
-	^packageBefore
-
-]
-
-{ #category : 'Updating' }
-RwClassMove >> packageBefore: newValue [
-	packageBefore := newValue
 
 ]

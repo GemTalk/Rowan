@@ -53,7 +53,13 @@ RwGsClassVersioningPatch class >> for: aClassModification inPackage: aPackageDef
 ]
 
 { #category : 'private' }
-RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars patchedClassProperties: patchedClassPropertiesBlock patchedClassVars: patchedClassVarsBlock patchedClassNewVersions: patchedClassNewVersionsBlock [
+RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass 
+newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars 
+newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars newConstraints: aConstraint
+patchedClassProperties: patchedClassPropertiesBlock 
+patchedConstraints: patchedConstraintsBlock 
+patchedClassVars: patchedClassVarsBlock 
+patchedClassNewVersions: patchedClassNewVersionsBlock [
 
 	" based on Class>>_equivalentSubclass:superCls:name:newOpts:newFormat:newInstVars:newClassInstVars:newPools:newClassVars:inDict:isKernel: and ultimately needs to be rolled back into base, so that class creation and Rowan use the same new class version rules.
 "
@@ -79,8 +85,8 @@ RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivale
         of the formats must match exactly.
 "
 
-	| supr opts ivs civs poolds cvars cvarsPatched |
-	cvarsPatched := anArrayOfClassVars isEmpty not.
+	| supr opts ivs civs poolds cvars cons cvarsPatched |
+	cvarsPatched := (anArrayOfClassVars asSortedCollection = oldClass classVarNames asSortedCollection) not.
 	self
 		_newSubclassWithSuperclass: newSuperclass
 		isEquivalentToSubclass: oldClass
@@ -90,13 +96,15 @@ RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivale
 		newClassInstVars: anArrayOfClassInstVars
 		newPools: anArrayOfPoolDicts
 		newClassVars: anArrayOfClassVars
+		newConstraints: aConstraint
 		suprBlock: [ :bool | supr := bool not ]
 		optsBlock: [ :bool | opts := bool not ]
 		ivsBlock: [ :bool | ivs := bool not ]
 		civsBlock: [ :bool | civs := bool not ]
 		poolsBlock: [ :bool | poolds := bool not ]
-		cvarsBlock: [ :bool | cvars := bool not ].
-	(supr or: [ opts or: [ ivs or: [ civs or: [ poolds ] ] ] ])
+		cvarsBlock: [ :bool | cvars := bool not ]
+		consBlock:  [ :bool | cons := bool not ].
+	(supr or: [ opts or: [ ivs or: [ civs or: [ poolds or: [cvars ] ] ] ] ])
 		ifTrue: [ 
 			"new class version means that class vars will be patched (for free) before methods compiled"
 			patchedClassNewVersionsBlock value.
@@ -104,14 +112,21 @@ RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivale
 	cvarsPatched
 		ifTrue: [ 
 			"have to patch class variables BEFORE methods are compiled"
-			patchedClassVarsBlock value ]
-		ifFalse: [ 
-			"class property changes that do not affect method compilation"
-			patchedClassPropertiesBlock value ]
+			patchedClassVarsBlock value ].
+	cons
+		ifTrue: [
+			"constraint changes are added in separate step after all classes have been created"
+			patchedConstraintsBlock value ].
+	"class property changes that do not affect method compilation"
+	patchedClassPropertiesBlock value
+
 ]
 
 { #category : 'private' }
-RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars suprBlock: suprBlock optsBlock: optsBlock ivsBlock: ivsBlock civsBlock: civsBlock poolsBlock: poolsBlock cvarsBlock: cvarsBlock [
+RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivalentToSubclass: oldClass 
+newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars 
+newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars newConstraints: aConstraint 
+suprBlock: suprBlock optsBlock: optsBlock ivsBlock: ivsBlock civsBlock: civsBlock poolsBlock: poolsBlock cvarsBlock: cvarsBlock consBlock: consBlock [
 
 	" based on Class>>_equivalentSubclass:superCls:name:newOpts:newFormat:newInstVars:newClassInstVars:newPools:newClassVars:inDict:isKernel: and ultimately needs to be rolled back into base, so that class creation and Rowan use the same new class version rules.
 "
@@ -146,7 +161,9 @@ RwGsClassVersioningPatch >> _newSubclassWithSuperclass: newSuperclass isEquivale
 	ivsBlock value: (oldClass _instVarsEqual: anArrayOfInstvarNames).
 	civsBlock value: (oldClass class _instVarsEqual: anArrayOfClassInstVars).
 	poolsBlock value: (oldClass _poolDictsEqual: anArrayOfPoolDicts).
-	cvarsBlock value: (oldClass _classVarsChangableTo: anArrayOfClassVars copy)
+	cvarsBlock value: (oldClass _classVarsChangableTo: anArrayOfClassVars copy).
+	consBlock value: (aConstraint size = 0 or: [oldClass _constraintsEqual: aConstraint ])
+
 ]
 
 { #category : 'patching' }
@@ -155,11 +172,12 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	"Need to decide whether the patches in aClassModification warrant a new class version or 
 	 simple property changes."
 
-	| dict existingClass newFormat aClassDefinition newSuperclassAssoc |
+	| dict existingClass newFormat afterClassDefinition beforeClassDefinition newSuperclassAssoc afterSymDict beforeSymDict |
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
-	aClassDefinition := aClassModification after.
-	(newSuperclassAssoc := self resolveName: aClassDefinition superclassName)
+	afterClassDefinition := aClassModification after.
+	beforeClassDefinition := aClassModification before.
+	(newSuperclassAssoc := self resolveName: afterClassDefinition superclassName)
 		ifNil: [
 			"new superclass does not currently exist ... so it will be a new class, which means a new class version, guaranteed"
 			aRwGsPatchSet
@@ -167,30 +185,46 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 				inPackage: aPackageDefinition
 				inProject: aProjectDefinition.
 			^ self ].
-	dict := self symbolDictionary.
+	dict := Rowan image symbolList objectNamed: beforeClassDefinition gs_symbolDictionary.
 	existingClass := dict
-		at: aClassDefinition name asSymbol
+		at: beforeClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
 	newFormat := self
 		_classFormat: existingClass superclass format
-		forSubclassType: aClassDefinition classType.
+		forSubclassType: afterClassDefinition classType.
+	afterSymDict := afterClassDefinition gs_symbolDictionary ifNil: [ self symbolDictionary name asString ].
+	beforeSymDict := beforeClassDefinition gs_symbolDictionary.
+	beforeSymDict ~= afterSymDict
+		ifTrue: [
+			aRwGsPatchSet
+				addPatchedClassSymbolDictionaryMove: aClassModification
+				inPackage: aPackageDefinition
+				inProject: aProjectDefinition ].
 	self
 		_newSubclassWithSuperclass: newSuperclassAssoc value
 		isEquivalentToSubclass: existingClass
-		newOpts: ((aClassDefinition propertyAt: 'gs_options' ifAbsent: [ #() ]) collect: [:each | each asSymbol])
+		newOpts: (afterClassDefinition gs_options collect: [:each | each asSymbol])
 		newFormat: newFormat
-		newInstVars: aClassDefinition instVarNames
-		newClassInstVars: aClassDefinition classInstVarNames
-		newPools: aClassDefinition poolDictionaryNames
-		newClassVars: aClassDefinition classVarNames
-		patchedClassProperties: [ 
+		newInstVars: afterClassDefinition instVarNames
+		newClassInstVars: afterClassDefinition classInstVarNames
+		newPools: afterClassDefinition poolDictionaryNames
+		newClassVars: afterClassDefinition classVarNames
+		newConstraints: (self _gemStoneConstraintsFrom: afterClassDefinition gs_constraints)
+		patchedClassProperties: [
+			aClassModification propertiesModification isEmpty
+				ifFalse: [ 
+					aRwGsPatchSet
+						addPatchedClassProperties: afterClassDefinition
+						inPackage: aPackageDefinition
+						inProject: aProjectDefinition ] ]
+		patchedConstraints: [
 			aRwGsPatchSet
-				addPatchedClassProperties: aClassDefinition
-				inPackage: aPackageDefinition
-				inProject: aProjectDefinition ]
+						addPatchedClassConstraints: afterClassDefinition
+						inPackage: aPackageDefinition
+						inProject: aProjectDefinition ]
 		patchedClassVars: [ 
 			aRwGsPatchSet
-				addPatchedClassClassVariables: aClassDefinition
+				addPatchedClassClassVariables: afterClassDefinition
 				inPackage: aPackageDefinition
 				inProject: aProjectDefinition ]
 		patchedClassNewVersions: [ 
@@ -206,18 +240,19 @@ RwGsClassVersioningPatch >> addPatchedClassModificationForcingNewClassVersion: a
 
 	"Uncontitionally create a new class version"
 
-	| dict existingClass aClassDefinition |
+	| dict existingClass beforeClassDefinition |
 	packageDefinition := aPackageDefinition.
 	projectDefinition := aProjectDefinition.
-	aClassDefinition := aClassModification after.
-	dict := self symbolDictionary.
+	beforeClassDefinition := aClassModification before.
+	dict := Rowan image symbolList objectNamed: beforeClassDefinition gs_symbolDictionary.
 	existingClass := dict
-		at: aClassDefinition name asSymbol
+		at: beforeClassDefinition name asSymbol
 		ifAbsent: [ self error: 'Internal error. Attempt to modify a class whose name is not bound.' ].
 	aRwGsPatchSet
 		addPatchedClassNewVersion: aClassModification
 		inPackage: aPackageDefinition
 		inProject: aProjectDefinition
+
 ]
 
 { #category : 'accessing' }

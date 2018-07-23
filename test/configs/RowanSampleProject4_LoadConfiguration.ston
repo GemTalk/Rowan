@@ -38,7 +38,7 @@
 		},
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
-			'default' : {
+			'allusers' : {
 				#defaultSymbolDictName : 'RowanSample4SymbolDict',
 				#defaultUseSessionMethodsForExtensions : false,
 				#packageNameToPlatformPropertiesMap : {

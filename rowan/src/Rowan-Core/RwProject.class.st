@@ -10,6 +10,12 @@ RwProject >> _loadedProject [
 	^ Rowan image loadedProjectNamed: self name
 ]
 
+{ #category : 'private' }
+RwProject >> _specification [
+
+	^ self _loadedProject specification
+]
+
 { #category : 'properties' }
 RwProject >> canCommit [
 
@@ -26,6 +32,8 @@ RwProject >> comment [
 RwProject >> currentBranchName [
 
 	| rootPath |
+	self useGit
+		ifFalse: [ ^ '' ].
 	rootPath := self repositoryRootPath.
 	rootPath ifNil: [ ^ '' ].
 	^ Rowan gitTools gitBranchNameIn:rootPath
@@ -75,6 +83,14 @@ RwProject >> project [
 	^ self
 ]
 
+{ #category : 'project creation' }
+RwProject >> register [
+	"Create a loaded project based on the receiver's properties in the image."
+
+	self _specification register
+
+]
+
 { #category : 'properties' }
 RwProject >> remote [
 
@@ -85,6 +101,8 @@ RwProject >> remote [
 RwProject >> repositoryCommitId [
 
 	| rootPath |
+	self useGit
+		ifFalse: [ ^ '' ].
 	rootPath := self repositoryRootPath.
 	rootPath ifNil: [ ^ '' ].
 	^ Rowan gitTools gitcommitShaIn: rootPath
@@ -95,4 +113,11 @@ RwProject >> repositoryCommitId [
 RwProject >> repositoryRootPath [
 
 	^ self _specification repositoryRootPath
+]
+
+{ #category : 'testing' }
+RwProject >> useGit [
+
+	^self _specification useGit
+
 ]

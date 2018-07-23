@@ -15,9 +15,27 @@ RwProjectLoadConfiguration >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
+RwProjectLoadConfiguration >> addDefinedGroupName: groupName [ 
+
+	"add a group that does not include any other groups"
+
+	self addDefinedGroupName: groupName includeGroups: #()
+
+]
+
+{ #category : 'accessing' }
+RwProjectLoadConfiguration >> addDefinedGroupName: groupName includeGroups: includedGroups [
+
+	"add a group that does not include any other groups"
+
+	self definedGroupNames at: groupName put: includedGroups asArray sort
+
+]
+
+{ #category : 'accessing' }
 RwProjectLoadConfiguration >> definedGroupNames [
 
-	^ definedGroupNames ifNil: [ definedGroupNames :=  Set new ]
+	^ definedGroupNames ifNil: [ definedGroupNames :=  Dictionary new ]
 
 ]
 
@@ -25,13 +43,5 @@ RwProjectLoadConfiguration >> definedGroupNames [
 RwProjectLoadConfiguration >> definedGroupNames: aColl [
 
 	definedGroupNames := aColl
-
-]
-
-{ #category : 'initialization' }
-RwProjectLoadConfiguration >> initialize [
-
-	super initialize.
-	definedGroupNames := Set new
 
 ]

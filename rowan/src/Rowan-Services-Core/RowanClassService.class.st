@@ -65,7 +65,7 @@ RowanClassService >> classCreationTemplate [
 { #category : 'private' }
 RowanClassService >> classFromName [
 
-	^(System myUserProfile resolveSymbol: name asSymbol) value
+	^Rowan globalNamed: name
 
 ]
 

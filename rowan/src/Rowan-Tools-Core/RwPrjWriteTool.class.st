@@ -66,7 +66,7 @@ RwPrjWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification
 
 { #category : 'smalltalk api' }
 RwPrjWriteTool >> writeProjectDefinition: projectDefinition [
-	"project defintion does not necessarily represent a loaded project, so the loaded projects and packages 
+	"project defintion does represent a loaded project, so the loaded projects and packages 
 		will not be marked not dirty"
 
 	| repo repositoryUrl |
@@ -77,7 +77,7 @@ RwPrjWriteTool >> writeProjectDefinition: projectDefinition [
 				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , projectDefinition repoPath , '/') asRwUrl ] ]
 		ifNotNil: [ :urlString | urlString asRwUrl ].
 	repo := repositoryUrl asRwRepository.
-	(self _loadedPackagesForProject: projectDefinition) asPackageDefinitionSet
+	projectDefinition packages values
 		do: [ :rwPackageDefinition | 
 			| packageStructure |
 			packageStructure := RwCypressPackageStructure

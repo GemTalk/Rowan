@@ -8,6 +8,7 @@ Class {
 	#name : 'RwMethodAdditionOrRemoval',
 	#superclass : 'Object',
 	#instVars : [
+		'projectDefinition',
 		'packageDefinition',
 		'classDefinitionOrExtension',
 		'methodKey',
@@ -27,6 +28,20 @@ RwMethodAdditionOrRemoval class >> packageDefinition: aPackageDefinition classDe
 		isMeta: isMeta;
 		methodsModification: aMethodsModification;
 		yourself
+]
+
+{ #category : 'instance creation' }
+RwMethodAdditionOrRemoval class >> projectDefinition: aProjectDefinition packageDefinition: aPackageDefinition classDefinitionOrExtension: aClassDefinitionOrExtension methodKey: aMethodKey isMeta: isMeta methodsModification: aMethodsModification [
+
+	^(self new)
+		projectDefinition: aProjectDefinition;
+		packageDefinition: aPackageDefinition;
+		classDefinitionOrExtension: aClassDefinitionOrExtension;
+		methodKey: aMethodKey;
+		isMeta: isMeta;
+		methodsModification: aMethodsModification;
+		yourself
+
 ]
 
 { #category : 'Accessing' }
@@ -86,5 +101,17 @@ RwMethodAdditionOrRemoval >> packageDefinition [
 { #category : 'Updating' }
 RwMethodAdditionOrRemoval >> packageDefinition: newValue [
 	packageDefinition := newValue
+
+]
+
+{ #category : 'Accessing' }
+RwMethodAdditionOrRemoval >> projectDefinition [
+	^ projectDefinition
+
+]
+
+{ #category : 'Updating' }
+RwMethodAdditionOrRemoval >> projectDefinition: newValue [
+	projectDefinition := newValue
 
 ]

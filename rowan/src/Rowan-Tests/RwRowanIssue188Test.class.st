@@ -4,6 +4,13 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
+{ #category : 'Testing' }
+RwRowanIssue188Test class >> shouldInheritSelectors [
+
+	^false
+
+]
+
 { #category : 'private' }
 RwRowanIssue188Test >> _createBaselineClassesInSingleLoad: projectName packageName: packageName classNames: classNames [
 
@@ -20,7 +27,7 @@ RwRowanIssue188Test >> _createBaselineClassesInSingleLoad: projectName packageNa
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
 	projectDefinition := RwProjectDefinition
-		newForGitPackageProjectNamed: projectName.
+		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		addPackagesNamed: {packageName};
 		yourself.

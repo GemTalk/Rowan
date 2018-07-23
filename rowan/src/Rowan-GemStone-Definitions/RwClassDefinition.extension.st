@@ -1,6 +1,6 @@
 Extension { #name : 'RwClassDefinition' }
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
 
 	propertyKey = 'comment' ifFalse: [ ^super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue ].
@@ -12,13 +12,13 @@ RwClassDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue a
 
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> _modificationForcingNewClassVersion [
 
 	^ RwClassModificationForcingNewClassVersion
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> compareAgainstBaseForcingNewClassVersion: aDefinition [
 
 	"all unchanged and unremoved methods need to be applied to the patch"
@@ -52,7 +52,35 @@ RwClassDefinition >> compareAgainstBaseForcingNewClassVersion: aDefinition [
 
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-definitions' }
+RwClassDefinition >> gs_constraints [
+
+	^self properties
+				at: 'gs_constraints'
+				ifAbsent: [ #() ]
+
+]
+
+{ #category : '*rowan-gemstone-definitions' }
+RwClassDefinition >> gs_constraints: constraintsArray [
+
+	(constraintsArray _isArray and: [ constraintsArray isEmpty not ])
+		ifTrue: [ 
+			self properties
+				at: 'gs_constraints'
+				put: constraintsArray ]
+]
+
+{ #category : '*rowan-gemstone-definitions' }
+RwClassDefinition >> gs_options [
+
+	^self properties
+				at: 'gs_options'
+				ifAbsent: [ #() ]
+
+]
+
+{ #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> gs_options: optionsArray [
 
 	(optionsArray _isArray and: [ optionsArray isEmpty not ])
@@ -63,7 +91,16 @@ RwClassDefinition >> gs_options: optionsArray [
 					(optionsArray collect: [ :each | each asString ]) asSortedCollection asArray ]
 ]
 
-{ #category : '*rowan-gemstone-core' }
+{ #category : '*rowan-gemstone-definitions' }
+RwClassDefinition >> gs_symbolDictionary [
+
+	^ self properties
+		at: 'gs_SymbolDictionary'
+		ifAbsent: []
+
+]
+
+{ #category : '*rowan-gemstone-definitions' }
 RwClassDefinition >> gs_symbolDictionary: aSymbolDictionaryName [
 
 	self properties

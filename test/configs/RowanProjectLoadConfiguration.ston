@@ -17,6 +17,7 @@
 					'Rowan-Configurations',
 					'Rowan-Core',
 					'Rowan-Tools-Core',
+					'Rowan-Tools-Extensions',
 					'Rowan-Tools-Kernel'
 					],
 				#configurationNames : [ ]
@@ -124,7 +125,7 @@
 					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' }
 					}
 			},
-			'default' : {
+			'allusers' : {
 				#defaultSymbolDictName : 'UserGlobals',
 				#defaultUseSessionMethodsForExtensions : false
 				}

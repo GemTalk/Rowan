@@ -1,6 +1,6 @@
 Extension { #name : 'STONWriter' }
 
-{ #category : '*ston-gemstonecommon-core' }
+{ #category : '*ston-gemstonecommon' }
 STONWriter >> encodeCharacter: char [
   | code encoding |
   ((code := char codePoint) < 127
@@ -23,7 +23,7 @@ STONWriter >> encodeCharacter: char [
 
 ]
 
-{ #category : '*ston-gemstonecommon-core' }
+{ #category : '*ston-gemstonecommon' }
 STONWriter >> isSimpleSymbol: symbol [
   symbol isEmpty
     ifTrue: [ ^ false ].
@@ -34,14 +34,14 @@ STONWriter >> isSimpleSymbol: symbol [
 
 ]
 
-{ #category : '*ston-gemstonecommon-core' }
+{ #category : '*ston-gemstonecommon' }
 STONWriter >> optimizeForLargeStructures [
   "nothing special for GemStone"
 
 
 ]
 
-{ #category : '*ston-gemstonecommon-core' }
+{ #category : '*ston-gemstonecommon' }
 STONWriter class >> findFirstInString: aString inSet: inclusionMap startingAt: start [
   "Trivial, non-primitive version"
 

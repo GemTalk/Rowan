@@ -658,5 +658,7 @@ RwAbstractTest >> setUp [
 RwAbstractTest >> tearDown [
 
 	super tearDown.
-	Rowan platform _alternateImageClass: nil
+	Rowan platform _alternateImageClass: nil.
+	self class cleanup.
+
 ]

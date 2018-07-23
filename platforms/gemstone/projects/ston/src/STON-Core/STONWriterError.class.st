@@ -5,5 +5,8 @@ Class {
 	#name : 'STONWriterError',
 	#superclass : 'Error',
 	#type : 'variable',
+	#gs_options : [
+		'disallowGciStore'
+	],
 	#category : 'STON-Core'
 }

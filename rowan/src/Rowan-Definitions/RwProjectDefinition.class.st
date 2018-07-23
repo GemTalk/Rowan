@@ -8,7 +8,19 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwProjectDefinition class >> newForGitPackageProjectNamed: aString [
+RwProjectDefinition class >> newForDiskBasedProjectNamed: aString [
+
+	| spec |
+	spec := RwSimpleProjectSpecification new
+		specName: aString;
+		repoSpec: RwDiskRepositorySpecification new;
+		yourself.
+	^ self newForSpecification: spec
+
+]
+
+{ #category : 'instance creation' }
+RwProjectDefinition class >> newForGitBasedProjectNamed: aString [
 
 	| spec |
 	spec := RwSimpleProjectSpecification new
@@ -87,21 +99,52 @@ RwProjectDefinition >> comment: aString [
 	self specification comment: aString
 ]
 
-{ #category : 'comparing' }
-RwProjectDefinition >> compareAgainstBase: aDefinition [
+{ #category : 'properties' }
+RwProjectDefinition >> configsPath [
 
-	| modification packagesModification |
-	modification := RwProjectModification before: aDefinition after: self.
-	modification
-		propertiesModification: (self comparePropertiesAgainstBase: aDefinition).
-	packagesModification := RwPackagesModification new.
-	self
-		compareDictionary: packages
-		againstBaseDictionary: aDefinition packages
-		into: packagesModification
-		elementClass: RwPackageDefinition.
-	modification packagesModification: packagesModification.
-	^ modification
+	^ self specification configsPath
+
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> configsPath: aDirectoryPathString [
+
+	self specification configsPath: aDirectoryPathString
+
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> configurationExportUrl [
+
+	"Return an RwFileUrl suitable for saving the receiver's configuration in the appropriate configs directory"
+
+	| exportPath |
+	self repositoryUrl
+		ifNil: [ self error: 'RepositoryUrl has not been set. Receiver has not bee associated with an existing Rowan project on disk.' ].
+	exportPath := self repositoryRootPath , '/' , self configsPath , '/'.
+	^('file:' , exportPath) asRwUrl
+
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> configurationTemplate [
+
+	"Return a generic RwProjectLoadConfiguration based on the list of packages in the reciever"
+
+	| config groupNames |
+	config := RwProjectLoadConfiguration new
+		name: 'Default';
+		projectName: self specification specName;
+		yourself.
+	groupNames := self specification defaultGroupNames.
+	groupNames
+		do: [:groupName | config addDefinedGroupName: groupName ].
+	config 
+		conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+		andGroup: (groupNames at: 1) 
+		addPackageNames: self packageNames.
+	^ config
+
 ]
 
 { #category : 'accessing' }
@@ -162,11 +205,12 @@ RwProjectDefinition >> packageNames [
   ^ self packages keys asArray
 ]
 
-{ #category : 'properties' }
-RwProjectDefinition >> packageNamesInLoadOrder: packageNamesInLoadOrder [
+{ #category : 'accessing' }
+RwProjectDefinition >> packageNames: packageNames [
 
-	packageNamesInLoadOrder
+	packageNames
 		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
+
 ]
 
 { #category : 'accessing' }
@@ -181,10 +225,12 @@ RwProjectDefinition >> packages: aPackageDefinitionDictionary [
 	packages := aPackageDefinitionDictionary
 ]
 
-{ #category : 'printing' }
-RwProjectDefinition >> printOn: aStream [
+{ #category : 'copying' }
+RwProjectDefinition >> postCopy [
 
-	aStream nextPutAll: self asString
+	super postCopy.
+	packages := packages copy
+
 ]
 
 { #category : 'accessing' }
@@ -211,9 +257,10 @@ RwProjectDefinition >> repoPath [
 ]
 
 { #category : 'properties' }
-RwProjectDefinition >> repoPath: repoPath [
+RwProjectDefinition >> repoPath: aDirectoryPathString [
 
-	self specification repoPath: repoPath
+	self specification repoPath: aDirectoryPathString
+
 ]
 
 { #category : 'properties' }
@@ -250,6 +297,13 @@ RwProjectDefinition >> specification [
 RwProjectDefinition >> specsPath [
 
 	^ self specification specsPath
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> specsPath: aDirectoryPathString [
+
+	self specification specsPath: aDirectoryPathString
+
 ]
 
 { #category : 'properties' }

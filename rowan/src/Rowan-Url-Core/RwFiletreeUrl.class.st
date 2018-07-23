@@ -19,6 +19,14 @@ RwFiletreeUrl class >> schemeName [
 
 ]
 
+{ #category : 'converting' }
+RwFiletreeUrl >> asRwRepository [
+  "return a platform appropriate repository for the repository located in the directory referenced by the receiver"
+
+  ^ self createRwFiletreeRepositoryForPath: self pathForDirectory
+
+]
+
 { #category : 'printing' }
 RwFiletreeUrl >> printOn: aStream [
   aStream

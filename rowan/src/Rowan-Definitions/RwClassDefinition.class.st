@@ -36,18 +36,6 @@ RwClassDefinition class >> newForClassNamed: className super: superClassName ins
 		instanceMethodDefinitions: Dictionary new
 ]
 
-{ #category : 'private' }
-RwClassDefinition >> _methodsModificationClass [
-
-	^ RwMethodsModification
-]
-
-{ #category : 'private' }
-RwClassDefinition >> _modificationClass [
-
-	^ RwClassModification
-]
-
 { #category : 'accessing' }
 RwClassDefinition >> classType [
 	"Legal types are normal, variable, and bytes."

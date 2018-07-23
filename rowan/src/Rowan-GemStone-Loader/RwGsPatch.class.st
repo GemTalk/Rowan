@@ -30,18 +30,6 @@ RwGsPatch >> packageName [
 ]
 
 { #category : 'accessing' }
-RwGsPatch >> packageSymbolDictionary [
-
-	| symDictName symDict |
-	symDictName := self projectDefinition
-		symbolDictNameForPackageNamed: self packageName.
-	symDict := Rowan globalNamed: symDictName asSymbol.
-	symDict
-		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
-	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
-]
-
-{ #category : 'accessing' }
 RwGsPatch >> projectDefinition [
 
 	^ projectDefinition ifNil: [ RwUnmanagedProjectDefinition new ]

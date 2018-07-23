@@ -83,6 +83,14 @@ RwDefinitionSetDefinition >> keys [
 	^ definitions keys
 ]
 
+{ #category : 'copying' }
+RwDefinitionSetDefinition >> postCopy [
+
+	super postCopy.
+	definitions := definitions copy
+
+]
+
 { #category : 'printing' }
 RwDefinitionSetDefinition >> printOn: aStream [
 

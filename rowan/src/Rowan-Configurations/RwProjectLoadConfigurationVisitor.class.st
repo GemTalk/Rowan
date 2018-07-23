@@ -22,6 +22,13 @@ RwProjectLoadConfigurationVisitor class >> new [
 ]
 
 { #category : 'private' }
+RwProjectLoadConfigurationVisitor >> _addPackageNames: somePackageNames for: aConfiguration [
+
+	self packageNames addAll: somePackageNames
+
+]
+
+{ #category : 'private' }
 RwProjectLoadConfigurationVisitor >> _configurations: configDirPath forProject: aProjectName [
 
 	| urlBase |
@@ -66,23 +73,26 @@ RwProjectLoadConfigurationVisitor >> _processConditionalPackageMapSpecs: aProjec
 			ifTrue: [
 				(thePackageMapSpecsMap 
 					at: currentUserId 
-					ifAbsent: [ thePackageMapSpecsMap at: 'default'  ifAbsent: [] ])
-						ifNotNil: [:thePackageMapSpecs |
-							(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
-								ifNotNil: [:name | packageMapSpecs at: #defaultSymbolDictName put: name ].
-							(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
-								ifNotNil: [:boolean | packageMapSpecs at: #defaultUseSessionMethodsForExtensions put: boolean  ].
-							(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
-								ifNotNil: [:theMap | 
-									| map |
-									map := packageMapSpecs at: #packageNameToPlatformPropertiesMap ifAbsentPut: [ Dictionary new ].
-									theMap keysAndValuesDo: [:thePackageName :thePropMap | 
-										thePropMap keysAndValuesDo: [:thePropertyName :thePropertyValue |
-											| packageMap |
-											packageMap  := map at: thePackageName ifAbsentPut: [ Dictionary new ].
-											(#('symbolDictName' 'userId' 'useSessionMethodsForExtensions' ) includes: thePropertyName)
-												ifTrue: [ packageMap at: thePropertyName put: thePropertyValue  ] 
-												ifFalse: [ self error: 'Unrecognized property name ', thePropertyName printString, ' in package name to properties map' ] ] ] ] ] ] ]
+					ifAbsent: [ 
+						"<allusers> is preferred, but for the alpha, there are outstanding configs that use <default>"
+						thePackageMapSpecsMap at: 'default'  
+							ifAbsent: [ thePackageMapSpecsMap at: 'allusers'  ifAbsent: [] ] ])
+								ifNotNil: [:thePackageMapSpecs |
+									(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
+										ifNotNil: [:name | packageMapSpecs at: #defaultSymbolDictName put: name ].
+									(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
+										ifNotNil: [:boolean | packageMapSpecs at: #defaultUseSessionMethodsForExtensions put: boolean  ].
+									(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
+										ifNotNil: [:theMap | 
+											| map |
+											map := packageMapSpecs at: #packageNameToPlatformPropertiesMap ifAbsentPut: [ Dictionary new ].
+											theMap keysAndValuesDo: [:thePackageName :thePropMap | 
+												thePropMap keysAndValuesDo: [:thePropertyName :thePropertyValue |
+													| packageMap |
+													packageMap  := map at: thePackageName ifAbsentPut: [ Dictionary new ].
+													(#('symbolDictName' 'userId' 'useSessionMethodsForExtensions' ) includes: thePropertyName)
+														ifTrue: [ packageMap at: thePropertyName put: thePropertyValue  ] 
+														ifFalse: [ self error: 'Unrecognized property name ', thePropertyName printString, ' in package name to properties map' ] ] ] ] ] ] ]
 
 ]
 
@@ -95,8 +105,15 @@ RwProjectLoadConfigurationVisitor >> _processConditionalPackageNames: aProjectLo
 				groupMap keysAndValuesDo: [:group :map |
 					(self groupNames includes: group)
 						ifTrue: [ 
-							self packageNames addAll: (map at: #packageNames ifAbsent: [ #() ]).
+							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
 							self configurationNames addAll: (map at: #configurationNames ifAbsent: [ #()] ) ] ] ] ].
+
+]
+
+{ #category : 'private' }
+RwProjectLoadConfigurationVisitor >> _visited: aConfiguration [
+
+	visitedConfigurationNames add:  aConfiguration name.
 
 ]
 
@@ -131,7 +148,7 @@ RwProjectLoadConfigurationVisitor >> groupNames [
 { #category : 'accessing' }
 RwProjectLoadConfigurationVisitor >> groupNames: aColl [
 
-	groupNames := aColl
+	groupNames := aColl copy
 
 ]
 
@@ -142,7 +159,7 @@ RwProjectLoadConfigurationVisitor >> initialize [
 	visitedConfigurationNames := Set new.
 	configurationNames := Set new.
 	platformAttributes := #().
-	groupNames := #().
+	groupNames := {}.
 	configurationBasePath := ''.
 	packageMapSpecs := Dictionary new.
 
@@ -189,7 +206,7 @@ RwProjectLoadConfigurationVisitor >> visitNestedProjectLoadConfiguration: aNeste
 	(visitedConfigurationNames includes: aNestedProjectLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
-	visitedConfigurationNames add:  aNestedProjectLoadConfiguration name. 
+	self _visited: aNestedProjectLoadConfiguration. 
 
 	self _processConditionalPackageNames: aNestedProjectLoadConfiguration.
 
@@ -207,8 +224,9 @@ RwProjectLoadConfigurationVisitor >> visitProjectCompoundConfiguration: aProject
 	(visitedConfigurationNames includes: aProjectCompoundConfiguration name)
 		ifTrue: [ ^ self ].
 
-	visitedConfigurationNames add:  aProjectCompoundConfiguration name. 
-	packageNames addAll: aProjectCompoundConfiguration packageNames.
+	self _visited: aProjectCompoundConfiguration. 
+
+	self _addPackageNames: aProjectCompoundConfiguration packageNames for: aProjectCompoundConfiguration.
 
 	aProjectCompoundConfiguration _configurations
 		do: [:config | config acceptCompoundVisitor: self ].
@@ -218,16 +236,23 @@ RwProjectLoadConfigurationVisitor >> visitProjectCompoundConfiguration: aProject
 { #category : 'visiting' }
 RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjectLoadConfiguration [
 
+	| seedGroupNames |
 	(visitedConfigurationNames includes: aProjectLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
-	visitedConfigurationNames add:  aProjectLoadConfiguration name. 
+	self _visited: aProjectLoadConfiguration. 
 
 	definedGroupNames := aProjectLoadConfiguration definedGroupNames.
-	groupNames := groupNames asSet.
-	self groupNames copy do: [:groupName |
-		"make sure that required groups are included in group names"
-		groupNames addAll: (definedGroupNames at: groupName ifAbsent: [ #() ]) ].
+	seedGroupNames := groupNames asSet copy.
+	[seedGroupNames isEmpty ]
+		whileFalse: [ 
+			seedGroupNames copy do: [:groupName |
+				| referencedGroupNames |
+				"make sure that required groups are included in group names, recursively"
+				seedGroupNames remove: groupName.
+				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
+				groupNames addAll: referencedGroupNames.
+				seedGroupNames addAll: referencedGroupNames ] ].
 
 	self _processConditionalPackageNames: aProjectLoadConfiguration.
 

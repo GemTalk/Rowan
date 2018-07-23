@@ -7,11 +7,12 @@
 			#defaultSymbolDictName : 'SampleSymbolDict',
 			#defaultUseSessionMethodsForExtensions : true }
 	},
-	#specsPath : 'specs',
 	#repoSpec : RwGitRepositorySpecification {
 		#committish : 'master',
 		#committishType : 'branch'
 	},
+	#configsPath : 'configs',
 	#repoPath : 'src',
+	#specsPath : 'specs',
 	#comment : ''
 }

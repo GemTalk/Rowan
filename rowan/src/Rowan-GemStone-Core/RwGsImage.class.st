@@ -16,8 +16,13 @@ RwGsImage class >> _loadedProjectRegistry [
 { #category : 'private' }
 RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
 
-	| ug |
-	ug := (AllUsers userWithId: aUserId) objectNamed: #'UserGlobals'.
+	| userProfile ug |
+	userProfile := AllUsers userWithId: aUserId.
+	userProfile defaultObjectSecurityPolicy currentUserCanRead
+		ifFalse: [
+			"do not have permissions to read objects created by <aUserId>"
+			^ nil ].
+	ug := userProfile objectNamed: #'UserGlobals'.
 	^ ug
 		at: #'RwGsLoadedProjectRegistry'
 		ifAbsent: [ 
@@ -91,6 +96,21 @@ RwGsImage class >> existingSymbolDictionaryNamed: dictName [
 	^ self symbolList
 		detect: [ :each | (each at: symbolName ifAbsent: [ nil ]) == each ]
 		ifNone: [ nil ]
+]
+
+{ #category : 'querying' }
+RwGsImage class >> loadedClassAndSymbolDicitonaryForClass: class ifPresent: presentBlock ifAbsent: absentBlock [
+
+        "scan the symbol list for a RwLoadedClass instances for the given compiled method"
+
+        self symbolList
+                do: [ :symbolDict |
+                        symbolDict rowanSymbolDictionaryRegistry
+                                ifNotNil: [ :registry |
+                                        (registry classRegistry at: class classHistory ifAbsent: [  ])
+                                                ifNotNil: [ :loadedClass | ^ presentBlock value: symbolDict value: loadedClass ] ] ].
+        ^ absentBlock value
+
 ]
 
 { #category : 'querying' }
@@ -213,6 +233,21 @@ RwGsImage class >> loadedMethod: selector inClassNamed: className isMeta: isMeta
 ]
 
 { #category : 'querying' }
+RwGsImage class >> loadedMethodAndSymbolDicitonaryForMethod: compiledMethod ifPresent: presentBlock ifAbsent: absentBlock [
+
+        "scan the symbol list for a RwLoadedMethod instances for the given compiled method"
+
+        self symbolList
+                do: [ :symbolDict |
+                        symbolDict rowanSymbolDictionaryRegistry
+                                ifNotNil: [ :registry |
+                                        (registry methodRegistry at: compiledMethod ifAbsent: [  ])
+                                                ifNotNil: [ :loadedMethod | ^ presentBlock value: symbolDict value: loadedMethod ] ] ].
+        ^ absentBlock value
+
+]
+
+{ #category : 'querying' }
 RwGsImage class >> loadedMethodForMethod: compiledMethod [
 
 	"scan the symbol list for a RwLoadedMethod instances for the given compiled method"
@@ -278,47 +313,46 @@ RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 	currentUserId := self currentUserId.
 	^ self _loadedProjectRegistry
 		at: aString
-		ifAbsent: [ 
-			AllUsers
-				do: [ :userProfile | 
-					| aUserId |
-					aUserId := userProfile userId.
-					aUserId ~= currentUserId
-						ifTrue: [ 
-							(self _loadedProjectRegistryForUserId: aUserId)
-								ifNotNil: [ :projectRegistry | 
-									(projectRegistry at: aString ifAbsent: [  ])
-										ifNotNil: [ :loadedProject | ^ loadedProject ] ] ] ].
-			^ absentBlock value ]
+		ifAbsent: [
+			| matchingProjects |
+			matchingProjects := self loadedProjects select: [:each | each name = aString ].
+			matchingProjects size > 1 ifTrue: [ self error: 'Multiple projects with same name available from symbol dictionaries in symbol list' ].
+			matchingProjects size = 0 ifTrue: [ ^ absentBlock value ].
+			matchingProjects any ]
 
 ]
 
 { #category : 'querying' }
 RwGsImage class >> loadedProjects [
 
-	"Return the list of loaded project in current users project registry and in AllUsers, where
-		the current user is the project owner."
+	"Return the list of loaded projects based on the packages that are visible in the current transient symbol list."
 
-	| currentUserId loadedProjects visibleUserIds |
-	loadedProjects := self _loadedProjectRegistry values.
-	currentUserId := self currentUserId.
+	| loadedProjects |
+	loadedProjects := (self _loadedProjectRegistryForUserId: self currentUserId) values asIdentitySet. "list of projects created by current user"
+	(self symbolList select: [:symDict | 
+		symDict rowanSymbolDictionaryRegistry notNil])
+		do: [:symDict | 
+			"visible loaded packages"
+			symDict rowanSymbolDictionaryRegistry packageRegistry values 
+				do: [:loadedPackage | 
+					"visible loaded projects"
+					loadedProjects add: loadedPackage loadedProject ] ].
+	^loadedProjects
 
-	visibleUserIds := ((System myUserProfile symbolList select: [:each | each objectSecurityPolicy notNil])
-								collect: [:each | each objectSecurityPolicy owner userId]) asSet asArray.
+]
 
-	AllUsers
-		do: [ :userProfile | 
-			| aUserId |
-			aUserId := userProfile userId.
-			(visibleUserIds includes: aUserId)
-				ifTrue: [
-					aUserId ~= currentUserId
-						ifTrue: [ 
-							(self _loadedProjectRegistryForUserId: aUserId)
-								ifNotNil: [ :projectRegistry | 
-									loadedProjects
-										addAll: projectRegistry values ] ] ] ].
-	^ loadedProjects
+{ #category : 'querying' }
+RwGsImage class >> loadedRegistryForPackageNamed:  aName [
+
+	"scan the symbol list for a RwLoadedPackage instance of the given name and return the registry"
+
+	self symbolList
+		do: [ :symbolDict | 
+			symbolDict rowanSymbolDictionaryRegistry
+				ifNotNil: [ :registry | 
+					(registry loadedPackageNamed: aName ifAbsent: [  ])
+						ifNotNil: [ :loadedPackage | ^ registry ] ] ].
+	^self error: 'The package ', aName printString, ' was not found'
 
 ]
 
@@ -355,7 +389,8 @@ RwGsImage class >> objectNamed: aSymbol [
 	"Returns the first object in the current session's symbol list that has the given
  name.  If no object with the given name is found, returns nil."
 
-	^ GsCurrentSession currentSession symbolList objectNamed: aSymbol
+	^ self symbolList objectNamed: aSymbol
+
 ]
 
 { #category : 'cypress (old)' }
@@ -385,7 +420,8 @@ RwGsImage class >> projectNames [
 
 	"Return list of project names"
 
-	^ self loadedProjects collect: [ :loadedProject | loadedProject name ]
+	^ (self loadedProjects collect: [ :loadedProject | loadedProject name ]) asArray
+
 ]
 
 { #category : 'querying' }

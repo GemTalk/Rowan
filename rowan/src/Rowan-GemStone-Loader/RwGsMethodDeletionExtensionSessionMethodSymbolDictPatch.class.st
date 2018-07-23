@@ -39,9 +39,54 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteMethodNewClasse
 ]
 
 { #category : 'deleting' }
+RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteMovedLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
+
+	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ 
+			"class cannot be found, so the method is already gone"
+			^ self ].
+
+	self symbolDictionaryRegistry
+		deleteMovedLoadedMethod: methodDefinition selector
+		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+
+]
+
+{ #category : 'deleting' }
+RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteMovedMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
+
+	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ 
+			"class cannot be found, so the method is already gone"
+			^ self ].
+
+	self symbolDictionaryRegistry
+		deleteMovedMethod: methodDefinition selector
+		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+
+]
+
+{ #category : 'deleting' }
 RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteNewVersionMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
 
 	"noop for class extension methods"
 
 	
+]
+
+{ #category : 'accessing' }
+RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> symbolDictionary [
+
+	| symDictName symDict |
+	symDictName := self projectDefinition
+		symbolDictNameForPackageNamed: self packageName.
+	symDict := GsCurrentSession currentSession symbolList objectNamed: symDictName asSymbol.
+	symDict
+		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
+	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
+
 ]

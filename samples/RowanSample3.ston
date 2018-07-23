@@ -7,7 +7,7 @@
 			#defaultUseSessionMethodsForExtensions : true }
 	},
 	#repoSpec : RwGitRepositorySpecification {
-		#committish : 'issue150',
+		#committish : 'issue_150',
 		#committishType : 'branch'
 	},
 	#configsPath : 'rowan/configs',

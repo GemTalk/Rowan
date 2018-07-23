@@ -1445,7 +1445,7 @@ RwLoadingTest >> projectDefinitionFor: packageNames [
 
 	| projectDefinition |
 	projectDefinition := (RwProjectDefinition
-		newForGitPackageProjectNamed: 'RwloadingTest')
+		newForGitBasedProjectNamed: 'RwloadingTest')
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
 		packageNamesInLoadOrder: packageNames;
@@ -1455,6 +1455,7 @@ RwLoadingTest >> projectDefinitionFor: packageNames [
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
 
 	^ projectDefinition
+
 ]
 
 { #category : 'support' }

@@ -12,22 +12,6 @@ Class {
 }
 
 { #category : 'deleting' }
-RwGsMethodDeletionSymbolDictPatch >> deleteLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
-
-	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
-	behavior
-		ifNil: [ 
-			"class cannot be found, so the method is already gone"
-			^ self ].
-
-	self symbolDictionaryRegistry
-		_doDeleteCompiledMethodFromLoadedThings: self compiledMethod
-		for: behavior
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-
-]
-
-{ #category : 'deleting' }
 RwGsMethodDeletionSymbolDictPatch >> deleteMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
 
 	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
@@ -40,6 +24,38 @@ RwGsMethodDeletionSymbolDictPatch >> deleteMethodNewClasses: createdClasses andE
 		deleteMethod: methodDefinition selector
 		for: behavior
 		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+]
+
+{ #category : 'deleting' }
+RwGsMethodDeletionSymbolDictPatch >> deleteMovedLoadedMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
+
+	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ 
+			"class is being deleted, nothing else to do"
+			^ self ].
+
+	self symbolDictionaryRegistry
+		deleteMovedLoadedMethod: methodDefinition selector
+		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+
+]
+
+{ #category : 'deleting' }
+RwGsMethodDeletionSymbolDictPatch >> deleteMovedMethodNewClasses: createdClasses andExistingClasses: tempSymbols [
+
+	self primeBehaviorNewClasses: createdClasses andExistingClasses: tempSymbols.
+	behavior
+		ifNil: [ 
+			"class is being deleted, nothing else to do"
+			^ self ].
+
+	self symbolDictionaryRegistry
+		deleteMovedMethod: methodDefinition selector
+		for: behavior
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+
 ]
 
 { #category : 'deleting' }
@@ -65,4 +81,15 @@ RwGsMethodDeletionSymbolDictPatch >> isAnInitializer [
 { #category : 'initializers' }
 RwGsMethodDeletionSymbolDictPatch >> runInitializer [
 	"noop"
+]
+
+{ #category : 'accessing' }
+RwGsMethodDeletionSymbolDictPatch >> symbolDictionary [
+	"For deleting methods, we have to find the symbol dictionary where the loaded method is currently stored ... "
+
+	^ Rowan image 
+			loadedMethodAndSymbolDicitonaryForMethod: self compiledMethod 
+			ifPresent: [ :symbolDict :loadedMethod | ^ symbolDict ]
+			ifAbsent: [ ^ super symbolDictionary ]
+
 ]

@@ -23,15 +23,14 @@ RwClassExtensionDefinition class >> newForClassNamed: className [
 ]
 
 { #category : 'private' }
-RwClassExtensionDefinition >> _methodsModificationClass [
+RwClassExtensionDefinition >> _classNameForCompare: aDefinition [
 
-	^ RwExtensionMethodsModification
-]
+	^ self key ifNil: 
+		[ | cName |
+		cName := aDefinition key.
+		self name: cName.
+		cName ]
 
-{ #category : 'private' }
-RwClassExtensionDefinition >> _modificationClass [
-
-	^ RwClassExtensionModification
 ]
 
 { #category : 'comparing' }
@@ -51,4 +50,10 @@ RwClassExtensionDefinition >> compareDictionary: myDictionary againstBaseDiction
 				classDefinition: self.
 			modification isEmpty
 				ifFalse: [ anElementsModification addElementModification: modification ] ]
+]
+
+{ #category : 'testing' }
+RwClassExtensionDefinition >> isClassExtension [
+	^ true
+
 ]

@@ -73,6 +73,15 @@ RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmen
 					with: [:ex | ex resume])
 ]
 
+{ #category : 'queries' }
+RwGsPlatform >> basePlatformAttribute [
+	"Answer the generic configuration attribute for the platform"
+
+
+	^ 'gemstone'
+
+]
+
 { #category : 'defaults' }
 RwGsPlatform >> defaultConfiguration [
 
@@ -145,12 +154,8 @@ RwGsPlatform >> parseSelectorFrom: methodString [
 
 { #category : 'queries' }
 RwGsPlatform >> platformConfigurationAttributes [
-	"Answer the configuration attributes. Currently 'common' is the only shared attribute."
+	"Answer the configuration attributes for the current platform."
 
-	"subclasses need to override and provide additional platform-specific attributes"
-
-	| gemStoneVersion |
-	gemStoneVersion := System stoneVersionReport at: 'gsVersion'.
-	^ super platformConfigurationAttributes, {'gemstone'. gemStoneVersion asRwGemStoneVersionNumber}
+	^ super platformConfigurationAttributes, {self basePlatformAttribute. (System stoneVersionReport at: 'gsVersion') asRwGemStoneVersionNumber}
 
 ]

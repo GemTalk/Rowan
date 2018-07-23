@@ -61,6 +61,7 @@ RwCypressPackageStructure >> fromPackage: aRwPackageDefinition [
 			self extensions add: classStructure ].
 	name := aRwPackageDefinition key , self packageExtension.
 	properties := Dictionary new
+
 ]
 
 { #category : 'initialization' }

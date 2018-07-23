@@ -73,6 +73,23 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _addMovedDeletedMethod: new
 
 ]
 
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry_Implementation class >> _doDeleteClassFromLoadedThings: class removeClassFromSystem: removeClassFromSystem instance: registryInstance [
+
+	"a class association is being deleted from the receiver remove it from the loaded things. Conditionally remove class from system"
+
+	self
+		_loadedClassFor: class
+		noNewVersion: [ :loadedClass | 
+			"association for class is present, finish delete operation"
+			loadedClass removeFromLoaded: registryInstance.
+			registryInstance classRegistry removeKey: class classHistory.
+			removeClassFromSystem ifTrue: [ registryInstance _symbolDictionary removeKey: loadedClass key asSymbol ] ]
+		instance: registryInstance.
+	^ registryInstance
+
+]
+
 { #category : 'method - private api' }
 RwGsSymbolDictionaryRegistry_Implementation class >> _doDeleteCompiledMethod: compiledMethod from: behavior instance: registryInstance [
 
@@ -216,7 +233,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 	| loadedPackage loadedClass |
 	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
 
-	registryInstance classRegistry
+	loadedClass := registryInstance classRegistry
 		at: class classHistory
 		ifAbsent: [ 
 			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
@@ -232,27 +249,17 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 	self 
 		_symbolDictionary: registryInstance _symbolDictionary 
 		at: assoc key 
-		ifPresent: [
-			"If there is an existing association, then we need to use the existing association which may have references
-				in compiled methods --- bootstrapping Rowan in Rowan is only valid use case"
-			(registryInstance _symbolDictionary associationAt: assoc key) value: class ]
-		ifAbsent: [
-			assoc value: class.
-			registryInstance _symbolDictionary add: assoc].
-	^ registryInstance
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry_Implementation class >> addClassToSymbolDictionaryForClassAssociation: assoc forClass: class  instance: registryInstance [
-
-	self 
-		_symbolDictionary: registryInstance _symbolDictionary
-		at: assoc key 
-		ifPresent: [ 
-			"If there is an existing association, then we need to use the existing association which may have references
-				in compiled methods --- bootstrapping Rowan in Rowan is only valid use case"
-			(registryInstance _symbolDictionary associationAt: assoc key) value: class ]
+		ifPresent: [:theClass |
+			theClass ~~ class
+				ifTrue: [
+					(RwExistingAssociationWithSameKeyNotification new
+						errorMessage: 'Found an existing association in the ',  
+								registryInstance _symbolDictionary name asString printString, 
+								' symbol dictionary with a duplicate key ',
+								assoc key printString, 
+								' while attempting to add a new class' )
+						signal.
+					(registryInstance _symbolDictionary associationAt: assoc key) value: class ] ]
 		ifAbsent: [
 			assoc value: class.
 			registryInstance _symbolDictionary add: assoc].
@@ -567,17 +574,9 @@ RwGsSymbolDictionaryRegistry_Implementation class >> createLoadedPackageNamed: p
 { #category : 'class - patch api' }
 RwGsSymbolDictionaryRegistry_Implementation class >> deleteClassFromPackage: class instance: registryInstance [
 
-	"a class association is being deleted from the receiver remove it from the loaded things"
+	"a class association is being deleted from the receiver remove it from the loaded things and remove class from system"
 
-	self
-		_loadedClassFor: class
-		noNewVersion: [ :loadedClass | 
-			"association for class is present, finish delete operation"
-			loadedClass removeFromLoaded: registryInstance.
-			registryInstance classRegistry removeKey: class classHistory.
-			registryInstance _symbolDictionary removeKey: loadedClass key asSymbol ]
-		instance: registryInstance.
-	^ registryInstance
+	^ self _doDeleteClassFromLoadedThings: class removeClassFromSystem: true instance: registryInstance
 
 ]
 
@@ -619,6 +618,39 @@ RwGsSymbolDictionaryRegistry_Implementation class >> deleteMethod: selector for:
 ]
 
 { #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> deleteMovedCompiledMethod: compiledMethod from: behavior instance: registryInstance [
+
+	"delete a compiled method from behavior - moved method already removed from the loaded things"
+
+	self _doDeleteCompiledMethod: compiledMethod from: behavior instance: registryInstance.
+
+	^ registryInstance
+
+]
+
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> deleteMovedLoadedMethod: selector for: behavior instance: registryInstance [
+
+	| compiledMethod |
+
+	compiledMethod := behavior compiledMethodAt: selector.
+	self _doDeleteCompiledMethodFromLoadedThings: compiledMethod for: behavior instance: registryInstance.
+	^ registryInstance
+
+]
+
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> deleteMovedMethod: selector for: behavior instance: registryInstance [
+
+	| compiledMethod |
+
+	compiledMethod := behavior compiledMethodAt: selector.
+	self deleteMovedCompiledMethod: compiledMethod from: behavior instance: registryInstance.
+	^ registryInstance
+
+]
+
+{ #category : 'method - patch api' }
 RwGsSymbolDictionaryRegistry_Implementation class >> deletePackage: packageName instance: registryInstance [
 
 	| loadedPackage |
@@ -626,6 +658,39 @@ RwGsSymbolDictionaryRegistry_Implementation class >> deletePackage: packageName 
 		removeKey: packageName
 		ifAbsent: [ registryInstance error: 'package ' , packageName printString , ' not found' ].
 	loadedPackage loadedProject removeLoadedPackage: loadedPackage.
+	^ registryInstance
+
+]
+
+{ #category : 'class disown api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> disownClass: class instance: registryInstance [
+
+	"Remove the specified class and all of it's packaged instance and class methods from the loaded things."
+
+	self
+		_loadedClassFor: class
+		noNewVersion: [ :loadedClass | 
+			loadedClass disownFromLoaded: registryInstance.
+			registryInstance classRegistry removeKey: class classHistory ]
+		instance: registryInstance.
+	^ registryInstance
+
+]
+
+{ #category : 'class disown api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> disownClassExtensions: class forLoadedPackage: loadedPackage instance: registryInstance [
+
+	"Remove the extension methods in the class for the given package"
+
+	| loadedClassExtension |
+	loadedClassExtension := loadedPackage
+		loadedClassExtensionForClass: class
+		ifAbsent: [ self error: 'No class extensions found for the class ', class name asString printString, ' in the package ', loadedPackage name printString ].
+	
+	loadedClassExtension disownFromLoaded: registryInstance.
+
+	loadedPackage removeLoadedClassExtension: loadedClassExtension.
+
 	^ registryInstance
 
 ]
@@ -694,6 +759,57 @@ RwGsSymbolDictionaryRegistry_Implementation class >> loadedHybridPackageNamed: h
 RwGsSymbolDictionaryRegistry_Implementation class >> loadedPackageNamed: packageName ifAbsent: absentBlock instance: registryInstance [
 
 	^ registryInstance packageRegistry at: packageName ifAbsent: absentBlock
+
+]
+
+{ #category : 'class symbol dict - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> moveClassFor: classMove [
+	" move class from <oldRegistry> to <newRegistry> which includes moveing the loaded methods associated with the class"
+
+	"loaded things are handled elsewhere, just need to update the various registries ... and move the association"
+
+	"extension methods will be dealt with later"
+
+	| originalSymbolDictionary newSymbolDictionary before assoc theClass loadedClass theBehavior oldRegistry newRegistry |
+
+	before := classMove classBefore.
+	originalSymbolDictionary := Rowan globalNamed: before gs_symbolDictionary.
+	assoc := originalSymbolDictionary associationAt: before key asSymbol.
+	theClass := assoc value.
+	theBehavior := theClass class.
+	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
+
+	newSymbolDictionary := Rowan globalNamed: ((classMove projectAfter specification platformSpec at: 'gemstone')
+				symbolDictNameForPackageNamed: classMove packageAfter name) .
+	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
+
+	loadedClass := oldRegistry classRegistry removeKey: theClass classHistory.
+	originalSymbolDictionary removeKey: assoc key.
+
+	self 
+		_symbolDictionary: newSymbolDictionary 
+		at: assoc key 
+		ifPresent: [:class |
+			theClass ~~ class
+				ifTrue: [ self error: ' internal error - found an existing association in the ',  
+								newSymbolDictionary name asString printString, 
+								' symbol dictionary with a duplicate key ',
+								assoc key printString, 
+								' while attempting to move class ', assoc key asString printString ] ]
+		ifAbsent: [ newSymbolDictionary add: assoc ].
+
+	newRegistry classRegistry at: theClass classHistory put: loadedClass.
+
+	loadedClass loadedInstanceMethods values do: [:loadedMethod |
+		| compiledMethod |
+		compiledMethod := theClass compiledMethodAt: loadedMethod selector asSymbol.
+		oldRegistry methodRegistry removeKey: compiledMethod.
+		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
+	loadedClass loadedClassMethods values do: [:loadedMethod |
+		| compiledMethod |
+		compiledMethod := theBehavior compiledMethodAt: loadedMethod selector asSymbol.
+		oldRegistry methodRegistry removeKey: compiledMethod.
+		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
 
 ]
 
