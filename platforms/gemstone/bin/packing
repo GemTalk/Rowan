@@ -185,5 +185,10 @@ cp $sett_zip_location .
 
 zip -r ${base_label}.zip MANIFEST.TXT ${jadeite_runtime_dirName} ${sett_zip} *.pdf Rowan RowanSample1 RowanSample2 RowanSample4 RowanSample6
 
+# create sha256 file
+
+sha256sum ${base_label}.zip > ${base_label}.sha256
+sha256sum -c ${base_label}.sha256
+
 printf "${ANSI_GREEN}Successful creation of ${base_label}.zip ${ANSI_RESET}\n"
 
