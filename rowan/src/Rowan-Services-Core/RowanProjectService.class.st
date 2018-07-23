@@ -26,6 +26,17 @@ RowanProjectService class >> defaultProjectName: aString [
 
 ]
 
+{ #category : 'instance creation' }
+RowanProjectService class >> newNamed: aString [
+
+	| inst |
+	inst := self new.
+	inst name: aString.
+	inst refresh. 
+	^inst
+
+]
+
 { #category : 'accessing' }
 RowanProjectService >> branch [
 
@@ -275,6 +286,17 @@ RowanProjectService >> pushToGit [
 
 ]
 
+{ #category : 'initialization' }
+RowanProjectService >> refresh [
+
+	packages := self packageServices.
+	isDirty := self isDirty. 
+	isSkew := self isSkew.
+	sha := self rowanSha.
+	branch := self rowanBranch.
+
+]
+
 { #category : 'replication' }
 RowanProjectService >> removeOrganizer [
 
@@ -364,12 +386,7 @@ RowanProjectService >> unload [
 
 { #category : 'update' }
 RowanProjectService >> update [
-	"update project service for transport to client"
-	packages := self packageServices.
-	isDirty := self isDirty. 
-	isSkew := self isSkew.
-	sha := self rowanSha.
-	branch := self rowanBranch.
+	self refresh.
 	RowanCommandResult addResult: self
 
 ]

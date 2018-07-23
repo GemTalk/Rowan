@@ -216,7 +216,8 @@ RowanPackageService >> update [
 		| classService | 
 		classService := (RowanClassService forClassNamed: string) 
 			isExtension: true.
-		classService definedPackageName: (Rowan image loadedClassForClass: classService classFromName ifAbsent: [nil]) packageName]).
+		(Rowan image loadedClassForClass: classService classFromName ifAbsent:[]) 
+			ifNotNil:[:cls | classService definedPackageName: cls packageName]]).
 	classes do: [:clsService | clsService packageName: self name]. 
 	self isDirty. 
 	RowanCommandResult addResult: self
