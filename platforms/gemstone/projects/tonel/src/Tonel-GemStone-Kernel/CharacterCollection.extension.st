@@ -42,7 +42,7 @@ CharacterCollection >> substrings: separators [
 		ifFalse: [ ^ self error: 'separators must be Characters.' ].
 	sourceStream := self readStream.
 	result := OrderedCollection new.
-	subStringStream := String new writeStream.
+	subStringStream := String new writeStreamPortable.
 	[ sourceStream atEnd ] whileFalse: [
 		| char |
 		char := sourceStream next.
@@ -50,7 +50,7 @@ CharacterCollection >> substrings: separators [
 			ifTrue: [
 				subStringStream isEmpty ifFalse: [
 					result add: subStringStream contents.
-					subStringStream := String new writeStream ] ]
+					subStringStream := String new writeStreamPortable ] ]
 			ifFalse: [
 				subStringStream nextPut: char ] ].
 	subStringStream isEmpty ifFalse: [
