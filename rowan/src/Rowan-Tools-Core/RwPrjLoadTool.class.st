@@ -148,17 +148,6 @@ RwPrjLoadTool >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceM
 
 ]
 
-{ #category : 'private' }
-RwPrjLoadTool >> _markProjectSetNotDirty: projectSetDefinition [
-
-	"This method should only be used when the projectSetDefinitions have been read from disk - mark them not dirty. Not durty means that the loaded things match the code on disk."
-
-	projectSetDefinition deriveLoadedThings do: [:loadedProject |
-		loadedProject markNotDirty.
-		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
-
-]
-
 { #category : 'load project definitions' }
 RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 
@@ -177,7 +166,7 @@ RwPrjLoadTool >> loadProjectFromSpecUrl: fileUrlOrString [
 	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
 	res := self loadProjectSetDefinition: projectSetDefinition.
 	"loaded project and loaded packages read from disk - mark them not dirty"
-	self _markProjectSetNotDirty: projectSetDefinition.
+	self markProjectSetNotDirty: projectSetDefinition.
 	^ res
 
 ]
@@ -191,7 +180,7 @@ RwPrjLoadTool >> loadProjectFromSpecUrl: fileUrlOrString  projectRootPath: proje
 	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
 	res := self loadProjectSetDefinition: projectSetDefinition.
 	"loaded project and loaded packages read from disk - mark them not dirty"
-	self _markProjectSetNotDirty: projectSetDefinition.
+	self markProjectSetNotDirty: projectSetDefinition.
 	^ res
 
 ]
@@ -210,7 +199,7 @@ RwPrjLoadTool >> loadProjectNamed_254: projectNamed instanceMigrator: instanceMi
 		originalProjectSet: projectSetDefinition 
 		processedClassNames: Set new.
 	"loaded project and loaded packages read from disk - mark them not dirty"
-	self _markProjectSetNotDirty: projectSetDefinition.
+	self markProjectSetNotDirty: projectSetDefinition.
 	^ res
 
 ]
@@ -238,7 +227,7 @@ RwPrjLoadTool >> loadProjectNamed_old: projectNamed instanceMigrator: instanceMi
 		originalProjectSet: projectSetDefinition 
 		processedClassNames: Set new.
 	"loaded project and loaded packages read from disk - mark them not dirty"
-	self _markProjectSetNotDirty: projectSetDefinition.
+	self markProjectSetNotDirty: projectSetDefinition.
 	^ res
 
 ]
@@ -265,12 +254,12 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed instanceMigrator: instanceMigrat
 		originalProjectSet: projectSetDefinition 
 		processedClassNames: Set new.
 	"loaded project and loaded packages read from disk - mark them not dirty"
-	self _markProjectSetNotDirty: projectSetDefinition.
+	self markProjectSetNotDirty: projectSetDefinition.
 	^ res
 
 ]
 
-{ #category : 'deprecation candidates' }
+{ #category : '*rowan-tools-deprecated' }
 RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName [
 
 	"load the named project from disk, mark the loaded projects not dirty and run initializers"
@@ -290,7 +279,7 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName [
 
 ]
 
-{ #category : 'deprecation candidates' }
+{ #category : '*rowan-tools-deprecated' }
 RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName instanceMigrator: instanceMigrator [
 
 	"load the named project from disk, mark the loaded projects not dirty and run initializers"
@@ -355,5 +344,16 @@ RwPrjLoadTool >> loadProjectSetDefinition: projectSetDefinition instanceMigrator
 		instanceMigrator: instanceMigrator 
 		originalProjectSet: projectSetDefinition 
 		processedClassNames: Set new
+
+]
+
+{ #category : 'utilities' }
+RwPrjLoadTool >> markProjectSetNotDirty: projectSetDefinition [
+
+	"This method should only be used when the projectSetDefinitions have been read from disk - mark them not dirty. Not dirty means that the loaded things match the code on disk."
+
+	projectSetDefinition deriveLoadedThings do: [:loadedProject |
+		loadedProject markNotDirty.
+		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
 
 ]
