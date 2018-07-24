@@ -8,6 +8,12 @@ Class {
 RwProjectTool class >> adopt [
 
 	^ RwPrjAdoptTool new
+]
+
+{ #category : 'commands' }
+RwProjectTool class >> audit [
+
+	^RwPrjAuditTool new
 
 ]
 

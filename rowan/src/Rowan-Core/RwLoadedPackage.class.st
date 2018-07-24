@@ -110,6 +110,48 @@ RwLoadedPackage >> loadedClasses [
 
 ]
 
+{ #category : 'enumeration' }
+RwLoadedPackage >> loadedClassesDo: loadedClassBlock loadedClassExtenstionsDo: loadedClassExtensionBlock [ 
+
+	loadedClasses
+		valuesDo: [ :loadedClass | 
+			loadedClassBlock 
+				cull: loadedClass
+				cull: self loadedProject 
+				cull: self].
+	loadedClassExtensions
+		valuesDo: [ :loadedClassExtension | 
+			loadedClassExtensionBlock
+				cull: loadedClassExtension
+				cull: self loadedProject
+				cull: self ]
+
+]
+
+{ #category : 'enumeration' }
+RwLoadedPackage >> loadedClassesDo: loadedClassBlock loadedClassExtenstionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock [
+
+	loadedClasses
+		valuesDo: [ :loadedClass | 
+			loadedClassBlock 
+				cull: loadedClass
+				cull: self loadedProject 
+				cull: self. 
+			loadedClass
+				loadedInstanceMethodsDo: loadedInstanceMethodBlock
+				loadedClassMethodsDo: loadedClassMethodBlock ].
+	loadedClassExtensions
+		valuesDo: [ :loadedClassExtension | 
+			loadedClassExtensionBlock
+				cull: loadedClassExtension
+				cull: self loadedProject
+				cull: self.
+			loadedClassExtension
+				loadedInstanceMethodsDo: loadedInstanceMethodBlock
+				loadedClassMethodsDo: loadedClassMethodBlock ]
+
+]
+
 { #category : 'accessing' }
 RwLoadedPackage >> loadedClassExtensions [
 	^loadedClassExtensions
