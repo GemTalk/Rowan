@@ -47,6 +47,10 @@ RwGsLoadedSymbolDictClassExtension >> disownFromLoaded: aPackageSymbolDictionary
 			self removeLoadedClassMethod: loadedClassMethod.
 			aPackageSymbolDictionary methodRegistry removeKey: loadedClassMethod handle ].
 
+	(aPackageSymbolDictionary classExtensionRegistry at: handle classHistory) remove: self.
+	(aPackageSymbolDictionary classExtensionRegistry at: handle classHistory) isEmpty
+		ifTrue: [ aPackageSymbolDictionary classExtensionRegistry removeKey: handle classHistory ].
+
 ]
 
 { #category : 'private-updating' }

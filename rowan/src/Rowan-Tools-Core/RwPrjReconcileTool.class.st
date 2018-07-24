@@ -45,6 +45,108 @@ RwPrjReconcileTool >> _moveClassExtension: theClassExtension toNewPackageClonedF
 
 ]
 
+{ #category : 'private' }
+RwPrjReconcileTool >> _moveClassExtension: theClassExtension toNewPackageNamed: newPackageName clonedFrom: packageDef inProject: projectDef [
+
+	| newPackageDef |
+	newPackageDef := projectDef 
+		packageNamed: newPackageName 
+		ifAbsent: [ 
+			| pDef |
+			pDef := RwPackageDefinition newNamed: newPackageName.
+			projectDef addPackage: pDef.
+			pDef ].
+	packageDef removeClassExtension: theClassExtension.
+	newPackageDef addClassExtension: theClassExtension.
+	"update the method categories --- hybrid only ... but that is what we're doing"
+	theClassExtension instanceMethodDefinitions values do: [:methodDef |
+		methodDef protocol: '*', newPackageName ].
+	theClassExtension classMethodDefinitions values do: [:methodDef |
+		methodDef protocol: '*', newPackageName ].
+	^ newPackageDef
+
+]
+
+{ #category : 'smalltalk api' }
+RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet defaultGroupName: defaultGroupName globalsGroupName: globalsGroupName globalsUserId: globalsUserId [
+
+	| configExportMap |
+	configExportMap := Dictionary new.
+	projectDefinitionSet projects do: [:projectDef |
+		| config movedClassExtensions globalPackageNames originalPackageNames |
+		movedClassExtensions := Set new.
+		globalPackageNames := Set new.
+		originalPackageNames := projectDef packageNames.
+		projectDef packages values do: [:packageDef |
+			packageDef classExtensions values do: [:classDef |
+				(Globals 
+					at: classDef name asSymbol 
+					ifAbsent: [])
+						ifNotNil: [ 
+							"the class extension is for a class that is Globals, so it needs to be moved to a new Globals extension package"
+							movedClassExtensions add: {classDef . packageDef . projectDef } ] ] ].
+		movedClassExtensions do: [:ar |
+			| theClassDef packageDef theProjectDef  newPackageName |
+			theClassDef := ar at: 1.
+			packageDef := ar at: 2.
+			theProjectDef := ar at: 3.
+			newPackageName :=  packageDef name , '-Globals'.
+			self 
+				_moveClassExtension: theClassDef 
+				toNewPackageNamed: packageDef name , '-Globals'
+				clonedFrom: packageDef 
+				inProject: theProjectDef.
+			globalPackageNames add: newPackageName ].
+		config := RwProjectLoadConfiguration new
+			name: 'Default';
+			projectName: projectDef name;
+			yourself.
+		{ defaultGroupName . globalsGroupName }
+			do: [:groupName | config addDefinedGroupName: groupName ].
+		config 
+			conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+				andGroup: defaultGroupName 
+				addPackageNames: originalPackageNames;
+			conditionalPackagesAtConditions: { Rowan platform basePlatformAttribute } 
+				andGroup: globalsGroupName 
+				addPackageNames: globalPackageNames.
+		globalPackageNames do: [:packageName |
+			config 
+				conditionalPackageMapSpecsAtGemStoneUserId: globalsUserId 
+				andPackageName: packageName 
+				setSymbolDictNameTo: 'Globals' ].
+		configExportMap at: config put: projectDef configurationExportUrl ].
+	^ configExportMap
+
+]
+
+{ #category : 'smalltalk api' }
+RwPrjReconcileTool >> reconcileGlobalClassExtensionsForProjectFromSpecUrl: specUrl defaultGroupName: defaultGroupName globalsGroupName: globalsGroupName  globalsUserId: globalsUserId writeProject: writeProjectBool [
+	| projectDefinition projectDefinitionSet projectTools loadedProjectInfo configExportMap |
+	projectTools := Rowan projectTools.
+	projectDefinition := projectTools create createProjectDefinitionFromSpecUrl: specUrl.
+	projectDefinitionSet := projectTools read readProjectSetForProjectDefinition: projectDefinition.
+
+	loadedProjectInfo := projectDefinitionSet properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
+	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
+			"install the packageMapSpecs for this load into the specification prior to the reconcile"
+			(projectDefinitionSet projectNamed: projectName ifAbsent: [])
+				updateGsPlatformSpecLoadedProjectInfo: projectInfo ].
+
+	configExportMap := self 
+		reconcileGlobalClassExtensionsForProjectDefinitionSet: projectDefinitionSet 
+		defaultGroupName: defaultGroupName 
+		globalsGroupName: globalsGroupName  
+		globalsUserId: globalsUserId.
+	writeProjectBool
+		ifTrue: [
+			configExportMap keysAndValuesDo: [:config :exportUrl |
+				config exportToUrl: exportUrl ].
+			projectTools write writeProjectDefinition: projectDefinition ].
+	^ projectDefinition
+
+]
+
 { #category : 'smalltalk api' }
 RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
 	| movedClassExtensions packageNameToSymbolDictNameMap configExportMap |
@@ -89,6 +191,7 @@ RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
 				inSymbolDictionary: actualSymDictName 
 				inProject: theProjectDef.
 			(packageNameToSymbolDictNameMap at: newPackageDef name ifAbsentPut: [ IdentitySet new ]) add: actualSymDictName asSymbol  ].
+self halt.
 		config := projectDef configurationTemplate.
 		packageNameToSymbolDictNameMap keysAndValuesDo: [:packageName :symDictNames |
 			symDictNames size > 1 ifTrue: [ self error: 'More than one symbol dictionary associated with package ', packageName printString ].
