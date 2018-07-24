@@ -53,13 +53,12 @@ RowanMethodService class >> source: source selector: selector category: category
 { #category : 'rowan' }
 RowanMethodService >> addOrUpdateMethod [
 
-		self browserTool
+		self browserTool  
                    addOrUpdateMethod: source
                    inProtocol: category
                    forClassNamed: self classService name
                    isMeta: meta
                    inPackageNamed: self classService packageName
-
 ]
 
 { #category : 'queries' }
@@ -354,13 +353,13 @@ RowanMethodService >> saveMethod [
 		inCategory: category asSymbol.
 	(gsNMethod := compilationResult key) isNil ifTrue: [
 		System
-			signal: 1001 
+			signal: 1001  
 			args: (Array with: compilationResult value)
 			signalDictionary: GemStoneError.
-	].
+	]. 
 	category := behavior categoryOfSelector: gsNMethod selector. 
-	compilationWarnings := compilationResult value
-
+	compilationWarnings := compilationResult value.   
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'Accessing' }
