@@ -576,7 +576,11 @@ RwGsSymbolDictionaryRegistry_Implementation class >> deleteClassFromPackage: cla
 
 	"a class association is being deleted from the receiver remove it from the loaded things and remove class from system"
 
-	^ self _doDeleteClassFromLoadedThings: class removeClassFromSystem: true instance: registryInstance
+	| removeClassFromSystem |
+	removeClassFromSystem := RwDeleteClassFromSystemNotification new
+		candidateClass: class;
+		signal. "handle and `resume: true` if you want class to remain in system, unpackaged"
+	^ self _doDeleteClassFromLoadedThings: class removeClassFromSystem: removeClassFromSystem instance: registryInstance
 
 ]
 

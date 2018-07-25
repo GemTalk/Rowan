@@ -110,7 +110,7 @@ SequenceableCollection >> withIndexDo: elementAndIndexBlock [
 ]
 
 { #category : '*tonel-gemstone-kernel' }
-SequenceableCollection >> writeStream [
+SequenceableCollection >> writeStreamPortable [
 
 	^ WriteStreamPortable on: self
 

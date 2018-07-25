@@ -261,7 +261,7 @@ method: TonelParser
 comment
 	| result ch eatNext |
 	
-	result := String new writeStream.
+	result := String new writeStreamPortable.
 
 	eatNext := false.
 	stream next = $" ifFalse: [ TonelParseError signal: 'Can''t parse comment' ].	
@@ -311,11 +311,11 @@ extractSelector: aString
 		Character cr. 
 		$:}.
 
-	keywords := Array new writeStream.
+	keywords := Array new writeStreamPortable.
 	selectorStream := aString readStream.
 	[ selectorStream atEnd ]
 	whileFalse: [ | word ch |
-		word := String new writeStream.
+		word := String new writeStreamPortable.
 		[ selectorStream atEnd not and: [ (separators includes: (ch := selectorStream next)) not ] ]
 		whileTrue: [ word nextPut: ch ].
 		ch = $: ifTrue: [ word nextPut: ch ]. 
@@ -345,7 +345,7 @@ method: TonelParser
 metadata
 	| result ch count |
 	
-	result := String new writeStream.
+	result := String new writeStreamPortable.
 
 	count := 0.
 	stream peek = ${ ifFalse: [ TonelParseError signal: 'Can''t parse metadata' ].	
@@ -437,7 +437,7 @@ methodDefList
 	| result |
 	
 	self separator. "to arrive to the end of the file in case there are no methods"
-	result := Array new writeStream.
+	result := Array new writeStreamPortable.
   [
 	  [ stream atEnd ]
 	  whileFalse: [ 
@@ -812,7 +812,7 @@ splitMethodSource: aMethodDefinition into: aBlock
 	"Skip comments"
 	(source peek = $") ifTrue: [ self skipComment: source ]. 
 	"Parse declaration"
-	declaration := String new writeStream.
+	declaration := String new writeStreamPortable.
 	[ (self selectorIsComplete: keywords in: declaration originalContents) not 
 		or: [ ':+-/\*~<>=@,%|&?!' includes: declaration contents trimRight last ] ]
 	whileTrue: [ 
