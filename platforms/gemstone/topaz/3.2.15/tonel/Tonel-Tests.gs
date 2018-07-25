@@ -1568,7 +1568,7 @@ Class {
 }
 '
         withLineEndings: TonelWriter lineEnding).
-  stream := String new writeStream.
+  stream := String new writeStreamPortable.
   def := self
     creatClassDefinition: #'SomeObject'
     superclassName: #'Object'
@@ -1615,7 +1615,7 @@ method: TonelWriterTest
 testWriteMethodDefinitionOn
   | writer def stream |
   writer := TonelWriter new.
-  stream := String new writeStream.
+  stream := String new writeStreamPortable.
   def := self creatMethodDefinition: #'Object'
     classIsMeta: false
     selector: #'selector'
@@ -1634,7 +1634,7 @@ Object >> selector [
 ]
 '
         withLineEndings: TonelWriter lineEnding).
-  stream := String new writeStream.
+  stream := String new writeStreamPortable.
   def := self creatMethodDefinition: #'Object'
     classIsMeta: true
     selector: #'selector'
@@ -1653,7 +1653,7 @@ Object class >> selector [
 ]
 '
         withLineEndings: TonelWriter lineEnding).
-  stream := String new writeStream.
+  stream := String new writeStreamPortable.
   def := self creatMethodDefinition: #'Object'
     classIsMeta: false
     selector: #'='
