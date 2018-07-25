@@ -55,6 +55,19 @@ RowanClassService class >> forClassNamed: className package: packageName [
 
 ]
 
+{ #category : 'commands' }
+RowanClassService >> addCategory: string [
+
+	| theClass |
+
+	theClass := self classFromName.
+	meta ifTrue:[theClass := theClass class]. 
+	theClass addCategory: string.
+	self refreshFrom: self classFromName. 
+	RowanCommandResult addResult: self.
+
+]
+
 { #category : 'rowan' }
 RowanClassService >> classCreationTemplate [
 	
@@ -269,6 +282,18 @@ RowanClassService >> refreshFrom: theClass [
 				forSelector: sel class: theClass meta: meta organizer: organizer]).
 	methods := methods asOrderedCollection
 
+]
+
+{ #category : 'commands' }
+RowanClassService >> removeCategories: categories [
+	| theClass |
+	theClass := self classFromName.
+	meta ifTrue:[theClass := theClass class]. 
+	categories do: [:category |
+		theClass removeCategory: category.
+		].
+	self refreshFrom: self classFromName. 
+	RowanCommandResult addResult: self
 ]
 
 { #category : 'updates' }
