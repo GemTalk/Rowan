@@ -37,8 +37,9 @@ RwGitTool >> gitBranchNameIn: gitRepoPath [
 
 	| command result |
 	command := 'set -e; cd ' , gitRepoPath , '; git rev-parse --abbrev-ref HEAD'.
-	result := System performOnServer: command.
+	result := self performOnServer: command logging: false.
 	^ result trimWhiteSpace
+
 ]
 
 { #category : 'smalltalk api' }
