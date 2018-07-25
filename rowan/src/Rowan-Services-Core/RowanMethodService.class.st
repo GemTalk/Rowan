@@ -191,8 +191,8 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	source := gsNMethod sourceString.
 	category := classOrMeta categoryOfSelector: selector.
 	className := theClass name. 
-	packageName := method rowanPackageName. 
-	projectName := method rowanProjectName.
+	packageName := gsNMethod rowanPackageName. 
+	projectName := gsNMethod rowanProjectName.
 	self setSupersAndSubsFor: theClass.
 	isExtension := self rowanIsExtension.
 
