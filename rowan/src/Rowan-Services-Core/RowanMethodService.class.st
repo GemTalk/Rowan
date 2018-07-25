@@ -8,6 +8,7 @@ Class {
 		'classService',
 		'category',
 		'packageName',
+		'projectName',
 		'className',
 		'meta',
 		'hasSupers',
@@ -181,6 +182,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	category := classOrMeta categoryOfSelector: selector.
 	className := theClass name. 
 	packageName := method rowanPackageName. 
+	projectName := method rowanProjectName.
 	self setSupersAndSubsFor: theClass.
 	isExtension := self rowanIsExtension.
 
