@@ -180,14 +180,6 @@ RowanPackageService >> removeClassNamed: className [
 
 ]
 
-{ #category : 'replication' }
-RowanPackageService >> removeOrganizer [
-
-	classes ifNotNil: [
-		classes do: [:classService | classService removeOrganizer]]
-
-]
-
 { #category : 'rowan' }
 RowanPackageService >> rowanDirty [
 
@@ -209,7 +201,7 @@ RowanPackageService >> sampleProjectName [
 
 ]
 
-{ #category : 'Updating' }
+{ #category : 'updates' }
 RowanPackageService >> update [
 	classes := (self loadedClassNames keys collect:[:string | RowanClassService forClassNamed: string]) asArray.
 	classes addAll: (self loadedClassExtensions keys collect:[:string | 

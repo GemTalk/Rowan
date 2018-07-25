@@ -8,6 +8,7 @@ Class {
 		'classService',
 		'category',
 		'packageName',
+		'projectName',
 		'className',
 		'meta',
 		'hasSupers',
@@ -172,6 +173,13 @@ RowanMethodService >> definitionClass [
 
 ]
 
+{ #category : 'ston' }
+RowanMethodService >> excludedInstVars [
+
+	^#(#organizer)
+
+]
+
 { #category : 'initialization' }
 RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	"assume meta and selector are set"
@@ -183,7 +191,8 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	source := gsNMethod sourceString.
 	category := classOrMeta categoryOfSelector: selector.
 	className := theClass name. 
-	packageName := gsNMethod rowanPackageName. 
+	packageName := method rowanPackageName. 
+	projectName := method rowanProjectName.
 	self setSupersAndSubsFor: theClass.
 	isExtension := self rowanIsExtension.
 
@@ -307,14 +316,6 @@ RowanMethodService >> packageName [
 { #category : 'Updating' }
 RowanMethodService >> packageName: newValue [
 	packageName := newValue
-
-]
-
-{ #category : 'replication' }
-RowanMethodService >> removeOrganizer [
-
-	references ifNotNil: [references do: [:methodService | methodService removeOrganizer]].
-	organizer := nil
 
 ]
 
@@ -457,7 +458,7 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 { #category : 'replication' }
 RowanMethodService >> stonOn: stonWriter [
     | instanceVariableNames |
-    instanceVariableNames := self class allInstVarNames reject: [:iv | iv = #organizer].
+    instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
     stonWriter writeObject: self
         streamMap: 
             [:dictionary |

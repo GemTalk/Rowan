@@ -5306,13 +5306,15 @@ JadeServer >> terminate: aGsProcess [
 { #category : 'category' }
 JadeServer >> updateFromSton: stonString [
 	| services organizer |
-	RowanCommandResult initializeResults. 
-	services := (STON fromString: stonString).
+	RowanCommandResult initializeResults.
+	services := STON fromString: stonString.
 	organizer := ClassOrganizer new.
-	services do: [:service |
-		service offerOrganizer: organizer.
-		service command ifNil: [service update] ifNotNil: [service perform: service command].
-		service removeOrganizer].
+	services do: 
+			[:service |
+			service offerOrganizer: organizer.
+			service command
+				ifNil: [service update]
+				ifNotNil: [service perform: service command withArguments: service commandArgs]].
 	^STON toString: RowanCommandResult results
 
 ]
