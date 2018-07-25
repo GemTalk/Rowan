@@ -162,6 +162,13 @@ RowanMethodService >> definitionClass [
 
 ]
 
+{ #category : 'ston' }
+RowanMethodService >> excludedInstVars [
+
+	^#(#organizer)
+
+]
+
 { #category : 'initialization' }
 RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	"assume meta and selector are set"
@@ -275,14 +282,6 @@ RowanMethodService >> packageName [
 { #category : 'Updating' }
 RowanMethodService >> packageName: newValue [
 	packageName := newValue
-
-]
-
-{ #category : 'replication' }
-RowanMethodService >> removeOrganizer [
-
-	references ifNotNil: [references do: [:methodService | methodService removeOrganizer]].
-	organizer := nil
 
 ]
 
@@ -401,6 +400,21 @@ RowanMethodService >> source [
 RowanMethodService >> source: aString [
 	
 	source := aString
+
+]
+
+{ #category : 'ston' }
+RowanMethodService >> stonOn: stonWriter [
+	| instanceVariableNames |
+	instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
+	stonWriter writeObject: self
+		streamMap: 
+			[:dictionary |
+			instanceVariableNames do: 
+					[:each |
+					(self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
+						ifNotNil: [:value | dictionary at: each asSymbol put: value]
+						ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
 
 ]
 

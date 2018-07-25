@@ -297,14 +297,6 @@ RowanProjectService >> refresh [
 
 ]
 
-{ #category : 'replication' }
-RowanProjectService >> removeOrganizer [
-
-	packages ifNotNil: [
-		packages do: [:packageService | packageService removeOrganizer]]
-
-]
-
 { #category : 'rowan' }
 RowanProjectService >> removeProjectNamed: projectName [
    "remove project"

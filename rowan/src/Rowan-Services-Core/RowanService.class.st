@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'definition',
 		'updates',
-		'command'
+		'command',
+		'commandArgs'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -48,6 +49,13 @@ RowanService >> command [
 RowanService >> command: aSymbol [
 
 	command := aSymbol
+
+]
+
+{ #category : 'accessing' }
+RowanService >> commandArgs [
+
+	^commandArgs ifNil:[commandArgs := Array new]
 
 ]
 
@@ -122,15 +130,6 @@ RowanService >> offerOrganizer: anOrganizer [
 RowanService >> projectTools [
 
 	^Rowan projectTools
-
-]
-
-{ #category : 'replication' }
-RowanService >> removeOrganizer [
-
-	"we don't want to replicate a ClassOrganizer
-	with STON. Therefore tell each service to
-	remove uses as it sees fit"
 
 ]
 
