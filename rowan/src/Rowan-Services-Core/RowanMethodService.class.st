@@ -17,10 +17,20 @@ Class {
 		'compilationWarnings',
 		'isExtension',
 		'inSelectedPackage',
-		'references'
+		'references',
+		'stepPoints'
 	],
 	#category : 'Rowan-Services-Core'
 }
+
+{ #category : 'instance creation' }
+RowanMethodService class >> forGsNMethod: aGsNMethod organizer: aClassOrganizer [
+
+	^self basicNew
+		initialize: aGsNMethod organizer: aClassOrganizer;
+		yourself
+
+]
 
 { #category : 'instance creation' }
 RowanMethodService class >> forSelector: sel class: theClass meta: boolean organizer: organizer [
@@ -174,15 +184,15 @@ RowanMethodService >> excludedInstVars [
 RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	"assume meta and selector are set"
 
-	| classOrMeta method |
+	| classOrMeta gsNMethod |
 	organizer := theOrganizer. 
 	classOrMeta := meta ifTrue:[theClass class] ifFalse:[theClass]. 
-	method := classOrMeta compiledMethodAt: selector.
-	source := method sourceString.
+	gsNMethod := classOrMeta compiledMethodAt: selector.
+	source := gsNMethod sourceString.
 	category := classOrMeta categoryOfSelector: selector.
 	className := theClass name. 
-	packageName := method rowanPackageName. 
-	projectName := method rowanProjectName.
+	packageName := gsNMethod rowanPackageName. 
+	projectName := gsNMethod rowanProjectName.
 	self setSupersAndSubsFor: theClass.
 	isExtension := self rowanIsExtension.
 
@@ -222,6 +232,28 @@ RowanMethodService >> initialize [
 	super initialize. 
 	hasSupers := false. 
 	hasSubs := false.
+
+]
+
+{ #category : 'initialization' }
+RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
+
+	| inClass |
+	selector := aGsNMethod selector.
+	stepPoints := self stepPointsFor: aGsNMethod.
+	(inClass := aGsNMethod inClass) ifNil: [
+		meta := false.
+		source := aGsNMethod sourceString.
+		hasSupers := false.
+		hasSubs := false.
+		organizer := aClassOrganizer.
+		inSelectedPackage := false.
+		^self
+	].
+	meta := inClass isMeta.
+	self 
+		forClass: inClass thisClass 
+		organizer: aClassOrganizer.
 
 ]
 
@@ -405,18 +437,36 @@ RowanMethodService >> source: aString [
 
 ]
 
-{ #category : 'ston' }
+{ #category : 'initialization' }
+RowanMethodService >> stepPointsFor: aGsNMethod [
+	"Answers an Array of Associations (offset -> selector) indexed by step point"
+
+	|  selectors list |
+	(selectors := aGsNMethod _allDebugInfo: 10) ifNil: [^#()].
+	list := aGsNMethod homeMethod  _sourceOffsets.
+	list := list collect: [:each |
+		| index eachSelector |
+		eachSelector := ''.
+		index := selectors indexOf: each.
+		0 < index ifTrue: [eachSelector := selectors at: index + 1].
+		each -> eachSelector.
+	].
+	^list
+
+]
+
+{ #category : 'replication' }
 RowanMethodService >> stonOn: stonWriter [
-	| instanceVariableNames |
-	instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
-	stonWriter writeObject: self
-		streamMap: 
-			[:dictionary |
-			instanceVariableNames do: 
-					[:each |
-					(self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
-						ifNotNil: [:value | dictionary at: each asSymbol put: value]
-						ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
+    | instanceVariableNames |
+    instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
+    stonWriter writeObject: self
+        streamMap: 
+            [:dictionary |
+            instanceVariableNames do: 
+                    [:each |
+                    (self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
+                        ifNotNil: [:value | dictionary at: each asSymbol put: value]
+                        ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
 
 ]
 
