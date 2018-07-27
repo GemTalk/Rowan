@@ -989,6 +989,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages [
 	| projectName  packageName1 packageName2  projectDefinition1 projectDefinition2 packageDefinition 
 		className1 className2 className3 className4 className5 className6 className7
 		projectSetDefinition |
+
 	projectName := 'Issue'.
 	packageName1 := 'Issue-Core1'.
 	packageName2 := 'Issue-Core2'.
@@ -1084,6 +1085,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages [
 	packageDefinition
 		removeClassNamed: className1;	"deleted"
 		removeClassNamed: className2;	"deleted"
+		removeClassNamed: className3;	"moved"
 		removeClassNamed: className4;	"moved"
 		removeClassNamed: className5;	"moved"
 		yourself.
