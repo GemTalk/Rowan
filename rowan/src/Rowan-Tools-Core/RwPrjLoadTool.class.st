@@ -88,20 +88,15 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 	| loadedProjectSet diff loadedProjectInfo| 
 	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings
 		asProjectDefinitionSet.
-	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectSet.
-	diff isEmpty
-		ifTrue: [ 
-			| msg |
-			msg := 'The projects are already up to date'.
-			self inform: msg.
-			^ msg ].
 	loadedProjectInfo := projectSetDefinitionToLoad properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
 	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
 			"install the packageMapSpecs for this load into the specification prior to the load"
 			| projectDefinition |
 			projectDefinition := projectSetDefinitionToLoad projectNamed: projectName ifAbsent: [].
 			projectDefinition updateGsPlatformSpecLoadedProjectInfo: projectInfo ].
-	Rowan image applyModification_254: diff instanceMigrator: instanceMigrator.
+	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectSet.
+	diff isEmpty
+		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef | 
 			self specification: projectDef specification.
