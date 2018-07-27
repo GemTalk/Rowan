@@ -314,7 +314,10 @@ RwGsImagePatchVisitor_254 >> visitProjectModification: aProjectModification [
 	propertiesModification isEmpty
 		ifFalse: [ 
 			"https://github.com/dalehenrich/Rowan/issues/180"
-			self error: 'internal error - unexpected non-empty project properties modification. See Issue #180'  ].
+			| modifiedProperties |
+			modifiedProperties := String new.
+			propertiesModification elementsModified keys do: [:key | modifiedProperties add: ' '; add: key printString ].
+			self error: 'internal error - unexpected non-empty project properties modification:', modifiedProperties, '. See Issue #180'  ].
 	aProjectModification packagesModification acceptVisitor: self
 
 ]

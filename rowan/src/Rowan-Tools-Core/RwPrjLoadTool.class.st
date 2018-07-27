@@ -88,20 +88,15 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 	| loadedProjectSet diff loadedProjectInfo| 
 	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings
 		asProjectDefinitionSet.
-	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectSet.
-	diff isEmpty
-		ifTrue: [ 
-			| msg |
-			msg := 'The projects are already up to date'.
-			self inform: msg.
-			^ msg ].
 	loadedProjectInfo := projectSetDefinitionToLoad properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
 	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
 			"install the packageMapSpecs for this load into the specification prior to the load"
 			| projectDefinition |
 			projectDefinition := projectSetDefinitionToLoad projectNamed: projectName ifAbsent: [].
 			projectDefinition updateGsPlatformSpecLoadedProjectInfo: projectInfo ].
-	Rowan image applyModification_254: diff instanceMigrator: instanceMigrator.
+	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectSet.
+	diff isEmpty
+		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef | 
 			self specification: projectDef specification.
@@ -255,48 +250,6 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed instanceMigrator: instanceMigrat
 		processedClassNames: Set new.
 	"loaded project and loaded packages read from disk - mark them not dirty"
 	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-
-]
-
-{ #category : '*rowan-tools-deprecated' }
-RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName [
-
-	"load the named project from disk, mark the loaded projects not dirty and run initializers"
-
-	| projectSetDefinition res |
-	projectSetDefinition := self class read
-		readProjectSetForProjectNamed: projectNamed
-		withConfiguration: configName.
-	[ res := self loadProjectSetDefinition: projectSetDefinition  ]
-			on: RwExecuteClassInitializeMethodsAfterLoadNotification
-			do: [:ex | ex resume: true ].
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	projectSetDefinition deriveLoadedThings do: [:loadedProject |
-		loadedProject markNotDirty.
-		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
-	^ res
-
-]
-
-{ #category : '*rowan-tools-deprecated' }
-RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName instanceMigrator: instanceMigrator [
-
-	"load the named project from disk, mark the loaded projects not dirty and run initializers"
-
-	| projectSetDefinition res |
-	projectSetDefinition := self class read
-		readProjectSetForProjectNamed: projectNamed
-		withConfiguration: configName.
-	[ res := self
-		loadProjectSetDefinition: projectSetDefinition
-		instanceMigrator: instanceMigrator ]
-			on: RwExecuteClassInitializeMethodsAfterLoadNotification
-			do: [:ex | ex resume: true ].
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	projectSetDefinition deriveLoadedThings do: [:loadedProject |
-		loadedProject markNotDirty.
-		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
 	^ res
 
 ]
