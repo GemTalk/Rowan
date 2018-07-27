@@ -1338,7 +1338,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 ]
 
 { #category : 'tests - non _254 stack' }
-RwMoveTest >> testProjectSet_move_modified_class_structure_with_new_class_version_between_packages_and_symbol_dicts [
+RwMoveTest >> testProjectSet_move_modified_class_structure_with_new_class_version_between_packages_and_symbol_dicts_286 [
 
 	"https://github.com/dalehenrich/Rowan/issues/286"
 
