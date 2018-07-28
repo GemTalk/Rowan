@@ -25,6 +25,8 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 "create project"
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
+		repositoryRootPath: '/tmp/rowanTest/';					"reconcile expects the repo to be on disk"
+		repositoryUrl: 'cypress:/tmp/rowanTest/rowan/src/';	"reconcile expects the repo to be on disk"
 		addPackagesNamed: { packageName1 . packageName2 . packageName3 };
 		yourself.
 
