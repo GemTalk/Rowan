@@ -190,12 +190,24 @@ RwGsClassVersioningSymbolDictPatch >> existingSymbolDictionaryRegistry [
 ]
 
 { #category : 'patching' }
-RwGsClassVersioningSymbolDictPatch >> installNewClassVerionInSystem [
+RwGsClassVersioningSymbolDictPatch >> installNewClassVersionInSystem [
 
 	"Install the new class association in the symbolAssociation for the class.
 	 Update the LoadedClass with properties for the new classversion."
 
 	self symbolDictionaryRegistry addNewClassVersionToAssociation: newClassVersion implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+
+]
+
+{ #category : 'patching' }
+RwGsClassVersioningSymbolDictPatch >> moveNewClassVersionInSystem: aClassMove [
+
+	"Move the class association for the class.
+	 Update the LoadedClass with properties for the new classversion."
+
+	(self symbolDictionaryRegistryFor: aClassMove packageAfter name)
+		addNewClassVersionToAssociation: newClassVersion 
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
 
 ]
 

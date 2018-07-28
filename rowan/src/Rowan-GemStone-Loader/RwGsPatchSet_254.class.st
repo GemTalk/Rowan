@@ -1276,5 +1276,10 @@ RwGsPatchSet_254 >> updateMethodProperties [
 RwGsPatchSet_254 >> updateSymbolAssociations [
 	"Install new class versions."
 
-	classesWithNewVersions do: [:each | each installNewClassVerionInSystem ]
+	classesWithNewVersions do: [:each | 
+		(movedClassesMap at: each className ifAbsent: [])
+			ifNil: [ each installNewClassVersionInSystem ]
+			ifNotNil: [:aClassMove | each moveNewClassVersionInSystem: aClassMove ].
+		 ]
+
 ]

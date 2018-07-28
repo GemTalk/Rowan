@@ -58,9 +58,16 @@ RwGsPatch >> resolveName: aName [
 { #category : 'accessing' }
 RwGsPatch >> symbolDictionary [
 
+	^ self symbolDictionaryFor: self packageName
+
+]
+
+{ #category : 'accessing' }
+RwGsPatch >> symbolDictionaryFor: aPackageName [
+
 	| symDictName symDict |
 	symDictName := self projectDefinition
-		symbolDictNameForPackageNamed: self packageName.
+		symbolDictNameForPackageNamed:aPackageName.
 	symDict := GsCurrentSession currentSession symbolList objectNamed: symDictName asSymbol.
 	symDict
 		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
@@ -72,4 +79,12 @@ RwGsPatch >> symbolDictionary [
 RwGsPatch >> symbolDictionaryRegistry [
 
 	^ self symbolDictionary rowanSymbolDictionaryRegistry
+
+]
+
+{ #category : 'accessing' }
+RwGsPatch >> symbolDictionaryRegistryFor: aPackageName [
+
+	^ (self symbolDictionaryFor: aPackageName) rowanSymbolDictionaryRegistry
+
 ]
