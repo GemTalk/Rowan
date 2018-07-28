@@ -164,6 +164,14 @@ RwGsClassPatch >> createClassFor: aPatchSet [
 	^ createdClass
 ]
 
+{ #category : 'patching moved classes' }
+RwGsClassPatch >> installPropertiesPatchFor: aPatchSet classMove: aClassMove [
+
+
+	self installPropertiesPatchFor: aPatchSet registry: (self symbolDictionaryRegistryFor: aClassMove packageAfter name)
+
+]
+
 { #category : 'versioning' }
 RwGsClassPatch >> oldClassVersion [
 	"The old version is what is currently bound to the class definition's name."

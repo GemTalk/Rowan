@@ -1247,7 +1247,10 @@ RwGsPatchSet_254 >> updateClassProperties [
 	(classesWithClassVariableChanges copy
 		addAll: classesWithPropertyChanges;
 		addAll: classesWithConstraintChanges;
-		yourself) do: [ :each | each installPropertiesPatchFor: self ]
+		yourself) do: [ :each | 
+			(movedClassesMap at: each className ifAbsent: [])
+				ifNil: [ each installPropertiesPatchFor: self ]
+				ifNotNil: [:aClassMove | each installPropertiesPatchFor: self classMove: aClassMove ] ]
 
 ]
 

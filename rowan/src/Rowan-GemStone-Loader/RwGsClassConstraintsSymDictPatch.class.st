@@ -15,6 +15,13 @@ RwGsClassConstraintsSymDictPatch >> addToNewClassesByName: aDictionary [
 { #category : 'installing' }
 RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 
+	self installPropertiesPatchFor: aPatchSet registry: self symbolDictionaryRegistry
+
+]
+
+{ #category : 'installing' }
+RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry [
+
 	" update class and update loadedClass with new constraints"
 
 	| className existingClass theConstraints existingConstraintsMap existingVaryingConstraint theConstraintsMap theVaryingConstraint keys |
@@ -63,6 +70,6 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 		ifFalse: [
 			"change the varying constraint"
 			existingClass _setVaryingConstraint: theVaryingConstraint ].
-	self symbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+	aSymbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 
 ]
