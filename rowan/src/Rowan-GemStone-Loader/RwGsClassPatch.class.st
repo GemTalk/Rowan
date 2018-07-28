@@ -167,6 +167,7 @@ RwGsClassPatch >> createClassFor: aPatchSet [
 { #category : 'patching moved classes' }
 RwGsClassPatch >> installPropertiesPatchFor: aPatchSet classMove: aClassMove [
 
+(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 
 	self installPropertiesPatchFor: aPatchSet registry: (self symbolDictionaryRegistryFor: aClassMove packageAfter name)
 
