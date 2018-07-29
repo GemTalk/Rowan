@@ -357,6 +357,16 @@ RowanClassService >> samplePackageName [
 ]
 
 { #category : 'Accessing' }
+RowanClassService >> selectedPackageServices [
+	^selectedPackageServices
+]
+
+{ #category : 'Updating' }
+RowanClassService >> selectedPackageServices: newValue [
+	selectedPackageServices := newValue
+]
+
+{ #category : 'Accessing' }
 RowanClassService >> setComment [
 
 	| theClass |

@@ -18,7 +18,8 @@ Class {
 		'isExtension',
 		'inSelectedPackage',
 		'references',
-		'stepPoints'
+		'stepPoints',
+		'selectedPackageServices'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -132,6 +133,11 @@ RowanMethodService >> classService [
 RowanMethodService >> classService: newValue [
 	classService := newValue
 
+]
+
+{ #category : 'Updating' }
+RowanMethodService >> compilationWarnings: newValue [
+	compilationWarnings := newValue
 ]
 
 { #category : 'method compilation' }
@@ -390,9 +396,24 @@ RowanMethodService >> saveMethod [
 			args: (Array with: compilationResult value)
 			signalDictionary: GemStoneError.
 	]. 
-	category := behavior categoryOfSelector: gsNMethod selector. 
-	compilationWarnings := compilationResult value.   
-	RowanCommandResult addResult: self.
+	gsNMethod selector = selector ifTrue:[
+		self updateExistingMethod: gsNMethod in: behavior compiltationResult: compilationResult]
+	ifFalse: [
+		self updateNewMethod: gsNMethod in: behavior compiltationResult: compilationResult].
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> selectedPackageServices [
+
+	^selectedPackageServices
+
+]
+
+{ #category : 'Updating' }
+RowanMethodService >> selectedPackageServices: collection [
+
+	selectedPackageServices := collection
+
 ]
 
 { #category : 'Accessing' }
@@ -475,4 +496,26 @@ RowanMethodService >> update [
 	self needsRecompile ifTrue:[
 		^self saveMethod].
 
+]
+
+{ #category : 'method compilation' }
+RowanMethodService >> updateExistingMethod: gsNMethod in: behavior compiltationResult: compilationResult [
+
+		category := behavior categoryOfSelector: gsNMethod selector. 
+		compilationWarnings := compilationResult value.
+		RowanCommandResult addResult: self
+
+]
+
+{ #category : 'method compilation' }
+RowanMethodService >> updateNewMethod: gsNMethod in: behavior compiltationResult: compilationResult [
+		| newClassService newMethodService |
+		
+		newClassService := RowanClassService forClassNamed: className meta: meta. 
+		newClassService selectedPackageServices: selectedPackageServices. 
+		newClassService filters: (Array with: (behavior categoryOfSelector: gsNMethod selector)). 
+		RowanCommandResult addResult: newClassService. 
+		newMethodService := self class forGsNMethod: gsNMethod organizer: organizer.
+		newMethodService compilationWarnings: compilationResult value. 
+		RowanCommandResult addResult: newMethodService
 ]

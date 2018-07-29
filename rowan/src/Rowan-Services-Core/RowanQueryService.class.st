@@ -16,6 +16,33 @@ RowanQueryService >> excludedInstVars [
 ]
 
 { #category : 'queries' }
+RowanQueryService >> hierarchyImplementorsOf: selector [
+
+	| methods |
+	methods := organizer implementorsOf: selector.
+	queryResults := self methodServicesFrom: methods.
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'queries' }
+RowanQueryService >> hierarchySendersOf: selector [
+
+	| methods |
+	methods := organizer sendersOf: selector.
+	queryResults := self methodServicesFrom: methods first.
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'queries' }
+RowanQueryService >> hierarchySendersOf: selector inClass: className [
+
+	| methods |
+	methods := organizer sendersOf: selector.
+	queryResults := self methodServicesFrom: methods first.
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'queries' }
 RowanQueryService >> implementorsOf: selector [
 
 	| methods |
