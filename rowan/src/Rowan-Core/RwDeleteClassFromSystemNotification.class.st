@@ -13,15 +13,16 @@ Class {
 
 { #category : 'accessing' }
 RwDeleteClassFromSystemNotification >> candidateClass [
+	"class to be deleted from system, if receiver is #resumed: with true"
 
 	^ candidateClass
 
 ]
 
 { #category : 'accessing' }
-RwDeleteClassFromSystemNotification >> candidateClass: aClass [
+RwDeleteClassFromSystemNotification >> candidateClass: aClassToBeDeleted [
 
-	candidateClass := aClass
+	candidateClass := aClassToBeDeleted
 
 ]
 

@@ -1164,8 +1164,9 @@ RwGsPatchSet_254 >> runInitializers [
 		ifTrue: [ self class methodPatchesInInitializationOrder: methodPatches ]
 		ifFalse: [ methodPatches ].
 	orderedMethodPatches do: [ :methodPatch | 
-			RwExecuteClassInitializeMethodsAfterLoadNotification signal 
-				ifTrue: [ methodPatch runInitializer ] ]
+			(RwExecuteClassInitializeMethodsAfterLoadNotification new
+				candidateClass: methodPatch behavior thisClass) signal 
+					ifTrue: [ methodPatch runInitializer ] ]
 
 ]
 
