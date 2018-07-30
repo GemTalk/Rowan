@@ -301,7 +301,7 @@ RowanClassService >> refreshFromCategory: classOrMeta [
 RowanClassService >> refreshFromVariable: classOrMeta [
 	| theFilters organizer gsNmethods |
 	theFilters := SortedCollection new.
-	theFilters addAll: classOrMeta instVarNames.
+	theFilters addAll: classOrMeta allInstVarNames.
 	allFilters := theFilters asOrderedCollection.
 	methods := SortedCollection sortBlock: [:x :y | x selector < y selector].
 	organizer := ClassOrganizer new.
