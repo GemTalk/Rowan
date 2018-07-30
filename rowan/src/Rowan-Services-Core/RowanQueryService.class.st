@@ -16,28 +16,27 @@ RowanQueryService >> excludedInstVars [
 ]
 
 { #category : 'queries' }
-RowanQueryService >> hierarchyImplementorsOf: selector [
+RowanQueryService >> hierarchyImplementorsOf: selector inClass: className [
 
-	| methods |
-	methods := organizer implementorsOf: selector.
+	| methods behavior classes |
+	behavior := Rowan globalNamed: className.
+	classes := behavior allSuperclasses. 
+	classes add: behavior. 
+	classes addAll: (organizer subclassesOf: behavior). 
+	methods := organizer implementorsOf: selector in: classes.
 	queryResults := self methodServicesFrom: methods.
-	RowanCommandResult addResult: self.
-]
-
-{ #category : 'queries' }
-RowanQueryService >> hierarchySendersOf: selector [
-
-	| methods |
-	methods := organizer sendersOf: selector.
-	queryResults := self methodServicesFrom: methods first.
 	RowanCommandResult addResult: self.
 ]
 
 { #category : 'queries' }
 RowanQueryService >> hierarchySendersOf: selector inClass: className [
 
-	| methods |
-	methods := organizer sendersOf: selector.
+	| methods behavior classes |
+	behavior := Rowan globalNamed: className.
+	classes := behavior allSuperclasses. 
+	classes add: behavior. 
+	classes addAll: (organizer subclassesOf: behavior). 
+	methods := organizer sendersOf: selector in: classes.
 	queryResults := self methodServicesFrom: methods first.
 	RowanCommandResult addResult: self.
 ]
