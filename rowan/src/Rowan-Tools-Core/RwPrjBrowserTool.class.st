@@ -131,6 +131,13 @@ RwPrjBrowserTool >> _projectNamed: projectName [
 	^ (self _loadedProjectNamed: projectName) asDefinition
 ]
 
+{ #category : 'private' }
+RwPrjBrowserTool >> _rowanSymbolDictionaryNames [
+
+	^ #( #RowanKernel #RowanLoader #RowanTools )
+
+]
+
 { #category : 'class browsing' }
 RwPrjBrowserTool >> addOrUpdateClassDefinition: className type: type superclass: superclassName instVarNames: anArrayOfStrings classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: category packageName: packageName constraints: constraintsArray options: optionsArray [
 
@@ -388,6 +395,27 @@ RwPrjBrowserTool >> addPackagesNamed: packageNames toProjectNamed: projectName [
 	packageNames
 		do: [ :packageName | projectDefinition addPackage: (RwPackageDefinition newNamed: packageName) ].
 	Rowan projectTools load loadProjectDefinition: projectDefinition
+]
+
+{ #category : 'project browsing' }
+RwPrjBrowserTool >> addRowanSymbolDictionariesToPeristentSymbolList [
+
+	self addRowanSymbolDictionariesToPeristentSymbolListFor: System myUserProfile
+
+]
+
+{ #category : 'project browsing' }
+RwPrjBrowserTool >> addRowanSymbolDictionariesToPeristentSymbolListFor: userProfile [
+
+	| systemUser |
+	systemUser := AllUsers userWithId: 'SystemUser'.
+	self _rowanSymbolDictionaryNames do: [:symDictName |
+		| aSymbolDictionary anIndex |
+		aSymbolDictionary := systemUser objectNamed: symDictName.
+		anIndex := userProfile symbolList size + 1.
+		userProfile
+			insertDictionary: aSymbolDictionary at: anIndex ]
+
 ]
 
 { #category : 'class browsing' }

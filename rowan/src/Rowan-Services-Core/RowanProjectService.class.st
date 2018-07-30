@@ -309,7 +309,7 @@ RowanProjectService >> removeProjectNamed: projectName [
 { #category : 'rowan' }
 RowanProjectService >> repositorySha [
 
-	^(RwProject newNamed: name) repositoryCommitId
+	^ [ (RwProject newNamed: name) repositoryCommitId ] on: Error do: [:ex | ^'ERROR getting repository commit id' ]
 
 ]
 
@@ -317,7 +317,7 @@ RowanProjectService >> repositorySha [
 RowanProjectService >> rowanBranch [
 	
 	name isNil ifTrue:[^String new].
-	^(RwProject newNamed: name) currentBranchName
+	^ [ (RwProject newNamed: name) currentBranchName ] on: Error do: [:ex | ^'ERROR getting repository branch' ]
 
 ]
 
