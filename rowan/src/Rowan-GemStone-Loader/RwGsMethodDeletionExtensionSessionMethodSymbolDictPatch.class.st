@@ -81,12 +81,5 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteNewVersionMetho
 { #category : 'accessing' }
 RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> symbolDictionary [
 
-	| symDictName symDict |
-	symDictName := self projectDefinition
-		symbolDictNameForPackageNamed: self packageName.
-	symDict := GsCurrentSession currentSession symbolList objectNamed: symDictName asSymbol.
-	symDict
-		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
-	^ Rowan image newOrExistingSymbolDictionaryNamed: symDictName
-
+	^self symbolDictionaryFor: self packageName
 ]

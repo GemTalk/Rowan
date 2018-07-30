@@ -23,6 +23,13 @@ RwGsClassPropertiesSymDictPatch >> addToNewClassesByName: aDictionary [
 { #category : 'installing' }
 RwGsClassPropertiesSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 
+	self installPropertiesPatchFor: aPatchSet registry: self symbolDictionaryRegistry
+
+]
+
+{ #category : 'installing' }
+RwGsClassPropertiesSymDictPatch >> installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry [
+
 	" update class and update loadedClass with new properties"
 
 	| className existingClass createdClass |
@@ -39,6 +46,6 @@ RwGsClassPropertiesSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 			self
 				error:
 					'internal error - class changed during class property update ... should have been a class versioning patch' ].
-	self symbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+	aSymbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_Implementation
 
 ]

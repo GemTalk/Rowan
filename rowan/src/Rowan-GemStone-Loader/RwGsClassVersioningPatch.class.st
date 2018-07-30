@@ -192,7 +192,7 @@ RwGsClassVersioningPatch >> addPatchedClassModification: aClassModification inPa
 	newFormat := self
 		_classFormat: existingClass superclass format
 		forSubclassType: afterClassDefinition classType.
-	afterSymDict := afterClassDefinition gs_symbolDictionary ifNil: [ self symbolDictionary name asString ].
+	afterSymDict := self symbolDictionary name asString.
 	beforeSymDict := beforeClassDefinition gs_symbolDictionary.
 	beforeSymDict ~= afterSymDict
 		ifTrue: [

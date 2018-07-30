@@ -191,7 +191,6 @@ RwPrjReconcileTool >> reconcileProjectDefinitionSet: projectDefinitionSet [
 				inSymbolDictionary: actualSymDictName 
 				inProject: theProjectDef.
 			(packageNameToSymbolDictNameMap at: newPackageDef name ifAbsentPut: [ IdentitySet new ]) add: actualSymDictName asSymbol  ].
-self halt.
 		config := projectDef configurationTemplate.
 		packageNameToSymbolDictNameMap keysAndValuesDo: [:packageName :symDictNames |
 			symDictNames size > 1 ifTrue: [ self error: 'More than one symbol dictionary associated with package ', packageName printString ].
