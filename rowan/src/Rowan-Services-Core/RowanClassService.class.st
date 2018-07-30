@@ -270,10 +270,11 @@ RowanClassService >> refreshFrom: theClass [
 	self setComment.
 	oop := theClass asOop.
 	theFilters := SortedCollection new.
-	filterType isNil ifTrue: [filterType := 'categories'].
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	filterType = 'categories'
 		ifTrue: [classOrMeta env: 0 categorysDo: [:category :selector | theFilters add: category]].
+	filterType = 'variables'
+		ifTrue: [theFilters addAll: classOrMeta instVarNames].
 	allFilters := theFilters asOrderedCollection.
 	methods := SortedCollection sortBlock: [:x :y | x selector < y selector].
 	organizer := ClassOrganizer new.
@@ -281,7 +282,6 @@ RowanClassService >> refreshFrom: theClass [
 			RowanMethodService 
 				forSelector: sel class: theClass meta: meta organizer: organizer]).
 	methods := methods asOrderedCollection
-
 ]
 
 { #category : 'commands' }
