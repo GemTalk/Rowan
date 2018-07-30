@@ -66,9 +66,8 @@ RowanQueryService >> methodServicesFrom: methods [
 	| sorted | 
 	sorted := SortedCollection sortBlock: [:x :y | x className = y className ifTrue:[x selector < y selector] ifFalse:[x className < y className]].
 	sorted addAll: (methods collect:[:gsNMethod | 
-			RowanMethodService forSelector: gsNMethod selector class: gsNMethod inClass meta: gsNMethod inClass isMeta organizer: organizer]).
+			RowanMethodService forSelector: gsNMethod selector class: gsNMethod inClass thisClass meta: gsNMethod inClass isMeta organizer: organizer]).
 	^sorted asArray
-
 ]
 
 { #category : 'replication' }
