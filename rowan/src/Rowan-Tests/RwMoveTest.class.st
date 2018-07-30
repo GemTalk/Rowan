@@ -988,7 +988,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages [
 
 	| projectName  packageName1 packageName2  projectDefinition1 projectDefinition2 packageDefinition 
 		className1 className2 className3 className4 className5 className6 className7
-		projectSetDefinition |
+		projectSetDefinition class3 class4 class5  oldClass3 oldClass4 oldClass5 |
 
 	projectName := 'Issue'.
 	packageName1 := 'Issue-Core1'.
@@ -1075,6 +1075,14 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages [
 "load"
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"verify"
+	class3 := Rowan globalNamed: className3.
+	class4 := Rowan globalNamed: className4.
+	class5 := Rowan globalNamed: className5.
+	self assert: class3 notNil.
+	self assert: class4 notNil.
+	self assert: class5 notNil.
+
 "create new package structure"
 	projectSetDefinition := RwProjectSetDefinition new.
 
@@ -1146,6 +1154,21 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages [
 
 "load"
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"verify"
+	oldClass3 := class3.
+	oldClass4 := class4.
+	oldClass5 := class5.
+
+	class3 := Rowan globalNamed: className3.
+	class4 := Rowan globalNamed: className4.
+	class5 := Rowan globalNamed: className5.
+	self assert: class3 notNil.
+	self assert: class4 notNil.
+	self assert: class5 notNil.
+	self assert: class3 == oldClass3.
+	self assert: class4 == oldClass4.
+	self assert: class5 == oldClass5.
 
 ]
 
@@ -1175,7 +1198,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 
 	| projectName  packageName1 packageName2  projectDefinition1 projectDefinition2 packageDefinition 
 		className1 className2 className3 className4 className5 className6 className7
-		projectSetDefinition |
+		projectSetDefinition class3 class4 class5  oldClass3 oldClass4 oldClass5 |
 
 	projectName := 'Issue'.
 	packageName1 := 'Issue-Core1'.
@@ -1262,6 +1285,14 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 
 "load"
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"verify"
+	class3 := Rowan globalNamed: className3.
+	class4 := Rowan globalNamed: className4.
+	class5 := Rowan globalNamed: className5.
+	self assert: class3 notNil.
+	self assert: class4 notNil.
+	self assert: class5 notNil.
 
 "create new package structure"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -1333,7 +1364,22 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 		yourself.
 
 "load"
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"verify"
+	oldClass3 := class3.
+	oldClass4 := class4.
+	oldClass5 := class5.
+
+	class3 := Rowan globalNamed: className3.
+	class4 := Rowan globalNamed: className4.
+	class5 := Rowan globalNamed: className5.
+	self assert: class3 notNil.
+	self assert: class4 notNil.
+	self assert: class5 notNil.
+	self assert: class3 == oldClass3.
+	self assert: class4 == oldClass4.
+	self assert: class5 == oldClass5.
 
 ]
 
@@ -1363,7 +1409,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_with_new_class_versio
 
 	| projectName  packageName1 packageName2  projectDefinition1 projectDefinition2 packageDefinition 
 		className1 className2 className3 className4 className5 className6 className7
-		projectSetDefinition |
+		projectSetDefinition class3 class4 class5  oldClass3 oldClass4 oldClass5 |
 
 	projectName := 'Issue'.
 	packageName1 := 'Issue-Core1'.
@@ -1450,6 +1496,14 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_with_new_class_versio
 
 "load"
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"verify"
+	class3 := Rowan globalNamed: className3.
+	class4 := Rowan globalNamed: className4.
+	class5 := Rowan globalNamed: className5.
+	self assert: class3 notNil.
+	self assert: class4 notNil.
+	self assert: class5 notNil.
 
 "create new package structure"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -1521,7 +1575,22 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_with_new_class_versio
 		yourself.
 
 "load"
-	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"verify"
+	oldClass3 := class3.
+	oldClass4 := class4.
+	oldClass5 := class5.
+
+	class3 := Rowan globalNamed: className3.
+	class4 := Rowan globalNamed: className4.
+	class5 := Rowan globalNamed: className5.
+	self assert: class3 notNil.
+	self assert: class4 notNil.
+	self assert: class5 notNil.
+	self assert: class3 ~~ oldClass3.
+	self assert: class4 ~~ oldClass4.
+	self assert: class5 ~~ oldClass5.
 
 ]
 
