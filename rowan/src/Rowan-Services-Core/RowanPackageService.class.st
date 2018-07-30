@@ -6,7 +6,8 @@ Class {
 		'packageName',
 		'name',
 		'isDirty',
-		'classes'
+		'classes',
+		'defaultTemplate'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -66,6 +67,13 @@ RowanPackageService >> createSamplePackage [
 	name := self samplePackageName.
 	self projectTools load loadProjectDefinition: projectDefinition.
 
+]
+
+{ #category : 'commands' }
+RowanPackageService >> defaultTemplate [
+
+	defaultTemplate := self genericClassCreationTemplate.
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'rowan' }

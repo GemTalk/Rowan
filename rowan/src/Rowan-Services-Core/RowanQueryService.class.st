@@ -51,6 +51,15 @@ RowanQueryService >> implementorsOf: selector [
 
 ]
 
+{ #category : 'queries' }
+RowanQueryService >> methodsContaining: string [
+
+	| methods |
+	methods := organizer substringSearch: string.
+	queryResults := self methodServicesFrom: methods first.
+	RowanCommandResult addResult: self.
+]
+
 { #category : 'private' }
 RowanQueryService >> methodServicesFrom: methods [
 
