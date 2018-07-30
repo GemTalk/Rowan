@@ -13,13 +13,14 @@ Class {
 }
 
 { #category : 'instance creation' }
-RowanPackageService class >> forPackageNamed: packageName [
+RowanPackageService class >> forPackageNamed: aName [
 
 	| inst |
 	inst := self new.  
-	inst name: packageName.
-	packageName isNil ifFalse:[
+	inst name: aName.
+	aName isNil ifFalse:[
 		inst isDirty. "lazy initialize"].
+	inst setDefaultTemplate. 
 	^inst
 
 ]
@@ -69,11 +70,9 @@ RowanPackageService >> createSamplePackage [
 
 ]
 
-{ #category : 'commands' }
-RowanPackageService >> defaultTemplate [
-
-	defaultTemplate := self genericClassCreationTemplate.
-	RowanCommandResult addResult: self.
+{ #category : 'Updating' }
+RowanPackageService >> defaultTemplate: newValue [
+	defaultTemplate := newValue
 ]
 
 { #category : 'rowan' }
@@ -207,6 +206,12 @@ RowanPackageService >> sampleProjectName [
 
 	^'SampleProjectName'
 
+]
+
+{ #category : 'commands' }
+RowanPackageService >> setDefaultTemplate [
+
+	defaultTemplate := self genericClassCreationTemplate.
 ]
 
 { #category : 'updates' }
