@@ -317,7 +317,7 @@ RowanProjectService >> repositorySha [
 RowanProjectService >> rowanBranch [
 	
 	name isNil ifTrue:[^String new].
-	^(RwProject newNamed: name) currentBranchName
+	^ [ (RwProject newNamed: name) currentBranchName ] on: Error do: [:ex | ^'ERROR getting repository branch' ]
 
 ]
 
