@@ -211,6 +211,14 @@ RowanClassService >> meta: anObject [
 
 ]
 
+{ #category : 'private' }
+RowanClassService >> methodSelectorsFor: classOrMeta organizer: organizer [
+
+	methods addAll: (classOrMeta selectors collect:[:sel | 
+			RowanMethodService 
+				forSelector: sel class: classOrMeta thisClass meta: meta organizer: organizer])
+]
+
 { #category : 'Accessing' }
 RowanClassService >> name [
 	^name
@@ -272,15 +280,41 @@ RowanClassService >> refreshFrom: theClass [
 	theFilters := SortedCollection new.
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	filterType = 'categories'
-		ifTrue: [classOrMeta env: 0 categorysDo: [:category :selector | theFilters add: category]].
+		ifTrue: [self refreshFromCategory: classOrMeta].
 	filterType = 'variables'
-		ifTrue: [theFilters addAll: classOrMeta instVarNames].
+		ifTrue: [self refreshFromVariable: classOrMeta].
+]
+
+{ #category : 'updates' }
+RowanClassService >> refreshFromCategory: classOrMeta [
+	| theFilters organizer |
+	theFilters := SortedCollection new.
+	classOrMeta env: 0 categorysDo: [:category :selector | theFilters add: category].
 	allFilters := theFilters asOrderedCollection.
 	methods := SortedCollection sortBlock: [:x :y | x selector < y selector].
 	organizer := ClassOrganizer new.
-	methods addAll: (classOrMeta selectors collect:[:sel | 
-			RowanMethodService 
-				forSelector: sel class: theClass meta: meta organizer: organizer]).
+	self methodSelectorsFor: classOrMeta organizer: organizer.
+	methods := methods asOrderedCollection
+]
+
+{ #category : 'updates' }
+RowanClassService >> refreshFromVariable: classOrMeta [
+	| theFilters organizer gsNmethods |
+	theFilters := SortedCollection new.
+	theFilters addAll: classOrMeta instVarNames.
+	allFilters := theFilters asOrderedCollection.
+	methods := SortedCollection sortBlock: [:x :y | x selector < y selector].
+	organizer := ClassOrganizer new.
+	gsNmethods := Set new. 
+	Transcript cr; show: filters printString. 
+	filters isEmpty ifTrue:[
+		self methodSelectorsFor: classOrMeta organizer: organizer]
+	ifFalse:[
+		filters do:[:instVar |
+			gsNmethods addAll: (organizer accessorsOf: instVar inClass: classOrMeta).
+			methods addAll: (gsNmethods collect:[:gsNmeth | 
+				RowanMethodService 
+					forSelector: gsNmeth selector class: classOrMeta thisClass meta: meta organizer: organizer]).]].
 	methods := methods asOrderedCollection
 ]
 
