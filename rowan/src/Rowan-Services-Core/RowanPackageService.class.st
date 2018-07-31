@@ -36,10 +36,13 @@ RowanPackageService >> changes [
 { #category : 'commands' }
 RowanPackageService >> compileClass: definitionString [
 
-	| theClass classService |
+	| theClass classService packageService |
 	theClass := definitionString evaluate.
 	classService := RowanClassService forClassNamed: theClass name. 
-	RowanCommandResult addResult: classService
+	RowanCommandResult addResult: classService.
+	packageService := RowanPackageService forPackageNamed: classService packageName. 
+	packageService update.
+
 ]
 
 { #category : 'rowan' }
@@ -189,10 +192,17 @@ RowanPackageService >> projectDefinition: newValue [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
+RowanPackageService >> removeClass: classService [
+
+	self removeClassNamed: classService name. 
+	self update.
+]
+
+{ #category : 'commands' }
 RowanPackageService >> removeClassNamed: className [
 
-	self browserTool removeClassNamed: className
+	self browserTool removeClassNamed: className.
 
 ]
 

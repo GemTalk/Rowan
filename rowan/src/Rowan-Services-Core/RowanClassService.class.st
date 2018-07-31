@@ -269,7 +269,7 @@ RowanClassService >> poolDictionaryNames: newValue [
 
 ]
 
-{ #category : 'updates' }
+{ #category : 'commands' }
 RowanClassService >> refreshFrom: theClass [
 	| classOrMeta theFilters organizer |
 	versions := theClass classHistory size.
@@ -279,6 +279,7 @@ RowanClassService >> refreshFrom: theClass [
 	oop := theClass asOop.
 	theFilters := SortedCollection new.
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
+	packageName := classOrMeta rowanPackageName. 
 	filterType = 'variables'
 		ifTrue: [^self refreshFromVariable: classOrMeta].
 	self refreshFromCategory: classOrMeta
