@@ -6,10 +6,28 @@ Class {
 	#name : 'RowanBrowserService',
 	#superclass : 'RowanService',
 	#instVars : [
-		'projects'
+		'projects',
+		'removedMethods'
 	],
 	#category : 'Rowan-Services-Core'
 }
+
+{ #category : 'commands' }
+RowanBrowserService >> removeMethods: methodServices [
+
+	| notRemoved |
+	notRemoved := Array new. 
+	removedMethods := Array new. 
+	methodServices do: [:methodService |
+		| classService |
+		classService := RowanClassService forClassNamed: methodService className. 
+		classService meta: methodService meta. 
+		classService removeSelector: methodService selector ifAbsent:[notRemoved add: methodService selector].
+		removedMethods add: methodService].
+	notRemoved isEmpty ifFalse:[
+		self error: 'These selectors were not removed - ', notRemoved printString].
+	RowanCommandResult addResult: self.
+]
 
 { #category : 'updates' }
 RowanBrowserService >> update [

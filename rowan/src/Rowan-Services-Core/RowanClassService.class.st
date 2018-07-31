@@ -329,7 +329,7 @@ RowanClassService >> removeCategories: categories [
 	RowanCommandResult addResult: self
 ]
 
-{ #category : 'updates' }
+{ #category : 'commands' }
 RowanClassService >> removeMethods [
 
 	| notRemoved |

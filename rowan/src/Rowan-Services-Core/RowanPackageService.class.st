@@ -42,7 +42,7 @@ RowanPackageService >> compileClass: definitionString [
 	RowanCommandResult addResult: classService.
 	packageService := RowanPackageService forPackageNamed: classService packageName. 
 	packageService update.
-
+	classService selectedPackageServices: (Array with: packageService)
 ]
 
 { #category : 'rowan' }

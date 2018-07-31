@@ -265,7 +265,7 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 
 { #category : 'Accessing' }
 RowanMethodService >> meta [
-	^meta printString
+	^meta
 
 ]
 
