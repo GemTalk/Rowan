@@ -33,6 +33,15 @@ RowanPackageService >> changes [
 
 ]
 
+{ #category : 'commands' }
+RowanPackageService >> compileClass: definitionString [
+
+	| theClass classService |
+	theClass := definitionString evaluate.
+	classService := RowanClassService forClassNamed: theClass name. 
+	RowanCommandResult addResult: classService
+]
+
 { #category : 'rowan' }
 RowanPackageService >> createPackage [
 	| projectService default |

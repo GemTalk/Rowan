@@ -161,7 +161,7 @@ RowanClassService >> filterType: newValue [
 
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'initialization' }
 RowanClassService >> forClassNamed: className [ 
 
 	| theClass |
@@ -279,10 +279,9 @@ RowanClassService >> refreshFrom: theClass [
 	oop := theClass asOop.
 	theFilters := SortedCollection new.
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
-	filterType = 'categories'
-		ifTrue: [self refreshFromCategory: classOrMeta].
 	filterType = 'variables'
-		ifTrue: [self refreshFromVariable: classOrMeta].
+		ifTrue: [^self refreshFromVariable: classOrMeta].
+	self refreshFromCategory: classOrMeta
 ]
 
 { #category : 'updates' }
@@ -306,7 +305,6 @@ RowanClassService >> refreshFromVariable: classOrMeta [
 	methods := SortedCollection sortBlock: [:x :y | x selector < y selector].
 	organizer := ClassOrganizer new.
 	gsNmethods := Set new. 
-	Transcript cr; show: filters printString. 
 	filters isEmpty ifTrue:[
 		self methodSelectorsFor: classOrMeta organizer: organizer]
 	ifFalse:[
@@ -333,7 +331,6 @@ RowanClassService >> removeCategories: categories [
 { #category : 'updates' }
 RowanClassService >> removeMethods [
 
-
 	| notRemoved |
 	notRemoved := Array new. 
 	methods do: [:methodService |
@@ -341,7 +338,6 @@ RowanClassService >> removeMethods [
 	notRemoved isEmpty ifFalse:[
 		self error: 'These selectors were not removed - ', notRemoved printString].
 	self updateClass.
-
 ]
 
 { #category : 'rowan' }
@@ -464,9 +460,7 @@ RowanClassService >> template: newValue [
 { #category : 'updates' }
 RowanClassService >> update [
 
-	command ifNil:[ self updateClass] ifNotNil: [:symbol | self perform: symbol].
-	RowanCommandResult addResult: self
-
+	self updateClass.
 ]
 
 { #category : 'updates' }
