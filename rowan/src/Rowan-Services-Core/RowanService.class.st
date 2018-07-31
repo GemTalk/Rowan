@@ -5,7 +5,8 @@ Class {
 		'definition',
 		'updates',
 		'command',
-		'commandArgs'
+		'commandArgs',
+		'updateType'
 	],
 	#category : 'Rowan-Services-Core'
 }

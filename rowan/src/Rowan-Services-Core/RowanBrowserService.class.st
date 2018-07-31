@@ -26,6 +26,7 @@ RowanBrowserService >> removeMethods: methodServices [
 		removedMethods add: methodService].
 	notRemoved isEmpty ifFalse:[
 		self error: 'These selectors were not removed - ', notRemoved printString].
+	updateType := #methodsRemoved:. 
 	RowanCommandResult addResult: self.
 ]
 
