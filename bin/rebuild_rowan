@@ -31,13 +31,13 @@ run
   commit
 
 run
-  false  "set to true to load the projects into the image"
+  false  "set to true to update the projects after they have been loaded in the image"
     ifTrue: [ 
       #(
         'RowanSample1'
         'RowanSample2'
       ) do: [:projectName |
-        Rowan projectTools load loadProjectNamed: projectName withConfiguration: 'Default'
+        Rowan projectTools load loadProjectNamed: projectName
       ] ]
 %
   commit
