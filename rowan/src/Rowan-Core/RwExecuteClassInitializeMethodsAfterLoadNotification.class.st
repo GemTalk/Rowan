@@ -29,6 +29,6 @@ RwExecuteClassInitializeMethodsAfterLoadNotification >> candidateClass: aClassTo
 { #category : 'handling' }
 RwExecuteClassInitializeMethodsAfterLoadNotification >> defaultAction [
 
-	^ false
+	^ true
 
 ]
