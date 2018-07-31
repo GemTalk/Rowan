@@ -282,13 +282,14 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 				classesModificationAndPackageModificationAndProjectModificationDo: [ :classesModification :packageModification |  
 					packageModification key = loadedPackageName
 						ifTrue: [
+							| classesModified |
+							classesModified := classesModification elementsModified.
 							classesModification isEmpty
 								ifTrue: [ 
-									"this is not unexpected ... not all packages in the project set are expected to have class modifications with new versions"
-									]
+									classesModified at: subclassName put: newVersionClassModification.
+									newVersionClassModification
+										mergeForNewClassVersionWith: newVersionClassModification ]
 								ifFalse: [ 
-									| classesModified |
-									classesModified := classesModification elementsModified.
 									(classesModified at: subclassName ifAbsent: [  ])
 										ifNil: [
 											classesModified at: subclassName put: newVersionClassModification.
