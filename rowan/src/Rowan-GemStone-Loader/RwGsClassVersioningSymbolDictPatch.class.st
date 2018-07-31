@@ -36,7 +36,14 @@ RwGsClassVersioningSymbolDictPatch >> _createMethodExtensionModificationForNewVe
 	loadedPackage := loadedMethod loadedPackage.
 	loadedProject := loadedMethod loadedProject.
 	projectModification := aProjectSetModification elementsModified
-		at: loadedProject name.
+		at: loadedProject name
+		ifAbsentPut: [
+			| def |
+			def := loadedProject asDefinition.
+			(RwProjectModification before: def after: def)
+				propertiesModification: RwPropertiesModification new;
+				packagesModification: RwPackagesModification new;
+				yourself ].
 	packageModification := projectModification packagesModification
 		elementsModified
 		at: loadedPackage name
