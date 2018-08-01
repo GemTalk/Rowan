@@ -50,6 +50,7 @@ result add: 'constraints: '.
 
 { #category : '*rowan-gemstone-kernel' }
 Class >> _rwSortedConstraints [
+"as of https://github.com/dalehenrich/Rowan/issues/293, no longer sorting in alphabetical order ... instance variable order is the right answer"
 
 |   aConstraint constraintArray |
 ( constraints isKindOf: Array ) ifTrue: [
@@ -60,7 +61,6 @@ Class >> _rwSortedConstraints [
           _and:[ superClass == nil
             _or:[ (superClass _namedIvConstraintAt: x) ~~ aConstraint ]] )
       ifTrue: [ constraintArray add: {(instVarNames at: x) . aConstraint } ] ].
-	constraintArray := constraintArray sort: [:ar1 :ar2 | (ar1 at: 1) <= (ar2 at: 1) ].
 
     aConstraint:= self varyingConstraint .
     ( (aConstraint ~~ Object) _and:
