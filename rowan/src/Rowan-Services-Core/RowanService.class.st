@@ -6,7 +6,8 @@ Class {
 		'updates',
 		'command',
 		'commandArgs',
-		'updateType'
+		'updateType',
+		'organizer'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -114,17 +115,21 @@ RowanService >> definitionClassName [
 
 ]
 
+{ #category : 'other' }
+RowanService >> excludedInstVars [
+
+	^#( #organizer)
+
+]
+
 { #category : 'initialization' }
 RowanService >> initialize [
 ]
 
-{ #category : 'replication' }
-RowanService >> offerOrganizer: anOrganizer [
+{ #category : 'other' }
+RowanService >> organizer: anOrganizer [
 
-	"some services would like an organizer. 
-	Since creation is expensive, offer one from
-	the outside"
-
+	organizer := anOrganizer.
 ]
 
 { #category : 'rowan' }
@@ -183,6 +188,20 @@ RowanService >> sampleSymbolDictionaryName [
 
 	^'SampleSymbolDictionaryName'
 
+]
+
+{ #category : 'replication' }
+RowanService >> stonOn: stonWriter [
+    | instanceVariableNames |
+    instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
+    stonWriter writeObject: self
+        streamMap: 
+            [:dictionary |
+            instanceVariableNames do: 
+                    [:each |
+                    (self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
+                        ifNotNil: [:value | dictionary at: each asSymbol put: value]
+                        ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
 ]
 
 { #category : 'replication' }

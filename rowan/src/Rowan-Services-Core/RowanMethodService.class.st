@@ -13,7 +13,6 @@ Class {
 		'meta',
 		'hasSupers',
 		'hasSubs',
-		'organizer',
 		'compilationWarnings',
 		'isExtension',
 		'inSelectedPackage',
@@ -34,13 +33,13 @@ RowanMethodService class >> forGsNMethod: aGsNMethod organizer: aClassOrganizer 
 ]
 
 { #category : 'instance creation' }
-RowanMethodService class >> forSelector: sel class: theClass meta: boolean organizer: organizer [
+RowanMethodService class >> forSelector: sel class: theClass meta: boolean organizer: anOrganizer [
 
 	| service |
 	service := self new. 
 	service selector: sel;
 		meta: boolean.
-	service forClass: theClass organizer: organizer.
+	service forClass: theClass organizer: anOrganizer.
 	^service
 
 ]
@@ -73,7 +72,7 @@ RowanMethodService >> addOrUpdateMethod [
                    inPackageNamed: self classService packageName
 ]
 
-{ #category : 'queries' }
+{ #category : 'other' }
 RowanMethodService >> allReferences [
 
 	| methods |
@@ -140,24 +139,6 @@ RowanMethodService >> compilationWarnings: newValue [
 	compilationWarnings := newValue
 ]
 
-{ #category : 'method compilation' }
-RowanMethodService >> compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol [
-	"returns (nil -> anArrayOfErrors) or (aGsNMethod -> compilerWarnings) or (aGsNMethod -> nil)"
-
-	| method warnings |
-	
-	[[method := aBehavior rwCompileMethod: methodString category: categorySymbol] on: CompileError
-		do: [:ex | ^nil -> (ex gsArguments at: 1)]]
-			on: CompileWarning
-			do: 
-				[:ex |
-				warnings := ex gsArguments at: 1.
-				ex resume].
-	^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] on: Error
-		do: [:ex | ex return: method -> warnings]
-
-]
-
 { #category : 'examples' }
 RowanMethodService >> createSampleMethod [
            
@@ -179,14 +160,7 @@ RowanMethodService >> definitionClass [
 
 ]
 
-{ #category : 'ston' }
-RowanMethodService >> excludedInstVars [
-
-	^#(#organizer)
-
-]
-
-{ #category : 'initialization' }
+{ #category : 'other' }
 RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	"assume meta and selector are set"
 
@@ -241,7 +215,7 @@ RowanMethodService >> initialize [
 
 ]
 
-{ #category : 'initialization' }
+{ #category : 'other' }
 RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 
 	| inClass |
@@ -252,7 +226,7 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 		source := aGsNMethod sourceString.
 		hasSupers := false.
 		hasSubs := false.
-		organizer := aClassOrganizer.
+		organizer := aClassOrganizer. 
 		inSelectedPackage := false.
 		^self
 	].
@@ -292,24 +266,6 @@ RowanMethodService >> methodDefinitions [
 { #category : 'Updating' }
 RowanMethodService >> methodDefinitions: newValue [
 	methodDefinitions := newValue
-
-]
-
-{ #category : 'testing' }
-RowanMethodService >> needsRecompile [
-
-	| theMethod |
-	theMethod := self method. 
-	^theMethod isNil or:[
-		theMethod sourceString ~= source or:[
-		(self classFromName categoryOfSelector: selector) ~= category]]
-
-]
-
-{ #category : 'replication' }
-RowanMethodService >> offerOrganizer: anOrganizer [
-
-	organizer := anOrganizer
 
 ]
 
@@ -379,29 +335,6 @@ RowanMethodService >> sampleMethodSource [
 
 ]
 
-{ #category : 'method compilation' }
-RowanMethodService >> saveMethod [
-
-	| behavior compilationResult gsNMethod |
-	behavior := self classFromName.
-	category := category ifNil: ['other'].
-	compilationResult := self		
-		compileMethod: source 
-		behavior: behavior 
-		symbolList: System myUserProfile symbolList
-		inCategory: category asSymbol.
-	(gsNMethod := compilationResult key) isNil ifTrue: [
-		System
-			signal: 1001  
-			args: (Array with: compilationResult value)
-			signalDictionary: GemStoneError.
-	]. 
-	gsNMethod selector = selector ifTrue:[
-		self updateExistingMethod: gsNMethod in: behavior compiltationResult: compilationResult]
-	ifFalse: [
-		self updateNewMethod: gsNMethod in: behavior compiltationResult: compilationResult].
-]
-
 { #category : 'Accessing' }
 RowanMethodService >> selectedPackageServices [
 
@@ -430,7 +363,7 @@ RowanMethodService >> selector: aSymbol [
 
 ]
 
-{ #category : 'initialization' }
+{ #category : 'other' }
 RowanMethodService >> setSupersAndSubsFor: theClass [
 
 	| theSuper |
@@ -493,29 +426,4 @@ RowanMethodService >> stonOn: stonWriter [
 
 { #category : 'updates' }
 RowanMethodService >> update [
-	self needsRecompile ifTrue:[
-		^self saveMethod].
-
-]
-
-{ #category : 'method compilation' }
-RowanMethodService >> updateExistingMethod: gsNMethod in: behavior compiltationResult: compilationResult [
-
-		category := behavior categoryOfSelector: gsNMethod selector. 
-		compilationWarnings := compilationResult value.
-		RowanCommandResult addResult: self
-
-]
-
-{ #category : 'method compilation' }
-RowanMethodService >> updateNewMethod: gsNMethod in: behavior compiltationResult: compilationResult [
-		| newClassService newMethodService |
-		
-		newClassService := RowanClassService forClassNamed: className meta: meta. 
-		newClassService selectedPackageServices: selectedPackageServices. 
-		newClassService filters: (Array with: (behavior categoryOfSelector: gsNMethod selector)). 
-		RowanCommandResult addResult: newClassService. 
-		newMethodService := self class forGsNMethod: gsNMethod organizer: organizer.
-		newMethodService compilationWarnings: compilationResult value. 
-		RowanCommandResult addResult: newMethodService
 ]

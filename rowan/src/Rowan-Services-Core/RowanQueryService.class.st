@@ -2,7 +2,6 @@ Class {
 	#name : 'RowanQueryService',
 	#superclass : 'RowanService',
 	#instVars : [
-		'organizer',
 		'queryResults'
 	],
 	#category : 'Rowan-Services-Core'
@@ -15,7 +14,7 @@ RowanQueryService >> excludedInstVars [
 
 ]
 
-{ #category : 'queries' }
+{ #category : 'other' }
 RowanQueryService >> hierarchyImplementorsOf: selector inClass: className [
 
 	| methods behavior classes |
@@ -26,9 +25,10 @@ RowanQueryService >> hierarchyImplementorsOf: selector inClass: className [
 	methods := organizer implementorsOf: selector in: classes.
 	queryResults := self methodServicesFrom: methods.
 	RowanCommandResult addResult: self.
+
 ]
 
-{ #category : 'queries' }
+{ #category : 'other' }
 RowanQueryService >> hierarchySendersOf: selector inClass: className [
 
 	| methods behavior classes |
@@ -39,9 +39,10 @@ RowanQueryService >> hierarchySendersOf: selector inClass: className [
 	methods := organizer sendersOf: selector in: classes.
 	queryResults := self methodServicesFrom: methods first.
 	RowanCommandResult addResult: self.
+
 ]
 
-{ #category : 'queries' }
+{ #category : 'other' }
 RowanQueryService >> implementorsOf: selector [
 
 	| methods |
@@ -51,16 +52,17 @@ RowanQueryService >> implementorsOf: selector [
 
 ]
 
-{ #category : 'queries' }
+{ #category : 'other' }
 RowanQueryService >> methodsContaining: string [
 
 	| methods |
 	methods := organizer substringSearch: string.
 	queryResults := self methodServicesFrom: methods first.
 	RowanCommandResult addResult: self.
+
 ]
 
-{ #category : 'private' }
+{ #category : 'other' }
 RowanQueryService >> methodServicesFrom: methods [
 
 	| sorted | 
@@ -68,16 +70,10 @@ RowanQueryService >> methodServicesFrom: methods [
 	sorted addAll: (methods collect:[:gsNMethod | 
 			RowanMethodService forSelector: gsNMethod selector class: gsNMethod inClass thisClass meta: gsNMethod inClass isMeta organizer: organizer]).
 	^sorted asArray
-]
-
-{ #category : 'replication' }
-RowanQueryService >> offerOrganizer: anOrganizer [
-
-	organizer := anOrganizer
 
 ]
 
-{ #category : 'queries' }
+{ #category : 'other' }
 RowanQueryService >> sendersOf: selector [
 
 	| methods |

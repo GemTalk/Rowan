@@ -130,6 +130,24 @@ RowanClassService >> comment: newValue [
 
 ]
 
+{ #category : 'method compilation' }
+RowanClassService >> compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol [
+	"returns (nil -> anArrayOfErrors) or (aGsNMethod -> compilerWarnings) or (aGsNMethod -> nil)"
+
+	| method warnings |
+	
+	[[method := aBehavior rwCompileMethod: methodString category: categorySymbol] on: CompileError
+		do: [:ex | ^nil -> (ex gsArguments at: 1)]]
+			on: CompileWarning
+			do: 
+				[:ex |
+				warnings := ex gsArguments at: 1.
+				ex resume].
+	^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] on: Error
+		do: [:ex | ex return: method -> warnings]
+
+]
+
 { #category : 'Updating' }
 RowanClassService >> definedPackageName: newValue [
 
@@ -212,11 +230,21 @@ RowanClassService >> meta: anObject [
 ]
 
 { #category : 'private' }
-RowanClassService >> methodSelectorsFor: classOrMeta organizer: organizer [
+RowanClassService >> methodSelectorsFor: classOrMeta organizer: theOrganizer [
 
 	methods addAll: (classOrMeta selectors collect:[:sel | 
 			RowanMethodService 
-				forSelector: sel class: classOrMeta thisClass meta: meta organizer: organizer])
+				forSelector: sel class: classOrMeta thisClass meta: meta organizer: theOrganizer])
+]
+
+{ #category : 'other' }
+RowanClassService >> methodServiceFrom: gsNMethod in: behavior compiltationResult: compilationResult [
+	| methodService |
+
+	methodService := RowanMethodService forGsNMethod: gsNMethod organizer: organizer. 
+	methodService compilationWarnings: compilationResult value.
+	^methodService
+
 ]
 
 { #category : 'Accessing' }
@@ -243,14 +271,14 @@ RowanClassService >> oop: newValue [
 
 ]
 
-{ #category : 'examples' }
+{ #category : 'Accessing' }
 RowanClassService >> packageName [
 	
 	^packageName
 
 ]
 
-{ #category : 'examples' }
+{ #category : 'Updating' }
 RowanClassService >> packageName: pkgName [
 	
 	packageName := pkgName
@@ -269,9 +297,12 @@ RowanClassService >> poolDictionaryNames: newValue [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'other' }
 RowanClassService >> refreshFrom: theClass [
-	| classOrMeta theFilters organizer |
+	| classOrMeta theFilters |
+	command := nil. 
+	commandArgs := nil. 
+	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade"
 	versions := theClass classHistory size.
 	version := theClass classHistory indexOf: theClass.
 	template := self classCreationTemplate.
@@ -283,28 +314,28 @@ RowanClassService >> refreshFrom: theClass [
 	filterType = 'variables'
 		ifTrue: [^self refreshFromVariable: classOrMeta].
 	self refreshFromCategory: classOrMeta
+
 ]
 
-{ #category : 'updates' }
+{ #category : 'other' }
 RowanClassService >> refreshFromCategory: classOrMeta [
-	| theFilters organizer |
+	| theFilters |
 	theFilters := SortedCollection new.
 	classOrMeta env: 0 categorysDo: [:category :selector | theFilters add: category].
 	allFilters := theFilters asOrderedCollection.
 	methods := SortedCollection sortBlock: [:x :y | x selector < y selector].
-	organizer := ClassOrganizer new.
 	self methodSelectorsFor: classOrMeta organizer: organizer.
 	methods := methods asOrderedCollection
+
 ]
 
-{ #category : 'updates' }
+{ #category : 'other' }
 RowanClassService >> refreshFromVariable: classOrMeta [
-	| theFilters organizer gsNmethods |
+	| theFilters gsNmethods |
 	theFilters := SortedCollection new.
 	theFilters addAll: classOrMeta allInstVarNames.
 	allFilters := theFilters asOrderedCollection.
 	methods := SortedCollection sortBlock: [:x :y | x selector < y selector].
-	organizer := ClassOrganizer new.
 	gsNmethods := Set new. 
 	filters isEmpty ifTrue:[
 		self methodSelectorsFor: classOrMeta organizer: organizer]
@@ -315,6 +346,7 @@ RowanClassService >> refreshFromVariable: classOrMeta [
 				RowanMethodService 
 					forSelector: gsNmeth selector class: classOrMeta thisClass meta: meta organizer: organizer]).]].
 	methods := methods asOrderedCollection
+
 ]
 
 { #category : 'commands' }
@@ -387,6 +419,29 @@ RowanClassService >> samplePackageName [
 
 ]
 
+{ #category : 'commands' }
+RowanClassService >> saveMethodSource: source category: category [
+
+	| behavior compilationResult gsNMethod updatedCategory methodService |
+	behavior := self classFromName.
+	updatedCategory := category ifNil: ['other'].
+	compilationResult := self		
+		compileMethod: source 
+		behavior: behavior 
+		symbolList: System myUserProfile symbolList
+		inCategory: updatedCategory asSymbol.
+	(gsNMethod := compilationResult key) isNil ifTrue: [
+		System
+			signal: 1001  
+			args: (Array with: compilationResult value) 
+			signalDictionary: GemStoneError.
+	]. 
+	methodService := self methodServiceFrom: gsNMethod in: behavior compiltationResult: compilationResult.
+	RowanCommandResult addResult: methodService.
+	self update. 
+	RowanCommandResult addResult: self.
+]
+
 { #category : 'Accessing' }
 RowanClassService >> selectedPackageServices [
 	^selectedPackageServices
@@ -395,6 +450,12 @@ RowanClassService >> selectedPackageServices [
 { #category : 'Updating' }
 RowanClassService >> selectedPackageServices: newValue [
 	selectedPackageServices := newValue
+]
+
+{ #category : 'Accessing' }
+RowanClassService >> selectors [
+
+	^methods collect:[:methodService | methodService selector]
 ]
 
 { #category : 'Accessing' }
@@ -412,6 +473,21 @@ RowanClassService >> setComment [
 						description class name = #GsClassDocumentation
 							ifTrue: [comment := description detailsAboutClass]]].
 	comment isNil ifTrue: [comment := String new].
+
+]
+
+{ #category : 'replication' }
+RowanClassService >> stonOn: stonWriter [
+    | instanceVariableNames |
+    instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
+    stonWriter writeObject: self
+        streamMap: 
+            [:dictionary |
+            instanceVariableNames do: 
+                    [:each |
+                    (self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
+                        ifNotNil: [:value | dictionary at: each asSymbol put: value]
+                        ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
 
 ]
 
