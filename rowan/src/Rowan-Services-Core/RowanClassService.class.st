@@ -23,7 +23,8 @@ Class {
 		'methods',
 		'selectedPackageServices',
 		'packageName',
-		'definedPackageName'
+		'definedPackageName',
+		'selectedMethods'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -193,7 +194,7 @@ RowanClassService >> forClassNamed: className [
 RowanClassService >> initialize [
 
 	isExtension := false.
-
+	selectedMethods := Array new.
 ]
 
 { #category : 'Accessing' }
@@ -245,6 +246,20 @@ RowanClassService >> methodServiceFrom: gsNMethod in: behavior compiltationResul
 	methodService compilationWarnings: compilationResult value.
 	^methodService
 
+]
+
+{ #category : 'commands' }
+RowanClassService >> moveMethods: methodServices to: category [
+	| behavior |
+	behavior := meta 
+			ifTrue:[self classFromName] 
+			ifFalse: [self classFromName class].
+	methodServices do: [:methodService | 
+			behavior rwMoveMethod: methodService selector toCategory: category.
+			methodService category: category].
+	self update. 
+	self selectedMethods: methodServices. 
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'Accessing' }
@@ -438,7 +453,8 @@ RowanClassService >> saveMethodSource: source category: category [
 	]. 
 	methodService := self methodServiceFrom: gsNMethod in: behavior compiltationResult: compilationResult.
 	RowanCommandResult addResult: methodService.
-	self update. 
+	self update.  
+	selectedMethods := (Array with: methodService).
 	RowanCommandResult addResult: self.
 ]
 
