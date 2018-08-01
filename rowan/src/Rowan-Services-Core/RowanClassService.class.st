@@ -238,7 +238,7 @@ RowanClassService >> methodSelectorsFor: classOrMeta organizer: theOrganizer [
 				forSelector: sel class: classOrMeta thisClass meta: meta organizer: theOrganizer])
 ]
 
-{ #category : 'other' }
+{ #category : 'private' }
 RowanClassService >> methodServiceFrom: gsNMethod in: behavior compiltationResult: compilationResult [
 	| methodService |
 
@@ -252,8 +252,8 @@ RowanClassService >> methodServiceFrom: gsNMethod in: behavior compiltationResul
 RowanClassService >> moveMethods: methodServices to: category [
 	| behavior |
 	behavior := meta 
-			ifTrue:[self classFromName] 
-			ifFalse: [self classFromName class].
+			ifTrue:[self classFromName class] 
+			ifFalse: [self classFromName].
 	methodServices do: [:methodService | 
 			behavior rwMoveMethod: methodService selector toCategory: category.
 			methodService category: category].
@@ -312,7 +312,7 @@ RowanClassService >> poolDictionaryNames: newValue [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'initialization' }
 RowanClassService >> refreshFrom: theClass [
 	| classOrMeta theFilters |
 	command := nil. 
@@ -332,7 +332,7 @@ RowanClassService >> refreshFrom: theClass [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'initialization' }
 RowanClassService >> refreshFromCategory: classOrMeta [
 	| theFilters |
 	theFilters := SortedCollection new.
@@ -344,7 +344,7 @@ RowanClassService >> refreshFromCategory: classOrMeta [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'initialization' }
 RowanClassService >> refreshFromVariable: classOrMeta [
 	| theFilters gsNmethods |
 	theFilters := SortedCollection new.
@@ -456,6 +456,11 @@ RowanClassService >> saveMethodSource: source category: category [
 	self update.  
 	selectedMethods := (Array with: methodService).
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'Updating' }
+RowanClassService >> selectedMethods: newValue [
+	selectedMethods := newValue
 ]
 
 { #category : 'Accessing' }
