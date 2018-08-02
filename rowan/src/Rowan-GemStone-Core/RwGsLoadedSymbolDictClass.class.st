@@ -225,13 +225,14 @@ RwGsLoadedSymbolDictClass >> updateClassTypeFromClass [
 					[handle isNsc
 						ifTrue: [ 'normal' ]
 						ifFalse:  [
-							handle isVariable
+							(handle isVariable and: [handle superClass isVariable not])
 								ifTrue: ['variable']
 								ifFalse: [ 'normal'] ] ].
 
 	oldValue = newValue
 		ifFalse: 
 			[ self propertyAt: propertyName put: newValue ]
+
 ]
 
 { #category : 'private-updating' }
@@ -329,7 +330,7 @@ RwGsLoadedSymbolDictClass >> updateOptionsFromClass [
 	| propertyName oldValue newValue |
 	propertyName := 'gs_options'.
 	oldValue := self propertyAt: propertyName.
-	newValue := (handle _optionsArray collect: [:option | option asString])
+	newValue := (handle _rwOptionsArray collect: [:option | option asString])
 				asSortedCollection asArray.
 	newValue isEmpty ifTrue: [newValue := self absentToken].
 
@@ -339,6 +340,7 @@ RwGsLoadedSymbolDictClass >> updateOptionsFromClass [
 			[newValue == self absentToken
 				ifTrue: [self removeProperty: propertyName]
 				ifFalse: [self propertyAt: propertyName put: newValue]]
+
 ]
 
 { #category : 'private-updating' }
