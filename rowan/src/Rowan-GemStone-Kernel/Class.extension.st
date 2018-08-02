@@ -59,7 +59,7 @@ Class >> _rwSortedConstraints [
       aConstraint := constraints atOrNil: x .
       ((aConstraint ~~ nil _and: [aConstraint ~~ Object])
           _and:[ superClass == nil
-            _or:[ (superClass _namedIvConstraintAt: x) ~~ aConstraint ]] )
+            _or:[ ((superClass _namedIvConstraintAt: x) isVersionOf: aConstraint) not ]] )
       ifTrue: [ constraintArray add: {(instVarNames at: x) . aConstraint } ] ].
 
     aConstraint:= self varyingConstraint .
