@@ -14,7 +14,7 @@ RowanQueryService >> excludedInstVars [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'queries' }
 RowanQueryService >> hierarchyImplementorsOf: selector inClass: className [
 
 	| methods behavior classes |
@@ -28,7 +28,7 @@ RowanQueryService >> hierarchyImplementorsOf: selector inClass: className [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'queries' }
 RowanQueryService >> hierarchySendersOf: selector inClass: className [
 
 	| methods behavior classes |
@@ -42,7 +42,7 @@ RowanQueryService >> hierarchySendersOf: selector inClass: className [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'queries' }
 RowanQueryService >> implementorsOf: selector [
 
 	| methods |
@@ -52,7 +52,7 @@ RowanQueryService >> implementorsOf: selector [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'queries' }
 RowanQueryService >> methodsContaining: string [
 
 	| methods |
@@ -62,7 +62,7 @@ RowanQueryService >> methodsContaining: string [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'queries' }
 RowanQueryService >> methodServicesFrom: methods [
 
 	| sorted | 
@@ -73,7 +73,7 @@ RowanQueryService >> methodServicesFrom: methods [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'queries' }
 RowanQueryService >> sendersOf: selector [
 
 	| methods |

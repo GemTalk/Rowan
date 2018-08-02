@@ -76,7 +76,7 @@ RowanClassService >> classCreationTemplate [
 
 ]
 
-{ #category : 'private' }
+{ #category : 'Accessing' }
 RowanClassService >> classFromName [
 
 	^Rowan globalNamed: name
