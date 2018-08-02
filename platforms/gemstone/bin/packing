@@ -30,6 +30,7 @@ set -e
 # Alpha14: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha14 v0.4.5-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
 # Alpha15: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha15 v0.4.6-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
 # Alpha16: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha16 v0.4.7-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
+# 1.0.0-candidate: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-1.0.0-candidate v0.4.7-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"

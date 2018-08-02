@@ -448,7 +448,7 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 				addLast: $'.
 			newByteSubclass := true ]
 		ifFalse: [ 
-			aClass isIndexable
+			(aClass isIndexable and: [superClass isIndexable not])
 				ifTrue: [ 
 					nonRowanClass
 						ifTrue: [ result addAll: ' indexableSubclass: ''' ]
@@ -524,7 +524,7 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 				add: aClass _rwDefinitionOfConstraints ].
 	result
 		add: lfsp;
-		add: aClass _optionsForDefinition.
+		add: aClass _rwOptionsForDefinition.
 	result add: Character lf.
 	^ result
 
