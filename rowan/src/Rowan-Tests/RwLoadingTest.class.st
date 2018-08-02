@@ -114,7 +114,7 @@ RwLoadingTest >> basicClassDefinitions: packageName [
             superclass: 'Bag'
             type: 'normal'
             instvars: {}
-            gs_options: {'disallowGciStore'}
+            gs_options: {}
             inPackage: packageName);
     at: 'TestCustomByteArrayClass'
       put:
@@ -144,6 +144,7 @@ RwLoadingTest >> basicClassDefinitions: packageName [
             gs_options: {}
             inPackage: packageName);
     yourself
+
 ]
 
 { #category : 'support - basic definitions' }
