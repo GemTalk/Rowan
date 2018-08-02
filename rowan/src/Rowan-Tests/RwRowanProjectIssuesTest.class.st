@@ -5325,15 +5325,15 @@ RwRowanProjectIssuesTest >> testIssue275_delete_subclass_handle_keep_in_system [
 
 ]
 
-{ #category : 'tests-issue 292' }
-RwRowanProjectIssuesTest >> testIssue292_new_version_class_with_subclass_constraints_1 [
+{ #category : 'tests-issue 291' }
+RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constraints_1 [
 
-	"https://github.com/dalehenrich/Rowan/issues/292"
+	"https://github.com/dalehenrich/Rowan/issues/291"
 
 	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3 
 		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 |
 
-	projectName := 'Issue292'.
+	projectName := 'Issue291'.
 	packageName := 'Issue255-Core'.
 	className1 := 'Issue255Class1'.
 	className2 := 'Issue255Class2'.
@@ -5447,15 +5447,15 @@ RwRowanProjectIssuesTest >> testIssue292_new_version_class_with_subclass_constra
 
 ]
 
-{ #category : 'tests-issue 292' }
-RwRowanProjectIssuesTest >> testIssue292_new_version_class_with_subclass_constraints_2 [
+{ #category : 'tests-issue 291' }
+RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constraints_2 [
 
-	"https://github.com/dalehenrich/Rowan/issues/292"
+	"https://github.com/dalehenrich/Rowan/issues/291"
 
 	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3 
 		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
 
-	projectName := 'Issue292'.
+	projectName := 'Issue291'.
 	packageName := 'Issue255-Core'.
 	className1 := 'Issue255Class1'.
 	className2 := 'Issue255Class2'.
@@ -5574,17 +5574,17 @@ RwRowanProjectIssuesTest >> testIssue292_new_version_class_with_subclass_constra
 
 ]
 
-{ #category : 'tests-issue 292' }
-RwRowanProjectIssuesTest >> testIssue292_new_version_class_with_subclass_constraints_3 [
+{ #category : 'tests-issue 291' }
+RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constraints_3 [
 
-	"https://github.com/dalehenrich/Rowan/issues/292"
+	"https://github.com/dalehenrich/Rowan/issues/291"
 
 	"super class has constraint on instance of subclass"
 
 	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3 
 		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
 
-	projectName := 'Issue292'.
+	projectName := 'Issue291'.
 	packageName := 'Issue255-Core'.
 	className1 := 'Issue255Class1'.
 	className2 := 'Issue255Class2'.
@@ -5703,17 +5703,17 @@ RwRowanProjectIssuesTest >> testIssue292_new_version_class_with_subclass_constra
 
 ]
 
-{ #category : 'tests-issue 292' }
-RwRowanProjectIssuesTest >> testIssue292_new_version_class_with_subclass_constraints_4 [
+{ #category : 'tests-issue 291' }
+RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constraints_4 [
 
-	"https://github.com/dalehenrich/Rowan/issues/292"
+	"https://github.com/dalehenrich/Rowan/issues/291"
 
 	"subclass overrides constraint of superclass (ivar1 has different constraint for each of classes)"
 
 	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3 
 		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
 
-	projectName := 'Issue292'.
+	projectName := 'Issue291'.
 	packageName := 'Issue255-Core'.
 	className1 := 'Issue255Class1'.
 	className2 := 'Issue255Class2'.
