@@ -24,7 +24,8 @@ Class {
 		'selectedPackageServices',
 		'packageName',
 		'definedPackageName',
-		'selectedMethods'
+		'selectedMethods',
+		'projectName'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -309,6 +310,11 @@ RowanClassService >> poolDictionaryNames [
 RowanClassService >> poolDictionaryNames: newValue [
 	poolDictionaryNames := newValue
 
+]
+
+{ #category : 'Updating' }
+RowanClassService >> projectName: newValue [
+	projectName := newValue
 ]
 
 { #category : 'initialization' }
