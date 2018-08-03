@@ -70,6 +70,14 @@ RowanClassService >> addCategory: string [
 
 ]
 
+{ #category : 'commands' }
+RowanClassService >> classComment: string [
+
+	self classFromName comment: string.
+	RowanCommandResult addResult: self.
+
+]
+
 { #category : 'rowan' }
 RowanClassService >> classCreationTemplate [
 	
@@ -274,6 +282,12 @@ RowanClassService >> name: newValue [
 
 ]
 
+{ #category : 'private' }
+RowanClassService >> objectInBaseNamed: aString [
+
+	^System myUserProfile symbolList objectNamed: aString asSymbol
+]
+
 { #category : 'Accessing' }
 RowanClassService >> oop [
 	^oop
@@ -322,6 +336,7 @@ RowanClassService >> refreshFrom: theClass [
 	| classOrMeta theFilters |
 	command := nil. 
 	commandArgs := nil. 
+	comment := theClass comment. 
 	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade"
 	versions := theClass classHistory size.
 	version := theClass classHistory indexOf: theClass.
@@ -334,7 +349,6 @@ RowanClassService >> refreshFrom: theClass [
 	filterType = 'variables'
 		ifTrue: [^self refreshFromVariable: classOrMeta].
 	self refreshFromCategory: classOrMeta
-
 ]
 
 { #category : 'initialization' }
@@ -413,7 +427,7 @@ RowanClassService >> removeSelector: selector ifAbsent: absentBlock [
 RowanClassService >> saveMethodSource: source category: category [
 
 	| behavior compilationResult gsNMethod updatedCategory methodService |
-	behavior := self classFromName.
+	behavior := meta ifTrue:[self classFromName class] ifFalse:[self classFromName].
 	updatedCategory := category ifNil: ['other'].
 	compilationResult := self		
 		compileMethod: source 
