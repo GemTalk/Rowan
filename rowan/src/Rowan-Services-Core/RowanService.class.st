@@ -115,7 +115,7 @@ RowanService >> definitionClassName [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'replication' }
 RowanService >> excludedInstVars [
 
 	^#( #organizer)
@@ -126,7 +126,7 @@ RowanService >> excludedInstVars [
 RowanService >> initialize [
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 RowanService >> organizer: anOrganizer [
 
 	organizer := anOrganizer.

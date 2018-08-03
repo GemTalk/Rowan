@@ -30,11 +30,13 @@ RowanBrowserService >> removeMethods: methodServices [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'updates' }
-RowanBrowserService >> update [
+{ #category : 'commands' }
+RowanBrowserService >> updateProjects [
 	| sortedProjects | 
 	sortedProjects := SortedCollection sortBlock: [:a :b | a name < b name]. 
 	sortedProjects addAll:  Rowan image loadedProjects.
 	projects := sortedProjects collect:[:project | RowanProjectService newNamed: project name].
+	updateType := #projectsUpdate:.
 	RowanCommandResult addResult: self
+
 ]
