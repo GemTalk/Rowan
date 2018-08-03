@@ -1,13 +1,9 @@
 Class {
 	#name : 'RwExistingVisitorAddingExistingClassNotification',
 	#superclass : 'RwNotification',
-	#type : 'variable',
 	#instVars : [
 		'classDefinition',
 		'loadedProject'
-	],
-	#gs_options : [
-		'disallowGciStore'
 	],
 	#category : 'Rowan-Core'
 }

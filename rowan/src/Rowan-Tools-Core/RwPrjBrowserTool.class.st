@@ -398,14 +398,14 @@ RwPrjBrowserTool >> addPackagesNamed: packageNames toProjectNamed: projectName [
 ]
 
 { #category : 'project browsing' }
-RwPrjBrowserTool >> addRowanSymbolDictionariesToPeristentSymbolList [
+RwPrjBrowserTool >> addRowanSymbolDictionariesToPersistentSymbolList [
 
-	self addRowanSymbolDictionariesToPeristentSymbolListFor: System myUserProfile
+	self addRowanSymbolDictionariesToPersistentSymbolListFor: System myUserProfile
 
 ]
 
 { #category : 'project browsing' }
-RwPrjBrowserTool >> addRowanSymbolDictionariesToPeristentSymbolListFor: userProfile [
+RwPrjBrowserTool >> addRowanSymbolDictionariesToPersistentSymbolListFor: userProfile [
 
 	| systemUser |
 	systemUser := AllUsers userWithId: 'SystemUser'.
