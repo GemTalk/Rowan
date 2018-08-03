@@ -159,6 +159,7 @@ RwAbstractTool >> help [
 RwAbstractTool >> readlink: filepath [
 
 	"resolve (possible) symbolic links in filepath and return an absolute path"
+	"NOTE: may need alternate solution on OSX"
 
 	| command |
 	command := 'set -e; readlink -f ', filepath.
