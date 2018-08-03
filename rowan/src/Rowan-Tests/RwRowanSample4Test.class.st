@@ -1821,7 +1821,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
 	"load project into stone"
 	projectTools load 
 		loadProjectFromSpecUrl: 'file:', gitRootPath, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'
-		projectRootPath: gitRootPath_symLink, '/', symLinkName, '/'.
+		projectRootPath: gitRootPath_symLink, '/', symLinkName, '/', projectName, '/'.
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
