@@ -85,27 +85,31 @@ RwPrjLoadTool >> _doProjectSetLoad: projectSetDefinition instanceMigrator: insta
 { #category : 'private' }
 RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad instanceMigrator: instanceMigrator [
 
-	| loadedProjectSet diff loadedProjectInfo| 
-	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings
-		asProjectDefinitionSet.
+	| loadedProjectSet loadedProjectDefinitionSet diff loadedProjectInfo| 
+	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings.
+	loadedProjectDefinitionSet := loadedProjectSet asProjectDefinitionSet.
 	loadedProjectInfo := projectSetDefinitionToLoad properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
 	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
 			"install the packageMapSpecs for this load into the specification prior to the load"
 			| projectDefinition |
 			projectDefinition := projectSetDefinitionToLoad projectNamed: projectName ifAbsent: [].
 			projectDefinition updateGsPlatformSpecLoadedProjectInfo: projectInfo ].
-	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectSet.
+	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectDefinitionSet.
 	diff isEmpty
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
-		do: [ :projectDef | 
-			self specification: projectDef specification.
-			projectDef specification updateLoadedCommitIdForTool: self.
+		do: [ :projectDef |
+			| theSpec |
+			theSpec := (loadedProjectSet entities at: projectDef name ifAbsent: [])
+				ifNil: [ projectDef specification ]
+				ifNotNil: [:loadedProject | loadedProject specification ].
+			self specification: theSpec.
+			theSpec updateLoadedCommitIdForTool: self.
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
 				ifNotNil: [:map |
-					projectDef specification imageSpec
+					theSpec imageSpec
 						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
-						loadedGroupNames: (map at: 'loadedGroupNames') ]].
+						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
 	^ diff
 
 ]
