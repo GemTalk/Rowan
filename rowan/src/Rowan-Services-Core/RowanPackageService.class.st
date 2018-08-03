@@ -68,21 +68,6 @@ RowanPackageService >> createPackageNamed: aString inProject: projName [
 	self projectTools load loadProjectDefinition: projectDefinition.
 ]
 
-{ #category : 'examples' }
-RowanPackageService >> createSamplePackage [
-
-	"assume that the sample project & symbol dictionary 
-	were already removed"
-
-	| projectService |
-	projectService := RowanProjectService new.
-	projectDefinition := projectService createSampleProject.  
-	projectDefinition addPackageNamed: self samplePackageName.
-	name := self samplePackageName.
-	self projectTools load loadProjectDefinition: projectDefinition.
-
-]
-
 { #category : 'Updating' }
 RowanPackageService >> defaultTemplate: newValue [
 	defaultTemplate := newValue
@@ -100,19 +85,6 @@ RowanPackageService >> deletePackage [
 
 	self browserTool removePackageNamed: name.
 
-]
-
-{ #category : 'other' }
-RowanPackageService >> forPackageNamed: aName [
-
-	| inst |
-	inst := self new.  
-	inst name: aName.
-	aName isNil ifFalse:[
-		inst isDirty. "lazy initialize"].
-	inst setDefaultTemplate. 
-	inst updateProjectName.
-	^inst
 ]
 
 { #category : 'rowan' }
@@ -234,20 +206,6 @@ RowanPackageService >> removeClassNamed: className [
 RowanPackageService >> rowanDirty [
 
 	^(RwPackage newNamed: name) isDirty
-
-]
-
-{ #category : 'examples' }
-RowanPackageService >> samplePackageName [
-	
-	^'SamplePackageName'
-
-]
-
-{ #category : 'examples' }
-RowanPackageService >> sampleProjectName [
-
-	^'SampleProjectName'
 
 ]
 

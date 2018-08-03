@@ -109,15 +109,6 @@ RowanProjectService >> createProjectNamed: projectName in: symbolDictionaryName 
 
 ]
 
-{ #category : 'examples' }
-RowanProjectService >> createSampleProject [
-
-	self removeProjectNamed: self sampleProjectName.
-	self createSampleSymbolDictionary.
-	^self createProjectNamed: self sampleProjectName in: self sampleSymbolDictionaryName
-
-]
-
 { #category : 'accessing' }
 RowanProjectService >> defaultProjectName [
 
@@ -340,13 +331,6 @@ RowanProjectService >> rowanSha [
 RowanProjectService >> rowanSkew [
 
 	^self sha ~= self repositorySha
-
-]
-
-{ #category : 'examples' }
-RowanProjectService >> sampleProjectName [
-	
-	^'SampleProjectName'
 
 ]
 

@@ -80,7 +80,6 @@ RowanClassService >> classCreationTemplate [
 RowanClassService >> classFromName [
 
 	^Rowan globalNamed: name
-
 ]
 
 { #category : 'Accessing' }
@@ -346,7 +345,7 @@ RowanClassService >> refreshFromCategory: classOrMeta [
 
 { #category : 'initialization' }
 RowanClassService >> refreshFromVariable: classOrMeta [
-	| theFilters gsNmethods |
+	| theFilters gsNmethods  | 
 	theFilters := SortedCollection new.
 	theFilters addAll: classOrMeta allInstVarNames.
 	allFilters := theFilters asOrderedCollection.
@@ -359,14 +358,13 @@ RowanClassService >> refreshFromVariable: classOrMeta [
 			gsNmethods addAll: (organizer accessorsOf: instVar inClass: classOrMeta).
 			methods addAll: (gsNmethods collect:[:gsNmeth | 
 				RowanMethodService 
-					forSelector: gsNmeth selector class: classOrMeta thisClass meta: meta organizer: organizer]).]].
+					forSelector: gsNmeth selector class: gsNmeth inClass thisClass meta: meta organizer: organizer]).]].
 	methods := methods asOrderedCollection
-
 ]
 
 { #category : 'commands' }
 RowanClassService >> removeCategories: categories [
-	| theClass |
+	| theClass | 
 	theClass := self classFromName.
 	meta ifTrue:[theClass := theClass class]. 
 	categories do: [:category |
@@ -402,35 +400,6 @@ RowanClassService >> removeSelector: selector ifAbsent: absentBlock [
 	meta ifTrue: [theClass := theClass class].
 	(theClass compiledMethodAt: selector otherwise: nil) isNil ifTrue:[ ^absentBlock value ].
 	self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta
-
-]
-
-{ #category : 'examples' }
-RowanClassService >> sampleClass [
-	"return the actual resolved class"
-	
-	^(GsSession currentSession resolveSymbol: self sampleClassName) value
-
-]
-
-{ #category : 'examples' }
-RowanClassService >> sampleClassInstance [
-
-	^self sampleClass new
-
-]
-
-{ #category : 'examples' }
-RowanClassService >> sampleClassName [
-	
-	^'SampleClassName'
-
-]
-
-{ #category : 'examples' }
-RowanClassService >> samplePackageName [
-	
-	^'SamplePackageName'
 
 ]
 

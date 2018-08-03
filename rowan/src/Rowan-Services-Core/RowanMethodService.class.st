@@ -139,20 +139,6 @@ RowanMethodService >> compilationWarnings: newValue [
 	compilationWarnings := newValue
 ]
 
-{ #category : 'examples' }
-RowanMethodService >> createSampleMethod [
-           
-           |   classDefinition | 
-		
-			classService := RowanClassService new.
-			classDefinition := classService createSampleClass. 
-			source := self sampleMethodSource.
-			category := 'sample'.
-			meta := false. 
-			^self addOrUpdateMethod
-
-]
-
 { #category : 'rowan' }
 RowanMethodService >> definitionClass [
 
@@ -293,45 +279,6 @@ RowanMethodService >> removeSelector: sel class: clsName [
 RowanMethodService >> rowanIsExtension [
 
 	^Rowan projectTools browser isExtensionMethod: selector asString forClassNamed: className asString isMeta: meta
-
-]
-
-{ #category : 'examples' }
-RowanMethodService >> sampleClassInstance [
-
-	^classService sampleClassInstance
-
-]
-
-{ #category : 'examples' }
-RowanMethodService >> sampleDefinition [
-
-	definition := self definitionClass newForSelector: 'sampleMethod' protocol: 'sampleProtocol' source: self sampleMethodSource.
-	source := definition source.
-	selector := definition selector.
-	^definition
-
-]
-
-{ #category : 'examples' }
-RowanMethodService >> sampleDefinitions [
-	
-	methodDefinitions := Array with: self sampleDefinition.
-	^methodDefinitions
-
-]
-
-{ #category : 'examples' }
-RowanMethodService >> sampleMethodSelector [
-
-	^'sampleMethod'
-
-]
-
-{ #category : 'examples' }
-RowanMethodService >> sampleMethodSource [
-
-	^'sampleMethod ^''some text'''.
 
 ]
 
