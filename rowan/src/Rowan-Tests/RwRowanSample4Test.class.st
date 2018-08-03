@@ -1729,6 +1729,107 @@ RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 ]
 
 { #category : 'tests' }
+RwRowanSample4Test >> testLoadProjectFromUrl_300_1 [
+
+	"https://github.com/dalehenrich/Rowan/issues/300"
+
+	"validation for testLoadProjectFromUrl_300_1, that a non-symbolic link clone/load works"
+
+	| specUrlString projectTools rowanSpec gitRootPath projectName spec theClass |
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4SpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	spec := specUrlString asRwUrl asSpecification.
+	projectTools clone
+		cloneSpecification: spec
+		gitRootPath: gitRootPath
+		useSsh: true
+		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
+
+	"load project into stone"
+	projectTools load 
+		loadProjectFromSpecUrl: 'file:', gitRootPath, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'
+		projectRootPath: gitRootPath, '/', projectName, '/'.
+
+	theClass := Rowan globalNamed: 'RowanSample4'.
+
+	self assert: theClass new foo = 'foo'
+
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
+
+	"https://github.com/dalehenrich/Rowan/issues/300"
+
+	"regression test for bug ... mixed symbolic link and absolute path referencing same git repository"
+
+	| specUrlString projectTools rowanSpec gitRootPath projectName spec theClass commandLine symLinkName gitRootPath_symLink |
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4SpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath_symLink  := '/tmp/rowan_issue_300/'.
+	gitRootPath :=  rowanSpec repositoryRootPath , '/test/testRepositories/repos/issue_300_dir/'.
+
+	commandLine := 'set -e;  rm -rf ', gitRootPath.
+	Rowan gitTools performOnServer: commandLine logging: true.
+
+	commandLine := 'set -e;  rm -rf ', gitRootPath_symLink.
+	Rowan gitTools performOnServer: commandLine logging: true.
+
+"clone project to make sure that we have an existing git project"
+	spec := specUrlString asRwUrl asSpecification.
+	projectTools clone
+		cloneSpecification: spec
+		gitRootPath: gitRootPath
+		useSsh: true
+		registerProject: false. 	"does not register the project, so it is not visible in project list ... does however clone the project to local disk --- which we need"
+
+	self assert: (Rowan fileUtilities directoryExists: gitRootPath , projectName).
+
+"create symbolic link..."
+	symLinkName := 'issue_300_symLink'.
+	commandLine := 'set -e;  cd ' , gitRootPath , '; mkdir ', gitRootPath_symLink, '; ln -s ', gitRootPath, ' ', gitRootPath_symLink, '/', symLinkName.
+	Rowan gitTools performOnServer: commandLine logging: true.
+
+"...and now run clone again using symbolic link" 
+	spec := specUrlString asRwUrl asSpecification.
+	self assert: spec repositoryUrl isNil.
+	projectTools clone
+		cloneSpecification: spec
+		gitRootPath: gitRootPath_symLink, '/', symLinkName
+		useSsh: true
+		registerProject: true.
+
+	self assert: spec repositoryUrl notNil.
+
+	"load project into stone"
+	projectTools load 
+		loadProjectFromSpecUrl: 'file:', gitRootPath, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'
+		projectRootPath: gitRootPath_symLink, '/', symLinkName, '/'.
+
+	theClass := Rowan globalNamed: 'RowanSample4'.
+
+	self assert: theClass new foo = 'foo'.
+
+]
+
+{ #category : 'tests' }
 RwRowanSample4Test >> testLoadProjectFromUrl_issue180 [
 
 	"https://github.com/dalehenrich/Rowan/issues/180"
