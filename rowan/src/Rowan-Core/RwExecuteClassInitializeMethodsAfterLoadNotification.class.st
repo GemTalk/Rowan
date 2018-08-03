@@ -1,12 +1,8 @@
 Class {
 	#name : 'RwExecuteClassInitializeMethodsAfterLoadNotification',
 	#superclass : 'RwNotification',
-	#type : 'variable',
 	#instVars : [
 		'candidateClass'
-	],
-	#gs_options : [
-		'disallowGciStore'
 	],
 	#category : 'Rowan-Core'
 }

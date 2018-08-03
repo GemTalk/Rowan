@@ -16,7 +16,7 @@ RwPrjCloneTool >> _validateForGitRootPathForSpecification: gitRootPath gitRepoDi
 			response := gitTool gitrevparseShowTopLevelIn: repoUrl pathString.
 			command := 'set -e; cd ' , gitRepoPath , '; pwd'.
 			cdResponse := gitTool performOnServer: command logging: true.
-			response = cdResponse
+			(self readlink: response) = (self readlink: cdResponse)
 				ifTrue: [ 
 					| msg |
 					msg := 'A clone for ' , specification specName printString
@@ -35,7 +35,7 @@ RwPrjCloneTool >> _validateForGitRootPathForSpecification: gitRootPath gitRepoDi
 			response := gitTool gitrevparseShowTopLevelIn: gitRepoPath.
 			command := 'set -e; cd ' , gitRepoPath , '; pwd'.
 			cdResponse := gitTool performOnServer: command logging: true.
-			response = cdResponse
+			(self readlink: response) = (self readlink: cdResponse)
 				ifTrue: [ 
 					| msg |
 					specification
