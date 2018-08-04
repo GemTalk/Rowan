@@ -486,21 +486,6 @@ RowanClassService >> setComment [
 
 ]
 
-{ #category : 'replication' }
-RowanClassService >> stonOn: stonWriter [
-    | instanceVariableNames |
-    instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
-    stonWriter writeObject: self
-        streamMap: 
-            [:dictionary |
-            instanceVariableNames do: 
-                    [:each |
-                    (self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
-                        ifNotNil: [:value | dictionary at: each asSymbol put: value]
-                        ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
-
-]
-
 { #category : 'rowan' }
 RowanClassService >> subclassCreationTemplate [
 
