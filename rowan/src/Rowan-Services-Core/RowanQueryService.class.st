@@ -7,6 +7,15 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'queries' }
+RowanQueryService >> browseClassReferences: className [
+
+	| methods |
+	methods := organizer referencesTo: className asSymbol.
+	queryResults := self methodServicesFrom: methods first.
+	RowanCommandResult addResult: self.
+]
+
 { #category : 'ston' }
 RowanQueryService >> excludedInstVars [
 

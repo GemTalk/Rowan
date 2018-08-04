@@ -486,11 +486,13 @@ RowanClassService >> setComment [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanClassService >> subclassCreationTemplate [
-
-	^self browserTool classCreationTemplateForSubclassOf: name className: 'NewSubclass' category: self classFromName rowanPackageName
-
+	| answerService |
+	answerService := RowanAnsweringService new. 
+	answerService answer: (self browserTool classCreationTemplateForSubclassOf: name 
+								className: 'NewSubclass' category: self classFromName rowanPackageName).
+	RowanCommandResult addResult: answerService.
 ]
 
 { #category : 'Accessing' }
