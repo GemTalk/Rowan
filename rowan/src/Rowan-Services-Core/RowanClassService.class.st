@@ -25,7 +25,8 @@ Class {
 		'packageName',
 		'definedPackageName',
 		'selectedMethods',
-		'projectName'
+		'projectName',
+		'hierarchyServices'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -89,6 +90,18 @@ RowanClassService >> classCreationTemplate [
 RowanClassService >> classFromName [
 
 	^Rowan globalNamed: name
+]
+
+{ #category : 'commands' }
+RowanClassService >> classHierarchy [
+	organizer := ClassOrganizer newWithRoot: self classFromName. 
+	hierarchyServices := Dictionary new.   
+	organizer hierarchy keysAndValuesDo: [:key :value |
+		| classService |
+		classService := key == #nil ifTrue:[#nil] ifFalse: [RowanClassService forClassNamed: key name].
+		hierarchyServices at: classService put: (value collect:[:cls | RowanClassService forClassNamed: cls name]) asArray.
+	].
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'Accessing' }
