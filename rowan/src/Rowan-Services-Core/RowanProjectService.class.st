@@ -81,15 +81,13 @@ RowanProjectService >> checkout: branchName [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> commitWithMessage: message [
 	
 	Rowan projectTools write writeProjectNamed: name.
 	Rowan projectTools commit
 		commitProjectNamed: name
-		message: message. 
-	System commitTransaction.
-
+		message: message.
 ]
 
 { #category : 'examples' }

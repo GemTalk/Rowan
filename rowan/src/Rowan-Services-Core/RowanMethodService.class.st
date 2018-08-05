@@ -18,7 +18,9 @@ Class {
 		'inSelectedPackage',
 		'references',
 		'stepPoints',
-		'selectedPackageServices'
+		'selectedPackageServices',
+		'superSource',
+		'superDisplayString'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -72,7 +74,7 @@ RowanMethodService >> addOrUpdateMethod [
                    inPackageNamed: self classService packageName
 ]
 
-{ #category : 'other' }
+{ #category : 'commands' }
 RowanMethodService >> allReferences [
 
 	| methods |
@@ -80,13 +82,6 @@ RowanMethodService >> allReferences [
 	references := methods first collect:[:gsNMethod | 
 			self class forSelector: gsNMethod selector class: gsNMethod inClass meta: gsNMethod inClass isMeta organizer: organizer].
 	RowanCommandResult addResult: self
-
-]
-
-{ #category : 'rowan' }
-RowanMethodService >> browserTool [
-
-	^Rowan projectTools browser.
 
 ]
 
@@ -146,7 +141,7 @@ RowanMethodService >> definitionClass [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'initialization' }
 RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	"assume meta and selector are set"
 
@@ -201,7 +196,7 @@ RowanMethodService >> initialize [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'initialization' }
 RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 
 	| inClass |
@@ -310,18 +305,20 @@ RowanMethodService >> selector: aSymbol [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'initialization' }
 RowanMethodService >> setSupersAndSubsFor: theClass [
 
 	| theSuper |
 	theSuper := theClass superClass. 
 	hasSupers := false. 
 	[theSuper notNil and:[hasSupers not]] whileTrue:[
-		hasSupers := theSuper canUnderstand: selector.
+		hasSupers := theSuper selectors includes: selector.
+		hasSupers ifTrue:[
+			superSource := theSuper sourceCodeAt: selector.
+			superDisplayString := theSuper name, '>>', selector].
 		theSuper := theSuper superClass].
 	(organizer allSubclassesOf: theClass) do:[:cls |
 		(hasSubs := cls includesSelector: selector) ifTrue:[^self]].
-
 ]
 
 { #category : 'Accessing' }
@@ -354,23 +351,4 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 	].
 	^list
 
-]
-
-{ #category : 'replication' }
-RowanMethodService >> stonOn: stonWriter [
-    | instanceVariableNames |
-    instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
-    stonWriter writeObject: self
-        streamMap: 
-            [:dictionary |
-            instanceVariableNames do: 
-                    [:each |
-                    (self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
-                        ifNotNil: [:value | dictionary at: each asSymbol put: value]
-                        ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
-
-]
-
-{ #category : 'updates' }
-RowanMethodService >> update [
 ]

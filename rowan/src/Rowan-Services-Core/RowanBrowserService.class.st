@@ -7,10 +7,27 @@ Class {
 	#superclass : 'RowanService',
 	#instVars : [
 		'projects',
-		'removedMethods'
+		'removedMethods',
+		'allClasses'
 	],
 	#category : 'Rowan-Services-Core'
 }
+
+{ #category : 'commands' }
+RowanBrowserService >> allClasses [
+
+	allClasses := SortedCollection sortBlock: [:x :y | x name < y name].
+	allClasses addAll: (organizer classes collect:[:class | 
+			| service |
+			service := RowanClassService new name: class name. 
+			service packageName: class rowanPackageName.
+			service projectName: class rowanProjectName.
+			service]
+			).
+	allClasses := allClasses asArray. 
+	updateType := #classes. "#classes not used at the moment so no updates will be done"
+	RowanCommandResult addResult: self
+]
 
 { #category : 'commands' }
 RowanBrowserService >> removeMethods: methodServices [

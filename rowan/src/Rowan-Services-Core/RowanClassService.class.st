@@ -24,7 +24,9 @@ Class {
 		'selectedPackageServices',
 		'packageName',
 		'definedPackageName',
-		'selectedMethods'
+		'selectedMethods',
+		'projectName',
+		'hierarchyServices'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -69,6 +71,14 @@ RowanClassService >> addCategory: string [
 
 ]
 
+{ #category : 'commands' }
+RowanClassService >> classComment: string [
+
+	self classFromName comment: string.
+	RowanCommandResult addResult: self.
+
+]
+
 { #category : 'rowan' }
 RowanClassService >> classCreationTemplate [
 	
@@ -80,6 +90,18 @@ RowanClassService >> classCreationTemplate [
 RowanClassService >> classFromName [
 
 	^Rowan globalNamed: name
+]
+
+{ #category : 'commands' }
+RowanClassService >> classHierarchy [
+	organizer := ClassOrganizer newWithRoot: self classFromName. 
+	hierarchyServices := Dictionary new.   
+	organizer hierarchy keysAndValuesDo: [:key :value |
+		| classService |
+		classService := key == #nil ifTrue:[#nil] ifFalse: [RowanClassService forClassNamed: key name].
+		hierarchyServices at: classService put: (value collect:[:cls | RowanClassService forClassNamed: cls name]) asArray.
+	].
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'Accessing' }
@@ -273,6 +295,12 @@ RowanClassService >> name: newValue [
 
 ]
 
+{ #category : 'private' }
+RowanClassService >> objectInBaseNamed: aString [
+
+	^System myUserProfile symbolList objectNamed: aString asSymbol
+]
+
 { #category : 'Accessing' }
 RowanClassService >> oop [
 	^oop
@@ -311,11 +339,17 @@ RowanClassService >> poolDictionaryNames: newValue [
 
 ]
 
+{ #category : 'Updating' }
+RowanClassService >> projectName: newValue [
+	projectName := newValue
+]
+
 { #category : 'initialization' }
 RowanClassService >> refreshFrom: theClass [
 	| classOrMeta theFilters |
 	command := nil. 
 	commandArgs := nil. 
+	comment := theClass comment. 
 	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade"
 	versions := theClass classHistory size.
 	version := theClass classHistory indexOf: theClass.
@@ -328,7 +362,6 @@ RowanClassService >> refreshFrom: theClass [
 	filterType = 'variables'
 		ifTrue: [^self refreshFromVariable: classOrMeta].
 	self refreshFromCategory: classOrMeta
-
 ]
 
 { #category : 'initialization' }
@@ -407,7 +440,7 @@ RowanClassService >> removeSelector: selector ifAbsent: absentBlock [
 RowanClassService >> saveMethodSource: source category: category [
 
 	| behavior compilationResult gsNMethod updatedCategory methodService |
-	behavior := self classFromName.
+	behavior := meta ifTrue:[self classFromName class] ifFalse:[self classFromName].
 	updatedCategory := category ifNil: ['other'].
 	compilationResult := self		
 		compileMethod: source 
@@ -466,26 +499,13 @@ RowanClassService >> setComment [
 
 ]
 
-{ #category : 'replication' }
-RowanClassService >> stonOn: stonWriter [
-    | instanceVariableNames |
-    instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
-    stonWriter writeObject: self
-        streamMap: 
-            [:dictionary |
-            instanceVariableNames do: 
-                    [:each |
-                    (self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
-                        ifNotNil: [:value | dictionary at: each asSymbol put: value]
-                        ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
-
-]
-
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanClassService >> subclassCreationTemplate [
-
-	^self browserTool classCreationTemplateForSubclassOf: name className: 'NewSubclass' category: self classFromName rowanPackageName
-
+	| answerService |
+	answerService := RowanAnsweringService new. 
+	answerService answer: (self browserTool classCreationTemplateForSubclassOf: name 
+								className: 'NewSubclass' category: self classFromName rowanPackageName).
+	RowanCommandResult addResult: answerService.
 ]
 
 { #category : 'Accessing' }
