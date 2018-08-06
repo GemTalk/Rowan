@@ -29,12 +29,21 @@ RwGsClassVersioningSymbolDictPatch class >> for: aClassModification inPackage: a
 { #category : 'private' }
 RwGsClassVersioningSymbolDictPatch >> _createMethodExtensionModificationForNewVersionOfClassNamed: className isMeta: isMeta loadedMethod: loadedMethod projectSetModification: aProjectSetModification [
 
-	| loadedProject loadedPackage loadedClassExtension projectModification packageModification classExtensionModification methodsModification methodDef source sourceModification modification |
+	| loadedProject loadedPackage loadedClassExtension projectModification packageModification 
+		classExtensionModification methodsModification methodDef source sourceModification modification
+		afterMethodDef beforeMethodDef |
 	loadedClassExtension := loadedMethod loadedClass.
 	loadedPackage := loadedMethod loadedPackage.
 	loadedProject := loadedMethod loadedProject.
 	projectModification := aProjectSetModification elementsModified
-		at: loadedProject name.
+		at: loadedProject name
+		ifAbsentPut: [
+			| def |
+			def := loadedProject asDefinition.
+			(RwProjectModification before: def after: def)
+				propertiesModification: RwPropertiesModification new;
+				packagesModification: RwPackagesModification new;
+				yourself ].
 	packageModification := projectModification packagesModification
 		elementsModified
 		at: loadedPackage name
@@ -64,30 +73,36 @@ RwGsClassVersioningSymbolDictPatch >> _createMethodExtensionModificationForNewVe
 		ifTrue: [ classExtensionModification classMethodsModification elementsModified ]
 		ifFalse: [ classExtensionModification instanceMethodsModification elementsModified ].
 	(methodsModification at: loadedMethod selector ifAbsent: [  ])
-		ifNotNil: [ 
-			"should have been filtered out earlier"
-			self
-				error:
-					'Unexpected method modification for ' , loadedMethod selector printString ].
+		ifNil: [
+			afterMethodDef := beforeMethodDef := methodDef := loadedMethod asDefinition.
+			source := methodDef source.
+			sourceModification := RwSourceModification new
+				addElementModification:
+						(RwUnconditionalPropertyModification
+								key: 'source'
+								oldValue: source
+								newValue: source);
+				yourself.
+			modification := (RwExtensionMethodModificationForNewClassVersion
+				before: beforeMethodDef
+				after: afterMethodDef)
+				isMeta: isMeta;
+				classDefinition: loadedClassExtension asDefinition;
+				propertiesModification: RwPropertiesModification new;
+				sourceModification: sourceModification;
+				yourself ]
+		ifNotNil: [:theMethodModification |
+			modification := (RwExtensionMethodModificationForNewClassVersion
+				before: theMethodModification before
+				after: theMethodModification after)
+				isMeta: isMeta;
+				classDefinition: loadedClassExtension asDefinition;
+				propertiesModification: theMethodModification propertiesModification;
+				sourceModification: theMethodModification sourceModification;
+				yourself ].
 
-	methodDef := loadedMethod asDefinition.
-	source := methodDef source.
-	sourceModification := RwSourceModification new
-		addElementModification:
-				(RwUnconditionalPropertyModification
-						key: 'source'
-						oldValue: source
-						newValue: source);
-		yourself.
-	modification := (RwExtensionMethodModificationForNewClassVersion
-		before: methodDef
-		after: methodDef)
-		isMeta: isMeta;
-		classDefinition: loadedClassExtension asDefinition;
-		propertiesModification: RwPropertiesModification new;
-		sourceModification: sourceModification;
-		yourself.
 	methodsModification at: loadedMethod selector put: modification
+
 ]
 
 { #category : 'private' }
@@ -120,9 +135,7 @@ RwGsClassVersioningSymbolDictPatch >> _updateNewClassVersionPatchesForClass: cla
 				ifAbsent: [ emptyDict ].
 			selectorDict := patch isMeta
 				ifTrue: [ methodsDict at: 'class' ifAbsent: [ emptyDict ] ]
-				ifFalse: [ methodsDict at: 'instance' ifAbsent: [ emptyDict ] ].
-			(selectorDict includesKey: patch methodDefinition selector)
-				ifTrue: [ self error: 'not yet implemented' ] ]
+				ifFalse: [ methodsDict at: 'instance' ifAbsent: [ emptyDict ] ] ]
 		deletedMethodsDo: [ :patch | 
 			| methodsDict selectorDict |
 			methodsDict := extensionMap
@@ -148,6 +161,7 @@ RwGsClassVersioningSymbolDictPatch >> _updateNewClassVersionPatchesForClass: cla
 						isMeta: true
 						loadedMethod: loadedMethod
 						projectSetModification: aProjectSetModification ] ]
+
 ]
 
 { #category : 'accessing' }
@@ -268,13 +282,14 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 				classesModificationAndPackageModificationAndProjectModificationDo: [ :classesModification :packageModification |  
 					packageModification key = loadedPackageName
 						ifTrue: [
+							| classesModified |
+							classesModified := classesModification elementsModified.
 							classesModification isEmpty
 								ifTrue: [ 
-									"this is not unexpected ... not all packages in the project set are expected to have class modifications with new versions"
-									]
+									classesModified at: subclassName put: newVersionClassModification.
+									newVersionClassModification
+										mergeForNewClassVersionWith: newVersionClassModification ]
 								ifFalse: [ 
-									| classesModified |
-									classesModified := classesModification elementsModified.
 									(classesModified at: subclassName ifAbsent: [  ])
 										ifNil: [
 											classesModified at: subclassName put: newVersionClassModification.

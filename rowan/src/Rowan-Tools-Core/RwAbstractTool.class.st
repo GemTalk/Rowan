@@ -155,6 +155,18 @@ RwAbstractTool >> help [
 	^self manPage asText
 ]
 
+{ #category : 'bash utilities' }
+RwAbstractTool >> readlink: filepath [
+
+	"resolve (possible) symbolic links in filepath and return an absolute path"
+	"NOTE: may need alternate solution on OSX"
+
+	| command |
+	command := 'set -e; readlink -f ', filepath.
+	^Rowan gitTools performOnServer: command logging: true
+
+]
+
 { #category : 'smalltalk api' }
 RwAbstractTool >> specification: aRwSpecification [
   self validate: aRwSpecification.

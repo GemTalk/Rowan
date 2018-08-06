@@ -5325,6 +5325,741 @@ RwRowanProjectIssuesTest >> testIssue275_delete_subclass_handle_keep_in_system [
 
 ]
 
+{ #category : 'tests-issue 291' }
+RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constraints_1 [
+
+	"https://github.com/dalehenrich/Rowan/issues/291"
+
+	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3 
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 |
+
+	projectName := 'Issue291'.
+	packageName := 'Issue255-Core'.
+	className1 := 'Issue255Class1'.
+	className2 := 'Issue255Class2'.
+	className3 := 'Issue255Class3'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+
+	classDefinition1 := (RwClassDefinition
+		newForClassNamed: className1
+			super: 'Object'
+			instvars: #(ivar1)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		gs_constraints: { { 'ivar1' . 'Association' } };
+		yourself.
+	packageDefinition 
+		addClassDefinition: classDefinition1.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className2
+			super: className1
+			instvars: #(ivar2)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		gs_constraints: { { 'ivar2' . 'Association' } };
+		yourself.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className3
+			super: className2
+			instvars: #(ivar4 ivar3)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		gs_constraints: { { 'ivar3' . 'Association' }. { 'ivar4' . 'Association' }. };
+		yourself.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class1 := Rowan globalNamed: className1.
+	self assert: class1 instVarNames = #(ivar1).
+	self assert: class1 category = 'category'.
+	self assert: class1 comment = 'comment'.
+	self assert: (class1 _constraintsEqual: { { #'ivar1' . Association } }).
+	class2 := Rowan globalNamed: className2.
+	self assert: class2 instVarNames = #(ivar2).
+	self assert: (class2 _constraintsEqual: { { #'ivar2' . Association } }).
+	class3 := Rowan globalNamed: className3.
+	self assert: class3 instVarNames = #(ivar4 ivar3).
+	self assert: (class3 _constraintsEqual: { { #'ivar4' . Association }. { #'ivar3' . Association }. }).
+
+
+
+"modify class -- new version"
+	classDefinition1
+		instVarNames: #(ivar5 ivar1);
+		gs_constraints: { { 'ivar1' . 'Association' } . { 'ivar5' . 'Number' } }.
+
+"load"
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	oldClass1 := class1.
+	class1 := Rowan globalNamed: className1.
+	self assert: oldClass1 ~~ class1.
+	self assert: class1 instVarNames = #(ivar5 ivar1).
+	self assert: class1 category = 'category'.
+	self assert: class1 comment = 'comment'.
+	self assert: (class1 _constraintsEqual: { { #'ivar5' . Number }. { #'ivar1' . Association }. }).
+	oldClass2 := class2.
+	class2 := Rowan globalNamed: className2.
+	self assert: oldClass2 ~~ class2.
+	self assert: class2 instVarNames = #(ivar2).
+	self assert: (class2 _constraintsEqual: { { #'ivar2' . Association } }).
+	oldClass3 := class3.
+	class3 := Rowan globalNamed: className3.
+	self assert: oldClass3 ~~ class3.
+	self assert: class3 instVarNames = #(ivar4 ivar3).
+	self assert: (class3 _constraintsEqual: { { #'ivar4' . Association }. { #'ivar3' . Association }. }).
+
+]
+
+{ #category : 'tests-issue 291' }
+RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constraints_2 [
+
+	"https://github.com/dalehenrich/Rowan/issues/291"
+
+	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3 
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+
+	projectName := 'Issue291'.
+	packageName := 'Issue255-Core'.
+	className1 := 'Issue255Class1'.
+	className2 := 'Issue255Class2'.
+	className3 := 'Issue255Class3'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+
+	classDefinition1 := (RwClassDefinition
+		newForClassNamed: className1
+			super: 'Object'
+			instvars: #(ivar1)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		gs_constraints: { { 'ivar1' . 'Association' } };
+		yourself.
+	packageDefinition 
+		addClassDefinition: classDefinition1.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className2
+			super: className1
+			instvars: #(ivar2)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		gs_constraints: { { 'ivar2' . 'Association' } };
+		yourself.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className3
+			super: className2
+			instvars: #(ivar4 ivar3)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		gs_constraints: { { 'ivar3' . 'Association' }. { 'ivar4' . 'Association' }. };
+		yourself.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class1 := Rowan globalNamed: className1.
+	self assert: class1 instVarNames = #(ivar1).
+	self assert: class1 category = 'category'.
+	self assert: class1 comment = 'comment'.
+	self assert: (class1 _constraintsEqual: { { #'ivar1' . Association } }).
+	class2 := Rowan globalNamed: className2.
+	self assert: class2 instVarNames = #(ivar2).
+	self assert: (class2 _constraintsEqual: { { #'ivar2' . Association } }).
+	class3 := Rowan globalNamed: className3.
+	self assert: class3 instVarNames = #(ivar4 ivar3).
+	self assert: (class3 _constraintsEqual: { { #'ivar4' . Association }. { #'ivar3' . Association }. }).
+
+
+
+"create new version"
+	newClass1 := Object 
+		rwSubclass: className1 
+		instVarNames: #('ivar5' 'ivar1') 
+		classVars: #() 
+		classInstVars: #() 
+		poolDictionaries: #() 
+		category: 'category' 
+		packageName:  packageName
+		constraints: { { #'ivar1' . Association } . { #'ivar5' . Number } } 
+		options: #().
+
+"validate"
+	oldClass1 := class1.
+	class1 := Rowan globalNamed: className1.
+	self assert: class1 == newClass1.
+	self assert: oldClass1 ~~ class1.
+	self assert: class1 instVarNames = #(ivar5 ivar1).
+	self assert: class1 category = 'category'.
+	self assert: class1 comment = 'comment'.
+	self assert: (class1 _constraintsEqual: { { #'ivar5' . Number }. { #'ivar1' . Association }. }).
+	oldClass2 := class2.
+	class2 := Rowan globalNamed: className2.
+	self assert: oldClass2 ~~ class2.
+	self assert: class2 instVarNames = #(ivar2).
+	self assert: (class2 _constraintsEqual: { { #'ivar2' . Association } }).
+	oldClass3 := class3.
+	class3 := Rowan globalNamed: className3.
+	self assert: oldClass3 ~~ class3.
+	self assert: class3 instVarNames = #(ivar4 ivar3).
+	self assert: (class3 _constraintsEqual: { { #'ivar4' . Association }. { #'ivar3' . Association }. }).
+
+]
+
+{ #category : 'tests-issue 291' }
+RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constraints_3 [
+
+	"https://github.com/dalehenrich/Rowan/issues/291"
+
+	"super class has constraint on instance of subclass"
+
+	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3 
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+
+	projectName := 'Issue291'.
+	packageName := 'Issue255-Core'.
+	className1 := 'Issue255Class1'.
+	className2 := 'Issue255Class2'.
+	className3 := 'Issue255Class3'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+
+	classDefinition1 := (RwClassDefinition
+		newForClassNamed: className1
+			super: 'Object'
+			instvars: #(ivar1)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		gs_constraints: { { 'ivar1' . className2 } };
+		yourself.
+	packageDefinition 
+		addClassDefinition: classDefinition1.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className2
+			super: className1
+			instvars: #(ivar2)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		gs_constraints: { { 'ivar2' . 'Association' } };
+		yourself.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className3
+			super: className2
+			instvars: #(ivar4 ivar3)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		gs_constraints: { { 'ivar3' . 'Association' }. { 'ivar4' . 'Association' }. };
+		yourself.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class1 := Rowan globalNamed: className1.
+	class2 := Rowan globalNamed: className2.
+	class3 := Rowan globalNamed: className3.
+	self assert: class1 instVarNames = #(ivar1).
+	self assert: class1 category = 'category'.
+	self assert: class1 comment = 'comment'.
+	self assert: (class1 _constraintsEqual: { { #'ivar1' . class2 } }).
+	self assert: class2 instVarNames = #(ivar2).
+	self assert: (class2 _constraintsEqual: { { #'ivar2' . Association } }).
+	self assert: class3 instVarNames = #(ivar4 ivar3).
+	self assert: (class3 _constraintsEqual: { { #'ivar4' . Association }. { #'ivar3' . Association }. }).
+
+
+
+"create new version"
+	newClass1 := Object 
+		rwSubclass: className1 
+		instVarNames: #('ivar5' 'ivar1') 
+		classVars: #() 
+		classInstVars: #() 
+		poolDictionaries: #() 
+		category: 'category' 
+		packageName:  packageName
+		constraints: { { #'ivar1' . class2 } . { #'ivar5' . Number } } 
+		options: #().
+
+"validate"
+	oldClass1 := class1.
+	class1 := Rowan globalNamed: className1.
+	oldClass2 := class2.
+	class2 := Rowan globalNamed: className2.
+	oldClass3 := class3.
+	class3 := Rowan globalNamed: className3.
+	self assert: class1 == newClass1.
+	self assert: oldClass1 ~~ class1.
+	self assert: class1 instVarNames = #(ivar5 ivar1).
+	self assert: class1 category = 'category'.
+	self assert: class1 comment = 'comment'.
+	self assert: (class1 _constraintsEqual: { { #'ivar5' . Number }. { #'ivar1' . oldClass2 }. }).
+	self assert: oldClass2 ~~ class2.
+	self assert: class2 instVarNames = #(ivar2).
+	self assert: (class2 _constraintsEqual: { { #'ivar2' . Association } }).
+	self assert: oldClass3 ~~ class3.
+	self assert: class3 instVarNames = #(ivar4 ivar3).
+	self assert: (class3 _constraintsEqual: { { #'ivar4' . Association }. { #'ivar3' . Association }. }).
+
+]
+
+{ #category : 'tests-issue 291' }
+RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constraints_4 [
+
+	"https://github.com/dalehenrich/Rowan/issues/291"
+
+	"subclass overrides constraint of superclass (ivar1 has different constraint for each of classes)"
+
+	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3 
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+
+	projectName := 'Issue291'.
+	packageName := 'Issue255-Core'.
+	className1 := 'Issue255Class1'.
+	className2 := 'Issue255Class2'.
+	className3 := 'Issue255Class3'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+
+	classDefinition1 := (RwClassDefinition
+		newForClassNamed: className1
+			super: 'Object'
+			instvars: #(ivar1)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		gs_constraints: { { 'ivar1' . 'Number' } };
+		yourself.
+	packageDefinition 
+		addClassDefinition: classDefinition1.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className2
+			super: className1
+			instvars: #(ivar2)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		gs_constraints: { { 'ivar2' . 'Association' } . { 'ivar1' . 'Integer' } };
+		yourself.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className3
+			super: className2
+			instvars: #(ivar4 ivar3)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		gs_constraints: { { 'ivar3' . 'Association' }. { 'ivar4' . 'Association' }.  { 'ivar1' . 'SmallInteger' } };
+		yourself.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class1 := Rowan globalNamed: className1.
+	class2 := Rowan globalNamed: className2.
+	class3 := Rowan globalNamed: className3.
+	self assert: class1 instVarNames = #(ivar1).
+	self assert: class1 category = 'category'.
+	self assert: class1 comment = 'comment'.
+	self assert: (class1 _constraintsEqual: { { #'ivar1' . Number } }).
+	self assert: class2 instVarNames = #(ivar2).
+	self assert: (class2 _constraintsEqual: {  { #'ivar1' . Integer } . { #'ivar2' . Association } }).
+	self assert: class3 instVarNames = #(ivar4 ivar3).
+	self assert: (class3 _constraintsEqual: { { #'ivar1' . SmallInteger } . { #'ivar4' . Association }. { #'ivar3' . Association }. }).
+
+
+
+"create new version"
+	newClass1 := Object 
+		rwSubclass: className1 
+		instVarNames: #('ivar5' 'ivar1') 
+		classVars: #() 
+		classInstVars: #() 
+		poolDictionaries: #() 
+		category: 'category' 
+		packageName:  packageName
+		constraints: { { #'ivar1' . Number } . { #'ivar5' . Number } } 
+		options: #().
+
+"validate"
+	oldClass1 := class1.
+	class1 := Rowan globalNamed: className1.
+	oldClass2 := class2.
+	class2 := Rowan globalNamed: className2.
+	oldClass3 := class3.
+	class3 := Rowan globalNamed: className3.
+	self assert: class1 == newClass1.
+	self assert: oldClass1 ~~ class1.
+	self assert: class1 instVarNames = #(ivar5 ivar1).
+	self assert: class1 category = 'category'.
+	self assert: class1 comment = 'comment'.
+	self assert: (class1 _constraintsEqual: { { #'ivar5' . Number }. { #'ivar1' . Number }. }).
+	self assert: oldClass2 ~~ class2.
+	self assert: class2 instVarNames = #(ivar2).
+	self assert: (class2 _constraintsEqual: { { #'ivar1' . Integer } . { #'ivar2' . Association } }).
+	self assert: oldClass3 ~~ class3.
+	self assert: class3 instVarNames = #(ivar4 ivar3).
+	self assert: (class3 _constraintsEqual: { { #'ivar1' . SmallInteger } . { #'ivar4' . Association }. { #'ivar3' . Association }. }).
+
+]
+
+{ #category : 'tests-issue 293' }
+RwRowanProjectIssuesTest >> testIssue293_constraint_ordering [
+
+	"https://github.com/dalehenrich/Rowan/issues/293"
+
+	"constraints should be displayed in inst var order, not alphabetical order"
+
+	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 projectSetDefinition class |
+	projectName := 'Issue255'.
+	packageName := 'Issue255-Core'.
+	className1 := 'Issue255Class1'.
+	className2 := 'Issue255Subclass2'.
+	className3 := 'Issue255Subclass3'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #( ivar2 ivar3 ivar4 ivar1)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { { 'ivar4' . 'Association' }. { 'ivar3' . 'Association' }. { 'ivar2' . 'Association' }. { 'ivar1' . 'Association' }. }.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: className1
+		instvars: #( ivar7 ivar6)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { { 'ivar7' . 'Association' }. { 'ivar6' . 'Association' }. }.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className3
+		super: className2
+		instvars: #( ivar8 ivar9)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { { 'ivar9' . 'Association' }. { 'ivar8' . 'Association' }. }.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class := Rowan globalNamed: className1.
+	self assert: (class _constraintsEqual: {  { #'ivar1' . Association }.  { #'ivar2' . Association }. { #'ivar3' . Association }. { #'ivar4' . Association }.  }).
+
+	class := Rowan globalNamed: className2.
+	self assert: (class _constraintsEqual: {  { #'ivar7' . Association }.  { #'ivar6' . Association }. }).
+
+	class := Rowan globalNamed: className3.
+	self assert: (class _constraintsEqual: {  { #'ivar8' . Association }.  { #'ivar9' . Association }. }).
+
+]
+
+{ #category : 'tests-issue 305' }
+RwRowanProjectIssuesTest >> testIssue305_delete_package_with_class [
+
+	"https://github.com/dalehenrich/Rowan/issues/305"
+
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class |
+	projectName := 'Issue305'.
+	packageName1 := 'Issue305-Core1'.
+	packageName2 := 'Issue305-Core2'.
+	className := 'Issue305Class'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	projectDefinition1 := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+
+	packageDefinition := projectDefinition1 packageNamed: packageName2.
+	packageDefinition addClassDefinition: classDefinition.
+
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition1.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	class := Rowan globalNamed: className.
+	self assert: class rowanPackageName = packageName2.
+
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
+
+	projectDefinition2 removePackageNamed: packageName2.
+
+	projectSetDefinition addDefinition: projectDefinition2.
+	Rowan projectTools load loadProjectSetDefinition_254: projectSetDefinition.
+
+	class := Rowan globalNamed: className.
+	self assert: class isNil.
+
+]
+
+{ #category : 'tests-issue 305' }
+RwRowanProjectIssuesTest >> testIssue305_delete_package_with_extension_method [
+
+	"https://github.com/dalehenrich/Rowan/issues/305"
+
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		classExtension packageDefinition className projectSetDefinition class oldClass |
+	projectName := 'Issue305'.
+	packageName1 := 'Issue305-Core1'.
+	packageName2 := 'Issue305-Core2'.
+	className := 'Issue305Class'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	projectDefinition1 := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+
+	packageDefinition := projectDefinition1 packageNamed: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+
+	classExtension := (RwClassExtensionDefinition newForClassNamed: className)
+		addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'foo'
+						protocol: '*', packageName2 asLowercase
+						source: 'foo ^ ''foo''');
+		addClassMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #'foo'
+						protocol: '*', packageName2 asLowercase
+						source: 'foo ^ ''foo''');
+		yourself.
+
+	packageDefinition := projectDefinition1 packageNamed: packageName2.
+	packageDefinition addClassExtension: classExtension.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition1.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class := Rowan globalNamed: className.
+	self assert: class rowanPackageName = packageName1.
+	self assert: class foo = 'foo'.
+	self assert: class new foo = 'foo'.
+
+"remove package"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
+
+	projectDefinition2 removePackageNamed: packageName2.
+
+"load"
+	projectSetDefinition addDefinition: projectDefinition2.
+	Rowan projectTools load loadProjectSetDefinition_254: projectSetDefinition.
+
+"validate"
+	oldClass := class.
+	class := Rowan globalNamed: className.
+	self assert: class == oldClass.
+	self should: [ class foo = 'foo' ] raise: MessageNotUnderstood.
+	self should: [ class new foo = 'foo' ] raise: MessageNotUnderstood.
+
+]
+
 { #category : 'tests-issue 40' }
 RwRowanProjectIssuesTest >> testIssue40 [
 
@@ -5384,7 +6119,7 @@ RwRowanProjectIssuesTest >> testIssue41_addUpdateInitializeExtensionMethods [
 
 	"Are extension method initialization methods run correctly for add and update"
 
-	| projectName packageName1 packageName2 className theClass  |
+	| projectName packageName1 packageName2 className theClass initializeRun |
 	projectName := 'Issue41_project'.
 	packageName1 := 'Issue41-Core'.
 	packageName2 := 'Issue41-Extensions'.
@@ -5398,17 +6133,25 @@ RwRowanProjectIssuesTest >> testIssue41_addUpdateInitializeExtensionMethods [
 	self _addOrUpdateMethod: 'cvar1 ^CVar1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'cvar2 ^CVar2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 	
+	initializeRun := false.
 	[ self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
-		do: [:ex | ex resume: true ].
+		do: [:ex | 
+			initializeRun := true.
+			ex resume: true ].
 
+	self assert: initializeRun.
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 isNil.
 
+	initializeRun := false.
 	[ self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
-		do: [:ex | ex resume: true ].
+		do: [:ex | 
+			initializeRun := true.
+			ex resume: true ].
 
+	self assert: initializeRun.
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
 
@@ -5437,15 +6180,10 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveAddUpdateInitializeExtensionM
 	
 	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 isNil.
+	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 isNil.
 
 	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
-
-	self assert: theClass cvar1 isNil.
-	self assert: theClass cvar2 isNil.
-
-	theClass initialize.
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
@@ -5480,7 +6218,7 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	"create initialize package as an extension method"
 	self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
-	self assert: theClass cvar1 isNil.
+	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 isNil.
 
 	theClass 
@@ -5492,6 +6230,9 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	"initialize method changed in same package"
 	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 
+	self assert: theClass cvar1 = 1.
+	self assert: theClass cvar2 = 2.
+
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
 	self assert: ((loadedClassExtensions at: className) classMethodDefinitions includesKey: #initialize).
@@ -5500,9 +6241,6 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
 	self assert: (loadedClassExtensions at: className ifAbsent: []) isNil.
 
-	self assert: theClass cvar1 = 3.
-	self assert: theClass cvar2 = 4.
-
 	theClass 
 		cvar1: 5;
 		cvar2: 6.
@@ -5510,7 +6248,10 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	self assert: theClass cvar2 = 6.
 
 	"initialize method not changed and moved to new package"
-	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
+	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
+
+	self assert: theClass cvar1 = 5.
+	self assert: theClass cvar2 = 6.
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName3.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
@@ -5520,9 +6261,6 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
 	self deny: ((loadedClassExtensions at: className) classMethodDefinitions includesKey: #initialize).
 
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
-
 	theClass 
 		cvar1: 5;
 		cvar2: 6.
@@ -5530,10 +6268,21 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	self assert: theClass cvar2 = 6.
 
 	"initialize method not changed and left in same package"
-	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
+	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
 
 	self assert: theClass cvar1 = 5.
 	self assert: theClass cvar2 = 6.
+
+	"initialize method not changed and moved to new package"
+	self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
+
+	self assert: theClass cvar1 = 5.
+	self assert: theClass cvar2 = 6.
+
+	theClass initialize.
+
+	self assert: theClass cvar1 = 1.
+	self assert: theClass cvar2 = 2.
 
 	theClass 
 		cvar1: 5;
@@ -5541,13 +6290,8 @@ RwRowanProjectIssuesTest >> testIssue41_interactiveMoveInitializeExtensionMethod
 	self assert: theClass cvar1 = 5.
 	self assert: theClass cvar2 = 6.
 
-	"initialize method not changed and moved to new package"
-	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
-
-	self assert: theClass cvar1 = 5.
-	self assert: theClass cvar2 = 6.
-
-	theClass initialize.
+	"initialize method changed and moved to new package"
+	self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false.
 
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
@@ -5561,7 +6305,7 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 
 	"Are extension method initialization methods run correctly for add and update"
 
-	| projectName packageName1 packageName2 packageName3 className theClass  |
+	| projectName packageName1 packageName2 packageName3 className theClass initializeRun |
 	projectName := 'Issue41_project'.
 	packageName1 := 'Issue41-Core'.
 	packageName2 := 'Issue41-Extensions1'.
@@ -5579,10 +6323,14 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 	self _addOrUpdateMethod: 'cvar1: anInt CVar1 := anInt' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'cvar2: anInt CVar2 := anInt' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false.
 	
+	initializeRun := false.
 	[ self _addOrUpdateMethod: 'initialize CVar1 := 1' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
-		do: [:ex | ex resume: true ].
+		do: [:ex | 
+			initializeRun := true.
+			ex resume: true ].
 
+	self assert: initializeRun.
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 isNil.
 
@@ -5592,11 +6340,15 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 	self assert: theClass cvar1 = 3.
 	self assert: theClass cvar2 = 4.
 
+	initializeRun := false.
 	[	"initialize method changed in same package"
 		self _addOrUpdateMethod: 'initialize "" CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false ]
 			on: RwExecuteClassInitializeMethodsAfterLoadNotification
-			do: [:ex | ex resume: true ].
+			do: [:ex | 
+				initializeRun := true.
+				ex resume: true ].
 
+	self assert: initializeRun.
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
 
@@ -5606,11 +6358,15 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 	self assert: theClass cvar1 = 5.
 	self assert: theClass cvar2 = 6.
 
+	initializeRun := false.
 	[	"initialize method changed and moved to new package"
 		self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false ]
 			on: RwExecuteClassInitializeMethodsAfterLoadNotification
-			do: [:ex | ex resume: true ].
+			do: [:ex | 
+				initializeRun := true.
+				ex resume: true ].
 
+	self assert: initializeRun.
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
 
@@ -5620,11 +6376,15 @@ RwRowanProjectIssuesTest >> testIssue41_moveInitializeExtensionMethodToPackage [
 	self assert: theClass cvar1 = 5.
 	self assert: theClass cvar2 = 6.
 
+	initializeRun := false.
 	[	"initialize method not changed and left in same package"
 		self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName3 inProjectNamed: projectName validate: false ]
 			on: RwExecuteClassInitializeMethodsAfterLoadNotification
-			do: [:ex | ex resume: true ].
+			do: [:ex | 
+				initializeRun := true.
+				ex resume: true ].
 
+	self deny: initializeRun.
 	self assert: theClass cvar1 = 5.
 	self assert: theClass cvar2 = 6.
 
@@ -5642,7 +6402,7 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 
 	"initialize method not changed and moved to new package"
 
-	| projectName packageName1 packageName2 packageName3 className theClass  |
+	| projectName packageName1 packageName2 packageName3 className theClass initializeRun |
 	projectName := 'Issue41_project'.
 	packageName1 := 'Issue41-Core'.
 	packageName2 := 'Issue41-Extensions1'.
@@ -5660,10 +6420,14 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 	self _addOrUpdateMethod: 'cvar1: anInt CVar1 := anInt' forBehavior: theClass class inPackage: packageName1 inProjectNamed: projectName validate: false.
 	self _addOrUpdateMethod: 'cvar2: anInt CVar2 := anInt' forBehavior: theClass class inPackage: packageName1 inProjectNamed: projectName validate: false.
 
+	initializeRun := false.
 	[ self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName1 inProjectNamed: projectName validate: false ]
 			on: RwExecuteClassInitializeMethodsAfterLoadNotification
-			do: [:ex | ex resume: true ].
+			do: [:ex | 
+				initializeRun := true.
+				ex resume: true ].
 
+	self assert: initializeRun.
 	self assert: theClass cvar1 = 1.
 	self assert: theClass cvar2 = 2.
 
@@ -5673,11 +6437,15 @@ RwRowanProjectIssuesTest >> testIssue41_moveUnchangedInitializeExtensionMethodTo
 	self assert: theClass cvar1 = 3.
 	self assert: theClass cvar2 = 4.
 
+	initializeRun := false.
 	[	"initialize method not changed and moved to new package"
 		self _addOrUpdateMethod: 'initialize CVar1 := 1. CVar2 := 2' forBehavior: theClass class inPackage: packageName2 inProjectNamed: projectName validate: false ]
 			on: RwExecuteClassInitializeMethodsAfterLoadNotification
-			do: [:ex | ex resume: true ].
+			do: [:ex | 
+				initializeRun := true.
+				ex resume: true ].
 
+	self deny: initializeRun.
 	self assert: theClass cvar1 = 3.
 	self assert: theClass cvar2 = 4.
 
