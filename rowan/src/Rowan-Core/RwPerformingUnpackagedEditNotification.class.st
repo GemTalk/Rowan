@@ -1,12 +1,8 @@
 Class {
 	#name : 'RwPerformingUnpackagedEditNotification',
 	#superclass : 'RwNotification',
-	#type : 'variable',
 	#instVars : [
 		'informMessage'
-	],
-	#gs_options : [
-		'disallowGciStore'
 	],
 	#category : 'Rowan-Core'
 }

@@ -1,12 +1,8 @@
 Class {
 	#name : 'GsInteractionRequest',
 	#superclass : 'Notification',
-	#type : 'variable',
 	#instVars : [
 		'interaction'
-	],
-	#gs_options : [
-		'disallowGciStore'
 	],
 	#category : 'GemStone-Interactions-Core'
 }

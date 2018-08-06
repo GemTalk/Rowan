@@ -123,7 +123,8 @@ RwGitTool >> gitPresentIn: gitRepoPath [
 	cdResponse := self performOnServer: command logging: true ]
 		on: Error
 		do: [ :ex | ^ false ].
-	^ gitHome = cdResponse
+	^ (self readlink: gitHome) = (self readlink: cdResponse)
+
 ]
 
 { #category : 'smalltalk api' }

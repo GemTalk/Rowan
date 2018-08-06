@@ -130,8 +130,8 @@ RowanClassService >> classHierarchy [
 	hierarchyServices := Dictionary new.   
 	organizer hierarchy keysAndValuesDo: [:key :value |
 		| classService |
-		classService := key == #nil ifTrue:[#nil] ifFalse: [RowanClassService basicForClassNamed: key name].
-		hierarchyServices at: classService put: (value collect:[:cls | RowanClassService basicForClassNamed: cls name]) asArray.
+		classService := key == #nil ifTrue:[#nil] ifFalse: [self hierarchyClassServiceFor: key name].
+		hierarchyServices at: classService put: (self subclassServices: value). 
 	].
 	RowanCommandResult addResult: self.
 ]
@@ -240,6 +240,16 @@ RowanClassService >> forClassNamed: className [
 	name := className. 
 	theClass := self classFromName. 
 	self refreshFrom: theClass.
+
+]
+
+{ #category : 'private' }
+RowanClassService >> hierarchyClassServiceFor: className [
+
+	^className asString = name asString ifTrue:[ 
+			RowanClassService forClassNamed: className]
+		ifFalse:[
+			RowanClassService basicForClassNamed: className]
 
 ]
 
@@ -529,6 +539,16 @@ RowanClassService >> subclassCreationTemplate [
 	answerService answer: (self browserTool classCreationTemplateForSubclassOf: name 
 								className: 'NewSubclass' category: self classFromName rowanPackageName).
 	RowanCommandResult addResult: answerService.
+]
+
+{ #category : 'private' }
+RowanClassService >> subclassServices: subclasses [
+
+	| sortedSubclasses |
+
+	sortedSubclasses := SortedCollection sortBlock: [:x :y | x name < y name]. 
+	sortedSubclasses addAll: subclasses. 
+	^(sortedSubclasses collect:[:cls | self hierarchyClassServiceFor: cls name]) asArray.
 ]
 
 { #category : 'Accessing' }

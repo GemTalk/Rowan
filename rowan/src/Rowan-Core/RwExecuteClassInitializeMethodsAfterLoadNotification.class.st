@@ -1,12 +1,8 @@
 Class {
 	#name : 'RwExecuteClassInitializeMethodsAfterLoadNotification',
 	#superclass : 'RwNotification',
-	#type : 'variable',
 	#instVars : [
 		'candidateClass'
-	],
-	#gs_options : [
-		'disallowGciStore'
 	],
 	#category : 'Rowan-Core'
 }
@@ -29,6 +25,6 @@ RwExecuteClassInitializeMethodsAfterLoadNotification >> candidateClass: aClassTo
 { #category : 'handling' }
 RwExecuteClassInitializeMethodsAfterLoadNotification >> defaultAction [
 
-	^ false
+	^ true
 
 ]

@@ -390,6 +390,27 @@ RwPrjBrowserTool >> addPackagesNamed: packageNames toProjectNamed: projectName [
 	Rowan projectTools load loadProjectDefinition: projectDefinition
 ]
 
+{ #category : 'project browsing' }
+RwPrjBrowserTool >> addRowanSymbolDictionariesToPersistentSymbolList [
+
+	self addRowanSymbolDictionariesToPersistentSymbolListFor: System myUserProfile
+
+]
+
+{ #category : 'project browsing' }
+RwPrjBrowserTool >> addRowanSymbolDictionariesToPersistentSymbolListFor: userProfile [
+
+	| systemUser |
+	systemUser := AllUsers userWithId: 'SystemUser'.
+	self _rowanSymbolDictionaryNames do: [:symDictName |
+		| aSymbolDictionary anIndex |
+		aSymbolDictionary := systemUser objectNamed: symDictName.
+		anIndex := userProfile symbolList size + 1.
+		userProfile
+			insertDictionary: aSymbolDictionary at: anIndex ]
+
+]
+
 { #category : 'class browsing' }
 RwPrjBrowserTool >> classCreationTemplateForClass: aClass [
 
@@ -420,7 +441,7 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 				addLast: $'.
 			newByteSubclass := true ]
 		ifFalse: [ 
-			aClass isIndexable
+			(aClass isIndexable and: [superClass isIndexable not])
 				ifTrue: [ 
 					nonRowanClass
 						ifTrue: [ result addAll: ' indexableSubclass: ''' ]
@@ -496,7 +517,7 @@ RwPrjBrowserTool >> classCreationTemplateForClass: aClass hybridBrowser: hybridB
 				add: aClass _rwDefinitionOfConstraints ].
 	result
 		add: lfsp;
-		add: aClass _optionsForDefinition.
+		add: aClass _rwOptionsForDefinition.
 	result add: Character lf.
 	^ result
 
