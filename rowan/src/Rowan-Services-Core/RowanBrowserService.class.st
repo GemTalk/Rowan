@@ -8,7 +8,8 @@ Class {
 	#instVars : [
 		'projects',
 		'removedMethods',
-		'allClasses'
+		'allClasses',
+		'hierarchyServices'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -27,6 +28,18 @@ RowanBrowserService >> allClasses [
 	allClasses := allClasses asArray. 
 	updateType := #classes. "#classes not used at the moment so no updates will be done"
 	RowanCommandResult addResult: self
+]
+
+{ #category : 'other' }
+RowanBrowserService >> defaultClassHierarchy [
+	hierarchyServices := Dictionary new.   
+	organizer hierarchy keysAndValuesDo: [:key :value |
+		| classService |
+		classService := key == #nil ifTrue:[#nil] ifFalse: [RowanClassService basicForClassNamed: key name].
+		hierarchyServices at: classService put: (value collect:[:cls | RowanClassService basicForClassNamed: cls name]) asArray.
+	].
+	updateType := #classHierarchyUpdate:browser:. 
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'commands' }
