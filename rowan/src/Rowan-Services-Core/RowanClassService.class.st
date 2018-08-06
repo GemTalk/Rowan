@@ -32,6 +32,12 @@ Class {
 }
 
 { #category : 'instance creation' }
+RowanClassService class >> basicForClassNamed: className [ 
+	"Don't get method services. Efficient for classes with many methods"
+	^self new basicForClassNamed: className
+]
+
+{ #category : 'instance creation' }
 RowanClassService class >> forClassNamed: className [ 
 
 	^self new forClassNamed: className
@@ -71,6 +77,32 @@ RowanClassService >> addCategory: string [
 
 ]
 
+{ #category : 'initialization' }
+RowanClassService >> basicForClassNamed: className [ 
+
+	| theClass |
+	name := className. 
+	theClass := self classFromName. 
+	self basicRefreshFrom: theClass.
+]
+
+{ #category : 'initialization' }
+RowanClassService >> basicRefreshFrom: theClass [
+	| classOrMeta theFilters |
+	command := nil. 
+	commandArgs := nil. 
+	comment := theClass comment. 
+	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade"
+	versions := theClass classHistory size.
+	version := theClass classHistory indexOf: theClass.
+	template := self classCreationTemplate.
+	self setComment.
+	oop := theClass asOop.
+	theFilters := SortedCollection new.
+	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
+	packageName := classOrMeta rowanPackageName.
+]
+
 { #category : 'commands' }
 RowanClassService >> classComment: string [
 
@@ -98,8 +130,8 @@ RowanClassService >> classHierarchy [
 	hierarchyServices := Dictionary new.   
 	organizer hierarchy keysAndValuesDo: [:key :value |
 		| classService |
-		classService := key == #nil ifTrue:[#nil] ifFalse: [RowanClassService forClassNamed: key name].
-		hierarchyServices at: classService put: (value collect:[:cls | RowanClassService forClassNamed: cls name]) asArray.
+		classService := key == #nil ifTrue:[#nil] ifFalse: [RowanClassService basicForClassNamed: key name].
+		hierarchyServices at: classService put: (value collect:[:cls | RowanClassService basicForClassNamed: cls name]) asArray.
 	].
 	RowanCommandResult addResult: self.
 ]
@@ -347,18 +379,9 @@ RowanClassService >> projectName: newValue [
 { #category : 'initialization' }
 RowanClassService >> refreshFrom: theClass [
 	| classOrMeta theFilters |
-	command := nil. 
-	commandArgs := nil. 
-	comment := theClass comment. 
-	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade"
-	versions := theClass classHistory size.
-	version := theClass classHistory indexOf: theClass.
-	template := self classCreationTemplate.
-	self setComment.
-	oop := theClass asOop.
+	self basicRefreshFrom: theClass. 
 	theFilters := SortedCollection new.
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
-	packageName := classOrMeta rowanPackageName. 
 	filterType = 'variables'
 		ifTrue: [^self refreshFromVariable: classOrMeta].
 	self refreshFromCategory: classOrMeta
