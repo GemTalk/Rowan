@@ -258,6 +258,65 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed instanceMigrator: instanceMigrat
 
 ]
 
+{ #category : 'load project by name' }
+RwPrjLoadTool >> loadProjectNamed: projectNamed withConfigurations: configNames groupNames: groupNames [
+
+	"load the named project from disk, mark the loaded projects not dirty and run initializers"
+
+	^ self loadProjectNamed: projectNamed withConfigurations: configNames groupNames: groupNames instanceMigrator: Rowan platform instanceMigrator
+
+]
+
+{ #category : 'load project by name' }
+RwPrjLoadTool >> loadProjectNamed: projectNamed withConfigurations: configNames groupNames: groupNames instanceMigrator: instanceMigrator [
+
+	"load the named project from disk, mark the loaded projects not dirty and run initializers"
+
+	| projectSetDefinition res |
+	projectSetDefinition := self class read
+		readProjectSetForProjectNamed: projectNamed
+		withConfigurations: configNames 
+		groupNames: groupNames.
+	res := self 
+		_doProjectSetLoad_254: projectSetDefinition
+		instanceMigrator: instanceMigrator 
+		originalProjectSet: projectSetDefinition 
+		processedClassNames: Set new.
+	"loaded project and loaded packages read from disk - mark them not dirty"
+	self markProjectSetNotDirty: projectSetDefinition.
+	^ res
+
+]
+
+{ #category : 'load project by name' }
+RwPrjLoadTool >> loadProjectNamed: projectNamed withGroupNames: groupNames [
+
+	"load the named project from disk, mark the loaded projects not dirty and run initializers"
+
+	^ self loadProjectNamed: projectNamed withGroupNames: groupNames instanceMigrator: Rowan platform instanceMigrator
+
+]
+
+{ #category : 'load project by name' }
+RwPrjLoadTool >> loadProjectNamed: projectNamed withGroupNames: groupNames instanceMigrator: instanceMigrator [
+
+	"load the named project from disk, mark the loaded projects not dirty and run initializers"
+
+	| projectSetDefinition res |
+	projectSetDefinition := self class read
+		readProjectSetForProjectNamed: projectNamed
+		withGroupNames: groupNames.
+	res := self 
+		_doProjectSetLoad_254: projectSetDefinition
+		instanceMigrator: instanceMigrator 
+		originalProjectSet: projectSetDefinition 
+		processedClassNames: Set new.
+	"loaded project and loaded packages read from disk - mark them not dirty"
+	self markProjectSetNotDirty: projectSetDefinition.
+	^ res
+
+]
+
 { #category : 'load project definitions' }
 RwPrjLoadTool >> loadProjectSetDefinition_254: projectSetDefinitionToLoad [
 

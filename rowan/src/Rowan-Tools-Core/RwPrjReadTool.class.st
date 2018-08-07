@@ -67,11 +67,19 @@ RwPrjReadTool >> _visitConfigurations: visitorClass forProjectDefinition: projec
 { #category : 'read configurations' }
 RwPrjReadTool >> readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames [
 
+	| spec theConfigNames theGroupNames |
+	spec := projectDefinition specification.
+	theConfigNames := configNames isEmpty
+		ifTrue: [ spec defaultConfigurationNames ]
+		ifFalse: [ configNames ].
+	theGroupNames := groupNames isEmpty
+		ifTrue: [  spec defaultGroupNames ]
+		ifFalse: [ groupNames ].
 	^ self 
 		_visitConfigurations: RwProjectLoadConfigurationVisitor 
 		forProjectDefinition: projectDefinition 
-		withConfigurations: configNames 
-		groupNames: groupNames
+		withConfigurations: theConfigNames 
+		groupNames: theGroupNames
 
 ]
 
@@ -182,6 +190,25 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfigurations: 
 	| projectDefinition |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
 	^ self readProjectSetForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames
+
+]
+
+{ #category : 'read project by name' }
+RwPrjReadTool >> readProjectSetForProjectNamed: projectName withGroupNames: groupNames [
+
+	| projectDefinition spec theConfigNames |
+	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	spec := projectDefinition specification.
+	theConfigNames := spec loadedConfigurationNames
+		ifNotNil: [:configNames | configNames ]
+		ifNil: [
+			spec defaultConfigurationNames
+				ifNotNil: [:configNames | configNames ]
+				ifNil: [ #('Default') ] ].
+	^ self 
+		readProjectSetForProjectDefinition: projectDefinition 
+		withConfigurations: theConfigNames 
+		groupNames: groupNames
 
 ]
 
