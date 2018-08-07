@@ -17,7 +17,6 @@ Class {
 		'versions',
 		'oop',
 		'template',
-		'allFilters',
 		'filters',
 		'filterType',
 		'methods',
@@ -26,7 +25,9 @@ Class {
 		'definedPackageName',
 		'selectedMethods',
 		'projectName',
-		'hierarchyServices'
+		'hierarchyServices',
+		'variables',
+		'categories'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -100,6 +101,8 @@ RowanClassService >> basicRefreshFrom: theClass [
 	oop := theClass asOop.
 	theFilters := SortedCollection new.
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
+	self initializeVariablesFor: classOrMeta. 
+	self initializeCategoriesFor: classOrMeta.
 	packageName := classOrMeta rowanPackageName.
 ]
 
@@ -260,6 +263,23 @@ RowanClassService >> initialize [
 	selectedMethods := Array new.
 ]
 
+{ #category : 'initialization' }
+RowanClassService >> initializeCategoriesFor: classOrMeta [
+
+	| theFilters |
+	theFilters := SortedCollection new.
+	classOrMeta env: 0 categorysDo: [:category :selector | theFilters add: category].
+	categories := theFilters asOrderedCollection.
+]
+
+{ #category : 'initialization' }
+RowanClassService >> initializeVariablesFor: classOrMeta [
+	| theFilters |
+	theFilters := SortedCollection new.
+	theFilters addAll: classOrMeta allInstVarNames.
+	variables := theFilters asOrderedCollection.
+]
+
 { #category : 'Accessing' }
 RowanClassService >> instVarNames [
 	^instVarNames
@@ -294,14 +314,6 @@ RowanClassService >> meta: anObject [
 ]
 
 { #category : 'private' }
-RowanClassService >> methodSelectorsFor: classOrMeta organizer: theOrganizer [
-
-	methods addAll: (classOrMeta selectors collect:[:sel | 
-			RowanMethodService 
-				forSelector: sel class: classOrMeta thisClass meta: meta organizer: theOrganizer])
-]
-
-{ #category : 'private' }
 RowanClassService >> methodServiceFrom: gsNMethod in: behavior compiltationResult: compilationResult [
 	| methodService |
 
@@ -309,6 +321,14 @@ RowanClassService >> methodServiceFrom: gsNMethod in: behavior compiltationResul
 	methodService compilationWarnings: compilationResult value.
 	^methodService
 
+]
+
+{ #category : 'private' }
+RowanClassService >> methodServicesFor: classOrMeta organizer: theOrganizer [
+
+	methods addAll: (classOrMeta selectors collect:[:sel | 
+			RowanMethodService 
+				forSelector: sel class: classOrMeta thisClass meta: meta organizer: theOrganizer])
 ]
 
 { #category : 'commands' }
@@ -392,48 +412,31 @@ RowanClassService >> refreshFrom: theClass [
 	self basicRefreshFrom: theClass. 
 	theFilters := SortedCollection new.
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
-	filterType = 'variables'
-		ifTrue: [^self refreshFromVariable: classOrMeta].
-	self refreshFromCategory: classOrMeta
+	self refreshMethodsFor: classOrMeta
 ]
 
 { #category : 'initialization' }
-RowanClassService >> refreshFromCategory: classOrMeta [
-	| theFilters |
-	theFilters := SortedCollection new.
-	classOrMeta env: 0 categorysDo: [:category :selector | theFilters add: category].
-	allFilters := theFilters asOrderedCollection.
+RowanClassService >> refreshMethodsFor: classOrMeta [
+	| gsNMethods |
 	methods := SortedCollection sortBlock: [:x :y | x selector < y selector].
-	self methodSelectorsFor: classOrMeta organizer: organizer.
-	methods := methods asOrderedCollection
-
-]
-
-{ #category : 'initialization' }
-RowanClassService >> refreshFromVariable: classOrMeta [
-	| theFilters gsNmethods  | 
-	theFilters := SortedCollection new.
-	theFilters addAll: classOrMeta allInstVarNames.
-	allFilters := theFilters asOrderedCollection.
-	methods := SortedCollection sortBlock: [:x :y | x selector < y selector].
-	gsNmethods := Set new. 
-	filters isEmpty ifTrue:[
-		self methodSelectorsFor: classOrMeta organizer: organizer]
-	ifFalse:[
-		filters do:[:instVar |
-			gsNmethods addAll: (organizer accessorsOf: instVar inClass: classOrMeta).
-			methods addAll: (gsNmethods collect:[:gsNmeth | 
-				RowanMethodService 
-					forSelector: gsNmeth selector class: gsNmeth inClass thisClass meta: meta organizer: organizer]).]].
-	methods := methods asOrderedCollection
+	self methodServicesFor: classOrMeta organizer: organizer.
+	methods := methods asOrderedCollection.
+	classOrMeta allInstVarNames do:[:instVar | 
+			gsNMethods := organizer accessorsOf: instVar inClass: classOrMeta.
+			gsNMethods do:[:gsNMethod |
+				| service |
+				service := methods detect:[:methodService | methodService selector = gsNMethod selector] ifNone:[].
+				service ifNotNil:[
+					service accessedInstVars add: instVar]
+	]].
 ]
 
 { #category : 'commands' }
-RowanClassService >> removeCategories: categories [
+RowanClassService >> removeCategories: theCategories [
 	| theClass | 
 	theClass := self classFromName.
 	meta ifTrue:[theClass := theClass class]. 
-	categories do: [:category |
+	theCategories do: [:category |
 		theClass removeCategory: category.
 		].
 	self refreshFrom: self classFromName. 

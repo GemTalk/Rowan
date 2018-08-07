@@ -20,7 +20,8 @@ Class {
 		'stepPoints',
 		'selectedPackageServices',
 		'superSource',
-		'superDisplayString'
+		'superDisplayString',
+		'accessedInstVars'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -61,6 +62,16 @@ RowanMethodService class >> source: source selector: selector category: category
 		meta: boolString == true.
 	^service
 
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> accessedInstVars [
+	^accessedInstVars
+]
+
+{ #category : 'Updating' }
+RowanMethodService >> accessedInstVars: anArray [
+	accessedInstVars := anArray
 ]
 
 { #category : 'rowan' }
@@ -193,7 +204,7 @@ RowanMethodService >> initialize [
 	super initialize. 
 	hasSupers := false. 
 	hasSubs := false.
-
+	accessedInstVars := Array new.
 ]
 
 { #category : 'initialization' }
