@@ -204,34 +204,6 @@ RwPrjLoadTool >> loadProjectNamed_254: projectNamed instanceMigrator: instanceMi
 ]
 
 { #category : 'load project by name' }
-RwPrjLoadTool >> loadProjectNamed_old: projectNamed [
-
-	"load the named project from disk, mark the loaded projects not dirty and run initializers"
-
-	^ self loadProjectNamed_old: projectNamed instanceMigrator: Rowan platform instanceMigrator
-
-]
-
-{ #category : 'load project by name' }
-RwPrjLoadTool >> loadProjectNamed_old: projectNamed instanceMigrator: instanceMigrator [
-
-	"load the named project from disk, mark the loaded projects not dirty and run initializers"
-
-	| projectSetDefinition res |
-	projectSetDefinition := self class read
-		readProjectSetForProjectNamed: projectNamed.
-	res := self 
-		_doProjectSetLoad: projectSetDefinition
-		instanceMigrator: instanceMigrator 
-		originalProjectSet: projectSetDefinition 
-		processedClassNames: Set new.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-
-]
-
-{ #category : 'load project by name' }
 RwPrjLoadTool >> loadProjectNamed: projectNamed [
 
 	"load the named project from disk, mark the loaded projects not dirty and run initializers"
