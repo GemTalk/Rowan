@@ -1786,9 +1786,9 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
 
 "load"
 	Rowan projectTools browser
-		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: 'accessing';
-		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName2 asLowercase);
-		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName2 asLowercase);
+		moveMethod: #'foo' forClassNamed: className isMeta: false toProtocol: 'accessing';
+		moveMethod: #'bar' forClassNamed: className isMeta: false toProtocol: ( '*' , packageName2 asLowercase);
+		moveMethod: #'baz' forClassNamed: className isMeta: true toProtocol: ( '*' , packageName2 asLowercase);
 		yourself.
 
 "validate"
@@ -1823,9 +1823,9 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
 
 "load"
 	Rowan projectTools browser
-		moveMethod: #'foo' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
-		moveMethod: #'bar' forClassNamed: 'SimpleHybridNormal1' isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
-		moveMethod: #'baz' forClassNamed: 'SimpleHybridNormal1' isMeta: true toProtocol: ( '*' , packageName3 asLowercase);
+		moveMethod: #'foo' forClassNamed: className isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
+		moveMethod: #'bar' forClassNamed: className isMeta: false toProtocol: ( '*' , packageName3 asLowercase);
+		moveMethod: #'baz' forClassNamed: className isMeta: true toProtocol: ( '*' , packageName3 asLowercase);
 		yourself.
 "validate"
 	self assert: (normalClass categoryOfSelector: #foo) = ( '*' , packageName3 asLowercase) asSymbol.
@@ -1834,20 +1834,23 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
-			packageDef name = packageName1
-				ifTrue: [ self assert: false description: 'no class extensions expected in package ', packageDef name printString ].
-			packageDef name = packageName2
-				ifTrue: [ self assert: false description: 'no class extensions expected in package ', packageDef name printString ].
-			packageDef name = packageName3
-				ifTrue: [
-					| classExtension |
-					classExtension := packageDef classExtensions at: className.
-					self assert: (classExtension instanceMethodDefinitions includesKey: #foo).
-					self assert: (classExtension instanceMethodDefinitions includesKey: #bar).
-					self assert: (classExtension classMethodDefinitions includesKey: #baz) ] ]
+			(classExtensionDef instanceMethodDefinitions isEmpty and: [classExtensionDef classMethodDefinitions isEmpty])
+				ifFalse: [ 
+					packageDef name = packageName1
+						ifTrue: [ self assert: false description: 'no class extensions expected in package ', packageDef name printString ].
+					packageDef name = packageName2
+						ifTrue: [ self assert: false description: 'no class extensions expected in package ', packageDef name printString ].
+					packageDef name = packageName3
+						ifTrue: [
+							| classExtension |
+							classExtension := packageDef classExtensions at: className.
+							self assert: (classExtension instanceMethodDefinitions includesKey: #foo).
+							self assert: (classExtension instanceMethodDefinitions includesKey: #bar).
+							self assert: (classExtension classMethodDefinitions includesKey: #baz) ] ] ]
 		forClassExtensionsIn: className.
 	self
 		_assert: [ :classDef :packageDef :projectDef | 
+					self assert: packageDef name = packageName1.
 					self assert: classDef name = className.
 					self assert: classDef instanceMethodDefinitions isEmpty.
 					self assert: classDef classMethodDefinitions isEmpty ]
