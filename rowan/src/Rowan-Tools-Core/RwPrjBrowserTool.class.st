@@ -807,7 +807,8 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 
 	"hybridPackageName is expected to be an existing protocol in className"
 
-	| loadedMethodToBeMoved loadedPackage loadedClassOrExtension projectDef packageDef clsDef projectSetDefinition destinationLoadedPackage methodDef |
+	| loadedMethodToBeMoved srcLoadedMethodPackage srcLoadedClassPackage srcLoadedClassOrExtension projectDef packageDef 
+		clsDef projectSetDefinition destinationLoadedPackage methodDef |
 
 	loadedMethodToBeMoved := self
 		_loadedMethod: methodSelector
@@ -817,7 +818,8 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 			RwPerformingUnpackagedEditNotification signal: 'Attempt to move an unpackaged method in the class ', className printString.
 			"Notification resumed, so continue with move"
 			^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
-	loadedPackage := loadedMethodToBeMoved loadedPackage.
+	srcLoadedMethodPackage := loadedMethodToBeMoved loadedPackage.
+	srcLoadedClassPackage := (self _loadedClassNamed: className) loadedPackage.
 
 	destinationLoadedPackage := (hybridPackageName at: 1) = $*
 		ifTrue: [ 
@@ -828,25 +830,27 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 						error:
 							'A package for hybrid package name ' , hybridPackageName printString
 								, ' was not found.' ] ]
-		ifFalse: [ loadedPackage ].
+		ifFalse: [ 
+			"use the loaded package for the class that contains the method"
+			srcLoadedClassPackage ].
 
-	loadedClassOrExtension := loadedPackage
+	srcLoadedClassOrExtension := srcLoadedMethodPackage
 		classOrExtensionForClassNamed: className
 		ifAbsent: [ 
 			self
 				error:
 					'Internal error -- no class or extension for ' , className printString
-						, ' in package ' , loadedPackage name printString , '.' ].
+						, ' in package ' , srcLoadedMethodPackage name printString , '.' ].
 
 	projectSetDefinition := RwProjectSetDefinition new.
-	projectDef := loadedPackage loadedProject asDefinition.
-	packageDef := projectDef packageNamed: loadedPackage name.
-	clsDef := loadedClassOrExtension isLoadedClass
+	projectDef := srcLoadedMethodPackage loadedProject asDefinition.
+	packageDef := projectDef packageNamed: srcLoadedMethodPackage name.
+	clsDef := srcLoadedClassOrExtension isLoadedClass
 		ifTrue: [ packageDef classDefinitions at: className ]
 		ifFalse: [ packageDef classExtensions at: className ].
 
 	projectSetDefinition addProject: projectDef.
-	destinationLoadedPackage name = loadedPackage name
+	destinationLoadedPackage name = srcLoadedMethodPackage name
 		ifTrue: [
 			"method is not moving to a different package, only need to change the protocol for the method"
 
@@ -855,7 +859,7 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 				ifFalse: [ clsDef instanceMethodDefinitions at: methodSelector ].
 			methodDef protocol: hybridPackageName ]
 		ifFalse: [
-			"method is moving to a different package and the destination will be a class extension"
+			"method is moving to a different package"
 
 			| destProjectDef destPackageDef destClsDef srcPackageDef  srcClsDef |
 			destinationLoadedPackage loadedProject name = projectDef name 
@@ -864,23 +868,38 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 					"method is moving to a different project"
 					destProjectDef := destinationLoadedPackage loadedProject asDefinition.
 					projectSetDefinition addProject: destProjectDef ].
-			srcPackageDef := projectDef packageNamed: loadedPackage name.
-			srcClsDef := loadedClassOrExtension isLoadedClass
+			srcPackageDef := projectDef packageNamed: srcLoadedMethodPackage name.
+			srcClsDef := srcLoadedClassOrExtension isLoadedClass
 				ifTrue: [ srcPackageDef classDefinitions at: className ]
 				ifFalse: [ srcPackageDef classExtensions at: className ].
 
 			destPackageDef := destProjectDef packageNamed: destinationLoadedPackage name. 
 
-			destClsDef := destPackageDef classExtensions at: className ifAbsent: [ RwClassExtensionDefinition newForClassNamed: className ].
+			destClsDef := srcLoadedClassPackage == destinationLoadedPackage
+				ifTrue: [
+					"method is not an extension method ... add the method to the class definition"
+					destPackageDef 
+						classDefinitions 
+							at: className 
+							ifAbsent: [ 
+								self error: 'internal error - class ', 
+									className printString , 
+									' not found in expected package ', 
+									destinationLoadedPackage name printString ] ]
+				ifFalse: [ 
+					"method is to be added as an extension method" 
+					destPackageDef classExtensions at: className ifAbsentPut: [ RwClassExtensionDefinition newForClassNamed: className ] ].
 			isMeta
 				ifTrue: [
 					methodDef := srcClsDef classMethodDefinitions at: methodSelector.
 					methodDef protocol: hybridPackageName.
-					destClsDef addClassMethodDefinition: methodDef ]
+					destClsDef addClassMethodDefinition: methodDef.
+					srcClsDef removeClassMethod: methodSelector ]
 				ifFalse: [ 
 					methodDef := srcClsDef instanceMethodDefinitions at: methodSelector.
 					methodDef protocol: hybridPackageName.
-					destClsDef addInstanceMethodDefinition: methodDef ] ].
+					destClsDef addInstanceMethodDefinition: methodDef.
+					srcClsDef removeInstanceMethod: methodSelector ] ].
 
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
