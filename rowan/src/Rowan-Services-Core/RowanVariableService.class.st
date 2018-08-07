@@ -4,25 +4,27 @@ Class {
 	#instVars : [
 		'oop',
 		'key',
-		'value'
+		'value',
+		'className'
 	],
 	#category : 'Rowan-Services-Core'
 }
 
 { #category : 'other' }
-RowanVariableService class >> oop: oop key: key value: value [
+RowanVariableService class >> oop: anInteger key: nameString value: valueString className: classNameString [
 
 	^self basicNew
-		 oop: oop key: key value: value;
+		oop: anInteger key: nameString value: valueString className: classNameString;
 		yourself
 
 ]
 
 { #category : 'other' }
-RowanVariableService >> oop: anInteger key: nameString value: valueString [
+RowanVariableService >> oop: anInteger key: nameString value: valueString className: classNameString [
 
 	oop := anInteger.
 	key := nameString.
 	value := valueString.
+	className := classNameString.
 
 ]
