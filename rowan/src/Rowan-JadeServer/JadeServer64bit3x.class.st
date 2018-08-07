@@ -561,9 +561,10 @@ JadeServer64bit3x >> sbUpdateMethodsByCategories [
 	selectors := IdentitySet new.
 	classList do: [:eachClass |
 		(eachClass selectorsForEnvironment: environment) do: [:eachSelector |
-			| category |
-			category := eachClass categoryOfSelector: eachSelector environmentId: environment.
-			((category isNil and: [ methodFilters includes: #'other']) or: [ methodFilters includes: category asSymbol]) ifTrue: [
+			(methodFilters isEmpty or: [
+				| category |
+				category := eachClass categoryOfSelector: eachSelector environmentId: environment.
+				(category isNil and: [ methodFilters includes: #'other']) or: [ methodFilters includes: category asSymbol]]) ifTrue: [
 				| method |
 				method := eachClass compiledMethodAt: eachSelector environmentId: environment.
 				method isRubyBridgeMethod ifFalse: [
