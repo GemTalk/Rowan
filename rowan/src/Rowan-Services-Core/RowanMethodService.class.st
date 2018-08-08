@@ -2,6 +2,7 @@ Class {
 	#name : 'RowanMethodService',
 	#superclass : 'RowanService',
 	#instVars : [
+		'oop',
 		'source',
 		'selector',
 		'methodDefinitions',
@@ -22,6 +23,7 @@ Class {
 		'superSource',
 		'superDisplayString',
 		'accessedInstVars'
+		'breakPoints'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -93,6 +95,21 @@ RowanMethodService >> allReferences [
 	references := methods first collect:[:gsNMethod | 
 			self class forSelector: gsNMethod selector class: gsNMethod inClass meta: gsNMethod inClass isMeta organizer: organizer].
 	RowanCommandResult addResult: self
+
+]
+
+{ #category : 'initialization' }
+RowanMethodService >> breakPointsFor: aGsNMethod [
+	"Answers an Array stepPoints"
+
+	| list |
+	list := Array new.
+	aGsNMethod _allBreakpoints ifNil: [^#()] ifNotNil: [:anArray | 
+		1 to: anArray size by: 3 do: [:i | 
+			list add: (aGsNMethod _stepPointForMeth: (anArray at: i + 1) ip: (anArray at: i + 2)).
+		].
+	].
+	^list
 
 ]
 
@@ -211,8 +228,10 @@ RowanMethodService >> initialize [
 RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 
 	| inClass |
+	oop := aGsNMethod asOop.
 	selector := aGsNMethod selector.
 	stepPoints := self stepPointsFor: aGsNMethod.
+	breakPoints := self breakPointsFor: aGsNMethod.
 	(inClass := aGsNMethod inClass) ifNil: [
 		meta := false.
 		source := aGsNMethod sourceString.
@@ -361,5 +380,15 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 		each -> eachSelector.
 	].
 	^list
+
+]
+
+{ #category : 'initialization' }
+RowanMethodService >> update [
+
+	self 
+		initialize: (Object _objectForOop: oop) 
+		organizer: ClassOrganizer new.
+	RowanCommandResult addResult: self.
 
 ]
