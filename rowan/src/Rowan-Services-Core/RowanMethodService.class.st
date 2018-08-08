@@ -22,7 +22,7 @@ Class {
 		'selectedPackageServices',
 		'superSource',
 		'superDisplayString',
-		'accessedInstVars'
+		'accessedInstVars',
 		'breakPoints'
 	],
 	#category : 'Rowan-Services-Core'
