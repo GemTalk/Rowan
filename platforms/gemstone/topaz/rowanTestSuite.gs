@@ -2,9 +2,11 @@ run
 	| suite strm res projectNames |
 	projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' ).
 	projectNames do: [:projectName |
+		"load test groups ... include deprecated packages for now"
 		Rowan projectTools load
 			loadProjectNamed: projectName
 			withGroupNames: #('tests' 'deprecated') ].  
+
 	suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 	res := suite run.
 	strm := WriteStream on: String new.
