@@ -4,7 +4,7 @@ run
 	projectNames do: [:projectName |
 		Rowan projectTools load
 			loadProjectNamed: projectName
-			withGroupNames: #('tests') ].  
+			withGroupNames: #('tests' 'deprecated') ].  
 	suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 	res := suite run.
 	strm := WriteStream on: String new.
