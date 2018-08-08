@@ -174,13 +174,13 @@ TonelWriterTest >> testWriteClassDefinitionOn [
 comment test
 "
 Class {
-	#name : #SomeObject,
-	#superclass : #Object,
-	#category : #Kernel
+	#name : ''SomeObject'',
+	#superclass : ''Object'',
+	#category : ''Kernel''
 }
 '
         withLineEndings: TonelWriter lineEnding).
-  stream := String new writeStream.
+  stream := String new writeStreamPortable.
   def := self
     creatClassDefinition: #'SomeObject'
     superclassName: #'Object'
@@ -199,8 +199,8 @@ Class {
 comment test
 "
 Class {
-	#name : #SomeObject,
-	#superclass : #Object,
+	#name : ''SomeObject'',
+	#superclass : ''Object'',
 	#instVars : [
 		''a'',
 		''b'',
@@ -216,7 +216,7 @@ Class {
 	#classInstVars : [
 		''instVarA''
 	],
-	#category : #Kernel
+	#category : ''Kernel''
 }
 '
         withLineEndings: TonelWriter lineEnding)
@@ -227,7 +227,7 @@ Class {
 TonelWriterTest >> testWriteMethodDefinitionOn [
   | writer def stream |
   writer := TonelWriter new.
-  stream := String new writeStream.
+  stream := String new writeStreamPortable.
   def := self creatMethodDefinition: #'Object'
     classIsMeta: false
     selector: #'selector'
@@ -240,13 +240,13 @@ TonelWriterTest >> testWriteMethodDefinitionOn [
     assert: stream contents
     equals:
       ('
-{ #category : #accessing }
+{ #category : ''accessing'' }
 Object >> selector [
 	^ 42
 ]
 '
         withLineEndings: TonelWriter lineEnding).
-  stream := String new writeStream.
+  stream := String new writeStreamPortable.
   def := self creatMethodDefinition: #'Object'
     classIsMeta: true
     selector: #'selector'
@@ -259,13 +259,13 @@ Object >> selector [
     assert: stream contents
     equals:
       ('
-{ #category : #accessing }
+{ #category : ''accessing'' }
 Object class >> selector [
 	^ 42
 ]
 '
         withLineEndings: TonelWriter lineEnding).
-  stream := String new writeStream.
+  stream := String new writeStreamPortable.
   def := self creatMethodDefinition: #'Object'
     classIsMeta: false
     selector: #'='
@@ -278,7 +278,7 @@ Object class >> selector [
     assert: stream contents
     equals:
       ('
-{ #category : #comparing }
+{ #category : ''comparing'' }
 Object >> = anObject [
 	^ self == anObject
 ]
@@ -289,14 +289,14 @@ Object >> = anObject [
 
 { #category : 'tests' }
 TonelWriterTest >> testWritePackageOn [
-  | writer def stream |
+  | writer stream |
   writer := TonelWriter new.
   stream := TonelParser writeStreamClass on: String new.
   writer writePackage: 'ThePackage' on: stream.
   self
     assert: stream contents
     equals:
-      ('Package { #name : #ThePackage }
+      ('Package { #name : ''ThePackage'' }
 '
 ).
 
@@ -305,7 +305,7 @@ TonelWriterTest >> testWritePackageOn [
   self
     assert: stream contents
     equals:
-      ('Package { #name : #The-Package }
+      ('Package { #name : ''The-Package'' }
 '
 ).
 
@@ -314,7 +314,7 @@ TonelWriterTest >> testWritePackageOn [
   self
     assert: stream contents
     equals:
-      ('Package { #name : #''The Package'' }
+      ('Package { #name : ''The Package'' }
 '
 ).
 
