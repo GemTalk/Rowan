@@ -281,7 +281,16 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 			newVersionClassModification := loadedClassDefinition
 				compareAgainstBaseForcingNewClassVersion: loadedClassDefinition.
 
-			projectModification := aProjectSetModification elementsModified at: loadedProject name ifAbsentPut: [ self halt ].
+			projectModification := aProjectSetModification elementsModified 
+				at: loadedProject name 
+				ifAbsentPut: [
+					| def |
+					"arrange for anew project modification to be added"
+					def := loadedProject asDefinition.
+					(RwProjectModification before: def after: def)
+						propertiesModification: RwPropertiesModification new;
+						packagesModification: RwPackagesModification new;
+						yourself ].
 			packageModification := projectModification packagesModification elementsModified 
 					at: loadedPackage name 
 					ifAbsentPut: [  
