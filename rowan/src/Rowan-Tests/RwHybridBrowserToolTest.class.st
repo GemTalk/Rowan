@@ -1824,7 +1824,7 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
 
 	"https://github.com/dalehenrich/Rowan/issues/309"
 
-	|  normalClass projectName packageNames packageName1 packageName2 packageName3 className |
+	|  normalClass projectName packageNames packageName1 packageName2 packageName3 className symDict registry |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions1'.
@@ -1865,6 +1865,14 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
 	self assert: (normalClass categoryOfSelector: #bar) = #accessing.
 	self assert: (normalClass class categoryOfSelector: #baz) = #accessing.
 
+	symDict := Rowan globalNamed: self _symbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 3.
+	self assert: registry classRegistry size = 1.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 3.
+
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
 			packageDef name = packageName1
@@ -1902,6 +1910,14 @@ RwHybridBrowserToolTest >> testHybridMoveMethod_309 [
 	self assert: (normalClass categoryOfSelector: #foo) = #accessing.
 	self assert: (normalClass categoryOfSelector: #bar) = ( '*' , packageName2 asLowercase) asSymbol.
 	self assert: (normalClass class categoryOfSelector: #baz) = ( '*' , packageName2 asLowercase) asSymbol.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 3.
+	self assert: registry classRegistry size = 1.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 3.
 
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 

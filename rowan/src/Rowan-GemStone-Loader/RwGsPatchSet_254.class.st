@@ -967,7 +967,7 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 				ifTrue: [
 					loadedClassOrExtension isEmpty
 						ifTrue: [ 
-							registry classExtensionRegistry removeKey: loadedClassOrExtension handle classHistory.
+							(registry classExtensionRegistry at: loadedClassOrExtension handle classHistory) remove: loadedClassOrExtension.
 							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 
             compiledMethod := loadedMethod handle.
@@ -995,10 +995,11 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 													'The extension class named ' , self className printString , ' cannot be found.' ].
 "logic is not quite correct here ... need to create a lodedClassExtension for this puppy ... deferring session method work to a later date"
 "https://github.com/dalehenrich/Rowan/issues/254"]
-								ifFalse: [							registry
-									ensureExtensionClassNamed: classOrExtensionDef name
-									existsForPackageNamed: packageDef name
-									implementationClass: RwGsSymbolDictionaryRegistry_Implementation ].
+								ifFalse: [
+									registry
+										ensureExtensionClassNamed: classOrExtensionDef name
+										existsForPackageNamed: packageDef name
+										implementationClass: RwGsSymbolDictionaryRegistry_Implementation ].
 							loadedPackage loadedClassExtensions at: classOrExtensionDef name ]
 						ifFalse: [ 
 							self error: 'internal error - no loaded class found for class ', 
