@@ -58,12 +58,11 @@ RowanMethodService class >> source: source selector: selector category: category
 	service 
 		source: source;
 		selector: selector;
-		category: category;
+		category: category asString;
 		className: className;
 		packageName: packageName;
 		meta: boolString == true.
 	^service
-
 ]
 
 { #category : 'Accessing' }
@@ -121,8 +120,7 @@ RowanMethodService >> category [
 
 { #category : 'Updating' }
 RowanMethodService >> category: newValue [
-	category := newValue
-
+	category := newValue asString
 ]
 
 { #category : 'Accessing' }
@@ -178,13 +176,12 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	classOrMeta := meta ifTrue:[theClass class] ifFalse:[theClass]. 
 	gsNMethod := classOrMeta compiledMethodAt: selector.
 	source := gsNMethod sourceString.
-	category := classOrMeta categoryOfSelector: selector.
+	category := (classOrMeta categoryOfSelector: selector) asString.
 	className := theClass name. 
 	packageName := gsNMethod rowanPackageName. 
 	projectName := gsNMethod rowanProjectName.
 	self setSupersAndSubsFor: theClass.
 	isExtension := self rowanIsExtension.
-
 ]
 
 { #category : 'Accessing' }
@@ -387,8 +384,6 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 RowanMethodService >> update [
 
 	self 
-		initialize: (Object _objectForOop: oop) 
-		organizer: ClassOrganizer new.
+		initialize: (Object _objectForOop: oop).
 	RowanCommandResult addResult: self.
-
 ]

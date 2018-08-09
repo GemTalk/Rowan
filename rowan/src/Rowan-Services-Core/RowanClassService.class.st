@@ -82,7 +82,7 @@ RowanClassService >> addCategory: string [
 RowanClassService >> basicForClassNamed: className [ 
 
 	| theClass |
-	name := className. 
+	self name: className. 
 	theClass := self classFromName. 
 	self basicRefreshFrom: theClass.
 ]
@@ -136,6 +136,7 @@ RowanClassService >> classHierarchy [
 		classService := key == #nil ifTrue:[#nil] ifFalse: [self hierarchyClassServiceFor: key name].
 		hierarchyServices at: classService put: (self subclassServices: value). 
 	].
+	self refreshFrom: self classFromName. 
 	RowanCommandResult addResult: self.
 ]
 
@@ -240,16 +241,15 @@ RowanClassService >> filterType: newValue [
 RowanClassService >> forClassNamed: className [ 
 
 	| theClass |
-	name := className. 
+	self name: className. 
 	theClass := self classFromName. 
 	self refreshFrom: theClass.
-
 ]
 
 { #category : 'private' }
 RowanClassService >> hierarchyClassServiceFor: className [
 
-	^className asString = name asString ifTrue:[ 
+	^className asString = name asString ifTrue:[
 			RowanClassService forClassNamed: className]
 		ifFalse:[
 			RowanClassService basicForClassNamed: className]
@@ -268,7 +268,7 @@ RowanClassService >> initializeCategoriesFor: classOrMeta [
 
 	| theFilters |
 	theFilters := SortedCollection new.
-	classOrMeta env: 0 categorysDo: [:category :selector | theFilters add: category].
+	classOrMeta env: 0 categorysDo: [:category :selector | theFilters add: category asString].
 	categories := theFilters asOrderedCollection.
 ]
 
@@ -276,8 +276,9 @@ RowanClassService >> initializeCategoriesFor: classOrMeta [
 RowanClassService >> initializeVariablesFor: classOrMeta [
 	| theFilters |
 	theFilters := SortedCollection new.
-	theFilters addAll: classOrMeta allInstVarNames.
+	theFilters addAll: (classOrMeta allInstVarNames collect:[:instVar | instVar asString]).
 	variables := theFilters asOrderedCollection.
+
 ]
 
 { #category : 'Accessing' }
@@ -353,8 +354,7 @@ RowanClassService >> name [
 
 { #category : 'Updating' }
 RowanClassService >> name: newValue [
-	name := newValue
-
+	name := newValue asString
 ]
 
 { #category : 'private' }
@@ -408,11 +408,11 @@ RowanClassService >> projectName: newValue [
 
 { #category : 'initialization' }
 RowanClassService >> refreshFrom: theClass [
-	| classOrMeta theFilters |
+	| classOrMeta  |
 	self basicRefreshFrom: theClass. 
-	theFilters := SortedCollection new.
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	self refreshMethodsFor: classOrMeta
+
 ]
 
 { #category : 'initialization' }
@@ -427,7 +427,7 @@ RowanClassService >> refreshMethodsFor: classOrMeta [
 				| service |
 				service := methods detect:[:methodService | methodService selector = gsNMethod selector] ifNone:[].
 				service ifNotNil:[
-					service accessedInstVars add: instVar]
+					service accessedInstVars add: instVar asString]
 	]].
 ]
 
@@ -492,13 +492,16 @@ RowanClassService >> saveMethodSource: source category: category [
 	methodService := self methodServiceFrom: gsNMethod in: behavior compiltationResult: compilationResult.
 	RowanCommandResult addResult: methodService.
 	self update.  
-	selectedMethods := (Array with: methodService).
+	self selectedMethods: (Array with: methodService).
 	RowanCommandResult addResult: self.
 ]
 
 { #category : 'Updating' }
-RowanClassService >> selectedMethods: newValue [
-	selectedMethods := newValue
+RowanClassService >> selectedMethods: theMethods [
+	"To avoid setting STON class>>allowComplexKeyMap: (which appears to slow down ston replication)
+	just store the selector"
+	selectedMethods := theMethods collect:[:service | service selector].
+
 ]
 
 { #category : 'Accessing' }

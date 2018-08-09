@@ -30,7 +30,7 @@ RowanBrowserService >> allClasses [
 	RowanCommandResult addResult: self
 ]
 
-{ #category : 'other' }
+{ #category : 'commands' }
 RowanBrowserService >> defaultClassHierarchy [
 	hierarchyServices := Dictionary new.   
 	organizer hierarchy keysAndValuesDo: [:key :value |
