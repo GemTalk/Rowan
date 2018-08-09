@@ -271,44 +271,48 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 	subclassesOfClassWithNewVersions removeAllPresent: classesWithNewVersions.
 	subclassesOfClassWithNewVersions
 		do: [ :subclass | 
-			| loadedClass loadedPackageName loadedClassDefinition subclassName newVersionClassModification |
+			| loadedClass loadedPackage loadedProject loadedClassDefinition subclassName newVersionClassModification 
+				projectModification packageModification classesModification classesModified |
 			subclassName := subclass name asString.
 			loadedClass := self existingSymbolDictionaryRegistry existingForClass: subclass.
 			loadedClassDefinition := loadedClass asDefinition.
-			loadedPackageName := loadedClass loadedPackage name.
+			loadedPackage := loadedClass loadedPackage.
+			loadedProject := loadedClass loadedProject.
 			newVersionClassModification := loadedClassDefinition
 				compareAgainstBaseForcingNewClassVersion: loadedClassDefinition.
-			aProjectSetModification
-				classesModificationAndPackageModificationAndProjectModificationDo: [ :classesModification :packageModification |  
-					packageModification key = loadedPackageName
-						ifTrue: [
-							| classesModified |
-							classesModified := classesModification elementsModified.
-							classesModification isEmpty
+
+			projectModification := aProjectSetModification elementsModified at: loadedProject name ifAbsentPut: [ self halt ].
+			packageModification := projectModification packagesModification elementsModified 
+					at: loadedPackage name 
+					ifAbsentPut: [  
+						| def |
+						"arrange for a new package modification to be added"
+						def := loadedPackage asDefinition.
+						(RwPackageModification before: def after: def)
+							classesModification: RwClassesModification new;
+							classExtensionsModification: RwClassExtensionsModification new;
+							yourself  ].
+			classesModification := packageModification classesModification.
+			classesModified := classesModification elementsModified.
+			classesModification isEmpty
+				ifTrue: [ 
+					classesModified at: subclassName put: newVersionClassModification.
+					newVersionClassModification
+						mergeForNewClassVersionWith: newVersionClassModification ]
+				ifFalse: [ 
+					(classesModified at: subclassName ifAbsent: [  ])
+						ifNil: [
+							classesModified at: subclassName put: newVersionClassModification.
+							newVersionClassModification
+								mergeForNewClassVersionWith: newVersionClassModification ]
+						ifNotNil: [ :existingClassModification | 
+							existingClassModification isDeletion
 								ifTrue: [ 
-									classesModified at: subclassName put: newVersionClassModification.
-									newVersionClassModification
-										mergeForNewClassVersionWith: newVersionClassModification ]
-								ifFalse: [ 
-									(classesModified at: subclassName ifAbsent: [  ])
-										ifNil: [
-											classesModified at: subclassName put: newVersionClassModification.
-											newVersionClassModification
-												mergeForNewClassVersionWith: newVersionClassModification ]
-										ifNotNil: [ :existingClassModification | 
-											existingClassModification isDeletion
-												ifTrue: [ 
-													"a deletion is not unexpected ... "
-													]
-												ifFalse: [
-													newVersionClassModification mergeForExistingClassWith: existingClassModification.
-													classesModified at: subclassName put: newVersionClassModification ] ] ] ] 
-						ifFalse: [
-							classesModification isEmpty
-								ifFalse: [| classesModified |
-									classesModified := classesModification elementsModified.
-									(classesModified at: subclassName ifAbsent: [  ])
-										ifNil: []] ] ].
+									"a deletion is not unexpected ... "
+									]
+								ifFalse: [
+									newVersionClassModification mergeForExistingClassWith: existingClassModification.
+									classesModified at: subclassName put: newVersionClassModification ] ] ] .
 			self
 				_updateNewClassVersionPatchesForClass: subclass
 				in: aProjectSetModification
