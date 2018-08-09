@@ -41,6 +41,13 @@ RwProjectTool class >> create [
 ]
 
 { #category : 'commands' }
+RwProjectTool class >> delete [
+
+	^ RwPrjDeleteTool new
+
+]
+
+{ #category : 'commands' }
 RwProjectTool class >> diff [
 
 	^RwPrjDiffTool new
