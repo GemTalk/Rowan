@@ -274,11 +274,11 @@ RowanClassService >> initializeCategoriesFor: classOrMeta [
 
 { #category : 'initialization' }
 RowanClassService >> initializeVariablesFor: classOrMeta [
+
 	| theFilters |
 	theFilters := SortedCollection new.
 	theFilters addAll: (classOrMeta allInstVarNames collect:[:instVar | instVar asString]).
 	variables := theFilters asOrderedCollection.
-
 ]
 
 { #category : 'Accessing' }
