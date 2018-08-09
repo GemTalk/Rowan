@@ -966,7 +966,9 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 			loadedClassOrExtension isLoadedClassExtension
 				ifTrue: [
 					loadedClassOrExtension isEmpty
-						ifTrue: [ registry classExtensionRegistry removeKey: loadedClassOrExtension handle classHistory ] ].
+						ifTrue: [ 
+							registry classExtensionRegistry removeKey: loadedClassOrExtension handle classHistory.
+							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 
             compiledMethod := loadedMethod handle.
 			registry methodRegistry removeKey: compiledMethod.

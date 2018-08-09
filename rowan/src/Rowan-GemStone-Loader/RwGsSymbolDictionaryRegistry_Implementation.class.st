@@ -130,7 +130,9 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _doDeleteCompiledMethodFrom
 	loadedClassOrExtension isLoadedClassExtension
 		ifTrue: [
 			loadedClassOrExtension isEmpty
-				ifTrue: [ registryInstance classExtensionRegistry removeKey: loadedClassOrExtension handle classHistory ] ].
+				ifTrue: [
+					registryInstance classExtensionRegistry removeKey: loadedClassOrExtension handle classHistory.
+					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 
 	^ registryInstance
 
