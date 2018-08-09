@@ -960,9 +960,14 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 				ifFalse: [ loadedClassOrExtension loadedInstanceMethods ].
 			loadedMethod := loadedMethods at: aMethodMove methodBefore selector.
 
-			loadedClassOrExtension removeLoadedMethod: loadedMethod.
-
 			registry := image loadedRegistryForPackageNamed: loadedPackage name.
+
+			loadedClassOrExtension removeLoadedMethod: loadedMethod.
+			loadedClassOrExtension isLoadedClassExtension
+				ifTrue: [
+					loadedClassOrExtension isEmpty
+						ifTrue: [ registry classExtensionRegistry removeKey: loadedClassOrExtension handle classHistory ] ].
+
             compiledMethod := loadedMethod handle.
 			registry methodRegistry removeKey: compiledMethod.
 

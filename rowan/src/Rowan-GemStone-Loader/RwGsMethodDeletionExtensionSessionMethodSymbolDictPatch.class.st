@@ -75,7 +75,6 @@ RwGsMethodDeletionExtensionSessionMethodSymbolDictPatch >> deleteNewVersionMetho
 
 	"noop for class extension methods"
 
-	
 ]
 
 { #category : 'accessing' }
