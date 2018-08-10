@@ -251,7 +251,7 @@ RowanProjectService >> projects [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> pullFromGit [
 
 	| project |
@@ -263,7 +263,7 @@ RowanProjectService >> pullFromGit [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> pushToGit [
 
 	| project |
