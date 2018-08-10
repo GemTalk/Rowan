@@ -35,20 +35,23 @@ RwGsMethodAdditionSymbolDictPatch >> installMovedMethod: aClassMove newClassVers
 	| oldClassVersion oldBehavior theRegistry |
 	theRegistry := self symbolDictionaryRegistry. "if the class is moved between symbol dictionaries, we have already moved the old method to the this registry"
 	oldClassVersion := newClassVersionPatch oldClassVersion.
-	oldBehavior := self isMeta
-		ifTrue: [ oldClassVersion class ]
-		ifFalse: [ oldClassVersion ].
-    (oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
-		ifNotNil: [ :oldCompiledMethod |
-			"new methods will not be in the old method dictionary"
-			(theRegistry methodRegistry
-				at: oldCompiledMethod
-				ifAbsent: [])
-					ifNil: [
-						theRegistry
-							error:
-								'Internal error -- no existing LoadedMethod found for deleted method.' ]
-					ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ].
+	oldClassVersion ~~ newClassVersionPatch newClassVersion
+		ifTrue: [ 
+			"only do this work if we truly have a new class version"
+			oldBehavior := self isMeta
+				ifTrue: [ oldClassVersion class ]
+				ifFalse: [ oldClassVersion ].
+			(oldBehavior compiledMethodAt: self methodDefinition selector otherwise: nil)
+				ifNotNil: [ :oldCompiledMethod |
+					"new methods will not be in the old method dictionary"
+					(theRegistry methodRegistry
+						at: oldCompiledMethod
+						ifAbsent: [])
+							ifNil: [
+								theRegistry
+									error:
+										'Internal error -- no existing LoadedMethod found for deleted method.' ]
+							ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
 
 	self symbolDictionaryRegistry
 		addNewCompiledMethod: compiledMethod
