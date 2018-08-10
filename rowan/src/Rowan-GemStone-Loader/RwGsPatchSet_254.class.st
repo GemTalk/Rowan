@@ -1285,8 +1285,16 @@ RwGsPatchSet_254 >> updateMethodDictionaries [
 	or LoadedExtension
 	For methods that need recompiling updated the LoadedMethods registration. "
 
+	| movedClassesWithNewVersionMap |
+	movedClassesWithNewVersionMap := Dictionary new.
+	classesWithNewVersions do: [:patch | 
+		(movedClassesMap at: patch className ifAbsent: []) 
+			ifNotNil: [:aClassMove | 
+				movedClassesWithNewVersionMap at: patch className put: aClassMove ] ]. 
 	addedMethods do: [:patch |
-		(movedClassesMap at: patch className ifAbsent: [])
+		| className |
+		className := patch className.
+		(movedClassesWithNewVersionMap at: className ifAbsent: [])
 			ifNil: [ patch installMethod ]
 			ifNotNil: [:aClassMove | 
 				(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
