@@ -83,6 +83,15 @@ RowanQueryService >> methodServicesFrom: methods [
 ]
 
 { #category : 'queries' }
+RowanQueryService >> projectBranches: projectName [
+
+	| project  |
+	project := (RwProject newNamed: projectName). 
+	queryResults := Rowan gitTools gitbranchIn: project repositoryRootPath with: ''.
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'queries' }
 RowanQueryService >> sendersOf: selector [
 
 	| methods |
