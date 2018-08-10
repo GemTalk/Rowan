@@ -177,9 +177,6 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages [
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
 		className projectSetDefinition class oldClass symDict registry loadedClass |
-
-UserGlobals at: #ConditionalHalt put: false.
-
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -256,7 +253,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	projectSetDefinition addDefinition: projectDefinition2.
 
 "load"
-UserGlobals at: #ConditionalHalt put: true.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
@@ -288,9 +284,6 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages [
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
 		className projectSetDefinition class oldClass symDict registry loadedClass |
-
-UserGlobals at: #ConditionalHalt put: false.
-
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -348,7 +341,6 @@ UserGlobals at: #ConditionalHalt put: false.
 
 	projectSetDefinition addDefinition: projectDefinition2.
 
-UserGlobals at: #ConditionalHalt put: true.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	oldClass := class.
@@ -477,9 +469,6 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages [
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
 		className projectSetDefinition class oldClass symDict registry loadedClass |
-
-UserGlobals at: #ConditionalHalt put: false.
-
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -556,7 +545,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	projectSetDefinition addDefinition: projectDefinition2.
 
 "load"
-UserGlobals at: #ConditionalHalt put: true.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
@@ -1515,9 +1503,6 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
 		className projectSetDefinition class x newClass symDict registry |
-
-UserGlobals at: #ConditionalHalt put: false.
-
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -1578,7 +1563,6 @@ UserGlobals at: #ConditionalHalt put: false.
 
 	projectSetDefinition addDefinition: projectDefinition2.
 
-UserGlobals at: #ConditionalHalt put: true.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	newClass := Rowan globalNamed: className.
@@ -1711,9 +1695,6 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_new_method_between_pack
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
 		className projectSetDefinition class x newClass symDict registry |
-
-UserGlobals at: #ConditionalHalt put: false.
-
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -1786,7 +1767,6 @@ UserGlobals at: #ConditionalHalt put: false.
 	projectSetDefinition addDefinition: projectDefinition2.
 
 "validate"
-UserGlobals at: #ConditionalHalt put: true.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	newClass := Rowan globalNamed: className.

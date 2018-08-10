@@ -48,9 +48,6 @@ RwGsMethodAdditionSymbolDictPatch >> installMovedMethod: aClassMove newClassVers
 
 	oldRegistry methodRegistry removeKey: oldCompiledMethod.
 
-(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
-
-
 	self symbolDictionaryRegistry
 		addNewCompiledMethod: compiledMethod
 		for: behavior
