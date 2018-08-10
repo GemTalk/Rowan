@@ -1982,7 +1982,7 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new]) instanceMethodDefinitions includesKey: #mover).
+	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
 
 ]
 
@@ -2107,7 +2107,7 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new]) instanceMethodDefinitions includesKey: #mover).
+	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
 
 ]
 
@@ -2231,7 +2231,7 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new]) instanceMethodDefinitions includesKey: #mover).
+	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
 
 ]
 
@@ -2679,7 +2679,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_1 
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new]) instanceMethodDefinitions includesKey: #mover).
+	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
 
 ]
 
@@ -2786,7 +2786,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_2 
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new]) instanceMethodDefinitions includesKey: #mover).
+	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
 
 ]
 
@@ -2911,7 +2911,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_3 
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new]) instanceMethodDefinitions includesKey: #mover).
+	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
 
 ]
 
@@ -3035,7 +3035,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_4 
 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
-	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new]) instanceMethodDefinitions includesKey: #mover).
+	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
 
 ]
 

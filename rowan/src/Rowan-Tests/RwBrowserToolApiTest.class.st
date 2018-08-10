@@ -1355,7 +1355,8 @@ RwBrowserToolApiTest >> testMoveGlobalExtensionSessionMethods [
 { #category : 'tests' }
 RwBrowserToolApiTest >> testMoveMethod [
 
-	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool testSymDict |
+	| projectName packageNames className packageName1 packageName2 packageName3 testClass testInstance browserTool testSymDict
+		registry |
 	projectName := 'Simple Browser'.
 	packageName1 := 'Simple-Core'.
 	packageName2 := 'Simple-Extensions1'.
@@ -1381,6 +1382,7 @@ RwBrowserToolApiTest >> testMoveMethod [
 		isMeta: false
 		inPackageNamed: packageName1.	"add method in the package of the class"
 
+"validate"
 	testClass := Rowan globalNamed: className.
 	self assert: testClass notNil.
 	testSymDict := Rowan globalNamed: self _symbolDictionaryName.
@@ -1391,6 +1393,12 @@ RwBrowserToolApiTest >> testMoveMethod [
 	self should: [ testInstance foo ] raise: MessageNotUnderstood.
 	self _assertNoClassExtensionsIn: className.
 
+	registry := testSymDict rowanSymbolDictionaryRegistry.
+	self assert: registry packageRegistry size = 3.
+	self assert: registry classRegistry size = 1.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 5.
+
 	browserTool
 		addOrUpdateMethod: 'foo ^''bar'''
 		inProtocol: 'accessing'
@@ -1398,7 +1406,15 @@ RwBrowserToolApiTest >> testMoveMethod [
 		isMeta: false
 		inPackageNamed: packageName2.	"add method in a package as a class extension"
 
+"validate"
 	self assert: testInstance foo = 'bar'.
+
+	registry := testSymDict rowanSymbolDictionaryRegistry.
+	self assert: registry packageRegistry size = 3.
+	self assert: registry classRegistry size = 1.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 6.
+
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
 			packageDef name = packageName1
@@ -1419,7 +1435,14 @@ RwBrowserToolApiTest >> testMoveMethod [
 		isMeta: false
 		inPackageNamed: packageName2.	"change class extension method"
 
+"validate"
 	self assert: testInstance foo = 'baz'.
+
+	registry := testSymDict rowanSymbolDictionaryRegistry.
+	self assert: registry packageRegistry size = 3.
+	self assert: registry classRegistry size = 1.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 6.
 
 	browserTool
 		addOrUpdateMethod: 'foo ^''bif'''
@@ -1428,7 +1451,15 @@ RwBrowserToolApiTest >> testMoveMethod [
 		isMeta: false
 		inPackageNamed: packageName3.	"move method to another package as a class extension"
 
+"validate"
 	self assert: testInstance foo = 'bif'.
+
+	registry := testSymDict rowanSymbolDictionaryRegistry.
+	self assert: registry packageRegistry size = 3.
+	self assert: registry classRegistry size = 1.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 6.
+
 	self
 		_assert: [ :classExtensionDef :packageDef :projectDef | 
 			packageDef name = packageName1
@@ -1441,6 +1472,7 @@ RwBrowserToolApiTest >> testMoveMethod [
 						assert: classExtensionDef instanceMethodDefinitions size = 1;
 						assert: (classExtensionDef instanceMethodDefinitions includesKey: #'foo') ] ]
 		forClassExtensionsIn: className
+
 ]
 
 { #category : 'tests' }

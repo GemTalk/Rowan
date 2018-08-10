@@ -127,6 +127,18 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _doDeleteCompiledMethodFrom
 					'Internal error -- attempt to remove a method from a package in which its class is neither defined nor extended.' ].
 
 	loadedClassOrExtension removeLoadedMethod: loadedMethod.
+	loadedClassOrExtension isLoadedClassExtension
+		ifTrue: [
+			loadedClassOrExtension isEmpty
+				ifTrue: [ 
+					| theKey classExtensionRegistry |
+					theKey := loadedClassOrExtension handle classHistory.
+					classExtensionRegistry := registryInstance classExtensionRegistry.
+					(classExtensionRegistry at: theKey) remove: loadedClassOrExtension.
+					(classExtensionRegistry at: theKey) isEmpty
+						ifTrue: [ classExtensionRegistry removeKey: theKey ].
+					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
+
 	^ registryInstance
 
 ]
