@@ -1290,15 +1290,15 @@ RwGsPatchSet_254 >> updateMethodDictionaries [
 	classesWithNewVersions do: [:patch | 
 		(movedClassesMap at: patch className ifAbsent: []) 
 			ifNotNil: [:aClassMove | 
-				movedClassesWithNewVersionMap at: patch className put: aClassMove ] ]. 
+				movedClassesWithNewVersionMap at: patch className put: {aClassMove . patch} ] ]. 
 	addedMethods do: [:patch |
 		| className |
 		className := patch className.
 		(movedClassesWithNewVersionMap at: className ifAbsent: [])
 			ifNil: [ patch installMethod ]
-			ifNotNil: [:aClassMove | 
-				(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
-				patch installMethod ] ].
+			ifNotNil: [:ar | 
+				"https://github.com/dalehenrich/Rowan/issues/316"
+				patch installMovedMethod: (ar at: 1) newClassVersionPatch: (ar at: 2) ] ].
 	extendedMethods do: [:each | each installMethod ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
 
