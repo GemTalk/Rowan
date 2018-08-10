@@ -1682,7 +1682,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 	self assert: registry packageRegistry size = 1.
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
-	self assert: registry methodRegistry size = 0.
+	self assert: registry methodRegistry size = 1.
 
 ]
 
