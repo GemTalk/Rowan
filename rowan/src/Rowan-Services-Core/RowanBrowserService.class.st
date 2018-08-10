@@ -60,6 +60,12 @@ RowanBrowserService >> removeMethods: methodServices [
 	RowanCommandResult addResult: self.
 ]
 
+{ #category : 'update' }
+RowanBrowserService >> update [
+
+	self updateProjects
+]
+
 { #category : 'commands' }
 RowanBrowserService >> updateProjects [
 	| sortedProjects | 

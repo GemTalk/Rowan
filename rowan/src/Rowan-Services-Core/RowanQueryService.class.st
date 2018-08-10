@@ -55,7 +55,7 @@ RowanQueryService >> hierarchySendersOf: selector inClass: className [
 RowanQueryService >> implementorsOf: selector [
 
 	| methods |
-	methods := organizer implementorsOf: selector.
+	methods := organizer implementorsOf: selector asSymbol.
 	queryResults := self methodServicesFrom: methods.
 	RowanCommandResult addResult: self.
 
@@ -86,10 +86,9 @@ RowanQueryService >> methodServicesFrom: methods [
 RowanQueryService >> sendersOf: selector [
 
 	| methods |
-	methods := organizer sendersOf: selector.
+	methods := organizer sendersOf: selector asSymbol.
 	queryResults := self methodServicesFrom: methods first.
 	RowanCommandResult addResult: self.
-
 ]
 
 { #category : 'ston' }

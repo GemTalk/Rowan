@@ -365,7 +365,7 @@ RowanProjectService >> update [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> write [
 	Rowan projectTools write writeProjectNamed: name
 
