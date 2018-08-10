@@ -425,7 +425,6 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addNewCompiledMethod: compi
 	(methodDictionary at: selector ifAbsent: [  ])
 		ifNotNil: [ :oldCompiledMethod | 
 			"there is an existing compiled method ... that means we're adding a recompiled methoded and moving it to the (possibly new) protocol"
-(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
 			self addRecompiledMethod: compiledMethod instance: registryInstance.
 			^ self 
 				moveCompiledMethod: compiledMethod toProtocol: protocolString instance: registryInstance ].
