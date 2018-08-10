@@ -960,9 +960,21 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 				ifFalse: [ loadedClassOrExtension loadedInstanceMethods ].
 			loadedMethod := loadedMethods at: aMethodMove methodBefore selector.
 
-			loadedClassOrExtension removeLoadedMethod: loadedMethod.
-
 			registry := image loadedRegistryForPackageNamed: loadedPackage name.
+
+			loadedClassOrExtension removeLoadedMethod: loadedMethod.
+			loadedClassOrExtension isLoadedClassExtension
+				ifTrue: [
+					loadedClassOrExtension isEmpty
+						ifTrue: [ 
+							| theKey classExtensionRegistry |
+							theKey := loadedClassOrExtension handle classHistory.
+							classExtensionRegistry := registry classExtensionRegistry.
+							(classExtensionRegistry at: theKey) remove: loadedClassOrExtension.
+							(classExtensionRegistry at: theKey) isEmpty
+								ifTrue: [ classExtensionRegistry removeKey: theKey ].
+							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
+
             compiledMethod := loadedMethod handle.
 			registry methodRegistry removeKey: compiledMethod.
 
@@ -988,10 +1000,11 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 													'The extension class named ' , self className printString , ' cannot be found.' ].
 "logic is not quite correct here ... need to create a lodedClassExtension for this puppy ... deferring session method work to a later date"
 "https://github.com/dalehenrich/Rowan/issues/254"]
-								ifFalse: [							registry
-									ensureExtensionClassNamed: classOrExtensionDef name
-									existsForPackageNamed: packageDef name
-									implementationClass: RwGsSymbolDictionaryRegistry_Implementation ].
+								ifFalse: [
+									registry
+										ensureExtensionClassNamed: classOrExtensionDef name
+										existsForPackageNamed: packageDef name
+										implementationClass: RwGsSymbolDictionaryRegistry_Implementation ].
 							loadedPackage loadedClassExtensions at: classOrExtensionDef name ]
 						ifFalse: [ 
 							self error: 'internal error - no loaded class found for class ', 
