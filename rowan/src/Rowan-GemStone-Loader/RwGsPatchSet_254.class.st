@@ -148,6 +148,16 @@ RwGsPatchSet_254 >> _classVersioningPatchClass [
 ]
 
 { #category : 'private - applying' }
+RwGsPatchSet_254 >> _createMovedClasses [
+
+	movedClasses do: [:movedClass | 
+		movedClassesMap 
+			at: movedClass classBefore name 
+			put: movedClass ].
+
+]
+
+{ #category : 'private - applying' }
 RwGsPatchSet_254 >> _currentProjectDefinition [
 
 	^ currentProjectDefinition
@@ -290,6 +300,7 @@ RwGsPatchSet_254 >> addAddedInstanceMethod: anInstanceMethodDefinition inClass: 
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
+
 ]
 
 { #category : 'building' }
@@ -818,6 +829,7 @@ RwGsPatchSet_254 >> applyForNewClassVersions: anInstanceMigrator [
 					deleteNewVersionMethods add: patch.
 					deletedMethods remove: patch ] ].
 	self apply
+
 ]
 
 { #category : 'accessing' }
@@ -1207,17 +1219,14 @@ RwGsPatchSet_254 >> setupForApply [
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> setupForMovedClasses [
 
-	movedClasses do: [:movedClass | 
-		movedClassesMap 
-			at: movedClass classBefore name 
-			put: movedClass ].
+	self _createMovedClasses
 
 ]
 
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> setupForNewClassVersionUpdates [
 
-	self setupForMovedClasses
+	self _createMovedClasses
 
 ]
 
@@ -1276,7 +1285,12 @@ RwGsPatchSet_254 >> updateMethodDictionaries [
 	or LoadedExtension
 	For methods that need recompiling updated the LoadedMethods registration. "
 
-	addedMethods do: [:patch | patch installMethod ].
+	addedMethods do: [:patch |
+		(movedClassesMap at: patch className ifAbsent: [])
+			ifNil: [ patch installMethod ]
+			ifNotNil: [:aClassMove | 
+				(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
+				patch installMethod ] ].
 	extendedMethods do: [:each | each installMethod ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
 
