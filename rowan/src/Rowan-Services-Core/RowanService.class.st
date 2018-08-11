@@ -2,10 +2,22 @@ Class {
 	#name : 'RowanService',
 	#superclass : 'Object',
 	#instVars : [
-		'definition'
+		'definition',
+		'updates',
+		'command',
+		'commandArgs',
+		'updateType',
+		'organizer'
 	],
 	#category : 'Rowan-Services-Core'
 }
+
+{ #category : 'instance creation' }
+RowanService class >> new [
+
+	^super new initialize
+
+]
 
 { #category : 'other' }
 RowanService class >> rowanFixMe [
@@ -25,6 +37,27 @@ RowanService class >> sampleService [
 RowanService >> browserTool [
 
 	^self projectTools browser
+
+]
+
+{ #category : 'accessing' }
+RowanService >> command [
+
+	^command
+
+]
+
+{ #category : 'accessing' }
+RowanService >> command: aSymbol [
+
+	command := aSymbol
+
+]
+
+{ #category : 'accessing' }
+RowanService >> commandArgs [
+
+	^commandArgs ifNil:[commandArgs := Array new]
 
 ]
 
@@ -80,6 +113,23 @@ RowanService >> definitionClassName [
 
 	^self definitionClass name
 
+]
+
+{ #category : 'replication' }
+RowanService >> excludedInstVars [
+
+	^#( #organizer)
+
+]
+
+{ #category : 'initialization' }
+RowanService >> initialize [
+]
+
+{ #category : 'accessing' }
+RowanService >> organizer: anOrganizer [
+
+	organizer := anOrganizer.
 ]
 
 { #category : 'rowan' }
@@ -138,6 +188,20 @@ RowanService >> sampleSymbolDictionaryName [
 
 	^'SampleSymbolDictionaryName'
 
+]
+
+{ #category : 'replication' }
+RowanService >> stonOn: stonWriter [
+    | instanceVariableNames |
+    instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
+    stonWriter writeObject: self
+        streamMap: 
+            [:dictionary |
+            instanceVariableNames do: 
+                    [:each |
+                    (self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
+                        ifNotNil: [:value | dictionary at: each asSymbol put: value]
+                        ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
 ]
 
 { #category : 'replication' }
