@@ -229,7 +229,7 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	selector := aGsNMethod selector.
 	stepPoints := self stepPointsFor: aGsNMethod.
 	breakPoints := self breakPointsFor: aGsNMethod.
-	(inClass := aGsNMethod inClass) ifNil: [
+	((inClass := aGsNMethod inClass) isNil or: [selector isNil]) ifTrue: [
 		meta := false.
 		source := aGsNMethod sourceString.
 		hasSupers := false.
@@ -384,6 +384,8 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 RowanMethodService >> update [
 
 	self 
-		initialize: (Object _objectForOop: oop).
+		initialize: (Object _objectForOop: oop) 
+		organizer: ClassOrganizer new.
 	RowanCommandResult addResult: self.
+
 ]
