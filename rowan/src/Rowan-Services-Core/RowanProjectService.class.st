@@ -111,13 +111,6 @@ RowanProjectService >> defaultProjectName: aString [
 ]
 
 { #category : 'rowan' }
-RowanProjectService >> definition [
-
-	^(Rowan image loadedProjectNamed: name) asDefinition
-
-]
-
-{ #category : 'rowan' }
 RowanProjectService >> isDirty [
 
 	name isNil ifTrue:[^false].
@@ -139,7 +132,7 @@ RowanProjectService >> isSkew [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> loadProjectNamed: aName [
 
 	[Rowan projectTools load loadProjectNamed: aName] 
@@ -273,6 +266,14 @@ RowanProjectService >> refresh [
 	sha := self rowanSha.
 	branch := self rowanBranch.
 
+]
+
+{ #category : 'commands' }
+RowanProjectService >> reloadProject [
+
+	[Rowan projectTools load loadProjectNamed: name] 
+		on: Warning
+		do: [ :ex | Transcript cr; show: ex description. ex resume ]
 ]
 
 { #category : 'rowan' }
