@@ -4,6 +4,7 @@
 	#definedGroupNames : {
 		'core' : [ ],
 		'deprecated' : [ 'core' ],
+		'jadeServer' : [ 'core' ], 
 		'tests' : [ 'core' ]
 		},
 	#configurationNames : [ 

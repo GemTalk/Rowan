@@ -55,6 +55,15 @@ Rowan class >> image [
 ]
 
 { #category : 'public client services' }
+Rowan class >> jadeServerClassNamed: className [
+
+	| jadeClasses |
+	jadeClasses := Array with: JadeServer. 
+	jadeClasses add: JadeServer64bit32. 
+	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]
+]
+
+{ #category : 'public client services' }
 Rowan class >> methodServiceClass [
 
 	^ self platform methodServiceClass
@@ -123,6 +132,21 @@ Rowan class >> serviceClass [
 
 	^ self platform serviceClass
 
+]
+
+{ #category : 'public client services' }
+Rowan class >> serviceClasses [
+
+	| array |
+	array := Array with: RowanService. 
+	array addAll: RowanService allSubclasses.
+	^array
+]
+
+{ #category : 'public client services' }
+Rowan class >> serviceClassFor: className [
+
+	^self serviceClasses detect:[:cls | cls name == className] ifNone:[]
 ]
 
 { #category : 'public' }
