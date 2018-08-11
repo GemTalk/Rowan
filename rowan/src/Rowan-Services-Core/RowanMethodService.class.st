@@ -384,6 +384,8 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 RowanMethodService >> update [
 
 	self 
-		initialize: (Object _objectForOop: oop).
+		initialize: (Object _objectForOop: oop) 
+		organizer: ClassOrganizer new.
 	RowanCommandResult addResult: self.
+
 ]
