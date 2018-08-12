@@ -532,6 +532,7 @@ RwGsPatchSet_254 >> addExtendedInstanceMethod: anInstanceMethodDefinition inClas
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
+
 ]
 
 { #category : 'modification dispatching' }

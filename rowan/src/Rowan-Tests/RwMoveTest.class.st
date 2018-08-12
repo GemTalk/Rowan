@@ -1964,6 +1964,244 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages_and_symbolD
 ]
 
 { #category : 'tests - issue 254' }
+RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_between_existing_packages [
+
+	"https://github.com/dalehenrich/Rowan/issues/316"
+
+	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
+		className projectSetDefinition class x newClass symDict registry classExtensionDefinition |
+	projectName := 'Issue254'.
+	packageName1 := 'Issue254-Core1'.
+	packageName2 := 'Issue254-Extension2'.
+	packageName3 := 'Issue254-Core3'.
+	packageName4 := 'Issue254-Extension4'.
+	className := 'Issue254Class'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+"setup"
+	projectDefinition1 := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		addPackageNamed: packageName3;
+		addPackageNamed: packageName4;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: 'accessing'
+					source: 'method1 ^1').
+
+	packageDefinition := projectDefinition1 packageNamed: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition
+		newForClassNamed: className.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #ext1
+						protocol: 'extension'
+						source: 'ext1 ^ 1').
+
+	packageDefinition := projectDefinition1 packageNamed: packageName2.
+	packageDefinition addClassExtension: classExtensionDefinition.
+
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition1.
+
+"load"
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class := Rowan globalNamed: className.
+	self assert: class rowanPackageName = packageName1.
+	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
+	self assert: (class compiledMethodAt: #ext1) rowanPackageName = packageName2.
+
+"move class with new version and extension method to new packages"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
+
+	classDefinition 
+		instVarNames: (classDefinition instVarNames copy add: 'ivar1'; yourself). "force new class version"
+
+	packageDefinition := projectDefinition2 packageNamed: packageName3.
+	packageDefinition addClassDefinition: classDefinition.
+
+	packageDefinition := projectDefinition2 packageNamed: packageName4.
+	packageDefinition addClassExtension: classExtensionDefinition.
+
+	projectSetDefinition addDefinition: projectDefinition2.
+
+"load"
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	newClass := Rowan globalNamed: className.
+	self assert: (x := newClass rowanPackageName) = packageName3.
+	self assert: (newClass compiledMethodAt: #method1) rowanPackageName = packageName3.
+	self assert: (newClass compiledMethodAt: #ext1) rowanPackageName = packageName4.
+	self assert: newClass ~~ class.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 1.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 2.
+
+]
+
+{ #category : 'tests - issue 254' }
+RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_between_existing_packages_and_symbolDict [
+
+	"https://github.com/dalehenrich/Rowan/issues/316"
+
+	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
+
+	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
+		className projectSetDefinition class oldClass ar loadedClass symDict registry classExtensionDefinition |
+	projectName := 'Issue254'.
+	packageName1 := 'Issue254-Core1'.
+	packageName2 := 'Issue254-Extension2'.
+	packageName3 := 'Issue254-Core3'.
+	packageName4 := 'Issue254-Extension4'.
+	className := 'Issue254Class'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+"setup"
+	projectDefinition1 := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		addPackageNamed: packageName3;
+		addPackageNamed: packageName4;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: 'accessing'
+					source: 'method1 ^1').
+
+	packageDefinition := projectDefinition1 packageNamed: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition
+		newForClassNamed: className.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+				(RwMethodDefinition
+						newForSelector: #ext1
+						protocol: 'extension'
+						source: 'ext1 ^ 1').
+
+	packageDefinition := projectDefinition1 packageNamed: packageName2.
+	packageDefinition addClassExtension: classExtensionDefinition.
+
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition1.
+"load"
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	loadedClass := Rowan image loadedClassNamed: className.
+	loadedClass loadedInstanceMethods includesKey: #method1.
+
+"validation"
+	class := Rowan globalNamed: className.
+	self assert: class rowanPackageName = packageName1.
+	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
+	self assert: (class compiledMethodAt: #ext1) rowanPackageName = packageName2.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
+	self assert: ar size = 1.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName1 asSymbol.
+
+"move class with new version and extension methods"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
+		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName3;
+		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName4.
+
+	classDefinition 
+		instVarNames: (classDefinition instVarNames copy add: 'ivar1'; yourself). "force new class version"
+
+	packageDefinition := projectDefinition2 packageNamed: packageName3.
+	packageDefinition addClassDefinition: classDefinition.
+
+	packageDefinition := projectDefinition2 packageNamed: packageName4.
+	packageDefinition addClassExtension: classExtensionDefinition.
+
+"load"
+	projectSetDefinition addDefinition: projectDefinition2.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	loadedClass := Rowan image loadedClassNamed: className.
+	loadedClass loadedInstanceMethods includesKey: #method1.
+
+"validate"
+	oldClass := class.
+	class := Rowan globalNamed: className.
+	self assert: class rowanPackageName = packageName2.
+	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName3.
+	self assert: (class compiledMethodAt: #ext1) rowanPackageName = packageName4.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
+	self assert: ar size = 1.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
+
+	self assert: class ~~ oldClass.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 0.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName2.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 1.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 2.
+
+]
+
+{ #category : 'tests - issue 254' }
 RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_between_packages [
 
 	"https://github.com/dalehenrich/Rowan/issues/316"
@@ -2207,7 +2445,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 ]
 
 { #category : 'tests - issue 254' }
-RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages [
+RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing_packages [
 
 	"Use the regular load stack"
 
@@ -2286,6 +2524,196 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 	registry := symDict rowanSymbolDictionaryRegistry.
 
 	self assert: registry packageRegistry size = 2.
+	self assert: registry classRegistry size = 1.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 1.
+
+]
+
+{ #category : 'tests - issue 254' }
+RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing_packages_and_symbolDict [
+	"Use the regular load stack"
+
+	"https://github.com/dalehenrich/Rowan/issues/254"
+
+	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
+
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
+		className projectSetDefinition class oldClass ar loadedClass symDict registry |
+	projectName := 'Issue254'.
+	packageName1 := 'Issue254-Core1'.
+	packageName2 := 'Issue254-Core2'.
+	className := 'Issue254Class'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	projectDefinition1 := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: 'accessing'
+					source: 'method1 ^1').
+
+	packageDefinition := projectDefinition1 packageNamed: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition1.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	loadedClass := Rowan image loadedClassNamed: className.
+	loadedClass loadedInstanceMethods includesKey: #method1.
+
+	class := Rowan globalNamed: className.
+	self assert: class rowanPackageName = packageName1.
+	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
+	self assert: ar size = 1.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName1 asSymbol.
+
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
+		addPackageNamed: packageName2;
+		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: packageName2.
+
+	classDefinition 
+		instVarNames: (classDefinition instVarNames copy add: 'ivar1'; yourself). "force new class version"
+
+	packageDefinition := projectDefinition2 packageNamed: packageName2.
+	packageDefinition addClassDefinition: classDefinition.
+
+	projectSetDefinition addDefinition: projectDefinition2.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	loadedClass := Rowan image loadedClassNamed: className.
+	loadedClass loadedInstanceMethods includesKey: #method1.
+
+	oldClass := class.
+	class := Rowan globalNamed: className.
+	self assert: class rowanPackageName = packageName2.
+	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName2.
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
+	self assert: ar size = 1.
+	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
+
+	self assert: class ~~ oldClass.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 0.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName2.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 1.
+	self assert: registry classRegistry size = 1.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 1.
+
+]
+
+{ #category : 'tests - issue 254' }
+RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages [
+
+	"Use the regular load stack"
+
+	"https://github.com/dalehenrich/Rowan/issues/254"
+
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
+		className projectSetDefinition class x newClass symDict registry |
+	projectName := 'Issue254'.
+	packageName1 := 'Issue254-Core1'.
+	packageName2 := 'Issue254-Core2'.
+	className := 'Issue254Class'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+	projectDefinition1 := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: 'accessing'
+					source: 'method1 ^1').
+
+	packageDefinition := projectDefinition1 packageNamed: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition1.
+
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	class := Rowan globalNamed: className.
+	self assert: class rowanPackageName = packageName1.
+	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
+
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition.
+
+	projectDefinition2 removePackageNamed: packageName1.
+
+	classDefinition 
+		instVarNames: (classDefinition instVarNames copy add: 'ivar1'; yourself). "force new class version"
+
+	packageDefinition := projectDefinition2 packageNamed: packageName2.
+	packageDefinition addClassDefinition: classDefinition.
+
+	projectSetDefinition addDefinition: projectDefinition2.
+
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+	newClass := Rowan globalNamed: className.
+	self assert: (x := newClass rowanPackageName) = packageName2.
+	self assert: (newClass compiledMethodAt: #method1) rowanPackageName = packageName2.
+	self assert: newClass ~~ class.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName1.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 1.
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
