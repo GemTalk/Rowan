@@ -123,7 +123,7 @@ RwLoadingTest >> basicClassDefinitions: packageName [
             superclass: 'RcIdentityBag'
             type: 'normal'
             instvars: {}
-            gs_options: {'traverseByCallback'}
+            gs_options: {}
             inPackage: packageName);
     at: 'TestCustomByteArrayClass'
       put:
@@ -139,7 +139,7 @@ RwLoadingTest >> basicClassDefinitions: packageName [
         (self
             definitionOfBasicClassNamed: 'TestMyByteArrayClass'
             superclass: 'ByteArray'
-            type: 'bytes'
+            type: 'normal'
             instvars: {}
             gs_options: {}
             inPackage: packageName);
@@ -148,7 +148,7 @@ RwLoadingTest >> basicClassDefinitions: packageName [
         (self
             definitionOfBasicClassNamed: 'TestMyStringClass'
             superclass: 'String'
-            type: 'bytes'
+            type: 'normal'
             instvars: {}
             gs_options: {}
             inPackage: packageName);
@@ -1680,7 +1680,8 @@ RwLoadingTest >> testBasicLoading [
 	myPackageSet
 		addPackage: (self basicPackageDefinition: packageName);
 		yourself.
-	self loadAndTestPackagesNamed: packageNames using: myPackageSet
+	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+
 ]
 
 { #category : 'tests' }
