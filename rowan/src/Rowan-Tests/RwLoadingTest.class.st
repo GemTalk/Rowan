@@ -116,6 +116,15 @@ RwLoadingTest >> basicClassDefinitions: packageName [
             instvars: {}
             gs_options: {}
             inPackage: packageName);
+    at: 'TestMyRcIdentityBagClass'
+      put:
+        (self
+            definitionOfBasicClassNamed: 'TestMyRcIdentityBagClass'
+            superclass: 'RcIdentityBag'
+            type: 'normal'
+            instvars: {}
+            gs_options: {}
+            inPackage: packageName);
     at: 'TestCustomByteArrayClass'
       put:
         (self
@@ -130,7 +139,16 @@ RwLoadingTest >> basicClassDefinitions: packageName [
         (self
             definitionOfBasicClassNamed: 'TestMyByteArrayClass'
             superclass: 'ByteArray'
-            type: 'bytes'
+            type: 'normal'
+            instvars: {}
+            gs_options: {}
+            inPackage: packageName);
+    at: 'TestMyStringClass'
+      put:
+        (self
+            definitionOfBasicClassNamed: 'TestMyStringClass'
+            superclass: 'String'
+            type: 'normal'
             instvars: {}
             gs_options: {}
             inPackage: packageName);
@@ -1662,7 +1680,8 @@ RwLoadingTest >> testBasicLoading [
 	myPackageSet
 		addPackage: (self basicPackageDefinition: packageName);
 		yourself.
-	self loadAndTestPackagesNamed: packageNames using: myPackageSet
+	self loadAndTestPackagesNamed: packageNames using: myPackageSet.
+
 ]
 
 { #category : 'tests' }
