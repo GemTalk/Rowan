@@ -1299,7 +1299,14 @@ RwGsPatchSet_254 >> updateMethodDictionaries [
 			ifNotNil: [:ar | 
 				"https://github.com/dalehenrich/Rowan/issues/316"
 				patch installMovedMethod: (ar at: 1) newClassVersionPatch: (ar at: 2) ] ].
-	extendedMethods do: [:each | each installMethod ].
+	extendedMethods do: [:patch |
+		| className |
+		className := patch className.
+		(movedClassesWithNewVersionMap at: className ifAbsent: [])
+			ifNil: [ patch installMethod ]
+			ifNotNil: [:ar | 
+				"https://github.com/dalehenrich/Rowan/issues/316"
+				patch installMovedMethod: (ar at: 1) newClassVersionPatch: (ar at: 2) ] ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
 
 ]
