@@ -7,9 +7,6 @@ Class {
 	#instVars : [
 		'executionTime'
 	],
-	#classVars : [
-		'Results'
-	],
 	#category : 'Rowan-Services-Core'
 }
 
@@ -21,10 +18,18 @@ RowanCommandResult class >> addResult: aResult [
 ]
 
 { #category : 'initailize' }
+RowanCommandResult class >> cleanupResults [
+
+	"remove the key so users other than SystemUser can
+	create a key in their own UserGlobals"
+
+	UserGlobals removeKey: #rowanCommandResults
+]
+
+{ #category : 'initailize' }
 RowanCommandResult class >> initializeResults [
 
-	Results := Array new
-
+	UserGlobals at: #rowanCommandResults put: Array new
 ]
 
 { #category : 'instance creation' }
@@ -40,8 +45,7 @@ RowanCommandResult class >> new [
 { #category : 'accessing' }
 RowanCommandResult class >> results [
 
-	^Results ifNil:[Results := Array new]
-
+	^UserGlobals at: #rowanCommandResults
 ]
 
 { #category : 'accessing' }

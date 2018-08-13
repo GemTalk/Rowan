@@ -136,17 +136,30 @@ Rowan class >> serviceClass [
 
 { #category : 'public client services' }
 Rowan class >> serviceClasses [
+	"Explicitly add each class rather than sending #allSubclasses so
+	that users other than SystemUser have visibility. Visibility in Rowan
+	is determined at compile time."
 
 	| array |
 	array := Array with: RowanService. 
-	array addAll: RowanService allSubclasses.
+	array add: RowanAnsweringService; 
+		add: RowanBrowserService;
+		add: RowanClassService; 
+		add: RowanDebuggerService; 
+		add: RowanFrameService;
+		add: RowanMethodService;
+		add: RowanPackageService; 
+		add: RowanProcessService;
+		add: RowanProjectService;
+		add: RowanQueryService;
+		add: RowanVariableService.
 	^array
 ]
 
 { #category : 'public client services' }
 Rowan class >> serviceClassFor: className [
 
-	^self serviceClasses detect:[:cls | cls name == className] ifNone:[]
+	^self serviceClasses detect:[:cls | cls name asString = className asString] ifNone:[]
 ]
 
 { #category : 'public' }

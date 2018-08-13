@@ -5234,11 +5234,11 @@ JadeServer >> systemBrowserSTONA: aString [
 
 ]
 
-{ #category : 'category' }
+{ #category : 'jadeite' }
 JadeServer >> systemBrowserUpdate [
 
 	RowanCommandResult initializeResults. 
-	writeStream nextPutAll: 'update'; lf.
+	[writeStream nextPutAll: 'update'; lf.
 	self 
 		sbUpdatePackagesOrDictionaries;
 		sbUpdateClassCategories;
@@ -5251,8 +5251,8 @@ JadeServer >> systemBrowserUpdate [
 			methodCommandResult selectedClass: selectedClass name.
 			self
 				sbUpdateMethodFilter;
-				sbUpdateMethods]
-
+				sbUpdateMethods]]
+		ensure: [RowanCommandResult cleanupResults].
 ]
 
 { #category : 'category' }
@@ -5303,11 +5303,11 @@ JadeServer >> terminate: aGsProcess [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'jadeite' }
 JadeServer >> updateFromSton: stonString [
 	| services organizer resultString |
 	RowanCommandResult initializeResults.
-	services := STON fromString: stonString.
+	[services := STON fromString: stonString.
 	organizer := ClassOrganizer new.
 	services do: 
 			[:service |
@@ -5315,8 +5315,8 @@ JadeServer >> updateFromSton: stonString [
 			service command
 				ifNil: [service update]
 				ifNotNil: [service perform: service command withArguments: service commandArgs]].
-	resultString := STON toString: RowanCommandResult results.
-	RowanCommandResult initializeResults.
+	resultString := STON toString: RowanCommandResult results] 
+		ensure: [RowanCommandResult cleanupResults].
 	^resultString
 ]
 
