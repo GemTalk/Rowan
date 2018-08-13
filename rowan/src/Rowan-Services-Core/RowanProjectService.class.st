@@ -7,7 +7,8 @@ Class {
 		'branch',
 		'isSkew',
 		'isDirty',
-		'packages'
+		'packages',
+		'changes'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -52,11 +53,20 @@ RowanProjectService >> branch: anObject [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> changes [
-	
-	^(Rowan projectTools diff diffForProjectName: name) asString
 
+	| projectService |
+	changes := Array new. 
+	self packageNames do:[:packageName |
+			| patch |
+			patch := Rowan packageTools diff patchForPackageName: packageName.
+			changes add:(JadeServer new
+				_mcDescriptionOfPatch: patch
+				baseName: 'closest ancestor'
+				alternateName: nil)].
+	self refresh.
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'commands' }
