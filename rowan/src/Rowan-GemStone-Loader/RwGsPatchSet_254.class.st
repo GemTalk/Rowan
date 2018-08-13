@@ -1286,7 +1286,7 @@ RwGsPatchSet_254 >> updateMethodDictionaries [
 	or LoadedExtension
 	For methods that need recompiling updated the LoadedMethods registration. "
 
-	| movedClassesWithNewVersionMap |
+	| movedClassesWithNewVersionMap movedExtensionMethodsMap |
 	movedClassesWithNewVersionMap := Dictionary new.
 	classesWithNewVersions do: [:patch | 
 		(movedClassesMap at: patch className ifAbsent: []) 
@@ -1300,6 +1300,16 @@ RwGsPatchSet_254 >> updateMethodDictionaries [
 			ifNotNil: [:ar | 
 				"https://github.com/dalehenrich/Rowan/issues/316"
 				patch installMovedMethod: (ar at: 1) newClassVersionPatch: (ar at: 2) ] ].
+	movedClassesWithNewVersionMap isEmpty
+		ifFalse: [
+			"calculate moved extension methods map only if there are moved new class versions as well"
+			movedExtensionMethodsMap := Dictionary new.
+			movedMethods do: [:aMethodMove |
+				| classExtDict key methodDict  |
+				classExtDict := movedExtensionMethodsMap  at: aMethodMove classOrExtensionAfter name ifAbsentPut: [ Dictionary new].
+				key := aMethodMove isMeta ifTrue: [ 'class' ] ifFalse: [ 'instance'].
+				methodDict := classExtDict at: key ifAbsentPut: [ Dictionary new ]. 
+				methodDict at: aMethodMove methodAfter selector put: aMethodMove ] ].
 	extendedMethods do: [:patch |
 		| className |
 		className := patch className.
@@ -1307,7 +1317,17 @@ RwGsPatchSet_254 >> updateMethodDictionaries [
 			ifNil: [ patch installMethod ]
 			ifNotNil: [:ar | 
 				"https://github.com/dalehenrich/Rowan/issues/316"
-				patch installMovedMethod: (ar at: 1) newClassVersionPatch: (ar at: 2) ] ].
+				(movedExtensionMethodsMap at: className ifAbsent: [])
+					ifNil: [ patch installMethod ]
+					ifNotNil: [:classExtDict |
+						| methodDict |
+						methodDict := patch isMeta
+							ifTrue: [ classExtDict at: 'class' ifAbsent: [ Dictionary new ] ]
+							ifFalse: [ classExtDict at: 'instance' ifAbsent: [ Dictionary new ] ].
+						(methodDict at: patch methodDefinition selector ifAbsent: [])
+							ifNil: [ patch installMethod ]
+							ifNotNil: [:aMethodMove |
+								patch installMovedMethod: aMethodMove newClassVersionPatch: (ar at: 2) ] ] ] ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
 
 ]

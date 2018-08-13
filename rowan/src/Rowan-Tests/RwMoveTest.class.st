@@ -1968,8 +1968,9 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
-	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class x newClass symDict registry classExtensionDefinition |
+	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 projectDefinition2 
+		classDefinition packageDefinition className projectSetDefinition class x newClass symDict registry 
+		classExtensionDefinition |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Extension2'.
@@ -2069,7 +2070,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
-	self assert: registry packageRegistry size = 2.
+	self assert: registry packageRegistry size = 4.
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 2.
@@ -2310,7 +2311,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	newClass := Rowan globalNamed: className.
 	self assert: (x := newClass rowanPackageName) = packageName3.
 	self assert: (newClass compiledMethodAt: #method1) rowanPackageName = packageName3.
-	self assert: (newClass compiledMethodAt: #ext1) rowanPackageName = packageName4.
+	self assert: (x := (newClass compiledMethodAt: #ext1) rowanPackageName) = packageName4.
 	self assert: newClass ~~ class.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.

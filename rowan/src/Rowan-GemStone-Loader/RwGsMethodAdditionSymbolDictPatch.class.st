@@ -57,7 +57,7 @@ RwGsMethodAdditionSymbolDictPatch >> installMovedMethod: aClassMove newClassVers
 		addNewCompiledMethod: compiledMethod
 		for: behavior
 		protocol: self propertiesProtocolName
-		toPackageNamed: self packageName
+		toPackageNamed: aClassMove packageAfter name
 		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 	selector := compiledMethod selector
 

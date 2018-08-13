@@ -25,7 +25,7 @@ RwGsMethodExtensionSymbolDictPatch >> installMethod [
 ]
 
 { #category : 'installing' }
-RwGsMethodExtensionSymbolDictPatch >> installMovedMethod: aClassMove newClassVersionPatch: newClassVersionPatch [
+RwGsMethodExtensionSymbolDictPatch >> installMovedMethod: aMethodMove newClassVersionPatch: newClassVersionPatch [
 	"the receiver represents an existing method for a class with a new version that has moved to a new package"
 
 	"the old method in the old class version must be removed from the loaded things, then the regular installMethod should be performed"
@@ -57,7 +57,7 @@ RwGsMethodExtensionSymbolDictPatch >> installMovedMethod: aClassMove newClassVer
 		addExtensionCompiledMethod: compiledMethod
 		for: behavior
 		protocol: self propertiesProtocolName
-		toPackageNamed: self packageName
+		toPackageNamed: aMethodMove packageAfter name
 		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 	selector := compiledMethod selector
 
