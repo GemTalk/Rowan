@@ -16,6 +16,12 @@ RowanQueryService >> browseClassReferences: className [
 	RowanCommandResult addResult: self.
 ]
 
+{ #category : 'private' }
+RowanQueryService >> defaultProjectLogSize [
+
+	^100
+]
+
 { #category : 'ston' }
 RowanQueryService >> excludedInstVars [
 
@@ -88,6 +94,16 @@ RowanQueryService >> projectBranches: projectName [
 	| project  |
 	project := (RwProject newNamed: projectName). 
 	queryResults := Rowan gitTools gitbranchIn: project repositoryRootPath with: ''.
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'queries' }
+RowanQueryService >> projectLog: projectName [
+
+	queryResults := 
+		(Rowan projectTools log
+		commitLogProjectNamed: projectName
+		limit: self defaultProjectLogSize).
 	RowanCommandResult addResult: self.
 ]
 

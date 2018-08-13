@@ -18,18 +18,9 @@ RowanCommandResult class >> addResult: aResult [
 ]
 
 { #category : 'initailize' }
-RowanCommandResult class >> cleanupResults [
-
-	"remove the key so users other than SystemUser can
-	create a key in their own UserGlobals"
-
-	UserGlobals removeKey: #rowanCommandResults
-]
-
-{ #category : 'initailize' }
 RowanCommandResult class >> initializeResults [
 
-	UserGlobals at: #rowanCommandResults put: Array new
+	SessionTemps current at: #rowanCommandResults put: Array new.
 ]
 
 { #category : 'instance creation' }
@@ -45,7 +36,7 @@ RowanCommandResult class >> new [
 { #category : 'accessing' }
 RowanCommandResult class >> results [
 
-	^UserGlobals at: #rowanCommandResults
+	^SessionTemps current at: #rowanCommandResults
 ]
 
 { #category : 'accessing' }
