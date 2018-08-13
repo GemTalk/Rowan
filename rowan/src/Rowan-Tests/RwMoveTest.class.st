@@ -2042,6 +2042,12 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	classDefinition 
 		instVarNames: (classDefinition instVarNames copy add: 'ivar1'; yourself). "force new class version"
 
+	packageDefinition := projectDefinition2 packageNamed: packageName1.
+	packageDefinition removeClassDefinition: classDefinition.
+
+	packageDefinition := projectDefinition2 packageNamed: packageName2.
+	packageDefinition removeClassExtension: classExtensionDefinition.
+
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
 	packageDefinition addClassDefinition: classDefinition.
 
@@ -2057,7 +2063,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	newClass := Rowan globalNamed: className.
 	self assert: (x := newClass rowanPackageName) = packageName3.
 	self assert: (newClass compiledMethodAt: #method1) rowanPackageName = packageName3.
-	self assert: (newClass compiledMethodAt: #ext1) rowanPackageName = packageName4.
+	self assert: (x := (newClass compiledMethodAt: #ext1) rowanPackageName) = packageName4.
 	self assert: newClass ~~ class.
 
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
@@ -2157,6 +2163,12 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 	classDefinition 
 		instVarNames: (classDefinition instVarNames copy add: 'ivar1'; yourself). "force new class version"
+
+	packageDefinition := projectDefinition2 packageNamed: packageName1.
+	packageDefinition removeClassDefinition: classDefinition.
+
+	packageDefinition := projectDefinition2 packageNamed: packageName2.
+	packageDefinition removeClassExtension: classExtensionDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
 	packageDefinition addClassDefinition: classDefinition.
@@ -2598,6 +2610,8 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 	classDefinition 
 		instVarNames: (classDefinition instVarNames copy add: 'ivar1'; yourself). "force new class version"
 
+	packageDefinition := projectDefinition2 packageNamed: packageName1.
+	packageDefinition removeClassNamed: classDefinition name.
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
@@ -2620,7 +2634,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
-	self assert: registry packageRegistry size = 0.
+	self assert: registry packageRegistry size = 1.
 	self assert: registry classRegistry size = 0.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
