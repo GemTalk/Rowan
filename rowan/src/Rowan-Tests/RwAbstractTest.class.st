@@ -303,26 +303,28 @@ RwAbstractTest >> methodDefsFromSpec: specArray [
 RwAbstractTest >> packageDefinition: packageName [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName)
+		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions: Dictionary new
 		classExtensions: Dictionary new
+
 ]
 
 { #category : 'support' }
 RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName)
+		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions:
 			(self classDefinition: className super: superClassName inPackage: packageName)
 		classExtensions: Dictionary new
+
 ]
 
 { #category : 'support' }
 RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName category: category [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName)
+		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions:
 			(self
 				classDefinition: className
@@ -330,13 +332,14 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 				category: category
 				inPackage: packageName)
 		classExtensions: Dictionary new
+
 ]
 
 { #category : 'support' }
 RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName classVars: classVars [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName)
+		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions:
 			(self
 				classDefinition: className
@@ -344,13 +347,14 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 				classVars: classVars
 				inPackage: packageName)
 		classExtensions: Dictionary new
+
 ]
 
 { #category : 'support' }
 RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName comment: comment [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName)
+		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions:
 			(self
 				classDefinition: className
@@ -358,13 +362,14 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 				comment: comment
 				inPackage: packageName)
 		classExtensions: Dictionary new
+
 ]
 
 { #category : 'support' }
 RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName instanceMethods: instanceMethods classMethods: classMethods [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName)
+		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions:
 			(self
 				classDefinition: className
@@ -373,13 +378,14 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 				classMethods: classMethods
 				inPackage: packageName)
 		classExtensions: Dictionary new
+
 ]
 
 { #category : 'support' }
 RwAbstractTest >> packageDefinition: packageName classNamed: className super: superClassName instVars: instVars [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName)
+		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions:
 			(self
 				classDefinition: className
@@ -387,19 +393,21 @@ RwAbstractTest >> packageDefinition: packageName classNamed: className super: su
 				instVars: instVars
 				inPackage: packageName)
 		classExtensions: Dictionary new
+
 ]
 
 { #category : 'support' }
 RwAbstractTest >> packageDefinition: packageName extendClassNamed: className instanceMethods: instanceMethods classMethods: classMethods [
 
 	^ RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> packageName)
+		withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions: Dictionary new
 		classExtensions:
 			(self
 				classExtensionDefinition: className
 				instanceMethods: instanceMethods
 				classMethods: classMethods)
+
 ]
 
 { #category : 'support' }

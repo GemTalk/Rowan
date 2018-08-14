@@ -260,7 +260,9 @@ RwGsImagePatchVisitor_254 >> visitPackageModification: aPackageModification [
 	currentPackage := aPackageModification after.
 	propertiesModification := aPackageModification propertiesModification.
 	propertiesModification isEmpty
-		ifFalse: [ "https://github.com/dalehenrich/Rowan/issues/180: noop"].
+		ifFalse: [ 
+(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
+].
 	aPackageModification classesModification acceptVisitor: self.
 	aPackageModification classExtensionsModification acceptVisitor: self
 
@@ -282,10 +284,6 @@ RwGsImagePatchVisitor_254 >> visitPackagesModification: aPackagesModification [
 { #category : 'visting' }
 RwGsImagePatchVisitor_254 >> visitProjecteSetModification: aProjectSetModification [
 
-	aProjectSetModification 
-		movedPackages do: [:movedPackage | 
-			"not a thing right now https://github.com/dalehenrich/Rowan/issues/254" 
-			self error: 'internal error - moved packages not yet implemented' ].
 	aProjectSetModification movedClasses do: [:movedClass | 
 		movedClass addMovedClassToPatchSet: patchSet ].
 	aProjectSetModification movedMethods do: [:movedMethod | 

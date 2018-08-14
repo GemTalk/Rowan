@@ -186,9 +186,10 @@ RwLoadingTest >> basicInstanceMethodsForClass: className [
 { #category : 'support - basic definitions' }
 RwLoadingTest >> basicPackageDefinition: packageName [
   ^ RwPackageDefinition
-    withProperties: (Dictionary with: 'name' -> packageName)
+    withProperties: (Dictionary with: 'name' -> packageName with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
     classDefinitions: (self basicClassDefinitions: packageName)
     classExtensions: Dictionary new
+
 ]
 
 { #category : 'support - classExtensions definitions' }
@@ -284,7 +285,7 @@ RwLoadingTest >> classInitializationClassMethodsForClass2: className [
 { #category : 'support - classInitialization definitions' }
 RwLoadingTest >> classInitializePackageDefinition: packageName className: className classMethodDefinitions: classMethodDefinitions [
   ^ RwPackageDefinition
-    withProperties: (Dictionary with: 'name' -> packageName)
+    withProperties: (Dictionary with: 'name' -> packageName with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
     classDefinitions:
       (Dictionary new
         at: className
@@ -295,6 +296,7 @@ RwLoadingTest >> classInitializePackageDefinition: packageName className: classN
                 classMethodDefinitions: classMethodDefinitions);
         yourself)
     classExtensions: Dictionary new
+
 ]
 
 { #category : 'support - classInstVarChanges definitions' }
@@ -1252,7 +1254,7 @@ RwLoadingTest >> methodDeletionInstanceMethodsForClass2: className [
 { #category : 'support - methodDeletion definitions' }
 RwLoadingTest >> methodDeletionPackageDefinition: packageName className: className instanceMethodDefinitions: instanceMethodDefinitions classMethodDefinitions: classMethodDefinitions [
   ^ RwPackageDefinition
-    withProperties: (Dictionary with: 'name' -> packageName)
+    withProperties: (Dictionary with: 'name' -> packageName with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
     classDefinitions:
       (Dictionary new
         at: className
@@ -1264,6 +1266,7 @@ RwLoadingTest >> methodDeletionPackageDefinition: packageName className: classNa
                 classMethodDefinitions: classMethodDefinitions);
         yourself)
     classExtensions: Dictionary new
+
 ]
 
 { #category : 'support - methodProtocolChange definitions' }
@@ -1327,20 +1330,22 @@ RwLoadingTest >> methodProtocolChangePackageDefinition: packageName className: c
 RwLoadingTest >> package1Definition [
 
 	^RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> 'TestPackage1')
+		withProperties: (Dictionary with: 'name' -> 'TestPackage1'  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions: (Dictionary
 				with: 'TestClass1' -> (self definitionOfSimpleClassNamed: 'TestClass1' inPackage: 'TestPackage1'))
 		classExtensions: Dictionary new
+
 ]
 
 { #category : 'support - simple definitions' }
 RwLoadingTest >> package2Definition [
 
 	^RwPackageDefinition
-		withProperties: (Dictionary with: 'name' -> 'TestPackage2')
+		withProperties: (Dictionary with: 'name' -> 'TestPackage2'  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 		classDefinitions: (Dictionary
 				with: 'TestClass2' -> (self definitionOfSimpleClassNamed: 'TestClass2' inPackage: 'TestPackage2'))
 		classExtensions: Dictionary new
+
 ]
 
 { #category : 'support - poolDictionaryChanges definitions' }
@@ -1753,12 +1758,13 @@ RwLoadingTest >> testClassDelete [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: Dictionary new
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet.
 	self assert: (Rowan image resolveClassNamed: className asSymbol) isNil
+
 ]
 
 { #category : 'tests' }
@@ -1775,7 +1781,7 @@ RwLoadingTest >> testClassExtension [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName1)
+						withProperties: (Dictionary with: 'name' -> packageName1  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions:
 							(self
 								classExtionsClassDefinitions1: packageName1
@@ -1792,7 +1798,7 @@ RwLoadingTest >> testClassExtension [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName2)
+						withProperties: (Dictionary with: 'name' -> packageName2  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: Dictionary new
 						classExtensions:
 							(self
@@ -1802,6 +1808,7 @@ RwLoadingTest >> testClassExtension [
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: false using: myPackageSet.
 	self assert: testInstance foo = 'foo'
+
 ]
 
 { #category : 'tests' }
@@ -1916,7 +1923,7 @@ RwLoadingTest >> testClassInstVarChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self classInstVarChangesClassDefinitions1: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -1927,7 +1934,7 @@ RwLoadingTest >> testClassInstVarChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self classInstVarChangesClassDefinitions2: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -1939,7 +1946,7 @@ RwLoadingTest >> testClassInstVarChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self classInstVarChangesClassDefinitions3: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -1951,7 +1958,7 @@ RwLoadingTest >> testClassInstVarChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self classInstVarChangesClassDefinitions4: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -1959,6 +1966,7 @@ RwLoadingTest >> testClassInstVarChanges [
 	testClass4 := Rowan image resolveClassNamed: className asSymbol.
 	civs4 := testClass4 _classInstVars copy.
 	self deny: testClass4 == testClass1
+
 ]
 
 { #category : 'tests' }
@@ -1972,7 +1980,7 @@ RwLoadingTest >> testClassPropertyChangesWithNewClassVersion1 [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self classVersionChangeClassDefinitions1: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -1982,11 +1990,12 @@ RwLoadingTest >> testClassPropertyChangesWithNewClassVersion1 [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self classVersionChangeClassDefinitions2: packageName)
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet
+
 ]
 
 { #category : 'tests' }
@@ -2002,7 +2011,7 @@ RwLoadingTest >> testClassPropertyChangesWithNewClassVersion2 [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self classVersionChangeClassDefinitions1: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -2012,11 +2021,12 @@ RwLoadingTest >> testClassPropertyChangesWithNewClassVersion2 [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self classVersionChangeClassDefinitions3: packageName)
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet
+
 ]
 
 { #category : 'tests' }
@@ -2030,7 +2040,7 @@ RwLoadingTest >> testClassPropertyChangesWithNoNewClassVersion [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self classPropertyChangeClassDefinitions1: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -2040,11 +2050,12 @@ RwLoadingTest >> testClassPropertyChangesWithNoNewClassVersion [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self classPropertyChangeClassDefinitions2: packageName)
 						classExtensions: Dictionary new);
 		yourself.
 	self loadAndTestPackagesNamed: packageNames loaded: true using: myPackageSet
+
 ]
 
 { #category : 'tests' }
@@ -2063,7 +2074,7 @@ RwLoadingTest >> testClassVarChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self  _symbolDictionaryName asString)
 						classDefinitions: (self classVarChangesClassDefinitions1: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -2074,7 +2085,7 @@ RwLoadingTest >> testClassVarChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self classVarChangesClassDefinitions2: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -2086,7 +2097,7 @@ RwLoadingTest >> testClassVarChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self classVarChangesClassDefinitions3: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -2098,7 +2109,7 @@ RwLoadingTest >> testClassVarChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self classVarChangesClassDefinitions4: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -2106,6 +2117,7 @@ RwLoadingTest >> testClassVarChanges [
 	testClass4 := Rowan image resolveClassNamed: className asSymbol.
 	cvs4 := testClass4 _classVars copy.
 	self assert: testClass4 == testClass1
+
 ]
 
 { #category : 'tests' }
@@ -2150,7 +2162,7 @@ RwLoadingTest >> testCombinedChanges [
 	myPackageSet := RwPackageSetDefinition new
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: classDefinitionsDictionary
 						classExtensions: Dictionary new);
 		yourself.
@@ -2183,7 +2195,7 @@ RwLoadingTest >> testCombinedChanges [
 	myPackageSet := RwPackageSetDefinition new
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: classDefinitionsDictionary
 						classExtensions: Dictionary new);
 		yourself.
@@ -2198,6 +2210,7 @@ RwLoadingTest >> testCombinedChanges [
 		assert:
 				(testClass compiledMethodAt: #'testInstanceMethod2' otherwise: false) == false;
 		assert: testInstance testInstanceMethod3 = 2
+
 ]
 
 { #category : 'tests' }
@@ -2215,7 +2228,7 @@ RwLoadingTest >> testInstVarChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self instVarChangesClassDefinitions1: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -2226,7 +2239,7 @@ RwLoadingTest >> testInstVarChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self instVarChangesClassDefinitions2: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -2238,7 +2251,7 @@ RwLoadingTest >> testInstVarChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self instVarChangesClassDefinitions3: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -2250,7 +2263,7 @@ RwLoadingTest >> testInstVarChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions: (self instVarChangesClassDefinitions4: packageName)
 						classExtensions: Dictionary new);
 		yourself.
@@ -2258,6 +2271,7 @@ RwLoadingTest >> testInstVarChanges [
 	testClass4 := Rowan image resolveClassNamed: className asSymbol.
 	ivs4 := testClass4 _instVarNames copy.
 	self deny: testClass4 == testClass1
+
 ]
 
 { #category : 'tests' }
@@ -2379,7 +2393,7 @@ RwLoadingTest >> testPoolDictionaryChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions:
 							(self poolDictionaryChangesClassDefinitions1: packageName)
 						classExtensions: Dictionary new);
@@ -2391,7 +2405,7 @@ RwLoadingTest >> testPoolDictionaryChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions:
 							(self poolDictionaryChangesClassDefinitions2: packageName)
 						classExtensions: Dictionary new);
@@ -2404,7 +2418,7 @@ RwLoadingTest >> testPoolDictionaryChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions:
 							(self poolDictionaryChangesClassDefinitions3: packageName)
 						classExtensions: Dictionary new);
@@ -2417,7 +2431,7 @@ RwLoadingTest >> testPoolDictionaryChanges [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions:
 							(self poolDictionaryChangesClassDefinitions4: packageName)
 						classExtensions: Dictionary new);
@@ -2426,6 +2440,7 @@ RwLoadingTest >> testPoolDictionaryChanges [
 	testClass4 := Rowan image resolveClassNamed: className asSymbol.
 	pds4 := testClass4 _poolDictionaries copy.
 	self deny: testClass4 == testClass1
+
 ]
 
 { #category : 'tests' }
@@ -2457,7 +2472,7 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions:
 							(self
 								singleClassVersionChangeClassDefinitions1: packageName
@@ -2476,7 +2491,7 @@ RwLoadingTest >> testSingleClassVersionChange1 [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions:
 							(self
 								singleClassVersionChangeClassDefinitions2: packageName
@@ -2508,7 +2523,7 @@ RwLoadingTest >> testSingleClassVersionChange2 [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions:
 							(self
 								singleClassVersionChangeClassDefinitions2: packageName
@@ -2527,7 +2542,7 @@ RwLoadingTest >> testSingleClassVersionChange2 [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions:
 							(self
 								singleClassVersionChangeClassDefinitions3: packageName
@@ -2559,7 +2574,7 @@ RwLoadingTest >> testSingleClassVersionChange3 [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions:
 							(self
 								singleClassVersionChangeClassDefinitions2: packageName
@@ -2578,7 +2593,7 @@ RwLoadingTest >> testSingleClassVersionChange3 [
 	myPackageSet
 		addPackage:
 				(RwPackageDefinition
-						withProperties: (Dictionary with: 'name' -> packageName)
+						withProperties: (Dictionary with: 'name' -> packageName  with: 'gs_SymbolDictionary' -> self _symbolDictionaryName asString)
 						classDefinitions:
 							(self
 								singleClassVersionChangeClassDefinitions4: packageName

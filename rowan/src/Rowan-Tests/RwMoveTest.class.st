@@ -3156,6 +3156,9 @@ RwMoveTest >> testProjectSet_move_packages_between_symbolDict [
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 projectSetDefinition
 		symDict registry x |
+
+UserGlobals at: #ConditionalHalt put: false.
+
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -3198,6 +3201,7 @@ RwMoveTest >> testProjectSet_move_packages_between_symbolDict [
 
 "load"
 	projectSetDefinition addDefinition: projectDefinition2.
+UserGlobals at: #ConditionalHalt put: false.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
