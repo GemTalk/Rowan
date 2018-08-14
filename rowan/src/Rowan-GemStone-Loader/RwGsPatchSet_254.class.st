@@ -9,6 +9,7 @@ Class {
 		'addedProjects',
 		'addedPackages',
 		'deletedPackages',
+		'movedPackages',
 		'projectsWithPropertyChanges',
 		'addedClasses',
 		'deletedClasses',
@@ -573,8 +574,7 @@ RwGsPatchSet_254 >> addMethodMove: aRwMethodMove [
 RwGsPatchSet_254 >> addMovedPackage: packageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
-self error: 'not yet implemented'.
-	deletedPackages
+	movedPackages
 		add:
 			((self _packageMovePatchClass for: packageDefinition)
 				projectDefinition: aProjectDefinition;
@@ -823,6 +823,7 @@ RwGsPatchSet_254 >> apply [
 		updateMethodDictionaries;
 		updateMethodProperties;
 		"removeDeletedClassesAndExtensionsFromPackages;"
+		movePackages;
 		removeDeletedPackages;
 		commit;
 		runInitializers;
@@ -1057,6 +1058,7 @@ RwGsPatchSet_254 >> initialize [
 	addedPackages := Set new.
 	addedProjects := Set new.
 	deletedPackages := Set new.
+	movedPackages := Set new.
 	projectsWithPropertyChanges := Set new.
 	deletedClasses := Set new.
 	addedClasses := Set new.
@@ -1134,6 +1136,13 @@ RwGsPatchSet_254 >> moveClassesBetweenSymbolDictionaries [
 { #category : 'accessing' }
 RwGsPatchSet_254 >> movedClassesMap [
 	^ movedClassesMap
+
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_254 >> movePackages [
+
+	movedPackages do: [:each | each movePackage ]
 
 ]
 

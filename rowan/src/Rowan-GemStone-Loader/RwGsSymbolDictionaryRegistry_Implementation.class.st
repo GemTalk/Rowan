@@ -874,6 +874,21 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveCompiledMethod: compile
 
 ]
 
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> movePackage: packageName to: symbolDictionaryName instance: fromRegistryInstance [
+
+	| loadedPackage toRegistryInstance |
+	loadedPackage := fromRegistryInstance packageRegistry
+		removeKey: packageName
+		ifAbsent: [ fromRegistryInstance error: 'package ' , packageName printString , ' not found' ].
+	toRegistryInstance := (Rowan image newOrExistingSymbolDictionaryNamed: symbolDictionaryName) rowanSymbolDictionaryRegistry.
+	(toRegistryInstance packageRegistry at: packageName ifAbsent: [])
+		ifNotNil: [:unexpectedLoadedPackage | toRegistryInstance error: 'package ', packageName printString, ' unexpectedly found in ', symbolDictionaryName printString ].
+	toRegistryInstance packageRegistry at: packageName put: loadedPackage.
+	^ fromRegistryInstance
+
+]
+
 { #category : 'package - creation api' }
 RwGsSymbolDictionaryRegistry_Implementation class >> newLoadedPackageNamed: packageName instance: registryInstance [
 
