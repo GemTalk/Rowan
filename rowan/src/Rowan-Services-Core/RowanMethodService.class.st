@@ -155,6 +155,12 @@ RowanMethodService >> classService: newValue [
 
 ]
 
+{ #category : 'Accessing' }
+RowanMethodService >> compilationWarnings [
+
+	^compilationWarnings
+]
+
 { #category : 'Updating' }
 RowanMethodService >> compilationWarnings: newValue [
 	compilationWarnings := newValue

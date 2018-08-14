@@ -198,12 +198,11 @@ RowanClassService >> compileMethod: methodString behavior: aBehavior symbolList:
 		do: [:ex | ^nil -> (ex gsArguments at: 1)]]
 			on: CompileWarning
 			do: 
-				[:ex |
-				warnings := ex gsArguments at: 1.
+				[:ex | 
+				warnings := ex warningString.
 				ex resume].
 	^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] on: Error
 		do: [:ex | ex return: method -> warnings]
-
 ]
 
 { #category : 'Updating' }
@@ -321,7 +320,6 @@ RowanClassService >> methodServiceFrom: gsNMethod in: behavior compiltationResul
 	methodService := RowanMethodService forGsNMethod: gsNMethod organizer: organizer. 
 	methodService compilationWarnings: compilationResult value.
 	^methodService
-
 ]
 
 { #category : 'private' }
@@ -498,10 +496,7 @@ RowanClassService >> saveMethodSource: source category: category [
 
 { #category : 'Updating' }
 RowanClassService >> selectedMethods: theMethods [
-	"To avoid setting STON class>>allowComplexKeyMap: (which appears to slow down ston replication)
-	just store the selector"
-	selectedMethods := theMethods collect:[:service | service selector].
-
+	selectedMethods := theMethods
 ]
 
 { #category : 'Accessing' }
