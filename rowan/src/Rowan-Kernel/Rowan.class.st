@@ -57,10 +57,10 @@ Rowan class >> image [
 { #category : 'public client services' }
 Rowan class >> jadeServerClassNamed: className [
 
-	| jadeClasses |
+	"| jadeClasses |
 	jadeClasses := Array with: JadeServer. 
 	jadeClasses add: JadeServer64bit32. 
-	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]
+	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]"
 ]
 
 { #category : 'public client services' }
@@ -132,34 +132,6 @@ Rowan class >> serviceClass [
 
 	^ self platform serviceClass
 
-]
-
-{ #category : 'public client services' }
-Rowan class >> serviceClasses [
-	"Explicitly add each class rather than sending #allSubclasses so
-	that users other than SystemUser have visibility. Visibility in Rowan
-	is determined at compile time."
-
-	| array |
-	array := Array with: RowanService. 
-	array add: RowanAnsweringService; 
-		add: RowanBrowserService;
-		add: RowanClassService; 
-		add: RowanDebuggerService; 
-		add: RowanFrameService;
-		add: RowanMethodService;
-		add: RowanPackageService; 
-		add: RowanProcessService;
-		add: RowanProjectService;
-		add: RowanQueryService;
-		add: RowanVariableService.
-	^array
-]
-
-{ #category : 'public client services' }
-Rowan class >> serviceClassFor: className [
-
-	^self serviceClasses detect:[:cls | cls name asString = className asString] ifNone:[]
 ]
 
 { #category : 'public' }

@@ -56,12 +56,14 @@ RowanProjectService >> branch: anObject [
 { #category : 'commands' }
 RowanProjectService >> changes [
 
-	| projectService |
+	| projectService jadeServer |
+	self rowanFixMe. "better lookup for JadeServer class"
+	jadeServer := (GsCurrentSession currentSession resolveSymbol: #JadeServer) value. 
 	changes := Array new. 
 	self packageNames do:[:packageName |
 			| patch |
 			patch := Rowan packageTools diff patchForPackageName: packageName.
-			changes add:(JadeServer new
+			changes add:(jadeServer new
 				_mcDescriptionOfPatch: patch
 				baseName: 'closest ancestor'
 				alternateName: nil)].

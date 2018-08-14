@@ -10,7 +10,7 @@ STONReader >> lookupClass: name [
 					ifNotNil: [:cls | ^cls ] ])
 						ifNil: [ classes at: name ifAbsentPut: [ (ClassOrganizer new allSubclassesOf: Object)
 								detect: [ :cls | cls stonName == name ]
-								ifNone: [ (Rowan serviceClassFor: name) ifNil:[self error: 'Cannot resolve class named ' , name printString] ] ] ] ]
+								ifNone: [ (Rowan platform serviceClassFor: name) ifNil:[self error: 'Cannot resolve class named ' , name printString ]] ] ] ]
 ]
 
 { #category : '*ston-gemstonebase' }

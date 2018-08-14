@@ -34,3 +34,31 @@ RwGsPlatform >> serviceClass [
 	^ RowanService
 
 ]
+
+{ #category : '*rowan-services-extensions' }
+RwGsPlatform >> serviceClasses [
+	"Explicitly add each class rather than sending #allSubclasses so
+	that users other than SystemUser have visibility. Visibility in Rowan
+	is determined at compile time."
+	
+	| array |
+	array := Array with: RowanService. 
+	array add: RowanAnsweringService; 
+		add: RowanBrowserService;
+		add: RowanClassService; 
+		add: RowanDebuggerService; 
+		add: RowanFrameService;
+		add: RowanMethodService;
+		add: RowanPackageService; 
+		add: RowanProcessService;
+		add: RowanProjectService;
+		add: RowanQueryService;
+		add: RowanVariableService.
+	^array
+]
+
+{ #category : '*rowan-services-extensions' }
+RwGsPlatform >> serviceClassFor: className [
+
+	^self serviceClasses detect:[:cls | cls name asString = className asString] ifNone:[]
+]
