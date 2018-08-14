@@ -258,11 +258,11 @@ RwGsImagePatchVisitor_254 >> visitPackageModification: aPackageModification [
 	aPackageModification isDeletion
 		ifTrue: [ self addDeletedPackage: aPackageModification before ].
 	currentPackage := aPackageModification after.
-	propertiesModification := aPackageModification propertiesModification.
-	propertiesModification isEmpty
-		ifFalse: [ 
-(UserGlobals at: #ConditionalHalt ifAbsent: [ false ]) ifTrue: [ self halt ].
-].
+	aPackageModification isModification
+		ifTrue: [ 
+			propertiesModification := aPackageModification propertiesModification.
+			propertiesModification isEmpty
+				ifFalse: [ patchSet addMovedPackage: currentPackage inProject: currentProject ] ].
 	aPackageModification classesModification acceptVisitor: self.
 	aPackageModification classExtensionsModification acceptVisitor: self
 

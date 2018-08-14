@@ -241,6 +241,13 @@ RwGsPatchSet_254 >> _packageDeletionPatchClass [
 ]
 
 { #category : 'private - patch class accessors' }
+RwGsPatchSet_254 >> _packageMovePatchClass [
+
+	^ RwGsPackageMoveSymbolDictPatch
+
+]
+
+{ #category : 'private - patch class accessors' }
 RwGsPatchSet_254 >> _projectAdditionPatchClass [
 
 	^ RwGsProjectAdditionPatch
@@ -559,6 +566,19 @@ RwGsPatchSet_254 >> addForcingNewClassVersionModification: aRwClassModificationF
 RwGsPatchSet_254 >> addMethodMove: aRwMethodMove [
 
 	movedMethods add: aRwMethodMove
+
+]
+
+{ #category : 'building' }
+RwGsPatchSet_254 >> addMovedPackage: packageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+self error: 'not yet implemented'.
+	deletedPackages
+		add:
+			((self _packageMovePatchClass for: packageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
 
 ]
 
