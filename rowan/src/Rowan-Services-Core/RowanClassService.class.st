@@ -331,6 +331,16 @@ RowanClassService >> methodServicesFor: classOrMeta organizer: theOrganizer [
 ]
 
 { #category : 'commands' }
+RowanClassService >> methodsIn: theClass categories: theCategories [
+
+	| selectors |
+	selectors := Array new. 
+	theCategories do:[:category |
+		selectors addAll: (theClass selectorsIn: theCategories)]. 
+	^methods select:[:methodService | selectors includes: methodService selector]
+]
+
+{ #category : 'commands' }
 RowanClassService >> moveMethods: methodServices to: category [
 	| behavior |
 	behavior := meta 
@@ -431,9 +441,11 @@ RowanClassService >> refreshMethodsFor: classOrMeta [
 
 { #category : 'commands' }
 RowanClassService >> removeCategories: theCategories [
-	| theClass | 
+	| theClass affectedMethods | 
 	theClass := self classFromName.
 	meta ifTrue:[theClass := theClass class]. 
+	affectedMethods := self methodsIn: theClass categories: theCategories. 
+	self moveMethods: affectedMethods to: 'other'. 
 	theCategories do: [:category |
 		theClass removeCategory: category.
 		].
@@ -606,7 +618,7 @@ RowanClassService >> updateClass [
 
 { #category : 'updates' }
 RowanClassService >> updateDirtyState [
-	| projectService |
+	| projectService | 
 	selectedPackageServices do:[:packageService | 
 		packageService update. 
 		RowanCommandResult addResult: packageService].
