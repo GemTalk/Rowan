@@ -330,13 +330,13 @@ RowanClassService >> methodServicesFor: classOrMeta organizer: theOrganizer [
 				forSelector: sel class: classOrMeta thisClass meta: meta organizer: theOrganizer])
 ]
 
-{ #category : 'commands' }
+{ #category : 'private' }
 RowanClassService >> methodsIn: theClass categories: theCategories [
 
 	| selectors |
 	selectors := Array new. 
 	theCategories do:[:category |
-		selectors addAll: (theClass selectorsIn: theCategories)]. 
+		selectors addAll: (theClass selectorsIn: category)]. 
 	^methods select:[:methodService | selectors includes: methodService selector]
 ]
 
@@ -442,6 +442,7 @@ RowanClassService >> refreshMethodsFor: classOrMeta [
 { #category : 'commands' }
 RowanClassService >> removeCategories: theCategories [
 	| theClass affectedMethods | 
+	self refreshFrom: self classFromName. 
 	theClass := self classFromName.
 	meta ifTrue:[theClass := theClass class]. 
 	affectedMethods := self methodsIn: theClass categories: theCategories. 
