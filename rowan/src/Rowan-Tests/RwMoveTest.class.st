@@ -2180,6 +2180,9 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
 		className projectSetDefinition class oldClass ar loadedClass symDict registry classExtensionDefinition |
+
+UserGlobals at: #ConditionalHalt put: false.
+
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Extension2'.
@@ -2273,6 +2276,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 "load"
 	projectSetDefinition addDefinition: projectDefinition2.
+UserGlobals at: #ConditionalHalt put: false.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	loadedClass := Rowan image loadedClassNamed: className.

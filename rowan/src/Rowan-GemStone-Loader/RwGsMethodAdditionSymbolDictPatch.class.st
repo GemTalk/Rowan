@@ -33,7 +33,7 @@ RwGsMethodAdditionSymbolDictPatch >> installMovedMethod: aClassMove newClassVers
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
 	| oldClassVersion oldBehavior theRegistry |
-	theRegistry := self symbolDictionaryRegistry. "if the class is moved between symbol dictionaries, we have already moved the old method to the this registry"
+	theRegistry := self symbolDictionaryRegistryFor: aClassMove packageBefore name. 
 	oldClassVersion := newClassVersionPatch oldClassVersion.
 	oldClassVersion ~~ newClassVersionPatch newClassVersion
 		ifTrue: [ 
@@ -47,10 +47,7 @@ RwGsMethodAdditionSymbolDictPatch >> installMovedMethod: aClassMove newClassVers
 					(theRegistry methodRegistry
 						at: oldCompiledMethod
 						ifAbsent: [])
-							ifNil: [
-								theRegistry
-									error:
-										'Internal error -- no existing LoadedMethod found for deleted method.' ]
+							ifNil: []
 							ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
 
 	self symbolDictionaryRegistry
