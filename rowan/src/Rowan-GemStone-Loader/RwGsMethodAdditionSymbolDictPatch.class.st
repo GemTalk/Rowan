@@ -28,12 +28,13 @@ RwGsMethodAdditionSymbolDictPatch >> installMethod [
 RwGsMethodAdditionSymbolDictPatch >> installMovedMethod: aClassMove newClassVersionPatch: newClassVersionPatch [
 	"the receiver represents an existing method for a class with a new version that has moved to a new package"
 
-	"the old method in the old class version must be removed from the loaded things, then the regular installMethod should be performed"
+	"the old method in the old class version must be removed from the loaded things in the new registry, since it was moved earlier, 
+		then the regular installMethod should be performed --- new version requires that all methods be compiled"
 
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
 	| oldClassVersion oldBehavior theRegistry |
-	theRegistry := self symbolDictionaryRegistryFor: aClassMove packageBefore name. 
+	theRegistry := self symbolDictionaryRegistryFor: aClassMove packageAfter name. 
 	oldClassVersion := newClassVersionPatch oldClassVersion.
 	oldClassVersion ~~ newClassVersionPatch newClassVersion
 		ifTrue: [ 
@@ -47,10 +48,10 @@ RwGsMethodAdditionSymbolDictPatch >> installMovedMethod: aClassMove newClassVers
 					(theRegistry methodRegistry
 						at: oldCompiledMethod
 						ifAbsent: [])
-							ifNil: []
+							ifNil: [self halt.]
 							ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
 
-	self symbolDictionaryRegistry
+	(self symbolDictionaryRegistryFor: aClassMove packageAfter name)
 		addNewCompiledMethod: compiledMethod
 		for: behavior
 		protocol: self propertiesProtocolName
