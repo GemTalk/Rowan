@@ -474,7 +474,7 @@ RowanClassService >> removeSelector: selector ifAbsent: absentBlock [
 RowanClassService >> saveMethodSource: source category: category [
 
 	| behavior compilationResult gsNMethod updatedCategory methodService |
-	behavior := meta ifTrue:[self classFromName class] ifFalse:[self classFromName].
+	behavior := meta ifTrue:[self classFromName class] ifFalse:[self classFromName]. 
 	updatedCategory := category ifNil: ['other'].
 	compilationResult := self		
 		compileMethod: source 
@@ -491,6 +491,7 @@ RowanClassService >> saveMethodSource: source category: category [
 	RowanCommandResult addResult: methodService.
 	self update.  
 	self selectedMethods: (Array with: methodService).
+	self updateDirtyState. 
 	RowanCommandResult addResult: self.
 ]
 
@@ -601,6 +602,16 @@ RowanClassService >> updateClass [
 	theClass := self classFromName. 
 	self refreshFrom: theClass.
 	RowanCommandResult addResult: self
+]
+
+{ #category : 'updates' }
+RowanClassService >> updateDirtyState [
+	| projectService |
+	selectedPackageServices do:[:packageService | 
+		packageService update. 
+		RowanCommandResult addResult: packageService].
+	projectService := RowanProjectService newNamed: self classFromName rowanProjectName. 
+	RowanCommandResult addResult: projectService.
 ]
 
 { #category : 'Accessing' }
