@@ -813,6 +813,7 @@ RwGsPatchSet_254 >> apply [
 		removeDeletedClassesFromSystem;
 		"removeDeletedClassExtensionsFromSystem;" 
 		installAddedClasses;
+		movePackages;
 		moveClassesBetweenSymbolDictionaries;
 		installAddedClassExtensions;
 		doMoveClassesBetweenPackages;
@@ -823,7 +824,6 @@ RwGsPatchSet_254 >> apply [
 		updateMethodDictionaries;
 		updateMethodProperties;
 		"removeDeletedClassesAndExtensionsFromPackages;"
-		movePackages;
 		removeDeletedPackages;
 		commit;
 		runInitializers;
@@ -1004,13 +1004,17 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 							| theKey classExtensionRegistry |
 							theKey := loadedClassOrExtension handle classHistory.
 							classExtensionRegistry := registry classExtensionRegistry.
-							(classExtensionRegistry at: theKey) remove: loadedClassOrExtension.
-							(classExtensionRegistry at: theKey) isEmpty
-								ifTrue: [ classExtensionRegistry removeKey: theKey ].
+							(classExtensionRegistry at: theKey ifAbsent: [])
+								ifNotNil: [ :loadedClassExtensions |
+									loadedClassExtensions isEmpty
+										ifFalse: [ 
+											loadedClassExtensions remove: loadedClassOrExtension.
+											loadedClassExtensions isEmpty
+												ifTrue: [ classExtensionRegistry removeKey: theKey ] ] ].
 							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 
             compiledMethod := loadedMethod handle.
-			registry methodRegistry removeKey: compiledMethod.
+			registry methodRegistry removeKey: compiledMethod ifAbsent: [].
 
 			packageDef := aMethodMove packageAfter.
 			classOrExtensionDef := aMethodMove classOrExtensionAfter.

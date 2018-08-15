@@ -47,10 +47,7 @@ RwGsMethodExtensionSymbolDictPatch >> installMovedMethod: aMethodMove newClassVe
 					(theRegistry methodRegistry
 						at: oldCompiledMethod
 						ifAbsent: [])
-							ifNil: [
-								theRegistry
-									error:
-										'Internal error -- no existing LoadedMethod found for deleted method.' ]
+							ifNil: [ "if old method is not in the method registry, then that is what we want anyway" ]
 							ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
 
 	self symbolDictionaryRegistry

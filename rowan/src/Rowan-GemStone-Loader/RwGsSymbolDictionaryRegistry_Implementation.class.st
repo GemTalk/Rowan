@@ -302,7 +302,9 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addExtensionCompiledMethod:
 
 	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
 
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
+	loadedPackage := Rowan image 
+		loadedPackageNamed: packageName 
+		ifAbsent: [ self existingOrNewLoadedPackageNamed: packageName instance: registryInstance ].
 
 	loadedClassExtension := loadedPackage
 		loadedClassExtensionForClass: behavior

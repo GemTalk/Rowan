@@ -2281,7 +2281,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 "validate"
 	oldClass := class.
 	class := Rowan globalNamed: className.
-	self assert: class rowanPackageName = packageName2.
+	self assert: class rowanPackageName = packageName3.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName3.
 	self assert: (class compiledMethodAt: #ext1) rowanPackageName = packageName4.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
@@ -2293,7 +2293,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
-	self assert: registry packageRegistry size = 0.
+	self assert: registry packageRegistry size = 2.
 	self assert: registry classRegistry size = 0.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
@@ -2524,7 +2524,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 "validate"
 	oldClass := class.
 	class := Rowan globalNamed: className.
-	self assert: class rowanPackageName = packageName2.
+	self assert: class rowanPackageName = packageName3.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName3.
 	self assert: (class compiledMethodAt: #ext1) rowanPackageName = packageName4.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
