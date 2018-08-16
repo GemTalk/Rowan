@@ -4,17 +4,25 @@ Class {
 	#instVars : [
 		'projectDefinition',
 		'packageName',
-		'name'
+		'name',
+		'isDirty',
+		'classes',
+		'defaultTemplate',
+		'projectName'
 	],
 	#category : 'Rowan-Services-Core'
 }
 
 { #category : 'instance creation' }
-RowanPackageService class >> forPackageNamed: packageName [
+RowanPackageService class >> forPackageNamed: aName [
 
 	| inst |
-	inst := self new. 
-	inst packageName: packageName.
+	inst := self new.  
+	inst name: aName.
+	aName isNil ifFalse:[
+		inst isDirty. "lazy initialize"].
+	inst setDefaultTemplate. 
+	inst updateProjectName.
 	^inst
 
 ]
@@ -27,41 +35,42 @@ RowanPackageService >> changes [
 
 ]
 
+{ #category : 'commands' }
+RowanPackageService >> compileClass: definitionString [
+
+	| theClass classService packageService |
+	theClass := definitionString evaluate.
+	classService := RowanClassService forClassNamed: theClass name. 
+	RowanCommandResult addResult: classService.
+	packageService := RowanPackageService forPackageNamed: classService packageName. 
+	packageService update.
+	classService selectedPackageServices: (Array with: packageService)
+]
+
 { #category : 'rowan' }
 RowanPackageService >> createPackage [
 	| projectService default |
 	default := RowanProjectService defaultProjectName.
 	projectService := RowanProjectService new.
 	projectService createProjectNamed: default.  
-	(Rowan packageNames includes: packageName) ifFalse:[
-		self browserTool addPackageNamed: packageName toProjectNamed: default].
+	(Rowan packageNames includes: name) ifFalse:[
+		self browserTool addPackageNamed: name toProjectNamed: default].
 
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> createPackageNamed: aString inProject: projectName [
+RowanPackageService >> createPackageNamed: aString inProject: projName [
 	| projectService | 
-	packageName := aString.
+	name := aString.
 	projectService := RowanProjectService new.
-	projectDefinition := projectService createProjectNamed: projectName.  
-	projectDefinition addPackageNamed: packageName.
+	projectDefinition := projectService createProjectNamed: projName.  
+	projectDefinition addPackageNamed: name.
 	self projectTools load loadProjectDefinition: projectDefinition.
-
 ]
 
-{ #category : 'examples' }
-RowanPackageService >> createSamplePackage [
-
-	"assume that the sample project & symbol dictionary 
-	were already removed"
-
-	| projectService |
-	projectService := RowanProjectService new.
-	projectDefinition := projectService createSampleProject.  
-	projectDefinition addPackageNamed: self samplePackageName.
-	packageName := self samplePackageName.
-	self projectTools load loadProjectDefinition: projectDefinition.
-
+{ #category : 'Updating' }
+RowanPackageService >> defaultTemplate: newValue [
+	defaultTemplate := newValue
 ]
 
 { #category : 'rowan' }
@@ -74,7 +83,7 @@ RowanPackageService >> definition [
 { #category : 'rowan' }
 RowanPackageService >> deletePackage [
 
-	self browserTool removePackageNamed: packageName.
+	self browserTool removePackageNamed: name.
 
 ]
 
@@ -88,7 +97,7 @@ RowanPackageService >> genericClassCreationTemplate [
 { #category : 'rowan' }
 RowanPackageService >> isDirty [
 
-	^(RwPackage newNamed: name) isDirty
+	^isDirty := self rowanDirty
 
 ]
 
@@ -103,15 +112,26 @@ RowanPackageService >> loadedClassDefinitions [
 RowanPackageService >> loadedClasses [
 
 	| loadedPackage |
-	loadedPackage := Rowan image loadedPackageNamed: packageName ifAbsent:[^Array new].
+	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^Array new].
 	^loadedPackage loadedClasses
 
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> loadedClassHandles [
+RowanPackageService >> loadedClassExtensions [
 
-	^self loadedClasses collect:[:loadedClass | loadedClass handle]
+	| loadedPackage |
+	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^Array new].
+	^loadedPackage loadedClassExtensions
+
+]
+
+{ #category : 'rowan' }
+RowanPackageService >> loadedClassHandles [
+	| loadedClasses |
+	loadedClasses := self loadedClasses collect:[:loadedClass | loadedClass handle].
+	loadedClasses addAll: (self loadedClassExtensions collect:[:extension | extension handle]).
+	^loadedClasses
 
 ]
 
@@ -136,13 +156,13 @@ RowanPackageService >> name: newValue [
 
 { #category : 'Accessing' }
 RowanPackageService >> packageName [
-	^packageName
+	^name
 
 ]
 
 { #category : 'Updating' }
 RowanPackageService >> packageName: newValue [
-	packageName := newValue
+	name := newValue
 
 ]
 
@@ -158,23 +178,61 @@ RowanPackageService >> projectDefinition: newValue [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'Accessing' }
+RowanPackageService >> projectName [
+	^projectName
+]
+
+{ #category : 'Updating' }
+RowanPackageService >> projectName: newValue [
+	projectName := newValue
+]
+
+{ #category : 'commands' }
+RowanPackageService >> removeClass: classService [
+
+	self removeClassNamed: classService name. 
+	self update.
+]
+
+{ #category : 'commands' }
 RowanPackageService >> removeClassNamed: className [
 
-	self browserTool removeClassNamed: className
+	self browserTool removeClassNamed: className.
 
 ]
 
-{ #category : 'examples' }
-RowanPackageService >> samplePackageName [
-	
-	^'SamplePackageName'
+{ #category : 'rowan' }
+RowanPackageService >> rowanDirty [
+
+	^(RwPackage newNamed: name) isDirty
 
 ]
 
-{ #category : 'examples' }
-RowanPackageService >> sampleProjectName [
+{ #category : 'commands' }
+RowanPackageService >> setDefaultTemplate [
 
-	^'SampleProjectName'
+	defaultTemplate := self genericClassCreationTemplate.
+]
 
+{ #category : 'updates' }
+RowanPackageService >> update [
+	classes := (self loadedClassNames keys collect:[:string | RowanClassService forClassNamed: string]) asArray.
+	classes addAll: (self loadedClassExtensions keys collect:[:string | 
+		| classService | 
+		classService := (RowanClassService forClassNamed: string) 
+			isExtension: true.
+		(Rowan image loadedClassForClass: classService classFromName ifAbsent:[]) 
+			ifNotNil:[:cls | classService definedPackageName: cls packageName]]).
+	classes do: [:clsService | clsService packageName: self name]. 
+	self isDirty. 
+	projectName := (Rowan image loadedPackageNamed: name) projectName.
+	RowanCommandResult addResult: self
+
+]
+
+{ #category : 'updates' }
+RowanPackageService >> updateProjectName [
+
+	projectName := (Rowan image loadedPackageNamed: name) projectName.
 ]
