@@ -108,10 +108,11 @@ RowanClassService >> basicRefreshFrom: theClass [
 
 { #category : 'commands' }
 RowanClassService >> classComment: string [
-
-	self classFromName comment: string.
+	| theClass |
+	theClass := self classFromName. 
+	theClass comment: string.
+	self refreshFrom: theClass. 
 	RowanCommandResult addResult: self.
-
 ]
 
 { #category : 'rowan' }
