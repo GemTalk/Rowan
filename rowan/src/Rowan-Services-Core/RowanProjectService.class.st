@@ -38,6 +38,13 @@ RowanProjectService class >> newNamed: aString [
 
 ]
 
+{ #category : 'commands' }
+RowanProjectService >> addPackageNamed: packageName [
+
+	self browserTool addPackageNamed: packageName toProjectNamed: name. 
+	self update.
+]
+
 { #category : 'accessing' }
 RowanProjectService >> branch [
 
