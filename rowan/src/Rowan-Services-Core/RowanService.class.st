@@ -1,3 +1,18 @@
+"
+Rowan Service is the abstract service class for classes that represent
+first class entities in Rowan. They are transported to the client via 
+ston. 
+
+On the client, set the command & commandArgs inst vars, then tell
+the browser to #issueCommand: with an array of services. A service
+received without the the command inst var set will send #update to
+the service. #issueCommand: should call JadeServer>>updateFromSton:
+which will run the command and return a result. 
+
+Any service that sends updates back to the client willl propogates to 
+registered windows. Add a service for return to the client with:
+RowanCommandResult addResult: <self>
+"
 Class {
 	#name : 'RowanService',
 	#superclass : 'Object',
@@ -226,4 +241,10 @@ RowanService >> symbolDictionaryNamed: aName [
 		ifFalse:[
 			self createSymbolDictionaryNamed: aName].
 
+]
+
+{ #category : 'accessing' }
+RowanService >> updateType: aSymbol [
+
+	updateType := aSymbol
 ]
