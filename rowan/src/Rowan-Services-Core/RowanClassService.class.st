@@ -154,6 +154,14 @@ RowanClassService >> classInstVarNames: newValue [
 ]
 
 { #category : 'Accessing' }
+RowanClassService >> classOrMeta [
+
+	^meta 
+			ifTrue:[self classFromName class] 
+			ifFalse: [self classFromName].
+]
+
+{ #category : 'Accessing' }
 RowanClassService >> classType [
 	^classType
 
@@ -344,9 +352,7 @@ RowanClassService >> methodsIn: theClass categories: theCategories [
 { #category : 'commands' }
 RowanClassService >> moveMethods: methodServices to: category [
 	| behavior |
-	behavior := meta 
-			ifTrue:[self classFromName class] 
-			ifFalse: [self classFromName].
+	behavior := self classOrMeta.
 	methodServices do: [:methodService | 
 			behavior rwMoveMethod: methodService selector toCategory: category.
 			methodService category: category].
@@ -480,6 +486,19 @@ RowanClassService >> removeSelector: selector ifAbsent: absentBlock [
 	(theClass compiledMethodAt: selector otherwise: nil) isNil ifTrue:[ ^absentBlock value ].
 	self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta
 
+]
+
+{ #category : 'commands' }
+RowanClassService >> renameCategoryFrom: old to: new [
+
+	| affectedSelectors behavior |
+
+	self addCategory: new. 
+	behavior := self classOrMeta.
+	affectedSelectors := behavior selectorsIn: old.
+	methods := methods select:[:methodService | affectedSelectors includes: methodService selector].
+	self moveMethods: methods to: new.
+	self removeCategories: (Array with: old)
 ]
 
 { #category : 'commands' }
