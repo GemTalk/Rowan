@@ -449,7 +449,7 @@ RowanClassService >> removeCategories: theCategories [
 	affectedMethods := self methodsIn: theClass categories: theCategories. 
 	self moveMethods: affectedMethods to: 'other'. 
 	theCategories do: [:category |
-		theClass removeCategory: category.
+		theClass rwRemoveCategory: category.
 		].
 	self refreshFrom: self classFromName. 
 	RowanCommandResult addResult: self

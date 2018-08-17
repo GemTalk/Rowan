@@ -193,6 +193,8 @@ RowanPackageService >> removeClass: classService [
 
 	self removeClassNamed: classService name. 
 	self update.
+	classService updateType: #removedClass:
+	RowanCommandResult addResult: classService
 ]
 
 { #category : 'commands' }
@@ -223,12 +225,12 @@ RowanPackageService >> update [
 		classService := (RowanClassService forClassNamed: string) 
 			isExtension: true.
 		(Rowan image loadedClassForClass: classService classFromName ifAbsent:[]) 
-			ifNotNil:[:cls | classService definedPackageName: cls packageName]]).
+			ifNotNil:[:cls | classService definedPackageName: cls packageName].
+		classService]).
 	classes do: [:clsService | clsService packageName: self name]. 
 	self isDirty. 
 	projectName := (Rowan image loadedPackageNamed: name) projectName.
 	RowanCommandResult addResult: self
-
 ]
 
 { #category : 'updates' }
