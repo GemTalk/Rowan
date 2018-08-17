@@ -22,13 +22,6 @@ RowanQueryService >> defaultProjectLogSize [
 	^100
 ]
 
-{ #category : 'ston' }
-RowanQueryService >> excludedInstVars [
-
-	^#(#organizer)
-
-]
-
 { #category : 'queries' }
 RowanQueryService >> hierarchyImplementorsOf: selector inClass: className [
 
