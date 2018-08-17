@@ -302,7 +302,9 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addExtensionCompiledMethod:
 
 	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
 
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
+	loadedPackage := Rowan image 
+		loadedPackageNamed: packageName 
+		ifAbsent: [ self existingOrNewLoadedPackageNamed: packageName instance: registryInstance ].
 
 	loadedClassExtension := loadedPackage
 		loadedClassExtensionForClass: behavior
@@ -871,6 +873,21 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveCompiledMethod: compile
 
 	loadedMethod updateForProtocolChange.
 	^ registryInstance
+
+]
+
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> movePackage: packageName to: symbolDictionaryName instance: fromRegistryInstance [
+
+	| loadedPackage toRegistryInstance |
+	loadedPackage := fromRegistryInstance packageRegistry
+		removeKey: packageName
+		ifAbsent: [ fromRegistryInstance error: 'package ' , packageName printString , ' not found' ].
+	toRegistryInstance := (Rowan image newOrExistingSymbolDictionaryNamed: symbolDictionaryName) rowanSymbolDictionaryRegistry.
+	(toRegistryInstance packageRegistry at: packageName ifAbsent: [])
+		ifNotNil: [:unexpectedLoadedPackage | toRegistryInstance error: 'package ', packageName printString, ' unexpectedly found in ', symbolDictionaryName printString ].
+	toRegistryInstance packageRegistry at: packageName put: loadedPackage.
+	^ fromRegistryInstance
 
 ]
 
