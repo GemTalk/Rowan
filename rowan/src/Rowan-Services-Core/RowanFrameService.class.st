@@ -68,7 +68,11 @@ RowanFrameService >> varsFor: anArray [
 		value := values at: i.
 		valueClass := value class.
 		oop := value asOop.
-		value := value printString.
+		value := [
+			value printString.
+		] on: Error do: [:ex | 
+			ex return: '(' , value class name , ' printString error: ' , ex description , ')'. 
+		].
 		value size > 500 ifTrue: [value := (value copyFrom: 1 to: 500) , '...'].
 		value := value collect: [:char | (char asciiValue < 32 or: [127 < char asciiValue]) ifTrue: [$?] ifFalse: [char]].
 		list add: (RowanVariableService oop: oop key: key value: value className: valueClass name asString).
