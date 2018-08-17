@@ -101,8 +101,7 @@ Behavior >> _rwInstVar: aString constrainTo: aClass [
  will be unchanged.  Otherwise, the subclass's constraint will be changed to
  aClass."
 
-| ivInfo offset mySubclasses |
-self deprecated: 'Behavior>>instVar:constrainTo: deprecated, Constraints are no longer supported'.
+| ivInfo offset mySubclasses superConstraintClass |
 self _validatePrivilege ifFalse:[ ^ nil ].
 aClass _validateIsClass ifFalse:[ ^ nil ].
 (Symbol _existingWithAll: aString) ifNotNil:[ :aSymbol |
@@ -110,9 +109,12 @@ aClass _validateIsClass ifFalse:[ ^ nil ].
 ].
 ivInfo ifNil:[ ^ self _error: #classErrNotAVar args:{ aString } ] .
 offset := ivInfo at: 1 .
-(aClass validateSubclassOf: (self superClass _namedIvConstraintAtOffset: offset)) ifFalse:[
-  ^ nil
-].
+superConstraintClass := self superClass _namedIvConstraintAtOffset: offset.
+(aClass ~~ Object and: [superConstraintClass ~~ Object])
+ifTrue: [ 
+	(aClass validateSubclassOf: superConstraintClass) ifFalse:[
+	  ^ nil
+	] ].
 mySubclasses := self subclasses .
 self _rwNewConstraint: aClass atOffset: offset .
 mySubclasses do:[:x| x _rwNewInheritedConstraint: aClass atOffset: offset ] .
