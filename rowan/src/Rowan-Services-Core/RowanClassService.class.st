@@ -442,12 +442,10 @@ RowanClassService >> refreshMethodsFor: classOrMeta [
 
 { #category : 'commands' }
 RowanClassService >> removeCategories: theCategories [
-	| theClass affectedMethods | 
+	| theClass  | 
 	self refreshFrom: self classFromName. 
 	theClass := self classFromName.
 	meta ifTrue:[theClass := theClass class]. 
-	affectedMethods := self methodsIn: theClass categories: theCategories. 
-	self moveMethods: affectedMethods to: 'other'. 
 	theCategories do: [:category |
 		theClass rwRemoveCategory: category.
 		].
