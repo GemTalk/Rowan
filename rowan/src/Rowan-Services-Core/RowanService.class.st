@@ -227,3 +227,9 @@ RowanService >> symbolDictionaryNamed: aName [
 			self createSymbolDictionaryNamed: aName].
 
 ]
+
+{ #category : 'accessing' }
+RowanService >> updateType: aSymbol [
+
+	updateType := aSymbol
+]

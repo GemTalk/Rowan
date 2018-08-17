@@ -193,7 +193,7 @@ RowanPackageService >> removeClass: classService [
 
 	self removeClassNamed: classService name. 
 	self update.
-	classService updateType: #removedClass:
+	classService updateType: #removedClass:.
 	RowanCommandResult addResult: classService
 ]
 
