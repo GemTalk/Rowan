@@ -57,10 +57,10 @@ Rowan class >> image [
 { #category : 'public client services' }
 Rowan class >> jadeServerClassNamed: className [
 
-	"| jadeClasses |
+	| jadeClasses |
 	jadeClasses := Array with: JadeServer. 
 	jadeClasses add: JadeServer64bit32. 
-	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]"
+	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]
 ]
 
 { #category : 'public client services' }

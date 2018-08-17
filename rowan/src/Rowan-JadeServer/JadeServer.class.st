@@ -3477,10 +3477,8 @@ JadeServer >> sbClassComment: anOrderedCollection [
 	doc := (self objectInBaseNamed: #'GsClassDocumentation') newForClass: self.
 	txt := (self objectInBaseNamed: #'GsDocText') new details: self sbNextParagraph trimSeparators.
 	doc documentClassWith: txt.
-	class description: doc.
+	class rwComment: doc.
 	self systemBrowserUpdate.
-
-
 ]
 
 { #category : 'category' }
@@ -4325,20 +4323,8 @@ JadeServer >> sbUpdateClassInfo [
 							classCreationTemplate.
 	classInfoUpdate category: ((classInfoUpdate template includesString: 'category: ''')
 					ifFalse: [' category: ' , selectedClass category printString]).
-	(selectedClass class canUnderstand: #comment)
-		ifTrue: [classComment := selectedClass comment]
-		ifFalse: 
-			[(selectedClass class canUnderstand: #description)
-					ifTrue: 
-						[| description |
-						description := selectedClass description.
-						description class name = #GsClassDocumentation
-							ifTrue: [classComment := description detailsAboutClass]]].
-	classComment isNil ifTrue: [classComment := ''].
-	classInfoUpdate comment: classComment. 
+	classInfoUpdate comment: selectedClass comment. 
 	classInfoUpdate writeInfoOn: writeStream.
-
-
 ]
 
 { #category : 'category' }

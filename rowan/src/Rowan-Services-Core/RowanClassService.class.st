@@ -110,7 +110,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 RowanClassService >> classComment: string [
 	| theClass |
 	theClass := self classFromName. 
-	theClass comment: string.
+	theClass rwComment: string.
 	self refreshFrom: theClass. 
 	RowanCommandResult addResult: self.
 ]
