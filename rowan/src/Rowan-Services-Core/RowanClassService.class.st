@@ -518,9 +518,9 @@ RowanClassService >> saveMethodSource: source category: category [
 			args: (Array with: compilationResult value) 
 			signalDictionary: GemStoneError.
 	]. 
+	self update.  
 	methodService := self methodServiceFrom: gsNMethod in: behavior compiltationResult: compilationResult.
 	RowanCommandResult addResult: methodService.
-	self update.  
 	self selectedMethods: (Array with: methodService).
 	self updateDirtyState. 
 	RowanCommandResult addResult: self.

@@ -181,6 +181,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	organizer := theOrganizer. 
 	classOrMeta := meta ifTrue:[theClass class] ifFalse:[theClass]. 
 	gsNMethod := classOrMeta compiledMethodAt: selector.
+	oop := gsNMethod asOop. 
 	stepPoints := self stepPointsFor: gsNMethod.
 	breakPoints := self breakPointsFor: gsNMethod.
 	source := gsNMethod sourceString.
