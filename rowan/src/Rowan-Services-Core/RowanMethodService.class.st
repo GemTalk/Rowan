@@ -143,6 +143,14 @@ RowanMethodService >> className: newValue [
 ]
 
 { #category : 'Accessing' }
+RowanMethodService >> classOrMeta [
+
+	^meta 
+			ifTrue:[self classFromName class] 
+			ifFalse: [self classFromName].
+]
+
+{ #category : 'Accessing' }
 RowanMethodService >> classService [
 
 	^classService ifNil:[classService := RowanClassService forClassNamed: className package: packageName]
@@ -153,6 +161,14 @@ RowanMethodService >> classService [
 RowanMethodService >> classService: newValue [
 	classService := newValue
 
+]
+
+{ #category : 'commands' }
+RowanMethodService >> clearBreakAt: stepPoint [
+
+	self gsNMethod clearBreakAtStepPoint: stepPoint.
+	self update. 
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'Accessing' }
@@ -191,6 +207,12 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	projectName := gsNMethod rowanProjectName.
 	self setSupersAndSubsFor: theClass.
 	isExtension := self rowanIsExtension.
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> gsNMethod [
+
+	^self classOrMeta compiledMethodAt: selector
 ]
 
 { #category : 'Accessing' }
@@ -339,6 +361,14 @@ RowanMethodService >> selector: aSymbol [
 
 	selector := aSymbol
 
+]
+
+{ #category : 'commands' }
+RowanMethodService >> setBreakAt: stepPoint [
+
+	self gsNMethod setBreakAtStepPoint: stepPoint.
+	self update. 
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'initialization' }
