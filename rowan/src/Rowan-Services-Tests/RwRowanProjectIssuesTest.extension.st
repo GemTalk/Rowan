@@ -8,7 +8,7 @@ RwRowanProjectIssuesTest >> testIssue150_branches [
 	"The issue #150 tests are mainly aimed at verifying that the given commands do not fail - ensuring that git version supports the
 		commands and arguments used by Jadeite. "
 
-	| rowanSpec projectName service testBranch testClass |
+	| rowanSpec projectName service testBranch testClass  queryService |
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	projectName := 'RowanSample3'.
@@ -16,13 +16,16 @@ RwRowanProjectIssuesTest >> testIssue150_branches [
 		_cloneGitRepositoryFor: projectName 
 		projectUrlString:  'file:' , rowanSpec repositoryRootPath , '/samples/', projectName, '.ston'.
 
+	queryService := 	RowanQueryService new
+		projectBranches: projectName;
+		yourself.
+
 	service := RowanProjectService new
 		name: projectName;
 		yourself.
 
-	"service newGitProject: url root: rootPath useSsh: true." "same Rowan api call used in _cloneGitRepositoryFor:projectUrlString:"
 	testBranch := 'issue_150'.
-	service branches;
+	service 
 		checkout: testBranch;
 		branch;
 		repositorySha;
