@@ -4,12 +4,11 @@ Class {
 	#category : 'Rowan-Tools-Core'
 }
 
-{ #category : 'smalltalk api' }
-RwPrjTestTool >> testSuiteForProjectNamed: projectName [
+{ #category : 'private' }
+RwPrjTestTool >> _addTestsForProjectNamed: projectName toTestSuite: suite [
 
-	| loadedProject suite |
+	| loadedProject |
 	loadedProject := Rowan image loadedProjectNamed: projectName.
-	suite := TestSuite named: projectName , ' tests'.
 	loadedProject loadedPackages
 		do: [ :loadedPackage | 
 			loadedPackage loadedClasses values
@@ -21,4 +20,28 @@ RwPrjTestTool >> testSuiteForProjectNamed: projectName [
 							cl isAbstract
 								ifFalse: [ suite addTests: cl suite tests ] ] ] ].
 	^ suite
+
+]
+
+{ #category : 'smalltalk api' }
+RwPrjTestTool >> testSuiteForProjectNamed: projectName [
+
+	| suite |
+	suite := TestSuite named: projectName , ' tests'.
+	self _addTestsForProjectNamed: projectName toTestSuite: suite.
+	^ suite
+
+]
+
+{ #category : 'smalltalk api' }
+RwPrjTestTool >> testSuiteForProjectsNamed: projectNames [
+
+	| suite strm |
+	strm := WriteStream on: String new.
+	projectNames do: [:projectName | strm nextPutAll: projectName; space ].
+	strm nextPutAll:  'tests'.
+	suite := TestSuite named: strm contents.
+	projectNames do: [:projectName | self _addTestsForProjectNamed: projectName toTestSuite: suite ].
+	^ suite
+
 ]

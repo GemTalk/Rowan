@@ -5,13 +5,9 @@ STONReaderError is the error/exception signalled by STONReader when illegal/inco
 Class {
 	#name : 'STONReaderError',
 	#superclass : 'Error',
-	#type : 'variable', 
 	#instVars : [
 		'streamPosition'
 	],
-	#gs_options : [
-		'disallowGciStore'
-	], 
 	#category : 'STON-Core'
 }
 

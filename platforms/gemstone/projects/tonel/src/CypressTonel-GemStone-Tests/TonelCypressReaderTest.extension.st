@@ -11,7 +11,13 @@ TonelCypressReaderTest >> createReaderFor: snapshot fileName: packageName [
 { #category : '*cypresstonel-gemstone-tests' }
 TonelCypressReaderTest >> directory [
 	directory ifNil:
-		[directory := (GsFile _expandEnvVariable: 'PWD' isClient: false)].
+		[ 
+		| fileUtils |
+		fileUtils := self fileUtils.
+		directory := fileUtils
+			directoryFromPath: 'mctest'
+			relativeTo: fileUtils default.
+		fileUtils ensureDirectoryExists: directory ].
 	^ directory
 
 ]
