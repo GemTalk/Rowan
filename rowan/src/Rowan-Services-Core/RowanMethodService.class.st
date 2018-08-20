@@ -90,11 +90,12 @@ RowanMethodService >> addOrUpdateMethod [
 RowanMethodService >> allReferences [
 
 	| methods |
+	oop := self gsNMethod asOop. 
+	self update. 
 	methods := organizer sendersOf: selector.
 	references := methods first collect:[:gsNMethod | 
 			self class forSelector: gsNMethod selector class: gsNMethod inClass meta: gsNMethod inClass isMeta organizer: organizer].
 	RowanCommandResult addResult: self
-
 ]
 
 { #category : 'initialization' }
