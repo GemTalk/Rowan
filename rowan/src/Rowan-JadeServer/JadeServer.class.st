@@ -599,9 +599,6 @@ JadeServer >> abort [
 
 	classOrganizers := Array new: 4.
 	System abortTransaction.
-	self refreshSymbolList.
-
-
 ]
 
 { #category : 'category' }
@@ -2959,14 +2956,6 @@ JadeServer >> referencesToObject: anObject [
 ]
 
 { #category : 'category' }
-JadeServer >> refreshSymbolList [
-
-	GsSession currentSession symbolList replaceElementsFrom: self symbolList.	"replace the transcient one with the persistent one"
-
-
-]
-
-{ #category : 'category' }
 JadeServer >> registerOBNotifications [
 
 	| platform clientForwarder |
@@ -3168,11 +3157,8 @@ JadeServer >> sbAddDictionary: anOrderedCollection [
 	symbolList
 		createDictionaryNamed: newName
 		at: index.
-	self refreshSymbolList.
 	selections at: #'dictionary' put: newName.
 	self systemBrowserUpdate.
-
-
 ]
 
 { #category : 'category' }
@@ -3959,10 +3945,7 @@ JadeServer >> sbRemoveDictionaries: anOrderedCollection [
 	anOrderedCollection do: [:each | 
 		self symbolList removeDictionaryNamed: each asSymbol.
 	].
-	self refreshSymbolList.
 	self systemBrowserUpdate.
-
-
 ]
 
 { #category : 'category' }
