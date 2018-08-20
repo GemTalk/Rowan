@@ -183,7 +183,7 @@ RowanProjectService >> name: anObject [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 	"set useSsh to false to clone using https:"
 
