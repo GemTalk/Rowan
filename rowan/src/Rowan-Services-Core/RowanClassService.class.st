@@ -104,6 +104,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
 	packageName := classOrMeta rowanPackageName.
+	projectName := classOrMeta rowanProjectName
 ]
 
 { #category : 'commands' }
