@@ -64,3 +64,13 @@ RwGsLoadedSymbolDictPackage >> loadedClassOrClassExtensionForClass: aClass ifAbs
 		at: aClass thisClass name asString
 		ifAbsent: [ self loadedClassExtensionForClass: aClass ifAbsent: absentBlock ]
 ]
+
+{ #category : 'private' }
+RwGsLoadedSymbolDictPackage >> propertiesForDefinition [
+
+	| props |
+	props := super propertiesForDefinition.
+	props at:  'gs_SymbolDictionary' put: (Rowan image loadedRegistryForPackageNamed: self name) _symbolDictionary name asString.
+	^ props
+
+]

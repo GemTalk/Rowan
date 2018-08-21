@@ -9,6 +9,7 @@ Class {
 		'addedProjects',
 		'addedPackages',
 		'deletedPackages',
+		'movedPackages',
 		'projectsWithPropertyChanges',
 		'addedClasses',
 		'deletedClasses',
@@ -238,6 +239,13 @@ RwGsPatchSet_254 >> _packageAdditionPatchClass [
 RwGsPatchSet_254 >> _packageDeletionPatchClass [
 
 	^ RwGsPackageDeletionSymbolDictPatch
+]
+
+{ #category : 'private - patch class accessors' }
+RwGsPatchSet_254 >> _packageMovePatchClass [
+
+	^ RwGsPackageMoveSymbolDictPatch
+
 ]
 
 { #category : 'private - patch class accessors' }
@@ -563,6 +571,18 @@ RwGsPatchSet_254 >> addMethodMove: aRwMethodMove [
 ]
 
 { #category : 'building' }
+RwGsPatchSet_254 >> addMovedPackage: packageDefinition inProject: aProjectDefinition [
+
+	currentProjectDefinition := aProjectDefinition.
+	movedPackages
+		add:
+			((self _packageMovePatchClass for: packageDefinition)
+				projectDefinition: aProjectDefinition;
+				yourself)
+
+]
+
+{ #category : 'building' }
 RwGsPatchSet_254 >> addPatchedClassClassVariables: aClassDefinition inPackage: aPackageDefinition inProject: aProjectDefinition [
 
 	currentProjectDefinition := aProjectDefinition.
@@ -793,6 +813,7 @@ RwGsPatchSet_254 >> apply [
 		removeDeletedClassesFromSystem;
 		"removeDeletedClassExtensionsFromSystem;" 
 		installAddedClasses;
+		movePackages;
 		moveClassesBetweenSymbolDictionaries;
 		installAddedClassExtensions;
 		doMoveClassesBetweenPackages;
@@ -983,13 +1004,17 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 							| theKey classExtensionRegistry |
 							theKey := loadedClassOrExtension handle classHistory.
 							classExtensionRegistry := registry classExtensionRegistry.
-							(classExtensionRegistry at: theKey) remove: loadedClassOrExtension.
-							(classExtensionRegistry at: theKey) isEmpty
-								ifTrue: [ classExtensionRegistry removeKey: theKey ].
+							(classExtensionRegistry at: theKey ifAbsent: [])
+								ifNotNil: [ :loadedClassExtensions |
+									loadedClassExtensions isEmpty
+										ifFalse: [ 
+											loadedClassExtensions remove: loadedClassOrExtension.
+											loadedClassExtensions isEmpty
+												ifTrue: [ classExtensionRegistry removeKey: theKey ] ] ].
 							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
 
             compiledMethod := loadedMethod handle.
-			registry methodRegistry removeKey: compiledMethod.
+			registry methodRegistry removeKey: compiledMethod ifAbsent: [].
 
 			packageDef := aMethodMove packageAfter.
 			classOrExtensionDef := aMethodMove classOrExtensionAfter.
@@ -1037,6 +1062,7 @@ RwGsPatchSet_254 >> initialize [
 	addedPackages := Set new.
 	addedProjects := Set new.
 	deletedPackages := Set new.
+	movedPackages := Set new.
 	projectsWithPropertyChanges := Set new.
 	deletedClasses := Set new.
 	addedClasses := Set new.
@@ -1114,6 +1140,13 @@ RwGsPatchSet_254 >> moveClassesBetweenSymbolDictionaries [
 { #category : 'accessing' }
 RwGsPatchSet_254 >> movedClassesMap [
 	^ movedClassesMap
+
+]
+
+{ #category : 'private - applying' }
+RwGsPatchSet_254 >> movePackages [
+
+	movedPackages do: [:each | each movePackage ]
 
 ]
 

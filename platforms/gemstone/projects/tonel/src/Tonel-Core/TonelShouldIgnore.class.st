@@ -7,9 +7,5 @@ This tipically happens on a MCClassTraitDefinition, because it will be managed o
 Class {
 	#name : 'TonelShouldIgnore',
 	#superclass : 'Notification',
-	#type : 'variable',
-	#gs_options : [
-		'disallowGciStore'
-	],
 	#category : 'Tonel-Core'
 }

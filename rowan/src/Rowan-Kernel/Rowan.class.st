@@ -55,6 +55,12 @@ Rowan class >> image [
 ]
 
 { #category : 'public client services' }
+Rowan class >> jadeServerClassNamed: className [
+
+	^ self platform jadeServerClassNamed: className
+]
+
+{ #category : 'public client services' }
 Rowan class >> methodServiceClass [
 
 	^ self platform methodServiceClass

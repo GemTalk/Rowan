@@ -94,6 +94,10 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 			| projectDefinition |
 			projectDefinition := projectSetDefinitionToLoad projectNamed: projectName ifAbsent: [].
 			projectDefinition updateGsPlatformSpecLoadedProjectInfo: projectInfo ].
+	projectSetDefinitionToLoad definitions keysAndValuesDo: [:projectName :projectDefinition |
+			projectDefinition packages keysAndValuesDo: [:packageName :packageDefinition |
+				"set the target symbol dictionary name for each incoming package definition"
+				packageDefinition gs_symbolDictionary: (projectDefinition symbolDictNameForPackageNamed: packageName) ] ].
 	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectDefinitionSet.
 	diff isEmpty
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
@@ -194,34 +198,6 @@ RwPrjLoadTool >> loadProjectNamed_254: projectNamed instanceMigrator: instanceMi
 		readProjectSetForProjectNamed: projectNamed.
 	res := self 
 		_doProjectSetLoad_254: projectSetDefinition
-		instanceMigrator: instanceMigrator 
-		originalProjectSet: projectSetDefinition 
-		processedClassNames: Set new.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-
-]
-
-{ #category : 'load project by name' }
-RwPrjLoadTool >> loadProjectNamed_old: projectNamed [
-
-	"load the named project from disk, mark the loaded projects not dirty and run initializers"
-
-	^ self loadProjectNamed_old: projectNamed instanceMigrator: Rowan platform instanceMigrator
-
-]
-
-{ #category : 'load project by name' }
-RwPrjLoadTool >> loadProjectNamed_old: projectNamed instanceMigrator: instanceMigrator [
-
-	"load the named project from disk, mark the loaded projects not dirty and run initializers"
-
-	| projectSetDefinition res |
-	projectSetDefinition := self class read
-		readProjectSetForProjectNamed: projectNamed.
-	res := self 
-		_doProjectSetLoad: projectSetDefinition
 		instanceMigrator: instanceMigrator 
 		originalProjectSet: projectSetDefinition 
 		processedClassNames: Set new.

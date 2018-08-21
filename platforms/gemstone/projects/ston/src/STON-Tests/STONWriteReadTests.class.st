@@ -259,6 +259,7 @@ STONWriteReadTests >> testUnicodeStrings [
   (self unicode32TestString).
   'élève en Français'}.
   self serializeAndMaterialize: strings
+
 ]
 
 { #category : 'tests' }

@@ -6,7 +6,9 @@ Class {
 		'sha',
 		'branch',
 		'isSkew',
-		'isDirty'
+		'isDirty',
+		'packages',
+		'changes'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -25,9 +27,28 @@ RowanProjectService class >> defaultProjectName: aString [
 
 ]
 
+{ #category : 'instance creation' }
+RowanProjectService class >> newNamed: aString [
+
+	| inst |
+	inst := self new.
+	inst name: aString.
+	inst refresh. 
+	^inst
+
+]
+
+{ #category : 'commands' }
+RowanProjectService >> addPackageNamed: packageName [
+
+	self browserTool addPackageNamed: packageName toProjectNamed: name. 
+	self update.
+]
+
 { #category : 'accessing' }
 RowanProjectService >> branch [
 
+	name isNil ifTrue:[^String new].
 	^(RwProject newNamed: name) currentBranchName
 
 ]
@@ -39,25 +60,25 @@ RowanProjectService >> branch: anObject [
 
 ]
 
-{ #category : 'rowan' }
-RowanProjectService >> branches [
-
-	| project branches |
-
-	project := (RwProject newNamed: name). 
-	branches := Rowan gitTools gitbranchIn: project repositoryRootPath with: ''.
-	^branches
-
-]
-
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> changes [
-	
-	^(Rowan projectTools diff diffForProjectName: name) asString
 
+	| projectService jadeServer |
+	self rowanFixMe. "better lookup for JadeServer class"
+	jadeServer := (GsCurrentSession currentSession resolveSymbol: #JadeServer) value. 
+	changes := Array new. 
+	self packageNames do:[:packageName |
+			| patch |
+			patch := Rowan packageTools diff patchForPackageName: packageName.
+			changes add:(jadeServer new
+				_mcDescriptionOfPatch: patch
+				baseName: 'closest ancestor'
+				alternateName: nil)].
+	self refresh.
+	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> checkout: branchName [
 
 	| project branches |
@@ -68,15 +89,13 @@ RowanProjectService >> checkout: branchName [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> commitWithMessage: message [
 	
 	Rowan projectTools write writeProjectNamed: name.
 	Rowan projectTools commit
 		commitProjectNamed: name
-		message: message. 
-	System commitTransaction.
-
+		message: message.
 ]
 
 { #category : 'examples' }
@@ -96,15 +115,6 @@ RowanProjectService >> createProjectNamed: projectName in: symbolDictionaryName 
 
 ]
 
-{ #category : 'examples' }
-RowanProjectService >> createSampleProject [
-
-	self removeProjectNamed: self sampleProjectName.
-	self createSampleSymbolDictionary.
-	^self createProjectNamed: self sampleProjectName in: self sampleSymbolDictionaryName
-
-]
-
 { #category : 'accessing' }
 RowanProjectService >> defaultProjectName [
 
@@ -120,15 +130,9 @@ RowanProjectService >> defaultProjectName: aString [
 ]
 
 { #category : 'rowan' }
-RowanProjectService >> definition [
-
-	^(Rowan image loadedProjectNamed: name) asDefinition
-
-]
-
-{ #category : 'rowan' }
 RowanProjectService >> isDirty [
 
+	name isNil ifTrue:[^false].
 	^(RwProject newNamed: name) isDirty
 
 ]
@@ -142,12 +146,12 @@ RowanProjectService >> isDirty: aBoolean [
 
 { #category : 'rowan' }
 RowanProjectService >> isSkew [
-
+	name isNil ifTrue:[^false].
 	^self sha ~= self repositorySha
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> loadProjectNamed: aName [
 
 	[Rowan projectTools load loadProjectNamed: aName] 
@@ -179,7 +183,7 @@ RowanProjectService >> name: anObject [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 	"set useSsh to false to clone using https:"
 
@@ -192,8 +196,13 @@ RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 
 { #category : 'rowan' }
 RowanProjectService >> packageNames [
-	^(Rowan image loadedProjectNamed: name) packageNames.
-
+	"if no project is selected, return all package names"
+	^name isNil ifTrue:[
+		"list of visible packageNames for current user"
+		Rowan image packageNames ]
+	ifFalse:[
+		"list of visible packageNames for current user and named project"
+		Rowan image packageNamesForLoadedProjectNamed: name ]
 ]
 
 { #category : 'rowan' }
@@ -218,6 +227,13 @@ RowanProjectService >> packageNameString [
 
 ]
 
+{ #category : 'accessing' }
+RowanProjectService >> packageServices [
+
+	^self packageNames collect:[:packageName | RowanPackageService forPackageNamed: packageName]
+
+]
+
 { #category : 'rowan' }
 RowanProjectService >> projects [
 
@@ -232,7 +248,7 @@ RowanProjectService >> projects [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> pullFromGit [
 
 	| project |
@@ -244,7 +260,7 @@ RowanProjectService >> pullFromGit [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'commands' }
 RowanProjectService >> pushToGit [
 
 	| project |
@@ -254,6 +270,25 @@ RowanProjectService >> pushToGit [
 		remote: project remote
 		branch: project currentBranchName
 
+]
+
+{ #category : 'initialization' }
+RowanProjectService >> refresh [
+
+	packages := self packageServices.
+	isDirty := self isDirty. 
+	isSkew := self isSkew.
+	sha := self rowanSha.
+	branch := self rowanBranch.
+
+]
+
+{ #category : 'commands' }
+RowanProjectService >> reloadProject [
+
+	[Rowan projectTools load loadProjectNamed: name] 
+		on: Warning
+		do: [ :ex | Transcript cr; show: ex description. ex resume ]
 ]
 
 { #category : 'rowan' }
@@ -268,13 +303,14 @@ RowanProjectService >> removeProjectNamed: projectName [
 { #category : 'rowan' }
 RowanProjectService >> repositorySha [
 
-	^ [ (RwProject newNamed: name) repositoryCommitId ] on: Error do: [:ex | ^'ERROR getting repository commit id' ]
+	^(RwProject newNamed: name) repositoryCommitId
 
 ]
 
 { #category : 'rowan' }
 RowanProjectService >> rowanBranch [
-
+	
+	name isNil ifTrue:[^String new].
 	^ [ (RwProject newNamed: name) currentBranchName ] on: Error do: [:ex | ^'ERROR getting repository branch' ]
 
 ]
@@ -289,6 +325,7 @@ RowanProjectService >> rowanDirty [
 { #category : 'rowan' }
 RowanProjectService >> rowanSha [
 
+	name isNil ifTrue:[^0].
 	^(RwProject newNamed: name) loadedCommitId
 
 ]
@@ -300,16 +337,10 @@ RowanProjectService >> rowanSkew [
 
 ]
 
-{ #category : 'examples' }
-RowanProjectService >> sampleProjectName [
-	
-	^'SampleProjectName'
-
-]
-
 { #category : 'accessing' }
 RowanProjectService >> sha [
 
+	name isNil ifTrue:[^0].
 	^(RwProject newNamed: name) loadedCommitId
 
 ]
@@ -332,7 +363,14 @@ RowanProjectService >> unload [
 
 ]
 
-{ #category : 'rowan' }
+{ #category : 'update' }
+RowanProjectService >> update [
+	self refresh.
+	RowanCommandResult addResult: self
+
+]
+
+{ #category : 'commands' }
 RowanProjectService >> write [
 	Rowan projectTools write writeProjectNamed: name
 

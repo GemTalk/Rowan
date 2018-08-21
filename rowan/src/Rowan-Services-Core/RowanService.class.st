@@ -1,11 +1,38 @@
+"
+Rowan Service is the abstract service class for classes that represent
+first class entities in Rowan. They are transported to the client via 
+ston. 
+
+On the client, set the command & commandArgs inst vars, then tell
+the browser to #issueCommand: with an array of services. A service
+received without the the command inst var set will send #update to
+the service. #issueCommand: should call JadeServer>>updateFromSton:
+which will run the command and return a result. 
+
+Any service that sends updates back to the client willl propogates to 
+registered windows. Add a service for return to the client with:
+RowanCommandResult addResult: <self>
+"
 Class {
 	#name : 'RowanService',
 	#superclass : 'Object',
 	#instVars : [
-		'definition'
+		'definition',
+		'updates',
+		'command',
+		'commandArgs',
+		'updateType',
+		'organizer'
 	],
 	#category : 'Rowan-Services-Core'
 }
+
+{ #category : 'instance creation' }
+RowanService class >> new [
+
+	^super new initialize
+
+]
 
 { #category : 'other' }
 RowanService class >> rowanFixMe [
@@ -25,6 +52,27 @@ RowanService class >> sampleService [
 RowanService >> browserTool [
 
 	^self projectTools browser
+
+]
+
+{ #category : 'accessing' }
+RowanService >> command [
+
+	^command
+
+]
+
+{ #category : 'accessing' }
+RowanService >> command: aSymbol [
+
+	command := aSymbol
+
+]
+
+{ #category : 'accessing' }
+RowanService >> commandArgs [
+
+	^commandArgs ifNil:[commandArgs := Array new]
 
 ]
 
@@ -80,6 +128,23 @@ RowanService >> definitionClassName [
 
 	^self definitionClass name
 
+]
+
+{ #category : 'replication' }
+RowanService >> excludedInstVars [
+
+	^#( #organizer)
+
+]
+
+{ #category : 'initialization' }
+RowanService >> initialize [
+]
+
+{ #category : 'accessing' }
+RowanService >> organizer: anOrganizer [
+
+	organizer := anOrganizer.
 ]
 
 { #category : 'rowan' }
@@ -141,6 +206,20 @@ RowanService >> sampleSymbolDictionaryName [
 ]
 
 { #category : 'replication' }
+RowanService >> stonOn: stonWriter [
+    | instanceVariableNames |
+    instanceVariableNames := self class allInstVarNames reject: [:iv | self excludedInstVars includes: iv].
+    stonWriter writeObject: self
+        streamMap: 
+            [:dictionary |
+            instanceVariableNames do: 
+                    [:each |
+                    (self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
+                        ifNotNil: [:value | dictionary at: each asSymbol put: value]
+                        ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
+]
+
+{ #category : 'replication' }
 RowanService >> stonStringFor: anObject [
 
 	"return a string representing a complete object structure
@@ -162,4 +241,10 @@ RowanService >> symbolDictionaryNamed: aName [
 		ifFalse:[
 			self createSymbolDictionaryNamed: aName].
 
+]
+
+{ #category : 'accessing' }
+RowanService >> updateType: aSymbol [
+
+	updateType := aSymbol
 ]
