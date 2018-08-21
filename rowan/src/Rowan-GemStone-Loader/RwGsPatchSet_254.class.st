@@ -148,6 +148,16 @@ RwGsPatchSet_254 >> _classVersioningPatchClass [
 ]
 
 { #category : 'private - applying' }
+RwGsPatchSet_254 >> _createMovedClasses [
+
+	movedClasses do: [:movedClass | 
+		movedClassesMap 
+			at: movedClass classBefore name 
+			put: movedClass ].
+
+]
+
+{ #category : 'private - applying' }
 RwGsPatchSet_254 >> _currentProjectDefinition [
 
 	^ currentProjectDefinition
@@ -290,6 +300,7 @@ RwGsPatchSet_254 >> addAddedInstanceMethod: anInstanceMethodDefinition inClass: 
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
+
 ]
 
 { #category : 'building' }
@@ -521,6 +532,7 @@ RwGsPatchSet_254 >> addExtendedInstanceMethod: anInstanceMethodDefinition inClas
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
+
 ]
 
 { #category : 'modification dispatching' }
@@ -818,6 +830,7 @@ RwGsPatchSet_254 >> applyForNewClassVersions: anInstanceMigrator [
 					deleteNewVersionMethods add: patch.
 					deletedMethods remove: patch ] ].
 	self apply
+
 ]
 
 { #category : 'accessing' }
@@ -960,9 +973,21 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 				ifFalse: [ loadedClassOrExtension loadedInstanceMethods ].
 			loadedMethod := loadedMethods at: aMethodMove methodBefore selector.
 
-			loadedClassOrExtension removeLoadedMethod: loadedMethod.
-
 			registry := image loadedRegistryForPackageNamed: loadedPackage name.
+
+			loadedClassOrExtension removeLoadedMethod: loadedMethod.
+			loadedClassOrExtension isLoadedClassExtension
+				ifTrue: [
+					loadedClassOrExtension isEmpty
+						ifTrue: [ 
+							| theKey classExtensionRegistry |
+							theKey := loadedClassOrExtension handle classHistory.
+							classExtensionRegistry := registry classExtensionRegistry.
+							(classExtensionRegistry at: theKey) remove: loadedClassOrExtension.
+							(classExtensionRegistry at: theKey) isEmpty
+								ifTrue: [ classExtensionRegistry removeKey: theKey ].
+							loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
+
             compiledMethod := loadedMethod handle.
 			registry methodRegistry removeKey: compiledMethod.
 
@@ -988,10 +1013,11 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 													'The extension class named ' , self className printString , ' cannot be found.' ].
 "logic is not quite correct here ... need to create a lodedClassExtension for this puppy ... deferring session method work to a later date"
 "https://github.com/dalehenrich/Rowan/issues/254"]
-								ifFalse: [							registry
-									ensureExtensionClassNamed: classOrExtensionDef name
-									existsForPackageNamed: packageDef name
-									implementationClass: RwGsSymbolDictionaryRegistry_Implementation ].
+								ifFalse: [
+									registry
+										ensureExtensionClassNamed: classOrExtensionDef name
+										existsForPackageNamed: packageDef name
+										implementationClass: RwGsSymbolDictionaryRegistry_Implementation ].
 							loadedPackage loadedClassExtensions at: classOrExtensionDef name ]
 						ifFalse: [ 
 							self error: 'internal error - no loaded class found for class ', 
@@ -1194,17 +1220,14 @@ RwGsPatchSet_254 >> setupForApply [
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> setupForMovedClasses [
 
-	movedClasses do: [:movedClass | 
-		movedClassesMap 
-			at: movedClass classBefore name 
-			put: movedClass ].
+	self _createMovedClasses
 
 ]
 
 { #category : 'private - applying' }
 RwGsPatchSet_254 >> setupForNewClassVersionUpdates [
 
-	self setupForMovedClasses
+	self _createMovedClasses
 
 ]
 
@@ -1263,8 +1286,48 @@ RwGsPatchSet_254 >> updateMethodDictionaries [
 	or LoadedExtension
 	For methods that need recompiling updated the LoadedMethods registration. "
 
-	addedMethods do: [:patch | patch installMethod ].
-	extendedMethods do: [:each | each installMethod ].
+	| movedClassesWithNewVersionMap movedExtensionMethodsMap |
+	movedClassesWithNewVersionMap := Dictionary new.
+	classesWithNewVersions do: [:patch | 
+		(movedClassesMap at: patch className ifAbsent: []) 
+			ifNotNil: [:aClassMove | 
+				movedClassesWithNewVersionMap at: patch className put: {aClassMove . patch} ] ]. 
+	addedMethods do: [:patch |
+		| className |
+		className := patch className.
+		(movedClassesWithNewVersionMap at: className ifAbsent: [])
+			ifNil: [ patch installMethod ]
+			ifNotNil: [:ar | 
+				"https://github.com/dalehenrich/Rowan/issues/316"
+				patch installMovedMethod: (ar at: 1) newClassVersionPatch: (ar at: 2) ] ].
+	movedClassesWithNewVersionMap isEmpty
+		ifFalse: [
+			"calculate moved extension methods map only if there are moved new class versions as well"
+			movedExtensionMethodsMap := Dictionary new.
+			movedMethods do: [:aMethodMove |
+				| classExtDict key methodDict  |
+				classExtDict := movedExtensionMethodsMap  at: aMethodMove classOrExtensionAfter name ifAbsentPut: [ Dictionary new].
+				key := aMethodMove isMeta ifTrue: [ 'class' ] ifFalse: [ 'instance'].
+				methodDict := classExtDict at: key ifAbsentPut: [ Dictionary new ]. 
+				methodDict at: aMethodMove methodAfter selector put: aMethodMove ] ].
+	extendedMethods do: [:patch |
+		| className |
+		className := patch className.
+		(movedClassesWithNewVersionMap at: className ifAbsent: [])
+			ifNil: [ patch installMethod ]
+			ifNotNil: [:ar | 
+				"https://github.com/dalehenrich/Rowan/issues/316"
+				(movedExtensionMethodsMap at: className ifAbsent: [])
+					ifNil: [ patch installMethod ]
+					ifNotNil: [:classExtDict |
+						| methodDict |
+						methodDict := patch isMeta
+							ifTrue: [ classExtDict at: 'class' ifAbsent: [ Dictionary new ] ]
+							ifFalse: [ classExtDict at: 'instance' ifAbsent: [ Dictionary new ] ].
+						(methodDict at: patch methodDefinition selector ifAbsent: [])
+							ifNil: [ patch installMethod ]
+							ifNotNil: [:aMethodMove |
+								patch installMovedMethod: aMethodMove newClassVersionPatch: (ar at: 2) ] ] ] ].
 	methodsNeedingRecompile do: [:each | each installSourcePatch ]
 
 ]

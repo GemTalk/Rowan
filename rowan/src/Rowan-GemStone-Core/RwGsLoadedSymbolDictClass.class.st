@@ -219,15 +219,21 @@ RwGsLoadedSymbolDictClass >> updateClassTypeFromClass [
 	| propertyName oldValue newValue |
 	propertyName := 'type'.
 	oldValue := self propertyAt: propertyName.
-	newValue := handle isBytesOrSpecial
-				ifTrue: [handle isBytes ifTrue: ['bytes'] ifFalse: ['immediate']]
-				ifFalse: 
-					[handle isNsc
-						ifTrue: [ 'normal' ]
-						ifFalse:  [
-							(handle isVariable and: [handle superClass isVariable not])
-								ifTrue: ['variable']
-								ifFalse: [ 'normal'] ] ].
+	newValue := handle isBytes
+						ifTrue: [
+							handle superClass isBytes not
+								ifTrue: [ 'bytes' ]
+								ifFalse: [ 'normal' ]]
+						ifFalse: [ 
+							handle isSpecial
+								ifTrue: [ 'immediate' ]
+								ifFalse: 
+									[ handle isNsc
+										ifTrue: [ 'normal' ]
+										ifFalse:  [
+											(handle isVariable and: [handle superClass isVariable not])
+												ifTrue: [ 'variable' ]
+												ifFalse: [ 'normal' ] ] ] ].
 
 	oldValue = newValue
 		ifFalse: 
