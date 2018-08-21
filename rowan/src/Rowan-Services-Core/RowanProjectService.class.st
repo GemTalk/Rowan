@@ -198,15 +198,11 @@ RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 RowanProjectService >> packageNames [
 	"if no project is selected, return all package names"
 	^name isNil ifTrue:[
-		| packageNames |
-		packageNames := Array new.
-		Rowan image loadedProjects do:[:project |
-				packageNames addAll: project packageNames].
-		packageNames
-		]
+		"list of visible packageNames for current user"
+		Rowan image packageNames ]
 	ifFalse:[
-		(Rowan image loadedProjectNamed: name) packageNames]
-
+		"list of visible packageNames for current user and named project"
+		Rowan image packageNamesForLoadedProjectNamed: name ]
 ]
 
 { #category : 'rowan' }
