@@ -133,6 +133,7 @@ self halt.
 RowanFrameService >> testMethod [
 
 	self halt.
+	^0
 ]
 
 { #category : 'other' }
