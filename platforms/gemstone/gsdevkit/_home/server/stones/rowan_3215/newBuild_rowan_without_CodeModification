@@ -18,23 +18,29 @@ startTopaz $GEMSTONE_NAME -l << EOF
   login
 
 	run
-	| securityPolicy worldAuthorization newUser |
-	worldAuthorization := #read.
+	"User with no code modification privileges and owner read"
+	AllUsers 
+		addNewUserWithId: 'NoCodeModificationUser'
+			password: 'swordfish'
+			createNewSecurityPolicy: true.
+	AllUsers 
+		addNewUserWithId: 'ReadOnlyNoCodeModificationUser'
+			password: 'swordfish'
+			createNewSecurityPolicy: true.
+%
+	commit
+
+	run
+	| securityPolicy |
 	securityPolicy := GsObjectSecurityPolicy new
 		ownerAuthorization: #write;
-		worldAuthorization: worldAuthorization;
-		yourself.
+		worldAuthorization: #read;
+		owner: System myUserProfile;
+	yourself.
 	System commit.
-	newUser := AllUsers 
-		addNewUserWithId: 'Issue332User'
-			password: 'swordfish'
-			defaultObjectSecurityPolicy: securityPolicy
-			privileges: #(
-				  'UserPassword'
-				  'SessionAccess'
-				  'SessionPriority')
-			inGroups: #().
-		  securityPolicy owner: newUser.
+	"take away permissions to write UserGlobals"
+	((AllUsers userWithId: 'ReadOnlyNoCodeModificationUser') symbolList resolveSymbol: #UserGlobals) value
+		objectSecurityPolicy:  securityPolicy.
 %
 	commit
 
