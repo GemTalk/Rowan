@@ -72,8 +72,7 @@ RowanProjectService >> branch: anObject [
 RowanProjectService >> changes [
 
 	| projectService jadeServer |
-	self rowanFixMe. "better lookup for JadeServer class"
-	jadeServer := (GsCurrentSession currentSession resolveSymbol: #JadeServer) value. 
+	jadeServer := Rowan platform jadeServerClassNamed: #JadeServer. 
 	changes := Array new. 
 	self packageNames do:[:packageName |
 			| patch |
