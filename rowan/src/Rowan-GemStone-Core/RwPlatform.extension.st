@@ -1,26 +1,33 @@
 Extension { #name : 'RwPlatform' }
 
 { #category : '*rowan-gemstone-core' }
-RwPlatform class >> current [
+RwPlatform class >> _userPlatformDictionary [
+
+	"Platform globals are put into the current user's UserGlobals so that the values can be persisted.
+		if the user does not have write access to UserGlobals, we'll store in session-specific dictionary"
 
 	| userGlobals |
 	userGlobals := System myUserProfile objectNamed: 'UserGlobals'.
 	^ (System canWrite: userGlobals)
-		ifTrue: [
-			userGlobals 
-				at: #RwUserPlatformInstance 
-				ifAbsentPut: [ RwGsPlatform new ] ]
-		ifFalse: [
-			SessionTemps current 
-				at: #RwUserPlatformInstance 
-				ifAbsentPut: [ RwGsPlatform new ] ]
+		ifTrue: [ userGlobals ]
+		ifFalse: [ SessionTemps current ]
+
+]
+
+{ #category : '*rowan-gemstone-core' }
+RwPlatform class >> current [
+
+	^ self _userPlatformDictionary 
+		at: #RwUserPlatformInstance 
+		ifAbsentPut: [ RwGsPlatform new ]
 
 ]
 
 { #category : '*rowan-gemstone-core' }
 RwPlatform class >> reset [
 
-	^ (System myUserProfile objectNamed: 'UserGlobals') 
+	^ self _userPlatformDictionary 
 		removeKey: #RwUserPlatformInstance 
 		ifAbsent: [ ]
+
 ]
