@@ -12,7 +12,6 @@ RowanServicePreferences class >> current [
 	^(Rowan globalNamed: 'UserGlobals') 
 		at: #RowanServicePrefs 
 		ifAbsentPut: [ self new ]
-
 ]
 
 { #category : 'accessing' }

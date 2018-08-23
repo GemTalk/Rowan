@@ -166,6 +166,14 @@ RowanPackageService >> packageName: newValue [
 
 ]
 
+{ #category : 'printing' }
+RowanPackageService >> printOn: aStream [
+
+	super printOn: aStream. 
+	aStream nextPut: $:. 
+	aStream nextPutAll: (name ifNil: [nil printString])
+]
+
 { #category : 'Accessing' }
 RowanPackageService >> projectDefinition [
 	^projectDefinition

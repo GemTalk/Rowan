@@ -74,5 +74,4 @@ RowanBrowserService >> updateProjects [
 	projects := sortedProjects collect:[:project | RowanProjectService newNamed: project name].
 	updateType := #projectsUpdate:.
 	RowanCommandResult addResult: self
-
 ]
