@@ -16,19 +16,19 @@ RwGsImage class >> _loadedProjectRegistry [
 { #category : 'private' }
 RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
 
-	| userProfile ug |
+	| userProfile userPlatformDict |
 	userProfile := AllUsers userWithId: aUserId.
 	userProfile defaultObjectSecurityPolicy currentUserCanRead
 		ifFalse: [
 			"do not have permissions to read objects created by <aUserId>"
 			^ nil ].
-	ug := userProfile objectNamed: #'UserGlobals'.
-	^ ug
+	userPlatformDict := RwPlatform _userPlatformDictionary.
+	^ userPlatformDict
 		at: #'RwGsLoadedProjectRegistry'
 		ifAbsent: [ 
 			(self currentUserId = aUserId)
 				ifFalse: [ ^ nil ].
-			ug at: #'RwGsLoadedProjectRegistry' put: StringKeyValueDictionary new ]
+			userPlatformDict at: #'RwGsLoadedProjectRegistry' put: StringKeyValueDictionary new ]
 
 ]
 
