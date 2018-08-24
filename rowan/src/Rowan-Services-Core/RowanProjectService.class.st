@@ -33,9 +33,8 @@ RowanProjectService class >> newNamed: aString [
 	| inst |
 	inst := self new.
 	inst name: aString.
-	inst refresh. 
+	inst refresh.
 	^inst
-
 ]
 
 { #category : 'commands' }
@@ -43,6 +42,15 @@ RowanProjectService >> addPackageNamed: packageName [
 
 	self browserTool addPackageNamed: packageName toProjectNamed: name. 
 	self update.
+]
+
+{ #category : 'initialization' }
+RowanProjectService >> basicRefresh [
+
+	isDirty := self isDirty. 
+	isSkew := self isSkew.
+	sha := self rowanSha.
+	branch := self rowanBranch.
 ]
 
 { #category : 'accessing' }
@@ -64,8 +72,7 @@ RowanProjectService >> branch: anObject [
 RowanProjectService >> changes [
 
 	| projectService jadeServer |
-	self rowanFixMe. "better lookup for JadeServer class"
-	jadeServer := (GsCurrentSession currentSession resolveSymbol: #JadeServer) value. 
+	jadeServer := Rowan platform jadeServerClassNamed: #JadeServer. 
 	changes := Array new. 
 	self packageNames do:[:packageName |
 			| patch |
@@ -127,6 +134,13 @@ RowanProjectService >> defaultProjectName: aString [
 
 	self class defaultProjectName: aString
 
+]
+
+{ #category : 'initialization' }
+RowanProjectService >> initialize [
+
+	super initialize. 
+	packages := Array new
 ]
 
 { #category : 'rowan' }
@@ -234,6 +248,14 @@ RowanProjectService >> packageServices [
 
 ]
 
+{ #category : 'printing' }
+RowanProjectService >> printOn: aStream [
+
+	super printOn: aStream. 
+	aStream nextPut: $:. 
+	aStream nextPutAll: (name ifNil: [nil printString])
+]
+
 { #category : 'rowan' }
 RowanProjectService >> projects [
 
@@ -274,13 +296,8 @@ RowanProjectService >> pushToGit [
 
 { #category : 'initialization' }
 RowanProjectService >> refresh [
-
+	self basicRefresh. 
 	packages := self packageServices.
-	isDirty := self isDirty. 
-	isSkew := self isSkew.
-	sha := self rowanSha.
-	branch := self rowanBranch.
-
 ]
 
 { #category : 'commands' }
@@ -335,6 +352,12 @@ RowanProjectService >> rowanSkew [
 
 	^self sha ~= self repositorySha
 
+]
+
+{ #category : 'commands' }
+RowanProjectService >> setDefaultProject [
+
+	self class defaultProjectName: name
 ]
 
 { #category : 'accessing' }
