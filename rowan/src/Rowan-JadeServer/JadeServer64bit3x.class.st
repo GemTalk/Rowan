@@ -321,16 +321,11 @@ JadeServer64bit3x >> inspectNamedInstanceVariablesOf: anObject on: aStream [
 
 ]
 
-{ #category : 'category' }
+{ #category : 'transcript' }
 JadeServer64bit3x >> installTranscript [
 
-	| sessionTemps |
-	Transcript class name == #'TranscriptStreamPortable' ifFalse: [^super installTranscript].
-	sessionTemps := SessionTemps current.
-	(sessionTemps at: #'TranscriptStream_SessionStream' ifAbsent: [nil]) notNil ifTrue: [^super installTranscript].
-	sessionTemps at: #'TranscriptStream_SessionStream' put: self.
-
-
+	Transcript class name == #'TranscriptStreamPortable' ifFalse: [^self].
+	SessionTemps current at: #'TranscriptStream_SessionStream' put: self.
 ]
 
 { #category : 'category' }
@@ -637,4 +632,11 @@ JadeServer64bit3x >> selectedClassOverridesSelector: aSymbol [
 	^selectedClass superclass notNil and: [(selectedClass superclass whichClassIncludesSelector: aSymbol environmentId: environment) ~~ nil].
 
 
+]
+
+{ #category : 'transcript' }
+JadeServer64bit3x >> uninstallTranscript [
+
+	Transcript class name == #'TranscriptStreamPortable' ifFalse: [^self].
+	SessionTemps current at: #'TranscriptStream_SessionStream' put: nil.
 ]
