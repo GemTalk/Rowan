@@ -16,7 +16,7 @@ RwRowanSample1Test >> _rowanSample1LoadSpecificationUrl [
 { #category : 'tests' }
 RwRowanSample1Test >> testIssue345 [
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec |
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec symDict registry |
 	projectName := 'RowanSample1'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
@@ -45,10 +45,32 @@ RwRowanSample1Test >> testIssue345 [
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: 'issue_345'.
+"load project"
 	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
 
+"validation"
+	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 3.
+	self assert: registry classRegistry size = 2.
+	self assert: registry classExtensionRegistry size = 1.
+	self assert: registry methodRegistry size = 6.
+
+"delete project"
 	Rowan projectTools delete deleteProjectNamed: projectName.
 
-self halt. "make sure that all pieces of the project are gone"
+"validation"
+	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) isNil.
+
+	symDict := Rowan globalNamed: self _symbolDictionaryName.
+	registry := symDict rowanSymbolDictionaryRegistry.
+
+	self assert: registry packageRegistry size = 0.
+	self assert: registry classRegistry size = 0.
+	self assert: registry classExtensionRegistry size = 0.
+	self assert: registry methodRegistry size = 0.
 
 ]
