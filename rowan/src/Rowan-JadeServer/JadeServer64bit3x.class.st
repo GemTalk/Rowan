@@ -324,10 +324,8 @@ JadeServer64bit3x >> inspectNamedInstanceVariablesOf: anObject on: aStream [
 { #category : 'transcript' }
 JadeServer64bit3x >> installTranscript [
 
-	| sessionTemps |
 	Transcript class name == #'TranscriptStreamPortable' ifFalse: [^self].
-	sessionTemps := SessionTemps current.
-	sessionTemps at: #'TranscriptStream_SessionStream' put: self.
+	SessionTemps current at: #'TranscriptStream_SessionStream' put: self.
 ]
 
 { #category : 'category' }
@@ -639,8 +637,6 @@ JadeServer64bit3x >> selectedClassOverridesSelector: aSymbol [
 { #category : 'transcript' }
 JadeServer64bit3x >> uninstallTranscript [
 
-	| sessionTemps |
 	Transcript class name == #'TranscriptStreamPortable' ifFalse: [^self].
-	sessionTemps := SessionTemps current.
-	sessionTemps at: #'TranscriptStream_SessionStream' put: nil. "lazy initialize later"
+	SessionTemps current at: #'TranscriptStream_SessionStream' put: nil.
 ]
