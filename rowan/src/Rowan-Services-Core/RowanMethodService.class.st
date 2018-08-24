@@ -217,6 +217,12 @@ RowanMethodService >> gsNMethod [
 ]
 
 { #category : 'Accessing' }
+RowanMethodService >> gsNMethodFromOop [
+
+	^Object _objectForOop: oop
+]
+
+{ #category : 'Accessing' }
 RowanMethodService >> hasSubs [
 
 	^hasSubs
