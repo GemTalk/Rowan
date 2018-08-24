@@ -172,7 +172,7 @@ RwAbstractTool >> readlink: filepath [
 	"NOTE: may need alternate solution on OSX"
 
 	| command |
-	command := 'set -e; readlink -f ', filepath.
+	command := self _realpath_source, '; realpath ' , filepath.
 	^Rowan gitTools performOnServer: command logging: true
 
 ]
@@ -184,7 +184,7 @@ RwAbstractTool >> readlinkX: filepath [
 	"NOTE: may need alternate solution on OSX"
 
 	| command |
-	command := 'set -e; ', self _realpath_source, '; realpath ' , filepath.
+	command := self _realpath_source, '; realpath ' , filepath.
 	^Rowan gitTools performOnServer: command logging: true
 
 ]
