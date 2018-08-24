@@ -40,7 +40,7 @@ RowanFrameService >> testMethod [
 
 	^0
 ]
- 
+
 { #category : 'other' }
 RowanFrameService >> varsFor: anArray [
 

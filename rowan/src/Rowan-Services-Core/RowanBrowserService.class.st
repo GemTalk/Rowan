@@ -43,6 +43,13 @@ RowanBrowserService >> defaultClassHierarchy [
 ]
 
 { #category : 'commands' }
+RowanBrowserService >> reloadProjects: projectServices [
+
+	projectServices do:[:projectService |
+		projectService reloadProject]
+]
+
+{ #category : 'commands' }
 RowanBrowserService >> removeMethods: methodServices [
 
 	| notRemoved |
