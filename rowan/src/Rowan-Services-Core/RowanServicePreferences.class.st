@@ -9,7 +9,7 @@ Class {
 
 { #category : 'accessing' }
 RowanServicePreferences class >> current [
-	^(Rowan globalNamed: 'UserGlobals') 
+	^(RwPlatform _userPlatformDictionary) 
 		at: #RowanServicePrefs 
 		ifAbsentPut: [ self new ]
 ]

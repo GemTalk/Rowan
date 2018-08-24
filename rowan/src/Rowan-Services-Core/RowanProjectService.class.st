@@ -354,6 +354,12 @@ RowanProjectService >> rowanSkew [
 
 ]
 
+{ #category : 'commands' }
+RowanProjectService >> setDefaultProject [
+
+	self class defaultProjectName: name
+]
+
 { #category : 'accessing' }
 RowanProjectService >> sha [
 
