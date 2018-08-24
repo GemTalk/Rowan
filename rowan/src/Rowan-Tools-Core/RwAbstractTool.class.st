@@ -31,6 +31,16 @@ RwAbstractTool class >> git [
 ]
 
 { #category : 'private' }
+RwAbstractTool >> _realpath_source [
+	"mac and linux compatible implementation of readlink -f"
+
+	"all on one line because that's what our commandline runner wants"
+
+	^'realpath() { OURPWD=$PWD; cd "$(dirname "$1")"; LINK=$(readlink "$(basename "$1")"); while [ "$LINK" ]; do cd "$(dirname "$LINK")"; LINK=$(readlink "$(basename "$1")"); done; REALPATH="$PWD/$(basename "$1")"; cd "$OURPWD"; echo "$REALPATH"; }'
+
+]
+
+{ #category : 'private' }
 RwAbstractTool >> _symbolDictionaryForSpecification [
 
 	^ Rowan image
@@ -157,6 +167,30 @@ RwAbstractTool >> help [
 
 { #category : 'bash utilities' }
 RwAbstractTool >> readlink: filepath [
+
+	"resolve (possible) symbolic links in filepath and return an absolute path"
+	"NOTE: may need alternate solution on OSX"
+
+	| command |
+	command := 'set -e; readlink -f ', filepath.
+	^Rowan gitTools performOnServer: command logging: true
+
+]
+
+{ #category : 'bash utilities' }
+RwAbstractTool >> readlinkX: filepath [
+
+	"resolve (possible) symbolic links in filepath and return an absolute path"
+	"NOTE: may need alternate solution on OSX"
+
+	| command |
+	command := 'set -e; ', self _realpath_source, '; realpath ' , filepath.
+	^Rowan gitTools performOnServer: command logging: true
+
+]
+
+{ #category : 'bash utilities' }
+RwAbstractTool >> readlinkY: filepath [
 
 	"resolve (possible) symbolic links in filepath and return an absolute path"
 	"NOTE: may need alternate solution on OSX"
