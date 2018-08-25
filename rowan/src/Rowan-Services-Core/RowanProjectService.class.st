@@ -46,11 +46,15 @@ RowanProjectService >> addPackageNamed: packageName [
 
 { #category : 'initialization' }
 RowanProjectService >> basicRefresh [
-
+	self projectIsLoaded ifFalse:[
+		updateType := #removedProject:. 
+		^RowanCommandResult addResult: self]. 
 	isDirty := self isDirty. 
 	isSkew := self isSkew.
 	sha := self rowanSha.
 	branch := self rowanBranch.
+	RowanCommandResult addResult: self
+
 ]
 
 { #category : 'accessing' }
@@ -256,6 +260,14 @@ RowanProjectService >> printOn: aStream [
 	aStream nextPutAll: (name ifNil: [nil printString])
 ]
 
+{ #category : 'testing' }
+RowanProjectService >> projectIsLoaded [
+
+	^(Rowan image
+		loadedProjectNamed: name
+		ifAbsent: []) notNil
+]
+
 { #category : 'rowan' }
 RowanProjectService >> projects [
 
@@ -297,7 +309,8 @@ RowanProjectService >> pushToGit [
 { #category : 'initialization' }
 RowanProjectService >> refresh [
 	self basicRefresh. 
-	packages := self packageServices.
+	self projectIsLoaded ifTrue:[
+		packages := self packageServices].
 ]
 
 { #category : 'commands' }
@@ -389,8 +402,6 @@ RowanProjectService >> unload [
 { #category : 'update' }
 RowanProjectService >> update [
 	self refresh.
-	RowanCommandResult addResult: self
-
 ]
 
 { #category : 'commands' }
