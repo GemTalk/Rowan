@@ -86,6 +86,15 @@ RwGsImage class >> currentUserId [
 	^ GsCurrentSession currentSession userProfile userId
 ]
 
+{ #category : 'operations' }
+RwGsImage class >> ensureSessionMethodsEnabled [
+
+	"Ensure that session methods are enabled for the current user."
+
+	GsPackagePolicy current enabled
+		ifFalse: [ GsPackagePolicy current enable ].
+]
+
 { #category : 'querying' }
 RwGsImage class >> existingSymbolDictionaryNamed: dictName [
 

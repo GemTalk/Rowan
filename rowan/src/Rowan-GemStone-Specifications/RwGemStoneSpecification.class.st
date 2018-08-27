@@ -45,6 +45,7 @@ RwGemStoneSpecification >> defaultUseSessionMethodsForExtensions [
 { #category : 'accessing' }
 RwGemStoneSpecification >> defaultUseSessionMethodsForExtensions: aBool [
 
+	aBool ifTrue: [ Rowan image ensureSessionMethodsEnabled ].
 	defaultUseSessionMethodsForExtensions := aBool
 ]
 
@@ -149,8 +150,8 @@ RwGemStoneSpecification >> setUseSessionMethodsForExtensions: aBool forPackageNa
 			"remove the entry if it exists"
 			packageProperties removeKey: 'useSessionMethodsForExtensions' ifAbsent: [].
 			^self ].
+	aBool ifTrue: [ Rowan image ensureSessionMethodsEnabled ].
 	packageProperties at: 'useSessionMethodsForExtensions' put: aBool
-
 ]
 
 { #category : 'accessing' }
