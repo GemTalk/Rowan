@@ -40,6 +40,11 @@ RowanAnsweringService >> jadeServer [
 ]
 
 { #category : 'commands' }
+RowanAnsweringService >> subclassCreationTemplate: className [
+	 (RowanClassService new name: className) subclassCreationTemplate.  "gives an answer for us"
+]
+
+{ #category : 'commands' }
 RowanAnsweringService >> transcriptInstalled [
 
 	answer := self isTranscriptInstalled.
