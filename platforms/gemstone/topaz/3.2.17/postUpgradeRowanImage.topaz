@@ -1,0 +1,34 @@
+set gemstone $stoneName user SystemUser pass swordfish
+!
+display resultcheck
+level 0
+!
+set INCONVERSION
+expectvalue @268
+! this login will wait for symbolvm to commit it's upgrade transaction
+login
+
+! workaround 42294, relogin to get a view after the symbolvm first commit
+logout
+set INCONVERSION
+expectvalue @268
+login
+
+iferr 1 where
+iferr 2 stk
+iferr 3 stack
+
+!  display topaz settings
+status
+time
+
+! comment out following for debugging
+! iferror exit
+
+commit
+
+
+!========================================================================
+logout
+output pop
+exit
