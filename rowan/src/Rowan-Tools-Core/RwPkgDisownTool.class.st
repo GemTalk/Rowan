@@ -13,7 +13,7 @@ RwPkgDisownTool >> disownClassExtensionMethodsInClassNamed: className forPackage
 
 	"use:
 		Rowan packageTools adopt
-			adoptClassExtensionNamed: className  instanceSelectors: <instanceSelectors> classSelectors: <classSelectors> intoPackageNamed: packageName: packageName
+			adoptClassExtensionNamed: className  instanceSelectors: <instanceSelectors> classSelectors: <classSelectors> intoPackageNamed: packageName
 	to restore the classes and methods to the loaded things"
 
 	| loadedPackage loadedProject loadedClassExtension gemstoneSpec packageSymDictName theClass theSymbolDictionary registry |

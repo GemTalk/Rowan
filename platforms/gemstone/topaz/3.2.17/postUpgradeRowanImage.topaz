@@ -79,6 +79,71 @@ commit
   UserGlobals removeKey: #CypressBootstrapRowanBlock.
 	System commit
 %
+
+	run
+	"At this stage Rowan is functional, however the loaded things must be rebuilt for Globals class extensions"
+	| packagesInGlobals disownTool adoptTool adoptionMap stagingPackageName stagingProjectName
+		stagingProjectDefinition projectNames |
+	"Collect a list of projects and package names that are loaded into Globals"
+	packagesInGlobals := Dictionary new.
+	adoptionMap := Dictionary new.
+	(UserGlobals at: #RwGsLoadedProjectRegistry)
+		do: [:loadedProject |
+			| gsSpec |
+			gsSpec := loadedProject handle platformSpec at: 'gemstone'.
+			loadedProject packageNames do: [:packageName |
+				(gsSpec symbolDictNameForPackageNamed: packageName) = 'Globals'
+						ifTrue: [ 
+							(packagesInGlobals at: loadedProject name ifAbsentPut: [ Array new ])
+								add: packageName ] ] ].
+	"disown all of the Globals class extension methods and record the extension methods for use with staging project"
+	disownTool := Rowan packageTools disown.
+	packagesInGlobals keysAndValuesDo: [:projectName :packageNames |
+		| loadedProject |
+		loadedProject := Rowan image loadedProjectNamed: projectName.
+		packageNames do: [:packageName |
+			| loadedPackage |
+			loadedPackage := loadedProject loadedPackages at: packageName.
+			loadedPackage classExtensionDefinitions keysAndValuesDo: [:className :classExtensionDef |
+				| classMap |
+				disownTool 
+					disownClassExtensionMethodsInClassNamed: className 
+					forPackageNamed: packageName.
+				classMap := adoptionMap at: className ifAbsentPut: [ Dictionary new ].
+				(classMap at: 'class' ifAbsentPut: [ Array new ])
+					addAll: classExtensionDef classMethodDefinitions keys.
+				(classMap at: 'instance' ifAbsentPut: [ Array new ])
+					addAll: classExtensionDef instanceMethodDefinitions keys ] ] ].
+	"Create the staging project and package: all Globals class extension methods will be adopted into the staging package"
+	stagingProjectName := 'Staging-Upgrade-Project'.
+	stagingPackageName := 'Staging-Upgrade-Globals'.
+	stagingProjectDefinition := Rowan projectTools create
+		createDiskBasedProjectDefinition: stagingProjectName 
+		packageNames: {stagingPackageName} 
+		format: 'tonel'
+		root: '$ROWAN_PROJECTS_HOME'.
+	stagingProjectDefinition defaultSymbolDictName: 'Globals'.
+	Rowan projectTools load loadProjectDefinition: stagingProjectDefinition.
+	"adopt existing Globals class extension methods into the staging project"
+	adoptTool := Rowan packageTools adopt.
+	adoptionMap keysAndValuesDo: [:className :selectorsDict |
+			| instanceSelectors classSelectors selectors |
+			selectors := (Rowan globalNamed: className) selectors.
+			instanceSelectors := (selectorsDict at: 'instance') select: [:selector | selectors includes: selector ].
+			selectors := (Rowan globalNamed: className) class selectors.
+			classSelectors := (selectorsDict at: 'class') select: [:selector | selectors includes: selector ].
+			adoptTool
+				adoptClassExtensionNamed: className 
+				 instanceSelectors: instanceSelectors 
+				classSelectors:  classSelectors  
+				intoPackageNamed: stagingPackageName ].
+	"reload all projects that have packages in Globals with extension methods"
+	projectNames := packagesInGlobals keys.
+	projectNames do: [:projectName |
+		Rowan projectTools load loadProjectNamed: projectName ]. 
+	Rowan projectTools disown disownProjectNamed: stagingProjectName.
+	System commit.
+%
 	logout
 
 errorCount
