@@ -81,10 +81,14 @@ commit
 %
 
 	run
-	"At this stage Rowan is functional, however the loaded things must be rebuilt for Globals class extensions"
+"At this stage Rowan is functional - all of the loaded methods are correct, 
+		however the loaded things must be rebuilt for Globals class extensions, since 
+		loaded methods without using the Rowan API (because the API is non-functional
+		after extension methods to Globals were removed during upgrade."
 	| packagesInGlobals disownTool adoptTool adoptionMap stagingPackageName stagingProjectName
-		stagingProjectDefinition projectNames |
-	"Collect a list of projects and package names that are loaded into Globals"
+		stagingProjectDefinition projectNames stagingPackageDefinition projectSetDefinition |
+
+"Collect a list of projects and package names that are loaded into Globals"
 	packagesInGlobals := Dictionary new.
 	adoptionMap := Dictionary new.
 	(UserGlobals at: #RwGsLoadedProjectRegistry)
@@ -96,7 +100,8 @@ commit
 						ifTrue: [ 
 							(packagesInGlobals at: loadedProject name ifAbsentPut: [ Array new ])
 								add: packageName ] ] ].
-	"disown all of the Globals class extension methods and record the extension methods for use with staging project"
+
+"disown all of the Globals class extension methods and record the extension methods for use with staging project"
 	disownTool := Rowan packageTools disown.
 	packagesInGlobals keysAndValuesDo: [:projectName :packageNames |
 		| loadedProject |
@@ -114,7 +119,8 @@ commit
 					addAll: classExtensionDef classMethodDefinitions keys.
 				(classMap at: 'instance' ifAbsentPut: [ Array new ])
 					addAll: classExtensionDef instanceMethodDefinitions keys ] ] ].
-	"Create the staging project and package: all Globals class extension methods will be adopted into the staging package"
+
+"Create the staging project and package. All Globals class extension methods will be adopted into the staging package"
 	stagingProjectName := 'Staging-Upgrade-Project'.
 	stagingPackageName := 'Staging-Upgrade-Globals'.
 	stagingProjectDefinition := Rowan projectTools create
@@ -124,10 +130,13 @@ commit
 		root: '$ROWAN_PROJECTS_HOME'.
 	stagingProjectDefinition defaultSymbolDictName: 'Globals'.
 	Rowan projectTools load loadProjectDefinition: stagingProjectDefinition.
-	"adopt existing Globals class extension methods into the staging project"
+
+"adopt existing Globals class extension methods into the staging project"
 	adoptTool := Rowan packageTools adopt.
 	adoptionMap keysAndValuesDo: [:className :selectorsDict |
 			| instanceSelectors classSelectors selectors |
+			"only adopt selectors for which a method exists in the class -- during upgrade we only reload some of the extensions methods
+				-- those will be reloaded at end when we load all projects from disk. "
 			selectors := (Rowan globalNamed: className) selectors.
 			instanceSelectors := (selectorsDict at: 'instance') select: [:selector | selectors includes: selector ].
 			selectors := (Rowan globalNamed: className) class selectors.
@@ -137,12 +146,47 @@ commit
 				 instanceSelectors: instanceSelectors 
 				classSelectors:  classSelectors  
 				intoPackageNamed: stagingPackageName ].
-	"reload all projects that have packages in Globals with extension methods"
+
+"read all projects that have packages in Globals with extension methods from disk"
 	projectNames := packagesInGlobals keys.
+	projectSetDefinition := RwProjectSetDefinition new.
 	projectNames do: [:projectName |
-		Rowan projectTools load loadProjectNamed: projectName ]. 
-	Rowan projectTools disown disownProjectNamed: stagingProjectName.
+		| psd |
+		psd:= Rowan projectTools read readProjectSetForProjectNamed: projectName.
+		projectSetDefinition addProject: (psd projectNamed: projectName ifAbsent: []) ].
+
+"remove the class extensions from the staging project package"
+	stagingProjectDefinition := (Rowan image loadedProjectNamed: stagingProjectName) asDefinition.
+	stagingPackageDefinition := stagingProjectDefinition packageNamed: stagingPackageName.
+	stagingPackageDefinition classExtensions: Dictionary new.
+	projectSetDefinition addProject: stagingProjectDefinition.
+
+"load the projects and mark not dirty"
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition. 
+	Rowan projectTools load markProjectSetNotDirty: projectSetDefinition.
+
+"Now delete the (empty) staging project"
+	Rowan projectTools delete deleteProjectNamed: stagingProjectName.
 	System commit.
+%
+
+# should be no duplicate methods in Globals method registry
+	expectvalue 0 
+	run
+	"validate that there are no duplicate methods in the methodRegistry --- we've done the upgrade correctly"
+	| dict dupes |
+	dict := Dictionary new.
+	Globals rowanSymbolDictionaryRegistry methodRegistry keys
+		do: [:meth |
+			((dict at: meth inClass name ifAbsentPut: [Dictionary new])
+				at: meth selector ifAbsentPut: [IdentitySet new])
+					add: meth].
+	dupes := {}.
+	dict keysAndValuesDo: [:className :methDict |
+		methDict keysAndValuesDo: [:selector :methSet |
+			methSet size > 1
+				ifTrue: [ dupes add: className -> (selector -> methSet) ]]].
+	dupes size
 %
 	logout
 
