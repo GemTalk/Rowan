@@ -1,9 +1,10 @@
+output push $upgradeLogDir/upgradeImage.out only
+
 set gemstone $stoneName user SystemUser pass swordfish
 !
 display resultcheck
 level 0
 !
-login
 
 iferr 1 where
 iferr 2 stk
@@ -16,12 +17,17 @@ time
 ! comment out following for debugging
 ! iferror exit
 
+# restore the Rowan Kernel modification methods
+#		NOTE:
+#			1. restored the kernel support methods, but additional extension methods for
+#					base classes have not been installed
+#			2. by using topaz to install methods, we have corrupted the Rowan loaded
+#					things
+#			3. we need rowan to be functional before we can restore things.
+#
 input $ROWAN_INSTALL_HOME/rowan/Rowan-Kernel-Support.gs
 errorCount
 
-commit
-
 !========================================================================
-logout
 output pop
 exit

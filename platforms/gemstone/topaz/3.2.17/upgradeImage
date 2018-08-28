@@ -158,7 +158,6 @@ $GEMSTONE/bin/topaz -i -l < $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/
 topaz_stat=$?
 if [ $topaz_stat -eq 0 ]; then
   echo "pre upgrade completed. No errors detected."
-  exit 0
 else
   echo "ERROR: pre upgradeImage topaz exited with status $topaz_stat."
   echo "Please check these files for errors:"
@@ -173,7 +172,6 @@ $GEMSTONE/bin/topaz -i -l -e $upgradeLogDir/conversion.conf < $upgradeDir/upgrad
 topaz_stat=$?
 if [ $topaz_stat -eq 0 ]; then
   echo "Upgrade completed. No errors detected."
-  exit 0
 else
   echo "ERROR: upgradeImage topaz exited with status $topaz_stat."
   echo "Please check these files for errors:"
@@ -184,14 +182,15 @@ else
   exit $topaz_stat
 fi
 
+export ROWAN_INSTALL_HOME="$(dirname $0)"
 $GEMSTONE/bin/topaz -i -l < $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/$gsvers/postUpgradeRowanImage.topaz > $upgradeLogDir/post_topaz.out 2>&1
 
 topaz_stat=$?
 if [ $topaz_stat -eq 0 ]; then
-  echo "Upgrade completed. No errors detected."
+  echo "post upgrade completed. No errors detected."
   exit 0
 else
-  echo "ERROR: topaz exited with status $topaz_stat."
+  echo "ERROR: post upgrade image exited with status $topaz_stat."
   echo "Please check these files for errors:"
   echo "  $upgradeLogDir/topazerrors.log"
   echo "  $upgradeLogDir/post_topaz.out"
