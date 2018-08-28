@@ -31,6 +31,8 @@ input $ROWAN_INSTALL_HOME/cypress/Cypress-PackageManagement.gs
 errorCount
 input $ROWAN_INSTALL_HOME/cypress/Cypress-Environmental-Tools.gs
 errorCount
+input $ROWAN_INSTALL_HOME/cypress/Cypress-GemStone-Environmental-Tools.gs
+errorCount
 input $ROWAN_INSTALL_HOME/cypress/Cypress-Comparison.gs
 errorCount
 

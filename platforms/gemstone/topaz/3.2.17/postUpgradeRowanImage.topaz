@@ -28,6 +28,61 @@ time
 input $ROWAN_INSTALL_HOME/rowan/Rowan-Kernel-Support.gs
 errorCount
 
+  set u SystemUser p swordfish
+  login
+
+input $ROWAN_INSTALL_HOME/cypress/Cypress-GemStone-Environmental-Tools.gs
+errorCount
+commit
+input $ROWAN_INSTALL_HOME/ston/STON-GemStone-Kernel.gs
+errorCount
+input $ROWAN_INSTALL_HOME/ston/STON-GemStoneBase-Core.gs
+errorCount
+input $ROWAN_INSTALL_HOME/ston/STON-GemStoneCommon-Core.gs
+errorCount
+commit
+input $ROWAN_INSTALL_HOME/tonel/Tonel-GemStoneCommon-Core.gs
+errorCount
+commit
+
+  run
+  UserGlobals 
+    at: #CypressBootstrapRowanBlock 
+    put: [:symbolDictName :packageNames  |
+    | packageManager repo |
+    packageManager := CypressPackageManager3 new.
+    repo := CypressAbstractRepository
+      onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/rowan/src/'  )
+      alias: ''.
+    packageManager
+      defaultSymbolDictionaryName: symbolDictName asSymbol.
+    packageNames
+      do: [ :packageName | 
+        packageManager
+          addResolvedReference:
+            (CypressResolvedReference name: packageName repository: repo) ].
+    packageManager loadResolvedReferences ].
+	System commit
+%
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'Globals'
+    value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel' 
+      'Rowan-Tools-Kernel' 
+      'Rowan-GemStone-3215'
+	).		"Extension methods for GemStone kernel classes"
+	System commit.
+%
+
+  run
+  UserGlobals removeKey: #CypressBootstrapRowanBlock.
+	System commit
+%
+	logout
+
+errorCount
+
 !========================================================================
 output pop
 exit
