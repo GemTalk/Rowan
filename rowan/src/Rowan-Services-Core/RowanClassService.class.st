@@ -89,7 +89,7 @@ RowanClassService >> basicForClassNamed: className [
 
 { #category : 'initialization' }
 RowanClassService >> basicRefreshFrom: theClass [
-	| classOrMeta theFilters |
+	| classOrMeta theFilters selectedPackageNames |
 	command := nil. 
 	commandArgs := nil. 
 	comment := theClass comment. 
@@ -103,8 +103,8 @@ RowanClassService >> basicRefreshFrom: theClass [
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
-	packageName := classOrMeta rowanPackageName.
-	projectName := classOrMeta rowanProjectName
+	packageName := definedPackageName := classOrMeta rowanPackageName.
+	projectName := classOrMeta rowanProjectName.
 ]
 
 { #category : 'commands' }
