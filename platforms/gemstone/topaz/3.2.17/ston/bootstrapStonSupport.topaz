@@ -4,11 +4,11 @@
 
 output push ston.out
 
-input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/ston/STON-Core.gs
+input $ROWAN_INSTALL_HOME/ston/STON-Core.gs
 errorCount
-input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/ston/STON-GemStoneBase-Core.gs
+input $ROWAN_INSTALL_HOME/ston/STON-GemStoneBase-Core.gs
 errorCount
-input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/ston/STON-GemStoneCommon-Core.gs
+input $ROWAN_INSTALL_HOME/ston/STON-GemStoneCommon-Core.gs
 errorCount
 
 output pop
