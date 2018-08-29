@@ -101,6 +101,12 @@ RowanPackageService >> isDirty [
 
 ]
 
+{ #category : 'Updating' }
+RowanPackageService >> isDirty: boolean [
+
+	isDirty := boolean
+]
+
 { #category : 'rowan' }
 RowanPackageService >> loadedClassDefinitions [
 

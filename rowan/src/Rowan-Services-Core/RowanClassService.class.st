@@ -417,6 +417,19 @@ RowanClassService >> poolDictionaryNames: newValue [
 
 ]
 
+{ #category : 'perform' }
+RowanClassService >> postPerform [
+	| packageService projectService |
+	packageName ifNotNil: [
+		packageService := RowanPackageService new name: packageName. 
+		packageService update. 
+		RowanCommandResult addResult: packageService].
+	projectName ifNotNil: [
+		projectService := RowanProjectService new name: projectName. 
+		projectService update.
+		RowanCommandResult addResult: projectService].
+]
+
 { #category : 'printing' }
 RowanClassService >> printOn: aStream [
 
