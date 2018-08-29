@@ -1,0 +1,17 @@
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit 1
+
+  set u SystemUser p swordfish
+  login
+
+  input $ROWAN_INSTALL_HOME/cypress/bootstrapCypressSupport.topaz
+  input $ROWAN_INSTALL_HOME/ston/bootstrapStonSupport.topaz
+  input $ROWAN_INSTALL_HOME/tonel/bootstrapTonelSupport.topaz
+  commit
+
+  logout
+  input $ROWAN_INSTALL_HOME/rowan/bootstrapRowanSupport.topaz
+  errorCount
+

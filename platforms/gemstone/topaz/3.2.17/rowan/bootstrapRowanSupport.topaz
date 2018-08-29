@@ -1,0 +1,12 @@
+!=========================================================================
+! Copyright (C) GemTalk Systems 2018.  All Rights Reserved.
+!=========================================================================
+
+output push rowan.out
+
+input $ROWAN_INSTALL_HOME/rowan/Rowan-Kernel-Support.gs
+errorCount
+input $ROWAN_INSTALL_HOME/rowan/Rowan-Bootstrap.gs
+errorCount
+
+output pop

@@ -1,0 +1,14 @@
+!=========================================================================
+! Copyright (C) GemTalk Systems 2017.  All Rights Reserved.
+!=========================================================================
+
+output push tonel.out
+
+input $ROWAN_INSTALL_HOME/tonel/Tonel-Core.gs
+errorCount
+input $ROWAN_INSTALL_HOME/tonel/Tonel-GemStoneCommon-Core.gs
+errorCount
+input $ROWAN_INSTALL_HOME/tonel/CypressTonel-Core.gs
+errorCount
+
+output pop
