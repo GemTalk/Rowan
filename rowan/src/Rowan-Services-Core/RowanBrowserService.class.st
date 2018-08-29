@@ -67,6 +67,13 @@ RowanBrowserService >> removeMethods: methodServices [
 	RowanCommandResult addResult: self.
 ]
 
+{ #category : 'commands' }
+RowanBrowserService >> unloadProjectsNamed: array [
+	array do:[:projectName |
+		Rowan projectTools delete deleteProjectNamed: projectName]. 
+	self updateProjects
+]
+
 { #category : 'update' }
 RowanBrowserService >> update [
 
