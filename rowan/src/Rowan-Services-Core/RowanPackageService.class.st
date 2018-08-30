@@ -114,13 +114,6 @@ RowanPackageService >> isDirty: boolean [
 ]
 
 { #category : 'rowan' }
-RowanPackageService >> loadedClassDefinitions [
-
-	^self loadedClasses collect:[:loadedClass | loadedClass asDefinition]
-
-]
-
-{ #category : 'rowan' }
 RowanPackageService >> loadedClasses [
 
 	| loadedPackage |
@@ -132,9 +125,8 @@ RowanPackageService >> loadedClasses [
 RowanPackageService >> loadedClassExtensions [
 
 	| loadedPackage |
-	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^Array new].
+	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^KeyValueDictionary new].
 	^loadedPackage loadedClassExtensions
-
 ]
 
 { #category : 'rowan' }
