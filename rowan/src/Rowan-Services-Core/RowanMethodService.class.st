@@ -316,6 +316,12 @@ RowanMethodService >> methodDefinitions: newValue [
 ]
 
 { #category : 'Accessing' }
+RowanMethodService >> name [
+
+	^selector
+]
+
+{ #category : 'Accessing' }
 RowanMethodService >> packageName [
 	^packageName
 

@@ -367,6 +367,15 @@ RowanProjectService >> rowanSkew [
 
 ]
 
+{ #category : 'perform' }
+RowanProjectService >> servicePerform: symbol withArguments: collection [
+	| wasClean |
+	wasClean := self rowanDirty not.
+	super servicePerform: symbol withArguments: collection.
+	wasClean ifTrue:[
+		self update]
+]
+
 { #category : 'commands' }
 RowanProjectService >> setDefaultProject [
 

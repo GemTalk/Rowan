@@ -78,6 +78,12 @@ RowanClassService >> addCategory: string [
 
 ]
 
+{ #category : 'testing' }
+RowanClassService >> arePackageAndProjectClean [
+
+	^self packageIsDirty not and:[self projectIsDirty not]
+]
+
 { #category : 'initialization' }
 RowanClassService >> basicForClassNamed: className [ 
 
@@ -391,6 +397,12 @@ RowanClassService >> oop: newValue [
 
 ]
 
+{ #category : 'testing' }
+RowanClassService >> packageIsDirty [
+
+	^(RowanPackageService new name: self classFromName rowanPackageName) rowanDirty
+]
+
 { #category : 'Accessing' }
 RowanClassService >> packageName [
 	
@@ -417,25 +429,18 @@ RowanClassService >> poolDictionaryNames: newValue [
 
 ]
 
-{ #category : 'perform' }
-RowanClassService >> postPerform [
-	| packageService projectService |
-	packageName ifNotNil: [
-		packageService := RowanPackageService new name: packageName. 
-		packageService update. 
-		RowanCommandResult addResult: packageService].
-	projectName ifNotNil: [
-		projectService := RowanProjectService new name: projectName. 
-		projectService update.
-		RowanCommandResult addResult: projectService].
-]
-
 { #category : 'printing' }
 RowanClassService >> printOn: aStream [
 
 	super printOn: aStream. 
 	aStream nextPut: $:. 
 	aStream nextPutAll: (name ifNil: [nil printString])
+]
+
+{ #category : 'testing' }
+RowanClassService >> projectIsDirty [
+
+	^(RowanProjectService new name: self classFromName rowanProjectName) rowanDirty
 ]
 
 { #category : 'Updating' }
@@ -569,6 +574,16 @@ RowanClassService >> selectors [
 	^methods collect:[:methodService | methodService selector]
 ]
 
+{ #category : 'perform' }
+RowanClassService >> servicePerform: symbol withArguments: collection [
+	| wasClean |
+	wasClean := self arePackageAndProjectClean.
+	super servicePerform: symbol withArguments: collection.
+	wasClean ifTrue:[
+		self update. 
+		self updatePackageProject]
+]
+
 { #category : 'Accessing' }
 RowanClassService >> setComment [
 
@@ -664,6 +679,19 @@ RowanClassService >> updateDirtyState [
 		packageService update. 
 		RowanCommandResult addResult: packageService].
 	projectService := RowanProjectService newNamed: self classFromName rowanProjectName. 
+	RowanCommandResult addResult: projectService.
+]
+
+{ #category : 'updates' }
+RowanClassService >> updatePackageProject [
+	| packageService projectService |
+
+	packageService := RowanPackageService new name: packageName. 
+	packageService update. 
+	RowanCommandResult addResult: packageService.
+
+	projectService := RowanProjectService new name: projectName. 
+	projectService update.
 	RowanCommandResult addResult: projectService.
 ]
 

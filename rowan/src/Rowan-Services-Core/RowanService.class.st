@@ -147,17 +147,6 @@ RowanService >> organizer: anOrganizer [
 	organizer := anOrganizer.
 ]
 
-{ #category : 'perform' }
-RowanService >> perform: symbol withArguments: collection [
-
-	super perform: symbol withArguments: collection.
-	self postPerform
-]
-
-{ #category : 'perform' }
-RowanService >> postPerform [
-]
-
 { #category : 'rowan' }
 RowanService >> projectTools [
 
@@ -214,6 +203,11 @@ RowanService >> sampleSymbolDictionaryName [
 
 	^'SampleSymbolDictionaryName'
 
+]
+
+{ #category : 'perform' }
+RowanService >> servicePerform: symbol withArguments: collection [
+	super perform: symbol withArguments: collection.
 ]
 
 { #category : 'replication' }
