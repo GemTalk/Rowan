@@ -370,7 +370,7 @@ RowanProjectService >> rowanSkew [
 { #category : 'perform' }
 RowanProjectService >> servicePerform: symbol withArguments: collection [
 	| wasClean |
-	wasClean := self rowanDirty not.
+	wasClean := [self rowanDirty not] on: Error do:[:ex | false "not loaded"].
 	super servicePerform: symbol withArguments: collection.
 	wasClean ifTrue:[
 		self update]

@@ -124,9 +124,8 @@ RowanPackageService >> loadedClassDefinitions [
 RowanPackageService >> loadedClasses [
 
 	| loadedPackage |
-	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^Array new].
+	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^KeyValueDictionary new].
 	^loadedPackage loadedClasses
-
 ]
 
 { #category : 'rowan' }
@@ -201,7 +200,7 @@ RowanPackageService >> projectDefinition: newValue [
 { #category : 'testing' }
 RowanPackageService >> projectIsDirty [
 
-	^(RowanProjectService new name: self classFromName rowanProjectName) rowanDirty
+	^(RowanProjectService new name: projectName) rowanDirty
 ]
 
 { #category : 'Accessing' }
