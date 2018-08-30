@@ -27,7 +27,8 @@ Class {
 		'projectName',
 		'hierarchyServices',
 		'variables',
-		'categories'
+		'categories',
+		'isTestCase'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -95,7 +96,7 @@ RowanClassService >> basicForClassNamed: className [
 
 { #category : 'initialization' }
 RowanClassService >> basicRefreshFrom: theClass [
-	| classOrMeta theFilters selectedPackageNames |
+	| classOrMeta theFilters |
 	command := nil. 
 	commandArgs := nil. 
 	comment := theClass comment. 
@@ -111,6 +112,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	self initializeCategoriesFor: classOrMeta.
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
+	isTestCase := classOrMeta superClass == TestCase
 ]
 
 { #category : 'commands' }
