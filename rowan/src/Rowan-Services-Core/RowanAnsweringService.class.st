@@ -20,6 +20,14 @@ RowanAnsweringService >> answer: anObject [
 ]
 
 { #category : 'commands' }
+RowanAnsweringService >> exec: aString [
+
+	"for command line service someday"
+	answer := aString evaluate printString. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'commands' }
 RowanAnsweringService >> flipTranscript [
 	self isTranscriptInstalled ifTrue:[
 		self jadeServer uninstallTranscript]
