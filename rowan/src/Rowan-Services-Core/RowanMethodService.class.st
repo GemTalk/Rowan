@@ -190,6 +190,14 @@ RowanMethodService >> definitionClass [
 
 ]
 
+{ #category : 'commands' }
+RowanMethodService >> fileout [
+	| answeringService |
+	answeringService := RowanAnsweringService new.
+	answeringService answer: (self classFromName fileOutMethod: selector asString environmentId: 0).
+	RowanCommandResult addResult: answeringService.
+]
+
 { #category : 'initialization' }
 RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	"assume meta and selector are set"
