@@ -279,7 +279,11 @@ RowanClassService >> forClassNamed: className [
 RowanClassService >> hierarchyClassServiceFor: className [
 
 	^className asString = name asString ifTrue:[
-			RowanClassService forClassNamed: className]
+			className = 'Object' 
+				ifTrue:[
+					RowanClassService basicForClassNamed: className]
+				ifFalse:[
+					RowanClassService forClassNamed: className]]
 		ifFalse:[
 			RowanClassService minimalForClassNamed: className]
 ]
