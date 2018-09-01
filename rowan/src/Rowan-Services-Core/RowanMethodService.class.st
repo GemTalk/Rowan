@@ -196,7 +196,7 @@ RowanMethodService >> fileout [
 	answeringService := RowanAnsweringService new.
 	ws := WriteStream on: String new. 
 	self writeFileOutHeaderOn: ws.
-	ws nextPutAll: (self classFromName fileOutMethod: selector asString environmentId: 0).
+	ws nextPutAll: (self behavior fileOutMethod: selector asString environmentId: 0).
 	answeringService answer: ws contents.
 	RowanCommandResult addResult: answeringService.
 ]

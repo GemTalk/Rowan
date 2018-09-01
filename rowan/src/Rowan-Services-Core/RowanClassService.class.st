@@ -121,6 +121,15 @@ RowanClassService >> basicRefreshFrom: theClass [
 	isTestCase := classOrMeta superClass == TestCase
 ]
 
+{ #category : 'Accessing' }
+RowanClassService >> behavior [
+
+	| behavior |
+	behavior := self classFromName. 
+	meta == true ifTrue:[behavior := behavior class].
+	^behavior
+]
+
 { #category : 'commands' }
 RowanClassService >> classComment: string [
 	| theClass |
@@ -249,7 +258,7 @@ RowanClassService >> fileoutCategories: array [
 	ws := WriteStream on: String new. 
 	self writeFileOutHeaderOn: ws.
 	array do:[:category |
-		self classFromName fileOutCategory: category on: ws]. 
+		self behavior fileOutCategory: category on: ws]. 
 	answeringService answer: ws contents. 
 	RowanCommandResult addResult: answeringService.
 ]
@@ -261,7 +270,7 @@ RowanClassService >> fileoutMethods: array [
 	ws := WriteStream on: String new. 
 	self writeFileOutHeaderOn: ws.
 	array do:[:methodService |
-		self classFromName fileOutMethod: methodService selector on: ws]. 
+		self behavior fileOutMethod: methodService selector on: ws]. 
 	answeringService answer: ws contents. 
 	RowanCommandResult addResult: answeringService.
 ]
