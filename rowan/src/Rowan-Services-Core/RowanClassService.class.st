@@ -264,6 +264,17 @@ RowanClassService >> fileoutCategories: array [
 ]
 
 { #category : 'commands' }
+RowanClassService >> fileoutClass [
+	| answeringService ws |
+	answeringService := RowanAnsweringService new.
+	ws := WriteStream on: String new. 
+	self writeFileOutHeaderOn: ws.
+	ws nextPutAll: self behavior fileOutClass. 
+	answeringService answer: ws contents. 
+	RowanCommandResult addResult: answeringService.
+]
+
+{ #category : 'commands' }
 RowanClassService >> fileoutMethods: array [
 	| answeringService ws |
 	answeringService := RowanAnsweringService new.
