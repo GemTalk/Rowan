@@ -192,9 +192,12 @@ RowanMethodService >> definitionClass [
 
 { #category : 'commands' }
 RowanMethodService >> fileout [
-	| answeringService |
+	| answeringService ws |
 	answeringService := RowanAnsweringService new.
-	answeringService answer: (self classFromName fileOutMethod: selector asString environmentId: 0).
+	ws := WriteStream on: String new. 
+	self writeFileOutHeaderOn: ws.
+	ws nextPutAll: (self classFromName fileOutMethod: selector asString environmentId: 0).
+	answeringService answer: ws contents.
 	RowanCommandResult addResult: answeringService.
 ]
 

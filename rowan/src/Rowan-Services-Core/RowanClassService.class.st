@@ -242,6 +242,30 @@ RowanClassService >> definedPackageName: newValue [
 
 ]
 
+{ #category : 'commands' }
+RowanClassService >> fileoutCategories: array [
+	| answeringService ws |
+	answeringService := RowanAnsweringService new.
+	ws := WriteStream on: String new. 
+	self writeFileOutHeaderOn: ws.
+	array do:[:category |
+		self classFromName fileOutCategory: category on: ws]. 
+	answeringService answer: ws contents. 
+	RowanCommandResult addResult: answeringService.
+]
+
+{ #category : 'commands' }
+RowanClassService >> fileoutMethods: array [
+	| answeringService ws |
+	answeringService := RowanAnsweringService new.
+	ws := WriteStream on: String new. 
+	self writeFileOutHeaderOn: ws.
+	array do:[:methodService |
+		self classFromName fileOutMethod: methodService selector on: ws]. 
+	answeringService answer: ws contents. 
+	RowanCommandResult addResult: answeringService.
+]
+
 { #category : 'Accessing' }
 RowanClassService >> filters [
 	^filters
