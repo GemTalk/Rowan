@@ -60,11 +60,19 @@ RowanBrowserService >> removeMethods: methodServices [
 		classService := RowanClassService forClassNamed: methodService className. 
 		classService meta: methodService meta. 
 		classService removeSelector: methodService selector ifAbsent:[notRemoved add: methodService selector].
+		classService updatePackageProject.
 		removedMethods add: methodService].
 	notRemoved isEmpty ifFalse:[
 		self error: 'These selectors were not removed - ', notRemoved printString].
 	updateType := #methodsRemoved:. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'commands' }
+RowanBrowserService >> unloadProjectsNamed: array [
+	array do:[:projectName |
+		Rowan projectTools delete deleteProjectNamed: projectName]. 
+	self updateProjects
 ]
 
 { #category : 'update' }

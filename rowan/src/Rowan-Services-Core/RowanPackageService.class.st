@@ -27,6 +27,12 @@ RowanPackageService class >> forPackageNamed: aName [
 
 ]
 
+{ #category : 'testing' }
+RowanPackageService >> arePackageAndProjectClean [
+
+	^self rowanDirty not and:[self projectIsDirty not]
+]
+
 { #category : 'rowan' }
 RowanPackageService >> changes [
    "diffForPackageName: not implemented yet"
@@ -101,29 +107,26 @@ RowanPackageService >> isDirty [
 
 ]
 
-{ #category : 'rowan' }
-RowanPackageService >> loadedClassDefinitions [
+{ #category : 'Updating' }
+RowanPackageService >> isDirty: boolean [
 
-	^self loadedClasses collect:[:loadedClass | loadedClass asDefinition]
-
+	isDirty := boolean
 ]
 
 { #category : 'rowan' }
 RowanPackageService >> loadedClasses [
 
 	| loadedPackage |
-	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^Array new].
+	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^KeyValueDictionary new].
 	^loadedPackage loadedClasses
-
 ]
 
 { #category : 'rowan' }
 RowanPackageService >> loadedClassExtensions [
 
 	| loadedPackage |
-	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^Array new].
+	loadedPackage := Rowan image loadedPackageNamed: name ifAbsent:[^KeyValueDictionary new].
 	^loadedPackage loadedClassExtensions
-
 ]
 
 { #category : 'rowan' }
@@ -186,6 +189,12 @@ RowanPackageService >> projectDefinition: newValue [
 
 ]
 
+{ #category : 'testing' }
+RowanPackageService >> projectIsDirty [
+
+	^(RowanProjectService new name: projectName) rowanDirty
+]
+
 { #category : 'Accessing' }
 RowanPackageService >> projectName [
 	^projectName
@@ -219,6 +228,16 @@ RowanPackageService >> rowanDirty [
 
 ]
 
+{ #category : 'perform' }
+RowanPackageService >> servicePerform: symbol withArguments: collection [
+	| wasClean |
+	wasClean := self arePackageAndProjectClean.
+	super servicePerform: symbol withArguments: collection.
+	wasClean ifTrue:[
+		self update. 
+		self updateProject]
+]
+
 { #category : 'commands' }
 RowanPackageService >> setDefaultTemplate [
 
@@ -239,6 +258,15 @@ RowanPackageService >> update [
 	self isDirty. 
 	projectName := (Rowan image loadedPackageNamed: name) projectName.
 	RowanCommandResult addResult: self
+]
+
+{ #category : 'updates' }
+RowanPackageService >> updateProject [
+	| projectService |
+
+	projectService := RowanProjectService new name: projectName. 
+	projectService update.
+	RowanCommandResult addResult: projectService.
 ]
 
 { #category : 'updates' }

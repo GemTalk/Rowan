@@ -205,6 +205,11 @@ RowanService >> sampleSymbolDictionaryName [
 
 ]
 
+{ #category : 'perform' }
+RowanService >> servicePerform: symbol withArguments: collection [
+	super perform: symbol withArguments: collection.
+]
+
 { #category : 'replication' }
 RowanService >> stonOn: stonWriter [
     | instanceVariableNames |

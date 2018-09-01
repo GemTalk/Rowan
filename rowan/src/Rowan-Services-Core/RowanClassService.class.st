@@ -27,7 +27,8 @@ Class {
 		'projectName',
 		'hierarchyServices',
 		'variables',
-		'categories'
+		'categories',
+		'isTestCase'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -65,6 +66,12 @@ RowanClassService class >> forClassNamed: className package: packageName [
 
 ]
 
+{ #category : 'instance creation' }
+RowanClassService class >> minimalForClassNamed: className [ 
+	"Don't get method services. Efficient for classes with many methods"
+	^self new minimalForClassNamed: className
+]
+
 { #category : 'commands' }
 RowanClassService >> addCategory: string [
 
@@ -76,6 +83,12 @@ RowanClassService >> addCategory: string [
 	self refreshFrom: self classFromName. 
 	RowanCommandResult addResult: self.
 
+]
+
+{ #category : 'testing' }
+RowanClassService >> arePackageAndProjectClean [
+
+	^self packageIsDirty not and:[self projectIsDirty not]
 ]
 
 { #category : 'initialization' }
@@ -103,8 +116,9 @@ RowanClassService >> basicRefreshFrom: theClass [
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
-	packageName := classOrMeta rowanPackageName.
-	projectName := classOrMeta rowanProjectName
+	packageName := definedPackageName := classOrMeta rowanPackageName.
+	projectName := classOrMeta rowanProjectName.
+	isTestCase := classOrMeta superClass == TestCase
 ]
 
 { #category : 'commands' }
@@ -131,14 +145,20 @@ RowanClassService >> classFromName [
 
 { #category : 'commands' }
 RowanClassService >> classHierarchy [
-	organizer := ClassOrganizer newWithRoot: self classFromName. 
+	| behavior | 
+	behavior := self classFromName. 
+	organizer := ClassOrganizer newWithRoot: behavior. 
 	hierarchyServices := Dictionary new.   
 	organizer hierarchy keysAndValuesDo: [:key :value |
 		| classService |
-		classService := key == #nil ifTrue:[#nil] ifFalse: [self hierarchyClassServiceFor: key name].
+		classService := key == #nil ifTrue:[#nil] ifFalse: [(self hierarchyClassServiceFor: key name) meta: meta].
 		hierarchyServices at: classService put: (self subclassServices: value). 
 	].
-	self refreshFrom: self classFromName. 
+	name = 'Object' 
+	ifTrue:[
+		self basicRefreshFrom: behavior]
+	ifFalse:[
+		self refreshFrom: behavior]. 
 	RowanCommandResult addResult: self.
 ]
 
@@ -259,10 +279,13 @@ RowanClassService >> forClassNamed: className [
 RowanClassService >> hierarchyClassServiceFor: className [
 
 	^className asString = name asString ifTrue:[
-			RowanClassService forClassNamed: className]
+			className = 'Object' 
+				ifTrue:[
+					RowanClassService basicForClassNamed: className]
+				ifFalse:[
+					RowanClassService forClassNamed: className]]
 		ifFalse:[
-			RowanClassService basicForClassNamed: className]
-
+			RowanClassService minimalForClassNamed: className]
 ]
 
 { #category : 'initialization' }
@@ -350,6 +373,29 @@ RowanClassService >> methodsIn: theClass categories: theCategories [
 	^methods select:[:methodService | selectors includes: methodService selector]
 ]
 
+{ #category : 'initialization' }
+RowanClassService >> minimalForClassNamed: className [ 
+
+	| theClass |
+	self name: className. 
+	theClass := self classFromName. 
+	self minimalRefreshFrom: theClass.
+]
+
+{ #category : 'initialization' }
+RowanClassService >> minimalRefreshFrom: theClass [
+	| classOrMeta  |
+	command := nil. 
+	commandArgs := nil. 
+	versions := theClass classHistory size.
+	version := theClass classHistory indexOf: theClass.
+	oop := theClass asOop.
+	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
+	packageName := definedPackageName := classOrMeta rowanPackageName.
+	projectName := classOrMeta rowanProjectName.
+	isTestCase := classOrMeta superClass == TestCase
+]
+
 { #category : 'commands' }
 RowanClassService >> moveMethods: methodServices to: category [
 	| behavior |
@@ -374,6 +420,12 @@ RowanClassService >> name: newValue [
 ]
 
 { #category : 'private' }
+RowanClassService >> notRowanizedName [
+
+	^'(NONE)'
+]
+
+{ #category : 'private' }
 RowanClassService >> objectInBaseNamed: aString [
 
 	^System myUserProfile symbolList objectNamed: aString asSymbol
@@ -389,6 +441,15 @@ RowanClassService >> oop [
 RowanClassService >> oop: newValue [
 	oop := newValue
 
+]
+
+{ #category : 'testing' }
+RowanClassService >> packageIsDirty [
+
+	| behavior |
+	behavior := self classFromName.
+	behavior rowanPackageName = self notRowanizedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
+	^(RowanPackageService new name: behavior rowanPackageName) rowanDirty
 ]
 
 { #category : 'Accessing' }
@@ -423,6 +484,15 @@ RowanClassService >> printOn: aStream [
 	super printOn: aStream. 
 	aStream nextPut: $:. 
 	aStream nextPutAll: (name ifNil: [nil printString])
+]
+
+{ #category : 'testing' }
+RowanClassService >> projectIsDirty [
+
+	| behavior |
+	behavior := self classFromName.
+	behavior rowanProjectName = self notRowanizedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
+	^(RowanProjectService new name: behavior rowanProjectName) rowanDirty
 ]
 
 { #category : 'Updating' }
@@ -514,7 +584,11 @@ RowanClassService >> renameCategoryFrom: old to: new [
 RowanClassService >> saveMethodSource: source category: category [
 
 	| behavior compilationResult gsNMethod updatedCategory methodService |
-	behavior := meta ifTrue:[self classFromName class] ifFalse:[self classFromName]. 
+	meta ifNil:[
+				behavior := (Object _objectForOop: oop) behavior. 
+				meta := behavior isMeta]
+			ifNotNil:[ 
+				behavior := meta ifTrue:[self classFromName class] ifFalse:[self classFromName]]. 
 	updatedCategory := category ifNil: ['other'].
 	compilationResult := self		
 		compileMethod: source 
@@ -554,6 +628,16 @@ RowanClassService >> selectedPackageServices: newValue [
 RowanClassService >> selectors [
 
 	^methods collect:[:methodService | methodService selector]
+]
+
+{ #category : 'perform' }
+RowanClassService >> servicePerform: symbol withArguments: collection [
+	| wasClean |
+	wasClean := self arePackageAndProjectClean.
+	super servicePerform: symbol withArguments: collection.
+	wasClean ifTrue:[
+		self update. 
+		self updatePackageProject]
 ]
 
 { #category : 'Accessing' }
@@ -651,6 +735,19 @@ RowanClassService >> updateDirtyState [
 		packageService update. 
 		RowanCommandResult addResult: packageService].
 	projectService := RowanProjectService newNamed: self classFromName rowanProjectName. 
+	RowanCommandResult addResult: projectService.
+]
+
+{ #category : 'updates' }
+RowanClassService >> updatePackageProject [
+	| packageService projectService |
+
+	packageService := RowanPackageService new name: packageName. 
+	packageService update. 
+	RowanCommandResult addResult: packageService.
+
+	projectService := RowanProjectService new name: projectName. 
+	projectService update.
 	RowanCommandResult addResult: projectService.
 ]
 
