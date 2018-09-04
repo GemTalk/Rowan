@@ -625,6 +625,16 @@ RowanClassService >> renameCategoryFrom: old to: new [
 ]
 
 { #category : 'commands' }
+RowanClassService >> runMethodTests: methodServices [
+
+	| behavior |
+	behavior := self classFromName. 
+	methodServices do:[:method |
+		behavior debug: method selector].
+	RowanCommandResult addResult: (RowanAnsweringService new answer: true).
+]
+
+{ #category : 'commands' }
 RowanClassService >> saveMethodSource: source category: category [
 
 	| behavior compilationResult gsNMethod updatedCategory methodService |
