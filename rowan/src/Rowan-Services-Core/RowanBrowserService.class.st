@@ -54,6 +54,7 @@ RowanBrowserService >> packagesWithTests [
 			packageName = Rowan unpackagedName ifFalse:[
 				testPackages add: (RowanPackageService forPackageNamed: packageName)]]]. 
 	updateType := #testPackages:. 
+	testPackages := testPackages asArray. 
 	RowanCommandResult addResult: self.
 ]
 

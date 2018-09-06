@@ -27,6 +27,12 @@ RowanPackageService class >> forPackageNamed: aName [
 
 ]
 
+{ #category : 'comparing' }
+RowanPackageService >> = packageService [
+
+	^name = packageService name
+]
+
 { #category : 'testing' }
 RowanPackageService >> arePackageAndProjectClean [
 
@@ -98,6 +104,11 @@ RowanPackageService >> genericClassCreationTemplate [
 
 	^self browserTool classCreationTemplateForSubclassOf: 'Object' category: name packageName: nil
 
+]
+
+{ #category : 'comparing' }
+RowanPackageService >> hash [
+	^self name hash
 ]
 
 { #category : 'rowan' }
