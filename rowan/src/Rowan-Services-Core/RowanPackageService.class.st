@@ -263,9 +263,10 @@ RowanPackageService >> testClasses [
 	TestCase allSubclasses do:[:testSubclass |
 		testSubclass selectors do:[:selector |
 			| packageName |
-			packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
-			packageName = name ifTrue:[
-				testClasses add: (RowanClassService basicForClassNamed: testSubclass name)]]]. 
+			(selector copyFrom: 1 to: 4) = 'test' ifTrue:[
+				packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
+				packageName = name ifTrue:[
+					testClasses add: (RowanClassService basicForClassNamed: testSubclass name)]]]]. 
 	updateType := #testClasses:. 
 	testClasses := testClasses asArray. 
 	RowanCommandResult addResult: self.
