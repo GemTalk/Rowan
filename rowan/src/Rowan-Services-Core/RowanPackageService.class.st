@@ -8,7 +8,8 @@ Class {
 		'isDirty',
 		'classes',
 		'defaultTemplate',
-		'projectName'
+		'projectName',
+		'testClasses'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -253,6 +254,21 @@ RowanPackageService >> servicePerform: symbol withArguments: collection [
 RowanPackageService >> setDefaultTemplate [
 
 	defaultTemplate := self genericClassCreationTemplate.
+]
+
+{ #category : 'commands' }
+RowanPackageService >> testClasses [
+
+	testClasses := Set new. 
+	TestCase allSubclasses do:[:testSubclass |
+		testSubclass selectors do:[:selector |
+			| packageName |
+			packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
+			packageName = name ifTrue:[
+				testClasses add: (RowanClassService forClassNamed: testSubclass name)]]]. 
+	updateType := #testClasses:. 
+	testClasses := testClasses asArray. 
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'updates' }
