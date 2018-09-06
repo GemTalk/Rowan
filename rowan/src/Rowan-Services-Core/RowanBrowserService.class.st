@@ -9,7 +9,8 @@ Class {
 		'projects',
 		'removedMethods',
 		'allClasses',
-		'hierarchyServices'
+		'hierarchyServices',
+		'testPackages'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -39,6 +40,19 @@ RowanBrowserService >> defaultClassHierarchy [
 		hierarchyServices at: classService put: (value collect:[:cls | RowanClassService basicForClassNamed: cls name]) asArray.
 	].
 	updateType := #classHierarchyUpdate:browser:. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'commands' }
+RowanBrowserService >> packagesWithTests [
+
+	testPackages := Set new. 
+	TestCase allSubclasses do:[:testSubclass |
+		testSubclass selectors do:[:selector |
+			| packageName |
+			packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
+			packageName = Rowan unpackagedName ifFalse:[
+				testPackages add: (RowanPackageService forPackageNamed: packageName)]]]. 
 	RowanCommandResult addResult: self.
 ]
 
