@@ -72,6 +72,11 @@ RowanClassService class >> minimalForClassNamed: className [
 	^self new minimalForClassNamed: className
 ]
 
+{ #category : 'comparing' }
+RowanClassService >> = classService [
+	^name = classService name
+]
+
 { #category : 'commands' }
 RowanClassService >> addCategory: string [
 
@@ -317,6 +322,11 @@ RowanClassService >> forClassNamed: className [
 	self name: className. 
 	theClass := self classFromName. 
 	self refreshFrom: theClass.
+]
+
+{ #category : 'comparing' }
+RowanClassService >> hash [
+	^self name hash
 ]
 
 { #category : 'private' }
