@@ -265,7 +265,7 @@ RowanPackageService >> testClasses [
 			| packageName |
 			packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
 			packageName = name ifTrue:[
-				testClasses add: (RowanClassService forClassNamed: testSubclass name)]]]. 
+				testClasses add: (RowanClassService basicForClassNamed: testSubclass name)]]]. 
 	updateType := #testClasses:. 
 	testClasses := testClasses asArray. 
 	RowanCommandResult addResult: self.
