@@ -246,10 +246,10 @@ RowanPackageService >> setDefaultTemplate [
 
 { #category : 'updates' }
 RowanPackageService >> update [
-	classes := (self loadedClassNames keys collect:[:string | RowanClassService forClassNamed: string]) asArray.
+	classes := (self loadedClassNames keys collect:[:string | RowanClassService basicForClassNamed: string]) asArray.
 	classes addAll: (self loadedClassExtensions keys collect:[:string | 
 		| classService | 
-		classService := (RowanClassService forClassNamed: string) 
+		classService := (RowanClassService basicForClassNamed: string) 
 			isExtension: true.
 		(Rowan image loadedClassForClass: classService classFromName ifAbsent:[]) 
 			ifNotNil:[:cls | classService definedPackageName: cls packageName].

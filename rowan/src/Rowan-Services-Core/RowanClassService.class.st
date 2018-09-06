@@ -154,7 +154,7 @@ RowanClassService >> classFromName [
 
 { #category : 'commands' }
 RowanClassService >> classHierarchy [
-	| behavior | 
+	| behavior |
 	behavior := self classFromName. 
 	organizer := ClassOrganizer newWithRoot: behavior. 
 	hierarchyServices := Dictionary new.   
@@ -168,7 +168,7 @@ RowanClassService >> classHierarchy [
 		self basicRefreshFrom: behavior]
 	ifFalse:[
 		self refreshFrom: behavior]. 
-	RowanCommandResult addResult: self.
+	RowanCommandResult addResult: self
 ]
 
 { #category : 'Accessing' }
