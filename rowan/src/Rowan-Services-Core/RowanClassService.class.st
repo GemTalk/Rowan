@@ -464,12 +464,6 @@ RowanClassService >> name: newValue [
 ]
 
 { #category : 'private' }
-RowanClassService >> notRowanizedName [
-
-	^'(NONE)'
-]
-
-{ #category : 'private' }
 RowanClassService >> objectInBaseNamed: aString [
 
 	^System myUserProfile symbolList objectNamed: aString asSymbol
@@ -492,7 +486,7 @@ RowanClassService >> packageIsDirty [
 
 	| behavior |
 	behavior := self classFromName.
-	behavior rowanPackageName = self notRowanizedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
+	behavior rowanPackageName =  Rowan unpackagedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
 	^(RowanPackageService new name: behavior rowanPackageName) rowanDirty
 ]
 
@@ -535,7 +529,7 @@ RowanClassService >> projectIsDirty [
 
 	| behavior |
 	behavior := self classFromName.
-	behavior rowanProjectName = self notRowanizedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
+	behavior rowanProjectName =  Rowan unpackagedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
 	^(RowanProjectService new name: behavior rowanProjectName) rowanDirty
 ]
 

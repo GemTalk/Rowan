@@ -53,6 +53,7 @@ RowanBrowserService >> packagesWithTests [
 			packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
 			packageName = Rowan unpackagedName ifFalse:[
 				testPackages add: (RowanPackageService forPackageNamed: packageName)]]]. 
+	updateType := #testPackages:. 
 	RowanCommandResult addResult: self.
 ]
 
