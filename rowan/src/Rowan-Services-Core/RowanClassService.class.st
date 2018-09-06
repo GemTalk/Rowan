@@ -123,7 +123,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	self initializeCategoriesFor: classOrMeta.
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
-	isTestCase := classOrMeta superClass == TestCase
+	isTestCase := self classFromName isSubclassOf: TestCase
 ]
 
 { #category : 'Accessing' }
@@ -447,7 +447,7 @@ RowanClassService >> minimalRefreshFrom: theClass [
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
-	isTestCase := classOrMeta superClass == TestCase
+	isTestCase := self classFromName isSubclassOf: TestCase
 ]
 
 { #category : 'commands' }
