@@ -30,7 +30,7 @@ RowanPackageService class >> forPackageNamed: aName [
 
 { #category : 'comparing' }
 RowanPackageService >> = packageService [
-
+	(packageService isKindOf: RowanPackageService) ifFalse:[^false].
 	^name = packageService name
 ]
 

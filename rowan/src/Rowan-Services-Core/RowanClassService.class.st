@@ -74,6 +74,7 @@ RowanClassService class >> minimalForClassNamed: className [
 
 { #category : 'comparing' }
 RowanClassService >> = classService [
+	(classService isKindOf: RowanClassService) ifFalse:[^false].
 	^name = classService name
 ]
 
