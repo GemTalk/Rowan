@@ -91,10 +91,9 @@ RowanMethodService >> allReferences [
 
 	| methods |
 	oop := self gsNMethod asOop. 
-	self update. 
 	methods := organizer sendersOf: selector.
 	references := methods first collect:[:gsNMethod | 
-			self class forSelector: gsNMethod selector class: gsNMethod inClass meta: gsNMethod inClass isMeta organizer: organizer].
+			self class forGsNMethod: gsNMethod organizer: organizer].
 	RowanCommandResult addResult: self
 ]
 
@@ -225,12 +224,6 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 RowanMethodService >> gsNMethod [
 
 	^self classOrMeta compiledMethodAt: selector
-]
-
-{ #category : 'Accessing' }
-RowanMethodService >> gsNMethodFromOop [
-
-	^Object _objectForOop: oop
 ]
 
 { #category : 'Accessing' }
@@ -443,9 +436,8 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 
 ]
 
-{ #category : 'initialization' }
+{ #category : 'updates' }
 RowanMethodService >> update [
-
 	oop ifNil: [oop := self gsNMethod asOop].
 	self 
 		initialize: (Object _objectForOop: oop) 
