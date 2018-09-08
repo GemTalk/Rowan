@@ -23,7 +23,8 @@ Class {
 		'superSource',
 		'superDisplayString',
 		'accessedInstVars',
-		'breakPoints'
+		'breakPoints',
+		'testResult'
 	],
 	#category : 'Rowan-Services-Core'
 }
