@@ -4,20 +4,25 @@ Class {
 	#category : 'Rowan-Services-Tests'
 }
 
+{ #category : 'support' }
+RowanProjectServicesTest >> existingProjectNamed: projectName [
+
+	| projectService |
+	projectService := RowanProjectService newNamed: projectName. 
+	self assert: (Rowan image loadedProjectNamed: projectName) name equals: projectName.
+	^projectService
+]
+
 { #category : 'tests' }
 RowanProjectServicesTest >> test_addPackage [
 
-	| projectService browserService projectName packageName loadedPackage |
-	projectName := 'TestAddPackageProject'. 
+	| projectService projectName packageName loadedPackage |
+	projectName := 'RowanSample1'. 
 	packageName := 'TestAddPackage'.
-	projectService := RowanProjectService newNamed: projectName. 
+	projectService := self existingProjectNamed: projectName.
 
-	[
 	projectService addPackageNamed: packageName.
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	self assert: loadedPackage name equals: packageName. 
-	self assert: loadedPackage rowanProjectName equals: projectName. 
-	] ensure: [
-		browserService := RowanBrowserService new. 
-		browserService unloadProjectsNamed: (Array with: projectName)]
+	self assert: loadedPackage projectName equals: projectName.
 ]
