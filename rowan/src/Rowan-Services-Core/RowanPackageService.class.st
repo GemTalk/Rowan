@@ -61,10 +61,10 @@ RowanPackageService >> classHierarchy [
 		1 to: chain size do: [:index | 
 			| cls super classSet |
 			cls := chain at: index.
-			classSet := dict at: cls ifAbsentPut: [ClassSet new].
+			classSet := dict at: cls ifAbsentPut: [SortedCollection sortBlock:[:x :y | x name < y name]].
 			index = 1 
 		ifTrue:[
-			classSet := dict at: #'nil' ifAbsentPut: [ClassSet new]. 
+			classSet := dict at: #'nil' ifAbsentPut: [SortedCollection sortBlock:[:x :y | x name < y name]]. 
 			(dict at: #'nil') add: cls.
 		]
 		ifFalse:[
