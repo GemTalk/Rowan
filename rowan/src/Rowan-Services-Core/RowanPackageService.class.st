@@ -9,7 +9,8 @@ Class {
 		'classes',
 		'defaultTemplate',
 		'projectName',
-		'testClasses'
+		'testClasses',
+		'hierarchyServices'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -46,6 +47,38 @@ RowanPackageService >> changes [
  
    ^ (Rowan packageTools diff diffForPackageName: name) asString
 
+]
+
+{ #category : 'commands' }
+RowanPackageService >> classHierarchy [
+	| superclassChains levels services |
+	self update. 
+	superclassChains := classes collect:[:classService | | supers | 
+			supers := classService classFromName allSuperclasses. 
+			supers add: classService classFromName. 
+			supers].
+	levels := superclassChains inject: Dictionary new into:[:dict :chain | 
+		1 to: chain size do: [:index | 
+			| cls super classSet |
+			cls := chain at: index.
+			classSet := dict at: cls ifAbsentPut: [ClassSet new].
+			index = 1 
+		ifTrue:[
+			classSet := dict at: #'nil' ifAbsentPut: [ClassSet new]. 
+			(dict at: #'nil') add: cls.
+		]
+		ifFalse:[
+				super := chain at: index - 1.
+				(dict at: super) add: cls
+				]].
+			dict].
+	services := Dictionary new. 
+	levels keysAndValuesDo: [:key :value |
+		| newKey | 
+		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[(RowanClassService minimalForClassNamed: key name)].
+		services at: newKey put: (value collect:[:cls | (RowanClassService minimalForClassNamed: cls name)])].
+	hierarchyServices := services reject:[:array | array isEmpty].
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'commands' }
