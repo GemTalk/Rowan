@@ -24,7 +24,8 @@ Class {
 		'superDisplayString',
 		'accessedInstVars',
 		'breakPoints',
-		'testResult'
+		'testResult',
+		'definedPackage'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -209,6 +210,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	organizer := theOrganizer. 
 	classOrMeta := meta ifTrue:[theClass class] ifFalse:[theClass]. 
 	gsNMethod := classOrMeta compiledMethodAt: selector.
+	definedPackage := gsNMethod rowanPackageName. 
 	oop := gsNMethod asOop. 
 	stepPoints := self stepPointsFor: gsNMethod.
 	breakPoints := self breakPointsFor: gsNMethod.
@@ -269,6 +271,7 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 
 	| inClass |
 	oop := aGsNMethod asOop.
+	definedPackage := aGsNMethod rowanPackageName. 
 	selector := aGsNMethod selector.
 	stepPoints := self stepPointsFor: aGsNMethod.
 	breakPoints := self breakPointsFor: aGsNMethod.
@@ -285,7 +288,6 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	self 
 		forClass: inClass thisClass 
 		organizer: aClassOrganizer.
-
 ]
 
 { #category : 'Accessing' }
