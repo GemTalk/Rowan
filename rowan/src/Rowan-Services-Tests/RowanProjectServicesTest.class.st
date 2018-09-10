@@ -26,3 +26,21 @@ RowanProjectServicesTest >> test_addPackage [
 	self assert: loadedPackage name equals: packageName. 
 	self assert: loadedPackage projectName equals: projectName.
 ]
+
+{ #category : 'tests' }
+RowanProjectServicesTest >> test_commandResultSessionTemp [
+
+	self assert: RowanCommandResult results == (SessionTemps current at: #rowanCommandResults)
+]
+
+{ #category : 'tests' }
+RowanProjectServicesTest >> test_updateAddsCommandResult [
+	| projectName packageName projectService |
+	projectName := 'RowanSample1'. 
+	projectService := self existingProjectNamed: projectName.
+	RowanCommandResult initializeResults. 
+	self assert: RowanCommandResult results size equals: 0. 
+	projectService update. 
+	self assert: RowanCommandResult results size equals: 1. 
+	self assert: RowanCommandResult results first == projectService.
+]
