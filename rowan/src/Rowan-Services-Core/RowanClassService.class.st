@@ -169,11 +169,7 @@ RowanClassService >> classHierarchy [
 		classService := key == #nil ifTrue:[#nil] ifFalse: [(self hierarchyClassServiceFor: key name) meta: meta].
 		hierarchyServices at: classService put: (self subclassServices: value). 
 	].
-	name = 'Object' 
-	ifTrue:[
-		self basicRefreshFrom: behavior]
-	ifFalse:[
-		self refreshFrom: behavior]. 
+	self refreshFrom: behavior. 
 	RowanCommandResult addResult: self
 ]
 
@@ -478,6 +474,23 @@ RowanClassService >> name: newValue [
 RowanClassService >> objectInBaseNamed: aString [
 
 	^System myUserProfile symbolList objectNamed: aString asSymbol
+]
+
+{ #category : 'commands' }
+RowanClassService >> oneLevelClassHierarchy [
+	"good for expanding an existing hierarchy quickly"
+	| behavior sortedSubclasses |
+	behavior := self classFromName. 
+	hierarchyServices := Dictionary new. 
+	hierarchyServices at: #expand put: Array new. 
+	sortedSubclasses := behavior subclasses asSortedCollection:[:x :y | x name < y name].
+	sortedSubclasses do: [:subclass |
+		| classService |
+		classService := (self hierarchyClassServiceFor: subclass name) meta: meta.
+		(hierarchyServices at: #expand) add: classService. 
+	].
+	self refreshFrom: behavior. 
+	RowanCommandResult addResult: self
 ]
 
 { #category : 'Accessing' }
