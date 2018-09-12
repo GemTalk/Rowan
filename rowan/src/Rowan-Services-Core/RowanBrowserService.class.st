@@ -52,7 +52,8 @@ RowanBrowserService >> packagesWithTests [
 	TestCase allSubclasses do:[:testSubclass |
 		testSubclass selectors do:[:selector |
 			| packageName |
-			(selector copyFrom: 1 to: 4) = 'test' ifTrue:[
+			(selector size >= 4 and:[
+			(selector copyFrom: 1 to: 4) asString = 'test']) ifTrue:[
 				packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
 				packageName = Rowan unpackagedName ifFalse:[
 					testCount := testCount + 1. 

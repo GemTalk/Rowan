@@ -296,7 +296,8 @@ RowanPackageService >> testClasses [
 	TestCase allSubclasses do:[:testSubclass |
 		testSubclass selectors do:[:selector |
 			| packageName |
-			(selector copyFrom: 1 to: 4) = 'test' ifTrue:[
+			(selector size >= 4 and:[
+			(selector copyFrom: 1 to: 4) asString = 'test']) ifTrue:[
 				packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
 				packageName = name ifTrue:[
 					testClasses add: (RowanClassService basicForClassNamed: testSubclass name)]]]]. 
