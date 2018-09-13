@@ -1,11 +1,11 @@
 Class {
-	#name : 'RowanProjectServicesTest',
+	#name : 'RowanProjectServiceTest',
 	#superclass : 'RowanServicesTest',
 	#category : 'Rowan-Services-Tests'
 }
 
 { #category : 'support' }
-RowanProjectServicesTest >> existingProjectNamed: projectName [
+RowanProjectServiceTest >> existingProjectNamed: projectName [
 
 	| projectService |
 	projectService := RowanProjectService newNamed: projectName. 
@@ -14,7 +14,7 @@ RowanProjectServicesTest >> existingProjectNamed: projectName [
 ]
 
 { #category : 'tests' }
-RowanProjectServicesTest >> test_addPackage [
+RowanProjectServiceTest >> test_addPackage [
 
 	| projectService projectName packageName loadedPackage |
 	projectName := 'RowanSample1'. 
@@ -28,13 +28,13 @@ RowanProjectServicesTest >> test_addPackage [
 ]
 
 { #category : 'tests' }
-RowanProjectServicesTest >> test_commandResultSessionTemp [
+RowanProjectServiceTest >> test_commandResultSessionTemp [
 
 	self assert: RowanCommandResult results == (SessionTemps current at: #rowanCommandResults)
 ]
 
 { #category : 'tests' }
-RowanProjectServicesTest >> test_updateAddsCommandResult [
+RowanProjectServiceTest >> test_updateAddsCommandResult [
 	| projectName packageName projectService |
 	projectName := 'RowanSample1'. 
 	projectService := self existingProjectNamed: projectName.
