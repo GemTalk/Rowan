@@ -47,3 +47,24 @@ RowanClassServiceTest >> testClassFromName [
 	classService := RowanClassService forClassNamed: 'OrderedCollection' meta: true.
 	self assert: classService classFromName equals: OrderedCollection
 ]
+
+{ #category : 'tests' }
+RowanClassServiceTest >> testClassHierarchy [
+	"return class hierarchy in format client can use.
+	#nil -> #(Object class service)
+	Object class service -> #(RowanService class service) 
+	etc"
+  
+	| classService hierarchy objectClassService rowanServiceService |
+	classService := RowanClassService forClassNamed: 'RowanClassService'.
+	hierarchy := classService classHierarchy hierarchyServices. 
+	self assert: (hierarchy isKindOf: Dictionary). 
+	self assert: ((hierarchy at: #nil) isKindOf: Array).
+	self assert: (hierarchy at: #nil) size equals: 1. 
+	objectClassService := (hierarchy at: #nil) first.
+	self assert: (objectClassService isKindOf: RowanClassService).
+	self assert: objectClassService name equals: 'Object'.
+	rowanServiceService := (hierarchy at: objectClassService) first. 
+	self assert: rowanServiceService name equals: 'RowanService'.
+	self assert: (hierarchy at: rowanServiceService) first name equals: 'RowanClassService'.
+]

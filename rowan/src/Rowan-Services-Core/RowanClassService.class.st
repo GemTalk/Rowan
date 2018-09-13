@@ -339,6 +339,12 @@ RowanClassService >> hierarchyClassServiceFor: className [
 			RowanClassService minimalForClassNamed: className]
 ]
 
+{ #category : 'Accessing' }
+RowanClassService >> hierarchyServices [
+
+	^hierarchyServices
+]
+
 { #category : 'initialization' }
 RowanClassService >> initialize [
 
