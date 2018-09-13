@@ -26,3 +26,24 @@ RowanClassServiceTest >> testAddCategory [
 	classService addCategory: 'fnoodle'.
 	self assert: (behavior categoryNames includes: #fnoodle).
 ]
+
+{ #category : 'tests' }
+RowanClassServiceTest >> testClassComment [
+	| classService className behavior |
+	className := 'ClassCommentTest'. 
+	behavior := self createClassNamed: className.
+	self assert: behavior comment equals: String new. 
+	classService := RowanClassService forClassNamed: className meta: false. 
+	classService classComment: 'This is a test'. 
+	self assert: behavior comment equals: 'This is a test'.
+]
+
+{ #category : 'tests' }
+RowanClassServiceTest >> testClassFromName [
+	"always return thisClass" 
+	| classService |
+	classService := RowanClassService forClassNamed: 'Array' meta: false.
+	self assert: classService classFromName equals: Array.
+	classService := RowanClassService forClassNamed: 'OrderedCollection' meta: true.
+	self assert: classService classFromName equals: OrderedCollection
+]
