@@ -7,12 +7,11 @@ Class {
 { #category : 'support' }
 RowanServicesTest >> setUp [
 
-	System abortTransaction.
+	super setUp
 ]
 
 { #category : 'support' }
 RowanServicesTest >> tearDown [
 
-	System abortTransaction.
 	RowanCommandResult initializeResults.  "squash the gui updates"
 ]
