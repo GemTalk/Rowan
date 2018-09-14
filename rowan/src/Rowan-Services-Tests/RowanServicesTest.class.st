@@ -1,3 +1,6 @@
+"
+RowanServicesTest subclasses require RowanSample1 project to be loaded.
+"
 Class {
 	#name : 'RowanServicesTest',
 	#superclass : 'TestCase',
