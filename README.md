@@ -10,7 +10,7 @@ Installation instructions assume that you have registered SSH Keys with your Git
 
 You must have git installed: [git setup](https://help.github.com/articles/set-up-git/)
 
-You must have GemStone installed on this node, and a GemStone repository setup and running. For GemStone installation, see [GemStone 3.2.x Installation instructions](https://downloads.gemtalksystems.com/docs/GemStone64/3.2.x/GS64-InstallGuide-Linux-3.2.6/GS64-InstallGuide-Linux-3.2.6.htm). 
+You must have GemStone installed on this node, and a GemStone repository setup and running. For GemStone installation, see [GemStone 3.2.x Installation instructions for Linux](https://downloads.gemtalksystems.com/docs/GemStone64/3.2.x/GS64-InstallGuide-Linux-3.2.6/GS64-InstallGuide-Linux-3.2.6.htm). 
 
 If you already have GemStone running, after defining the ROWAN_PROJECTS_HOME environment variable, you will need to restart the NetLDI.
 
