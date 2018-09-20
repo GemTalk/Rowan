@@ -72,6 +72,12 @@ RowanClassService class >> minimalForClassNamed: className [
 	^self new minimalForClassNamed: className
 ]
 
+{ #category : 'comparing' }
+RowanClassService >> = classService [
+	(classService isKindOf: RowanClassService) ifFalse:[^false].
+	^name = classService name
+]
+
 { #category : 'commands' }
 RowanClassService >> addCategory: string [
 
@@ -118,7 +124,16 @@ RowanClassService >> basicRefreshFrom: theClass [
 	self initializeCategoriesFor: classOrMeta.
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
-	isTestCase := classOrMeta superClass == TestCase
+	isTestCase := self classFromName isSubclassOf: TestCase
+]
+
+{ #category : 'Accessing' }
+RowanClassService >> behavior [
+
+	| behavior |
+	behavior := self classFromName. 
+	meta == true ifTrue:[behavior := behavior class].
+	^behavior
 ]
 
 { #category : 'commands' }
@@ -145,7 +160,7 @@ RowanClassService >> classFromName [
 
 { #category : 'commands' }
 RowanClassService >> classHierarchy [
-	| behavior | 
+	| behavior |
 	behavior := self classFromName. 
 	organizer := ClassOrganizer newWithRoot: behavior. 
 	hierarchyServices := Dictionary new.   
@@ -154,12 +169,8 @@ RowanClassService >> classHierarchy [
 		classService := key == #nil ifTrue:[#nil] ifFalse: [(self hierarchyClassServiceFor: key name) meta: meta].
 		hierarchyServices at: classService put: (self subclassServices: value). 
 	].
-	name = 'Object' 
-	ifTrue:[
-		self basicRefreshFrom: behavior]
-	ifFalse:[
-		self refreshFrom: behavior]. 
-	RowanCommandResult addResult: self.
+	self refreshFrom: behavior. 
+	RowanCommandResult addResult: self
 ]
 
 { #category : 'Accessing' }
@@ -242,6 +253,41 @@ RowanClassService >> definedPackageName: newValue [
 
 ]
 
+{ #category : 'commands' }
+RowanClassService >> fileoutCategories: array [
+	| answeringService ws |
+	answeringService := RowanAnsweringService new.
+	ws := WriteStream on: String new. 
+	self writeFileOutHeaderOn: ws.
+	array do:[:category |
+		self behavior fileOutCategory: category on: ws]. 
+	answeringService answer: ws contents. 
+	RowanCommandResult addResult: answeringService.
+]
+
+{ #category : 'commands' }
+RowanClassService >> fileoutClass [
+	| answeringService ws |
+	answeringService := RowanAnsweringService new.
+	ws := WriteStream on: String new. 
+	self writeFileOutHeaderOn: ws.
+	ws nextPutAll: self behavior fileOutClass. 
+	answeringService answer: ws contents. 
+	RowanCommandResult addResult: answeringService.
+]
+
+{ #category : 'commands' }
+RowanClassService >> fileoutMethods: array [
+	| answeringService ws |
+	answeringService := RowanAnsweringService new.
+	ws := WriteStream on: String new. 
+	self writeFileOutHeaderOn: ws.
+	array do:[:methodService |
+		self behavior fileOutMethod: methodService selector on: ws]. 
+	answeringService answer: ws contents. 
+	RowanCommandResult addResult: answeringService.
+]
+
 { #category : 'Accessing' }
 RowanClassService >> filters [
 	^filters
@@ -275,6 +321,11 @@ RowanClassService >> forClassNamed: className [
 	self refreshFrom: theClass.
 ]
 
+{ #category : 'comparing' }
+RowanClassService >> hash [
+	^self name hash
+]
+
 { #category : 'private' }
 RowanClassService >> hierarchyClassServiceFor: className [
 
@@ -286,6 +337,12 @@ RowanClassService >> hierarchyClassServiceFor: className [
 					RowanClassService forClassNamed: className]]
 		ifFalse:[
 			RowanClassService minimalForClassNamed: className]
+]
+
+{ #category : 'Accessing' }
+RowanClassService >> hierarchyServices [
+
+	^hierarchyServices
 ]
 
 { #category : 'initialization' }
@@ -393,7 +450,7 @@ RowanClassService >> minimalRefreshFrom: theClass [
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
-	isTestCase := classOrMeta superClass == TestCase
+	isTestCase := self classFromName isSubclassOf: TestCase
 ]
 
 { #category : 'commands' }
@@ -420,15 +477,26 @@ RowanClassService >> name: newValue [
 ]
 
 { #category : 'private' }
-RowanClassService >> notRowanizedName [
-
-	^'(NONE)'
-]
-
-{ #category : 'private' }
 RowanClassService >> objectInBaseNamed: aString [
 
 	^System myUserProfile symbolList objectNamed: aString asSymbol
+]
+
+{ #category : 'commands' }
+RowanClassService >> oneLevelClassHierarchy [
+	"good for expanding an existing hierarchy quickly"
+	| behavior sortedSubclasses |
+	behavior := self classFromName. 
+	hierarchyServices := Dictionary new. 
+	hierarchyServices at: #expand put: Array new. 
+	sortedSubclasses := behavior subclasses asSortedCollection:[:x :y | x name < y name].
+	sortedSubclasses do: [:subclass |
+		| classService |
+		classService := (self hierarchyClassServiceFor: subclass name) meta: meta.
+		(hierarchyServices at: #expand) add: classService. 
+	].
+	self refreshFrom: behavior. 
+	RowanCommandResult addResult: self
 ]
 
 { #category : 'Accessing' }
@@ -448,7 +516,7 @@ RowanClassService >> packageIsDirty [
 
 	| behavior |
 	behavior := self classFromName.
-	behavior rowanPackageName = self notRowanizedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
+	behavior rowanPackageName =  Rowan unpackagedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
 	^(RowanPackageService new name: behavior rowanPackageName) rowanDirty
 ]
 
@@ -491,7 +559,7 @@ RowanClassService >> projectIsDirty [
 
 	| behavior |
 	behavior := self classFromName.
-	behavior rowanProjectName = self notRowanizedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
+	behavior rowanProjectName =  Rowan unpackagedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
 	^(RowanProjectService new name: behavior rowanProjectName) rowanDirty
 ]
 
@@ -578,6 +646,16 @@ RowanClassService >> renameCategoryFrom: old to: new [
 	methods := methods select:[:methodService | affectedSelectors includes: methodService selector].
 	self moveMethods: methods to: new.
 	self removeCategories: (Array with: old)
+]
+
+{ #category : 'commands' }
+RowanClassService >> runMethodTests: methodServices [
+
+	| behavior |
+	behavior := self classFromName. 
+	methodServices do:[:method |
+		behavior debug: method selector].
+	RowanCommandResult addResult: (RowanAnsweringService new answer: true).
 ]
 
 { #category : 'commands' }

@@ -23,7 +23,9 @@ Class {
 		'superSource',
 		'superDisplayString',
 		'accessedInstVars',
-		'breakPoints'
+		'breakPoints',
+		'testResult',
+		'definedPackage'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -91,10 +93,9 @@ RowanMethodService >> allReferences [
 
 	| methods |
 	oop := self gsNMethod asOop. 
-	self update. 
 	methods := organizer sendersOf: selector.
 	references := methods first collect:[:gsNMethod | 
-			self class forSelector: gsNMethod selector class: gsNMethod inClass meta: gsNMethod inClass isMeta organizer: organizer].
+			self class forGsNMethod: gsNMethod organizer: organizer].
 	RowanCommandResult addResult: self
 ]
 
@@ -192,9 +193,12 @@ RowanMethodService >> definitionClass [
 
 { #category : 'commands' }
 RowanMethodService >> fileout [
-	| answeringService |
+	| answeringService ws |
 	answeringService := RowanAnsweringService new.
-	answeringService answer: (self classFromName fileOutMethod: selector asString environmentId: 0).
+	ws := WriteStream on: String new. 
+	self writeFileOutHeaderOn: ws.
+	ws nextPutAll: (self behavior fileOutMethod: selector asString environmentId: 0).
+	answeringService answer: ws contents.
 	RowanCommandResult addResult: answeringService.
 ]
 
@@ -206,6 +210,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	organizer := theOrganizer. 
 	classOrMeta := meta ifTrue:[theClass class] ifFalse:[theClass]. 
 	gsNMethod := classOrMeta compiledMethodAt: selector.
+	definedPackage := gsNMethod rowanPackageName. 
 	oop := gsNMethod asOop. 
 	stepPoints := self stepPointsFor: gsNMethod.
 	breakPoints := self breakPointsFor: gsNMethod.
@@ -222,12 +227,6 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 RowanMethodService >> gsNMethod [
 
 	^self classOrMeta compiledMethodAt: selector
-]
-
-{ #category : 'Accessing' }
-RowanMethodService >> gsNMethodFromOop [
-
-	^Object _objectForOop: oop
 ]
 
 { #category : 'Accessing' }
@@ -272,6 +271,7 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 
 	| inClass |
 	oop := aGsNMethod asOop.
+	definedPackage := aGsNMethod rowanPackageName. 
 	selector := aGsNMethod selector.
 	stepPoints := self stepPointsFor: aGsNMethod.
 	breakPoints := self breakPointsFor: aGsNMethod.
@@ -288,7 +288,6 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	self 
 		forClass: inClass thisClass 
 		organizer: aClassOrganizer.
-
 ]
 
 { #category : 'Accessing' }
@@ -440,9 +439,8 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 
 ]
 
-{ #category : 'initialization' }
+{ #category : 'updates' }
 RowanMethodService >> update [
-
 	oop ifNil: [oop := self gsNMethod asOop].
 	self 
 		initialize: (Object _objectForOop: oop) 

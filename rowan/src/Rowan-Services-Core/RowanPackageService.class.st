@@ -8,7 +8,9 @@ Class {
 		'isDirty',
 		'classes',
 		'defaultTemplate',
-		'projectName'
+		'projectName',
+		'testClasses',
+		'hierarchyServices'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -27,6 +29,12 @@ RowanPackageService class >> forPackageNamed: aName [
 
 ]
 
+{ #category : 'comparing' }
+RowanPackageService >> = packageService [
+	(packageService isKindOf: RowanPackageService) ifFalse:[^false].
+	^name = packageService name
+]
+
 { #category : 'testing' }
 RowanPackageService >> arePackageAndProjectClean [
 
@@ -39,6 +47,38 @@ RowanPackageService >> changes [
  
    ^ (Rowan packageTools diff diffForPackageName: name) asString
 
+]
+
+{ #category : 'commands' }
+RowanPackageService >> classHierarchy [
+	| superclassChains levels services |
+	self update. 
+	superclassChains := classes collect:[:classService | | supers | 
+			supers := classService classFromName allSuperclasses. 
+			supers add: classService classFromName. 
+			supers].
+	levels := superclassChains inject: Dictionary new into:[:dict :chain | 
+		1 to: chain size do: [:index | 
+			| cls super classSet |
+			cls := chain at: index.
+			classSet := dict at: cls ifAbsentPut: [SortedCollection sortBlock:[:x :y | x name < y name]].
+			index = 1 
+		ifTrue:[
+			classSet := dict at: #'nil' ifAbsentPut: [SortedCollection sortBlock:[:x :y | x name < y name]]. 
+			(dict at: #'nil') add: cls.
+		]
+		ifFalse:[
+				super := chain at: index - 1.
+				(dict at: super) add: cls
+				]].
+			dict].
+	services := Dictionary new. 
+	levels keysAndValuesDo: [:key :value |
+		| newKey | 
+		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[(RowanClassService minimalForClassNamed: key name)].
+		services at: newKey put: (value collect:[:cls | (RowanClassService minimalForClassNamed: cls name)])].
+	hierarchyServices := services reject:[:array | array isEmpty].
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'commands' }
@@ -98,6 +138,11 @@ RowanPackageService >> genericClassCreationTemplate [
 
 	^self browserTool classCreationTemplateForSubclassOf: 'Object' category: name packageName: nil
 
+]
+
+{ #category : 'comparing' }
+RowanPackageService >> hash [
+	^self name hash
 ]
 
 { #category : 'rowan' }
@@ -244,12 +289,29 @@ RowanPackageService >> setDefaultTemplate [
 	defaultTemplate := self genericClassCreationTemplate.
 ]
 
+{ #category : 'commands' }
+RowanPackageService >> testClasses [
+
+	testClasses := Set new. 
+	TestCase allSubclasses do:[:testSubclass |
+		testSubclass selectors do:[:selector |
+			| packageName |
+			(selector size >= 4 and:[
+			(selector copyFrom: 1 to: 4) asString = 'test']) ifTrue:[
+				packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
+				packageName = name ifTrue:[
+					testClasses add: (RowanClassService basicForClassNamed: testSubclass name)]]]]. 
+	updateType := #testClasses:. 
+	testClasses := testClasses asArray. 
+	RowanCommandResult addResult: self.
+]
+
 { #category : 'updates' }
 RowanPackageService >> update [
-	classes := (self loadedClassNames keys collect:[:string | RowanClassService forClassNamed: string]) asArray.
+	classes := (self loadedClassNames keys collect:[:string | RowanClassService basicForClassNamed: string]) asArray.
 	classes addAll: (self loadedClassExtensions keys collect:[:string | 
 		| classService | 
-		classService := (RowanClassService forClassNamed: string) 
+		classService := (RowanClassService basicForClassNamed: string) 
 			isExtension: true.
 		(Rowan image loadedClassForClass: classService classFromName ifAbsent:[]) 
 			ifNotNil:[:cls | classService definedPackageName: cls packageName].

@@ -64,3 +64,10 @@ RowanAnsweringService >> transcriptObject [
 	
 	^(SessionTemps current  at: #'TranscriptStream_SessionStream')
 ]
+
+{ #category : 'commands' }
+RowanAnsweringService >> turnOffTranscriptWrites [
+
+	self isTranscriptInstalled ifTrue:[
+		self flipTranscript]
+]
