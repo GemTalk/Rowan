@@ -7486,7 +7486,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	classDefinition := (RwClassDefinition
 		newForClassNamed: className1
 			super: 'SuperMan'
-			instvars: #(ivar0)
+			instvars: #()
 			classinstvars: #()
 			classvars: #()
 			category: 'category'
@@ -7494,6 +7494,18 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 			pools: #()
 			type: 'normal')
 		yourself.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method4'
+					protocol: 'accessing'
+					source: 'method4 ^3').
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method5'
+					protocol: 'accessing'
+					source: 'method5 ^2').
 
 	packageDefinition 
 		addClassDefinition: classDefinition.
@@ -7532,8 +7544,13 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 
-"new class version of className1 and remove methods"
+"new class version of SuperMan and remove methods"
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at: className1.
+	classDefinition
+		removeInstanceMethod: #method4;
+		removeClassMethod: #method5;
+		yourself.
 	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at: className2.
 	classDefinition
 		removeInstanceMethod: #method3;

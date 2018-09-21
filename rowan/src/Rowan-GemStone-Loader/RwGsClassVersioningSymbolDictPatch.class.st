@@ -161,7 +161,6 @@ RwGsClassVersioningSymbolDictPatch >> _updateNewClassVersionPatchesForClass: cla
 						isMeta: true
 						loadedMethod: loadedMethod
 						projectSetModification: aProjectSetModification ] ]
-
 ]
 
 { #category : 'accessing' }
