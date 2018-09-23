@@ -20,7 +20,8 @@ set -e
 #     one PDF file)
 # 6. Archive the zip file and stage for delivery
 #
-# 1.1.0 candidate $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.0-candidate v1.1.0-candidate Oscar-3.0.16-candidate /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.1.0-candidate $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.0-candidate v1.1.0-candidate Oscar-3.0.16-candidate /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.1.0 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.0 v1.1.0 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
@@ -35,8 +36,8 @@ rowan_tag="$2"
 jadeite_tag="$3"
 sett_zip_location="$4"
 sett_zip=$(basename ${sett_zip_location})
-rowanDeploymentBranch="masterV1.1"
 rowanDeploymentBranch="candidateV1.1"
+rowanDeploymentBranch="masterV1.1"
 
 commit_match_tag() {
   targetTag="$1"
