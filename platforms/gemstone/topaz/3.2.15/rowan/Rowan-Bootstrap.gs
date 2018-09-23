@@ -1,10 +1,9 @@
   set u SystemUser p swordfish
   login
 
-# enable GsPackagePolicy
+# set rowanCompile to true 
 #
   run
-  GsPackagePolicy current enable.
   UserGlobals at: #rowanCompile put: true.
   System commit
 %
@@ -781,10 +780,9 @@ currentOrNil
   set u DataCurator p swordfish
   login
 
-# enable GsPackagePolicy
+# set rowanCompile to true 
 #
 run
-GsPackagePolicy current enable.
 UserGlobals at: #rowanCompile put: true.
 System commit
 %

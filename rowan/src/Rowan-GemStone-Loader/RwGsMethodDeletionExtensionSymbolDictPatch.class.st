@@ -37,11 +37,8 @@ RwGsMethodDeletionExtensionSymbolDictPatch >> primeBehaviorNewClasses: createdCl
 			tempSymbols
 				at: className
 				ifAbsent: [ 
-					self classDefinition key
-						ifNil: [ 
-							"class is being deleted ... we're done"
-							^ self ].
-					self error: 'Cannot find class to delete method from.' ] ].
+					"class is being deleted ... we're done"
+					^ self] ].
 	behavior := isMeta
 		ifTrue: [ class class ]
 		ifFalse: [ class ]

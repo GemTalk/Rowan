@@ -1,0 +1,25 @@
+set -e
+. defStone.env
+export vers="3.2.15"
+
+rm -rf *.log *.out
+
+newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
+
+$GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/$vers/installRowan $GEMSTONE_NAME
+
+startTopaz $GEMSTONE_NAME -l << EOF
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit
+
+  set user SystemUser p swordfish
+  login
+
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/rowanTestSuite.gs
+
+  commit
+
+  exit
+EOF

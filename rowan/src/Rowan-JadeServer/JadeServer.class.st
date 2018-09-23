@@ -5280,9 +5280,10 @@ JadeServer >> updateFromSton: stonString [
 	services do: 
 			[:service |
 			service organizer: organizer. 
+			service updateType: nil.  "Update type is only for returned commands"
 			service command
 				ifNil: [service update]
-				ifNotNil: [service perform: service command withArguments: service commandArgs]].
+				ifNotNil: [service servicePerform: service command withArguments: service commandArgs]].
 	resultString := STON toString: RowanCommandResult results.
 	^resultString
 ]

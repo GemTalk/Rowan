@@ -33,9 +33,8 @@ RowanProjectService class >> newNamed: aString [
 	| inst |
 	inst := self new.
 	inst name: aString.
-	inst refresh. 
+	inst refresh.
 	^inst
-
 ]
 
 { #category : 'commands' }
@@ -43,6 +42,19 @@ RowanProjectService >> addPackageNamed: packageName [
 
 	self browserTool addPackageNamed: packageName toProjectNamed: name. 
 	self update.
+]
+
+{ #category : 'initialization' }
+RowanProjectService >> basicRefresh [
+	self projectIsLoaded ifFalse:[
+		updateType := #removedProject:. 
+		^RowanCommandResult addResult: self]. 
+	isDirty := self isDirty. 
+	isSkew := self isSkew.
+	sha := self rowanSha.
+	branch := self rowanBranch.
+	RowanCommandResult addResult: self
+
 ]
 
 { #category : 'accessing' }
@@ -64,8 +76,7 @@ RowanProjectService >> branch: anObject [
 RowanProjectService >> changes [
 
 	| projectService jadeServer |
-	self rowanFixMe. "better lookup for JadeServer class"
-	jadeServer := (GsCurrentSession currentSession resolveSymbol: #JadeServer) value. 
+	jadeServer := Rowan platform jadeServerClassNamed: #JadeServer. 
 	changes := Array new. 
 	self packageNames do:[:packageName |
 			| patch |
@@ -127,6 +138,13 @@ RowanProjectService >> defaultProjectName: aString [
 
 	self class defaultProjectName: aString
 
+]
+
+{ #category : 'initialization' }
+RowanProjectService >> initialize [
+
+	super initialize. 
+	packages := Array new
 ]
 
 { #category : 'rowan' }
@@ -234,6 +252,22 @@ RowanProjectService >> packageServices [
 
 ]
 
+{ #category : 'printing' }
+RowanProjectService >> printOn: aStream [
+
+	super printOn: aStream. 
+	aStream nextPut: $:. 
+	aStream nextPutAll: (name ifNil: [nil printString])
+]
+
+{ #category : 'testing' }
+RowanProjectService >> projectIsLoaded [
+
+	^(Rowan image
+		loadedProjectNamed: name
+		ifAbsent: []) notNil
+]
+
 { #category : 'rowan' }
 RowanProjectService >> projects [
 
@@ -274,13 +308,9 @@ RowanProjectService >> pushToGit [
 
 { #category : 'initialization' }
 RowanProjectService >> refresh [
-
-	packages := self packageServices.
-	isDirty := self isDirty. 
-	isSkew := self isSkew.
-	sha := self rowanSha.
-	branch := self rowanBranch.
-
+	self basicRefresh. 
+	self projectIsLoaded ifTrue:[
+		packages := self packageServices].
 ]
 
 { #category : 'commands' }
@@ -337,6 +367,21 @@ RowanProjectService >> rowanSkew [
 
 ]
 
+{ #category : 'perform' }
+RowanProjectService >> servicePerform: symbol withArguments: collection [
+	| wasClean |
+	wasClean := [self rowanDirty not] on: Error do:[:ex | false "not loaded"].
+	super servicePerform: symbol withArguments: collection.
+	wasClean ifTrue:[
+		self update]
+]
+
+{ #category : 'commands' }
+RowanProjectService >> setDefaultProject [
+
+	self class defaultProjectName: name
+]
+
 { #category : 'accessing' }
 RowanProjectService >> sha [
 
@@ -366,8 +411,6 @@ RowanProjectService >> unload [
 { #category : 'update' }
 RowanProjectService >> update [
 	self refresh.
-	RowanCommandResult addResult: self
-
 ]
 
 { #category : 'commands' }

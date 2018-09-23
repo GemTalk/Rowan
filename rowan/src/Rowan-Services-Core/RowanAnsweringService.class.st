@@ -1,3 +1,9 @@
+"
+A place to put miscellaneous commands that don't fit 
+well in other services. 
+
+Also good asking the server questions.
+"
 Class {
 	#name : 'RowanAnsweringService',
 	#superclass : 'RowanService',
@@ -11,4 +17,57 @@ Class {
 RowanAnsweringService >> answer: anObject [
 
 	answer := anObject
+]
+
+{ #category : 'commands' }
+RowanAnsweringService >> exec: aString [
+
+	"for command line service someday"
+	answer := aString evaluate printString. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'commands' }
+RowanAnsweringService >> flipTranscript [
+	self isTranscriptInstalled ifTrue:[
+		self jadeServer uninstallTranscript]
+	ifFalse:[
+		self jadeServer installTranscript]
+]
+
+{ #category : 'testing' }
+RowanAnsweringService >> isTranscriptInstalled [
+
+	^self transcriptObject == self jadeServer
+]
+
+{ #category : 'private' }
+RowanAnsweringService >> jadeServer [
+
+	^System _sessionStateAt: 3
+]
+
+{ #category : 'commands' }
+RowanAnsweringService >> subclassCreationTemplate: className [
+	 (RowanClassService new name: className) subclassCreationTemplate.  "gives an answer for us"
+]
+
+{ #category : 'commands' }
+RowanAnsweringService >> transcriptInstalled [
+
+	answer := self isTranscriptInstalled.
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'private' }
+RowanAnsweringService >> transcriptObject [
+	
+	^(SessionTemps current  at: #'TranscriptStream_SessionStream')
+]
+
+{ #category : 'commands' }
+RowanAnsweringService >> turnOffTranscriptWrites [
+
+	self isTranscriptInstalled ifTrue:[
+		self flipTranscript]
 ]

@@ -10,7 +10,7 @@ run
 	suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 	res := suite run.
 	strm := WriteStream on: String new.
-  strm nextPutAll: suite name; lf.
+  strm nextPutAll: suite name, ' for GemStone ', (System gemVersionAt: #gsVersion) printString; lf.
 	strm nextPutAll: res printString; lf.
 	strm nextPutAll: '  errors'; lf.
 	(res errors collect: [:each | each printString ]) asArray sort do: [:each |

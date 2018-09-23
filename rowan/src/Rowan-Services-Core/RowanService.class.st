@@ -205,6 +205,11 @@ RowanService >> sampleSymbolDictionaryName [
 
 ]
 
+{ #category : 'perform' }
+RowanService >> servicePerform: symbol withArguments: collection [
+	super perform: symbol withArguments: collection.
+]
+
 { #category : 'replication' }
 RowanService >> stonOn: stonWriter [
     | instanceVariableNames |
@@ -247,4 +252,33 @@ RowanService >> symbolDictionaryNamed: aName [
 RowanService >> updateType: aSymbol [
 
 	updateType := aSymbol
+]
+
+{ #category : 'fileout' }
+RowanService >> writeFileOutHeaderOn: stream [
+	"This method will write a fileout header onto the given file.
+	Adapted from GBS - GbxBrowser>>writeFileOutHeaderOn:"
+
+	| rawVer beVer cr |
+	stream nextPutAll: 'fileformat utf8';
+			cr. 
+	rawVer := System _version.
+	beVer := ''.
+	cr := String with: Character cr.
+	"Comment each newline"
+	(rawVer subStrings: (Array with: Character lf)) do: [:line | beVer := beVer , '! ' , line , cr].
+	stream
+		nextPutAll: '!';
+		cr;
+		nextPutAll: '! From ';
+		nextPutAll: beVer;
+		cr;
+		nextPutAll: '! On ';
+		nextPutAll: Date today printString;
+		nextPutAll: ', ';
+		nextPutAll: Time now printString;
+		cr;
+		nextPutAll: '!';
+		cr;
+		flush
 ]
