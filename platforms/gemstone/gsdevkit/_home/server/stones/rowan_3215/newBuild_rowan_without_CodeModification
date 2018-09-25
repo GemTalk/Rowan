@@ -1,0 +1,49 @@
+set -e
+. defStone.env
+export vers="3.2.15"
+
+rm -rf *.log *.out
+
+newExtent -s product/bin/extent0.dbf $GEMSTONE_NAME
+
+$GS_HOME/shared/repos/Rowan/platforms/gemstone/topaz/3.2.15/installRowan $GEMSTONE_NAME
+
+startTopaz $GEMSTONE_NAME -l << EOF
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit
+
+  set user DataCurator p swordfish
+  login
+
+	run
+	"User with no code modification privileges and owner read"
+	AllUsers 
+		addNewUserWithId: 'NoCodeModificationUser'
+			password: 'swordfish'
+			createNewSecurityPolicy: true.
+	AllUsers 
+		addNewUserWithId: 'ReadOnlyNoCodeModificationUser'
+			password: 'swordfish'
+			createNewSecurityPolicy: true.
+%
+	commit
+
+	run
+	| securityPolicy |
+	securityPolicy := GsObjectSecurityPolicy new
+		ownerAuthorization: #write;
+		worldAuthorization: #read;
+		owner: System myUserProfile;
+	yourself.
+	System commit.
+	"take away permissions to write UserGlobals"
+	((AllUsers userWithId: 'ReadOnlyNoCodeModificationUser') symbolList resolveSymbol: #UserGlobals) value
+		objectSecurityPolicy:  securityPolicy.
+%
+	commit
+
+  logout
+	exit
+EOF

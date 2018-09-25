@@ -1608,6 +1608,155 @@ RwRowanSample4Test >> testIssue230 [
 ]
 
 { #category : 'tests' }
+RwRowanSample4Test >> testIssue284 [
+
+	"https://github.com/dalehenrich/Rowan/issues/284"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec repoRootPath loadedCommitId |
+
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_185_0'.				"starting point of test"
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	loadedCommitId := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId.
+	self assert: loadedCommitId = '149ef9f'.
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_284_0'.				"README commit"
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	loadedCommitId := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId.
+	self assert: loadedCommitId = '1d4ae93'
+
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testIssue304 [
+
+	"https://github.com/dalehenrich/Rowan/issues/304"
+
+	"load a different config and group using the spec url load api ... SHA needs to change as well"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec  repoRootPath x masterBranchSHA |
+
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.				"no tests loaded"
+
+	projectTools load
+		loadProjectFromSpecUrl: 'file:' , repoRootPath, '/rowan/specs/RowanSample4_core.ston'.
+
+	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+
+	masterBranchSHA := '66a9de3'.
+
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Load').
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #('core').
+	self deny: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId) = masterBranchSHA.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: masterBranchSHA.				"now load tests group"
+
+	projectTools load
+		loadProjectFromSpecUrl: 'file:' , repoRootPath, '/rowan/specs/RowanSample4_load.ston'.
+
+	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Load').
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #('tests').
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId) = masterBranchSHA.
+
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testIssue305 [
+
+	"https://github.com/dalehenrich/Rowan/issues/305"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec  repoRootPath |
+
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.				"useful spec --- no tests group"
+
+	projectTools load
+		loadProjectFromSpecUrl: 'file:' , repoRootPath, '/rowan/specs/RowanSample4_core.ston'.
+
+	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+
+]
+
+{ #category : 'tests' }
 RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 
 	| specUrlString projectTools rowanSpec gitRootPath projectName projectDefinition spec theClass |
@@ -1677,6 +1826,362 @@ RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 
 	self assert: theClass new foo = 'foo'
 
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testLoadProjectFromUrl_300_1 [
+
+	"https://github.com/dalehenrich/Rowan/issues/300"
+
+	"validation for testLoadProjectFromUrl_300_1, that a non-symbolic link clone/load works"
+
+	| specUrlString projectTools rowanSpec gitRootPath projectName spec theClass |
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4SpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	spec := specUrlString asRwUrl asSpecification.
+	projectTools clone
+		cloneSpecification: spec
+		gitRootPath: gitRootPath
+		useSsh: true
+		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
+
+	"load project into stone"
+	projectTools load 
+		loadProjectFromSpecUrl: 'file:', gitRootPath, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'
+		projectRootPath: gitRootPath, '/', projectName, '/'.
+
+	theClass := Rowan globalNamed: 'RowanSample4'.
+
+	self assert: theClass new foo = 'foo'
+
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
+
+	"https://github.com/dalehenrich/Rowan/issues/300"
+
+	"regression test for bug ... mixed symbolic link and absolute path referencing same git repository"
+
+	| specUrlString projectTools rowanSpec gitRootPath projectName spec theClass commandLine symLinkName gitRootPath_symLink |
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4SpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath_symLink  := '/tmp/rowan_issue_300/'.
+	gitRootPath :=  rowanSpec repositoryRootPath , '/test/testRepositories/repos/issue_300_dir/'.
+
+	commandLine := 'set -e;  rm -rf ', gitRootPath.
+	Rowan gitTools performOnServer: commandLine logging: true.
+
+	commandLine := 'set -e;  rm -rf ', gitRootPath_symLink.
+	Rowan gitTools performOnServer: commandLine logging: true.
+
+"clone project to make sure that we have an existing git project"
+	spec := specUrlString asRwUrl asSpecification.
+	projectTools clone
+		cloneSpecification: spec
+		gitRootPath: gitRootPath
+		useSsh: true
+		registerProject: false. 	"does not register the project, so it is not visible in project list ... does however clone the project to local disk --- which we need"
+
+	self assert: (Rowan fileUtilities directoryExists: gitRootPath , projectName).
+
+"create symbolic link..."
+	symLinkName := 'issue_300_symLink'.
+	commandLine := 'set -e;  cd ' , gitRootPath , '; mkdir ', gitRootPath_symLink, '; ln -s ', gitRootPath, ' ', gitRootPath_symLink, '/', symLinkName.
+	Rowan gitTools performOnServer: commandLine logging: true.
+
+"...and now run clone again using symbolic link" 
+	spec := specUrlString asRwUrl asSpecification.
+	self assert: spec repositoryUrl isNil.
+	projectTools clone
+		cloneSpecification: spec
+		gitRootPath: gitRootPath_symLink, '/', symLinkName
+		useSsh: true
+		registerProject: true.
+
+	self assert: spec repositoryUrl notNil.
+
+	"load project into stone"
+	projectTools load 
+		loadProjectFromSpecUrl: 'file:', gitRootPath, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'
+		projectRootPath: gitRootPath_symLink, '/', symLinkName, '/', projectName, '/'.
+
+	theClass := Rowan globalNamed: 'RowanSample4'.
+
+	self assert: theClass new foo = 'foo'.
+
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testLoadProjectFromUrl_issue180 [
+
+	"https://github.com/dalehenrich/Rowan/issues/180"
+
+	| specUrlString projectTools rowanSpec gitRootPath projectName spec |
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4SpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	spec := specUrlString asRwUrl asSpecification.
+	projectTools clone
+		cloneSpecification: spec
+		gitRootPath: gitRootPath
+		useSsh: true
+		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
+
+	"load project into stone"
+	projectTools load loadProjectFromSpecUrl: 'file:', gitRootPath, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'.
+
+	"load project into stone, again ... should be legal"
+	projectTools load loadProjectFromSpecUrl: 'file:', gitRootPath, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'.
+
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testLoadProjectNamed_221A [
+
+	"https://github.com/dalehenrich/Rowan/issues/221"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec repoRootPath x |
+
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.
+
+"load core group"
+	projectTools load
+		loadProjectFromSpecUrl: 'file:' , repoRootPath, '/rowan/specs/RowanSample4_core.ston'. 
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Load').
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #('core').
+
+"load tests group"
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withGroupNames: #('tests').
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Load').
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #('tests').
+
+"load core group -- unload the tests package"
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withGroupNames: #('core').
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Load').
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #('core').
+
+"load Default configuration (by default) -- tests loaded"
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withConfigurations: #() groupNames: #().
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #().
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #().
+
+"(re)load project"
+	projectTools load
+		loadProjectNamed: 'RowanSample4'.
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #().
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #().
+
+"load Load configuraiont and core group -- unload the tests package"
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withConfigurations: #('Load') groupNames: #('core').
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Load').
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #('core').
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testLoadProjectNamed_221B [
+
+	"https://github.com/dalehenrich/Rowan/issues/221"
+
+	"do spec url load changing the default configs and groups"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec repoRootPath x |
+
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.
+
+"load Load_tests configuration and core group"
+	projectTools load
+		loadProjectFromSpecUrl: 'file:' , repoRootPath, '/rowan/specs/RowanSample4_load.ston'
+		withConfigurations: #( 'Load' )
+		groupNames: #( 'core' ). 
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Load').
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #('core').
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testLoadProjectNamed_221C [
+
+	"https://github.com/dalehenrich/Rowan/issues/221"
+
+	"do spec url load changing the default configs and groups"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec repoRootPath x |
+
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.
+
+"load Load_tests configuration and tests group"
+	projectTools load
+		loadProjectFromSpecUrl: 'file:' , repoRootPath, '/rowan/specs/RowanSample4_load.ston'
+		withConfigurations: #( 'Load' )
+		groupNames: #( 'tests' ). 
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Load').
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #('tests').
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testLoadProjectNamed_221D [
+
+	"https://github.com/dalehenrich/Rowan/issues/221"
+
+	"do spec url load changing the default configs and groups"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec repoRootPath x |
+
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.
+
+"load Common configuration and empty groups ... groups do not apply to Common config"
+	projectTools load
+		loadProjectFromSpecUrl: 'file:' , repoRootPath, '/rowan/specs/RowanSample4_load.ston'
+		withConfigurations: #( 'Common' )
+		groupNames: #(  ). 
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Common').
+	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #().
 ]
 
 { #category : 'tests' }

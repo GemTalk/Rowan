@@ -1287,5 +1287,6 @@ RwGsPatchSet >> updateMethodProperties [
 RwGsPatchSet >> updateSymbolAssociations [
 	"Install new class versions."
 
-	classesWithNewVersions do: [:each | each installNewClassVerionInSystem ]
+	classesWithNewVersions do: [:each | each installNewClassVersionInSystem ]
+
 ]

@@ -49,7 +49,43 @@ result add: 'constraints: '.
 ]
 
 { #category : '*rowan-gemstone-kernel' }
+Class >> _rwOptionsArray [
+  "copy of _optionsArray"
+
+  | result optCount | 
+  result := { } .
+  optCount := 0 .
+  self instancesDbTransient ifTrue:[ result add: #dbTransient . optCount := optCount + 1 ].
+  self instancesNonPersistent ifTrue:[ result add:  #instancesNonPersistent  . optCount := optCount + 1 ].
+  self instancesInvariant ifTrue:[ result add:  #instancesInvariant  . optCount := optCount + 1 ].
+  optCount > 1 ifTrue:[
+    self _error: #classErrBadFormat
+        with:'only one of #dbTransient #instancesNonPersistent  #instancesInvariant allowed' .
+  ].
+  "self _structuralUpdatesDisallowed ifTrue:[ result add: #disallowGciStore  ]." "commented out variant of _optionsArray (https://github.com/dalehenrich/Rowan/issues/292)"
+  self isModifiable ifTrue:[ result add: #modifiable  ].
+  self subclassesDisallowed ifTrue:[ result add: #subclassesDisallowed  ].
+  "self _traversalByCallback ifTrue:[ result add: #traverseByCallback  ]." "commented out variant of _optionsArray (https://github.com/dalehenrich/Rowan/issues/292)"
+  ^ result
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+Class >> _rwOptionsForDefinition [ 
+  "copy of _optionsForDefinition"
+
+  | result arr |
+  result :=  'options: #(' copy .
+  arr := self _rwOptionsArray .
+  1 to: arr size do:[:j | result add: $ ; add: (arr at: j) ].
+  result add: $)  .
+  ^ result
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
 Class >> _rwSortedConstraints [
+"as of https://github.com/dalehenrich/Rowan/issues/293, no longer sorting in alphabetical order ... instance variable order is the right answer"
 
 |   aConstraint constraintArray |
 ( constraints isKindOf: Array ) ifTrue: [
@@ -58,9 +94,8 @@ Class >> _rwSortedConstraints [
       aConstraint := constraints atOrNil: x .
       ((aConstraint ~~ nil _and: [aConstraint ~~ Object])
           _and:[ superClass == nil
-            _or:[ (superClass _namedIvConstraintAt: x) ~~ aConstraint ]] )
+            _or:[ ((superClass _namedIvConstraintAt: x) isVersionOf: aConstraint) not ]] )
       ifTrue: [ constraintArray add: {(instVarNames at: x) . aConstraint } ] ].
-	constraintArray := constraintArray sort: [:ar1 :ar2 | (ar1 at: 1) <= (ar2 at: 1) ].
 
     aConstraint:= self varyingConstraint .
     ( (aConstraint ~~ Object) _and:

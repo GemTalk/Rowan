@@ -26,6 +26,14 @@ set -e
 # Alpha9: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha9 v0.4.0-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
 # Alpha10: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha10 v0.4.1-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
 # Alpha12: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha12 v0.4.3-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
+# Alpha13: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha13 v0.4.4-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
+# Alpha14: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha14 v0.4.5-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
+# Alpha15: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha15 v0.4.6-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
+# Alpha16: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-Alpha16 v0.4.7-alpha Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0alpha6.zip
+# 1.0.0-candidate: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-1.0.0-candidate v1.0.0-candidate Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.0.0: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-1.0.0 v1.0.0 Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.0.1: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-1.0.1 v1.0.1 Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.0.2: $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing Edelweiss-1.0.2 v1.0.1 Alpha2.0.1 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
@@ -40,6 +48,7 @@ rowan_tag="$2"
 jadeite_tag="$3"
 sett_zip_location="$4"
 sett_zip=$(basename ${sett_zip_location})
+rowanDeploymentBranch="masterV1"
 
 commit_match_tag() {
   targetTag="$1"
@@ -66,10 +75,14 @@ validate_tag() {
   projectName="$1"
   label="$2"
   tagName="$3"
+  deploymentBranch="$4"
   theTag=""
   pad=""
   if [ "$projectName" = "Rowan" ] ; then
     pad="	"
+  fi
+  if [ "$deploymentBranch"x = "x" ] ; then
+    deploymentBranch="master"
   fi
   pushd $projectName
     head="HEAD"		# tag is on current commit
@@ -78,7 +91,7 @@ validate_tag() {
       head="HEAD~1"	#tag is on the previous commit for Jadeite"
     fi
     if [ "$tagName"x != "x" ] ; then
-      git checkout master
+      git checkout $deploymentBranch
       theTag=`commit_match_tag "$tagName" "$head"`
       if [ "${theTag}" != "${tagName}" ] ; then
         printf "${ANSI_RED} latest tag (${theTag}) for $projectName does not match expected tag (${tagName}) ${ANSI_RESET}\n"
@@ -97,20 +110,24 @@ clone_entire_git_repo() {
   # clones the entire git repository including all branches
   url="$1"
   dir="$2"
+  branch="$3"
+  if [ "$branch"x = "x" ] ; then
+    branch=master
+  fi
   # mkdir $dir
   git clone --bare $url $dir/.git
   pushd $dir
   git config --bool core.bare false
-  git checkout master
+  git checkout $branch
   popd
 }
 
 cd $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/packing
 
-rm -rf Rowan Jade RowanSample1 RowanSample2 RowanSample4 RowanSample6 MANIFEST.TXT Jadeite_runtime_* *.zip
+rm -rf Rowan Jade RowanSample1 RowanSample2 RowanSample4 RowanSample6 MANIFEST.TXT Jadeite_runtime_* *.zip *.sha256
 
 # Clone Rowan include all branches (complete copy of github repo)
-clone_entire_git_repo git@github.com:dalehenrich/Rowan.git Rowan
+clone_entire_git_repo git@github.com:dalehenrich/Rowan.git Rowan $rowanDeploymentBranch
 # Clone Jade, avoid downloading old .exe files ... only need latest runtime dir
 git clone --branch master --depth 2 git@github.com:ericwinger/Jade.git
 # Clone entire RowanSample1, RowanSample2, RowanSample4 and RowanSample6 repos
@@ -134,7 +151,7 @@ echo "  Git clone directories" >> MANIFEST.TXT
 echo "------------------------------" >> MANIFEST.TXT
 padded_manifest_line "Git_Project" "Tag" "SHA"
 echo "---------------|-----------------|-----------------|" >> MANIFEST.TXT
-validate_tag Rowan Rowan "$rowan_tag"
+validate_tag Rowan Rowan "$rowan_tag" $rowanDeploymentBranch
 validate_tag RowanSample1 RowanSample1
 validate_tag RowanSample2 RowanSample2
 validate_tag RowanSample4 RowanSample4
@@ -184,6 +201,11 @@ cp $sett_zip_location .
 # create zip file
 
 zip -r ${base_label}.zip MANIFEST.TXT ${jadeite_runtime_dirName} ${sett_zip} *.pdf Rowan RowanSample1 RowanSample2 RowanSample4 RowanSample6
+
+# create sha256 file
+
+sha256sum ${base_label}.zip > ${base_label}.sha256
+sha256sum -c ${base_label}.sha256
 
 printf "${ANSI_GREEN}Successful creation of ${base_label}.zip ${ANSI_RESET}\n"
 

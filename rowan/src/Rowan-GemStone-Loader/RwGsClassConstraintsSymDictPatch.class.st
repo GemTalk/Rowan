@@ -15,9 +15,17 @@ RwGsClassConstraintsSymDictPatch >> addToNewClassesByName: aDictionary [
 { #category : 'installing' }
 RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 
+	self installPropertiesPatchFor: aPatchSet registry: self symbolDictionaryRegistry
+
+]
+
+{ #category : 'installing' }
+RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet registry: aSymbolDictionaryRegistry [
+
 	" update class and update loadedClass with new constraints"
 
-	| className existingClass theConstraints existingConstraintsMap existingVaryingConstraint theConstraintsMap theVaryingConstraint keys |
+	| className existingClass theConstraints existingConstraintsMap existingVaryingConstraint theConstraintsMap theVaryingConstraint keys 
+		existingConstraints instVarNames |
 	className := classDefinition key asSymbol.
 	existingClass := aPatchSet createdClasses
 		at: className
@@ -27,9 +35,10 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 				ifAbsent: [ self error: 'Cannot find class to update constraints for.' ] ].
 	existingConstraintsMap := Dictionary new.
 	existingVaryingConstraint := existingClass _varyingConstraint.
-	existingClass _constraints do: [:arrayOrVaryingConstraintClass |
-		arrayOrVaryingConstraintClass _isArray
-			ifTrue: [ existingConstraintsMap at: (arrayOrVaryingConstraintClass at: 1) put: (arrayOrVaryingConstraintClass at: 2) ] ].
+	instVarNames := existingClass allInstVarNames.
+	existingConstraints := existingClass _constraints.
+	1 to: existingClass _constraints size do: [:index |
+		existingConstraintsMap at: (instVarNames at: index) put: (existingConstraints at: index ) ].
 	theConstraints := self _gemStoneConstraintsFrom:	classDefinition gs_constraints.
 	theConstraintsMap := Dictionary new.
 	theVaryingConstraint := Object.
@@ -63,6 +72,6 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet [
 		ifFalse: [
 			"change the varying constraint"
 			existingClass _setVaryingConstraint: theVaryingConstraint ].
-	self symbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+	aSymbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 
 ]

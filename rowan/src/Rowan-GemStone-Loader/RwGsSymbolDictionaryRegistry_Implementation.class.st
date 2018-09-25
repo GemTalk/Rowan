@@ -127,6 +127,18 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _doDeleteCompiledMethodFrom
 					'Internal error -- attempt to remove a method from a package in which its class is neither defined nor extended.' ].
 
 	loadedClassOrExtension removeLoadedMethod: loadedMethod.
+	loadedClassOrExtension isLoadedClassExtension
+		ifTrue: [
+			loadedClassOrExtension isEmpty
+				ifTrue: [ 
+					| theKey classExtensionRegistry |
+					theKey := loadedClassOrExtension handle classHistory.
+					classExtensionRegistry := registryInstance classExtensionRegistry.
+					(classExtensionRegistry at: theKey) remove: loadedClassOrExtension.
+					(classExtensionRegistry at: theKey) isEmpty
+						ifTrue: [ classExtensionRegistry removeKey: theKey ].
+					loadedPackage removeLoadedClassExtension: loadedClassOrExtension ] ].
+
 	^ registryInstance
 
 ]
@@ -290,7 +302,9 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addExtensionCompiledMethod:
 
 	registryInstance methodRegistry at: compiledMethod put: loadedMethod.
 
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
+	loadedPackage := Rowan image 
+		loadedPackageNamed: packageName 
+		ifAbsent: [ self existingOrNewLoadedPackageNamed: packageName instance: registryInstance ].
 
 	loadedClassExtension := loadedPackage
 		loadedClassExtensionForClass: behavior
@@ -576,7 +590,11 @@ RwGsSymbolDictionaryRegistry_Implementation class >> deleteClassFromPackage: cla
 
 	"a class association is being deleted from the receiver remove it from the loaded things and remove class from system"
 
-	^ self _doDeleteClassFromLoadedThings: class removeClassFromSystem: true instance: registryInstance
+	| removeClassFromSystem |
+	removeClassFromSystem := RwDeleteClassFromSystemNotification new
+		candidateClass: class;
+		signal. "handle and `resume: true` if you want class to remain in system, unpackaged"
+	^ self _doDeleteClassFromLoadedThings: class removeClassFromSystem: removeClassFromSystem instance: registryInstance
 
 ]
 
@@ -855,6 +873,21 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveCompiledMethod: compile
 
 	loadedMethod updateForProtocolChange.
 	^ registryInstance
+
+]
+
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry_Implementation class >> movePackage: packageName to: symbolDictionaryName instance: fromRegistryInstance [
+
+	| loadedPackage toRegistryInstance |
+	loadedPackage := fromRegistryInstance packageRegistry
+		removeKey: packageName
+		ifAbsent: [ fromRegistryInstance error: 'package ' , packageName printString , ' not found' ].
+	toRegistryInstance := (Rowan image newOrExistingSymbolDictionaryNamed: symbolDictionaryName) rowanSymbolDictionaryRegistry.
+	(toRegistryInstance packageRegistry at: packageName ifAbsent: [])
+		ifNotNil: [:unexpectedLoadedPackage | toRegistryInstance error: 'package ', packageName printString, ' unexpectedly found in ', symbolDictionaryName printString ].
+	toRegistryInstance packageRegistry at: packageName put: loadedPackage.
+	^ fromRegistryInstance
 
 ]
 

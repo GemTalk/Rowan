@@ -156,7 +156,7 @@ TonelWriter >> splitMethodSource: aMethodDefinition into: aBlock [
 	"Skip comments"
 	(source peek = $") ifTrue: [ self skipComment: source ]. 
 	"Parse declaration"
-	declaration := String new writeStream.
+	declaration := String new writeStreamPortable.
 	[ (self selectorIsComplete: keywords in: declaration originalContents) not 
 		or: [ ':+-/\*~<>=@,%|&?!' includes: declaration contents trimRight last ] ]
 	whileTrue: [ 

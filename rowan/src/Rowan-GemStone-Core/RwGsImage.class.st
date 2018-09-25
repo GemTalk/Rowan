@@ -16,19 +16,19 @@ RwGsImage class >> _loadedProjectRegistry [
 { #category : 'private' }
 RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
 
-	| userProfile ug |
+	| userProfile userPlatformDict |
 	userProfile := AllUsers userWithId: aUserId.
 	userProfile defaultObjectSecurityPolicy currentUserCanRead
 		ifFalse: [
 			"do not have permissions to read objects created by <aUserId>"
 			^ nil ].
-	ug := userProfile objectNamed: #'UserGlobals'.
-	^ ug
+	userPlatformDict := RwPlatform _userPlatformDictionary.
+	^ userPlatformDict
 		at: #'RwGsLoadedProjectRegistry'
 		ifAbsent: [ 
 			(self currentUserId = aUserId)
 				ifFalse: [ ^ nil ].
-			ug at: #'RwGsLoadedProjectRegistry' put: StringKeyValueDictionary new ]
+			userPlatformDict at: #'RwGsLoadedProjectRegistry' put: StringKeyValueDictionary new ]
 
 ]
 
@@ -84,6 +84,15 @@ RwGsImage class >> canWrite: anObject [
 RwGsImage class >> currentUserId [
 
 	^ GsCurrentSession currentSession userProfile userId
+]
+
+{ #category : 'operations' }
+RwGsImage class >> ensureSessionMethodsEnabled [
+
+	"Ensure that session methods are enabled for the current user."
+
+	GsPackagePolicy current enabled
+		ifFalse: [ GsPackagePolicy current enable ].
 ]
 
 { #category : 'querying' }
@@ -393,7 +402,7 @@ RwGsImage class >> objectNamed: aSymbol [
 
 ]
 
-{ #category : 'cypress (old)' }
+{ #category : 'querying' }
 RwGsImage class >> packageNames [
 
 	"Return list of package names. All sytem projects are visible, but not all packages of visible projects
@@ -411,7 +420,27 @@ RwGsImage class >> packageNames [
 		do: [ :loadedProject | 
 			loadedProject packageNames do: [:packageName |
 				(visiblePackageNames includes: packageName) ifTrue: [ packageNames add: packageName ] ] ].
-	^ packageNames
+	^ packageNames asArray
+
+]
+
+{ #category : 'querying' }
+RwGsImage class >> packageNamesForLoadedProjectNamed: projectName [
+
+	"Return list of package names for the loaded project with the given name. All sytem projects are visible, but not all packages of visible projects
+		are visible."
+
+	| packageNames visiblePackageNames |
+	packageNames := Set new.
+	visiblePackageNames := Set new.
+	(self symbolList select: [:symDict | 
+		symDict rowanSymbolDictionaryRegistry notNil])
+		do: [:symDict | 
+			visiblePackageNames 
+				addAll: symDict rowanSymbolDictionaryRegistry packageRegistry keys ].
+	(self loadedProjectNamed: projectName) packageNames do: [:packageName |
+				(visiblePackageNames includes: packageName) ifTrue: [ packageNames add: packageName ] ].
+	^ packageNames asArray
 
 ]
 

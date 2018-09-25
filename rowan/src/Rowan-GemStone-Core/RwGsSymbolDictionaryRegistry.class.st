@@ -692,6 +692,13 @@ RwGsSymbolDictionaryRegistry >> moveCompiledMethod: compiledMethod toProtocol: n
 
 ]
 
+{ #category : 'method - patch api' }
+RwGsSymbolDictionaryRegistry >> movePackage: packageName to: symbolDictionaryName [
+
+	^  self class registry_ImplementationClass movePackage: packageName  to: symbolDictionaryName instance: self
+
+]
+
 { #category : 'package - creation api' }
 RwGsSymbolDictionaryRegistry >> newLoadedPackageNamed: packageName [
 

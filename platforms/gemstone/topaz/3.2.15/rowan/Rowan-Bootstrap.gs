@@ -1,10 +1,9 @@
   set u SystemUser p swordfish
   login
 
-# enable GsPackagePolicy
+# set rowanCompile to true 
 #
   run
-  GsPackagePolicy current enable.
   UserGlobals at: #rowanCompile put: true.
   System commit
 %
@@ -189,7 +188,7 @@ copyUpTo: anObject
 		ifFalse: [ ^ self copyFrom: 1 to: idx - 1 ]
 %
 method: SequenceableCollection
-writeStream
+writeStreamPortable
 
 	^ WriteStreamPortable on: self
 %
@@ -315,7 +314,7 @@ substrings: separators
 		ifFalse: [ ^ self error: 'separators must be Characters.' ].
 	sourceStream := self readStream.
 	result := OrderedCollection new.
-	subStringStream := String new writeStream.
+	subStringStream := String new writeStreamPortable.
 	[ sourceStream atEnd ] whileFalse: [
 		| char |
 		char := sourceStream next.
@@ -323,7 +322,7 @@ substrings: separators
 			ifTrue: [
 				subStringStream isEmpty ifFalse: [
 					result add: subStringStream contents.
-					subStringStream := String new writeStream ] ]
+					subStringStream := String new writeStreamPortable ] ]
 			ifFalse: [
 				subStringStream nextPut: char ] ].
 	subStringStream isEmpty ifFalse: [
@@ -646,6 +645,14 @@ currentOrNil
   commit
 
   run
+  CypressBootstrapRowanBlock
+    value: 'UserGlobals'
+    value: #( 'Rowan-JadeServer').           "install JadeServer classes"
+%
+  commit
+
+
+  run
   UserGlobals removeKey: #CypressBootstrapRowanBlock.
 %
   commit
@@ -773,10 +780,9 @@ currentOrNil
   set u DataCurator p swordfish
   login
 
-# enable GsPackagePolicy
+# set rowanCompile to true 
 #
 run
-GsPackagePolicy current enable.
 UserGlobals at: #rowanCompile put: true.
 System commit
 %

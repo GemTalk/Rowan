@@ -1,7 +1,0 @@
-#
-# NOTES on making new drop available after zip file created by packing script
-#
-# ablakeman@oak:~$ sha256sum foo.zip > foo.sha256
-# ablakeman@oak:~$ sha256sum -c foo.sha256
-# foo.zip: OK
-
