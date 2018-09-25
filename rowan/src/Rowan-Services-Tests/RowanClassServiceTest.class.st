@@ -12,7 +12,7 @@ RowanClassServiceTest >> createClassNamed: className [
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	category: 'Rowan-Services-Tests'
+	category: 'RowanSample1-Tests'
 	options: #()
 ]
 
@@ -39,13 +39,16 @@ RowanClassServiceTest >> testBehavior [
 
 { #category : 'tests' }
 RowanClassServiceTest >> testClassComment [
-	| classService className behavior |
+	| classService className behavior packageService |
 	className := 'ClassCommentTest'. 
 	behavior := self createClassNamed: className.
-	self assert: behavior comment equals: String new. 
+	[self assert: behavior comment equals: String new. 
 	classService := RowanClassService forClassNamed: className meta: false. 
 	classService classComment: 'This is a test'. 
-	self assert: behavior comment equals: 'This is a test'.
+	self assert: behavior comment equals: 'This is a test']
+		ensure:[
+			packageService := RowanPackageService forPackageNamed:  'RowanSample1-Tests'.
+			packageService removeClassNamed: className].
 ]
 
 { #category : 'tests' }

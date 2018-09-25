@@ -22,9 +22,10 @@ RowanProjectServiceTest >> test_addPackage [
 	projectService := self existingProjectNamed: projectName.
 
 	projectService addPackageNamed: packageName.
-	loadedPackage := Rowan image loadedPackageNamed: packageName.
+	[loadedPackage := Rowan image loadedPackageNamed: packageName.
 	self assert: loadedPackage name equals: packageName. 
-	self assert: loadedPackage projectName equals: projectName.
+	self assert: loadedPackage projectName equals: projectName]
+		ensure: [System abortTransaction "use abort to remove the package. package removal not yet available in Rowan"]
 ]
 
 { #category : 'tests' }
