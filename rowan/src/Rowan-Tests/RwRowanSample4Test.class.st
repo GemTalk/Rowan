@@ -110,7 +110,8 @@ RwRowanSample4Test >> testCreateProjectFromUrl [
 { #category : 'tests' }
 RwRowanSample4Test >> testIssue14 [
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath theClass |
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec 
+		project x repoRootPath theClass constraint |
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
@@ -156,8 +157,8 @@ RwRowanSample4Test >> testIssue14 [
 	self assert: (x := theClass _constraintOn: #instvar4) = Array.
 
 	theClass := Rowan globalNamed: 'RowanSample4IdentityBag'.
-	self assert: (x := theClass varyingConstraint) = String.
-
+	constraint := theClass _varyingConstraint.
+	self assert: constraint = String.
 ]
 
 { #category : 'tests' }
