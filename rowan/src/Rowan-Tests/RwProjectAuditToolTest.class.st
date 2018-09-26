@@ -15,15 +15,12 @@ RwProjectAuditToolTest >> _addClassExtensionNamed: className toPackageNamed: pac
 RwProjectAuditToolTest >> _addClassExtensionNamed: className toPackageNamed: packageName inProjectNamed: projectName validate: validate [
 
 	"since we create class extension no warries about package"
- | theClass |
+ | theClass service |
 
-	theClass := 
-		Object
-		subclass: className
-		instVarNames: #(bar)
-		inDictionary: (GsSession currentSession symbolList resolveSymbol: #UserGlobals) value.
-
-	theClass addCategory:(self _categoryFromPackageName: packageName)
+	theClass := (System myUserProfile resolveSymbol: className asSymbol) ifNotNil: [:anAssoc | anAssoc value].
+	theClass ifNil: [self error: 'Class named ', className , ' does not exist'].
+	service := RowanClassService forClassNamed: className package: packageName meta: false.
+	service addCategory:(self _categoryFromPackageName: packageName)
 
 ]
 
@@ -139,7 +136,7 @@ RwProjectAuditToolTest >> _createLoadedProjectNamed: projectName root: rootPath 
 
 	| projectDefinition project |
 
-	(Rowan loadedProjectNamed: projectName ifAbsent: [  ])
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	projectDefinition := self
@@ -349,7 +346,8 @@ RwProjectAuditToolTest >> testClassExtension [
 
 	self _writeProjectNamed: projectName.
 
-	theClassExtension := String"self _addClassExtensionNamed: classExtensionName toPackageNamed: packageName inProjectNamed: projectName".
+	theClassExtension := String.
+	self _addClassExtensionNamed: classExtensionName toPackageNamed: packageName inProjectNamed: projectName.
 
 	self _addOrUpdateMethod:  'foo ^''foo''' forBehavior: theClassExtension inPackage: packageName inProjectNamed: projectName.
 

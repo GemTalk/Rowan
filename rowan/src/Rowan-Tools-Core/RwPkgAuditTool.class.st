@@ -4,7 +4,6 @@ Class {
 	#category : 'Rowan-Tools-Core'
 }
 
-
 { #category : 'other' }
 RwPkgAuditTool >> auditForPackageName: packageName [
 
@@ -68,4 +67,3 @@ Transcript show: 'Missing ', aLoadedMethod printString]]
 	^res
 
 ]
-
