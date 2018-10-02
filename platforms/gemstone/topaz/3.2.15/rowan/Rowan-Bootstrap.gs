@@ -552,6 +552,26 @@ currentOrNil
 %
   commit
 
+# Bootstrap FileSystem into image
+	run
+	| packageManager repo |
+	packageManager := CypressPackageManager3 new.
+	repo := CypressAbstractRepository
+		onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/rowan/src/'  )
+		alias: ''.
+	packageManager defaultSymbolDictionaryName: #Globals.
+	#( 'FileSystem-GemStone-Kernel' 'Files' 'Files-Tests' 'Kernel-Methods' 'Network-UUID' 'Network-UUID-Tests' 
+			'Zinc-Character-Encoding-Core' 'Zinc-Character-Encoding-Tests' 'FileSystem-Core' 'FileSystem-Disk' 
+      'FileSystem-Memory' 'FileSystem-Path' 'FileSystem-Tests-Attributes' 'FileSystem-Tests-Core' 
+      'FileSystem-Tests-Disk' 'FileSystem-Tests-GemStone' 'FileSystem-Tests-Memory' 'FileSystem-Zip')
+		do: [ :packageName | 
+			packageManager
+				addResolvedReference:
+					(CypressResolvedReference name: packageName repository: repo) ].
+			packageManager loadResolvedReferences ].
+%
+commit
+
 # Bootstrap Rowan into image
   run
   UserGlobals 
@@ -657,13 +677,14 @@ currentOrNil
 %
   commit
 
-# Install Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
+# Install FileSystem, Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
 #  methods into the correct package structure
   run
  	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo |
 	projectSetDefinition := RwProjectSetDefinition new.
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
 	{
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/specs/FileSystemGs.ston'. 'Default'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'. 'Bootstrap'}.

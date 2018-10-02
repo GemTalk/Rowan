@@ -3,7 +3,7 @@ run
 	deprecationAction := Deprecated deprecatedAction.
 	[
 		Deprecated doErrorOnDeprecated.
-		projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' ).
+		projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' 'FileSystem' ).
 		projectNames do: [:projectName |
 			"load test groups ... include deprecated packages for now"
 			Rowan projectTools load
