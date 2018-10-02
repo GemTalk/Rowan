@@ -563,12 +563,12 @@ currentOrNil
 	#( 'FileSystem-GemStone-Kernel' 'Files' 'Files-Tests' 'Kernel-Methods' 'Network-UUID' 'Network-UUID-Tests' 
 			'Zinc-Character-Encoding-Core' 'Zinc-Character-Encoding-Tests' 'FileSystem-Core' 'FileSystem-Disk' 
       'FileSystem-Memory' 'FileSystem-Path' 'FileSystem-Tests-Attributes' 'FileSystem-Tests-Core' 
-      'FileSystem-Tests-Disk' 'FileSystem-Tests-GemStone' 'FileSystem-Tests-Memory' 'FileSystem-Zip')
+      'FileSystem-Tests-Disk' 'FileSystem-Tests-GemStone' 'FileSystem-Tests-Memory' )
 		do: [ :packageName | 
 			packageManager
 				addResolvedReference:
 					(CypressResolvedReference name: packageName repository: repo) ].
-			packageManager loadResolvedReferences ].
+	packageManager loadResolvedReferences.
 %
 commit
 
@@ -684,14 +684,14 @@ commit
 	projectSetDefinition := RwProjectSetDefinition new.
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
 	{
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/specs/FileSystemGs.ston'. 'Default'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/rowan/specs/FileSystemGs.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'. 'Load'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'. 'Bootstrap'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'. 'Bootstrap'}.
 	} 
 	do: [:ar |
-		"Read project and packages from disk, creating a projectSetDefinition with all 4 projects"
+		"Read project and packages from disk, creating a projectSetDefinition with all 5 projects"
 		| specification specUrl readTool |
 		specUrl := ar at: 1.
 		specification := RwSpecification fromUrl: specUrl.

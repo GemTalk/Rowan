@@ -1,0 +1,74 @@
+"
+I am the GemStone/S implementation of ZnUTF8Encoder.
+I implement the variable length UTF-8 encoding and decoding of Unicode according to RFC 3629.
+
+Wikipedia reference http://en.wikipedia.org/wiki/UTF-8
+
+Part of Zinc HTTP Components.
+
+I use the ICU library to encode strings and decode ByteArray and Utf8 instances ... 
+"
+Class {
+	#name : 'ZnUTF8Encoder',
+	#superclass : 'Object',
+	#classVars : [
+		'Default'
+	],
+	#category : 'Zinc-Character-Encoding-Core'
+}
+
+{ #category : 'accessing' }
+ZnUTF8Encoder class >> default [
+	"Return a cached instance of the most commonly used encoder,
+	which is faster than going via #newForEncoding: that does a subclass search"
+	
+	^ Default ifNil: [ Default := self new ]
+]
+
+{ #category : 'instance creation' }
+ZnUTF8Encoder class >> newForEncoding: string [
+	"No further parametrization needed"
+	
+	^ self new
+]
+
+{ #category : 'convenience' }
+ZnUTF8Encoder >> decodeBytes: bytes [
+	"Decode bytes and return the resulting string"
+
+	^ bytes decodeFromUTF8
+]
+
+{ #category : 'convenience' }
+ZnUTF8Encoder >> encodeString: string [
+	"Encode string and return the resulting Utf8 instance"
+	
+	^ string encodeAsUTF8
+]
+
+{ #category : 'accessing' }
+ZnUTF8Encoder >> identifier [
+	^ #utf8
+]
+
+{ #category : 'convenience' }
+ZnUTF8Encoder >> readInto: aCollection startingAt: offset count: requestedCount fromStream: stream [
+	"Read requestedCount characters into string starting at offset,
+	returning the number read, there could be less available when stream is atEnd"
+
+	"For the time being, we are expecting that the requestedCount is ALWAYS greater than the
+		size of stream ... we cannot encode/decode partial streams"
+
+	| decodedCollection |
+	offset > 1
+		ifTrue: [ self error: 'decode operation not supported for large collections' ].
+	
+	decodedCollection := self decodeBytes: stream collection.
+	aCollection 
+		replaceFrom: offset 
+		to: offset + (requestedCount min: decodedCollection size) - 1
+		with: decodedCollection
+		startingAt: 1.
+	stream setToEnd.
+	^ 	requestedCount
+]
