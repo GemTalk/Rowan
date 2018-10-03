@@ -70,5 +70,5 @@ ZnUTF8Encoder >> readInto: aCollection startingAt: offset count: requestedCount 
 		with: decodedCollection
 		startingAt: 1.
 	stream setToEnd.
-	^ 	requestedCount
+	^ 	requestedCount min: decodedCollection size
 ]
