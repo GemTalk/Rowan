@@ -709,11 +709,15 @@ commit
 						projectSetDefinition addProject: projectDefinition ].
 				projectSetDefinition properties: theProjectSetDefinition properties ]
 			ifFalse: [
-				| configName |
+      	| configName groupNames |
 				configName := ar at: 2.
-				(readTool readProjectSetForProjectNamed: specification specName withConfiguration: configName)
-					do: [:projectDefinition |
-						projectSetDefinition addProject: projectDefinition ] ] ].
+				groupNames := specification defaultGroupNames.
+        (readTool
+					readProjectSetForProjectNamed: specification specName 
+						withConfigurations: { configName } 
+						groupNames: groupNames )
+            	do: [:projectDefinition |
+              	projectSetDefinition addProject: projectDefinition ] ] ].
 
 	loadedProjectInfo := projectSetDefinition properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
 	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
