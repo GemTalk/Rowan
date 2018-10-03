@@ -5,6 +5,19 @@ Class {
 }
 
 { #category : 'other' }
+RwPrjAuditTool >> auditAll [
+| res |
+	res := KeyValueDictionary new.
+	System myUserProfile symbolList do: [:aSmbDict | 
+			(aSmbDict at: #RwGsLoadedProjectRegistry ifAbsent: [KeyValueDictionary new]) keysAndValuesDo: [:prjName :aLoadedProject |
+				(self auditForProject: aLoadedProject) ifNotEmpty: [:aColl | res at: prjName put: aColl]
+			]
+	].
+	^res
+
+]
+
+{ #category : 'other' }
 RwPrjAuditTool >> auditForProject: aLoadedProject [
 "audit loaded project"
 

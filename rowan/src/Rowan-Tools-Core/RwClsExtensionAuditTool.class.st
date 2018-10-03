@@ -20,16 +20,16 @@ RwClsExtensionAuditTool >> auditLoadedClassExtenstion: aLoadedClass [
 
 	res := Array new.
 	(GsSession currentSession resolveSymbol: aLoadedClass name) 
-		ifNil: [res add: aLoadedClass]"there is no matching actual class for loaded class"
+		ifNil: [self _addAll: { 'Compiled class does not exists '-> aLoadedClass name} to: res for: aLoadedClass name] "there is no matching actual class for loaded class"
 		ifNotNil: [:bhv | aBehavior := bhv value ].
 "look for methods removed outside of Rowan API"
 	aBehavior notNil ifTrue: [
 		aLoadedClass 
 			loadedInstanceMethodsDo: [:aLoadedMethod | 
-				(aBehavior compiledMethodAt: aLoadedMethod name) ifNil: [self _addAll: { 'Missing compiled method: ', aLoadedMethod name } to: res for: aLoadedClass name.
+				(aBehavior compiledMethodAt: aLoadedMethod name) ifNil: [self _addAll: { 'Missing compiled method: ' -> aLoadedMethod  } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aLoadedMethod printString"]]
 			loadedClassMethodsDo: [:aLoadedMethod |
-				(aBehavior class compiledMethodAt: aLoadedMethod name) ifNil: [self _addAll: { 'Missing compiled method: ', aLoadedMethod name } to: res for: aLoadedClass name.
+				(aBehavior class compiledMethodAt: aLoadedMethod name) ifNil: [self _addAll: { 'Missing compiled method: ' -> aLoadedMethod  } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aLoadedMethod printString"]]
 	].
 	^res

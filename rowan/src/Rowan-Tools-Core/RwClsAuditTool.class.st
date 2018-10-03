@@ -26,14 +26,14 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 
 	res := Array new.
 	(GsSession currentSession resolveSymbol: aLoadedClass name) 
-		ifNil: [self _addAll: { 'Class does not exists ', aLoadedClass name} to: res for: aLoadedClass name] "there is no matching Class for LoadedClass"
+		ifNil: [self _addAll: { 'Class does not exists ' -> aLoadedClass name} to: res for: aLoadedClass name] "there is no matching Class for LoadedClass"
 		ifNotNil: [:bhv | 
 						(x := (aBehavior := bhv value) selectors reject: [:e | aLoadedClass includesSelector: e isMeta: false]) do: [:aSelector |
-								self _addAll: { 'Missing loaded method: ', aSelector } to: res for: aLoadedClass name.
+								self _addAll: { 'Missing loaded method ' ->  aSelector } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aSelector printString"
 						].
 						(x := (aBehavior := bhv value ) class  selectors reject: [:e | aLoadedClass includesSelector: e isMeta: true]) do: [:aSelector |
-								self _addAll: {'Missing loaded classmethod: ',  aSelector   } to: res for: aLoadedClass name.
+								self _addAll: {'Missing loaded classmethod: '->  aSelector   } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aSelector printString"
 						].
 	].
@@ -41,10 +41,10 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 	aBehavior notNil ifTrue: [
 		aLoadedClass 
 			loadedInstanceMethodsDo: [:aLoadedMethod | (aBehavior compiledMethodAt: aLoadedMethod name) 
-					ifNil: [self _addAll: { 'Missing compiled method: ', aLoadedMethod name } to: res for: aLoadedClass name.
+					ifNil: [self _addAll: { 'Missing compiled method: ' -> aLoadedMethod  } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aLoadedMethod printString"]]
 			loadedClassMethodsDo: [:aLoadedMethod |(aBehavior class compiledMethodAt: aLoadedMethod name) 
-					ifNil: [self _addAll: { 'Missing compiled classmethod: ', aLoadedMethod name} to: res for: aLoadedClass name.
+					ifNil: [self _addAll: { 'Missing compiled classmethod ' -> aLoadedMethod } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aLoadedMethod printString"]]
 	].
 	^res
