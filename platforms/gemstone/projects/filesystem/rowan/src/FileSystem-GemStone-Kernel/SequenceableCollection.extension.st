@@ -133,10 +133,3 @@ SequenceableCollection >> reversed [
 	^ result
 
 ]
-
-{ #category : '*filesystem-gemstone-kernel' }
-SequenceableCollection >> writeStreamPortable [
-
-	^ WriteStreamPortable on: self
-
-]

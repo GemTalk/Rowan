@@ -682,6 +682,7 @@ commit
   run
  	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo |
 	projectSetDefinition := RwProjectSetDefinition new.
+	loadedProjectInfo := Dictionary new.
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
 	{
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/rowan/specs/FileSystemGs.ston'. 'Default'}.
@@ -707,21 +708,22 @@ commit
 				theProjectSetDefinition
 					do: [:projectDefinition |
 						projectSetDefinition addProject: projectDefinition ].
-				projectSetDefinition properties: theProjectSetDefinition properties ]
+				loadedProjectInfo at: specification specName put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: specification specName) ]
 			ifFalse: [
-      	| configName groupNames |
+      	| configName groupNames theProjectSetDefinition |
 				configName := ar at: 2.
 				groupNames := specification defaultGroupNames.
-        (readTool
+        theProjectSetDefinition := readTool
 					readProjectSetForProjectNamed: specification specName 
 						withConfigurations: { configName } 
-						groupNames: groupNames )
+						groupNames: groupNames.
+				loadedProjectInfo at: specification specName put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: specification specName).
+				theProjectSetDefinition
             	do: [:projectDefinition |
               	projectSetDefinition addProject: projectDefinition ] ] ].
 
-	loadedProjectInfo := projectSetDefinition properties at: 'loadedProjectInfo' ifAbsent: [ Dictionary new ].
 	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
-			projectName = 'Rowan'
+			(#('FileSystemGs' 'Rowan') includes: projectName)
 				ifTrue: [ 
 					"install the packageMapSpecs for this load into the specification prior to the load"
 					| projectDefinition spec gemstoneSpec thePackageMapSpecs |
