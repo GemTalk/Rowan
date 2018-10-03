@@ -5,14 +5,45 @@ Class {
 }
 
 { #category : 'other' }
-RwPrjAuditTool >> auditProjectsNamed: aCol [
+RwPrjAuditTool >> auditForProject: aLoadedProject [
+"audit loaded project"
 
-	^aCol collect: [:prjName | (Rowan image loadedProjectNamed: prjName) 
-			loadedPackagesDo: [:a| ]
-			loadedClassedDo: [:a| ]
-			loadedClassExtenstionsDo: [:a| ]
-			loadedInstanceMethodsDo: [:a| ]
-			loadedClassMethodsDo: [:a| ]
-	]
+	| res |
+
+	res := KeyValueDictionary new.
+	aLoadedProject isDirty ifTrue: [
+		aLoadedProject loadedPackages values do: [:e | (Rowan packageTools audit auditForPackage: e) 
+				ifNotEmpty: [:aColl | res at: e name put: aColl]].	
+	].
+	^res
+
+]
+
+{ #category : 'other' }
+RwPrjAuditTool >> auditForProjectNamed: aProjectName [
+
+	^self auditForProject: (Rowan image loadedProjectNamed: aProjectName)
+
+]
+
+{ #category : 'other' }
+RwPrjAuditTool >> auditForProjectsNamed: aCol [
+"audit all named projects"
+	
+	| res |
+	res := Array new.
+		aCol do: [:prjName | res addAll: (self auditForProjectNamed: prjName )	].
+	^res
+
+]
+
+{ #category : 'other' }
+RwPrjAuditTool >> auditProjectsNamed: aCol [
+"audit all named projects"
+	
+	| res |
+	res := Array new.
+		aCol do: [:prjName | res addAll: (self auditForProjectNamed: prjName )	].
+	^res
 
 ]
