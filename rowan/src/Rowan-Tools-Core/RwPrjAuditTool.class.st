@@ -7,9 +7,9 @@ Class {
 { #category : 'other' }
 RwPrjAuditTool >> auditAll [
 | res |
-	res := KeyValueDictionary new.
+	res := KeyValueDictionary halt new.
 	System myUserProfile symbolList do: [:aSmbDict | 
-			(aSmbDict at: #RwGsLoadedProjectRegistry ifAbsent: [KeyValueDictionary new]) keysAndValuesDo: [:prjName :aLoadedProject |
+			((Rowan image  _loadedProjectRegistryForUserId: System myUserProfile userId) ifNil: [KeyValueDictionary new]) keysAndValuesDo: [:prjName :aLoadedProject |
 				(self auditForProject: aLoadedProject) ifNotEmpty: [:aColl | res at: prjName put: aColl]
 			]
 	].
