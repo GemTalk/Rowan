@@ -25,13 +25,12 @@ RwClsExtensionAuditTool >> auditLoadedClassExtenstion: aLoadedClass [
 "look for methods removed outside of Rowan API"
 	aBehavior notNil ifTrue: [
 		aLoadedClass 
-			loadedInstanceMethodsDo: [:aLoadedMethod | 
+			loadedInstanceMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
 				(aBehavior compiledMethodAt: aLoadedMethod name) ifNil: [self _addAll: { 'Missing compiled method: ' -> aLoadedMethod  } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aLoadedMethod printString"]]
-			loadedClassMethodsDo: [:aLoadedMethod |
+			loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
 				(aBehavior class compiledMethodAt: aLoadedMethod name) ifNil: [self _addAll: { 'Missing compiled method: ' -> aLoadedMethod  } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aLoadedMethod printString"]]
 	].
 	^res
-
 ]

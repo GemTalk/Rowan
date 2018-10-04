@@ -9,7 +9,7 @@ RwPrjAuditTool >> auditAll [
 | res |
 	res := KeyValueDictionary halt new.
 	System myUserProfile symbolList do: [:aSmbDict | 
-			((Rowan image  _loadedProjectRegistryForUserId: System myUserProfile userId) ifNil: [KeyValueDictionary new]) keysAndValuesDo: [:prjName :aLoadedProject |
+			(Rowan image  _loadedProjectRegistryForUserId: System myUserProfile userId) keysAndValuesDo: [:prjName :aLoadedProject |
 				(self auditForProject: aLoadedProject) ifNotEmpty: [:aColl | res at: prjName put: aColl]
 			]
 	].

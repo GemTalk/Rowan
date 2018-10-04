@@ -419,7 +419,7 @@ RwProjectAuditToolTest >> testMissingMethods [
 			loadedInstanceMethodsDo: [:anLMethod | (anLMethod name isEquivalent: 'bar') ifTrue: [self error: 'bar was compiled without Rowan']] 
 			loadedClassMethodsDo: [:cMethod | "do nothing"].
 
-	self assert: (x := RwPkgAuditTool new auditForPackageName:  'AuditTests') size = 2.
+	self assert: (x := RwPkgAuditTool new auditForPackageNamed:  'AuditTests') size = 2.
 		
 
 
