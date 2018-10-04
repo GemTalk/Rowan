@@ -18,7 +18,7 @@ RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
 
 	| userProfile userPlatformDict |
 	userProfile := AllUsers userWithId: aUserId.
-	userProfile defaultObjectSecurityPolicy currentUserCanRead
+	(userProfile defaultObjectSecurityPolicy ifNil: [true] ifNotNil: [:x |x currentUserCanRead])
 		ifFalse: [
 			"do not have permissions to read objects created by <aUserId>"
 			^ nil ].
