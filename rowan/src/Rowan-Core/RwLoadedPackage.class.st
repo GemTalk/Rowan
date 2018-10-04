@@ -45,6 +45,12 @@ RwLoadedPackage >> asDefinition [
 		classExtensions: self classExtensionDefinitions
 ]
 
+{ #category : 'other' }
+RwLoadedPackage >> asExtensionName [
+
+	^'*', self name asLowercase
+]
+
 { #category : 'private' }
 RwLoadedPackage >> classDefinitions [
 	"Create definitions from all of the classes I define, and answer the collection of them"

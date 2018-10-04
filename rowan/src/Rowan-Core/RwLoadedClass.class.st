@@ -80,21 +80,20 @@ RwLoadedClass >> loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassM
 	loadedInstanceMethods
 		valuesDo: [ :loadedMethod | 
 			loadedInstanceMethodBlock
-				cull: loadedMethod 
-				cull: self
+				cull:  self loadedProject
 				cull: self loadedPackage
-				cull: self loadedProject
+				cull: self 
+				cull: loadedMethod
 				
 	].
 	loadedClassMethods
 		valuesDo: [ :loadedMethod | 
 			loadedClassMethodBlock
-				cull: loadedMethod 
-				cull: self
-				cull: self loadedPackage
 				cull: self loadedProject
+				cull: self loadedPackage
+				cull: self 
+				cull: loadedMethod
 	]
-
 ]
 
 { #category : 'accessing' }

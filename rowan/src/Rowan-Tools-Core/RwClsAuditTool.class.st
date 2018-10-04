@@ -28,12 +28,14 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 	(GsSession currentSession resolveSymbol: aLoadedClass name) 
 		ifNil: [self _addAll: { 'Class does not exists ' -> aLoadedClass name} to: res for: aLoadedClass name] "there is no matching Class for LoadedClass"
 		ifNotNil: [:bhv | 
-						(x := (aBehavior := bhv value) selectors reject: [:e | aLoadedClass includesSelector: e isMeta: false]) do: [:aSelector |
-								self _addAll: { 'Missing loaded method ' ->  aSelector } to: res for: aLoadedClass name.
+						(x := (aBehavior := bhv value) selectors reject: [:e |  ((aBehavior categoryOfSelector: e) first == $*) or: [
+							aLoadedClass includesSelector: e isMeta: false]]) do: [:aSelector |
+								self _addAll: { aSelector  ->'Missing loaded method '  } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aSelector printString"
 						].
-						(x := (aBehavior := bhv value ) class  selectors reject: [:e | aLoadedClass includesSelector: e isMeta: true]) do: [:aSelector |
-								self _addAll: {'Missing loaded classmethod: '->  aSelector   } to: res for: aLoadedClass name.
+						(x := (aBehavior := bhv value ) class  selectors reject: [:e | ((aBehavior class categoryOfSelector: e) first == $*) or: [
+									aLoadedClass includesSelector: e isMeta: true]]) do: [:aSelector |
+								self _addAll: {aSelector  -> 'Missing loaded classmethod: '    } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aSelector printString"
 						].
 	].
@@ -41,11 +43,12 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 	aBehavior notNil ifTrue: [
 		aLoadedClass 
 			loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | (aBehavior compiledMethodAt: aLoadedMethod name) 
-					ifNil: [self _addAll: { 'Missing compiled method: ' -> aLoadedMethod  } to: res for: aLoadedClass name.
+					ifNil: [self _addAll: { aLoadedMethod name  -> 'Missing compiled method: '   } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aLoadedMethod printString"]]
 			loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |(aBehavior class compiledMethodAt: aLoadedMethod name) 
-					ifNil: [self _addAll: { 'Missing compiled classmethod ' -> aLoadedMethod } to: res for: aLoadedClass name.
+					ifNil: [self _addAll: {aLoadedMethod name  -> 'Missing compiled classmethod ' } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aLoadedMethod printString"]]
 	].
 	^res
+
 ]

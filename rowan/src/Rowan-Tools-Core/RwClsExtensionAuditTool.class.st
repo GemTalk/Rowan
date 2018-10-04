@@ -21,16 +21,32 @@ RwClsExtensionAuditTool >> auditLoadedClassExtenstion: aLoadedClass [
 	res := Array new.
 	(GsSession currentSession resolveSymbol: aLoadedClass name) 
 		ifNil: [self _addAll: { 'Compiled class does not exists '-> aLoadedClass name} to: res for: aLoadedClass name] "there is no matching actual class for loaded class"
-		ifNotNil: [:bhv | aBehavior := bhv value ].
+		ifNotNil: [:bhv | | selectors |
+
+			aBehavior := bhv value.
+			(aBehavior includesCategory: aLoadedClass loadedPackage asExtensionName) ifTrue: [
+			selectors := aBehavior selectorsIn: aLoadedClass loadedPackage asExtensionName.
+				(selectors reject: [:e | aLoadedClass includesSelector: e isMeta: false]) do: [:aSelector |
+								self _addAll: { aSelector -> 'Missing loaded extension method' ->  aSelector } to: res for: aLoadedClass name.
+						]
+			].
+			(aBehavior class includesCategory: aLoadedClass loadedPackage asExtensionName) ifTrue: [
+					selectors := aBehavior class selectorsIn: aLoadedClass loadedPackage asExtensionName.
+						( selectors reject: [:e | aLoadedClass includesSelector: e isMeta: true]) do: [:aSelector |
+								self _addAll: {aSelector -> 'Missing loaded extensions classmethod: '   } to: res for: aLoadedClass name.
+						]						
+			]
+	].
 "look for methods removed outside of Rowan API"
 	aBehavior notNil ifTrue: [
 		aLoadedClass 
 			loadedInstanceMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-				(aBehavior compiledMethodAt: aLoadedMethod name) ifNil: [self _addAll: { 'Missing compiled method: ' -> aLoadedMethod  } to: res for: aLoadedClass name.
+				(aBehavior compiledMethodAt: aLoadedMethod name) ifNil: [self _addAll: {aLoadedMethod -> 'Missing compiled method: '   } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aLoadedMethod printString"]]
 			loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
-				(aBehavior class compiledMethodAt: aLoadedMethod name) ifNil: [self _addAll: { 'Missing compiled method: ' -> aLoadedMethod  } to: res for: aLoadedClass name.
+				(aBehavior class compiledMethodAt: aLoadedMethod name) ifNil: [self _addAll: { aLoadedMethod -> 'Missing compiled method: '    } to: res for: aLoadedClass name.
 "Transcript show: 'Missing ', aLoadedMethod printString"]]
 	].
 	^res
+
 ]
