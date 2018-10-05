@@ -8,7 +8,7 @@ run
 			"load test groups ... include deprecated packages for now"
 			Rowan projectTools load
 				loadProjectNamed: projectName
-				withGroupNames: #('tests' 'deprecated') ].  
+				withGroupNames: #('tests' 'deprecated' 'jadeServer') ].
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 		res := suite run.
