@@ -205,7 +205,7 @@ RwGsModificationTopazWriterVisitor >> ensureProjectDirectoryStructureFor: aProje
 { #category : 'exporting' }
 RwGsModificationTopazWriterVisitor >> export [
 
-	| classDefinitionsInOrder classExtensionsInOrder |
+	| classDefinitionsInOrder classExtensionsInOrder classExtensionsList |
 	classDefinitionsInOrder := (CypressGsGeneralDependencySorter
 		on: self classDefinitions values
 		dependsOn: [:candidate | candidate superclassName]
@@ -213,10 +213,26 @@ RwGsModificationTopazWriterVisitor >> export [
 	self exportClassDefinitions: classDefinitionsInOrder;
 		exportMethodDefinitions: classDefinitionsInOrder.
 
+	"consolidate the classExtensions for a class from multiple packages into a single definition"
+	classExtensionsList := Set new.
+	self classExtensions values do: [:aSet |
+		aSet size <= 1 
+			ifTrue: [ classExtensionsList addAll: aSet ]
+			ifFalse: [
+				| ar def |
+				ar := aSet asArray.
+				def := (ar at: 1) copy.
+				2 to: ar size do: [:index |
+					| d |
+					d := (ar at: index).
+					d classMethodDefinitions values do: [:m | def addClassMethodDefinition: m ].
+					d instanceMethodDefinitions values do: [:m | def addInstanceMethodDefinition: m ] ].
+				classExtensionsList add: def ] ].
+
 	classExtensionsInOrder := (CypressGsGeneralDependencySorter
-		on: self classExtensions values
+		on: classExtensionsList
 		dependsOn: [:candidate | 'Object' ]
-		dependent: [:candidate | candidate name]) inOrder.
+		dependent: [:candidate | candidate name ]) inOrder.
 	self
 		exportExtensionMethodDefinitions: classExtensionsInOrder.
 
@@ -265,14 +281,14 @@ RwGsModificationTopazWriterVisitor >> exportMethodDefinitions: classDefinitionsI
 			ifTrue: [ 
 				stream nextPutAll: '!		Class methods for ', className printString; lf;
 				lf ].
-		classDef classMethodDefinitions values
+		(classDef classMethodDefinitions values sort: [:a :b | a selector <= b selector ])
 			do: [:methodDef |
 				self _fileOutMethod: methodDef forClass: className isMeta: true on: stream ].
 		classDef instanceMethodDefinitions isEmpty not
 			ifTrue: [ 
 				stream nextPutAll: '!		Instance methods for ', className printString; lf;
 				lf ].
-		classDef instanceMethodDefinitions values
+		(classDef instanceMethodDefinitions values sort: [:a :b | a selector <= b selector ])
 			do: [:methodDef |
 				self _fileOutMethod: methodDef forClass: className isMeta: false on: stream ] ].
 ]
@@ -305,8 +321,8 @@ RwGsModificationTopazWriterVisitor >> processClassExtension: aClassExtensionModi
 
 	| classExtension |
 	classExtension := aClassExtensionModification after.
-	(self classExtensions at: classExtension name ifAbsent: []) ifNotNil: [ self error: 'duplicate class extension defintion for ', classExtension name printString, ' encountered.'].
-	self classExtensions at: classExtension name put: classExtension.
+	(self classExtensions at: classExtension name ifAbsentPut: [ Set new ])
+		add: classExtension
 
 	"no need to visit any further as the class etension records the instance and class methods"
 ]

@@ -183,9 +183,14 @@ method4 ^4
 
 !		Instance methods for ''Issue361Class1''
 
-category: ''*issue361-extension''
+category: ''*issue361-extension1''
 method: Issue361Class1
 method1 ^1
+%
+
+category: ''*issue361-extension2''
+method: Issue361Class1
+method5 ^5
 %
 
 '
@@ -346,6 +351,7 @@ RwProjectWriterTest >> testGsTopazWriter_B [
 		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
+		addPackageNamed: packageName3;
 		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
 		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
 		yourself.
@@ -425,7 +431,6 @@ RwProjectWriterTest >> testGsTopazWriter_B [
 					newForSelector: #'method5'
 					protocol: '*', packageName3 asLowercase
 					source: 'method5 ^5').
-	packageDefinition := projectDefinition packageNamed: packageName2.
 	packageDefinition addClassExtension: classExtensionDefinition.
 
 "diff"
