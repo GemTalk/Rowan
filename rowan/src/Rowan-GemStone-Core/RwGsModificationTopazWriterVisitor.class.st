@@ -79,7 +79,7 @@ RwGsModificationTopazWriterVisitor >> _writeClassTypeMessage: classDefinition on
   | classType classTypeMessage hasInstanceVariables |
   hasInstanceVariables := true.
   classType := classDefinition subclassType.
-  classType = 'indexableSubclass'
+  classType = 'variable'
     ifTrue: [ classTypeMessage := 'indexableSubclass: ' ]
     ifFalse: [ classType = 'byteSubclass'
         ifTrue: [ classTypeMessage := 'byteSubclass: '.
