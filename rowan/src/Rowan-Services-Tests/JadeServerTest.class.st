@@ -4,6 +4,13 @@ Class {
 	#category : 'Rowan-Services-Tests'
 }
 
+{ #category : 'support' }
+JadeServerTest >> jadeServer [
+	"use what a service would use" 
+
+	^RowanAnsweringService new jadeServer
+]
+
 { #category : 'tests' }
 JadeServerTest >> test_jadeServerExists [
 
@@ -73,5 +80,18 @@ JadeServerTest >> test_updateFromSton [
 	"the entry point for all services call is JadeServer>>updateFromSton:.
 	Make sure the method is present and will accept/return ston string"
 
-	self assert: (JadeServer canUnderstand: #updateFromSton:)
+	| service stonString resultString services |
+
+	self assert: (JadeServer canUnderstand: #updateFromSton:).
+	service := RowanQueryService new 
+				command: #implementorsOf:; 
+				commandArgs: (Array with: #test_updateFromSton).
+	stonString := STON toString: (Array with: service).
+	resultString := self jadeServer updateFromSton: stonString. 
+	[services := STON fromString: resultString.
+	self assert: services size equals: 1.
+	self assert: (services first isKindOf: RowanQueryService).
+	self assert: (services first queryResults first isKindOf: RowanMethodService).
+	self assert: services first queryResults first selector == #test_updateFromSton]
+		ensure: [RowanCommandResult initializeResults.]
 ]
