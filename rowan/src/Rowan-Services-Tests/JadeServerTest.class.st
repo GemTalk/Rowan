@@ -25,6 +25,13 @@ JadeServerTest >> test_jadeServerExists [
 ]
 
 { #category : 'tests' }
+JadeServerTest >> test_jadeServerHeldInSessionState [
+	
+	self assert: (RowanAnsweringService new jadeServer isKindOf: JadeServer64bit32).
+	self assert: RowanAnsweringService new jadeServer == (System _sessionStateAt: 3)
+]
+
+{ #category : 'tests' }
 JadeServerTest >> test_jadeServerHierarchyValid [
 
 	"The hierarchy should be:
@@ -58,4 +65,13 @@ JadeServerTest >> test_jadeServerHierarchyValid [
 	jadeServerClass := Rowan platform jadeServerClassNamed: #JadeServer64bit32. 
 	subclasses :=  jadeServerClass subclasses asArray.
 	self assert: subclasses isEmpty
+]
+
+{ #category : 'tests' }
+JadeServerTest >> test_updateFromSton [
+	
+	"the entry point for all services call is JadeServer>>updateFromSton:.
+	Make sure the method is present and will accept/return ston string"
+
+	self assert: (JadeServer canUnderstand: #updateFromSton:)
 ]
