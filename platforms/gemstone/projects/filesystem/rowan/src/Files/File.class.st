@@ -389,7 +389,9 @@ File class >> write: aGsFile from: stringOrByteArray startingAt: startIndex coun
 	"Write count bytes onto this file from the given string or byte array starting at the given index. 	Answer the number of bytes written."
 
 	| written |
-	written := aGsFile nextPutAll: (stringOrByteArray copyFrom: startIndex to: startIndex + count - 1).
+	written := (startIndex = 1 and: [ count = stringOrByteArray size])
+		ifTrue: [ aGsFile nextPutAll: stringOrByteArray ]
+		ifFalse: [ aGsFile nextPutAll: (stringOrByteArray copyFrom: startIndex to: startIndex + count - 1) ].
 	written ifNil: [ self error: 'failed write' ].
 	^ written
 ]

@@ -61,7 +61,7 @@ ZnBufferedWriteStream >> bufferSize [
 
 { #category : 'initialize-release' }
 ZnBufferedWriteStream >> close [
-	self flushBuffer.
+	self flush.
 	stream close
 ]
 
@@ -84,11 +84,6 @@ ZnBufferedWriteStream >> defaultBufferSize [
 ZnBufferedWriteStream >> discardBuffer [
 
 	position := 0
-]
-
-{ #category : 'initialize-release' }
-ZnBufferedWriteStream >> finish [
-	self flushBuffer
 ]
 
 { #category : 'accessing' }
@@ -294,7 +289,7 @@ ZnBufferedWriteStream >> truncate [
 { #category : 'accessing' }
 ZnBufferedWriteStream >> truncate: anInteger [ 
 	
-	self flushBuffer.
+	self flush.
 	stream truncate: anInteger
 ]
 
