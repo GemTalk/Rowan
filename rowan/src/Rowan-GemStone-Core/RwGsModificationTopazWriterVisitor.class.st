@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'topazFilename',
 		'filenameExtension',
+		'currentProjectDefinition',
 		'currentPackageDefinition',
+		'classSymbolDictionaryNames',
 		'classDefinitions',
 		'classExtensions',
 		'bufferedStream'
@@ -34,7 +36,7 @@ RwGsModificationTopazWriterVisitor >> _fileOutClassDeclaration: classDefinition 
     lf;
     nextPutAll: '	poolDictionaries: #()';
     lf;
-    nextPutAll: '	inDictionary: UserGlobals';
+    nextPutAll: '	inDictionary: ', (self classSymbolDictionaryNames at: classDefinition name);
     lf;
     nextPutAll: '	options: #())';
     lf;
@@ -116,9 +118,8 @@ RwGsModificationTopazWriterVisitor >> addedPackage: aPackageModification [
 { #category : 'actions' }
 RwGsModificationTopazWriterVisitor >> addedProject: aProjectModification [
 
-	| addedProject |
 	super addedProject: aProjectModification.
-	addedProject := aProjectModification after.
+	currentProjectDefinition := aProjectModification after.
 	aProjectModification packagesModification acceptVisitor: self
 ]
 
@@ -171,9 +172,21 @@ RwGsModificationTopazWriterVisitor >> classExtensions [
 ]
 
 { #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> classSymbolDictionaryNames [
+
+	^ classSymbolDictionaryNames ifNil: [ classSymbolDictionaryNames := Dictionary new ]
+]
+
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitor >> currentPackageDefinition [
 
 	^ currentPackageDefinition
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> currentProjectDefinition [
+
+	^ currentProjectDefinition
 ]
 
 { #category : 'actions' }
@@ -308,9 +321,12 @@ RwGsModificationTopazWriterVisitor >> filenameExtension: aString [
 { #category : 'class writing' }
 RwGsModificationTopazWriterVisitor >> processClass: aClassModification [
 
-	| classDefinition |
+	| classDefinition symbolDictName |
 	classDefinition := aClassModification after.
 	(self classDefinitions at: classDefinition name ifAbsent: []) ifNotNil: [ self error: 'duplicate class defintion for ', classDefinition name printString, ' encountered.'].
+
+	symbolDictName := self currentProjectDefinition symbolDictNameForPackageNamed: self currentPackageDefinition name.
+	self classSymbolDictionaryNames at: classDefinition name put: symbolDictName.
 	self classDefinitions at: classDefinition name put: classDefinition.
 
 	"no need to visit any further as the class definition records the instance and class methods"

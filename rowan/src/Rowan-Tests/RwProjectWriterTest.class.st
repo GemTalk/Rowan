@@ -25,7 +25,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: CypressTestData
 	options: #())
 		category: ''Issue361-Core'';
 		comment: '''';
@@ -40,7 +40,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: CypressTestData
 	options: #())
 		category: ''Issue361-Core'';
 		comment: '''';
@@ -55,7 +55,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: CypressTestData
 	options: #())
 		category: ''Issue361-Core'';
 		comment: '''';
@@ -114,7 +114,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: CypressTestData
 	options: #())
 		category: ''Issue361-Core'';
 		comment: '''';
@@ -129,7 +129,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: CypressTestData
 	options: #())
 		category: ''Issue361-Core'';
 		comment: '''';
@@ -144,7 +144,7 @@ doit
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: CypressTestData
 	options: #())
 		category: ''Issue361-Core'';
 		comment: '''';
