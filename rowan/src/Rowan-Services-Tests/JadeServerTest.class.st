@@ -35,7 +35,7 @@ JadeServerTest >> test_jadeServerExists [
 JadeServerTest >> test_jadeServerHeldInSessionState [
 	
 	self assert: (RowanAnsweringService new jadeServer isKindOf: JadeServer64bit32).
-	self assert: RowanAnsweringService new jadeServer == (System _sessionStateAt: 3)
+	self assert: RowanAnsweringService new jadeServer == (System __sessionStateAt: 3)
 ]
 
 { #category : 'tests' }
