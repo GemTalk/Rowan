@@ -76,6 +76,14 @@ JadeServerTest >> test_jadeServerHierarchyValid [
 ]
 
 { #category : 'tests' }
+JadeServerTest >> test_rowanCanFindJadeServer [
+
+	self assert: (Rowan class canUnderstand: #jadeServerClassNamed:).
+	self assert: (RwGsPlatform canUnderstand: #jadeServerClassNamed:).
+	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit32) equals: JadeServer64bit32
+]
+
+{ #category : 'tests' }
 JadeServerTest >> test_serviceUsesCanonicalJadeServer [
 	
 	self assert: (RowanAnsweringService new jadeServer isKindOf: JadeServer64bit32).
