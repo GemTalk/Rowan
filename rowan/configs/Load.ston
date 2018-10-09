@@ -9,6 +9,8 @@
 		},
 	#configurationNames : [ 
 		'Kernel', 
+		'Globals',
+		'UserGlobals',
 		'Tests'
 		],
 	#conditionalPackages : {

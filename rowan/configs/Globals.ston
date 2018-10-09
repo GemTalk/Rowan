@@ -1,0 +1,49 @@
+ RwNestedProjectLoadConfiguration{
+	#name : 'Globals',
+	#version : '0.1.0',
+	#conditionalPackages : {
+		[ 'common' ] : {
+    	'core': {
+				#packageNames : [
+					'Rowan-Cypress-Kernel',
+					'Rowan-Tools-Kernel'
+					]
+				}
+			},
+		[ 'gemstone' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-Kernel'
+					]
+				}
+			},
+		[ 'gs3.[2-]' ] : {
+      'core': {
+				#packageNames : [
+					'GemStone-Interactions-Kernel'
+					]
+				}
+			},
+		[ 'gs3.2.[15-]' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-3215'
+					]
+				}
+			}
+		},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
+					'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' }
+					}
+				}
+			}
+		},
+	#comment : 'Rowan Globals configuration - packages are loaded into Globals symbol dictionary'
+}
