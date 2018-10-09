@@ -98,7 +98,7 @@ JadeServerTest >> test_updateFromSton [
 
 	| service stonString resultString services |
 
-	self assert: (JadeServer canUnderstand: #updateFromSton:).
+	self assert: ((UserGlobals at: #JadeServer) canUnderstand: #updateFromSton:).
 	service := RowanQueryService new 
 				command: #implementorsOf:; 
 				commandArgs: (Array with: #test_updateFromSton).
