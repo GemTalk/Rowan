@@ -15,7 +15,7 @@ JadeServerTest >> jadeServer [
 JadeServerTest >> test_jadeServerCanonicalLocation [
 	"We reuse the topaz session state slot. Safe because this is not a topaz session"
 	
-	self assert: ((System __sessionStateAt: 3) isKindOf: JadeServer64bit32).
+	self assert: ((System __sessionStateAt: 3) isKindOf: (UserGlobals at: #JadeServer64bit32)).
 	self assert: ((System __sessionStateAt: 3) class canUnderstand: #updateFromSton:)
 ]
 
@@ -80,13 +80,13 @@ JadeServerTest >> test_rowanCanFindJadeServer [
 
 	self assert: (Rowan class canUnderstand: #jadeServerClassNamed:).
 	self assert: (RwGsPlatform canUnderstand: #jadeServerClassNamed:).
-	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit32) equals: JadeServer64bit32
+	self assert: (Rowan jadeServerClassNamed: #JadeServer64bit32) equals: (UserGlobals at: #JadeServer64bit32)
 ]
 
 { #category : 'tests' }
 JadeServerTest >> test_serviceUsesCanonicalJadeServer [
 	
-	self assert: (RowanAnsweringService new jadeServer isKindOf: JadeServer64bit32).
+	self assert: (RowanAnsweringService new jadeServer isKindOf: (UserGlobals at: #JadeServer64bit32)).
 	self assert: RowanAnsweringService new jadeServer == (System __sessionStateAt: 3)
 ]
 
