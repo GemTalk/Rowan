@@ -128,8 +128,7 @@ RwAbstractProjectConfiguration >> acceptCompoundVisitor: aVisitor [
 { #category : 'visiting' }
 RwAbstractProjectConfiguration >> acceptNestedVisitor: aVisitor [
 
-	^ self subclassResponsibility: #acceptNestedVisitor:
-
+	^ self acceptVisitor: aVisitor
 ]
 
 { #category : 'visiting' }

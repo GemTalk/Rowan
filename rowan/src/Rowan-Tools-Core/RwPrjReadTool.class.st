@@ -41,10 +41,11 @@ RwPrjReadTool >> _readProjectSetForProjectDefinition: projectDefinition packageN
 ]
 
 { #category : 'private' }
-RwPrjReadTool >> _visitConfigurations: visitorClass forProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames [
+RwPrjReadTool >> _visitConfigurations: visitorClass forProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: forLoad [
 
 	| spec projectName configDirectory visitor |
 	spec := projectDefinition specification.
+	spec repositoryRootPath ifNil: [ ^ nil ].
 	projectName := projectDefinition name.
 	configDirectory := spec repositoryRootPath , '/' , spec configsPath , '/'.
 	(Rowan fileUtilities directoryExists: configDirectory)
@@ -59,13 +60,24 @@ RwPrjReadTool >> _visitConfigurations: visitorClass forProjectDefinition: projec
 		url := 'file:' , configDirectory, configName , '.ston'.
 		config := RwAbstractProjectConfiguration fromUrl: url.
 		config projectName: projectName.
-		visitor visit: config ].
+		forLoad
+			ifTrue: [
+				"expect all config names to represent loadable configurations - throw error if a nested configuration is encountered"
+				visitor visit: config ]
+			ifFalse: [ 
+				"resolve config names without respect to whether or not the configuration is loadable"
+				visitor visitNested: config ] ].
 	^visitor
-
 ]
 
 { #category : 'read configurations' }
 RwPrjReadTool >> readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames [
+
+	^self readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: true
+]
+
+{ #category : 'read configurations' }
+RwPrjReadTool >> readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: forLoad [
 
 	| spec theConfigNames theGroupNames |
 	spec := projectDefinition specification.
@@ -80,7 +92,7 @@ RwPrjReadTool >> readConfigurationsForProjectDefinition: projectDefinition withC
 		forProjectDefinition: projectDefinition 
 		withConfigurations: theConfigNames 
 		groupNames: theGroupNames
-
+		forLoad: forLoad
 ]
 
 { #category : 'read project definitions' }

@@ -2,6 +2,7 @@ Class {
 	#name : 'RwGsModificationTopazWriterVisitor',
 	#superclass : 'RwModificationWriterVisitor',
 	#instVars : [
+		'topazFilenameConfigsMap',
 		'topazFilename',
 		'filenameExtension',
 		'currentProjectDefinition',
@@ -9,7 +10,10 @@ Class {
 		'classSymbolDictionaryNames',
 		'classDefinitions',
 		'classExtensions',
-		'bufferedStream'
+		'bufferedStream',
+		'topazFilenamePackageNamesMap',
+		'classDefPackageNameMap',
+		'classExtPackageNameMap'
 	],
 	#category : 'Rowan-GemStone-Core'
 }
@@ -67,6 +71,20 @@ RwGsModificationTopazWriterVisitor >> _fileOutMethod: methodDefinition forClass:
 ]
 
 { #category : 'private exporting' }
+RwGsModificationTopazWriterVisitor >> _setBufferedStreamFor: filename [
+
+	^ self _setBufferedStreamFor: filename extension: self filenameExtension
+]
+
+{ #category : 'private exporting' }
+RwGsModificationTopazWriterVisitor >> _setBufferedStreamFor: filename extension: extension [
+
+	| encodedStream |
+	encodedStream := (self repositoryRootPath / filename, extension) writeStreamEncoded: 'utf8'.
+	bufferedStream := ZnBufferedWriteStream on: encodedStream
+]
+
+{ #category : 'private exporting' }
 RwGsModificationTopazWriterVisitor >> _stringForVariables: variableList [
 
 	| stream |
@@ -119,8 +137,7 @@ RwGsModificationTopazWriterVisitor >> addedPackage: aPackageModification [
 RwGsModificationTopazWriterVisitor >> addedProject: aProjectModification [
 
 	super addedProject: aProjectModification.
-	currentProjectDefinition := aProjectModification after.
-	aProjectModification packagesModification acceptVisitor: self
+	self processProject: aProjectModification
 ]
 
 { #category : 'accessing' }
@@ -156,7 +173,7 @@ RwGsModificationTopazWriterVisitor >> changedProject: aProjectModification [
 	super changedProject: aProjectModification.
 self halt.
 
-	aProjectModification packagesModification acceptVisitor: self
+	self processProject: aProjectModification
 ]
 
 { #category : 'accessing' }
@@ -166,9 +183,21 @@ RwGsModificationTopazWriterVisitor >> classDefinitions [
 ]
 
 { #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> classDefPackageNameMap [
+
+	^ classDefPackageNameMap ifNil: [ classDefPackageNameMap := Dictionary new ]
+]
+
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitor >> classExtensions [
 
 	^ classExtensions ifNil: [ classExtensions := Dictionary new ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> classExtPackageNameMap [
+
+	^ classExtPackageNameMap ifNil: [ classExtPackageNameMap := IdentityKeyValueDictionary new ]
 ]
 
 { #category : 'accessing' }
@@ -218,38 +247,55 @@ RwGsModificationTopazWriterVisitor >> ensureProjectDirectoryStructureFor: aProje
 { #category : 'exporting' }
 RwGsModificationTopazWriterVisitor >> export [
 
-	| classDefinitionsInOrder classExtensionsInOrder classExtensionsList |
-	classDefinitionsInOrder := (CypressGsGeneralDependencySorter
-		on: self classDefinitions values
-		dependsOn: [:candidate | candidate superclassName]
-		dependent: [:candidate | candidate name]) inOrder.
-	self exportClassDefinitions: classDefinitionsInOrder;
-		exportMethodDefinitions: classDefinitionsInOrder.
+	self topazFilenamePackageNamesMap keysAndValuesDo: [:filename :packageNames |
+		| classDefinitionsInOrder classExtensionsInOrder classExtensionsList classDefinitionsList |
 
-	"consolidate the classExtensions for a class from multiple packages into a single definition"
-	classExtensionsList := Set new.
-	self classExtensions values do: [:aSet |
-		aSet size <= 1 
-			ifTrue: [ classExtensionsList addAll: aSet ]
-			ifFalse: [
-				| ar def |
-				ar := aSet asArray.
-				def := (ar at: 1) copy.
-				2 to: ar size do: [:index |
-					| d |
-					d := (ar at: index).
-					d classMethodDefinitions values do: [:m | def addClassMethodDefinition: m ].
-					d instanceMethodDefinitions values do: [:m | def addInstanceMethodDefinition: m ] ].
-				classExtensionsList add: def ] ].
+		self _setBufferedStreamFor: filename.
 
-	classExtensionsInOrder := (CypressGsGeneralDependencySorter
-		on: classExtensionsList
-		dependsOn: [:candidate | 'Object' ]
-		dependent: [:candidate | candidate name ]) inOrder.
-	self
-		exportExtensionMethodDefinitions: classExtensionsInOrder.
+		classDefinitionsList := Set new.
+		self classDefPackageNameMap keysAndValuesDo: [:className :packageName |
+			(packageNames includes: packageName)
+				ifTrue: [ classDefinitionsList add: (self classDefinitions at: className) ] ].
 
-	self bufferedStream flush; close
+		classDefinitionsInOrder := (CypressGsGeneralDependencySorter
+			on: classDefinitionsList
+			dependsOn: [:candidate | candidate superclassName]
+			dependent: [:candidate | candidate name]) inOrder.
+		self exportClassDefinitions: classDefinitionsInOrder;
+			exportMethodDefinitions: classDefinitionsInOrder.
+
+		"consolidate the classExtensions for a class from multiple packages into a single definition"
+		classExtensionsList := Set new. 
+		self classExtensions keysAndValuesDo: [:classExtName :extSet |
+			| extsInConfig |
+			extsInConfig := Set new.
+			extSet do: [:ext |
+				| packageName |
+				packageName := self classExtPackageNameMap at: ext.
+				(packageNames includes: packageName)
+					ifTrue: [ extsInConfig add: ext ] ].
+
+			extsInConfig size <= 1 
+				ifTrue: [ classExtensionsList addAll: extsInConfig ]
+				ifFalse: [
+					| ar def |
+					ar := extsInConfig asArray.
+					def := (ar at: 1) copy.
+					2 to: ar size do: [:index |
+						| d |
+						d := (ar at: index).
+						d classMethodDefinitions values do: [:m | def addClassMethodDefinition: m ].
+						d instanceMethodDefinitions values do: [:m | def addInstanceMethodDefinition: m ] ].
+					classExtensionsList add: def ] ].
+
+		classExtensionsInOrder := (CypressGsGeneralDependencySorter
+			on: classExtensionsList
+			dependsOn: [:candidate | 'Object' ]
+			dependent: [:candidate | candidate name ]) inOrder.
+		self
+			exportExtensionMethodDefinitions: classExtensionsInOrder.
+
+		self bufferedStream flush; close ].
 ]
 
 { #category : 'exporting' }
@@ -329,6 +375,8 @@ RwGsModificationTopazWriterVisitor >> processClass: aClassModification [
 	self classSymbolDictionaryNames at: classDefinition name put: symbolDictName.
 	self classDefinitions at: classDefinition name put: classDefinition.
 
+	self classDefPackageNameMap at: classDefinition name put: currentPackageDefinition name.
+
 	"no need to visit any further as the class definition records the instance and class methods"
 ]
 
@@ -338,7 +386,9 @@ RwGsModificationTopazWriterVisitor >> processClassExtension: aClassExtensionModi
 	| classExtension |
 	classExtension := aClassExtensionModification after.
 	(self classExtensions at: classExtension name ifAbsentPut: [ Set new ])
-		add: classExtension
+		add: classExtension.
+
+	self classExtPackageNameMap at: classExtension put: currentPackageDefinition name.
 
 	"no need to visit any further as the class etension records the instance and class methods"
 ]
@@ -349,6 +399,32 @@ RwGsModificationTopazWriterVisitor >> processPackage: aPackageModification [
 	currentPackageDefinition := aPackageModification after.
 	aPackageModification classesModification acceptVisitor: self.
 	aPackageModification classExtensionsModification acceptVisitor: self
+]
+
+{ #category : 'project writing' }
+RwGsModificationTopazWriterVisitor >> processProject: aProjectModification [
+
+	| map readTool |
+	currentProjectDefinition := aProjectModification after.
+	map := self topazFilenamePackageNamesMap.
+	readTool := Rowan projectTools read.
+	self topazFilenameConfigsMap keysAndValuesDo: [:filename :configAndGroupNames | 
+		| configNames groupNames visitor packageNames |
+		configNames := configAndGroupNames at: 1.
+		groupNames := configAndGroupNames at: 2.
+		visitor := readTool 
+			readConfigurationsForProjectDefinition: currentProjectDefinition 
+			withConfigurations: configNames 
+			groupNames: groupNames 
+			forLoad: false.
+		packageNames := visitor
+			ifNil: [ 
+				self topazFilenameConfigsMap size > 1
+					ifTrue: [ self error: 'unable to read project configurations for project ', currentProjectDefinition name printString, '. Multiple output files likely to have the same contents.'].
+				currentProjectDefinition packageNames ]
+			ifNotNil: [  visitor packageNames ].
+		(map at: filename ifAbsentPut: [ Set new ]) addAll: packageNames ].
+	aProjectModification packagesModification acceptVisitor: self
 ]
 
 { #category : 'accessing' }
@@ -368,6 +444,31 @@ RwGsModificationTopazWriterVisitor >> topazFilename: aNameString filenameExtensi
 
 	topazFilename := aNameString.
 	filenameExtension := anExtensionString
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> topazFilenameConfigsMap [
+
+	^ topazFilenameConfigsMap
+		ifNil: [ topazFilenameConfigsMap := Dictionary new at: self topazFilename put: {{}.{}}; yourself ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> topazFilenameConfigsMap: aDictionary [
+
+	"keys are topaz file names, values are two slot array with config name list and group name list. The config names and group names are 
+		resolved to a list of packages that will be written to the named file.
+
+			If the config/group name list is empty, the default config and group names for the project will be used.
+			If either (or both) of the slots contain empty array, then the corresponding project default will be used."
+
+	topazFilenameConfigsMap := aDictionary
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> topazFilenamePackageNamesMap [
+
+	^ topazFilenamePackageNamesMap ifNil: [ topazFilenamePackageNamesMap := Dictionary new ]
 ]
 
 { #category : 'accessing' }

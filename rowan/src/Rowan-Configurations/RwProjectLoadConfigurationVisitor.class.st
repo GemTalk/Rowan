@@ -201,6 +201,12 @@ RwProjectLoadConfigurationVisitor >> visit: aProjectConfiguration [
 ]
 
 { #category : 'visiting' }
+RwProjectLoadConfigurationVisitor >> visitNested: aProjectConfiguration [
+
+	^aProjectConfiguration acceptNestedVisitor: self
+]
+
+{ #category : 'visiting' }
 RwProjectLoadConfigurationVisitor >> visitNestedProjectLoadConfiguration: aNestedProjectLoadConfiguration [
 
 	(visitedConfigurationNames includes: aNestedProjectLoadConfiguration name)
