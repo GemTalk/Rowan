@@ -125,16 +125,15 @@ mySubclasses do:[:x| x _rwNewInheritedConstraint: aClass atOffset: offset ] .
 Behavior >> _rwNewConstraint: aClass atOffset: offset [
 
 	| oldConstraintsArray newConstraintsArray constraintsIndex instanceVariableNames |
-	oldConstraintsArray := self _constraints.
+	oldConstraintsArray := constraints.
 	newConstraintsArray := oldConstraintsArray copy.
 	instanceVariableNames := self class allInstVarNames.
 	constraintsIndex := instanceVariableNames indexOf: #constraints.
 	self _unsafeAt: constraintsIndex put: newConstraintsArray.
 
-	self _newConstraint: aClass atOffset: offset.
+	[ self _newConstraint: aClass atOffset: offset ] on: Deprecated do: [:ex | ex resume ].
 
-	self _constraints immediateInvariant
-
+	constraints immediateInvariant
 ]
 
 { #category : '*rowan-gemstone-kernel' }
