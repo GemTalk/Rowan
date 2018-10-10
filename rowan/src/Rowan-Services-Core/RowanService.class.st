@@ -152,7 +152,7 @@ RowanService >> initialize [
 { #category : 'accessing' }
 RowanService >> jadeiteServer [
 
-	^JadeServer theJadeiteServer
+	^(Rowan jadeServerClassNamed: #JadeServer) theJadeiteServer
 ]
 
 { #category : 'accessing' }
