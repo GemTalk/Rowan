@@ -279,13 +279,31 @@ method4 ^4
 { #category : 'private' }
 RwProjectWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Extension1 [
 
-	^ ''
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension1''
+method: Issue361Class1
+method1 ^1
+%
+
+'
 ]
 
 { #category : 'private' }
 RwProjectWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Extension2 [
 
-	^ ''
+	^'! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension2''
+method: Issue361Class1
+method5 ^5
+%
+
+'
 ]
 
 { #category : 'private' }
@@ -678,7 +696,7 @@ RwProjectWriterTest >> testGsTopazWriter_C [
 
 	{ packageName1. packageName2. packageName3 }
 		do: [:packageName |
-			stream := ZnBufferedReadStream on: (repositoryRootPath / packageName1, visitor filenameExtension) readStream.
+			stream := ZnBufferedReadStream on: (repositoryRootPath / packageName, visitor filenameExtension) readStream.
 			x := stream contents.
 			y := self perform: #'_expectedGsTopazWriterFileContents_C_', (packageName copyWithout: $-).
 			self assert: x = y ].
