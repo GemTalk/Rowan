@@ -404,29 +404,31 @@ RwGsModificationTopazWriterVisitor >> processPackage: aPackageModification [
 { #category : 'project writing' }
 RwGsModificationTopazWriterVisitor >> processProject: aProjectModification [
 
-	| map readTool |
 	currentProjectDefinition := aProjectModification after.
-	map := self topazFilenamePackageNamesMap.
-	readTool := Rowan projectTools read.
-	self topazFilenameConfigsMap keysAndValuesDo: [:filename :configAndGroupNamesMap | 
-		| configNames groupNames visitor packageNames configAndGroupNamesArray |
-		configAndGroupNamesArray := configAndGroupNamesMap at: currentProjectDefinition name ifAbsent: [ {{}.{}} ].
-		configAndGroupNamesArray
-			ifNotNil: [
-				configNames := configAndGroupNamesArray at: 1.
-				groupNames := configAndGroupNamesArray at: 2.
-				visitor := readTool 
-					readConfigurationsForProjectDefinition: currentProjectDefinition 
-					withConfigurations: configNames 
-					groupNames: groupNames 
-					forLoad: false.
-				packageNames := visitor
-					ifNil: [ 
-						self topazFilenameConfigsMap size > 1
-							ifTrue: [ self error: 'unable to read project configurations for project ', currentProjectDefinition name printString, '. Multiple output files likely to have the same contents.'].
-						currentProjectDefinition packageNames ]
-					ifNotNil: [  visitor packageNames ].
-				(map at: filename ifAbsentPut: [ Set new ]) addAll: packageNames ] ].
+	topazFilenamePackageNamesMap 
+		ifNil: [
+			| readTool |
+			topazFilenamePackageNamesMap := Dictionary new.
+			readTool := Rowan projectTools read.
+			self topazFilenameConfigsMap keysAndValuesDo: [:filename :configAndGroupNamesMap | 
+				| configNames groupNames visitor packageNames configAndGroupNamesArray |
+				configAndGroupNamesArray := configAndGroupNamesMap at: currentProjectDefinition name ifAbsent: [ {{}.{}} ].
+				configAndGroupNamesArray
+					ifNotNil: [
+						configNames := configAndGroupNamesArray at: 1.
+						groupNames := configAndGroupNamesArray at: 2.
+						visitor := readTool 
+							readConfigurationsForProjectDefinition: currentProjectDefinition 
+							withConfigurations: configNames 
+							groupNames: groupNames 
+							forLoad: false.
+						packageNames := visitor
+							ifNil: [ 
+								self topazFilenameConfigsMap size > 1
+									ifTrue: [ self error: 'unable to read project configurations for project ', currentProjectDefinition name printString, '. Multiple output files likely to have the same contents.'].
+								currentProjectDefinition packageNames ]
+							ifNotNil: [  visitor packageNames ].
+						(topazFilenamePackageNamesMap at: filename ifAbsentPut: [ Set new ]) addAll: packageNames ] ] ].
 	aProjectModification packagesModification acceptVisitor: self
 ]
 
@@ -466,13 +468,30 @@ RwGsModificationTopazWriterVisitor >> topazFilenameConfigsMap: aDictionary [
 			If the config/group name list is empty, the default config and group names for the project will be used.
 			If either (or both) of the slots contain empty array, then the corresponding project default will be used."
 
+	"If topazFilenamePackageNamesMap is explicitly set, then the contents of topazFilenameConfigsMap will be ignored (and erased)."
+
+	topazFilenamePackageNamesMap := nil.
 	topazFilenameConfigsMap := aDictionary
 ]
 
 { #category : 'accessing' }
 RwGsModificationTopazWriterVisitor >> topazFilenamePackageNamesMap [
 
-	^ topazFilenamePackageNamesMap ifNil: [ topazFilenamePackageNamesMap := Dictionary new ]
+	^ topazFilenamePackageNamesMap
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> topazFilenamePackageNamesMap: aDictionary [
+
+	"keys are topaz file names, values are a collection of package names"
+
+	"if topazFilenameConfigsMap is being used, then the topazFilenamePackageNamesMap is generated automatically,
+		based on the project configurations."
+
+	"If you explicitly set topazFilenamePackageNamesMap then contents of topazFilenameConfigsMap will not be erased and ignored."
+
+	topazFilenameConfigsMap := nil.
+	topazFilenamePackageNamesMap := aDictionary
 ]
 
 { #category : 'accessing' }
