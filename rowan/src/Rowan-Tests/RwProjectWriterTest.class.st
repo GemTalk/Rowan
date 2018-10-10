@@ -294,13 +294,149 @@ method1 ^1
 { #category : 'private' }
 RwProjectWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Extension2 [
 
-	^'! Class extensions for ''Issue361Class1''
+	^ '! Class extensions for ''Issue361Class1''
 
 !		Instance methods for ''Issue361Class1''
 
 category: ''*issue361-extension2''
 method: Issue361Class1
 method5 ^5
+%
+
+'
+]
+
+{ #category : 'private' }
+RwProjectWriterTest >> _expectedGsTopazWriterFileContents_D_Issue361Core [
+
+	^ '! Class Declarations
+
+doit
+(Array
+	subclass: ''Issue361Class2''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #())
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: ''Issue361Class1''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #())
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+%
+
+doit
+(Issue361Class1
+	subclass: ''Issue361Class3''
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: CypressTestData
+	options: #())
+		category: ''Issue361-Core'';
+		comment: '''';
+		immediateInvariant.
+true.
+%
+
+! Class implementation for ''Issue361Class2''
+
+!		Instance methods for ''Issue361Class2''
+
+category: ''accessing''
+method: Issue361Class2
+method3 ^3
+%
+
+! Class implementation for ''Issue361Class1''
+
+!		Class methods for ''Issue361Class1''
+
+category: ''initialization''
+classmethod: Issue361Class1
+initialize "noop"
+%
+
+category: ''accessing''
+classmethod: Issue361Class1
+method2 ^2
+%
+
+! Class implementation for ''Issue361Class3''
+
+!		Class methods for ''Issue361Class3''
+
+category: ''accessing''
+classmethod: Issue361Class3
+method4 ^4
+%
+
+! Class Initialization
+
+run
+Issue361Class1 initialize.
+%
+
+'
+]
+
+{ #category : 'private' }
+RwProjectWriterTest >> _expectedGsTopazWriterFileContents_D_Issue361Extension1 [
+
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension1''
+method: Issue361Class1
+method1 ^1
+%
+
+'
+]
+
+{ #category : 'private' }
+RwProjectWriterTest >> _expectedGsTopazWriterFileContents_D_Issue361Extension2 [
+
+	^ '! Class extensions for ''Issue361Class1''
+
+!		Instance methods for ''Issue361Class1''
+
+category: ''*issue361-extension2''
+method: Issue361Class1
+method5 ^5
+%
+
+! Class extensions for ''Issue361Class2''
+
+!		Class methods for ''Issue361Class2''
+
+category: ''*issue361-extension2''
+classmethod: Issue361Class2
+initialize "another noop"
+%
+
+! Class Initialization
+
+run
+Issue361Class2 initialize.
 %
 
 '
@@ -699,6 +835,159 @@ RwProjectWriterTest >> testGsTopazWriter_C [
 			stream := ZnBufferedReadStream on: (repositoryRootPath / packageName, visitor filenameExtension) readStream.
 			x := stream contents.
 			y := self perform: #'_expectedGsTopazWriterFileContents_C_', (packageName copyWithout: $-).
+			self assert: x = y ].
+]
+
+{ #category : 'tests' }
+RwProjectWriterTest >> testGsTopazWriter_D [
+
+	"ramp up to multiple class extensions from multiple packages for a single class"
+
+	"write each package into a separate topaz file"
+
+	"include class initialization methods"
+
+	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
+		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y
+		packageName3 |
+
+	projectName := 'Issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension1'.
+	packageName3 := 'Issue361-Extension2'.
+	className1 := 'Issue361Class1'. 
+	className2 := 'Issue361Class2'. 
+	className3 := 'Issue361Class3'. 
+
+"create definitions"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		addPackageNamed: packageName3;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
+		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method2'
+					protocol: 'accessing'
+					source: 'method2 ^2');
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'initialize'
+					protocol: 'initialization'
+					source: 'initialize "noop"').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: 'Array'
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method3'
+					protocol: 'accessing'
+					source: 'method3 ^3').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className3
+		super: className1
+		instvars: #()
+		classinstvars: #()
+		classvars: #()
+		category: packageName1
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method4'
+					protocol: 'accessing'
+					source: 'method4 ^4').
+	packageDefinition addClassDefinition: classDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: '*', packageName2 asLowercase
+					source: 'method1 ^1').
+	packageDefinition := projectDefinition packageNamed: packageName2.
+	packageDefinition addClassExtension: classExtensionDefinition.
+
+	packageDefinition := projectDefinition packageNamed: packageName3.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method5'
+					protocol: '*', packageName3 asLowercase
+					source: 'method5 ^5').
+	packageDefinition addClassExtension: classExtensionDefinition.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className2.
+	classExtensionDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'initialize'
+					protocol: '*', packageName3 asLowercase
+					source: 'initialize "another noop"').
+	packageDefinition addClassExtension: classExtensionDefinition.
+
+
+"diff"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+
+"write"
+	repositoryRootPath := filesystem workingDirectory / projectName / 'topaz'.
+	self _markForCleanup: repositoryRootPath.
+	repositoryRootPath ensureCreateDirectory.
+
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: repositoryRootPath;
+		topazFilenamePackageNamesMap: 
+			(Dictionary new
+				at: packageName1 put: {packageName1};
+				at: packageName2 put: {packageName2};
+				at: packageName3 put: {packageName3};
+				yourself)
+		yourself.
+	visitor visit: projectSetModification.
+	visitor export.
+
+	{ packageName1. packageName2. packageName3 }
+		do: [:packageName |
+			stream := ZnBufferedReadStream on: (repositoryRootPath / packageName, visitor filenameExtension) readStream.
+			x := stream contents.
+			y := self perform: #'_expectedGsTopazWriterFileContents_D_', (packageName copyWithout: $-).
 			self assert: x = y ].
 ]
 

@@ -1,3 +1,51 @@
+"
+Example script that produces topaz bootstrap files for the Rowan projects:
+
+	| repositoryRootPath projectSetDefinition projectSetModification visitor |
+	repositoryRootPath := FileLocator dbfScratchDir / 'rowanBootstrap'.
+	repositoryRootPath ensureCreateDirectory.
+
+	projectSetDefinition := RwProjectSetDefinition new.
+	Rowan image loadedProjects do: [:lp | projectSetDefinition addProject: lp asDefinition ].
+
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwGsModificationTopazWriterVisitor new
+		repositoryRootPath: repositoryRootPath;
+		yourself.
+	false 
+		ifTrue: [ visitor topazFilename: 'rowan_bootstrap' ]
+		ifFalse: [
+			| fileNameConfigsMap |
+			fileNameConfigsMap := Dictionary new
+				at: 'rowan_bootstrap_app' 
+					put: (Dictionary new 
+							at: 'Rowan' put: {{'Kernel'}. {}};
+							at: 'FileSystemGs' put: nil;
+							at: 'Cypress' put: nil;
+							at: 'STON' put: nil;
+							at: 'Tonel' put: nil;
+							yourself);
+				at: 'rowan_bootstrap_globals' 
+					put: (Dictionary new 
+							at: 'Rowan' put: {{'Globals'}. {}};
+							at: 'FileSystemGs' put: {{'Default'}. {}};
+							at: 'Cypress' put: {{'Default'}. {}};
+							at: 'STON' put: {{'Bootstrap'}. {}};
+							at: 'Tonel' put: {{'Bootstrap'}. {}};
+							yourself);
+				at: 'rowan_bootstrap_user_globals' 
+					put: (Dictionary new 
+							at: 'Rowan' put: {{'UserGlobals'}. {}};
+							at: 'FileSystemGs' put: nil;
+							at: 'Cypress' put: nil;
+							at: 'STON' put: nil;
+							at: 'Tonel' put: nil;
+							yourself);
+				yourself.
+			visitor topazFilenameConfigsMap: fileNameConfigsMap].
+	visitor visit: projectSetModification.
+	visitor export.
+"
 Class {
 	#name : 'RwGsModificationTopazWriterVisitor',
 	#superclass : 'RwModificationWriterVisitor',
@@ -13,7 +61,8 @@ Class {
 		'bufferedStream',
 		'topazFilenamePackageNamesMap',
 		'classDefPackageNameMap',
-		'classExtPackageNameMap'
+		'classExtPackageNameMap',
+		'classInitializationDefinitions'
 	],
 	#category : 'Rowan-GemStone-Core'
 }
@@ -201,6 +250,12 @@ RwGsModificationTopazWriterVisitor >> classExtPackageNameMap [
 ]
 
 { #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> classInitializationDefinitions [
+
+	^ classInitializationDefinitions
+]
+
+{ #category : 'accessing' }
 RwGsModificationTopazWriterVisitor >> classSymbolDictionaryNames [
 
 	^ classSymbolDictionaryNames ifNil: [ classSymbolDictionaryNames := Dictionary new ]
@@ -252,7 +307,9 @@ RwGsModificationTopazWriterVisitor >> export [
 
 		self _setBufferedStreamFor: filename.
 
+		classInitializationDefinitions := Set new. "per file record"
 		classDefinitionsList := Set new.
+
 		self classDefPackageNameMap keysAndValuesDo: [:className :packageName |
 			(packageNames includes: packageName)
 				ifTrue: [ classDefinitionsList add: (self classDefinitions at: className) ] ].
@@ -295,6 +352,8 @@ RwGsModificationTopazWriterVisitor >> export [
 		self
 			exportExtensionMethodDefinitions: classExtensionsInOrder.
 
+		self exportClassInitializations.
+
 		self bufferedStream flush; close ].
 ]
 
@@ -310,6 +369,26 @@ RwGsModificationTopazWriterVisitor >> exportClassDefinitions: classDefinitionsIn
 				lf ].
 	classDefinitionsInOrder do: [:classDef | 
 		self _fileOutClassDeclaration: classDef on: stream ].
+]
+
+{ #category : 'exporting' }
+RwGsModificationTopazWriterVisitor >> exportClassInitializations [
+
+	| stream |
+	self classInitializationDefinitions isEmpty ifTrue: [ ^ self ].
+
+	stream := self bufferedStream.
+
+	stream 
+		nextPutAll: '! Class Initialization'; lf;
+		lf;
+		nextPutAll: 'run'; lf.
+
+	self classInitializationDefinitions do: [ :classDef |
+		stream nextPutAll: classDef name, ' initialize.'; lf ].
+
+	stream nextPutAll: '%'; lf;
+		lf
 ]
 
 { #category : 'exporting' }
@@ -342,6 +421,8 @@ RwGsModificationTopazWriterVisitor >> exportMethodDefinitions: classDefinitionsI
 				lf ].
 		(classDef classMethodDefinitions values sort: [:a :b | a selector <= b selector ])
 			do: [:methodDef |
+				methodDef selector == #initialize
+					ifTrue: [ self classInitializationDefinitions add: classDef ].
 				self _fileOutMethod: methodDef forClass: className isMeta: true on: stream ].
 		classDef instanceMethodDefinitions isEmpty not
 			ifTrue: [ 
