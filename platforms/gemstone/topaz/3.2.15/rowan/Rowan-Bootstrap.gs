@@ -631,6 +631,13 @@ commit
   commit
 
   run
+  CypressBootstrapRowanBlock
+    value: 'UserGlobals'
+    value: #( 'Rowan-JadeServer').           "install JadeServer classes"
+%
+  commit
+
+  run
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
     value: #('Rowan-Tools-Extensions' 'Rowan-Deprecated' 'Rowan-Tests' 'Rowan-Services-Tests'	
@@ -661,13 +668,6 @@ commit
       'Rowan-Tools-Kernel' 
       'Rowan-GemStone-3215'
 	).		"Extension methods for GemStone kernel classes"
-%
-  commit
-
-  run
-  CypressBootstrapRowanBlock
-    value: 'UserGlobals'
-    value: #( 'Rowan-JadeServer').           "install JadeServer classes"
 %
   commit
 
