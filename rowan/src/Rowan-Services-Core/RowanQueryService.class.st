@@ -100,6 +100,14 @@ RowanQueryService >> projectLog: projectName [
 	RowanCommandResult addResult: self.
 ]
 
+{ #category : 'queryResults' }
+RowanQueryService >> queryResults [
+
+	"for tests. So far, not needed on server." 
+
+	^queryResults
+]
+
 { #category : 'queries' }
 RowanQueryService >> sendersOf: selector [
 

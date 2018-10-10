@@ -76,6 +76,14 @@ RowanService >> commandArgs [
 
 ]
 
+{ #category : 'accessing' }
+RowanService >> commandArgs: anArray [
+
+	"for tests" 
+
+	commandArgs := anArray
+]
+
 { #category : 'symbol dictionaries' }
 RowanService >> createDefaultSymbolDictionary [
 

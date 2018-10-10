@@ -44,7 +44,7 @@ RowanAnsweringService >> isTranscriptInstalled [
 { #category : 'private' }
 RowanAnsweringService >> jadeServer [
 
-	^System _sessionStateAt: 3
+	^System __sessionStateAt: 3
 ]
 
 { #category : 'commands' }
