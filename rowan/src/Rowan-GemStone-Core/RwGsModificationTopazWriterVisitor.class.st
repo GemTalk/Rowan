@@ -62,7 +62,8 @@ Class {
 		'topazFilenamePackageNamesMap',
 		'classDefPackageNameMap',
 		'classExtPackageNameMap',
-		'classInitializationDefinitions'
+		'classInitializationDefinitions',
+		'buildPackageNamesMap'
 	],
 	#category : 'Rowan-GemStone-Core'
 }
@@ -196,6 +197,15 @@ RwGsModificationTopazWriterVisitor >> bufferedStream [
 		| encodedStream |
 		encodedStream := (self repositoryRootPath / self topazFilename, self filenameExtension) writeStreamEncoded: 'utf8'.
 		bufferedStream := ZnBufferedWriteStream on: encodedStream ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> buildPackageNamesMap [
+
+	"If true, topazFilenamePackageNamesMap will be built from topazFilenameConfigsMap.
+		If false, existing topazFilenamePackageNamesMap will be used"
+
+	^ buildPackageNamesMap ifNil: [ buildPackageNamesMap := true ]
 ]
 
 { #category : 'actions' }
@@ -384,7 +394,7 @@ RwGsModificationTopazWriterVisitor >> exportClassInitializations [
 		lf;
 		nextPutAll: 'run'; lf.
 
-	self classInitializationDefinitions do: [ :classDef |
+	(self classInitializationDefinitions sort: [:a :b | a name <= b name ]) do: [ :classDef |
 		stream nextPutAll: classDef name, ' initialize.'; lf ].
 
 	stream nextPutAll: '%'; lf;
@@ -486,10 +496,10 @@ RwGsModificationTopazWriterVisitor >> processPackage: aPackageModification [
 RwGsModificationTopazWriterVisitor >> processProject: aProjectModification [
 
 	currentProjectDefinition := aProjectModification after.
-	topazFilenamePackageNamesMap 
-		ifNil: [
+	self buildPackageNamesMap 
+		ifTrue: [
 			| readTool |
-			topazFilenamePackageNamesMap := Dictionary new.
+			topazFilenamePackageNamesMap := self topazFilenamePackageNamesMap.
 			readTool := Rowan projectTools read.
 			self topazFilenameConfigsMap keysAndValuesDo: [:filename :configAndGroupNamesMap | 
 				| configNames groupNames visitor packageNames configAndGroupNamesArray |
@@ -549,16 +559,16 @@ RwGsModificationTopazWriterVisitor >> topazFilenameConfigsMap: aDictionary [
 			If the config/group name list is empty, the default config and group names for the project will be used.
 			If either (or both) of the slots contain empty array, then the corresponding project default will be used."
 
-	"If topazFilenamePackageNamesMap is explicitly set, then the contents of topazFilenameConfigsMap will be ignored (and erased)."
+	"If topazFilenamePackageNamesMap is explicitly set, then the contents of topazFilenameConfigsMap will be ignored."
 
-	topazFilenamePackageNamesMap := nil.
+	buildPackageNamesMap := true.
 	topazFilenameConfigsMap := aDictionary
 ]
 
 { #category : 'accessing' }
 RwGsModificationTopazWriterVisitor >> topazFilenamePackageNamesMap [
 
-	^ topazFilenamePackageNamesMap
+	^ topazFilenamePackageNamesMap ifNil: [ topazFilenamePackageNamesMap := Dictionary new ]
 ]
 
 { #category : 'accessing' }
@@ -569,9 +579,9 @@ RwGsModificationTopazWriterVisitor >> topazFilenamePackageNamesMap: aDictionary 
 	"if topazFilenameConfigsMap is being used, then the topazFilenamePackageNamesMap is generated automatically,
 		based on the project configurations."
 
-	"If you explicitly set topazFilenamePackageNamesMap then contents of topazFilenameConfigsMap will not be erased and ignored."
+	"If you explicitly set topazFilenamePackageNamesMap then contents of topazFilenameConfigsMap will be ignored."
 
-	topazFilenameConfigsMap := nil.
+	buildPackageNamesMap := false.
 	topazFilenamePackageNamesMap := aDictionary
 ]
 
