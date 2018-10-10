@@ -30,21 +30,15 @@ RowanAnsweringService >> exec: aString [
 { #category : 'commands' }
 RowanAnsweringService >> flipTranscript [
 	self isTranscriptInstalled ifTrue:[
-		self jadeServer uninstallTranscript]
+		self jadeiteServer uninstallTranscript]
 	ifFalse:[
-		self jadeServer installTranscript]
+		self jadeiteServer installTranscript]
 ]
 
 { #category : 'testing' }
 RowanAnsweringService >> isTranscriptInstalled [
 
-	^self transcriptObject == self jadeServer
-]
-
-{ #category : 'private' }
-RowanAnsweringService >> jadeServer [
-
-	^System __sessionStateAt: 3
+	^self transcriptObject == self jadeiteServer
 ]
 
 { #category : 'commands' }

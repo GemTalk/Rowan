@@ -5,18 +5,18 @@ Class {
 }
 
 { #category : 'support' }
-JadeServerTest >> jadeServer [
-	"use what a service would use" 
+JadeServerTest >> jadeiteServer [
 
-	^RowanAnsweringService new jadeServer
+	^JadeServer theJadeiteServer
 ]
 
 { #category : 'tests' }
 JadeServerTest >> test_jadeServerCanonicalLocation [
 	"We reuse the topaz session state slot. Safe because this is not a topaz session"
 	
-	self assert: ((System __sessionStateAt: 3) isKindOf: JadeServer64bit32).
-	self assert: ((System __sessionStateAt: 3) class canUnderstand: #updateFromSton:)
+	self assert: (JadeServer theJadeiteServer isKindOf: JadeServer64bit32).
+	self assert: (JadeServer theJadeiteServer class canUnderstand: #updateFromSton:).
+	self assert: (JadeServer theJadeiteServer == (SessionTemps current at: #jadeiteServer))
 ]
 
 { #category : 'tests' }
@@ -88,8 +88,8 @@ JadeServerTest >> test_rowanCanFindJadeServer [
 { #category : 'tests' }
 JadeServerTest >> test_serviceUsesCanonicalJadeServer [
 	
-	self assert: (RowanAnsweringService new jadeServer isKindOf: JadeServer64bit32).
-	self assert: RowanAnsweringService new jadeServer == (System __sessionStateAt: 3)
+	self assert: (RowanAnsweringService new jadeiteServer isKindOf: JadeServer64bit32).
+	self assert: RowanAnsweringService new jadeiteServer == JadeServer theJadeiteServer
 ]
 
 { #category : 'tests' }
@@ -100,12 +100,12 @@ JadeServerTest >> test_updateFromSton [
 
 	| service stonString resultString services |
 
-	self assert: JadeServer canUnderstand: #updateFromSton:.
+	self assert: (JadeServer canUnderstand: #updateFromSton:).
 	service := RowanQueryService new 
 				command: #implementorsOf:; 
 				commandArgs: (Array with: #test_updateFromSton).
 	stonString := STON toString: (Array with: service).
-	resultString := self jadeServer updateFromSton: stonString. 
+	resultString := self jadeiteServer updateFromSton: stonString. 
 	[services := STON fromString: resultString.
 	self assert: services size equals: 1.
 	self assert: (services first isKindOf: RowanQueryService).

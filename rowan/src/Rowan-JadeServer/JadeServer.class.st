@@ -22,6 +22,13 @@ Class {
 	#category : 'Rowan-JadeServer'
 }
 
+{ #category : 'jadeite server' }
+JadeServer class >> theJadeiteServer [
+
+	^SessionTemps current at: #jadeiteServer ifAbsentPut: [
+		(Rowan jadeServerClassNamed: #JadeServer64bit32) new initialize; yourself]
+]
+
 { #category : 'category' }
 JadeServer >> _addClass: each toStream: stream [ 
 
