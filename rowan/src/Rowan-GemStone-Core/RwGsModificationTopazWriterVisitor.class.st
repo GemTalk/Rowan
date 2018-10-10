@@ -408,22 +408,25 @@ RwGsModificationTopazWriterVisitor >> processProject: aProjectModification [
 	currentProjectDefinition := aProjectModification after.
 	map := self topazFilenamePackageNamesMap.
 	readTool := Rowan projectTools read.
-	self topazFilenameConfigsMap keysAndValuesDo: [:filename :configAndGroupNames | 
-		| configNames groupNames visitor packageNames |
-		configNames := configAndGroupNames at: 1.
-		groupNames := configAndGroupNames at: 2.
-		visitor := readTool 
-			readConfigurationsForProjectDefinition: currentProjectDefinition 
-			withConfigurations: configNames 
-			groupNames: groupNames 
-			forLoad: false.
-		packageNames := visitor
-			ifNil: [ 
-				self topazFilenameConfigsMap size > 1
-					ifTrue: [ self error: 'unable to read project configurations for project ', currentProjectDefinition name printString, '. Multiple output files likely to have the same contents.'].
-				currentProjectDefinition packageNames ]
-			ifNotNil: [  visitor packageNames ].
-		(map at: filename ifAbsentPut: [ Set new ]) addAll: packageNames ].
+	self topazFilenameConfigsMap keysAndValuesDo: [:filename :configAndGroupNamesMap | 
+		| configNames groupNames visitor packageNames configAndGroupNamesArray |
+		configAndGroupNamesArray := configAndGroupNamesMap at: currentProjectDefinition name ifAbsent: [ {{}.{}} ].
+		configAndGroupNamesArray
+			ifNotNil: [
+				configNames := configAndGroupNamesArray at: 1.
+				groupNames := configAndGroupNamesArray at: 2.
+				visitor := readTool 
+					readConfigurationsForProjectDefinition: currentProjectDefinition 
+					withConfigurations: configNames 
+					groupNames: groupNames 
+					forLoad: false.
+				packageNames := visitor
+					ifNil: [ 
+						self topazFilenameConfigsMap size > 1
+							ifTrue: [ self error: 'unable to read project configurations for project ', currentProjectDefinition name printString, '. Multiple output files likely to have the same contents.'].
+						currentProjectDefinition packageNames ]
+					ifNotNil: [  visitor packageNames ].
+				(map at: filename ifAbsentPut: [ Set new ]) addAll: packageNames ] ].
 	aProjectModification packagesModification acceptVisitor: self
 ]
 
@@ -450,14 +453,15 @@ RwGsModificationTopazWriterVisitor >> topazFilename: aNameString filenameExtensi
 RwGsModificationTopazWriterVisitor >> topazFilenameConfigsMap [
 
 	^ topazFilenameConfigsMap
-		ifNil: [ topazFilenameConfigsMap := Dictionary new at: self topazFilename put: {{}.{}}; yourself ]
+		ifNil: [ topazFilenameConfigsMap := Dictionary new at: self topazFilename put: Dictionary new; yourself ]
 ]
 
 { #category : 'accessing' }
 RwGsModificationTopazWriterVisitor >> topazFilenameConfigsMap: aDictionary [
 
-	"keys are topaz file names, values are two slot array with config name list and group name list. The config names and group names are 
-		resolved to a list of packages that will be written to the named file.
+	"keys are topaz file names, values are a dictionary:
+		whose keys are project names and values are two slot array with config name list and group name list. 
+			The config names and group names are resolved to a list of packages that will be written to the named file.
 
 			If the config/group name list is empty, the default config and group names for the project will be used.
 			If either (or both) of the slots contain empty array, then the corresponding project default will be used."
