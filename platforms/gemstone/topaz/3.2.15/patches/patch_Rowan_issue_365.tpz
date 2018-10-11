@@ -1,0 +1,18 @@
+
+output push patch_issue_365.out
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit 1
+
+  set u SystemUser p swordfish
+  login
+
+
+  commit
+errorCount
+
+  logout
+
+output pop
+
