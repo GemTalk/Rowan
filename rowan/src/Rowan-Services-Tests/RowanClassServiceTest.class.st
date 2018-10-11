@@ -5,24 +5,27 @@ Class {
 }
 
 { #category : 'support' }
-RowanClassServiceTest >> createClassNamed: className [
+RowanClassServiceTest >> setUp [
 
-^Object rwSubclass: className
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	category: 'RowanSample1-Tests'
-	options: #()
+	super setUp.
+	self createDefaultClass. 
+	self loadDefaultProject.
+]
+
+{ #category : 'support' }
+RowanClassServiceTest >> tearDown [
+
+	super tearDown.
+	self unloadDefaultProject
 ]
 
 { #category : 'tests' }
 RowanClassServiceTest >> testAddCategory [
-	| classService className behavior |
-	className := 'AddCategoryTest'. 
-	behavior := self createClassNamed: className.
+	| classService behavior |
+	
+	behavior := Rowan globalNamed: self defaultClassName. 
 	self deny: (behavior categoryNames includes: 'fnoodle'). 
-	classService := RowanClassService forClassNamed: className meta: false. 
+	classService := RowanClassService forClassNamed: self defaultClassName meta: false. 
 	classService addCategory: 'fnoodle'.
 	self assert: (behavior categoryNames includes: #fnoodle).
 ]
@@ -40,15 +43,11 @@ RowanClassServiceTest >> testBehavior [
 { #category : 'tests' }
 RowanClassServiceTest >> testClassComment [
 	| classService className behavior packageService |
-	className := 'ClassCommentTest'. 
-	behavior := self createClassNamed: className.
-	[self assert: behavior comment equals: String new. 
-	classService := RowanClassService forClassNamed: className meta: false. 
+	behavior := Rowan globalNamed: self defaultClassName. 
+	self assert: behavior comment equals: String new. 
+	classService := RowanClassService forClassNamed: self defaultClassName meta: false. 
 	classService classComment: 'This is a test'. 
-	self assert: behavior comment equals: 'This is a test']
-		ensure:[
-			packageService := RowanPackageService forPackageNamed:  'RowanSample1-Tests'.
-			packageService removeClassNamed: className].
+	self assert: behavior comment equals: 'This is a test'
 ]
 
 { #category : 'tests' }
