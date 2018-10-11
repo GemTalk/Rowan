@@ -258,8 +258,8 @@ STONWriteReadTests >> testUnicodeStrings [
   (self unicode16TestString).
   (self unicode32TestString).
   'élève en Français'}.
+  strings := strings collect: [:each | each asString ].  "Normalize strings so that they are all Unicode or all Legacy string"
   self serializeAndMaterialize: strings
-
 ]
 
 { #category : 'tests' }
