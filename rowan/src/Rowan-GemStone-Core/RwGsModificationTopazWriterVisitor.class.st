@@ -355,10 +355,7 @@ RwGsModificationTopazWriterVisitor >> export [
 						d instanceMethodDefinitions values do: [:m | def addInstanceMethodDefinition: m ] ].
 					classExtensionsList add: def ] ].
 
-		classExtensionsInOrder := (CypressGsGeneralDependencySorter
-			on: classExtensionsList
-			dependsOn: [:candidate | 'Object' ]
-			dependent: [:candidate | candidate name ]) inOrder.
+		classExtensionsInOrder := classExtensionsList sort: [:a :b | a name <= b name ].
 		self
 			exportExtensionMethodDefinitions: classExtensionsInOrder.
 
