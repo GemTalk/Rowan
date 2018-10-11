@@ -1708,13 +1708,15 @@ JadeServer >> implementorsOf: aGsMethod startingAt: aClass [
 
 { #category : 'category' }
 JadeServer >> initialize [
+	"#installTranscript is run from the Jadeite
+	client post login method only. This avoids
+	setting up ClientForwarder sends in a topaz
+	session"
 
 	classOrganizers := Array new: 4.
 	self 
-		installTranscript;
 		registerOBNotifications;
 		yourself.
-
 ]
 
 { #category : 'category' }
