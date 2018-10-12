@@ -106,6 +106,13 @@ RowanServicesTest >> loadDefaultProject [
 ]
 
 { #category : 'setup teardown' }
+RowanServicesTest >> setUp [
+	"ensure results are clean as service requests not coming through #updateFromSton: like the client"
+
+	RowanCommandResult initializeResults.
+]
+
+{ #category : 'setup teardown' }
 RowanServicesTest >> tearDown [
 
 	RowanCommandResult initializeResults.  "squash the gui updates"
