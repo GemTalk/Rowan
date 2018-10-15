@@ -23,7 +23,8 @@ startTopaz $GEMSTONE_NAME -l << EOF
 		ifTrue: [ (UserGlobals at: #ROWAN_AUDIT_issue_365_results) removeKey: 'RwUnmanagedProjectDefinition' ifAbsent: [] ].
 	(UserGlobals at: #ROWAN_AUDIT_issue_365_results) isEmpty
 		ifFalse: [ self error: 'Rowan Audit is not clean, please view dictionary ''UserGlobals at: #ROWAN_AUDIT_issue_365_results'' or log file for details.' ].
-	true
+	UserGlobals removeKey: #ROWAN_AUDIT_issue_365_results ifAbsent: [].
+	System commit
 %
 	errorCount
   exit
