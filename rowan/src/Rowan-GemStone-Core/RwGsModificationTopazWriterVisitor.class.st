@@ -53,8 +53,6 @@ Class {
 		'topazFilenameConfigsMap',
 		'topazFilename',
 		'filenameExtension',
-		'currentProjectDefinition',
-		'currentPackageDefinition',
 		'classSymbolDictionaryNames',
 		'classDefinitions',
 		'classExtensions',
@@ -165,31 +163,6 @@ RwGsModificationTopazWriterVisitor >> _writeClassTypeMessage: classDefinition on
     ifTrue: [ instanceVariableBlock value ]
 ]
 
-{ #category : 'actions' }
-RwGsModificationTopazWriterVisitor >> addedClass: aClassModification [
-
-	self processClass: aClassModification
-]
-
-{ #category : 'actions' }
-RwGsModificationTopazWriterVisitor >> addedClassExtension: aClassExtensionModification [
-
-	self processClassExtension: aClassExtensionModification
-]
-
-{ #category : 'actions' }
-RwGsModificationTopazWriterVisitor >> addedPackage: aPackageModification [
-
-	self processPackage: aPackageModification
-]
-
-{ #category : 'actions' }
-RwGsModificationTopazWriterVisitor >> addedProject: aProjectModification [
-
-	super addedProject: aProjectModification.
-	self processProject: aProjectModification
-]
-
 { #category : 'accessing' }
 RwGsModificationTopazWriterVisitor >> bufferedStream [
 
@@ -206,33 +179,6 @@ RwGsModificationTopazWriterVisitor >> buildPackageNamesMap [
 		If false, existing topazFilenamePackageNamesMap will be used"
 
 	^ buildPackageNamesMap ifNil: [ buildPackageNamesMap := true ]
-]
-
-{ #category : 'actions' }
-RwGsModificationTopazWriterVisitor >> changedClass: aClassModification [
-
-	self processClass: aClassModification
-]
-
-{ #category : 'actions' }
-RwGsModificationTopazWriterVisitor >> changedClassExtension: aClassExtensionModification [
-
-	self processClassExtension: aClassExtensionModification
-]
-
-{ #category : 'actions' }
-RwGsModificationTopazWriterVisitor >> changedPackage: aPackageModification [
-
-	self processPackage: aPackageModification
-]
-
-{ #category : 'actions' }
-RwGsModificationTopazWriterVisitor >> changedProject: aProjectModification [
-
-	super changedProject: aProjectModification.
-self halt.
-
-	self processProject: aProjectModification
 ]
 
 { #category : 'accessing' }
@@ -271,18 +217,6 @@ RwGsModificationTopazWriterVisitor >> classSymbolDictionaryNames [
 	^ classSymbolDictionaryNames ifNil: [ classSymbolDictionaryNames := Dictionary new ]
 ]
 
-{ #category : 'accessing' }
-RwGsModificationTopazWriterVisitor >> currentPackageDefinition [
-
-	^ currentPackageDefinition
-]
-
-{ #category : 'accessing' }
-RwGsModificationTopazWriterVisitor >> currentProjectDefinition [
-
-	^ currentProjectDefinition
-]
-
 { #category : 'actions' }
 RwGsModificationTopazWriterVisitor >> deletededClass: aClassModification [
 
@@ -299,8 +233,6 @@ RwGsModificationTopazWriterVisitor >> deletededClassExtension: aClassExtensionMo
 RwGsModificationTopazWriterVisitor >> deletededPackage: aPackageModification [
 
 	"a deleted package is ignored for topaz ... the deleted classes and methods are simply not written out"
-
-self halt. "if we end up writing out per package topaz files, then something significant needs to happen here"
 ]
 
 { #category : 'project writing' }
@@ -479,14 +411,6 @@ RwGsModificationTopazWriterVisitor >> processClassExtension: aClassExtensionModi
 	self classExtPackageNameMap at: classExtension put: currentPackageDefinition name.
 
 	"no need to visit any further as the class etension records the instance and class methods"
-]
-
-{ #category : 'package writing' }
-RwGsModificationTopazWriterVisitor >> processPackage: aPackageModification [
-
-	currentPackageDefinition := aPackageModification after.
-	aPackageModification classesModification acceptVisitor: self.
-	aPackageModification classExtensionsModification acceptVisitor: self
 ]
 
 { #category : 'project writing' }

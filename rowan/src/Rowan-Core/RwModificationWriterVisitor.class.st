@@ -1,7 +1,15 @@
+"
+Abstract class with support for walking a modification tree and writing out the source code in a variety of formats:
+	topaz fileout
+	Tonel
+	Filetree
+"
 Class {
 	#name : 'RwModificationWriterVisitor',
 	#superclass : 'Object',
 	#instVars : [
+		'currentProjectDefinition',
+		'currentPackageDefinition',
 		'repositoryRootPath'
 	],
 	#category : 'Rowan-Core'
@@ -10,19 +18,19 @@ Class {
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedClass: aClassModification [
 
-	self subclassResponsibility: #addedClass:
+	self processClass: aClassModification
 ]
 
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedClassExtension: aClassExtensionModification [
 
-	self subclassResponsibility: #addedClassExtension:
+	self processClassExtension: aClassExtensionModification
 ]
 
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedPackage: aPackageModification [
 
-	self subclassResponsibility: #addedPackage:
+	self processPackage: aPackageModification
 ]
 
 { #category : 'actions' }
@@ -31,24 +39,25 @@ RwModificationWriterVisitor >> addedProject: aProjectModification [
 	addedProjectDefinition := aProjectModification after.
 	self repositoryRootPath ifNil: [ self repositoryRootPath: addedProjectDefinition repositoryRootPath ].
 	self ensureProjectDirectoryStructureFor: addedProjectDefinition.
+	self processProject: aProjectModification
 ]
 
 { #category : 'actions' }
 RwModificationWriterVisitor >> changedClass: aClassModification [
 
-	self subclassResponsibility: #changedClass:
+	self processClass: aClassModification
 ]
 
 { #category : 'actions' }
 RwModificationWriterVisitor >> changedClassExtension: aClassExtensionModification [
 
-	self subclassResponsibility: #changedClassExtension:
+	self processClassExtension: aClassExtensionModification
 ]
 
 { #category : 'actions' }
 RwModificationWriterVisitor >> changedPackage: aPackageModification [
 
-	self subclassResponsibility: #changedPackage:
+	self processPackage: aPackageModification
 ]
 
 { #category : 'actions' }
@@ -56,6 +65,19 @@ RwModificationWriterVisitor >> changedProject: aProjectModification [
 	| afterProject |
 	afterProject := aProjectModification after.
 	self repositoryRootPath ifNil: [ self repositoryRootPath: afterProject repositoryRootPath ].
+self halt.
+]
+
+{ #category : 'accessing' }
+RwModificationWriterVisitor >> currentPackageDefinition [
+
+	^ currentPackageDefinition
+]
+
+{ #category : 'accessing' }
+RwModificationWriterVisitor >> currentProjectDefinition [
+
+	^ currentProjectDefinition
 ]
 
 { #category : 'actions' }
@@ -87,6 +109,42 @@ RwModificationWriterVisitor >> deletedProject: aProjectModification [
 RwModificationWriterVisitor >> ensureProjectDirectoryStructureFor: aProjectDefinition [
 
 	(self repositoryRootPath / aProjectDefinition repoPath) ensureCreateDirectory
+]
+
+{ #category : 'exporting' }
+RwModificationWriterVisitor >> export [
+
+	self subclassResponsibility: #export
+]
+
+{ #category : 'class writing' }
+RwModificationWriterVisitor >> processClass: aClassModification [
+
+	self subclassResponsibility: #processClass:
+]
+
+{ #category : 'class writing' }
+RwModificationWriterVisitor >> processClassExtension: aClassExtensionModification [
+
+	self subclassResponsibility: #processClassExtension:
+]
+
+{ #category : 'package writing' }
+RwModificationWriterVisitor >> processPackage: aPackageModification [
+
+	currentPackageDefinition := aPackageModification after.
+	aPackageModification classesModification acceptVisitor: self.
+	aPackageModification classExtensionsModification acceptVisitor: self
+]
+
+{ #category : 'project writing' }
+RwModificationWriterVisitor >> processProject: aProjectModification [
+
+	| x |
+	currentProjectDefinition := aProjectModification after.
+	x := STON fromStream: (ZnBufferedReadStream on: (self repositoryRootPath / currentProjectDefinition repoPath / 'properties.st') readStream).
+	(x at: #format) = 'tonel' ifFalse: [ self error: 'expected tonel format repository' ].
+	aProjectModification packagesModification acceptVisitor: self
 ]
 
 { #category : 'accessing' }

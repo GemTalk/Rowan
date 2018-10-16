@@ -46,8 +46,15 @@ RwProjectSpecification >> _exportToUrl: fileUrl as: fileName [
           string := STON toStringPretty: self.
           stream nextPutAll: string.
           ^ self ] ].
+  url schemeName = 'memory'
+    ifTrue: [ 
+		(FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory / fileName)
+			writeStreamDo: [ :stream | 
+			  | string |
+			  string := STON toStringPretty: self.
+			  stream nextPutAll: string.
+			  ^ self ] ].
   ^ nil	"otherwise a noop"
-
 ]
 
 { #category : 'private' }
@@ -128,11 +135,12 @@ RwProjectSpecification >> export [
 	self repositoryUrl
 		ifNil: [ self error: 'exportToUrl: must be used if repositoryUrl has not been set' ].
 	url := RwUrl fromString: self repositoryUrl.
-	exportPath := self repositoryRootPath , '/' , self specsPath , '/'.
-	CypressFileUtilities current ensureDirectoryExists: exportPath.
-	exportUrl := 'file:' , exportPath.
+	exportPath := self repositoryRootPath asFileReference / self specsPath.
+	exportPath ensureCreateDirectory.
+	exportUrl := exportPath fileSystem isMemoryFileSystem
+		ifTrue: [ 'memory:' , exportPath pathString ]
+		ifFalse: [ 'file:' , exportPath pathString, '/' ].
 	^ self exportToUrl: exportUrl
-
 ]
 
 { #category : 'exporting' }
