@@ -96,6 +96,15 @@ RwLoadedClass >> loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassM
 	]
 ]
 
+{ #category : 'testing' }
+RwLoadedClass >> loadedMethodAt: aSelector isMeta: isMeta [
+
+	^ isMeta
+		ifTrue: [ loadedClassMethods at: aSelector ifAbsent: [nil]]
+		ifFalse: [ loadedInstanceMethods at: aSelector ifAbsent: [nil] ]
+
+]
+
 { #category : 'accessing' }
 RwLoadedClass >> loadedPackage [
 
