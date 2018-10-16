@@ -20,11 +20,10 @@ RwPkgAuditTool >> auditForPackage: loadedPackage [
 		loadedPackage 
 				loadedClassesDo: [:aLoadedClass |  (self auditLoadedClass: aLoadedClass) 
 					ifNotEmpty: [:aColl | res at: aLoadedClass name put: aColl]]				
-				loadedClassExtenstionsDo: [:aLoadedClass | (self auditLoadedClassExtenstion: aLoadedClass) 
+				loadedClassExtensionsDo: [:aLoadedClass | (self auditLoadedClassExtenstion: aLoadedClass) 
 					ifNotEmpty: [:aColl | res at: aLoadedClass name put: aColl] ] .
 	].
 	^res
-
 ]
 
 { #category : 'other' }

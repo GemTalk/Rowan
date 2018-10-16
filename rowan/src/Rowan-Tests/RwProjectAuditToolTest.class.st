@@ -63,6 +63,42 @@ y := RwClsExtensionAuditTool new auditLoadedClassExtenstion: (loadedClassExtensi
 ]
 
 { #category : 'tests' }
+RwProjectAuditToolTest >> testClassVars [
+	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x |
+	projectName := 'AuditProject'.
+	packageName := 'Audit-Core'.
+	packageNames := {packageName}.
+    className := 'ClassWithVars'.
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName
+		comment: 'project for testing project browser api'.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+		super: 'Object'
+		instvars: #('ivar1')
+		classinstvars: #('civar1')
+		classvars: #('Cvar1')
+		category: 'Simple Things'
+		comment: 'I am a Simple class with various vars'
+		pools: #()
+		type: 'normal'.
+
+	browserTool := Rowan projectTools browser.
+	browserTool createClass: classDefinition inPackageNamed: packageName.
+
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+
+	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') isEmpty.
+	testClass removeInstVar: 'ivar1'.
+	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
+
+]
+
+{ #category : 'tests' }
 RwProjectAuditToolTest >> testMissingMethods [
 
 | packageTools projectName packageNames className packageName theClass fooMethod x|

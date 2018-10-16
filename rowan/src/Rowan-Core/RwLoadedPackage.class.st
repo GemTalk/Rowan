@@ -91,7 +91,7 @@ RwLoadedPackage >> key [
 ]
 
 { #category : 'enumeration' }
-RwLoadedPackage >> loadedClassedDo: loadedClassBlock loadedClassExtenstionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock [
+RwLoadedPackage >> loadedClassedDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock [
 
 	loadedClasses
 		valuesDo: [ :loadedClass | 
@@ -108,6 +108,7 @@ RwLoadedPackage >> loadedClassedDo: loadedClassBlock loadedClassExtenstionsDo: l
 			loadedClassExtension
 				loadedInstanceMethodsDo: loadedInstanceMethodBlock
 				loadedClassMethodsDo: loadedClassMethodBlock ]
+
 ]
 
 { #category : 'accessing' }
@@ -117,7 +118,7 @@ RwLoadedPackage >> loadedClasses [
 ]
 
 { #category : 'enumeration' }
-RwLoadedPackage >> loadedClassesDo: loadedClassBlock loadedClassExtenstionsDo: loadedClassExtensionBlock [ 
+RwLoadedPackage >> loadedClassesDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionBlock [ 
 
 	loadedClasses
 		valuesDo: [ :loadedClass | 
@@ -135,7 +136,7 @@ RwLoadedPackage >> loadedClassesDo: loadedClassBlock loadedClassExtenstionsDo: l
 ]
 
 { #category : 'enumeration' }
-RwLoadedPackage >> loadedClassesDo: loadedClassBlock loadedClassExtenstionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock [
+RwLoadedPackage >> loadedClassesDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock [
 
 	loadedClasses
 		valuesDo: [ :loadedClass | 
