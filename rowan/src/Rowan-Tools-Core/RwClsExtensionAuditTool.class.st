@@ -5,72 +5,19 @@ Class {
 }
 
 { #category : 'other' }
-RwClsExtensionAuditTool >> _add: anAssoc to: aDict for: aName [
-
-	"aDict at: aName ifAbsentPut: [aColl]."
-	
-	aDict add: anAssoc
-
-]
-
-{ #category : 'other' }
-RwClsExtensionAuditTool >> _addAll: aColl to: aDict for: aName [
-
-	"aDict at: aName ifAbsentPut: [aColl]."
-	
-aDict addAll: aColl
-
-]
-
-{ #category : 'other' }
-RwClsExtensionAuditTool >> _auditCategory: extensionCategoryName forBehavior: aBehavior loadedClass: aLoadedClassExtension [
-| selectors  res |
-			res := Array new.
-			(aBehavior includesCategory: extensionCategoryName) ifTrue: [
-				selectors := aBehavior selectorsIn: extensionCategoryName.
-				selectors isEmpty ifTrue: ["expected some methods"
-					selectors do: [:aSelector |
-							(aLoadedClassExtension includesSelector: aSelector isMeta: false) 
-								ifFalse: [self _add: aSelector -> 'Missing loaded extension method' ->  aSelector  to: res for: aLoadedClassExtension name]
-					]
-				]
-			] ifFalse: [
-					(aBehavior class includesCategory: extensionCategoryName) ifTrue: [
-						selectors := aBehavior class selectorsIn: aLoadedClassExtension loadedPackage asExtensionName.
-							( selectors reject: [:e | aLoadedClassExtension includesSelector: e isMeta: true]) do: [:aSelector |
-									self _add: aSelector -> 'Missing loaded extensions classmethod: '   to: res for: aLoadedClassExtension name.
-					]						
-				] ifFalse: [
-					self _add: extensionCategoryName -> 'Missing extension category' to: res for: aLoadedClassExtension name.
-				]
-			].
-			
-			^res
-
-]
-
-{ #category : 'other' }
-RwClsExtensionAuditTool >> _auditLoadedClassMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoadedClassOrExtension [
-
-		^(aClassOrMeta compiledMethodAt: aLoadedMethod name) 
-				ifNil: [aLoadedMethod -> 'Missing compiled method: ' ]
-				ifNotNil: [:aGsMethod |
-					aGsMethod == (aLoadedClassOrExtension loadedClassMethods at: aLoadedMethod name) handle 
-						ifFalse: [aLoadedMethod name -> 'compiled class Method is not identical to loaded class Method']
-		]
-
-]
-
-{ #category : 'other' }
-RwClsExtensionAuditTool >> _auditLoadedInstanceMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoadedClassOrExtension [
-
-		^(aClassOrMeta compiledMethodAt: aLoadedMethod name) 
-				ifNil: [aLoadedMethod -> 'Missing compiled method: ' ]
-				ifNotNil: [:aGsMethod |
-					aGsMethod == (aLoadedClassOrExtension loadedInstanceMethods at: aLoadedMethod name) handle 
-						ifFalse: [aLoadedMethod name -> 'compiled class Method is not identical to loaded class Method']
-		]
-
+RwClsExtensionAuditTool >> _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoadedClassExtension [
+"if we have loaded methods but no compiled methods add error to result"
+| res |
+	res := super _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoadedClassExtension
+	aClassOrMeta isMeta 
+		ifTrue: [
+			(aLoadedClassExtension loadedClassMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
+				ifTrue: [ res add: ('expected class methods in the category ', anExtentionCategory printString, ' they are missing') -> aLoadedClassExtension name  ].
+	] 	ifFalse: [
+			(aLoadedClassExtension loadedMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
+				ifTrue: [ res add: ('expected instances methods in the category ', anExtentionCategory printString, ' they are missing') -> aLoadedClassExtension name  ].
+	].
+	^res
 ]
 
 { #category : 'other' }
@@ -91,8 +38,8 @@ RwClsExtensionAuditTool >> auditLoadedClassExtenstion: aLoadedClassExtension [
 						ifTrue: [(self _auditCategory: extensionCategoryName forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
 						ifFalse: [ { extensionCategoryName -> 'Missing extension category'} ]
 			]).
-			
 
+			
 			aLoadedClassExtension 
 				loadedInstanceMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
 					(self _auditLoadedInstanceMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:x | res add: x]
@@ -102,5 +49,4 @@ RwClsExtensionAuditTool >> auditLoadedClassExtenstion: aLoadedClassExtension [
 				]
 		].
 		^res
-
 ]
