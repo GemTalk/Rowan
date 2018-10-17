@@ -12,10 +12,10 @@ RwClsExtensionAuditTool >> _auditCategory: anExtentionCategory forBehavior: aCla
 	aClassOrMeta isMeta 
 		ifTrue: [
 			(aLoadedClassExtension loadedClassMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
-				ifTrue: [ res add: ('expected class methods in the category ', anExtentionCategory printString, ' they are missing') -> aLoadedClassExtension name  ].
+				ifTrue: [ self errorLog: res  add: (aLoadedClassExtension name -> 'expected class methods in the category ', anExtentionCategory printString, ' they are missing')   ].
 	] 	ifFalse: [
 			(aLoadedClassExtension loadedInstanceMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
-				ifTrue: [ res add: ('expected instances methods in the category ', anExtentionCategory printString, ' they are missing') -> aLoadedClassExtension name  ].
+				ifTrue: [ self errorLog: res  add: (aLoadedClassExtension name -> 'expected instances methods in the category ', anExtentionCategory printString, ' they are missing')   ].
 	].
 	^res
 ]
@@ -28,10 +28,10 @@ RwClsExtensionAuditTool >> auditLoadedClassExtenstion: aLoadedClassExtension [
 	res := Array new.
 	extensionCategoryName := aLoadedClassExtension loadedPackage asExtensionName.
 	(Rowan globalNamed: aLoadedClassExtension name) 
-		ifNil: [res add: aLoadedClassExtension name -> 'Compiled class does not exists '] 
+		ifNil: [self errorLog: res  add: aLoadedClassExtension name -> 'Matching compiled class does not exists '] 
 		ifNotNil: [:aBehavior | 
 			
-			res addAll:  ((aBehavior includesCategory: extensionCategoryName)
+			self errorLog: res addAll:  ((aBehavior includesCategory: extensionCategoryName)
 				ifTrue: [(self _auditCategory: extensionCategoryName forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
 				ifFalse: [
 					(aBehavior class includesCategory: extensionCategoryName)
