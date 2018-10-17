@@ -666,7 +666,7 @@ RowanClassService >> runMethodTests: methodServices [
 	| behavior |
 	behavior := self classFromName.  
 	methodServices do:[:methodService |
-		('test*' match: methodService selector) ifTrue:[ 
+		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
 			behavior debug: methodService selector]].
 	RowanCommandResult addResult: (RowanAnsweringService new answer: true).
 ]

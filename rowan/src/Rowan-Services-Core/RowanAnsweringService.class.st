@@ -13,6 +13,12 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'other' }
+RowanAnsweringService >> answer [
+
+	^answer
+]
+
 { #category : 'Updating' }
 RowanAnsweringService >> answer: anObject [
 
@@ -44,8 +50,8 @@ RowanAnsweringService >> isTranscriptInstalled [
 { #category : 'commands' }
 RowanAnsweringService >> selectorsMatchingPattern: pattern [
 
-	answer := ((AllUsers userWithId: #SymbolUser ifAbsent: [AllUsers userWithId: #DataCurator]) resolveSymbol: #AllSymbols) value.
-	answer := answer select: [:each |each asUppercase matchPattern: pattern].
+	answer := ((AllUsers userWithId: #SymbolUser) resolveSymbol: #AllSymbols) value.
+	answer := answer select: [:each |each _matchPatternNoCase: pattern].
 	answer := answer select: [:each | (organizer implementorsOf: each) notEmpty].
 	answer := answer asSortedCollection asArray.
 	command := nil. 

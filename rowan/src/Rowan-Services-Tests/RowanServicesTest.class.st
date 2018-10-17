@@ -119,6 +119,16 @@ RowanServicesTest >> tearDown [
 ]
 
 { #category : 'support' }
+RowanServicesTest >> testsIssue: aSymbol withTitle: anObject [
+	"send this to help identify which tests test which issues"
+
+	" a helpful parameter format is #issue<issueNumber>"
+
+	"Issues currently reside in: 
+		https://github.com/GemTalk/Jadeite/issues/"
+]
+
+{ #category : 'support' }
 RowanServicesTest >> unloadDefaultProject [
 
 	Rowan projectTools delete deleteProjectNamed: self defaultProjectName
