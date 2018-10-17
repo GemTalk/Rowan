@@ -42,6 +42,18 @@ RowanAnsweringService >> isTranscriptInstalled [
 ]
 
 { #category : 'commands' }
+RowanAnsweringService >> selectorsMatchingPattern: pattern [
+
+	answer := ((AllUsers userWithId: #SymbolUser ifAbsent: [AllUsers userWithId: #DataCurator]) resolveSymbol: #AllSymbols) value.
+	answer := answer select: [:each |each asUppercase matchPattern: pattern].
+	answer := answer select: [:each | (organizer implementorsOf: each) notEmpty].
+	answer := answer asSortedCollection asArray.
+	command := nil. 
+	commandArgs := nil. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'commands' }
 RowanAnsweringService >> subclassCreationTemplate: className [
 	 (RowanClassService new name: className) subclassCreationTemplate.  "gives an answer for us"
 ]
