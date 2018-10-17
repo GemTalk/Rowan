@@ -1,4 +1,4 @@
-output push audit_issue_365.out
+output pushnew audit_issue_365.out
 
   iferr 1 stk
   iferr 2 stack
@@ -35,12 +35,12 @@ output push audit_issue_365.out
 				"look for methods removed outside of Rowan API"
 				aLoadedClass 
 					loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-						(aBehavior compiledMethodAt: aLoadedMethod name) 
+						(aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil) 
 							ifNil: [
 								ar addAll: { aLoadedMethod name  -> 'Missing compiled method: ' }.
 								GsFile gciLogServer: 'Missing compiled method ', loadedClass name, '>>', aLoadedMethod name ] ]
 					loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
-						(aBehavior class compiledMethodAt: aLoadedMethod name) 
+						(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil) 
 							ifNil: [
 								ar addAll: { aLoadedMethod name  -> 'Missing compiled classmethod ' }.
 								GsFile gciLogServer: 'Missing compiled method ', loadedClass name, ' class>>', aLoadedMethod name ] ] ].
@@ -68,10 +68,19 @@ output push audit_issue_365.out
 									ar addAll: { aSelector -> 'Missing loaded extension method' ->  aSelector }.
 									GsFile gciLogServer: 'Missing loaded extension method ', aLoadedClassExtension name, '>>', aSelector ].
 						selectors do: [:sel |
-							(aBehavior compiledMethodAt: sel) == (aLoadedClassExtension loadedInstanceMethods at: sel) handle
+							| cMeth lMeth |
+							(cMeth := aBehavior compiledMethodAt: sel otherwise: nil) == (lMeth := (aLoadedClassExtension loadedInstanceMethods at: sel) handle)
 								ifFalse: [
 									ar addAll: { sel -> 'compiled Method is not identical to loaded Method' }.
-									GsFile gciLogServer: 'Compiled Method is not identical to loaded Method ', aLoadedClassExtension name, '>>', sel ] ] ]
+									GsFile gciLogServer: 
+										'Compiled Method (oop: ', 
+										cMeth asOop printString, 
+										') is not identical to loaded Method (oop: ',
+									  lMeth asOop printString, 
+										') ', 
+										aLoadedClassExtension name, 
+										'>>', 
+										sel ] ] ]
 					ifNil: [ 
 						aLoadedClassExtension loadedInstanceMethods isEmpty not
 							ifTrue: [
@@ -88,10 +97,19 @@ output push audit_issue_365.out
 								ar addAll: {aSelector -> 'Missing loaded extensions classmethod: ' }.
 								GsFile gciLogServer: 'Missing loaded extension method ', aLoadedClassExtension name, ' class>>', aSelector ].
 						selectors do: [:sel |
-							(aBehavior class compiledMethodAt: sel) == (aLoadedClassExtension loadedClassMethods at: sel) handle
+							| cMeth lMeth |
+							(cMeth := aBehavior class compiledMethodAt: sel otherwise: nil) == (lMeth := (aLoadedClassExtension loadedClassMethods at: sel) handle)
 								ifFalse: [
 									ar addAll: { sel -> 'class compiled Method is not identical to loaded Method' }.
-									GsFile gciLogServer: 'Compiled Method is not identical to loaded Method ', aLoadedClassExtension name, ' class>>', sel ] ]  ]
+									GsFile gciLogServer: 
+										'Compiled Method (oop: ', 
+										cMeth asOop printString, 
+										') is not identical to loaded Method (oop: ',
+									  lMeth asOop printString, 
+										') ', 
+										aLoadedClassExtension name, 
+										' class>>', 
+										sel ] ]  ]
 					ifNil: [
 						aLoadedClassExtension loadedClassMethods isEmpty not
 							ifTrue: [ 
@@ -100,12 +118,12 @@ output push audit_issue_365.out
 				"look for methods removed outside of Rowan API"
 				aLoadedClassExtension 
 					loadedInstanceMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-						(aBehavior compiledMethodAt: aLoadedMethod name) 
+						(aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil) 
 							ifNil: [
 								ar addAll: {aLoadedMethod name -> 'Missing compiled method: ' }.
 								GsFile gciLogServer: 'Missing compiled  method ', loadedClass name, '>>', aLoadedMethod name ] ]
 					loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
-						(aBehavior class compiledMethodAt: aLoadedMethod name) 
+						(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil) 
 							ifNil: [
 								ar addAll: { aLoadedMethod name -> 'Missing compiled class method: ' }.
 								GsFile gciLogServer: 'Missing compiled  class method ', loadedClass name, ' class>>', aLoadedMethod name ] ] ].
