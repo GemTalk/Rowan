@@ -101,6 +101,14 @@ RwLoadedClassExtension >> loadedInstanceMethodsDo: loadedInstanceMethodBlock loa
 
 ]
 
+{ #category : 'private' }
+RwLoadedClassExtension >> loadedMethodAt: aSelector isMeta: isMeta [
+
+	^ isMeta
+		ifTrue: [ loadedClassMethods at: aSelector ifAbsent: [nil]]
+		ifFalse: [ loadedInstanceMethods at: aSelector ifAbsent: [nil] ]
+]
+
 { #category : 'accessing' }
 RwLoadedClassExtension >> loadedPackage [
 

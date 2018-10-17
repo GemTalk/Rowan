@@ -64,7 +64,7 @@ y := RwClsExtensionAuditTool new auditLoadedClassExtenstion: (loadedClassExtensi
 
 { #category : 'tests' }
 RwProjectAuditToolTest >> testClassVars [
-	| projectName packageNames className packageName classDefinition browserTool testClass testSymDict x |
+	| projectName packageNames className packageName classDefinition browserTool testClass testClassB testSymDict x |
 	projectName := 'AuditProject'.
 	packageName := 'Audit-Core'.
 	packageNames := {packageName}.
@@ -93,9 +93,21 @@ RwProjectAuditToolTest >> testClassVars [
 	self assert: testClass notNil.
 
 	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') isEmpty.
-	testClass removeInstVar: 'ivar1'.
-	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
+	
+	DateTime subclass: className
+	instVarNames: #( )
+	classVars: #( )
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: (System myUserProfile resolveSymbol: self _symbolDictionaryName) value
+	newVersionOf: testClass
+	description: 'Non rowan class'
+	options: #().
 
+	testClassB := Rowan globalNamed: className.
+	self deny: testClassB == testClass.
+	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 1.
+	self assert: ((x at: packageName) at: className) size = 4 description: 'expected 4 failures superclass instvars classvars and comment'
 ]
 
 { #category : 'tests' }

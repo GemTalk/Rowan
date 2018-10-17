@@ -8,13 +8,13 @@ Class {
 RwClsExtensionAuditTool >> _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoadedClassExtension [
 "if we have loaded methods but no compiled methods add error to result"
 | res |
-	res := super _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoadedClassExtension
+	res := super _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoadedClassExtension.
 	aClassOrMeta isMeta 
 		ifTrue: [
 			(aLoadedClassExtension loadedClassMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
 				ifTrue: [ res add: ('expected class methods in the category ', anExtentionCategory printString, ' they are missing') -> aLoadedClassExtension name  ].
 	] 	ifFalse: [
-			(aLoadedClassExtension loadedMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
+			(aLoadedClassExtension loadedInstanceMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
 				ifTrue: [ res add: ('expected instances methods in the category ', anExtentionCategory printString, ' they are missing') -> aLoadedClassExtension name  ].
 	].
 	^res
