@@ -76,6 +76,8 @@ RwSemanticVersionNumberTestCase >> testLessThanComparison [
 RwSemanticVersionNumberTestCase >> testOfficialInvalidSemanticVersions [
 	"https://github.com/semver/semver/issues/232#issuecomment-430813095"
 
+	"https://github.com/GemTalk/Rowan/issues/381"
+
     | vrsn |
     {
 		'1'.
@@ -127,7 +129,9 @@ RwSemanticVersionNumberTestCase >> testOfficialInvalidSemanticVersions [
 RwSemanticVersionNumberTestCase >> testOfficialValidSemanticVersions [
 	"https://github.com/semver/semver/issues/232#issuecomment-430813095"
 
-    | x vrsn |
+	"https://github.com/GemTalk/Rowan/issues/381"
+
+	| x vrsn |
     {
 		'0.0.0'.
 		'0.0.1'.
