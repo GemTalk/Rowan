@@ -16,6 +16,12 @@ RwModificationTonelWriterVisitor class >> orderedDictionaryClass [
   ^ GsTonelOrderedDictionary
 ]
 
+{ #category : 'class extension writing' }
+RwModificationTonelWriterVisitor >> _classExtensionSourceFile [
+
+	^ self _packageSourceDir / (self currentClassExtension name, '.extension.st')
+]
+
 { #category : 'class writing' }
 RwModificationTonelWriterVisitor >> _classSourceFile [
 
@@ -171,6 +177,13 @@ RwModificationTonelWriterVisitor >> _writeClassDefinition: aClassDefinition on: 
 		<< ' ' << (self _typeClassDefinitionOf: aClassDefinition ) << nl
 ]
 
+{ #category : 'class extension writing' }
+RwModificationTonelWriterVisitor >> _writeClassExtension: aClassExtension on: aStream [
+
+	aStream << 'Extension '
+				<< (self _toSTON: {(#'name' -> aClassExtension name)} asDictionary) << self _newLine.
+]
+
 { #category : 'class writing' }
 RwModificationTonelWriterVisitor >> _writeClassSideMethodDefinitions: aClassDefinition on: aStream [
 	((aClassDefinition classMethodDefinitions values )
@@ -212,6 +225,14 @@ RwModificationTonelWriterVisitor >> addedClass: aClassModification [
 ]
 
 { #category : 'actions' }
+RwModificationTonelWriterVisitor >> addedClassExtension: aClassExtensionModification [
+
+	currentClassExtension := aClassExtensionModification after.
+
+	self processClassExtension: aClassExtensionModification
+]
+
+{ #category : 'actions' }
 RwModificationTonelWriterVisitor >> addedPackage: aPackageModification [
 
 	currentPackageDefinition := aPackageModification after.
@@ -237,6 +258,14 @@ RwModificationTonelWriterVisitor >> changedClass: aClassModification [
 ]
 
 { #category : 'actions' }
+RwModificationTonelWriterVisitor >> changedClassExtension: aClassExtensionModification [
+
+	currentClassDefinition := aClassExtensionModification after.
+
+	self processClassExtension: aClassExtensionModification
+]
+
+{ #category : 'actions' }
 RwModificationTonelWriterVisitor >> changedPackage: aPackageModification [
 
 	currentPackageDefinition := aPackageModification after.
@@ -252,6 +281,15 @@ RwModificationTonelWriterVisitor >> deletedClass: aClassModification [
 	currentClassDefinition := aClassModification after.
 
 	self halt. "delete the class file"
+]
+
+{ #category : 'actions' }
+RwModificationTonelWriterVisitor >> deletedClassExtension: aClassExtensionModification [
+
+	currentClassDefinition := aClassExtensionModification after.
+
+
+	self halt. "delete the class extension file"
 ]
 
 { #category : 'actions' }
@@ -272,6 +310,18 @@ RwModificationTonelWriterVisitor >> processClass: aClassModification [
 			self _writeClassDefinition: currentClassDefinition on: aStream.
 			self _writeClassSideMethodDefinitions: currentClassDefinition on: aStream.
 			self _writeInstanceSideMethodDefinitions: currentClassDefinition on: aStream ]
+]
+
+{ #category : 'class extension writing' }
+RwModificationTonelWriterVisitor >> processClassExtension: aClassExtensionModification [
+
+	"write out the class definition"
+
+	self _classExtensionSourceFile
+		writeStreamDo: [:aStream |
+			self _writeClassExtension: currentClassExtension on: aStream.
+			self _writeClassSideMethodDefinitions: currentClassExtension on: aStream.
+			self _writeInstanceSideMethodDefinitions: currentClassExtension on: aStream ]
 ]
 
 { #category : 'project writing' }

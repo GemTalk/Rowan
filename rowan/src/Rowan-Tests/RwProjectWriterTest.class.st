@@ -1035,7 +1035,6 @@ RwProjectWriterTest >> testGsTopazWriter_A [
 		topazFilename: projectName;
 		yourself.
 	visitor visit: projectSetModification.
-	visitor export.
 
 	stream := ZnBufferedReadStream on: visitor topazFileReference readStream.
 	x := stream contents.
@@ -1162,7 +1161,6 @@ RwProjectWriterTest >> testGsTopazWriter_B [
 		topazFilename: projectName;
 		yourself.
 	visitor visit: projectSetModification.
-	visitor export.
 
 	stream := ZnBufferedReadStream on: visitor topazFileReference readStream.
 	x := stream contents.
@@ -1296,7 +1294,6 @@ RwProjectWriterTest >> testGsTopazWriter_C [
 				yourself)
 		yourself.
 	visitor visit: projectSetModification.
-	visitor export.
 
 	{ packageName1. packageName2. packageName3 }
 		do: [:packageName |
@@ -1449,7 +1446,6 @@ RwProjectWriterTest >> testGsTopazWriter_D [
 				yourself)
 		yourself.
 	visitor visit: projectSetModification.
-	visitor export.
 
 	{ packageName1. packageName2. packageName3 }
 		do: [:packageName |
@@ -1725,7 +1721,6 @@ RwProjectWriterTest >> testGsTopazWriter_MultiProject_A [
 		topazFilename: projectName;
 		yourself.
 	visitor visit: projectSetModification.
-	visitor export.
 
 "validate"
 	stream := ZnBufferedReadStream on: visitor topazFileReference readStream.
@@ -1880,7 +1875,6 @@ RwProjectWriterTest >> testGsTopazWriter_MultiProject_B [
 				yourself)
 		yourself.
 	visitor visit: projectSetModification.
-	visitor export.
 
 "validate"
 	{ packageName1. packageName2. packageName3 }
@@ -2020,7 +2014,6 @@ RwProjectWriterTest >> testTonelWriter_A [
 		repositoryRootPath: repositoryRootPath;
 		yourself.
 	visitor visit: projectSetModification.
-	visitor export.
 
-	self halt.
+	self halt. "need to add contents validation for each of the packages"
 ]

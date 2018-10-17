@@ -11,6 +11,7 @@ Class {
 		'currentProjectDefinition',
 		'currentPackageDefinition',
 		'currentClassDefinition',
+		'currentClassExtension',
 		'repositoryRootPath'
 	],
 	#category : 'Rowan-Core'
@@ -104,6 +105,12 @@ RwModificationWriterVisitor >> currentClassDefinition [
 ]
 
 { #category : 'accessing' }
+RwModificationWriterVisitor >> currentClassExtension [
+
+	^ currentClassExtension
+]
+
+{ #category : 'accessing' }
 RwModificationWriterVisitor >> currentPackageDefinition [
 
 	^ currentPackageDefinition
@@ -143,7 +150,7 @@ RwModificationWriterVisitor >> deletedProject: aProjectModification [
 { #category : 'exporting' }
 RwModificationWriterVisitor >> export [
 
-	self subclassResponsibility: #export
+	"noop ... directory-based formats written out as each element is visited"
 ]
 
 { #category : 'class writing' }
@@ -187,7 +194,8 @@ RwModificationWriterVisitor >> repositoryRootPath: aStringOrFileReference [
 { #category : 'public' }
 RwModificationWriterVisitor >> visit: aPackageSetModification [
 
-	^aPackageSetModification acceptVisitor: self
+	aPackageSetModification acceptVisitor: self.
+	self export.
 ]
 
 { #category : 'visiting' }
