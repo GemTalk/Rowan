@@ -42,7 +42,7 @@ RwClsAuditTool >> _auditClassSelector: aSelector forBehavior: aBehavior loadedCl
 	^(aLoadedClass loadedMethodAt: aSelector isMeta:  true)
 			ifNil: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded classmethod'.]
 			ifNotNil: [:aLoadedMethod |
-				(aBehavior compiledMethodAt: aSelector) == aLoadedMethod handle 
+				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle 
 						ifFalse: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Compiled classmethod is not identical to loaded class method ']
 			]
 ]
@@ -52,7 +52,7 @@ RwClsAuditTool >> _auditLoadedClassMethod: aLoadedMethod forBehavior: aClassOrMe
 "verify that compiled method is present for each loaded class method. return nil if no error"
 "we already check verifying selectors that compiled method matches loaded method"
 
-		^(aClassOrMeta compiledMethodAt: aLoadedMethod name) 
+		^(aClassOrMeta compiledMethodAt: aLoadedMethod name otherwise: nil) 
 				isNil ifTrue: [(aLoadedClassOrExtension name ,  ' >> ', aLoadedMethod name) -> 'Missing compiled classmethod: ' ]
 ]
 
@@ -88,7 +88,7 @@ RwClsAuditTool >> _auditLoadedInstanceMethod: aLoadedMethod forBehavior: aClassO
 "verify that compiled method is present for each loaded instance method. return nil if no error"
 "we already check verifying selectors that compiled method matches loaded method"
 
-		^(aClassOrMeta compiledMethodAt: aLoadedMethod name) 
+		^(aClassOrMeta compiledMethodAt: aLoadedMethod name  otherwise: nil) 
 				isNil ifTrue: [(aLoadedClassOrExtension name ,  ' >> ', aLoadedMethod name) -> 'Missing compiled instance method ' ]
 ]
 
@@ -99,7 +99,7 @@ RwClsAuditTool >> _auditSelector: aSelector forBehavior: aBehavior loadedClass: 
 	^(aLoadedClass loadedMethodAt: aSelector isMeta:  false)
 			ifNil: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded instance method'.]
 			ifNotNil: [:aLoadedMethod |
-				(aBehavior compiledMethodAt: aSelector) == aLoadedMethod handle 
+				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle 
 							ifFalse: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Compiled instance method is not identical to loaded method']
 			]
 ]
