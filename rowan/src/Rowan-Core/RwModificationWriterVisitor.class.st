@@ -10,10 +10,39 @@ Class {
 	#instVars : [
 		'currentProjectDefinition',
 		'currentPackageDefinition',
+		'currentClassDefinition',
 		'repositoryRootPath'
 	],
 	#category : 'Rowan-Core'
 }
+
+{ #category : 'accessing' }
+RwModificationWriterVisitor class >> lineEnding [
+  "Answer the os-specific line endings"
+
+  ^ String with: Character lf
+]
+
+{ #category : 'private' }
+RwModificationWriterVisitor >> _newLine [
+	 ^ self class lineEnding
+]
+
+{ #category : 'project writing' }
+RwModificationWriterVisitor >> _repositoryFormatFor: aProjectModification [
+
+	^ (self _repositoryPropertyDictFor: aProjectModification) at: #format ifAbsent: [ 'filetree' ]
+]
+
+{ #category : 'project writing' }
+RwModificationWriterVisitor >> _repositoryPropertyDictFor: aProjectModification [
+
+	| propertiesFile |
+	propertiesFile := self repositoryRootPath / aProjectModification after repoPath / 'properties.st'.
+	propertiesFile exists
+		ifFalse: [ propertiesFile := self repositoryRootPath / aProjectModification after repoPath / '.cypress' ].
+	^ STON fromStream: (ZnBufferedReadStream on: propertiesFile  readStream)
+]
 
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedClass: aClassModification [
@@ -30,15 +59,14 @@ RwModificationWriterVisitor >> addedClassExtension: aClassExtensionModification 
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedPackage: aPackageModification [
 
+	currentPackageDefinition := aPackageModification after.
 	self processPackage: aPackageModification
 ]
 
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedProject: aProjectModification [
-	| addedProjectDefinition |
-	addedProjectDefinition := aProjectModification after.
-	self repositoryRootPath ifNil: [ self repositoryRootPath: addedProjectDefinition repositoryRootPath ].
-	self ensureProjectDirectoryStructureFor: addedProjectDefinition.
+	currentProjectDefinition := aProjectModification after.
+	self repositoryRootPath ifNil: [ self repositoryRootPath: currentProjectDefinition repositoryRootPath ].
 	self processProject: aProjectModification
 ]
 
@@ -57,15 +85,22 @@ RwModificationWriterVisitor >> changedClassExtension: aClassExtensionModificatio
 { #category : 'actions' }
 RwModificationWriterVisitor >> changedPackage: aPackageModification [
 
+	currentPackageDefinition := aPackageModification after.
 	self processPackage: aPackageModification
 ]
 
 { #category : 'actions' }
 RwModificationWriterVisitor >> changedProject: aProjectModification [
-	| afterProject |
-	afterProject := aProjectModification after.
-	self repositoryRootPath ifNil: [ self repositoryRootPath: afterProject repositoryRootPath ].
+
+	currentProjectDefinition := aProjectModification after.
+	self repositoryRootPath ifNil: [ self repositoryRootPath: currentProjectDefinition repositoryRootPath ].
 self halt.
+]
+
+{ #category : 'accessing' }
+RwModificationWriterVisitor >> currentClassDefinition [
+
+	^ currentClassDefinition
 ]
 
 { #category : 'accessing' }
@@ -105,12 +140,6 @@ RwModificationWriterVisitor >> deletedProject: aProjectModification [
 		So ignore the rest of the project"
 ]
 
-{ #category : 'project writing' }
-RwModificationWriterVisitor >> ensureProjectDirectoryStructureFor: aProjectDefinition [
-
-	(self repositoryRootPath / aProjectDefinition repoPath) ensureCreateDirectory
-]
-
 { #category : 'exporting' }
 RwModificationWriterVisitor >> export [
 
@@ -132,7 +161,6 @@ RwModificationWriterVisitor >> processClassExtension: aClassExtensionModificatio
 { #category : 'package writing' }
 RwModificationWriterVisitor >> processPackage: aPackageModification [
 
-	currentPackageDefinition := aPackageModification after.
 	aPackageModification classesModification acceptVisitor: self.
 	aPackageModification classExtensionsModification acceptVisitor: self
 ]
@@ -140,10 +168,6 @@ RwModificationWriterVisitor >> processPackage: aPackageModification [
 { #category : 'project writing' }
 RwModificationWriterVisitor >> processProject: aProjectModification [
 
-	| x |
-	currentProjectDefinition := aProjectModification after.
-	x := STON fromStream: (ZnBufferedReadStream on: (self repositoryRootPath / currentProjectDefinition repoPath / 'properties.st') readStream).
-	(x at: #format) = 'tonel' ifFalse: [ self error: 'expected tonel format repository' ].
 	aProjectModification packagesModification acceptVisitor: self
 ]
 

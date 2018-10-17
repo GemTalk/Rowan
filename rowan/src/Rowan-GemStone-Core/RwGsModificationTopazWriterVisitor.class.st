@@ -235,12 +235,6 @@ RwGsModificationTopazWriterVisitor >> deletededPackage: aPackageModification [
 	"a deleted package is ignored for topaz ... the deleted classes and methods are simply not written out"
 ]
 
-{ #category : 'project writing' }
-RwGsModificationTopazWriterVisitor >> ensureProjectDirectoryStructureFor: aProjectDefinition [
-
-	"topaz files do not go in a standard spot in the project directory structure. The files are written directly in the repositoryRootPath"
-]
-
 { #category : 'exporting' }
 RwGsModificationTopazWriterVisitor >> export [
 
@@ -416,7 +410,6 @@ RwGsModificationTopazWriterVisitor >> processClassExtension: aClassExtensionModi
 { #category : 'project writing' }
 RwGsModificationTopazWriterVisitor >> processProject: aProjectModification [
 
-	currentProjectDefinition := aProjectModification after.
 	self buildPackageNamesMap 
 		ifTrue: [
 			| readTool |
