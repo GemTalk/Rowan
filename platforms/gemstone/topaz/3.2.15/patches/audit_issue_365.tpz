@@ -130,6 +130,7 @@ output pushnew audit_issue_365.out
 		ar ].
 		
 	Rowan projectNames do: [:projectName |
+		GsFile gciLogServer: '---Auditing project: ', projectName printString.
 		loadedProject := Rowan image loadedProjectNamed: projectName.
 		loadedProject loadedPackages do: [:loadedPackage |
 			loadedPackage

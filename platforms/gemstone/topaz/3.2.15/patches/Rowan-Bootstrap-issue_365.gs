@@ -552,6 +552,30 @@ currentOrNil
 
   run
   CypressBootstrapRowanBlock 
+    value: 'RowanKernel'
+    value: #('Rowan-Core-Definitions-Extensions' 
+	).	"Populate with Rowan implementation classes"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanTools'
+    value: #('Rowan-Definitions-Deprecated'
+	).	"Rowan Tools"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
+    value: 'RowanKernel'
+    value: #('Rowan-GemStone-Loader-Extensions'
+	).	"Extension methods in non-loader classes"
+%
+  commit
+
+  run
+  CypressBootstrapRowanBlock 
     value: 'Globals'
     value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel' 
       'Rowan-Tools-Kernel' 
@@ -561,3 +585,4 @@ currentOrNil
   commit
 
 	logout
+
