@@ -1042,6 +1042,35 @@ RwProjectWriterTest >> tearDown [
 ]
 
 { #category : 'tests' }
+RwProjectWriterTest >> testFiletreeWriter_A [
+
+	"multiple class extensions from multiple packages for multiple classes"
+
+	| projectName projectSetDefinition projectDefinition projectSetModification visitor repositoryRootPath |
+"project set"
+	projectSetDefinition := self _projectSetDefinitionForStructureWriters_A.
+	projectName := projectSetDefinition projectNames at: 1.
+	projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
+
+"set project up for using filesystem"
+	repositoryRootPath := filesystem workingDirectory / projectName.
+	self _markForCleanup: (filesystem workingDirectory / projectName).
+
+	projectDefinition repositoryRootPath: repositoryRootPath.
+	Rowan projectTools create createProjectFor: projectDefinition format: 'filetree'.	"create repository structure on filesystem"
+
+"write project set to tonel"
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwModificationFiletreeWriterVisitor new
+		repositoryRootPath: repositoryRootPath;
+		yourself.
+	visitor visit: projectSetModification.
+
+"validation -- need to have reader implemented before doing validation"
+self halt
+]
+
+{ #category : 'tests' }
 RwProjectWriterTest >> testGsTopazWriter_A [
 
 	"simple case with only two packages and a single set of extensions for a class"

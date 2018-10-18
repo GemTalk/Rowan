@@ -48,6 +48,8 @@ RwModificationWriterVisitor >> _repositoryPropertyDictFor: aProjectModification 
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedClass: aClassModification [
 
+	currentClassDefinition := aClassModification after.
+
 	self processClass: aClassModification
 ]
 

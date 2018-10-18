@@ -1,19 +1,12 @@
 Class {
 	#name : 'RwModificationTonelWriterVisitor',
-	#superclass : 'RwModificationWriterVisitor',
+	#superclass : 'RwModificationCypressFamilyWriterVisitor',
 	#category : 'Rowan-Core'
 }
 
 { #category : 'accessing' }
 RwModificationTonelWriterVisitor class >> classLabel [
 	^ 'Class'
-]
-
-{ #category : 'accessing' }
-RwModificationTonelWriterVisitor class >> orderedDictionaryClass [
-  "Answer the platform-specific OrderedDictionary-compatible class"
-
-  ^ GsTonelOrderedDictionary
 ]
 
 { #category : 'class extension writing' }
@@ -26,14 +19,6 @@ RwModificationTonelWriterVisitor >> _classExtensionSourceFile [
 RwModificationTonelWriterVisitor >> _classSourceFile [
 
 	^ self _packageSourceDir / (self _fileNameFor: self currentClassDefinition)
-]
-
-{ #category : 'class writing' }
-RwModificationTonelWriterVisitor >> _commentOf: aClassDefinition [
-	^ (aClassDefinition comment 
-		copyReplaceAll: '"' 
-		with: '""')
-		withLineEndings: self _newLine
 ]
 
 { #category : 'class writing' }
@@ -58,18 +43,6 @@ RwModificationTonelWriterVisitor >> _methodDefinitionOf: aMethodDefinition [
 	^ self _toSTON: (self class orderedDictionaryClass new 
 		at: #category put: aMethodDefinition protocol; 
 		yourself)
-]
-
-{ #category : 'package writing' }
-RwModificationTonelWriterVisitor >> _packageSourceDir [
-
-	^ self _projectSourceDir / self currentPackageDefinition name
-]
-
-{ #category : 'project writing' }
-RwModificationTonelWriterVisitor >> _projectSourceDir [
-
-	^ self repositoryRootPath / self currentProjectDefinition repoPath
 ]
 
 { #category : 'class writing' }
@@ -111,13 +84,6 @@ RwModificationTonelWriterVisitor >> _splitMethodSource: aMethodDefinition into: 
 	aBlock 
 		value: (declaration contents trimLeft withLineEndings: self _newLine)
 		value: (source upToEnd withLineEndings: self _newLine)
-]
-
-{ #category : 'private' }
-RwModificationTonelWriterVisitor >> _toSTON: anObject [
-	^ (String streamContents: [ :stream | 
-		(TonelSTONWriter on: stream) nextPut: anObject ])
-		withLineEndings: self _newLine
 ]
 
 { #category : 'class writing' }
@@ -217,14 +183,6 @@ RwModificationTonelWriterVisitor >> _writeMethodDefinition: aMethodDefinition  c
 ]
 
 { #category : 'actions' }
-RwModificationTonelWriterVisitor >> addedClass: aClassModification [
-
-	currentClassDefinition := aClassModification after.
-
-	self processClass: aClassModification
-]
-
-{ #category : 'actions' }
 RwModificationTonelWriterVisitor >> addedClassExtension: aClassExtensionModification [
 
 	currentClassExtension := aClassExtensionModification after.
@@ -266,16 +224,6 @@ RwModificationTonelWriterVisitor >> changedClassExtension: aClassExtensionModifi
 ]
 
 { #category : 'actions' }
-RwModificationTonelWriterVisitor >> changedPackage: aPackageModification [
-
-	currentPackageDefinition := aPackageModification after.
-
-	self halt. "anything need to be done for tonel?"
-
-	self processPackage: aPackageModification
-]
-
-{ #category : 'actions' }
 RwModificationTonelWriterVisitor >> deletedClass: aClassModification [
 
 	currentClassDefinition := aClassModification after.
@@ -290,14 +238,6 @@ RwModificationTonelWriterVisitor >> deletedClassExtension: aClassExtensionModifi
 
 
 	self halt. "delete the class extension file"
-]
-
-{ #category : 'actions' }
-RwModificationTonelWriterVisitor >> deletedPackage: aPackageModification [
-
-	currentPackageDefinition := aPackageModification after.
-
-	self halt. "delete the whole package directory"
 ]
 
 { #category : 'class writing' }
