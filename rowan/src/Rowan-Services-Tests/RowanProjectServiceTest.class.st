@@ -29,6 +29,22 @@ RowanProjectServiceTest >> tearDown [
 ]
 
 { #category : 'tests' }
+RowanProjectServiceTest >> test_addedProjectNotOnDisk [
+
+	| proj projectService |
+	self testsIssue: #issue246 withTitle: 'Jadeite handling project that''s not committed'. 
+	proj := RwProjectDefinition newForGitBasedProjectNamed: 'Tashkent'.
+	proj repositoryRootPath: '$ROWAN_PROJECTS_HOME/Tashkent'.
+	Rowan projectTools create createProjectFor: proj.
+	Rowan projectTools load loadProjectDefinition: proj.
+	projectService := RowanProjectService newNamed: 'Tashkent'. 
+	projectService refresh. "<-- walkback occured here" 
+	[self deny: projectService existsOnDisk.
+	self assert: projectService isSkew]
+		ensure: [RowanBrowserService new unloadProjectsNamed: (Array with: 'Tashkent')]
+]
+
+{ #category : 'tests' }
 RowanProjectServiceTest >> test_addPackage [
 
 	| projectService  packageName loadedPackage |
