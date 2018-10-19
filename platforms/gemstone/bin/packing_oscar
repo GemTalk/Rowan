@@ -10,18 +10,20 @@ set -e
 # Usage:
 #  $ROWAN_PROJECTS_HOME/Rowan/bin/packing_oscar <base_label> <rowan_tag> <jadeite_tag> <location_of_sett_zip>
 #
-# 1. clone the Rowan, RowanSample1, RowanSample2, RowanSample4, and RowanSample6 projects
+# 1. clone the Rowan project
 # 2. confirm that the master branches of Rowan is on the correct tag
 # 3. Create Jadeite runtime directory (Jadeite_runtime) and download .exe from github for given tag
 # 4. create MANIFEST.TXT and list the sha of the commit for each of the git 
 #    projects along with the name of the file or directory
-# 5. zip up the Rowan, RowanSample1, and RowanSample2 projects, the 
-#    Jadeite_runtime directory  plus any .pdf documents present (only expect 
-#     one PDF file)
+# 5. zip up the Rowan project the 
+#    Jadeite_runtime directory  plus any .pdf documents present
 # 6. Archive the zip file and stage for delivery
 #
-# 1.1.0-candidate $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.0-candidate v1.1.0-candidate Oscar-3.0.16-candidate /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.1.0 candidate $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.0-candidate v1.1.0-candidate Oscar-3.0.16-candidate /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.1.0 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.0 v1.1.0 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.1.1 candidate $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.1-candidate v1.1.1-candidate Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.1.1 candidate 2 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.1-candidate_2 v1.1.1-candidate_2 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.1.1 candidate 3 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.1-candidate_3 v1.1.1-candidate_3 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.2.0 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.0 v1.2.0 Oscar-3.0.40 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 #
 ANSI_RED="\033[91;1m"
@@ -53,7 +55,7 @@ commit_match_tag() {
   fi
 }
 padded_manifest_line() {
-  line='               |  '
+  line='                   |  '
   PROC_NAME="$1"
   printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> MANIFEST.TXT
   PROC_NAME="$2"
@@ -117,7 +119,7 @@ echo "------------------------------" >> MANIFEST.TXT
 echo "  Git clone directories" >> MANIFEST.TXT
 echo "------------------------------" >> MANIFEST.TXT
 padded_manifest_line "Git_Project" "Tag" "SHA"
-echo "---------------|-----------------|-----------------|" >> MANIFEST.TXT
+echo "-------------------|---------------------|---------------------|" >> MANIFEST.TXT
 validate_tag Rowan Rowan "$rowan_tag" $rowanDeploymentBranch
 
 # create Jadeite runtime directory
