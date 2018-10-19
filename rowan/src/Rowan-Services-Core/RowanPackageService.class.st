@@ -78,6 +78,7 @@ RowanPackageService >> classHierarchy [
 		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[(RowanClassService minimalForClassNamed: key name)].
 		services at: newKey put: (value collect:[:cls | (RowanClassService minimalForClassNamed: cls name)])].
 	hierarchyServices := services reject:[:array | array isEmpty].
+	hierarchyServices copy keysAndValuesDo:[:key :value | hierarchyServices at: key put: value asSet asArray].
 	RowanCommandResult addResult: self.
 ]
 
