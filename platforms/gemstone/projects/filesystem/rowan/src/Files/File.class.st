@@ -120,7 +120,8 @@ File class >> deleteDirectory: fullPath [
 	"Delete the directory named by the given path. 
 	Fail if the path is bad or if a directory by that name does not exist."
 
-	GsFile removeServerDirectory: fullPath
+	(GsFile removeServerDirectory: fullPath)
+		ifNil: [ self error: 'Error deleting directory ', fullPath printString, ' :: ', GsFile serverErrorString ]
 ]
 
 { #category : 'primitives-path' }

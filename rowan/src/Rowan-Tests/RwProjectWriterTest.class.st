@@ -11,7 +11,7 @@ Class {
 
 { #category : 'private' }
 RwProjectWriterTest >> _createFileSystem [
-	^ FileSystem currentMemoryFileSystem
+	^ FileSystem "disk "currentMemoryFileSystem
 ]
 
 { #category : 'private' }
@@ -1064,8 +1064,15 @@ RwProjectWriterTest >> testFiletreeWriter_A [
 	visitor := RwModificationFiletreeWriterVisitor new
 		repositoryRootPath: repositoryRootPath;
 		yourself.
+[
 	visitor visit: projectSetModification.
-
+] on: Error do: [:ex |
+	toDelete
+		select: [ :path | filesystem exists: path ]
+		thenDo: [ :path |
+self error: 'halt here'.
+ (filesystem resolve: path) deleteAll ].
+].
 "validation -- need to have reader implemented before doing validation"
 self halt
 ]
