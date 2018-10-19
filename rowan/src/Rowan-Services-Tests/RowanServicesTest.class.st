@@ -119,7 +119,7 @@ RowanServicesTest >> tearDown [
 ]
 
 { #category : 'support' }
-RowanServicesTest >> testsIssue: aSymbol withTitle: anObject [
+RowanServicesTest >> testsJadeiteIssue: aSymbol withTitle: anObject [
 	"send this to help identify which tests test which issues"
 
 	" a helpful parameter format is #issue<issueNumber>"

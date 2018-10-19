@@ -32,7 +32,7 @@ RowanProjectServiceTest >> tearDown [
 RowanProjectServiceTest >> test_addedProjectNotOnDisk [
 
 	| proj projectService |
-	self testsIssue: #issue246 withTitle: 'Jadeite handling project that''s not committed'. 
+	self testsJadeiteIssue: #issue246 withTitle: 'Jadeite handling project that''s not committed'. 
 	proj := RwProjectDefinition newForGitBasedProjectNamed: 'Tashkent'.
 	proj repositoryRootPath: '$ROWAN_PROJECTS_HOME/Tashkent'.
 	Rowan projectTools create createProjectFor: proj.

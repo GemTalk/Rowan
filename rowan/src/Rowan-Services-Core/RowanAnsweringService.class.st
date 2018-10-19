@@ -48,6 +48,20 @@ RowanAnsweringService >> isTranscriptInstalled [
 ]
 
 { #category : 'commands' }
+RowanAnsweringService >> runMethodTests: methodServices [
+
+	| behavior |
+	methodServices do:[:methodService |
+		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
+			behavior := methodService classFromName. 
+			behavior debug: methodService selector]].
+	answer := true. 
+	command := nil. 
+	commandArgs := nil. 
+	RowanCommandResult addResult: self
+]
+
+{ #category : 'commands' }
 RowanAnsweringService >> selectorsMatchingPattern: pattern [
 
 	answer := ((AllUsers userWithId: #SymbolUser) resolveSymbol: #AllSymbols) value.

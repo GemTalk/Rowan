@@ -146,6 +146,12 @@ RowanPackageService >> hash [
 	^self name hash
 ]
 
+{ #category : 'Accessing' }
+RowanPackageService >> hierarchyServices [
+
+	^hierarchyServices
+]
+
 { #category : 'rowan' }
 RowanPackageService >> isDirty [
 
