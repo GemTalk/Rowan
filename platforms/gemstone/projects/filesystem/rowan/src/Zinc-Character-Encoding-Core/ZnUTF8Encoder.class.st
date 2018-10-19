@@ -10,7 +10,7 @@ I use the ICU library to encode strings and decode ByteArray and Utf8 instances 
 "
 Class {
 	#name : 'ZnUTF8Encoder',
-	#superclass : 'Object',
+	#superclass : 'ZnCharacterEncoder',
 	#classVars : [
 		'Default'
 	],
