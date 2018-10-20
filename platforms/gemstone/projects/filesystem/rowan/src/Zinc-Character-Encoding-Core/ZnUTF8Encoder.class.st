@@ -25,6 +25,13 @@ ZnUTF8Encoder class >> default [
 	^ Default ifNil: [ Default := self new ]
 ]
 
+{ #category : 'accessing' }
+ZnUTF8Encoder class >> handlesEncoding: string [
+	"Return true when my instances handle the encoding described by string"
+	
+	^ (self canonicalEncodingIdentifier: string) = 'utf8'
+]
+
 { #category : 'instance creation' }
 ZnUTF8Encoder class >> newForEncoding: string [
 	"No further parametrization needed"
@@ -33,10 +40,34 @@ ZnUTF8Encoder class >> newForEncoding: string [
 ]
 
 { #category : 'convenience' }
+ZnUTF8Encoder >> decodeAsCodePoints: bytes [
+	"Decode bytes and return the resulting code points"
+
+	| ar |
+	ar := {}.
+	bytes decodeFromUTF8 do: [:char | ar add: char codePoint ].
+	^ ar
+]
+
+{ #category : 'convenience' }
 ZnUTF8Encoder >> decodeBytes: bytes [
 	"Decode bytes and return the resulting string"
 
 	^ bytes decodeFromUTF8
+]
+
+{ #category : 'convenience' }
+ZnUTF8Encoder >> encodeCodePoints: codePoints [
+	"Encode codePoints and return the resulting byte array"
+	
+	^ codePoints asByteArray asUnicodeString encodeAsUTF8
+]
+
+{ #category : 'convenience' }
+ZnUTF8Encoder >> encodedByteCountForCodePoints: codePoints [
+	"Return the exact number of bytes it would take to encode codePoints as a byte array"
+
+	^ (self encodeCodePoints: codePoints) size
 ]
 
 { #category : 'convenience' }
@@ -49,6 +80,20 @@ ZnUTF8Encoder >> encodeString: string [
 { #category : 'accessing' }
 ZnUTF8Encoder >> identifier [
 	^ #utf8
+]
+
+{ #category : 'converting' }
+ZnUTF8Encoder >> nextCodePointFromStream: stream [
+	"Read and return the next integer code point from stream"
+
+	self error: 'not currently supported'
+]
+
+{ #category : 'converting' }
+ZnUTF8Encoder >> nextPutCodePoint: codePoint toStream: stream [
+	"Write the encoding for Integer code point to stream"
+
+	^ stream nextPutAll: codePoint asString encodeAsUTF8
 ]
 
 { #category : 'convenience' }

@@ -35,8 +35,57 @@ Additionally, I can encode Integer code points to a binary stream as well as rea
 Part of Zinc HTTP Components.
 "
 Class {
-	#name : #ZnCharacterEncoder,
-	#superclass : #Object,
-	#category : #'Zinc-Character-Encoding-Core'
+	#name : 'ZnCharacterEncoder',
+	#superclass : 'Object',
+	#category : 'Zinc-Character-Encoding-Core'
 }
 
+{ #category : 'accessing' }
+ZnCharacterEncoder class >> canonicalEncodingIdentifier: string [
+	^ (string select: [ :each | each isAlphaNumeric ]) asLowercase
+]
+
+{ #category : 'accessing' }
+ZnCharacterEncoder class >> handlesEncoding: string [
+	"Return true when my instances handle the encoding described by string"
+	
+	self subclassResponsibility: #handlesEncoding:
+]
+
+{ #category : 'instance creation' }
+ZnCharacterEncoder class >> newForEncoding: string [
+	"Return a new character encoder object for an encoding described by string.
+	Search for a subclass that handles it and delegate (subclassResponsibility)."
+	
+	| concreteSubclass |
+	concreteSubclass := self allSubclasses 
+		detect: [ :each | each handlesEncoding: string ] 
+		ifNone: [ ^ self error: 'The ', string printString, ' is not currently supported.' ].
+	^ concreteSubclass newForEncoding: string
+]
+
+{ #category : 'converting' }
+ZnCharacterEncoder >> asZnCharacterEncoder [
+	^ self
+]
+
+{ #category : 'convenience' }
+ZnCharacterEncoder >> decodeAsCodePoints: bytes [
+	"Decode bytes and return the resulting code points"
+	
+	self subclassResponsibility: #decodeAsCodePoints:
+]
+
+{ #category : 'convenience' }
+ZnCharacterEncoder >> encodeCodePoints: codePoints [
+	"Encode codePoints and return the resulting byte array"
+	
+	^ self subclassResponsibility: #encodeCodePoints:
+]
+
+{ #category : 'convenience' }
+ZnCharacterEncoder >> encodedByteCountForCodePoints: codePoints [
+	"Return the exact number of bytes it would take to encode codePoints as a byte array"
+
+	^self subclassResponsibility: #encodedByteCountForCodePoints:
+]
