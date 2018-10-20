@@ -13,6 +13,12 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'other' }
+RowanAnsweringService >> answer [
+
+	^answer
+]
+
 { #category : 'Updating' }
 RowanAnsweringService >> answer: anObject [
 
@@ -30,21 +36,41 @@ RowanAnsweringService >> exec: aString [
 { #category : 'commands' }
 RowanAnsweringService >> flipTranscript [
 	self isTranscriptInstalled ifTrue:[
-		self jadeServer uninstallTranscript]
+		self jadeiteServer uninstallTranscript]
 	ifFalse:[
-		self jadeServer installTranscript]
+		self jadeiteServer installTranscript]
 ]
 
 { #category : 'testing' }
 RowanAnsweringService >> isTranscriptInstalled [
 
-	^self transcriptObject == self jadeServer
+	^self transcriptObject == self jadeiteServer
 ]
 
-{ #category : 'private' }
-RowanAnsweringService >> jadeServer [
+{ #category : 'commands' }
+RowanAnsweringService >> runMethodTests: methodServices [
 
-	^System __sessionStateAt: 3
+	| behavior |
+	methodServices do:[:methodService |
+		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
+			behavior := methodService classFromName. 
+			behavior debug: methodService selector]].
+	answer := true. 
+	command := nil. 
+	commandArgs := nil. 
+	RowanCommandResult addResult: self
+]
+
+{ #category : 'commands' }
+RowanAnsweringService >> selectorsMatchingPattern: pattern [
+
+	answer := ((AllUsers userWithId: #SymbolUser) resolveSymbol: #AllSymbols) value.
+	answer := answer select: [:each |each _matchPatternNoCase: pattern].
+	answer := answer select: [:each | (organizer implementorsOf: each) notEmpty].
+	answer := answer asSortedCollection asArray.
+	command := nil. 
+	commandArgs := nil. 
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'commands' }

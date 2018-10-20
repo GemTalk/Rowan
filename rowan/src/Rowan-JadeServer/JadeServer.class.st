@@ -22,6 +22,13 @@ Class {
 	#category : 'Rowan-JadeServer'
 }
 
+{ #category : 'jadeite server' }
+JadeServer class >> theJadeiteServer [
+
+	^SessionTemps current at: #jadeiteServer ifAbsentPut: [
+		(Rowan jadeServerClassNamed: #JadeServer64bit32) new initialize; yourself]
+]
+
 { #category : 'category' }
 JadeServer >> _addClass: each toStream: stream [ 
 
@@ -1701,13 +1708,15 @@ JadeServer >> implementorsOf: aGsMethod startingAt: aClass [
 
 { #category : 'category' }
 JadeServer >> initialize [
+	"#installTranscript is run from the Jadeite
+	client post login method only. This avoids
+	setting up ClientForwarder sends in a topaz
+	session"
 
 	classOrganizers := Array new: 4.
 	self 
-		installTranscript;
 		registerOBNotifications;
 		yourself.
-
 ]
 
 { #category : 'category' }
