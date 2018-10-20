@@ -649,12 +649,25 @@ RowanClassService >> renameCategoryFrom: old to: new [
 ]
 
 { #category : 'commands' }
+RowanClassService >> runClassTests: classService [
+
+	| behavior |
+	behavior := classService classFromName. 
+	self refreshFrom: behavior.
+	methods do:[:methodService |
+		('test*' match: methodService selector) ifTrue:[ 
+			behavior debug: methodService selector]]. 
+	RowanCommandResult addResult: (RowanAnsweringService new answer: true).
+]
+
+{ #category : 'commands' }
 RowanClassService >> runMethodTests: methodServices [
 
 	| behavior |
-	behavior := self classFromName. 
-	methodServices do:[:method |
-		behavior debug: method selector].
+	behavior := self classFromName.  
+	methodServices do:[:methodService |
+		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
+			behavior debug: methodService selector]].
 	RowanCommandResult addResult: (RowanAnsweringService new answer: true).
 ]
 

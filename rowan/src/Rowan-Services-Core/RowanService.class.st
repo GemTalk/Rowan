@@ -150,6 +150,12 @@ RowanService >> initialize [
 ]
 
 { #category : 'accessing' }
+RowanService >> jadeiteServer [
+
+	^(Rowan jadeServerClassNamed: #JadeServer) theJadeiteServer
+]
+
+{ #category : 'accessing' }
 RowanService >> organizer: anOrganizer [
 
 	organizer := anOrganizer.

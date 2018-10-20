@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'support' }
-RowanProjectServiceTest >> existingProjectNamed: projectName [
+RowanProjectServiceTest >> projectServiceNamed: projectName [
 
 	| projectService |
 	projectService := RowanProjectService newNamed: projectName. 
@@ -13,19 +13,47 @@ RowanProjectServiceTest >> existingProjectNamed: projectName [
 	^projectService
 ]
 
+{ #category : 'setup teardown' }
+RowanProjectServiceTest >> setUp [
+
+	super setUp.
+	self createDefaultProject.
+	self loadDefaultProject.
+]
+
+{ #category : 'setup teardown' }
+RowanProjectServiceTest >> tearDown [
+
+	super tearDown.
+	self unloadDefaultProject
+]
+
+{ #category : 'tests' }
+RowanProjectServiceTest >> test_addedProjectNotOnDisk [
+
+	| proj projectService |
+	self testsJadeiteIssue: #issue246 withTitle: 'Jadeite handling project that''s not committed'. 
+	proj := RwProjectDefinition newForGitBasedProjectNamed: 'Tashkent'.
+	proj repositoryRootPath: '$ROWAN_PROJECTS_HOME/Tashkent'.
+	Rowan projectTools create createProjectFor: proj.
+	Rowan projectTools load loadProjectDefinition: proj.
+	projectService := RowanProjectService newNamed: 'Tashkent'. 
+	projectService refresh. "<-- walkback occured here" 
+	[self deny: projectService existsOnDisk.
+	self assert: projectService isSkew]
+		ensure: [RowanBrowserService new unloadProjectsNamed: (Array with: 'Tashkent')]
+]
+
 { #category : 'tests' }
 RowanProjectServiceTest >> test_addPackage [
 
-	| projectService projectName packageName loadedPackage |
-	projectName := 'RowanSample1'. 
+	| projectService  packageName loadedPackage |
 	packageName := 'TestAddPackage'.
-	projectService := self existingProjectNamed: projectName.
-
+	projectService := self projectServiceNamed: self defaultProjectName.
 	projectService addPackageNamed: packageName.
-	[loadedPackage := Rowan image loadedPackageNamed: packageName.
+	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	self assert: loadedPackage name equals: packageName. 
-	self assert: loadedPackage projectName equals: projectName]
-		ensure: [System abortTransaction "use abort to remove the package. package removal not yet available in Rowan"]
+	self assert: loadedPackage projectName equals: self defaultProjectName
 ]
 
 { #category : 'tests' }
@@ -36,9 +64,8 @@ RowanProjectServiceTest >> test_commandResultSessionTemp [
 
 { #category : 'tests' }
 RowanProjectServiceTest >> test_updateAddsCommandResult [
-	| projectName packageName projectService |
-	projectName := 'RowanSample1'. 
-	projectService := self existingProjectNamed: projectName.
+	| projectService |
+	projectService := self projectServiceNamed: self defaultProjectName.
 	RowanCommandResult initializeResults. 
 	self assert: RowanCommandResult results size equals: 0. 
 	projectService update. 

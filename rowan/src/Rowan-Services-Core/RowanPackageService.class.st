@@ -61,10 +61,10 @@ RowanPackageService >> classHierarchy [
 		1 to: chain size do: [:index | 
 			| cls super classSet |
 			cls := chain at: index.
-			classSet := dict at: cls ifAbsentPut: [SortedCollection sortBlock:[:x :y | x name < y name]].
+			classSet := dict at: cls ifAbsentPut: [Array new].
 			index = 1 
 		ifTrue:[
-			classSet := dict at: #'nil' ifAbsentPut: [SortedCollection sortBlock:[:x :y | x name < y name]]. 
+			classSet := dict at: #'nil' ifAbsentPut: [Array new]. 
 			(dict at: #'nil') add: cls.
 		]
 		ifFalse:[
@@ -78,6 +78,8 @@ RowanPackageService >> classHierarchy [
 		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[(RowanClassService minimalForClassNamed: key name)].
 		services at: newKey put: (value collect:[:cls | (RowanClassService minimalForClassNamed: cls name)])].
 	hierarchyServices := services reject:[:array | array isEmpty].
+	hierarchyServices copy keysAndValuesDo:[:key :value | 
+		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
 	RowanCommandResult addResult: self.
 ]
 
@@ -143,6 +145,12 @@ RowanPackageService >> genericClassCreationTemplate [
 { #category : 'comparing' }
 RowanPackageService >> hash [
 	^self name hash
+]
+
+{ #category : 'Accessing' }
+RowanPackageService >> hierarchyServices [
+
+	^hierarchyServices
 ]
 
 { #category : 'rowan' }

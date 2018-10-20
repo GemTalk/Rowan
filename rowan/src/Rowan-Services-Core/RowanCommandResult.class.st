@@ -36,7 +36,8 @@ RowanCommandResult class >> new [
 { #category : 'accessing' }
 RowanCommandResult class >> results [
 
-	^SessionTemps current at: #rowanCommandResults
+	"lazy initialize for a topaz session test" 
+	^SessionTemps current at: #rowanCommandResults ifAbsentPut: [Array new]
 ]
 
 { #category : 'accessing' }
