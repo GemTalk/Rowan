@@ -96,6 +96,16 @@ RowanServicesTest >> defaultSymbolDictionaryName [
 ]
 
 { #category : 'support' }
+RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
+	"send this to help identify which tests test which issues
+	format: #issue<issueNumber>
+	Example self issueTested: #issue235 withTitle: 'Need Find Class/Method from console'
+
+	Issues currently reside in: 
+		https://github.com/GemTalk/Jadeite/issues/"
+]
+
+{ #category : 'support' }
 RowanServicesTest >> loadDefaultProject [
 	
 	| projectSetDefinition |
@@ -116,16 +126,6 @@ RowanServicesTest >> setUp [
 RowanServicesTest >> tearDown [
 
 	RowanCommandResult initializeResults.  "squash the gui updates"
-]
-
-{ #category : 'support' }
-RowanServicesTest >> testsJadeiteIssue: aSymbol withTitle: anObject [
-	"send this to help identify which tests test which issues"
-
-	" a helpful parameter format is #issue<issueNumber>"
-
-	"Issues currently reside in: 
-		https://github.com/GemTalk/Jadeite/issues/"
 ]
 
 { #category : 'support' }

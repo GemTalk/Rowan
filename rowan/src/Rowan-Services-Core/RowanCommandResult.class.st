@@ -12,9 +12,9 @@ Class {
 
 { #category : 'accessing' }
 RowanCommandResult class >> addResult: aResult [
-	aResult command: nil. 
+	aResult command: nil;
+			commandArgs: nil. 
 	self results add: aResult
-
 ]
 
 { #category : 'initailize' }

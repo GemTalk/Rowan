@@ -7,7 +7,7 @@ Class {
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_matchingPattern [
 	| answeringService randomSymbol | 
-	self testsJadeiteIssue: #issue235 withTitle: 'Need Find Class/Method from console'.
+	self jadeiteIssueTested: #issue235 withTitle: 'Need Find Class/Method from console'.
 	answeringService := RowanAnsweringService new organizer: ClassOrganizer new.  
 	answeringService selectorsMatchingPattern: #('size'). 
 	self assert: answeringService answer size equals: 1. 

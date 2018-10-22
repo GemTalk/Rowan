@@ -56,8 +56,7 @@ RowanAnsweringService >> runMethodTests: methodServices [
 			behavior := methodService classFromName. 
 			behavior debug: methodService selector]].
 	answer := true. 
-	command := nil. 
-	commandArgs := nil. 
+	RowanCommandResult initializeResults. "squash any client updates during server test run"
 	RowanCommandResult addResult: self
 ]
 

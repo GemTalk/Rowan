@@ -16,7 +16,7 @@ RowanPackageServiceTest >> testClassHierarchy [
 
 	| packageService objectClassService |
 
-	self testsJadeiteIssue: #issue239 withTitle: 'long update times possible when selecting a package with `hierarchy` tab selected'.
+	self jadeiteIssueTested: #issue239 withTitle: 'long update times possible when selecting a package with `hierarchy` tab selected'.
 	packageService := RowanPackageService forPackageNamed: 'Rowan-Tests'. 
 	packageService classHierarchy. "<-- infinite recursion occured here"
 	self assert: (packageService hierarchyServices at: #nil) size equals: 1. "duplicate Object services was the problem"
