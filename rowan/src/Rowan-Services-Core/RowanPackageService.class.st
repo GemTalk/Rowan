@@ -10,7 +10,8 @@ Class {
 		'defaultTemplate',
 		'projectName',
 		'testClasses',
-		'hierarchyServices'
+		'hierarchyServices',
+		'selectedClass'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -91,7 +92,8 @@ RowanPackageService >> compileClass: definitionString [
 	classService := RowanClassService forClassNamed: theClass name. 
 	RowanCommandResult addResult: classService.
 	packageService := RowanPackageService forPackageNamed: classService packageName. 
-	packageService update.
+	packageService update. 
+	packageService selectedClass: classService.
 	classService selectedPackageServices: (Array with: packageService)
 ]
 
@@ -279,6 +281,18 @@ RowanPackageService >> rowanDirty [
 
 	^(RwPackage newNamed: name) isDirty
 
+]
+
+{ #category : 'other' }
+RowanPackageService >> selectedClass [
+	
+	^selectedClass
+]
+
+{ #category : 'Accessing' }
+RowanPackageService >> selectedClass: classService [
+
+	selectedClass := classService
 ]
 
 { #category : 'perform' }

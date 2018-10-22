@@ -54,6 +54,25 @@ RowanServicesTest >> createDefaultProject [
 ]
 
 { #category : 'support' }
+RowanServicesTest >> createJadeiteTestPackage [
+	| proj pkg |
+	proj := self createJadeiteTestProject. 
+	pkg := RwPackageDefinition newNamed: self jadeiteTestPackageName.
+	proj addPackage: pkg.
+	Rowan projectTools load loadProjectDefinition: proj.
+	^pkg.
+]
+
+{ #category : 'support' }
+RowanServicesTest >> createJadeiteTestProject [
+	| proj |
+	proj := RwProjectDefinition newForGitBasedProjectNamed: self jadeiteTestProjectName. 
+	proj repositoryRootPath: '$ROWAN_PROJECTS_HOME/', self jadeiteTestProjectName. 
+	Rowan projectTools create createProjectFor: proj.
+	^proj
+]
+
+{ #category : 'support' }
 RowanServicesTest >> createProjectDefinitionNamed: projectName [
 
 	| projectDefinition |
@@ -65,13 +84,13 @@ RowanServicesTest >> createProjectDefinitionNamed: projectName [
 	^projectDefinition
 ]
 
-{ #category : 'support' }
+{ #category : 'constants' }
 RowanServicesTest >> defaultClassName [
 
 	^'ServicesTestClass'
 ]
 
-{ #category : 'support' }
+{ #category : 'constants' }
 RowanServicesTest >> defaultPackageName [
 
 	^'ServicesTestPackage'
@@ -83,7 +102,7 @@ RowanServicesTest >> defaultProjectDefinition [
 	^defaultProjectDefinition ifNil:[defaultProjectDefinition := self createDefaultProject]
 ]
 
-{ #category : 'support' }
+{ #category : 'constants' }
 RowanServicesTest >> defaultProjectName [
 
 	^'ServicesTestProject'
@@ -103,6 +122,18 @@ RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 
 	Issues currently reside in: 
 		https://github.com/GemTalk/Jadeite/issues/"
+]
+
+{ #category : 'constants' }
+RowanServicesTest >> jadeiteTestPackageName [
+
+	^'JadeitePackage'
+]
+
+{ #category : 'constants' }
+RowanServicesTest >> jadeiteTestProjectName [
+
+	^'JadeiteProject'
 ]
 
 { #category : 'support' }
