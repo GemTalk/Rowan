@@ -32,6 +32,11 @@ ZnUTF8Encoder class >> handlesEncoding: string [
 	^ (self canonicalEncodingIdentifier: string) = 'utf8'
 ]
 
+{ #category : 'accessing' }
+ZnUTF8Encoder class >> knownEncodingIdentifiers [
+	^ #( utf8 )
+]
+
 { #category : 'instance creation' }
 ZnUTF8Encoder class >> newForEncoding: string [
 	"No further parametrization needed"
@@ -68,6 +73,13 @@ ZnUTF8Encoder >> encodedByteCountForCodePoints: codePoints [
 	"Return the exact number of bytes it would take to encode codePoints as a byte array"
 
 	^ (self encodeCodePoints: codePoints) size
+]
+
+{ #category : 'convenience' }
+ZnUTF8Encoder >> encodedByteCountForString: string [
+	"Return the exact number of bytes it would take to encode string as a byte array"
+
+	^ (self encodeString: string) size
 ]
 
 { #category : 'convenience' }
@@ -108,7 +120,7 @@ ZnUTF8Encoder >> readInto: aCollection startingAt: offset count: requestedCount 
 	offset > 1
 		ifTrue: [ self error: 'decode operation not supported for large collections' ].
 	
-	decodedCollection := self decodeBytes: stream collection.
+	decodedCollection := self decodeBytes: stream contents.
 	aCollection 
 		replaceFrom: offset 
 		to: offset + (requestedCount min: decodedCollection size) - 1

@@ -27,6 +27,15 @@ ZnCharacterEncoderTests class >> unicodeCharacterSource [
 	^ ($A to: $Z), ($a to: $z), ($0 to: $9), '.-_/*+=|,;?!$&<>^%#', '         ', 'éèçüäßñα', '€∏'
 ]
 
+{ #category : 'public' }
+ZnCharacterEncoderTests >> assertCharacterCollection: anObject equals: otherObj [
+	"allow comparison between unitcode and legacy strings in legacy mode"
+
+	self
+		assert: (anObject isEquivalent: otherObj)
+		description: anObject printString , ' is not equal to ' , otherObj printString.
+]
+
 { #category : 'private' }
 ZnCharacterEncoderTests >> decodeBytes: bytes with: encoder [
 	| input |
@@ -74,23 +83,11 @@ ZnCharacterEncoderTests >> testConvencienceMethods [
 	| encoder string |
 	encoder := ZnUTF8Encoder new.
 	string := 'élève en Français'.
-	self assert: (encoder decodeBytes: (encoder encodeString: string)) equals: string.
+	self assertCharacterCollection: (encoder decodeBytes: (encoder encodeString: string)) equals: string.
 	self assert: (encoder encodedByteCountForString: string) = 20.
 	
 	#( 'ccc' 'ççç' 'c' 'ç' 'çc' 'cç' ) do: [ :each |
-		self assert: (encoder decodeBytes: (encoder encodeString: each)) equals: each ]
-]
-
-{ #category : 'testing' }
-ZnCharacterEncoderTests >> testDetectEncoding [
-	| bytes |
-	bytes := 'abc' asByteArray.
-	self assert: (ZnCharacterEncoder detectEncoding: bytes) equals: ZnCharacterEncoder ascii.
-	bytes := ZnCharacterEncoder iso88591 encodeString: 'Les élèves Français'.
-	self assert: (ZnCharacterEncoder detectEncoding: bytes) equals: ZnCharacterEncoder iso88591.
-	bytes := ZnCharacterEncoder utf8 encodeString: 'Les élèves Français'.
-	self assert: (ZnCharacterEncoder detectEncoding: bytes) equals: ZnCharacterEncoder utf8.
-
+		self assertCharacterCollection: (encoder decodeBytes: (encoder encodeString: each)) equals: each ]
 ]
 
 { #category : 'testing' }
@@ -99,15 +96,16 @@ ZnCharacterEncoderTests >> testKnownEncodingIdentifiers [
 	all := ZnCharacterEncoder knownEncodingIdentifiers asSet.
 	minimal := #(utf8) asSet.
 	"make sure at least a minimal set is present"
-	self assert: (all intersection: minimal) equals: minimal.
-	asciiString := String withAll: ($a to: $z) , ($A to: $Z) , ($0 to: $9).
+	self assert: (all  select: [ :each | minimal includes: each ]) equals: minimal.
+	asciiString := String withAll: ((($a asciiValue to: $z asciiValue) , 
+		($A asciiValue to: $Z asciiValue) , ($0 asciiValue to: $9 asciiValue)) collect: [:each | Character codePoint: each ]).
 	"make sure that each identifier can be used to instanciate a decoder,
 	and that those decoders at least work on a ASCII string in both directions"
 	all do: [ :each |
 		| encoder bytes |
 		encoder := ZnCharacterEncoder newForEncoding: each.
 		bytes := encoder encodeString: asciiString.
-		self assert: (encoder decodeBytes: bytes) equals: asciiString ]
+		self assert: ((encoder decodeBytes: bytes) isEquivalent: asciiString) ]
 ]
 
 { #category : 'testing' }
@@ -190,7 +188,7 @@ ZnCharacterEncoderTests >> testStringEncoding [
 	string := 'élève en Français'.
 	self assert: (string encodeWith: encoder) equals: (encoder encodeString: string).
 	self assert: (string encodeWith: #utf8) equals: (encoder encodeString: string).
-	self assert: string utf8Encoded equals: (encoder encodeString: string)
+	self assert: string encodeAsUTF8 equals: (encoder encodeString: string)
 
 ]
 
@@ -224,7 +222,7 @@ ZnCharacterEncoderTests >> testUTF8Boundaries [
 		boundaries do: [ :each |
 			string := String with: each asCharacter.
 			encoded := utf8Encoder encodeString: string. 
-			self assert: (utf8Encoder decodeBytes: encoded) equals: string.
+			self assertCharacterCollection: (utf8Encoder decodeBytes: encoded) equals: string.
 			self assert: encoded size equals: byteCount ] ]
 ]
 

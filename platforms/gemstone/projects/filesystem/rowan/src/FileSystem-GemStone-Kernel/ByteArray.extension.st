@@ -20,14 +20,6 @@ ByteArray >> decodeWith: encoding [
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
-ByteArray class >> readHexFrom: aString [
-  "Create a byte array from a hexadecimal representation"
-
-  ^ (self new: aString size // 2) readHexFrom: aString readStream
-
-]
-
-{ #category : '*filesystem-gemstone-kernel' }
 ByteArray >> utf8Decoded [
 	"Produce a String decoding the receiver using UTF-8,
 	the recommended encoding for Strings, unless you know what you are doing."
@@ -35,5 +27,13 @@ ByteArray >> utf8Decoded [
 	"#[76 101 115 32 195 169 108 195 168 118 101 115 32 102 114 97 110 195 167 97 105 115] utf8Decoded"
 	
 	^ self asUnicodeString
+
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+ByteArray class >> readHexFrom: aString [
+  "Create a byte array from a hexadecimal representation"
+
+  ^ (self new: aString size // 2) readHexFrom: aString readStream
 
 ]

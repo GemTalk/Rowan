@@ -52,6 +52,16 @@ ZnCharacterEncoder class >> handlesEncoding: string [
 	self subclassResponsibility: #handlesEncoding:
 ]
 
+{ #category : 'accessing' }
+ZnCharacterEncoder class >> knownEncodingIdentifiers [
+	"Return a collection of all known encoding identifiers in the system"
+	
+	self = ZnCharacterEncoder ifFalse: [ ^ #() ].
+	^ Array streamContents: [ :all |
+		self allSubclasses do: [ :subClass |
+			all nextPutAll: subClass knownEncodingIdentifiers ] ]
+]
+
 { #category : 'instance creation' }
 ZnCharacterEncoder class >> newForEncoding: string [
 	"Return a new character encoder object for an encoding described by string.
@@ -86,6 +96,13 @@ ZnCharacterEncoder >> encodeCodePoints: codePoints [
 { #category : 'convenience' }
 ZnCharacterEncoder >> encodedByteCountForCodePoints: codePoints [
 	"Return the exact number of bytes it would take to encode codePoints as a byte array"
+
+	^self subclassResponsibility: #encodedByteCountForCodePoints:
+]
+
+{ #category : 'convenience' }
+ZnCharacterEncoder >> encodedByteCountForString: string [
+	"Return the exact number of bytes it would take to encode string as a byte array"
 
 	^self subclassResponsibility: #encodedByteCountForCodePoints:
 ]
