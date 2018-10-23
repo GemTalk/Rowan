@@ -47,6 +47,12 @@ RowanCommandResult >> command: anObject [
 
 ]
 
+{ #category : 'accessing' }
+RowanCommandResult >> commandArgs: anObject [
+
+	"results don't have commandArgs"
+]
+
 { #category : 'initialization' }
 RowanCommandResult >> initialize [
 
