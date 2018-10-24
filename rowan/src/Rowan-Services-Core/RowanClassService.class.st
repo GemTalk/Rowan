@@ -813,8 +813,12 @@ RowanClassService >> update [
 { #category : 'updates' }
 RowanClassService >> updateClass [
 
+	"It's possible to have a nil class. For example, if we added & selected
+	a class then aborted."
+
 	| theClass |
 	theClass := self classFromName. 
+	theClass isNil ifTrue:[^self]. 
 	self refreshFrom: theClass.
 	RowanCommandResult addResult: self
 ]
