@@ -390,6 +390,18 @@ RowanClassService >> isExtension: boolean [
 
 ]
 
+{ #category : 'Updating' }
+RowanClassService >> isTestCase [
+
+	^isTestCase
+]
+
+{ #category : 'Updating' }
+RowanClassService >> isTestCase: aBoolean [
+
+	isTestCase := aBoolean
+]
+
 { #category : 'Accessing' }
 RowanClassService >> meta [
 

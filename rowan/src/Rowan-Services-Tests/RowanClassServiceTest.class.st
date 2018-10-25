@@ -50,6 +50,22 @@ RowanClassServiceTest >> test_addedProjectNotOnDisk [
 ]
 
 { #category : 'tests' }
+RowanClassServiceTest >> test_isTestCase [
+
+	| classService |
+	self jadeiteIssueTested: #issue253 withTitle: 'popup method menu in method list is slow for JadeServer methods'. 
+	classService := RowanClassService forClassNamed: self class.
+	self assert: classService isTestCase.
+	classService isTestCase: false. 
+	self deny: classService isTestCase. 
+	classService setIsTestCaseCommand. 
+	self assert: classService isTestCase.
+
+	classService := RowanClassService forClassNamed: 'JadeServer'.
+	self deny: classService isTestCase.
+]
+
+{ #category : 'tests' }
 RowanClassServiceTest >> testAddCategory [
 	| classService behavior |
 	
