@@ -112,3 +112,13 @@ JadeServerTest >> test_updateFromSton [
 	self assert: services first queryResults first selector == #test_updateFromSton]
 		ensure: [RowanCommandResult initializeResults.]
 ]
+
+{ #category : 'tests' }
+JadeServerTest >> testJadeitePostLogin [
+
+	"Jadeite client method #postLogin:useSocket: sends this code after login to initialize
+	the Jadeite server. This is a good test that the initialization code isn't broken when
+	run from a topaz client" 
+
+	(Rowan jadeServerClassNamed: #JadeServer) theJadeiteServer installTranscript.
+]
