@@ -103,6 +103,7 @@ RowanClassService >> basicForClassNamed: className [
 	| theClass |
 	self name: className. 
 	theClass := self classFromName. 
+	theClass isNil ifTrue:[oop := nil. ^self].
 	self basicRefreshFrom: theClass.
 ]
 
@@ -818,7 +819,7 @@ RowanClassService >> updateClass [
 
 	| theClass |
 	theClass := self classFromName. 
-	theClass isNil ifTrue:[^self]. 
+	theClass isNil ifTrue:[oop := nil. ^self]. 
 	self refreshFrom: theClass.
 	RowanCommandResult addResult: self
 ]
