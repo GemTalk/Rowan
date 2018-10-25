@@ -125,7 +125,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	self initializeCategoriesFor: classOrMeta.
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
-	isTestCase := self classFromName isSubclassOf: TestCase
+	self setIsTestCase
 ]
 
 { #category : 'Accessing' }
@@ -451,7 +451,7 @@ RowanClassService >> minimalRefreshFrom: theClass [
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
-	isTestCase := self classFromName isSubclassOf: TestCase
+	self setIsTestCase
 ]
 
 { #category : 'commands' }
@@ -748,6 +748,19 @@ RowanClassService >> setComment [
 							ifTrue: [comment := description detailsAboutClass]]].
 	comment isNil ifTrue: [comment := String new].
 
+]
+
+{ #category : 'Updating' }
+RowanClassService >> setIsTestCase [
+
+	isTestCase := self classFromName isSubclassOf: TestCase
+]
+
+{ #category : 'commands' }
+RowanClassService >> setIsTestCaseCommand [
+
+	self setIsTestCase. 
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'commands' }
