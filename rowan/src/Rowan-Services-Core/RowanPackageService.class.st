@@ -92,8 +92,8 @@ RowanPackageService >> compileClass: definitionString [
 	classService := RowanClassService forClassNamed: theClass name. 
 	RowanCommandResult addResult: classService.
 	packageService := RowanPackageService forPackageNamed: classService packageName. 
-	packageService update. 
 	packageService selectedClass: classService.
+	packageService update. 
 	classService selectedPackageServices: (Array with: packageService)
 ]
 
