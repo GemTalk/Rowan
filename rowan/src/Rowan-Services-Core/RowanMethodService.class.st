@@ -127,9 +127,11 @@ RowanMethodService >> category: newValue [
 
 { #category : 'Accessing' }
 RowanMethodService >> classFromName [
-
-	^(System myUserProfile resolveSymbol: className asSymbol) value
-
+	
+	"the dictionary browser may have versions numbers in the name"
+	| nameSymbol |
+	nameSymbol := (className copyUpTo: Character space) asSymbol.
+	^(System myUserProfile resolveSymbol: nameSymbol) value
 ]
 
 { #category : 'Accessing' }

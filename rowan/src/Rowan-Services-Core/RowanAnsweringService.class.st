@@ -65,7 +65,6 @@ RowanAnsweringService >> selectorsMatchingPattern: pattern [
 
 	answer := ((AllUsers userWithId: #SymbolUser) resolveSymbol: #AllSymbols) value.
 	answer := answer select: [:each |each _matchPatternNoCase: pattern].
-	answer := answer select: [:each | (organizer implementorsOf: each) notEmpty].
 	answer := answer asSortedCollection asArray.
 	command := nil. 
 	commandArgs := nil. 
