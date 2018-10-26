@@ -61,6 +61,15 @@ RowanQueryService >> implementorsOf: selector [
 ]
 
 { #category : 'queries' }
+RowanQueryService >> literalReferences: symbol [
+
+	| methods |
+	methods := organizer referencesToLiteral: symbol.
+	queryResults := self methodServicesFrom: methods first.
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'queries' }
 RowanQueryService >> methodsContaining: string [
 
 	| methods |
