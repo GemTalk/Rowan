@@ -26,8 +26,7 @@ ByteArray >> utf8Decoded [
 
 	"#[76 101 115 32 195 169 108 195 168 118 101 115 32 102 114 97 110 195 167 97 105 115] utf8Decoded"
 	
-	^ self asUnicodeString
-
+	^ self decodeFromUTF8
 ]
 
 { #category : '*filesystem-gemstone-kernel' }

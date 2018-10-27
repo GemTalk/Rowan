@@ -79,6 +79,13 @@ ZnCharacterEncoder >> asZnCharacterEncoder [
 	^ self
 ]
 
+{ #category : 'converting' }
+ZnCharacterEncoder >> backOnStream: stream [
+	"Move back one character on stream, assuming stream understands #back"
+	
+	self subclassResponsibility: #backOnStream:
+]
+
 { #category : 'convenience' }
 ZnCharacterEncoder >> decodeAsCodePoints: bytes [
 	"Decode bytes and return the resulting code points"
@@ -93,6 +100,15 @@ ZnCharacterEncoder >> encodeCodePoints: codePoints [
 	^ self subclassResponsibility: #encodeCodePoints:
 ]
 
+{ #category : 'converting' }
+ZnCharacterEncoder >> encodedByteCountFor: character [
+	"Return how many bytes are needed to encode character"
+	
+	"We should use #codePoint but #asInteger is faster"
+	
+	^ self encodedByteCountForCodePoint: character asInteger
+]
+
 { #category : 'convenience' }
 ZnCharacterEncoder >> encodedByteCountForCodePoints: codePoints [
 	"Return the exact number of bytes it would take to encode codePoints as a byte array"
@@ -105,4 +121,37 @@ ZnCharacterEncoder >> encodedByteCountForString: string [
 	"Return the exact number of bytes it would take to encode string as a byte array"
 
 	^self subclassResponsibility: #encodedByteCountForCodePoints:
+]
+
+{ #category : 'convenience' }
+ZnCharacterEncoder >> next: count putAll: string startingAt: offset toStream: stream [
+	"Write count characters from string starting at offset to stream."
+	
+	offset to: offset + count - 1 do: [ :index | 
+		self nextPut: (string at: index) toStream: stream ]
+]
+
+{ #category : 'converting' }
+ZnCharacterEncoder >> nextCodePointFromStream: stream [
+	"Read and return the next integer code point from stream"
+	
+	self subclassResponsibility: #nextCodePointFromStream:
+]
+
+{ #category : 'converting' }
+ZnCharacterEncoder >> nextFromStream: stream [
+	"Read and return the next character from stream"
+	
+	"We should use #codePoint: but #value: is faster"
+	
+	^ Character value: (self nextCodePointFromStream: stream)
+]
+
+{ #category : 'converting' }
+ZnCharacterEncoder >> nextPut: character toStream: stream [
+	"Write the encoding for character to stream"
+	
+	"We should use #codePoint but #asInteger is faster"
+	
+	self nextPutCodePoint: character asInteger toStream: stream
 ]

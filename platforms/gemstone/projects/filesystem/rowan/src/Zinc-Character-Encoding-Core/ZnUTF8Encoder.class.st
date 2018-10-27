@@ -44,6 +44,13 @@ ZnUTF8Encoder class >> newForEncoding: string [
 	^ self new
 ]
 
+{ #category : 'converting' }
+ZnUTF8Encoder >> backOnStream: stream [
+	"Move back one character on stream"
+
+	self error: 'not currently supported'
+]
+
 { #category : 'convenience' }
 ZnUTF8Encoder >> decodeAsCodePoints: bytes [
 	"Decode bytes and return the resulting code points"
@@ -68,6 +75,13 @@ ZnUTF8Encoder >> encodeCodePoints: codePoints [
 	^ codePoints asByteArray asUnicodeString encodeAsUTF8
 ]
 
+{ #category : 'converting' }
+ZnUTF8Encoder >> encodedByteCountFor: character [
+	"Return how many bytes are needed to encode character"
+		
+	^ character asString encodeAsUTF8 size
+]
+
 { #category : 'convenience' }
 ZnUTF8Encoder >> encodedByteCountForCodePoints: codePoints [
 	"Return the exact number of bytes it would take to encode codePoints as a byte array"
@@ -86,12 +100,19 @@ ZnUTF8Encoder >> encodedByteCountForString: string [
 ZnUTF8Encoder >> encodeString: string [
 	"Encode string and return the resulting Utf8 instance"
 	
-	^ string encodeAsUTF8
+	^ string encodeAsUTF8 asByteArray
 ]
 
 { #category : 'accessing' }
 ZnUTF8Encoder >> identifier [
 	^ #utf8
+]
+
+{ #category : 'convenience' }
+ZnUTF8Encoder >> next: count putAll: string startingAt: offset toStream: stream [
+	"Write count characters from string starting at offset to stream."
+	
+	stream nextPutAll: (string copyFrom: offset to: offset + count - 1) encodeAsUTF8 asByteArray
 ]
 
 { #category : 'converting' }
@@ -105,7 +126,7 @@ ZnUTF8Encoder >> nextCodePointFromStream: stream [
 ZnUTF8Encoder >> nextPutCodePoint: codePoint toStream: stream [
 	"Write the encoding for Integer code point to stream"
 
-	^ stream nextPutAll: codePoint asString encodeAsUTF8
+	^ stream nextPutAll: (Character codePoint: codePoint) asString encodeAsUTF8
 ]
 
 { #category : 'convenience' }
@@ -113,19 +134,14 @@ ZnUTF8Encoder >> readInto: aCollection startingAt: offset count: requestedCount 
 	"Read requestedCount characters into string starting at offset,
 	returning the number read, there could be less available when stream is atEnd"
 
-	"For the time being, we are expecting that the requestedCount is ALWAYS greater than the
-		size of stream ... we cannot encode/decode partial streams"
-
-	| decodedCollection |
-	offset > 1
-		ifTrue: [ self error: 'decode operation not supported for large collections' ].
-	
+	| decodedCollection pos |
+	pos := stream position.
 	decodedCollection := self decodeBytes: stream contents.
 	aCollection 
 		replaceFrom: offset 
 		to: offset + (requestedCount min: decodedCollection size) - 1
 		with: decodedCollection
-		startingAt: 1.
+		startingAt: pos + 1.
 	stream setToEnd.
 	^ 	requestedCount min: decodedCollection size
 ]
