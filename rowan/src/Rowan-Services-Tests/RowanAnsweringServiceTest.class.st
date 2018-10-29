@@ -7,7 +7,7 @@ Class {
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_matchingPattern [
 	| answeringService randomSymbol | 
-	self testsJadeiteIssue: #issue235 withTitle: 'Need Find Class/Method from console'.
+	self jadeiteIssueTested: #issue235 withTitle: 'Need Find Class/Method from console'.
 	answeringService := RowanAnsweringService new organizer: ClassOrganizer new.  
 	answeringService selectorsMatchingPattern: #('size'). 
 	self assert: answeringService answer size equals: 1. 
@@ -23,14 +23,6 @@ RowanAnsweringServiceTest >> test_matchingPattern [
 
 	answeringService selectorsMatchingPattern: #($* 'test_matching' ). 
 	self assert: answeringService answer size equals: 0.
-
-	randomSymbol := #eeeGads. 
-	answeringService organizer: ClassOrganizer new. 
-	self assert: ('eeeGads' matchPattern: #('eeeGads')). "symbol exists, but no implementors"
-	answeringService selectorsMatchingPattern: #('eeeGads'). 
-	self assert: answeringService answer size equals: 0.
-	answeringService selectorsMatchingPattern: #($* 'eeeGads' $*). 
-	self assert: answeringService answer size equals: 0. 
 
 	"sorted result"
 	answeringService selectorsMatchingPattern: #('size' $*). 

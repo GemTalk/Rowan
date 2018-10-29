@@ -10,7 +10,8 @@ Class {
 		'defaultTemplate',
 		'projectName',
 		'testClasses',
-		'hierarchyServices'
+		'hierarchyServices',
+		'selectedClass'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -91,8 +92,9 @@ RowanPackageService >> compileClass: definitionString [
 	classService := RowanClassService forClassNamed: theClass name. 
 	RowanCommandResult addResult: classService.
 	packageService := RowanPackageService forPackageNamed: classService packageName. 
-	packageService update.
-	classService selectedPackageServices: (Array with: packageService)
+	packageService update. 
+	packageService selectedClass: classService.
+	classService selectedPackageServices: (Array with: packageService).
 ]
 
 { #category : 'rowan' }
@@ -281,6 +283,18 @@ RowanPackageService >> rowanDirty [
 
 ]
 
+{ #category : 'other' }
+RowanPackageService >> selectedClass [
+	
+	^selectedClass
+]
+
+{ #category : 'Accessing' }
+RowanPackageService >> selectedClass: classService [
+
+	selectedClass := classService
+]
+
 { #category : 'perform' }
 RowanPackageService >> servicePerform: symbol withArguments: collection [
 	| wasClean |
@@ -316,10 +330,11 @@ RowanPackageService >> testClasses [
 
 { #category : 'updates' }
 RowanPackageService >> update [
-	classes := (self loadedClassNames keys collect:[:string | RowanClassService basicForClassNamed: string]) asArray.
+	Rowan image loadedPackageNamed: name ifAbsent: [^self]. 
+	classes := (self loadedClassNames keys collect:[:string | RowanClassService minimalForClassNamed: string]) asArray.
 	classes addAll: (self loadedClassExtensions keys collect:[:string | 
 		| classService | 
-		classService := (RowanClassService basicForClassNamed: string) 
+		classService := (RowanClassService minimalForClassNamed: string) 
 			isExtension: true.
 		(Rowan image loadedClassForClass: classService classFromName ifAbsent:[]) 
 			ifNotNil:[:cls | classService definedPackageName: cls packageName].
