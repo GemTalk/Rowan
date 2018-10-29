@@ -11,16 +11,6 @@ JadeServerTest >> jadeiteServer [
 ]
 
 { #category : 'tests' }
-JadeServerTest >> test_JadeitePostLogin [
-
-	"Jadeite client method #postLogin:useSocket: sends this code after login to initialize
-	the Jadeite server. This is a good test that the initialization code isn't broken when
-	run from a topaz client" 
-
-	(Rowan jadeServerClassNamed: #JadeServer) theJadeiteServer installTranscript.
-]
-
-{ #category : 'tests' }
 JadeServerTest >> test_jadeServerCanonicalLocation [
 	
 	self assert: (JadeServer theJadeiteServer isKindOf: JadeServer64bit32).
