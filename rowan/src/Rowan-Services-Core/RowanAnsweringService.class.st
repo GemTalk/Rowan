@@ -56,8 +56,7 @@ RowanAnsweringService >> runMethodTests: methodServices [
 			behavior := methodService classFromName. 
 			behavior debug: methodService selector]].
 	answer := true. 
-	command := nil. 
-	commandArgs := nil. 
+	RowanCommandResult initializeResults. "squash any client updates during server test run"
 	RowanCommandResult addResult: self
 ]
 
@@ -66,7 +65,6 @@ RowanAnsweringService >> selectorsMatchingPattern: pattern [
 
 	answer := ((AllUsers userWithId: #SymbolUser) resolveSymbol: #AllSymbols) value.
 	answer := answer select: [:each |each _matchPatternNoCase: pattern].
-	answer := answer select: [:each | (organizer implementorsOf: each) notEmpty].
 	answer := answer asSortedCollection asArray.
 	command := nil. 
 	commandArgs := nil. 

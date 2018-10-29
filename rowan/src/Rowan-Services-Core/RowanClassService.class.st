@@ -103,6 +103,7 @@ RowanClassService >> basicForClassNamed: className [
 	| theClass |
 	self name: className. 
 	theClass := self classFromName. 
+	theClass isNil ifTrue:[oop := nil. ^self].
 	self basicRefreshFrom: theClass.
 ]
 
@@ -124,7 +125,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	self initializeCategoriesFor: classOrMeta.
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
-	isTestCase := self classFromName isSubclassOf: TestCase
+	self setIsTestCase
 ]
 
 { #category : 'Accessing' }
@@ -389,6 +390,18 @@ RowanClassService >> isExtension: boolean [
 
 ]
 
+{ #category : 'Updating' }
+RowanClassService >> isTestCase [
+
+	^isTestCase
+]
+
+{ #category : 'Updating' }
+RowanClassService >> isTestCase: aBoolean [
+
+	isTestCase := aBoolean
+]
+
 { #category : 'Accessing' }
 RowanClassService >> meta [
 
@@ -450,7 +463,7 @@ RowanClassService >> minimalRefreshFrom: theClass [
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
-	isTestCase := self classFromName isSubclassOf: TestCase
+	self setIsTestCase
 ]
 
 { #category : 'commands' }
@@ -749,6 +762,19 @@ RowanClassService >> setComment [
 
 ]
 
+{ #category : 'Updating' }
+RowanClassService >> setIsTestCase [
+
+	isTestCase := self classFromName isSubclassOf: TestCase
+]
+
+{ #category : 'commands' }
+RowanClassService >> setIsTestCaseCommand [
+
+	self setIsTestCase. 
+	RowanCommandResult addResult: self.
+]
+
 { #category : 'commands' }
 RowanClassService >> subclassCreationTemplate [
 	| answerService |
@@ -813,8 +839,12 @@ RowanClassService >> update [
 { #category : 'updates' }
 RowanClassService >> updateClass [
 
+	"It's possible to have a nil class. For example, if we added & selected
+	a class then aborted."
+
 	| theClass |
 	theClass := self classFromName. 
+	theClass isNil ifTrue:[oop := nil. ^self]. 
 	self refreshFrom: theClass.
 	RowanCommandResult addResult: self
 ]
