@@ -345,11 +345,11 @@ RowanPackageService >> services: services from: levels expand: toExpand [
 		| newKey service  | 
 		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
 			service := (RowanClassService minimalForClassNamed: key name).
-			(toExpand includes: service classFromName) ifTrue:[service expand: true].
+			(toExpand includes: service classFromName) ifTrue:[service expand: true] ifFalse:[service expand: false].
 			service].
 		services at: newKey put: (value collect:[:cls | 
 				service := (RowanClassService minimalForClassNamed: cls name).
-				(toExpand includes: service classFromName) ifTrue:[service expand: true].
+				(toExpand includes: service classFromName) ifTrue:[service expand: true] ifFalse:[service expand: false].
 				service
 				])]
 ]
