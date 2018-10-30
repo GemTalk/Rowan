@@ -52,32 +52,15 @@ RowanPackageService >> changes [
 
 { #category : 'commands' }
 RowanPackageService >> classHierarchy [
-	| superclassChains levels services |
+	| superclassChains levels services hierarchies theClasses toExpand |
 	self update. 
-	superclassChains := classes collect:[:classService | | supers | 
-			supers := classService classFromName allSuperclasses. 
-			supers add: classService classFromName. 
-			supers].
-	levels := superclassChains inject: Dictionary new into:[:dict :chain | 
-		1 to: chain size do: [:index | 
-			| cls super classSet |
-			cls := chain at: index.
-			classSet := dict at: cls ifAbsentPut: [Array new].
-			index = 1 
-		ifTrue:[
-			classSet := dict at: #'nil' ifAbsentPut: [Array new]. 
-			(dict at: #'nil') add: cls.
-		]
-		ifFalse:[
-				super := chain at: index - 1.
-				(dict at: super) add: cls
-				]].
-			dict].
+	theClasses := classes collect:[:classService | classService classFromName].
+	superclassChains := self superclassChainsFor: theClasses. 
+	hierarchies := self extendHierarchies: superclassChains. 
+	levels := self hierarchiesByLevel: hierarchies.
 	services := Dictionary new. 
-	levels keysAndValuesDo: [:key :value |
-		| newKey | 
-		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[(RowanClassService minimalForClassNamed: key name)].
-		services at: newKey put: (value collect:[:cls | (RowanClassService minimalForClassNamed: cls name)])].
+	toExpand := Set new. 
+	self services: services from: levels expand: toExpand.
 	hierarchyServices := services reject:[:array | array isEmpty].
 	hierarchyServices copy keysAndValuesDo:[:key :value | 
 		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
@@ -137,6 +120,26 @@ RowanPackageService >> deletePackage [
 
 ]
 
+{ #category : 'commands support' }
+RowanPackageService >> extendHierarchies: hierarchies [
+	
+	"extend the hierarchies by one level
+	of subclasses"
+
+	| extendedHierarchies |
+	extendedHierarchies := Array new. 
+	hierarchies do:[:hierarchy |
+		| theClass |
+		theClass := hierarchy last. 
+		theClass subclasses isEmpty 
+			ifTrue:[extendedHierarchies add: hierarchy]
+			ifFalse:[
+				theClass subclasses do:[:sub |
+					extendedHierarchies add: (hierarchy copy add: sub; yourself)
+				]]].
+	^extendedHierarchies
+]
+
 { #category : 'rowan' }
 RowanPackageService >> genericClassCreationTemplate [
 
@@ -147,6 +150,34 @@ RowanPackageService >> genericClassCreationTemplate [
 { #category : 'comparing' }
 RowanPackageService >> hash [
 	^self name hash
+]
+
+{ #category : 'commands support' }
+RowanPackageService >> hierarchiesByLevel: hierarchies [
+
+	"Return dictionary of classes by level. 
+	Example: 
+		hierarchies - #(#(Object Collection Array) #(Object AbstractException Exception))
+	Return: 
+		#(#nil->#(Object) Object->#(Collection AbstractException) Collection->#(Array) AbstractException->#(Exception)
+	"
+	| levels |
+	levels := hierarchies inject: Dictionary new into:[:dict :chain | 
+		1 to: chain size do: [:index | 
+			| cls theSuper classSet |
+			cls := chain at: index.
+			classSet := dict at: cls ifAbsentPut: [Array new].
+			index = 1 
+		ifTrue:[
+			classSet := dict at: #'nil' ifAbsentPut: [Array new]. 
+			((dict at: #'nil') includes: cls) ifFalse:[(dict at: #'nil') add: cls].
+		]
+		ifFalse:[
+				theSuper := chain at: index - 1.
+				((dict at: theSuper) includes: cls) ifFalse:[(dict at: theSuper) add: cls]
+				]].
+			dict].
+	^levels
 ]
 
 { #category : 'Accessing' }
@@ -305,10 +336,37 @@ RowanPackageService >> servicePerform: symbol withArguments: collection [
 		self updateProject]
 ]
 
+{ #category : 'commands support' }
+RowanPackageService >> services: services from: levels expand: toExpand [
+
+	(classes collect:[:svc | svc classFromName]) do:[:aClass |
+		toExpand addAll: aClass allSuperclasses].
+	levels keysAndValuesDo: [:key :value |
+		| newKey service  | 
+		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
+			service := (RowanClassService minimalForClassNamed: key name).
+			(toExpand includes: service classFromName) ifTrue:[service expand: true].
+			service].
+		services at: newKey put: (value collect:[:cls | 
+				service := (RowanClassService minimalForClassNamed: cls name).
+				(toExpand includes: service classFromName) ifTrue:[service expand: true].
+				service
+				])]
+]
+
 { #category : 'commands' }
 RowanPackageService >> setDefaultTemplate [
 
 	defaultTemplate := self genericClassCreationTemplate.
+]
+
+{ #category : 'commands support' }
+RowanPackageService >> superclassChainsFor: behaviors [
+
+	^behaviors collect:[:behavior | | supers |
+			supers := behavior allSuperclasses. 
+			supers add: behavior. 
+			supers].
 ]
 
 { #category : 'commands' }
