@@ -268,6 +268,7 @@ RwModificationTonelWriterVisitor >> processClassExtension: aClassExtensionModifi
 RwModificationTonelWriterVisitor >> processProject: aProjectModification [
 	"confirm that the project source is written in Tonel format"
 
-	(self _repositoryFormatFor: aProjectModification) = 'tonel' ifFalse: [ self error: 'expected tonel format repository' ].
+	| format |
+	(format := self _repositoryFormatFor: aProjectModification) = 'tonel' ifFalse: [ self error: 'expected tonel format repository, instead format is ', format printString ].
 	super processProject: aProjectModification.
 ]

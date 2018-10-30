@@ -903,8 +903,8 @@ Issue361Class2_2 initialize.
 ]
 
 { #category : 'private' }
-RwProjectWriterTest >> _markForCleanup: anObject [
-	toDelete add: (filesystem resolve: anObject)
+RwProjectWriterTest >> _markForCleanup: aFileReference [
+	toDelete add: aFileReference
 ]
 
 { #category : 'private' }
@@ -1034,8 +1034,8 @@ RwProjectWriterTest >> setUp [
 { #category : 'running' }
 RwProjectWriterTest >> tearDown [
 	toDelete
-		select: [ :path | filesystem exists: path ]
-		thenDo: [ :path | filesystem delete: path ].
+		select: [ :aFileRef | aFileRef exists ]
+		thenDo: [ :aFileRef | aFileRef deleteAll ].
 	projectsToDelete
 		do: [ :projectName | Rowan projectTools delete deleteProjectNamed: projectName ].
 	super tearDown
@@ -1064,15 +1064,9 @@ RwProjectWriterTest >> testFiletreeWriter_A [
 	visitor := RwModificationFiletreeWriterVisitor new
 		repositoryRootPath: repositoryRootPath;
 		yourself.
-[
+
 	visitor visit: projectSetModification.
-] on: Error do: [:ex |
-	toDelete
-		select: [ :path | filesystem exists: path ]
-		thenDo: [ :path |
-self error: 'halt here'.
- (filesystem resolve: path) deleteAll ].
-].
+
 "validation -- need to have reader implemented before doing validation"
 self halt
 ]
