@@ -43,7 +43,7 @@ RwModificationFiletreeWriterVisitor >> _typeClassDefinitionOf: aClassDefinition 
 	definition 		
 		at: #category put: aClassDefinition category.
 	
-	^ self _toSTON: definition
+	^ self _toJSON: definition
 ]
 
 { #category : 'actions' }
@@ -59,7 +59,7 @@ RwModificationFiletreeWriterVisitor >> addedPackage: aPackageModification [
 			<< (self _toJSON: self class orderedDictionaryClass new)
 			<< self  _newLine ].
 
-	(self _packageSourceDir /  'filetree')
+	(self _packageSourceDir /  '.filetree')
 		writeStreamDo: [:aStream |
 		aStream 
 			<< (self _toJSON: {
@@ -86,9 +86,9 @@ RwModificationFiletreeWriterVisitor >> processClass: aClassModification [
 
 	(self _classSourceDir /  'properties.json')
 		writeStreamDo: [:aStream |
-		aStream 
-			<< (self _toJSON: (self _typeClassDefinitionOf: self currentClassDefinition))
-			<< self  _newLine ].
+			aStream 
+				<< (self _typeClassDefinitionOf: self currentClassDefinition)
+				<< self _newLine ].
 
 	aClassModification instanceMethodsModification acceptVisitor: self.
 	aClassModification classMethodsModification acceptVisitor: self
