@@ -22,7 +22,7 @@ RwModificationCypressFamilyWriterVisitor >> _commentOf: aClassDefinition [
 { #category : 'package writing' }
 RwModificationCypressFamilyWriterVisitor >> _packageSourceDir [
 
-	^ self _projectSourceDir / self currentPackageDefinition name, 'package'
+	^ self _projectSourceDir / self currentPackageDefinition name, self packageExtension
 ]
 
 { #category : 'project writing' }
@@ -60,4 +60,10 @@ RwModificationCypressFamilyWriterVisitor >> deletedPackage: aPackageModification
 	currentPackageDefinition := aPackageModification after.
 
 	self halt. "delete the whole package directory"
+]
+
+{ #category : 'package writing' }
+RwModificationCypressFamilyWriterVisitor >> packageExtension [
+
+	^ 'package'
 ]

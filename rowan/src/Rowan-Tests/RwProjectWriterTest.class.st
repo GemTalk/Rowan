@@ -11,7 +11,7 @@ Class {
 
 { #category : 'private' }
 RwProjectWriterTest >> _createFileSystem [
-	^ FileSystem "disk "currentMemoryFileSystem
+	^ FileSystem disk "currentMemoryFileSystem"
 ]
 
 { #category : 'private' }
