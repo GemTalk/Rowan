@@ -204,6 +204,8 @@ RwModificationTonelWriterVisitor >> addedPackage: aPackageModification [
 			<< (self _toSTON: { #name ->  currentPackageDefinition name } asDictionary) 
 			<< self  _newLine ].
 
+self error: 'need to create class to filename map to handle class file names on case insensitive file systems'.
+
 	self processPackage: aPackageModification
 ]
 
