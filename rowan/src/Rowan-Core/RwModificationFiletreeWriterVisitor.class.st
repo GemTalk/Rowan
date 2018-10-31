@@ -6,7 +6,9 @@ Class {
 		'separateMethodMetaAndSource',
 		'noMethodMetaData',
 		'useCypressPropertiesFile',
-		'monticelloMetadata'
+		'monticelloMetadata',
+		'instanceFileNameMap',
+		'classFileNameMap'
 	],
 	#classInstVars : [
 		'specials'
@@ -56,6 +58,47 @@ RwModificationFiletreeWriterVisitor class >> selectorSpecials [
 RwModificationFiletreeWriterVisitor >> _classSourceDir [
 
 	^ self _packageSourceDir / self currentClassDefinition name, 'class'
+]
+
+{ #category : 'class writing' }
+RwModificationFiletreeWriterVisitor >> _createFileNameMapFor: aMethodDefinitionCollection [
+  "https://github.com/dalehenrich/filetree/issues/92"
+
+  "answer a dictionary that maps each definition selector to a filename that is guaranteed unique on case insensitive file systems"
+
+  | map filenameMap |
+  map := Dictionary new.
+  aMethodDefinitionCollection
+    do: [ :mDef | 
+      | sel col |
+      "sort into bins by lowercase selector. "
+      sel := mDef selector asLowercase.
+      col := map
+        at: sel
+        ifAbsentPut: [ OrderedCollection new ].
+      col add: mDef ].
+  filenameMap := Dictionary new.
+  map values
+	do: [ :col | 
+	  | selector sortedCol |
+	  col size = 1
+		ifTrue: [ 
+		  | def |
+		  "no need to distinguish filename"
+		  def := col at: 1.
+		  filenameMap
+			at: def selector
+			put: (self _methodFileNameFor: def) ]
+		ifFalse: [ 
+		  "tack on postfix to guarantee  file names are unique on case insensitive file systems"
+		  sortedCol := col sorted: [ :a :b | a asString _unicodeLessThan: b asString ].
+		  (1 to: sortedCol size) do: [ :index | 
+			| def filename |
+			def := sortedCol at: index.
+			filename := self _methodFileNameFor: def.
+			filename := filename , '..' , index printString.
+			filenameMap at: def selector put: filename ] ] ].
+  ^ filenameMap
 ]
 
 { #category : 'package writing' }
@@ -182,16 +225,21 @@ RwModificationFiletreeWriterVisitor >> _typeClassDefinitionOf: aClassDefinition 
 { #category : 'actions' }
 RwModificationFiletreeWriterVisitor >> addedMethod: aMethodModification [
 
-	| methodDefinition methodDir |
-
-	"create instance/class directory as needed ... write method source file"
-	methodDir := (aMethodModification isMeta
-		ifTrue: [ self _methodClassDir ]
-		ifFalse: [ self _methodInstanceDir ]) ensureCreateDirectory.
+	| methodDefinition methodDir methodFileName |
 
 	methodDefinition := aMethodModification after.
 
-	(methodDir / (self _methodFileNameFor: methodDefinition))
+	"create instance/class directory as needed ... write method source file"
+	 (aMethodModification isMeta
+		ifTrue: [
+			methodFileName := classFileNameMap at: methodDefinition selector.
+			methodDir := self _methodClassDir ensureCreateDirectory ]
+		ifFalse: [ 
+			methodFileName := instanceFileNameMap at: methodDefinition selector.
+			methodDir := self _methodInstanceDir ensureCreateDirectory ]) .
+
+
+	(methodDir / methodFileName, 'st')
 		writeStreamDo: [:aStream |
 		aStream 
 			<< methodDefinition protocol
@@ -267,6 +315,9 @@ RwModificationFiletreeWriterVisitor >> processClass: aClassModification [
 			aStream 
 				<< (self _typeClassDefinitionOf: self currentClassDefinition)
 				<< self _newLine ].
+
+	instanceFileNameMap  := self _createFileNameMapFor: self currentClassDefinition instanceMethodDefinitions.
+	classFileNameMap := self _createFileNameMapFor: self currentClassDefinition classMethodDefinitions.
 
 	aClassModification instanceMethodsModification acceptVisitor: self.
 	aClassModification classMethodsModification acceptVisitor: self
