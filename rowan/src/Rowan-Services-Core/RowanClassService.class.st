@@ -28,7 +28,8 @@ Class {
 		'hierarchyServices',
 		'variables',
 		'categories',
-		'isTestCase'
+		'isTestCase',
+		'expand'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -252,6 +253,12 @@ RowanClassService >> definedPackageName: newValue [
 
 	definedPackageName := newValue
 
+]
+
+{ #category : 'Updating' }
+RowanClassService >> expand: boolean [
+
+	expand := boolean
 ]
 
 { #category : 'commands' }
