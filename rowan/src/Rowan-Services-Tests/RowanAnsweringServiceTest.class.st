@@ -5,6 +5,19 @@ Class {
 }
 
 { #category : 'tests' }
+RowanAnsweringServiceTest >> test_loadedPackageExists [
+	| answeringService |
+	self jadeiteIssueTested: #issue205 withTitle: 'misspelled extension category name causes trouble'.
+	answeringService := RowanAnsweringService new organizer: ClassOrganizer new.
+	Rowan packageNames do:[:packageName |
+		self assert: (answeringService loadedPackageExists: packageName) answer].
+	self deny: (answeringService loadedPackageExists: 'AAAA') answer.
+	self deny: (answeringService loadedPackageExists: 'AJsfdjsdf') answer.
+	self assert: (answeringService loadedPackageExists: 'Rowan-Kernel') answer. 
+	self assert: (answeringService loadedPackageExists: 'rowan-kernel') answer. "lower case is accepted"
+]
+
+{ #category : 'tests' }
 RowanAnsweringServiceTest >> test_matchingPattern [
 	| answeringService randomSymbol | 
 	self jadeiteIssueTested: #issue235 withTitle: 'Need Find Class/Method from console'.

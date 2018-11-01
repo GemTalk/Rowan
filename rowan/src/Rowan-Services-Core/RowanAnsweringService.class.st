@@ -48,6 +48,17 @@ RowanAnsweringService >> isTranscriptInstalled [
 ]
 
 { #category : 'commands' }
+RowanAnsweringService >> loadedPackageExists: packageName [
+	
+	| actualName |
+	actualName := Rowan image packageNames detect:[:loadedName | loadedName asLowercase = packageName asLowercase] ifNone:[]. 
+	answer := (Rowan image loadedPackageNamed: actualName ifAbsent: []) notNil. 
+	command := nil. 
+	commandArgs := nil. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'commands' }
 RowanAnsweringService >> runMethodTests: methodServices [
 
 	| behavior |
