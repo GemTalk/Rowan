@@ -51,6 +51,7 @@ SCIExcludedTests>>#testError
 	1 unexpected passes
 ```
 9. Create two rowan/smalltalkCI stones dev and test:
+```
 createStone -RG rowan_ci_3215 3.2.15
 cd $GS_HOME/server/stones/rowan_ci_3215
 
@@ -72,7 +73,7 @@ startNetldi testrowan_ci_3215
 
 ln -s $GS_HOME/shared/repos/smalltalkCI/gemstone/gsdevkit/stones/newBuild_rowan_smalltalkci	#rebuild rowan/smalltalkCI stone new stone in-place
 ln -s $GS_HOME/shared/repos/smalltalkCI/gemstone/gsdevkit/stones/newBuild_rowan_test_smalltalkci	#rebuild rowan/smalltalkCI stone new stone in-place and run tests
-
+```
 10. Current test results running `newBuild_rowan_test_smalltalkci` script  11-2-18):
 ```
 smalltalkCI tests
