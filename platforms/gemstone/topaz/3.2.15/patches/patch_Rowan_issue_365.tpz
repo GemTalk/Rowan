@@ -9,8 +9,30 @@ output push patch_issue_365.out
   login
 
 	run
+	"patch missing JadeServer classes - so they can be disowned and updated"
+	#(JadeServer64bit24
+		JadeServer64bit3x
+		JadeServer
+		JadeServer64bit32
+		JadeServer64bit )
+			do: [:className |
+				(UserGlobals at: className ifAbsent: [])
+					ifNil: [
+						GsFile gciLogServer: 'Needs Patching ...', className.
+						(UserGlobals at: #RwSymbolDictionaryRegistry)
+							classRegistry keys do: [:classHistory |
+								| theClass |
+								theClass := classHistory current.
+								theClass name == className
+									ifTrue: [ 
+										UserGlobals at: className put: theClass.
+										GsFile gciLogServer: '	Patched ', className ] ] ] ].
+%
+	commit
+
+	run
 	Rowan projectNames do: [:projectName |
-		GsFile gciLogServer: 'Disown projectName'.
+		GsFile gciLogServer: 'Disown ', projectName.
 		Rowan projectTools disown
 			disownProjectNamed: projectName ].
 %
