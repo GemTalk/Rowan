@@ -76,6 +76,14 @@ RowanService >> commandArgs [
 
 ]
 
+{ #category : 'accessing' }
+RowanService >> commandArgs: anArray [
+
+	"for tests" 
+
+	commandArgs := anArray
+]
+
 { #category : 'symbol dictionaries' }
 RowanService >> createDefaultSymbolDictionary [
 
@@ -139,6 +147,12 @@ RowanService >> excludedInstVars [
 
 { #category : 'initialization' }
 RowanService >> initialize [
+]
+
+{ #category : 'accessing' }
+RowanService >> jadeiteServer [
+
+	^(Rowan jadeServerClassNamed: #JadeServer) theJadeiteServer
 ]
 
 { #category : 'accessing' }

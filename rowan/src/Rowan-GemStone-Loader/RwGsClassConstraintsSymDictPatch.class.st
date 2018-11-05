@@ -36,8 +36,8 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet registr
 	existingConstraintsMap := Dictionary new.
 	existingVaryingConstraint := existingClass _varyingConstraint.
 	instVarNames := existingClass allInstVarNames.
-	existingConstraints := existingClass _constraints.
-	1 to: existingClass _constraints size do: [:index |
+	existingConstraints := [ existingClass _constraints ] on: Deprecated do: [:ex | ex resume ].
+	1 to: existingConstraints size do: [:index |
 		existingConstraintsMap at: (instVarNames at: index) put: (existingConstraints at: index ) ].
 	theConstraints := self _gemStoneConstraintsFrom:	classDefinition gs_constraints.
 	theConstraintsMap := Dictionary new.
@@ -71,7 +71,6 @@ RwGsClassConstraintsSymDictPatch >> installPropertiesPatchFor: aPatchSet registr
 	existingVaryingConstraint == theVaryingConstraint
 		ifFalse: [
 			"change the varying constraint"
-			existingClass _setVaryingConstraint: theVaryingConstraint ].
+			[ existingClass _setVaryingConstraint: theVaryingConstraint] on: Deprecated do: [:ex | ex resume ] ].
 	aSymbolDictionaryRegistry updateClassProperties: existingClass implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
-
 ]
