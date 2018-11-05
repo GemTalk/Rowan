@@ -10,17 +10,21 @@ set -e
 # Usage:
 #  $ROWAN_PROJECTS_HOME/Rowan/bin/packing_oscar <base_label> <rowan_tag> <jadeite_tag> <location_of_sett_zip>
 #
-# 1. clone the Rowan, RowanSample1, RowanSample2, RowanSample4, and RowanSample6 projects
+# 1. clone the Rowan project
 # 2. confirm that the master branches of Rowan is on the correct tag
 # 3. Create Jadeite runtime directory (Jadeite_runtime) and download .exe from github for given tag
 # 4. create MANIFEST.TXT and list the sha of the commit for each of the git 
 #    projects along with the name of the file or directory
-# 5. zip up the Rowan, RowanSample1, and RowanSample2 projects, the 
-#    Jadeite_runtime directory  plus any .pdf documents present (only expect 
-#     one PDF file)
+# 5. zip up the Rowan project the 
+#    Jadeite_runtime directory  plus any .pdf documents present
 # 6. Archive the zip file and stage for delivery
 #
 # 1.1.0 candidate $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.0-candidate v1.1.0-candidate Oscar-3.0.16-candidate /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.1.0 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.0 v1.1.0 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.1.1 candidate $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.1-candidate v1.1.1-candidate Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.1.1 candidate 2 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.1-candidate_2 v1.1.1-candidate_2 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.1.1 candidate 3 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.1-candidate_3 v1.1.1-candidate_3 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.2.0 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.0 v1.2.0 Oscar-3.0.40 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
@@ -35,8 +39,8 @@ rowan_tag="$2"
 jadeite_tag="$3"
 sett_zip_location="$4"
 sett_zip=$(basename ${sett_zip_location})
-rowanDeploymentBranch="masterV1.1"
-rowanDeploymentBranch="candidateV1.1"
+rowanDeploymentBranch="candidateV1.2"
+rowanDeploymentBranch="masterV1.2"
 
 commit_match_tag() {
   targetTag="$1"
@@ -51,7 +55,7 @@ commit_match_tag() {
   fi
 }
 padded_manifest_line() {
-  line='               |  '
+  line='                   |  '
   PROC_NAME="$1"
   printf "%s%s" $PROC_NAME "${line:${#PROC_NAME}}" >> MANIFEST.TXT
   PROC_NAME="$2"
@@ -106,41 +110,22 @@ clone_entire_git_repo() {
 
 cd $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/packing
 
-rm -rf Rowan Jade RowanSample1 RowanSample2 RowanSample4 RowanSample6 MANIFEST.TXT Jadeite_runtime_* *.zip *.sha256
+rm -rf Rowan MANIFEST.TXT Jadeite_runtime_* *.zip *.sha256
 
 # Clone Rowan include all branches (complete copy of github repo)
 clone_entire_git_repo git@github.com:dalehenrich/Rowan.git Rowan $rowanDeploymentBranch
-# Clone entire RowanSample1, RowanSample2, RowanSample4 and RowanSample6 repos
-clone_entire_git_repo git@github.com:dalehenrich/RowanSample1.git RowanSample1
-clone_entire_git_repo git@github.com:dalehenrich/RowanSample2.git RowanSample2
-clone_entire_git_repo git@github.com:dalehenrich/RowanSample4.git RowanSample4
-clone_entire_git_repo git@github.com:dalehenrich/RowanSample6.git RowanSample6
-
-# checkout sample branch in RowanSample1 and RowanSample2
-pushd RowanSample1
-  git checkout sample
-popd
-pushd RowanSample2
-  git checkout sample
-popd
-
-# rm -rf MANIFEST.TXT Jadeite_runtime_* *.zip
 
 echo "------------------------------" >> MANIFEST.TXT
 echo "  Git clone directories" >> MANIFEST.TXT
 echo "------------------------------" >> MANIFEST.TXT
 padded_manifest_line "Git_Project" "Tag" "SHA"
-echo "---------------|-----------------|-----------------|" >> MANIFEST.TXT
+echo "-------------------|---------------------|---------------------|" >> MANIFEST.TXT
 validate_tag Rowan Rowan "$rowan_tag" $rowanDeploymentBranch
-validate_tag RowanSample1 RowanSample1
-validate_tag RowanSample2 RowanSample2
-validate_tag RowanSample4 RowanSample4
-validate_tag RowanSample6 RowanSample6
 
 # create Jadeite runtime directory
 jadeite_runtime_dirName="Jadeite_runtime_${jadeite_tag}"
 cp -r ~/ubs/runtime  "$jadeite_runtime_dirName"
-wget https://github.com/ericwinger/Jade/releases/download/"$jadeite_tag"/Jadeite.exe -P "$jadeite_runtime_dirName"
+wget https://github.com/GemTalk/Jadeite/releases/download/"$jadeite_tag"/Jadeite.exe -P "$jadeite_runtime_dirName"
 
 echo "" >> MANIFEST.TXT
 echo "------------------------------" >> MANIFEST.TXT
@@ -177,7 +162,7 @@ cp $sett_zip_location .
 
 # create zip file
 
-zip -r ${base_label}.zip MANIFEST.TXT ${jadeite_runtime_dirName} ${sett_zip} *.pdf Rowan RowanSample1 RowanSample2 RowanSample4 RowanSample6
+zip -r ${base_label}.zip MANIFEST.TXT ${jadeite_runtime_dirName} ${sett_zip} *.pdf Rowan
 
 # create sha256 file
 

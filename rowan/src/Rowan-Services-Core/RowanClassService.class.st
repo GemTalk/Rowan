@@ -28,7 +28,8 @@ Class {
 		'hierarchyServices',
 		'variables',
 		'categories',
-		'isTestCase'
+		'isTestCase',
+		'expand'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -103,6 +104,7 @@ RowanClassService >> basicForClassNamed: className [
 	| theClass |
 	self name: className. 
 	theClass := self classFromName. 
+	theClass isNil ifTrue:[oop := nil. ^self].
 	self basicRefreshFrom: theClass.
 ]
 
@@ -124,7 +126,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	self initializeCategoriesFor: classOrMeta.
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
-	isTestCase := self classFromName isSubclassOf: TestCase
+	self setIsTestCase
 ]
 
 { #category : 'Accessing' }
@@ -251,6 +253,12 @@ RowanClassService >> definedPackageName: newValue [
 
 	definedPackageName := newValue
 
+]
+
+{ #category : 'Updating' }
+RowanClassService >> expand: boolean [
+
+	expand := boolean
 ]
 
 { #category : 'commands' }
@@ -389,6 +397,18 @@ RowanClassService >> isExtension: boolean [
 
 ]
 
+{ #category : 'Updating' }
+RowanClassService >> isTestCase [
+
+	^isTestCase
+]
+
+{ #category : 'Updating' }
+RowanClassService >> isTestCase: aBoolean [
+
+	isTestCase := aBoolean
+]
+
 { #category : 'Accessing' }
 RowanClassService >> meta [
 
@@ -450,7 +470,7 @@ RowanClassService >> minimalRefreshFrom: theClass [
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
-	isTestCase := self classFromName isSubclassOf: TestCase
+	self setIsTestCase
 ]
 
 { #category : 'commands' }
@@ -649,12 +669,25 @@ RowanClassService >> renameCategoryFrom: old to: new [
 ]
 
 { #category : 'commands' }
+RowanClassService >> runClassTests: classService [
+
+	| behavior |
+	behavior := classService classFromName. 
+	self refreshFrom: behavior.
+	methods do:[:methodService |
+		('test*' match: methodService selector) ifTrue:[ 
+			behavior debug: methodService selector]]. 
+	RowanCommandResult addResult: (RowanAnsweringService new answer: true).
+]
+
+{ #category : 'commands' }
 RowanClassService >> runMethodTests: methodServices [
 
 	| behavior |
-	behavior := self classFromName. 
-	methodServices do:[:method |
-		behavior debug: method selector].
+	behavior := self classFromName.  
+	methodServices do:[:methodService |
+		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
+			behavior debug: methodService selector]].
 	RowanCommandResult addResult: (RowanAnsweringService new answer: true).
 ]
 
@@ -736,6 +769,19 @@ RowanClassService >> setComment [
 
 ]
 
+{ #category : 'Updating' }
+RowanClassService >> setIsTestCase [
+
+	isTestCase := self classFromName isSubclassOf: TestCase
+]
+
+{ #category : 'commands' }
+RowanClassService >> setIsTestCaseCommand [
+
+	self setIsTestCase. 
+	RowanCommandResult addResult: self.
+]
+
 { #category : 'commands' }
 RowanClassService >> subclassCreationTemplate [
 	| answerService |
@@ -800,8 +846,12 @@ RowanClassService >> update [
 { #category : 'updates' }
 RowanClassService >> updateClass [
 
+	"It's possible to have a nil class. For example, if we added & selected
+	a class then aborted."
+
 	| theClass |
 	theClass := self classFromName. 
+	theClass isNil ifTrue:[oop := nil. ^self]. 
 	self refreshFrom: theClass.
 	RowanCommandResult addResult: self
 ]

@@ -1,11 +1,6 @@
  RwSimpleProjectSpecification{
 	#specName : 'RowanSample1',
 	#projectUrl : 'https://github.com/dalehenrich/RowanSample1',
-	#platformSpec : {
-		'gemstone' : RwGemStoneSpecification {
-			#defaultSymbolDictName : 'SampleSymbolDict',
-			#defaultUseSessionMethodsForExtensions : false }
-	},
 	#repoSpec : RwGitRepositorySpecification {
 		#committish : 'sample',
 		#committishType : 'branch'

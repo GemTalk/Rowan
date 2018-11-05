@@ -12,9 +12,9 @@ Class {
 
 { #category : 'accessing' }
 RowanCommandResult class >> addResult: aResult [
-	aResult command: nil. 
+	aResult command: nil;
+			commandArgs: nil. 
 	self results add: aResult
-
 ]
 
 { #category : 'initailize' }
@@ -36,7 +36,8 @@ RowanCommandResult class >> new [
 { #category : 'accessing' }
 RowanCommandResult class >> results [
 
-	^SessionTemps current at: #rowanCommandResults
+	"lazy initialize for a topaz session test" 
+	^SessionTemps current at: #rowanCommandResults ifAbsentPut: [Array new]
 ]
 
 { #category : 'accessing' }
@@ -44,6 +45,12 @@ RowanCommandResult >> command: anObject [
 
 	"results don't have commands"
 
+]
+
+{ #category : 'accessing' }
+RowanCommandResult >> commandArgs: anObject [
+
+	"results don't have commandArgs"
 ]
 
 { #category : 'initialization' }
