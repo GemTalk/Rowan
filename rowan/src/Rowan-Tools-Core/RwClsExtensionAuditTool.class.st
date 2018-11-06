@@ -12,12 +12,13 @@ RwClsExtensionAuditTool >> _auditCategory: anExtentionCategory forBehavior: aCla
 	aClassOrMeta isMeta 
 		ifTrue: [
 			(aLoadedClassExtension loadedClassMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
-				ifTrue: [ self errorLog: res  add: (aLoadedClassExtension name -> 'expected class methods in the category ', anExtentionCategory printString, ' they are missing')   ].
+				ifTrue: [ self errorLog: res  add: ((anExtentionCategory asString -> 'expected class methods in the category are missing'))   ].
 	] 	ifFalse: [
 			(aLoadedClassExtension loadedInstanceMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
-				ifTrue: [ self errorLog: res  add: (aLoadedClassExtension name -> 'expected instances methods in the category ', anExtentionCategory printString, ' they are missing')   ].
+				ifTrue: [ self errorLog: res  add: (anExtentionCategory asString -> ('expected instances methods in the category are missing'))   ].
 	].
 	^res
+
 ]
 
 { #category : 'other' }
@@ -25,7 +26,7 @@ RwClsExtensionAuditTool >> auditLoadedClassExtenstion: aLoadedClassExtension [
 "look for methods compiled into class without Rowan API"
 | res   extensionCategoryName|
 
-	res := Array new.
+	res := StringKeyValueDictionary new.
 	extensionCategoryName := aLoadedClassExtension loadedPackage asExtensionName.
 	(Rowan globalNamed: aLoadedClassExtension name) 
 		ifNil: [self errorLog: res  add: aLoadedClassExtension name -> 'Matching compiled class does not exists '] 
@@ -49,4 +50,5 @@ RwClsExtensionAuditTool >> auditLoadedClassExtenstion: aLoadedClassExtension [
 				]
 		].
 		^res
+
 ]

@@ -11,6 +11,56 @@ RwProjectAuditToolTest class >> comment [
 ]
 
 { #category : 'tests' }
+RwProjectAuditToolTest >> testClassBadExtension [
+
+| packageTools projectName packageNames className packageName1 packageName2 theClass loadedClass loadedClassExtension fooMethod x y|
+	packageTools := Rowan packageTools.
+	projectName := 'AuditProject'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extensions'.
+	packageNames := {packageName1 . packageName2}.
+	className := 'AuditClass'.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'project for testing audit api'.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: theClass rowanPackageName = packageName1.
+
+   theClass rwCompileMethod: 'bar ^bar'
+	     category: 'Accessing' "'*'  packageName1 asLowercase".
+
+	fooMethod := theClass
+		rwCompileMethod: 'foo ^''foo'''
+		category: '*' , packageName2 asLowercase.
+
+	fooMethod := theClass
+		compileMethod: 'foo ^2'
+		dictionaries:  #() 
+		category: '*' , packageName1 asLowercase.
+
+x := RwClsAuditTool new auditLoadedClass: (loadedClass := Rowan image loadedClassForClass: theClass ifAbsent: [nil]).
+y := RwClsExtensionAuditTool new auditLoadedClassExtenstion: (loadedClassExtension := (Rowan image loadedClassExtensionsForClass: theClass) _at: 1).
+
+	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 2.
+	self assert: ( y := (x at: packageName1) at: className) size = 1;
+			assert: (y at: '*', packageName1 asLowercase) notNil;
+		assert: (y := (x at: packageName2) at: className) size = 1;
+		assert: (y at: '*', packageName2 asLowercase) notNil
+
+]
+
+{ #category : 'tests' }
 RwProjectAuditToolTest >> testClassExtension [
 
 | packageTools projectName packageNames className packageName1 packageName2 theClass loadedClass loadedClassExtension fooMethod x y|

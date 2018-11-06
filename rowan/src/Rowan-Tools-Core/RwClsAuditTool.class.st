@@ -109,7 +109,7 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 "look for methods compiled into class without Rowan API"
 | res  |
 
-	res := Array new.
+	res := StringKeyValueDictionary new.
 	(Rowan globalNamed: aLoadedClass name)  
 		ifNil: [self errorLog: res add: aLoadedClass name -> 'Matching class does not exists ' ] "there is no matching Class for LoadedClass"
 		ifNotNil: [:aBehavior | 
@@ -118,11 +118,17 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 			"audit categories"
 
 			aBehavior categorysDo: [:category :selectors | 
-				category first == $* ifFalse: [
-					self errorLog: res addAll: (self  _auditCategory: category selectors: selectors forBehavior: aBehavior loadedClass: aLoadedClass)]
+				category first == $*	ifTrue: [
+						((category copyFrom: 2 to: category size) isEquivalent: aBehavior rowanPackageName) 
+							ifTrue: [self errorLog: res add: category asString -> 'Extension category name can be same as class category' ]
+					] ifFalse: [
+						self errorLog: res addAll: (self  _auditCategory: category selectors: selectors forBehavior: aBehavior loadedClass: aLoadedClass)]
 			].
 			aBehavior class categorysDo: [:category :selectors | 
-				category first == $* ifFalse: [
+				category first == $* 	ifTrue: [
+						((category copyFrom: 2 to: category size)  isEquivalent: aBehavior rowanPackageName) 
+							ifTrue: [self errorLog: res add: category asString -> 'Extension category name can be same as class category' ]
+					] ifFalse: [
 					self errorLog: res  addAll: (self  _auditCategory: category selectors: selectors forBehavior: aBehavior class loadedClass: aLoadedClass)
 				]
 			].
@@ -136,6 +142,7 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 			]
 	].
 	^res
+
 ]
 
 { #category : 'other' }
