@@ -27,19 +27,13 @@ output push patch_issue_365.out
 										| theClass |
 										classHistory current name == className
 											ifTrue: [ 
-												GsFile gciLogServer: 'ClassHistory: ', classHistory asOop printString.
 												classHistory reverseDo: [:cls |
-GsFile gciLogServer: 'cls --> ', cls name printString, ' -- ', theClass printString.
 													(theClass isNil and: [ cls allSelectors includes: #updateFromSton: ])
-														ifTrue: [ theClass := cls.
-GsFile gciLogServer: '+' ]
-														ifFalse: [ GsFile gciLogServer: '-' ] ].
+														ifTrue: [ theClass := cls ] ].
 												theClass ifNil: [ self error: 'no class found for ', className, ' in class history' ].
 												UserGlobals at: className put: theClass.
 												theClass classHistory == classHistory 
-													ifFalse: [ 
-GsFile gciLogServer: '--> ',  theClass name printString, ' -- ', className printString, ' -- ', classHistory current name printString.
-self halt].
+													ifFalse: [ self error: 'class history mismatch for ', className ].
 												GsFile gciLogServer: '	Replaced ', className, ' (', theClass asOop printString, ')' ] ] ] ]
 					ifNil: [
 						GsFile gciLogServer: 'Needs Patching ...', className.
