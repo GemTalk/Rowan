@@ -7258,7 +7258,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7344,6 +7344,9 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests-issue 353' }
@@ -7353,7 +7356,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7437,6 +7440,9 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests-issue 353' }
@@ -7446,7 +7452,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7564,6 +7570,9 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests-issue 353' }
@@ -7573,7 +7582,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7693,16 +7702,19 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
-{ #category : 'tests-issue 353' }
+{ #category : 'tests-issue 393' }
 RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_method_deletion_E [
 
 	"new test case:superclass has new class version ... each subclass has methods removed"
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7821,18 +7833,21 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
 "validate"
 	self assert: ((Rowan image loadedClassNamed: className1) loadedInstanceMethods values select: [:loadedMethod | loadedMethod selector == #method4 ]) isEmpty
 ]
 
-{ #category : 'tests-issue 353' }
+{ #category : 'tests-issue 393' }
 RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_method_deletion_F [
 
 	"new test case:superclass has new class version ... each subclass has SOME methods removed"
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7948,6 +7963,9 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 
 "validate"
 	self assert: ((Rowan image loadedClassNamed: className1) loadedInstanceMethods values select: [:loadedMethod | loadedMethod selector == #method4 ]) isEmpty
