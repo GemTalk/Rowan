@@ -16,7 +16,8 @@ RwPkgAuditTool >> auditForPackage: loadedPackage [
 "audit dirty packages"
 	|  res|
 	res := KeyValueDictionary new.
-	(loadedPackage isDirty or: [self checkAll]) ifTrue: [
+	true ifTrue: [
+	"(loadedPackage isDirty or: [self checkAll]) ifTrue: ["
 		loadedPackage 
 				loadedClassesDo: [:aLoadedClass |  (self auditLoadedClass: aLoadedClass) 
 					ifNotEmpty: [:aColl | res at: aLoadedClass name put: aColl]]				

@@ -755,7 +755,9 @@ currentOrNil
 		do: [:projectDefinition |
 			| audit projectName |
 			projectName := projectDefinition name.
+			GsFile gciLogServer: '---Auditing project: ', projectName printString.
 			audit := Rowan projectTools audit auditForProjectNamed: projectName.
+			GsFile gciLogServer: '	-- audit finished '. 
 			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ]
 	
 %

@@ -24,12 +24,9 @@ RwPrjAuditTool >> auditForProject: aLoadedProject [
 	| res |
 
 	res := KeyValueDictionary new.
-	aLoadedProject isDirty ifTrue: [
-		aLoadedProject loadedPackages values do: [:e | (Rowan packageTools audit auditForPackage: e) 
-				ifNotEmpty: [:aColl | res at: e name put: aColl]].	
-	].
+	aLoadedProject loadedPackages values do: [:e | (Rowan packageTools audit auditForPackage: e) 
+		ifNotEmpty: [:aColl | res at: e name put: aColl]].	
 	^res
-
 ]
 
 { #category : 'other' }

@@ -32,23 +32,24 @@ RwClsExtensionAuditTool >> auditLoadedClassExtenstion: aLoadedClassExtension [
 		ifNil: [self errorLog: res  add: aLoadedClassExtension name -> 'Matching compiled class does not exists '] 
 		ifNotNil: [:aBehavior | 
 			
+false ifTrue: [ 
 			self errorLog: res addAll:  ((aBehavior includesCategory: extensionCategoryName)
 				ifTrue: [(self _auditCategory: extensionCategoryName forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
 				ifFalse: [
 					(aBehavior class includesCategory: extensionCategoryName)
 						ifTrue: [(self _auditCategory: extensionCategoryName forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
-						ifFalse: [ { extensionCategoryName -> 'Missing extension category'} ]
+						ifFalse: [ { extensionCategoryName -> ('Missing extension category in class  ', aBehavior name printString)} ]
 			]).
+].
 
 			
 			aLoadedClassExtension 
 				loadedInstanceMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-					(self _auditLoadedInstanceMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:x | res add: x]
+					(self _auditLoadedInstanceMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:x | self errorLog: res add: x]
 				] 
 				loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
-					(self _auditLoadedClassMethod: aLoadedMethod forBehavior: aBehavior class loadedClass: loadedClass) ifNotNil: [:x | res add: x]
+					(self _auditLoadedClassMethod: aLoadedMethod forBehavior: aBehavior class loadedClass: loadedClass) ifNotNil: [:x | self errorLog: res add: x]
 				]
 		].
 		^res
-
 ]

@@ -66,9 +66,11 @@ RwClsAuditTool >> _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavi
 		ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Superclass is different from loaded class'].
 	((aLoadedClass propertyAt: 'instvars') = (aBehavior instVarNames collect: [:e | e asString]) ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'instVarNames changed in compiled class v loaded class'].
+false ifTrue: [
 	((aLoadedClass propertyAt: 'classvars') = ((aBehavior.classVars ifNil: [SymbolDictionary new]) 
 			keys collect: [:e | e asString])  asArray) ifFalse: [
 				self errorLog: res  add: aLoadedClass name -> 'ClassVars changed in compiled class v loaded class'].
+].
 	((aLoadedClass propertyAt: 'pools') = ((aBehavior.poolDictionaries ifNil: [Array new]) collect: [:e | e asString]) ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'PoolDictionaries changed in compiled class v loaded class'].
 	((aLoadedClass propertyAt: 'comment' ifAbsent: ['']) isEquivalent: aBehavior comment ) 
@@ -135,14 +137,13 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 		"audit loaded class methods"
 		aLoadedClass 
 			loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | (aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil) 
-					ifNil: [(self _auditLoadedInstanceMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:a | res add: a]]]
+					ifNil: [(self _auditLoadedInstanceMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:a | self errorLog: res add: a ]]]
 
 			loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil) 
-					ifNil: [(self _auditLoadedClassMethod: aLoadedMethod forBehavior: aBehavior class loadedClass: loadedClass)  ifNotNil: [:a | res add: a]]
+					ifNil: [(self _auditLoadedClassMethod: aLoadedMethod forBehavior: aBehavior class loadedClass: loadedClass)  ifNotNil: [:a | self errorLog: res add: a ]]
 			]
 	].
 	^res
-
 ]
 
 { #category : 'other' }

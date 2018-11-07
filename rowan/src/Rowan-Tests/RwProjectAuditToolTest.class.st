@@ -1,14 +1,11 @@
+"
+testing audit api
+"
 Class {
 	#name : 'RwProjectAuditToolTest',
 	#superclass : 'RwBrowserToolTest',
 	#category : 'Rowan-Tests'
 }
-
-{ #category : 'other' }
-RwProjectAuditToolTest class >> comment [
-
-	^'testing audit api'
-]
 
 { #category : 'tests' }
 RwProjectAuditToolTest >> testClassBadExtension [
