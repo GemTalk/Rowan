@@ -921,7 +921,7 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 											'Unexpected loaded class ' , loadedClass name printString , ' in '
 												, packageName2 ] ] ]
 				ifFalse: [ self assert: false description: 'No class expected in ' , packageName2 ] ]
-		loadedClassExtenstionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
+		loadedClassExtensionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
 			self assert: theLoadedProject == loadedProject.
 			self assert: theLoadedPackage == loadedPackage.
 			self
@@ -1025,7 +1025,7 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 											'Unexpected loaded class ' , loadedClass name printString , ' in '
 												, packageName2 ] ] ]
 				ifFalse: [ self assert: false description: 'No class expected in ' , packageName2 ] ]
-		loadedClassExtenstionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
+		loadedClassExtensionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
 			self assert: theLoadedProject == loadedProject.
 			self assert: theLoadedPackage == loadedPackage.
 			self
@@ -1098,7 +1098,6 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 	self should: [ normalInstance2 biff ] raise: MessageNotUnderstood.
 
 	writtenStateValidationBlock value	"verify that original state is restored"
-
 ]
 
 { #category : 'tests' }
@@ -1186,7 +1185,7 @@ RwHybridBrowserToolTest >> testHybridDeletePackage [
 					loadedPackage name = packageName2
 						ifTrue: [ self assert: loadedClass name = className2 ]
 						ifFalse: [ self assert: false description: 'unexpected package ' , loadedPackage name ] ] ]
-		loadedClassExtenstionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
+		loadedClassExtensionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
 			self assert: false description: 'no class extensions expected in package '.
 			loadedPackage name ]
 		loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod | 
@@ -2633,7 +2632,7 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 					self assert: loadedClass name = className.
 					self assert: (loadedClass propertyAt: 'instvars') isEmpty ]
 				ifFalse: [ self assert: false description: 'No class expected in ' , packageName2 ] ]
-		loadedClassExtenstionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
+		loadedClassExtensionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
 			self assert: theLoadedProject == loadedProject.
 			self assert: theLoadedPackage == loadedPackage.
 			self
@@ -2723,7 +2722,7 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 					self assert: loadedClass name = className.
 					self assert: (loadedClass propertyAt: 'instvars') = #('ivar1') ]
 				ifFalse: [ self assert: false description: 'No class expected in ' , packageName2 ] ]
-		loadedClassExtenstionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
+		loadedClassExtensionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
 			self assert: theLoadedProject == loadedProject.
 			self assert: theLoadedPackage == loadedPackage.
 			self
@@ -2772,7 +2771,6 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 	self should: [ normalClass baz = 'baz' ] raise: MessageNotUnderstood.
 
 	writtenStateValidationBlock value	"verify that original state is restored"
-
 ]
 
 { #category : 'tests' }

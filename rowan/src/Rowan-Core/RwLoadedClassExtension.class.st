@@ -83,17 +83,30 @@ RwLoadedClassExtension >> loadedInstanceMethodsDo: loadedInstanceMethodBlock loa
 	loadedInstanceMethods
 		valuesDo: [ :loadedMethod | 
 			loadedInstanceMethodBlock
-				cull: self loadedProject
+				cull: self loadedProject 
 				cull: self loadedPackage
-				cull: self
-				cull: loadedMethod ].
+				cull: self 
+				cull: loadedMethod
+				
+	].
 	loadedClassMethods
 		valuesDo: [ :loadedMethod | 
 			loadedClassMethodBlock
 				cull: self loadedProject
 				cull: self loadedPackage
-				cull: self
-				cull: loadedMethod ]
+				cull: self 
+				cull: loadedMethod 
+				
+	].
+
+]
+
+{ #category : 'private' }
+RwLoadedClassExtension >> loadedMethodAt: aSelector isMeta: isMeta [
+
+	^ isMeta
+		ifTrue: [ loadedClassMethods at: aSelector ifAbsent: [nil]]
+		ifFalse: [ loadedInstanceMethods at: aSelector ifAbsent: [nil] ]
 ]
 
 { #category : 'accessing' }

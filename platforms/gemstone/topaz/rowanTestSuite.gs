@@ -4,11 +4,21 @@ run
 	[
 		Deprecated doErrorOnDeprecated.
 		projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' 'FileSystemGs' ).
+		"audit before load"
 		projectNames do: [:projectName |
-			"load test groups ... include deprecated packages for now"
+			| audit |
+			audit := Rowan projectTools audit auditForProjectNamed: projectName.
+			audit isEmpty ifFalse: [ self error: 'Pre load Rowan audit failed for project ', projectName printString ] ].
+		projectNames do: [:projectName |
+			"make sure test group is loaded ... include deprecated packages for now"
 			Rowan projectTools load
 				loadProjectNamed: projectName
 				withGroupNames: #('tests' 'deprecated' 'jadeServer') ].
+		"audit after load"
+		projectNames do: [:projectName |
+			| audit |
+			audit := Rowan projectTools audit auditForProjectNamed: projectName.
+			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 		res := suite run.

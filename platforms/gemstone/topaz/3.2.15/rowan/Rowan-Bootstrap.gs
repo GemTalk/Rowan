@@ -777,20 +777,16 @@ commit
 		"mark projects and packages not dirty"
 		loadedProject markNotDirty.
 		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
-	
 
-  true
-    ifTrue: [
-      | incorrectlyPackaged |
-      "quick and dirty validation that Rowan loaded with Rowan is correct"
-      incorrectlyPackaged := (ClassOrganizer new classes 
-	select: [:cl | 
-		(cl name asString beginsWith: 'Rw') 
-			or: [cl name asString beginsWith: 'Rowan' ]])
-	select: [:cl | 
-		(Rowan image loadedClassNamed: cl name asString ifAbsent: [])
-			handle ~~ cl ].
-      incorrectlyPackaged isEmpty ifFalse: [ self error: 'Rowan is not correctly packaged' ] ].
+	projectSetDefinition projects
+		do: [:projectDefinition |
+			| audit projectName |
+			projectName := projectDefinition name.
+			GsFile gciLogServer: '---Auditing project: ', projectName printString.
+			audit := Rowan projectTools audit auditForProjectNamed: projectName.
+			GsFile gciLogServer: '	-- audit finished '. 
+			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ]
+	
 %
   commit
 

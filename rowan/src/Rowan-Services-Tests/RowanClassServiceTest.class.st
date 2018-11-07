@@ -4,6 +4,11 @@ Class {
 	#category : 'Rowan-Services-Tests'
 }
 
+{ #category : 'patch' }
+RowanClassServiceTest >> createClassNamed: className [
+
+]
+
 { #category : 'support' }
 RowanClassServiceTest >> setUp [
 
