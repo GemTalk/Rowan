@@ -7258,7 +7258,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7344,6 +7344,9 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests-issue 353' }
@@ -7353,7 +7356,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7437,6 +7440,9 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests-issue 353' }
@@ -7446,7 +7452,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7564,6 +7570,598 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+]
+
+{ #category : 'tests-issue 353' }
+RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_method_deletion_D [
+
+	"new test case: both superclass and subclass have new class versions and method removed from each sublclass"
+	"https://github.com/dalehenrich/Rowan/issues/353"
+
+	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+
+	projectName := 'Issue326'.
+	packageName := 'Issue326-Core'.
+	className1 := 'Issue326Class1'.
+	className2 := 'Issue326Class2'.
+	className3 := 'Issue326Class3'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: 'SuperMan'
+			super: 'Object'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		yourself.
+
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className1
+			super: 'SuperMan'
+			instvars: #(ivar4 ivar6)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		yourself.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method4'
+					protocol: 'accessing'
+					source: 'method4 ^3').
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method5'
+					protocol: 'accessing'
+					source: 'method5 ^2').
+
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className2
+			super: 'SuperMan'
+			instvars: #(ivar1 ivar5 ivar3)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		yourself.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method3'
+					protocol: 'accessing'
+					source: 'method3 ^3').
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method2'
+					protocol: 'accessing'
+					source: 'method2 ^2').
+
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+
+"new class version of SuperMan and remove methods"
+	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at: className1.
+	classDefinition instVarNames: #(ivar4).
+	classDefinition
+		removeInstanceMethod: #method4;
+		removeClassMethod: #method5;
+		yourself.
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at: className2.
+	classDefinition instVarNames: #(ivar1 ivar5).
+	classDefinition
+		removeInstanceMethod: #method3;
+		removeClassMethod: #method2;
+		yourself.
+
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at: 'SuperMan'.
+	classDefinition instVarNames: #(ivar0).
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+]
+
+{ #category : 'tests-issue 393' }
+RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_extension_method_deletion_A [
+
+	"new test case:superclass has new class version ... the subclass has an extension method removed --- simplest case"
+	"https://github.com/dalehenrich/Rowan/issues/393"
+
+	| projectName  packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3 
+		projectSetDefinition class1 oldClass1 oldClass2 oldClass3 newClass1 audit classExtensionDefinition |
+
+	projectName := 'Issue326'.
+	packageName1 := 'Issue326-Core'.
+	packageName2 := 'Issue326-Extension'.
+	className1 := 'Issue326Class1'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName1.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: 'SuperMan'
+			super: 'Object'
+			instvars: #(ivar0)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		yourself.
+
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className1
+			super: 'SuperMan'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		yourself.
+
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	packageDefinition := projectDefinition packageNamed: packageName2.
+
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: '*', packageName2 asLowercase
+					source: 'method1 ^1').
+
+	packageDefinition 
+		addClassExtension: classExtensionDefinition.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+
+"new class version of SuperMan and remove extension method"
+	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	classDefinition := (projectDefinition packageNamed: packageName1) classDefinitions at: className1.
+
+	classDefinition := (projectDefinition packageNamed: packageName1) classDefinitions at: 'SuperMan'.
+	classDefinition instVarNames: #().
+
+	classExtensionDefinition := (projectDefinition packageNamed: packageName2) classExtensions at:className1.
+	classExtensionDefinition
+		removeInstanceMethod: #method1;
+		yourself.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+]
+
+{ #category : 'tests-issue 393' }
+RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_method_deletion_E [
+
+	"new test case:superclass has new class version ... each subclass has methods removed"
+	"https://github.com/dalehenrich/Rowan/issues/393"
+
+	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+
+	projectName := 'Issue326'.
+	packageName := 'Issue326-Core'.
+	className1 := 'Issue326Class1'.
+	className2 := 'Issue326Class2'.
+	className3 := 'Issue326Class3'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: 'SuperMan'
+			super: 'Object'
+			instvars: #(ivar0)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		yourself.
+
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className1
+			super: 'SuperMan'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		yourself.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method4'
+					protocol: 'accessing'
+					source: 'method4 ^3').
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method5'
+					protocol: 'accessing'
+					source: 'method5 ^2').
+
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className2
+			super: 'SuperMan'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		yourself.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method3'
+					protocol: 'accessing'
+					source: 'method3 ^3').
+	classDefinition
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method2'
+					protocol: 'accessing'
+					source: 'method2 ^2').
+
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+
+"new class version of SuperMan and remove methods"
+	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at: className1.
+	classDefinition
+		removeInstanceMethod: #method4;
+		removeClassMethod: #method5;
+		yourself.
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at: className2.
+	classDefinition
+		removeInstanceMethod: #method3;
+		removeClassMethod: #method2;
+		yourself.
+
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at: 'SuperMan'.
+	classDefinition instVarNames: #().
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"validate"
+	self assert: ((Rowan image loadedClassNamed: className1) loadedInstanceMethods values select: [:loadedMethod | loadedMethod selector == #method4 ]) isEmpty
+]
+
+{ #category : 'tests-issue 393' }
+RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_method_deletion_F [
+
+	"new test case:superclass has new class version ... each subclass has SOME methods removed"
+	"https://github.com/dalehenrich/Rowan/issues/393"
+
+	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+
+	projectName := 'Issue326'.
+	packageName := 'Issue326-Core'.
+	className1 := 'Issue326Class1'.
+	className2 := 'Issue326Class2'.
+	className3 := 'Issue326Class3'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: 'SuperMan'
+			super: 'Object'
+			instvars: #(ivar0)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		yourself.
+
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className1
+			super: 'SuperMan'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		yourself.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method4'
+					protocol: 'accessing'
+					source: 'method4 ^3').
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method5'
+					protocol: 'accessing'
+					source: 'method5 ^2').
+
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className2
+			super: 'SuperMan'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		yourself.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method3'
+					protocol: 'accessing'
+					source: 'method3 ^3').
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method2'
+					protocol: 'accessing'
+					source: 'method2 ^2').
+
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+
+"new class version of SuperMan and remove methods"
+	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at: className1.
+	classDefinition
+		removeInstanceMethod: #method4;
+		yourself.
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at: className2.
+	classDefinition
+		removeInstanceMethod: #method3;
+		yourself.
+
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at: 'SuperMan'.
+	classDefinition instVarNames: #().
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"validate"
+	self assert: ((Rowan image loadedClassNamed: className1) loadedInstanceMethods values select: [:loadedMethod | loadedMethod selector == #method4 ]) isEmpty
+]
+
+{ #category : 'tests-issue 393' }
+RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_method_deletion_G [
+
+	"new test case:superclass has new class version ... the subclass has a method removed --- simplest case"
+	"https://github.com/dalehenrich/Rowan/issues/393"
+
+	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
+		projectSetDefinition class1 oldClass1 oldClass2 oldClass3 newClass1 audit |
+
+	projectName := 'Issue326'.
+	packageName := 'Issue326-Core'.
+	className1 := 'Issue326Class1'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: 'SuperMan'
+			super: 'Object'
+			instvars: #(ivar0)
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		yourself.
+
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := (RwClassDefinition
+		newForClassNamed: className1
+			super: 'SuperMan'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: 'category'
+			comment: 'comment'
+			pools: #()
+			type: 'normal')
+		yourself.
+	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method1'
+					protocol: 'accessing'
+					source: 'method1 ^1').
+
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+
+"new class version of SuperMan and remove method"
+	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at: className1.
+	classDefinition
+		removeInstanceMethod: #method1;
+		yourself.
+
+	classDefinition := (projectDefinition packageNamed: packageName) classDefinitions at: 'SuperMan'.
+	classDefinition instVarNames: #().
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests-issue 40' }

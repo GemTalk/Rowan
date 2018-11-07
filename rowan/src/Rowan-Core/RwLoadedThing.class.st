@@ -132,6 +132,12 @@ RwLoadedThing >> propertyAt: propertyName [
 ]
 
 { #category : 'accessing' }
+RwLoadedThing >> propertyAt: propertyName ifAbsent: aBlock [
+
+	^properties at: propertyName ifAbsent: aBlock
+]
+
+{ #category : 'accessing' }
 RwLoadedThing >> propertyAt: propertyName put: aValue [
 	"Value should be a string"
 

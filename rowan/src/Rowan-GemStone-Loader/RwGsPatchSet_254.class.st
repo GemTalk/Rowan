@@ -1187,7 +1187,6 @@ RwGsPatchSet_254 >> removeDeletedMethods [
 			methodDeletionPatch
 				deleteNewVersionMethodNewClasses: createdClasses
 				andExistingClasses: tempSymbols  ]
-
 ]
 
 { #category : 'private - applying' }

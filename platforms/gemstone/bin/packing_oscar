@@ -25,6 +25,7 @@ set -e
 # 1.1.1 candidate 2 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.1-candidate_2 v1.1.1-candidate_2 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.1.1 candidate 3 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.1-candidate_3 v1.1.1-candidate_3 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.2.0 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.0 v1.2.0 Oscar-3.0.40 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.2.1 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.1 v1.2.1 Oscar-3.0.45 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
@@ -124,8 +125,9 @@ validate_tag Rowan Rowan "$rowan_tag" $rowanDeploymentBranch
 
 # create Jadeite runtime directory
 jadeite_runtime_dirName="Jadeite_runtime_${jadeite_tag}"
-cp -r ~/ubs/runtime  "$jadeite_runtime_dirName"
-wget https://github.com/GemTalk/Jadeite/releases/download/"$jadeite_tag"/Jadeite.exe -P "$jadeite_runtime_dirName"
+wget https://github.com/GemTalk/Jadeite/releases/download/"$jadeite_tag"/runtime.zip
+unzip runtime.zip
+mv runtime "$jadeite_runtime_dirName"
 
 echo "" >> MANIFEST.TXT
 echo "------------------------------" >> MANIFEST.TXT
