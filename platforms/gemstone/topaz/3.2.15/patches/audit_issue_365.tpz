@@ -10,7 +10,6 @@ output pushnew audit_issue_365.out
 	run
 	|  res loadedPackage loadedProject auditLoadedClassBlock auditLoadedClassExtensionBlock |
 	GsFile gciLogServer: '--STARTING ROWAN AUDIT'.
-	res := KeyValueDictionary new.
 	auditLoadedClassBlock := [:aLoadedClass |
 		| ar |
 		ar := {}.
@@ -19,6 +18,16 @@ output pushnew audit_issue_365.out
 				ar addAll: { 'Class does not exists ' -> aLoadedClass name }.
 				GsFile gciLogServer: 'Class does not exist ', aLoadedClass name ]
 			ifNotNil: [:aBehavior |
+				| lc |
+				(lc := Rowan image loadedClassNamed: aLoadedClass name ifAbsent: []) == aLoadedClass
+					ifFalse: [
+						lc isNil
+							ifTrue: [ 
+								ar addAll: { 'Loaded class not registered'  -> aLoadedClass name  }.
+								GsFile gciLogServer: 'Loaded class not registered ', aLoadedClass name ]
+							ifFalse: [ 
+								ar addAll: { 'Loaded class not identical to registered class '  -> aLoadedClass name  }.
+								GsFile gciLogServer: 'Loaded class not identical to registered class ', aLoadedClass name ] ].
 				"check for non-extension methods that are not packaged in Rowan" 
 				(aBehavior selectors reject: [:e |  
 					((aBehavior categoryOfSelector: e) first == $*) or: [
@@ -54,7 +63,18 @@ output pushnew audit_issue_365.out
 				ar addAll: { 'Class does not exists '-> aLoadedClassExtension name }.
 				GsFile gciLogServer: 'Class does not exist ', aLoadedClassExtension name ]
 			ifNotNil: [ :aBehavior |
-				| selectors extensionCategoryName |
+				| selectors extensionCategoryName les |
+				les := nil.
+				((Rowan image loadedClassExtensionsNamed: aLoadedClassExtension name ifFound: [:set | les := set ]  ifAbsent: [ #() ]) includesIdentical: aLoadedClassExtension)
+					ifFalse: [
+						les isNil
+							ifTrue: [ 
+								ar addAll: { 'Loaded class extension not registered'  -> aLoadedClassExtension name  }.
+								GsFile gciLogServer: 'Loaded class not registered ', aLoadedClassExtension name ]
+							ifFalse: [ 
+								ar addAll: { 'Loaded class extension not identical to registered class '  -> aLoadedClassExtension name  }.
+								GsFile gciLogServer: 'Loaded class not identical to registered class ', aLoadedClassExtension name ] ].
+
 				extensionCategoryName := '*', aLoadedClassExtension loadedPackage name asLowercase.
 
 				((aBehavior _baseCategorys: 0) keys
@@ -129,10 +149,23 @@ output pushnew audit_issue_365.out
 								GsFile gciLogServer: 'Missing compiled  class method ', loadedClass name, ' class>>', aLoadedMethod name ] ] ].
 		ar ].
 		
+
+	res := Dictionary new.
 	Rowan projectNames do: [:projectName |
 		GsFile gciLogServer: '---Auditing project: ', projectName printString.
 		loadedProject := Rowan image loadedProjectNamed: projectName.
 		loadedProject loadedPackages do: [:loadedPackage |
+			| lp |
+			GsFile gciLogServer: ' --Auditing package: ', loadedPackage name printString.
+			(lp := Rowan image loadedPackageNamed: loadedPackage name ifAbsent: []) == loadedPackage
+				ifFalse: [
+					lp isNil
+						ifTrue: [ 
+							res at: 'Package:', loadedPackage name put: { loadedPackage name  -> ' is missing from the package registry.' }.
+							GsFile gciLogServer: 'The package', loadedPackage name printString, ' is missing from the package registry.' ] 
+						ifFalse: [ 
+							res at: 'Package:', loadedPackage name put: { loadedPackage name  -> ' is not identical to the registered package.' }.
+							GsFile gciLogServer: 'The package', loadedPackage name printString, ' is not identical to the registered loaded package' ] ].
 			loadedPackage
 				loadedClasses
 					valuesDo: [:aLoadedClass |
