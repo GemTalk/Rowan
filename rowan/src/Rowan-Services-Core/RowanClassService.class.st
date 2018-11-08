@@ -696,7 +696,7 @@ RowanClassService >> saveMethodSource: source category: category [
 
 	| behavior compilationResult gsNMethod updatedCategory methodService |
 	meta ifNil:[
-				behavior := (Object _objectForOop: oop) behavior. 
+				behavior := (Object _objectForOop: oop). 
 				meta := behavior isMeta]
 			ifNotNil:[ 
 				behavior := meta ifTrue:[self classFromName class] ifFalse:[self classFromName]]. 
