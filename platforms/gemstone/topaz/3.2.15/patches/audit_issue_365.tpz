@@ -45,11 +45,21 @@ output pushnew audit_issue_365.out
 				aLoadedClass 
 					loadedInstanceMethodsDo: [ :loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
 						(aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil) 
+							ifNotNil: [:lm | 
+								(Rowan image loadedMethodForMethod: lm ifAbsent: [])
+									ifNil: [
+										ar addAll: { 'Loaded method not registered'  -> (aLoadedClass name, '>>', aLoadedMethod name)  }.
+										GsFile gciLogServer: 'Loaded method not registered ', aLoadedClass name, '>>', aLoadedMethod name ] ]
 							ifNil: [
 								ar addAll: { aLoadedMethod name  -> 'Missing compiled method: ' }.
 								GsFile gciLogServer: 'Missing compiled method ', loadedClass name, '>>', aLoadedMethod name ] ]
 					loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
 						(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil) 
+							ifNotNil: [:lm | 
+								(Rowan image loadedMethodForMethod: lm ifAbsent: []) 
+									ifNil: [
+										ar addAll: { 'Loaded class method not registered'  -> (aLoadedClass name,  ' class>>', aLoadedMethod name)  }.
+										GsFile gciLogServer: 'Loaded class method not registered ', aLoadedClass name,  ' class>>', aLoadedMethod name ] ]
 							ifNil: [
 								ar addAll: { aLoadedMethod name  -> 'Missing compiled classmethod ' }.
 								GsFile gciLogServer: 'Missing compiled method ', loadedClass name, ' class>>', aLoadedMethod name ] ] ].
@@ -139,11 +149,21 @@ output pushnew audit_issue_365.out
 				aLoadedClassExtension 
 					loadedInstanceMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
 						(aBehavior compiledMethodAt: aLoadedMethod name otherwise: nil) 
+							ifNotNil: [:lm | 
+								(Rowan image loadedMethodForMethod: lm ifAbsent: [])
+									ifNil: [
+										ar addAll: { 'Loaded extension method not registered'  -> (aLoadedClassExtension name, '>>', aLoadedMethod name)  }.
+										GsFile gciLogServer: 'Loaded extension method not registered ', aLoadedClassExtension name, '>>', aLoadedMethod name ] ]
 							ifNil: [
 								ar addAll: {aLoadedMethod name -> 'Missing compiled method: ' }.
 								GsFile gciLogServer: 'Missing compiled  method ', loadedClass name, '>>', aLoadedMethod name ] ]
 					loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
 						(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil) 
+							ifNotNil: [:lm | 
+								(Rowan image loadedMethodForMethod: lm ifAbsent: []) 
+									ifNil: [
+										ar addAll: { 'Loaded class extension method not registered'  -> (aLoadedClassExtension name,  ' class>>', aLoadedMethod name)  }.
+										GsFile gciLogServer: 'Loaded class extension method not registered ', aLoadedClassExtension name,  ' class>>', aLoadedMethod name ] ]
 							ifNil: [
 								ar addAll: { aLoadedMethod name -> 'Missing compiled class method: ' }.
 								GsFile gciLogServer: 'Missing compiled  class method ', loadedClass name, ' class>>', aLoadedMethod name ] ] ].
