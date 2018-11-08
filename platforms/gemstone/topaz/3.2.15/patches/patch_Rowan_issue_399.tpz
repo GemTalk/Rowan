@@ -29,8 +29,14 @@ output push patch_issue_399.out
 		methodRegistry := registry methodRegistry.
 		loadedProject := Rowan image loadedProjectNamed: projectName.
 		loadedProject loadedPackages do: [:loadedPackage |
-			(project symbolDictNameForPackageNamed: loadedPackage name) == #UserGlobals
+			| symDictName |
+			symDictName := project symbolDictNameForPackageNamed: loadedPackage name.
+			GsFile gciLogServer: ' --Checking package: ', loadedPackage name printString.
+			(symDictName = 'UserGlobals')
 				ifTrue: [
+
+					GsFile gciLogServer: ' -Repairing package: ', loadedPackage name printString.
+
 					packageRegistry 
 						at: loadedPackage name 
 						ifAbsentPut: [
