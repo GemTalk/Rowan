@@ -1,0 +1,47 @@
+output push patch_issue_365.out
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit 1
+	display oops
+
+  set u SystemUser p swordfish
+  login
+
+	run
+	"patch missing RwSymbolDictionaryRegistry in UserGlobals"
+	(UserGlobals at: #RwSymbolDictionaryRegistry ifAbsent: []) 
+		ifNotNil: [
+			GsFile gciLogServer: '---RwSymbolDictionaryRegistry is present in UserGlobals'.
+			^ true ].
+	GsFile gciLogServer: '---Patching missing RwSymbolDictionaryRegistry in UserGlobals'.
+
+	Rowan projectNames do: [:projectName |
+		| project loadedProject |
+		GsFile gciLogServer: '---Checking project: ', projectName printString.
+		project := RwProject newNamed: projectName.
+		loadedProject := Rowan image loadedProjectNamed: projectName.
+		loadedProject loadedPackages do: [:loadedPackage |
+			(project symbolDictNameForPackageNamed: loadedPackage name) == #UserGlobals
+				ifTrue: [
+
+					loadedPackage
+						loadedClasses
+							valuesDo: [:aLoadedClass |
+								 ].
+					loadedPackage
+						loadedClassExtensions
+							valuesDo: [:aLoadedClass | 
+								 ] ] ] ].
+
+	GsFile gciLogServer: '--Finished Patching missing RwSymbolDictionaryRegistry'.
+	true
+%
+  commit
+
+errorCount
+
+  logout
+
+output pop
+

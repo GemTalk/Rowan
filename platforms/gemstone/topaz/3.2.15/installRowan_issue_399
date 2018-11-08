@@ -8,10 +8,6 @@ export ROWAN_HOME="$(dirname $0)/../../../../"
 
 startTopaz $GEMSTONE_NAME -l << EOF
 
-
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/install_issue_365.tpz
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/audit_issue_365.tpz
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/patch_Rowan_issue_365.tpz
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/audit_issue_365.tpz
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/patch_Rowan_issue_399.tpz
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/audit_issue_365.tpz
@@ -24,7 +20,7 @@ startTopaz $GEMSTONE_NAME -l << EOF
 	true
 		ifTrue: [ (UserGlobals at: #ROWAN_AUDIT_issue_365_results) removeKey: 'RwUnmanagedProjectDefinition' ifAbsent: [] ].
 	(UserGlobals at: #ROWAN_AUDIT_issue_365_results) isEmpty
-		ifFalse: [ self error: 'Rowan Audit is not clean, please view dictionary ''UserGlobals at: #ROWAN_AUDIT_issue_365_results'' or log file for details.' ].
+		ifFalse: [ self error: 'Rowan Audit is not clean, please view dictionary ''UserGlobals at: #ROWAN_AUDIT_issue_399_results.out'' or log file for details.' ].
 	UserGlobals removeKey: #ROWAN_AUDIT_issue_365_results ifAbsent: [].
 	System commit
 %
