@@ -13,8 +13,6 @@ startTopaz $GEMSTONE_NAME -l << EOF
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/audit_issue_365.tpz
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/patch_Rowan_issue_365.tpz
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/audit_issue_365.tpz
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/patch_Rowan_issue_399.tpz
-  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/audit_issue_365.tpz
 
   set u SystemUser p swordfish
   login
