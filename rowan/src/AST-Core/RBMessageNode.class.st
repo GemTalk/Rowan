@@ -93,7 +93,7 @@ RBMessageNode >> bestNodeFor: anInterval [
 { #category : 'private' }
 RBMessageNode >> buildSelector [
 	| selectorStream |
-	selectorStream := AnsiWriteStream on: String new.
+	selectorStream := WriteStreamPortable on: String new.
 	selectorParts do: [ :each | selectorStream nextPutAll: each value ].
 	^ selectorStream contents asSymbol
 ]

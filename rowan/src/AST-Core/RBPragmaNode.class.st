@@ -62,7 +62,7 @@ RBPragmaNode >> arguments: aLiteralCollection [
 { #category : 'private' }
 RBPragmaNode >> buildSelector [
 	| selectorStream |
-	selectorStream := AnsiWriteStream on: String new.
+	selectorStream := WriteStreamPortable on: String new.
 	selectorParts do: [ :each | selectorStream nextPutAll: each value ].
 	^ selectorStream contents asSymbol
 ]

@@ -41,7 +41,7 @@ Class {
 RBProgramNode class >> formatterClass [
   ^ FormatterClass isNil
     ifTrue: [ RBConfigurableFormatter ]
-    ifFalse: [ ^ Smalltalk classNamed: FormatterClass name ]
+    ifFalse: [ ^ Rowan globalNamed: FormatterClass name ]
 ]
 
 { #category : 'accessing' }

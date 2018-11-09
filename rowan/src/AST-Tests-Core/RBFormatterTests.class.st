@@ -60,7 +60,7 @@ RBFormatterTests >> testCoreSystem [
   #(#'Object' #'Behavior' #'Boolean' #'Integer' #'SmallInteger' #'Collection' #'String')
     do: [ :each | 
       | class |
-      class := Smalltalk globals classNamed: each.
+      class := Rowan globalNamed: each.
       self
         formatClass: class;
         formatClass: class class ]
@@ -70,9 +70,7 @@ RBFormatterTests >> testCoreSystem [
 RBFormatterTests >> testIndexingSystem [
   #(#'IXCompoundQueryPredicateTests' #'IXGsClassicQueryBlockOptimizerTests' #'IXQueryBlockPredicateTests' #'IXQueryExpressionPrintStringTests' #'IXQueryExpressionTests' #'IXQueryPredicateTests')
     do: [ :each | 
-      Smalltalk
-        at: each
-        ifPresent: [ :class | 
+       (Rowan globalNamed: each) ifNotNil: [ :class | 
           class ifNotNilself
             formatClass: class;
             formatClass: class class ] ]

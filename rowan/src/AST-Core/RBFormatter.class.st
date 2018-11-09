@@ -404,7 +404,7 @@ RBFormatter >> indentWhile: aBlock [
 { #category : 'initialize-release' }
 RBFormatter >> initialize [
   super initialize.
-  codeStream := AnsiWriteStream on: String new.
+  codeStream := WriteStreamPortable on: String new.
   tabs := 0.
   lineStart := 0.
   inQueryBlock := false
@@ -512,7 +512,7 @@ RBFormatter >> newLinesFor: aString startingAt: anIndex [
 RBFormatter >> postCopy [
 	super postCopy.
 	lineStart := self lineLength negated.
-	codeStream := AnsiWriteStream on: String new.
+	codeStream := WriteStreamPortable on: String new.
 	firstLineLength := nil
 ]
 

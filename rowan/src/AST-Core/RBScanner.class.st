@@ -166,7 +166,7 @@ RBScanner >> classify: aCharacter [
 { #category : 'accessing' }
 RBScanner >> contents [
 	| contentsStream |
-	contentsStream := AnsiWriteStream on: String new.
+	contentsStream := WriteStreamPortable on: String new.
 	[ self atEnd ]
 		whileFalse: [ contentsStream nextPut: self next ].
 	^ contentsStream contents
@@ -234,7 +234,7 @@ RBScanner >> nextPut: anObject [
 
 { #category : 'initialize-release' }
 RBScanner >> on: aStream [ 
-	buffer := AnsiWriteStream on: String new.
+	buffer := WriteStreamPortable on: String new.
 	stream := aStream.
 	classificationTable := self class classificationTable.
 	comments := OrderedCollection new

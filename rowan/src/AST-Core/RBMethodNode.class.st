@@ -140,7 +140,7 @@ RBMethodNode >> body: stmtsNode [
 { #category : 'private' }
 RBMethodNode >> buildSelector [
 	| selectorStream |
-	selectorStream := AnsiWriteStream on: String new.
+	selectorStream := WriteStreamPortable on: String new.
 	selectorParts do: [:each | selectorStream nextPutAll: each value].
 	^selectorStream contents asSymbol
 ]
@@ -351,7 +351,7 @@ RBMethodNode >> references: aVariableName [
 { #category : 'private' }
 RBMethodNode >> reformatSource [
 	| stream newSource newTree |
-	stream := AnsiWriteStream on: String new.
+	stream := WriteStreamPortable on: String new.
 	stream
 		nextPutAll: (source
 			copyFrom: (replacements

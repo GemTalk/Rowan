@@ -741,7 +741,7 @@ RBConfigurableFormatter >> initialize [
 	lineStart := 0.
 	indent := 0.
 	lookaheadCode := IdentityDictionary new.
-	codeStream := AnsiWriteStream on: String new
+	codeStream := WriteStreamPortable on: String new
 ]
 
 { #category : 'private' }
@@ -763,7 +763,7 @@ RBConfigurableFormatter >> isMultiLineMessage: aMessageNode [
 		ifTrue: [ ^ true ].
 	aMessageNode isUnary
 		ifTrue: [ ^ self isLineTooLong: aMessageNode selector ].
-	messageStream := AnsiWriteStream on: String new.
+	messageStream := WriteStreamPortable on: String new.
 	self  with: aMessageNode selectorParts and: aMessageNode arguments 
 		do: [ :sel :arg | messageStream nextPutAll: sel value; space; nextPutAll: (self formattedSourceFor: arg) ]
 		separatedBy: [ messageStream space ].

@@ -413,7 +413,7 @@ RBParser >> parseKeywordPragma [
 RBParser >> parseLiteralArray [
 	| stream start stop |
 	start := currentToken start.
-	stream := AnsiWriteStream on: Array new.
+	stream := WriteStreamPortable on: Array new.
 	self step.
 	[self atEnd or: [currentToken isSpecial and: [currentToken value = $)]]] 
 		whileFalse: [stream nextPut: self parseLiteralArrayObject].
@@ -447,7 +447,7 @@ RBParser >> parseLiteralArrayObject [
 RBParser >> parseLiteralByteArray [
 	| stream start stop |
 	start := currentToken start.
-	stream := AnsiWriteStream on: Array new.
+	stream := WriteStreamPortable on: Array new.
 	self step.
 	[self atEnd or: [currentToken isSpecial and: [currentToken value = $]]]] 
 		whileFalse: [stream nextPut: self parseLiteralByteArrayObject].
