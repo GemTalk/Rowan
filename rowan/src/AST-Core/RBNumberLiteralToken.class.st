@@ -17,6 +17,11 @@ RBNumberLiteralToken class >> value: aNumber start: anInteger stop: stopInteger 
 		yourself
 ]
 
+{ #category : 'printing' }
+RBNumberLiteralToken >> rbStoreOn: aStream [ 
+	aStream nextPutAll: source
+]
+
 { #category : 'accessing' }
 RBNumberLiteralToken >> source [
 	^source
@@ -25,9 +30,4 @@ RBNumberLiteralToken >> source [
 { #category : 'initialize-release' }
 RBNumberLiteralToken >> source: aString [ 
 	source := aString
-]
-
-{ #category : 'printing' }
-RBNumberLiteralToken >> storeOn: aStream [ 
-	aStream nextPutAll: source
 ]

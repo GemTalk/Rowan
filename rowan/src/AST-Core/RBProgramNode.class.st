@@ -49,6 +49,12 @@ RBProgramNode class >> formatterClass: aClass [
 	FormatterClass := aClass
 ]
 
+{ #category : 'instance creation' }
+RBProgramNode class >> new [
+
+	^self basicNew initialize
+]
+
 { #category : 'accessing' }
 RBProgramNode class >> optimizedSelectors [
 	^ #( and: caseOf: caseOf:otherwise: ifFalse: ifFalse:ifTrue: ifNil: ifNil:ifNotNil: ifNotNil: ifNotNil:ifNil: ifTrue: ifTrue:ifFalse: or: to:by:do: to:do: whileFalse whileFalse: whileTrue whileTrue: )
@@ -301,6 +307,10 @@ RBProgramNode >> hasProperty: aKey [
 	"Test if the property aKey is present."
 	
 	^ properties notNil and: [ properties includesKey: aKey ]
+]
+
+{ #category : 'initialize release' }
+RBProgramNode >> initialize [
 ]
 
 { #category : 'testing' }

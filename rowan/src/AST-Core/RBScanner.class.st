@@ -85,7 +85,7 @@ RBScanner class >> initializeClassificationTable [
 RBScanner class >> initializeUnderscore [
   self classificationTable
     at: $_ asInteger
-    put: true
+    put: #'alphabetic' 
 "
       ((Scanner isLiteralSymbol: '_')
         ifTrue: [ #'alphabetic' ]

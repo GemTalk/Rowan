@@ -110,7 +110,7 @@ RBFormatter >> acceptLiteralArrayNode: aRBArrayLiteralNode [
 
 { #category : 'visitor-double dispatching' }
 RBFormatter >> acceptLiteralNode: aLiteralNode [ 
-	aLiteralNode token storeOn: codeStream
+	aLiteralNode token rbStoreOn: codeStream
 ]
 
 { #category : 'visitor-double dispatching' }

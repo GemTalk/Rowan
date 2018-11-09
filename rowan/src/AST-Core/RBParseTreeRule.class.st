@@ -25,6 +25,12 @@ RBParseTreeRule class >> methodSearch: aString [
 ]
 
 { #category : 'instance creation' }
+RBParseTreeRule class >> new [
+
+	^self basicNew initialize
+]
+
+{ #category : 'instance creation' }
 RBParseTreeRule class >> search: aString [ 
 	^(self new)
 		searchString: aString;
@@ -44,6 +50,10 @@ RBParseTreeRule >> context [
 { #category : 'matching' }
 RBParseTreeRule >> foundMatchFor: aProgramNode [
 	^aProgramNode
+]
+
+{ #category : 'initialize-release' }
+RBParseTreeRule >> initialize [
 ]
 
 { #category : 'initialize-release' }

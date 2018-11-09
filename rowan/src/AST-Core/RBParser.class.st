@@ -28,6 +28,12 @@ Class {
 	#category : 'AST-Core-Parser'
 }
 
+{ #category : 'instance creation' }
+RBParser class >> new [
+
+	^self basicNew initialize
+]
+
 { #category : 'accessing' }
 RBParser class >> parseExpression: aString [ 
 	^self parseExpression: aString onError: nil
@@ -465,7 +471,7 @@ RBParser >> parseLiteralByteArray [
 { #category : 'private-parsing' }
 RBParser >> parseLiteralByteArrayObject [
 	(currentToken isLiteralToken and: 
-			[currentToken value isInteger and: [currentToken value between: 0 and: 255]]) 
+			[currentToken value _isInteger and: [currentToken value between: 0 and: 255]]) 
 		ifFalse: [self parserError: 'Expecting 8-bit integer'].
 	^self parsePrimitiveLiteral
 ]

@@ -1,1 +1,1 @@
-Package { #name : 'AST-Core' }
+Package { #name : 'AST-Kernel-Core' }

@@ -9,6 +9,12 @@ Class {
 	#category : 'AST-Core-Visitors'
 }
 
+{ #category : 'instance creation' }
+RBProgramNodeVisitor class >> new [
+
+	^self basicNew initialize
+]
+
 { #category : 'visitor-double dispatching' }
 RBProgramNodeVisitor >> acceptArrayNode: anArrayNode [ 
 	anArrayNode children do: [:each | self visitNode: each]
@@ -92,6 +98,10 @@ RBProgramNodeVisitor >> acceptSequenceNode: aSequenceNode [
 
 { #category : 'visitor-double dispatching' }
 RBProgramNodeVisitor >> acceptVariableNode: aVariableNode [
+]
+
+{ #category : 'initialize release' }
+RBProgramNodeVisitor >> initialize [
 ]
 
 { #category : 'visiting' }

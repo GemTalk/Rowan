@@ -51,18 +51,8 @@ RBLiteralToken >> length [
 	^stopPosition - self start + 1
 ]
 
-{ #category : 'accessing' }
-RBLiteralToken >> realValue [
-	^value
-]
-
-{ #category : 'accessing' }
-RBLiteralToken >> stop: anObject [ 
-	stopPosition := anObject
-]
-
 { #category : 'printing' }
-RBLiteralToken >> storeOn: aStream [
+RBLiteralToken >> rbStoreOn: aStream [
     value isSymbol
         ifTrue: [ 
             aStream nextPut: $#.
@@ -74,7 +64,17 @@ RBLiteralToken >> storeOn: aStream [
                 nextPut: $$;
                 nextPut: value.
             ^ self ].
-    value squeakStoreOn: aStream
+    value rbStoreOn: aStream
+]
+
+{ #category : 'accessing' }
+RBLiteralToken >> realValue [
+	^value
+]
+
+{ #category : 'accessing' }
+RBLiteralToken >> stop: anObject [ 
+	stopPosition := anObject
 ]
 
 { #category : 'initialize-release' }
