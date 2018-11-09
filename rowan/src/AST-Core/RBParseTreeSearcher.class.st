@@ -25,7 +25,7 @@ Class {
 RBParseTreeSearcher class >> buildSelectorString: aSelector [ 
 	| stream keywords |
 	aSelector numArgs = 0 ifTrue: [^aSelector].
-	stream := AnsiWriteStream on: String new.
+	stream := WriteStreamPortable on: String new.
 	keywords := aSelector keywords.
 	1 to: keywords size
 		do: 

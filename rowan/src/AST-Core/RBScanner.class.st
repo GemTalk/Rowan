@@ -65,7 +65,7 @@ RBScanner class >> initializeClassificationTable [
   PatternVariableCharacter := $`.
   classificationTable := Array new: 255.
   self
-    initializeChars: (Character allCharacters select: [ :each | each isLetter ])
+    initializeChars: (((0 to: 255) collect: [ :v | Character codePoint: v ]) select: [ :each | each isLetter ])
     to: #'alphabetic'.
   self initializeUnderscore.
   self initializeChars: '01234567890' to: #'digit'.
@@ -77,7 +77,7 @@ RBScanner class >> initializeClassificationTable [
   self initializeChars: '().:;[]{}^' to: #'special'.
   self
     initializeChars:
-      (Character allCharacters select: [ :each | each isSqueakSeparator ])
+      (((1 to: 255) collect: [ :v | Character codePoint: v ]) select: [ :each | each isSeparator ])
     to: #'separator'
 ]
 
@@ -85,10 +85,12 @@ RBScanner class >> initializeClassificationTable [
 RBScanner class >> initializeUnderscore [
   self classificationTable
     at: $_ asInteger
-    put:
+    put: true
+"
       ((Scanner isLiteralSymbol: '_')
         ifTrue: [ #'alphabetic' ]
         ifFalse: [ #'special' ])
+"
 ]
 
 { #category : 'testing' }
@@ -394,7 +396,7 @@ RBScanner >> scanNumber [
 	| start number stop string |
 	start := stream position.
 	stream position: start - 1.
-	number := SqNumberParser parse: stream.
+	number := Number fromStream: stream.
 	stop := stream position.
 	stream position: start - 1.
 	string := stream next: stop - start + 1.
