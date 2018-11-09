@@ -32,6 +32,7 @@
 		[ 'gemstone' ] : {
                         'core': {
 				#packageNames : [
+					'AST-Core',
 					'Rowan-Services-Extensions',
 					'Rowan-Services-Core',
 					'Rowan-GemStone-Core',

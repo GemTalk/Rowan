@@ -595,7 +595,7 @@ currentOrNil
     value: #('GemStone-Interactions-Core' 'Rowan-Url-3215' 
       'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 'Rowan-Core-Definitions-Extensions'
       'Rowan-Services-Core' 'Rowan-Url-Extensions'
-      'Rowan-Services-Extensions'
+      'Rowan-Services-Extensions' 'AST-Core' 'AST-Tests-Core'
 	).	"Populate with Rowan implementation classes"
 %
   commit

@@ -6,7 +6,8 @@
 			'tests' : {
 				#packageNames : [
 					'Rowan-Tests',
-					'Rowan-Services-Tests'
+					'Rowan-Services-Tests',
+					'AST-Tests-Core'
 					]
 				}
 			}
