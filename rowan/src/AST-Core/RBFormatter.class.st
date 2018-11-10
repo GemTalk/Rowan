@@ -491,13 +491,13 @@ RBFormatter >> needsParenthesisFor: aNode [
 { #category : 'private-formatting' }
 RBFormatter >> newLinesFor: aString startingAt: anIndex [ 
 	| count cr lf index char |
-	cr := Character value: 13.
-	lf := Character value: 10.
+	cr := Character codePoint: 13.
+	lf := Character codePoint: 10.
 	count := 0.
 	index := anIndex - 1.
 	[index > 0 and: 
 			[char := aString at: index.
-			char isSqueakSeparator]] 
+			char isSeparator]] 
 		whileTrue: 
 			[char == lf 
 				ifTrue: 

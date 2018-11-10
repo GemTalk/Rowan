@@ -388,7 +388,7 @@ RBConfigurableFormatter >> acceptLiteralArrayNode: aRBArrayLiteralNode [
 
 { #category : 'visitor-double dispatching' }
 RBConfigurableFormatter >> acceptLiteralNode: aLiteralNode [ 
-	self writeString: aLiteralNode token storeString
+	self writeString: aLiteralNode token rbStoreString
 ]
 
 { #category : 'visitor-double dispatching' }

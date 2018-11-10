@@ -101,6 +101,19 @@ RBToken >> printOn: aStream [
 		nextPutAll: self class name
 ]
 
+{ #category : 'printing' }
+RBToken >> rbStoreString [
+
+"Returns a string that, when evaluated, will recreate a copy of the
+ receiver.  The default is to use storeOn: to create the description."
+
+| stream str |
+str := String new.
+stream := WriteStreamPortable on: str.
+self rbStoreOn: stream.
+^str
+]
+
 { #category : 'accessing' }
 RBToken >> removePositions [
 	sourcePointer := nil
