@@ -149,7 +149,7 @@ RBParser >> initialize [
 { #category : 'accessing' }
 RBParser >> initializeParserWith: aString [ 
 	source := aString.
-	self scanner: (self scannerClass on: aString readStream
+	self scanner: (self scannerClass on: aString readStreamPortable
 				errorBlock: self errorBlock)
 ]
 

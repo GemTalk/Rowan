@@ -57,3 +57,10 @@ SequenceableCollection >> rbStoreOn: aStream [
   aStream nextPut: $)
 
 ]
+
+{ #category : '*ast-kernel-core' }
+SequenceableCollection >> readStreamPortable [
+
+	^ ReadStreamPortable on: self
+
+]

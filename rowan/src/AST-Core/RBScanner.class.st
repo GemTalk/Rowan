@@ -97,7 +97,7 @@ RBScanner class >> initializeUnderscore [
 RBScanner class >> isSelector: aSymbol [ 
 	| scanner token |
 	scanner := self basicNew.
-	scanner on: aSymbol asString readStream.
+	scanner on: aSymbol asString readStreamPortable.
 	scanner step.
 	token := scanner scanAnySymbol.
 	token isLiteralToken ifFalse: [^false].
@@ -108,7 +108,7 @@ RBScanner class >> isSelector: aSymbol [
 { #category : 'testing' }
 RBScanner class >> isVariable: aString [ 
 	| scanner token |
-	scanner := self on: aString readStream errorBlock: [:s :p | ^false].
+	scanner := self on: aString readStreamPortable errorBlock: [:s :p | ^false].
 	token := scanner next.
 	token isIdentifier ifFalse: [^false].
 	(token start = 1 and: [token stop = aString size]) ifFalse: [^false].
