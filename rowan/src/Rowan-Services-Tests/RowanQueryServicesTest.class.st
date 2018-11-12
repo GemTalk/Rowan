@@ -19,6 +19,29 @@ RowanQueryServicesTest >> test_hierarchyImplementors [
 ]
 
 { #category : 'tests' }
+RowanQueryServicesTest >> test_hierarchyImplementorsGetsAllSubclasses [
+	"was missing subclasses of subclasses" 
+
+	| queryService subclassesImplementing |
+	self jadeiteIssueTested: #issue242 withTitle: '`implementors in hierarchy` doesn''t include method in the currently selected class?'.
+	queryService := RowanQueryService new organizer: ClassOrganizer new. 
+	queryService hierarchyImplementorsOf: #initialize inClass: 'RwLoadedThing'.
+	subclassesImplementing := Array new. 
+	queryService queryResults do:[:methodService |
+		| classService |
+		self assert: methodService selector equals: #initialize.
+		classService := RowanClassService forClassNamed: methodService className.
+		subclassesImplementing add:  methodService className.
+		classService classHierarchy. 
+		self assert: (classService classHierarchyNames includes: 'RwLoadedThing')].
+	self assert: (subclassesImplementing includes: #RwLoadedThing). 
+	self assert: (subclassesImplementing includes: #RwLoadedProject). 
+	self assert: (subclassesImplementing includes: #RwGsLoadedSymbolDictPackage). 
+	self assert: (subclassesImplementing includes: #RwGsLoadedSymbolDictClass). 
+	self assert: (subclassesImplementing includes: #RwGsLoadedSymbolDictClassExtension).
+]
+
+{ #category : 'tests' }
 RowanQueryServicesTest >> test_hierarchySenders [
 
 	| queryService hierarchyClassNames |

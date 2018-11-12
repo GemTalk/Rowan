@@ -176,6 +176,16 @@ RowanClassService >> classHierarchy [
 ]
 
 { #category : 'Accessing' }
+RowanClassService >> classHierarchyNames [
+
+	| names |
+	names := Array new. 
+	hierarchyServices keys do:[:classService | 
+		classService == #nil ifFalse:[names add: classService name]].
+	^names
+]
+
+{ #category : 'Accessing' }
 RowanClassService >> classInstVarNames [
 	^classInstVarNames
 
