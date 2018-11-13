@@ -5,6 +5,15 @@ Class {
 }
 
 { #category : 'support' }
+RowanProjectServiceTest >> existingProjectNamed: projectName [
+
+	| projectService |
+	projectService := RowanProjectService newNamed: projectName. 
+	self assert: (Rowan image loadedProjectNamed: projectName) name equals: projectName.
+	^projectService
+]
+
+{ #category : 'support' }
 RowanProjectServiceTest >> projectServiceNamed: projectName [
 
 	| projectService |

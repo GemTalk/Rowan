@@ -117,7 +117,7 @@ RwPrjDeleteTool >> forceDeleteProjectSetDefinition: projectSetDefinitionToDelete
 			loadedClassedDo: [ :loadedProject :loadedPackage :loadedClass | 
 				"collect the classes defined in the project"
 				classesToDelete add: loadedClass handle currentVersion ] 
-			loadedClassExtenstionsDo: [:loadedProject :loadedPackage :loadedClassExtension | "ignored" ] 
+			loadedClassExtensionsDo: [:loadedProject :loadedPackage :loadedClassExtension | "ignored" ] 
 			loadedInstanceMethodsDo: [:loadedProject :loadedPackage :loadedClassOrClassExtension :loadedMethod |
 				loadedClassOrClassExtension isLoadedClassExtension
 					ifTrue: [ 
@@ -158,5 +158,4 @@ RwPrjDeleteTool >> forceDeleteProjectSetDefinition: projectSetDefinitionToDelete
 		(selectorDict at: 'class' ifAbsent: [ #() ]) do: [:selector |
 			GsFile gciLogServer: '		', selector asString printString.
 			behavior removeSelector: selector ] ].
-
 ]

@@ -45,6 +45,12 @@ RwLoadedPackage >> asDefinition [
 		classExtensions: self classExtensionDefinitions
 ]
 
+{ #category : 'other' }
+RwLoadedPackage >> asExtensionName [
+
+	^'*', self name asLowercase
+]
+
 { #category : 'private' }
 RwLoadedPackage >> classDefinitions [
 	"Create definitions from all of the classes I define, and answer the collection of them"
@@ -85,7 +91,7 @@ RwLoadedPackage >> key [
 ]
 
 { #category : 'enumeration' }
-RwLoadedPackage >> loadedClassedDo: loadedClassBlock loadedClassExtenstionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock [
+RwLoadedPackage >> loadedClassedDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock [
 
 	loadedClasses
 		valuesDo: [ :loadedClass | 
@@ -102,11 +108,54 @@ RwLoadedPackage >> loadedClassedDo: loadedClassBlock loadedClassExtenstionsDo: l
 			loadedClassExtension
 				loadedInstanceMethodsDo: loadedInstanceMethodBlock
 				loadedClassMethodsDo: loadedClassMethodBlock ]
+
 ]
 
 { #category : 'accessing' }
 RwLoadedPackage >> loadedClasses [
 	^loadedClasses
+
+]
+
+{ #category : 'enumeration' }
+RwLoadedPackage >> loadedClassesDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionBlock [ 
+
+	loadedClasses
+		valuesDo: [ :loadedClass | 
+			loadedClassBlock 
+				cull: loadedClass
+				cull: self loadedProject 
+				cull: self].
+	loadedClassExtensions
+		valuesDo: [ :loadedClassExtension | 
+			loadedClassExtensionBlock
+				cull: loadedClassExtension
+				cull: self loadedProject
+				cull: self ]
+
+]
+
+{ #category : 'enumeration' }
+RwLoadedPackage >> loadedClassesDo: loadedClassBlock loadedClassExtensionsDo: loadedClassExtensionBlock loadedInstanceMethodsDo: loadedInstanceMethodBlock loadedClassMethodsDo: loadedClassMethodBlock [
+
+	loadedClasses
+		valuesDo: [ :loadedClass | 
+			loadedClassBlock 
+				cull: loadedClass
+				cull: self loadedProject 
+				cull: self. 
+			loadedClass
+				loadedInstanceMethodsDo: loadedInstanceMethodBlock
+				loadedClassMethodsDo: loadedClassMethodBlock ].
+	loadedClassExtensions
+		valuesDo: [ :loadedClassExtension | 
+			loadedClassExtensionBlock
+				cull: loadedClassExtension
+				cull: self loadedProject
+				cull: self.
+			loadedClassExtension
+				loadedInstanceMethodsDo: loadedInstanceMethodBlock
+				loadedClassMethodsDo: loadedClassMethodBlock ]
 
 ]
 
