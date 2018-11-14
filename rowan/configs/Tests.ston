@@ -7,7 +7,8 @@
 				#packageNames : [
 					'Rowan-Tests',
 					'Rowan-Services-Tests',
-					'AST-Tests-Core'
+					'AST-Tests-Core',
+					'AST-Kernel-Tests-Core'
 					]
 				}
 			}
