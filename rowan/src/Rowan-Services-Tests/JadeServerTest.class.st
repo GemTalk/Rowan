@@ -12,7 +12,6 @@ JadeServerTest >> jadeiteServer [
 
 { #category : 'tests' }
 JadeServerTest >> test_jadeServerCanonicalLocation [
-	
 	self assert: (JadeServer theJadeiteServer isKindOf: JadeServer64bit32).
 	self assert: (JadeServer theJadeiteServer class canUnderstand: #updateFromSton:).
 	self assert: (JadeServer theJadeiteServer == (SessionTemps current at: #jadeiteServer))
