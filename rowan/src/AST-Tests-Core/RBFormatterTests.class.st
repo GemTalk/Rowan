@@ -46,6 +46,8 @@ RBFormatterTests >> formatMethodSource: source formatter: aFormatterClass expect
     parseMethod: (aFormatterClass new format: tree1)
     onError: [ :err :pos | self assert: false ].
   x := tree2 source.
+self assert: x size = expected size.
+1 to: x size do: [:index | | z y | self assert: (z := x at: index) = (y := expected at: index) ].
   self assert: x = expected.
   self assert: tree1 = tree2
 ]

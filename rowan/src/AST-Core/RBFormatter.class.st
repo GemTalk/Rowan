@@ -310,7 +310,7 @@ RBFormatter >> formatMethodCommentFor: aNode indentBefore: aBoolean [
 			aBoolean ifTrue: [self indent].
 			codeStream
 				nextPutAll: (aNode source copyFrom: each first to: each last);
-				cr.
+				lf.
 			aBoolean ifFalse: [self indent]]
 ]
 
@@ -346,7 +346,7 @@ RBFormatter >> formatStatementCommentFor: aNode [
 			[:each | 
 			| crs |
 			crs := self newLinesFor: source startingAt: each first.
-			(crs - 1 max: 0) timesRepeat: [codeStream cr].
+			(crs - 1 max: 0) timesRepeat: [codeStream lf].
 			crs == 0 ifTrue: [codeStream tab] ifFalse: [self indent].
 			codeStream nextPutAll: (source copyFrom: each first to: each last)]
 ]
@@ -384,7 +384,7 @@ RBFormatter >> formatTemporariesFor: aSequenceNode [
 { #category : 'private' }
 RBFormatter >> indent [
 	firstLineLength isNil ifTrue: [firstLineLength := codeStream position].
-	codeStream cr.
+	codeStream lf.
 	tabs timesRepeat: [codeStream tab].
 	lineStart := codeStream position
 ]

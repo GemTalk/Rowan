@@ -746,7 +746,7 @@ RBConfigurableFormatter >> initialize [
 
 { #category : 'private' }
 RBConfigurableFormatter >> isLineTooLong: aString [ 
-	^ self currentLineLength + (aString indexOf: Character cr ifAbsent: [ aString size ]) >= MaxLineLength
+	^ self currentLineLength + (aString indexOf: Character lf ifAbsent: [ aString size ]) >= MaxLineLength
 ]
 
 { #category : 'private-formatting' }
@@ -823,7 +823,7 @@ RBConfigurableFormatter >> newLine [
 { #category : 'private' }
 RBConfigurableFormatter >> newLines: anInteger [ 
 	anInteger + IndentString size = 0 ifTrue: [codeStream space].
-	anInteger timesRepeat: [codeStream cr].
+	anInteger timesRepeat: [codeStream lf].
 	lineStart := codeStream position.
 	indent timesRepeat: [codeStream nextPutAll: IndentString]
 ]
@@ -914,7 +914,7 @@ RBConfigurableFormatter >> with: firstCollection and: secondCollection do: aBloc
 { #category : 'private' }
 RBConfigurableFormatter >> writeString: aString [ 
 	| index |
-	index := aString lastIndexOf: Character cr ifAbsent: [0].
+	index := aString lastIndexOf: Character lf ifAbsent: [0].
 	codeStream nextPutAll: aString.
 	index > 0 
 		ifTrue: [lineStart := codeStream position - (aString size - index)]
