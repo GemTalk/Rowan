@@ -52,7 +52,7 @@ Number class >> rwFromStream: aStream [
       "found a radix separator"
       aStream next.
       ^ Integer
-        _finishFromStream: aStream
+        _rwFinishFromStream: aStream
         signFound: signFound
         factor: factor
         radix: integerPart ].
