@@ -24,6 +24,8 @@ set -e
 # 1.1.1 candidate $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.1-candidate v1.1.1-candidate Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.1.1 candidate 2 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.1-candidate_2 v1.1.1-candidate_2 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.1.1 candidate 3 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.1-candidate_3 v1.1.1-candidate_3 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.1.3 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.3 v1.1.3 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.1.4 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.4 v1.1.4 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.2.0 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.0 v1.2.0 Oscar-3.0.40 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.2.1 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.1 v1.2.1 Oscar-3.0.45 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.2.2 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.2 v1.2.2 Oscar-3.0.45 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
