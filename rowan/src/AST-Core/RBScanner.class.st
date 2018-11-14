@@ -396,7 +396,7 @@ RBScanner >> scanNumber [
 	| start number stop string |
 	start := stream position.
 	stream position: start - 1.
-	number := Number fromStream: stream.
+	number := Number rwFromStream: stream.
 	stop := stream position.
 	stream position: start - 1.
 	string := stream next: stop - start + 1.
