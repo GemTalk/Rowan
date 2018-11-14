@@ -56,7 +56,9 @@ output push patch_issue_406.out
 		ar size = 1
 			ifTrue: [
 				| theProjectSetDefinition |
-				theProjectSetDefinition := readTool readProjectSetForProjectNamed: specification specName.
+				theProjectSetDefinition := readTool 
+					readProjectSetForProjectNamed: specification specName  
+					withGroupNames: #('core'  'tests' 'deprecated'). "skip reading jadeServer group, since JadeServer classes missing"
 				theProjectSetDefinition
 					do: [:projectDefinition |
 						projectSetDefinition addProject: projectDefinition ].
@@ -124,8 +126,14 @@ output push patch_issue_406.out
 		"mark projects and packages not dirty"
 		loadedProject markNotDirty.
 		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
+
+	"Now reload Rowan including jadeServer group to get JadeServer classes properly installed"
+	Rowan projectTools load
+			loadProjectNamed: 'Rowan'
+			withGroupNames: #('core' 'tests' 'deprecated' 'jadeServer') 
 	
 %
+
   commit
 
 errorCount
