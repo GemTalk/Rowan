@@ -58,11 +58,16 @@ Number class >> rwFromStream: aStream [
         radix: integerPart ].
   (ch isEquivalent: (Locale decimalPoint at: 1))
     ifTrue: [ 
-      aStream peek isDigit 
-		ifFalse: [
-			"we're done"
-			^ integerPart * factor ].
-      "found a decimal point, followed by a numeric character."
+      | chch |
+		chch := aStream peek2. ".?"
+		chch notNil
+			ifTrue: [
+				"not at eof"
+				chch isDigit 
+					ifFalse: [
+						"we're done"
+						^ integerPart * factor ] ].
+	  "found a decimal point, followed by a numeric character."
       aStream next.
       ^ BinaryFloat
         _finishFromStream: aStream
