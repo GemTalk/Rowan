@@ -32,8 +32,8 @@ createStone smalltalkCI_3215 3.2.15
 ```
 7. Load smalltalkCI into smalltalkCi_3215 stone using tode command:
 ```
-project load SmalltalkCI	# load SmalltalkCI
-test project SmalltalkCI	# bring up test browser
+project load --loads=`#('tests')` SmalltalkCI	# load SmalltalkCI
+test project SmalltalkCI			# bring up test browser
 ```
 8. Current test results (SCIExcludedTests errors and failures are normal - SmalltalkCI needs ):
 ```
