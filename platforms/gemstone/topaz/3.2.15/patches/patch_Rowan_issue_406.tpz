@@ -16,10 +16,18 @@ output push patch_issue_406.out
   login
 
 	run
-	#('Cypress' 'Tonel' 'STON' 'Rowan') do: [:projectName |
+	| loadedProject |
+	#('Cypress' 'Tonel' 'STON') do: [:projectName |
 		GsFile gciLogServer: 'Disown ', projectName.
 		Rowan projectTools disown
 			disownProjectNamed: projectName ].
+	loadedProject := Rowan image loadedProjectNamed: 'Rowan'.
+	loadedProject loadedPackages do: [:loadedPackage |
+		loadedPackage name = 'Rowan-JadeServer'
+			ifTrue: [ 
+				(Rowan image loadedRegistryForPackageNamed: loadedPackage name) 
+					deletePackage: loadedPackage name ]
+			ifFalse: [ Rowan packageTools disown disownPackageNamed: loadedPackage name ] ].
 %
   commit
 
