@@ -176,6 +176,16 @@ RowanClassService >> classHierarchy [
 ]
 
 { #category : 'Accessing' }
+RowanClassService >> classHierarchyNames [
+
+	| names |
+	names := Array new. 
+	hierarchyServices keys do:[:classService | 
+		classService == #nil ifFalse:[names add: classService name]].
+	^names
+]
+
+{ #category : 'Accessing' }
 RowanClassService >> classInstVarNames [
 	^classInstVarNames
 
@@ -696,7 +706,7 @@ RowanClassService >> saveMethodSource: source category: category [
 
 	| behavior compilationResult gsNMethod updatedCategory methodService |
 	meta ifNil:[
-				behavior := (Object _objectForOop: oop) behavior. 
+				behavior := (Object _objectForOop: oop). 
 				meta := behavior isMeta]
 			ifNotNil:[ 
 				behavior := meta ifTrue:[self classFromName class] ifFalse:[self classFromName]]. 
