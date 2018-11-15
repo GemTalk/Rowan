@@ -334,8 +334,9 @@ RBParserTest >> testNumberRadixParsing [
 		| radixString |
 		radixString := radix printString, 'r'.
 		0 to: 72 do: [ :i | 
-			self  assert: (RBParser parseExpression: (radixString, (i radix: radix)))
-				value = i ] ]
+			| x |
+			self  assert: (x := ((RBParser parseExpression: (radixString, (i printStringRadix: radix)))
+				value)) = i ] ]
 ]
 
 { #category : 'tests' }

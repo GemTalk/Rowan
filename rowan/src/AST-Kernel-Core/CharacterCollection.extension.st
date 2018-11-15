@@ -13,10 +13,3 @@ CharacterCollection >> rbStoreOn: aStream [
   aStream nextPut: $'
 
 ]
-
-{ #category : '*ast-kernel-core' }
-CharacterCollection >> value [
-
-	^self
-
-]
