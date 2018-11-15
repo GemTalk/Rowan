@@ -36,10 +36,9 @@ Integer class >> _rwFinishFromStream: aStream signFound: aSignFound factor: aFac
             ifTrue: [ ^ self _errIncorrectFormat: aStream ].
           aStream next.
           signFound := true ] ].
-  [ aStream atEnd not and: [ aStream peek isDigit ] ]
+  [ aStream atEnd not and: [ | ch | ch := aStream peek. radix <= 10 ifTrue: [ ch isDigit ] ifFalse: [ ch isAlphaNumeric ] ] ]
     whileTrue: [ 
       ch := aStream next.
       number := number * radix + (ch digitValueInRadix: radix) ].
   ^ number * factor
-
 ]
