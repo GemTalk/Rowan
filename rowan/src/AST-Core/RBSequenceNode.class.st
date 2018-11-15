@@ -340,7 +340,7 @@ RBSequenceNode >> removeDeadCode [
 			(statements at: i) isImmediateNode 
 				ifTrue: 
 					[self clearReplacements.
-					statements removeAt: i]].
+					statements removeAtIndex: i]].
 	super removeDeadCode
 ]
 

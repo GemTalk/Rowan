@@ -434,7 +434,7 @@ RBParserTest >> testQuerying [
 	tree := RBParser 
 				parseMethod: ('test: a`	| b |`	b := (self foo: a; bar) baz.`	b := super test: b.`	^[:arg1 | self foa1 + (super foo: arg1 foo: a foo: b)]' 
 						copyReplaceAll: '`'
-						with: (String with: (Character value: 13))).
+						with: (String with: (Character codePoint: 13))).
 	self 
 		assert: tree selfMessages asSortedCollection asArray = #(#bar #foa1 #foo:).
 	self assert: tree superMessages asSortedCollection asArray 
