@@ -41,8 +41,8 @@ RwProjectAuditToolTest >> testClassBadExtensionName [
 	     category: 'Accessing' "'*'  packageName1 asLowercase".
 
 	fooMethod := theClass
-		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName2 asLowercase.
+		rwCompileExtensionMethod: 'foo ^''foo'''
+		package: packageName2.
 
 	fooMethod := theClass
 		compileMethod: 'foo ^2'
