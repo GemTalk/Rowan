@@ -20,7 +20,7 @@ RwPkgAuditTool >> auditForPackage: loadedPackage [
 		loadedPackage 
 				loadedClassesDo: [:aLoadedClass |  (self auditLoadedClass: aLoadedClass) 
 					ifNotEmpty: [:aColl | res at: aLoadedClass name put: aColl]]				
-				loadedClassExtensionsDo: [:aLoadedClass | (self auditLoadedClassExtenstion: aLoadedClass) 
+				loadedClassExtensionsDo: [:aLoadedClass | (self auditLoadedClassExtension: aLoadedClass) 
 					ifNotEmpty: [:aColl | res at: aLoadedClass name put: aColl] ] .
 	].
 	^res
@@ -42,10 +42,10 @@ RwPkgAuditTool >> auditLoadedClass: aLoadedClass [
 ]
 
 { #category : 'other' }
-RwPkgAuditTool >> auditLoadedClassExtenstion: aLoadedClass [
+RwPkgAuditTool >> auditLoadedClassExtension: aLoadedClass [
 "look for methods compiled into class without Rowan API"
 
-	^RwClsExtensionAuditTool new auditLoadedClassExtenstion: aLoadedClass
+	^RwClsExtensionAuditTool new auditLoadedClassExtension: aLoadedClass
 
 ]
 
