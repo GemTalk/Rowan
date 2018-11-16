@@ -49,7 +49,7 @@ RowanQueryServicesTest >> test_hierarchySenders [
 	queryService hierarchySendersOf: #isEmpty inClass: 'RwModification'.
 	hierarchyClassNames := Array with: 'RwModification'. 
 	hierarchyClassNames addAll: (RwModification allSuperclasses collect:[:cls | cls name asString]).
-	hierarchyClassNames addAll: (RwModification subclasses collect:[:cls | cls name asString]). 
+	hierarchyClassNames addAll: (RwModification allSubclasses collect:[:cls | cls name asString]). 
 	queryService queryResults do:[:methodService |
 		self assert: (methodService source includesString: 'isEmpty').
 		self assert: (hierarchyClassNames includes: methodService className asString)].
