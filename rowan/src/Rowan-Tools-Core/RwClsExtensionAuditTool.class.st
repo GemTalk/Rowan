@@ -27,7 +27,7 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 | res   extensionCategoryName|
 
 	res := self _result.
-	extensionCategoryName :=  '*' , aLoadedClassExtension loadedPackage name.
+	extensionCategoryName :=  aLoadedClassExtension loadedPackage asExtensionName "'*' , aLoadedClassExtension loadedPackage name" .
 	(Rowan globalNamed: aLoadedClassExtension name) 
 		ifNil: [self errorLog: res  add: aLoadedClassExtension name -> 'Matching compiled class does not exists '] 
 		ifNotNil: [:aBehavior | 

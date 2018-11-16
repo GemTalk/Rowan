@@ -42,12 +42,12 @@ RwProjectAuditToolTest >> testClassBadExtensionName [
 
 	fooMethod := theClass
 		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName2.
+		category: '*' , packageName2 asLowercase.
 
 	fooMethod := theClass
 		compileMethod: 'foo ^2'
 		dictionaries:  #() 
-		category: '*' , packageName1 .
+		category: '*' , packageName1 asLowercase .
 
 	self assert: (x := Rowan projectTools audit auditForProjectNamed:  'AuditProject') size = 2.
 	self assert: ( y := x at: packageName1) notNil; 
@@ -94,20 +94,20 @@ RwProjectAuditToolTest >> testClassExtension [
 		category: 'Instance creation'.
 	
 	theClass class
-		rwCompileMethod: 'new2 ^self new'
-		category: '*' , packageName2.
+		rwCompileExtensionMethod: 'new2 ^self new'
+		package: packageName2.
 
 	theClass class
-		rwCompileMethod: 'new3 ^self new initialize'
-		category: '*' , packageName3.
+		rwCompileExtensionMethod: 'new3 ^self new initialize'
+		package: packageName3.
 
    theClass 
 		rwCompileMethod: 'bar ^bar'
 	    category: 'Accessing' "'*'  packageName1 asLowercase".
 
 	fooMethod := theClass
-		rwCompileMethod: 'foo ^''foo'''
-		category: '*' , packageName2.
+		rwCompileExtensionMethod: 'foo ^''foo'''
+		package: packageName2.
 	
 x := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
 
@@ -119,17 +119,17 @@ self assert: x isEmpty.
     fooMethod := theClass
 		compileMethod: 'bar: aBar bar := aBar'
 		dictionaries:  #() 
-		category: '*' , packageName2.
+		category: '*' , packageName2 asLowercase.
 
 	 fooMethod := theClass class
 		compileMethod: 'new2 ^self new'
 		dictionaries: #()
-		category: '*' , packageName2.
+		category: '*' , packageName2 asLowercase.
 
 	fooMethod := theClass class
 		compileMethod: 'new3 ^self new initialize'
 		dictionaries: #()
-		category: '*' , packageName3.
+		category: '*' , packageName3 asLowercase.
 
 	 theClass class compileMethod: 'new ^super new '
 		dictionaries: #()
