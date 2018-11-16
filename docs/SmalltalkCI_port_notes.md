@@ -23,6 +23,8 @@ git clone git@github.com:GemTalk/FileSystemGs.git
 4. `rowan` branch of SmalltalkCI
 ```
 cd $GS_HOME/shared/repos/smalltalkCI
+git remote add dkh git@github.com:dalehenrich/smalltalkCI.git
+git fetch --all
 git checkout rowan
 ```
 5. Fork the projects that you will be changing. [SmalltalkCi](https://github.com/dalehenrich/smalltalkCI), obviously and [GsDevKit_home](https://github.com/GsDevKit/GsDevKit_home) as you might have to adjust some scripts for testing ... [Rowan](https://github.com/GemTalk/Rowan), since it's possible that bugs will be fixed, etc.
