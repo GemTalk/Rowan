@@ -8,7 +8,7 @@
 set -e
 
 # Usage:
-#  $ROWAN_PROJECTS_HOME/Rowan/bin/packing_oscar <base_label> <rowan_tag> <jadeite_tag> <location_of_sett_zip>
+#  $ROWAN_PROJECTS_HOME/Rowan/bin/packing_oscar <base_label> <rowan_tag> <jadeite_tag>
 #
 # 1. clone the Rowan project
 # 2. confirm that the master branches of Rowan is on the correct tag
@@ -28,6 +28,7 @@ set -e
 # 1.1.4 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.4 v1.1.4 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.1.5 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.5 v1.1.5 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.1.6 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.6 v1.1.6 Oscar-3.0.16 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.1.7 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.1.7 v1.1.7 Oscar-3.0.16 
 # 1.2.0 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.0 v1.2.0 Oscar-3.0.40 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.2.1 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.1 v1.2.1 Oscar-3.0.45 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.2.2 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.2 v1.2.2 Oscar-3.0.45 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
@@ -43,8 +44,6 @@ if [ "$base_label"x = "x" ] ; then
 fi
 rowan_tag="$2"
 jadeite_tag="$3"
-sett_zip_location="$4"
-sett_zip=$(basename ${sett_zip_location})
 rowanDeploymentBranch="candidateV1.2"
 rowanDeploymentBranch="masterV1.2"
 
@@ -142,12 +141,6 @@ echo "Jadeite_runtime_${jadeite_tag}" >> MANIFEST.TXT
 
 echo "" >> MANIFEST.TXT
 echo "------------------------------" >> MANIFEST.TXT
-echo "  SETT release " >> MANIFEST.TXT
-echo "------------------------------" >> MANIFEST.TXT
-echo "${sett_zip} " >> MANIFEST.TXT
-
-echo "" >> MANIFEST.TXT
-echo "------------------------------" >> MANIFEST.TXT
 echo "  doc file(s)" >> MANIFEST.TXT
 echo "------------------------------" >> MANIFEST.TXT
 count=0
@@ -164,12 +157,9 @@ if [ $count -lt 1 ] ; then
   exit 1
 fi
 
-# Copy SETT 
-cp $sett_zip_location .
-
 # create zip file
 
-zip -r ${base_label}.zip MANIFEST.TXT ${jadeite_runtime_dirName} ${sett_zip} *.pdf Rowan
+zip -r ${base_label}.zip MANIFEST.TXT ${jadeite_runtime_dirName} *.pdf Rowan 
 
 # create sha256 file
 
