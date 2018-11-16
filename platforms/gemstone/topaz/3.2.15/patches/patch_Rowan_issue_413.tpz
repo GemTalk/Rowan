@@ -1,0 +1,57 @@
+output push patch_issue_413.out
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit
+
+  set user SystemUser p swordfish
+  login
+#---
+run
+  "update and load Rowan projects"
+  Rowan projectTools load
+    loadProjectNamed: 'Cypress';
+    loadProjectNamed: 'STON';
+    loadProjectNamed: 'Tonel';
+    loadProjectNamed: 'Rowan';
+    yourself
+%
+commit
+run
+	"Outright remove JadeServer classes --- assume not packaged"
+	#(JadeServer64bit24
+		JadeServer64bit3x
+		JadeServer
+		JadeServer64bit32
+		JadeServer64bit )
+			do: [:className |
+				(UserGlobals at: className ifAbsent: [])
+					ifNotNil: [:aClass | 
+						| packageName |
+						packageName := aClass rowanProjectName.
+						packageName = '(NONE)'
+							ifFalse: [ 
+								self error: 'Did not expect ', className printString, ' to be packaged in  ', packageName printString ]. 
+						GsFile gciLogServer: 'Deleting ...', className, ' (', aClass asOop printString, ')'.
+						UserGlobals removeKey: className ]
+					ifNil: [
+						self error: 'Expected ', className printString, ' to be present' ] ].
+%
+	commit
+run
+    "For update from v1.0.2. Do the full load with the current list of group names ('jadeServer' being the most important"
+    Rowan projectTools load
+        loadProjectNamed: 'Rowan'
+        withConfigurations: #( 'Load' )
+        groupNames: #( 'core' 'tests' 'deprecated' 'jadeServer' )
+%
+commit
+#---
+
+errorCount
+
+  logout
+
+output pop
+
+
