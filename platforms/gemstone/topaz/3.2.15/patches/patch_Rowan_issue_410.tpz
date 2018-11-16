@@ -4,8 +4,6 @@ output push patch_issue_410.out
   iferr 2 stack
   iferr 3 exit
 
-	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/audit_issue_365.tpz
-
   set user SystemUser p swordfish
   login
 #---
