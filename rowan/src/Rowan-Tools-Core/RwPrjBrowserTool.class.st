@@ -263,11 +263,9 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 			loadedClass := Rowan image 
 				loadedClassNamed: className 
 				ifAbsent: [
-					RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify an unpackage method in the class ', className printString.
-					"Notification resumed, so continue with add/modify"
 					^ (Rowan image objectNamed: className)
 						compileMethod: methodSource
-						dictionaries: GsCurrentSession currentSession symbolList
+						dictionaries: Rowan image symbolList
 						category: hybridPackageName].
 			loadedClass loadedPackage ].
 
@@ -829,8 +827,6 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 		inClassNamed: className
 		isMeta: isMeta
 		ifAbsent: [
-			RwPerformingUnpackagedEditNotification signal: 'Attempt to move an unpackaged method in the class ', className printString.
-			"Notification resumed, so continue with move"
 			^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
 	srcLoadedMethodPackage := loadedMethodToBeMoved loadedPackage.
 	srcLoadedClassPackage := (self _loadedClassNamed: className) loadedPackage.
@@ -1016,8 +1012,6 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 		inClassNamed: className
 		isMeta: isMeta
 		ifAbsent: [
-			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackaged method in the class ', className printString.
-			"Notification resumed, so continue with removal"
 			^ (Rowan globalNamed: className) removeSelector: methodSelector ].
 	loadedPackage := loadedMethodToBeRemoved loadedPackage.
 	loadedClassOrExtension := loadedPackage
