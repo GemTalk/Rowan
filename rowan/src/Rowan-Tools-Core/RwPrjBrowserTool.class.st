@@ -829,8 +829,7 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 		ifAbsent: [
 			^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
 	srcLoadedMethodPackage := loadedMethodToBeMoved loadedPackage.
-	srcLoadedClassPackage := (self _loadedClassNamed: className) loadedPackage.
-
+	
 	destinationLoadedPackage := (hybridPackageName at: 1) = $*
 		ifTrue: [ 
 			Rowan image
@@ -841,8 +840,18 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 							'A package for hybrid package name ' , hybridPackageName printString
 								, ' was not found.' ] ]
 		ifFalse: [ 
-			"use the loaded package for the class that contains the method"
-			srcLoadedClassPackage ].
+			| lc |
+			lc := self
+				_loadedClassNamed: className
+				ifAbsent: [].
+			srcLoadedClassPackage := lc 
+				ifNil: [
+					RwPerformingUnpackagedEditNotification signal: 'Attempt to move a packaged method to an unpackaged class ', className printString.
+					"Notification resumed, so continue with move"
+					^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName]
+				ifNotNil: [ 
+					"use the loaded package for the class that contains the method"
+					lc loadedPackage ] ].
 
 	srcLoadedClassOrExtension := srcLoadedMethodPackage
 		classOrExtensionForClassNamed: className
@@ -912,7 +921,6 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 					srcClsDef removeInstanceMethod: methodSelector ] ].
 
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
-
 ]
 
 { #category : 'project browsing' }
