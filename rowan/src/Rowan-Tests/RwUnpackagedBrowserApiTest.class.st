@@ -34,16 +34,16 @@ RwUnpackagedBrowserApiTest >> setUp [
 ]
 
 { #category : 'tests' }
-RwUnpackagedBrowserApiTest >> testAddPackagedMethod [
+RwUnpackagedBrowserApiTest >> testIssue263 [
 
-	"https://github.com/GemTalk/Rowan/issues/364"
+	"https://github.com/GemTalk/Rowan/issues/263"
 
-	"Add packaged method"
+	"Add extension method to an unpackaged class"
 
 	| projectName  packageName projectDefinition projectSetDefinition audit testClass |
 
-	projectName := 'Issue364'.
-	packageName := 'Issue364-Extension'.
+	projectName := 'Issue263'.
+	packageName := 'Issue263-Extension'.
 
 	{projectName}
 		do: [ :pn | 
@@ -54,7 +54,6 @@ RwUnpackagedBrowserApiTest >> testAddPackagedMethod [
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName;
-		defaultSymbolDictName: 'Globals';
 		yourself.
 
 "load"
