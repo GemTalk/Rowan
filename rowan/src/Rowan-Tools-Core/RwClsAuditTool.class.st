@@ -4,14 +4,14 @@ Class {
 	#category : 'Rowan-Tools-Core'
 }
 
-{ #category : 'other' }
+{ #category : 'audit' }
 RwClsAuditTool >> _asClassPrefix: aBoolean [
 
 	^aBoolean ifTrue: ['class' ] ifFalse: ['']
 
 ]
 
-{ #category : 'other' }
+{ #category : 'audit' }
 RwClsAuditTool >> _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass [
 	| aPackage |
 		"must be an extension. Do basic checks"
@@ -19,7 +19,7 @@ RwClsAuditTool >> _auditCategory: category forBehavior: aBehavior loadedClass: a
 
 	^category first == $*	ifTrue: ["must be an extension category. See if package exists"
 		(aPackage asLowercase isEquivalent: aBehavior rowanPackageName asLowercase) 
-			ifTrue: [{category asString -> 'Extension category name can not be same as class category' }]
+			ifTrue: [{category asString -> 'Extension category name can not be same as class package' }]
 			ifFalse: [
 				(Rowan image loadedClassExtensionsNamed: aBehavior thisClass name 
 					ifFound: [:extensions | extensions detect: [:e | e loadedPackage name asLowercase isEquivalent: aPackage] ifNone: [nil]] 
@@ -30,10 +30,9 @@ RwClsAuditTool >> _auditCategory: category forBehavior: aBehavior loadedClass: a
 	] ifFalse: [
 		self _auditCategory: category selectors: (aBehavior selectorsIn: category)  forBehavior: aBehavior loadedClass: aLoadedClass		
 	]
-
 ]
 
-{ #category : 'other' }
+{ #category : 'audit' }
 RwClsAuditTool >> _auditCategory: category selectors: aSelectorSet forBehavior: aBehavior loadedClass: aLoadedClass [
 	|  res |
 	
@@ -52,33 +51,42 @@ RwClsAuditTool >> _auditCategory: category selectors: aSelectorSet forBehavior: 
 
 ]
 
-{ #category : 'other' }
+{ #category : 'audit' }
 RwClsAuditTool >> _auditClassSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass [
 "audit a selector. verify compiled method matches loaded method reference return nil if no problem found"
 
 	^(aLoadedClass loadedMethodAt: aSelector isMeta:  true)
-			ifNil: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded classmethod'.]
+			ifNil: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded classmethod '.]
 			ifNotNil: [:aLoadedMethod |
-				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle 
+				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle
+						ifTrue: [
+							((aLoadedMethod propertyAt: 'protocol') equalsNoCase: (aBehavior categoryOfSelector:  aSelector ) ) 
+								ifTrue: [nil]
+								ifFalse: [aLoadedClass name , '#', (aLoadedMethod propertyAt: 'protocol') -> 'Missing class method category for loaded class']
+						] 
 						ifFalse: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Compiled classmethod is not identical to loaded class method ']
 			]
+
 ]
 
-{ #category : 'other' }
+{ #category : 'audit' }
 RwClsAuditTool >> _auditLoadedClassMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoadedClassOrExtension [
 "verify that compiled method is present for each loaded class method. return nil if no error"
 "we already check verifying selectors that compiled method matches loaded method"
 
 		^( aClassOrMeta compiledMethodAt: aLoadedMethod name  otherwise: nil) 
-				ifNil: [(aLoadedClassOrExtension name ,  ' >> ', aLoadedMethod name) -> 'Missing compiled class method. ALCM ' ]
+				ifNil: [(aLoadedClassOrExtension name ,  ' >> ', aLoadedMethod name) -> 'Missing compiled class method. ' ]
 				ifNotNil: [:aMethod | aMethod == aLoadedMethod handle 
-						ifTrue: [nil]
-						ifFalse: [(aClassOrMeta name ,  ' >> ', aLoadedMethod name) -> 'Compiled class method is not identical to loaded class method. ALCM ']		
+						ifTrue: [((aLoadedMethod propertyAt: 'protocol') equalsNoCase: (aClassOrMeta categoryOfSelector: aMethod selector) ) 
+							ifTrue: [nil]
+							ifFalse: [aLoadedClassOrExtension name , '#', (aLoadedMethod properties at: 'protocol') -> 'Missing class method category for loaded class']
+						]
+						ifFalse: [(aClassOrMeta name ,  ' >> ', aLoadedMethod name) -> 'Compiled class method is not identical to loaded class method. ']		
 			]
 
 ]
 
-{ #category : 'other' }
+{ #category : 'audit' }
 RwClsAuditTool >> _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior [
 "Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
 
@@ -106,7 +114,7 @@ RwClsAuditTool >> _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavi
 
 ]
 
-{ #category : 'other' }
+{ #category : 'audit' }
 RwClsAuditTool >> _auditLoadedInstanceMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoadedClassOrExtension [
 "verify that compiled method is present for each loaded instance method. return nil if no error"
 "we already check verifying selectors that compiled method matches loaded method"
@@ -114,40 +122,48 @@ RwClsAuditTool >> _auditLoadedInstanceMethod: aLoadedMethod forBehavior: aClassO
 		^( aClassOrMeta compiledMethodAt: aLoadedMethod name  otherwise: nil) 
 				ifNil: [(aLoadedClassOrExtension name ,  ' >> ', aLoadedMethod name) -> 'Missing compiled instance method ALIM' ]
 				ifNotNil: [:aMethod | aMethod == aLoadedMethod handle 
-						ifTrue: [nil]
+						ifTrue: [((aLoadedMethod propertyAt: 'protocol') equalsNoCase: (aClassOrMeta categoryOfSelector: aMethod selector) ) 
+							ifTrue: [nil]
+							ifFalse: [aLoadedClassOrExtension name , '#', (aLoadedMethod propertiyAt: 'protocol') -> 'Missing method category for loaded class']
+						]
 						ifFalse: [(aClassOrMeta name ,  ' >> ', aLoadedMethod name) -> 'Compiled instance method is not identical to loaded instance method ALIM']		
 			]
 
 ]
 
-{ #category : 'other' }
+{ #category : 'audit' }
 RwClsAuditTool >> _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass [
 "audit an instance selector. return nil if no problem found"
 
 	^(aLoadedClass loadedMethodAt: aSelector isMeta:  aBehavior isMeta)
 			ifNil: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded instance method. ASBC'.]
 			ifNotNil: [:aLoadedMethod |
-				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle 
-							ifFalse: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Compiled instance method is not identical to loaded method. ASBC']
+				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle
+						ifTrue: [
+							((aLoadedMethod propertyAt: 'protocol') equalsNoCase: (aBehavior categoryOfSelector:   aSelector ) ) 
+								ifTrue: [nil]
+								ifFalse: [aLoadedClass name , '#', (aLoadedMethod propertyAt: 'protocol') -> 'Missing class method category for loaded class']
+						] 
+						ifFalse: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Compiled instance method is not identical to loaded method. ASBC']
 			]
 
 ]
 
-{ #category : 'other' }
+{ #category : 'audit' }
 RwClsAuditTool >> _result [
 
 	^Array new.
 
 ]
 
-{ #category : 'other' }
+{ #category : 'audit' }
 RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 "look for methods compiled into class without Rowan API"
 | res  |
 
 	res := self _result.
 	(Rowan globalNamed: aLoadedClass name)  
-		ifNil: [self errorLog: res add: aLoadedClass name -> 'Matching class does not exists ' ] "there is no matching Class for LoadedClass"
+		ifNil: [self errorLog: res add: aLoadedClass name -> 'Missing gemstone class for loaded class ' ] "there is no matching Class for LoadedClass"
 		ifNotNil: [:aBehavior | 
 			"audit class properties"
 			self errorLog: res addAll:  (self _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior).
@@ -169,10 +185,9 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 			]
 	].
 	^res
-
 ]
 
-{ #category : 'other' }
+{ #category : 'audit' }
 RwClsAuditTool >> errorLog: aResult add: aMessage [	
 "add error to results. print to file"
 	aResult add: aMessage.
@@ -180,7 +195,7 @@ RwClsAuditTool >> errorLog: aResult add: aMessage [
 
 ]
 
-{ #category : 'other' }
+{ #category : 'audit' }
 RwClsAuditTool >> errorLog: aResult addAll: aCol [	
 "add all messages to result"
 	aCol do: [:e | self errorLog: aResult add: e].
