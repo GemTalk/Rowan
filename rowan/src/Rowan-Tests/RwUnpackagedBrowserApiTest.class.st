@@ -142,4 +142,3 @@ RwUnpackagedBrowserApiTest >> testIssue420 [
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
-

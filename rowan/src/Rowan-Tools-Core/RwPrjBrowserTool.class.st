@@ -833,8 +833,7 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 			"Notification resumed, so continue with move"
 			^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
 	srcLoadedMethodPackage := loadedMethodToBeMoved loadedPackage.
-	srcLoadedClassPackage := (self _loadedClassNamed: className) loadedPackage.
-
+	
 	destinationLoadedPackage := (hybridPackageName at: 1) = $*
 		ifTrue: [ 
 			Rowan image
@@ -846,7 +845,7 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 								, ' was not found.' ] ]
 		ifFalse: [ 
 			"use the loaded package for the class that contains the method"
-			srcLoadedClassPackage ].
+			srcLoadedClassPackage := (self _loadedClassNamed: className) loadedPackage. ].
 
 	srcLoadedClassOrExtension := srcLoadedMethodPackage
 		classOrExtensionForClassNamed: className
