@@ -34,6 +34,32 @@ RwUnpackagedBrowserApiTest >> setUp [
 ]
 
 { #category : 'tests' }
+RwUnpackagedBrowserApiTest >> testAddUnpackagedMethod [
+
+	"https://github.com/GemTalk/Rowan/issues/364"
+
+	"Add unpackaged method to an upackaged class"
+
+	| testClass audit |
+
+	testClass := self _testClass.
+	testClass
+		rwCompileMethod: 'bar ^''bar'''
+		category: 'issue 364'.
+
+"validate"
+	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) notNil.
+
+	testClass rwRemoveSelector: #bar.
+
+"validate"
+	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) isNil.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: 'Rowan') isEmpty.
+]
+
+{ #category : 'tests' }
 RwUnpackagedBrowserApiTest >> testIssue263 [
 
 	"https://github.com/GemTalk/Rowan/issues/263"
@@ -54,6 +80,7 @@ RwUnpackagedBrowserApiTest >> testIssue263 [
 	projectDefinition := (RwProjectDefinition
 		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.
 
 "load"
@@ -85,36 +112,11 @@ RwUnpackagedBrowserApiTest >> testIssue263 [
 ]
 
 { #category : 'tests' }
-RwUnpackagedBrowserApiTest >> testAddUnpackagedMethod [
-
-	"https://github.com/GemTalk/Rowan/issues/364"
-
-	"Add unpackaged method"
-
-	| audit |
-
-	Object
-		rwCompileMethod: 'bar ^''bar'''
-		category: 'issue 364'.
-
-"validate"
-	self assert: (Object compiledMethodAt: 'bar' otherwise: nil) notNil.
-
-	Object rwRemoveSelector: #bar.
-
-"validate"
-	self assert: (Object compiledMethodAt: 'bar' otherwise: nil) isNil.
-
-"audit"
-	self assert: (audit := Rowan projectTools audit auditForProjectNamed: 'Rowan') isEmpty.
-]
-
-{ #category : 'tests' }
 RwUnpackagedBrowserApiTest >> testMovePackagedMethod [
 
 	"https://github.com/GemTalk/Rowan/issues/364"
 
-	| projectName  packageName1 packageName2 projectDefinition projectSetDefinition audit |
+	| projectName  packageName1 packageName2 projectDefinition projectSetDefinition audit testClass |
 
 	projectName := 'Issue364'.
 	packageName1 := 'Issue364-Extension-1'.
@@ -130,7 +132,7 @@ RwUnpackagedBrowserApiTest >> testMovePackagedMethod [
 		newForGitBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
-		defaultSymbolDictName: 'Globals';
+		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.
 
 "load"
@@ -138,19 +140,22 @@ RwUnpackagedBrowserApiTest >> testMovePackagedMethod [
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
-	Object
+	testClass := self _testClass.
+	testClass addCategory: '*' , packageName1 asLowercase.
+	testClass
 		rwCompileMethod: 'bar ^''bar'''
 		category: '*' , packageName1 asLowercase.
 
 "validate"
-	self assert: (Object compiledMethodAt: 'bar' otherwise: nil) notNil.
-	self assert: (Object categoryOfSelector: #bar) = '*' , packageName1 asLowercase.
+	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) notNil.
+	self assert: (testClass categoryOfSelector: #bar) = ('*' , packageName1 asLowercase) asSymbol.
 
-	Object rwMoveMethod: #bar toCategory: '*' , packageName2 asLowercase.
+	testClass addCategory: '*' , packageName2 asLowercase.
+	testClass rwMoveMethod: #bar toCategory: '*' , packageName2 asLowercase.
 
 "validate"
-	self assert: (Object compiledMethodAt: 'bar' otherwise: nil) notNil.
-	self assert: (Object categoryOfSelector: #bar) = '*' , packageName2 asLowercase.
+	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) notNil.
+	self assert: (testClass categoryOfSelector: #bar) = ('*' , packageName2 asLowercase) asSymbol.
 
 "load -- effectively unload extension methods"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -158,7 +163,7 @@ RwUnpackagedBrowserApiTest >> testMovePackagedMethod [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
-	self assert: (Object compiledMethodAt: 'bar' otherwise: nil) isNil.
+	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) isNil.
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
@@ -171,26 +176,28 @@ RwUnpackagedBrowserApiTest >> testMoveUnpackagedMethod [
 
 	"Add unpackaged method"
 
-	| audit x |
+	| audit x testClass |
 
-	Object
+	testClass := self _testClass.
+	testClass
 		rwCompileMethod: 'bar ^''bar'''
-		category: #'issue 364'.
+		category: 'issue 364'.
 
 "validate"
-	self assert: (Object compiledMethodAt: 'bar' otherwise: nil) notNil.
-	self assert: (x := Object categoryOfSelector: #bar) = #'issue 364'.
+	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) notNil.
+	self assert: (x := testClass categoryOfSelector: #bar) = #'issue 364'.
 
-	Object rwMoveMethod: #bar toCategory: #'issue 364 other'.
-
-"validate"
-	self assert: (Object compiledMethodAt: 'bar' otherwise: nil) notNil.
-	self assert: (x := Object categoryOfSelector: #bar) = #'issue 364 other'.
-
-	Object rwRemoveSelector: #bar.
+	testClass addCategory: 'issue 364 other'.
+	testClass rwMoveMethod: #bar toCategory: 'issue 364 other'.
 
 "validate"
-	self assert: (Object compiledMethodAt: 'bar' otherwise: nil) isNil.
+	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) notNil.
+	self assert: (x := testClass categoryOfSelector: #bar) = #'issue 364 other'.
+
+	testClass rwRemoveSelector: #bar.
+
+"validate"
+	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) isNil.
 
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: 'Rowan') isEmpty.
