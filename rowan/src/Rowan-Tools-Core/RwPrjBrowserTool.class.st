@@ -851,17 +851,35 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 							^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
 				RwPerformingUnpackagedEditNotification signal: 'Attempt to move a packaged method to an unpackaged class ', className printString.
 				"Notification resumed, so continue with move"
-self error: 'oops' ].
+				"Move packaged method to unpackaged category"
+				"Disown the method, then move it to proper category" 
+				Rowan packageTools disown disownMethod: methodSelector inClassNamed: className isMeta: isMeta.
+				^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
 			"use the loaded package for the class that contains the method"
 			srcLoadedClassPackage := lc loadedPackage ].
 
 	loadedMethodToBeMoved
 		ifNil: [
-			"Moving an unpackaged method to a packaged method - using hybrid protocol"
+			| instanceSelectors classSelectors res |
+			"Adding an unpackaged method to a package in an unpackage class"
 			RwPerformingUnpackagedEditNotification signal: 'Attempt to move an unpackaged method in the class ', className printString.
 			"Notification resumed, so continue with move"
-self error: 'oops'.
-			^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName].
+			"Move the method to the proper category and then adopt the method"
+			isMeta
+				ifTrue: [
+					instanceSelectors := {}.
+					classSelectors := { methodSelector } ]
+				ifFalse: [
+					instanceSelectors := { methodSelector }.
+					classSelectors := {} ].
+			res := (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName.
+			Rowan packageTools adopt
+				adoptClassNamed: className 
+				classExtension: true
+				instanceSelectors: instanceSelectors 
+				classSelectors: classSelectors 
+				intoPackageNamed: destinationLoadedPackage name.
+			^ res ].
 
 	"Moving a packaged method to another package"
 	srcLoadedMethodPackage := loadedMethodToBeMoved loadedPackage.

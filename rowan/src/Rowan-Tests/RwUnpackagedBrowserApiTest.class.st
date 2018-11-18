@@ -373,6 +373,11 @@ RwUnpackagedBrowserApiTest >> testIssue420_C [
 	projectSetDefinition addDefinition: projectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) notNil.
+	[ testClass rwRemoveSelector: #bar ]
+			on: RwPerformingUnpackagedEditNotification
+			do: [:ex | ex resume ].	
+
 "validate"
 	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) isNil.
 
@@ -457,9 +462,6 @@ RwUnpackagedBrowserApiTest >> testIssue420_D [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
-false ifTrue: [	[ testClass rwRemoveSelector: #bar ]
-			on: RwPerformingUnpackagedEditNotification
-			do: [:ex | ex resume ]].	
 	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) isNil.
 "audit"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
@@ -467,7 +469,7 @@ false ifTrue: [	[ testClass rwRemoveSelector: #bar ]
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
-	self assert: registry packageRegistry size = 0.
+	self assert: registry packageRegistry size = 1.
 	self assert: registry classRegistry size = 0.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
