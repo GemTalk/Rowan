@@ -827,12 +827,8 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 		_loadedMethod: methodSelector
 		inClassNamed: className
 		isMeta: isMeta
-		ifAbsent: [
-			RwPerformingUnpackagedEditNotification signal: 'Attempt to move an unpackaged method in the class ', className printString.
-			"Notification resumed, so continue with move"
-			^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
-	srcLoadedMethodPackage := loadedMethodToBeMoved loadedPackage.
-	
+		ifAbsent: [ ].
+
 	destinationLoadedPackage := (hybridPackageName at: 1) = $*
 		ifTrue: [ 
 			Rowan image
@@ -847,15 +843,23 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 			lc := self
 				_loadedClassNamed: className
 				ifAbsent: [].
-			srcLoadedClassPackage := lc 
+			lc 
 				ifNil: [
 					RwPerformingUnpackagedEditNotification signal: 'Attempt to move a packaged method to an unpackaged class ', className printString.
 					"Notification resumed, so continue with move"
-					^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName]
-				ifNotNil: [ 
-					"use the loaded package for the class that contains the method"
-					lc loadedPackage ] ].
+					^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
+			"use the loaded package for the class that contains the method"
+			srcLoadedClassPackage := lc loadedPackage ].
 
+	loadedMethodToBeMoved
+		ifNil: [
+			"Moving an unpackaged method to a packaged method - using hybrid protocol"
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to move an unpackaged method in the class ', className printString.
+			"Notification resumed, so continue with move"
+			^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName].
+
+	"Moving a packaged method to another package"
+	srcLoadedMethodPackage := loadedMethodToBeMoved loadedPackage.
 	srcLoadedClassOrExtension := srcLoadedMethodPackage
 		classOrExtensionForClassNamed: className
 		ifAbsent: [ 
