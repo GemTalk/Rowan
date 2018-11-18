@@ -263,6 +263,8 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 			loadedClass := Rowan image 
 				loadedClassNamed: className 
 				ifAbsent: [
+					RwPerformingUnpackagedEditNotification signal: 'Attempt to add or modify an unpackage method in the class ', className printString.
+					"Notification resumed, so continue with add/modify"
 					^ (Rowan image objectNamed: className)
 						compileMethod: methodSource
 						dictionaries: Rowan image symbolList
@@ -275,7 +277,6 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 		forClassNamed: className
 		isMeta: isMeta
 		inPackageNamed: loadedPackage name
-
 ]
 
 { #category : 'method browsing' }
@@ -827,6 +828,8 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 		inClassNamed: className
 		isMeta: isMeta
 		ifAbsent: [
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to move an unpackaged method in the class ', className printString.
+			"Notification resumed, so continue with move"
 			^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
 	srcLoadedMethodPackage := loadedMethodToBeMoved loadedPackage.
 	
@@ -1020,6 +1023,8 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 		inClassNamed: className
 		isMeta: isMeta
 		ifAbsent: [
+			RwPerformingUnpackagedEditNotification signal: 'Attempt to remove an unpackaged method in the class ', className printString.
+			"Notification resumed, so continue with removal"
 			^ (Rowan globalNamed: className) removeSelector: methodSelector ].
 	loadedPackage := loadedMethodToBeRemoved loadedPackage.
 	loadedClassOrExtension := loadedPackage
@@ -1038,7 +1043,6 @@ RwPrjBrowserTool >> removeMethod: methodSelector forClassNamed: className isMeta
 		ifTrue: [ crDef removeClassMethod: methodSelector ]
 		ifFalse: [ crDef removeInstanceMethod: methodSelector ].
 	Rowan projectTools load loadProjectDefinition: projectDef
-
 ]
 
 { #category : 'package browsing' }
