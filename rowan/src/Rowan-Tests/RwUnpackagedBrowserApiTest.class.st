@@ -524,9 +524,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_E [
 
 "move"
 	testClass addCategory: 'other accessing'.
-	[ testClass rwMoveMethod: #bar toCategory: 'other accessing']
-			on: RwPerformingUnpackagedEditNotification
-			do: [:ex | ex resume ].	
+	testClass rwMoveMethod: #bar toCategory: 'other accessing'.	
 
 "validate"
 	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) notNil.
@@ -584,9 +582,7 @@ RwUnpackagedBrowserApiTest >> testMoveUnpackagedMethod [
 	self assert: (x := testClass categoryOfSelector: #bar) = #'issue 364'.
 
 	testClass addCategory: 'issue 364 other'.
-	[ testClass rwMoveMethod: #bar toCategory: 'issue 364 other' ]
-		on: RwPerformingUnpackagedEditNotification
-		do: [:ex | ex resume ].	
+	testClass rwMoveMethod: #bar toCategory: 'issue 364 other'.	
 
 "validate"
 	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) notNil.
