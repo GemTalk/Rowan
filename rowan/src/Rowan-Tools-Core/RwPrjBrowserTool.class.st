@@ -847,7 +847,7 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 				ifNil: [
 					RwPerformingUnpackagedEditNotification signal: 'Attempt to move a packaged method to an unpackaged class ', className printString.
 					"Notification resumed, so continue with move"
-self error: 'are we correctly removing the packaged method from loaded things?'.
+"suspect"
 					^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
 			"use the loaded package for the class that contains the method"
 			srcLoadedClassPackage := lc loadedPackage ].
@@ -857,7 +857,7 @@ self error: 'are we correctly removing the packaged method from loaded things?'.
 			"Moving an unpackaged method to a packaged method - using hybrid protocol"
 			RwPerformingUnpackagedEditNotification signal: 'Attempt to move an unpackaged method in the class ', className printString.
 			"Notification resumed, so continue with move"
-self error: 'are we correctly moving the unpackaged method to a packaged target?'.
+"suspect"
 			^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName].
 
 	"Moving a packaged method to another package"
