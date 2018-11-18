@@ -1,14 +1,11 @@
+"
+keep test cases here
+"
 Class {
 	#name : 'RwProjectAuditToolTest',
 	#superclass : 'RwBrowserToolTest',
 	#category : 'Rowan-Tests'
 }
-
-{ #category : 'other' }
-RwProjectAuditToolTest class >> comment [
-
-	^'testing audit api'
-]
 
 { #category : 'tests' }
 RwProjectAuditToolTest >> _auditBlock [

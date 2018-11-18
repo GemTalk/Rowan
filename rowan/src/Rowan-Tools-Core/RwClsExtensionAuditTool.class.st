@@ -12,12 +12,13 @@ RwClsExtensionAuditTool >> _auditCategory: anExtentionCategory forBehavior: aCla
 	aClassOrMeta isMeta 
 		ifTrue: [
 			(aLoadedClassExtension loadedClassMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
-				ifTrue: [ self errorLog: res  add: ((anExtentionCategory asString -> 'Missing expected class methods in the category '))   ].
+				ifTrue: [ self errorLog: res  add: ((aLoadedClassExtension name , ' #' ,anExtentionCategory asString -> 'Missing expected class methods in the category '))   ].
 	] 	ifFalse: [
 			(aLoadedClassExtension loadedInstanceMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
-				ifTrue: [ self errorLog: res  add: (anExtentionCategory asString -> ('Missing expected instances methods in the category'))   ].
+				ifTrue: [ self errorLog: res  add: (aLoadedClassExtension name , ' #' ,anExtentionCategory asString -> ('Missing expected instances methods in the category'))   ].
 	].
 	^res
+
 ]
 
 { #category : 'other' }
@@ -30,25 +31,22 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 	(Rowan globalNamed: aLoadedClassExtension name) 
 		ifNil: [self errorLog: res  add: aLoadedClassExtension name -> ' Class does not exists '] 
 		ifNotNil: [:aBehavior ||categories | 
-			
-			((aBehavior includesCategory: extensionCategoryName) or: [(aBehavior class includesCategory: extensionCategoryName)]) 
-				ifFalse: [self errorLog: res add: extensionCategoryName -> 'Missing extension category' ].
-			
+					
 				categories := (aBehavior _baseCategorys: 0) keys.
 				(categories	
 					detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
-						ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: extensionCategoryName forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
+						ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
 						ifNil: [aLoadedClassExtension loadedInstanceMethods notEmpty ifTrue: [
-							self errorLog: res add: extensionCategoryName -> 'Missing extension category ']
+							self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing extension category ']
 			].
 
 
 			categories := (aBehavior class _baseCategorys: 0) keys.
 			(categories
 				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
-					ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: extensionCategoryName forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
+					ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
 					ifNil: [aLoadedClassExtension loadedClassMethods notEmpty ifTrue: [
-						self errorLog: res add: extensionCategoryName -> 'Missing classmethod extension category ']
+						self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing classmethod extension category ']
 			].
 
 		
@@ -61,4 +59,5 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 				]
 		].
 		^res
+
 ]
