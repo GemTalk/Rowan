@@ -849,7 +849,7 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 						ifNil: [ 
 							"unpackaged method moved to unpackaged category"
 							^ (Rowan image objectNamed: className) moveMethod: methodSelector toCategory: hybridPackageName ].
-				RwPerformingUnpackagedEditNotification signal: 'Attempt to move a packaged method to an unpackaged class ', className printString.
+				RwPerformingUnpackagedEditNotification signal: 'Attempt to move a packaged method to an unpackaged class ', className printString, '. The unpackaged method will not be tracked by Rowan'.
 				"Notification resumed, so continue with move"
 				"Move packaged method to unpackaged category"
 				"Disown the method, then move it to proper category" 
@@ -861,9 +861,7 @@ RwPrjBrowserTool >> moveMethod: methodSelector forClassNamed: className isMeta: 
 	loadedMethodToBeMoved
 		ifNil: [
 			| instanceSelectors classSelectors res |
-			"Adding an unpackaged method to a package in an unpackage class"
-			RwPerformingUnpackagedEditNotification signal: 'Attempt to move an unpackaged method in the class ', className printString.
-			"Notification resumed, so continue with move"
+			"Moving an unpackaged method to a package in an unpackage class"
 			"Move the method to the proper category and then adopt the method"
 			isMeta
 				ifTrue: [

@@ -438,9 +438,7 @@ RwUnpackagedBrowserApiTest >> testIssue420_D [
 
 "move"
 	testClass addCategory: '*' , packageName1 asLowercase.
-	[ testClass rwMoveMethod: #bar toCategory: '*' , packageName1 asLowercase ]
-			on: RwPerformingUnpackagedEditNotification
-			do: [:ex | ex resume ].	
+	testClass rwMoveMethod: #bar toCategory: '*' , packageName1 asLowercase.	
 
 "validate"
 	self assert: (testClass compiledMethodAt: 'bar' otherwise: nil) notNil.
