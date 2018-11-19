@@ -5,11 +5,11 @@ output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
   iferr 3 exit 1
 	display oops
 
-  set u SystemUser p swordfish
-  login
-
 # use block-based audit - audit tool not present in v1.0.2
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/audit_issue_365.tpz
+
+  set u SystemUser p swordfish
+  login
 
 run
   "update and load Rowan projects"
