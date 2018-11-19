@@ -189,7 +189,6 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 			]
 	].
 	^res
-
 ]
 
 { #category : 'audit' }

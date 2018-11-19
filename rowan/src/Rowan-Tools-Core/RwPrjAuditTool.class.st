@@ -26,7 +26,6 @@ RwPrjAuditTool >> auditForProject: aLoadedProject [
 		aLoadedProject loadedPackages values do: [:e | (Rowan packageTools audit auditForPackage: e) 
 				ifNotEmpty: [:aColl | res at: e name put: aColl]].	
 	^res
-
 ]
 
 { #category : 'other' }

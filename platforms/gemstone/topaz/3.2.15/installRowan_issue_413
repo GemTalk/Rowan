@@ -1,0 +1,30 @@
+
+set -e
+
+rm -rf *.out
+
+GEMSTONE_NAME=$1
+export ROWAN_HOME="$(dirname $0)/../../../../"
+
+startTopaz $GEMSTONE_NAME -l << EOF
+
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/audit_issue_365.tpz
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/patch_Rowan_issue_413.tpz
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/audit_issue_365.tpz
+
+  set u SystemUser p swordfish
+  login
+! Rowan Audit should run clean
+	run
+	"Known issue with Rowan package structure ... will be addressed separately"
+	true
+		ifTrue: [ (UserGlobals at: #ROWAN_AUDIT_issue_365_results) removeKey: 'RwUnmanagedProjectDefinition' ifAbsent: [] ].
+	(UserGlobals at: #ROWAN_AUDIT_issue_365_results) isEmpty
+		ifFalse: [ self error: 'Rowan Audit is not clean, please view dictionary ''UserGlobals at: #ROWAN_AUDIT_issue_399_results.out'' or log file for details.' ].
+	UserGlobals removeKey: #ROWAN_AUDIT_issue_365_results ifAbsent: [].
+	System commit
+%
+	errorCount
+  exit
+EOF
+

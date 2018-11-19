@@ -9,7 +9,8 @@ Class {
 		'isDirty',
 		'packages',
 		'changes',
-		'existsOnDisk'
+		'existsOnDisk',
+		'isLoaded'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -53,7 +54,7 @@ RowanProjectService >> addPackageNamed: packageName [
 
 { #category : 'initialization' }
 RowanProjectService >> basicRefresh [
-	self projectIsLoaded ifFalse:[
+	(isLoaded := self projectIsLoaded) ifFalse:[
 		updateType := #removedProject:. 
 		^RowanCommandResult addResult: self]. 
 	isDirty := self isDirty. 
@@ -323,7 +324,7 @@ RowanProjectService >> pushToGit [
 { #category : 'initialization' }
 RowanProjectService >> refresh [
 	self basicRefresh. 
-	self projectIsLoaded ifTrue:[
+	isLoaded ifTrue:[
 		packages := self packageServices].
 ]
 

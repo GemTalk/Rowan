@@ -1,0 +1,29 @@
+output pushnew audit_issue_365.out
+
+  iferr 1 stk
+  iferr 2 stack
+#  iferr 3 exit 1
+
+  set u SystemUser p swordfish
+  login
+
+	run
+	| res audit |
+	GsFile gciLogServer: '--STARTING ROWAN AUDIT'.
+	res := KeyValueDictionary new.
+
+	Rowan projectNames do: [:projectName |
+		GsFile gciLogServer: '---Auditing project: ', projectName printString.
+		audit := Rowan projectTools audit auditForProjectNamed: projectName.
+		res at: projectName put: audit.
+		GsFile gciLogServer: '	-- audit finished ' ].
+	UserGlobals at: #ROWAN_AUDIT_issue_365_results put: res.
+	GsFile gciLogServer: '--ENDING ROWAN AUDIT'.
+	true
+%
+  commit
+
+  logout
+	errorCount
+
+	output pop
