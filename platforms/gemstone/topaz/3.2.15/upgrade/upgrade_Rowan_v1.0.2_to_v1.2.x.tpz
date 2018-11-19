@@ -8,17 +8,15 @@ output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
   set u SystemUser p swordfish
   login
 
-	# use block-based audit - audit tool not present in v1.0.2
+# use block-based audit - audit tool not present in v1.0.2
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/patch_Rowan_Issue_406.tpz
 
 run
   "update and load Rowan projects"
-  Rowan projectTools load
-    loadProjectNamed: 'Cypress';
-    loadProjectNamed: 'STON';
-    loadProjectNamed: 'Tonel';
-    loadProjectNamed: 'Rowan';
-    yourself
+    #( 'Cypress' 'STON' 'Tonel' 'Rowan' )
+			do: [:projectName |
+				Rowan projectTools load
+					loadProjectNamed: projectName ]
 %
 	commit
 	run
@@ -48,13 +46,24 @@ run
 	commit
 
 	run
-    "For update from v1.0.2. Do the full load with the current list of group names ('jadeServer' being the most important"
-    Rowan projectTools load
-        loadProjectNamed: 'Rowan'
-        withConfigurations: #( 'Load' )
-        groupNames: #( 'core' 'tests' 'deprecated' 'jadeServer' )
+    "For update from v1.0.2. Do the full load with the current list of group names"
+    #( 'Cypress' 'STON' 'Tonel' 'Rowan' )
+			do: [:projectName |
+				Rowan projectTools load
+       	 loadProjectNamed: projectName
+        	withConfigurations: #( 'Load' )
+        	groupNames: #( 'core' 'tests' 'deprecated' 'jadeServer' ) ].
 %
 	commit
+
+	run
+    "run project audits"
+    | auditResult |
+		auditResult := Rowan projectTools audit
+        auditProjectsNamed: #( 'Cypress' 'STON' 'Tonel' 'Rowan' ).
+		auditResult isEmpty
+			ifFalse: [ self error: 'Post load audit failure' ]
+%
 
 	logout
 
