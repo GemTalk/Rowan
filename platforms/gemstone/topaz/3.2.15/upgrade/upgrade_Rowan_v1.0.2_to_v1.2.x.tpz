@@ -10,38 +10,33 @@ output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
 
   set u SystemUser p swordfish
   login
-
-run
-  "update and load Rowan projects"
-    #( 'Cypress' 'STON' 'Tonel' 'Rowan' )
-			do: [:projectName |
-				Rowan projectTools load
-					loadProjectNamed: projectName ]
+! Rowan Audit should run clean
+	run
+	"Known issue with Rowan package structure ... will be addressed separately"
+	true
+		ifTrue: [ (UserGlobals at: #ROWAN_AUDIT_issue_365_results) removeKey: 'RwUnmanagedProjectDefinition' ifAbsent: [] ].
+	(UserGlobals at: #ROWAN_AUDIT_issue_365_results) isEmpty
+		ifFalse: [ self error: 'Rowan Audit is not clean, please view dictionary ''UserGlobals at: #ROWAN_AUDIT_issue_365_results'' or log file for details.' ].
+	UserGlobals removeKey: #ROWAN_AUDIT_issue_365_results ifAbsent: [].
+	System commit
 %
+
 	commit
 	run
-    "For update from v1.0.2. Create the Rowan-JadeServer package and adopt the JadeServer classes into the package"
+    "For update from v1.0.2. Delete any JadeServer classes that may exist, since they would not be packaged."
     | jadeServerClass projectDefinition jadeServerProjectName |
     jadeServerClass := UserGlobals at: #JadeServer ifAbsent: [ ^ 'No JadeServer class found' ].
     (jadeServerProjectName := jadeServerClass rowanProjectName) = '(NONE)'
         ifFalse: [ ^ 'JadeServer project name: ',  jadeServerProjectName printString ].
-    projectDefinition := (Rowan image loadedProjectNamed: 'Rowan') asDefinition.
-    projectDefinition addPackageNamed: 'Rowan-JadeServer'.
-    Rowan projectTools load
-        loadProjectDefinition: projectDefinition.
-    GsFile gciLogServer: 'Created Rowan-JadeServer package'.
-    "Adopt the JadeServer classes into the Rowan-JadeServer package"
+    GsFile gciLogServer: 'Deleting JadeServer classes'.
     {
-        'JadeServer64bit3x' .
-        'JadeServer' .
-        'JadeServer64bit24' .
-        'JadeServer64bit' .
-        'JadeServer64bit32' .
+        #'JadeServer64bit3x' .
+        #'JadeServer' .
+        #'JadeServer64bit24' .
+        #'JadeServer64bit' .
+        #'JadeServer64bit32' .
     } do: [:className |
-        Rowan packageTools adopt
-            adoptClassNamed: className
-            intoPackageNamed: 'Rowan-JadeServer'
-        ].
+        UserGlobals removeKey: className ifAbsent: [] ].
 %
 	commit
 
