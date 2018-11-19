@@ -1,0 +1,64 @@
+output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit 1
+	display oops
+
+  set u SystemUser p swordfish
+  login
+
+	# use block-based audit - audit tool not present in v1.0.2
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/patch_Rowan_Issue_406.tpz
+
+run
+  "update and load Rowan projects"
+  Rowan projectTools load
+    loadProjectNamed: 'Cypress';
+    loadProjectNamed: 'STON';
+    loadProjectNamed: 'Tonel';
+    loadProjectNamed: 'Rowan';
+    yourself
+%
+	commit
+	run
+    "For update from v1.0.2. Create the Rowan-JadeServer package and adopt the JadeServer classes into the package"
+    | jadeServerClass projectDefinition jadeServerProjectName |
+    jadeServerClass := UserGlobals at: #JadeServer ifAbsent: [ ^ 'No JadeServer class found' ].
+    (jadeServerProjectName := jadeServerClass rowanProjectName) = '(NONE)'
+        ifFalse: [ ^ 'JadeServer project name: ',  jadeServerProjectName printString ].
+    projectDefinition := (Rowan image loadedProjectNamed: 'Rowan') asDefinition.
+    projectDefinition addPackageNamed: 'Rowan-JadeServer'.
+    Rowan projectTools load
+        loadProjectDefinition: projectDefinition.
+    GsFile gciLogServer: 'Created Rowan-JadeServer package'.
+    "Adopt the JadeServer classes into the Rowan-JadeServer package"
+    {
+        'JadeServer64bit3x' .
+        'JadeServer' .
+        'JadeServer64bit24' .
+        'JadeServer64bit' .
+        'JadeServer64bit32' .
+    } do: [:className |
+        Rowan packageTools adopt
+            adoptClassNamed: className
+            intoPackageNamed: 'Rowan-JadeServer'
+        ].
+%
+	commit
+
+	run
+    "For update from v1.0.2. Do the full load with the current list of group names ('jadeServer' being the most important"
+    Rowan projectTools load
+        loadProjectNamed: 'Rowan'
+        withConfigurations: #( 'Load' )
+        groupNames: #( 'core' 'tests' 'deprecated' 'jadeServer' )
+%
+	commit
+
+	logout
+
+	errorCount
+
+output pop
+
