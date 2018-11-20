@@ -42,12 +42,16 @@ output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
 
 	run
     "For update from v1.0.2. Do the full load with the current list of group names"
-    #( 'Cypress' 'STON' 'Tonel' 'Rowan' )
-			do: [:projectName |
+    { 
+			{ 'Cypress'. #( 'Default' ). nil }.
+			{ 'STON'. #( 'Bootstrap' ). nil }.
+			{ 'Tonel'. #( 'Bootstrap' ). nil }.
+			{ 'Rowan'. #( 'Load' ).  #( 'core' 'tests' 'deprecated' 'jadeServer' ) }
+			do: [:loadAttributes |
 				Rowan projectTools load
-       	 loadProjectNamed: projectName
-        	withConfigurations: #( 'Load' )
-        	groupNames: #( 'core' 'tests' 'deprecated' 'jadeServer' ) ].
+       	 loadProjectNamed: (loadAttributes at: 1)
+        	withConfigurations: (loadAttributes at: 2)
+        	groupNames: (loadAttributes at: 3) ].
 %
 	commit
 
