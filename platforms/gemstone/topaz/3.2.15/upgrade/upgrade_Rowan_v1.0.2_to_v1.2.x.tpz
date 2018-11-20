@@ -23,7 +23,7 @@ output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
 
 	commit
 	run
-    "For update from v1.0.2. Delete any JadeServer classes that may exist, since they would not be packaged."
+    "For update from v1.0.2, delete any JadeServer classes that may exist, since they would not be packaged."
     | jadeServerClass projectDefinition jadeServerProjectName |
     jadeServerClass := UserGlobals at: #JadeServer ifAbsent: [ ^ 'No JadeServer class found' ].
     (jadeServerProjectName := jadeServerClass rowanProjectName) = '(NONE)'
@@ -41,7 +41,7 @@ output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
 	commit
 
 	run
-    "For update from v1.0.2. Do the full load with the current list of group names"
+    "For update from v1.0.2, do the full load with the current list of group names"
     { 
 			{ 'Cypress'. #( 'Default' ). #() }.
 			{ 'STON'. #( 'Bootstrap' ). #() }.

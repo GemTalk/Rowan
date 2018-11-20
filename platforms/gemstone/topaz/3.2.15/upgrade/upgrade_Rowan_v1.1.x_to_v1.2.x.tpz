@@ -1,0 +1,49 @@
+output push upgrade_Rowan_v1.1.x_to_v1.2.x.out
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit 1
+	display oops
+
+# use block-based audit - audit tool present in v1.1.0, but block-based audit is newer
+	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/patches/audit_issue_365.tpz
+
+  set u SystemUser p swordfish
+  login
+! Rowan Audit should run clean
+	run
+	"Known issue with Rowan package structure ... will be addressed separately"
+	true
+		ifTrue: [ (UserGlobals at: #ROWAN_AUDIT_issue_365_results) removeKey: 'RwUnmanagedProjectDefinition' ifAbsent: [] ].
+	(UserGlobals at: #ROWAN_AUDIT_issue_365_results) isEmpty
+		ifFalse: [ self error: 'Rowan Audit is not clean, please view dictionary ''UserGlobals at: #ROWAN_AUDIT_issue_365_results'' or log file for details.' ].
+	UserGlobals removeKey: #ROWAN_AUDIT_issue_365_results ifAbsent: [].
+	System commit
+%
+
+	commit
+
+	run
+    "For update from v1.1.0, do standard update"
+    #( 'Cypress' 'STON' 'Tonel' 'Rowan' )
+			do: [:loadAttributes |
+				Rowan projectTools load
+       	 loadProjectNamed: projectName ].
+%
+	commit
+
+	run
+    "run project audits"
+    | auditResult |
+		auditResult := Rowan projectTools audit
+        auditProjectsNamed: #( 'Cypress' 'STON' 'Tonel' 'Rowan' ).
+		auditResult isEmpty
+			ifFalse: [ self error: 'Post load audit failure' ]
+%
+
+	logout
+
+	errorCount
+
+output pop
+
