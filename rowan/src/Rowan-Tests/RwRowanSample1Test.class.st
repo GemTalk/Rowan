@@ -72,5 +72,4 @@ RwRowanSample1Test >> testIssue345 [
 	self assert: registry classRegistry size = 0.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]

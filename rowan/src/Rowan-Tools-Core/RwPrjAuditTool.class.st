@@ -7,11 +7,9 @@ Class {
 { #category : 'other' }
 RwPrjAuditTool >> auditAll [
 | res |
-	res := KeyValueDictionary halt new.
-	System myUserProfile symbolList do: [:aSmbDict | 
+	res := StringKeyValueDictionary new.
 			(Rowan image  _loadedProjectRegistryForUserId: System myUserProfile userId) keysAndValuesDo: [:prjName :aLoadedProject |
 				(self auditForProject: aLoadedProject) ifNotEmpty: [:aColl | res at: prjName put: aColl]
-			]
 	].
 	^res
 
@@ -24,8 +22,9 @@ RwPrjAuditTool >> auditForProject: aLoadedProject [
 	| res |
 
 	res := KeyValueDictionary new.
-	aLoadedProject loadedPackages values do: [:e | (Rowan packageTools audit auditForPackage: e) 
-		ifNotEmpty: [:aColl | res at: e name put: aColl]].	
+	GsFile gciLogClient: '==============Auditing project ', aLoadedProject name.
+		aLoadedProject loadedPackages values do: [:e | (Rowan packageTools audit auditForPackage: e) 
+				ifNotEmpty: [:aColl | res at: e name put: aColl]].	
 	^res
 ]
 
