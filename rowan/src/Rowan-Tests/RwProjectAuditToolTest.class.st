@@ -301,7 +301,7 @@ x := Rowan projectTools audit auditForProjectNamed:  'AuditProject'.
 
 	self 
 	  assert: x size = 3;
-	  assert: ((y := x at: packageName1) at: className) size = 1;
+	  assert: ((y := x at: packageName1) at: className) size = 2;
 	  assert: ((y := x at: packageName2) at: className) size = 3;
 	  assert: ((y := x at: packageName3) at: className) size = 2
 
