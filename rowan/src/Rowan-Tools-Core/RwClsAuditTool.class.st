@@ -27,7 +27,11 @@ RwClsAuditTool >> _auditCategory: category forBehavior: aBehavior loadedClass: a
 				(Rowan image loadedClassExtensionsNamed: aBehavior thisClass name 
 					ifFound: [:extensions | extensions detect: [:e | e loadedPackage name asLowercase isEquivalent: aPackage] ifNone: [nil]] 
 					ifAbsent: [nil]) isNil 
-						ifTrue: [{aLoadedClass name , ' #' , category asString -> 'Class Extension is not present in the package '}] 
+						ifTrue: [ | res | 
+									res := self _auditCategory: category selectors: (aBehavior selectorsIn: category)  forBehavior: aBehavior loadedClass: aLoadedClass		.
+									res add: (aLoadedClass name , ' #' , category asString -> 'Class Extension is not present in the package '); 
+									yourself
+						] 
 						ifFalse: [{}"no basic extension problems found, class extension will be audited separately"]
 			]
 	] ifFalse: [
