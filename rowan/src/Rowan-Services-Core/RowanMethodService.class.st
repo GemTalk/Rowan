@@ -228,7 +228,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 { #category : 'Accessing' }
 RowanMethodService >> gsNMethod [
 
-	^self classOrMeta compiledMethodAt: selector
+	^[self classOrMeta compiledMethodAt: selector ] on: Error do:[:ex | nil "removed method"]
 ]
 
 { #category : 'Accessing' }
@@ -357,6 +357,12 @@ RowanMethodService >> rowanIsExtension [
 
 ]
 
+{ #category : 'rowan' }
+RowanMethodService >> rowanProjectName [
+
+	^projectName
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> selectedPackageServices [
 
@@ -443,6 +449,7 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 
 { #category : 'updates' }
 RowanMethodService >> update [
+	self gsNMethod ifNil:[^self].  "removed method"
 	oop ifNil: [oop := self gsNMethod asOop].
 	self 
 		initialize: (Object _objectForOop: oop) 

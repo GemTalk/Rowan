@@ -314,6 +314,12 @@ RowanPackageService >> rowanDirty [
 
 ]
 
+{ #category : 'rowan' }
+RowanPackageService >> rowanProjectName [
+
+	^projectName
+]
+
 { #category : 'other' }
 RowanPackageService >> selectedClass [
 	

@@ -64,10 +64,13 @@ RowanBrowserService >> packagesWithTests [
 ]
 
 { #category : 'commands' }
-RowanBrowserService >> reloadProjects: projectServices [
-
+RowanBrowserService >> reloadProjects: projectServices andUpdateServices: services [
+	| projectNames |
 	projectServices do:[:projectService |
-		projectService reloadProject]
+		projectService reloadProject].
+	projectNames := projectServices collect: [:projectService | projectService name]. 
+	services do:[:service | 
+		(projectNames includes: service rowanProjectName) ifTrue:[service update]].
 ]
 
 { #category : 'commands' }

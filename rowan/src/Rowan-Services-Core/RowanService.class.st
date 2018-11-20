@@ -212,6 +212,15 @@ RowanService >> rowanLoadedPackageNames [
 
 ]
 
+{ #category : 'accessing' }
+RowanService >> rowanProjectName [
+
+	"all services should be able to return a project name
+	even if they are not truly packaged" 
+
+	^nil
+]
+
 { #category : 'samples' }
 RowanService >> sampleSymbolDictionaryName [
 

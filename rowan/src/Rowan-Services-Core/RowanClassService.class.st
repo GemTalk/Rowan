@@ -678,6 +678,12 @@ RowanClassService >> renameCategoryFrom: old to: new [
 	self removeCategories: (Array with: old)
 ]
 
+{ #category : 'rowan' }
+RowanClassService >> rowanProjectName [
+
+	^projectName
+]
+
 { #category : 'commands' }
 RowanClassService >> runClassTests: classService [
 
