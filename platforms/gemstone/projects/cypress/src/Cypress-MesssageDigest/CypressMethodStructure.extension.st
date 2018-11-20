@@ -1,7 +1,7 @@
 Extension { #name : 'CypressMethodStructure' }
 
 { #category : '*Cypress-MesssageDigest' }
-addToDigest: aMessageDigestStream [
+CypressMethodStructure >> addToDigest: aMessageDigestStream [
 
 	aMessageDigestStream
 		tab;
@@ -44,7 +44,7 @@ addToDigest: aMessageDigestStream [
 ]
 
 { #category : '*Cypress-MesssageDigest' }
-isSkeleton [
+CypressMethodStructure >> isSkeleton [
 
 	^source isNil
 		and: [classStructure isNil

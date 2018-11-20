@@ -1,7 +1,7 @@
 Extension { #name : 'CypressMethodDefinition' }
 
 { #category : '*cypress-environmental-tools' }
-loadMethodDefinition: lookupSymbolList environmentLoader: environmentLoader [
+CypressMethodDefinition >> loadMethodDefinition: lookupSymbolList environmentLoader: environmentLoader [
   | cls actualCls |
   cls := (lookupSymbolList resolveSymbol: self className) value.
   actualCls := self classIsMeta
@@ -16,7 +16,7 @@ loadMethodDefinition: lookupSymbolList environmentLoader: environmentLoader [
 ]
 
 { #category : '*cypress-environmental-tools' }
-postLoadOver: aDefinition lookupSymbolList: lookupSymbolList environmentId: environmentId [
+CypressMethodDefinition >> postLoadOver: aDefinition lookupSymbolList: lookupSymbolList environmentId: environmentId [
   super
     postLoadOver: aDefinition
     lookupSymbolList: lookupSymbolList
@@ -31,7 +31,7 @@ postLoadOver: aDefinition lookupSymbolList: lookupSymbolList environmentId: envi
 ]
 
 { #category : '*cypress-environmental-tools' }
-theNonMetaClass: lookupSymbolList [
+CypressMethodDefinition >> theNonMetaClass: lookupSymbolList [
   ^ self
     resolveGlobalNamed: self className
     lookupSymbolList: lookupSymbolList

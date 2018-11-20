@@ -1,14 +1,14 @@
 Extension { #name : 'CypressStructure' }
 
 { #category : '*Cypress-MesssageDigest' }
-addToDigest: aMessageDigestStream [
+CypressStructure >> addToDigest: aMessageDigestStream [
 
 	self subclassResponsibility: #addToDigest:
 
 ]
 
 { #category : '*Cypress-MesssageDigest' }
-digest [
+CypressStructure >> digest [
 	"Answer a digest of the receiver, unless it is a skeleton (never populated).
 	 The digest is not constrained, but is typically a ByteArray or an Integer.
 	 In the case of a skeleton, answer nil so there is a distinction between
@@ -23,7 +23,7 @@ digest [
 ]
 
 { #category : '*Cypress-MesssageDigest' }
-isSkeleton [
+CypressStructure >> isSkeleton [
 
 	^self subclassResponsibility: #isSkeleton
 

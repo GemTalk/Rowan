@@ -1,7 +1,7 @@
 Extension { #name : 'CypressClassDefinition' }
 
 { #category : '*cypress-environmental-tools' }
-createOrReviseClass: aSymbolDictionaryName environmentLoader: environmentLoader [
+CypressClassDefinition >> createOrReviseClass: aSymbolDictionaryName environmentLoader: environmentLoader [
   ^ self subclassType = ''
     ifTrue: [ 
       self
@@ -24,7 +24,7 @@ createOrReviseClass: aSymbolDictionaryName environmentLoader: environmentLoader 
 ]
 
 { #category : '*cypress-environmental-tools' }
-createOrReviseRegularClass: aSymbolDictionaryName environmentLoader: environmentLoader [
+CypressClassDefinition >> createOrReviseRegularClass: aSymbolDictionaryName environmentLoader: environmentLoader [
   "To be resolved:
 		- the question of an 'environment' in which to create the class.
 		- the question of which SymbolDictionary in which to create the class.
@@ -49,7 +49,7 @@ createOrReviseRegularClass: aSymbolDictionaryName environmentLoader: environment
 ]
 
 { #category : '*cypress-environmental-tools' }
-loadClassDefinition: aSymbolDictionaryName environmentLoader: environmentLoader [
+CypressClassDefinition >> loadClassDefinition: aSymbolDictionaryName environmentLoader: environmentLoader [
   "Create a new version of the defined class. If the class already exists,
 	 copy the behaviors and state from the old version."
 
@@ -72,7 +72,7 @@ loadClassDefinition: aSymbolDictionaryName environmentLoader: environmentLoader 
 ]
 
 { #category : '*cypress-environmental-tools' }
-symbolDictionaryForClassNamed: aString symbolList: aSymbolList [
+CypressClassDefinition >> symbolDictionaryForClassNamed: aString symbolList: aSymbolList [
   "Answer the SymbolDictionary containing the named class.
 	 If there are multiple answers, answer the first.
 	 If there are no answers (i.e., the class does not exist), answer

@@ -1,7 +1,7 @@
 Extension { #name : 'CypressPackageStructure' }
 
 { #category : '*Cypress-MesssageDigest' }
-addToDigest: aMessageDigestStream [
+CypressPackageStructure >> addToDigest: aMessageDigestStream [
 
 	aMessageDigestStream
 		nextPutAll: self class name;
@@ -33,7 +33,7 @@ addToDigest: aMessageDigestStream [
 ]
 
 { #category : '*Cypress-MesssageDigest' }
-isSkeleton [
+CypressPackageStructure >> isSkeleton [
 
 	^(properties isNil or: [properties isEmpty])
 		and: [classes isNil
