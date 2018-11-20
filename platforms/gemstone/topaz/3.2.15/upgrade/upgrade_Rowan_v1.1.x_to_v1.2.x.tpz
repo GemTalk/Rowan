@@ -24,11 +24,11 @@ output push upgrade_Rowan_v1.1.x_to_v1.2.x.out
 	commit
 
 	run
-    "For update from v1.1.0, do standard update"
-    #( 'Cypress' 'STON' 'Tonel' 'Rowan' )
-			do: [:loadAttributes |
-				Rowan projectTools load
-       	 loadProjectNamed: projectName ].
+	"For update from v1.1.0, do standard update"
+	#( 'Cypress' 'STON' 'Tonel' 'Rowan' )
+		do: [:projectName |
+			Rowan projectTools load
+				loadProjectNamed: projectName ].
 %
 	commit
 
