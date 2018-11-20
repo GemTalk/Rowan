@@ -43,9 +43,9 @@ output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
 	run
     "For update from v1.0.2. Do the full load with the current list of group names"
     { 
-			{ 'Cypress'. #( 'Default' ). nil }.
-			{ 'STON'. #( 'Bootstrap' ). nil }.
-			{ 'Tonel'. #( 'Bootstrap' ). nil }.
+			{ 'Cypress'. #( 'Default' ). #() }.
+			{ 'STON'. #( 'Bootstrap' ). #() }.
+			{ 'Tonel'. #( 'Bootstrap' ). #() }.
 			{ 'Rowan'. #( 'Load' ).  #( 'core' 'tests' 'deprecated' 'jadeServer' ) }
 		}
 			do: [:loadAttributes |
