@@ -38,7 +38,7 @@ RowanFrameService >> initializeProcess: aGsProcess level: anInteger organizer: a
 { #category : 'other' }
 RowanFrameService >> testMethod [
 
-	^1212879958
+	^7950332623
 ]
 
 { #category : 'other' }
