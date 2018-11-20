@@ -33,12 +33,12 @@ output push upgrade_Rowan_v1.1.x_to_v1.2.x.out
 	commit
 
 	run
-    "run project audits"
-    | auditResult |
-		auditResult := Rowan projectTools audit
-        auditProjectsNamed: #( 'Cypress' 'STON' 'Tonel' 'Rowan' ).
-		auditResult isEmpty
-			ifFalse: [ self error: 'Post load audit failure' ]
+	"run project audits"
+	| auditResult |
+	auditResult := Rowan projectTools audit
+	auditProjectsNamed: #( 'Cypress' 'STON' 'Tonel' 'Rowan' ).
+	auditResult isEmpty
+		ifFalse: [ self error: 'Post load audit failure' ]
 %
 
 	logout
