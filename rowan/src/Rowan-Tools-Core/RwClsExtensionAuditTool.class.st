@@ -8,47 +8,54 @@ Class {
 RwClsExtensionAuditTool >> _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoadedClassExtension [
 "if we have loaded methods but no compiled methods add error to result"
 | res |
-	res := super _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoadedClassExtension.
+	res := super _auditCategory: anExtentionCategory selectors:  (aClassOrMeta selectorsIn: anExtentionCategory) forBehavior: aClassOrMeta loadedClass: aLoadedClassExtension.
 	aClassOrMeta isMeta 
 		ifTrue: [
 			(aLoadedClassExtension loadedClassMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
-				ifTrue: [ self errorLog: res  add: ((anExtentionCategory asString -> 'expected class methods in the category are missing'))   ].
+				ifTrue: [ self errorLog: res  add: ((aLoadedClassExtension name , ' #' ,anExtentionCategory asString -> 'Missing expected class methods in the category '))   ].
 	] 	ifFalse: [
 			(aLoadedClassExtension loadedInstanceMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
-				ifTrue: [ self errorLog: res  add: (anExtentionCategory asString -> ('expected instances methods in the category are missing'))   ].
+				ifTrue: [ self errorLog: res  add: (aLoadedClassExtension name , ' #' ,anExtentionCategory asString -> ('Missing expected instances methods in the category'))   ].
 	].
 	^res
 
 ]
 
 { #category : 'other' }
-RwClsExtensionAuditTool >> auditLoadedClassExtenstion: aLoadedClassExtension [
+RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 "look for methods compiled into class without Rowan API"
 | res   extensionCategoryName|
 
-	res := StringKeyValueDictionary new.
-	extensionCategoryName := aLoadedClassExtension loadedPackage asExtensionName.
+	res := self _result.
+	extensionCategoryName :=  aLoadedClassExtension loadedPackage asExtensionName "'*' , aLoadedClassExtension loadedPackage name" .
 	(Rowan globalNamed: aLoadedClassExtension name) 
-		ifNil: [self errorLog: res  add: aLoadedClassExtension name -> 'Matching compiled class does not exists '] 
-		ifNotNil: [:aBehavior | 
-			
-false ifTrue: [ 
-			self errorLog: res addAll:  ((aBehavior includesCategory: extensionCategoryName)
-				ifTrue: [(self _auditCategory: extensionCategoryName forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
-				ifFalse: [
-					(aBehavior class includesCategory: extensionCategoryName)
-						ifTrue: [(self _auditCategory: extensionCategoryName forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
-						ifFalse: [ { extensionCategoryName -> ('Missing extension category in class  ', aBehavior name printString)} ]
-			]).
-].
+		ifNil: [self errorLog: res  add: aLoadedClassExtension name -> ' Class does not exists '] 
+		ifNotNil: [:aBehavior ||categories | 
+					
+				categories := (aBehavior _baseCategorys: 0) keys.
+				(categories	
+					detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
+						ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
+						ifNil: [aLoadedClassExtension loadedInstanceMethods notEmpty ifTrue: [
+							self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing extension category ']
+			].
 
-			
+
+			categories := (aBehavior class _baseCategorys: 0) keys.
+			(categories
+				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
+					ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
+					ifNil: [aLoadedClassExtension loadedClassMethods notEmpty ifTrue: [
+						self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing classmethod extension category ']
+			].
+
+		
 			aLoadedClassExtension 
 				loadedInstanceMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
 					(self _auditLoadedInstanceMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:x | self errorLog: res add: x]
 				] 
 				loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
-					(self _auditLoadedClassMethod: aLoadedMethod forBehavior: aBehavior class loadedClass: loadedClass) ifNotNil: [:x | self errorLog: res add: x]
+					(self _auditLoadedClassMethod: aLoadedMethod forBehavior: aBehavior class loadedClass: loadedClass) ifNotNil: [:x |self errorLog: res add: x]
 				]
 		].
 		^res
