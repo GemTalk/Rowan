@@ -449,7 +449,10 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 
 { #category : 'updates' }
 RowanMethodService >> update [
-	self gsNMethod ifNil:[^self].  "removed method"
+
+	self gsNMethod ifNil:[
+		self updateType: #methodsRemoved:. 
+		^RowanCommandResult addResult: self. ].  "removed method"
 	oop ifNil: [oop := self gsNMethod asOop].
 	self 
 		initialize: (Object _objectForOop: oop) 
