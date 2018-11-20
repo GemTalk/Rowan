@@ -47,6 +47,7 @@ output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
 			{ 'STON'. #( 'Bootstrap' ). nil }.
 			{ 'Tonel'. #( 'Bootstrap' ). nil }.
 			{ 'Rowan'. #( 'Load' ).  #( 'core' 'tests' 'deprecated' 'jadeServer' ) }
+		}
 			do: [:loadAttributes |
 				Rowan projectTools load
        	 loadProjectNamed: (loadAttributes at: 1)
