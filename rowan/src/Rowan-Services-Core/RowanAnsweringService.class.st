@@ -13,6 +13,12 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'other' }
+RowanAnsweringService >> answer [
+
+	^answer
+]
+
 { #category : 'Updating' }
 RowanAnsweringService >> answer: anObject [
 
@@ -30,21 +36,50 @@ RowanAnsweringService >> exec: aString [
 { #category : 'commands' }
 RowanAnsweringService >> flipTranscript [
 	self isTranscriptInstalled ifTrue:[
-		self jadeServer uninstallTranscript]
+		self jadeiteServer uninstallTranscript]
 	ifFalse:[
-		self jadeServer installTranscript]
+		self jadeiteServer installTranscript]
 ]
 
 { #category : 'testing' }
 RowanAnsweringService >> isTranscriptInstalled [
 
-	^self transcriptObject == self jadeServer
+	^self transcriptObject == self jadeiteServer
 ]
 
-{ #category : 'private' }
-RowanAnsweringService >> jadeServer [
+{ #category : 'commands' }
+RowanAnsweringService >> loadedPackageExists: packageName [
+	
+	| actualName |
+	actualName := Rowan image packageNames detect:[:loadedName | loadedName asLowercase = packageName asLowercase] ifNone:[]. 
+	answer := (Rowan image loadedPackageNamed: actualName ifAbsent: []) notNil. 
+	command := nil. 
+	commandArgs := nil. 
+	RowanCommandResult addResult: self.
+]
 
-	^System _sessionStateAt: 3
+{ #category : 'commands' }
+RowanAnsweringService >> runMethodTests: methodServices [
+
+	| behavior |
+	methodServices do:[:methodService |
+		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
+			behavior := methodService classFromName. 
+			behavior debug: methodService selector]].
+	answer := true. 
+	RowanCommandResult initializeResults. "squash any client updates during server test run"
+	RowanCommandResult addResult: self
+]
+
+{ #category : 'commands' }
+RowanAnsweringService >> selectorsMatchingPattern: pattern [
+
+	answer := ((AllUsers userWithId: #SymbolUser) resolveSymbol: #AllSymbols) value.
+	answer := answer select: [:each |each _matchPatternNoCase: pattern].
+	answer := answer asSortedCollection asArray.
+	command := nil. 
+	commandArgs := nil. 
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'commands' }
@@ -63,4 +98,11 @@ RowanAnsweringService >> transcriptInstalled [
 RowanAnsweringService >> transcriptObject [
 	
 	^(SessionTemps current  at: #'TranscriptStream_SessionStream')
+]
+
+{ #category : 'commands' }
+RowanAnsweringService >> turnOffTranscriptWrites [
+
+	self isTranscriptInstalled ifTrue:[
+		self flipTranscript]
 ]

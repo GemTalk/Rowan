@@ -97,9 +97,9 @@ Class >> _rwSortedConstraints [
             _or:[ ((superClass _namedIvConstraintAt: x) isVersionOf: aConstraint) not ]] )
       ifTrue: [ constraintArray add: {(instVarNames at: x) . aConstraint } ] ].
 
-    aConstraint:= self varyingConstraint .
+    aConstraint:= self _varyingConstraint.
     ( (aConstraint ~~ Object) _and:
-        [(superClass varyingConstraint) ~~ aConstraint] )
+        [(superClass _varyingConstraint) ~~ aConstraint] )
 		ifTrue: [ constraintArray add: aConstraint ]
   ]
   ifFalse: [
@@ -112,7 +112,6 @@ Class >> _rwSortedConstraints [
   ].
 
 ^constraintArray
-
 ]
 
 { #category : '*rowan-gemstone-kernel' }

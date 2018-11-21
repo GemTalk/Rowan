@@ -29,11 +29,10 @@ RowanQueryService >> hierarchyImplementorsOf: selector inClass: className [
 	behavior := Rowan globalNamed: className.
 	classes := behavior allSuperclasses. 
 	classes add: behavior. 
-	classes addAll: (organizer subclassesOf: behavior). 
+	classes addAll: (organizer allSubclassesOf: behavior). 
 	methods := organizer implementorsOf: selector in: classes.
 	queryResults := self methodServicesFrom: methods.
 	RowanCommandResult addResult: self.
-
 ]
 
 { #category : 'queries' }
@@ -43,11 +42,10 @@ RowanQueryService >> hierarchySendersOf: selector inClass: className [
 	behavior := Rowan globalNamed: className.
 	classes := behavior allSuperclasses. 
 	classes add: behavior. 
-	classes addAll: (organizer subclassesOf: behavior). 
+	classes addAll: (organizer allSubclassesOf: behavior). 
 	methods := organizer sendersOf: selector in: classes.
 	queryResults := self methodServicesFrom: methods first.
 	RowanCommandResult addResult: self.
-
 ]
 
 { #category : 'queries' }
@@ -58,6 +56,15 @@ RowanQueryService >> implementorsOf: selector [
 	queryResults := self methodServicesFrom: methods.
 	RowanCommandResult addResult: self.
 
+]
+
+{ #category : 'queries' }
+RowanQueryService >> literalReferences: symbol [
+
+	| methods |
+	methods := organizer referencesToLiteral: symbol.
+	queryResults := self methodServicesFrom: methods first.
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'queries' }
@@ -98,6 +105,14 @@ RowanQueryService >> projectLog: projectName [
 		commitLogProjectNamed: projectName
 		limit: self defaultProjectLogSize).
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'queryResults' }
+RowanQueryService >> queryResults [
+
+	"for tests. So far, not needed on server." 
+
+	^queryResults
 ]
 
 { #category : 'queries' }

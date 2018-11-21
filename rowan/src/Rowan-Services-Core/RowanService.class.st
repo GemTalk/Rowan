@@ -76,6 +76,14 @@ RowanService >> commandArgs [
 
 ]
 
+{ #category : 'accessing' }
+RowanService >> commandArgs: anArray [
+
+	"for tests" 
+
+	commandArgs := anArray
+]
+
 { #category : 'symbol dictionaries' }
 RowanService >> createDefaultSymbolDictionary [
 
@@ -139,6 +147,12 @@ RowanService >> excludedInstVars [
 
 { #category : 'initialization' }
 RowanService >> initialize [
+]
+
+{ #category : 'accessing' }
+RowanService >> jadeiteServer [
+
+	^(Rowan jadeServerClassNamed: #JadeServer) theJadeiteServer
 ]
 
 { #category : 'accessing' }
@@ -252,4 +266,33 @@ RowanService >> symbolDictionaryNamed: aName [
 RowanService >> updateType: aSymbol [
 
 	updateType := aSymbol
+]
+
+{ #category : 'fileout' }
+RowanService >> writeFileOutHeaderOn: stream [
+	"This method will write a fileout header onto the given file.
+	Adapted from GBS - GbxBrowser>>writeFileOutHeaderOn:"
+
+	| rawVer beVer cr |
+	stream nextPutAll: 'fileformat utf8';
+			cr. 
+	rawVer := System _version.
+	beVer := ''.
+	cr := String with: Character cr.
+	"Comment each newline"
+	(rawVer subStrings: (Array with: Character lf)) do: [:line | beVer := beVer , '! ' , line , cr].
+	stream
+		nextPutAll: '!';
+		cr;
+		nextPutAll: '! From ';
+		nextPutAll: beVer;
+		cr;
+		nextPutAll: '! On ';
+		nextPutAll: Date today printString;
+		nextPutAll: ', ';
+		nextPutAll: Time now printString;
+		cr;
+		nextPutAll: '!';
+		cr;
+		flush
 ]

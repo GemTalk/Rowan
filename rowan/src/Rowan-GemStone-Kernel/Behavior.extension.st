@@ -125,16 +125,15 @@ mySubclasses do:[:x| x _rwNewInheritedConstraint: aClass atOffset: offset ] .
 Behavior >> _rwNewConstraint: aClass atOffset: offset [
 
 	| oldConstraintsArray newConstraintsArray constraintsIndex instanceVariableNames |
-	oldConstraintsArray := self _constraints.
+	oldConstraintsArray := constraints.
 	newConstraintsArray := oldConstraintsArray copy.
 	instanceVariableNames := self class allInstVarNames.
 	constraintsIndex := instanceVariableNames indexOf: #constraints.
 	self _unsafeAt: constraintsIndex put: newConstraintsArray.
 
-	self _newConstraint: aClass atOffset: offset.
+	[ self _newConstraint: aClass atOffset: offset ] on: Deprecated do: [:ex | ex resume ].
 
-	self _constraints immediateInvariant
-
+	constraints immediateInvariant
 ]
 
 { #category : '*rowan-gemstone-kernel' }
@@ -179,6 +178,35 @@ Behavior >> rowanProjectName [
 		loadedClassForClass: self thisClass
 		ifAbsent: [ ^ Rowan unpackagedName ].
 	^ loadedClass loadedProject name
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+Behavior >> rwCompileExtensionMethod: sourceString category: categoryName packageName: packageName [
+
+	| aCategory |
+	
+	categoryName first == $* ifFalse: [self error: 'Extension category must  contain * as first character'].
+	(aCategory isEquivalent: '*', packageName asLowercase) ifFalse: [self error: 'Extension category name must match lowercased name of Rowan package'].
+	^ Rowan projectTools browser
+		addOrUpdateMethod: sourceString
+		inProtocol: aCategory asString asLowercase
+		forClassNamed: self thisClass name asString
+		isMeta: self isMeta
+		inPackageNamed: packageName
+
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+Behavior >> rwCompileExtensionMethod: sourceString package: aPackageName [
+
+	| aCategory |
+	aCategory := '*', aPackageName asLowercase .
+	^Rowan projectTools browser
+		addOrUpdateMethod: sourceString
+		inProtocol: aCategory asString asLowercase
+		forClassNamed: self thisClass name asString
+		isMeta: self isMeta
 
 ]
 

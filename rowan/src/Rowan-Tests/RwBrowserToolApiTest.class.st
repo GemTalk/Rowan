@@ -664,7 +664,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 										assert: false
 										description:
 											'no classes expected in ' , (packageNames2 at: 2) printString ] ] ]
-				loadedClassExtenstionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
+				loadedClassExtensionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
 					self assert: theLoadedProject == loadedProject.
 					self assert: theLoadedPackage == loadedPackage.
 					self
@@ -811,7 +811,7 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 										assert: false
 										description:
 											'no classes expected in ' , (packageNames2 at: 2) printString ] ] ]
-				loadedClassExtenstionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
+				loadedClassExtensionsDo: [ :loadedProject :loadedPackage :loadedClassExtension | 
 					self assert: theLoadedProject == loadedProject.
 					self assert: theLoadedPackage == loadedPackage.
 					self
@@ -893,7 +893,6 @@ RwBrowserToolApiTest >> testDeleteComplicatedPackage [
 	testProjectDefinition := browserTool projectNamed: projectName1.
 	testPackageNames := testProjectDefinition packageNames.
 	self assert: testPackageNames = {packageName2}
-
 ]
 
 { #category : 'tests' }

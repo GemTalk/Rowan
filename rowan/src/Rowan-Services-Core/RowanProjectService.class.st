@@ -8,7 +8,9 @@ Class {
 		'isSkew',
 		'isDirty',
 		'packages',
-		'changes'
+		'changes',
+		'existsOnDisk',
+		'isLoaded'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -37,6 +39,12 @@ RowanProjectService class >> newNamed: aString [
 	^inst
 ]
 
+{ #category : 'accessing' }
+RowanProjectService >> _isSkew [
+
+	^isSkew
+]
+
 { #category : 'commands' }
 RowanProjectService >> addPackageNamed: packageName [
 
@@ -46,15 +54,15 @@ RowanProjectService >> addPackageNamed: packageName [
 
 { #category : 'initialization' }
 RowanProjectService >> basicRefresh [
-	self projectIsLoaded ifFalse:[
+	(isLoaded := self projectIsLoaded) ifFalse:[
 		updateType := #removedProject:. 
 		^RowanCommandResult addResult: self]. 
 	isDirty := self isDirty. 
+	self setExistsOnDisk.
 	isSkew := self isSkew.
 	sha := self rowanSha.
 	branch := self rowanBranch.
 	RowanCommandResult addResult: self
-
 ]
 
 { #category : 'accessing' }
@@ -140,6 +148,12 @@ RowanProjectService >> defaultProjectName: aString [
 
 ]
 
+{ #category : 'accessing' }
+RowanProjectService >> existsOnDisk [
+
+	^existsOnDisk
+]
+
 { #category : 'initialization' }
 RowanProjectService >> initialize [
 
@@ -164,9 +178,10 @@ RowanProjectService >> isDirty: aBoolean [
 
 { #category : 'rowan' }
 RowanProjectService >> isSkew [
+	| repositorySha |
 	name isNil ifTrue:[^false].
-	^self sha ~= self repositorySha
-
+	repositorySha := [self repositorySha] on: Error do:[:ex | repositorySha := 'not on disk'].
+	^self sha ~= repositorySha
 ]
 
 { #category : 'commands' }
@@ -309,7 +324,7 @@ RowanProjectService >> pushToGit [
 { #category : 'initialization' }
 RowanProjectService >> refresh [
 	self basicRefresh. 
-	self projectIsLoaded ifTrue:[
+	isLoaded ifTrue:[
 		packages := self packageServices].
 ]
 
@@ -380,6 +395,15 @@ RowanProjectService >> servicePerform: symbol withArguments: collection [
 RowanProjectService >> setDefaultProject [
 
 	self class defaultProjectName: name
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> setExistsOnDisk [
+	"might be a better test than #repositorySha for
+	determining if a project exists on disk." 
+
+	[self repositorySha] on: Error do:[:ex | ^existsOnDisk := false].
+	existsOnDisk := true.
 ]
 
 { #category : 'accessing' }
