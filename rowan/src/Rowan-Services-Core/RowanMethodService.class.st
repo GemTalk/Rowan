@@ -450,7 +450,7 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 { #category : 'updates' }
 RowanMethodService >> update [
 
-	self gsNMethod ifNil:[
+	self wasDeleted ifTrue:[
 		self updateType: #methodsRemoved:. 
 		^RowanCommandResult addResult: self. ].  "removed method"
 	oop ifNil: [oop := self gsNMethod asOop].
@@ -458,4 +458,10 @@ RowanMethodService >> update [
 		initialize: (Object _objectForOop: oop) 
 		organizer: ClassOrganizer new.
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'testing' }
+RowanMethodService >> wasDeleted [
+
+	^self gsNMethod isNil
 ]
