@@ -3,7 +3,7 @@ run
 	deprecationAction := Deprecated deprecatedAction.
 	[
 		Deprecated doErrorOnDeprecated.
-		projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' ).
+		projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' 'FileSystemGs' ).
 		"audit before load"
 		projectNames do: [:projectName |
 			| audit |

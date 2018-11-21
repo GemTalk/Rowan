@@ -1,0 +1,19 @@
+ RwNestedProjectLoadConfiguration{
+	#name : 'UserGlobals',
+	#version : '0.1.0',
+	#conditionalPackages : {
+		[ 'gemstone' ] : {
+				'jadeServer' : {#packageNames : ['Rowan-JadeServer']}
+			}
+		},
+	#conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#packageNameToPlatformPropertiesMap : {
+					'Rowan-JadeServer' : { 'symbolDictName' : 'UserGlobals' }
+					}
+				}
+			}
+		},
+	#comment : 'Rowan UserGlobals configuration - packages are loaded into UserGlobals symbol dictionary (SystemUser)'
+}

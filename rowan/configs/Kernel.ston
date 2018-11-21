@@ -3,13 +3,12 @@
 	#version : '0.1.0',
 	#conditionalPackages : {
 		[ 'common' ] : {
-                        'core': {
+      'core': {
 				#packageNames : [
 					'Rowan-Kernel',
 					'Rowan-Url-Core',
 					'Rowan-Url-Extensions',
 					'Rowan-Cypress-Core',
-					'Rowan-Cypress-Kernel',
 					'Rowan-Definitions',
 					'Rowan-Core-Definitions-Extensions',
 					'Rowan-Cypress-Definitions',
@@ -18,8 +17,7 @@
 					'Rowan-Configurations',
 					'Rowan-Core',
 					'Rowan-Tools-Core',
-					'Rowan-Tools-Extensions',
-					'Rowan-Tools-Kernel'
+					'Rowan-Tools-Extensions'
 					]
 				},
 			'deprecated' : {
@@ -30,32 +28,28 @@
 				}
 			},
 		[ 'gemstone' ] : {
-                        'core': {
+      'core': {
 				#packageNames : [
 					'Rowan-Services-Extensions',
 					'Rowan-Services-Core',
 					'Rowan-GemStone-Core',
-					'Rowan-GemStone-Kernel',
 					'Rowan-GemStone-Loader',
 					'Rowan-GemStone-Loader-Extensions',
 					'Rowan-GemStone-Definitions',
 					'Rowan-GemStone-Specifications'
 					]
-				}, 
-			'jadeServer' : {#packageNames : ['Rowan-JadeServer']}
+				}
 			},
 		[ 'gs3.[2-]' ] : {
-                        'core': {
+      'core': {
 				#packageNames : [
-                			'GemStone-Interactions-Core',
-					'GemStone-Interactions-Kernel'
+          'GemStone-Interactions-Core'
 					]
 				}
 			},
 		[ 'gs3.2.[15-]' ] : {
-                        'core': {
+      'core': {
 				#packageNames : [
-					'Rowan-GemStone-3215',
 					'Rowan-Url-3215'
 					]
 				}
@@ -65,12 +59,6 @@
 		'gemstone' : {
 			'SystemUser' : {
 				#packageNameToPlatformPropertiesMap : {
-					'Rowan-JadeServer' : { 'symbolDictName' : 'UserGlobals' },
-					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
-					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
-					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
-					'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
-					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Core-Definitions-Extensions' : { 'symbolDictName' : 'RowanTools' },

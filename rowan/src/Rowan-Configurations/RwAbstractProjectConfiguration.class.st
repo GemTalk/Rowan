@@ -90,8 +90,15 @@ RwAbstractProjectConfiguration >> _exportToUrl: fileUrl [
 					string := STON toStringPretty: self.
 					stream nextPutAll: string.
 					^ self ] ].
+  url schemeName = 'memory'
+    ifTrue: [ 
+		(FileSystem currentMemoryFileSystem workingDirectory / url pathForDirectory / self name , 'ston')
+			writeStreamDo: [ :stream | 
+			  | string |
+			  string := STON toStringPretty: self.
+			  stream nextPutAll: string.
+			  ^ self ] ].
 	^ nil	"otherwise a noop"
-
 ]
 
 { #category : 'private' }
@@ -128,8 +135,7 @@ RwAbstractProjectConfiguration >> acceptCompoundVisitor: aVisitor [
 { #category : 'visiting' }
 RwAbstractProjectConfiguration >> acceptNestedVisitor: aVisitor [
 
-	^ self subclassResponsibility: #acceptNestedVisitor:
-
+	^ self acceptVisitor: aVisitor
 ]
 
 { #category : 'visiting' }
@@ -183,12 +189,13 @@ RwAbstractProjectConfiguration >> currentVersion [
 { #category : 'exporting' }
 RwAbstractProjectConfiguration >> export [
 
-	|  exportUrl exportPath export |
-	exportPath := self _repositoryRootPath , '/' , self _configsPath , '/'.
-	Rowan fileUtilities ensureDirectoryExists: exportPath.
-	exportUrl := 'file:' , exportPath.
+	|  exportUrl exportPath |
+	exportPath := self _repositoryRootPath asFileReference / self _configsPath.
+	exportPath ensureCreateDirectory.
+	exportUrl := exportPath fileSystem isMemoryFileSystem
+		ifTrue: [ 'memory:' , exportPath pathString ]
+		ifFalse: [ 'file:' , exportPath pathString, '/' ].
 	^ self exportToUrl: exportUrl
-
 ]
 
 { #category : 'exporting' }

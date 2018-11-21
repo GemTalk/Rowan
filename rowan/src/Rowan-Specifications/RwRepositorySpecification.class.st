@@ -26,6 +26,22 @@ RwRepositorySpecification >> commitLogForTool: aRwTool limit: logLimit [
   
 ]
 
+{ #category : 'initialization' }
+RwRepositorySpecification >> initializeForExport [
+  "if spec has been exported, clear out any of the fields that represent local disk state"
+
+  super initializeForImport.
+  repositoryRootPath := nil
+]
+
+{ #category : 'initialization' }
+RwRepositorySpecification >> initializeForImport [
+  "if spec has been imported, clear out any of the fields that represent local disk state"
+
+  super initializeForImport.
+  repositoryRootPath := nil
+]
+
 { #category : 'copying' }
 RwRepositorySpecification >> postCopy [
   "don't forget to copy any compound state objects"
