@@ -209,39 +209,6 @@ self error: 'need to create class to filename map to handle class file names on 
 	self processPackage: aPackageModification
 ]
 
-{ #category : 'actions' }
-RwModificationTonelWriterVisitor >> changedClass: aClassModification [
-
-	currentClassDefinition := aClassModification after.
-
-	self processClass: aClassModification
-]
-
-{ #category : 'actions' }
-RwModificationTonelWriterVisitor >> changedClassExtension: aClassExtensionModification [
-
-	currentClassDefinition := aClassExtensionModification after.
-
-	self processClassExtension: aClassExtensionModification
-]
-
-{ #category : 'actions' }
-RwModificationTonelWriterVisitor >> deletedClass: aClassModification [
-
-	currentClassDefinition := aClassModification after.
-
-	self halt. "delete the class file"
-]
-
-{ #category : 'actions' }
-RwModificationTonelWriterVisitor >> deletedClassExtension: aClassExtensionModification [
-
-	currentClassDefinition := aClassExtensionModification after.
-
-
-	self halt. "delete the class extension file"
-]
-
 { #category : 'class writing' }
 RwModificationTonelWriterVisitor >> processClass: aClassModification [
 

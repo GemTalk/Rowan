@@ -56,6 +56,8 @@ RwModificationWriterVisitor >> addedClass: aClassModification [
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedClassExtension: aClassExtensionModification [
 
+	currentClassExtension := aClassExtensionModification after.
+
 	self processClassExtension: aClassExtensionModification
 ]
 
@@ -76,11 +78,15 @@ RwModificationWriterVisitor >> addedProject: aProjectModification [
 { #category : 'actions' }
 RwModificationWriterVisitor >> changedClass: aClassModification [
 
+	currentClassDefinition := aClassModification after.
+
 	self processClass: aClassModification
 ]
 
 { #category : 'actions' }
 RwModificationWriterVisitor >> changedClassExtension: aClassExtensionModification [
+
+	currentClassExtension := aClassExtensionModification after.
 
 	self processClassExtension: aClassExtensionModification
 ]
@@ -127,13 +133,18 @@ RwModificationWriterVisitor >> currentProjectDefinition [
 { #category : 'actions' }
 RwModificationWriterVisitor >> deletedClass: aClassModification [
 
-	self subclassResponsibility: #deletedClass:
+	currentClassDefinition := aClassModification after.
+
+	self halt. "delete the class file"
 ]
 
 { #category : 'actions' }
 RwModificationWriterVisitor >> deletedClassExtension: aClassExtensionModification [
 
-	self subclassResponsibility: #deletedClassExtension:
+	currentClassExtension := aClassExtensionModification after.
+
+
+	self halt. "delete the class extension file"
 ]
 
 { #category : 'actions' }
@@ -169,6 +180,8 @@ RwModificationWriterVisitor >> processClassExtension: aClassExtensionModificatio
 
 { #category : 'package writing' }
 RwModificationWriterVisitor >> processPackage: aPackageModification [
+
+self error: 'need to create package to filename map to handle package file names on case insensitive file systems'.
 
 	aPackageModification classesModification acceptVisitor: self.
 	aPackageModification classExtensionsModification acceptVisitor: self
