@@ -6,9 +6,7 @@ Class {
 		'separateMethodMetaAndSource',
 		'noMethodMetaData',
 		'useCypressPropertiesFile',
-		'monticelloMetadata',
-		'instanceFileNameMap',
-		'classFileNameMap'
+		'monticelloMetadata'
 	],
 	#classInstVars : [
 		'specials'
@@ -69,24 +67,28 @@ RwModificationFiletreeWriterVisitor >> _classExtensionOf: aClassExtension [
 { #category : 'class writing' }
 RwModificationFiletreeWriterVisitor >> _classExtensionSourceDir [
 
-	^ self _packageSourceDir / self currentClassExtension name, 'extension'
+	| filename |
+	filename := classExtFileNameMap at:  self currentClassExtension name.
+	^ self _packageSourceDir / filename, 'extension'
 ]
 
 { #category : 'class writing' }
 RwModificationFiletreeWriterVisitor >> _classSourceDir [
 
-	^ self _packageSourceDir / self currentClassDefinition name, 'class'
+	| filename |
+	filename := classDefFileNameMap at:  self currentClassDefinition name.
+	^ self _packageSourceDir / filename, 'class'
 ]
 
-{ #category : 'class writing' }
-RwModificationFiletreeWriterVisitor >> _createFileNameMapFor: aMethodDefinitionCollection [
+{ #category : 'method writing' }
+RwModificationFiletreeWriterVisitor >> _createFileNameMapForMethods: aMethodDefinitionDictionary [
   "https://github.com/dalehenrich/filetree/issues/92"
 
   "answer a dictionary that maps each definition selector to a filename that is guaranteed unique on case insensitive file systems"
 
   | map filenameMap |
   map := Dictionary new.
-  aMethodDefinitionCollection
+  aMethodDefinitionDictionary
     do: [ :mDef | 
       | sel col |
       "sort into bins by lowercase selector. "
@@ -331,8 +333,6 @@ RwModificationFiletreeWriterVisitor >> addedPackage: aPackageModification [
 			"Rowan can read filetree repositories without CypressPropertiesFile, but does write without useCypressPropertiesFile"
 			self error: 'only useCypressPropertiesFile not supported.' ].
 
-self error: 'need to create class to filename map to handle class file names on case insensitive file systems'.
-
 	self processPackage: aPackageModification
 ]
 
@@ -373,8 +373,8 @@ RwModificationFiletreeWriterVisitor >> processClass: aClassModification [
 				<< (self _typeClassDefinitionOf: self currentClassDefinition)
 				<< self _newLine ].
 
-	instanceFileNameMap  := self _createFileNameMapFor: self currentClassDefinition instanceMethodDefinitions.
-	classFileNameMap := self _createFileNameMapFor: self currentClassDefinition classMethodDefinitions.
+	instanceFileNameMap  := self _createFileNameMapForMethods: self currentClassDefinition instanceMethodDefinitions.
+	classFileNameMap := self _createFileNameMapForMethods: self currentClassDefinition classMethodDefinitions.
 
 	aClassModification instanceMethodsModification acceptVisitor: self.
 	aClassModification classMethodsModification acceptVisitor: self
@@ -393,8 +393,8 @@ RwModificationFiletreeWriterVisitor >> processClassExtension: aClassExtensionMod
 				<< (self _classExtensionOf: self currentClassExtension)
 				<< self _newLine ].
 
-	instanceFileNameMap  := self _createFileNameMapFor: self currentClassExtension instanceMethodDefinitions.
-	classFileNameMap := self _createFileNameMapFor: self currentClassExtension classMethodDefinitions.
+	instanceFileNameMap  := self _createFileNameMapForMethods: self currentClassExtension instanceMethodDefinitions.
+	classFileNameMap := self _createFileNameMapForMethods: self currentClassExtension classMethodDefinitions.
 
 	aClassExtensionModification instanceMethodsModification acceptVisitor: self.
 	aClassExtensionModification classMethodsModification acceptVisitor: self
@@ -404,6 +404,8 @@ RwModificationFiletreeWriterVisitor >> processClassExtension: aClassExtensionMod
 RwModificationFiletreeWriterVisitor >> processProject: aProjectModification [
 
 	| projectProperties |
+
+	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
 
 	"confirm that the project source is written in Tonel format"
 	(self _repositoryFormatFor: aProjectModification) = 'filetree' ifFalse: [ self error: 'expected tonel format repository' ].

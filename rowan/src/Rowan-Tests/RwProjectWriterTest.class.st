@@ -1068,7 +1068,8 @@ RwProjectWriterTest >> testFiletreeWriter_A [
 	visitor visit: projectSetModification.
 
 "validation -- need to have reader implemented before doing validation"
-self halt
+self error: 'validation is not implemented, yet'.
+self error: 'Need test case with package/class/method that differ only in case'
 ]
 
 { #category : 'tests' }
@@ -2060,4 +2061,6 @@ RwProjectWriterTest >> testTonelWriter_A [
 	visitor visit: projectSetModification.
 
 "validation -- need to have reader implemented before doing validation"
+self error: 'validation is not implemented, yet'.
+self error: 'Need test case with package/class/method that differ only in case'
 ]

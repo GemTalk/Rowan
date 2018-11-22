@@ -1,6 +1,13 @@
 Class {
 	#name : 'RwModificationCypressFamilyWriterVisitor',
 	#superclass : 'RwModificationWriterVisitor',
+	#instVars : [
+		'instanceFileNameMap',
+		'classFileNameMap',
+		'classDefFileNameMap',
+		'classExtFileNameMap',
+		'packageDefFileNameMap'
+	],
 	#category : 'Rowan-Core'
 }
 
@@ -22,7 +29,9 @@ RwModificationCypressFamilyWriterVisitor >> _commentOf: aClassDefinition [
 { #category : 'package writing' }
 RwModificationCypressFamilyWriterVisitor >> _packageSourceDir [
 
-	^ self _projectSourceDir / self currentPackageDefinition name, self packageExtension
+	| filename |
+	filename := packageDefFileNameMap at:  self currentPackageDefinition name.
+	^ self _projectSourceDir /filename, self packageExtension
 ]
 
 { #category : 'project writing' }
@@ -66,4 +75,13 @@ RwModificationCypressFamilyWriterVisitor >> deletedPackage: aPackageModification
 RwModificationCypressFamilyWriterVisitor >> packageExtension [
 
 	^ 'package'
+]
+
+{ #category : 'package writing' }
+RwModificationCypressFamilyWriterVisitor >> processPackage: aPackageModification [
+
+	classDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification after classDefinitions.
+	classExtFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification after classExtensions.
+
+	super processPackage: aPackageModification
 ]
