@@ -1,21 +1,11 @@
 Class {
-	#name : 'RwProjectWriterTest',
-	#superclass : 'RwBrowserToolTest',
-	#instVars : [
-		'filesystem',
-		'toDelete',
-		'projectsToDelete'
-	],
+	#name : 'RwProjectTopazWriterTest',
+	#superclass : 'RwProjectReaderWriterTest',
 	#category : 'Rowan-Tests'
 }
 
 { #category : 'private' }
-RwProjectWriterTest >> _createFileSystem [
-	^ FileSystem disk "currentMemoryFileSystem"
-]
-
-{ #category : 'private' }
-RwProjectWriterTest >> _expectedGsTopazWriterFileContents_A [
+RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_A [
 
 	^ '! Class Declarations
 
@@ -104,7 +94,7 @@ method1 ^1
 ]
 
 { #category : 'private' }
-RwProjectWriterTest >> _expectedGsTopazWriterFileContents_B [
+RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_B [
 
 	^ '! Class Declarations
 
@@ -198,7 +188,7 @@ method5 ^5
 ]
 
 { #category : 'private' }
-RwProjectWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Core [
+RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Core [
 
 	^ '! Class Declarations
 
@@ -278,7 +268,7 @@ method4 ^4
 ]
 
 { #category : 'private' }
-RwProjectWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Extension1 [
+RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Extension1 [
 
 	^ '! Class extensions for ''Issue361Class1''
 
@@ -293,7 +283,7 @@ method1 ^1
 ]
 
 { #category : 'private' }
-RwProjectWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Extension2 [
+RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Extension2 [
 
 	^ '! Class extensions for ''Issue361Class1''
 
@@ -308,7 +298,7 @@ method5 ^5
 ]
 
 { #category : 'private' }
-RwProjectWriterTest >> _expectedGsTopazWriterFileContents_D_Issue361Core [
+RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_D_Issue361Core [
 
 	^ '! Class Declarations
 
@@ -399,7 +389,7 @@ Issue361Class1 initialize.
 ]
 
 { #category : 'private' }
-RwProjectWriterTest >> _expectedGsTopazWriterFileContents_D_Issue361Extension1 [
+RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_D_Issue361Extension1 [
 
 	^ '! Class extensions for ''Issue361Class1''
 
@@ -414,7 +404,7 @@ method1 ^1
 ]
 
 { #category : 'private' }
-RwProjectWriterTest >> _expectedGsTopazWriterFileContents_D_Issue361Extension2 [
+RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_D_Issue361Extension2 [
 
 	^ '! Class extensions for ''Issue361Class1''
 
@@ -444,7 +434,7 @@ Issue361Class2 initialize.
 ]
 
 { #category : 'private' }
-RwProjectWriterTest >> _expectedGsTopazWriterFileContents_Multi_A [
+RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_Multi_A [
 
 	^ '! Class Declarations
 
@@ -661,7 +651,7 @@ Issue361Class2_2 initialize.
 ]
 
 { #category : 'private' }
-RwProjectWriterTest >> _expectedGsTopazWriterFileContents_MULTI_B_Issue361Core [
+RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_MULTI_B_Issue361Core [
 
 	^ '! Class Declarations
 
@@ -830,7 +820,7 @@ Issue361Class1_2 initialize.
 ]
 
 { #category : 'private' }
-RwProjectWriterTest >> _expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension1 [
+RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension1 [
 
 	^ '! Class extensions for ''Issue361Class1_1''
 
@@ -854,7 +844,7 @@ method1 ^1
 ]
 
 { #category : 'private' }
-RwProjectWriterTest >> _expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension2 [
+RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension2 [
 
 	^ '! Class extensions for ''Issue361Class1_1''
 
@@ -902,178 +892,8 @@ Issue361Class2_2 initialize.
 '
 ]
 
-{ #category : 'private' }
-RwProjectWriterTest >> _markForCleanup: aFileReference [
-	toDelete add: aFileReference
-]
-
-{ #category : 'private' }
-RwProjectWriterTest >> _markForProjectCleanup: aProjectName [
-	projectsToDelete add: aProjectName
-]
-
-{ #category : 'private' }
-RwProjectWriterTest >> _projectSetDefinitionForStructureWriters_A [
-
-	"multiple class extensions from multiple packages for multiple classes"
-
-	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath packageName3 |
-
-	projectName := 'Issue361'.
-	self _markForProjectCleanup: projectName.
-	packageName1 := 'Issue361-Core'.
-	packageName2 := 'Issue361-Extension1'.
-	packageName3 := 'Issue361-Extension2'.
-	className1 := 'Issue361Class1'. 
-	className2 := 'Issue361Class2'. 
-	className3 := 'Issue361Class3'. 
-
-"create definitions"
-	projectDefinition := (RwProjectDefinition
-		newForDiskBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
-		yourself.
-
-	packageDefinition := projectDefinition packageNamed: packageName1.
-
-	classDefinition := RwClassDefinition
-		newForClassNamed: className1
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	classDefinition
-		addClassMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method2'
-					protocol: 'accessing'
-					source: 'method2 ^2').
-	packageDefinition addClassDefinition: classDefinition.
-
-	classDefinition := RwClassDefinition
-		newForClassNamed: className2
-		super: 'Array'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	classDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method3'
-					protocol: 'accessing'
-					source: 'method3 ^3').
-	packageDefinition addClassDefinition: classDefinition.
-
-	classDefinition := RwClassDefinition
-		newForClassNamed: className3
-		super: className1
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	classDefinition
-		addClassMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method4'
-					protocol: 'accessing'
-					source: 'method4 ^4').
-	packageDefinition addClassDefinition: classDefinition.
-
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method1'
-					protocol: '*', packageName2 asLowercase
-					source: 'method1 ^1').
-	packageDefinition := projectDefinition packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
-
-	packageDefinition := projectDefinition packageNamed: packageName3.
-
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method5'
-					protocol: '*', packageName3 asLowercase
-					source: 'method5 ^5').
-	packageDefinition addClassExtension: classExtensionDefinition.
-
-"project set"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition.
-
-	^ projectSetDefinition
-]
-
-{ #category : 'running' }
-RwProjectWriterTest >> setUp [
-	super setUp.
-	filesystem := self _createFileSystem.
-	toDelete := OrderedCollection new.
-	projectsToDelete := OrderedCollection new.
-]
-
-{ #category : 'running' }
-RwProjectWriterTest >> tearDown [
-	toDelete
-		select: [ :aFileRef | aFileRef exists ]
-		thenDo: [ :aFileRef | aFileRef deleteAll ].
-	projectsToDelete
-		do: [ :projectName | Rowan projectTools delete deleteProjectNamed: projectName ].
-	super tearDown
-]
-
 { #category : 'tests' }
-RwProjectWriterTest >> testFiletreeWriter_A [
-
-	"multiple class extensions from multiple packages for multiple classes"
-
-	| projectName projectSetDefinition projectDefinition projectSetModification visitor repositoryRootPath |
-"project set"
-	projectSetDefinition := self _projectSetDefinitionForStructureWriters_A.
-	projectName := projectSetDefinition projectNames at: 1.
-	projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
-
-"set project up for using filesystem"
-	repositoryRootPath := filesystem workingDirectory / projectName.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
-
-	projectDefinition repositoryRootPath: repositoryRootPath.
-	Rowan projectTools create createProjectFor: projectDefinition format: 'filetree'.	"create repository structure on filesystem"
-
-"write project set to tonel"
-	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwModificationFiletreeWriterVisitor new
-		repositoryRootPath: repositoryRootPath;
-		yourself.
-
-	visitor visit: projectSetModification.
-
-"validation -- need to have reader implemented before doing validation"
-self error: 'validation is not implemented, yet'.
-self error: 'Need test case with package/class/method that differ only in case'
-]
-
-{ #category : 'tests' }
-RwProjectWriterTest >> testGsTopazWriter_A [
+RwProjectTopazWriterTest >> testGsTopazWriter_A [
 
 	"simple case with only two packages and a single set of extensions for a class"
 
@@ -1185,7 +1005,7 @@ RwProjectWriterTest >> testGsTopazWriter_A [
 ]
 
 { #category : 'tests' }
-RwProjectWriterTest >> testGsTopazWriter_B [
+RwProjectTopazWriterTest >> testGsTopazWriter_B [
 
 	"ramp up to multiple class extensions from multiple packages for multiple classes"
 
@@ -1311,7 +1131,7 @@ RwProjectWriterTest >> testGsTopazWriter_B [
 ]
 
 { #category : 'tests' }
-RwProjectWriterTest >> testGsTopazWriter_C [
+RwProjectTopazWriterTest >> testGsTopazWriter_C [
 
 	"ramp up to multiple class extensions from multiple packages for multiple classes"
 
@@ -1446,7 +1266,7 @@ RwProjectWriterTest >> testGsTopazWriter_C [
 ]
 
 { #category : 'tests' }
-RwProjectWriterTest >> testGsTopazWriter_D [
+RwProjectTopazWriterTest >> testGsTopazWriter_D [
 
 	"ramp up to multiple class extensions from multiple packages for multiple classes"
 
@@ -1598,7 +1418,7 @@ RwProjectWriterTest >> testGsTopazWriter_D [
 ]
 
 { #category : 'tests' }
-RwProjectWriterTest >> testGsTopazWriter_error [
+RwProjectTopazWriterTest >> testGsTopazWriter_error [
 
 	"try to write to multiple files when no configs are available"
 
@@ -1723,7 +1543,7 @@ RwProjectWriterTest >> testGsTopazWriter_error [
 ]
 
 { #category : 'tests' }
-RwProjectWriterTest >> testGsTopazWriter_MultiProject_A [
+RwProjectTopazWriterTest >> testGsTopazWriter_MultiProject_A [
 
 	"ramp up to multiple class extensions from multiple packages and multiple projects"
 
@@ -1872,7 +1692,7 @@ RwProjectWriterTest >> testGsTopazWriter_MultiProject_A [
 ]
 
 { #category : 'tests' }
-RwProjectWriterTest >> testGsTopazWriter_MultiProject_B [
+RwProjectTopazWriterTest >> testGsTopazWriter_MultiProject_B [
 
 	"ramp up to multiple class extensions from multiple packages and multiple projects"
 
@@ -2033,34 +1853,4 @@ RwProjectWriterTest >> testGsTopazWriter_MultiProject_B [
 				self assert: a = b ].
 
 			self assert: x = y ].
-]
-
-{ #category : 'tests' }
-RwProjectWriterTest >> testTonelWriter_A [
-
-	"multiple class extensions from multiple packages for multiple classes"
-
-	| projectName projectSetDefinition projectDefinition projectSetModification visitor repositoryRootPath |
-"project set"
-	projectSetDefinition := self _projectSetDefinitionForStructureWriters_A.
-	projectName := projectSetDefinition projectNames at: 1.
-	projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
-
-"set project up for using filesystem"
-	repositoryRootPath := filesystem workingDirectory / projectName.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
-
-	projectDefinition repositoryRootPath: repositoryRootPath.
-	Rowan projectTools create createProjectFor: projectDefinition format: 'tonel'.	"create repository structure on filesystem"
-
-"write project set to tonel"
-	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
-	visitor := RwModificationTonelWriterVisitor new
-		repositoryRootPath: repositoryRootPath;
-		yourself.
-	visitor visit: projectSetModification.
-
-"validation -- need to have reader implemented before doing validation"
-self error: 'validation is not implemented, yet'.
-self error: 'Need test case with package/class/method that differ only in case'
 ]
