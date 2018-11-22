@@ -32,6 +32,7 @@ set -e
 # 1.2.0 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.0 v1.2.0 Oscar-3.0.40 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.2.1 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.1 v1.2.1 Oscar-3.0.45 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.2.2 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.2 v1.2.2 Oscar-3.0.45 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
+# 1.2.3 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.3 v1.2.3 Oscar-3.0.50
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
@@ -82,14 +83,9 @@ validate_tag() {
     deploymentBranch="master"
   fi
   pushd $projectName
-    head="HEAD"		# tag is on current commit
     if [ "$tagName"x != "x" ] ; then
-      git checkout $deploymentBranch
-      theTag=`commit_match_tag "$tagName" "$head"`
-      if [ "${theTag}" != "${tagName}" ] ; then
-        printf "${ANSI_RED} latest tag (${theTag}) for $projectName does not match expected tag (${tagName}) ${ANSI_RESET}\n"
-        exit 1
-      fi
+			theTag="$tagName"
+      git checkout "$tagName"
     else
       theTag="-"
     fi
@@ -109,7 +105,11 @@ clone_entire_git_repo() {
   git clone --bare $url $dir/.git
   pushd $dir
   git config --bool core.bare false
-  git checkout $branch
+	if [ "$tagName"x != "x" ] ; then
+		git checkout $tagName
+	else
+  	git checkout $branch
+	fi
   popd
 }
 
