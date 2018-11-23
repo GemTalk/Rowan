@@ -1,7 +1,7 @@
 # The Rowan Specification
 Rowan is a [declarative][1], cross dialect, project management system for Smalltalk.
 
-## Differences Between Rowan and Monticello/Metacello
+## Differences between Rowan and Monticello/Metacello
 
 ### Declarative Object Model
 The Rowan object model is a superset of the [Monticello][2] object model.
@@ -24,6 +24,24 @@ Because of conditional loading requirements (cross platform and cross version co
 
 In order to make it feasible to load a single package and meet the requirement that such loads would result in an independent chunk of functionality, [Metacello][3] uses package dependencies to ensure that no matter which package was loaded, the developer would get a complete unit of functionality.
 
+However in practice the package dependencies defined in a Metacello baseline tend to be biased towards resolving load issues like package load order and making sure that classes/globals are defined before they are used rather than biased towards defining functional units.
+For example, the following Metacello load expression is likely to load without error:
+```smalltalk
+Metacello new
+ baseline:'Seaside3';
+ repository: 'github://SeasideSt/Seaside:master/repository';
+ load: #('Seaside-Core')
+```
+however it is not likely that you will end up with a cogent, functional unit.
+In Metacello functional units are defined by groups like the following:
+```smalltalk
+Metacello new
+ baseline:'Seaside3';
+ repository: 'github://SeasideSt/Seaside:master/repository';
+ load: #('Core')
+```
+where the Core goup is expected to be a standalone functional unit.
+
 
 ### Conditional loading
 
@@ -35,9 +53,11 @@ Metacello new
  repository: 'github://SeasideSt/Seaside:master/repository';
  load: #('Core')
 ```
- 
 
+Seaside-Core
+ 
 
 [1]: http://www.smalltalksystems.com/publications/_awss97/SSDCL1.HTM
 [2]: http://www.wiresong.ca/monticello/
 [3]: https://github.com/Metacello/metacello
+
