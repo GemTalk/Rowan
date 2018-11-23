@@ -19,7 +19,7 @@ RwProjectReaderWriterTest class >> isAbstract [
 
 { #category : 'private' }
 RwProjectReaderWriterTest >> _createFileSystem [
-	^ FileSystem "disk "currentMemoryFileSystem
+	^ FileSystem disk "currentMemoryFileSystem"
 ]
 
 { #category : 'private' }

@@ -124,9 +124,41 @@ RwProjectFiletreeTonelReaderWriterTest >> _projectSetDefinitionForStructureWrite
 ]
 
 { #category : 'private' }
+RwProjectFiletreeTonelReaderWriterTest >> _readProjectDefinition: projectDefinition [
+
+	| repoDir packageNames propertyDict format |
+	repoDir := filesystem referenceTo: projectDefinition repositoryUrl asRwUrl pathForDirectory.
+	propertyDict := self _repositoryPropertyDictFor: projectDefinition repositoryRootPath: repoDir.
+	format := propertyDict at: 'format' ifAbsent: [ 'filetree' ].
+self error: 'switch readers at this point .. time to rename the Modification visitors or something so that the structure logic can be shared ...'.
+	packageNames := repoDir packageNames.
+	^ self 
+		_readProjectDefinition: projectDefinition 
+		packageNames: packageNames
+		from: repoDir
+]
+
+{ #category : 'private' }
+RwProjectFiletreeTonelReaderWriterTest >> _readProjectSetDefinition: projectSetDefinition [
+
+	projectSetDefinition do: [:projectDefinition |
+		self _readProjectDefinition: projectDefinition ].
+]
+
+{ #category : 'private' }
 RwProjectFiletreeTonelReaderWriterTest >> _repositoryFormat [
 
 	^ self subclassResponsibility: #_repositoryFormat
+]
+
+{ #category : 'private' }
+RwProjectFiletreeTonelReaderWriterTest >> _repositoryPropertyDictFor: aProjectDefinition repositoryRootPath: repositoryRootPath [
+
+	| propertiesFile |
+	propertiesFile := repositoryRootPath / '.filetree'.
+	propertiesFile exists
+		ifFalse: [ propertiesFile := repositoryRootPath / '.cypress' ].
+	^ STON fromStream: (ZnBufferedReadStream on: propertiesFile  readStream)
 ]
 
 { #category : 'private' }
@@ -147,7 +179,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
 		writerVisitorClass: self _writerVisitorClass 
 		format: self _repositoryFormat.
 
-	readProjectSetDefinition := self _readProjectSetDefinitionForFormat:  'tonel'.
+	readProjectSetDefinition := self _readProjectSetDefinition: writtenProjectSetDefinition.
 
 "validation"
 	projectSetModification := readProjectSetDefinition compareAgainstBase: writtenProjectSetDefinition.
