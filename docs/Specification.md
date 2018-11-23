@@ -25,7 +25,7 @@ Because of conditional loading requirements (cross platform and cross version co
 In order to make it feasible to load a single package and meet the requirement that such loads would result in an independent chunk of functionality, [Metacello][3] uses package dependencies to ensure that no matter which package was loaded, the developer would get a complete unit of functionality.
 
 However in practice the package dependencies defined in a Metacello baseline tend to be biased towards resolving load issues like package load order and making sure that classes/globals are defined before they are used rather than biased towards defining functional units.
-For example, the following Metacello load expression is likely to load without error:
+For example, the following (imperative) Metacello load expression is likely to load without error:
 ```smalltalk
 Metacello new
  baseline:'Seaside3';
@@ -33,7 +33,7 @@ Metacello new
  load: #('Seaside-Core')
 ```
 however it is not likely that you will end up with a cogent, functional unit.
-In Metacello functional units are defined by groups like the following:
+In Metacello functional units are defined by groups like the following (imperative) Metacello load expression:
 ```smalltalk
 Metacello new
  baseline:'Seaside3';
