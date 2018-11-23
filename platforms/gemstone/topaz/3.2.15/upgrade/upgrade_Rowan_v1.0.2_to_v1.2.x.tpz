@@ -41,10 +41,11 @@ output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
 	commit
 
 	run
+	"load Rowan first ... patch bug #425?"
 	Rowan projectTools load
-		loadProjectNamed:  ].
-     withConfigurations: 'Rowan'
-     groupNames: #( 'core' 'tests' 'deprecated' 'jadeServer' )
+		loadProjectNamed: 'Rowan'
+		withConfigurations: #( 'Load' )
+		groupNames: #( 'core' 'tests' 'deprecated' 'jadeServer' )
 %
 	commit
 
