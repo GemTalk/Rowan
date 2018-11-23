@@ -41,6 +41,14 @@ output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
 	commit
 
 	run
+	"do default load first -- Issue #424
+		#( 'Rowan' 'STON' 'Cypress' 'Tonel' ) do: [:projectName |
+			Rowan projectTools load
+				loadProjectNamed: projectName ].
+%
+	commit
+
+	run
     "For update from v1.0.2, do the full load with the current list of group names"
     { 
 			{ 'Cypress'. #( 'Default' ). #() }.
