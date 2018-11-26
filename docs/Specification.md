@@ -113,9 +113,17 @@ RwProjectLoadConfiguration{
 	#comment : 'Rowan Globals configuration - packages are loaded into Globals symbol dictionary'
 }
 ```
-Since Rowan Configurations are instance -based, the configuration model may be extended by introducing new classes.
+Since Rowan Configurations are instance-based, the configuration model may be extended by introducing new Configuration classes.
  
 #### Rowan Declarative Loading
+The initial load of a Rowan projet uses a Rowan Load Specification to specify the load parameters which include:
+- list of configurations to load
+- list of groups to load
+- cloning from remote project
+   - location of remote project.
+   - location to clone 
+- attaching to a local disk-based project
+   - path to project.
 
 [1]: http://www.smalltalksystems.com/publications/_awss97/SSDCL1.HTM
 [2]: http://www.wiresong.ca/monticello/
