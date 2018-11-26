@@ -42,20 +42,80 @@ Metacello new
 ```
 where the Core goup is expected to be a standalone functional unit.
 
-
-### Conditional loading
-
-### Declarative loading
-
-```smalltalk
-Metacello new
- baseline:'Seaside3';
- repository: 'github://SeasideSt/Seaside:master/repository';
- load: #('Core')
+### Rowan Loading Model: configuration-centric and declarative
+#### Rowan Configurations
+A Rowan Configuration is a named list of packages that are loaded together as a unit.
+Here is an example of a simple Rowan Configuration that loads the **Core** functionality of the project:
+```ston
+RwProjectCompoundConfiguration{
+	#name : 'Core',
+	#packageNames : [
+		'RowanSample1-Core',
+		'RowanSample1-Extensions'
+	],
+	#comment : 'Platform independent packages, that should always be loaded together.'
+}
 ```
+A Rowan Configuration may reference another Rowan Configuration.
+Here the **Test** configuration requires the **Core** configuration:
+```ston
+RwProjectCompoundConfiguration{
+	#name : 'Test',
+	#packageNames : [
+		'RowanSample1-Tests'
+	],
+	#configurationNames : [ 
+		'Core'
+	],
+	#comment : 'Platform independent Test packages. The Test configuration requires the Core configuration.'
+}
+```
+Configuration references may be recursive.
 
-Seaside-Core
+Rowan Configurations may define *groups* and specify confitional loading for packages:
+```ston
+RwProjectLoadConfiguration{
+	#name : 'Globals',
+	#definedGroupNames : {
+		'core' : [ ]
+		},
+	#conditionalPackages : {
+		[ 'common' ] : {
+    	'core': {
+				#packageNames : [
+					'Rowan-Cypress-Kernel',
+					'Rowan-Tools-Kernel'
+					]
+				}
+			},
+		[ 'gemstone' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-Kernel'
+					]
+				}
+			},
+		[ 'gs3.[2-]' ] : {
+      'core': {
+				#packageNames : [
+					'GemStone-Interactions-Kernel'
+					]
+				}
+			},
+		[ 'gs3.2.[15-]' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-3215'
+					]
+				}
+			}
+		},
+	#comment : 'Rowan Globals configuration - packages are loaded into Globals symbol dictionary'
+}
+```
+Since Rowan Configurations are instance -based, the configuration model may be extended by introducing new classes.
  
+#### Rowan Declarative Loading
 
 [1]: http://www.smalltalksystems.com/publications/_awss97/SSDCL1.HTM
 [2]: http://www.wiresong.ca/monticello/
