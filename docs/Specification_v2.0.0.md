@@ -29,7 +29,7 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 
 ### Examples
 #### Create and Load Project ... no disk artifacts
-##### v1.2.x
+##### Create and load a v1.2.x in memory project
 ```smalltalk
 
 	| projectName packageName projectDefinition spec classDefinition |
@@ -66,8 +66,7 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 ```
 Drawback of this code and [fundamental issue with v1.x][1], is that there is no explicit configration used or created.
 I also don't like fact that we have some early binding for the repoSpec of the project.
-##### v2.0.0
-Here is the code that I would (currently) like to see in v2.0.0:
+##### Create and load a v2.0.0 in memory configuration
 ```smalltalk
 	| configurationName projectName packageName |
 "initialize"
@@ -91,6 +90,26 @@ Here is the code that I would (currently) like to see in v2.0.0:
 "load"
 	configurationDefinition load
 ```
+##### Attach a git-based repository to a v2.0.0 project. Create/write/commit
+```smalltalk
+	| projectName projectDefinition |
+"lookup"
+	projectName := 'Project'.
+	projectDefinition := Rowan projectDefinitionForProjectNamed: projectName.
 
+"attach repository"
+	projectDefinition 
+		attachGitRepository: Rowan projectsHome / projectName
+			configsPath:  'rowan/configs'
+			srcPath: 'rowan/src'
+			format: 'tonel';
+			yourself.
+
+"create/write/commit"
+	projectDefinition
+		createRepository;
+		writeRepository;
+		commitRepository: 'first commit'
+```
 [1]: https://github.com/GemTalk/Rowan/issues/376
 
