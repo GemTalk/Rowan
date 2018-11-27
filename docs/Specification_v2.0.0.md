@@ -28,7 +28,7 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 11. --A project reference configuration is a specialized top-level configuration. 
 
 ### Examples
-#### Create and Load Project ... no disk artefacts
+#### Create and Load Project ... no disk artifacts
 ##### v1.2.x
 ```smalltalk
 
