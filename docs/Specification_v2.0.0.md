@@ -29,7 +29,8 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 
 ### v2.0.0 Examples
 1. [Create and Load in memory Configuration](#create-and-load-in-memory-configuration)
-2. [Attach Git-based Repository to Loaded Project - create/write/commit repository](#attach-git-based-repository-to-loaded-project)
+2. [Attach New Git-based Repository to Loaded Project - create/write/commit repository](#attach-new-git-based-repository-to-loaded-project)
+3. [Clone and Load GitHub Project using Load Spec Url](#clone-and-load-github-project-using-load-spec)
 
 #### Create and Load in memory Configuration
 ```smalltalk
@@ -55,7 +56,7 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 "load"
 	configurationDefinition load
 ```
-#### Attach Git-based Repository to Loaded Project
+#### Attach New Git-based Repository to Loaded Project
 ```smalltalk
 	| projectName projectDefinition |
 "lookup"
@@ -74,5 +75,18 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 	projectDefinition
 		createRepository;
 		writeRepository;
-		commitRepository: 'first commit'
+		commitToRepository: 'first commit'
+```
+#### Clone and Load GitHub Project using Load Spec Url
+```smalltalk
+	| specUrl projectDefinition |
+"init"
+	specUrl :=  'file:' ,  (Rowan projectsHome / projectName) / 'samples/RowanSample4_core.ston'.
+
+"create configuration"
+	projectDefinition := RwProjectDefinition newFromSpecUrl: specUrl.
+	projectDefinitoin cloneRepository.	"clone perfomed only if the repo not present on disk"
+
+"load"
+	projectDefinition defaultConfigurationDefinition load
 ```
