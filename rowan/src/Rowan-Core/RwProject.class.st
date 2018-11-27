@@ -46,6 +46,12 @@ RwProject >> definedClasses [
 	^ self _projectTools query classForProjectNamed: self name
 ]
 
+{ #category : 'testing' }
+RwProject >> existsOnDisk [
+
+	^ Rowan platform fileUtilities directoryExists: self repositoryRootPath.
+]
+
 { #category : 'accessing' }
 RwProject >> extendedClasses [
 
