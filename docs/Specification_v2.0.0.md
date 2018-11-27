@@ -29,7 +29,7 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 
 ### v2.0.0 Examples
 1. [Create and Load in memory Project](#create-and-load-in-memory-project)
-2. [Attach a git-based repository to a loaded v2.0.0 project](#attach-a-git-based-repository-to-a-loaded-v200-project)
+2. [Attach Git-based Repository to Loaded Project - create/write/commit](#attach-git-based-repository-to-loaded-project)
 
 #### Create and Load in memory Project
 ```smalltalk
@@ -55,7 +55,7 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 "load"
 	configurationDefinition load
 ```
-#### Attach a git-based repository to a loaded v2.0.0 project
+#### Attach Git-based Repository to Loaded Project
 ```smalltalk
 	| projectName projectDefinition |
 "lookup"
