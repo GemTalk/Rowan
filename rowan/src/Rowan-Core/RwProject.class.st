@@ -49,6 +49,7 @@ RwProject >> definedClasses [
 { #category : 'testing' }
 RwProject >> existsOnDisk [
 
+	Rowan image loadedProjectNamed: self name ifAbsent: [ ^false ].
 	^ Rowan platform fileUtilities directoryExists: self repositoryRootPath.
 ]
 
