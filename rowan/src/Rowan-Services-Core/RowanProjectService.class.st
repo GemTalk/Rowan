@@ -402,8 +402,7 @@ RowanProjectService >> setExistsOnDisk [
 	"might be a better test than #repositorySha for
 	determining if a project exists on disk." 
 
-	[self repositorySha] on: Error do:[:ex | ^existsOnDisk := false].
-	existsOnDisk := true.
+	existsOnDisk := existsOnDisk := (RwProject newNamed: name) existsOnDisk.
 ]
 
 { #category : 'accessing' }
