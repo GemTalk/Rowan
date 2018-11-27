@@ -28,7 +28,10 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 11. --A project reference configuration is a specialized top-level configuration. 
 
 ### v2.0.0 Examples
-#### Create and Load Project ... no disk artifacts
+1. [Create and Load in memory Project](#create_and_load_in_memory_project)
+2. [Attach a git-based repository to a loaded v2.0.0 project](attach_a_git_based_repository_to_a_loaded_v2.0.0_project)
+
+#### Create and Load in memory Project
 ```smalltalk
 	| configurationName projectName packageName |
 "initialize"
@@ -52,7 +55,7 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 "load"
 	configurationDefinition load
 ```
-#### Attach a git-based repository to a loaded v2.0.0 project. Create/write/commit
+#### Attach a git-based repository to a loaded v2.0.0 project
 ```smalltalk
 	| projectName projectDefinition |
 "lookup"
