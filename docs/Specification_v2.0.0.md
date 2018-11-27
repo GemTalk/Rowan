@@ -27,46 +27,8 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 10. Configration reference paths may be recursive.
 11. --A project reference configuration is a specialized top-level configuration. 
 
-### Examples
+### v2.0.0 Examples
 #### Create and Load Project ... no disk artifacts
-##### Create and load a v1.2.x in memory project
-```smalltalk
-
-	| projectName packageName projectDefinition spec classDefinition |
-"initialize"
-	projectName := 'Project'.
-	packageName := 'Project-Core'.
-
-"create projects"
-	spec := RwSimpleProjectSpecification new
-		specName: projectName;
-		repoSpec: RwDiskRepositorySpecification new;
-		yourself.
-	projectDefinition := (RwProjectDefinition newForSpecification: spec)
-		addPackageNamed: packageName;
-		yourself.
-
-	classDefinition := (RwClassDefinition
-		newForClassNamed: 'ProjectClass'
-			super: 'Object'
-			instvars: #()
-			classinstvars: #()
-			classvars: #()
-			category: 'category'
-			comment: 'comment'
-			pools: #()
-			type: 'normal')
-		yourself.
-
-	(projectDefinition packageNamed: packageName)
-		addClassDefinition: classDefinition.
-
-"load"
-	Rowan projectTools load loadProjectDefinition: projectDefinition.
-```
-Drawback of this code and [fundamental issue with v1.x][1], is that there is no explicit configration used or created.
-I also don't like fact that we have some early binding for the repoSpec of the project.
-##### Create and load a v2.0.0 in memory configuration
 ```smalltalk
 	| configurationName projectName packageName |
 "initialize"
@@ -90,7 +52,7 @@ I also don't like fact that we have some early binding for the repoSpec of the p
 "load"
 	configurationDefinition load
 ```
-##### Attach a git-based repository to a v2.0.0 project. Create/write/commit
+#### Attach a git-based repository to a loaded v2.0.0 project. Create/write/commit
 ```smalltalk
 	| projectName projectDefinition |
 "lookup"
@@ -111,5 +73,3 @@ I also don't like fact that we have some early binding for the repoSpec of the p
 		writeRepository;
 		commitRepository: 'first commit'
 ```
-[1]: https://github.com/GemTalk/Rowan/issues/376
-
