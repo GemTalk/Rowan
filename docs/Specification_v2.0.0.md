@@ -28,8 +28,8 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 11. --A project reference configuration is a specialized top-level configuration. 
 
 ### v2.0.0 Examples
-1. [Create and Load in memory Project](#create_and_load_in_memory_project)
-2. [Attach a git-based repository to a loaded v2.0.0 project](attach_a_git_based_repository_to_a_loaded_v2.0.0_project)
+1. [Create and Load in memory Project](#create-and-load-in-memory-project)
+2. [Attach a git-based repository to a loaded v2.0.0 project](#attach-a-git-based-repository-to-a-loaded-v200-project)
 
 #### Create and Load in memory Project
 ```smalltalk
