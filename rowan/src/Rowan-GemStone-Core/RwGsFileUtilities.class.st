@@ -88,8 +88,8 @@ RwGsFileUtilities class >> directoryEntriesFrom: aDirectory [
 { #category : 'utilities' }
 RwGsFileUtilities class >> directoryExists: aDirectory [
 
-	^GsFile existsOnServer: aDirectory
-
+	"handle the case where GsFile class>>existsOnServer: returns nil"
+	^ (GsFile existsOnServer: aDirectory) == true
 ]
 
 { #category : 'utilities' }
@@ -122,7 +122,7 @@ RwGsFileUtilities class >> endsWithSpecial: filename [
 RwGsFileUtilities class >> ensureDirectoryExists: aDirectory [
 
 	| lastSeparator |
-	(GsFile existsOnServer: aDirectory) ifTrue: [^aDirectory].
+	(GsFile existsOnServer: aDirectory) == true ifTrue: [^aDirectory].
 	(GsFile createServerDirectory: aDirectory) ifNotNil: [^aDirectory].
 	lastSeparator := aDirectory findLastSubString: self pathNameDelimiter
 				startingAt: aDirectory size.

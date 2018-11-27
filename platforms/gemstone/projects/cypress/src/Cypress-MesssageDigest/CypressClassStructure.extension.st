@@ -63,4 +63,5 @@ CypressClassStructure >> isSkeleton [
 		and: [classMethods isNil
 		and: [comment isNil
 		and: [isClassExtension isNil]]]
+
 ]
