@@ -30,7 +30,7 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 ### v2.0.0 Examples
 1. [Create and Load in memory Configuration](#create-and-load-in-memory-configuration)
 2. [Attach New Git-based Repository to Loaded Project - create/write/commit repository](#attach-new-git-based-repository-to-loaded-project)
-3. [Clone and Load GitHub Project using Load Spec Url](#clone-and-load-github-project-using-load-spec)
+3. [Clone and Load GitHub Project using Load Spec Url](#clone-and-load-github-project-using-load-spec-url)
 
 #### Create and Load in memory Configuration
 ```smalltalk
@@ -78,15 +78,46 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 		commitToRepository: 'first commit'
 ```
 #### Clone and Load GitHub Project using Load Spec Url
+Sample load specification:
+```ston
+RwSimpleProjectSpecification {
+	#specName : 'RowanSample4',
+	#projectUrl : 'https://github.com/dalehenrich/RowanSample4',
+	#repoSpec : RwGitRepositorySpecification {
+		#committish : 'master',
+		#committishType : 'branch'
+	},
+	#configsPath : 'rowan/configs',
+	#repoPath : 'rowan/src',
+	#specsPath : 'rowan/specs',
+	#defaultConfigurationNames : [ 'Load' ],
+	#comment : 'Sample project to be used as an example project when first getting started with Jadeite and Rowan.'
+}
+```
+Script to load the default configuration using a spec url:
 ```smalltalk
 	| specUrl projectDefinition |
 "init"
-	specUrl :=  'file:' ,  (Rowan projectsHome / projectName) / 'samples/RowanSample4_core.ston'.
+	specUrl :=  'file:' ,  (Rowan projectsHome / projectName / 'samples/RowanSample4_core.ston') pathString.
 
 "create configuration"
 	projectDefinition := RwProjectDefinition newFromSpecUrl: specUrl.
-	projectDefinitoin cloneRepository.	"clone perfomed only if the repo not present on disk"
+	projectDefinition cloneRepository.	"clone perfomed only if the repo not present on disk"
 
 "load"
 	projectDefinition defaultConfigurationDefinition load
+```
+Script to load a non-default configuration using a spec url:
+```smalltalk
+	| specUrl projectDefinition |
+"init"
+	specUrl :=  'file:' ,  (Rowan projectsHome / projectName / 'samples/RowanSample4_core.ston') pathString.
+
+"create configuration"
+	projectDefinition := RwProjectDefinition newFromSpecUrl: specUrl.
+	projectDefinition cloneRepository.	"clone perfomed only if the repo not present on disk"
+
+"load"
+	(projectDefinition configurationNamed: 'Load_core') load
+
 ```
