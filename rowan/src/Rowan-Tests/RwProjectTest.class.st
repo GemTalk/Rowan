@@ -4,28 +4,6 @@ Class {
 	#category : 'Rowan-Tests'
 }
 
-{ #category : 'private' }
-RwProjectTest >> gsInteractionConfirmationHandler [
-
-	^ GsInteractionHandler new
-		defaultBlock: [ :ignored | self assert: false description: 'expected a confirmation' ];
-		confirmBlock: [ :interaction | interaction ok ];
-		yourself
-]
-
-{ #category : 'private' }
-RwProjectTest >> handleConfirmationDuring: aBlock [
-
-	"expect a confirmation"
-
-	aBlock
-		on: GsInteractionRequest
-		do: [ :ex | 
-			ex
-				response:
-					(ex interaction interactWith: self gsInteractionConfirmationHandler) ]
-]
-
 { #category : 'tests - issue 428' }
 RwProjectTest >> test_issue428_loaded_no_disk [
 
