@@ -6,12 +6,7 @@ RwPlatform class >> _userPlatformDictionary [
 	"Platform globals are put into the current user's UserGlobals so that the values can be persisted.
 		if the user does not have write access to UserGlobals, we'll store in session-specific dictionary"
 
-	| userGlobals |
-	userGlobals := System myUserProfile objectNamed: 'UserGlobals'.
-	^ (System canWrite: userGlobals)
-		ifTrue: [ userGlobals ]
-		ifFalse: [ SessionTemps current ]
-
+	^self _userPlatformDictionaryForUser: RwGsImage currentUserId
 ]
 
 { #category : '*rowan-gemstone-core' }
