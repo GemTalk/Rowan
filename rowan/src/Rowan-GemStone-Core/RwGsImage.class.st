@@ -22,14 +22,13 @@ RwGsImage class >> _loadedProjectRegistryForUserId: aUserId [
 		ifFalse: [
 			"do not have permissions to read objects created by <aUserId>"
 			^ nil ].
-	userPlatformDict := RwPlatform _userPlatformDictionary.
+	userPlatformDict := RwPlatform _userPlatformDictionaryForUser: aUserId.
 	^ userPlatformDict
 		at: #'RwGsLoadedProjectRegistry'
 		ifAbsent: [ 
 			(self currentUserId = aUserId)
 				ifFalse: [ ^ nil ].
 			userPlatformDict at: #'RwGsLoadedProjectRegistry' put: StringKeyValueDictionary new ]
-
 ]
 
 { #category : 'cypress (old)' }
