@@ -87,11 +87,7 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 
 "attach existing repository"
 	projectDefinition 
-		attachGitRepository: Rowan projectsHome / 'temp' / projectName
-			configsPath:  'rowan/configs'
-			srcPath: 'rowan/src'
-			format: 'tonel';
-			yourself.
+		attachGitRepository: Rowan projectsHome / 'temp' / projectName.
 
 "load configuration from new location"
 	projectDefinition loadedConfigurationDefinition load
