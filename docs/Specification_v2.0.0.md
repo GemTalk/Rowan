@@ -30,6 +30,7 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 ### v2.0.0 Examples
 1. [Create and Load in memory Configuration](#create-and-load-in-memory-configuration)
 2. [Attach New Git-based Repository to Loaded Project - create/write/commit repository](#attach-new-git-based-repository-to-loaded-project)
+2. [Attach Existing Git-based Repository to Loaded Project](#attach-existing-git-based-repository-to-loaded-project)
 3. [Clone and Load GitHub Project using Load Spec Url](#clone-and-load-github-project-using-load-spec-url)
 
 #### Create and Load in memory Configuration
@@ -77,6 +78,24 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 		writeRepository;
 		commitToRepository: 'first commit'
 ```
+#### Attach Existing Git-based Repository to Loaded Project
+```smalltalk
+	| projectName projectDefinition |
+"lookup"
+	projectName := 'Project'.
+	projectDefinition := Rowan projectDefinitionForProjectNamed: projectName.
+
+"attach existing repository"
+	projectDefinition 
+		attachGitRepository: Rowan projectsHome / 'temp' / projectName
+			configsPath:  'rowan/configs'
+			srcPath: 'rowan/src'
+			format: 'tonel';
+			yourself.
+
+"load configuration from new location"
+	projectDefinition loadedConfigurationDefinition load
+```
 #### Clone and Load GitHub Project using Load Spec Url
 Sample load specification:
 ```ston
@@ -96,12 +115,15 @@ RwSimpleProjectSpecification {
 ```
 Script to load the default configuration using a spec url:
 ```smalltalk
-	| specUrl projectDefinition |
+	| specUrl projectDefinition projectRootPath |
 "init"
-	specUrl :=  'file:' ,  (Rowan projectsHome / projectName / 'samples/RowanSample4_core.ston') pathString.
+	projectRootPath := Rowan projectsHome / projectName.
+	specUrl :=  'file:' ,  (projectRootPath / 'samples/RowanSample4_core.ston') pathString.
 
 "create configuration"
-	projectDefinition := RwProjectDefinition newFromSpecUrl: specUrl.
+	projectDefinition := RwProjectDefinition 
+		newFromSpecUrl: specUrl
+		projectRootPath: projectRootPath.
 	projectDefinition cloneRepository.	"clone perfomed only if the repo not present on disk"
 
 "load"
@@ -109,12 +131,15 @@ Script to load the default configuration using a spec url:
 ```
 Script to load a non-default configuration using a spec url:
 ```smalltalk
-	| specUrl projectDefinition |
+	| specUrl projectDefinition projectRootPath |
 "init"
-	specUrl :=  'file:' ,  (Rowan projectsHome / projectName / 'samples/RowanSample4_core.ston') pathString.
+	projectRootPath := Rowan projectsHome / projectName.
+	specUrl :=  'file:' ,  (projectRootPath / 'rowan/specs/RowanSample4_core.ston') pathString.
 
 "create configuration"
-	projectDefinition := RwProjectDefinition newFromSpecUrl: specUrl.
+	projectDefinition := RwProjectDefinition 
+		newFromSpecUrl: specUrl
+		projectRootPath: projectRootPath.
 	projectDefinition cloneRepository.	"clone perfomed only if the repo not present on disk"
 
 "load"
