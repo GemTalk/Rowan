@@ -113,12 +113,11 @@ RwClsAuditTool >> _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavi
 	((aLoadedClass propertyAt: 'category') = aBehavior category ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Class category has changed in compiled class v loaded class'].
 	(aDict := System myUserProfile resolveSymbol: (aLoadedClass propertyAt: 'gs_SymbolDictionary') asSymbol ) 
-			ifNil: [self errorLog: res  add: 'Unable to find SymbolDictionary for LoadedClass'] 
+			ifNil: [self errorLog: res  add: aLoadedClass name -> ('Unable to find SymbolDictionary ' ,(aLoadedClass propertyAt: 'gs_SymbolDictionary'))] 
 			ifNotNil: [:smbd | smbd value at: aLoadedClass name asSymbol 
 					ifAbsent: [self errorLog: res  add: aLoadedClass name -> 'Compiled class not found in symbol dictionary of loaded class']] .
 
 	^res
-
 ]
 
 { #category : 'audit' }
