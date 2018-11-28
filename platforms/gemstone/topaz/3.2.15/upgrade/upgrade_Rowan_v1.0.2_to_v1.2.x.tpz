@@ -23,7 +23,7 @@ output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
 
 	commit
 	run
-    "For update from v1.0.2. Delete any JadeServer classes that may exist, since they would not be packaged."
+    "For update from v1.0.2, delete any JadeServer classes that may exist, since they would not be packaged."
     | jadeServerClass projectDefinition jadeServerProjectName |
     jadeServerClass := UserGlobals at: #JadeServer ifAbsent: [ ^ 'No JadeServer class found' ].
     (jadeServerProjectName := jadeServerClass rowanProjectName) = '(NONE)'
@@ -41,12 +41,13 @@ output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
 	commit
 
 	run
-    "For update from v1.0.2. Do the full load with the current list of group names"
+    "For update from v1.0.2, do the full load with the current list of group names"
     { 
-			{ 'Cypress'. #( 'Default' ). nil }.
-			{ 'STON'. #( 'Bootstrap' ). nil }.
-			{ 'Tonel'. #( 'Bootstrap' ). nil }.
-			{ 'Rowan'. #( 'Load' ).  #( 'core' 'tests' 'deprecated' 'jadeServer' ) }
+			{ 'Rowan'. #( 'Load' ).  #( 'core' 'tests' 'deprecated' 'jadeServer' ) }.
+			{ 'Cypress'. #( 'Default' ). #() }.
+			{ 'STON'. #( 'Bootstrap' ). #() }.
+			{ 'Tonel'. #( 'Bootstrap' ). #() }.
+		}
 			do: [:loadAttributes |
 				Rowan projectTools load
        	 loadProjectNamed: (loadAttributes at: 1)
@@ -56,12 +57,12 @@ output push upgrade_Rowan_v1.0.2_to_v1.2.x.out
 	commit
 
 	run
-    "run project audits"
-    | auditResult |
-		auditResult := Rowan projectTools audit
-        auditProjectsNamed: #( 'Cypress' 'STON' 'Tonel' 'Rowan' ).
-		auditResult isEmpty
-			ifFalse: [ self error: 'Post load audit failure' ]
+	"run project audits"
+	| auditResult |
+	auditResult := Rowan projectTools audit
+	auditProjectsNamed: #( 'Cypress' 'STON' 'Tonel' 'Rowan' ).
+	auditResult isEmpty
+		ifFalse: [ self error: 'Post load audit failure' ]
 %
 
 	logout
