@@ -1,3 +1,6 @@
+"
+Created to test inherited tests on client
+"
 Class {
 	#name : 'RowanClassServiceTest',
 	#superclass : 'RowanServicesTest',
