@@ -170,6 +170,146 @@ RwAdoptToolApiTest >> testAdoptMethod [
 ]
 
 { #category : 'tests' }
+RwAdoptToolApiTest >> testAdoptMethod_issue389_A [
+
+	"https://github.com/GemTalk/Rowan/issues/389"
+
+	"adopt methods without changing protocol to use hybrid convention"
+
+	| projectName packageNames className packageName1 packageName2 theClass symDict symDictName instanceMethod classMethod symbolList audit |
+	projectName := 'AdoptProject'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1. packageName2 }.
+	symDictName := self _symbolDictionaryName2.
+	className := 'AdoptedClass'.
+	symbolList := Rowan image symbolList.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: symDictName
+		comment: 'project for testing package adopt api'.
+
+	symDict := Rowan globalNamed: symDictName.
+
+	"Use non-Rowan api to create class and methods"
+	theClass := Object subclass: className
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symDict
+		options: #().
+
+	self assert: theClass rowanProjectName = Rowan unpackagedName.
+
+	Rowan packageTools adopt 
+		adoptClassNamed: className  
+			intoPackageNamed: packageName1.
+
+	instanceMethod := theClass
+		compileMethod: 'foo ^''foo'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+	classMethod := theClass class
+		compileMethod: 'bar ^''bar'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+	self assert: instanceMethod rowanProjectName = Rowan unpackagedName.
+	self assert: classMethod rowanProjectName = Rowan unpackagedName.
+
+	Rowan packageTools adopt 
+		adoptMethod: #foo 
+			inClassNamed: className  
+			isMeta: false 
+			intoPackageNamed: packageName2;
+		adoptMethod: #bar 
+			inClassNamed: className  
+			isMeta: true 
+			intoPackageNamed: packageName2;
+		yourself.
+
+"validate"
+	self assert: theClass rowanPackageName = packageName1.
+	self assert: instanceMethod rowanPackageName = packageName2.
+	self assert: classMethod rowanPackageName = packageName2.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+]
+
+{ #category : 'tests' }
+RwAdoptToolApiTest >> testAdoptMethod_issue389_B [
+
+	"https://github.com/GemTalk/Rowan/issues/389"
+
+	"adopt methods without changing protocol to use hybrid convention"
+
+	| projectName packageNames className packageName theClass symDict symDictName instanceMethod classMethod symbolList audit |
+	projectName := 'AdoptProject'.
+	packageName := 'Adopt-Core'.
+	packageNames := {packageName}.
+	symDictName := self _symbolDictionaryName2.
+	className := 'AdoptedClass'.
+	symbolList := Rowan image symbolList.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: symDictName
+		comment: 'project for testing package adopt api'.
+
+	symDict := Rowan globalNamed: symDictName.
+
+	"Use non-Rowan api to create class and methods"
+	theClass := Object subclass: className
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symDict
+		options: #().
+
+	instanceMethod := theClass
+		compileMethod: 'foo ^''foo'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+	classMethod := theClass class
+		compileMethod: 'bar ^''bar'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+	self assert: theClass rowanProjectName = Rowan unpackagedName.
+	self assert: instanceMethod rowanProjectName = Rowan unpackagedName.
+	self assert: classMethod rowanProjectName = Rowan unpackagedName.
+
+	Rowan packageTools adopt 
+		adoptMethod: #foo 
+			inClassNamed: className  
+			isMeta: false 
+			intoPackageNamed: packageName;
+		adoptMethod: #bar 
+			inClassNamed: className  
+			isMeta: true 
+			intoPackageNamed: packageName;
+		yourself.
+
+"validate"
+	self assert: theClass rowanProjectName = Rowan unpackagedName.
+	self assert: instanceMethod rowanProjectName = projectName.
+	self assert: classMethod rowanProjectName = projectName.
+
+"audit --> category not correct"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+]
+
+{ #category : 'tests' }
 RwAdoptToolApiTest >> testAdoptSymbolDictionary_1 [
 
 	"simplest case"
