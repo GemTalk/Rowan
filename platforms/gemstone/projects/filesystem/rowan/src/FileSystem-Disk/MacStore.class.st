@@ -9,7 +9,8 @@ Class {
 
 { #category : 'current' }
 MacStore class >> isActiveClass [
-	^ ((System gemVersionAt: 'osName') = 'OSX') and: [ super isActiveClass ]
+	""
+	^ ((System gemVersionAt: 'osName') = 'Darwin') and: [ super isActiveClass ]
 ]
 
 { #category : 'public' }
