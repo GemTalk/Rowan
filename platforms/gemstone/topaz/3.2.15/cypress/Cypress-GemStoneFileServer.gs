@@ -1867,7 +1867,8 @@ category: 'utilities'
 classmethod: CypressGemStoneDirectoryUtilities
 directoryExists: aDirectory
 
-	^GsFile existsOnServer: aDirectory
+       "handle the case where GsFile class>>existsOnServer: returns nil"
+       ^ (GsFile existsOnServer: aDirectory) == true
 %
 
 category: 'utilities'
@@ -1945,7 +1946,7 @@ classmethod: CypressGemStoneDirectoryUtilities
 ensureDirectoryExists: aDirectory
 
 	| lastSeparator |
-	(GsFile existsOnServer: aDirectory) ifTrue: [^aDirectory].
+	(GsFile existsOnServer: aDirectory) == true ifTrue: [^aDirectory].
 	(GsFile createServerDirectory: aDirectory) ifNotNil: [^aDirectory].
 	lastSeparator := aDirectory findLastSubString: self pathNameDelimiter startingAt: aDirectory size.
 	lastSeparator <= 1 ifTrue: [self error: 'Cannot create directory'].

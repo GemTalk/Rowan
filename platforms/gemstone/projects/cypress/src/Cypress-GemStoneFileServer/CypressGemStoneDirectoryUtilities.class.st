@@ -57,8 +57,8 @@ CypressGemStoneDirectoryUtilities class >> directoryEntriesFrom: aDirectory [
 { #category : 'utilities' }
 CypressGemStoneDirectoryUtilities class >> directoryExists: aDirectory [
 
-	^GsFile existsOnServer: aDirectory
-
+	"handle the case where GsFile class>>existsOnServer: returns nil"
+	^ (GsFile existsOnServer: aDirectory) == true
 ]
 
 { #category : 'utilities' }
@@ -135,13 +135,12 @@ CypressGemStoneDirectoryUtilities class >> endsWithSpecial: filename [
 CypressGemStoneDirectoryUtilities class >> ensureDirectoryExists: aDirectory [
 
 	| lastSeparator |
-	(GsFile existsOnServer: aDirectory) ifTrue: [^aDirectory].
+	(GsFile existsOnServer: aDirectory) == true ifTrue: [^aDirectory].
 	(GsFile createServerDirectory: aDirectory) ifNotNil: [^aDirectory].
 	lastSeparator := aDirectory findLastSubString: self pathNameDelimiter startingAt: aDirectory size.
 	lastSeparator <= 1 ifTrue: [self error: 'Cannot create directory'].
 	self ensureDirectoryExists: (aDirectory copyFrom: 1 to: lastSeparator - 1).
 	self ensureDirectoryExists: aDirectory.
-
 ]
 
 { #category : 'initializating' }
