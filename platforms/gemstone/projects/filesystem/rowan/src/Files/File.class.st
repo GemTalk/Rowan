@@ -132,15 +132,6 @@ File class >> deleteFile: aFileName [
 	^ GsFile _removeFile: aFileName onClient: false
 ]
 
-{ #category : 'primitives-path' }
-File class >> delimiter [
-	"Return the path delimiter for the underlying platform's file system."
-
-	"Was a primitive ... only needed to resolve whether or not we're on Windows"
-
-	^ $/
-]
-
 { #category : 'primitives-file' }
 File class >> fileDescriptorIsAvailable: anInteger [
 	"Answer a boolean indicating whether the supplied file descriptor (anInteger) is available.

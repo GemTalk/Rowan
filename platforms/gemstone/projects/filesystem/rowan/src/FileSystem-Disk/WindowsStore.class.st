@@ -30,6 +30,11 @@ WindowsStore class >> maxFileNameLength [
 ]
 
 { #category : 'accessing' }
+WindowsStore class >> platformNames [
+	^ {'Win32'}
+]
+
+{ #category : 'accessing' }
 WindowsStore class >> separator [ 
 	^ $\
 ]

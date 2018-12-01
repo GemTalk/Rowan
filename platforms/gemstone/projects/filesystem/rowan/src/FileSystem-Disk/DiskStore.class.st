@@ -15,10 +15,10 @@ Class {
 	#category : 'FileSystem-Disk-Store'
 }
 
-{ #category : 'current' }
+{ #category : 'accessing' }
 DiskStore class >> activeClass [
 	self allSubclasses do: [:ea | 
-		ea isActiveClass ifTrue: [^ ea]].
+		(ea platformNames includes: self osName) ifTrue: [^ ea] ].
 	^ self
 ]
 
@@ -53,14 +53,14 @@ DiskStore class >> delimiter [
 	^ self current delimiter
 ]
 
-{ #category : 'current' }
-DiskStore class >> isActiveClass [
-	^ self delimiter = File delimiter
-]
-
 { #category : 'public' }
 DiskStore class >> maxFileNameLength [
 	self subclassResponsibility 
+]
+
+{ #category : 'current' }
+DiskStore class >> platformNames [
+	^{}
 ]
 
 { #category : 'current' }

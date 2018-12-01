@@ -7,14 +7,13 @@ Class {
 	#category : 'FileSystem-Disk-Store'
 }
 
-{ #category : 'current' }
-MacStore class >> isActiveClass [
-	""
-	^ ((System gemVersionAt: 'osName') = 'Darwin') and: [ super isActiveClass ]
-]
-
 { #category : 'public' }
 MacStore class >> isCaseSensitive [
 
 	^ true
+]
+
+{ #category : 'public' }
+MacStore class >> platformNames [
+	^ {'Darwin'}
 ]

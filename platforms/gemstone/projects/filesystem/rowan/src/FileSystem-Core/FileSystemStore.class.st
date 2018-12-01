@@ -33,6 +33,11 @@ FileSystemStore class >> new [
 ]
 
 { #category : 'accessing' }
+FileSystemStore class >> osName [
+	^System gemVersionAt: 'osName'
+]
+
+{ #category : 'accessing' }
 FileSystemStore class >> separator [
 	self shouldBeImplemented
 ]
