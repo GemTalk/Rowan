@@ -8,8 +8,8 @@ Class {
 }
 
 { #category : 'accessing' }
-UnixResolver class >> platformName [
-	^  'Linux'
+UnixResolver class >> platformNames [
+	^  {'Linux'}
 ]
 
 { #category : 'origins' }

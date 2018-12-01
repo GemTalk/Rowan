@@ -11,12 +11,12 @@ Class {
 PlatformResolver class >> forCurrentPlatform [
 	| platformName |
 	platformName :=  System gemVersionAt: 'osName' .
-	^ (self allSubclasses detect: [:ea | ea platformName = platformName]) new
+	^ (self allSubclasses detect: [:ea | ea platformNames includes: platformName]) new
 ]
 
 { #category : 'accessing' }
-PlatformResolver class >> platformName [
-	^ nil
+PlatformResolver class >> platformNames [
+	^ {}
 ]
 
 { #category : 'origins' }

@@ -8,8 +8,8 @@ Class {
 }
 
 { #category : 'accessing' }
-WindowsResolver class >> platformName [
-	^ 'Win32'
+WindowsResolver class >> platformNames [
+	^ {'Win32'}
 ]
 
 { #category : 'origins' }
