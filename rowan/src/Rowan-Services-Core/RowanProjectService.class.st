@@ -368,6 +368,12 @@ RowanProjectService >> rowanDirty [
 ]
 
 { #category : 'rowan' }
+RowanProjectService >> rowanProjectName [
+
+	^name
+]
+
+{ #category : 'rowan' }
 RowanProjectService >> rowanSha [
 
 	name isNil ifTrue:[^0].

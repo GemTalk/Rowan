@@ -45,6 +45,17 @@ RowanBrowserService >> defaultClassHierarchy [
 ]
 
 { #category : 'commands' }
+RowanBrowserService >> findRemovedMethods: methodServices [
+
+	methodServices do:[:methodService | 
+		methodService wasDeleted ifTrue:[
+				methodService updateType: #methodsRemoved:.
+				RowanCommandResult addResult: methodService.
+		]
+	].
+]
+
+{ #category : 'commands' }
 RowanBrowserService >> packagesWithTests [
 
 	testPackages := Set new. 
@@ -64,10 +75,13 @@ RowanBrowserService >> packagesWithTests [
 ]
 
 { #category : 'commands' }
-RowanBrowserService >> reloadProjects: projectServices [
-
+RowanBrowserService >> reloadProjects: projectServices andUpdateServices: services [
+	| projectNames |
 	projectServices do:[:projectService |
-		projectService reloadProject]
+		projectService reloadProject].
+	projectNames := projectServices collect: [:projectService | projectService name]. 
+	services do:[:service | 
+		(projectNames includes: service rowanProjectName) ifTrue:[service update]].
 ]
 
 { #category : 'commands' }

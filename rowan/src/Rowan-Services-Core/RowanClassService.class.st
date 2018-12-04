@@ -29,7 +29,8 @@ Class {
 		'variables',
 		'categories',
 		'isTestCase',
-		'expand'
+		'expand',
+		'visibleTests'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -92,6 +93,24 @@ RowanClassService >> addCategory: string [
 
 ]
 
+{ #category : 'Accessing' }
+RowanClassService >> allTests [
+	self isTestCase ifFalse:[^Array new]. 
+	name = 'TestCase' ifTrue:[^Array new].
+	^self allTestsWith: Set new
+]
+
+{ #category : 'private' }
+RowanClassService >> allTestsWith: methodServices [
+
+	"assumes that we are in a test class hierarchy"
+	|  superclassService |	
+	methodServices addAll: (methods select:[:service |service selector asString matchPattern: #('test' $*)]). 
+	superclassName = 'TestCase' ifTrue:[^methodServices]. 
+	superclassService := RowanClassService forClassNamed: superclassName.
+	^superclassService allTestsWith: methodServices
+]
+
 { #category : 'testing' }
 RowanClassService >> arePackageAndProjectClean [
 
@@ -113,6 +132,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	| classOrMeta theFilters |
 	command := nil. 
 	commandArgs := nil. 
+	superclassName := theClass superClass ifNotNil:[:theSuper | theSuper name asString]. 
 	comment := theClass comment. 
 	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade"
 	versions := theClass classHistory size.
@@ -126,7 +146,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	self initializeCategoriesFor: classOrMeta.
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
-	self setIsTestCase
+	self setIsTestCase.
 ]
 
 { #category : 'Accessing' }
@@ -621,6 +641,7 @@ RowanClassService >> refreshMethodsFor: classOrMeta [
 				service ifNotNil:[
 					service accessedInstVars add: instVar asString]
 	]].
+	self setVisibleTests. "methods must be available"
 ]
 
 { #category : 'commands' }
@@ -676,6 +697,12 @@ RowanClassService >> renameCategoryFrom: old to: new [
 	methods := methods select:[:methodService | affectedSelectors includes: methodService selector].
 	self moveMethods: methods to: new.
 	self removeCategories: (Array with: old)
+]
+
+{ #category : 'rowan' }
+RowanClassService >> rowanProjectName [
+
+	^projectName
 ]
 
 { #category : 'commands' }
@@ -790,6 +817,13 @@ RowanClassService >> setIsTestCaseCommand [
 
 	self setIsTestCase. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'commands' }
+RowanClassService >> setVisibleTests [
+	visibleTests := SortedCollection sortBlock: [:x :y | x selector < y selector]. 
+	visibleTests addAll: self allTests.
+	visibleTests := visibleTests asArray.
 ]
 
 { #category : 'commands' }
