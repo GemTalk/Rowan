@@ -46,7 +46,10 @@ RwRowanSample1Test >> testIssue345 [
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: 'issue_345'.
 "load project"
-	projectTools load loadProjectNamed: projectName withConfiguration: 'Default'.
+	projectTools load 
+		loadProjectNamed: projectName 
+		withConfigurations: #('Default') 
+		groupNames: #().
 
 "validation"
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.

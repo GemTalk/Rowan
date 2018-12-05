@@ -16,16 +16,6 @@ RwPackageTool class >> audit [
 ]
 
 { #category : 'commands' }
-RwPackageTool class >> commit [
-  ^ RwPkgCommitTool new
-]
-
-{ #category : 'commands' }
-RwPackageTool class >> copy [
-  ^ RwPkgCopyTool new
-]
-
-{ #category : 'commands' }
 RwPackageTool class >> create [
   ^ RwPkgCreateTool new
 ]
@@ -39,22 +29,6 @@ RwPackageTool class >> diff [
 RwPackageTool class >> disown [
   ^ RwPkgDisownTool new
 
-]
-
-{ #category : 'commands' }
-RwPackageTool class >> edit [
-
-	^ RwPkgEditTool new
-]
-
-{ #category : 'commands' }
-RwPackageTool class >> install [
-	^ RwPkgInstallTool new
-]
-
-{ #category : 'commands' }
-RwPackageTool class >> list [
-  ^ RwPkgListTool new
 ]
 
 { #category : 'commands' }

@@ -14,8 +14,8 @@ RwPrjLoadTool >> loadProjectNamed_old: projectNamed [
 
 	"load the named project from disk, mark the loaded projects not dirty and run initializers"
 
+	self deprecated: 'RwPrjLoadTool >> loadProjectNamed_old: deprecated in Rowan 1.2.6+'.
 	^ self loadProjectNamed_old: projectNamed instanceMigrator: Rowan platform instanceMigrator
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -24,6 +24,7 @@ RwPrjLoadTool >> loadProjectNamed_old: projectNamed instanceMigrator: instanceMi
 	"load the named project from disk, mark the loaded projects not dirty and run initializers"
 
 	| projectSetDefinition res |
+	self deprecated: 'RwPrjLoadTool >> loadProjectNamed_old:instanceMigrator: deprecated in Rowan 1.2.6+'.
 	projectSetDefinition := self class read
 		readProjectSetForProjectNamed: projectNamed.
 	res := self 
@@ -34,7 +35,6 @@ RwPrjLoadTool >> loadProjectNamed_old: projectNamed instanceMigrator: instanceMi
 	"loaded project and loaded packages read from disk - mark them not dirty"
 	self markProjectSetNotDirty: projectSetDefinition.
 	^ res
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -43,6 +43,7 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName [
 	"load the named project from disk, mark the loaded projects not dirty and run initializers"
 
 	| projectSetDefinition res |
+	self deprecated: 'RwPrjLoadTool >> loadProjectNamed:withConfiguration: deprecated in Rowan 1.2.6+'.
 	projectSetDefinition := self class read
 		readProjectSetForProjectNamed: projectNamed
 		withConfiguration: configName.
@@ -54,7 +55,6 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName [
 		loadedProject markNotDirty.
 		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
 	^ res
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -63,6 +63,7 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName in
 	"load the named project from disk, mark the loaded projects not dirty and run initializers"
 
 	| projectSetDefinition res |
+	self deprecated: 'RwPrjLoadTool >> loadProjectNamed:withConfiguration:instanceMigrator: deprecated in Rowan 1.2.6+'.
 	projectSetDefinition := self class read
 		readProjectSetForProjectNamed: projectNamed
 		withConfiguration: configName.
@@ -76,5 +77,4 @@ RwPrjLoadTool >> loadProjectNamed: projectNamed withConfiguration: configName in
 		loadedProject markNotDirty.
 		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
 	^ res
-
 ]

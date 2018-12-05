@@ -21,7 +21,16 @@ run
 			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
-		res := suite run.
+
+		false
+			ifTrue: [ 
+				[
+					res := suite run.
+				] on: Deprecated do: [:ex |
+					ex resignalAs: (Error new messageText: ex description; yourself)
+					] ]
+			ifFalse: [ res := suite run ].
+
 		strm := WriteStream on: String new.
  	 strm nextPutAll: suite name, ' for GemStone ', (System gemVersionAt: #gsVersion) printString; lf.
 		strm nextPutAll: res printString; lf.
