@@ -423,3 +423,10 @@ RowanPackageService >> updateProjectName [
 
 	projectName := (Rowan image loadedPackageNamed: name) projectName.
 ]
+
+{ #category : 'testing' }
+RowanPackageService >> wasDeleted [
+
+	^(Rowan image loadedPackageNamed: name
+			ifAbsent: []) isNil
+]

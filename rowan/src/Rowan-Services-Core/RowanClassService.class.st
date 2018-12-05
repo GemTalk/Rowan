@@ -946,3 +946,8 @@ RowanClassService >> versions: newValue [
 	versions := newValue
 
 ]
+
+{ #category : 'testing' }
+RowanClassService >> wasDeleted [
+	^(Rowan globalNamed: name) isNil
+]

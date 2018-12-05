@@ -5,6 +5,18 @@ Class {
 }
 
 { #category : 'tests' }
+RowanPackageServiceTest >> test_packageWasDeleted [
+
+	| package packageService |
+	self jadeiteIssueTested: #issue284 withTitle: '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
+	package := self createJadeiteTestPackage. 
+	packageService := RowanPackageService forPackageNamed: self jadeiteTestPackageName.
+	self deny: packageService wasDeleted.
+	System abortTransaction. 
+	self assert: packageService wasDeleted.
+]
+
+{ #category : 'tests' }
 RowanPackageServiceTest >> testClassHierarchy [
 
 	"format for client is:

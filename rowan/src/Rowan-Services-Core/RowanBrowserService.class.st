@@ -45,12 +45,12 @@ RowanBrowserService >> defaultClassHierarchy [
 ]
 
 { #category : 'commands' }
-RowanBrowserService >> findRemovedMethods: methodServices [
+RowanBrowserService >> findRemovedServices: services [
 
-	methodServices do:[:methodService | 
-		methodService wasDeleted ifTrue:[
-				methodService updateType: #methodsRemoved:.
-				RowanCommandResult addResult: methodService.
+	services do:[:service | 
+		service wasDeleted ifTrue:[
+				service updateType: #removed:.
+				RowanCommandResult addResult: service.
 		]
 	].
 ]
