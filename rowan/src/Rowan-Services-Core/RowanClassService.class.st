@@ -146,6 +146,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	self initializeCategoriesFor: classOrMeta.
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
+	instVarNames := classOrMeta instVarNames. 
 	self setIsTestCase.
 ]
 
@@ -500,6 +501,7 @@ RowanClassService >> minimalRefreshFrom: theClass [
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
+	instVarNames := classOrMeta instVarNames. 
 	self setIsTestCase
 ]
 
