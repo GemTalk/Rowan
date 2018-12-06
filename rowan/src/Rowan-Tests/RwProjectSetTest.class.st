@@ -47,7 +47,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 	projectDefinition2 := RwProjectDefinition
 		newForGitBasedProjectNamed: projectName2.
 	projectDefinition2
-		packageNamesInLoadOrder: packageNames2;
+		addPackagesNamed: packageNames2;
 		defaultSymbolDictName: self _symbolDictionaryName2;
 		setSymbolDictName: self _symbolDictionaryName1 forPackageNamed: (packageNames2 at: 2).
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -465,7 +465,7 @@ RwProjectSetTest >> testProjectSetLoad1 [
 	projectDefinition2 := RwProjectDefinition
 		newForGitBasedProjectNamed: projectName2.
 	projectDefinition2
-		packageNamesInLoadOrder: #('Simple2-Core');
+		addPackagesNamed: #('Simple2-Core');
 		defaultSymbolDictName: self _symbolDictionaryName2.
 	projectSetDefinition addDefinition: projectDefinition2.
 

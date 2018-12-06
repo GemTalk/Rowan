@@ -229,7 +229,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		newForGitBasedProjectNamed: projectName2)
 		comment:
 				'This is a class extension project created in memory first, then written to disk. Uses a separate symbol dictionary from project 1';
-		packageNamesInLoadOrder: #('Simple-Extensions');
+		addPackagesNamed: #('Simple-Extensions');
 		defaultSymbolDictName: self _symbolDictionaryName2;
 		yourself.
 

@@ -13,7 +13,7 @@ RwPackageReadWriteTest >> basicPackageLoadSpec: packageNames packageNamesToLoad:
 	"The class RwPackageProjectSpecification is deprecated .... will eventually need to convert this to use
 		RwSimpleProjectSpecification and configurations"
 
-	^ RwPackageProjectSpecification new
+	^ RwSimpleProjectSpecification new
 		specName: 'basic test spec';
 		packageNamesToLoad: packageNamesToLoad;
 		repoSpec: RwDiskRepositorySpecification new;
