@@ -38,7 +38,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 	projectDefinition1 := RwProjectDefinition
 		newForGitBasedProjectNamed: projectName1.
 	projectDefinition1
-		packageNamesInLoadOrder: packageNames1;
+		packageNames: packageNames1;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		setSymbolDictName: self _symbolDictionaryName2 forPackageNamed: (packageNames1 at: 2).
 
@@ -212,7 +212,6 @@ RwProjectSetTest >> testProjectAdoptTool [
 		asProjectDefinitionSet.
 	diff := projectSetDefinition compareAgainstBase: loadedProjectSet.
 	self assert: diff isEmpty.
-
 ]
 
 { #category : 'tests' }
@@ -459,7 +458,7 @@ RwProjectSetTest >> testProjectSetLoad1 [
 	projectDefinition1 := RwProjectDefinition
 		newForGitBasedProjectNamed: projectName1.
 	projectDefinition1
-		packageNamesInLoadOrder: #('Simple1-Core');
+		packageNames: #('Simple1-Core');
 		defaultSymbolDictName: self _symbolDictionaryName1.
 	projectSetDefinition addDefinition: projectDefinition1.
 
@@ -478,5 +477,4 @@ RwProjectSetTest >> testProjectSetLoad1 [
 				= projectNames size.
 	loadedProjects entities
 		do: [ :loadedProject | self assert: (projectNames includes: loadedProject name) ]
-
 ]

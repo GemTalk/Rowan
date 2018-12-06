@@ -38,7 +38,7 @@ run
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 
-		true
+		false
 			ifTrue: [ res := suite run ]
 			ifFalse: [ 
 				[ 

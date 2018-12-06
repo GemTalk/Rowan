@@ -136,7 +136,7 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		comment: comment;
-		packageNamesInLoadOrder: packageNames;
+		packageNames: packageNames;
 		defaultSymbolDictName: defaultSymbolDictName;
 		yourself.
 
@@ -147,7 +147,6 @@ RwBrowserToolTest >> _globalExtensionsProjectDefinition: projectName packageName
 				forPackageNamed: packageName ].
 
 	^ projectDefinition
-
 ]
 
 { #category : 'private' }
