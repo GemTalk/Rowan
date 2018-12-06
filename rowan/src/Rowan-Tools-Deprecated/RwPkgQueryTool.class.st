@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwPkgQueryTool',
 	#superclass : 'RwPackageTool',
-	#category : 'Rowan-Tools-Core'
+	#category : 'Rowan-Tools-Deprecated'
 }
 
 { #category : 'smalltalk API' }

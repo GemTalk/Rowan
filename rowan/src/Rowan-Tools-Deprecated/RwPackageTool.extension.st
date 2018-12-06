@@ -31,3 +31,28 @@ RwPackageTool class >> list [
 	self deprecated: 'RwPackageTool class >> list deprecated in Rowan 1.2.6+'.
   ^ RwPkgListTool new
 ]
+
+{ #category : '*rowan-tools-deprecated' }
+RwPackageTool class >> move [
+  ^ RwPkgMoveTool new
+]
+
+{ #category : '*rowan-tools-deprecated' }
+RwPackageTool class >> read [
+	^ RwPkgReadTool new
+]
+
+{ #category : '*rowan-tools-deprecated' }
+RwPackageTool class >> recompile [
+  ^ RwPkgRecompileTool new
+]
+
+{ #category : '*rowan-tools-deprecated' }
+RwPackageTool class >> remove [
+  ^ RwPkgRemoveTool new
+]
+
+{ #category : '*rowan-tools-deprecated' }
+RwPackageTool class >> revert [
+  ^ RwPkgRevertTool new
+]

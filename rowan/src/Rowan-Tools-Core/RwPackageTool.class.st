@@ -37,33 +37,8 @@ RwPackageTool class >> load [
 ]
 
 { #category : 'commands' }
-RwPackageTool class >> move [
-  ^ RwPkgMoveTool new
-]
-
-{ #category : 'commands' }
-RwPackageTool class >> read [
-	^ RwPkgReadTool new
-]
-
-{ #category : 'commands' }
-RwPackageTool class >> recompile [
-  ^ RwPkgRecompileTool new
-]
-
-{ #category : 'commands' }
-RwPackageTool class >> remove [
-  ^ RwPkgRemoveTool new
-]
-
-{ #category : 'commands' }
 RwPackageTool class >> rename [
   ^ RwPkgRenameTool new
-]
-
-{ #category : 'commands' }
-RwPackageTool class >> revert [
-  ^ RwPkgRevertTool new
 ]
 
 { #category : 'commands' }
