@@ -12,17 +12,41 @@ Class {
 	#category : 'Files-Streams'
 }
 
+{ #category : 'instance creation' }
+BinaryFileStream class >> appendStreamOn: aFileReference [
+
+	self basicNew
+		initializeAppendStreamOn: aFileReference;
+		yourself
+]
+
+{ #category : 'instance creation' }
+BinaryFileStream class >> readStreamOn: aFileReference [
+
+	self basicNew
+		initializeReadStreamOn: aFileReference;
+		yourself
+]
+
+{ #category : 'instance creation' }
+BinaryFileStream class >> writeStreamOn: aFileReference [
+
+	self basicNew
+		initializeWriteStreamOn: aFileReference;
+		yourself
+]
+
 { #category : 'open/close' }
 BinaryFileStream >> close [
 	self closed
 		ifTrue: [ ^ self ].
-	handle close.
-	handle := nil
+	self handle close.
+	self handle: nil
 ]
 
 { #category : 'testing' }
 BinaryFileStream >> closed [
-	^ handle isOpen not
+	^ self handle isOpen not
 ]
 
 { #category : 'finalization' }
@@ -31,7 +55,7 @@ BinaryFileStream >> finalize [
 	^ self close
 ]
 
-{ #category : 'accessing' }
+{ #category : 'reading' }
 BinaryFileStream >> peek [
 	"Answer what would be returned if the message next were sent to the receiver. If the receiver is at the end, answer nil.  "
 	| next |
@@ -57,5 +81,5 @@ BinaryFileStream >> truncate [
 BinaryFileStream >> truncate: pos [
 	"Truncate to this position"
 
-	^ File truncate: handle to: pos
+	^ self handle truncateTo: pos
 ]

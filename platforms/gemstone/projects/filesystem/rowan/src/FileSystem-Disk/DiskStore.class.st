@@ -111,7 +111,7 @@ DiskStore >> basicEntry: ignored path: aPath nodesDo: aBlock [
 	intOrArray
 		do: [:entryPathString |
 			((entryPathString endsWith: '.')  or: [ entryPathString endsWith: '..' ])
-				ifFalse: [ aBlock value: (File lookupPath: entryPathString) ] ]
+				ifFalse: [ aBlock value: (self lookupPath: entryPathString) ] ]
 ]
 
 { #category : 'public' }
@@ -121,7 +121,7 @@ DiskStore >> basicEntryAt: aPath [
 	path := self stringFromPath: aPath parent.
 	basename := aPath basename.
 	
-	^ (File lookupDirectory: path filename: basename)
+	^ (self lookupDirectory: path filename: basename)
 		ifNil: [ #badDirectoryPath ].
 ]
 
@@ -157,9 +157,9 @@ DiskStore >> basicOpen: aPath writable: writeMode [
 
 	"writeMode - #read, #append, #write"
 
-	| string encoded |
+	| string |
 	string := self stringFromPath: aPath.
-	^ File open: string writable: writeMode
+	^GsFile  open: string mode: writeMode mode onClient: false
 ]
 
 { #category : 'private' }
@@ -197,7 +197,7 @@ DiskStore >> createDirectory: path [
 
 	| parent pathString result |
 	pathString := self stringFromPath: path.
-	result := File createDirectory: pathString.
+	result := GsFile createServerDirectory: pathString.
 	result
 		ifNil: [ 
 			parent := path parent.
@@ -230,9 +230,22 @@ DiskStore >> delete: path [
 	pathString := self stringFromPath: path.
 	
 	(self isDirectory: path)
-		ifTrue: [ File deleteDirectory: pathString ]
-		ifFalse: [ 
-			(File named: pathString) delete ]
+		ifTrue: [ self deleteDirectory: pathString ]
+		ifFalse: [ self deleteFile: pathString ]
+]
+
+{ #category : 'public' }
+DiskStore >> deleteDirectory: pathString [
+	
+	(GsFile removeServerDirectory: pathString)
+		ifNil: [ self error: 'Error deleting directory ', pathString printString, ' :: ', GsFile serverErrorString ]
+]
+
+{ #category : 'public' }
+DiskStore >> deleteFile: pathString [
+
+	(GsFile removeServerFile: pathString)
+		ifNil: [ (CannotDeleteFileException new messageText: 'Could not delete file ' , pathString , '. Check the file is not open.') signal ].
 ]
 
 { #category : 'printing' }
@@ -293,9 +306,9 @@ DiskStore >> isFile: aPath [
 DiskStore >> isReadable: aPath [
 	(self exists: aPath) ifFalse: [ ^ false ].
 	self flag: 'TODO: we need a decent primitive for this...'.
-	(self basicOpen: aPath writable: #read) 
+	(self basicOpen: aPath writable: self readMode) 
 		ifNotNil: [ :id|
-			File close: id.
+			id close.
 			^ true].
 	^ false
 ]
@@ -318,11 +331,49 @@ DiskStore >> isSymlink: aPath [
 DiskStore >> isWritable: aPath [
 	(self exists: aPath) ifFalse: [ ^ false ].
 	self flag: 'TODO: we need a decent primitive for this...'.
-	(self basicOpen: aPath writable: #write) 
+	(self basicOpen: aPath writable: self readWriteMode) 
 		ifNotNil: [ :id|
-			File close: id.
+			id close.
 			^ true].
 	^ false
+]
+
+{ #category : 'public' }
+DiskStore >> lookupDirectory: fullPath filename: fileName [
+
+	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and return entry array"
+
+	^ self lookupPath: fullPath, '/', fileName
+]
+
+{ #category : 'public' }
+DiskStore >> lookupPath: fullPath [
+
+	"Look up the file or directory identified by <fullPath> and return an array containing:
+
+	<fileName> 			
+	<creationTime> 			(in seconds since the start of the Linux time epoch)
+	<modificationTime> 	(in seconds since the start of the Linux time epoch)
+	<dirFlag> 				DirFlag is true if the entry is a directory
+	<fileSize> 				FileSize the file size in bytes or zero for directories
+	<posixPermissions> 	Numeric Notation 
+	<symLinkFlag>			seemingly, symLinkFlag is true if the entry is a symLink
+
+	On Unix, the empty path denotes '/'. 
+   On Macs and PCs, it is the container of the system volumes."
+
+	| gsFileStat |
+	gsFileStat := GsFile stat: fullPath isLstat: true.
+	gsFileStat _isSmallInteger ifTrue: [ ^ nil ].
+	^	{
+		(Path from: fullPath) basename.
+		gsFileStat ctimeUtcSeconds .
+		gsFileStat mtimeUtcSeconds .
+		gsFileStat isDirectory .
+		gsFileStat size.
+		gsFileStat mode bitAnd: 8r777. "https://github.com/GemTalk/FileSystemGs/issues/11"
+		(gsFileStat mode bitAnd: 8r0120000) = 8r0120000. "https://github.com/GemTalk/FileSystemGs/issues/10"
+	}
 ]
 
 { #category : 'public' }
@@ -357,12 +408,15 @@ DiskStore >> openFileStream: path writable: writable [
 ]
 
 { #category : 'public' }
-DiskStore >> rename: sourcePath to: destinationPath [
+DiskStore >> rename: sourcePath to: destinationPath [ 
+	"Rename the file of the given name to the new name. Fail if there is no file of the old name 
+	or if there is an existing file with the new name."
 
 	| sourcePathString targetPathString |
 	sourcePathString := self stringFromPath: sourcePath.
 	targetPathString := self stringFromPath: destinationPath.
-	^ File rename: sourcePathString to: targetPathString.
+	(GsFile renameFileOnServer: sourcePathString to: targetPathString) = 0
+		ifFalse: [ self error: 'Rename file failed']
 ]
 
 { #category : 'private' }

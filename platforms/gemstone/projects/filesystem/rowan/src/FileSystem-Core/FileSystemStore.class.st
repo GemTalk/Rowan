@@ -42,6 +42,40 @@ FileSystemStore class >> separator [
 	self shouldBeImplemented
 ]
 
+{ #category : 'modes' }
+FileSystemStore >> appendAndReadMode [
+	"Open for reading and appending (writing at end of file).  The
+     file is created if it does not exist.  The initial file
+     position for reading is at the beginning of the file, but
+     output is always appended to the end of the file."
+	^FileAppendAndReadMode new
+]
+
+{ #category : 'modes' }
+FileSystemStore >> appendBinaryAndReadMode [
+	"Open for reading and appending (writing at end of file).  The
+     file is created if it does not exist.  The initial file
+     position for reading is at the beginning of the file, but
+     output is always appended to the end of the file."
+	^FileAppendAndReadBinaryMode new
+]
+
+{ #category : 'modes' }
+FileSystemStore >> appendBinaryMode [
+	"Open for appending (writing at end of file).  The file is
+     created if it does not exist.  The stream is positioned at the
+     end of the file."
+	^FileAppendBinaryMode new
+]
+
+{ #category : 'modes' }
+FileSystemStore >> appendMode [
+	"Open for appending (writing at end of file).  The file is
+     created if it does not exist.  The stream is positioned at the
+     end of the file."
+	^FileAppendMode new
+]
+
 { #category : 'public' }
 FileSystemStore >> basenameFromEntry: aNode [
 	"Used to extract the basename from the low-level representation (node / entry) from the store."
@@ -355,6 +389,46 @@ FileSystemStore >> printPath: aPath on: out [
 	^ aPath printOn: out delimiter: self delimiter
 ]
 
+{ #category : 'modes' }
+FileSystemStore >> readBinaryMode [
+	"Open binary for reading and writing.  The stream is positioned at the beginning of the file."
+	^FileReadBinaryMode new
+]
+
+{ #category : 'modes' }
+FileSystemStore >> readMode [
+	"Open for reading and writing.  The stream is positioned at the beginning of the file."
+	^FileReadMode new
+]
+
+{ #category : 'modes' }
+FileSystemStore >> readWriteBinaryMode [
+	"Open binary file for reading and writing.  The stream is positioned at the beginning of the file."
+	^FileReadBinaryMode new
+]
+
+{ #category : 'modes' }
+FileSystemStore >> readWriteBinaryTruncatedMode [
+	"Open binary file for reading and writing.  The file is created if it does
+      not exist, otherwise it is truncated.  The stream is
+      positioned at the beginning of the file."
+	^FileReadWriteTruncatedBinaryMode new
+]
+
+{ #category : 'modes' }
+FileSystemStore >> readWriteMode [
+	"Open for reading and writing.  The stream is positioned at the beginning of the file."
+	^FileReadWriteMode new
+]
+
+{ #category : 'modes' }
+FileSystemStore >> readWriteTruncatedMode [
+	"Open for reading and writing.  The file is created if it does
+      not exist, otherwise it is truncated.  The stream is
+      positioned at the beginning of the file."
+	^FileReadWriteTruncatedMode new
+]
+
 { #category : 'private' }
 FileSystemStore >> rename: sourcePath ifAbsent: absentBlock to: destinationPath ifPresent: presentBlock fileSystem: anFSFilesystem [
 
@@ -389,7 +463,7 @@ FileSystemStore >> signalDirectoryExists: aPath [
 { #category : 'error signalling' }
 FileSystemStore >> signalFileDoesNotExist: aPath [
 	^ FileDoesNotExistException
-		signalWithFile: (File named: aPath asPath pathString)
+		signalWithFile: aPath
 		writeMode: false
 ]
 
@@ -412,4 +486,18 @@ FileSystemStore >> sizeOf: aPath [
 FileSystemStore >> stringFromPath: aPath [
 	^ String streamContents: [ :out | 
 		self printPath: aPath on: out ]
+]
+
+{ #category : 'modes' }
+FileSystemStore >> writeBinaryMode [
+	"Truncate binary file to zero length or create text file for writing. 
+	 The stream is positioned at the beginning of the file."
+	^FileWriteBinaryMode new
+]
+
+{ #category : 'modes' }
+FileSystemStore >> writeMode [
+	"Truncate file to zero length or create text file for writing. 
+	 The stream is positioned at the beginning of the file."
+	^FileWriteMode new
 ]

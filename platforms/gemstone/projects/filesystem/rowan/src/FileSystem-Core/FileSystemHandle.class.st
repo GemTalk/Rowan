@@ -54,7 +54,7 @@ FileSystemHandle >> basicOpen [
 	"get the raw stream description from the filesystem's store"
 	^ self fileSystem 
 		openStreamDescription: reference path
-		writable: (writable ifTrue: [ #write ] ifFalse: [ #read ])
+		writable: self fileMode
 ]
 
 { #category : 'streams' }
@@ -80,6 +80,16 @@ FileSystemHandle >> ensureClosed [
 ]
 
 { #category : 'accessing' }
+FileSystemHandle >> fileMode [
+	^writable
+]
+
+{ #category : 'accessing' }
+FileSystemHandle >> fileMode: aString [
+	writable := aString
+]
+
+{ #category : 'accessing' }
 FileSystemHandle >> fileSystem [
 	^ reference fileSystem 
 ]
@@ -101,7 +111,8 @@ FileSystemHandle >> isOpen [
 
 { #category : 'testing' }
 FileSystemHandle >> isWritable [
-	^ writable
+
+	^ self fileMode isWritable
 ]
 
 { #category : 'public' }
@@ -114,6 +125,11 @@ FileSystemHandle >> reference [
 	^ reference
 ]
 
+{ #category : 'accessing' }
+FileSystemHandle >> reference: aFileReference [
+	reference := aFileReference
+]
+
 { #category : 'public' }
 FileSystemHandle >> reopen [
 	self close.
@@ -122,8 +138,8 @@ FileSystemHandle >> reopen [
 
 { #category : 'initialize-release' }
 FileSystemHandle >> setReference: aReference writable: aBoolean [
-	reference := aReference resolve.
-	writable := aBoolean
+	self reference: aReference resolve.
+	self fileMode: aBoolean
 ]
 
 { #category : 'public' }

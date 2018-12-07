@@ -9,5 +9,7 @@ Class {
 
 { #category : 'running' }
 FileHandleTest >> createFileSystem [
+	"Force the filesystem to be created for each test.
+	 Normally use: 'FileSystem disk' which returns the cached file system"
 	^ FileSystem store: DiskStore activeClass createDefault
 ]

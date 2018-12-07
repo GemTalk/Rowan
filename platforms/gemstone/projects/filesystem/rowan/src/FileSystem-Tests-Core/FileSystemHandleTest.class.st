@@ -32,7 +32,7 @@ FileSystemHandleTest >> setUp [
 	super setUp.
 	filesystem := self createFileSystem.
 	reference := filesystem * 'plonk'.
-	handle := reference openWritable: true
+	handle := reference openWritable: filesystem store readWriteTruncatedMode
 ]
 
 { #category : 'running' }
@@ -128,7 +128,7 @@ FileSystemHandleTest >> testReadBufferTooLarge [
 { #category : 'tests' }
 FileSystemHandleTest >> testReadOnly [
 	handle close.
-	handle := reference openWritable: false.
+	handle := reference openWritable: filesystem store readMode.
 	self 
 		should: 
 			[ handle 
@@ -166,7 +166,9 @@ FileSystemHandleTest >> testTruncate [
 	| out |
 	out := #(1 2 3 4 5) asByteArray.
 	handle at: 1 write: out startingAt: 1 count: 5.
+	self assert: handle size = 5.
 	handle truncateTo: 3.
+	"The Disk version will fail until the primitive is implemented"
 	self assert: handle size = 3
 ]
 

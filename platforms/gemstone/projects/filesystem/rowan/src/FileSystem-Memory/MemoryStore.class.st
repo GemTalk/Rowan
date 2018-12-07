@@ -93,9 +93,9 @@ MemoryStore >> basicOpen: path writable: writeMode [
 			aMemoryFileSystemEntry
 				basicOpen;
 				yourself ]
-		ifAbsent: [ writeMode == #write
-				ifFalse: [ self signalFileDoesNotExist: path ]
-				ifTrue: [ self createFile: path ] ]
+		ifAbsent: [ writeMode isWritable
+				ifTrue: [ self createFile: path ] 
+				ifFalse: [ self signalFileDoesNotExist: path ] ]
 ]
 
 { #category : 'private' }

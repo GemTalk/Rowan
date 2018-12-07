@@ -52,6 +52,11 @@ FileSystemTest >> setUp [
 	toDelete := OrderedCollection new.
 ]
 
+{ #category : 'private' }
+FileSystemTest >> store [
+	^filesystem store
+]
+
 { #category : 'running' }
 FileSystemTest >> tearDown [
 	toDelete
@@ -428,7 +433,7 @@ FileSystemTest >> testEntryAt [
 	self markForCleanup: path2.
 	
 	filesystem createDirectory: path1.
-	(Delay forSeconds: 2) wait. "#creationTime seems limited to 1 second resolution"
+	self waitForSeconds: 4.
 	filesystem createDirectory: path2.
 	
 	entry1 := filesystem entryAt: path1.
@@ -441,7 +446,6 @@ FileSystemTest >> testEntryAt [
 
 	self assert: entry1 creationTime < entry2 creationTime.
 	self assert: entry1 modificationTime < entry2 modificationTime.
-
 ]
 
 { #category : 'tests' }
@@ -600,7 +604,7 @@ FileSystemTest >> testReadingAfterWriting [
 FileSystemTest >> testReadStream [
 	| reference stream |
 	self markForCleanup: (reference := filesystem workingDirectory / 'griffle').
-	self should: [ reference readStream ] raise: FileDoesNotExistException.
+	self should: [ stream := reference readStream ] raise: FileDoesNotExistException.
 	reference writeStreamDo: [ :ws | ws nextPutAll: 'griffle' ].
 	stream := reference readStream.
 	self assert: stream contents asString equals: 'griffle'.
@@ -727,4 +731,10 @@ FileSystemTest >> testWriteStreamIfPresent [
 	stream close.
 	self assert: (filesystem workingDirectory / 'griffle') isFile.
 	self assert: (reference writeStreamIfPresent: [ true ])
+]
+
+{ #category : 'running' }
+FileSystemTest >> waitForSeconds: anIngeger [
+	"#creationTime seems limited to 1 second resolution"
+	(Delay forSeconds: anIngeger) wait.
 ]

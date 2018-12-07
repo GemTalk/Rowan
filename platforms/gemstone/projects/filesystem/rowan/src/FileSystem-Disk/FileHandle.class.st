@@ -26,7 +26,7 @@ FileHandle class >> startUp: resuming [
 { #category : 'public' }
 FileHandle >> assureOpen [
 	"Compatibility method to make the FileHandle Tests pass"
-	self isOpen ifFalse: [ id := self basicOpen ].
+	self isOpen ifFalse: [ self id: self basicOpen ].
 ]
 
 { #category : 'public' }
@@ -35,10 +35,9 @@ FileHandle >> at: index read: buffer startingAt: start count: count [
 	self flag: 'TODO: remove once FileHandles are really used!'.
 	self assureOpen.
 	
-	^ File 
-		setPosition: id to: index - 1;
-		read: id into: buffer startingAt: start count: count
-
+	^ self 
+		setPositionTo: index - 1;
+		readInto: buffer startingAt: start count: count
 ]
 
 { #category : 'public' }
@@ -47,32 +46,38 @@ FileHandle >> at: index write: buffer startingAt: start count: count [
 	self flag: 'TODO: remove once FileHandles are really used!'.
 	self assureOpen.
 	
-	File 
-		setPosition: id to: index - 1;
-		write: id from: buffer startingAt: start count: count
+	self 
+		setPositionTo: index - 1;
+		writeFrom: buffer startingAt: start count: count
+]
 
+{ #category : 'public' }
+FileHandle >> basicOpen [
+	^GsFile  open: self reference pathString mode: self fileMode mode onClient: false
 ]
 
 { #category : 'public' }
 FileHandle >> binaryReadStream [
-	^ ZnBufferedReadStream on: (File named: reference fullName) readStream
-
+	"The file handle should be created with the file mode which indicates if it is a write or read stream"
+	^ ZnBufferedReadStream on: (BinaryFileStream onFileHandle: self)
 ]
 
 { #category : 'public' }
 FileHandle >> binaryWriteStream [
-	^ (File named: reference fullName) writeStream
+	"The file handle should be created with the file mode which indicates if it is a write or read stream"
+	^BinaryFileStream onFileHandle: self
 ]
 
 { #category : 'public' }
 FileHandle >> close [
-	File close: id.
-	id := nil
+	self id ifNil: [ ^ self ].
+	self id close.
+	self id: nil
 ]
 
 { #category : 'finalization' }
 FileHandle >> finalize [
-	File close: id
+	self close
 ]
 
 { #category : 'public' }
@@ -81,21 +86,56 @@ FileHandle >> flush [
 	self flag: 'TODO: remove once FileHandles are really used!'.
 	self assureOpen.
 	
-	File flush: id
+	self id flush
+]
+
+{ #category : 'accessing' }
+FileHandle >> id [
+	^id
+]
+
+{ #category : 'accessing' }
+FileHandle >> id: anObject [
+	id := anObject
 ]
 
 { #category : 'testing' }
 FileHandle >> isOpen [
-	^ (File sizeOrNil: id) notNil
+	^self id notNil
 ]
 
 { #category : 'public' }
 FileHandle >> open [
-	self flag: 'TODO: for now we solely rely on the old FileStreams'
-	"id := self basicOpen.
-	id ifNil: 	[
-		reference exists ifFalse: [FileDoesNotExist signalWith: reference].
-		self error: 'Unable to open file ' , reference printString]"
+	self flag: 'TODO: for now we solely rely on the old FileStreams'.
+	self id: self basicOpen.
+	self id ifNil: 	[
+		self reference exists ifFalse: [FileDoesNotExistException signalWith: self reference].
+		self error: 'Unable to open file ' , self reference printString]
+]
+
+{ #category : 'public' }
+FileHandle >> readInto: byteArray startingAt: startIndex count: count [
+	"Read up to count bytes of data from this file into the given string or byte array starting at the given index. 
+		Answer the number of bytes actually read."
+
+	| buf cnt |
+	buf := byteArray species new: count.
+	cnt := self id next: count into: buf.
+	cnt ifNil: [ 
+		self id isNil
+			ifTrue: [ ^ self error: 'File is closed' ].
+		self error: 'File read failed: ' , (self id class serverErrorString ifNil: [ '']) ].
+	byteArray replaceFrom: startIndex to: startIndex + cnt - 1 with: buf.
+	^cnt
+]
+
+{ #category : 'public' }
+FileHandle >> setPositionTo: anInteger [
+	"Set this file to the given position."
+
+	| pos |
+	pos := self id position: anInteger.
+	pos ifNil: [ self error: 'position error' ].
 ]
 
 { #category : 'public' }
@@ -104,7 +144,7 @@ FileHandle >> size [
 	self flag: 'TODO: remove once FileHandles are really used!'.
 	self assureOpen.
 	
-	^ File sizeOf: id
+	^ self id fileSize
 ]
 
 { #category : 'private' }
@@ -121,9 +161,9 @@ FileHandle >> startUp [
 
 { #category : 'public' }
 FileHandle >> streamError [
-	reference exists
-		ifFalse: [FileDoesNotExistException signalWith: reference].
-	self error: 'Unable to open file ' , reference printString
+	self reference exists
+		ifFalse: [FileDoesNotExistException signalWith: self reference].
+	self error: 'Unable to open file ' , self reference printString
 ]
 
 { #category : 'public' }
@@ -131,13 +171,23 @@ FileHandle >> sync [
 	
 	self flag: 'TODO: remove once FileHandles are really used!'.
 	self assureOpen.
-	
-	File sync: id
+	"This needs to be implemented in GsFile or this function removed"
+	self id sync
 ]
 
 { #category : 'public' }
 FileHandle >> truncateTo: anInteger [
-	File setPosition: id to: anInteger.
-	File truncate: id to: anInteger.
-	self reopen
+	self id truncateTo: anInteger
+]
+
+{ #category : 'public' }
+FileHandle >> writeFrom: stringOrByteArray startingAt: startIndex count: count [
+	"Write count bytes onto this file from the given string or byte array starting at the given index. 	Answer the number of bytes written."
+
+	| written |
+	written := (startIndex = 1 and: [ count = stringOrByteArray size])
+		ifTrue: [ self id nextPutAll: stringOrByteArray ]
+		ifFalse: [ self id nextPutAll: (stringOrByteArray copyFrom: startIndex to: startIndex + count - 1) ].
+	written ifNil: [ self error: 'failed write' ].
+	^ written
 ]

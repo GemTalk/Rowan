@@ -43,20 +43,34 @@ Class {
 }
 
 { #category : 'instance creation' }
-AbstractBinaryFileStream class >> handle: aCollection file: aFile forWrite: aTrue [
+AbstractBinaryFileStream class >> handle: aGsFile fileReference: aFileReference forWrite: aTrue [
 	
 	^ self basicNew
-		handle: aCollection file: aFile forWrite: aTrue;
+		handle: aGsFile fileReference: aFileReference forWrite: aTrue;
+		yourself
+]
+
+{ #category : 'instance creation' }
+AbstractBinaryFileStream class >> onFileHandle: aFileHandle [
+
+	^self basicNew
+		initializeFromFileHandle: aFileHandle;
 		yourself
 ]
 
 { #category : 'testing' }
 AbstractBinaryFileStream >> atEnd [
 
-	^ File atEnd: handle
+	^ self handle atEnd
 ]
 
-{ #category : 'accessing' }
+{ #category : 'open/close' }
+AbstractBinaryFileStream >> closed [
+
+	^ self handle isOpen not
+]
+
+{ #category : 'reading' }
 AbstractBinaryFileStream >> contents [
 	"Answer the contents of the receiver while leaving the position unchanged.
 	Fail if the receiver doesn't support positioning.
@@ -84,14 +98,28 @@ AbstractBinaryFileStream >> crlf [
 ]
 
 { #category : 'accessing' }
-AbstractBinaryFileStream >> file [
+AbstractBinaryFileStream >> fileHandle [
 	^ file
 ]
 
 { #category : 'accessing' }
-AbstractBinaryFileStream >> file: aFile [ 
-	
-	file := aFile
+AbstractBinaryFileStream >> fileHandle: aFileHandle [
+	file := aFileHandle
+]
+
+{ #category : 'accessing' }
+AbstractBinaryFileStream >> fileMode [
+	^forWrite
+]
+
+{ #category : 'accessing' }
+AbstractBinaryFileStream >> fileMode: aSymbol [
+	forWrite := aSymbol
+]
+
+{ #category : 'accessing' }
+AbstractBinaryFileStream >> fileName [
+	^self fileHandle fullName
 ]
 
 { #category : 'flushing' }
@@ -100,20 +128,47 @@ AbstractBinaryFileStream >> flush [
 	the number of write() system calls it makes. This should generally be
 	used before #sync, but on Windows they do the same thing."
 	
-	File flush: handle
+	self handle flush
+]
+
+{ #category : 'accessing' }
+AbstractBinaryFileStream >> handle [
+	^self fileHandle id
+]
+
+{ #category : 'accessing' }
+AbstractBinaryFileStream >> handle: anObject [
+	self fileHandle id: anObject
 ]
 
 { #category : 'initialization' }
-AbstractBinaryFileStream >> handle: aCollection file: aFile forWrite: aBoolean [
-	
-	handle := aCollection.
-	file := aFile.
+AbstractBinaryFileStream >> handle: aGsFile fileReference: aFileReferemce forWrite: aBoolean [
+	self halt. "This is deprecated"
+	handle := aGsFile.
+	self fileReference: aFileReferemce.
 	forWrite := aBoolean
+]
+
+{ #category : 'initialization' }
+AbstractBinaryFileStream >> initializeFromFileHandle: aFileHandle [
+
+	self fileHandle: aFileHandle.
+	self fileMode: aFileHandle fileMode
 ]
 
 { #category : 'testing' }
 AbstractBinaryFileStream >> isBinary [
 	^ true
+]
+
+{ #category : 'testing' }
+AbstractBinaryFileStream >> isReadStream [
+	^self fileMode isWritable not
+]
+
+{ #category : 'other' }
+AbstractBinaryFileStream >> isWriteStream [
+	^self fileMode isWritable
 ]
 
 { #category : 'character writing' }
@@ -122,32 +177,26 @@ AbstractBinaryFileStream >> lf [
 	self nextPut: Character lf asInteger
 ]
 
-{ #category : 'accessing' }
-AbstractBinaryFileStream >> name [
-
-	^ file name
-]
-
-{ #category : 'accessing' }
+{ #category : 'reading' }
 AbstractBinaryFileStream >> next [
 	"Answer the next byte from this file, or nil if at the end of the file."
 
 	^ (self next: 1) ifEmpty: [ nil ] ifNotEmpty: [ :col | col first ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'reading' }
 AbstractBinaryFileStream >> next: n [
 	"Return a string with the next n characters of the filestream in it."
 
 	^ self next: n into: (ByteArray new: n)
 ]
 
-{ #category : 'accessing' }
+{ #category : 'reading' }
 AbstractBinaryFileStream >> next: n into: aBuffer [
 	"Return a string with the next n characters of the filestream in it."
 	| readBuffer read |
 	readBuffer := aBuffer.
-	read := File read: handle into: readBuffer startingAt: 1 count: n.
+	read := self readInto: readBuffer startingAt: 1 count: n.
 	^read = n 
 		ifTrue: [ readBuffer ]
 		ifFalse: [ readBuffer copyFrom: 1 to: read ]
@@ -168,19 +217,18 @@ AbstractBinaryFileStream >> next: n into: aString startingAt: startIndex [
 { #category : 'writing' }
 AbstractBinaryFileStream >> next: amount putAll: aByteArray [
 
-	forWrite
+	self fileMode isWritable
 		ifFalse: [ ^ self error: 'Cannot write a read-only file' ].
-	[ File
-		write: handle
-		from: aByteArray
+	[ self
+		writeFrom: aByteArray
 		startingAt: 1
 		count: amount ]
 		on: Error
-		do: [:ex | (FileWriteError fileName: self name)
+		do: [:ex | (FileWriteError fileName: self fileName)
 				signal:
 					(self close
-						ifTrue: [ 'File ' , self name , ' is closed' ]
-						ifFalse: [ 'File ' , self name , ' write failed' ]) ].
+						ifTrue: [ 'File ' , self fileName , ' is closed' ]
+						ifFalse: [ 'File ' , self fileName , ' write failed' ]) ].
 	^ aByteArray
 ]
 
@@ -192,7 +240,7 @@ AbstractBinaryFileStream >> next: anInteger putAll: aCollection startingAt: star
 ^self nextPutAll: (aCollection copyFrom: startIndex to: startIndex+anInteger-1)
 ]
 
-{ #category : 'accessing' }
+{ #category : 'reading' }
 AbstractBinaryFileStream >> nextInto: aBuffer [
 	"Return a string with the next n characters of the filestream in it."
 
@@ -230,7 +278,7 @@ AbstractBinaryFileStream >> nextPutAll: aByteArray [
 	self next: aByteArray basicSize putAll: aByteArray
 ]
 
-{ #category : 'accessing' }
+{ #category : 'reading' }
 AbstractBinaryFileStream >> peek [
 	"Answer what would be returned if the message next were sent to the receiver. If the receiver is at the end, answer nil.  "
 	self subclassResponsibility
@@ -239,13 +287,15 @@ AbstractBinaryFileStream >> peek [
 { #category : 'positioning' }
 AbstractBinaryFileStream >> position [
 
-	^ File getPosition: handle
+	^ self handle position
 ]
 
 { #category : 'positioning' }
 AbstractBinaryFileStream >> position: aPosition [
 	
-	File setPosition: handle to: aPosition
+	| pos |
+	pos := self handle position: aPosition.
+	pos ifNil: [ self error: 'position error' ].
 ]
 
 { #category : 'printing' }
@@ -255,13 +305,23 @@ AbstractBinaryFileStream >> printOn: aStream [
 	aStream
 		nextPutAll: self class name;
 		nextPutAll: ': ';
-		print: file name
+		print: self fileName
 ]
 
 { #category : 'reading' }
-AbstractBinaryFileStream >> readInto: readBuffer startingAt: startIndex count: count [
+AbstractBinaryFileStream >> readInto: byteArray startingAt: startIndex count: count [
+	"Read up to count bytes of data from this file into the given string or byte array starting at the given index. 
+		Answer the number of bytes actually read."
 
-	^ File read: handle into: readBuffer startingAt: startIndex count: count
+	| buf cnt |
+	buf := byteArray species new: count.
+	cnt := self handle next: count into: buf.
+	cnt ifNil: [ 
+		self handle isNil
+			ifTrue: [ ^ self error: 'File is closed' ].
+		self error: 'File read failed: ' , (self handle serverErrorString ifNil: [ '']) ].
+	byteArray replaceFrom: startIndex to: startIndex + cnt - 1 with: buf.
+	^cnt
 ]
 
 { #category : 'positioning' }
@@ -278,7 +338,7 @@ AbstractBinaryFileStream >> setToEnd [
 { #category : 'accessing' }
 AbstractBinaryFileStream >> size [
 
-	^ File sizeOf: handle
+	^ self handle size
 ]
 
 { #category : 'positioning' }
@@ -291,20 +351,30 @@ AbstractBinaryFileStream >> skip: n [
 
 { #category : 'flushing' }
 AbstractBinaryFileStream >> sync [	
-	"When writing, this syncs any written/flushed data still in the kernel
-	file system buffers to disk. This should generally be used after #flush,
-	but on Windows they do the same thing."
 
-	File sync: handle
+	"On Unix, this syncs any written or flushed data still in the kernel file
+	system buffers to disk. On Windows this and primFlush: do the same thing
+
+	self file sync
+
+
+
+	<primitive: 'primitiveFileSync' module: 'FilePlugin'>
+
+"
+	self error: 'not yet implmented'
+
+	"fsync() failing cannot be ignored"
+	self primitiveFailed
 ]
 
-{ #category : 'accessing' }
+{ #category : 'reading' }
 AbstractBinaryFileStream >> upTo: delim [
 
 	^ self upToAnyOf: (ByteArray with: delim)
 ]
 
-{ #category : 'accessing' }
+{ #category : 'reading' }
 AbstractBinaryFileStream >> upToAnyOf: delimiters [
 
 	^ ByteArray new: 1000 streamContents: [ :stream | | ch |
@@ -312,7 +382,7 @@ AbstractBinaryFileStream >> upToAnyOf: delimiters [
 			whileFalse: [ stream nextPut: ch ] ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'reading' }
 AbstractBinaryFileStream >> upToEnd [
 	"Answer a subcollection from the current access position through the last element of the receiver."
 
@@ -320,4 +390,22 @@ AbstractBinaryFileStream >> upToEnd [
 		| next |
 		[ (next := self next) isNil ] whileFalse: [
 			newStream nextPut: next ] ]
+]
+
+{ #category : 'exceptions' }
+AbstractBinaryFileStream >> writeError: aString [
+
+	(FileWriteError fileName: self fileName) signal: aString
+]
+
+{ #category : 'writing' }
+AbstractBinaryFileStream >> writeFrom: stringOrByteArray startingAt: startIndex count: count [
+	"Write count bytes onto this file from the given string or byte array starting at the given index. 	Answer the number of bytes written."
+
+	| written |
+	written := (startIndex = 1 and: [ count = stringOrByteArray size])
+		ifTrue: [ self handle nextPutAll: stringOrByteArray ]
+		ifFalse: [ self handle nextPutAll: (stringOrByteArray copyFrom: startIndex to: startIndex + count - 1) ].
+	written ifNil: [ self error: 'write failed' ].
+	^ written
 ]

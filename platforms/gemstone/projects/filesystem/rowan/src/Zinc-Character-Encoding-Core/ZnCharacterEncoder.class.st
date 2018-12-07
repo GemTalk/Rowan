@@ -123,6 +123,21 @@ ZnCharacterEncoder >> encodedByteCountForString: string [
 	^self subclassResponsibility: #encodedByteCountForCodePoints:
 ]
 
+{ #category : 'error handling' }
+ZnCharacterEncoder >> errorIllegalLeadingByte [
+	^ self error: 'Illegal leading byte for utf-8 encoding'
+]
+
+{ #category : 'error handling' }
+ZnCharacterEncoder >> errorIncomplete [
+	^ #ZnIncomplete signal: 'Incomplete input for character decoding'
+]
+
+{ #category : 'error handling' }
+ZnCharacterEncoder >> errorOutsideRange [
+	^ self error: 'Character Unicode code point outside encoder range'
+]
+
 { #category : 'convenience' }
 ZnCharacterEncoder >> next: count putAll: string startingAt: offset toStream: stream [
 	"Write count characters from string starting at offset to stream."
@@ -144,7 +159,7 @@ ZnCharacterEncoder >> nextFromStream: stream [
 	
 	"We should use #codePoint: but #value: is faster"
 	
-	^ Character value: (self nextCodePointFromStream: stream)
+	^ Character withValue: (self nextCodePointFromStream: stream)
 ]
 
 { #category : 'converting' }

@@ -25,7 +25,7 @@ Class {
 { #category : 'signalling' }
 FileDoesNotExistException class >> signalWithFile: aFile writeMode: writeMode [
 
-	^ (self fileName: aFile basename)
+	^ (self fileName:  ( aFile isString ifTrue: [aFile] ifFalse: [aFile basename]))
 		readOnly: writeMode not;
 		signal
 ]

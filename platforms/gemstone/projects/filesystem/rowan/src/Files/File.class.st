@@ -49,23 +49,11 @@ Class {
 }
 
 { #category : 'primitives-file' }
-File class >> atEnd: aGsFile [
-	"Answer true if the file position is at the end of the file."
-
-	^ aGsFile atEnd
-]
-
-{ #category : 'primitives-file' }
 File class >> close: aGsFile [
 	"Close this file."
 
 	aGsFile ifNil: [ ^ self ].
 	aGsFile close
-]
-
-{ #category : 'primitives-file' }
-File class >> closed: aGsFile [
-	^ aGsFile isNil or: [ (self sizeOrNil: aGsFile) isNil ]
 ]
 
 { #category : 'primitives-file' }
@@ -107,31 +95,6 @@ self error: 'not yet implmented'
 
 ]
 
-{ #category : 'primitives-path' }
-File class >> createDirectory: fullPath [
-	"Create a directory named by the given path. 
-	Fail if the path is bad or if a file or directory by that name already exists."
-
-	^ GsFile createServerDirectory: fullPath
-]
-
-{ #category : 'primitives-path' }
-File class >> deleteDirectory: fullPath [
-	"Delete the directory named by the given path. 
-	Fail if the path is bad or if a directory by that name does not exist."
-
-	(GsFile removeServerDirectory: fullPath)
-		ifNil: [ self error: 'Error deleting directory ', fullPath printString, ' :: ', GsFile serverErrorString ]
-]
-
-{ #category : 'primitives-path' }
-File class >> deleteFile: aFileName [
-	"Delete the file of the given name. 
-	Return self if the primitive succeeds, nil otherwise."
-
-	^ GsFile _removeFile: aFileName onClient: false
-]
-
 { #category : 'primitives-file' }
 File class >> fileDescriptorIsAvailable: anInteger [
 	"Answer a boolean indicating whether the supplied file descriptor (anInteger) is available.
@@ -159,73 +122,6 @@ File class >> fileDescriptorType: fdNum [
 	^ self primitiveFailed
 "
 self error: 'not yet implmented'
-
-]
-
-{ #category : 'primitives-file' }
-File class >> flush: aGsFile [
-	"On Unix, the FilePlugin uses stdio FILE* structs which maintain their
-	own internal buffer to minimize write() syscalls. This flushes that buffer.
-	On Windows this and primSync: do the same thing."
-
-	aGsFile flush
-]
-
-{ #category : 'primitives-path' }
-File class >> getMacFile: fileName type: typeString creator: creatorString [
-	"Get the Macintosh file type and creator info for the file with the given name. Fails if the file does not exist or if the type and creator type arguments are not strings of length 4. This primitive is Mac specific; it is a noop on other platforms."
-
-"
- 	<primitive: 'primitiveDirectoryGetMacTypeAndCreator' module: 'FilePlugin'>
-"
-self error: 'not yet implmented'
-
-
-]
-
-{ #category : 'primitives-file' }
-File class >> getPosition: aGsFile [
-	"Get this files current position."
-
-	^ aGsFile position
-]
-
-{ #category : 'primitives-path' }
-File class >> lookupDirectory: fullPath filename: fileName [
-
-	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and return entry array"
-
-	^ self lookupPath: fullPath, '/', fileName
-]
-
-{ #category : 'primitives-path' }
-File class >> lookupPath: fullPath [
-
-	"Look up the file or directory identified by <fullPath> and return an array containing:
-
-	<fileName> 			
-	<creationTime> 			(in seconds since the start of the Linux time epoch)
-	<modificationTime> 	(in seconds since the start of the Linux time epoch)
-	<dirFlag> 				DirFlag is true if the entry is a directory
-	<fileSize> 				FileSize the file size in bytes or zero for directories
-	<posixPermissions> 	Numeric Notation 
-	<symLinkFlag>			seemingly, symLinkFlag is true if the entry is a symLink
-
-	On Unix, the empty path denotes '/'. 
-   On Macs and PCs, it is the container of the system volumes."
-
-	| gsFileStat |
-	gsFileStat := GsFile stat: fullPath isLstat: true.
-	gsFileStat _isSmallInteger ifTrue: [ ^ nil ].
-	^	{
-		(Path from: fullPath) basename.
-		gsFileStat ctimeUtcSeconds .
-		gsFileStat mtimeUtcSeconds .
-		gsFileStat isDirectory .
-		gsFileStat size.
-		gsFileStat mode bitAnd: 8r777. "https://github.com/GemTalk/FileSystemGs/issues/11"
-		(gsFileStat mode bitAnd: 8r0120000) = 8r0120000. "https://github.com/GemTalk/FileSystemGs/issues/10"
-	}
 
 ]
 
@@ -263,7 +159,7 @@ File class >> open: fileName writable: writeMode [
 
 { #category : 'file creation' }
 File class >> openAndTruncateForWriteFileNamed: aName [
-
+	self errror: 'This needs to be changed to support deprecation of File'.
 	^ (self named: aName)
 		delete;
 		openForWrite
@@ -280,55 +176,6 @@ File class >> openForReadFileNamed: aName [
 File class >> openForWriteFileNamed: aName [
 
 	^ (self named: aName) openForWrite
-]
-
-{ #category : 'primitives-file' }
-File class >> read: aGsFile into: byteArray startingAt: startIndex count: count [
-	"Read up to count bytes of data from this file into the given string or byte array starting at the given index. 
-		Answer the number of bytes actually read."
-
-	| buf cnt |
-	buf := byteArray species new: count.
-	cnt := aGsFile next: count into: buf.
-	cnt ifNil: [ 
-		(self closed: aGsFile)
-			ifTrue: [ ^ self error: 'File is closed' ].
-		self error: 'File read failed: ' , (GsFile serverErrorString ifNil: [ '']) ].
-	byteArray replaceFrom: startIndex to: startIndex + cnt - 1 with: buf.
-	^cnt
-]
-
-{ #category : 'primitives-path' }
-File class >> rename: oldFileFullName to: newFileFullName [ 
-	"Rename the file of the given name to the new name. Fail if there is no file of the old name 
-	or if there is an existing file with the new name."
-
-	(GsFile renameFileOnServer: oldFileFullName to: newFileFullName) = 0
-		ifFalse: [ self error: 'Rename file failed'].
-]
-
-{ #category : 'primitives-file' }
-File class >> setPosition: aGsFile to: anInteger [
-	"Set this file to the given position."
-
-	| pos |
-	pos := aGsFile position: anInteger.
-	pos ifNil: [ self error: 'position error' ].
-]
-
-{ #category : 'primitives-file' }
-File class >> sizeOf: aGsFile [
-	"Answer the size of this file."
-
-	^ aGsFile fileSize
-]
-
-{ #category : 'primitives-file' }
-File class >> sizeOrNil: aGsFile [
-	"Answer the size of this file."
-
-	aGsFile ifNil: [ ^ nil ].
-	^ aGsFile fileSize
 ]
 
 { #category : 'primitives-file' }
@@ -365,29 +212,6 @@ self error: 'not yet implmented'
 	self primitiveFailed
 ]
 
-{ #category : 'primitives-file' }
-File class >> truncate: id to: anInteger [
-	"Truncate this file to the given position."
-"
-	<primitive: 'primitiveFileTruncate' module: 'FilePlugin'>
-	self primitiveFailed
-"
-self error: 'not yet implmented'
-
-]
-
-{ #category : 'primitives-file' }
-File class >> write: aGsFile from: stringOrByteArray startingAt: startIndex count: count [
-	"Write count bytes onto this file from the given string or byte array starting at the given index. 	Answer the number of bytes written."
-
-	| written |
-	written := (startIndex = 1 and: [ count = stringOrByteArray size])
-		ifTrue: [ aGsFile nextPutAll: stringOrByteArray ]
-		ifFalse: [ aGsFile nextPutAll: (stringOrByteArray copyFrom: startIndex to: startIndex + count - 1) ].
-	written ifNil: [ self error: 'failed write' ].
-	^ written
-]
-
 { #category : 'accessing' }
 File >> basename [
 	^self name
@@ -414,14 +238,6 @@ File >> checkDoesNotExist [
 	"
 	self exists ifTrue: [
 		^ FileAlreadyExistsException signalOnFile: self ]
-]
-
-{ #category : 'open/close' }
-File >> delete [
-	"We retries with GC because in some platforms open files cannot be open"
-	self class deleteFile: name.
-	self exists
-		ifTrue: [ (CannotDeleteFileException new messageText: 'Could not delete file ' , name,'. Check the file is not open.') signal ].
 ]
 
 { #category : 'testing' }
@@ -484,7 +300,7 @@ File >> openForWrite: writeMode [
 		CannotDeleteFileException signal: name
 	].
 
-	^ BinaryFileStream handle: fileHandle file: self forWrite: writeMode ~~ #read
+	^ BinaryFileStream handle: fileHandle fileReference: self forWrite: writeMode ~~ #read
 ]
 
 { #category : 'streaming' }
