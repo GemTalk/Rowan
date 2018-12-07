@@ -26,7 +26,8 @@
 				#packageNames : [
 					'Rowan-Tools-Deprecated',
 					'Rowan-GemStone-Loader-Deprecated',
-					'Rowan-Definitions-Deprecated'
+					'Rowan-Definitions-Deprecated',
+					'Rowan-Tools-Kernel-Deprecated'
 					]
 				}
 			},
@@ -69,6 +70,7 @@
 					'Rowan-JadeServer' : { 'symbolDictName' : 'UserGlobals' },
 					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-Kernel-Deprecated' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
 					'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
