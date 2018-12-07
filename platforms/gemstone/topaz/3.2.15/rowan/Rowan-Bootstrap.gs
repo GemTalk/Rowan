@@ -637,7 +637,7 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
-    value: #('Rowan-GemStone-Loader-Extensions'
+    value: #('Rowan-GemStone-Loader-Extensions' 'Rowan-GemStone-Loader-Extensions-Deprecated'
 	).	"Extension methods in non-loader classes"
 %
   commit
@@ -645,7 +645,7 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'Globals'
-    value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-GemStone-Kernel-Deprecated' 
+    value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 
 			'Rowan-Cypress-Kernel' 'Rowan-Tools-Kernel' 'Rowan-GemStone-3215'
 	).		"Extension methods for GemStone kernel classes"
 %
