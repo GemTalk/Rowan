@@ -1,7 +1,7 @@
 run
 	| deprecationAction suite strm res projectNames includeDeprecatedPackages |
 
-	includeDeprecatedPackages := true. "true means load deprecated packages"
+	includeDeprecatedPackages := false. "true means load deprecated packages"
 
 	deprecationAction := Deprecated deprecatedAction.
 	[
@@ -36,6 +36,8 @@ run
 				RwProjectDefinition class
 					removeCategory: '*rowan-definitions-deprecated'.
 				RwPrjLoadTool
+					removeCategory: '*rowan-tools-deprecated'.
+				RwProjectTool class
 					removeCategory: '*rowan-tools-deprecated' ].
 		System commit.
 		"audit after load"
@@ -46,7 +48,7 @@ run
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 
-		true
+		false
 			ifTrue: [ res := suite run ]
 			ifFalse: [ 
 				[ 
