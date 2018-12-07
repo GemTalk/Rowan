@@ -47,7 +47,7 @@
 		[ 'gs3.[2-]' ] : {
                         'core': {
 				#packageNames : [
-                			'GemStone-Interactions-Core',
+          'GemStone-Interactions-Core',
 					'GemStone-Interactions-Kernel'
 					]
 				}

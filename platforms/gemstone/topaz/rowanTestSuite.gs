@@ -18,23 +18,31 @@ run
 				"make sure test group is loaded ... include deprecated packages"
 				Rowan projectTools load
 					loadProjectNamed: projectName
-					withGroupNames: #('tests' 'deprecated' 'jadeServer') ]
+					withGroupNames: #('tests' 'deprecated' 'jadeServer' 'deprecated tests') ]
 			ifFalse: [
 				"make sure test group is loaded ... do NOT include deprecated packages"
 				Rowan projectTools load
 					loadProjectNamed: projectName
 					withGroupNames: #('tests' 'jadeServer') ] ].
+		includeDeprecatedPackages
+			ifFalse: [
+				"remove categories until https://github.com/GemTalk/Rowan/issues/450 fixed"
+				RwProjectDefinition
+					removeCategory: '*rowan-definitions-deprecated'.
+				RwPackageTool class
+					removeCategory: '*rowan-tools-deprecated'. 
+				RwPrjCreateTool
+					removeCategory: '*rowan-tools-deprecated'. 
+				RwProjectDefinition class
+					removeCategory: '*rowan-definitions-deprecated'.
+				RwPrjLoadTool
+					removeCategory: '*rowan-tools-deprecated' ].
 		System commit.
 		"audit after load"
 		projectNames do: [:projectName |
-			includeDeprecatedPackages 
-				ifTrue: [ 
-					| audit |
-					audit := Rowan projectTools audit auditForProjectNamed: projectName.
-					audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ]
-				ifFalse: [
-					"skip post load audit without deprecated packages until https://github.com/GemTalk/Rowan/issues/450 fixed"
-					Transcript cr; show: 'Skipping the audit for issue #450' ] ].
+			| audit |
+			audit := Rowan projectTools audit auditForProjectNamed: projectName.
+			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 
