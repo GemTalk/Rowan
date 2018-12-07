@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'officialRowanProjectInstance'
 	],
-	#category : 'Rowan-Tests'
+	#category : 'Rowan-Tests-Deprecated'
 }
 
 { #category : 'private' }
