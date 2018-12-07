@@ -629,7 +629,7 @@ currentOrNil
   run
   CypressBootstrapRowanBlock 
     value: 'RowanLoader'
-    value: #('Rowan-GemStone-Loader'
+    value: #('Rowan-GemStone-Loader' 'Rowan-GemStone-Loader-Deprecated'
 	).		"GemStone Rowan loader classes"
 %
   commit
