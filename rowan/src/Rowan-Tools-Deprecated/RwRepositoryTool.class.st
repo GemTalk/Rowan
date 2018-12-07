@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwRepositoryTool',
 	#superclass : 'RwAbstractTool',
-	#category : 'Rowan-Tools-Core'
+	#category : 'Rowan-Tools-Deprecated'
 }
 
 { #category : 'commands' }
