@@ -37,6 +37,8 @@ run
 					removeCategory: '*rowan-definitions-deprecated'.
 				RwPrjLoadTool
 					removeCategory: '*rowan-tools-deprecated'.
+				RwGsImage class
+					removeCategory: '*rowan-gemstone-loader-extensions-deprecated'.
 				RwProjectTool class
 					removeCategory: '*rowan-tools-deprecated' ].
 		System commit.
