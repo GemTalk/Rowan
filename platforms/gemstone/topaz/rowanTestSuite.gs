@@ -24,23 +24,7 @@ run
 				Rowan projectTools load
 					loadProjectNamed: projectName
 					withGroupNames: #('tests' 'jadeServer') ] ].
-		includeDeprecatedPackages
-			ifFalse: [
-				"remove categories until https://github.com/GemTalk/Rowan/issues/450 fixed"
-				RwProjectDefinition
-					removeCategory: '*rowan-definitions-deprecated'.
-				RwPackageTool class
-					removeCategory: '*rowan-tools-deprecated'. 
-				RwPrjCreateTool
-					removeCategory: '*rowan-tools-deprecated'. 
-				RwProjectDefinition class
-					removeCategory: '*rowan-definitions-deprecated'.
-				RwPrjLoadTool
-					removeCategory: '*rowan-tools-deprecated'.
-				RwGsImage class
-					removeCategory: '*rowan-gemstone-loader-extensions-deprecated'.
-				RwProjectTool class
-					removeCategory: '*rowan-tools-deprecated' ].
+
 		System commit.
 		"audit after load"
 		projectNames do: [:projectName |
