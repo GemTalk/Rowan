@@ -45,7 +45,7 @@ RowanProjectService >> _isSkew [
 	^isSkew
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> addPackageNamed: packageName [
 
 	self browserTool addPackageNamed: packageName toProjectNamed: name. 
@@ -55,6 +55,7 @@ RowanProjectService >> addPackageNamed: packageName [
 { #category : 'initialization' }
 RowanProjectService >> basicRefresh [
 	(isLoaded := self projectIsLoaded) ifFalse:[
+		existsOnDisk := false. 
 		updateType := #removedProject:. 
 		^RowanCommandResult addResult: self]. 
 	isDirty := self isDirty. 
@@ -80,7 +81,7 @@ RowanProjectService >> branch: anObject [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> changes [
 
 	| projectService jadeServer |
@@ -97,7 +98,7 @@ RowanProjectService >> changes [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> checkout: branchName [
 
 	| project branches |
@@ -108,7 +109,7 @@ RowanProjectService >> checkout: branchName [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> commitWithMessage: message [
 	
 	Rowan projectTools write writeProjectNamed: name.
@@ -184,7 +185,7 @@ RowanProjectService >> isSkew [
 	^self sha ~= repositorySha
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> loadProjectNamed: aName [
 
 	[Rowan projectTools load loadProjectNamed: aName] 
@@ -216,7 +217,7 @@ RowanProjectService >> name: anObject [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 	"set useSsh to false to clone using https:"
 
@@ -297,7 +298,7 @@ RowanProjectService >> projects [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> pullFromGit [
 
 	| project |
@@ -309,7 +310,7 @@ RowanProjectService >> pullFromGit [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> pushToGit [
 
 	| project |
@@ -328,7 +329,7 @@ RowanProjectService >> refresh [
 		packages := self packageServices].
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> reloadProject [
 
 	[Rowan projectTools load loadProjectNamed: name] 
@@ -390,14 +391,11 @@ RowanProjectService >> rowanSkew [
 
 { #category : 'perform' }
 RowanProjectService >> servicePerform: symbol withArguments: collection [
-	| wasClean |
-	wasClean := [self rowanDirty not] on: Error do:[:ex | false "not loaded"].
 	super servicePerform: symbol withArguments: collection.
-	wasClean ifTrue:[
-		self update]
+	self update.
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> setDefaultProject [
 
 	self class defaultProjectName: name
@@ -442,7 +440,23 @@ RowanProjectService >> update [
 	self refresh.
 ]
 
-{ #category : 'commands' }
+{ #category : 'update' }
+RowanProjectService >> updateInternalService: updatedService [
+
+	"when sending services back to the client,
+	verify any services held by this object are 
+	updated. Services know what internal services
+	they contain." 
+
+	1 to: packages size do:[:index |
+		| packageService |
+		packageService := packages at: index. 
+		packageService = updatedService ifTrue:[
+			packages at: index put: updatedService
+		]].
+]
+
+{ #category : 'client commands' }
 RowanProjectService >> write [
 	Rowan projectTools write writeProjectNamed: name
 

@@ -5,6 +5,54 @@ Class {
 }
 
 { #category : 'tests' }
+RowanPackageServiceTest >> test_compileAndSelectClass [
+
+	| package packageService |
+	[self assert: RowanCommandResult results isEmpty. 
+	package := self createJadeiteTestPackage. 
+	packageService := RowanPackageService forPackageNamed: self jadeiteTestPackageName.
+	self assert: RowanCommandResult results isEmpty. 
+	packageService compileClass: 
+	'RowanServicesTest rwSubclass: ''RowanTestCompile''
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: ''JadeitePackage''
+		options: #()'.
+	self assert: RowanCommandResult results size equals: 1. 
+	self assert: RowanCommandResult results first name equals: 'RowanTestCompile'. 
+	self assert: packageService selectedClass name equals: 'RowanTestCompile'.
+	self assert: packageService selectedClass selectedPackageServices first equals: packageService] 
+		ensure:[System abortTransaction.  "get rid of test package and class"]
+]
+
+{ #category : 'tests' }
+RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
+
+	| package packageService testsPackage |
+	[self assert: RowanCommandResult results isEmpty. 
+	package := self createJadeiteTestPackage. 
+	packageService := RowanPackageService forPackageNamed: self jadeiteTestPackageName.
+	self assert: RowanCommandResult results isEmpty. 
+	packageService compileClass: 
+	'RowanServicesTest rwSubclass: ''RowanTestCompile''
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: ''Rowan-Services-Tests''
+		options: #()'.
+	self assert: RowanCommandResult results size equals: 2. 
+	self assert: RowanCommandResult results first name equals: 'RowanTestCompile'. 
+	self assert: RowanCommandResult results last name equals: 'Rowan-Services-Tests'. 
+	testsPackage := RowanCommandResult results last.
+	self assert: testsPackage selectedClass name equals: 'RowanTestCompile'.
+	self assert: testsPackage selectedClass selectedPackageServices first equals: testsPackage] 
+		ensure:[System abortTransaction.  "get rid of test package and class"]
+]
+
+{ #category : 'tests' }
 RowanPackageServiceTest >> test_packageWasDeleted [
 
 	| package packageService |
