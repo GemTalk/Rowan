@@ -102,8 +102,8 @@ RowanPackageServiceTest >> testCompileClassSelectsPackageAndClass [
 			poolDictionaries: #()
 			category: ''', self jadeiteTestPackageName, '''
 			options: #()'.
-	self assert: RowanCommandResult results size equals: 2.
-	newClassService := RowanCommandResult results detect:[:service | service name = 'TestCompileClass'] ifNone:[]. 
+	self assert: RowanCommandResult results size equals: 1.
+	newClassService := RowanCommandResult results first.
 	self assert: newClassService name equals: 'TestCompileClass'. 
 	self assert: newClassService selectedPackageServices size equals: 1. 
 	self assert: newClassService selectedPackageServices first name equals: self jadeiteTestPackageName. 
