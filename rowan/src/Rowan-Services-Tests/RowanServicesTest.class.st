@@ -162,5 +162,6 @@ RowanServicesTest >> tearDown [
 { #category : 'support' }
 RowanServicesTest >> unloadDefaultProject [
 
+	Rowan image loadedProjectNamed: self defaultProjectName ifAbsent:[^self].
 	Rowan projectTools delete deleteProjectNamed: self defaultProjectName
 ]

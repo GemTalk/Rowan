@@ -58,6 +58,24 @@ RowanClassServiceTest >> test_addedProjectNotOnDisk [
 ]
 
 { #category : 'tests' }
+RowanClassServiceTest >> test_classWasDeleted [
+
+	| classService |
+	self jadeiteIssueTested: #issue284 withTitle: '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
+	'Object rwSubclass: ''TestClass''
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	category: ''Rowan-Services-Tests''
+	options: #()' evaluate.
+	classService := RowanClassService forClassNamed: 'TestClass'. 
+	self deny: classService wasDeleted.
+	System abortTransaction. 
+	self assert: classService wasDeleted.
+]
+
+{ #category : 'tests' }
 RowanClassServiceTest >> test_isTestCase [
 
 	| classService |
