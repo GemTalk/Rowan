@@ -34,7 +34,7 @@ RowanProjectServiceTest >> setUp [
 RowanProjectServiceTest >> tearDown [
 
 	super tearDown.
-	self unloadDefaultProject
+	self unloadServicesTestProject
 ]
 
 { #category : 'tests' }
@@ -56,11 +56,11 @@ RowanProjectServiceTest >> test_addPackage [
 
 	| projectService  packageName loadedPackage |
 	packageName := 'TestAddPackage'.
-	projectService := self projectServiceNamed: self defaultProjectName.
+	projectService := self projectServiceNamed: self servicesTestProjectName.
 	projectService addPackageNamed: packageName.
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	self assert: loadedPackage name equals: packageName. 
-	self assert: loadedPackage projectName equals: self defaultProjectName
+	self assert: loadedPackage projectName equals: self servicesTestProjectName
 ]
 
 { #category : 'tests' }
@@ -72,7 +72,7 @@ RowanProjectServiceTest >> test_commandResultSessionTemp [
 { #category : 'tests' }
 RowanProjectServiceTest >> test_updateAddsCommandResult [
 	| projectService |
-	projectService := self projectServiceNamed: self defaultProjectName.
+	projectService := self projectServiceNamed: self servicesTestProjectName.
 	RowanCommandResult initializeResults. 
 	self assert: RowanCommandResult results size equals: 0. 
 	projectService update. 
