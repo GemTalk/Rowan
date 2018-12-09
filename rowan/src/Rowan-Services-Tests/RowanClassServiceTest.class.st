@@ -24,7 +24,7 @@ RowanClassServiceTest >> setUp [
 RowanClassServiceTest >> tearDown [
 
 	super tearDown.
-	self unloadDefaultProject
+	self unloadServicesTestProject
 ]
 
 { #category : 'tests' }
@@ -95,9 +95,9 @@ RowanClassServiceTest >> test_isTestCase [
 RowanClassServiceTest >> testAddCategory [
 	| classService behavior |
 	
-	behavior := Rowan globalNamed: self defaultClassName. 
+	behavior := Rowan globalNamed: self servicesDefaultClassName. 
 	self deny: (behavior categoryNames includes: 'fnoodle'). 
-	classService := RowanClassService forClassNamed: self defaultClassName meta: false. 
+	classService := RowanClassService forClassNamed: self servicesDefaultClassName meta: false. 
 	classService addCategory: 'fnoodle'.
 	self assert: (behavior categoryNames includes: #fnoodle).
 ]
@@ -115,9 +115,9 @@ RowanClassServiceTest >> testBehavior [
 { #category : 'tests' }
 RowanClassServiceTest >> testClassComment [
 	| classService className behavior packageService |
-	behavior := Rowan globalNamed: self defaultClassName. 
+	behavior := Rowan globalNamed: self servicesDefaultClassName. 
 	self assert: behavior comment equals: String new. 
-	classService := RowanClassService forClassNamed: self defaultClassName meta: false. 
+	classService := RowanClassService forClassNamed: self servicesDefaultClassName meta: false. 
 	classService classComment: 'This is a test'. 
 	self assert: behavior comment equals: 'This is a test'
 ]
