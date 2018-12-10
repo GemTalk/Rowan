@@ -120,6 +120,12 @@ FileSystemHandle >> open [
 	self subclassResponsibility
 ]
 
+{ #category : 'public' }
+FileSystemHandle >> pathString [
+
+	^self reference pathString
+]
+
 { #category : 'accessing' }
 FileSystemHandle >> reference [
 	^ reference

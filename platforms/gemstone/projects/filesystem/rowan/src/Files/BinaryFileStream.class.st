@@ -46,6 +46,7 @@ BinaryFileStream >> close [
 
 { #category : 'testing' }
 BinaryFileStream >> closed [
+	self handle isNil ifTrue: [^true].
 	^ self handle isOpen not
 ]
 

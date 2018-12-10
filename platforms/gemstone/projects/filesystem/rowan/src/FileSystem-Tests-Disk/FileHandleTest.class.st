@@ -13,3 +13,12 @@ FileHandleTest >> createFileSystem [
 	 Normally use: 'FileSystem disk' which returns the cached file system"
 	^ FileSystem store: DiskStore activeClass createDefault
 ]
+
+{ #category : 'tests' }
+FileHandleTest >> testFileWriteError [
+	" This test may be not needed depending on what happens with BinaryFileStream "
+	| stream  |
+	stream := FileSystem disk binaryWriteStreamOn: (FileSystem disk workingDirectory / 'foo.txt') path.
+	stream close.
+	self should: [stream  nextPutAll: 'abdef'] raise: FileWriteError
+]

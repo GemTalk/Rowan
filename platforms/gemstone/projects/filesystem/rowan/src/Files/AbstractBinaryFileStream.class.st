@@ -202,17 +202,11 @@ AbstractBinaryFileStream >> next: n into: aString startingAt: startIndex [
 AbstractBinaryFileStream >> next: amount putAll: aByteArray [
 
 	self fileMode isWritable
-		ifFalse: [ ^ self error: 'Cannot write a read-only file' ].
-	[ self
+		ifFalse: [ ^ FileWriteError signalWith: self fileHandle reference text: 'Cannot write a read-only file - ' , self pathString ].
+	self
 		writeFrom: aByteArray
 		startingAt: 1
-		count: amount ]
-		on: Error
-		do: [:ex | (FileWriteError fileName: self fileName)
-				signal:
-					(self close
-						ifTrue: [ 'File ' , self fileName , ' is closed' ]
-						ifFalse: [ 'File ' , self fileName , ' write failed' ]) ].
+		count: amount.
 	^ aByteArray
 ]
 
@@ -260,6 +254,12 @@ AbstractBinaryFileStream >> nextPut: anInteger [
 { #category : 'writing' }
 AbstractBinaryFileStream >> nextPutAll: aByteArray [
 	self next: aByteArray basicSize putAll: aByteArray
+]
+
+{ #category : 'accessing' }
+AbstractBinaryFileStream >> pathString [
+
+	^self fileHandle pathString
 ]
 
 { #category : 'reading' }
@@ -376,20 +376,15 @@ AbstractBinaryFileStream >> upToEnd [
 			newStream nextPut: next ] ]
 ]
 
-{ #category : 'exceptions' }
-AbstractBinaryFileStream >> writeError: aString [
-
-	(FileWriteError fileName: self fileName) signal: aString
-]
-
 { #category : 'writing' }
 AbstractBinaryFileStream >> writeFrom: stringOrByteArray startingAt: startIndex count: count [
 	"Write count bytes onto this file from the given string or byte array starting at the given index. 	Answer the number of bytes written."
 
 	| written |
+	self handle ifNil: [FileWriteError signalWith: self fileHandle reference text: 'File closed - ' , self pathString].
 	written := (startIndex = 1 and: [ count = stringOrByteArray size])
 		ifTrue: [ self handle nextPutAll: stringOrByteArray ]
 		ifFalse: [ self handle nextPutAll: (stringOrByteArray copyFrom: startIndex to: startIndex + count - 1) ].
-	written ifNil: [ self error: 'write failed' ].
+	written ifNil: [FileWriteError signalWith: self fileHandle reference text: 'Write failed - ' , self pathString].
 	^ written
 ]
