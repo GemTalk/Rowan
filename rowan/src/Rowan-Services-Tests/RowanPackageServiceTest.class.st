@@ -8,6 +8,7 @@ Class {
 RowanPackageServiceTest >> test_compileAndSelectClass [
 
 	| package packageService |
+	System commitTransaction.
 	[self assert: RowanCommandResult results isEmpty. 
 	package := self createJadeiteTestPackage. 
 	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
@@ -31,6 +32,7 @@ RowanPackageServiceTest >> test_compileAndSelectClass [
 RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
 
 	| package packageService testsPackage |
+	System commitTransaction.
 	[self assert: RowanCommandResult results isEmpty. 
 	package := self createJadeiteTestPackage. 
 	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
@@ -56,6 +58,7 @@ RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
 RowanPackageServiceTest >> test_packageWasDeleted [
 
 	| package packageService |
+	System commitTransaction. 
 	self jadeiteIssueTested: #issue284 withTitle: '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
 	package := self createJadeiteTestPackage. 
 	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
