@@ -212,6 +212,15 @@ RowanService >> rowanLoadedPackageNames [
 
 ]
 
+{ #category : 'accessing' }
+RowanService >> rowanProjectName [
+
+	"all services should be able to return a project name
+	even if they are not truly packaged" 
+
+	^nil
+]
+
 { #category : 'samples' }
 RowanService >> sampleSymbolDictionaryName [
 
@@ -221,7 +230,7 @@ RowanService >> sampleSymbolDictionaryName [
 
 { #category : 'perform' }
 RowanService >> servicePerform: symbol withArguments: collection [
-	super perform: symbol withArguments: collection.
+	^super perform: symbol withArguments: collection.
 ]
 
 { #category : 'replication' }
@@ -260,6 +269,16 @@ RowanService >> symbolDictionaryNamed: aName [
 		ifFalse:[
 			self createSymbolDictionaryNamed: aName].
 
+]
+
+{ #category : 'initialization' }
+RowanService >> update [
+]
+
+{ #category : 'update' }
+RowanService >> updateInternalService: updatedService [
+
+	"no internally held services to update"
 ]
 
 { #category : 'accessing' }

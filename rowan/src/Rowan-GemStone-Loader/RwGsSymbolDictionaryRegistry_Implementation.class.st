@@ -57,6 +57,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _addMovedDeletedMethod: new
 			"exit early, no more work to be done"
 			^ registryInstance ].
 	methodDictionary at: selector put: newCompiledMethod.
+	self _clearLookupCachesFor: behavior env: 0.
 
 	loadedMethod := registryInstance methodRegistry
 		at: oldCompiledMethod
@@ -70,7 +71,24 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _addMovedDeletedMethod: new
 
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
 	^ registryInstance
+]
 
+{ #category : 'private' }
+RwGsSymbolDictionaryRegistry_Implementation class >> _clearLookupCachesFor: aBehavior env: envId [
+
+"Invalidates method lookup caches for all classes.
+ Invalidates all send-site caches for the specified environment.
+
+ envId must be a SmallInteger >= 0 and <= 255 .
+"
+
+ "set bit in VM's cbCodeChanged word so it can propagate to
+  other VMs upon commit.  Code which adds or removes entries
+  in persistent method dictionaries must send this method. "
+
+	aBehavior 
+		_clearLookupCaches: envId;
+		_codeChangedForEnv: envId
 ]
 
 { #category : 'private' }
@@ -286,6 +304,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addExtensionCompiledMethod:
 	methodDictionary := behavior persistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	methodDictionary at: selector put: compiledMethod.
+	self _clearLookupCachesFor: behavior env: 0.
 
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
@@ -320,7 +339,6 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addExtensionCompiledMethod:
 			ext ].
 	loadedClassExtension addLoadedMethod: loadedMethod.
 	^ registryInstance
-
 ]
 
 { #category : 'private' }
@@ -430,6 +448,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addNewCompiledMethod: compi
 			^ self 
 				moveCompiledMethod: compiledMethod toProtocol: protocolString instance: registryInstance ].
 	methodDictionary at: selector put: compiledMethod.
+	self _clearLookupCachesFor: behavior env: 0.
 
 	protocolSymbol := protocolString asSymbol.
 	(behavior includesCategory: protocolSymbol)
@@ -458,7 +477,6 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addNewCompiledMethod: compi
 					'Internal error -- attempt to add a method to a package in which its class is neither defined nor extended.' ].
 	loadedClassOrExtension addLoadedMethod: loadedMethod.
 	^ registryInstance
-
 ]
 
 { #category : 'private' }
@@ -482,6 +500,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addRecompiledMethod: newCom
 			"exit early, no more work to be done"
 			^ registryInstance ].
 	methodDictionary at: selector put: newCompiledMethod.
+	self _clearLookupCachesFor: behavior env: 0.
 
 	loadedMethod := registryInstance methodRegistry
 		at: oldCompiledMethod
@@ -493,7 +512,6 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addRecompiledMethod: newCom
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod.
 	^ registryInstance
-
 ]
 
 { #category : 'private' }

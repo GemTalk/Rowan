@@ -16,7 +16,7 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanBrowserService >> allClasses [
 
 	allClasses := SortedCollection sortBlock: [:x :y | x name < y name].
@@ -32,7 +32,7 @@ RowanBrowserService >> allClasses [
 	RowanCommandResult addResult: self
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanBrowserService >> defaultClassHierarchy [
 	hierarchyServices := Dictionary new.   
 	organizer hierarchy keysAndValuesDo: [:key :value |
@@ -44,9 +44,19 @@ RowanBrowserService >> defaultClassHierarchy [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'commands' }
-RowanBrowserService >> packagesWithTests [
+{ #category : 'client commands' }
+RowanBrowserService >> findRemovedServices: services [
 
+	services do:[:service | 
+		service wasDeleted ifTrue:[
+				service updateType: #removed:.
+				RowanCommandResult addResult: service.
+		]
+	].
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> packagesWithTests [
 	testPackages := Set new. 
 	testCount := 0. 
 	TestCase allSubclasses do:[:testSubclass |
@@ -63,14 +73,17 @@ RowanBrowserService >> packagesWithTests [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'commands' }
-RowanBrowserService >> reloadProjects: projectServices [
-
+{ #category : 'client commands' }
+RowanBrowserService >> reloadProjects: projectServices andUpdateServices: services [
+	| projectNames |
 	projectServices do:[:projectService |
-		projectService reloadProject]
+		projectService reloadProject].
+	projectNames := projectServices collect: [:projectService | projectService name]. 
+	services do:[:service | 
+		(projectNames includes: service rowanProjectName) ifTrue:[service update]].
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanBrowserService >> removeMethods: methodServices [
 
 	| notRemoved |
@@ -89,7 +102,12 @@ RowanBrowserService >> removeMethods: methodServices [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'commands' }
+{ #category : 'perform' }
+RowanBrowserService >> servicePerform: symbol withArguments: collection [
+	super perform: symbol withArguments: collection.
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> unloadProjectsNamed: array [
 	array do:[:projectName |
 		Rowan projectTools delete deleteProjectNamed: projectName]. 
@@ -102,7 +120,7 @@ RowanBrowserService >> update [
 	self updateProjects
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanBrowserService >> updateProjects [
 	| sortedProjects | 
 	sortedProjects := SortedCollection sortBlock: [:a :b | a name < b name]. 

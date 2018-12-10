@@ -11,10 +11,11 @@ Class {
 }
 
 { #category : 'accessing' }
-RowanCommandResult class >> addResult: aResult [
-	aResult command: nil;
+RowanCommandResult class >> addResult: service [
+	service command: nil;
 			commandArgs: nil. 
-	self results add: aResult
+	self updateClientBoundServices: service.
+	self results add: service
 ]
 
 { #category : 'initailize' }
@@ -34,10 +35,33 @@ RowanCommandResult class >> new [
 ]
 
 { #category : 'accessing' }
+RowanCommandResult class >> removeResult: aResult [
+
+	self results remove: aResult
+]
+
+{ #category : 'accessing' }
 RowanCommandResult class >> results [
 
 	"lazy initialize for a topaz session test" 
 	^SessionTemps current at: #rowanCommandResults ifAbsentPut: [Array new]
+]
+
+{ #category : 'private' }
+RowanCommandResult class >> updateClientBoundServices: clientBoundService [
+	"We're about to add a service to the results collection. 
+	That service will be sent to the client. Since services
+	are not canonical, we need to do some housekeeping
+	to ensure that we don't already have this service 
+	somewhere in other client-bound services"
+
+	(self results includes: clientBoundService) ifTrue:[
+		self removeResult: clientBoundService. 
+		self addResult: clientBoundService. 
+	].
+	self results do:[:service |
+		service updateInternalService: clientBoundService.
+		clientBoundService updateInternalService: service].
 ]
 
 { #category : 'accessing' }
@@ -61,4 +85,8 @@ RowanCommandResult >> initialize [
 { #category : 'private' }
 RowanCommandResult >> rowanFixMe [
 
+]
+
+{ #category : 'accessing' }
+RowanCommandResult >> updateInternalService: service [
 ]
