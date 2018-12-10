@@ -25,7 +25,6 @@ run
 					loadProjectNamed: projectName
 					withGroupNames: #('tests' 'jadeServer') ] ].
 
-		System commit.
 		"audit after load"
 		projectNames do: [:projectName |
 			| audit |
@@ -34,8 +33,10 @@ run
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 
-		false
-			ifTrue: [ res := suite run ]
+		true
+			ifTrue: [ 
+				"Deprection error will halt tests immediately"
+				res := suite run ]
 			ifFalse: [ 
 				[ 
 					res := suite run.
