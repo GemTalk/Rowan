@@ -88,7 +88,7 @@ RowanMethodService >> addOrUpdateMethod [
                    inPackageNamed: self classService packageName
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanMethodService >> allReferences [
 
 	| methods |
@@ -167,7 +167,7 @@ RowanMethodService >> classService: newValue [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanMethodService >> clearBreakAt: stepPoint [
 
 	self gsNMethod clearBreakAtStepPoint: stepPoint.
@@ -193,7 +193,7 @@ RowanMethodService >> definitionClass [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanMethodService >> fileout [
 	| answeringService ws |
 	answeringService := RowanAnsweringService new.
@@ -391,7 +391,13 @@ RowanMethodService >> selector: aSymbol [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'perform' }
+RowanMethodService >> servicePerform: symbol withArguments: collection [
+	super servicePerform: symbol withArguments: collection.
+	self update.
+]
+
+{ #category : 'client commands' }
 RowanMethodService >> setBreakAt: stepPoint [
 
 	self gsNMethod setBreakAtStepPoint: stepPoint.

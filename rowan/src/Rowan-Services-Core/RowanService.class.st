@@ -230,7 +230,7 @@ RowanService >> sampleSymbolDictionaryName [
 
 { #category : 'perform' }
 RowanService >> servicePerform: symbol withArguments: collection [
-	super perform: symbol withArguments: collection.
+	^super perform: symbol withArguments: collection.
 ]
 
 { #category : 'replication' }
@@ -269,6 +269,16 @@ RowanService >> symbolDictionaryNamed: aName [
 		ifFalse:[
 			self createSymbolDictionaryNamed: aName].
 
+]
+
+{ #category : 'initialization' }
+RowanService >> update [
+]
+
+{ #category : 'update' }
+RowanService >> updateInternalService: updatedService [
+
+	"no internally held services to update"
 ]
 
 { #category : 'accessing' }
