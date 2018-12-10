@@ -108,9 +108,7 @@ FileHandle >> isOpen [
 FileHandle >> open [
 	self flag: 'TODO: for now we solely rely on the old FileStreams'.
 	self id: self basicOpen.
-	self id ifNil: 	[
-		self reference exists ifFalse: [FileDoesNotExistException signalWith: self reference].
-		self error: 'Unable to open file ' , self reference printString]
+	self id ifNil: 	[self signalOpenError]
 ]
 
 { #category : 'public' }
@@ -139,6 +137,17 @@ FileHandle >> setPositionTo: anInteger [
 ]
 
 { #category : 'public' }
+FileHandle >> signalOpenError [
+	self reference exists ifFalse: [
+		FileDoesNotExist signalWith: self reference text: 'Attempting to open non existent file - ' , self reference fullName].
+	self reference isDirectory ifTrue: [
+		FileDoesNotExist signalWith: self reference text: 'Attempting to open directory - ' , self reference fullName].
+	FileOpenError 
+		signalWith: self reference 
+		text: ('Unable to open'  , self reference fullName)
+]
+
+{ #category : 'public' }
 FileHandle >> size [
 	
 	self flag: 'TODO: remove once FileHandles are really used!'.
@@ -162,7 +171,7 @@ FileHandle >> startUp [
 { #category : 'public' }
 FileHandle >> streamError [
 	self reference exists
-		ifFalse: [FileDoesNotExistException signalWith: self reference].
+		ifFalse: [FileDoesNotExist signalWith: self reference].
 	self error: 'Unable to open file ' , self reference printString
 ]
 

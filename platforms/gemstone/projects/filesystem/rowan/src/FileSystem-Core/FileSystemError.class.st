@@ -12,7 +12,12 @@ Class {
 
 { #category : 'instance creation' }
 FileSystemError class >> reference: aReference [
-	^ self basicNew initializeWithReference: aReference
+	^ self reference: aReference text: aReference printString
+]
+
+{ #category : 'instance creation' }
+FileSystemError class >> reference: aReference text: aString [
+	^ self basicNew initializeWithReference: aReference text: aString
 ]
 
 { #category : 'instance creation' }
@@ -20,10 +25,15 @@ FileSystemError class >> signalWith: aReference [
 	^ (self reference: aReference) signal
 ]
 
+{ #category : 'instance creation' }
+FileSystemError class >> signalWith: aReference text: aString [
+	^ (self reference: aReference text: aString) signal
+]
+
 { #category : 'initialize-release' }
-FileSystemError >> initializeWithReference: aReference [
+FileSystemError >> initializeWithReference: aReference text: aString [
 	reference := aReference.
-	messageText := aReference printString
+	messageText := aString
 ]
 
 { #category : 'testing' }

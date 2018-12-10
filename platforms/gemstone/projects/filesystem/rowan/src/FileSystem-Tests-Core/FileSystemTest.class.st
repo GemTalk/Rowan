@@ -69,7 +69,7 @@ FileSystemTest >> tearDown [
 FileSystemTest >> testBinaryReadStream [
 	| reference stream |
 	self markForCleanup: (reference := filesystem workingDirectory / 'griffle').
-	self should: [ reference binaryReadStream ] raise: FileDoesNotExistException.
+	self should: [ reference binaryReadStream ] raise: FileDoesNotExist.
 	reference writeStreamDo: [ :ws | ws nextPutAll: 'griffle' ].
 	stream := reference binaryReadStream.
 	self assert: stream contents asString equals: 'griffle'.
@@ -82,7 +82,7 @@ FileSystemTest >> testBinaryReadStreamDo [
 	self markForCleanup: (reference := filesystem workingDirectory / 'griffle').
 	self 
 		should: [ reference binaryReadStreamDo: [ :stream | self assert: false ] ] 
-		raise: FileDoesNotExistException.
+		raise: FileDoesNotExist.
 	reference writeStreamDo: [ :ws | ws nextPutAll: 'griffle' ].
 	self assert: (reference readStreamDo: [ :stream | stream contents asString ]) 
 		= 'griffle'
@@ -238,7 +238,7 @@ FileSystemTest >> testCopyDestExists [
 FileSystemTest >> testCopySourceDoesntExist [
 	self 
 		should: [filesystem copy: 'plonk' to: 'griffle']
-		raise: FileDoesNotExistException
+		raise: FileDoesNotExist
 ]
 
 { #category : 'tests' }
@@ -336,15 +336,13 @@ FileSystemTest >> testDelete [
 	
 	self 
 		should: [ reference delete ]
-		raise: FileDoesNotExistException.
+		raise: FileDoesNotExist.
 		
 		
 	reference := ( filesystem workingDirectory / 'file') ensureCreateFile.
 	reference delete.
 	
-	self deny: reference exists. 
-		
-
+	self deny: reference exists.
 ]
 
 { #category : 'tests' }
@@ -571,8 +569,8 @@ FileSystemTest >> testNonExistentEntryAt [
 	self markForCleanup: path1.
 	filesystem createDirectory: path1.
 
-	self shouldnt: [ filesystem entryAt: path1 ] raise: FileDoesNotExistException.
-	self should: [ filesystem entryAt: path2 ] raise: FileDoesNotExistException
+	self shouldnt: [ filesystem entryAt: path1 ] raise: FileDoesNotExist.
+	self should: [ filesystem entryAt: path2 ] raise: FileDoesNotExist
 ]
 
 { #category : 'tests' }
@@ -584,8 +582,8 @@ FileSystemTest >> testNonExistentFileSize [
 	file2 := (base / 'file2').
 	self markForCleanup: base / 'file1'.
 	
-	self shouldnt: [ file1 size ] raise: FileDoesNotExistException.
-	self should: [ file2 size ] raise: FileDoesNotExistException
+	self shouldnt: [ file1 size ] raise: FileDoesNotExist.
+	self should: [ file2 size ] raise: FileDoesNotExist
 ]
 
 { #category : 'tests-streams' }
@@ -604,12 +602,11 @@ FileSystemTest >> testReadingAfterWriting [
 FileSystemTest >> testReadStream [
 	| reference stream |
 	self markForCleanup: (reference := filesystem workingDirectory / 'griffle').
-	self should: [ stream := reference readStream ] raise: FileDoesNotExistException.
+	self should: [ stream := reference readStream ] raise: FileDoesNotExist.
 	reference writeStreamDo: [ :ws | ws nextPutAll: 'griffle' ].
 	stream := reference readStream.
 	self assert: stream contents asString equals: 'griffle'.
 	stream close
-
 ]
 
 { #category : 'tests-streams' }
@@ -618,7 +615,7 @@ FileSystemTest >> testReadStreamDo [
 	self markForCleanup: (reference := filesystem workingDirectory / 'griffle').
 	self 
 		should: [ reference readStreamDo: [ :stream | self assert: false ] ] 
-		raise: FileDoesNotExistException.
+		raise: FileDoesNotExist.
 	reference writeStreamDo: [ :ws | ws nextPutAll: 'griffle' ].
 	self assert: (reference readStreamDo: [ :stream | stream contents asString ]) 
 		= 'griffle'

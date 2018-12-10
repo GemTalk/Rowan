@@ -43,14 +43,6 @@ Class {
 }
 
 { #category : 'instance creation' }
-AbstractBinaryFileStream class >> handle: aGsFile fileReference: aFileReference forWrite: aTrue [
-	
-	^ self basicNew
-		handle: aGsFile fileReference: aFileReference forWrite: aTrue;
-		yourself
-]
-
-{ #category : 'instance creation' }
 AbstractBinaryFileStream class >> onFileHandle: aFileHandle [
 
 	^self basicNew
@@ -139,14 +131,6 @@ AbstractBinaryFileStream >> handle [
 { #category : 'accessing' }
 AbstractBinaryFileStream >> handle: anObject [
 	self fileHandle id: anObject
-]
-
-{ #category : 'initialization' }
-AbstractBinaryFileStream >> handle: aGsFile fileReference: aFileReferemce forWrite: aBoolean [
-	self halt. "This is deprecated"
-	handle := aGsFile.
-	self fileReference: aFileReferemce.
-	forWrite := aBoolean
 ]
 
 { #category : 'initialization' }

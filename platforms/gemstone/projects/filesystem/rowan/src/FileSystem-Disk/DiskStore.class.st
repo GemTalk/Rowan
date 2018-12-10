@@ -225,7 +225,7 @@ DiskStore >> delete: path [
 	| pathString |
 	
 	(self exists: path)
-		ifFalse: [ ^ FileDoesNotExistException signalWith: path ].
+		ifFalse: [ ^ FileDoesNotExist signalWith: path ].
 		
 	pathString := self stringFromPath: path.
 	
@@ -245,7 +245,9 @@ DiskStore >> deleteDirectory: pathString [
 DiskStore >> deleteFile: pathString [
 
 	(GsFile removeServerFile: pathString)
-		ifNil: [ (CannotDeleteFileException new messageText: 'Could not delete file ' , pathString , '. Check the file is not open.') signal ].
+		ifNil: [ FileDeletionError 
+					signalWith: pathString  
+					text: 'Could not delete file ' , pathString , '. Check the file is not open.' ].
 ]
 
 { #category : 'printing' }
