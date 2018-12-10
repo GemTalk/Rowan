@@ -640,7 +640,8 @@ commit
   run
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
-    value: #('Rowan-Tools-Extensions' 'Rowan-Deprecated' 'Rowan-Tests' 'Rowan-Services-Tests'	
+    value: #('Rowan-Tools-Extensions' 'Rowan-Deprecated' 'Rowan-Tests' 'Rowan-Tests-Deprecated' 
+	'Rowan-Services-Tests'	
 	).	"Tool extension methods for RowanKernel classes "
 %
   commit

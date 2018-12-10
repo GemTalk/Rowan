@@ -2219,7 +2219,8 @@ RwRowanSample4Test >> testSampleCompoundConfiguration [
 	gitTool gitcheckoutIn: gitRootPath with: 'master'.
 	projectTools load
 		loadProjectNamed: projectName
-		withConfiguration: 'Test'
+		withConfigurations: #( 'Test' )
+		groupNames: #()
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	project := RwProject newNamed: projectName.

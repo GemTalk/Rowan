@@ -3,6 +3,7 @@
 	#version : '0.1.0',
 	#definedGroupNames : {
 		'core' : [ ],
+		'deprecated tests' : [ 'tests', 'deprecated' ],
 		'deprecated' : [ 'core' ],
 		'jadeServer' : [ 'core' ], 
 		'tests' : [ 'core' ]

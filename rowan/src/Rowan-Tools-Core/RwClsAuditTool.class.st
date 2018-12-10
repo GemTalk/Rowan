@@ -29,14 +29,15 @@ RwClsAuditTool >> _auditCategory: category forBehavior: aBehavior loadedClass: a
 					ifAbsent: [nil]) isNil 
 						ifTrue: [ | res | 
 									res := self _auditCategory: category selectors: (aBehavior selectorsIn: category)  forBehavior: aBehavior loadedClass: aLoadedClass		.
-									res add: (aLoadedClass name , ' #' , category asString -> 'Class Extension is not present in the package '); 
-									yourself
+									"res add: (aLoadedClass name , ' #' , category asString -> 'Class Extension is not present in the package '); 
+									yourself"
 						] 
 						ifFalse: [{}"no basic extension problems found, class extension will be audited separately"]
 			]
 	] ifFalse: [
 		self _auditCategory: category selectors: (aBehavior selectorsIn: category)  forBehavior: aBehavior loadedClass: aLoadedClass		
 	]
+
 ]
 
 { #category : 'audit' }
@@ -148,7 +149,7 @@ RwClsAuditTool >> _auditSelector: aSelector forBehavior: aBehavior loadedClass: 
 						ifTrue: [
 							((aLoadedMethod propertyAt: 'protocol') equalsNoCase: (aBehavior categoryOfSelector:   aSelector ) ) 
 								ifTrue: [nil]
-								ifFalse: [aLoadedClass name , '#', (aLoadedMethod propertyAt: 'protocol') -> 'Missing class method category for loaded class']
+								ifFalse: [aLoadedClass name , '#', (aLoadedMethod propertyAt: 'protocol') -> 'Missing instance method category for loaded class']
 						] 
 						ifFalse: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Compiled instance method is not identical to loaded method. ']
 			]
@@ -197,7 +198,8 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 RwClsAuditTool >> errorLog: aResult add: aMessage [	
 "add error to results. print to file"
 	aResult add: aMessage.
-	GsFile gciLogServer: aMessage value asString,'  ', aMessage key asString
+	GsFile gciLogServer: aMessage value asString,'  ', aMessage key asString.
+	Notification signal: aMessage value asString,'  ', aMessage key asString.
 
 ]
 

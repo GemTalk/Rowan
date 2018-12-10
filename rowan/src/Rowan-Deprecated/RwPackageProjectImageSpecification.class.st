@@ -7,6 +7,13 @@ Class {
 	#category : 'Rowan-Deprecated'
 }
 
+{ #category : 'instance creation' }
+RwPackageProjectImageSpecification class >> new [
+
+	self deprecated: 'RwPackageProjectImageSpecification deprecated in Rowan 1.2.6+'.
+	^ super new
+]
+
 { #category : 'accessing' }
 RwPackageProjectImageSpecification >> loadedPackageNames [
 

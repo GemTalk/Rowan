@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwRepCommitTool',
 	#superclass : 'RwRepositoryTool',
-	#category : 'Rowan-Tools-Core'
+	#category : 'Rowan-Tools-Deprecated'
 }
 
 { #category : 'smalltalk api' }

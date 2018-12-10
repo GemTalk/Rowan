@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'officialRowanProjectInstance'
 	],
-	#category : 'Rowan-Tests'
+	#category : 'Rowan-Tests-Deprecated'
 }
 
 { #category : 'private' }
@@ -13,12 +13,11 @@ RwPackageReadWriteTest >> basicPackageLoadSpec: packageNames packageNamesToLoad:
 	"The class RwPackageProjectSpecification is deprecated .... will eventually need to convert this to use
 		RwSimpleProjectSpecification and configurations"
 
-	^ RwPackageProjectSpecification new
+	[ ^ RwPackageProjectSpecification new
 		specName: 'basic test spec';
 		packageNamesToLoad: packageNamesToLoad;
 		repoSpec: RwDiskRepositorySpecification new;
-		yourself
-
+		yourself ] on: Deprecated do: [:ex | ex resume ].
 ]
 
 { #category : 'private' }
@@ -125,11 +124,11 @@ RwPackageReadWriteTest >> setUpSpecificationForTest: myPackageSet rowanSpec: row
     ifTrue: [ 
       (CypressFileUtilities current directoryExists: repositoryPath)
         ifTrue: [ CypressFileUtilities current deleteAll: repositoryPath ] ].
-  ^ (self basicPackageLoadSpec: packageNames packageNamesToLoad: packageNames)
+   [ ^ (self basicPackageLoadSpec: packageNames packageNamesToLoad: packageNames)
     repositoryRootPath: repositoryRootPath;
     repositoryUrl: repositoryFormat , ':' , repositoryPath;
     repoPath: 'repositoryFormat';
-    yourself
+    yourself ] on: Deprecated do: [:ex | ex resume ].
 ]
 
 { #category : 'private' }

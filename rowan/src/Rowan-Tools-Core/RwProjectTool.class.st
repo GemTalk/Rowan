@@ -54,12 +54,6 @@ RwProjectTool class >> delete [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> diff [
-
-	^RwPrjDiffTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> disown [
 
 	^ RwPrjDisownTool new
@@ -70,17 +64,6 @@ RwProjectTool class >> disown [
 RwProjectTool class >> edit [
 
 	^ RwPrjEditTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> install [
-	^ RwPrjInstallTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> list [
-
-	^RwPrjListTool new
 ]
 
 { #category : 'commands' }
@@ -126,17 +109,6 @@ RwProjectTool class >> reconcile [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> register [
-  ^ RwPrjRegisterTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> registry [
-
-	^RwPrjRegistryTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> revert [
 
 	^RwPrjRevertTool new
@@ -151,12 +123,6 @@ RwProjectTool class >> spec [
 RwProjectTool class >> test [
 
 	^RwPrjTestTool new
-]
-
-{ #category : 'commands' }
-RwProjectTool class >> unregister [
-
-	^RwPrjUnregisterTool new
 ]
 
 { #category : 'commands' }

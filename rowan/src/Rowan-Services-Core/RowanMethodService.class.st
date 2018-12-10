@@ -88,7 +88,7 @@ RowanMethodService >> addOrUpdateMethod [
                    inPackageNamed: self classService packageName
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanMethodService >> allReferences [
 
 	| methods |
@@ -167,7 +167,7 @@ RowanMethodService >> classService: newValue [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanMethodService >> clearBreakAt: stepPoint [
 
 	self gsNMethod clearBreakAtStepPoint: stepPoint.
@@ -193,7 +193,7 @@ RowanMethodService >> definitionClass [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanMethodService >> fileout [
 	| answeringService ws |
 	answeringService := RowanAnsweringService new.
@@ -228,7 +228,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 { #category : 'Accessing' }
 RowanMethodService >> gsNMethod [
 
-	^self classOrMeta compiledMethodAt: selector
+	^[self classOrMeta compiledMethodAt: selector ] on: Error do:[:ex | nil "removed method"]
 ]
 
 { #category : 'Accessing' }
@@ -357,6 +357,12 @@ RowanMethodService >> rowanIsExtension [
 
 ]
 
+{ #category : 'rowan' }
+RowanMethodService >> rowanProjectName [
+
+	^projectName
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> selectedPackageServices [
 
@@ -385,7 +391,13 @@ RowanMethodService >> selector: aSymbol [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'perform' }
+RowanMethodService >> servicePerform: symbol withArguments: collection [
+	super servicePerform: symbol withArguments: collection.
+	self update.
+]
+
+{ #category : 'client commands' }
 RowanMethodService >> setBreakAt: stepPoint [
 
 	self gsNMethod setBreakAtStepPoint: stepPoint.
@@ -443,9 +455,19 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 
 { #category : 'updates' }
 RowanMethodService >> update [
+
+	self wasDeleted ifTrue:[
+		self updateType: #methodsRemoved:. 
+		^RowanCommandResult addResult: self. ].  "removed method"
 	oop ifNil: [oop := self gsNMethod asOop].
 	self 
 		initialize: (Object _objectForOop: oop) 
 		organizer: ClassOrganizer new.
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'testing' }
+RowanMethodService >> wasDeleted [
+
+	^self gsNMethod isNil
 ]

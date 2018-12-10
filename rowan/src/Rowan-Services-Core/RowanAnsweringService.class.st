@@ -13,6 +13,13 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'commands' }
+RowanAnsweringService >> allTestsIn: classServices [
+	answer := Array new. 
+	classServices do:[:service | answer addAll: service allTests].
+	RowanCommandResult addResult: self.
+]
+
 { #category : 'other' }
 RowanAnsweringService >> answer [
 

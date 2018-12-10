@@ -8,6 +8,11 @@
 					'Rowan-Tests',
 					'Rowan-Services-Tests'
 					]
+				},
+			'deprecated tests' : {
+				#packageNames : [
+					'Rowan-Tests-Deprecated'
+					]
 				}
 			}
 		},

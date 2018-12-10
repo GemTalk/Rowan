@@ -1,5 +1,5 @@
 Class {
 	#name : 'RwPrjListTool',
 	#superclass : 'RwProjectTool',
-	#category : 'Rowan-Tools-Core'
+	#category : 'Rowan-Tools-Deprecated'
 }

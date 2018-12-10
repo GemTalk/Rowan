@@ -32,7 +32,7 @@ RowanServicesTest >> createDefaultClass [
 
 	| packageDefinition classDefinition |
 	packageDefinition := self createDefaultPackage.
-	classDefinition := self createClassDefinitionNamed: self defaultClassName. 
+	classDefinition := self createClassDefinitionNamed: self servicesDefaultClassName. 
 	packageDefinition addClassDefinition: classDefinition. 
 	^classDefinition
 ]
@@ -42,14 +42,14 @@ RowanServicesTest >> createDefaultPackage [
 
 	| projectDefinition |
 	projectDefinition := self createDefaultProject. 
-	projectDefinition addPackageNamed: self defaultPackageName.
-	^projectDefinition packageNamed: self defaultPackageName
+	projectDefinition addPackageNamed: self servicesTestPackageName.
+	^projectDefinition packageNamed: self servicesTestPackageName
 ]
 
 { #category : 'support' }
 RowanServicesTest >> createDefaultProject [
 
-	defaultProjectDefinition := self createProjectDefinitionNamed: self defaultProjectName.
+	defaultProjectDefinition := self createProjectDefinitionNamed: self servicesTestProjectName.
 	^defaultProjectDefinition
 ]
 
@@ -57,7 +57,7 @@ RowanServicesTest >> createDefaultProject [
 RowanServicesTest >> createJadeiteTestPackage [
 	| proj pkg |
 	proj := self createJadeiteTestProject. 
-	pkg := RwPackageDefinition newNamed: self jadeiteTestPackageName.
+	pkg := RwPackageDefinition newNamed: self servicesTestPackageName.
 	proj addPackage: pkg.
 	Rowan projectTools load loadProjectDefinition: proj.
 	^pkg.
@@ -66,8 +66,8 @@ RowanServicesTest >> createJadeiteTestPackage [
 { #category : 'support' }
 RowanServicesTest >> createJadeiteTestProject [
 	| proj |
-	proj := RwProjectDefinition newForGitBasedProjectNamed: self jadeiteTestProjectName. 
-	proj repositoryRootPath: '$ROWAN_PROJECTS_HOME/', self jadeiteTestProjectName. 
+	proj := RwProjectDefinition newForGitBasedProjectNamed: self servicesTestProjectName. 
+	proj repositoryRootPath: '$ROWAN_PROJECTS_HOME/', self servicesTestProjectName. 
 	Rowan projectTools create createProjectFor: proj.
 	^proj
 ]
@@ -84,28 +84,10 @@ RowanServicesTest >> createProjectDefinitionNamed: projectName [
 	^projectDefinition
 ]
 
-{ #category : 'constants' }
-RowanServicesTest >> defaultClassName [
-
-	^'ServicesTestClass'
-]
-
-{ #category : 'constants' }
-RowanServicesTest >> defaultPackageName [
-
-	^'ServicesTestPackage'
-]
-
 { #category : 'support' }
 RowanServicesTest >> defaultProjectDefinition [
 
 	^defaultProjectDefinition ifNil:[defaultProjectDefinition := self createDefaultProject]
-]
-
-{ #category : 'constants' }
-RowanServicesTest >> defaultProjectName [
-
-	^'ServicesTestProject'
 ]
 
 { #category : 'support' }
@@ -124,18 +106,6 @@ RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 		https://github.com/GemTalk/Jadeite/issues/"
 ]
 
-{ #category : 'constants' }
-RowanServicesTest >> jadeiteTestPackageName [
-
-	^'JadeitePackage'
-]
-
-{ #category : 'constants' }
-RowanServicesTest >> jadeiteTestProjectName [
-
-	^'JadeiteProject'
-]
-
 { #category : 'support' }
 RowanServicesTest >> loadDefaultProject [
 	
@@ -144,6 +114,24 @@ RowanServicesTest >> loadDefaultProject [
 	projectSetDefinition:= RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: self defaultProjectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+]
+
+{ #category : 'constants' }
+RowanServicesTest >> servicesDefaultClassName [
+
+	^'RowanServicesTestClass'
+]
+
+{ #category : 'constants' }
+RowanServicesTest >> servicesTestPackageName [
+
+	^'RowanServicesTestPackage'
+]
+
+{ #category : 'constants' }
+RowanServicesTest >> servicesTestProjectName [
+
+	^'RowanServicesTestProject'
 ]
 
 { #category : 'setup teardown' }
@@ -160,7 +148,8 @@ RowanServicesTest >> tearDown [
 ]
 
 { #category : 'support' }
-RowanServicesTest >> unloadDefaultProject [
+RowanServicesTest >> unloadServicesTestProject [
 
-	Rowan projectTools delete deleteProjectNamed: self defaultProjectName
+	Rowan image loadedProjectNamed: self servicesTestProjectName ifAbsent:[^self].
+	Rowan projectTools delete deleteProjectNamed: self servicesTestProjectName
 ]

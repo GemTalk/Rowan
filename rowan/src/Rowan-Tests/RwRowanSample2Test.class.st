@@ -89,10 +89,11 @@ RwRowanSample2Test >> testAutomaticMigration [
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	[ projectTools load
+	projectTools load
 		loadProjectNamed: projectName
-		withConfiguration: 'Default'
-		instanceMigrator: RwGsInstanceMigrator noMigration ] on: Deprecated do: [:ex | ex resume ].
+		withConfigurations: #( 'Default' )
+		groupNames: #()
+		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -106,10 +107,12 @@ RwRowanSample2Test >> testAutomaticMigration [
 			instanceMap at: instance put: ar -> class ].
 
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
-	[ projectTools load
+
+	projectTools load
 		loadProjectNamed: projectName
-		withConfiguration: 'Default'
-		instanceMigrator: RwGsInstanceMigrator aggressiveMigration ] on: Deprecated do: [:ex | ex resume ].
+		withConfigurations: #( 'Default' )
+		groupNames: #()
+		instanceMigrator: RwGsInstanceMigrator aggressiveMigration.
 
 	instanceMap
 		keysAndValuesDo: [ :instance :assoc | 
@@ -162,17 +165,19 @@ RwRowanSample2Test >> testDeferredMigration [
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	[ projectTools load
+	projectTools load
 		loadProjectNamed: projectName
-		withConfiguration: 'Default'
-		instanceMigrator: RwGsInstanceMigrator noMigration ] on: Deprecated do: [:ex | ex resume ].
+		withConfigurations: #( 'Default' )
+		groupNames: #()
+		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
 	instanceMigrator := RwGsDeferredInstanceMigrator noMigration.
-	[ projectTools load
+	projectTools load
 		loadProjectNamed: projectName
-		withConfiguration: 'Default'
-		instanceMigrator: instanceMigrator ] on: Deprecated do: [:ex | ex resume ].
+		withConfigurations: #( 'Default' )
+		groupNames: #()
+		instanceMigrator: instanceMigrator.
 
 	classesToMigrate := (instanceMigrator classesToMigrate collect: [:each | each name ]) sort.
 	expectedClassesToMigrate := (self _migrationClassMap collect: [:each | each at: 1 ]) sort.
@@ -213,7 +218,7 @@ RwRowanSample2Test >> testNoMigration [
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	[ projectTools load loadProjectNamed: projectName withConfiguration: 'Default' ] on: Deprecated do: [:ex | ex resume ].
+	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -227,7 +232,7 @@ RwRowanSample2Test >> testNoMigration [
 			instanceMap at: instance put: ar -> class ].
 
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
-	[ projectTools load loadProjectNamed: projectName withConfiguration: 'Default' ] on: Deprecated do: [:ex | ex resume ].
+	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
 
 	instanceMap
 		keysAndValuesDo: [ :instance :assoc | 
@@ -279,7 +284,7 @@ RwRowanSample2Test >> testNoMigration_bitbucket [
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	[ projectTools load loadProjectNamed: projectName withConfiguration: 'Default' ] on: Deprecated do: [:ex | ex resume ].
+	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -293,7 +298,7 @@ RwRowanSample2Test >> testNoMigration_bitbucket [
 			instanceMap at: instance put: ar -> class ].
 
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
-	[ projectTools load loadProjectNamed: projectName withConfiguration: 'Default' ] on: Deprecated do: [:ex | ex resume ].
+	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
 
 	instanceMap
 		keysAndValuesDo: [ :instance :assoc | 
@@ -345,7 +350,7 @@ RwRowanSample2Test >> testNoMigration_gitlab [
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	[ projectTools load loadProjectNamed: projectName withConfiguration: 'Default' ] on: Deprecated do: [:ex | ex resume ].
+	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -359,7 +364,7 @@ RwRowanSample2Test >> testNoMigration_gitlab [
 			instanceMap at: instance put: ar -> class ].
 
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
-	[ projectTools load loadProjectNamed: projectName withConfiguration: 'Default'  ] on: Deprecated do: [:ex | ex resume ].
+	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
 
 	instanceMap
 		keysAndValuesDo: [ :instance :assoc | 
@@ -411,7 +416,7 @@ RwRowanSample2Test >> testNoMigration_gitolite [
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	[ projectTools load loadProjectNamed: projectName withConfiguration: 'Default' ] on: Deprecated do: [:ex | ex resume ].
+	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
 
 	instanceMap := IdentityKeyValueDictionary new.
 	self _migrationClassMap
@@ -425,7 +430,7 @@ RwRowanSample2Test >> testNoMigration_gitolite [
 			instanceMap at: instance put: ar -> class ].
 
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_2'.
-	[ projectTools load loadProjectNamed: projectName withConfiguration: 'Default' ] on: Deprecated do: [:ex | ex resume ].
+	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
 
 	instanceMap
 		keysAndValuesDo: [ :instance :assoc | 
@@ -493,14 +498,14 @@ RwRowanSample2Test >> testRemoveSubclassOfClassWithNewVersion [
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_1'.
-	[ projectTools load loadProjectNamed: projectName withConfiguration: 'Default' ] on: Deprecated do: [:ex | ex resume ].
+	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
 
 	rowanSample2Class := Rowan globalNamed: 'RowanSample2'.
 	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
 	self assert: subclasses size = 6.
 
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_0'.
-	[ projectTools load loadProjectNamed: projectName withConfiguration: 'Default' ] on: Deprecated do: [:ex | ex resume ].
+	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #().
 
 	rowanSample2Class := Rowan globalNamed: 'RowanSample2'.
 	subclasses := ClassOrganizer new allSubclassesOf: rowanSample2Class.
@@ -541,10 +546,7 @@ RwRowanSample2Test >> testSampleDefaultConfiguration [
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: 'migration_0'.
-	[ projectTools load
-		loadProjectNamed: projectName
-		withConfiguration: 'Default'
-		instanceMigrator: RwGsInstanceMigrator noMigration ] on: Deprecated do: [:ex | ex resume ].
+	projectTools load loadProjectNamed: projectName withConfigurations: #( 'Default' ) groupNames: #() instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	project := RwProject newNamed: projectName.
 	self assert: (x := project packageNames) = #('RowanSample2-Core')

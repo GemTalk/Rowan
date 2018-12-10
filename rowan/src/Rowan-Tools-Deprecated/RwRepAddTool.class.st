@@ -1,5 +1,5 @@
 Class {
 	#name : 'RwRepAddTool',
 	#superclass : 'RwRepositoryTool',
-	#category : 'Rowan-Tools-Core'
+	#category : 'Rowan-Tools-Deprecated'
 }
