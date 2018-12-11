@@ -17,7 +17,7 @@ RwPlatformInstanceTest >> tearDown [
 	Rowan platform clearAllPreferencesFor: self _testPreference
 ]
 
-{ #category : 'tests' }
+{ #category : 'test preferences (issue #448)' }
 RwPlatformInstanceTest >> testDefaultPrecedence [
 
 	"https://github.com/GemTalk/Rowan/issues/448"
@@ -37,7 +37,7 @@ RwPlatformInstanceTest >> testDefaultPrecedence [
 	self should: [ platformInstance preferenceFor: preference ] raise: Error
 ]
 
-{ #category : 'tests' }
+{ #category : 'test preferences (issue #448)' }
 RwPlatformInstanceTest >> testGlobalPreferences [
 
 	"https://github.com/GemTalk/Rowan/issues/448"
@@ -53,7 +53,7 @@ RwPlatformInstanceTest >> testGlobalPreferences [
 	self assert: (platformInstance preferenceFor: preference).
 ]
 
-{ #category : 'tests' }
+{ #category : 'test preferences (issue #448)' }
 RwPlatformInstanceTest >> testPreferencePrecedence [
 
 	"https://github.com/GemTalk/Rowan/issues/448"
@@ -79,7 +79,7 @@ RwPlatformInstanceTest >> testPreferencePrecedence [
 	self assert: (x := platformInstance preferenceFor: preference) == #global.
 ]
 
-{ #category : 'tests' }
+{ #category : 'test preferences (issue #448)' }
 RwPlatformInstanceTest >> testPreferences [
 
 	"https://github.com/GemTalk/Rowan/issues/448"
@@ -97,7 +97,7 @@ RwPlatformInstanceTest >> testPreferences [
 	self assert: (platformInstance preferenceFor: preference).
 ]
 
-{ #category : 'tests' }
+{ #category : 'test preferences (issue #448)' }
 RwPlatformInstanceTest >> testSessionPreferences [
 
 	"https://github.com/GemTalk/Rowan/issues/448"
@@ -113,7 +113,7 @@ RwPlatformInstanceTest >> testSessionPreferences [
 	self assert: (platformInstance preferenceFor: preference).
 ]
 
-{ #category : 'tests' }
+{ #category : 'test preferences (issue #448)' }
 RwPlatformInstanceTest >> testUserPreferences [
 
 	"https://github.com/GemTalk/Rowan/issues/448"
