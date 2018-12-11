@@ -19,6 +19,18 @@ RwPlatform >> basePlatformAttribute [
 
 ]
 
+{ #category : 'preferences' }
+RwPlatform >> clearAllPreferencesFor: preferenceSymbol [ 
+
+	self subclassResponisbility: #clearAllPreferencesFor:
+]
+
+{ #category : 'preferences' }
+RwPlatform >> clearPreferenceFor: preferenceSymbol [ 
+
+	self subclassResponisbility: #clearPreferenceFor:
+]
+
 { #category : 'queries' }
 RwPlatform >> fileUtilities [
 	"Answer the platform-specific object for accessing files and directories"
@@ -51,6 +63,24 @@ RwPlatform >> platformConfigurationAttributes [
 
 	^ #('common')
 
+]
+
+{ #category : 'preferences' }
+RwPlatform >> preferenceFor: preferenceSymbol [
+
+	^ self preferenceFor: preferenceSymbol ifAbsent: [ self error: 'No preference found for ', preferenceSymbol asString printString ]
+]
+
+{ #category : 'preferences' }
+RwPlatform >> preferenceFor: preferenceSymbol ifAbsent: aBlock [
+
+	^ self subclassResponisbility: #preferenceFor:ifAbsent:
+]
+
+{ #category : 'preferences' }
+RwPlatform >> setPreferenceFor: preferenceSymbol to: anObject [
+
+	self subclassResponisbility: #setPreferenceFor:to:
 ]
 
 { #category : 'queries' }
