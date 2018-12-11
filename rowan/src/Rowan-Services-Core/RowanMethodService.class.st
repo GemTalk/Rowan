@@ -25,7 +25,8 @@ Class {
 		'accessedInstVars',
 		'breakPoints',
 		'testResult',
-		'definedPackage'
+		'definedPackage',
+		'isTestMethod'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -266,6 +267,7 @@ RowanMethodService >> initialize [
 	hasSupers := false. 
 	hasSubs := false.
 	accessedInstVars := Array new.
+	isTestMethod := false.
 ]
 
 { #category : 'initialization' }
@@ -290,6 +292,18 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	self 
 		forClass: inClass thisClass 
 		organizer: aClassOrganizer.
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> isTestMethod [
+
+	^isTestMethod
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> isTestMethod: boolean [
+
+	isTestMethod := boolean
 ]
 
 { #category : 'Accessing' }

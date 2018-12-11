@@ -92,20 +92,16 @@ RowanClassService >> addCategory: string [
 
 { #category : 'Accessing' }
 RowanClassService >> allTests [
+	| allSelectors theClass |
 	self isTestCase ifFalse:[^Array new]. 
-	name asString = 'TestCase' asString ifTrue:[^Array new].
-	^self allTestsWith: Set new
-]
-
-{ #category : 'private' }
-RowanClassService >> allTestsWith: methodServices [
-
-	"assumes that we are in a test class hierarchy"
-	|  superclassService |	
-	methodServices addAll: (methods select:[:service |service selector asString matchPattern: #('test' $*)]). 
-	superclassName asString = 'TestCase' asString ifTrue:[^methodServices]. 
-	superclassService := RowanClassService forClassNamed: superclassName.
-	^superclassService allTestsWith: methodServices
+	theClass := self classFromName thisClass.
+	theClass isAbstract ifTrue:[^Array new].
+	allSelectors := self classFromName thisClass allTestSelectors.
+	^allSelectors collect:[:selector | 
+			RowanMethodService forSelector: selector 
+										class: (theClass whichClassIncludesSelector: selector asString)
+										meta: false
+										organizer: organizer].
 ]
 
 { #category : 'testing' }
@@ -382,6 +378,16 @@ RowanClassService >> initializeCategoriesFor: classOrMeta [
 ]
 
 { #category : 'initialization' }
+RowanClassService >> initializeTestMethodsFor: aClass [
+	| testSelectors |
+	(aClass inheritsFrom: TestCase) ifTrue:[
+		aClass isAbstract ifTrue:[^self]. 
+		testSelectors := aClass thisClass suite tests collect:[:method | method selector]. 
+		methods do:[:methodService | 
+			methodService isTestMethod: (testSelectors includes: methodService selector)]].
+]
+
+{ #category : 'initialization' }
 RowanClassService >> initializeVariablesFor: classOrMeta [
 
 	| theFilters |
@@ -623,6 +629,7 @@ RowanClassService >> refreshMethodsFor: classOrMeta [
 				service ifNotNil:[
 					service accessedInstVars add: instVar asString]
 	]].
+	self initializeTestMethodsFor: classOrMeta thisClass. 
 	self setVisibleTests. "methods must be available"
 ]
 
