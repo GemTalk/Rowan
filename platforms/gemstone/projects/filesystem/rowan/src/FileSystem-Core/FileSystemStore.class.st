@@ -15,6 +15,11 @@ Class {
 }
 
 { #category : 'accessing' }
+FileSystemStore class >> clientOsName [
+	^System clientVersionReport at: 'osName'
+]
+
+{ #category : 'accessing' }
 FileSystemStore class >> delimiter [
 	^ self shouldBeImplemented 
 ]

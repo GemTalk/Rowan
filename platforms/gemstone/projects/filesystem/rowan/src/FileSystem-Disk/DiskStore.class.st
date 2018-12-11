@@ -9,7 +9,9 @@ Class {
 		'maxFileNameLength'
 	],
 	#classVars : [
+		'CurrentClientFS',
 		'CurrentFS',
+		'DefaultClientWorkingDirectory',
 		'DefaultWorkingDirectory'
 	],
 	#category : 'FileSystem-Disk-Store'
@@ -19,6 +21,13 @@ Class {
 DiskStore class >> activeClass [
 	self allSubclasses do: [:ea | 
 		(ea platformNames includes: self osName) ifTrue: [^ ea] ].
+	^ self
+]
+
+{ #category : 'accessing' }
+DiskStore class >> activeClientClass [
+	self allSubclasses do: [:ea | 
+		(ea platformNames includes: self clientOsName) ifTrue: [^ ea] ].
 	^ self
 ]
 
@@ -33,9 +42,31 @@ DiskStore class >> current [
 ]
 
 { #category : 'current' }
+DiskStore class >> currentClient [
+	^ self currentClientFileSystem store
+]
+
+{ #category : 'current' }
+DiskStore class >> currentClientFileSystem [
+	^ CurrentClientFS ifNil: [
+		CurrentClientFS := FileSystem store: self activeClientClass createDefault]
+]
+
+{ #category : 'current' }
 DiskStore class >> currentFileSystem [
 	^ CurrentFS ifNil: [
 		CurrentFS := FileSystem store: self activeClass createDefault]
+]
+
+{ #category : 'accessing' }
+DiskStore class >> defaultClientWorkingDirectory [
+	"Ask the VM for the default working directory.
+	Clients should normally use the instance side method which caches this value."
+	| pathString |
+	
+	"This is hacked for testing purposes. The retrieval of the client pwd needs to be added to the "
+	pathString := (GsFile _expandEnvVariable: 'PWD' isClient:true) ifNil: ['C:\Users\Public\Documents'].
+	^(Path from: pathString delimiter: self delimiter).
 ]
 
 { #category : 'accessing' }
@@ -66,7 +97,9 @@ DiskStore class >> platformNames [
 { #category : 'current' }
 DiskStore class >> reset [
 	DefaultWorkingDirectory := nil.
-	CurrentFS := nil
+	CurrentFS := nil.
+	DefaultClientWorkingDirectory := nil.
+	CurrentClientFS := nil
 ]
 
 { #category : 'system startup' }
@@ -210,6 +243,14 @@ DiskStore >> createDirectory: path [
 				ifFalse: [ ^ self signalDirectoryDoesNotExist: parent ].
 			self primitiveFailed ].
 	^ self
+]
+
+{ #category : 'accessing' }
+DiskStore >> defaultClientWorkingDirectory [
+	"Answer the default working directory, which is defined as the directory where the image resides."
+
+	^ DefaultClientWorkingDirectory
+		ifNil: [ self class defaultClientWorkingDirectory ]
 ]
 
 { #category : 'accessing' }

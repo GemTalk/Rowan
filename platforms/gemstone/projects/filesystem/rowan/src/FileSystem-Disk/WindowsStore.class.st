@@ -31,7 +31,7 @@ WindowsStore class >> maxFileNameLength [
 
 { #category : 'accessing' }
 WindowsStore class >> platformNames [
-	^ {'Win32'}
+	^ {'Win32' . 'Windows NT'}
 ]
 
 { #category : 'accessing' }
