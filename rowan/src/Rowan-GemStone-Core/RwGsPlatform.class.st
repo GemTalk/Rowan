@@ -104,7 +104,23 @@ RwGsPlatform >> automaticClassInitializationBlackList_session [
 			| list |
 			list := OrderedCollection new.
 			self setSessionPreferenceFor: preferenceSymbol to: list.
-			list]
+			list ]
+]
+
+{ #category : 'automatic class initialization' }
+RwGsPlatform >> automaticClassInitializationBlackList_user [
+
+	"Answer session list of project names for which automatic class initialiation should be disabled."
+
+	| preferenceSymbol |
+	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
+	^ self 
+		userPreferenceFor: preferenceSymbol 
+		ifAbsent: [
+			| list |
+			list := OrderedCollection new.
+			self setUserPreferenceFor: preferenceSymbol to: list.
+			list ]
 ]
 
 { #category : 'queries' }
@@ -214,6 +230,7 @@ RwGsPlatform >> image [
 { #category : 'initialization' }
 RwGsPlatform >> initialize [
 
+	self automaticClassInitializationBlackList
 ]
 
 { #category : 'queries' }
