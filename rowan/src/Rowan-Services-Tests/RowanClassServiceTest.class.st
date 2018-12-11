@@ -16,8 +16,8 @@ RowanClassServiceTest >> createClassNamed: className [
 RowanClassServiceTest >> setUp [
 
 	super setUp.
-	self createDefaultClass. 
-	self loadDefaultProject.
+	self createServicesTestClass. 
+	self loadServicesTestProject.
 ]
 
 { #category : 'support' }
@@ -74,22 +74,6 @@ RowanClassServiceTest >> test_classWasDeleted [
 	self deny: classService wasDeleted.
 	System abortTransaction. 
 	self assert: classService wasDeleted.
-]
-
-{ #category : 'tests' }
-RowanClassServiceTest >> test_isTestCase [
-
-	| classService |
-	self jadeiteIssueTested: #issue253 withTitle: 'popup method menu in method list is slow for JadeServer methods'. 
-	classService := RowanClassService forClassNamed: self class.
-	self assert: classService isTestCase.
-	classService isTestCase: false. 
-	self deny: classService isTestCase. 
-	classService setIsTestCaseCommand. 
-	self assert: classService isTestCase.
-
-	classService := RowanClassService forClassNamed: 'JadeServer'.
-	self deny: classService isTestCase.
 ]
 
 { #category : 'tests' }

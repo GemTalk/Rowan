@@ -93,7 +93,7 @@ RowanClassService >> addCategory: string [
 { #category : 'Accessing' }
 RowanClassService >> allTests [
 	self isTestCase ifFalse:[^Array new]. 
-	name = 'TestCase' ifTrue:[^Array new].
+	name asString = 'TestCase' asString ifTrue:[^Array new].
 	^self allTestsWith: Set new
 ]
 
@@ -103,7 +103,7 @@ RowanClassService >> allTestsWith: methodServices [
 	"assumes that we are in a test class hierarchy"
 	|  superclassService |	
 	methodServices addAll: (methods select:[:service |service selector asString matchPattern: #('test' $*)]). 
-	superclassName = 'TestCase' ifTrue:[^methodServices]. 
+	superclassName asString = 'TestCase' asString ifTrue:[^methodServices]. 
 	superclassService := RowanClassService forClassNamed: superclassName.
 	^superclassService allTestsWith: methodServices
 ]
@@ -687,12 +687,14 @@ RowanClassService >> rowanProjectName [
 { #category : 'client commands' }
 RowanClassService >> runClassTests: classService [
 
+	"if it errors, the client will handle the error. 
+	If it passes, we return true and the client
+	will display decent results." 
 	| behavior |
 	behavior := classService classFromName. 
 	self refreshFrom: behavior.
-	methods do:[:methodService |
-		('test*' match: methodService selector) ifTrue:[ 
-			behavior debug: methodService selector]]. 
+	self tests do:[:methodService |
+			behavior debug: methodService selector]. 
 	RowanCommandResult addResult: (RowanAnsweringService new answer: true).
 ]
 
@@ -856,6 +858,12 @@ RowanClassService >> template [
 RowanClassService >> template: newValue [
 	template := newValue
 
+]
+
+{ #category : 'private' }
+RowanClassService >> tests [
+
+	^methods select:[:methodService | methodService selector asString matchPattern: #('test' $*)]
 ]
 
 { #category : 'updates' }
