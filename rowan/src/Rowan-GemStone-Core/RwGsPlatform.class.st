@@ -91,6 +91,22 @@ RwGsPlatform >> _userPreferenceDict [
 	^ self class _userPlatformDictionary at: #RwUserPlatform_Preferences ifAbsentPut: [ Dictionary new ]
 ]
 
+{ #category : 'automatic class initialization' }
+RwGsPlatform >> automaticClassInitializationBlackList_session [
+
+	"Answer session list of project names for which automatic class initialiation should be disabled."
+
+	| preferenceSymbol |
+	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
+	^ self 
+		sessionPreferenceFor: preferenceSymbol 
+		ifAbsent: [
+			| list |
+			list := OrderedCollection new.
+			self setSessionPreferenceFor: preferenceSymbol to: list.
+			list]
+]
+
 { #category : 'queries' }
 RwGsPlatform >> basePlatformAttribute [
 	"Answer the generic configuration attribute for the platform"
@@ -156,6 +172,14 @@ RwGsPlatform >> defaultConfiguration [
 		yourself
 ]
 
+{ #category : 'preferences' }
+RwGsPlatform >> defaultPreferenceFor: preferenceSymbol ifAbsent: aBlock [
+
+	"global preferences implements default preference"
+
+	^self globalPreferenceFor: preferenceSymbol ifAbsent: aBlock
+]
+
 { #category : 'queries' }
 RwGsPlatform >> fileUtilities [
   "Answer the platform-specific object for accessing files and directories"
@@ -176,7 +200,7 @@ RwGsPlatform >> globalPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 
 	^ self _globalPreferenceDict 
 		at: preferenceSymbol 
-		ifAbSent: aBlock
+		ifAbsent: aBlock
 ]
 
 { #category : 'queries' }
@@ -253,7 +277,7 @@ RwGsPlatform >> sessionPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 
 	^ self _sessionPreferenceDict 
 		at: preferenceSymbol 
-		ifAbSent: aBlock
+		ifAbsent: aBlock
 ]
 
 { #category : 'preferences' }
@@ -296,5 +320,5 @@ RwGsPlatform >> userPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 
 	^ self _userPreferenceDict 
 		at: preferenceSymbol 
-		ifAbSent: aBlock
+		ifAbsent: aBlock
 ]
