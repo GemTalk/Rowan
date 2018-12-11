@@ -112,6 +112,15 @@ RwGsPlatform >> clearAllPreferencesFor: preferenceSymbol [
 ]
 
 { #category : 'preferences' }
+RwGsPlatform >> clearDefaultPreferenceFor: preferenceSymbol [
+	"global preferences implements default preference"
+
+	self 
+		clearGlobalPreferenceFor: preferenceSymbol;
+		yourself
+]
+
+{ #category : 'preferences - gemstone' }
 RwGsPlatform >> clearGlobalPreferenceFor: preferenceSymbol [
 
 	self _globalPreferenceDict removeKey: preferenceSymbol ifAbsent: []
@@ -119,7 +128,7 @@ RwGsPlatform >> clearGlobalPreferenceFor: preferenceSymbol [
 
 { #category : 'preferences' }
 RwGsPlatform >> clearPreferenceFor: preferenceSymbol [
-
+	"clear sessoin and userPreferences - preserve non-gemstone semantics"
 
 	self 
 		clearSessionPreferenceFor: preferenceSymbol;
@@ -127,13 +136,13 @@ RwGsPlatform >> clearPreferenceFor: preferenceSymbol [
 		yourself
 ]
 
-{ #category : 'preferences' }
+{ #category : 'preferences - gemstone' }
 RwGsPlatform >> clearSessionPreferenceFor: preferenceSymbol [
 
 	self _sessionPreferenceDict removeKey: preferenceSymbol ifAbsent: []
 ]
 
-{ #category : 'preferences' }
+{ #category : 'preferences - gemstone' }
 RwGsPlatform >> clearUserPreferenceFor: preferenceSymbol [
 
 	self _userPreferenceDict removeKey: preferenceSymbol ifAbsent: []
@@ -162,7 +171,7 @@ RwGsPlatform >> globalNamed: aString [
 	^ Rowan image objectNamed: aString
 ]
 
-{ #category : 'preferences' }
+{ #category : 'preferences - gemstone' }
 RwGsPlatform >> globalPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 
 	^ self _globalPreferenceDict 
@@ -239,7 +248,7 @@ RwGsPlatform >> preferenceFor: preferenceSymbol ifAbsent: aBlock [
 						ifAbsent:aBlock ] ]
 ]
 
-{ #category : 'preferences' }
+{ #category : 'preferences - gemstone' }
 RwGsPlatform >> sessionPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 
 	^ self _sessionPreferenceDict 
@@ -248,6 +257,14 @@ RwGsPlatform >> sessionPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 ]
 
 { #category : 'preferences' }
+RwGsPlatform >> setDefaultPreferenceFor: preferenceSymbol to: anObject [
+
+	"global preferences implements default preference"
+
+	^self setGlobalPreferenceFor: preferenceSymbol to: anObject
+]
+
+{ #category : 'preferences - gemstone' }
 RwGsPlatform >> setGlobalPreferenceFor: preferenceSymbol to: anObject [
 
 	self _globalPreferenceDict at: preferenceSymbol put: anObject
@@ -256,24 +273,25 @@ RwGsPlatform >> setGlobalPreferenceFor: preferenceSymbol to: anObject [
 { #category : 'preferences' }
 RwGsPlatform >> setPreferenceFor: preferenceSymbol to: anObject [
 
+	"clear session; set userPreferences - preserve non-gemstone semantics"
 
 	self clearSessionPreferenceFor: preferenceSymbol.
 	^self setUserPreferenceFor: preferenceSymbol to: anObject
 ]
 
-{ #category : 'preferences' }
+{ #category : 'preferences - gemstone' }
 RwGsPlatform >> setSessionPreferenceFor: preferenceSymbol to: anObject [
 
 	self _sessionPreferenceDict at: preferenceSymbol put: anObject
 ]
 
-{ #category : 'preferences' }
+{ #category : 'preferences - gemstone' }
 RwGsPlatform >> setUserPreferenceFor: preferenceSymbol to: anObject [
 
 	self _userPreferenceDict at: preferenceSymbol put: anObject
 ]
 
-{ #category : 'preferences' }
+{ #category : 'preferences - gemstone' }
 RwGsPlatform >> userPreferenceFor: preferenceSymbol ifAbsent: aBlock [
 
 	^ self _userPreferenceDict 

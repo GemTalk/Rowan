@@ -26,6 +26,12 @@ RwPlatform >> clearAllPreferencesFor: preferenceSymbol [
 ]
 
 { #category : 'preferences' }
+RwPlatform >> clearDefaultPreferenceFor: preferenceSymbol [ 
+
+	self subclassResponisbility: #clearDefaultPreferenceFor:
+]
+
+{ #category : 'preferences' }
 RwPlatform >> clearPreferenceFor: preferenceSymbol [ 
 
 	self subclassResponisbility: #clearPreferenceFor:
@@ -75,6 +81,12 @@ RwPlatform >> preferenceFor: preferenceSymbol [
 RwPlatform >> preferenceFor: preferenceSymbol ifAbsent: aBlock [
 
 	^ self subclassResponisbility: #preferenceFor:ifAbsent:
+]
+
+{ #category : 'preferences' }
+RwPlatform >> setDefaultPreferenceFor: preferenceSymbol to: anObject [
+
+	self subclassResponisbility: #setDefaultPreferenceFor:to:
 ]
 
 { #category : 'preferences' }

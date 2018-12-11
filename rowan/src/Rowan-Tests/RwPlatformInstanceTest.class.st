@@ -18,6 +18,26 @@ RwPlatformInstanceTest >> tearDown [
 ]
 
 { #category : 'tests' }
+RwPlatformInstanceTest >> testDefaultPrecedence [
+
+	"https://github.com/GemTalk/Rowan/issues/448"
+
+	| platformInstance  x preference |
+	platformInstance := Rowan platform.
+	preference := self _testPreference.
+
+	platformInstance setDefaultPreferenceFor: preference to: #default.
+	self assert: (platformInstance preferenceFor: preference) == #default.
+
+	platformInstance setPreferenceFor: preference to: #user.
+	self assert: (x := platformInstance preferenceFor: preference) == #user. 
+
+	platformInstance clearPreferenceFor: preference.
+	platformInstance clearDefaultPreferenceFor: preference.
+	self should: [ platformInstance preferenceFor: preference ] raise: Error
+]
+
+{ #category : 'tests' }
 RwPlatformInstanceTest >> testGlobalPreferences [
 
 	"https://github.com/GemTalk/Rowan/issues/448"
