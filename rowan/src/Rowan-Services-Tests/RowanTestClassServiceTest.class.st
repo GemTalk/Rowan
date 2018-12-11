@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : 'support' }
+RowanTestClassServiceTest class >> shouldInheritSelectors [
+
+	^true
+]
+
+{ #category : 'support' }
 RowanTestClassServiceTest >> nonTestMethod [
 
 	"do not remove. Used in test"
