@@ -140,7 +140,9 @@ JadeServer64bit3x >> compileMethod: methodString behavior: aBehavior symbolList:
 	| method warnings | 
 
 	[[((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile ifAbsent:[false]) ifTrue:[
-			method := aBehavior rwCompileMethod: methodString category: categorySymbol]
+			[ method := aBehavior rwCompileMethod: methodString category: categorySymbol ]
+					on: RwExecuteClassInitializeMethodsAfterLoadNotification
+					do: [:ex | ex resume: false ] ]
 		ifFalse:[
 			method := aBehavior
 			compileMethod: methodString
@@ -158,8 +160,6 @@ JadeServer64bit3x >> compileMethod: methodString behavior: aBehavior symbolList:
 	] on: Error do: [:ex | 
 		ex return: method -> warnings.
 	].
-
-
 ]
 
 { #category : 'category' }
