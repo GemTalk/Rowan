@@ -132,31 +132,6 @@ File class >> named: fileName [
 	^ self new named: fileName
 ]
 
-{ #category : 'primitives-file' }
-File class >> open: fileName writable: writeMode [
-	"Open a file of the given name, and return the GsFile obtained.
-	If writableFlag is true, then
-		if there is none with this name, then create one
-		else prepare to overwrite the existing from the beginning
-	otherwise
-		if the file exists, open it read-only
-		else return nil"
-
-	"writeMode - #read, #append, #write"
-
-	| mode |
-	mode := writeMode == #write 
-		ifTrue: [ 'w+' ] 
-		ifFalse: [ 
-			writeMode = #read
-				ifTrue: [ 'r+' ]
-				ifFalse: [ 'a+' ] ].
-	^ GsFile
-		open: fileName 
-		mode: mode 
-		onClient: false
-]
-
 { #category : 'file creation' }
 File class >> openAndTruncateForWriteFileNamed: aName [
 	self errror: 'This needs to be changed to support deprecation of File'.

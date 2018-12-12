@@ -16,7 +16,7 @@ DiskFileSystemTest >> createFileSystem [
 DiskFileSystemTest >> testDefaultWorkingDirectory [
 	| ref x y |
 	ref := filesystem workingDirectory.
-	self assert: ((x := GsFile _expandEnvVariable: 'PWD' isClient:false) beginsWith: (y := ref pathString))
+	self assert: ((x := FileSystem fileClass _expandEnvVariable: 'PWD' isClient:false) beginsWith: (y := ref pathString))
 ]
 
 { #category : 'tests' }

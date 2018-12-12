@@ -65,7 +65,7 @@ DiskStore class >> defaultClientWorkingDirectory [
 	| pathString |
 	
 	"This is hacked for testing purposes. The retrieval of the client pwd needs to be added to the "
-	pathString := (GsFile _expandEnvVariable: 'PWD' isClient:true) ifNil: ['C:\Users\Public\Documents'].
+	pathString := (FileSystem fileClass _expandEnvVariable: 'PWD' isClient:true) ifNil: ['C:\Users\Public\Documents'].
 	^(Path from: pathString delimiter: self delimiter).
 ]
 
@@ -75,7 +75,7 @@ DiskStore class >> defaultWorkingDirectory [
 	Clients should normally use the instance side method which caches this value."
 	| pathString |
 
-	pathString := (GsFile _expandEnvVariable: 'PWD' isClient:false).
+	pathString := (FileSystem fileClass _expandEnvVariable: 'PWD' isClient:false).
 	^(Path from: pathString delimiter: self delimiter).
 ]
 
@@ -139,7 +139,7 @@ DiskStore >> basicEntry: ignored path: aPath nodesDo: aBlock [
 	| pathString intOrArray |
 		
 	pathString := self stringFromPath: aPath.
-	intOrArray := GsFile _contentsOfServerDirectory: pathString expandPath: true.
+	intOrArray := FileSystem fileClass _contentsOfServerDirectory: pathString expandPath: true.
 	intOrArray _isArray ifFalse: [ ^ self signalDirectoryDoesNotExist: aPath ].
 	intOrArray
 		do: [:entryPathString |
@@ -192,7 +192,7 @@ DiskStore >> basicOpen: aPath writable: writeMode [
 
 	| string |
 	string := self stringFromPath: aPath.
-	^GsFile  open: string mode: writeMode mode onClient: false
+	^FileSystem fileClass  open: string mode: writeMode mode onClient: false
 ]
 
 { #category : 'private' }
@@ -230,7 +230,7 @@ DiskStore >> createDirectory: path [
 
 	| parent pathString result |
 	pathString := self stringFromPath: path.
-	result := GsFile createServerDirectory: pathString.
+	result := FileSystem fileClass createServerDirectory: pathString.
 	result
 		ifNil: [ 
 			parent := path parent.
@@ -278,14 +278,14 @@ DiskStore >> delete: path [
 { #category : 'public' }
 DiskStore >> deleteDirectory: pathString [
 	
-	(GsFile removeServerDirectory: pathString)
+	(FileSystem fileClass removeServerDirectory: pathString)
 		ifNil: [ self error: 'Error deleting directory ', pathString printString, ' :: ', GsFile serverErrorString ]
 ]
 
 { #category : 'public' }
 DiskStore >> deleteFile: pathString [
 
-	(GsFile removeServerFile: pathString)
+	(FileSystem fileClass removeServerFile: pathString)
 		ifNil: [ FileDeletionError 
 					signalWith: pathString  
 					text: 'Could not delete file ' , pathString , '. Check the file is not open.' ].
@@ -406,7 +406,7 @@ DiskStore >> lookupPath: fullPath [
    On Macs and PCs, it is the container of the system volumes."
 
 	| gsFileStat |
-	gsFileStat := GsFile stat: fullPath isLstat: true.
+	gsFileStat := FileSystem fileClass stat: fullPath isLstat: true.
 	gsFileStat _isSmallInteger ifTrue: [ ^ nil ].
 	^	{
 		(Path from: fullPath) basename.
@@ -458,7 +458,7 @@ DiskStore >> rename: sourcePath to: destinationPath [
 	| sourcePathString targetPathString |
 	sourcePathString := self stringFromPath: sourcePath.
 	targetPathString := self stringFromPath: destinationPath.
-	(GsFile renameFileOnServer: sourcePathString to: targetPathString) = 0
+	(FileSystem fileClass renameFileOnServer: sourcePathString to: targetPathString) = 0
 		ifFalse: [ self error: 'Rename file failed']
 ]
 

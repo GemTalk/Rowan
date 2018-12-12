@@ -53,7 +53,7 @@ FileHandle >> at: index write: buffer startingAt: start count: count [
 
 { #category : 'public' }
 FileHandle >> basicOpen [
-	^GsFile  open: self reference pathString mode: self fileMode mode onClient: false
+	^FileSystem fileClass open: self reference pathString mode: self fileMode mode onClient: false
 ]
 
 { #category : 'public' }
