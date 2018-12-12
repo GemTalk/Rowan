@@ -26,6 +26,12 @@ RwGsPlatform >> _alternateImageClass: anImageClass [
 ]
 
 { #category : 'private' }
+RwGsPlatform >> _globalPreferenceDict [
+
+	^ (self class _userPlatformDictionaryForUser: 'SystemUser') at: #RwGlobalPlatform_Preferences ifAbsentPut: [ Dictionary new ]
+]
+
+{ #category : 'private' }
 RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId [
 	"Compiles the method into disposable dictionaries, if possible.
 	 Attempts auto-recompile for undefinedSymbols.
@@ -73,6 +79,50 @@ RwGsPlatform >> _parseMethod: source category: cat using: aSymbolList environmen
 					with: [:ex | ex resume])
 ]
 
+{ #category : 'private' }
+RwGsPlatform >> _sessionPreferenceDict [
+
+	^ SessionTemps current at: #RwSessionPlatform_Preferences ifAbsentPut: [ Dictionary new ]
+]
+
+{ #category : 'private' }
+RwGsPlatform >> _userPreferenceDict [
+
+	^ self class _userPlatformDictionary at: #RwUserPlatform_Preferences ifAbsentPut: [ Dictionary new ]
+]
+
+{ #category : 'automatic class initialization' }
+RwGsPlatform >> automaticClassInitializationBlackList_session [
+
+	"Answer session list of project names for which automatic class initialiation should be disabled."
+
+	| preferenceSymbol |
+	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
+	^ self 
+		sessionPreferenceFor: preferenceSymbol 
+		ifAbsent: [
+			| list |
+			list := OrderedCollection new.
+			self setSessionPreferenceFor: preferenceSymbol to: list.
+			list ]
+]
+
+{ #category : 'automatic class initialization' }
+RwGsPlatform >> automaticClassInitializationBlackList_user [
+
+	"Answer session list of project names for which automatic class initialiation should be disabled."
+
+	| preferenceSymbol |
+	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
+	^ self 
+		userPreferenceFor: preferenceSymbol 
+		ifAbsent: [
+			| list |
+			list := OrderedCollection new.
+			self setUserPreferenceFor: preferenceSymbol to: list.
+			list ]
+]
+
 { #category : 'queries' }
 RwGsPlatform >> basePlatformAttribute [
 	"Answer the generic configuration attribute for the platform"
@@ -82,12 +132,68 @@ RwGsPlatform >> basePlatformAttribute [
 
 ]
 
+{ #category : 'preferences' }
+RwGsPlatform >> clearAllPreferencesFor: preferenceSymbol [
+
+
+	self 
+		clearSessionPreferenceFor: preferenceSymbol;
+		clearUserPreferenceFor: preferenceSymbol;
+		clearGlobalPreferenceFor: preferenceSymbol;
+		yourself
+]
+
+{ #category : 'preferences' }
+RwGsPlatform >> clearDefaultPreferenceFor: preferenceSymbol [
+	"global preferences implements default preference"
+
+	self 
+		clearGlobalPreferenceFor: preferenceSymbol;
+		yourself
+]
+
+{ #category : 'preferences - gemstone' }
+RwGsPlatform >> clearGlobalPreferenceFor: preferenceSymbol [
+
+	self _globalPreferenceDict removeKey: preferenceSymbol ifAbsent: []
+]
+
+{ #category : 'preferences' }
+RwGsPlatform >> clearPreferenceFor: preferenceSymbol [
+	"clear sessoin and userPreferences - preserve non-gemstone semantics"
+
+	self 
+		clearSessionPreferenceFor: preferenceSymbol;
+		clearUserPreferenceFor: preferenceSymbol;
+		yourself
+]
+
+{ #category : 'preferences - gemstone' }
+RwGsPlatform >> clearSessionPreferenceFor: preferenceSymbol [
+
+	self _sessionPreferenceDict removeKey: preferenceSymbol ifAbsent: []
+]
+
+{ #category : 'preferences - gemstone' }
+RwGsPlatform >> clearUserPreferenceFor: preferenceSymbol [
+
+	self _userPreferenceDict removeKey: preferenceSymbol ifAbsent: []
+]
+
 { #category : 'defaults' }
 RwGsPlatform >> defaultConfiguration [
 
 	^ RwConfiguration new
 		packageInfoSource: #'SymbolDictionary';
 		yourself
+]
+
+{ #category : 'preferences' }
+RwGsPlatform >> defaultPreferenceFor: preferenceSymbol ifAbsent: aBlock [
+
+	"global preferences implements default preference"
+
+	^self globalPreferenceFor: preferenceSymbol ifAbsent: aBlock
 ]
 
 { #category : 'queries' }
@@ -105,6 +211,14 @@ RwGsPlatform >> globalNamed: aString [
 	^ Rowan image objectNamed: aString
 ]
 
+{ #category : 'preferences - gemstone' }
+RwGsPlatform >> globalPreferenceFor: preferenceSymbol ifAbsent: aBlock [
+
+	^ self _globalPreferenceDict 
+		at: preferenceSymbol 
+		ifAbsent: aBlock
+]
+
 { #category : 'queries' }
 RwGsPlatform >> image [
 
@@ -116,6 +230,7 @@ RwGsPlatform >> image [
 { #category : 'initialization' }
 RwGsPlatform >> initialize [
 
+	self automaticClassInitializationBlackList
 ]
 
 { #category : 'queries' }
@@ -158,4 +273,69 @@ RwGsPlatform >> platformConfigurationAttributes [
 
 	^ super platformConfigurationAttributes, {self basePlatformAttribute. 'gemstone-kernel'. (System stoneVersionReport at: 'gsVersion') asRwGemStoneVersionNumber}
 
+]
+
+{ #category : 'preferences' }
+RwGsPlatform >> preferenceFor: preferenceSymbol ifAbsent: aBlock [
+
+	^ self _sessionPreferenceDict 
+		at: preferenceSymbol 
+		ifAbsent: [ 
+			self 
+				_userPreferenceDict at: preferenceSymbol 
+				ifAbsent: [
+					self _globalPreferenceDict 
+						at: preferenceSymbol
+						ifAbsent:aBlock ] ]
+]
+
+{ #category : 'preferences - gemstone' }
+RwGsPlatform >> sessionPreferenceFor: preferenceSymbol ifAbsent: aBlock [
+
+	^ self _sessionPreferenceDict 
+		at: preferenceSymbol 
+		ifAbsent: aBlock
+]
+
+{ #category : 'preferences' }
+RwGsPlatform >> setDefaultPreferenceFor: preferenceSymbol to: anObject [
+
+	"global preferences implements default preference"
+
+	^self setGlobalPreferenceFor: preferenceSymbol to: anObject
+]
+
+{ #category : 'preferences - gemstone' }
+RwGsPlatform >> setGlobalPreferenceFor: preferenceSymbol to: anObject [
+
+	self _globalPreferenceDict at: preferenceSymbol put: anObject
+]
+
+{ #category : 'preferences' }
+RwGsPlatform >> setPreferenceFor: preferenceSymbol to: anObject [
+
+	"clear session; set userPreferences - preserve non-gemstone semantics"
+
+	self clearSessionPreferenceFor: preferenceSymbol.
+	^self setUserPreferenceFor: preferenceSymbol to: anObject
+]
+
+{ #category : 'preferences - gemstone' }
+RwGsPlatform >> setSessionPreferenceFor: preferenceSymbol to: anObject [
+
+	self _sessionPreferenceDict at: preferenceSymbol put: anObject
+]
+
+{ #category : 'preferences - gemstone' }
+RwGsPlatform >> setUserPreferenceFor: preferenceSymbol to: anObject [
+
+	self _userPreferenceDict at: preferenceSymbol put: anObject
+]
+
+{ #category : 'preferences - gemstone' }
+RwGsPlatform >> userPreferenceFor: preferenceSymbol ifAbsent: aBlock [
+
+	^ self _userPreferenceDict 
+		at: preferenceSymbol 
+		ifAbsent: aBlock
 ]
