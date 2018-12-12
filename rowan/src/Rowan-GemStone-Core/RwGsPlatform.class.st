@@ -143,13 +143,41 @@ RwGsPlatform >> clearAllPreferencesFor: preferenceSymbol [
 		yourself
 ]
 
+{ #category : 'automatic class initialization' }
+RwGsPlatform >> clearAutomaticClassInitializationBlackList_global [
+
+	"Answer global list of project names for which automatic class initialiation should be disabled."
+
+	| preferenceSymbol |
+	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
+	self clearGlobalPreferenceFor: preferenceSymbol
+]
+
+{ #category : 'automatic class initialization' }
+RwGsPlatform >> clearAutomaticClassInitializationBlackList_session [
+
+	"Answer session list of project names for which automatic class initialiation should be disabled."
+
+	| preferenceSymbol |
+	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
+	self clearSessionPreferenceFor: preferenceSymbol
+]
+
+{ #category : 'automatic class initialization' }
+RwGsPlatform >> clearAutomaticClassInitializationBlackList_user [
+
+	"Answer session list of project names for which automatic class initialiation should be disabled."
+
+	| preferenceSymbol |
+	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
+	self clearUserPreferenceFor: preferenceSymbol
+]
+
 { #category : 'preferences' }
 RwGsPlatform >> clearDefaultPreferenceFor: preferenceSymbol [
 	"global preferences implements default preference"
 
-	self 
-		clearGlobalPreferenceFor: preferenceSymbol;
-		yourself
+	self clearGlobalPreferenceFor: preferenceSymbol
 ]
 
 { #category : 'preferences - gemstone' }

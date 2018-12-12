@@ -27,7 +27,7 @@ RwPlatformInstanceTest >> testDefaultPrecedence [
 	preference := self _testPreference.
 
 	platformInstance setDefaultPreferenceFor: preference to: #default.
-	self assert: (platformInstance preferenceFor: preference) == #default.
+	self assert: (x := platformInstance preferenceFor: preference) == #default.
 
 	platformInstance setPreferenceFor: preference to: #user.
 	self assert: (x := platformInstance preferenceFor: preference) == #user. 

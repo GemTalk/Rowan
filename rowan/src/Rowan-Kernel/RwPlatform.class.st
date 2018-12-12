@@ -46,6 +46,22 @@ RwPlatform >> automaticClassInitializationBlackList_default [
 			list]
 ]
 
+{ #category : 'automatic class initialization' }
+RwPlatform >> automaticClassInitializationBlackList_global [
+
+	"Answer global list of project names for which automatic class initialiation should be disabled."
+
+	| preferenceSymbol |
+	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
+	^ self 
+		globalPreferenceFor: preferenceSymbol 
+		ifAbsent: [
+			| list |
+			list := OrderedCollection new.
+			self setDefaultPreferenceFor: preferenceSymbol to: list.
+			list]
+]
+
 { #category : 'queries' }
 RwPlatform >> basePlatformAttribute [
 	"Answer the generic configuration attribute for the platform"
@@ -61,6 +77,36 @@ RwPlatform >> basePlatformAttribute [
 RwPlatform >> clearAllPreferencesFor: preferenceSymbol [ 
 
 	self subclassResponisbility: #clearAllPreferencesFor:
+]
+
+{ #category : 'automatic class initialization' }
+RwPlatform >> clearAutomaticClassInitializationBlackList [
+
+	"Answer list of project names for which automatic class initialiation should be disabled."
+
+	| preferenceSymbol |
+	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
+	self clearPreferenceFor: preferenceSymbol
+]
+
+{ #category : 'automatic class initialization' }
+RwPlatform >> clearAutomaticClassInitializationBlackList_default [
+
+	"Answer default list of project names for which automatic class initialiation should be disabled."
+
+	| preferenceSymbol |
+	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
+	self clearDefaultPreferenceFor: preferenceSymbol
+]
+
+{ #category : 'automatic class initialization' }
+RwPlatform >> clearAutomaticClassInitializationBlackList_global [
+
+	"Answer default list of project names for which automatic class initialiation should be disabled."
+
+	| preferenceSymbol |
+	preferenceSymbol := self _automaticClassInitializationBlackList_symbol.
+	self clearGlobalPreferenceFor: preferenceSymbol
 ]
 
 { #category : 'preferences' }
