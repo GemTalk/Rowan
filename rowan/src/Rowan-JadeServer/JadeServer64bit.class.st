@@ -145,15 +145,16 @@ JadeServer64bit >> recompile: aMethod withSource: aString [
 	behavior := aMethod inClass.
 	((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile ifAbsent: [false])
 		ifTrue: 
-			[behavior rwCompileMethod: aString
-				category: (self _behavior: behavior categoryOfSelector: aMethod selector).
+			[ [ behavior rwCompileMethod: aString
+				category: (self _behavior: behavior categoryOfSelector: aMethod selector) ]
+					on: RwExecuteClassInitializeMethodsAfterLoadNotification
+					do: [:ex | ex resume: false ].
 			Rowan serviceClass rowanFixMe.	"need to handle compile errors"
 			^true]
 		ifFalse: 
 			[result := aMethod _recompileWithSource: aString.
 			result isNil ifTrue: [^true].	"Bug 41195 returns nil if success so assume it is the same method"
 			^result]
-
 ]
 
 { #category : 'category' }
