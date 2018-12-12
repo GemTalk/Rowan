@@ -1754,7 +1754,6 @@ RwRowanSample4Test >> testIssue305 [
 		loadProjectFromSpecUrl: 'file:' , repoRootPath, '/rowan/specs/RowanSample4_core.ston'.
 
 	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
-
 ]
 
 { #category : 'tests' }
