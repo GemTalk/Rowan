@@ -217,7 +217,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_A [
 	"https://github.com/GemTalk/Rowan/issues/389"
 
 	"adopt methods into a different package than the packaged class; 
-		don't use use Monticello convention.
+		don't use Monticello convention.
 	 methods should be extension methods."
 
 	| projectName packageNames className packageName1 packageName2 theClass symDict symDictName instanceMethod classMethod symbolList audit |
@@ -294,7 +294,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_B [
 	"https://github.com/GemTalk/Rowan/issues/389"
 
 	"adopt methods into an unpackaged class; 
-		don't use use Monticello convention.
+		don't use Monticello convention.
 	 methods should be extension methods."
 
 	| projectName packageNames className packageName theClass symDict symDictName instanceMethod classMethod symbolList audit |
@@ -365,7 +365,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_C [
 	"https://github.com/GemTalk/Rowan/issues/389"
 
 	"adopt methods into a different package than the packaged class; 
-		use use Monticello convention (_A).
+		use Monticello convention (_A).
 	 methods should be extension methods."
 
 	"adopt methods into a packaged class change protocol to use Monticello convention (_A)"
@@ -445,7 +445,7 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_D [
 	"https://github.com/GemTalk/Rowan/issues/389"
 
 	"adopt methods into an unpackaged class; 
-		don't use use Monticello convention (_B).
+		don't use Monticello convention (_B).
 	 methods should be extension methods."
 
 	"adopt methods change protocol to use Monticello convention (_B)"
