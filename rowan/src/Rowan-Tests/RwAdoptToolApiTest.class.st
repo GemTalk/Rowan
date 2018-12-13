@@ -16,7 +16,8 @@ RwAdoptToolApiTest >> _validateExpectedMonticelloConventionFailure_389_A: audit 
 	"class category not following Monticello conventions"
 	unexpectedFailures := ((audit at: (packageNames at: 1)) at: className)
 		reject: [:each | (each value = 'Class category has changed in compiled class v loaded class')
-			or: [ (each value = 'Missing instance method extension category ') or: [ each value = 'Missing class method extension category ' ] ] ].
+			or: [ (each value = 'Missing instance method extension category ') or: [ (each value = 'Missing class method extension category ')
+			or: [ (each value = 'Missing loaded instance method. ') or: [ (each value = 'Missing loaded classmethod ') ]] ] ] ].
 	self assert: unexpectedFailures isEmpty
 ]
 
