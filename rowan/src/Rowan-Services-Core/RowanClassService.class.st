@@ -1,3 +1,6 @@
+"
+selectedMethods - client side selection. Used after a method compile.
+"
 Class {
 	#name : 'RowanClassService',
 	#superclass : 'RowanService',
@@ -366,6 +369,8 @@ RowanClassService >> initialize [
 
 	isExtension := false.
 	selectedMethods := Array new.
+	meta := false. "assume most of our work is on the instance side"
+	selectedPackageServices := Array new.
 ]
 
 { #category : 'initialization' }
@@ -466,6 +471,13 @@ RowanClassService >> methodsIn: theClass categories: theCategories [
 	theCategories do:[:category |
 		selectors addAll: (theClass selectorsIn: category)]. 
 	^methods select:[:methodService | selectors includes: methodService selector]
+]
+
+{ #category : 'testing' }
+RowanClassService >> methodsNamed: selector [
+	"For testing. Multiple because class could have both instance and class methods"
+
+	^methods select:[:methodService | methodService selector = selector]
 ]
 
 { #category : 'initialization' }
@@ -599,6 +611,12 @@ RowanClassService >> projectIsDirty [
 	behavior := self classFromName.
 	behavior rowanProjectName =  Rowan unpackagedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
 	^(RowanProjectService new name: behavior rowanProjectName) rowanDirty
+]
+
+{ #category : 'other' }
+RowanClassService >> projectName [
+
+	^projectName
 ]
 
 { #category : 'Updating' }
@@ -742,6 +760,12 @@ RowanClassService >> saveMethodSource: source category: category [
 	RowanCommandResult addResult: methodService.
 	self selectedMethods: (Array with: methodService).
 	self updateDirtyState.
+]
+
+{ #category : 'other' }
+RowanClassService >> selectedMethods [
+	"client side selection. Used after a method compile" 
+	^selectedMethods
 ]
 
 { #category : 'Updating' }
