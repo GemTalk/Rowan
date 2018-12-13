@@ -2910,8 +2910,6 @@ JadeServer >> printStringOf: anObject to: anInteger [
 	(string := self printStringOf: anObject) size > anInteger ifTrue: [string := (string copyFrom: 1 to: anInteger) , '...'].
 	string := String withAll: (string collect: [:each | (32 <= each asciiValue and: [each asciiValue <= 255]) ifTrue: [each] ifFalse: [$?]]).
 	^string.
-
-
 ]
 
 { #category : 'category' }
