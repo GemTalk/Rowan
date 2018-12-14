@@ -260,13 +260,16 @@ RowanClassService >> compileMethod: methodString behavior: aBehavior symbolList:
 
 	| method warnings |
 	
-	[[method := aBehavior rwCompileMethod: methodString category: categorySymbol] on: CompileError
-		do: [:ex | ^nil -> (ex gsArguments at: 1)]]
-			on: CompileWarning
-			do: 
-				[:ex | 
-				warnings := ex warningString.
-				ex resume].
+	[ [ [ method := aBehavior rwCompileMethod: methodString category: categorySymbol  ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: false ] ] 
+			on: CompileError
+			do: [:ex | ^nil -> (ex gsArguments at: 1)]]
+				on: CompileWarning
+				do: 
+					[:ex | 
+					warnings := ex warningString.
+					ex resume].
 	^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] on: Error
 		do: [:ex | ex return: method -> warnings]
 ]

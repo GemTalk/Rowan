@@ -1037,7 +1037,10 @@ JadeServer >> compile: aString frame: anInteger process: aGsProcess [
 	category := self _behavior: aBehavior categoryOfSelector: selector.
 	result := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
 				ifAbsent: [false])
-					ifTrue: [aBehavior rwCompileMethod: aString category: category]
+					ifTrue: [ 
+						[ aBehavior rwCompileMethod: aString category: category ]
+							on: RwExecuteClassInitializeMethodsAfterLoadNotification
+							do: [:ex | ex resume: false ] ]
 					ifFalse: 
 						[self
 							compileMethod: aString
@@ -1045,7 +1048,6 @@ JadeServer >> compile: aString frame: anInteger process: aGsProcess [
 							user: nil
 							inCategory: category].
 	^result
-
 ]
 
 { #category : 'category' }

@@ -29,7 +29,7 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 	res := self _result.
 	extensionCategoryName :=  aLoadedClassExtension loadedPackage asExtensionName "'*' , aLoadedClassExtension loadedPackage name" .
 	(Rowan globalNamed: aLoadedClassExtension name) 
-		ifNil: [self errorLog: res  add: aLoadedClassExtension name -> ' Class does not exists '] 
+		ifNil: [self errorLog: res  add: aLoadedClassExtension name -> ' Class does not exists for loaded class '] 
 		ifNotNil: [:aBehavior ||categories | 
 					
 				categories := (aBehavior _baseCategorys: 0) keys.
@@ -37,7 +37,7 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 					detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
 						ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
 						ifNil: [aLoadedClassExtension loadedInstanceMethods notEmpty ifTrue: [
-							self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing extension category ']
+							self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing instance method extension category ']
 			].
 
 
@@ -46,7 +46,7 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
 					ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
 					ifNil: [aLoadedClassExtension loadedClassMethods notEmpty ifTrue: [
-						self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing classmethod extension category ']
+						self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing class method extension category ']
 			].
 
 		
@@ -59,4 +59,5 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 				]
 		].
 		^res
+
 ]
