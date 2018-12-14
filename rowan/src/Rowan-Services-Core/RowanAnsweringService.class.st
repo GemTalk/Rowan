@@ -2,7 +2,9 @@
 A place to put miscellaneous commands that don't fit 
 well in other services. 
 
-Also good asking the server questions.
+Also good asking the server questions as it gives back 
+an answer whereas other services simply return updated
+services.
 "
 Class {
 	#name : 'RowanAnsweringService',

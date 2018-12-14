@@ -1,4 +1,6 @@
 "
+Most class operations done here. 
+
 selectedMethods - client side selection. Used after a method compile.
 "
 Class {
