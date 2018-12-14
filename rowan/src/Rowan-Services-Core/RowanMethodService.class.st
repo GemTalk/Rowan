@@ -222,7 +222,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	className := theClass name. 
 	packageName := gsNMethod rowanPackageName. 
 	projectName := gsNMethod rowanProjectName.
-	self setSupersAndSubsFor: theClass.
+	self setSupersAndSubsFor: classOrMeta.
 	isExtension := self rowanIsExtension.
 ]
 
@@ -431,8 +431,10 @@ RowanMethodService >> setSupersAndSubsFor: theClass [
 			superSource := theSuper sourceCodeAt: selector.
 			superDisplayString := theSuper name, '>>', selector].
 		theSuper := theSuper superClass].
-	(organizer allSubclassesOf: theClass) do:[:cls |
-		(hasSubs := cls includesSelector: selector) ifTrue:[^self]].
+	(organizer allSubclassesOf: theClass thisClass) do:[:cls |
+		| aClass |
+		aClass := theClass isMeta ifTrue:[cls class] ifFalse:[cls]. 
+		(hasSubs := aClass includesSelector: selector) ifTrue:[^self]].
 ]
 
 { #category : 'Accessing' }
