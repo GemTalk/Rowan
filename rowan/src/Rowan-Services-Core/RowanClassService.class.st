@@ -81,8 +81,10 @@ RowanClassService class >> minimalForClassNamed: className [
 
 { #category : 'comparing' }
 RowanClassService >> = classService [
-	(classService isKindOf: RowanClassService) ifFalse:[^false].
-	^name = classService name
+	(classService class canUnderstand: #isClassService) ifFalse:[^false].
+	^classService isClassService
+			ifTrue: [  name asString = classService name asString and: [meta = classService meta]]
+			ifFalse: [^false]
 ]
 
 { #category : 'client commands' }
@@ -347,12 +349,11 @@ RowanClassService >> forClassNamed: className [
 
 { #category : 'comparing' }
 RowanClassService >> hash [
-	^self name hash
+	^self name hash bitXor: meta hash
 ]
 
 { #category : 'private' }
 RowanClassService >> hierarchyClassServiceFor: className [
-
 	^className asString = name asString ifTrue:[
 			className = 'Object' 
 				ifTrue:[
@@ -416,6 +417,12 @@ RowanClassService >> instVarNames [
 RowanClassService >> instVarNames: newValue [
 	instVarNames := newValue
 
+]
+
+{ #category : 'testing' }
+RowanClassService >> isClassService [
+
+	^true
 ]
 
 { #category : 'Updating' }
@@ -763,6 +770,9 @@ RowanClassService >> saveMethodSource: source category: category [
 	self update.  
 	methodService := self methodServiceFrom: gsNMethod in: behavior compiltationResult: compilationResult.
 	RowanCommandResult addResult: methodService.
+	RowanQueryService new 
+			organizer: ClassOrganizer new;
+			hierarchyImplementorsOf: methodService selector inClass: methodService className. "this will update hierarchy method indicators for client"
 	self selectedMethods: (Array with: methodService).
 	self updateDirtyState.
 ]
@@ -857,7 +867,7 @@ RowanClassService >> subclassServices: subclasses [
 
 	sortedSubclasses := SortedCollection sortBlock: [:x :y | x name < y name]. 
 	sortedSubclasses addAll: subclasses. 
-	^(sortedSubclasses collect:[:cls | self hierarchyClassServiceFor: cls name]) asArray.
+	^(sortedSubclasses collect:[:cls | (self hierarchyClassServiceFor: cls name) meta: meta]) asArray.
 ]
 
 { #category : 'Accessing' }

@@ -45,6 +45,11 @@ RowanProjectService >> _isSkew [
 	^isSkew
 ]
 
+{ #category : 'comparing' }
+RowanProjectService >> = projectService [
+	^projectService isProjectService ifTrue: [name = projectService name] ifFalse: [^false]
+]
+
 { #category : 'client commands' }
 RowanProjectService >> addPackageNamed: packageName [
 
@@ -153,6 +158,11 @@ RowanProjectService >> defaultProjectName: aString [
 RowanProjectService >> existsOnDisk [
 
 	^existsOnDisk
+]
+
+{ #category : 'comparing' }
+RowanProjectService >> hash [
+	^self name hash
 ]
 
 { #category : 'initialization' }

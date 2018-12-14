@@ -34,10 +34,9 @@ Class {
 { #category : 'instance creation' }
 RowanMethodService class >> forGsNMethod: aGsNMethod organizer: aClassOrganizer [
 
-	^self basicNew
+	^self new
 		initialize: aGsNMethod organizer: aClassOrganizer;
 		yourself
-
 ]
 
 { #category : 'instance creation' }
@@ -66,6 +65,14 @@ RowanMethodService class >> source: source selector: selector category: category
 		packageName: packageName;
 		meta: boolString == true.
 	^service
+]
+
+{ #category : 'comparing' }
+RowanMethodService >> = methodService [
+	(methodService class canUnderstand: #isMethodService) ifFalse:[^false].
+	methodService isMethodService ifFalse:[^false].
+	^selector = methodService selector
+		and: [className asString = methodService className asString and: [meta = methodService meta]]
 ]
 
 { #category : 'Accessing' }
@@ -232,6 +239,11 @@ RowanMethodService >> gsNMethod [
 	^[self classOrMeta compiledMethodAt: selector ] on: Error do:[:ex | nil "removed method"]
 ]
 
+{ #category : 'comparing' }
+RowanMethodService >> hash [
+	^(selector hash bitXor: className hash) bitXor: meta hash
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> hasSubs [
 
@@ -294,6 +306,12 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 		organizer: aClassOrganizer.
 ]
 
+{ #category : 'testing' }
+RowanMethodService >> isMethodService [
+
+	^true
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> isTestMethod [
 
@@ -354,6 +372,17 @@ RowanMethodService >> packageName [
 RowanMethodService >> packageName: newValue [
 	packageName := newValue
 
+]
+
+{ #category : 'printing' }
+RowanMethodService >> printOn: aStream [
+
+	super printOn: aStream. 
+	aStream nextPut: $(;
+				nextPutAll: className; 
+				nextPutAll: '>>'; 
+				nextPutAll: selector;
+				nextPut: $)
 ]
 
 { #category : 'rowan' }
@@ -434,7 +463,8 @@ RowanMethodService >> setSupersAndSubsFor: theClass [
 	(organizer allSubclassesOf: theClass thisClass) do:[:cls |
 		| aClass |
 		aClass := theClass isMeta ifTrue:[cls class] ifFalse:[cls]. 
-		(hasSubs := aClass includesSelector: selector) ifTrue:[^self]].
+		(hasSubs := aClass includesSelector: selector) ifTrue:[
+		^self]].
 ]
 
 { #category : 'Accessing' }

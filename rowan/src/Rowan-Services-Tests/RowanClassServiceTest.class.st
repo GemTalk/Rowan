@@ -171,6 +171,33 @@ RowanClassServiceTest >> test_selectedMethod [
 ]
 
 { #category : 'test method compilation' }
+RowanClassServiceTest >> test_setSuperSubIndicators [
+	| classService superclassMethodService subclassMethodService selector subclassService |
+	selector := #indicatorTesting. 
+	self loadRowanSample1.
+	[classService := RowanClassService forClassNamed: 'RowanSample1'.
+	classService saveMethodSource: selector asString,  ' ^#deleteThisMethod' category: 'abc'.
+	superclassMethodService := (classService methodsNamed: selector) first.
+	self deny: superclassMethodService hasSupers.
+	self deny: superclassMethodService hasSubs.
+	subclassService := RowanClassService forClassNamed: 'RowanSubClass'.
+	subclassService saveMethodSource: selector asString,  ' ^#subclassMethod' category: 'abc'.
+	subclassMethodService := RowanCommandResult results 
+			detect:[:service | service isMethodService
+				and:[service selector = selector and:[service className = #RowanSubClass]]]. "an updated subclass method should be heading back to the client" 
+	superclassMethodService := RowanCommandResult results 
+			detect:[:service | service isMethodService
+				and:[service selector = selector and:[service className = #RowanSample1]]]. "an updated superclass method should be heading back to the client" 
+	self assert: superclassMethodService hasSubs.  
+	self deny: superclassMethodService hasSupers.
+	self assert: subclassMethodService hasSupers.
+	self deny: subclassMethodService hasSubs.
+	]
+			ensure: [
+				Rowan projectTools delete deleteProjectNamed: 'RowanSample1'.]
+]
+
+{ #category : 'test method compilation' }
 RowanClassServiceTest >> test_simpleCompile [
 	| classService methodService selector |
 	self jadeiteIssueTested: #issue356 withTitle: 'Add method compilation tests in server services tests'.

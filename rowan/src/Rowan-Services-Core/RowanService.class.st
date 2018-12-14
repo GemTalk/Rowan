@@ -149,6 +149,30 @@ RowanService >> excludedInstVars [
 RowanService >> initialize [
 ]
 
+{ #category : 'testing' }
+RowanService >> isClassService [
+
+	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isMethodService [
+
+	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isPackageService [
+
+	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isProjectService [
+
+	^false
+]
+
 { #category : 'accessing' }
 RowanService >> jadeiteServer [
 
