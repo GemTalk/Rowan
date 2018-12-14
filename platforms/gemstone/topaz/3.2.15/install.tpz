@@ -6,6 +6,11 @@
   set u SystemUser p swordfish
   login
 
+	run
+	(System myUserProfile objectNamed: 'Rowan')
+		ifNotNil: [ self error: 'Rowan is already installed!' ].
+%
+
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/cypress/bootstrapCypressSupport.topaz
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/ston/bootstrapStonSupport.topaz
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/tonel/bootstrapTonelSupport.topaz
