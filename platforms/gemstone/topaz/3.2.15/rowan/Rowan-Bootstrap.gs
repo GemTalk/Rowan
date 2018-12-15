@@ -1,6 +1,11 @@
   set u SystemUser p swordfish
   login
 
+	run
+	(System myUserProfile objectNamed: 'Rowan')
+		ifNotNil: [ self error: 'Rowan is already installed!' ].
+%
+
 # set rowanCompile to true 
 #
   run
