@@ -1,6 +1,24 @@
 Extension { #name : 'Object' }
 
 { #category : '*filesystem-gemstone-kernel' }
+Object >> assert: aBlock [
+	"Throw an assertion error if aBlock does not evaluates to true.
+	We check for true explicitly to make the assertion fail for non booleans"
+	self assert: aBlock description: 'Assertion failed'.
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+Object >> assert: aBlockOrBoolean description: aStringOrBlock [
+	"Throw an assertion error if aBlock does not evaluates to true."
+	
+	(aBlockOrBoolean isKindOf: BlockClosure) 
+		ifTrue: [
+			aBlockOrBoolean value ifFalse: [ AssertionFailure signal: aStringOrBlock value ] ]
+		ifFalse: [
+			aBlockOrBoolean ifFalse: [ AssertionFailure signal: aStringOrBlock value ] ]
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
 Object >> flag: aSymbol [
 
 	"Send this message, with a relevant symbol as argument, to flag a message for subsequent retrieval.  For example, you might put the following line in a number of messages:

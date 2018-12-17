@@ -16,18 +16,6 @@ FileSystem class >> / aFileOrDirectoryName [
 ]
 
 { #category : '*filesystem-disk' }
-FileSystem class >> client [
-	"Answer a filesystem that represents the 'on-disk' filesystem used by the host operating system."
-
-	^ DiskStore currentClientFileSystem
-]
-
-{ #category : '*filesystem-disk' }
-FileSystem class >> clientWorkingDirectory [
-	^ self disk clientWorkingDirectory
-]
-
-{ #category : '*filesystem-disk' }
 FileSystem class >> disk [
 	"Answer a filesystem that represents the 'on-disk' filesystem used by the host operating system."
 

@@ -12,6 +12,22 @@ ZnCharacterStreamTests >> assertUpToAll: array [
 	self assert: (utf8Stream upToAll: array second) equals: array third
 ]
 
+{ #category : 'private' }
+ZnCharacterStreamTests >> decodeBytes: bytes with: encoder [
+	| input |
+	input := bytes readStream.
+	^ String streamContents: [ :stream |
+		[ input atEnd ] whileFalse: [ 
+			stream nextPut: (encoder nextFromStream: input) ] ]
+]
+
+{ #category : 'private' }
+ZnCharacterStreamTests >> encodeString: string with: encoder [
+	^ ByteArray streamContents: [ :stream |
+		string do: [ :each |
+			encoder nextPut: each toStream: stream ] ]
+]
+
 { #category : 'testing' }
 ZnCharacterStreamTests >> testNextLine [
 	| stream |
@@ -167,16 +183,14 @@ ZnCharacterStreamTests >> testUTF8ReadStreamReadInto [
 	| string bytes stream buffer |
 	string := 'élève en Français'.
 	bytes := ZnUTF8Encoder new encodeString: string.
-	stream := ZnBufferedReadStream on: (ZnCharacterReadStream on: bytes readStreamPortable).
-	stream sizeBuffer: string size.
+	stream := ZnCharacterReadStream on: bytes readStream.
 	buffer := String new: string size.
 	stream next: string size into: buffer. 
 	self assert: buffer equals: string.
 	self assert: stream atEnd.
-	string := 'Czech in Czech is ', 269 asCharacter asString ,'e', 353 asCharacter asString , 'tina.'.
+	string := 'Czech in Czech is {1}e{2}tina.' format: { 269 asCharacter. 353 asCharacter }.
 	bytes := ZnUTF8Encoder new encodeString: string.
-	stream := ZnBufferedReadStream on: (ZnCharacterReadStream on: bytes readStreamPortable).
-	stream sizeBuffer: string size.
+	stream := ZnCharacterReadStream on: bytes readStream.
 	buffer := String new: string size.
 	stream next: string size into: buffer. 
 	self assert: buffer equals: string.

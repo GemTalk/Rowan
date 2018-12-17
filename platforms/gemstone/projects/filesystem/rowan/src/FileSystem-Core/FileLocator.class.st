@@ -69,11 +69,6 @@ FileLocator class >> cache [
 	^ self origin: #cache
 ]
 
-{ #category : 'gemstone-origins' }
-FileLocator class >> clientWorkingDirectory [
-	^ FileSystem client referenceTo: RelativePath new
-]
-
 { #category : 'origins' }
 FileLocator class >> cwd [
 	^ self workingDirectory

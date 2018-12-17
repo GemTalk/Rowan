@@ -21,3 +21,40 @@ CharacterCollection >> encodeWith: encoding [
 	^ encoding asZnCharacterEncoder encodeString: self
 
 ]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> fillFrom: aCollection with: aBlock [
+	"Evaluate aBlock with each of aCollections's elements as the argument.  
+	Collect the resulting values into self. Answer self."
+
+	| index |
+	index := 0.
+	aCollection do: [ :each |
+		self at: (index := index + 1) put: (aBlock value: each) ]
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> urlDecoded [
+	"URL Decode the receiver and return the resulting String.
+	This is an encoding where characters that are illegal in a URL are escaped."
+
+    ^ ZnPercentEncoder new decode: self
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> urlEncoded [
+	"URL Encode the receiver and return the resulting String.
+	This is an encoding where characters that are illegal in a URL are escaped."
+
+    ^ ZnPercentEncoder new encode: self
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> utf8Encoded [
+	"Produce a ByteArray encoding the receiver using UTF-8,
+	the recommended encoding for Strings, unless you know what you are doing."
+	
+	" 'Les élèves français' utf8Encoded "
+	
+	^ self encodeWith: ZnCharacterEncoder utf8
+]

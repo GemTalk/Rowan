@@ -47,26 +47,9 @@ DiskStore class >> currentClient [
 ]
 
 { #category : 'current' }
-DiskStore class >> currentClientFileSystem [
-	^ CurrentClientFS ifNil: [
-		CurrentClientFS := FileSystem store: self activeClientClass createDefault]
-]
-
-{ #category : 'current' }
 DiskStore class >> currentFileSystem [
 	^ CurrentFS ifNil: [
 		CurrentFS := FileSystem store: self activeClass createDefault]
-]
-
-{ #category : 'accessing' }
-DiskStore class >> defaultClientWorkingDirectory [
-	"Ask the VM for the default working directory.
-	Clients should normally use the instance side method which caches this value."
-	| pathString |
-	
-	"This is hacked for testing purposes. The retrieval of the client pwd needs to be added to the "
-	pathString := (FileSystem fileClass _expandEnvVariable: 'PWD' isClient:true) ifNil: ['C:\Users\Public\Documents'].
-	^(Path from: pathString delimiter: self delimiter).
 ]
 
 { #category : 'accessing' }
@@ -75,7 +58,7 @@ DiskStore class >> defaultWorkingDirectory [
 	Clients should normally use the instance side method which caches this value."
 	| pathString |
 
-	pathString := (FileSystem fileClass _expandEnvVariable: 'PWD' isClient:false).
+	pathString := FileSystem fileClass currentWorkingDirectoryPath.
 	^(Path from: pathString delimiter: self delimiter).
 ]
 
@@ -136,15 +119,24 @@ DiskStore >> basicCreationTimeOf: anEntry [
 
 { #category : 'private' }
 DiskStore >> basicEntry: ignored path: aPath nodesDo: aBlock [
-	| pathString intOrArray |
+
+	| encodedPathString entries pathString |
 		
 	pathString := self stringFromPath: aPath.
-	intOrArray := FileSystem fileClass _contentsOfServerDirectory: pathString expandPath: true.
-	intOrArray _isArray ifFalse: [ ^ self signalDirectoryDoesNotExist: aPath ].
-	intOrArray
+	encodedPathString := "File encodePathString:" pathString.
+	(FileSystem fileClass entriesIn: encodedPathString) do: [:eaEntry |
+		aBlock value: (FileSystem fileClass lookupDirectoryEntry: eaEntry)]
+
+"	[ entry isNil ]
+		whileFalse: [ 
+			entry at: 1 put: (File decodePathString: entry first).
+			aBlock value: entry.
+			index := index + 1.
+			entry := File lookupEntryIn: encodedPathString index: index ]."
+"	entry
 		do: [:entryPathString |
 			((entryPathString endsWith: '.')  or: [ entryPathString endsWith: '..' ])
-				ifFalse: [ aBlock value: (self lookupPath: entryPathString) ] ]
+				ifFalse: [ aBlock value: (FileSystem fileClass lookupEntryIn: entryPathString index: 1) ] ]"
 ]
 
 { #category : 'public' }
@@ -154,7 +146,7 @@ DiskStore >> basicEntryAt: aPath [
 	path := self stringFromPath: aPath parent.
 	basename := aPath basename.
 	
-	^ (self lookupDirectory: path filename: basename)
+	^ (FileSystem fileClass lookupDirectory: path filename: basename)
 		ifNil: [ #badDirectoryPath ].
 ]
 
@@ -230,7 +222,7 @@ DiskStore >> createDirectory: path [
 
 	| parent pathString result |
 	pathString := self stringFromPath: path.
-	result := FileSystem fileClass createServerDirectory: pathString.
+	result := FileSystem fileClass createDirectory: pathString.
 	result
 		ifNil: [ 
 			parent := path parent.
@@ -243,14 +235,6 @@ DiskStore >> createDirectory: path [
 				ifFalse: [ ^ self signalDirectoryDoesNotExist: parent ].
 			self primitiveFailed ].
 	^ self
-]
-
-{ #category : 'accessing' }
-DiskStore >> defaultClientWorkingDirectory [
-	"Answer the default working directory, which is defined as the directory where the image resides."
-
-	^ DefaultClientWorkingDirectory
-		ifNil: [ self class defaultClientWorkingDirectory ]
 ]
 
 { #category : 'accessing' }
@@ -278,14 +262,14 @@ DiskStore >> delete: path [
 { #category : 'public' }
 DiskStore >> deleteDirectory: pathString [
 	
-	(FileSystem fileClass removeServerDirectory: pathString)
-		ifNil: [ self error: 'Error deleting directory ', pathString printString, ' :: ', GsFile serverErrorString ]
+	(FileSystem fileClass deleteDirectory: pathString)
+		ifNil: [ self error: 'Error deleting directory ', pathString printString, ' :: ', FileSystem fileClass serverErrorString ]
 ]
 
 { #category : 'public' }
 DiskStore >> deleteFile: pathString [
 
-	(FileSystem fileClass removeServerFile: pathString)
+	(FileSystem fileClass deleteFile: pathString)
 		ifNil: [ FileDeletionError 
 					signalWith: pathString  
 					text: 'Could not delete file ' , pathString , '. Check the file is not open.' ].
@@ -382,44 +366,6 @@ DiskStore >> isWritable: aPath [
 ]
 
 { #category : 'public' }
-DiskStore >> lookupDirectory: fullPath filename: fileName [
-
-	"Look up <fileName> (a simple file name) in the directory identified by <fullPath> and return entry array"
-
-	^ self lookupPath: fullPath, '/', fileName
-]
-
-{ #category : 'public' }
-DiskStore >> lookupPath: fullPath [
-
-	"Look up the file or directory identified by <fullPath> and return an array containing:
-
-	<fileName> 			
-	<creationTime> 			(in seconds since the start of the Linux time epoch)
-	<modificationTime> 	(in seconds since the start of the Linux time epoch)
-	<dirFlag> 				DirFlag is true if the entry is a directory
-	<fileSize> 				FileSize the file size in bytes or zero for directories
-	<posixPermissions> 	Numeric Notation 
-	<symLinkFlag>			seemingly, symLinkFlag is true if the entry is a symLink
-
-	On Unix, the empty path denotes '/'. 
-   On Macs and PCs, it is the container of the system volumes."
-
-	| gsFileStat |
-	gsFileStat := FileSystem fileClass stat: fullPath isLstat: true.
-	gsFileStat _isSmallInteger ifTrue: [ ^ nil ].
-	^	{
-		(Path from: fullPath) basename.
-		gsFileStat ctimeUtcSeconds .
-		gsFileStat mtimeUtcSeconds .
-		gsFileStat isDirectory .
-		gsFileStat size.
-		gsFileStat mode bitAnd: 8r777. "https://github.com/GemTalk/FileSystemGs/issues/11"
-		(gsFileStat mode bitAnd: 8r0120000) = 8r0120000. "https://github.com/GemTalk/FileSystemGs/issues/10"
-	}
-]
-
-{ #category : 'public' }
 DiskStore >> maxFileNameLength [
 	^ maxFileNameLength
 ]
@@ -458,8 +404,7 @@ DiskStore >> rename: sourcePath to: destinationPath [
 	| sourcePathString targetPathString |
 	sourcePathString := self stringFromPath: sourcePath.
 	targetPathString := self stringFromPath: destinationPath.
-	(FileSystem fileClass renameFileOnServer: sourcePathString to: targetPathString) = 0
-		ifFalse: [ self error: 'Rename file failed']
+	^FileSystem fileClass rename: sourcePathString to: targetPathString
 ]
 
 { #category : 'private' }

@@ -5,7 +5,6 @@ I wrap another binary ReadStream and use a ZnCharacerEncoder to allow Characters
 I am not positionable, but I do allow a one character peek using a one character internal buffer.
 
 Part of Zinc HTTP Components.
-
 "
 Class {
 	#name : 'ZnCharacterReadStream',

@@ -115,18 +115,6 @@ FileSystem >> childrenAt: aResolvable do: aBlock [
 			aBlock value: path / (store basenameFromEntry: entry) ]
 ]
 
-{ #category : 'accessing' }
-FileSystem >> clientWorkingDirectory [
-	"Returns a reference to the directory from where the image was launched"
-
-	^ self referenceTo: self clientWorkingDirectoryPath
-]
-
-{ #category : 'accessing' }
-FileSystem >> clientWorkingDirectoryPath [
-	^ store defaultClientWorkingDirectory
-]
-
 { #category : 'public' }
 FileSystem >> close [
 	store close

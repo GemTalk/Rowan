@@ -96,7 +96,7 @@ FileSystemStore >> basicCreationTimeOf: aNode [
 
 { #category : 'abstract' }
 FileSystemStore >> basicEntry: directoryEntry path: aPath nodesDo: aBlock [
-	self subclassResponsibility 
+	self subclassResponsibility: #basicEntry:path:nodesDo:
 ]
 
 { #category : 'abstract' }
@@ -358,7 +358,7 @@ FileSystemStore >> nodeAt: aPath [
 
 { #category : 'abstract' }
 FileSystemStore >> nodeAt: aPath ifPresent: presentBlock ifAbsent: absentBlock [
-	self subclassResponsibility 
+	self subclassResponsibility: #nodeAt:ifPresent:ifAbsent:
 ]
 
 { #category : 'abstract' }

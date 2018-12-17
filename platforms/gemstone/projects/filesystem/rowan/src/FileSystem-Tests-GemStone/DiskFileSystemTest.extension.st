@@ -1,15 +1,6 @@
 Extension { #name : 'DiskFileSystemTest' }
 
 { #category : '*filesystem-tests-gemstone' }
-DiskFileSystemTest >> testClient [
-
-	| aFileSystem |
-	aFileSystem := FileSystem client.
-	self assert: aFileSystem notNil.
-	self assert: aFileSystem store notNil
-]
-
-{ #category : '*filesystem-tests-gemstone' }
 DiskFileSystemTest >> testClientIsReadable [
 
 	"This fails - it needs the code to differentiate between client and server implemented"

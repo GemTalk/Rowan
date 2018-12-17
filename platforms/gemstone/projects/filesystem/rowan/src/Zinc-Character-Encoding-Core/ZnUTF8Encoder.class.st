@@ -10,7 +10,7 @@ I use the ICU library to encode strings and decode ByteArray and Utf8 instances 
 "
 Class {
 	#name : 'ZnUTF8Encoder',
-	#superclass : 'ZnCharacterEncoder',
+	#superclass : 'ZnUTFEncoder',
 	#classVars : [
 		'Default'
 	],
@@ -53,7 +53,7 @@ ZnUTF8Encoder >> backOnStream: stream [
 
 { #category : 'convenience' }
 ZnUTF8Encoder >> decodeAsCodePoints: bytes [
-	"Decode bytes and return the resulting code points"
+	"Decode bytes and return the resulting code points - This is a Gemstone implementation"
 
 	| ar |
 	ar := {}.
@@ -105,7 +105,7 @@ ZnUTF8Encoder >> encodeString: string [
 
 { #category : 'error handling' }
 ZnUTF8Encoder >> error: message [
-	^ #ZnInvalidUTF8 signal: message
+	^ZnInvalidUTF8 signal: message
 ]
 
 { #category : 'error handling' }
@@ -114,8 +114,25 @@ ZnUTF8Encoder >> errorIllegalContinuationByte [
 ]
 
 { #category : 'error handling' }
+ZnUTF8Encoder >> errorIllegalLeadingByte [
+	^ self error: 'Illegal leading byte for utf-8 encoding'
+]
+
+{ #category : 'error handling' }
 ZnUTF8Encoder >> errorOverlong [
 	^ self error: 'Overlong utf-8 encoding (non-shortest form)'
+]
+
+{ #category : 'private' }
+ZnUTF8Encoder >> findFirstNonASCIIIn: string startingAt: offset [
+	"This calls a fast primitive. Note that string can be a ByteString or ByteArray"
+	
+self error: 'The classes ByteString and ByteASCIISet are not implemented in Gemstone'.
+	offset > string size ifTrue: [ ^ 0 ].
+	^ #ByteString 
+		findFirstInString: string 
+		inSet: #ByteASCIISet 
+		startingAt: offset
 ]
 
 { #category : 'accessing' }
@@ -135,6 +152,38 @@ ZnUTF8Encoder >> next: count putAll: string startingAt: offset toStream: stream 
 	"Write count characters from string starting at offset to stream."
 	
 	stream nextPutAll: (string copyFrom: offset to: offset + count - 1) encodeAsUTF8 asByteArray
+]
+
+{ #category : 'private' }
+ZnUTF8Encoder >> next: count putAllASCII: string startingAt: offset toStream: stream [
+	"Write count bytes from string starting at offset to stream,
+	assuming all characters are in the ASCII set and need no translation"
+	
+	offset to: offset + count - 1 do: [ :index | 
+		stream nextPut: (string byteAt: index) ]
+]
+
+{ #category : 'private' }
+ZnUTF8Encoder >> next: count putAllByteString: string startingAt: offset toStream: stream [
+	"A faster version when string is a ByteString"
+	
+	| lastIndex nextIndex |
+self error: 'The class ByteUTF8Encoding is not implemented in Gemstone'.
+	lastIndex := offset.
+	nextIndex := self findFirstNonASCIIIn: string startingAt: lastIndex.
+	(nextIndex = 0 or: [ offset + count <= nextIndex ]) 
+		ifTrue: [ 
+			^ self next: count putAllASCII: string startingAt: offset toStream: stream ].
+	[	nextIndex > lastIndex 
+			ifTrue: [
+				self next: nextIndex - lastIndex putAllASCII: string startingAt: lastIndex toStream: stream ].
+		stream nextPutAll: (#ByteUTF8Encoding at: (string byteAt: nextIndex) + 1).
+		lastIndex := nextIndex + 1.
+		nextIndex := self findFirstNonASCIIIn: string startingAt: lastIndex.
+		nextIndex = 0 or: [ offset + count <= nextIndex ] ] whileFalse.
+	offset + count <= lastIndex 
+		ifFalse: [ 
+			self next: offset + count - lastIndex putAllASCII: string startingAt: lastIndex toStream: stream ]
 ]
 
 { #category : 'converting' }
