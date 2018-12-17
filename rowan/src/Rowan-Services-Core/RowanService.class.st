@@ -48,6 +48,15 @@ RowanService class >> sampleService [
 
 ]
 
+{ #category : 'other' }
+RowanService >> answer: anObject [
+
+	| answeringService |
+	answeringService := RowanAnsweringService new. 
+	answeringService answer: anObject. 
+	RowanCommandResult addResult: answeringService.
+]
+
 { #category : 'rowan' }
 RowanService >> browserTool [
 
