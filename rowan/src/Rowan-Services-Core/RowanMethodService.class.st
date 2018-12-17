@@ -514,6 +514,6 @@ RowanMethodService >> update [
 
 { #category : 'testing' }
 RowanMethodService >> wasDeleted [
-
+	selector isNil ifTrue:[^false].
 	^self gsNMethod isNil
 ]
