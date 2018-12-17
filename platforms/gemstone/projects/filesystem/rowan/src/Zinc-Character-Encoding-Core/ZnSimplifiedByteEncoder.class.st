@@ -7,6 +7,12 @@ I am like ZnByteEncoder, a subclass of me, but I implement just two mappings, la
 Class {
 	#name : 'ZnSimplifiedByteEncoder',
 	#superclass : 'ZnCharacterEncoder',
+	#instVars : [
+		'identifier',
+		'byteToUnicode',
+		'unicodeToByte',
+		'strict'
+	],
 	#classInstVars : [
 		'byteTextConverters'
 	],
@@ -139,4 +145,152 @@ ZnSimplifiedByteEncoder class >> tablesFromSpec: mapping [
 				byteToUnicode at: index put: (Character value: unicode).
 				unicodeToByte at: unicode put: 127 + index ] ].
 	^ Array with: byteToUnicode with: unicodeToByte
+]
+
+{ #category : 'comparing' }
+ZnSimplifiedByteEncoder >> = anObject [
+	^ super = anObject and: [ self identifier = anObject identifier ]
+]
+
+{ #category : 'converting' }
+ZnSimplifiedByteEncoder >> backOnStream: stream [
+	stream back
+]
+
+{ #category : 'initialize-release' }
+ZnSimplifiedByteEncoder >> beLenient [
+	"Don't be strict, which is the default.
+	This means that holes in the mapping are let to pass through."
+
+	strict := false
+]
+
+{ #category : 'accessing' }
+ZnSimplifiedByteEncoder >> byteDomain [
+	"Return an array with the byte values that are in my domain, that I can decode"
+	| a b index |
+	a := (0 to: 127) asArray.
+	index := 1.
+	b := (byteToUnicode collect: [ :each | 
+				each ifNotNil: [ index + 127 ]. 
+				index := index + 1 ]) reject: [ :each | each isNil ].
+	^  a , b
+]
+
+{ #category : 'initialize-release' }
+ZnSimplifiedByteEncoder >> byteToUnicode: map [
+	byteToUnicode := map
+]
+
+{ #category : 'accessing' }
+ZnSimplifiedByteEncoder >> characterDomain [
+	"Return a set with the characters that are in my domain, that I can encode"
+
+	^ ((0 to: 127) asSet addAll: unicodeToByte keys; yourself) collect: [ :each | Character value: each  ]
+]
+
+{ #category : 'converting' }
+ZnSimplifiedByteEncoder >> encodedByteCountFor: character [
+	"Overwritten for performance reasons"
+	
+	^ 1
+]
+
+{ #category : 'converting' }
+ZnSimplifiedByteEncoder >> encodedByteCountForCodePoint: character [
+	^ 1
+]
+
+{ #category : 'comparing' }
+ZnSimplifiedByteEncoder >> hash [
+	^ self identifier hash
+]
+
+{ #category : 'accessing' }
+ZnSimplifiedByteEncoder >> identifier [
+	^ identifier
+]
+
+{ #category : 'initialize-release' }
+ZnSimplifiedByteEncoder >> identifier: object [
+	identifier := object
+]
+
+{ #category : 'initialization' }
+ZnSimplifiedByteEncoder >> initialize [
+	super initialize.
+	strict := true
+]
+
+{ #category : 'testing' }
+ZnSimplifiedByteEncoder >> isLenient [
+	^ strict not
+]
+
+{ #category : 'testing' }
+ZnSimplifiedByteEncoder >> isStrict [
+	^ strict
+]
+
+{ #category : 'converting' }
+ZnSimplifiedByteEncoder >> nextCodePointFromStream: stream [
+	"In non-strict mode, we let byte values for holes in our mapping pass through"
+
+	| byteValue |
+	^ (byteValue := stream next) < 128
+		ifTrue: [ byteValue ]
+		ifFalse: [ 
+			(byteToUnicode at: byteValue - 127 ifAbsent: [ nil ])
+				ifNotNil: [ :unicode | unicode asInteger ]
+				ifNil: [ 
+					strict
+						ifTrue: [ self errorOutsideRange ]
+						ifFalse: [ byteValue ] ] ]
+]
+
+{ #category : 'converting' }
+ZnSimplifiedByteEncoder >> nextFromStream: stream [
+	"In non-strict mode, we let byte values for holes in our mapping pass through.
+	Overwritten for performance reasons"
+
+	| byteValue |
+	^ (byteValue := stream next ifNil: [ ^ self errorIncomplete asCharacter ]) < 128
+		ifTrue: [ Character value: byteValue ]
+		ifFalse: [ 
+			(byteToUnicode at: byteValue - 127 ifAbsent: [ nil ])
+				ifNotNil: [ :unicode | unicode ]
+				ifNil: [ 
+					strict
+						ifTrue: [ self errorOutsideRange ]
+						ifFalse: [ Character value: byteValue ] ] ]
+]
+
+{ #category : 'converting' }
+ZnSimplifiedByteEncoder >> nextPutCodePoint: codePoint toStream: stream [
+	"In non-strict mode, we let code points for holes in our mapping table pass through"
+	
+	codePoint < 128
+		ifTrue: [ stream nextPut: codePoint ]
+		ifFalse: [ 
+			| byte |
+			byte := unicodeToByte at: codePoint ifAbsent: [ nil ].
+			(byte isNil and: [ strict or: [ codePoint > 255 ] ])
+				ifTrue: [ self errorOutsideRange ].
+			stream nextPut: (byte ifNil: [ codePoint ]) ]
+]
+
+{ #category : 'printing' }
+ZnSimplifiedByteEncoder >> printOn: stream [
+	super printOn: stream.
+	stream
+		nextPut: $(;
+		print: identifier.
+	strict
+		ifTrue: [ stream nextPutAll: ' strict' ].
+	stream nextPut: $)
+]
+
+{ #category : 'initialize-release' }
+ZnSimplifiedByteEncoder >> unicodeToByte: map [
+	unicodeToByte := map
 ]

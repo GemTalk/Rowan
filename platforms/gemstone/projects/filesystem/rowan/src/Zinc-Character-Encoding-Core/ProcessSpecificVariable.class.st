@@ -70,7 +70,7 @@ ProcessSpecificVariable >> value [
 	"This is a hack. There may need to be something implemented to tie a value to a process in the future."
 
 	"Pharo code ^ (Processor activeProcess psValueAt: index) ifNil: [ self default ]"
-
+index := nil.
 	^index ifNil: [index := self default]
 ]
 

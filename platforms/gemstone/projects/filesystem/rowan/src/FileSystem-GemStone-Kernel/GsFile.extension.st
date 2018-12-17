@@ -71,8 +71,7 @@ GsFile class >> lookupDirectory: path filename: basename [
 
 	| fullPath|
 	fullPath := self _fullPath: path filename: basename.
-	^self directoryEntryFor: fullPath
-
+	^self lookupDirectoryEntry: fullPath
 ]
 
 { #category : '*FileSystem-Gemstone-Kernel' }
@@ -89,14 +88,6 @@ GsFile class >> lookupDirectoryEntry: fullPath [
 		gsFileStat mode bitAnd: 8r777. "https://github.com/GemTalk/FileSystemGs/issues/11"
 		(gsFileStat mode bitAnd: 8r0120000) = 8r0120000. "https://github.com/GemTalk/FileSystemGs/issues/10"
 	}
-
-]
-
-{ #category : '*FileSystem-Gemstone-Kernel' }
-GsFile class >> lookupEntryIn: pathString index: index [
-	| result |
-	result := self _contentsOfServerDirectory: pathString expandPath: true.
-	^result _isArray ifTrue: [result] ifFalse:  [nil]
 
 ]
 

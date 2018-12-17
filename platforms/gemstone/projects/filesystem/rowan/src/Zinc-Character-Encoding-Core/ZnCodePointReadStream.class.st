@@ -11,3 +11,13 @@ Class {
 	#superclass : 'ZnEncodedReadStream',
 	#category : 'Zinc-Character-Encoding-Core'
 }
+
+{ #category : 'accessing' }
+ZnCodePointReadStream >> collectionSpecies [
+	^ Array
+]
+
+{ #category : 'private' }
+ZnCodePointReadStream >> nextElement [
+	^ self encoder nextCodePointFromStream: stream
+]

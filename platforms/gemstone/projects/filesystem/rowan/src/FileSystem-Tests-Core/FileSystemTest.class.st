@@ -35,6 +35,13 @@ FileSystemTest class >> shouldInheritSelectors [
 	
 ]
 
+{ #category : 'private' }
+FileSystemTest >> cleanupPaths [
+	toDelete
+		select: [ :path | filesystem exists: path ]
+		thenDo: [ :path | filesystem delete: path ].
+]
+
 { #category : 'initialize-release' }
 FileSystemTest >> createFileSystem [
 	self subclassResponsibility 
@@ -59,10 +66,8 @@ FileSystemTest >> store [
 
 { #category : 'running' }
 FileSystemTest >> tearDown [
-	toDelete
-		select: [ :path | filesystem exists: path ]
-		thenDo: [ :path | filesystem delete: path ].
-	super tearDown	
+	self cleanupPaths.
+	super tearDown
 ]
 
 { #category : 'tests-streams-compatibility' }
@@ -403,14 +408,15 @@ FileSystemTest >> testEntriesAt [
 	| directory entries |
 	directory := Path * 'plonk'.
 	
-	filesystem createDirectory: directory.
-	filesystem createDirectory: directory / 'griffle'.
-	filesystem createDirectory: directory / 'bint'.
-	
 	self 
 		markForCleanup: directory / 'griffle';
 		markForCleanup: directory / 'bint';
 		markForCleanup: directory.
+	self cleanupPaths.
+
+	filesystem createDirectory: directory.
+	filesystem createDirectory: directory / 'griffle'.
+	filesystem createDirectory: directory / 'bint'.
 	
 	entries := filesystem entriesAt: directory.
 	self assert: entries size = 2.
@@ -730,7 +736,7 @@ FileSystemTest >> testWriteStreamIfPresent [
 	self assert: (reference writeStreamIfPresent: [ true ])
 ]
 
-{ #category : 'running' }
+{ #category : 'private' }
 FileSystemTest >> waitForSeconds: anIngeger [
 	"#creationTime seems limited to 1 second resolution"
 	(Delay forSeconds: anIngeger) wait.

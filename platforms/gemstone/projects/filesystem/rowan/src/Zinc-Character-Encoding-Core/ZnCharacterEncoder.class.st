@@ -105,6 +105,13 @@ ZnCharacterEncoder class >> latin1 [
 ]
 
 { #category : 'instance creation' }
+ZnCharacterEncoder class >> new [
+	^super new
+		initialize;
+		yourself
+]
+
+{ #category : 'instance creation' }
 ZnCharacterEncoder class >> newForEncoding: string [
 	"Return a new character encoder object for an encoding described by string.
 	Search for a subclass that handles it and delegate (subclassResponsibility)."
@@ -241,6 +248,10 @@ ZnCharacterEncoder >> hash [
 { #category : 'accessing' }
 ZnCharacterEncoder >> identifier [
 	^ self subclassResponsibility
+]
+
+{ #category : 'initialization' }
+ZnCharacterEncoder >> initialize [
 ]
 
 { #category : 'convenience' }

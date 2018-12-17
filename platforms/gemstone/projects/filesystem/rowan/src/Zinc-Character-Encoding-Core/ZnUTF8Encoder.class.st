@@ -100,7 +100,8 @@ ZnUTF8Encoder >> encodedByteCountForString: string [
 ZnUTF8Encoder >> encodeString: string [
 	"Encode string and return the resulting Utf8 instance"
 	
-	^ string encodeAsUTF8 asByteArray
+	"^ string encodeAsUTF8 asByteArray"
+	^super encodeString: string
 ]
 
 { #category : 'error handling' }
@@ -151,7 +152,9 @@ ZnUTF8Encoder >> isSurrogateCodePoint: codePoint [
 ZnUTF8Encoder >> next: count putAll: string startingAt: offset toStream: stream [
 	"Write count characters from string starting at offset to stream."
 	
-	stream nextPutAll: (string copyFrom: offset to: offset + count - 1) encodeAsUTF8 asByteArray
+	"stream nextPutAll: (string copyFrom: offset to: offset + count - 1) encodeAsUTF8 asByteArray"
+
+	super next: count putAll: string startingAt: offset toStream: stream
 ]
 
 { #category : 'private' }

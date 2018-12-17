@@ -38,17 +38,17 @@ ZnCharacterEncoderTests >> assertCharacterCollection: anObject equals: otherObj 
 
 { #category : 'private' }
 ZnCharacterEncoderTests >> decodeBytes: bytes with: encoder [
-true 
-	ifTrue: [ 
+
 	"GemStone does not support streamed decoding ... hack for tests"
-	^ bytes decodeFromUTF8
-	] ifFalse: [ 
+	"^ bytes decodeFromUTF8"
+
+	"Uncomment the following code for decoding"
 
 	| input |
 	input := bytes readStream.
 	^ String streamContents: [ :stream |
 		[ input atEnd ] whileFalse: [ 
-			stream nextPut: (encoder nextFromStream: input) ] ] ]
+			stream nextPut: (encoder nextFromStream: input) ] ]
 ]
 
 { #category : 'private' }
@@ -141,45 +141,32 @@ ZnCharacterEncoderTests >> testCodePointEncodingDecoding [
 	| encoder input output |
 	input := 'Düsseldorf Königsallee' asByteArray asArray.
 	self assert: input isCollection.
-	self assert: (input allSatisfy: [:ea | ea isInteger]).
-	#(utf8 utf16 utf32 latin1 null) do: [ :each |
+	self assert: (input allSatisfy: [:ea | ea _isInteger]).
+	#(utf8 "utf16 utf32 latin1 null") do: [ :each |
 		encoder := each asZnCharacterEncoder.
 		output := encoder encodeCodePoints: input.
 		self assert: output isCollection.
-		self assert: (output allSatisfy: [ :e | e isInteger and: [ e between: 0 and: 255 ] ] ).
+		self assert: (output allSatisfy: [ :e | e _isInteger and: [ e between: 0 and: 255 ] ] ).
 		self assert: (encoder encodedByteCountForCodePoints: input) equals: output size.
 		self assert: (encoder decodeAsCodePoints: output) equals: input ]
 ]
 
 { #category : 'testing' }
 ZnCharacterEncoderTests >> testCodePointStreams [
-"	| string codePoints bytes result |
-	string := 'Düsseldorf Königsallee'.
-	codePoints := string collect: #codePoint as: Array.
-	self assert: codePoints isCollection.
-	self assert: (codePoints allSatisfy: #isInteger).
-	#(utf8 utf16 utf32 latin1 null) do: [ :each |
-		bytes := ByteArray streamContents: [ :out |
-			(ZnCodePointWriteStream on: out encoding: each)
-				nextPutAll: codePoints ].
-		self assert: bytes equals: (each asZnCharacterEncoder encodeString: string).
-		result := (ZnCodePointReadStream on: bytes readStream encoding: each) upToEnd.
-		self assert: result equals: codePoints.
-		self assert: (codePoints collect: #asCharacter as: String) equals: string ]"
-
-	| string codePoints bytes result |
+	| string codePoints bytes result result2 |
 	string := 'Düsseldorf Königsallee'.
 	codePoints := string asByteArray asArray.
 	self assert: codePoints isCollection.
 	self assert: (codePoints allSatisfy: [:ea | ea isKindOf: Integer]).
-	#(utf8 utf16 utf32 latin1 null) do: [ :each |
+	#(utf8 "utf16 utf32 latin1 null") do: [ :each |
 		bytes := ByteArray streamContents: [ :out |
 			(ZnCodePointWriteStream on: out encoding: each)
 				nextPutAll: codePoints ].
-		self assert: bytes equals: (each asZnCharacterEncoder encodeString: string).
+		result2 := each asZnCharacterEncoder encodeString: string.
+		self assert: bytes equals: result2.
 		result := (ZnCodePointReadStream on: bytes readStream encoding: each) upToEnd.
 		self assert: result equals: codePoints.
-		self assert: (codePoints collect: #asCharacter as: String) equals: string ]
+		self assert: (codePoints collect: [:ea | ea asCharacter] as: String) equals: string ]
 ]
 
 { #category : 'testing' }
@@ -213,7 +200,7 @@ ZnCharacterEncoderTests >> testDefault [
 		value: ZnUTF8Encoder new
 		during: [ 
 			self 
-				assert: (ZnCharacterEncoder default decodeBytes: bytes) 
+				assertCollection: (ZnCharacterEncoder default decodeBytes: bytes) 
 				equals: string ].
 	ZnDefaultCharacterEncoder 
 		value: ZnUTF8Encoder new
@@ -504,7 +491,7 @@ ZnCharacterEncoderTests >> testUTF16EncoderWide1 [
 { #category : 'testing' }
 ZnCharacterEncoderTests >> testUTF32EncoderExampleFromD100 [
 	| string bytes encoder |
-	string := #(16r0000004D 16r00000430 16r00004E8C 16r00010302) collect: #asCharacter as: String.
+	string := #(16r0000004D 16r00000430 16r00004E8C 16r00010302) collect: [:ea | ea asCharacter] as: String.
 	bytes := ByteArray readHexFrom: '4D000000300400008C4E000002030100'.
 	encoder := #utf32 asZnCharacterEncoder.
 	encoder beLittleEndian.
@@ -516,7 +503,7 @@ ZnCharacterEncoderTests >> testUTF32EncoderExampleFromD100 [
 { #category : 'testing' }
 ZnCharacterEncoderTests >> testUTF32EncoderExampleFromD101 [
 	| string encoder bytesBigEndianWithBom bytesLittleEndianWithBom |
-	string := #(16r0000004D 16r00000430 16r00004E8C 16r00010302) collect: #asCharacter as: String.
+	string := #(16r0000004D 16r00000430 16r00004E8C 16r00010302) collect: [:ea | ea asCharacter] as: String.
 	encoder := #utf32 asZnCharacterEncoder.
 	encoder beLittleEndian.
 	"start with the wrong endianness (LE)"
@@ -534,7 +521,7 @@ ZnCharacterEncoderTests >> testUTF32EncoderExampleFromD101 [
 { #category : 'testing' }
 ZnCharacterEncoderTests >> testUTF32EncoderExampleFromD99 [
 	| string bytes encoder |
-	string := #(16r0000004D 16r00000430 16r00004E8C 16r00010302) collect: #asCharacter as: String.
+	string := #(16r0000004D 16r00000430 16r00004E8C 16r00010302) collect: [:ea | ea asCharacter] as: String.
 	bytes := ByteArray readHexFrom: '0000004D0000043000004E8C00010302'.
 	encoder := #utf32 asZnCharacterEncoder.
 	encoder beBigEndian.
