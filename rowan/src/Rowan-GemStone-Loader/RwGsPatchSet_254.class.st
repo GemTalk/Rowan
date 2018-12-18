@@ -1382,5 +1382,4 @@ RwGsPatchSet_254 >> updateSymbolAssociations [
 			ifNil: [ each installNewClassVersionInSystem ]
 			ifNotNil: [:aClassMove | each moveNewClassVersionInSystem: aClassMove ].
 		 ]
-
 ]
