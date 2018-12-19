@@ -102,7 +102,7 @@ RowanQueryService >> projectLog: projectName [
 		(Rowan projectTools log
 		commitLogProjectNamed: projectName
 		limit: self defaultProjectLogSize).
-	self returnQueryToClient.
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'queryResults' }
