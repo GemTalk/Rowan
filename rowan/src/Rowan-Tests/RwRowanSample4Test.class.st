@@ -29,6 +29,14 @@ RwRowanSample4Test >> _rowanSample4LoadSpecificationUrl [
 ]
 
 { #category : 'private' }
+RwRowanSample4Test >> _rowanSample4LoadSpecificationUrl_295 [
+
+	| rowanSpec |
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	^ 'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample4_295.ston'
+]
+
+{ #category : 'private' }
 RwRowanSample4Test >> _rowanSample4SpecificationUrl [
 
 	| rowanSpec |
@@ -1659,7 +1667,9 @@ RwRowanSample4Test >> testIssue284 [
 { #category : 'tests' }
 RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProject [
 
-	"https://github.com/dalehenrich/Rowan/issues/185"
+	"https://github.com/dalehenrich/Rowan/issues/295"
+
+	"Error creating a new class version while moving to a new package in a new project and a new symbol dictionary"
 
 	"issue_295_1 --> issue_295_2	:: rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
 													move new version of NewRowanSample4 to RowanSample4SymbolDict in new project"
@@ -1668,8 +1678,9 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 		baselinePackageNames newClass ar oldClass |
 
 	projectName := 'RowanSample4'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	{ projectName . projectName, '_295'} do: [:pn |
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
@@ -1692,7 +1703,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_0'.				"starting point of test"
 
 	projectTools load
-		loadProjectNamed_254: projectName
+		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	project := RwProject newNamed: projectName.
@@ -1711,7 +1722,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 	self assert: (Rowan globalNamed: 'NewRowanSample4') isNil.
 
 	projectTools load
-		loadProjectNamed_254: projectName
+		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	self
@@ -1727,9 +1738,11 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_2'.				"Rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
 																								move new version of NewRowanSample4 to RowanSample4SymbolDict"
+"trigger the bug on this load"
+	specUrlString := self _rowanSample4LoadSpecificationUrl_295.
 	projectTools load
-		loadProjectNamed_254: projectName
-		instanceMigrator: RwGsInstanceMigrator noMigration.
+		loadProjectFromSpecUrl: specUrlString
+		projectRootPath: repoRootPath.
 
 	oldClass := newClass.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
