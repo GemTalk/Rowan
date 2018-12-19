@@ -144,7 +144,7 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 		move the method into protocol <protocolString> "
 
 	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
-		theBehavior theCompiledMethod |
+		theBehavior theCompiledMethod extensionMethod |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
@@ -165,12 +165,20 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 	theCompiledMethod rowanProjectName = Rowan unpackagedName
 		ifFalse: [ self error: 'The method ', className printString, '>>', methodSelector asString, ' is already packaged ... no need to adopt' ].
 
-	registry
-		addExtensionCompiledMethod: theCompiledMethod 
-		for: theBehavior 
-		protocol: protocolString 
-		toPackageNamed: packageName
-
+	theClass  rowanPackageName ~= packageName
+		ifTrue: [ 
+			registry
+				addExtensionCompiledMethod: theCompiledMethod 
+				for: theBehavior 
+				protocol: protocolString 
+				toPackageNamed: packageName ]
+		ifFalse: [ 
+			registry
+				adoptCompiledMethod: theCompiledMethod 
+				classExtension: false
+				for: theBehavior 
+				protocol: protocolString
+				toPackageNamed: packageName ].
 ]
 
 { #category : 'smalltalk api' }
