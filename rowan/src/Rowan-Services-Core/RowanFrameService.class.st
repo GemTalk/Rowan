@@ -36,12 +36,6 @@ RowanFrameService >> initializeProcess: aGsProcess level: anInteger organizer: a
 ]
 
 { #category : 'other' }
-RowanFrameService >> testMethod [
-
-	^10023614059
-]
-
-{ #category : 'other' }
 RowanFrameService >> varsFor: anArray [
 
 	| keys list receiver values |

@@ -45,11 +45,19 @@ RowanProjectService >> _isSkew [
 	^isSkew
 ]
 
+{ #category : 'comparing' }
+RowanProjectService >> = projectService [
+	^projectService isProjectService ifTrue: [name = projectService name] ifFalse: [^false]
+]
+
 { #category : 'client commands' }
 RowanProjectService >> addPackageNamed: packageName [
 
-	self browserTool addPackageNamed: packageName toProjectNamed: name. 
-	self update.
+	Rowan image loadedPackageNamed: packageName ifAbsent: [
+		self browserTool addPackageNamed: packageName toProjectNamed: name. 
+		self update.
+		^self answer: #added.].
+	self answer: #duplicatePackage
 ]
 
 { #category : 'initialization' }
@@ -153,6 +161,11 @@ RowanProjectService >> defaultProjectName: aString [
 RowanProjectService >> existsOnDisk [
 
 	^existsOnDisk
+]
+
+{ #category : 'comparing' }
+RowanProjectService >> hash [
+	^self name hash
 ]
 
 { #category : 'initialization' }

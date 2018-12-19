@@ -48,6 +48,15 @@ RowanService class >> sampleService [
 
 ]
 
+{ #category : 'other' }
+RowanService >> answer: anObject [
+
+	| answeringService |
+	answeringService := RowanAnsweringService new. 
+	answeringService answer: anObject. 
+	RowanCommandResult addResult: answeringService.
+]
+
 { #category : 'rowan' }
 RowanService >> browserTool [
 
@@ -147,6 +156,30 @@ RowanService >> excludedInstVars [
 
 { #category : 'initialization' }
 RowanService >> initialize [
+]
+
+{ #category : 'testing' }
+RowanService >> isClassService [
+
+	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isMethodService [
+
+	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isPackageService [
+
+	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isProjectService [
+
+	^false
 ]
 
 { #category : 'accessing' }
