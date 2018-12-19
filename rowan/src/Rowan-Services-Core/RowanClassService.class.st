@@ -1,3 +1,8 @@
+"
+Most class operations done here. 
+
+selectedMethods - client side selection. Used after a method compile.
+"
 Class {
 	#name : 'RowanClassService',
 	#superclass : 'RowanService',
@@ -76,8 +81,10 @@ RowanClassService class >> minimalForClassNamed: className [
 
 { #category : 'comparing' }
 RowanClassService >> = classService [
-	(classService isKindOf: RowanClassService) ifFalse:[^false].
-	^name = classService name
+	(classService class canUnderstand: #isClassService) ifFalse:[^false].
+	^classService isClassService
+			ifTrue: [  name asString = classService name asString and: [meta = classService meta]]
+			ifFalse: [^false]
 ]
 
 { #category : 'client commands' }
@@ -92,20 +99,16 @@ RowanClassService >> addCategory: string [
 
 { #category : 'Accessing' }
 RowanClassService >> allTests [
+	| allSelectors theClass |
 	self isTestCase ifFalse:[^Array new]. 
-	name = 'TestCase' ifTrue:[^Array new].
-	^self allTestsWith: Set new
-]
-
-{ #category : 'private' }
-RowanClassService >> allTestsWith: methodServices [
-
-	"assumes that we are in a test class hierarchy"
-	|  superclassService |	
-	methodServices addAll: (methods select:[:service |service selector asString matchPattern: #('test' $*)]). 
-	superclassName = 'TestCase' ifTrue:[^methodServices]. 
-	superclassService := RowanClassService forClassNamed: superclassName.
-	^superclassService allTestsWith: methodServices
+	theClass := self classFromName thisClass.
+	theClass isAbstract ifTrue:[^Array new].
+	allSelectors := self classFromName thisClass allTestSelectors.
+	^allSelectors collect:[:selector | 
+			RowanMethodService forSelector: selector 
+										class: (theClass whichClassIncludesSelector: selector asString)
+										meta: false
+										organizer: organizer].
 ]
 
 { #category : 'testing' }
@@ -346,12 +349,11 @@ RowanClassService >> forClassNamed: className [
 
 { #category : 'comparing' }
 RowanClassService >> hash [
-	^self name hash
+	^self name hash bitXor: meta hash
 ]
 
 { #category : 'private' }
 RowanClassService >> hierarchyClassServiceFor: className [
-
 	^className asString = name asString ifTrue:[
 			className = 'Object' 
 				ifTrue:[
@@ -373,6 +375,8 @@ RowanClassService >> initialize [
 
 	isExtension := false.
 	selectedMethods := Array new.
+	meta := false. "assume most of our work is on the instance side"
+	selectedPackageServices := Array new.
 ]
 
 { #category : 'initialization' }
@@ -382,6 +386,16 @@ RowanClassService >> initializeCategoriesFor: classOrMeta [
 	theFilters := SortedCollection new.
 	classOrMeta env: 0 categorysDo: [:category :selector | theFilters add: category asString].
 	categories := theFilters asOrderedCollection.
+]
+
+{ #category : 'initialization' }
+RowanClassService >> initializeTestMethodsFor: aClass [
+	| testSelectors |
+	(aClass inheritsFrom: TestCase) ifTrue:[
+		aClass isAbstract ifTrue:[^self]. 
+		testSelectors := aClass thisClass suite tests collect:[:method | method selector]. 
+		methods do:[:methodService | 
+			methodService isTestMethod: (testSelectors includes: methodService selector)]].
 ]
 
 { #category : 'initialization' }
@@ -403,6 +417,12 @@ RowanClassService >> instVarNames [
 RowanClassService >> instVarNames: newValue [
 	instVarNames := newValue
 
+]
+
+{ #category : 'testing' }
+RowanClassService >> isClassService [
+
+	^true
 ]
 
 { #category : 'Updating' }
@@ -463,6 +483,13 @@ RowanClassService >> methodsIn: theClass categories: theCategories [
 	theCategories do:[:category |
 		selectors addAll: (theClass selectorsIn: category)]. 
 	^methods select:[:methodService | selectors includes: methodService selector]
+]
+
+{ #category : 'testing' }
+RowanClassService >> methodsNamed: selector [
+	"For testing. Multiple because class could have both instance and class methods"
+
+	^methods select:[:methodService | methodService selector = selector]
 ]
 
 { #category : 'initialization' }
@@ -598,6 +625,12 @@ RowanClassService >> projectIsDirty [
 	^(RowanProjectService new name: behavior rowanProjectName) rowanDirty
 ]
 
+{ #category : 'other' }
+RowanClassService >> projectName [
+
+	^projectName
+]
+
 { #category : 'Updating' }
 RowanClassService >> projectName: newValue [
 	projectName := newValue
@@ -626,6 +659,7 @@ RowanClassService >> refreshMethodsFor: classOrMeta [
 				service ifNotNil:[
 					service accessedInstVars add: instVar asString]
 	]].
+	self initializeTestMethodsFor: classOrMeta thisClass. 
 	self setVisibleTests. "methods must be available"
 ]
 
@@ -690,12 +724,14 @@ RowanClassService >> rowanProjectName [
 { #category : 'client commands' }
 RowanClassService >> runClassTests: classService [
 
+	"if it errors, the client will handle the error. 
+	If it passes, we return true and the client
+	will display decent results." 
 	| behavior |
 	behavior := classService classFromName. 
 	self refreshFrom: behavior.
-	methods do:[:methodService |
-		('test*' match: methodService selector) ifTrue:[ 
-			behavior debug: methodService selector]]. 
+	self tests do:[:methodService |
+			behavior debug: methodService selector]. 
 	RowanCommandResult addResult: (RowanAnsweringService new answer: true).
 ]
 
@@ -734,8 +770,17 @@ RowanClassService >> saveMethodSource: source category: category [
 	self update.  
 	methodService := self methodServiceFrom: gsNMethod in: behavior compiltationResult: compilationResult.
 	RowanCommandResult addResult: methodService.
+	RowanQueryService new 
+			organizer: ClassOrganizer new;
+			hierarchyImplementorsOf: methodService selector inClass: methodService className. "this will update hierarchy method indicators for client"
 	self selectedMethods: (Array with: methodService).
 	self updateDirtyState.
+]
+
+{ #category : 'other' }
+RowanClassService >> selectedMethods [
+	"client side selection. Used after a method compile" 
+	^selectedMethods
 ]
 
 { #category : 'Updating' }
@@ -822,7 +867,7 @@ RowanClassService >> subclassServices: subclasses [
 
 	sortedSubclasses := SortedCollection sortBlock: [:x :y | x name < y name]. 
 	sortedSubclasses addAll: subclasses. 
-	^(sortedSubclasses collect:[:cls | self hierarchyClassServiceFor: cls name]) asArray.
+	^(sortedSubclasses collect:[:cls | (self hierarchyClassServiceFor: cls name) meta: meta]) asArray.
 ]
 
 { #category : 'Accessing' }
@@ -859,6 +904,12 @@ RowanClassService >> template [
 RowanClassService >> template: newValue [
 	template := newValue
 
+]
+
+{ #category : 'private' }
+RowanClassService >> tests [
+
+	^methods select:[:methodService | methodService selector asString matchPattern: #('test' $*)]
 ]
 
 { #category : 'updates' }

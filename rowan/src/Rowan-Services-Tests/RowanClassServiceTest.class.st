@@ -13,11 +13,24 @@ RowanClassServiceTest >> createClassNamed: className [
 ]
 
 { #category : 'support' }
+RowanClassServiceTest >> loadRowanSample1 [
+
+	RowanProjectService new newGitProject: 'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston' root: '$ROWAN_PROJECTS_HOME' useSsh: true. 
+	Rowan projectTools load loadProjectNamed: 'RowanSample1'.
+]
+
+{ #category : 'support' }
+RowanClassServiceTest >> servicesClassInstance [
+
+	^self servicesDefaultClassName evaluate perform: #new
+]
+
+{ #category : 'support' }
 RowanClassServiceTest >> setUp [
 
 	super setUp.
-	self createDefaultClass. 
-	self loadDefaultProject.
+	self createServicesTestClass. 
+	self loadServicesTestProject.
 ]
 
 { #category : 'support' }
@@ -76,20 +89,195 @@ RowanClassServiceTest >> test_classWasDeleted [
 	self assert: classService wasDeleted.
 ]
 
-{ #category : 'tests' }
-RowanClassServiceTest >> test_isTestCase [
+{ #category : 'test method compilation' }
+RowanClassServiceTest >> test_compileClassInitializer [
+	"if you compile a class side method #initialize, the error 
+	RwExecuteClassInitializeMethodsAfterLoadNotification is signaled. 
+	Ensure that #saveMethodSource:category: doesn't handle it as
+	it should be handled in compileMethod:behavior:symbolList:inCategory:"
+	| classService errorHit methodService selector |
+	self jadeiteIssueTested: #issue356 withTitle: 'Add method compilation tests in server services tests'.
+	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
+	selector := #initialize. 
+	classService meta: true. 
+	errorHit := false. 
+	[classService saveMethodSource: selector asString , ' ^$a' category: 'test initialize'] on: 
+		RwExecuteClassInitializeMethodsAfterLoadNotification do:[:ex | errorHit := true.  ex resume: false. ].
+	[self deny: errorHit. 
+	methodService := classService methodsNamed: selector.
+	self assert: methodService size equals: 1. 
+	self assert: methodService first selector equals: selector.
+	self assert: methodService first meta equals: true.
+	self assert: (self servicesDefaultClassName evaluate perform: selector) equals: $a]
+		ensure: [
+			classService removeSelector: selector ifAbsent: [].
+			self deny: ((self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false))]
+]
 
-	| classService |
-	self jadeiteIssueTested: #issue253 withTitle: 'popup method menu in method list is slow for JadeServer methods'. 
-	classService := RowanClassService forClassNamed: self class.
-	self assert: classService isTestCase.
-	classService isTestCase: false. 
-	self deny: classService isTestCase. 
-	classService setIsTestCaseCommand. 
-	self assert: classService isTestCase.
+{ #category : 'test method compilation' }
+RowanClassServiceTest >> test_compileMethodNoCategory [
+	"defaults to 'other'"
+	| classService methodService selector |
+	self jadeiteIssueTested: #issue356 withTitle: 'Add method compilation tests in server services tests'.
+	selector := #fnoodle. 
+	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
+	self deny: (self servicesDefaultClassName evaluate categoryNames includes: 'other'). 
+	classService saveMethodSource: selector asString, ' ^$a' category: nil.
+	[methodService := classService methodsNamed: selector.
+	self assert: methodService size equals: 1. 
+	self assert: methodService first meta equals: false.
+	self assert: methodService first category equals: 'other'. 
+	self assert: (self servicesDefaultClassName evaluate categoryNames includes: #'other'). 
+	self assert: (self servicesClassInstance perform: selector) equals: $a]
+		ensure: [
+			classService removeSelector: selector ifAbsent: [].
+			self deny: ((self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false))]
+]
 
-	classService := RowanClassService forClassNamed: 'JadeServer'.
-	self deny: classService isTestCase.
+{ #category : 'test method compilation' }
+RowanClassServiceTest >> test_dirtyState [
+	| classService methodService selector |
+	self jadeiteIssueTested: #issue356 withTitle: 'Add method compilation tests in server services tests'.
+	selector := #simpleMethod. 
+	self loadRowanSample1. "ensure we're in a clean state"
+	self deny: (RowanProjectService newNamed:  'RowanSample1') isDirty.
+	self deny: (RowanPackageService forPackageNamed: 'RowanSample1-Core') isDirty.
+	classService := RowanClassService forClassNamed: 'RowanSample1'.
+	classService saveMethodSource: selector asString,  ' ^123' category: 'abc'.
+	
+	methodService := classService methodsNamed: selector.
+	[self assert: (RowanProjectService newNamed: 'RowanSample1') isDirty.
+	self assert: (RowanPackageService new name: 'RowanSample1-Core') isDirty.]
+			ensure: [
+				Rowan projectTools delete deleteProjectNamed: 'RowanSample1'.]
+]
+
+{ #category : 'test method compilation' }
+RowanClassServiceTest >> test_selectedMethod [
+	| classService methodService selector |
+	self jadeiteIssueTested: #issue356 withTitle: 'Add method compilation tests in server services tests'.
+	selector := #simpleMethod. 
+	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
+	self deny: classService meta. 
+	self deny: (self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false).
+	classService saveMethodSource: selector asString,  ' ^123' category: 'abc'.
+	
+	methodService := classService methodsNamed: selector.
+	[self assert: classService selectedMethods size equals: 1.
+	self assert: classService selectedMethods first selector equals: selector]
+		ensure: [
+			classService removeSelector: selector ifAbsent: [].
+			self deny: ((self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false))]
+]
+
+{ #category : 'test method compilation' }
+RowanClassServiceTest >> test_setSuperSubIndicators [
+	| classService superclassMethodService subclassMethodService selector subclassService |
+	selector := #indicatorTesting. 
+	self loadRowanSample1.
+	[classService := RowanClassService forClassNamed: 'RowanSample1'.
+	classService saveMethodSource: selector asString,  ' ^#deleteThisMethod' category: 'abc'.
+	superclassMethodService := (classService methodsNamed: selector) first.
+	self deny: superclassMethodService hasSupers.
+	self deny: superclassMethodService hasSubs.
+	subclassService := RowanClassService forClassNamed: 'RowanSubClass'.
+	subclassService saveMethodSource: selector asString,  ' ^#subclassMethod' category: 'abc'.
+	subclassMethodService := RowanCommandResult results 
+			detect:[:service | service isMethodService
+				and:[service selector = selector and:[service className = #RowanSubClass]]]. "an updated subclass method should be heading back to the client" 
+	superclassMethodService := RowanCommandResult results 
+			detect:[:service | service isMethodService
+				and:[service selector = selector and:[service className = #RowanSample1]]]. "an updated superclass method should be heading back to the client" 
+	self assert: superclassMethodService hasSubs.  
+	self deny: superclassMethodService hasSupers.
+	self assert: subclassMethodService hasSupers.
+	self deny: subclassMethodService hasSubs.
+	]
+			ensure: [
+				Rowan projectTools delete deleteProjectNamed: 'RowanSample1'.]
+]
+
+{ #category : 'test method compilation' }
+RowanClassServiceTest >> test_simpleCompile [
+	| classService methodService selector |
+	self jadeiteIssueTested: #issue356 withTitle: 'Add method compilation tests in server services tests'.
+	selector := #simpleMethod. 
+	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
+	self deny: classService meta. 
+	self deny: (self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false).
+	classService saveMethodSource: selector asString,  ' ^123' category: 'abc'.
+	
+	methodService := classService methodsNamed: selector.
+	[self assert: methodService size equals: 1. 
+	self assert: methodService first selector equals: selector.
+	self assert: methodService first meta equals: false.
+	self assert: methodService first category equals: 'abc'.
+	self assert: (self servicesClassInstance perform: selector) equals: 123.
+	self assert: ((self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: nil) isKindOf: GsNMethod)]
+		ensure: [
+			classService removeSelector: selector ifAbsent: [].
+			self deny: ((self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false))]
+]
+
+{ #category : 'test method compilation' }
+RowanClassServiceTest >> test_simpleCompileClassSide [
+	| classService methodService selector |
+	self jadeiteIssueTested: #issue356 withTitle: 'Add method compilation tests in server services tests'.
+	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
+	selector := #simpleMethod.
+	classService meta: true. 
+	self assert: classService meta. 
+	self deny: (((self servicesDefaultClassName evaluate perform: #class)  compiledMethodAt: selector otherwise: false)).
+	classService saveMethodSource: selector asString,  ' ^123' category: 'abc'.
+	[methodService := classService methodsNamed: selector.
+	self assert: methodService size equals: 1. 
+	self assert: methodService first selector equals: selector.
+	self assert: methodService first meta equals: true.
+	self assert: methodService first category equals: 'abc'.
+	self assert: (self servicesDefaultClassName evaluate perform: selector) equals: 123.
+	((self servicesDefaultClassName evaluate perform: #class)compiledMethodAt: selector) isKindOf: GsNMethod]
+		ensure: [
+			classService removeSelector: selector ifAbsent: [].
+			self deny: (((self servicesDefaultClassName evaluate perform: #class)  compiledMethodAt: selector otherwise: false)).]
+]
+
+{ #category : 'test method compilation' }
+RowanClassServiceTest >> test_simpleCompileOnClassWithoutMetaSet [
+	| classService  methodService selector |
+	self jadeiteIssueTested: #issue356 withTitle: 'Add method compilation tests in server services tests'.
+	selector := #noMeta. 
+	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
+	classService meta: nil.  "possible for meta not to be set but it should have an oop from which to determine" 
+	classService oop: (self servicesDefaultClassName, ' class') evaluate asOop. 
+	self deny: (((self servicesDefaultClassName evaluate perform: #class)  compiledMethodAt: selector otherwise: false)).
+	classService saveMethodSource: selector asString,  ' ^true' category: 'testing'.
+	[methodService := classService methodsNamed: selector.
+	self assert: methodService size equals: 1. 
+	self assert: methodService first selector equals: selector.
+	self assert: methodService first meta equals: true. "we created a class method"
+	self assert: methodService first category equals: 'testing'.
+	self assert: (self servicesDefaultClassName evaluate perform: selector)]
+		ensure: [
+			classService removeSelector: selector ifAbsent: [].
+			self deny: (((self servicesDefaultClassName evaluate perform: #class)  compiledMethodAt: selector otherwise: false)).]
+]
+
+{ #category : 'test method compilation' }
+RowanClassServiceTest >> test_simpleCompileWithoutMetaSet [
+	| classService methodService selector |
+	self jadeiteIssueTested: #issue356 withTitle: 'Add method compilation tests in server services tests'.
+	selector := #noMeta. 
+	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
+	classService meta: nil.  "possible for meta not to be set but it should have an oop from which to determine" 
+	classService oop: self servicesDefaultClassName evaluate asOop. 
+	self deny: (self servicesDefaultClassName evaluate compiledMethodAt: selector otherwise: false).
+	classService saveMethodSource: selector asString,  ' ^true' category: 'testing'.
+	methodService := classService methodsNamed: selector.
+	self assert: methodService size equals: 1. 
+	self assert: methodService first selector equals: selector.
+	self assert: methodService first meta equals: false. "we created an instance method"
+	self assert: methodService first category equals: 'testing'.
+	self assert: (self servicesClassInstance perform: selector).
 ]
 
 { #category : 'tests' }

@@ -54,7 +54,7 @@ RowanCommandResult class >> updateClientBoundServices: clientBoundService [
 	are not canonical, we need to do some housekeeping
 	to ensure that we don't already have this service 
 	somewhere in other client-bound services"
-
+	
 	(self results includes: clientBoundService) ifTrue:[
 		self removeResult: clientBoundService. 
 		self addResult: clientBoundService. 
@@ -80,6 +80,12 @@ RowanCommandResult >> commandArgs: anObject [
 { #category : 'initialization' }
 RowanCommandResult >> initialize [
 
+]
+
+{ #category : 'testing' }
+RowanCommandResult >> isMethodService [
+
+	^false
 ]
 
 { #category : 'private' }

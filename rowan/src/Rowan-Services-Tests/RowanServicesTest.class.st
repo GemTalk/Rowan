@@ -28,32 +28,6 @@ RowanServicesTest >> createClassDefinitionNamed: className [
 ]
 
 { #category : 'support' }
-RowanServicesTest >> createDefaultClass [
-
-	| packageDefinition classDefinition |
-	packageDefinition := self createDefaultPackage.
-	classDefinition := self createClassDefinitionNamed: self servicesDefaultClassName. 
-	packageDefinition addClassDefinition: classDefinition. 
-	^classDefinition
-]
-
-{ #category : 'support' }
-RowanServicesTest >> createDefaultPackage [
-
-	| projectDefinition |
-	projectDefinition := self createDefaultProject. 
-	projectDefinition addPackageNamed: self servicesTestPackageName.
-	^projectDefinition packageNamed: self servicesTestPackageName
-]
-
-{ #category : 'support' }
-RowanServicesTest >> createDefaultProject [
-
-	defaultProjectDefinition := self createProjectDefinitionNamed: self servicesTestProjectName.
-	^defaultProjectDefinition
-]
-
-{ #category : 'support' }
 RowanServicesTest >> createJadeiteTestPackage [
 	| proj pkg |
 	proj := self createJadeiteTestProject. 
@@ -85,9 +59,29 @@ RowanServicesTest >> createProjectDefinitionNamed: projectName [
 ]
 
 { #category : 'support' }
-RowanServicesTest >> defaultProjectDefinition [
+RowanServicesTest >> createServicesTestClass [
 
-	^defaultProjectDefinition ifNil:[defaultProjectDefinition := self createDefaultProject]
+	| packageDefinition classDefinition |
+	packageDefinition := self createServicesTestPackage.
+	classDefinition := self createClassDefinitionNamed: self servicesDefaultClassName. 
+	packageDefinition addClassDefinition: classDefinition. 
+	^classDefinition
+]
+
+{ #category : 'support' }
+RowanServicesTest >> createServicesTestPackage [
+
+	| projectDefinition |
+	projectDefinition := self createServicesTestProject. 
+	projectDefinition addPackageNamed: self servicesTestPackageName.
+	^projectDefinition packageNamed: self servicesTestPackageName
+]
+
+{ #category : 'support' }
+RowanServicesTest >> createServicesTestProject [
+
+	defaultProjectDefinition := self createProjectDefinitionNamed: self servicesTestProjectName.
+	^defaultProjectDefinition
 ]
 
 { #category : 'support' }
@@ -107,12 +101,12 @@ RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 ]
 
 { #category : 'support' }
-RowanServicesTest >> loadDefaultProject [
+RowanServicesTest >> loadServicesTestProject [
 	
 	| projectSetDefinition |
 
 	projectSetDefinition:= RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: self defaultProjectDefinition.
+	projectSetDefinition addDefinition: self servicesTestProjectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 ]
 
@@ -126,6 +120,12 @@ RowanServicesTest >> servicesDefaultClassName [
 RowanServicesTest >> servicesTestPackageName [
 
 	^'RowanServicesTestPackage'
+]
+
+{ #category : 'support' }
+RowanServicesTest >> servicesTestProjectDefinition [
+
+	^defaultProjectDefinition ifNil:[defaultProjectDefinition := self createServicesTestProject]
 ]
 
 { #category : 'constants' }
