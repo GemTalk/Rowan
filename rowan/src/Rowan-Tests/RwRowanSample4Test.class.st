@@ -7,8 +7,7 @@ Class {
 { #category : 'private' }
 RwRowanSample4Test class >> _symbolDictionaryNames [
 
-	^ 	super _symbolDictionaryNames, #(#'RowanSample4SymbolDict' #'RowanSample4DictionarySymbolDict')
-
+	^ 	super _symbolDictionaryNames, #( #'RowanSample4SymbolDict' #'RowanSample4DictionarySymbolDict' #'RowanSample4DictionarySymbolDict_295')
 ]
 
 { #category : 'private' }
