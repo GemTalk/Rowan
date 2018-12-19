@@ -1213,12 +1213,10 @@ JadeServer >> currentUserMayEditMethod: aMethod [
 
 { #category : 'category' }
 JadeServer >> debugString: aString fromContext: anObject environment: anInteger [
-
 	anInteger == 0 ifFalse: [self error: 'Only environment 0 is supported in this version!'].
-	^'nil halt. ' , aString
+	^(RowanDebuggerService new debugStringFrom: aString)
 		evaluateInContext: anObject 
-		symbolList: GsSession currentSession symbolList. 
-
+		symbolList: GsSession currentSession symbolList.
 ]
 
 { #category : 'category' }
