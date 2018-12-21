@@ -66,6 +66,17 @@ RowanQueryServicesTest >> test_implementors [
 ]
 
 { #category : 'tests' }
+RowanQueryServicesTest >> test_projectLog [
+
+	| queryService result |
+	queryService := RowanQueryService new.
+	queryService projectLog: 'Rowan'. 
+	result := RowanCommandResult results first. 
+	self assert: (result isKindOf: RowanQueryService). 
+	self assert: (result queryResults isKindOf: String)
+]
+
+{ #category : 'tests' }
 RowanQueryServicesTest >> test_senders [
 
 	| queryService hierarchyClassNames |
