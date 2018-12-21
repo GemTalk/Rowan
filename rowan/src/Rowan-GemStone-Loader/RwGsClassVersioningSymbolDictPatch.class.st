@@ -223,10 +223,10 @@ x := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: 
 		rowanSymbolDictionaryRegistry.
 y := self symbolDictionaryRegistryFor: aClassMove packageAfter name.
 
-z := y. "don't use bugfix"
-false
+true
 ifTrue: [ "use bugfix" z := x ]
-ifFalse:  ["expose the bug" (false or: [ x ~~ y]) ifTrue: [ z := y ] ].
+ifFalse:  [ "don't use bugfix" z := y. ].
+
 		z addNewClassVersionToAssociation: newClassVersion 
 				implementationClass: RwGsSymbolDictionaryRegistry_Implementation
 ]
