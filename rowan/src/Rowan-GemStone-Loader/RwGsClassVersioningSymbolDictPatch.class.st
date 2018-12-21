@@ -218,9 +218,17 @@ RwGsClassVersioningSymbolDictPatch >> moveNewClassVersionInSystem: aClassMove [
 	"Move the class association for the class.
 	 Update the LoadedClass with properties for the new classversion."
 
-	(self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
-		rowanSymbolDictionaryRegistry
-			addNewClassVersionToAssociation: newClassVersion 
+| x y z |
+x := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
+		rowanSymbolDictionaryRegistry.
+y := self symbolDictionaryRegistryFor: aClassMove packageAfter name.
+
+z := x.
+true
+ifTrue: [ "use bugfix" z := x ]
+ifFalse:  ["expose the bug" (false or: [ x ~~ y]) ifTrue: [ z := y ] ].
+
+		z addNewClassVersionToAssociation: newClassVersion 
 				implementationClass: RwGsSymbolDictionaryRegistry_Implementation
 ]
 

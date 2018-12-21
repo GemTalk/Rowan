@@ -7,7 +7,9 @@ Class {
 { #category : 'private' }
 RwRowanSample4Test class >> _symbolDictionaryNames [
 
-	^ 	super _symbolDictionaryNames, #( #'RowanSample4SymbolDict' #'RowanSample4DictionarySymbolDict' #'RowanSample4DictionarySymbolDict_295')
+	^ 	super _symbolDictionaryNames, 
+			#( #'RowanSample4SymbolDict' #'RowanSample4DictionarySymbolDict' #'RowanSample4DictionarySymbolDict_295'
+					#'RowanSample4DictionarySymbolDict_295_3')
 ]
 
 { #category : 'private' }
@@ -1769,7 +1771,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 													move new version of NewRowanSample4 to RowanSample4SymbolDict in new project"
 
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath 
-		baselinePackageNames newClass ar oldClass |
+		baselinePackageNames newClass ar oldClass projectDefinition projectSetDefinition oldProjectDefinition |
 
 	projectName := 'RowanSample4'.
 	{ projectName . projectName, '_295'} do: [:pn |
@@ -1834,9 +1836,23 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 																								move new version of NewRowanSample4 to RowanSample4SymbolDict"
 "trigger the bug on this load"
 	specUrlString := self _rowanSample4LoadSpecificationUrl_295.
-	projectTools load
-		loadProjectFromSpecUrl: specUrlString
-		projectRootPath: repoRootPath.
+
+"need to add old project definition with all classes and extensions removed to the projectSet Definition to reproduce bug"
+	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
+	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
+
+oldProjectDefinition := (Rowan image loadedProjectNamed: 'RowanSample4') asDefinition.
+projectSetDefinition addProject: oldProjectDefinition.
+
+	oldProjectDefinition packages values do: [:pkgDefinition |
+	    pkgDefinition classDefinitions values do: [:classDefinition |
+	        pkgDefinition removeClassDefinition: classDefinition ].
+	    pkgDefinition classExtensions values do: [:classExtension |
+        	pkgDefinition removeClassExtension: classExtension ]].
+
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+	Rowan projectTools load markProjectSetNotDirty: projectSetDefinition.
+
 
 	oldClass := newClass.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.
@@ -1845,7 +1861,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 	self assert: newClass new foo = 'foo'.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
-	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295'.
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
 
 	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
 ]
