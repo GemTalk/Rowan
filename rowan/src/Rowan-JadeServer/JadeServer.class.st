@@ -1213,12 +1213,10 @@ JadeServer >> currentUserMayEditMethod: aMethod [
 
 { #category : 'category' }
 JadeServer >> debugString: aString fromContext: anObject environment: anInteger [
-
 	anInteger == 0 ifFalse: [self error: 'Only environment 0 is supported in this version!'].
-	^'nil halt. ' , aString
+	^(RowanDebuggerService new debugStringFrom: aString)
 		evaluateInContext: anObject 
-		symbolList: GsSession currentSession symbolList. 
-
+		symbolList: GsSession currentSession symbolList.
 ]
 
 { #category : 'category' }
@@ -2912,8 +2910,6 @@ JadeServer >> printStringOf: anObject to: anInteger [
 	(string := self printStringOf: anObject) size > anInteger ifTrue: [string := (string copyFrom: 1 to: anInteger) , '...'].
 	string := String withAll: (string collect: [:each | (32 <= each asciiValue and: [each asciiValue <= 255]) ifTrue: [each] ifFalse: [$?]]).
 	^string.
-
-
 ]
 
 { #category : 'category' }

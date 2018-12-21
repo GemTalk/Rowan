@@ -2,7 +2,9 @@
 A place to put miscellaneous commands that don't fit 
 well in other services. 
 
-Also good asking the server questions.
+Also good asking the server questions as it gives back 
+an answer whereas other services simply return updated
+services.
 "
 Class {
 	#name : 'RowanAnsweringService',
@@ -84,8 +86,6 @@ RowanAnsweringService >> selectorsMatchingPattern: pattern [
 	answer := ((AllUsers userWithId: #SymbolUser) resolveSymbol: #AllSymbols) value.
 	answer := answer select: [:each |each _matchPatternNoCase: pattern].
 	answer := answer asSortedCollection asArray.
-	command := nil. 
-	commandArgs := nil. 
 	RowanCommandResult addResult: self.
 ]
 

@@ -25,7 +25,8 @@ Class {
 		'accessedInstVars',
 		'breakPoints',
 		'testResult',
-		'definedPackage'
+		'definedPackage',
+		'isTestMethod'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -33,10 +34,9 @@ Class {
 { #category : 'instance creation' }
 RowanMethodService class >> forGsNMethod: aGsNMethod organizer: aClassOrganizer [
 
-	^self basicNew
+	^self new
 		initialize: aGsNMethod organizer: aClassOrganizer;
 		yourself
-
 ]
 
 { #category : 'instance creation' }
@@ -65,6 +65,14 @@ RowanMethodService class >> source: source selector: selector category: category
 		packageName: packageName;
 		meta: boolString == true.
 	^service
+]
+
+{ #category : 'comparing' }
+RowanMethodService >> = methodService [
+	(methodService class canUnderstand: #isMethodService) ifFalse:[^false].
+	methodService isMethodService ifFalse:[^false].
+	^selector = methodService selector
+		and: [className asString = methodService className asString and: [meta = methodService meta]]
 ]
 
 { #category : 'Accessing' }
@@ -221,7 +229,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	className := theClass name. 
 	packageName := gsNMethod rowanPackageName. 
 	projectName := gsNMethod rowanProjectName.
-	self setSupersAndSubsFor: theClass.
+	self setSupersAndSubsFor: classOrMeta.
 	isExtension := self rowanIsExtension.
 ]
 
@@ -229,6 +237,11 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 RowanMethodService >> gsNMethod [
 
 	^[self classOrMeta compiledMethodAt: selector ] on: Error do:[:ex | nil "removed method"]
+]
+
+{ #category : 'comparing' }
+RowanMethodService >> hash [
+	^(selector hash bitXor: className hash) bitXor: meta hash
 ]
 
 { #category : 'Accessing' }
@@ -266,6 +279,7 @@ RowanMethodService >> initialize [
 	hasSupers := false. 
 	hasSubs := false.
 	accessedInstVars := Array new.
+	isTestMethod := false.
 ]
 
 { #category : 'initialization' }
@@ -290,6 +304,24 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	self 
 		forClass: inClass thisClass 
 		organizer: aClassOrganizer.
+]
+
+{ #category : 'testing' }
+RowanMethodService >> isMethodService [
+
+	^true
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> isTestMethod [
+
+	^isTestMethod
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> isTestMethod: boolean [
+
+	isTestMethod := boolean
 ]
 
 { #category : 'Accessing' }
@@ -340,6 +372,17 @@ RowanMethodService >> packageName [
 RowanMethodService >> packageName: newValue [
 	packageName := newValue
 
+]
+
+{ #category : 'printing' }
+RowanMethodService >> printOn: aStream [
+
+	super printOn: aStream. 
+	aStream nextPut: $(;
+				nextPutAll: className; 
+				nextPutAll: '>>'; 
+				nextPutAll: selector;
+				nextPut: $)
 ]
 
 { #category : 'rowan' }
@@ -417,8 +460,11 @@ RowanMethodService >> setSupersAndSubsFor: theClass [
 			superSource := theSuper sourceCodeAt: selector.
 			superDisplayString := theSuper name, '>>', selector].
 		theSuper := theSuper superClass].
-	(organizer allSubclassesOf: theClass) do:[:cls |
-		(hasSubs := cls includesSelector: selector) ifTrue:[^self]].
+	(organizer allSubclassesOf: theClass thisClass) do:[:cls |
+		| aClass |
+		aClass := theClass isMeta ifTrue:[cls class] ifFalse:[cls]. 
+		(hasSubs := aClass includesSelector: selector) ifTrue:[
+		^self]].
 ]
 
 { #category : 'Accessing' }
@@ -468,6 +514,6 @@ RowanMethodService >> update [
 
 { #category : 'testing' }
 RowanMethodService >> wasDeleted [
-
+	selector isNil ifTrue:[^false].
 	^self gsNMethod isNil
 ]

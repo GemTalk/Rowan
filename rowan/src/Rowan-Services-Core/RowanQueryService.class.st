@@ -13,7 +13,7 @@ RowanQueryService >> browseClassReferences: className [
 	| methods |
 	methods := organizer referencesTo: className asSymbol.
 	queryResults := self methodServicesFrom: methods first.
-	RowanCommandResult addResult: self.
+	self returnQueryToClient.
 ]
 
 { #category : 'private' }
@@ -32,7 +32,7 @@ RowanQueryService >> hierarchyImplementorsOf: selector inClass: className [
 	classes addAll: (organizer allSubclassesOf: behavior). 
 	methods := organizer implementorsOf: selector in: classes.
 	queryResults := self methodServicesFrom: methods.
-	RowanCommandResult addResult: self.
+	self returnQueryToClient.
 ]
 
 { #category : 'queries' }
@@ -45,7 +45,7 @@ RowanQueryService >> hierarchySendersOf: selector inClass: className [
 	classes addAll: (organizer allSubclassesOf: behavior). 
 	methods := organizer sendersOf: selector in: classes.
 	queryResults := self methodServicesFrom: methods first.
-	RowanCommandResult addResult: self.
+	self returnQueryToClient.
 ]
 
 { #category : 'queries' }
@@ -54,8 +54,7 @@ RowanQueryService >> implementorsOf: selector [
 	| methods |
 	methods := organizer implementorsOf: selector asSymbol.
 	queryResults := self methodServicesFrom: methods.
-	RowanCommandResult addResult: self.
-
+	self returnQueryToClient.
 ]
 
 { #category : 'queries' }
@@ -64,7 +63,7 @@ RowanQueryService >> literalReferences: symbol [
 	| methods |
 	methods := organizer referencesToLiteral: symbol.
 	queryResults := self methodServicesFrom: methods first.
-	RowanCommandResult addResult: self.
+	self returnQueryToClient.
 ]
 
 { #category : 'queries' }
@@ -73,8 +72,7 @@ RowanQueryService >> methodsContaining: string [
 	| methods |
 	methods := organizer substringSearch: string.
 	queryResults := self methodServicesFrom: methods first.
-	RowanCommandResult addResult: self.
-
+	self returnQueryToClient.
 ]
 
 { #category : 'queries' }
@@ -94,7 +92,7 @@ RowanQueryService >> projectBranches: projectName [
 	| project  |
 	project := (RwProject newNamed: projectName). 
 	queryResults := Rowan gitTools gitbranchIn: project repositoryRootPath with: ''.
-	RowanCommandResult addResult: self.
+	self returnQueryToClient.
 ]
 
 { #category : 'queries' }
@@ -115,13 +113,21 @@ RowanQueryService >> queryResults [
 	^queryResults
 ]
 
+{ #category : 'private' }
+RowanQueryService >> returnQueryToClient [
+
+	queryResults do:[:service |
+		RowanCommandResult addResult: service].
+	RowanCommandResult addResult: self.
+]
+
 { #category : 'queries' }
 RowanQueryService >> sendersOf: selector [
 
 	| methods |
 	methods := organizer sendersOf: selector asSymbol.
 	queryResults := self methodServicesFrom: methods first.
-	RowanCommandResult addResult: self.
+	self returnQueryToClient.
 ]
 
 { #category : 'ston' }
@@ -136,4 +142,19 @@ RowanQueryService >> stonOn: stonWriter [
 					(self instVarAt: (self class allInstVarNames indexOf: each asSymbol))
 						ifNotNil: [:value | dictionary at: each asSymbol put: value]
 						ifNil: [self stonShouldWriteNilInstVars ifTrue: [dictionary at: each asSymbol put: nil]]]]
+]
+
+{ #category : 'update' }
+RowanQueryService >> updateInternalService: updatedService [
+
+	"when sending services back to the client,
+	verify any services held by this object are 
+	updated. Services know what internal services
+	they contain." 
+	1 to: queryResults size do:[:index |
+		| service |
+		service := queryResults at: index. 
+		service = updatedService ifTrue:[ 
+			queryResults at: index put: updatedService
+		]].
 ]

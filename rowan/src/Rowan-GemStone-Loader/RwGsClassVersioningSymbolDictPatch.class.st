@@ -218,10 +218,12 @@ RwGsClassVersioningSymbolDictPatch >> moveNewClassVersionInSystem: aClassMove [
 	"Move the class association for the class.
 	 Update the LoadedClass with properties for the new classversion."
 
-	(self symbolDictionaryRegistryFor: aClassMove packageAfter name)
-		addNewClassVersionToAssociation: newClassVersion 
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+	| theRegistry |
+	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
+		rowanSymbolDictionaryRegistry.
 
+	theRegistry addNewClassVersionToAssociation: newClassVersion 
+			implementationClass: RwGsSymbolDictionaryRegistry_Implementation
 ]
 
 { #category : 'versioning' }

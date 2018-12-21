@@ -384,13 +384,15 @@ RowanPackageService >> testClasses [
 
 	testClasses := Set new. 
 	TestCase allSubclasses do:[:testSubclass |
-		testSubclass selectors do:[:selector |
-			| packageName |
-			(selector size >= 4 and:[
-			(selector copyFrom: 1 to: 4) asString = 'test']) ifTrue:[
-				packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
-				packageName = name ifTrue:[
-					testClasses add: (RowanClassService basicForClassNamed: testSubclass name)]]]]. 
+		testSubclass isAbstract ifFalse:[
+			testSubclass suite tests do:[:testClassInstance |
+				| implementingClass |
+				implementingClass := testClassInstance class whichClassIncludesSelector: testClassInstance selector. 
+				(implementingClass compiledMethodAt: testClassInstance selector) rowanPackageName = name ifTrue:[
+					| classService |
+					classService := RowanClassService basicForClassNamed: testSubclass name.
+					testClasses detect:[:testClassService | testClassService name = classService name] ifNone:[
+						testClasses add: classService]]]]]. 
 	updateType := #testClasses:. 
 	testClasses := testClasses asArray. 
 	RowanCommandResult addResult: self.

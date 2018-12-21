@@ -651,7 +651,6 @@ RwGsPatchSet_254 >> addPatchedClassNewVersion: aClassModification inPackage: aPa
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
-
 ]
 
 { #category : 'building' }
@@ -1382,5 +1381,4 @@ RwGsPatchSet_254 >> updateSymbolAssociations [
 			ifNil: [ each installNewClassVersionInSystem ]
 			ifNotNil: [:aClassMove | each moveNewClassVersionInSystem: aClassMove ].
 		 ]
-
 ]
