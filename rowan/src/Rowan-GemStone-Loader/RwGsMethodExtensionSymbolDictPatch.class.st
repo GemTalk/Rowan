@@ -34,7 +34,8 @@ RwGsMethodExtensionSymbolDictPatch >> installMovedMethod: aMethodMove newClassVe
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
 	| oldClassVersion oldBehavior theRegistry |
-	theRegistry := self symbolDictionaryRegistryFor: aMethodMove packageAfter name. 
+	theRegistry := (self symbolDictionaryFor: aMethodMove packageAfter name projectDefinition: aMethodMove projectAfter)
+		rowanSymbolDictionaryRegistry.
 	oldClassVersion := newClassVersionPatch oldClassVersion.
 	oldClassVersion ~~ newClassVersionPatch newClassVersion
 		ifTrue: [ 
@@ -54,12 +55,11 @@ RwGsMethodExtensionSymbolDictPatch >> installMovedMethod: aMethodMove newClassVe
 										'Internal error -- no existing LoadedMethod found for deleted method.' ]
 							ifNotNil: [ :oldLoadedMethod | theRegistry methodRegistry removeKey: oldCompiledMethod ] ] ].
 
-	(self symbolDictionaryRegistryFor: aMethodMove packageAfter name)
+	theRegistry
 		addExtensionCompiledMethod: compiledMethod
 		for: behavior
 		protocol: self propertiesProtocolName
 		toPackageNamed: aMethodMove packageAfter name
 		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 	selector := compiledMethod selector
-
 ]

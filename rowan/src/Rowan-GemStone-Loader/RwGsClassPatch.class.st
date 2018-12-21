@@ -167,8 +167,10 @@ RwGsClassPatch >> createClassFor: aPatchSet [
 { #category : 'patching moved classes' }
 RwGsClassPatch >> installPropertiesPatchFor: aPatchSet classMove: aClassMove [
 
-	self installPropertiesPatchFor: aPatchSet registry: (self symbolDictionaryRegistryFor: aClassMove packageAfter name)
-
+	| theRegistry |
+	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
+		rowanSymbolDictionaryRegistry.
+	self installPropertiesPatchFor: aPatchSet registry: theRegistry
 ]
 
 { #category : 'versioning' }

@@ -33,14 +33,9 @@ RwGsMethodAdditionSymbolDictPatch >> installMovedMethod: aClassMove newClassVers
 
 	"https://github.com/dalehenrich/Rowan/issues/316"
 
-	| oldClassVersion oldBehavior theRegistry x y |
-x := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
+	| oldClassVersion oldBehavior theRegistry |
+	theRegistry := (self symbolDictionaryFor: aClassMove packageAfter name projectDefinition: aClassMove projectAfter)
 		rowanSymbolDictionaryRegistry.
-y := self symbolDictionaryRegistryFor: aClassMove packageAfter name.
-
-true
-ifTrue: [ "use bugfix" theRegistry := x ]
-ifFalse:  [ "don't use bugfix" theRegistry := y. ].
 
 	oldClassVersion := newClassVersionPatch oldClassVersion.
 	oldClassVersion ~~ newClassVersionPatch newClassVersion
