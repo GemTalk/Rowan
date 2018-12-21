@@ -1875,8 +1875,8 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_with_subc
 
 	"Error creating a new class version of a superclass while moving to a new package in a new project and a new symbol dictionary"
 
-	"issue_295_1 --> issue_295_3	:: rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
-													move new version of NewRowanSample4 to RowanSample4SymbolDict in new project"
+	"issue_295_4 --> issue_295_5	:: rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
+													move new version of NewRowanSample4  with subclass to RowanSample4SymbolDict in new project"
 
 	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath 
 		baselinePackageNames newClass ar oldClass projectDefinition projectSetDefinition oldProjectDefinition |
