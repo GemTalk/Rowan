@@ -33,6 +33,23 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 2. [Attach Existing Git-based Repository to Loaded Project](#attach-existing-git-based-repository-to-loaded-project)
 3. [Clone and Load GitHub Project using Load Spec Url](#clone-and-load-github-project-using-load-spec-url)
 
+#### Create and Load ComponentDefinitions
+```smalltalk
+| repo |
+repo := RwMemoryRepositoryDefinition
+	newNamed: 'Project Repository'
+		repositoryRoot: '/repos/Example'
+		specsPath: 'rowan/specs'
+		configsPath: 'rowan/configs'
+		srcPath: 'rowan/src'.
+
+"create component"
+component := (RwComponentDefinition newNamed: 'Project')
+	addPackageNamed: 'Project-Core';
+	yourself
+		
+```
+
 #### Create and Load in memory Configuration
 ```smalltalk
 	| configurationName projectName packageName |
