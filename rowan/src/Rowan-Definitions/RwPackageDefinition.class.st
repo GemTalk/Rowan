@@ -107,7 +107,7 @@ RwPackageDefinition >> removeClassDefinition: aClassDefinition [
 ]
 
 { #category : 'accessing' }
-RwPackageDefinition >> removeClassExtension: aClassExtension [
+RwPackageDefinition >> removeClassExtensionDefinition: aClassExtension [
 
 	self removeDefinition: aClassExtension from: classExtensions
 ]

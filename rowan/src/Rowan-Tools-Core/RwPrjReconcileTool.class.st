@@ -34,7 +34,7 @@ RwPrjReconcileTool >> _moveClassExtension: theClassExtension toNewPackageClonedF
 			pDef := RwPackageDefinition newNamed: newPackageName.
 			projectDef addPackage: pDef.
 			pDef ].
-	packageDef removeClassExtension: theClassExtension.
+	packageDef removeClassExtensionDefinition: theClassExtension.
 	newPackageDef addClassExtensionDefinition: theClassExtension.
 	"update the method categories --- hybrid only ... but that is what we're doing"
 	theClassExtension instanceMethodDefinitions values do: [:methodDef |
@@ -55,7 +55,7 @@ RwPrjReconcileTool >> _moveClassExtension: theClassExtension toNewPackageNamed: 
 			pDef := RwPackageDefinition newNamed: newPackageName.
 			projectDef addPackage: pDef.
 			pDef ].
-	packageDef removeClassExtension: theClassExtension.
+	packageDef removeClassExtensionDefinition: theClassExtension.
 	newPackageDef addClassExtensionDefinition: theClassExtension.
 	"update the method categories --- hybrid only ... but that is what we're doing"
 	theClassExtension instanceMethodDefinitions values do: [:methodDef |

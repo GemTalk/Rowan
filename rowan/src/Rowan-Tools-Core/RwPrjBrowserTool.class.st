@@ -1016,7 +1016,7 @@ RwPrjBrowserTool >> removeClassNamed: className [
 				ifFalse: [ projectSetDefinition addProject: ceProjectDef ].
 			cePackageDef := ceProjectDef packageNamed: loadedClassExtensionPackage name.
 			cePackageDef
-				removeClassExtension:
+				removeClassExtensionDefinition:
 					(cePackageDef classExtensions at: loadedClassExtension name) ].
 
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.

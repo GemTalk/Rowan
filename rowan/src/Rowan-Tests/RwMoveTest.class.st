@@ -2138,7 +2138,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	packageDefinition removeClassDefinition: classDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
-	packageDefinition removeClassExtension: classExtensionDefinition.
+	packageDefinition removeClassExtensionDefinition: classExtensionDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
 	packageDefinition addClassDefinition: classDefinition.
@@ -2259,7 +2259,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	packageDefinition removeClassDefinition: classDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
-	packageDefinition removeClassExtension: classExtensionDefinition.
+	packageDefinition removeClassExtensionDefinition: classExtensionDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
 	packageDefinition addClassDefinition: classDefinition.
