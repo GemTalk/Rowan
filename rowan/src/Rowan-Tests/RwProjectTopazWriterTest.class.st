@@ -980,7 +980,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_A [
 					protocol: '*', packageName2 asLowercase
 					source: 'method1 ^1').
 	packageDefinition := projectDefinition packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 "diff"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -1095,7 +1095,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_B [
 					protocol: '*', packageName2 asLowercase
 					source: 'method1 ^1').
 	packageDefinition := projectDefinition packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	packageDefinition := projectDefinition packageNamed: packageName3.
 
@@ -1106,7 +1106,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_B [
 					newForSelector: #'method5'
 					protocol: '*', packageName3 asLowercase
 					source: 'method5 ^5').
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 "diff"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -1223,7 +1223,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_C [
 					protocol: '*', packageName2 asLowercase
 					source: 'method1 ^1').
 	packageDefinition := projectDefinition packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	packageDefinition := projectDefinition packageNamed: packageName3.
 
@@ -1234,7 +1234,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_C [
 					newForSelector: #'method5'
 					protocol: '*', packageName3 asLowercase
 					source: 'method5 ^5').
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 "diff"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -1365,7 +1365,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_D [
 					protocol: '*', packageName2 asLowercase
 					source: 'method1 ^1').
 	packageDefinition := projectDefinition packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	packageDefinition := projectDefinition packageNamed: packageName3.
 
@@ -1376,7 +1376,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_D [
 					newForSelector: #'method5'
 					protocol: '*', packageName3 asLowercase
 					source: 'method5 ^5').
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className2.
 	classExtensionDefinition
@@ -1385,7 +1385,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_D [
 					newForSelector: #'initialize'
 					protocol: '*', packageName3 asLowercase
 					source: 'initialize "another noop"').
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 
 "diff"
@@ -1508,7 +1508,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_error [
 					protocol: '*', packageName2 asLowercase
 					source: 'method1 ^1').
 	packageDefinition := projectDefinition packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	packageDefinition := projectDefinition packageNamed: packageName3.
 
@@ -1519,7 +1519,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_error [
 					newForSelector: #'method5'
 					protocol: '*', packageName3 asLowercase
 					source: 'method5 ^5').
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 "diff"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -1648,7 +1648,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_MultiProject_A [
 						protocol: '*', (packageName2, projectExt) asLowercase
 						source: 'method1 ^1').
 		packageDefinition := projectDefinition packageNamed: packageName2, projectExt.
-		packageDefinition addClassExtension: classExtensionDefinition.
+		packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 		packageDefinition := projectDefinition packageNamed: packageName3, projectExt.
 
@@ -1659,7 +1659,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_MultiProject_A [
 						newForSelector: #'method5'
 						protocol: '*', (packageName3, projectExt) asLowercase
 						source: 'method5 ^5').
-		packageDefinition addClassExtension: classExtensionDefinition.
+		packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 		classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className2, projectExt.
 		classExtensionDefinition
@@ -1668,7 +1668,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_MultiProject_A [
 						newForSelector: #'initialize'
 						protocol: '*', (packageName3, projectExt) asLowercase
 						source: 'initialize "another noop"').
-		packageDefinition addClassExtension: classExtensionDefinition.
+		packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 		projectSetDefinition addDefinition: projectDefinition ].
 
@@ -1797,7 +1797,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_MultiProject_B [
 						protocol: '*', (packageName2, projectExt) asLowercase
 						source: 'method1 ^1').
 		packageDefinition := projectDefinition packageNamed: packageName2, projectExt.
-		packageDefinition addClassExtension: classExtensionDefinition.
+		packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 		packageDefinition := projectDefinition packageNamed: packageName3, projectExt.
 
@@ -1808,7 +1808,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_MultiProject_B [
 						newForSelector: #'method5'
 						protocol: '*', (packageName3, projectExt) asLowercase
 						source: 'method5 ^5').
-		packageDefinition addClassExtension: classExtensionDefinition.
+		packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 		classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className2, projectExt.
 		classExtensionDefinition
@@ -1817,7 +1817,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_MultiProject_B [
 						newForSelector: #'initialize'
 						protocol: '*', (packageName3, projectExt) asLowercase
 						source: 'initialize "another noop"').
-		packageDefinition addClassExtension: classExtensionDefinition.
+		packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 		projectSetDefinition addDefinition: projectDefinition ].
 
