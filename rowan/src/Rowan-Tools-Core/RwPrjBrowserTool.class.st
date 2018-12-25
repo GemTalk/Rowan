@@ -370,11 +370,10 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: protocol forClas
 			"no existing class extension definition ... create a new one"
 			classExtensionDef := RwClassExtensionDefinition newForClassNamed: className.
 
-			packageDefinition addClassExtension: classExtensionDef.
+			packageDefinition addClassExtensionDefinition: classExtensionDef.
 			classExtensionDef ].
 
 	^ updateBlock value: classExtensionDef value: projectDefinition
-
 ]
 
 { #category : 'package browsing' }
@@ -732,12 +731,11 @@ RwPrjBrowserTool >> copyClassNamed: className to: newName [
 			packageDef := projectDef packageNamed: loadedPackage name.
 			classExtDef := loadedClassExtension asDefinition.
 			classExtDef name: newName.
-			packageDef addClassExtension: classExtDef ].
+			packageDef addClassExtensionDefinition: classExtDef ].
 
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	^ Rowan globalNamed: newName
-
 ]
 
 { #category : 'class browsing' }
@@ -1018,7 +1016,7 @@ RwPrjBrowserTool >> removeClassNamed: className [
 				ifFalse: [ projectSetDefinition addProject: ceProjectDef ].
 			cePackageDef := ceProjectDef packageNamed: loadedClassExtensionPackage name.
 			cePackageDef
-				removeClassExtension:
+				removeClassExtensionDefinition:
 					(cePackageDef classExtensions at: loadedClassExtension name) ].
 
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.

@@ -63,7 +63,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 				source: 'bar ^1 ');
 		yourself.
 	packageDefinition2 
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 	classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: 'Object')
 		addInstanceMethodDefinition:
@@ -78,7 +78,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 				source: 'bar ^1 ');
 		yourself.
 	packageDefinition2 
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 "packageName3 contents"
 
@@ -95,7 +95,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 				source: 'foo ^1 ');
 		yourself.
 	packageDefinition3 
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 	classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: 'ByteArray')
 		addInstanceMethodDefinition:
@@ -105,7 +105,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 				source: 'foo ^1 ');
 		yourself.
 	packageDefinition3 
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 "reconcile"
 	projectDefinitionSet := (RwProjectSetDefinition new)
@@ -119,7 +119,6 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods [
 		globalsUserId: 'SystemUser'.
 
 "validate"
-
 ]
 
 { #category : 'tests' }
@@ -188,7 +187,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 				source: 'bar ^1 ');
 		yourself.
 	packageDefinition2 
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 	classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: 'Object')
 		addInstanceMethodDefinition:
@@ -203,7 +202,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 				source: 'bar ^1 ');
 		yourself.
 	packageDefinition2 
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 "packageName3 contents"
 
@@ -220,7 +219,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 				source: 'foo ^1 ');
 		yourself.
 	packageDefinition3 
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 	classExtensionDefinition := (RwClassExtensionDefinition newForClassNamed: 'ByteArray')
 		addInstanceMethodDefinition:
@@ -230,7 +229,7 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 				source: 'foo ^1 ');
 		yourself.
 	packageDefinition3 
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 "reconcile"
 	projectDefinitionSet := (RwProjectSetDefinition new)
@@ -250,5 +249,4 @@ RwReconcileToolApiTest >> testReconcileGlobalExtensionMethods_issue_290 [
 		readStreamFor: '/tmp/rowanTest/rowan/src/GlobalsExtensionMethods-Extension1/GlobalsExtensionMethods.extension.st' 
 		do: [:fileStream | classFileString := fileStream contents ].
 	self deny: (classFileString includesString: 'classSide')
-
 ]

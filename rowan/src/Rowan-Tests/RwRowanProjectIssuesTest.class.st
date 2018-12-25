@@ -1922,7 +1922,7 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 					source: 'mover ^2').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -1961,7 +1961,7 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 					source: 'mover ^3').
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -1983,7 +1983,6 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
 	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -2047,7 +2046,7 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 					source: 'mover ^2').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -2086,7 +2085,7 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 					source: 'mover ^2').
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -2108,7 +2107,6 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
 	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -2171,7 +2169,7 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 					source: 'mover ^2').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -2210,7 +2208,7 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 					source: 'mover ^2').
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -2232,7 +2230,6 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
 	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -2619,7 +2616,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_1 
 					source: 'mover ^2').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -2658,7 +2655,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_1 
 					source: 'mover ^3').
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -2680,7 +2677,6 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_1 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
 	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -2743,7 +2739,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_2 
 					source: 'mover ^2').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -2787,7 +2783,6 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_2 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
 	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -2851,7 +2846,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_3 
 					source: 'mover ^2').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -2890,7 +2885,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_3 
 					source: 'mover ^2').
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -2912,7 +2907,6 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_3 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
 	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -2975,7 +2969,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_4 
 					source: 'mover ^2').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -3014,7 +3008,7 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_4 
 					source: 'mover ^2').
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -3036,7 +3030,6 @@ RwRowanProjectIssuesTest >> testIssue185_move_extension_method_to_new_package_4 
 	loadedPackage := Rowan image loadedPackageNamed: packageName2.
 	loadedClassExtensions := loadedPackage loadedClassExtensions.
 	self deny: ((x := loadedClassExtensions at: className ifAbsent: [RwGsLoadedSymbolDictClassExtension new initialize]) instanceMethodDefinitions includesKey: #mover).
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -3823,7 +3816,7 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 					source: 'mover ^2').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -3851,7 +3844,7 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 					source: 'mover ^2').
 
 	packageDefinition := projectDefinition2 packageNamed: packageName3.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -3860,7 +3853,6 @@ RwRowanProjectIssuesTest >> testIssue206_move_extension_method_to_new_package [
 
 	"validate"
 	self assert: class new mover = 2. "method not installed when class extension does not have a proper class name"
-
 ]
 
 { #category : 'tests-issue 208' }
@@ -3952,7 +3944,7 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 					newForSelector: #'method1'
 					protocol: '*', packageName3 asLowercase
 					source: 'method1 ^1').
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 "load project2"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -3985,7 +3977,6 @@ RwRowanProjectIssuesTest >> testIssue208_move_method_from_project_to_project [
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 1.
-
 ]
 
 { #category : 'tests-issue 215' }
@@ -4051,7 +4042,7 @@ RwRowanProjectIssuesTest >> testIssue215_move_class_and_extension_method_to_new_
 				newForSelector: #'mover'
 				protocol: 'accessing'
 			source: 'mover ^2').
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -4084,7 +4075,7 @@ RwRowanProjectIssuesTest >> testIssue215_move_class_and_extension_method_to_new_
 				newForSelector: #'mover'
 				protocol: 'accessing'
 			source: 'mover ^2').
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 	
 	"load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -4098,7 +4089,6 @@ RwRowanProjectIssuesTest >> testIssue215_move_class_and_extension_method_to_new_
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName3.
 	self assert: class new mover = 2.
-
 ]
 
 { #category : 'tests-issue 217' }
@@ -6074,7 +6064,7 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_extension_method [
 		yourself.
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtension.
+	packageDefinition addClassExtensionDefinition: classExtension.
 
 "load"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -6103,7 +6093,6 @@ RwRowanProjectIssuesTest >> testIssue305_delete_package_with_extension_method [
 	self assert: class == oldClass.
 	self should: [ class foo = 'foo' ] raise: MessageNotUnderstood.
 	self should: [ class new foo = 'foo' ] raise: MessageNotUnderstood.
-
 ]
 
 { #category : 'tests-issue 310' }
@@ -6596,7 +6585,7 @@ RwRowanProjectIssuesTest >> testIssue313_4 [
 						newForSelector: #'mover'
 						protocol: '*', packageName2 asLowercase
 						source: 'foo ^1').
-		packageDefinition2 addClassExtension: classExtensionDefinition ].
+		packageDefinition2 addClassExtensionDefinition: classExtensionDefinition ].
 
 
 "load"
@@ -6636,7 +6625,6 @@ RwRowanProjectIssuesTest >> testIssue313_4 [
 
 		self assert: theClass superclass == baseClass.
 		self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2 ].
-
 ]
 
 { #category : 'tests-issue 313' }
@@ -7823,7 +7811,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_ex
 					source: 'method1 ^1').
 
 	packageDefinition 
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 "load"
 	projectSetDefinition := RwProjectSetDefinition new.

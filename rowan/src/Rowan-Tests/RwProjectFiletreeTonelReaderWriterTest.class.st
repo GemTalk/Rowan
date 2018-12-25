@@ -103,7 +103,7 @@ RwProjectFiletreeTonelReaderWriterTest >> _projectSetDefinitionForStructureWrite
 					protocol: '*', packageName2 asLowercase
 					source: 'method1 ^1').
 	packageDefinition := projectDefinition packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	packageDefinition := projectDefinition packageNamed: packageName3.
 
@@ -114,7 +114,7 @@ RwProjectFiletreeTonelReaderWriterTest >> _projectSetDefinitionForStructureWrite
 					newForSelector: #'method5'
 					protocol: '*', packageName3 asLowercase
 					source: 'method5 ^5').
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 "project set"
 	projectSetDefinition := RwProjectSetDefinition new.
