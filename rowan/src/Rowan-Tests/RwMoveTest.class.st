@@ -543,7 +543,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages [
 						source: 'ext1 ^ 1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName3.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
@@ -589,7 +589,6 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages [
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 2.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -652,7 +651,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 						source: 'ext1 ^ 1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
@@ -683,7 +682,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 	packageDefinition addClassDefinition: classDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectSetDefinition addDefinition: projectDefinition2.
 "load"
@@ -719,7 +718,6 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 2.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -1220,7 +1218,7 @@ RwMoveTest >> testProjectSet_move_method_between_packages [
 					source: 'mover ^1').
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectSetDefinition addDefinition: projectDefinition2.
 
@@ -1253,7 +1251,6 @@ RwMoveTest >> testProjectSet_move_method_between_packages [
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 1.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -2116,7 +2113,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 						source: 'ext1 ^ 1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
@@ -2147,7 +2144,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	packageDefinition addClassDefinition: classDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectSetDefinition addDefinition: projectDefinition2.
 
@@ -2168,7 +2165,6 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 2.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -2231,7 +2227,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 						source: 'ext1 ^ 1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
@@ -2269,7 +2265,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	packageDefinition addClassDefinition: classDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 "load"
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -2305,7 +2301,6 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 2.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -2364,7 +2359,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 						source: 'ext1 ^ 1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
@@ -2394,7 +2389,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	packageDefinition addClassDefinition: classDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectSetDefinition addDefinition: projectDefinition2.
 
@@ -2415,7 +2410,6 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 2.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -2476,7 +2470,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 						source: 'ext1 ^ 1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
@@ -2512,7 +2506,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	packageDefinition addClassDefinition: classDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 "load"
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -2548,7 +2542,6 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 1.
 	self assert: registry methodRegistry size = 2.
-
 ]
 
 { #category : 'tests - issue 254' }

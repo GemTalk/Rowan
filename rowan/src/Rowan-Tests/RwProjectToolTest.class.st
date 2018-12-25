@@ -150,7 +150,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 		yourself.
 
 	packageDefinition2 := projectDefinition packageNamed: 'Simple-Extensions'.
-	packageDefinition2 addClassExtension: classExtensionDefinition.
+	packageDefinition2 addClassExtensionDefinition: classExtensionDefinition.
 
 	[ projectTools load loadProjectDefinition: projectDefinition ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
@@ -177,7 +177,6 @@ RwProjectToolTest >> testProjectClassExtensions [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class and extension methods'
-
 ]
 
 { #category : 'tests' }
@@ -256,7 +255,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		yourself.
 
 	packageDefinition2 := projectDefinition2 packageNamed: 'Simple-Extensions'.
-	packageDefinition2 addClassExtension: classExtensionDefinition.
+	packageDefinition2 addClassExtensionDefinition: classExtensionDefinition.
 	self
 		should: [ 
 			"class extensions need to be made by packages loaded into the symbol dictionary in which the class is defined"
@@ -376,7 +375,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 		yourself.
 
 	packageDefinition3 := projectDefinition packageNamed: 'Simple-Extensions1'.
-	packageDefinition3 addClassExtension: classExtensionDefinition.
+	packageDefinition3 addClassExtensionDefinition: classExtensionDefinition.
 
 	[ projectTools load loadProjectDefinition: projectDefinition ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
@@ -495,7 +494,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 
 	packageDefinition2 := projectDefinition packageNamed: 'Simple-Extensions'.
 	packageDefinition2 addClassDefinition: classDefinition2.
-	packageDefinition2 addClassExtension: classExtensionDefinition.
+	packageDefinition2 addClassExtensionDefinition: classExtensionDefinition.
 
 	[ projectTools load loadProjectDefinition: projectDefinition ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
@@ -555,7 +554,7 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 
 	packageDefinition := projectDefinition
 		packageNamed: 'Simple-Globals-Extensions'.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectTools load loadProjectDefinition: projectDefinition.
 

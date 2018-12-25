@@ -101,7 +101,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 		yourself.
 
 	(projectDefinition1 packageNamed: (packageNames1 at: 2))
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName2) asDefinition.
 	projectSetDefinition addProject: projectDefinition2.
@@ -147,7 +147,7 @@ RwProjectSetTest >> testProjectAdoptTool [
 		yourself.
 
 	(projectDefinition2 packageNamed: (packageNames2 at: 2))
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 	"construct class structures using traditional methods"
 	symbolList := Rowan image symbolList.
@@ -320,7 +320,7 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 		yourself.
 
 	(projectDefinition1 packageNamed: (packageNames1 at: 2))
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName2) asDefinition.
 	projectSetDefinition addProject: projectDefinition2.
@@ -366,7 +366,7 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 		yourself.
 
 	(projectDefinition2 packageNamed: (packageNames2 at: 2))
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 	"construct class structures using traditional methods"
 	symbolList := Rowan image symbolList.
@@ -431,7 +431,6 @@ RwProjectSetTest >> testProjectAdoptTool_existing_project [
 		asProjectDefinitionSet.
 	diff := projectSetDefinition compareAgainstBase: loadedProjectSet.
 	self assert: diff isEmpty.
-
 ]
 
 { #category : 'tests' }
