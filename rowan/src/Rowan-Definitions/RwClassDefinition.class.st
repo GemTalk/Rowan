@@ -12,6 +12,21 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwClassDefinition class >> newForClassNamed: className super: superClassName category: category [
+
+	^ self 
+		newForClassNamed: className 
+		super: superClassName 
+		instvars: #() 
+		classinstvars: #() 
+		classvars: #() 
+		category: category 
+		comment: nil 
+		pools: #() 
+		type: 'normal'
+]
+
+{ #category : 'instance creation' }
 RwClassDefinition class >> newForClassNamed: className super: superClassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
 
 	| propertiesDictionary |
