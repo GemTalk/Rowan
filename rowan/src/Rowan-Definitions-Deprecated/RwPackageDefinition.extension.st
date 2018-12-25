@@ -10,5 +10,6 @@ RwPackageDefinition >> addClassExtension: aClassExtensionDefinition [
 { #category : '*rowan-definitions-deprecated' }
 RwPackageDefinition >> removeClassExtension: aClassExtension [
 
+	self deprecated: 'RwPackageDefinition >> removeClassExtension: deprecated in Rowan 1.2.6+'.
 	self removeDefinition: aClassExtension from: classExtensions
 ]
