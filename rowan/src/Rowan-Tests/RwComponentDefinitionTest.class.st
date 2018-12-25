@@ -10,7 +10,7 @@ RwComponentDefinitionTest >> _createRepositoryRoot [
 	repositoryRoot := FileSystem memory * 'componentDefinitionTestRoot'
 ]
 
-{ #category : 'other' }
+{ #category : 'tests' }
 RwComponentDefinitionTest >> testBasicComponentDefinitionCreation [
 
 	| componentDef  componentName1 subComponentName1 subComponentName2 packageName0 packageName1 packageName2 
