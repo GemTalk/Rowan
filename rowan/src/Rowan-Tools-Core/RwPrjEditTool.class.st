@@ -37,7 +37,7 @@ RwPrjEditTool >> addClassExtension: classExtensionDefinition inPackageNamed: pac
 
 	| packageDefinition |
 	packageDefinition := projectDefinition packageNamed: packageName.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 	^ projectDefinition
 ]
 

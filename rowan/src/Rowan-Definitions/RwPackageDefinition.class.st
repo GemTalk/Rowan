@@ -40,7 +40,7 @@ RwPackageDefinition >> addClassDefinition: aClassDefinition [
 ]
 
 { #category : 'accessing' }
-RwPackageDefinition >> addClassExtension: aClassExtensionDefinition [
+RwPackageDefinition >> addClassExtensionDefinition: aClassExtensionDefinition [
 
 	self addDefinition: aClassExtensionDefinition to: classExtensions
 ]
@@ -107,7 +107,7 @@ RwPackageDefinition >> removeClassDefinition: aClassDefinition [
 ]
 
 { #category : 'accessing' }
-RwPackageDefinition >> removeClassExtension: aClassExtension [
+RwPackageDefinition >> removeClassExtensionDefinition: aClassExtension [
 
 	self removeDefinition: aClassExtension from: classExtensions
 ]

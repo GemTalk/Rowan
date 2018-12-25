@@ -57,7 +57,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition 
 		addClassDefinition: classDefinition;
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 "create classes and methods for project2"
 	classDefinition := RwClassDefinition
@@ -115,7 +115,6 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods [
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests' }
@@ -171,7 +170,7 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
 	packageDefinition 
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 "load project definitions"
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -206,7 +205,6 @@ RwProjectDeleteToolTest >> testDeleteProjectWithExtensionMethods_345 [
 	self assert: registry classRegistry size = 0.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests' }
@@ -334,7 +332,7 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition 
 		addClassDefinition: classDefinition;
-		addClassExtension: classExtensionDefinition.
+		addClassExtensionDefinition: classExtensionDefinition.
 
 "create classes and methods for project2"
 	classDefinition := RwClassDefinition
@@ -392,7 +390,6 @@ RwProjectDeleteToolTest >> testForceDeleteProjectWithExtensionMethods [
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests' }
