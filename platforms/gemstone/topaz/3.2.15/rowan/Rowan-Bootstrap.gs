@@ -628,8 +628,7 @@ commit
   run
   CypressBootstrapRowanBlock 
     value: 'RowanTools'
-    value: #('Rowan-Tools-Core' 'Rowan-Tools-Deprecated' 'Rowan-Definitions-Deprecated'
-	'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions' 
+    value: #('Rowan-Tools-Core' 'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions' 
 	'Rowan-GemStone-Specifications'
 	).	"Rowan Tools"
 %
@@ -645,8 +644,7 @@ commit
   run
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
-    value: #('Rowan-Tools-Extensions' 'Rowan-Deprecated' 'Rowan-Tests' 'Rowan-Tests-Deprecated' 
-	'Rowan-Services-Tests'	
+    value: #('Rowan-Tools-Extensions' 'Rowan-Tests' 'Rowan-Services-Tests'	
 	).	"Tool extension methods for RowanKernel classes "
 %
   commit

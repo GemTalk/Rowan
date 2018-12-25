@@ -57,7 +57,19 @@ RwPackageTool class >> remove [
 ]
 
 { #category : '*rowan-tools-deprecated' }
+RwPackageTool class >> rename [
+	self deprecated: 'RwPkgRenameTool class deprecated in Rowan 1.2.6+'.
+  ^ RwPkgRenameTool new
+]
+
+{ #category : '*rowan-tools-deprecated' }
 RwPackageTool class >> revert [
 	self deprecated: 'RwPkgRevertTool class deprecated in Rowan 1.2.6+'.
   ^ RwPkgRevertTool new
+]
+
+{ #category : '*rowan-tools-deprecated' }
+RwPackageTool class >> write [
+	self deprecated: 'RwPkgWriteTool class deprecated in Rowan 1.2.6+'.
+  ^ RwPkgWriteTool new
 ]

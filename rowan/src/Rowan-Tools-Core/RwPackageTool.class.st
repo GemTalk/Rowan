@@ -35,13 +35,3 @@ RwPackageTool class >> disown [
 RwPackageTool class >> load [
   ^ RwPkgLoadTool new
 ]
-
-{ #category : 'commands' }
-RwPackageTool class >> rename [
-  ^ RwPkgRenameTool new
-]
-
-{ #category : 'commands' }
-RwPackageTool class >> write [
-  ^ RwPkgWriteTool new
-]
