@@ -7,11 +7,43 @@ Class {
 { #category : 'instance creation' }
 RwAbstractRepositoryDefinition class >> newForSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString [
 
+	^ self 
+		newNamed: aRwSpecification specName 
+		forSpecification: aRwSpecification 
+		projectNamed: aRwSpecification specName  
+		projectHome: projectHomeFileReferenceOrString
+]
+
+{ #category : 'instance creation' }
+RwAbstractRepositoryDefinition class >> newForSpecification: aRwSpecification projectNamed: projectName projectHome: projectHomeFileReferenceOrString [
+
+
+	^ self 
+		newNamed: aRwSpecification specName 
+		forSpecification: aRwSpecification 
+		projectNamed: projectName
+		projectHome: projectHomeFileReferenceOrString
+]
+
+{ #category : 'instance creation' }
+RwAbstractRepositoryDefinition class >> newNamed: repositoryName forSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString [
+
+
+	^ self 
+		newNamed: repositoryName 
+		forSpecification: aRwSpecification 
+		projectNamed: aRwSpecification specName  
+		projectHome: projectHomeFileReferenceOrString
+]
+
+{ #category : 'instance creation' }
+RwAbstractRepositoryDefinition class >> newNamed: repositoryName forSpecification: aRwSpecification projectNamed: projectName projectHome: projectHomeFileReferenceOrString [
+
 	| projectHomeFileReference |
 	projectHomeFileReference := projectHomeFileReferenceOrString asFileReference.
 	^ projectHomeFileReference fileSystem rowanRepositoryDefinitionClass
-		newNamed: aRwSpecification specName 
-		repositoryRoot: projectHomeFileReference / aRwSpecification specName 
+		newNamed: repositoryName 
+		repositoryRoot: projectHomeFileReference / projectName
 		specsPath: aRwSpecification specsPath
 		configsPath: aRwSpecification configsPath
 		srcPath: aRwSpecification repoPath
@@ -63,6 +95,12 @@ RwAbstractRepositoryDefinition >> name [
 RwAbstractRepositoryDefinition >> name: aString [ 
 
 	properties at: 'name' put: aString
+]
+
+{ #category : 'testing' }
+RwAbstractRepositoryDefinition >> repositoryExists [
+
+	^ self repositoryRoot exists
 ]
 
 { #category : 'accessing' }

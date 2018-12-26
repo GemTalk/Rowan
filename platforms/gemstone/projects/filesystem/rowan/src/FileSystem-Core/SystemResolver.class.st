@@ -81,9 +81,19 @@ SystemResolver >> imageDirectory [
 	^ self dbfScratchDir
 ]
 
+{ #category : 'origins' }
+SystemResolver >> rowanProjectsHome [
+
+	"Answer the path to $ROWAN_PROJECTS_HOME"
+
+	^ (System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+		ifNil: [ self error: '$ROWAN_PROJECTS_HOME not defined' ]
+		ifNotNil: [:str | self  resolveString: str ]
+]
+
 { #category : 'resolving' }
 SystemResolver >> supportedOrigins [
-	^ #(image imageDirectory extent1 extent1Directory tranlog dbfScratchDir workingDirectory)
+	^ #(image imageDirectory extent1 extent1Directory tranlog dbfScratchDir workingDirectory rowanProjectsHome )
 ]
 
 { #category : 'origins' }
