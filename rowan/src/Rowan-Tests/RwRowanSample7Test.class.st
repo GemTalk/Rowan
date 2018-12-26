@@ -74,6 +74,8 @@ self error: 'test not complete ...'.
 { #category : 'tests' }
 RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_1 [
 
+	"exercise the RwAbstractRepositoryDefinition class creation protocol"
+
 	| specUrlString rowanSpec gitRootPath projectName componentSpec repositoryDefinition_1
 		repositoryDefinition_2 repositoryDefinition_3 repositoryDefinition_4 |
 	projectName := 'RowanSample7'.
@@ -120,7 +122,9 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_1 [
 { #category : 'tests' }
 RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 
-	| specUrlString rowanSpec gitRootPath projectName componentSpec repositoryDefinition x y  |
+	"verify that the repository root can be dynamically swapped out (if desired) ... repository definitioin can be ointed wholesale to another $ROWAN_PROJECTS_HOME"
+
+	| specUrlString rowanSpec gitRootPath projectName componentSpec repositoryDefinition x y  memoryRoot repositoryDefinition_1 |
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
@@ -131,17 +135,33 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 	specUrlString := self _rowanSample7SpecificationUrl.
 	componentSpec := specUrlString asRwUrl asSpecification.
 
-	self _repositoryRoot: FileSystem memory * 'repoDefinitionTestRoot'.
-
 "create repository definition based on disk"
 	repositoryDefinition := RwAbstractRepositoryDefinition 
 		newForSpecification: componentSpec 
 			projectHome: gitRootPath.
 
 "validate"
-	self assert: (x := repositoryDefinition srcPath pathString) = (y := (gitRootPath / projectName / componentSpec repoPath) pathString),
+	self assert: (x := repositoryDefinition srcPath pathString) = (y := (gitRootPath / projectName / componentSpec repoPath) pathString).
 
-self error: 'test not complete'.
+"create repository definition based on memory"
+	memoryRoot := FileSystem memory * 'repoDefinitionTestRoot'.
+	self _repositoryRoot: memoryRoot.
 
-repositoryDefinition repositoryRootPath: 'a memory reference'
+	gitRootPath := memoryRoot / 'repos'.
+	repositoryDefinition repositoryRoot: gitRootPath / projectName.
+
+"validate"
+	self assert: (x := repositoryDefinition srcPath pathString) = (y := (gitRootPath / projectName / componentSpec repoPath) pathString).
+
+"create from scratch and it should be using RwMemoryRepositoryDefinition"
+	repositoryDefinition_1 := RwAbstractRepositoryDefinition 
+		newForSpecification: componentSpec 
+			projectHome: gitRootPath.
+
+"validate"
+	self assert: repositoryDefinition  configsPath = repositoryDefinition_1 configsPath.
+	self assert: repositoryDefinition  name = repositoryDefinition_1 name.
+	self assert: repositoryDefinition  repositoryRoot = repositoryDefinition_1 repositoryRoot.
+	self assert: repositoryDefinition  specsPath = repositoryDefinition_1 specsPath.
+	self assert: repositoryDefinition  srcPath = repositoryDefinition_1 srcPath
 ]
