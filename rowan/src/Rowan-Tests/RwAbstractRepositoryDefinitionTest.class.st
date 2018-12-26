@@ -22,7 +22,7 @@ RwAbstractRepositoryDefinitionTest >> _repositoryDefinitionClass [
 RwAbstractRepositoryDefinitionTest >> testRepositoryCreation [
 
 	| repoDef |
-	repoDef := RwMemoryRepositoryDefinition 
+	repoDef := self _repositoryDefinitionClass 
 		newNamed: 'RowanTestRepository' 
 			repositoryRoot: '/repos/Example'
 			specsPath: 'rowan/specs'

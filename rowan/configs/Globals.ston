@@ -6,7 +6,8 @@
     	'core': {
 				#packageNames : [
 					'Rowan-Cypress-Kernel',
-					'Rowan-Tools-Kernel'
+					'Rowan-Tools-Kernel',
+					'Rowan-Components-Kernel'
 					]
 				}
 			},
@@ -36,6 +37,7 @@
 		'gemstone' : {
 			'SystemUser' : {
 				#packageNameToPlatformPropertiesMap : {
+					'Rowan-Components-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
