@@ -46,12 +46,6 @@ RwPackageDefinition >> addClassExtensionDefinition: aClassExtensionDefinition [
 ]
 
 { #category : 'accessing' }
-RwPackageDefinition >> addClassExtensionDefinition: aClassExtensionDefinition [
-
-	self addDefinition: aClassExtensionDefinition to: classExtensions
-]
-
-{ #category : 'accessing' }
 RwPackageDefinition >> classDefinitions [
 
 	^classDefinitions

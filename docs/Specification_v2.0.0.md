@@ -28,7 +28,7 @@ The numbered items marked with `--` are obsolete and subject to a planned change
 11. --A project reference configuration is a specialized top-level configuration. 
 
 ### v2.0.0 Examples
-1. [Create and Load in memory Configuration](#create-and-load-in-memory-configuration)
+1. [Create and Load ComponentDefinitions](#create-and-load-componentdefinitions)
 2. [Attach New Git-based Repository to Loaded Project - create/write/commit repository](#attach-new-git-based-repository-to-loaded-project)
 2. [Attach Existing Git-based Repository to Loaded Project](#attach-existing-git-based-repository-to-loaded-project)
 3. [Clone and Load GitHub Project using Load Spec Url](#clone-and-load-github-project-using-load-spec-url)
@@ -44,10 +44,18 @@ repo := RwMemoryRepositoryDefinition
 		srcPath: 'rowan/src'.
 
 "create component"
-component := (RwComponentDefinition newNamed: 'Project')
-	addPackageNamed: 'Project-Core';
-	yourself
-		
+componentDef := RwComponentDefinition newNamed: 'Example'.
+(componentDef addPackageNamed: 'Example-Core')
+		addClassDefinition: 
+			((RwClassDefinition 
+				newForClassNamed: 'ExampleCoreClass'
+				super: 'Object'
+				category: 'Example-Common')
+					addInstanceMethodDefinition: 
+						(RwMethodDefinition newForSource: 'bar ^ 1' protocol: 'accessing');
+					addClassMethodDefinition: 
+						(RwMethodDefinition newForSource: 'bar ^ 2' protocol: 'accessing');
+					yourself).
 ```
 
 #### Create and Load in memory Configuration
