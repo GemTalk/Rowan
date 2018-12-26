@@ -425,3 +425,9 @@ FileReference >> writeStream [
 	
 	^ self writeStreamEncoded: 'utf8'
 ]
+
+{ #category : 'prototype' }
+FileReference >> writeStreamRk [
+
+	^self fileSystem store writeBinaryMode writeStreamFor: self
+]

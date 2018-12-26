@@ -53,7 +53,7 @@ FileSystemStore >> appendAndReadMode [
      file is created if it does not exist.  The initial file
      position for reading is at the beginning of the file, but
      output is always appended to the end of the file."
-	^FileAppendAndReadMode new
+	^FileSpec appendAndRead
 ]
 
 { #category : 'modes' }
@@ -62,7 +62,7 @@ FileSystemStore >> appendBinaryAndReadMode [
      file is created if it does not exist.  The initial file
      position for reading is at the beginning of the file, but
      output is always appended to the end of the file."
-	^FileAppendAndReadBinaryMode new
+	^FileSpec appendAndReadBinary
 ]
 
 { #category : 'modes' }
@@ -70,7 +70,7 @@ FileSystemStore >> appendBinaryMode [
 	"Open for appending (writing at end of file).  The file is
      created if it does not exist.  The stream is positioned at the
      end of the file."
-	^FileAppendBinaryMode new
+	^FileSpec appendBinary
 ]
 
 { #category : 'modes' }
@@ -78,7 +78,7 @@ FileSystemStore >> appendMode [
 	"Open for appending (writing at end of file).  The file is
      created if it does not exist.  The stream is positioned at the
      end of the file."
-	^FileAppendMode new
+	^FileSpec append
 ]
 
 { #category : 'public' }
@@ -397,19 +397,19 @@ FileSystemStore >> printPath: aPath on: out [
 { #category : 'modes' }
 FileSystemStore >> readBinaryMode [
 	"Open binary for reading and writing.  The stream is positioned at the beginning of the file."
-	^FileReadBinaryMode new
+	^FileSpec readBinary
 ]
 
 { #category : 'modes' }
 FileSystemStore >> readMode [
 	"Open for reading and writing.  The stream is positioned at the beginning of the file."
-	^FileReadMode new
+	^FileSpec read
 ]
 
 { #category : 'modes' }
 FileSystemStore >> readWriteBinaryMode [
 	"Open binary file for reading and writing.  The stream is positioned at the beginning of the file."
-	^FileReadBinaryMode new
+	^FileSpec readWriteBinary
 ]
 
 { #category : 'modes' }
@@ -417,13 +417,13 @@ FileSystemStore >> readWriteBinaryTruncatedMode [
 	"Open binary file for reading and writing.  The file is created if it does
       not exist, otherwise it is truncated.  The stream is
       positioned at the beginning of the file."
-	^FileReadWriteTruncatedBinaryMode new
+	^FileSpec readWriteTruncatedBinary
 ]
 
 { #category : 'modes' }
 FileSystemStore >> readWriteMode [
 	"Open for reading and writing.  The stream is positioned at the beginning of the file."
-	^FileReadWriteMode new
+	^FileSpec readWrite
 ]
 
 { #category : 'modes' }
@@ -431,7 +431,7 @@ FileSystemStore >> readWriteTruncatedMode [
 	"Open for reading and writing.  The file is created if it does
       not exist, otherwise it is truncated.  The stream is
       positioned at the beginning of the file."
-	^FileReadWriteTruncatedMode new
+	^FileSpec readWriteTruncated
 ]
 
 { #category : 'private' }
@@ -496,12 +496,12 @@ FileSystemStore >> stringFromPath: aPath [
 FileSystemStore >> writeBinaryMode [
 	"Truncate binary file to zero length or create text file for writing. 
 	 The stream is positioned at the beginning of the file."
-	^FileWriteBinaryMode new
+	^FileSpec writeBinary
 ]
 
 { #category : 'modes' }
 FileSystemStore >> writeMode [
 	"Truncate file to zero length or create text file for writing. 
 	 The stream is positioned at the beginning of the file."
-	^FileWriteMode new
+	^FileSpec write
 ]
