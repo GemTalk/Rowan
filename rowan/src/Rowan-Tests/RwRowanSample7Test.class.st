@@ -72,12 +72,35 @@ self error: 'test not complete ...'.
 ]
 
 { #category : 'tests' }
+RwRowanSample7Test >> testCreateProjectReferenceFromUrl [
+
+	| specUrlString rowanSpec gitRootPath projectName componentSpec projectReferenceDefinition |
+
+	projectName := 'RowanSample7'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	specUrlString := self _rowanSample7SpecificationUrl.
+	componentSpec := specUrlString asRwUrl asSpecification.
+
+
+"create project reference definitions"
+	projectReferenceDefinition := RwAbstractProjectReferenceDefinition 
+		newForSpecification: componentSpec 
+		projectHome: gitRootPath.
+]
+
+{ #category : 'tests' }
 RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_1 [
 
 	"exercise the RwAbstractRepositoryDefinition class creation protocol"
 
 	| specUrlString rowanSpec gitRootPath projectName componentSpec repositoryDefinition_1
 		repositoryDefinition_2 repositoryDefinition_3 repositoryDefinition_4 |
+
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
@@ -125,6 +148,7 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 	"verify that the repository root can be dynamically swapped out (if desired) ... repository definitioin can be ointed wholesale to another $ROWAN_PROJECTS_HOME"
 
 	| specUrlString rowanSpec gitRootPath projectName componentSpec repositoryDefinition x y  memoryRoot repositoryDefinition_1 |
+
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
@@ -159,6 +183,8 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 			projectHome: gitRootPath.
 
 "validate"
+	self assert: repositoryDefinition  repositoryRoot fileSystem isMemoryFileSystem.
+
 	self assert: repositoryDefinition  configsPath = repositoryDefinition_1 configsPath.
 	self assert: repositoryDefinition  name = repositoryDefinition_1 name.
 	self assert: repositoryDefinition  repositoryRoot = repositoryDefinition_1 repositoryRoot.
