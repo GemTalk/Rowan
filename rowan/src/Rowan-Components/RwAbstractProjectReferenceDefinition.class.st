@@ -5,6 +5,15 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwAbstractProjectReferenceDefinition class >> newForSpecification: aRwSpecification [
+
+	^ self
+		newNamed: aRwSpecification specName 
+			forSpecification: aRwSpecification 
+			projectHome: nil
+]
+
+{ #category : 'instance creation' }
 RwAbstractProjectReferenceDefinition class >> newForSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString [
 
 	^ self 
@@ -14,14 +23,25 @@ RwAbstractProjectReferenceDefinition class >> newForSpecification: aRwSpecificat
 ]
 
 { #category : 'instance creation' }
-RwAbstractProjectReferenceDefinition class >> newNamed: projectName forSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString [
+RwAbstractProjectReferenceDefinition class >> newNamed: projectName forSpecification: aRwSpecification [
 
 	^ self
+		newNamed: projectName 
+			forSpecification: aRwSpecification 
+			projectHome: nil
+]
+
+{ #category : 'instance creation' }
+RwAbstractProjectReferenceDefinition class >> newNamed: projectName forSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString [
+
+	^ (self
 		projectUrl: aRwSpecification projectUrl
-		projectName: projectName
-		projectAlias: nil
-		configurationNames: aRwSpecification defaultConfigurationNames
-		groupNames: aRwSpecification defaultGroupNames
+			projectName: projectName
+			projectAlias: nil
+			configurationNames: aRwSpecification defaultConfigurationNames
+			groupNames: aRwSpecification defaultGroupNames)
+		projectHome: projectHomeFileReferenceOrString;
+		yourself
 ]
 
 { #category : 'instance creation' }
@@ -83,13 +103,18 @@ RwAbstractProjectReferenceDefinition >> projectAlias: aStringOrNil [
 { #category : 'accessing' }
 RwAbstractProjectReferenceDefinition >> projectHome [
 
-	^ self properties at: 'projectHome'
+	^ self properties at: 'projectHome' ifAbsent: [ FileLocator rowanProjectsHome ]
 ]
 
 { #category : 'accessing' }
 RwAbstractProjectReferenceDefinition >> projectHome: projectHomeFileReferenceOrString [
 
-	^ self properties at: 'projectHome' put: projectHomeFileReferenceOrString
+	| ref |
+	ref := (projectHomeFileReferenceOrString isKindOf: CharacterCollection)
+		ifTrue: [ projectHomeFileReferenceOrString asFileReference ]
+		ifFalse: [ projectHomeFileReferenceOrString ].
+	ref ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
+	^ self properties at: 'projectHome' put: ref
 ]
 
 { #category : 'accessing' }

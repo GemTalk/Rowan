@@ -74,7 +74,7 @@ self error: 'test not complete ...'.
 { #category : 'tests' }
 RwRowanSample7Test >> testCreateProjectReferenceFromUrl [
 
-	| specUrlString rowanSpec gitRootPath projectName componentSpec projectReferenceDefinition |
+	| specUrlString rowanSpec gitRootPath projectName componentSpec projectReferenceDefinition x y |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -86,11 +86,25 @@ RwRowanSample7Test >> testCreateProjectReferenceFromUrl [
 	specUrlString := self _rowanSample7SpecificationUrl.
 	componentSpec := specUrlString asRwUrl asSpecification.
 
-
 "create project reference definitions"
 	projectReferenceDefinition := RwAbstractProjectReferenceDefinition 
 		newForSpecification: componentSpec 
 		projectHome: gitRootPath.
+
+"validate"
+	self assert: projectReferenceDefinition projectName = projectName.
+	self assert: projectReferenceDefinition projectAlias = projectReferenceDefinition projectName.
+	self assert: projectReferenceDefinition configurationNames = #( 'Default').
+	self assert: projectReferenceDefinition groupNames = #( 'core').
+	self assert: projectReferenceDefinition projectUrl = 'https://github.com/dalehenrich/RowanSample7'.
+
+	self assert: (x := projectReferenceDefinition projectHome pathString) = (y := gitRootPath asFileReference pathString).
+
+"create project reference definitions"
+	projectReferenceDefinition := RwAbstractProjectReferenceDefinition newForSpecification: componentSpec.
+
+"validate"
+	self assert: (x := projectReferenceDefinition projectHome pathString) = (y := FileLocator rowanProjectsHome pathString).
 ]
 
 { #category : 'tests' }
