@@ -205,3 +205,26 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 	self assert: repositoryDefinition  specsPath = repositoryDefinition_1 specsPath.
 	self assert: repositoryDefinition  srcPath = repositoryDefinition_1 srcPath
 ]
+
+{ #category : 'tests' }
+RwRowanSample7Test >> testResolveProjectReference [
+
+	| specUrlString rowanSpec gitRootPath projectName componentSpec projectReferenceDefinition x y |
+
+	projectName := 'RowanSample7'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	specUrlString := self _rowanSample7SpecificationUrl.
+	componentSpec := specUrlString asRwUrl asSpecification.
+
+"create project reference definitions"
+	projectReferenceDefinition := RwAbstractProjectReferenceDefinition 
+		newForSpecification: componentSpec 
+		projectHome: gitRootPath.
+
+	projectReferenceDefinition resolve
+]
