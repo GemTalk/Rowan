@@ -211,9 +211,3 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withGroupNames: grou
 		groupNames: groupNames
 
 ]
-
-{ #category : 'validation' }
-RwPrjReadTool >> validate: aRwSpecification [
-  super validate: aRwSpecification.
-  self validateForRead: aRwSpecification
-]
