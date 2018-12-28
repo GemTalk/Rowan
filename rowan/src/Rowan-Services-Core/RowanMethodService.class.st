@@ -481,6 +481,14 @@ RowanMethodService >> source: aString [
 
 ]
 
+{ #category : 'Accessing' }
+RowanMethodService >> stepPoints [
+
+	"for testing"
+	
+	^stepPoints
+]
+
 { #category : 'initialization' }
 RowanMethodService >> stepPointsFor: aGsNMethod [
 	"Answers an Array of Associations (offset -> selector) indexed by step point"

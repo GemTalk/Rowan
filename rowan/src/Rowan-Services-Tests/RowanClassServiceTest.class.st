@@ -13,13 +13,6 @@ RowanClassServiceTest >> createClassNamed: className [
 ]
 
 { #category : 'support' }
-RowanClassServiceTest >> loadRowanSample1 [
-
-	RowanProjectService new newGitProject: 'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston' root: '$ROWAN_PROJECTS_HOME' useSsh: true. 
-	Rowan projectTools load loadProjectNamed: 'RowanSample1'.
-]
-
-{ #category : 'support' }
 RowanClassServiceTest >> servicesClassInstance [
 
 	^self servicesDefaultClassName evaluate perform: #new

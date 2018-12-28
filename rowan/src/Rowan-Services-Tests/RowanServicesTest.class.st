@@ -101,6 +101,13 @@ RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 ]
 
 { #category : 'support' }
+RowanServicesTest >> loadRowanSample1 [
+
+	RowanProjectService new newGitProject: 'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston' root: '$ROWAN_PROJECTS_HOME' useSsh: true. 
+	Rowan projectTools load loadProjectNamed: 'RowanSample1'.
+]
+
+{ #category : 'support' }
 RowanServicesTest >> loadServicesTestProject [
 	
 	| projectSetDefinition |
