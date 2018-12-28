@@ -112,11 +112,7 @@ RwAbstractRepositoryDefinition >> repositoryRoot [
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> repositoryRoot: pathStringOrReference [
 
-	| ref |
-	ref := (pathStringOrReference isKindOf: CharacterCollection)
-		ifTrue: [ pathStringOrReference asFileReference ]
-		ifFalse: [ pathStringOrReference ].
-	self properties at: 'repositoryRoot' put: ref
+	self properties at: 'repositoryRoot' put: pathStringOrReference asFileReference
 ]
 
 { #category : 'accessing' }

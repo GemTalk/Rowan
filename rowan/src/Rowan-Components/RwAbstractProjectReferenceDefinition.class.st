@@ -126,12 +126,8 @@ RwAbstractProjectReferenceDefinition >> projectHome [
 { #category : 'accessing' }
 RwAbstractProjectReferenceDefinition >> projectHome: projectHomeFileReferenceOrString [
 
-	| ref |
-	ref := (projectHomeFileReferenceOrString isKindOf: CharacterCollection)
-		ifTrue: [ projectHomeFileReferenceOrString asFileReference ]
-		ifFalse: [ projectHomeFileReferenceOrString ].
-	ref ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
-	^ self properties at: 'projectHome' put: ref
+	projectHomeFileReferenceOrString ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
+	^ self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference
 ]
 
 { #category : 'accessing' }

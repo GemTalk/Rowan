@@ -74,9 +74,7 @@ RwPrjCloneTool >> cloneSpecification: aRwSpecification gitRootPath: gitRootPathO
 			"Register project show that is shows up as a loaded project in project list ... ready to be explicitly loaded"
 			self specification: aRwSpecification ]
 		ifFalse: [ specification := aRwSpecification ].
-	gitRootPath := (gitRootPathOrString isKindOf: CharacterCollection)
-		ifTrue: [ gitRootPathOrString asFileReference ]
-		ifFalse: [ gitRootPathOrString ].
+	gitRootPath := gitRootPathOrString asFileReference.
 	gitRepoPath := gitRootPath / aRwSpecification specName.
 	self
 		_validateForGitRootPathForSpecification: gitRootPath
