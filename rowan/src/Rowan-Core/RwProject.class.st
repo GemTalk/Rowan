@@ -50,7 +50,9 @@ RwProject >> definedClasses [
 RwProject >> existsOnDisk [
 
 	Rowan image loadedProjectNamed: self name ifAbsent: [ ^false ].
-	^ Rowan platform fileUtilities directoryExists: self repositoryRootPath.
+	^ (self repositoryRootPath) 
+		ifNil: [ false ]
+		ifNotNil: [:path | path asFileReference exists ]
 ]
 
 { #category : 'accessing' }

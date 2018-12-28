@@ -33,7 +33,7 @@ RwProjectLoadConfigurationVisitor >> _configurations: configDirPath forProject: 
 
 	| urlBase |
 	self configurationNames isEmpty ifTrue: [ ^ #() ].
-	urlBase := 'file:' ,configDirPath.
+	urlBase := 'file:' ,configDirPath asFileReference pathString, '/'.
 	^ self configurationNames
 		collect: [ :configName | 
 			| url |
@@ -41,7 +41,6 @@ RwProjectLoadConfigurationVisitor >> _configurations: configDirPath forProject: 
 			(RwAbstractProjectConfiguration fromUrl: url)
 				projectName: aProjectName;
 				yourself ]
-
 ]
 
 { #category : 'private' }

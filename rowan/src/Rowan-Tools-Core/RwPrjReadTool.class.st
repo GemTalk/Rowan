@@ -47,17 +47,17 @@ RwPrjReadTool >> _visitConfigurations: visitorClass forProjectDefinition: projec
 	spec := projectDefinition specification.
 	spec repositoryRootPath ifNil: [ ^ nil ].
 	projectName := projectDefinition name.
-	configDirectory := spec repositoryRootPath , '/' , spec configsPath , '/'.
-	(Rowan fileUtilities directoryExists: configDirectory)
+	configDirectory := spec repositoryRootPath asFileReference / spec configsPath.
+	configDirectory exists
 		ifFalse: [ ^ nil ].
 	visitor := visitorClass new
 		platformAttributes: Rowan platformConfigurationAttributes;
 		groupNames: groupNames;
-		configurationBasePath: configDirectory;
+		configurationBasePath: configDirectory pathString;
 		yourself.
 	configNames do: [:configName |
 		| config url |
-		url := 'file:' , configDirectory, configName , '.ston'.
+		url := 'file:' , ((configDirectory / configName) , 'ston') pathString.
 		config := RwAbstractProjectConfiguration fromUrl: url.
 		config projectName: projectName.
 		forLoad

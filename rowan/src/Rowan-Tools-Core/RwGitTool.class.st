@@ -45,7 +45,7 @@ RwGitTool >> gitBranchNameIn: gitRepoPath [
 { #category : 'smalltalk api' }
 RwGitTool >> gitcheckoutIn: gitRepoPath with: args [
 
-	^ self performGitCommand: 'checkout' in: gitRepoPath with: args
+	^ self performGitCommand: 'checkout' in: gitRepoPath pathString with: args
 ]
 
 { #category : 'smalltalk api' }

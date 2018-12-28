@@ -20,7 +20,7 @@ RwPrjCheckoutTool >> checkoutSpecification: aRwSpecification [
 		ifNotNil: [ 
 			| gitTool gitRepoPath |
 			gitTool := Rowan gitTools.
-			gitRepoPath := specification repoSpec repositoryRootPath.
+			gitRepoPath := specification repoSpec repositoryRootPath asFileReference.
 			gitTool gitcheckoutIn: gitRepoPath with: checkout ].
 	^ specification
 ]

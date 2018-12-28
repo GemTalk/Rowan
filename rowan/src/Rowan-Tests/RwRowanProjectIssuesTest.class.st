@@ -144,16 +144,14 @@ RwRowanProjectIssuesTest >> _cloneGitRepositoryFor: projectName projectUrlString
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/issues/'.
+	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/issues/'.
 
-	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
-		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+	(gitRootPath / projectName) deleteAll.
 
 	projectTools clone
 		cloneSpecUrl: projectUrlString
 		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
 		useSsh: true.
-
 ]
 
 { #category : 'private-issue 24' }

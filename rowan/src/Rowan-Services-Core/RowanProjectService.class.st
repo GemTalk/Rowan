@@ -112,9 +112,8 @@ RowanProjectService >> checkout: branchName [
 	| project branches |
 
 	project := (RwProject newNamed: name). 
-	branches := Rowan gitTools gitcheckoutIn: project repositoryRootPath with: branchName.
+	branches := Rowan gitTools gitcheckoutIn: project repositoryRootPath asFileReference with: branchName.
 	^branches
-
 ]
 
 { #category : 'client commands' }

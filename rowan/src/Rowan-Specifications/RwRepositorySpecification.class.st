@@ -77,6 +77,12 @@ RwRepositorySpecification >> repositoryRootPath: anObject [
 
 ]
 
+{ #category : 'accessing' }
+RwRepositorySpecification >> repositoryRootReference [
+
+   ^repositoryRootPath asFileReference
+]
+
 { #category : 'actions' }
 RwRepositorySpecification >> updateLoadedCommitIdForTool: aRwTool [
   "commit not supported by default"
