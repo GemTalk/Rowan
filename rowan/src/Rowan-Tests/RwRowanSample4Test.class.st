@@ -60,7 +60,7 @@ RwRowanSample4Test >> testCreateProjectDefinition [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecification: specUrlString asRwUrl asSpecification
@@ -94,7 +94,7 @@ RwRowanSample4Test >> testCreateProjectFromUrl [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	spec := specUrlString asRwUrl asSpecification.
 	projectTools clone
@@ -126,7 +126,7 @@ RwRowanSample4Test >> testIssue14 [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -184,7 +184,7 @@ RwRowanSample4Test >> testIssue185_254_move_newClassVariable_to_symbolDict [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -269,7 +269,7 @@ RwRowanSample4Test >> testIssue185_254_move_newClassVersion_to_symbolDict [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -355,7 +355,7 @@ RwRowanSample4Test >> testIssue185_254_rename_package_move_class [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -440,7 +440,7 @@ RwRowanSample4Test >> testIssue185_254_rename_package_move_classVariable [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -525,7 +525,7 @@ RwRowanSample4Test >> testIssue185_254_rename_package_move_newClassVersion [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -610,7 +610,7 @@ RwRowanSample4Test >> testIssue185_254_simple_package_rename [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -697,7 +697,7 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -780,7 +780,7 @@ RwRowanSample4Test >> testIssue185_move_newClassVariable_to_symbolDict [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -865,7 +865,7 @@ RwRowanSample4Test >> testIssue185_move_newClassVersion_to_symbolDict [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -951,7 +951,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_class [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -1036,7 +1036,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_classVariable [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -1121,7 +1121,7 @@ RwRowanSample4Test >> testIssue185_rename_package_move_newClassVersion [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -1206,7 +1206,7 @@ RwRowanSample4Test >> testIssue185_simple_package_rename [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -1360,7 +1360,7 @@ RwRowanSample4Test >> testIssue208_adopt_load [
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample4_208_LoadSpecificationUrl.
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
@@ -1465,7 +1465,7 @@ RwRowanSample4Test >> testIssue210 [
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample4_208_LoadSpecificationUrl.
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
@@ -1562,7 +1562,7 @@ RwRowanSample4Test >> testIssue230 [
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	specUrlString := self _rowanSample4_208_LoadSpecificationUrl.
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 	projectTools clone
 		cloneSpecUrl: specUrlString
 		gitRootPath: gitRootPath
@@ -1596,7 +1596,7 @@ RwRowanSample4Test >> testIssue284 [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -1650,7 +1650,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -1743,7 +1743,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -1850,7 +1850,7 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_with_subc
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -1950,7 +1950,7 @@ RwRowanSample4Test >> testIssue304 [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -2003,7 +2003,7 @@ RwRowanSample4Test >> testIssue305 [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -2051,7 +2051,7 @@ RwRowanSample4Test >> testIssue460 [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -2146,7 +2146,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	spec := specUrlString asRwUrl asSpecification.
 	projectTools clone
@@ -2183,7 +2183,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-		(gitRootPath / projectName) deleteAll.
+		(gitRootPath / projectName) ensureDeleteAll.
 
 	spec := specUrlString asRwUrl asSpecification.
 	projectTools clone
@@ -2218,7 +2218,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_1 [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-		(gitRootPath / projectName) deleteAll.
+		(gitRootPath / projectName) ensureDeleteAll.
 
 	spec := specUrlString asRwUrl asSpecification.
 	projectTools clone
@@ -2314,7 +2314,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_issue180 [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-		(gitRootPath / projectName) deleteAll.
+		(gitRootPath / projectName) ensureDeleteAll.
 
 	spec := specUrlString asRwUrl asSpecification.
 	projectTools clone
@@ -2347,7 +2347,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221A [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -2434,7 +2434,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221B [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -2478,7 +2478,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221C [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -2522,7 +2522,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221D [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath  / projectName) deleteAll.
+	(gitRootPath  / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -2561,7 +2561,7 @@ RwRowanSample4Test >> testSampleCompoundConfiguration [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -2605,7 +2605,7 @@ RwRowanSample4Test >> testSampleProjectLoadConfiguration [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString

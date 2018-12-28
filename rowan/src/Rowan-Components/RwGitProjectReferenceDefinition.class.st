@@ -8,7 +8,7 @@ Class {
 RwGitProjectReferenceDefinition >> _createRepositoryFrom: repoDef [ 
 
 	Rowan projectTools clone
-		cloneSpecification: self projectSpec gitRootPath: self projectHome useSsh: true.
+		cloneProjectReference: self.
 
 	self error: 'implementation incomplete'.
 ]

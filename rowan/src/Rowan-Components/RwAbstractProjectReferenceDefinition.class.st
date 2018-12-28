@@ -46,6 +46,11 @@ RwAbstractProjectReferenceDefinition class >> newNamed: projectName forSpecifica
 			groupNames: aRwSpecification defaultGroupNames)
 		projectHome: projectHomeFileReferenceOrString;
 		projectSpec: aRwSpecification;
+		repositoryUrl: aRwSpecification repositoryUrl;
+		committish: aRwSpecification repoSpec committish;
+		configsPath: aRwSpecification configsPath;
+		packagesPath: aRwSpecification repoPath;
+		specsPath: aRwSpecification specsPath;
 		yourself
 ]
 
@@ -72,6 +77,36 @@ RwAbstractProjectReferenceDefinition >> _createRepositoryFrom: repoDef [
 RwAbstractProjectReferenceDefinition >> _repositoryDefinitionClass [
 
 	^ RwAbstractRepositoryDefinition
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> committish [
+
+	^ self properties at: 'committish' ifAbsent: [ ]
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> committish: aString [
+
+	^ self properties at: 'committish' put: aString
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> configsPath [
+
+	^ self properties at: 'configsPath' ifAbsent: [ 'rowan/configs' ]
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> configsPath: aString [
+
+	^ self properties at: 'configsPath' put: aString
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> configsRoot [
+
+	^self repositoryRoot / self configsPath
 ]
 
 { #category : 'accessing' }
@@ -102,6 +137,24 @@ RwAbstractProjectReferenceDefinition >> groupNames: anArray [
 RwAbstractProjectReferenceDefinition >> key [
 
 	^ self projectName
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> packagesPath [
+
+	^ self properties at: 'packagesPath' ifAbsent: [ 'rowan/src' ]
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> packagesPath: aString [
+
+	^ self properties at: 'packagesPath' put: aString
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> packagesRoot [
+
+	^self repositoryRoot / self packagesPath
 ]
 
 { #category : 'accessing' }
@@ -183,6 +236,28 @@ RwAbstractProjectReferenceDefinition >> repositoryDefinition: aProjectHome [
 			projectHome: aProjectHome
 ]
 
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> repositoryRoot [
+
+	^self projectHome / self projectAlias
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> repositoryUrl [
+
+	"I think that I want to get rid of this ... or change it?"
+
+	^ self properties at: 'repositoryUrl' ifAbsent: [ ]
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> repositoryUrl: aString [
+
+	"I think that I want to get rid of this ... or change it?"
+
+	^ self properties at: 'repositoryUrl' put: aString
+]
+
 { #category : 'actions' }
 RwAbstractProjectReferenceDefinition >> resolve [
 
@@ -196,6 +271,24 @@ RwAbstractProjectReferenceDefinition >> resolve: aProjectHome [
 	repoDef := self repositoryDefinition: aProjectHome.
 	repoDef repositoryExists ifFalse: [ self _createRepositoryFrom: repoDef ].
 self error: 'implementation incomplete'.
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> specsPath [
+
+	^ self properties at: 'specsPath' ifAbsent: [ 'rowan/specs' ]
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> specsPath: aString [
+
+	^ self properties at: 'specsPath' put: aString
+]
+
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> specsRoot [
+
+	^self repositoryRoot / self specsPath
 ]
 
 { #category : 'testing' }

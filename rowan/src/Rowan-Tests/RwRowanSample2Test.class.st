@@ -71,7 +71,7 @@ RwRowanSample2Test >> testAutomaticMigration [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	 (gitRootPath / projectName) deleteAll.
+	 (gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -146,7 +146,7 @@ RwRowanSample2Test >> testDeferredMigration [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -198,7 +198,7 @@ RwRowanSample2Test >> testNoMigration [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath /projectName) deleteAll.
+	(gitRootPath /projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -263,7 +263,7 @@ RwRowanSample2Test >> testNoMigration_bitbucket [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -328,7 +328,7 @@ RwRowanSample2Test >> testNoMigration_gitlab [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -393,7 +393,7 @@ RwRowanSample2Test >> testNoMigration_gitolite [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
@@ -522,7 +522,7 @@ RwRowanSample2Test >> testSampleDefaultConfiguration [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString

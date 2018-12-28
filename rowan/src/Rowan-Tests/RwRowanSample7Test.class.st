@@ -53,7 +53,7 @@ RwRowanSample7Test >> testCreateProjectFromUrl [
 
 "delete repository from disk if it exists"
 	repositoryDefinition repositoryExists
-		ifTrue: [ repositoryDefinition repositoryRoot deleteAll ].
+		ifTrue: [ repositoryDefinition repositoryRoot ensureDeleteAll ].
 
 self error: 'test not complete ...'.
 
@@ -209,7 +209,7 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 { #category : 'tests' }
 RwRowanSample7Test >> testResolveProjectReference [
 
-	| specUrlString rowanSpec gitRootPath projectName componentSpec projectReferenceDefinition x y |
+	| specUrlString rowanSpec gitRootPath projectName componentSpec projectReferenceDefinition |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -225,6 +225,8 @@ RwRowanSample7Test >> testResolveProjectReference [
 	projectReferenceDefinition := RwAbstractProjectReferenceDefinition 
 		newForSpecification: componentSpec 
 		projectHome: gitRootPath.
+
+	projectReferenceDefinition repositoryRoot ensureDeleteAll.
 
 	projectReferenceDefinition resolve
 ]

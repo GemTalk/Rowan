@@ -27,7 +27,7 @@ RwRowanSample1Test >> testIssue345 [
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
