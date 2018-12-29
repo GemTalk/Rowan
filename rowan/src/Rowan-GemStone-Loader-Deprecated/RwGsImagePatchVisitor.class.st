@@ -11,7 +11,7 @@ Class {
 		'currentClass',
 		'currentMethod'
 	],
-	#category : 'Rowan-GemStone-Loader'
+	#category : 'Rowan-GemStone-Loader-Deprecated'
 }
 
 { #category : 'instance creation' }

@@ -41,7 +41,6 @@ RwProjectConfigurationsTest >> _expectedLoadPackageNames_common_core_tests [
 RwProjectConfigurationsTest >> _expectedLoadPackageNames_common_deprecated [
 
 	^ (self _expectedLoadPackageNames_common_core , #('Rowan-Deprecated')) sort
-
 ]
 
 { #category : 'private' }
@@ -57,7 +56,6 @@ RwProjectConfigurationsTest >> _expectedLoadPackageNames_gemstone [
 	^ (self _expectedLoadPackageNames_common , 
 			#('Rowan-Services-Extensions' 'Rowan-Services-Core' 'Rowan-GemStone-Core' 'Rowan-GemStone-Kernel' 'Rowan-GemStone-Loader'
 					'Rowan-GemStone-Loader-Extensions' 'Rowan-Services-Tests') ) sort
-
 ]
 
 { #category : 'private' }
