@@ -33,7 +33,7 @@ Class {
 		'errors',
 		'currentProjectDefinition'
 	],
-	#category : 'Rowan-GemStone-Loader'
+	#category : 'Rowan-GemStone-Loader-Deprecated'
 }
 
 { #category : 'private - method initialization order' }
