@@ -30,37 +30,35 @@ RwGsImage class >> _shouldCloneRowanLoader: aProjectSetModification [
 ]
 
 { #category : '*rowan-gemstone-loader-extensions' }
-RwGsImage class >> applyModification: aProjectSetModification instanceMigrator: instanceMigrator [
-
-	self deprecated: 'RwGsImage class >> applyModification:instanceMigrator: deprecated in Rowan 1.2.6+'.
+RwGsImage class >> applyModification_254: aProjectSetModification instanceMigrator: instanceMigrator [
 	(self _shouldCloneRowanLoader: aProjectSetModification)
 		ifTrue: [ 
 			| visitorClass |
-			visitorClass := self _cloneRowanLoaderSymbolDictionary at: #RwGsImagePatchVisitor.
+			visitorClass := self _cloneRowanLoaderSymbolDictionary at: #RwGsImagePatchVisitor_254.
 			self 
-				applyModification: aProjectSetModification 
+				applyModification_254: aProjectSetModification 
 				visitorClass:visitorClass 
 				instanceMigrator: instanceMigrator ]
 		ifFalse: [ 
 			self 
-				applyModification: aProjectSetModification 
-				visitorClass: RwGsImagePatchVisitor 
+				applyModification_254: aProjectSetModification 
+				visitorClass: RwGsImagePatchVisitor_254 
 				instanceMigrator: instanceMigrator ]
+
 ]
 
 { #category : '*rowan-gemstone-loader-extensions' }
-RwGsImage class >> applyModification: aProjectSetModification visitorClass: visitorClass instanceMigrator: instanceMigrator [
+RwGsImage class >> applyModification_254: aProjectSetModification visitorClass: visitorClass instanceMigrator: instanceMigrator [
 
 	| visitor patchSet newClassVersionPatchSet |
-	self deprecated: 'RwGsImage class >> applyModification:visitorClass:instanceMigrator: deprecated in Rowan 1.2.6+'.
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
 	patchSet := visitor patchSet.
-	patchSet moveClassesBetweenPackages.
 	patchSet classesWithNewVersions isEmpty
 		ifTrue: [ 
 			patchSet apply.
 			^ self ].
+	patchSet setupForNewClassVersionUpdates.
 	patchSet classesWithNewVersions
 		do: [ :each | 
 			each
@@ -73,6 +71,6 @@ RwGsImage class >> applyModification: aProjectSetModification visitorClass: visi
 	visitor := visitorClass new.
 	visitor visit: aProjectSetModification.
 	newClassVersionPatchSet := visitor patchSet.
-	newClassVersionPatchSet moveClassesWithNewVersionsBetweenPackages.
 	newClassVersionPatchSet applyForNewClassVersions: instanceMigrator
+
 ]
