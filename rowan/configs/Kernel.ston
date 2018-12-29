@@ -24,6 +24,8 @@
 			'deprecated' : {
 				#packageNames : [
 					'Rowan-Tools-Deprecated',
+					'Rowan-GemStone-Loader-Deprecated',
+					'Rowan-GemStone-Loader-Extensions-Deprecated',
 					'Rowan-Definitions-Deprecated'
 					]
 				}
@@ -61,6 +63,7 @@
 			'SystemUser' : {
 				#packageNameToPlatformPropertiesMap : {
 					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
+					'Rowan-GemStone-Loader-Deprecated' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Core-Definitions-Extensions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Components' : { 'symbolDictName' : 'RowanTools' },
