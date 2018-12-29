@@ -209,7 +209,9 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 { #category : 'tests' }
 RwRowanSample7Test >> testResolveProjectReference [
 
-	| specUrlString rowanSpec gitRootPath projectName componentSpec projectReferenceDefinition |
+	"clone a repository from github, attach to an existing git repository, clone to an alternate projectHome"
+
+	| specUrlString rowanSpec gitRootPath projectName componentSpec projectReferenceDefinition_1 projectReferenceDefinition_2 informHappened |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -222,13 +224,54 @@ RwRowanSample7Test >> testResolveProjectReference [
 	componentSpec := specUrlString asRwUrl asSpecification.
 
 "create project reference definitions"
-	projectReferenceDefinition := RwAbstractProjectReferenceDefinition 
+	projectReferenceDefinition_1 := RwAbstractProjectReferenceDefinition 
 		newForSpecification: componentSpec 
 		projectHome: gitRootPath.
 
-	projectReferenceDefinition repositoryRoot ensureDeleteAll.
+	projectReferenceDefinition_1 repositoryRoot ensureDeleteAll.
 
-	projectReferenceDefinition resolve.
+"1. clone repository"
+	self 
+		handleInformDuring: [ projectReferenceDefinition_1 resolve ] 
+		interactionBlock: [:inform | self assert: false description: 'unexpected inform' ].
 
-self error: 'incomplete: need to try again to resolve again ... now that the repo exists ... different code path'
+"validate"
+	self assert: projectReferenceDefinition_1 repositoryRoot exists.
+
+"2. create second project reference definitions"
+	projectReferenceDefinition_2 := RwAbstractProjectReferenceDefinition 
+		newForSpecification: componentSpec 
+		projectHome: gitRootPath.
+
+"attach to repository - inform confirms that skip branch was taken"
+	informHappened := false.
+	self 
+		handleInformDuring: [ projectReferenceDefinition_2 resolve ] 
+		interactionBlock: [:inform | 
+			"skipping the clone"
+			Transcript cr; show: inform message.
+			informHappened := true ].
+	self assert: informHappened.
+
+"validate"
+	self assert: projectReferenceDefinition_1 projectHome = projectReferenceDefinition_2 projectHome.
+	self assert: projectReferenceDefinition_1 repositoryUrlScheme = projectReferenceDefinition_2 repositoryUrlScheme.
+
+"3. now clone to a different spot by just changing the project home"
+projectReferenceDefinition_2 repositoryRoot ensureDeleteAll.
+
+	gitRootPath := gitRootPath asFileReference / 'sample7_repos'.
+	gitRootPath ensureDeleteAll.
+	gitRootPath ensureCreateDirectory.
+
+	projectReferenceDefinition_2 projectHome: gitRootPath.
+
+"clone to new location"
+	self 
+		handleInformDuring: [ projectReferenceDefinition_2 resolve ] 
+		interactionBlock: [:inform | self assert: false dexcription: 'unexpected inform: ', inform message printString ].
+
+"validate"
+	self assert: projectReferenceDefinition_2 repositoryRoot exists.
+	self deny: projectReferenceDefinition_1 repositoryRoot exists	"confirm that the repo wasn't cloned to old location"
 ]

@@ -12,12 +12,12 @@ RwPrjCloneTool >> _validateForGitProjectReference: aRwGitProjectReference ifDone
 	projectHome := aRwGitProjectReference projectHome.
 	gitRepoPath := projectHome / aRwGitProjectReference projectAlias.
 
-	aRwGitProjectReference repositoryUrlScheme
+	aRwGitProjectReference repositoryUrl
 		ifNotNil: [ :repoUrlString | 
 			| repoUrl |
 			repoUrl := RwUrl fromString: repoUrlString.
 			response := gitTool gitrevparseShowTopLevelIn: repoUrl pathString.
-			command := 'set -e; cd ' , gitRepoPath , '; pwd'.
+			command := 'set -e; cd ' , gitRepoPath pathString , '; pwd'.
 			cdResponse := gitTool performOnServer: command logging: true.
 			(self readlink: response) = (self readlink: cdResponse)
 				ifTrue: [ 
@@ -41,13 +41,10 @@ RwPrjCloneTool >> _validateForGitProjectReference: aRwGitProjectReference ifDone
 			(self readlink: response) = (self readlink: cdResponse)
 				ifTrue: [ 
 					| msg |
-					specification
-						repositoryUrl:
-							'cypress:' , gitRepoPath pathString , '/' , specification repoPath , '/'.
-					specification repositoryRootPath: gitRepoPath pathString.
+					aRwGitProjectReference repositoryUrlScheme:'cypress:'.
 					msg := 'A clone for '
-						, specification specName printString , ' already exists in '
-						, gitRepoPath printString , ', so the clone operation is being skipped'
+						, aRwGitProjectReference projectAlias printString , ' already exists in '
+						, gitRepoPath pathString printString , ', so the clone operation is being skipped'
 						, '
 The project project has been registered with Rowan at the existing location .'.
 					self inform: msg.

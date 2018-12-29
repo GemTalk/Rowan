@@ -179,6 +179,7 @@ RwAbstractProjectReferenceDefinition >> projectHome [
 RwAbstractProjectReferenceDefinition >> projectHome: projectHomeFileReferenceOrString [
 
 	projectHomeFileReferenceOrString ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
+	self repositoryUrlScheme: nil. "clear url scheme, since the repositoryUrl is invalid when a new projectHome is specified"
 	^ self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference
 ]
 
@@ -246,7 +247,7 @@ RwAbstractProjectReferenceDefinition >> repositoryUrl [
 
 	| scheme |
 	scheme := self repositoryUrlScheme.
-	scheme ifNil: [ self error: 'repository url not yet defined' ].
+	scheme ifNil: [ ^ nil ].
 	^ scheme, self packagesRoot pathString  , '/'
 ]
 

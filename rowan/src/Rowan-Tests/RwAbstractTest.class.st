@@ -289,6 +289,15 @@ RwAbstractTest >> gsInteractionConfirmationHandler [
 ]
 
 { #category : 'private' }
+RwAbstractTest >> gsInteractionInformHandler: interactionBlock [
+
+	^ GsInteractionHandler new
+		defaultBlock: [ :ignored | self assert: false description: 'expected an inform' ];
+		informBlock: interactionBlock;
+		yourself
+]
+
+{ #category : 'private' }
 RwAbstractTest >> handleConfirmationDuring: aBlock [
 
 	"expect a confirmation"
@@ -299,6 +308,19 @@ RwAbstractTest >> handleConfirmationDuring: aBlock [
 			ex
 				response:
 					(ex interaction interactWith: self gsInteractionConfirmationHandler) ]
+]
+
+{ #category : 'private' }
+RwAbstractTest >> handleInformDuring: aBlock interactionBlock: interactionBlock [
+
+	"expect a confirmation"
+
+	aBlock
+		on: GsInteractionRequest
+		do: [ :ex | 
+			ex
+				response:
+					(ex interaction interactWith: (self gsInteractionInformHandler: interactionBlock)) ]
 ]
 
 { #category : 'support' }
