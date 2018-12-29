@@ -228,5 +228,7 @@ RwRowanSample7Test >> testResolveProjectReference [
 
 	projectReferenceDefinition repositoryRoot ensureDeleteAll.
 
-	projectReferenceDefinition resolve
+	projectReferenceDefinition resolve.
+
+self error: 'incomplete: need to try again to resolve again ... now that the repo exists ... different code path'
 ]

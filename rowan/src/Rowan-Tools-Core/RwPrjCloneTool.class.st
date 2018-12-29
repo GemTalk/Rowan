@@ -12,7 +12,7 @@ RwPrjCloneTool >> _validateForGitProjectReference: aRwGitProjectReference ifDone
 	projectHome := aRwGitProjectReference projectHome.
 	gitRepoPath := projectHome / aRwGitProjectReference projectAlias.
 
-	aRwGitProjectReference repositoryUrl
+	aRwGitProjectReference repositoryUrlScheme
 		ifNotNil: [ :repoUrlString | 
 			| repoUrl |
 			repoUrl := RwUrl fromString: repoUrlString.
@@ -138,7 +138,7 @@ RwPrjCloneTool >> cloneProjectReference: aRwGitProjectReference [
 	checkout ifNil: [ cloneOption := '' ].
 	response := gitTool gitcloneIn: aRwGitProjectReference projectHome pathString with: cloneOption , cloneUrl.
 	aRwGitProjectReference
-		repositoryUrl: 'cypress:' , aRwGitProjectReference packagesRoot pathString  , '/'.
+		repositoryUrlScheme: 'cypress:'.
 	checkout
 		ifNotNil: [ Rowan projectTools checkout checkoutProjectReference: aRwGitProjectReference ].
 ]

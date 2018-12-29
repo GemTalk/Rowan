@@ -8,9 +8,7 @@ Class {
 RwGitProjectReferenceDefinition >> _createRepositoryFrom: repoDef [ 
 
 	Rowan projectTools clone
-		cloneProjectReference: self.
-
-	self error: 'implementation incomplete'.
+		cloneProjectReference: self
 ]
 
 { #category : 'testing' }

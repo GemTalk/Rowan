@@ -46,7 +46,6 @@ RwAbstractProjectReferenceDefinition class >> newNamed: projectName forSpecifica
 			groupNames: aRwSpecification defaultGroupNames)
 		projectHome: projectHomeFileReferenceOrString;
 		projectSpec: aRwSpecification;
-		repositoryUrl: aRwSpecification repositoryUrl;
 		committish: aRwSpecification repoSpec committish;
 		configsPath: aRwSpecification configsPath;
 		packagesPath: aRwSpecification repoPath;
@@ -245,17 +244,22 @@ RwAbstractProjectReferenceDefinition >> repositoryRoot [
 { #category : 'accessing' }
 RwAbstractProjectReferenceDefinition >> repositoryUrl [
 
-	"I think that I want to get rid of this ... or change it?"
-
-	^ self properties at: 'repositoryUrl' ifAbsent: [ ]
+	| scheme |
+	scheme := self repositoryUrlScheme.
+	scheme ifNil: [ self error: 'repository url not yet defined' ].
+	^ scheme, self packagesRoot pathString  , '/'
 ]
 
 { #category : 'accessing' }
-RwAbstractProjectReferenceDefinition >> repositoryUrl: aString [
+RwAbstractProjectReferenceDefinition >> repositoryUrlScheme [
 
-	"I think that I want to get rid of this ... or change it?"
+	^ self properties at: 'repositoryUrlScheme' ifAbsent: []
+]
 
-	^ self properties at: 'repositoryUrl' put: aString
+{ #category : 'accessing' }
+RwAbstractProjectReferenceDefinition >> repositoryUrlScheme: aString [
+
+	^ self properties at: 'repositoryUrlScheme' put: aString
 ]
 
 { #category : 'actions' }
@@ -269,8 +273,7 @@ RwAbstractProjectReferenceDefinition >> resolve: aProjectHome [
 
 	| repoDef |
 	repoDef := self repositoryDefinition: aProjectHome.
-	repoDef repositoryExists ifFalse: [ self _createRepositoryFrom: repoDef ].
-self error: 'implementation incomplete'.
+	self _createRepositoryFrom: repoDef
 ]
 
 { #category : 'accessing' }
