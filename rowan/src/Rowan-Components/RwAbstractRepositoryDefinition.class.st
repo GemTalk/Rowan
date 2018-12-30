@@ -4,24 +4,21 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'private' }
+RwAbstractRepositoryDefinition class >> _instanceClass: defaultInstanceClass [
+	"default class only needed when receiver is the abstract class"
+
+	self == RwAbstractRepositoryDefinition
+		ifTrue: [ ^ defaultInstanceClass ].
+	^ self
+]
+
 { #category : 'instance creation' }
 RwAbstractRepositoryDefinition class >> newForSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString [
 
 	^ self 
 		newNamed: aRwSpecification specName 
 		forSpecification: aRwSpecification 
-		projectNamed: aRwSpecification specName  
-		projectHome: projectHomeFileReferenceOrString
-]
-
-{ #category : 'instance creation' }
-RwAbstractRepositoryDefinition class >> newForSpecification: aRwSpecification projectNamed: projectName projectHome: projectHomeFileReferenceOrString [
-
-
-	^ self 
-		newNamed: aRwSpecification specName 
-		forSpecification: aRwSpecification 
-		projectNamed: projectName
 		projectHome: projectHomeFileReferenceOrString
 ]
 
@@ -29,35 +26,41 @@ RwAbstractRepositoryDefinition class >> newForSpecification: aRwSpecification pr
 RwAbstractRepositoryDefinition class >> newNamed: repositoryName forSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString [
 
 
-	^ self 
-		newNamed: repositoryName 
-		forSpecification: aRwSpecification 
-		projectNamed: aRwSpecification specName  
-		projectHome: projectHomeFileReferenceOrString
-]
-
-{ #category : 'instance creation' }
-RwAbstractRepositoryDefinition class >> newNamed: repositoryName forSpecification: aRwSpecification projectNamed: projectName projectHome: projectHomeFileReferenceOrString [
-
-	| projectHomeFileReference |
+	| cls projectHomeFileReference |
 	projectHomeFileReference := projectHomeFileReferenceOrString asFileReference.
-	^ projectHomeFileReference fileSystem rowanRepositoryDefinitionClass
+	cls := self _instanceClass: projectHomeFileReference fileSystem rowanRepositoryDefinitionClass.
+	^ cls
 		newNamed: repositoryName 
-		repositoryRoot: projectHomeFileReference / projectName
-		specsPath: aRwSpecification specsPath
-		configsPath: aRwSpecification configsPath
-		srcPath: aRwSpecification repoPath
+		repositoryRoot: projectHomeFileReference / repositoryName
 ]
 
 { #category : 'instance creation' }
-RwAbstractRepositoryDefinition class >> newNamed: repositoryName repositoryRoot: repoRoot specsPath: specsPath configsPath: configsPath srcPath: srcPath [
+RwAbstractRepositoryDefinition class >> newNamed: repositoryName repositoryRoot: repoRoot [ 
 
 	^ self new
 		name: repositoryName;
 		repositoryRoot: repoRoot;
-		specsPath: specsPath;
-		configsPath: configsPath;
-		srcPath: srcPath;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwAbstractRepositoryDefinition class >> newNamed: repositoryName repositoryRoot: repoRoot projectUrl: anUrlString version: aSemanticVersionoOrString [
+
+	^ self new
+		name: repositoryName;
+		repositoryRoot: repoRoot;
+		projectUrl: anUrlString;
+		version: aSemanticVersionoOrString;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwAbstractRepositoryDefinition class >> newNamed: repositoryName repositoryRoot: repoRoot version: aSemanticVersionoOrString [
+
+	^ self new
+		name: repositoryName;
+		repositoryRoot: repoRoot;
+		version: aSemanticVersionoOrString;
 		yourself
 ]
 
@@ -68,15 +71,35 @@ RwAbstractRepositoryDefinition >> _fileSystem [
 ]
 
 { #category : 'accessing' }
-RwAbstractRepositoryDefinition >> configsPath [
+RwAbstractRepositoryDefinition >> alias [
 
-	^ self repositoryRoot / (self properties at: 'configsPath')
+	^ self properties at: 'alias' ifAbsent: [ self name ]
 ]
 
 { #category : 'accessing' }
-RwAbstractRepositoryDefinition >> configsPath: pathStringOrPath [
+RwAbstractRepositoryDefinition >> alias: aString [
 
-	self properties at: 'configsPath' put: pathStringOrPath
+	self properties at: 'alias' put: aString
+]
+
+{ #category : 'actions' }
+RwAbstractRepositoryDefinition >> attach [
+]
+
+{ #category : 'accessing' }
+RwAbstractRepositoryDefinition >> commitId [
+
+	^ self properties at: 'commitId' ifAbsent: [ '' ]
+]
+
+{ #category : 'accessing' }
+RwAbstractRepositoryDefinition >> commitId: aString [
+
+	^ self properties at: 'commitId' put: aString
+]
+
+{ #category : 'actions' }
+RwAbstractRepositoryDefinition >> create [
 ]
 
 { #category : 'accessing' }
@@ -97,6 +120,19 @@ RwAbstractRepositoryDefinition >> name: aString [
 	properties at: 'name' put: aString
 ]
 
+{ #category : 'accessing' }
+RwAbstractRepositoryDefinition >> projectUrl [
+
+	^ self properties at: 'projectUrl' ifAbsent: [ '' ]
+]
+
+{ #category : 'accessing' }
+RwAbstractRepositoryDefinition >> projectUrl: anUrlString [
+
+	anUrlString ifNil: [ ^ self properties removeKey: 'projectUrl' ifAbsent: [ ] ].
+	self properties at: 'projectUrl' put: anUrlString
+]
+
 { #category : 'testing' }
 RwAbstractRepositoryDefinition >> repositoryExists [
 
@@ -112,29 +148,24 @@ RwAbstractRepositoryDefinition >> repositoryRoot [
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> repositoryRoot: pathStringOrReference [
 
+	self version: nil.
+	self projectUrl: nil.
 	self properties at: 'repositoryRoot' put: pathStringOrReference asFileReference
 ]
 
-{ #category : 'accessing' }
-RwAbstractRepositoryDefinition >> specsPath [
-
-	^ self repositoryRoot / (self properties at: 'specsPath')
+{ #category : 'actions' }
+RwAbstractRepositoryDefinition >> resolve [
 ]
 
 { #category : 'accessing' }
-RwAbstractRepositoryDefinition >> specsPath: pathStringOrPath [
+RwAbstractRepositoryDefinition >> version [
 
-	self properties at: 'specsPath' put: pathStringOrPath
+	^ self properties at: 'version' ifAbsent: [ ]
 ]
 
 { #category : 'accessing' }
-RwAbstractRepositoryDefinition >> srcPath [
+RwAbstractRepositoryDefinition >> version: aSemanticVersionoOrString [
 
-	^ self repositoryRoot / (self properties at: 'srcPath')
-]
-
-{ #category : 'accessing' }
-RwAbstractRepositoryDefinition >> srcPath: pathStringOrPath [
-
-	self properties at: 'srcPath' put: pathStringOrPath
+	aSemanticVersionoOrString ifNil: [ ^ self properties removeKey: 'version' ifAbsent: [ ] ].
+	^ self properties at: 'version' put: aSemanticVersionoOrString asRwSemanticVersionNumber
 ]

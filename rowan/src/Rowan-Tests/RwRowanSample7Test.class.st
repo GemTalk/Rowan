@@ -74,7 +74,7 @@ self error: 'test not complete ...'.
 { #category : 'tests' }
 RwRowanSample7Test >> testCreateProjectReferenceFromUrl [
 
-	| specUrlString rowanSpec gitRootPath projectName componentSpec projectReferenceDefinition x y |
+	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition x y |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -84,11 +84,11 @@ RwRowanSample7Test >> testCreateProjectReferenceFromUrl [
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
-	componentSpec := specUrlString asRwUrl asSpecification.
+	projectSpec := specUrlString asRwUrl asSpecification.
 
 "create project reference definitions"
 	projectReferenceDefinition := RwAbstractProjectReferenceDefinition 
-		newForSpecification: componentSpec 
+		newForSpecification: projectSpec 
 		projectHome: gitRootPath.
 
 "validate"
@@ -101,10 +101,44 @@ RwRowanSample7Test >> testCreateProjectReferenceFromUrl [
 	self assert: (x := projectReferenceDefinition projectHome pathString) = (y := gitRootPath asFileReference pathString).
 
 "create project reference definitions"
-	projectReferenceDefinition := RwAbstractProjectReferenceDefinition newForSpecification: componentSpec.
+	projectReferenceDefinition := RwAbstractProjectReferenceDefinition newForSpecification: projectSpec.
 
 "validate"
 	self assert: (x := projectReferenceDefinition projectHome pathString) = (y := FileLocator rowanProjectsHome pathString).
+]
+
+{ #category : 'tests' }
+RwRowanSample7Test >> testCreateRepositoryDefinition [
+
+	"exercise the RwAbstractRepositoryDefinition class creation protocol"
+
+	| rowanSpec gitRootPath repositoryName repositoryDefinition  repoDef repoRoot specsPath configsPath srcPath |
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	repositoryName := 'RowanSample7'.
+	repoRoot := ''.
+	specsPath := ''.
+	configsPath := ''.
+	srcPath := ''.
+
+"create repository definitions"
+	repositoryDefinition := RwAbstractRepositoryDefinition
+		newNamed: repositoryName 
+		repositoryRoot: repoRoot 
+		specsPath: specsPath 
+		configsPath: configsPath 
+		srcPath: srcPath
+
+		newForSpecification: 'projectSpec'
+			projectHome: gitRootPath.
+
+	self assert: repoDef  configsPath = repositoryDefinition configsPath.
+	self assert: repoDef  name = repositoryDefinition name.
+	self assert: repoDef  repositoryRoot = repositoryDefinition repositoryRoot.
+	self assert: repoDef  specsPath = repositoryDefinition specsPath.
+	self assert: repoDef  srcPath = repositoryDefinition srcPath
 ]
 
 { #category : 'tests' }
@@ -112,7 +146,7 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_1 [
 
 	"exercise the RwAbstractRepositoryDefinition class creation protocol"
 
-	| specUrlString rowanSpec gitRootPath projectName componentSpec repositoryDefinition_1
+	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition_1
 		repositoryDefinition_2 repositoryDefinition_3 repositoryDefinition_4 |
 
 	projectName := 'RowanSample7'.
@@ -123,27 +157,27 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_1 [
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
-	componentSpec := specUrlString asRwUrl asSpecification.
+	projectSpec := specUrlString asRwUrl asSpecification.
 
 
 "create repository definitions"
 	repositoryDefinition_1 := RwAbstractRepositoryDefinition 
-		newForSpecification: componentSpec 
+		newForSpecification: projectSpec 
 			projectHome: gitRootPath.
 
 	repositoryDefinition_2 := RwAbstractRepositoryDefinition 
-		newForSpecification: componentSpec 
+		newForSpecification: projectSpec 
 			projectNamed: projectName
 			projectHome: gitRootPath.
 
 	repositoryDefinition_3 := RwAbstractRepositoryDefinition 
 		newNamed: projectName 
-			forSpecification: componentSpec 
+			forSpecification: projectSpec 
 			projectHome: gitRootPath.
 
 	repositoryDefinition_4 := RwAbstractRepositoryDefinition 
 		newNamed: projectName 
-			forSpecification: componentSpec
+			forSpecification: projectSpec
 			projectNamed: projectName
 			projectHome: gitRootPath.
 
@@ -161,7 +195,7 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 
 	"verify that the repository root can be dynamically swapped out (if desired) ... repository definitioin can be ointed wholesale to another $ROWAN_PROJECTS_HOME"
 
-	| specUrlString rowanSpec gitRootPath projectName componentSpec repositoryDefinition x y  memoryRoot repositoryDefinition_1 |
+	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition x y  memoryRoot repositoryDefinition_1 |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -171,15 +205,15 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 	gitRootPath := FileLocator rowanProjectsHome resolve / 'Rowan/test/testRepositories/repos/'.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
-	componentSpec := specUrlString asRwUrl asSpecification.
+	projectSpec := specUrlString asRwUrl asSpecification.
 
 "create repository definition based on disk"
 	repositoryDefinition := RwAbstractRepositoryDefinition 
-		newForSpecification: componentSpec 
+		newForSpecification: projectSpec 
 			projectHome: gitRootPath.
 
 "validate"
-	self assert: (x := repositoryDefinition srcPath pathString) = (y := (gitRootPath / projectName / componentSpec repoPath) pathString).
+	self assert: (x := repositoryDefinition srcPath pathString) = (y := (gitRootPath / projectName / projectSpec repoPath) pathString).
 
 "create repository definition based on memory"
 	memoryRoot := FileSystem memory * 'repoDefinitionTestRoot'.
@@ -189,11 +223,11 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 	repositoryDefinition repositoryRoot: gitRootPath / projectName.
 
 "validate"
-	self assert: (x := repositoryDefinition srcPath pathString) = (y := (gitRootPath / projectName / componentSpec repoPath) pathString).
+	self assert: (x := repositoryDefinition srcPath pathString) = (y := (gitRootPath / projectName / projectSpec repoPath) pathString).
 
 "create from scratch and it should be using RwMemoryRepositoryDefinition"
 	repositoryDefinition_1 := RwAbstractRepositoryDefinition 
-		newForSpecification: componentSpec 
+		newForSpecification: projectSpec 
 			projectHome: gitRootPath.
 
 "validate"
@@ -211,7 +245,7 @@ RwRowanSample7Test >> testResolveProjectReference [
 
 	"clone a repository from github, attach to an existing git repository, clone to an alternate projectHome"
 
-	| specUrlString rowanSpec gitRootPath projectName componentSpec projectReferenceDefinition_1 projectReferenceDefinition_2 informHappened |
+	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition_1 projectReferenceDefinition_2 informHappened |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -221,11 +255,11 @@ RwRowanSample7Test >> testResolveProjectReference [
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
-	componentSpec := specUrlString asRwUrl asSpecification.
+	projectSpec := specUrlString asRwUrl asSpecification.
 
 "create project reference definitions"
 	projectReferenceDefinition_1 := RwAbstractProjectReferenceDefinition 
-		newForSpecification: componentSpec 
+		newForSpecification: projectSpec 
 		projectHome: gitRootPath.
 
 	projectReferenceDefinition_1 repositoryRoot ensureDeleteAll.
@@ -240,7 +274,7 @@ RwRowanSample7Test >> testResolveProjectReference [
 
 "2. create second project reference definitions"
 	projectReferenceDefinition_2 := RwAbstractProjectReferenceDefinition 
-		newForSpecification: componentSpec 
+		newForSpecification: projectSpec 
 		projectHome: gitRootPath.
 
 "attach to repository - inform confirms that skip branch was taken"
