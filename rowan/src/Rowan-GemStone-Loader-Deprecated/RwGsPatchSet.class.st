@@ -73,6 +73,7 @@ RwGsPatchSet class >> methodPatchesInInitializationOrder: methodPatches [
 	"Returns acollection of the specified methodPatches ordered in superclass order, which is sufficient for initialization order."
 
 	| order toBeOrdered processed aClass patchMap |
+	self deprecated: 'RwGsPatchSet >> methodPatchesInInitializationOrder: deprecated in Rowan 1.2.6+'.
 	patchMap := IdentityKeyValueDictionary new.
 	methodPatches do: [:methodPatch |
 		patchMap at: methodPatch behavior thisClass put: methodPatch ].
@@ -87,12 +88,12 @@ RwGsPatchSet class >> methodPatchesInInitializationOrder: methodPatches [
 				into: order
 				ignoring: processed ].
   ^ (order collect: [:orderedClass | patchMap at: orderedClass ifAbsent: []]) select: [:patch | patch notNil ]
-
 ]
 
 { #category : 'instance creation' }
 RwGsPatchSet class >> new [
 
+	self deprecated: 'The class RwGsPatchSet is deprecated. Use the class RwGsPatchSet_254 instead'.
 	^super new initialize
 ]
 
