@@ -17,6 +17,7 @@ Class {
 { #category : 'instance creation' }
 RwGsImagePatchVisitor class >> new [
 
+	self deprecated: 'The class RwGsImagePatchVisitor is deprecated. Use the class RwGsImagePatchVisitor_254 instead'.
 	^super new initialize
 ]
 
