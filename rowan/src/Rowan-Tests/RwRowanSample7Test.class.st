@@ -8,6 +8,18 @@ Class {
 }
 
 { #category : 'private' }
+RwRowanSample7Test >> _gitHubProjectUrl [
+
+	^ 'https://github.com/dalehenrich/RowanSample7'
+]
+
+{ #category : 'private' }
+RwRowanSample7Test >> _projectVersionString [
+
+	^ '0.0.2'
+]
+
+{ #category : 'private' }
 RwRowanSample7Test >> _repositoryRoot [
 
 	^ repositoryRoot
@@ -112,33 +124,69 @@ RwRowanSample7Test >> testCreateRepositoryDefinition [
 
 	"exercise the RwAbstractRepositoryDefinition class creation protocol"
 
-	| rowanSpec gitRootPath repositoryName repositoryDefinition  repoDef repoRoot specsPath configsPath srcPath |
-
+	| rowanSpec gitRootPath repositoryName repositoryDefinition_1  repositoryDefinition_2 repoRoot
+		projectVersionString gitHubProjectUrl |
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
 
 	repositoryName := 'RowanSample7'.
-	repoRoot := ''.
-	specsPath := ''.
-	configsPath := ''.
-	srcPath := ''.
+	repoRoot := gitRootPath asFileReference / repositoryName.
+	projectVersionString := self _projectVersionString.
+	gitHubProjectUrl := self _gitHubProjectUrl.
 
-"create repository definitions"
-	repositoryDefinition := RwAbstractRepositoryDefinition
+"create repository definitions using #newNamed:repositoryRoot:"
+	repositoryDefinition_1 := RwAbstractRepositoryDefinition
 		newNamed: repositoryName 
-		repositoryRoot: repoRoot 
-		specsPath: specsPath 
-		configsPath: configsPath 
-		srcPath: srcPath
+		repositoryRoot: repoRoot.
 
-		newForSpecification: 'projectSpec'
-			projectHome: gitRootPath.
+	repositoryDefinition_2 := RwAbstractRepositoryDefinition
+		newNamed: repositoryName 
+		repositoryRoot: repoRoot pathString.
 
-	self assert: repoDef  configsPath = repositoryDefinition configsPath.
-	self assert: repoDef  name = repositoryDefinition name.
-	self assert: repoDef  repositoryRoot = repositoryDefinition repositoryRoot.
-	self assert: repoDef  specsPath = repositoryDefinition specsPath.
-	self assert: repoDef  srcPath = repositoryDefinition srcPath
+"validate"
+	self assert: repositoryDefinition_1  name = repositoryDefinition_2 name.
+	self assert: repositoryDefinition_1  repositoryRoot = repositoryDefinition_2 repositoryRoot.
+	self assert:  repositoryDefinition_1 repositoryRoot = repoRoot asFileReference.
+
+"create repository definitions using #newNamed:repositoryRoot:version:"
+	repositoryDefinition_1 := RwAbstractRepositoryDefinition
+		newNamed: repositoryName 
+		repositoryRoot: repoRoot
+		version: projectVersionString.
+
+	repositoryDefinition_2 := RwAbstractRepositoryDefinition
+		newNamed: repositoryName 
+		repositoryRoot: repoRoot pathString
+		version: projectVersionString asRwSemanticVersionNumber.
+
+"validate"
+	self assert: repositoryDefinition_1  name = repositoryDefinition_2 name.
+	self assert: repositoryDefinition_1  repositoryRoot = repositoryDefinition_2 repositoryRoot.
+	self assert: repositoryDefinition_1  version = repositoryDefinition_2 version.
+
+	self assert:  repositoryDefinition_1 version = projectVersionString asRwSemanticVersionNumber.
+	self assert:  repositoryDefinition_1 repositoryRoot = repoRoot asFileReference.
+
+"create repository definitions using #newNamed:repositoryRoot:version:"
+	repositoryDefinition_1 := RwAbstractRepositoryDefinition
+		newNamed: repositoryName 
+		repositoryRoot: repoRoot
+		projectUrl: gitHubProjectUrl
+		version: projectVersionString.
+
+	repositoryDefinition_2 := RwAbstractRepositoryDefinition
+		newNamed: repositoryName 
+		repositoryRoot: repoRoot pathString
+		projectUrl: gitHubProjectUrl
+		version: projectVersionString asRwSemanticVersionNumber.
+
+"validate"
+	self assert: repositoryDefinition_1  name = repositoryDefinition_2 name.
+	self assert: repositoryDefinition_1  repositoryRoot = repositoryDefinition_2 repositoryRoot.
+	self assert: repositoryDefinition_1  version = repositoryDefinition_2 version.
+	self assert: repositoryDefinition_1  projectUrl = repositoryDefinition_2 projectUrl.
+
+	self assert:  repositoryDefinition_1 projectUrl = gitHubProjectUrl.
 ]
 
 { #category : 'tests' }
