@@ -17,5 +17,5 @@ RwComponentSpecification >> version [
 
 	"return an RwSemanticVersionNumber"
 
-	^ self reposSpec version
+	^ self repoSpec version
 ]

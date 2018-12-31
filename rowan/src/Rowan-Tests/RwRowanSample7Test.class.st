@@ -195,7 +195,7 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_1 [
 	"exercise the RwAbstractRepositoryDefinition class creation protocol"
 
 	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition_1
-		repositoryDefinition_2 repositoryDefinition_3 repositoryDefinition_4 |
+		repositoryDefinition_2 |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -214,28 +214,16 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_1 [
 			projectHome: gitRootPath.
 
 	repositoryDefinition_2 := RwAbstractRepositoryDefinition 
-		newForSpecification: projectSpec 
-			projectNamed: projectName
-			projectHome: gitRootPath.
-
-	repositoryDefinition_3 := RwAbstractRepositoryDefinition 
 		newNamed: projectName 
 			forSpecification: projectSpec 
 			projectHome: gitRootPath.
 
-	repositoryDefinition_4 := RwAbstractRepositoryDefinition 
-		newNamed: projectName 
-			forSpecification: projectSpec
-			projectNamed: projectName
-			projectHome: gitRootPath.
+	self assert: repositoryDefinition_1  name = repositoryDefinition_2 name.
+	self assert: repositoryDefinition_1  repositoryRoot = repositoryDefinition_2 repositoryRoot.
+	self assert: repositoryDefinition_1  version = repositoryDefinition_2 version.
+	self assert: repositoryDefinition_1  projectUrl = repositoryDefinition_2 projectUrl.
 
-	{repositoryDefinition_1 . repositoryDefinition_2 . repositoryDefinition_3 . repositoryDefinition_4}
-		do: [:repoDef |
-			self assert: repoDef  configsPath = repositoryDefinition_1 configsPath.
-			self assert: repoDef  name = repositoryDefinition_1 name.
-			self assert: repoDef  repositoryRoot = repositoryDefinition_1 repositoryRoot.
-			self assert: repoDef  specsPath = repositoryDefinition_1 specsPath.
-			self assert: repoDef  srcPath = repositoryDefinition_1 srcPath ]
+	self assert:  repositoryDefinition_1 projectUrl = self _gitHubProjectUrl
 ]
 
 { #category : 'tests' }
