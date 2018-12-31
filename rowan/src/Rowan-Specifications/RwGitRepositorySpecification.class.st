@@ -138,3 +138,22 @@ RwGitRepositorySpecification >> useGit [
 
 	^ true
 ]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> version [
+
+	| vers |
+	vers :=  self versionString.
+	vers isEmpty ifTrue: [ ^ nil ].
+	^ vers asRwSemanticVersionNumber
+]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> versionString [
+
+	self committishType =  'tag'
+		ifFalse: [ ^ '' ]
+	self commitish first = 'v'
+		ifTrue: [ ^self commitish copyFrom: 2 to self commitish size ].
+	^self commitish
+]

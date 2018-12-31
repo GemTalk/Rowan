@@ -91,3 +91,9 @@ RwSpecification >> postCopy [
 RwSpecification >> projectUrl: ignored [
   
 ]
+
+{ #category : 'accessing' }
+RwSpecification >> version [
+
+	^ nil
+]

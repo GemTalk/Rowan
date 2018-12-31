@@ -95,3 +95,9 @@ RwRepositorySpecification >> useGit [
 
 	^ false
 ]
+
+{ #category : 'accessing' }
+RwRepositorySpecification >> version [
+
+	^ nil
+]

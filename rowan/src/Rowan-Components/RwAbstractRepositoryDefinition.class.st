@@ -32,6 +32,8 @@ RwAbstractRepositoryDefinition class >> newNamed: repositoryName forSpecificatio
 	^ cls
 		newNamed: repositoryName 
 		repositoryRoot: projectHomeFileReference / repositoryName
+		projectUrl: aRwSpecification projectUrl
+		version: aRwSpecification version
 ]
 
 { #category : 'instance creation' }
@@ -164,8 +166,8 @@ RwAbstractRepositoryDefinition >> version [
 ]
 
 { #category : 'accessing' }
-RwAbstractRepositoryDefinition >> version: aSemanticVersionoOrString [
+RwAbstractRepositoryDefinition >> version: aSemanticVersionOrString [
 
-	aSemanticVersionoOrString ifNil: [ ^ self properties removeKey: 'version' ifAbsent: [ ] ].
-	^ self properties at: 'version' put: aSemanticVersionoOrString asRwSemanticVersionNumber
+	aSemanticVersionOrString ifNil: [ ^ self properties removeKey: 'version' ifAbsent: [ ] ].
+	^ self properties at: 'version' put: aSemanticVersionOrString asRwSemanticVersionNumber
 ]

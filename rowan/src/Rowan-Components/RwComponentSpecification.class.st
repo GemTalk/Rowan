@@ -11,3 +11,11 @@ RwComponentSpecification >> asDefinition [
 
 	self error: 'not yet implemented'.
 ]
+
+{ #category : 'accessing' }
+RwComponentSpecification >> version [
+
+	"return an RwSemanticVersionNumber"
+
+	^ self reposSpec version
+]
