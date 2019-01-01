@@ -4,6 +4,14 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'instance creation' }
+RwGitRepositoryDefinition class >> newNamed: repositoryName forSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString [
+
+	^ (super newNamed: repositoryName forSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString)
+		committish: aRwSpecification repoSpec committish;
+		yourself
+]
+
 { #category : 'accessing' }
 RwGitRepositoryDefinition >> commitId [
 self error: 'use a git command to extract commitId'
@@ -13,6 +21,15 @@ self error: 'use a git command to extract commitId'
 RwGitRepositoryDefinition >> commitId: aString [
 
 	self shouldNotImplement: #commitId
+]
+
+{ #category : 'actions' }
+RwGitRepositoryDefinition >> resolve [
+
+	"attach to existing git repository structure, clone, or create"
+
+	Rowan projectTools clone
+		cloneRepository: self
 ]
 
 { #category : 'accessing' }

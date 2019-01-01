@@ -210,8 +210,7 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_1 [
 
 	"exercise the RwAbstractRepositoryDefinition class creation protocol"
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition_1
-		repositoryDefinition_2 x y |
+	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition_1 |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -229,18 +228,10 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_1 [
 		newForSpecification: projectSpec 
 			projectHome: gitRootPath.
 
-	repositoryDefinition_2 := RwAbstractRepositoryDefinition 
-		newNamed: projectName 
-			forSpecification: projectSpec 
-			projectHome: gitRootPath.
-
-	self assert: repositoryDefinition_1  name = repositoryDefinition_2 name.
-	self assert: repositoryDefinition_1  repositoryRoot = repositoryDefinition_2 repositoryRoot.
-	self assert: repositoryDefinition_1  version = repositoryDefinition_2 version.
-	self assert: repositoryDefinition_1  projectUrl = repositoryDefinition_2 projectUrl.
-
-	self assert:  repositoryDefinition_1 projectUrl = self _gitHubProjectUrl.
-	self assert: (x := repositoryDefinition_1 version) = (y := self _projectVersionString asRwSemanticVersionNumber)
+	self assert: repositoryDefinition_1  name = projectSpec specName.
+	self assert: repositoryDefinition_1  repositoryRoot = (gitRootPath asFileReference / projectName).
+	self assert: repositoryDefinition_1  version =  self _projectVersionString asRwSemanticVersionNumber.
+	self assert: repositoryDefinition_1  projectUrl = self _gitHubProjectUrl
 ]
 
 { #category : 'tests' }
@@ -361,4 +352,39 @@ projectReferenceDefinition_2 repositoryRoot ensureDeleteAll.
 "validate"
 	self assert: projectReferenceDefinition_2 repositoryRoot exists.
 	self deny: projectReferenceDefinition_1 repositoryRoot exists	"confirm that the repo wasn't cloned to old location"
+]
+
+{ #category : 'tests' }
+RwRowanSample7Test >> testResolveRepositoryDefinition [
+
+	"clone a repository from github using repositoryDefinition"
+
+	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition |
+
+	projectName := 'RowanSample7'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	gitRootPath := (rowanSpec repositoryRootPath , '/test/testRepositories/repos/') asFileReference.
+
+	specUrlString := self _rowanSample7SpecificationUrl.
+	projectSpec := specUrlString asRwUrl asSpecification.
+
+
+"create repository definitions"
+	repositoryDefinition := RwAbstractRepositoryDefinition 
+		newForSpecification: projectSpec 
+			projectHome: gitRootPath.
+
+	repositoryDefinition repositoryRoot ensureDeleteAll.
+
+"1. clone repository"
+	self 
+		handleInformDuring: [ repositoryDefinition resolve ] 
+		interactionBlock: [:inform | self assert: false description: 'unexpected inform' ].
+
+"validate"
+	self assert: gitRootPath exists.
+	self assert: repositoryDefinition repositoryExists.
 ]

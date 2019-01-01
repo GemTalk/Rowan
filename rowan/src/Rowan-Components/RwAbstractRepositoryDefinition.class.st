@@ -28,12 +28,14 @@ RwAbstractRepositoryDefinition class >> newNamed: repositoryName forSpecificatio
 
 	| cls projectHomeFileReference |
 	projectHomeFileReference := projectHomeFileReferenceOrString asFileReference.
-	cls := self _instanceClass: projectHomeFileReference fileSystem rowanRepositoryDefinitionClass.
-	^ cls
+	cls := aRwSpecification useGit
+		ifTrue: [ RwGitRepositoryDefinition ]
+		ifFalse: [  projectHomeFileReference fileSystem rowanRepositoryDefinitionClass ].
+	^ (self _instanceClass: cls)
 		newNamed: repositoryName 
-		repositoryRoot: projectHomeFileReference / repositoryName
-		projectUrl: aRwSpecification projectUrl
-		version: aRwSpecification version
+			repositoryRoot: projectHomeFileReference / repositoryName
+			projectUrl: aRwSpecification projectUrl
+			version: aRwSpecification version
 ]
 
 { #category : 'instance creation' }
@@ -86,6 +88,19 @@ RwAbstractRepositoryDefinition >> _fileSystem [
 RwAbstractRepositoryDefinition >> attach [
 
 	self error: 'not yet implemented'
+]
+
+{ #category : 'accessing' }
+RwAbstractRepositoryDefinition >> committish [
+
+	^ self properties at: 'committish' ifAbsent: [ '' ]
+]
+
+{ #category : 'accessing' }
+RwAbstractRepositoryDefinition >> committish: anCommittishString [
+
+	anCommittishString ifNil: [ ^ self properties removeKey: 'committish' ifAbsent: [ ] ].
+	self properties at: 'committish' put: anCommittishString
 ]
 
 { #category : 'actions' }
@@ -147,6 +162,10 @@ RwAbstractRepositoryDefinition >> repositoryRoot: pathStringOrReference [
 
 { #category : 'actions' }
 RwAbstractRepositoryDefinition >> resolve [
+
+	"attach to existing repository structure or create"
+
+	self subclassResponsibility: #resolve
 ]
 
 { #category : 'accessing' }
