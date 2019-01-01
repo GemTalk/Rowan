@@ -148,6 +148,22 @@ RwRowanSample7Test >> testCreateRepositoryDefinition [
 	self assert: repositoryDefinition_1  repositoryRoot = repositoryDefinition_2 repositoryRoot.
 	self assert:  repositoryDefinition_1 repositoryRoot = repoRoot asFileReference.
 
+"create repository definitions using #newNamed:repositoryRoot:projectUrl:"
+	repositoryDefinition_1 := RwAbstractRepositoryDefinition
+		newNamed: repositoryName 
+		repositoryRoot: repoRoot
+		projectUrl: gitHubProjectUrl.
+
+	repositoryDefinition_2 := RwAbstractRepositoryDefinition
+		newNamed: repositoryName 
+		repositoryRoot: repoRoot pathString
+		projectUrl: gitHubProjectUrl.
+
+"validate"
+	self assert: repositoryDefinition_1  name = repositoryDefinition_2 name.
+	self assert: repositoryDefinition_1  repositoryRoot = repositoryDefinition_2 repositoryRoot.
+	self assert: repositoryDefinition_1  projectUrl = repositoryDefinition_2 projectUrl.
+
 "create repository definitions using #newNamed:repositoryRoot:version:"
 	repositoryDefinition_1 := RwAbstractRepositoryDefinition
 		newNamed: repositoryName 
@@ -167,7 +183,7 @@ RwRowanSample7Test >> testCreateRepositoryDefinition [
 	self assert:  repositoryDefinition_1 version = projectVersionString asRwSemanticVersionNumber.
 	self assert:  repositoryDefinition_1 repositoryRoot = repoRoot asFileReference.
 
-"create repository definitions using #newNamed:repositoryRoot:version:"
+"create repository definitions using #newNamed:repositoryRoot:projectUrl:version:"
 	repositoryDefinition_1 := RwAbstractRepositoryDefinition
 		newNamed: repositoryName 
 		repositoryRoot: repoRoot
@@ -195,7 +211,7 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_1 [
 	"exercise the RwAbstractRepositoryDefinition class creation protocol"
 
 	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition_1
-		repositoryDefinition_2 |
+		repositoryDefinition_2 x y |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -223,7 +239,8 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_1 [
 	self assert: repositoryDefinition_1  version = repositoryDefinition_2 version.
 	self assert: repositoryDefinition_1  projectUrl = repositoryDefinition_2 projectUrl.
 
-	self assert:  repositoryDefinition_1 projectUrl = self _gitHubProjectUrl
+	self assert:  repositoryDefinition_1 projectUrl = self _gitHubProjectUrl.
+	self assert: (x := repositoryDefinition_1 version) = (y := self _projectVersionString asRwSemanticVersionNumber)
 ]
 
 { #category : 'tests' }

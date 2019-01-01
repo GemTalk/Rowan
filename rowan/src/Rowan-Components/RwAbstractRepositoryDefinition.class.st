@@ -46,6 +46,16 @@ RwAbstractRepositoryDefinition class >> newNamed: repositoryName repositoryRoot:
 ]
 
 { #category : 'instance creation' }
+RwAbstractRepositoryDefinition class >> newNamed: repositoryName repositoryRoot: repoRoot projectUrl: anUrlString [
+
+	^ self new
+		name: repositoryName;
+		repositoryRoot: repoRoot;
+		projectUrl: anUrlString;
+		yourself
+]
+
+{ #category : 'instance creation' }
 RwAbstractRepositoryDefinition class >> newNamed: repositoryName repositoryRoot: repoRoot projectUrl: anUrlString version: aSemanticVersionoOrString [
 
 	^ self new
@@ -72,36 +82,16 @@ RwAbstractRepositoryDefinition >> _fileSystem [
 	self subclassResponsibility: #_fileSystem
 ]
 
-{ #category : 'accessing' }
-RwAbstractRepositoryDefinition >> alias [
-
-	^ self properties at: 'alias' ifAbsent: [ self name ]
-]
-
-{ #category : 'accessing' }
-RwAbstractRepositoryDefinition >> alias: aString [
-
-	self properties at: 'alias' put: aString
-]
-
 { #category : 'actions' }
 RwAbstractRepositoryDefinition >> attach [
-]
 
-{ #category : 'accessing' }
-RwAbstractRepositoryDefinition >> commitId [
-
-	^ self properties at: 'commitId' ifAbsent: [ '' ]
-]
-
-{ #category : 'accessing' }
-RwAbstractRepositoryDefinition >> commitId: aString [
-
-	^ self properties at: 'commitId' put: aString
+	self error: 'not yet implemented'
 ]
 
 { #category : 'actions' }
 RwAbstractRepositoryDefinition >> create [
+
+	self error: 'not yet implemented'
 ]
 
 { #category : 'accessing' }

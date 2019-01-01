@@ -232,7 +232,6 @@ RwAbstractProjectReferenceDefinition >> repositoryDefinition: aProjectHome [
 	^ self _repositoryDefinitionClass 
 		newNamed: self projectName 
 			forSpecification: self projectSpec  
-			projectNamed: self projectName 
 			projectHome: aProjectHome
 ]
 
@@ -274,6 +273,7 @@ RwAbstractProjectReferenceDefinition >> resolve: aProjectHome [
 
 	| repoDef |
 	repoDef := self repositoryDefinition: aProjectHome.
+self error: 'implementation not complete: project reference must hang onto the repo def'.
 	self _createRepositoryFrom: repoDef
 ]
 

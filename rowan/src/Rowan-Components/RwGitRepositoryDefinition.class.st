@@ -5,6 +5,17 @@ Class {
 }
 
 { #category : 'accessing' }
+RwGitRepositoryDefinition >> commitId [
+self error: 'use a git command to extract commitId'
+]
+
+{ #category : 'accessing' }
+RwGitRepositoryDefinition >> commitId: aString [
+
+	self shouldNotImplement: #commitId
+]
+
+{ #category : 'accessing' }
 RwGitRepositoryDefinition >> version [
 
 	^ self properties at: 'version' ifAbsent: [

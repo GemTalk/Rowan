@@ -153,7 +153,7 @@ RwGitRepositorySpecification >> versionString [
 
 	self committishType =  'tag'
 		ifFalse: [ ^ '' ].
-	self commitish first = 'v'
-		ifTrue: [ ^self commitish copyFrom: 2 to self commitish size ].
-	^self commitish
+	self committish first = $v
+		ifTrue: [ ^self committish copyFrom: 2 to: self committish size ].
+	^self committish
 ]

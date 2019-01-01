@@ -7,8 +7,8 @@ RwComponentSpecification{
 		}
 	},
 	#repoSpec : RwGitRepositorySpecification {
-		#committish : 'master',
-		#committishType : 'branch'
+		#committish : 'v0.0.2',
+		#committishType : 'tag'
 	},
 	#configsPath : 'rowan/configs',
 	#repoPath : 'rowan/src',

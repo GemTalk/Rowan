@@ -11,6 +11,12 @@ RwGitProjectReferenceDefinition >> _createRepositoryFrom: repoDef [
 		cloneProjectReference: self
 ]
 
+{ #category : 'private' }
+RwGitProjectReferenceDefinition >> _repositoryDefinitionClass [
+
+	^ RwGitRepositoryDefinition
+]
+
 { #category : 'testing' }
 RwGitProjectReferenceDefinition >> useGit [
 
