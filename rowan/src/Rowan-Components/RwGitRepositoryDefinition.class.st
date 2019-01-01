@@ -5,9 +5,9 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwGitRepositoryDefinition class >> newNamed: repositoryName forSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString [
+RwGitRepositoryDefinition class >> newNamed: repositoryName forSpecification: aRwSpecification repositoryRoot: repoRoot [
 
-	^ (super newNamed: repositoryName forSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString)
+	^ (super newNamed: repositoryName forSpecification: aRwSpecification repositoryRoot: repoRoot)
 		committish: aRwSpecification repoSpec committish;
 		yourself
 ]

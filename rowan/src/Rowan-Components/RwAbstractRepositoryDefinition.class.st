@@ -33,7 +33,16 @@ RwAbstractRepositoryDefinition class >> newNamed: repositoryName forSpecificatio
 		ifFalse: [  projectHomeFileReference fileSystem rowanRepositoryDefinitionClass ].
 	^ (self _instanceClass: cls)
 		newNamed: repositoryName 
+			forSpecification: aRwSpecification
 			repositoryRoot: projectHomeFileReference / repositoryName
+]
+
+{ #category : 'instance creation' }
+RwAbstractRepositoryDefinition class >> newNamed: repositoryName forSpecification: aRwSpecification repositoryRoot: repoRoot [
+
+	^self
+		newNamed: repositoryName 
+			repositoryRoot: repoRoot
 			projectUrl: aRwSpecification projectUrl
 			version: aRwSpecification version
 ]

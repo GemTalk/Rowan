@@ -196,9 +196,7 @@ RwPrjCloneTool >> cloneRepository: aRwGitRepositoryDefinition [
 	cloneOption := ' --no-checkout '.
 	checkout := aRwGitRepositoryDefinition committish.
 	checkout ifNil: [ cloneOption := '' ].
-	response := gitTool gitcloneIn: aRwGitRepositoryDefinition projectHome pathString with: cloneOption , cloneUrl.
-	aRwGitRepositoryDefinition
-		repositoryUrlScheme: 'cypress:'.
+	response := gitTool gitcloneIn: aRwGitRepositoryDefinition repositoryRoot parent pathString with: cloneOption , cloneUrl.
 	checkout
 		ifNotNil: [ Rowan projectTools checkout checkoutProjectReference: aRwGitRepositoryDefinition ].
 ]

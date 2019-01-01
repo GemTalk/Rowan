@@ -371,15 +371,32 @@ RwRowanSample7Test >> testResolveRepositoryDefinition [
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
 
-
-"create repository definitions"
+"create repository definitions using standard git repo name"
 	repositoryDefinition := RwAbstractRepositoryDefinition 
 		newForSpecification: projectSpec 
 			projectHome: gitRootPath.
 
 	repositoryDefinition repositoryRoot ensureDeleteAll.
 
-"1. clone repository"
+"clone repository "
+	self 
+		handleInformDuring: [ repositoryDefinition resolve ] 
+		interactionBlock: [:inform | self assert: false description: 'unexpected inform' ].
+
+"validate"
+	self assert: gitRootPath exists.
+	self assert: repositoryDefinition repositoryExists.
+
+	repositoryDefinition repositoryRoot ensureDeleteAll.
+
+"create repository definitions using alternat git repo name"
+	repositoryDefinition := RwAbstractRepositoryDefinition 
+		newForSpecification: projectSpec 
+			projectHome: gitRootPath.
+
+	repositoryDefinition repositoryRoot ensureDeleteAll.
+
+"clone repository"
 	self 
 		handleInformDuring: [ repositoryDefinition resolve ] 
 		interactionBlock: [:inform | self assert: false description: 'unexpected inform' ].
