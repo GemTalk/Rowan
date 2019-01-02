@@ -265,12 +265,15 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 	projectSpec := specUrlString asRwUrl asSpecification.
 
 "create repository definition based on disk"
-	repositoryDefinition := RwAbstractRepositoryDefinition 
+	repositoryDefinition := RwDiskRepositoryDefinition 
 		newForSpecification: projectSpec 
 			projectHome: gitRootPath.
 
+	self assert: repositoryDefinition  repositoryRoot fileSystem isDiskFileSystem.
+	self assert: repositoryDefinition class == RwDiskRepositoryDefinition.
+
 "validate"
-	self assert: (x := repositoryDefinition srcPath pathString) = (y := (gitRootPath / projectName / projectSpec repoPath) pathString).
+	self assert: (x := repositoryDefinition repositoryRoot pathString) = (y := (gitRootPath / projectName) pathString).
 
 "create repository definition based on memory"
 	memoryRoot := FileSystem memory * 'repoDefinitionTestRoot'.
@@ -280,7 +283,8 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 	repositoryDefinition repositoryRoot: gitRootPath / projectName.
 
 "validate"
-	self assert: (x := repositoryDefinition srcPath pathString) = (y := (gitRootPath / projectName / projectSpec repoPath) pathString).
+	self assert: repositoryDefinition  repositoryRoot fileSystem isMemoryFileSystem.
+	self assert: (x := repositoryDefinition repositoryRoot pathString) = (y := (gitRootPath / projectName) pathString).
 
 "create from scratch and it should be using RwMemoryRepositoryDefinition"
 	repositoryDefinition_1 := RwAbstractRepositoryDefinition 
@@ -288,13 +292,11 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 			projectHome: gitRootPath.
 
 "validate"
-	self assert: repositoryDefinition  repositoryRoot fileSystem isMemoryFileSystem.
+	self assert: repositoryDefinition_1  repositoryRoot fileSystem isMemoryFileSystem.
+	self assert: repositoryDefinition_1 class == RwMemoryRepositoryDefinition.
 
-	self assert: repositoryDefinition  configsPath = repositoryDefinition_1 configsPath.
 	self assert: repositoryDefinition  name = repositoryDefinition_1 name.
 	self assert: repositoryDefinition  repositoryRoot = repositoryDefinition_1 repositoryRoot.
-	self assert: repositoryDefinition  specsPath = repositoryDefinition_1 specsPath.
-	self assert: repositoryDefinition  srcPath = repositoryDefinition_1 srcPath
 ]
 
 { #category : 'tests' }

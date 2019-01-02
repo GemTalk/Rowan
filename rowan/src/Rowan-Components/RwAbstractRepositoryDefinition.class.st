@@ -28,7 +28,8 @@ RwAbstractRepositoryDefinition class >> newNamed: repositoryName forSpecificatio
 
 	| cls projectHomeFileReference |
 	projectHomeFileReference := projectHomeFileReferenceOrString asFileReference.
-	cls := aRwSpecification useGit
+	
+	cls := (aRwSpecification useGit and: [ projectHomeFileReference fileSystem isDiskFileSystem ])
 		ifTrue: [ RwGitRepositoryDefinition ]
 		ifFalse: [  projectHomeFileReference fileSystem rowanRepositoryDefinitionClass ].
 	^ (self _instanceClass: cls)
@@ -166,7 +167,6 @@ RwAbstractRepositoryDefinition >> repositoryRoot: pathStringOrReference [
 
 	| fileRef |
 	fileRef := pathStringOrReference asFileReference.
-	fileRef fileSystem = self _fileSystem ifFalse: [ self error: 'incorrect repository root file reference for this class' ].
 	self version: nil.
 	self projectUrl: nil.
 	self properties at: 'repositoryRoot' put: fileRef
