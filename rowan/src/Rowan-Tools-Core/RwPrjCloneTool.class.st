@@ -76,9 +76,8 @@ RwPrjCloneTool >> _validateForGitRepository: aRwGitRepositoryDefinition ifDone: 
 			(self readlink: response) = (self readlink: cdResponse)
 				ifTrue: [ 
 					| msg |
-					aRwGitRepositoryDefinition repositoryUrlScheme:'cypress:'.
 					msg := 'A clone for '
-						, aRwGitRepositoryDefinition projectAlias printString , ' already exists in '
+						, aRwGitRepositoryDefinition name printString , ' already exists in '
 						, gitRepoPath pathString printString , ', so the clone operation is being skipped'
 						, '
 The project project has been registered with Rowan at the existing location .'.

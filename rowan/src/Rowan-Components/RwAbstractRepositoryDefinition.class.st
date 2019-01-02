@@ -25,23 +25,21 @@ RwAbstractRepositoryDefinition class >> newForSpecification: aRwSpecification pr
 { #category : 'instance creation' }
 RwAbstractRepositoryDefinition class >> newNamed: repositoryName forSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString [
 
-
 	| cls projectHomeFileReference |
 	projectHomeFileReference := projectHomeFileReferenceOrString asFileReference.
-	
 	cls := (aRwSpecification useGit and: [ projectHomeFileReference fileSystem isDiskFileSystem ])
 		ifTrue: [ RwGitRepositoryDefinition ]
 		ifFalse: [  projectHomeFileReference fileSystem rowanRepositoryDefinitionClass ].
 	^ (self _instanceClass: cls)
-		newNamed: repositoryName 
-			forSpecification: aRwSpecification
-			repositoryRoot: projectHomeFileReference / repositoryName
+		newNamed: aRwSpecification specName 
+			forSpecification: aRwSpecification 
+			repositoryRoot: projectHomeFileReference / aRwSpecification specName
 ]
 
 { #category : 'instance creation' }
 RwAbstractRepositoryDefinition class >> newNamed: repositoryName forSpecification: aRwSpecification repositoryRoot: repoRoot [
 
-	^self
+	^ self
 		newNamed: repositoryName 
 			repositoryRoot: repoRoot
 			projectUrl: aRwSpecification projectUrl

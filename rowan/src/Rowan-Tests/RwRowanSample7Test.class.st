@@ -105,7 +105,7 @@ RwRowanSample7Test >> testCreateProjectReferenceFromUrl [
 	projectSpec := specUrlString asRwUrl asSpecification.
 
 "create project reference definitions"
-	projectReferenceDefinition := RwAbstractProjectReferenceDefinition 
+	projectReferenceDefinition := RwProjectReferenceDefinition 
 		newForSpecification: projectSpec 
 		projectHome: gitRootPath.
 
@@ -119,7 +119,7 @@ RwRowanSample7Test >> testCreateProjectReferenceFromUrl [
 	self assert: (x := projectReferenceDefinition projectHome pathString) = (y := gitRootPath asFileReference pathString).
 
 "create project reference definitions"
-	projectReferenceDefinition := RwAbstractProjectReferenceDefinition newForSpecification: projectSpec.
+	projectReferenceDefinition := RwProjectReferenceDefinition newForSpecification: projectSpec.
 
 "validate"
 	self assert: (x := projectReferenceDefinition projectHome pathString) = (y := FileLocator rowanProjectsHome pathString).
@@ -317,7 +317,7 @@ RwRowanSample7Test >> testResolveProjectReference [
 	projectSpec := specUrlString asRwUrl asSpecification.
 
 "create project reference definitions"
-	projectReferenceDefinition_1 := RwAbstractProjectReferenceDefinition 
+	projectReferenceDefinition_1 := RwProjectReferenceDefinition 
 		newForSpecification: projectSpec 
 		projectHome: gitRootPath.
 
@@ -332,7 +332,7 @@ RwRowanSample7Test >> testResolveProjectReference [
 	self assert: projectReferenceDefinition_1 repositoryRoot exists.
 
 "2. create second project reference definitions"
-	projectReferenceDefinition_2 := RwAbstractProjectReferenceDefinition 
+	projectReferenceDefinition_2 := RwProjectReferenceDefinition 
 		newForSpecification: projectSpec 
 		projectHome: gitRootPath.
 
@@ -348,7 +348,6 @@ RwRowanSample7Test >> testResolveProjectReference [
 
 "validate"
 	self assert: projectReferenceDefinition_1 projectHome = projectReferenceDefinition_2 projectHome.
-	self assert: projectReferenceDefinition_1 repositoryUrlScheme = projectReferenceDefinition_2 repositoryUrlScheme.
 
 "3. now clone to a different spot by just changing the project home"
 projectReferenceDefinition_2 repositoryRoot ensureDeleteAll.
