@@ -203,8 +203,8 @@ RowanProjectService >> loadProjectNamed: aName [
 
 	[Rowan projectTools load loadProjectNamed: aName] 
 		on: Warning
-		do: [ :ex | Transcript cr; show: ex description. ex resume ]
-
+		do: [ :ex | Transcript cr; show: ex description. ex resume ].
+	RowanBrowserService new updateProjects.
 ]
 
 { #category : 'rowan' }
@@ -238,7 +238,7 @@ RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 		cloneSpecUrl: url
 		gitRootPath: rootPath
 		useSsh: useSsh.
-
+	RowanBrowserService new updateProjects.
 ]
 
 { #category : 'rowan' }
