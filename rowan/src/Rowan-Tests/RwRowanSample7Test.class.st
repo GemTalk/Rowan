@@ -55,38 +55,38 @@ RwRowanSample7Test >> tearDown [
 { #category : 'tests' }
 RwRowanSample7Test >> testCreateProjectFromUrl [
 
-	| specUrlString projectTools rowanSpec gitRootPath projectName projectDefinition spec repositoryDefinition |
+	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition
+		informHappened projectDefinitionSet |
+
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	specUrlString := self _rowanSample7SpecificationUrl.
-	projectTools := Rowan projectTools.
-
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
 
-	spec := specUrlString asRwUrl asSpecification.
-	repositoryDefinition := RwDiskRepositoryDefinition newForSpecification: spec projectHome: gitRootPath.
+	specUrlString := self _rowanSample7SpecificationUrl.
+	projectSpec := specUrlString asRwUrl asSpecification.
 
-"delete repository from disk if it exists"
-	repositoryDefinition repositoryExists
-		ifTrue: [ repositoryDefinition repositoryRoot ensureDeleteAll ].
+"create project reference definitions"
+	projectReferenceDefinition := RwProjectReferenceDefinition 
+		newForSpecification: projectSpec 
+		projectHome: gitRootPath.
 
-self error: 'test not complete ...'.
+	projectReferenceDefinition repositoryRoot ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecification: spec
-		gitRootPath: gitRootPath
-		useSsh: true
-		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
+"1. clone repository"
+	self 
+		handleInformDuring: [ projectReferenceDefinition resolve ] 
+		interactionBlock: [:inform | self assert: false description: 'unexpected inform' ].
 
-	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
-	projectDefinition := projectTools create createProjectFromSpecUrl: 'file:', gitRootPath, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'.
+"validate"
+	self assert: projectReferenceDefinition repositoryRoot exists.
+	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) isNil.
 
-	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
+	projectDefinitionSet := projectReferenceDefinition projectDefinitionSet.
 
-	projectTools load loadProjectNamed: projectName
+	Rowan projectTools load loadProjectSetDefinition: projectDefinitionSet
 ]
 
 { #category : 'tests' }

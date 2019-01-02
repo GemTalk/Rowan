@@ -175,6 +175,12 @@ RwProjectReferenceDefinition >> projectAlias: aStringOrNil [
 ]
 
 { #category : 'accessing' }
+RwProjectReferenceDefinition >> projectDefinitionSet [
+
+	self error: 'implementation incomplete'
+]
+
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> projectHome [
 
 	^ self properties at: 'projectHome' ifAbsent: [ FileLocator rowanProjectsHome ]
@@ -215,13 +221,7 @@ RwProjectReferenceDefinition >> projectSpec: aRwSpecification [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectUrl [
 
-	^ self properties at: 'projectUrl'
-]
-
-{ #category : 'accessing' }
-RwProjectReferenceDefinition >> projectUrl: anUrlString [
-
-	self properties at: 'projectUrl' put: anUrlString
+	^ self repositoryDefinition projectUrl
 ]
 
 { #category : 'accessing' }
