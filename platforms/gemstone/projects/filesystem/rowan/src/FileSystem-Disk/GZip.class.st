@@ -42,9 +42,13 @@ GZip >> initialize [
 	self compressionLevel: ''
 ]
 
-{ #category : 'printing' }
+{ #category : 'testing' }
+GZip >> isGzipped [
+	^true
+]
+
+{ #category : 'accessing' }
 GZip >> printOpenModeStringOn: aStream [
 
-	self fileType printOpenModeStringOn: aStream.
 	aStream nextPutAll: self compressionLevel
 ]

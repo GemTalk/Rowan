@@ -1,9 +1,44 @@
+"
+This class contains options for a file. The options available are based on the POSIX standards.
+
+This gives a more flexible and nuanced way of defining how a file is to be opened and used. This is following the POSIX file open options. Much of this
+information has been garnered from the VA Smalltalk POSIX implmenetion of CfsFielDescriptior and CfsDirectoryDescriptor.
+
+Instance Variables:
+mode 			-	This contains the access mode of the file - O_RDONLY | O_RDWR | O_WRONLY. 
+						These modes are represented by the classes FileOpenReadOnlyMode, FileOpenReadWriteMode, and FileOpenWriteOnlyMode.
+options			- 	This contains a collection of the options which are used to further define how the file is opened, created if missing, truncate, append, etc.
+						Options contais instances of subclasses of FileCreateOption
+
+API:
+modeString	-	Returns the traditional unix mode string. (See table below.) This is implemented to support GemStone's GsFile file class.
+isWritable		-	Returns true/false based on the access mode - O_RDONLY | O_RDWR | O_WRONLY. This is implemen to support Pharo's File file class.
+
+
+
+This table shows the mapping between the file options and the traditional unix string for defining file open mode.
+
+Mode                 File Options (Flags)
+------				-----------------------------------------
+	r     				O_RDONLY
+	w            		O_WRONLY | O_CREAT | O_TRUNC
+	a    				O_WRONLY | O_CREAT | O_APPEND
+	r+            		O_RDWR
+	w+				O_RDWR | O_CREAT | O_TRUNC
+	a+				O_RDWR | O_CREAT | O_APPEND
+
+The
+"
 Class {
 	#name : 'FileOptions',
 	#superclass : 'Object',
 	#instVars : [
 		'mode',
-		'options'
+		'options',
+		'fileType',
+		'share',
+		'permissionOptions',
+		'parent'
 	],
 	#category : 'FileSystem-Disk-Options'
 }
@@ -23,6 +58,20 @@ FileOptions class >> appendAndRead [
 ]
 
 { #category : 'instance creation' }
+FileOptions class >> appendAndReadBinary [
+	^self appendAndRead
+		beBinaryFileType;
+		yourself
+]
+
+{ #category : 'instance creation' }
+FileOptions class >> appendBinary [
+	^self append
+		beBinaryFileType;
+		yourself
+]
+
+{ #category : 'instance creation' }
 FileOptions class >> new [
 	^self basicNew
 		initialize;
@@ -37,9 +86,23 @@ FileOptions class >> read [
 ]
 
 { #category : 'instance creation' }
+FileOptions class >> readBinary [
+	^self read
+		beBinaryFileType;
+		yourself
+]
+
+{ #category : 'instance creation' }
 FileOptions class >> readWrite [
 	^self basicNew
 		initializeReadWrite;
+		yourself
+]
+
+{ #category : 'instance creation' }
+FileOptions class >> readWriteBinary [
+	^self readWrite
+		beBinaryFileType;
 		yourself
 ]
 
@@ -51,9 +114,23 @@ FileOptions class >> readWriteTruncated [
 ]
 
 { #category : 'instance creation' }
+FileOptions class >> readWriteTruncatedBinary [
+	^self readWriteTruncated
+		beBinaryFileType;
+		yourself
+]
+
+{ #category : 'instance creation' }
 FileOptions class >> write [
 	^self basicNew
 		initializeWrite;
+		yourself
+]
+
+{ #category : 'instance creation' }
+FileOptions class >> writeBinary [
+	^self write
+		beBinaryFileType;
 		yourself
 ]
 
@@ -81,9 +158,24 @@ FileOptions >> addTruncateOption [
 	self addOption: FileTruncateOption new
 ]
 
+{ #category : 'file type' }
+FileOptions >> beBinaryFileType [
+	self fileType: FileBinaryTypeOption new
+]
+
+{ #category : 'sharing' }
+FileOptions >> bePrivate [
+	self share: FileDenyReadWriteOption new
+]
+
 { #category : 'open mode' }
 FileOptions >> beReadMode [
 	self mode: FileOpenReadOnlyMode new.
+]
+
+{ #category : 'sharing' }
+FileOptions >> beReadOnlyShared [
+	self share: FileDenyWriteOption new
 ]
 
 { #category : 'open mode' }
@@ -91,9 +183,29 @@ FileOptions >> beReadWriteMode [
 	self mode: FileOpenReadWriteMode new.
 ]
 
+{ #category : 'sharing' }
+FileOptions >> beShared [
+	self share: FileDenyNoneOption new
+]
+
+{ #category : 'file type' }
+FileOptions >> beTextFileType [
+	self fileType: FileTextTypeOption new
+]
+
 { #category : 'open mode' }
 FileOptions >> beWriteMode [
 	self mode: FileOpenWriteOnlyMode new.
+]
+
+{ #category : 'sharing' }
+FileOptions >> beWriteOnlyShared [
+	self share: FileDenyReadOption new
+]
+
+{ #category : 'convenience' }
+FileOptions >> compressionPolicy [
+	^self parent ifNotNil: [:fs | fs compressionPolicy]
 ]
 
 { #category : 'options' }
@@ -109,6 +221,17 @@ FileOptions >> fileOpenModeValue [
 { #category : 'options' }
 FileOptions >> fileOptionsValue [
 	^self options inject: 0 into: [:total :ea | total + ea posixValue]
+]
+
+{ #category : 'accessing' }
+FileOptions >> fileType [
+	^fileType
+]
+
+{ #category : 'accessing' }
+FileOptions >> fileType: aFileTypeOption [
+	aFileTypeOption parent: self.
+	fileType := aFileTypeOption
 ]
 
 { #category : 'testing' }
@@ -133,7 +256,9 @@ FileOptions >> hasOption: anOptionClass [
 
 { #category : 'initialization' }
 FileOptions >> initialize [
-	self options: OrderedCollection new
+	self options: OrderedCollection new.
+	self permissionOptions: OrderedCollection new.
+	self beShared
 ]
 
 { #category : 'initialization' }
@@ -181,6 +306,17 @@ FileOptions >> initializeWrite [
 ]
 
 { #category : 'testing' }
+FileOptions >> isClientFileSystem [
+	"This needs more work"
+	^false
+]
+
+{ #category : 'testing' }
+FileOptions >> isGzipped [
+	^self parent isGzipped
+]
+
+{ #category : 'testing' }
 FileOptions >> isReadable [
 	^self mode isReadable
 ]
@@ -206,6 +342,7 @@ FileOptions >> modeString [
 	| aStream |
 	aStream := WriteStream on: String new.
 	self printOpenModeStringOn: aStream.
+	self compressionPolicy ifNotNil: [:cp | cp printOpenModeStringOn: aStream].
 	^aStream contents
 ]
 
@@ -219,14 +356,46 @@ FileOptions >> options: aCollection [
 	options := aCollection
 ]
 
+{ #category : 'accessing' }
+FileOptions >> parent [
+	^parent
+]
+
+{ #category : 'accessing' }
+FileOptions >> parent: anObject [
+	parent := anObject
+]
+
+{ #category : 'other' }
+FileOptions >> permissionOptions [
+	^permissionOptions
+]
+
+{ #category : 'other' }
+FileOptions >> permissionOptions: aCollection [
+	permissionOptions := aCollection
+]
+
 { #category : 'printing' }
 FileOptions >> printOpenModeStringOn: aStream [
 
-	self mode printOpenModeStringOn: aStream
+	self mode printOpenModeStringOn: aStream.
+	self fileType ifNotNil: [:ft | ft printOpenModeStringOn: aStream.]
 ]
 
 { #category : 'options' }
 FileOptions >> removeOption: anOption [
 	anOption parent: nil.
 	self options remove: anOption ifAbsent: []
+]
+
+{ #category : 'accessing' }
+FileOptions >> share [
+	^share
+]
+
+{ #category : 'accessing' }
+FileOptions >> share: aFileShareOption [
+	aFileShareOption parent: self.
+	share := aFileShareOption
 ]

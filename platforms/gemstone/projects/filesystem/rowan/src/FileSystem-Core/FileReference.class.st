@@ -92,7 +92,7 @@ FileReference >> asPath [
 { #category : 'streams' }
 FileReference >> binaryReadStream [
 	
-	^ filesystem binaryReadStreamOn: self path
+	^ ZnBufferedReadStream on: ( filesystem binaryReadStreamOn: self path )
 ]
 
 { #category : 'streams' }

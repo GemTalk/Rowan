@@ -38,30 +38,6 @@ DiskFileSystemTest >> testIsDiskFileSystem [
 ]
 
 { #category : 'tests' }
-DiskFileSystemTest >> testIsReadable [
-	| aPath aFileReference directory |
-
-	directory := filesystem workingDirectory.
-	aFileReference := directory / 'plonked3'.
- 	self markForCleanup: aFileReference.
-	self deny: (self store exists: aFileReference path).
-	(filesystem open: aFileReference path writable: self store readWriteTruncatedMode) close.
-	self assert: (self store isReadable: aFileReference path)
-]
-
-{ #category : 'tests' }
-DiskFileSystemTest >> testIsWritable [
-	| aPath aFileReference directory |
-
-	directory := filesystem workingDirectory.
-	aFileReference := directory / 'plonked3'.
- 	self markForCleanup: aFileReference.
-	self deny: (self store exists: aFileReference path).
-	(filesystem open: aFileReference path writable: self store readWriteTruncatedMode) close.
-	self assert: (self store isWritable: aFileReference path)
-]
-
-{ #category : 'tests' }
 DiskFileSystemTest >> testMoveMemoryToDisk [
 	"Test moving a file from the memory filesystem to the disk filesystem.
 	This ensures that the copyAndDelete:to: is called correctly."

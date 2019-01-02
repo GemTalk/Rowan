@@ -8,3 +8,8 @@ Class {
 FileDoNotUpdateAccessTimeOption class >> posinName [
 	^'O_NOATIME'
 ]
+
+{ #category : 'accessing' }
+FileDoNotUpdateAccessTimeOption class >> posixValue [
+	self error: 'Not supported'
+]

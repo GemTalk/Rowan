@@ -12,10 +12,24 @@ Class {
 	#name : 'ZnUTF8Encoder',
 	#superclass : 'ZnUTFEncoder',
 	#classVars : [
+		'ByteASCIISet',
+		'ByteUTF8Encoding',
 		'Default'
 	],
 	#category : 'Zinc-Character-Encoding-Core'
 }
+
+{ #category : 'accessing' }
+ZnUTF8Encoder class >> byteASCIISet [
+	
+	^ ByteASCIISet
+]
+
+{ #category : 'accessing' }
+ZnUTF8Encoder class >> byteUTF8Encoding [
+	
+	^ ByteUTF8Encoding
+]
 
 { #category : 'accessing' }
 ZnUTF8Encoder class >> default [
@@ -30,6 +44,26 @@ ZnUTF8Encoder class >> handlesEncoding: string [
 	"Return true when my instances handle the encoding described by string"
 	
 	^ (self canonicalEncodingIdentifier: string) = 'utf8'
+]
+
+{ #category : 'class initialization' }
+ZnUTF8Encoder class >> initialize [
+	| encoder stream |
+	ByteASCIISet := ByteArray new: 256.
+	ByteUTF8Encoding := Array new: 256.
+	encoder := self new.
+	stream := ByteArray new writeStream.
+	0 to: 255 do: [ :each |
+		| bytes |
+		stream reset.
+		encoder nextPut: (Character value: each) toStream: stream.
+		bytes := stream contents.
+		(bytes size = 1 and: [ bytes first = each ])
+			ifTrue: [
+				ByteASCIISet at: each + 1 put: 0 ]
+			ifFalse: [  
+				ByteASCIISet at: each + 1 put: 1.
+				ByteUTF8Encoding at: each + 1 put: bytes ] ]
 ]
 
 { #category : 'accessing' }
@@ -154,7 +188,12 @@ ZnUTF8Encoder >> next: count putAll: string startingAt: offset toStream: stream 
 	
 	"stream nextPutAll: (string copyFrom: offset to: offset + count - 1) encodeAsUTF8 asByteArray"
 
-	super next: count putAll: string startingAt: offset toStream: stream
+	"Write count characters from string starting at offset to stream."
+	"Overwritten for performance reasons - create a fast path for byte strings"
+	
+	string isByteString
+		ifTrue: [ self next: count putAllByteString: string startingAt: offset toStream: stream ]
+		ifFalse: [ super next: count putAll: string startingAt: offset toStream: stream ]
 ]
 
 { #category : 'private' }
@@ -171,16 +210,16 @@ ZnUTF8Encoder >> next: count putAllByteString: string startingAt: offset toStrea
 	"A faster version when string is a ByteString"
 	
 	| lastIndex nextIndex |
-self error: 'The class ByteUTF8Encoding is not implemented in Gemstone'.
+
 	lastIndex := offset.
 	nextIndex := self findFirstNonASCIIIn: string startingAt: lastIndex.
 	(nextIndex = 0 or: [ offset + count <= nextIndex ]) 
-		ifTrue: [ 
+		ifTrue: [  
 			^ self next: count putAllASCII: string startingAt: offset toStream: stream ].
 	[	nextIndex > lastIndex 
-			ifTrue: [
+			ifTrue: [ 
 				self next: nextIndex - lastIndex putAllASCII: string startingAt: lastIndex toStream: stream ].
-		stream nextPutAll: (#ByteUTF8Encoding at: (string byteAt: nextIndex) + 1).
+		stream nextPutAll: (ByteUTF8Encoding at: (string byteAt: nextIndex) + 1).
 		lastIndex := nextIndex + 1.
 		nextIndex := self findFirstNonASCIIIn: string startingAt: lastIndex.
 		nextIndex = 0 or: [ offset + count <= nextIndex ] ] whileFalse.

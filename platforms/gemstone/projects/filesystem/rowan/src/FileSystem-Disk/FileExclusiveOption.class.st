@@ -14,5 +14,5 @@ FileExclusiveOption class >> posixName [
 
 { #category : 'accessing' }
 FileExclusiveOption class >> posixValue [
-	^262144
+	^16r40000
 ]

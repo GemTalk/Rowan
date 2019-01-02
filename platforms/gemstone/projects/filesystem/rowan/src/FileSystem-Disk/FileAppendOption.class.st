@@ -1,5 +1,7 @@
 "
-Writes are always appended to the end of the file.
+This is an abstract class whose subclasses define the file type. These are applicable only to windows operating system.
+
+The ""posixValue"" in Unix/Linux will always be zero.
 "
 Class {
 	#name : 'FileAppendOption',

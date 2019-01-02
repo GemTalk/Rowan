@@ -8,47 +8,6 @@ Class {
 }
 
 { #category : 'tests' }
-FileOptionsTest class >> testAppendAndReadOpenMode [
-
-	| aFileMode |
-	aFileMode := #FileMode appendAndRead.
-	self assert: aFileMode isWritable.
-	self assert: aFileMode isReadable.
-	self assert: aFileMode initialWritePosition isPositionable.
-	self assert: aFileMode initialReadPosition isPositionable.
-	self deny: aFileMode truncate.
-	aFileMode printOpenModeStringOn: self stream.
-	self assert: self stream contents = 'a+'
-]
-
-{ #category : 'private' }
-FileOptionsTest >> initializeStream [
-	stream := WriteStream on: String new
-]
-
-{ #category : 'running' }
-FileOptionsTest >> setUp [
-	super setUp.
-	self initializeStream
-]
-
-{ #category : 'accessing' }
-FileOptionsTest >> stream [
-	^stream
-]
-
-{ #category : 'accessing' }
-FileOptionsTest >> stream: anObject [
-	stream := anObject
-]
-
-{ #category : 'running' }
-FileOptionsTest >> tearDown [
-	self stream: nil.
-	super tearDown
-]
-
-{ #category : 'tests' }
 FileOptionsTest >> testAppendAndReadOpenMode [
 
 	| aFileOptions |

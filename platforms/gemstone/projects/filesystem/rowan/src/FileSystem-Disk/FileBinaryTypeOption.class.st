@@ -24,6 +24,5 @@ FileBinaryTypeOption class >> posixValue [
 { #category : 'printing' }
 FileBinaryTypeOption >> printOpenModeStringOn: aStream [
 
-	super printOpenModeStringOn: aStream.
 	aStream nextPutAll: 'b'
 ]

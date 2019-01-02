@@ -53,19 +53,20 @@ FileHandle >> at: index write: buffer startingAt: start count: count [
 
 { #category : 'public' }
 FileHandle >> basicOpen [
-	^FileSystem fileClass open: self reference pathString mode: self fileMode openModeString onClient: false
+	^FileSystem fileClass openReference: self reference withOptions: writable fileOptions
 ]
 
 { #category : 'public' }
 FileHandle >> binaryReadStream [
 	"The file handle should be created with the file mode which indicates if it is a write or read stream"
-	^ ZnBufferedReadStream on: (BinaryFileStream onFileHandle: self)
+	"^ ZnBufferedReadStream on: (BinaryFileStream onFileHandle: self)"
+
+	^(BinaryFileStream handle: id file: (FileSystem fileClass openReference: reference withOptions: writable fileOptions) forWrite: writable fileOptions)
 ]
 
 { #category : 'public' }
 FileHandle >> binaryWriteStream [
-	"The file handle should be created with the file mode which indicates if it is a write or read stream"
-	^BinaryFileStream onFileHandle: self
+	^(BinaryFileStream handle: nil file: (FileSystem fileClass openReference: reference withOptions: writable fileOptions) forWrite: writable fileOptions)
 ]
 
 { #category : 'public' }
@@ -107,8 +108,8 @@ FileHandle >> isOpen [
 { #category : 'public' }
 FileHandle >> open [
 	self flag: 'TODO: for now we solely rely on the old FileStreams'.
-	self id: self basicOpen.
-	self id ifNil: 	[self signalOpenError]
+"	self id: self basicOpen.
+	self id ifNil: 	[self signalOpenError]"
 ]
 
 { #category : 'public' }

@@ -6,6 +6,4 @@ Class {
 
 { #category : 'printing' }
 NoCompression >> printOpenModeStringOn: aStream [
-
-	self fileType printOpenModeStringOn: aStream
 ]

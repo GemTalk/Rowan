@@ -34,6 +34,13 @@ CharacterCollection >> fillFrom: aCollection with: aBlock [
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> isByteString [
+
+	^false
+
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
 CharacterCollection >> urlDecoded [
 	"URL Decode the receiver and return the resulting String.
 	This is an encoding where characters that are illegal in a URL are escaped."

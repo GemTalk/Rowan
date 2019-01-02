@@ -7,5 +7,5 @@ Class {
 { #category : 'printing' }
 FileFileTypeOption >> printOpenModeStringOn: aStream [
 
-	self openMode printOpenModeStringOn: aStream.
+	self fileOptions printOpenModeStringOn: aStream.
 ]

@@ -70,6 +70,18 @@ DiskStore class >> delimiter [
 	^ self current delimiter
 ]
 
+{ #category : 'file constants' }
+DiskStore class >> fileSharedRule [
+	"The value used to always open an existing file or create a file if one does not exist"
+	^self fileShareReadRule bitOr: self fileShareWriteRule
+]
+
+{ #category : 'file constants' }
+DiskStore class >> genericReadWriteRule [
+	"Returns platform specific read/write value"
+	^self genericRead bitOr: self genericWriteRule
+]
+
 { #category : 'initialization' }
 DiskStore class >> initialize [
 	self reset
@@ -264,7 +276,7 @@ DiskStore >> basicOpen: aPath writable: writeMode [
 
 	| string |
 	string := self stringFromPath: aPath.
-	^FileSystem fileClass  open: string mode: writeMode openModeString onClient: false
+	^FileSystem fileClass  open: string mode: writeMode modeString onClient: false
 ]
 
 { #category : 'private' }
@@ -353,6 +365,12 @@ DiskStore >> deleteFile: pathString [
 		ifNil: [ FileDeletionError 
 					signalWith: pathString  
 					text: 'Could not delete file ' , pathString , '. Check the file is not open.' ].
+]
+
+{ #category : 'file constants' }
+DiskStore >> fileSharedRule [
+	"The value used to always open an existing file or create a file if one does not exist"
+	^self fileShareReadRule bitOr: self fileShareWriteRule
 ]
 
 { #category : 'printing' }

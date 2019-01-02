@@ -49,5 +49,8 @@ ZnEncodedWriteStream >> nextPut: anObject [
 { #category : 'accessing' }
 ZnEncodedWriteStream >> nextPutAll: collection [
 
-	stream nextPutAll: (self encoder encodeString: collection)
+	self 
+		next: collection size 
+		putAll: collection 
+		startingAt: 1
 ]

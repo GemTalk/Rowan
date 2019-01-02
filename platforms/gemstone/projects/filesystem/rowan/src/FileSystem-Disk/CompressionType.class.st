@@ -32,3 +32,12 @@ CompressionType >> fileType [
 { #category : 'initialization' }
 CompressionType >> initialize [
 ]
+
+{ #category : 'testing' }
+CompressionType >> isGzipped [
+	^false
+]
+
+{ #category : 'printing' }
+CompressionType >> printOpenModeStringOn: aStream [
+]

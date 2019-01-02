@@ -13,3 +13,8 @@ Class {
 FileAsyncOption class >> posixName [
 	^'O_ASYNC'
 ]
+
+{ #category : 'accessing' }
+FileAsyncOption class >> posixValue [
+	^self error: 'Not implmented'
+]

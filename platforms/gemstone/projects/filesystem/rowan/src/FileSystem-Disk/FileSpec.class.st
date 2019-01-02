@@ -2,9 +2,8 @@ Class {
 	#name : 'FileSpec',
 	#superclass : 'Object',
 	#instVars : [
-		'accessMode',
+		'fileOptions',
 		'encoding',
-		'missingFileAction',
 		'fileType',
 		'compressionPolicy'
 	],
@@ -153,104 +152,108 @@ FileSpec >> encoding: anObject [
 ]
 
 { #category : 'accessing' }
-FileSpec >> fileType [
-	^fileType
+FileSpec >> fileOptions [
+	^fileOptions
 ]
 
 { #category : 'accessing' }
-FileSpec >> fileType: aFileType [
-	aFileType fileSpec: self.
-	fileType := aFileType
+FileSpec >> fileOptions: aFileOptions [
+	aFileOptions parent: self.
+	fileOptions := aFileOptions
+]
+
+{ #category : 'convenience' }
+FileSpec >> fileType [
+	^self fileOptions fileType
 ]
 
 { #category : 'initialization' }
 FileSpec >> initialize [
-	self fileType: FileTextTypeOption new.
 	self compressionPolicy: NoCompression new
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForAppend [
 	self initialize.
-	self openMode: #FileMode append.
-	self missingFileAction: #MissingFileAction new.
+	self fileOptions: FileOptions append.
 	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForAppendAndRead [
 	self initialize.
-	self openMode: #FileMode appendAndRead.
-	self missingFileAction: #MissingFileAction new.
+	self fileOptions: FileOptions appendAndRead.
 	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForAppendAndReadBinary [
-	self initializeForAppendAndRead.
-	self fileType:  FileBinaryTypeOption new
+	self initialize.
+	self fileOptions: FileOptions appendAndReadBinary.
+	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForAppendBinary [
-	self initializeForAppend.
-	self fileType: FileBinaryTypeOption new
+	self initialize.
+	self fileOptions: FileOptions appendBinary.
+	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForRead [
 	self initialize.
-	self openMode: #FileMode read.
-	self missingFileAction: #MissingFileAction new.
+	self fileOptions: FileOptions read.
 	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadBinary [
-	self initializeForRead.
-	self fileType: FileBinaryTypeOption new
+	self initialize.
+	self fileOptions: FileOptions readBinary.
+	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadWrite [
 	self initialize.
-	self openMode: #FileMode readWrite.
-	self missingFileAction: #MissingFileAction new.
+	self fileOptions: FileOptions readWrite.
 	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadWriteBinary [
-	self initializeForReadWrite.
-	self fileType: FileBinaryTypeOption new
+	self initialize.
+	self fileOptions: FileOptions readWriteBinary.
+	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadWriteTruncated [
 	self initialize.
-	self openMode: #FileMode readWriteTruncated.
-	self missingFileAction: #MissingFileAction new.
+	self fileOptions: FileOptions readWriteTruncated.
 	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadWriteTruncatedBinary [
-	self initializeForReadWriteTruncated.
-	self fileType: FileBinaryTypeOption new
+	self initialize.
+	self fileOptions: FileOptions readWriteTruncatedBinary.
+	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForWrite [
 	self initialize.
-	self openMode: #FileMode write.
-	self missingFileAction: #CreateFileAction new.
+	self fileOptions: FileOptions write.
 	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForWriteBinary [
-	self initializeForWrite.
-	self fileType: FileBinaryTypeOption new
+	self initialize.
+	self fileOptions: FileOptions writeBinary.
+	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
@@ -272,38 +275,26 @@ FileSpec >> initializeForWriteZipped [
 ]
 
 { #category : 'testing' }
+FileSpec >> isGzipped [
+
+	^self compressionPolicy ifNil: [false] ifNotNil: [:cp | cp isGzipped]
+]
+
+{ #category : 'testing' }
+FileSpec >> isReadable [
+
+	^self fileOptions isReadable
+]
+
+{ #category : 'testing' }
 FileSpec >> isWritable [
 
-	^self openMode isWritable
+	^self fileOptions isWritable
 ]
 
-{ #category : 'accessing' }
-FileSpec >> missingFileAction [
-	^missingFileAction
-]
-
-{ #category : 'accessing' }
-FileSpec >> missingFileAction: anObject [
-	missingFileAction := anObject
-]
-
-{ #category : 'accessing' }
-FileSpec >> openMode [
-	^accessMode
-]
-
-{ #category : 'accessing' }
-FileSpec >> openMode: anObject [
-	anObject fileSpec: self.
-	accessMode := anObject
-]
-
-{ #category : 'converting' }
-FileSpec >> openModeString [
-	| aStream |
-	aStream := WriteStream on: String new.
-	self compressionPolicy printOpenModeStringOn: aStream.
-	^aStream contents
+{ #category : 'printing' }
+FileSpec >> modeString [
+	^self fileOptions modeString
 ]
 
 { #category : 'prototype' }

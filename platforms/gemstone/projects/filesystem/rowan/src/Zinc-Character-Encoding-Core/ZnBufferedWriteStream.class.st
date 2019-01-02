@@ -96,8 +96,12 @@ ZnBufferedWriteStream >> flush [
 ZnBufferedWriteStream >> flushBuffer [
 	position = 0 ifTrue: [ ^ self ].
 	position = self bufferSize
-		ifTrue: [ stream nextPutAll: buffer ]
-		ifFalse: [ stream nextPutAll: (buffer copyFrom: 1 to: position) ].
+		ifTrue: [ 
+			stream nextPutAll: buffer ]
+		ifFalse: [ 
+			(stream respondsTo: #next:putAll:startingAt:)  "This was added from Pharo"
+				ifTrue: [ stream next: position putAll: buffer startingAt: 1 ]
+				ifFalse: [ stream nextPutAll: (buffer copyFrom: 1 to: position) ] ].
 	position := 0
 ]
 

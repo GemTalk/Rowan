@@ -243,7 +243,7 @@ FileSystemTest >> testCopyDestExists [
 FileSystemTest >> testCopySourceDoesntExist [
 	self 
 		should: [filesystem copy: 'plonk' to: 'griffle']
-		raise: FileDoesNotExist
+		raise: FileDoesNotExistException
 ]
 
 { #category : 'tests' }

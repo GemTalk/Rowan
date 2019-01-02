@@ -13,9 +13,57 @@ Class {
 	#category : 'FileSystem-Disk-Store'
 }
 
+{ #category : 'file constants' }
+WindowsStore class >> createNewRule [
+	"The value used to create a new file"
+	^1
+]
+
 { #category : 'accessing' }
 WindowsStore class >> delimiter [
 	^ $\
+]
+
+{ #category : 'file constants' }
+WindowsStore class >> fileNoShareRule [
+	"The file can be shared by others while it is open (ODENYRDWR)"
+	^0
+]
+
+{ #category : 'file constants' }
+WindowsStore class >> fileShareReadRule [
+	"The file can be read by others while it is open (ODENYWR)"
+	^1
+]
+
+{ #category : 'file constants' }
+WindowsStore class >> fileShareWriteRule [
+	"The file can be written to others while it is open (ODENYRD)"
+	^2
+]
+
+{ #category : 'file constants' }
+WindowsStore class >> genericReadRule [
+	"Returns platform specific read value"
+	^2147483648
+]
+
+{ #category : 'file constants' }
+WindowsStore class >> genericReadWriteRule [
+	"Returns platform specific read/write value"
+	^self genericRead bitOr: self genericWriteRule
+]
+
+{ #category : 'file constants' }
+WindowsStore class >> genericWriteRule [
+	"Returns platform specific write value"
+	^1073741824
+]
+
+{ #category : 'file constants' }
+WindowsStore class >> invalidHandleValue [
+	"The value is returned if a file handle was not created"
+	^4294967295
 ]
 
 { #category : 'accessing' }
@@ -27,6 +75,18 @@ WindowsStore class >> isCaseSensitive [
 WindowsStore class >> maxFileNameLength [
 	self flag: 'TODO: more tests needed here!'.
 	^ 255
+]
+
+{ #category : 'file constants' }
+WindowsStore class >> openAlwaysRule [
+	"The value used to always open an existing file or create a file if one does not exist"
+	^4
+]
+
+{ #category : 'file constants' }
+WindowsStore class >> openExistingRule [
+	"The value used to open an existing file"
+	^3
 ]
 
 { #category : 'accessing' }

@@ -13,3 +13,8 @@ Class {
 FileNotControllingTerminalOption class >> posixName [
 	^'O_NOCTTY'
 ]
+
+{ #category : 'accessing' }
+FileNotControllingTerminalOption class >> posixValue [
+	self error: 'Not supported'
+]

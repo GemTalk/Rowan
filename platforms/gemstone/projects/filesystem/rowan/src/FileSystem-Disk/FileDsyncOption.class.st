@@ -11,3 +11,8 @@ Class {
 FileDsyncOption class >> posixName [
 	^'O_DSYNC'
 ]
+
+{ #category : 'accessing' }
+FileDsyncOption class >> posixValue [
+	^self error: 'Not implmented'
+]

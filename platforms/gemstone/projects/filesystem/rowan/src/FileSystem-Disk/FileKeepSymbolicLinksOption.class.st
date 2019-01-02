@@ -13,3 +13,8 @@ Class {
 FileKeepSymbolicLinksOption class >> posixName [
 	^'O_NOFOLLOW'
 ]
+
+{ #category : 'accessing' }
+FileKeepSymbolicLinksOption class >> posixValue [
+	self error: 'Not supported'
+]

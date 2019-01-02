@@ -43,23 +43,17 @@ Class {
 }
 
 { #category : 'instance creation' }
-AbstractBinaryFileStream class >> onFileHandle: aFileHandle [
-
-	^self basicNew
-		initializeFromFileHandle: aFileHandle;
+AbstractBinaryFileStream class >> handle: aCollection file: aFile forWrite: aTrue [
+	
+	^ self basicNew
+		handle: aCollection file: aFile forWrite: aTrue;
 		yourself
 ]
 
 { #category : 'testing' }
 AbstractBinaryFileStream >> atEnd [
 
-	^ self handle atEnd
-]
-
-{ #category : 'open/close' }
-AbstractBinaryFileStream >> closed [
-
-	^ self handle isOpen not
+	^ file atEnd: handle
 ]
 
 { #category : 'reading' }
@@ -90,13 +84,13 @@ AbstractBinaryFileStream >> crlf [
 ]
 
 { #category : 'accessing' }
-AbstractBinaryFileStream >> fileHandle [
+AbstractBinaryFileStream >> file [
 	^ file
 ]
 
 { #category : 'accessing' }
-AbstractBinaryFileStream >> fileHandle: aFileHandle [
-	file := aFileHandle
+AbstractBinaryFileStream >> file: aFile [
+	file := aFile
 ]
 
 { #category : 'accessing' }
@@ -111,7 +105,7 @@ AbstractBinaryFileStream >> fileMode: aSymbol [
 
 { #category : 'accessing' }
 AbstractBinaryFileStream >> fileName [
-	^self fileHandle fullName
+	^self file fullName
 ]
 
 { #category : 'flushing' }
@@ -120,24 +114,25 @@ AbstractBinaryFileStream >> flush [
 	the number of write() system calls it makes. This should generally be
 	used before #sync, but on Windows they do the same thing."
 	
-	self handle flush
+	file flush: handle
 ]
 
 { #category : 'accessing' }
 AbstractBinaryFileStream >> handle [
-	^self fileHandle id
+	^handle
 ]
 
 { #category : 'accessing' }
 AbstractBinaryFileStream >> handle: anObject [
-	self fileHandle id: anObject
+	handle := anObject
 ]
 
 { #category : 'initialization' }
-AbstractBinaryFileStream >> initializeFromFileHandle: aFileHandle [
-
-	self fileHandle: aFileHandle.
-	self fileMode: aFileHandle fileMode
+AbstractBinaryFileStream >> handle: aCollection file: aFile forWrite: aBoolean [
+	
+	handle := aCollection.
+	file := aFile.
+	forWrite := aBoolean
 ]
 
 { #category : 'testing' }
@@ -180,7 +175,7 @@ AbstractBinaryFileStream >> next: n into: aBuffer [
 	"Return a string with the next n characters of the filestream in it."
 	| readBuffer read |
 	readBuffer := aBuffer.
-	read := self readInto: readBuffer startingAt: 1 count: n.
+	read := file read: handle into: readBuffer startingAt: 1 count: n.
 	^read = n 
 		ifTrue: [ readBuffer ]
 		ifFalse: [ readBuffer copyFrom: 1 to: read ]
@@ -202,20 +197,13 @@ AbstractBinaryFileStream >> next: n into: aString startingAt: startIndex [
 AbstractBinaryFileStream >> next: amount putAll: aByteArray [
 
 	self fileMode isWritable
-		ifFalse: [ ^ FileWriteError signalWith: self fileHandle reference text: 'Cannot write a read-only file - ' , self pathString ].
-	self
-		writeFrom: aByteArray
+		ifFalse: [ ^ FileWriteError signalWith: self file reference text: 'Cannot write a read-only file - ' , self pathString ].
+	file
+		write: handle
+		from: aByteArray
 		startingAt: 1
 		count: amount.
 	^ aByteArray
-]
-
-{ #category : 'writing' }
-AbstractBinaryFileStream >> next: anInteger putAll: aCollection startingAt: startIndex [
-"Store the next anInteger elements from the given collection."
-(startIndex = 1 and:[anInteger = aCollection size])
-	ifTrue:[^self nextPutAll: aCollection].
-^self nextPutAll: (aCollection copyFrom: startIndex to: startIndex+anInteger-1)
 ]
 
 { #category : 'reading' }
@@ -259,7 +247,7 @@ AbstractBinaryFileStream >> nextPutAll: aByteArray [
 { #category : 'accessing' }
 AbstractBinaryFileStream >> pathString [
 
-	^self fileHandle pathString
+	^self file pathString
 ]
 
 { #category : 'reading' }
@@ -271,15 +259,13 @@ AbstractBinaryFileStream >> peek [
 { #category : 'positioning' }
 AbstractBinaryFileStream >> position [
 
-	^ self handle position
+	^ self file getPosition: handle
 ]
 
 { #category : 'positioning' }
 AbstractBinaryFileStream >> position: aPosition [
 	
-	| pos |
-	pos := self handle position: aPosition.
-	pos ifNil: [ self error: 'position error' ].
+	self file setPosition: handle to: aPosition
 ]
 
 { #category : 'printing' }
@@ -293,19 +279,9 @@ AbstractBinaryFileStream >> printOn: aStream [
 ]
 
 { #category : 'reading' }
-AbstractBinaryFileStream >> readInto: byteArray startingAt: startIndex count: count [
-	"Read up to count bytes of data from this file into the given string or byte array starting at the given index. 
-		Answer the number of bytes actually read."
+AbstractBinaryFileStream >> readInto: readBuffer startingAt: startIndex count: count [
 
-	| buf cnt |
-	buf := byteArray species new: count.
-	cnt := self handle next: count into: buf.
-	cnt ifNil: [ 
-		self handle isNil
-			ifTrue: [ ^ self error: 'File is closed' ].
-		self error: 'File read failed: ' , (self handle serverErrorString ifNil: [ '']) ].
-	byteArray replaceFrom: startIndex to: startIndex + cnt - 1 with: buf.
-	^cnt
+	^ file read: handle into: readBuffer startingAt: startIndex count: count
 ]
 
 { #category : 'positioning' }
@@ -322,7 +298,7 @@ AbstractBinaryFileStream >> setToEnd [
 { #category : 'accessing' }
 AbstractBinaryFileStream >> size [
 
-	^ self handle size
+	^ self file sizeOf: handle
 ]
 
 { #category : 'positioning' }
@@ -336,20 +312,7 @@ AbstractBinaryFileStream >> skip: n [
 { #category : 'flushing' }
 AbstractBinaryFileStream >> sync [	
 
-	"On Unix, this syncs any written or flushed data still in the kernel file
-	system buffers to disk. On Windows this and primFlush: do the same thing
-
-	self file sync
-
-
-
-	<primitive: 'primitiveFileSync' module: 'FilePlugin'>
-
-"
-	self error: 'not yet implmented'
-
-	"fsync() failing cannot be ignored"
-	self primitiveFailed
+	self file sync: handle
 ]
 
 { #category : 'reading' }
@@ -374,17 +337,4 @@ AbstractBinaryFileStream >> upToEnd [
 		| next |
 		[ (next := self next) isNil ] whileFalse: [
 			newStream nextPut: next ] ]
-]
-
-{ #category : 'writing' }
-AbstractBinaryFileStream >> writeFrom: stringOrByteArray startingAt: startIndex count: count [
-	"Write count bytes onto this file from the given string or byte array starting at the given index. 	Answer the number of bytes written."
-
-	| written |
-	self handle ifNil: [FileWriteError signalWith: self fileHandle reference text: 'File closed - ' , self pathString].
-	written := (startIndex = 1 and: [ count = stringOrByteArray size])
-		ifTrue: [ self handle nextPutAll: stringOrByteArray ]
-		ifFalse: [ self handle nextPutAll: (stringOrByteArray copyFrom: startIndex to: startIndex + count - 1) ].
-	written ifNil: [FileWriteError signalWith: self fileHandle reference text: 'Write failed - ' , self pathString].
-	^ written
 ]
