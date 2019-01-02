@@ -191,12 +191,12 @@ RwPrjCloneTool >> cloneRepository: aRwGitRepositoryDefinition [
 	cloneUrl := 'git@' , projectUrl authority , ':'.
 	segments := projectUrl segments.
 	cloneUrl := segments size = 1
-		ifTrue: [ cloneUrl , (segments at: 1) , '.git' ]
-		ifFalse: [ cloneUrl , (segments at: 1) , '/' , (projectUrl segments at: 2) , '.git' ].
+		ifTrue: [ cloneUrl , (segments at: 1) , '.git ' ]
+		ifFalse: [ cloneUrl , (segments at: 1) , '/' , (projectUrl segments at: 2) , '.git ' ].
 	cloneOption := ' --no-checkout '.
 	checkout := aRwGitRepositoryDefinition committish.
 	checkout ifNil: [ cloneOption := '' ].
-	response := gitTool gitcloneIn: aRwGitRepositoryDefinition repositoryRoot parent pathString with: cloneOption , cloneUrl.
+	response := gitTool gitcloneIn: aRwGitRepositoryDefinition repositoryRoot parent pathString with: cloneOption , cloneUrl, aRwGitRepositoryDefinition repositoryRoot pathString.
 	checkout
 		ifNotNil: [ Rowan projectTools checkout checkoutProjectReference: aRwGitRepositoryDefinition ].
 ]

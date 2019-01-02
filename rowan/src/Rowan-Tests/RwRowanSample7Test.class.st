@@ -390,9 +390,11 @@ RwRowanSample7Test >> testResolveRepositoryDefinition [
 	repositoryDefinition repositoryRoot ensureDeleteAll.
 
 "create repository definitions using alternat git repo name"
-	repositoryDefinition := RwAbstractRepositoryDefinition 
-		newForSpecification: projectSpec 
-			projectHome: gitRootPath.
+	projectName := projectName, '_alt'.
+	repositoryDefinition := RwGitRepositoryDefinition 
+		newNamed: projectName 
+			forSpecification: projectSpec 
+			repositoryRoot: gitRootPath / projectName.
 
 	repositoryDefinition repositoryRoot ensureDeleteAll.
 
