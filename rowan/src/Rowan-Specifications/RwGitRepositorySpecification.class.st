@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'committish',
 		'committishType',
-		'remote'
+		'remote',
+		'remoteUrl'
 	],
 	#category : 'Rowan-Specifications'
 }
@@ -105,6 +106,18 @@ RwGitRepositorySpecification >> remote: anObject [
 
    remote := anObject
 
+]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> remoteUrl [
+
+	^ remoteUrl
+]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> remoteUrl: aRemoteUrlString [
+
+	remoteUrl := aRemoteUrlString
 ]
 
 { #category : 'accessing' }

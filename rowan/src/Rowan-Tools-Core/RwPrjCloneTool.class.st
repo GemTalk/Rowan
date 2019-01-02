@@ -187,12 +187,15 @@ RwPrjCloneTool >> cloneRepository: aRwGitRepositoryDefinition [
 		the clone is already present."
 			^ msg ].
 	gitTool := Rowan gitTools.
-	projectUrl := RwUrl fromString: aRwGitRepositoryDefinition projectUrl.
-	cloneUrl := 'git@' , projectUrl authority , ':'.
-	segments := projectUrl segments.
-	cloneUrl := segments size = 1
-		ifTrue: [ cloneUrl , (segments at: 1) , '.git ' ]
-		ifFalse: [ cloneUrl , (segments at: 1) , '/' , (projectUrl segments at: 2) , '.git ' ].
+	aRwGitRepositoryDefinition remoteUrl
+		ifNil: [ 
+			projectUrl := RwUrl fromString: aRwGitRepositoryDefinition projectUrl.
+			cloneUrl := 'git@' , projectUrl authority , ':'.
+			segments := projectUrl segments.
+			cloneUrl := segments size = 1
+				ifTrue: [ cloneUrl , (segments at: 1) , '.git ' ]
+				ifFalse: [ cloneUrl , (segments at: 1) , '/' , (projectUrl segments at: 2) , '.git ' ] ]
+		ifNotNil: [:remoteUrl | cloneUrl := remoteUrl , ' ' ].
 	cloneOption := ' --no-checkout '.
 	checkout := aRwGitRepositoryDefinition committish.
 	checkout ifNil: [ cloneOption := '' ].

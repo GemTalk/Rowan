@@ -281,6 +281,12 @@ RwProjectSpecification >> remote [
 ]
 
 { #category : 'accessing' }
+RwProjectSpecification >> remoteUrl [
+
+   ^repoSpec remoteUrl
+]
+
+{ #category : 'accessing' }
 RwProjectSpecification >> repoPath [
 
    ^repoPath ifNil: [ repoPath := 'rowan/src' ]

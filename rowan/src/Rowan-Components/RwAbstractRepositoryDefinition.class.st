@@ -164,9 +164,12 @@ RwAbstractRepositoryDefinition >> repositoryRoot [
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> repositoryRoot: pathStringOrReference [
 
+	| fileRef |
+	fileRef := pathStringOrReference asFileReference.
+	fileRef fileSystem = self _fileSystem ifFalse: [ self error: 'incorrect repository root file reference for this class' ].
 	self version: nil.
 	self projectUrl: nil.
-	self properties at: 'repositoryRoot' put: pathStringOrReference asFileReference
+	self properties at: 'repositoryRoot' put: fileRef
 ]
 
 { #category : 'actions' }

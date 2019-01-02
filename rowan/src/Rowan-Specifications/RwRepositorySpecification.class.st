@@ -64,6 +64,12 @@ RwRepositorySpecification >> pushForTool: aRwTool remote: remoteOrNil [
 ]
 
 { #category : 'accessing' }
+RwRepositorySpecification >> remoteUrl [
+
+	^ nil
+]
+
+{ #category : 'accessing' }
 RwRepositorySpecification >> repositoryRootPath [
 
    ^repositoryRootPath
