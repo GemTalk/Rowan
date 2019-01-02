@@ -341,8 +341,8 @@ DiskStore >> defaultWorkingDirectory [
 DiskStore >> delete: path [
 	| pathString |
 	
-	(self exists: path)
-		ifFalse: [ ^ FileDoesNotExist signalWith: path ].
+	(self exists: path) 
+		ifFalse: [ ^ FileDoesNotExistException signalWith: path ].
 		
 	pathString := self stringFromPath: path.
 	

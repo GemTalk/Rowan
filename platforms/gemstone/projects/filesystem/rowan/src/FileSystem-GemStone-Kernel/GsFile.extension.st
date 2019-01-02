@@ -202,7 +202,7 @@ GsFile class >> open: aPathName withOptions: aFileOptions [
 GsFile class >> openReference: aFileReference withOptions: aFileOptions [
 
 	^(self open: aFileReference fullName withOptions: aFileOptions) 
-		ifNil: [FileDoesNotExist signalWith: aFileReference fullName]
+		ifNil: [FileDoesNotExistException signalWith: aFileReference fullName]
 ]
 
 { #category : '*FileSystem-Gemstone-Kernel' }

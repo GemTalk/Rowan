@@ -140,9 +140,9 @@ FileHandle >> setPositionTo: anInteger [
 { #category : 'public' }
 FileHandle >> signalOpenError [
 	self reference exists ifFalse: [
-		FileDoesNotExist signalWith: self reference text: 'Attempting to open non existent file - ' , self reference fullName].
+		FileDoesNotExistException signalWith: self reference text: 'Attempting to open non existent file - ' , self reference fullName].
 	self reference isDirectory ifTrue: [
-		FileDoesNotExist signalWith: self reference text: 'Attempting to open directory - ' , self reference fullName].
+		FileDoesNotExistException signalWith: self reference text: 'Attempting to open directory - ' , self reference fullName].
 	FileOpenError 
 		signalWith: self reference 
 		text: ('Unable to open'  , self reference fullName)
@@ -172,7 +172,7 @@ FileHandle >> startUp [
 { #category : 'public' }
 FileHandle >> streamError [
 	self reference exists
-		ifFalse: [FileDoesNotExist signalWith: self reference].
+		ifFalse: [FileDoesNotExistException signalWith: self reference].
 	self error: 'Unable to open file ' , self reference printString
 ]
 
