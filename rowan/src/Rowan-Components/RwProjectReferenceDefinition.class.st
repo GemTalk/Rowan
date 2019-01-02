@@ -175,12 +175,6 @@ RwProjectReferenceDefinition >> projectAlias: aStringOrNil [
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinition >> projectDefinitionSet [
-
-	self error: 'implementation incomplete'
-]
-
-{ #category : 'accessing' }
 RwProjectReferenceDefinition >> projectHome [
 
 	^ self properties at: 'projectHome' ifAbsent: [ FileLocator rowanProjectsHome ]

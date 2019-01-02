@@ -55,8 +55,7 @@ RwRowanSample7Test >> tearDown [
 { #category : 'tests' }
 RwRowanSample7Test >> testCreateProjectFromUrl [
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition
-		informHappened projectDefinitionSet |
+	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -84,9 +83,7 @@ RwRowanSample7Test >> testCreateProjectFromUrl [
 	self assert: projectReferenceDefinition repositoryRoot exists.
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) isNil.
 
-	projectDefinitionSet := projectReferenceDefinition projectDefinitionSet.
-
-	Rowan projectTools load loadProjectSetDefinition: projectDefinitionSet
+	Rowan projectTools load loadProjectReferenceDefinition: projectReferenceDefinition
 ]
 
 { #category : 'tests' }
