@@ -366,12 +366,12 @@ FileOptions >> parent: anObject [
 	parent := anObject
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 FileOptions >> permissionOptions [
 	^permissionOptions
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 FileOptions >> permissionOptions: aCollection [
 	permissionOptions := aCollection
 ]
