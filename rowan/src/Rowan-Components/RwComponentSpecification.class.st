@@ -10,9 +10,9 @@ Class {
 { #category : 'converting' }
 RwComponentSpecification >> asDefinition [
 
-	"answer an RwProjectDefintion?? created using the reciever"
-
-	self error: 'not yet implemented'.
+	"answer an RwComponentProjectDefinition created using the reciever"
+self halt.
+	^RwComponentProjectDefinition newForSpecification: self
 ]
 
 { #category : 'accessing' }

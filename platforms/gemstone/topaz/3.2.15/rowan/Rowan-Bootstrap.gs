@@ -629,7 +629,7 @@ commit
   CypressBootstrapRowanBlock 
     value: 'RowanTools'
     value: #('Rowan-Tools-Core' 'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions' 
-							'Rowan-GemStone-Specifications' 'Rowan-Components'
+							'Rowan-GemStone-Specifications' 'Rowan-Components' 'Rowan-GemStone-Components'
 	).	"Rowan Tools"
 %
   commit
