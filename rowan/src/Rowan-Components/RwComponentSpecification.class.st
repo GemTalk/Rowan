@@ -1,6 +1,9 @@
 Class {
 	#name : 'RwComponentSpecification',
 	#superclass : 'RwProjectSpecification',
+	#instVars : [
+		'projectsPath'
+	],
 	#category : 'Rowan-Components'
 }
 

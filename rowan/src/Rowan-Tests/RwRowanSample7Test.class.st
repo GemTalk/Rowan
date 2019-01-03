@@ -38,6 +38,14 @@ RwRowanSample7Test >> _repositoryRoot: anObject [
 ]
 
 { #category : 'private' }
+RwRowanSample7Test >> _rowanSample7_ColorsSpecificationUrl [
+
+	| rowanSpec |
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	^ 'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample7_Colors.ston'
+]
+
+{ #category : 'private' }
 RwRowanSample7Test >> _rowanSample7SpecificationUrl [
 
 	| rowanSpec |
@@ -53,7 +61,7 @@ RwRowanSample7Test >> tearDown [
 ]
 
 { #category : 'tests' }
-RwRowanSample7Test >> testCreateProjectFromUrl [
+RwRowanSample7Test >> testCreateProjectFromUrl_1 [
 
 	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition |
 
@@ -84,6 +92,39 @@ RwRowanSample7Test >> testCreateProjectFromUrl [
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) isNil.
 
 	Rowan projectTools load loadProjectReferenceDefinition: projectReferenceDefinition
+]
+
+{ #category : 'tests' }
+RwRowanSample7Test >> testCreateProjectFromUrl_2 [
+
+	"load RowanSample7_Colors project"
+
+	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition |
+
+	projectName := 'RowanSample7_Colors'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	specUrlString :=  self _rowanSample7_ColorsSpecificationUrl.
+	projectSpec := specUrlString asRwUrl asSpecification.
+
+"create project reference definitions"
+	projectReferenceDefinition := RwProjectReferenceDefinition 
+		newForSpecification: projectSpec 
+		projectHome: gitRootPath.
+
+	projectReferenceDefinition repositoryRoot ensureDeleteAll.
+
+"resolve and register project ... preparing to load next"
+	projectReferenceDefinition resolve.
+	projectReferenceDefinition projectSpec register.
+
+"load project"
+	Rowan projectTools load
+		loadProjectNamed: projectName
 ]
 
 { #category : 'tests' }

@@ -1,0 +1,16 @@
+RwComponentSpecification{
+	#specName : 'RowanSample7_Colors',
+	#projectUrl : 'https://github.com/dalehenrich/RowanSample7',
+	#repoSpec : RwGitRepositorySpecification {
+		#committish : 'candidateV1.0',
+		#committishType : 'branch',
+		#remoteUrl : 'git@github.com:dalehenrich/RowanSample7.git'
+	},
+	#configsPath : 'colors/configs',
+	#repoPath : 'colors/src',
+	#projectsPath : 'colors/projects',
+	#specsPath : 'colors/specs',
+	#defaultConfigurationNames : [ 'Colors' ],
+	#defaultGroupNames : [ 'core' ],
+	#comment : 'Sample project for Rowan v2.0.0.'
+}

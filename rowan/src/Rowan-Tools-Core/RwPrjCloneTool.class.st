@@ -5,60 +5,6 @@ Class {
 }
 
 { #category : 'private' }
-RwPrjCloneTool >> _validateForGitProjectReference: aRwGitProjectReference ifDone: doneBlock [
-
-	| gitTool response command cdResponse gitRepoPath projectHome |
-	gitTool := Rowan gitTools.
-	projectHome := aRwGitProjectReference projectHome.
-	gitRepoPath := projectHome / aRwGitProjectReference projectAlias.
-
-	aRwGitProjectReference repositoryUrl
-		ifNotNil: [ :repoUrlString | 
-			| repoUrl |
-			repoUrl := RwUrl fromString: repoUrlString.
-			response := gitTool gitrevparseShowTopLevelIn: repoUrl pathString.
-			command := 'set -e; cd ' , gitRepoPath pathString , '; pwd'.
-			cdResponse := gitTool performOnServer: command logging: true.
-			(self readlink: response) = (self readlink: cdResponse)
-				ifTrue: [ 
-					| msg |
-					msg := 'A clone for ' , specification specName printString
-						, ' already exists in ' , gitRepoPath printString , '. Skipping clone.'.
-					self inform: msg.
-					doneBlock value: msg ].
-			self
-				error:
-					'A clone for a different project (' , response printString
-						, ') is already present in ' , gitRepoPath printString ].
-	gitRepoPath exists
-		ifTrue: [ 
-			[ 
-			"if gitRepoDir exists and it is a git repo, then make sure that the clone is for the target
-		project ... if not error out of here."
-			response := gitTool gitrevparseShowTopLevelIn: gitRepoPath pathString.
-			command := 'set -e; cd ' , gitRepoPath pathString , '; pwd'.
-			cdResponse := gitTool performOnServer: command logging: true.
-			(self readlink: response) = (self readlink: cdResponse)
-				ifTrue: [ 
-					| msg |
-					aRwGitProjectReference repositoryUrlScheme:'cypress:'.
-					msg := 'A clone for '
-						, aRwGitProjectReference projectAlias printString , ' already exists in '
-						, gitRepoPath pathString printString , ', so the clone operation is being skipped'
-						, '
-The project project has been registered with Rowan at the existing location .'.
-					self inform: msg.
-					doneBlock value: msg ] ]
-				on: Error
-				do: [ :ignored | 
-					self
-						error:
-							'Expected a git repository to present in the directory: '
-								, gitRepoPath pathString printString ] ].
-	projectHome ensureCreateDirectory
-]
-
-{ #category : 'private' }
 RwPrjCloneTool >> _validateForGitRepository: aRwGitRepositoryDefinition ifDone: doneBlock [
 
 	| gitTool response command cdResponse gitRepoPath |
@@ -144,34 +90,6 @@ The project project has been registered with Rowan at the existing location .'.
 							'Expected a git repository to present in the directory: '
 								, gitRepoPath pathString printString ] ].
 	gitRootPath ensureCreateDirectory
-]
-
-{ #category : 'smalltalk api' }
-RwPrjCloneTool >> cloneProjectReference: aRwGitProjectReference [
-
-	| gitTool response projectUrl cloneUrl cloneOption checkout segments |
-
-	self
-		_validateForGitProjectReference: aRwGitProjectReference
-		ifDone: [ :msg | 
-			"done block is invoked when it is not necessary to perform further processing. Typically,
-		the clone is already present."
-			^ msg ].
-	gitTool := Rowan gitTools.
-	projectUrl := RwUrl fromString: aRwGitProjectReference projectUrl.
-	cloneUrl := 'git@' , projectUrl authority , ':'.
-	segments := projectUrl segments.
-	cloneUrl := segments size = 1
-		ifTrue: [ cloneUrl , (segments at: 1) , '.git' ]
-		ifFalse: [ cloneUrl , (segments at: 1) , '/' , (projectUrl segments at: 2) , '.git' ].
-	cloneOption := ' --no-checkout '.
-	checkout := aRwGitProjectReference committish.
-	checkout ifNil: [ cloneOption := '' ].
-	response := gitTool gitcloneIn: aRwGitProjectReference projectHome pathString with: cloneOption , cloneUrl.
-	aRwGitProjectReference
-		repositoryUrlScheme: 'cypress:'.
-	checkout
-		ifNotNil: [ Rowan projectTools checkout checkoutProjectReference: aRwGitProjectReference ].
 ]
 
 { #category : 'smalltalk api' }
