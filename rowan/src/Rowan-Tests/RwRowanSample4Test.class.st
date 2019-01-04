@@ -2302,7 +2302,7 @@ projectSetDefinition addProject: oldProjectDefinition.
 	    pkgDefinition classDefinitions values do: [:classDefinition |
 	        pkgDefinition removeClassDefinition: classDefinition ].
 	    pkgDefinition classExtensions values do: [:classExtension |
-        	pkgDefinition removeClassExtension: classExtension ]].
+        	pkgDefinition removeClassExtensionDefinition: classExtension ]].
 
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 	Rowan projectTools load markProjectSetNotDirty: projectSetDefinition.
