@@ -152,6 +152,14 @@ RwLoadedProject >> packageNames [
 	^ self loadedPackages keys asArray
 ]
 
+{ #category : 'accessing' }
+RwLoadedProject >> projectUrl [
+
+	"Return the projectUrl used to clone the project"
+
+	^ self specification projectUrl
+]
+
 { #category : 'definitions' }
 RwLoadedProject >> propertiesForDefinition [
 
