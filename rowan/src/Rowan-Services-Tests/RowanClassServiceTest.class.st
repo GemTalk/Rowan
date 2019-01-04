@@ -24,13 +24,15 @@ RowanClassServiceTest >> setUp [
 	super setUp.
 	self createServicesTestClass. 
 	self loadServicesTestProject.
+	Rowan platform _alternateImageClass: Rowan image testImageClass
 ]
 
 { #category : 'support' }
 RowanClassServiceTest >> tearDown [
 
 	super tearDown.
-	self unloadServicesTestProject
+	Rowan platform _alternateImageClass: nil.
+	self unloadServicesTestProject.
 ]
 
 { #category : 'tests' }
