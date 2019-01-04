@@ -92,6 +92,14 @@ RwProject >> project [
 	^ self
 ]
 
+{ #category : 'accessing' }
+RwProject >> projectUrl [
+
+	"Return the projectUrl used to clone the project"
+
+	^ self _loadedProject projectUrl
+]
+
 { #category : 'project creation' }
 RwProject >> register [
 	"Create a loaded project based on the receiver's properties in the image."
