@@ -101,14 +101,14 @@ RwAbstractRepositoryDefinition >> attach [
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> committish [
 
-	^ self properties at: 'committish' ifAbsent: [ '' ]
+	^ self properties at: 'committish' ifAbsent: []
 ]
 
 { #category : 'accessing' }
-RwAbstractRepositoryDefinition >> committish: anCommittishString [
+RwAbstractRepositoryDefinition >> committish: aString committishType: committishTypeString [
 
-	anCommittishString ifNil: [ ^ self properties removeKey: 'committish' ifAbsent: [ ] ].
-	self properties at: 'committish' put: anCommittishString
+	self properties at: 'committish' put: aString.
+	self properties at: 'committishType' put: committishTypeString.
 ]
 
 { #category : 'actions' }
@@ -180,13 +180,13 @@ RwAbstractRepositoryDefinition >> resolve [
 
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> version [
-
+"not quite convinced this is needed"
 	^ self properties at: 'version' ifAbsent: [ ]
 ]
 
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> version: aSemanticVersionOrString [
-
+"not quite convinced this is needed"
 	aSemanticVersionOrString ifNil: [ ^ self properties removeKey: 'version' ifAbsent: [ ] ].
 	^ self properties at: 'version' put: aSemanticVersionOrString asRwSemanticVersionNumber
 ]

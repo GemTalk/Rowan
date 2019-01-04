@@ -120,11 +120,49 @@ RwRowanSample7Test >> testCreateProjectFromUrl_2 [
 
 "resolve and register project ... preparing to load next"
 	projectReferenceDefinition resolve.
-	projectReferenceDefinition projectSpec register.
+	projectReferenceDefinition register.
 
 "load project"
 	Rowan projectTools load
 		loadProjectNamed: projectName
+]
+
+{ #category : 'tests' }
+RwRowanSample7Test >> testCreateProjectReferenceFromScratch [
+
+	| rowanSpec gitRootPath projectName projectReferenceDefinition x y projectSpec |
+
+	projectName := 'RowanSample7'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	projectSpec := RwComponentSpecification new
+		specName: projectName;
+		repoSpec: RwDiskRepositorySpecification new; "want to create a disk-based repository"
+		yourself.
+
+"create project reference definitions"
+	projectReferenceDefinition := RwProjectReferenceDefinition 
+		projectName: projectName 
+			projectSpec: projectSpec 
+			configurationNames: #( 'Default'  )
+			groupNames: #( 'core' )
+			projectUrl: self _gitHubProjectUrl
+			comment: ''.
+
+	projectReferenceDefinition projectHome: gitRootPath.
+
+"validate"
+	self assert: projectReferenceDefinition projectName = projectName.
+	self assert: projectReferenceDefinition projectAlias = projectReferenceDefinition projectName.
+	self assert: projectReferenceDefinition configurationNames = #( 'Default').
+	self assert: projectReferenceDefinition groupNames = #( 'core').
+	self assert: projectReferenceDefinition projectUrl = self _gitHubProjectUrl.
+
+	self assert: (x := projectReferenceDefinition projectHome pathString) = (y := gitRootPath asFileReference pathString).
 ]
 
 { #category : 'tests' }
@@ -169,7 +207,7 @@ RwRowanSample7Test >> testCreateRepositoryDefinition [
 	"exercise the RwAbstractRepositoryDefinition class creation protocol"
 
 	| rowanSpec gitRootPath repositoryName repositoryDefinition_1  repositoryDefinition_2 repoRoot
-		projectVersionString gitHubProjectUrl gitHubRemoteUrl |
+		projectVersionString gitHubProjectUrl gitHubRemoteUrl x y |
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
 
@@ -234,26 +272,27 @@ RwRowanSample7Test >> testCreateRepositoryDefinition [
 		repositoryRoot: repoRoot
 		projectUrl: gitHubProjectUrl
 		remoteUrl: gitHubRemoteUrl
-		committish: 'master'.
+		committish: 'master'
+		committishType: 'branch'.
 
 	repositoryDefinition_2 := RwGitRepositoryDefinition
 		newNamed: repositoryName 
 		repositoryRoot: repoRoot pathString
 		projectUrl: gitHubProjectUrl
 		remoteUrl: gitHubRemoteUrl
-		committish: 'master'.
+		committish: 'master'
+		committishType: 'branch'.
 
 "validate"
 	self assert: repositoryDefinition_1  name = repositoryDefinition_2 name.
 	self assert: repositoryDefinition_1  repositoryRoot = repositoryDefinition_2 repositoryRoot.
-	self assert: repositoryDefinition_1  committish = repositoryDefinition_2 committish.
+	self assert: (x := repositoryDefinition_1  committish) = (y := repositoryDefinition_2 committish).
 	self assert: repositoryDefinition_1  projectUrl = repositoryDefinition_2 projectUrl.
 	self assert: repositoryDefinition_1  remoteUrl = repositoryDefinition_2 remoteUrl.
 
 	self assert:  repositoryDefinition_1 projectUrl = gitHubProjectUrl.
 	self assert: repositoryDefinition_1 remoteUrl = gitHubRemoteUrl.
 	self assert: repositoryDefinition_1 committish = 'master'.
-
 ]
 
 { #category : 'tests' }

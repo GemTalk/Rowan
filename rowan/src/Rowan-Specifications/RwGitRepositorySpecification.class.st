@@ -13,8 +13,7 @@ Class {
 { #category : 'accessing' }
 RwGitRepositorySpecification >> branch: aString [
 
-	self committish: aString.
-	self committishType: 'branch'
+	self committish: aString committishType: 'branch'
 ]
 
 { #category : 'testing' }
@@ -123,22 +122,19 @@ RwGitRepositorySpecification >> remoteUrl: aRemoteUrlString [
 { #category : 'accessing' }
 RwGitRepositorySpecification >> SHA: aString [
 
-	self committish: aString.
-	self committishType: 'SHA'
+	self committish: aString committishType: 'SHA'
 ]
 
 { #category : 'accessing' }
 RwGitRepositorySpecification >> tag: aString [
 
-	self committish: aString.
-	self committishType: 'tag'
+	self committish: aString committishType: 'tag'
 ]
 
 { #category : 'accessing' }
 RwGitRepositorySpecification >> tagPattern: aString [
 
-	self committish: aString.
-	self committishType: 'tagPattern'
+	self committish: aString committishType: 'tagPattern'
 ]
 
 { #category : 'actions' }

@@ -18,8 +18,8 @@ RwProjectReferenceDefinition class >> newForSpecification: aRwSpecification proj
 
 	^ self 
 		newNamed: aRwSpecification specName 
-		forSpecification: aRwSpecification 
-		projectHome: projectHomeFileReferenceOrString
+			forSpecification: aRwSpecification 
+			projectHome: projectHomeFileReferenceOrString
 ]
 
 { #category : 'instance creation' }
@@ -39,23 +39,42 @@ RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aR
 			projectSpec: aRwSpecification
 			configurationNames: aRwSpecification defaultConfigurationNames
 			groupNames: aRwSpecification defaultGroupNames
+			projectUrl: aRwSpecification projectUrl
+			comment: aRwSpecification comment
 			projectHome: projectHomeFileReferenceOrString
 			configsPath: aRwSpecification configsPath
 			packagesPath: aRwSpecification repoPath
+			projectsPath: aRwSpecification projectsPath
 			specsPath: aRwSpecification specsPath
 ]
 
 { #category : 'instance creation' }
-RwProjectReferenceDefinition class >> projectName: projectName projectSpec: projectSpec configurationNames: configurationNames groupNames: groupNames projectHome: projectHomeFileReferenceOrString configsPath: configsPath packagesPath: packagesPath specsPath: specsPath [
+RwProjectReferenceDefinition class >> projectName: projectName projectSpec: projectSpec configurationNames: configurationNames groupNames: groupNames projectUrl: projectUrl comment: comment [
 
 	^ self new
 		projectName: projectName;
 		projectSpec: projectSpec;
 		configurationNames: configurationNames;
 		groupNames: groupNames;
+		projectUrl: projectUrl;
+		comment: comment;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwProjectReferenceDefinition class >> projectName: projectName projectSpec: projectSpec configurationNames: configurationNames groupNames: groupNames  projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath [
+
+	^ self new
+		projectName: projectName;
+		projectSpec: projectSpec;
+		configurationNames: configurationNames;
+		groupNames: groupNames;
+		projectUrl: projectUrl;
+		comment: comment;
 		projectHome: projectHomeFileReferenceOrString;
 		configsPath: configsPath;
 		packagesPath: packagesPath;
+		projectsPath: projectsPath;
 		specsPath: specsPath;
 		yourself
 ]
@@ -79,8 +98,26 @@ RwProjectReferenceDefinition >> _repositoryDefinitionForProjectHome: projectHome
 
 	^ self _repositoryDefinitionClass
 		newNamed: self projectAlias
-			forSpecification: self projectSpec
 			repositoryRoot: projectHomeFileReferenceOrString asFileReference / self projectAlias
+			projectUrl: self projectUrl
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> branch: aString [
+
+	self committish: aString committishType: 'branch'
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> comment [
+
+	^ self properties at: 'comment' ifAbsent: [ '' ]
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> comment: aString [
+
+	^ self properties at: 'comment' put: aString
 ]
 
 { #category : 'accessing' }
@@ -90,9 +127,16 @@ RwProjectReferenceDefinition >> committish [
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinition >> committish: aString [
+RwProjectReferenceDefinition >> committish: aString committishType: committishTypeString [
 
-	^ self properties at: 'committish' put: aString
+	self properties at: 'committish' put: aString.
+	self properties at: 'committishType' put: committishTypeString.
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> committishType [
+
+	^ self properties at: 'committishType'  ifAbsent: []
 ]
 
 { #category : 'accessing' }
@@ -201,6 +245,18 @@ RwProjectReferenceDefinition >> projectName: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectReferenceDefinition >> projectsPath [
+
+	^ self properties at: 'projectsPath' ifAbsent: [ 'rowan/projects' ]
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> projectsPath: aString [
+
+	^ self properties at: 'projectsPath' put: aString
+]
+
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> projectSpec [
 
 	^ self properties at: 'spec' ifAbsent: []
@@ -215,7 +271,13 @@ RwProjectReferenceDefinition >> projectSpec: aRwSpecification [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectUrl [
 
-	^ self repositoryDefinition projectUrl
+	^ self properties at: 'projectUrl' ifAbsent: []
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> projectUrl: aString [
+
+	^ self properties at: 'projectUrl' put: aString
 ]
 
 { #category : 'accessing' }
@@ -244,6 +306,12 @@ RwProjectReferenceDefinition >> resolve [
 ]
 
 { #category : 'accessing' }
+RwProjectReferenceDefinition >> SHA: aString [
+
+	self committish: aString committishType: 'SHA'
+]
+
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> specsPath [
 
 	^ self properties at: 'specsPath' ifAbsent: [ 'rowan/specs' ]
@@ -259,6 +327,12 @@ RwProjectReferenceDefinition >> specsPath: aString [
 RwProjectReferenceDefinition >> specsRoot [
 
 	^self repositoryRoot / self specsPath
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> tag: aString [
+
+	self committish: aString committishType: 'tag'
 ]
 
 { #category : 'testing' }

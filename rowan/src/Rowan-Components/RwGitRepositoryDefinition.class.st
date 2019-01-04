@@ -8,20 +8,20 @@ Class {
 RwGitRepositoryDefinition class >> newNamed: repositoryName forSpecification: aRwSpecification repositoryRoot: repoRoot [
 
 	^ (super newNamed: repositoryName forSpecification: aRwSpecification repositoryRoot: repoRoot)
-		committish: aRwSpecification repoSpec committish;
+		committish: aRwSpecification repoSpec committish committishType: aRwSpecification repoSpec committishType;
 		remoteUrl: aRwSpecification remoteUrl;
 		yourself
 ]
 
 { #category : 'instance creation' }
-RwGitRepositoryDefinition class >> newNamed: repositoryName repositoryRoot: repoRoot projectUrl: anUrlString remoteUrl: aRemoreUrlStrng committish: committish [
+RwGitRepositoryDefinition class >> newNamed: repositoryName repositoryRoot: repoRoot projectUrl: anUrlString remoteUrl: aRemoreUrlStrng committish: committish committishType:committishType [
 
 	^ self new
 		name: repositoryName;
 		repositoryRoot: repoRoot;
 		projectUrl: anUrlString;
 		remoteUrl: aRemoreUrlStrng;
-		committish: committish;
+		committish: committish committishType:committishType;
 		yourself
 ]
 

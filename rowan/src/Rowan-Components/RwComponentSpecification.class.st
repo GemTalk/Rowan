@@ -16,6 +16,18 @@ self halt.
 ]
 
 { #category : 'accessing' }
+RwComponentSpecification >> projectsPath [
+
+	^ projectsPath ifNil: [ 'rowan/projects' ]
+]
+
+{ #category : 'accessing' }
+RwComponentSpecification >> projectsPath: aString [ 
+
+	projectsPath := aString
+]
+
+{ #category : 'accessing' }
 RwComponentSpecification >> version [
 
 	"return an RwSemanticVersionNumber"

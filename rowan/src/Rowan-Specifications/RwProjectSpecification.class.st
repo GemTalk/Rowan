@@ -230,6 +230,18 @@ RwProjectSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
 ]
 
 { #category : 'accessing' }
+RwProjectSpecification >> packagesPath [
+
+	^ self repoPath
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> packagesPath: aString [
+
+	self repoPath: aString
+]
+
+{ #category : 'accessing' }
 RwProjectSpecification >> platformSpec: anObject [
 
    platformSpec := anObject
