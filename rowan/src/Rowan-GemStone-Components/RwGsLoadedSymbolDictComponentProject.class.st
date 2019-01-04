@@ -7,6 +7,15 @@ Class {
 	#category : 'Rowan-GemStone-Components'
 }
 
+{ #category : 'instance creation' }
+RwGsLoadedSymbolDictComponentProject class >> newForProjectReferenceDefinition: aProjectReferenceDefinition [
+
+	^ self new
+		initialize;
+		initializeForProjectReferenceDefinition: aProjectReferenceDefinition;
+		yourself
+]
+
 { #category : 'definitions' }
 RwGsLoadedSymbolDictComponentProject >> asDefinition [
 
@@ -23,6 +32,13 @@ RwGsLoadedSymbolDictComponentProject >> initialize [
 
 	super initialize.
 	loadedComponents := KeyValueDictionary new.
+]
+
+{ #category : 'initialization' }
+RwGsLoadedSymbolDictComponentProject >> initializeForProjectReferenceDefinition: aProjectReferenceDefinition [
+
+	self initializeForName: aProjectReferenceDefinition projectAlias.
+	handle := aProjectReferenceDefinition
 ]
 
 { #category : 'accessing' }

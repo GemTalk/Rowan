@@ -280,6 +280,17 @@ RwProjectReferenceDefinition >> projectUrl: aString [
 	^ self properties at: 'projectUrl' put: aString
 ]
 
+{ #category : 'actions' }
+RwProjectReferenceDefinition >> register [
+
+	Rowan image 
+		loadedProjectNamed: self projectAlias
+		ifAbsent: [
+			| newLoadedProject |
+			newLoadedProject := RwGsLoadedSymbolDictComponentProject newForProjectReferenceDefinition: self.
+			Rowan image addLoadedProject: newLoadedProject ]
+]
+
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> repositoryDefinition [
 
