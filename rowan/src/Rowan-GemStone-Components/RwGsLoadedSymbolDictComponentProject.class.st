@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwGsLoadedSymbolDictComponentProject',
-	#superclass : 'RwGsLoadedSymbolDictProject',
+	#superclass : 'RwLoadedProject',
 	#instVars : [
 		'loadedComponents'
 	],
@@ -47,4 +47,23 @@ RwGsLoadedSymbolDictComponentProject >> loadedComponentDefinitions [
 	"Create definitions from all of the components I define, and answer the collection of them"
 
 	^ self definitionsFor: loadedComponents
+]
+
+{ #category : 'private' }
+RwGsLoadedSymbolDictComponentProject >> markPackageDirty [
+	"... indicates that receiver needs to mark it's container as dirty .... "
+
+	self markDirty
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> projectOwnerId [
+
+	^ self propertyAt: 'projectOwnerId'
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> projectOwnerId: aString [
+
+	^ self propertyAt: 'projectOwnerId' put: aString
 ]

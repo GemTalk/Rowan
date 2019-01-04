@@ -133,9 +133,8 @@ RwLoadedProject >> markDirty [
 { #category : 'private' }
 RwLoadedProject >> markNotDirty [
 	"I have been changed to be consistent with my source, so mark not dirty."
-self halt.
-	isDirty := false
 
+	isDirty := false
 ]
 
 { #category : 'private' }
