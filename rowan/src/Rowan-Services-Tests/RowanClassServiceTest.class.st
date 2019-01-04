@@ -167,10 +167,19 @@ RowanClassServiceTest >> test_selectedMethod [
 
 { #category : 'test method compilation' }
 RowanClassServiceTest >> test_setSuperSubIndicators [
-	| classService superclassMethodService subclassMethodService selector subclassService |
+	| classService superclassMethodService subclassMethodService selector subclassService packageService |
 	selector := #indicatorTesting. 
 	self loadRowanSample1.
-	[classService := RowanClassService forClassNamed: 'RowanSample1'.
+	[packageService := RowanPackageService forPackageNamed: 'RowanSample1-Core'.
+	packageService compileClass: 
+		'RowanSample1 rwSubclass: ''RowanSubClass''
+			instVarNames: #()
+			classVars: #()
+			classInstVars: #()
+			poolDictionaries: #()
+			category: ''RowanSample1-Core''
+			options: #()'.
+	classService := RowanClassService forClassNamed: 'RowanSample1'.
 	classService saveMethodSource: selector asString,  ' ^#deleteThisMethod' category: 'abc'.
 	superclassMethodService := (classService methodsNamed: selector) first.
 	self deny: superclassMethodService hasSupers.
