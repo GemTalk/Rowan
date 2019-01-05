@@ -195,6 +195,12 @@ RwProjectDefinition >> loadedCommitId [
 	^ self specification loadedCommitId
 ]
 
+{ #category : 'properties' }
+RwProjectDefinition >> loadedConfigurationNames [
+
+	^ self specification loadedConfigurationNames
+]
+
 { #category : 'accessing' }
 RwProjectDefinition >> packageNamed: aString [
 
@@ -240,6 +246,12 @@ RwProjectDefinition >> postCopy [
 	super postCopy.
 	packages := packages copy
 
+]
+
+{ #category : 'tool api' }
+RwProjectDefinition >> readProjectSet [
+
+	^ Rowan projectTools read  readProjectSetForProjectDefinition: self
 ]
 
 { #category : 'accessing' }

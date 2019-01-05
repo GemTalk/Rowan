@@ -28,3 +28,59 @@ RwComponentProjectDefinition >> components: aComponentDefinitionDictionary [
 
 	components := aComponentDefinitionDictionary
 ]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> configsPath [
+
+	^ self projectRef configsPath
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> defaultConfigurationNames [
+
+	^ self propertyAt: 'defaultConfigurationNames' ifAbsent: [ #( 'Default' ). ]
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> defaultGroupNames [
+
+	^ self propertyAt: 'defaultGroupNames' ifAbsent: [ #( 'default' ). ]
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> loadedConfigurationNames [
+
+	^ self propertyAt: 'loadedConfigurationNames' ifAbsent: [ ]
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> loadedGroupNames [
+
+	^ self propertyAt: 'loadedGroupNames' ifAbsent: [ ]
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> projectRef [
+
+	^ self propertyAt: 'projectRef' ifAbsent: [ ]
+]
+
+{ #category : 'tool api' }
+RwComponentProjectDefinition >> readProjectSet [
+
+	^ Rowan projectTools read  readProjectSetForComponentProjectDefinition: self
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> repositoryRoot [
+
+	^ self projectRef repositoryRoot
+]
+
+{ #category : 'temporary compat' }
+RwComponentProjectDefinition >> specification [
+
+self deprecated: 'temporary method ... simulating RwSpecification api'.
+
+	^ self
+]

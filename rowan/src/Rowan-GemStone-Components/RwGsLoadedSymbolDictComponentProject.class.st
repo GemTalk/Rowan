@@ -67,3 +67,18 @@ RwGsLoadedSymbolDictComponentProject >> projectOwnerId: aString [
 
 	^ self propertyAt: 'projectOwnerId' put: aString
 ]
+
+{ #category : 'definitions' }
+RwGsLoadedSymbolDictComponentProject >> propertiesForDefinition [
+
+	| props |
+	props := super propertiesForDefinition.
+	props at: 'projectRef' put: handle.
+	^ props
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> specification [
+
+	^ handle
+]

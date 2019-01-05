@@ -99,7 +99,7 @@ RwRowanSample7Test >> testCreateProjectFromUrl_2 [
 
 	"load RowanSample7_Colors project"
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition |
+	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition x |
 
 	projectName := 'RowanSample7_Colors'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -120,7 +120,7 @@ RwRowanSample7Test >> testCreateProjectFromUrl_2 [
 
 "resolve and register project ... preparing to load next"
 	projectReferenceDefinition resolve.
-	projectReferenceDefinition register.
+	x := projectReferenceDefinition register.
 
 "load project"
 	Rowan projectTools load

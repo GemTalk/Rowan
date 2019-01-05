@@ -33,7 +33,7 @@ run
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 
-		true
+		false	
 			ifTrue: [ 
 				"Deprection error will halt tests immediately"
 				res := suite run ]

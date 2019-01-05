@@ -181,10 +181,28 @@ RwProjectReferenceDefinition >> groupNames: anArray [
 	^ self properties at: 'groupNames' put: anArray
 ]
 
+{ #category : 'temporary compat' }
+RwProjectReferenceDefinition >> imageSpec [
+self deprecated: 'temporary method ... simulating RwSpecification api'.
+	^self
+]
+
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> key [
 
 	^ self projectName
+]
+
+{ #category : 'temporary compat' }
+RwProjectReferenceDefinition >> loadedCommitId [
+
+self deprecated: 'temporary method ... simulating RwSpecification api'.
+	^''
+]
+
+{ #category : 'temporary compat' }
+RwProjectReferenceDefinition >> loadedCommitId:  ignored [
+self deprecated: 'temporary method ... simulating RwSpecification api'.
 ]
 
 { #category : 'accessing' }
@@ -310,6 +328,20 @@ RwProjectReferenceDefinition >> repositoryRoot [
 	^self projectHome / self projectAlias
 ]
 
+{ #category : 'temporary compat' }
+RwProjectReferenceDefinition >> repositoryRootPath [
+
+self deprecated: 'temporary method ... simulating RwSpecification api'.
+	^ self repositoryRoot pathString
+]
+
+{ #category : 'temporary compat' }
+RwProjectReferenceDefinition >> repoSpec [
+
+self deprecated: 'temporary method ... simulating RwSpecification api'.
+	^self
+]
+
 { #category : 'actions' }
 RwProjectReferenceDefinition >> resolve [
 
@@ -344,6 +376,12 @@ RwProjectReferenceDefinition >> specsRoot [
 RwProjectReferenceDefinition >> tag: aString [
 
 	self committish: aString committishType: 'tag'
+]
+
+{ #category : 'temporary compat' }
+RwProjectReferenceDefinition >> updateLoadedCommitIdForTool: aRwTool [
+self deprecated: 'temporary method ... simulating RwSpecification api'.
+  ^ aRwTool doGitUpdateLoadedCommitId
 ]
 
 { #category : 'testing' }
