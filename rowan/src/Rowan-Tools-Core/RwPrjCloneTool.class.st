@@ -95,7 +95,7 @@ The project project has been registered with Rowan at the existing location .'.
 { #category : 'smalltalk api' }
 RwPrjCloneTool >> cloneRepository: aRwGitRepositoryDefinition [
 
-	| gitTool response projectUrl cloneUrl cloneOption checkout segments |
+	| gitTool response remoteUrl cloneOption checkout |
 
 	self
 		_validateForGitRepository: aRwGitRepositoryDefinition
@@ -104,19 +104,11 @@ RwPrjCloneTool >> cloneRepository: aRwGitRepositoryDefinition [
 		the clone is already present."
 			^ msg ].
 	gitTool := Rowan gitTools.
-	aRwGitRepositoryDefinition remoteUrl
-		ifNil: [ 
-			projectUrl := RwUrl fromString: aRwGitRepositoryDefinition projectUrl.
-			cloneUrl := 'git@' , projectUrl authority , ':'.
-			segments := projectUrl segments.
-			cloneUrl := segments size = 1
-				ifTrue: [ cloneUrl , (segments at: 1) , '.git ' ]
-				ifFalse: [ cloneUrl , (segments at: 1) , '/' , (projectUrl segments at: 2) , '.git ' ] ]
-		ifNotNil: [:remoteUrl | cloneUrl := remoteUrl , ' ' ].
+	remoteUrl := aRwGitRepositoryDefinition remoteUrl , ' '.
 	cloneOption := ' --no-checkout '.
 	checkout := aRwGitRepositoryDefinition committish.
 	checkout ifNil: [ cloneOption := '' ].
-	response := gitTool gitcloneIn: aRwGitRepositoryDefinition repositoryRoot parent pathString with: cloneOption , cloneUrl, aRwGitRepositoryDefinition repositoryRoot pathString.
+	response := gitTool gitcloneIn: aRwGitRepositoryDefinition repositoryRoot parent pathString with: cloneOption , remoteUrl, aRwGitRepositoryDefinition repositoryRoot pathString.
 	checkout
 		ifNotNil: [ Rowan projectTools checkout checkoutProjectReference: aRwGitRepositoryDefinition ].
 ]

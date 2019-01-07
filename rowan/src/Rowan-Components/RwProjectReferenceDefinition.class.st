@@ -42,6 +42,8 @@ RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aR
 			projectUrl: aRwSpecification projectUrl
 			comment: aRwSpecification comment
 			projectHome: projectHomeFileReferenceOrString
+			committish: aRwSpecification repoSpec committish
+			committishType: aRwSpecification repoSpec committishType
 			configsPath: aRwSpecification configsPath
 			packagesPath: aRwSpecification repoPath
 			projectsPath: aRwSpecification projectsPath
@@ -62,7 +64,7 @@ RwProjectReferenceDefinition class >> projectName: projectName projectSpec: proj
 ]
 
 { #category : 'instance creation' }
-RwProjectReferenceDefinition class >> projectName: projectName projectSpec: projectSpec configurationNames: configurationNames groupNames: groupNames  projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath [
+RwProjectReferenceDefinition class >> projectName: projectName projectSpec: projectSpec configurationNames: configurationNames groupNames: groupNames  projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath [
 
 	^ self new
 		projectName: projectName;
@@ -72,6 +74,7 @@ RwProjectReferenceDefinition class >> projectName: projectName projectSpec: proj
 		projectUrl: projectUrl;
 		comment: comment;
 		projectHome: projectHomeFileReferenceOrString;
+		committish: committish committishType: committishType;
 		configsPath: configsPath;
 		packagesPath: packagesPath;
 		projectsPath: projectsPath;

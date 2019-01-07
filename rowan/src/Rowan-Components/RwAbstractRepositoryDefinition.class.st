@@ -43,7 +43,6 @@ RwAbstractRepositoryDefinition class >> newNamed: repositoryName forSpecificatio
 		newNamed: repositoryName 
 			repositoryRoot: repoRoot
 			projectUrl: aRwSpecification projectUrl
-			version: aRwSpecification version
 ]
 
 { #category : 'instance creation' }
@@ -62,27 +61,6 @@ RwAbstractRepositoryDefinition class >> newNamed: repositoryName repositoryRoot:
 		name: repositoryName;
 		repositoryRoot: repoRoot;
 		projectUrl: anUrlString;
-		yourself
-]
-
-{ #category : 'instance creation' }
-RwAbstractRepositoryDefinition class >> newNamed: repositoryName repositoryRoot: repoRoot projectUrl: anUrlString version: aSemanticVersionoOrString [
-
-	^ self new
-		name: repositoryName;
-		repositoryRoot: repoRoot;
-		projectUrl: anUrlString;
-		version: aSemanticVersionoOrString;
-		yourself
-]
-
-{ #category : 'instance creation' }
-RwAbstractRepositoryDefinition class >> newNamed: repositoryName repositoryRoot: repoRoot version: aSemanticVersionoOrString [
-
-	^ self new
-		name: repositoryName;
-		repositoryRoot: repoRoot;
-		version: aSemanticVersionoOrString;
 		yourself
 ]
 
@@ -165,7 +143,6 @@ RwAbstractRepositoryDefinition >> repositoryRoot: pathStringOrReference [
 
 	| fileRef |
 	fileRef := pathStringOrReference asFileReference.
-	self version: nil.
 	self projectUrl: nil.
 	self properties at: 'repositoryRoot' put: fileRef
 ]
@@ -176,17 +153,4 @@ RwAbstractRepositoryDefinition >> resolve [
 	"attach to existing repository structure or create"
 
 	self subclassResponsibility: #resolve
-]
-
-{ #category : 'accessing' }
-RwAbstractRepositoryDefinition >> version [
-"not quite convinced this is needed"
-	^ self properties at: 'version' ifAbsent: [ ]
-]
-
-{ #category : 'accessing' }
-RwAbstractRepositoryDefinition >> version: aSemanticVersionOrString [
-"not quite convinced this is needed"
-	aSemanticVersionOrString ifNil: [ ^ self properties removeKey: 'version' ifAbsent: [ ] ].
-	^ self properties at: 'version' put: aSemanticVersionOrString asRwSemanticVersionNumber
 ]

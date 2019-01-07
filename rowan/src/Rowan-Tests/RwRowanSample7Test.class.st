@@ -250,20 +250,16 @@ RwRowanSample7Test >> testCreateRepositoryDefinition [
 "create repository definitions using #newNamed:repositoryRoot:version:"
 	repositoryDefinition_1 := RwDiskRepositoryDefinition
 		newNamed: repositoryName 
-		repositoryRoot: repoRoot
-		version: projectVersionString.
+		repositoryRoot: repoRoot.
 
 	repositoryDefinition_2 := RwDiskRepositoryDefinition
 		newNamed: repositoryName 
-		repositoryRoot: repoRoot pathString
-		version: projectVersionString asRwSemanticVersionNumber.
+		repositoryRoot: repoRoot pathString.
 
 "validate"
 	self assert: repositoryDefinition_1  name = repositoryDefinition_2 name.
 	self assert: repositoryDefinition_1  repositoryRoot = repositoryDefinition_2 repositoryRoot.
-	self assert: repositoryDefinition_1  version = repositoryDefinition_2 version.
 
-	self assert:  repositoryDefinition_1 version = projectVersionString asRwSemanticVersionNumber.
 	self assert:  repositoryDefinition_1 repositoryRoot = repoRoot asFileReference.
 
 "create repository definitions using #newNamed:repositoryRoot:projectUrl:version:"
