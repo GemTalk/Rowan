@@ -43,6 +43,8 @@ RwAbstractRepositoryDefinition class >> newNamed: repositoryName forSpecificatio
 		newNamed: repositoryName 
 			repositoryRoot: repoRoot
 			projectUrl: aRwSpecification projectUrl
+			committish: aRwSpecification repoSpec committish 
+			committishType: aRwSpecification repoSpec committishType
 ]
 
 { #category : 'instance creation' }
@@ -61,6 +63,17 @@ RwAbstractRepositoryDefinition class >> newNamed: repositoryName repositoryRoot:
 		name: repositoryName;
 		repositoryRoot: repoRoot;
 		projectUrl: anUrlString;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwAbstractRepositoryDefinition class >> newNamed: repositoryName repositoryRoot: repoRoot projectUrl: anUrlString committish: committish committishType: committishType [
+
+	^ self new
+		name: repositoryName;
+		repositoryRoot: repoRoot;
+		projectUrl: anUrlString;
+		committish: committish committishType: committishType;
 		yourself
 ]
 
@@ -87,6 +100,12 @@ RwAbstractRepositoryDefinition >> committish: aString committishType: committish
 
 	self properties at: 'committish' put: aString.
 	self properties at: 'committishType' put: committishTypeString.
+]
+
+{ #category : 'accessing' }
+RwAbstractRepositoryDefinition >> committishType [
+
+	^ self properties at: 'committishType' ifAbsent: []
 ]
 
 { #category : 'actions' }

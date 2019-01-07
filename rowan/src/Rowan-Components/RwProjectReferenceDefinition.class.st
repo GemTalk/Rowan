@@ -103,6 +103,8 @@ RwProjectReferenceDefinition >> _repositoryDefinitionForProjectHome: projectHome
 		newNamed: self projectAlias
 			repositoryRoot: projectHomeFileReferenceOrString asFileReference / self projectAlias
 			projectUrl: self projectUrl
+			committish: self committish 
+			committishType: self committishType
 ]
 
 { #category : 'accessing' }
@@ -163,7 +165,7 @@ RwProjectReferenceDefinition >> configsRoot [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> configurationNames [
 
-	^ self properties at: 'configurationNames' ifAbsent: [ #() ]
+	^ self properties at: 'configurationNames' ifAbsent: [ #( 'Default' ) ]
 ]
 
 { #category : 'accessing' }
@@ -175,7 +177,7 @@ RwProjectReferenceDefinition >> configurationNames: anArray [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> groupNames [
 
-	^ self properties at: 'groupNames' ifAbsent: [ #() ]
+	^ self properties at: 'groupNames' ifAbsent: [ #( 'default' ) ]
 ]
 
 { #category : 'accessing' }

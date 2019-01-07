@@ -38,13 +38,13 @@ RwComponentProjectDefinition >> configsPath [
 { #category : 'properties' }
 RwComponentProjectDefinition >> defaultConfigurationNames [
 
-	^ self propertyAt: 'defaultConfigurationNames' ifAbsent: [ #( 'Default' ). ]
+	^ self propertyAt: 'defaultConfigurationNames' ifAbsent: [ self projectRef configurationNames ]
 ]
 
 { #category : 'properties' }
 RwComponentProjectDefinition >> defaultGroupNames [
 
-	^ self propertyAt: 'defaultGroupNames' ifAbsent: [ #( 'default' ). ]
+	^ self propertyAt: 'defaultGroupNames' ifAbsent: [ self projectRef groupNames ]
 ]
 
 { #category : 'properties' }
