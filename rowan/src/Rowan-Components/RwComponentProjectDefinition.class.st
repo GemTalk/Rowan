@@ -65,6 +65,12 @@ RwComponentProjectDefinition >> projectRef [
 	^ self propertyAt: 'projectRef' ifAbsent: [ ]
 ]
 
+{ #category : 'properties' }
+RwComponentProjectDefinition >> projectsPath [
+
+	^ self projectRef projectsPath
+]
+
 { #category : 'tool api' }
 RwComponentProjectDefinition >> readProjectSet [
 

@@ -7,6 +7,12 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'visiting' }
+RwComponentLoadConfiguration >> acceptVisitor: aVisitor [
+
+	^aVisitor visitComponentLoadConfiguration: self
+]
+
 { #category : 'accessing' }
 RwComponentLoadConfiguration >> projectNames [
 
