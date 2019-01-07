@@ -265,27 +265,6 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName [
 	^ (Rowan image loadedProjectNamed: projectName) asDefinition readProjectSet
 ]
 
-{ #category : 'deprecation candidates' }
-RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfiguration: configName [
-
-	| projectDefinition repo spec url config |
-	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	spec := projectDefinition specification.
-	url := 'file:' , spec repositoryRootPath , '/' , spec configsPath , '/'
-		, configName , '.ston'.
-	[ config := RwAbstractProjectConfiguration fromUrl: url ]
-		on: Error
-		do: [ :ignored | 
-			^ self readProjectSetForProjectNamed: projectName ].
-	repo := projectDefinition repositoryUrl asRwRepository.
-	config projectName: projectName.
-	^ self 
-		_readProjectSetForProjectDefinition: projectDefinition 
-		packageNames: config resolvePackageNames 
-		fromRepo: repo
-
-]
-
 { #category : 'read project by name' }
 RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfigurations: configNames groupNames: groupNames [
 
