@@ -707,6 +707,7 @@ RowanClassService >> renameCategoryFrom: old to: new [
 
 	| affectedSelectors behavior |
 
+	self update. 
 	self addCategory: new. 
 	behavior := self classOrMeta.
 	affectedSelectors := behavior selectorsIn: old.
