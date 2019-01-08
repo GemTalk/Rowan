@@ -174,6 +174,13 @@ RwProjectReferenceDefinition >> configurationNames: anArray [
 	^ self properties at: 'configurationNames' put: anArray
 ]
 
+{ #category : 'actions' }
+RwProjectReferenceDefinition >> create [
+	"write the project structure to disk, if it doesn't already exist"
+
+	self error: 'not yet implemented'.
+]
+
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> groupNames [
 

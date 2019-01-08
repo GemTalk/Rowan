@@ -53,6 +53,16 @@ RwRowanSample7Test >> _rowanSample7SpecificationUrl [
 	^ 'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample7.ston'
 ]
 
+{ #category : 'private' }
+RwRowanSample7Test >> _rowanSample7SpecificationUrl_12x [
+
+	"1.2.x compat project spec"
+
+	| rowanSpec |
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	^ 'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample7_12x.ston'
+]
+
 { #category : 'running' }
 RwRowanSample7Test >> tearDown [
 
@@ -61,9 +71,16 @@ RwRowanSample7Test >> tearDown [
 ]
 
 { #category : 'tests' }
-RwRowanSample7Test >> testCreateProjectFromUrl_1 [
+RwRowanSample7Test >> testCreateNewProjectFromUrl [
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition |
+	"
+		1. clone RowanSample7 using non-component API (v1.2.x style)
+		2. read project from disk into a project definition
+		3. create a new git project on disk using component API
+		4. write the project definition to the new project.
+	"
+
+	| specUrlString rowanSpec gitRootPath projectName projectSpec_1 projectDefinition_2 projectReferenceDefinition_3 projectName_3 |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -72,32 +89,52 @@ RwRowanSample7Test >> testCreateProjectFromUrl_1 [
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
 
-	specUrlString := self _rowanSample7SpecificationUrl.
-	projectSpec := specUrlString asRwUrl asSpecification.
+"1. clone RowanSample7 using non-component API (v1.2.x style"
+	specUrlString :=  self _rowanSample7SpecificationUrl_12x.
+	projectSpec_1 := specUrlString asRwUrl asSpecification.
+	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-"create project reference definitions"
-	projectReferenceDefinition := RwProjectReferenceDefinition 
-		newForSpecification: projectSpec 
-		projectHome: gitRootPath.
+	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectReferenceDefinition repositoryRoot ensureDeleteAll.
+	Rowan projectTools clone
+		cloneSpecification: projectSpec_1
+		gitRootPath: gitRootPath
+		useSsh: true
+		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 
-"1. clone repository"
-	self 
-		handleInformDuring: [ projectReferenceDefinition resolve ] 
-		interactionBlock: [:inform | self assert: false description: 'unexpected inform' ].
+"2. read project from disk into a project definition"
+	projectDefinition_2 := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: gitRootPath / projectName.
 
-"validate"
-	self assert: projectReferenceDefinition repositoryRoot exists.
-	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) isNil.
+	Rowan projectTools read readProjectDefinition: projectDefinition_2.
 
-	Rowan projectTools load loadProjectReferenceDefinition: projectReferenceDefinition
+"3. create a new git project on disk using component API"
+
+	projectName_3 := projectName, '_3'.
+	projectReferenceDefinition_3 := RwProjectReferenceDefinition
+		projectName: projectName_3
+			projectSpec: nil 
+			configurationNames: #( 'Main' ) 
+			groupNames: #('core')  
+			projectUrl: '' 
+			comment: '' 
+			projectHome: FileLocator rowanProjectsHome 
+			committish: 'candidateV1.0' 
+			committishType: 'branch' 
+			configsPath: 'rowan/configs' 
+			packagesPath: 'rowan/src'  
+			projectsPath: 'rowan/projects'  
+			specsPath: 'rowan/specs'.
+
+	(gitRootPath / projectName_3) ensureDeleteAll.
+
+		projectReferenceDefinition_3 create.
+self halt.
 ]
 
 { #category : 'tests' }
-RwRowanSample7Test >> testCreateProjectFromUrl_2 [
+RwRowanSample7Test >> testCreateProjectFromUrl [
 
-	"load RowanSample7_Colors project"
+	"load RowanSample7_Colors project using load project named after clone and v2.0.0 api"
 
 	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition x |
 
