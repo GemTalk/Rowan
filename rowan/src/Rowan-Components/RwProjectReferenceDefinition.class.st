@@ -36,10 +36,10 @@ RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aR
 
 	^ self
 		projectName: projectName
-			projectSpec: aRwSpecification
 			configurationNames: aRwSpecification defaultConfigurationNames
 			groupNames: aRwSpecification defaultGroupNames
 			projectUrl: aRwSpecification projectUrl
+			useGit: aRwSpecification useGit
 			comment: aRwSpecification comment
 			projectHome: projectHomeFileReferenceOrString
 			committish: aRwSpecification repoSpec committish
@@ -51,27 +51,14 @@ RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aR
 ]
 
 { #category : 'instance creation' }
-RwProjectReferenceDefinition class >> projectName: projectName projectSpec: projectSpec configurationNames: configurationNames groupNames: groupNames projectUrl: projectUrl comment: comment [
+RwProjectReferenceDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames  projectUrl: projectUrl useGit: useGit comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath [
 
 	^ self new
 		projectName: projectName;
-		projectSpec: projectSpec;
 		configurationNames: configurationNames;
 		groupNames: groupNames;
 		projectUrl: projectUrl;
-		comment: comment;
-		yourself
-]
-
-{ #category : 'instance creation' }
-RwProjectReferenceDefinition class >> projectName: projectName projectSpec: projectSpec configurationNames: configurationNames groupNames: groupNames  projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath [
-
-	^ self new
-		projectName: projectName;
-		projectSpec: projectSpec;
-		configurationNames: configurationNames;
-		groupNames: groupNames;
-		projectUrl: projectUrl;
+		useGit: useGit;
 		comment: comment;
 		projectHome: projectHomeFileReferenceOrString;
 		committish: committish committishType: committishType;
@@ -79,6 +66,19 @@ RwProjectReferenceDefinition class >> projectName: projectName projectSpec: proj
 		packagesPath: packagesPath;
 		projectsPath: projectsPath;
 		specsPath: specsPath;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwProjectReferenceDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl comment: comment [
+
+	^ self new
+		projectName: projectName;
+		configurationNames: configurationNames;
+		groupNames: groupNames;
+		useGit: useGit;
+		projectUrl: projectUrl;
+		comment: comment;
 		yourself
 ]
 
@@ -287,18 +287,6 @@ RwProjectReferenceDefinition >> projectsPath: aString [
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinition >> projectSpec [
-
-	^ self properties at: 'spec' ifAbsent: []
-]
-
-{ #category : 'accessing' }
-RwProjectReferenceDefinition >> projectSpec: aRwSpecification [
-
-	^ self properties at: 'spec' put: aRwSpecification
-]
-
-{ #category : 'accessing' }
 RwProjectReferenceDefinition >> projectUrl [
 
 	^ self properties at: 'projectUrl' ifAbsent: []
@@ -396,8 +384,14 @@ self deprecated: 'temporary method ... simulating RwSpecification api'.
   ^ aRwTool doGitUpdateLoadedCommitId
 ]
 
-{ #category : 'testing' }
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> useGit [
 
-	^self projectSpec useGit
+	^ self properties at: 'useGit' ifAbsent: [ false ]
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> useGit: aBool [
+
+	^ self properties at: 'useGit' put: aBool
 ]

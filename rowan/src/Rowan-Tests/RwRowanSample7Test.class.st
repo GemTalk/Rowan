@@ -112,10 +112,10 @@ RwRowanSample7Test >> testCreateNewProjectFromUrl [
 	projectName_3 := projectName, '_3'.
 	projectReferenceDefinition_3 := RwProjectReferenceDefinition
 		projectName: projectName_3
-			projectSpec: nil 
 			configurationNames: #( 'Main' ) 
 			groupNames: #('core')  
 			projectUrl: '' 
+			useGit: true
 			comment: '' 
 			projectHome: FileLocator rowanProjectsHome 
 			committish: 'candidateV1.0' 
@@ -184,9 +184,9 @@ RwRowanSample7Test >> testCreateProjectReferenceFromScratch [
 "create project reference definitions"
 	projectReferenceDefinition := RwProjectReferenceDefinition 
 		projectName: projectName 
-			projectSpec: projectSpec 
 			configurationNames: #( 'Default'  )
 			groupNames: #( 'core' )
+			useGit: true
 			projectUrl: self _gitHubProjectUrl
 			comment: ''.
 
