@@ -511,13 +511,6 @@ FileSystem >> open: aResolvable options: aFileOptions [
 		options: aFileOptions
 ]
 
-{ #category : 'delegated' }
-FileSystem >> openFileStream: aResolvable writable: aBoolean [
-	^ store 
-		openFileStream: (self resolve: aResolvable) 
-		writable: aBoolean
-]
-
 { #category : 'private' }
 FileSystem >> openStreamDescription: aResolvable options: aFileOptions [
 	"I am  a helper method to delegate basicOpen:options: to the store.
