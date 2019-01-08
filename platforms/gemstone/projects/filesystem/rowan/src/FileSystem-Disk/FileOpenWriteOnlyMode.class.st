@@ -8,13 +8,18 @@ Class {
 }
 
 { #category : 'accessing' }
+FileOpenWriteOnlyMode class >> defaultPlatformValue [
+	^16r00001
+]
+
+{ #category : 'accessing' }
 FileOpenWriteOnlyMode class >> posixName [
 	^'O_WRONLY'
 ]
 
-{ #category : 'accessing' }
-FileOpenWriteOnlyMode class >> posixValue [
-	^16r00001
+{ #category : 'convenience' }
+FileOpenWriteOnlyMode >> accessRule [
+	^self store class writeOnlyAccessRule
 ]
 
 { #category : 'testing' }

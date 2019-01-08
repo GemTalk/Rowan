@@ -334,8 +334,8 @@ FileReference >> nextVersion [
 ]
 
 { #category : 'streams' }
-FileReference >> openWritable: aBoolean [ 
-	^ filesystem open: path writable: aBoolean
+FileReference >> openWithOptions: aFileOptions [ 
+	^ filesystem open: path options: aFileOptions
 ]
 
 { #category : 'accessing' }
@@ -424,10 +424,4 @@ FileReference >> size [
 FileReference >> writeStream [
 	
 	^ self writeStreamEncoded: 'utf8'
-]
-
-{ #category : 'prototype' }
-FileReference >> writeStreamRk [
-
-	^self fileSystem store writeBinaryMode writeStreamFor: self
 ]

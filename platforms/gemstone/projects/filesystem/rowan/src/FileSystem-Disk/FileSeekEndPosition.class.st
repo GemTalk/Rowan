@@ -8,11 +8,11 @@ Class {
 }
 
 { #category : 'accessing' }
-FileSeekEndPosition class >> posixName [
-	^'SEEK_END'
+FileSeekEndPosition class >> defaultPlatformValue [
+	^2
 ]
 
 { #category : 'accessing' }
-FileSeekEndPosition class >> posixValue [
-	^2
+FileSeekEndPosition class >> posixName [
+	^'SEEK_END'
 ]

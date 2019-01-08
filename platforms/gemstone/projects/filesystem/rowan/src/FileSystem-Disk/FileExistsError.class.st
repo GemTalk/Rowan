@@ -8,8 +8,13 @@ Class {
 }
 
 { #category : 'accessing' }
+FileExistsError class >> defaultErrorNumber [
+	^13
+]
+
+{ #category : 'accessing' }
 FileExistsError class >> errorDescription [
-	^'File exists. An existing file was mentioned in an inappropriate context; for example, as a new link name in the link() function.'
+	^'File exists'
 ]
 
 { #category : 'accessing' }
@@ -20,11 +25,11 @@ FileExistsError class >> errorFor: errorNumber path: path fileSystem: aFileSyste
 ]
 
 { #category : 'accessing' }
-FileExistsError class >> errorNumber [
-	^17
+FileExistsError class >> posixName [
+	^'EEXIST'
 ]
 
 { #category : 'accessing' }
-FileExistsError class >> posixName [
-	^'EEXIST'
+FileExistsError class >> windowsErrorNumber [
+	^17
 ]

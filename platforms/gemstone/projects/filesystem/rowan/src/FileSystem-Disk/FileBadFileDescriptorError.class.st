@@ -8,11 +8,21 @@ Class {
 }
 
 { #category : 'accessing' }
-FileBadFileDescriptorError class >> errorNumber [
+FileBadFileDescriptorError class >> defaultErrorNumber [
 	^10
+]
+
+{ #category : 'accessing' }
+FileBadFileDescriptorError class >> errorDescription [
+	^'Bad file descriptor'
 ]
 
 { #category : 'accessing' }
 FileBadFileDescriptorError class >> posixName [
 	^'EBADF'
+]
+
+{ #category : 'accessing' }
+FileBadFileDescriptorError class >> windowsErrorNumber [
+	^9
 ]

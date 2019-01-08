@@ -8,11 +8,21 @@ Class {
 }
 
 { #category : 'accessing' }
-FileMaxFilesOpenError class >> errorNumber [
+FileMaxFilesOpenError class >> defaultErrorNumber [
 	^17
+]
+
+{ #category : 'other' }
+FileMaxFilesOpenError class >> errorDescription [
+	^'Too many open files'
 ]
 
 { #category : 'accessing' }
 FileMaxFilesOpenError class >> posixName [
-	^'EMFILE'
+	^'ENFILE'
+]
+
+{ #category : 'accessing' }
+FileMaxFilesOpenError class >> windowsErrorNumber [
+	^23
 ]

@@ -8,13 +8,18 @@ Class {
 }
 
 { #category : 'accessing' }
+FileOpenReadOnlyMode class >> defaultPlatformValue [
+	^16r00000
+]
+
+{ #category : 'accessing' }
 FileOpenReadOnlyMode class >> posixName [
 	^'O_RDONLY'
 ]
 
-{ #category : 'accessing' }
-FileOpenReadOnlyMode class >> posixValue [
-	^16r00000
+{ #category : 'convenience' }
+FileOpenReadOnlyMode >> accessRule [
+	^self store class readOnlyAccessRule
 ]
 
 { #category : 'testing' }

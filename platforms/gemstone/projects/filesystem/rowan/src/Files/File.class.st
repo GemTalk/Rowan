@@ -192,15 +192,6 @@ File >> basename [
 	^self name
 ]
 
-{ #category : 'open/close' }
-File >> basicOpenForWrite: writeMode [ 
-	"Open the file with the given name. If writeMode is true, allow writing, otherwise open the file in read-only mode."
-
-	"writeMode - #read, #append, #write"
-
-	^ self class open: name writable: writeMode
-]
-
 { #category : 'testing' }
 File >> checkDoesNotExist [
 	"This method implements a backwards compatible logic to #newFileNamed:
@@ -220,7 +211,7 @@ File >> exists [
 
 	| handle |
 	"We open it for read. If the returned handle is nil, the file could not be opened"
-	handle := self basicOpenForWrite: #read.
+	handle := self basicOpenWithOpitons: FileOptions read.
 	handle ifNil: [^ false].
 	self class close: handle.
 	^ true
@@ -242,40 +233,37 @@ File >> named: fileName [
 File >> openForAppend [
 
 	| stream |
-	stream := self openForWrite: #append.
+	stream := self openWithOptions: FileOptions append.
 	^ stream setToEnd; yourself
 ]
 
 { #category : 'open/close' }
 File >> openForRead [
 
-	^ self openForWrite: #read
+	^ self openWithOptions:  FileOptions read
 ]
 
 { #category : 'open/close' }
 File >> openForWrite [
 
-	^ self openForWrite: #write
+	^ self openWithOptions: FileOptions write
 ]
 
 { #category : 'open/close' }
-File >> openForWrite: writeMode [
-	"Open the file with the given name. If writeMode is true, allow writing, otherwise open the file in read-only mode."
-
-	"writeMode - #read, #append, #write"
+File >> openWithOptions: aFileOptions [
 
 	| fileHandle |
-	fileHandle := self basicOpenForWrite: writeMode.
+	fileHandle := self basicOpenWithOpitons: aFileOptions.
 	fileHandle ifNil: [
 		"Opening the file failed.
 		If the file does not exist, we throw an explicit FileDoesNotExistException.
 		Otherwise, we throw a generic FileException."
 		self exists
-			ifFalse: [ ^ FileDoesNotExistException signalWithFile: self writeMode: writeMode == #write ].
+			ifFalse: [ ^ FileDoesNotExistException signalWithFile: self writeMode: aFileOptions isWritable ].
 		CannotDeleteFileException signal: name
 	].
 
-	^ BinaryFileStream handle: fileHandle fileReference: self forWrite: writeMode ~~ #read
+	^ BinaryFileStream handle: fileHandle file: self options: aFileOptions
 ]
 
 { #category : 'streaming' }

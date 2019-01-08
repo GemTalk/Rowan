@@ -53,7 +53,7 @@ FileHandle >> at: index write: buffer startingAt: start count: count [
 
 { #category : 'public' }
 FileHandle >> basicOpen [
-	^FileSystem fileClass openReference: self reference withOptions: writable fileOptions
+	^FileSystem fileClass openReference: self reference withOptions: self options
 ]
 
 { #category : 'public' }
@@ -61,12 +61,15 @@ FileHandle >> binaryReadStream [
 	"The file handle should be created with the file mode which indicates if it is a write or read stream"
 	"^ ZnBufferedReadStream on: (BinaryFileStream onFileHandle: self)"
 
-	^(BinaryFileStream handle: id file: (FileSystem fileClass openReference: reference withOptions: writable fileOptions) forWrite: writable fileOptions)
+	^(BinaryFileStream handle: id file: (FileSystem fileClass openReference: reference withOptions: self options) options: self options)
 ]
 
 { #category : 'public' }
 FileHandle >> binaryWriteStream [
-	^(BinaryFileStream handle: nil file: (FileSystem fileClass openReference: reference withOptions: writable fileOptions) forWrite: writable fileOptions)
+	^(BinaryFileStream 
+		handle: nil 
+		file: (FileSystem fileClass openReference: reference withOptions: self options) 
+		options: self options)
 ]
 
 { #category : 'public' }

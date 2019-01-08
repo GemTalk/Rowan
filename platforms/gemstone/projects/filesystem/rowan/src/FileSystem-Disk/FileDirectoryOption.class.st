@@ -11,8 +11,3 @@ Class {
 FileDirectoryOption class >> posixName [
 	^'O_DIRECTORY'
 ]
-
-{ #category : 'accessing' }
-FileDirectoryOption class >> posixValue [
-	self error: 'Not supported'
-]

@@ -72,6 +72,20 @@ FileOptions class >> appendBinary [
 ]
 
 { #category : 'instance creation' }
+FileOptions class >> appendWithHighCompression [
+	^self basicNew
+		initializeAppendWithHighCompression;
+		yourself
+]
+
+{ #category : 'instance creation' }
+FileOptions class >> appendWithLowCompression [
+	^self basicNew
+		initializeAppendWithLowCompression;
+		yourself
+]
+
+{ #category : 'instance creation' }
 FileOptions class >> new [
 	^self basicNew
 		initialize;
@@ -134,33 +148,74 @@ FileOptions class >> writeBinary [
 		yourself
 ]
 
-{ #category : 'options' }
+{ #category : 'instance creation' }
+FileOptions class >> writeWithHighCompression [
+	^self write
+		initializeWriteWithHighCompression;
+		yourself
+]
+
+{ #category : 'instance creation' }
+FileOptions class >> writeWithLowCompression [
+	^self write
+		initializeWriteWithLowCompression;
+		yourself
+]
+
+{ #category : 'permissions' }
+FileOptions >> accessPermissions [
+
+	self permissionOptions isEmpty ifTrue: [^FileSystemPermission default posixPermission].
+	^self permissionOptions inject: 0 into: [:total :ea | total + ea posixValue]
+]
+
+{ #category : 'convenience' }
+FileOptions >> accessRule [
+	^self mode accessRule
+]
+
+{ #category : 'options - adding and removing' }
 FileOptions >> addAppendOption [
 
 	self addOption: FileAppendOption new
 ]
 
-{ #category : 'options' }
+{ #category : 'options - adding and removing' }
 FileOptions >> addCreateOption [
 
 	self addOption: FileCreateOption new
 ]
 
-{ #category : 'options' }
+{ #category : 'options - adding and removing' }
 FileOptions >> addOption: anOption [
 	anOption parent: self.
 	self options add: anOption
 ]
 
-{ #category : 'options' }
+{ #category : 'options - adding and removing' }
 FileOptions >> addTruncateOption [
 
 	self addOption: FileTruncateOption new
 ]
 
+{ #category : 'options' }
+FileOptions >> appendOption [
+	^self optionForClass: FileAppendOption
+]
+
 { #category : 'file type' }
 FileOptions >> beBinaryFileType [
 	self fileType: FileBinaryTypeOption new
+]
+
+{ #category : 'file type' }
+FileOptions >> beHighCompression [
+	self fileType: FileGzipTypeOption high
+]
+
+{ #category : 'file type' }
+FileOptions >> beLowCompression [
+	self fileType: FileGzipTypeOption low
 ]
 
 { #category : 'sharing' }
@@ -208,6 +263,23 @@ FileOptions >> compressionPolicy [
 	^self parent ifNotNil: [:fs | fs compressionPolicy]
 ]
 
+{ #category : 'convenience' }
+FileOptions >> createRule [
+	^self fileCreateOption 
+		ifNil: [self store class openExistingRule] 
+		ifNotNil: [:option | option createRule]
+]
+
+{ #category : 'options' }
+FileOptions >> fileCreateOption [
+	^self optionForClass: FileCreateOption
+]
+
+{ #category : 'options' }
+FileOptions >> fileExclusiveOption [
+	^self optionForClass: FileExclusiveOption
+]
+
 { #category : 'options' }
 FileOptions >> fileOpenAndOptionsValue [
 	^self fileOpenModeValue + self fileOptionsValue
@@ -215,12 +287,12 @@ FileOptions >> fileOpenAndOptionsValue [
 
 { #category : 'options' }
 FileOptions >> fileOpenModeValue [
-	^self mode posixValue
+	^self mode optionValue
 ]
 
 { #category : 'options' }
 FileOptions >> fileOptionsValue [
-	^self options inject: 0 into: [:total :ea | total + ea posixValue]
+	^self options inject: 0 into: [:total :ea | total + ea optionValue]
 ]
 
 { #category : 'accessing' }
@@ -251,7 +323,7 @@ FileOptions >> hasFileTruncateOption [
 
 { #category : 'testing' }
 FileOptions >> hasOption: anOptionClass [
-	^(self options detect: [:ea | ea isKindOf: anOptionClass] ifNone: [nil]) notNil
+	^(self optionForClass: anOptionClass) notNil
 ]
 
 { #category : 'initialization' }
@@ -275,6 +347,18 @@ FileOptions >> initializeAppendAndRead [
 	self beReadWriteMode.
 	self addCreateOption.
 	self addAppendOption
+]
+
+{ #category : 'initialization' }
+FileOptions >> initializeAppendWithHighCompression [
+	self initializeAppend.
+	self beHighCompression
+]
+
+{ #category : 'initialization' }
+FileOptions >> initializeAppendWithLowCompression [
+	self initializeAppend.
+	self beLowCompression
 ]
 
 { #category : 'initialization' }
@@ -305,6 +389,18 @@ FileOptions >> initializeWrite [
 	self addTruncateOption
 ]
 
+{ #category : 'initialization' }
+FileOptions >> initializeWriteWithHighCompression [
+	self initializeWrite.
+	self beHighCompression
+]
+
+{ #category : 'initialization' }
+FileOptions >> initializeWriteWithLowCompression [
+	self initializeWrite.
+	self beLowCompression
+]
+
 { #category : 'testing' }
 FileOptions >> isClientFileSystem [
 	"This needs more work"
@@ -313,7 +409,7 @@ FileOptions >> isClientFileSystem [
 
 { #category : 'testing' }
 FileOptions >> isGzipped [
-	^self parent isGzipped
+	^(self fileType  ifNil: [^false]) isGzipped
 ]
 
 { #category : 'testing' }
@@ -344,6 +440,11 @@ FileOptions >> modeString [
 	self printOpenModeStringOn: aStream.
 	self compressionPolicy ifNotNil: [:cp | cp printOpenModeStringOn: aStream].
 	^aStream contents
+]
+
+{ #category : 'options' }
+FileOptions >> optionForClass: anOptionClass [
+	^self options detect: [:ea | ea isKindOf: anOptionClass] ifNone: [nil]
 ]
 
 { #category : 'accessing' }
@@ -383,7 +484,7 @@ FileOptions >> printOpenModeStringOn: aStream [
 	self fileType ifNotNil: [:ft | ft printOpenModeStringOn: aStream.]
 ]
 
-{ #category : 'options' }
+{ #category : 'options - adding and removing' }
 FileOptions >> removeOption: anOption [
 	anOption parent: nil.
 	self options remove: anOption ifAbsent: []
@@ -398,4 +499,26 @@ FileOptions >> share [
 FileOptions >> share: aFileShareOption [
 	aFileShareOption parent: self.
 	share := aFileShareOption
+]
+
+{ #category : 'convenience' }
+FileOptions >> shareRule [
+	^self share shareRule
+]
+
+{ #category : 'convenience' }
+FileOptions >> store [
+	^self parent ifNil: [FileSystem disk store] ifNotNil: [:fs | fs fileStore]
+]
+
+{ #category : 'options' }
+FileOptions >> truncateOption [
+	^self optionForClass: FileTruncateOption
+]
+
+{ #category : 'convenience' }
+FileOptions >> truncateRule [
+	^self truncateOption 
+		ifNil: [self store class noTruncateRule] 
+		ifNotNil: [:option | option truncateRule]
 ]

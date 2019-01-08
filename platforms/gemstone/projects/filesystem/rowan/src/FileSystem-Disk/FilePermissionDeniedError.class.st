@@ -8,11 +8,21 @@ Class {
 }
 
 { #category : 'accessing' }
-FilePermissionDeniedError class >> errorNumber [
+FilePermissionDeniedError class >> defaultErrorNumber [
 	^7
+]
+
+{ #category : 'accessing' }
+FilePermissionDeniedError class >> errorDescription [
+	^'Permission denied or not owner'
 ]
 
 { #category : 'accessing' }
 FilePermissionDeniedError class >> posixName [
 	^'EPERM'
+]
+
+{ #category : 'accessing' }
+FilePermissionDeniedError class >> windowsErrorNumber [
+	^1
 ]

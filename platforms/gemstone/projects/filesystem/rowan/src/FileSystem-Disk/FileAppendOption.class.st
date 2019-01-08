@@ -10,11 +10,16 @@ Class {
 }
 
 { #category : 'accessing' }
+FileAppendOption class >> defaultPlatformValue [
+	^16r00400
+]
+
+{ #category : 'accessing' }
 FileAppendOption class >> posixName [
 	^'O_APPEND'
 ]
 
 { #category : 'accessing' }
-FileAppendOption class >> posixValue [
+FileAppendOption class >> windowsValue [
 	^16r10000
 ]

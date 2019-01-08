@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : 'accessing' }
+FileSeekSetPosition class >> defaultPlatformValue [
+	^0
+]
+
+{ #category : 'accessing' }
 FileSeekSetPosition class >> posixName [
-	^'SEEK_CUR'
+	^'SEEK_SET'
 ]

@@ -8,11 +8,21 @@ Class {
 }
 
 { #category : 'accessing' }
-FileNoSpaceError class >> errorNumber [
+FileNoSpaceError class >> defaultErrorNumber [
 	^18
+]
+
+{ #category : 'other' }
+FileNoSpaceError class >> errorDescription [
+	^'No space left on device'
 ]
 
 { #category : 'accessing' }
 FileNoSpaceError class >> posixName [
 	^'ENOSPC'
+]
+
+{ #category : 'accessing' }
+FileNoSpaceError class >> windowsErrorNumber [
+	^28
 ]

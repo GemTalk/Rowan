@@ -8,11 +8,11 @@ Class {
 }
 
 { #category : 'accessing' }
-FileNonBlockOption class >> posixName [
-	^'O_NONBLOCK'
+FileNonBlockOption class >> defaultPlatformValue [
+	^16r00080
 ]
 
 { #category : 'accessing' }
-FileNonBlockOption class >> posixValue [
-	^16r00080
+FileNonBlockOption class >> posixName [
+	^'O_NONBLOCK'
 ]

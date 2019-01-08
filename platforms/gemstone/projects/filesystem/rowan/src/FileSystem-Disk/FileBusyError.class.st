@@ -8,11 +8,21 @@ Class {
 }
 
 { #category : 'accessing' }
-FileBusyError class >> errorNumber [
+FileBusyError class >> defaultErrorNumber [
 	^12
+]
+
+{ #category : 'accessing' }
+FileBusyError class >> errorDescription [
+	^'Resource busy'
 ]
 
 { #category : 'accessing' }
 FileBusyError class >> posixName [
 	^'EBUSY'
+]
+
+{ #category : 'accessing' }
+FileBusyError class >> windowsErrorNumber [
+	^16
 ]

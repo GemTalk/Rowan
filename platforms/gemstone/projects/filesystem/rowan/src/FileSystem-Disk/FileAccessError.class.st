@@ -8,8 +8,13 @@ Class {
 }
 
 { #category : 'access' }
+FileAccessError class >> defaultErrorNumber [
+	^11
+]
+
+{ #category : 'access' }
 FileAccessError class >> errorDescription [
-	^'Permission denied. An attempt was made to access a file in a way forbidden by its file access permissions.'
+	^'Invalid path or access denied'
 ]
 
 { #category : 'access' }
@@ -20,11 +25,11 @@ FileAccessError class >> errorFor: errorNumber path: path fileSystem: aFileSyste
 ]
 
 { #category : 'access' }
-FileAccessError class >> errorNumber [
-	^13
+FileAccessError class >> posixName [
+	^'EACCES'
 ]
 
 { #category : 'access' }
-FileAccessError class >> posixName [
-	^'EACCES'
+FileAccessError class >> windowsErrorNumber [
+	^13
 ]

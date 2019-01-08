@@ -13,9 +13,8 @@ Class {
 	#category : 'FileSystem-Disk-Store'
 }
 
-{ #category : 'file constants' }
+{ #category : 'create rules' }
 WindowsStore class >> createNewRule [
-	"The value used to create a new file"
 	^1
 ]
 
@@ -24,40 +23,29 @@ WindowsStore class >> delimiter [
 	^ $\
 ]
 
-{ #category : 'file constants' }
-WindowsStore class >> fileNoShareRule [
-	"The file can be shared by others while it is open (ODENYRDWR)"
+{ #category : 'share rules' }
+WindowsStore class >> denyNoneShareRule [
+	^3
+]
+
+{ #category : 'share rules' }
+WindowsStore class >> denyReadShareRule [
+	^2
+]
+
+{ #category : 'share rules' }
+WindowsStore class >> denyReadWriteShareRule [
 	^0
 ]
 
-{ #category : 'file constants' }
-WindowsStore class >> fileShareReadRule [
-	"The file can be read by others while it is open (ODENYWR)"
+{ #category : 'share rules' }
+WindowsStore class >> denyWriteShareRule [
 	^1
 ]
 
 { #category : 'file constants' }
-WindowsStore class >> fileShareWriteRule [
-	"The file can be written to others while it is open (ODENYRD)"
-	^2
-]
-
-{ #category : 'file constants' }
-WindowsStore class >> genericReadRule [
-	"Returns platform specific read value"
-	^2147483648
-]
-
-{ #category : 'file constants' }
-WindowsStore class >> genericReadWriteRule [
-	"Returns platform specific read/write value"
-	^self genericRead bitOr: self genericWriteRule
-]
-
-{ #category : 'file constants' }
-WindowsStore class >> genericWriteRule [
-	"Returns platform specific write value"
-	^1073741824
+WindowsStore class >> fileAttributeNormal [
+	^128
 ]
 
 { #category : 'file constants' }
@@ -77,15 +65,18 @@ WindowsStore class >> maxFileNameLength [
 	^ 255
 ]
 
-{ #category : 'file constants' }
+{ #category : 'create rules' }
+WindowsStore class >> noTruncateRule [
+	^nil
+]
+
+{ #category : 'create rules' }
 WindowsStore class >> openAlwaysRule [
-	"The value used to always open an existing file or create a file if one does not exist"
 	^4
 ]
 
-{ #category : 'file constants' }
+{ #category : 'create rules' }
 WindowsStore class >> openExistingRule [
-	"The value used to open an existing file"
 	^3
 ]
 
@@ -94,9 +85,29 @@ WindowsStore class >> platformNames [
 	^ {'Win32' . 'Windows NT'}
 ]
 
+{ #category : 'access rules' }
+WindowsStore class >> readOnlyAccessRule [
+	^2147483648
+]
+
+{ #category : 'access rules' }
+WindowsStore class >> readWriteAccessRule [
+	^self readOnlyAccessRule bitOr: self writeOnlyAccessRule
+]
+
 { #category : 'accessing' }
 WindowsStore class >> separator [ 
 	^ $\
+]
+
+{ #category : 'create rules' }
+WindowsStore class >> truncateExistingRule [
+	^5
+]
+
+{ #category : 'access rules' }
+WindowsStore class >> writeOnlyAccessRule [
+	^1073741824
 ]
 
 { #category : 'public' }

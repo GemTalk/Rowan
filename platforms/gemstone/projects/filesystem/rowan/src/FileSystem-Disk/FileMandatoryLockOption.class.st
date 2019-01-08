@@ -1,3 +1,9 @@
+"
+Exclusive MANDATORY lock.
+
+
+Windows supports this type of lock.
+"
 Class {
 	#name : 'FileMandatoryLockOption',
 	#superclass : 'FileLockOption',
@@ -5,11 +11,11 @@ Class {
 }
 
 { #category : 'accessing' }
-FileMandatoryLockOption class >> posixName [
-	^'FMDLOCK'
+FileMandatoryLockOption class >> defaultPlatformValue [
+	^0
 ]
 
 { #category : 'accessing' }
-FileMandatoryLockOption class >> posixValue [
-	^0
+FileMandatoryLockOption class >> posixName [
+	^'F_MDLCK'
 ]

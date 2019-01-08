@@ -8,11 +8,21 @@ Class {
 }
 
 { #category : 'accessing' }
-FileIsDirectoryError class >> errorNumber [
-	^21
+FileIsDirectoryError class >> defaultErrorNumber [
+	^15
+]
+
+{ #category : 'accessing' }
+FileIsDirectoryError class >> errorDescription [
+	^'Is a directory'
 ]
 
 { #category : 'accessing' }
 FileIsDirectoryError class >> posixName [
 	^'EISDIR'
+]
+
+{ #category : 'accessing' }
+FileIsDirectoryError class >> windowsErrorNumber [
+	^21
 ]

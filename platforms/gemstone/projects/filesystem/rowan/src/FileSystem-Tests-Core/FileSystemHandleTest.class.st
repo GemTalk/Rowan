@@ -32,7 +32,7 @@ FileSystemHandleTest >> setUp [
 	super setUp.
 	filesystem := self createFileSystem.
 	reference := filesystem * 'plonk'.
-	handle := reference openWritable: filesystem store readWriteTruncatedMode
+	handle := reference openWithOptions: filesystem store readWriteTruncatedOptions
 ]
 
 { #category : 'running' }
@@ -128,7 +128,7 @@ FileSystemHandleTest >> testReadBufferTooLarge [
 { #category : 'tests' }
 FileSystemHandleTest >> testReadOnly [
 	handle close.
-	handle := reference openWritable: filesystem store readMode.
+	handle := reference openWithOptions: filesystem store readOptions.
 	self 
 		should: 
 			[ handle 

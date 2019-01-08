@@ -80,7 +80,7 @@ MemoryFileSystemTest >> testModifiedTimeWhenHandleTruncated [
 	| modifiedTime fileReference handle |
 
 	fileReference := (filesystem / 'file.txt') ensureCreateFile.
-	handle := fileReference openWritable: filesystem store writeMode.
+	handle := fileReference openWithOptions: filesystem store writeOptions.
 	modifiedTime := self lastModificationTimeOf: fileReference.
 	handle truncate.
 	self assert: modifiedTime notNil.

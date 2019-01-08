@@ -8,11 +8,21 @@ Class {
 }
 
 { #category : 'accessing' }
-FileNoEntryError class >> errorNumber [
+FileNoEntryError class >> defaultErrorNumber [
 	^8
+]
+
+{ #category : 'accessing' }
+FileNoEntryError class >> errorDescription [
+	^'No such file or directory'
 ]
 
 { #category : 'accessing' }
 FileNoEntryError class >> posixName [
 	^'ENOENT'
+]
+
+{ #category : 'accessing' }
+FileNoEntryError class >> windowsErrorNumber [
+	^2
 ]

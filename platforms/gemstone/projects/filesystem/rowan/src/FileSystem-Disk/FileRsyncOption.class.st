@@ -19,8 +19,3 @@ Class {
 FileRsyncOption class >> posixName [
 	^'O_RSYNC'
 ]
-
-{ #category : 'accessing' }
-FileRsyncOption class >> posixValue [
-	^self error: 'Not implmented'
-]

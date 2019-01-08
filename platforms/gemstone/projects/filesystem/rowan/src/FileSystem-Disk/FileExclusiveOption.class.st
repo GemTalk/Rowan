@@ -8,11 +8,16 @@ Class {
 }
 
 { #category : 'accessing' }
+FileExclusiveOption class >> defaultPlatformValue [
+	^16r0080
+]
+
+{ #category : 'accessing' }
 FileExclusiveOption class >> posixName [
 	^'O_EXCL'
 ]
 
 { #category : 'accessing' }
-FileExclusiveOption class >> posixValue [
+FileExclusiveOption class >> windowsValue [
 	^16r40000
 ]

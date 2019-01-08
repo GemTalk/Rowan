@@ -5,11 +5,11 @@ Class {
 }
 
 { #category : 'accessing' }
-FileDoNotUpdateAccessTimeOption class >> posinName [
+FileDoNotUpdateAccessTimeOption class >> posixName [
 	^'O_NOATIME'
 ]
 
 { #category : 'accessing' }
-FileDoNotUpdateAccessTimeOption class >> posixValue [
-	self error: 'Not supported'
+FileDoNotUpdateAccessTimeOption >> posixName [
+		^'O_NOATIME'
 ]

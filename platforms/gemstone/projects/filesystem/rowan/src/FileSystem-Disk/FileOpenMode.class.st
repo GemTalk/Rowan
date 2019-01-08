@@ -12,6 +12,11 @@ Class {
 	#category : 'FileSystem-Disk-Options'
 }
 
+{ #category : 'convenience' }
+FileOpenMode >> accessRule [
+	self subclassResponsibility
+]
+
 { #category : 'testing' }
 FileOpenMode >> isReadable [
 	^false

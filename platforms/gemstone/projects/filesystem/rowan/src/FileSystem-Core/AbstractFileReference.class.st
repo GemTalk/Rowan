@@ -610,8 +610,8 @@ AbstractFileReference >> nextVersion [
 ]
 
 { #category : 'streams' }
-AbstractFileReference >> openWritable: aBoolean [
-	^ self resolve openWritable: aBoolean
+AbstractFileReference >> openWithOptions: aFileOptions [
+	^ self resolve openWithOptions: aFileOptions
 ]
 
 { #category : 'delegated' }

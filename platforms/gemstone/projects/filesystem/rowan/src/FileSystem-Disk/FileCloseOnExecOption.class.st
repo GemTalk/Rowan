@@ -13,8 +13,3 @@ Class {
 FileCloseOnExecOption class >> posixName [
 	^'O_CLOEXEC'
 ]
-
-{ #category : 'accessing' }
-FileCloseOnExecOption class >> posixValue [
-	self error: 'Not supported'
-]

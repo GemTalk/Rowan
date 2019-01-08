@@ -8,11 +8,21 @@ Class {
 }
 
 { #category : 'accessing' }
-FileInvalidOptionError class >> errorNumber [
+FileInvalidOptionError class >> defaultErrorNumber [
 	^16
+]
+
+{ #category : 'accessing' }
+FileInvalidOptionError class >> errorDescription [
+	^'The function is being used incorrectly.  An argument may be invalid.'
 ]
 
 { #category : 'accessing' }
 FileInvalidOptionError class >> posixName [
 	^'EINVAL'
+]
+
+{ #category : 'accessing' }
+FileInvalidOptionError class >> windowsErrorNumber [
+	^22
 ]

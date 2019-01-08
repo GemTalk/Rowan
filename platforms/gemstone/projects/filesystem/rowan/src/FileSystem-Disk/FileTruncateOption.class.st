@@ -10,11 +10,21 @@ Class {
 }
 
 { #category : 'accessing' }
+FileTruncateOption class >> defaultPlatformValue [
+	^16r00200
+]
+
+{ #category : 'accessing' }
 FileTruncateOption class >> posixName [
 	^'O_TRUNC'
 ]
 
 { #category : 'accessing' }
-FileTruncateOption class >> posixValue [
+FileTruncateOption class >> windowsValue [
 	^16r80000
+]
+
+{ #category : 'convenience' }
+FileTruncateOption >> truncateRule [
+	^self store class truncateExistingRule
 ]

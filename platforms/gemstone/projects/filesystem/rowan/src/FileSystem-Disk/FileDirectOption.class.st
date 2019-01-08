@@ -11,8 +11,3 @@ Class {
 FileDirectOption class >> posixName [
 	^'O_DIRECT'
 ]
-
-{ #category : 'accessing' }
-FileDirectOption class >> posixValue [
-	self error: 'Not supported'
-]

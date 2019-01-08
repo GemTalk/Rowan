@@ -15,7 +15,8 @@ Class {
 		'DefaultWorkingDirectory'
 	],
 	#classInstVars : [
-		'PosixValues'
+		'PosixValues',
+		'PosixErrorNumbers'
 	],
 	#category : 'FileSystem-Disk-Store'
 }
@@ -34,9 +35,24 @@ DiskStore class >> activeClientClass [
 	^ self
 ]
 
+{ #category : 'class initialization' }
+DiskStore class >> allConcreteFileOptionClasses [
+	^FileOption allConcreteFileOptionClasses
+]
+
+{ #category : 'class initialization' }
+DiskStore class >> allConcreteFilePosixErrorClasses [
+	^FilePosixError allSubclasses select: [:ea | ea subclasses isEmpty and: [(ea class includesSelector: #defaultErrorNumber)]]
+]
+
 { #category : 'current' }
 DiskStore class >> createDefault [
 	^ self new
+]
+
+{ #category : 'create rules' }
+DiskStore class >> createNewRule [
+	FileOptionFeatureNotSupported signal: 'createNewRule'
 ]
 
 { #category : 'current' }
@@ -70,96 +86,74 @@ DiskStore class >> delimiter [
 	^ self current delimiter
 ]
 
+{ #category : 'share rules' }
+DiskStore class >> denyNoneShareRule [
+	FileOptionFeatureNotSupported signal: 'denyNoneShareRule'
+]
+
+{ #category : 'share rules' }
+DiskStore class >> denyReadShareRule [
+	FileOptionFeatureNotSupported signal: 'denyReadShareRule'
+]
+
+{ #category : 'share rules' }
+DiskStore class >> denyReadWriteShareRule [
+	FileOptionFeatureNotSupported signal: 'denyReadWriteShareRule'
+]
+
+{ #category : 'share rules' }
+DiskStore class >> denyWriteShareRule [
+	FileOptionFeatureNotSupported signal: 'denyWriteShareRule'
+]
+
 { #category : 'file constants' }
 DiskStore class >> fileSharedRule [
 	"The value used to always open an existing file or create a file if one does not exist"
 	^self fileShareReadRule bitOr: self fileShareWriteRule
 ]
 
-{ #category : 'file constants' }
-DiskStore class >> genericReadWriteRule [
-	"Returns platform specific read/write value"
-	^self genericRead bitOr: self genericWriteRule
+{ #category : 'class initialization' }
+DiskStore class >> initializePosixErrorValues [
+	| errorNumberSelector |
+	errorNumberSelector := ((self name copyFrom: 1 to: self name size - 5) , 'ErrorNumber') asValidSelector.
+	self posixErrorNumbers: Dictionary new. 
+	self allConcreteFilePosixErrorClasses do: [:eaClass |  
+			self posixErrorNumbers at: eaClass posixName put: (eaClass errorNumberForSelector: errorNumberSelector)]
 ]
 
-{ #category : 'initialization' }
-DiskStore class >> initialize [
-	self reset
-]
-
-{ #category : 'initialization' }
+{ #category : 'class initialization' }
 DiskStore class >> initializePosixValues [
-
-	self posixValues
-		at: 'EPERM' put: 1;
-		at: 'ENOENT' put: 2;
-		at: 'EIO' put: 5
-		at: 'EBADF' put: 9;
-		at: 'EACCES' put: 13;
-		at: 'EBUSY' put: 16;
-		at: 'EEXIST' put: 17;
-		at: 'EXDEV' put: 18;
-		at: 'EISDIR' put: 21;
-		at: 'EINVAL' put: 22;
-		at: 'ENFILE' put: 23;
-		at: 'ENOSPC' put: 28;  
-		at: 'EROFS' put: 30;
-
-		"*** CONFIGURATION CONSTANTS ***"
-		at: 'O_RDONLY' put: 16r0000;
-		at: 'O_WRONLY' put: 16r0001;
-		at: 'O_RDWR' put: 16r0002;
-		at: 'O_DENYNONE' put: 16r0040;
-		at: 'O_DENYRD' put: 16r0030;
-		at: 'O_DENYWR' put: 16r0020;
-		at: 'O_DENYRDWR' put: 16r0010;
-		at: 'O_APPEND' put: 16r10000;
-		at: 'O_CREAT' put: 16r20000;
-		at: 'O_EXCL' put: 16r40000;
-		at: 'O_TRUNC' put: 16r80000;
-		at: 'SEEK_SET' put: 0;
-		at: 'SEEK_CUR' put: 1;
-		at: 'SEEK_END' put: 2;
-		at: 'F_MDLOCK' put: 0;
-		at: 'F_RDLOCK' put: 1;
-		at: 'F_WRLOCK' put: 2;
-		at: 'F_REG' put: 16r100;
-		at: 'F_DIR' put: 16r10;
-		at: 'F_SPECIAL' put: 16r06;
-
-		"*** stMode CONSTANTS ***"
-		at: 'S_IRWXU' put: 0;
-		at: 'S_IRUSR' put: 1;    "We have defined 1 to mean READ."
-		at: 'S_IWUSR' put: 2;   "We have defined 2 to mead WRITE."	
-		at: 'S_IXUSR' put: 0;
-
-		at: 'S_IRWXG' put: 0;
-		at: 'S_IRGRP' put: 0;
-		at: 'S_IWGRP' put: 0;
-		at: 'S_IXGRP' put: 0;
-
-		at: 'S_IRWXO' put: 0;
-		at: 'S_IROTH' put: 0;
-		at: 'S_IWOTH' put: 0;
-		at: 'S_IXOTH' put: 0;
-
-		"*** FCNTL CONSTANTS ***"
-		at: 'F_DUPFD' put: 0;
-		at: 'F_GETFD' put: 1;
-		at: 'F_GETLK' put: 14;
-		at: 'F_SETFD' put: 2;
-		at: 'F_GETFL' put: 3;
-		at: 'F_SETFL' put: 4;
-		at: 'F_SETLK' put: 6;
-		at: 'F_SETLKW' put: 7;
-		at: 'F_DCLOEXEC' put: 1;
-		at: 'F_UNLOCK' put: 3;
-		at: 'O_NONBLOCK' put: 16r80
+	| valueSelector |
+	valueSelector := ((self name copyFrom: 1 to: self name size - 5) , 'Value') asValidSelector.
+	self posixValues: Dictionary new. 
+	self allConcreteFileOptionClasses do: [:eaClass |  
+			self posixValues at: eaClass posixName put: (eaClass valueForSelector: valueSelector)]
 ]
 
 { #category : 'public' }
 DiskStore class >> maxFileNameLength [
 	self subclassResponsibility 
+]
+
+{ #category : 'create rules' }
+DiskStore class >> noTruncateRule [
+	FileOptionFeatureNotSupported signal: 'noTruncateRule'
+]
+
+{ #category : 'create rules' }
+DiskStore class >> openAlwaysRule [
+	FileOptionFeatureNotSupported signal: 'openAlwaysRule'
+]
+
+{ #category : 'create rules' }
+DiskStore class >> openExistingRule [
+	FileOptionFeatureNotSupported signal: 'openExistingRule'
+]
+
+{ #category : 'posix' }
+DiskStore class >> optionPlatformValueFor: aPosixName [
+
+	^self posixValues at: aPosixName ifAbsent: []
 ]
 
 { #category : 'current' }
@@ -168,8 +162,33 @@ DiskStore class >> platformNames [
 ]
 
 { #category : 'accessing' }
+DiskStore class >> posixErrorNumbers [
+	^PosixErrorNumbers
+]
+
+{ #category : 'accessing' }
+DiskStore class >> posixErrorNumbers: aCollection [
+	PosixErrorNumbers := aCollection
+]
+
+{ #category : 'accessing' }
 DiskStore class >> posixValues [
 	^PosixValues
+]
+
+{ #category : 'accessing' }
+DiskStore class >> posixValues: aCollection [
+	PosixValues := aCollection
+]
+
+{ #category : 'access rules' }
+DiskStore class >> readOnlyAccessRule [
+	FileOptionFeatureNotSupported signal: 'readOnlyAccessRule'
+]
+
+{ #category : 'access rules' }
+DiskStore class >> readWriteAccessRule [
+	FileOptionFeatureNotSupported signal: 'readWriteAccessRule'
 ]
 
 { #category : 'initialization' }
@@ -188,6 +207,16 @@ DiskStore class >> startUp: resuming [
 	resuming 
 		ifTrue: [ self reset ].
 	DefaultWorkingDirectory := self defaultWorkingDirectory.
+]
+
+{ #category : 'create rules' }
+DiskStore class >> truncateExistingRule [
+	FileOptionFeatureNotSupported signal: 'truncateExistingRule'
+]
+
+{ #category : 'access rules' }
+DiskStore class >> writeOnlyAccessRule [
+	FileOptionFeatureNotSupported signal: 'readWriteAccessRule'
 ]
 
 { #category : 'comparing' }
@@ -431,7 +460,7 @@ DiskStore >> isFile: aPath [
 DiskStore >> isReadable: aPath [
 	(self exists: aPath) ifFalse: [ ^ false ].
 	self flag: 'TODO: we need a decent primitive for this...'.
-	(self basicOpen: aPath writable: self readMode) 
+	(self basicOpen: aPath options: self readOptions) 
 		ifNotNil: [ :id|
 			id close.
 			^ true].
@@ -456,7 +485,7 @@ DiskStore >> isSymlink: aPath [
 DiskStore >> isWritable: aPath [
 	(self exists: aPath) ifFalse: [ ^ false ].
 	self flag: 'TODO: we need a decent primitive for this...'.
-	(self basicOpen: aPath writable: self readWriteMode) 
+	(self basicOpen: aPath options: self readWriteOptions) 
 		ifNotNil: [ :id|
 			id close.
 			^ true].
@@ -492,6 +521,12 @@ DiskStore >> openFileStream: path writable: writable [
 	^ writable 
 		ifFalse: [ FileStream readOnlyFileNamed: fullPath ]
 		ifTrue: [ FileStream fileNamed: fullPath ]
+]
+
+{ #category : 'posix' }
+DiskStore >> optionPlatformValueFor: aPosixName [
+
+	^self class optionPlatformValueFor: aPosixName
 ]
 
 { #category : 'public' }

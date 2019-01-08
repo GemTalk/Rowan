@@ -8,13 +8,18 @@ Class {
 }
 
 { #category : 'accessing' }
+FileOpenReadWriteMode class >> defaultPlatformValue [
+	^16r00002
+]
+
+{ #category : 'accessing' }
 FileOpenReadWriteMode class >> posixName [
 	^'O_RDWR'
 ]
 
-{ #category : 'accessing' }
-FileOpenReadWriteMode class >> posixValue [
-	^16r00002
+{ #category : 'convenience' }
+FileOpenReadWriteMode >> accessRule [
+	^self store class readWriteAccessRule
 ]
 
 { #category : 'testing' }

@@ -10,11 +10,21 @@ Class {
 }
 
 { #category : 'accessing' }
-FileIOError class >> errorNumber [
+FileIOError class >> defaultErrorNumber [
 	^9
+]
+
+{ #category : 'accessing' }
+FileIOError class >> errorDescription [
+	^'I/O error'
 ]
 
 { #category : 'accessing' }
 FileIOError class >> posixName [
 	^'EIO'
+]
+
+{ #category : 'accessing' }
+FileIOError class >> windowsErrorNumber [
+	^5
 ]

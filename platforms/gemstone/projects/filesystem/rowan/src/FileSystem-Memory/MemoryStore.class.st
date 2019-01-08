@@ -86,6 +86,19 @@ MemoryStore >> basicModificationTimeOf: aMemoryFileSystemEntry [
 ]
 
 { #category : 'private' }
+MemoryStore >> basicOpen: path options: aFileOptions [
+	^ self
+		nodeAt: path
+		ifPresent: [ :aMemoryFileSystemEntry | 
+			aMemoryFileSystemEntry
+				basicOpen;
+				yourself ]
+		ifAbsent: [ aFileOptions isWritable
+				ifTrue: [ self createFile: path ] 
+				ifFalse: [ self signalFileDoesNotExist: path ] ]
+]
+
+{ #category : 'private' }
 MemoryStore >> basicOpen: path writable: writeMode [
 	^ self
 		nodeAt: path
@@ -214,6 +227,16 @@ MemoryStore >> nodeAt: aPath ifPresent: presentBlock ifAbsent: absentBlock [
 				ifTrue: [ current := current fileEntryAt: segment ifAbsent: [ ^ absentBlock value ] ]
 				ifFalse: [ ^ absentBlock value ] ].
 	^ presentBlock value: current
+]
+
+{ #category : 'public' }
+MemoryStore >> openFileStream: path options: aFileOptions [
+
+	| entry |
+	entry := self basicOpen: path options: aFileOptions.
+	^ aFileOptions isWritable
+		ifTrue: [ entry writeStream ]
+		ifFalse: [ entry readStreamPortable ]
 ]
 
 { #category : 'public' }

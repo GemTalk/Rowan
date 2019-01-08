@@ -63,7 +63,7 @@ FileSystem >> binaryReadStreamOn: aResolvable [
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a read stream for reading the file."
 
-	^ (self open: aResolvable writable: self store readBinaryMode) binaryReadStream.
+	^ (self open: aResolvable options: self store readBinaryOptions) binaryReadStream.
 ]
 
 { #category : 'public' }
@@ -71,7 +71,7 @@ FileSystem >> binaryWriteStreamOn: aResolvable [
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a binary write stream for reading the file."
 
-	^ (self open: aResolvable writable: self store writeBinaryMode) binaryWriteStream.
+	^ (self open: aResolvable options: self store writeBinaryOptions) binaryWriteStream.
 ]
 
 { #category : 'public' }
@@ -488,7 +488,7 @@ FileSystem >> open [
 ]
 
 { #category : 'public' }
-FileSystem >> open: aResolvable writable: aBoolean [ 
+FileSystem >> open: aResolvable optinos: aFileOptions [ 
 	"Resolve aResolvable into an absolute path, then ask the store to open the file at
 	that path using the specified access mode."
 	
@@ -496,8 +496,19 @@ FileSystem >> open: aResolvable writable: aBoolean [
 	path := self resolve: aResolvable.
 	^ store handleClass 
 		open: (FileReference fileSystem: self path: path) 
-		writable: aBoolean
-		
+		options: aFileOptions
+]
+
+{ #category : 'public' }
+FileSystem >> open: aResolvable options: aFileOptions [ 
+	"Resolve aResolvable into an absolute path, then ask the store to open the file at
+	that path using the specified access mode."
+	
+	| path |
+	path := self resolve: aResolvable.
+	^ store handleClass 
+		open: (FileReference fileSystem: self path: path) 
+		options: aFileOptions
 ]
 
 { #category : 'delegated' }
@@ -505,6 +516,17 @@ FileSystem >> openFileStream: aResolvable writable: aBoolean [
 	^ store 
 		openFileStream: (self resolve: aResolvable) 
 		writable: aBoolean
+]
+
+{ #category : 'private' }
+FileSystem >> openStreamDescription: aResolvable options: aFileOptions [
+	"I am  a helper method to delegate basicOpen:options: to the store.
+	 I am called from FileSystemHandle implementations."
+
+	| path |
+	
+	path := self resolve: aResolvable.
+	^ store basicOpen: path options: aFileOptions
 ]
 
 { #category : 'private' }
@@ -556,7 +578,7 @@ FileSystem >> readStreamOn: aResolvable [
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a read stream for reading the file."
 
-	^ (self open: aResolvable writable: self store readMode) readStream.
+	^ (self open: aResolvable options: self store readOptions) readStream.
 ]
 
 { #category : 'public' }
@@ -673,5 +695,5 @@ FileSystem >> workingDirectoryPath [
 FileSystem >> writeStreamOn: aResolvable [
 	"Open a write stream on the file referred by the argument. It can be a string or a path"
 
-	^ (self open: aResolvable writable: self store writeMode) writeStream.
+	^ (self open: aResolvable options: self store writeOptions) writeStream.
 ]

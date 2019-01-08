@@ -7,18 +7,23 @@ This is Windows only
 "
 Class {
 	#name : 'FileBinaryTypeOption',
-	#superclass : 'FileFileTypeOption',
+	#superclass : 'FileTypeOption',
 	#category : 'FileSystem-Disk-Options'
 }
 
-{ #category : 'posixName' }
+{ #category : 'accessing' }
+FileBinaryTypeOption class >> defaultPlatformValue [
+	^0
+]
+
+{ #category : 'accessing' }
 FileBinaryTypeOption class >> posixName [
 	^'O_BINARY'
 ]
 
-{ #category : 'posixName' }
-FileBinaryTypeOption class >> posixValue [
-	^0
+{ #category : 'accessing' }
+FileBinaryTypeOption class >> windowsValue [
+	^1
 ]
 
 { #category : 'printing' }

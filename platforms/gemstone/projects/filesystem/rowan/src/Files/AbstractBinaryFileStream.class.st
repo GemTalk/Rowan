@@ -37,17 +37,18 @@ Class {
 	#instVars : [
 		'file',
 		'handle',
-		'forWrite'
+		'options'
 	],
 	#category : 'Files-Streams'
 }
 
 { #category : 'instance creation' }
-AbstractBinaryFileStream class >> handle: aCollection file: aFile forWrite: aTrue [
+AbstractBinaryFileStream class >> handle: aCollection file: aFile options: aFileOptions [
 	
 	^ self basicNew
-		handle: aCollection file: aFile forWrite: aTrue;
+		handle: aCollection file: aFile options: aFileOptions;
 		yourself
+
 ]
 
 { #category : 'testing' }
@@ -94,16 +95,6 @@ AbstractBinaryFileStream >> file: aFile [
 ]
 
 { #category : 'accessing' }
-AbstractBinaryFileStream >> fileMode [
-	^forWrite
-]
-
-{ #category : 'accessing' }
-AbstractBinaryFileStream >> fileMode: aSymbol [
-	forWrite := aSymbol
-]
-
-{ #category : 'accessing' }
 AbstractBinaryFileStream >> fileName [
 	^self file fullName
 ]
@@ -128,11 +119,11 @@ AbstractBinaryFileStream >> handle: anObject [
 ]
 
 { #category : 'initialization' }
-AbstractBinaryFileStream >> handle: aCollection file: aFile forWrite: aBoolean [
+AbstractBinaryFileStream >> handle: aCollection file: aFile options: aFileOptions [
 	
 	handle := aCollection.
 	file := aFile.
-	forWrite := aBoolean
+	options := aFileOptions
 ]
 
 { #category : 'testing' }
@@ -142,12 +133,12 @@ AbstractBinaryFileStream >> isBinary [
 
 { #category : 'testing' }
 AbstractBinaryFileStream >> isReadStream [
-	^self fileMode isWritable not
+	^self options isWritable not
 ]
 
 { #category : 'other' }
 AbstractBinaryFileStream >> isWriteStream [
-	^self fileMode isWritable
+	^self options isWritable
 ]
 
 { #category : 'character writing' }
@@ -196,7 +187,7 @@ AbstractBinaryFileStream >> next: n into: aString startingAt: startIndex [
 { #category : 'writing' }
 AbstractBinaryFileStream >> next: amount putAll: aByteArray [
 
-	self fileMode isWritable
+	self options isWritable
 		ifFalse: [ ^ FileWriteError signalWith: self file reference text: 'Cannot write a read-only file - ' , self pathString ].
 	file
 		write: handle
@@ -242,6 +233,16 @@ AbstractBinaryFileStream >> nextPut: anInteger [
 { #category : 'writing' }
 AbstractBinaryFileStream >> nextPutAll: aByteArray [
 	self next: aByteArray basicSize putAll: aByteArray
+]
+
+{ #category : 'accessing' }
+AbstractBinaryFileStream >> options [
+	^options
+]
+
+{ #category : 'accessing' }
+AbstractBinaryFileStream >> options: aFileOptions [
+	options := aFileOptions
 ]
 
 { #category : 'accessing' }

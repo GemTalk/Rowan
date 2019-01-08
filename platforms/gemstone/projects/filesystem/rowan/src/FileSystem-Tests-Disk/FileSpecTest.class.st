@@ -119,7 +119,7 @@ FileSpecTest >> testWriteHighZipped [
 
 	| aFileSpec |
 	aFileSpec := FileSpec writeHighZipped.
-	self assert: (aFileSpec compressionPolicy isKindOf: GZip).
+	self assert: aFileSpec isGzipped.
 	self assert: aFileSpec modeString = 'w9'
 ]
 
@@ -128,7 +128,7 @@ FileSpecTest >> testWriteLowZipped [
 
 	| aFileSpec |
 	aFileSpec := FileSpec writeLowZipped.
-	self assert: (aFileSpec compressionPolicy isKindOf: GZip).
+	self assert: aFileSpec isGzipped.
 	self assert: aFileSpec modeString = 'w1'
 ]
 
@@ -136,7 +136,8 @@ FileSpecTest >> testWriteLowZipped [
 FileSpecTest >> testWriteZippedWithoutCompressionLevel [
 
 	| aFileSpec | 
-	aFileSpec := FileSpec writeZipped.
-	self assert: (aFileSpec compressionPolicy isKindOf: GZip).
+	aFileSpec := FileSpec write.
+	aFileSpec fileOptions fileType: FileGzipTypeOption none.
+	self deny: aFileSpec isGzipped.
 	self assert: aFileSpec modeString = 'w'
 ]

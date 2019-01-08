@@ -8,11 +8,21 @@ Class {
 }
 
 { #category : 'accessing' }
+FileCreateOption class >> defaultPlatformValue [
+	^16r00040
+]
+
+{ #category : 'accessing' }
 FileCreateOption class >> posixName [
 	^'O_CREAT'
 ]
 
 { #category : 'accessing' }
-FileCreateOption class >> posixValue [
+FileCreateOption class >> windowsValue [
 	^16r20000
+]
+
+{ #category : 'convenience' }
+FileCreateOption >> createRule [
+	^self parent fileExclusiveOption ifNil: [self store class openAlwaysRule] ifNotNil: [:option | self store class createNewRule]
 ]

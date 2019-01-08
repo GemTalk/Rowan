@@ -11,8 +11,3 @@ Class {
 FileSynchronousOption class >> posixName [
 	^'O_SYNC'
 ]
-
-{ #category : 'accessing' }
-FileSynchronousOption class >> posixValue [
-	^self error: 'Not implmented'
-]

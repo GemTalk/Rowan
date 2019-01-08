@@ -1,3 +1,8 @@
+"
+Used to indicate a exclusive (write) ADVISORY lock when the file is opened.
+
+Linux supports this type of lock.
+"
 Class {
 	#name : 'FileWriteLockOption',
 	#superclass : 'FileLockOption',
@@ -5,11 +10,11 @@ Class {
 }
 
 { #category : 'accessing' }
-FileWriteLockOption class >> posixName [
-	^'FWRLOCK'
+FileWriteLockOption class >> defaultPlatformValue [
+	^2
 ]
 
 { #category : 'accessing' }
-FileWriteLockOption class >> posixValue [
-	^2
+FileWriteLockOption class >> posixName [
+	^'F_WRLCK'
 ]

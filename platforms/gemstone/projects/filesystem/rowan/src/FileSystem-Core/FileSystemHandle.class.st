@@ -6,19 +6,19 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'reference',
-		'writable'
+		'options'
 	],
 	#category : 'FileSystem-Core-Kernel'
 }
 
 { #category : 'instance creation' }
-FileSystemHandle class >> on: aReference writable: aBoolean [
-	^ self new setReference: aReference writable: aBoolean
+FileSystemHandle class >> on: aReference options: aFileOptions [
+	^ self new setReference: aReference options: aFileOptions
 ]
 
 { #category : 'instance creation' }
-FileSystemHandle class >> open: aReference writable: aBoolean [
-	^ (self on: aReference writable: aBoolean) open
+FileSystemHandle class >> open: aReference options: aFileOptions [
+	^ (self on: aReference options: aFileOptions) open
 ]
 
 { #category : 'public' }
@@ -54,7 +54,7 @@ FileSystemHandle >> basicOpen [
 	"get the raw stream description from the filesystem's store"
 	^ self fileSystem 
 		openStreamDescription: reference path
-		writable: self fileMode
+		options: self options
 ]
 
 { #category : 'streams' }
@@ -80,16 +80,6 @@ FileSystemHandle >> ensureClosed [
 ]
 
 { #category : 'accessing' }
-FileSystemHandle >> fileMode [
-	^writable
-]
-
-{ #category : 'accessing' }
-FileSystemHandle >> fileMode: aString [
-	writable := aString
-]
-
-{ #category : 'accessing' }
 FileSystemHandle >> fileSystem [
 	^ reference fileSystem 
 ]
@@ -112,12 +102,22 @@ FileSystemHandle >> isOpen [
 { #category : 'testing' }
 FileSystemHandle >> isWritable [
 
-	^ self fileMode isWritable
+	^ self options isWritable
 ]
 
 { #category : 'public' }
 FileSystemHandle >> open [
 	self subclassResponsibility
+]
+
+{ #category : 'accessing' }
+FileSystemHandle >> options [
+	^options
+]
+
+{ #category : 'accessing' }
+FileSystemHandle >> options: aFileOptions [
+	options := aFileOptions
 ]
 
 { #category : 'public' }
@@ -143,9 +143,9 @@ FileSystemHandle >> reopen [
 ]
 
 { #category : 'initialize-release' }
-FileSystemHandle >> setReference: aReference writable: aBoolean [
+FileSystemHandle >> setReference: aReference options: aFileOptions [
 	self reference: aReference resolve.
-	self fileMode: aBoolean
+	self options: aFileOptions
 ]
 
 { #category : 'public' }

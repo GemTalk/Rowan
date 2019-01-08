@@ -5,7 +5,8 @@ Class {
 		'fileOptions',
 		'encoding',
 		'fileType',
-		'compressionPolicy'
+		'compressionPolicy',
+		'fileStore'
 	],
 	#category : 'FileSystem-Disk-Base'
 }
@@ -130,6 +131,16 @@ FileSpec class >> writeZipped [
 		yourself
 ]
 
+{ #category : 'convenience' }
+FileSpec >> beUnixStore [
+	self fileStore: UnixStore createDefault
+]
+
+{ #category : 'convenience' }
+FileSpec >> beWindowsStore [
+	self fileStore: WindowsStore createDefault
+]
+
 { #category : 'accessing' }
 FileSpec >> compressionPolicy [
 	^compressionPolicy
@@ -162,6 +173,16 @@ FileSpec >> fileOptions: aFileOptions [
 	fileOptions := aFileOptions
 ]
 
+{ #category : 'accessing' }
+FileSpec >> fileStore [
+	^fileStore
+]
+
+{ #category : 'accessing' }
+FileSpec >> fileStore: anObject [
+	fileStore := anObject
+]
+
 { #category : 'convenience' }
 FileSpec >> fileType [
 	^self fileOptions fileType
@@ -169,7 +190,8 @@ FileSpec >> fileType [
 
 { #category : 'initialization' }
 FileSpec >> initialize [
-	self compressionPolicy: NoCompression new
+	self compressionPolicy: NoCompression new.
+	self fileStore: FileSystem disk store
 ]
 
 { #category : 'initialization' }
@@ -258,26 +280,36 @@ FileSpec >> initializeForWriteBinary [
 
 { #category : 'initialization' }
 FileSpec >> initializeForWriteHighZipped [
-	self initializeForWrite.
-	self compressionPolicy: GZip high
+	self initialize.
+	self fileOptions: FileOptions writeWithHighCompression.
+	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForWriteLowZipped [
-	self initializeForWrite.
-	self compressionPolicy: GZip low
+	self initialize.
+	self fileOptions: FileOptions writeWithLowCompression.
+	self encoding: #'utf8'
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForWriteZipped [
-	self initializeForWrite.
-	self compressionPolicy: GZip none
+	self initialize.
+	self fileOptions: FileOptions write.
+	self fileOptions fileType: FileGzipTypeOption none.
+	self encoding: #'utf8'
+]
+
+{ #category : 'testing' }
+FileSpec >> isClientFileSystem [
+
+	^false
 ]
 
 { #category : 'testing' }
 FileSpec >> isGzipped [
 
-	^self compressionPolicy ifNil: [false] ifNotNil: [:cp | cp isGzipped]
+	^self fileOptions isGzipped
 ]
 
 { #category : 'testing' }

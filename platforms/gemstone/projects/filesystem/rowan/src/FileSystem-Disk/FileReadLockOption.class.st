@@ -1,3 +1,8 @@
+"
+Used to indicate a shared (read) ADVISORY lock when the file is opened.
+
+Linux supports this type of lock.
+"
 Class {
 	#name : 'FileReadLockOption',
 	#superclass : 'FileLockOption',
@@ -5,11 +10,11 @@ Class {
 }
 
 { #category : 'accessing' }
-FileReadLockOption class >> posixName [
-	^'FRDLOCK'
+FileReadLockOption class >> defaultPlatformValue [
+	^1
 ]
 
 { #category : 'accessing' }
-FileReadLockOption class >> posixValue [
-	^1
+FileReadLockOption class >> posixName [
+	^'F_RDLCK'
 ]
