@@ -315,10 +315,8 @@ RwGsImage class >> loadedProjectNamed: aString [
 { #category : 'querying' }
 RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 
-	"Look up a loaded project. First in current users project registry, then scan AllUsers for the project ... note that the user needs to be the project owner."
+	"Look up a loaded project in the loaded project registry"
 
-	| currentUserId |
-	currentUserId := self currentUserId.
 	^ self _loadedProjectRegistry
 		at: aString
 		ifAbsent: [
@@ -327,7 +325,6 @@ RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 			matchingProjects size > 1 ifTrue: [ self error: 'Multiple projects with same name available from symbol dictionaries in symbol list' ].
 			matchingProjects size = 0 ifTrue: [ ^ absentBlock value ].
 			matchingProjects any ]
-
 ]
 
 { #category : 'querying' }

@@ -99,12 +99,24 @@ RwProjectReferenceDefinition >> _repositoryDefinitionClass [
 RwProjectReferenceDefinition >> _repositoryDefinitionForProjectHome: projectHomeFileReferenceOrString [
 
 
-	^ self _repositoryDefinitionClass
-		newNamed: self projectAlias
-			repositoryRoot: projectHomeFileReferenceOrString asFileReference / self projectAlias
-			projectUrl: self projectUrl
-			committish: self committish 
-			committishType: self committishType
+	| existingProjectRepository |
+	existingProjectRepository := 
+		Rowan image 
+			projectRepositoryNamed: self projectAlias
+				ifAbsent: [
+					| newProjectRepository |
+					newProjectRepository := self _repositoryDefinitionClass
+						newNamed: self projectAlias
+							repositoryRoot: projectHomeFileReferenceOrString asFileReference / self projectAlias
+							projectUrl: self projectUrl
+							committish: self committish 
+							committishType: self committishType.
+					Rowan image addProjectRepository: newProjectRepository.
+					^ newProjectRepository ].
+	"confirm that the existing project repository is compatible with the receiver"
+	existingProjectRepository projectUrl = self projectUrl
+		ifFalse: [ self error: 'incompatible project repository found in registry' ].
+	^ existingProjectRepository
 ]
 
 { #category : 'accessing' }
@@ -178,6 +190,11 @@ RwProjectReferenceDefinition >> configurationNames: anArray [
 RwProjectReferenceDefinition >> create [
 	"write the project structure to disk, if it doesn't already exist"
 
+	| repoDef |
+	repoDef := self repositoryDefinition
+	repoDif repositoryExists
+		ifFalse: [ 
+			self error: 'not yet implemented' ].
 	self error: 'not yet implemented'.
 ]
 
@@ -296,17 +313,6 @@ RwProjectReferenceDefinition >> projectUrl [
 RwProjectReferenceDefinition >> projectUrl: aString [
 
 	^ self properties at: 'projectUrl' put: aString
-]
-
-{ #category : 'actions' }
-RwProjectReferenceDefinition >> register [
-
-	Rowan image 
-		loadedProjectNamed: self projectAlias
-		ifAbsent: [
-			| newLoadedProject |
-			newLoadedProject := RwGsLoadedSymbolDictComponentProject newForProjectReferenceDefinition: self.
-			Rowan image addLoadedProject: newLoadedProject ]
 ]
 
 { #category : 'accessing' }

@@ -419,6 +419,8 @@ RwRowanSample7Test >> testResolveProjectReference [
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
@@ -432,6 +434,8 @@ RwRowanSample7Test >> testResolveProjectReference [
 		projectHome: gitRootPath.
 
 	projectReferenceDefinition_1 repositoryRoot ensureDeleteAll.
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "1. clone repository"
 	self 
@@ -460,12 +464,15 @@ RwRowanSample7Test >> testResolveProjectReference [
 	self assert: projectReferenceDefinition_1 projectHome = projectReferenceDefinition_2 projectHome.
 
 "3. now clone to a different spot by just changing the project home"
-projectReferenceDefinition_2 repositoryRoot ensureDeleteAll.
+	projectReferenceDefinition_2 repositoryRoot ensureDeleteAll.
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	gitRootPath := gitRootPath asFileReference / 'sample7_repos'.
 	gitRootPath ensureDeleteAll.
 	gitRootPath ensureCreateDirectory.
 
+	self error: 'projectHome: should not override the path for the old repositoryDefinition ... needs more validation'.
 	projectReferenceDefinition_2 projectHome: gitRootPath.
 
 "clone to new location"

@@ -57,14 +57,28 @@ RwGsTestImage class >> _projectForNonTestProject: projectName [
 
 ]
 
+{ #category : 'private' }
+RwGsTestImage class >> _projectRepositoryRegistryForUserId: aUserId [
+
+	| ug |
+	ug := (AllUsers userWithId: aUserId) objectNamed: #'UserGlobals'.
+	^ ug
+		at: #'RwGsTestProjectRepositoryRegistry'
+		ifAbsent: [ 
+			(self currentUserId = aUserId)
+				ifFalse: [ ^ nil ].
+			ug at: #'RwGsTestProjectRepositoryRegistry' put: StringKeyValueDictionary new ]
+]
+
 { #category : 'accessing' }
 RwGsTestImage class >> resetTestProjectRegistry [
 
-	"self resetTestProjectRegistry"
+	"RwGsTestImage resetTestProjectRegistry"
 
 	"drop any projects that may be present test project registry"
 
 	((AllUsers userWithId: self currentUserId) objectNamed: #'UserGlobals')
-		removeKey: #'RwGsTestLoadedProjectRegistry'
-		ifAbsent: [  ]
+		removeKey: #'RwGsTestLoadedProjectRegistry' ifAbsent: [  ];
+		removeKey: #'RwGsTestProjectRepositoryRegistry' ifAbsent: [  ];
+		yourself
 ]
