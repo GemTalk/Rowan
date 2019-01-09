@@ -10,7 +10,9 @@ Class {
 		'packages',
 		'changes',
 		'existsOnDisk',
-		'isLoaded'
+		'isLoaded',
+		'projectUrl',
+		'rowanProjectsHome'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -71,6 +73,8 @@ RowanProjectService >> basicRefresh [
 	isSkew := self isSkew.
 	sha := self rowanSha.
 	branch := self rowanBranch.
+	projectUrl := self rowanProjectUrl. 
+	rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' .
 	RowanCommandResult addResult: self
 ]
 
@@ -311,6 +315,18 @@ RowanProjectService >> projects [
 
 ]
 
+{ #category : 'accessing' }
+RowanProjectService >> projectUrl [
+
+	^projectUrl
+]
+
+{ #category : 'accessing' }
+RowanProjectService >> projectUrl: anObject [
+
+	projectUrl := anObject
+]
+
 { #category : 'client commands' }
 RowanProjectService >> pullFromGit [
 
@@ -385,6 +401,12 @@ RowanProjectService >> rowanDirty [
 RowanProjectService >> rowanProjectName [
 
 	^name
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> rowanProjectUrl [
+
+	^(RwProject newNamed: name) projectUrl
 ]
 
 { #category : 'rowan' }
