@@ -154,7 +154,7 @@ RwProjectReferenceDefinition >> comment: aString [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> committish [
 
-	^ self properties at: 'committish' ifAbsent: [ ]
+	^ self properties at: 'committish' ifAbsent: [ 'master' ]
 ]
 
 { #category : 'accessing' }
@@ -167,7 +167,7 @@ RwProjectReferenceDefinition >> committish: aString committishType: committishTy
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> committishType [
 
-	^ self properties at: 'committishType'  ifAbsent: []
+	^ self properties at: 'committishType'  ifAbsent: [ 'branch' ]
 ]
 
 { #category : 'accessing' }
@@ -223,7 +223,7 @@ RwProjectReferenceDefinition >> exportPackages [
 	| root |
 	root := self packagesRoot.
 	(root /  'properties', 'st') 
-		writeStreamDo: [ :fileStream | fileStream nextPutAll: '{ #format : ' , self format printString , '}' ].
+		writeStreamDo: [ :fileStream | fileStream nextPutAll: '{ #format : ' , self packageFormat printString , '}' ].
 ]
 
 { #category : 'exporting' }
@@ -237,9 +237,28 @@ self error: 'not yet implemented'
 { #category : 'exporting' }
 RwProjectReferenceDefinition >> exportSpecification [
 
-	| root |
+	| root spec repoSpec |
 	root := self specsRoot.
-self error: 'not yet implemented'
+	self useGit
+		ifTrue: [
+			repoSpec := RwGitRepositorySpecification new
+				committish: self committish;
+				committishType: self committishType;
+				remoteUrl: self remoteUrl;
+				yourself ]
+		ifFalse: [  repoSpec := RwDiskRepositorySpecification new ] .
+	spec := RwComponentSpecification new
+		specName: self projectName;
+		projectUrl: self projectUrl;
+		configsPath: self configsPath;
+		specsPath: self specsPath;
+		projectsPath: self projectsPath;
+		defaultConfigurationNames: self configurationNames;
+		defaultGroupNames: self groupNames;
+		comment: self comment;
+		repoSpec: repoSpec;
+		yourself.
+	spec exportToUrl: 'file:',  self specsRoot pathString, '/'
 ]
 
 { #category : 'accessing' }
@@ -276,6 +295,18 @@ self deprecated: 'temporary method ... simulating RwSpecification api'.
 { #category : 'temporary compat' }
 RwProjectReferenceDefinition >> loadedCommitId:  ignored [
 self deprecated: 'temporary method ... simulating RwSpecification api'.
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> packageFormat [
+
+	^ self properties at: 'packageFormat' ifAbsent: [ 'tonel' ]
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> packageFormat: aString [
+
+	^ self properties at: 'packageFormat' put: aString
 ]
 
 { #category : 'accessing' }
@@ -363,6 +394,18 @@ RwProjectReferenceDefinition >> projectUrl [
 RwProjectReferenceDefinition >> projectUrl: aString [
 
 	^ self properties at: 'projectUrl' put: aString
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> remoteUrl [
+
+	^ self repositoryDefinition remoteUrl
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> remoteUrl: aRemoteUrl [
+
+	self repositoryDefinition remoteUrl: aRemoteUrl
 ]
 
 { #category : 'accessing' }

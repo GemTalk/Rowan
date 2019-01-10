@@ -174,6 +174,54 @@ RwRowanSample7Test >> testCreateProjectFromUrl [
 ]
 
 { #category : 'tests' }
+RwRowanSample7Test >> testCreateProjectReference [
+
+	"Excercise RwProjectReferenceDefinition instance creation protocol ... 
+		create the project reference on disk"
+
+	| prd projectUrl projectName configurationNames groupNames comment projectHome
+		rowanSpec|
+
+	projectName := 'RowanSample7_test'.
+	configurationNames := #( 'Main' ).
+	groupNames := #( 'core' ).
+	projectUrl := self _gitHubProjectUrl.
+	comment := 'test project reference'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+"create definition"
+	prd := RwProjectReferenceDefinition
+		projectName: projectName 
+			configurationNames: configurationNames 
+			groupNames: groupNames 
+			useGit: true 
+			projectUrl: projectUrl 
+			comment: comment.
+	prd projectHome: projectHome.
+
+	prd repositoryRoot ensureDeleteAll.
+
+"create project reference on disk"
+	prd create.
+
+"validate"
+	self assert: prd repositoryRoot exists.
+	self assert: prd configsRoot exists.
+	self assert: prd specsRoot exists.
+	self assert: prd packagesRoot exists.
+	self assert: prd projectsRoot exists.
+	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: [  ]) notNil.
+	self assert: (Rowan image projectRepositoryNamed: projectName ifAbsent: [  ]) notNil.
+]
+
+{ #category : 'tests' }
 RwRowanSample7Test >> testCreateProjectReferenceFromScratch [
 
 	| rowanSpec gitRootPath projectName projectReferenceDefinition x y projectSpec |
@@ -208,6 +256,8 @@ RwRowanSample7Test >> testCreateProjectReferenceFromScratch [
 	self assert: projectReferenceDefinition projectAlias = projectReferenceDefinition projectName.
 	self assert: projectReferenceDefinition configurationNames = #( 'Default').
 	self assert: projectReferenceDefinition groupNames = #( 'core').
+	self assert: projectReferenceDefinition committish = 'master'.
+	self assert: projectReferenceDefinition committishType = 'branch'.
 	self assert: projectReferenceDefinition projectUrl = self _gitHubProjectUrl.
 
 	self assert: (x := projectReferenceDefinition projectHome pathString) = (y := gitRootPath asFileReference pathString).

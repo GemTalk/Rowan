@@ -122,10 +122,22 @@ RwProjectSpecification >> defaultConfigurationNames [
 ]
 
 { #category : 'accessing' }
+RwProjectSpecification >> defaultConfigurationNames: anArray [
+
+	defaultConfigurationNames := anArray
+]
+
+{ #category : 'accessing' }
 RwProjectSpecification >> defaultGroupNames [
 
 	^ defaultGroupNames
 
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> defaultGroupNames: anArray [
+
+	defaultGroupNames := anArray
 ]
 
 { #category : 'exporting' }
@@ -147,7 +159,7 @@ RwProjectSpecification >> export [
 RwProjectSpecification >> exportToUrl: fileUrl [
 
 	^ self copy
-		initializeForExport;
+		initializeForExport
 		_exportToUrl: fileUrl
 
 ]
@@ -156,9 +168,8 @@ RwProjectSpecification >> exportToUrl: fileUrl [
 RwProjectSpecification >> exportToUrl: fileUrl as: fileName [
 
 	^ self copy
-		initializeForExport;
+		initializeForExport
 		_exportToUrl: fileUrl as: fileName
-
 ]
 
 { #category : 'accessing' }
@@ -182,9 +193,8 @@ RwProjectSpecification >> initializeForExport [
 
 	super initializeForExport.
 	imageSpec := nil.
-	platformSpec valuesDo: [:each | each initializeForExport ].
+	platformSpec := nil.
 	repoSpec initializeForExport
-
 ]
 
 { #category : 'initialization' }

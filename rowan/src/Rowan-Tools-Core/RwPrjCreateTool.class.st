@@ -344,6 +344,8 @@ RwPrjCreateTool >> createProjectRepository: projectReferenceDefinition [
 	projectReferenceDefinition exportSpecification.
 	projectReferenceDefinition exportConfiguration.
 	projectReferenceDefinition exportProjects.
+	projectReferenceDefinition exportProjects.
+	projectReferenceDefinition exportProjects.
 
 	^ projectReferenceDefinition
 ]
