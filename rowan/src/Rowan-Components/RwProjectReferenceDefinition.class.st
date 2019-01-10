@@ -38,8 +38,8 @@ RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aR
 		projectName: projectName
 			configurationNames: aRwSpecification defaultConfigurationNames
 			groupNames: aRwSpecification defaultGroupNames
-			projectUrl: aRwSpecification projectUrl
 			useGit: aRwSpecification useGit
+			projectUrl: aRwSpecification projectUrl
 			comment: aRwSpecification comment
 			projectHome: projectHomeFileReferenceOrString
 			committish: aRwSpecification repoSpec committish
@@ -51,7 +51,20 @@ RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aR
 ]
 
 { #category : 'instance creation' }
-RwProjectReferenceDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames  projectUrl: projectUrl useGit: useGit comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath [
+RwProjectReferenceDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl comment: comment [
+
+	^ self new
+		projectName: projectName;
+		configurationNames: configurationNames;
+		groupNames: groupNames;
+		useGit: useGit;
+		projectUrl: projectUrl;
+		comment: comment;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwProjectReferenceDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames  useGit: useGit projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath [
 
 	^ self new
 		projectName: projectName;
@@ -70,7 +83,7 @@ RwProjectReferenceDefinition class >> projectName: projectName configurationName
 ]
 
 { #category : 'instance creation' }
-RwProjectReferenceDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl comment: comment [
+RwProjectReferenceDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl committish: committish committishType: committishType comment: comment [
 
 	^ self new
 		projectName: projectName;
@@ -79,6 +92,7 @@ RwProjectReferenceDefinition class >> projectName: projectName configurationName
 		useGit: useGit;
 		projectUrl: projectUrl;
 		comment: comment;
+		committish: committish committishType: committishType;
 		yourself
 ]
 
@@ -190,11 +204,8 @@ RwProjectReferenceDefinition >> configurationNames: anArray [
 RwProjectReferenceDefinition >> create [
 	"write the project structure to disk, if it doesn't already exist"
 
-	| repoDef |
-	repoDef := self repositoryDefinition
-	repoDif repositoryExists
-		ifFalse: [ 
-			self error: 'not yet implemented' ].
+	Rowan projectTools create
+		createProjectRepository: self repositoryDefinition.
 	self error: 'not yet implemented'.
 ]
 

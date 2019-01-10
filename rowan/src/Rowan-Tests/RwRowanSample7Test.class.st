@@ -85,6 +85,8 @@ RwRowanSample7Test >> testCreateNewProjectFromUrl [
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
@@ -102,6 +104,9 @@ RwRowanSample7Test >> testCreateNewProjectFromUrl [
 		useSsh: true
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 
+"validate"
+	self assert: (Rowan image projectRepositoryNamed: projectSpec_1 specName ifAbsent: [  ]) isNil.
+
 "2. read project from disk into a project definition"
 	projectDefinition_2 := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: gitRootPath / projectName.
 
@@ -110,24 +115,28 @@ RwRowanSample7Test >> testCreateNewProjectFromUrl [
 "3. create a new git project on disk using component API"
 
 	projectName_3 := projectName, '_3'.
+
+	(Rowan image projectRepositoryNamed: projectName_3 ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
 	projectReferenceDefinition_3 := RwProjectReferenceDefinition
 		projectName: projectName_3
 			configurationNames: #( 'Main' ) 
 			groupNames: #('core')  
-			projectUrl: '' 
 			useGit: true
-			comment: '' 
-			projectHome: FileLocator rowanProjectsHome 
+			projectUrl: '' 
 			committish: 'candidateV1.0' 
-			committishType: 'branch' 
-			configsPath: 'rowan/configs' 
-			packagesPath: 'rowan/src'  
-			projectsPath: 'rowan/projects'  
-			specsPath: 'rowan/specs'.
+			committishType: 'branch'
+			comment: 'sample project created from scratch -- copied programatically from RowanSample7'.
+	projectReferenceDefinition_3 projectHome: gitRootPath.
 
-	(gitRootPath / projectName_3) ensureDeleteAll.
+	projectReferenceDefinition_3 repositoryRoot ensureDeleteAll.
 
-		projectReferenceDefinition_3 create.
+	projectReferenceDefinition_3 create.
+
+"validate"
+	self assert: projectReferenceDefinition_3 repositoryRoot exists.
+	self assert: (Rowan image projectRepositoryNamed: projectName_3 ifAbsent: [  ]) notNil.
 self halt.
 ]
 
@@ -172,6 +181,8 @@ RwRowanSample7Test >> testCreateProjectReferenceFromScratch [
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.

@@ -318,3 +318,11 @@ RwPrjCreateTool >> createProjectFromSpecUrl: fileUrlOrString [
 	^ self createProjectFor: projectDefinition
 
 ]
+
+{ #category : 'project repository creation' }
+RwPrjCreateTool >> createProjectRepository: repositoryDefinition [
+
+	"Create create new repository on `disk`, based on the given repository definition."
+
+	self error: 'not yet implemented'
+]
