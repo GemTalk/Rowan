@@ -205,8 +205,41 @@ RwProjectReferenceDefinition >> create [
 	"write the project structure to disk, if it doesn't already exist"
 
 	Rowan projectTools create
-		createProjectRepository: self repositoryDefinition.
+		createProjectRepository: self.
 	self error: 'not yet implemented'.
+]
+
+{ #category : 'exporting' }
+RwProjectReferenceDefinition >> exportConfiguration [
+
+	| root |
+	root := self configsRoot.
+self error: 'not yet implemented'
+]
+
+{ #category : 'exporting' }
+RwProjectReferenceDefinition >> exportPackages [
+
+	| root |
+	root := self packagesRoot.
+	(root /  'properties', 'st') 
+		writeStreamDo: [ :fileStream | fileStream nextPutAll: '{ #format : ' , self format printString , '}' ].
+]
+
+{ #category : 'exporting' }
+RwProjectReferenceDefinition >> exportProjects [
+
+	| root |
+	root := self projectsRoot.
+self error: 'not yet implemented'
+]
+
+{ #category : 'exporting' }
+RwProjectReferenceDefinition >> exportSpecification [
+
+	| root |
+	root := self specsRoot.
+self error: 'not yet implemented'
 ]
 
 { #category : 'accessing' }
@@ -312,6 +345,12 @@ RwProjectReferenceDefinition >> projectsPath [
 RwProjectReferenceDefinition >> projectsPath: aString [
 
 	^ self properties at: 'projectsPath' put: aString
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> projectsRoot [
+
+	^self repositoryRoot / self projectsPath
 ]
 
 { #category : 'accessing' }

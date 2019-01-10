@@ -320,9 +320,30 @@ RwPrjCreateTool >> createProjectFromSpecUrl: fileUrlOrString [
 ]
 
 { #category : 'project repository creation' }
-RwPrjCreateTool >> createProjectRepository: repositoryDefinition [
+RwPrjCreateTool >> createProjectRepository: projectReferenceDefinition [
 
 	"Create create new repository on `disk`, based on the given repository definition."
 
-	self error: 'not yet implemented'
+	| repositoryDefinition |
+	repositoryDefinition := projectReferenceDefinition repositoryDefinition.
+	self _createProjectRepositoryDirectory: 
+		repositoryDefinition repositoryRoot 
+		useGit: projectReferenceDefinition useGit 
+		abort: [
+			"abort occurs because directory exists and user has not confirmed that the directory should be deleted"
+			"probably should try to cofirm that the directory appears to be complete relative to this project"
+			self error: 'not yet implemented'.
+			^ projectReferenceDefinition ].
+
+	{projectReferenceDefinition configsRoot. projectReferenceDefinition packagesRoot. projectReferenceDefinition specsRoot. projectReferenceDefinition projectsRoot }
+		do: [ :path | path ensureCreateDirectory ].
+
+	projectReferenceDefinition register.
+
+	projectReferenceDefinition exportPackages.
+	projectReferenceDefinition exportSpecification.
+	projectReferenceDefinition exportConfiguration.
+	projectReferenceDefinition exportProjects.
+
+	^ projectReferenceDefinition
 ]
