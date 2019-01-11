@@ -206,45 +206,6 @@ RwProjectReferenceDefinition >> create [
 
 	Rowan projectTools create
 		createProjectRepository: self.
-	self error: 'not yet implemented'.
-]
-
-{ #category : 'exporting' }
-RwProjectReferenceDefinition >> exportConfiguration [
-
-	self configurationNames do: [:configName|
-		| config |
-		config := RwComponentLoadConfiguration new
-			name: configName;
-			projectName: self projectName;
-			yourself.
-		self groupNames
-			do: [:groupName | config addDefinedGroupName: groupName ].
-		self projectNames
-			do: [:projectName | config addProjectName: projectName ].
-		self groupNames
-			do: [:groupName |
-				config 
-					conditionalPackagesAtConditions: { 'common' } 
-					andGroup: groupName
-					addPackageNames: { } ].
-		config exportToUrl: 'file:',  self configsRoot pathString, '/' ].
-]
-
-{ #category : 'exporting' }
-RwProjectReferenceDefinition >> exportPackages [
-
-	| root |
-	root := self packagesRoot.
-	(root /  'properties', 'st') 
-		writeStreamDo: [ :fileStream | fileStream nextPutAll: '{ #format : ' , self packageFormat printString , '}' ].
-]
-
-{ #category : 'exporting' }
-RwProjectReferenceDefinition >> exportProjects [
-
-	self projectNames do: [:projectName |
-		self error: 'not yet implemented' ].
 ]
 
 { #category : 'exporting' }

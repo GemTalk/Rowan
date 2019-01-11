@@ -71,6 +71,56 @@ RwRowanSample7Test >> tearDown [
 ]
 
 { #category : 'tests' }
+RwRowanSample7Test >> testCreateComponentProject [
+
+	"Excercise RwComponentProjectDefinition instance creation protocol ... 
+		create the project on disk -- this is the full deal"
+
+	| projectUrl projectName configurationNames groupNames comment projectHome
+		rowanSpec cpd |
+
+	projectName := 'RowanSample7_component'.
+	configurationNames := #( 'Main' ).
+	groupNames := #( 'core' ).
+	projectUrl := self _gitHubProjectUrl.
+	comment := 'test project reference'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+"create definition"
+	cpd := RwComponentProjectDefinition
+		projectName: projectName 
+			configurationNames: configurationNames 
+			groupNames: groupNames 
+			useGit: true 
+			projectUrl: projectUrl 
+			comment: comment.
+	cpd projectHome: projectHome.
+
+	cpd repositoryRoot ensureDeleteAll.
+
+"create component project on disk"
+	cpd create.
+
+"validate"
+	self assert: cpd repositoryRoot exists.
+	self assert: cpd configsRoot exists.
+	self assert: cpd specsRoot exists.
+	self assert: cpd packagesRoot exists.
+	self assert: cpd projectsRoot exists.
+
+	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: [  ]) notNil.
+	self assert: (Rowan image projectRepositoryNamed: projectName ifAbsent: [  ]) notNil.
+self halt.
+]
+
+{ #category : 'tests' }
 RwRowanSample7Test >> testCreateNewProjectFromUrl [
 
 	"
@@ -137,7 +187,8 @@ RwRowanSample7Test >> testCreateNewProjectFromUrl [
 "validate"
 	self assert: projectReferenceDefinition_3 repositoryRoot exists.
 	self assert: (Rowan image projectRepositoryNamed: projectName_3 ifAbsent: [  ]) notNil.
-self halt.
+"4. write the project definition to the new project"
+self error: 'not yet implemented'. "need to write project definition"
 ]
 
 { #category : 'tests' }
@@ -217,14 +268,20 @@ RwRowanSample7Test >> testCreateProjectReference [
 	self assert: prd specsRoot exists.
 	self assert: prd packagesRoot exists.
 	self assert: prd projectsRoot exists.
-	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: [  ]) notNil.
+
+	self deny: prd configsRoot hasChildren.
+	self deny: prd packagesRoot hasChildren.
+	self deny: prd projectsRoot hasChildren.
+	self assert: prd specsRoot hasChildren.
+
+	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: [  ]) isNil.
 	self assert: (Rowan image projectRepositoryNamed: projectName ifAbsent: [  ]) notNil.
 ]
 
 { #category : 'tests' }
 RwRowanSample7Test >> testCreateProjectReferenceFromScratch [
 
-	| rowanSpec gitRootPath projectName projectReferenceDefinition x y projectSpec |
+	| rowanSpec gitRootPath projectName projectReferenceDefinition projectSpec |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -260,7 +317,7 @@ RwRowanSample7Test >> testCreateProjectReferenceFromScratch [
 	self assert: projectReferenceDefinition committishType = 'branch'.
 	self assert: projectReferenceDefinition projectUrl = self _gitHubProjectUrl.
 
-	self assert: (x := projectReferenceDefinition projectHome pathString) = (y := gitRootPath asFileReference pathString).
+	self assert: projectReferenceDefinition projectHome pathString = gitRootPath asFileReference pathString.
 ]
 
 { #category : 'tests' }

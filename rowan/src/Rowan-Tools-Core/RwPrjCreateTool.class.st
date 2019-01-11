@@ -28,6 +28,22 @@ RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPathIn useGit: useGit 
 					gitTool gitinitIn: repoPath pathString with: '' ] ]
 ]
 
+{ #category : 'component project defintion creation' }
+RwPrjCreateTool >> createComponentProject: componentProjectDefinition [
+
+	"Create create new repository on `disk`, based on the given repository definition."
+
+	self createProjectRepository: componentProjectDefinition projectRef.
+
+	componentProjectDefinition exportProjects.
+	componentProjectDefinition exportConfiguration.
+	componentProjectDefinition exportPackages.
+
+	componentProjectDefinition register.
+
+	^ componentProjectDefinition
+]
+
 { #category : 'loaded project creation' }
 RwPrjCreateTool >> createDiskBasedProject: projectName packageNames: packageNames format: format root: rootPath [
 
@@ -338,14 +354,6 @@ RwPrjCreateTool >> createProjectRepository: projectReferenceDefinition [
 	{projectReferenceDefinition configsRoot. projectReferenceDefinition packagesRoot. projectReferenceDefinition specsRoot. projectReferenceDefinition projectsRoot }
 		do: [ :path | path ensureCreateDirectory ].
 
-	projectReferenceDefinition register.
-
-	projectReferenceDefinition exportPackages.
 	projectReferenceDefinition exportSpecification.
-	projectReferenceDefinition exportConfiguration.
-	projectReferenceDefinition exportProjects.
-	projectReferenceDefinition exportProjects.
-	projectReferenceDefinition exportProjects.
-
 	^ projectReferenceDefinition
 ]
