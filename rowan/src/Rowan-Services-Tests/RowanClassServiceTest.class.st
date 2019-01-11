@@ -38,14 +38,11 @@ RowanClassServiceTest >> tearDown [
 { #category : 'tests' }
 RowanClassServiceTest >> test_addedProjectNotOnDisk [
 
-	| proj pkg cls projectService |
-	proj := RwProjectDefinition newForGitBasedProjectNamed: 'Azer'.
-	proj repositoryRootPath: '$ROWAN_PROJECTS_HOME/Azer'.
-	Rowan projectTools create createProjectFor: proj.
-	pkg := RwPackageDefinition newNamed: 'Baijan'.
-	proj addPackage: pkg.
+	| projectDefinition packageDefinition classDefinition projectService |
+	projectDefinition := self createNonDiskTestProjectNamed: 'Azer' packageName: 'Baijan'. 
+	[packageDefinition := projectDefinition packageNamed: 'Baijan'.
 
-	cls := RwClassDefinition
+	classDefinition := RwClassDefinition
 		newForClassNamed: #Baijan
 		super: 'Object'
 		instvars: #(name address orderHistory)
@@ -55,13 +52,13 @@ RowanClassServiceTest >> test_addedProjectNotOnDisk [
 		comment: 'a CustomerRecord holds the sales record for a customer.'
 		pools: #()
 		type: 'normal'.
-	pkg addClassDefinition: cls.
-	Rowan projectTools load loadProjectDefinition: proj.
+	packageDefinition addClassDefinition: classDefinition.
+	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
 	(RowanClassService forClassNamed: 'Baijan') update. "<-- walkback occurrred here"
 	projectService := RowanProjectService newNamed: 'Azer'. 
-	[self deny: projectService existsOnDisk.
-	self assert: projectService isSkew]
+	self deny: projectService existsOnDisk.
+	self deny: projectService isSkew]
 		ensure: [RowanBrowserService new unloadProjectsNamed: (Array with: 'Azer')]
 ]
 

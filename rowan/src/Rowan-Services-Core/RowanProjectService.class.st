@@ -198,6 +198,7 @@ RowanProjectService >> isDirty: aBoolean [
 RowanProjectService >> isSkew [
 	| repositorySha |
 	name isNil ifTrue:[^false].
+	self existsOnDisk ifFalse:[^false]. 
 	repositorySha := [self repositorySha] on: Error do:[:ex | repositorySha := 'not on disk'].
 	^self sha ~= repositorySha
 ]

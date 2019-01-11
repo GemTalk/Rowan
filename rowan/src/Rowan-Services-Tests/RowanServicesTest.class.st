@@ -47,6 +47,21 @@ RowanServicesTest >> createJadeiteTestProject [
 ]
 
 { #category : 'support' }
+RowanServicesTest >> createNonDiskTestProjectNamed: projectName packageName: packageName [
+
+	| projectDefinition projectSetDefinition  |
+	projectDefinition := RwProjectDefinition newForGitBasedProjectNamed: projectName.
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		yourself.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+	^projectDefinition
+]
+
+{ #category : 'support' }
 RowanServicesTest >> createProjectDefinitionNamed: projectName [
 
 	| projectDefinition |
