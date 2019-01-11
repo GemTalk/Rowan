@@ -212,9 +212,23 @@ RwProjectReferenceDefinition >> create [
 { #category : 'exporting' }
 RwProjectReferenceDefinition >> exportConfiguration [
 
-	| root |
-	root := self configsRoot.
-self error: 'not yet implemented'
+	self configurationNames do: [:configName|
+		| config |
+		config := RwComponentLoadConfiguration new
+			name: configName;
+			projectName: self projectName;
+			yourself.
+		self groupNames
+			do: [:groupName | config addDefinedGroupName: groupName ].
+		self projectNames
+			do: [:projectName | config addProjectName: projectName ].
+		self groupNames
+			do: [:groupName |
+				config 
+					conditionalPackagesAtConditions: { 'common' } 
+					andGroup: groupName
+					addPackageNames: { } ].
+		config exportToUrl: 'file:',  self configsRoot pathString, '/' ].
 ]
 
 { #category : 'exporting' }
@@ -229,16 +243,14 @@ RwProjectReferenceDefinition >> exportPackages [
 { #category : 'exporting' }
 RwProjectReferenceDefinition >> exportProjects [
 
-	| root |
-	root := self projectsRoot.
-self error: 'not yet implemented'
+	self projectNames do: [:projectName |
+		self error: 'not yet implemented' ].
 ]
 
 { #category : 'exporting' }
 RwProjectReferenceDefinition >> exportSpecification [
 
-	| root spec repoSpec |
-	root := self specsRoot.
+	| spec repoSpec |
 	self useGit
 		ifTrue: [
 			repoSpec := RwGitRepositorySpecification new
@@ -364,6 +376,18 @@ RwProjectReferenceDefinition >> projectName [
 RwProjectReferenceDefinition >> projectName: aString [
 
 	^ self properties at: 'projectName' put: aString
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> projectNames [
+
+	^ self properties at: 'projectNames' ifAbsent: [ #() ]
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> projectNames: anArray [
+
+	^ self properties at: 'projectNames' put: anArray
 ]
 
 { #category : 'accessing' }
