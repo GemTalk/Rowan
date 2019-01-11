@@ -101,8 +101,14 @@ RwRowanSample7Test >> testCreateComponentProject [
 			useGit: true 
 			projectUrl: projectUrl 
 			comment: comment.
-	cpd projectHome: projectHome.
+	cpd
+		addPackageNamed: projectName, '-Core' 
+			toComponentNamed: 'Main' 
+			withConditions: #( 'common' ) 
+			andGroup: 'core'.
 
+"prepare to export component project definition"
+	cpd projectHome: projectHome.
 	cpd repositoryRoot ensureDeleteAll.
 
 "create component project on disk"
@@ -111,8 +117,11 @@ RwRowanSample7Test >> testCreateComponentProject [
 "validate"
 	self assert: cpd repositoryRoot exists.
 	self assert: cpd configsRoot exists.
+	self assert: (cpd configsRoot / (configurationNames at: 1) , 'ston') exists.
 	self assert: cpd specsRoot exists.
+	self assert: (cpd specsRoot / projectName , 'ston') exists.
 	self assert: cpd packagesRoot exists.
+	self assert: (cpd packagesRoot /  'properties' , 'st') exists.
 	self assert: cpd projectsRoot exists.
 
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: [  ]) notNil.

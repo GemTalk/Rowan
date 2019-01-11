@@ -78,6 +78,28 @@ RwComponentProjectDefinition class >> withProperties: properties packageDefiniti
 ]
 
 { #category : 'accessing' }
+RwComponentProjectDefinition >> addPackageNamed: packageName [
+
+	self
+		addPackageNamed: packageName 
+			toComponentNamed: self defaultComponentName 
+			withConditions: #( 'common' ) 
+			andGroup: self defaultGroupName
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroup: groupName [
+
+	super addPackageNamed: packageName.
+	self components at: componentName ifAbsentPut: [
+		(RwComponentLoadConfiguration newNamed:componentName for: self name)
+			conditionalPackagesAtConditions: conditionArray
+				andGroup: groupName
+				addPackageNames: { packageName };
+			yourself ]
+]
+
+{ #category : 'accessing' }
 RwComponentProjectDefinition >> components [
 
 	^ components
@@ -114,10 +136,22 @@ RwComponentProjectDefinition >> create [
 		createComponentProject: self.
 ]
 
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> defaultComponentName [
+
+	^ self projectRef defaultComponentName
+]
+
 { #category : 'properties' }
 RwComponentProjectDefinition >> defaultConfigurationNames [
 
 	^ self propertyAt: 'defaultConfigurationNames' ifAbsent: [ self projectRef configurationNames ]
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> defaultGroupName [
+
+	^ self projectRef defaultGroupName
 ]
 
 { #category : 'properties' }

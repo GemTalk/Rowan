@@ -191,7 +191,7 @@ RwProjectReferenceDefinition >> configsRoot [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> configurationNames [
 
-	^ self properties at: 'configurationNames' ifAbsent: [ #( 'Default' ) ]
+	^ self properties at: 'configurationNames' ifAbsent: [ { self defaultComponentName } ]
 ]
 
 { #category : 'accessing' }
@@ -206,6 +206,18 @@ RwProjectReferenceDefinition >> create [
 
 	Rowan projectTools create
 		createProjectRepository: self.
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> defaultComponentName [
+
+	^ 'Core'
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> defaultGroupName [
+
+	^ 'core'
 ]
 
 { #category : 'exporting' }
