@@ -116,8 +116,7 @@ RwRowanSample7Test >> testCreateComponentProject [
 	self assert: cpd projectsRoot exists.
 
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: [  ]) notNil.
-	self assert: (Rowan image projectRepositoryNamed: projectName ifAbsent: [  ]) notNil.
-self halt.
+	self assert: (Rowan image projectRepositoryNamed: projectName ifAbsent: [  ]) notNil
 ]
 
 { #category : 'tests' }

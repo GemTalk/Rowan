@@ -36,7 +36,7 @@ RwPrjCreateTool >> createComponentProject: componentProjectDefinition [
 	self createProjectRepository: componentProjectDefinition projectRef.
 
 	componentProjectDefinition exportProjects.
-	componentProjectDefinition exportConfiguration.
+	componentProjectDefinition exportComponents.
 	componentProjectDefinition exportPackages.
 
 	componentProjectDefinition register.

@@ -127,25 +127,10 @@ RwComponentProjectDefinition >> defaultGroupNames [
 ]
 
 { #category : 'exporting' }
-RwComponentProjectDefinition >> exportConfiguration [
+RwComponentProjectDefinition >> exportComponents [
 
-	self configurationNames do: [:configName|
-		| config |
-		config := RwComponentLoadConfiguration new
-			name: configName;
-			projectName: self projectName;
-			yourself.
-		self groupNames
-			do: [:groupName | config addDefinedGroupName: groupName ].
-		self projectNames
-			do: [:projectName | config addProjectName: projectName ].
-		self groupNames
-			do: [:groupName |
-				config 
-					conditionalPackagesAtConditions: { 'common' } 
-					andGroup: groupName
-					addPackageNames: { } ].
-		config exportToUrl: 'file:',  self configsRoot pathString, '/' ].
+	self components values do: [:component|
+		component exportToUrl: 'file:',  self configsRoot pathString, '/' ].
 ]
 
 { #category : 'exporting' }
@@ -154,7 +139,17 @@ RwComponentProjectDefinition >> exportPackages [
 	| root |
 	root := self packagesRoot.
 	(root /  'properties', 'st') 
-		writeStreamDo: [ :fileStream | fileStream nextPutAll: '{ #format : ' , self packageFormat printString , '}' ].
+		writeStreamDo: [ :fileStream | 
+			fileStream nextPutAll: '{ '; 
+				lf;
+				tab;
+				nextPutAll: '#format : ' , self packageFormat printString, ',' ;
+				lf;
+				tab;
+				nextPutAll: '#convention : ', self packageConvention printString;
+				lf;
+				nextPutAll: '}';
+				lf ].
 ]
 
 { #category : 'exporting' }
@@ -174,6 +169,30 @@ RwComponentProjectDefinition >> loadedConfigurationNames [
 RwComponentProjectDefinition >> loadedGroupNames [
 
 	^ self propertyAt: 'loadedGroupNames' ifAbsent: [ ]
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> packageConvention [
+
+	^ self projectRef packageConvention
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> packageConvention: aString [
+
+	self projectRef packageConvention: aString
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> packageFormat [
+
+	^ self projectRef packageFormat
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> packageFormat: aString [
+
+	self projectRef packageFormat: aString
 ]
 
 { #category : 'properties' }
@@ -204,6 +223,18 @@ RwComponentProjectDefinition >> projectHome [
 RwComponentProjectDefinition >> projectHome: aProjectHomeReferenceOrString [
 
 	^ self projectRef projectHome: aProjectHomeReferenceOrString
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> projectNames [
+
+	^ self projectRef projectNames
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> projectNames: anArray [
+
+	self projectRef projectNames: anArray
 ]
 
 { #category : 'accessing' }
