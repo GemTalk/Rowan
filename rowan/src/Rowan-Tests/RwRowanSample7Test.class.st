@@ -8,6 +8,44 @@ Class {
 }
 
 { #category : 'private' }
+RwRowanSample7Test >> _expected_rowanSample7_component_configuration [
+
+^ 'RwComponentLoadConfiguration {
+	#name : ''Main'',
+	#comment : '''',
+	#projectName : ''RowanSample7_component'',
+	#version : ''0.1.0'',
+	#conditionalPackages : {
+		[
+			''common''
+		] : {
+			''core'' : {
+				#packageNames : [
+					''RowanSample7_component-Core'',
+					''RowanSample7_component-Fabulous''
+				]
+			},
+			''tests'' : {
+				#packageNames : [
+					''RowanSample7_component-Tests_A'',
+					''RowanSample7_component-Tests_B''
+				]
+			}
+		},
+		[
+			''gemstone''
+		] : {
+			''core'' : {
+				#packageNames : [
+					''RowanSample7_componentGemStone-Core''
+				]
+			}
+		}
+	}
+}'
+]
+
+{ #category : 'private' }
 RwRowanSample7Test >> _gitHubProjectUrl [
 
 	^ 'https://github.com/dalehenrich/RowanSample7'
@@ -77,11 +115,11 @@ RwRowanSample7Test >> testCreateComponentProject [
 		create the project on disk -- this is the full deal"
 
 	| projectUrl projectName configurationNames groupNames comment projectHome
-		rowanSpec cpd |
+		rowanSpec cpd x y |
 
 	projectName := 'RowanSample7_component'.
 	configurationNames := #( 'Main' ).
-	groupNames := #( 'core' ).
+	groupNames := #( 'core'  'tests').
 	projectUrl := self _gitHubProjectUrl.
 	comment := 'test project reference'.
 
@@ -105,7 +143,24 @@ RwRowanSample7Test >> testCreateComponentProject [
 		addPackageNamed: projectName, '-Core' 
 			toComponentNamed: 'Main' 
 			withConditions: #( 'common' ) 
-			andGroup: 'core'.
+			andGroup: 'core';
+		addPackageNamed: projectName, '-Fabulous' 
+			toComponentNamed: 'Main' 
+			withConditions: #( 'common' ) 
+			andGroup: 'core';
+		addPackageNamed: projectName, 'GemStone-Core' 
+			toComponentNamed: 'Main' 
+			withConditions: #( 'gemstone' ) 
+			andGroup: 'core';
+		addPackageNamed: projectName, '-Tests_B' 
+			toComponentNamed: 'Main' 
+			withConditions: #( 'common' ) 
+			andGroup: 'tests';
+		addPackageNamed: projectName, '-Tests_A' 
+			toComponentNamed: 'Main' 
+			withConditions: #( 'common' ) 
+			andGroup: 'tests';
+		yourself.
 
 "prepare to export component project definition"
 	cpd projectHome: projectHome.
@@ -116,8 +171,11 @@ RwRowanSample7Test >> testCreateComponentProject [
 
 "validate"
 	self assert: cpd repositoryRoot exists.
+
 	self assert: cpd configsRoot exists.
 	self assert: (cpd configsRoot / (configurationNames at: 1) , 'ston') exists.
+	self assert: (x := (cpd configsRoot / (configurationNames at: 1) , 'ston') readStream contents) = ( y:= self _expected_rowanSample7_component_configuration).
+
 	self assert: cpd specsRoot exists.
 	self assert: (cpd specsRoot / projectName , 'ston') exists.
 	self assert: cpd packagesRoot exists.

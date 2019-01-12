@@ -90,13 +90,15 @@ RwComponentProjectDefinition >> addPackageNamed: packageName [
 { #category : 'accessing' }
 RwComponentProjectDefinition >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroup: groupName [
 
+	| component |
 	super addPackageNamed: packageName.
-	self components at: componentName ifAbsentPut: [
-		(RwComponentLoadConfiguration newNamed:componentName for: self name)
-			conditionalPackagesAtConditions: conditionArray
-				andGroup: groupName
-				addPackageNames: { packageName };
-			yourself ]
+	component := self 
+		components at: componentName 
+		ifAbsentPut: [ RwComponentLoadConfiguration newNamed:componentName for: self name ].
+	component
+		conditionalPackagesAtConditions: conditionArray
+			andGroup: groupName
+			addPackageNames: { packageName }
 ]
 
 { #category : 'accessing' }
