@@ -38,9 +38,21 @@ RwAbstractClassDefinition >> _modificationClass [
 ]
 
 { #category : 'accessing' }
+RwAbstractClassDefinition >> addClassMethod: methodSource protocol: protocol [
+
+	^self addClassMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
+]
+
+{ #category : 'accessing' }
 RwAbstractClassDefinition >> addClassMethodDefinition: aMethodDefinition [
 
 	self addDefinition: aMethodDefinition to: classMethodDefinitions
+]
+
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> addInstanceMethod: methodSource protocol: protocol [
+
+	^self addInstanceMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
 ]
 
 { #category : 'accessing' }

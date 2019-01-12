@@ -10,7 +10,7 @@ Class {
 { #category : 'private' }
 RwRowanSample7Test >> _expected_rowanSample7_component_configuration [
 
-^ 'RwComponentLoadConfiguration {
+	^ 'RwComponentLoadConfiguration {
 	#name : ''Main'',
 	#comment : '''',
 	#projectName : ''RowanSample7_component'',
@@ -22,13 +22,12 @@ RwRowanSample7Test >> _expected_rowanSample7_component_configuration [
 			''core'' : {
 				#packageNames : [
 					''RowanSample7_component-Core'',
-					''RowanSample7_component-Fabulous''
+					''RowanSample7_component-Extension''
 				]
 			},
 			''tests'' : {
 				#packageNames : [
-					''RowanSample7_component-Tests_A'',
-					''RowanSample7_component-Tests_B''
+					''RowanSample7_component-Tests_Main''
 				]
 			}
 		},
@@ -37,12 +36,54 @@ RwRowanSample7Test >> _expected_rowanSample7_component_configuration [
 		] : {
 			''core'' : {
 				#packageNames : [
-					''RowanSample7_componentGemStone-Core''
+					''RowanSample7_component-GemStone-Core''
+				]
+			},
+			''tests'' : {
+				#packageNames : [
+					''RowanSample7_component-Tests-GemStone_Main''
 				]
 			}
 		}
 	}
 }'
+]
+
+{ #category : 'private' }
+RwRowanSample7Test >> _expected_rowanSample7_component_specification [
+
+^ 'RwComponentSpecification {
+	#specName : ''RowanSample7_component'',
+	#version : ''0.3.0'',
+	#projectUrl : ''https://github.com/dalehenrich/RowanSample7'',
+	#configsPath : ''rowan/configs'',
+	#specsPath : ''rowan/specs'',
+	#repoSpec : RwGitRepositorySpecification {
+		#committish : ''master'',
+		#committishType : ''branch'',
+		#remoteUrl : ''git@github.com:dalehenrich/RowanSample7.git ''
+	},
+	#repoPath : ''rowan/src'',
+	#comment : ''test project reference'',
+	#defaultConfigurationNames : [
+		''Main''
+	],
+	#defaultGroupNames : [
+		''core'',
+		''tests''
+	],
+	#projectsPath : ''rowan/projects''
+}'
+]
+
+{ #category : 'private' }
+RwRowanSample7Test >> _expected_rowanSample7_project_st [
+
+^ '{ 
+	#format : ''tonel'',
+	#convention : ''RowanHybrid''
+}
+'
 ]
 
 { #category : 'private' }
@@ -115,7 +156,7 @@ RwRowanSample7Test >> testCreateComponentProject [
 		create the project on disk -- this is the full deal"
 
 	| projectUrl projectName configurationNames groupNames comment projectHome
-		rowanSpec cpd x y |
+		rowanSpec cpd x y packageName className testClassName|
 
 	projectName := 'RowanSample7_component'.
 	configurationNames := #( 'Main' ).
@@ -131,7 +172,7 @@ RwRowanSample7Test >> testCreateComponentProject [
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
 
-"create definition"
+"create project definition"
 	cpd := RwComponentProjectDefinition
 		projectName: projectName 
 			configurationNames: configurationNames 
@@ -139,28 +180,55 @@ RwRowanSample7Test >> testCreateComponentProject [
 			useGit: true 
 			projectUrl: projectUrl 
 			comment: comment.
+
+"create package definitions"
 	cpd
+		addPackageNamed: projectName, '-Extension' 
+			toComponentNamed: 'Main' 
+			withConditions: #( 'common' ) 
+			andGroup: 'core';
 		addPackageNamed: projectName, '-Core' 
 			toComponentNamed: 'Main' 
 			withConditions: #( 'common' ) 
 			andGroup: 'core';
-		addPackageNamed: projectName, '-Fabulous' 
-			toComponentNamed: 'Main' 
-			withConditions: #( 'common' ) 
-			andGroup: 'core';
-		addPackageNamed: projectName, 'GemStone-Core' 
+		addPackageNamed: projectName, '-GemStone-Core' 
 			toComponentNamed: 'Main' 
 			withConditions: #( 'gemstone' ) 
 			andGroup: 'core';
-		addPackageNamed: projectName, '-Tests_B' 
+		addPackageNamed: projectName, '-Tests_Main' 
 			toComponentNamed: 'Main' 
 			withConditions: #( 'common' ) 
 			andGroup: 'tests';
-		addPackageNamed: projectName, '-Tests_A' 
+		addPackageNamed: projectName, '-Tests-GemStone_Main' 
 			toComponentNamed: 'Main' 
-			withConditions: #( 'common' ) 
+			withConditions: #( 'gemstone' ) 
 			andGroup: 'tests';
 		yourself.
+
+"create class and method definitions"
+	packageName := projectName, '-Core'.
+	className := projectName, 'Core'.
+	((cpd packageNamed: packageName)
+		addClassNamed: className
+			super: 'Object' 
+			category: packageName)
+		addInstanceMethod: 'foo ^''self foo_platform''' protocol: '*', packageName asLowercase.
+
+	packageName := projectName, '-Extension'.
+	((cpd packageNamed: packageName) addClassExtensionNamed: className)
+		addClassMethod: 'foo ^''foo''' protocol: '*', packageName asLowercase.
+
+	packageName := projectName, '-GemStone-Core'.
+	((cpd packageNamed: packageName) addClassExtensionNamed: className)
+		addInstanceMethod: 'foo_platform ^''foo_gemstone''' protocol: '*', packageName asLowercase.
+
+	packageName := projectName, '-Tests_Main'.
+	testClassName := projectName, 'Tests_Main'.
+	((cpd packageNamed: packageName)
+		addClassNamed: testClassName
+			super: 'TestCase' 
+			category: packageName)
+		addInstanceMethod: 'test1 self assert: ', className, ' new foo = ''foo_gemstone''' protocol: '*', packageName asLowercase.
 
 "prepare to export component project definition"
 	cpd projectHome: projectHome.
@@ -178,8 +246,12 @@ RwRowanSample7Test >> testCreateComponentProject [
 
 	self assert: cpd specsRoot exists.
 	self assert: (cpd specsRoot / projectName , 'ston') exists.
+	self assert: (x := (cpd specsRoot / projectName , 'ston') readStream contents) = ( y:= self _expected_rowanSample7_component_specification).
+
 	self assert: cpd packagesRoot exists.
 	self assert: (cpd packagesRoot /  'properties' , 'st') exists.
+	self assert: (x := (cpd packagesRoot /  'properties' , 'st') readStream contents) = ( y:= self _expected_rowanSample7_project_st).
+
 	self assert: cpd projectsRoot exists.
 
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: [  ]) notNil.

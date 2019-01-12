@@ -74,13 +74,13 @@ RwProjectDefinition >> addPackage: aPackageDefinition [
 	| key |
 	key := aPackageDefinition key.
 	(packages includesKey: key) ifTrue: [self error: 'Duplicate package'].
-	packages at: key put: aPackageDefinition
+	^ packages at: key put: aPackageDefinition
 ]
 
 { #category : 'accessing' }
 RwProjectDefinition >> addPackageNamed: packageName [
 
-	self addPackage: (RwPackageDefinition newNamed: packageName)
+	^ self addPackage: (RwPackageDefinition newNamed: packageName)
 ]
 
 { #category : 'accessing' }

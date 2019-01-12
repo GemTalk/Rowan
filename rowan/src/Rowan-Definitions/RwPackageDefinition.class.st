@@ -36,13 +36,42 @@ RwPackageDefinition class >> withProperties: properties classDefinitions: classD
 { #category : 'accessing' }
 RwPackageDefinition >> addClassDefinition: aClassDefinition [
 
-	self addDefinition: aClassDefinition to: classDefinitions
+	^ self addDefinition: aClassDefinition to: classDefinitions
 ]
 
 { #category : 'accessing' }
 RwPackageDefinition >> addClassExtensionDefinition: aClassExtensionDefinition [
 
-	self addDefinition: aClassExtensionDefinition to: classExtensions
+	^ self addDefinition: aClassExtensionDefinition to: classExtensions
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassExtensionNamed: className [
+
+	^ self addClassExtensionDefinition: (RwClassExtensionDefinition newForClassNamed: className)
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName category: categryName [
+
+	^ self addClassDefinition: (RwClassDefinition newForClassNamed: className super: superclassName  category: categryName)
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
+
+	^ self addClassDefinition: 
+		(RwClassDefinition 
+			newForClassNamed: className 
+				super: superclassName 
+				instvars: instvars 
+				classinstvars: 
+				classinstvars 
+				classvars: classvars 
+				category: category 
+				comment: comment 
+				pools: pools 
+				type: type)
 ]
 
 { #category : 'accessing' }

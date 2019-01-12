@@ -3077,7 +3077,8 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package [
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
 		removePackageNamed: packageName1;
-		addPackageNamed: packageName2.
+		addPackageNamed: packageName2;
+		yourself.
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 	projectSetDefinition addDefinition: projectDefinition2.

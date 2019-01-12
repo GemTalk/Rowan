@@ -3262,7 +3262,8 @@ RwMoveTest >> testProjectSet_rename_package [
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
 		removePackageNamed: packageName1;
-		addPackageNamed: packageName2.
+		addPackageNamed: packageName2;
+		yourself.
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -3353,7 +3354,8 @@ RwMoveTest >> testProjectSet_rename_package_add_change_remove_method [
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
 		removePackageNamed: packageName1;
-		addPackageNamed: packageName2.
+		addPackageNamed: packageName2;
+		yourself.
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
@@ -3467,7 +3469,8 @@ RwMoveTest >> testProjectSet_rename_package_and_symbolDict_add_change_remove_met
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
 		removePackageNamed: packageName1;
-		addPackageNamed: packageName2.
+		addPackageNamed: packageName2;
+		yourself.
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 

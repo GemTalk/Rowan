@@ -39,7 +39,7 @@ RwDefinition >> addDefinition: aDefinition to: aDictionary [
 	key := aDefinition key.
 	(aDictionary includesKey: key)
 		ifTrue: [self error: 'Duplicate definition.'].
-	aDictionary at: key put: aDefinition
+	^ aDictionary at: key put: aDefinition
 ]
 
 { #category : 'converting' }
