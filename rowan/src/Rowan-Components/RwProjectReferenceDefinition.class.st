@@ -96,6 +96,15 @@ RwProjectReferenceDefinition class >> projectName: projectName configurationName
 		yourself
 ]
 
+{ #category : 'instance creation' }
+RwProjectReferenceDefinition class >> projectName: projectName useGit: useGit [
+
+	^ self new
+		projectName: projectName;
+		useGit: useGit;
+		yourself
+]
+
 { #category : 'private' }
 RwProjectReferenceDefinition >> _createRepositoryFrom: repoDef [ 
 
@@ -311,7 +320,7 @@ RwProjectReferenceDefinition >> packageFormat [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> packageFormat: aString [
 
-	#( 'tonel' 'filetree' ) includes: aString
+	(#( 'tonel' 'filetree' ) includes: aString)
 		ifFalse: [ self error: 'Unknown package format ', aString printString, '. Should be one of: tonel, or filetree' ].
 	^ self properties at: 'packageFormat' put: aString
 ]

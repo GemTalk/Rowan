@@ -50,7 +50,7 @@ RwProjectReaderWriterTest >> _projectSetDefinitionForStructureWriters_A [
 	className3 := 'Issue361Class3'. 
 
 "create definitions"
-	projectDefinition := (RwProjectDefinition
+	projectDefinition := (RwComponentProjectDefinition
 		newForDiskBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
@@ -155,8 +155,9 @@ RwProjectReaderWriterTest >> _writeProjectSetDefinition: projectSetDefinition wr
 	repositoryRootPath := filesystem workingDirectory / projectName.
 	self _markForCleanup: (filesystem workingDirectory / projectName).
 
-	projectDefinition repositoryRootPath: repositoryRootPath.
-	Rowan projectTools create createProjectFor: projectDefinition format:repositoryFormat.
+	projectDefinition projectHome: repositoryRootPath.
+	projectDefinition packageFormat: repositoryFormat.
+	projectDefinition create.
 
 "write project set"
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new. "compare against empty project to write out entire project"

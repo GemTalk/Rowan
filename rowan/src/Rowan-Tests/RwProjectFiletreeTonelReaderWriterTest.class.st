@@ -30,7 +30,7 @@ RwProjectFiletreeTonelReaderWriterTest >> _projectSetDefinitionForStructureWrite
 	className3 := 'Issue361Class3'. 
 
 "create definitions"
-	projectDefinition := (RwProjectDefinition
+	projectDefinition := (RwComponentProjectDefinition
 		newForDiskBasedProjectNamed: projectName)
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;

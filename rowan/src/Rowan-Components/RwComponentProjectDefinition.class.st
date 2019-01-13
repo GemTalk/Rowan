@@ -8,6 +8,22 @@ Class {
 }
 
 { #category : 'instance creation' }
+RwComponentProjectDefinition class >> newForDiskBasedProjectNamed: projectName [
+
+	^ self newForProjectReference: (RwProjectReferenceDefinition
+		projectName: projectName 
+			useGit: false )
+]
+
+{ #category : 'instance creation' }
+RwComponentProjectDefinition class >> newForGitBasedProjectNamed: projectName [
+
+	^ self newForProjectReference: (RwProjectReferenceDefinition
+		projectName: projectName 
+			useGit: true )
+]
+
+{ #category : 'instance creation' }
 RwComponentProjectDefinition class >> newForProjectReference: aRwProjectReferenceDefintion [
 
 	^ self
