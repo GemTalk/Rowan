@@ -319,9 +319,8 @@ RwComponentProjectDefinition >> readProjectSet [
 { #category : 'temporary compat' }
 RwComponentProjectDefinition >> repoPath [
 
-self deprecated: 'temporary method ... RwProjectDefinition'.
-
-	^ self packagesPath
+	"use packagesPath"
+	^ self shouldNotImplement: #repoPath
 ]
 
 { #category : 'temporary compat' }
