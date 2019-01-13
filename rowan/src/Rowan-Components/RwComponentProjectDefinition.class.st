@@ -172,7 +172,7 @@ RwComponentProjectDefinition >> exportComponents [
 { #category : 'exporting' }
 RwComponentProjectDefinition >> exportPackages [
 
-	| root |
+	| root projectSetDefinition visitor projectSetModification writerVisitorClass |
 	root := self packagesRoot.
 	(root /  'properties', 'st') 
 		writeStreamDo: [ :fileStream | 
@@ -186,6 +186,19 @@ RwComponentProjectDefinition >> exportPackages [
 				lf;
 				nextPutAll: '}';
 				lf ].
+
+"write out packages"
+	writerVisitorClass := self packageFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	projectSetDefinition:= RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: self.
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new. "compare against empty project to write out entire project"
+	visitor := writerVisitorClass new
+		repositoryRootPath: self repositoryRoot;
+		yourself.
+
+	visitor visit: projectSetModification.
 ]
 
 { #category : 'exporting' }
@@ -303,14 +316,15 @@ RwComponentProjectDefinition >> readProjectSet [
 	^ Rowan projectTools read  readProjectSetForComponentProjectDefinition: self
 ]
 
-{ #category : 'properties' }
+{ #category : 'temporary compat' }
 RwComponentProjectDefinition >> repoPath [
 
-	"use packagesPath"
-	^ self shouldNotImplement: #repoPath
+self deprecated: 'temporary method ... RwProjectDefinition'.
+
+	^ self packagesPath
 ]
 
-{ #category : 'properties' }
+{ #category : 'temporary compat' }
 RwComponentProjectDefinition >> repoPath: astring [
 
 	"use packagesPath:"

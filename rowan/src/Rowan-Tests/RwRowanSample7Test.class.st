@@ -228,7 +228,11 @@ RwRowanSample7Test >> testCreateComponentProject [
 		addClassNamed: testClassName
 			super: 'TestCase' 
 			category: packageName)
-		addInstanceMethod: 'test1 self assert: ', className, ' new foo = ''foo_gemstone''' protocol: '*', packageName asLowercase.
+		addInstanceMethod: 'test1 self assert: ', className, ' new foo = self _platform_response' protocol: '*', packageName asLowercase.
+
+	packageName := projectName, '-Tests-GemStone_Main'.
+	((cpd packageNamed: packageName) addClassExtensionNamed:testClassName)
+		addInstanceMethod: '_platform_response ^ ''foo_gemstone''' protocol: '*', packageName asLowercase.
 
 "prepare to export component project definition"
 	cpd projectHome: projectHome.
@@ -251,6 +255,11 @@ RwRowanSample7Test >> testCreateComponentProject [
 	self assert: cpd packagesRoot exists.
 	self assert: (cpd packagesRoot /  'properties' , 'st') exists.
 	self assert: (x := (cpd packagesRoot /  'properties' , 'st') readStream contents) = ( y:= self _expected_rowanSample7_project_st).
+	{ projectName, '-GemStone-Core'. projectName, '-Core' . projectName, '-Tests-GemStone_Main'. 
+		projectName, '-Extension' . projectName, '-Tests_Main' . projectName, '-Tests-GemStone_Main'
+	}
+		do: [:pName | 
+			self assert: (cpd packagesRoot / pName, 'package') exists ].
 
 	self assert: cpd projectsRoot exists.
 
