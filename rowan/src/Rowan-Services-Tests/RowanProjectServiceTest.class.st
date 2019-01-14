@@ -70,6 +70,15 @@ RowanProjectServiceTest >> test_commandResultSessionTemp [
 ]
 
 { #category : 'tests' }
+RowanProjectServiceTest >> test_unloadNotLoadedProjectDoesNotWalkback [
+
+	"just make sure if a project we gracefully handle trying to remove an unloaded project"
+	self deny: (Rowan image loadedProjectNamed: 'BadProjectName' ifAbsent:[false]). 
+	RowanBrowserService new unloadProjectsNamed: #('BadProjectName').
+	self deny: (Rowan image loadedProjectNamed: 'BadProjectName' ifAbsent:[false]).
+]
+
+{ #category : 'tests' }
 RowanProjectServiceTest >> test_updateAddsCommandResult [
 	| projectService |
 	projectService := self projectServiceNamed: self servicesTestProjectName.
