@@ -15,23 +15,16 @@ RwProjectFiletreeTonelReaderWriterTest class >> isAbstract [
 { #category : 'private' }
 RwProjectFiletreeTonelReaderWriterTest >> _readProjectDefinition: projectDefinition [
 
-	| repoDir packageNames propertyDict format |
-	repoDir := filesystem referenceTo: projectDefinition repositoryUrl asRwUrl pathForDirectory.
-	propertyDict := self _repositoryPropertyDictFor: projectDefinition repositoryRootPath: repoDir.
+	| packagesDir packageNames propertyDict format |
+	packagesDir := projectDefinition packagesRoot.
+	propertyDict := self _repositoryPropertyDictFor: projectDefinition repositoryRootPath: packagesDir.
 	format := propertyDict at: 'format' ifAbsent: [ 'filetree' ].
 self error: 'switch readers at this point .. time to rename the Modification visitors or something so that the structure logic can be shared ...'.
-	packageNames := repoDir packageNames.
+	packageNames := '' packageNames.
 	^ self 
 		_readProjectDefinition: projectDefinition 
 		packageNames: packageNames
-		from: repoDir
-]
-
-{ #category : 'private' }
-RwProjectFiletreeTonelReaderWriterTest >> _readProjectSetDefinition: projectSetDefinition [
-
-	projectSetDefinition do: [:projectDefinition |
-		self _readProjectDefinition: projectDefinition ].
+		from: packagesDir
 ]
 
 { #category : 'private' }
@@ -44,9 +37,12 @@ RwProjectFiletreeTonelReaderWriterTest >> _repositoryFormat [
 RwProjectFiletreeTonelReaderWriterTest >> _repositoryPropertyDictFor: aProjectDefinition repositoryRootPath: repositoryRootPath [
 
 	| propertiesFile |
-	propertiesFile := repositoryRootPath / '.filetree'.
+	propertiesFile := repositoryRootPath / 'properties' , 'st'.
 	propertiesFile exists
-		ifFalse: [ propertiesFile := repositoryRootPath / '.cypress' ].
+		ifFalse: [
+			propertiesFile := repositoryRootPath / '.filetree'.
+			propertiesFile exists
+				ifFalse: [ propertiesFile := repositoryRootPath / '.cypress' ] ].
 	^ STON fromStream: (ZnBufferedReadStream on: propertiesFile  readStream)
 ]
 
@@ -79,7 +75,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
 
-	readProjectDefinition := self _readProjectSetDefinition: writtenProjectDefinition.
+	readProjectDefinition := self _readProjectDefinition: writtenProjectDefinition.
 
 "validation"
 	projectModification := readProjectDefinition compareAgainstBase: writtenProjectDefinition.
