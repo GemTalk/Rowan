@@ -81,7 +81,7 @@ RwModificationWriterVisitor >> _repositoryPropertyDictFor: aProjectModification 
 	| propertiesFile |
 	propertiesFile := self repositoryRootPath / aProjectModification after packagesPath / 'properties', 'st'.
 	propertiesFile exists
-		ifFalse: [ propertiesFile := self repositoryRootPath / aProjectModification after packagesPath, 'cypress' ].
+		ifFalse: [ propertiesFile := self repositoryRootPath / aProjectModification after packagesPath / '.cypress' ].
 	^ STON fromStream: (ZnBufferedReadStream on: propertiesFile  readStream)
 ]
 

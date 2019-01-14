@@ -149,6 +149,11 @@ RwProjectReaderWriterTest >> _writeProjectSetDefinition: projectSetDefinition wr
 	| projectName projectDefinition projectSetModification visitor repositoryRootPath |
 "project set"
 	projectName := projectSetDefinition projectNames at: 1.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
 	projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
 
 "set project up for using filesystem"
