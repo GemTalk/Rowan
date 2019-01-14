@@ -183,14 +183,17 @@ RwComponentProjectDefinition >> exportComponents [
 
 	self components values do: [:component|
 		component exportToUrl: 'file:',  self configsRoot pathString, '/' ].
+	self components isEmpty
+		ifTrue: [
+			"add README.md as placeholder to ensure that the directory is preserved by git"
+			(self configsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
 ]
 
 { #category : 'exporting' }
 RwComponentProjectDefinition >> exportPackages [
 
-	| root projectSetDefinition visitor projectSetModification writerVisitorClass |
-	root := self packagesRoot.
-	(root /  'properties', 'st') 
+	| projectSetDefinition visitor projectSetModification writerVisitorClass |
+	(self packagesRoot /  'properties', 'st') 
 		writeStreamDo: [ :fileStream | 
 			fileStream nextPutAll: '{ '; 
 				lf;
@@ -210,9 +213,7 @@ RwComponentProjectDefinition >> exportPackages [
 	projectSetDefinition:= RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: self.
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new. "compare against empty project to write out entire project"
-	visitor := writerVisitorClass new
-		repositoryRootPath: self repositoryRoot;
-		yourself.
+	visitor := writerVisitorClass new.
 
 	visitor visit: projectSetModification.
 ]
@@ -222,6 +223,10 @@ RwComponentProjectDefinition >> exportProjects [
 
 	self projectNames do: [:projectName |
 		self error: 'not yet implemented' ].
+	self projectNames isEmpty
+		ifTrue: [
+			"add README.md as placeholder to ensure that the directory is preserved by git"
+			(self projectsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
 ]
 
 { #category : 'properties' }

@@ -11,8 +11,7 @@ Class {
 		'currentProjectDefinition',
 		'currentPackageDefinition',
 		'currentClassDefinition',
-		'currentClassExtension',
-		'repositoryRootPath'
+		'currentClassExtension'
 	],
 	#category : 'Rowan-Core'
 }
@@ -79,9 +78,9 @@ RwModificationWriterVisitor >> _repositoryFormatFor: aProjectModification [
 RwModificationWriterVisitor >> _repositoryPropertyDictFor: aProjectModification [
 
 	| propertiesFile |
-	propertiesFile := self repositoryRootPath / aProjectModification after packagesPath / 'properties', 'st'.
+	propertiesFile := aProjectModification after packagesRoot / 'properties', 'st'.
 	propertiesFile exists
-		ifFalse: [ propertiesFile := self repositoryRootPath / aProjectModification after packagesPath / '.cypress' ].
+		ifFalse: [ propertiesFile :=aProjectModification after packagesRoot / '.cypress' ].
 	^ STON fromStream: (ZnBufferedReadStream on: propertiesFile  readStream)
 ]
 
@@ -111,7 +110,6 @@ RwModificationWriterVisitor >> addedPackage: aPackageModification [
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedProject: aProjectModification [
 	currentProjectDefinition := aProjectModification after.
-	self repositoryRootPath ifNil: [ self repositoryRootPath: currentProjectDefinition repositoryRootPath ].
 	self processProject: aProjectModification
 ]
 
@@ -142,7 +140,6 @@ RwModificationWriterVisitor >> changedPackage: aPackageModification [
 RwModificationWriterVisitor >> changedProject: aProjectModification [
 
 	currentProjectDefinition := aProjectModification after.
-	self repositoryRootPath ifNil: [ self repositoryRootPath: currentProjectDefinition repositoryRootPath ].
 self halt.
 ]
 
@@ -229,19 +226,6 @@ RwModificationWriterVisitor >> processPackage: aPackageModification [
 RwModificationWriterVisitor >> processProject: aProjectModification [
  
 	aProjectModification packagesModification acceptVisitor: self
-]
-
-{ #category : 'accessing' }
-RwModificationWriterVisitor >> repositoryRootPath [
-
-	^ repositoryRootPath
-]
-
-{ #category : 'accessing' }
-RwModificationWriterVisitor >> repositoryRootPath: aStringOrFileReference [
-
-	repositoryRootPath := aStringOrFileReference asFileReference.
-	repositoryRootPath exists ifFalse: [ self error: 'The repository root path must exist: ', repositoryRootPath pathString printString ]
 ]
 
 { #category : 'public' }

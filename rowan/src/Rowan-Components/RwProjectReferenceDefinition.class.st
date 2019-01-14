@@ -258,7 +258,7 @@ RwProjectReferenceDefinition >> exportSpecification [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> groupNames [
 
-	^ self properties at: 'groupNames' ifAbsent: [ #( 'default' ) ]
+	^ self properties at: 'groupNames' ifAbsent: [{ self defaultGroupName } ]
 ]
 
 { #category : 'accessing' }

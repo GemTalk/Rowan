@@ -33,14 +33,13 @@ RwProjectReaderWriterTest >> _markForProjectCleanup: aProjectName [
 ]
 
 { #category : 'private' }
-RwProjectReaderWriterTest >> _projectSetDefinitionForStructureWriters_A [
+RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectName format: repositoryFormat [
 
 	"multiple class extensions from multiple packages for multiple classes"
 
-	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath packageName3 |
+	| packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
+		classExtensionDefinition packageName3 rowanSpec projectHome |
 
-	projectName := 'Issue361'.
 	self _markForProjectCleanup: projectName.
 	packageName1 := 'Issue361-Core'.
 	packageName2 := 'Issue361-Extension1'.
@@ -49,9 +48,15 @@ RwProjectReaderWriterTest >> _projectSetDefinitionForStructureWriters_A [
 	className2 := 'Issue361Class2'. 
 	className3 := 'Issue361Class3'. 
 
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+
 "create definitions"
 	projectDefinition := (RwComponentProjectDefinition
 		newForDiskBasedProjectNamed: projectName)
+		packageFormat: repositoryFormat;
+		projectHome: projectHome;
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
 		addPackageNamed: packageName3;
@@ -136,17 +141,13 @@ RwProjectReaderWriterTest >> _projectSetDefinitionForStructureWriters_A [
 					source: 'method5 ^5').
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
-"project set"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition.
-
-	^ projectSetDefinition
+	^ projectDefinition
 ]
 
 { #category : 'private' }
 RwProjectReaderWriterTest >> _writeProjectSetDefinition: projectSetDefinition writerVisitorClass: writerVisitorClass format: repositoryFormat [
 
-	| projectName projectDefinition projectSetModification visitor repositoryRootPath |
+	| projectName projectDefinition projectSetModification visitor projectHome |
 "project set"
 	projectName := projectSetDefinition projectNames at: 1.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -157,17 +158,17 @@ RwProjectReaderWriterTest >> _writeProjectSetDefinition: projectSetDefinition wr
 	projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
 
 "set project up for using filesystem"
-	repositoryRootPath := filesystem workingDirectory / projectName.
+	projectHome := filesystem workingDirectory / projectName.
 	self _markForCleanup: (filesystem workingDirectory / projectName).
 
-	projectDefinition projectHome: repositoryRootPath.
+	projectDefinition projectHome: projectHome.
 	projectDefinition packageFormat: repositoryFormat.
 	projectDefinition create.
 
 "write project set"
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new. "compare against empty project to write out entire project"
 	visitor := writerVisitorClass new
-		repositoryRootPath: repositoryRootPath;
+		repositoryRootPath: projectHome / projectName;
 		yourself.
 
 	visitor visit: projectSetModification.
@@ -187,6 +188,10 @@ RwProjectReaderWriterTest >> tearDown [
 		select: [ :aFileRef | aFileRef exists ]
 		thenDo: [ :aFileRef | aFileRef deleteAll ].
 	projectsToDelete
-		do: [ :projectName | Rowan projectTools delete deleteProjectNamed: projectName ].
+		do: [ :projectName | 
+		(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+			(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+				ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ] ].
 	super tearDown
 ]

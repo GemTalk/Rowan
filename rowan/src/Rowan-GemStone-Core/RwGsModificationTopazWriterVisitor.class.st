@@ -61,7 +61,8 @@ Class {
 		'classDefPackageNameMap',
 		'classExtPackageNameMap',
 		'classInitializationDefinitions',
-		'buildPackageNamesMap'
+		'buildPackageNamesMap',
+		'repositoryRootPath'
 	],
 	#category : 'Rowan-GemStone-Core'
 }
@@ -435,6 +436,19 @@ RwGsModificationTopazWriterVisitor >> processProject: aProjectModification [
 							ifNotNil: [  visitor packageNames ].
 						(topazFilenamePackageNamesMap at: filename ifAbsentPut: [ Set new ]) addAll: packageNames ] ] ].
 	aProjectModification packagesModification acceptVisitor: self
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> repositoryRootPath [
+
+	^ repositoryRootPath
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> repositoryRootPath: aStringOrFileReference [ 
+
+	repositoryRootPath := aStringOrFileReference asFileReference.
+	repositoryRootPath exists ifFalse: [ self error: 'The repository root path must exist: ', repositoryRootPath pathString printString ]
 ]
 
 { #category : 'accessing' }

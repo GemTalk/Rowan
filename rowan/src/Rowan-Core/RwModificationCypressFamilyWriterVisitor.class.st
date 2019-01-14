@@ -37,7 +37,7 @@ RwModificationCypressFamilyWriterVisitor >> _packageSourceDir [
 { #category : 'project writing' }
 RwModificationCypressFamilyWriterVisitor >> _projectSourceDir [
 
-	^ self repositoryRootPath / self currentProjectDefinition packagesPath
+	^ self currentProjectDefinition packagesRoot
 ]
 
 { #category : 'private' }
