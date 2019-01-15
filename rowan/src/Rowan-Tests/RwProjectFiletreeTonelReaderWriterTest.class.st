@@ -15,16 +15,9 @@ RwProjectFiletreeTonelReaderWriterTest class >> isAbstract [
 { #category : 'private' }
 RwProjectFiletreeTonelReaderWriterTest >> _readProjectDefinition: projectDefinition [
 
-	| packagesDir packageNames propertyDict format |
-	packagesDir := projectDefinition packagesRoot.
-	propertyDict := self _repositoryPropertyDictFor: projectDefinition repositoryRootPath: packagesDir.
-	format := propertyDict at: 'format' ifAbsent: [ 'filetree' ].
-self error: 'switch readers at this point .. time to rename the Modification visitors or something so that the structure logic can be shared ...'.
-	packageNames := '' packageNames.
-	^ self 
-		_readProjectDefinition: projectDefinition 
-		packageNames: packageNames
-		from: packagesDir
+	RwRepositoryComponentProjectReaderVisitor new visit: projectDefinition.
+self error: 'not yet implemented'.
+
 ]
 
 { #category : 'private' }
@@ -57,7 +50,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
 
 	"multiple class extensions from multiple packages for multiple classes"
 
-	| projectName writtenProjectDefinition  readProjectDefinition projectModification |
+	| projectName writtenProjectDefinition readProjectDefinition readProjectSetDefinition projectSetModification writeProjectSetDefinition |
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
@@ -75,9 +68,11 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
 
-	readProjectDefinition := self _readProjectDefinition: writtenProjectDefinition.
+	readProjectDefinition := writtenProjectDefinition copy.
+	readProjectSetDefinition := readProjectDefinition readProjectSet.
 
 "validation"
-	projectModification := readProjectDefinition compareAgainstBase: writtenProjectDefinition.
-	self assert: projectModification isEmpty.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: writtenProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
 ]

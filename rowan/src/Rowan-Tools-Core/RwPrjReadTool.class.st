@@ -33,10 +33,7 @@ RwPrjReadTool >> _readProjectDefinition: projectDefinition packageNames: package
 { #category : 'private' }
 RwPrjReadTool >> _readProjectSetForProjectComponentDefinition: projectComponentDefinition packageNames: packageNames [
 
-	self error: 'not yet implemented'.
-	^ RwProjectSetDefinition new
-		addProject: projectComponentDefinition;
-		yourself
+	^ projectComponentDefinition readProjectSetForPackageNames: packageNames
 ]
 
 { #category : 'private' }

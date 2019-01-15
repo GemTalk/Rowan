@@ -30,7 +30,7 @@ RwModificationTonelWriterVisitor >> _fileNameFor: aClassDefinition [
 	^ String streamContents: [ :stream | 
 		stream 
 			<< aClassDefinition name
-			<< '.' << (self _typeOfClass: aClassDefinition)
+			<< '.' << (self _typeOfClass: aClassDefinition) asLowercase
 			<< '.st'  ]
 ]
 
@@ -128,7 +128,7 @@ RwModificationTonelWriterVisitor >> _typeClassDefinitionOf: aClassDefinition [
 
 { #category : 'class writing' }
 RwModificationTonelWriterVisitor >> _typeOfClass: aClassDefinition [
-	^ self class classLabel asLowercase
+	^ self class classLabel
 ]
 
 { #category : 'class writing' }

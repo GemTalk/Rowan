@@ -93,6 +93,12 @@ RwComponentProjectDefinition class >> withProperties: properties packageDefiniti
 		yourself
 ]
 
+{ #category : 'visiting' }
+RwComponentProjectDefinition >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitComponentProjectDefinition: self
+]
+
 { #category : 'accessing' }
 RwComponentProjectDefinition >> addPackageNamed: packageName [
 
@@ -283,6 +289,14 @@ RwComponentProjectDefinition >> packagesRoot [
 	^ self projectRef packagesRoot
 ]
 
+{ #category : 'copying' }
+RwComponentProjectDefinition >> postCopy [
+
+	super postCopy.
+	components := components copy.
+	components keysAndValuesDo: [:key : value | components at: key put: value copy ] .
+]
+
 { #category : 'accessing' }
 RwComponentProjectDefinition >> projectHome [
 
@@ -335,6 +349,18 @@ RwComponentProjectDefinition >> projectsRoot [
 RwComponentProjectDefinition >> readProjectSet [
 
 	^ Rowan projectTools read  readProjectSetForComponentProjectDefinition: self
+]
+
+{ #category : 'actions' }
+RwComponentProjectDefinition >> readProjectSetForPackageNames: packageNames [
+
+	| visitorClass |
+	visitorClass := self packageFormat = 'tonel'
+		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
+		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
+	^ visitorClass new
+		packageNames: packageNames;
+		visit: self.
 ]
 
 { #category : 'temporary compat' }

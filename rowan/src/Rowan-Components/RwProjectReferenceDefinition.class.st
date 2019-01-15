@@ -142,6 +142,12 @@ RwProjectReferenceDefinition >> _repositoryDefinitionForProjectHome: projectHome
 	^ existingProjectRepository
 ]
 
+{ #category : 'visiting' }
+RwProjectReferenceDefinition >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitProjectReferenceDefinition: self
+]
+
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> branch: aString [
 
