@@ -110,7 +110,10 @@ RowanBrowserService >> servicePerform: symbol withArguments: collection [
 { #category : 'client commands' }
 RowanBrowserService >> unloadProjectsNamed: array [
 	array do:[:projectName |
-		Rowan projectTools delete deleteProjectNamed: projectName]. 
+		| project |
+		project := Rowan image loadedProjectNamed: projectName ifAbsent:[].
+		project ifNotNil: [
+			Rowan projectTools delete deleteProjectNamed: projectName]]. 
 	self updateProjects
 ]
 

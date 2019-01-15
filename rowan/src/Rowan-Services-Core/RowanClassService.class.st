@@ -134,7 +134,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	commandArgs := nil. 
 	superclassName := theClass superClass ifNotNil:[:theSuper | theSuper name asString]. 
 	comment := theClass comment. 
-	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade"
+	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade and tests"
 	versions := theClass classHistory size.
 	version := theClass classHistory indexOf: theClass.
 	template := self classCreationTemplate.
@@ -707,6 +707,7 @@ RowanClassService >> renameCategoryFrom: old to: new [
 
 	| affectedSelectors behavior |
 
+	self update. 
 	self addCategory: new. 
 	behavior := self classOrMeta.
 	affectedSelectors := behavior selectorsIn: old.
