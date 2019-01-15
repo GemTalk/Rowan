@@ -177,8 +177,11 @@ RowanMethodService >> classService: newValue [
 
 { #category : 'client commands' }
 RowanMethodService >> clearBreakAt: stepPoint [
-
-	self gsNMethod clearBreakAtStepPoint: stepPoint.
+	| method |
+	method := self isUnboundMethod 
+			ifTrue:[Object _objectForOop: oop] 
+			ifFalse:[self gsNMethod].
+	method clearBreakAtStepPoint: stepPoint.
 	self update. 
 	RowanCommandResult addResult: self.
 ]
@@ -324,6 +327,13 @@ RowanMethodService >> isTestMethod: boolean [
 	isTestMethod := boolean
 ]
 
+{ #category : 'testing' }
+RowanMethodService >> isUnboundMethod [
+
+	(className notNil and: [selector notNil]) ifTrue:[^false].
+	^(Object _objectForOop: oop) isKindOf: GsNMethod
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> meta [
 	^meta
@@ -379,9 +389,9 @@ RowanMethodService >> printOn: aStream [
 
 	super printOn: aStream. 
 	aStream nextPut: $(;
-				nextPutAll: className; 
+				nextPutAll: (className ifNil:[nil printString]); 
 				nextPutAll: '>>'; 
-				nextPutAll: selector;
+				nextPutAll: (selector ifNil:[nil printString]);
 				nextPut: $)
 ]
 
@@ -442,8 +452,11 @@ RowanMethodService >> servicePerform: symbol withArguments: collection [
 
 { #category : 'client commands' }
 RowanMethodService >> setBreakAt: stepPoint [
-
-	self gsNMethod setBreakAtStepPoint: stepPoint.
+	| method |
+	method := self isUnboundMethod 
+			ifTrue:[Object _objectForOop: oop] 
+			ifFalse:[self gsNMethod].
+	method setBreakAtStepPoint: stepPoint.
 	self update. 
 	RowanCommandResult addResult: self.
 ]
@@ -481,6 +494,14 @@ RowanMethodService >> source: aString [
 
 ]
 
+{ #category : 'Accessing' }
+RowanMethodService >> stepPoints [
+
+	"for testing"
+	
+	^stepPoints
+]
+
 { #category : 'initialization' }
 RowanMethodService >> stepPointsFor: aGsNMethod [
 	"Answers an Array of Associations (offset -> selector) indexed by step point"
@@ -501,11 +522,13 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 
 { #category : 'updates' }
 RowanMethodService >> update [
-
-	self wasDeleted ifTrue:[
-		self updateType: #methodsRemoved:. 
-		^RowanCommandResult addResult: self. ].  "removed method"
-	oop ifNil: [oop := self gsNMethod asOop].
+	
+	self isUnboundMethod ifFalse:[
+		self wasRecycled ifTrue:[oop := self gsNMethod asOop].
+		self wasDeleted ifTrue:[
+			self updateType: #methodsRemoved:. 
+			^RowanCommandResult addResult: self. ].  "removed method"
+		oop ifNil: [oop := self gsNMethod asOop]].
 	self 
 		initialize: (Object _objectForOop: oop) 
 		organizer: ClassOrganizer new.
@@ -516,4 +539,10 @@ RowanMethodService >> update [
 RowanMethodService >> wasDeleted [
 	selector isNil ifTrue:[^false].
 	^self gsNMethod isNil
+]
+
+{ #category : 'testing' }
+RowanMethodService >> wasRecycled [
+	(oop notNil and:[self gsNMethod asOop ~= oop]) ifTrue:[^true].
+	^false
 ]

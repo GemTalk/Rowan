@@ -92,7 +92,7 @@ RowanQueryService >> projectBranches: projectName [
 	| project  |
 	project := (RwProject newNamed: projectName). 
 	queryResults := Rowan gitTools gitbranchIn: project repositoryRootPath with: ''.
-	self returnQueryToClient.
+	RowanCommandResult addResult: self
 ]
 
 { #category : 'queries' }

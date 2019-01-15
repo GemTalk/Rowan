@@ -15,6 +15,10 @@ RowanCommandResult class >> addResult: service [
 	service command: nil;
 			commandArgs: nil. 
 	self updateClientBoundServices: service.
+]
+
+{ #category : 'accessing' }
+RowanCommandResult class >> basicAddResult: service [
 	self results add: service
 ]
 
@@ -54,11 +58,9 @@ RowanCommandResult class >> updateClientBoundServices: clientBoundService [
 	are not canonical, we need to do some housekeeping
 	to ensure that we don't already have this service 
 	somewhere in other client-bound services"
-	
 	(self results includes: clientBoundService) ifTrue:[
-		self removeResult: clientBoundService. 
-		self addResult: clientBoundService. 
-	].
+		self removeResult: clientBoundService].
+	self basicAddResult: clientBoundService. 
 	self results do:[:service |
 		service updateInternalService: clientBoundService.
 		clientBoundService updateInternalService: service].
