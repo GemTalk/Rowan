@@ -55,6 +55,14 @@ RowanBrowserService >> findRemovedServices: services [
 	].
 ]
 
+{ #category : 'window registry' }
+RowanBrowserService >> openWindows [
+
+	"for testing"
+
+	^SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[]
+]
+
 { #category : 'client commands' }
 RowanBrowserService >> packagesWithTests [
 	testPackages := Set new. 
@@ -71,6 +79,14 @@ RowanBrowserService >> packagesWithTests [
 	updateType := #testPackages:. 
 	testPackages := testPackages asArray. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> releaseWindowHandle: integer [
+
+	| registry |
+	registry := SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[^self].
+	registry removeKey: integer ifAbsent: []
 ]
 
 { #category : 'client commands' }
@@ -100,6 +116,16 @@ RowanBrowserService >> removeMethods: methodServices [
 		self error: 'These selectors were not removed - ', notRemoved printString].
 	updateType := #methodsRemoved:. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> saveRootObject: object windowHandle: integer [
+
+	" a window has been opened on the client. Save the 
+	root object of the window so it won't be recycled"
+	| dictionary |
+	dictionary := SessionTemps current at: #rowanServicesWindowRegistry ifAbsentPut: [Dictionary new].
+	dictionary at: integer put: object.
 ]
 
 { #category : 'perform' }
