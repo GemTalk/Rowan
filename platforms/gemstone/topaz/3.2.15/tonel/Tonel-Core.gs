@@ -420,6 +420,18 @@ methodBody
 
 category: 'parsing'
 method: TonelParser
+methodDef
+	"kept around for tests"
+
+	| methodDef |
+	self methodDef: [:isMeta :mDef |
+		methodDef :=  mDef.
+		"skip possible spaces at the end"
+		self separator ].
+	^methodDef
+%
+category: 'parsing'
+method: TonelParser
 methodDef: aBlock
 	| ar def |
 	ar := { 

@@ -257,7 +257,7 @@ Object>>printOn: aStream [
 ]'
 		rule: #methodDefList.
 		
-	self assert: parsed size equals: 3
+	self assert: parsed flattened size equals: 3
 
 ]
 

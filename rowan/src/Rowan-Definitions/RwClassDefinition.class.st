@@ -43,7 +43,7 @@ RwClassDefinition class >> newForClassNamed: className super: superClassName ins
 		at: 'name' put: className;
 		at: 'pools' put: pools;
 		at: 'superclass' put: superClassName;
-		at: 'type' put: type.
+		at: 'type' put: type asString.
 	comment ifNotNil: [ propertiesDictionary at: 'comment' put: comment ].
 	^ self
 		withProperties: propertiesDictionary
