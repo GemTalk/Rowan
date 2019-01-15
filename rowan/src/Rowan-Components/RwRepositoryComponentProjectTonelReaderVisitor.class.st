@@ -93,15 +93,16 @@ self error: 'not yet implemented'
 { #category : 'class reading' }
 RwRepositoryComponentProjectTonelReaderVisitor >> readClassFile: file inPackage: packageName [
 
-	| definitions stream classDef |
-	stream := ZnBufferedReadStream on: file readStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-	stream sizeBuffer: 10000. "part of workaround for GemTalk/FileSystemGs#9"
-	definitions := (TonelParser on: stream forReader: self) start.
-	classDef := definitions at: 1.
-	((definitions at: 2) at: 1) do: [:mDef |
-		classDef addClassMethodDefinition: mDef ].
-	((definitions at: 2) at: 2) do: [:mDef |
-		classDef addInstanceMethodDefinition: mDef ].
-	(currentProjectDefinition packageNamed: packageName)
-		addClassDefinition: classDef.
+	file readStreamDo: [:fileStream |
+		| definitions stream classDef |
+		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+		stream sizeBuffer: 10000. "part of workaround for GemTalk/FileSystemGs#9"
+		definitions := (TonelParser on: stream forReader: self) start.
+		classDef := definitions at: 1.
+		((definitions at: 2) at: 1) do: [:mDef |
+			classDef addClassMethodDefinition: mDef ].
+		((definitions at: 2) at: 2) do: [:mDef |
+			classDef addInstanceMethodDefinition: mDef ].
+		(currentProjectDefinition packageNamed: packageName)
+			addClassDefinition: classDef ].
 ]

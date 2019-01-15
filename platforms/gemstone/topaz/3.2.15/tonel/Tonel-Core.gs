@@ -294,7 +294,6 @@ document
 	self typeDef.
 	self methodDefList.
 	 } 
-	flattened
 	select: [:each | each notNil ]
 %
 
@@ -421,37 +420,44 @@ methodBody
 
 category: 'parsing'
 method: TonelParser
-methodDef
-	^ self newMethodDefinitionFrom: { 
+methodDef: aBlock
+	| ar def |
+	ar := { 
 		self separator.
 		self try: [ self metadata ]. 
 		self separator. 
 		self method. 
 		self methodBody 
-	}
+	}.
+	def := self newMethodDefinitionFrom: ar.
+	aBlock 
+		value: ar fourth first second notNil 
+		value: def
 %
 
 category: 'parsing'
 method: TonelParser
 methodDefList
-	| result |
+	| result classStream instanceStream |
 	
 	self separator. "to arrive to the end of the file in case there are no methods"
-	result := Array new writeStreamPortable.
-  [
-	  [ stream atEnd ]
-	  whileFalse: [ 
-		  result nextPut: self methodDef .
-		  "skip possible spaces at the end"
-		  self separator 
-      ].
-  ] on: TonelParseError do:[:ex | 
-     lastSelectorParsed ifNotNil:[
-       GsFile gciLogServer:'Last selector parsed was: ', lastSelectorParsed printString .
-     ].
-     ex pass .
-  ].
-	^ result contents
+	result := { {}. {} }.
+	classStream := (result at: 1) writeStreamPortable.
+	instanceStream := (result at: 2) writeStreamPortable.
+	[
+		[ stream atEnd ]
+			whileFalse: [ 
+				self methodDef: [:isMeta :mDef |
+					isMeta
+						ifTrue: [ classStream nextPut: mDef ]
+						ifFalse: [ instanceStream nextPut: mDef ].
+					"skip possible spaces at the end"
+					self separator ]
+			] ] on: TonelParseError do:[:ex | 
+				lastSelectorParsed ifNotNil:[
+					GsFile gciLogServer:'Last selector parsed was: ', lastSelectorParsed printString ].
+				ex pass ].
+	^ result
 %
 
 category: 'private factory'
