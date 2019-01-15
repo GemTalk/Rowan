@@ -1,7 +1,7 @@
  RwSimpleProjectSpecification{
 	#specName : 'Rowan',
 	#version : '0.2.0',
-	#projectUrl : 'https://github.com/dalehenrich/Rowan',
+	#projectUrl : 'https://github.com/GemTalk/Rowan',
 	#repoSpec : RwGitRepositorySpecification {
 		#committish : 'master',
 		#committishType : 'branch'

@@ -10,7 +10,9 @@ Class {
 		'packages',
 		'changes',
 		'existsOnDisk',
-		'isLoaded'
+		'isLoaded',
+		'projectUrl',
+		'rowanProjectsHome'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -71,6 +73,8 @@ RowanProjectService >> basicRefresh [
 	isSkew := self isSkew.
 	sha := self rowanSha.
 	branch := self rowanBranch.
+	projectUrl := self rowanProjectUrl. 
+	rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' .
 	RowanCommandResult addResult: self
 ]
 
@@ -193,6 +197,7 @@ RowanProjectService >> isDirty: aBoolean [
 RowanProjectService >> isSkew [
 	| repositorySha |
 	name isNil ifTrue:[^false].
+	self existsOnDisk ifFalse:[^false]. 
 	repositorySha := [self repositorySha] on: Error do:[:ex | repositorySha := 'not on disk'].
 	^self sha ~= repositorySha
 ]
@@ -202,8 +207,8 @@ RowanProjectService >> loadProjectNamed: aName [
 
 	[Rowan projectTools load loadProjectNamed: aName] 
 		on: Warning
-		do: [ :ex | Transcript cr; show: ex description. ex resume ]
-
+		do: [ :ex | Transcript cr; show: ex description. ex resume ].
+	RowanBrowserService new updateProjects.
 ]
 
 { #category : 'rowan' }
@@ -237,7 +242,7 @@ RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 		cloneSpecUrl: url
 		gitRootPath: rootPath
 		useSsh: useSsh.
-
+	RowanBrowserService new updateProjects.
 ]
 
 { #category : 'rowan' }
@@ -308,6 +313,18 @@ RowanProjectService >> projects [
 				branch: service rowanBranch;
 				isDirty: service rowanDirty]
 
+]
+
+{ #category : 'accessing' }
+RowanProjectService >> projectUrl [
+
+	^projectUrl
+]
+
+{ #category : 'accessing' }
+RowanProjectService >> projectUrl: anObject [
+
+	projectUrl := anObject
 ]
 
 { #category : 'client commands' }
@@ -384,6 +401,12 @@ RowanProjectService >> rowanDirty [
 RowanProjectService >> rowanProjectName [
 
 	^name
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> rowanProjectUrl [
+
+	^(RwProject newNamed: name) projectUrl
 ]
 
 { #category : 'rowan' }

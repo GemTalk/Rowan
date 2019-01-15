@@ -43,11 +43,11 @@ RowanProjectServiceTest >> test_addedProjectNotOnDisk [
 	| proj projectService projectName |
 	projectName := 'Tashkent'. 
 	self jadeiteIssueTested: #issue246 withTitle: 'Jadeite handling project that''s not committed'. 
-	proj := RowanTestService new createNewTestProjectNamed: projectName.
+	self createNonDiskTestProjectNamed:  projectName packageName: 'Packagekent'. 
 	projectService := RowanProjectService newNamed: projectName. 
 	projectService refresh. "<-- walkback occured here" 
 	[self deny: projectService existsOnDisk.
-	self assert: projectService isSkew]
+	self deny: projectService isSkew "no skew if not on disk"]
 		ensure: [RowanBrowserService new unloadProjectsNamed: (Array with: 'Tashkent')]
 ]
 
@@ -67,6 +67,15 @@ RowanProjectServiceTest >> test_addPackage [
 RowanProjectServiceTest >> test_commandResultSessionTemp [
 
 	self assert: RowanCommandResult results == (SessionTemps current at: #rowanCommandResults)
+]
+
+{ #category : 'tests' }
+RowanProjectServiceTest >> test_unloadNotLoadedProjectDoesNotWalkback [
+
+	"just make sure if a project we gracefully handle trying to remove an unloaded project"
+	self deny: (Rowan image loadedProjectNamed: 'BadProjectName' ifAbsent:[false]). 
+	RowanBrowserService new unloadProjectsNamed: #('BadProjectName').
+	self deny: (Rowan image loadedProjectNamed: 'BadProjectName' ifAbsent:[false]).
 ]
 
 { #category : 'tests' }
