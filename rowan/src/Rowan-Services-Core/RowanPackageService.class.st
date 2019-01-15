@@ -416,6 +416,22 @@ RowanPackageService >> update [
 ]
 
 { #category : 'updates' }
+RowanPackageService >> updateInternalService: updatedService [
+
+	"when sending services back to the client,
+	verify any services held by this object are 
+	updated. Services know what internal services
+	they contain." 
+
+	1 to: classes size do:[:index |
+		| classesService |
+		classesService := classes at: index. 
+		classesService = updatedService ifTrue:[
+			classes at: index put: updatedService
+		]].
+]
+
+{ #category : 'updates' }
 RowanPackageService >> updateProject [
 	| projectService |
 

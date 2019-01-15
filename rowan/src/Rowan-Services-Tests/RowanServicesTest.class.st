@@ -47,6 +47,21 @@ RowanServicesTest >> createJadeiteTestProject [
 ]
 
 { #category : 'support' }
+RowanServicesTest >> createNonDiskTestProjectNamed: projectName packageName: packageName [
+
+	| projectDefinition projectSetDefinition  |
+	projectDefinition := RwProjectDefinition newForGitBasedProjectNamed: projectName.
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		yourself.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+	^projectDefinition
+]
+
+{ #category : 'support' }
 RowanServicesTest >> createProjectDefinitionNamed: projectName [
 
 	| projectDefinition |
@@ -98,6 +113,35 @@ RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 
 	Issues currently reside in: 
 		https://github.com/GemTalk/Jadeite/issues/"
+]
+
+{ #category : 'support' }
+RowanServicesTest >> loadRowanSample1 [
+	| specUrlString projectTools rowanSpec gitRootPath projectName projectDefinition spec |
+
+	projectName := 'RowanSample1'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [])
+		ifNotNil: [ :prj |  Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := 'file:' , rowanSpec repositoryRootPath , '/samples/RowanSample1.ston'.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	spec := specUrlString asRwUrl asSpecification.
+	projectTools clone
+		cloneSpecification: spec
+		gitRootPath: gitRootPath
+		useSsh: true
+		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
+	
+	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
+	projectDefinition := projectTools create createProjectFromSpecUrl: 'file:', gitRootPath, '/', projectName, '/', spec specsPath, '/RowanSample1.ston'.
+	Rowan projectTools load loadProjectNamed: 'RowanSample1'.
 ]
 
 { #category : 'support' }

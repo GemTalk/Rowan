@@ -13,13 +13,6 @@ RowanClassServiceTest >> createClassNamed: className [
 ]
 
 { #category : 'support' }
-RowanClassServiceTest >> loadRowanSample1 [
-
-	RowanProjectService new newGitProject: 'file:$ROWAN_PROJECTS_HOME/Rowan/samples/RowanSample1.ston' root: '$ROWAN_PROJECTS_HOME' useSsh: true. 
-	Rowan projectTools load loadProjectNamed: 'RowanSample1'.
-]
-
-{ #category : 'support' }
 RowanClassServiceTest >> servicesClassInstance [
 
 	^self servicesDefaultClassName evaluate perform: #new
@@ -31,26 +24,25 @@ RowanClassServiceTest >> setUp [
 	super setUp.
 	self createServicesTestClass. 
 	self loadServicesTestProject.
+	Rowan platform _alternateImageClass: Rowan image testImageClass
 ]
 
 { #category : 'support' }
 RowanClassServiceTest >> tearDown [
 
 	super tearDown.
-	self unloadServicesTestProject
+	Rowan platform _alternateImageClass: nil.
+	self unloadServicesTestProject.
 ]
 
 { #category : 'tests' }
 RowanClassServiceTest >> test_addedProjectNotOnDisk [
 
-	| proj pkg cls projectService |
-	proj := RwProjectDefinition newForGitBasedProjectNamed: 'Azer'.
-	proj repositoryRootPath: '$ROWAN_PROJECTS_HOME/Azer'.
-	Rowan projectTools create createProjectFor: proj.
-	pkg := RwPackageDefinition newNamed: 'Baijan'.
-	proj addPackage: pkg.
+	| projectDefinition packageDefinition classDefinition projectService |
+	projectDefinition := self createNonDiskTestProjectNamed: 'Azer' packageName: 'Baijan'. 
+	[packageDefinition := projectDefinition packageNamed: 'Baijan'.
 
-	cls := RwClassDefinition
+	classDefinition := RwClassDefinition
 		newForClassNamed: #Baijan
 		super: 'Object'
 		instvars: #(name address orderHistory)
@@ -60,13 +52,13 @@ RowanClassServiceTest >> test_addedProjectNotOnDisk [
 		comment: 'a CustomerRecord holds the sales record for a customer.'
 		pools: #()
 		type: 'normal'.
-	pkg addClassDefinition: cls.
-	Rowan projectTools load loadProjectDefinition: proj.
+	packageDefinition addClassDefinition: classDefinition.
+	Rowan projectTools load loadProjectDefinition: projectDefinition.
 
 	(RowanClassService forClassNamed: 'Baijan') update. "<-- walkback occurrred here"
 	projectService := RowanProjectService newNamed: 'Azer'. 
-	[self deny: projectService existsOnDisk.
-	self assert: projectService isSkew]
+	self deny: projectService existsOnDisk.
+	self deny: projectService isSkew]
 		ensure: [RowanBrowserService new unloadProjectsNamed: (Array with: 'Azer')]
 ]
 
@@ -172,10 +164,19 @@ RowanClassServiceTest >> test_selectedMethod [
 
 { #category : 'test method compilation' }
 RowanClassServiceTest >> test_setSuperSubIndicators [
-	| classService superclassMethodService subclassMethodService selector subclassService |
+	| classService superclassMethodService subclassMethodService selector subclassService packageService |
 	selector := #indicatorTesting. 
 	self loadRowanSample1.
-	[classService := RowanClassService forClassNamed: 'RowanSample1'.
+	[packageService := RowanPackageService forPackageNamed: 'RowanSample1-Core'.
+	packageService compileClass: 
+		'RowanSample1 rwSubclass: ''RowanSubClass''
+			instVarNames: #()
+			classVars: #()
+			classInstVars: #()
+			poolDictionaries: #()
+			category: ''RowanSample1-Core''
+			options: #()'.
+	classService := RowanClassService forClassNamed: 'RowanSample1'.
 	classService saveMethodSource: selector asString,  ' ^#deleteThisMethod' category: 'abc'.
 	superclassMethodService := (classService methodsNamed: selector) first.
 	self deny: superclassMethodService hasSupers.
