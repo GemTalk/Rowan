@@ -381,6 +381,26 @@ ZnBufferedReadStream >> upTo: value [
 ]
 
 { #category : 'accessing' }
+ZnBufferedReadStream >> upToAll: aCollection [ 
+"Answer a subcollection from the current access position to the occurrence (if any, but not inclusive) of aCollection. If aCollection is not in the stream, answer the entire rest of the stream."
+
+| startPos endMatch result x |
+startPos := self position.
+x := self upTo: aCollection first.
+self atEnd ifTrue: [ ^ x ].
+2 to: aCollection size do: [:i |
+	self peek = (aCollection at: i)
+		ifTrue: [ self next ]
+		ifFalse: [ self position: startPos.
+		^ self upToEnd ] ].
+endMatch := self position.
+self position: startPos.
+result := self next: endMatch - startPos - aCollection size.
+self position: endMatch.
+^ result
+]
+
+{ #category : 'accessing' }
 ZnBufferedReadStream >> upToEnd [
 	"Read elements until the stream is atEnd and return them as a collection."
 

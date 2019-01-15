@@ -77,10 +77,15 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 		pools: #()
 		type: 'normal'.
 	classDefinition
+		addInstanceMethodDefinition: 
+			(RwMethodDefinition
+					newForSelector: #'method6'
+					protocol: 'instance accessing'
+					source: 'method6 ^6');
 		addClassMethodDefinition:
 			(RwMethodDefinition
 					newForSelector: #'method2'
-					protocol: 'accessing'
+					protocol: 'class accessing'
 					source: 'method2 ^2').
 	packageDefinition addClassDefinition: classDefinition.
 

@@ -46,6 +46,15 @@ RwRepositoryComponentProjectTonelReaderVisitor >> newClassDefinitionFrom: anArra
 ]
 
 { #category : 'tonel parser' }
+RwRepositoryComponentProjectTonelReaderVisitor >> newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source [
+
+	^ RwMethodDefinition
+		newForSelector: selector 
+			protocol: category 
+			source: source
+]
+
+{ #category : 'tonel parser' }
 RwRepositoryComponentProjectTonelReaderVisitor >> newTypeDefinitionFrom: anArray [
   | typeClass |
   typeClass := self definitionForType: anArray fourth.
@@ -63,6 +72,9 @@ RwRepositoryComponentProjectTonelReaderVisitor >> packageExtension [
 
 { #category : 'class reading' }
 RwRepositoryComponentProjectTonelReaderVisitor >> readClassesFor: packageName packageRoot: packageRoot [
+	currentProjectDefinition 
+		packageNamed: packageName 
+		ifAbsent: [ currentProjectDefinition addPackageNamed: packageName ].
 	packageRoot files do: [:file |
 		| extensions x |
 		extensions := file extensions asArray.
@@ -81,9 +93,15 @@ self error: 'not yet implemented'
 { #category : 'class reading' }
 RwRepositoryComponentProjectTonelReaderVisitor >> readClassFile: file inPackage: packageName [
 
-	| result stream |
+	| definitions stream classDef |
 	stream := ZnBufferedReadStream on: file readStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 	stream sizeBuffer: 10000. "part of workaround for GemTalk/FileSystemGs#9"
-	result := (TonelParser on: stream forReader: self) start.
-self error: 'not yet implemented'
+	definitions := (TonelParser on: stream forReader: self) start.
+	classDef := definitions at: 1.
+	((definitions at: 2) at: 1) do: [:mDef |
+		classDef addClassMethodDefinition: mDef ].
+	((definitions at: 2) at: 2) do: [:mDef |
+		classDef addInstanceMethodDefinition: mDef ].
+	(currentProjectDefinition packageNamed: packageName)
+		addClassDefinition: classDef.
 ]

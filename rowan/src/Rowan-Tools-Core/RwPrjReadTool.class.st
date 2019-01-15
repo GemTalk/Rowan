@@ -33,7 +33,11 @@ RwPrjReadTool >> _readProjectDefinition: projectDefinition packageNames: package
 { #category : 'private' }
 RwPrjReadTool >> _readProjectSetForProjectComponentDefinition: projectComponentDefinition packageNames: packageNames [
 
-	^ projectComponentDefinition readProjectSetForPackageNames: packageNames
+	| projectSetDefinition |
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectComponentDefinition readProjectSetForPackageNames: packageNames.
+	projectSetDefinition addProject: projectComponentDefinition.
+	^ projectSetDefinition
 ]
 
 { #category : 'private' }
