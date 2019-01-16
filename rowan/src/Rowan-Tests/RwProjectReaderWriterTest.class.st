@@ -143,7 +143,12 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 			(RwMethodDefinition
 					newForSelector: #'method5'
 					protocol: '*', packageName3 asLowercase
-					source: 'method5 ^5').
+					source: 'method5 ^5');
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method6'
+					protocol: '*', packageName3 asLowercase
+					source: 'method6 ^6').
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	^ projectDefinition

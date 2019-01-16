@@ -5,13 +5,13 @@ Class {
 }
 
 { #category : 'class reading' }
-RwRepositoryComponentProjectTonelReaderVisitor >> classExtensionExtensions [
+RwRepositoryComponentProjectTonelReaderVisitor >> classExtensionFileExtensions [
 
-	^ #( 'extensions' 'st' )
+	^ #( 'extension' 'st' )
 ]
 
 { #category : 'class reading' }
-RwRepositoryComponentProjectTonelReaderVisitor >> classExtensions [
+RwRepositoryComponentProjectTonelReaderVisitor >> classFileExtensions [
 
 	^ #( 'class' 'st' )
 ]
@@ -60,8 +60,8 @@ RwRepositoryComponentProjectTonelReaderVisitor >> newTypeDefinitionFrom: anArray
   typeClass := self definitionForType: anArray fourth.
   typeClass == #class
     ifTrue: [ ^ self newClassDefinitionFrom: anArray ].
-  "is extension, no type"
-  ^ nil
+  "is extension, no definition, but return properties (which includes class name)"
+  ^ anArray sixth
 ]
 
 { #category : 'package reading' }
@@ -72,22 +72,41 @@ RwRepositoryComponentProjectTonelReaderVisitor >> packageExtension [
 
 { #category : 'class reading' }
 RwRepositoryComponentProjectTonelReaderVisitor >> readClassesFor: packageName packageRoot: packageRoot [
+
+	| classFileExtensions classExtensionFileExtensions |
 	currentProjectDefinition 
 		packageNamed: packageName 
 		ifAbsent: [ currentProjectDefinition addPackageNamed: packageName ].
+	classExtensionFileExtensions := self classExtensionFileExtensions.
+	classFileExtensions := self classFileExtensions.
 	packageRoot files do: [:file |
-		| extensions x |
-		extensions := file extensions asArray.
-		extensions = ( x :=  self classExtensions)
-			ifTrue: [ ^ self readClassFile: file inPackage: packageName ].
-		extensions = ( x := self classExtensionExtensions)
-			ifTrue: [ ^ self readClassExtensionFile: file  inPackage: packageName ] ]
+		| fileExtensions |
+		fileExtensions := file extensions asArray.
+		fileExtensions = classFileExtensions
+			ifTrue: [ self readClassFile: file inPackage: packageName ]
+			ifFalse: [
+				fileExtensions = classExtensionFileExtensions
+					ifTrue: [ self readClassExtensionFile: file  inPackage: packageName ] ] ]
 ]
 
 { #category : 'class reading' }
 RwRepositoryComponentProjectTonelReaderVisitor >> readClassExtensionFile: file inPackage: packageName [
 
-self error: 'not yet implemented'
+	file readStreamDo: [:fileStream |
+		| definitions stream classExtensionDef className package |
+		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
+		stream sizeBuffer: 10000. "part of workaround for GemTalk/FileSystemGs#9"
+		definitions := (TonelParser on: stream forReader: self) start.
+		package := currentProjectDefinition packageNamed: packageName.
+		className := (definitions at: 1) at: #name.
+		classExtensionDef := package 
+			classExtensionDefinitionNamed: className 
+			ifAbsent: [ package addClassExtensionNamed: className ].
+		((definitions at: 2) at: 1) do: [:mDef |
+			classExtensionDef addClassMethodDefinition: mDef ].
+		((definitions at: 2) at: 2) do: [:mDef |
+			classExtensionDef addInstanceMethodDefinition: mDef ].
+		 ].
 ]
 
 { #category : 'class reading' }

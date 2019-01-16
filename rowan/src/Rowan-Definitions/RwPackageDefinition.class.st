@@ -75,6 +75,12 @@ RwPackageDefinition >> addClassNamed: className super: superclassName instvars: 
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> classDefinitionNamed: className ifAbsent: absentBlock [
+
+	^ self classDefinitions at: className ifAbsent: absentBlock
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> classDefinitions [
 
 	^classDefinitions
@@ -84,6 +90,12 @@ RwPackageDefinition >> classDefinitions [
 RwPackageDefinition >> classDefinitions: classDefinitionDictionary [
 
 	classDefinitions := classDefinitionDictionary
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> classExtensionDefinitionNamed: className ifAbsent: absentBlock [
+
+	^ self classExtensions at: className ifAbsent: absentBlock
 ]
 
 { #category : 'accessing' }
