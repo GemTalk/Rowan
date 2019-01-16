@@ -675,14 +675,18 @@ RowanClassService >> removeCategories: theCategories [
 ]
 
 { #category : 'client commands' }
-RowanClassService >> removeMethods [
+RowanClassService >> removeMethods: methodsToRemove [
 
 	| notRemoved |
 	notRemoved := Array new. 
-	methods do: [:methodService |
-		self removeSelector: methodService selector ifAbsent:[notRemoved add: methodService selector]].
+	methodsToRemove do: [:methodService |
+		self removeSelector: methodService selector ifAbsent:[notRemoved add: methodService].
+		(notRemoved includes: methodService) ifFalse:[
+			methodService updateType: #removed:.
+			RowanCommandResult addResult: methodService
+		]].
 	notRemoved isEmpty ifFalse:[
-		self error: 'These selectors were not removed - ', notRemoved printString].
+		self error: 'These selectors were not removed - ', (notRemoved collect:[:svc | svc selector]) printString].
 ]
 
 { #category : 'rowan' }
