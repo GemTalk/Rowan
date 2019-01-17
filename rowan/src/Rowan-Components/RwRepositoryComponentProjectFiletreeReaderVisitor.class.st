@@ -40,8 +40,10 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> readClassDirectory: classDi
 		nil. 
 		normalizedMetadata
 	}.
+	(currentProjectDefinition packageNamed: packageName)
+		addClassDefinition: classDefinition.
 
-	self error: 'not yet implemented'
+	self readMethodDirectories: classDirectory forClassDefinition: classDefinition inPackage: packageName
 ]
 
 { #category : 'class reading' }
@@ -71,5 +73,34 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> readClassExtensionDirectory
 		classExtensionDefinitionNamed: className 
 		ifAbsent: [ package addClassExtensionNamed: className ].
 
-	self error: 'not yet implemented'
+	self readMethodDirectories: classExtensionDirectory forClassDefinition: classExtensionDef inPackage: packageName
+]
+
+{ #category : 'method reading' }
+RwRepositoryComponentProjectFiletreeReaderVisitor >> readMethodDirectories: classDirectory forClassDefinition: classDefinition inPackage: packageName [
+
+	(self readMethodDirectory: classDirectory / 'instance' inPackage: packageName) do: [:methodDefinition |
+		classDefinition addInstanceMethodDefinition: methodDefinition ].
+	(self readMethodDirectory: classDirectory / 'class' inPackage: packageName) do: [:methodDefinition |
+		classDefinition addClassMethodDefinition: methodDefinition ]
+]
+
+{ #category : 'method reading' }
+RwRepositoryComponentProjectFiletreeReaderVisitor >> readMethodDirectory: methodDirectory inPackage: packageName [
+
+	| methodDefinitions methodDefinitionStream |
+	methodDefinitions := {}.
+	methodDirectory exists ifFalse: [ ^ methodDefinitions ].
+
+	methodDefinitionStream := methodDefinitions writeStreamPortable.
+	methodDirectory files do: [:file |
+		file extension = 'st'
+			ifTrue: [ 
+				| protocol methodSource methodStream |
+				methodStream := file contents  readStreamPortable.
+				protocol := methodStream nextLine.
+				methodSource := methodStream upToEnd.
+				methodDefinitionStream nextPut: (RwMethodDefinition newForSource: methodSource protocol: protocol) ] ].
+
+	^ methodDefinitions
 ]

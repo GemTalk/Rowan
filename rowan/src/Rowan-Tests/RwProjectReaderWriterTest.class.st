@@ -118,6 +118,11 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 		pools: #()
 		type: 'normal'.
 	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method8:'
+					protocol: 'accessing'
+					source: 'method8: ignored ^ignored');
 		addClassMethodDefinition:
 			(RwMethodDefinition
 					newForSelector: #'method4'
