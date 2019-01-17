@@ -10,6 +10,7 @@ Class {
 { #category : 'testing' }
 WindowsStoreTest >> testAbsoluteFullName [
 	| filesystem |
+
 	filesystem := FileSystem store: WindowsStore new.
 
 	"Check dropping trailing slash."	
@@ -18,9 +19,6 @@ WindowsStoreTest >> testAbsoluteFullName [
 	"Check round-trip conversion from String to FileReference back to String again."
 	#( 	'C:\'		'D:\'		'\'		'C:\tmp'		'D:\tmp'		'C:\tmp\xx'      ) 
 		do: [ :pathString | self assert: (filesystem referenceTo: pathString) fullName equals: pathString ].
-	
-	
-
 ]
 
 { #category : 'testing' }

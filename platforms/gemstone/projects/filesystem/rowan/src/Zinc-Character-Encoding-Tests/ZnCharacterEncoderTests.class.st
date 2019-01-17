@@ -192,22 +192,22 @@ ZnCharacterEncoderTests >> testConvencienceMethods [
 
 { #category : 'testing' }
 ZnCharacterEncoderTests >> testDefault [
-	| string bytes |
-	self assert: ZnCharacterEncoder default equals: ZnUTF8Encoder new.
+	| string bytes |  
+	self assert: ZnCharacterEncoder default equals: ZnUTF8Encoder default.
 	string := 'Der Weg zur Hölle ist mit guten Vorsätzen gepflastert.'.
 	bytes := ZnUTF8Encoder new encodeString: string.
 	ZnDefaultCharacterEncoder 
 		value: ZnUTF8Encoder new
 		during: [ 
 			self 
-				assertCollection: (ZnCharacterEncoder default decodeBytes: bytes) 
-				equals: string ].
+				assertString: (ZnCharacterEncoder default decodeBytes: bytes) 
+				equalsString: string ].
 	ZnDefaultCharacterEncoder 
 		value: ZnUTF8Encoder new
 		during: [ 
 			self 
-				assert: ((ZnCharacterEncoder newForEncoding: 'unknown') decodeBytes: bytes) 
-				equals: string ]
+				assertString: ((ZnCharacterEncoder newForEncoding: 'unknown') decodeBytes: bytes) 
+				equalsString: string ]
 ]
 
 { #category : 'testing' }
@@ -357,10 +357,10 @@ ZnCharacterEncoderTests >> testReadIntoStartingAtCountFromStreamAtEnd [
 ZnCharacterEncoderTests >> testReadIntoStartingAtCountFromStreamWide [
 	| encoder |
 
-self error: 'Need to figure out how to handle WideString'.
+self flag: 'TODO: Need to figure out how to handle WideString'.
 
 	encoder := ZnUTF8Encoder new.
-	{ 'abc', (#WideString withAll: { 300 asCharacter. 400 asCharacter. 500 asCharacter}), 'xyz' } do: [ :each |
+	{ 'abc', (String withAll: { 300 asCharacter. 400 asCharacter. 500 asCharacter}), 'xyz' } do: [ :each |
 			| bytes buffer notified read |
 			bytes := encoder encodeString: each.
 			buffer := String new: each size.
@@ -600,17 +600,17 @@ ZnCharacterEncoderTests >> testUTF8ByteOrderMark [
 	encoder := ZnUTF8Encoder new.
 	string := 'élève en Français'.
 	bytes := encoder encodeStringWithByteOrderMark: string.
-	self assert: (encoder decodeBytes: bytes) equals: string.
+	self assertString: (encoder decodeBytes: bytes) equalsString: string.
 	
 	string := 'Foo'.
 	bytes := encoder encodeStringWithByteOrderMark: string.
 	decodedString := String new: string size.
 	ZnUTF8Encoder new 
 		readInto: decodedString startingAt: 1 count: string size fromStream: bytes readStream. 
-	self assert: decodedString equals: string.
+	self assertString: decodedString equalsString: string.
 	
 	bom := encoder encodeStringWithByteOrderMark: ''.
-	self should: [ encoder decodeBytes: bom ] raise: ZnIncomplete
+	self should: [ encoder decodeBytes: bom ] raise: Error
 ]
 
 { #category : 'testing' }
@@ -659,7 +659,7 @@ ZnCharacterEncoderTests >> testUTF8EncoderIncomplete [
 		2 to: each size do: [ :count |
 			self 
 				should: [ encoder decodeBytes: (each allButLast: count - 1) ] 
-				raise: ZnIncomplete ] ]
+				raise: ZnCharacterEncodingError ] ]
 ]
 
 { #category : 'testing' }
@@ -669,7 +669,7 @@ ZnCharacterEncoderTests >> testUTF8EncoderRandom [
 		string := self class stringOfSize: 256 fromSource: source.
 		bytes := string utf8Encoded.
 		result := bytes utf8Decoded.
-		self assert: result equals: string ]
+		self assertString: result equalsString: string ]
 ]
 
 { #category : 'testing' }
@@ -690,10 +690,10 @@ ZnCharacterEncoderTests >> testUTF8Overlong [
 	
 	self 
 		should: [ ZnUTF8Encoder new decodeBytes: #[ 16rF0 16r82 16r82 16rAC ] ] 
-		raise: ZnInvalidUTF8.
+		raise: ZnCharacterEncodingError.
 	self 
 		should: [ ZnUTF8Encoder new decodeBytes: #(193 129 193 130 193 131 ) ] 
-		raise: ZnInvalidUTF8.
+		raise: ZnCharacterEncodingError.
 ]
 
 { #category : 'testing' }
@@ -729,27 +729,6 @@ ZnCharacterEncoderTests >> testUTF8ReadFaultyInput [
 ]
 
 { #category : 'testing' }
-ZnCharacterEncoderTests >> testUTF8ReadStreamReadInto [
-	| string bytes stream buffer |
-	string := 'élève en Français'.
-	bytes := ZnUTF8Encoder new encodeString: string.
-	stream := ZnBufferedReadStream on: (ZnCharacterReadStream on: bytes readStreamPortable).
-	stream sizeBuffer: string size.
-	buffer := String new: string size.
-	stream next: string size into: buffer. 
-	self assert: buffer equals: string.
-	self assert: stream atEnd.
-	string := 'Czech in Czech is ', 269 asCharacter asString ,'e', 353 asCharacter asString , 'tina.'.
-	bytes := ZnUTF8Encoder new encodeString: string.
-	stream := ZnBufferedReadStream on: (ZnCharacterReadStream on: bytes readStreamPortable).
-	stream sizeBuffer: string size.
-	buffer := String new: string size.
-	stream next: string size into: buffer. 
-	self assert: buffer equals: string.
-	self assert: stream atEnd
-]
-
-{ #category : 'testing' }
 ZnCharacterEncoderTests >> testUTF8SurrogateCodePointsShouldFail [
 	| encoder surrogateCodePoint |
 	encoder := #utf8 asZnCharacterEncoder.
@@ -760,5 +739,5 @@ ZnCharacterEncoderTests >> testUTF8SurrogateCodePointsShouldFail [
 		raise: ZnInvalidUTF8.
 	self 
 		should: [ encoder decodeBytes: #[237 160 129] ]
-		raise: ZnInvalidUTF8
+		raise: ZnCharacterEncodingError
 ]

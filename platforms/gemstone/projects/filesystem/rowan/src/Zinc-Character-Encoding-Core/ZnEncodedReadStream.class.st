@@ -19,10 +19,16 @@ ZnEncodedReadStream >> atEnd [
 
 { #category : 'accessing' }
 ZnEncodedReadStream >> contents [
-	
-	^ self collectionSpecies
-		streamContents: [ :collectionStream | 
-			collectionStream nextPutAll: (self encoder decodeBytes: stream  contents) ]
+
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+		ifTrue: [
+			^ self collectionSpecies
+				streamContents: [ :collectionStream | 
+					collectionStream nextPutAll: (self encoder decodeBytes: stream  contents) ] ]
+		ifFalse: [
+			^self upToEnd]
 ]
 
 { #category : 'testing' }

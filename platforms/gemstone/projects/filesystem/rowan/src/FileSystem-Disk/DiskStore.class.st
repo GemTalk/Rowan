@@ -9,9 +9,7 @@ Class {
 		'maxFileNameLength'
 	],
 	#classVars : [
-		'CurrentClientFS',
 		'CurrentFS',
-		'DefaultClientWorkingDirectory',
 		'DefaultWorkingDirectory'
 	],
 	#classInstVars : [
@@ -21,17 +19,15 @@ Class {
 	#category : 'FileSystem-Disk-Store'
 }
 
-{ #category : 'accessing' }
+{ #category : 'current' }
 DiskStore class >> activeClass [
-	self allSubclasses do: [:ea | 
-		(ea platformNames includes: self osName) ifTrue: [^ ea] ].
-	^ self
+	^DiskStore activeClassFor: self osName
 ]
 
-{ #category : 'accessing' }
-DiskStore class >> activeClientClass [
+{ #category : 'current' }
+DiskStore class >> activeClassFor: anOsName [
 	self allSubclasses do: [:ea | 
-		(ea platformNames includes: self clientOsName) ifTrue: [^ ea] ].
+		(ea platformNames includes: anOsName) ifTrue: [^ ea] ].
 	^ self
 ]
 
@@ -61,11 +57,6 @@ DiskStore class >> current [
 ]
 
 { #category : 'current' }
-DiskStore class >> currentClient [
-	^ self currentClientFileSystem store
-]
-
-{ #category : 'current' }
 DiskStore class >> currentFileSystem [
 	^ CurrentFS ifNil: [
 		CurrentFS := FileSystem store: self activeClass createDefault]
@@ -75,10 +66,9 @@ DiskStore class >> currentFileSystem [
 DiskStore class >> defaultWorkingDirectory [
 	"Ask the VM for the default working directory.
 	Clients should normally use the instance side method which caches this value."
-	| pathString |
 
-	pathString := FileSystem fileClass currentWorkingDirectoryPath.
-	^(Path from: pathString delimiter: self delimiter).
+	DefaultWorkingDirectory ifNil: [DefaultWorkingDirectory := FileSystem fileClass currentWorkingDirectoryPath].
+	^(Path from: DefaultWorkingDirectory delimiter: self delimiter).
 ]
 
 { #category : 'public' }
@@ -106,10 +96,9 @@ DiskStore class >> denyWriteShareRule [
 	FileOptionFeatureNotSupported signal: 'denyWriteShareRule'
 ]
 
-{ #category : 'file constants' }
-DiskStore class >> fileSharedRule [
-	"The value used to always open an existing file or create a file if one does not exist"
-	^self fileShareReadRule bitOr: self fileShareWriteRule
+{ #category : 'class initialization' }
+DiskStore class >> initializeDefaultWorkingDirectory [
+	^DefaultWorkingDirectory := self defaultWorkingDirectory
 ]
 
 { #category : 'class initialization' }
@@ -191,9 +180,11 @@ DiskStore class >> readWriteAccessRule [
 	FileOptionFeatureNotSupported signal: 'readWriteAccessRule'
 ]
 
-{ #category : 'initialization' }
+{ #category : 'current' }
 DiskStore class >> reset [
-	PosixValues := Dictionary new
+	self posixValues: nil.
+	CurrentFS := nil.
+	DefaultWorkingDirectory := nil
 ]
 
 { #category : 'system startup' }
@@ -239,25 +230,18 @@ DiskStore >> basicCreationTimeOf: anEntry [
 ]
 
 { #category : 'private' }
+DiskStore >> basicEntriesIn: aPath [
+	^FileSystem fileClass entriesIn: aPath
+]
+
+{ #category : 'private' }
 DiskStore >> basicEntry: ignored path: aPath nodesDo: aBlock [
 
-	| encodedPathString entries pathString |
+	| pathString |
 		
 	pathString := self stringFromPath: aPath.
-	encodedPathString := "File encodePathString:" pathString.
-	(FileSystem fileClass entriesIn: encodedPathString) do: [:eaEntry |
+	(self basicEntriesIn: pathString) do: [:eaEntry |
 		aBlock value: (FileSystem fileClass lookupDirectoryEntry: eaEntry)]
-
-"	[ entry isNil ]
-		whileFalse: [ 
-			entry at: 1 put: (File decodePathString: entry first).
-			aBlock value: entry.
-			index := index + 1.
-			entry := File lookupEntryIn: encodedPathString index: index ]."
-"	entry
-		do: [:entryPathString |
-			((entryPathString endsWith: '.')  or: [ entryPathString endsWith: '..' ])
-				ifFalse: [ aBlock value: (FileSystem fileClass lookupEntryIn: entryPathString index: 1) ] ]"
 ]
 
 { #category : 'public' }
@@ -273,7 +257,8 @@ DiskStore >> basicEntryAt: aPath [
 
 { #category : 'private' }
 DiskStore >> basicIsDirectory: anEntry [
-	^ anEntry at: 4
+
+	^anEntry at: 4
 ]
 
 { #category : 'private' }
@@ -343,7 +328,7 @@ DiskStore >> createDirectory: path [
 
 	| parent pathString result |
 	pathString := self stringFromPath: path.
-	result := FileSystem fileClass createDirectory: pathString.
+	result := FileSystem fileClass _createDirectory: pathString onClient: self isForeignFileSystem mode: nil.
 	result
 		ifNil: [ 
 			parent := path parent.
@@ -361,9 +346,9 @@ DiskStore >> createDirectory: path [
 { #category : 'accessing' }
 DiskStore >> defaultWorkingDirectory [
 	"Answer the default working directory, which is defined as the directory where the image resides."
-
-	^ DefaultWorkingDirectory
-		ifNil: [ self class defaultWorkingDirectory ]
+ 
+	DefaultWorkingDirectory  ifNil: [self class initializeDefaultWorkingDirectory].
+	^DefaultWorkingDirectory
 ]
 
 { #category : 'public' }
@@ -383,23 +368,17 @@ DiskStore >> delete: path [
 { #category : 'public' }
 DiskStore >> deleteDirectory: pathString [
 	
-	(FileSystem fileClass deleteDirectory: pathString)
+	(FileSystem fileClass _removeDirectory: pathString onClient: self isForeignFileSystem)
 		ifNil: [ self error: 'Error deleting directory ', pathString printString, ' :: ', FileSystem fileClass serverErrorString ]
 ]
 
 { #category : 'public' }
 DiskStore >> deleteFile: pathString [
 
-	(FileSystem fileClass deleteFile: pathString)
+	(FileSystem fileClass _removeFile: pathString onClient: self isForeignFileSystem)
 		ifNil: [ FileDeletionError 
 					signalWith: pathString  
 					text: 'Could not delete file ' , pathString , '. Check the file is not open.' ].
-]
-
-{ #category : 'file constants' }
-DiskStore >> fileSharedRule [
-	"The value used to always open an existing file or create a file if one does not exist"
-	^self fileShareReadRule bitOr: self fileShareWriteRule
 ]
 
 { #category : 'printing' }
@@ -420,7 +399,7 @@ DiskStore >> hash [
 { #category : 'initialization' }
 DiskStore >> initialize [
 	super initialize.
-	maxFileNameLength := 255.
+	maxFileNameLength := 255
 ]
 
 { #category : 'public' }
@@ -456,11 +435,16 @@ DiskStore >> isFile: aPath [
 	
 ]
 
+{ #category : 'testing' }
+DiskStore >> isForeignFileSystem [
+	^ false
+]
+
 { #category : 'public' }
 DiskStore >> isReadable: aPath [
 	(self exists: aPath) ifFalse: [ ^ false ].
 	self flag: 'TODO: we need a decent primitive for this...'.
-	(self basicOpen: aPath options: self readOptions) 
+	(self basicOpen: aPath options: self class currentFileSystem readFileOptions) 
 		ifNotNil: [ :id|
 			id close.
 			^ true].
@@ -485,7 +469,7 @@ DiskStore >> isSymlink: aPath [
 DiskStore >> isWritable: aPath [
 	(self exists: aPath) ifFalse: [ ^ false ].
 	self flag: 'TODO: we need a decent primitive for this...'.
-	(self basicOpen: aPath options: self readWriteOptions) 
+	(self basicOpen: aPath options: self class currentFileSystem writeFileOptions) 
 		ifNotNil: [ :id|
 			id close.
 			^ true].
@@ -527,10 +511,15 @@ DiskStore >> rename: sourcePath to: destinationPath [
 	| sourcePathString targetPathString |
 	sourcePathString := self stringFromPath: sourcePath.
 	targetPathString := self stringFromPath: destinationPath.
-	^FileSystem fileClass rename: sourcePathString to: targetPathString
+	^FileSystem fileClass rename: sourcePathString to: targetPathString onClient: self isForeignFileSystem
 ]
 
 { #category : 'private' }
 DiskStore >> rootNode [
 	^ #('' 0 0 true 0 8r555)
+]
+
+{ #category : 'accessing' }
+DiskStore >> workingDirectoryEnvironmentVariableName [
+	^'PWD'
 ]

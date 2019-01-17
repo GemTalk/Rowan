@@ -8,10 +8,10 @@ Class {
 ZnPercentEncoderTests >> testDecodePlusAsSpace [
 	| encoder |
 	encoder := ZnPercentEncoder new.
-	self assert: (encoder decode: '+') equals: ' '.
+	self assertString: (encoder decode: '+') equalsString: ' '.
 	self assert: encoder decodePlusAsSpace.
 	encoder decodePlusAsSpace: false.
-	self assert: (encoder decode: '+') equals: '+'.
+	self assertString: (encoder decode: '+') equalsString: '+'.
 	self deny: encoder decodePlusAsSpace
 ]
 
@@ -30,10 +30,10 @@ ZnPercentEncoderTests >> testDecodingErrors [
 ZnPercentEncoderTests >> testLeadingZero [
 	| encoder |
 	encoder := ZnPercentEncoder new.
-	self assert: (encoder encode: 'foo', Character tab asString, 'bar') equals: 'foo%09bar'.
-	self assert: (encoder decode: 'foo%09bar') equals: 'foo', Character tab asString, 'bar'.
-	self assert: (encoder encode: 'foo', Character lf asString, 'bar') equals: 'foo%0Abar'.
-	self assert: (encoder decode: 'foo%0Abar') equals: 'foo', Character lf asString, 'bar'
+	self assertString: (encoder encode: 'foo', Character tab asString, 'bar') equalsString: 'foo%09bar'.
+	self assertString: (encoder decode: 'foo%09bar') equalsString: 'foo', Character tab asString, 'bar'.
+	self assertString: (encoder encode: 'foo', Character lf asString, 'bar') equalsString: 'foo%0Abar'.
+	self assertString: (encoder decode: 'foo%0Abar') equalsString: 'foo', Character lf asString, 'bar'
 ]
 
 { #category : 'tests' }
@@ -41,29 +41,29 @@ ZnPercentEncoderTests >> testNonAscii [
 	| encoder |
 	encoder := ZnPercentEncoder new.
 	self 
-		assert: encoder characterEncoder 
-		equals: (ZnCharacterEncoder newForEncoding: 'utf-8').
+		assertString: encoder characterEncoder 
+		equalsString: (ZnCharacterEncoder newForEncoding: 'utf-8').
 	self 
-		assert: (encoder encode: 'élève en Français') 
-		equals: '%C3%A9l%C3%A8ve%20en%20Fran%C3%A7ais'.
+		assertString: (encoder encode: 'élève en Français') 
+		equalsString: '%C3%A9l%C3%A8ve%20en%20Fran%C3%A7ais'.
 	self 
-		assert: (encoder decode: '%C3%A9l%C3%A8ve%20en%20Fran%C3%A7ais') 
-		equals: 'élève en Français'
+		assertString: (encoder decode: '%C3%A9l%C3%A8ve%20en%20Fran%C3%A7ais') 
+		equalsString: 'élève en Français'
 ]
 
 { #category : 'tests' }
 ZnPercentEncoderTests >> testSimple [
 	| encoder |
 	encoder := ZnPercentEncoder new.
-	self assert: (encoder encode: 'foo bar') equals: 'foo%20bar'.
-	self assert: (encoder decode: 'foo%20bar') equals: 'foo bar'.
-	self assert: (encoder encode: '') equals: ''.
-	self assert: (encoder decode: '') equals: ''.
-	self assert: (encoder decode: 'foo%25bar') equals: 'foo%bar'.
-	self assert: (encoder decode: 'foo+bar') equals: 'foo bar'
+	self assertString: (encoder encode: 'foo bar') equalsString: 'foo%20bar'.
+	self assertString: (encoder decode: 'foo%20bar') equalsString: 'foo bar'.
+	self assertString: (encoder encode: '') equalsString: ''.
+	self assertString: (encoder decode: '') equalsString: ''.
+	self assertString: (encoder decode: 'foo%25bar') equalsString: 'foo%bar'.
+	self assertString: (encoder decode: 'foo+bar') equalsString: 'foo bar'
 ]
 
 { #category : 'tests' }
 ZnPercentEncoderTests >> testStringUrlDecoded [
-	self assert: ('foo%20bar' urlDecoded) equals: 'foo bar'
+	self assertString: ('foo%20bar' urlDecoded) equalsString: 'foo bar'
 ]

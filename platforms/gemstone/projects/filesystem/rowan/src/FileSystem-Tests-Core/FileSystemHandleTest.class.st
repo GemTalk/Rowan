@@ -32,7 +32,7 @@ FileSystemHandleTest >> setUp [
 	super setUp.
 	filesystem := self createFileSystem.
 	reference := filesystem * 'plonk'.
-	handle := reference openWithOptions: filesystem store readWriteTruncatedOptions
+	handle := reference openWithOptions: filesystem readWriteTruncatedFileSpec fileOptions
 ]
 
 { #category : 'running' }
@@ -128,7 +128,7 @@ FileSystemHandleTest >> testReadBufferTooLarge [
 { #category : 'tests' }
 FileSystemHandleTest >> testReadOnly [
 	handle close.
-	handle := reference openWithOptions: filesystem store readOptions.
+	handle := reference openWithOptions: filesystem readFileOptions.
 	self 
 		should: 
 			[ handle 
@@ -170,11 +170,4 @@ FileSystemHandleTest >> testTruncate [
 	handle truncateTo: 3.
 	"The Disk version will fail until the primitive is implemented"
 	self assert: handle size = 3
-]
-
-{ #category : 'tests' }
-FileSystemHandleTest >> testWriteStream [
-	| stream |
-	stream := handle binaryWriteStream.
-	self assert: (stream respondsTo: #nextPut:)
 ]

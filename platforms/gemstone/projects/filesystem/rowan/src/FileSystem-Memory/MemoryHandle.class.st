@@ -38,6 +38,13 @@ MemoryHandle >> binaryReadStream [
 ]
 
 { #category : 'streams' }
+MemoryHandle >> binaryStream [
+	^self options isWritable 
+		ifTrue: [entry binaryWriteStream] 
+		ifFalse: [entry binaryReadStream]
+]
+
+{ #category : 'streams' }
 MemoryHandle >> binaryWriteStream [
 	
 	^ entry binaryWriteStream

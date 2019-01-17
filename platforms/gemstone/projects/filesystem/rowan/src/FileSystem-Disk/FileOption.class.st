@@ -57,7 +57,7 @@ FileOption class >> reportOn: aStream indent: indent [
 
 	((self name = #FileOption) not and: [self class includesSelector: #defaultPlatformValue]) 
 		ifTrue: [aValue := self defaultPlatformValue asString]
-		ifFalse: [aValue := (self subclasses isEmpty not) ifTrue: [''] ifFalse: ['not supported']].
+		ifFalse: [aValue := (self subclasses isEmpty not) ifTrue: [''] ifFalse: ['value not defined']].
 	aSize :=  aValue size.
 	(15 - aSize) timesRepeat: [aStream space].
 	aStream nextPutAll: aValue asString.

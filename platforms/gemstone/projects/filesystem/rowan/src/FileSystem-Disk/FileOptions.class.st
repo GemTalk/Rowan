@@ -259,11 +259,6 @@ FileOptions >> beWriteOnlyShared [
 ]
 
 { #category : 'convenience' }
-FileOptions >> compressionPolicy [
-	^self parent ifNotNil: [:fs | fs compressionPolicy]
-]
-
-{ #category : 'convenience' }
 FileOptions >> createRule [
 	^self fileCreateOption 
 		ifNil: [self store class openExistingRule] 
@@ -402,9 +397,8 @@ FileOptions >> initializeWriteWithLowCompression [
 ]
 
 { #category : 'testing' }
-FileOptions >> isClientFileSystem [
-	"This needs more work"
-	^false
+FileOptions >> isForeignFileSystem [
+	^self store isForeignFileSystem
 ]
 
 { #category : 'testing' }
@@ -438,7 +432,7 @@ FileOptions >> modeString [
 	| aStream |
 	aStream := WriteStream on: String new.
 	self printOpenModeStringOn: aStream.
-	self compressionPolicy ifNotNil: [:cp | cp printOpenModeStringOn: aStream].
+"	self compressionPolicy ifNotNil: [:cp | cp printOpenModeStringOn: aStream]."
 	^aStream contents
 ]
 
@@ -508,7 +502,7 @@ FileOptions >> shareRule [
 
 { #category : 'convenience' }
 FileOptions >> store [
-	^self parent ifNil: [FileSystem disk store] ifNotNil: [:fs | fs fileStore]
+	^self parent ifNil: [FileSystem disk store] ifNotNil: [:fs | fs store]
 ]
 
 { #category : 'options' }

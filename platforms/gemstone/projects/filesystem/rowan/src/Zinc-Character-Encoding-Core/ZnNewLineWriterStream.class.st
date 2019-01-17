@@ -16,7 +16,7 @@ converter forPlatformLineEnding.
 "
 Class {
 	#name : 'ZnNewLineWriterStream',
-	#superclass : 'Object',
+	#superclass : 'WriteStreamPortable',
 	#instVars : [
 		'stream',
 		'cr',
@@ -67,14 +67,13 @@ ZnNewLineWriterStream >> forLf [
 
 { #category : 'accessing' }
 ZnNewLineWriterStream >> forPlatformLineEnding [
-self error: 'This needs to be changed to access System to find the currre line ending'.
-	"lineEnding := OSPlatform current lineEnding"
+	lineEnding := System lineEnding
 ]
 
 { #category : 'initialize' }
 ZnNewLineWriterStream >> initialize [
 
-	super initialize.
+	"super initialize."
 	cr := Character cr.
 	lf := Character lf.
 	self forPlatformLineEnding.

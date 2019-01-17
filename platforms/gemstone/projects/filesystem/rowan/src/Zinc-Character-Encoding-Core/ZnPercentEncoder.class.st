@@ -49,12 +49,15 @@ ZnPercentEncoder class >> rfc3986UnreservedCharacters [
 ZnPercentEncoder >> characterEncoder [
 	"Return the character encoder that I currently use.
 	If not set, I will default to using UTF-8."
-	
-self error: 'In Pharo, ZnDefaultCharacterEncoder is a DynamicVariable. This must be handled differently in Gemstone'.
-"default
-	^ ZnCharacterEncoder utf8 
-is the method which initializes the variable"
-	^ characterEncoder ifNil: [ characterEncoder := #ZnDefaultCharacterEncoder value ]
+
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+		ifTrue: [
+			self flag: 'TODO: In Pharo, ZnDefaultCharacterEncoder is a DynamicVariable. This must be handled differently in Gemstone'.
+			^ characterEncoder ifNil: [ characterEncoder := ZnCharacterEncoder utf8 ] ]
+		ifFalse: [
+			^ characterEncoder ifNil: [ characterEncoder := ZnDefaultCharacterEncoder value ] ]
 ]
 
 { #category : 'initialize-release' }
@@ -152,9 +155,9 @@ ZnPercentEncoder >> errorHexDigitExpected [
 { #category : 'private' }
 ZnPercentEncoder >> readHexFrom: stream [
 	| first second |
-	(stream atEnd not and: [ (first := stream next digitValue) between: 0 and: 15 ])
+	(stream atEnd not and: [ (first := stream next numberParserDigitalValue) between: 0 and: 15 ])
 		ifFalse: [ self errorHexDigitExpected ].
-	(stream atEnd not and: [ (second := stream next digitValue) between: 0 and: 15 ])
+	(stream atEnd not and: [ (second := stream next numberParserDigitalValue) between: 0 and: 15 ])
 		ifFalse: [ self errorHexDigitExpected ].
 	^ (first << 4) + second
 ]

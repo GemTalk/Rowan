@@ -57,19 +57,38 @@ FileHandle >> basicOpen [
 ]
 
 { #category : 'public' }
+FileHandle >> binaryFileStream [
+	^BinaryFileStream 
+		handle: nil 
+		file: (FileSystem fileClass openReference: reference withOptions: self options) 
+		options: self options
+]
+
+{ #category : 'public' }
 FileHandle >> binaryReadStream [
 	"The file handle should be created with the file mode which indicates if it is a write or read stream"
 	"^ ZnBufferedReadStream on: (BinaryFileStream onFileHandle: self)"
 
-	^(BinaryFileStream handle: id file: (FileSystem fileClass openReference: reference withOptions: self options) options: self options)
+	^BinaryFileStream 
+		handle: id 
+		file: (FileSystem fileClass openReference: reference withOptions: self options) 
+		options: self options
+]
+
+{ #category : 'public' }
+FileHandle >> binaryStream [
+	^BinaryFileStream 
+		handle: nil 
+		file: (FileSystem fileClass openReference: reference withOptions: self options) 
+		options: self options
 ]
 
 { #category : 'public' }
 FileHandle >> binaryWriteStream [
-	^(BinaryFileStream 
+	^BinaryFileStream 
 		handle: nil 
 		file: (FileSystem fileClass openReference: reference withOptions: self options) 
-		options: self options)
+		options: self options
 ]
 
 { #category : 'public' }

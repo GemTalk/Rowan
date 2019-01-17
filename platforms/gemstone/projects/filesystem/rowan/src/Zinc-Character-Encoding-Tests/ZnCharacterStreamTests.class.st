@@ -31,15 +31,15 @@ ZnCharacterStreamTests >> encodeString: string with: encoder [
 { #category : 'testing' }
 ZnCharacterStreamTests >> testNextLine [
 	| stream |
-	stream := ZnCharacterReadStream on: 'abc' asByteArray readStreamPortable.
+	stream := ZnCharacterReadStream on: 'abc' asByteArray readStream.
 	self assert: stream nextLine equals: 'abc'.
 	self assert: stream nextLine  equals: nil.
-	stream := ZnCharacterReadStream on: '' asByteArray readStreamPortable.
+	stream := ZnCharacterReadStream on: '' asByteArray readStream.
 	self assert: stream nextLine equals: nil.
 	stream := ZnCharacterReadStream on: (String withAll: { 
 		$a. Character cr. 
 		$b. Character lf. 
-		$c }) readStreamPortable.
+		$c }) readStream.
 	self assert: stream nextLine equals: 'a'.
 	self assert: stream nextLine equals: 'b'.
 	self assert: stream nextLine equals: 'c'.
@@ -47,7 +47,7 @@ ZnCharacterStreamTests >> testNextLine [
 	stream := ZnCharacterReadStream on: (String withAll:{ 
 		$a. Character cr. Character lf.  
 		$b. Character cr. Character lf. 
-		$c. Character cr. Character lf }) readStreamPortable.
+		$c. Character cr. Character lf }) readStream.
 	self assert: stream nextLine equals: 'a'.
 	self assert: stream nextLine equals: 'b'.
 	self assert: stream nextLine equals: 'c'.
@@ -55,7 +55,7 @@ ZnCharacterStreamTests >> testNextLine [
 	stream := ZnCharacterReadStream on: (String withAll: { 
 		$a. Character cr. Character lf.  
 		Character cr. Character lf. 
-		$c. Character cr. Character lf }) readStreamPortable.
+		$c. Character cr. Character lf }) readStream.
 	self assert: stream nextLine equals: 'a'.
 	self assert: stream nextLine equals: ''.
 	self assert: stream nextLine equals: 'c'.

@@ -9,14 +9,17 @@ Class {
 
 { #category : 'instance creation' }
 PlatformResolver class >> forCurrentPlatform [
-	| platformName |
-	platformName :=  System gemVersionAt: 'osName' .
-	^ (self allSubclasses detect: [:ea | ea platformNames includes: platformName]) new
+	^(self resolverClassFor: System osName) new
 ]
 
 { #category : 'accessing' }
 PlatformResolver class >> platformNames [
 	^ {}
+]
+
+{ #category : 'instance creation' }
+PlatformResolver class >> resolverClassFor: anOsName [
+	^PlatformResolver allSubclasses detect: [:ea | ea platformNames includes: anOsName]
 ]
 
 { #category : 'origins' }
@@ -43,13 +46,12 @@ PlatformResolver >> directoryFromEnvVariableNamed: aString [
 { #category : 'private' }
 PlatformResolver >> directoryFromEnvVariableNamed: aString or: aBlock [
 	| envValue |
-	envValue := [ System gemEnvironmentVariable: aString ]
+	envValue := [ self osEnvironmentVariable: aString ]
 		on: Error
 		do: [ ^ aBlock value ].
 	^ envValue isEmptyOrNil
 		ifTrue: [ aBlock value ]
-		ifFalse: [ self resolveString: envValue ]
-
+		ifFalse: [ self resolveString: envValue ].
 ]
 
 { #category : 'origins' }
@@ -59,7 +61,18 @@ PlatformResolver >> documents [
 
 { #category : 'origins' }
 PlatformResolver >> home [
+	^ self directoryFromEnvVariableNamed: self homeEnvironmentVariableName
+]
+
+{ #category : 'origins' }
+PlatformResolver >> homeEnvironmentVariableName [
 	^ self subclassResponsibility
+]
+
+{ #category : 'private' }
+PlatformResolver >> osEnvironmentVariable: aString [
+
+	^System gemEnvironmentVariable: aString
 ]
 
 { #category : 'origins' }

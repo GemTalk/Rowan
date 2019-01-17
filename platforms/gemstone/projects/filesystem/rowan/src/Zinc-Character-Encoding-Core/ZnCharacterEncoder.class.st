@@ -67,13 +67,15 @@ ZnCharacterEncoder class >> detectEncoding: bytes [
 	
 	| candidates |
 	"Set up an ordered candidates list, 7-bit ascii and utf8 are reasonably reliable, iso88591 is a reasonable default"
+
 	candidates := #(ascii utf8 iso88591).
-	candidates := candidates , (ZnByteEncoder knownEncodingIdentifiers difference: candidates).
-	candidates := candidates , (self knownEncodingIdentifiers difference: candidates).
+	candidates := candidates , (ZnByteEncoder knownEncodingIdentifiers difference: candidates) asArray.
+	candidates := candidates , (self knownEncodingIdentifiers difference: candidates) asArray.
+
 	"Try each and return the first one that succeeeds."
 	candidates do: [ :identifier | | encoder |
 		encoder := self newForEncoding: identifier.
-		[ ^ encoder decodeBytes: bytes; yourself ] on: ZnCharacterEncodingError do: [ ] ].
+		[ ^ encoder decodeBytes: bytes; yourself ] on: ZnCharacterEncodingError do: [:s | s return: nil ] ]. "s return: nil <== This is needed to mimic Pharo"
 	ZnCharacterEncodingError signal: 'No suitable encoder found'
 ]
 
@@ -119,7 +121,7 @@ ZnCharacterEncoder class >> newForEncoding: string [
 	| concreteSubclass |
 	concreteSubclass := self allSubclasses 
 		detect: [ :each | each handlesEncoding: string ] 
-		ifNone: [ ^ self error: 'The ', string printString, ' is not currently supported.' ].
+		ifNone: [ ^ self default ].
 	^ concreteSubclass newForEncoding: string
 ]
 
@@ -232,7 +234,7 @@ ZnCharacterEncoder >> error: message [
 
 { #category : 'error handling' }
 ZnCharacterEncoder >> errorIncomplete [
-	^ #ZnIncomplete signal: 'Incomplete input for character decoding'
+	^ ZnIncomplete signal: 'Incomplete input for character decoding'
 ]
 
 { #category : 'error handling' }

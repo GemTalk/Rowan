@@ -3,12 +3,18 @@ Extension { #name : 'CharacterCollection' }
 { #category : '*filesystem-gemstone-kernel' }
 CharacterCollection >> asZnCharacterEncoder [
 	"Return a ZnCharacterEncoder instance using the receiver as identifier"
-	
-	" 'UTF-8' asZnCharacterEncoder "
-	
-	((self select: [ :each | each isAlphaNumeric ]) asLowercase) = 'utf8' ifFalse: [ self error: 'Only utf8 encoding supported'].
-	^ ZnUTF8Encoder new
 
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+		ifTrue: [
+			^ ZnCharacterEncoder newForEncoding: self
+			" 'UTF-8' asZnCharacterEncoder 
+			((self select: [ :each | each isAlphaNumeric ]) asLowercase) = 'utf8' 
+				ifFalse: [ self error: 'Only utf8 encoding supported'].
+			^ ZnUTF8Encoder new"]
+		ifFalse: [
+			^ ZnCharacterEncoder newForEncoding: self]
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
@@ -38,6 +44,12 @@ CharacterCollection >> isByteString [
 
 	^false
 
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> isWideString [
+	"Answer whether the receiver is a WideString"
+	^false
 ]
 
 { #category : '*filesystem-gemstone-kernel' }

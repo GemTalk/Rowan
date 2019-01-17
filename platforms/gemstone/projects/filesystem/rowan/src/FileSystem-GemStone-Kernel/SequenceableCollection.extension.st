@@ -18,6 +18,17 @@ SequenceableCollection >> allButFirst: n [
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
+SequenceableCollection >> atRandom: aGenerator [
+	"Answer a random element of the receiver.  Uses aGenerator which
+	should be kept by the user in a variable and used every time. Use
+	this instead of #atRandom for better uniformity of random numbers 
+	because only you use the generator.  Causes an error if self has no 
+	elements."
+
+	^ self at: (aGenerator nextInt: self size)
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
 SequenceableCollection >> copyAfterLast: anElement [
 	"Answer a copy of the receiver from after the last occurence
 	of anElement up to the end. If no such element exists, answer 
@@ -132,6 +143,16 @@ SequenceableCollection >> reversed [
 	1 to: n do: [:i | result at: i put: (self at: (src := src - 1))].
 	^ result
 
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+SequenceableCollection >> swap: oneIndex with: anotherIndex [ 
+	"Move the element at oneIndex to anotherIndex, and vice-versa."
+
+	| element |
+	element := self at: oneIndex.
+	self at: oneIndex put: (self at: anotherIndex).
+	self at: anotherIndex put: element
 ]
 
 { #category : '*filesystem-gemstone-kernel' }

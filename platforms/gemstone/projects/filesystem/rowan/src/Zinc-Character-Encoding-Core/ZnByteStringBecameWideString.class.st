@@ -20,8 +20,8 @@ ZnByteStringBecameWideString class >> convert: byteString [
 	"Convert byteString to a wideString, signalling a resumable error"
 	
 	| wideString |
-self error: 'WideString does not exist in Gemstone'.
-	wideString := #WideString from: byteString.
+self flag: 'TODO: WideString does not exist in Gemstone'.
+	wideString := QuadByteString from: byteString.
 	self new
 		byteString: byteString;
 		wideString: wideString;
@@ -31,9 +31,13 @@ self error: 'WideString does not exist in Gemstone'.
 
 { #category : 'convenience' }
 ZnByteStringBecameWideString >> becomeForward [
-	"Switch the identities of byteString and wideString using #becomeForward:"
-
-	byteString becomeForward: wideString
+	"Switch the identities of byteString and wideString using #becomeForward:.
+		byteString becomeForward: wideString
+	 GemStone's #become: is a two way become. This is an attempt to mimic a one-way become"
+	| a |
+	a := byteString copy.
+	a become: wideString.
+	byteString := a
 ]
 
 { #category : 'accessing' }

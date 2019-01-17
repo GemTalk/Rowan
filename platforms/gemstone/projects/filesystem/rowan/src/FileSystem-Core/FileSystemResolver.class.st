@@ -34,6 +34,11 @@ FileSystemResolver >> canResolve: aSymbol [
 	^ self supportedOrigins includes: aSymbol
 ]
 
+{ #category : 'resolving' }
+FileSystemResolver >> fileSystem [
+	^ FileSystem disk
+]
+
 { #category : 'accessing' }
 FileSystemResolver >> flushCaches [
 	self flushLocalCache.
@@ -62,16 +67,26 @@ FileSystemResolver >> resolve: aSymbol [
 
 { #category : 'resolving' }
 FileSystemResolver >> resolveString: aString [
+	| decoded |
+	"The argument string is actually a byte array encoded differently on each platform.
+	We are transforming it to an image string.
+	We assume for now that the string is utf8 encoded."
+	decoded := aString decodeFromUTF8 asString.
+	^ FileReference 
+		fileSystem: self fileSystem 
+		path: (self fileSystem pathFromString: decoded)
+]
+
+{ #category : 'resolving' }
+FileSystemResolver >> resolveString: aString fileSystem: aFileSystem [
 	| decoded fs |
 	"The argument string is actually a byte array encoded differently on each platform.
 	We are transforming it to an image string.
 	We assume for now that the string is utf8 encoded."
 	decoded := aString decodeFromUTF8 asString.
-	fs := FileSystem disk.
 	^ FileReference 
-		fileSystem: fs 
+		fileSystem: aFileSystem 
 		path: (fs pathFromString: decoded)
-
 ]
 
 { #category : 'resolving' }

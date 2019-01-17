@@ -39,7 +39,7 @@ FileSystemTest class >> shouldInheritSelectors [
 FileSystemTest >> cleanupPaths [
 	toDelete
 		select: [ :path | filesystem exists: path ]
-		thenDo: [ :path | filesystem delete: path ].
+		thenDo: [ :path | filesystem delete: path ]
 ]
 
 { #category : 'initialize-release' }
@@ -49,6 +49,7 @@ FileSystemTest >> createFileSystem [
 
 { #category : 'initialize-release' }
 FileSystemTest >> markForCleanup: anObject [
+	"[filesystem delete: anObject] on: FileDoesNotExistException do: [:s | s resume]."
 	toDelete add: (filesystem resolve: anObject)
 ]
 

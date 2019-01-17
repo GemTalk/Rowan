@@ -29,7 +29,7 @@ ZnUTFEncoder >> decodeBytes: bytes [
 	
 	| byteStream |
 
-self error: 'This require the class WideString to be implemented'.
+self flag: 'TODO: This require the class WideString to be implemented'.
 	byteStream := bytes readStream.
 	^ String streamContents: [ :stream |
 		[ byteStream atEnd ] whileFalse: [ | codePoint |
@@ -37,7 +37,7 @@ self error: 'This require the class WideString to be implemented'.
 			(codePoint > 255 and: [ stream originalContents isWideString not ])
 				ifTrue: [ | wideString position |
 					position := stream position.
-					wideString := #WideString from: stream originalContents.
+					wideString := QuadByteString from: stream originalContents.
 					stream on: wideString; setFrom: position + 1 to: position ].
 			stream nextPut: (Character value: codePoint) ] ]
 ]
@@ -48,9 +48,9 @@ ZnUTFEncoder >> decodeBytesIntoWideString: bytes [
 
 	| byteStream |
 	byteStream := bytes readStream.
-self error: 'This requires the class WideString to be implemented'.
+self flag: 'TODO: This requires the class WideString to be implemented'.
 
-	^ #WideString streamContents: [ :stream |
+	^ QuadByteString streamContents: [ :stream |
 		[ byteStream atEnd ] whileFalse: [
 			stream nextPut: (self nextFromStream: byteStream) ] ]
 ]

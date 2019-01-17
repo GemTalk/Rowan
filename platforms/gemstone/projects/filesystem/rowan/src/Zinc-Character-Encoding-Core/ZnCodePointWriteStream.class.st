@@ -9,3 +9,11 @@ Class {
 	#superclass : 'ZnEncodedWriteStream',
 	#category : 'Zinc-Character-Encoding-Core'
 }
+
+{ #category : 'accessing' }
+ZnCodePointWriteStream >> nextPut: object [
+	self encoder 
+		nextPutCodePoint: object 
+		toStream: stream.
+	^ object
+]

@@ -28,8 +28,7 @@ ZnNewLineWriterStreamTests >> testNextPut [
 	"Ensure that the line ends are written correctly"
 
 	| expectedString stream crStream |
-self error: 'Changes needed here to hande lineEnding'.
-	expectedString := 'a', #'OSPlatform current lineEnding', 'b'.
+	expectedString := 'a', System lineEnding , 'b'.
 	{ String cr.
 		String lf.
 		String crlf. } do: [ :lineEnd |

@@ -171,3 +171,8 @@ WindowsStore >> printPath: aPath on: aStream [
 WindowsStore >> stripDrive: pathElements [
 	pathElements ifNotEmpty: [ pathElements at: 1 put: ( ($: split: pathElements first) last)  ]
 ]
+
+{ #category : 'accessing' }
+WindowsStore >> workingDirectoryEnvironmentVariableName [
+	^'USERPROFILE'
+]

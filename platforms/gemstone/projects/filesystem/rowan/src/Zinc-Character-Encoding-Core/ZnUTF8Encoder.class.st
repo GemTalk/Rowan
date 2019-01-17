@@ -78,6 +78,13 @@ ZnUTF8Encoder class >> newForEncoding: string [
 	^ self new
 ]
 
+{ #category : 'accessing' }
+ZnUTF8Encoder class >> reset [
+	"ZnUTF8Encoder reset"
+	
+	^ Default := self new
+]
+
 { #category : 'converting' }
 ZnUTF8Encoder >> backOnStream: stream [
 	"Move back one character on stream"
@@ -89,53 +96,106 @@ ZnUTF8Encoder >> backOnStream: stream [
 ZnUTF8Encoder >> decodeAsCodePoints: bytes [
 	"Decode bytes and return the resulting code points - This is a Gemstone implementation"
 
-	| ar |
-	ar := {}.
-	bytes decodeFromUTF8 do: [:char | ar add: char codePoint ].
-	^ ar
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+		ifTrue: [
+			| ar |
+			ar := {}.
+			bytes decodeFromUTF8 do: [:char | ar add: char codePoint ].
+			^ ar]
+		ifFalse: [
+			^super decodeAsCodePoints: bytes]
 ]
 
 { #category : 'convenience' }
 ZnUTF8Encoder >> decodeBytes: bytes [
 	"Decode bytes and return the resulting string"
 
-	^ bytes decodeFromUTF8
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+		ifTrue: [
+			^ [bytes decodeFromUTF8] on: ArgumentError do: [:s | ZnCharacterEncodingError signal]] 
+		ifFalse: [
+			^super decodeBytes: bytes]
 ]
 
 { #category : 'convenience' }
 ZnUTF8Encoder >> encodeCodePoints: codePoints [
 	"Encode codePoints and return the resulting byte array"
-	
-	^ codePoints asByteArray asUnicodeString encodeAsUTF8
+
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+		ifTrue: [
+			^ codePoints asByteArray asUnicodeString encodeAsUTF8]
+		ifFalse: [
+			^super encodeCodePoints: codePoints]
 ]
 
 { #category : 'converting' }
 ZnUTF8Encoder >> encodedByteCountFor: character [
 	"Return how many bytes are needed to encode character"
-		
-	^ character asString encodeAsUTF8 size
+
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+		ifTrue: [
+			^ character asString encodeAsUTF8 size]
+		ifFalse: [
+			^super encodedByteCountFor: character]
+]
+
+{ #category : 'converting' }
+ZnUTF8Encoder >> encodedByteCountForCodePoint: codePoint [
+	"Return how many bytes are needed to encode integer code point"
+
+	codePoint < 128 ifTrue: [ ^ 1 ].
+	codePoint < 2048 ifTrue: [ ^ 2 ].
+	codePoint < 65535 ifTrue: [ ^ 3 ].
+	codePoint <= self maximumUTFCode ifTrue: [ ^ 4 ].
+	self errorOutsideRange.
+	^ 0
 ]
 
 { #category : 'convenience' }
 ZnUTF8Encoder >> encodedByteCountForCodePoints: codePoints [
 	"Return the exact number of bytes it would take to encode codePoints as a byte array"
 
-	^ (self encodeCodePoints: codePoints) size
+	self flag: 'GemStone/Pharo code switched for research'.
+	
+	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+		ifTrue: [
+			^ (self encodeCodePoints: codePoints) size]
+		ifFalse: [
+			^ super encodedByteCountForCodePoints: codePoints]
 ]
 
 { #category : 'convenience' }
 ZnUTF8Encoder >> encodedByteCountForString: string [
 	"Return the exact number of bytes it would take to encode string as a byte array"
 
-	^ (self encodeString: string) size
+	self flag: 'GemStone/Pharo code switched for research'.
+	
+	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+		ifTrue: [
+			^ (self encodeString: string) size]
+		ifFalse: [
+			^super encodedByteCountForString: string]
 ]
 
 { #category : 'convenience' }
 ZnUTF8Encoder >> encodeString: string [
 	"Encode string and return the resulting Utf8 instance"
-	
-	"^ string encodeAsUTF8 asByteArray"
-	^super encodeString: string
+
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+		ifTrue: [
+			^ [string encodeAsUTF8 asByteArray] on: ArgumentError do: [:s | ZnInvalidUTF8 signal]  ]
+		ifFalse: [
+			^super encodeString: string]
 ]
 
 { #category : 'error handling' }
@@ -166,7 +226,7 @@ self error: 'The classes ByteString and ByteASCIISet are not implemented in Gems
 	offset > string size ifTrue: [ ^ 0 ].
 	^ #ByteString 
 		findFirstInString: string 
-		inSet: #ByteASCIISet 
+		inSet: ByteASCIISet 
 		startingAt: offset
 ]
 
@@ -175,25 +235,20 @@ ZnUTF8Encoder >> identifier [
 	^ #utf8
 ]
 
-{ #category : 'testing' }
-ZnUTF8Encoder >> isSurrogateCodePoint: codePoint [
-	"Surrogate Code Points should not be encoded or decoded because they are not Unicode scalar values"
-	
-	^ codePoint between: 16rD800 and: 16rDFFF
-]
-
 { #category : 'convenience' }
 ZnUTF8Encoder >> next: count putAll: string startingAt: offset toStream: stream [
 	"Write count characters from string starting at offset to stream."
-	
-	"stream nextPutAll: (string copyFrom: offset to: offset + count - 1) encodeAsUTF8 asByteArray"
-
-	"Write count characters from string starting at offset to stream."
 	"Overwritten for performance reasons - create a fast path for byte strings"
 	
-	string isByteString
-		ifTrue: [ self next: count putAllByteString: string startingAt: offset toStream: stream ]
-		ifFalse: [ super next: count putAll: string startingAt: offset toStream: stream ]
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+		ifTrue: [
+			stream nextPutAll: (string copyFrom: offset to: offset + count - 1) encodeAsUTF8 asByteArray]
+		ifFalse: [
+			string isByteString
+				ifTrue: [ self next: count putAllByteString: string startingAt: offset toStream: stream ]
+				ifFalse: [ super next: count putAll: string startingAt: offset toStream: stream ] ]
 ]
 
 { #category : 'private' }
@@ -294,18 +349,34 @@ ZnUTF8Encoder >> nextPutCodePoint: codePoint toStream: stream [
 ]
 
 { #category : 'convenience' }
-ZnUTF8Encoder >> readInto: aCollection startingAt: offset count: requestedCount fromStream: stream [
+ZnUTF8Encoder >> readInto: string startingAt: offset count: requestedCount fromStream: stream [
 	"Read requestedCount characters into string starting at offset,
 	returning the number read, there could be less available when stream is atEnd"
 
-	| decodedCollection pos |
-	pos := stream position.
-	decodedCollection := self decodeBytes: stream contents.
-	aCollection 
-		replaceFrom: offset 
-		to: offset + (requestedCount min: decodedCollection size) - 1
-		with: decodedCollection
-		startingAt: pos + 1.
-	stream setToEnd.
-	^ 	requestedCount min: decodedCollection size
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+		ifTrue: [
+			| decodedCollection pos |
+
+			pos := stream position.
+			decodedCollection := self decodeBytes: stream contents.
+			string 
+				replaceFrom: offset 
+				to: offset + (requestedCount min: decodedCollection size) - 1
+				with: decodedCollection
+				startingAt: pos + 1.
+			stream setToEnd.
+			^ 	requestedCount min: decodedCollection size]
+		ifFalse: [
+			| stringBuffer |
+
+			stringBuffer := string.
+			offset to: offset + requestedCount - 1 do: [ :index | | codePoint |
+			stream atEnd ifTrue: [ ^ index - offset ].  
+			codePoint := self nextCodePointFromStream: stream.
+			(codePoint > 255 and: [ stringBuffer isWideString not ])
+				ifTrue: [ stringBuffer := ZnByteStringBecameWideString convert: stringBuffer ].
+			stringBuffer at: index put: (Character value: codePoint) ].
+			^ requestedCount]
 ]

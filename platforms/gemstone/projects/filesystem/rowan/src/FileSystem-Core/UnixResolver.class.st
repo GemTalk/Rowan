@@ -30,8 +30,8 @@ UnixResolver >> documents [
 ]
 
 { #category : 'origins' }
-UnixResolver >> home [
-	^ self directoryFromEnvVariableNamed: 'HOME'
+UnixResolver >> homeEnvironmentVariableName [
+	^'HOME'
 ]
 
 { #category : 'origins' }

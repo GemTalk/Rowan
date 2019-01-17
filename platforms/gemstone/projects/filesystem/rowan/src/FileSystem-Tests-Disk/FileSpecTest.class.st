@@ -43,8 +43,7 @@ FileSpecTest >> testCreation [
 	| aFileSpec |
 	aFileSpec := FileSpec append.
 	self assert: (aFileSpec fileOptions isKindOf: FileOptions).
-	self assert: aFileSpec fileOptions parent == aFileSpec.
-	self assert: (aFileSpec compressionPolicy isKindOf: NoCompression)
+	self assert: aFileSpec fileOptions parent == aFileSpec
 ]
 
 { #category : 'tests' }

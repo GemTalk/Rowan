@@ -15,11 +15,6 @@ Class {
 }
 
 { #category : 'accessing' }
-FileSystemStore class >> clientOsName [
-	^System clientVersionReport at: 'osName'
-]
-
-{ #category : 'accessing' }
 FileSystemStore class >> delimiter [
 	^ self shouldBeImplemented 
 ]
@@ -39,43 +34,12 @@ FileSystemStore class >> new [
 
 { #category : 'accessing' }
 FileSystemStore class >> osName [
-	^System gemVersionAt: 'osName'
+	^System osName
 ]
 
 { #category : 'accessing' }
 FileSystemStore class >> separator [
 	self shouldBeImplemented
-]
-
-{ #category : 'modes' }
-FileSystemStore >> appendAndReadOptions [
-	"Open for reading and appending (writing at end of file).  The
-     file is created if it does not exist.  The initial file
-     position for reading is at the beginning of the file, but
-     output is always appended to the end of the file."
-	^FileSpec appendAndRead
-]
-
-{ #category : 'modes' }
-FileSystemStore >> appendBinaryAndReadOptions [
-	"Open for reading and appending (writing at end of file).  The
-     file is created if it does not exist.  The initial file
-     position for reading is at the beginning of the file, but
-     output is always appended to the end of the file."
-	^FileSpec appendAndReadBinary
-]
-
-{ #category : 'modes' }
-FileSystemStore >> appendBinaryOptions [
-	"Open for appending (writing at end of file).  The file is
-     created if it does not exist.  The stream is positioned at the
-     end of the file."
-	^FileSpec appendBinary
-]
-
-{ #category : 'modes' }
-FileSystemStore >> appendOptions [
-	^FileSpec append
 ]
 
 { #category : 'public' }
@@ -369,7 +333,7 @@ FileSystemStore >> openFileStream: path writable: writable [
 ]
 
 { #category : 'converting' }
-FileSystemStore >> pathFromString: aString [
+FileSystemStore >> pathFromString: aString [	
 	"Use the unix convention by default, since many filesystems are based on it."
 	
 	^ Path from: aString delimiter: self delimiter
@@ -389,46 +353,6 @@ FileSystemStore >> printPath: aPath on: out [
 	
 	aPath isAbsolute ifTrue: [ out nextPut: self delimiter ].
 	^ aPath printOn: out delimiter: self delimiter
-]
-
-{ #category : 'modes' }
-FileSystemStore >> readBinaryOptions [
-	"Open binary for reading and writing.  The stream is positioned at the beginning of the file."
-	^FileSpec readBinary
-]
-
-{ #category : 'modes' }
-FileSystemStore >> readOptions [
-	"Open for reading and writing.  The stream is positioned at the beginning of the file."
-	^FileSpec read
-]
-
-{ #category : 'modes' }
-FileSystemStore >> readWriteBinaryOptions [
-	"Open binary file for reading and writing.  The stream is positioned at the beginning of the file."
-	^FileSpec readWriteBinary
-]
-
-{ #category : 'modes' }
-FileSystemStore >> readWriteBinaryTruncatedOptions [
-	"Open binary file for reading and writing.  The file is created if it does
-      not exist, otherwise it is truncated.  The stream is
-      positioned at the beginning of the file."
-	^FileSpec readWriteTruncatedBinary
-]
-
-{ #category : 'modes' }
-FileSystemStore >> readWriteOptions [
-	"Open for reading and writing.  The stream is positioned at the beginning of the file."
-	^FileSpec readWrite
-]
-
-{ #category : 'modes' }
-FileSystemStore >> readWriteTruncatedOptions [
-	"Open for reading and writing.  The file is created if it does
-      not exist, otherwise it is truncated.  The stream is
-      positioned at the beginning of the file."
-	^FileSpec readWriteTruncated
 ]
 
 { #category : 'private' }
@@ -487,18 +411,4 @@ FileSystemStore >> sizeOf: aPath [
 FileSystemStore >> stringFromPath: aPath [
 	^ String streamContents: [ :out | 
 		self printPath: aPath on: out ]
-]
-
-{ #category : 'modes' }
-FileSystemStore >> writeBinaryOptions [
-	"Truncate binary file to zero length or create text file for writing. 
-	 The stream is positioned at the beginning of the file."
-	^FileSpec writeBinary
-]
-
-{ #category : 'modes' }
-FileSystemStore >> writeOptions [
-	"Truncate file to zero length or create text file for writing. 
-	 The stream is positioned at the beginning of the file."
-	^FileSpec write
 ]

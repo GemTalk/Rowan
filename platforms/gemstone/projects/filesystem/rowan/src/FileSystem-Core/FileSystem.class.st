@@ -63,7 +63,7 @@ FileSystem >> binaryReadStreamOn: aResolvable [
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a read stream for reading the file."
 
-	^ (self open: aResolvable options: self store readBinaryOptions) binaryReadStream.
+	^ (self open: aResolvable options: self readFileOptions) binaryStream.
 ]
 
 { #category : 'public' }
@@ -71,7 +71,7 @@ FileSystem >> binaryWriteStreamOn: aResolvable [
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a binary write stream for reading the file."
 
-	^ (self open: aResolvable options: self store writeBinaryOptions) binaryWriteStream.
+	^ (self open: aResolvable options: self writeFileOptions) binaryStream.
 ]
 
 { #category : 'public' }
@@ -418,6 +418,12 @@ FileSystem >> isFile: aResolvable [
 ]
 
 { #category : 'public-testing' }
+FileSystem >> isForeignFileSystem [
+
+	^self store ifNil: [false] ifNotNil: [self store isForeignFileSystem]
+]
+
+{ #category : 'public-testing' }
 FileSystem >> isReadable: aResolvable [
 	"Resolve the argument, and answer true if the there is
 	a file or directory that can be read from."
@@ -542,7 +548,7 @@ FileSystem >> pathFromObject: anObject [
 
 { #category : 'converting' }
 FileSystem >> pathFromString: aString [
-	^ store pathFromString: aString
+	^store pathFromString: aString
 ]
 
 { #category : 'public' }
@@ -566,12 +572,41 @@ FileSystem >> printPath: aPath on: aStream [
 	store printPath: aPath on: aStream
 ]
 
+{ #category : 'private' }
+FileSystem >> readFileOptions [
+	^self readFileSpec fileOptions
+]
+
+{ #category : 'private' }
+FileSystem >> readFileSpec [
+
+	^(FileSpec on: self)
+		initializeForRead;
+		yourself
+]
+
 { #category : 'public' }
 FileSystem >> readStreamOn: aResolvable [
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a read stream for reading the file."
 
-	^ (self open: aResolvable options: self store readOptions) readStream.
+	^ (self open: aResolvable options: self readFileOptions) readStream.
+]
+
+{ #category : 'private' }
+FileSystem >> readWriteFileSpec [
+
+	^(FileSpec on: self)
+		initializeForReadWrite;
+		yourself
+]
+
+{ #category : 'private' }
+FileSystem >> readWriteTruncatedFileSpec [
+
+	^(FileSpec on: self)
+		initializeForReadWriteTruncated;
+		yourself
 ]
 
 { #category : 'public' }
@@ -684,9 +719,22 @@ FileSystem >> workingDirectoryPath [
 	^ store defaultWorkingDirectory
 ]
 
+{ #category : 'private' }
+FileSystem >> writeFileOptions [
+	^self writeFileSpec fileOptions
+]
+
+{ #category : 'private' }
+FileSystem >> writeFileSpec [
+
+	^(FileSpec on: self)
+		initializeForWrite;
+		yourself
+]
+
 { #category : 'public' }
 FileSystem >> writeStreamOn: aResolvable [
 	"Open a write stream on the file referred by the argument. It can be a string or a path"
 
-	^ (self open: aResolvable options: self store writeOptions) writeStream.
+	^ (self open: aResolvable options: self writeFileOptions) writeStream.
 ]

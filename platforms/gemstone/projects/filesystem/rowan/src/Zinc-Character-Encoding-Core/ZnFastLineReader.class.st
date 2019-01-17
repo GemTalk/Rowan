@@ -14,6 +14,13 @@ Class {
 }
 
 { #category : 'instance creation' }
+ZnFastLineReader class >> new [
+	^self basicNew
+		initialize;
+		yourself
+]
+
+{ #category : 'instance creation' }
 ZnFastLineReader class >> on: characterReadStream [
 	^ self new 
 		on: characterReadStream;
@@ -43,7 +50,7 @@ ZnFastLineReader >> close [
 
 { #category : 'initialize' }
 ZnFastLineReader >> initialize [
-	super initialize.
+	"super initialize."
 	cr := Character cr.
 	lf := Character lf
 ]

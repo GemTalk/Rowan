@@ -260,6 +260,7 @@ FileLocator class >> resolver [
 		InteractiveResolver new
 			addResolver: SystemResolver new;
 			addResolver: PlatformResolver forCurrentPlatform;
+			addResolver: ClientResolver forCurrentPlatform;
 			yourself ]
 ]
 

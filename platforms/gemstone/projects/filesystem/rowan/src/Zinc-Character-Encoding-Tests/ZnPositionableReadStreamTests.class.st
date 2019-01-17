@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : 'tests' }
+ZnPositionableReadStreamTests >> buildData [
+	^ByteArray new: 2000 streamContents: [ :out | 
+		2000 timesRepeat: [ out nextPut: 256 atRandom - 1 ] ]
+]
+
+{ #category : 'tests' }
 ZnPositionableReadStreamTests >> testBulkReading [
 	| stream buffer |
 	stream := ZnPositionableReadStream on: #(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15) readStream.
@@ -26,7 +32,7 @@ ZnPositionableReadStreamTests >> testEmpty [
 	self assert: stream atEnd.
 	self assert: stream peek isNil.
 	self assert: stream next isNil.
-	self assert: stream position isZero
+	self assert: stream position = 0
 ]
 
 { #category : 'tests' }
@@ -48,7 +54,7 @@ ZnPositionableReadStreamTests >> testNestedExcursion [
 ZnPositionableReadStreamTests >> testNew [
 	| stream |
 	stream := ZnPositionableReadStream on: 'abc' readStream.
-	self assert: stream position isZero.
+	self assert: stream position = 0.
 	self assert: stream bufferSize equals: stream defaultBufferSize.
 	self deny: stream atEnd
 ]
@@ -113,13 +119,13 @@ ZnPositionableReadStreamTests >> testReadAll [
 		200 timesRepeat: [ out nextPut: 'abc' atRandom ] ].
 	stream := ZnPositionableReadStream on: data readStream.
 	self deny: stream atEnd.
-	self assert: stream position isZero.
+	self assert: stream position equals: 0.
 	stream savingPositionDo: [
 		self assert: stream upToEnd equals: data.
 		self assert: stream atEnd.
 		self assert: stream position equals: 200 ].
 	self deny: stream atEnd.
-	self assert: stream position isZero.
+	self assert: stream position equals: 0.
 	self assert: stream upToEnd equals: data.
 	self assert: stream atEnd.
 	self assert: stream position equals: 200
@@ -133,13 +139,13 @@ ZnPositionableReadStreamTests >> testReadAllLargerBuffer [
 	stream := ZnPositionableReadStream on: data readStream.
 	stream sizeBuffer: 500.
 	self deny: stream atEnd.
-	self assert: stream position isZero.
+	self assert: stream position equals: 0.
 	stream savingPositionDo: [
 		self assert: stream upToEnd equals: data.
 		self assert: stream atEnd.
 		self assert: stream position equals: 500 ].
 	self deny: stream atEnd.
-	self assert: stream position isZero.
+	self assert: stream position equals: 0.
 	self assert: stream upToEnd equals: data.
 	self assert: stream atEnd.
 	self assert: stream position equals: 500
@@ -166,8 +172,7 @@ ZnPositionableReadStreamTests >> testSearch [
 { #category : 'tests' }
 ZnPositionableReadStreamTests >> testSearchBinary [
 	| data stream pattern found |
-	data := ByteArray new: 2000 streamContents: [ :out | 
-		2000 timesRepeat: [ out nextPut: 256 atRandom - 1 ] ].
+	data := self buildData.
 	pattern := ByteArray readHexFrom: 'FF77ABAB'.
 	data replaceFrom: 1000 to: 1000 + pattern size - 1 with: pattern.
 	stream := ZnPositionableReadStream on: data readStream.

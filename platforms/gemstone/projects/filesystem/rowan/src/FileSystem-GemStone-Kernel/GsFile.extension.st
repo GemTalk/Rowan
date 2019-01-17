@@ -190,7 +190,7 @@ GsFile class >> lookupDirectoryEntry: fullPath [
 { #category : '*FileSystem-Gemstone-Kernel' }
 GsFile class >> open: aPathName withOptions: aFileOptions [
 	"This is the current way of openning a file"
-	^self open: aPathName mode: aFileOptions modeString onClient: aFileOptions isClientFileSystem withCompression: aFileOptions isGzipped.
+	^self open: aPathName mode: aFileOptions modeString onClient: aFileOptions isForeignFileSystem withCompression: aFileOptions isGzipped.
 
 	"This section sketcher out how to open the file using POSIX flags"
 
@@ -235,4 +235,14 @@ GsFile class >> rename: oldFileFullName to: newFileFullName [
 		ifTrue: [0] 
 		ifFalse: [nil]
 
+]
+
+{ #category : '*FileSystem-Gemstone-Kernel' }
+GsFile class >> rename: oldFileFullName to: newFileFullName onClient: aBoolean [
+
+	^(aBoolean 
+			ifTrue: [self renameFileOnServer: oldFileFullName to: newFileFullName] 
+			ifFalse: [self renameFileOnServer: oldFileFullName to: newFileFullName]) = 0 
+				ifTrue: [0] 
+				ifFalse: [nil]
 ]

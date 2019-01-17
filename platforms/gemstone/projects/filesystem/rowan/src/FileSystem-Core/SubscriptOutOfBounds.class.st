@@ -2,6 +2,7 @@ Class {
 	#name : 'SubscriptOutOfBounds',
 	#superclass : 'FileSystemError',
 	#instVars : [
+		'signaler',
 		'subscript',
 		'lowerBound',
 		'upperBound'
@@ -61,6 +62,16 @@ SubscriptOutOfBounds >> messageText [
 	"Overwritten to initialiaze the message text to a standard text if it has not yet been set"
 	
 	^ messageText ifNil: [ messageText := self standardMessageText ]
+]
+
+{ #category : 'accessing' }
+SubscriptOutOfBounds >> signaler [
+	^ signaler
+]
+
+{ #category : 'accessing' }
+SubscriptOutOfBounds >> signaler: anObject [
+	signaler := anObject
 ]
 
 { #category : 'printing' }

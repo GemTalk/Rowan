@@ -9,8 +9,7 @@ ZnCrPortableWriteStreamTests >> testNextPut [
 	"Ensure that the line ends are written correctly"
 
 	| expectedString stream crStream |
-self error: 'Platform line ending must be sorted'.
-	expectedString := 'a', #'OSPlatform current lineEnding', 'b'.
+	expectedString := 'a', System lineEnding  asString, 'b'.
 	{ String cr.
 		String lf.
 		String crlf. } do: [ :lineEnd |

@@ -9,7 +9,7 @@ Class {
 
 { #category : 'accessing' }
 WindowsResolver class >> platformNames [
-	^ {'Win32'}
+	^ {'Win32' . 'Windows NT'}
 ]
 
 { #category : 'origins' }
@@ -28,11 +28,9 @@ WindowsResolver >> documents [
 	^ self home / 'Documents'
 ]
 
-{ #category : 'origins' }
-WindowsResolver >> home [
-	"Value of the $USERPROFILE environment variable."
-
-	^ self directoryFromEnvVariableNamed: 'USERPROFILE'
+{ #category : 'private' }
+WindowsResolver >> homeEnvironmentVariableName [
+	^'USERPROFILE'
 ]
 
 { #category : 'origins' }

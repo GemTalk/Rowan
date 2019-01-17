@@ -5,8 +5,7 @@ Class {
 		'fileOptions',
 		'encoding',
 		'fileType',
-		'compressionPolicy',
-		'fileStore'
+		'store'
 	],
 	#category : 'FileSystem-Disk-Base'
 }
@@ -14,7 +13,7 @@ Class {
 { #category : 'instance creation' }
 FileSpec class >> append [
 
-	^self basicNew
+	^self onCurrent
 		initializeForAppend;
 		yourself
 ]
@@ -22,7 +21,7 @@ FileSpec class >> append [
 { #category : 'instance creation' }
 FileSpec class >> appendAndRead [
 
-	^self basicNew
+	^self onCurrent
 		initializeForAppendAndRead;
 		yourself
 ]
@@ -30,7 +29,7 @@ FileSpec class >> appendAndRead [
 { #category : 'instance creation' }
 FileSpec class >> appendAndReadBinary [
 
-	^self basicNew
+	^self onCurrent
 		initializeForAppendAndReadBinary;
 		yourself
 ]
@@ -38,15 +37,37 @@ FileSpec class >> appendAndReadBinary [
 { #category : 'instance creation' }
 FileSpec class >> appendBinary [
 
-	^self basicNew
+	^self onCurrent
 		initializeForAppendBinary;
 		yourself
 ]
 
 { #category : 'instance creation' }
-FileSpec class >> read [
+FileSpec class >> new [
+	^self on: FileSystem disk
+]
 
+{ #category : 'instance creation' }
+FileSpec class >> on: aFileSystem [
+	"Default is to be on the local disk filesystem."
 	^self basicNew
+		initializeOn: aFileSystem;
+		yourself
+]
+
+{ #category : 'instance creation' }
+FileSpec class >> onClient [
+	^self on: FileSystem clientDisk
+]
+
+{ #category : 'instance creation' }
+FileSpec class >> onCurrent [
+	^self new
+]
+
+{ #category : 'instance creation' }
+FileSpec class >> read [
+	^self onCurrent
 		initializeForRead;
 		yourself
 ]
@@ -54,7 +75,7 @@ FileSpec class >> read [
 { #category : 'instance creation' }
 FileSpec class >> readBinary [
 
-	^self basicNew
+	^self onCurrent
 		initializeForReadBinary;
 		yourself
 ]
@@ -62,7 +83,7 @@ FileSpec class >> readBinary [
 { #category : 'instance creation' }
 FileSpec class >> readWrite [
 
-	^self basicNew
+	^self onCurrent
 		initializeForReadWrite;
 		yourself
 ]
@@ -70,7 +91,7 @@ FileSpec class >> readWrite [
 { #category : 'instance creation' }
 FileSpec class >> readWriteBinary [
 
-	^self basicNew
+	^self onCurrent
 		initializeForReadWriteBinary;
 		yourself
 ]
@@ -78,7 +99,7 @@ FileSpec class >> readWriteBinary [
 { #category : 'instance creation' }
 FileSpec class >> readWriteTruncated [
 
-	^self basicNew
+	^self onCurrent
 		initializeForReadWriteTruncated;
 		yourself
 ]
@@ -86,7 +107,7 @@ FileSpec class >> readWriteTruncated [
 { #category : 'instance creation' }
 FileSpec class >> readWriteTruncatedBinary [
 
-	^self basicNew
+	^self onCurrent
 		initializeForReadWriteTruncatedBinary;
 		yourself
 ]
@@ -94,7 +115,7 @@ FileSpec class >> readWriteTruncatedBinary [
 { #category : 'instance creation' }
 FileSpec class >> write [
 
-	^self basicNew
+	^self onCurrent
 		initializeForWrite;
 		yourself
 ]
@@ -102,7 +123,7 @@ FileSpec class >> write [
 { #category : 'instance creation' }
 FileSpec class >> writeBinary [
 
-	^self basicNew
+	^self onCurrent
 		initializeForWriteBinary;
 		yourself
 ]
@@ -110,7 +131,7 @@ FileSpec class >> writeBinary [
 { #category : 'instance creation' }
 FileSpec class >> writeHighZipped [
 
-	^self basicNew
+	^self onCurrent
 		initializeForWriteHighZipped;
 		yourself
 ]
@@ -118,7 +139,7 @@ FileSpec class >> writeHighZipped [
 { #category : 'instance creation' }
 FileSpec class >> writeLowZipped [
 
-	^self basicNew
+	^self onCurrent
 		initializeForWriteLowZipped;
 		yourself
 ]
@@ -126,30 +147,73 @@ FileSpec class >> writeLowZipped [
 { #category : 'instance creation' }
 FileSpec class >> writeZipped [
 
-	^self basicNew
+	^self onCurrent
 		initializeForWriteZipped;
 		yourself
 ]
 
 { #category : 'convenience' }
+FileSpec >> beNonEncoded [
+	self encoding: 'null'
+]
+
+{ #category : 'convenience' }
 FileSpec >> beUnixStore [
-	self fileStore: UnixStore createDefault
+	self store: UnixStore createDefault
+]
+
+{ #category : 'convenience' }
+FileSpec >> beUtf16Encoded [
+	self encoding: 'utf16'
+]
+
+{ #category : 'convenience' }
+FileSpec >> beUtf32Encoded [
+	self encoding: 'utf32'
+]
+
+{ #category : 'convenience' }
+FileSpec >> beUtf8Encoded [
+	self encoding: 'utf8'
 ]
 
 { #category : 'convenience' }
 FileSpec >> beWindowsStore [
-	self fileStore: WindowsStore createDefault
+	self store: WindowsStore createDefault
 ]
 
-{ #category : 'accessing' }
-FileSpec >> compressionPolicy [
-	^compressionPolicy
+{ #category : 'stream creation' }
+FileSpec >> binaryFileStreamOn: aFileReference [
+
+	^(aFileReference fileSystem open: aFileReference options: self fileOptions) binaryStream
 ]
 
-{ #category : 'accessing' }
-FileSpec >> compressionPolicy: anObject [
-	anObject fileSpec: self.
-	compressionPolicy := anObject
+{ #category : 'convenience' }
+FileSpec >> bufferedStreamClass [
+	^self isWritable 
+		ifTrue: [ZnBufferedWriteStream] 
+		ifFalse: [ZnBufferedReadStream]
+]
+
+{ #category : 'stream creation' }
+FileSpec >> bufferedStreamFor: aFileReference [
+
+	^ self bufferedStreamClass on: (self binaryFileStreamOn: aFileReference)
+]
+
+{ #category : 'convenience' }
+FileSpec >> characterStreamClass [
+	^self isWritable 
+		ifTrue: [ZnCharacterWriteStream] 
+		ifFalse: [ZnCharacterReadStream]
+]
+
+{ #category : 'stream creation' }
+FileSpec >> encodedStreamFor: aFileReference [
+
+	^ self characterStreamClass
+		on: (self bufferedStreamClass on: (self binaryFileStreamOn: aFileReference))
+		encoding: self encoding
 ]
 
 { #category : 'accessing' }
@@ -173,16 +237,6 @@ FileSpec >> fileOptions: aFileOptions [
 	fileOptions := aFileOptions
 ]
 
-{ #category : 'accessing' }
-FileSpec >> fileStore [
-	^fileStore
-]
-
-{ #category : 'accessing' }
-FileSpec >> fileStore: anObject [
-	fileStore := anObject
-]
-
 { #category : 'convenience' }
 FileSpec >> fileType [
 	^self fileOptions fileType
@@ -190,114 +244,101 @@ FileSpec >> fileType [
 
 { #category : 'initialization' }
 FileSpec >> initialize [
-	self compressionPolicy: NoCompression new.
-	self fileStore: FileSystem disk store
+	self beNonEncoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForAppend [
-	self initialize.
 	self fileOptions: FileOptions append.
-	self encoding: #'utf8'
+	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForAppendAndRead [
-	self initialize.
 	self fileOptions: FileOptions appendAndRead.
-	self encoding: #'utf8'
+	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForAppendAndReadBinary [
-	self initialize.
 	self fileOptions: FileOptions appendAndReadBinary.
-	self encoding: #'utf8'
+	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForAppendBinary [
-	self initialize.
 	self fileOptions: FileOptions appendBinary.
-	self encoding: #'utf8'
+	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForRead [
-	self initialize.
 	self fileOptions: FileOptions read.
-	self encoding: #'utf8'
+	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadBinary [
-	self initialize.
 	self fileOptions: FileOptions readBinary.
-	self encoding: #'utf8'
+	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadWrite [
-	self initialize.
 	self fileOptions: FileOptions readWrite.
-	self encoding: #'utf8'
+	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadWriteBinary [
-	self initialize.
 	self fileOptions: FileOptions readWriteBinary.
-	self encoding: #'utf8'
+	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadWriteTruncated [
-	self initialize.
 	self fileOptions: FileOptions readWriteTruncated.
-	self encoding: #'utf8'
+	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadWriteTruncatedBinary [
-	self initialize.
 	self fileOptions: FileOptions readWriteTruncatedBinary.
-	self encoding: #'utf8'
+	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForWrite [
-	self initialize.
 	self fileOptions: FileOptions write.
-	self encoding: #'utf8'
+	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForWriteBinary [
-	self initialize.
 	self fileOptions: FileOptions writeBinary.
-	self encoding: #'utf8'
+	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForWriteHighZipped [
-	self initialize.
-	self fileOptions: FileOptions writeWithHighCompression.
-	self encoding: #'utf8'
+	self fileOptions: FileOptions writeWithHighCompression
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForWriteLowZipped [
-	self initialize.
-	self fileOptions: FileOptions writeWithLowCompression.
-	self encoding: #'utf8'
+	self fileOptions: FileOptions writeWithLowCompression
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForWriteZipped [
-	self initialize.
 	self fileOptions: FileOptions write.
-	self fileOptions fileType: FileGzipTypeOption none.
-	self encoding: #'utf8'
+	self fileOptions fileType: FileGzipTypeOption none
+]
+
+{ #category : 'initialization' }
+FileSpec >> initializeOn: aFileSystem [
+	self initialize.
+	self store: aFileSystem store
 ]
 
 { #category : 'testing' }
@@ -329,10 +370,12 @@ FileSpec >> modeString [
 	^self fileOptions modeString
 ]
 
-{ #category : 'prototype' }
-FileSpec >> writeStreamFor: aFileReference [
+{ #category : 'accessing' }
+FileSpec >> store [
+	^store
+]
 
-	^ ZnCharacterWriteStream
-		on: (ZnBufferedWriteStream on: (aFileReference fileSystem binaryWriteStreamOn: aFileReference path))
-		encoding: self encoding asString
+{ #category : 'accessing' }
+FileSpec >> store: anObject [
+	store := anObject
 ]

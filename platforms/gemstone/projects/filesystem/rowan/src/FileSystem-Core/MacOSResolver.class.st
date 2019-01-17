@@ -28,8 +28,8 @@ MacOSResolver >> documents [
 ]
 
 { #category : 'origins' }
-MacOSResolver >> home [
-	^ self directoryFromEnvVariableNamed: 'HOME'
+MacOSResolver >> homeEnvironmentVariableName [
+	^'HOME'
 ]
 
 { #category : 'origins' }

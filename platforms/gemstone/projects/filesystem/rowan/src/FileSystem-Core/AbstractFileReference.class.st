@@ -142,7 +142,7 @@ AbstractFileReference >> binaryReadStream [
 { #category : 'streams-compatibility' }
 AbstractFileReference >> binaryReadStreamDo: aBlock [
 	| stream |
-	stream := self binaryReadStream.
+	stream := self fileSystem readFileSpec bufferedStreamFor: self.
 	^ [ aBlock value: stream ] 
 		ensure: [ stream close ]
 ]

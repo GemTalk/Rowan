@@ -91,15 +91,24 @@ FileReference >> asPath [
 
 { #category : 'streams' }
 FileReference >> binaryReadStream [
-	
-	^ ZnBufferedReadStream on: ( filesystem binaryReadStreamOn: self path )
+	"Answer a buffered read stream wrapping a binary file stream on the receiver"
+
+	^self fileSystem readFileSpec bufferedStreamFor: self
+"	^ ZnBufferedReadStream on: (filesystem binaryReadStreamOn: self path)"
+]
+
+{ #category : 'streams' }
+FileReference >> binaryReadWriteStream [
+	"Answer a binary read/write stream on the receiver"
+
+	^ ZnBufferedReadWriteStream on: (filesystem binaryWriteStreamOn: self path)
 ]
 
 { #category : 'streams' }
 FileReference >> binaryWriteStream [
-	"Answer a binary write stream on the receiver"
+	"Answer a buffered write stream wrapping a binary file stream on the receiver"
 
-	^ ZnBufferedWriteStream on: (filesystem binaryWriteStreamOn: self path)
+	^self fileSystem writeFileSpec bufferedStreamFor: self
 ]
 
 { #category : 'comparing' }
@@ -364,8 +373,9 @@ FileReference >> printOn: aStream [
 
 { #category : 'streams' }
 FileReference >> readStream [
+	"Answer an encoded buffered read stream wrapping a binary file stream on the receiver"
 
-	^ self readStreamEncoded: 'utf8'
+	^ self fileSystem readFileSpec encodedStreamFor: self
 ]
 
 { #category : 'operations' }
@@ -422,6 +432,7 @@ FileReference >> size [
 
 { #category : 'streams' }
 FileReference >> writeStream [
-	
-	^ self writeStreamEncoded: 'utf8'
+	"Answer an encoded buffered write stream wrapping a binary file stream on the receiver"
+
+	^ self fileSystem writeFileSpec encodedStreamFor: self
 ]

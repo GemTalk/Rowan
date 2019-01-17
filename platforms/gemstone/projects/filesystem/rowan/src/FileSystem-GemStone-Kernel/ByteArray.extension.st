@@ -26,7 +26,15 @@ ByteArray >> utf8Decoded [
 
 	"#[76 101 115 32 195 169 108 195 168 118 101 115 32 102 114 97 110 195 167 97 105 115] utf8Decoded"
 	
-	^ self decodeFromUTF8
+	self flag: 'GemStone/Pharo code switched for research'.
+
+	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+		ifTrue: [
+			^ [self decodeFromUTF8]
+				on: ArgumentError
+				do: [:s | ZnInvalidUTF8 signal: 'Illegal leading byte for utf-8 encoding'] ]
+		ifFalse: [
+			^ self decodeWith: ZnCharacterEncoder utf8]
 ]
 
 { #category : '*filesystem-gemstone-kernel' }

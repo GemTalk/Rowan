@@ -11,3 +11,11 @@ Class {
 MemoryHandleTest >> createFileSystem [
 	^ FileSystem memory
 ]
+
+{ #category : 'tests' }
+MemoryHandleTest >> testWriteStream [
+	| stream |
+	stream := handle binaryStream.
+	self assert: (stream isKindOf: MemoryFileWriteStream).
+	self assert: (stream respondsTo: #nextPut:)
+]

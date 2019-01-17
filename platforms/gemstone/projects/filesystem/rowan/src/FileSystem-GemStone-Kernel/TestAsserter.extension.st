@@ -10,6 +10,14 @@ TestAsserter >> assertCollection: actual equals: expected [
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
+TestAsserter >> assertString: actual equalsString: expected [
+	"Specialized test method that generates a proper error message for collection"
+	^ self
+		assert: (self isString: actual equalToString: expected)
+		description: actual printString , ' is not equal to ' , expected printString
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
 TestAsserter >> comparingCollectionBetween: left and: right [
 	| additionalLeft additionalRight sortBlock|
 	
@@ -45,4 +53,23 @@ TestAsserter >> comparingCollectionBetween: left and: right [
 					print: additionalRight size;
 					nextPutAll: ' additional element(s) in the right collection: ';
 					tab; print: additionalRight  ]]
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+TestAsserter >> isString: actual comparedToDifferentStringClass: expected [
+	^(actual isKindOf: String) and: [
+		(expected isKindOf: String) and: [
+			actual class name ~~ expected class name]]
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+TestAsserter >> isString: actual equalToString: expected [
+	"Support testing strings in two different classes have the same contents"
+	^(self isString: actual comparedToDifferentStringClass: expected)
+		ifTrue: [
+			actual size = expected size ifFalse: [^false].
+			actual with: expected do: [:a :b | a == b ifFalse: [^false] ].
+			true]
+		ifFalse: [
+			actual = expected]
 ]

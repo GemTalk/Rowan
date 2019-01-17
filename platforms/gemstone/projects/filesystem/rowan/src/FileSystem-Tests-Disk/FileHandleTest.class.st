@@ -22,3 +22,11 @@ FileHandleTest >> testFileWriteError [
 	stream close.
 	self should: [stream  nextPutAll: 'abdef'] raise: FileWriteError
 ]
+
+{ #category : 'tests' }
+FileHandleTest >> testWriteStream [
+	| stream |
+	stream := handle binaryStream.
+	self assert: (stream isKindOf: BinaryFileStream).
+	self assert: (stream respondsTo: #nextPut:)
+]
