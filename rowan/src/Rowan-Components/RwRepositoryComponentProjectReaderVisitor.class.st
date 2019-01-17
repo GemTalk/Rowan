@@ -10,6 +10,13 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'private' }
+RwRepositoryComponentProjectReaderVisitor >> _readObjectFrom: aFileReference [
+
+	aFileReference readStreamDo: [:stream |
+		^ STON fromStream: (ZnBufferedReadStream on:  stream) ]
+]
+
 { #category : 'accessing' }
 RwRepositoryComponentProjectReaderVisitor >> currentDirectory [
 
@@ -44,6 +51,26 @@ RwRepositoryComponentProjectReaderVisitor >> currentProjectReferenceDefinition [
 RwRepositoryComponentProjectReaderVisitor >> currentProjectReferenceDefinition: aRwProjectReferenceDefinition [
 
 	currentProjectReferenceDefinition := aRwProjectReferenceDefinition
+]
+
+{ #category : 'tonel parser' }
+RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
+  | metadata classDef |
+  metadata := anArray sixth.
+  classDef := RwClassDefinition
+		newForClassNamed: (metadata at: #'name') 
+			super: (metadata at: #'superclass' ifAbsent: [metadata at: #'super']) 
+			instvars: (metadata at: #'instvars' ifAbsent: [ #() ]) 
+			classinstvars: (metadata at: #'classinstvars' ifAbsent: [ #() ]) 
+			classvars: (metadata at: #'classvars' ifAbsent: [ #() ]) 
+			category: (metadata at: #'category' ifAbsent: [ ])
+			comment: (anArray second ifNil: [ '' ]) 
+			pools: (metadata at: #'pools' ifAbsent: [ #() ]) 
+			type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol.
+	^ classDef
+		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
+		gs_constraints: (metadata at: #'gs_constraints' ifAbsent: [ #() ]);
+		yourself
 ]
 
 { #category : 'package reading' }

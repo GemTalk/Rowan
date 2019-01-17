@@ -41,6 +41,13 @@ RwModificationCypressFamilyWriterVisitor >> _projectSourceDir [
 ]
 
 { #category : 'private' }
+RwModificationCypressFamilyWriterVisitor >> _readObjectFrom: aFileReference [
+
+	aFileReference readStreamDo: [:stream |
+		^ STON fromStream: (ZnBufferedReadStream on:  stream) ]
+]
+
+{ #category : 'private' }
 RwModificationCypressFamilyWriterVisitor >> _toJSON: anObject [
 	^ (STON toJsonStringPretty: anObject)
 		withLineEndings: self _newLine

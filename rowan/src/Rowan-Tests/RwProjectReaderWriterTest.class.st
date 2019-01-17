@@ -73,7 +73,7 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 		classinstvars: #()
 		classvars: #()
 		category: packageName1
-		comment: ''
+		comment: 'this is a test comment for ', className1
 		pools: #()
 		type: 'normal'.
 	classDefinition
@@ -96,7 +96,7 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 		classinstvars: #()
 		classvars: #()
 		category: packageName1
-		comment: ''
+		comment: 'this is a test comment for ', className2
 		pools: #()
 		type: 'normal'.
 	classDefinition
@@ -114,7 +114,7 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 		classinstvars: #()
 		classvars: #()
 		category: packageName1
-		comment: ''
+		comment: 'this is a test comment for ', className3
 		pools: #()
 		type: 'normal'.
 	classDefinition

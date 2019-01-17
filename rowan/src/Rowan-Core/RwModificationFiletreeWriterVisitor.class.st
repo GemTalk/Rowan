@@ -139,7 +139,7 @@ RwModificationFiletreeWriterVisitor >> _filetreePackagePropertyDictFor: aPackage
 						add: 'useCypressPropertiesFile' -> self useCypressPropertiesFile;
 						yourself))
 					<< self  _newLine ] ].
-	^ STON fromStream: (ZnBufferedReadStream on: propertiesFile  readStream)
+	^ self _readObjectFrom: propertiesFile
 ]
 
 { #category : 'project writing' }
@@ -160,7 +160,7 @@ RwModificationFiletreeWriterVisitor >> _filetreeProjectPropertyDictFor: aProject
 				aStream 
 					<< (self _toJSON: dict )
 					<< self  _newLine ] ].
-	^ STON fromStream: (ZnBufferedReadStream on: propertiesFile  readStream)
+	^ self _readObjectFrom: propertiesFile
 ]
 
 { #category : 'method writing' }
