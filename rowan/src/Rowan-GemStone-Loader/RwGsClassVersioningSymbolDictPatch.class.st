@@ -275,7 +275,7 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 			| loadedClass loadedPackage loadedProject loadedClassDefinition subclassName newVersionClassModification 
 				projectModification packageModification classesModification classesModified |
 			subclassName := subclass name asString.
-			loadedClass := self existingSymbolDictionaryRegistry existingForClass: subclass.
+			loadedClass := Rowan image loadedClassNamed: subclassName.
 			loadedClassDefinition := loadedClass asDefinition.
 			loadedPackage := loadedClass loadedPackage.
 			loadedProject := loadedClass loadedProject.
@@ -327,7 +327,6 @@ RwGsClassVersioningSymbolDictPatch >> updateNewClassVersionPatchesForSubclassesI
 				_updateNewClassVersionPatchesForClass: subclass
 				in: aProjectSetModification
 				patchSet: patchSet ]
-
 ]
 
 { #category : 'new version support' }
