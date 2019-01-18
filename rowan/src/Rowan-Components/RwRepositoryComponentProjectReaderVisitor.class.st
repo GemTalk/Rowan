@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'packageNames',
 		'currentDirectory',
-		'currentProjectDefinition',
 		'currentProjectReferenceDefinition'
 	],
 	#category : 'Rowan-Components'
@@ -33,18 +32,6 @@ RwRepositoryComponentProjectReaderVisitor >> currentDirectory [
 RwRepositoryComponentProjectReaderVisitor >> currentDirectory: aFileReference [
 
 	currentDirectory := aFileReference
-]
-
-{ #category : 'accessing' }
-RwRepositoryComponentProjectReaderVisitor >> currentProjectDefinition [
-
-	^ currentProjectDefinition
-]
-
-{ #category : 'accessing' }
-RwRepositoryComponentProjectReaderVisitor >> currentProjectDefinition: aRwComponentProjectDefinition [
-
-	currentProjectDefinition := aRwComponentProjectDefinition
 ]
 
 { #category : 'accessing' }
