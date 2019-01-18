@@ -6,7 +6,7 @@ Abstract class with support for walking a modification tree and writing out the 
 "
 Class {
 	#name : 'RwModificationWriterVisitor',
-	#superclass : 'Object',
+	#superclass : 'RwAbstractReaderWriterVisitor',
 	#instVars : [
 		'currentProjectDefinition',
 		'currentPackageDefinition',

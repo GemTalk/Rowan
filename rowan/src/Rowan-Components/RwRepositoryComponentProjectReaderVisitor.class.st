@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwRepositoryComponentProjectReaderVisitor',
-	#superclass : 'Object',
+	#superclass : 'RwAbstractReaderWriterVisitor',
 	#instVars : [
 		'packageNames',
 		'currentDirectory',
@@ -15,6 +15,12 @@ RwRepositoryComponentProjectReaderVisitor >> _readObjectFrom: aFileReference [
 
 	aFileReference readStreamDo: [:stream |
 		^ STON fromStream: (ZnBufferedReadStream on:  stream) ]
+]
+
+{ #category : 'private' }
+RwRepositoryComponentProjectReaderVisitor >> _repositoryPropertyDictFor: packagesRoot [
+
+	^ self _readObjectFrom: packagesRoot / 'properties', 'st'
 ]
 
 { #category : 'accessing' }

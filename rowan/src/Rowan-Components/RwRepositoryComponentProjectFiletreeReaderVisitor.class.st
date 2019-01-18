@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : 'private' }
-RwRepositoryComponentProjectFiletreeReaderVisitor >> _repositoryPropertyDictFor: packagesRoot [
+RwRepositoryComponentProjectFiletreeReaderVisitor >> _filetreeRepositoryPropertyDictFor: packagesRoot [
 
 	^ self _readObjectFrom: packagesRoot / '.filetree'
 ]
@@ -19,7 +19,7 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> packageExtension [
 	^ packageExtension 
 		ifNil: [ 
 			| ext |
-			ext := (self _repositoryPropertyDictFor: currentProjectReferenceDefinition packagesRoot) at: 'packageExtension'.
+			ext := (self _filetreeRepositoryPropertyDictFor: currentProjectReferenceDefinition packagesRoot) at: 'packageExtension'.
 			packageExtension := ext copyFrom: 2 to: ext size ]
 ]
 
