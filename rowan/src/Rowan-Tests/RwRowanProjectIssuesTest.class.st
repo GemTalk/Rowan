@@ -8615,10 +8615,13 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_1 [
 	1. move shared/common inst var to superclass. [pass]
 	2. move shared/common inst var to superclass. One subclass in different symbol dictionary. [pass]
 	3. scenario 2 with extra subclasses in hierarchy [reproduce bug]
+	4. senario 3 with a few more extra subclasses (passing)
+	5. senario 4 moving a subclass to another package (in same symbol dictionary)
+	6. senario 4 moving a subclass to another package (in different symbol dictionary)
 	"
 
 	| projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition2 classDefinition3 packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 audit |
 
 	projectName := 'Issue467'.
 	packageName1 := 'Issue467-Core1'.
@@ -8723,6 +8726,9 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_1 [
 	self assert: class3 ~~ oldClass3.
 	self assert: class3 instVarNames = #().
 	self assert: class3 superclass == class1.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests-issue 467' }
@@ -8734,10 +8740,13 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_2 [
 	1. move shared/common inst var to superclass. [pass]
 	2. move shared/common inst var to superclass. One subclass in different symbol dictionary. [pass]
 	3. scenario 2 with extra subclasses in hierarchy [reproduce bug]
+	4. senario 3 with a few more extra subclasses (passing)
+	5. senario 4 moving a subclass to another package (in same symbol dictionary)
+	6. senario 4 moving a subclass to another package (in different symbol dictionary)
 	"
 
 	| projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition2 classDefinition3 packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 audit |
 
 	projectName := 'Issue467'.
 	packageName1 := 'Issue467-Core1'.
@@ -8843,6 +8852,9 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_2 [
 	self assert: class3 ~~ oldClass3.
 	self assert: class3 instVarNames = #().
 	self assert: class3 superclass == class1.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests-issue 467' }
@@ -8854,10 +8866,13 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_3 [
 	1. move shared/common inst var to superclass. [pass]
 	2. move shared/common inst var to superclass. One subclass in different symbol dictionary. [pass]
 	3. scenario 2 with extra subclasses in hierarchy [reproduce bug]
+	4. senario 3 with a few more extra subclasses (passing)
+	5. senario 4 moving a subclass to another package (in same symbol dictionary)
+	6. senario 4 moving a subclass to another package (in different symbol dictionary)
 	"
 
 	| projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition2 classDefinition3 packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 extraClassDefinition |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 extraClassDefinition audit |
 
 	projectName := 'Issue467'.
 	packageName1 := 'Issue467-Core1'.
@@ -8989,6 +9004,9 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_3 [
 	self assert: class3 ~~ oldClass3.
 	self assert: class3 instVarNames = #().
 	self assert: class3 superclass == class1.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests-issue 467' }
@@ -9001,10 +9019,12 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_4 [
 	2. move shared/common inst var to superclass. One subclass in different symbol dictionary. [pass]
 	3. scenario 2 with extra subclasses in hierarchy [reproduce bug]
 	4. senario 3 with a few more extra subclasses (passing)
+	5. senario 4 moving a subclass to another package (in same symbol dictionary)
+	6. senario 4 moving a subclass to another package (in different symbol dictionary)
 	"
 
 	| projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition2 classDefinition3 packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 extraClassDefinition |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 extraClassDefinition audit |
 
 	projectName := 'Issue467'.
 	packageName1 := 'Issue467-Core1'.
@@ -9184,6 +9204,9 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_4 [
 	self assert: class3 ~~ oldClass3.
 	self assert: class3 instVarNames = #().
 	self assert: class3 superclass == class1.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests-issue 467' }
@@ -9197,10 +9220,11 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_5 [
 	3. scenario 2 with extra subclasses in hierarchy [reproduce bug]
 	4. senario 3 with a few more extra subclasses (passing)
 	5. senario 4 moving a subclass to another package (in same symbol dictionary)
+	6. senario 4 moving a subclass to another package (in different symbol dictionary)
 	"
 
 	| projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition2 classDefinition3 packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 extraClassDefinition packageName3 |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 extraClassDefinition packageName3 audit |
 
 	projectName := 'Issue467'.
 	packageName1 := 'Issue467-Core1'.
@@ -9386,6 +9410,9 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_5 [
 	self assert: class3 ~~ oldClass3.
 	self assert: class3 instVarNames = #().
 	self assert: class3 superclass == class1.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests-issue 467' }
@@ -9403,7 +9430,7 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_6 [
 	"
 
 	| projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition2 classDefinition3 packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 extraClassDefinition packageName3 |
+		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 extraClassDefinition packageName3 audit |
 
 	projectName := 'Issue467'.
 	packageName1 := 'Issue467-Core1'.
@@ -9589,6 +9616,9 @@ RwRowanProjectIssuesTest >> testIssue467_new_version_class_with_subclasses_6 [
 	self assert: class3 ~~ oldClass3.
 	self assert: class3 instVarNames = #().
 	self assert: class3 superclass == class1.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests-issue 72' }
