@@ -67,22 +67,6 @@ RwModificationWriterVisitor >> _newLine [
 	 ^ self class lineEnding
 ]
 
-{ #category : 'project writing' }
-RwModificationWriterVisitor >> _repositoryFormatFor: aProjectModification [
-
-	^ (self _repositoryPropertyDictFor: aProjectModification) at: #format ifAbsent: [ 'filetree' ]
-]
-
-{ #category : 'project writing' }
-RwModificationWriterVisitor >> _repositoryPropertyDictFor: aProjectModification [
-
-	| propertiesFile |
-	propertiesFile := aProjectModification after packagesRoot / 'properties', 'st'.
-	propertiesFile exists
-		ifFalse: [ propertiesFile :=aProjectModification after packagesRoot / '.cypress' ].
-	^ self _readObjectFrom: propertiesFile
-]
-
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedClass: aClassModification [
 

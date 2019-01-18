@@ -241,6 +241,6 @@ RwModificationTonelWriterVisitor >> processProject: aProjectModification [
 
 	| format |
 	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
-	(format := self _repositoryFormatFor: aProjectModification) = 'tonel' ifFalse: [ self error: 'expected tonel format repository, instead format is ', format printString ].
+	(format := self _repositoryFormatFor:  aProjectModification after packagesRoot) = 'tonel' ifFalse: [ self error: 'expected tonel format repository, instead format is ', format printString ].
 	super processProject: aProjectModification.
 ]
