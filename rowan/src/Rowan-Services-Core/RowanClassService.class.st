@@ -35,7 +35,8 @@ Class {
 		'categories',
 		'isTestCase',
 		'expand',
-		'visibleTests'
+		'visibleTests',
+		'isNewClass'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -377,6 +378,7 @@ RowanClassService >> initialize [
 	selectedMethods := Array new.
 	meta := false. "assume most of our work is on the instance side"
 	selectedPackageServices := Array new.
+	isNewClass := false.
 ]
 
 { #category : 'initialization' }
@@ -430,6 +432,11 @@ RowanClassService >> isExtension: boolean [
 
 	isExtension := boolean
 
+]
+
+{ #category : 'Updating' }
+RowanClassService >> isNewClass: boolean [
+	isNewClass := boolean
 ]
 
 { #category : 'Updating' }
@@ -515,7 +522,7 @@ RowanClassService >> minimalRefreshFrom: theClass [
 	instVarNames := classOrMeta instVarNames. 
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
-	self setIsTestCase
+	self setIsTestCase.
 ]
 
 { #category : 'client commands' }
@@ -675,14 +682,18 @@ RowanClassService >> removeCategories: theCategories [
 ]
 
 { #category : 'client commands' }
-RowanClassService >> removeMethods [
+RowanClassService >> removeMethods: methodsToRemove [
 
 	| notRemoved |
 	notRemoved := Array new. 
-	methods do: [:methodService |
-		self removeSelector: methodService selector ifAbsent:[notRemoved add: methodService selector]].
+	methodsToRemove do: [:methodService |
+		self removeSelector: methodService selector ifAbsent:[notRemoved add: methodService].
+		(notRemoved includes: methodService) ifFalse:[
+			methodService updateType: #removed:.
+			RowanCommandResult addResult: methodService
+		]].
 	notRemoved isEmpty ifFalse:[
-		self error: 'These selectors were not removed - ', notRemoved printString].
+		self error: 'These selectors were not removed - ', (notRemoved collect:[:svc | svc selector]) printString].
 ]
 
 { #category : 'rowan' }
@@ -750,7 +761,7 @@ RowanClassService >> runMethodTests: methodServices [
 { #category : 'client commands' }
 RowanClassService >> saveMethodSource: source category: category [
 
-	| behavior compilationResult gsNMethod updatedCategory methodService |
+	| behavior compilationResult gsNMethod updatedCategory methodService |        
 	meta ifNil:[
 				behavior := (Object _objectForOop: oop). 
 				meta := behavior isMeta]

@@ -74,6 +74,7 @@ RowanPackageService >> compileClass: definitionString [
 	theClass := definitionString evaluate.
 	classService := RowanClassService new name: theClass name. 
 	classService update. 
+	classService isNewClass: true.
 	classService packageName = name 
 		ifTrue:[
 			self selectedClass: classService
@@ -82,6 +83,7 @@ RowanPackageService >> compileClass: definitionString [
 			packageService := RowanPackageService forPackageNamed: classService packageName. 
 			packageService update. 
 			packageService selectedClass: classService].
+	RowanCommandResult addResult: classService.
 ]
 
 { #category : 'rowan' }
