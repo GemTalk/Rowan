@@ -55,6 +55,14 @@ RowanBrowserService >> findRemovedServices: services [
 	].
 ]
 
+{ #category : 'window registry' }
+RowanBrowserService >> openWindows [
+
+	"for testing"
+
+	^SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[]
+]
+
 { #category : 'client commands' }
 RowanBrowserService >> packagesWithTests [
 	testPackages := Set new. 
@@ -71,6 +79,14 @@ RowanBrowserService >> packagesWithTests [
 	updateType := #testPackages:. 
 	testPackages := testPackages asArray. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> releaseWindowHandle: integer [
+
+	| registry |
+	registry := SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[^self].
+	registry removeKey: integer ifAbsent: []
 ]
 
 { #category : 'client commands' }
@@ -93,13 +109,26 @@ RowanBrowserService >> removeMethods: methodServices [
 		| classService |
 		classService := RowanClassService forClassNamed: methodService className. 
 		classService meta: methodService meta. 
-		classService removeSelector: methodService selector ifAbsent:[notRemoved add: methodService selector].
+		classService removeSelector: methodService selector ifAbsent:[notRemoved add: methodService].
 		classService updatePackageProject.
+		(notRemoved includes: methodService) ifFalse:[
+			methodService updateType: #removed:.
+			RowanCommandResult addResult: methodService]. 
 		removedMethods add: methodService].
 	notRemoved isEmpty ifFalse:[
-		self error: 'These selectors were not removed - ', notRemoved printString].
+		self error: 'These selectors were not removed - ', (notRemoved collect:[:ea | ea selector]) printString].
 	updateType := #methodsRemoved:. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> saveRootObject: object windowHandle: integer [
+
+	" a window has been opened on the client. Save the 
+	root object of the window so it won't be recycled"
+	| dictionary |
+	dictionary := SessionTemps current at: #rowanServicesWindowRegistry ifAbsentPut: [Dictionary new].
+	dictionary at: integer put: object.
 ]
 
 { #category : 'perform' }

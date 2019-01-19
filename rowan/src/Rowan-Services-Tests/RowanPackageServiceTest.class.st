@@ -46,9 +46,9 @@ RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
 		category: ''Rowan-Services-Tests''
 		options: #()'.
 	self assert: RowanCommandResult results size equals: 2. 
-	self assert: RowanCommandResult results first name equals: 'RowanTestCompile'. 
-	self assert: RowanCommandResult results last name equals: 'Rowan-Services-Tests'. 
-	testsPackage := RowanCommandResult results last.
+	self assert: RowanCommandResult results last name equals: 'RowanTestCompile'. 
+	self assert: RowanCommandResult results first name equals: 'Rowan-Services-Tests'. 
+	testsPackage := RowanCommandResult results first.
 	self assert: testsPackage selectedClass name equals: 'RowanTestCompile'.
 	self assert: testsPackage selectedClass selectedPackageServices first equals: testsPackage] 
 		ensure:[System abortTransaction.  "get rid of test package and class"]
