@@ -8,7 +8,6 @@ Class {
 	#name : 'RwModificationWriterVisitor',
 	#superclass : 'RwAbstractReaderWriterVisitor',
 	#instVars : [
-		'currentPackageDefinition',
 		'currentClassDefinition',
 		'currentClassExtension'
 	],
@@ -136,12 +135,6 @@ RwModificationWriterVisitor >> currentClassDefinition [
 RwModificationWriterVisitor >> currentClassExtension [
 
 	^ currentClassExtension
-]
-
-{ #category : 'accessing' }
-RwModificationWriterVisitor >> currentPackageDefinition [
-
-	^ currentPackageDefinition
 ]
 
 { #category : 'actions' }

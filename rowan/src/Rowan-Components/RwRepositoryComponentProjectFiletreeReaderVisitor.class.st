@@ -49,7 +49,7 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> readClassDirectory: classDi
 { #category : 'class reading' }
 RwRepositoryComponentProjectFiletreeReaderVisitor >> readClassesFor: packageName packageRoot: packageRoot [
 
-	currentProjectDefinition 
+	currentPackageDefinition := currentProjectDefinition 
 		packageNamed: packageName 
 		ifAbsent: [ currentProjectDefinition addPackageNamed: packageName ].
 	packageRoot directories do: [:directory |

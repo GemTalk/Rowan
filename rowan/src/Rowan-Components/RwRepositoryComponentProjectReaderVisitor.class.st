@@ -87,8 +87,10 @@ RwRepositoryComponentProjectReaderVisitor >> readClassesFor: packageName package
 { #category : 'package reading' }
 RwRepositoryComponentProjectReaderVisitor >> readPackages: packagesRoot [
 	packagesRoot directories do: [:packageDir |
-		(packageDir extension = self packageExtension and: [ self packageNames includes: packageDir basenameWithoutExtension])
-			ifTrue: [ self readClassesFor: packageDir basenameWithoutExtension packageRoot: packageDir ] ]
+		| packageName |
+		packageName := packageDir basenameWithoutExtension.
+		(packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
+			ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
 ]
 
 { #category : 'public' }

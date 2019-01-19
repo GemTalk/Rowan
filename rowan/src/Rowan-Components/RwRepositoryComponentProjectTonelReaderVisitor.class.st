@@ -54,7 +54,7 @@ RwRepositoryComponentProjectTonelReaderVisitor >> packageExtension [
 RwRepositoryComponentProjectTonelReaderVisitor >> readClassesFor: packageName packageRoot: packageRoot [
 
 	| classFileExtensions classExtensionFileExtensions |
-	currentProjectDefinition 
+	currentPackageDefinition := currentProjectDefinition 
 		packageNamed: packageName 
 		ifAbsent: [ currentProjectDefinition addPackageNamed: packageName ].
 	classExtensionFileExtensions := self classExtensionFileExtensions.
