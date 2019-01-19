@@ -9,11 +9,12 @@ Class {
 	#category : 'Rowan-Components'
 }
 
-{ #category : 'private' }
-RwRepositoryComponentProjectReaderVisitor >> _readObjectFrom: aFileReference [
+{ #category : 'package reading' }
+RwRepositoryComponentProjectReaderVisitor >> _packageNameFromPackageDir: packageDir [
 
-	aFileReference readStreamDo: [:stream |
-		^ STON fromStream: (ZnBufferedReadStream on:  stream) ]
+	"this is not really correct, but it works as a fallback (filetree does not have independent package name)"
+
+	^ packageDir basenameWithoutExtension
 ]
 
 { #category : 'accessing' }
@@ -88,7 +89,7 @@ RwRepositoryComponentProjectReaderVisitor >> readClassesFor: packageName package
 RwRepositoryComponentProjectReaderVisitor >> readPackages: packagesRoot [
 	packagesRoot directories do: [:packageDir |
 		| packageName |
-		packageName := packageDir basenameWithoutExtension.
+		packageName := self _packageNameFromPackageDir: packageDir.
 		(packageDir extension = self packageExtension and: [ self packageNames includes: packageName ])
 			ifTrue: [ self readClassesFor: packageName packageRoot: packageDir ] ]
 ]

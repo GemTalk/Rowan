@@ -10,6 +10,13 @@ Class {
 }
 
 { #category : 'private' }
+RwAbstractReaderWriterVisitor >> _readObjectFrom: aFileReference [
+
+	aFileReference readStreamDo: [:stream |
+		^ STON fromStream: (ZnBufferedReadStream on:  stream) ]
+]
+
+{ #category : 'private' }
 RwAbstractReaderWriterVisitor >> _repositoryConventionFor: packagesRoot [
 
 	^ (self _repositoryPropertyDictFor: packagesRoot) at: #convention ifAbsent: [ 'RowanHybrid'  ]

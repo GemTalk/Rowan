@@ -4,6 +4,14 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'package reading' }
+RwRepositoryComponentProjectTonelReaderVisitor >> _packageNameFromPackageDir: packageDir [
+
+	"this is not really correct, but it works as a fallback (filetree does not have independent package name)"
+
+	^ self _readObjectFrom: (packageDir / 'package', 'st')
+]
+
 { #category : 'class reading' }
 RwRepositoryComponentProjectTonelReaderVisitor >> classExtensionFileExtensions [
 
