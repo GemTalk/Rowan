@@ -1867,8 +1867,8 @@ category: 'utilities'
 classmethod: CypressGemStoneDirectoryUtilities
 directoryExists: aDirectory
 
-       "handle the case where GsFile class>>existsOnServer: returns nil"
-       ^ (GsFile existsOnServer: aDirectory) == true
+	"handle the case where GsFile class>>existsOnServer: returns nil"
+	^ (GsFile existsOnServer: aDirectory) == true
 %
 
 category: 'utilities'

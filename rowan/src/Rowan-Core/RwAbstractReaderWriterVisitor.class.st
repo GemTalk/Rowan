@@ -13,7 +13,11 @@ Class {
 RwAbstractReaderWriterVisitor >> _readObjectFrom: aFileReference [
 
 	aFileReference readStreamDo: [:stream |
-		^ STON fromStream: (ZnBufferedReadStream on:  stream) ]
+		| reader |
+		reader := STON reader on:  (ZnBufferedReadStream on:  stream).
+		reader classes at: #'Package' put: Dictionary.
+		^ reader next ]
+
 ]
 
 { #category : 'private' }

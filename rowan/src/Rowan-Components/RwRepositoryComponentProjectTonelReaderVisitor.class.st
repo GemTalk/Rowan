@@ -9,7 +9,7 @@ RwRepositoryComponentProjectTonelReaderVisitor >> _packageNameFromPackageDir: pa
 
 	"this is not really correct, but it works as a fallback (filetree does not have independent package name)"
 
-	^ self _readObjectFrom: (packageDir / 'package', 'st')
+	^ (self _readObjectFrom: (packageDir / 'package', 'st')) at: #name
 ]
 
 { #category : 'class reading' }

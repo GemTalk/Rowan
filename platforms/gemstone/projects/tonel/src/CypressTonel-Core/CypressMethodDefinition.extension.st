@@ -5,7 +5,7 @@ CypressMethodDefinition >> fullClassName [
 	
 	^ self classIsMeta
 		ifFalse: [self className]
-		ifTrue: [ self className, ' class' ]
+		ifTrue: [self className, ' class' ]
 
 ]
 

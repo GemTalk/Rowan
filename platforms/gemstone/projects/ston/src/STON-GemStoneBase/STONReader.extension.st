@@ -14,6 +14,7 @@ STONReader >> lookupClass: name [
 									(((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan') 
 										platform serviceClassFor: name)
 											ifNil: [ self error: 'Cannot resolve class named ' , name printString ] ] ] ] ]
+
 ]
 
 { #category : '*ston-gemstonebase' }

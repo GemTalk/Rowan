@@ -59,6 +59,7 @@ CypressGemStoneDirectoryUtilities class >> directoryExists: aDirectory [
 
 	"handle the case where GsFile class>>existsOnServer: returns nil"
 	^ (GsFile existsOnServer: aDirectory) == true
+
 ]
 
 { #category : 'utilities' }
@@ -141,6 +142,7 @@ CypressGemStoneDirectoryUtilities class >> ensureDirectoryExists: aDirectory [
 	lastSeparator <= 1 ifTrue: [self error: 'Cannot create directory'].
 	self ensureDirectoryExists: (aDirectory copyFrom: 1 to: lastSeparator - 1).
 	self ensureDirectoryExists: aDirectory.
+
 ]
 
 { #category : 'initializating' }

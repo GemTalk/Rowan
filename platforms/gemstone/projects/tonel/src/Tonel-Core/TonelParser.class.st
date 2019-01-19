@@ -305,6 +305,7 @@ TonelParser >> methodDef [
 		"skip possible spaces at the end"
 		self separator ].
 	^methodDef
+
 ]
 
 { #category : 'parsing' }
@@ -321,6 +322,7 @@ TonelParser >> methodDef: aBlock [
 	aBlock 
 		value: ar fourth first second notNil 
 		value: def
+
 ]
 
 { #category : 'parsing' }
@@ -345,6 +347,7 @@ TonelParser >> methodDefList [
 					GsFile gciLogServer:'Last selector parsed was: ', lastSelectorParsed printString ].
 				ex pass ].
 	^ result
+
 ]
 
 { #category : 'private factory' }

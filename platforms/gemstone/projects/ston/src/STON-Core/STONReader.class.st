@@ -39,6 +39,13 @@ STONReader >> atEnd [
 ]
 
 { #category : 'initialize-release' }
+STONReader >> classes [
+
+	^ classes
+
+]
+
+{ #category : 'initialize-release' }
 STONReader >> close [
 	readStream ifNotNil: [
 		readStream close.
