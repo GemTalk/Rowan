@@ -40,6 +40,7 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> readClassDirectory: classDi
 		nil. 
 		normalizedMetadata
 	}.
+	self validateClassCategory: classDefinition category  forPackageNamed: self currentPackageDefinition name.
 	(currentProjectDefinition packageNamed: packageName)
 		addClassDefinition: classDefinition.
 

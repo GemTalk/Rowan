@@ -43,6 +43,13 @@ RwAbstractReaderWriterVisitor >> _repositoryPropertyDictFor: packagesRoot [
 ]
 
 { #category : 'validation' }
+RwAbstractReaderWriterVisitor >> _validateRowanHybridClassCategoryConvention: category forPackageNamed: packageName [
+
+	category = packageName ifTrue: [ ^ self ].
+	self error: 'not yet implemented'
+]
+
+{ #category : 'validation' }
 RwAbstractReaderWriterVisitor >> _validateRowanHybridProtocolConvention: protocol forPackageNamed: packageName [
 
 	| canonProtocol expectedProtocol |
@@ -50,6 +57,13 @@ RwAbstractReaderWriterVisitor >> _validateRowanHybridProtocolConvention: protoco
 	canonProtocol := protocol asLowercase.
 	expectedProtocol := '*', packageName asLowercase.
 	canonProtocol = expectedProtocol ifTrue: [ ^ self ].
+	self error: 'not yet implemented'
+]
+
+{ #category : 'validation' }
+RwAbstractReaderWriterVisitor >> _validateRowanMonticelloClassCategoryConvention: category forPackageNamed: packageName [
+
+	(category beginsWith: packageName) ifTrue: [ ^ self ].
 	self error: 'not yet implemented'
 ]
 
@@ -119,6 +133,24 @@ RwAbstractReaderWriterVisitor >> packagesRoot [
 RwAbstractReaderWriterVisitor >> projectName [
 
 	^ self currentProjectDefinition projectName
+]
+
+{ #category : 'validation' }
+RwAbstractReaderWriterVisitor >> validateClassCategory: category  forPackageNamed: packageName [
+
+	"
+		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
+		Monticello		- Class category is package name, method protocol with leading $* begins with case insensitive package name
+		Rowan			- Class category and method protocol are not overloaded with packaging information
+	"
+
+	"signal an error if the protocol does not conform to the convention for the current project"
+
+	self packageConvention = 'RowanHybrid'
+		ifTrue: [ ^ self _validateRowanHybridClassCategoryConvention: category forPackageNamed: packageName ].
+	self packageConvention = 'Monticello'
+		ifTrue: [ ^ self _validateRowanMonticelloClassCategoryConvention: category forPackageNamed: packageName ].
+	"Rowan - no convention ... any old protocol is fine"
 ]
 
 { #category : 'validation' }

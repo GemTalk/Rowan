@@ -48,7 +48,7 @@ RwRepositoryComponentProjectTonelReaderVisitor >> newTypeDefinitionFrom: anArray
   | typeClass |
   typeClass := self definitionForType: anArray fourth.
   typeClass == #class
-    ifTrue: [ ^ self newClassDefinitionFrom: anArray ].
+    ifTrue: [^  self newClassDefinitionFrom: anArray ].
   "is extension, no definition, but return properties (which includes class name)"
   ^ anArray sixth
 ]
@@ -107,6 +107,7 @@ RwRepositoryComponentProjectTonelReaderVisitor >> readClassFile: file inPackage:
 		stream sizeBuffer: 10000. "part of workaround for GemTalk/FileSystemGs#9"
 		definitions := (TonelParser on: stream forReader: self) start.
 		classDef := definitions at: 1.
+		self validateClassCategory: classDef category forPackageNamed: self currentPackageDefinition name.
 		((definitions at: 2) at: 1) do: [:mDef |
 			classDef addClassMethodDefinition: mDef ].
 		((definitions at: 2) at: 2) do: [:mDef |
