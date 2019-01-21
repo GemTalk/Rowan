@@ -36,6 +36,7 @@ RwRepositoryComponentProjectTonelReaderVisitor >> definitionForType: aString [
 { #category : 'tonel parser' }
 RwRepositoryComponentProjectTonelReaderVisitor >> newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source [
 
+	self validateMethodProtocol: category  forPackageNamed: self currentPackageDefinition name.
 	^ RwMethodDefinition
 		newForSelector: selector 
 			protocol: category 

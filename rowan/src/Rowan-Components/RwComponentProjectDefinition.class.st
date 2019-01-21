@@ -102,7 +102,7 @@ RwComponentProjectDefinition >> acceptVisitor: aVisitor [
 { #category : 'accessing' }
 RwComponentProjectDefinition >> addPackageNamed: packageName [
 
-	self
+	^ self
 		addPackageNamed: packageName 
 			toComponentNamed: self defaultComponentName 
 			withConditions: #( 'common' ) 
@@ -112,15 +112,16 @@ RwComponentProjectDefinition >> addPackageNamed: packageName [
 { #category : 'accessing' }
 RwComponentProjectDefinition >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroup: groupName [
 
-	| component |
-	super addPackageNamed: packageName.
+	| package component |
+	package := super addPackageNamed: packageName.
 	component := self 
 		components at: componentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed:componentName for: self name ].
 	component
 		conditionalPackagesAtConditions: conditionArray
 			andGroup: groupName
-			addPackageNames: { packageName }
+			addPackageNames: { packageName }.
+	^package
 ]
 
 { #category : 'accessing' }

@@ -100,6 +100,7 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> readMethodDirectory: method
 				methodStream := file contents  readStreamPortable.
 				protocol := methodStream nextLine.
 				methodSource := methodStream upToEnd.
+				self validateMethodProtocol: protocol  forPackageNamed: packageName.
 				methodDefinitionStream nextPut: (RwMethodDefinition newForSource: methodSource protocol: protocol) ] ].
 
 	^ methodDefinitions
