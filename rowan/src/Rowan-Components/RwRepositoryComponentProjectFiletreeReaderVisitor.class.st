@@ -26,13 +26,13 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> packageExtension [
 { #category : 'class reading' }
 RwRepositoryComponentProjectFiletreeReaderVisitor >> readClassDirectory: classDirectory inPackage: packageName [
 
-	| classProperties classComment normalizedMetadata classDefinition |
+	| classProperties classComment normalizedMetadata classDef |
 	classProperties :=  self _readObjectFrom: classDirectory / 'properties' , 'json'.
 	classComment := (classDirectory / 'README' , 'md') contents.
 	normalizedMetadata := Dictionary new.
 	classProperties keysAndValuesDo: [:key :value |
 		normalizedMetadata at: key asLowercase asSymbol put: value ].
-	classDefinition :=	self newClassDefinitionFrom: {
+	classDef :=	self newClassDefinitionFrom: {
 		nil.
 		classComment. 
 		nil. 
@@ -40,11 +40,11 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> readClassDirectory: classDi
 		nil. 
 		normalizedMetadata
 	}.
-	self validateClassCategory: classDefinition category  forPackageNamed: packageName.
+	self validateClassCategory: classDef category  forPackageNamed: packageName.
 	(currentProjectDefinition packageNamed: packageName)
-		addClassDefinition: classDefinition.
+		addClassDefinition: currentClassDefinition.
 
-	self readMethodDirectories: classDirectory forClassDefinition: classDefinition inPackage: packageName
+	self readMethodDirectories: classDirectory forClassDefinition: classDef inPackage: packageName
 ]
 
 { #category : 'class reading' }
@@ -66,15 +66,16 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> readClassesFor: packageName
 { #category : 'class reading' }
 RwRepositoryComponentProjectFiletreeReaderVisitor >> readClassExtensionDirectory: classExtensionDirectory inPackage: packageName [
 
-	| classExtensionProperties className package classExtensionDef |
+	| classExtensionProperties className package |
 	classExtensionProperties :=  self _readObjectFrom: classExtensionDirectory / 'properties' , 'json'.
 	className := classExtensionProperties at: 'name'.
 	package := currentProjectDefinition packageNamed: packageName.
-	classExtensionDef := package 
+	currentClassDefinition := nil.
+	currentClassExtension := package 
 		classExtensionDefinitionNamed: className 
 		ifAbsent: [ package addClassExtensionNamed: className ].
 
-	self readMethodDirectories: classExtensionDirectory forClassDefinition: classExtensionDef inPackage: packageName
+	self readMethodDirectories: classExtensionDirectory forClassDefinition: currentClassExtension inPackage: packageName
 ]
 
 { #category : 'method reading' }

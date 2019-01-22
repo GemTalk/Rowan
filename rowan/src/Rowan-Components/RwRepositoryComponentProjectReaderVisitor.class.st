@@ -43,9 +43,10 @@ RwRepositoryComponentProjectReaderVisitor >> currentProjectReferenceDefinition: 
 
 { #category : 'tonel parser' }
 RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
-  | metadata classDef |
+  | metadata |
   metadata := anArray sixth.
-  classDef := RwClassDefinition
+	currentClassExtension := nil.
+  currentClassDefinition := RwClassDefinition
 		newForClassNamed: (metadata at: #'name') 
 			super: (metadata at: #'superclass' ifAbsent: [metadata at: #'super']) 
 			instvars: (metadata at: #'instvars' ifAbsent: [ #() ]) 
@@ -55,10 +56,20 @@ RwRepositoryComponentProjectReaderVisitor >> newClassDefinitionFrom: anArray [
 			comment: (anArray second ifNil: [ '' ]) 
 			pools: (metadata at: #'pools' ifAbsent: [ #() ]) 
 			type: (metadata at: #'type' ifAbsent: [ #'normal' ]) asSymbol.
-	^ classDef
+	^ currentClassDefinition
 		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
 		gs_constraints: (metadata at: #'gs_constraints' ifAbsent: [ #() ]);
 		yourself
+]
+
+{ #category : 'tonel parser' }
+RwRepositoryComponentProjectReaderVisitor >> newClassExtensionDefinitionFrom: anArray [
+	| className |
+	className := (anArray sixth) at: #name.
+	currentClassDefinition := nil.
+	^currentClassExtension := currentPackageDefinition
+		classExtensionDefinitionNamed: className 
+		ifAbsent: [ currentPackageDefinition addClassExtensionNamed: className ].
 ]
 
 { #category : 'package reading' }

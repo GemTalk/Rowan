@@ -7,10 +7,6 @@ Abstract class with support for walking a modification tree and writing out the 
 Class {
 	#name : 'RwModificationWriterVisitor',
 	#superclass : 'RwAbstractReaderWriterVisitor',
-	#instVars : [
-		'currentClassDefinition',
-		'currentClassExtension'
-	],
 	#category : 'Rowan-Core'
 }
 
@@ -123,18 +119,6 @@ RwModificationWriterVisitor >> changedProject: aProjectModification [
 
 	currentProjectDefinition := aProjectModification after.
 self halt.
-]
-
-{ #category : 'accessing' }
-RwModificationWriterVisitor >> currentClassDefinition [
-
-	^ currentClassDefinition
-]
-
-{ #category : 'accessing' }
-RwModificationWriterVisitor >> currentClassExtension [
-
-	^ currentClassExtension
 ]
 
 { #category : 'actions' }

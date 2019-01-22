@@ -29,7 +29,7 @@ RwRepositoryComponentProjectTonelReaderVisitor >> definitionForType: aString [
   aString = TonelWriter classLabel
     ifTrue: [ ^ #class ].
   aString = TonelWriter extensionLabel
-    ifTrue: [ ^ nil ].
+    ifTrue: [ ^ #classExtension ].
   TonelParseError signal: 'Unknown type declaration.'
 ]
 
@@ -48,9 +48,10 @@ RwRepositoryComponentProjectTonelReaderVisitor >> newTypeDefinitionFrom: anArray
   | typeClass |
   typeClass := self definitionForType: anArray fourth.
   typeClass == #class
-    ifTrue: [^  self newClassDefinitionFrom: anArray ].
-  "is extension, no definition, but return properties (which includes class name)"
-  ^ anArray sixth
+    ifTrue: [ ^  self newClassDefinitionFrom: anArray ].
+  typeClass == #classExtension
+	ifTrue: [ ^ self newClassExtensionDefinitionFrom: anArray ].
+  ^ self error: 'unexpected typeClass: ', typeClass printString
 ]
 
 { #category : 'package reading' }
@@ -82,36 +83,29 @@ RwRepositoryComponentProjectTonelReaderVisitor >> readClassesFor: packageName pa
 RwRepositoryComponentProjectTonelReaderVisitor >> readClassExtensionFile: file inPackage: packageName [
 
 	file readStreamDo: [:fileStream |
-		| definitions stream classExtensionDef className package |
+		| definitions stream |
 		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 		stream sizeBuffer: 10000. "part of workaround for GemTalk/FileSystemGs#9"
 		definitions := (TonelParser on: stream forReader: self) start.
-		package := currentProjectDefinition packageNamed: packageName.
-		className := (definitions at: 1) at: #name.
-		classExtensionDef := package 
-			classExtensionDefinitionNamed: className 
-			ifAbsent: [ package addClassExtensionNamed: className ].
 		((definitions at: 2) at: 1) do: [:mDef |
-			classExtensionDef addClassMethodDefinition: mDef ].
+			currentClassExtension addClassMethodDefinition: mDef ].
 		((definitions at: 2) at: 2) do: [:mDef |
-			classExtensionDef addInstanceMethodDefinition: mDef ].
-		 ].
+			currentClassExtension addInstanceMethodDefinition: mDef ] ].
 ]
 
 { #category : 'class reading' }
 RwRepositoryComponentProjectTonelReaderVisitor >> readClassFile: file inPackage: packageName [
 
 	file readStreamDo: [:fileStream |
-		| definitions stream classDef |
+		| definitions stream |
 		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 		stream sizeBuffer: 10000. "part of workaround for GemTalk/FileSystemGs#9"
 		definitions := (TonelParser on: stream forReader: self) start.
-		classDef := definitions at: 1.
-		self validateClassCategory: classDef category forPackageNamed: packageName.
+		self validateClassCategory: currentClassDefinition category forPackageNamed: packageName.
 		((definitions at: 2) at: 1) do: [:mDef |
-			classDef addClassMethodDefinition: mDef ].
+			currentClassDefinition addClassMethodDefinition: mDef ].
 		((definitions at: 2) at: 2) do: [:mDef |
-			classDef addInstanceMethodDefinition: mDef ].
+			currentClassDefinition addInstanceMethodDefinition: mDef ].
 		(currentProjectDefinition packageNamed: packageName)
-			addClassDefinition: classDef ].
+			addClassDefinition: currentClassDefinition ].
 ]
