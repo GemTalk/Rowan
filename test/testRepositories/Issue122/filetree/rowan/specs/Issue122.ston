@@ -1,0 +1,18 @@
+RwComponentSpecification {
+	#specName : 'Issue122',
+	#version : '0.3.0',
+	#configsPath : 'filetree/rowan/configs',
+	#specsPath : 'filetree/rowan/specs',
+	#repoSpec : RwDiskRepositorySpecification {
+		
+	},
+	#repoPath : 'filetree/rowan/src',
+	#comment : '',
+	#defaultConfigurationNames : [
+		'Core'
+	],
+	#defaultGroupNames : [
+		'core'
+	],
+	#projectsPath : 'filetree/rowan/projects'
+}

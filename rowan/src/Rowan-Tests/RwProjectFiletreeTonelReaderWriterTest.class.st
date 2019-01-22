@@ -46,6 +46,25 @@ RwProjectFiletreeTonelReaderWriterTest >> _writerVisitorClass [
 ]
 
 { #category : 'tests' }
+RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProject [
+
+	| rowanSpec projectHome specUrlString projectSpec projectDefinition |	
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+
+	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122.ston'.
+
+	projectSpec := specUrlString asRwUrl asSpecification.
+
+"create project definition"
+	projectDefinition := RwComponentProjectDefinition newForProjectReference: (RwProjectReferenceDefinition newForSpecification: projectSpec).
+	projectDefinition projectHome: projectHome.
+
+	Rowan projectTools read 
+		readProjectSetForComponentProjectDefinition: projectDefinition.
+]
+
+{ #category : 'tests' }
 RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
 
 	"multiple class extensions from multiple packages for multiple classes"

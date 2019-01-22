@@ -1,0 +1,1 @@
+this is a test comment for Issue361Class3
