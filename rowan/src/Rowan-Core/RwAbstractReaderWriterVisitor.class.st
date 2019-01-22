@@ -12,14 +12,29 @@ Class {
 }
 
 { #category : 'private' }
-RwAbstractReaderWriterVisitor >> _readObjectFrom: aFileReference [
+RwAbstractReaderWriterVisitor class >> _readObjectFrom: aFileReference [
 
 	aFileReference readStreamDo: [:stream |
 		| reader |
 		reader := STON reader on:  (ZnBufferedReadStream on:  stream).
 		reader classes at: #'Package' put: Dictionary.
 		^ reader next ]
+]
 
+{ #category : 'private' }
+RwAbstractReaderWriterVisitor class >> _repositoryPropertyDictFor: packagesRoot [
+
+	| propertiesFile |
+	propertiesFile := packagesRoot / 'properties', 'st'.
+	propertiesFile exists
+		ifFalse: [ ^ Dictionary new ].
+	^ self _readObjectFrom: propertiesFile
+]
+
+{ #category : 'private' }
+RwAbstractReaderWriterVisitor >> _readObjectFrom: aFileReference [
+
+	^ self class _readObjectFrom: aFileReference
 ]
 
 { #category : 'private' }
@@ -37,11 +52,7 @@ RwAbstractReaderWriterVisitor >> _repositoryFormatFor: packagesRoot [
 { #category : 'private' }
 RwAbstractReaderWriterVisitor >> _repositoryPropertyDictFor: packagesRoot [
 
-	| propertiesFile |
-	propertiesFile := packagesRoot / 'properties', 'st'.
-	propertiesFile exists
-		ifFalse: [ ^ Dictionary new ].
-	^ self _readObjectFrom: propertiesFile
+	^ self class _repositoryPropertyDictFor: packagesRoot
 ]
 
 { #category : 'validation' }

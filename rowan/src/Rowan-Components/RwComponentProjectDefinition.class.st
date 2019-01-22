@@ -272,6 +272,12 @@ RwComponentProjectDefinition >> packageFormat: aString [
 	self projectRef packageFormat: aString
 ]
 
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> packageFormatIfAbsent: aBlock [
+
+	^ self projectRef packageFormatIfAbsent: aBlock
+]
+
 { #category : 'properties' }
 RwComponentProjectDefinition >> packagesPath [
 
@@ -355,8 +361,15 @@ RwComponentProjectDefinition >> readProjectSet [
 { #category : 'actions' }
 RwComponentProjectDefinition >> readProjectSetForPackageNames: packageNames [
 
-	| visitorClass |
-	visitorClass := self packageFormat = 'tonel'
+	| format visitorClass |
+	format := self 
+		packageFormatIfAbsent: [  
+			| formatFromDisk |
+			formatFromDisk := (RwAbstractReaderWriterVisitor _repositoryPropertyDictFor: self packagesRoot)
+				at: #format ifAbsent: [ 'tonel' ].
+			self packageFormat: formatFromDisk.
+			formatFromDisk ].
+	visitorClass := format = 'tonel'
 		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
 		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
 	^ visitorClass new

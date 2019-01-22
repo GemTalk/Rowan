@@ -320,7 +320,7 @@ RwProjectReferenceDefinition >> packageConvention: aString [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> packageFormat [
 
-	^ self properties at: 'packageFormat' ifAbsent: [ 'tonel' ]
+	^ self packageFormatIfAbsent: [ 'tonel' ]
 ]
 
 { #category : 'accessing' }
@@ -329,6 +329,12 @@ RwProjectReferenceDefinition >> packageFormat: aString [
 	(#( 'tonel' 'filetree' ) includes: aString)
 		ifFalse: [ self error: 'Unknown package format ', aString printString, '. Should be one of: tonel, or filetree' ].
 	^ self properties at: 'packageFormat' put: aString
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> packageFormatIfAbsent: absentBlock [
+
+	^ self properties at: 'packageFormat' ifAbsent: absentBlock
 ]
 
 { #category : 'accessing' }
