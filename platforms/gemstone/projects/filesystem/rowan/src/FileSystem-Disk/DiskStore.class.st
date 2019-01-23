@@ -32,13 +32,13 @@ DiskStore class >> activeClassFor: anOsName [
 ]
 
 { #category : 'class initialization' }
-DiskStore class >> allConcreteFileOptionClasses [
-	^FileOption allConcreteFileOptionClasses
+DiskStore class >> allConcreteFilePosixErrorClasses [
+	^FilePosixError allConcreteFilePosixErrorClasses
 ]
 
 { #category : 'class initialization' }
-DiskStore class >> allConcreteFilePosixErrorClasses [
-	^FilePosixError allSubclasses select: [:ea | ea subclasses isEmpty and: [(ea class includesSelector: #defaultErrorNumber)]]
+DiskStore class >> allConcretePosixFlagClasses [
+	^PosixFlag allConcretePosixFlagClasses
 ]
 
 { #category : 'current' }
@@ -103,6 +103,7 @@ DiskStore class >> initializeDefaultWorkingDirectory [
 
 { #category : 'class initialization' }
 DiskStore class >> initializePosixErrorValues [
+	" DiskStore initializePosixErrorValues"
 	| errorNumberSelector |
 	errorNumberSelector := ((self name copyFrom: 1 to: self name size - 5) , 'ErrorNumber') asValidSelector.
 	self posixErrorNumbers: Dictionary new. 
@@ -111,11 +112,12 @@ DiskStore class >> initializePosixErrorValues [
 ]
 
 { #category : 'class initialization' }
-DiskStore class >> initializePosixValues [
+DiskStore class >> initializePosixFlagValues [
+	" DiskStore initializePosixFlagValues "
 	| valueSelector |
 	valueSelector := ((self name copyFrom: 1 to: self name size - 5) , 'Value') asValidSelector.
 	self posixValues: Dictionary new. 
-	self allConcreteFileOptionClasses do: [:eaClass |  
+	self allConcretePosixFlagClasses do: [:eaClass |  
 			self posixValues at: eaClass posixName put: (eaClass valueForSelector: valueSelector)]
 ]
 

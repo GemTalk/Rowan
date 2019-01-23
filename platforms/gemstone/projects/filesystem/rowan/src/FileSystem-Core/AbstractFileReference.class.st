@@ -748,6 +748,13 @@ AbstractFileReference >> size [
 	^ self resolve size
 ]
 
+{ #category : 'delegated' }
+AbstractFileReference >> store [
+	"Answer the receiver with references to the current folder (.) and parent folder (..) removed"
+
+	^ self fileSystem store
+]
+
 { #category : 'streams' }
 AbstractFileReference >> streamWritable: writable do: aBlock [
 	^ writable 

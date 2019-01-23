@@ -26,12 +26,12 @@ FileOptionsTest >> storeClass [
 ]
 
 { #category : 'tests' }
-FileOptionsTest >> testAppendOption [
+FileOptionsTest >> testAppendFlag [
 
 	| aFileOptions |
 	aFileOptions := FileSpec append fileOptions.
 	aFileOptions parent store: self store.
-	self assert: aFileOptions appendOption optionValue equals: (FileAppendOption perform: self valueAccessor)
+	self assert: aFileOptions appendFlag optionValue equals: (FileAppendFlag perform: self valueAccessor)
 ]
 
 { #category : 'tests' }
@@ -43,9 +43,9 @@ FileOptionsTest >> testOpenAndAppendAndReadMode [
 	self assert: aFileOptions isWritable.
 	self assert: aFileOptions isReadable.
 	self assert: aFileOptions options size equals: 2.
-	self assert: aFileOptions hasFileCreateOption.
-	self assert: aFileOptions hasFileAppendOption.
-	self deny: aFileOptions hasFileTruncateOption.
+	self assert: aFileOptions hasFileCreateFlag.
+	self assert: aFileOptions hasFileAppendFlag.
+	self deny: aFileOptions hasFileTruncateFlag.
 	self assert: aFileOptions modeString equals: 'a+'.
 	self assert: aFileOptions fileOpenModeValue equals: 2.
 	self assert: aFileOptions fileOpenAndOptionsValue equals: self openAndAppendAndReadValue
@@ -60,8 +60,8 @@ FileOptionsTest >> testOpenAppendMode [
 	self assert: aFileOptions isWritable.
 	self deny: aFileOptions isReadable.
 	self assert: aFileOptions options size equals: 2.
-	self assert: aFileOptions hasFileCreateOption.
-	self assert: aFileOptions hasFileAppendOption.
+	self assert: aFileOptions hasFileCreateFlag.
+	self assert: aFileOptions hasFileAppendFlag.
 	self assert: aFileOptions modeString equals: 'a'.
 	self assert: aFileOptions fileOpenModeValue equals: 1.
 	self assert: aFileOptions fileOpenAndOptionsValue equals: self openAndAppendValue
@@ -76,8 +76,8 @@ FileOptionsTest >> testReadOpenMode [
 	self deny: aFileOptions isWritable.
 	self assert: aFileOptions isReadable.
 	self assert: aFileOptions options isEmpty.
-	self deny: aFileOptions hasFileCreateOption.
-	self deny: aFileOptions hasFileTruncateOption.
+	self deny: aFileOptions hasFileCreateFlag.
+	self deny: aFileOptions hasFileTruncateFlag.
 	self assert: aFileOptions modeString equals: 'r'.
 	self assert: aFileOptions fileOpenModeValue equals: 0.
 	self assert: aFileOptions fileOpenAndOptionsValue equals: 0
@@ -91,8 +91,8 @@ FileOptionsTest >> testReadWriteOpenMode [
 	aFileOptions parent store: self store.
 	self assert: aFileOptions isWritable.
 	self assert: aFileOptions isReadable.
-	self deny: aFileOptions hasFileCreateOption.
-	self deny: aFileOptions hasFileTruncateOption.
+	self deny: aFileOptions hasFileCreateFlag.
+	self deny: aFileOptions hasFileTruncateFlag.
 	self assert: aFileOptions modeString equals: 'r+'.
 	self assert: aFileOptions fileOpenModeValue equals: 2.
 	self assert: aFileOptions fileOpenAndOptionsValue equals: self openReadWriteValue
@@ -107,26 +107,26 @@ FileOptionsTest >> testReadWriteTruncateOpenMode [
 	self assert: aFileOptions isWritable.
 	self assert: aFileOptions isReadable.
 	self assert: aFileOptions options size equals: 2.
-	self assert: aFileOptions hasFileCreateOption.
-	self assert: aFileOptions hasFileTruncateOption.
+	self assert: aFileOptions hasFileCreateFlag.
+	self assert: aFileOptions hasFileTruncateFlag.
 	self assert: aFileOptions modeString equals: 'w+'.
 	self assert: aFileOptions fileOpenModeValue equals: 2.
 	self assert: aFileOptions fileOpenAndOptionsValue equals: self openReadWriteTruncateValue
 ]
 
 { #category : 'tests' }
-FileOptionsTest >> testShareOptions [
+FileOptionsTest >> testShareFlags [
 
 	| aFileOptions |
 	aFileOptions := FileSpec append fileOptions.
 	aFileOptions parent store: self store.
-	self assert: aFileOptions share optionValue equals: (FileDenyNoneOption perform: self valueAccessor).
+	self assert: aFileOptions share optionValue equals: (FileDenyNoneFlag perform: self valueAccessor).
 	aFileOptions beReadOnlyShared.
-	self assert: aFileOptions share optionValue equals: (FileDenyWriteOption perform: self valueAccessor).
+	self assert: aFileOptions share optionValue equals: (FileDenyWriteFlag perform: self valueAccessor).
 	aFileOptions beWriteOnlyShared.
-	self assert: aFileOptions share optionValue equals: (FileDenyReadOption perform: self valueAccessor).
+	self assert: aFileOptions share optionValue equals: (FileDenyReadFlag perform: self valueAccessor).
 	aFileOptions bePrivate.
-	self assert: aFileOptions share optionValue equals: (FileDenyReadWriteOption perform: self valueAccessor).
+	self assert: aFileOptions share optionValue equals: (FileDenyReadWriteFlag perform: self valueAccessor).
 ]
 
 { #category : 'tests' }
@@ -138,8 +138,8 @@ FileOptionsTest >> testWriteOpenMode [
 	self assert: aFileOptions isWritable.
 	self deny: aFileOptions isReadable.
 	self assert: aFileOptions options size equals: 2.
-	self assert: aFileOptions hasFileCreateOption.
-	self assert: aFileOptions hasFileTruncateOption.
+	self assert: aFileOptions hasFileCreateFlag.
+	self assert: aFileOptions hasFileTruncateFlag.
 	self assert: aFileOptions modeString equals: 'w'.
 	self assert: aFileOptions fileOpenModeValue equals: 1.
 	self assert: aFileOptions fileOpenAndOptionsValue equals: self openWriteValue

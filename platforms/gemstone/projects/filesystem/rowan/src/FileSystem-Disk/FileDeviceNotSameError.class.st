@@ -16,10 +16,5 @@ FileDeviceNotSameError class >> errorDescription [
 
 { #category : 'accessing' }
 FileDeviceNotSameError class >> posixName [
-	^'EXDEV'
-]
-
-{ #category : 'accessing' }
-FileDeviceNotSameError class >> windowsErrorNumber [
-	^18
+	^'EBUSY'
 ]

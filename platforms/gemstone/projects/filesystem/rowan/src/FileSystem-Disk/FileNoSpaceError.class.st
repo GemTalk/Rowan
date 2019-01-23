@@ -12,7 +12,7 @@ FileNoSpaceError class >> defaultErrorNumber [
 	^18
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 FileNoSpaceError class >> errorDescription [
 	^'No space left on device'
 ]
@@ -20,9 +20,4 @@ FileNoSpaceError class >> errorDescription [
 { #category : 'accessing' }
 FileNoSpaceError class >> posixName [
 	^'ENOSPC'
-]
-
-{ #category : 'accessing' }
-FileNoSpaceError class >> windowsErrorNumber [
-	^28
 ]

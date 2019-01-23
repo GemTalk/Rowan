@@ -18,8 +18,3 @@ FileReadOnlyFileSystemError class >> errorDescription [
 FileReadOnlyFileSystemError class >> posixName [
 	^'EROFS'
 ]
-
-{ #category : 'accessing' }
-FileReadOnlyFileSystemError class >> windowsErrorNumber [
-	^30
-]

@@ -18,11 +18,6 @@ FileImproperLinkError class >> errorDescription [
 ]
 
 { #category : 'accessing' }
-FileImproperLinkError class >> errorNumber [
-	^14
-]
-
-{ #category : 'accessing' }
-FileImproperLinkError class >> windowsErrorNumber [
-	^18
+FileImproperLinkError class >> posixName [
+	^'TBD'  "Lost the name - needs to be fixed"
 ]

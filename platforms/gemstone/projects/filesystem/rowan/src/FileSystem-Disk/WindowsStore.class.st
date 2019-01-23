@@ -134,6 +134,24 @@ WindowsStore >> currentDisk [
 	^ disk ifNil: [  disk := FileSystem workingDirectory path segments first ]
 ]
 
+{ #category : 'error handling' }
+WindowsStore >> errorClassForErrorNumber: anErrorNumber fileReference: aFileReference errorGroup: anErrorGroup [
+
+	^anErrorGroup errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference
+]
+
+{ #category : 'error handling' }
+WindowsStore >> errorClassForErrorNumber: anErrorNumber fileReference: aFileReference options: fileOptions errorGroup: anErrorGroup [
+
+	^anErrorGroup errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference options: fileOptions
+]
+
+{ #category : 'error handling' }
+WindowsStore >> errorClassForErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference errorGroup: anErrorGroup [
+
+	^anErrorGroup errorClassForWindowsPlatformError: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+]
+
 { #category : 'converting' }
 WindowsStore >> pathFromString: aString [
 	"Need to distinguish '' and '/' , so tag latter with invalid character ':'  "

@@ -238,6 +238,24 @@ FileSystemStore >> entryFromNode: node path: path for: aFileystem [
 	^ self entryFromNode: node fileSystem: aFileystem path: entryPath
 ]
 
+{ #category : 'error handling' }
+FileSystemStore >> errorClassForErrorNumber: anErrorNumber fileReference: aFileReference errorGroup: anErrorGroup [
+
+	^anErrorGroup errorClassForDefaultPlatformError: anErrorNumber fileReference: aFileReference
+]
+
+{ #category : 'error handling' }
+FileSystemStore >> errorClassForErrorNumber: anErrorNumber fileReference: aFileReference options: fileOptions errorGroup: anErrorGroup [
+
+	^anErrorGroup errorClassForDefaultPlatformError: anErrorNumber fileReference: aFileReference options: fileOptions
+]
+
+{ #category : 'error handling' }
+FileSystemStore >> errorClassForErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference errorGroup: anErrorGroup [
+
+	^anErrorGroup errorClassForDefaultPlatformError: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+]
+
 { #category : 'public' }
 FileSystemStore >> exists: aPath [
 	self 

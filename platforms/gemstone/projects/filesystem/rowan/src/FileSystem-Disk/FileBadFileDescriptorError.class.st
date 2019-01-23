@@ -21,8 +21,3 @@ FileBadFileDescriptorError class >> errorDescription [
 FileBadFileDescriptorError class >> posixName [
 	^'EBADF'
 ]
-
-{ #category : 'accessing' }
-FileBadFileDescriptorError class >> windowsErrorNumber [
-	^9
-]

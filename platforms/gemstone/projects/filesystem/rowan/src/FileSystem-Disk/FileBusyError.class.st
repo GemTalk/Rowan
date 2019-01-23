@@ -21,8 +21,3 @@ FileBusyError class >> errorDescription [
 FileBusyError class >> posixName [
 	^'EBUSY'
 ]
-
-{ #category : 'accessing' }
-FileBusyError class >> windowsErrorNumber [
-	^16
-]

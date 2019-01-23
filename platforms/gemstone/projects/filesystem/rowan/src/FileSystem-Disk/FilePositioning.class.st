@@ -1,5 +1,5 @@
 Class {
 	#name : 'FilePositioning',
-	#superclass : 'FileOption',
+	#superclass : 'PosixFlag',
 	#category : 'FileSystem-Disk-Options'
 }

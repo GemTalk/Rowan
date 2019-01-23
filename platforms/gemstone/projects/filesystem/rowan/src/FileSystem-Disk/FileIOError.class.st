@@ -23,8 +23,3 @@ FileIOError class >> errorDescription [
 FileIOError class >> posixName [
 	^'EIO'
 ]
-
-{ #category : 'accessing' }
-FileIOError class >> windowsErrorNumber [
-	^5
-]

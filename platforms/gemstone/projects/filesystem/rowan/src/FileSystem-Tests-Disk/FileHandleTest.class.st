@@ -24,6 +24,17 @@ FileHandleTest >> testFileWriteError [
 ]
 
 { #category : 'tests' }
+FileHandleTest >> testTruncate [
+	| out |
+	out := #(1 2 3 4 5) asByteArray.
+	handle at: 1 write: out startingAt: 1 count: 5.
+	self assert: handle size = 5.
+	handle truncateTo: 3. "This actually sets the position."
+	"When truncate is implemented in the file, this test will fail as the size should be 3"
+	self assert: handle size = 5
+]
+
+{ #category : 'tests' }
 FileHandleTest >> testWriteStream [
 	| stream |
 	stream := handle binaryStream.

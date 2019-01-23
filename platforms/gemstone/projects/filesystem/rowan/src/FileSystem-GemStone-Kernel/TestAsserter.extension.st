@@ -1,6 +1,14 @@
 Extension { #name : 'TestAsserter' }
 
 { #category : '*filesystem-gemstone-kernel' }
+TestAsserter >> assert: anObject equals: otherObj description: aString [
+	self
+		assert: anObject = otherObj
+		description: anObject printString , ' is not equal to ' , otherObj printString , ' - ' , aString.
+
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
 TestAsserter >> assertCollection: actual equals: expected [
 	"Specialized test method that generates a proper error message for collection"
 	^ self

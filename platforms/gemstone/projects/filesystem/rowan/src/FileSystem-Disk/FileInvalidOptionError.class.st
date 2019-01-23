@@ -21,8 +21,3 @@ FileInvalidOptionError class >> errorDescription [
 FileInvalidOptionError class >> posixName [
 	^'EINVAL'
 ]
-
-{ #category : 'accessing' }
-FileInvalidOptionError class >> windowsErrorNumber [
-	^22
-]

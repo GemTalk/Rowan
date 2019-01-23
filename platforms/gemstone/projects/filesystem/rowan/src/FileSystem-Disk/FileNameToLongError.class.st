@@ -10,8 +10,13 @@ Class {
 }
 
 { #category : 'accessing' }
-FileNameToLongError class >> errorNumber [
+FileNameToLongError class >> defaultErrorNumber [
 	^10063
+]
+
+{ #category : 'accessing' }
+FileNameToLongError class >> errorDescription [
+	^'Name is too long'
 ]
 
 { #category : 'accessing' }

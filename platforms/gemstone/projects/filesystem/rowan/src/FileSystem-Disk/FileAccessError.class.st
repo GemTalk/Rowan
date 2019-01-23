@@ -18,18 +18,6 @@ FileAccessError class >> errorDescription [
 ]
 
 { #category : 'access' }
-FileAccessError class >> errorFor: errorNumber path: path fileSystem: aFileSystem [
-	(#(3 123 161) includes: errorNumber) ifTrue: [^self].
-	(#(2 5 87) includes: errorNumber and: [aFileSystem privateIsDirectory: path]) ifTrue: [^self].
-	(errorNumber = 80 and: []) ifTrue: [^self].
-]
-
-{ #category : 'access' }
 FileAccessError class >> posixName [
 	^'EACCES'
-]
-
-{ #category : 'access' }
-FileAccessError class >> windowsErrorNumber [
-	^13
 ]

@@ -5,8 +5,13 @@ Class {
 }
 
 { #category : 'accessing' }
-FileSynchronizedIONotSupportedError class >> errorNumber [
-	self error: 'This needs to be defined'
+FileSynchronizedIONotSupportedError class >> defaultErrorNumber [
+	^999 "This needs to be determined"
+]
+
+{ #category : 'accessing' }
+FileSynchronizedIONotSupportedError class >> errorDescription [
+	^'Synchronized IO not supported'
 ]
 
 { #category : 'accessing' }

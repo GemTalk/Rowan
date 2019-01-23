@@ -124,6 +124,24 @@ ClientStore >> delimiter [
 	^ self store delimiter
 ]
 
+{ #category : 'error handling' }
+ClientStore >> errorClassForErrorNumber: anErrorNumber fileReference: aFileReference errorGroup: anErrorGroup [
+
+	^self store errorClassForErrorNumber: anErrorNumber fileReference: aFileReference errorGroup: anErrorGroup
+]
+
+{ #category : 'error handling' }
+ClientStore >> errorClassForErrorNumber: anErrorNumber fileReference: aFileReference options: fileOptions errorGroup: anErrorGroup [
+
+	^self store errorClassForErrorNumber: anErrorNumber fileReference: aFileReference options: fileOptions errorGroup: anErrorGroup
+]
+
+{ #category : 'error handling' }
+ClientStore >> errorClassForErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference errorGroup: anErrorGroup [
+
+	^anErrorGroup errorClassForDefaultPlatformError: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+]
+
 { #category : 'public' }
 ClientStore >> exists: aPath [
 	| result |

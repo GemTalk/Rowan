@@ -25,7 +25,7 @@ FileSpecTest >> testAppendAndReadBinary [
 
 	| aFileSpec |
 	aFileSpec := FileSpec appendAndReadBinary.
-	self assert: (aFileSpec fileType isKindOf: FileBinaryTypeOption).
+	self assert: (aFileSpec fileType isKindOf: FileBinaryTypeFlag).
 	self assert: aFileSpec modeString = 'a+b'
 ]
 
@@ -59,7 +59,7 @@ FileSpecTest >> testReadBinary [
 
 	| aFileSpec |
 	aFileSpec := FileSpec readBinary.
-	self assert: (aFileSpec fileOptions fileType isKindOf: FileBinaryTypeOption).
+	self assert: (aFileSpec fileOptions fileType isKindOf: FileBinaryTypeFlag).
 	self assert: aFileSpec modeString = 'rb'
 ]
 
@@ -76,7 +76,7 @@ FileSpecTest >> testReadWriteBinary [
 
 	| aFileSpec |
 	aFileSpec := FileSpec readWriteBinary.
-	self assert: (aFileSpec fileType isKindOf: FileBinaryTypeOption).
+	self assert: (aFileSpec fileType isKindOf: FileBinaryTypeFlag).
 	self assert: aFileSpec modeString = 'r+b'
 ]
 
@@ -109,7 +109,7 @@ FileSpecTest >> testWriteBinary [
 
 	| aFileSpec |
 	aFileSpec := FileSpec writeBinary.
-	self assert: (aFileSpec fileType isKindOf: FileBinaryTypeOption).
+	self assert: (aFileSpec fileType isKindOf: FileBinaryTypeFlag).
 	self assert: aFileSpec modeString = 'wb'
 ]
 
@@ -136,7 +136,7 @@ FileSpecTest >> testWriteZippedWithoutCompressionLevel [
 
 	| aFileSpec | 
 	aFileSpec := FileSpec write.
-	aFileSpec fileOptions fileType: FileGzipTypeOption none.
+	aFileSpec fileOptions fileType: FileGzipTypeFlag none.
 	self deny: aFileSpec isGzipped.
 	self assert: aFileSpec modeString = 'w'
 ]

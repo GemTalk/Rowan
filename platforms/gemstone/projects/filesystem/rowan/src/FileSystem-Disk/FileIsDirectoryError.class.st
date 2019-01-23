@@ -21,8 +21,3 @@ FileIsDirectoryError class >> errorDescription [
 FileIsDirectoryError class >> posixName [
 	^'EISDIR'
 ]
-
-{ #category : 'accessing' }
-FileIsDirectoryError class >> windowsErrorNumber [
-	^21
-]

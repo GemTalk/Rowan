@@ -21,7 +21,7 @@ ZnByteStringBecameWideString class >> convert: byteString [
 	
 	| wideString |
 self flag: 'TODO: WideString does not exist in Gemstone'.
-	wideString := QuadByteString from: byteString.
+	wideString := String from: byteString.
 	self new
 		byteString: byteString;
 		wideString: wideString;

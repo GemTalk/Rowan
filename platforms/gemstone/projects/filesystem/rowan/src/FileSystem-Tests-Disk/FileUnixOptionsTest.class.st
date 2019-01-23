@@ -43,10 +43,10 @@ FileUnixOptionsTest >> testAccessRules [
 
 	self should: [aFileOptions accessRule] raise: FileOptionFeatureNotSupported.
 
-	aFileOptions mode: FileOpenWriteOnlyMode new.
+	aFileOptions mode: FileOpenWriteOnlyFlag new.
 	self should: [aFileOptions accessRule] raise: FileOptionFeatureNotSupported.
 
-	aFileOptions mode: FileOpenReadWriteMode new.
+	aFileOptions mode: FileOpenReadWriteFlag new.
 	self should: [aFileOptions accessRule] raise: FileOptionFeatureNotSupported.
 ]
 
@@ -59,14 +59,14 @@ FileUnixOptionsTest >> testCreateRules [
 
 	self should: [aFileOptions createRule] raise: FileOptionFeatureNotSupported.
 
-	aFileOptions addOption: FileCreateOption new.
+	aFileOptions addOption: FileCreateFlag new.
 	self should: [aFileOptions createRule] raise: FileOptionFeatureNotSupported.
 
-	aFileOptions addOption: FileExclusiveOption new.
+	aFileOptions addOption: FileExclusiveFlag new.
 	self should: [aFileOptions createRule] raise: FileOptionFeatureNotSupported.
 	self should: [aFileOptions truncateRule] raise: FileOptionFeatureNotSupported.
 
-	aFileOptions addOption: FileTruncateOption new.
+	aFileOptions addOption: FileTruncateFlag new.
 	self should: [aFileOptions truncateRule] raise: FileOptionFeatureNotSupported.
 ]
 
@@ -87,13 +87,13 @@ FileUnixOptionsTest >> testShareRules [
 	aFileOptions parent store: self store.
 	self should: [aFileOptions shareRule] raise: FileOptionFeatureNotSupported.
 
-	aFileOptions share: FileDenyReadOption new.
+	aFileOptions share: FileDenyReadFlag new.
 	self should: [aFileOptions shareRule] raise: FileOptionFeatureNotSupported.
 
-	aFileOptions share: FileDenyWriteOption new.
+	aFileOptions share: FileDenyWriteFlag new.
 	self should: [aFileOptions shareRule] raise: FileOptionFeatureNotSupported.
 
-	aFileOptions share: FileDenyReadWriteOption new.
+	aFileOptions share: FileDenyReadWriteFlag new.
 	self should: [aFileOptions shareRule] raise: FileOptionFeatureNotSupported.
 ]
 

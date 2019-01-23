@@ -1,5 +1,5 @@
 Class {
 	#name : 'FileControlOption',
-	#superclass : 'FileOption',
+	#superclass : 'PosixFlag',
 	#category : 'FileSystem-Disk-Options'
 }

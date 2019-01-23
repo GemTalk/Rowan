@@ -21,8 +21,3 @@ FilePermissionDeniedError class >> errorDescription [
 FilePermissionDeniedError class >> posixName [
 	^'EPERM'
 ]
-
-{ #category : 'accessing' }
-FilePermissionDeniedError class >> windowsErrorNumber [
-	^1
-]

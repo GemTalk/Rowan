@@ -175,15 +175,21 @@ FileOptions >> accessRule [
 ]
 
 { #category : 'options - adding and removing' }
-FileOptions >> addAppendOption [
+FileOptions >> addAppendFlag [
 
-	self addOption: FileAppendOption new
+	self addOption: FileAppendFlag new
 ]
 
 { #category : 'options - adding and removing' }
-FileOptions >> addCreateOption [
+FileOptions >> addCreateFlag [
 
-	self addOption: FileCreateOption new
+	self addOption: FileCreateFlag new
+]
+
+{ #category : 'options - adding and removing' }
+FileOptions >> addExclusiveFlag [
+
+	self addOption: FileExclusiveFlag new
 ]
 
 { #category : 'options - adding and removing' }
@@ -193,86 +199,86 @@ FileOptions >> addOption: anOption [
 ]
 
 { #category : 'options - adding and removing' }
-FileOptions >> addTruncateOption [
+FileOptions >> addTruncateFlag [
 
-	self addOption: FileTruncateOption new
+	self addOption: FileTruncateFlag new
 ]
 
 { #category : 'options' }
-FileOptions >> appendOption [
-	^self optionForClass: FileAppendOption
+FileOptions >> appendFlag [
+	^self optionForClass: FileAppendFlag
 ]
 
 { #category : 'file type' }
 FileOptions >> beBinaryFileType [
-	self fileType: FileBinaryTypeOption new
+	self fileType: FileBinaryTypeFlag new
 ]
 
 { #category : 'file type' }
 FileOptions >> beHighCompression [
-	self fileType: FileGzipTypeOption high
+	self fileType: FileGzipTypeFlag high
 ]
 
 { #category : 'file type' }
 FileOptions >> beLowCompression [
-	self fileType: FileGzipTypeOption low
+	self fileType: FileGzipTypeFlag low
 ]
 
 { #category : 'sharing' }
 FileOptions >> bePrivate [
-	self share: FileDenyReadWriteOption new
+	self share: FileDenyReadWriteFlag new
 ]
 
 { #category : 'open mode' }
 FileOptions >> beReadMode [
-	self mode: FileOpenReadOnlyMode new.
+	self mode: FileOpenReadOnlyFlag new.
 ]
 
 { #category : 'sharing' }
 FileOptions >> beReadOnlyShared [
-	self share: FileDenyWriteOption new
+	self share: FileDenyWriteFlag new
 ]
 
 { #category : 'open mode' }
 FileOptions >> beReadWriteMode [
-	self mode: FileOpenReadWriteMode new.
+	self mode: FileOpenReadWriteFlag new.
 ]
 
 { #category : 'sharing' }
 FileOptions >> beShared [
-	self share: FileDenyNoneOption new
+	self share: FileDenyNoneFlag new
 ]
 
 { #category : 'file type' }
 FileOptions >> beTextFileType [
-	self fileType: FileTextTypeOption new
+	self fileType: FileTextTypeFlag new
 ]
 
 { #category : 'open mode' }
 FileOptions >> beWriteMode [
-	self mode: FileOpenWriteOnlyMode new.
+	self mode: FileOpenWriteOnlyFlag new.
 ]
 
 { #category : 'sharing' }
 FileOptions >> beWriteOnlyShared [
-	self share: FileDenyReadOption new
+	self share: FileDenyReadFlag new
 ]
 
 { #category : 'convenience' }
 FileOptions >> createRule [
-	^self fileCreateOption 
+	^self fileCreateFlag 
 		ifNil: [self store class openExistingRule] 
 		ifNotNil: [:option | option createRule]
 ]
 
 { #category : 'options' }
-FileOptions >> fileCreateOption [
-	^self optionForClass: FileCreateOption
+FileOptions >> fileCreateFlag [
+	^self optionForClass: FileCreateFlag
 ]
 
 { #category : 'options' }
-FileOptions >> fileExclusiveOption [
-	^self optionForClass: FileExclusiveOption
+FileOptions >> fileExclusiveFlag [
+	^self optionForClass: FileExclusiveFlag
 ]
 
 { #category : 'options' }
@@ -302,23 +308,28 @@ FileOptions >> fileType: aFileTypeOption [
 ]
 
 { #category : 'testing' }
-FileOptions >> hasFileAppendOption [
-	^self hasOption: FileAppendOption
+FileOptions >> hasExclsiveFlag [
+	^self hasOption: FileExclusiveFlag
 ]
 
 { #category : 'testing' }
-FileOptions >> hasFileCreateOption [
-	^self hasOption: FileCreateOption
+FileOptions >> hasFileAppendFlag [
+	^self hasOption: FileAppendFlag
 ]
 
 { #category : 'testing' }
-FileOptions >> hasFileTruncateOption [
-	^self hasOption: FileTruncateOption
+FileOptions >> hasFileCreateFlag [
+	^self hasOption: FileCreateFlag
 ]
 
 { #category : 'testing' }
-FileOptions >> hasOption: anOptionClass [
-	^(self optionForClass: anOptionClass) notNil
+FileOptions >> hasFileTruncateFlag [
+	^self hasOption: FileTruncateFlag
+]
+
+{ #category : 'testing' }
+FileOptions >> hasOption: anPosixFlagClass [
+	^(self optionForClass: anPosixFlagClass) notNil
 ]
 
 { #category : 'initialization' }
@@ -332,16 +343,16 @@ FileOptions >> initialize [
 FileOptions >> initializeAppend [
 	self initialize.
 	self beWriteMode.
-	self addCreateOption.
-	self addAppendOption
+	self addCreateFlag.
+	self addAppendFlag
 ]
 
 { #category : 'initialization' }
 FileOptions >> initializeAppendAndRead [
 	self initialize.
 	self beReadWriteMode.
-	self addCreateOption.
-	self addAppendOption
+	self addCreateFlag.
+	self addAppendFlag
 ]
 
 { #category : 'initialization' }
@@ -372,16 +383,16 @@ FileOptions >> initializeReadWrite [
 FileOptions >> initializeReadWriteTruncated [
 	self initialize.
 	self initializeReadWrite.
-	self addCreateOption.
-	self addTruncateOption
+	self addCreateFlag.
+	self addTruncateFlag
 ]
 
 { #category : 'initialization' }
 FileOptions >> initializeWrite [
 	self initialize.
 	self beWriteMode.
-	self addCreateOption.
-	self addTruncateOption
+	self addCreateFlag.
+	self addTruncateFlag
 ]
 
 { #category : 'initialization' }
@@ -432,13 +443,12 @@ FileOptions >> modeString [
 	| aStream |
 	aStream := WriteStream on: String new.
 	self printOpenModeStringOn: aStream.
-"	self compressionPolicy ifNotNil: [:cp | cp printOpenModeStringOn: aStream]."
 	^aStream contents
 ]
 
 { #category : 'options' }
-FileOptions >> optionForClass: anOptionClass [
-	^self options detect: [:ea | ea isKindOf: anOptionClass] ifNone: [nil]
+FileOptions >> optionForClass: anPosixFlagClass [
+	^self options detect: [:ea | ea isKindOf: anPosixFlagClass] ifNone: [nil]
 ]
 
 { #category : 'accessing' }
@@ -506,13 +516,13 @@ FileOptions >> store [
 ]
 
 { #category : 'options' }
-FileOptions >> truncateOption [
-	^self optionForClass: FileTruncateOption
+FileOptions >> truncateFlag [
+	^self optionForClass: FileTruncateFlag
 ]
 
 { #category : 'convenience' }
 FileOptions >> truncateRule [
-	^self truncateOption 
+	^self truncateFlag
 		ifNil: [self store class noTruncateRule] 
 		ifNotNil: [:option | option truncateRule]
 ]

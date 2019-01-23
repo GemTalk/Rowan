@@ -21,8 +21,3 @@ FileNoEntryError class >> errorDescription [
 FileNoEntryError class >> posixName [
 	^'ENOENT'
 ]
-
-{ #category : 'accessing' }
-FileNoEntryError class >> windowsErrorNumber [
-	^2
-]

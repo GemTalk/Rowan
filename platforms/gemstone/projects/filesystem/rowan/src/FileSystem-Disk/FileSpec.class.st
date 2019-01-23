@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'fileOptions',
 		'encoding',
-		'fileType',
 		'store'
 	],
 	#category : 'FileSystem-Disk-Base'
@@ -332,7 +331,7 @@ FileSpec >> initializeForWriteLowZipped [
 { #category : 'initialization' }
 FileSpec >> initializeForWriteZipped [
 	self fileOptions: FileOptions write.
-	self fileOptions fileType: FileGzipTypeOption none
+	self fileOptions fileType: FileGzipTypeFlag none
 ]
 
 { #category : 'initialization' }

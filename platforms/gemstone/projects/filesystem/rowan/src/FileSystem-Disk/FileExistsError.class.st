@@ -18,18 +18,6 @@ FileExistsError class >> errorDescription [
 ]
 
 { #category : 'accessing' }
-FileExistsError class >> errorFor: errorNumber path: path fileSystem: aFileSystem [
-	(#(5 87) includes: errorNumber and: [aFileSystem privateIsDirectory: path]) ifTrue: [^true].
-	(#(80) includes: errorNumber and: ["(oflag bitAnd: OEXCL) == 0"]) ifTrue: [^true].
-	^false
-]
-
-{ #category : 'accessing' }
 FileExistsError class >> posixName [
 	^'EEXIST'
-]
-
-{ #category : 'accessing' }
-FileExistsError class >> windowsErrorNumber [
-	^17
 ]

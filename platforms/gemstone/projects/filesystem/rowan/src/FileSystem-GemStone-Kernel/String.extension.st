@@ -61,6 +61,13 @@ String class >> crlf [
 ]
 
 { #category : '*FileSystem-GemStone-Kernel' }
+String class >> from: aString [
+
+	^self withAll: aString
+
+]
+
+{ #category : '*FileSystem-GemStone-Kernel' }
 String class >> lf [
 	"Answer a string containing a single carriage return character."
 

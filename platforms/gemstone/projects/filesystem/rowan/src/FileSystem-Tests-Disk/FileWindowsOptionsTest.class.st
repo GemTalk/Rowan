@@ -43,10 +43,10 @@ FileWindowsOptionsTest >> testAccessRules [
 
 	self assert: aFileOptions accessRule equals: WindowsStore readOnlyAccessRule.
 
-	aFileOptions mode: FileOpenWriteOnlyMode new.
+	aFileOptions mode: FileOpenWriteOnlyFlag new.
 	self assert: aFileOptions accessRule equals: WindowsStore writeOnlyAccessRule.
 
-	aFileOptions mode: FileOpenReadWriteMode new.
+	aFileOptions mode: FileOpenReadWriteFlag new.
 	self assert: aFileOptions accessRule equals: WindowsStore readWriteAccessRule.
 ]
 
@@ -59,14 +59,14 @@ FileWindowsOptionsTest >> testCreateRules [
 
 	self assert: aFileOptions createRule equals: WindowsStore openExistingRule.
 
-	aFileOptions addOption: FileCreateOption new.
+	aFileOptions addOption: FileCreateFlag new.
 	self assert: aFileOptions createRule equals: WindowsStore openAlwaysRule.
 
-	aFileOptions addOption: FileExclusiveOption new.
+	aFileOptions addOption: FileExclusiveFlag new.
 	self assert: aFileOptions createRule equals: WindowsStore createNewRule.
 	self assert: aFileOptions truncateRule equals: WindowsStore noTruncateRule.
 
-	aFileOptions addOption: FileTruncateOption new.
+	aFileOptions addOption: FileTruncateFlag new.
 	self assert: aFileOptions truncateRule equals: WindowsStore truncateExistingRule.
 ]
 
@@ -107,13 +107,13 @@ FileWindowsOptionsTest >> testShareRules [
 	aFileOptions parent store: self store.
 	self assert: aFileOptions shareRule equals: WindowsStore denyNoneShareRule.
 
-	aFileOptions share: FileDenyReadOption new.
+	aFileOptions share: FileDenyReadFlag new.
 	self assert: aFileOptions shareRule equals: WindowsStore denyReadShareRule.
 
-	aFileOptions share: FileDenyWriteOption new.
+	aFileOptions share: FileDenyWriteFlag new.
 	self assert: aFileOptions shareRule equals: WindowsStore denyWriteShareRule.
 
-	aFileOptions share: FileDenyReadWriteOption new.
+	aFileOptions share: FileDenyReadWriteFlag new.
 	self assert: aFileOptions shareRule equals: WindowsStore denyReadWriteShareRule.
 ]
 

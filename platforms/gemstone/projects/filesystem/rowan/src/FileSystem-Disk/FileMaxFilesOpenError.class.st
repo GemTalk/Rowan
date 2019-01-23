@@ -12,7 +12,7 @@ FileMaxFilesOpenError class >> defaultErrorNumber [
 	^17
 ]
 
-{ #category : 'other' }
+{ #category : 'accessing' }
 FileMaxFilesOpenError class >> errorDescription [
 	^'Too many open files'
 ]
@@ -20,9 +20,4 @@ FileMaxFilesOpenError class >> errorDescription [
 { #category : 'accessing' }
 FileMaxFilesOpenError class >> posixName [
 	^'ENFILE'
-]
-
-{ #category : 'accessing' }
-FileMaxFilesOpenError class >> windowsErrorNumber [
-	^23
 ]
