@@ -101,6 +101,7 @@ RowanMethodServiceTest >> test_runMethodTest [
 	methodService runTest: #test_matchingPattern inClassName: 'RowanAnsweringServiceTest'.
 	self assert: methodService testResult equals: 'passed'.
 	self createServicesTestTestClass.
+	self loadServicesTestProject.
 	classService := RowanClassService forClassNamed: self servicesDefaultTestClassName.
 	classService saveMethodSource: 'testMethod1  self assert: false' category: 'failing test'.
 	methodService runTest: #testMethod1 inClassName: self servicesDefaultTestClassName.

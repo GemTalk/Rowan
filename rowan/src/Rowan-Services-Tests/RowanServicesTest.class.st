@@ -103,7 +103,7 @@ RowanServicesTest >> createServicesTestProject [
 RowanServicesTest >> createServicesTestTestClass [
 
 	| packageDefinition classDefinition |
-	packageDefinition := self createServicesTestPackage.
+	packageDefinition := defaultProjectDefinition packageNamed: self servicesTestPackageName. 
 	classDefinition := self createTestClassDefinitionNamed: self servicesDefaultTestClassName. 
 	packageDefinition addClassDefinition: classDefinition. 
 	^classDefinition
@@ -222,14 +222,6 @@ RowanServicesTest >> setUp [
 RowanServicesTest >> tearDown [
 
 	RowanCommandResult initializeResults.  "squash the gui updates"
-]
-
-{ #category : 'failing test' }
-RowanServicesTest >> testMethod1 [  self assert: false
-]
-
-{ #category : 'failing test' }
-RowanServicesTest >> testMethod2 [  1 zork
 ]
 
 { #category : 'support' }
