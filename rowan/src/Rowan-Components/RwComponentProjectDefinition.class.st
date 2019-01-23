@@ -145,7 +145,7 @@ RwComponentProjectDefinition >> configsPath [
 { #category : 'properties' }
 RwComponentProjectDefinition >> configsPath: aDirectoryPathString [
 
-	self specification configsPath: aDirectoryPathString
+	self projectRef configsPath: aDirectoryPathString
 ]
 
 { #category : 'properties' }
@@ -400,9 +400,7 @@ RwComponentProjectDefinition >> repositoryRoot [
 { #category : 'temporary compat' }
 RwComponentProjectDefinition >> specification [
 
-self deprecated: 'temporary method ... simulating RwSpecification api'.
-
-	^ self
+	^ self shouldNotImplement: #specification
 ]
 
 { #category : 'properties' }
