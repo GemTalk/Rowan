@@ -100,6 +100,33 @@ RowanServicesTest >> createServicesTestProject [
 ]
 
 { #category : 'support' }
+RowanServicesTest >> createServicesTestTestClass [
+
+	| packageDefinition classDefinition |
+	packageDefinition := self createServicesTestPackage.
+	classDefinition := self createTestClassDefinitionNamed: self servicesDefaultTestClassName. 
+	packageDefinition addClassDefinition: classDefinition. 
+	^classDefinition
+]
+
+{ #category : 'support' }
+RowanServicesTest >> createTestClassDefinitionNamed: className [
+
+	| classDefinition |
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+			super: 'TestCase'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: 'services test'
+			comment: String new
+			pools: #()
+			type: 'normal'.
+	^classDefinition
+]
+
+{ #category : 'support' }
 RowanServicesTest >> defaultSymbolDictionaryName [
 
 	^'ServicesTestDictionary'
@@ -161,6 +188,12 @@ RowanServicesTest >> servicesDefaultClassName [
 ]
 
 { #category : 'constants' }
+RowanServicesTest >> servicesDefaultTestClassName [
+
+	^'RowanServicesTestClassForTesting'
+]
+
+{ #category : 'constants' }
 RowanServicesTest >> servicesTestPackageName [
 
 	^'RowanServicesTestPackage'
@@ -189,6 +222,14 @@ RowanServicesTest >> setUp [
 RowanServicesTest >> tearDown [
 
 	RowanCommandResult initializeResults.  "squash the gui updates"
+]
+
+{ #category : 'failing test' }
+RowanServicesTest >> testMethod1 [  self assert: false
+]
+
+{ #category : 'failing test' }
+RowanServicesTest >> testMethod2 [  1 zork
 ]
 
 { #category : 'support' }

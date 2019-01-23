@@ -416,6 +416,17 @@ RowanMethodService >> rowanProjectName [
 	^projectName
 ]
 
+{ #category : 'client commands' }
+RowanMethodService >> runTest: testSelector inClassName: theClassName [
+
+	| sunitTestResult |
+	sunitTestResult := (Rowan image objectNamed: theClassName) run: testSelector asSymbol.
+	sunitTestResult errorCount > 0 ifTrue:[testResult := 'error']. 
+	sunitTestResult failureCount > 0 ifTrue:[testResult := 'failure']. 
+	sunitTestResult passedCount > 0 ifTrue:[testResult := 'passed']. 
+	RowanCommandResult addResult: self.
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> selectedPackageServices [
 
@@ -518,6 +529,12 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 	].
 	^list
 
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> testResult [
+
+	^testResult
 ]
 
 { #category : 'updates' }
