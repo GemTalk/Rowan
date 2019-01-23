@@ -52,7 +52,7 @@ RwUrlTest >> testAsRwRepository [
 	loadedProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	loadSpec := loadedProject specification.
 	repoRoot := loadSpec repoSpec repositoryRootPath.
-	testRepoPath := repoRoot , '/testRepositories'.
+	testRepoPath := repoRoot , '/test/testRepositories/repos'.
 	repos := {('cypress:' , testRepoPath , '/cypress/').
 	('filetree://' , testRepoPath , '/filetree/').
 	('tonel:' , testRepoPath , '/tonel/')}
@@ -62,7 +62,6 @@ RwUrlTest >> testAsRwRepository [
 			| repo x y |
 			repo := assoc value.
 			self assert: (x := repo url) = (y := assoc key) ]
-
 ]
 
 { #category : 'tests' }
