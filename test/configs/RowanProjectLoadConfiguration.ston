@@ -10,6 +10,7 @@
                         'core': {
 				#packageNames : [
 					'Rowan-Url-Core',
+					'Rowan-Components',
 					'Rowan-Cypress-Core',
 					'Rowan-Cypress-Kernel',
 					'Rowan-Definitions',
@@ -18,7 +19,8 @@
 					'Rowan-Core',
 					'Rowan-Tools-Core',
 					'Rowan-Tools-Extensions',
-					'Rowan-Tools-Kernel'
+					'Rowan-Tools-Kernel',
+					'Rowan-Components-Kernel'
 					],
 				#configurationNames : [ ]
 				},
@@ -43,7 +45,9 @@
 					'Rowan-GemStone-Core',
 					'Rowan-GemStone-Kernel',
 					'Rowan-GemStone-Loader',
-					'Rowan-GemStone-Loader-Extensions'
+					'Rowan-GemStone-Loader-Extensions',
+					'Rowan-GemStone-Components',
+					'Rowan-GemStone-Components-Extensions'
 					],
 				#configurationNames : [ ]
 				},

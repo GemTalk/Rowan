@@ -17,9 +17,9 @@ RwProjectConfigurationsTest >> _expectedCompoundPackageNames [
 { #category : 'private' }
 RwProjectConfigurationsTest >> _expectedLoadPackageNames_common [
 
-	^ #('Rowan-Url-Core' 'Rowan-Cypress-Core' 'Rowan-Cypress-Kernel' 'Rowan-Definitions' 'Rowan-Specifications' 'Rowan-Configurations'
+	^ #('Rowan-Url-Core' 'Rowan-Cypress-Core' 'Rowan-Cypress-Kernel' 'Rowan-Definitions' 
+			'Rowan-Specifications' 'Rowan-Configurations' 'Rowan-Components-Kernel' 'Rowan-Components' 
 			'Rowan-Core' 'Rowan-Tools-Core' 'Rowan-Tools-Kernel' 'Rowan-Tools-Extensions' 'Rowan-Tests') sort
-
 ]
 
 { #category : 'private' }
@@ -54,7 +54,9 @@ RwProjectConfigurationsTest >> _expectedLoadPackageNames_common_tests [
 RwProjectConfigurationsTest >> _expectedLoadPackageNames_gemstone [
 
 	^ (self _expectedLoadPackageNames_common , 
-			#('Rowan-Services-Extensions' 'Rowan-Services-Core' 'Rowan-GemStone-Core' 'Rowan-GemStone-Kernel' 'Rowan-GemStone-Loader'
+			#('Rowan-Services-Extensions' 'Rowan-Services-Core' 'Rowan-GemStone-Core' 
+					'Rowan-GemStone-Kernel' 'Rowan-GemStone-Loader' 'Rowan-GemStone-Components'
+					'Rowan-GemStone-Components-Extensions'
 					'Rowan-GemStone-Loader-Extensions' 'Rowan-Services-Tests') ) sort
 ]
 
@@ -416,7 +418,7 @@ RwProjectConfigurationsTest >> testVisitProjectCompoundConfiguration [
 { #category : 'tests' }
 RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_common [
 
-	| url rowanSpec config visitor packageNames |
+	| url rowanSpec config visitor packageNames x |
 	rowanSpec := self _rowanProjectSpecification.
 	url := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanProjectLoadConfiguration.ston'.
 
@@ -430,14 +432,14 @@ RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_common [
 
 	packageNames := visitor packageNames asArray sort.
 
-	self assert: packageNames = self _expectedLoadPackageNames_common.
+	self assert: packageNames = (x := self _expectedLoadPackageNames_common).
 
 ]
 
 { #category : 'tests' }
 RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gemstone [
 
-	| url rowanSpec config visitor packageNames packageMapSpecs packagePropertiesMap |
+	| url rowanSpec config visitor packageNames packageMapSpecs packagePropertiesMap x |
 	rowanSpec := self _rowanProjectSpecification.
 	url := 'file:' , rowanSpec repositoryRootPath , '/test/configs/RowanProjectLoadConfiguration.ston'.
 
@@ -450,7 +452,7 @@ RwProjectConfigurationsTest >> testVisitProjectLoadConfiguration_gemstone [
 	visitor visit: config.
 
 	packageNames := visitor packageNames asArray sort.
-	self assert: packageNames = self _expectedLoadPackageNames_gemstone.
+	self assert: packageNames = (x := self _expectedLoadPackageNames_gemstone).
 
 	packageMapSpecs := visitor packageMapSpecs.
 	self assert: packageMapSpecs notNil.
