@@ -52,14 +52,15 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProject [
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
 
+"identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122.ston'.
 
-	projectSpec := specUrlString asRwUrl asSpecification.
-
 "create project definition"
-	projectDefinition := RwComponentProjectDefinition newForProjectReference: (RwProjectReferenceDefinition newForSpecification: projectSpec).
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+"point to directory where the disk project is located"
 	projectDefinition projectHome: projectHome.
 
+"read project"
 	Rowan projectTools read 
 		readProjectSetForComponentProjectDefinition: projectDefinition.
 ]

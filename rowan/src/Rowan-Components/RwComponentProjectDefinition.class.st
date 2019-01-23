@@ -37,6 +37,18 @@ RwComponentProjectDefinition class >> newForProjectReference: aRwProjectReferenc
 ]
 
 { #category : 'instance creation' }
+RwComponentProjectDefinition class >> newForSpecification: aRwSpecification [
+
+	^ RwComponentProjectDefinition newForProjectReference: (RwProjectReferenceDefinition newForSpecification: aRwSpecification)
+]
+
+{ #category : 'instance creation' }
+RwComponentProjectDefinition class >> newForUrl: specUrl [
+
+	^ self newForSpecification: specUrl asRwUrl asSpecification
+]
+
+{ #category : 'instance creation' }
 RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl comment: comment [
 
 
