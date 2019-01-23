@@ -3,7 +3,7 @@ Extension { #name : 'RwProjectReferenceDefinition' }
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinition >> packageNameToPlatformPropertiesMap [
 
-	^ self properties at: 'comment' ifAbsentPut: [ Dictionary new ]
+	^ self properties at: 'packageNameToPlatformPropertiesMap' ifAbsentPut: [ Dictionary new ]
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }

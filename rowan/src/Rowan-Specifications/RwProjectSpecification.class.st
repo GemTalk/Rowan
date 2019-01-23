@@ -87,7 +87,6 @@ RwProjectSpecification >> comment [
 RwProjectSpecification >> comment: anObject [
 
    comment := anObject
-
 ]
 
 { #category : 'actions' }
