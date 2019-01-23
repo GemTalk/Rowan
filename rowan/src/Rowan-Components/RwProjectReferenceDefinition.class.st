@@ -427,7 +427,7 @@ RwProjectReferenceDefinition >> projectsRoot [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectUrl [
 
-	^ self properties at: 'projectUrl' ifAbsent: []
+	^ self properties at: 'projectUrl' ifAbsent: [ '' ]
 ]
 
 { #category : 'accessing' }
