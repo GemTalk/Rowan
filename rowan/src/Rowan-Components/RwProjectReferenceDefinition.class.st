@@ -148,6 +148,32 @@ RwProjectReferenceDefinition >> acceptVisitor: aVisitor [
 	^ aVisitor visitProjectReferenceDefinition: self
 ]
 
+{ #category : 'conversion' }
+RwProjectReferenceDefinition >> asSpecification [
+
+	| repoSpec |
+	self useGit
+		ifTrue: [
+			repoSpec := RwGitRepositorySpecification new
+				committish: self committish;
+				committishType: self committishType;
+				remoteUrl: self remoteUrl;
+				yourself ]
+		ifFalse: [  repoSpec := RwDiskRepositorySpecification new ] .
+	^ RwComponentSpecification new
+		specName: self projectName;
+		projectUrl: self projectUrl;
+		repoPath: self packagesPath;
+		configsPath: self configsPath;
+		specsPath: self specsPath;
+		projectsPath: self projectsPath;
+		defaultConfigurationNames: self configurationNames;
+		defaultGroupNames: self groupNames;
+		comment: self comment;
+		repoSpec: repoSpec;
+		yourself.
+]
+
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> branch: aString [
 
@@ -238,26 +264,8 @@ RwProjectReferenceDefinition >> defaultGroupName [
 { #category : 'exporting' }
 RwProjectReferenceDefinition >> exportSpecification [
 
-	| spec repoSpec |
-	self useGit
-		ifTrue: [
-			repoSpec := RwGitRepositorySpecification new
-				committish: self committish;
-				committishType: self committishType;
-				remoteUrl: self remoteUrl;
-				yourself ]
-		ifFalse: [  repoSpec := RwDiskRepositorySpecification new ] .
-	spec := RwComponentSpecification new
-		specName: self projectName;
-		projectUrl: self projectUrl;
-		configsPath: self configsPath;
-		specsPath: self specsPath;
-		projectsPath: self projectsPath;
-		defaultConfigurationNames: self configurationNames;
-		defaultGroupNames: self groupNames;
-		comment: self comment;
-		repoSpec: repoSpec;
-		yourself.
+	| spec |
+	spec := self asSpecification.
 	spec exportToUrl: 'file:',  self specsRoot pathString, '/'
 ]
 

@@ -11,8 +11,14 @@ Class {
 RwComponentSpecification >> asDefinition [
 
 	"answer an RwComponentProjectDefinition created using the reciever"
-self halt.
 	^RwComponentProjectDefinition newForSpecification: self
+]
+
+{ #category : 'converting' }
+RwComponentSpecification >> asProjectReferenceDefinition [
+
+	"answer an RwProjectReferenceDefinition created using the reciever"
+	^RwProjectReferenceDefinition newForSpecification: self
 ]
 
 { #category : 'accessing' }
