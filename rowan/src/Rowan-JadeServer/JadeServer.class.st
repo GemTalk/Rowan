@@ -5292,6 +5292,7 @@ JadeServer >> updateFromSton: stonString [
 				ifNil: [service update]
 				ifNotNil: [service servicePerform: service command withArguments: service commandArgs]].
 	resultString := STON toString: RowanCommandResult results.
+	RowanService autoCommit ifTrue:[System commitTransaction]. 
 	^resultString
 ]
 
