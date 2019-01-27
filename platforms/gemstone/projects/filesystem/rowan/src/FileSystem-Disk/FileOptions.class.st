@@ -283,7 +283,7 @@ FileOptions >> fileExclusiveFlag [
 
 { #category : 'options' }
 FileOptions >> fileOpenAndOptionsValue [
-	^self fileOpenModeValue + self fileOptionsValue
+	^self fileOpenModeValue + self fileOpenOptionsValue
 ]
 
 { #category : 'options' }
@@ -292,7 +292,7 @@ FileOptions >> fileOpenModeValue [
 ]
 
 { #category : 'options' }
-FileOptions >> fileOptionsValue [
+FileOptions >> fileOpenOptionsValue [
 	^self options inject: 0 into: [:total :ea | total + ea optionValue]
 ]
 

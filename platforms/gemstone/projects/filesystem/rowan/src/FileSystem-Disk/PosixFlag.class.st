@@ -55,25 +55,29 @@ PosixFlag class >> reportOn: aStream indent: indent [
 	indent timesRepeat: [aStream tab].
 
 	aStream nextPutAll: self name asString.
-	(45 - ((indent * 4) + self name asString size)) timesRepeat: [aStream space].
+	"(45 - ((indent * 4) + self name asString size)) timesRepeat: [aStream space]."
+	aStream tab.
 
 	((self name = #PosixFlag) not and: [self class includesSelector: #posixName]) 
 		ifTrue: [
 			aSize := self posixName size.
 			aStream nextPutAll: self posixName].
-	(15 - (aSize ifNil: [0])) timesRepeat: [aStream space].
+	"(15 - (aSize ifNil: [0])) timesRepeat: [aStream space]."
+	aStream tab.
 
 	((self name = #PosixFlag) not and: [self class includesSelector: #defaultPlatformValue]) 
 		ifTrue: [aValue := self defaultPlatformValue asString]
 		ifFalse: [aValue := (self subclasses isEmpty not) ifTrue: [''] ifFalse: ['value not defined']].
 	aSize :=  aValue size.
-	(15 - aSize) timesRepeat: [aStream space].
+	"(15 - aSize) timesRepeat: [aStream space]."
+	aStream tab.
 	aStream nextPutAll: aValue asString.
 
 	((self name = #PosixFlag) not and: [self class includesSelector: #windowsValue]) 
 		ifTrue: [
 			aSize := self windowsValue asString size.
-			(15 - aSize) timesRepeat: [aStream space].
+			"(15 - aSize) timesRepeat: [aStream space]."
+			aStream tab.
 			aStream nextPutAll: self windowsValue asString].
 
 	aStream crlf.

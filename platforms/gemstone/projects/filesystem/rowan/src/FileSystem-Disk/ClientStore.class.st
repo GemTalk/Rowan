@@ -151,7 +151,7 @@ ClientStore >> exists: aPath [
 
 { #category : 'private' }
 ClientStore >> fileTypeOf: aPath [
-	^GsFile _fileKind: (self store stringFromPath: aPath) onClient: true
+	^FileSystem fileClass _fileKind: (self store stringFromPath: aPath) onClient: true
 ]
 
 { #category : 'initialize' }
