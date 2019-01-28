@@ -81,6 +81,15 @@ RowanAnsweringService >> loadedPackageExists: packageName [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> printStringOf: oop toMaxSize: integer [
+
+	answer := (Object _objectForOop: oop) printString. 
+	answer := answer size > integer ifTrue: [(answer copyFrom: 1 to: integer) , '...'] ifFalse:[answer].
+	RowanCommandResult addResult: self.
+	^answer
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> runMethodTests: methodServices [
 
 	| behavior |
