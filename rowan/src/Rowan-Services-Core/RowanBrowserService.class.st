@@ -17,6 +17,15 @@ Class {
 }
 
 { #category : 'client commands' }
+RowanBrowserService >> abortTransaction [
+
+	System abortTransaction.
+	self updateProjects.
+	self packagesWithTests.
+	self updateType: #aborted:browser:.
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> allClasses [
 
 	allClasses := SortedCollection sortBlock: [:x :y | x name < y name].

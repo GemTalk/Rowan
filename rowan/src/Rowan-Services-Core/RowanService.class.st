@@ -27,6 +27,18 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'autocommit' }
+RowanService class >> autoCommit [
+
+	^SessionTemps current at: #'Jadeite_AutoCommit' ifAbsentPut: [false]
+]
+
+{ #category : 'autocommit' }
+RowanService class >> flipAutoCommit [
+
+	^self setAutoCommit: self autoCommit not
+]
+
 { #category : 'instance creation' }
 RowanService class >> new [
 
@@ -46,6 +58,12 @@ RowanService class >> sampleService [
 
 	^self new sampleService
 
+]
+
+{ #category : 'autocommit' }
+RowanService class >> setAutoCommit: boolean [
+
+	^SessionTemps current at: #'Jadeite_AutoCommit' put: boolean
 ]
 
 { #category : 'other' }

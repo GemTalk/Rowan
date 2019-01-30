@@ -15,7 +15,7 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanAnsweringService >> allTestsIn: classServices [
 	answer := Array new. 
 	classServices do:[:service | answer addAll: service allTests].
@@ -34,7 +34,7 @@ RowanAnsweringService >> answer: anObject [
 	answer := anObject
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanAnsweringService >> exec: aString [
 
 	"for command line service someday"
@@ -42,12 +42,25 @@ RowanAnsweringService >> exec: aString [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
+RowanAnsweringService >> flipAutoCommit [
+
+	answer := RowanService flipAutoCommit. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> flipTranscript [
 	self isTranscriptInstalled ifTrue:[
 		self jadeiteServer uninstallTranscript]
 	ifFalse:[
 		self jadeiteServer installTranscript]
+]
+
+{ #category : 'client commands' }
+RowanAnsweringService >> initializeAutoCommit [
+
+	RowanService setAutoCommit: false
 ]
 
 { #category : 'testing' }
@@ -56,7 +69,7 @@ RowanAnsweringService >> isTranscriptInstalled [
 	^self transcriptObject == self jadeiteServer
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanAnsweringService >> loadedPackageExists: packageName [
 	
 	| actualName |
@@ -67,7 +80,7 @@ RowanAnsweringService >> loadedPackageExists: packageName [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanAnsweringService >> runMethodTests: methodServices [
 
 	| behavior |
@@ -80,7 +93,7 @@ RowanAnsweringService >> runMethodTests: methodServices [
 	RowanCommandResult addResult: self
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanAnsweringService >> selectorsMatchingPattern: pattern [
 
 	answer := ((AllUsers userWithId: #SymbolUser) resolveSymbol: #AllSymbols) value.
@@ -89,12 +102,19 @@ RowanAnsweringService >> selectorsMatchingPattern: pattern [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
+RowanAnsweringService >> setAutoCommit: boolean [
+
+	answer := RowanService setAutoCommit: boolean.
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> subclassCreationTemplate: className [
 	 (RowanClassService new name: className) subclassCreationTemplate.  "gives an answer for us"
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanAnsweringService >> transcriptInstalled [
 
 	answer := self isTranscriptInstalled.
@@ -107,7 +127,7 @@ RowanAnsweringService >> transcriptObject [
 	^(SessionTemps current  at: #'TranscriptStream_SessionStream')
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanAnsweringService >> turnOffTranscriptWrites [
 
 	self isTranscriptInstalled ifTrue:[
