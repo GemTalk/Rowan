@@ -93,6 +93,25 @@ RowanMethodServiceTest >> test_noStepPoints [
 ]
 
 { #category : 'tests' }
+RowanMethodServiceTest >> test_runMethodTest [
+
+	| methodService classService |
+	self jadeiteIssueTested: #issue410 withTitle: 'Selecting class in Project Browser changes test status icons in SUnit Browser'.
+	methodService := RowanMethodService new.
+	methodService runTest: #test_matchingPattern inClassName: 'RowanAnsweringServiceTest'.
+	self assert: methodService testResult equals: 'passed'.
+	self createServicesTestTestClass.
+	self loadServicesTestProject.
+	classService := RowanClassService forClassNamed: self servicesDefaultTestClassName.
+	classService saveMethodSource: 'testMethod1  self assert: false' category: 'failing test'.
+	methodService runTest: #testMethod1 inClassName: self servicesDefaultTestClassName.
+	self assert: methodService testResult equals: 'failure'.
+	classService saveMethodSource: 'testMethod2  1 zork' category: 'failing test'.
+	methodService runTest: #testMethod2 inClassName: self servicesDefaultTestClassName.
+	self assert: methodService testResult equals: 'error'.
+]
+
+{ #category : 'tests' }
 RowanMethodServiceTest >> test_stepPoint1 [
 	| classService methodService |
 	classService := RowanClassService forClassNamed: self servicesDefaultClassName.
