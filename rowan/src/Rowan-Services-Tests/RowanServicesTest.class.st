@@ -100,6 +100,33 @@ RowanServicesTest >> createServicesTestProject [
 ]
 
 { #category : 'support' }
+RowanServicesTest >> createServicesTestTestClass [
+
+	| packageDefinition classDefinition |
+	packageDefinition := defaultProjectDefinition packageNamed: self servicesTestPackageName. 
+	classDefinition := self createTestClassDefinitionNamed: self servicesDefaultTestClassName. 
+	packageDefinition addClassDefinition: classDefinition. 
+	^classDefinition
+]
+
+{ #category : 'support' }
+RowanServicesTest >> createTestClassDefinitionNamed: className [
+
+	| classDefinition |
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+			super: 'TestCase'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: 'services test'
+			comment: String new
+			pools: #()
+			type: 'normal'.
+	^classDefinition
+]
+
+{ #category : 'support' }
 RowanServicesTest >> defaultSymbolDictionaryName [
 
 	^'ServicesTestDictionary'
@@ -158,6 +185,12 @@ RowanServicesTest >> loadServicesTestProject [
 RowanServicesTest >> servicesDefaultClassName [
 
 	^'RowanServicesTestClass'
+]
+
+{ #category : 'constants' }
+RowanServicesTest >> servicesDefaultTestClassName [
+
+	^'RowanServicesTestClassForTesting'
 ]
 
 { #category : 'constants' }
