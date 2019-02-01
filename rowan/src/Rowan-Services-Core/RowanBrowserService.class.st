@@ -11,7 +11,8 @@ Class {
 		'allClasses',
 		'hierarchyServices',
 		'testPackages',
-		'testCount'
+		'testCount',
+		'autoCommit'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -62,6 +63,14 @@ RowanBrowserService >> findRemovedServices: services [
 				RowanCommandResult addResult: service.
 		]
 	].
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> flipAutoCommit [
+
+	autoCommit := RowanService flipAutoCommit. 
+	updateType := #autoCommitUpdate:.
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'window registry' }
