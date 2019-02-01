@@ -43,6 +43,15 @@ RowanBrowserService >> allClasses [
 ]
 
 { #category : 'client commands' }
+RowanBrowserService >> autoCommit: boolean [
+
+	RowanService setAutoCommit: boolean.
+	autoCommit := RowanService autoCommit. 
+	updateType := #autoCommitUpdate:.
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> defaultClassHierarchy [
 	hierarchyServices := Dictionary new.   
 	organizer hierarchy keysAndValuesDo: [:key :value |
