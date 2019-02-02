@@ -35,17 +35,17 @@ RowanAnsweringService >> answer: anObject [
 ]
 
 { #category : 'client commands' }
-RowanAnsweringService >> exec: aString [
+RowanAnsweringService >> autoCommit [
 
-	"for command line service someday"
-	answer := aString evaluate printString. 
+	answer := RowanService autoCommit. 
 	RowanCommandResult addResult: self.
 ]
 
 { #category : 'client commands' }
-RowanAnsweringService >> flipAutoCommit [
+RowanAnsweringService >> exec: aString [
 
-	answer := RowanService flipAutoCommit. 
+	"for command line service someday"
+	answer := aString evaluate printString. 
 	RowanCommandResult addResult: self.
 ]
 

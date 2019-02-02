@@ -15,21 +15,6 @@ RowanAnsweringServiceTest >> setUp [
 ]
 
 { #category : 'tests' }
-RowanAnsweringServiceTest >> test_flipAutoCommit [
-	| autoCommit | 
-	self jadeiteIssueTested: #issue396 withTitle: 'Ability to turn on autocommit would be nice'.
-	autoCommit := RowanService autoCommit. 
-	[service flipAutoCommit. 
-	self assert: RowanService autoCommit equals: autoCommit not. 
-	self assert: (SessionTemps current at: #'Jadeite_AutoCommit') equals: autoCommit not.
-	service flipAutoCommit. 
-	self assert: RowanService autoCommit equals: autoCommit. 
-	self assert: (SessionTemps current at: #'Jadeite_AutoCommit') equals: autoCommit] ensure: [
-		RowanService setAutoCommit: autoCommit.
-		self assert: RowanService autoCommit equals: autoCommit.]
-]
-
-{ #category : 'tests' }
 RowanAnsweringServiceTest >> test_initializeAutoCommit [
 	| autoCommit | 
 	self jadeiteIssueTested: #issue396 withTitle: 'Ability to turn on autocommit would be nice'.
