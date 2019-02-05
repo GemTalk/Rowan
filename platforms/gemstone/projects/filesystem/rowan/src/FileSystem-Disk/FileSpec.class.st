@@ -55,11 +55,6 @@ FileSpec class >> on: aFileSystem [
 ]
 
 { #category : 'instance creation' }
-FileSpec class >> onClient [
-	^self on: FileSystem clientDisk
-]
-
-{ #category : 'instance creation' }
 FileSpec class >> onCurrent [
 	^self new
 ]
@@ -338,12 +333,6 @@ FileSpec >> initializeForWriteZipped [
 FileSpec >> initializeOn: aFileSystem [
 	self initialize.
 	self store: aFileSystem store
-]
-
-{ #category : 'testing' }
-FileSpec >> isClientFileSystem [
-
-	^false
 ]
 
 { #category : 'testing' }

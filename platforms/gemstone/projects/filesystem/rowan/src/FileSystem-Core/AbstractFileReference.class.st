@@ -641,6 +641,11 @@ AbstractFileReference >> permissions [
 ]
 
 { #category : 'streams' }
+AbstractFileReference >> readRawStream [
+	self subclassResponsibility
+]
+
+{ #category : 'streams' }
 AbstractFileReference >> readStream [
 	self subclassResponsibility
 ]
@@ -756,6 +761,17 @@ AbstractFileReference >> store [
 ]
 
 { #category : 'streams' }
+AbstractFileReference >> stream: aStream do: aBlock [
+	^ [ aBlock value: aStream ]
+		ensure: [ aStream close ]
+]
+
+{ #category : 'streams' }
+AbstractFileReference >> streamFor: aFileSpec [
+	self subclassResponsibility
+]
+
+{ #category : 'streams' }
 AbstractFileReference >> streamWritable: writable do: aBlock [
 	^ writable 
 		ifTrue: [ self writeStreamDo: aBlock ]
@@ -786,6 +802,11 @@ AbstractFileReference >> withPath: newPath [
 	^ self path == newPath
 		ifTrue: [ self ]
 		ifFalse: [ self copyWithPath: newPath ]
+]
+
+{ #category : 'streams' }
+AbstractFileReference >> writeRawStream [
+	self subclassResponsibility
 ]
 
 { #category : 'streams' }
