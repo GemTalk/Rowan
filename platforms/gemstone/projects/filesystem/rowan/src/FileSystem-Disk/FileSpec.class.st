@@ -152,11 +152,6 @@ FileSpec >> beNonEncoded [
 ]
 
 { #category : 'convenience' }
-FileSpec >> beUnixStore [
-	self store: UnixStore createDefault
-]
-
-{ #category : 'convenience' }
 FileSpec >> beUtf16Encoded [
 	self encoding: 'utf16'
 ]
@@ -354,8 +349,8 @@ FileSpec >> isWritable [
 ]
 
 { #category : 'printing' }
-FileSpec >> modeString [
-	^self fileOptions modeString
+FileSpec >> mode [
+	^self fileOptions mode
 ]
 
 { #category : 'accessing' }

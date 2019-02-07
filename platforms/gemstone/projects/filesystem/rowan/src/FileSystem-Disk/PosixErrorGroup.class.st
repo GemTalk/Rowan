@@ -30,6 +30,27 @@ PosixErrorGroup class >> posixErrorNames [
 	^#()
 ]
 
+{ #category : 'api' }
+PosixErrorGroup class >> signalErrorNumber: anInteger fileReference: aFileReference [
+
+	self new
+		signalErrorNumber: anInteger fileReference: aFileReference
+]
+
+{ #category : 'api' }
+PosixErrorGroup class >> signalErrorNumber: anInteger fileReference: aFileReference options: aFileOptions [ 
+
+	self new
+		signalErrorNumber: anInteger fileReference: aFileReference options: aFileOptions
+]
+
+{ #category : 'api' }
+PosixErrorGroup class >> signalErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference [
+
+	self new
+		signalErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference
+]
+
 { #category : 'accessing' }
 PosixErrorGroup >> errorClasses [
 	^errorClasses
@@ -166,4 +187,19 @@ PosixErrorGroup >> selector: aSelector errorNames: posixErrorNames [
 
 	self selector: aSelector.
 	posixErrorNames collect: [:ea | self errorClasses add: (FilePosixError classWithPosixName: ea)]
+]
+
+{ #category : 'api' }
+PosixErrorGroup >> signalErrorNumber: anInteger fileReference: aFileReference [
+	(self errorForNumber: anInteger fileReference: aFileReference) signal
+]
+
+{ #category : 'api' }
+PosixErrorGroup >> signalErrorNumber: anErrorNumber fileReference: aFileReference options: aFileOptions [
+	(self errorForNumber: anErrorNumber fileReference: aFileReference options: aFileOptions) signal
+]
+
+{ #category : 'api' }
+PosixErrorGroup >> signalErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference [
+	(self errorForNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference) signal
 ]

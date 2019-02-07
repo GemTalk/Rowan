@@ -9,7 +9,7 @@ Class {
 
 { #category : 'accessing' }
 FileNoSpaceError class >> defaultErrorNumber [
-	^18
+	^28
 ]
 
 { #category : 'accessing' }

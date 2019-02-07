@@ -6,12 +6,12 @@ Class {
 
 { #category : 'accessing' }
 FileSynchronizedIONotSupportedError class >> defaultErrorNumber [
-	^999 "This needs to be determined"
+	^4
 ]
 
 { #category : 'accessing' }
 FileSynchronizedIONotSupportedError class >> errorDescription [
-	^'Synchronized IO not supported'
+	^'Interrupted system call'
 ]
 
 { #category : 'accessing' }

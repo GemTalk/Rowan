@@ -27,7 +27,7 @@ FileBinaryTypeFlag class >> windowsValue [
 ]
 
 { #category : 'printing' }
-FileBinaryTypeFlag >> printOpenModeStringOn: aStream [
+FileBinaryTypeFlag >> printOpenModeOn: aStream [
 
 	aStream nextPutAll: 'b'
 ]

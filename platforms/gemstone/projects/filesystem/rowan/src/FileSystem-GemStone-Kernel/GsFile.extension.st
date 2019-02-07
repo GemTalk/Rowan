@@ -190,7 +190,7 @@ GsFile class >> lookupDirectoryEntry: fullPath [
 { #category : '*FileSystem-Gemstone-Kernel' }
 GsFile class >> open: aPathName withOptions: aFileOptions [
 	"This is the current way of openning a file"
-	^self open: aPathName mode: aFileOptions modeString onClient: aFileOptions isForeignFileSystem withCompression: aFileOptions isGzipped.
+	^self open: aPathName mode: aFileOptions mode onClient: aFileOptions isForeignFileSystem withCompression: aFileOptions isGzipped.
 
 	"This section sketcher out how to open the file using POSIX flags"
 

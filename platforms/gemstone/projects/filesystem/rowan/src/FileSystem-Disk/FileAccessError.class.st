@@ -9,7 +9,7 @@ Class {
 
 { #category : 'access' }
 FileAccessError class >> defaultErrorNumber [
-	^11
+	^13
 ]
 
 { #category : 'access' }

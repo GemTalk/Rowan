@@ -494,18 +494,6 @@ FileSystem >> open [
 ]
 
 { #category : 'public' }
-FileSystem >> open: aResolvable optinos: aFileOptions [ 
-	"Resolve aResolvable into an absolute path, then ask the store to open the file at
-	that path using the specified access mode."
-	
-	| path |
-	path := self resolve: aResolvable.
-	^ store handleClass 
-		open: (FileReference fileSystem: self path: path) 
-		options: aFileOptions
-]
-
-{ #category : 'public' }
 FileSystem >> open: aResolvable options: aFileOptions [ 
 	"Resolve aResolvable into an absolute path, then ask the store to open the file at
 	that path using the specified access mode."
@@ -526,19 +514,6 @@ FileSystem >> openStreamDescription: aResolvable options: aFileOptions [
 	
 	path := self resolve: aResolvable.
 	^ store basicOpen: path options: aFileOptions
-]
-
-{ #category : 'private' }
-FileSystem >> openStreamDescription: aResolvable writable: writeMode [
-	"I am  a helper method to delegate basicOpen:writable: to the store.
-	 I am called from FileSystemHandle implementations."
-	
-	"writeMode - #read, #append, #write"
-
-	| path |
-	
-	path := self resolve: aResolvable.
-	^ store basicOpen: path writable: writeMode
 ]
 
 { #category : 'converting' }

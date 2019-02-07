@@ -9,7 +9,7 @@ Class {
 
 { #category : 'accessing' }
 FilePermissionDeniedError class >> defaultErrorNumber [
-	^7
+	^1
 ]
 
 { #category : 'accessing' }

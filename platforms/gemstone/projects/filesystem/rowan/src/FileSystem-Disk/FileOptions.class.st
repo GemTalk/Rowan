@@ -33,11 +33,11 @@ Class {
 	#name : 'FileOptions',
 	#superclass : 'Object',
 	#instVars : [
-		'mode',
-		'options',
+		'openPosixFlag',
+		'posixFlags',
 		'fileType',
 		'share',
-		'permissionOptions',
+		'permissionFlags',
 		'parent'
 	],
 	#category : 'FileSystem-Disk-Options'
@@ -163,50 +163,50 @@ FileOptions class >> writeWithLowCompression [
 ]
 
 { #category : 'permissions' }
-FileOptions >> accessPermissions [
+FileOptions >> accessPermissionValue [
 
-	self permissionOptions isEmpty ifTrue: [^FileSystemPermission default posixPermission].
-	^self permissionOptions inject: 0 into: [:total :ea | total + ea posixValue]
+	self permissionFlags isEmpty ifTrue: [^FileSystemPermission default posixPermission].
+	^self permissionFlags inject: 0 into: [:total :ea | total bitOr: ea posixValue]
 ]
 
 { #category : 'convenience' }
 FileOptions >> accessRule [
-	^self mode accessRule
+	^self openPosixFlag accessRule
 ]
 
-{ #category : 'options - adding and removing' }
+{ #category : 'posix flags - adding and removing' }
 FileOptions >> addAppendFlag [
 
-	self addOption: FileAppendFlag new
+	self addFlag: FileAppendFlag new
 ]
 
-{ #category : 'options - adding and removing' }
+{ #category : 'posix flags - adding and removing' }
 FileOptions >> addCreateFlag [
 
-	self addOption: FileCreateFlag new
+	self addFlag: FileCreateFlag new
 ]
 
-{ #category : 'options - adding and removing' }
+{ #category : 'posix flags - adding and removing' }
 FileOptions >> addExclusiveFlag [
 
-	self addOption: FileExclusiveFlag new
+	self addFlag: FileExclusiveFlag new
 ]
 
-{ #category : 'options - adding and removing' }
-FileOptions >> addOption: anOption [
-	anOption parent: self.
-	self options add: anOption
+{ #category : 'posix flags - adding and removing' }
+FileOptions >> addFlag: aPosixFag [
+	aPosixFag parent: self.
+	self posixFlags add: aPosixFag
 ]
 
-{ #category : 'options - adding and removing' }
+{ #category : 'posix flags - adding and removing' }
 FileOptions >> addTruncateFlag [
 
-	self addOption: FileTruncateFlag new
+	self addFlag: FileTruncateFlag new
 ]
 
-{ #category : 'options' }
+{ #category : 'posix flags' }
 FileOptions >> appendFlag [
-	^self optionForClass: FileAppendFlag
+	^self posixFlagForClass: FileAppendFlag
 ]
 
 { #category : 'file type' }
@@ -231,7 +231,7 @@ FileOptions >> bePrivate [
 
 { #category : 'open mode' }
 FileOptions >> beReadMode [
-	self mode: FileOpenReadOnlyFlag new.
+	self openPosixFlag: FileOpenReadOnlyFlag new.
 ]
 
 { #category : 'sharing' }
@@ -241,7 +241,7 @@ FileOptions >> beReadOnlyShared [
 
 { #category : 'open mode' }
 FileOptions >> beReadWriteMode [
-	self mode: FileOpenReadWriteFlag new.
+	self openPosixFlag: FileOpenReadWriteFlag new.
 ]
 
 { #category : 'sharing' }
@@ -256,7 +256,7 @@ FileOptions >> beTextFileType [
 
 { #category : 'open mode' }
 FileOptions >> beWriteMode [
-	self mode: FileOpenWriteOnlyFlag new.
+	self openPosixFlag: FileOpenWriteOnlyFlag new.
 ]
 
 { #category : 'sharing' }
@@ -271,29 +271,24 @@ FileOptions >> createRule [
 		ifNotNil: [:option | option createRule]
 ]
 
-{ #category : 'options' }
+{ #category : 'posix flags' }
 FileOptions >> fileCreateFlag [
-	^self optionForClass: FileCreateFlag
+	^self posixFlagForClass: FileCreateFlag
 ]
 
-{ #category : 'options' }
+{ #category : 'posix flags' }
 FileOptions >> fileExclusiveFlag [
-	^self optionForClass: FileExclusiveFlag
+	^self posixFlagForClass: FileExclusiveFlag
 ]
 
-{ #category : 'options' }
-FileOptions >> fileOpenAndOptionsValue [
-	^self fileOpenModeValue + self fileOpenOptionsValue
+{ #category : 'posix flags' }
+FileOptions >> fileOpenPosixFlagValue [
+	^self openPosixFlag flagValue
 ]
 
-{ #category : 'options' }
-FileOptions >> fileOpenModeValue [
-	^self mode optionValue
-]
-
-{ #category : 'options' }
-FileOptions >> fileOpenOptionsValue [
-	^self options inject: 0 into: [:total :ea | total + ea optionValue]
+{ #category : 'posix flags' }
+FileOptions >> fileOpenValue [
+	^self fileOpenPosixFlagValue bitOr: self otherFileOpenPosixFlagsValue
 ]
 
 { #category : 'accessing' }
@@ -302,40 +297,40 @@ FileOptions >> fileType [
 ]
 
 { #category : 'accessing' }
-FileOptions >> fileType: aFileTypeOption [
-	aFileTypeOption parent: self.
-	fileType := aFileTypeOption
+FileOptions >> fileType: aFileTypeFlag [
+	aFileTypeFlag parent: self.
+	fileType := aFileTypeFlag
 ]
 
 { #category : 'testing' }
 FileOptions >> hasExclsiveFlag [
-	^self hasOption: FileExclusiveFlag
+	^self hasPosixFlag: FileExclusiveFlag
 ]
 
 { #category : 'testing' }
 FileOptions >> hasFileAppendFlag [
-	^self hasOption: FileAppendFlag
+	^self hasPosixFlag: FileAppendFlag
 ]
 
 { #category : 'testing' }
 FileOptions >> hasFileCreateFlag [
-	^self hasOption: FileCreateFlag
+	^self hasPosixFlag: FileCreateFlag
 ]
 
 { #category : 'testing' }
 FileOptions >> hasFileTruncateFlag [
-	^self hasOption: FileTruncateFlag
+	^self hasPosixFlag: FileTruncateFlag
 ]
 
 { #category : 'testing' }
-FileOptions >> hasOption: anPosixFlagClass [
-	^(self optionForClass: anPosixFlagClass) notNil
+FileOptions >> hasPosixFlag: anPosixFlagClass [
+	^(self posixFlagForClass: anPosixFlagClass) notNil
 ]
 
 { #category : 'initialization' }
 FileOptions >> initialize [
-	self options: OrderedCollection new.
-	self permissionOptions: OrderedCollection new.
+	self posixFlags: OrderedCollection new.
+	self permissionFlags: OrderedCollection new.
 	self beShared
 ]
 
@@ -419,46 +414,36 @@ FileOptions >> isGzipped [
 
 { #category : 'testing' }
 FileOptions >> isReadable [
-	^self mode isReadable
+	^self openPosixFlag isReadable
 ]
 
 { #category : 'testing' }
 FileOptions >> isWritable [
-	^self mode isWritable
-]
-
-{ #category : 'accessing' }
-FileOptions >> mode [
-	^mode
-]
-
-{ #category : 'accessing' }
-FileOptions >> mode: aFileOpenMode [
-	aFileOpenMode parent: self.
-	mode :=  aFileOpenMode
+	^self openPosixFlag isWritable
 ]
 
 { #category : 'printing' }
-FileOptions >> modeString [
+FileOptions >> mode [
 	| aStream |
 	aStream := WriteStream on: String new.
-	self printOpenModeStringOn: aStream.
+	self printOpenModeOn: aStream.
 	^aStream contents
 ]
 
-{ #category : 'options' }
-FileOptions >> optionForClass: anPosixFlagClass [
-	^self options detect: [:ea | ea isKindOf: anPosixFlagClass] ifNone: [nil]
+{ #category : 'accessing' }
+FileOptions >> openPosixFlag [
+	^openPosixFlag
 ]
 
 { #category : 'accessing' }
-FileOptions >> options [
-	^options
+FileOptions >> openPosixFlag: aFileOpenPosixFlag [
+	aFileOpenPosixFlag parent: self.
+	openPosixFlag :=  aFileOpenPosixFlag
 ]
 
-{ #category : 'accessing' }
-FileOptions >> options: aCollection [
-	options := aCollection
+{ #category : 'posix flags' }
+FileOptions >> otherFileOpenPosixFlagsValue [
+	^self posixFlags inject: 0 into: [:total :ea | total bitOr: ea flagValue]
 ]
 
 { #category : 'accessing' }
@@ -472,26 +457,41 @@ FileOptions >> parent: anObject [
 ]
 
 { #category : 'accessing' }
-FileOptions >> permissionOptions [
-	^permissionOptions
+FileOptions >> permissionFlags [
+	^permissionFlags
 ]
 
 { #category : 'accessing' }
-FileOptions >> permissionOptions: aCollection [
-	permissionOptions := aCollection
+FileOptions >> permissionFlags: aCollection [
+	permissionFlags := aCollection
+]
+
+{ #category : 'posix flags - adding and removing' }
+FileOptions >> posixFlagForClass: anPosixFlagClass [
+	^self posixFlags detect: [:ea | ea class = anPosixFlagClass] ifNone: []
+]
+
+{ #category : 'accessing' }
+FileOptions >> posixFlags [
+	^posixFlags
+]
+
+{ #category : 'accessing' }
+FileOptions >> posixFlags: aCollection [
+	posixFlags := aCollection
 ]
 
 { #category : 'printing' }
-FileOptions >> printOpenModeStringOn: aStream [
+FileOptions >> printOpenModeOn: aStream [
 
-	self mode printOpenModeStringOn: aStream.
-	self fileType ifNotNil: [:ft | ft printOpenModeStringOn: aStream.]
+	self openPosixFlag printOpenModeOn: aStream.
+	self fileType ifNotNil: [:ft | ft printOpenModeOn: aStream.]
 ]
 
-{ #category : 'options - adding and removing' }
-FileOptions >> removeOption: anOption [
-	anOption parent: nil.
-	self options remove: anOption ifAbsent: []
+{ #category : 'posix flags - adding and removing' }
+FileOptions >> removeFlag: aPosixFlag [
+	aPosixFlag parent: nil.
+	self posixFlags remove: aPosixFlag ifAbsent: []
 ]
 
 { #category : 'accessing' }
@@ -500,9 +500,9 @@ FileOptions >> share [
 ]
 
 { #category : 'accessing' }
-FileOptions >> share: aFileShareOption [
-	aFileShareOption parent: self.
-	share := aFileShareOption
+FileOptions >> share: aFileShareFlag [
+	aFileShareFlag parent: self.
+	share := aFileShareFlag
 ]
 
 { #category : 'convenience' }
@@ -515,9 +515,9 @@ FileOptions >> store [
 	^self parent ifNil: [FileSystem disk store] ifNotNil: [:fs | fs store]
 ]
 
-{ #category : 'options' }
+{ #category : 'posix flags' }
 FileOptions >> truncateFlag [
-	^self optionForClass: FileTruncateFlag
+	^self posixFlagForClass: FileTruncateFlag
 ]
 
 { #category : 'convenience' }

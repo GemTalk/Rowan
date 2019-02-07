@@ -9,7 +9,7 @@ Class {
 
 { #category : 'accessing' }
 FileBadFileDescriptorError class >> defaultErrorNumber [
-	^10
+	^9
 ]
 
 { #category : 'accessing' }

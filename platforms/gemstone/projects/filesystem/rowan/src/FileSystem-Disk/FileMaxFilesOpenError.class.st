@@ -9,12 +9,12 @@ Class {
 
 { #category : 'accessing' }
 FileMaxFilesOpenError class >> defaultErrorNumber [
-	^17
+	^23
 ]
 
 { #category : 'accessing' }
 FileMaxFilesOpenError class >> errorDescription [
-	^'Too many open files'
+	^'TToo many open files in system'
 ]
 
 { #category : 'accessing' }
