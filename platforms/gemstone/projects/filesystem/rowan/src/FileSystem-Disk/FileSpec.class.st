@@ -55,6 +55,11 @@ FileSpec class >> on: aFileSystem [
 ]
 
 { #category : 'instance creation' }
+FileSpec class >> onClient [
+	^self on: FileSystem clientDisk
+]
+
+{ #category : 'instance creation' }
 FileSpec class >> onCurrent [
 	^self new
 ]
@@ -149,6 +154,11 @@ FileSpec class >> writeZipped [
 { #category : 'convenience' }
 FileSpec >> beNonEncoded [
 	self encoding: 'null'
+]
+
+{ #category : 'convenience' }
+FileSpec >> beUnixStore [
+	self store: UnixStore createDefault
 ]
 
 { #category : 'convenience' }
@@ -331,6 +341,12 @@ FileSpec >> initializeOn: aFileSystem [
 ]
 
 { #category : 'testing' }
+FileSpec >> isClientFileSystem [
+
+	^false
+]
+
+{ #category : 'testing' }
 FileSpec >> isGzipped [
 
 	^self fileOptions isGzipped
@@ -349,8 +365,8 @@ FileSpec >> isWritable [
 ]
 
 { #category : 'printing' }
-FileSpec >> mode [
-	^self fileOptions mode
+FileSpec >> modeString [
+	^self fileOptions modeString
 ]
 
 { #category : 'accessing' }

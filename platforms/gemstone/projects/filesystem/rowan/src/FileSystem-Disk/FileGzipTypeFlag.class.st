@@ -59,6 +59,6 @@ FileGzipTypeFlag >> isGzipped [
 ]
 
 { #category : 'printing' }
-FileGzipTypeFlag >> printOpenModeOn: aStream [
+FileGzipTypeFlag >> printOpenModeStringOn: aStream [
 	aStream nextPutAll: self compressionLevel
 ]

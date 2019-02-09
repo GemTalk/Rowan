@@ -96,12 +96,6 @@ DiskStore class >> denyWriteShareRule [
 	FileOptionFeatureNotSupported signal: 'denyWriteShareRule'
 ]
 
-{ #category : 'posix' }
-DiskStore class >> flagPlatformValueFor: aPosixName [
-
-	^self posixValues at: aPosixName ifAbsent: []
-]
-
 { #category : 'class initialization' }
 DiskStore class >> initializeDefaultWorkingDirectory [
 	^DefaultWorkingDirectory := self defaultWorkingDirectory
@@ -145,6 +139,12 @@ DiskStore class >> openAlwaysRule [
 { #category : 'create rules' }
 DiskStore class >> openExistingRule [
 	FileOptionFeatureNotSupported signal: 'openExistingRule'
+]
+
+{ #category : 'posix' }
+DiskStore class >> optionPlatformValueFor: aPosixName [
+
+	^self posixValues at: aPosixName ifAbsent: []
 ]
 
 { #category : 'current' }
@@ -292,7 +292,7 @@ DiskStore >> basicOpen: aPath writable: writeMode [
 
 	| string |
 	string := self stringFromPath: aPath.
-	^FileSystem fileClass  open: string mode: writeMode mode onClient: false
+	^FileSystem fileClass  open: string mode: writeMode modeString onClient: false
 ]
 
 { #category : 'private' }
@@ -381,12 +381,6 @@ DiskStore >> deleteFile: pathString [
 		ifNil: [ FileDeletionError 
 					signalWith: pathString  
 					text: 'Could not delete file ' , pathString , '. Check the file is not open.' ].
-]
-
-{ #category : 'posix' }
-DiskStore >> flagPlatformValueFor: aPosixName [
-
-	^self class flagPlatformValueFor: aPosixName
 ]
 
 { #category : 'printing' }
@@ -503,6 +497,12 @@ DiskStore >> nodeAt: aPath ifPresent: presentBlock ifAbsent: absentBlock [
 		ifFalse: [
 			entry at: 1 put: aPath basename.
 			presentBlock value: entry ].
+]
+
+{ #category : 'posix' }
+DiskStore >> optionPlatformValueFor: aPosixName [
+
+	^self class optionPlatformValueFor: aPosixName
 ]
 
 { #category : 'public' }

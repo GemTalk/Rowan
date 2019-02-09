@@ -28,7 +28,7 @@ FileOpenModeFlag >> isWritable [
 ]
 
 { #category : 'printing' }
-FileOpenModeFlag >> printOpenModeOn: aStream [
+FileOpenModeFlag >> printOpenModeStringOn: aStream [
 
 	aStream nextPutAll: self mode
 ]

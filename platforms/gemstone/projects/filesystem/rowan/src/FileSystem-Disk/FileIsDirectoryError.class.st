@@ -9,7 +9,7 @@ Class {
 
 { #category : 'accessing' }
 FileIsDirectoryError class >> defaultErrorNumber [
-	^21
+	^15
 ]
 
 { #category : 'accessing' }

@@ -93,8 +93,8 @@ PosixFlag class >> valueForSelector: valueSelector [
 ]
 
 { #category : 'querry' }
-PosixFlag >> flagValue [
-	^self store flagPlatformValueFor: self class posixName
+PosixFlag >> optionValue [
+	^self store optionPlatformValueFor: self class posixName
 ]
 
 { #category : 'accessing' }

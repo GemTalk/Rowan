@@ -9,15 +9,15 @@ Class {
 
 { #category : 'accessing' }
 FileImproperLinkError class >> defaultErrorNumber [
-	^18
+	^14
 ]
 
 { #category : 'accessing' }
 FileImproperLinkError class >> errorDescription [
-	^'Invalid cross-device link'
+	^'Not same device'
 ]
 
 { #category : 'accessing' }
 FileImproperLinkError class >> posixName [
-	^'EXDEV'
+	^'TBD'  "Lost the name - needs to be fixed"
 ]

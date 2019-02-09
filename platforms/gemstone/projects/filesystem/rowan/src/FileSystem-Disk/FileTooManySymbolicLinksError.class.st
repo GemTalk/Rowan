@@ -9,12 +9,12 @@ Class {
 
 { #category : 'accessing' }
 FileTooManySymbolicLinksError class >> defaultErrorNumber [
-	^40
+	^10062
 ]
 
 { #category : 'accessing' }
 FileTooManySymbolicLinksError class >> errorDescription [
-	^'Too many levels of symbolic links'
+	^'Too many symbolic links'
 ]
 
 { #category : 'accessing' }

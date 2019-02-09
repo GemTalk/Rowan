@@ -13,7 +13,7 @@ FileTypeFlag >> isGzipped [
 ]
 
 { #category : 'printing' }
-FileTypeFlag >> printOpenModeOn: aStream [
+FileTypeFlag >> printOpenModeStringOn: aStream [
 
-	self fileOptions printOpenModeOn: aStream.
+	self fileOptions printOpenModeStringOn: aStream.
 ]

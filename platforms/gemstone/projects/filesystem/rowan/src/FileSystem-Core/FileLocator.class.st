@@ -260,7 +260,8 @@ FileLocator class >> resolver [
 		InteractiveResolver new
 			addResolver: SystemResolver new;
 			addResolver: PlatformResolver forCurrentPlatform;
-				yourself ]
+			addResolver: ClientResolver forCurrentPlatform;
+			yourself ]
 ]
 
 { #category : 'origins' }
@@ -486,11 +487,6 @@ FileLocator >> printOn: aStream [
 ]
 
 { #category : 'streams' }
-FileLocator >> readRawStream [
-	^ self resolve readRawStream
-]
-
-{ #category : 'streams' }
 FileLocator >> readStream [
 	^ self resolve readStream 
 ]
@@ -516,16 +512,6 @@ FileLocator >> resolveString: aString [
 	filesystem := (self class resolver resolve: origin) fileSystem.
 	thePath := filesystem pathFromString: aString.
 	^ self withPath: (path resolvePath: thePath)
-]
-
-{ #category : 'streams' }
-FileLocator >> streamFor: aFileSpec [
-	^ self resolve streamFor: aFileSpec
-]
-
-{ #category : 'streams' }
-FileLocator >> writeRawStream [
-	^ self resolve writeRawStream
 ]
 
 { #category : 'streams' }

@@ -1,23 +1,6 @@
 Extension { #name : 'CharacterCollection' }
 
 { #category : '*filesystem-core' }
-CharacterCollection >> asClientFileReference [
-
-	^ FileSystem clientDisk referenceTo: self
-]
-
-{ #category : '*filesystem-core' }
-CharacterCollection >> asClientPath [
-	"convert myself to a path"
-	"Examples:
-		'.' asPath
-		'~/Desktop' asPath
-		'/home/foo' asPath
-		'../../foo.bar' asPath"
-	^ FileSystem clientDisk resolve: self
-]
-
-{ #category : '*filesystem-core' }
 CharacterCollection >> asFileReference [
 
 	^ FileSystem disk referenceTo: self

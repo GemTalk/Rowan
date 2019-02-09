@@ -43,10 +43,10 @@ FileUnixOptionsTest >> testAccessRules [
 
 	self should: [aFileOptions accessRule] raise: FileOptionFeatureNotSupported.
 
-	aFileOptions openPosixFlag: FileOpenWriteOnlyFlag new.
+	aFileOptions mode: FileOpenWriteOnlyFlag new.
 	self should: [aFileOptions accessRule] raise: FileOptionFeatureNotSupported.
 
-	aFileOptions openPosixFlag: FileOpenReadWriteFlag new.
+	aFileOptions mode: FileOpenReadWriteFlag new.
 	self should: [aFileOptions accessRule] raise: FileOptionFeatureNotSupported.
 ]
 
@@ -59,14 +59,14 @@ FileUnixOptionsTest >> testCreateRules [
 
 	self should: [aFileOptions createRule] raise: FileOptionFeatureNotSupported.
 
-	aFileOptions addFlag: FileCreateFlag new.
+	aFileOptions addOption: FileCreateFlag new.
 	self should: [aFileOptions createRule] raise: FileOptionFeatureNotSupported.
 
-	aFileOptions addFlag: FileExclusiveFlag new.
+	aFileOptions addOption: FileExclusiveFlag new.
 	self should: [aFileOptions createRule] raise: FileOptionFeatureNotSupported.
 	self should: [aFileOptions truncateRule] raise: FileOptionFeatureNotSupported.
 
-	aFileOptions addFlag: FileTruncateFlag new.
+	aFileOptions addOption: FileTruncateFlag new.
 	self should: [aFileOptions truncateRule] raise: FileOptionFeatureNotSupported.
 ]
 

@@ -1,16 +1,16 @@
 Class {
-	#name : 'ChageDirectoryErrorGroup',
+	#name : 'ChangeDirectoryErrorGroup',
 	#superclass : 'PosixErrorGroup',
 	#category : 'FileSystem-Disk-Options'
 }
 
 { #category : 'constants' }
-ChageDirectoryErrorGroup class >> posixErrorNames [
+ChangeDirectoryErrorGroup class >> posixErrorNames [
 	^#('EACCES' 'ENOENT' 'EIO')
 ]
 
 { #category : 'errors - windows' }
-ChageDirectoryErrorGroup >> errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference [
+ChangeDirectoryErrorGroup >> errorClassForWindowsPlatformError: anErrorNumber fileReference: aFileReference [
 
 	((#(161 2 3 5) includes: anErrorNumber) and: [aFileReference isDirectory not]) 
 		ifTrue: [^self posixErrorNamed: 'ENOENT'].

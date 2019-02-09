@@ -43,10 +43,10 @@ FileWindowsOptionsTest >> testAccessRules [
 
 	self assert: aFileOptions accessRule equals: WindowsStore readOnlyAccessRule.
 
-	aFileOptions openPosixFlag: FileOpenWriteOnlyFlag new.
+	aFileOptions mode: FileOpenWriteOnlyFlag new.
 	self assert: aFileOptions accessRule equals: WindowsStore writeOnlyAccessRule.
 
-	aFileOptions openPosixFlag: FileOpenReadWriteFlag new.
+	aFileOptions mode: FileOpenReadWriteFlag new.
 	self assert: aFileOptions accessRule equals: WindowsStore readWriteAccessRule.
 ]
 
@@ -59,14 +59,14 @@ FileWindowsOptionsTest >> testCreateRules [
 
 	self assert: aFileOptions createRule equals: WindowsStore openExistingRule.
 
-	aFileOptions addFlag: FileCreateFlag new.
+	aFileOptions addOption: FileCreateFlag new.
 	self assert: aFileOptions createRule equals: WindowsStore openAlwaysRule.
 
-	aFileOptions addFlag: FileExclusiveFlag new.
+	aFileOptions addOption: FileExclusiveFlag new.
 	self assert: aFileOptions createRule equals: WindowsStore createNewRule.
 	self assert: aFileOptions truncateRule equals: WindowsStore noTruncateRule.
 
-	aFileOptions addFlag: FileTruncateFlag new.
+	aFileOptions addOption: FileTruncateFlag new.
 	self assert: aFileOptions truncateRule equals: WindowsStore truncateExistingRule.
 ]
 
@@ -93,10 +93,10 @@ FileWindowsOptionsTest >> testFileType [
 			fileOptions.
 	aFileOptions beBinaryFileType.
 
-	self assert: aFileOptions fileType flagValue equals: 1.
+	self assert: aFileOptions fileType optionValue equals: 1.
 
 	aFileOptions beTextFileType.
-	self assert: aFileOptions fileType flagValue equals: 0
+	self assert: aFileOptions fileType optionValue equals: 0
 ]
 
 { #category : 'tests' }

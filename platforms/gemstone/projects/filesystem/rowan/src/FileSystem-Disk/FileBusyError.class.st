@@ -9,12 +9,12 @@ Class {
 
 { #category : 'accessing' }
 FileBusyError class >> defaultErrorNumber [
-	^16
+	^12
 ]
 
 { #category : 'accessing' }
 FileBusyError class >> errorDescription [
-	^'Device or resource busy'
+	^'Resource busy'
 ]
 
 { #category : 'accessing' }

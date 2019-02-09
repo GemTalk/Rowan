@@ -9,7 +9,7 @@ Class {
 
 { #category : 'accessing' }
 FileInvalidOptionError class >> defaultErrorNumber [
-	^22
+	^16
 ]
 
 { #category : 'accessing' }

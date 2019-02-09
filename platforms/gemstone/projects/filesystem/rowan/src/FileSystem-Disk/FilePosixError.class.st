@@ -88,17 +88,33 @@ FilePosixError class >> posixNamesWithClasses [
 
 { #category : 'printing' }
 FilePosixError class >> reportOn: aStream indent: indent [
-
+	| aSize aValue |
 	indent timesRepeat: [aStream tab].
-	aStream nextPutAll: self name; tab; cr.
 
-	(self name = #FilePosixError) 
-		ifFalse: [
-			aStream 
-				nextPutAll: self posixName;
-				tab;
-				nextPutAll: self defaultErrorNumber asString;
-				cr].
+	aStream nextPutAll: self name asString.
+	(45 - ((indent * 4) + self name asString size)) timesRepeat: [aStream space].
+
+	((self name = #FilePosixError) not and: [self class includesSelector: #posixName]) 
+		ifTrue: [
+			aSize := self posixName size.
+			aStream nextPutAll: self posixName].
+	(15 - (aSize ifNil: [0])) timesRepeat: [aStream space].
+
+	((self name = #FilePosixError) not and: [self class includesSelector: #defaultErrorNumber]) 
+		ifTrue: [aValue := self defaultErrorNumber asString]
+		ifFalse: [aValue := (self subclasses isEmpty not) ifTrue: [''] ifFalse: ['value not defined']].
+	aSize :=  aValue size.
+	(15 - aSize) timesRepeat: [aStream space].
+	aStream nextPutAll: aValue asString.
+
+"	((self name = #PosixFlag) not and: [self class includesSelector: #windowsErrorNumber]) 
+		ifTrue: [
+			aSize := self windowsErrorNumber asString size.
+			(15 - aSize) timesRepeat: [aStream space].
+			aStream nextPutAll: self windowsErrorNumber asString]."
+
+	aStream crlf.
+
 	self subclasses do: [:ea | ea reportOn: aStream indent: indent + 1]
 ]
 

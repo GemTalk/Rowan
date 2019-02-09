@@ -91,9 +91,10 @@ FileReference >> asPath [
 
 { #category : 'streams' }
 FileReference >> binaryReadStream [
-	"Answer a buffered read stream wrapping a binary file stream on the receiver. There is no encoding"
+	"Answer a buffered read stream wrapping a binary file stream on the receiver"
 
 	^self fileSystem readFileSpec bufferedStreamFor: self
+"	^ ZnBufferedReadStream on: (filesystem binaryReadStreamOn: self path)"
 ]
 
 { #category : 'streams' }
@@ -105,7 +106,7 @@ FileReference >> binaryReadWriteStream [
 
 { #category : 'streams' }
 FileReference >> binaryWriteStream [
-	"Answer a buffered write stream wrapping a binary file stream on the receiver. There is no encoding"
+	"Answer a buffered write stream wrapping a binary file stream on the receiver"
 
 	^self fileSystem writeFileSpec bufferedStreamFor: self
 ]
@@ -371,13 +372,6 @@ FileReference >> printOn: aStream [
 ]
 
 { #category : 'streams' }
-FileReference >> readRawStream [
-	"Answer a a binary file stream on the receiver in read mode - this is not encoded or buffered"
-
-	^self fileSystem readFileSpec binaryFileStreamOn: self
-]
-
-{ #category : 'streams' }
 FileReference >> readStream [
 	"Answer an encoded buffered read stream wrapping a binary file stream on the receiver"
 
@@ -434,20 +428,6 @@ FileReference >> setFileSystem: aFilesystem path: aPath [
 { #category : 'accessing' }
 FileReference >> size [
 	^ filesystem sizeOf: path
-]
-
-{ #category : 'streams' }
-FileReference >> streamFor: aFileSpec [
-	"Answer an encoded buffered write stream wrapping a binary file stream on the receiver"
-
-	^ aFileSpec encodedStreamFor: self
-]
-
-{ #category : 'streams' }
-FileReference >> writeRawStream [
-	"Answer a a binary file stream on the receiver in write mode - this is not encoded or buffered"
-
-	^self fileSystem writeFileSpec binaryFileStreamOn: self
 ]
 
 { #category : 'streams' }

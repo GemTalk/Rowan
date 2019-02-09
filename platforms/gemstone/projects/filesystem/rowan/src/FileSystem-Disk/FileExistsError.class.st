@@ -9,7 +9,7 @@ Class {
 
 { #category : 'accessing' }
 FileExistsError class >> defaultErrorNumber [
-	^17
+	^13
 ]
 
 { #category : 'accessing' }

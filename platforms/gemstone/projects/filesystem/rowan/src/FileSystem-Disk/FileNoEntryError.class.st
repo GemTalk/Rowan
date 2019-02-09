@@ -9,7 +9,7 @@ Class {
 
 { #category : 'accessing' }
 FileNoEntryError class >> defaultErrorNumber [
-	^2
+	^8
 ]
 
 { #category : 'accessing' }
