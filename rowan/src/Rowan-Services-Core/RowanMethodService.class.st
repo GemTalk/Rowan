@@ -515,6 +515,12 @@ RowanMethodService >> stepPoints [
 	^stepPoints
 ]
 
+{ #category : 'Updating' }
+RowanMethodService >> stepPoints: collection [
+
+	stepPoints := collection
+]
+
 { #category : 'initialization' }
 RowanMethodService >> stepPointsFor: aGsNMethod [
 	"Answers an Array of Associations (offset -> selector) indexed by step point"
