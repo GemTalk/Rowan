@@ -50,6 +50,16 @@ RowanAnsweringService >> exec: aString [
 ]
 
 { #category : 'client commands' }
+RowanAnsweringService >> exec: aString context: anObject [
+
+	answer := (aString evaluateInContext: anObject symbolList: GsSession currentSession symbolList). 
+	RowanCommandResult addResult: self.
+
+	"return answer for testing" 
+	^answer
+]
+
+{ #category : 'client commands' }
 RowanAnsweringService >> flipTranscript [
 	self isTranscriptInstalled ifTrue:[
 		self jadeiteServer uninstallTranscript]
