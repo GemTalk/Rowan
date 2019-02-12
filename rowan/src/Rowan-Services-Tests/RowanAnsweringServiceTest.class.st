@@ -15,6 +15,34 @@ RowanAnsweringServiceTest >> setUp [
 ]
 
 { #category : 'tests' }
+RowanAnsweringServiceTest >> test_execCompileError [
+	| gotError |
+
+	gotError := [service exec: '1 +' context: nil] on: CompileError do:[:ex |
+		true].
+	self assert: gotError.
+]
+
+{ #category : 'tests' }
+RowanAnsweringServiceTest >> test_execNilContext [
+
+	self assert: (service exec: '123' context: nil) equals: 123.
+	self assert: (service exec: '$a' context: nil) equals: $a.
+	self assert: (service exec: '''abc''' context: nil) equals: 'abc'.
+	self assert: (service exec: '3+4' context: nil) equals: 7.
+	self assert: (service exec: 'true' context: nil) equals: true.
+	self assert: (service exec: 'false' context: nil) equals: false.
+]
+
+{ #category : 'tests' }
+RowanAnsweringServiceTest >> test_execWithContext [
+
+	self assert: (service exec: 'self' context: 123) equals: 123.
+	self assert: (service exec: 'self size' context: Array new) equals: 0.
+	self assert: (service exec: '1 + self' context: 2) equals: 3.
+]
+
+{ #category : 'tests' }
 RowanAnsweringServiceTest >> test_initializeAutoCommit [
 	| autoCommit | 
 	self jadeiteIssueTested: #issue396 withTitle: 'Ability to turn on autocommit would be nice'.

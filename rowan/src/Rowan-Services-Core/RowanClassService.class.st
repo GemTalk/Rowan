@@ -36,7 +36,8 @@ Class {
 		'isTestCase',
 		'expand',
 		'visibleTests',
-		'isNewClass'
+		'isNewClass',
+		'updateAfterCommand'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -293,6 +294,24 @@ RowanClassService >> expand: boolean [
 ]
 
 { #category : 'client commands' }
+RowanClassService >> fastRefresh [
+	"pushes less information to ston so it's faster"
+
+	| theClass |
+	theClass := self classFromName. 
+	self refreshFrom: theClass. 
+	RowanCommandResult initializeResults. 
+	methods do:[:service |
+			service source: nil; 
+					stepPoints: Array new.
+	visibleTests do:[:service |
+			service source: nil; 
+					stepPoints: Array new].
+			].
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
 RowanClassService >> fileoutCategories: array [
 	| answeringService ws |
 	answeringService := RowanAnsweringService new.
@@ -463,6 +482,13 @@ RowanClassService >> meta: anObject [
 
 	meta := anObject
 
+]
+
+{ #category : 'Accessing' }
+RowanClassService >> methods [
+
+	"for testing"
+	^methods
 ]
 
 { #category : 'private' }
@@ -821,7 +847,8 @@ RowanClassService >> servicePerform: symbol withArguments: collection [
 	| wasClean |
 	wasClean := self arePackageAndProjectClean.
 	super servicePerform: symbol withArguments: collection.
-	self update.
+	updateAfterCommand == false ifFalse:[
+		self update].
 	wasClean ifTrue:[
 		self updatePackageProject]
 ]
