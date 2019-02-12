@@ -26,7 +26,8 @@ Class {
 		'breakPoints',
 		'testResult',
 		'definedPackage',
-		'isTestMethod'
+		'isTestMethod',
+		'testRunClassName'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -424,6 +425,7 @@ RowanMethodService >> runTest: testSelector inClassName: theClassName [
 	sunitTestResult errorCount > 0 ifTrue:[testResult := 'error']. 
 	sunitTestResult failureCount > 0 ifTrue:[testResult := 'failure']. 
 	sunitTestResult passedCount > 0 ifTrue:[testResult := 'passed']. 
+	testRunClassName := theClassName. 
 	RowanCommandResult addResult: self.
 ]
 
@@ -511,6 +513,12 @@ RowanMethodService >> stepPoints [
 	"for testing"
 	
 	^stepPoints
+]
+
+{ #category : 'Updating' }
+RowanMethodService >> stepPoints: collection [
+
+	stepPoints := collection
 ]
 
 { #category : 'initialization' }
