@@ -1213,7 +1213,7 @@ RwPrjBrowserTool >> renameClassNamed: className to: newName [
 				pDef ].
 		packageDef := projectDef packageNamed: loadedPackage name.
 		classDef := packageDef classDefinitions at: subclassName.
-		classDef superclassName: className ].
+		classDef superclassName: newName ].
 
 "load projectSetDefinition & do rename"
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
