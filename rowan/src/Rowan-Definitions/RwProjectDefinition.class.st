@@ -51,15 +51,6 @@ RwProjectDefinition class >> withProperties: properties packageDefinitions: pack
 		yourself
 ]
 
-{ #category : 'private' }
-RwProjectDefinition >> _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue [
-
-	propertyKey = 'spec' ifFalse: [ ^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue ].
-	"spec entries are considered to be equal for comparison purposes"
-	^ true
-
-]
-
 { #category : 'accessing' }
 RwProjectDefinition >> addOrUpdatePackage: aPackageDefinition [
 

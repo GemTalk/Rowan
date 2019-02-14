@@ -93,6 +93,8 @@ RwUnpackagedBrowserApiTest >> testIssue263 [
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.
 
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectUnknownDefinitionSourceValue).
+
 "load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.

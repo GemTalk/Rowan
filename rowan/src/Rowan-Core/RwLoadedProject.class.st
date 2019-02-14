@@ -8,6 +8,39 @@ Class {
 	#category : 'Rowan-Core'
 }
 
+{ #category : 'accessing' }
+RwLoadedProject class >> _projectDefinitionSourceKey [
+	"The value of the property key indicates which source the project definition was derived from.
+		Currently used when deciding whether to change the loaded commit id, during a load ... 
+		if the load is derived from a loaded project (RwLoadedProject class _projectDefinitionSourceValue), 
+		then it isn't necessary to update the loaded commit id."
+
+	^ '_Project_Definition_Source'
+]
+
+{ #category : 'accessing' }
+RwLoadedProject class >> _projectDiskDefinitionSourceValue [
+	"This value of the property key indicates that the source of the project definition was loaded from disk, 
+		then it isn't necessary to update the loaded commit id."
+
+	^ 'loaded from disk'
+]
+
+{ #category : 'accessing' }
+RwLoadedProject class >> _projectLoadedDefinitionSourceValue [
+	"This value of the property key indicates that the source of the project definition was derived from
+		a loaded project, then it isn't necessary to update the loaded commit id."
+
+	^ 'loaded project'
+]
+
+{ #category : 'accessing' }
+RwLoadedProject class >> _projectUnknownDefinitionSourceValue [
+	"This value of the property key indicates that the source of the project definition is unknown."
+
+	^ 'unknown'
+]
+
 { #category : 'instance creation' }
 RwLoadedProject class >> newForLoadSpecification: aLoadSpecification [
 
@@ -165,6 +198,7 @@ RwLoadedProject >> propertiesForDefinition [
 	| props |
 	props := super propertiesForDefinition.
 	props at: 'name' put: name.
+	props at: self class _projectDefinitionSourceKey put: self class _projectLoadedDefinitionSourceValue.
 	^ props
 ]
 
