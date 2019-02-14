@@ -108,14 +108,14 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 				ifNil: [ projectDef specification ]
 				ifNotNil: [:loadedProject | loadedProject specification ].
 			self specification: theSpec.
-			theSpec updateLoadedCommitIdForTool: self.
+			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
+				ifTrue: [  theSpec updateLoadedCommitIdForTool: self ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
 				ifNotNil: [:map |
 					theSpec imageSpec
 						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
 						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
 	^ diff
-
 ]
 
 { #category : 'private' }
@@ -141,14 +141,14 @@ RwPrjLoadTool >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceM
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef | 
 			self specification: projectDef specification.
-			projectDef specification updateLoadedCommitIdForTool: self.
+			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
+				ifTrue: [ projectDef  updateLoadedCommitIdForTool: self ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
 				ifNotNil: [:map |
 					projectDef specification imageSpec
 						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
 						loadedGroupNames: (map at: 'loadedGroupNames') ]].
 	^ diff
-
 ]
 
 { #category : 'load project definitions' }
