@@ -1332,6 +1332,8 @@ RwBrowserToolApiTest >> testIssue471_2 [
 
 "remove class2 and add class4 -- edit projectDefinition structure in place"
   projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+  self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectLoadedDefinitionSourceValue).
+
   packageDefinition := projectDefinition packageNamed: packageName1.
 
   packageDefinition removeClassNamed: className2.

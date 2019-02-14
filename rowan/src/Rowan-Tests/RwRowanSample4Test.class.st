@@ -1617,6 +1617,7 @@ RwRowanSample4Test >> testIssue230 [
 	"Create and load the primer project ... with two packages into which the classes will be adopted"
 	projectDefinition := RwProjectDefinition
 		newForGitBasedProjectNamed: primerProjectName.
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectUnknownDefinitionSourceValue).
 	projectDefinition
 		addPackageNamed: primerPackageName1;
 		addPackageNamed: primerPackageName2;
@@ -1650,7 +1651,6 @@ RwRowanSample4Test >> testIssue230 [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
-
 ]
 
 { #category : 'tests' }

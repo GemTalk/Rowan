@@ -31,5 +31,5 @@ RwProjectDefinition >> compareAgainstBase: aDefinition [
 { #category : '*rowan-core-definitions-extensions' }
 RwProjectDefinition >> projectDefinitionSourceProperty [
 
-	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ 'unknown' ]
+	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
 ]
