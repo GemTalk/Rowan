@@ -518,6 +518,7 @@ RwDisownToolApiTest >> testDisownProject [
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
 
 	projectDefinitionToAdopt := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	self assert: (projectDefinitionToAdopt projectDefinitionSourceProperty = RwLoadedProject _projectLoadedDefinitionSourceValue).
 
 	projectTools disown
 		disownProjectNamed: projectName.
@@ -548,5 +549,4 @@ RwDisownToolApiTest >> testDisownProject [
 	self assert: barMethod rowanPackageName = packageName2.
 	self assert: (Rowan image loadedPackageNamed: packageName1 ifAbsent: []) notNil.
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
-
 ]

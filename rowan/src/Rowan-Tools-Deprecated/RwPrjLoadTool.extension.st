@@ -3,6 +3,7 @@ Extension { #name : 'RwPrjLoadTool' }
 { #category : '*rowan-tools-deprecated' }
 RwPrjLoadTool >> _doProjectSetLoad: projectSetDefinition instanceMigrator: instanceMigrator originalProjectSet: originalProjectSet processedClassNames: processedClassNames [
 	| copiedProjectSetDef theClassName theClass projectDef theLoadedProject loadedClass packageDef |
+	self deprecated: 'RwPrjLoadTool >>_doProjectSetLoad:instanceMigrator:originalProjectSet:processedClassNames: deprecated in Rowan 1.2.6+'.
 	[ ^ self
 		_loadProjectSetDefinition: projectSetDefinition
 		instanceMigrator: instanceMigrator ]
@@ -36,13 +37,13 @@ RwPrjLoadTool >> _doProjectSetLoad: projectSetDefinition instanceMigrator: insta
 				processedClassNames add: theClassName ].
 	"trim the stack"
 	^ self _doProjectSetLoad: copiedProjectSetDef instanceMigrator: instanceMigrator originalProjectSet: originalProjectSet processedClassNames: processedClassNames
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
 RwPrjLoadTool >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceMigrator: instanceMigrator [
 
 	| loadedProjectSet diff loadedProjectInfo| 
+	self deprecated: 'RwPrjLoadTool >>_loadProjectSetDefinition:instanceMigrator: deprecated in Rowan 1.2.6+'.
 	loadedProjectSet := projectSetDefinitionToLoad deriveLoadedThings
 		asProjectDefinitionSet.
 	diff := projectSetDefinitionToLoad compareAgainstBase: loadedProjectSet.
@@ -62,14 +63,14 @@ RwPrjLoadTool >> _loadProjectSetDefinition: projectSetDefinitionToLoad instanceM
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef | 
 			self specification: projectDef specification.
-			projectDef specification updateLoadedCommitIdForTool: self.
+			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
+				ifTrue: [ projectDef  updateLoadedCommitIdForTool: self ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
 				ifNotNil: [:map |
 					projectDef specification imageSpec
 						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
 						loadedGroupNames: (map at: 'loadedGroupNames') ]].
 	^ diff
-
 ]
 
 { #category : '*rowan-tools-deprecated' }

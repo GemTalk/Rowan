@@ -26,8 +26,8 @@ RwPrjReadTool >> _readProjectDefinition: projectDefinition packageNames: package
 				readPackageStructure.
 			packageDefinition := reader packageStructure rwSnapshot.
 			projectDefinition addOrUpdatePackage: packageDefinition ].
+	projectDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
 	^ projectDefinition
-
 ]
 
 { #category : 'private' }
