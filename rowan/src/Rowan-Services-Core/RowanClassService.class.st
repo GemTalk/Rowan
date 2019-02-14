@@ -300,7 +300,6 @@ RowanClassService >> fastRefresh [
 	| theClass |
 	theClass := self classFromName. 
 	self refreshFrom: theClass. 
-	RowanCommandResult initializeResults. 
 	methods do:[:service |
 			service source: nil; 
 					stepPoints: Array new.
