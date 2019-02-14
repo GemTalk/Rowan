@@ -965,6 +965,7 @@ RowanClassService >> updateClass [
 	| theClass |
 	theClass := self classFromName. 
 	theClass isNil ifTrue:[oop := nil. ^self]. 
+	theClass isBehavior ifFalse:[oop := theClass asOop. ^self].
 	self refreshFrom: theClass.
 	RowanCommandResult addResult: self
 ]
