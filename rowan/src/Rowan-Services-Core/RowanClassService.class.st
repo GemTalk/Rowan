@@ -374,7 +374,7 @@ RowanClassService >> hash [
 { #category : 'private' }
 RowanClassService >> hierarchyClassServiceFor: className [
 	^className asString = name asString ifTrue:[
-			className = 'Object' 
+			className asString = 'Object' 
 				ifTrue:[
 					RowanClassService basicForClassNamed: className]
 				ifFalse:[
