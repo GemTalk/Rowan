@@ -112,10 +112,11 @@ RwRowanSample4Test >> testCreateProjectDefinition [
 	
 	projectTools read readProjectDefinition: projectDefinition.
 
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
+
 	self assert: (x := projectDefinition packageNames asArray sort) = #('RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests' 'RowanSample4-Tests') sort.
 
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) isNil.
-
 ]
 
 { #category : 'tests' }
@@ -1616,6 +1617,7 @@ RwRowanSample4Test >> testIssue230 [
 	"Create and load the primer project ... with two packages into which the classes will be adopted"
 	projectDefinition := RwProjectDefinition
 		newForGitBasedProjectNamed: primerProjectName.
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectUnknownDefinitionSourceValue).
 	projectDefinition
 		addPackageNamed: primerPackageName1;
 		addPackageNamed: primerPackageName2;
@@ -1649,7 +1651,6 @@ RwRowanSample4Test >> testIssue230 [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
-
 ]
 
 { #category : 'tests' }
@@ -1876,6 +1877,8 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
 	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
 
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
+
 oldProjectDefinition := (Rowan image loadedProjectNamed: 'RowanSample4') asDefinition.
 projectSetDefinition addProject: oldProjectDefinition.
 
@@ -1983,6 +1986,8 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_with_subc
 "need to add old project definition with all classes and extensions removed to the projectSet Definition to reproduce bug"
 	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
 	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
+
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
 
 oldProjectDefinition := (Rowan image loadedProjectNamed: 'RowanSample4') asDefinition.
 projectSetDefinition addProject: oldProjectDefinition.
@@ -2189,6 +2194,8 @@ RwRowanSample4Test >> testIssue460_1 [
 	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
 	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
 
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
+
 oldProjectDefinition := (Rowan image loadedProjectNamed: 'RowanSample4') asDefinition.
 projectSetDefinition addProject: oldProjectDefinition.
 
@@ -2295,6 +2302,8 @@ RwRowanSample4Test >> testIssue460_2 [
 	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
 	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
 
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
+
 oldProjectDefinition := (Rowan image loadedProjectNamed: 'RowanSample4') asDefinition.
 projectSetDefinition addProject: oldProjectDefinition.
 
@@ -2353,6 +2362,8 @@ RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 
 	projectTools read readProjectDefinition: projectDefinition.
 
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
+
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
 
 	projectTools load loadProjectNamed: projectName.
@@ -2360,7 +2371,6 @@ RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
 	self assert: theClass new foo = 'foo'
-
 ]
 
 { #category : 'tests' }
