@@ -37,14 +37,6 @@ PositionableStreamPortable >> nextMatchAll: aColl [
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
-PositionableStreamPortable >> originalContents [
-	"Answer the receiver's actual contents collection, NOT a copy."
-
-	^ collection
-
-]
-
-{ #category : '*filesystem-gemstone-kernel' }
 PositionableStreamPortable >> setFrom: newStart to: newStop [
 
 	position := newStart - 1.

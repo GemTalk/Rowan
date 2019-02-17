@@ -29,6 +29,15 @@ SequenceableCollection >> atRandom: aGenerator [
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
+SequenceableCollection >> copyAfter: anElement [
+	"Answer a copy of the receiver from after the first occurence
+	of anElement up to the end. If no such element exists, answer 
+	an empty copy."
+
+	^ self allButFirst: (self indexOf: anElement ifAbsent: [^ self copyEmpty])
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
 SequenceableCollection >> copyAfterLast: anElement [
 	"Answer a copy of the receiver from after the last occurence
 	of anElement up to the end. If no such element exists, answer 
@@ -36,6 +45,20 @@ SequenceableCollection >> copyAfterLast: anElement [
 
 	^ self allButFirst: (self lastIndexOf: anElement ifAbsent: [^ self copyEmpty])
 
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+SequenceableCollection >> copyFrom: start to: stop [ 
+	"Answer a copy of a subset of the receiver, starting from element at 
+	index start until element at index stop."
+
+	| newSize |
+	newSize := stop - start + 1.
+	^(self species new: newSize)
+		replaceFrom: 1
+		to: newSize
+		with: self
+		startingAt: start
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
@@ -47,6 +70,22 @@ SequenceableCollection >> copyLast: n [
 	size := self size.
 	^ self copyFrom: size - n + 1 to: size
 
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+SequenceableCollection >> copyUpThrough: anElement [
+    "Answer all elements up to and including anObject. If there
+     is no such object, answer a copy of the receiver."
+
+	^self first: (self indexOf: anElement ifAbsent: [^ self copy])
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+SequenceableCollection >> copyUpTo: anElement [ 
+	"Answer all elements up to but not including anObject. If there
+	is no such object, answer a copy of the receiver."
+
+	^ self copyFrom: 1 to: (self indexOf: anElement ifAbsent: [^ self copy]) - 1
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
@@ -73,6 +112,17 @@ SequenceableCollection >> copyWithFirst: newElement [
 		startingAt: 1.
 	newIC at: 1 put: newElement.
 	^ newIC
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+SequenceableCollection >> endsWith: aSequenceableCollection [
+	"Answer true if the receiver ends with the argument collection"
+	
+	| start |
+	(aSequenceableCollection isEmpty or: [self size < aSequenceableCollection size]) ifTrue: [^false].
+	start := self size - aSequenceableCollection size.
+	aSequenceableCollection withIndexDo: [:each :index | (self at: start + index) ~= each ifTrue: [^false]].
+	^true
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
@@ -120,6 +170,13 @@ SequenceableCollection >> readStreamPortable [
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
+SequenceableCollection >> removeAll [
+
+	self removeFrom: 1 to: self size
+
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
 SequenceableCollection >> replaceAll: oldObject with: newObject [
   "Replace all occurences of oldObject with newObject"
 
@@ -153,6 +210,22 @@ SequenceableCollection >> swap: oneIndex with: anotherIndex [
 	element := self at: oneIndex.
 	self at: oneIndex put: (self at: anotherIndex).
 	self at: anotherIndex put: element
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+SequenceableCollection >> withIndexCollect: elementAndIndexBlock [ 
+	"Just like with:collect: except that the iteration index supplies the second argument to the block. Override superclass in order to use addLast:, not at:put:."
+
+	| newCollection |
+	newCollection := self species new: self size.
+	1 to: self size do:
+		[:index |
+		newCollection at: index put: (
+			elementAndIndexBlock
+				value: (self at: index)
+				value: index)].
+	^ newCollection
+
 ]
 
 { #category : '*filesystem-gemstone-kernel' }

@@ -18,3 +18,8 @@ ChangeDirectoryErrorGroup >> errorClassForWindowsPlatformError: anErrorNumber fi
 		ifTrue: [^self posixErrorNamed: 'EACCES'].
 	^self ioFileErrorClass
 ]
+
+{ #category : 'constants' }
+ChangeDirectoryErrorGroup >> posixErrorNames [
+	^#('EACCES' 'ENOENT' 'EIO')
+]

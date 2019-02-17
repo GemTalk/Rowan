@@ -9,8 +9,7 @@ Class {
 
 { #category : 'predefined' }
 PosixErrorGroup class >> changeDirectoryErrorGroup [
-	< fileError >
-	^ChageDirectoryErrorGroup new
+	^ChangeDirectoryErrorGroup new
 ]
 
 { #category : 'constants' }

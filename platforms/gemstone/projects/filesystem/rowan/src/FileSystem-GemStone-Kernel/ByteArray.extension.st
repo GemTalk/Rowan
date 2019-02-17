@@ -28,7 +28,7 @@ ByteArray >> utf8Decoded [
 	
 	self flag: 'GemStone/Pharo code switched for research'.
 
-	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+	self isGemStoneUtf8Encoding
 		ifTrue: [
 			^ [self decodeFromUTF8]
 				on: ArgumentError

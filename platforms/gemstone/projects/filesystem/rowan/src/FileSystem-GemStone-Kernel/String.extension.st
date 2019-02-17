@@ -35,6 +35,14 @@ String >> format: collection [
 ]
 
 { #category : '*FileSystem-Gemstone-Kernel' }
+String >> includesSubstring: substring [
+	"Returns whether the receiver contains the argument."
+	"('abcdefgh' includesSubstring: 'de') >>> true"
+	
+	^ substring isEmpty or: [ (self findString: substring startingAt: 1) > 0 ]
+]
+
+{ #category : '*FileSystem-Gemstone-Kernel' }
 String >> squeezeOutNumber [
 	"Try to find a number somewhere in this string, as explained in Number>readFrom:
 	

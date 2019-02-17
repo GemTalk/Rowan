@@ -1,7 +1,7 @@
   set u SystemUser p swordfish
   login
 
-# set rowanCompile to true 
+# set rowanCompile to true
 #
   run
   UserGlobals at: #rowanCompile put: true.
@@ -18,7 +18,7 @@ findString: subString startingAt: startIndex caseSensitive: aBoolean
 method: CharacterCollection
 withGemstoneLineEndings
 
-	"assume the string is textual, and that CR, LF, and CRLF are all 
+	"assume the string is textual, and that CR, LF, and CRLF are all
   valid line endings.  Replace each occurence with a single LF"
 
 	| cr lf crlf inPos outPos outString lineEndPos newOutPos |
@@ -33,10 +33,10 @@ withGemstoneLineEndings
 	outPos := 1.
 	outString := self class _newString: self size.
 
-	[ 
+	[
 	lineEndPos := self indexOfAnyOf: crlf startingAt: inPos ifAbsent: [ 0 ].
 	lineEndPos ~= 0 ]
-		whileTrue: [ 
+		whileTrue: [
 			newOutPos := outPos + (lineEndPos - inPos + 1).
 			outString
 				replaceFrom: outPos
@@ -48,10 +48,10 @@ withGemstoneLineEndings
 
 			((self at: lineEndPos) = cr
 				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) = lf ] ])
-				ifTrue: [ 
+				ifTrue: [
 					"CRLF ending"
 					inPos := lineEndPos + 2 ]
-				ifFalse: [ 
+				ifFalse: [
 					"CR or LF ending"
 					inPos := lineEndPos + 1 ] ].	"no more line endings.  copy the rest"
 	newOutPos := outPos + (self size - inPos + 1).
@@ -72,20 +72,20 @@ keywords
 	| kwd char keywords |
 	keywords := Array new.
 			kwd := WriteStreamPortable on: String new.
-			1 to: self size do: [ :i | 
+			1 to: self size do: [ :i |
 				kwd nextPut: (char := self at: i).
 				char = $:
-					ifTrue: [ 
+					ifTrue: [
 						keywords add: kwd contents.
 						kwd reset ] ].
 			kwd position = 0
 				ifFalse: [ keywords add: kwd contents ].
 	(keywords size >= 1 and: [ (keywords at: 1) = ':' ])
-		ifTrue: [ 
+		ifTrue: [
 			"Has an initial keyword, as in #:if:then:else:"
 			keywords := keywords allButFirst ].
 	(keywords size >= 2 and: [ (keywords at: keywords size - 1) = ':' ])
-		ifTrue: [ 
+		ifTrue: [
 			"Has a final keyword, as in #nextPut::andCR"
 			keywords := keywords
 				copyReplaceFrom: keywords size - 1
@@ -123,7 +123,7 @@ beginsWith: aSequenceableCollection
 		or: [ self size < aSequenceableCollection size ])
 		ifTrue: [ ^ false ].
 	aSequenceableCollection
-		withIndexDo: [ :each :index | 
+		withIndexDo: [ :each :index |
 			(self at: index) ~= each
 				ifTrue: [ ^ false ] ].
 	^ true
@@ -145,17 +145,17 @@ unescapePercents
 	oldPos _ 1.
 	specialChars _ '+%'.
 
-	[ 
+	[
 	pos _ self indexOfAnyOf: specialChars startingAt: oldPos.
 	pos > 0 ]
-		whileTrue: [ 
+		whileTrue: [
 			ans nextPutAll: (self copyFrom: oldPos to: pos - 1).
 			c _ self at: pos.
 			c = $+
 				ifTrue: [ ans nextPut: $  ]
-				ifFalse: [ 
+				ifFalse: [
 					(c = $% and: [ pos + 2 <= self size ])
-						ifTrue: [ 
+						ifTrue: [
 							asciiVal _ ((self at: pos + 1) asUppercase digitValueInRadix: 16) * 16
 								+ ((self at: pos + 2) asUppercase digitValueInRadix: 16).
 							pos _ pos + 2.
@@ -170,7 +170,7 @@ unescapePercents
 method: CharacterCollection
 indexOfAnyOf: specialChars startingAt: oldPos
 
-	oldPos to: self size do: [ :i | 
+	oldPos to: self size do: [ :i |
 		(specialChars includes: (self at: i))
 			ifTrue: [ ^ i ] ].
 	^ 0
@@ -305,11 +305,11 @@ allButLast
 	^ self allButLast: 1
 %
 method: CharacterCollection
-substrings: separators 
-	"Answer an array containing the substrings in the receiver separated 
+substrings: separators
+	"Answer an array containing the substrings in the receiver separated
 	by the elements of separators."
 	| result sourceStream subStringStream |
-	
+
 	(separators isString or: [ separators allSatisfy: [ :element | element isCharacter ] ])
 		ifFalse: [ ^ self error: 'separators must be Characters.' ].
 	sourceStream := self readStream.
@@ -353,7 +353,7 @@ cull: firstArg cull: secondArg
 
        | nargs |
        (nargs := self argumentCount) < 2
-               ifTrue: [ 
+               ifTrue: [
                        nargs == 1
                                ifTrue: [ ^ self value: firstArg ].
                        ^ self value ].
@@ -411,7 +411,7 @@ sort
 method: CharacterCollection
 withoutGemstoneLineEndings
 
-	"assume the string is textual, and that CR, LF, and CRLF are all 
+	"assume the string is textual, and that CR, LF, and CRLF are all
 	valid line endings.  Remove each occurence. "
 
 	| cr lf crlf inPos outPos outString lineEndPos newOutPos |
@@ -426,10 +426,10 @@ withoutGemstoneLineEndings
 	outPos := 1.
 	outString := self class _newString: self size.
 
-	[ 
+	[
 	lineEndPos := self indexOfAnyOf: crlf startingAt: inPos ifAbsent: [ 0 ].
 	lineEndPos ~= 0 ]
-		whileTrue: [ 
+		whileTrue: [
 			newOutPos := outPos + (lineEndPos - inPos + 1).
 			outString
 				replaceFrom: outPos
@@ -440,10 +440,10 @@ withoutGemstoneLineEndings
 
 			((self at: lineEndPos) = cr
 				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) = lf ] ])
-				ifTrue: [ 
+				ifTrue: [
 					"CRLF ending"
 					inPos := lineEndPos + 2 ]
-				ifFalse: [ 
+				ifFalse: [
 					"CR or LF ending"
 					inPos := lineEndPos + 1 ] ].	"no more line endings.  copy the rest"
 	newOutPos := outPos + (self size - inPos + 1).
@@ -482,7 +482,7 @@ byteArrayMap
 classmethod: SequenceableCollection
 new: size withAll: value
 
-	"Answer an instance of me, with number of elements equal to size, each 
+	"Answer an instance of me, with number of elements equal to size, each
 	of which refers to the argument, value."
 
 	^ (self new: size)
@@ -501,9 +501,9 @@ findFirstInString: aString inSet: inclusionMap startingAt: start
 
 	i := start.
 	stringSize := aString size.
-	[ 
+	[
 	i <= stringSize
-		and: [ 
+		and: [
 			ascii := (aString at: i) asciiValue.
 			ascii < 256
 				ifTrue: [ (inclusionMap at: ascii + 1) = 0 ]
@@ -528,7 +528,7 @@ currentOrNil
 		at: self globalName
 		otherwise: nil.
 	pp
-		ifNotNil: [ 
+		ifNotNil: [
 			pp enabled
 				ifTrue: [ ^ pp ] ].
 	^ nil
@@ -541,7 +541,7 @@ currentOrNil
 	session := GsCurrentSession currentSession.
 	symbolList := session symbolList.
 	#( #RowanKernel #RowanLoader #RowanTools)
-		do: [:symbolName | 
+		do: [:symbolName |
 			| newDict size |
 			newDict := SymbolDictionary new
 				name: symbolName;
@@ -560,11 +560,11 @@ currentOrNil
 		onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/rowan/src/'  )
 		alias: ''.
 	packageManager defaultSymbolDictionaryName: #Globals.
-	#( 'FileSystem-GemStone-Kernel' 'Files' 'Files-Tests' 'Kernel-Methods' 'Network-UUID' 'Network-UUID-Tests' 
-			'Zinc-Character-Encoding-Core' 'Zinc-Character-Encoding-Tests' 'FileSystem-Core' 'FileSystem-Disk' 
-      'FileSystem-Memory' 'FileSystem-Path' 'FileSystem-Tests-Attributes' 'FileSystem-Tests-Core' 
+	#( 'FileSystem-GemStone-Kernel' 'Files' 'Files-Tests' 'Kernel-Methods' 'Network-UUID' 'Network-UUID-Tests'
+			'Zinc-Character-Encoding-Core' 'Zinc-Character-Encoding-Tests' 'FileSystem-Core' 'FileSystem-Disk'
+      'FileSystem-Memory' 'FileSystem-Path' 'FileSystem-Tests-Attributes' 'FileSystem-Tests-Core'
       'FileSystem-Tests-Disk' 'FileSystem-Tests-GemStone' 'FileSystem-Tests-Memory' )
-		do: [ :packageName | 
+		do: [ :packageName |
 			packageManager
 				addResolvedReference:
 					(CypressResolvedReference name: packageName repository: repo) ].
@@ -574,8 +574,8 @@ commit
 
 # Bootstrap Rowan into image
   run
-  UserGlobals 
-    at: #CypressBootstrapRowanBlock 
+  UserGlobals
+    at: #CypressBootstrapRowanBlock
     put: [:symbolDictName :packageNames  |
     | packageManager repo |
     packageManager := CypressPackageManager3 new.
@@ -585,7 +585,7 @@ commit
     packageManager
       defaultSymbolDictionaryName: symbolDictName asSymbol.
     packageNames
-      do: [ :packageName | 
+      do: [ :packageName |
         packageManager
           addResolvedReference:
             (CypressResolvedReference name: packageName repository: repo) ].
@@ -595,24 +595,24 @@ commit
 
 # Define the classes needed by definitions, configurations and specifications
   run
-  CypressBootstrapRowanBlock 
+  CypressBootstrapRowanBlock
     value: 'RowanKernel'
     value: #('Rowan-Kernel' 'Rowan-Url-Core').
 %
   commit
 
   run
-  CypressBootstrapRowanBlock 
+  CypressBootstrapRowanBlock
     value: 'RowanTools'
-    value: #('Rowan-Definitions' 'Rowan-Configurations' 'Rowan-Specifications' 
+    value: #('Rowan-Definitions' 'Rowan-Configurations' 'Rowan-Specifications'
 	).	"Rowan Definitions, Configurations and Specifications"
 %
   commit
 
   run
-  CypressBootstrapRowanBlock 
+  CypressBootstrapRowanBlock
     value: 'RowanKernel'
-    value: #('GemStone-Interactions-Core' 'Rowan-Url-3215' 
+    value: #('GemStone-Interactions-Core' 'Rowan-Url-3215'
       'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 'Rowan-Core-Definitions-Extensions'
       'Rowan-Services-Core' 'Rowan-Url-Extensions'
       'Rowan-Services-Extensions'
@@ -621,10 +621,10 @@ commit
   commit
 
   run
-  CypressBootstrapRowanBlock 
+  CypressBootstrapRowanBlock
     value: 'RowanTools'
     value: #('Rowan-Tools-Core' 'Rowan-Tools-Deprecated' 'Rowan-Definitions-Deprecated'
-	'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions' 
+	'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions'
 	'Rowan-GemStone-Specifications'
 	).	"Rowan Tools"
 %
@@ -638,15 +638,15 @@ commit
   commit
 
   run
-  CypressBootstrapRowanBlock 
+  CypressBootstrapRowanBlock
     value: 'RowanKernel'
-    value: #('Rowan-Tools-Extensions' 'Rowan-Deprecated' 'Rowan-Tests' 'Rowan-Services-Tests'	
+    value: #('Rowan-Tools-Extensions' 'Rowan-Deprecated' 'Rowan-Tests' 'Rowan-Services-Tests'
 	).	"Tool extension methods for RowanKernel classes "
 %
   commit
 
   run
-  CypressBootstrapRowanBlock 
+  CypressBootstrapRowanBlock
     value: 'RowanLoader'
     value: #('Rowan-GemStone-Loader'
 	).		"GemStone Rowan loader classes"
@@ -654,7 +654,7 @@ commit
   commit
 
   run
-  CypressBootstrapRowanBlock 
+  CypressBootstrapRowanBlock
     value: 'RowanKernel'
     value: #('Rowan-GemStone-Loader-Extensions'
 	).	"Extension methods in non-loader classes"
@@ -662,10 +662,10 @@ commit
   commit
 
   run
-  CypressBootstrapRowanBlock 
+  CypressBootstrapRowanBlock
     value: 'Globals'
-    value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel' 
-      'Rowan-Tools-Kernel' 
+    value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel'
+      'Rowan-Tools-Kernel'
       'Rowan-GemStone-3215'
 	).		"Extension methods for GemStone kernel classes"
 %
@@ -690,7 +690,7 @@ commit
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'. 'Bootstrap'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'. 'Bootstrap'}.
-	} 
+	}
 	do: [:ar |
 		"Read project and packages from disk, creating a projectSetDefinition with all 5 projects"
 		| specification specUrl readTool |
@@ -714,8 +714,8 @@ commit
 				configName := ar at: 2.
 				groupNames := specification defaultGroupNames.
         theProjectSetDefinition := readTool
-					readProjectSetForProjectNamed: specification specName 
-						withConfigurations: { configName } 
+					readProjectSetForProjectNamed: specification specName
+						withConfigurations: { configName }
 						groupNames: groupNames.
 				loadedProjectInfo at: specification specName put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: specification specName).
 				theProjectSetDefinition
@@ -724,19 +724,19 @@ commit
 
 	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
 			(#('FileSystemGs' 'Rowan') includes: projectName)
-				ifTrue: [ 
+				ifTrue: [
 					"install the packageMapSpecs for this load into the specification prior to the load"
 					| projectDefinition spec gemstoneSpec thePackageMapSpecs |
 					projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
 					spec := projectDefinition specification.
 					thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
 					gemstoneSpec := spec platformSpec at: 'gemstone'.
-					(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
+					(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil)
 						ifNotNil: [:name | gemstoneSpec defaultSymbolDictName: name ].
-					(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
-						ifNotNil: [:boolean | 
+					(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil)
+						ifNotNil: [:boolean |
 							gemstoneSpec defaultUseSessionMethodsForExtensions: boolean  ].
-					(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
+					(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil)
 						ifNotNil: [:map | gemstoneSpec packageNameToPlatformPropertiesMap: map] ] ].
 
 	Rowan image newOrExistingSymbolDictionaryNamed: 'RowanKernel'.
@@ -744,7 +744,7 @@ commit
 	Rowan image newOrExistingSymbolDictionaryNamed: 'RowanTools'.
 
 	packageCreateTool := Rowan packageTools create.
-	projectSetDefinition projects 
+	projectSetDefinition projects
 		do: [:projectDefinition |
 			"The loaded project was created by the earlier #register,
 				traverse the package definitions and create loaded packages for each"
@@ -760,7 +760,7 @@ commit
 
 	projectLoadTool := Rowan projectTools load.
 
-	projectSetDefinition projects 
+	projectSetDefinition projects
 		do: [:projectDefinition |
 			"make sure that the loaded SHA is set for each project"
 			projectLoadTool specification: projectDefinition specification.
@@ -784,14 +784,14 @@ commit
 			projectName := projectDefinition name.
 			GsFile gciLogServer: '---Auditing project: ', projectName printString.
 			audit := Rowan projectTools audit auditForProjectNamed: projectName.
-			GsFile gciLogServer: '	-- audit finished '. 
-			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ]
-	
+			GsFile gciLogServer: '	-- audit finished '.
+			"audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ]" ]
+
 %
   commit
 
 # Install Rowan class in Published symbol dict, so it is availailable to all users
-# 
+#
    run
   | rowanAssoc |
   rowanAssoc := RowanKernel associationAt: #Rowan.
@@ -803,7 +803,7 @@ commit
   set u DataCurator p swordfish
   login
 
-# set rowanCompile to true 
+# set rowanCompile to true
 #
 run
 UserGlobals at: #rowanCompile put: true.

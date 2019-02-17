@@ -97,6 +97,12 @@ DiskStore class >> denyWriteShareRule [
 ]
 
 { #category : 'class initialization' }
+DiskStore class >> initialize [
+	self initializePosixFlagValues.
+	self initializePosixErrorValues
+]
+
+{ #category : 'class initialization' }
 DiskStore class >> initializeDefaultWorkingDirectory [
 	^DefaultWorkingDirectory := self defaultWorkingDirectory
 ]

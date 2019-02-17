@@ -18,6 +18,15 @@ TestAsserter >> assertCollection: actual equals: expected [
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
+TestAsserter >> assertCollectionOfStrings: actual equalsCollectionOfStrings: expected [
+	"Specialized test method that generates a proper error message for collection"
+	actual with: expected do: [:a :b |
+		self
+			assert: (self isString: a equalToString: b)
+			description: a printString , ' is  equal to ' , b printString]
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
 TestAsserter >> assertString: actual equalsString: expected [
 	"Specialized test method that generates a proper error message for collection"
 	^ self

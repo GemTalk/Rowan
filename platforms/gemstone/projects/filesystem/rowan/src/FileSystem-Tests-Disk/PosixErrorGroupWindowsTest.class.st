@@ -145,7 +145,7 @@ PosixErrorGroupWindowsTest >> testCreationOfFilePosixError [
 	self assert: aPosixError options isNil.
 	self assert: aPosixError errorGroupName = errorGroup class name asString.
 
-	errorGroup := ChageModeErrorGroup new.
+	errorGroup := ChangeModeErrorGroup new.
 	aPosixError := errorGroup errorForNumber: 123 fileReference: fileReference.
 	self assert: aPosixError class posixName equals: 'EACCES'.
 	self assert: aPosixError reference equals: fileReference.

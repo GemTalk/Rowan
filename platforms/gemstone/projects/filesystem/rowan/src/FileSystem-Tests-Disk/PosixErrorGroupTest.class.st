@@ -80,7 +80,7 @@ PosixErrorGroupTest >> setupFileSystem [
 { #category : 'private' }
 PosixErrorGroupTest >> setupForChageModeErrorGroup [
 
-	errorGroup := ChageModeErrorGroup new
+	errorGroup := ChangeModeErrorGroup new
 ]
 
 { #category : 'private' }

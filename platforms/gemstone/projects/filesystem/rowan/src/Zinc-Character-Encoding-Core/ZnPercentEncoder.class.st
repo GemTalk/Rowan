@@ -52,7 +52,7 @@ ZnPercentEncoder >> characterEncoder [
 
 	self flag: 'GemStone/Pharo code switched for research'.
 
-	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+	self isGemStoneUtf8Encoding
 		ifTrue: [
 			self flag: 'TODO: In Pharo, ZnDefaultCharacterEncoder is a DynamicVariable. This must be handled differently in Gemstone'.
 			^ characterEncoder ifNil: [ characterEncoder := ZnCharacterEncoder utf8 ] ]

@@ -6,7 +6,7 @@ CharacterCollection >> asZnCharacterEncoder [
 
 	self flag: 'GemStone/Pharo code switched for research'.
 
-	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+	self isGemStoneUtf8Encoding
 		ifTrue: [
 			^ ZnCharacterEncoder newForEncoding: self
 			" 'UTF-8' asZnCharacterEncoder 

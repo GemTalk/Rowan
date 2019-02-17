@@ -15,7 +15,7 @@ Object >> assert: aBlockOrBoolean description: aStringOrBlock [
 		ifTrue: [
 			aBlockOrBoolean value ifFalse: [ AssertionFailure signal: aStringOrBlock value ] ]
 		ifFalse: [
-			aBlockOrBoolean ifFalse: [ AssertionFailure signal: aStringOrBlock value ] ]
+			aBlockOrBoolean ifFalse: [ AssertionFailure signal: aStringOrBlock ] ]
 ]
 
 { #category : '*filesystem-gemstone-kernel' }

@@ -33,9 +33,8 @@ ClientStore class >> defaultWorkingDirectory [
 	^self currentFs store defaultWorkingDirectory
 ]
 
-{ #category : 'current' }
+{ #category : 'class initialization' }
 ClientStore class >> initialize [
-	self initializeClientFS
 ]
 
 { #category : 'class initialization' }

@@ -22,7 +22,7 @@ ZnEncodedReadStream >> contents [
 
 	self flag: 'GemStone/Pharo code switched for research'.
 
-	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+	self isGemStoneUtf8Encoding
 		ifTrue: [
 			^ self collectionSpecies
 				streamContents: [ :collectionStream | 

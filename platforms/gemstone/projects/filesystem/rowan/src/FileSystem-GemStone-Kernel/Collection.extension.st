@@ -74,6 +74,20 @@ Collection >> isEmptyOrNil [
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
+Collection >> noneSatisfy: aBlock [
+	"Evaluate aBlock with the elements of the receiver. If aBlock returns false for all elements return true. Otherwise return false"
+
+	self do: [:item | (aBlock value: item) ifTrue: [^ false]].
+	^ true
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+Collection >> removeAll [
+
+	self removeAll: self
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
 Collection >> sort [
 
 	"Sort this array into ascending order using the '<=' operator."

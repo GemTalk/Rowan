@@ -14,8 +14,6 @@ RwProjectLoadConfiguration {
 					'FileSystem-Memory',
 					'FileSystem-Path',
 					'Zinc-Character-Encoding-Core',
-					'Zinc-Resource-Meta-Core',
-					'Zinc-Resource-Meta-FileSystem',
 					'Files',
 					'Kernel-Methods',
 					'Network-UUID'
@@ -28,7 +26,6 @@ RwProjectLoadConfiguration {
 					'FileSystem-Tests-Disk',
 					'FileSystem-Tests-Memory',
 					'Zinc-Character-Encoding-Tests',
-					'Zinc-Resource-Meta-Tests',
 					'Files-Tests',
 					'Network-UUID-Tests',
 					'FileSystem-Tests-GemStone'

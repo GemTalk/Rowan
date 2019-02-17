@@ -98,7 +98,7 @@ ZnUTF8Encoder >> decodeAsCodePoints: bytes [
 
 	self flag: 'GemStone/Pharo code switched for research'.
 
-	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+	self isGemStoneUtf8Encoding
 		ifTrue: [
 			| ar |
 			ar := {}.
@@ -114,7 +114,7 @@ ZnUTF8Encoder >> decodeBytes: bytes [
 
 	self flag: 'GemStone/Pharo code switched for research'.
 
-	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+	self isGemStoneUtf8Encoding
 		ifTrue: [
 			^ [bytes decodeFromUTF8] on: ArgumentError do: [:s | ZnCharacterEncodingError signal]] 
 		ifFalse: [
@@ -127,7 +127,7 @@ ZnUTF8Encoder >> encodeCodePoints: codePoints [
 
 	self flag: 'GemStone/Pharo code switched for research'.
 
-	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+	self isGemStoneUtf8Encoding
 		ifTrue: [
 			^ codePoints asByteArray asUnicodeString encodeAsUTF8]
 		ifFalse: [
@@ -140,7 +140,7 @@ ZnUTF8Encoder >> encodedByteCountFor: character [
 
 	self flag: 'GemStone/Pharo code switched for research'.
 
-	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+	self isGemStoneUtf8Encoding
 		ifTrue: [
 			^ character asString encodeAsUTF8 size]
 		ifFalse: [
@@ -165,7 +165,7 @@ ZnUTF8Encoder >> encodedByteCountForCodePoints: codePoints [
 
 	self flag: 'GemStone/Pharo code switched for research'.
 	
-	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+	self isGemStoneUtf8Encoding
 		ifTrue: [
 			^ (self encodeCodePoints: codePoints) size]
 		ifFalse: [
@@ -178,7 +178,7 @@ ZnUTF8Encoder >> encodedByteCountForString: string [
 
 	self flag: 'GemStone/Pharo code switched for research'.
 	
-	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+	self isGemStoneUtf8Encoding
 		ifTrue: [
 			^ (self encodeString: string) size]
 		ifFalse: [
@@ -191,7 +191,7 @@ ZnUTF8Encoder >> encodeString: string [
 
 	self flag: 'GemStone/Pharo code switched for research'.
 
-	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+	self isGemStoneUtf8Encoding
 		ifTrue: [
 			^ [string encodeAsUTF8 asByteArray] on: ArgumentError do: [:s | ZnInvalidUTF8 signal]  ]
 		ifFalse: [
@@ -242,7 +242,7 @@ ZnUTF8Encoder >> next: count putAll: string startingAt: offset toStream: stream 
 	
 	self flag: 'GemStone/Pharo code switched for research'.
 
-	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+	self isGemStoneUtf8Encoding
 		ifTrue: [
 			stream nextPutAll: (string copyFrom: offset to: offset + count - 1) encodeAsUTF8 asByteArray]
 		ifFalse: [
@@ -355,7 +355,7 @@ ZnUTF8Encoder >> readInto: string startingAt: offset count: requestedCount fromS
 
 	self flag: 'GemStone/Pharo code switched for research'.
 
-	((SessionTemps current at: #ZnEncoding otherwise: #GemStone) = #GemStone)
+	self isGemStoneUtf8Encoding
 		ifTrue: [
 			| decodedCollection pos |
 

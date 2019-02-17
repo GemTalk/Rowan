@@ -23,6 +23,6 @@ PosixErrorGroupClientTest >> testDelegationOfFileOpenError [
 			aFilePosixError := OpenFileErrorGroup new errorForNumber: 19 fileReference: fileReference options: FileOptions read.
 			self assert: aFilePosixError class posixName equals: 'EROFS'.
 
-		posixErrorClass := ChageModeErrorGroup new errorClassForErrorNumber: 123 fileReference: fileReference.
+		posixErrorClass := ChangeModeErrorGroup new errorClassForErrorNumber: 123 fileReference: fileReference.
 		self assert: posixErrorClass posixName equals: 'EACCES'].
 ]

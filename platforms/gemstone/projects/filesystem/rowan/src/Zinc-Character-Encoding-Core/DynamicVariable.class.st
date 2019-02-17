@@ -12,21 +12,17 @@ DynamicVariable class >> value: anObject during: aBlock [
 
 { #category : 'accessing' }
 DynamicVariable >> value: anObject during: aBlock [
-	"
-	The following is the Pharo code 
 
-	| activeProcess oldValue |
-	activeProcess := Processor activeProcess.
-	""oldValue will be nil if the variable has not yet been set""
-	oldValue := activeProcess psValueAt: index.
-	^ [ activeProcess
+"	The following is the Pharo code "
+
+	| oldValue |
+	"oldValue will be nil if the variable has not yet been set"
+	oldValue := self psValueAt: index.
+	^ [ self
 			psValueAt: index
 			put: anObject.
 		aBlock value ] ensure: [ 
-			activeProcess
+			self
 				psValueAt: index
-				put: oldValue ]"
-
-	index := anObject.
-	aBlock value
+				put: oldValue ]
 ]
