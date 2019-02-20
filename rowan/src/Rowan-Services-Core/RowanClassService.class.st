@@ -192,6 +192,7 @@ RowanClassService >> classHierarchy [
 		classService := key == #nil ifTrue:[#nil] ifFalse: [(self hierarchyClassServiceFor: key name) meta: meta].
 		hierarchyServices at: classService put: (self subclassServices: value). 
 	].
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'Accessing' }
