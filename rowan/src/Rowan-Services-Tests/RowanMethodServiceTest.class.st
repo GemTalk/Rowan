@@ -84,6 +84,26 @@ RowanMethodServiceTest >> tearDown [
 ]
 
 { #category : 'tests' }
+RowanMethodServiceTest >> test_classNameIsString [
+
+	| methodService organizer |
+	self jadeiteIssueTested: #issue441 withTitle: '(3.0.62) suspicious code in RowanClassService>>hierarchyClassServiceFor:'.
+	organizer := ClassOrganizer new. 
+	methodService := RowanMethodService forGsNMethod: (RowanMethodServiceTest compiledMethodAt: #setUp) organizer: organizer.
+	self assert: (methodService className isKindOf: String).
+	self assert: methodService className = 'RowanMethodServiceTest'.
+
+	methodService := RowanMethodService forSelector: #setUp class: RowanMethodServiceTest meta: false organizer: organizer.
+	self assert: (methodService className isKindOf: String).
+	self assert: methodService className = 'RowanMethodServiceTest'.
+
+	methodService := RowanMethodService source: 'fnoodle' selector: #fnoodle category: 'other' className: 'RowanMethodServiceTest' packageName: 'Rowan-Services-Tests' meta: true. 
+	self assert: (methodService className isKindOf: String).
+	self assert: methodService className = 'RowanMethodServiceTest'.
+	System abortTransaction.
+]
+
+{ #category : 'tests' }
 RowanMethodServiceTest >> test_noStepPoints [
 	| classService methodService |
 	classService := RowanClassService forClassNamed: self servicesDefaultClassName.

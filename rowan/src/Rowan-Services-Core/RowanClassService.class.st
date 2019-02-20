@@ -192,6 +192,7 @@ RowanClassService >> classHierarchy [
 		classService := key == #nil ifTrue:[#nil] ifFalse: [(self hierarchyClassServiceFor: key name) meta: meta].
 		hierarchyServices at: classService put: (self subclassServices: value). 
 	].
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'Accessing' }
@@ -300,7 +301,6 @@ RowanClassService >> fastRefresh [
 	| theClass |
 	theClass := self classFromName. 
 	self refreshFrom: theClass. 
-	RowanCommandResult initializeResults. 
 	methods do:[:service |
 			service source: nil; 
 					stepPoints: Array new.
@@ -375,7 +375,7 @@ RowanClassService >> hash [
 { #category : 'private' }
 RowanClassService >> hierarchyClassServiceFor: className [
 	^className asString = name asString ifTrue:[
-			className = 'Object' 
+			className asString = 'Object' 
 				ifTrue:[
 					RowanClassService basicForClassNamed: className]
 				ifFalse:[
@@ -966,6 +966,7 @@ RowanClassService >> updateClass [
 	| theClass |
 	theClass := self classFromName. 
 	theClass isNil ifTrue:[oop := nil. ^self]. 
+	theClass isBehavior ifFalse:[oop := theClass asOop. ^self].
 	self refreshFrom: theClass.
 	RowanCommandResult addResult: self
 ]
