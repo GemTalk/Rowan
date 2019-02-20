@@ -151,8 +151,7 @@ RowanMethodService >> className [
 
 { #category : 'Updating' }
 RowanMethodService >> className: newValue [
-	className := newValue
-
+	className := newValue asString
 ]
 
 { #category : 'Accessing' }
@@ -230,7 +229,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	breakPoints := self breakPointsFor: gsNMethod.
 	source := gsNMethod sourceString.
 	category := (classOrMeta categoryOfSelector: selector) asString.
-	className := theClass name. 
+	className := theClass name asString. 
 	packageName := gsNMethod rowanPackageName. 
 	projectName := gsNMethod rowanProjectName.
 	self setSupersAndSubsFor: classOrMeta.
