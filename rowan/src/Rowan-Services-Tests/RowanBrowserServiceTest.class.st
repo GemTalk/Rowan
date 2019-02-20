@@ -27,7 +27,7 @@ RowanBrowserServiceTest >> test_windowsRegistry [
 	self jadeiteIssueTested: #issue385 withTitle: 'Inspector should keep associated root object alive'.
 	browserService := RowanBrowserService new. 
 	object := Object new. 
-	browserService saveRootObject: object windowHandle: 123456. 
+	browserService saveRootObject: object asOop windowHandle: 123456. 
 	self assert: (browserService openWindows at: 123456) equals: object.
 	browserService releaseWindowHandle: 123456. 
 	self assert: (browserService openWindows at: 123456 ifAbsent:['gone']) equals: 'gone'.
