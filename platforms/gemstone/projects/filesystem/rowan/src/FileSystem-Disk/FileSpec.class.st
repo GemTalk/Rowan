@@ -12,7 +12,7 @@ Class {
 { #category : 'instance creation' }
 FileSpec class >> append [
 
-	^self onCurrent
+	^self new
 		initializeForAppend;
 		yourself
 ]
@@ -20,7 +20,7 @@ FileSpec class >> append [
 { #category : 'instance creation' }
 FileSpec class >> appendAndRead [
 
-	^self onCurrent
+	^self new
 		initializeForAppendAndRead;
 		yourself
 ]
@@ -28,7 +28,7 @@ FileSpec class >> appendAndRead [
 { #category : 'instance creation' }
 FileSpec class >> appendAndReadBinary [
 
-	^self onCurrent
+	^self new
 		initializeForAppendAndReadBinary;
 		yourself
 ]
@@ -36,7 +36,7 @@ FileSpec class >> appendAndReadBinary [
 { #category : 'instance creation' }
 FileSpec class >> appendBinary [
 
-	^self onCurrent
+	^self new
 		initializeForAppendBinary;
 		yourself
 ]
@@ -55,18 +55,8 @@ FileSpec class >> on: aFileSystem [
 ]
 
 { #category : 'instance creation' }
-FileSpec class >> onClient [
-	^self on: FileSystem clientDisk
-]
-
-{ #category : 'instance creation' }
-FileSpec class >> onCurrent [
-	^self new
-]
-
-{ #category : 'instance creation' }
 FileSpec class >> read [
-	^self onCurrent
+	^self new
 		initializeForRead;
 		yourself
 ]
@@ -74,7 +64,7 @@ FileSpec class >> read [
 { #category : 'instance creation' }
 FileSpec class >> readBinary [
 
-	^self onCurrent
+	^self new
 		initializeForReadBinary;
 		yourself
 ]
@@ -82,7 +72,7 @@ FileSpec class >> readBinary [
 { #category : 'instance creation' }
 FileSpec class >> readWrite [
 
-	^self onCurrent
+	^self new
 		initializeForReadWrite;
 		yourself
 ]
@@ -90,7 +80,7 @@ FileSpec class >> readWrite [
 { #category : 'instance creation' }
 FileSpec class >> readWriteBinary [
 
-	^self onCurrent
+	^self new
 		initializeForReadWriteBinary;
 		yourself
 ]
@@ -98,7 +88,7 @@ FileSpec class >> readWriteBinary [
 { #category : 'instance creation' }
 FileSpec class >> readWriteTruncated [
 
-	^self onCurrent
+	^self new
 		initializeForReadWriteTruncated;
 		yourself
 ]
@@ -106,7 +96,7 @@ FileSpec class >> readWriteTruncated [
 { #category : 'instance creation' }
 FileSpec class >> readWriteTruncatedBinary [
 
-	^self onCurrent
+	^self new
 		initializeForReadWriteTruncatedBinary;
 		yourself
 ]
@@ -114,7 +104,7 @@ FileSpec class >> readWriteTruncatedBinary [
 { #category : 'instance creation' }
 FileSpec class >> write [
 
-	^self onCurrent
+	^self new
 		initializeForWrite;
 		yourself
 ]
@@ -122,7 +112,7 @@ FileSpec class >> write [
 { #category : 'instance creation' }
 FileSpec class >> writeBinary [
 
-	^self onCurrent
+	^self new
 		initializeForWriteBinary;
 		yourself
 ]
@@ -130,7 +120,7 @@ FileSpec class >> writeBinary [
 { #category : 'instance creation' }
 FileSpec class >> writeHighZipped [
 
-	^self onCurrent
+	^self new
 		initializeForWriteHighZipped;
 		yourself
 ]
@@ -138,7 +128,7 @@ FileSpec class >> writeHighZipped [
 { #category : 'instance creation' }
 FileSpec class >> writeLowZipped [
 
-	^self onCurrent
+	^self new
 		initializeForWriteLowZipped;
 		yourself
 ]
@@ -146,7 +136,7 @@ FileSpec class >> writeLowZipped [
 { #category : 'instance creation' }
 FileSpec class >> writeZipped [
 
-	^self onCurrent
+	^self new
 		initializeForWriteZipped;
 		yourself
 ]
@@ -254,19 +244,19 @@ FileSpec >> initializeForAppend [
 
 { #category : 'initialization' }
 FileSpec >> initializeForAppendAndRead [
-	self fileOptions: FileOptions appendAndRead.
+	self fileOptions: FileOptions append read.
 	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForAppendAndReadBinary [
-	self fileOptions: FileOptions appendAndReadBinary.
+	self fileOptions: FileOptions append read binaryFileType.
 	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForAppendBinary [
-	self fileOptions: FileOptions appendBinary.
+	self fileOptions: FileOptions append binaryFileType.
 	self beUtf8Encoded
 ]
 
@@ -278,7 +268,7 @@ FileSpec >> initializeForRead [
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadBinary [
-	self fileOptions: FileOptions readBinary.
+	self fileOptions: FileOptions read binaryFileType.
 	self beUtf8Encoded
 ]
 
@@ -290,19 +280,19 @@ FileSpec >> initializeForReadWrite [
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadWriteBinary [
-	self fileOptions: FileOptions readWriteBinary.
+	self fileOptions: FileOptions readWrite binaryFileType.
 	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadWriteTruncated [
-	self fileOptions: FileOptions readWriteTruncated.
+	self fileOptions: FileOptions readWrite truncate create.
 	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadWriteTruncatedBinary [
-	self fileOptions: FileOptions readWriteTruncatedBinary.
+	self fileOptions: FileOptions readWrite truncate binaryFileType.
 	self beUtf8Encoded
 ]
 
@@ -314,18 +304,18 @@ FileSpec >> initializeForWrite [
 
 { #category : 'initialization' }
 FileSpec >> initializeForWriteBinary [
-	self fileOptions: FileOptions writeBinary.
+	self fileOptions: FileOptions write binaryFileType.
 	self beUtf8Encoded
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForWriteHighZipped [
-	self fileOptions: FileOptions writeWithHighCompression
+	self fileOptions: FileOptions write gzipHighCompression
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForWriteLowZipped [
-	self fileOptions: FileOptions writeWithLowCompression
+	self fileOptions: FileOptions write gzipLowCompression
 ]
 
 { #category : 'initialization' }
@@ -365,8 +355,8 @@ FileSpec >> isWritable [
 ]
 
 { #category : 'printing' }
-FileSpec >> modeString [
-	^self fileOptions modeString
+FileSpec >> mode [
+	^self fileOptions mode
 ]
 
 { #category : 'accessing' }

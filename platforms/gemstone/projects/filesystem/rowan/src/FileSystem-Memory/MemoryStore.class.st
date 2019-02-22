@@ -99,19 +99,6 @@ MemoryStore >> basicOpen: path options: aFileOptions [
 ]
 
 { #category : 'private' }
-MemoryStore >> basicOpen: path writable: writeMode [
-	^ self
-		nodeAt: path
-		ifPresent: [ :aMemoryFileSystemEntry | 
-			aMemoryFileSystemEntry
-				basicOpen;
-				yourself ]
-		ifAbsent: [ writeMode isWritable
-				ifTrue: [ self createFile: path ] 
-				ifFalse: [ self signalFileDoesNotExist: path ] ]
-]
-
-{ #category : 'private' }
 MemoryStore >> basicPosixPermissions: anEntry [
 	^ 8r777
 ]
@@ -235,18 +222,6 @@ MemoryStore >> openFileStream: path options: aFileOptions [
 	| entry |
 	entry := self basicOpen: path options: aFileOptions.
 	^ aFileOptions isWritable
-		ifTrue: [ entry writeStream ]
-		ifFalse: [ entry readStreamPortable ]
-]
-
-{ #category : 'public' }
-MemoryStore >> openFileStream: path writable: writeMode [
-
-	"writeMode - #read, #append, #write"
-
-	| entry |
-	entry := self basicOpen: path writable: writeMode.
-	^ writeMode == #write
 		ifTrue: [ entry writeStream ]
 		ifFalse: [ entry readStreamPortable ]
 ]

@@ -38,6 +38,24 @@ DiskFileSystemTest >> testIsDiskFileSystem [
 ]
 
 { #category : 'tests' }
+DiskFileSystemTest >> testIsReadable [
+	self assert: (filesystem store isReadable: FileLocator imageDirectory resolve path)
+]
+
+{ #category : 'tests' }
+DiskFileSystemTest >> testIsWritable [
+	| aReference |
+
+	self deny: (filesystem store isWritable: FileLocator imageDirectory resolve path).
+
+	aReference := FileLocator temp / 'plonk'.
+    self markForCleanup: aReference resolve path.
+	self deny: aReference exists.
+	aReference writeStream close. 
+	self assert: (filesystem store isWritable: aReference resolve path).
+]
+
+{ #category : 'tests' }
 DiskFileSystemTest >> testMoveMemoryToDisk [
 	"Test moving a file from the memory filesystem to the disk filesystem.
 	This ensures that the copyAndDelete:to: is called correctly."

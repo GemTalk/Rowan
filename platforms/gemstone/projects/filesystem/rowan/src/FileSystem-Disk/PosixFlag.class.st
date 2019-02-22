@@ -92,11 +92,6 @@ PosixFlag class >> valueForSelector: valueSelector [
 		ifFalse: [self defaultPlatformValue]
 ]
 
-{ #category : 'querry' }
-PosixFlag >> optionValue [
-	^self store optionPlatformValueFor: self class posixName
-]
-
 { #category : 'accessing' }
 PosixFlag >> parent [
 	^parent
@@ -105,6 +100,11 @@ PosixFlag >> parent [
 { #category : 'accessing' }
 PosixFlag >> parent: anObject [
 	parent := anObject
+]
+
+{ #category : 'querry' }
+PosixFlag >> posixFlagValue [
+	^self store optionPlatformValueFor: self class posixName
 ]
 
 { #category : 'querry' }

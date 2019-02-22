@@ -188,48 +188,6 @@ GsFile class >> lookupDirectoryEntry: fullPath [
 ]
 
 { #category : '*FileSystem-Gemstone-Kernel' }
-GsFile class >> open: aPathName withOptions: aFileOptions [
-	"This is the current way of openning a file"
-	^self open: aPathName mode: aFileOptions modeString onClient: aFileOptions isForeignFileSystem withCompression: aFileOptions isGzipped.
-
-	"This section sketcher out how to open the file using POSIX flags"
-
-	"result := 
-		CfsOSHandle	
-			platformFunctionCreateFile: aPathName
-			fdwAccess: aFileOptions accessRule
-			fdwShareMode: aFileOptions shareRule
-			lpsa: nil
-			fdwCreate: aFileOptions createRule
-			fdwAttrsAndFlags: WindowsStore fileAttributeNormal
-			hTemplateFile: nil.
-
-						\C equivalent: HANDLE CreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, 
-							LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile).
-						<c: pointer 'kernel32.dll':CreateFileA pointer uint32 uint32 pointer uint32 uint32 pointer>..
-
-	 result asInteger = WindowsStore invalidHandleValue 
-		ifTrue: [result := self getLastError  ex: <c: uint32 'kernel32.dll':GetLastError> - returns anInteger]
-		ifFalse: [result := 
-			CfsOSHandle	
-				platformFunctionCreateFile: aPathName
-				fdwAccess: aFileOptions accessRule
-				fdwShareMode: aFileOptions share windowsShareRule
-				lpsa: nil
-				fdwCreate: WindowsStore truncateExisting
-				fdwAttrsAndFlags: WindowsStore fileAttributeNormal
-				hTemplateFile: nil.
-			result asInteger = WindowsStore invalidHandleValue ifTrue: [result := self getLastError]"
-]
-
-{ #category : '*FileSystem-Gemstone-Kernel' }
-GsFile class >> openReference: aFileReference withOptions: aFileOptions [
-
-	^(self open: aFileReference fullName withOptions: aFileOptions) 
-		ifNil: [FileDoesNotExistException signalWith: aFileReference fullName]
-]
-
-{ #category : '*FileSystem-Gemstone-Kernel' }
 GsFile class >> rename: oldFileFullName to: newFileFullName [
 	^(self renameFileOnServer: oldFileFullName to: newFileFullName) = 0 
 		ifTrue: [0] 

@@ -32,7 +32,7 @@ FileSystemHandleTest >> setUp [
 	super setUp.
 	filesystem := self createFileSystem.
 	reference := filesystem * 'plonk'.
-	handle := reference openWithOptions: filesystem readWriteTruncatedFileSpec fileOptions
+	handle := reference openOptions: FileOptions write
 ]
 
 { #category : 'running' }
@@ -94,6 +94,10 @@ FileSystemHandleTest >> testCreatedOpen [
 
 { #category : 'tests' }
 FileSystemHandleTest >> testEnsureClosed [
+
+	filesystem := self createFileSystem.
+	reference := filesystem * 'plonk'.
+	handle := reference openOptions: FileOptions write.
 	handle ensureClosed.
 	self deny: handle isOpen.
 	handle ensureClosed.
@@ -128,7 +132,7 @@ FileSystemHandleTest >> testReadBufferTooLarge [
 { #category : 'tests' }
 FileSystemHandleTest >> testReadOnly [
 	handle close.
-	handle := reference openWithOptions: filesystem readFileOptions.
+	handle := reference openOptions: filesystem readFileOptions.
 	self 
 		should: 
 			[ handle 

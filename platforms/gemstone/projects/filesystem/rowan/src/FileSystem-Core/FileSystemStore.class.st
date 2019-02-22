@@ -95,7 +95,7 @@ FileSystemStore >> basicModificationTime: aNode [
 ]
 
 { #category : 'error signalling' }
-FileSystemStore >> basicOpen: aPath writable: aBoolean [
+FileSystemStore >> basicOpen: aPath  options: aFileOptions [
 	"open the file at the given path and return an identifier"
 	self subclassResponsibility
 ]
@@ -299,6 +299,11 @@ FileSystemStore >> isFile: aPath [
 	
 ]
 
+{ #category : 'testing' }
+FileSystemStore >> isForeignFileSystem [
+	^ false
+]
+
 { #category : 'public' }
 FileSystemStore >> isSymlink: aPath [
 	aPath isRoot ifTrue: [ ^ true ].
@@ -346,7 +351,7 @@ FileSystemStore >> open [
 ]
 
 { #category : 'public' }
-FileSystemStore >> openFileStream: path writable: writable [
+FileSystemStore >> openFileStream: path options: aFileOptions [
 	self subclassResponsibility
 ]
 

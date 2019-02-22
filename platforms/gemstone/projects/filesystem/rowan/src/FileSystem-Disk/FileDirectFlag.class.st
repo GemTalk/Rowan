@@ -1,4 +1,6 @@
 "
+O_DIRECT
+
 Try to minimize cache effects of the I/O to and from this file.  In general this will degrade performance, but it is useful in special situations, such as when applications do their own caching.  File I/O is done directly to/from user-space buffers.  The O_DIRECT flag on its own makes an effort to transfer data synchronously, but does not give the guarantees of the O_SYNC flag that data and necessary metadata are transferred.  To guarantee synchronous I/O, O_SYNC must be used in addition to O_DIRECT.
 
 ====

@@ -5,16 +5,17 @@ This gives a more flexible and nuanced way of defining how a file is to be opene
 information has been garnered from the VA Smalltalk POSIX implmenetion of CfsFielDescriptior and CfsDirectoryDescriptor.
 
 Instance Variables:
-mode 			-	This contains the access mode of the file - O_RDONLY | O_RDWR | O_WRONLY. 
+openModeFlag -	This contains the access mode of the file - O_RDONLY | O_RDWR | O_WRONLY. 
 						These modes are represented by the classes FileOpenReadOnlyMode, FileOpenReadWriteMode, and FileOpenWriteOnlyMode.
-options			- 	This contains a collection of the options which are used to further define how the file is opened, created if missing, truncate, append, etc.
+posixFlags		- 	This contains a collection of the options which are used to further define how the file is opened, created if missing, truncate, append, etc.
 						Options contais instances of subclasses of FileCreateOption
+fileType			-   This defines the file type. Available types are Binary, Text, Gzip (Currently GemStone only). The former two are only relevant to Windows.
+						The difference between Binary and Text is how cr/lf is handled. In Unicode this distinction is non-sensical so Binary is recommended for Unicode files.
+share 			-	Indicates how the file is to be shared with others.
 
 API:
 modeString	-	Returns the traditional unix mode string. (See table below.) This is implemented to support GemStone's GsFile file class.
 isWritable		-	Returns true/false based on the access mode - O_RDONLY | O_RDWR | O_WRONLY. This is implemen to support Pharo's File file class.
-
-
 
 This table shows the mapping between the file options and the traditional unix string for defining file open mode.
 
@@ -27,14 +28,15 @@ Mode                 File Options (Flags)
 	w+				O_RDWR | O_CREAT | O_TRUNC
 	a+				O_RDWR | O_CREAT | O_APPEND
 
-The
+See https://linux.die.net/man/3/fopen for more details on the fopen open modes.
 "
 Class {
 	#name : 'FileOptions',
 	#superclass : 'Object',
 	#instVars : [
+		'openModeFlag',
 		'mode',
-		'options',
+		'posixFlags',
 		'fileType',
 		'share',
 		'permissionOptions',
@@ -45,43 +47,8 @@ Class {
 
 { #category : 'instance creation' }
 FileOptions class >> append [
-	^self basicNew 
+	^self new 
 		initializeAppend;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileOptions class >> appendAndRead [
-	^self basicNew
-		initializeAppendAndRead;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileOptions class >> appendAndReadBinary [
-	^self appendAndRead
-		beBinaryFileType;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileOptions class >> appendBinary [
-	^self append
-		beBinaryFileType;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileOptions class >> appendWithHighCompression [
-	^self basicNew
-		initializeAppendWithHighCompression;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileOptions class >> appendWithLowCompression [
-	^self basicNew
-		initializeAppendWithLowCompression;
 		yourself
 ]
 
@@ -94,71 +61,22 @@ FileOptions class >> new [
 
 { #category : 'instance creation' }
 FileOptions class >> read [
-	^self basicNew
+	^self new
 		initializeRead;
 		yourself
 ]
 
 { #category : 'instance creation' }
-FileOptions class >> readBinary [
-	^self read
-		beBinaryFileType;
-		yourself
-]
-
-{ #category : 'instance creation' }
 FileOptions class >> readWrite [
-	^self basicNew
+	^self new
 		initializeReadWrite;
 		yourself
 ]
 
 { #category : 'instance creation' }
-FileOptions class >> readWriteBinary [
-	^self readWrite
-		beBinaryFileType;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileOptions class >> readWriteTruncated [
-	^self basicNew
-		initializeReadWriteTruncated;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileOptions class >> readWriteTruncatedBinary [
-	^self readWriteTruncated
-		beBinaryFileType;
-		yourself
-]
-
-{ #category : 'instance creation' }
 FileOptions class >> write [
-	^self basicNew
+	^self new
 		initializeWrite;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileOptions class >> writeBinary [
-	^self write
-		beBinaryFileType;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileOptions class >> writeWithHighCompression [
-	^self write
-		initializeWriteWithHighCompression;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileOptions class >> writeWithLowCompression [
-	^self write
-		initializeWriteWithLowCompression;
 		yourself
 ]
 
@@ -171,67 +89,59 @@ FileOptions >> accessPermissions [
 
 { #category : 'convenience' }
 FileOptions >> accessRule [
-	^self mode accessRule
+	^self openModeFlag accessRule
 ]
 
-{ #category : 'options - adding and removing' }
+{ #category : 'posix flags - adding and removing' }
 FileOptions >> addAppendFlag [
 
-	self addOption: FileAppendFlag new
+	self addPosixFlag: FileAppendFlag new
 ]
 
-{ #category : 'options - adding and removing' }
+{ #category : 'posix flags - adding and removing' }
 FileOptions >> addCreateFlag [
 
-	self addOption: FileCreateFlag new
+	self addPosixFlag: FileCreateFlag new
 ]
 
-{ #category : 'options - adding and removing' }
+{ #category : 'posix flags - adding and removing' }
 FileOptions >> addExclusiveFlag [
 
-	self addOption: FileExclusiveFlag new
+	self addPosixFlag: FileExclusiveFlag new
 ]
 
-{ #category : 'options - adding and removing' }
-FileOptions >> addOption: anOption [
-	anOption parent: self.
-	self options add: anOption
+{ #category : 'posix flags - adding and removing' }
+FileOptions >> addPosixFlag: aPosixFlag [
+	(self hasPosixFlag: aPosixFlag class) ifTrue: [^self].
+	aPosixFlag parent: self.
+	self posixFlags add: aPosixFlag
 ]
 
-{ #category : 'options - adding and removing' }
+{ #category : 'posix flags - adding and removing' }
 FileOptions >> addTruncateFlag [
 
-	self addOption: FileTruncateFlag new
+	self addPosixFlag: FileTruncateFlag new
 ]
 
-{ #category : 'options' }
+{ #category : 'commands' }
+FileOptions >> append [
+	self hasNoReadOrWriteMode ifTrue: [^self signalOpenModeFlagNotDefined].
+	self addAppendFlag
+]
+
+{ #category : 'posix flags' }
 FileOptions >> appendFlag [
-	^self optionForClass: FileAppendFlag
-]
-
-{ #category : 'file type' }
-FileOptions >> beBinaryFileType [
-	self fileType: FileBinaryTypeFlag new
-]
-
-{ #category : 'file type' }
-FileOptions >> beHighCompression [
-	self fileType: FileGzipTypeFlag high
-]
-
-{ #category : 'file type' }
-FileOptions >> beLowCompression [
-	self fileType: FileGzipTypeFlag low
+	^self posixFlagForClass: FileAppendFlag
 ]
 
 { #category : 'sharing' }
-FileOptions >> bePrivate [
+FileOptions >> beNonShared [
 	self share: FileDenyReadWriteFlag new
 ]
 
-{ #category : 'open mode' }
+{ #category : 'open mode flag' }
 FileOptions >> beReadMode [
-	self mode: FileOpenReadOnlyFlag new.
+	self openModeFlag: FileOpenReadOnlyFlag new.
 ]
 
 { #category : 'sharing' }
@@ -239,9 +149,9 @@ FileOptions >> beReadOnlyShared [
 	self share: FileDenyWriteFlag new
 ]
 
-{ #category : 'open mode' }
+{ #category : 'open mode flag' }
 FileOptions >> beReadWriteMode [
-	self mode: FileOpenReadWriteFlag new.
+	self openModeFlag: FileOpenReadWriteFlag new.
 ]
 
 { #category : 'sharing' }
@@ -249,19 +159,25 @@ FileOptions >> beShared [
 	self share: FileDenyNoneFlag new
 ]
 
-{ #category : 'file type' }
-FileOptions >> beTextFileType [
-	self fileType: FileTextTypeFlag new
-]
-
-{ #category : 'open mode' }
+{ #category : 'open mode flag' }
 FileOptions >> beWriteMode [
-	self mode: FileOpenWriteOnlyFlag new.
+	self openModeFlag: FileOpenWriteOnlyFlag new.
 ]
 
 { #category : 'sharing' }
 FileOptions >> beWriteOnlyShared [
 	self share: FileDenyReadFlag new
+]
+
+{ #category : 'file type' }
+FileOptions >> binaryFileType [
+	self fileType: FileBinaryTypeFlag new
+]
+
+{ #category : 'commands' }
+FileOptions >> create [
+	self hasNoReadOrWriteMode ifTrue: [^self signalOpenModeFlagNotDefined].
+	self addCreateFlag
 ]
 
 { #category : 'convenience' }
@@ -271,29 +187,30 @@ FileOptions >> createRule [
 		ifNotNil: [:option | option createRule]
 ]
 
-{ #category : 'options' }
+{ #category : 'commands' }
+FileOptions >> exclusive [
+	self hasNoReadOrWriteMode ifTrue: [^self signalOpenModeFlagNotDefined].
+	self addExclusiveFlag
+]
+
+{ #category : 'posix flags' }
 FileOptions >> fileCreateFlag [
-	^self optionForClass: FileCreateFlag
+	^self posixFlagForClass: FileCreateFlag
 ]
 
-{ #category : 'options' }
+{ #category : 'posix flags' }
 FileOptions >> fileExclusiveFlag [
-	^self optionForClass: FileExclusiveFlag
+	^self posixFlagForClass: FileExclusiveFlag
 ]
 
-{ #category : 'options' }
-FileOptions >> fileOpenAndOptionsValue [
-	^self fileOpenModeValue + self fileOpenOptionsValue
+{ #category : 'posix flags' }
+FileOptions >> fileOpenFlagsTotalValue [
+	^self fileOpenModeValue + self posixFlagsTotalValue
 ]
 
-{ #category : 'options' }
+{ #category : 'posix flags' }
 FileOptions >> fileOpenModeValue [
-	^self mode optionValue
-]
-
-{ #category : 'options' }
-FileOptions >> fileOpenOptionsValue [
-	^self options inject: 0 into: [:total :ea | total + ea optionValue]
+	^self openModeFlag posixFlagValue
 ]
 
 { #category : 'accessing' }
@@ -302,109 +219,80 @@ FileOptions >> fileType [
 ]
 
 { #category : 'accessing' }
-FileOptions >> fileType: aFileTypeOption [
-	aFileTypeOption parent: self.
-	fileType := aFileTypeOption
+FileOptions >> fileType: aFileTypeFlag [
+	aFileTypeFlag parent: self.
+	fileType := aFileTypeFlag
+]
+
+{ #category : 'file type' }
+FileOptions >> gzipHighCompression [
+	self fileType: FileGzipTypeFlag high
+]
+
+{ #category : 'file type' }
+FileOptions >> gzipLowCompression [
+	self fileType: FileGzipTypeFlag low
 ]
 
 { #category : 'testing' }
 FileOptions >> hasExclsiveFlag [
-	^self hasOption: FileExclusiveFlag
+	^self hasPosixFlag: FileExclusiveFlag
 ]
 
 { #category : 'testing' }
 FileOptions >> hasFileAppendFlag [
-	^self hasOption: FileAppendFlag
+	^self hasPosixFlag: FileAppendFlag
 ]
 
 { #category : 'testing' }
 FileOptions >> hasFileCreateFlag [
-	^self hasOption: FileCreateFlag
+	^self hasPosixFlag: FileCreateFlag
 ]
 
 { #category : 'testing' }
 FileOptions >> hasFileTruncateFlag [
-	^self hasOption: FileTruncateFlag
+	^self hasPosixFlag: FileTruncateFlag
 ]
 
 { #category : 'testing' }
-FileOptions >> hasOption: anPosixFlagClass [
-	^(self optionForClass: anPosixFlagClass) notNil
+FileOptions >> hasNoReadOrWriteMode [
+	^self openModeFlag isNil
+]
+
+{ #category : 'testing' }
+FileOptions >> hasPosixFlag: anPosixFlagClass [
+	^(self posixFlagForClass: anPosixFlagClass) notNil
 ]
 
 { #category : 'initialization' }
 FileOptions >> initialize [
-	self options: OrderedCollection new.
+	self posixFlags: OrderedCollection new.
 	self permissionOptions: OrderedCollection new.
 	self beShared
 ]
 
 { #category : 'initialization' }
 FileOptions >> initializeAppend [
-	self initialize.
 	self beWriteMode.
 	self addCreateFlag.
 	self addAppendFlag
 ]
 
 { #category : 'initialization' }
-FileOptions >> initializeAppendAndRead [
-	self initialize.
-	self beReadWriteMode.
-	self addCreateFlag.
-	self addAppendFlag
-]
-
-{ #category : 'initialization' }
-FileOptions >> initializeAppendWithHighCompression [
-	self initializeAppend.
-	self beHighCompression
-]
-
-{ #category : 'initialization' }
-FileOptions >> initializeAppendWithLowCompression [
-	self initializeAppend.
-	self beLowCompression
-]
-
-{ #category : 'initialization' }
 FileOptions >> initializeRead [
-	self initialize.
 	self beReadMode
 ]
 
 { #category : 'initialization' }
 FileOptions >> initializeReadWrite [
-	self initialize.
 	self beReadWriteMode
 ]
 
 { #category : 'initialization' }
-FileOptions >> initializeReadWriteTruncated [
-	self initialize.
-	self initializeReadWrite.
-	self addCreateFlag.
-	self addTruncateFlag
-]
-
-{ #category : 'initialization' }
 FileOptions >> initializeWrite [
-	self initialize.
 	self beWriteMode.
 	self addCreateFlag.
 	self addTruncateFlag
-]
-
-{ #category : 'initialization' }
-FileOptions >> initializeWriteWithHighCompression [
-	self initializeWrite.
-	self beHighCompression
-]
-
-{ #category : 'initialization' }
-FileOptions >> initializeWriteWithLowCompression [
-	self initializeWrite.
-	self beLowCompression
 ]
 
 { #category : 'testing' }
@@ -419,46 +307,31 @@ FileOptions >> isGzipped [
 
 { #category : 'testing' }
 FileOptions >> isReadable [
-	^self mode isReadable
+	^self openModeFlag isReadable
 ]
 
 { #category : 'testing' }
 FileOptions >> isWritable [
-	^self mode isWritable
-]
-
-{ #category : 'accessing' }
-FileOptions >> mode [
-	^mode
-]
-
-{ #category : 'accessing' }
-FileOptions >> mode: aFileOpenMode [
-	aFileOpenMode parent: self.
-	mode :=  aFileOpenMode
+	^self openModeFlag isWritable
 ]
 
 { #category : 'printing' }
-FileOptions >> modeString [
+FileOptions >> mode [
 	| aStream |
 	aStream := WriteStream on: String new.
 	self printOpenModeStringOn: aStream.
 	^aStream contents
 ]
 
-{ #category : 'options' }
-FileOptions >> optionForClass: anPosixFlagClass [
-	^self options detect: [:ea | ea isKindOf: anPosixFlagClass] ifNone: [nil]
+{ #category : 'accessing' }
+FileOptions >> openModeFlag [
+	^openModeFlag
 ]
 
 { #category : 'accessing' }
-FileOptions >> options [
-	^options
-]
-
-{ #category : 'accessing' }
-FileOptions >> options: aCollection [
-	options := aCollection
+FileOptions >> openModeFlag: aFileOpenMode [
+	aFileOpenMode parent: self.
+	openModeFlag :=  aFileOpenMode
 ]
 
 { #category : 'accessing' }
@@ -481,17 +354,48 @@ FileOptions >> permissionOptions: aCollection [
 	permissionOptions := aCollection
 ]
 
+{ #category : 'posix flags' }
+FileOptions >> posixFlagForClass: anPosixFlagClass [
+	^self posixFlags detect: [:ea | ea isKindOf: anPosixFlagClass] ifNone: [nil]
+]
+
+{ #category : 'accessing' }
+FileOptions >> posixFlags [
+	^posixFlags
+]
+
+{ #category : 'accessing' }
+FileOptions >> posixFlags: aCollection [
+	posixFlags := aCollection
+]
+
+{ #category : 'posix flags' }
+FileOptions >> posixFlagsTotalValue [
+	^self posixFlags inject: 0 into: [:total :ea | total + ea posixFlagValue]
+]
+
 { #category : 'printing' }
 FileOptions >> printOpenModeStringOn: aStream [
 
-	self mode printOpenModeStringOn: aStream.
+	self openModeFlag printOpenModeStringOn: aStream.
 	self fileType ifNotNil: [:ft | ft printOpenModeStringOn: aStream.]
 ]
 
-{ #category : 'options - adding and removing' }
-FileOptions >> removeOption: anOption [
-	anOption parent: nil.
-	self options remove: anOption ifAbsent: []
+{ #category : 'commands' }
+FileOptions >> read [
+	self hasNoReadOrWriteMode ifTrue: [^self initializeRead].
+	self isWritable ifTrue: [self beReadWriteMode]
+]
+
+{ #category : 'commands' }
+FileOptions >> readWrite [
+	self initializeReadWrite
+]
+
+{ #category : 'posix flags - adding and removing' }
+FileOptions >> removePosixFlag: aPosixFlag [
+	aPosixFlag parent: nil.
+	self posixFlags remove: aPosixFlag ifAbsent: []
 ]
 
 { #category : 'accessing' }
@@ -500,9 +404,9 @@ FileOptions >> share [
 ]
 
 { #category : 'accessing' }
-FileOptions >> share: aFileShareOption [
-	aFileShareOption parent: self.
-	share := aFileShareOption
+FileOptions >> share: aFileShareFlag [
+	aFileShareFlag parent: self.
+	share := aFileShareFlag
 ]
 
 { #category : 'convenience' }
@@ -510,14 +414,31 @@ FileOptions >> shareRule [
 	^self share shareRule
 ]
 
+{ #category : 'errors' }
+FileOptions >> signalOpenModeFlagNotDefined [
+
+	self error: 'Attempting to add an open flag without first defining the opem mode of #read, #write or #readWrite'
+]
+
 { #category : 'convenience' }
 FileOptions >> store [
 	^self parent ifNil: [FileSystem disk store] ifNotNil: [:fs | fs store]
 ]
 
-{ #category : 'options' }
+{ #category : 'file type' }
+FileOptions >> textFileType [
+	self fileType: FileTextTypeFlag new
+]
+
+{ #category : 'commands' }
+FileOptions >> truncate [
+	self hasNoReadOrWriteMode ifTrue: [^self signalOpenModeFlagNotDefined].
+	self addTruncateFlag
+]
+
+{ #category : 'posix flags' }
 FileOptions >> truncateFlag [
-	^self optionForClass: FileTruncateFlag
+	^self posixFlagForClass: FileTruncateFlag
 ]
 
 { #category : 'convenience' }
@@ -525,4 +446,10 @@ FileOptions >> truncateRule [
 	^self truncateFlag
 		ifNil: [self store class noTruncateRule] 
 		ifNotNil: [:option | option truncateRule]
+]
+
+{ #category : 'commands' }
+FileOptions >> write [
+	self hasNoReadOrWriteMode ifTrue: [^self initializeWrite].
+	self isReadable ifTrue: [self beReadWriteMode]
 ]

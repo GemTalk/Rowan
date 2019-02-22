@@ -218,6 +218,26 @@ DiskStore class >> writeOnlyAccessRule [
 	FileOptionFeatureNotSupported signal: 'readWriteAccessRule'
 ]
 
+{ #category : 'public' }
+DiskStore >> _createDirectory: path [
+	^FileSystem fileClass createDirectory: path.
+]
+
+{ #category : 'public' }
+DiskStore >> _deleteDirectory: pathString [
+	^FileSystem fileClass deleteDirectory: pathString
+]
+
+{ #category : 'public' }
+DiskStore >> _deleteFile: pathString [
+	^FileSystem fileClass deleteFile: pathString
+]
+
+{ #category : 'public' }
+DiskStore >> _rename: sourcePathString to: targetPathString [
+	^FileSystem fileClass rename: sourcePathString to: targetPathString
+]
+
 { #category : 'comparing' }
 DiskStore >> = other [
 	^ self species = other species
@@ -292,13 +312,11 @@ DiskStore >> basicModificationTimeOf: anEntry [
 ]
 
 { #category : 'public' }
-DiskStore >> basicOpen: aPath writable: writeMode [
-
-	"writeMode - #read, #append, #write"
+DiskStore >> basicOpen: aPath options: aFileOptions [
 
 	| string |
 	string := self stringFromPath: aPath.
-	^FileSystem fileClass  open: string mode: writeMode modeString onClient: false
+	^FileSystem fileClass openPathName: string withOptions: aFileOptions
 ]
 
 { #category : 'private' }
@@ -336,7 +354,7 @@ DiskStore >> createDirectory: path [
 
 	| parent pathString result |
 	pathString := self stringFromPath: path.
-	result := FileSystem fileClass _createDirectory: pathString onClient: self isForeignFileSystem mode: nil.
+	result := self _createDirectory: pathString.
 	result
 		ifNil: [ 
 			parent := path parent.
@@ -375,18 +393,16 @@ DiskStore >> delete: path [
 
 { #category : 'public' }
 DiskStore >> deleteDirectory: pathString [
-	
-	(FileSystem fileClass _removeDirectory: pathString onClient: self isForeignFileSystem)
+	(self _deleteDirectory: pathString)
 		ifNil: [ self error: 'Error deleting directory ', pathString printString, ' :: ', FileSystem fileClass serverErrorString ]
 ]
 
 { #category : 'public' }
 DiskStore >> deleteFile: pathString [
-
-	(FileSystem fileClass _removeFile: pathString onClient: self isForeignFileSystem)
+	(self _deleteFile: pathString)
 		ifNil: [ FileDeletionError 
 					signalWith: pathString  
-					text: 'Could not delete file ' , pathString , '. Check the file is not open.' ].
+					text: 'Could not delete file ' , pathString , '. Check the file is not open.' ]
 ]
 
 { #category : 'printing' }
@@ -441,11 +457,6 @@ DiskStore >> isFile: aPath [
 		ifTrue: [  false ]
 		ifFalse: [ self basicIsFile: entry ].
 	
-]
-
-{ #category : 'testing' }
-DiskStore >> isForeignFileSystem [
-	^ false
 ]
 
 { #category : 'public' }
@@ -519,7 +530,7 @@ DiskStore >> rename: sourcePath to: destinationPath [
 	| sourcePathString targetPathString |
 	sourcePathString := self stringFromPath: sourcePath.
 	targetPathString := self stringFromPath: destinationPath.
-	^FileSystem fileClass rename: sourcePathString to: targetPathString onClient: self isForeignFileSystem
+	^self _rename: sourcePathString to: targetPathString
 ]
 
 { #category : 'private' }

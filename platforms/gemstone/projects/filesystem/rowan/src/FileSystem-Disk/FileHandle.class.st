@@ -52,43 +52,26 @@ FileHandle >> at: index write: buffer startingAt: start count: count [
 ]
 
 { #category : 'public' }
-FileHandle >> basicOpen [
-	^FileSystem fileClass openReference: self reference withOptions: self options
-]
-
-{ #category : 'public' }
 FileHandle >> binaryFileStream [
-	^BinaryFileStream 
-		handle: nil 
-		file: (FileSystem fileClass openReference: reference withOptions: self options) 
-		options: self options
+	^self binaryStream
 ]
 
 { #category : 'public' }
 FileHandle >> binaryReadStream [
-	"The file handle should be created with the file mode which indicates if it is a write or read stream"
-	"^ ZnBufferedReadStream on: (BinaryFileStream onFileHandle: self)"
-
-	^BinaryFileStream 
-		handle: id 
-		file: (FileSystem fileClass openReference: reference withOptions: self options) 
-		options: self options
+	^self binaryStream
 ]
 
 { #category : 'public' }
 FileHandle >> binaryStream [
 	^BinaryFileStream 
 		handle: nil 
-		file: (FileSystem fileClass openReference: reference withOptions: self options) 
+		file: (self open: reference withOptions: self options) 
 		options: self options
 ]
 
 { #category : 'public' }
 FileHandle >> binaryWriteStream [
-	^BinaryFileStream 
-		handle: nil 
-		file: (FileSystem fileClass openReference: reference withOptions: self options) 
-		options: self options
+	^self binaryStream
 ]
 
 { #category : 'public' }
@@ -124,7 +107,7 @@ FileHandle >> id: anObject [
 
 { #category : 'testing' }
 FileHandle >> isOpen [
-	^self id notNil
+	^self id ifNil: [false] ifNotNil: [self id isOpen] 
 ]
 
 { #category : 'public' }
@@ -132,6 +115,11 @@ FileHandle >> open [
 	self flag: 'TODO: for now we solely rely on the old FileStreams'.
 "	self id: self basicOpen.
 	self id ifNil: 	[self signalOpenError]"
+]
+
+{ #category : 'public' }
+FileHandle >> open: aFileReference withOptions: aFileOptions [
+	^FileSystem fileClass open: aFileReference withOptions: aFileOptions
 ]
 
 { #category : 'public' }

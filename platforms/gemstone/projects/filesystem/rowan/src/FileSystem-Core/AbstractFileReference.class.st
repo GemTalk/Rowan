@@ -610,7 +610,13 @@ AbstractFileReference >> nextVersion [
 ]
 
 { #category : 'streams' }
+AbstractFileReference >> openOptions: aFileOptions [
+	^ self resolve openOptions: aFileOptions
+]
+
+{ #category : 'streams' }
 AbstractFileReference >> openWithOptions: aFileOptions [
+	"This returns an instance of a file"
 	^ self resolve openWithOptions: aFileOptions
 ]
 

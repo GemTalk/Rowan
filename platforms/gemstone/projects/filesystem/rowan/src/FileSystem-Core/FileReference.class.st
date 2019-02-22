@@ -342,9 +342,14 @@ FileReference >> nextVersion [
 
 ]
 
-{ #category : 'streams' }
+{ #category : 'operations' }
+FileReference >> openOptions: aFileOptions [ 
+	^self fileSystem open: self options: aFileOptions
+]
+
+{ #category : 'operations' }
 FileReference >> openWithOptions: aFileOptions [ 
-	^ filesystem open: path options: aFileOptions
+	^filesystem open: self withOptions: aFileOptions
 ]
 
 { #category : 'accessing' }

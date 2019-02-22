@@ -1,4 +1,8 @@
 "
+From http://man7.org/linux/man-pages/man2/open.2.html
+
+O_CLOEXEC
+
 Enable the close-on-exec flag for the new file descriptor.
 Specifying this flag permits a program to avoid additional
 fcntl(2) F_SETFD operations to set the FD_CLOEXEC flag.
