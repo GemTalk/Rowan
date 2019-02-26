@@ -3,7 +3,3 @@ Class {
 	#superclass : 'FileSystemError',
 	#category : 'FileSystem-Disk'
 }
-
-{ #category : 'asdfasd' }
-FileOptionFeatureNotSupported >> aaa [
-]
