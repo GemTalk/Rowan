@@ -1,7 +1,7 @@
 Class {
 	#name : 'PosixErrorGroupWindowsTest',
 	#superclass : 'PosixErrorGroupTest',
-	#category : 'FileSystem-Tests-Disk-Base'
+	#category : 'FileSystem-Tests-Disk-ErrorGroups'
 }
 
 { #category : 'private' }

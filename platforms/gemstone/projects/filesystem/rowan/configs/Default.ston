@@ -9,8 +9,6 @@ RwProjectLoadConfiguration {
 			'core' : {
 				#packageNames : [
 					'FileSystem-Core',
-					'FileSystem-Disk-Errors',
-					'FileSystem-Disk-ErrorGroups',
 					'FileSystem-Disk-Options',
 					'FileSystem-Disk',
 					'FileSystem-GemStone-Kernel',

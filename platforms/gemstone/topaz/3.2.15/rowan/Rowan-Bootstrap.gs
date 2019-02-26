@@ -562,7 +562,7 @@ currentOrNil
 	packageManager defaultSymbolDictionaryName: #Globals.
 	#( 'FileSystem-GemStone-Kernel' 'Files' 'Files-Tests' 'Kernel-Methods' 'Network-UUID' 'Network-UUID-Tests'
       'Zinc-Character-Encoding-Core' 'Zinc-Character-Encoding-Tests' 'FileSystem-Core' 'FileSystem-Disk-Options'
-      'FileSystem-Disk-Errors' 'FileSystem-Disk-ErrorGroups' 'FileSystem-Disk'
+      'FileSystem-Disk'
       'FileSystem-Memory' 'FileSystem-Path' 'FileSystem-Tests-Attributes' 'FileSystem-Tests-Core'
       'FileSystem-Tests-Disk' 'FileSystem-Tests-GemStone' 'FileSystem-Tests-Memory')
 		do: [ :packageName |

@@ -10,7 +10,7 @@ Class {
 		'filesToDelete',
 		'directoriesToDelete'
 	],
-	#category : 'FileSystem-Tests-Disk-Base'
+	#category : 'FileSystem-Tests-Disk-ErrorGroups'
 }
 
 { #category : 'private' }
