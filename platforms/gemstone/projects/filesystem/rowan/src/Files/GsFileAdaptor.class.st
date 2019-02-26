@@ -11,13 +11,23 @@ GsFileAdaptor class >> _entriesIn: pathString [
 	^result _isArray ifTrue: [result] ifFalse:  [nil]
 ]
 
+{ #category : 'client' }
+GsFileAdaptor class >> _fileKind: aPathName onClient: aBoolean [
+	^GsFile _fileKind: aPathName onClient: aBoolean
+]
+
 { #category : 'accessing' }
 GsFileAdaptor class >> _fullPath: path filename: basename [
 	"If this is a directory, then the path needs to have a slash on the end"
 	| fullPath |
 	fullPath := path , '/' , basename.
-	(GsFile isDirectory: fullPath) == true ifTrue: [^fullPath , '/'].
+	(self isDirectory: fullPath) == true ifTrue: [^fullPath , '/'].
 	^fullPath
+]
+
+{ #category : 'client' }
+GsFileAdaptor class >> createClientDirectory: path [
+	^GsFile createClientDirectory: path
 ]
 
 { #category : 'accessing' }
@@ -31,9 +41,9 @@ GsFileAdaptor class >> currentWorkingDirectoryPath [
 	^GsFile _expandEnvVariable: 'PWD' isClient:false
 ]
 
-{ #category : 'accessing' }
-GsFileAdaptor class >> deleteClientDirectory: aPathName [
-	^GsFile _removeDirectory: aPathName onClient: true
+{ #category : 'client' }
+GsFileAdaptor class >> deleteClientDirectory: path [
+	^GsFile _removeDirectory: path onClient: true 
 ]
 
 { #category : 'accessing' }
@@ -51,10 +61,19 @@ GsFileAdaptor class >> deleteFile: aPathName [
 	^GsFile removeServerFile: aPathName
 ]
 
+{ #category : 'convenience' }
+GsFileAdaptor class >> doesNotUnderstand: aMessage [
+	"Redirect message to the resolved version of this GsFile."
+	(GsFile respondsTo: aMessage selector)
+		ifTrue: [ ^ GsFile perform: aMessage selector withArguments: aMessage arguments ].
+	
+	^ super doesNotUnderstand: aMessage.
+]
+
 { #category : 'accessing' }
 GsFileAdaptor class >> entriesIn: pathString [
 	| result |
-	result := GsFile _entriesIn: pathString.
+	result := self _entriesIn: pathString.
 	^(result ifNil: [#()])
 		reject: [:ea | (ea  endsWith: '.') or: [ea endsWith: '..']]
 ]
@@ -69,7 +88,7 @@ GsFileAdaptor class >> lookupDirectory: path filename: basename [
 
 	| fullPath|
 	fullPath := self _fullPath: path filename: basename.
-	^GsFile lookupDirectoryEntry: fullPath
+	^self lookupDirectoryEntry: fullPath
 ]
 
 { #category : 'accessing' }
@@ -88,7 +107,7 @@ GsFileAdaptor class >> lookupDirectoryEntry: fullPath [
 	}
 ]
 
-{ #category : 'accessing' }
+{ #category : 'instance creation' }
 GsFileAdaptor class >> openPathName: aPathName withOptions: aFileOptions [
 	"This is the current way of openning a file"
 	| aGsFile |
@@ -135,6 +154,22 @@ GsFileAdaptor >> atEnd: handle [
 { #category : 'convenience' }
 GsFileAdaptor >> close [
 	self file close
+]
+
+{ #category : 'accessing' }
+GsFileAdaptor >> close: handle [
+	"The handle is always nil. This is here for Pharo compatability"
+
+	self file close
+]
+
+{ #category : 'convenience' }
+GsFileAdaptor >> doesNotUnderstand: aMessage [
+	"Redirect message to the resolved version of this GsFile."
+	(self file respondsTo: aMessage selector)
+		ifTrue: [ ^ self file perform: aMessage selector withArguments: aMessage arguments ].
+	
+	^ super doesNotUnderstand: aMessage.
 ]
 
 { #category : 'convenience' }
@@ -186,7 +221,7 @@ GsFileAdaptor >> nextPutAll: stringOrByteArray [
 
 { #category : 'convenience' }
 GsFileAdaptor >> position: anInteger [
-	self file position: anInteger
+	^self file position: anInteger
 ]
 
 { #category : 'accessing' }
@@ -199,7 +234,7 @@ GsFileAdaptor >> read: handle into: readBuffer startingAt: startIndex count: cou
 { #category : 'accessing' }
 GsFileAdaptor >> setPosition: handle to: aPosition [
 	"The handle is always nil. This is here for Pharo compatability"
-		(self position: aPosition) ifNil: [ self error: 'position error' ]
+		(self file position: aPosition) ifNil: [ self error: 'position error' ]
 ]
 
 { #category : 'accessing' }

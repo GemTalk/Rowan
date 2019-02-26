@@ -349,6 +349,7 @@ FileReference >> openOptions: aFileOptions [
 
 { #category : 'operations' }
 FileReference >> openWithOptions: aFileOptions [ 
+	"This will return an instance of the File or FileAdaptor, depending on installation"
 	^filesystem open: self withOptions: aFileOptions
 ]
 

@@ -175,8 +175,7 @@ FileSystemTest >> testChildrenSortingRoot [
 	self markForCleanup: directory1.
 	self markForCleanup: directory2.
 	
-	self assert: filesystem workingDirectory children sort size = filesystem workingDirectory children size
-
+	self assert: filesystem workingDirectory children sort size equals: filesystem workingDirectory children size
 ]
 
 { #category : 'tests' }
@@ -449,8 +448,8 @@ FileSystemTest >> testEntryAt [
 	self assert: entry1 reference = (filesystem referenceTo: path1) asAbsolute.
 	self assert: entry2 reference = (filesystem referenceTo: path2) asAbsolute.
 
-	self assert: entry1 creationTime < entry2 creationTime.
-	self assert: entry1 modificationTime < entry2 modificationTime.
+	self assert: entry1 creationTime <= entry2 creationTime.
+	self assert: entry1 modificationTime <= entry2 modificationTime.
 ]
 
 { #category : 'tests' }

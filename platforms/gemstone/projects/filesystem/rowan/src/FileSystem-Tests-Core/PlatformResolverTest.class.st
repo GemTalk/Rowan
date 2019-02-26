@@ -19,17 +19,6 @@ PlatformResolverTest >> testCache [
 ]
 
 { #category : 'tests' }
-PlatformResolverTest >> testClientHome [
-	| reference |
-	resolver := ClientResolver forCurrentPlatform.
-	reference := resolver resolve: #home.
-	self assert: (reference isKindOf: FileReference).
-"	self assert: reference exists."	"Currently cannot lookup directory on client"
-	self assert: reference isAbsolute.
-	"self assert: reference isDirectory"  "Currently cannot lookup directory on client"
-]
-
-{ #category : 'tests' }
 PlatformResolverTest >> testHome [
 	| home |
 	home := self assertOriginResolves: #home.

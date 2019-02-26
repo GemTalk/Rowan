@@ -31,16 +31,6 @@ DiskStore class >> activeClassFor: anOsName [
 	^ self
 ]
 
-{ #category : 'class initialization' }
-DiskStore class >> allConcreteFilePosixErrorClasses [
-	^FilePosixError allConcreteFilePosixErrorClasses
-]
-
-{ #category : 'class initialization' }
-DiskStore class >> allConcretePosixFlagClasses [
-	^PosixFlag allConcretePosixFlagClasses
-]
-
 { #category : 'current' }
 DiskStore class >> createDefault [
 	^ self new
@@ -98,8 +88,10 @@ DiskStore class >> denyWriteShareRule [
 
 { #category : 'class initialization' }
 DiskStore class >> initialize [
+	"DiskStore initialize"
 	self initializePosixFlagValues.
-	self initializePosixErrorValues
+	self initializePosixErrorValues.
+	self allSubclasses do: [:ea | ea initialize]
 ]
 
 { #category : 'class initialization' }

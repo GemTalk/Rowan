@@ -26,11 +26,6 @@ FileSystemHandle class >> open: aReference withOptions: aFileOptions [
 	^ (self on: aReference options: aFileOptions) open
 ]
 
-{ #category : 'instance creation' }
-FileSystemHandle class >> openReference: aReference withOptions: aFileOptions [
-	^ (self on: aReference options: aFileOptions) open
-]
-
 { #category : 'public' }
 FileSystemHandle >> at: index [
 	| buffer |

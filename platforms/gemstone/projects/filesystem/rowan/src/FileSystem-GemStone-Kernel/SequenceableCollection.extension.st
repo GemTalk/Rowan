@@ -81,14 +81,6 @@ SequenceableCollection >> copyUpThrough: anElement [
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
-SequenceableCollection >> copyUpTo: anElement [ 
-	"Answer all elements up to but not including anObject. If there
-	is no such object, answer a copy of the receiver."
-
-	^ self copyFrom: 1 to: (self indexOf: anElement ifAbsent: [^ self copy]) - 1
-]
-
-{ #category : '*filesystem-gemstone-kernel' }
 SequenceableCollection >> copyUpToLast: anElement [
   "Answer a copy of the receiver from index 1 to the last occurrence of 
 	anElement, not including anElement."

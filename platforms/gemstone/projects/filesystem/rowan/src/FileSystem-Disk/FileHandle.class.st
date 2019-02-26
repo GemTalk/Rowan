@@ -15,6 +15,11 @@ Class {
 	#category : 'FileSystem-Disk-Base'
 }
 
+{ #category : 'accessing' }
+FileHandle class >> open: aFileReference withOptions: aFileOptions [
+	^FileSystem fileClass open: aFileReference withOptions: aFileOptions
+]
+
 { #category : 'class initialization' }
 FileHandle class >> startUp: resuming [
 	"This functionality is disabled for now, to avoid doing a lot of processing at
@@ -65,7 +70,7 @@ FileHandle >> binaryReadStream [
 FileHandle >> binaryStream [
 	^BinaryFileStream 
 		handle: nil 
-		file: (self open: reference withOptions: self options) 
+		file: (FileSystem fileClass open: reference withOptions: self options) 
 		options: self options
 ]
 
@@ -118,11 +123,6 @@ FileHandle >> open [
 ]
 
 { #category : 'public' }
-FileHandle >> open: aFileReference withOptions: aFileOptions [
-	^FileSystem fileClass open: aFileReference withOptions: aFileOptions
-]
-
-{ #category : 'public' }
 FileHandle >> readInto: byteArray startingAt: startIndex count: count [
 	"Read up to count bytes of data from this file into the given string or byte array starting at the given index. 
 		Answer the number of bytes actually read."
@@ -133,7 +133,7 @@ FileHandle >> readInto: byteArray startingAt: startIndex count: count [
 	cnt ifNil: [ 
 		self id isNil
 			ifTrue: [ ^ self error: 'File is closed' ].
-		self error: 'File read failed: ' , (self id class serverErrorString ifNil: [ '']) ].
+		self error: 'File read failed: ' , (self id class serverErrorString ifNil: [ ' - No error reason found']) ].
 	byteArray replaceFrom: startIndex to: startIndex + cnt - 1 with: buf.
 	^cnt
 ]

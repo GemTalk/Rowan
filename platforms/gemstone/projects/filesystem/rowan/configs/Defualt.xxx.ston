@@ -9,16 +9,14 @@ RwProjectLoadConfiguration {
 			'core' : {
 				#packageNames : [
 					'FileSystem-Core',
-					'FileSystem-Disk-Errors',
-					'FileSystem-Disk-ErrorGroups',
-					'FileSystem-Disk-Options',
 					'FileSystem-Disk',
+					'FileSystem-Disk-Errors',
+					'FileSystem-Disk-Options',
 					'FileSystem-GemStone-Kernel',
 					'FileSystem-Memory',
 					'FileSystem-Path',
+					'FileSystem-Client-Core',
 					'Zinc-Character-Encoding-Core',
-					'Zinc-Resource-Meta-Core',
-					'Zinc-Resource-Meta-FileSystem',
 					'Files',
 					'Kernel-Methods',
 					'Network-UUID'
@@ -30,8 +28,8 @@ RwProjectLoadConfiguration {
 					'FileSystem-Tests-Core',
 					'FileSystem-Tests-Disk',
 					'FileSystem-Tests-Memory',
+					'FileSystem-Client-Tests',
 					'Zinc-Character-Encoding-Tests',
-					'Zinc-Resource-Meta-Tests',
 					'Files-Tests',
 					'Network-UUID-Tests',
 					'FileSystem-Tests-GemStone'

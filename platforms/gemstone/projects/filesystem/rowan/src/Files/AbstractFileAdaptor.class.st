@@ -70,30 +70,18 @@ AbstractFileAdaptor class >> openPathName: aPathname withOptions: aFileOptions [
 ]
 
 { #category : 'accessing' }
-AbstractFileAdaptor class >> openReference: aFileReference withOptions: aFileOptions [
-	| aFileAdaptor |
-	aFileAdaptor := self openPathName: aFileReference fullName withOptions: aFileOptions.
-	aFileAdaptor ifNil: [FileDoesNotExistException signalWith: aFileReference fullName].
-	^aFileAdaptor
-]
-
-{ #category : 'accessing' }
 AbstractFileAdaptor class >> rename: oldFileFullName to: newFileFullName [
 	self subclassResponsibility
 ]
 
-{ #category : 'positioning' }
+{ #category : 'accessing' }
 AbstractFileAdaptor >> atEnd: handle [
-	"The handle is always nil. This is here for Pharo compatability"
-
-	^self file atEnd
+	self subclassResponsibility
 ]
 
 { #category : 'positioning' }
 AbstractFileAdaptor >> close: handle [
-	"The handle is always nil. This is here for Pharo compatability"
-
-	self file close
+	self subclassResponsibility
 ]
 
 { #category : 'accessing' }
@@ -108,86 +96,55 @@ AbstractFileAdaptor >> file: aFile [
 
 { #category : 'positioning' }
 AbstractFileAdaptor >> flush: handle [
-	"The handle is always nil. This is here for Pharo compatability"
-
-	self file flush
+	self subclassResponsibility
 ]
 
 { #category : 'positioning' }
 AbstractFileAdaptor >> fullName [
-	^self file pathName
+	self subclassResponsibility
 ]
 
 { #category : 'positioning' }
 AbstractFileAdaptor >> getPosition: handle [
-	"The handle is always nil. This is here for Pharo compatability"
-		^self file position ifNil: [ self error: 'position error' ]
+	self subclassResponsibility
 ]
 
 { #category : 'positioning' }
 AbstractFileAdaptor >> isClosed: handle [
-	"The handle is always nil. This is here for Pharo compatability"
-
-	^self file isOpen not
+	self subclassResponsibility
 ]
 
 { #category : 'positioning' }
 AbstractFileAdaptor >> read: handle into: readBuffer startingAt: startIndex count: count [
-	"The handle is always nil. This is here for Pharo compatability"
-
-	^(self file read: count into: readBuffer) ifNil: [FileReadError signal: 'File Read Error']
+	self subclassResponsibility
 ]
 
 { #category : 'positioning' }
 AbstractFileAdaptor >> setPosition: handle to: aPosition [
-	"The handle is always nil. This is here for Pharo compatability"
-		(self file position: aPosition) ifNil: [ self error: 'position error' ]
+	self subclassResponsibility
 ]
 
 { #category : 'positioning' }
 AbstractFileAdaptor >> sizeOf: handle [
-	"The handle is always nil. This is here for Pharo compatability"
-
-	^(self file fileSize) ifNil: [ self error: 'file size error' ]
+	self subclassResponsibility
 ]
 
 { #category : 'positioning' }
 AbstractFileAdaptor >> sizeOrNil: id [
-
-	^self file fileSize
+	self subclassResponsibility
 ]
 
 { #category : 'positioning' }
 AbstractFileAdaptor >> sync: handle [
-	"The handle is always nil. This is here for Pharo compatability"
-
-	"On Unix, this syncs any written or flushed data still in the kernel file
-	system buffers to disk. On Windows this and primFlush: do the same thing
-
-	self file sync
-
-
-
-	<primitive: 'primitiveFileSync' module: 'FilePlugin'>
-
-"
-	self error: 'sync not yet implmented'
-
-	"fsync() failing cannot be ignored"
+	self subclassResponsibility
 ]
 
 { #category : 'positioning' }
 AbstractFileAdaptor >> truncate: handle to: anInteger [
-
-	self setPosition: handle to: anInteger
-	
-	"work needs to be done here to call out to the bash shell script 'truncate -s anInteger' "
+	self subclassResponsibility
 ]
 
 { #category : 'positioning' }
 AbstractFileAdaptor >> write: handle from: aByteArray startingAt: anIndex count: amount [
-	"The handle is always nil. This is here for Pharo compatability"
-
-	^(self file nextPutAll: aByteArray) ifNil: [
-		(FileWriteError fileName: self fullName) signal: ('File ' , self file name , ' write failed')]
+	self subclassResponsibility
 ]

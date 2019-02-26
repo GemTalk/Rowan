@@ -321,7 +321,7 @@ FileSpec >> initializeForWriteLowZipped [
 { #category : 'initialization' }
 FileSpec >> initializeForWriteZipped [
 	self fileOptions: FileOptions write.
-	self fileOptions fileType: FileGzipTypeFlag none
+	"self fileOptions fileType: FileGzipTypeFlag none"
 ]
 
 { #category : 'initialization' }

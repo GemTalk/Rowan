@@ -211,7 +211,7 @@ File >> exists [
 
 	| handle |
 	"We open it for read. If the returned handle is nil, the file could not be opened"
-	handle := self basicOpenWithOpitons: FileOptions read.
+	handle := self basicOpenWithOpitons: #FileOptions read.
 	handle ifNil: [^ false].
 	self class close: handle.
 	^ true
@@ -233,20 +233,20 @@ File >> named: fileName [
 File >> openForAppend [
 
 	| stream |
-	stream := self openWithOptions: FileOptions append.
+	stream := self openWithOptions: #FileOptions append.
 	^ stream setToEnd; yourself
 ]
 
 { #category : 'open/close' }
 File >> openForRead [
 
-	^ self openWithOptions:  FileOptions read
+	^ self openWithOptions:  #FileOptions read
 ]
 
 { #category : 'open/close' }
 File >> openForWrite [
 
-	^ self openWithOptions: FileOptions write
+	^ self openWithOptions: #FileOptions write
 ]
 
 { #category : 'open/close' }

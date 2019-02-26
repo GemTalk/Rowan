@@ -51,6 +51,12 @@ AbstractBinaryFileStream class >> handle: aCollection file: aFile options: aFile
 
 ]
 
+{ #category : 'instance creation' }
+AbstractBinaryFileStream class >> on: aFile options: aFileOptions [
+	
+	^ self handle: nil file: aFile options: aFileOptions
+]
+
 { #category : 'testing' }
 AbstractBinaryFileStream >> atEnd [
 

@@ -42,7 +42,7 @@ Class {
 		'permissionOptions',
 		'parent'
 	],
-	#category : 'FileSystem-Disk-Options'
+	#category : 'FileSystem-Disk'
 }
 
 { #category : 'instance creation' }
