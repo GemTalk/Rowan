@@ -31,6 +31,18 @@ DiskStore class >> activeClassFor: anOsName [
 	^ self
 ]
 
+{ #category : 'class initialization' }
+DiskStore class >> allConcreteFilePosixErrorClasses [
+	"Currently these are optional - Hence the lookup"
+	^(Globals at: #FilePosixError ifAbsent: [^OrderedCollection new]) 
+		allConcreteFilePosixErrorClasses
+]
+
+{ #category : 'class initialization' }
+DiskStore class >> allConcretePosixFlagClasses [
+	^PosixFlag allConcretePosixFlagClasses
+]
+
 { #category : 'current' }
 DiskStore class >> createDefault [
 	^ self new
