@@ -116,7 +116,7 @@ ZnUTF8Encoder >> decodeBytes: bytes [
 
 	self isGemStoneUtf8Encoding
 		ifTrue: [
-			^ [bytes decodeFromUTF8] on: ArgumentError do: [:s | ZnCharacterEncodingError signal]] 
+			^ [bytes decodeFromUTF8] on: (ExceptionSet with: ArgumentError  with: MessageNotUnderstood) do: [:s | ZnCharacterEncodingError signal]] 
 		ifFalse: [
 			^super decodeBytes: bytes]
 ]
@@ -193,7 +193,7 @@ ZnUTF8Encoder >> encodeString: string [
 
 	self isGemStoneUtf8Encoding
 		ifTrue: [
-			^ [string encodeAsUTF8 asByteArray] on: ArgumentError do: [:s | ZnInvalidUTF8 signal]  ]
+			^ [string encodeAsUTF8 asByteArray] on: (ExceptionSet with: ArgumentError  with: MessageNotUnderstood) do: [:s | ZnInvalidUTF8 signal]  ]
 		ifFalse: [
 			^super encodeString: string]
 ]

@@ -28,6 +28,10 @@ FileSystemHandleTest >> createFileSystem [
 ]
 
 { #category : 'running' }
+FileSystemHandleTest >> reopenForRead [
+]
+
+{ #category : 'running' }
 FileSystemHandleTest >> setUp [
 	super setUp.
 	filesystem := self createFileSystem.
@@ -45,6 +49,7 @@ FileSystemHandleTest >> tearDown [
 { #category : 'tests' }
 FileSystemHandleTest >> testAt [
 	handle at: 1 write: (ByteArray with: 3) startingAt: 1 count: 1.
+	self reopenForRead.
 	self assert: (handle at: 1) = 3
 ]
 
@@ -53,6 +58,7 @@ FileSystemHandleTest >> testAtPut [
 	| in |
 	handle at: 1 put: 3.
 	in := ByteArray new: 1.
+	self reopenForRead.
 	handle at: 1 read: in startingAt: 1 count: 1.
 	self assert: in first = 3
 ]
@@ -113,6 +119,7 @@ FileSystemHandleTest >> testIO [
 	out := #(1 2 3) asByteArray.
 	in := ByteArray new: 3.
 	handle at: 1 write: out startingAt: 1 count: 3.
+	self reopenForRead.
 	handle at: 1 read: in startingAt: 1 count: 3.
 	self assert: out = in.
 ]
@@ -124,6 +131,7 @@ FileSystemHandleTest >> testReadBufferTooLarge [
 	in := ByteArray new: 5.
 	in atAllPut: 9.
 	handle at: 1 write: out startingAt: 1 count: 3.
+	self reopenForRead.
 	result := handle at: 1 read: in startingAt: 2 count: 4.
 	self assert: result = 3.
 	self assert: in = #(9 1 2 3 9) asByteArray.

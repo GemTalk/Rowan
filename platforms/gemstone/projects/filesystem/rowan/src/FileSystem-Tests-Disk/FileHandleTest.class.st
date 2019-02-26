@@ -14,6 +14,13 @@ FileHandleTest >> createFileSystem [
 	^ FileSystem store: DiskStore activeClass createDefault
 ]
 
+{ #category : 'running' }
+FileHandleTest >> reopenForRead [
+	handle close.
+	handle := reference openOptions: FileOptions read.
+	handle assureOpen
+]
+
 { #category : 'tests' }
 FileHandleTest >> testFileWriteError [
 	" This test may be not needed depending on what happens with BinaryFileStream "
