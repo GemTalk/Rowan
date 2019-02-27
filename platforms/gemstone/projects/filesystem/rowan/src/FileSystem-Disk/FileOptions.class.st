@@ -39,7 +39,7 @@ Class {
 		'posixFlags',
 		'fileType',
 		'share',
-		'permissionOptions',
+		'permissionFlags',
 		'parent'
 	],
 	#category : 'FileSystem-Disk'
@@ -83,8 +83,8 @@ FileOptions class >> write [
 { #category : 'permissions' }
 FileOptions >> accessPermissions [
 
-	self permissionOptions isEmpty ifTrue: [^FileSystemPermission default posixPermission].
-	^self permissionOptions inject: 0 into: [:total :ea | total bitOr: ea posixFlagValue]
+	self permissionFlags isEmpty ifTrue: [^FileSystemPermission default posixPermission].
+	^self permissionFlags inject: 0 into: [:total :ea | total bitOr: ea posixFlagValue]
 ]
 
 { #category : 'convenience' }
@@ -114,7 +114,7 @@ FileOptions >> addExclusiveFlag [
 FileOptions >> addPermissionFlag: aPermissionFlag [
 	(self hasPermissionsFlag: aPermissionFlag class) ifTrue: [^self].
 	aPermissionFlag parent: self.
-	self permissionOptions add: aPermissionFlag
+	self permissionFlags add: aPermissionFlag
 ]
 
 { #category : 'posix flags - adding and removing' }
@@ -305,7 +305,7 @@ FileOptions >> hasPosixFlag: anPosixFlagClass [
 { #category : 'initialization' }
 FileOptions >> initialize [
 	self posixFlags: OrderedCollection new.
-	self permissionOptions: OrderedCollection new.
+	self permissionFlags: OrderedCollection new.
 	self beShared
 ]
 
@@ -435,18 +435,18 @@ FileOptions >> parent: anObject [
 ]
 
 { #category : 'accessing' }
-FileOptions >> permissionOptions [
-	^permissionOptions
+FileOptions >> permissionFlags [
+	^permissionFlags
 ]
 
 { #category : 'accessing' }
-FileOptions >> permissionOptions: aCollection [
-	permissionOptions := aCollection
+FileOptions >> permissionFlags: aCollection [
+	permissionFlags := aCollection
 ]
 
 { #category : 'permissions' }
 FileOptions >> permissionsFlagForClass: anPermissionFlagClass [
-	^self permissionOptions detect: [:ea | ea isKindOf: anPermissionFlagClass] ifNone: [nil]
+	^self permissionFlags detect: [:ea | ea isKindOf: anPermissionFlagClass] ifNone: [nil]
 ]
 
 { #category : 'posix flags' }
@@ -490,7 +490,7 @@ FileOptions >> readWrite [
 { #category : 'permissions' }
 FileOptions >> removePermissionFlag: aPermissionFlag [
 	aPermissionFlag parent: nil.
-	self permissionOptions remove: aPermissionFlag ifAbsent: []
+	self permissionFlags remove: aPermissionFlag ifAbsent: []
 ]
 
 { #category : 'posix flags - adding and removing' }
