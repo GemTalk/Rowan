@@ -175,7 +175,8 @@ FileSpec >> gzipLowCompression [
 
 { #category : 'initialization' }
 FileSpec >> initialize [
-	self beNonEncoded
+	self beNonEncoded.
+	self fileOptions: FileOptions new
 ]
 
 { #category : 'initialization' }

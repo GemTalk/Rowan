@@ -182,7 +182,7 @@ FileOptionsTest >> testReadWriteOpenMode [
 FileOptionsTest >> testReadWriteTruncateOpenMode [
 
 	| aFileOptions |
-	aFileOptions := FileSpec readWrite truncate fileOptions.
+	aFileOptions := FileSpec readWrite truncate create fileOptions.
 	aFileOptions parent store: self store.
 	self assert: aFileOptions isWritable.
 	self assert: aFileOptions isReadable.

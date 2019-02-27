@@ -212,7 +212,7 @@ FileOptions >> fileExclusiveFlag [
 
 { #category : 'posix flags' }
 FileOptions >> fileOpenFlagsTotalValue [
-	^self fileOpenModeValue + self posixFlagsTotalValue
+	^self fileOpenModeValue bitOr: self posixFlagsTotalValue
 ]
 
 { #category : 'posix flags' }
@@ -466,7 +466,7 @@ FileOptions >> posixFlags: aCollection [
 
 { #category : 'posix flags' }
 FileOptions >> posixFlagsTotalValue [
-	^self posixFlags inject: 0 into: [:total :ea | total + ea posixFlagValue]
+	^self posixFlags inject: 0 into: [:total :ea | total bitOr: ea posixFlagValue]
 ]
 
 { #category : 'printing' }

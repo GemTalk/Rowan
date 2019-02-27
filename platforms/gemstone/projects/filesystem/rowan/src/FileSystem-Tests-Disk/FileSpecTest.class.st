@@ -92,7 +92,7 @@ FileSpecTest >> testReadWriteTruncated [
 FileSpecTest >> testReadWriteTruncatedBinary [
 
 	| aFileSpec |
-	aFileSpec := FileSpec readWrite truncated binaryFileType.
+	aFileSpec := FileSpec readWrite truncate binaryFileType.
 	self assert: aFileSpec mode = 'w+b'
 ]
 
