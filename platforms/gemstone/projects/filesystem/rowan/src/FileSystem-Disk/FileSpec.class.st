@@ -18,30 +18,6 @@ FileSpec class >> append [
 ]
 
 { #category : 'instance creation' }
-FileSpec class >> appendAndRead [
-
-	^self new
-		initializeForAppendAndRead;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileSpec class >> appendAndReadBinary [
-
-	^self new
-		initializeForAppendAndReadBinary;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileSpec class >> appendBinary [
-
-	^self new
-		initializeForAppendBinary;
-		yourself
-]
-
-{ #category : 'instance creation' }
 FileSpec class >> new [
 	^self on: FileSystem disk
 ]
@@ -62,42 +38,10 @@ FileSpec class >> read [
 ]
 
 { #category : 'instance creation' }
-FileSpec class >> readBinary [
-
-	^self new
-		initializeForReadBinary;
-		yourself
-]
-
-{ #category : 'instance creation' }
 FileSpec class >> readWrite [
 
 	^self new
 		initializeForReadWrite;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileSpec class >> readWriteBinary [
-
-	^self new
-		initializeForReadWriteBinary;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileSpec class >> readWriteTruncated [
-
-	^self new
-		initializeForReadWriteTruncated;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileSpec class >> readWriteTruncatedBinary [
-
-	^self new
-		initializeForReadWriteTruncatedBinary;
 		yourself
 ]
 
@@ -109,36 +53,9 @@ FileSpec class >> write [
 		yourself
 ]
 
-{ #category : 'instance creation' }
-FileSpec class >> writeBinary [
-
-	^self new
-		initializeForWriteBinary;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileSpec class >> writeHighZipped [
-
-	^self new
-		initializeForWriteHighZipped;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileSpec class >> writeLowZipped [
-
-	^self new
-		initializeForWriteLowZipped;
-		yourself
-]
-
-{ #category : 'instance creation' }
-FileSpec class >> writeZipped [
-
-	^self new
-		initializeForWriteZipped;
-		yourself
+{ #category : 'convenience - file options' }
+FileSpec >> append [
+	self fileOptions append
 ]
 
 { #category : 'convenience' }
@@ -177,6 +94,11 @@ FileSpec >> binaryFileStreamOn: aFileReference [
 	^(aFileReference fileSystem open: aFileReference options: self fileOptions) binaryStream
 ]
 
+{ #category : 'convenience - file type' }
+FileSpec >> binaryFileType [
+	self fileOptions binaryFileType
+]
+
 { #category : 'convenience' }
 FileSpec >> bufferedStreamClass [
 	^self isWritable 
@@ -197,6 +119,11 @@ FileSpec >> characterStreamClass [
 		ifFalse: [ZnCharacterReadStream]
 ]
 
+{ #category : 'convenience - file options' }
+FileSpec >> create [
+	self fileOptions create
+]
+
 { #category : 'stream creation' }
 FileSpec >> encodedStreamFor: aFileReference [
 
@@ -215,6 +142,11 @@ FileSpec >> encoding: anObject [
 	encoding := anObject
 ]
 
+{ #category : 'convenience - file options' }
+FileSpec >> exclusive [
+	self fileOptions exclusive
+]
+
 { #category : 'accessing' }
 FileSpec >> fileOptions [
 	^fileOptions
@@ -229,6 +161,16 @@ FileSpec >> fileOptions: aFileOptions [
 { #category : 'convenience' }
 FileSpec >> fileType [
 	^self fileOptions fileType
+]
+
+{ #category : 'convenience - file type' }
+FileSpec >> gzipHighCompression [
+	self fileOptions gzipHighCompression
+]
+
+{ #category : 'convenience - file type' }
+FileSpec >> gzipLowCompression [
+	self fileOptions gzipLowCompression
 ]
 
 { #category : 'initialization' }
@@ -359,6 +301,16 @@ FileSpec >> mode [
 	^self fileOptions mode
 ]
 
+{ #category : 'convenience - file options' }
+FileSpec >> read [
+	self fileOptions read
+]
+
+{ #category : 'convenience - file options' }
+FileSpec >> readWrite [
+	self fileOptions readWrite
+]
+
 { #category : 'accessing' }
 FileSpec >> store [
 	^store
@@ -367,4 +319,19 @@ FileSpec >> store [
 { #category : 'accessing' }
 FileSpec >> store: anObject [
 	store := anObject
+]
+
+{ #category : 'convenience - file type' }
+FileSpec >> textFileType [
+	self fileOptions textFileType
+]
+
+{ #category : 'convenience - file options' }
+FileSpec >> truncate [
+	self fileOptions truncate
+]
+
+{ #category : 'convenience - file options' }
+FileSpec >> write [
+	self fileOptions write
 ]

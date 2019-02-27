@@ -1,5 +1,7 @@
 "
 Specifies permission for users in the file group class to read the file.
+
+If applied to a WindowsStore, this has no effect.
 "
 Class {
 	#name : 'FileGroupReadPermissionFlag',

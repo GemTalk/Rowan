@@ -84,7 +84,7 @@ FileOptions class >> write [
 FileOptions >> accessPermissions [
 
 	self permissionOptions isEmpty ifTrue: [^FileSystemPermission default posixPermission].
-	^self permissionOptions inject: 0 into: [:total :ea | total + ea posixValue]
+	^self permissionOptions inject: 0 into: [:total :ea | total bitOr: ea posixFlagValue]
 ]
 
 { #category : 'convenience' }
@@ -108,6 +108,13 @@ FileOptions >> addCreateFlag [
 FileOptions >> addExclusiveFlag [
 
 	self addPosixFlag: FileExclusiveFlag new
+]
+
+{ #category : 'permissions' }
+FileOptions >> addPermissionFlag: aPermissionFlag [
+	(self hasPermissionsFlag: aPermissionFlag class) ifTrue: [^self].
+	aPermissionFlag parent: self.
+	self permissionOptions add: aPermissionFlag
 ]
 
 { #category : 'posix flags - adding and removing' }
@@ -224,6 +231,32 @@ FileOptions >> fileType: aFileTypeFlag [
 	fileType := aFileTypeFlag
 ]
 
+{ #category : 'permissions' }
+FileOptions >> groupAll [
+	(self permissionsFlagForClass: FileGroupExecutePermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	(self permissionsFlagForClass: FileGroupReadPermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	(self permissionsFlagForClass: FileGroupWritePermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	self addPermissionFlag: FileGroupAllPermissionFlag new
+]
+
+{ #category : 'permissions' }
+FileOptions >> groupExecute [
+	(self hasPermissionsFlag: FileGroupAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileGroupExecutePermissionFlag new
+]
+
+{ #category : 'permissions' }
+FileOptions >> groupRead [
+	(self hasPermissionsFlag: FileGroupAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileGroupReadPermissionFlag new
+]
+
+{ #category : 'permissions' }
+FileOptions >> groupWrite [
+	(self hasPermissionsFlag: FileGroupAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileGroupWritePermissionFlag new
+]
+
 { #category : 'file type' }
 FileOptions >> gzipHighCompression [
 	self fileType: FileGzipTypeFlag high
@@ -257,6 +290,11 @@ FileOptions >> hasFileTruncateFlag [
 { #category : 'testing' }
 FileOptions >> hasNoReadOrWriteMode [
 	^self openModeFlag isNil
+]
+
+{ #category : 'testing' }
+FileOptions >> hasPermissionsFlag: anPosixFlagClass [
+	^(self permissionsFlagForClass: anPosixFlagClass) notNil
 ]
 
 { #category : 'testing' }
@@ -334,6 +372,58 @@ FileOptions >> openModeFlag: aFileOpenMode [
 	openModeFlag :=  aFileOpenMode
 ]
 
+{ #category : 'permissions' }
+FileOptions >> otherAll [
+	(self permissionsFlagForClass: FileOtherExecutePermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	(self permissionsFlagForClass: FileOtherReadPermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	(self permissionsFlagForClass: FileOtherWritePermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	self addPermissionFlag: FileOtherAllPermissionFlag new
+]
+
+{ #category : 'permissions' }
+FileOptions >> otherExecute [
+	(self hasPermissionsFlag: FileOtherAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileOtherExecutePermissionFlag new
+]
+
+{ #category : 'permissions' }
+FileOptions >> otherRead [
+	(self hasPermissionsFlag: FileOtherAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileOtherReadPermissionFlag new
+]
+
+{ #category : 'permissions' }
+FileOptions >> otherWrite [
+	(self hasPermissionsFlag: FileOtherAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileOtherWritePermissionFlag new
+]
+
+{ #category : 'permissions' }
+FileOptions >> ownerAll [
+	(self permissionsFlagForClass: FileOwnerExecutePermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	(self permissionsFlagForClass: FileOwnerReadPermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	(self permissionsFlagForClass: FileOwnerWritePermissionFlag) ifNotNil: [:aFlag | self removePermissionFlag: aFlag].
+	self addPermissionFlag: FileOwnerAllPermissionFlag new
+]
+
+{ #category : 'permissions' }
+FileOptions >> ownerExecute [
+	(self hasPermissionsFlag: FileOwnerAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileOwnerExecutePermissionFlag new
+]
+
+{ #category : 'permissions' }
+FileOptions >> ownerRead [
+	(self hasPermissionsFlag: FileOwnerAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileOwnerReadPermissionFlag new
+]
+
+{ #category : 'permissions' }
+FileOptions >> ownerWrite [
+	(self hasPermissionsFlag: FileOwnerAllPermissionFlag) ifTrue: [^self].
+	self addPermissionFlag: FileOwnerWritePermissionFlag new
+]
+
 { #category : 'accessing' }
 FileOptions >> parent [
 	^parent
@@ -352,6 +442,11 @@ FileOptions >> permissionOptions [
 { #category : 'accessing' }
 FileOptions >> permissionOptions: aCollection [
 	permissionOptions := aCollection
+]
+
+{ #category : 'permissions' }
+FileOptions >> permissionsFlagForClass: anPermissionFlagClass [
+	^self permissionOptions detect: [:ea | ea isKindOf: anPermissionFlagClass] ifNone: [nil]
 ]
 
 { #category : 'posix flags' }
@@ -392,6 +487,12 @@ FileOptions >> readWrite [
 	self initializeReadWrite
 ]
 
+{ #category : 'permissions' }
+FileOptions >> removePermissionFlag: aPermissionFlag [
+	aPermissionFlag parent: nil.
+	self permissionOptions remove: aPermissionFlag ifAbsent: []
+]
+
 { #category : 'posix flags - adding and removing' }
 FileOptions >> removePosixFlag: aPosixFlag [
 	aPosixFlag parent: nil.
@@ -417,7 +518,7 @@ FileOptions >> shareRule [
 { #category : 'errors' }
 FileOptions >> signalOpenModeFlagNotDefined [
 
-	self error: 'Attempting to add an open flag without first defining the opem mode of #read, #write or #readWrite'
+	self error: 'Attempting to add an open flag without first defining the open mode of #read, #write or #readWrite'
 ]
 
 { #category : 'convenience' }

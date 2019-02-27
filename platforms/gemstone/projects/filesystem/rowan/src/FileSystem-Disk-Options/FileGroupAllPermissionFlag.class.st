@@ -5,6 +5,8 @@ Specifies permission for users in the file group class either:
     To read, write, and execute, for a file other than a directory
 
 This value has the same effect as specifying all three parameters (SIRGRP, SIWGRP, and SIXGRP).
+
+If applied to a WindowsStore, this has no effect.
 "
 Class {
 	#name : 'FileGroupAllPermissionFlag',
@@ -14,7 +16,7 @@ Class {
 
 { #category : 'access' }
 FileGroupAllPermissionFlag class >> defaultPlatformValue [
-	^16r20
+	^16r38
 ]
 
 { #category : 'access' }

@@ -568,8 +568,7 @@ FileSystem >> readFileOptions [
 FileSystem >> readFileSpec [
 
 	^(FileSpec on: self)
-		initializeForRead;
-		yourself
+		read
 ]
 
 { #category : 'public' }
@@ -584,16 +583,15 @@ FileSystem >> readStreamOn: aResolvable [
 FileSystem >> readWriteFileSpec [
 
 	^(FileSpec on: self)
-		initializeForReadWrite;
-		yourself
+		readWrite
 ]
 
 { #category : 'private' }
 FileSystem >> readWriteTruncatedFileSpec [
 
 	^(FileSpec on: self)
-		initializeForReadWriteTruncated;
-		yourself
+		readWrite;
+		truncate
 ]
 
 { #category : 'public' }
@@ -715,8 +713,7 @@ FileSystem >> writeFileOptions [
 FileSystem >> writeFileSpec [
 
 	^(FileSpec on: self)
-		initializeForWrite;
-		yourself
+		write
 ]
 
 { #category : 'public' }

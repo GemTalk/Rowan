@@ -1,7 +1,9 @@
 "
-Specifies permission for the file owner to write the file.
+Specifies permission for users in the file owner class either:
 
-For windows this returns 2
+    To write to the file or directory
+
+For Windows, this returns a 2.
 "
 Class {
 	#name : 'FileOwnerWritePermissionFlag',

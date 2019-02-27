@@ -8,7 +8,7 @@ Class {
 FileSpecTest >> testAppend [
 
 	| aFileSpec |
-	aFileSpec := FileSpec append.
+	aFileSpec := FileSpec append textFileType.
 	self assert: aFileSpec mode = 'a'
 ]
 
@@ -16,7 +16,7 @@ FileSpecTest >> testAppend [
 FileSpecTest >> testAppendAndRead [
 
 	| aFileSpec |
-	aFileSpec := FileSpec appendAndRead.
+	aFileSpec := FileSpec append read.
 	self assert: aFileSpec mode = 'a+'
 ]
 
@@ -24,7 +24,7 @@ FileSpecTest >> testAppendAndRead [
 FileSpecTest >> testAppendAndReadBinary [
 
 	| aFileSpec |
-	aFileSpec := FileSpec appendAndReadBinary.
+	aFileSpec := FileSpec append read binaryFileType.
 	self assert: (aFileSpec fileType isKindOf: FileBinaryTypeFlag).
 	self assert: aFileSpec mode = 'a+b'
 ]
@@ -33,7 +33,7 @@ FileSpecTest >> testAppendAndReadBinary [
 FileSpecTest >> testAppendBinary [
 
 	| aFileSpec |
-	aFileSpec := FileSpec appendBinary.
+	aFileSpec := FileSpec append binaryFileType.
 	self assert: aFileSpec mode = 'ab'
 ]
 
@@ -58,7 +58,7 @@ FileSpecTest >> testRead [
 FileSpecTest >> testReadBinary [
 
 	| aFileSpec |
-	aFileSpec := FileSpec readBinary.
+	aFileSpec := FileSpec read binaryFileType.
 	self assert: (aFileSpec fileOptions fileType isKindOf: FileBinaryTypeFlag).
 	self assert: aFileSpec mode = 'rb'
 ]
@@ -75,7 +75,7 @@ FileSpecTest >> testReadWrite [
 FileSpecTest >> testReadWriteBinary [
 
 	| aFileSpec |
-	aFileSpec := FileSpec readWriteBinary.
+	aFileSpec := FileSpec readWrite binaryFileType.
 	self assert: (aFileSpec fileType isKindOf: FileBinaryTypeFlag).
 	self assert: aFileSpec mode = 'r+b'
 ]
@@ -84,7 +84,7 @@ FileSpecTest >> testReadWriteBinary [
 FileSpecTest >> testReadWriteTruncated [
 
 	| aFileSpec |
-	aFileSpec := FileSpec readWriteTruncated.
+	aFileSpec := FileSpec readWrite truncate.
 	self assert: aFileSpec mode = 'w+'
 ]
 
@@ -92,7 +92,7 @@ FileSpecTest >> testReadWriteTruncated [
 FileSpecTest >> testReadWriteTruncatedBinary [
 
 	| aFileSpec |
-	aFileSpec := FileSpec readWriteTruncatedBinary.
+	aFileSpec := FileSpec readWrite truncated binaryFileType.
 	self assert: aFileSpec mode = 'w+b'
 ]
 
@@ -108,7 +108,7 @@ FileSpecTest >> testWrite [
 FileSpecTest >> testWriteBinary [
 
 	| aFileSpec |
-	aFileSpec := FileSpec writeBinary.
+	aFileSpec := FileSpec write binaryFileType.
 	self assert: (aFileSpec fileType isKindOf: FileBinaryTypeFlag).
 	self assert: aFileSpec mode = 'wb'
 ]
@@ -117,7 +117,7 @@ FileSpecTest >> testWriteBinary [
 FileSpecTest >> testWriteHighZipped [
 
 	| aFileSpec |
-	aFileSpec := FileSpec writeHighZipped.
+	aFileSpec := FileSpec write gzipHighCompression.
 	self assert: aFileSpec isGzipped.
 	self assert: aFileSpec mode = 'w9'
 ]
@@ -126,7 +126,7 @@ FileSpecTest >> testWriteHighZipped [
 FileSpecTest >> testWriteLowZipped [
 
 	| aFileSpec |
-	aFileSpec := FileSpec writeLowZipped.
+	aFileSpec := FileSpec write gzipLowCompression.
 	self assert: aFileSpec isGzipped.
 	self assert: aFileSpec mode = 'w1'
 ]

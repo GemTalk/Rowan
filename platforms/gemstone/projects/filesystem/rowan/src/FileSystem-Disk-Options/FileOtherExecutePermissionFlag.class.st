@@ -2,7 +2,9 @@
 Specifies permission for users in the file other class either:
 
     To search, if the file is a directory
-    To execute the program in the file, for a file other than a directory
+    To execute the program in the file, for a file other than a directory.
+
+If applied to a WindowsStore, this has no effect.
 "
 Class {
 	#name : 'FileOtherExecutePermissionFlag',

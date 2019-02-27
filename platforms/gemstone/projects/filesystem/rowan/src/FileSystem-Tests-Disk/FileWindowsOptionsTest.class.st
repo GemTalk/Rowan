@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : 'private' }
+FileWindowsOptionsTest >> groupAllOctalValue [
+	^'0'
+]
+
+{ #category : 'private' }
 FileWindowsOptionsTest >> openAndAppendAndReadValue [
 	^196610
 ]
@@ -27,6 +32,16 @@ FileWindowsOptionsTest >> openReadWriteValue [
 { #category : 'private' }
 FileWindowsOptionsTest >> openWriteValue [
 	^655361
+]
+
+{ #category : 'private' }
+FileWindowsOptionsTest >> otherAllOctalValue [
+	^'0'
+]
+
+{ #category : 'private' }
+FileWindowsOptionsTest >> ownerAllOctalValue [
+	^'3'
 ]
 
 { #category : 'private' }

@@ -1,5 +1,7 @@
 "
-Specifies permission for the file owner to read the file.
+Specifies permission for users in the file owner class either:
+
+    To read the file or directory
 
 For Windows, this returns a 1 for read.
 "

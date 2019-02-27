@@ -4,9 +4,7 @@ Specifies permission for the file owner either:
 -    To read, write, and search, if the file is a directory
 -    To read, write, and execute, for a file other than a directory
 
-This value has the same effect as specifying all three parameters (SIRUSR, SIWUSR, and SIXUSR).
-
-This only applies to Unix. The windows value is set to zero.
+This value has the same effect as specifying all three parameters (SIRUSR, SIWUSR, and SIXUSR)
 "
 Class {
 	#name : 'FileOwnerAllPermissionFlag',
@@ -26,5 +24,5 @@ FileOwnerAllPermissionFlag class >> posixName [
 
 { #category : 'accessing' }
 FileOwnerAllPermissionFlag class >> windowsValue [
-	^0
+	^3
 ]

@@ -5,6 +5,8 @@ Specifies permission for users in the file other class either:
 -   To read, write, and execute, for a file other than a directory
 
 This value has the same effect as specifying all three parameters (SIROTH, SIWOTH, and SIXOTH).
+
+If applied to a WindowsStore, this has no effect.
 "
 Class {
 	#name : 'FileOtherAllPermissionFlag',

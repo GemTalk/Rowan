@@ -16,6 +16,34 @@ FileOptionsTest class >> isAbstract [
 ]
 
 { #category : 'private' }
+FileOptionsTest >> _testPermissionFlag: aPermissionFlagClass in: aFileOptions [
+	self assert: aFileOptions accessPermissions equals: (aPermissionFlagClass perform: self valueAccessor)
+]
+
+{ #category : 'private' }
+FileOptionsTest >> fileOptions [
+	| aFileOptions |
+	aFileOptions := FileSpec read fileOptions.
+	aFileOptions parent store: self store.
+	^aFileOptions
+]
+
+{ #category : 'private' }
+FileOptionsTest >> groupAllOctalValue [
+	^'70'
+]
+
+{ #category : 'private' }
+FileOptionsTest >> otherAllOctalValue [
+	^'7'
+]
+
+{ #category : 'private' }
+FileOptionsTest >> ownerAllOctalValue [
+	^'700'
+]
+
+{ #category : 'private' }
 FileOptionsTest >> store [
 	^self storeClass createDefault
 ]
@@ -35,10 +63,42 @@ FileOptionsTest >> testAppendFlag [
 ]
 
 { #category : 'tests' }
+FileOptionsTest >> testGroupAccessPermissionFlags [
+	self _testPermissionFlag: FileGroupAllPermissionFlag in: self fileOptions groupAll.
+	self _testPermissionFlag: FileGroupAllPermissionFlag in: self fileOptions groupAll groupRead.
+	self _testPermissionFlag: FileGroupAllPermissionFlag in: self fileOptions groupRead groupAll.
+	self _testPermissionFlag: FileGroupAllPermissionFlag in: self fileOptions groupRead groupWrite groupExecute.
+	self _testPermissionFlag: FileGroupAllPermissionFlag in: self fileOptions groupRead groupWrite groupExecute groupAll.
+	self assert: (self fileOptions groupRead groupWrite groupExecute accessPermissions printStringRadix: 8) equals: self groupAllOctalValue.
+]
+
+{ #category : 'tests' }
+FileOptionsTest >> testIndividualAccessPermissionFlags [
+
+	self assert: (self fileOptions groupAll accessPermissions printStringRadix: 8) equals: self groupAllOctalValue.
+	self _testPermissionFlag: FileGroupAllPermissionFlag in: self fileOptions groupAll.
+	self _testPermissionFlag: FileGroupExecutePermissionFlag in: self fileOptions groupExecute.
+	self _testPermissionFlag: FileGroupReadPermissionFlag in: self fileOptions groupRead.
+	self _testPermissionFlag: FileGroupWritePermissionFlag in: self fileOptions groupWrite.
+
+	self assert: (self fileOptions otherAll accessPermissions printStringRadix: 8) equals: self otherAllOctalValue.
+	self _testPermissionFlag: FileOtherAllPermissionFlag in: self fileOptions otherAll.
+	self _testPermissionFlag: FileOtherExecutePermissionFlag in: self fileOptions otherExecute.
+	self _testPermissionFlag: FileOtherReadPermissionFlag in: self fileOptions otherRead.
+	self _testPermissionFlag: FileOtherWritePermissionFlag in: self fileOptions otherWrite.
+
+	self assert: (self fileOptions ownerAll accessPermissions printStringRadix: 8) equals: self ownerAllOctalValue.
+	self _testPermissionFlag: FileOwnerAllPermissionFlag in: self fileOptions ownerAll.
+	self _testPermissionFlag: FileOwnerExecutePermissionFlag in: self fileOptions ownerExecute.
+	self _testPermissionFlag: FileOwnerReadPermissionFlag in: self fileOptions ownerRead.
+	self _testPermissionFlag: FileOwnerWritePermissionFlag in: self fileOptions ownerWrite.
+]
+
+{ #category : 'tests' }
 FileOptionsTest >> testOpenAndAppendAndReadMode [
 
 	| aFileOptions |
-	aFileOptions := FileSpec appendAndRead fileOptions.
+	aFileOptions := FileSpec append read fileOptions.
 	aFileOptions parent store: self store.
 	self assert: aFileOptions isWritable.
 	self assert: aFileOptions isReadable.
@@ -65,6 +125,26 @@ FileOptionsTest >> testOpenAppendMode [
 	self assert: aFileOptions mode equals: 'a'.
 	self assert: aFileOptions fileOpenModeValue equals: 1.
 	self assert: aFileOptions fileOpenFlagsTotalValue equals: self openAndAppendValue
+]
+
+{ #category : 'tests' }
+FileOptionsTest >> testOtherAccessPermissionFlags [
+	self _testPermissionFlag: FileOtherAllPermissionFlag in: self fileOptions otherAll.
+	self _testPermissionFlag: FileOtherAllPermissionFlag in: self fileOptions otherAll otherRead.
+	self _testPermissionFlag: FileOtherAllPermissionFlag in: self fileOptions otherRead otherAll.
+	self _testPermissionFlag: FileOtherAllPermissionFlag in: self fileOptions otherRead otherWrite otherExecute.
+	self _testPermissionFlag: FileOtherAllPermissionFlag in: self fileOptions otherRead otherWrite otherExecute otherAll.
+	self assert: (self fileOptions otherRead otherWrite otherExecute accessPermissions printStringRadix: 8) equals: self otherAllOctalValue.
+]
+
+{ #category : 'tests' }
+FileOptionsTest >> testOwnerAccessPermissionFlags [
+	self _testPermissionFlag: FileOwnerAllPermissionFlag in: self fileOptions ownerAll.
+	self _testPermissionFlag: FileOwnerAllPermissionFlag in: self fileOptions ownerAll ownerRead.
+	self _testPermissionFlag: FileOwnerAllPermissionFlag in: self fileOptions ownerRead ownerAll.
+	self _testPermissionFlag: FileOwnerAllPermissionFlag in: self fileOptions ownerRead ownerWrite ownerExecute.
+	self _testPermissionFlag: FileOwnerAllPermissionFlag in: self fileOptions ownerRead ownerWrite ownerExecute ownerAll.
+	self assert: (self fileOptions ownerRead ownerWrite ownerExecute accessPermissions printStringRadix: 8) equals: self ownerAllOctalValue
 ]
 
 { #category : 'tests' }
@@ -102,7 +182,7 @@ FileOptionsTest >> testReadWriteOpenMode [
 FileOptionsTest >> testReadWriteTruncateOpenMode [
 
 	| aFileOptions |
-	aFileOptions := FileSpec readWriteTruncated fileOptions.
+	aFileOptions := FileSpec readWrite truncate fileOptions.
 	aFileOptions parent store: self store.
 	self assert: aFileOptions isWritable.
 	self assert: aFileOptions isReadable.
