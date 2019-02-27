@@ -126,7 +126,7 @@ FileOptions >> addPosixFlag: aPosixFlag [
 
 { #category : 'posix flags - adding and removing' }
 FileOptions >> addTruncateFlag [
-
+	self removeAppendFlag.
 	self addPosixFlag: FileTruncateFlag new
 ]
 
@@ -485,6 +485,11 @@ FileOptions >> read [
 { #category : 'commands' }
 FileOptions >> readWrite [
 	self initializeReadWrite
+]
+
+{ #category : 'posix flags - adding and removing' }
+FileOptions >> removeAppendFlag [
+	self appendFlag ifNotNil: [:flag | self removePosixFlag: flag]
 ]
 
 { #category : 'permissions' }
