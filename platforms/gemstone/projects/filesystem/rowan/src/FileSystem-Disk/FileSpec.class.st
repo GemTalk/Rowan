@@ -175,96 +175,28 @@ FileSpec >> gzipLowCompression [
 
 { #category : 'initialization' }
 FileSpec >> initialize [
-	self beNonEncoded.
+	self beUtf8Encoded.
 	self fileOptions: FileOptions new
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForAppend [
-	self fileOptions: FileOptions append.
-	self beUtf8Encoded
-]
-
-{ #category : 'initialization' }
-FileSpec >> initializeForAppendAndRead [
-	self fileOptions: FileOptions append read.
-	self beUtf8Encoded
-]
-
-{ #category : 'initialization' }
-FileSpec >> initializeForAppendAndReadBinary [
-	self fileOptions: FileOptions append read binaryFileType.
-	self beUtf8Encoded
-]
-
-{ #category : 'initialization' }
-FileSpec >> initializeForAppendBinary [
-	self fileOptions: FileOptions append binaryFileType.
-	self beUtf8Encoded
+	self fileOptions write create append
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForRead [
-	self fileOptions: FileOptions read.
-	self beUtf8Encoded
-]
-
-{ #category : 'initialization' }
-FileSpec >> initializeForReadBinary [
-	self fileOptions: FileOptions read binaryFileType.
-	self beUtf8Encoded
+	self fileOptions read
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForReadWrite [
-	self fileOptions: FileOptions readWrite.
-	self beUtf8Encoded
-]
-
-{ #category : 'initialization' }
-FileSpec >> initializeForReadWriteBinary [
-	self fileOptions: FileOptions readWrite binaryFileType.
-	self beUtf8Encoded
-]
-
-{ #category : 'initialization' }
-FileSpec >> initializeForReadWriteTruncated [
-	self fileOptions: FileOptions readWrite truncate create.
-	self beUtf8Encoded
-]
-
-{ #category : 'initialization' }
-FileSpec >> initializeForReadWriteTruncatedBinary [
-	self fileOptions: FileOptions readWrite truncate binaryFileType.
-	self beUtf8Encoded
+	self fileOptions readWrite
 ]
 
 { #category : 'initialization' }
 FileSpec >> initializeForWrite [
-	self fileOptions: FileOptions write.
-	self beUtf8Encoded
-]
-
-{ #category : 'initialization' }
-FileSpec >> initializeForWriteBinary [
-	self fileOptions: FileOptions write binaryFileType.
-	self beUtf8Encoded
-]
-
-{ #category : 'initialization' }
-FileSpec >> initializeForWriteHighZipped [
-	self fileOptions: FileOptions write gzipHighCompression
-]
-
-{ #category : 'initialization' }
-FileSpec >> initializeForWriteLowZipped [
-	self fileOptions: FileOptions write gzipLowCompression
-]
-
-{ #category : 'initialization' }
-FileSpec >> initializeForWriteZipped [
-	self fileOptions: FileOptions write.
-	"self fileOptions fileType: FileGzipTypeFlag none"
+	self fileOptions write create truncate
 ]
 
 { #category : 'initialization' }

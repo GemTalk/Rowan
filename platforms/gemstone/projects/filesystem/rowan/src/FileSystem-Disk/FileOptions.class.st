@@ -94,7 +94,7 @@ FileOptions >> accessRule [
 
 { #category : 'posix flags - adding and removing' }
 FileOptions >> addAppendFlag [
-
+	self removeTruncateFlag.
 	self addPosixFlag: FileAppendFlag new
 ]
 
@@ -497,6 +497,11 @@ FileOptions >> removePermissionFlag: aPermissionFlag [
 FileOptions >> removePosixFlag: aPosixFlag [
 	aPosixFlag parent: nil.
 	self posixFlags remove: aPosixFlag ifAbsent: []
+]
+
+{ #category : 'posix flags - adding and removing' }
+FileOptions >> removeTruncateFlag [
+	self truncateFlag ifNotNil: [:flag | self removePosixFlag: flag]
 ]
 
 { #category : 'accessing' }
