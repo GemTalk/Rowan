@@ -10,8 +10,9 @@ RwProjectLoadConfiguration {
 				#packageNames : [
 					'FileSystem-Core',
 					'FileSystem-Disk',
-					'FileSystem-Disk-Errors',
 					'FileSystem-Disk-Options',
+					'FileSystem-Disk-Errors',
+					'FileSystem-Disk-ErrorGroups',
 					'FileSystem-GemStone-Kernel',
 					'FileSystem-Memory',
 					'FileSystem-Path',
@@ -29,6 +30,7 @@ RwProjectLoadConfiguration {
 					'FileSystem-Tests-Attributes',
 					'FileSystem-Tests-Core',
 					'FileSystem-Tests-Disk',
+					'FileSystem-Tests-Disk-ErrorGroups',
 					'FileSystem-Tests-Memory',
 					'FileSystem-Client-Tests',
 					'Zinc-Character-Encoding-Tests',

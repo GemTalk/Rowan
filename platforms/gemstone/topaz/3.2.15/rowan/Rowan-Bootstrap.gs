@@ -561,10 +561,11 @@ currentOrNil
 		alias: ''.
 	packageManager defaultSymbolDictionaryName: #Globals.
 	#( 'FileSystem-GemStone-Kernel' 'Files' 'Files-Tests' 'Kernel-Methods' 'Network-UUID' 'Network-UUID-Tests'
-      'Zinc-Character-Encoding-Core' 'Zinc-Character-Encoding-Tests' 'FileSystem-Core' 'FileSystem-Disk-Options'
-      'FileSystem-Disk'
-      'FileSystem-Memory' 'FileSystem-Path' 'FileSystem-Tests-Attributes' 'FileSystem-Tests-Core'
-      'FileSystem-Tests-Disk' 'FileSystem-Tests-GemStone' 'FileSystem-Tests-Memory')
+      'Zinc-Character-Encoding-Core' 'Zinc-Character-Encoding-Tests' 'FileSystem-Core' 'FileSystem-Disk-Errors'
+      'FileSystem-Disk-ErrorGroups' 'FileSystem-Disk-Options' 'FileSystem-Disk'
+      'FileSystem-Memory' 'FileSystem-Path' 'FileSystem-Client-Core' 'Zinc-Resource-Meta-Core'
+      'Zinc-Resource-Meta-FileSystem' 'FileSystem-Tests-Attributes' 'FileSystem-Tests-Core'
+      'FileSystem-Tests-Disk' 'FileSystem-Tests-GemStone' 'FileSystem-Tests-Memory' 'FileSystem-Tests-Disk-ErrorGroups' 'FileSystem-Tests-Client' 'Zinc-Resource-Meta-Tests')
 		do: [ :packageName |
 			packageManager
 				addResolvedReference:
