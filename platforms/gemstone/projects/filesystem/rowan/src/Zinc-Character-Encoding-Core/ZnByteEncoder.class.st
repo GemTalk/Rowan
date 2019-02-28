@@ -775,9 +775,9 @@ ZnByteEncoder >> decodeBytesIntoWideString: bytes [
 	that a WideString is probably needed"
 
 	| byteStream |
-self flag: 'TODO: This refers to #WideString which does not exist in Gemstone'.
+self flag: 'TODO: WideString does not exist in Gemstone. Using String which can grow to a QuadByteString'.
 	byteStream := bytes readStream.
-	^ QuadByteString streamContents: [ :stream |
+	^ String streamContents: [ :stream |
 		[ byteStream atEnd ] whileFalse: [
 			stream nextPut: (self nextFromStream: byteStream) ] ]
 ]

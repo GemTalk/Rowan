@@ -20,13 +20,14 @@ ZnByteStringBecameWideString class >> convert: byteString [
 	"Convert byteString to a wideString, signalling a resumable error"
 	
 	| wideString |
-self flag: 'TODO: WideString does not exist in Gemstone'.
+self flag: 'TODO: WideString does not exist in Gemstone. Using String which can grow to a QuadByteString'.
 	wideString := String from: byteString.
 	self new
 		byteString: byteString;
 		wideString: wideString;
 		signal.
 	^ wideString
+
 ]
 
 { #category : 'convenience' }

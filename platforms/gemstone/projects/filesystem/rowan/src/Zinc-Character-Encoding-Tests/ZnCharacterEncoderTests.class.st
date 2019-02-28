@@ -108,24 +108,11 @@ ZnCharacterEncoderTests >> testByteDecoding [
 
 { #category : 'testing' }
 ZnCharacterEncoderTests >> testCodePointEncodingDecoding [
-"	| encoder input output |
-	input := {}.
-	'Düsseldorf Königsallee' do: [:each | input add: each codePoint ].
-	self assert: input isCollection.
-	self assert: (input allSatisfy: [:each | each _isInteger ]).
-	#(utf8 ) do: [ :each |
-		encoder := each asZnCharacterEncoder.
-		output := encoder encodeCodePoints: input.
-		self assert: output isCollection.
-		self assert: (output allSatisfy: [ :e | e _isInteger and: [ e between: 0 and: 255 ] ] ).
-		self assert: (encoder encodedByteCountForCodePoints: input) equals: output size.
-		self assert: (encoder decodeAsCodePoints: output) equals: input ]"
-
 	| encoder input output |
 	input := 'Düsseldorf Königsallee' asByteArray asArray.
 	self assert: input isCollection.
 	self assert: (input allSatisfy: [:ea | ea _isInteger]).
-	#(utf8 "utf16 utf32 latin1 null") do: [ :each |
+	#(utf8 utf16 utf32 latin1 null) do: [ :each |
 		encoder := each asZnCharacterEncoder.
 		output := encoder encodeCodePoints: input.
 		self assert: output isCollection.
@@ -141,7 +128,7 @@ ZnCharacterEncoderTests >> testCodePointStreams [
 	codePoints := string asByteArray asArray.
 	self assert: codePoints isCollection.
 	self assert: (codePoints allSatisfy: [:ea | ea isKindOf: Integer]).
-	#(utf8 "utf16 utf32 latin1 null") do: [ :each |
+	#(utf8 utf16 utf32 latin1 null) do: [ :each |
 		bytes := ByteArray streamContents: [ :out |
 			(ZnCodePointWriteStream on: out encoding: each)
 				nextPutAll: codePoints ].
@@ -162,15 +149,6 @@ ZnCharacterEncoderTests >> testConvencienceMethods [
 	
 	#( 'ccc' 'ççç' 'c' 'ç' 'çc' 'cç' ) do: [ :each |
 		self assertCharacterCollection: (encoder decodeBytes: (encoder encodeString: each)) equals: each ]
-
-"	| encoder string |
-	encoder := ZnUTF8Encoder new.
-	string := 'élève en Français'. 
-	self assert: (encoder decodeBytes: (encoder encodeString: string)) equals: string.
-	self assert: (encoder encodedByteCountForString: string) = 20.
-	
-	#( 'ccc' 'ççç' 'c' 'ç' 'çc' 'cç' ) do: [ :each |
-		self assert: (encoder decodeBytes: (encoder encodeString: each)) equals: each ]"
 ]
 
 { #category : 'testing' }
@@ -206,11 +184,11 @@ ZnCharacterEncoderTests >> testDetectEncoding [
 
 { #category : 'testing' }
 ZnCharacterEncoderTests >> testKnownEncodingIdentifiers [
-	| all minimal asciiString |
+	| all minimal asciiString aCollection |
 	all := ZnCharacterEncoder knownEncodingIdentifiers asSet.
-	minimal := #(utf8) asSet.
+	minimal := #('utf8' 'latin1' 'null' 'ascii' 'iso88591') asSet.
 	"make sure at least a minimal set is present"
-	self assert: (all  select: [ :each | minimal includes: each ]) equals: minimal.
+	self assert: ( all  select: [ :each | (minimal includes: each) ] ) equals: minimal.
 	asciiString := String withAll: ((($a asciiValue to: $z asciiValue) , 
 		($A asciiValue to: $Z asciiValue) , ($0 asciiValue to: $9 asciiValue)) collect: [:each | Character codePoint: each ]).
 	"make sure that each identifier can be used to instanciate a decoder,
@@ -220,18 +198,6 @@ ZnCharacterEncoderTests >> testKnownEncodingIdentifiers [
 		encoder := ZnCharacterEncoder newForEncoding: each.
 		bytes := encoder encodeString: asciiString.
 		self assert: ((encoder decodeBytes: bytes) isEquivalent: asciiString) ]
-
-
-"	| all minimal asciiString |
-	all := ZnCharacterEncoder knownEncodingIdentifiers asSet.
-	minimal := #(utf8 latin1 null ascii iso88591) asSet.
-	self assert: (all intersection: minimal) equals: minimal.
-	asciiString := String withAll: ($a to: $z) , ($A to: $Z) , ($0 to: $9).
-	all do: [ :each |
-		| encoder bytes |
-		encoder := ZnCharacterEncoder newForEncoding: each.
-		bytes := encoder encodeString: asciiString.
-		self assert: (encoder decodeBytes: bytes) equals: asciiString ] "
 ]
 
 { #category : 'testing' }
@@ -276,21 +242,6 @@ ZnCharacterEncoderTests >> testNextPutAllStartingAtToStream [
 				bytes := ByteArray streamContents: [ :out |
 					encoder next: each size putAll: string startingAt: prefix size + 1 toStream: out ].
 				self assertCharacterCollection: (encoder decodeBytes: bytes) equals: each ] ]
-
-"	| encoder |
-	encoder := ZnUTF8Encoder new.
-	#( 'ccc' 'ççç' 'c' 'ç' 'çc' 'cç' 'çç' ) do: [ :each |
-		#( ( '' '' ) ( 'ABC' '' ) ( '' 'ABC' ) ( 'ABC' 'ABC' ) 
-			( 'AéC' '' ) ( '' 'AèC' ) ( 'AéC' 'AèC' ) 
-			( 'AXC' 'AèC' ) ( 'AéC' 'AXC' ) 
-			( 'PRE' 'ç' ) ) do: [ :extra |
-				| prefix postfix string bytes |
-				prefix := extra first.
-				postfix := extra last.
-				string := prefix, each, postfix.
-				bytes := ByteArray streamContents: [ :out |
-					encoder next: each size putAll: string startingAt: prefix size + 1 toStream: out ].
-				self assert: (encoder decodeBytes: bytes) equals: each ] ]"
 ]
 
 { #category : 'testing' }
@@ -340,7 +291,7 @@ ZnCharacterEncoderTests >> testReadIntoStartingAtCountFromStreamAtEnd [
 ZnCharacterEncoderTests >> testReadIntoStartingAtCountFromStreamWide [
 	| encoder |
 
-self flag: 'TODO: Need to figure out how to handle WideString'.
+self flag: 'TODO: WideString does not exist in Gemstone. Using String which can grow to a QuadByteString'.
 
 	encoder := ZnUTF8Encoder new.
 	{ 'abc', (String withAll: { 300 asCharacter. 400 asCharacter. 500 asCharacter}), 'xyz' } do: [ :each |
@@ -389,14 +340,8 @@ ZnCharacterEncoderTests >> testStringEncoding [
 	string := 'élève en Français'.
 	self assert: (string encodeWith: encoder) equals: (encoder encodeString: string).
 	self assert: (string encodeWith: #utf8) equals: (encoder encodeString: string).
-	self assert: string encodeAsUTF8 asByteArray equals: (encoder encodeString: string)
-
-"	| encoder string |
-	encoder := ZnUTF8Encoder new.
-	string := 'élève en Français'.
-	self assert: (string encodeWith: encoder) equals: (encoder encodeString: string).
-	self assert: (string encodeWith: #utf8) equals: (encoder encodeString: string).
-	self assert: string utf8Encoded equals: (encoder encodeString: string)"
+	"self assert: string encodeAsUTF8 asByteArray equals: (encoder encodeString: string)."
+	self assert: string utf8Encoded equals: (encoder encodeString: string)
 ]
 
 { #category : 'testing' }
@@ -537,7 +482,7 @@ ZnCharacterEncoderTests >> testUTF32EncoderWide [
 		'' } do: [ :each | 
 			| bytes |
 			bytes := self encodeString: each with: encoder. 
-			self assert: (encoder decodeBytesIntoWideString: bytes) equals: each ]
+			self assertString: (encoder decodeBytesIntoWideString: bytes) equalsString: each ]
 ]
 
 { #category : 'testing' }
@@ -571,7 +516,6 @@ ZnCharacterEncoderTests >> testUTF8Boundaries [
 			string := String with: each asCharacter.
 			encoded := utf8Encoder encodeString: string. 
 			self assertCharacterCollection: (utf8Encoder decodeBytes: encoded) equals: string.
-	"		self assert: (utf8Encoder decodeBytes: encoded) equals: string."
 			self assert: encoded size equals: byteCount ] ]
 ]
 
@@ -608,7 +552,6 @@ ZnCharacterEncoderTests >> testUTF8Encoder [
 	self assert: outputBytes = inputBytes.
 	outputString := self decodeBytes: inputBytes with: encoder.
 	self assertCharacterCollection: outputString equals: inputString
-"	self assert: outputString = inputString"
 ]
 
 { #category : 'testing' }
@@ -619,7 +562,6 @@ ZnCharacterEncoderTests >> testUTF8EncoderAuto [
 	bytes := self encodeString: inputString with: encoder. 
 	outputString := self decodeBytes: bytes with: encoder.
 	self assertCharacterCollection: inputString equals: outputString
-"	self assert: inputString = outputString"
 ]
 
 { #category : 'testing' }
@@ -662,8 +604,8 @@ ZnCharacterEncoderTests >> testUTF8EncoderWide [
 	{ 'abc'. 'élève en Français'. 'Pra-ská' copy at: 4 put: (Character codePoint: 382); yourself. '' }
 		do: [ :each | | bytes |
 			bytes := self encodeString: each with: encoder. 
-			self assertCharacterCollection: (encoder decodeBytes: bytes) equals: each ]
-"			self assert: (encoder decodeBytesIntoWideString: bytes) equals: each ]"
+"			self assertCharacterCollection: (encoder decodeBytes: bytes) equals: each."
+			self assertCharacterCollection: (encoder decodeBytesIntoWideString: bytes) equals: each ]
 ]
 
 { #category : 'testing' }

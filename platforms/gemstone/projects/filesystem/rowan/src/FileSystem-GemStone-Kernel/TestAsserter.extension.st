@@ -30,7 +30,7 @@ TestAsserter >> assertCollectionOfStrings: actual equalsCollectionOfStrings: exp
 TestAsserter >> assertString: actual equalsString: expected [
 	"Specialized test method that generates a proper error message for collection"
 	^ self
-		assert: (self isString: actual equalToString: expected)
+		assert: (actual isEquivalent: expected)
 		description: actual printString , ' is not equal to ' , expected printString
 ]
 

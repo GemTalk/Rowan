@@ -50,14 +50,16 @@ ZnPercentEncoder >> characterEncoder [
 	"Return the character encoder that I currently use.
 	If not set, I will default to using UTF-8."
 
-	self flag: 'GemStone/Pharo code switched for research'.
+	^ characterEncoder ifNil: [ characterEncoder := ZnDefaultCharacterEncoder value].
+
+"	self flag: 'GemStone/Pharo code switched for research'.
 
 	self isGemStoneUtf8Encoding
 		ifTrue: [
 			self flag: 'TODO: In Pharo, ZnDefaultCharacterEncoder is a DynamicVariable. This must be handled differently in Gemstone'.
 			^ characterEncoder ifNil: [ characterEncoder := ZnCharacterEncoder utf8 ] ]
 		ifFalse: [
-			^ characterEncoder ifNil: [ characterEncoder := ZnDefaultCharacterEncoder value ] ]
+			^ characterEncoder ifNil: [ characterEncoder := ZnDefaultCharacterEncoder value ] ]"
 ]
 
 { #category : 'initialize-release' }

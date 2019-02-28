@@ -68,7 +68,7 @@ ZnUTF8Encoder class >> initialize [
 
 { #category : 'accessing' }
 ZnUTF8Encoder class >> knownEncodingIdentifiers [
-	^ #( utf8 )
+	^ #( 'utf8' )
 ]
 
 { #category : 'instance creation' }

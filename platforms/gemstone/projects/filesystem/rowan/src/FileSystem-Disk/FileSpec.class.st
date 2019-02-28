@@ -58,29 +58,14 @@ FileSpec >> append [
 	self fileOptions append
 ]
 
-{ #category : 'convenience' }
-FileSpec >> beNonEncoded [
-	self encoding: 'null'
+{ #category : 'convenience - encoding' }
+FileSpec >> asciiEncoded [
+	self encoding: 'ascii'
 ]
 
 { #category : 'convenience' }
 FileSpec >> beUnixStore [
 	self store: UnixStore createDefault
-]
-
-{ #category : 'convenience' }
-FileSpec >> beUtf16Encoded [
-	self encoding: 'utf16'
-]
-
-{ #category : 'convenience' }
-FileSpec >> beUtf32Encoded [
-	self encoding: 'utf32'
-]
-
-{ #category : 'convenience' }
-FileSpec >> beUtf8Encoded [
-	self encoding: 'utf8'
 ]
 
 { #category : 'convenience' }
@@ -175,7 +160,7 @@ FileSpec >> gzipLowCompression [
 
 { #category : 'initialization' }
 FileSpec >> initialize [
-	self beUtf8Encoded.
+	self utf8Encoded.
 	self fileOptions: FileOptions new
 ]
 
@@ -217,6 +202,11 @@ FileSpec >> isGzipped [
 	^self fileOptions isGzipped
 ]
 
+{ #category : 'convenience - encoding' }
+FileSpec >> iso88591Encoded [
+	self encoding: 'iso88591'
+]
+
 { #category : 'testing' }
 FileSpec >> isReadable [
 
@@ -229,9 +219,19 @@ FileSpec >> isWritable [
 	^self fileOptions isWritable
 ]
 
+{ #category : 'convenience - encoding' }
+FileSpec >> latin1Encoded [
+	self encoding: 'latin1'
+]
+
 { #category : 'printing' }
 FileSpec >> mode [
 	^self fileOptions mode
+]
+
+{ #category : 'convenience - encoding' }
+FileSpec >> nullEncoded [
+	self encoding: 'null'
 ]
 
 { #category : 'convenience - file options' }
@@ -262,6 +262,21 @@ FileSpec >> textFileType [
 { #category : 'convenience - file options' }
 FileSpec >> truncate [
 	self fileOptions truncate
+]
+
+{ #category : 'convenience - encoding' }
+FileSpec >> utf16Encoded [
+	self encoding: 'utf16'
+]
+
+{ #category : 'convenience - encoding' }
+FileSpec >> utf32Encoded [
+	self encoding: 'utf32'
+]
+
+{ #category : 'convenience - encoding' }
+FileSpec >> utf8Encoded [
+	self encoding: 'utf8'
 ]
 
 { #category : 'convenience - file options' }

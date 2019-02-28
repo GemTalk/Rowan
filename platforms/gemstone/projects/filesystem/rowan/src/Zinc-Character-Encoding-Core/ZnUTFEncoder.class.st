@@ -29,7 +29,7 @@ ZnUTFEncoder >> decodeBytes: bytes [
 	
 	| byteStream |
 
-self flag: 'TODO: This require the class WideString to be implemented'.
+self flag: 'TODO: WideString does not exist in Gemstone. Using String which can grow to a QuadByteString'.
 	byteStream := bytes readStream.
 	^ String streamContents: [ :stream |
 		[ byteStream atEnd ] whileFalse: [ | codePoint |
@@ -48,7 +48,7 @@ ZnUTFEncoder >> decodeBytesIntoWideString: bytes [
 
 	| byteStream |
 	byteStream := bytes readStream.
-self flag: 'TODO: This requires the class WideString to be implemented. Using String as it will grow to a QuadByteString if needed'.
+self flag: 'TODO: WideString does not exist in Gemstone. Using String which can grow to a QuadByteString'.
 
 	^ String streamContents: [ :stream |
 		[ byteStream atEnd ] whileFalse: [

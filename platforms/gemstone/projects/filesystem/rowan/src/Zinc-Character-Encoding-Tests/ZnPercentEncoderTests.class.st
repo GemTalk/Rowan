@@ -41,8 +41,8 @@ ZnPercentEncoderTests >> testNonAscii [
 	| encoder |
 	encoder := ZnPercentEncoder new.
 	self 
-		assertString: encoder characterEncoder 
-		equalsString: (ZnCharacterEncoder newForEncoding: 'utf-8').
+		assert: encoder characterEncoder 
+		equals: (ZnCharacterEncoder newForEncoding: 'utf-8').
 	self 
 		assertString: (encoder encode: 'élève en Français') 
 		equalsString: '%C3%A9l%C3%A8ve%20en%20Fran%C3%A7ais'.
@@ -66,4 +66,9 @@ ZnPercentEncoderTests >> testSimple [
 { #category : 'tests' }
 ZnPercentEncoderTests >> testStringUrlDecoded [
 	self assertString: ('foo%20bar' urlDecoded) equalsString: 'foo bar'
+]
+
+{ #category : 'tests' }
+ZnPercentEncoderTests >> testStringUrlEncoded [
+	self assert: ('foo bar' urlEncoded) equals: 'foo%20bar'
 ]
