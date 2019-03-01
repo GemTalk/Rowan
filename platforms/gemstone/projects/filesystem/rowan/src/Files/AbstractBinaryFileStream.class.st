@@ -60,7 +60,7 @@ AbstractBinaryFileStream class >> on: aFile options: aFileOptions [
 { #category : 'testing' }
 AbstractBinaryFileStream >> atEnd [
 
-	^ file atEnd: handle
+	^ self file atEnd
 ]
 
 { #category : 'reading' }
@@ -107,11 +107,7 @@ AbstractBinaryFileStream >> fileName [
 
 { #category : 'flushing' }
 AbstractBinaryFileStream >> flush [
-	"When writing, this flushes the write buffer the stream uses to reduce
-	the number of write() system calls it makes. This should generally be
-	used before #sync, but on Windows they do the same thing."
-	
-	file flush: handle
+	self file flush
 ]
 
 { #category : 'accessing' }
@@ -127,9 +123,7 @@ AbstractBinaryFileStream >> handle: anObject [
 { #category : 'initialization' }
 AbstractBinaryFileStream >> handle: aCollection file: aFile options: aFileOptions [
 	
-	handle := aCollection.
-	file := aFile.
-	options := aFileOptions
+	self file: aFile
 ]
 
 { #category : 'testing' }
@@ -139,12 +133,17 @@ AbstractBinaryFileStream >> isBinary [
 
 { #category : 'testing' }
 AbstractBinaryFileStream >> isReadStream [
-	^self options isWritable not
+	^self isWritable not
 ]
 
-{ #category : 'other' }
+{ #category : 'testing' }
+AbstractBinaryFileStream >> isWritable [
+	^self file  isNil ifTrue: [false] ifFalse: [self file isWritable]
+]
+
+{ #category : 'testing' }
 AbstractBinaryFileStream >> isWriteStream [
-	^self options isWritable
+	^self isWritable
 ]
 
 { #category : 'character writing' }
@@ -172,7 +171,7 @@ AbstractBinaryFileStream >> next: n into: aBuffer [
 	"Return a string with the next n characters of the filestream in it."
 	| readBuffer read |
 	readBuffer := aBuffer.
-	read := file read: handle into: readBuffer startingAt: 1 count: n.
+	read := self file readInto: readBuffer startingAt: 1 count: n.
 	^read = n 
 		ifTrue: [ readBuffer ]
 		ifFalse: [ readBuffer copyFrom: 1 to: read ]
@@ -193,11 +192,10 @@ AbstractBinaryFileStream >> next: n into: aString startingAt: startIndex [
 { #category : 'writing' }
 AbstractBinaryFileStream >> next: amount putAll: aByteArray [
 
-	self options isWritable
-		ifFalse: [ ^ FileWriteError signalWith: self file reference text: 'Cannot write a read-only file - ' , self pathString ].
-	file
-		write: handle
-		from: aByteArray
+	self isWritable
+		ifFalse: [ ^ FileWriteError signalWith: 'Cannot write a read-only file - ' , self file fullName ].
+	self file
+		writeFrom: aByteArray
 		startingAt: 1
 		count: amount.
 	^ aByteArray
@@ -266,13 +264,13 @@ AbstractBinaryFileStream >> peek [
 { #category : 'positioning' }
 AbstractBinaryFileStream >> position [
 
-	^ self file getPosition: handle
+	^ self file position
 ]
 
 { #category : 'positioning' }
 AbstractBinaryFileStream >> position: aPosition [
 	
-	self file setPosition: handle to: aPosition
+	self file position: aPosition
 ]
 
 { #category : 'printing' }
@@ -288,7 +286,7 @@ AbstractBinaryFileStream >> printOn: aStream [
 { #category : 'reading' }
 AbstractBinaryFileStream >> readInto: readBuffer startingAt: startIndex count: count [
 
-	^ file read: handle into: readBuffer startingAt: startIndex count: count
+	^self file readInto: readBuffer startingAt: startIndex count: count
 ]
 
 { #category : 'positioning' }
@@ -305,7 +303,7 @@ AbstractBinaryFileStream >> setToEnd [
 { #category : 'accessing' }
 AbstractBinaryFileStream >> size [
 
-	^ self file sizeOf: handle
+	^ self file fileSize
 ]
 
 { #category : 'positioning' }
@@ -319,7 +317,7 @@ AbstractBinaryFileStream >> skip: n [
 { #category : 'flushing' }
 AbstractBinaryFileStream >> sync [	
 
-	self file sync: handle
+	self file sync
 ]
 
 { #category : 'reading' }

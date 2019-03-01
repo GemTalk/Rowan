@@ -27,6 +27,7 @@ FileHandleTest >> testFileWriteError [
 	| stream  |
 	stream := FileSystem disk binaryWriteStreamOn: (FileSystem disk workingDirectory / 'foo.txt') path.
 	stream close.
+	stream := FileSystem disk binaryReadStreamOn: (FileSystem disk workingDirectory / 'foo.txt') path.
 	self should: [stream  nextPutAll: 'abdef'] raise: FileWriteError
 ]
 

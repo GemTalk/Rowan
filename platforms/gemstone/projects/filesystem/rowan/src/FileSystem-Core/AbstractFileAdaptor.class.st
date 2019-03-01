@@ -1,10 +1,17 @@
+"
+I provide an abstraction layer to adapt the theoretical file implementation in the FileSystem package with the actual file implemenation in the target Smalltalk dialect.
+
+Each Smalltalk dialect can create its own subclass.
+
+To change which file class to use, update the method FileSystem class>>#fileClass. This should be implemented in dialect dependent package.
+"
 Class {
 	#name : 'AbstractFileAdaptor',
 	#superclass : 'Object',
 	#instVars : [
 		'file'
 	],
-	#category : 'Files-Core'
+	#category : 'FileSystem-Core-Kernel'
 }
 
 { #category : 'accessing' }
@@ -74,13 +81,8 @@ AbstractFileAdaptor class >> rename: oldFileFullName to: newFileFullName [
 	self subclassResponsibility
 ]
 
-{ #category : 'accessing' }
-AbstractFileAdaptor >> atEnd: handle [
-	self subclassResponsibility
-]
-
-{ #category : 'positioning' }
-AbstractFileAdaptor >> close: handle [
+{ #category : 'accessing - file' }
+AbstractFileAdaptor >> atEnd [
 	self subclassResponsibility
 ]
 
@@ -94,8 +96,13 @@ AbstractFileAdaptor >> file: aFile [
 	file := aFile
 ]
 
+{ #category : 'accessing - file' }
+AbstractFileAdaptor >> fileSize [
+	self subclassResponsibility
+]
+
 { #category : 'positioning' }
-AbstractFileAdaptor >> flush: handle [
+AbstractFileAdaptor >> flush [
 	self subclassResponsibility
 ]
 
@@ -104,24 +111,22 @@ AbstractFileAdaptor >> fullName [
 	self subclassResponsibility
 ]
 
-{ #category : 'positioning' }
-AbstractFileAdaptor >> getPosition: handle [
+{ #category : 'accessing - file' }
+AbstractFileAdaptor >> isClosed [
+
 	self subclassResponsibility
 ]
 
-{ #category : 'positioning' }
-AbstractFileAdaptor >> isClosed: handle [
+{ #category : 'accessing - file' }
+AbstractFileAdaptor >> isWritable [
+
 	self subclassResponsibility
 ]
 
-{ #category : 'positioning' }
-AbstractFileAdaptor >> read: handle into: readBuffer startingAt: startIndex count: count [
-	self subclassResponsibility
-]
+{ #category : 'accessing - file' }
+AbstractFileAdaptor >> pathString [
 
-{ #category : 'positioning' }
-AbstractFileAdaptor >> setPosition: handle to: aPosition [
-	self subclassResponsibility
+	^self file pathString
 ]
 
 { #category : 'positioning' }
@@ -130,21 +135,11 @@ AbstractFileAdaptor >> sizeOf: handle [
 ]
 
 { #category : 'positioning' }
-AbstractFileAdaptor >> sizeOrNil: id [
+AbstractFileAdaptor >> truncate: anInteger [
 	self subclassResponsibility
 ]
 
-{ #category : 'positioning' }
-AbstractFileAdaptor >> sync: handle [
-	self subclassResponsibility
-]
-
-{ #category : 'positioning' }
-AbstractFileAdaptor >> truncate: handle to: anInteger [
-	self subclassResponsibility
-]
-
-{ #category : 'positioning' }
-AbstractFileAdaptor >> write: handle from: aByteArray startingAt: anIndex count: amount [
+{ #category : 'accessing - file' }
+AbstractFileAdaptor >> writeFrom: aByteArray startingAt: anIndex count: count [
 	self subclassResponsibility
 ]

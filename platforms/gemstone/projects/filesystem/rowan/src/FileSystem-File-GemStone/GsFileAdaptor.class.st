@@ -1,22 +1,23 @@
+"
+I provide an abstraction layer to adapt the theoretical file implementation in the FileSystem package with the actual file implemenation in the target Smalltalk dialect.
+"
 Class {
 	#name : 'GsFileAdaptor',
 	#superclass : 'AbstractFileAdaptor',
-	#category : 'Files-Core'
+	#instVars : [
+		'options'
+	],
+	#category : 'FileSystem-File-GemStone'
 }
 
-{ #category : 'accessing' }
+{ #category : 'accessing - file' }
 GsFileAdaptor class >> _entriesIn: pathString [
 	| result |
 	result := GsFile _contentsOfServerDirectory: pathString expandPath: true.
 	^result _isArray ifTrue: [result] ifFalse:  [nil]
 ]
 
-{ #category : 'client' }
-GsFileAdaptor class >> _fileKind: aPathName onClient: aBoolean [
-	^GsFile _fileKind: aPathName onClient: aBoolean
-]
-
-{ #category : 'accessing' }
+{ #category : 'accessing - file' }
 GsFileAdaptor class >> _fullPath: path filename: basename [
 	"If this is a directory, then the path needs to have a slash on the end"
 	| fullPath |
@@ -25,43 +26,28 @@ GsFileAdaptor class >> _fullPath: path filename: basename [
 	^fullPath
 ]
 
-{ #category : 'client' }
-GsFileAdaptor class >> createClientDirectory: path [
-	^GsFile createClientDirectory: path
-]
-
-{ #category : 'accessing' }
+{ #category : 'accessing - file' }
 GsFileAdaptor class >> createDirectory: aPathName [
 	^GsFile createServerDirectory: aPathName
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - file' }
 GsFileAdaptor class >> currentWorkingDirectoryPath [
 
 	^GsFile _expandEnvVariable: 'PWD' isClient:false
 ]
 
-{ #category : 'client' }
-GsFileAdaptor class >> deleteClientDirectory: path [
-	^GsFile _removeDirectory: path onClient: true 
-]
-
-{ #category : 'accessing' }
-GsFileAdaptor class >> deleteClientFile: aPathName [
-	^GsFile _removeFile: aPathName onClient: true
-]
-
-{ #category : 'accessing' }
+{ #category : 'accessing - file' }
 GsFileAdaptor class >> deleteDirectory: aPathName [
 	^GsFile removeServerDirectory: aPathName
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - file' }
 GsFileAdaptor class >> deleteFile: aPathName [
 	^GsFile removeServerFile: aPathName
 ]
 
-{ #category : 'convenience' }
+{ #category : 'error handling' }
 GsFileAdaptor class >> doesNotUnderstand: aMessage [
 	"Redirect message to the resolved version of this GsFile."
 	(GsFile respondsTo: aMessage selector)
@@ -70,7 +56,7 @@ GsFileAdaptor class >> doesNotUnderstand: aMessage [
 	^ super doesNotUnderstand: aMessage.
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - file' }
 GsFileAdaptor class >> entriesIn: pathString [
 	| result |
 	result := self _entriesIn: pathString.
@@ -78,12 +64,12 @@ GsFileAdaptor class >> entriesIn: pathString [
 		reject: [:ea | (ea  endsWith: '.') or: [ea endsWith: '..']]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - file' }
 GsFileAdaptor class >> isDirectory: aPathName [
 	^GsFile _isDirectory: aPathName onClient: false
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - file' }
 GsFileAdaptor class >> lookupDirectory: path filename: basename [
 
 	| fullPath|
@@ -91,7 +77,7 @@ GsFileAdaptor class >> lookupDirectory: path filename: basename [
 	^self lookupDirectoryEntry: fullPath
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - file' }
 GsFileAdaptor class >> lookupDirectoryEntry: fullPath [
 	| gsFileStat |
 	gsFileStat := GsFile stat: fullPath isLstat: true.
@@ -117,53 +103,32 @@ GsFileAdaptor class >> openPathName: aPathName withOptions: aFileOptions [
 			mode: aFileOptions mode 
 			onClient: aFileOptions isForeignFileSystem 
 			withCompression: aFileOptions isGzipped.
-	^aGsFile ifNotNil: [self on: aGsFile]
+	^aGsFile ifNotNil: [(self on: aGsFile) options: aFileOptions]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - file' }
 GsFileAdaptor class >> rename: oldFileFullName to: newFileFullName [
 	^(GsFile renameFileOnServer: oldFileFullName to: newFileFullName) = 0 
 		ifTrue: [0] 
 		ifFalse: [nil]
 ]
 
-{ #category : 'accessing' }
-GsFileAdaptor class >> renameOnClient: oldFileFullName to: newFileFullName [
-	^(GsFile renameFile: oldFileFullName to: newFileFullName) = 0 
-		ifTrue: [0] 
-		ifFalse: [nil]
-]
-
-{ #category : 'convenience' }
+{ #category : 'accessing - file' }
 GsFileAdaptor class >> serverErrorString [
 	^GsFile serverErrorString
 ]
 
-{ #category : 'convenience' }
-GsFileAdaptor >> at: anInteger [
-	self file at: anInteger
-]
-
-{ #category : 'accessing' }
-GsFileAdaptor >> atEnd: handle [
-	"The handle is always nil. This is here for Pharo compatability"
-
+{ #category : 'accessing - file' }
+GsFileAdaptor >> atEnd [
 	^self file atEnd
 ]
 
-{ #category : 'convenience' }
+{ #category : 'accessing - file' }
 GsFileAdaptor >> close [
 	self file close
 ]
 
-{ #category : 'accessing' }
-GsFileAdaptor >> close: handle [
-	"The handle is always nil. This is here for Pharo compatability"
-
-	self file close
-]
-
-{ #category : 'convenience' }
+{ #category : 'error handling' }
 GsFileAdaptor >> doesNotUnderstand: aMessage [
 	"Redirect message to the resolved version of this GsFile."
 	(self file respondsTo: aMessage selector)
@@ -172,86 +137,73 @@ GsFileAdaptor >> doesNotUnderstand: aMessage [
 	^ super doesNotUnderstand: aMessage.
 ]
 
-{ #category : 'convenience' }
+{ #category : 'accessing - file' }
 GsFileAdaptor >> fileSize [
 	^self file fileSize
 ]
 
-{ #category : 'accessing' }
-GsFileAdaptor >> flush: handle [
-	"The handle is always nil. This is here for Pharo compatability"
-
+{ #category : 'accessing - file' }
+GsFileAdaptor >> flush [
 	self file flush
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - file' }
 GsFileAdaptor >> fullName [
 	^self file pathName
 ]
 
-{ #category : 'accessing' }
-GsFileAdaptor >> getPosition: handle [
-	"The handle is always nil. This is here for Pharo compatability"
-		^self position ifNil: [ self error: 'position error' ]
+{ #category : 'accessing - file' }
+GsFileAdaptor >> isClosed [
+	^self isOpen not
 ]
 
-{ #category : 'accessing' }
-GsFileAdaptor >> isClosed: handle [
-	"The handle is always nil. This is here for Pharo compatability"
-
-	^self file isOpen not
-]
-
-{ #category : 'accessing' }
+{ #category : 'accessing - file' }
 GsFileAdaptor >> isOpen [
-	"The handle is always nil. This is here for Pharo compatability"
-
-	^self file isOpen
+	^self file notNil and: [self file isOpen]
 ]
 
-{ #category : 'convenience' }
+{ #category : 'testing' }
+GsFileAdaptor >> isWritable [
+	^self options isWritable
+]
+
+{ #category : 'accessing - file' }
 GsFileAdaptor >> next: count into: buf [
 	^self file next: count into: buf
 ]
 
-{ #category : 'convenience' }
+{ #category : 'accessing - file' }
 GsFileAdaptor >> nextPutAll: stringOrByteArray [
 	^self file nextPutAll: stringOrByteArray
 ]
 
-{ #category : 'convenience' }
-GsFileAdaptor >> position: anInteger [
-	^self file position: anInteger
+{ #category : 'accessing' }
+GsFileAdaptor >> options [
+	^options
 ]
 
 { #category : 'accessing' }
-GsFileAdaptor >> read: handle into: readBuffer startingAt: startIndex count: count [
-	"The handle is always nil. This is here for Pharo compatability"
+GsFileAdaptor >> options: aFileOptions [
+	options := aFileOptions
+]
 
+{ #category : 'accessing - file' }
+GsFileAdaptor >> position [
+	^self file position ifNil: [ self error: 'position error' ]
+]
+
+{ #category : 'accessing - file' }
+GsFileAdaptor >> position: aPosition [
+	(self file position: aPosition) ifNil: [ self error: 'position error' ]
+]
+
+{ #category : 'accessing - file' }
+GsFileAdaptor >> readInto: readBuffer startingAt: startIndex count: count [
 	^(self file read: count into: readBuffer) ifNil: [FileReadError signal: 'File Read Error']
 ]
 
-{ #category : 'accessing' }
-GsFileAdaptor >> setPosition: handle to: aPosition [
-	"The handle is always nil. This is here for Pharo compatability"
-		(self file position: aPosition) ifNil: [ self error: 'position error' ]
-]
-
-{ #category : 'accessing' }
-GsFileAdaptor >> sizeOf: handle [
-	"The handle is always nil. This is here for Pharo compatability"
-
-	^(self fileSize) ifNil: [ self error: 'file size error' ]
-]
-
-{ #category : 'accessing' }
-GsFileAdaptor >> sizeOrNil: id [
-
-	^self fileSize
-]
-
-{ #category : 'accessing' }
-GsFileAdaptor >> sync: handle [
+{ #category : 'accessing - file' }
+GsFileAdaptor >> sync [
 	"The handle is always nil. This is here for Pharo compatability"
 
 	"On Unix, this syncs any written or flushed data still in the kernel file
@@ -269,18 +221,13 @@ GsFileAdaptor >> sync: handle [
 	"fsync() failing cannot be ignored"
 ]
 
-{ #category : 'accessing' }
-GsFileAdaptor >> truncate: handle to: anInteger [
-
-	self setPosition: handle to: anInteger
-	
-	"work needs to be done here to call out to the bash shell script 'truncate -s anInteger' "
+{ #category : 'accessing - file' }
+GsFileAdaptor >> truncate: anInteger [
+	self file position: anInteger
 ]
 
-{ #category : 'accessing' }
-GsFileAdaptor >> write: handle from: aByteArray startingAt: anIndex count: amount [
-	"The handle is always nil. This is here for Pharo compatability"
-
+{ #category : 'accessing - file' }
+GsFileAdaptor >> writeFrom: aByteArray startingAt: anIndex count: count [
 	^(self nextPutAll: aByteArray) ifNil: [
 		(FileWriteError fileName: self fullName) signal: ('File ' , self file name , ' write failed')]
 ]

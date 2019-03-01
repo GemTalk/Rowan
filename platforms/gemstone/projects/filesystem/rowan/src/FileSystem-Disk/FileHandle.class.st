@@ -197,7 +197,7 @@ FileHandle >> sync [
 
 { #category : 'public' }
 FileHandle >> truncateTo: anInteger [
-	self id truncate: nil to: anInteger
+	self id truncate: anInteger
 ]
 
 { #category : 'public' }

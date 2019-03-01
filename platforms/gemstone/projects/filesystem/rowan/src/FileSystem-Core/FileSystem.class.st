@@ -23,14 +23,6 @@ Class {
 	#category : 'FileSystem-Core-Public'
 }
 
-{ #category : 'accessing' }
-FileSystem class >> fileClass [
-	"This is a step toward implementing comptability with Pharo.
-      - this needs to be moved into a separate package
-      - also, common methods need to be implmented which are sent to the fileClass to make it pluggable"
-	^GsFileAdaptor
-]
-
 { #category : 'instance creation' }
 FileSystem class >> store: aStore [
 	^ self basicNew

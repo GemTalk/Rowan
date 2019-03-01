@@ -9,7 +9,10 @@ RwProjectLoadConfiguration {
 			'core' : {
 				#packageNames : [
 				'FileSystem-Core',
+				'FileSystem-File-GemStone',
+				'FileSystem-File-Pharo',
 				'FileSystem-Disk',
+				'FileSystem-Disk-GemStone',
 				'FileSystem-Disk-Options',
 				'FileSystem-Disk-Errors',
 				'FileSystem-Disk-ErrorGroups',
@@ -31,6 +34,7 @@ RwProjectLoadConfiguration {
 				'FileSystem-Tests-Core',
 				'FileSystem-Tests-Disk',
 				'FileSystem-Tests-Disk-ErrorGroups',
+				'FileSystem-Tests-Disk-GemStone',
 				'FileSystem-Tests-Memory',
 				'FileSystem-Tests-Client',
 				'Zinc-Character-Encoding-Tests',
