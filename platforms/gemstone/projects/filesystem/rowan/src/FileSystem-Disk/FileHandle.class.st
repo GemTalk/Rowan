@@ -68,10 +68,7 @@ FileHandle >> binaryReadStream [
 
 { #category : 'public' }
 FileHandle >> binaryStream [
-	^BinaryFileStream 
-		handle: nil 
-		file: (FileSystem fileClass open: reference withOptions: self options) 
-		options: self options
+	^BinaryFileStream on: (FileSystem fileClass open: reference withOptions: self options)
 ]
 
 { #category : 'public' }

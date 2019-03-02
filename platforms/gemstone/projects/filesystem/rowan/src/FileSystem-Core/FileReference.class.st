@@ -378,6 +378,13 @@ FileReference >> printOn: aStream [
 ]
 
 { #category : 'streams' }
+FileReference >> readRawStream [
+	"Answer a buffered write stream wrapping a binary file stream on the receiver"
+
+	^self fileSystem readFileSpec binaryFileStreamOn: self
+]
+
+{ #category : 'streams' }
 FileReference >> readStream [
 	"Answer an encoded buffered read stream wrapping a binary file stream on the receiver"
 
@@ -434,6 +441,13 @@ FileReference >> setFileSystem: aFilesystem path: aPath [
 { #category : 'accessing' }
 FileReference >> size [
 	^ filesystem sizeOf: path
+]
+
+{ #category : 'streams' }
+FileReference >> writeRawStream [
+	"Answer a buffered write stream wrapping a binary file stream on the receiver"
+
+	^self fileSystem writeFileSpec binaryFileStreamOn: self
 ]
 
 { #category : 'streams' }

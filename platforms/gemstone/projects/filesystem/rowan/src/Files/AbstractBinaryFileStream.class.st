@@ -35,26 +35,17 @@ Class {
 	#name : 'AbstractBinaryFileStream',
 	#superclass : 'Stream',
 	#instVars : [
-		'file',
-		'handle',
-		'options'
+		'file'
 	],
 	#category : 'Files-Streams'
 }
 
 { #category : 'instance creation' }
-AbstractBinaryFileStream class >> handle: aCollection file: aFile options: aFileOptions [
+AbstractBinaryFileStream class >> on: aFile [
 	
-	^ self basicNew
-		handle: aCollection file: aFile options: aFileOptions;
+	^ self new
+		file: aFile;
 		yourself
-
-]
-
-{ #category : 'instance creation' }
-AbstractBinaryFileStream class >> on: aFile options: aFileOptions [
-	
-	^ self handle: nil file: aFile options: aFileOptions
 ]
 
 { #category : 'testing' }
@@ -108,22 +99,6 @@ AbstractBinaryFileStream >> fileName [
 { #category : 'flushing' }
 AbstractBinaryFileStream >> flush [
 	self file flush
-]
-
-{ #category : 'accessing' }
-AbstractBinaryFileStream >> handle [
-	^handle
-]
-
-{ #category : 'accessing' }
-AbstractBinaryFileStream >> handle: anObject [
-	handle := anObject
-]
-
-{ #category : 'initialization' }
-AbstractBinaryFileStream >> handle: aCollection file: aFile options: aFileOptions [
-	
-	self file: aFile
 ]
 
 { #category : 'testing' }
@@ -237,16 +212,6 @@ AbstractBinaryFileStream >> nextPut: anInteger [
 { #category : 'writing' }
 AbstractBinaryFileStream >> nextPutAll: aByteArray [
 	self next: aByteArray basicSize putAll: aByteArray
-]
-
-{ #category : 'accessing' }
-AbstractBinaryFileStream >> options [
-	^options
-]
-
-{ #category : 'accessing' }
-AbstractBinaryFileStream >> options: aFileOptions [
-	options := aFileOptions
 ]
 
 { #category : 'accessing' }

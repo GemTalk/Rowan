@@ -57,7 +57,9 @@ PosixErrorGroupWindowsTest >> testCloseFileErrorGroup [
 	self assert: posixErrorClass posixName equals: 'EIO'.
 
 	posixErrorClass := errorGroup errorClassForErrorNumber: 6 fileReference: fileReference.
-	self assert: posixErrorClass posixName equals: 'EBADF'
+	self assert: posixErrorClass posixName equals: 'EBADF'.
+
+	self should: [errorGroup signalErrorNumber: 6 fileReference: fileReference] raise: FileBadFileDescriptorError
 ]
 
 { #category : 'tests - lookup file posix error class' }
@@ -136,6 +138,8 @@ PosixErrorGroupWindowsTest >> testCreationOfFilePosixError [
 	self assert: aPosixError sourceReference isNil.
 	self assert: aPosixError options equals: fileOptions.
 	self assert: aPosixError errorGroupName = errorGroup class name asString.
+
+	self should: [errorGroup signalErrorNumber: 3 fileReference: fileReference options: fileOptions] raise: FileAccessError.
 
 	errorGroup := CopyFileErrorGroup new.
 	aPosixError := errorGroup errorForNumber: 16 newFileReference: fileReference oldFileReference: fileSystem workingDirectory.
@@ -442,6 +446,8 @@ PosixErrorGroupWindowsTest >> testRenameFileErrorGroup [
 
 	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 newFileReference: fileReference oldFileReference: fileReference.
 	self assert: posixErrorClass posixName equals: 'EIO'.
+
+	self should: [errorGroup signalErrorNumber: 9999 newFileReference: fileReference oldFileReference: fileReference] raise: FileIOError.
 
 	self isWindowsStoreCurrentStore ifTrue: [
 		posixErrorClass := errorGroup errorClassForErrorNumber: 2 newFileReference: fileReference oldFileReference: fileReference.

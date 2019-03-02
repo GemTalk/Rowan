@@ -118,6 +118,30 @@ GsFileAdaptor class >> serverErrorString [
 	^GsFile serverErrorString
 ]
 
+{ #category : 'instance creation' }
+GsFileAdaptor class >> stderr [
+
+	| aGsFile |
+	aGsFile := GsFile _getStdFile: 2 onClient: false.
+	^aGsFile ifNotNil: [(self on: aGsFile) options: FileOptions write]
+]
+
+{ #category : 'instance creation' }
+GsFileAdaptor class >> stdin [
+
+	| aGsFile |
+	aGsFile := GsFile _getStdFile: 0 onClient: false.
+	^aGsFile ifNotNil: [(self on: aGsFile) options: FileOptions read]
+]
+
+{ #category : 'instance creation' }
+GsFileAdaptor class >> stdout [
+
+	| aGsFile |
+	aGsFile := GsFile _getStdFile: 1 onClient: false.
+	^aGsFile ifNotNil: [(self on: aGsFile) options: FileOptions write]
+]
+
 { #category : 'accessing - file' }
 GsFileAdaptor >> atEnd [
 	^self file atEnd

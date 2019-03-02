@@ -263,7 +263,10 @@ File >> openWithOptions: aFileOptions [
 		CannotDeleteFileException signal: name
 	].
 
-	^ BinaryFileStream handle: fileHandle file: self options: aFileOptions
+	^ BinaryFileStream on: (
+		(FileAdaptor on: self) 
+			options: aFileOptions;
+			handle: fileHandle)
 ]
 
 { #category : 'streaming' }

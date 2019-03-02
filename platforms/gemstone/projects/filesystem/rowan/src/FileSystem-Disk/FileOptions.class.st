@@ -470,6 +470,15 @@ FileOptions >> posixFlagsTotalValue [
 ]
 
 { #category : 'printing' }
+FileOptions >> printOn: aStream [
+	super printOn: aStream.
+	aStream
+		nextPutAll: '(';
+		nextPutAll: (self openModeFlag posixName ifNil: ['nil']);
+		nextPutAll: ')'
+]
+
+{ #category : 'printing' }
 FileOptions >> printOpenModeStringOn: aStream [
 
 	self openModeFlag printOpenModeStringOn: aStream.

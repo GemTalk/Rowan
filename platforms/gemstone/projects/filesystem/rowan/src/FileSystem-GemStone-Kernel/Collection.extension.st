@@ -66,6 +66,34 @@ Collection >> ifEmpty: aBlock [
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
+Collection >> ifEmpty: emptyBlock ifNotEmpty: notEmptyBlock [
+	"Evaluate emptyBlock if I'm empty, notEmptyBlock otherwise"
+	" If the notEmptyBlock has an argument, eval with the receiver as its argument"
+
+	self isEmpty ifTrue: [ ^emptyBlock value ].
+	^notEmptyBlock cull: self
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+Collection >> ifNotEmpty: aBlock [
+	"Evaluate the given block with the receiver as argument, answering its value
+    unless the receiver is empty, in which case answer the receiver."
+
+    ^self isEmpty
+          ifTrue: [self]
+          ifFalse: [aBlock cull: self]
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
+Collection >> ifNotEmpty: notEmptyBlock ifEmpty: emptyBlock [
+	"Evaluate emptyBlock if I'm empty, notEmptyBlock otherwise
+	 If the notEmptyBlock has an argument, eval with the receiver as its argument"
+
+	self isEmpty ifFalse: [ ^notEmptyBlock cull: self ].
+	^emptyBlock value
+]
+
+{ #category : '*filesystem-gemstone-kernel' }
 Collection >> isEmptyOrNil [
   "Answer whether the receiver contains any elements, or is nil.  Useful in numerous situations where one wishes the same reaction to an empty collection or to nil"
 

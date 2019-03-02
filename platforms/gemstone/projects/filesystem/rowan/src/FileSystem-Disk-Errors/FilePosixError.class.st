@@ -148,6 +148,17 @@ FilePosixError >> platformErrorNumber: anInteger [
 	platformErrorNumber := anInteger
 ]
 
+{ #category : 'printing' }
+FilePosixError >> printOn: aStream [
+	aStream 
+		nextPutAll: self class name; 
+		nextPutAll: '(';
+		nextPutAll: self class posixName;
+		nextPutAll: '-';
+		nextPutAll: self errorGroupName;
+		nextPutAll: ')'
+]
+
 { #category : 'accessing' }
 FilePosixError >> sourceReference [
 	^sourceReference

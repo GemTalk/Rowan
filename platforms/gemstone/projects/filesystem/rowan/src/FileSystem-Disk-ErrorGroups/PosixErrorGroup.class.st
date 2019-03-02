@@ -166,3 +166,18 @@ PosixErrorGroup >> selector: aSelector errorNames: posixErrorNames [
 	self selector: aSelector.
 	posixErrorNames collect: [:ea | self errorClasses add: (FilePosixError classWithPosixName: ea)]
 ]
+
+{ #category : 'api' }
+PosixErrorGroup >> signalErrorNumber: anErrorNumber fileReference: aFileReference [
+	(self errorForNumber: anErrorNumber fileReference: aFileReference) signal
+]
+
+{ #category : 'api' }
+PosixErrorGroup >> signalErrorNumber: anErrorNumber fileReference: aFileReference options: aFileOptions [
+	(self errorForNumber: anErrorNumber fileReference: aFileReference options: aFileOptions) signal
+]
+
+{ #category : 'api' }
+PosixErrorGroup >> signalErrorNumber: anErrorNumber newFileReference: aNewFileReference oldFileReference: anOldFileReference [
+	(self errorForNumber: anErrorNumber  newFileReference: aNewFileReference oldFileReference: anOldFileReference) signal
+]
