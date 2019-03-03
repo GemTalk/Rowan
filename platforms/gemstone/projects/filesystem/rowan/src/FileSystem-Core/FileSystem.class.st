@@ -55,7 +55,7 @@ FileSystem >> binaryReadStreamOn: aResolvable [
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a read stream for reading the file."
 
-	^ (self open: aResolvable options: self readFileOptions) binaryStream.
+	^ (self open: aResolvable options: self readStreamOptions) binaryStream.
 ]
 
 { #category : 'public' }
@@ -551,39 +551,31 @@ FileSystem >> printPath: aPath on: aStream [
 	store printPath: aPath on: aStream
 ]
 
-{ #category : 'private' }
-FileSystem >> readFileOptions [
-	^self readFileSpec fileOptions
-]
-
-{ #category : 'private' }
-FileSystem >> readFileSpec [
-
-	^(FileSpec on: self)
-		read
-]
-
 { #category : 'public' }
 FileSystem >> readStreamOn: aResolvable [
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a read stream for reading the file."
 
-	^ (self open: aResolvable options: self readFileOptions) readStream.
+	^ (self open: aResolvable options: self readStreamOptions) readStream.
 ]
 
 { #category : 'private' }
-FileSystem >> readWriteFileSpec [
+FileSystem >> readStreamOptions [
+	^self readStreamSpec fileOptions
+]
 
-	^(FileSpec on: self)
+{ #category : 'private' }
+FileSystem >> readStreamSpec [
+
+	^(StreamSpec on: self)
+		read
+]
+
+{ #category : 'private' }
+FileSystem >> readWriteStreamSpec [
+
+	^(StreamSpec on: self)
 		readWrite
-]
-
-{ #category : 'private' }
-FileSystem >> readWriteTruncatedFileSpec [
-
-	^(FileSpec on: self)
-		readWrite;
-		truncate
 ]
 
 { #category : 'public' }
@@ -698,14 +690,7 @@ FileSystem >> workingDirectoryPath [
 
 { #category : 'private' }
 FileSystem >> writeFileOptions [
-	^self writeFileSpec fileOptions
-]
-
-{ #category : 'private' }
-FileSystem >> writeFileSpec [
-
-	^(FileSpec on: self)
-		write
+	^self writeStreamSpec fileOptions
 ]
 
 { #category : 'public' }
@@ -713,4 +698,11 @@ FileSystem >> writeStreamOn: aResolvable [
 	"Open a write stream on the file referred by the argument. It can be a string or a path"
 
 	^ (self open: aResolvable options: self writeFileOptions) writeStream.
+]
+
+{ #category : 'private' }
+FileSystem >> writeStreamSpec [
+
+	^(StreamSpec on: self)
+		write
 ]

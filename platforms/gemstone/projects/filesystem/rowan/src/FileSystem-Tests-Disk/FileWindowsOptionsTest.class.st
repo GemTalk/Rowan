@@ -53,7 +53,7 @@ FileWindowsOptionsTest >> storeClass [
 FileWindowsOptionsTest >> testAccessRules [
 
 	| aFileOptions |
-	aFileOptions := FileSpec read fileOptions.
+	aFileOptions := StreamSpec read fileOptions.
 	aFileOptions parent store: self store.
 
 	self assert: aFileOptions accessRule equals: WindowsStore readOnlyAccessRule.
@@ -69,7 +69,7 @@ FileWindowsOptionsTest >> testAccessRules [
 FileWindowsOptionsTest >> testCreateRules [
 
 	| aFileOptions |
-	aFileOptions := FileSpec read fileOptions.
+	aFileOptions := StreamSpec read fileOptions.
 	aFileOptions parent store: self store.
 
 	self assert: aFileOptions createRule equals: WindowsStore openExistingRule.
@@ -89,7 +89,7 @@ FileWindowsOptionsTest >> testCreateRules [
 FileWindowsOptionsTest >> testDefaultReadFileRules [
 
 	| aFileOptions |
-	aFileOptions := FileSpec read fileOptions.
+	aFileOptions := StreamSpec read fileOptions.
 	aFileOptions parent store: self store.
 
 	self assert: aFileOptions createRule equals: WindowsStore openExistingRule.
@@ -102,7 +102,7 @@ FileWindowsOptionsTest >> testFileType [
 
 	| aFileOptions |
 	aFileOptions := 
-		FileSpec new 
+		StreamSpec new 
 			initializeForAppend; 
 			beWindowsStore; 
 			fileOptions.
@@ -118,7 +118,7 @@ FileWindowsOptionsTest >> testFileType [
 FileWindowsOptionsTest >> testShareRules [
 
 	| aFileOptions |
-	aFileOptions := FileSpec read fileOptions.
+	aFileOptions := StreamSpec read fileOptions.
 	aFileOptions parent store: self store.
 	self assert: aFileOptions shareRule equals: WindowsStore denyNoneShareRule.
 

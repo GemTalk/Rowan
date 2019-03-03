@@ -93,8 +93,7 @@ FileReference >> asPath [
 FileReference >> binaryReadStream [
 	"Answer a buffered read stream wrapping a binary file stream on the receiver"
 
-	^self fileSystem readFileSpec bufferedStreamFor: self
-"	^ ZnBufferedReadStream on: (filesystem binaryReadStreamOn: self path)"
+	^self fileSystem readStreamSpec bufferedStreamFor: self
 ]
 
 { #category : 'streams' }
@@ -108,7 +107,7 @@ FileReference >> binaryReadWriteStream [
 FileReference >> binaryWriteStream [
 	"Answer a buffered write stream wrapping a binary file stream on the receiver"
 
-	^self fileSystem writeFileSpec bufferedStreamFor: self
+	^self fileSystem writeStreamSpec bufferedStreamFor: self
 ]
 
 { #category : 'comparing' }
@@ -381,14 +380,14 @@ FileReference >> printOn: aStream [
 FileReference >> readRawStream [
 	"Answer a buffered write stream wrapping a binary file stream on the receiver"
 
-	^self fileSystem readFileSpec binaryFileStreamOn: self
+	^self fileSystem readStreamSpec binaryFileStreamOn: self
 ]
 
 { #category : 'streams' }
 FileReference >> readStream [
 	"Answer an encoded buffered read stream wrapping a binary file stream on the receiver"
 
-	^ self fileSystem readFileSpec encodedStreamFor: self
+	^ self fileSystem readStreamSpec encodedStreamFor: self
 ]
 
 { #category : 'operations' }
@@ -444,15 +443,27 @@ FileReference >> size [
 ]
 
 { #category : 'streams' }
+FileReference >> streamFor: aFileSpec [
+	"Answer an encoded buffered write stream wrapping a binary file stream on the receiver"
+
+	^ aFileSpec encodedStreamFor: self
+]
+
+{ #category : 'streams' }
+FileReference >> streamFor: aFileSpec do: aBlock [
+	^self stream: (aFileSpec encodedStreamFor: self) do: aBlock
+]
+
+{ #category : 'streams' }
 FileReference >> writeRawStream [
 	"Answer a buffered write stream wrapping a binary file stream on the receiver"
 
-	^self fileSystem writeFileSpec binaryFileStreamOn: self
+	^self fileSystem writeStreamSpec binaryFileStreamOn: self
 ]
 
 { #category : 'streams' }
 FileReference >> writeStream [
 	"Answer an encoded buffered write stream wrapping a binary file stream on the receiver"
 
-	^ self fileSystem writeFileSpec encodedStreamFor: self
+	^ self fileSystem writeStreamSpec encodedStreamFor: self
 ]

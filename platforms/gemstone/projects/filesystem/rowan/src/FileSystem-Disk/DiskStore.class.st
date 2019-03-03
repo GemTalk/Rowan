@@ -33,9 +33,7 @@ DiskStore class >> activeClassFor: anOsName [
 
 { #category : 'class initialization' }
 DiskStore class >> allConcreteFilePosixErrorClasses [
-	"Currently these are optional - Hence the lookup"
-	^(Globals at: #FilePosixError ifAbsent: [^OrderedCollection new]) 
-		allConcreteFilePosixErrorClasses
+	^FilePosixError allConcreteFilePosixErrorClasses
 ]
 
 { #category : 'class initialization' }
@@ -467,7 +465,7 @@ DiskStore >> isFile: aPath [
 DiskStore >> isReadable: aPath [
 	(self exists: aPath) ifFalse: [ ^ false ].
 	self flag: 'TODO: we need a decent primitive for this...'.
-	(self basicOpen: aPath options: self class currentFileSystem readFileOptions) 
+	(self basicOpen: aPath options: self class currentFileSystem readStreamOptions) 
 		ifNotNil: [ :id|
 			id close.
 			^ true].

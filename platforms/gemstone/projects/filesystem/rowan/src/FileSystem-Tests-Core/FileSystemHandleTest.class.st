@@ -140,7 +140,7 @@ FileSystemHandleTest >> testReadBufferTooLarge [
 { #category : 'tests' }
 FileSystemHandleTest >> testReadOnly [
 	handle close.
-	handle := reference openOptions: filesystem readFileOptions.
+	handle := reference openOptions: filesystem readStreamOptions.
 	self 
 		should: 
 			[ handle 

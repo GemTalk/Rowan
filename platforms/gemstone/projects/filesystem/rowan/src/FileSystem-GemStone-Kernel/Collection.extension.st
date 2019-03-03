@@ -75,16 +75,6 @@ Collection >> ifEmpty: emptyBlock ifNotEmpty: notEmptyBlock [
 ]
 
 { #category : '*filesystem-gemstone-kernel' }
-Collection >> ifNotEmpty: aBlock [
-	"Evaluate the given block with the receiver as argument, answering its value
-    unless the receiver is empty, in which case answer the receiver."
-
-    ^self isEmpty
-          ifTrue: [self]
-          ifFalse: [aBlock cull: self]
-]
-
-{ #category : '*filesystem-gemstone-kernel' }
 Collection >> ifNotEmpty: notEmptyBlock ifEmpty: emptyBlock [
 	"Evaluate emptyBlock if I'm empty, notEmptyBlock otherwise
 	 If the notEmptyBlock has an argument, eval with the receiver as its argument"

@@ -560,9 +560,16 @@ currentOrNil
 		onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/rowan/src/'  )
 		alias: ''.
 	packageManager defaultSymbolDictionaryName: #Globals.
-	#( 'FileSystem-Disk-Errors'
-      'FileSystem-Disk-ErrorGroups'
-    )
+	#(
+    'Kernel-Methods' 'Network-UUID'
+    'FileSystem-Base-Errors' 'FileSystem-Base-ErrorGroups' 'FileSystem-Base-FileOptions' 'FileSystem-Streams'
+    'FileSystem-Core' 'FileSystem-Core-GemStone' 'FileSystem-Disk' 'FileSystem-Memory' 'FileSystem-Path'
+    'Zinc-Character-Encoding-Core' 'FileSystem-GemStone-Kernel'
+    'FileSystem-Client-Core' 'Zinc-Resource-Meta-Core' 'Zinc-Resource-Meta-FileSystem'
+    
+    'FileSystem-Tests-Base-ErrorGroups' 'FileSystem-Tests-Attributes' 'FileSystem-Tests-Core'   'Network-UUID-Tests' 'Zinc-Character-Encoding-Tests'
+    'FileSystem-Tests-Streams'
+    'FileSystem-Tests-Disk' 'FileSystem-Tests-GemStone' 'FileSystem-Tests-Memory'  'FileSystem-Tests-Client' 'Zinc-Resource-Meta-Tests')
 		do: [ :packageName |
 			packageManager
 				addResolvedReference:

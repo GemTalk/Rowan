@@ -141,24 +141,21 @@ AbstractFileReference >> binaryReadStream [
 
 { #category : 'streams-compatibility' }
 AbstractFileReference >> binaryReadStreamDo: aBlock [
-	| stream |
-	stream := self fileSystem readFileSpec bufferedStreamFor: self.
-	^ [ aBlock value: stream ] 
-		ensure: [ stream close ]
+	^self stream: (self fileSystem readStreamSpec bufferedStreamFor: self) do: aBlock
 ]
 
 { #category : 'streams-compatibility' }
 AbstractFileReference >> binaryReadStreamDo: doBlock ifAbsent: absentBlock [
 	^ self isFile 
 		ifTrue: [ self binaryReadStreamDo: doBlock ]
-		ifFalse: absentBlock
+		ifFalse: [ absentBlock value ]
 ]
 
 { #category : 'streams-compatibility' }
 AbstractFileReference >> binaryReadStreamIfAbsent: absentBlock [
 	^ self isFile
 		ifTrue: [ self binaryReadStream ]
-		ifFalse: absentBlock
+		ifFalse: [ absentBlock value ]
 ]
 
 { #category : 'streams' }
@@ -172,17 +169,13 @@ AbstractFileReference >> binaryWriteStream [
 AbstractFileReference >> binaryWriteStreamDo: aBlock [
 	"Pass a binary write stream on the receiver to the supplied block, and ensure that the stream is closed after evaluation."
 
-	| stream |
-
-	stream := self binaryWriteStream.
-	^ [ aBlock value: stream ] 
-		ensure: [ stream close ]
+	^self stream: self binaryWriteStream do: aBlock
 ]
 
 { #category : 'streams' }
 AbstractFileReference >> binaryWriteStreamDo: doBlock ifPresent: presentBlock [
 	^ self isFile
-		ifTrue: presentBlock
+		ifTrue: [ presentBlock ]
 		ifFalse: [ self binaryWriteStreamDo: doBlock ]
 ]
 
@@ -653,18 +646,14 @@ AbstractFileReference >> readStream [
 
 { #category : 'streams' }
 AbstractFileReference >> readStreamDo: aBlock [
-	| stream |
-	stream := self readStream.
-	^ [ aBlock value: stream ] 
-		ensure: [ stream close ]
-
+	^self stream: self readStream do: aBlock
 ]
 
 { #category : 'streams' }
 AbstractFileReference >> readStreamDo: doBlock ifAbsent: absentBlock [
 	^ self isFile 
 		ifTrue: [ self readStreamDo: doBlock ]
-		ifFalse: absentBlock
+		ifFalse: [absentBlock value]
 ]
 
 { #category : 'streams' }
@@ -677,18 +666,14 @@ AbstractFileReference >> readStreamEncoded: anEncoding [
 
 { #category : 'streams' }
 AbstractFileReference >> readStreamEncoded: anEncoding do: aBlock [
-	| stream |
-	stream := self readStreamEncoded: anEncoding.
-	^ [ aBlock value: stream ] 
-		ensure: [ stream close ]
+	^self stream: (self readStreamEncoded: anEncoding) do: aBlock
 ]
 
 { #category : 'streams' }
 AbstractFileReference >> readStreamIfAbsent: absentBlock [
 	^ self isFile
 		ifTrue: [ self readStream ]
-		ifFalse: absentBlock
-
+		ifFalse: [absentBlock value]
 ]
 
 { #category : 'navigating' }
@@ -762,6 +747,22 @@ AbstractFileReference >> store [
 ]
 
 { #category : 'streams' }
+AbstractFileReference >> stream: aStream do: aBlock [
+	^ [ aBlock value: aStream ] 
+		ensure: [ aStream close ]
+]
+
+{ #category : 'streams' }
+AbstractFileReference >> streamFor: aFileSpec [
+	^self resolve streamFor: aFileSpec
+]
+
+{ #category : 'streams' }
+AbstractFileReference >> streamFor: aFileSpec do: aBlock [
+	self resolve streamFor: aFileSpec do: aBlock
+]
+
+{ #category : 'streams' }
 AbstractFileReference >> streamWritable: writable do: aBlock [
 	^ writable 
 		ifTrue: [ self writeStreamDo: aBlock ]
@@ -801,16 +802,13 @@ AbstractFileReference >> writeStream [
 
 { #category : 'streams' }
 AbstractFileReference >> writeStreamDo: aBlock [
-	| stream |
-	stream := self writeStream.
-	^ [ aBlock value: stream ]
-		ensure: [ stream close ]
+	^self stream: self writeStream do: aBlock
 ]
 
 { #category : 'streams' }
 AbstractFileReference >> writeStreamDo: doBlock ifPresent: presentBlock [
 	^ self isFile
-		ifTrue: presentBlock
+		ifTrue: [presentBlock value ]
 		ifFalse: [ self writeStreamDo: doBlock ]
 ]
 
@@ -824,15 +822,12 @@ AbstractFileReference >> writeStreamEncoded: anEncoding [
 
 { #category : 'streams' }
 AbstractFileReference >> writeStreamEncoded: anEncoding do: aBlock [
-	| stream |
-	stream := self writeStreamEncoded: anEncoding.
-	^ [ aBlock value: stream ]
-		ensure: [ stream close ]
+	^self stream: (self writeStreamEncoded: anEncoding) do: aBlock
 ]
 
 { #category : 'streams' }
 AbstractFileReference >> writeStreamIfPresent: presentBlock [
 	^ self isFile 
-		ifTrue: presentBlock
+		ifTrue: [ presentBlock value ]
 		ifFalse: [ self writeStream ]
 ]

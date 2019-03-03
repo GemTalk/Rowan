@@ -8,135 +8,135 @@ Class {
 FileSpecTest >> testAppend [
 
 	| aFileSpec |
-	aFileSpec := FileSpec append textFileType.
+	aFileSpec := StreamSpec append textFileType.
 	self assert: aFileSpec mode = 'a'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testAppendAndRead [
 
-	| aFileSpec |
-	aFileSpec := FileSpec append read.
-	self assert: aFileSpec mode = 'a+'
+	| aStreamSpec |
+	aStreamSpec := StreamSpec append read.
+	self assert: aStreamSpec mode = 'a+'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testAppendAndReadBinary [
 
-	| aFileSpec |
-	aFileSpec := FileSpec append read binaryFileType.
-	self assert: (aFileSpec fileType isKindOf: FileBinaryTypeFlag).
-	self assert: aFileSpec mode = 'a+b'
+	| aStreamSpec |
+	aStreamSpec := StreamSpec append read binaryFileType.
+	self assert: (aStreamSpec fileType isKindOf: FileBinaryTypeFlag).
+	self assert: aStreamSpec mode = 'a+b'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testAppendBinary [
 
-	| aFileSpec |
-	aFileSpec := FileSpec append binaryFileType.
-	self assert: aFileSpec mode = 'ab'
+	| aStreamSpec |
+	aStreamSpec := StreamSpec append binaryFileType.
+	self assert: aStreamSpec mode = 'ab'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testCreation [
 
-	| aFileSpec |
-	aFileSpec := FileSpec append.
-	self assert: (aFileSpec fileOptions isKindOf: FileOptions).
-	self assert: aFileSpec fileOptions parent == aFileSpec
+	| aStreamSpec |
+	aStreamSpec := StreamSpec append.
+	self assert: (aStreamSpec fileOptions isKindOf: FileOptions).
+	self assert: aStreamSpec fileOptions parent == aStreamSpec
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testRead [
 
-	| aFileSpec |
-	aFileSpec := FileSpec read.
-	self assert: aFileSpec mode = 'r'
+	| aStreamSpec |
+	aStreamSpec := StreamSpec read.
+	self assert: aStreamSpec mode = 'r'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testReadBinary [
 
-	| aFileSpec |
-	aFileSpec := FileSpec read binaryFileType.
-	self assert: (aFileSpec fileOptions fileType isKindOf: FileBinaryTypeFlag).
-	self assert: aFileSpec mode = 'rb'
+	| aStreamSpec |
+	aStreamSpec := StreamSpec read binaryFileType.
+	self assert: (aStreamSpec fileOptions fileType isKindOf: FileBinaryTypeFlag).
+	self assert: aStreamSpec mode = 'rb'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testReadWrite [
 
-	| aFileSpec |
-	aFileSpec := FileSpec readWrite.
-	self assert: aFileSpec mode = 'r+'
+	| aStreamSpec |
+	aStreamSpec := StreamSpec readWrite.
+	self assert: aStreamSpec mode = 'r+'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testReadWriteBinary [
 
-	| aFileSpec |
-	aFileSpec := FileSpec readWrite binaryFileType.
-	self assert: (aFileSpec fileType isKindOf: FileBinaryTypeFlag).
-	self assert: aFileSpec mode = 'r+b'
+	| aStreamSpec |
+	aStreamSpec := StreamSpec readWrite binaryFileType.
+	self assert: (aStreamSpec fileType isKindOf: FileBinaryTypeFlag).
+	self assert: aStreamSpec mode = 'r+b'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testReadWriteTruncated [
 
-	| aFileSpec |
-	aFileSpec := FileSpec readWrite truncate.
-	self assert: aFileSpec mode = 'w+'
+	| aStreamSpec |
+	aStreamSpec := StreamSpec readWrite truncate.
+	self assert: aStreamSpec mode = 'w+'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testReadWriteTruncatedBinary [
 
-	| aFileSpec |
-	aFileSpec := FileSpec readWrite truncate binaryFileType.
-	self assert: aFileSpec mode = 'w+b'
+	| aStreamSpec |
+	aStreamSpec := StreamSpec readWrite truncate binaryFileType.
+	self assert: aStreamSpec mode = 'w+b'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testWrite [
 
-	| aFileSpec |
-	aFileSpec := FileSpec write.
-	self assert: aFileSpec mode = 'w'
+	| aStreamSpec |
+	aStreamSpec := StreamSpec write.
+	self assert: aStreamSpec mode = 'w'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testWriteBinary [
 
-	| aFileSpec |
-	aFileSpec := FileSpec write binaryFileType.
-	self assert: (aFileSpec fileType isKindOf: FileBinaryTypeFlag).
-	self assert: aFileSpec mode = 'wb'
+	| aStreamSpec |
+	aStreamSpec := StreamSpec write binaryFileType.
+	self assert: (aStreamSpec fileType isKindOf: FileBinaryTypeFlag).
+	self assert: aStreamSpec mode = 'wb'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testWriteHighZipped [
 
-	| aFileSpec |
-	aFileSpec := FileSpec write gzipHighCompression.
-	self assert: aFileSpec isGzipped.
-	self assert: aFileSpec mode = 'w9'
+	| aStreamSpec |
+	aStreamSpec := StreamSpec write gzipHighCompression.
+	self assert: aStreamSpec isGzipped.
+	self assert: aStreamSpec mode = 'w9'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testWriteLowZipped [
 
-	| aFileSpec |
-	aFileSpec := FileSpec write gzipLowCompression.
-	self assert: aFileSpec isGzipped.
-	self assert: aFileSpec mode = 'w1'
+	| aStreamSpec |
+	aStreamSpec := StreamSpec write gzipLowCompression.
+	self assert: aStreamSpec isGzipped.
+	self assert: aStreamSpec mode = 'w1'
 ]
 
 { #category : 'tests' }
 FileSpecTest >> testWriteZippedWithoutCompressionLevel [
 
-	| aFileSpec | 
-	aFileSpec := FileSpec write.
-	aFileSpec fileOptions fileType: FileGzipTypeFlag none.
-	self deny: aFileSpec isGzipped.
-	self assert: aFileSpec mode = 'w'
+	| aStreamSpec | 
+	aStreamSpec := StreamSpec write.
+	aStreamSpec fileOptions fileType: FileGzipTypeFlag none.
+	self deny: aStreamSpec isGzipped.
+	self assert: aStreamSpec mode = 'w'
 ]

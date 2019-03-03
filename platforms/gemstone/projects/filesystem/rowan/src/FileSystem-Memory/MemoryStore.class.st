@@ -93,7 +93,7 @@ MemoryStore >> basicOpen: path options: aFileOptions [
 			aMemoryFileSystemEntry
 				basicOpen;
 				yourself ]
-		ifAbsent: [ aFileOptions isWritable
+		ifAbsent: [ (aFileOptions isWritable or: [aFileOptions hasFileCreateFlag])
 				ifTrue: [ self createFile: path ] 
 				ifFalse: [ self signalFileDoesNotExist: path ] ]
 ]
