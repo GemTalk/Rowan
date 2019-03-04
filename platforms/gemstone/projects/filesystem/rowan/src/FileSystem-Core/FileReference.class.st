@@ -99,8 +99,7 @@ FileReference >> binaryReadStream [
 { #category : 'streams' }
 FileReference >> binaryReadWriteStream [
 	"Answer a binary read/write stream on the receiver"
-
-	^ ZnBufferedReadWriteStream on: (filesystem binaryWriteStreamOn: self path)
+	^self fileSystem readWriteStreamSpec bufferedStreamFor: self
 ]
 
 { #category : 'streams' }

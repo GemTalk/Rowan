@@ -7,11 +7,6 @@ Class {
 	#category : 'FileSystem-Base-ErrorGroups'
 }
 
-{ #category : 'predefined' }
-PosixErrorGroup class >> changeDirectoryErrorGroup [
-	^ChangeDirectoryErrorGroup new
-]
-
 { #category : 'constants' }
 PosixErrorGroup class >> ioFileErrorClass [
 	^FileIOError

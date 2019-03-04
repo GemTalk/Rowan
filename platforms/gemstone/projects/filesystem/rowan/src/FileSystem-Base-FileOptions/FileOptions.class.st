@@ -349,6 +349,11 @@ FileOptions >> isReadable [
 ]
 
 { #category : 'testing' }
+FileOptions >> isReadWritable [
+	^self openModeFlag isReadable and: [self openModeFlag isWritable]
+]
+
+{ #category : 'testing' }
 FileOptions >> isWritable [
 	^self openModeFlag isWritable
 ]

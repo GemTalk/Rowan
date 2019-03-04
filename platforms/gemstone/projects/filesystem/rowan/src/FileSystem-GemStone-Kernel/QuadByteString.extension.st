@@ -1,12 +1,6 @@
 Extension { #name : 'QuadByteString' }
 
 { #category : '*FileSystem-GemStone-Kernel' }
-QuadByteString >> isWideString [
-	"Answer whether the receiver is a WideString"
-	^true
-]
-
-{ #category : '*FileSystem-GemStone-Kernel' }
 QuadByteString class >> from: aString [ 
 
 	| newString |

@@ -409,6 +409,13 @@ FileLocator >> binaryReadStream [
 ]
 
 { #category : 'streams-compatibility' }
+FileLocator >> binaryReadWriteStream [
+	"Answer a binary write stream on the receiver"
+
+	^ self resolve binaryReadWriteStream
+]
+
+{ #category : 'streams-compatibility' }
 FileLocator >> binaryWriteStream [
 	"Answer a binary write stream on the receiver"
 
@@ -486,6 +493,11 @@ FileLocator >> printOn: aStream [
 ]
 
 { #category : 'streams' }
+FileLocator >> readRawStream [
+	^ self resolve readRawStream
+]
+
+{ #category : 'streams' }
 FileLocator >> readStream [
 	^ self resolve readStream 
 ]
@@ -511,6 +523,11 @@ FileLocator >> resolveString: aString [
 	filesystem := (self class resolver resolve: origin) fileSystem.
 	thePath := filesystem pathFromString: aString.
 	^ self withPath: (path resolvePath: thePath)
+]
+
+{ #category : 'streams' }
+FileLocator >> writeRawStream [
+	^ self resolve writeRawStream
 ]
 
 { #category : 'streams' }

@@ -84,11 +84,21 @@ StreamSpec >> binaryFileType [
 	self fileOptions binaryFileType
 ]
 
+{ #category : 'accessing' }
+StreamSpec >> bufferedReadStreamClass [
+	^ZnBufferedReadStream
+]
+
+{ #category : 'accessing' }
+StreamSpec >> bufferedReadWriteStreamClass [
+	^ZnBufferedReadWriteStream
+]
+
 { #category : 'convenience' }
 StreamSpec >> bufferedStreamClass [
-	^self isWritable 
-		ifTrue: [ZnBufferedWriteStream] 
-		ifFalse: [ZnBufferedReadStream]
+	self isReadWritable ifTrue: [^self bufferedReadWriteStreamClass].
+	self isWritable ifTrue: [^self bufferedWriteStreamClass] .
+	^self bufferedReadStreamClass
 ]
 
 { #category : 'stream creation' }
@@ -97,11 +107,26 @@ StreamSpec >> bufferedStreamFor: aFileReference [
 	^ self bufferedStreamClass on: (self binaryFileStreamOn: aFileReference)
 ]
 
+{ #category : 'accessing' }
+StreamSpec >> bufferedWriteStreamClass [
+	^ZnBufferedWriteStream
+]
+
+{ #category : 'accessing' }
+StreamSpec >> characterReadStreamClass [
+	^ZnCharacterReadStream
+]
+
 { #category : 'convenience' }
 StreamSpec >> characterStreamClass [
 	^self isWritable 
-		ifTrue: [ZnCharacterWriteStream] 
-		ifFalse: [ZnCharacterReadStream]
+		ifTrue: [self characterWriteStreamClass] 
+		ifFalse: [self characterReadStreamClass]
+]
+
+{ #category : 'accessing' }
+StreamSpec >> characterWriteStreamClass [
+	^ZnCharacterWriteStream
 ]
 
 { #category : 'convenience - file options' }
@@ -211,6 +236,12 @@ StreamSpec >> iso88591Encoded [
 StreamSpec >> isReadable [
 
 	^self fileOptions isReadable
+]
+
+{ #category : 'testing' }
+StreamSpec >> isReadWritable [
+
+	^self fileOptions isReadWritable
 ]
 
 { #category : 'testing' }

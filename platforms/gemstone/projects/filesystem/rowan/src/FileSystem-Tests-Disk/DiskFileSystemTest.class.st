@@ -12,6 +12,29 @@ DiskFileSystemTest >> createFileSystem [
 	^ FileSystem store: (DiskStore activeClass createDefault)
 ]
 
+{ #category : 'tests-streams' }
+DiskFileSystemTest >> testBinaryReadWriteStream [
+	| reference stream |
+
+	self markForCleanup: (reference := filesystem workingDirectory / 'griffle').
+	self should: [ stream := reference readRawStream ] raise: FileDoesNotExistException.
+
+	reference writeStreamDo: [:stream | stream nextPutAll: '0123456789' ].
+	stream := reference binaryReadWriteStream.
+	stream sizeBuffer: 8.
+
+	stream nextPutAll: 'ABCD'.
+
+	self assert: stream peek asCharacter equals: $4. 
+"	self assert: stream position equals: 4."
+	self assert: stream upToEnd asString equals: '456789'.
+"	self assert: stream position equals: 10."
+	self assert: stream atEnd.
+	stream close.
+
+	self assert: reference contents asString equals: 'ABCD456789'.
+]
+
 { #category : 'tests' }
 DiskFileSystemTest >> testDefaultWorkingDirectory [
 	| ref x y |

@@ -159,6 +159,13 @@ AbstractFileReference >> binaryReadStreamIfAbsent: absentBlock [
 ]
 
 { #category : 'streams' }
+AbstractFileReference >> binaryReadWriteStream [
+	"Answer a binary write stream on the receiver"
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'streams' }
 AbstractFileReference >> binaryWriteStream [
 	"Answer a binary write stream on the receiver"
 
@@ -640,6 +647,11 @@ AbstractFileReference >> permissions [
 ]
 
 { #category : 'streams' }
+AbstractFileReference >> readRawStream [
+	self subclassResponsibility
+]
+
+{ #category : 'streams' }
 AbstractFileReference >> readStream [
 	self subclassResponsibility
 ]
@@ -793,6 +805,11 @@ AbstractFileReference >> withPath: newPath [
 	^ self path == newPath
 		ifTrue: [ self ]
 		ifFalse: [ self copyWithPath: newPath ]
+]
+
+{ #category : 'streams' }
+AbstractFileReference >> writeRawStream [
+	self subclassResponsibility
 ]
 
 { #category : 'streams' }
