@@ -10,3 +10,8 @@ CharacterCollection >> fillFrom: aCollection with: aBlock [
 	aCollection do: [ :each |
 		self at: (index := index + 1) put: (aBlock value: each) ]
 ]
+
+{ #category : '*filesystem-gemstone-kernel' }
+CharacterCollection >> fullName [
+	^self
+]
