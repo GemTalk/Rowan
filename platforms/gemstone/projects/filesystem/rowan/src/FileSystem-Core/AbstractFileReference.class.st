@@ -136,12 +136,12 @@ AbstractFileReference >> basenameWithoutExtension: anExtension [
 
 { #category : 'streams-compatibility' }
 AbstractFileReference >> binaryReadStream [
-	^ self subclassResponsibility
+	^BufferedStreamSpec read on: self
 ]
 
 { #category : 'streams-compatibility' }
 AbstractFileReference >> binaryReadStreamDo: aBlock [
-	^self stream: (self fileSystem bufferedReadStreamSpec on: self) do: aBlock
+	^self stream: self binaryReadStream do: aBlock
 ]
 
 { #category : 'streams-compatibility' }
@@ -160,22 +160,16 @@ AbstractFileReference >> binaryReadStreamIfAbsent: absentBlock [
 
 { #category : 'streams' }
 AbstractFileReference >> binaryReadWriteStream [
-	"Answer a binary write stream on the receiver"
-
-	^ self subclassResponsibility
+	^BufferedStreamSpec readWrite on: self
 ]
 
 { #category : 'streams' }
 AbstractFileReference >> binaryWriteStream [
-	"Answer a binary write stream on the receiver"
-
-	^ self subclassResponsibility
+	^BufferedStreamSpec write on: self
 ]
 
 { #category : 'streams' }
 AbstractFileReference >> binaryWriteStreamDo: aBlock [
-	"Pass a binary write stream on the receiver to the supplied block, and ensure that the stream is closed after evaluation."
-
 	^self stream: self binaryWriteStream do: aBlock
 ]
 
@@ -648,12 +642,12 @@ AbstractFileReference >> permissions [
 
 { #category : 'streams' }
 AbstractFileReference >> readRawStream [
-	self subclassResponsibility
+	^BinaryStreamSpec read on: self
 ]
 
 { #category : 'streams' }
 AbstractFileReference >> readStream [
-	self subclassResponsibility
+	^EncodedBufferedStreamSpec read on: self
 ]
 
 { #category : 'streams' }
@@ -671,9 +665,7 @@ AbstractFileReference >> readStreamDo: doBlock ifAbsent: absentBlock [
 { #category : 'streams' }
 AbstractFileReference >> readStreamEncoded: anEncoding [
 
-	^ ZnCharacterReadStream
-		on: self binaryReadStream
-		encoding: anEncoding
+	^ (EncodedBufferedStreamSpec read encoding: anEncoding) on: self
 ]
 
 { #category : 'streams' }
@@ -765,18 +757,14 @@ AbstractFileReference >> stream: aStream do: aBlock [
 ]
 
 { #category : 'streams' }
-AbstractFileReference >> streamFor: aStreamSpec [
-	^self resolve streamFor: aStreamSpec
+AbstractFileReference >> streamFrom: aStreamSpec [
+	"Answer a stream on a file"
+	^ aStreamSpec on: self
 ]
 
 { #category : 'streams' }
-AbstractFileReference >> streamFor: aStreamSpec do: aBlock [
-	self resolve streamFor: aStreamSpec do: aBlock
-]
-
-{ #category : 'streams' }
-AbstractFileReference >> streamOn: aStreamSpec [
-	^self resolve streamOn: aStreamSpec
+AbstractFileReference >> streamFrom: aStreamSpec do: aBlock [
+	^self stream: (aStreamSpec streamFrom: self) do: aBlock
 ]
 
 { #category : 'streams' }
@@ -814,12 +802,12 @@ AbstractFileReference >> withPath: newPath [
 
 { #category : 'streams' }
 AbstractFileReference >> writeRawStream [
-	self subclassResponsibility
+	^BinaryStreamSpec write on: self
 ]
 
 { #category : 'streams' }
 AbstractFileReference >> writeStream [
-	self subclassResponsibility
+	^ EncodedBufferedStreamSpec write on: self
 ]
 
 { #category : 'streams' }

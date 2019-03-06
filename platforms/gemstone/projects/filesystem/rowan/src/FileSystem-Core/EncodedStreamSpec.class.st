@@ -13,7 +13,7 @@ EncodedStreamSpec >> asciiEncoded [
 ]
 
 { #category : 'configuration' }
-EncodedStreamSpec >> childStreamSpec [
+EncodedStreamSpec >> containedStreamSpec [
 	^BinaryStreamSpec
 ]
 
@@ -48,7 +48,7 @@ EncodedStreamSpec >> nullEncoded [
 	self encoding: 'null'
 ]
 
-{ #category : 'stream creation' }
+{ #category : 'streams' }
 EncodedStreamSpec >> on: aFileReference [
 
 	^ self streamClass
@@ -63,7 +63,7 @@ EncodedStreamSpec >> readStreamClass [
 
 { #category : 'configuration' }
 EncodedStreamSpec >> readWriteStreamClass [
-	^self error: 'Not implemented for this class'
+	^ZnCharacterReadWriteStream
 ]
 
 { #category : 'encoding' }

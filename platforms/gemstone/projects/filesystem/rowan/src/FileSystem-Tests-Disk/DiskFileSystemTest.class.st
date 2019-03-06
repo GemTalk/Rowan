@@ -101,3 +101,13 @@ DiskFileSystemTest >> testMoveMemoryToDisk [
 		new ensureDelete.
 	]
 ]
+
+{ #category : 'tests' }
+DiskFileSystemTest >> testOpenWithOptions [
+	| aFileOptions  result reference|
+	aFileOptions := FileOptions write.
+	reference := (FileLocator temp / 'tttt') resolve.
+	self markForCleanup: reference.
+	result := reference openWithOptions: aFileOptions.
+	self assert: (result isKindOf: FileSystem fileClass)
+]

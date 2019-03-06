@@ -17,6 +17,7 @@ Class {
 
 { #category : 'accessing' }
 FileHandle class >> open: aFileReference withOptions: aFileOptions [
+	"This returns an instance of the dialects File or FileAdaptor class - see FileSystem class>>fileClass"
 	^FileSystem fileClass open: aFileReference withOptions: aFileOptions
 ]
 

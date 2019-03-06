@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'configuration' }
-BufferedStreamSpec >> childStreamSpec [
+BufferedStreamSpec >> containedStreamSpec [
 	^BinaryStreamSpec
 ]
 

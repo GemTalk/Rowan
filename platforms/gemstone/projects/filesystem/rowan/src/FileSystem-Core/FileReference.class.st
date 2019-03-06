@@ -89,25 +89,6 @@ FileReference >> asPath [
 	^path
 ]
 
-{ #category : 'streams' }
-FileReference >> binaryReadStream [
-	"Answer a buffered read stream wrapping a binary file stream on the receiver"
-	^self fileSystem bufferedReadStreamSpec on: self
-]
-
-{ #category : 'streams' }
-FileReference >> binaryReadWriteStream [
-	"Answer a binary read/write stream on the receiver"
-	^self fileSystem bufferedReadWriteStreamSpec on: self
-]
-
-{ #category : 'streams' }
-FileReference >> binaryWriteStream [
-	"Answer a buffered write stream wrapping a binary file stream on the receiver"
-
-	^self fileSystem bufferedWriteStreamSpec on: self
-]
-
 { #category : 'comparing' }
 FileReference >> containsReference: aReference [
 	^  aReference fileSystem = filesystem and: [path contains: aReference path]
@@ -374,20 +355,6 @@ FileReference >> printOn: aStream [
 	filesystem printPath: path on: aStream
 ]
 
-{ #category : 'streams' }
-FileReference >> readRawStream [
-	"Answer a buffered write stream wrapping a binary file stream on the receiver"
-
-	^self fileSystem binaryReadStreamSpec on: self
-]
-
-{ #category : 'streams' }
-FileReference >> readStream [
-	"Answer an encoded buffered read stream wrapping a binary file stream on the receiver"
-
-	^ self fileSystem readStreamSpec on: self
-]
-
 { #category : 'operations' }
 FileReference >> renameTo: newBasename [
 	
@@ -438,42 +405,4 @@ FileReference >> setFileSystem: aFilesystem path: aPath [
 { #category : 'accessing' }
 FileReference >> size [
 	^ filesystem sizeOf: path
-]
-
-{ #category : 'streams' }
-FileReference >> streamFor: aStreamSpec [
-	"Answer an encoded buffered write stream wrapping a binary file stream on the receiver"
-
-	^ aStreamSpec encodedStreamOn: self
-]
-
-{ #category : 'streams' }
-FileReference >> streamFor: aStreamSpec do: aBlock [
-	^self stream: (aStreamSpec encodedStreamOn: self) do: aBlock
-]
-
-{ #category : 'streams' }
-FileReference >> streamOn: aStreamSpec [
-	"Answer an encoded buffered write stream wrapping a binary file stream on the receiver"
-
-	^ aStreamSpec encodedStreamOn: self
-]
-
-{ #category : 'streams' }
-FileReference >> streamOn: aStreamSpec do: aBlock [
-	^self stream: (aStreamSpec encodedStreamOn: self) do: aBlock
-]
-
-{ #category : 'streams' }
-FileReference >> writeRawStream [
-	"Answer a buffered write stream wrapping a binary file stream on the receiver"
-
-	^self fileSystem binaryWriteStreamSpec on: self
-]
-
-{ #category : 'streams' }
-FileReference >> writeStream [
-	"Answer an encoded buffered write stream wrapping a binary file stream on the receiver"
-
-	^ self fileSystem writeStreamSpec on: self
 ]

@@ -465,7 +465,7 @@ DiskStore >> isFile: aPath [
 DiskStore >> isReadable: aPath [
 	(self exists: aPath) ifFalse: [ ^ false ].
 	self flag: 'TODO: we need a decent primitive for this...'.
-	(self basicOpen: aPath options: self class currentFileSystem readStreamOptions) 
+	(self basicOpen: aPath options: FileOptions read ) 
 		ifNotNil: [ :id|
 			id close.
 			^ true].
@@ -490,7 +490,7 @@ DiskStore >> isSymlink: aPath [
 DiskStore >> isWritable: aPath [
 	(self exists: aPath) ifFalse: [ ^ false ].
 	self flag: 'TODO: we need a decent primitive for this...'.
-	(self basicOpen: aPath options: self class currentFileSystem writeFileOptions) 
+	(self basicOpen: aPath options: FileOptions write) 
 		ifNotNil: [ :id|
 			id close.
 			^ true].

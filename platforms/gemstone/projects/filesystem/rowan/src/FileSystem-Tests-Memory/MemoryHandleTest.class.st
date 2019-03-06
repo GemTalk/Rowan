@@ -12,6 +12,11 @@ MemoryHandleTest >> createFileSystem [
 	^ FileSystem memory
 ]
 
+{ #category : 'running' }
+MemoryHandleTest >> targetClass [
+	^MemoryHandle
+]
+
 { #category : 'tests' }
 MemoryHandleTest >> testTruncate [
 	| out |

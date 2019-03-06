@@ -21,6 +21,11 @@ FileHandleTest >> reopenForRead [
 	handle assureOpen
 ]
 
+{ #category : 'running' }
+FileHandleTest >> targetClass [
+	^FileHandle
+]
+
 { #category : 'tests' }
 FileHandleTest >> testFileWriteError [
 	" This test may be not needed depending on what happens with BinaryFileStream "
@@ -29,6 +34,15 @@ FileHandleTest >> testFileWriteError [
 	stream close.
 	stream := FileSystem disk binaryReadStreamOn: (FileSystem disk workingDirectory / 'foo.txt') path.
 	self should: [stream  nextPutAll: 'abdef'] raise: FileWriteError
+]
+
+{ #category : 'tests' }
+FileHandleTest >> testOpenWithOptions [
+	| aFileOptions  result |
+	aFileOptions := FileOptions write.
+	reference := (FileLocator temp / 'tttt') resolve.
+	result := FileHandle open: reference withOptions: aFileOptions.
+	self assert: (result isKindOf: FileSystem fileClass)
 ]
 
 { #category : 'tests' }

@@ -125,6 +125,15 @@ FileSystemHandleTest >> testIO [
 ]
 
 { #category : 'tests' }
+FileSystemHandleTest >> testOpenOptions [
+	| aFileOptions |
+	aFileOptions := FileOptions read.
+	handle := reference openOptions: aFileOptions.
+	self assert: (handle isKindOf: self targetClass).
+	self assert: handle options == aFileOptions
+]
+
+{ #category : 'tests' }
 FileSystemHandleTest >> testReadBufferTooLarge [
 	| out in result |
 	out := #(1 2 3) asByteArray.
@@ -140,7 +149,7 @@ FileSystemHandleTest >> testReadBufferTooLarge [
 { #category : 'tests' }
 FileSystemHandleTest >> testReadOnly [
 	handle close.
-	handle := reference openOptions: filesystem readStreamOptions.
+	handle := reference openOptions: FileOptions read.
 	self 
 		should: 
 			[ handle 

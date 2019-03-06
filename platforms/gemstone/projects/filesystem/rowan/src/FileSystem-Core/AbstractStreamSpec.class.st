@@ -25,10 +25,17 @@ AbstractStreamSpec class >> new [
 ]
 
 { #category : 'instance creation' }
+AbstractStreamSpec class >> on: aFileReference options: aFileOptions [
+	"Note: This returns an instance of the stream on the fileReference"
+	^self basicNew
+		initalizeOn: aFileReference options: aFileOptions
+		yourself
+]
+
+{ #category : 'instance creation' }
 AbstractStreamSpec class >> onOptions: aFileOptions [
 	^self basicNew
-		fileOptions: aFileOptions copy;
-		store: aFileOptions parent store;
+		initalizeOnOptions: aFileOptions
 		yourself
 ]
 
@@ -75,14 +82,14 @@ AbstractStreamSpec >> binaryFileType [
 	self fileOptions binaryFileType
 ]
 
-{ #category : 'configuration' }
-AbstractStreamSpec >> childStreamSpec [
-	^BufferedStreamSpec
-]
-
 { #category : 'private' }
 AbstractStreamSpec >> containedStreamOn: aFileReference [
-	^(self childStreamSpec onOptions: self fileOptions) on: aFileReference
+	^(self containedStreamSpec onOptions: self fileOptions) on: aFileReference
+]
+
+{ #category : 'configuration' }
+AbstractStreamSpec >> containedStreamSpec [
+	self subclassResponsibility
 ]
 
 { #category : 'file options configuration' }
@@ -119,6 +126,23 @@ AbstractStreamSpec >> gzipHighCompression [
 { #category : 'file type configuration' }
 AbstractStreamSpec >> gzipLowCompression [
 	self fileOptions gzipLowCompression
+]
+
+{ #category : 'initialization' }
+AbstractStreamSpec >> initalizeOn: aFileReference options: aFileOptions [
+	self initialize.
+	self fileOptions: aFileOptions.
+	^self on: aFileReference
+]
+
+{ #category : 'initialization' }
+AbstractStreamSpec >> initalizeOnOptions: aFileOptions [
+	self initialize.
+	self fileOptions: aFileOptions copy.
+	self store: (
+		aFileOptions parent 
+			ifNil: [FileSystem disk] 
+			ifNotNil: [:streamSpec | streamSpec store])
 ]
 
 { #category : 'initialization' }
@@ -175,9 +199,31 @@ AbstractStreamSpec >> mode [
 	^self fileOptions mode
 ]
 
-{ #category : 'stream creation' }
+{ #category : 'streams' }
 AbstractStreamSpec >> on: aFileReference [
 	^ self streamClass on: (self containedStreamOn: aFileReference)
+]
+
+{ #category : 'streams' }
+AbstractStreamSpec >> on: aFileReference do: aBlock [
+	| aStream |
+	aStream := self on: aFileReference.
+	^ [ aBlock value: aStream ]
+			ensure: [ aStream close ]
+]
+
+{ #category : 'streams' }
+AbstractStreamSpec >> on: aFileReference do: aBlock ifAbsent: anAbsentBlock [
+	^aFileReference isFile
+		ifTrue: [self on: aFileReference do: aBlock]
+		ifFalse: [anAbsentBlock value]
+]
+
+{ #category : 'streams' }
+AbstractStreamSpec >> on: aFileReference do: aBlock ifPresent: anAbsentBlock [
+	^aFileReference isFile
+		ifTrue: [anAbsentBlock value]
+		ifFalse: [ self on: aFileReference do: aBlock]
 ]
 
 { #category : 'file options configuration' }

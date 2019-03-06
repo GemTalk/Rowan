@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : 'configuration' }
-EncodedBufferedStreamSpec >> childStreamSpec [
+EncodedBufferedStreamSpec >> containedStreamSpec [
 	^BufferedStreamSpec
 ]

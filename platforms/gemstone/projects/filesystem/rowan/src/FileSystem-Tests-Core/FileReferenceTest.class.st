@@ -905,17 +905,11 @@ FileReferenceTest >> testUpToAll [
 	| testString fileRef |
 	testString := 'ße'.
 	fileRef := FileReference newTempFilePrefix: 'FileReference' suffix: 'Test'.
-
+ 
 	[  
-	fileRef
-		writeStreamEncoded: 'utf8' do: [ :stream | 
-			stream nextPutAll: testString ].
-
-	fileRef
-		readStreamDo: [ :stream |
-			self assert: (stream upToAll: 'e') equals: 'ß'.
-		] ]
-	ensure: [ fileRef ensureDelete ]
+		fileRef writeStreamEncoded: 'utf8' do: [ :stream | stream nextPutAll: testString ].
+		fileRef readStreamDo: [ :stream | self assert: (stream upToAll: 'e') equals: 'ß'] 
+			] ensure: [ fileRef ensureDelete ].
 ]
 
 { #category : 'tests' }

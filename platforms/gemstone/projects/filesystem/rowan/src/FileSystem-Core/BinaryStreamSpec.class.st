@@ -5,11 +5,11 @@ Class {
 }
 
 { #category : 'configuration' }
-BinaryStreamSpec >> childStreamSpec [
+BinaryStreamSpec >> containedStreamSpec [
 	^self error: 'This is the lowest level of nested streams'
 ]
 
-{ #category : 'stream creation' }
+{ #category : 'streams' }
 BinaryStreamSpec >> on: aFileReference [
 	^(aFileReference fileSystem open: aFileReference options: self fileOptions) binaryStream
 ]
