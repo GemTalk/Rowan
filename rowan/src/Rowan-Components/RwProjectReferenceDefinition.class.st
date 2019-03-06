@@ -8,7 +8,7 @@ Class {
 RwProjectReferenceDefinition class >> newForSpecification: aRwSpecification [
 
 	^ self
-		newNamed: aRwSpecification specName 
+		newNamed: aRwSpecification projectName 
 			forSpecification: aRwSpecification 
 			projectHome: nil
 ]
