@@ -147,6 +147,18 @@ RwProjectDefinition >> configurationTemplate [
 
 ]
 
+{ #category : 'properties' }
+RwProjectDefinition >> defaultConfigurationNames [
+
+	^self specification defaultConfigurationNames
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> defaultGroupNames [
+
+	^self specification defaultGroupNames
+]
+
 { #category : 'accessing' }
 RwProjectDefinition >> definitionWithKey: aKey ifAbsent: absentBlock [
 

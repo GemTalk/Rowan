@@ -85,11 +85,10 @@ RwPrjReadTool >> _visitConfigurations: visitorClass forProjectComponentDefinitio
 { #category : 'private' }
 RwPrjReadTool >> _visitConfigurations: visitorClass forProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: forLoad [
 
-	| spec projectName configDirectory visitor |
-	spec := projectDefinition specification.
-	spec repositoryRootPath ifNil: [ ^ nil ].
+	| projectName configDirectory visitor |
+	projectDefinition repositoryRootPath ifNil: [ ^ nil ].
 	projectName := projectDefinition name.
-	configDirectory := spec repositoryRootPath asFileReference / spec configsPath.
+	configDirectory := projectDefinition repositoryRootPath asFileReference / projectDefinition configsPath.
 	configDirectory exists
 		ifFalse: [ ^ nil ].
 	visitor := visitorClass new
@@ -145,13 +144,12 @@ RwPrjReadTool >> readConfigurationsForProjectDefinition: projectDefinition withC
 { #category : 'read configurations' }
 RwPrjReadTool >> readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: forLoad [
 
-	| spec theConfigNames theGroupNames |
-	spec := projectDefinition specification.
+	| theConfigNames theGroupNames |
 	theConfigNames := configNames isEmpty
-		ifTrue: [ spec defaultConfigurationNames ]
+		ifTrue: [ projectDefinition defaultConfigurationNames ]
 		ifFalse: [ configNames ].
 	theGroupNames := groupNames isEmpty
-		ifTrue: [  spec defaultGroupNames ]
+		ifTrue: [  projectDefinition defaultGroupNames ]
 		ifFalse: [ groupNames ].
 	^ self 
 		_visitConfigurations: RwProjectLoadConfigurationVisitor 

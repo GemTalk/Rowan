@@ -16,3 +16,9 @@ RwComponentProjectDefinition >> setSymbolDictName: symbolDictName forPackageName
 
 	^self projectRef setSymbolDictName: symbolDictName forPackageNamed: packageName
 ]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> symbolDictNameForPackageNamed: packageName [
+
+	^self projectRef symbolDictNameForPackageNamed: packageName
+]

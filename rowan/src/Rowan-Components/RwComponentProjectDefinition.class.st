@@ -410,6 +410,12 @@ RwComponentProjectDefinition >> repositoryRoot [
 ]
 
 { #category : 'temporary compat' }
+RwComponentProjectDefinition >> repositoryRootPath [
+
+	^ self repositoryRoot fullName
+]
+
+{ #category : 'temporary compat' }
 RwComponentProjectDefinition >> specification [
 
 	^ self shouldNotImplement: #specification

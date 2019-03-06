@@ -57,7 +57,7 @@ RwRepositoryComponentProjectTonelReaderVisitor >> newTypeDefinitionFrom: anArray
 { #category : 'package reading' }
 RwRepositoryComponentProjectTonelReaderVisitor >> packageExtension [
 
-	^ 'package'
+	^ ''
 ]
 
 { #category : 'class reading' }
@@ -99,7 +99,7 @@ RwRepositoryComponentProjectTonelReaderVisitor >> readClassFile: file inPackage:
 	file readStreamDo: [:fileStream |
 		| definitions stream |
 		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: 10000. "part of workaround for GemTalk/FileSystemGs#9"
+		stream sizeBuffer: file size. "part of workaround for GemTalk/FileSystemGs#9"
 		definitions := (TonelParser on: stream forReader: self) start.
 		self validateClassCategory: currentClassDefinition category forPackageNamed: packageName.
 		((definitions at: 2) at: 1) do: [:mDef |
