@@ -479,7 +479,7 @@ FileOptions >> printOn: aStream [
 	super printOn: aStream.
 	aStream
 		nextPutAll: '(';
-		nextPutAll: (self openModeFlag posixName ifNil: ['nil']);
+		nextPutAll: (self openModeFlag ifNil: ['nil'] ifNotNil: [:f | f posixName ifNil: ['nil']]);
 		nextPutAll: ')'
 ]
 
@@ -547,7 +547,8 @@ FileOptions >> signalOpenModeFlagNotDefined [
 
 { #category : 'convenience' }
 FileOptions >> store [
-	^self parent ifNil: [FileSystem disk store] ifNotNil: [:fs | fs store]
+	self parent isNil ifTrue: [^FileSystem disk store].
+	^self parent store
 ]
 
 { #category : 'file type' }

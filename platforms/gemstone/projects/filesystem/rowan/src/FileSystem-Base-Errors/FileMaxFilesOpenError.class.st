@@ -9,7 +9,7 @@ Class {
 
 { #category : 'accessing' }
 FileMaxFilesOpenError class >> defaultErrorNumber [
-	^17
+	^23
 ]
 
 { #category : 'accessing' }

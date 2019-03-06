@@ -6,15 +6,15 @@ Class {
 
 { #category : 'accessing' }
 FileDeviceNotSameError class >> defaultErrorNumber [
-	^14
+	^18
 ]
 
 { #category : 'accessing' }
 FileDeviceNotSameError class >> errorDescription [
-	^'Not same device'
+	^'Invalid cross-device link'
 ]
 
 { #category : 'accessing' }
 FileDeviceNotSameError class >> posixName [
-	^'EBUSY'
+	^'EXDEV'
 ]

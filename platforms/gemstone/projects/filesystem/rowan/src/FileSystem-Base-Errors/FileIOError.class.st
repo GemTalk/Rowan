@@ -11,7 +11,7 @@ Class {
 
 { #category : 'accessing' }
 FileIOError class >> defaultErrorNumber [
-	^9
+	^5
 ]
 
 { #category : 'accessing' }

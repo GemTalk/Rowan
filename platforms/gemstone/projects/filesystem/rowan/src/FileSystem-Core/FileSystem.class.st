@@ -58,12 +58,42 @@ FileSystem >> binaryReadStreamOn: aResolvable [
 	^ (self open: aResolvable options: self readStreamOptions) binaryStream.
 ]
 
+{ #category : 'private' }
+FileSystem >> binaryReadStreamSpec [
+
+	^BinaryStreamSpec read
+]
+
 { #category : 'public' }
 FileSystem >> binaryWriteStreamOn: aResolvable [
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a binary write stream for reading the file."
 
 	^ (self open: aResolvable options: self writeFileOptions) binaryStream.
+]
+
+{ #category : 'private' }
+FileSystem >> binaryWriteStreamSpec [
+
+	^BinaryStreamSpec write
+]
+
+{ #category : 'private' }
+FileSystem >> bufferedReadStreamSpec [
+
+	^BufferedStreamSpec read
+]
+
+{ #category : 'private' }
+FileSystem >> bufferedReadWriteStreamSpec [
+
+	^BufferedStreamSpec readWrite
+]
+
+{ #category : 'private' }
+FileSystem >> bufferedWriteStreamSpec [
+
+	^BufferedStreamSpec write
 ]
 
 { #category : 'public' }
@@ -567,15 +597,7 @@ FileSystem >> readStreamOptions [
 { #category : 'private' }
 FileSystem >> readStreamSpec [
 
-	^(StreamSpec on: self)
-		read
-]
-
-{ #category : 'private' }
-FileSystem >> readWriteStreamSpec [
-
-	^(StreamSpec on: self)
-		readWrite
+	^EncodedBufferedStreamSpec read
 ]
 
 { #category : 'public' }
@@ -703,6 +725,5 @@ FileSystem >> writeStreamOn: aResolvable [
 { #category : 'private' }
 FileSystem >> writeStreamSpec [
 
-	^(StreamSpec on: self)
-		write
+	^EncodedBufferedStreamSpec write
 ]

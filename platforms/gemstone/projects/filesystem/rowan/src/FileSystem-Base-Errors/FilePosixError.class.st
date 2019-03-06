@@ -116,15 +116,10 @@ FilePosixError class >> reportOn: aStream indent: indent [
 	(15 - aSize) timesRepeat: [aStream space].
 	aStream nextPutAll: aValue asString.
 
-"	((self name = #PosixFlag) not and: [self class includesSelector: #windowsErrorNumber])
-		ifTrue: [
-			aSize := self windowsErrorNumber asString size.
-			(15 - aSize) timesRepeat: [aStream space].
-			aStream nextPutAll: self windowsErrorNumber asString]."
-
 	aStream crlf.
 
-	self subclasses do: [:ea | ea reportOn: aStream indent: indent + 1]
+	(self subclasses asSortedCollection: [:a :b | a name <= b name]) 
+		do: [:ea | ea reportOn: aStream indent: indent + 1]
 ]
 
 { #category : 'accessing' }

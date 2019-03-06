@@ -6,7 +6,7 @@ Class {
 
 { #category : 'accessing' }
 FileReadOnlyFileSystemError class >> defaultErrorNumber [
-	^19
+	^30
 ]
 
 { #category : 'accessing' }

@@ -141,7 +141,7 @@ AbstractFileReference >> binaryReadStream [
 
 { #category : 'streams-compatibility' }
 AbstractFileReference >> binaryReadStreamDo: aBlock [
-	^self stream: (self fileSystem readStreamSpec bufferedStreamFor: self) do: aBlock
+	^self stream: (self fileSystem bufferedReadStreamSpec on: self) do: aBlock
 ]
 
 { #category : 'streams-compatibility' }
@@ -765,13 +765,18 @@ AbstractFileReference >> stream: aStream do: aBlock [
 ]
 
 { #category : 'streams' }
-AbstractFileReference >> streamFor: aFileSpec [
-	^self resolve streamFor: aFileSpec
+AbstractFileReference >> streamFor: aStreamSpec [
+	^self resolve streamFor: aStreamSpec
 ]
 
 { #category : 'streams' }
-AbstractFileReference >> streamFor: aFileSpec do: aBlock [
-	self resolve streamFor: aFileSpec do: aBlock
+AbstractFileReference >> streamFor: aStreamSpec do: aBlock [
+	self resolve streamFor: aStreamSpec do: aBlock
+]
+
+{ #category : 'streams' }
+AbstractFileReference >> streamOn: aStreamSpec [
+	^self resolve streamOn: aStreamSpec
 ]
 
 { #category : 'streams' }
@@ -832,9 +837,7 @@ AbstractFileReference >> writeStreamDo: doBlock ifPresent: presentBlock [
 { #category : 'streams' }
 AbstractFileReference >> writeStreamEncoded: anEncoding [
 
-	^ ZnCharacterWriteStream
-		on: self binaryWriteStream
-		encoding: anEncoding
+	^(EncodedBufferedStreamSpec write encoding: anEncoding) on: self
 ]
 
 { #category : 'streams' }

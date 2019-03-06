@@ -11,7 +11,7 @@ Class {
 
 { #category : 'accessing' }
 FileNameToLongError class >> defaultErrorNumber [
-	^10063
+	^36
 ]
 
 { #category : 'accessing' }

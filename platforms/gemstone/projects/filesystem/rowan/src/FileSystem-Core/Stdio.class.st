@@ -97,6 +97,9 @@ Stdio class >> useDefaultStreams [
 { #category : 'stdio' }
 Stdio class >> useMemoryStreams [
 	<script>
-	self createWriteStreamBlock: [ :aName | (FileSystem memory / aName asString) writeStream ].
-	self createReadStreamBlock: [ :aName | (FileSystem memory / aName asString) streamFor: StreamSpec read create ].
+	self createWriteStreamBlock: 
+		[ :aName | (FileSystem memory / aName asString) writeStream ].
+	self createReadStreamBlock: 
+		[ :aName | 
+			EncodedBufferedStreamSpec read create on: (FileSystem memory / aName asString)  ].
 ]

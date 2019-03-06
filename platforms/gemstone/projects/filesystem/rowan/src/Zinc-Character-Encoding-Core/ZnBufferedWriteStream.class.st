@@ -311,3 +311,8 @@ ZnBufferedWriteStream >> uint32: integer [
 ZnBufferedWriteStream >> uint8: integer [
 	^ self nextIntegerOfSize: 1 signed: false bigEndian: true put: integer
 ]
+
+{ #category : 'accessing' }
+ZnBufferedWriteStream >> wrappedStream [
+	^stream
+]

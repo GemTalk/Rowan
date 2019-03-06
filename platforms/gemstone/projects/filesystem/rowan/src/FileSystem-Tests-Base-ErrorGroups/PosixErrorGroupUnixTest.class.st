@@ -46,7 +46,7 @@ PosixErrorGroupUnixTest >> testCopyFileErrorGroup [
 	self assert: posixErrorClass posixName equals: 'EIO'.
 
 	posixErrorClass := errorGroup errorClassForErrorNumber: 13 newFileReference: fileReference oldFileReference: oldFileReference.
-	self assert: posixErrorClass posixName equals: 'EEXIST'.
+	self assert: posixErrorClass posixName equals: 'EACCES'.
 	
 "	posixErrorClass := errorGroup errorClassForErrorNumber: FileReadOnlyFileSystemError defaultErrorNumber fileReference: fileReference.
 	self assert: posixErrorClass posixName equals: 'EROFS'.
