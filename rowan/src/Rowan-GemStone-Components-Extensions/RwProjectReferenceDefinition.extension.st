@@ -24,11 +24,9 @@ RwProjectReferenceDefinition >> setSymbolDictName: symbolDictName forPackageName
 
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinition >> symbolDictNameForPackageNamed: packageName [
-	| packageProperties  |
-self deprecated: 'temporary patch .. see RwGemStoneSpecification>>symbolDictNameForPackageNamed: for full implementation'.
-	packageProperties :=  self packageNameToPlatformPropertiesMap
-		at: packageName
-		ifAbsent: [ ^  'UserGlobals' ].
-	self halt.
 
+self deprecated: 'temporary patch .. see RwGemStoneSpecification>>symbolDictNameForPackageNamed: for full implementation'.
+	^  self packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ self error: 'not properly implemented' ].
 ]
