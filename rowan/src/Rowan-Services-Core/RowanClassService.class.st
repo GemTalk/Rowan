@@ -398,6 +398,7 @@ RowanClassService >> initialize [
 	meta := false. "assume most of our work is on the instance side"
 	selectedPackageServices := Array new.
 	isNewClass := false.
+	methods := Array new.
 ]
 
 { #category : 'initialization' }
