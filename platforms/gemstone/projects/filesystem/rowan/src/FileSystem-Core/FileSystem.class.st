@@ -491,6 +491,7 @@ FileSystem >> open: aResolvable options: aFileOptions [
 	that path using the specified access mode."
 	
 	| path |
+	aFileOptions alignStoreWith: self.
 	path := self resolve: aResolvable.
 	^ store handleClass 
 		open: (FileReference fileSystem: self path: path) 

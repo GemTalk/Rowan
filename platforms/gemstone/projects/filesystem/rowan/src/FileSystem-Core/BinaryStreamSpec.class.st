@@ -11,6 +11,7 @@ BinaryStreamSpec >> containedStreamSpec [
 
 { #category : 'streams' }
 BinaryStreamSpec >> on: aFileReference [
+	self alignStoreWith: aFileReference.
 	^(aFileReference fileSystem open: aFileReference options: self fileOptions) binaryStream
 ]
 

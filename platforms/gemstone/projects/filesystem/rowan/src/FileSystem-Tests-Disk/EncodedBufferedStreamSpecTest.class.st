@@ -68,8 +68,8 @@ EncodedBufferedStreamSpecTest >> testOnDo [
 	fileRef := FileReference newTempFilePrefix: 'FileReference' suffix: 'Test'.
 
 	[  
-		EncodedBufferedStreamSpec write utf8Encoded on: fileRef do: [ :stream | stream nextPutAll: testString ].
-		EncodedBufferedStreamSpec read utf8Encoded on: fileRef do: [: stream |
+		EncodedBufferedStreamSpec write utf8 on: fileRef do: [ :stream | stream nextPutAll: testString ].
+		EncodedBufferedStreamSpec read utf8 on: fileRef do: [: stream |
 			self assert: (stream upToAll: 'e') equals: 'ß'] 
 			] ensure: [ fileRef ensureDelete ].
 ]

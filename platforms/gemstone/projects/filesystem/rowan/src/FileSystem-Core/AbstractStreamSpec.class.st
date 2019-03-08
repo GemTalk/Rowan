@@ -20,7 +20,7 @@ AbstractStreamSpec class >> append [
 AbstractStreamSpec class >> new [
 	^self basicNew
 		initialize;
-		store: FileSystem disk;
+		store: (FileSystem disk) store;
 		yourself
 ]
 
@@ -60,6 +60,15 @@ AbstractStreamSpec class >> write [
 	^self new
 		initializeForWrite;
 		yourself
+]
+
+{ #category : 'private' }
+AbstractStreamSpec >> alignStoreWith: aFileReference [
+	"Stream Spec is built with the local filesystem. If a foreign filesystem
+     was used to build the reference, switch to the foreign filesystem"
+
+	aFileReference fileSystem isForeignFileSystem 
+		ifTrue: [self store: aFileReference fileSystem store]
 ]
 
 { #category : 'file options configuration' }
@@ -201,6 +210,7 @@ AbstractStreamSpec >> mode [
 
 { #category : 'streams' }
 AbstractStreamSpec >> on: aFileReference [
+	self alignStoreWith: aFileReference.
 	^ self streamClass on: (self containedStreamOn: aFileReference)
 ]
 

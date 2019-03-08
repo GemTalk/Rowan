@@ -40,7 +40,8 @@ Class {
 		'fileType',
 		'share',
 		'permissionFlags',
-		'parent'
+		'parent',
+		'store'
 	],
 	#category : 'FileSystem-Base-FileOptions'
 }
@@ -128,6 +129,15 @@ FileOptions >> addPosixFlag: aPosixFlag [
 FileOptions >> addTruncateFlag [
 	self removeAppendFlag.
 	self addPosixFlag: FileTruncateFlag new
+]
+
+{ #category : 'initialization' }
+FileOptions >> alignStoreWith: anObject [
+	"FileOptions is built with the local filesystem. If a foreign filesystem
+     was used to build the reference, switch to the foreign filesystem"
+
+	anObject store isForeignFileSystem 
+		ifTrue: [self store: anObject store]
 ]
 
 { #category : 'commands' }
@@ -545,10 +555,16 @@ FileOptions >> signalOpenModeFlagNotDefined [
 	self error: 'Attempting to add an open flag without first defining the open mode of #read, #write or #readWrite'
 ]
 
-{ #category : 'convenience' }
+{ #category : 'accessing' }
 FileOptions >> store [
-	self parent isNil ifTrue: [^FileSystem disk store].
-	^self parent store
+	^store ifNil: [
+		self parent isNil ifTrue: [^FileSystem disk store].
+		^self parent store]
+]
+
+{ #category : 'accessing' }
+FileOptions >> store: aDiskStore [
+	store := aDiskStore
 ]
 
 { #category : 'file type' }
