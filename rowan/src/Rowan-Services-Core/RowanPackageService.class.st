@@ -50,7 +50,7 @@ RowanPackageService >> changes [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanPackageService >> classHierarchy [
 	| superclassChains levels services hierarchies theClasses toExpand |
 	self update. 
@@ -67,17 +67,23 @@ RowanPackageService >> classHierarchy [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanPackageService >> compileClass: definitionString [
 
 	| theClass classService packageService |
 	theClass := definitionString evaluate.
-	classService := RowanClassService forClassNamed: theClass name. 
+	classService := RowanClassService new name: theClass name. 
+	classService update. 
+	classService isNewClass: true.
+	classService packageName = name 
+		ifTrue:[
+			self selectedClass: classService
+		]
+		ifFalse:[
+			packageService := RowanPackageService forPackageNamed: classService packageName. 
+			packageService update. 
+			packageService selectedClass: classService].
 	RowanCommandResult addResult: classService.
-	packageService := RowanPackageService forPackageNamed: classService packageName. 
-	packageService update. 
-	packageService selectedClass: classService.
-	classService selectedPackageServices: (Array with: packageService).
 ]
 
 { #category : 'rowan' }
@@ -291,7 +297,7 @@ RowanPackageService >> projectName: newValue [
 	projectName := newValue
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanPackageService >> removeClass: classService [
 
 	self removeClassNamed: classService name. 
@@ -300,7 +306,7 @@ RowanPackageService >> removeClass: classService [
 	RowanCommandResult addResult: classService
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanPackageService >> removeClassNamed: className [
 
 	self browserTool removeClassNamed: className.
@@ -314,6 +320,12 @@ RowanPackageService >> rowanDirty [
 
 ]
 
+{ #category : 'rowan' }
+RowanPackageService >> rowanProjectName [
+
+	^projectName
+]
+
 { #category : 'other' }
 RowanPackageService >> selectedClass [
 	
@@ -322,8 +334,8 @@ RowanPackageService >> selectedClass [
 
 { #category : 'Accessing' }
 RowanPackageService >> selectedClass: classService [
-
-	selectedClass := classService
+	selectedClass := classService.
+	classService selectedPackageServices: (Array with: self)
 ]
 
 { #category : 'perform' }
@@ -331,8 +343,8 @@ RowanPackageService >> servicePerform: symbol withArguments: collection [
 	| wasClean |
 	wasClean := self arePackageAndProjectClean.
 	super servicePerform: symbol withArguments: collection.
+	self update. 
 	wasClean ifTrue:[
-		self update. 
 		self updateProject]
 ]
 
@@ -354,7 +366,7 @@ RowanPackageService >> services: services from: levels expand: toExpand [
 				])]
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanPackageService >> setDefaultTemplate [
 
 	defaultTemplate := self genericClassCreationTemplate.
@@ -369,18 +381,20 @@ RowanPackageService >> superclassChainsFor: behaviors [
 			supers].
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanPackageService >> testClasses [
 
 	testClasses := Set new. 
 	TestCase allSubclasses do:[:testSubclass |
-		testSubclass selectors do:[:selector |
-			| packageName |
-			(selector size >= 4 and:[
-			(selector copyFrom: 1 to: 4) asString = 'test']) ifTrue:[
-				packageName := (testSubclass compiledMethodAt: selector) rowanPackageName. 
-				packageName = name ifTrue:[
-					testClasses add: (RowanClassService basicForClassNamed: testSubclass name)]]]]. 
+		testSubclass isAbstract ifFalse:[
+			testSubclass suite tests do:[:testClassInstance |
+				| implementingClass |
+				implementingClass := testClassInstance class whichClassIncludesSelector: testClassInstance selector. 
+				(implementingClass compiledMethodAt: testClassInstance selector) rowanPackageName = name ifTrue:[
+					| classService |
+					classService := RowanClassService basicForClassNamed: testSubclass name.
+					testClasses detect:[:testClassService | testClassService name = classService name] ifNone:[
+						testClasses add: classService]]]]]. 
 	updateType := #testClasses:. 
 	testClasses := testClasses asArray. 
 	RowanCommandResult addResult: self.
@@ -404,6 +418,22 @@ RowanPackageService >> update [
 ]
 
 { #category : 'updates' }
+RowanPackageService >> updateInternalService: updatedService [
+
+	"when sending services back to the client,
+	verify any services held by this object are 
+	updated. Services know what internal services
+	they contain." 
+
+	1 to: classes size do:[:index |
+		| classesService |
+		classesService := classes at: index. 
+		classesService = updatedService ifTrue:[
+			classes at: index put: updatedService
+		]].
+]
+
+{ #category : 'updates' }
 RowanPackageService >> updateProject [
 	| projectService |
 
@@ -416,4 +446,11 @@ RowanPackageService >> updateProject [
 RowanPackageService >> updateProjectName [
 
 	projectName := (Rowan image loadedPackageNamed: name) projectName.
+]
+
+{ #category : 'testing' }
+RowanPackageService >> wasDeleted [
+
+	^(Rowan image loadedPackageNamed: name
+			ifAbsent: []) isNil
 ]

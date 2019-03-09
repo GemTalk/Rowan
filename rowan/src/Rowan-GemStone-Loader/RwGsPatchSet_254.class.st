@@ -651,7 +651,6 @@ RwGsPatchSet_254 >> addPatchedClassNewVersion: aClassModification inPackage: aPa
 				inPackage: aPackageDefinition)
 				projectDefinition: aProjectDefinition;
 				yourself)
-
 ]
 
 { #category : 'building' }
@@ -1212,7 +1211,8 @@ RwGsPatchSet_254 >> runInitializers [
 
 	"run the class initialization methods as needed"
 
-	| methodPatches orderedMethodPatches |
+	| methodPatches orderedMethodPatches blackList |
+	blackList := Rowan automaticClassInitializationBlackList.
 	methodPatches := (addedMethods copy
 		addAll: extendedMethods;
 		addAll: methodsNeedingRecompile;
@@ -1222,10 +1222,11 @@ RwGsPatchSet_254 >> runInitializers [
 		ifTrue: [ self class methodPatchesInInitializationOrder: methodPatches ]
 		ifFalse: [ methodPatches ].
 	orderedMethodPatches do: [ :methodPatch | 
-			(RwExecuteClassInitializeMethodsAfterLoadNotification new
-				candidateClass: methodPatch behavior thisClass) signal 
-					ifTrue: [ methodPatch runInitializer ] ]
-
+		(blackList includes: methodPatch projectDefinition name)
+			ifFalse: [ 
+				(RwExecuteClassInitializeMethodsAfterLoadNotification new
+					candidateClass: methodPatch behavior thisClass) signal 
+						ifTrue: [ methodPatch runInitializer ] ] ]
 ]
 
 { #category : 'private - applying' }
@@ -1380,5 +1381,4 @@ RwGsPatchSet_254 >> updateSymbolAssociations [
 			ifNil: [ each installNewClassVersionInSystem ]
 			ifNotNil: [:aClassMove | each moveNewClassVersionInSystem: aClassMove ].
 		 ]
-
 ]

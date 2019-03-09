@@ -1037,7 +1037,10 @@ JadeServer >> compile: aString frame: anInteger process: aGsProcess [
 	category := self _behavior: aBehavior categoryOfSelector: selector.
 	result := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
 				ifAbsent: [false])
-					ifTrue: [aBehavior rwCompileMethod: aString category: category]
+					ifTrue: [ 
+						[ aBehavior rwCompileMethod: aString category: category ]
+							on: RwExecuteClassInitializeMethodsAfterLoadNotification
+							do: [:ex | ex resume: false ] ]
 					ifFalse: 
 						[self
 							compileMethod: aString
@@ -1045,7 +1048,6 @@ JadeServer >> compile: aString frame: anInteger process: aGsProcess [
 							user: nil
 							inCategory: category].
 	^result
-
 ]
 
 { #category : 'category' }
@@ -1211,12 +1213,10 @@ JadeServer >> currentUserMayEditMethod: aMethod [
 
 { #category : 'category' }
 JadeServer >> debugString: aString fromContext: anObject environment: anInteger [
-
 	anInteger == 0 ifFalse: [self error: 'Only environment 0 is supported in this version!'].
-	^'nil halt. ' , aString
+	^(RowanDebuggerService new debugStringFrom: aString)
 		evaluateInContext: anObject 
-		symbolList: GsSession currentSession symbolList. 
-
+		symbolList: GsSession currentSession symbolList.
 ]
 
 { #category : 'category' }
@@ -2910,8 +2910,6 @@ JadeServer >> printStringOf: anObject to: anInteger [
 	(string := self printStringOf: anObject) size > anInteger ifTrue: [string := (string copyFrom: 1 to: anInteger) , '...'].
 	string := String withAll: (string collect: [:each | (32 <= each asciiValue and: [each asciiValue <= 255]) ifTrue: [each] ifFalse: [$?]]).
 	^string.
-
-
 ]
 
 { #category : 'category' }
@@ -5294,6 +5292,7 @@ JadeServer >> updateFromSton: stonString [
 				ifNil: [service update]
 				ifNotNil: [service servicePerform: service command withArguments: service commandArgs]].
 	resultString := STON toString: RowanCommandResult results.
+	RowanService autoCommit ifTrue:[System commitTransaction]. 
 	^resultString
 ]
 

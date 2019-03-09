@@ -25,7 +25,9 @@ Class {
 		'accessedInstVars',
 		'breakPoints',
 		'testResult',
-		'definedPackage'
+		'definedPackage',
+		'isTestMethod',
+		'testRunClassName'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -33,10 +35,9 @@ Class {
 { #category : 'instance creation' }
 RowanMethodService class >> forGsNMethod: aGsNMethod organizer: aClassOrganizer [
 
-	^self basicNew
+	^self new
 		initialize: aGsNMethod organizer: aClassOrganizer;
 		yourself
-
 ]
 
 { #category : 'instance creation' }
@@ -67,6 +68,14 @@ RowanMethodService class >> source: source selector: selector category: category
 	^service
 ]
 
+{ #category : 'comparing' }
+RowanMethodService >> = methodService [
+	(methodService class canUnderstand: #isMethodService) ifFalse:[^false].
+	methodService isMethodService ifFalse:[^false].
+	^selector = methodService selector
+		and: [className asString = methodService className asString and: [meta = methodService meta]]
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> accessedInstVars [
 	^accessedInstVars
@@ -88,7 +97,7 @@ RowanMethodService >> addOrUpdateMethod [
                    inPackageNamed: self classService packageName
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanMethodService >> allReferences [
 
 	| methods |
@@ -142,8 +151,7 @@ RowanMethodService >> className [
 
 { #category : 'Updating' }
 RowanMethodService >> className: newValue [
-	className := newValue
-
+	className := newValue asString
 ]
 
 { #category : 'Accessing' }
@@ -167,10 +175,13 @@ RowanMethodService >> classService: newValue [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanMethodService >> clearBreakAt: stepPoint [
-
-	self gsNMethod clearBreakAtStepPoint: stepPoint.
+	| method |
+	method := self isUnboundMethod 
+			ifTrue:[Object _objectForOop: oop] 
+			ifFalse:[self gsNMethod].
+	method clearBreakAtStepPoint: stepPoint.
 	self update. 
 	RowanCommandResult addResult: self.
 ]
@@ -193,7 +204,7 @@ RowanMethodService >> definitionClass [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanMethodService >> fileout [
 	| answeringService ws |
 	answeringService := RowanAnsweringService new.
@@ -218,17 +229,22 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	breakPoints := self breakPointsFor: gsNMethod.
 	source := gsNMethod sourceString.
 	category := (classOrMeta categoryOfSelector: selector) asString.
-	className := theClass name. 
+	className := theClass name asString. 
 	packageName := gsNMethod rowanPackageName. 
 	projectName := gsNMethod rowanProjectName.
-	self setSupersAndSubsFor: theClass.
+	self setSupersAndSubsFor: classOrMeta.
 	isExtension := self rowanIsExtension.
 ]
 
 { #category : 'Accessing' }
 RowanMethodService >> gsNMethod [
 
-	^self classOrMeta compiledMethodAt: selector
+	^[self classOrMeta compiledMethodAt: selector ] on: Error do:[:ex | nil "removed method"]
+]
+
+{ #category : 'comparing' }
+RowanMethodService >> hash [
+	^(selector hash bitXor: className hash) bitXor: meta hash
 ]
 
 { #category : 'Accessing' }
@@ -266,6 +282,7 @@ RowanMethodService >> initialize [
 	hasSupers := false. 
 	hasSubs := false.
 	accessedInstVars := Array new.
+	isTestMethod := false.
 ]
 
 { #category : 'initialization' }
@@ -290,6 +307,31 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	self 
 		forClass: inClass thisClass 
 		organizer: aClassOrganizer.
+]
+
+{ #category : 'testing' }
+RowanMethodService >> isMethodService [
+
+	^true
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> isTestMethod [
+
+	^isTestMethod
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> isTestMethod: boolean [
+
+	isTestMethod := boolean
+]
+
+{ #category : 'testing' }
+RowanMethodService >> isUnboundMethod [
+
+	(className notNil and: [selector notNil]) ifTrue:[^false].
+	^(Object _objectForOop: oop) isKindOf: GsNMethod
 ]
 
 { #category : 'Accessing' }
@@ -342,6 +384,17 @@ RowanMethodService >> packageName: newValue [
 
 ]
 
+{ #category : 'printing' }
+RowanMethodService >> printOn: aStream [
+
+	super printOn: aStream. 
+	aStream nextPut: $(;
+				nextPutAll: (className ifNil:[nil printString]); 
+				nextPutAll: '>>'; 
+				nextPutAll: (selector ifNil:[nil printString]);
+				nextPut: $)
+]
+
 { #category : 'rowan' }
 RowanMethodService >> removeSelector: sel class: clsName [
 	
@@ -355,6 +408,24 @@ RowanMethodService >> rowanIsExtension [
 
 	^Rowan projectTools browser isExtensionMethod: selector asString forClassNamed: className asString isMeta: meta
 
+]
+
+{ #category : 'rowan' }
+RowanMethodService >> rowanProjectName [
+
+	^projectName
+]
+
+{ #category : 'client commands' }
+RowanMethodService >> runTest: testSelector inClassName: theClassName [
+
+	| sunitTestResult |
+	sunitTestResult := (Rowan image objectNamed: theClassName) run: testSelector asSymbol.
+	sunitTestResult errorCount > 0 ifTrue:[testResult := 'error']. 
+	sunitTestResult failureCount > 0 ifTrue:[testResult := 'failure']. 
+	sunitTestResult passedCount > 0 ifTrue:[testResult := 'passed']. 
+	testRunClassName := theClassName. 
+	RowanCommandResult addResult: self.
 ]
 
 { #category : 'Accessing' }
@@ -385,10 +456,19 @@ RowanMethodService >> selector: aSymbol [
 
 ]
 
-{ #category : 'commands' }
-RowanMethodService >> setBreakAt: stepPoint [
+{ #category : 'perform' }
+RowanMethodService >> servicePerform: symbol withArguments: collection [
+	super servicePerform: symbol withArguments: collection.
+	self update.
+]
 
-	self gsNMethod setBreakAtStepPoint: stepPoint.
+{ #category : 'client commands' }
+RowanMethodService >> setBreakAt: stepPoint [
+	| method |
+	method := self isUnboundMethod 
+			ifTrue:[Object _objectForOop: oop] 
+			ifFalse:[self gsNMethod].
+	method setBreakAtStepPoint: stepPoint.
 	self update. 
 	RowanCommandResult addResult: self.
 ]
@@ -405,8 +485,11 @@ RowanMethodService >> setSupersAndSubsFor: theClass [
 			superSource := theSuper sourceCodeAt: selector.
 			superDisplayString := theSuper name, '>>', selector].
 		theSuper := theSuper superClass].
-	(organizer allSubclassesOf: theClass) do:[:cls |
-		(hasSubs := cls includesSelector: selector) ifTrue:[^self]].
+	(organizer allSubclassesOf: theClass thisClass) do:[:cls |
+		| aClass |
+		aClass := theClass isMeta ifTrue:[cls class] ifFalse:[cls]. 
+		(hasSubs := aClass includesSelector: selector) ifTrue:[
+		^self]].
 ]
 
 { #category : 'Accessing' }
@@ -421,6 +504,20 @@ RowanMethodService >> source: aString [
 	
 	source := aString
 
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> stepPoints [
+
+	"for testing"
+	
+	^stepPoints
+]
+
+{ #category : 'Updating' }
+RowanMethodService >> stepPoints: collection [
+
+	stepPoints := collection
 ]
 
 { #category : 'initialization' }
@@ -441,11 +538,35 @@ RowanMethodService >> stepPointsFor: aGsNMethod [
 
 ]
 
+{ #category : 'Accessing' }
+RowanMethodService >> testResult [
+
+	^testResult
+]
+
 { #category : 'updates' }
 RowanMethodService >> update [
-	oop ifNil: [oop := self gsNMethod asOop].
+	
+	self isUnboundMethod ifFalse:[
+		self wasRecycled ifTrue:[oop := self gsNMethod asOop].
+		self wasDeleted ifTrue:[
+			self updateType: #methodsRemoved:. 
+			^RowanCommandResult addResult: self. ].  "removed method"
+		oop ifNil: [oop := self gsNMethod asOop]].
 	self 
 		initialize: (Object _objectForOop: oop) 
 		organizer: ClassOrganizer new.
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'testing' }
+RowanMethodService >> wasDeleted [
+	selector isNil ifTrue:[^false].
+	^self gsNMethod isNil
+]
+
+{ #category : 'testing' }
+RowanMethodService >> wasRecycled [
+	(oop notNil and:[self gsNMethod asOop ~= oop]) ifTrue:[^true].
+	^false
 ]

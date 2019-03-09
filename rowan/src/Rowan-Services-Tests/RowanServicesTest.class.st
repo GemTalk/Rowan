@@ -28,36 +28,10 @@ RowanServicesTest >> createClassDefinitionNamed: className [
 ]
 
 { #category : 'support' }
-RowanServicesTest >> createDefaultClass [
-
-	| packageDefinition classDefinition |
-	packageDefinition := self createDefaultPackage.
-	classDefinition := self createClassDefinitionNamed: self defaultClassName. 
-	packageDefinition addClassDefinition: classDefinition. 
-	^classDefinition
-]
-
-{ #category : 'support' }
-RowanServicesTest >> createDefaultPackage [
-
-	| projectDefinition |
-	projectDefinition := self createDefaultProject. 
-	projectDefinition addPackageNamed: self defaultPackageName.
-	^projectDefinition packageNamed: self defaultPackageName
-]
-
-{ #category : 'support' }
-RowanServicesTest >> createDefaultProject [
-
-	defaultProjectDefinition := self createProjectDefinitionNamed: self defaultProjectName.
-	^defaultProjectDefinition
-]
-
-{ #category : 'support' }
 RowanServicesTest >> createJadeiteTestPackage [
 	| proj pkg |
 	proj := self createJadeiteTestProject. 
-	pkg := RwPackageDefinition newNamed: self jadeiteTestPackageName.
+	pkg := RwPackageDefinition newNamed: self servicesTestPackageName.
 	proj addPackage: pkg.
 	Rowan projectTools load loadProjectDefinition: proj.
 	^pkg.
@@ -66,10 +40,25 @@ RowanServicesTest >> createJadeiteTestPackage [
 { #category : 'support' }
 RowanServicesTest >> createJadeiteTestProject [
 	| proj |
-	proj := RwProjectDefinition newForGitBasedProjectNamed: self jadeiteTestProjectName. 
-	proj repositoryRootPath: '$ROWAN_PROJECTS_HOME/', self jadeiteTestProjectName. 
+	proj := RwProjectDefinition newForGitBasedProjectNamed: self servicesTestProjectName. 
+	proj repositoryRootPath: '$ROWAN_PROJECTS_HOME/', self servicesTestProjectName. 
 	Rowan projectTools create createProjectFor: proj.
 	^proj
+]
+
+{ #category : 'support' }
+RowanServicesTest >> createNonDiskTestProjectNamed: projectName packageName: packageName [
+
+	| projectDefinition projectSetDefinition  |
+	projectDefinition := RwProjectDefinition newForGitBasedProjectNamed: projectName.
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		yourself.
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+	^projectDefinition
 ]
 
 { #category : 'support' }
@@ -84,28 +73,57 @@ RowanServicesTest >> createProjectDefinitionNamed: projectName [
 	^projectDefinition
 ]
 
-{ #category : 'constants' }
-RowanServicesTest >> defaultClassName [
+{ #category : 'support' }
+RowanServicesTest >> createServicesTestClass [
 
-	^'ServicesTestClass'
-]
-
-{ #category : 'constants' }
-RowanServicesTest >> defaultPackageName [
-
-	^'ServicesTestPackage'
+	| packageDefinition classDefinition |
+	packageDefinition := self createServicesTestPackage.
+	classDefinition := self createClassDefinitionNamed: self servicesDefaultClassName. 
+	packageDefinition addClassDefinition: classDefinition. 
+	^classDefinition
 ]
 
 { #category : 'support' }
-RowanServicesTest >> defaultProjectDefinition [
+RowanServicesTest >> createServicesTestPackage [
 
-	^defaultProjectDefinition ifNil:[defaultProjectDefinition := self createDefaultProject]
+	| projectDefinition |
+	projectDefinition := self createServicesTestProject. 
+	projectDefinition addPackageNamed: self servicesTestPackageName.
+	^projectDefinition packageNamed: self servicesTestPackageName
 ]
 
-{ #category : 'constants' }
-RowanServicesTest >> defaultProjectName [
+{ #category : 'support' }
+RowanServicesTest >> createServicesTestProject [
 
-	^'ServicesTestProject'
+	defaultProjectDefinition := self createProjectDefinitionNamed: self servicesTestProjectName.
+	^defaultProjectDefinition
+]
+
+{ #category : 'support' }
+RowanServicesTest >> createServicesTestTestClass [
+
+	| packageDefinition classDefinition |
+	packageDefinition := defaultProjectDefinition packageNamed: self servicesTestPackageName. 
+	classDefinition := self createTestClassDefinitionNamed: self servicesDefaultTestClassName. 
+	packageDefinition addClassDefinition: classDefinition. 
+	^classDefinition
+]
+
+{ #category : 'support' }
+RowanServicesTest >> createTestClassDefinitionNamed: className [
+
+	| classDefinition |
+	classDefinition := RwClassDefinition
+		newForClassNamed: className
+			super: 'TestCase'
+			instvars: #()
+			classinstvars: #()
+			classvars: #()
+			category: 'services test'
+			comment: String new
+			pools: #()
+			type: 'normal'.
+	^classDefinition
 ]
 
 { #category : 'support' }
@@ -124,26 +142,73 @@ RowanServicesTest >> jadeiteIssueTested: aSymbol withTitle: anObject [
 		https://github.com/GemTalk/Jadeite/issues/"
 ]
 
-{ #category : 'constants' }
-RowanServicesTest >> jadeiteTestPackageName [
+{ #category : 'support' }
+RowanServicesTest >> loadRowanSample1 [
+	| specUrlString projectTools rowanSpec gitRootPath projectName projectDefinition spec |
 
-	^'JadeitePackage'
-]
+	projectName := 'RowanSample1'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [])
+		ifNotNil: [ :prj |  Rowan image _removeLoadedProject: prj ].
 
-{ #category : 'constants' }
-RowanServicesTest >> jadeiteTestProjectName [
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := 'file:' , rowanSpec repositoryRootPath , '/samples/RowanSample1.ston'.
+	projectTools := Rowan projectTools.
 
-	^'JadeiteProject'
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	spec := specUrlString asRwUrl asSpecification.
+	projectTools clone
+		cloneSpecification: spec
+		gitRootPath: gitRootPath
+		useSsh: true
+		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
+	
+	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
+	projectDefinition := projectTools create createProjectFromSpecUrl: 'file:', gitRootPath, '/', projectName, '/', spec specsPath, '/RowanSample1.ston'.
+	Rowan projectTools load loadProjectNamed: 'RowanSample1'.
 ]
 
 { #category : 'support' }
-RowanServicesTest >> loadDefaultProject [
+RowanServicesTest >> loadServicesTestProject [
 	
 	| projectSetDefinition |
 
 	projectSetDefinition:= RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: self defaultProjectDefinition.
+	projectSetDefinition addDefinition: self servicesTestProjectDefinition.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+]
+
+{ #category : 'constants' }
+RowanServicesTest >> servicesDefaultClassName [
+
+	^'RowanServicesTestClass'
+]
+
+{ #category : 'constants' }
+RowanServicesTest >> servicesDefaultTestClassName [
+
+	^'RowanServicesTestClassForTesting'
+]
+
+{ #category : 'constants' }
+RowanServicesTest >> servicesTestPackageName [
+
+	^'RowanServicesTestPackage'
+]
+
+{ #category : 'support' }
+RowanServicesTest >> servicesTestProjectDefinition [
+
+	^defaultProjectDefinition ifNil:[defaultProjectDefinition := self createServicesTestProject]
+]
+
+{ #category : 'constants' }
+RowanServicesTest >> servicesTestProjectName [
+
+	^'RowanServicesTestProject'
 ]
 
 { #category : 'setup teardown' }
@@ -160,7 +225,8 @@ RowanServicesTest >> tearDown [
 ]
 
 { #category : 'support' }
-RowanServicesTest >> unloadDefaultProject [
+RowanServicesTest >> unloadServicesTestProject [
 
-	Rowan projectTools delete deleteProjectNamed: self defaultProjectName
+	Rowan image loadedProjectNamed: self servicesTestProjectName ifAbsent:[^self].
+	Rowan projectTools delete deleteProjectNamed: self servicesTestProjectName
 ]

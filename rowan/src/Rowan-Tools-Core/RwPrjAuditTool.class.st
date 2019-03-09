@@ -6,13 +6,18 @@ Class {
 
 { #category : 'other' }
 RwPrjAuditTool >> auditAll [
+	
+	^self auditAllForUser: System myUserProfile userId
+]
+
+{ #category : 'other' }
+RwPrjAuditTool >> auditAllForUser: aUserId [
 | res |
 	res := StringKeyValueDictionary new.
-			(Rowan image  _loadedProjectRegistryForUserId: System myUserProfile userId) keysAndValuesDo: [:prjName :aLoadedProject |
+			(Rowan image  _loadedProjectRegistryForUserId: aUserId) keysAndValuesDo: [:prjName :aLoadedProject |
 				(self auditForProject: aLoadedProject) ifNotEmpty: [:aColl | res at: prjName put: aColl]
 	].
 	^res
-
 ]
 
 { #category : 'other' }

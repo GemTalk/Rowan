@@ -46,6 +46,13 @@ RwProject >> definedClasses [
 	^ self _projectTools query classForProjectNamed: self name
 ]
 
+{ #category : 'testing' }
+RwProject >> existsOnDisk [
+
+	Rowan image loadedProjectNamed: self name ifAbsent: [ ^false ].
+	^ Rowan platform fileUtilities directoryExists: self repositoryRootPath.
+]
+
 { #category : 'accessing' }
 RwProject >> extendedClasses [
 
@@ -81,6 +88,14 @@ RwProject >> packages [
 RwProject >> project [
 
 	^ self
+]
+
+{ #category : 'accessing' }
+RwProject >> projectUrl [
+
+	"Return the projectUrl used to clone the project"
+
+	^ self _loadedProject projectUrl
 ]
 
 { #category : 'project creation' }

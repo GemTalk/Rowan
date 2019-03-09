@@ -56,7 +56,7 @@ RowanProcessService class >> onWaitingProcess: aGsProcess [
 RowanProcessService >> initialize: aGsProcess status: aString [
 
 	| theOrganizer |
-	theOrganizer := ClassOrganizer new.
+	theOrganizer := ClassOrganizer new. 
 	frames := Array new: aGsProcess stackDepth.
 	1 to: aGsProcess stackDepth do: [:i | 
 		frames at: i put: (RowanFrameService process: aGsProcess level: i organizer: theOrganizer).

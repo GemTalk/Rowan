@@ -14,6 +14,9 @@ run
 			Rowan projectTools load
 				loadProjectNamed: projectName
 				withGroupNames: #('tests' 'deprecated' 'jadeServer') ].
+
+		System commit. "do a commit immediately after test code is loaded, to avoid losing test classes if a test does an apport"
+
 		"audit after load"
 		projectNames do: [:projectName |
 			| audit |

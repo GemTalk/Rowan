@@ -10,7 +10,9 @@ Class {
 		'packages',
 		'changes',
 		'existsOnDisk',
-		'isLoaded'
+		'isLoaded',
+		'projectUrl',
+		'rowanProjectsHome'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -45,16 +47,25 @@ RowanProjectService >> _isSkew [
 	^isSkew
 ]
 
-{ #category : 'commands' }
+{ #category : 'comparing' }
+RowanProjectService >> = projectService [
+	^projectService isProjectService ifTrue: [name = projectService name] ifFalse: [^false]
+]
+
+{ #category : 'client commands' }
 RowanProjectService >> addPackageNamed: packageName [
 
-	self browserTool addPackageNamed: packageName toProjectNamed: name. 
-	self update.
+	Rowan image loadedPackageNamed: packageName ifAbsent: [
+		self browserTool addPackageNamed: packageName toProjectNamed: name. 
+		self update.
+		^self answer: #added.].
+	self answer: #duplicatePackage
 ]
 
 { #category : 'initialization' }
 RowanProjectService >> basicRefresh [
 	(isLoaded := self projectIsLoaded) ifFalse:[
+		existsOnDisk := false. 
 		updateType := #removedProject:. 
 		^RowanCommandResult addResult: self]. 
 	isDirty := self isDirty. 
@@ -62,6 +73,8 @@ RowanProjectService >> basicRefresh [
 	isSkew := self isSkew.
 	sha := self rowanSha.
 	branch := self rowanBranch.
+	projectUrl := self rowanProjectUrl. 
+	rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' .
 	RowanCommandResult addResult: self
 ]
 
@@ -80,7 +93,7 @@ RowanProjectService >> branch: anObject [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> changes [
 
 	| projectService jadeServer |
@@ -97,7 +110,7 @@ RowanProjectService >> changes [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> checkout: branchName [
 
 	| project branches |
@@ -108,7 +121,7 @@ RowanProjectService >> checkout: branchName [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> commitWithMessage: message [
 	
 	Rowan projectTools write writeProjectNamed: name.
@@ -154,6 +167,11 @@ RowanProjectService >> existsOnDisk [
 	^existsOnDisk
 ]
 
+{ #category : 'comparing' }
+RowanProjectService >> hash [
+	^self name hash
+]
+
 { #category : 'initialization' }
 RowanProjectService >> initialize [
 
@@ -180,17 +198,18 @@ RowanProjectService >> isDirty: aBoolean [
 RowanProjectService >> isSkew [
 	| repositorySha |
 	name isNil ifTrue:[^false].
+	self existsOnDisk ifFalse:[^false]. 
 	repositorySha := [self repositorySha] on: Error do:[:ex | repositorySha := 'not on disk'].
 	^self sha ~= repositorySha
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> loadProjectNamed: aName [
 
 	[Rowan projectTools load loadProjectNamed: aName] 
 		on: Warning
-		do: [ :ex | Transcript cr; show: ex description. ex resume ]
-
+		do: [ :ex | Transcript cr; show: ex description. ex resume ].
+	RowanBrowserService new updateProjects.
 ]
 
 { #category : 'rowan' }
@@ -216,7 +235,7 @@ RowanProjectService >> name: anObject [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 	"set useSsh to false to clone using https:"
 
@@ -224,7 +243,7 @@ RowanProjectService >> newGitProject: url root: rootPath useSsh: useSsh [
 		cloneSpecUrl: url
 		gitRootPath: rootPath
 		useSsh: useSsh.
-
+	RowanBrowserService new updateProjects.
 ]
 
 { #category : 'rowan' }
@@ -297,7 +316,19 @@ RowanProjectService >> projects [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'accessing' }
+RowanProjectService >> projectUrl [
+
+	^projectUrl
+]
+
+{ #category : 'accessing' }
+RowanProjectService >> projectUrl: anObject [
+
+	projectUrl := anObject
+]
+
+{ #category : 'client commands' }
 RowanProjectService >> pullFromGit [
 
 	| project |
@@ -309,7 +340,7 @@ RowanProjectService >> pullFromGit [
 
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> pushToGit [
 
 	| project |
@@ -328,7 +359,7 @@ RowanProjectService >> refresh [
 		packages := self packageServices].
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> reloadProject [
 
 	[Rowan projectTools load loadProjectNamed: name] 
@@ -368,6 +399,18 @@ RowanProjectService >> rowanDirty [
 ]
 
 { #category : 'rowan' }
+RowanProjectService >> rowanProjectName [
+
+	^name
+]
+
+{ #category : 'rowan' }
+RowanProjectService >> rowanProjectUrl [
+
+	^(RwProject newNamed: name) projectUrl
+]
+
+{ #category : 'rowan' }
 RowanProjectService >> rowanSha [
 
 	name isNil ifTrue:[^0].
@@ -384,14 +427,11 @@ RowanProjectService >> rowanSkew [
 
 { #category : 'perform' }
 RowanProjectService >> servicePerform: symbol withArguments: collection [
-	| wasClean |
-	wasClean := [self rowanDirty not] on: Error do:[:ex | false "not loaded"].
 	super servicePerform: symbol withArguments: collection.
-	wasClean ifTrue:[
-		self update]
+	self update.
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanProjectService >> setDefaultProject [
 
 	self class defaultProjectName: name
@@ -402,8 +442,7 @@ RowanProjectService >> setExistsOnDisk [
 	"might be a better test than #repositorySha for
 	determining if a project exists on disk." 
 
-	[self repositorySha] on: Error do:[:ex | ^existsOnDisk := false].
-	existsOnDisk := true.
+	existsOnDisk := (RwProject newNamed: name) existsOnDisk.
 ]
 
 { #category : 'accessing' }
@@ -437,7 +476,23 @@ RowanProjectService >> update [
 	self refresh.
 ]
 
-{ #category : 'commands' }
+{ #category : 'update' }
+RowanProjectService >> updateInternalService: updatedService [
+
+	"when sending services back to the client,
+	verify any services held by this object are 
+	updated. Services know what internal services
+	they contain." 
+
+	1 to: packages size do:[:index |
+		| packageService |
+		packageService := packages at: index. 
+		packageService = updatedService ifTrue:[
+			packages at: index put: updatedService
+		]].
+]
+
+{ #category : 'client commands' }
 RowanProjectService >> write [
 	Rowan projectTools write writeProjectNamed: name
 

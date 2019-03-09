@@ -279,6 +279,28 @@ RwAbstractTest >> classExtensionDefinition: className instanceMethods: instanceM
 		yourself
 ]
 
+{ #category : 'private' }
+RwAbstractTest >> gsInteractionConfirmationHandler [
+
+	^ GsInteractionHandler new
+		defaultBlock: [ :ignored | self assert: false description: 'expected a confirmation' ];
+		confirmBlock: [ :interaction | interaction ok ];
+		yourself
+]
+
+{ #category : 'private' }
+RwAbstractTest >> handleConfirmationDuring: aBlock [
+
+	"expect a confirmation"
+
+	aBlock
+		on: GsInteractionRequest
+		do: [ :ex | 
+			ex
+				response:
+					(ex interaction interactWith: self gsInteractionConfirmationHandler) ]
+]
+
 { #category : 'support' }
 RwAbstractTest >> methodDefsFromSpec: specArray [
   | dict |

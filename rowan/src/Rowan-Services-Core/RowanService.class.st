@@ -27,6 +27,18 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
+{ #category : 'autocommit' }
+RowanService class >> autoCommit [
+
+	^SessionTemps current at: #'Jadeite_AutoCommit' ifAbsentPut: [false]
+]
+
+{ #category : 'autocommit' }
+RowanService class >> flipAutoCommit [
+
+	^self setAutoCommit: self autoCommit not
+]
+
 { #category : 'instance creation' }
 RowanService class >> new [
 
@@ -46,6 +58,21 @@ RowanService class >> sampleService [
 
 	^self new sampleService
 
+]
+
+{ #category : 'autocommit' }
+RowanService class >> setAutoCommit: boolean [
+
+	^SessionTemps current at: #'Jadeite_AutoCommit' put: boolean
+]
+
+{ #category : 'other' }
+RowanService >> answer: anObject [
+
+	| answeringService |
+	answeringService := RowanAnsweringService new. 
+	answeringService answer: anObject. 
+	RowanCommandResult addResult: answeringService.
 ]
 
 { #category : 'rowan' }
@@ -149,6 +176,30 @@ RowanService >> excludedInstVars [
 RowanService >> initialize [
 ]
 
+{ #category : 'testing' }
+RowanService >> isClassService [
+
+	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isMethodService [
+
+	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isPackageService [
+
+	^false
+]
+
+{ #category : 'testing' }
+RowanService >> isProjectService [
+
+	^false
+]
+
 { #category : 'accessing' }
 RowanService >> jadeiteServer [
 
@@ -212,6 +263,15 @@ RowanService >> rowanLoadedPackageNames [
 
 ]
 
+{ #category : 'accessing' }
+RowanService >> rowanProjectName [
+
+	"all services should be able to return a project name
+	even if they are not truly packaged" 
+
+	^nil
+]
+
 { #category : 'samples' }
 RowanService >> sampleSymbolDictionaryName [
 
@@ -221,7 +281,7 @@ RowanService >> sampleSymbolDictionaryName [
 
 { #category : 'perform' }
 RowanService >> servicePerform: symbol withArguments: collection [
-	super perform: symbol withArguments: collection.
+	^super perform: symbol withArguments: collection.
 ]
 
 { #category : 'replication' }
@@ -260,6 +320,16 @@ RowanService >> symbolDictionaryNamed: aName [
 		ifFalse:[
 			self createSymbolDictionaryNamed: aName].
 
+]
+
+{ #category : 'initialization' }
+RowanService >> update [
+]
+
+{ #category : 'update' }
+RowanService >> updateInternalService: updatedService [
+
+	"no internally held services to update"
 ]
 
 { #category : 'accessing' }

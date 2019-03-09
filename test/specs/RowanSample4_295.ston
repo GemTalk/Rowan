@@ -1,0 +1,11 @@
+ RwSimpleProjectSpecification{
+	#specName : 'RowanSample4_295',
+	#version : '0.2.0',
+	#projectUrl : 'https://github.com/dalehenrich/RowanSample4',
+	#configsPath : 'rowan/configs',
+	#repoPath : 'rowan/src',
+	#specsPath : 'rowan/specs',
+	#defaultConfigurationNames : [ 'Load' ],
+	#defaultGroupNames : [ 'tests' ],
+	#comment : 'Project used for Issue #295.'
+}

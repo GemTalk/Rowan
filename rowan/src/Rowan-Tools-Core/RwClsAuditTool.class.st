@@ -29,14 +29,15 @@ RwClsAuditTool >> _auditCategory: category forBehavior: aBehavior loadedClass: a
 					ifAbsent: [nil]) isNil 
 						ifTrue: [ | res | 
 									res := self _auditCategory: category selectors: (aBehavior selectorsIn: category)  forBehavior: aBehavior loadedClass: aLoadedClass		.
-									res add: (aLoadedClass name , ' #' , category asString -> 'Class Extension is not present in the package '); 
-									yourself
+									"res add: (aLoadedClass name , ' #' , category asString -> 'Class Extension is not present in the package '); 
+									yourself"
 						] 
 						ifFalse: [{}"no basic extension problems found, class extension will be audited separately"]
 			]
 	] ifFalse: [
 		self _auditCategory: category selectors: (aBehavior selectorsIn: category)  forBehavior: aBehavior loadedClass: aLoadedClass		
 	]
+
 ]
 
 { #category : 'audit' }
@@ -113,12 +114,11 @@ RwClsAuditTool >> _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavi
 	((aLoadedClass propertyAt: 'category') = aBehavior category ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Class category has changed in compiled class v loaded class'].
 	(aDict := System myUserProfile resolveSymbol: (aLoadedClass propertyAt: 'gs_SymbolDictionary') asSymbol ) 
-			ifNil: [self errorLog: res  add: 'Unable to find SymbolDictionary for LoadedClass'] 
+			ifNil: [self errorLog: res  add: aLoadedClass name -> ('Unable to find SymbolDictionary ' ,(aLoadedClass propertyAt: 'gs_SymbolDictionary'))] 
 			ifNotNil: [:smbd | smbd value at: aLoadedClass name asSymbol 
 					ifAbsent: [self errorLog: res  add: aLoadedClass name -> 'Compiled class not found in symbol dictionary of loaded class']] .
 
 	^res
-
 ]
 
 { #category : 'audit' }
@@ -149,7 +149,7 @@ RwClsAuditTool >> _auditSelector: aSelector forBehavior: aBehavior loadedClass: 
 						ifTrue: [
 							((aLoadedMethod propertyAt: 'protocol') equalsNoCase: (aBehavior categoryOfSelector:   aSelector ) ) 
 								ifTrue: [nil]
-								ifFalse: [aLoadedClass name , '#', (aLoadedMethod propertyAt: 'protocol') -> 'Missing class method category for loaded class']
+								ifFalse: [aLoadedClass name , '#', (aLoadedMethod propertyAt: 'protocol') -> 'Missing instance method category for loaded class']
 						] 
 						ifFalse: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Compiled instance method is not identical to loaded method. ']
 			]
@@ -198,7 +198,8 @@ RwClsAuditTool >> auditLoadedClass: aLoadedClass [
 RwClsAuditTool >> errorLog: aResult add: aMessage [	
 "add error to results. print to file"
 	aResult add: aMessage.
-	GsFile gciLogServer: aMessage value asString,'  ', aMessage key asString
+	GsFile gciLogServer: aMessage value asString,'  ', aMessage key asString.
+	Notification signal: aMessage value asString,'  ', aMessage key asString.
 
 ]
 
