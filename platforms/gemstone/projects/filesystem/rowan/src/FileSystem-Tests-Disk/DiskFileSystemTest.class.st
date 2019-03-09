@@ -105,7 +105,7 @@ DiskFileSystemTest >> testMoveMemoryToDisk [
 { #category : 'tests' }
 DiskFileSystemTest >> testOpenWithOptions [
 	| aFileOptions  result reference|
-	aFileOptions := FileOptions write.
+	aFileOptions := FileOptions newWrite.
 	reference := (FileLocator temp / 'tttt') resolve.
 	self markForCleanup: reference.
 	result := reference openWithOptions: aFileOptions.

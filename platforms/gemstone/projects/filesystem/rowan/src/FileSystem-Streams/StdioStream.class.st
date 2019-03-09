@@ -44,7 +44,7 @@ StdioStream >> next: n [
 		readBuffer at: 1 put: peekBuffer.
 		startingAt := startingAt + 1.
 		peekBuffer := nil ].
-	read := self file readInto: readBuffer startingAt: startingAt count: n - startingAt + 1.
+	read := self terminal readInto: readBuffer startingAt: startingAt count: n - startingAt + 1.
 	^read = (n - startingAt + 1)
 		ifTrue: [ readBuffer ]
 		ifFalse: [ readBuffer copyFrom: 1 to: read ]

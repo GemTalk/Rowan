@@ -53,7 +53,7 @@ FileWindowsOptionsTest >> storeClass [
 FileWindowsOptionsTest >> testAccessRules [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec read fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
 	aFileOptions parent store: self store.
 
 	self assert: aFileOptions accessRule equals: WindowsStore readOnlyAccessRule.
@@ -69,7 +69,7 @@ FileWindowsOptionsTest >> testAccessRules [
 FileWindowsOptionsTest >> testCreateRules [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec read fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
 	aFileOptions parent store: self store.
 
 	self assert: aFileOptions createRule equals: WindowsStore openExistingRule.
@@ -89,7 +89,7 @@ FileWindowsOptionsTest >> testCreateRules [
 FileWindowsOptionsTest >> testDefaultReadFileRules [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec read fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
 	aFileOptions parent store: self store.
 
 	self assert: aFileOptions createRule equals: WindowsStore openExistingRule.
@@ -118,7 +118,7 @@ FileWindowsOptionsTest >> testFileType [
 FileWindowsOptionsTest >> testShareRules [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec read fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
 	aFileOptions parent store: self store.
 	self assert: aFileOptions shareRule equals: WindowsStore denyNoneShareRule.
 

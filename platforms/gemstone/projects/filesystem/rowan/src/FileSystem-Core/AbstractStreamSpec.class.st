@@ -9,7 +9,15 @@ Class {
 }
 
 { #category : 'instance creation' }
-AbstractStreamSpec class >> append [
+AbstractStreamSpec class >> new [
+	^self basicNew
+		initialize;
+		store: (FileSystem disk) store;
+		yourself
+]
+
+{ #category : 'instance creation' }
+AbstractStreamSpec class >> newAppend [
 
 	^self new
 		initializeForAppend;
@@ -17,10 +25,25 @@ AbstractStreamSpec class >> append [
 ]
 
 { #category : 'instance creation' }
-AbstractStreamSpec class >> new [
-	^self basicNew
-		initialize;
-		store: (FileSystem disk) store;
+AbstractStreamSpec class >> newRead [
+	^self new
+		initializeForRead;
+		yourself
+]
+
+{ #category : 'instance creation' }
+AbstractStreamSpec class >> newReadWrite [
+
+	^self new
+		initializeForReadWrite;
+		yourself
+]
+
+{ #category : 'instance creation' }
+AbstractStreamSpec class >> newWrite [
+
+	^self new
+		initializeForWrite;
 		yourself
 ]
 
@@ -36,29 +59,6 @@ AbstractStreamSpec class >> on: aFileReference options: aFileOptions [
 AbstractStreamSpec class >> onOptions: aFileOptions [
 	^self basicNew
 		initalizeOnOptions: aFileOptions
-		yourself
-]
-
-{ #category : 'instance creation' }
-AbstractStreamSpec class >> read [
-	^self new
-		initializeForRead;
-		yourself
-]
-
-{ #category : 'instance creation' }
-AbstractStreamSpec class >> readWrite [
-
-	^self new
-		initializeForReadWrite;
-		yourself
-]
-
-{ #category : 'instance creation' }
-AbstractStreamSpec class >> write [
-
-	^self new
-		initializeForWrite;
 		yourself
 ]
 

@@ -47,13 +47,6 @@ Class {
 }
 
 { #category : 'instance creation' }
-FileOptions class >> append [
-	^self new
-		initializeAppend;
-		yourself
-]
-
-{ #category : 'instance creation' }
 FileOptions class >> new [
 	^self basicNew
 		initialize;
@@ -61,21 +54,28 @@ FileOptions class >> new [
 ]
 
 { #category : 'instance creation' }
-FileOptions class >> read [
+FileOptions class >> newAppend [
+	^self new
+		initializeAppend;
+		yourself
+]
+
+{ #category : 'instance creation' }
+FileOptions class >> newRead [
 	^self new
 		initializeRead;
 		yourself
 ]
 
 { #category : 'instance creation' }
-FileOptions class >> readWrite [
+FileOptions class >> newReadWrite [
 	^self new
 		initializeReadWrite;
 		yourself
 ]
 
 { #category : 'instance creation' }
-FileOptions class >> write [
+FileOptions class >> newWrite [
 	^self new
 		initializeWrite;
 		yourself

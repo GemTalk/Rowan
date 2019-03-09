@@ -23,7 +23,7 @@ FileOptionsTest >> _testPermissionFlag: aPermissionFlagClass in: aFileOptions [
 { #category : 'private' }
 FileOptionsTest >> fileOptions [
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec read fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
 	aFileOptions parent store: self store.
 	^aFileOptions
 ]
@@ -57,7 +57,7 @@ FileOptionsTest >> storeClass [
 FileOptionsTest >> testAppendFlag [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec append fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newAppend fileOptions.
 	aFileOptions parent store: self store.
 	self assert: aFileOptions appendFlag posixFlagValue equals: (FileAppendFlag perform: self valueAccessor)
 ]
@@ -98,7 +98,7 @@ FileOptionsTest >> testIndividualAccessPermissionFlags [
 FileOptionsTest >> testOpenAndAppendAndReadMode [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec append read fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newAppend read fileOptions.
 	aFileOptions parent store: self store.
 	self assert: aFileOptions isWritable.
 	self assert: aFileOptions isReadable.
@@ -115,7 +115,7 @@ FileOptionsTest >> testOpenAndAppendAndReadMode [
 FileOptionsTest >> testOpenAppendMode [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec append fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newAppend fileOptions.
 	aFileOptions parent store: self store.
 	self assert: aFileOptions isWritable.
 	self deny: aFileOptions isReadable.
@@ -151,7 +151,7 @@ FileOptionsTest >> testOwnerAccessPermissionFlags [
 FileOptionsTest >> testReadOpenMode [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec read fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
 	aFileOptions parent store: self store.
 	self deny: aFileOptions isWritable.
 	self assert: aFileOptions isReadable.
@@ -167,7 +167,7 @@ FileOptionsTest >> testReadOpenMode [
 FileOptionsTest >> testReadWriteOpenMode [
 
 	| aFileOptions|
-	aFileOptions := EncodedBufferedStreamSpec readWrite fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newReadWrite fileOptions.
 	aFileOptions parent store: self store.
 	self assert: aFileOptions isWritable.
 	self assert: aFileOptions isReadable.
@@ -182,7 +182,7 @@ FileOptionsTest >> testReadWriteOpenMode [
 FileOptionsTest >> testReadWriteTruncateOpenMode [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec readWrite truncate create fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newReadWrite truncate create fileOptions.
 	aFileOptions parent store: self store.
 	self assert: aFileOptions isWritable.
 	self assert: aFileOptions isReadable.
@@ -198,7 +198,7 @@ FileOptionsTest >> testReadWriteTruncateOpenMode [
 FileOptionsTest >> testShareFlags [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec append fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newAppend fileOptions.
 	aFileOptions parent store: self store.
 	self assert: aFileOptions share posixFlagValue equals: (FileDenyNoneFlag perform: self valueAccessor).
 	aFileOptions beReadOnlyShared.
@@ -213,7 +213,7 @@ FileOptionsTest >> testShareFlags [
 FileOptionsTest >> testWriteOpenMode [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec write fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newWrite fileOptions.
 	aFileOptions parent store: self store.
 	self assert: aFileOptions isWritable.
 	self deny: aFileOptions isReadable.

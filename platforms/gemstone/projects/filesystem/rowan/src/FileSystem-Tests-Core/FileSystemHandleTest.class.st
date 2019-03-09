@@ -36,7 +36,7 @@ FileSystemHandleTest >> setUp [
 	super setUp.
 	filesystem := self createFileSystem.
 	reference := filesystem * 'plonk'.
-	handle := reference openOptions: FileOptions write
+	handle := reference openOptions: FileOptions newWrite
 ]
 
 { #category : 'running' }
@@ -103,7 +103,7 @@ FileSystemHandleTest >> testEnsureClosed [
 
 	filesystem := self createFileSystem.
 	reference := filesystem * 'plonk'.
-	handle := reference openOptions: FileOptions write.
+	handle := reference openOptions: FileOptions newWrite.
 	handle ensureClosed.
 	self deny: handle isOpen.
 	handle ensureClosed.
@@ -127,7 +127,7 @@ FileSystemHandleTest >> testIO [
 { #category : 'tests' }
 FileSystemHandleTest >> testOpenOptions [
 	| aFileOptions |
-	aFileOptions := FileOptions read.
+	aFileOptions := FileOptions newRead.
 	handle := reference openOptions: aFileOptions.
 	self assert: (handle isKindOf: self targetClass).
 	self assert: handle options == aFileOptions
@@ -149,7 +149,7 @@ FileSystemHandleTest >> testReadBufferTooLarge [
 { #category : 'tests' }
 FileSystemHandleTest >> testReadOnly [
 	handle close.
-	handle := reference openOptions: FileOptions read.
+	handle := reference openOptions: FileOptions newRead.
 	self 
 		should: 
 			[ handle 

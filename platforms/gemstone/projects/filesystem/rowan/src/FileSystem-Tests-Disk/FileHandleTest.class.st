@@ -17,7 +17,7 @@ FileHandleTest >> createFileSystem [
 { #category : 'running' }
 FileHandleTest >> reopenForRead [
 	handle close.
-	handle := reference openOptions: FileOptions read.
+	handle := reference openOptions: FileOptions newRead.
 	handle assureOpen
 ]
 
@@ -39,7 +39,7 @@ FileHandleTest >> testFileWriteError [
 { #category : 'tests' }
 FileHandleTest >> testOpenWithOptions [
 	| aFileOptions  result |
-	aFileOptions := FileOptions write.
+	aFileOptions := FileOptions newWrite.
 	reference := (FileLocator temp / 'tttt') resolve.
 	result := FileHandle open: reference withOptions: aFileOptions.
 	self assert: (result isKindOf: FileSystem fileClass)

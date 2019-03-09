@@ -136,7 +136,7 @@ AbstractFileReference >> basenameWithoutExtension: anExtension [
 
 { #category : 'streams-compatibility' }
 AbstractFileReference >> binaryReadStream [
-	^BufferedStreamSpec read on: self
+	^BufferedStreamSpec newRead on: self
 ]
 
 { #category : 'streams-compatibility' }
@@ -160,12 +160,12 @@ AbstractFileReference >> binaryReadStreamIfAbsent: absentBlock [
 
 { #category : 'streams' }
 AbstractFileReference >> binaryReadWriteStream [
-	^BufferedStreamSpec readWrite on: self
+	^BufferedStreamSpec newReadWrite on: self
 ]
 
 { #category : 'streams' }
 AbstractFileReference >> binaryWriteStream [
-	^BufferedStreamSpec write on: self
+	^BufferedStreamSpec newWrite on: self
 ]
 
 { #category : 'streams' }
@@ -642,12 +642,12 @@ AbstractFileReference >> permissions [
 
 { #category : 'streams' }
 AbstractFileReference >> readRawStream [
-	^BinaryStreamSpec read on: self
+	^BinaryStreamSpec newRead on: self
 ]
 
 { #category : 'streams' }
 AbstractFileReference >> readStream [
-	^EncodedBufferedStreamSpec read on: self
+	^EncodedBufferedStreamSpec newRead on: self
 ]
 
 { #category : 'streams' }
@@ -665,7 +665,7 @@ AbstractFileReference >> readStreamDo: doBlock ifAbsent: absentBlock [
 { #category : 'streams' }
 AbstractFileReference >> readStreamEncoded: anEncoding [
 
-	^ (EncodedBufferedStreamSpec read encoding: anEncoding) on: self
+	^ (EncodedBufferedStreamSpec newRead encoding: anEncoding) on: self
 ]
 
 { #category : 'streams' }
@@ -802,12 +802,12 @@ AbstractFileReference >> withPath: newPath [
 
 { #category : 'streams' }
 AbstractFileReference >> writeRawStream [
-	^BinaryStreamSpec write on: self
+	^BinaryStreamSpec newWrite on: self
 ]
 
 { #category : 'streams' }
 AbstractFileReference >> writeStream [
-	^ EncodedBufferedStreamSpec write on: self
+	^ EncodedBufferedStreamSpec newWrite on: self
 ]
 
 { #category : 'streams' }
@@ -825,7 +825,7 @@ AbstractFileReference >> writeStreamDo: doBlock ifPresent: presentBlock [
 { #category : 'streams' }
 AbstractFileReference >> writeStreamEncoded: anEncoding [
 
-	^(EncodedBufferedStreamSpec write encoding: anEncoding) on: self
+	^(EncodedBufferedStreamSpec newWrite encoding: anEncoding) on: self
 ]
 
 { #category : 'streams' }

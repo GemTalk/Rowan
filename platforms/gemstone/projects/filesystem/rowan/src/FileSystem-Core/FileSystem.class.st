@@ -55,7 +55,7 @@ FileSystem >> binaryReadStreamOn: aResolvable [
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a read stream for reading the file."
 
-	^ (self open: aResolvable options: FileOptions read) binaryStream.
+	^ (self open: aResolvable options: FileOptions newRead) binaryStream.
 ]
 
 { #category : 'public' }
@@ -63,7 +63,7 @@ FileSystem >> binaryWriteStreamOn: aResolvable [
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a binary write stream for reading the file."
 
-	^ (self open: aResolvable options: FileOptions write) binaryStream.
+	^ (self open: aResolvable options: FileOptions newWrite) binaryStream.
 ]
 
 { #category : 'public' }
@@ -559,7 +559,7 @@ FileSystem >> readStreamOn: aResolvable [
 	"Resolve the argument into an absolute path and open a file handle on the file
 	at that path. Ask the handle to give us a read stream for reading the file."
 
-	^ (self open: aResolvable options: FileOptions read) readStream.
+	^ (self open: aResolvable options: FileOptions newRead) readStream.
 ]
 
 { #category : 'public' }
@@ -676,5 +676,5 @@ FileSystem >> workingDirectoryPath [
 FileSystem >> writeStreamOn: aResolvable [
 	"Open a write stream on the file referred by the argument. It can be a string or a path"
 
-	^ (self open: aResolvable options: FileOptions write) writeStream.
+	^ (self open: aResolvable options: FileOptions newWrite) writeStream.
 ]

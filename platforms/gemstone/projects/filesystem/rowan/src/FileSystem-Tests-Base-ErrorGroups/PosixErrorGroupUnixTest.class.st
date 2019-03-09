@@ -60,7 +60,7 @@ PosixErrorGroupUnixTest >> testCreationOfFilePosixError [
 	| fileOptions aPosixError |
 
 	self setupForOpenFileErrorGroup.
-	fileOptions := FileOptions read.
+	fileOptions := FileOptions newRead.
 	fileReference := fileSystem workingDirectory / 't2'.
 
 	errorGroup := OpenFileErrorGroup new.
@@ -93,7 +93,7 @@ PosixErrorGroupUnixTest >> testOpenFileErrorGroup [
 	| fileOptions |
 
 	self setupForOpenFileErrorGroup.
-	fileOptions := FileOptions read.
+	fileOptions := FileOptions newRead.
 "	directory1 := self createTemporaryDirectory: Path * 'plonk1'.
 	oldFileReference := self createTemporaryFile: directory1 path / 't1'	containing: 'griffle'."
 	fileReference := fileSystem workingDirectory / 't2'.

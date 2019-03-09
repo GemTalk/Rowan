@@ -76,7 +76,7 @@ BinaryFileStreamTest >> testOpenFile [
 	| aBinaryFileStream |
 	aBinaryFileStream := self writeStreamOnTestFile.
 	
-	self assert: aBinaryFileStream file notNil
+	self assert: aBinaryFileStream terminal notNil
 ]
 
 { #category : 'tests' }

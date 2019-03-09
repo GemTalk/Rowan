@@ -23,7 +23,7 @@ EncodedBufferedStreamSpecTest >> tearDown [
 EncodedBufferedStreamSpecTest >> testAppend [
 
 	| aStreamSpec |
-	aStreamSpec := EncodedBufferedStreamSpec append textFileType.
+	aStreamSpec := EncodedBufferedStreamSpec newAppend textFileType.
 	self assert: aStreamSpec mode = 'a'
 ]
 
@@ -31,7 +31,7 @@ EncodedBufferedStreamSpecTest >> testAppend [
 EncodedBufferedStreamSpecTest >> testAppendAndRead [
 
 	| aStreamSpec |
-	aStreamSpec := EncodedBufferedStreamSpec append read.
+	aStreamSpec := EncodedBufferedStreamSpec newAppend read.
 	self assert: aStreamSpec mode = 'a+'
 ]
 
@@ -39,7 +39,7 @@ EncodedBufferedStreamSpecTest >> testAppendAndRead [
 EncodedBufferedStreamSpecTest >> testAppendAndReadBinary [
 
 	| aStreamSpec |
-	aStreamSpec := EncodedBufferedStreamSpec append read binaryFileType.
+	aStreamSpec := EncodedBufferedStreamSpec newAppend read binaryFileType.
 	self assert: (aStreamSpec fileType isKindOf: FileBinaryTypeFlag).
 	self assert: aStreamSpec mode = 'a+b'
 ]
@@ -48,7 +48,7 @@ EncodedBufferedStreamSpecTest >> testAppendAndReadBinary [
 EncodedBufferedStreamSpecTest >> testAppendBinary [
 
 	| aStreamSpec |
-	aStreamSpec := EncodedBufferedStreamSpec append binaryFileType.
+	aStreamSpec := EncodedBufferedStreamSpec newAppend binaryFileType.
 	self assert: aStreamSpec mode = 'ab'
 ]
 
@@ -56,7 +56,7 @@ EncodedBufferedStreamSpecTest >> testAppendBinary [
 EncodedBufferedStreamSpecTest >> testCreation [
 
 	| aStreamSpec |
-	aStreamSpec := EncodedBufferedStreamSpec append.
+	aStreamSpec := EncodedBufferedStreamSpec newAppend.
 	self assert: (aStreamSpec fileOptions isKindOf: FileOptions).
 	self assert: aStreamSpec fileOptions parent == aStreamSpec
 ]
@@ -68,8 +68,8 @@ EncodedBufferedStreamSpecTest >> testOnDo [
 	fileRef := FileReference newTempFilePrefix: 'FileReference' suffix: 'Test'.
 
 	[  
-		EncodedBufferedStreamSpec write utf8 on: fileRef do: [ :stream | stream nextPutAll: testString ].
-		EncodedBufferedStreamSpec read utf8 on: fileRef do: [: stream |
+		EncodedBufferedStreamSpec newWrite utf8 on: fileRef do: [ :stream | stream nextPutAll: testString ].
+		EncodedBufferedStreamSpec newRead utf8 on: fileRef do: [: stream |
 			self assert: (stream upToAll: 'e') equals: 'ß'] 
 			] ensure: [ fileRef ensureDelete ].
 ]
@@ -82,7 +82,7 @@ EncodedBufferedStreamSpecTest >> testOnDoIfAbsent [
 	fileRef createFile.
 
 	[ 
-		result := EncodedBufferedStreamSpec read 
+		result := EncodedBufferedStreamSpec newRead 
 						on: fileRef 
 						do: [:stream | stream upToEnd ]
 						ifAbsent: [ self signalFailure: 'Should not reach here.' ].
@@ -90,7 +90,7 @@ EncodedBufferedStreamSpecTest >> testOnDoIfAbsent [
 		ensure: [ fileRef ensureDelete ].
 
 	[ 
-		result := EncodedBufferedStreamSpec read 
+		result := EncodedBufferedStreamSpec newRead 
 						on: fileRef 
 						do: [:stream | stream upToEnd ]
 						ifAbsent: ['Should reach here.' ].
@@ -106,7 +106,7 @@ EncodedBufferedStreamSpecTest >> testOnDoIfPresent [
 	fileRef createFile.
 
 	[ 
-		result := EncodedBufferedStreamSpec write 
+		result := EncodedBufferedStreamSpec newWrite 
 						on: fileRef 
 						do: [:stream | 'Should not reach here' ]
 						ifPresent: [ 'Should reach here' ].
@@ -114,7 +114,7 @@ EncodedBufferedStreamSpecTest >> testOnDoIfPresent [
 		ensure: [ fileRef ensureDelete ].
 
 	[ 
-		result := EncodedBufferedStreamSpec write 
+		result := EncodedBufferedStreamSpec newWrite 
 						on: fileRef 
 						do: [:stream | 'Should reach here' ]
 						ifPresent: ['Should not reach here' ].
@@ -129,16 +129,16 @@ EncodedBufferedStreamSpecTest >> testOnOptions [
 
 	fileRef := FileReference newTempFilePrefix: 'FileReference' suffix: 'Test'.
 
-	stream := (EncodedStreamSpec onOptions: FileOptions write) on: fileRef.
+	stream := (EncodedStreamSpec onOptions: FileOptions newWrite) on: fileRef.
 	stream nextPutAll: 'test data'.
 	stream close.
-	stream := (EncodedStreamSpec onOptions: FileOptions read) on: fileRef.
+	stream := (EncodedStreamSpec onOptions: FileOptions newRead) on: fileRef.
 	self assert: stream upToEnd equals: 'test data'.
 
-	stream := (EncodedStreamSpec on: fileRef options: FileOptions write).
+	stream := (EncodedStreamSpec on: fileRef options: FileOptions newWrite).
 	stream nextPutAll: 'test data'.
 	stream close.
-	stream := (EncodedStreamSpec on: fileRef options: FileOptions read).
+	stream := (EncodedStreamSpec on: fileRef options: FileOptions newRead).
 	self assert: stream upToEnd equals: 'test data'
 ]
 
@@ -146,7 +146,7 @@ EncodedBufferedStreamSpecTest >> testOnOptions [
 EncodedBufferedStreamSpecTest >> testRead [
 
 	| aStreamSpec |
-	aStreamSpec := EncodedBufferedStreamSpec read.
+	aStreamSpec := EncodedBufferedStreamSpec newRead.
 	self assert: aStreamSpec mode = 'r'
 ]
 
@@ -154,18 +154,18 @@ EncodedBufferedStreamSpecTest >> testRead [
 EncodedBufferedStreamSpecTest >> testReadCreation [
 	| aSpec |
 	reference createFile.
-	aSpec := EncodedBufferedStreamSpec read on: reference.
+	aSpec := EncodedBufferedStreamSpec newRead on: reference.
 	self assert: aSpec encoder class name = #ZnUTF8Encoder.
 	self assert: aSpec wrappedStream class name = #ZnBufferedReadStream.
 	self assert: aSpec wrappedStream wrappedStream class name = #BinaryFileStream.
-	self assert: aSpec wrappedStream wrappedStream file options mode equals: 'r'
+	self assert: aSpec wrappedStream wrappedStream terminal options mode equals: 'r'
 ]
 
 { #category : 'tests' }
 EncodedBufferedStreamSpecTest >> testReadWrite [
 	| aSpec |
 	reference createFile.
-	aSpec := EncodedBufferedStreamSpec readWrite on: reference.
+	aSpec := EncodedBufferedStreamSpec newReadWrite on: reference.
 
 	self assert: aSpec class name = #ZnCharacterReadWriteStream.
 	"self assert: aSpec wrappedStream class name = #BinaryFileStream.
@@ -176,7 +176,7 @@ EncodedBufferedStreamSpecTest >> testReadWrite [
 EncodedBufferedStreamSpecTest >> testReadWriteBinary [
 
 	| aStreamSpec |
-	aStreamSpec := EncodedBufferedStreamSpec readWrite binaryFileType.
+	aStreamSpec := EncodedBufferedStreamSpec newReadWrite binaryFileType.
 	self assert: (aStreamSpec fileType isKindOf: FileBinaryTypeFlag).
 	self assert: aStreamSpec mode = 'r+b'
 ]
@@ -185,7 +185,7 @@ EncodedBufferedStreamSpecTest >> testReadWriteBinary [
 EncodedBufferedStreamSpecTest >> testReadWriteTruncated [
 
 	| aStreamSpec |
-	aStreamSpec := EncodedBufferedStreamSpec readWrite truncate.
+	aStreamSpec := EncodedBufferedStreamSpec newReadWrite truncate.
 	self assert: aStreamSpec mode = 'w+'
 ]
 
@@ -193,7 +193,7 @@ EncodedBufferedStreamSpecTest >> testReadWriteTruncated [
 EncodedBufferedStreamSpecTest >> testReadWriteTruncatedBinary [
 
 	| aStreamSpec |
-	aStreamSpec := EncodedBufferedStreamSpec readWrite truncate binaryFileType.
+	aStreamSpec := EncodedBufferedStreamSpec newReadWrite truncate binaryFileType.
 	self assert: aStreamSpec mode = 'w+b'
 ]
 
@@ -201,7 +201,7 @@ EncodedBufferedStreamSpecTest >> testReadWriteTruncatedBinary [
 EncodedBufferedStreamSpecTest >> testWrite [
 
 	| aStreamSpec |
-	aStreamSpec := EncodedBufferedStreamSpec write.
+	aStreamSpec := EncodedBufferedStreamSpec newWrite.
 	self assert: aStreamSpec mode = 'w'
 ]
 
@@ -209,7 +209,7 @@ EncodedBufferedStreamSpecTest >> testWrite [
 EncodedBufferedStreamSpecTest >> testWriteBinary [
 
 	| aStreamSpec |
-	aStreamSpec := EncodedBufferedStreamSpec write binaryFileType.
+	aStreamSpec := EncodedBufferedStreamSpec newWrite binaryFileType.
 	self assert: (aStreamSpec fileType isKindOf: FileBinaryTypeFlag).
 	self assert: aStreamSpec mode = 'wb'
 ]
@@ -217,18 +217,18 @@ EncodedBufferedStreamSpecTest >> testWriteBinary [
 { #category : 'tests' }
 EncodedBufferedStreamSpecTest >> testWriteCreation [
 	| aSpec |
-	aSpec := EncodedBufferedStreamSpec write on: reference.
+	aSpec := EncodedBufferedStreamSpec newWrite on: reference.
 	self assert: aSpec encoder class name = #ZnUTF8Encoder.
 	self assert: aSpec wrappedStream class name = #ZnBufferedWriteStream.
 	self assert: aSpec wrappedStream wrappedStream class name = #BinaryFileStream.
-	self assert: aSpec wrappedStream wrappedStream file options mode equals: 'w'
+	self assert: aSpec wrappedStream wrappedStream terminal options mode equals: 'w'
 ]
 
 { #category : 'tests' }
 EncodedBufferedStreamSpecTest >> testWriteHighZipped [
 
 	| aStreamSpec |
-	aStreamSpec := EncodedBufferedStreamSpec write gzipHighCompression.
+	aStreamSpec := EncodedBufferedStreamSpec newWrite gzipHighCompression.
 	self assert: aStreamSpec isGzipped.
 	self assert: aStreamSpec mode = 'w9'
 ]

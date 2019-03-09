@@ -17,10 +17,10 @@ PosixErrorGroupClientTest >> testDelegationOfFileOpenError [
 
 	fileSystem store store class name = #WindowsStore
 		ifTrue: [
-			aClass := OpenFileErrorGroup new errorClassForErrorNumber: 19 fileReference: fileReference options: FileOptions read.
+			aClass := OpenFileErrorGroup new errorClassForErrorNumber: 19 fileReference: fileReference options: FileOptions newRead.
 			self assert: aClass posixName equals: 'EROFS'.
 
-			aFilePosixError := OpenFileErrorGroup new errorForNumber: 19 fileReference: fileReference options: FileOptions read.
+			aFilePosixError := OpenFileErrorGroup new errorForNumber: 19 fileReference: fileReference options: FileOptions newRead.
 			self assert: aFilePosixError class posixName equals: 'EROFS'.
 
 		posixErrorClass := ChangeModeErrorGroup new errorClassForErrorNumber: 123 fileReference: fileReference.

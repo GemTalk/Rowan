@@ -101,5 +101,5 @@ Stdio class >> useMemoryStreams [
 		[ :aName | (FileSystem memory / aName asString) writeStream ].
 	self createReadStreamBlock: 
 		[ :aName | 
-			EncodedBufferedStreamSpec read create on: (FileSystem memory / aName asString)  ].
+			EncodedBufferedStreamSpec newRead create on: (FileSystem memory / aName asString)  ].
 ]

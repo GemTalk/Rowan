@@ -23,27 +23,27 @@ BufferedStreamSpecTest >> tearDown [
 BufferedStreamSpecTest >> testReadCreation [
 	| aSpec |
 	reference createFile.
-	aSpec := BufferedStreamSpec read on: reference.
+	aSpec := BufferedStreamSpec newRead on: reference.
 	self assert: aSpec class name = #ZnBufferedReadStream.
 	self assert: aSpec wrappedStream class name = #BinaryFileStream.
-	self assert: aSpec wrappedStream file options mode equals: 'r'
+	self assert: aSpec wrappedStream terminal options mode equals: 'r'
 ]
 
 { #category : 'tests' }
 BufferedStreamSpecTest >> testReadWrite [
 	| aSpec |
 	reference createFile.
-	aSpec := BufferedStreamSpec readWrite on: reference.
+	aSpec := BufferedStreamSpec newReadWrite on: reference.
 	self assert: aSpec class name = #ZnBufferedReadWriteStream.
 	self assert: aSpec wrappedStream class name = #BinaryFileStream.
-	self assert: aSpec wrappedStream file options mode equals: 'r+'
+	self assert: aSpec wrappedStream terminal options mode equals: 'r+'
 ]
 
 { #category : 'tests' }
 BufferedStreamSpecTest >> testWriteCreation [
 	| aSpec |
-	aSpec := BufferedStreamSpec write on: reference.
+	aSpec := BufferedStreamSpec newWrite on: reference.
 	self assert: aSpec class name = #ZnBufferedWriteStream.
 	self assert: aSpec wrappedStream class name = #BinaryFileStream.
-	self assert: aSpec wrappedStream file options mode equals: 'w'
+	self assert: aSpec wrappedStream terminal options mode equals: 'w'
 ]

@@ -123,7 +123,7 @@ GsFileAdaptor class >> stderr [
 
 	| aGsFile |
 	aGsFile := GsFile _getStdFile: 2 onClient: false.
-	^aGsFile ifNotNil: [(self on: aGsFile) options: FileOptions write]
+	^aGsFile ifNotNil: [(self on: aGsFile) options: FileOptions newWrite]
 ]
 
 { #category : 'instance creation' }
@@ -131,7 +131,7 @@ GsFileAdaptor class >> stdin [
 
 	| aGsFile |
 	aGsFile := GsFile _getStdFile: 0 onClient: false.
-	^aGsFile ifNotNil: [(self on: aGsFile) options: FileOptions read]
+	^aGsFile ifNotNil: [(self on: aGsFile) options: FileOptions newRead]
 ]
 
 { #category : 'instance creation' }
@@ -139,7 +139,7 @@ GsFileAdaptor class >> stdout [
 
 	| aGsFile |
 	aGsFile := GsFile _getStdFile: 1 onClient: false.
-	^aGsFile ifNotNil: [(self on: aGsFile) options: FileOptions write]
+	^aGsFile ifNotNil: [(self on: aGsFile) options: FileOptions newWrite]
 ]
 
 { #category : 'accessing - file' }

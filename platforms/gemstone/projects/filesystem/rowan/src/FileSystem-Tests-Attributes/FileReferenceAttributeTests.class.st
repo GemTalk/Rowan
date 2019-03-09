@@ -42,14 +42,12 @@ FileReferenceAttributeTests >> testExists [
 FileReferenceAttributeTests >> testFileSize [
 
 	self assert: self tempFileResource file size equals: 72.
-
 ]
 
 { #category : 'tests' }
 FileReferenceAttributeTests >> testIsCharacter [
 
 	self deny: self tempFileResource file isCharacter
-
 ]
 
 { #category : 'tests' }

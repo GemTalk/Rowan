@@ -19,15 +19,15 @@ StdioTest >> testInitialization [
 	| stdio |
 	self clearCache.
 	stdio := Stdio stdout.
-	self assert: (stdio file isKindOf: FileSystem fileClass).
+	self assert: (stdio terminal isKindOf: FileSystem fileClass).
 	self assert: stdio isWritable.
 
 	stdio := Stdio stderr.
-	self assert: (stdio file isKindOf: FileSystem fileClass).
+	self assert: (stdio terminal isKindOf: FileSystem fileClass).
 	self assert: stdio isWritable.
 
 	stdio := Stdio stdin.
-	self assert: (stdio file isKindOf: FileSystem fileClass).
+	self assert: (stdio terminal isKindOf: FileSystem fileClass).
 	self deny: stdio isWritable
 ]
 
@@ -36,7 +36,7 @@ StdioTest >> testUseMemoryStreams [
 	| stdio |
 	self clearCache.
 	stdio := Stdio stdout.
-	self assert: (stdio file isKindOf: FileSystem fileClass).
+	self assert: (stdio terminal isKindOf: FileSystem fileClass).
 	self assert: stdio isWritable.
 
 	Stdio useMemoryStreams.

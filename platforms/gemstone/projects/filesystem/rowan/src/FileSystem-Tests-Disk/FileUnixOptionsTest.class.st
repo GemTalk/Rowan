@@ -38,7 +38,7 @@ FileUnixOptionsTest >> storeClass [
 FileUnixOptionsTest >> testAccessRules [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec read fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
 	aFileOptions parent store: self store.
 
 	self should: [aFileOptions accessRule] raise: FileOptionFeatureNotSupported.
@@ -54,7 +54,7 @@ FileUnixOptionsTest >> testAccessRules [
 FileUnixOptionsTest >> testCreateRules [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec read fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
 	aFileOptions parent store: self store.
 
 	self should: [aFileOptions createRule] raise: FileOptionFeatureNotSupported.
@@ -74,7 +74,7 @@ FileUnixOptionsTest >> testCreateRules [
 FileUnixOptionsTest >> testFileType [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec append fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newAppend fileOptions.
 	aFileOptions parent store: self store.
 	self assert: aFileOptions fileType isNil
 ]
@@ -83,7 +83,7 @@ FileUnixOptionsTest >> testFileType [
 FileUnixOptionsTest >> testShareRules [
 
 	| aFileOptions |
-	aFileOptions := EncodedBufferedStreamSpec read fileOptions.
+	aFileOptions := EncodedBufferedStreamSpec newRead fileOptions.
 	aFileOptions parent store: self store.
 	self should: [aFileOptions shareRule] raise: FileOptionFeatureNotSupported.
 

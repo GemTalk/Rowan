@@ -14,14 +14,14 @@ Class {
 
 { #category : 'open/close' }
 BinaryFileStream >> close [
-	self file notNil ifTrue: [
-		self file close.
-		self file: nil]
+	self terminal notNil ifTrue: [
+		self terminal close.
+		self terminal: nil]
 ]
 
 { #category : 'testing' }
 BinaryFileStream >> closed [
-	^ self file isNil or: [self isClosed]
+	^ self terminal isNil or: [self isClosed]
 ]
 
 { #category : 'finalization' }
@@ -56,5 +56,5 @@ BinaryFileStream >> truncate [
 BinaryFileStream >> truncate: pos [
 	"Truncate to this position"
 
-	^ self file truncate: pos
+	^ self terminal truncate: pos
 ]

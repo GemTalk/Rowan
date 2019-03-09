@@ -35,23 +35,23 @@ Class {
 	#name : 'AbstractBinaryFileStream',
 	#superclass : 'Stream',
 	#instVars : [
-		'file'
+		'terminal'
 	],
 	#category : 'FileSystem-Streams'
 }
 
 { #category : 'instance creation' }
-AbstractBinaryFileStream class >> on: aFile [
+AbstractBinaryFileStream class >> on: aFileAdapter [
 	
 	^ self new
-		file: aFile;
+		terminal: aFileAdapter;
 		yourself
 ]
 
 { #category : 'testing' }
 AbstractBinaryFileStream >> atEnd [
 
-	^ self file atEnd
+	^ self terminal atEnd
 ]
 
 { #category : 'reading' }
@@ -82,23 +82,13 @@ AbstractBinaryFileStream >> crlf [
 ]
 
 { #category : 'accessing' }
-AbstractBinaryFileStream >> file [
-	^ file
-]
-
-{ #category : 'accessing' }
-AbstractBinaryFileStream >> file: aFile [
-	file := aFile
-]
-
-{ #category : 'accessing' }
 AbstractBinaryFileStream >> fileName [
-	^self file fullName
+	^self terminal fullName
 ]
 
 { #category : 'flushing' }
 AbstractBinaryFileStream >> flush [
-	self file flush
+	self terminal flush
 ]
 
 { #category : 'testing' }
@@ -113,7 +103,7 @@ AbstractBinaryFileStream >> isReadStream [
 
 { #category : 'testing' }
 AbstractBinaryFileStream >> isWritable [
-	^self file  isNil ifTrue: [false] ifFalse: [self file isWritable]
+	^self terminal  isNil ifTrue: [false] ifFalse: [self terminal isWritable]
 ]
 
 { #category : 'testing' }
@@ -146,7 +136,7 @@ AbstractBinaryFileStream >> next: n into: aBuffer [
 	"Return a string with the next n characters of the filestream in it."
 	| readBuffer read |
 	readBuffer := aBuffer.
-	read := self file readInto: readBuffer startingAt: 1 count: n.
+	read := self terminal readInto: readBuffer startingAt: 1 count: n.
 	^read = n 
 		ifTrue: [ readBuffer ]
 		ifFalse: [ readBuffer copyFrom: 1 to: read ]
@@ -168,8 +158,8 @@ AbstractBinaryFileStream >> next: n into: aString startingAt: startIndex [
 AbstractBinaryFileStream >> next: amount putAll: aByteArray [
 
 	self isWritable
-		ifFalse: [ ^ FileWriteError signalWith: 'Cannot write a read-only file - ' , self file fullName ].
-	self file
+		ifFalse: [ ^ FileWriteError signalWith: 'Cannot write a read-only file - ' , self terminal fullName ].
+	self terminal
 		writeFrom: aByteArray
 		startingAt: 1
 		count: amount.
@@ -217,7 +207,7 @@ AbstractBinaryFileStream >> nextPutAll: aByteArray [
 { #category : 'accessing' }
 AbstractBinaryFileStream >> pathString [
 
-	^self file pathString
+	^self terminal pathString
 ]
 
 { #category : 'reading' }
@@ -229,13 +219,13 @@ AbstractBinaryFileStream >> peek [
 { #category : 'positioning' }
 AbstractBinaryFileStream >> position [
 
-	^ self file position
+	^ self terminal position
 ]
 
 { #category : 'positioning' }
 AbstractBinaryFileStream >> position: aPosition [
 	
-	self file position: aPosition
+	self terminal position: aPosition
 ]
 
 { #category : 'printing' }
@@ -251,7 +241,7 @@ AbstractBinaryFileStream >> printOn: aStream [
 { #category : 'reading' }
 AbstractBinaryFileStream >> readInto: readBuffer startingAt: startIndex count: count [
 
-	^self file readInto: readBuffer startingAt: startIndex count: count
+	^self terminal readInto: readBuffer startingAt: startIndex count: count
 ]
 
 { #category : 'positioning' }
@@ -268,7 +258,7 @@ AbstractBinaryFileStream >> setToEnd [
 { #category : 'accessing' }
 AbstractBinaryFileStream >> size [
 
-	^ self file fileSize
+	^ self terminal fileSize
 ]
 
 { #category : 'positioning' }
@@ -282,7 +272,17 @@ AbstractBinaryFileStream >> skip: n [
 { #category : 'flushing' }
 AbstractBinaryFileStream >> sync [	
 
-	self file sync
+	self terminal sync
+]
+
+{ #category : 'accessing' }
+AbstractBinaryFileStream >> terminal [
+	^ terminal
+]
+
+{ #category : 'accessing' }
+AbstractBinaryFileStream >> terminal: aFileAdaptor [
+	terminal := aFileAdaptor
 ]
 
 { #category : 'reading' }

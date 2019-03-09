@@ -128,7 +128,7 @@ PosixErrorGroupWindowsTest >> testCreationOfFilePosixError [
 	| fileOptions aPosixError |
 
 	self setupForOpenFileErrorGroup.
-	fileOptions := FileOptions read.
+	fileOptions := FileOptions newRead.
 	fileReference := fileSystem workingDirectory / 't2'.
 
 	errorGroup := OpenFileErrorGroup new.
@@ -258,7 +258,7 @@ PosixErrorGroupWindowsTest >> testOpenDirectoryErrorGroup [
 	| fileOptions |
 
 	self setupForOpenDirectoryErrorGroup.
-	fileOptions := FileOptions read.
+	fileOptions := FileOptions newRead.
 	fileReference := fileSystem workingDirectory / 't2'.
 
 	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference.
@@ -295,7 +295,7 @@ PosixErrorGroupWindowsTest >> testOpenFileErrorGroup [
 	| fileOptions |
 
 	self setupForOpenFileErrorGroup.
-	fileOptions := FileOptions read.
+	fileOptions := FileOptions newRead.
 	fileReference := fileSystem workingDirectory / 't2'.
 
 	posixErrorClass := errorGroup errorClassForErrorNumber: 9999 fileReference: fileReference options: fileOptions.
@@ -316,13 +316,13 @@ PosixErrorGroupWindowsTest >> testOpenFileErrorGroup [
 	self isWindowsStoreCurrentStore ifTrue: [
 		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileSystem workingDirectory options: fileOptions.
 		self assert: posixErrorClass posixName equals: 'EACCES' description: 'File reference is a directory'.
-		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference options: FileOptions write.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference options: FileOptions newWrite.
 		self assert: posixErrorClass posixName equals: 'EINVAL' description: 'Attempting to open with a truncate flag'.
-		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference options: FileOptions append.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference options: FileOptions newAppend.
 		self assert: posixErrorClass posixName equals: 'EACCES' description: 'Attempting to create a file if does not exist'.
 		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference options: FileOptions read.
 		self assert: posixErrorClass posixName equals: 'EACCES' description: 'Attempting to open a file with no access'.
-		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference options: FileOptions readWrite.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 5 fileReference: fileReference options: FileOptions newReadWrite.
 		self assert: posixErrorClass posixName equals: 'EINVAL' description: 'Catchall errors - no flags, file does not exist'].
 
 	posixErrorClass := errorGroup errorClassForErrorNumber: 19 fileReference: fileReference options: fileOptions.
@@ -337,10 +337,10 @@ PosixErrorGroupWindowsTest >> testOpenFileErrorGroup [
 	posixErrorClass := errorGroup errorClassForErrorNumber: 36 fileReference: fileReference options: fileOptions.
 	self assert: posixErrorClass posixName equals: 'ENFILE'.
 
-	posixErrorClass := errorGroup errorClassForErrorNumber: 80 fileReference: fileReference options: (FileOptions write addExclusiveFlag).
+	posixErrorClass := errorGroup errorClassForErrorNumber: 80 fileReference: fileReference options: (FileOptions newWrite addExclusiveFlag).
 	self assert: posixErrorClass posixName equals: 'EACCES' description: 'Attempting to open with an exlusive flag'.
 
-	posixErrorClass := errorGroup errorClassForErrorNumber: 80 fileReference: fileReference options: FileOptions write.
+	posixErrorClass := errorGroup errorClassForErrorNumber: 80 fileReference: fileReference options: FileOptions newWrite.
 	self assert: posixErrorClass posixName equals: 'EEXIST' description: 'Attempting to open without an exlusive flag'.
 
 	self isWindowsStoreCurrentStore ifTrue: [
@@ -348,7 +348,7 @@ PosixErrorGroupWindowsTest >> testOpenFileErrorGroup [
 		self assert: posixErrorClass posixName equals: 'EACCES' description: 'File reference is a directory'.
 		posixErrorClass := errorGroup errorClassForErrorNumber: 87 fileReference: fileReference options: FileOptions write.
 		self assert: posixErrorClass posixName equals: 'EINVAL' description: 'Attempting to open with a truncate flag'.
-		posixErrorClass := errorGroup errorClassForErrorNumber: 87 fileReference: fileReference options: FileOptions append.
+		posixErrorClass := errorGroup errorClassForErrorNumber: 87 fileReference: fileReference options: FileOptions newAppend.
 		self assert: posixErrorClass posixName equals: 'EACCES' description: 'Attempting to create a file if does not exist'.
 		posixErrorClass := errorGroup errorClassForErrorNumber: 87 fileReference: fileReference options: FileOptions read.
 		self assert: posixErrorClass posixName equals: 'EACCES' description: 'Attempting to open a file with no access'.
