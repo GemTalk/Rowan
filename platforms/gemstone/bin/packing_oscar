@@ -33,6 +33,9 @@ set -e
 # 1.2.1 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.1 v1.2.1 Oscar-3.0.45 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.2.2 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.2 v1.2.2 Oscar-3.0.45 /export/gcm/where/gemstone64/releases/Edelweiss/sett/Sett1.0.zip
 # 1.2.3 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.3 v1.2.3 Oscar-3.0.50
+# 1.2.4 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.4 v1.2.4 Oscar-3.0.50
+# 1.2.5 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.5 v1.2.5 Oscar-3.0.50
+# 1.2.6 $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/bin/packing_oscar Edelweiss-1.2.6 v1.2.6 Oscar-3.0.65
 #
 ANSI_RED="\033[91;1m"
 ANSI_GREEN="\033[92;1m"
