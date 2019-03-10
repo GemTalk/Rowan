@@ -140,7 +140,9 @@ JadeServer64bit3x >> compileMethod: methodString behavior: aBehavior symbolList:
 	| method warnings | 
 
 	[[((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile ifAbsent:[false]) ifTrue:[
-			method := aBehavior rwCompileMethod: methodString category: categorySymbol]
+			[ method := aBehavior rwCompileMethod: methodString category: categorySymbol ]
+					on: RwExecuteClassInitializeMethodsAfterLoadNotification
+					do: [:ex | ex resume: false ] ]
 		ifFalse:[
 			method := aBehavior
 			compileMethod: methodString
@@ -158,8 +160,6 @@ JadeServer64bit3x >> compileMethod: methodString behavior: aBehavior symbolList:
 	] on: Error do: [:ex | 
 		ex return: method -> warnings.
 	].
-
-
 ]
 
 { #category : 'category' }
@@ -284,15 +284,13 @@ JadeServer64bit3x >> inspect: anObject [
 				self print: (self oopOf: (anObject _primitiveAt: i + namedSize)) on: stream.
 				stream lf] ].
 
-	(string := anObject printString) size > 5000 ifTrue: [string := (string copyFrom: 1 to: 5000) , '...'].
+	(string := anObject printString) size > 100000 ifTrue: [string := (string copyFrom: 1 to: 100000) , '...'].
 	string class == String ifFalse: [
 		string := String withAll: (string collect: [:each | (32 <= each codePoint and: [each codePoint <= 255]) ifTrue: [each] ifFalse: [$?]]).
 	].
 	^stream 
 		nextPutAll: string; 
 		contents.
-
-
 ]
 
 { #category : 'category' }

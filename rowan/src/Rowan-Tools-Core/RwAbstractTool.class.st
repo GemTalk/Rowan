@@ -178,37 +178,10 @@ RwAbstractTool >> readlink: filepath [
 
 { #category : 'smalltalk api' }
 RwAbstractTool >> specification: aRwSpecification [
-  self validate: aRwSpecification.
   ^ specification := aRwSpecification
 ]
 
 { #category : 'smalltalk api' }
 RwAbstractTool >> specUrl: aString [
   ^ self specification: (RwSpecification fromUrl: aString)
-]
-
-{ #category : 'validation' }
-RwAbstractTool >> validate: aRwSpecification [
-  aRwSpecification specName
-    ifNil: [ self error: 'The specification must have a specName specified.' ]
-]
-
-{ #category : 'validation' }
-RwAbstractTool >> validateForRead: aRwSpecification [
-  aRwSpecification repositoryRootPath
-    ifNil: [ 
-      self
-        error:
-          'The repositoryRootPath must be defined in the specification: '
-            , aRwSpecification specName printString ]
-]
-
-{ #category : 'validation' }
-RwAbstractTool >> validateForWrite: aRwSpecification [
-  aRwSpecification repositoryRootPath
-    ifNil: [ 
-      self
-        error:
-          'The repositoryRootPath must be defined in the specification: '
-            , aRwSpecification specName printString ]
 ]

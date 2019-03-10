@@ -110,7 +110,7 @@ RwCypressPackageStructure >> rwSnapshot [
 					rwClassExtensionDef
 						addClassMethodDefinition:
 							(RwMethodDefinition fromCypressMethod: methodStructure) ].
-			rwPackageDefinition addClassExtension: rwClassExtensionDef ].
+			rwPackageDefinition addClassExtensionDefinition: rwClassExtensionDef ].
 	^ rwPackageDefinition
 ]
 

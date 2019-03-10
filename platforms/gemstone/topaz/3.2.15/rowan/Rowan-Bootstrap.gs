@@ -1,7 +1,12 @@
   set u SystemUser p swordfish
   login
 
-# set rowanCompile to true
+	run
+	(System myUserProfile objectNamed: 'Rowan')
+		ifNotNil: [ self error: 'Rowan is already installed!' ].
+%
+
+# set rowanCompile to true 
 #
   run
   UserGlobals at: #rowanCompile put: true.
@@ -629,8 +634,7 @@ commit
   run
   CypressBootstrapRowanBlock
     value: 'RowanTools'
-    value: #('Rowan-Tools-Core' 'Rowan-Tools-Deprecated' 'Rowan-Definitions-Deprecated'
-	'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions'
+    value: #('Rowan-Tools-Core' 'Rowan-Cypress-Definitions' 'Rowan-GemStone-Definitions' 
 	'Rowan-GemStone-Specifications'
 	).	"Rowan Tools"
 %
@@ -646,7 +650,7 @@ commit
   run
   CypressBootstrapRowanBlock
     value: 'RowanKernel'
-    value: #('Rowan-Tools-Extensions' 'Rowan-Deprecated' 'Rowan-Tests' 'Rowan-Services-Tests'
+    value: #('Rowan-Tools-Extensions' 'Rowan-Tests' 'Rowan-Services-Tests'	
 	).	"Tool extension methods for RowanKernel classes "
 %
   commit
@@ -670,9 +674,8 @@ commit
   run
   CypressBootstrapRowanBlock
     value: 'Globals'
-    value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel'
-      'Rowan-Tools-Kernel'
-      'Rowan-GemStone-3215'
+    value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 
+			'Rowan-Cypress-Kernel' 'Rowan-Tools-Kernel' 'Rowan-GemStone-3215'
 	).		"Extension methods for GemStone kernel classes"
 %
   commit

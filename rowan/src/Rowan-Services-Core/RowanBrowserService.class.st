@@ -11,12 +11,22 @@ Class {
 		'allClasses',
 		'hierarchyServices',
 		'testPackages',
-		'testCount'
+		'testCount',
+		'autoCommit'
 	],
 	#category : 'Rowan-Services-Core'
 }
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
+RowanBrowserService >> abortTransaction [
+
+	System abortTransaction.
+	self updateProjects.
+	self packagesWithTests.
+	self updateType: #aborted:browser:.
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> allClasses [
 
 	allClasses := SortedCollection sortBlock: [:x :y | x name < y name].
@@ -32,7 +42,16 @@ RowanBrowserService >> allClasses [
 	RowanCommandResult addResult: self
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
+RowanBrowserService >> autoCommit: boolean [
+
+	RowanService setAutoCommit: boolean.
+	autoCommit := RowanService autoCommit. 
+	updateType := #autoCommitUpdate:.
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> defaultClassHierarchy [
 	hierarchyServices := Dictionary new.   
 	organizer hierarchy keysAndValuesDo: [:key :value |
@@ -44,9 +63,35 @@ RowanBrowserService >> defaultClassHierarchy [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'commands' }
-RowanBrowserService >> packagesWithTests [
+{ #category : 'client commands' }
+RowanBrowserService >> findRemovedServices: services [
 
+	services do:[:service | 
+		service wasDeleted ifTrue:[
+				service updateType: #removed:.
+				RowanCommandResult addResult: service.
+		]
+	].
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> flipAutoCommit [
+
+	autoCommit := RowanService flipAutoCommit. 
+	updateType := #autoCommitUpdate:.
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'window registry' }
+RowanBrowserService >> openWindows [
+
+	"for testing"
+
+	^SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[]
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> packagesWithTests [
 	testPackages := Set new. 
 	testCount := 0. 
 	TestCase allSubclasses do:[:testSubclass |
@@ -63,14 +108,25 @@ RowanBrowserService >> packagesWithTests [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'commands' }
-RowanBrowserService >> reloadProjects: projectServices [
+{ #category : 'client commands' }
+RowanBrowserService >> releaseWindowHandle: integer [
 
-	projectServices do:[:projectService |
-		projectService reloadProject]
+	| registry |
+	registry := SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[^self].
+	registry removeKey: integer ifAbsent: []
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
+RowanBrowserService >> reloadProjects: projectServices andUpdateServices: services [
+	| projectNames |
+	projectServices do:[:projectService |
+		projectService reloadProject].
+	projectNames := projectServices collect: [:projectService | projectService name]. 
+	services do:[:service | 
+		(projectNames includes: service rowanProjectName) ifTrue:[service update]].
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> removeMethods: methodServices [
 
 	| notRemoved |
@@ -80,19 +136,40 @@ RowanBrowserService >> removeMethods: methodServices [
 		| classService |
 		classService := RowanClassService forClassNamed: methodService className. 
 		classService meta: methodService meta. 
-		classService removeSelector: methodService selector ifAbsent:[notRemoved add: methodService selector].
+		classService removeSelector: methodService selector ifAbsent:[notRemoved add: methodService].
 		classService updatePackageProject.
+		(notRemoved includes: methodService) ifFalse:[
+			methodService updateType: #removed:.
+			RowanCommandResult addResult: methodService]. 
 		removedMethods add: methodService].
 	notRemoved isEmpty ifFalse:[
-		self error: 'These selectors were not removed - ', notRemoved printString].
+		self error: 'These selectors were not removed - ', (notRemoved collect:[:ea | ea selector]) printString].
 	updateType := #methodsRemoved:. 
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
+RowanBrowserService >> saveRootObject: oop windowHandle: integer [
+
+	" a window has been opened on the client. Save the 
+	root object of the window so it won't be recycled"
+	| dictionary |
+	dictionary := SessionTemps current at: #rowanServicesWindowRegistry ifAbsentPut: [Dictionary new].
+	dictionary at: integer put: (Object _objectForOop: oop).
+]
+
+{ #category : 'perform' }
+RowanBrowserService >> servicePerform: symbol withArguments: collection [
+	super perform: symbol withArguments: collection.
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> unloadProjectsNamed: array [
 	array do:[:projectName |
-		Rowan projectTools delete deleteProjectNamed: projectName]. 
+		| project |
+		project := Rowan image loadedProjectNamed: projectName ifAbsent:[].
+		project ifNotNil: [
+			Rowan projectTools delete deleteProjectNamed: projectName]]. 
 	self updateProjects
 ]
 
@@ -102,7 +179,7 @@ RowanBrowserService >> update [
 	self updateProjects
 ]
 
-{ #category : 'commands' }
+{ #category : 'client commands' }
 RowanBrowserService >> updateProjects [
 	| sortedProjects | 
 	sortedProjects := SortedCollection sortBlock: [:a :b | a name < b name]. 

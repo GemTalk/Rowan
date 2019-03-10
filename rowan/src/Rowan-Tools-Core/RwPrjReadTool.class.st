@@ -26,8 +26,8 @@ RwPrjReadTool >> _readProjectDefinition: projectDefinition packageNames: package
 				readPackageStructure.
 			packageDefinition := reader packageStructure rwSnapshot.
 			projectDefinition addOrUpdatePackage: packageDefinition ].
+	projectDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
 	^ projectDefinition
-
 ]
 
 { #category : 'private' }
@@ -175,27 +175,6 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName [
 
 ]
 
-{ #category : 'deprecation candidates' }
-RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfiguration: configName [
-
-	| projectDefinition repo spec url config |
-	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	spec := projectDefinition specification.
-	url := 'file:' , spec repositoryRootPath , '/' , spec configsPath , '/'
-		, configName , '.ston'.
-	[ config := RwAbstractProjectConfiguration fromUrl: url ]
-		on: Error
-		do: [ :ignored | 
-			^ self readProjectSetForProjectNamed: projectName ].
-	repo := projectDefinition repositoryUrl asRwRepository.
-	config projectName: projectName.
-	^ self 
-		_readProjectSetForProjectDefinition: projectDefinition 
-		packageNames: config resolvePackageNames 
-		fromRepo: repo
-
-]
-
 { #category : 'read project by name' }
 RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfigurations: configNames groupNames: groupNames [
 
@@ -222,10 +201,4 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withGroupNames: grou
 		withConfigurations: theConfigNames 
 		groupNames: groupNames
 
-]
-
-{ #category : 'validation' }
-RwPrjReadTool >> validate: aRwSpecification [
-  super validate: aRwSpecification.
-  self validateForRead: aRwSpecification
 ]

@@ -26,15 +26,15 @@ RowanProjectServiceTest >> projectServiceNamed: projectName [
 RowanProjectServiceTest >> setUp [
 
 	super setUp.
-	self createDefaultProject.
-	self loadDefaultProject.
+	self createServicesTestProject.
+	self loadServicesTestProject.
 ]
 
 { #category : 'setup teardown' }
 RowanProjectServiceTest >> tearDown [
 
 	super tearDown.
-	self unloadDefaultProject
+	self unloadServicesTestProject
 ]
 
 { #category : 'tests' }
@@ -43,11 +43,11 @@ RowanProjectServiceTest >> test_addedProjectNotOnDisk [
 	| proj projectService projectName |
 	projectName := 'Tashkent'. 
 	self jadeiteIssueTested: #issue246 withTitle: 'Jadeite handling project that''s not committed'. 
-	proj := RowanTestService new createNewTestProjectNamed: projectName.
+	self createNonDiskTestProjectNamed:  projectName packageName: 'Packagekent'. 
 	projectService := RowanProjectService newNamed: projectName. 
 	projectService refresh. "<-- walkback occured here" 
 	[self deny: projectService existsOnDisk.
-	self assert: projectService isSkew]
+	self deny: projectService isSkew "no skew if not on disk"]
 		ensure: [RowanBrowserService new unloadProjectsNamed: (Array with: 'Tashkent')]
 ]
 
@@ -56,11 +56,11 @@ RowanProjectServiceTest >> test_addPackage [
 
 	| projectService  packageName loadedPackage |
 	packageName := 'TestAddPackage'.
-	projectService := self projectServiceNamed: self defaultProjectName.
+	projectService := self projectServiceNamed: self servicesTestProjectName.
 	projectService addPackageNamed: packageName.
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	self assert: loadedPackage name equals: packageName. 
-	self assert: loadedPackage projectName equals: self defaultProjectName
+	self assert: loadedPackage projectName equals: self servicesTestProjectName
 ]
 
 { #category : 'tests' }
@@ -70,9 +70,18 @@ RowanProjectServiceTest >> test_commandResultSessionTemp [
 ]
 
 { #category : 'tests' }
+RowanProjectServiceTest >> test_unloadNotLoadedProjectDoesNotWalkback [
+
+	"just make sure if a project we gracefully handle trying to remove an unloaded project"
+	self deny: (Rowan image loadedProjectNamed: 'BadProjectName' ifAbsent:[false]). 
+	RowanBrowserService new unloadProjectsNamed: #('BadProjectName').
+	self deny: (Rowan image loadedProjectNamed: 'BadProjectName' ifAbsent:[false]).
+]
+
+{ #category : 'tests' }
 RowanProjectServiceTest >> test_updateAddsCommandResult [
 	| projectService |
-	projectService := self projectServiceNamed: self defaultProjectName.
+	projectService := self projectServiceNamed: self servicesTestProjectName.
 	RowanCommandResult initializeResults. 
 	self assert: RowanCommandResult results size equals: 0. 
 	projectService update. 

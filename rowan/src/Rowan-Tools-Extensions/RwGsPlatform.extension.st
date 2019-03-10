@@ -21,10 +21,3 @@ RwGsPlatform >> projectTools [
 
 	^RwProjectTool
 ]
-
-{ #category : '*rowan-tools-extensions' }
-RwGsPlatform >> repositoryTools [
-	"Answer the platform-specific class for repository tools"
-
-	^RwRepositoryTool
-]

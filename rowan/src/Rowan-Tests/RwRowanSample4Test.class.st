@@ -7,8 +7,9 @@ Class {
 { #category : 'private' }
 RwRowanSample4Test class >> _symbolDictionaryNames [
 
-	^ 	super _symbolDictionaryNames, #(#'RowanSample4SymbolDict' #'RowanSample4DictionarySymbolDict')
-
+	^ 	super _symbolDictionaryNames, 
+			#( #'RowanSample4SymbolDict' #'RowanSample4DictionarySymbolDict' #'RowanSample4DictionarySymbolDict_295'
+					#'RowanSample4DictionarySymbolDict_295_3')
 ]
 
 { #category : 'private' }
@@ -30,12 +31,55 @@ RwRowanSample4Test >> _rowanSample4LoadSpecificationUrl [
 ]
 
 { #category : 'private' }
+RwRowanSample4Test >> _rowanSample4LoadSpecificationUrl_295 [
+
+	| rowanSpec |
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	^ 'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample4_295.ston'
+]
+
+{ #category : 'private' }
 RwRowanSample4Test >> _rowanSample4SpecificationUrl [
 
 	| rowanSpec |
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	^ 'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample4.ston'
 
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> test_projectUrl_issue_463 [
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath |
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	project := RwProject newNamed: projectName.
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+
+	self assert: project projectUrl = rowanSampleSpec projectUrl.
+	self assert: project projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self assert: project projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
 ]
 
 { #category : 'tests' }
@@ -68,10 +112,11 @@ RwRowanSample4Test >> testCreateProjectDefinition [
 	
 	projectTools read readProjectDefinition: projectDefinition.
 
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
+
 	self assert: (x := projectDefinition packageNames asArray sort) = #('RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests' 'RowanSample4-Tests') sort.
 
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) isNil.
-
 ]
 
 { #category : 'tests' }
@@ -1572,6 +1617,7 @@ RwRowanSample4Test >> testIssue230 [
 	"Create and load the primer project ... with two packages into which the classes will be adopted"
 	projectDefinition := RwProjectDefinition
 		newForGitBasedProjectNamed: primerProjectName.
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectUnknownDefinitionSourceValue).
 	projectDefinition
 		addPackageNamed: primerPackageName1;
 		addPackageNamed: primerPackageName2;
@@ -1605,7 +1651,6 @@ RwRowanSample4Test >> testIssue230 [
 	projectTools load
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
-
 ]
 
 { #category : 'tests' }
@@ -1655,6 +1700,318 @@ RwRowanSample4Test >> testIssue284 [
 	loadedCommitId := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId.
 	self assert: loadedCommitId = '1d4ae93'
 
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProject_1 [
+
+	"https://github.com/dalehenrich/Rowan/issues/295"
+
+	"Error creating a new class version while moving to a new package in a new project and a new symbol dictionary"
+
+	"issue_295_1 --> issue_295_2	:: rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
+													move new version of NewRowanSample4 to RowanSample4SymbolDict in new project"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath 
+		baselinePackageNames newClass ar oldClass |
+
+	projectName := 'RowanSample4'.
+	{ projectName . projectName, '_295'} do: [:pn |
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_0'.				"starting point of test"
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	project := RwProject newNamed: projectName.
+	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
+											'RowanSample4-GemStone-Tests').
+	self
+		assert:
+			(x := project packageNames asArray sort) =  baselinePackageNames sort.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	self assert: (x := rowanSampleSpec loadedGroupNames) = #('tests').
+	self assert: (x := rowanSampleSpec loadedConfigurationNames) = #('Load').
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_1'.				"New package added to the project"
+
+	self assert: (Rowan globalNamed: 'NewRowanSample4') isNil.
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self
+		assert:
+			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
+
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: newClass new foo = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_2'.				"Rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
+																								move new version of NewRowanSample4 to RowanSample4SymbolDict"
+"trigger the bug on this load"
+	specUrlString := self _rowanSample4LoadSpecificationUrl_295.
+	projectTools load
+		loadProjectFromSpecUrl: specUrlString
+		projectRootPath: repoRootPath.
+
+	oldClass := newClass.
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: oldClass ~~ newClass.
+	self assert: newClass new foo = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProject_2 [
+
+	"attempting to reproduce the actual issue (_1 doesn't reproduce problem, but should remain static to ensure behavior does not change detrimentally"
+
+	"https://github.com/dalehenrich/Rowan/issues/295"
+
+	"Error creating a new class version while moving to a new package in a new project and a new symbol dictionary"
+
+	"issue_295_1 --> issue_295_3	:: rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
+													move new version of NewRowanSample4 to RowanSample4SymbolDict in new project"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath 
+		baselinePackageNames newClass ar oldClass projectDefinition projectSetDefinition oldProjectDefinition |
+
+	projectName := 'RowanSample4'.
+	{ projectName . projectName, '_295'} do: [:pn |
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_0'.				"starting point of test"
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	project := RwProject newNamed: projectName.
+	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
+											'RowanSample4-GemStone-Tests').
+	self
+		assert:
+			(x := project packageNames asArray sort) =  baselinePackageNames sort.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	self assert: (x := rowanSampleSpec loadedGroupNames) = #('tests').
+	self assert: (x := rowanSampleSpec loadedConfigurationNames) = #('Load').
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_1'.				"New package added to the project"
+
+	self assert: (Rowan globalNamed: 'NewRowanSample4') isNil.
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self
+		assert:
+			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
+
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: newClass new foo = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_3'.				"Rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
+																								move new version of NewRowanSample4 to RowanSample4SymbolDict"
+"trigger the bug on this load"
+	specUrlString := self _rowanSample4LoadSpecificationUrl_295.
+
+"need to add old project definition with all classes and extensions removed to the projectSet Definition to reproduce bug"
+	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
+	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
+
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
+
+oldProjectDefinition := (Rowan image loadedProjectNamed: 'RowanSample4') asDefinition.
+projectSetDefinition addProject: oldProjectDefinition.
+
+	oldProjectDefinition packages values do: [:pkgDefinition |
+	    pkgDefinition classDefinitions values do: [:classDefinition |
+	        pkgDefinition removeClassDefinition: classDefinition ].
+	    pkgDefinition classExtensions values do: [:classExtension |
+        	pkgDefinition removeClassExtensionDefinition: classExtension ]].
+
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+	Rowan projectTools load markProjectSetNotDirty: projectSetDefinition.
+
+
+	oldClass := newClass.
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: oldClass ~~ newClass.
+	self assert: newClass new foo = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_with_subclass_newProject [
+
+	"attempting to reproduce the actual issue (_1 doesn't reproduce problem, but should remain static to ensure behavior does not change detrimentally"
+
+	"https://github.com/dalehenrich/Rowan/issues/295"
+
+	"Error creating a new class version of a superclass while moving to a new package in a new project and a new symbol dictionary"
+
+	"issue_295_4 --> issue_295_5	:: rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
+													move new version of NewRowanSample4  with subclass to RowanSample4SymbolDict in new project"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath 
+		baselinePackageNames newClass ar oldClass projectDefinition projectSetDefinition oldProjectDefinition |
+
+	projectName := 'RowanSample4'.
+	{ projectName . projectName, '_295'} do: [:pn |
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_0'.				"starting point of test"
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	project := RwProject newNamed: projectName.
+	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
+											'RowanSample4-GemStone-Tests').
+	self
+		assert:
+			(x := project packageNames asArray sort) =  baselinePackageNames sort.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	self assert: (x := rowanSampleSpec loadedGroupNames) = #('tests').
+	self assert: (x := rowanSampleSpec loadedConfigurationNames) = #('Load').
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_4'.				"New package added to the project, along with a subclass of NewRowanSample4"
+
+	self assert: (Rowan globalNamed: 'NewRowanSample4') isNil.
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self
+		assert:
+			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
+
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: newClass new foo = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_5'.				"Rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
+																								move new version of NewRowanSampleSubclass4 to RowanSample4SymbolDict"
+"trigger the bug on this load"
+	specUrlString := self _rowanSample4LoadSpecificationUrl_295.
+
+"need to add old project definition with all classes and extensions removed to the projectSet Definition to reproduce bug"
+	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
+	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
+
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
+
+oldProjectDefinition := (Rowan image loadedProjectNamed: 'RowanSample4') asDefinition.
+projectSetDefinition addProject: oldProjectDefinition.
+
+	oldProjectDefinition packages values do: [:pkgDefinition |
+	    pkgDefinition classDefinitions values do: [:classDefinition |
+	        pkgDefinition removeClassDefinition: classDefinition ].
+	    pkgDefinition classExtensions values do: [:classExtension |
+        	pkgDefinition removeClassExtensionDefinition: classExtension ]].
+
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+	Rowan projectTools load markProjectSetNotDirty: projectSetDefinition.
+
+
+	oldClass := newClass.
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: oldClass ~~ newClass.
+	self assert: newClass new foo = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
 ]
 
 { #category : 'tests' }
@@ -1754,7 +2111,226 @@ RwRowanSample4Test >> testIssue305 [
 		loadProjectFromSpecUrl: 'file:' , repoRootPath, '/rowan/specs/RowanSample4_core.ston'.
 
 	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+]
 
+{ #category : 'tests' }
+RwRowanSample4Test >> testIssue460_1 [
+
+	"https://github.com/dalehenrich/Rowan/issues/260"
+
+	"Error creating a new class version of a superclass while moving to a new package in a new project and a new symbol dictionary"
+
+	"issue_295_6 --> issue_295_5	:: rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
+													move new version of NewRowanSample4  with subclass (and method) to RowanSample4SymbolDict in new project"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath 
+		baselinePackageNames newClass ar oldClass projectDefinition projectSetDefinition oldProjectDefinition |
+
+	projectName := 'RowanSample4'.
+	{ projectName . projectName, '_295'} do: [:pn |
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_0'.				"starting point of test"
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	project := RwProject newNamed: projectName.
+	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
+											'RowanSample4-GemStone-Tests').
+	self
+		assert:
+			(x := project packageNames asArray sort) =  baselinePackageNames sort.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	self assert: (x := rowanSampleSpec loadedGroupNames) = #('tests').
+	self assert: (x := rowanSampleSpec loadedConfigurationNames) = #('Load').
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_6'.				"New package added to the project, along with a subclass of NewRowanSample4 with method"
+
+	self assert: (Rowan globalNamed: 'NewRowanSample4') isNil.
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self
+		assert:
+			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
+
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: newClass new foo = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_5'.				"Rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
+																								move new version of NewRowanSampleSubclass4 to RowanSample4SymbolDict"
+"trigger the bug on this load"
+	specUrlString := self _rowanSample4LoadSpecificationUrl_295.
+
+"need to add old project definition with all classes and extensions removed to the projectSet Definition to reproduce bug"
+	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
+	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
+
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
+
+oldProjectDefinition := (Rowan image loadedProjectNamed: 'RowanSample4') asDefinition.
+projectSetDefinition addProject: oldProjectDefinition.
+
+	oldProjectDefinition packages values do: [:pkgDefinition |
+	    pkgDefinition classDefinitions values do: [:classDefinition |
+	        pkgDefinition removeClassDefinition: classDefinition ].
+	    pkgDefinition classExtensions values do: [:classExtension |
+        	pkgDefinition removeClassExtensionDefinition: classExtension ]].
+
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+	Rowan projectTools load markProjectSetNotDirty: projectSetDefinition.
+
+
+	oldClass := newClass.
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: oldClass ~~ newClass.
+	self assert: newClass new foo = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
+]
+
+{ #category : 'tests' }
+RwRowanSample4Test >> testIssue460_2 [
+
+	"https://github.com/dalehenrich/Rowan/issues/260"
+
+	"Error creating a new class version of a superclass while moving to a new package in a new project and a new symbol dictionary"
+
+	"issue_295_6 --> issue_295_7	:: rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
+													move new version of NewRowanSample4  with subclass (and method) to RowanSample4SymbolDict in new project"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath 
+		baselinePackageNames newClass ar oldClass projectDefinition projectSetDefinition oldProjectDefinition subclass |
+
+	projectName := 'RowanSample4'.
+	{ projectName . projectName, '_295'} do: [:pn |
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_0'.				"starting point of test"
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	project := RwProject newNamed: projectName.
+	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
+											'RowanSample4-GemStone-Tests').
+	self
+		assert:
+			(x := project packageNames asArray sort) =  baselinePackageNames sort.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	self assert: (x := rowanSampleSpec loadedGroupNames) = #('tests').
+	self assert: (x := rowanSampleSpec loadedConfigurationNames) = #('Load').
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_6'.				"New package added to the project, along with a subclass of NewRowanSample4 with method"
+
+	self assert: (Rowan globalNamed: 'NewRowanSample4') isNil.
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self
+		assert:
+			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
+
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: newClass new foo = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_7'.				"Rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
+																								move new version of NewRowanSampleSubclass4 to RowanSample4SymbolDict"
+"trigger the bug on this load"
+	specUrlString := self _rowanSample4LoadSpecificationUrl_295.
+
+"need to add old project definition with all classes and extensions removed to the projectSet Definition to reproduce bug"
+	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
+	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
+
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
+
+oldProjectDefinition := (Rowan image loadedProjectNamed: 'RowanSample4') asDefinition.
+projectSetDefinition addProject: oldProjectDefinition.
+
+	oldProjectDefinition packages values do: [:pkgDefinition |
+	    pkgDefinition classDefinitions values do: [:classDefinition |
+	        pkgDefinition removeClassDefinition: classDefinition ].
+	    pkgDefinition classExtensions values do: [:classExtension |
+        	pkgDefinition removeClassExtensionDefinition: classExtension ]].
+
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+	Rowan projectTools load markProjectSetNotDirty: projectSetDefinition.
+
+
+	oldClass := newClass.
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: oldClass ~~ newClass.
+	self assert: newClass new foo = 'foo'.
+
+	subclass := Rowan globalNamed: 'NewRowanSampleSubclass4'.
+	self assert: subclass new foo = 'foo'.
+	self assert: subclass foo = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
 ]
 
 { #category : 'tests' }
@@ -1786,6 +2362,8 @@ RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 
 	projectTools read readProjectDefinition: projectDefinition.
 
+	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
+
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
 
 	projectTools load loadProjectNamed: projectName.
@@ -1793,7 +2371,6 @@ RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
 	self assert: theClass new foo = 'foo'
-
 ]
 
 { #category : 'tests' }
@@ -1826,7 +2403,6 @@ RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
 	self assert: theClass new foo = 'foo'
-
 ]
 
 { #category : 'tests' }
@@ -2219,7 +2795,8 @@ RwRowanSample4Test >> testSampleCompoundConfiguration [
 	gitTool gitcheckoutIn: gitRootPath with: 'master'.
 	projectTools load
 		loadProjectNamed: projectName
-		withConfiguration: 'Test'
+		withConfigurations: #( 'Test' )
+		groupNames: #()
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	project := RwProject newNamed: projectName.

@@ -4,6 +4,11 @@
 
 output push tonel.out
 
+	run
+	(System myUserProfile objectNamed: 'Rowan')
+		ifNotNil: [ self error: 'Rowan is already installed!' ].
+%
+
 input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/tonel/Tonel-Core.gs
 errorCount
 input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.2.15/tonel/Tonel-GemStoneCommon-Core.gs

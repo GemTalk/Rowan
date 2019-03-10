@@ -1,6 +1,11 @@
 Class {
 	#name : 'RwEditToolTest',
 	#superclass : 'RwToolTest',
+	#instVars : [
+		'globalBlackList',
+		'userBlackList',
+		'sessionBlackList'
+	],
 	#category : 'Rowan-Tests'
 }
 
@@ -190,12 +195,59 @@ RwEditToolTest >> _standardProjectDefinition: projectName packageNames: packageN
 		newForGitBasedProjectNamed: projectName.
 	projectDefinition
 		comment: comment;
-		packageNamesInLoadOrder: packageNames;
+		packageNames: packageNames;
 		yourself.
 	projectDefinition defaultSymbolDictName: defaultSymbolDictName.
 
 	^ projectDefinition
+]
 
+{ #category : 'running' }
+RwEditToolTest >> setUp [
+
+	| preferenceSymbol |
+	super setUp.
+
+"get current black list values"
+	preferenceSymbol := Rowan platform _automaticClassInitializationBlackList_symbol.
+	globalBlackList :=	(Rowan platform 
+		globalPreferenceFor: preferenceSymbol 
+		ifAbsent: []) copy.
+	userBlackList :=	(Rowan platform 
+		userPreferenceFor: preferenceSymbol 
+		ifAbsent: []) copy.
+	sessionBlackList :=	(Rowan platform 
+		sessionPreferenceFor: preferenceSymbol 
+		ifAbsent: []) copy.
+]
+
+{ #category : 'running' }
+RwEditToolTest >> tearDown [
+
+	| preferenceSymbol |
+
+	super tearDown.
+
+"clean up blackList"
+	preferenceSymbol := Rowan platform _automaticClassInitializationBlackList_symbol.
+	globalBlackList
+		ifNil: [ Rowan clearDefaultAutomaticClassInitializationBlackList ]
+		ifNotNil: [
+			Rowan platform 
+				setDefaultPreferenceFor: preferenceSymbol 
+				to: globalBlackList ].
+	userBlackList
+		ifNil: [ Rowan clearUserAutomaticClassInitializationBlackList ]
+		ifNotNil: [
+			Rowan platform 
+				setUserPreferenceFor: preferenceSymbol 
+				to: userBlackList ].
+	sessionBlackList
+		ifNil: [ Rowan clearSessionAutomaticClassInitializationBlackList ]
+		ifNotNil: [
+			Rowan platform 
+				setSessionPreferenceFor: preferenceSymbol 
+				to: sessionBlackList ].
 ]
 
 { #category : 'tests - classes' }
@@ -251,6 +303,108 @@ RwEditToolTest >> testAddAndRemoveClass [
 	testClass := Rowan globalNamed: className.
 	self assert: testClass isNil
 
+]
+
+{ #category : 'tests - classes' }
+RwEditToolTest >> testAddClass_blackList_A [
+
+	"https://github.com/GemTalk/Rowan/issues/447"
+
+	"test that blackList is used to block class initialization - sessionAutomaticClassInitializationBlackList"
+
+	| projectName projectDefinition projectTools packageNames classDefinition packageName testClass testInstance className |
+	projectName := 'Simple'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	projectTools := Rowan projectTools.
+
+	{projectName}
+		do: [ :name | 
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
+
+"create project definition"
+	projectDefinition := self
+		_standardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment:
+			'Testing class initialization blackList'.
+
+	className := 'SimpleEdit'.
+	classDefinition := self _standardClassDefinition: className.
+
+	projectTools edit
+		addClass: classDefinition
+		inPackageNamed: packageName
+		inProject: projectDefinition.
+
+"add project to session blackList"
+	Rowan sessionAutomaticClassInitializationBlackList add: projectName.
+
+"load project - initialization should not be triggered"
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | self assert: false description: 'unexpected signal of RwExecuteClassInitializeMethodsAfterLoadNotification'  ].
+
+"validate"
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	self assert: testClass civar1 isNil.
+	self assert: testClass cvar1 isNil.
+	testInstance := testClass new.
+	self assert: testInstance ivar1 isNil.
+]
+
+{ #category : 'tests - classes' }
+RwEditToolTest >> testAddClass_blackList_B [
+
+	"https://github.com/GemTalk/Rowan/issues/447"
+
+	"test that blackList is used to block class initialization - userAutomaticClassInitializationBlackList"
+
+	| projectName projectDefinition projectTools packageNames classDefinition packageName testClass testInstance className |
+	projectName := 'Simple'.
+	packageName := 'Simple-Core'.
+	packageNames := {packageName}.
+	projectTools := Rowan projectTools.
+
+	{projectName}
+		do: [ :name | 
+			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
+				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
+
+"create project definition"
+	projectDefinition := self
+		_standardProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment:
+			'Testing class initialization blackList'.
+
+	className := 'SimpleEdit'.
+	classDefinition := self _standardClassDefinition: className.
+
+	projectTools edit
+		addClass: classDefinition
+		inPackageNamed: packageName
+		inProject: projectDefinition.
+
+"add project to user blackList"
+	Rowan userAutomaticClassInitializationBlackList add: projectName.
+
+"load project - initialization should not be triggered"
+	[ projectTools load loadProjectDefinition: projectDefinition ]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | self assert: false description: 'unexpected signal of RwExecuteClassInitializeMethodsAfterLoadNotification'  ].
+
+"validate"
+	testClass := Rowan globalNamed: className.
+	self assert: testClass notNil.
+	self assert: testClass civar1 isNil.
+	self assert: testClass cvar1 isNil.
+	testInstance := testClass new.
+	self assert: testInstance ivar1 isNil.
 ]
 
 { #category : 'tests - classes' }
@@ -367,6 +521,41 @@ RwEditToolTest >> testAddUpdateAndRemoveClass [
 	testClass := Rowan globalNamed: className.
 	self assert: testClass isNil
 
+]
+
+{ #category : 'test api' }
+RwEditToolTest >> testPreferences [
+
+	| projectName |
+	projectName := '__Test-Preferences__'.
+
+"standard API - user in GemStone"
+	Rowan automaticClassInitializationBlackList add: projectName.
+	self assert: (Rowan automaticClassInitializationBlackList includes: projectName).
+
+	Rowan clearAutomaticClassInitializationBlackList.
+	self deny: (Rowan automaticClassInitializationBlackList includes: projectName).
+
+"globals"
+	Rowan globalAutomaticClassInitializationBlackList add: projectName.
+	self assert: (Rowan globalAutomaticClassInitializationBlackList includes: projectName).
+
+	Rowan clearGlobalAutomaticClassInitializationBlackList.
+	self deny: (Rowan globalAutomaticClassInitializationBlackList includes: projectName).
+
+"users"
+	Rowan userAutomaticClassInitializationBlackList add: projectName.
+	self assert: (Rowan userAutomaticClassInitializationBlackList includes: projectName).
+
+	Rowan clearUserAutomaticClassInitializationBlackList.
+	self deny: (Rowan userAutomaticClassInitializationBlackList includes: projectName).
+
+"session"
+	Rowan  sessionAutomaticClassInitializationBlackList add: projectName.
+	self assert: (Rowan sessionAutomaticClassInitializationBlackList includes: projectName).
+
+	Rowan clearSessionAutomaticClassInitializationBlackList.
+	self deny: (Rowan sessionAutomaticClassInitializationBlackList includes: projectName).
 ]
 
 { #category : 'tests - classes' }

@@ -6,9 +6,7 @@ Class {
 		'separateMethodMetaAndSource',
 		'noMethodMetaData',
 		'useCypressPropertiesFile',
-		'monticelloMetadata',
-		'instanceFileNameMap',
-		'classFileNameMap'
+		'monticelloMetadata'
 	],
 	#classInstVars : [
 		'specials'
@@ -55,20 +53,42 @@ RwModificationFiletreeWriterVisitor class >> selectorSpecials [
 ]
 
 { #category : 'class writing' }
-RwModificationFiletreeWriterVisitor >> _classSourceDir [
+RwModificationFiletreeWriterVisitor >> _classExtensionOf: aClassExtension [
+	"order is alphabetical"
 
-	^ self _packageSourceDir / self currentClassDefinition name, 'class'
+	| definition |
+	definition := self class orderedDictionaryClass new.
+
+	definition at: #name put: aClassExtension name.
+
+	^ self _toJSON: definition
 ]
 
 { #category : 'class writing' }
-RwModificationFiletreeWriterVisitor >> _createFileNameMapFor: aMethodDefinitionCollection [
+RwModificationFiletreeWriterVisitor >> _classExtensionSourceDir [
+
+	| filename |
+	filename := classExtFileNameMap at:  self currentClassExtension name.
+	^ self _packageSourceDir / filename, 'extension'
+]
+
+{ #category : 'class writing' }
+RwModificationFiletreeWriterVisitor >> _classSourceDir [
+
+	| filename |
+	filename := classDefFileNameMap at:  self currentClassDefinition name.
+	^ self _packageSourceDir / filename, 'class'
+]
+
+{ #category : 'method writing' }
+RwModificationFiletreeWriterVisitor >> _createFileNameMapForMethods: aMethodDefinitionDictionary [
   "https://github.com/dalehenrich/filetree/issues/92"
 
   "answer a dictionary that maps each definition selector to a filename that is guaranteed unique on case insensitive file systems"
 
   | map filenameMap |
   map := Dictionary new.
-  aMethodDefinitionCollection
+  aMethodDefinitionDictionary
     do: [ :mDef | 
       | sel col |
       "sort into bins by lowercase selector. "
@@ -150,6 +170,12 @@ RwModificationFiletreeWriterVisitor >> _methodClassDir [
 ]
 
 { #category : 'method writing' }
+RwModificationFiletreeWriterVisitor >> _methodClassExtensionDir [
+
+	^ self _classExtensionSourceDir / 'class'
+]
+
+{ #category : 'method writing' }
 RwModificationFiletreeWriterVisitor >> _methodFileNameFor: aMethodDefinition [
 	| selector |
 	selector := aMethodDefinition selector.
@@ -183,6 +209,12 @@ RwModificationFiletreeWriterVisitor >> _methodFileNameFor: aMethodDefinition [
 RwModificationFiletreeWriterVisitor >> _methodInstanceDir [
 
 	^ self _classSourceDir / 'instance'
+]
+
+{ #category : 'method writing' }
+RwModificationFiletreeWriterVisitor >> _methodInstanceExtensionDir [
+
+	^ self _classExtensionSourceDir / 'instance'
 ]
 
 { #category : 'class writing' }
@@ -237,6 +269,31 @@ RwModificationFiletreeWriterVisitor >> addedMethod: aMethodModification [
 		ifFalse: [ 
 			methodFileName := instanceFileNameMap at: methodDefinition selector.
 			methodDir := self _methodInstanceDir ensureCreateDirectory ]) .
+
+
+	(methodDir / methodFileName, 'st')
+		writeStreamDo: [:aStream |
+		aStream 
+			<< methodDefinition protocol
+			<< self _newLine
+			<< (methodDefinition source withLineEndings: self _newLine) ]
+]
+
+{ #category : 'actions' }
+RwModificationFiletreeWriterVisitor >> addedMethodExtension: aMethodExtensionModification [
+
+	| methodDefinition methodDir methodFileName |
+
+	methodDefinition := aMethodExtensionModification after.
+
+	"create instance/class directory as needed ... write method source file"
+	 (aMethodExtensionModification isMeta
+		ifTrue: [
+			methodFileName := classFileNameMap at: methodDefinition selector.
+			methodDir := self _methodClassExtensionDir ensureCreateDirectory ]
+		ifFalse: [ 
+			methodFileName := instanceFileNameMap at: methodDefinition selector.
+			methodDir := self _methodInstanceExtensionDir ensureCreateDirectory ]) .
 
 
 	(methodDir / methodFileName, 'st')
@@ -316,17 +373,39 @@ RwModificationFiletreeWriterVisitor >> processClass: aClassModification [
 				<< (self _typeClassDefinitionOf: self currentClassDefinition)
 				<< self _newLine ].
 
-	instanceFileNameMap  := self _createFileNameMapFor: self currentClassDefinition instanceMethodDefinitions.
-	classFileNameMap := self _createFileNameMapFor: self currentClassDefinition classMethodDefinitions.
+	instanceFileNameMap  := self _createFileNameMapForMethods: self currentClassDefinition instanceMethodDefinitions.
+	classFileNameMap := self _createFileNameMapForMethods: self currentClassDefinition classMethodDefinitions.
 
 	aClassModification instanceMethodsModification acceptVisitor: self.
 	aClassModification classMethodsModification acceptVisitor: self
+]
+
+{ #category : 'class writing' }
+RwModificationFiletreeWriterVisitor >> processClassExtension: aClassExtensionModification [
+
+	"create class extension directory and defintion structure"
+
+	self _classExtensionSourceDir ensureCreateDirectory.
+
+	(self _classExtensionSourceDir /  'properties.json')
+		writeStreamDo: [:aStream |
+			aStream 
+				<< (self _classExtensionOf: self currentClassExtension)
+				<< self _newLine ].
+
+	instanceFileNameMap  := self _createFileNameMapForMethods: self currentClassExtension instanceMethodDefinitions.
+	classFileNameMap := self _createFileNameMapForMethods: self currentClassExtension classMethodDefinitions.
+
+	aClassExtensionModification instanceMethodsModification acceptVisitor: self.
+	aClassExtensionModification classMethodsModification acceptVisitor: self
 ]
 
 { #category : 'project writing' }
 RwModificationFiletreeWriterVisitor >> processProject: aProjectModification [
 
 	| projectProperties |
+
+	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
 
 	"confirm that the project source is written in Tonel format"
 	(self _repositoryFormatFor: aProjectModification) = 'filetree' ifFalse: [ self error: 'expected tonel format repository' ].
@@ -355,6 +434,23 @@ RwModificationFiletreeWriterVisitor >> separateMethodMetaAndSource [
 RwModificationFiletreeWriterVisitor >> useCypressPropertiesFile [
 
 	^ useCypressPropertiesFile ifNil: [ useCypressPropertiesFile := true ]
+]
+
+{ #category : 'visiting' }
+RwModificationFiletreeWriterVisitor >> visitExtensionMethodModification: aMethodExtensionModification [
+
+	aMethodExtensionModification isAddition
+		ifTrue: [ ^ self addedMethodExtension: aMethodExtensionModification ] .
+	aMethodExtensionModification isDeletion
+		ifTrue: [ ^ self deletedMethodExtension: aMethodExtensionModification ].
+	^ self changedMethodExtension: aMethodExtensionModification
+]
+
+{ #category : 'visiting' }
+RwModificationFiletreeWriterVisitor >> visitExtensionMethodsModification: aMethodExtensionsModification [
+
+	aMethodExtensionsModification elementsModified
+		do: [ :each | each acceptVisitor: self ]
 ]
 
 { #category : 'visiting' }

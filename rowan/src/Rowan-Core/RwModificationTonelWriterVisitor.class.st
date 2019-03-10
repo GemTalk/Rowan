@@ -12,13 +12,17 @@ RwModificationTonelWriterVisitor class >> classLabel [
 { #category : 'class extension writing' }
 RwModificationTonelWriterVisitor >> _classExtensionSourceFile [
 
-	^ self _packageSourceDir / (self currentClassExtension name, '.extension.st')
+	| filename |
+	filename := classExtFileNameMap at:  self currentClassExtension name.
+	^ self _packageSourceDir / (filename, '.extension.st')
 ]
 
 { #category : 'class writing' }
 RwModificationTonelWriterVisitor >> _classSourceFile [
 
-	^ self _packageSourceDir / (self _fileNameFor: self currentClassDefinition)
+	| filename |
+	filename := classDefFileNameMap at:  self currentClassDefinition name.
+	^ self _packageSourceDir / (filename, '.class.st')
 ]
 
 { #category : 'class writing' }
@@ -204,42 +208,7 @@ RwModificationTonelWriterVisitor >> addedPackage: aPackageModification [
 			<< (self _toSTON: { #name ->  currentPackageDefinition name } asDictionary) 
 			<< self  _newLine ].
 
-self error: 'need to create class to filename map to handle class file names on case insensitive file systems'.
-
 	self processPackage: aPackageModification
-]
-
-{ #category : 'actions' }
-RwModificationTonelWriterVisitor >> changedClass: aClassModification [
-
-	currentClassDefinition := aClassModification after.
-
-	self processClass: aClassModification
-]
-
-{ #category : 'actions' }
-RwModificationTonelWriterVisitor >> changedClassExtension: aClassExtensionModification [
-
-	currentClassDefinition := aClassExtensionModification after.
-
-	self processClassExtension: aClassExtensionModification
-]
-
-{ #category : 'actions' }
-RwModificationTonelWriterVisitor >> deletedClass: aClassModification [
-
-	currentClassDefinition := aClassModification after.
-
-	self halt. "delete the class file"
-]
-
-{ #category : 'actions' }
-RwModificationTonelWriterVisitor >> deletedClassExtension: aClassExtensionModification [
-
-	currentClassDefinition := aClassExtensionModification after.
-
-
-	self halt. "delete the class extension file"
 ]
 
 { #category : 'class writing' }
@@ -271,6 +240,7 @@ RwModificationTonelWriterVisitor >> processProject: aProjectModification [
 	"confirm that the project source is written in Tonel format"
 
 	| format |
+	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
 	(format := self _repositoryFormatFor: aProjectModification) = 'tonel' ifFalse: [ self error: 'expected tonel format repository, instead format is ', format printString ].
 	super processProject: aProjectModification.
 ]

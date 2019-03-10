@@ -34,15 +34,14 @@ RwPrjReconcileTool >> _moveClassExtension: theClassExtension toNewPackageClonedF
 			pDef := RwPackageDefinition newNamed: newPackageName.
 			projectDef addPackage: pDef.
 			pDef ].
-	packageDef removeClassExtension: theClassExtension.
-	newPackageDef addClassExtension: theClassExtension.
+	packageDef removeClassExtensionDefinition: theClassExtension.
+	newPackageDef addClassExtensionDefinition: theClassExtension.
 	"update the method categories --- hybrid only ... but that is what we're doing"
 	theClassExtension instanceMethodDefinitions values do: [:methodDef |
 		methodDef protocol: '*', newPackageName ].
 	theClassExtension classMethodDefinitions values do: [:methodDef |
 		methodDef protocol: '*', newPackageName ].
 	^ newPackageDef
-
 ]
 
 { #category : 'private' }
@@ -56,15 +55,14 @@ RwPrjReconcileTool >> _moveClassExtension: theClassExtension toNewPackageNamed: 
 			pDef := RwPackageDefinition newNamed: newPackageName.
 			projectDef addPackage: pDef.
 			pDef ].
-	packageDef removeClassExtension: theClassExtension.
-	newPackageDef addClassExtension: theClassExtension.
+	packageDef removeClassExtensionDefinition: theClassExtension.
+	newPackageDef addClassExtensionDefinition: theClassExtension.
 	"update the method categories --- hybrid only ... but that is what we're doing"
 	theClassExtension instanceMethodDefinitions values do: [:methodDef |
 		methodDef protocol: '*', newPackageName ].
 	theClassExtension classMethodDefinitions values do: [:methodDef |
 		methodDef protocol: '*', newPackageName ].
 	^ newPackageDef
-
 ]
 
 { #category : 'smalltalk api' }

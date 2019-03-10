@@ -39,12 +39,6 @@ RwPrjWriteTool >> _loadedPackagesNamed: someNames forProject: projectDefinition 
 ]
 
 { #category : 'smalltalk api' }
-RwPrjWriteTool >> validate: aRwSpecification [
-  super validate: aRwSpecification.
-  self validateForWrite: aRwSpecification
-]
-
-{ #category : 'smalltalk api' }
 RwPrjWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification [
 
 	| repo repositoryUrl |

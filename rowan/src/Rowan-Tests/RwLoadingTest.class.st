@@ -1472,14 +1472,13 @@ RwLoadingTest >> projectDefinitionFor: packageNames [
 		newForGitBasedProjectNamed: 'RwloadingTest')
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNamesInLoadOrder: packageNames;
+		packageNames: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName;
 		yourself.
 
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName.
 
 	^ projectDefinition
-
 ]
 
 { #category : 'support' }

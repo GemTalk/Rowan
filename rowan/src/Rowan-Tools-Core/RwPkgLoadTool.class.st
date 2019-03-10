@@ -27,6 +27,6 @@ RwPkgLoadTool >> loadPackageSetDefinition: packageSetDefinitionToLoad instanceMi
 			msg := 'The packages are already up to date'.
 			self inform: msg.
 			^ msg ].
-	Rowan image applyModification: diff instanceMigrator: instanceMigrator.
+	Rowan image applyModification_254: diff instanceMigrator: instanceMigrator.
 	^ diff
 ]

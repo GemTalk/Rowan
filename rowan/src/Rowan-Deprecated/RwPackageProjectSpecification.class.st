@@ -21,6 +21,19 @@ Class {
 	#category : 'Rowan-Deprecated'
 }
 
+{ #category : 'instance creation' }
+RwPackageProjectSpecification class >> new [
+	self deprecated: 'RwPackageProjectSpecification deprecated in Rowan 1.2.6+'.
+	^ super new
+]
+
+{ #category : 'instance creation' }
+RwPackageProjectSpecification class >> newNamed: aString [
+
+	self deprecated: 'RwPackageProjectSpecification deprecated in Rowan 1.2.6+'.
+	^ super newNamed: aString
+]
+
 { #category : 'accessing' }
 RwPackageProjectSpecification >> imageSpec [
 

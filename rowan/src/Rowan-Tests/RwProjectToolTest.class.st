@@ -150,7 +150,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 		yourself.
 
 	packageDefinition2 := projectDefinition packageNamed: 'Simple-Extensions'.
-	packageDefinition2 addClassExtension: classExtensionDefinition.
+	packageDefinition2 addClassExtensionDefinition: classExtensionDefinition.
 
 	[ projectTools load loadProjectDefinition: projectDefinition ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
@@ -177,7 +177,6 @@ RwProjectToolTest >> testProjectClassExtensions [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class and extension methods'
-
 ]
 
 { #category : 'tests' }
@@ -202,7 +201,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		newForGitBasedProjectNamed: projectName1)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNamesInLoadOrder: #('Simple-Core' 'Simple-Tests');
+		packageNames: #('Simple-Core' 'Simple-Tests');
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		yourself.
 
@@ -229,7 +228,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		newForGitBasedProjectNamed: projectName2)
 		comment:
 				'This is a class extension project created in memory first, then written to disk. Uses a separate symbol dictionary from project 1';
-		packageNamesInLoadOrder: #('Simple-Extensions');
+		addPackagesNamed: #('Simple-Extensions');
 		defaultSymbolDictName: self _symbolDictionaryName2;
 		yourself.
 
@@ -256,13 +255,12 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionary [
 		yourself.
 
 	packageDefinition2 := projectDefinition2 packageNamed: 'Simple-Extensions'.
-	packageDefinition2 addClassExtension: classExtensionDefinition.
+	packageDefinition2 addClassExtensionDefinition: classExtensionDefinition.
 	self
 		should: [ 
 			"class extensions need to be made by packages loaded into the symbol dictionary in which the class is defined"
 			projectTools load loadProjectDefinition: projectDefinition2 ]
 		raise: Error
-
 ]
 
 { #category : 'tests' }
@@ -284,7 +282,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 		newForGitBasedProjectNamed: projectName)
 		comment:
 				'This is a project created in memory first, then written to disk. There are three packages 21 of which creates classes in a different symbol dictionary.';
-		packageNamesInLoadOrder: packageNames;
+		packageNames: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName2;
 		setSymbolDictName: self _symbolDictionaryName1 forPackageNamed: 'Simple-Core1';
 		setSymbolDictName: self _symbolDictionaryName1
@@ -377,7 +375,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 		yourself.
 
 	packageDefinition3 := projectDefinition packageNamed: 'Simple-Extensions1'.
-	packageDefinition3 addClassExtension: classExtensionDefinition.
+	packageDefinition3 addClassExtensionDefinition: classExtensionDefinition.
 
 	[ projectTools load loadProjectDefinition: projectDefinition ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
@@ -401,7 +399,6 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 		commitProjectDefinition: projectDefinition
 		message:
 			'3 packages with extension methods for first package in third package.'
-
 ]
 
 { #category : 'tests' }
@@ -423,7 +420,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 		newForGitBasedProjectNamed: projectName)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNamesInLoadOrder: packageNames;
+		packageNames: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName1;
 		setSymbolDictName: self _symbolDictionaryName2
 			forPackageNamed: 'Simple-Extensions';
@@ -497,7 +494,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 
 	packageDefinition2 := projectDefinition packageNamed: 'Simple-Extensions'.
 	packageDefinition2 addClassDefinition: classDefinition2.
-	packageDefinition2 addClassExtension: classExtensionDefinition.
+	packageDefinition2 addClassExtensionDefinition: classExtensionDefinition.
 
 	[ projectTools load loadProjectDefinition: projectDefinition ]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
@@ -509,7 +506,6 @@ RwProjectToolTest >> testProjectClassExtensionsInSessionMethods [
 	self assert: testClass2 notNil.
 	testInstance2 := testClass2 new.
 	self assert: testInstance2 foo
-
 ]
 
 { #category : 'tests' }
@@ -531,7 +527,7 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 		newForGitBasedProjectNamed: projectName)
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNamesInLoadOrder: packageNames;
+		packageNames: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName;
 		setUseSessionMethodsForExtensions: true
 			forPackageNamed: 'Simple-Globals-Extensions';
@@ -558,13 +554,12 @@ RwProjectToolTest >> testProjectGlobalsClassesExtensionsInSessionMethods [
 
 	packageDefinition := projectDefinition
 		packageNamed: 'Simple-Globals-Extensions'.
-	packageDefinition addClassExtension: classExtensionDefinition.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectTools load loadProjectDefinition: projectDefinition.
 
 	self assert: Object classFoo = 'bar'.
 	self assert: Object new instanceFoo = 'foo'
-
 ]
 
 { #category : 'tests' }
@@ -659,7 +654,7 @@ RwProjectToolTest >> testSimpleProject2 [
 	projectDefinition
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNamesInLoadOrder: packageNames;
+		packageNames: packageNames;
 		yourself.
 	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
 
@@ -696,7 +691,6 @@ RwProjectToolTest >> testSimpleProject2 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple class'
-
 ]
 
 { #category : 'tests' }
@@ -719,7 +713,7 @@ RwProjectToolTest >> testSimpleProject3 [
 	projectDefinition
 		comment:
 				'This is a simple project created in memory first, then written to disk.';
-		packageNamesInLoadOrder: packageNames;
+		packageNames: packageNames;
 		yourself.
 	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
 
@@ -783,5 +777,4 @@ RwProjectToolTest >> testSimpleProject3 [
 	projectTools commit
 		commitProjectDefinition: projectDefinition
 		message: 'Added Simple3 class and methods'
-
 ]

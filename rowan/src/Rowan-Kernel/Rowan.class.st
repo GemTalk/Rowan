@@ -13,6 +13,14 @@ Class {
 	#category : 'Rowan-Kernel'
 }
 
+{ #category : 'public' }
+Rowan class >> automaticClassInitializationBlackList [
+
+	"Answer list of project names for which automatic class initialiation should be disabled."
+
+	^ self platform automaticClassInitializationBlackList
+]
+
 { #category : 'public client services' }
 Rowan class >> classServiceClass [
 
@@ -21,9 +29,35 @@ Rowan class >> classServiceClass [
 ]
 
 { #category : 'public' }
+Rowan class >> clearAutomaticClassInitializationBlackList [
+
+	"Clear list of project names for which automatic class initialiation should be disabled."
+
+	^ self platform clearAutomaticClassInitializationBlackList
+]
+
+{ #category : 'public' }
+Rowan class >> clearDefaultAutomaticClassInitializationBlackList [
+
+	"Clear default list of project names for which automatic class initialiation should be disabled.
+		Individual users may override the black list."
+
+	^ self platform clearAutomaticClassInitializationBlackList_default
+]
+
+{ #category : 'public' }
 Rowan class >> configuration [
 
 	^configuration
+]
+
+{ #category : 'public' }
+Rowan class >> defaultAutomaticClassInitializationBlackList [
+
+	"Answer default list of project names for which automatic class initialiation should be disabled.
+		Individual users may override the black list."
+
+	^ self platform automaticClassInitializationBlackList_default
 ]
 
 { #category : 'private' }

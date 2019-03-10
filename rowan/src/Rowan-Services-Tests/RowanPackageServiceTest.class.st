@@ -5,6 +5,69 @@ Class {
 }
 
 { #category : 'tests' }
+RowanPackageServiceTest >> test_compileAndSelectClass [
+
+	| package packageService |
+	System commitTransaction.
+	[self assert: RowanCommandResult results isEmpty. 
+	package := self createJadeiteTestPackage. 
+	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
+	self assert: RowanCommandResult results isEmpty. 
+	packageService compileClass: 
+	'RowanServicesTest rwSubclass: ''RowanTestCompile'' 
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: ''', self servicesTestPackageName,  '''
+		options: #()'.
+	self assert: RowanCommandResult results size equals: 1. 
+	self assert: RowanCommandResult results first name equals: 'RowanTestCompile'. 
+	self assert: packageService selectedClass name equals: 'RowanTestCompile'.
+	self assert: packageService selectedClass selectedPackageServices first equals: packageService] 
+		ensure:[System abortTransaction.  "get rid of test package and class"]
+]
+
+{ #category : 'tests' }
+RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
+
+	| package packageService testsPackage |
+	System commitTransaction.
+	[self assert: RowanCommandResult results isEmpty. 
+	package := self createJadeiteTestPackage. 
+	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
+	self assert: RowanCommandResult results isEmpty. 
+	packageService compileClass: 
+	'RowanServicesTest rwSubclass: ''RowanTestCompile''
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: ''Rowan-Services-Tests''
+		options: #()'.
+	self assert: RowanCommandResult results size equals: 2. 
+	self assert: RowanCommandResult results last name equals: 'RowanTestCompile'. 
+	self assert: RowanCommandResult results first name equals: 'Rowan-Services-Tests'. 
+	testsPackage := RowanCommandResult results first.
+	self assert: testsPackage selectedClass name equals: 'RowanTestCompile'.
+	self assert: testsPackage selectedClass selectedPackageServices first equals: testsPackage] 
+		ensure:[System abortTransaction.  "get rid of test package and class"]
+]
+
+{ #category : 'tests' }
+RowanPackageServiceTest >> test_packageWasDeleted [
+
+	| package packageService |
+	System commitTransaction. 
+	self jadeiteIssueTested: #issue284 withTitle: '(3.0.49 and 3.0.50) project browser not updated properly on reload of project'.
+	package := self createJadeiteTestPackage. 
+	packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
+	self deny: packageService wasDeleted.
+	System abortTransaction. 
+	self assert: packageService wasDeleted.
+]
+
+{ #category : 'tests' }
 RowanPackageServiceTest >> testClassHierarchy [
 
 	"format for client is:
@@ -33,20 +96,20 @@ RowanPackageServiceTest >> testCompileClassSelectsPackageAndClass [
 
 	self jadeiteIssueTested: #issue228 withTitle: 'lose selected class in project browser when new version created'.
 	package := self createJadeiteTestPackage. 
-	[packageService := RowanPackageService forPackageNamed: self jadeiteTestPackageName.
+	[packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
 	packageService compileClass: 
 		'RowanServicesTest rwSubclass: ''TestCompileClass''
 			instVarNames: #()
 			classVars: #()
 			classInstVars: #()
 			poolDictionaries: #()
-			category: ''', self jadeiteTestPackageName, '''
+			category: ''', self servicesTestPackageName, '''
 			options: #()'.
-	self assert: RowanCommandResult results size equals: 2.
-	newClassService := RowanCommandResult results detect:[:service | service name = 'TestCompileClass'] ifNone:[]. 
+	self assert: RowanCommandResult results size equals: 1.
+	newClassService := RowanCommandResult results first.
 	self assert: newClassService name equals: 'TestCompileClass'. 
 	self assert: newClassService selectedPackageServices size equals: 1. 
-	self assert: newClassService selectedPackageServices first name equals: self jadeiteTestPackageName. 
+	self assert: newClassService selectedPackageServices first name equals: self servicesTestPackageName. 
 	self assert: newClassService selectedPackageServices first selectedClass == newClassService]
-		ensure:[RowanBrowserService new unloadProjectsNamed: (Array with: self jadeiteTestProjectName)]
+		ensure:[RowanBrowserService new unloadProjectsNamed: (Array with: self servicesTestProjectName)]
 ]

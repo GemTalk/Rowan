@@ -14,9 +14,9 @@ SymbolDictionary >> _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbol
 	toBeOrdered := (self values select: [:each | each isBehavior ]) asIdentitySet.
 	order := OrderedCollection new.
 	processed := IdentitySet new.
-	[ (aClass := RwGsPatchSet _anyElementOf: toBeOrdered ifEmpty: [ nil ]) isNil ]
+	[ (aClass := RwGsPatchSet_254 _anyElementOf: toBeOrdered ifEmpty: [ nil ]) isNil ]
 		whileFalse: [ 
-			RwGsPatchSet
+			RwGsPatchSet_254
 				_orderBySuperclass: aClass
 				from: toBeOrdered
 				into: order
@@ -59,7 +59,6 @@ SymbolDictionary >> _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbol
 			"do not leave clone in the symbol list"
 			symbolList remove: clonedSymDict ifAbsent: [] ].
 	^ clonedSymDict
-
 ]
 
 { #category : '*rowan-gemstone-kernel' }
