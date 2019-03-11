@@ -18,7 +18,7 @@ RwProjectFiletreeTonelReaderWriterTest >> _projectSetDefinitionForStructureWrite
 	"multiple class extensions from multiple packages for multiple classes"
 
 	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath packageName3 |
+		classExtensionDefinition projectSetDefinition packageName3 |
 
 	projectName := 'Issue361'.
 	self _markForProjectCleanup: projectName.
