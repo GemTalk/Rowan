@@ -562,7 +562,7 @@ currentOrNil
   UserGlobals 
     at: #CypressBootstrapRowanBlock 
     put: [:symbolDictName :packageNames  |
-    | packageManager repo |
+    | packageManager repo warnings |
     packageManager := CypressPackageManager3 new.
     repo := CypressAbstractRepository
       onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/rowan/src/'  )
@@ -574,7 +574,21 @@ currentOrNil
         packageManager
           addResolvedReference:
             (CypressResolvedReference name: packageName repository: repo) ].
-    packageManager loadResolvedReferences ].
+	true 
+		ifTrue: [
+			"collect warnings and error out, if any warnings have accumulated" 
+			warnings := {}.
+  	  [ packageManager loadResolvedReferences ]
+				on: CompileWarning do: [:ex | 
+					warnings add: ex asString printString.
+					ex resume ].
+ 			warnings isEmpty ifFalse: [
+				GsFile gciLogServer: 'WARNINGS during Rowan package bootstrap: '.
+				warnings do: [:warning | GsFile gciLogServer: '	', warning ]. 
+				self error: 'Warnings during bootstrap' ] ] 
+		ifFalse: [
+			"bypass warnings collection, if you are in a hurry" 
+			packageManager loadResolvedReferences ] ].
 %
   commit
 
