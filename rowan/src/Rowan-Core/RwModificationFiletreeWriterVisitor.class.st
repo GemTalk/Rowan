@@ -100,7 +100,7 @@ RwModificationFiletreeWriterVisitor >> _createFileNameMapForMethods: aMethodDefi
   filenameMap := Dictionary new.
   map values
 	do: [ :col | 
-	  | selector sortedCol |
+	  | sortedCol |
 	  col size = 1
 		ifTrue: [ 
 		  | def |

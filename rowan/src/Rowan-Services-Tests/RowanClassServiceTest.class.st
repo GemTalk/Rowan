@@ -85,7 +85,7 @@ RowanClassServiceTest >> test_behavior [
 
 { #category : 'tests' }
 RowanClassServiceTest >> test_classComment [
-	| classService className behavior packageService |
+	| classService behavior |
 	behavior := Rowan globalNamed: self servicesDefaultClassName. 
 	self assert: behavior comment equals: String new. 
 	classService := RowanClassService forClassNamed: self servicesDefaultClassName meta: false. 

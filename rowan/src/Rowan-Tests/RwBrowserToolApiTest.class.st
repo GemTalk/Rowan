@@ -4002,7 +4002,7 @@ RwBrowserToolApiTest >> testRenameClass_4 [
   "https://github.com/dalehenrich/Rowan/issues/470"
 
   | projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3
-    className4 projectSetDefinition class1 class2 class3 class4 classExtensionDefinition validateBlock |
+    className4 projectSetDefinition class1 class2 class3 classExtensionDefinition validateBlock |
 
   projectName := 'Issue470'.
   packageName1 := 'Issue470-Core'.
@@ -4150,7 +4150,7 @@ RwBrowserToolApiTest >> testRenameClass_5 [
   "https://github.com/dalehenrich/Rowan/issues/470"
 
   | projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition packageDefinition className1 className2 className3
-    className4 projectSetDefinition class1 class2 class3 class4 validateBlock classExtensionDefinition |
+    className4 projectSetDefinition class1 class2 class3 validateBlock classExtensionDefinition |
 
   projectName := 'Issue470'.
   packageName1 := 'Issue470-Core'.

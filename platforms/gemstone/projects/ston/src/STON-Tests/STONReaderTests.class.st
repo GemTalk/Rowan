@@ -148,7 +148,6 @@ STONReaderTests >> testJsonString [
 
 { #category : 'tests' }
 STONReaderTests >> testList [
-	| string |
 	self assert: STON listClass = Array.
 	self assert: (self materialize: '[1,2,3]') = (STON listClass with: 1 with: 2 with: 3).
 	self assert: (self materialize: '[]') = STON listClass new
@@ -156,7 +155,6 @@ STONReaderTests >> testList [
 
 { #category : 'tests' }
 STONReaderTests >> testMap [
-	| string |
 	self assert: (self materialize: '{#foo:1}') = (STON mapClass new at: #foo put: 1; yourself).
 	self assert: (self materialize: '{}') = STON mapClass new
 ]
@@ -287,7 +285,6 @@ STONReaderTests >> testString [
 
 { #category : 'tests' }
 STONReaderTests >> testSymbol [
-	| string |
 	self assert: (self materialize: '#''foo''') = #foo.
 	self assert: (self materialize: '#foo') = #foo
 ]

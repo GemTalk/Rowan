@@ -1423,7 +1423,7 @@ RwProjectTopazWriterTest >> testGsTopazWriter_error [
 	"try to write to multiple files when no configs are available"
 
 	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath x stream y
+		classExtensionDefinition projectSetDefinition projectSetModification visitor repositoryRootPath
 		packageName3 |
 
 	projectName := 'Issue361'.

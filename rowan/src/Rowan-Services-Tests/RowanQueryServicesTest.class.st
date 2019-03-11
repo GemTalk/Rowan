@@ -58,7 +58,7 @@ RowanQueryServicesTest >> test_hierarchySenders [
 { #category : 'tests' }
 RowanQueryServicesTest >> test_implementors [
 
-	| queryService hierarchyClassNames |
+	| queryService |
 	queryService := RowanQueryService new organizer: ClassOrganizer new. 
 	queryService implementorsOf: #size.
 	queryService queryResults do:[:methodService |
@@ -79,7 +79,7 @@ RowanQueryServicesTest >> test_projectLog [
 { #category : 'tests' }
 RowanQueryServicesTest >> test_senders [
 
-	| queryService hierarchyClassNames |
+	| queryService |
 	queryService := RowanQueryService new organizer: ClassOrganizer new. 
 	queryService sendersOf: #isEmpty.
 	queryService queryResults do:[:methodService |

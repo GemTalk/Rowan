@@ -69,7 +69,7 @@ RowanAnsweringServiceTest >> test_loadedPackageExists [
 
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_matchingPattern [
-	| randomSymbol | 
+
 	self jadeiteIssueTested: #issue235 withTitle: 'Need Find Class/Method from console'.
 	service selectorsMatchingPattern: #('size'). 
 	self assert: service answer size equals: 1. 

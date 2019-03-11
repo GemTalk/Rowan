@@ -34,18 +34,16 @@ TonelAbstractWriterTest >> directoryNamed: directoryName existsIn: dir [
 
 { #category : '*tonel-gemstone-tests' }
 TonelAbstractWriterTest >> directoryNamed: directoryName in: dir [
-  | fileUtils filePath |
+  | fileUtils |
   fileUtils := self fileUtils.
   ^ fileUtils directoryFromPath: directoryName relativeTo: dir
-
 ]
 
 { #category : '*tonel-gemstone-tests' }
 TonelAbstractWriterTest >> fileNamesIn: dir [
-  | fileUtils filePath |
+  | fileUtils |
   fileUtils := self fileUtils.
   ^ fileUtils entryNamesFrom: dir
-
 ]
 
 { #category : '*tonel-gemstone-tests' }
