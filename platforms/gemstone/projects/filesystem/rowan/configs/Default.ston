@@ -21,8 +21,6 @@ RwProjectLoadConfiguration {
 				'FileSystem-Streams',
 				'Zinc-Character-Encoding-Core',
 				'Zinc-Character-Encoding-GemStone',
-				'Zinc-Resource-Meta-Core',
-				'Zinc-Resource-Meta-FileSystem',
 				'Kernel-Methods',
 				'Network-UUID'
 				]
@@ -38,7 +36,6 @@ RwProjectLoadConfiguration {
 				'FileSystem-Tests-Memory',
 				'FileSystem-Tests-Streams',
 				'Zinc-Character-Encoding-Tests',
-				'Zinc-Resource-Meta-Tests',
 				'Network-UUID-Tests'
 				]
 			}
