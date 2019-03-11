@@ -159,7 +159,7 @@ RwProjectFiletreeTonelReaderWriterTest >> _writerVisitorClass [
 { #category : 'tests' }
 RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProject [
 
-	| rowanSpec projectHome specUrlString projectSpec projectDefinition |	
+	| rowanSpec projectHome specUrlString projectDefinition |	
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
 
