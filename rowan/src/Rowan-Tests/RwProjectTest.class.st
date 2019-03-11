@@ -7,7 +7,7 @@ Class {
 { #category : 'tests - issue 428' }
 RwProjectTest >> test_issue428_loaded_no_disk [
 
-| projectName  packageName projectDefinition projectSetDefinition audit testClass |
+| projectName  packageName projectDefinition projectSetDefinition |
 
 	projectName := 'Issue428'.
 	packageName := 'Issue428-Extension'.
@@ -37,7 +37,7 @@ RwProjectTest >> test_issue428_loaded_no_disk [
 { #category : 'tests - issue 428' }
 RwProjectTest >> test_issue428_loaded_on_disk [
 
-	| projectName projectDefinition projectTools classDefinition packageDefinition packageNames loadedProject |
+	| projectName projectDefinition projectTools packageNames |
 	projectName := 'Issue428'.
 	packageNames := #('Issue428-Core' 'Issue428-Tests').
 	projectTools := Rowan projectTools.

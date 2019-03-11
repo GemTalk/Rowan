@@ -301,11 +301,11 @@ RowanClassService >> fastRefresh [
 	| theClass |
 	theClass := self classFromName. 
 	self refreshFrom: theClass. 
-	methods do:[:service |
-			service source: nil; 
+	methods do:[:service1 |
+			service1 source: nil; 
 					stepPoints: Array new.
-	visibleTests do:[:service |
-			service source: nil; 
+	visibleTests do:[:service2 |
+			service2 source: nil; 
 					stepPoints: Array new].
 			].
 	RowanCommandResult addResult: self.

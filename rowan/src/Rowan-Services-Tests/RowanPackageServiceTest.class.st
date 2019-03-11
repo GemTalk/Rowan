@@ -92,7 +92,7 @@ RowanPackageServiceTest >> testClassHierarchy [
 { #category : 'tests' }
 RowanPackageServiceTest >> testCompileClassSelectsPackageAndClass [
 
-	| package packageService newPackageService newClassService |
+	| package packageService newClassService |
 
 	self jadeiteIssueTested: #issue228 withTitle: 'lose selected class in project browser when new version created'.
 	package := self createJadeiteTestPackage. 

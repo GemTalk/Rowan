@@ -96,7 +96,7 @@ RowanProjectService >> branch: anObject [
 { #category : 'client commands' }
 RowanProjectService >> changes [
 
-	| projectService jadeServer |
+	| jadeServer |
 	jadeServer := Rowan platform jadeServerClassNamed: #JadeServer. 
 	changes := Array new. 
 	self packageNames do:[:packageName |

@@ -144,7 +144,7 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 		move the method into protocol <protocolString> "
 
 	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
-		theBehavior theCompiledMethod extensionMethod |
+		theBehavior theCompiledMethod |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
