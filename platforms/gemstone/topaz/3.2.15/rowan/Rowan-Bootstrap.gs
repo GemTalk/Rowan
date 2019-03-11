@@ -794,7 +794,7 @@ commit
 			GsFile gciLogServer: '---Auditing project: ', projectName printString.
 			audit := Rowan projectTools audit auditForProjectNamed: projectName.
 			GsFile gciLogServer: '	-- audit finished '.
-			"audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ]" ]
+			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ]
 
 %
   commit

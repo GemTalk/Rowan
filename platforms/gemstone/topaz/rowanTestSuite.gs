@@ -11,9 +11,7 @@ run
 		projectNames do: [:projectName |
 			| audit |
 			audit := Rowan projectTools audit auditForProjectNamed: projectName.
-false ifTrue: [
 			audit isEmpty ifFalse: [ self error: 'Pre load Rowan audit failed for project ', projectName printString ].
-].
  ].
 
 		projectNames do: [:projectName |			
@@ -35,9 +33,7 @@ false ifTrue: [
 		projectNames do: [:projectName |
 			| audit |
 			audit := Rowan projectTools audit auditForProjectNamed: projectName.
-false ifTrue: [
 			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ].
-].
  ].
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
