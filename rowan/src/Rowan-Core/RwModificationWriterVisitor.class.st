@@ -36,7 +36,7 @@ RwModificationWriterVisitor >> _createFileNameMapForClassesOrPackages: aClassOrP
   filenameMap := Dictionary new.
   map values
 	do: [ :col | 
-	  | name sortedCol |
+	  | sortedCol |
 	  col size = 1
 		ifTrue: [ 
 		  | def |
@@ -249,7 +249,6 @@ RwModificationWriterVisitor >> visitProjecteSetModification: aProjectSetModifica
 { #category : 'visiting' }
 RwModificationWriterVisitor >> visitProjectModification: aProjectModification [
 
-	| propertiesModification |
 	aProjectModification isAddition
 		ifTrue: [ ^ self addedProject: aProjectModification ].
 	aProjectModification isDeletion

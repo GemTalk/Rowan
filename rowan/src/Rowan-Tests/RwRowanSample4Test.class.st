@@ -49,7 +49,7 @@ RwRowanSample4Test >> _rowanSample4SpecificationUrl [
 { #category : 'tests' }
 RwRowanSample4Test >> test_projectUrl_issue_463 [
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath |
+	| specUrlString projectTools rowanSpec gitRootPath projectName rowanSampleSpec project |
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].

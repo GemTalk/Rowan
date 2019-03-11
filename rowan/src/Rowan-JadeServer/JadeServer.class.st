@@ -3933,7 +3933,7 @@ JadeServer >> sbRecompileSubclassesOf: newClass andCopyMethods: aBoolean [
 
 { #category : 'category' }
 JadeServer >> sbRemoveClasses [
-	| isPackages containers classNames |
+	| containers classNames |
 	self nextLine = 'packageList'. "ignore this" 
 	containers := self nextLineAsList.
 	classNames := (self nextLineAsList reject: [:each | each isEmpty])
@@ -3943,7 +3943,6 @@ JadeServer >> sbRemoveClasses [
 			classNames
 				do: [:className | (Rowan packageServiceClass forPackageNamed: packageName) removeClassNamed: className]].
 	^self systemBrowserUpdate
-
 ]
 
 { #category : 'category' }
@@ -4303,7 +4302,7 @@ JadeServer >> sbUpdateClassHierarchy [
 
 { #category : 'category' }
 JadeServer >> sbUpdateClassInfo [
-	| classComment classInfoUpdate |
+	| classInfoUpdate |
 	selectedClass isNil ifTrue: [
 		^self sbClassTemplate. 
 ].
