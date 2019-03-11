@@ -7304,7 +7304,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7402,7 +7402,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7498,7 +7498,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7628,7 +7628,7 @@ RwRowanProjectIssuesTest >> testIssue353_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/353"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7759,8 +7759,8 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_ex
 	"new test case:superclass has new class version ... the subclass has an extension method removed --- simplest case"
 	"https://github.com/dalehenrich/Rowan/issues/393"
 
-	| projectName  packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 oldClass1 oldClass2 oldClass3 newClass1 audit classExtensionDefinition |
+	| projectName  packageName1 packageName2 projectDefinition classDefinition packageDefinition className1  
+		projectSetDefinition audit classExtensionDefinition |
 
 	projectName := 'Issue326'.
 	packageName1 := 'Issue326-Core'.
@@ -7862,7 +7862,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/393"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -7995,7 +7995,7 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 	"https://github.com/dalehenrich/Rowan/issues/393"
 
 	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 class2 class3 oldClass1 oldClass2 oldClass3 newClass1 audit |
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
@@ -8125,8 +8125,8 @@ RwRowanProjectIssuesTest >> testIssue393_new_version_class_with_subclass_with_me
 	"new test case:superclass has new class version ... the subclass has a method removed --- simplest case"
 	"https://github.com/dalehenrich/Rowan/issues/393"
 
-	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 className3 
-		projectSetDefinition class1 oldClass1 oldClass2 oldClass3 newClass1 audit |
+	| projectName  packageName projectDefinition classDefinition packageDefinition className1  
+		projectSetDefinition audit |
 
 	projectName := 'Issue326'.
 	packageName := 'Issue326-Core'.
