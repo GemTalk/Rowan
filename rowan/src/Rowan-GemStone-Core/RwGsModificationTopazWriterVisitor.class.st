@@ -52,6 +52,7 @@ Class {
 	#instVars : [
 		'topazFilenameConfigsMap',
 		'topazFilename',
+		'topazFileHeader',
 		'filenameExtension',
 		'classSymbolDictionaryNames',
 		'classDefinitions',
@@ -243,6 +244,7 @@ RwGsModificationTopazWriterVisitor >> export [
 		| classDefinitionsInOrder classExtensionsInOrder classExtensionsList classDefinitionsList |
 
 		self _setBufferedStreamFor: filename.
+		self bufferedStream nextPutAll: self topazFileHeader.
 
 		classInitializationDefinitions := Set new. "per file record"
 		classDefinitionsList := Set new.
@@ -449,6 +451,18 @@ RwGsModificationTopazWriterVisitor >> repositoryRootPath: aStringOrFileReference
 
 	repositoryRootPath := aStringOrFileReference asFileReference.
 	repositoryRootPath exists ifFalse: [ self error: 'The repository root path must exist: ', repositoryRootPath pathString printString ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> topazFileHeader [
+
+	^ topazFileHeader ifNil: [ '' ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> topazFileHeader: aString [
+
+	topazFileHeader := aString
 ]
 
 { #category : 'accessing' }
