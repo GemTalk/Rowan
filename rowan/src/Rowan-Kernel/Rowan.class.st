@@ -28,6 +28,12 @@ Rowan class >> classServiceClass [
 
 ]
 
+{ #category : 'public tools' }
+Rowan class >> classTools [
+
+	^ self platform classTools
+]
+
 { #category : 'public' }
 Rowan class >> clearAutomaticClassInitializationBlackList [
 
