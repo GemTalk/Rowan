@@ -442,6 +442,16 @@ TonelParser >> separator [
 
 ]
 
+{ #category : 'parsing' }
+TonelParser >> shebang [
+	"look for a '#!' in first two character position and skip to next line if present"
+
+	(stream peekFor: $#) ifFalse: [ ^ nil ].	
+	(stream peekFor: $!) ifFalse: [ ^ nil ].
+	stream  upTo: Character lf.
+
+]
+
 { #category : 'accessing' }
 TonelParser >> start [
 	^ self document
@@ -508,6 +518,7 @@ TonelParser >> type [
 
 { #category : 'parsing' }
 TonelParser >> typeDef [
+	self shebang. "ignore shebang on first line of file if present"
 	^ self newTypeDefinitionFrom: { 
 		self separator.
 		self try: [ self comment ]. 
@@ -521,10 +532,7 @@ TonelParser >> typeDef [
 			typeMetadata keysAndValuesDo: [:key :value |
 				normalizedMetadata at: key asLowercase asSymbol put: value ].
 			normalizedMetadata ] 
-	} 
-	
-		
-
+	}
 ]
 
 { #category : 'private parsing' }
