@@ -32,6 +32,12 @@ RwAbstractReaderWriterVisitor class >> _repositoryPropertyDictFor: packagesRoot 
 ]
 
 { #category : 'private' }
+RwAbstractReaderWriterVisitor >> _packageConvention: aString [
+
+	packageConvention := aString
+]
+
+{ #category : 'private' }
 RwAbstractReaderWriterVisitor >> _readObjectFrom: aFileReference [
 
 	^ self class _readObjectFrom: aFileReference

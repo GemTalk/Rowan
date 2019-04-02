@@ -320,7 +320,7 @@ RwProjectReferenceDefinition >> packageConvention: aString [
 		Rowan			- Class category and method protocol are not overloaded with packaging information
 	"
 
-	#( 'RowanHybrid' 'Monticello' 'Rowan' ) includes: aString
+	(#( 'RowanHybrid' 'Monticello' 'Rowan' ) includes: aString)
 		ifFalse: [ self error: 'Unknown package convention ', aString printString, '. Should be one of: RowanHybrid, Monticello, or Rowan' ].
 	^ self properties at: 'packageConvention' put: aString
 ]

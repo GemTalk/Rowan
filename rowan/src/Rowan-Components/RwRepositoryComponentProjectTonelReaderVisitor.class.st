@@ -7,7 +7,19 @@ Class {
 { #category : 'class file reading' }
 RwRepositoryComponentProjectTonelReaderVisitor class >> readClassFile: file [
 
-	^ self new readClassFile: file inPackage: nil
+	| visitor projectReference projectDefinition packageDefinition |
+	projectReference := RwProjectReferenceDefinition projectName: '___READ_CLASS_Project___' useGit: false.
+	projectDefinition := (RwComponentProjectDefinition newForProjectReference: projectReference)
+		packageConvention: 'Rowan';
+		yourself.
+	packageDefinition := projectDefinition addPackageNamed:  '___READ_CLASS_Package___'.
+	visitor := self new
+		currentProjectDefinition: projectDefinition;
+		currentPackageDefinition: packageDefinition;
+		_packageConvention: 'Rowan';
+		yourself.
+	visitor readClassFile: file inPackage: packageDefinition name.
+	^ projectDefinition
 ]
 
 { #category : 'package reading' }
