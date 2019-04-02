@@ -8,6 +8,13 @@ self deprecated: 'temporary patch .. this is probably the right spot, but it is 
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> defaultSymbolDictName [
+
+self deprecated: 'temporary patch .. this is probably the right spot, but it is worth double checking'.
+	^ 'UserGlobals'
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinition >> methodEnvForPackageNamed: packageName [
 
 	| packageProperties |
@@ -43,8 +50,12 @@ RwProjectReferenceDefinition >> setSymbolDictName: symbolDictName forPackageName
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinition >> symbolDictNameForPackageNamed: packageName [
 
+	| packageProperties |
 self deprecated: 'temporary patch .. see RwGemStoneSpecification>>symbolDictNameForPackageNamed: for full implementation'.
-	^  self packageNameToPlatformPropertiesMap
+	packageProperties := self packageNameToPlatformPropertiesMap
 		at: packageName
-		ifAbsent: [ 'UserGlobals' ].
+		ifAbsent: [ self defaultSymbolDictName ].
+	^ packageProperties
+		at: 'symbolDictName'
+		ifAbsent: [ ^ self defaultSymbolDictName ]
 ]
