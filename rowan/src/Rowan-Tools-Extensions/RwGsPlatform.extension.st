@@ -5,7 +5,7 @@ RwGsPlatform >> classTools [
 
 	"Answer the platform-specific class for class tools"
 
-	^ RwClassTool new
+	^ RwClassTool
 ]
 
 { #category : '*rowan-tools-extensions' }
