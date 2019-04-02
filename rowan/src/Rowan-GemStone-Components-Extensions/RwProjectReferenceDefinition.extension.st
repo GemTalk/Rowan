@@ -1,6 +1,24 @@
 Extension { #name : 'RwProjectReferenceDefinition' }
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> defaultMethodEnv [
+
+self deprecated: 'temporary patch .. this is probably the right spot, but it is worth double checking'.
+	^ 0
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> methodEnvForPackageNamed: packageName [
+
+	| packageProperties |
+self deprecated: 'temporary patch .. see RwGemStoneSpecification>>methodEnvForPackageNamed: for full implementation'.
+	packageProperties :=self packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self defaultMethodEnv ].
+	^ packageProperties at: 'methodEnv' ifAbsent: [ self defaultMethodEnv ]
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinition >> packageNameToPlatformPropertiesMap [
 
 	^ self properties at: 'packageNameToPlatformPropertiesMap' ifAbsentPut: [ Dictionary new ]
@@ -28,5 +46,5 @@ RwProjectReferenceDefinition >> symbolDictNameForPackageNamed: packageName [
 self deprecated: 'temporary patch .. see RwGemStoneSpecification>>symbolDictNameForPackageNamed: for full implementation'.
 	^  self packageNameToPlatformPropertiesMap
 		at: packageName
-		ifAbsent: [ self error: 'not properly implemented' ].
+		ifAbsent: [ 'UserGlobals' ].
 ]

@@ -1,6 +1,12 @@
 Extension { #name : 'RwComponentProjectDefinition' }
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> methodEnvForPackageNamed: packageName [
+
+	^self projectRef methodEnvForPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwComponentProjectDefinition >> register [
 
 	Rowan image 

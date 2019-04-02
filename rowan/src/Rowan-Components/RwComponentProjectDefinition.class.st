@@ -418,7 +418,8 @@ RwComponentProjectDefinition >> repositoryRootPath [
 { #category : 'temporary compat' }
 RwComponentProjectDefinition >> specification [
 
-	^ self shouldNotImplement: #specification
+self deprecated: 'temporary patch .. sender should be replaced with projectRef'.
+	^ self projectRef asSpecification
 ]
 
 { #category : 'properties' }
