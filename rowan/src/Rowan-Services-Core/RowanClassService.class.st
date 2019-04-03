@@ -756,20 +756,24 @@ RowanClassService >> renameCategoryFrom: old to: new [
 
 { #category : 'client commands' }
 RowanClassService >> renameClass: oldClassName to: newClassName [
-	| references |
+	| references newMethods |
+	newMethods := Array new. 
 	Rowan projectTools browser renameClassNamed: oldClassName to: newClassName.
 	name := newClassName. 
-	references := ClassOrganizer new update referencesTo: oldClassName asSymbol.
+	organizer := ClassOrganizer new. 
+	references := organizer update referencesTo: oldClassName asSymbol.
 	1 to: references first size do:[:index |
-		| method offset newSource |
+		| method offset newSource compileResult |
 		method := references first at: index. 
 		newSource := method sourceString.
 		offset := 1. 
 		[(offset := newSource findString: oldClassName startingAt: offset) = 0] whileFalse:[
 			newSource := newSource copyReplaceFrom: offset to: offset + oldClassName size - 1 with: newClassName. 
 		].
-		method inClass rwCompileMethod: newSource category: (method inClass categoryOfSelector: method selector) asSymbol.
+		compileResult := method inClass rwCompileMethod: newSource category: (method inClass categoryOfSelector: method selector) asSymbol.
+		newMethods add: (RowanMethodService forGsNMethod: compileResult organizer: organizer).
 		].
+	RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods).
 ]
 
 { #category : 'rowan' }
