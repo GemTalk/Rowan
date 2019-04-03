@@ -7,20 +7,29 @@ Class {
 { #category : 'class file reading' }
 RwRepositoryComponentProjectTonelReaderVisitor class >> readClassFile: file [
 
+	^ self readClassFiles: { file }
+]
+
+{ #category : 'class file reading' }
+RwRepositoryComponentProjectTonelReaderVisitor class >> readClassFiles: fileArray [
+
 	| visitor projectReference projectDefinition packageDefinition packageName |
 	packageName :=  '___READ_CLASS_Package___'.
 	projectReference := RwProjectReferenceDefinition projectName: '___READ_CLASS_Project___' useGit: false.
 	projectDefinition := (RwComponentProjectDefinition newForProjectReference: projectReference)
 		packageConvention: 'Rowan';
-		setSymbolDictName: 'Globals' forPackageNamed: packageName;
 		yourself.
-	packageDefinition := projectDefinition addPackageNamed:  packageName.
-	visitor := self new
-		currentProjectDefinition: projectDefinition;
-		currentPackageDefinition: packageDefinition;
-		_packageConvention: 'Rowan';
-		yourself.
-	visitor readClassFile: file inPackage: packageDefinition name.
+	1 to: fileArray size do: [:index |
+		| file |
+		file := fileArray at: index.
+		projectDefinition setSymbolDictName: 'Globals' forPackageNamed: packageName, '_', index asString.
+		packageDefinition := projectDefinition addPackageNamed:  packageName, '_', index asString.
+		visitor := self new
+			currentProjectDefinition: projectDefinition;
+			currentPackageDefinition: packageDefinition;
+			_packageConvention: 'Rowan';
+			yourself.
+		visitor readClassFile: file inPackage: packageDefinition name ].
 	^ projectDefinition
 ]
 

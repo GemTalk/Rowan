@@ -7,6 +7,36 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'class directory reading' }
+RwRepositoryComponentProjectFiletreeReaderVisitor class >> readClassDirectories: directoryArray [
+
+	| visitor projectReference projectDefinition packageDefinition packageName |
+	packageName :=  '___READ_CLASS_Package___'.
+	projectReference := RwProjectReferenceDefinition projectName: '___READ_CLASS_Project___' useGit: false.
+	projectDefinition := (RwComponentProjectDefinition newForProjectReference: projectReference)
+		packageConvention: 'Rowan';
+		setSymbolDictName: 'Globals' forPackageNamed: packageName;
+		yourself.
+	1 to: directoryArray size do: [:index |
+		| directory |
+		directory := directoryArray at: index.
+		projectDefinition setSymbolDictName: 'Globals' forPackageNamed: packageName, '_', index asString.
+		packageDefinition := projectDefinition addPackageNamed:  packageName, '_', index asString.
+		visitor := self new
+			currentProjectDefinition: projectDefinition;
+			currentPackageDefinition: packageDefinition;
+			_packageConvention: 'Rowan';
+			yourself.
+		visitor readClassDirectory: directory inPackage: packageDefinition name ].
+	^ projectDefinition
+]
+
+{ #category : 'class directory reading' }
+RwRepositoryComponentProjectFiletreeReaderVisitor class >> readClassDirectory: directory [
+
+	^ self readClassDirectories: {directory}
+]
+
 { #category : 'private' }
 RwRepositoryComponentProjectFiletreeReaderVisitor >> _filetreeRepositoryPropertyDictFor: packagesRoot [
 
@@ -26,9 +56,10 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> packageExtension [
 { #category : 'class reading' }
 RwRepositoryComponentProjectFiletreeReaderVisitor >> readClassDirectory: classDirectory inPackage: packageName [
 
-	| classProperties classComment normalizedMetadata classDef |
-	classProperties :=  self _readObjectFrom: classDirectory / 'properties' , 'json'.
-	classComment := (classDirectory / 'README' , 'md') contents.
+	| classDirectoryReference classProperties classComment normalizedMetadata classDef |
+	classDirectoryReference := classDirectory asFileReference.
+	classProperties :=  self _readObjectFrom: classDirectoryReference / 'properties' , 'json'.
+	classComment := (classDirectoryReference / 'README' , 'md') contents.
 	normalizedMetadata := Dictionary new.
 	classProperties keysAndValuesDo: [:key :value |
 		normalizedMetadata at: key asLowercase asSymbol put: value ].
@@ -44,7 +75,7 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> readClassDirectory: classDi
 	(currentProjectDefinition packageNamed: packageName)
 		addClassDefinition: currentClassDefinition.
 
-	self readMethodDirectories: classDirectory forClassDefinition: classDef inPackage: packageName
+	self readMethodDirectories: classDirectoryReference forClassDefinition: classDef inPackage: packageName
 ]
 
 { #category : 'class reading' }
