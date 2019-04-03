@@ -655,9 +655,7 @@ typeDef
 			typeMetadata keysAndValuesDo: [:key :value |
 				normalizedMetadata at: key asLowercase asSymbol put: value ].
 			normalizedMetadata ] 
-	} 
-	
-		
+	}
 %
 
 category: 'private parsing'
