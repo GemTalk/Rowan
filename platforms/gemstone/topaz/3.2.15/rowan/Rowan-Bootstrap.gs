@@ -614,7 +614,7 @@ currentOrNil
     value: #('GemStone-Interactions-Core' 'Rowan-Url-3215' 
       'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 'Rowan-Core-Definitions-Extensions'
       'Rowan-Services-Core' 'Rowan-Url-Extensions'
-      'Rowan-Services-Extensions'
+      'Rowan-Services-Extensions' 'AST-Core' 'AST-Kernel-Tests-Core' 'AST-Tests-Core'
 	).	"Populate with Rowan implementation classes"
 %
   commit
@@ -665,7 +665,7 @@ currentOrNil
     value: 'Globals'
     value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel' 
       'Rowan-Tools-Kernel' 
-      'Rowan-GemStone-3215'
+      'Rowan-GemStone-3215' 'AST-Kernel-Core'
 	).		"Extension methods for GemStone kernel classes"
 %
   commit
