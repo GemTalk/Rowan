@@ -763,17 +763,24 @@ RowanClassService >> renameClass: oldClassName to: newClassName [
 	organizer := ClassOrganizer new. 
 	references := organizer update referencesTo: oldClassName asSymbol.
 	1 to: references first size do:[:index |
-		| method offset newSource compileResult |
+		| method newSource compileResult |
 		method := references first at: index. 
-		newSource := method sourceString.
-		offset := 1. 
-		[(offset := newSource findString: oldClassName startingAt: offset) = 0] whileFalse:[
-			newSource := newSource copyReplaceFrom: offset to: offset + oldClassName size - 1 with: newClassName. 
-		].
+		newSource := self replaceSubString: oldClassName in: method sourceString with: newClassName.
 		compileResult := method inClass rwCompileMethod: newSource category: (method inClass categoryOfSelector: method selector) asSymbol.
 		newMethods add: (RowanMethodService forGsNMethod: compileResult organizer: organizer).
 		].
 	RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods).
+]
+
+{ #category : 'private' }
+RowanClassService >> replaceSubString: old in: string with: new [
+	| offset newSource |
+	newSource := string. 
+	offset := 1. 	
+	[(offset := newSource findString: old startingAt: offset) = 0] whileFalse:[
+		newSource := newSource copyReplaceFrom: offset to: offset + old size - 1 with: new. 
+	].
+	^newSource
 ]
 
 { #category : 'rowan' }
