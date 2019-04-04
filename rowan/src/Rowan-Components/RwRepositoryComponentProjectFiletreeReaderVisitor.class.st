@@ -32,9 +32,38 @@ RwRepositoryComponentProjectFiletreeReaderVisitor class >> readClassDirectories:
 ]
 
 { #category : 'class directory reading' }
+RwRepositoryComponentProjectFiletreeReaderVisitor class >> readClassDirectories: directoryArray  projectName: projectName packageName: packageName [
+
+	| visitor projectReference projectDefinition packageDefinition  |
+	projectReference := RwProjectReferenceDefinition projectName: projectName useGit: false.
+	projectDefinition := (RwComponentProjectDefinition newForProjectReference: projectReference)
+		packageConvention: 'Rowan';
+		setSymbolDictName: 'Globals' forPackageNamed: packageName;
+		yourself.
+	1 to: directoryArray size do: [:index |
+		| directory |
+		directory := directoryArray at: index.
+		projectDefinition setSymbolDictName: 'Globals' forPackageNamed: packageName, '_', index asString.
+		packageDefinition := projectDefinition addPackageNamed:  packageName, '_', index asString.
+		visitor := self new
+			currentProjectDefinition: projectDefinition;
+			currentPackageDefinition: packageDefinition;
+			_packageConvention: 'Rowan';
+			yourself.
+		visitor readClassDirectory: directory inPackage: packageDefinition name ].
+	^ projectDefinition
+]
+
+{ #category : 'class directory reading' }
 RwRepositoryComponentProjectFiletreeReaderVisitor class >> readClassDirectory: directory [
 
 	^ self readClassDirectories: {directory}
+]
+
+{ #category : 'class directory reading' }
+RwRepositoryComponentProjectFiletreeReaderVisitor class >> readClassDirectory: directory projectName: projectName packageName: packageName [
+
+	^ self readClassDirectories: {directory} projectName: projectName packageName: packageName
 ]
 
 { #category : 'private' }
