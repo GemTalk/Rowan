@@ -779,6 +779,7 @@ RowanClassService >> replaceSubString: old in: string with: new [
 	offset := 1. 	
 	[(offset := newSource findString: old startingAt: offset) = 0] whileFalse:[
 		newSource := newSource copyReplaceFrom: offset to: offset + old size - 1 with: new. 
+		offset := offset + new size. 
 	].
 	^newSource
 ]
