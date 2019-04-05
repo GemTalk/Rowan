@@ -54,7 +54,7 @@ RwProjectReferenceDefinition >> symbolDictNameForPackageNamed: packageName [
 self deprecated: 'temporary patch .. see RwGemStoneSpecification>>symbolDictNameForPackageNamed: for full implementation'.
 	packageProperties := self packageNameToPlatformPropertiesMap
 		at: packageName
-		ifAbsent: [ self defaultSymbolDictName ].
+		ifAbsent: [ ^ self defaultSymbolDictName ].
 	^ packageProperties
 		at: 'symbolDictName'
 		ifAbsent: [ ^ self defaultSymbolDictName ]
