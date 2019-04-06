@@ -1,0 +1,23 @@
+run
+
+	| projectDefinition projectSetDefinition projectSetModification visitor topazFileNameMap repositoryRoot |
+	repositoryRoot := '/home/dhenrich/rogue/_homes/rogue/_home/server/stones/rowan_dev_350_g/git/Rowan/platforms/gemstone/topaz/3.5.0/project_src' asFileReference.
+	repositoryRoot ensureCreateDirectory.
+	repositoryRoot deleteAllChildren.
+	{ 'Cypress' . 'FileSystemGs' . 'Rowan' . 'Tonel' . 'STON' } do: [:projectName |
+		projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+		projectSetDefinition := RwProjectSetDefinition new.
+		projectSetDefinition addDefinition: projectDefinition.
+		projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+		topazFileNameMap := Dictionary new.
+		topazFileNameMap at: projectName  put: {}.
+		projectDefinition packageNames do: [:packageName |
+			((#('Rowan-Tests'  'Rowan-Services-Tests' ) includes: packageName) and: [ projectName = 'Rowan'])
+				ifTrue: [  (topazFileNameMap at: 'Rowan-Tests' ifAbsentPut: [{} ]) add: packageName ]
+				ifFalse: [ (topazFileNameMap at: projectName) add: packageName ] ].
+		visitor := RwGsModificationTopazWriterVisitor new
+			repositoryRootPath: repositoryRoot;
+			topazFilenamePackageNamesMap: topazFileNameMap;
+			yourself.
+		visitor visit: projectSetModification ].
+%
