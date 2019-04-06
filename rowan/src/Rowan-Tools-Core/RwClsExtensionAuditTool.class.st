@@ -32,7 +32,9 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 		ifNil: [self errorLog: res  add: aLoadedClassExtension name -> ' Class does not exists for loaded class '] 
 		ifNotNil: [:aBehavior ||categories | 
 					
-				categories := (aBehavior _baseCategorys: 0) keys.
+				categories := (aBehavior _baseCategorys: 0)
+					ifNil: [ #() ]
+					ifNotNil: [:catDict | catDict keys ].
 				(categories	
 					detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
 						ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
@@ -41,7 +43,6 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 			].
 
 
-			categories := (aBehavior class _baseCategorys: 0) keys.
 			(categories
 				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
 					ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
@@ -59,5 +60,4 @@ RwClsExtensionAuditTool >> auditLoadedClassExtension: aLoadedClassExtension [
 				]
 		].
 		^res
-
 ]

@@ -88,10 +88,13 @@ RwProjectAuditToolTest >> _auditLoadedClassExtensionBlock [
 				ar addAll: { 'Class does not exists '-> aLoadedClassExtension name }.
 				GsFile gciLogServer: 'Class does not exist ', aLoadedClassExtension name ]
 			ifNotNil: [ :aBehavior |
-				| selectors extensionCategoryName |
+				| selectors extensionCategoryName categories |
 				extensionCategoryName := '*', aLoadedClassExtension loadedPackage name asLowercase.
 
-				((aBehavior _baseCategorys: 0) keys
+				categories := (aBehavior _baseCategorys: 0)
+					ifNil: [ #() ]
+					ifNotNil: [:catDict | catDict keys ].
+				(categories
 						detect: [:each | each equalsNoCase: extensionCategoryName ]
 						ifNone: [ ])
 					ifNotNil: [:categoryName |
@@ -123,7 +126,7 @@ RwProjectAuditToolTest >> _auditLoadedClassExtensionBlock [
 								GsFile gciLogServer: 'expected methods in category ', extensionCategoryName printString, 'for class ', aLoadedClassExtension name printString ] 
 				].
 
-				((aBehavior class _baseCategorys: 0) keys
+				(categories
 						detect: [:each | each equalsNoCase: extensionCategoryName ]
 						ifNone: [ ])
 					ifNotNil: [:categoryName |
@@ -165,7 +168,6 @@ RwProjectAuditToolTest >> _auditLoadedClassExtensionBlock [
 								ar addAll: { aLoadedMethod name -> 'Missing compiled class method: ' }.
 								GsFile gciLogServer: 'Missing compiled  class method ', loadedClass name, ' class>>', aLoadedMethod name ] ] ].
 		ar ].
-
 ]
 
 { #category : 'tests' }
