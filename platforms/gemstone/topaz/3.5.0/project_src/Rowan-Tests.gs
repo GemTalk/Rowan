@@ -8731,7 +8731,7 @@ _validateExpectedMonticelloConventionFailure_389_A: audit packageNames: packageN
 	unexpectedFailures := ((audit at: (packageNames at: 1)) at: className)
 		reject: [:each | (each value = 'Class category has changed in compiled class v loaded class')
 			or: [ (each value = 'Missing instance method extension category ') or: [ (each value = 'Missing class method extension category ')
-			or: [ (each value = 'Missing loaded instance method. ') or: [ (each value = 'Missing loaded classmethod ') ]] ] ] ].
+			or: [ (each value = 'Missing loaded instance method. ') or: [ (each value = 'Missing loaded class method ') ]] ] ] ].
 	self assert: unexpectedFailures isEmpty
 %
 
@@ -16926,7 +16926,7 @@ _auditLoadedClassBlock
 					((aBehavior class categoryOfSelector: e) first == $*) or: [
 						aLoadedClass includesSelector: e isMeta: true]]) 
 							do: [:aSelector |
-								ar addAll: {aSelector  -> 'Missing loaded classmethod ' }.
+								ar addAll: {aSelector  -> 'Missing loaded class method ' }.
 								GsFile gciLogServer: 'Missing loaded method ', aLoadedClass name, ' class>>', aSelector ].
 				"look for methods removed outside of Rowan API"
 				aLoadedClass 
@@ -16938,7 +16938,7 @@ _auditLoadedClassBlock
 					loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
 						(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil) 
 							ifNil: [
-								ar addAll: { aLoadedMethod name  -> 'Missing compiled classmethod ' }.
+								ar addAll: { aLoadedMethod name  -> 'Missing compiled class method ' }.
 								GsFile gciLogServer: 'Missing compiled method ', loadedClass name, ' class>>', aLoadedMethod name ] ] ].
 		ar ].
 %

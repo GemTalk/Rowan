@@ -25,7 +25,7 @@
 					]
 				}
 			},
-		[ 'gs3.2.[15-]' ] : {
+		[ 'gs3.2.[15-]', 'gs3.[3-]' ] : {
       'core': {
 				#packageNames : [
 					'Rowan-GemStone-3215'

@@ -21826,15 +21826,16 @@ _auditClassSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
 "audit a selector. verify compiled method matches loaded method reference return nil if no problem found"
 
 	^(aLoadedClass loadedMethodAt: aSelector isMeta:  true)
-			ifNil: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded classmethod '.]
+			ifNil: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded class method '.]
 			ifNotNil: [:aLoadedMethod |
 				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle
 						ifTrue: [
-							((aLoadedMethod propertyAt: 'protocol') equalsNoCase: (aBehavior categoryOfSelector:  aSelector ) ) 
+							| expected actual |
+							((expected := aLoadedMethod propertyAt: 'protocol') equalsNoCase: (actual := aBehavior categoryOfSelector:  aSelector ) ) 
 								ifTrue: [nil]
-								ifFalse: [aLoadedClass name , '#', (aLoadedMethod propertyAt: 'protocol') -> 'Missing class method category for loaded class']
+								ifFalse: [aLoadedClass name , '#', (aLoadedMethod propertyAt: 'protocol') -> 'Missing class method category for loaded class (expected: ', expected printString, ' actual: ', actual printString, ')' ]
 						] 
-						ifFalse: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Compiled classmethod is not identical to loaded class method ']
+						ifFalse: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Compiled class method is not identical to loaded class method '] 
 			]
 %
 
@@ -21910,9 +21911,10 @@ _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
 			ifNotNil: [:aLoadedMethod |
 				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle
 						ifTrue: [
-							((aLoadedMethod propertyAt: 'protocol') equalsNoCase: (aBehavior categoryOfSelector:   aSelector ) ) 
+							| expected actual |
+							((expected := aLoadedMethod propertyAt: 'protocol') equalsNoCase: (actual := aBehavior categoryOfSelector:   aSelector ) ) 
 								ifTrue: [nil]
-								ifFalse: [aLoadedClass name , '#', (aLoadedMethod propertyAt: 'protocol') -> 'Missing instance method category for loaded class']
+								ifFalse: [aLoadedClass name , '#', (aLoadedMethod propertyAt: 'protocol') -> 'Missing instance method category for loaded class (expected: ', expected printString, ' actual: ', actual printString, ')']
 						] 
 						ifFalse: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Compiled instance method is not identical to loaded method. ']
 			]
