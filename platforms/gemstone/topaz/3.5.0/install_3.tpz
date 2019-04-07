@@ -9,7 +9,7 @@
 # Install FileSystem, Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
 #  methods into the correct package structure
   run
- 	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo |
+ 	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo auditFailures |
 	projectSetDefinition := RwProjectSetDefinition new.
 	loadedProjectInfo := Dictionary new.
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
@@ -107,6 +107,7 @@
 		loadedProject markNotDirty.
 		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
 
+	auditFailures := {}.
 	projectSetDefinition projects
 		do: [:projectDefinition |
 			| audit projectName |
@@ -114,7 +115,10 @@
 			GsFile gciLogServer: '---Auditing project: ', projectName printString.
 			audit := Rowan projectTools audit auditForProjectNamed: projectName.
 			GsFile gciLogServer: '	-- audit finished '. 
-			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ]
+			audit isEmpty ifFalse: [ auditFailures add: projectName ] ].
+	auditFailures isEmpty 
+		ifFalse: [ 
+			self error: 'Post load Rowan audit failed for projects ', auditFailures printString ] 
 	
 %
   commit
