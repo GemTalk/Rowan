@@ -46226,7 +46226,7 @@ rowanSymbolDictionaryRegistry
 	^ self at: #'RwSymbolDictionaryRegistry' ifAbsent: [  ]
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-35x'
 method: SymbolDictionary
 _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 
@@ -46265,7 +46265,6 @@ _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 				_subclass: oldClassName asString 
 				instVarNames: oldClass instVarNames
 				format: oldClass format  
-				constraints: #() 
 				classVars: oldClass classVarNames
 				classInstVars: oldClass class instVarNames
 				poolDictionaries: #()
