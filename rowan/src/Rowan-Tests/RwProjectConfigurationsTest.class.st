@@ -106,10 +106,11 @@ RwProjectConfigurationsTest >> _expectedLoadPackageNames_gs3_3_0 [
 RwProjectConfigurationsTest >> _expectedRowan_LoadPackageNames [
 
 	^ (self _expectedLoadPackageNames_gemstone , 
-			#('Rowan-GemStone-3215' 'Rowan-Url-3215' 'GemStone-Interactions-Core' 'GemStone-Interactions-Kernel' 'Rowan-Url-Extensions' 'Rowan-Kernel' 
+			#('Rowan-GemStone-3215' 'Rowan-Url-3215' 'GemStone-Interactions-Core' 
+				'GemStone-Interactions-Kernel' 'Rowan-Url-Extensions' 'Rowan-Kernel' 
 				'Rowan-GemStone-Specifications' 'Rowan-Core-Definitions-Extensions' 
-				'Rowan-GemStone-Definitions' 'Rowan-Cypress-Definitions' ) ) sort
-
+				'Rowan-GemStone-Definitions' 'Rowan-Cypress-Definitions' 
+				'Rowan-GemStone-Loader32x'  'Rowan-GemStone-32x' ) ) sort
 ]
 
 { #category : 'private' }

@@ -82,8 +82,7 @@ Class >> _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpt
 ]
 
 { #category : '*rowan-gemstone-32x' }
-Class >> 
-_subclass: className instVarNames: anArrayOfInstvarNames format: theFormat constraints: theConstraints classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray [
+Class >> _subclass: className instVarNames: anArrayOfInstvarNames format: theFormat constraints: theConstraints classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray [
   "The preferred private subclass creation method.
  optionsArray is an Array of Symbols containing zero or more of  
    #noInheritOptions,  #subclassesDisallowed, #disallowGciStore, #modifiable , 
@@ -185,7 +184,7 @@ _subclass: className instVarNames: anArrayOfInstvarNames format: theFormat const
   theHist := aClassHistory.
   theHist ifNil: [ theHist := ClassHistory new name: className ].
   theHist notEmpty
-    ifTrue: [ result category: theHist current _category ].
+    ifTrue: [ result category: theHist current category ].
   theHist add: result.
   result classHistory: theHist.
   result timeStamp: DateTime now.
