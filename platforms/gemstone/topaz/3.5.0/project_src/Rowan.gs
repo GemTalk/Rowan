@@ -21941,25 +21941,24 @@ auditLoadedClassExtension: aLoadedClassExtension
 		ifNil: [self errorLog: res  add: aLoadedClassExtension name -> ' Class does not exists for loaded class '] 
 		ifNotNil: [:aBehavior ||categories | 
 					
-				categories := (aBehavior _baseCategorys: 0)
-					ifNil: [ #() ]
-					ifNotNil: [:catDict | catDict keys ].
-				(categories	
-					detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
-						ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
-						ifNil: [aLoadedClassExtension loadedInstanceMethods notEmpty ifTrue: [
-							self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing instance method extension category ']
-			].
+			categories := (aBehavior _baseCategorys: 0)
+				ifNil: [ #() ]
+				ifNotNil: [:catDict | catDict keys ].
+			(categories	
+				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
+					ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
+					ifNil: [aLoadedClassExtension loadedInstanceMethods notEmpty ifTrue: [
+						self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing instance method extension category ' ] ].
 
-
+			categories := (aBehavior class _baseCategorys: 0)
+				ifNil: [ #() ]
+				ifNotNil: [:catDict | catDict keys ].
 			(categories
 				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
 					ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
 					ifNil: [aLoadedClassExtension loadedClassMethods notEmpty ifTrue: [
-						self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing class method extension category ']
-			].
+						self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing class method extension category ' ] ].
 
-		
 			aLoadedClassExtension 
 				loadedInstanceMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
 					(self _auditLoadedInstanceMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:x | self errorLog: res add: x]

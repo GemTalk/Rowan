@@ -16993,13 +16993,16 @@ _auditLoadedClassExtensionBlock
 								GsFile gciLogServer: 'expected methods in category ', extensionCategoryName printString, 'for class ', aLoadedClassExtension name printString ] 
 				].
 
+				categories := (aBehavior class _baseCategorys: 0)
+					ifNil: [ #() ]
+					ifNotNil: [:catDict | catDict keys ].
 				(categories
 						detect: [:each | each equalsNoCase: extensionCategoryName ]
 						ifNone: [ ])
 					ifNotNil: [:categoryName |
 						selectors := aBehavior class selectorsIn: categoryName.
 						(selectors reject: [:e | aLoadedClassExtension includesSelector: e isMeta: true]) do: [:aSelector |
-								ar addAll: {aSelector -> 'Missing loaded extensions classmethod: ' }.
+								ar addAll: {aSelector -> 'Missing loaded extensions class method: ' }.
 								GsFile gciLogServer: 'Missing loaded extension method ', aLoadedClassExtension name, ' class>>', aSelector ].
 						selectors do: [:sel |
 							| cMeth lMeth |
