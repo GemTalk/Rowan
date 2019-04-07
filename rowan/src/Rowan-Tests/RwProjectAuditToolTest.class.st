@@ -59,7 +59,7 @@ RwProjectAuditToolTest >> _auditLoadedClassBlock [
 					((aBehavior class categoryOfSelector: e) first == $*) or: [
 						aLoadedClass includesSelector: e isMeta: true]]) 
 							do: [:aSelector |
-								ar addAll: {aSelector  -> 'Missing loaded classmethod ' }.
+								ar addAll: {aSelector  -> 'Missing loaded class method ' }.
 								GsFile gciLogServer: 'Missing loaded method ', aLoadedClass name, ' class>>', aSelector ].
 				"look for methods removed outside of Rowan API"
 				aLoadedClass 
@@ -71,10 +71,9 @@ RwProjectAuditToolTest >> _auditLoadedClassBlock [
 					loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
 						(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil) 
 							ifNil: [
-								ar addAll: { aLoadedMethod name  -> 'Missing compiled classmethod ' }.
+								ar addAll: { aLoadedMethod name  -> 'Missing compiled class method ' }.
 								GsFile gciLogServer: 'Missing compiled method ', loadedClass name, ' class>>', aLoadedMethod name ] ] ].
 		ar ].
-
 ]
 
 { #category : 'tests' }
