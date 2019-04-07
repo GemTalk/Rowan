@@ -6,24 +6,6 @@
   set u SystemUser p swordfish
   login
 
-#	Create Rowan symbol dictionaris
-
-  run
-	| session symbolList |
-	session := GsCurrentSession currentSession.
-	symbolList := session symbolList.
-	#( #RowanKernel #RowanLoader #RowanTools)
-		do: [:symbolName | 
-			| newDict size |
-			newDict := SymbolDictionary new
-				name: symbolName;
-				objectSecurityPolicy: symbolList objectSecurityPolicy;
-				yourself.
-			size := System myUserProfile symbolList size.
-			System myUserProfile insertDictionary: newDict at: size + 1 ].
-%
-  commit
-
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src/FileSystemGs.gs
   commit
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src/STON.gs
@@ -34,8 +16,10 @@
   commit
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src/Rowan.gs
   commit
+#  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src/Rowan-Tests.gs
+  commit
 
   logout
-#  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/bootstrapRowanSupport.topaz
+
   errorCount
 

@@ -19770,15 +19770,12 @@ export
 			(packageNames includes: packageName)
 				ifTrue: [ classDefinitionsList add: (self classDefinitions at: className) ] ].
 
-
 		classDefinitionsInOrder := (CypressGsGeneralDependencySorter
 			on: classDefinitionsList
 			dependsOn: [:candidate | candidate superclassName]
 			dependent: [:candidate | candidate name]) inOrder.
-		self exportClassDefinitions: classDefinitionsInOrder.
-		self bufferedStream flush.
-		self exportMethodDefinitions: classDefinitionsInOrder.
-		self bufferedStream flush.
+		self exportClassDefinitions: classDefinitionsInOrder;
+			exportMethodDefinitions: classDefinitionsInOrder.
 
 		"consolidate the classExtensions for a class from multiple packages into a single definition"
 		classExtensionsList := Set new. 
@@ -19805,7 +19802,6 @@ export
 					classExtensionsList add: def ] ].
 
 		classExtensionsInOrder := classExtensionsList sort: [:a :b | a name <= b name ].
-		self bufferedStream flush.
 		self
 			exportExtensionMethodDefinitions: classExtensionsInOrder.
 
@@ -20143,8 +20139,7 @@ _setBufferedStreamFor: filename extension: extension
 
 	| encodedStream |
 	encodedStream := (self repositoryRootPath / filename, extension) writeStreamEncoded: 'utf8'.
-	bufferedStream := ZnBufferedWriteStream on: encodedStream.
-	bufferedStream sizeBuffer: bufferedStream defaultBufferSize * 100
+	bufferedStream := ZnBufferedWriteStream on: encodedStream
 %
 
 category: 'private exporting'
@@ -22319,7 +22314,7 @@ adoptClassNamed: className classExtension: classExtension instanceSelectors: ins
 	"Ignore packaged instance and class methods"
 
 	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
-		theBehavior |
+		theBehavior actualPackageSymDictName |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
@@ -22328,17 +22323,19 @@ adoptClassNamed: className classExtension: classExtension instanceSelectors: ins
 	packageSymDictName := (gemstoneSpec symbolDictNameForPackageNamed: packageName) asSymbol.
 
 	theClass := Rowan globalNamed: className.
+	theClass ifNil: [ self error: 'The class ', className printString, ' is not present in the current user''s symbol list' ].
 	(Rowan image symbolList dictionariesAndSymbolsOf: theClass)
 		do: [:ar |
-			(ar at: 1) name == packageSymDictName
+			actualPackageSymDictName := (ar at: 1) name.
+			actualPackageSymDictName == packageSymDictName
 				ifTrue: [ theSymbolDictionary := (ar at: 1). ] ].
 	theSymbolDictionary 
 		ifNil: [ 
 			self error: 'The symbol dictionary for class ', 
 				className printString, 
-				' does not match the symbol dictionary for the package ', 
+				' (', actualPackageSymDictName, ') does not match the expected symbol dictionary for the package ', 
 				packageName printString, 
-				'. REQUIRED.'.]. 
+				'. (', packageSymDictName, '). REQUIRED.'.]. 
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
