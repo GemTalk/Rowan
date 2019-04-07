@@ -55,7 +55,15 @@
 		[ 'gs3.2.[15-]', 'gs3.[3-]' ] : {
       'core': {
 				#packageNames : [
-					'Rowan-Url-3215'
+					'Rowan-Url-3215',
+					'Rowan-GemStone-Loader32x'
+					]
+				}
+			},
+		[ 'gs3.[5-]' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-Loader35x'
 					]
 				}
 			}
@@ -64,6 +72,8 @@
 		'gemstone' : {
 			'SystemUser' : {
 				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Loader32x' : { 'symbolDictName' : 'RowanLoader' },
+					'Rowan-GemStone-Loader35x' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-GemStone-Loader-Deprecated' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-Definitions' : { 'symbolDictName' : 'RowanTools' },
