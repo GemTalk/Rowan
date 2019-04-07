@@ -27,7 +27,7 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 	"Ignore packaged instance and class methods"
 
 	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
-		theBehavior |
+		theBehavior actualPackageSymDictName |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
@@ -36,17 +36,19 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 	packageSymDictName := (gemstoneSpec symbolDictNameForPackageNamed: packageName) asSymbol.
 
 	theClass := Rowan globalNamed: className.
+	theClass ifNil: [ self error: 'The class ', className printString, ' is not present in the current user''s symbol list' ].
 	(Rowan image symbolList dictionariesAndSymbolsOf: theClass)
 		do: [:ar |
-			(ar at: 1) name == packageSymDictName
+			actualPackageSymDictName := (ar at: 1) name.
+			actualPackageSymDictName == packageSymDictName
 				ifTrue: [ theSymbolDictionary := (ar at: 1). ] ].
 	theSymbolDictionary 
 		ifNil: [ 
 			self error: 'The symbol dictionary for class ', 
 				className printString, 
-				' does not match the symbol dictionary for the package ', 
+				' (', actualPackageSymDictName, ') does not match the expected symbol dictionary for the package ', 
 				packageName printString, 
-				'. REQUIRED.'.]. 
+				'. (', packageSymDictName, '). REQUIRED.'.]. 
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
@@ -80,7 +82,6 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 			for: theBehavior 
 			protocol: (theBehavior categoryOfSelector: methodSelector) 
 			toPackageNamed: packageName ].
-
 ]
 
 { #category : 'smalltalk api' }
