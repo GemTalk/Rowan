@@ -18951,6 +18951,8 @@ category: 'private'
 method: RwProjectTopazWriterTest
 _expectedGsTopazWriterFileContents_A
 
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
 
 doit
@@ -18966,7 +18968,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Object
@@ -18981,7 +18983,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Issue361Class1
@@ -18996,7 +18998,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class2''
 
@@ -19005,7 +19007,7 @@ true.
 category: ''accessing''
 method: Issue361Class2
 method3 ^3
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class1''
 
@@ -19014,7 +19016,7 @@ method3 ^3
 category: ''accessing''
 classmethod: Issue361Class1
 method2 ^2
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class3''
 
@@ -19023,7 +19025,7 @@ method2 ^2
 category: ''accessing''
 classmethod: Issue361Class3
 method4 ^4
-%
+', percent, '
 
 ! Class extensions for ''Issue361Class1''
 
@@ -19032,7 +19034,7 @@ method4 ^4
 category: ''*issue361-extension''
 method: Issue361Class1
 method1 ^1
-%
+', percent, '
 
 '
 %
@@ -19041,6 +19043,8 @@ category: 'private'
 method: RwProjectTopazWriterTest
 _expectedGsTopazWriterFileContents_B
 
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
 
 doit
@@ -19056,7 +19060,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Object
@@ -19071,7 +19075,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Issue361Class1
@@ -19086,7 +19090,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class2''
 
@@ -19095,7 +19099,7 @@ true.
 category: ''accessing''
 method: Issue361Class2
 method3 ^3
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class1''
 
@@ -19104,7 +19108,7 @@ method3 ^3
 category: ''accessing''
 classmethod: Issue361Class1
 method2 ^2
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class3''
 
@@ -19113,7 +19117,7 @@ method2 ^2
 category: ''accessing''
 classmethod: Issue361Class3
 method4 ^4
-%
+', percent, '
 
 ! Class extensions for ''Issue361Class1''
 
@@ -19122,12 +19126,12 @@ method4 ^4
 category: ''*issue361-extension1''
 method: Issue361Class1
 method1 ^1
-%
+', percent, '
 
 category: ''*issue361-extension2''
 method: Issue361Class1
 method5 ^5
-%
+', percent, '
 
 '
 %
@@ -19136,6 +19140,8 @@ category: 'private'
 method: RwProjectTopazWriterTest
 _expectedGsTopazWriterFileContents_C_Issue361Core
 
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
 
 doit
@@ -19151,7 +19157,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Object
@@ -19166,7 +19172,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Issue361Class1
@@ -19181,7 +19187,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class2''
 
@@ -19190,7 +19196,7 @@ true.
 category: ''accessing''
 method: Issue361Class2
 method3 ^3
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class1''
 
@@ -19199,7 +19205,7 @@ method3 ^3
 category: ''accessing''
 classmethod: Issue361Class1
 method2 ^2
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class3''
 
@@ -19208,7 +19214,7 @@ method2 ^2
 category: ''accessing''
 classmethod: Issue361Class3
 method4 ^4
-%
+', percent, '
 
 '
 %
@@ -19217,6 +19223,8 @@ category: 'private'
 method: RwProjectTopazWriterTest
 _expectedGsTopazWriterFileContents_C_Issue361Extension1
 
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class extensions for ''Issue361Class1''
 
 !		Instance methods for ''Issue361Class1''
@@ -19224,7 +19232,7 @@ _expectedGsTopazWriterFileContents_C_Issue361Extension1
 category: ''*issue361-extension1''
 method: Issue361Class1
 method1 ^1
-%
+', percent, '
 
 '
 %
@@ -19233,6 +19241,8 @@ category: 'private'
 method: RwProjectTopazWriterTest
 _expectedGsTopazWriterFileContents_C_Issue361Extension2
 
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class extensions for ''Issue361Class1''
 
 !		Instance methods for ''Issue361Class1''
@@ -19240,7 +19250,7 @@ _expectedGsTopazWriterFileContents_C_Issue361Extension2
 category: ''*issue361-extension2''
 method: Issue361Class1
 method5 ^5
-%
+', percent, '
 
 '
 %
@@ -19249,6 +19259,8 @@ category: 'private'
 method: RwProjectTopazWriterTest
 _expectedGsTopazWriterFileContents_D_Issue361Core
 
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
 
 doit
@@ -19264,7 +19276,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Object
@@ -19279,7 +19291,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Issue361Class1
@@ -19294,7 +19306,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class2''
 
@@ -19303,7 +19315,7 @@ true.
 category: ''accessing''
 method: Issue361Class2
 method3 ^3
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class1''
 
@@ -19312,12 +19324,12 @@ method3 ^3
 category: ''initialization''
 classmethod: Issue361Class1
 initialize "noop"
-%
+', percent, '
 
 category: ''accessing''
 classmethod: Issue361Class1
 method2 ^2
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class3''
 
@@ -19326,13 +19338,13 @@ method2 ^2
 category: ''accessing''
 classmethod: Issue361Class3
 method4 ^4
-%
+', percent, '
 
 ! Class Initialization
 
 run
 Issue361Class1 initialize.
-%
+', percent, '
 
 '
 %
@@ -19341,6 +19353,8 @@ category: 'private'
 method: RwProjectTopazWriterTest
 _expectedGsTopazWriterFileContents_D_Issue361Extension1
 
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class extensions for ''Issue361Class1''
 
 !		Instance methods for ''Issue361Class1''
@@ -19348,7 +19362,7 @@ _expectedGsTopazWriterFileContents_D_Issue361Extension1
 category: ''*issue361-extension1''
 method: Issue361Class1
 method1 ^1
-%
+', percent, '
 
 '
 %
@@ -19357,6 +19371,8 @@ category: 'private'
 method: RwProjectTopazWriterTest
 _expectedGsTopazWriterFileContents_D_Issue361Extension2
 
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class extensions for ''Issue361Class1''
 
 !		Instance methods for ''Issue361Class1''
@@ -19364,7 +19380,7 @@ _expectedGsTopazWriterFileContents_D_Issue361Extension2
 category: ''*issue361-extension2''
 method: Issue361Class1
 method5 ^5
-%
+', percent, '
 
 ! Class extensions for ''Issue361Class2''
 
@@ -19373,13 +19389,13 @@ method5 ^5
 category: ''*issue361-extension2''
 classmethod: Issue361Class2
 initialize "another noop"
-%
+', percent, '
 
 ! Class Initialization
 
 run
 Issue361Class2 initialize.
-%
+', percent, '
 
 '
 %
@@ -19388,6 +19404,8 @@ category: 'private'
 method: RwProjectTopazWriterTest
 _expectedGsTopazWriterFileContents_Multi_A
 
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
 
 doit
@@ -19403,7 +19421,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Array
@@ -19418,7 +19436,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Issue361Class1
@@ -19433,7 +19451,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Issue361Class1
@@ -19448,7 +19466,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Object
@@ -19463,7 +19481,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Object
@@ -19478,7 +19496,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class2_1''
 
@@ -19487,7 +19505,7 @@ true.
 category: ''accessing''
 method: Issue361Class2_1
 method3 ^3
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class2_2''
 
@@ -19496,7 +19514,7 @@ method3 ^3
 category: ''accessing''
 method: Issue361Class2_2
 method3 ^3
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class3_1''
 
@@ -19505,7 +19523,7 @@ method3 ^3
 category: ''accessing''
 classmethod: Issue361Class3_1
 method4 ^4
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class3_2''
 
@@ -19514,7 +19532,7 @@ method4 ^4
 category: ''accessing''
 classmethod: Issue361Class3_2
 method4 ^4
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class1_1''
 
@@ -19523,12 +19541,12 @@ method4 ^4
 category: ''initialization''
 classmethod: Issue361Class1_1
 initialize "noop"
-%
+', percent, '
 
 category: ''accessing''
 classmethod: Issue361Class1_1
 method2 ^2
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class1_2''
 
@@ -19537,12 +19555,12 @@ method2 ^2
 category: ''initialization''
 classmethod: Issue361Class1_2
 initialize "noop"
-%
+', percent, '
 
 category: ''accessing''
 classmethod: Issue361Class1_2
 method2 ^2
-%
+', percent, '
 
 ! Class extensions for ''Issue361Class1_1''
 
@@ -19551,12 +19569,12 @@ method2 ^2
 category: ''*issue361-extension1_1''
 method: Issue361Class1_1
 method1 ^1
-%
+', percent, '
 
 category: ''*issue361-extension2_1''
 method: Issue361Class1_1
 method5 ^5
-%
+', percent, '
 
 ! Class extensions for ''Issue361Class1_2''
 
@@ -19565,12 +19583,12 @@ method5 ^5
 category: ''*issue361-extension1_2''
 method: Issue361Class1_2
 method1 ^1
-%
+', percent, '
 
 category: ''*issue361-extension2_2''
 method: Issue361Class1_2
 method5 ^5
-%
+', percent, '
 
 ! Class extensions for ''Issue361Class2_1''
 
@@ -19579,7 +19597,7 @@ method5 ^5
 category: ''*issue361-extension2_1''
 classmethod: Issue361Class2_1
 initialize "another noop"
-%
+', percent, '
 
 ! Class extensions for ''Issue361Class2_2''
 
@@ -19588,7 +19606,7 @@ initialize "another noop"
 category: ''*issue361-extension2_2''
 classmethod: Issue361Class2_2
 initialize "another noop"
-%
+', percent, '
 
 ! Class Initialization
 
@@ -19597,7 +19615,7 @@ Issue361Class1_1 initialize.
 Issue361Class1_2 initialize.
 Issue361Class2_1 initialize.
 Issue361Class2_2 initialize.
-%
+', percent, '
 
 '
 %
@@ -19606,6 +19624,8 @@ category: 'private'
 method: RwProjectTopazWriterTest
 _expectedGsTopazWriterFileContents_MULTI_B_Issue361Core
 
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
 
 doit
@@ -19621,7 +19641,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Array
@@ -19636,7 +19656,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Issue361Class1
@@ -19651,7 +19671,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Issue361Class1
@@ -19666,7 +19686,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Object
@@ -19681,7 +19701,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 doit
 (Object
@@ -19696,7 +19716,7 @@ doit
 		comment: '''';
 		immediateInvariant.
 true.
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class2_1''
 
@@ -19705,7 +19725,7 @@ true.
 category: ''accessing''
 method: Issue361Class2_1
 method3 ^3
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class2_2''
 
@@ -19714,7 +19734,7 @@ method3 ^3
 category: ''accessing''
 method: Issue361Class2_2
 method3 ^3
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class3_1''
 
@@ -19723,7 +19743,7 @@ method3 ^3
 category: ''accessing''
 classmethod: Issue361Class3_1
 method4 ^4
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class3_2''
 
@@ -19732,7 +19752,7 @@ method4 ^4
 category: ''accessing''
 classmethod: Issue361Class3_2
 method4 ^4
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class1_1''
 
@@ -19741,12 +19761,12 @@ method4 ^4
 category: ''initialization''
 classmethod: Issue361Class1_1
 initialize "noop"
-%
+', percent, '
 
 category: ''accessing''
 classmethod: Issue361Class1_1
 method2 ^2
-%
+', percent, '
 
 ! Class implementation for ''Issue361Class1_2''
 
@@ -19755,19 +19775,19 @@ method2 ^2
 category: ''initialization''
 classmethod: Issue361Class1_2
 initialize "noop"
-%
+', percent, '
 
 category: ''accessing''
 classmethod: Issue361Class1_2
 method2 ^2
-%
+', percent, '
 
 ! Class Initialization
 
 run
 Issue361Class1_1 initialize.
 Issue361Class1_2 initialize.
-%
+', percent, '
 
 '
 %
@@ -19776,6 +19796,8 @@ category: 'private'
 method: RwProjectTopazWriterTest
 _expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension1
 
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class extensions for ''Issue361Class1_1''
 
 !		Instance methods for ''Issue361Class1_1''
@@ -19783,7 +19805,7 @@ _expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension1
 category: ''*issue361-extension1_1''
 method: Issue361Class1_1
 method1 ^1
-%
+', percent, '
 
 ! Class extensions for ''Issue361Class1_2''
 
@@ -19792,7 +19814,7 @@ method1 ^1
 category: ''*issue361-extension1_2''
 method: Issue361Class1_2
 method1 ^1
-%
+', percent, '
 
 '
 %
@@ -19801,6 +19823,8 @@ category: 'private'
 method: RwProjectTopazWriterTest
 _expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension2
 
+| percent|
+percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class extensions for ''Issue361Class1_1''
 
 !		Instance methods for ''Issue361Class1_1''
@@ -19808,7 +19832,7 @@ _expectedGsTopazWriterFileContents_MULTI_B_Issue361Extension2
 category: ''*issue361-extension2_1''
 method: Issue361Class1_1
 method5 ^5
-%
+', percent, '
 
 ! Class extensions for ''Issue361Class1_2''
 
@@ -19817,7 +19841,7 @@ method5 ^5
 category: ''*issue361-extension2_2''
 method: Issue361Class1_2
 method5 ^5
-%
+', percent, '
 
 ! Class extensions for ''Issue361Class2_1''
 
@@ -19826,7 +19850,7 @@ method5 ^5
 category: ''*issue361-extension2_1''
 classmethod: Issue361Class2_1
 initialize "another noop"
-%
+', percent, '
 
 ! Class extensions for ''Issue361Class2_2''
 
@@ -19835,14 +19859,14 @@ initialize "another noop"
 category: ''*issue361-extension2_2''
 classmethod: Issue361Class2_2
 initialize "another noop"
-%
+', percent, '
 
 ! Class Initialization
 
 run
 Issue361Class2_1 initialize.
 Issue361Class2_2 initialize.
-%
+', percent, '
 
 '
 %
