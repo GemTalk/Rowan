@@ -1149,7 +1149,7 @@ true.
 doit
 (RowanService
 	subclass: 'RowanMethodService'
-	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superSource superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName )
+	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superSource superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -16061,6 +16061,42 @@ renameCategoryFrom: old to: new
 	self removeCategories: (Array with: old)
 %
 
+category: 'client commands'
+method: RowanClassService
+renameClass: oldClassName to: newClassName
+       | references newMethods |
+       newMethods := Array new. 
+       Rowan projectTools browser renameClassNamed: oldClassName to: newClassName.
+       name := newClassName. 
+       organizer := ClassOrganizer new. 
+       references := organizer update referencesTo: oldClassName asSymbol.
+       1 to: references first size do:[:index |
+               | method newSource compileResult failedCompile methodService |
+               failedCompile := false. 
+               method := references first at: index. 
+               newSource := self replaceSubString: oldClassName in: method sourceString with: newClassName.
+               compileResult := [method inClass rwCompileMethod: newSource
+                                                                       category: (method inClass categoryOfSelector: method selector) asSymbol] on: CompileError do:[:ex | failedCompile := true. method].
+               methodService := RowanMethodService forGsNMethod: compileResult organizer: organizer.
+               methodService failedCompile: failedCompile. 
+               newMethods add: methodService.
+               ].
+       RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods).
+%
+
+category: 'private'
+method: RowanClassService
+replaceSubString: old in: string with: new
+       | offset newSource |
+       newSource := string. 
+       offset := 1.    
+       [(offset := newSource findString: old startingAt: offset) = 0] whileFalse:[
+               newSource := newSource copyReplaceFrom: offset to: offset + old size - 1 with: new. 
+               offset := offset + new size. 
+       ].
+       ^newSource
+%
+
 category: 'rowan'
 method: RowanClassService
 rowanProjectName
@@ -16659,6 +16695,12 @@ definitionClass
 	^RwMethodDefinition
 %
 
+category: 'Updating'
+method: RowanMethodService
+failedCompile: boolean 
+       
+       failedCompile := boolean
+%
 category: 'client commands'
 method: RowanMethodService
 fileout
@@ -16743,6 +16785,7 @@ initialize
 	hasSubs := false.
 	accessedInstVars := Array new.
 	isTestMethod := false.
+	failedCompile := false.
 %
 
 category: 'initialization'

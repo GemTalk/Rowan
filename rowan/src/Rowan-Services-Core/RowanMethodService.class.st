@@ -27,7 +27,8 @@ Class {
 		'testResult',
 		'definedPackage',
 		'isTestMethod',
-		'testRunClassName'
+		'testRunClassName',
+		'failedCompile'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -204,6 +205,12 @@ RowanMethodService >> definitionClass [
 
 ]
 
+{ #category : 'Updating' }
+RowanMethodService >> failedCompile: boolean [	
+	
+	failedCompile := boolean
+]
+
 { #category : 'client commands' }
 RowanMethodService >> fileout [
 	| answeringService ws |
@@ -283,6 +290,7 @@ RowanMethodService >> initialize [
 	hasSubs := false.
 	accessedInstVars := Array new.
 	isTestMethod := false.
+	failedCompile := false.
 ]
 
 { #category : 'initialization' }
