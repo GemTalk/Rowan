@@ -565,7 +565,7 @@ currentOrNil
 		onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/rowan/src/'  )
 		alias: ''.
 	packageManager defaultSymbolDictionaryName: #Globals.
-	#( 'FileSystem-GemStone-Kernel' 'Files' 'Files-Tests' 'Kernel-Methods' 'Network-UUID' 'Network-UUID-Tests' 
+	#( 'FileSystem-GemStone-Kernel' 'Files' 'Files-Tests' 'FileSystem-Core32x' 'Network-UUID' 'Network-UUID-Tests' 
 			'Zinc-Character-Encoding-Core' 'Zinc-Character-Encoding-Tests' 'FileSystem-Core' 'FileSystem-Disk' 
       'FileSystem-Memory' 'FileSystem-Path' 'FileSystem-Tests-Attributes' 'FileSystem-Tests-Core' 
       'FileSystem-Tests-Disk' 'FileSystem-Tests-GemStone' 'FileSystem-Tests-Memory' )
