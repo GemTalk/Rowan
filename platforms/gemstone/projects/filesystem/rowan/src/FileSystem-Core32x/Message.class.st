@@ -11,7 +11,7 @@ Class {
 		'args',
 		'lookupClass'
 	],
-	#category : 'Kernel-Methods'
+	#category : 'FileSystem-Core32x'
 }
 
 { #category : 'instance creation' }

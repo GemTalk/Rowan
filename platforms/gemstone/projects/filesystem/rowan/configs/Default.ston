@@ -31,6 +31,15 @@ RwProjectLoadConfiguration {
 					'FileSystem-Tests-GemStone'
 				]
 			}
+		},
+		[
+			'gs3.2.x'
+		] : {
+			'core' : {
+				#packageNames : [
+					'FileSystem-Core32x'
+				]
+			}
 		}
 	},
 	#conditionalPackageMapSpecs : {
