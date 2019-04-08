@@ -153,7 +153,7 @@ suprBlock: suprBlock optsBlock: optsBlock ivsBlock: ivsBlock civsBlock: civsBloc
 "
 
 	| fmtArr |
-	fmtArr := newSuperclass _validateOptions: optionsArray withFormat: theFormat.
+	fmtArr := newSuperclass _validateOptions: optionsArray withFormat: theFormat newClassName: oldClass name asString.
 	(oldClass isKindOf: Class)
 		ifFalse: [ oldClass _validateClass: Class ].
 	suprBlock value: oldClass superClass == newSuperclass.

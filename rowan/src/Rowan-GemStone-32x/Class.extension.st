@@ -207,6 +207,13 @@ Class >> _subclass: className instVarNames: anArrayOfInstvarNames format: theFor
 ]
 
 { #category : '*rowan-gemstone-32x' }
+Class >> _validateOptions: optionsArray withFormat: theFormat newClassName: ignored [
+	"compatability with 3.5.x protocol"
+
+	^ self _validateOptions: optionsArray withFormat: theFormat
+]
+
+{ #category : '*rowan-gemstone-32x' }
 Class >> byteSubclass: aString
 classVars: anArrayOfClassVars
 classInstVars: anArrayOfClassInstVars

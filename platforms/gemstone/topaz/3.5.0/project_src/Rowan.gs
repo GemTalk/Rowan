@@ -32793,7 +32793,7 @@ suprBlock: suprBlock optsBlock: optsBlock ivsBlock: ivsBlock civsBlock: civsBloc
 "
 
 	| fmtArr |
-	fmtArr := newSuperclass _validateOptions: optionsArray withFormat: theFormat.
+	fmtArr := newSuperclass _validateOptions: optionsArray withFormat: theFormat newClassName: oldClass name asString.
 	(oldClass isKindOf: Class)
 		ifFalse: [ oldClass _validateClass: Class ].
 	suprBlock value: oldClass superClass == newSuperclass.
@@ -44126,6 +44126,18 @@ options: optionsArray
 	classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts
 	inDictionary: aDictionary inClassHistory: hist
 	description: descr options: optionsArray
+%
+
+category: '*rowan-gemstone-35x'
+method: Class
+_equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary constraints: aConstraint isKernel: isKernelBool
+
+	 self _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary isKernel: isKernelBool
+%
+category: '*rowan-gemstone-35x'
+method: Class
+_subclass: className instVarNames: anArrayOfInstvarNames format: theFormat constraints: theConstraints classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
+  ^ self _subclass: className instVarNames: anArrayOfInstvarNames format: theFormat classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
 %
 
 category: '*rowan-gemstone-kernel'
