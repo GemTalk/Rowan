@@ -157,7 +157,7 @@ DiskStore >> basicOpen: aPath writable: writeMode [
 
 	"writeMode - #read, #append, #write"
 
-	| string encoded |
+	| string |
 	string := self stringFromPath: aPath.
 	^ File open: string writable: writeMode
 ]

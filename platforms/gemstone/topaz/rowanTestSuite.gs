@@ -27,7 +27,8 @@ run
 					loadProjectNamed: projectName
 					withGroupNames: #('tests' 'jadeServer') ] ]
 					on: CompileWarning do: [:ex |
-						warnings add: ex asString printString.
+						(ex description includesString: 'not optimized')
+							ifFalse: [ warnings add: ex asString printString ].
 						ex resume ] ].
 
  		warnings isEmpty ifFalse: [
