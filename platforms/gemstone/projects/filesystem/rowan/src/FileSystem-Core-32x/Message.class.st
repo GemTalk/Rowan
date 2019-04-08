@@ -11,7 +11,7 @@ Class {
 		'args',
 		'lookupClass'
 	],
-	#category : 'FileSystem-Core32x'
+	#category : 'FileSystem-Core-32x'
 }
 
 { #category : 'instance creation' }

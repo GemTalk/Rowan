@@ -37,7 +37,16 @@ RwProjectLoadConfiguration {
 		] : {
 			'core' : {
 				#packageNames : [
-					'FileSystem-Core32x'
+					'FileSystem-Core-32x'
+				]
+			}
+		},
+		[
+			'gs3.[5-]'
+		] : {
+			'core' : {
+				#packageNames : [
+					'FileSystem-GemStone-Kernel-35x'
 				]
 			}
 		}

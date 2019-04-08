@@ -18427,6 +18427,14 @@ isMemoryFileSystem
 	^ false
 %
 
+! Class extensions for 'GsFile'
+category: '*filesystem-gemstone-kernel-35x'
+classmethod: GsFile
+_contentsOfServerDirectory: aPathName expandPath: aBoolean
+
+	^ self _contentsOfServerDirectory: aPathName expandPath: aBoolean utf8Results: false
+%
+
 ! Class extensions for 'Integer'
 
 !		Instance methods for 'Integer'
