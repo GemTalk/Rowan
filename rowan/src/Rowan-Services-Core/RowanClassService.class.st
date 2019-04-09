@@ -771,7 +771,10 @@ RowanClassService >> renameClass: oldClassName to: newClassName [
 		compileResult := [method inClass rwCompileMethod: newSource
 									category: (method inClass categoryOfSelector: method selector) asSymbol] on: CompileError do:[:ex | failedCompile := true. method].
 		methodService := RowanMethodService forGsNMethod: compileResult organizer: organizer.
-		failedCompile ifFalse:[methodService comparisonSource: oldSource].
+		failedCompile ifTrue:[
+				methodService comparisonSource: oldClassName]
+			ifFalse:[
+				methodService comparisonSource: oldSource].
 		methodService failedCompile: failedCompile. 
 		newMethods add: methodService.
 		].
