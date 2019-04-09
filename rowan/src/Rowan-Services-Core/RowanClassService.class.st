@@ -763,13 +763,15 @@ RowanClassService >> renameClass: oldClassName to: newClassName [
 	organizer := ClassOrganizer new. 
 	references := organizer update referencesTo: oldClassName asSymbol.
 	1 to: references first size do:[:index |
-		| method newSource compileResult failedCompile methodService |
+		| method newSource compileResult failedCompile methodService oldSource |
 		failedCompile := false. 
 		method := references first at: index. 
-		newSource := self replaceSubString: oldClassName in: method sourceString with: newClassName.
+		oldSource := method sourceString. 
+		newSource := self replaceSubString: oldClassName in: oldSource with: newClassName.
 		compileResult := [method inClass rwCompileMethod: newSource
 									category: (method inClass categoryOfSelector: method selector) asSymbol] on: CompileError do:[:ex | failedCompile := true. method].
 		methodService := RowanMethodService forGsNMethod: compileResult organizer: organizer.
+		failedCompile ifFalse:[methodService comparisonSource: oldSource].
 		methodService failedCompile: failedCompile. 
 		newMethods add: methodService.
 		].

@@ -20,7 +20,6 @@ Class {
 		'references',
 		'stepPoints',
 		'selectedPackageServices',
-		'superSource',
 		'superDisplayString',
 		'accessedInstVars',
 		'breakPoints',
@@ -28,7 +27,8 @@ Class {
 		'definedPackage',
 		'isTestMethod',
 		'testRunClassName',
-		'failedCompile'
+		'failedCompile',
+		'comparisonSource'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -185,6 +185,12 @@ RowanMethodService >> clearBreakAt: stepPoint [
 	method clearBreakAtStepPoint: stepPoint.
 	self update. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'Accessing' }
+RowanMethodService >> comparisonSource: string [
+
+	comparisonSource := string
 ]
 
 { #category : 'Accessing' }
@@ -490,7 +496,7 @@ RowanMethodService >> setSupersAndSubsFor: theClass [
 	[theSuper notNil and:[hasSupers not]] whileTrue:[
 		hasSupers := theSuper selectors includes: selector.
 		hasSupers ifTrue:[
-			superSource := theSuper sourceCodeAt: selector.
+			comparisonSource := theSuper sourceCodeAt: selector.
 			superDisplayString := theSuper name, '>>', selector].
 		theSuper := theSuper superClass].
 	(organizer allSubclassesOf: theClass thisClass) do:[:cls |
