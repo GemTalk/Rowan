@@ -90,3 +90,26 @@ self _validatePrivilege ifTrue:[
   format := format bitOr: 16#10 .
 ]
 ]
+
+{ #category : '*rowan-gemstone-35x' }
+Behavior >> _setVaryingConstraint: aClass [
+
+"Assign a new value to the constraint on unnamed variables of the receiver,
+ assuming all checks have been made."
+
+| constrs ofs |
+
+self deprecated: 'Behavior>>_setVaryingConstraint: deprecated, Constraints are no longer supported'.
+self _validatePrivilege ifTrue:[
+  constrs := constraints .
+  ofs := self instSize + 1 .
+  constrs size == 0 ifTrue:[ 
+    aClass == Object ifTrue:[ ^ self "nothing to do"].
+    (constrs := Array new: ofs) replaceFrom: 1 to: ofs withObject: Object .
+    constraints := constrs .
+  ].
+  constrs at: ofs put: aClass .
+  (aClass == Object) ifFalse:[ self _setConstraintBit ].
+  self _refreshClassCache: false .
+]
+]
