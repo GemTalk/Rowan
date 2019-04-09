@@ -155,6 +155,7 @@ Class >> rwComment [
   
   ^ (self _extraDictAt: #comment) ifNil: [ '' ]
 ]
+
 { #category : '*rowan-gemstone-kernel' }
 Class >> rwComment: aString [
 

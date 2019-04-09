@@ -45,18 +45,18 @@
 					]
 				}
 			},
-		[ 'gs3.[2-]' ] : {
+		[ 'gs3.[2-4]' ] : {
       'core': {
 				#packageNames : [
-          'GemStone-Interactions-Core'
+					'Rowan-GemStone-Loader32x'
 					]
 				}
 			},
-		[ 'gs3.2.[15-]', 'gs3.[3-]' ] : {
+		[ 'gs3.[2-]' ] : {
       'core': {
 				#packageNames : [
-					'Rowan-Url-3215',
-					'Rowan-GemStone-Loader32x'
+          'GemStone-Interactions-Core',
+					'Rowan-Url-3215'
 					]
 				}
 			},

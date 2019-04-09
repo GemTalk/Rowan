@@ -42184,6 +42184,13 @@ _expectedLoadPackageNames_gemstone
 					'Rowan-GemStone-Loader-Extensions' 'Rowan-Services-Tests') ) sort
 %
 
+category: '*rowan-tests-35x'
+method: RwProjectConfigurationsTest
+_expectedLoadPackageNames_gemstone_version
+
+	^ #( 'Rowan-GemStone-Loader35x' 'Rowan-GemStone-35x' 'Rowan-Tests-35x' )
+%
+
 category: 'private'
 method: RwProjectConfigurationsTest
 _expectedLoadPackageNames_gs3_2_14
@@ -42237,8 +42244,10 @@ category: 'private'
 method: RwProjectConfigurationsTest
 _expectedRowan_LoadPackageNames
 
-	^ (self _expectedLoadPackageNames_gemstone , 
-			#('Rowan-GemStone-3215' 'Rowan-Url-3215' 'GemStone-Interactions-Core' 'GemStone-Interactions-Kernel' 'Rowan-Url-Extensions' 'Rowan-Kernel' 
+
+	^ (self _expectedLoadPackageNames_gemstone , self _expectedLoadPackageNames_gemstone_version,
+			#('Rowan-GemStone-3215' 'Rowan-Url-3215' 'GemStone-Interactions-Core' 
+				'GemStone-Interactions-Kernel' 'Rowan-Url-Extensions' 'Rowan-Kernel' 
 				'Rowan-GemStone-Specifications' 'Rowan-Core-Definitions-Extensions' 
 				'Rowan-GemStone-Definitions' 'Rowan-Cypress-Definitions' ) ) sort
 %
