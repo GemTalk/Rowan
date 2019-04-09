@@ -658,8 +658,8 @@ commit
   run
   CypressBootstrapRowanBlock 
     value: 'RowanKernel'
-    value: #('Rowan-Tools-Extensions' 'Rowan-Tests' 'Rowan-Services-Tests'
-							'Rowan-GemStone-Components'
+    value: #('Rowan-Tools-Extensions' 'Rowan-Tests' 'Rowan-Tests-32x' 
+			'Rowan-Services-Tests' 'Rowan-GemStone-Components'
 	).	"Tool extension methods for RowanKernel classes "
 %
   commit
