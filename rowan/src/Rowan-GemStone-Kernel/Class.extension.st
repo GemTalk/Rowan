@@ -296,4 +296,3 @@ Class >> rwSubclass: aString instVarNames: anArrayOfStrings classVars: anArrayOf
 		options: optionsArray
 
 ]
-
