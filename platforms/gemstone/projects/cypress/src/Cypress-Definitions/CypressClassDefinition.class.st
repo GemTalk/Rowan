@@ -36,7 +36,7 @@ CypressClassDefinition class >> forClass: aClass [
 		classInstVarNames: aClass class instVarNames
 		classVarNames: aClass classVarNames
 		poolDictionaryNames: aClass sharedPools
-		comment: aClass comment
+		comment: aClass rwComment
 		subclassType: (self subclassTypeOf: aClass)
 
 ]

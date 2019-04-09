@@ -4312,7 +4312,7 @@ JadeServer >> sbUpdateClassInfo [
 							classCreationTemplate.
 	classInfoUpdate category: ((classInfoUpdate template includesString: 'category: ''')
 					ifFalse: [' category: ' , selectedClass category printString]).
-	classInfoUpdate comment: selectedClass comment. 
+	classInfoUpdate comment: selectedClass rwComment. 
 	classInfoUpdate writeInfoOn: writeStream.
 ]
 

@@ -149,6 +149,13 @@ Class >> rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: an
 ]
 
 { #category : '*rowan-gemstone-kernel' }
+Class >> rwComment [
+
+	"Provide direct access to comment of class, bypassing default comeent string."
+  
+  ^ (self _extraDictAt: #comment) ifNil: [ '' ]
+]
+{ #category : '*rowan-gemstone-kernel' }
 Class >> rwComment: aString [
 
 	^ Rowan projectTools browser

@@ -109,7 +109,7 @@ RwClsAuditTool >> _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavi
 				self errorLog: res  add: aLoadedClass name -> 'ClassVars changed in compiled class v loaded class'].
 	((aLoadedClass propertyAt: 'pools') = ((aBehavior.poolDictionaries ifNil: [Array new]) collect: [:e | e asString]) ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'PoolDictionaries changed in compiled class v loaded class'].
-	((aLoadedClass propertyAt: 'comment' ifAbsent: ['']) isEquivalent: aBehavior comment ) 
+	((aLoadedClass propertyAt: 'comment' ifAbsent: ['']) isEquivalent: aBehavior rwComment ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Comment has changed in compiled class v loaded class'].
 	((aLoadedClass propertyAt: 'category') = aBehavior category ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Class category has changed in compiled class v loaded class'].

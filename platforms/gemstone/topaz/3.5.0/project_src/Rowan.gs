@@ -10213,7 +10213,7 @@ sbUpdateClassInfo
 							classCreationTemplate.
 	classInfoUpdate category: ((classInfoUpdate template includesString: 'category: ''')
 					ifFalse: [' category: ' , selectedClass category printString]).
-	classInfoUpdate comment: selectedClass comment. 
+	classInfoUpdate comment: selectedClass rwComment. 
 	classInfoUpdate writeInfoOn: writeStream.
 %
 
@@ -15400,7 +15400,7 @@ basicRefreshFrom: theClass
 	command := nil. 
 	commandArgs := nil. 
 	superclassName := theClass superClass ifNotNil:[:theSuper | theSuper name asString]. 
-	comment := theClass comment. 
+	comment := theClass rwComment. 
 	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade and tests"
 	versions := theClass classHistory size.
 	version := theClass classHistory indexOf: theClass.
@@ -16215,8 +16215,8 @@ setComment
 
 	| theClass |
 	theClass := self classFromName.
-	(theClass canUnderstand: #comment)
-		ifTrue: [comment := theClass comment]
+	(theClass canUnderstand: #rwComment)
+		ifTrue: [comment := theClass rwComment]
 		ifFalse: 
 			[(theClass canUnderstand: #description)
 					ifTrue: 
@@ -21917,7 +21917,7 @@ _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior
 				self errorLog: res  add: aLoadedClass name -> 'ClassVars changed in compiled class v loaded class'].
 	((aLoadedClass propertyAt: 'pools') = ((aBehavior.poolDictionaries ifNil: [Array new]) collect: [:e | e asString]) ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'PoolDictionaries changed in compiled class v loaded class'].
-	((aLoadedClass propertyAt: 'comment' ifAbsent: ['']) isEquivalent: aBehavior comment ) 
+	((aLoadedClass propertyAt: 'comment' ifAbsent: [ '' ]) isEquivalent: aBehavior rwComment ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Comment has changed in compiled class v loaded class'].
 	((aLoadedClass propertyAt: 'category') = aBehavior category ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Class category has changed in compiled class v loaded class'].
@@ -44007,6 +44007,15 @@ rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfCl
 
 category: '*rowan-gemstone-kernel'
 method: Class
+rwComment
+
+	"Provide direct access to comment of class, bypassing default comeent string."
+  
+  ^ (self _extraDictAt: #comment) ifNil: [ '' ]
+%
+
+category: '*rowan-gemstone-kernel'
+method: Class
 rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName  options: optionsArray
 
 	^ Rowan projectTools browser
@@ -46446,7 +46455,7 @@ options: optionsArray
             oldClass _commentOrDescription: aDescription.
             ^oldClass "avoid creation of a new version"
         ].
-      descr ifNil: [descr := oldClass comment]
+      descr ifNil: [descr := oldClass rwComment]
   ].
   theClass := Object
         subclass: aString

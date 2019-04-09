@@ -135,7 +135,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	command := nil. 
 	commandArgs := nil. 
 	superclassName := theClass superClass ifNotNil:[:theSuper | theSuper name asString]. 
-	comment := theClass comment. 
+	comment := theClass rwComment. 
 	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade and tests"
 	versions := theClass classHistory size.
 	version := theClass classHistory indexOf: theClass.
@@ -893,8 +893,8 @@ RowanClassService >> setComment [
 
 	| theClass |
 	theClass := self classFromName.
-	(theClass canUnderstand: #comment)
-		ifTrue: [comment := theClass comment]
+	(theClass canUnderstand: #rwComment)
+		ifTrue: [comment := theClass rwComment]
 		ifFalse: 
 			[(theClass canUnderstand: #description)
 					ifTrue: 
