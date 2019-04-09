@@ -564,7 +564,7 @@ JadeServer64bit3x >> sbUpdateMethodsByCategories [
 					ifTrue: [ 
 						method isRubyBridgeMethod ifFalse: [
 							selectors add: eachSelector ] ]
-					ifFalse: [ selectors add: eachSelector ].
+					ifFalse: [ selectors add: eachSelector ]
 			].
 		].
 	].

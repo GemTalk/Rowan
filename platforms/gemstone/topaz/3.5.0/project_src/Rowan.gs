@@ -12634,9 +12634,11 @@ sbUpdateMethodsByCategories
 				(category isNil and: [ methodFilters includes: #'other']) or: [ methodFilters includes: category asSymbol]]) ifTrue: [
 				| method |
 				method := eachClass compiledMethodAt: eachSelector environmentId: environment.
-				method isRubyBridgeMethod ifFalse: [
-					selectors add: eachSelector.
-				].
+				(method respondsTo: #isRubyBridgeMethod)
+					ifTrue: [ 
+						method isRubyBridgeMethod ifFalse: [
+							selectors add: eachSelector ] ]
+					ifFalse: [ selectors add: eachSelector ]
 			].
 		].
 	].
@@ -33267,7 +33269,7 @@ compiledMethod
 	^ compiledMethod
 		ifNil: [ 
 			| methodDictionary |
-			methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
+			methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
 			selector := methodDefinition selector.
 			compiledMethod := methodDictionary
 				at: selector
@@ -33290,7 +33292,7 @@ compileUsingNewClasses: createdClasses andExistingClasses: tempSymbols
 		compileMethod: sourceString
 		dictionaries: symbolList
 		category: protocol
-		intoMethodDict: false
+		intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
 		intoCategories: nil
 		intoPragmas: nil
 		environmentId: self methodEnvironmentId
@@ -33838,7 +33840,7 @@ installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
-	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
+	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
 	selector := methodDefinition selector.
 	oldCompiledMethod := methodDictionary
 		at: selector
@@ -35646,7 +35648,7 @@ adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior
 				protocol: protocolString 
 				toPackageNamed: packageName ].
 
-	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
+	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
 	selector := compiledMethod selector.
 	compiledMethod == (methodDictionary at: selector ifAbsent: [ self error: 'expected an existing compiled method' ])
 		ifFalse: [ self error: 'The given compiled method does not the existing compiled method in the class.' ].
@@ -36236,7 +36238,7 @@ classmethod: RwGsSymbolDictionaryRegistry_Implementation
 addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance
 
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
-	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	methodDictionary at: selector put: compiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
@@ -36337,7 +36339,7 @@ addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toP
 		back using specialized processing"
 
 	| methodDictionary selector |
-	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
+	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
 	selector := compiledMethod selector.
 	methodDictionary 
 		at: selector 
@@ -36375,7 +36377,7 @@ classmethod: RwGsSymbolDictionaryRegistry_Implementation
 addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance
 
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
-	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	(methodDictionary at: selector ifAbsent: [  ])
 		ifNotNil: [ :oldCompiledMethod | 
@@ -36424,7 +36426,7 @@ addRecompiledMethod: newCompiledMethod instance: registryInstance
 	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
 	selector := newCompiledMethod selector.
 	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	oldCompiledMethod := methodDictionary
 		at: selector
 		ifAbsent: [ 
@@ -36796,7 +36798,7 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryIns
 	selector := compiledMethod selector.
 	behavior := compiledMethod inClass.
 
-	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
+	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
 	existingCompiledMethod := methodDictionary
 		at: selector
 		ifAbsent: [ 
@@ -36881,7 +36883,7 @@ _addMovedDeletedMethod: newCompiledMethod  instance: registryInstance
 	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
 	selector := newCompiledMethod selector.
 	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	oldCompiledMethod := methodDictionary
 		at: selector
 		ifAbsent: [ 
@@ -43431,11 +43433,22 @@ rwMoveMethod: methodSelector toCategory: categoryName
 		toProtocol: categoryName
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-35x'
 method: Behavior
-rwPersistentMethodDictForEnv: envId
+rwGuaranteePersistentMethodDictForEnv: envId
+	"in 3.5, the method persistentMethodDictForEnv: DOES NOT always return a GsMethodDictionary,
+		as classes are created without a GsMethodDictionary for envId 0."
 
-	^ (self persistentMethodDictForEnv: envId ) ifNil:[ ^ Dictionary new ]
+	<primitive: 2001>
+	| prot |
+	prot := System _protectedMode .
+	[ 
+		| newDict |
+		(self persistentMethodDictForEnv: envId) ifNotNil: [:oldDict | ^ oldDict ].
+		newDict := GsMethodDictionary new.
+		self persistentMethodDictForEnv: envId put: newDict.
+		^ newDict ] 
+		ensure:[ prot _leaveProtectedMode ].
 %
 
 category: '*rowan-gemstone-kernel'

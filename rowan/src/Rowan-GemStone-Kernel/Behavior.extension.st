@@ -243,12 +243,6 @@ Behavior >> rwMoveMethod: methodSelector toCategory: categoryName [
 ]
 
 { #category : '*rowan-gemstone-kernel' }
-Behavior >> rwPersistentMethodDictForEnv: envId [
-
-	^ (self persistentMethodDictForEnv: envId ) ifNil:[ ^ Dictionary new ]
-]
-
-{ #category : '*rowan-gemstone-kernel' }
 Behavior >> rwRemoveCategory: categoryName [
 
 	^ Rowan projectTools browser

@@ -61,7 +61,7 @@ RwGsMethodPatch >> compiledMethod [
 	^ compiledMethod
 		ifNil: [ 
 			| methodDictionary |
-			methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
+			methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
 			selector := methodDefinition selector.
 			compiledMethod := methodDictionary
 				at: selector
@@ -83,7 +83,7 @@ RwGsMethodPatch >> compileUsingNewClasses: createdClasses andExistingClasses: te
 		compileMethod: sourceString
 		dictionaries: symbolList
 		category: protocol
-		intoMethodDict: false
+		intoMethodDict: false "we do not want the compiled method added to the class methodDictionary"
 		intoCategories: nil
 		intoPragmas: nil
 		environmentId: self methodEnvironmentId

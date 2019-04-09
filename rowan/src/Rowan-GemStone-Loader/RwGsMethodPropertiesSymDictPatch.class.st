@@ -22,7 +22,7 @@ RwGsMethodPropertiesSymDictPatch >> installPropertiesPatchNewClasses: createdCla
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
-	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
+	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
 	selector := methodDefinition selector.
 	oldCompiledMethod := methodDictionary
 		at: selector
