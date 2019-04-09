@@ -33267,7 +33267,7 @@ compiledMethod
 	^ compiledMethod
 		ifNil: [ 
 			| methodDictionary |
-			methodDictionary := behavior persistentMethodDictForEnv: 0.
+			methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
 			selector := methodDefinition selector.
 			compiledMethod := methodDictionary
 				at: selector
@@ -33838,7 +33838,7 @@ installPropertiesPatchNewClasses: createdClasses andExistingClasses: tempSymbols
 	behavior
 		ifNil: [ self error: 'Class ' , self className printString , ' not found.' ].
 
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
 	selector := methodDefinition selector.
 	oldCompiledMethod := methodDictionary
 		at: selector
@@ -35646,7 +35646,7 @@ adoptCompiledMethod: compiledMethod classExtension: classExtension for: behavior
 				protocol: protocolString 
 				toPackageNamed: packageName ].
 
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	compiledMethod == (methodDictionary at: selector ifAbsent: [ self error: 'expected an existing compiled method' ])
 		ifFalse: [ self error: 'The given compiled method does not the existing compiled method in the class.' ].
@@ -36236,7 +36236,7 @@ classmethod: RwGsSymbolDictionaryRegistry_Implementation
 addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance
 
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	methodDictionary at: selector put: compiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
@@ -36337,7 +36337,7 @@ addMovedDeletedMethod: compiledMethod for: behavior protocol: protocolString toP
 		back using specialized processing"
 
 	| methodDictionary selector |
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	methodDictionary 
 		at: selector 
@@ -36375,7 +36375,7 @@ classmethod: RwGsSymbolDictionaryRegistry_Implementation
 addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance
 
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	(methodDictionary at: selector ifAbsent: [  ])
 		ifNotNil: [ :oldCompiledMethod | 
@@ -36424,7 +36424,7 @@ addRecompiledMethod: newCompiledMethod instance: registryInstance
 	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
 	selector := newCompiledMethod selector.
 	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
 	oldCompiledMethod := methodDictionary
 		at: selector
 		ifAbsent: [ 
@@ -36796,7 +36796,7 @@ moveCompiledMethod: compiledMethod toProtocol: newProtocol instance: registryIns
 	selector := compiledMethod selector.
 	behavior := compiledMethod inClass.
 
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
 	existingCompiledMethod := methodDictionary
 		at: selector
 		ifAbsent: [ 
@@ -36881,7 +36881,7 @@ _addMovedDeletedMethod: newCompiledMethod  instance: registryInstance
 	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
 	selector := newCompiledMethod selector.
 	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
 	oldCompiledMethod := methodDictionary
 		at: selector
 		ifAbsent: [ 
@@ -43429,6 +43429,13 @@ rwMoveMethod: methodSelector toCategory: categoryName
 		forClassNamed: self thisClass name asString
 		isMeta: self isMeta
 		toProtocol: categoryName
+%
+
+category: '*rowan-gemstone-kernel'
+method: Behavior
+rwPersistentMethodDictForEnv: envId
+
+	^ (self persistentMethodDictForEnv: envId ) ifNil:[ ^ Dictionary new ]
 %
 
 category: '*rowan-gemstone-kernel'

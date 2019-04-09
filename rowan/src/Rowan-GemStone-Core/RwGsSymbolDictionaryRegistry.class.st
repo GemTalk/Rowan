@@ -327,7 +327,7 @@ RwGsSymbolDictionaryRegistry >> adoptCompiledMethod: compiledMethod classExtensi
 				protocol: protocolString 
 				toPackageNamed: packageName ].
 
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	compiledMethod == (methodDictionary at: selector ifAbsent: [ self error: 'expected an existing compiled method' ])
 		ifFalse: [ self error: 'The given compiled method does not the existing compiled method in the class.' ].

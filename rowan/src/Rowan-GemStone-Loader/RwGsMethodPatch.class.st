@@ -61,7 +61,7 @@ RwGsMethodPatch >> compiledMethod [
 	^ compiledMethod
 		ifNil: [ 
 			| methodDictionary |
-			methodDictionary := behavior persistentMethodDictForEnv: 0.
+			methodDictionary := behavior rwPersistentMethodDictForEnv: 0.
 			selector := methodDefinition selector.
 			compiledMethod := methodDictionary
 				at: selector
