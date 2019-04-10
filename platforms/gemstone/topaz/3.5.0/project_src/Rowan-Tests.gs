@@ -39267,7 +39267,7 @@ testIssue284
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	loadedCommitId := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId.
-	self assert: loadedCommitId = '149ef9f'.
+	self assert: loadedCommitId = '4bdcf1a'.
 
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_284_0'.				"README commit"
 
@@ -42184,13 +42184,6 @@ _expectedLoadPackageNames_gemstone
 					'Rowan-GemStone-Loader-Extensions' 'Rowan-Services-Tests') ) sort
 %
 
-category: '*rowan-tests-35x'
-method: RwProjectConfigurationsTest
-_expectedLoadPackageNames_gemstone_version
-
-	^ #( 'Rowan-GemStone-Loader35x' 'Rowan-GemStone-35x' 'Rowan-Tests-35x' )
-%
-
 category: 'private'
 method: RwProjectConfigurationsTest
 _expectedLoadPackageNames_gs3_2_14
@@ -42243,7 +42236,6 @@ _expectedRowanSampleProject4_LoadPackageNames
 category: 'private'
 method: RwProjectConfigurationsTest
 _expectedRowan_LoadPackageNames
-
 
 	^ (self _expectedLoadPackageNames_gemstone , self _expectedLoadPackageNames_gemstone_version,
 			#('Rowan-GemStone-3215' 'Rowan-Url-3215' 'GemStone-Interactions-Core' 
@@ -42824,6 +42816,17 @@ testImageClass
 	"answer an alternate image class (presumably a subclass of the receiver) that can be used as the image class for the duration of tests"
 
 	^ RwGsTestImage
+%
+
+! Class extensions for 'RwProjectConfigurationsTest'
+
+!		Instance methods for 'RwProjectConfigurationsTest'
+
+category: '*rowan-tests-35x'
+method: RwProjectConfigurationsTest
+_expectedLoadPackageNames_gemstone_version
+
+	^ #( 'Rowan-GemStone-Loader35x' 'Rowan-GemStone-35x' 'Rowan-Tests-35x' )
 %
 
 ! Class extensions for 'RwRowanProjectIssuesTest'

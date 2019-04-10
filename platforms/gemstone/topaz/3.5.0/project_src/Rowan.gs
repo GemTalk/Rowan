@@ -16066,37 +16066,37 @@ renameCategoryFrom: old to: new
 category: 'client commands'
 method: RowanClassService
 renameClass: oldClassName to: newClassName
-       | references newMethods |
-       newMethods := Array new. 
-       Rowan projectTools browser renameClassNamed: oldClassName to: newClassName.
-       name := newClassName. 
-       organizer := ClassOrganizer new. 
-       references := organizer update referencesTo: oldClassName asSymbol.
-       1 to: references first size do:[:index |
-               | method newSource compileResult failedCompile methodService |
-               failedCompile := false. 
-               method := references first at: index. 
-               newSource := self replaceSubString: oldClassName in: method sourceString with: newClassName.
-               compileResult := [method inClass rwCompileMethod: newSource
-                                                                       category: (method inClass categoryOfSelector: method selector) asSymbol] on: CompileError do:[:ex | failedCompile := true. method].
-               methodService := RowanMethodService forGsNMethod: compileResult organizer: organizer.
-               methodService failedCompile: failedCompile. 
-               newMethods add: methodService.
-               ].
-       RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods).
+	| references newMethods |
+	newMethods := Array new. 
+	Rowan projectTools browser renameClassNamed: oldClassName to: newClassName.
+	name := newClassName. 
+	organizer := ClassOrganizer new. 
+	references := organizer update referencesTo: oldClassName asSymbol.
+	1 to: references first size do:[:index |
+		| method newSource compileResult failedCompile methodService |
+		failedCompile := false. 
+		method := references first at: index. 
+		newSource := self replaceSubString: oldClassName in: method sourceString with: newClassName.
+		compileResult := [method inClass rwCompileMethod: newSource
+									category: (method inClass categoryOfSelector: method selector) asSymbol] on: CompileError do:[:ex | failedCompile := true. method].
+		methodService := RowanMethodService forGsNMethod: compileResult organizer: organizer.
+		methodService failedCompile: failedCompile. 
+		newMethods add: methodService.
+		].
+	RowanCommandResult addResult: (RowanAnsweringService new answer: newMethods).
 %
 
 category: 'private'
 method: RowanClassService
 replaceSubString: old in: string with: new
-       | offset newSource |
-       newSource := string. 
-       offset := 1.    
-       [(offset := newSource findString: old startingAt: offset) = 0] whileFalse:[
-               newSource := newSource copyReplaceFrom: offset to: offset + old size - 1 with: new. 
-               offset := offset + new size. 
-       ].
-       ^newSource
+	| offset newSource |
+	newSource := string. 
+	offset := 1. 	
+	[(offset := newSource findString: old startingAt: offset) = 0] whileFalse:[
+		newSource := newSource copyReplaceFrom: offset to: offset + old size - 1 with: new. 
+		offset := offset + new size. 
+	].
+	^newSource
 %
 
 category: 'rowan'
@@ -16699,10 +16699,11 @@ definitionClass
 
 category: 'Updating'
 method: RowanMethodService
-failedCompile: boolean 
-       
-       failedCompile := boolean
+failedCompile: boolean	
+	
+	failedCompile := boolean
 %
+
 category: 'client commands'
 method: RowanMethodService
 fileout
@@ -21917,7 +21918,7 @@ _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior
 				self errorLog: res  add: aLoadedClass name -> 'ClassVars changed in compiled class v loaded class'].
 	((aLoadedClass propertyAt: 'pools') = ((aBehavior.poolDictionaries ifNil: [Array new]) collect: [:e | e asString]) ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'PoolDictionaries changed in compiled class v loaded class'].
-	((aLoadedClass propertyAt: 'comment' ifAbsent: [ '' ]) isEquivalent: aBehavior rwComment ) 
+	((aLoadedClass propertyAt: 'comment' ifAbsent: ['']) isEquivalent: aBehavior rwComment ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Comment has changed in compiled class v loaded class'].
 	((aLoadedClass propertyAt: 'category') = aBehavior category ) 
 			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Class category has changed in compiled class v loaded class'].
@@ -43422,17 +43423,6 @@ rwCompileMethod: sourceString category: aCategoryString packageName: packageName
 		inPackageNamed: packageName
 %
 
-category: '*rowan-gemstone-kernel'
-method: Behavior
-rwMoveMethod: methodSelector toCategory: categoryName
-
-	^ Rowan projectTools browser
-		moveMethod: methodSelector
-		forClassNamed: self thisClass name asString
-		isMeta: self isMeta
-		toProtocol: categoryName
-%
-
 category: '*rowan-gemstone-35x'
 method: Behavior
 rwGuaranteePersistentMethodDictForEnv: envId
@@ -43449,6 +43439,17 @@ rwGuaranteePersistentMethodDictForEnv: envId
 		self persistentMethodDictForEnv: envId put: newDict.
 		^ newDict ] 
 		ensure:[ prot _leaveProtectedMode ].
+%
+
+category: '*rowan-gemstone-kernel'
+method: Behavior
+rwMoveMethod: methodSelector toCategory: categoryName
+
+	^ Rowan projectTools browser
+		moveMethod: methodSelector
+		forClassNamed: self thisClass name asString
+		isMeta: self isMeta
+		toProtocol: categoryName
 %
 
 category: '*rowan-gemstone-kernel'
@@ -43488,6 +43489,54 @@ constrs := constraints .
   aSymbol == (ivNams  at: i) ifTrue:[ ^ self _constraintAt: i ].
 ].
 ^ nil
+%
+
+category: '*rowan-gemstone-35x'
+method: Behavior
+_ivOffsetAndConstraint: aSymbol
+
+"Searches the instVarNames instance variable of the receiver for an instance
+ variable named aSymbol, and returns an Array containing the offset and the
+ constraint for that instance variable.  Returns nil if no instance variable
+ exists with the name aSymbol."
+
+| idx |
+idx := instVarNames indexOfIdentical: aSymbol .
+idx == 0 ifTrue:[ ^ nil ].
+^ { idx .  self _constraintAt: idx } 
+%
+
+category: '*rowan-gemstone-35x'
+method: Behavior
+_namedIvConstraintAtOffset: offset
+
+"Returns the constraint, if any, on the named instance variable at the
+ specified offset.  Returns Object if there is no such named instance variable,
+ or if the instance variable at that offset is not constrained."
+
+(offset > self instSize ) ifTrue:[ ^ Object ] .
+^ self _constraintAt: offset 
+%
+
+category: '*rowan-gemstone-35x'
+method: Behavior
+_newConstraint: aClass atOffset: offset
+
+"Execute the constraint change for Behavior | instvar:ConstraintTo:
+ assuming all error and variance checks have been done."
+| constrs |
+self deprecated: 'Behavior>>_newConstraint:atOffset: deprecated, Constraints are no longer supported'.
+self _validatePrivilege ifTrue:[ 
+  (constrs := constraints) size == 0 ifTrue:[ | sz |
+    aClass == Object ifTrue:[ ^ self "do nothing"].
+    sz := self instSize .
+    (constrs := Array new: sz ) replaceFrom: 1 to: sz withObject: Object.
+    constraints := constrs .
+  ].
+  constrs at: offset put: aClass .
+  (aClass == Object) ifFalse:[ self _setConstraintBit ].
+  self _refreshClassCache: false .
+]
 %
 
 category: '*rowan-gemstone-kernel'
@@ -43568,54 +43617,6 @@ otherCvs ifNotNil:[ | destCvs |
 ].
 
 ^failed.
-%
-
-category: '*rowan-gemstone-35x'
-method: Behavior
-_ivOffsetAndConstraint: aSymbol
-
-"Searches the instVarNames instance variable of the receiver for an instance
- variable named aSymbol, and returns an Array containing the offset and the
- constraint for that instance variable.  Returns nil if no instance variable
- exists with the name aSymbol."
-
-| idx |
-idx := instVarNames indexOfIdentical: aSymbol .
-idx == 0 ifTrue:[ ^ nil ].
-^ { idx .  self _constraintAt: idx }
-%
-
-category: '*rowan-gemstone-35x'
-method: Behavior
-_namedIvConstraintAtOffset: offset
-
-"Returns the constraint, if any, on the named instance variable at the
- specified offset.  Returns Object if there is no such named instance variable,
- or if the instance variable at that offset is not constrained."
-
-(offset > self instSize ) ifTrue:[ ^ Object ] .
-^ self _constraintAt: offset 
-%
-
-category: '*rowan-gemstone-35x'
-method: Behavior
-_newConstraint: aClass atOffset: offset
-
-"Execute the constraint change for Behavior | instvar:ConstraintTo:
- assuming all error and variance checks have been done."
-| constrs |
-self deprecated: 'Behavior>>_newConstraint:atOffset: deprecated, Constraints are no longer supported'.
-self _validatePrivilege ifTrue:[ 
-  (constrs := constraints) size == 0 ifTrue:[ | sz |
-    aClass == Object ifTrue:[ ^ self "do nothing"].
-    sz := self instSize .
-    (constrs := Array new: sz ) replaceFrom: 1 to: sz withObject: Object.
-    constraints := constrs .
-  ].
-  constrs at: offset put: aClass .
-  (aClass == Object) ifFalse:[ self _setConstraintBit ].
-  self _refreshClassCache: false .
-]
 %
 
 category: '*rowan-gemstone-kernel'
@@ -44007,15 +44008,6 @@ rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfCl
 
 category: '*rowan-gemstone-kernel'
 method: Class
-rwComment
-
-	"Provide direct access to comment of class, bypassing default comeent string."
-  
-  ^ (self _extraDictAt: #comment) ifNil: [ '' ]
-%
-
-category: '*rowan-gemstone-kernel'
-method: Class
 rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts category: aCategoryName packageName: aPackageName  options: optionsArray
 
 	^ Rowan projectTools browser
@@ -44030,6 +44022,15 @@ rwByteSubclass: aString classVars: anArrayOfClassVars classInstVars: anArrayOfCl
 		packageName: aPackageName
 		constraints: #()
 		options: optionsArray
+%
+
+category: '*rowan-gemstone-kernel'
+method: Class
+rwComment
+
+	"Provide direct access to comment of class, bypassing default comeent string."
+  
+  ^ (self _extraDictAt: #comment) ifNil: [ '' ]
 %
 
 category: '*rowan-gemstone-kernel'
@@ -44256,11 +44257,6 @@ _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: option
 
 	 self _equivalentSubclass: oldClass superCls: actualSelf name: aString newOpts: optionsArray newFormat: theFormat newInstVars: anArrayOfInstvarNames newClassInstVars: anArrayOfClassInstVars newPools: anArrayOfPoolDicts newClassVars: anArrayOfClassVars inDict: aDictionary isKernel: isKernelBool
 %
-category: '*rowan-gemstone-35x'
-method: Class
-_subclass: className instVarNames: anArrayOfInstvarNames format: theFormat constraints: theConstraints classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
-  ^ self _subclass: className instVarNames: anArrayOfInstvarNames format: theFormat classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
-%
 
 category: '*rowan-gemstone-kernel'
 method: Class
@@ -44377,6 +44373,12 @@ _rwSortedConstraints
 ^constraintArray
 %
 
+category: '*rowan-gemstone-35x'
+method: Class
+_subclass: className instVarNames: anArrayOfInstvarNames format: theFormat constraints: theConstraints classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
+  ^ self _subclass: className instVarNames: anArrayOfInstvarNames format: theFormat classVars: anArrayOfClassVars classInstVars: anArrayOfClassInstVars poolDictionaries: anArrayOfPoolDicts inDictionary: aDictionary inClassHistory: aClassHistory description: aDescription options: optionsArray
+%
+
 ! Class extensions for 'CypressAddition'
 
 !		Instance methods for 'CypressAddition'
@@ -44444,7 +44446,7 @@ definitionString
 		classVariablesString: self classVariablesString
 		classInstanceVariablesString: self classInstanceVariablesString
 		poolDictionariesString: self poolDictionariesString
-		comment: self comment printString
+		comment: self rwComment printString
 		category: self category printString
 %
 

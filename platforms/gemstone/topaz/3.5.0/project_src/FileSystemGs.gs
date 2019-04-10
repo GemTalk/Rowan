@@ -18428,6 +18428,9 @@ isMemoryFileSystem
 %
 
 ! Class extensions for 'GsFile'
+
+!		Class methods for 'GsFile'
+
 category: '*filesystem-gemstone-kernel-35x'
 classmethod: GsFile
 _contentsOfServerDirectory: aPathName expandPath: aBoolean
