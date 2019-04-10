@@ -21216,25 +21216,7 @@ category: 'class directory reading'
 classmethod: RwRepositoryComponentProjectFiletreeReaderVisitor
 readClassDirectories: directoryArray
 
-	| visitor projectReference projectDefinition packageDefinition packageName |
-	packageName :=  '___READ_CLASS_Package___'.
-	projectReference := RwProjectReferenceDefinition projectName: '___READ_CLASS_Project___' useGit: false.
-	projectDefinition := (RwComponentProjectDefinition newForProjectReference: projectReference)
-		packageConvention: 'Rowan';
-		setSymbolDictName: 'Globals' forPackageNamed: packageName;
-		yourself.
-	1 to: directoryArray size do: [:index |
-		| directory |
-		directory := directoryArray at: index.
-		projectDefinition setSymbolDictName: 'Globals' forPackageNamed: packageName, '_', index asString.
-		packageDefinition := projectDefinition addPackageNamed:  packageName, '_', index asString.
-		visitor := self new
-			currentProjectDefinition: projectDefinition;
-			currentPackageDefinition: packageDefinition;
-			_packageConvention: 'Rowan';
-			yourself.
-		visitor readClassDirectory: directory inPackage: packageDefinition name ].
-	^ projectDefinition
+	^ self readClassDirectories: directoryArray  projectName: '___READ_CLASS_Project___' packageName: '___READ_CLASS_Package___'
 %
 
 category: 'class directory reading'
@@ -21408,24 +21390,7 @@ category: 'class file reading'
 classmethod: RwRepositoryComponentProjectTonelReaderVisitor
 readClassFiles: fileArray
 
-	| visitor projectReference projectDefinition packageDefinition packageName |
-	packageName :=  '___READ_CLASS_Package___'.
-	projectReference := RwProjectReferenceDefinition projectName: '___READ_CLASS_Project___' useGit: false.
-	projectDefinition := (RwComponentProjectDefinition newForProjectReference: projectReference)
-		packageConvention: 'Rowan';
-		yourself.
-	1 to: fileArray size do: [:index |
-		| file |
-		file := fileArray at: index.
-		projectDefinition setSymbolDictName: 'Globals' forPackageNamed: packageName, '_', index asString.
-		packageDefinition := projectDefinition addPackageNamed:  packageName, '_', index asString.
-		visitor := self new
-			currentProjectDefinition: projectDefinition;
-			currentPackageDefinition: packageDefinition;
-			_packageConvention: 'Rowan';
-			yourself.
-		visitor readClassFile: file inPackage: packageDefinition name ].
-	^ projectDefinition
+	^ self readClassFiles: fileArray projectName: '___READ_CLASS_Project___' packageName: '___READ_CLASS_Package___'
 %
 
 category: 'class file reading'
@@ -44446,7 +44411,7 @@ definitionString
 		classVariablesString: self classVariablesString
 		classInstanceVariablesString: self classInstanceVariablesString
 		poolDictionariesString: self poolDictionariesString
-		comment: self rwComment printString
+		comment: self comment printString
 		category: self category printString
 %
 

@@ -22,7 +22,7 @@ CypressClassDefinition >> definitionString [
 		classVariablesString: self classVariablesString
 		classInstanceVariablesString: self classInstanceVariablesString
 		poolDictionariesString: self poolDictionariesString
-		comment: self rwComment printString
+		comment: self comment printString
 		category: self category printString
 
 ]
