@@ -151,7 +151,7 @@ RwProjectReferenceDefinition >> acceptVisitor: aVisitor [
 { #category : 'conversion' }
 RwProjectReferenceDefinition >> asSpecification [
 
-	| repoSpec |
+	| repoSpec platformSpec platformDict |
 	self useGit
 		ifTrue: [
 			repoSpec := RwGitRepositorySpecification new
@@ -160,6 +160,9 @@ RwProjectReferenceDefinition >> asSpecification [
 				remoteUrl: self remoteUrl;
 				yourself ]
 		ifFalse: [  repoSpec := RwDiskRepositorySpecification new ] .
+	platformSpec := RwGemStoneSpecification new.
+	platformSpec packageNameToPlatformPropertiesMap: self packageNameToPlatformPropertiesMap.
+	platformDict := (Dictionary new) at: 'gemstone' put: platformSpec; yourself.
 	^ RwComponentSpecification new
 		specName: self projectName;
 		projectUrl: self projectUrl;
@@ -171,6 +174,7 @@ RwProjectReferenceDefinition >> asSpecification [
 		defaultGroupNames: self groupNames;
 		comment: self comment;
 		repoSpec: repoSpec;
+		platformSpec: platformDict;
 		yourself.
 ]
 
