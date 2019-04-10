@@ -1,0 +1,41 @@
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit 1
+
+  set u SystemUser p swordfish
+  login
+
+# reload projects to pick up latest source in packages
+  run
+	| projectNames warnings |
+	projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' 'FileSystemGs' ).
+	warnings := {}.
+	projectNames do: [:projectName |
+		[	Rowan projectTools load
+			loadProjectNamed: projectName
+			withGroupNames: #('tests' 'jadeServer') ]
+				on: CompileWarning do: [:ex |
+					(ex description includesString: 'not optimized')
+						ifFalse: [ warnings add: ex asString printString ].
+					ex resume ] ].
+
+ 	warnings isEmpty ifFalse: [
+		GsFile gciLogServer: 'COMPILE WARNINGS: '.
+		warnings do: [:warning | GsFile gciLogServer: '	', warning ]. 
+		self error: 'Warnings during project load' ]. 
+
+	System commit.
+
+	"audit after load"
+	projectNames do: [:projectName |
+		| audit |
+		audit := Rowan projectTools audit auditForProjectNamed: projectName.
+		audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
+	true
+%
+  commit
+
+  logout
+
+	errorCount
