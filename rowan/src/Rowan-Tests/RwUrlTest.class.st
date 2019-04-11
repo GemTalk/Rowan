@@ -27,6 +27,20 @@ RwUrlTest class >> testParseNoErrors [
 ]
 
 { #category : 'private' }
+RwUrlTest >> sampleFileUrlStrings [
+	"file: url, pathString pairs"
+
+	"the complicated bit is the env variable in the url"
+
+	^ {
+		{ 'file:/home/dhenrich/_home/shared/repos/rowan/sample/' . '/home/dhenrich/_home/shared/repos/rowan/sample/' }.
+		{ 'file:/home/dhenrich/_home/shared/repos/rowan/sample/spec.ston' . '/home/dhenrich/_home/shared/repos/rowan/sample/spec.ston' }.
+		{ 'file:$GS_HOME/shared/repos/rowan/sample/' . '$GS_HOME/shared/repos/rowan/sample/' }.
+		{ 'file:$GS_HOME/shared/repos/rowan/sample/spec.ston' . '$GS_HOME/shared/repos/rowan/sample/spec.ston' }.
+	}
+]
+
+{ #category : 'private' }
 RwUrlTest >> sampleUrlStrings [
   ^ {'github://GsDevKit/GsDevKit:master/repository'.
   'gitfiletree://gitlab.com/GsDevKit/GsDevKit:350/repository'.
@@ -72,4 +86,20 @@ RwUrlTest >> testAsRwUrl [
       RwUrl fromString: urlString.
       url := urlString asRwUrl.
       self assert: url printString = urlString ]
+]
+
+{ #category : 'tests' }
+RwUrlTest >> testAsRwUrlForFileUrls [
+
+	self sampleFileUrlStrings
+		do: [ :ar | 
+			| url urlString fileString pathString dirString |
+			urlString := ar at: 1.
+			fileString := ar at: 2.
+			RwUrl fromString: urlString.
+			url := urlString asRwUrl.
+			pathString := url pathString.
+			dirString := url pathDirString.
+			self assert: (pathString = fileString).
+			self assert: url printString = urlString ]
 ]
