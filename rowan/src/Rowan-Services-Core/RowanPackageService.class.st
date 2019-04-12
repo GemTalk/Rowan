@@ -302,6 +302,7 @@ RowanPackageService >> removeClass: classService [
 
 	self removeClassNamed: classService name. 
 	self update.
+	self setDefaultTemplate.
 	classService updateType: #removedClass:.
 	RowanCommandResult addResult: classService
 ]
