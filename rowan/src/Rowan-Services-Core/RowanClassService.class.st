@@ -547,6 +547,7 @@ RowanClassService >> minimalRefreshFrom: theClass [
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
 	instVarNames := classOrMeta instVarNames. 
+	template := self classCreationTemplate.
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
 	self setIsTestCase.
