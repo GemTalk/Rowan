@@ -29184,7 +29184,7 @@ category: 'conversion'
 method: RwProjectReferenceDefinition
 asSpecification
 
-	| repoSpec |
+	| repoSpec platformSpec platformDict |
 	self useGit
 		ifTrue: [
 			repoSpec := RwGitRepositorySpecification new
@@ -29193,6 +29193,9 @@ asSpecification
 				remoteUrl: self remoteUrl;
 				yourself ]
 		ifFalse: [  repoSpec := RwDiskRepositorySpecification new ] .
+	platformSpec := RwGemStoneSpecification new.
+	platformSpec packageNameToPlatformPropertiesMap: self packageNameToPlatformPropertiesMap.
+	platformDict := (Dictionary new) at: 'gemstone' put: platformSpec; yourself.
 	^ RwComponentSpecification new
 		specName: self projectName;
 		projectUrl: self projectUrl;
@@ -29204,6 +29207,7 @@ asSpecification
 		defaultGroupNames: self groupNames;
 		comment: self comment;
 		repoSpec: repoSpec;
+		platformSpec: platformDict;
 		yourself.
 %
 
@@ -42599,7 +42603,7 @@ pathString
 	
 	
 	^String streamContents: [ :s | | first |
-		"isAbsolute ifTrue:[ s nextPut: $/ ]."
+		self isAbsolute ifTrue:[ s nextPut: $/ ].
 		first := true.
 		self path do: [ :p |
 			first ifFalse: [ s nextPut: $/ ].
@@ -42630,8 +42634,6 @@ printOn: aStream
 	host isEmpty ifFalse: [isAbsolute ifFalse: [aStream nextPutAll: '<ErroneousURL>'. ^nil].
 						aStream nextPutAll: '//';
 						nextPutAll: host].
-
-	isAbsolute ifTrue: [aStream nextPut: $/].
 
 	aStream
 		nextPutAll: self pathString.
@@ -42822,6 +42824,15 @@ category: 'accessing'
 method: RwGithubUrl
 dirPath
   ^ self pathFor: dir
+%
+
+category: 'accessing'
+method: RwGithubUrl
+isAbsolute
+	"Should the path be considered absolute to
+	the filesystem instead of relative to the default directory?"
+ 
+	^false
 %
 
 category: 'printing'
