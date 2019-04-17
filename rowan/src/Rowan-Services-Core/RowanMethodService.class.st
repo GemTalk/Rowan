@@ -62,7 +62,8 @@ RowanMethodService class >> removeUnicode: string [
 	(string isKindOf: MultiByteString) ifTrue:[
 		| ws | 
 		ws := WriteStream on: String new. 
-		ws nextPutAll: '''This method source contains unicode and is not displayable in Jadeite. 
+		ws nextPutAll: '''METHOD SOURCE CANNOT BE DISPLAYED
+This method source contains unicode and is not displayable in Jadeite. 
 An approximation of the source code is given printed below with $\x<char hex value>
 replacing the actual unicode character.''';
 			cr; 

@@ -12,8 +12,8 @@ Class {
 
 { #category : 'unicode method' }
 RowanServicesTest >> compileUnicodeMethod [
+	"RowanServicesTest new compileUnicodeMethod"
 
-	"handy method for creating a method with unicode source"
 	RowanServicesTest rwCompileMethod:
 	'iAmAUnicodeMethod
 
