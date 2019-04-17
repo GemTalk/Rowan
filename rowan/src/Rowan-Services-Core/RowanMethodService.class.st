@@ -53,6 +53,31 @@ RowanMethodService class >> forSelector: sel class: theClass meta: boolean organ
 
 ]
 
+{ #category : 'utility' }
+RowanMethodService class >> removeUnicode: string [
+
+	"possibly a unicode string which is not yet 
+	presentable in Jadeite."
+
+	(string isKindOf: MultiByteString) ifTrue:[
+		| ws | 
+		ws := WriteStream on: String new. 
+		ws nextPutAll: '''This method source contains unicode and is not displayable in Jadeite. 
+An approximation of the source code is given printed below with $\x<char hex value>
+replacing the actual unicode character.''';
+			cr; 
+			cr.
+		string do:[:char | 
+			char asInteger > 255 ifTrue:[
+				ws nextPutAll: '$\x', char asInteger asHexString]
+			ifFalse:[
+				ws nextPut: char
+			]].
+		^ws contents]
+	ifFalse:[
+		^string].
+]
+
 { #category : 'instance creation' }
 RowanMethodService class >> source: source selector: selector category: category className: className packageName: packageName meta: boolString [
 
@@ -187,7 +212,7 @@ RowanMethodService >> clearBreakAt: stepPoint [
 	RowanCommandResult addResult: self.
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Updating' }
 RowanMethodService >> comparisonSource: string [
 
 	comparisonSource := string
@@ -240,7 +265,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	oop := gsNMethod asOop. 
 	stepPoints := self stepPointsFor: gsNMethod.
 	breakPoints := self breakPointsFor: gsNMethod.
-	source := gsNMethod sourceString.
+	self updateSource: gsNMethod sourceString.
 	category := (classOrMeta categoryOfSelector: selector) asString.
 	className := theClass name asString. 
 	packageName := gsNMethod rowanPackageName. 
@@ -310,7 +335,7 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	breakPoints := self breakPointsFor: aGsNMethod.
 	((inClass := aGsNMethod inClass) isNil or: [selector isNil]) ifTrue: [
 		meta := false.
-		source := aGsNMethod sourceString.
+		self updateSource: aGsNMethod sourceString.
 		hasSupers := false.
 		hasSubs := false.
 		organizer := aClassOrganizer. 
@@ -335,7 +360,7 @@ RowanMethodService >> isTestMethod [
 	^isTestMethod
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Updating' }
 RowanMethodService >> isTestMethod: boolean [
 
 	isTestMethod := boolean
@@ -463,7 +488,7 @@ RowanMethodService >> selector [
 
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Updating' }
 RowanMethodService >> selector: aSymbol [
 
 	selector := aSymbol
@@ -513,11 +538,10 @@ RowanMethodService >> source [
 
 ]
 
-{ #category : 'Accessing' }
-RowanMethodService >> source: aString [
+{ #category : 'Updating' }
+RowanMethodService >> source: string [
 	
-	source := aString
-
+	self updateSource: string
 ]
 
 { #category : 'Accessing' }
@@ -571,6 +595,12 @@ RowanMethodService >> update [
 		initialize: (Object _objectForOop: oop) 
 		organizer: ClassOrganizer new.
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'private' }
+RowanMethodService >> updateSource: string [
+
+	source := self class removeUnicode: string
 ]
 
 { #category : 'testing' }

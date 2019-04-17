@@ -10,6 +10,20 @@ Class {
 	#category : 'Rowan-Services-Tests'
 }
 
+{ #category : 'unicode method' }
+RowanServicesTest >> compileUnicodeMethod [
+
+	"handy method for creating a method with unicode source"
+	RowanServicesTest rwCompileMethod:
+	'iAmAUnicodeMethod
+
+		| abc |
+		abc := ''', (String with: (Character withValue: 16r3DA)), '''.
+		^abc'
+
+	category: 'unicode method'
+]
+
 { #category : 'support' }
 RowanServicesTest >> createClassDefinitionNamed: className [
 

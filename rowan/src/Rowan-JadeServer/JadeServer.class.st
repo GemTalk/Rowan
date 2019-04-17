@@ -185,7 +185,8 @@ JadeServer >> _describeMCDefinition: anMCDefinition on: aStream [
 
 { #category : 'category' }
 JadeServer >> _describeMCMethodDefinition: anMCMethodDefinition on: aStream [
-
+	| unicodeFreeSource |
+	unicodeFreeSource := RowanMethodService removeUnicode: anMCMethodDefinition source.
 	aStream
 		nextPut: $M; tab;
 		nextPutAll: anMCMethodDefinition timeStamp; tab;
@@ -193,10 +194,8 @@ JadeServer >> _describeMCMethodDefinition: anMCMethodDefinition on: aStream [
 		nextPutAll: anMCMethodDefinition classIsMeta printString; tab;
 		nextPutAll: anMCMethodDefinition category; tab;
 		nextPutAll: anMCMethodDefinition selector; tab;
-		nextPutAll: anMCMethodDefinition source size printString; tab;
-		nextPutAll: anMCMethodDefinition source; lf.
-
-
+		nextPutAll: unicodeFreeSource size printString; tab;
+		nextPutAll: unicodeFreeSource; lf.
 ]
 
 { #category : 'category' }
@@ -260,7 +259,7 @@ JadeServer >> _describeMethod: aMethod [
 "4"		selector: aMethod selector;
 "5"		category: (self categoryOfMethod: aMethod);
 "6"		isReadOnly: (self currentUserMayEditMethod: aMethod);
-			source: aMethod sourceString.
+			source: (RowanMethodService removeUnicode: aMethod sourceString).
 
 	"unimplemented selectors"			"https://github.com/jgfoster/Jade/issues/117"
 	((aMethod class includesSelector: #'_selectorPool') and: [aMethod class includesSelector: #'_sourceOffsetOfFirstSendOf:']) ifTrue: [
@@ -294,10 +293,6 @@ JadeServer >> _describeMethod: aMethod [
 	string isNil ifTrue: [string := ''].
 	methodUpdate compilationWarnings: string.
 	methodUpdate writeMethodTo: writeStream.
-
- 
-
-
 ]
 
 { #category : 'category' }
