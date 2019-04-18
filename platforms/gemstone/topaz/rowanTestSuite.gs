@@ -1,3 +1,21 @@
+#!/usr/bin/gsdevkit/topaz_raw
+#
+# If you are using GsDevKit_home[1] and have stash[2] installed, this topaz 
+#	script can be directly executed:
+#
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/rowanTestSuite.gs <gsdevkit-stone-name> -l
+#
+#	[1] https://github.com/GsDevKit/GsDevKit_home
+# [2] https://github.com/dalehenrich/stash
+#
+
+  iferr 1 stk
+  iferr 2 stack
+  iferr 3 exit 1
+
+  set user SystemUser p swordfish
+  login
+
 run
 	| deprecationAction suite strm res projectNames includeDeprecatedPackages warnings |
 
@@ -80,3 +98,7 @@ run
 					ifTrue: [ Deprecated doErrorOnDeprecated ].
 			].
 %
+
+	commit
+
+	exit
