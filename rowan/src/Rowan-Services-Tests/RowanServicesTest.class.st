@@ -19,6 +19,7 @@ RowanServicesTest >> compileUnicodeMethod [
 
 		| abc |
 		abc := ''', (String with: (Character withValue: 16r3DA)), '''.
+		self halt. 
 		^abc'
 
 	category: 'unicode method'
