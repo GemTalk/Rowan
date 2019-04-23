@@ -12958,6 +12958,15 @@ platformConfigurationAttributes
 
 category: 'public'
 classmethod: Rowan
+projectNamed: aName
+
+	"Answer a project with the given name.  If no project with the given name is found, signals error."
+
+	^ self platform projectNamed: aName
+%
+
+category: 'public'
+classmethod: Rowan
 projectNames
 
 	"Return list of project names"
@@ -45880,6 +45889,20 @@ _userPlatformDictionaryForUser: aUserId
 	^ (System canWrite: userGlobals)
 		ifTrue: [ userGlobals ]
 		ifFalse: [ SessionTemps current ]
+%
+
+!		Instance methods for 'RwPlatform'
+
+category: '*rowan-core'
+method: RwPlatform
+projectNamed: aName
+
+	"Answer a project with the given name.  If no project with the given name is found, signals error."
+
+	| project |
+	project := RwProject newNamed: aName.
+	project _loadedProject.	"signal error, if the project does not exist"
+	^ project
 %
 
 ! Class extensions for 'RwProject'
