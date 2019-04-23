@@ -144,6 +144,14 @@ Rowan class >> platformConfigurationAttributes [
 ]
 
 { #category : 'public' }
+Rowan class >> projectNamed: aName [
+
+	"Answer a project with the given name.  If no project with the given name is found, signals error."
+
+	^ self platform projectNamed: aName
+]
+
+{ #category : 'public' }
 Rowan class >> projectNames [
 
 	"Return list of project names"
