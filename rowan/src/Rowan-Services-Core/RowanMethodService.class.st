@@ -54,7 +54,27 @@ RowanMethodService class >> forSelector: sel class: theClass meta: boolean organ
 ]
 
 { #category : 'utility' }
+RowanMethodService class >> put: string onStreamWithoutUnicode: stream [
+
+	string do:[:char | 
+			char asInteger > 255 ifTrue:[
+				stream nextPutAll: '$\x', char asInteger asHexString]
+			ifFalse:[
+				stream nextPut: char
+			]].
+]
+
+{ #category : 'utility' }
 RowanMethodService class >> removeUnicode: string [
+
+		| ws | 
+		ws := WriteStream on: String new. 
+		self put: string onStreamWithoutUnicode: ws. 
+		^ws contents
+]
+
+{ #category : 'utility' }
+RowanMethodService class >> removeUnicodeFromSource: string [
 
 	"possibly a unicode string which is not yet 
 	presentable in Jadeite."
@@ -68,12 +88,7 @@ An approximation of the source code is given printed below with $\x<char hex val
 replacing the actual unicode character.''';
 			cr; 
 			cr.
-		string do:[:char | 
-			char asInteger > 255 ifTrue:[
-				ws nextPutAll: '$\x', char asInteger asHexString]
-			ifFalse:[
-				ws nextPut: char
-			]].
+		self put: string onStreamWithoutUnicode: ws. 
 		^ws contents]
 	ifFalse:[
 		^string].
@@ -601,7 +616,7 @@ RowanMethodService >> update [
 { #category : 'private' }
 RowanMethodService >> updateSource: string [
 
-	source := self class removeUnicode: string
+	source := self class removeUnicodeFromSource: string
 ]
 
 { #category : 'testing' }
