@@ -1,6 +1,7 @@
 run
-	| deprecationAction suite strm res projectNames |
+	| deprecationAction suite strm res projectNames warnings |
 	deprecationAction := Deprecated deprecatedAction.
+	warnings := {}.
 	[
 		Deprecated doErrorOnDeprecated.
 		projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' ).
@@ -11,9 +12,18 @@ run
 			audit isEmpty ifFalse: [ self error: 'Pre load Rowan audit failed for project ', projectName printString ] ].
 		projectNames do: [:projectName |
 			"make sure test group is loaded ... include deprecated packages for now"
-			Rowan projectTools load
+			[ Rowan projectTools load
 				loadProjectNamed: projectName
-				withGroupNames: #('tests' 'deprecated' 'jadeServer') ].
+				withGroupNames: #('tests' 'deprecated' 'jadeServer') ]
+					on: CompileWarning do: [:ex |
+						warnings add: ex asString printString.
+						ex resume ] ].
+
+ 		warnings isEmpty ifFalse: [
+			GsFile gciLogServer: 'COMPILE WARNINGS: '.
+			warnings do: [:warning | GsFile gciLogServer: '	', warning ]. 
+			self error: 'Warnings during project load' ]. 
+		
 
 		System commit. "do a commit immediately after test code is loaded, to avoid losing test classes if a test does an apport"
 

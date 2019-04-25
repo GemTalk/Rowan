@@ -40,7 +40,7 @@ RowanProjectServiceTest >> tearDown [
 { #category : 'tests' }
 RowanProjectServiceTest >> test_addedProjectNotOnDisk [
 
-	| proj projectService projectName |
+	| projectService projectName |
 	projectName := 'Tashkent'. 
 	self jadeiteIssueTested: #issue246 withTitle: 'Jadeite handling project that''s not committed'. 
 	self createNonDiskTestProjectNamed:  projectName packageName: 'Packagekent'. 

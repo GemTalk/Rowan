@@ -608,7 +608,7 @@ RwUnpackagedBrowserApiTest >> testUpdateUnpackagedClassComment [
 
 	"Add comment to unpackaged class"
 
-	| audit x testClass |
+	| audit testClass |
 
 	testClass := self _testClass.
 	[ testClass
