@@ -16,30 +16,27 @@ RowanAnsweringServiceTest >> setUp [
 
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_execCompileError [
-	| gotError |
 
-	gotError := [service exec: '1 +' context: nil] on: CompileError do:[:ex |
-		true].
-	self assert: gotError.
+	self deny: (service exec: '1 +' context: nil) key.
 ]
 
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_execNilContext [
 
-	self assert: (service exec: '123' context: nil) equals: 123.
-	self assert: (service exec: '$a' context: nil) equals: $a.
-	self assert: (service exec: '''abc''' context: nil) equals: 'abc'.
-	self assert: (service exec: '3+4' context: nil) equals: 7.
-	self assert: (service exec: 'true' context: nil) equals: true.
-	self assert: (service exec: 'false' context: nil) equals: false.
+	self assert: (service exec: '123' context: nil) value equals: 123.
+	self assert: (service exec: '$a' context: nil) value equals: $a.
+	self assert: (service exec: '''abc''' context: nil) value equals: 'abc'.
+	self assert: (service exec: '3+4' context: nil) value equals: 7.
+	self assert: (service exec: 'true' context: nil) value equals: true.
+	self assert: (service exec: 'false' context: nil) value equals: false.
 ]
 
 { #category : 'tests' }
 RowanAnsweringServiceTest >> test_execWithContext [
 
-	self assert: (service exec: 'self' context: 123) equals: 123.
-	self assert: (service exec: 'self size' context: Array new) equals: 0.
-	self assert: (service exec: '1 + self' context: 2) equals: 3.
+	self assert: (service exec: 'self' context: 123) value equals: 123.
+	self assert: (service exec: 'self size' context: Array new) value equals: 0.
+	self assert: (service exec: '1 + self' context: 2) value equals: 3.
 ]
 
 { #category : 'tests' }

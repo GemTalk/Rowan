@@ -52,7 +52,11 @@ RowanAnsweringService >> exec: aString [
 { #category : 'client commands' }
 RowanAnsweringService >> exec: aString context: anObject [
 
-	answer := (aString evaluateInContext: anObject symbolList: GsSession currentSession symbolList). 
+	answer := [true -> (aString evaluateInContext: anObject symbolList: GsSession currentSession symbolList)] 
+		on: CompileError do: [:ex | 
+			false -> ex errorDetails
+	].
+	answer key ifTrue:[RowanService autoCommit ifTrue:[System commitTransaction]].
 	RowanCommandResult addResult: self.
 
 	"return answer for testing" 
