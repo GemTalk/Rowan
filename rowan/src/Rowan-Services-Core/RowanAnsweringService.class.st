@@ -126,9 +126,9 @@ RowanAnsweringService >> selectorsMatchingPattern: pattern [
 ]
 
 { #category : 'client commands' }
-RowanAnsweringService >> setAutoCommit: boolean [
+RowanAnsweringService >> setAutoCommit: object [
 
-	answer := RowanService setAutoCommit: boolean.
+	answer := RowanService setAutoCommit: object.
 	RowanCommandResult addResult: self.
 ]
 

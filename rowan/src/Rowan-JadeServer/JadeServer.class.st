@@ -856,8 +856,8 @@ JadeServer >> autoCommitIfRequired [
 	| commitResult |
 	RowanService autoCommit == true ifTrue:[
 		commitResult := System commitTransaction.
-		RowanBrowserService new autoCommit: (
-			commitResult 
+		RowanBrowserService new autoCommit: 
+			(commitResult 
 				ifTrue:[true]
 				ifFalse:[#failed])].
 ]
