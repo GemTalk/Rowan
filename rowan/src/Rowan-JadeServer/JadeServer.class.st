@@ -854,7 +854,7 @@ JadeServer >> authorInitials: aString [
 { #category : 'jadeite' }
 JadeServer >> autoCommitIfRequired [
 	| commitResult |
-	RowanService autoCommit ifTrue:[
+	RowanService autoCommit == true ifTrue:[
 		commitResult := System commitTransaction.
 		RowanBrowserService new autoCommit: (
 			commitResult 
