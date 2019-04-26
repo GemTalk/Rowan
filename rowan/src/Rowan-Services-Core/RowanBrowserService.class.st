@@ -49,7 +49,6 @@ RowanBrowserService >> autoCommit: object [
 	autoCommit := RowanService autoCommit. 
 	updateType := #autoCommitUpdate:.
 	RowanCommandResult addResult: self.
-	Transcript cr; show: autoCommit printString.
 ]
 
 { #category : 'client commands' }
