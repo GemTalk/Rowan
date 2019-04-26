@@ -61,9 +61,9 @@ RowanService class >> sampleService [
 ]
 
 { #category : 'autocommit' }
-RowanService class >> setAutoCommit: boolean [
+RowanService class >> setAutoCommit: object [
 
-	^SessionTemps current at: #'Jadeite_AutoCommit' put: boolean
+	^SessionTemps current at: #'Jadeite_AutoCommit' put: object
 ]
 
 { #category : 'other' }

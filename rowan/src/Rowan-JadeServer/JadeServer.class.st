@@ -851,6 +851,17 @@ JadeServer >> authorInitials: aString [
 
 ]
 
+{ #category : 'jadeite' }
+JadeServer >> autoCommitIfRequired [
+	| commitResult |
+	RowanService autoCommit ifTrue:[
+		commitResult := System commitTransaction.
+		RowanBrowserService new autoCommit: (
+			commitResult 
+				ifTrue:[true]
+				ifFalse:[#failed])].
+]
+
 { #category : 'category' }
 JadeServer >> beginTransaction [
 
@@ -5283,8 +5294,8 @@ JadeServer >> updateFromSton: stonString [
 			service command
 				ifNil: [service update]
 				ifNotNil: [service servicePerform: service command withArguments: service commandArgs]].
+	self autoCommitIfRequired.
 	resultString := STON toString: RowanCommandResult results.
-	RowanService autoCommit ifTrue:[System commitTransaction]. 
 	^resultString
 ]
 
