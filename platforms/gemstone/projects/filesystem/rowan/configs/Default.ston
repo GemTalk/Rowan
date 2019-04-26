@@ -15,7 +15,6 @@ RwProjectLoadConfiguration {
 					'FileSystem-Path',
 					'Zinc-Character-Encoding-Core',
 					'Files',
-					'Kernel-Methods',
 					'Network-UUID'
 				]
 			},

@@ -20,7 +20,6 @@ Class {
 		'references',
 		'stepPoints',
 		'selectedPackageServices',
-		'superSource',
 		'superDisplayString',
 		'accessedInstVars',
 		'breakPoints',
@@ -28,7 +27,8 @@ Class {
 		'definedPackage',
 		'isTestMethod',
 		'testRunClassName',
-		'failedCompile'
+		'failedCompile',
+		'comparisonSource'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -51,6 +51,47 @@ RowanMethodService class >> forSelector: sel class: theClass meta: boolean organ
 	service forClass: theClass organizer: anOrganizer.
 	^service
 
+]
+
+{ #category : 'utility' }
+RowanMethodService class >> put: string onStreamWithoutUnicode: stream [
+
+	string do:[:char | 
+			char asInteger > 255 ifTrue:[
+				stream nextPutAll: '$\x', char asInteger asHexString]
+			ifFalse:[
+				stream nextPut: char
+			]].
+]
+
+{ #category : 'utility' }
+RowanMethodService class >> removeUnicode: string [
+
+		| ws | 
+		ws := WriteStream on: String new. 
+		self put: string onStreamWithoutUnicode: ws. 
+		^ws contents
+]
+
+{ #category : 'utility' }
+RowanMethodService class >> removeUnicodeFromSource: string [
+
+	"possibly a unicode string which is not yet 
+	presentable in Jadeite."
+
+	(string isKindOf: MultiByteString) ifTrue:[
+		| ws | 
+		ws := WriteStream on: String new. 
+		ws nextPutAll: '''METHOD SOURCE CANNOT BE DISPLAYED
+This method source contains unicode and is not displayable in Jadeite. 
+An approximation of the source code is given printed below with $\x<char hex value>
+replacing the actual unicode character.''';
+			cr; 
+			cr.
+		self put: string onStreamWithoutUnicode: ws. 
+		^ws contents]
+	ifFalse:[
+		^string].
 ]
 
 { #category : 'instance creation' }
@@ -187,6 +228,12 @@ RowanMethodService >> clearBreakAt: stepPoint [
 	RowanCommandResult addResult: self.
 ]
 
+{ #category : 'Updating' }
+RowanMethodService >> comparisonSource: string [
+
+	comparisonSource := string
+]
+
 { #category : 'Accessing' }
 RowanMethodService >> compilationWarnings [
 
@@ -234,7 +281,7 @@ RowanMethodService >> forClass: theClass organizer: theOrganizer [
 	oop := gsNMethod asOop. 
 	stepPoints := self stepPointsFor: gsNMethod.
 	breakPoints := self breakPointsFor: gsNMethod.
-	source := gsNMethod sourceString.
+	self updateSource: gsNMethod sourceString.
 	category := (classOrMeta categoryOfSelector: selector) asString.
 	className := theClass name asString. 
 	packageName := gsNMethod rowanPackageName. 
@@ -304,7 +351,7 @@ RowanMethodService >> initialize: aGsNMethod organizer: aClassOrganizer [
 	breakPoints := self breakPointsFor: aGsNMethod.
 	((inClass := aGsNMethod inClass) isNil or: [selector isNil]) ifTrue: [
 		meta := false.
-		source := aGsNMethod sourceString.
+		self updateSource: aGsNMethod sourceString.
 		hasSupers := false.
 		hasSubs := false.
 		organizer := aClassOrganizer. 
@@ -329,7 +376,7 @@ RowanMethodService >> isTestMethod [
 	^isTestMethod
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Updating' }
 RowanMethodService >> isTestMethod: boolean [
 
 	isTestMethod := boolean
@@ -457,7 +504,7 @@ RowanMethodService >> selector [
 
 ]
 
-{ #category : 'Accessing' }
+{ #category : 'Updating' }
 RowanMethodService >> selector: aSymbol [
 
 	selector := aSymbol
@@ -490,7 +537,7 @@ RowanMethodService >> setSupersAndSubsFor: theClass [
 	[theSuper notNil and:[hasSupers not]] whileTrue:[
 		hasSupers := theSuper selectors includes: selector.
 		hasSupers ifTrue:[
-			superSource := theSuper sourceCodeAt: selector.
+			comparisonSource := theSuper sourceCodeAt: selector.
 			superDisplayString := theSuper name, '>>', selector].
 		theSuper := theSuper superClass].
 	(organizer allSubclassesOf: theClass thisClass) do:[:cls |
@@ -507,11 +554,10 @@ RowanMethodService >> source [
 
 ]
 
-{ #category : 'Accessing' }
-RowanMethodService >> source: aString [
+{ #category : 'Updating' }
+RowanMethodService >> source: string [
 	
-	source := aString
-
+	self updateSource: string
 ]
 
 { #category : 'Accessing' }
@@ -565,6 +611,12 @@ RowanMethodService >> update [
 		initialize: (Object _objectForOop: oop) 
 		organizer: ClassOrganizer new.
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'private' }
+RowanMethodService >> updateSource: string [
+
+	source := self class removeUnicodeFromSource: string
 ]
 
 { #category : 'testing' }
