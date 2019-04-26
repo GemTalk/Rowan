@@ -36,7 +36,7 @@ RowanService class >> autoCommit [
 { #category : 'autocommit' }
 RowanService class >> flipAutoCommit [
 
-	^self setAutoCommit: self autoCommit not
+	^self setAutoCommit:  (self autoCommit == true) not
 ]
 
 { #category : 'instance creation' }

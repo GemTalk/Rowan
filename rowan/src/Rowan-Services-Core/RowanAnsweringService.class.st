@@ -56,7 +56,7 @@ RowanAnsweringService >> exec: aString context: anObject [
 		on: CompileError do: [:ex | 
 			false -> ex errorDetails
 	].
-	answer key ifTrue:[RowanService autoCommit ifTrue:[System commitTransaction]].
+	answer key ifTrue:[(RowanService autoCommit == true) ifTrue:[System commitTransaction]].
 	RowanCommandResult addResult: self.
 
 	"return answer for testing" 
