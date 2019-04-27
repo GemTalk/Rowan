@@ -26,17 +26,19 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 
 	"Ignore packaged instance and class methods"
 
-	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
-		theBehavior actualPackageSymDictName |
+	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary
+		registry theBehavior actualPackageSymDictName |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	
 	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
 	packageSymDictName := (gemstoneSpec symbolDictNameForPackageNamed: packageName) asSymbol.
 
 	theClass := Rowan globalNamed: className.
-	theClass ifNil: [ self error: 'The class ', className printString, ' is not present in the current user''s symbol list' ].
+	theClass ifNil: [ 
+		(RwAdoptClassErrorNotification failureAdoptingClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
+		"if exception resumed then we'll skip the adopt operation for this class"
+		^ self ].
 	(Rowan image symbolList dictionariesAndSymbolsOf: theClass)
 		do: [:ar |
 			actualPackageSymDictName := (ar at: 1) name.
@@ -64,24 +66,35 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 	theBehavior := theClass.
 	instanceSelectors do: [:methodSelector |
 		| theCompiledMethod |
-		theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
-		registry
-			adoptCompiledMethod: theCompiledMethod
-			classExtension: classExtension
-			for: theBehavior 
-			protocol: (theBehavior categoryOfSelector: methodSelector) 
-			toPackageNamed: packageName ].
+		theCompiledMethod := (theBehavior compiledMethodAt: methodSelector  otherwise: nil)
+			ifNil: [ 
+				(RwAdoptMethodErrorNotification failureAdoptingMethod: methodSelector isMeta: false inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
+				"skip adoption of this method"
+				nil ].
+		theCompiledMethod
+			ifNotNil: [ 
+				registry
+					adoptCompiledMethod: theCompiledMethod
+					classExtension: classExtension
+					for: theBehavior 
+					protocol: (theBehavior categoryOfSelector: methodSelector) 
+					toPackageNamed: packageName ] ] .
 
 	theBehavior := theClass class.
 	classSelectors do: [:methodSelector |
 		| theCompiledMethod |
-		theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
-		registry
-			adoptCompiledMethod: theCompiledMethod 
-			classExtension: classExtension
-			for: theBehavior 
-			protocol: (theBehavior categoryOfSelector: methodSelector) 
-			toPackageNamed: packageName ].
+		theCompiledMethod := (theBehavior compiledMethodAt: methodSelector  otherwise: nil)
+			ifNil: [ (RwAdoptMethodErrorNotification failureAdoptingMethod: methodSelector isMeta: true inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
+				"skip adoption of this method"
+				nil ].
+		theCompiledMethod
+			ifNotNil: [ 
+				registry
+					adoptCompiledMethod: theCompiledMethod 
+					classExtension: classExtension
+					for: theBehavior 
+					protocol: (theBehavior categoryOfSelector: methodSelector) 
+					toPackageNamed: packageName ] ].
 ]
 
 { #category : 'smalltalk api' }

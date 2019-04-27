@@ -143,7 +143,9 @@ RwAdoptToolApiTest >> testAdopt_issue481_A [
 
 	"missing instance method for packaged class"
 
-	| projectName packageNames className1 className2 packageName1 packageName2  symDictName projectDefinition |
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName projectDefinition notified audit |
+
 	projectName := 'AdoptProject_481'.
 	packageName1 := 'Adopt-Core'.
 	packageName2 := 'Adopt-Extension'.
@@ -174,8 +176,39 @@ RwAdoptToolApiTest >> testAdopt_issue481_A [
 			packageName2: packageName2 
 			symDictName: symDictName.
 
-"adopt and handle the missing selector"
-	Rowan projectTools adopt adoptProjectDefinition: projectDefinition
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing method"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptMethodErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className1.
+			self deny: ex isClassExtension.
+			self assert: ex selector = #foo.
+			self deny: ex isMetaclass.
+			self assert: ex packageName = packageName1.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests' }
@@ -185,7 +218,9 @@ RwAdoptToolApiTest >> testAdopt_issue481_B [
 
 	"missing class method for packaged class"
 
-	| projectName packageNames className1 className2 packageName1 packageName2  symDictName projectDefinition |
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName projectDefinition notified audit |
+
 	projectName := 'AdoptProject_481'.
 	packageName1 := 'Adopt-Core'.
 	packageName2 := 'Adopt-Extension'.
@@ -206,7 +241,7 @@ RwAdoptToolApiTest >> testAdopt_issue481_B [
 "disown the project"
 	Rowan projectTools disown disownProjectNamed: projectDefinition name.
 
-"remove #foo method"
+"remove #bar class method"
 	(Rowan globalNamed: className1) class removeSelector: #bar.
 
 "create an empty loaded project"
@@ -216,8 +251,39 @@ RwAdoptToolApiTest >> testAdopt_issue481_B [
 			packageName2: packageName2 
 			symDictName: symDictName.
 
-"adopt and handle the missing selector"
-	Rowan projectTools adopt adoptProjectDefinition: projectDefinition
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing method"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptMethodErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className1.
+			self deny: ex isClassExtension.
+			self assert: ex selector = #bar.
+			self assert: ex isMetaclass.
+			self assert: ex packageName = packageName1.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests' }
@@ -227,7 +293,9 @@ RwAdoptToolApiTest >> testAdopt_issue481_C [
 
 	"missing instance method extension for unpackaged class"
 
-	| projectName packageNames className1 className2 packageName1 packageName2  symDictName projectDefinition |
+	| projectName packageNames className1 className2 packageName1 packageName2 
+		symDictName projectDefinition notified audit |
+
 	projectName := 'AdoptProject_481'.
 	packageName1 := 'Adopt-Core'.
 	packageName2 := 'Adopt-Extension'.
@@ -258,8 +326,39 @@ RwAdoptToolApiTest >> testAdopt_issue481_C [
 			packageName2: packageName2 
 			symDictName: symDictName.
 
-"adopt and handle the missing selector"
-	Rowan projectTools adopt adoptProjectDefinition: projectDefinition
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing method"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptMethodErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className2.
+			self assert: ex isClassExtension.
+			self assert: ex selector = #foo.
+			self deny: ex isMetaclass.
+			self assert: ex packageName = packageName2.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests' }
@@ -269,7 +368,9 @@ RwAdoptToolApiTest >> testAdopt_issue481_D [
 
 	"missing class method extension for unpackaged class"
 
-	| projectName packageNames className1 className2 packageName1 packageName2  symDictName projectDefinition |
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName projectDefinition notified audit |
+
 	projectName := 'AdoptProject_481'.
 	packageName1 := 'Adopt-Core'.
 	packageName2 := 'Adopt-Extension'.
@@ -290,8 +391,8 @@ RwAdoptToolApiTest >> testAdopt_issue481_D [
 "disown the project"
 	Rowan projectTools disown disownProjectNamed: projectDefinition name.
 
-"remove #foo method"
-	(Rowan globalNamed: className1) class removeSelector: #bar.
+"remove #bar class method"
+	(Rowan globalNamed: className2) class removeSelector: #bar.
 
 "create an empty loaded project"
 	self
@@ -300,8 +401,39 @@ RwAdoptToolApiTest >> testAdopt_issue481_D [
 			packageName2: packageName2 
 			symDictName: symDictName.
 
-"adopt and handle the missing selector"
-	Rowan projectTools adopt adoptProjectDefinition: projectDefinition
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing method"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptMethodErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className2.
+			self assert: ex isClassExtension.
+			self assert: ex selector = #bar.
+			self assert: ex isMetaclass.
+			self assert: ex packageName = packageName2.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests' }
@@ -311,7 +443,8 @@ RwAdoptToolApiTest >> testAdopt_issue481_E [
 
 	"missing packaged class"
 
-	| projectName packageNames className1 className2 packageName1 packageName2  symDictName projectDefinition |
+	| projectName packageNames className1 className2 packageName1 packageName2  symDictName projectDefinition notified audit |
+
 	projectName := 'AdoptProject_481'.
 	packageName1 := 'Adopt-Core'.
 	packageName2 := 'Adopt-Extension'.
@@ -342,8 +475,37 @@ RwAdoptToolApiTest >> testAdopt_issue481_E [
 			packageName2: packageName2 
 			symDictName: symDictName.
 
-"adopt and handle the missing selector"
-	Rowan projectTools adopt adoptProjectDefinition: projectDefinition
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing class"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptClassErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className1.
+			self deny: ex isClassExtension.
+			self assert: ex packageName = packageName1.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests' }
@@ -353,7 +515,8 @@ RwAdoptToolApiTest >> testAdopt_issue481_F [
 
 	"missing unpackaged class"
 
-	| projectName packageNames className1 className2 packageName1 packageName2  symDictName projectDefinition |
+	| projectName packageNames className1 className2 packageName1 packageName2  symDictName projectDefinition notified audit|
+
 	projectName := 'AdoptProject_481'.
 	packageName1 := 'Adopt-Core'.
 	packageName2 := 'Adopt-Extension'.
@@ -384,8 +547,37 @@ RwAdoptToolApiTest >> testAdopt_issue481_F [
 			packageName2: packageName2 
 			symDictName: symDictName.
 
-"adopt and handle the missing selector"
-	Rowan projectTools adopt adoptProjectDefinition: projectDefinition
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing class"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptClassErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className2.
+			self assert: ex isClassExtension.
+			self assert: ex packageName = packageName2.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests' }
