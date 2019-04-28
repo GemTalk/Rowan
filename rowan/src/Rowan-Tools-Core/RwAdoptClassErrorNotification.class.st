@@ -1,18 +1,8 @@
 Class {
 	#name : 'RwAdoptClassErrorNotification',
-	#superclass : 'RwAdoptErrorNotification',
+	#superclass : 'RwAdoptAuditErrorNotification',
 	#category : 'Rowan-Tools-Core'
 }
-
-{ #category : 'instance creation' }
-RwAdoptClassErrorNotification class >> failureAdoptingClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName [
-
-	^ self new
-		className: className;
-		isClassExtension: classExtension;
-		packageName: packageName;
-		yourself
-]
 
 { #category : 'private' }
 RwAdoptClassErrorNotification >> _errorMessage [

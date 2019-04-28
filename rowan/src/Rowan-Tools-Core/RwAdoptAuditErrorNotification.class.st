@@ -1,0 +1,68 @@
+Class {
+	#name : 'RwAdoptAuditErrorNotification',
+	#superclass : 'Notification',
+	#instVars : [
+		'className',
+		'isClassExtension',
+		'packageName'
+	],
+	#category : 'Rowan-Tools-Core'
+}
+
+{ #category : 'instance creation' }
+RwAdoptAuditErrorNotification class >> classNamed: className isClassExtension: classExtension  intoPackageNamed: packageName [
+
+	^ self new
+		className: className;
+		isClassExtension: classExtension;
+		packageName: packageName;
+		yourself
+]
+
+{ #category : 'private' }
+RwAdoptAuditErrorNotification >> _errorMessage [
+
+	self subclassResponsibility: #_errorMessage
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditErrorNotification >> className [
+
+	^ className
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditErrorNotification >> className: aString [
+
+	className := aString
+]
+
+{ #category : 'Handling' }
+RwAdoptAuditErrorNotification >> defaultAction [
+ 
+	^ Error signal: self _errorMessage
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditErrorNotification >> isClassExtension [
+
+	^ isClassExtension
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditErrorNotification >> isClassExtension: aBoolean [
+
+	isClassExtension := aBoolean
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditErrorNotification >> packageName [
+
+	^ packageName
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditErrorNotification >> packageName: aString [
+
+	packageName := aString
+]

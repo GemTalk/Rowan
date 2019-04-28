@@ -36,7 +36,7 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 
 	theClass := Rowan globalNamed: className.
 	theClass ifNil: [ 
-		(RwAdoptClassErrorNotification failureAdoptingClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
+		(RwAdoptClassErrorNotification classNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
 		"if exception resumed then we'll skip the adopt operation for this class"
 		^ self ].
 	(Rowan image symbolList dictionariesAndSymbolsOf: theClass)
@@ -68,7 +68,7 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 		| theCompiledMethod |
 		theCompiledMethod := (theBehavior compiledMethodAt: methodSelector  otherwise: nil)
 			ifNil: [ 
-				(RwAdoptMethodErrorNotification failureAdoptingMethod: methodSelector isMeta: false inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
+				(RwAdoptMethodErrorNotification method: methodSelector isMeta: false inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
 				"skip adoption of this method"
 				nil ].
 		theCompiledMethod
@@ -84,7 +84,7 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 	classSelectors do: [:methodSelector |
 		| theCompiledMethod |
 		theCompiledMethod := (theBehavior compiledMethodAt: methodSelector  otherwise: nil)
-			ifNil: [ (RwAdoptMethodErrorNotification failureAdoptingMethod: methodSelector isMeta: true inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
+			ifNil: [ (RwAdoptMethodErrorNotification method: methodSelector isMeta: true inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
 				"skip adoption of this method"
 				nil ].
 		theCompiledMethod
