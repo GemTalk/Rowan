@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'className',
 		'isClassExtension',
-		'packageName'
+		'packageName',
+		'description'
 	],
 	#category : 'Rowan-Tools-Core'
 }
@@ -41,6 +42,18 @@ RwAdoptAuditErrorNotification >> className: aString [
 RwAdoptAuditErrorNotification >> defaultAction [
  
 	^ Error signal: self _errorMessage
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditErrorNotification >> description [
+
+	^ description ifNil: [ '' ]
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditErrorNotification >> description: aString [
+
+	description := aString
 ]
 
 { #category : 'accessing' }

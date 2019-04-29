@@ -143,7 +143,21 @@ RwClsAuditTool >> _auditSelector: aSelector forBehavior: aBehavior loadedClass: 
 "audit an instance selector. return nil if no problem found"
 
 	^(aLoadedClass loadedMethodAt: aSelector isMeta:  aBehavior isMeta)
-			ifNil: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded instance method. '.]
+			ifNil: [
+				| notification |
+				notification := (RwAuditMethodErrorNotification
+					method: aSelector 
+					isMeta: aBehavior isMeta 
+					inClassNamed: aBehavior theNonMetaClass name
+					isClassExtension: aLoadedClass isLoadedClassExtension
+					intoPackageNamed: aLoadedClass packageName )
+						description: 'Missing loaded instance method. ';
+						yourself.
+				(notification signal) 
+					ifTrue: [ (aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded instance method. ' ]
+					ifFalse: [ 
+						"don't record audit error"
+						nil ]]
 			ifNotNil: [:aLoadedMethod |
 				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle
 						ifTrue: [
@@ -154,7 +168,6 @@ RwClsAuditTool >> _auditSelector: aSelector forBehavior: aBehavior loadedClass: 
 						] 
 						ifFalse: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Compiled instance method is not identical to loaded method. ']
 			]
-
 ]
 
 { #category : 'audit' }

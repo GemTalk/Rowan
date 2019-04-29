@@ -208,7 +208,23 @@ RwProjectAuditToolTest >> testAuditAndRepair_issue481_A [
 		category: 'accessing'
 		environmentId: 0.
 
-"audit"
+"audit - audit errors expected"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"audit - repair audit errors"
+	[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+		on: RwAuditMethodErrorNotification
+		do: [:ex | 
+			"adopt the method"
+			Rowan packageTools adopt 
+				adoptMethod: ex selector 
+					inClassNamed: ex className  
+					isMeta: ex isMetaclass 
+					intoPackageNamed: ex packageName.
+			ex resume: false ].
+	self assert: audit isEmpty.
+
+"double check audit - pass"
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
