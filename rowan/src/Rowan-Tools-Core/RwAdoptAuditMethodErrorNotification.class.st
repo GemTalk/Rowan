@@ -30,6 +30,22 @@ RwAdoptAuditMethodErrorNotification >> isMetaclass: aBoolean [
 	isMetaclass := aBoolean
 ]
 
+{ #category : 'Handling' }
+RwAdoptAuditMethodErrorNotification >> methodErrorDo: methodBlock classErrorDo: classBlock [
+	"helper method for use in exception handling block ... avoid isKindOf:"
+
+	methodBlock value
+]
+
+{ #category : 'accessing' }
+RwAdoptAuditMethodErrorNotification >> methodPrintString [
+
+	^ self 
+		className, 
+		(self isMetaclass ifTrue: [ ' class >> ' ] ifFalse: [ ' >> ' ]),
+		self selector
+]
+
 { #category : 'accessing' }
 RwAdoptAuditMethodErrorNotification >> selector [
 

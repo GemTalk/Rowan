@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwAuditClassErrorNotification',
-	#superclass : 'RwAdoptAuditErrorNotification',
+	#superclass : 'RwAdoptAuditClassErrorNotification',
 	#category : 'Rowan-Tools-Core'
 }
 

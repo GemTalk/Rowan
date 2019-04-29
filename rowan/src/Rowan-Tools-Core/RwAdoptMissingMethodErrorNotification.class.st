@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwAdoptMethodErrorNotification',
+	#name : 'RwAdoptMissingMethodErrorNotification',
 	#superclass : 'RwAdoptAuditMethodErrorNotification',
 	#category : 'Rowan-Tools-Core'
 }
 
 { #category : 'private' }
-RwAdoptMethodErrorNotification >> _errorMessage [
+RwAdoptMissingMethodErrorNotification >> _errorMessage [
 
 	| extensionMessage metaClassMessage |
 	metaClassMessage := self isMetaclass

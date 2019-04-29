@@ -1,11 +1,11 @@
 Class {
-	#name : 'RwAdoptClassErrorNotification',
-	#superclass : 'RwAdoptAuditErrorNotification',
+	#name : 'RwAdoptMissingClassErrorNotification',
+	#superclass : 'RwAdoptAuditClassErrorNotification',
 	#category : 'Rowan-Tools-Core'
 }
 
 { #category : 'private' }
-RwAdoptClassErrorNotification >> _errorMessage [
+RwAdoptMissingClassErrorNotification >> _errorMessage [
 
 	| extensionMessage |
 	extensionMessage := self isClassExtension
