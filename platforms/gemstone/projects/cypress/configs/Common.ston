@@ -1,15 +1,23 @@
- RwProjectCompoundConfiguration{
+RwProjectLoadConfiguration {
 	#name : 'Common',
 	#version : '0.1.0',
-	#packageNames : Set [
-		'Cypress-Comparison',
-		'Cypress-Definitions',
-		'Cypress-Environmental-Tools',
-		'Cypress-GemStoneFileServer',
-		'Cypress-MesssageDigest',
-		'Cypress-Network-Url',
-		'Cypress-PackageManagement',
-		'Cypress-Structure'
-	],
+	#conditionalPackages : {
+		[
+			'gemstone'
+		] : {
+			'core' : {
+				#packageNames : [
+					'Cypress-Comparison',
+					'Cypress-Definitions',
+					'Cypress-Environmental-Tools',
+					'Cypress-GemStoneFileServer',
+					'Cypress-MesssageDigest',
+					'Cypress-Network-Url',
+					'Cypress-PackageManagement',
+					'Cypress-Structure'
+				]
+			}
+		}
+	},
 	#comment : 'Common set of packages '
 }

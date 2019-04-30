@@ -1,7 +1,10 @@
-RwProjectCompoundConfiguration{
+RwProjectLoadConfiguration {
 	#name : 'Default',
 	#version : '0.1.0',
-	#packageNames : Set [ ],
+	#definedGroupNames : {
+		'core' : [ ]
+	},
+	#conditionalPackages : { },
 	#configurationNames : [
 		'Gs3215'
 	],

@@ -1,10 +1,18 @@
-RwProjectCompoundConfiguration{
+RwProjectLoadConfiguration {
 	#name : 'Tests',
 	#version : '0.1.0',
-	#packageNames : [
-		'STON-Tests',
-		'STON-GemStone-Tests'
-	],
+	#conditionalPackages : {
+		[
+			'gemstone'
+		] : {
+			'core' : {
+				#packageNames : [
+					'STON-Tests',
+					'STON-GemStone-Tests'
+				]
+			}
+		}
+	},
 	#configurationNames : [ ],
 	#comment : 'STON test packages'
 }

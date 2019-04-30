@@ -22,6 +22,7 @@
   iferr 1 stk
   iferr 2 stack
 #  iferr 3 exit 1
+	display oops
 
   set user SystemUser p swordfish
   login
@@ -42,17 +43,34 @@ run
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
 	readTool := Rowan projectTools read.
 	{
-		'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/rowan/specs/FileSystemGs.ston'. 
-		'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'. 
-		'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'.
-		'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'.
-		'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/FileSystemGs_component.ston'. 
+			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
+		}.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Rowan_component.ston'. 
+			'$ROWAN_PROJECTS_HOME'
+		}.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Cypress_component.ston'.
+			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
+		}.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/STON_component.ston'.
+			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
+		}.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Tonel_component.ston'.
+			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
+		}.
 	} 
-	do: [:specUrl |
+	do: [:ar |
 		"Read project and packages from disk, creating a projectSetDefinition with all 5 projects"
-		| configNames groupNames projectDefinition theProjectSetDefinition |
-		projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
-		projectDefinition projectHome: '$ROWAN_PROJECTS_HOME'.
+		| configNames groupNames projectDefinition theProjectSetDefinition specUrl projectHome |
+		specUrl := ar at: 1.
+		projectHome := ar at: 2.
+		projectDefinition := RwComponentProjectDefinition newForUrl: specUrl.
+		projectDefinition projectHome: projectHome.
     theProjectSetDefinition := readTool 
 			readProjectSetForComponentProjectDefinition: projectDefinition 
 				withConfigurations: projectDefinition defaultConfigurationNames 
@@ -64,7 +82,7 @@ run
 	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src' asFileReference.
 	repositoryRoot ensureCreateDirectory.
 	repositoryRoot deleteAllChildren.
-	{ 'Cypress' . 'FileSystemGs' . 'Rowan' . 'Tonel' . 'STON' } do: [:projectName |
+	{ 'cypress' . 'filesystem' . 'Rowan' . 'tonel' . 'ston' } do: [:projectName |
 		projectDefinition := projectSetDefinition projectNamed: projectName.
 		projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 		topazFileNameMap := Dictionary new.
@@ -80,5 +98,3 @@ run
 			yourself.
 		visitor visit: projectSetModification ].
 %
-
-	exit
