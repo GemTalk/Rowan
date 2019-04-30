@@ -1,7 +1,7 @@
 Class {
 	#name : 'RBLiteralArrayToken',
 	#superclass : 'RBValueToken',
-	#category : 'AST-Core-Tokens'
+	#category : 'AST-Core'
 }
 
 { #category : 'testing' }

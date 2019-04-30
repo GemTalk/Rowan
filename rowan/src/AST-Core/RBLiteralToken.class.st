@@ -12,7 +12,7 @@ Class {
 	#instVars : [
 		'stopPosition'
 	],
-	#category : 'AST-Core-Tokens'
+	#category : 'AST-Core'
 }
 
 { #category : 'instance creation' }

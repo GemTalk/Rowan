@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'source'
 	],
-	#category : 'AST-Core-Tokens'
+	#category : 'AST-Core'
 }
 
 { #category : 'instance creation' }

@@ -1,0 +1,17 @@
+RwComponentSpecification {
+	#specName : 'Cypress',
+	#version : '0.3.0',
+	#projectUrl : 'https://github.com/GemTalk/FileSystemGs',
+	#platformSpec : {
+		'gemstone' : RwGemStoneSpecification {
+			#defaultSymbolDictName : 'Globals' 
+		}
+	},
+	#configsPath : 'platforms/gemstone/projects/filesystem/rowan/configs',
+	#repoPath : 'platforms/gemstone/projects/filesystem/rowan/src',
+	#projectsPath : 'platforms/gemstone/projects/filesystem/rowan/projects',
+	#specsPath : 'platforms/gemstone/projects/filesystem/rowan/specs',
+	#defaultConfigurationNames : [ 'Default' ],
+	#defaultGroupNames : [ 'tests' ],
+	#comment : 'Used for reading the project from disk'
+}

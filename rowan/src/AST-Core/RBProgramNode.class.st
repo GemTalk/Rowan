@@ -34,7 +34,7 @@ Class {
 	#classVars : [
 		'FormatterClass'
 	],
-	#category : 'AST-Core-Nodes'
+	#category : 'AST-Core'
 }
 
 { #category : 'accessing' }

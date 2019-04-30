@@ -22,7 +22,7 @@ Class {
 		'bar',
 		'body'
 	],
-	#category : 'AST-Core-Nodes'
+	#category : 'AST-Core'
 }
 
 { #category : 'instance creation' }

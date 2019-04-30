@@ -19,7 +19,7 @@ Class {
 		'tabs',
 		'inQueryBlock'
 	],
-	#category : 'AST-Core-Visitors'
+	#category : 'AST-Core'
 }
 
 { #category : 'visitor-double dispatching' }

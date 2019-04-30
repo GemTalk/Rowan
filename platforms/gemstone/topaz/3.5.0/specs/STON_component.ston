@@ -1,0 +1,22 @@
+RwComponentSpecification {
+	#specName : 'STON',
+	#version : '0.3.0',
+	#projectUrl : 'https://github.com/GemTalk/Rowan',
+	#platformSpec : {
+		'gemstone' : RwGemStoneSpecification {
+			#defaultSymbolDictName : 'Globals' 
+		}
+	},
+	#configsPath : 'platforms/gemstone/projects/ston/configs',
+	#specsPath : 'platforms/gemstone/projects/ston/specs',
+	#repoPath : 'platforms/gemstone/projects/ston/src',
+	#projectsPath : 'platforms/gemstone/projects/ston/projects',
+	#repoSpec : RwDiskRepositorySpecification {
+	},
+	#defaultConfigurationNames : [
+		'Default'
+	],
+	#defaultGroupNames : [
+	],
+	#comment : 'Used for reading the project from disk'
+}

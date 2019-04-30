@@ -20,7 +20,7 @@ Class {
 		'periods',
 		'temporaries'
 	],
-	#category : 'AST-Core-Nodes'
+	#category : 'AST-Core'
 }
 
 { #category : 'instance creation' }

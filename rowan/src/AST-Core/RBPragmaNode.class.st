@@ -19,7 +19,7 @@ Class {
 		'left',
 		'right'
 	],
-	#category : 'AST-Core-Nodes'
+	#category : 'AST-Core'
 }
 
 { #category : 'instance creation' }

@@ -4,7 +4,7 @@ RBLiteralNode is an AST node that represents literals.
 Class {
 	#name : 'RBLiteralNode',
 	#superclass : 'RBValueNode',
-	#category : 'AST-Core-Nodes'
+	#category : 'AST-Core'
 }
 
 { #category : 'instance creation' }

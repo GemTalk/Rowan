@@ -1,5 +1,7 @@
 #!/usr/bin/gemstone/topaz
 #
+#	write project source for loaded projects in a 3.5.0 image
+#
 # If you are using GsDevKit_home[1] and have stash[2] installed, this topaz 
 #	script can be directly executed:
 #
@@ -25,7 +27,12 @@
 
 run
 
-	| projectDefinition projectSetDefinition projectSetModification visitor topazFileNameMap repositoryRoot |
+	| currentGsVersion projectDefinition projectSetDefinition projectSetModification visitor topazFileNameMap
+		repositoryRoot |
+	currentGsVersion := System stoneVersionReport at: 'gsVersion') asRwGemStoneVersionNumber.
+	currentGsVersion = 3.5.0 asRwGemStoneVersionNumber
+		ifFalse: [ 
+			self error: 'This script should only be run using GemStone 3.5.0. Current version is ', currentGsVersion printString ].
 	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src' asFileReference.
 	repositoryRoot ensureCreateDirectory.
 	repositoryRoot deleteAllChildren.
@@ -37,7 +44,8 @@ run
 		topazFileNameMap := Dictionary new.
 		topazFileNameMap at: projectName  put: {}.
 		projectDefinition packageNames do: [:packageName |
-			((#('Rowan-Tests'  'Rowan-Services-Tests' 'Rowan-Tests-32x' 'Rowan-Tests-35x') includes: packageName) and: [ projectName = 'Rowan'])
+			((#('Rowan-Tests'  'Rowan-Services-Tests' 'Rowan-Tests-32x' 'Rowan-Tests-35x') includes: packageName) 
+					and: [ projectName = 'Rowan'])
 				ifTrue: [  (topazFileNameMap at: 'Rowan-Tests' ifAbsentPut: [{} ]) add: packageName ]
 				ifFalse: [ (topazFileNameMap at: projectName) add: packageName ] ].
 		visitor := RwGsModificationTopazWriterVisitor new

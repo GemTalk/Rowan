@@ -16,7 +16,7 @@ Class {
 		'assignment',
 		'value'
 	],
-	#category : 'AST-Core-Nodes'
+	#category : 'AST-Core'
 }
 
 { #category : 'instance creation' }

@@ -50,7 +50,7 @@ Class {
 		'TraditionalBinaryPrecedence',
 		'UseTraditionalBinaryPrecedenceForParentheses'
 	],
-	#category : 'AST-Core-Visitors'
+	#category : 'AST-Core'
 }
 
 { #category : 'accessing' }

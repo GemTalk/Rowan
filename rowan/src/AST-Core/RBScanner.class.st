@@ -40,7 +40,7 @@ Class {
 	#classInstVars : [
 		'classificationTable'
 	],
-	#category : 'AST-Core-Parser'
+	#category : 'AST-Core'
 }
 
 { #category : 'accessing' }

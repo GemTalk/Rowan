@@ -1,7 +1,7 @@
 Class {
 	#name : 'RBShortAssignmentToken',
 	#superclass : 'RBAssignmentToken',
-	#category : 'AST-Core-Tokens'
+	#category : 'AST-Core'
 }
 
 { #category : 'private' }

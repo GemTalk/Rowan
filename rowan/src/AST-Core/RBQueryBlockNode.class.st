@@ -1,7 +1,7 @@
 Class {
 	#name : 'RBQueryBlockNode',
 	#superclass : 'RBBlockNode',
-	#category : 'AST-Core-Nodes'
+	#category : 'AST-Core'
 }
 
 { #category : 'visitor' }

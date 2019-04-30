@@ -15,7 +15,7 @@ Class {
 		'values',
 		'tally'
 	],
-	#category : 'AST-Core-Matching'
+	#category : 'AST-Core'
 }
 
 { #category : 'instance creation' }

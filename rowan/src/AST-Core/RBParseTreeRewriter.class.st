@@ -10,7 +10,7 @@ Class {
 	#instVars : [
 		'tree'
 	],
-	#category : 'AST-Core-Matching'
+	#category : 'AST-Core'
 }
 
 { #category : 'instance creation' }
