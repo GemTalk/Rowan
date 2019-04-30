@@ -50,9 +50,9 @@ RowanAnsweringService >> exec: aString [
 ]
 
 { #category : 'client commands' }
-RowanAnsweringService >> exec: aString context: anObject [
+RowanAnsweringService >> exec: aString context: oop [
 
-	answer := [true -> (aString evaluateInContext: anObject symbolList: GsSession currentSession symbolList) asOop] 
+	answer := [true -> (aString evaluateInContext: (Object _objectForOop: oop) symbolList: GsSession currentSession symbolList) asOop] 
 		on: CompileError do: [:ex | 
 			false -> ex errorDetails
 	].
