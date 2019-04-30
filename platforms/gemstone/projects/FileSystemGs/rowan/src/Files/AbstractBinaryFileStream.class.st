@@ -39,7 +39,7 @@ Class {
 		'handle',
 		'forWrite'
 	],
-	#category : 'Files-Streams'
+	#category : 'Files'
 }
 
 { #category : 'instance creation' }

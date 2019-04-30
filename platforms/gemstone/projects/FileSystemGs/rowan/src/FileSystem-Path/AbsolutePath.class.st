@@ -4,7 +4,7 @@ I represent an absolute path (a position starting from Path root)
 Class {
 	#name : 'AbsolutePath',
 	#superclass : 'Path',
-	#category : 'FileSystem-Path-Base'
+	#category : 'FileSystem-Path'
 }
 
 { #category : 'as yet unclassified' }

@@ -12,7 +12,7 @@ Class {
 		'CurrentFS',
 		'DefaultWorkingDirectory'
 	],
-	#category : 'FileSystem-Disk-Store'
+	#category : 'FileSystem-Disk'
 }
 
 { #category : 'current' }

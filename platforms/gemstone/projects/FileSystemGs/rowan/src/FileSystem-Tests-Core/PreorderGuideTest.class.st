@@ -4,7 +4,7 @@ SUnit tests for class PreorderGuide
 Class {
 	#name : 'PreorderGuideTest',
 	#superclass : 'GuideTest',
-	#category : 'FileSystem-Tests-Core-Guide'
+	#category : 'FileSystem-Tests-Core'
 }
 
 { #category : 'tests' }

@@ -8,7 +8,7 @@ Class {
 		'reference',
 		'writable'
 	],
-	#category : 'FileSystem-Core-Kernel'
+	#category : 'FileSystem-Core'
 }
 
 { #category : 'instance creation' }

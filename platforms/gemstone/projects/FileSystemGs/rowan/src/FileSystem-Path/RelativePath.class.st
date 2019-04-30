@@ -4,7 +4,7 @@ I represent a relative path (a position starting from Path workingDirectory)
 Class {
 	#name : 'RelativePath',
 	#superclass : 'Path',
-	#category : 'FileSystem-Path-Base'
+	#category : 'FileSystem-Path'
 }
 
 { #category : 'accessing' }

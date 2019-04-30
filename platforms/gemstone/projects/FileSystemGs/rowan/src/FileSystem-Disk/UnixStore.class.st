@@ -4,7 +4,7 @@ I'm a specific store for Unix file systems
 Class {
 	#name : 'UnixStore',
 	#superclass : 'DiskStore',
-	#category : 'FileSystem-Disk-Store'
+	#category : 'FileSystem-Disk'
 }
 
 { #category : 'public' }

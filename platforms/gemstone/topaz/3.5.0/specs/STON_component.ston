@@ -17,6 +17,7 @@ RwComponentSpecification {
 		'Default'
 	],
 	#defaultGroupNames : [
+		'core'
 	],
 	#comment : 'Used for reading the project from disk'
 }

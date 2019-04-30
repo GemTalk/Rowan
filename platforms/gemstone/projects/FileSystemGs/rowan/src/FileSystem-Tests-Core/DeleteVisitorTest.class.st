@@ -4,7 +4,7 @@ SUnit tests for class DeleteVisitor
 Class {
 	#name : 'DeleteVisitorTest',
 	#superclass : 'SingleTreeTest',
-	#category : 'FileSystem-Tests-Core-Visitors'
+	#category : 'FileSystem-Tests-Core'
 }
 
 { #category : 'tests' }

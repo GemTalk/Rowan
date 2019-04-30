@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'resolver'
 	],
-	#category : 'FileSystem-Tests-Core-Resolver'
+	#category : 'FileSystem-Tests-Core'
 }
 
 { #category : 'testing' }

@@ -5,7 +5,7 @@ I am closer to a FileStream so I delegate some operations to my handle (collecti
 Class {
 	#name : 'MemoryWriteStream',
 	#superclass : 'WriteStream',
-	#category : 'FileSystem-Memory-Streams'
+	#category : 'FileSystem-Memory'
 }
 
 { #category : 'testing' }

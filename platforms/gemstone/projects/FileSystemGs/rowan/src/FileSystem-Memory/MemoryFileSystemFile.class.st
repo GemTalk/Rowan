@@ -9,7 +9,7 @@ Class {
 		'size',
 		'closed'
 	],
-	#category : 'FileSystem-Memory-Base'
+	#category : 'FileSystem-Memory'
 }
 
 { #category : 'stream-protocol' }

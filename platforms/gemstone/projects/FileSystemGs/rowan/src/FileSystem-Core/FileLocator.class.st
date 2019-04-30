@@ -38,7 +38,7 @@ Class {
 		'origin',
 		'path'
 	],
-	#category : 'FileSystem-Core-Public'
+	#category : 'FileSystem-Core'
 }
 
 { #category : 'windows-origins' }

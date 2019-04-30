@@ -9,7 +9,7 @@ Class {
 		'writeStream',
 		'stream'
 	],
-	#category : 'FileSystem-Memory-Streams'
+	#category : 'FileSystem-Memory'
 }
 
 { #category : 'instance creation' }

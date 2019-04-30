@@ -19,7 +19,7 @@ Class {
 	#instVars : [
 		'readOnly'
 	],
-	#category : 'Files-Core'
+	#category : 'Files'
 }
 
 { #category : 'signalling' }

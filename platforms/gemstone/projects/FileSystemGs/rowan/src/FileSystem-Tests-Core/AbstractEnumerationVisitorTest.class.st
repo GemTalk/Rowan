@@ -4,7 +4,7 @@ SUnit tests for AbstractEnumerationVisitor
 Class {
 	#name : 'AbstractEnumerationVisitorTest',
 	#superclass : 'SingleTreeTest',
-	#category : 'FileSystem-Tests-Core-Visitors'
+	#category : 'FileSystem-Tests-Core'
 }
 
 { #category : 'as yet unclassified' }

@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'origin'
 	],
-	#category : 'FileSystem-Core-Base-Errors'
+	#category : 'FileSystem-Core'
 }
 
 { #category : 'instance creation' }

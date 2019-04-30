@@ -10,7 +10,7 @@ Class {
 	#classVars : [
 		'CurrentFS'
 	],
-	#category : 'FileSystem-Memory-Store'
+	#category : 'FileSystem-Memory'
 }
 
 { #category : 'current' }

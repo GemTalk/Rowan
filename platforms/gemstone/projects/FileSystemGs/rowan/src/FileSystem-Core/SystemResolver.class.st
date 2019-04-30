@@ -7,7 +7,7 @@ Class {
 	#classVars : [
 		'UserLocalDirectory'
 	],
-	#category : 'FileSystem-Core-Base-Resolver'
+	#category : 'FileSystem-Core'
 }
 
 { #category : 'accessing' }

@@ -45,7 +45,7 @@ Class {
 	#instVars : [
 		'name'
 	],
-	#category : 'Files-Core'
+	#category : 'Files'
 }
 
 { #category : 'primitives-file' }

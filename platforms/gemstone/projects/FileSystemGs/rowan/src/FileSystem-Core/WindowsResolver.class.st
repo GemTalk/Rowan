@@ -4,7 +4,7 @@ I am an expert on Windows filesystem conventions. I resolve origins according to
 Class {
 	#name : 'WindowsResolver',
 	#superclass : 'PlatformResolver',
-	#category : 'FileSystem-Core-Base-Resolver'
+	#category : 'FileSystem-Core'
 }
 
 { #category : 'accessing' }

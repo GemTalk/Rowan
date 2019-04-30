@@ -10,7 +10,7 @@ Class {
 		'modificationTime',
 		'basename'
 	],
-	#category : 'FileSystem-Memory-Base'
+	#category : 'FileSystem-Memory'
 }
 
 { #category : 'instance creation' }

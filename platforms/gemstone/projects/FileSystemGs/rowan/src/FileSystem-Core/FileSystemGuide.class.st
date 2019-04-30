@@ -15,7 +15,7 @@ Class {
 		'work',
 		'selectChildren'
 	],
-	#category : 'FileSystem-Core-Base-Guide'
+	#category : 'FileSystem-Core'
 }
 
 { #category : 'instance creation' }

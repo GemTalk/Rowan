@@ -8,7 +8,7 @@ Class {
 		'guide',
 		'visited'
 	],
-	#category : 'FileSystem-Tests-Core-Guide'
+	#category : 'FileSystem-Tests-Core'
 }
 
 { #category : 'testing' }
