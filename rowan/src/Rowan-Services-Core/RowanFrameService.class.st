@@ -5,7 +5,8 @@ Class {
 		'label',
 		'method',
 		'stepPoint',
-		'vars'
+		'vars',
+		'oop'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -26,6 +27,7 @@ RowanFrameService >> initializeProcess: aGsProcess level: anInteger organizer: a
 
 	| frameData gsNMethod |
 	frameData := aGsProcess _frameContentsAt: anInteger.
+	oop := (frameData at: 8) asOop.
 	gsNMethod := frameData at: 1.
 	label := aGsProcess _reportAt: anInteger.
 	method := RowanMethodService forGsNMethod: gsNMethod organizer: aClassOrganizer.
