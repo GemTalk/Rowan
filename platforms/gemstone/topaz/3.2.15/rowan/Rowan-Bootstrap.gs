@@ -804,6 +804,8 @@ commit
 		loadedProject markNotDirty.
 		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
 
+System commit.
+
 	projectSetDefinition projects
 		do: [:projectDefinition |
 			| audit projectName |

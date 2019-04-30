@@ -4,7 +4,7 @@ Unit tests for file operations
 Class {
 	#name : 'FileTest',
 	#superclass : 'TestCase',
-	#category : 'Files'
+	#category : 'Files-Tests'
 }
 
 { #category : 'running' }

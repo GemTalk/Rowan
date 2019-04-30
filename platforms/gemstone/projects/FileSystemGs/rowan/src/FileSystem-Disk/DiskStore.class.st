@@ -16,7 +16,7 @@ Class {
 		'PosixValues',
 		'PosixErrorNumbers'
 	],
-	#category : 'FileSystem-Disk-Store'
+	#category : 'FileSystem-Disk'
 }
 
 { #category : 'current' }

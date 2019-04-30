@@ -18,7 +18,7 @@
 # [2] https://github.com/dalehenrich/stash
 #
 
- omit pushonly
+# omit pushonly
   iferr 1 stk
   iferr 2 stack
 #  iferr 3 exit 1
@@ -37,7 +37,7 @@ run
 		'common'.
 		'gemstone'.
 		'gemstone-kernel'.
-		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
+		'3.5.0' asRwGemStoneVersionNumber printString.	"want to read 3.5.0 packages"
 	}.
 	projectSetDefinition := RwProjectSetDefinition new.
 	loadedProjectInfo := Dictionary new.
@@ -83,26 +83,11 @@ run
 			put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: projectDefinition name).
 
 		theProjectSetDefinition
-			do: [:projectDefinition |	
+    	do: [:projectDefinition |	
 				GsFile stdout nextPutAll: 'Project: ', projectDefinition name; lf.
 				projectDefinition packageNames do: [:pkgName | 
 					GsFile stdout nextPutAll: '	', pkgName; lf ].
 				projectSetDefinition addProject: projectDefinition ] ].
-
-	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
-		"install the packageMapSpecs for this load into the specification prior to the load"
-		| projectDefinition thePackageMapSpecs |
-		projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
-		thePackageMapSpecs := projectInfo at: 'packageMapSpecs' .
-		(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
-			ifNotNil: [:name | 
-				projectDefinition defaultSymbolDictName: name ].
-		(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
-			ifNotNil: [:boolean | 
-				projectDefinition defaultUseSessionMethodsForExtensions: boolean  ].
-		(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
-			ifNotNil: [:map |
-				projectDefinition packageNameToPlatformPropertiesMap: map ] ].
 
 	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src' asFileReference.
 	repositoryRoot ensureCreateDirectory.

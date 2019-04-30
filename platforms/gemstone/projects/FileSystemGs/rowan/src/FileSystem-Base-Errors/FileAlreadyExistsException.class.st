@@ -7,7 +7,6 @@ Class {
 	#instVars : [
 		'file'
 	],
-FileAlreadyExistsException.class.st
 	#category : 'FileSystem-Base-Errors'
 }
 
