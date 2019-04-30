@@ -562,7 +562,7 @@ currentOrNil
 	| packageManager repo |
 	packageManager := CypressPackageManager3 new.
 	repo := CypressAbstractRepository
-		onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/rowan/src/'  )
+		onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/FileSystemGs/rowan/src/'  )
 		alias: ''.
 	packageManager defaultSymbolDictionaryName: #Globals.
 	#( 'FileSystem-GemStone-Kernel' 'Files' 'Files-Tests' 'FileSystem-Core-32x' 'Network-UUID' 'Network-UUID-Tests' 
@@ -712,11 +712,11 @@ commit
 	loadedProjectInfo := Dictionary new.
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
 	{
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/rowan/specs/FileSystemGs.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'. 'Default'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'. 'Load'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'. 'Bootstrap'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'. 'Bootstrap'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/STON/specs/STON_SystemUser.ston'. 'Bootstrap'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Tonel/specs/Tonel_SystemUser.ston'. 'Bootstrap'}.
 	} 
 	do: [:ar |
 		"Read project and packages from disk, creating a projectSetDefinition with all 5 projects"

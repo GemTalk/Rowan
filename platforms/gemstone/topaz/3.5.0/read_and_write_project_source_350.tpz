@@ -82,7 +82,7 @@ run
 	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src' asFileReference.
 	repositoryRoot ensureCreateDirectory.
 	repositoryRoot deleteAllChildren.
-	{ 'cypress' . 'filesystem' . 'Rowan' . 'tonel' . 'ston' } do: [:projectName |
+	{ 'Cypress' . 'FileSystemGs' . 'Rowan' . 'Tonel' . 'STON' } do: [:projectName |
 		projectDefinition := projectSetDefinition projectNamed: projectName.
 		projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 		topazFileNameMap := Dictionary new.
