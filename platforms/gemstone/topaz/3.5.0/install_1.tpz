@@ -15,9 +15,10 @@
 #	[1] https://github.com/GsDevKit/GsDevKit_home
 # [2] https://github.com/dalehenrich/stash
 #
+	omit pushonly
   iferr 1 stk
   iferr 2 stack
-  iferr 3 exit 1
+#  iferr 3 exit 1
 
   set u SystemUser p swordfish
   login
