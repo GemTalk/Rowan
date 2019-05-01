@@ -43,9 +43,9 @@ RowanBrowserService >> allClasses [
 ]
 
 { #category : 'client commands' }
-RowanBrowserService >> autoCommit: boolean [
+RowanBrowserService >> autoCommit: object [
 
-	RowanService setAutoCommit: boolean.
+	RowanService setAutoCommit: object.
 	autoCommit := RowanService autoCommit. 
 	updateType := #autoCommitUpdate:.
 	RowanCommandResult addResult: self.
