@@ -41,7 +41,7 @@
 %
   commit
 
-  logout
-
   errorCount
+
+	exit
 
