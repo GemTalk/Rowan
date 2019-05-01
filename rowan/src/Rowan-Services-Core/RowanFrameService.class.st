@@ -65,8 +65,7 @@ RowanFrameService >> varsFor: anArray [
 		ifTrue: [anArray copyFrom: 11 to: anArray size]
 		ifFalse: [#()]).
 	list := Array new.
-	1 to: (keys size min: values size) do: [:i | | oop theOop key value valueClass | 
-		oop := 1. 
+	1 to: (keys size min: values size) do: [:i | | theOop key value valueClass | 
 		key := keys at: i.
 		value := values at: i.
 		valueClass := value class.
