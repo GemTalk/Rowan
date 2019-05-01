@@ -172,3 +172,4 @@ UserGlobals at: #rowanCompile put: true.
   commit
 
 	errorCount
+
