@@ -9,5 +9,12 @@ RwProjectLoadConfiguration {
 		'Gs3215',
 		'Tests'
 	],
+  #conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
 	#comment : 'For now we load Gs3215 and Tests by default'
 }

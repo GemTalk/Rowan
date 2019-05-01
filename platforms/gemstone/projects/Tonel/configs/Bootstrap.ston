@@ -8,5 +8,12 @@ RwProjectLoadConfiguration {
 	#configurationNames : [
 		'Gs3215'
 	],
+  #conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
 	#comment : 'For Bootstrap load Gs3215 only - skip Tests'
 }

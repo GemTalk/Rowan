@@ -2,17 +2,10 @@
 	#specName : 'Tonel',
 	#version : '0.1.0',
 	#projectUrl : 'https://github.com/dalehenrich/Rowan',
-	#platformSpec : {
-		'gemstone' : RwGemStoneSpecification {
-			#defaultSymbolDictName : 'Globals',
-			#defaultUseSessionMethodsForExtensions : false }
-	},
-	#specsPath : 'platforms/gemstone/projects/tonel/specs',
-	#configsPath : 'platforms/gemstone/projects/tonel/configs',
-	#repoSpec : RwGitRepositorySpecification {
-		#committish : 'master',
-		#committishType : 'branch'
-	},
-	#repoPath : 'platforms/gemstone/projects/tonel/src',
+	#configsPath : 'platforms/gemstone/projects/Tonel/configs',
+	#repoPath : 'platforms/gemstone/projects/Tonel/src',
+	#specsPath : 'platforms/gemstone/projects/Tonel/specs',
+	#defaultConfigurationNames : [ 'Default' ],
+	#defaultGroupNames : [ 'core' ],
 	#comment : ''
 }

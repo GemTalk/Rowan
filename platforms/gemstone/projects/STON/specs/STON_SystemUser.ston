@@ -2,17 +2,10 @@
 	#specName : 'STON',
 	#version : '0.1.0',
 	#projectUrl : 'https://github.com/dalehenrich/Rowan',
-	#platformSpec : {
-		'gemstone' : RwGemStoneSpecification {
-			#defaultSymbolDictName : 'Globals',
-			#defaultUseSessionMethodsForExtensions : false }
-	},
-	#specsPath : 'platforms/gemstone/projects/ston/specs',
-	#configsPath : 'platforms/gemstone/projects/ston/configs',
-	#repoSpec : RwGitRepositorySpecification {
-		#committish : 'master',
-		#committishType : 'branch'
-	},
-	#repoPath : 'platforms/gemstone/projects/ston/src',
+	#configsPath : 'platforms/gemstone/projects/STON/configs',
+	#repoPath : 'platforms/gemstone/projects/STON/src',
+	#specsPath : 'platforms/gemstone/projects/STON/specs',
+	#defaultConfigurationNames : [ 'Default' ],
+	#defaultGroupNames : [ 'core' ],
 	#comment : ''
 }

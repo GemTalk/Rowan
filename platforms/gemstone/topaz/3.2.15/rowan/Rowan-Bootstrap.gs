@@ -720,7 +720,7 @@ commit
 	} 
 	do: [:ar |
 		"Read project and packages from disk, creating a projectSetDefinition with all 5 projects"
-		| specification specUrl readTool |
+		| specification specUrl readTool configName groupNames theProjectSetDefinition |
 		specUrl := ar at: 1.
 		specification := RwSpecification fromUrl: specUrl.
 		specification
@@ -728,29 +728,22 @@ commit
 			repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
 			register. "Create each of the loaded projects"
 		readTool := Rowan projectTools read.
-		ar size = 1
-			ifTrue: [
-				| theProjectSetDefinition |
-				theProjectSetDefinition := readTool readProjectSetForProjectNamed: specification specName.
-				theProjectSetDefinition
-					do: [:projectDefinition |
-						projectSetDefinition addProject: projectDefinition ].
-				loadedProjectInfo at: specification specName put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: specification specName) ]
-			ifFalse: [
-      	| configName groupNames theProjectSetDefinition |
-				configName := ar at: 2.
-				groupNames := specification defaultGroupNames.
-        theProjectSetDefinition := readTool
-					readProjectSetForProjectNamed: specification specName 
-						withConfigurations: { configName } 
-						groupNames: groupNames.
-				loadedProjectInfo at: specification specName put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: specification specName).
-				theProjectSetDefinition
-            	do: [:projectDefinition |
-              	projectSetDefinition addProject: projectDefinition ] ] ].
+		configName := ar at: 2.
+		groupNames := specification defaultGroupNames.
+    theProjectSetDefinition := readTool
+				readProjectSetForProjectNamed: specification specName 
+				withConfigurations: { configName } 
+				groupNames: groupNames.
+		loadedProjectInfo at: specification specName put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: specification specName).
+    theProjectSetDefinition
+    	do: [:projectDefinition |	
+				GsFile stdout nextPutAll: 'Project: ', projectDefinition name; lf.
+				projectDefinition packageNames do: [:pkgName | 
+					GsFile stdout nextPutAll: '	', pkgName; lf ].
+				projectSetDefinition addProject: projectDefinition ] ].
 
 	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
-			(#('FileSystemGs' 'Rowan') includes: projectName)
+			(#('FileSystemGs' 'Rowan' 'Cypress' 'Tonel' 'STON') includes: projectName)
 				ifTrue: [ 
 					"install the packageMapSpecs for this load into the specification prior to the load"
 					| projectDefinition spec gemstoneSpec thePackageMapSpecs |
