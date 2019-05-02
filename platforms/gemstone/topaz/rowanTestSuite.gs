@@ -6,7 +6,6 @@ run
 	deprecationAction := Deprecated deprecatedAction.
 	warnings := {}.
 	[
-		Deprecated doErrorOnDeprecated.
 		projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' 'FileSystemGs' ).
 		"audit before load"
 		projectNames do: [:projectName |
@@ -43,6 +42,8 @@ run
 			| audit |
 			audit := Rowan projectTools audit auditForProjectNamed: projectName.
 			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
+
+		Deprecated doErrorOnDeprecated.
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 
