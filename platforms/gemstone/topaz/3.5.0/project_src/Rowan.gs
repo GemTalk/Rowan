@@ -41309,7 +41309,7 @@ category: 'accessing'
 method: RwProjectReferenceDefinition
 loadedGroupNames
 
-	^ self loadedGroupNames
+	^ self groupNames
 %
 
 category: 'accessing'
