@@ -257,6 +257,15 @@ RwProjectDefinition >> readProjectSet [
 	^ Rowan projectTools read  readProjectSetForProjectDefinition: self
 ]
 
+{ #category : 'reading' }
+RwProjectDefinition >> readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: theGroupNames [
+
+	^ readTool
+		readProjectSetForProjectDefinition: self
+			withConfigurations: theConfigNames 
+			groupNames: theGroupNames
+]
+
 { #category : 'accessing' }
 RwProjectDefinition >> removePackage: aPackageDefinition [
 

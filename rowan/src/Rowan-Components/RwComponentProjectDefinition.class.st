@@ -194,7 +194,7 @@ RwComponentProjectDefinition >> defaultGroupName [
 { #category : 'properties' }
 RwComponentProjectDefinition >> defaultGroupNames [
 
-	^ self propertyAt: 'defaultGroupNames' ifAbsent: [ self projectRef groupNames ]
+	^ self projectRef groupNames
 ]
 
 { #category : 'exporting' }
@@ -251,7 +251,7 @@ RwComponentProjectDefinition >> exportProjects [
 { #category : 'properties' }
 RwComponentProjectDefinition >> loadedConfigurationNames [
 
-	^ self propertyAt: 'loadedConfigurationNames' ifAbsent: [ ]
+	^ self projectRef configurationNames
 ]
 
 { #category : 'properties' }
@@ -387,6 +387,15 @@ RwComponentProjectDefinition >> readProjectSetForPackageNames: packageNames [
 	^ visitorClass new
 		packageNames: packageNames;
 		visit: self.
+]
+
+{ #category : 'reading' }
+RwComponentProjectDefinition >> readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: theGroupNames [
+
+	^ readTool
+		readProjectSetForComponentProjectDefinition: self
+			withConfigurations: theConfigNames 
+			groupNames: theGroupNames
 ]
 
 { #category : 'temporary compat' }

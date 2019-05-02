@@ -112,17 +112,6 @@ RwPrjReadTool >> _visitConfigurations: visitorClass forProjectDefinition: projec
 ]
 
 { #category : 'read components' }
-RwPrjReadTool >> readConfigurationsForProjectComponentDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames [
-
-	^self 
-		readConfigurationsForProjectComponentDefinition: projectDefinition 
-			withConfigurations: configNames 
-			groupNames: groupNames 
-			platformConfigurationAttributes: Rowan platformConfigurationAttributes 
-			forLoad: true
-]
-
-{ #category : 'read components' }
 RwPrjReadTool >> readConfigurationsForProjectComponentDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
 
 	^self 
@@ -310,25 +299,25 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfigurations: 
 
 	| projectDefinition |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	^ self readProjectSetForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames
-
+	^ projectDefinition
+		readProjectSetReadTool: self
+			withConfigurations: configNames 
+			groupNames: groupNames
 ]
 
 { #category : 'read project by name' }
 RwPrjReadTool >> readProjectSetForProjectNamed: projectName withGroupNames: groupNames [
 
-	| projectDefinition spec theConfigNames |
+	| projectDefinition theConfigNames |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	spec := projectDefinition specification.
-	theConfigNames := spec loadedConfigurationNames
+	theConfigNames := projectDefinition loadedConfigurationNames
 		ifNotNil: [:configNames | configNames ]
 		ifNil: [
-			spec defaultConfigurationNames
+			projectDefinition defaultConfigurationNames
 				ifNotNil: [:configNames | configNames ]
 				ifNil: [ #('Default') ] ].
-	^ self 
-		readProjectSetForProjectDefinition: projectDefinition 
-		withConfigurations: theConfigNames 
-		groupNames: groupNames
-
+	^ projectDefinition
+		readProjectSetReadTool: self
+			withConfigurations: theConfigNames 
+			groupNames: groupNames
 ]

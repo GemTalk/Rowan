@@ -37740,18 +37740,6 @@ classExtensionsForProjectNamed: projectName
 
 category: 'read components'
 method: RwPrjReadTool
-readConfigurationsForProjectComponentDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames
-
-	^self 
-		readConfigurationsForProjectComponentDefinition: projectDefinition 
-			withConfigurations: configNames 
-			groupNames: groupNames 
-			platformConfigurationAttributes: Rowan platformConfigurationAttributes 
-			forLoad: true
-%
-
-category: 'read components'
-method: RwPrjReadTool
 readConfigurationsForProjectComponentDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
 
 	^self 
@@ -37947,26 +37935,28 @@ readProjectSetForProjectNamed: projectName withConfigurations: configNames group
 
 	| projectDefinition |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	^ self readProjectSetForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames
+	^ projectDefinition
+		readProjectSetReadTool: self
+			withConfigurations: configNames 
+			groupNames: groupNames
 %
 
 category: 'read project by name'
 method: RwPrjReadTool
 readProjectSetForProjectNamed: projectName withGroupNames: groupNames
 
-	| projectDefinition spec theConfigNames |
+	| projectDefinition theConfigNames |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	spec := projectDefinition specification.
-	theConfigNames := spec loadedConfigurationNames
+	theConfigNames := projectDefinition loadedConfigurationNames
 		ifNotNil: [:configNames | configNames ]
 		ifNil: [
-			spec defaultConfigurationNames
+			projectDefinition defaultConfigurationNames
 				ifNotNil: [:configNames | configNames ]
 				ifNil: [ #('Default') ] ].
-	^ self 
-		readProjectSetForProjectDefinition: projectDefinition 
-		withConfigurations: theConfigNames 
-		groupNames: groupNames
+	^ projectDefinition
+		readProjectSetReadTool: self
+			withConfigurations: theConfigNames 
+			groupNames: groupNames
 %
 
 category: 'private'
@@ -40396,6 +40386,16 @@ readProjectSet
 	^ Rowan projectTools read  readProjectSetForProjectDefinition: self
 %
 
+category: 'reading'
+method: RwProjectDefinition
+readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: theGroupNames
+
+	^ readTool
+		readProjectSetForProjectDefinition: self
+			withConfigurations: theConfigNames 
+			groupNames: theGroupNames
+%
+
 category: 'accessing'
 method: RwProjectDefinition
 removePackage: aPackageDefinition
@@ -40698,7 +40698,7 @@ category: 'properties'
 method: RwComponentProjectDefinition
 defaultGroupNames
 
-	^ self propertyAt: 'defaultGroupNames' ifAbsent: [ self projectRef groupNames ]
+	^ self projectRef groupNames
 %
 
 category: 'exporting'
@@ -40759,7 +40759,7 @@ category: 'properties'
 method: RwComponentProjectDefinition
 loadedConfigurationNames
 
-	^ self propertyAt: 'loadedConfigurationNames' ifAbsent: [ ]
+	^ self projectRef configurationNames
 %
 
 category: 'properties'
@@ -40915,6 +40915,16 @@ readProjectSetForPackageNames: packageNames
 	^ visitorClass new
 		packageNames: packageNames;
 		visit: self.
+%
+
+category: 'reading'
+method: RwComponentProjectDefinition
+readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: theGroupNames
+
+	^ readTool
+		readProjectSetForComponentProjectDefinition: self
+			withConfigurations: theConfigNames 
+			groupNames: theGroupNames
 %
 
 category: 'temporary compat'
