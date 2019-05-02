@@ -171,5 +171,7 @@ UserGlobals at: #rowanCompile put: true.
 %
   commit
 
+	logout
+
 	errorCount
 

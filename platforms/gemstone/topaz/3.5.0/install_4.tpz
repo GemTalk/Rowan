@@ -54,6 +54,8 @@
 %
   commit
 
+	logout
+
 	errorCount
 
 	
