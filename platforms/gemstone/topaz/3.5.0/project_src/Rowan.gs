@@ -40759,14 +40759,14 @@ category: 'properties'
 method: RwComponentProjectDefinition
 loadedConfigurationNames
 
-	^ self projectRef configurationNames
+	^ self projectRef loadedConfigurationNames
 %
 
 category: 'properties'
 method: RwComponentProjectDefinition
 loadedGroupNames
 
-	^ self propertyAt: 'loadedGroupNames' ifAbsent: [ ]
+	^ self projectRef loadedGroupNames
 %
 
 category: 'accessing'
@@ -41289,6 +41289,34 @@ category: 'temporary compat'
 method: RwProjectReferenceDefinition
 loadedCommitId:  ignored
 self deprecated: 'temporary method ... simulating RwSpecification api'.
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+loadedConfigurationNames
+
+	^ self configurationNames
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+loadedConfigurationNames: anArray
+
+	^ self configurationNames: anArray
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+loadedGroupNames
+
+	^ self loadedGroupNames
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+loadedGroupNames: anArray
+
+	^ self groupNames: anArray
 %
 
 category: 'accessing'

@@ -251,13 +251,13 @@ RwComponentProjectDefinition >> exportProjects [
 { #category : 'properties' }
 RwComponentProjectDefinition >> loadedConfigurationNames [
 
-	^ self projectRef configurationNames
+	^ self projectRef loadedConfigurationNames
 ]
 
 { #category : 'properties' }
 RwComponentProjectDefinition >> loadedGroupNames [
 
-	^ self propertyAt: 'loadedGroupNames' ifAbsent: [ ]
+	^ self projectRef loadedGroupNames
 ]
 
 { #category : 'accessing' }

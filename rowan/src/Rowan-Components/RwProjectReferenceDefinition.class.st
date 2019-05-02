@@ -310,6 +310,30 @@ self deprecated: 'temporary method ... simulating RwSpecification api'.
 ]
 
 { #category : 'accessing' }
+RwProjectReferenceDefinition >> loadedConfigurationNames [
+
+	^ self configurationNames
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> loadedConfigurationNames: anArray [
+
+	^ self configurationNames: anArray
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> loadedGroupNames [
+
+	^ self loadedGroupNames
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> loadedGroupNames: anArray [
+
+	^ self groupNames: anArray
+]
+
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> packageConvention [
 
 	^ self properties at: 'packageConvention' ifAbsent: [ 'RowanHybrid' ]
