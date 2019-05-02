@@ -1018,8 +1018,7 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 			packageDef := aMethodMove packageAfter.
 			classOrExtensionDef := aMethodMove classOrExtensionAfter.
 			loadedPackage := image loadedPackageNamed: packageDef name.
-			registry := (Rowan globalNamed: ((aMethodMove projectAfter specification platformSpec at: 'gemstone')
-				symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
+			registry := (Rowan globalNamed: (aMethodMove projectAfter  symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
 			loadedClassOrExtension := loadedPackage 
 				classOrExtensionForClassNamed: classOrExtensionDef name 
 				ifAbsent: [ 
@@ -1052,7 +1051,6 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 			loadedClassOrExtension addLoadedMethod: loadedMethod.
 
 			registry methodRegistry at: compiledMethod put: loadedMethod ]
-
 ]
 
 { #category : 'initialization' }

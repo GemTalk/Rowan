@@ -34198,13 +34198,12 @@ adoptClassNamed: className classExtension: classExtension instanceSelectors: ins
 
 	"Ignore packaged instance and class methods"
 
-	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary
+	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary
 		registry theBehavior actualPackageSymDictName |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := (gemstoneSpec symbolDictNameForPackageNamed: packageName) asSymbol.
+	packageSymDictName := (loadedProject symbolDictNameForPackageNamed: packageName) asSymbol.
 
 	theClass := Rowan globalNamed: className.
 	theClass ifNil: [ 
@@ -34330,13 +34329,12 @@ adoptMethod: methodSelector protocol: protocolString inClassNamed: className  is
 	"adopt the method <methodSelector> in class named <className> and it's methods into the package named <packageName>.
 		move the method into protocol <protocolString> "
 
-	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
+	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry 
 		theBehavior theCompiledMethod |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theClass := Rowan globalNamed: className.
 	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
@@ -34499,7 +34497,7 @@ disownClassExtensionMethodsInClassNamed: className forPackageNamed: packageName
 			adoptClassExtensionNamed: className  instanceSelectors: <instanceSelectors> classSelectors: <classSelectors> intoPackageNamed: packageName
 	to restore the classes and methods to the loaded things"
 
-	| loadedPackage loadedProject loadedClassExtension gemstoneSpec packageSymDictName theClass theSymbolDictionary registry |
+	| loadedPackage loadedProject loadedClassExtension packageSymDictName theClass theSymbolDictionary registry |
 	theClass := Rowan globalNamed: className.
 
 	loadedClassExtension := (Rowan image loadedClassExtensionsForClass: theClass) 
@@ -34509,8 +34507,7 @@ disownClassExtensionMethodsInClassNamed: className forPackageNamed: packageName
 	loadedPackage := loadedClassExtension loadedPackage.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
 
@@ -34533,7 +34530,7 @@ disownClassNamed: className
 			adoptClassNamed: className classExtension: classExtension instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: <packageName>
 	to restore the classes and methods to the loaded things"
 
-	| packageName loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry |
+	| packageName loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry |
 	theClass := Rowan globalNamed: className.
 
 	theClass rowanProjectName = Rowan unpackagedName
@@ -34543,8 +34540,7 @@ disownClassNamed: className
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
 
@@ -34564,7 +34560,7 @@ disownMethod: methodSelector inClassNamed: className isMeta: isMeta
 			adoptMethod: methodSelector inClassNamed: className  isMeta: isMeta intoPackageNamed: <packageName>
 	to restore the specified method to the loaded things"
 
-	| packageName loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
+	| packageName loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry 
 		theBehavior theCompiledMethod |
 	theClass := Rowan globalNamed: className.
 	theBehavior := isMeta
@@ -34579,8 +34575,7 @@ disownMethod: methodSelector inClassNamed: className isMeta: isMeta
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
 
@@ -43864,8 +43859,7 @@ method: RwGsPatch
 symbolDictionaryFor: aPackageName projectDefinition: aProjectDefinition
 
 	| symDictName symDict |
-	symDictName := aProjectDefinition
-		symbolDictNameForPackageNamed:aPackageName.
+	symDictName := aProjectDefinition symbolDictNameForPackageNamed: aPackageName.
 	symDict := GsCurrentSession currentSession symbolList objectNamed: symDictName asSymbol.
 	symDict
 		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
@@ -44386,8 +44380,7 @@ installSymbolDictionaryPatchFor: aPatchSet
 	assoc := originalSymbolDictionary associationAt: before key asSymbol.
 	registry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 	registry deleteClassNamedFromPackage: classDefinition name implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
-	newSymbolDictionary := Rowan globalNamed: ((projectDefinition specification platformSpec at: 'gemstone')
-				symbolDictNameForPackageNamed: packageDefinition name) .
+	newSymbolDictionary := Rowan globalNamed: (projectDefinition symbolDictNameForPackageNamed: packageDefinition name) .
 	registry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 	registry 
 		addClassAssociation: assoc 
@@ -46778,8 +46771,7 @@ doMoveMethodsBetweenPackages
 			packageDef := aMethodMove packageAfter.
 			classOrExtensionDef := aMethodMove classOrExtensionAfter.
 			loadedPackage := image loadedPackageNamed: packageDef name.
-			registry := (Rowan globalNamed: ((aMethodMove projectAfter specification platformSpec at: 'gemstone')
-				symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
+			registry := (Rowan globalNamed: (aMethodMove projectAfter  symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
 			loadedClassOrExtension := loadedPackage 
 				classOrExtensionForClassNamed: classOrExtensionDef name 
 				ifAbsent: [ 
@@ -48648,8 +48640,7 @@ moveClassFor: classMove
 	theBehavior := theClass class.
 	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	newSymbolDictionary := Rowan globalNamed: ((classMove projectAfter specification platformSpec at: 'gemstone')
-				symbolDictNameForPackageNamed: classMove packageAfter name) .
+	newSymbolDictionary := Rowan globalNamed: (classMove projectAfter symbolDictNameForPackageNamed: classMove packageAfter name) .
 	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 
 	loadedClass := oldRegistry classRegistry removeKey: theClass classHistory.

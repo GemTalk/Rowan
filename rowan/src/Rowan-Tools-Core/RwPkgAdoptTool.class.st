@@ -26,13 +26,12 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 
 	"Ignore packaged instance and class methods"
 
-	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary
+	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary
 		registry theBehavior actualPackageSymDictName |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := (gemstoneSpec symbolDictNameForPackageNamed: packageName) asSymbol.
+	packageSymDictName := (loadedProject symbolDictNameForPackageNamed: packageName) asSymbol.
 
 	theClass := Rowan globalNamed: className.
 	theClass ifNil: [ 
@@ -157,13 +156,12 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 	"adopt the method <methodSelector> in class named <className> and it's methods into the package named <packageName>.
 		move the method into protocol <protocolString> "
 
-	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
+	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry 
 		theBehavior theCompiledMethod |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theClass := Rowan globalNamed: className.
 	theSymbolDictionary := Rowan globalNamed: packageSymDictName.

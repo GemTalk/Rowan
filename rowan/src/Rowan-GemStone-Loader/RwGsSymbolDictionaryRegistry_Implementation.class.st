@@ -815,8 +815,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveClassFor: classMove [
 	theBehavior := theClass class.
 	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	newSymbolDictionary := Rowan globalNamed: ((classMove projectAfter specification platformSpec at: 'gemstone')
-				symbolDictNameForPackageNamed: classMove packageAfter name) .
+	newSymbolDictionary := Rowan globalNamed: (classMove projectAfter symbolDictNameForPackageNamed: classMove packageAfter name) .
 	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 
 	loadedClass := oldRegistry classRegistry removeKey: theClass classHistory.
@@ -846,7 +845,6 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveClassFor: classMove [
 		compiledMethod := theBehavior compiledMethodAt: loadedMethod selector asSymbol.
 		oldRegistry methodRegistry removeKey: compiledMethod.
 		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
-
 ]
 
 { #category : 'method - patch api' }
