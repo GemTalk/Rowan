@@ -37,7 +37,7 @@ run
 		'common'.
 		'gemstone'.
 		'gemstone-kernel'.
-		'3.5.0' asRwGemStoneVersionNumber printString.	"want to read 3.5.0 packages"
+		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
 	}.
 	projectSetDefinition := RwProjectSetDefinition new.
 	loadedProjectInfo := Dictionary new.

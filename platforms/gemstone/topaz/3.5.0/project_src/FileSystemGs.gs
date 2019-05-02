@@ -24,7 +24,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'Files-Core';
+		category: 'Files';
 		comment: 'Common superclass for exceptions while using file streams';
 		immediateInvariant.
 true.
@@ -39,7 +39,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'Files-Core';
+		category: 'Files';
 		comment: 'Notfify when not able to delete';
 		immediateInvariant.
 true.
@@ -54,7 +54,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'Files-Core';
+		category: 'Files';
 		comment: 'I am an exception that notifies that a file already exists.';
 		immediateInvariant.
 true.
@@ -69,7 +69,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'Files-Core';
+		category: 'Files';
 		comment: 'I am raised when an operation is attempted on a file that does not exist.
 
 The method used to signal the exception depends on the form the file name exists in:
@@ -96,7 +96,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'Files-Core';
+		category: 'Files';
 		comment: 'Notify about an error when trying to attempt to write to a file';
 		immediateInvariant.
 true.
@@ -111,7 +111,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Kernel-Errors';
+		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for errors that may occur during filesystem operations.';
 		immediateInvariant.
 true.
@@ -126,7 +126,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Kernel-Errors';
+		category: 'FileSystem-Core';
 		comment: 'I am raised when I an operation is attempted inside a directory that does not exist. ';
 		immediateInvariant.
 true.
@@ -141,7 +141,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Kernel-Errors';
+		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to create a directory that already exists.';
 		immediateInvariant.
 true.
@@ -156,7 +156,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Kernel-Errors';
+		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to delete a directory when is not empty.';
 		immediateInvariant.
 true.
@@ -171,7 +171,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Kernel-Errors';
+		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to create a file or directory over top of an existing file.';
 		immediateInvariant.
 true.
@@ -186,7 +186,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Kernel-Errors';
+		category: 'FileSystem-Core';
 		comment: 'I am raised on an attempt to use an illegal file name
 ';
 		immediateInvariant.
@@ -222,7 +222,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Errors';
+		category: 'FileSystem-Core';
 		comment: 'I represent a request for user assistance in resolving an origin. I am a resumable exception that gets raised when there is no way of automatically resolving a particular origin. ';
 		immediateInvariant.
 true.
@@ -237,7 +237,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Public';
+		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for FileLocator and FileReference. By implementing most of the methods on myself most code duplucation between the locator and the reference can be avoided';
 		immediateInvariant.
 true.
@@ -252,7 +252,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Public';
+		category: 'FileSystem-Core';
 		comment: 'I am a late-bound reference. I refer to a file or directory in relation to a well-known location on the filesystem, called an origin. When asked to perform concrete operation, I look up the current location of my origin, and resolve my path against it. 
 
 Usage
@@ -297,7 +297,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Public';
+		category: 'FileSystem-Core';
 		comment: 'I combine a filesystem and path, which is sufficient to refer to a concrete file or directory. I provide methods for navigating my filesystem, performing filesystem operations and opening and closing files.  I am the primary mechanism for working with files and directories. 
 
 | working |
@@ -336,7 +336,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'Files-Core';
+		category: 'Files';
 		comment: 'I represent a sequential binary File. I provide the minimum operations to:
 
 - move the cursor fo the file
@@ -389,7 +389,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Public';
+		category: 'FileSystem-Core';
 		comment: 'I present a low-level protocol for interacting with filesystems. I hold a reference to
 a store (a subinstance of FileSystemStore) which takes care of the details of performing 
 file and directory operations on the filesystem I represent. 
@@ -417,7 +417,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Public';
+		category: 'FileSystem-Core';
 		comment: 'I am a cache for metadata about a file or directory. The information I hold is as follows:
 
 reference
@@ -449,7 +449,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Guide';
+		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that fulfill the Guide role in the Guide/Visitor pattern. My subclasses know how to traverse a filesystem in a specific order, "showing" the files and directories they encounter to a visitor.
 
 visitor
@@ -470,7 +470,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Guide';
+		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in breadth-first order. Given this hierarchy:
 
 alpha
@@ -496,7 +496,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Guide';
+		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in depth-first post order. Given this hierarchy:
 
 alpha
@@ -521,7 +521,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Guide';
+		category: 'FileSystem-Core';
 		comment: 'I traverse the filesystem in depth-first pre order. Given this hierarchy:
 
 alpha
@@ -546,7 +546,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Kernel';
+		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for file handle implementations. I provide a uniform interface that streams can use for read and write operations on a file regardless of the filesystem. I encapsulate the actual IO primitives.';
 		immediateInvariant.
 true.
@@ -561,7 +561,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Disk-Base';
+		category: 'FileSystem-Disk';
 		comment: 'I provide an interface for doing IO on an open file. I keep an id, which as an opaque identifier used by the FilePlugin primitives. I translate positions from the 1-based indexes used in Smalltalk to the 0-based offsets used by the primitives.
 
 I implement the primitives on my class side.';
@@ -578,7 +578,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Memory-Base';
+		category: 'FileSystem-Memory';
 		comment: 'I provide "primitives" for doing IO on files in a MemoryFileSystem. I delegate most of my actions to the MemoryFile. This way there is only one place needed where the data is stored.';
 		immediateInvariant.
 true.
@@ -593,7 +593,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Public';
+		category: 'FileSystem-Core';
 		comment: 'I''m a set of permissions for a Directory Entry';
 		immediateInvariant.
 true.
@@ -608,7 +608,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Resolver';
+		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that can resolve origins into references. Such objects use the Chain of Responsibility pattern, and when unable to resolve a particular origin, delegate that resolution request to the next resolver in the list.
 
 next
@@ -627,7 +627,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Resolver';
+		category: 'FileSystem-Core';
 		comment: 'I resolve origins by consulting the user. I maintain a cache of the user''s responses.';
 		immediateInvariant.
 true.
@@ -642,7 +642,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Resolver';
+		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for platform-specific resolvers.';
 		immediateInvariant.
 true.
@@ -657,7 +657,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Resolver';
+		category: 'FileSystem-Core';
 		comment: 'I am an expert on Mac OS X filesystem conventions. I resolve origins according to these conventions.';
 		immediateInvariant.
 true.
@@ -672,7 +672,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Resolver';
+		category: 'FileSystem-Core';
 		comment: 'I am an expert on Unix filesystem conventions. I resolve origins according to these conventions.';
 		immediateInvariant.
 true.
@@ -687,7 +687,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Resolver';
+		category: 'FileSystem-Core';
 		comment: 'I am an expert on Windows filesystem conventions. I resolve origins according to these conventions.';
 		immediateInvariant.
 true.
@@ -702,7 +702,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Resolver';
+		category: 'FileSystem-Core';
 		comment: 'I resolve origins that are related to the currently running Smalltalk system, using primitives provided by the VM. ';
 		immediateInvariant.
 true.
@@ -717,7 +717,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Kernel';
+		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for store implementations. My subclasses provide access to the actual data storage of a particular kind of filesystem. 
 
 The file system can be accessed via
@@ -739,7 +739,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Disk-Store';
+		category: 'FileSystem-Disk';
 		comment: 'I am an abstract superclass for disk store implementations. My subclasses provide access to the actual data storage of a particular kind of filesystem. 
 ';
 		immediateInvariant.
@@ -755,7 +755,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Disk-Store';
+		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for Unix file systems';
 		immediateInvariant.
 true.
@@ -770,7 +770,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Disk-Store';
+		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for OSX file systems';
 		immediateInvariant.
 true.
@@ -785,7 +785,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Disk-Store';
+		category: 'FileSystem-Disk';
 		comment: 'I''m a specific store for Windows file systems';
 		immediateInvariant.
 true.
@@ -800,7 +800,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Memory-Store';
+		category: 'FileSystem-Memory';
 		comment: 'I''m a specific store for memory file system';
 		immediateInvariant.
 true.
@@ -815,7 +815,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Visitors';
+		category: 'FileSystem-Core';
 		comment: 'I am an abstract superclass for objects that can perform operations on directory trees. My subclasses implement the visitor protocol, and process filesystem nodes shown to them by guides.';
 		immediateInvariant.
 true.
@@ -830,7 +830,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Visitors';
+		category: 'FileSystem-Core';
 		comment: 'I''m an abstract superclass for enumeration operations on directory entries. ';
 		immediateInvariant.
 true.
@@ -845,7 +845,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Visitors';
+		category: 'FileSystem-Core';
 		comment: 'I am a visitor that collects objects from the nodes I visit. I take a block similar to those passed to Collection>>collect:. I evaluate the block with DirectoryEntries for the nodes I visit, and collect the objects answered into an array.
 
 I can use any guide, and the objects in the array I produce will reflect the order imposed by the guide.';
@@ -862,7 +862,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Visitors';
+		category: 'FileSystem-Core';
 		comment: 'I am a visitor that selects objects from the nodes I visit. I take a block similar to those passed to Collection>>select:. I evaluate the block with DirectoryEntries for the nodes I visit.
 
 I can use any guide, and the objects in the array I produce will reflect the order imposed by the guide.';
@@ -879,7 +879,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Visitors';
+		category: 'FileSystem-Core';
 		comment: 'I create a copy of the directory tree that I visit. I use the PreorderGuide so that I can create directories before creating their contents. ';
 		immediateInvariant.
 true.
@@ -894,7 +894,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Core-Base-Visitors';
+		category: 'FileSystem-Core';
 		comment: 'I delete the directory tree that I visit. I use the PostorderGuide so that I can delete files before deleting their containing directories.';
 		immediateInvariant.
 true.
@@ -909,7 +909,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Memory-Base';
+		category: 'FileSystem-Memory';
 		comment: 'I am an abstract file system entry for a memory file system.
 My subclasses should specialize on the kind of file they are.';
 		immediateInvariant.
@@ -925,7 +925,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Memory-Base';
+		category: 'FileSystem-Memory';
 		comment: 'I represent a memory file system entry for a directory';
 		immediateInvariant.
 true.
@@ -940,7 +940,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Memory-Base';
+		category: 'FileSystem-Memory';
 		comment: 'I represent a memory file system entry for a regular file';
 		immediateInvariant.
 true.
@@ -955,7 +955,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Memory-Streams';
+		category: 'FileSystem-Memory';
 		comment: 'A file write stream - but within memory';
 		immediateInvariant.
 true.
@@ -970,7 +970,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Path-Base';
+		category: 'FileSystem-Path';
 		comment: 'I''m a private and abstract filesystem path, independent of the string representation used to describe paths on a specific filesystem. I provide methods for navigating the filesystem hierarchy and working with absolute and relative paths. I only refer to a concrete file or directory with regard to a specific filesystem. Normally users should not use me directly. 
 
 API instance creation:
@@ -997,7 +997,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Path-Base';
+		category: 'FileSystem-Path';
 		comment: 'I represent an absolute path (a position starting from Path root)';
 		immediateInvariant.
 true.
@@ -1012,7 +1012,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Path-Base';
+		category: 'FileSystem-Path';
 		comment: 'I represent a relative path (a position starting from Path workingDirectory)';
 		immediateInvariant.
 true.
@@ -1274,7 +1274,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'Files-Streams';
+		category: 'Files';
 		comment: 'Provides a simple, platform-independent, file stream. I am 
    - binary
    - not buffered
@@ -1319,7 +1319,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'Files-Streams';
+		category: 'Files';
 		comment: 'I am a concrete subclass of AbstractBinaryFileStream for normal files. Regardless the position of the file, I will make my operarions on my position and then return the file it''s own position.
 
 In addition to my superclass'' API I provide the following methods.
@@ -1369,7 +1369,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Base';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for FileSystemDirectoryEntry';
 		immediateInvariant.
 true.
@@ -1384,7 +1384,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Base';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit test for FileLocator';
 		immediateInvariant.
 true.
@@ -1417,7 +1417,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Base';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for file reference';
 		immediateInvariant.
 true.
@@ -1432,7 +1432,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Base';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for FileSystemHandle';
 		immediateInvariant.
 true.
@@ -1447,7 +1447,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Disk-Base';
+		category: 'FileSystem-Tests-Disk';
 		comment: 'SUnit tests for file handles, the tests may be found in superclass';
 		immediateInvariant.
 true.
@@ -1462,7 +1462,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Memory-Base';
+		category: 'FileSystem-Tests-Memory';
 		comment: 'SUnit tests for memory handles, the tests may be found in superclass';
 		immediateInvariant.
 true.
@@ -1477,7 +1477,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Resolver';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for FileSystemResolver';
 		immediateInvariant.
 true.
@@ -1492,7 +1492,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Resolver';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for InteractiveResolver';
 		immediateInvariant.
 true.
@@ -1507,7 +1507,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Resolver';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for PlatformResolver';
 		immediateInvariant.
 true.
@@ -1522,7 +1522,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Resolver';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for SystemResolver';
 		immediateInvariant.
 true.
@@ -1537,7 +1537,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Base';
+		category: 'FileSystem-Tests-Core';
 		comment: 'I am an abstract file system test. 
 I directly test 
 - the public interface of a FileSystem using these methods directly
@@ -1555,7 +1555,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Disk-Base';
+		category: 'FileSystem-Tests-Disk';
 		comment: 'SUnit tests for the disk filesystem';
 		immediateInvariant.
 true.
@@ -1570,7 +1570,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Memory-Base';
+		category: 'FileSystem-Tests-Memory';
 		comment: 'SUnit tests for MemoryFileSystem';
 		immediateInvariant.
 true.
@@ -1585,7 +1585,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Base';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for a file system tree';
 		immediateInvariant.
 true.
@@ -1600,7 +1600,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Visitors';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for CopyVisitor';
 		immediateInvariant.
 true.
@@ -1615,7 +1615,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Base';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for a single file system tree (depth one)';
 		immediateInvariant.
 true.
@@ -1630,7 +1630,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Visitors';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for AbstractEnumerationVisitor';
 		immediateInvariant.
 true.
@@ -1645,7 +1645,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Visitors';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class CollectVisitor';
 		immediateInvariant.
 true.
@@ -1660,7 +1660,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Visitors';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class SelectVistor
 ';
 		immediateInvariant.
@@ -1676,7 +1676,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Visitors';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class DeleteVisitor';
 		immediateInvariant.
 true.
@@ -1691,7 +1691,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Guide';
+		category: 'FileSystem-Tests-Core';
 		comment: 'Common superclass for tests of guidance through the filesystem';
 		immediateInvariant.
 true.
@@ -1706,7 +1706,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Guide';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class BreadthFirstGuide';
 		immediateInvariant.
 true.
@@ -1721,7 +1721,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Guide';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class PostorderGuide';
 		immediateInvariant.
 true.
@@ -1736,7 +1736,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Guide';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for class PreorderGuide';
 		immediateInvariant.
 true.
@@ -1751,7 +1751,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'Files-Tests-Core';
+		category: 'Files-Tests';
 		comment: 'Unit tests for file operations';
 		immediateInvariant.
 true.
@@ -1781,7 +1781,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Core-Base';
+		category: 'FileSystem-Tests-Core';
 		comment: 'SUnit tests for file system paths';
 		immediateInvariant.
 true.
@@ -1796,7 +1796,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Tests-Disk-Base';
+		category: 'FileSystem-Tests-Disk';
 		comment: 'SUnit tests for class WindowsStore';
 		immediateInvariant.
 true.
@@ -1933,7 +1933,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #())
-		category: 'FileSystem-Memory-Streams';
+		category: 'FileSystem-Memory';
 		comment: 'I am like a WriteStream but I have more capacities than it.
 I am closer to a FileStream so I delegate some operations to my handle (collection instance variable)';
 		immediateInvariant.

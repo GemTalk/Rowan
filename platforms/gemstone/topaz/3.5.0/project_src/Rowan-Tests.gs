@@ -1248,6 +1248,22 @@ test_updateFromSton
 
 !		Instance methods for 'RowanServicesTest'
 
+category: 'unicode method'
+method: RowanServicesTest
+compileUnicodeMethod
+	"RowanServicesTest new compileUnicodeMethod"
+
+	RowanServicesTest rwCompileMethod:
+	'iAmAUnicodeMethod
+
+		| abc |
+		abc := ''', (String with: (Character withValue: 16r3DA)), '''.
+		self halt. 
+		^abc'
+
+	category: 'unicode method'
+%
+
 category: 'support'
 method: RowanServicesTest
 createClassDefinitionNamed: className
@@ -1506,32 +1522,28 @@ setUp
 category: 'tests'
 method: RowanAnsweringServiceTest
 test_execCompileError
-	| gotError |
 
-	gotError := [service exec: '1 +' context: nil] on: CompileError do:[:ex |
-		true].
-	self assert: gotError.
+	self deny: (service exec: '1 +' context: nil asOop) key.
 %
 
 category: 'tests'
 method: RowanAnsweringServiceTest
 test_execNilContext
 
-	self assert: (service exec: '123' context: nil) equals: 123.
-	self assert: (service exec: '$a' context: nil) equals: $a.
-	self assert: (service exec: '''abc''' context: nil) equals: 'abc'.
-	self assert: (service exec: '3+4' context: nil) equals: 7.
-	self assert: (service exec: 'true' context: nil) equals: true.
-	self assert: (service exec: 'false' context: nil) equals: false.
+	self assert: (service exec: '123' context: nil asOop) value equals: 123 asOop.
+	self assert: (service exec: '$a' context: nil asOop) value equals: $a asOop.
+	self assert: (service exec: '3+4' context: nil asOop) value equals: 7 asOop.
+	self assert: (service exec: 'true' context: nil asOop) value equals: true asOop.
+	self assert: (service exec: 'false' context: nil asOop) value equals: false asOop.
 %
 
 category: 'tests'
 method: RowanAnsweringServiceTest
 test_execWithContext
 
-	self assert: (service exec: 'self' context: 123) equals: 123.
-	self assert: (service exec: 'self size' context: Array new) equals: 0.
-	self assert: (service exec: '1 + self' context: 2) equals: 3.
+	self assert: (service exec: 'self' context: 123 asOop) value equals: 123 asOop.
+	self assert: (service exec: 'self size' context: Array new asOop) value equals: 0 asOop.
+	self assert: (service exec: '1 + self' context: 2 asOop) value equals: 3 asOop.
 %
 
 category: 'tests'
@@ -7304,6 +7316,97 @@ _globalExtensionsProjectDefinition: projectName packageNames: packageNames defau
 
 category: 'private'
 method: RwBrowserToolTest
+_issue481_loadProjectDefinition: projectName  packageName1: packageName1 packageName2: packageName2 symDictName: symDictName
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: { packageName1 . packageName2}
+		defaultSymbolDictName: symDictName
+		comment: 'project for testing package adopt api'.
+%
+
+category: 'private'
+method: RwBrowserToolTest
+_issue481_projectDefinition: projectName  packageName1: packageName1 packageName2: packageName2 className1: className1 className2: className2 symDictName: symDictName
+
+	| theClass1 theClass2 symDict instanceMethod1 classMethod1 symbolList 
+		instanceMethod2 classMethod2 |
+	symbolList := Rowan image symbolList.
+
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+	symDict := Rowan globalNamed: symDictName.
+
+	"Use non-Rowan api to create class and methods"
+	theClass1 := Object subclass: className1
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symDict
+		options: #().
+	theClass1 category: packageName1.
+
+	instanceMethod1 := theClass1
+		compileMethod: 'foo ^''foo'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+	classMethod1 := theClass1 class
+		compileMethod: 'bar ^''bar'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+	Rowan packageTools adopt 
+		adoptClassNamed: className1
+		intoPackageNamed: packageName1.
+
+	self assert: theClass1 rowanPackageName = packageName1.
+	self assert: instanceMethod1 rowanPackageName = packageName1.
+	self assert: classMethod1 rowanPackageName = packageName1.
+
+	theClass2 := Object subclass: className2
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symDict
+		options: #().
+	theClass2 category: packageName2.
+
+	instanceMethod2 := theClass2
+		compileMethod: 'foo ^''foo'''
+		dictionaries: symbolList
+		category: '*', packageName2 asLowercase
+		environmentId: 0.
+
+	classMethod2 := theClass2 class
+		compileMethod: 'bar ^''bar'''
+		dictionaries: symbolList
+		category: '*', packageName2 asLowercase
+		environmentId: 0.
+
+	Rowan packageTools adopt 
+		adoptClassExtensionNamed: className2  
+		instanceSelectors: #(foo) 
+		classSelectors: #(bar)
+		intoPackageNamed: packageName2.
+
+	self assert: theClass2 rowanPackageName = Rowan unpackagedName.
+	self assert: instanceMethod2 rowanPackageName = packageName2.
+	self assert: classMethod2 rowanPackageName = packageName2.
+
+	^(Rowan image loadedProjectNamed: projectName) asDefinition
+%
+
+category: 'private'
+method: RwBrowserToolTest
 _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbolDictName: defaultSymbolDictName comment: comment format: format root: rootPath
 
 	| projectDefinition projectTools |
@@ -8700,6 +8803,547 @@ testAdoptSymbolList_2
 	self assert: classMethod rowanPackageName = packageName.
 %
 
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_A
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing instance method for packaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName projectDefinition notified audit |
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove #foo method"
+	(Rowan globalNamed: className1) removeSelector: #foo.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing method"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptAuditMethodErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className1.
+			self deny: ex isClassExtension.
+			self assert: ex selector = #foo.
+			self deny: ex isMetaclass.
+			self assert: ex packageName = packageName1.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_A_F
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing unpackaged class and missing instance method for packaged class"
+
+	"test for RwAdoptAuditErrorNotification>>methodErrorDo:classErrorDo:"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName projectDefinition notified audit report |
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove #foo method"
+	(Rowan globalNamed: className1) removeSelector: #foo.
+"remove className2"
+	(Rowan globalNamed: symDictName) removeKey: className2 asSymbol.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing class and missing method"
+	notified := false.
+	report := WriteStream on: String new.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptMissingMethodErrorNotification, RwAdoptMissingClassErrorNotification
+		do: [:ex |
+			notified := true.
+			ex 
+				methodErrorDo: [
+					"RwAdoptAuditMethodErrorNotification"
+					self assert: ex className = className1.
+					self deny: ex isClassExtension.
+					self assert: ex selector = #foo.
+					self deny: ex isMetaclass.
+					self assert: ex packageName = packageName1.
+					report nextPutAll: 'Missing loaded method ', ex methodPrintString, ' encountered during adopt ... IGNORED'; lf ]
+				classErrorDo: [
+					"RwAdoptMissingClassErrorNotification"
+					self assert: ex className = className2.
+					self assert: ex isClassExtension.
+					self assert: ex packageName = packageName2.
+					report nextPutAll: 'Missing loaded class ', ex className, ' encountered during adopt ... IGNORED'; lf  ].
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_B
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing class method for packaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName projectDefinition notified audit |
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove #bar class method"
+	(Rowan globalNamed: className1) class removeSelector: #bar.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing method"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptMissingMethodErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className1.
+			self deny: ex isClassExtension.
+			self assert: ex selector = #bar.
+			self assert: ex isMetaclass.
+			self assert: ex packageName = packageName1.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_C
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing instance method extension for unpackaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2 
+		symDictName projectDefinition notified audit |
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove #foo method"
+	(Rowan globalNamed: className2) removeSelector: #foo.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing method"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptAuditMethodErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className2.
+			self assert: ex isClassExtension.
+			self assert: ex selector = #foo.
+			self deny: ex isMetaclass.
+			self assert: ex packageName = packageName2.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_D
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing class method extension for unpackaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName projectDefinition notified audit |
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove #bar class method"
+	(Rowan globalNamed: className2) class removeSelector: #bar.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing method"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptAuditMethodErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className2.
+			self assert: ex isClassExtension.
+			self assert: ex selector = #bar.
+			self assert: ex isMetaclass.
+			self assert: ex packageName = packageName2.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_E
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing packaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2  symDictName projectDefinition notified audit |
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove className1"
+	(Rowan globalNamed: symDictName) removeKey: className1 asSymbol.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing class"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptMissingClassErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className1.
+			self deny: ex isClassExtension.
+			self assert: ex packageName = packageName1.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_F
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing unpackaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2  symDictName projectDefinition notified audit|
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove className2"
+	(Rowan globalNamed: symDictName) removeKey: className2 asSymbol.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing class"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptMissingClassErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className2.
+			self assert: ex isClassExtension.
+			self assert: ex packageName = packageName2.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
 category: 'private'
 method: RwAdoptToolApiTest
 _validateExpectedMonticelloConventionFailure_389: audit packageName: packageName className: className
@@ -8731,7 +9375,7 @@ _validateExpectedMonticelloConventionFailure_389_A: audit packageNames: packageN
 	unexpectedFailures := ((audit at: (packageNames at: 1)) at: className)
 		reject: [:each | (each value = 'Class category has changed in compiled class v loaded class')
 			or: [ (each value = 'Missing instance method extension category ') or: [ (each value = 'Missing class method extension category ')
-			or: [ (each value = 'Missing loaded instance method. ') or: [ (each value = 'Missing loaded class method ') ]] ] ] ].
+			or: [ (each value = 'Missing loaded instance method. ') or: [ (each value = 'Missing loaded class method. ') ]] ] ] ].
 	self assert: unexpectedFailures isEmpty
 %
 
@@ -16476,6 +17120,238 @@ _standardProjectDefinition: projectName packageNameMap: packageNameMap defaultSy
 ! Class implementation for 'RwProjectAuditToolTest'
 
 !		Instance methods for 'RwProjectAuditToolTest'
+
+category: 'tests'
+method: RwProjectAuditToolTest
+testAuditAndRepair_issue481_A
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"extra instance method for packaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName audit symbolList |
+
+	symbolList := Rowan image symbolList.
+
+	projectName := 'AuditProject_481'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AuditedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create loadedProject"
+	self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"add extra instance method"
+	(Rowan globalNamed: className1)
+		compileMethod: 'foobar ^''foobar'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+"audit - audit errors expected"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"audit - repair audit errors"
+	[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+		on: RwAuditMethodErrorNotification
+		do: [:ex | 
+			"adopt the method"
+			Rowan packageTools adopt 
+				adoptMethod: ex selector 
+					inClassNamed: ex className  
+					isMeta: ex isMetaclass 
+					intoPackageNamed: ex packageName.
+			ex resume: false ].
+	self assert: audit isEmpty.
+
+"double check audit - pass"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwProjectAuditToolTest
+testAuditAndRepair_issue481_B
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"extra class method for packaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName audit symbolList |
+
+	symbolList := Rowan image symbolList.
+
+	projectName := 'AuditProject_481'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AuditedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create loadedProject"
+	self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"add extra class method"
+	(Rowan globalNamed: className1) class
+		compileMethod: 'foobar ^''foobar'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+"audit - audit errors expected"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"audit - repair audit errors"
+	[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+		on: RwAuditMethodErrorNotification
+		do: [:ex | 
+			"adopt the method"
+			Rowan packageTools adopt 
+				adoptMethod: ex selector 
+					inClassNamed: ex className  
+					isMeta: ex isMetaclass 
+					intoPackageNamed: ex packageName.
+			ex resume: false ].
+	self assert: audit isEmpty.
+
+"double check audit - pass"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwProjectAuditToolTest
+testAuditAndRepair_issue481_C
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"extra instance method for unpackaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName audit symbolList |
+
+	symbolList := Rowan image symbolList.
+
+	projectName := 'AuditProject_481'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AuditedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create loadedProject"
+	self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"add extra instance method"
+	(Rowan globalNamed: className2)
+		compileMethod: 'foobar ^''foobar'''
+		dictionaries: symbolList
+		category: '*' , packageName2 asLowercase
+		environmentId: 0.
+
+"audit - audit errors expected"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"audit - repair audit errors"
+	[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+		on: RwAuditMethodErrorNotification
+		do: [:ex | 
+			"adopt the method"
+			Rowan packageTools adopt 
+				adoptMethod: ex selector 
+					inClassNamed: ex className  
+					isMeta: ex isMetaclass 
+					intoPackageNamed: ex packageName.
+			ex resume: false ].
+	self assert: audit isEmpty.
+
+"validate that method is packaged properly"
+	self assert: ((Rowan globalNamed: className2) compiledMethodAt: #foobar) rowanPackageName = packageName2.
+
+"double check audit - pass"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwProjectAuditToolTest
+testAuditAndRepair_issue481_D
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"extra class method for unpackaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName audit symbolList |
+
+	symbolList := Rowan image symbolList.
+
+	projectName := 'AuditProject_481'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AuditedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create loadedProject"
+	self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"add extra instance method"
+	(Rowan globalNamed: className2) class
+		compileMethod: 'foobar ^''foobar'''
+		dictionaries: symbolList
+		category: '*' , packageName2 asLowercase
+		environmentId: 0.
+
+"audit - audit errors expected"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"audit - repair audit errors"
+	[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+		on: RwAuditMethodErrorNotification
+		do: [:ex | 
+			"adopt the method"
+			Rowan packageTools adopt 
+				adoptMethod: ex selector 
+					inClassNamed: ex className  
+					isMeta: ex isMetaclass 
+					intoPackageNamed: ex packageName.
+			ex resume: false ].
+	self assert: audit isEmpty.
+
+"validate that method is packaged properly"
+	self assert: ((Rowan globalNamed: className2) class compiledMethodAt: #foobar) rowanPackageName = packageName2.
+
+"double check audit - pass"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
 
 category: 'tests'
 method: RwProjectAuditToolTest
@@ -42275,7 +43151,8 @@ method: RwProjectConfigurationsTest
 _expectedRowan_LoadPackageNames
 
 	^ (self _expectedLoadPackageNames_gemstone , self _expectedLoadPackageNames_gemstone_version,
-			#('Rowan-GemStone-3215' 'Rowan-Url-3215' 'GemStone-Interactions-Core' 
+			#('AST-Core' 'AST-Kernel-Core' 'AST-Kernel-Tests-Core' 'AST-Tests-Core' 
+				'Rowan-GemStone-3215' 'Rowan-Url-3215' 'GemStone-Interactions-Core' 
 				'GemStone-Interactions-Kernel' 'Rowan-Url-Extensions' 'Rowan-Kernel' 
 				'Rowan-GemStone-Specifications' 'Rowan-Core-Definitions-Extensions' 
 				'Rowan-GemStone-Definitions' 'Rowan-Cypress-Definitions' ) ) sort
