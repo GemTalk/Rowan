@@ -324,7 +324,7 @@ RwProjectReferenceDefinition >> loadedConfigurationNames: anArray [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> loadedGroupNames [
 
-	^ self loadedGroupNames
+	^ self groupNames
 ]
 
 { #category : 'accessing' }
