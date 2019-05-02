@@ -17,6 +17,8 @@
 #
 
 	omit pushonly
+	display oops
+
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_1.tpz
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_2.tpz
 	input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_3.tpz

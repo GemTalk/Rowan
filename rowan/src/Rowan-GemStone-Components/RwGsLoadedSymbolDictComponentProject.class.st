@@ -68,6 +68,12 @@ RwGsLoadedSymbolDictComponentProject >> projectOwnerId: aString [
 	^ self propertyAt: 'projectOwnerId' put: aString
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> projectRef [
+
+	^ self handle
+]
+
 { #category : 'definitions' }
 RwGsLoadedSymbolDictComponentProject >> propertiesForDefinition [
 
@@ -81,4 +87,10 @@ RwGsLoadedSymbolDictComponentProject >> propertiesForDefinition [
 RwGsLoadedSymbolDictComponentProject >> specification [
 
 	^ handle
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> symbolDictNameForPackageNamed: packageName [
+
+	^self projectRef symbolDictNameForPackageNamed: packageName
 ]

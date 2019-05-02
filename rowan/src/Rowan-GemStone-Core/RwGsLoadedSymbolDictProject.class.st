@@ -31,3 +31,12 @@ RwGsLoadedSymbolDictProject >> specification [
 
 	^ handle
 ]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictProject >> symbolDictNameForPackageNamed: packageName [
+
+	| spec gemstoneSpec |
+	spec := self specification.
+	gemstoneSpec := spec platformSpec at: 'gemstone'.
+	^ gemstoneSpec symbolDictNameForPackageNamed: packageName.
+]

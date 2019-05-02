@@ -95,9 +95,10 @@
 	packageCreateTool := Rowan packageTools create.
 	projectSetDefinition projects 
 		do: [:projectDefinition |
-			"The loaded project was created by the earlier #register,
-				traverse the package definitions and create loaded packages for each"
+			"Create loaded project (if needed), traverse the package definitions and 
+				create loaded packages for each"
 			| projectName |
+			projectDefinition register.	"make sure that the project is created"
 			projectName := projectDefinition name.
 			projectDefinition packageNames
 				do: [:packageName |

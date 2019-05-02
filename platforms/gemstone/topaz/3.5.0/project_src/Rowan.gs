@@ -34429,11 +34429,9 @@ createLoadedPackageNamed: packageName inProjectNamed: projectName
 
 	"create a loaded package named <packageName> in the loaded project named <projectName>"
 
-	| spec registry theSymbolDictionary packageSymDictName gemstoneSpec loadedPackage loadedProject |
+	| registry theSymbolDictionary packageSymDictName loadedPackage loadedProject |
 	loadedProject := Rowan image loadedProjectNamed: projectName.
-	spec := loadedProject specification.
-	gemstoneSpec := spec platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 	theSymbolDictionary := Rowan image newOrExistingSymbolDictionaryNamed: packageSymDictName.
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 	loadedPackage := registry newLoadedPackageNamed: packageName.
@@ -50746,6 +50744,13 @@ projectOwnerId: aString
 	^ self propertyAt: 'projectOwnerId' put: aString
 %
 
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+projectRef
+
+	^ self handle
+%
+
 category: 'definitions'
 method: RwGsLoadedSymbolDictComponentProject
 propertiesForDefinition
@@ -50761,6 +50766,13 @@ method: RwGsLoadedSymbolDictComponentProject
 specification
 
 	^ handle
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+symbolDictNameForPackageNamed: packageName
+
+	^self projectRef symbolDictNameForPackageNamed: packageName
 %
 
 ! Class implementation for 'RwGsLoadedSymbolDictProject'
@@ -50796,6 +50808,16 @@ method: RwGsLoadedSymbolDictProject
 specification
 
 	^ handle
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+symbolDictNameForPackageNamed: packageName
+
+	| spec gemstoneSpec |
+	spec := self specification.
+	gemstoneSpec := spec platformSpec at: 'gemstone'.
+	^ gemstoneSpec symbolDictNameForPackageNamed: packageName.
 %
 
 ! Class implementation for 'RwMethodAdditionOrRemoval'
