@@ -86,6 +86,7 @@ RwGsLoadedSymbolDictComponentProject >> propertiesForDefinition [
 { #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> specification [
 
+self deprecated: 'temporary patch .. sender should send direct message to receiver'.
 	^ handle
 ]
 
