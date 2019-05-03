@@ -309,6 +309,12 @@ RwProjectDefinition >> repoPath: aDirectoryPathString [
 ]
 
 { #category : 'properties' }
+RwProjectDefinition >> repositoryRoot [
+
+	^ self repositoryRootPath asFileReference
+]
+
+{ #category : 'properties' }
 RwProjectDefinition >> repositoryRootPath [
 
 	^ self specification repositoryRootPath

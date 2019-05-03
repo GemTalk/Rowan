@@ -506,7 +506,6 @@ RwProjectReferenceDefinition >> repositoryRoot [
 { #category : 'temporary compat' }
 RwProjectReferenceDefinition >> repositoryRootPath [
 
-self deprecated: 'temporary method ... simulating RwSpecification api'.
 	^ self repositoryRoot pathString
 ]
 
