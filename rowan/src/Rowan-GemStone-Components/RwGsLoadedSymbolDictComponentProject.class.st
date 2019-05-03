@@ -49,6 +49,20 @@ RwGsLoadedSymbolDictComponentProject >> loadedComponentDefinitions [
 	^ self definitionsFor: loadedComponents
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> loadedConfigurationNames: configNames [
+
+
+	self projectRef loadedConfigurationNames: configNames
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> loadedGroupNames: groupNames [
+
+
+	self projectRef loadedGroupNames: groupNames
+]
+
 { #category : 'private' }
 RwGsLoadedSymbolDictComponentProject >> markPackageDirty [
 	"... indicates that receiver needs to mark it's container as dirty .... "

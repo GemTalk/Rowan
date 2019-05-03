@@ -185,6 +185,12 @@ RwLoadedProject >> packageNames [
 ]
 
 { #category : 'accessing' }
+RwLoadedProject >> projectDefinitionSourceProperty [
+
+	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
+]
+
+{ #category : 'accessing' }
 RwLoadedProject >> projectUrl [
 
 	"Return the projectUrl used to clone the project"

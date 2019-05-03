@@ -64,11 +64,15 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef |
-			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
-				ifTrue: [  projectDef updateLoadedCommitId ].
+			| theProjectDef |
+			theProjectDef := (loadedProjectSet entities at: projectDef name ifAbsent: [])
+				ifNil: [ projectDef ]
+				ifNotNil: [:loadedProject | loadedProject ].
+			theProjectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
+				ifTrue: [  theProjectDef updateLoadedCommitId ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
 				ifNotNil: [:map |
-					projectDef
+					theProjectDef
 						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
 						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
 	^ diff

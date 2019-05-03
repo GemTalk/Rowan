@@ -4,6 +4,18 @@ Class {
 	#category : 'Rowan-GemStone-Core'
 }
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictProject >> loadedConfigurationNames: configNames [
+
+	self specification imageSpec loadedConfigurationNames: configNames
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictProject >> loadedGroupNames: groupNames [
+
+	self specification imageSpec loadedGroupNames: groupNames
+]
+
 { #category : 'specifiction' }
 RwGsLoadedSymbolDictProject >> projectOwnerId [
 
