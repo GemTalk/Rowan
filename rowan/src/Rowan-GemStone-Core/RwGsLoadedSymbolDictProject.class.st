@@ -26,6 +26,13 @@ RwGsLoadedSymbolDictProject >> propertiesForDefinition [
 	^ props
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictProject >> repositoryRoot [
+
+	^ self specification repositoryRootPath
+		ifNotNil: [:path | path asFileReference ]
+]
+
 { #category : 'properties' }
 RwGsLoadedSymbolDictProject >> specification [
 
@@ -39,4 +46,10 @@ RwGsLoadedSymbolDictProject >> symbolDictNameForPackageNamed: packageName [
 	spec := self specification.
 	gemstoneSpec := spec platformSpec at: 'gemstone'.
 	^ gemstoneSpec symbolDictNameForPackageNamed: packageName.
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> useGit [
+
+	^ self specification useGit
 ]

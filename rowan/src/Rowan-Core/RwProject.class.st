@@ -50,9 +50,9 @@ RwProject >> definedClasses [
 RwProject >> existsOnDisk [
 
 	Rowan image loadedProjectNamed: self name ifAbsent: [ ^false ].
-	^ (self repositoryRootPath) 
+	^ self repositoryRoot
 		ifNil: [ false ]
-		ifNotNil: [:path | path asFileReference exists ]
+		ifNotNil: [:fileRef | fileRef exists ]
 ]
 
 { #category : 'accessing' }
@@ -127,14 +127,20 @@ RwProject >> repositoryCommitId [
 ]
 
 { #category : 'properties' }
+RwProject >> repositoryRoot [
+
+	^ self _loadedProject repositoryRoot
+]
+
+{ #category : 'properties' }
 RwProject >> repositoryRootPath [
 
-	^ self _specification repositoryRootPath
+	^ self repositoryRoot pathString
 ]
 
 { #category : 'testing' }
 RwProject >> useGit [
 
-	^self _specification useGit
+	^self _loadedProject useGit
 
 ]

@@ -26238,9 +26238,9 @@ method: RwProject
 existsOnDisk
 
 	Rowan image loadedProjectNamed: self name ifAbsent: [ ^false ].
-	^ (self repositoryRootPath) 
+	^ self repositoryRoot
 		ifNil: [ false ]
-		ifNotNil: [:path | path asFileReference exists ]
+		ifNotNil: [:fileRef | fileRef exists ]
 %
 
 category: 'accessing'
@@ -26323,16 +26323,23 @@ repositoryCommitId
 
 category: 'properties'
 method: RwProject
+repositoryRoot
+
+	^ self _loadedProject repositoryRoot
+%
+
+category: 'properties'
+method: RwProject
 repositoryRootPath
 
-	^ self _specification repositoryRootPath
+	^ self repositoryRoot pathString
 %
 
 category: 'testing'
 method: RwProject
 useGit
 
-	^self _specification useGit
+	^self _loadedProject useGit
 %
 
 category: 'private'
@@ -40986,6 +40993,13 @@ specsRoot
 	^ self projectRef specsRoot
 %
 
+category: 'properties'
+method: RwComponentProjectDefinition
+useGit
+
+	^ self projectRef useGit
+%
+
 ! Class implementation for 'RwProjectReferenceDefinition'
 
 !		Class methods for 'RwProjectReferenceDefinition'
@@ -50792,8 +50806,16 @@ propertiesForDefinition
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
+repositoryRoot
+
+	^ self projectRef repositoryRoot
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
 specification
 
+self deprecated: 'temporary patch .. sender should send direct message to receiver'.
 	^ handle
 %
 
@@ -50802,6 +50824,13 @@ method: RwGsLoadedSymbolDictComponentProject
 symbolDictNameForPackageNamed: packageName
 
 	^self projectRef symbolDictNameForPackageNamed: packageName
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+useGit
+
+	^ self projectRef useGit
 %
 
 ! Class implementation for 'RwGsLoadedSymbolDictProject'
@@ -50830,6 +50859,14 @@ propertiesForDefinition
 	props := super propertiesForDefinition.
 	props at: 'spec' put: handle.
 	^ props
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+repositoryRoot
+
+	^ self specification repositoryRootPath
+		ifNotNil: [:path | path asFileReference ]
 %
 
 category: 'properties'
@@ -55879,7 +55916,7 @@ testPrimitives
 category: 'tests'
 method: RBParserTest
 testProtectedPrimitives
-  self assert: (Object parseTreeFor: #'_changeClassTo:') isPrimitive.
+  self assert: (GemStoneParameters parseTreeFor: #'_getArg:key:') isPrimitive.
   #(#('foo ^true' false) #('foo <some: tag> ^true' false) #(' foo <some: tag> <protected primitive: 123> ^true' true))
     do: [ :each | self assert: (RBParser parseMethod: each first) isPrimitive = each last ]
 %

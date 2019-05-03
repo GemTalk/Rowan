@@ -448,3 +448,9 @@ RwComponentProjectDefinition >> specsRoot [
 
 	^ self projectRef specsRoot
 ]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> useGit [
+
+	^ self projectRef useGit
+]

@@ -84,6 +84,12 @@ RwGsLoadedSymbolDictComponentProject >> propertiesForDefinition [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> repositoryRoot [
+
+	^ self projectRef repositoryRoot
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> specification [
 
 self deprecated: 'temporary patch .. sender should send direct message to receiver'.
@@ -94,4 +100,10 @@ self deprecated: 'temporary patch .. sender should send direct message to receiv
 RwGsLoadedSymbolDictComponentProject >> symbolDictNameForPackageNamed: packageName [
 
 	^self projectRef symbolDictNameForPackageNamed: packageName
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> useGit [
+
+	^ self projectRef useGit
 ]

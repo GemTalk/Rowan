@@ -30,8 +30,8 @@ run
 
 	| currentGsVersion projectDefinition projectSetDefinition projectSetModification visitor topazFileNameMap
 		repositoryRoot |
-	currentGsVersion := System stoneVersionReport at: 'gsVersion') asRwGemStoneVersionNumber.
-	currentGsVersion = 3.5.0 asRwGemStoneVersionNumber
+	currentGsVersion := (System stoneVersionReport at: 'gsVersion') asRwGemStoneVersionNumber.
+	currentGsVersion = '3.5.0' asRwGemStoneVersionNumber
 		ifFalse: [ 
 			self error: 'This script should only be run using GemStone 3.5.0. Current version is ', currentGsVersion printString ].
 	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src' asFileReference.
