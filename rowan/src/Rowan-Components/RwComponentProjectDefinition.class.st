@@ -255,9 +255,21 @@ RwComponentProjectDefinition >> loadedConfigurationNames [
 ]
 
 { #category : 'properties' }
+RwComponentProjectDefinition >> loadedConfigurationNames: anArray [
+
+	^ self projectRef loadedConfigurationNames: anArray
+]
+
+{ #category : 'properties' }
 RwComponentProjectDefinition >> loadedGroupNames [
 
 	^ self projectRef loadedGroupNames
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> loadedGroupNames: anArray [
+
+	^ self projectRef loadedGroupNames: anArray
 ]
 
 { #category : 'accessing' }
@@ -447,6 +459,18 @@ RwComponentProjectDefinition >> specsPath: aDirectoryPathString [
 RwComponentProjectDefinition >> specsRoot [
 
 	^ self projectRef specsRoot
+]
+
+{ #category : 'loading' }
+RwComponentProjectDefinition >> updateLoadedCommitId [
+
+	| loadedCommitId |
+	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			^ nil ].
+	self projectRef loadedCommitId: loadedCommitId
 ]
 
 { #category : 'properties' }

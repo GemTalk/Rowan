@@ -49,7 +49,7 @@ RwGsLoadedSymbolDictProject >> symbolDictNameForPackageNamed: packageName [
 ]
 
 { #category : 'accessing' }
-RwGsLoadedSymbolDictComponentProject >> useGit [
+RwGsLoadedSymbolDictProject >> useGit [
 
 	^ self specification useGit
 ]

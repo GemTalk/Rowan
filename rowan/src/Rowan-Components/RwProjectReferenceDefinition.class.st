@@ -297,16 +297,16 @@ RwProjectReferenceDefinition >> key [
 	^ self projectName
 ]
 
-{ #category : 'temporary compat' }
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> loadedCommitId [
 
-self deprecated: 'temporary method ... simulating RwSpecification api'.
-	^''
+	^ self properties at: 'loadedCommitId' ifAbsent: [ '' ]
 ]
 
-{ #category : 'temporary compat' }
-RwProjectReferenceDefinition >> loadedCommitId:  ignored [
-self deprecated: 'temporary method ... simulating RwSpecification api'.
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> loadedCommitId:  aCommitId [
+
+	^ self properties at: 'loadedCommitId' put: aCommitId
 ]
 
 { #category : 'accessing' }

@@ -204,6 +204,18 @@ RwProjectDefinition >> loadedConfigurationNames [
 	^ self specification loadedConfigurationNames
 ]
 
+{ #category : 'properties' }
+RwProjectDefinition >> loadedConfigurationNames: anArray [
+
+	^ self specification imageSpec loadedConfigurationNames: anArray
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> loadedGroupNames: anArray [
+
+	^ self specification imageSpec loadedGroupNames: anArray
+]
+
 { #category : 'accessing' }
 RwProjectDefinition >> packageNamed: aString [
 
@@ -337,6 +349,18 @@ RwProjectDefinition >> specsPath: aDirectoryPathString [
 
 	self specification specsPath: aDirectoryPathString
 
+]
+
+{ #category : 'loading' }
+RwProjectDefinition >> updateLoadedCommitId [
+
+	| loadedCommitId |
+	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			^ nil ].
+	self specification imageSpec loadedCommitId: loadedCommitId
 ]
 
 { #category : 'properties' }
