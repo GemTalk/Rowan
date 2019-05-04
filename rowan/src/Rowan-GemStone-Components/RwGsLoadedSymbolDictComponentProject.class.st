@@ -116,6 +116,18 @@ RwGsLoadedSymbolDictComponentProject >> symbolDictNameForPackageNamed: packageNa
 	^self projectRef symbolDictNameForPackageNamed: packageName
 ]
 
+{ #category : 'loading' }
+RwGsLoadedSymbolDictComponentProject >> updateLoadedCommitId [
+
+	| loadedCommitId |
+	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			^ nil ].
+	self projectRef loadedCommitId: loadedCommitId
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> useGit [
 

@@ -60,6 +60,18 @@ RwGsLoadedSymbolDictProject >> symbolDictNameForPackageNamed: packageName [
 	^ gemstoneSpec symbolDictNameForPackageNamed: packageName.
 ]
 
+{ #category : 'loading' }
+RwGsLoadedSymbolDictProject >> updateLoadedCommitId [
+
+	| loadedCommitId |
+	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			^ nil ].
+	self specification imageSpec loadedCommitId: loadedCommitId
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictProject >> useGit [
 

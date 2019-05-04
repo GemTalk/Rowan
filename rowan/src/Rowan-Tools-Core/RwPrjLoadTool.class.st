@@ -68,7 +68,7 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 			theProjectDef := (loadedProjectSet entities at: projectDef name ifAbsent: [])
 				ifNil: [ projectDef ]
 				ifNotNil: [:loadedProject | loadedProject ].
-			theProjectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
+			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
 				ifTrue: [  theProjectDef updateLoadedCommitId ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
 				ifNotNil: [:map |
