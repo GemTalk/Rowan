@@ -70,6 +70,7 @@ RwGsLoadedSymbolDictProject >> symbolDictNameForPackageNamed: packageName [
 RwGsLoadedSymbolDictProject >> updateLoadedCommitId [
 
 	| loadedCommitId |
+	self useGit ifFalse: [ ^ nil ].
 	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
 		on: Error
 		do: [ :ignored | 

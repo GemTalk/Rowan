@@ -42,7 +42,7 @@ RwGsLoadedSymbolDictComponentProject >> initializeForProjectReferenceDefinition:
 ]
 
 { #category : 'properties' }
- RwGsLoadedSymbolDictComponentProject>> loadedCommitId [
+RwGsLoadedSymbolDictComponentProject >> loadedCommitId [
 
 	^ self projectRef loadedCommitId
 ]
@@ -95,7 +95,7 @@ RwGsLoadedSymbolDictComponentProject >> projectRef [
 ]
 
 { #category : 'accessing' }
- RwGsLoadedSymbolDictComponentProject>> projectUrl [
+RwGsLoadedSymbolDictComponentProject >> projectUrl [
 
 	"Return the projectUrl used to clone the project"
 
@@ -134,6 +134,7 @@ RwGsLoadedSymbolDictComponentProject >> symbolDictNameForPackageNamed: packageNa
 RwGsLoadedSymbolDictComponentProject >> updateLoadedCommitId [
 
 	| loadedCommitId |
+	self useGit ifFalse: [ ^ nil ].
 	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
 		on: Error
 		do: [ :ignored | 

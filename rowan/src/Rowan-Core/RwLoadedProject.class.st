@@ -68,6 +68,13 @@ RwLoadedProject >> asDefinition [
 		packageDefinitions: self loadedPackageDefinitions
 ]
 
+{ #category : 'commit log' }
+RwLoadedProject >> commitLog: logLimit [
+
+	self useGit ifFalse: [ ^ 'no commit log' ].
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRootPath
+]
+
 { #category : 'initialization' }
 RwLoadedProject >> initialize [
 
@@ -219,4 +226,10 @@ RwLoadedProject >> removeLoadedPackage: aLoadedPackage [
 RwLoadedProject >> specification [
 
 	^ properties at: 'spec'
+]
+
+{ #category : 'testing' }
+RwLoadedProject >> useGit [
+
+	^ self subclassResponsibility: #useGit
 ]

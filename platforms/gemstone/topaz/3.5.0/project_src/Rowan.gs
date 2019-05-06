@@ -37573,25 +37573,7 @@ category: 'smalltalk api'
 method: RwPrjLogTool
 commitLogProjectNamed: projectName limit: logLimit
 
-	| loadedProject |
-	loadedProject := Rowan image loadedProjectNamed: projectName.
-	self specification: loadedProject specification.
-	^ specification commitLogForTool: self limit: logLimit
-%
-
-category: 'smalltalk api'
-method: RwPrjLogTool
-commitLogSpecification: aRwSpecification limit: logLimit
-  self specification: aRwSpecification.
-  ^ specification commitLogForTool: self limit: logLimit
-%
-
-category: 'smalltalk api'
-method: RwPrjLogTool
-commitLogSpecUrl: aString limit: logLimit
-  ^ self
-    commitLogSpecification: (RwSpecification fromUrl: aString)
-    limit: logLimit
+	^ (Rowan image loadedProjectNamed: projectName) commitLog: logLimit
 %
 
 category: 'git'
@@ -40795,7 +40777,7 @@ exportProjects
 			(self projectsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
 %
 
-category: 'properties'
+category: 'accessing'
 method: RwComponentProjectDefinition
 loadedCommitId
 
@@ -50615,6 +50597,14 @@ asDefinition
 		packageDefinitions: self loadedPackageDefinitions
 %
 
+category: 'commit log'
+method: RwLoadedProject
+commitLog: logLimit
+
+	self useGit ifFalse: [ ^ 'no commit log' ].
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRootPath
+%
+
 category: 'initialization'
 method: RwLoadedProject
 initialize
@@ -50785,6 +50775,13 @@ specification
 	^ properties at: 'spec'
 %
 
+category: 'testing'
+method: RwLoadedProject
+useGit
+
+	^ self subclassResponsibility: #useGit
+%
+
 ! Class implementation for 'RwGsLoadedSymbolDictComponentProject'
 
 !		Class methods for 'RwGsLoadedSymbolDictComponentProject'
@@ -50829,7 +50826,7 @@ initializeForProjectReferenceDefinition: aProjectReferenceDefinition
 	handle := aProjectReferenceDefinition
 %
 
-category: 'accessing'
+category: 'properties'
 method: RwGsLoadedSymbolDictComponentProject
 loadedCommitId
 
@@ -50936,6 +50933,7 @@ method: RwGsLoadedSymbolDictComponentProject
 updateLoadedCommitId
 
 	| loadedCommitId |
+	self useGit ifFalse: [ ^ nil ].
 	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
 		on: Error
 		do: [ :ignored | 
@@ -51030,6 +51028,7 @@ method: RwGsLoadedSymbolDictProject
 updateLoadedCommitId
 
 	| loadedCommitId |
+	self useGit ifFalse: [ ^ nil ].
 	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
 		on: Error
 		do: [ :ignored | 
@@ -53553,12 +53552,6 @@ commitForTool: aRwTool message: messageString
   ^ self repoSpec commitForTool: aRwTool message: messageString
 %
 
-category: 'actions'
-method: RwProjectSpecification
-commitLogForTool: aRwTool limit: logLimit
-  ^ self repoSpec commitLogForTool: aRwTool limit: logLimit
-%
-
 category: 'accessing'
 method: RwProjectSpecification
 configsPath
@@ -54024,14 +54017,6 @@ commitForTool: aRwTool message: messageString
   
 %
 
-category: 'actions'
-method: RwRepositorySpecification
-commitLogForTool: aRwTool limit: logLimit
-  "commit log not supported by default"
-
-  
-%
-
 category: 'initialization'
 method: RwRepositorySpecification
 initializeForExport
@@ -54169,12 +54154,6 @@ category: 'actions'
 method: RwGitRepositorySpecification
 commitForTool: aRwTool message: messageString
   ^ aRwTool doGitCommit: messageString
-%
-
-category: 'actions'
-method: RwGitRepositorySpecification
-commitLogForTool: aRwTool limit: logLimit
-  ^ aRwTool doGitCommitLog: logLimit
 %
 
 category: 'accessing'
