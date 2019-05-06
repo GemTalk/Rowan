@@ -41,6 +41,12 @@ RwGsLoadedSymbolDictComponentProject >> initializeForProjectReferenceDefinition:
 	handle := aProjectReferenceDefinition
 ]
 
+{ #category : 'properties' }
+ RwGsLoadedSymbolDictComponentProject>> loadedCommitId [
+
+	^ self projectRef loadedCommitId
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> loadedComponentDefinitions [
 
@@ -86,6 +92,14 @@ RwGsLoadedSymbolDictComponentProject >> projectOwnerId: aString [
 RwGsLoadedSymbolDictComponentProject >> projectRef [
 
 	^ self handle
+]
+
+{ #category : 'accessing' }
+ RwGsLoadedSymbolDictComponentProject>> projectUrl [
+
+	"Return the projectUrl used to clone the project"
+
+	^ self projectRef projectUrl
 ]
 
 { #category : 'definitions' }

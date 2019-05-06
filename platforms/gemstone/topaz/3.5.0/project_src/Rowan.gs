@@ -26261,7 +26261,7 @@ category: 'properties'
 method: RwProject
 loadedCommitId
 
-	^ self _specification loadedCommitId
+	^ self _loadedProject loadedCommitId
 %
 
 category: 'accessing'
@@ -37551,16 +37551,15 @@ _loadProjectSetDefinition_254: projectSetDefinitionToLoad instanceMigrator: inst
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef |
-			| theSpec |
-			theSpec := (loadedProjectSet entities at: projectDef name ifAbsent: [])
-				ifNil: [ projectDef specification ]
-				ifNotNil: [:loadedProject | loadedProject specification ].
-			self specification: theSpec.
+			| theProjectDef |
+			theProjectDef := (loadedProjectSet entities at: projectDef name ifAbsent: [])
+				ifNil: [ projectDef ]
+				ifNotNil: [:loadedProject | loadedProject ].
 			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
-				ifTrue: [  theSpec updateLoadedCommitIdForTool: self ].
+				ifTrue: [  theProjectDef updateLoadedCommitId ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
 				ifNotNil: [:map |
-					theSpec imageSpec
+					theProjectDef
 						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
 						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
 	^ diff
@@ -40333,6 +40332,20 @@ loadedConfigurationNames
 	^ self specification loadedConfigurationNames
 %
 
+category: 'properties'
+method: RwProjectDefinition
+loadedConfigurationNames: anArray
+
+	^ self specification imageSpec loadedConfigurationNames: anArray
+%
+
+category: 'properties'
+method: RwProjectDefinition
+loadedGroupNames: anArray
+
+	^ self specification imageSpec loadedGroupNames: anArray
+%
+
 category: 'accessing'
 method: RwProjectDefinition
 packageNamed: aString
@@ -40436,6 +40449,13 @@ repoPath: aDirectoryPathString
 
 category: 'properties'
 method: RwProjectDefinition
+repositoryRoot
+
+	^ self repositoryRootPath asFileReference
+%
+
+category: 'properties'
+method: RwProjectDefinition
 repositoryRootPath
 
 	^ self specification repositoryRootPath
@@ -40481,6 +40501,19 @@ method: RwProjectDefinition
 specsPath: aDirectoryPathString
 
 	self specification specsPath: aDirectoryPathString
+%
+
+category: 'loading'
+method: RwProjectDefinition
+updateLoadedCommitId
+
+	| loadedCommitId |
+	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			^ nil ].
+	self specification imageSpec loadedCommitId: loadedCommitId
 %
 
 category: 'properties'
@@ -40764,6 +40797,13 @@ exportProjects
 
 category: 'properties'
 method: RwComponentProjectDefinition
+loadedCommitId
+
+	^ self projectRef loadedCommitId
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
 loadedConfigurationNames
 
 	^ self projectRef loadedConfigurationNames
@@ -40771,9 +40811,23 @@ loadedConfigurationNames
 
 category: 'properties'
 method: RwComponentProjectDefinition
+loadedConfigurationNames: anArray
+
+	^ self projectRef loadedConfigurationNames: anArray
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
 loadedGroupNames
 
 	^ self projectRef loadedGroupNames
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+loadedGroupNames: anArray
+
+	^ self projectRef loadedGroupNames: anArray
 %
 
 category: 'accessing'
@@ -40991,6 +41045,19 @@ method: RwComponentProjectDefinition
 specsRoot
 
 	^ self projectRef specsRoot
+%
+
+category: 'loading'
+method: RwComponentProjectDefinition
+updateLoadedCommitId
+
+	| loadedCommitId |
+	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			^ nil ].
+	self projectRef loadedCommitId: loadedCommitId
 %
 
 category: 'properties'
@@ -41291,18 +41358,18 @@ key
 	^ self projectName
 %
 
-category: 'temporary compat'
+category: 'accessing'
 method: RwProjectReferenceDefinition
 loadedCommitId
 
-self deprecated: 'temporary method ... simulating RwSpecification api'.
-	^''
+	^ self properties at: 'loadedCommitId' ifAbsent: [ '' ]
 %
 
-category: 'temporary compat'
+category: 'accessing'
 method: RwProjectReferenceDefinition
-loadedCommitId:  ignored
-self deprecated: 'temporary method ... simulating RwSpecification api'.
+loadedCommitId:  aCommitId
+
+	^ self properties at: 'loadedCommitId' put: aCommitId
 %
 
 category: 'accessing'
@@ -41533,7 +41600,6 @@ category: 'temporary compat'
 method: RwProjectReferenceDefinition
 repositoryRootPath
 
-self deprecated: 'temporary method ... simulating RwSpecification api'.
 	^ self repositoryRoot pathString
 %
 
@@ -50679,6 +50745,13 @@ packageNames
 
 category: 'accessing'
 method: RwLoadedProject
+projectDefinitionSourceProperty
+
+	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
+%
+
+category: 'accessing'
+method: RwLoadedProject
 projectUrl
 
 	"Return the projectUrl used to clone the project"
@@ -50758,11 +50831,34 @@ initializeForProjectReferenceDefinition: aProjectReferenceDefinition
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
+loadedCommitId
+
+	^ self projectRef loadedCommitId
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
 loadedComponentDefinitions
 
 	"Create definitions from all of the components I define, and answer the collection of them"
 
 	^ self definitionsFor: loadedComponents
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+loadedConfigurationNames: configNames
+
+
+	self projectRef loadedConfigurationNames: configNames
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+loadedGroupNames: groupNames
+
+
+	self projectRef loadedGroupNames: groupNames
 %
 
 category: 'private'
@@ -50792,6 +50888,15 @@ method: RwGsLoadedSymbolDictComponentProject
 projectRef
 
 	^ self handle
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+projectUrl
+
+	"Return the projectUrl used to clone the project"
+
+	^ self projectRef projectUrl
 %
 
 category: 'definitions'
@@ -50826,6 +50931,19 @@ symbolDictNameForPackageNamed: packageName
 	^self projectRef symbolDictNameForPackageNamed: packageName
 %
 
+category: 'loading'
+method: RwGsLoadedSymbolDictComponentProject
+updateLoadedCommitId
+
+	| loadedCommitId |
+	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			^ nil ].
+	self projectRef loadedCommitId: loadedCommitId
+%
+
 category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
 useGit
@@ -50836,6 +50954,27 @@ useGit
 ! Class implementation for 'RwGsLoadedSymbolDictProject'
 
 !		Instance methods for 'RwGsLoadedSymbolDictProject'
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+loadedCommitId
+
+	^ self specification loadedCommitId
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+loadedConfigurationNames: configNames
+
+	self specification imageSpec loadedConfigurationNames: configNames
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+loadedGroupNames: groupNames
+
+	self specification imageSpec loadedGroupNames: groupNames
+%
 
 category: 'specifiction'
 method: RwGsLoadedSymbolDictProject
@@ -50884,6 +51023,26 @@ symbolDictNameForPackageNamed: packageName
 	spec := self specification.
 	gemstoneSpec := spec platformSpec at: 'gemstone'.
 	^ gemstoneSpec symbolDictNameForPackageNamed: packageName.
+%
+
+category: 'loading'
+method: RwGsLoadedSymbolDictProject
+updateLoadedCommitId
+
+	| loadedCommitId |
+	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			^ nil ].
+	self specification imageSpec loadedCommitId: loadedCommitId
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+useGit
+
+	^ self specification useGit
 %
 
 ! Class implementation for 'RwMethodAdditionOrRemoval'

@@ -248,6 +248,12 @@ RwComponentProjectDefinition >> exportProjects [
 			(self projectsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
 ]
 
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> loadedCommitId [
+
+	^ self projectRef loadedCommitId
+]
+
 { #category : 'properties' }
 RwComponentProjectDefinition >> loadedConfigurationNames [
 

@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictProject >> loadedCommitId [
+
+	^ self specification loadedCommitId
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictProject >> loadedConfigurationNames: configNames [
 
 	self specification imageSpec loadedConfigurationNames: configNames

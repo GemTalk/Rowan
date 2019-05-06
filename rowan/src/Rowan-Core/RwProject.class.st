@@ -71,7 +71,7 @@ RwProject >> isDirty [
 { #category : 'properties' }
 RwProject >> loadedCommitId [
 
-	^ self _specification loadedCommitId
+	^ self _loadedProject loadedCommitId
 ]
 
 { #category : 'accessing' }
