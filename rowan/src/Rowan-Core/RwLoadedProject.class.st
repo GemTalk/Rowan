@@ -185,6 +185,13 @@ RwLoadedProject >> packageNames [
 ]
 
 { #category : 'accessing' }
+RwLoadedProject >> prettyName [
+
+	^' project ' , self name
+
+]
+
+{ #category : 'accessing' }
 RwLoadedProject >> projectUrl [
 
 	"Return the projectUrl used to clone the project"

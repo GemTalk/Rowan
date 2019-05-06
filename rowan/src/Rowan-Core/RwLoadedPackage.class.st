@@ -199,6 +199,13 @@ RwLoadedPackage >> markPackageDirty [
 	self markDirty
 ]
 
+{ #category : 'other' }
+RwLoadedPackage >> prettyName [
+
+	^' package ', self name
+
+]
+
 { #category : 'accessing' }
 RwLoadedPackage >> projectName [
 

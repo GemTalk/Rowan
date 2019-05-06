@@ -60,6 +60,13 @@ RwLoadedMethod >> markPackageDirty [
 	loadedClass ifNotNil: [loadedClass markPackageDirty]
 ]
 
+{ #category : 'accessing' }
+RwLoadedMethod >> methodCategory [
+
+	^ properties at: 'protocol'
+
+]
+
 { #category : 'definitions' }
 RwLoadedMethod >> propertiesForDefinition [
 

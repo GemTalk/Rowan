@@ -561,6 +561,6 @@ RwProjectAuditToolTest >> testNotification [
 	theClass compileMissingAccessingMethods. "this should add: #bar #bar:"
 
 
-	[Rowan projectTools audit auditForProjectNamed:  'AuditProject'] on: Notification do: [:ex | self assert: (ex description matchPattern: {$* . 'Missing loaded instance method' . $*})].
+	[Rowan projectTools audit auditForProjectNamed:  'AuditProject'] on: Notification do: [:ex | self assert: (ex description matchPattern: {$* . 'Missing loaded method' . $*})].
 
 ]

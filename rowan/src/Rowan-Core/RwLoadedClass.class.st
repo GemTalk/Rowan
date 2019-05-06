@@ -22,10 +22,59 @@ RwLoadedClass >> asDefinition [
 		instanceMethodDefinitions: self instanceMethodDefinitions
 ]
 
+{ #category : 'accessing' }
+RwLoadedClass >> classCategory [
+
+	^self propertyAt: 'category'
+
+]
+
+{ #category : 'accessing' }
+RwLoadedClass >> classClassVarNames [
+
+	^self propertyAt: 'classvars'
+
+]
+
+{ #category : 'accessing' }
+RwLoadedClass >> classComment [
+
+	^self propertyAt: 'comment' ifAbsent: ['']
+
+]
+
+{ #category : 'accessing' }
+RwLoadedClass >> classInstVarNames [
+
+	^self propertyAt: 'instvars'
+
+]
+
 { #category : 'private' }
 RwLoadedClass >> classMethodDefinitions [
 
 	^self definitionsFor: loadedClassMethods
+]
+
+{ #category : 'accessing' }
+RwLoadedClass >> classPoolDictionaries [
+
+	^self propertyAt: 'pools'
+
+]
+
+{ #category : 'accessing' }
+RwLoadedClass >> classSuperclass [
+
+	^self propertyAt: 'superclass'
+
+]
+
+{ #category : 'accessing' }
+RwLoadedClass >> classSymbolDictionaryName [
+
+	^self propertyAt: 'gs_SymbolDictionary'
+
 ]
 
 { #category : 'testing' }
@@ -127,4 +176,11 @@ RwLoadedClass >> markPackageDirty [
 RwLoadedClass >> packageName [
 
 	^loadedPackage name
+]
+
+{ #category : 'other' }
+RwLoadedClass >> prettyName [
+
+	^' class ', self name
+
 ]
