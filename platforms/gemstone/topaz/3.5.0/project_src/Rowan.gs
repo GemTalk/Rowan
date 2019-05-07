@@ -53186,6 +53186,13 @@ new
 
 !		Instance methods for 'RwSpecification'
 
+category: 'conversion'
+method: RwSpecification
+asSpecification
+
+	^ self
+%
+
 category: 'private'
 method: RwSpecification
 currentVersion
