@@ -6,7 +6,7 @@ RwComponentSpecification {
 	#specsPath : 'rowan/specs',
 	#repoPath : 'rowan/src',
 	#projectsPath : 'rowan/projects',
-	#repoSpec : RwDiskRepositorySpecification {
+	#repoSpec : RwGitRepositorySpecification {
 	},
 	#defaultConfigurationNames : [
 		'Load'

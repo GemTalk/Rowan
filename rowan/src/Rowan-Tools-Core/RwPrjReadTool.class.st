@@ -37,6 +37,7 @@ RwPrjReadTool >> _readProjectSetForProjectComponentDefinition: projectComponentD
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectComponentDefinition readProjectSetForPackageNames: packageNames.
 	projectSetDefinition addProject: projectComponentDefinition.
+	projectComponentDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
 	^ projectSetDefinition
 ]
 

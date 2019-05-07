@@ -27,7 +27,7 @@
 # Install FileSystem, Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
 #  methods into the correct package structure
   run
- 	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo auditFailures readTool
+ 	| projectSetDefinition gitRepoPath packageCreateTool loadedProjectInfo auditFailures readTool
 		reAudit  |
 	projectSetDefinition := RwProjectSetDefinition new.
 	loadedProjectInfo := Dictionary new.
@@ -117,20 +117,15 @@
 				classErrorDo: [  GsFile gciLogServer: 'Missing loaded class ', ex className, ' encountered during adopt ... IGNORED' ].
 			ex resume: nil ].
 
-	projectLoadTool := Rowan projectTools load.
-
 	projectSetDefinition projects 
 		do: [:projectDefinition |
 			"make sure that the loaded SHA is set for each project"
-			projectLoadTool specification: projectDefinition specification.
-			projectDefinition specification updateLoadedCommitIdForTool: projectLoadTool.
-			projectDefinition name = 'Rowan'
-				ifTrue: [
-					(loadedProjectInfo at: projectDefinition name ifAbsent: [])
-						ifNotNil: [:map |
-							projectDefinition specification imageSpec
-								loadedConfigurationNames: (map at: 'loadedConfigurationNames');
-								loadedGroupNames: (map at: 'loadedGroupNames') ] ] ].
+			projectDefinition updateLoadedCommitId.
+			(loadedProjectInfo at: projectDefinition name ifAbsent: [])
+				ifNotNil: [:map |
+					projectDefinition specification imageSpec
+						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
+						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
 
 	projectSetDefinition deriveLoadedThings do: [:loadedProject |
 		"mark projects and packages not dirty"

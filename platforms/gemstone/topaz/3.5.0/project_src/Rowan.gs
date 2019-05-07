@@ -37981,6 +37981,7 @@ _readProjectSetForProjectComponentDefinition: projectComponentDefinition package
 	| projectSetDefinition |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectComponentDefinition readProjectSetForPackageNames: packageNames.
+	projectComponentDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
 	projectSetDefinition addProject: projectComponentDefinition.
 	^ projectSetDefinition
 %

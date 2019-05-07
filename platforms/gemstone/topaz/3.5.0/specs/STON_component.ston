@@ -11,7 +11,7 @@ RwComponentSpecification {
 	#specsPath : 'specs',
 	#repoPath : 'src',
 	#projectsPath : 'projects',
-	#repoSpec : RwDiskRepositorySpecification {
+	#repoSpec : RwGitRepositorySpecification {
 	},
 	#defaultConfigurationNames : [
 		'Default'

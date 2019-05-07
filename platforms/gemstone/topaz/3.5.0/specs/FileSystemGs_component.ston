@@ -7,6 +7,8 @@ RwComponentSpecification {
 			#defaultSymbolDictName : 'Globals' 
 		}
 	},
+	#repoSpec : RwGitRepositorySpecification {
+	},
 	#configsPath : 'rowan/configs',
 	#repoPath : 'rowan/src',
 	#projectsPath : 'rowan/projects',
