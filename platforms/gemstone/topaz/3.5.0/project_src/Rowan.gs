@@ -26324,6 +26324,7 @@ repositoryCommitId
 category: 'properties'
 method: RwProject
 repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self _loadedProject repositoryRoot
 %
@@ -37981,8 +37982,8 @@ _readProjectSetForProjectComponentDefinition: projectComponentDefinition package
 	| projectSetDefinition |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectComponentDefinition readProjectSetForPackageNames: packageNames.
-	projectComponentDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
 	projectSetDefinition addProject: projectComponentDefinition.
+	projectComponentDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
 	^ projectSetDefinition
 %
 
@@ -39502,6 +39503,7 @@ repositoryExists
 category: 'accessing'
 method: RwAbstractRepositoryDefinition
 repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self properties at: 'repositoryRoot'
 %
@@ -40433,6 +40435,7 @@ repoPath: aDirectoryPathString
 category: 'properties'
 method: RwProjectDefinition
 repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self repositoryRootPath asFileReference
 %
@@ -40881,6 +40884,7 @@ postCopy
 category: 'accessing'
 method: RwComponentProjectDefinition
 projectHome
+	"Root directory of the repository. The configsPath, repoPath, specsPath, and projectsPath are specified relative to "
 
 	^ self projectRef projectHome
 %
@@ -40990,6 +40994,7 @@ repoPath: astring
 category: 'properties'
 method: RwComponentProjectDefinition
 repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self projectRef repositoryRoot
 %
@@ -41575,6 +41580,7 @@ repositoryDefinition: aRepositoryDefinition
 category: 'accessing'
 method: RwProjectReferenceDefinition
 repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^self projectHome / self projectAlias
 %
@@ -50910,6 +50916,7 @@ propertiesForDefinition
 category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
 repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self projectRef repositoryRoot
 %
@@ -51002,6 +51009,7 @@ propertiesForDefinition
 category: 'accessing'
 method: RwGsLoadedSymbolDictProject
 repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self specification repositoryRootPath
 		ifNotNil: [:path | path asFileReference ]
