@@ -282,7 +282,6 @@ RwProjectReferenceDefinition >> exportSpecification [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> gitRoot: aGitRootReferenceOrString  [
 
-	self repositoryDefinition: self repositoryDefinition copy.      "changing the gitRoot, means we need a new repository definition"
 	self repositoryDefinition gitRoot: aGitRootReferenceOrString
 ]
 
@@ -426,14 +425,10 @@ RwProjectReferenceDefinition >> projectHome [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectHome: projectHomeFileReferenceOrString [
 
+	self repositoryDefinition: nil. "changing project home invalidates the current repository definition"
 	projectHomeFileReferenceOrString
-		ifNil: [
-			self properties removeKey: 'projectHome' ifAbsent: [].
-			self repositoryDefinition: nil.
-			^self ].
+		ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
 	self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference.
-	self repositoryDefinition gitRoot ifNil: [ self repositoryDefinition gitRoot: self repositoryRoot ].
-
 ]
 
 { #category : 'accessing' }

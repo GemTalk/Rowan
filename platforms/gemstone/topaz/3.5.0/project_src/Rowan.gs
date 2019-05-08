@@ -39497,14 +39497,6 @@ name: aString
 	properties at: 'name' put: aString
 %
 
-category: 'copying'
-method: RwAbstractRepositoryDefinition
-postCopy
-
-	super postCopy.
-	properties := properties copy.
-%
-
 category: 'accessing'
 method: RwAbstractRepositoryDefinition
 projectUrl
@@ -39542,6 +39534,7 @@ repositoryRoot: pathStringOrReference
 	| fileRef |
 	fileRef := pathStringOrReference asFileReference.
 	self projectUrl: nil.
+	self gitRoot: nil.
 	self properties at: 'repositoryRoot' put: fileRef
 %
 
@@ -39612,7 +39605,7 @@ commitId
 			'' ].
 %
 
-category: 'accessing'
+category: 'loading'
 method: RwGitRepositoryDefinition
 commitLog: logLimit
 
@@ -39625,13 +39618,14 @@ gitRoot
 	"The root directory of the git repository that the project is located in. If the project is not git based
 		or the git root is not explicitly assigned, git root is synonymous with repository root."
 
-	^ self properties at: 'gitRoot' ifAbsent: []
+	^ self properties at: 'gitRoot' ifAbsent: [ self repositoryRoot ]
 %
 
 category: 'accessing'
 method: RwGitRepositoryDefinition
 gitRoot: aGitRootReferenceOrString
 
+	aGitRootReferenceOrString ifNil: [ ^ self properties removeKey: 'gitRoot' ifAbsent: [] ].
 	^ self properties at: 'gitRoot' put: aGitRootReferenceOrString asFileReference
 %
 
@@ -41377,7 +41371,6 @@ category: 'accessing'
 method: RwProjectReferenceDefinition
 gitRoot: aGitRootReferenceOrString 
 
-	self repositoryDefinition: self repositoryDefinition copy.	"changing the gitRoot, means we need a new repository definition"
 	self repositoryDefinition gitRoot: aGitRootReferenceOrString
 %
 
@@ -41543,13 +41536,10 @@ category: 'accessing'
 method: RwProjectReferenceDefinition
 projectHome: projectHomeFileReferenceOrString
 
+	self repositoryDefinition: nil. "changing project home invalidates the current repository definition"
 	projectHomeFileReferenceOrString
-		ifNil: [
-			self properties removeKey: 'projectHome' ifAbsent: [].
-			self repositoryDefinition: nil.
-			^self ].
+		ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
 	self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference.
-	self repositoryDefinition gitRoot ifNil: [ self repositoryDefinition gitRoot: self repositoryRoot ].
 %
 
 category: 'accessing'
@@ -41709,7 +41699,7 @@ tag: aString
 	self committish: aString committishType: 'tag'
 %
 
-category: 'accessing'
+category: 'loading'
 method: RwProjectReferenceDefinition
 updateLoadedCommitId
 
@@ -50890,7 +50880,7 @@ asDefinition
 		componentDefinitions: self loadedComponentDefinitions
 %
 
-category: 'definitions'
+category: 'commit log'
 method: RwGsLoadedSymbolDictComponentProject
 commitLog: logLimit
 
@@ -51034,11 +51024,11 @@ useGit
 
 !		Instance methods for 'RwGsLoadedSymbolDictProject'
 
-category: 'accessing'
+category: 'commit log'
 method: RwGsLoadedSymbolDictProject
 commitLog: logLimit
 
-		self useGit ifFalse: [ ^ '' ].
+	self useGit ifFalse: [ ^ '' ].
 	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRootPath
 %
 

@@ -148,13 +148,6 @@ RwAbstractRepositoryDefinition >> name: aString [
 	properties at: 'name' put: aString
 ]
 
-{ #category : 'copying' }
-RwAbstractRepositoryDefinition >> postCopy [ 
-
-	super postCopy.
-	properties := properties copy.
-]
-
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> projectUrl [
 
@@ -187,6 +180,7 @@ RwAbstractRepositoryDefinition >> repositoryRoot: pathStringOrReference [
 	| fileRef |
 	fileRef := pathStringOrReference asFileReference.
 	self projectUrl: nil.
+	self gitRoot: nil.
 	self properties at: 'repositoryRoot' put: fileRef
 ]
 
