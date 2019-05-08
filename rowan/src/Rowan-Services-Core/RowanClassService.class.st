@@ -991,8 +991,10 @@ RowanClassService >> tests [
 
 { #category : 'instance creation' }
 RowanClassService >> theClass [
-
-	^oop ifNil:[Rowan globalNamed: name] ifNotNil: [Object _objectForOop: oop]
+	| theClass |
+	theClass := oop ifNil:[Rowan globalNamed: name] ifNotNil: [Object _objectForOop: oop].
+	theClass isMeta ifTrue:[self halt].
+	^theClass
 ]
 
 { #category : 'updates' }
