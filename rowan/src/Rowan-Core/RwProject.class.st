@@ -117,12 +117,7 @@ RwProject >> remote [
 { #category : 'accessing' }
 RwProject >> repositoryCommitId [
 
-	| rootPath |
-	self useGit
-		ifFalse: [ ^ '' ].
-	rootPath := self repositoryRootPath.
-	rootPath ifNil: [ ^ '' ].
-	^ Rowan gitTools gitcommitShaIn: rootPath
+	^ self _loadedProject repositoryCommitId
 
 ]
 

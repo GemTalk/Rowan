@@ -52,6 +52,17 @@ RwGsLoadedSymbolDictProject >> propertiesForDefinition [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictProject >> repositoryCommitId [
+
+	| rootPath |
+	self useGit
+		ifFalse: [ ^ '' ].
+	rootPath := self repositoryRootPath.
+	rootPath ifNil: [ ^ '' ].
+	^ Rowan gitTools gitcommitShaIn: rootPath
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictProject >> repositoryRoot [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 

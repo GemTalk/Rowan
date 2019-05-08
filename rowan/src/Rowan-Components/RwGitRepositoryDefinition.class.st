@@ -81,6 +81,16 @@ RwGitRepositoryDefinition >> remoteUrl: aRemoteUrlString [
 	^ self properties at: 'remoteUrl' put: aRemoteUrlString
 ]
 
+{ #category : 'accessing' }
+RwGitRepositoryDefinition >> repositoryCommitId [
+
+	^ [  Rowan gitTools gitcommitShaIn: self gitRoot pathString ]
+			on: Error
+			do: [ :ignored | 
+			"most likely no commits yet"
+			'' ]
+]
+
 { #category : 'actions' }
 RwGitRepositoryDefinition >> resolve [
 

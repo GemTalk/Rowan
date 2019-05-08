@@ -161,6 +161,12 @@ RwAbstractRepositoryDefinition >> projectUrl: anUrlString [
 	self properties at: 'projectUrl' put: anUrlString
 ]
 
+{ #category : 'accessing' }
+RwAbstractRepositoryDefinition >> repositoryCommitId [
+
+	^ ''
+]
+
 { #category : 'testing' }
 RwAbstractRepositoryDefinition >> repositoryExists [
 

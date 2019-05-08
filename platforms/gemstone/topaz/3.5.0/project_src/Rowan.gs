@@ -26313,12 +26313,7 @@ category: 'accessing'
 method: RwProject
 repositoryCommitId
 
-	| rootPath |
-	self useGit
-		ifFalse: [ ^ '' ].
-	rootPath := self repositoryRootPath.
-	rootPath ifNil: [ ^ '' ].
-	^ Rowan gitTools gitcommitShaIn: rootPath
+	^ self _loadedProject repositoryCommitId
 %
 
 category: 'properties'
@@ -39512,6 +39507,13 @@ projectUrl: anUrlString
 	self properties at: 'projectUrl' put: anUrlString
 %
 
+category: 'accessing'
+method: RwAbstractRepositoryDefinition
+repositoryCommitId
+
+	^ ''
+%
+
 category: 'testing'
 method: RwAbstractRepositoryDefinition
 repositoryExists
@@ -39641,6 +39643,17 @@ method: RwGitRepositoryDefinition
 remoteUrl: aRemoteUrlString
 
 	^ self properties at: 'remoteUrl' put: aRemoteUrlString
+%
+
+category: 'accessing'
+method: RwGitRepositoryDefinition
+repositoryCommitId
+
+	^ [  Rowan gitTools gitcommitShaIn: self gitRoot pathString ]
+			on: Error
+			do: [ :ignored | 
+			"most likely no commits yet"
+			'' ]
 %
 
 category: 'actions'
@@ -41617,6 +41630,13 @@ method: RwProjectReferenceDefinition
 remoteUrl: aRemoteUrl
 
 	self repositoryDefinition remoteUrl: aRemoteUrl
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+repositoryCommitId
+
+	^ self repositoryDefinition repositoryCommitId
 %
 
 category: 'accessing'
@@ -50722,6 +50742,13 @@ key
 
 category: 'accessing'
 method: RwLoadedProject
+loadedCommitId
+
+	self subclassResponsibility: #loadedCommitId
+%
+
+category: 'accessing'
+method: RwLoadedProject
 loadedPackageDefinitions
 
 	"Create definitions from all of the packages I define, and answer the collection of them"
@@ -50836,6 +50863,13 @@ removeLoadedPackage: aLoadedPackage
 
 	self markDirty.
 	loadedPackages removeKey: aLoadedPackage key
+%
+
+category: 'accessing'
+method: RwLoadedProject
+repositoryCommitId
+
+	self subclassResponsibility: #repositoryCommitId
 %
 
 category: 'properties'
@@ -50985,6 +51019,13 @@ propertiesForDefinition
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
+repositoryCommitId
+
+	^ self projectRef repositoryCommitId
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
 repositoryRoot
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
@@ -51075,6 +51116,18 @@ propertiesForDefinition
 	props := super propertiesForDefinition.
 	props at: 'spec' put: handle.
 	^ props
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+repositoryCommitId
+
+	| rootPath |
+	self useGit
+		ifFalse: [ ^ '' ].
+	rootPath := self repositoryRootPath.
+	rootPath ifNil: [ ^ '' ].
+	^ Rowan gitTools gitcommitShaIn: rootPath
 %
 
 category: 'accessing'

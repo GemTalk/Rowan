@@ -498,6 +498,12 @@ RwProjectReferenceDefinition >> remoteUrl: aRemoteUrl [
 ]
 
 { #category : 'accessing' }
+RwProjectReferenceDefinition >> repositoryCommitId [
+
+	^ self repositoryDefinition repositoryCommitId
+]
+
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> repositoryDefinition [
 
 	^ self properties at: 'repositoryDefinition' ifAbsentPut: [ self _repositoryDefinitionForProjectHome: self projectHome ]

@@ -117,6 +117,12 @@ RwLoadedProject >> key [
 ]
 
 { #category : 'accessing' }
+RwLoadedProject >> loadedCommitId [
+
+	self subclassResponsibility: #loadedCommitId
+]
+
+{ #category : 'accessing' }
 RwLoadedProject >> loadedPackageDefinitions [
 
 	"Create definitions from all of the packages I define, and answer the collection of them"
@@ -219,6 +225,12 @@ RwLoadedProject >> removeLoadedPackage: aLoadedPackage [
 
 	self markDirty.
 	loadedPackages removeKey: aLoadedPackage key
+]
+
+{ #category : 'accessing' }
+RwLoadedProject >> repositoryCommitId [
+
+	self subclassResponsibility: #repositoryCommitId
 ]
 
 { #category : 'properties' }
