@@ -127,7 +127,7 @@ RwAbstractRepositoryDefinition >> create [
 ]
 
 { #category : 'accessing' }
-RwGitRepositoryDefinition >> gitRoot: ignored [
+RwAbstractRepositoryDefinition >> gitRoot: ignored [
 ]
 
 { #category : 'accessing' }

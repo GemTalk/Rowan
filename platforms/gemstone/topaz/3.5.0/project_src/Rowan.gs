@@ -51082,8 +51082,15 @@ method: RwGsLoadedSymbolDictProject
 repositoryRoot
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	^ self specification repositoryRootPath
+	^ self repositoryRootPath
 		ifNotNil: [:path | path asFileReference ]
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+repositoryRootPath
+
+	^ self specification repositoryRootPath
 %
 
 category: 'properties'

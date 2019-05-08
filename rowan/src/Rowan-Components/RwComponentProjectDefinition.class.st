@@ -249,7 +249,7 @@ RwComponentProjectDefinition >> exportProjects [
 ]
 
 { #category : 'accessing' }
-RwComponentProjectDefinition >> gitRoot: aGitRootReferenceOrString  [
+RwComponentProjectDefinition >> gitRoot: aGitRootReferenceOrString [ 
 
 	^ self projectRef gitRoot: aGitRootReferenceOrString
 ]

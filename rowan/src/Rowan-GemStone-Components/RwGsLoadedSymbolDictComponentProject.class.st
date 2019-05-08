@@ -16,12 +16,6 @@ RwGsLoadedSymbolDictComponentProject class >> newForProjectReferenceDefinition: 
 		yourself
 ]
 
-{ #category : 'commit log' }
-RwGsLoadedSymbolDictComponentProject >> commitLog: logLimit [
-
-	^ self projectRef commitLog: logLimit
-]
-
 { #category : 'definitions' }
 RwGsLoadedSymbolDictComponentProject >> asDefinition [
 
@@ -31,6 +25,12 @@ RwGsLoadedSymbolDictComponentProject >> asDefinition [
 		withProperties: self propertiesForDefinition
 		packageDefinitions: self loadedPackageDefinitions
 		componentDefinitions: self loadedComponentDefinitions
+]
+
+{ #category : 'commit log' }
+RwGsLoadedSymbolDictComponentProject >> commitLog: logLimit [
+
+	^ self projectRef commitLog: logLimit
 ]
 
 { #category : 'initialization' }

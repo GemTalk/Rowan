@@ -280,7 +280,7 @@ RwProjectReferenceDefinition >> exportSpecification [
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinition >> gitRoot: aGitRootReferenceOrString  [
+RwProjectReferenceDefinition >> gitRoot: aGitRootReferenceOrString [ 
 
 	self repositoryDefinition gitRoot: aGitRootReferenceOrString
 ]
@@ -566,16 +566,16 @@ RwProjectReferenceDefinition >> tag: aString [
 	self committish: aString committishType: 'tag'
 ]
 
-{ #category : 'temporary compat' }
-RwProjectReferenceDefinition >> updateLoadedCommitIdForTool: aRwTool [
-self deprecated: 'temporary method ... simulating RwSpecification api'.
-  ^ aRwTool doGitUpdateLoadedCommitId
-]
-
 { #category : 'loading' }
 RwProjectReferenceDefinition >> updateLoadedCommitId [
 
 	self loadedCommitId: self repositoryDefinition commitId
+]
+
+{ #category : 'temporary compat' }
+RwProjectReferenceDefinition >> updateLoadedCommitIdForTool: aRwTool [
+self deprecated: 'temporary method ... simulating RwSpecification api'.
+  ^ aRwTool doGitUpdateLoadedCommitId
 ]
 
 { #category : 'accessing' }
