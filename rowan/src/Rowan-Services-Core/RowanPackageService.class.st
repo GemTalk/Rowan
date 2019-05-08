@@ -54,7 +54,7 @@ RowanPackageService >> changes [
 RowanPackageService >> classHierarchy [
 	| superclassChains levels services hierarchies theClasses toExpand |
 	self update. 
-	theClasses := classes collect:[:classService | classService classFromName].
+	theClasses := classes collect:[:classService | classService theClass].
 	superclassChains := self superclassChainsFor: theClasses. 
 	hierarchies := self extendHierarchies: superclassChains. 
 	levels := self hierarchiesByLevel: hierarchies.
@@ -352,17 +352,17 @@ RowanPackageService >> servicePerform: symbol withArguments: collection [
 { #category : 'commands support' }
 RowanPackageService >> services: services from: levels expand: toExpand [
 
-	(classes collect:[:svc | svc classFromName]) do:[:aClass |
+	(classes collect:[:svc | svc theClass]) do:[:aClass |
 		toExpand addAll: aClass allSuperclasses].
 	levels keysAndValuesDo: [:key :value |
 		| newKey service  | 
 		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
-			service := (RowanClassService minimalForClassNamed: key name).
-			(toExpand includes: service classFromName) ifTrue:[service expand: true] ifFalse:[service expand: false].
+			service := (RowanClassService new classServiceFromOop: key asOop).
+			(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
 			service].
 		services at: newKey put: (value collect:[:cls | 
-				service := (RowanClassService minimalForClassNamed: cls name).
-				(toExpand includes: service classFromName) ifTrue:[service expand: true] ifFalse:[service expand: false].
+				service := (RowanClassService new classServiceFromOop: cls asOop).
+				(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
 				service
 				])]
 ]
@@ -409,7 +409,7 @@ RowanPackageService >> update [
 		| classService | 
 		classService := (RowanClassService minimalForClassNamed: string) 
 			isExtension: true.
-		(Rowan image loadedClassForClass: classService classFromName ifAbsent:[]) 
+		(Rowan image loadedClassForClass: classService theClass ifAbsent:[]) 
 			ifNotNil:[:cls | classService definedPackageName: cls packageName].
 		classService]).
 	classes do: [:clsService | clsService packageName: self name]. 

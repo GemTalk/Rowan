@@ -200,8 +200,8 @@ RowanMethodService >> className: newValue [
 RowanMethodService >> classOrMeta [
 
 	^meta 
-			ifTrue:[self classFromName class] 
-			ifFalse: [self classFromName].
+			ifTrue:[self theClass class] 
+			ifFalse: [self theClass].
 ]
 
 { #category : 'Accessing' }
@@ -406,7 +406,6 @@ RowanMethodService >> meta: aBoolean [
 RowanMethodService >> method [
 
 	^self classFromName compiledMethodAt: selector otherwise: nil
-
 ]
 
 { #category : 'Accessing' }

@@ -98,9 +98,9 @@ RowanClassServiceTest >> test_classFromName [
 	"always return thisClass" 
 	| classService |
 	classService := RowanClassService forClassNamed: 'Array' meta: false.
-	self assert: classService classFromName equals: Array.
+	self assert: classService theClass equals: Array.
 	classService := RowanClassService forClassNamed: 'OrderedCollection' meta: true.
-	self assert: classService classFromName equals: OrderedCollection
+	self assert: classService theClass equals: OrderedCollection
 ]
 
 { #category : 'tests' }
