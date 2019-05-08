@@ -27,6 +27,14 @@ RwGsLoadedSymbolDictComponentProject >> asDefinition [
 		componentDefinitions: self loadedComponentDefinitions
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> gitRoot [
+	"The root directory of the git repository that the project is located in. If the project is not git based
+		or the git root is not explicitly assigned, git root is synonymous with repository root."
+
+	^ self projectRef gitRoot
+]
+
 { #category : 'initialization' }
 RwGsLoadedSymbolDictComponentProject >> initialize [
 
@@ -136,7 +144,7 @@ RwGsLoadedSymbolDictComponentProject >> updateLoadedCommitId [
 
 	| loadedCommitId |
 	self useGit ifFalse: [ ^ nil ].
-	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self gitRoot pathString ]
 		on: Error
 		do: [ :ignored | 
 			"most likely no commits yet"

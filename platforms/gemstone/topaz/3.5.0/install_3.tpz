@@ -28,7 +28,7 @@
 #  methods into the correct package structure
   run
  	| projectSetDefinition gitRepoPath packageCreateTool loadedProjectInfo auditFailures readTool
-		reAudit  |
+		reAudit gitRoot |
 	projectSetDefinition := RwProjectSetDefinition new.
 	loadedProjectInfo := Dictionary new.
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
@@ -60,8 +60,11 @@
 		| configNames groupNames projectDefinition theProjectSetDefinition specUrl projectHome |
 		specUrl := ar at: 1.
 		projectHome := ar at: 2.
-		projectDefinition := RwComponentProjectDefinition newForUrl: specUrl.
-		projectDefinition projectHome: projectHome.
+		gitRoot := '$ROWAN_PROJECTS_HOME/Rowan'.
+		projectDefinition := (RwComponentProjectDefinition newForUrl: specUrl) 
+			projectHome: projectHome;
+			gitRoot: gitRoot;
+			yourself.
 		theProjectSetDefinition := readTool 
 			readProjectSetForComponentProjectDefinition: projectDefinition 
 				withConfigurations: projectDefinition defaultConfigurationNames 

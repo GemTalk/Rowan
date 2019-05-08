@@ -274,6 +274,22 @@ RwProjectReferenceDefinition >> exportSpecification [
 ]
 
 { #category : 'accessing' }
+RwProjectReferenceDefinition >> gitRoot [
+	"The root directory of the git repository that the project is located in. If the project is not git based
+		or the git root is not explicitly assigned, git root is synonymous with repository root."
+
+	^ self properties at: 'gitRoot' ifAbsent: [ self repositoryRoot ]
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> gitRoot: aGitRootReferenceOrString  [
+
+	self repositoryDefinition: nil. "changing git root invalidates the current repository definition"
+	aGitRootReferenceOrString ifNil: [ ^ self properties removeKey: 'gitRoot' ifAbsent: [] ].
+	^ self properties at: 'gitRoot' put: aGitRootReferenceOrString asFileReference
+]
+
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> groupNames [
 
 	^ self properties at: 'groupNames' ifAbsent: [{ self defaultGroupName } ]

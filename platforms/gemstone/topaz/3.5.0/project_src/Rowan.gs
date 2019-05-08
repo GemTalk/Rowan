@@ -40783,6 +40783,22 @@ exportProjects
 
 category: 'accessing'
 method: RwComponentProjectDefinition
+gitRoot
+	"The root directory of the git repository that the project is located in. If the project is not git based
+		or the git root is not explicitly assigned, git root is synonymous with repository root."
+
+	^ self projectRef gitRoot
+%
+
+category: 'accessing'
+method: RwComponentProjectDefinition
+gitRoot: aGitRootReferenceOrString
+
+	^ self projectRef gitRoot: aGitRootReferenceOrString
+%
+
+category: 'accessing'
+method: RwComponentProjectDefinition
 loadedCommitId
 
 	^ self projectRef loadedCommitId
@@ -40884,7 +40900,6 @@ postCopy
 category: 'accessing'
 method: RwComponentProjectDefinition
 projectHome
-	"Root directory of the repository. The configsPath, repoPath, specsPath, and projectsPath are specified relative to "
 
 	^ self projectRef projectHome
 %
@@ -41316,6 +41331,24 @@ exportSpecification
 	| spec |
 	spec := self asSpecification.
 	spec exportToUrl: 'file:',  self specsRoot pathString, '/'
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+gitRoot
+	"The root directory of the git repository that the project is located in. If the project is not git based
+		or the git root is not explicitly assigned, git root is synonymous with repository root."
+
+	^ self properties at: 'gitRoot' ifAbsent: [ self repositoryRoot ]
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+gitRoot: aGitRootReferenceOrString
+
+	self repositoryDefinition: nil. "changing git root invalidates the current repository definition"
+	aGitRootReferenceOrString ifNil: [ ^ self properties removeKey: 'gitRoot' ifAbsent: [] ].
+	^ self properties at: 'gitRoot' put: aGitRootReferenceOrString asFileReference
 %
 
 category: 'accessing'
@@ -50817,6 +50850,15 @@ asDefinition
 		componentDefinitions: self loadedComponentDefinitions
 %
 
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+gitRoot
+	"The root directory of the git repository that the project is located in. If the project is not git based
+		or the git root is not explicitly assigned, git root is synonymous with repository root."
+
+	^ self projectRef gitRoot
+%
+
 category: 'initialization'
 method: RwGsLoadedSymbolDictComponentProject
 initialize
@@ -50942,7 +50984,7 @@ updateLoadedCommitId
 
 	| loadedCommitId |
 	self useGit ifFalse: [ ^ nil ].
-	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self gitRoot pathString ]
 		on: Error
 		do: [ :ignored | 
 			"most likely no commits yet"
