@@ -90,6 +90,18 @@ RwAbstractRepositoryDefinition >> attach [
 ]
 
 { #category : 'accessing' }
+RwAbstractRepositoryDefinition >> commitId [
+
+	^ ''
+]
+
+{ #category : 'accessing' }
+RwAbstractRepositoryDefinition >> commitLog: logLimit [
+
+	^ ''
+]
+
+{ #category : 'accessing' }
 RwAbstractRepositoryDefinition >> committish [
 
 	^ self properties at: 'committish' ifAbsent: []
@@ -115,6 +127,10 @@ RwAbstractRepositoryDefinition >> create [
 ]
 
 { #category : 'accessing' }
+RwGitRepositoryDefinition >> gitRoot: ignored [
+]
+
+{ #category : 'accessing' }
 RwAbstractRepositoryDefinition >> key [
 
 	^properties at: 'name' ifAbsent: [nil]
@@ -130,6 +146,13 @@ RwAbstractRepositoryDefinition >> name [
 RwAbstractRepositoryDefinition >> name: aString [ 
 
 	properties at: 'name' put: aString
+]
+
+{ #category : 'copying' }
+RwAbstractRepositoryDefinition >> postCopy [ 
+
+	super postCopy.
+	properties := properties copy.
 ]
 
 { #category : 'accessing' }

@@ -40,13 +40,32 @@ RwGitRepositoryDefinition >> _createRemoteUrl [
 
 { #category : 'accessing' }
 RwGitRepositoryDefinition >> commitId [
-self error: 'use a git command to extract commitId'
+
+	^ [  Rowan gitTools gitcommitShaIn: self gitRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			'' ].
+]
+
+{ #category : 'loading' }
+RwGitRepositoryDefinition >> commitLog: logLimit [
+
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self gitRoot pathString
 ]
 
 { #category : 'accessing' }
-RwGitRepositoryDefinition >> commitId: aString [
+RwGitRepositoryDefinition >> gitRoot [
+	"The root directory of the git repository that the project is located in. If the project is not git based
+		or the git root is not explicitly assigned, git root is synonymous with repository root."
 
-	self shouldNotImplement: #commitId
+	^ self properties at: 'gitRoot' ifAbsent: []
+]
+
+{ #category : 'accessing' }
+RwGitRepositoryDefinition >> gitRoot: aGitRootReferenceOrString [
+
+	^ self properties at: 'gitRoot' put: aGitRootReferenceOrString asFileReference
 ]
 
 { #category : 'accessing' }

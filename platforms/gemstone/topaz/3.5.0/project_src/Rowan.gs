@@ -39430,6 +39430,20 @@ attach
 
 category: 'accessing'
 method: RwAbstractRepositoryDefinition
+commitId
+
+	^ ''
+%
+
+category: 'accessing'
+method: RwAbstractRepositoryDefinition
+commitLog: logLimit
+
+	^ ''
+%
+
+category: 'accessing'
+method: RwAbstractRepositoryDefinition
 committish
 
 	^ self properties at: 'committish' ifAbsent: []
@@ -39459,6 +39473,11 @@ create
 
 category: 'accessing'
 method: RwAbstractRepositoryDefinition
+gitRoot: ignored
+%
+
+category: 'accessing'
+method: RwAbstractRepositoryDefinition
 key
 
 	^properties at: 'name' ifAbsent: [nil]
@@ -39476,6 +39495,14 @@ method: RwAbstractRepositoryDefinition
 name: aString 
 
 	properties at: 'name' put: aString
+%
+
+category: 'copying'
+method: RwAbstractRepositoryDefinition
+postCopy
+
+	super postCopy.
+	properties := properties copy.
 %
 
 category: 'accessing'
@@ -39577,14 +39604,35 @@ newNamed: repositoryName repositoryRoot: repoRoot projectUrl: anUrlString remote
 category: 'accessing'
 method: RwGitRepositoryDefinition
 commitId
-self error: 'use a git command to extract commitId'
+
+	^ [  Rowan gitTools gitcommitShaIn: self gitRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			'' ].
 %
 
 category: 'accessing'
 method: RwGitRepositoryDefinition
-commitId: aString
+commitLog: logLimit
 
-	self shouldNotImplement: #commitId
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self gitRoot pathString
+%
+
+category: 'accessing'
+method: RwGitRepositoryDefinition
+gitRoot
+	"The root directory of the git repository that the project is located in. If the project is not git based
+		or the git root is not explicitly assigned, git root is synonymous with repository root."
+
+	^ self properties at: 'gitRoot' ifAbsent: []
+%
+
+category: 'accessing'
+method: RwGitRepositoryDefinition
+gitRoot: aGitRootReferenceOrString
+
+	^ self properties at: 'gitRoot' put: aGitRootReferenceOrString asFileReference
 %
 
 category: 'accessing'
@@ -40783,16 +40831,7 @@ exportProjects
 
 category: 'accessing'
 method: RwComponentProjectDefinition
-gitRoot
-	"The root directory of the git repository that the project is located in. If the project is not git based
-		or the git root is not explicitly assigned, git root is synonymous with repository root."
-
-	^ self projectRef gitRoot
-%
-
-category: 'accessing'
-method: RwComponentProjectDefinition
-gitRoot: aGitRootReferenceOrString
+gitRoot: aGitRootReferenceOrString 
 
 	^ self projectRef gitRoot: aGitRootReferenceOrString
 %
@@ -41054,13 +41093,7 @@ category: 'loading'
 method: RwComponentProjectDefinition
 updateLoadedCommitId
 
-	| loadedCommitId |
-	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
-		on: Error
-		do: [ :ignored | 
-			"most likely no commits yet"
-			^ nil ].
-	self projectRef loadedCommitId: loadedCommitId
+	self projectRef updateLoadedCommitId
 %
 
 category: 'properties'
@@ -41246,6 +41279,13 @@ comment: aString
 
 category: 'accessing'
 method: RwProjectReferenceDefinition
+commitLog: logLimit
+
+	^ self repositoryDefinition commitLog: logLimit
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
 committish
 
 	^ self properties at: 'committish' ifAbsent: [ 'master' ]
@@ -41335,20 +41375,10 @@ exportSpecification
 
 category: 'accessing'
 method: RwProjectReferenceDefinition
-gitRoot
-	"The root directory of the git repository that the project is located in. If the project is not git based
-		or the git root is not explicitly assigned, git root is synonymous with repository root."
+gitRoot: aGitRootReferenceOrString 
 
-	^ self properties at: 'gitRoot' ifAbsent: [ self repositoryRoot ]
-%
-
-category: 'accessing'
-method: RwProjectReferenceDefinition
-gitRoot: aGitRootReferenceOrString
-
-	self repositoryDefinition: nil. "changing git root invalidates the current repository definition"
-	aGitRootReferenceOrString ifNil: [ ^ self properties removeKey: 'gitRoot' ifAbsent: [] ].
-	^ self properties at: 'gitRoot' put: aGitRootReferenceOrString asFileReference
+	self repositoryDefinition: self repositoryDefinition copy.	"changing the gitRoot, means we need a new repository definition"
+	self repositoryDefinition gitRoot: aGitRootReferenceOrString
 %
 
 category: 'accessing'
@@ -41513,9 +41543,13 @@ category: 'accessing'
 method: RwProjectReferenceDefinition
 projectHome: projectHomeFileReferenceOrString
 
-	self repositoryDefinition: nil. "changing project home invalidates the current repository definition"
-	projectHomeFileReferenceOrString ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
-	^ self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference
+	projectHomeFileReferenceOrString
+		ifNil: [
+			self properties removeKey: 'projectHome' ifAbsent: [].
+			self repositoryDefinition: nil.
+			^self ].
+	self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference.
+	self repositoryDefinition gitRoot ifNil: [ self repositoryDefinition gitRoot: self repositoryRoot ].
 %
 
 category: 'accessing'
@@ -41673,6 +41707,13 @@ method: RwProjectReferenceDefinition
 tag: aString
 
 	self committish: aString committishType: 'tag'
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+updateLoadedCommitId
+
+	self loadedCommitId: self repositoryDefinition commitId
 %
 
 category: 'temporary compat'
@@ -50641,8 +50682,7 @@ category: 'commit log'
 method: RwLoadedProject
 commitLog: logLimit
 
-	self useGit ifFalse: [ ^ 'no commit log' ].
-	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRootPath
+	self subclassResponsibility: #commitLog:
 %
 
 category: 'initialization'
@@ -50850,13 +50890,11 @@ asDefinition
 		componentDefinitions: self loadedComponentDefinitions
 %
 
-category: 'accessing'
+category: 'definitions'
 method: RwGsLoadedSymbolDictComponentProject
-gitRoot
-	"The root directory of the git repository that the project is located in. If the project is not git based
-		or the git root is not explicitly assigned, git root is synonymous with repository root."
+commitLog: logLimit
 
-	^ self projectRef gitRoot
+	^ self projectRef commitLog: logLimit
 %
 
 category: 'initialization'
@@ -50982,14 +51020,7 @@ category: 'loading'
 method: RwGsLoadedSymbolDictComponentProject
 updateLoadedCommitId
 
-	| loadedCommitId |
-	self useGit ifFalse: [ ^ nil ].
-	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self gitRoot pathString ]
-		on: Error
-		do: [ :ignored | 
-			"most likely no commits yet"
-			^ nil ].
-	self projectRef loadedCommitId: loadedCommitId
+	self projectRef updateLoadedCommitId
 %
 
 category: 'accessing'
@@ -51002,6 +51033,14 @@ useGit
 ! Class implementation for 'RwGsLoadedSymbolDictProject'
 
 !		Instance methods for 'RwGsLoadedSymbolDictProject'
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+commitLog: logLimit
+
+		self useGit ifFalse: [ ^ '' ].
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRootPath
+%
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictProject

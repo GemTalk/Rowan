@@ -679,7 +679,7 @@ RwRowanSample7Test >> testResolveProjectReference [
 
 	"clone a repository from github, attach to an existing git repository, clone to an alternate projectHome"
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition_1 projectReferenceDefinition_2 informHappened |
+	| specUrlString rowanSpec projectHome projectName projectSpec projectReferenceDefinition_1 projectReferenceDefinition_2 informHappened |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -688,7 +688,7 @@ RwRowanSample7Test >> testResolveProjectReference [
 		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -696,7 +696,7 @@ RwRowanSample7Test >> testResolveProjectReference [
 "create project reference definitions"
 	projectReferenceDefinition_1 := RwProjectReferenceDefinition 
 		newForSpecification: projectSpec 
-		projectHome: gitRootPath.
+		projectHome: projectHome.
 
 	projectReferenceDefinition_1 repositoryRoot ensureDeleteAll.
 	(Rowan image projectRepositoryNamed: projectReferenceDefinition_1 projectAlias ifAbsent: [  ])
@@ -715,7 +715,7 @@ RwRowanSample7Test >> testResolveProjectReference [
 "2. create second project reference definitions"
 	projectReferenceDefinition_2 := RwProjectReferenceDefinition 
 		newForSpecification: projectSpec 
-		projectHome: gitRootPath.
+		projectHome: projectHome.
 
 "attach to repository - inform confirms that skip branch was taken"
 	informHappened := false.
@@ -736,13 +736,13 @@ RwRowanSample7Test >> testResolveProjectReference [
 	(Rowan image projectRepositoryNamed: projectReferenceDefinition_2 projectAlias ifAbsent: [  ])
 		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
-	gitRootPath := gitRootPath asFileReference / 'sample7_repos'.
-	gitRootPath ensureDeleteAll.
+	projectHome := projectHome asFileReference / 'sample7_repos'.
+	projectHome ensureDeleteAll.
 	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
-	gitRootPath ensureCreateDirectory.
+	projectHome ensureCreateDirectory.
 
-	projectReferenceDefinition_2 projectHome: gitRootPath.
+	projectReferenceDefinition_2 projectHome: projectHome.
 
 "clone to new location"
 	self assert: (Rowan image projectRepositoryNamed: projectReferenceDefinition_2 projectAlias ifAbsent: [  ]) isNil.

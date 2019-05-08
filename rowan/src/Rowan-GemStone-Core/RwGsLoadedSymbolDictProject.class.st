@@ -4,6 +4,13 @@ Class {
 	#category : 'Rowan-GemStone-Core'
 }
 
+{ #category : 'commit log' }
+RwGsLoadedSymbolDictProject >> commitLog: logLimit [
+
+	self useGit ifFalse: [ ^ '' ].
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRootPath
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictProject >> loadedCommitId [
 

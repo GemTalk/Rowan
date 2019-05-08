@@ -197,6 +197,12 @@ RwProjectReferenceDefinition >> comment: aString [
 ]
 
 { #category : 'accessing' }
+RwProjectReferenceDefinition >> commitLog: logLimit [
+
+	^ self repositoryDefinition commitLog: logLimit
+]
+
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> committish [
 
 	^ self properties at: 'committish' ifAbsent: [ 'master' ]
@@ -274,19 +280,10 @@ RwProjectReferenceDefinition >> exportSpecification [
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinition >> gitRoot [
-	"The root directory of the git repository that the project is located in. If the project is not git based
-		or the git root is not explicitly assigned, git root is synonymous with repository root."
-
-	^ self properties at: 'gitRoot' ifAbsent: [ self repositoryRoot ]
-]
-
-{ #category : 'accessing' }
 RwProjectReferenceDefinition >> gitRoot: aGitRootReferenceOrString  [
 
-	self repositoryDefinition: nil. "changing git root invalidates the current repository definition"
-	aGitRootReferenceOrString ifNil: [ ^ self properties removeKey: 'gitRoot' ifAbsent: [] ].
-	^ self properties at: 'gitRoot' put: aGitRootReferenceOrString asFileReference
+	self repositoryDefinition: self repositoryDefinition copy.      "changing the gitRoot, means we need a new repository definition"
+	self repositoryDefinition gitRoot: aGitRootReferenceOrString
 ]
 
 { #category : 'accessing' }
@@ -429,9 +426,14 @@ RwProjectReferenceDefinition >> projectHome [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectHome: projectHomeFileReferenceOrString [
 
-	self repositoryDefinition: nil. "changing project home invalidates the current repository definition"
-	projectHomeFileReferenceOrString ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
-	^ self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference
+	projectHomeFileReferenceOrString
+		ifNil: [
+			self properties removeKey: 'projectHome' ifAbsent: [].
+			self repositoryDefinition: nil.
+			^self ].
+	self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference.
+	self repositoryDefinition gitRoot ifNil: [ self repositoryDefinition gitRoot: self repositoryRoot ].
+
 ]
 
 { #category : 'accessing' }
@@ -573,6 +575,12 @@ RwProjectReferenceDefinition >> tag: aString [
 RwProjectReferenceDefinition >> updateLoadedCommitIdForTool: aRwTool [
 self deprecated: 'temporary method ... simulating RwSpecification api'.
   ^ aRwTool doGitUpdateLoadedCommitId
+]
+
+{ #category : 'loading' }
+RwProjectReferenceDefinition >> updateLoadedCommitId [
+
+	self loadedCommitId: self repositoryDefinition commitId
 ]
 
 { #category : 'accessing' }

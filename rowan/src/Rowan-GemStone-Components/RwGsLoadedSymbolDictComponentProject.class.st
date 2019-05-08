@@ -16,6 +16,12 @@ RwGsLoadedSymbolDictComponentProject class >> newForProjectReferenceDefinition: 
 		yourself
 ]
 
+{ #category : 'commit log' }
+RwGsLoadedSymbolDictComponentProject >> commitLog: logLimit [
+
+	^ self projectRef commitLog: logLimit
+]
+
 { #category : 'definitions' }
 RwGsLoadedSymbolDictComponentProject >> asDefinition [
 
@@ -25,14 +31,6 @@ RwGsLoadedSymbolDictComponentProject >> asDefinition [
 		withProperties: self propertiesForDefinition
 		packageDefinitions: self loadedPackageDefinitions
 		componentDefinitions: self loadedComponentDefinitions
-]
-
-{ #category : 'accessing' }
-RwGsLoadedSymbolDictComponentProject >> gitRoot [
-	"The root directory of the git repository that the project is located in. If the project is not git based
-		or the git root is not explicitly assigned, git root is synonymous with repository root."
-
-	^ self projectRef gitRoot
 ]
 
 { #category : 'initialization' }
@@ -142,14 +140,7 @@ RwGsLoadedSymbolDictComponentProject >> symbolDictNameForPackageNamed: packageNa
 { #category : 'loading' }
 RwGsLoadedSymbolDictComponentProject >> updateLoadedCommitId [
 
-	| loadedCommitId |
-	self useGit ifFalse: [ ^ nil ].
-	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self gitRoot pathString ]
-		on: Error
-		do: [ :ignored | 
-			"most likely no commits yet"
-			^ nil ].
-	self projectRef loadedCommitId: loadedCommitId
+	self projectRef updateLoadedCommitId
 ]
 
 { #category : 'accessing' }

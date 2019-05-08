@@ -71,8 +71,7 @@ RwLoadedProject >> asDefinition [
 { #category : 'commit log' }
 RwLoadedProject >> commitLog: logLimit [
 
-	self useGit ifFalse: [ ^ 'no commit log' ].
-	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRootPath
+	self subclassResponsibility: #commitLog:
 ]
 
 { #category : 'initialization' }

@@ -249,14 +249,6 @@ RwComponentProjectDefinition >> exportProjects [
 ]
 
 { #category : 'accessing' }
-RwComponentProjectDefinition >> gitRoot [
-	"The root directory of the git repository that the project is located in. If the project is not git based
-		or the git root is not explicitly assigned, git root is synonymous with repository root."
-
-	^ self projectRef gitRoot
-]
-
-{ #category : 'accessing' }
 RwComponentProjectDefinition >> gitRoot: aGitRootReferenceOrString  [
 
 	^ self projectRef gitRoot: aGitRootReferenceOrString
@@ -485,13 +477,7 @@ RwComponentProjectDefinition >> specsRoot [
 { #category : 'loading' }
 RwComponentProjectDefinition >> updateLoadedCommitId [
 
-	| loadedCommitId |
-	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
-		on: Error
-		do: [ :ignored | 
-			"most likely no commits yet"
-			^ nil ].
-	self projectRef loadedCommitId: loadedCommitId
+	self projectRef updateLoadedCommitId
 ]
 
 { #category : 'properties' }
