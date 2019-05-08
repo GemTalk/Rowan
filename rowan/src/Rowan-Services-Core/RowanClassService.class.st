@@ -1008,7 +1008,7 @@ RowanClassService >> updateClass [
 	a class then aborted."
 
 	| theClass |
-	theClass := self theClass thisClass. 
+	theClass := self theClass. 
 	theClass isNil ifTrue:[oop := nil. ^self]. 
 	theClass isBehavior ifFalse:[oop := theClass asOop. ^self].
 	self refreshFrom: theClass.
