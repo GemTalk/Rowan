@@ -18658,8 +18658,25 @@ testReadExistingDiskProjectWithClassCategoryValidationError
 	projectDefinition projectHome: projectHome.
 
 "read project -- hit category does not match error"
-	projectDefinitionSet := Rowan projectTools read 
-		readProjectSetForComponentProjectDefinition: projectDefinition.
+	self 
+		should: [ Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+		raise: Error.
+
+"recreate project definition"
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+
+"point to directory where the disk project is located"
+	projectDefinition projectHome: projectHome.
+
+"read project -- catch and resume the notification ... repair the category"
+	[ projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+		on: RwInvalidClassCategoryConventionErrorNotification
+		do: [:ex | 
+			"repair the category"
+			ex resume: true ].
+
+"validation"
+	self _validateIssue122RepairedInvalidClassCategoryConventionProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
 %
 
 category: 'tests'
@@ -18718,17 +18735,20 @@ _validateIssue122ProjectDefinitionSet: projectDefinitionSet projectName: project
 					packageDefinition classDefinitions keysAndValuesDo: [:className :classDefinition | 
 						classDefinition name = 'Issue122Class1'
 							ifTrue: [
+								self assert: classDefinition category = packageName.
 								self assert: classDefinition instanceMethodDefinitions size = 1.
 								self assert: classDefinition classMethodDefinitions size = 1 ]
 							ifFalse: [
 								classDefinition name = 'Issue122Class2'
 								ifTrue: [
+									self assert: classDefinition category = packageName.
 									self assert: classDefinition instanceMethodDefinitions size = 1.
 									self assert: classDefinition classMethodDefinitions size = 0 ]
 								ifFalse: [
 									classDefinition name = 'Issue122Class3'
 									ifTrue: [
 										self assert: classDefinition instanceMethodDefinitions size = 1.
+										self assert: classDefinition category = packageName.
 										self assert: classDefinition classMethodDefinitions size = 1 ]
 									ifFalse: [ self assert: false description: 'unexpected class definition ', classDefinition name printString ] ] ] ] ]
 				ifFalse: [
@@ -18741,6 +18761,29 @@ _validateIssue122ProjectDefinitionSet: projectDefinitionSet projectName: project
 									ifTrue: [ self assert: classExtension instanceMethodDefinitions size = 1 ]
 									ifFalse: [ self assert: false description: 'unexpected classExtenstion definition ', classExtension name printString ] ] ]
 						ifFalse: [ self assert: false description: 'unexpected package definition ', packageDefinition name printString ] ] ] ]
+%
+
+category: 'private'
+method: RwProjectFiletreeTonelReaderWriterTest
+_validateIssue122RepairedInvalidClassCategoryConventionProjectDefinitionSet: projectDefinitionSet projectName: projectName
+
+	self assert: projectDefinitionSet  projects size = 1.
+	projectDefinitionSet  projects keysAndValuesDo: [:projName :projectDefinition |  
+		self assert: projectDefinition name = projectName.
+		self assert: projectDefinition packages size = 1.
+		projectDefinition  packages keysAndValuesDo: [:packageName :packageDefinition |
+			packageDefinition name = 'Issue122-Core-CategoryValidationError'
+				ifTrue: [
+					self assert: packageDefinition classExtensions isEmpty.
+					self assert: packageDefinition classDefinitions size = 1.
+					packageDefinition classDefinitions keysAndValuesDo: [:className :classDefinition | 
+						classDefinition name = 'Issue122Class1'
+							ifTrue: [
+								self assert: classDefinition category = packageName.
+								self assert: classDefinition instanceMethodDefinitions size = 1.
+								self assert: classDefinition classMethodDefinitions size = 1 ]
+							ifFalse: [  self assert: false description: 'unexpected class definition ', classDefinition name printString  ] ] ]
+				ifFalse: [ self assert: false description: 'unexpected package definition ', packageDefinition name printString ] ] ]
 %
 
 ! Class implementation for 'RwProjectFiletreeReaderWriterTest'

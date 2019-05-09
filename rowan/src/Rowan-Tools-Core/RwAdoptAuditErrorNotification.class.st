@@ -1,6 +1,6 @@
 Class {
 	#name : 'RwAdoptAuditErrorNotification',
-	#superclass : 'Notification',
+	#superclass : 'RwNotification',
 	#instVars : [
 		'className',
 		'isClassExtension',

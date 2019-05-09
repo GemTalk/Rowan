@@ -65,7 +65,10 @@ RwAbstractReaderWriterVisitor >> _repositoryPropertyDictFor: packagesRoot [
 RwAbstractReaderWriterVisitor >> _validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName [
 
 	aClassDefinition category = packageName ifTrue: [ ^ self ].
-	self error: 'not yet implemented'
+	(RwInvalidClassCategoryConventionErrorNotification signalWithClassDefinition: aClassDefinition packageConvention: 'RowanHybrid')
+		ifTrue: [ 
+			"repair the class category"
+			aClassDefinition category: packageName ].
 ]
 
 { #category : 'validation' }
@@ -95,7 +98,7 @@ RwAbstractReaderWriterVisitor >> _validateRowanHybridProtocolConvention: protoco
 RwAbstractReaderWriterVisitor >> _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName [
 
 	(aClassDefinition category beginsWith: packageName) ifTrue: [ ^ self ].
-	self error: 'not yet implemented'
+	RwInvalidClassCategoryConventionErrorNotification signalWithClassDefinition: aClassDefinition packageConvention: 'Monticello'
 ]
 
 { #category : 'validation' }

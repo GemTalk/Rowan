@@ -435,6 +435,36 @@ true.
 
 doit
 (Notification
+	subclass: 'RwNotification'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: 'General way for Cypress to toss things up the stack for consideration by a higher authority.';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwNotification
+	subclass: 'RwAddUpdateRemoveMethodForUnpackagedClassNotification'
+	instVarNames: #( errorMessage )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwNotification
 	subclass: 'RwAdoptAuditErrorNotification'
 	instVarNames: #( className isClassExtension packageName description )
 	classVars: #(  )
@@ -539,36 +569,6 @@ true.
 %
 
 doit
-(Notification
-	subclass: 'RwNotification'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #())
-		category: 'Rowan-Core';
-		comment: 'General way for Cypress to toss things up the stack for consideration by a higher authority.';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwNotification
-	subclass: 'RwAddUpdateRemoveMethodForUnpackagedClassNotification'
-	instVarNames: #( errorMessage )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanKernel
-	options: #())
-		category: 'Rowan-Core';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
 (RwNotification
 	subclass: 'RwDeleteClassFromSystemNotification'
 	instVarNames: #( candidateClass )
@@ -617,6 +617,21 @@ doit
 (RwNotification
 	subclass: 'RwExistingVisitorAddingExistingClassNotification'
 	instVarNames: #( classDefinition loadedProject )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwNotification
+	subclass: 'RwInvalidClassCategoryConventionErrorNotification'
+	instVarNames: #( classDefinition packageConvention )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -7143,6 +7158,69 @@ method: RwExistingVisitorAddingExistingClassNotification
 loadedProject: aLoadedProject
 
 	loadedProject := aLoadedProject
+%
+
+! Class implementation for 'RwInvalidClassCategoryConventionErrorNotification'
+
+!		Class methods for 'RwInvalidClassCategoryConventionErrorNotification'
+
+category: 'instance creation'
+classmethod: RwInvalidClassCategoryConventionErrorNotification
+signalWithClassDefinition: aClassDefinition packageConvention: aString
+
+	^ self new
+			classDefinition: aClassDefinition;
+			packageConvention: aString;
+			signal
+%
+
+!		Instance methods for 'RwInvalidClassCategoryConventionErrorNotification'
+
+category: 'accessing'
+method: RwInvalidClassCategoryConventionErrorNotification
+classDefinition
+
+	^ classDefinition
+%
+
+category: 'accessing'
+method: RwInvalidClassCategoryConventionErrorNotification
+classDefinition: aClassDefinition
+
+	classDefinition := aClassDefinition
+%
+
+category: 'Handling'
+method: RwInvalidClassCategoryConventionErrorNotification
+defaultAction
+ 
+	^ Error signal: self _errorMessage
+%
+
+category: 'accessing'
+method: RwInvalidClassCategoryConventionErrorNotification
+packageConvention
+
+	^ packageConvention
+%
+
+category: 'accessing'
+method: RwInvalidClassCategoryConventionErrorNotification
+packageConvention: aString
+
+	packageConvention := aString
+%
+
+category: 'private'
+method: RwInvalidClassCategoryConventionErrorNotification
+_errorMessage
+
+	^ 'The class category ', 
+		self classDefinition category printString, 
+		' for the class ', 
+		self classDefinition name printString, 
+		' violates the package convention', 
+		self packageConvention printString
 %
 
 ! Class implementation for 'RwPerformingUnpackagedEditNotification'
@@ -31234,7 +31312,10 @@ method: RwAbstractReaderWriterVisitor
 _validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName
 
 	aClassDefinition category = packageName ifTrue: [ ^ self ].
-	self error: 'not yet implemented'
+	(RwInvalidClassCategoryConventionErrorNotification signalWithClassDefinition: aClassDefinition packageConvention: 'RowanHybrid')
+		ifTrue: [ 
+			"repair the class category"
+			aClassDefinition category: packageName ].
 %
 
 category: 'validation'
@@ -31266,7 +31347,7 @@ method: RwAbstractReaderWriterVisitor
 _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName
 
 	(aClassDefinition category beginsWith: packageName) ifTrue: [ ^ self ].
-	self error: 'not yet implemented'
+	RwInvalidClassCategoryConventionErrorNotification signalWithClassDefinition: aClassDefinition packageConvention: 'Monticello'
 %
 
 category: 'validation'
