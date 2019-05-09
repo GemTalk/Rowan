@@ -16,7 +16,7 @@ RowanClassServiceTest >> createClassNamed: className [
 RowanClassServiceTest >> createHierarchyWithNonResolvableClass [
 
 	"do not delete - sent by Jadeite client test
-	RowanSample1Test new createHierarchyWithNonResolvableClass.
+	RowanClassServiceTest new createHierarchyWithNonResolvableClass.
 	Code by dhenrich"
 
   | projectName  packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
