@@ -8,6 +8,7 @@ Class {
 RwPkgDiffTool >> patchForPackageName: packageName [
 
 	| loadedPackage loadedProject repo diskSnapshot imageSnapshot |
+self deprecated: 'patchForPackageName: deprecated in favor or RwPrjDiffTool>>patchesForProjectNamed:'.
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 	super specification: loadedProject specification.

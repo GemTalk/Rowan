@@ -29584,13 +29584,15 @@ changes
 	| jadeServer |
 	jadeServer := Rowan platform jadeServerClassNamed: #JadeServer. 
 	changes := Array new. 
-	self packageNames do:[:packageName |
+	(Rowan projectTools diff
+		patchesForProjectNamed: 'Rowan') do: [:assoc | 
+			"key is packageName, value is a CypressPatch"
 			| patch |
-			patch := Rowan packageTools diff patchForPackageName: packageName.
+			patch := assoc value.
 			changes add:(jadeServer new
 				_mcDescriptionOfPatch: patch
 				baseName: 'closest ancestor'
-				alternateName: nil)].
+				alternateName: nil) ].
 	self refresh.
 	RowanCommandResult addResult: self.
 %
@@ -34465,6 +34467,7 @@ method: RwPkgDiffTool
 patchForPackageName: packageName
 
 	| loadedPackage loadedProject repo diskSnapshot imageSnapshot |
+self deprecated: 'patchForPackageName: deprecated in favor or RwPrjDiffTool>>patchesForProjectNamed:'.
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 	super specification: loadedProject specification.
