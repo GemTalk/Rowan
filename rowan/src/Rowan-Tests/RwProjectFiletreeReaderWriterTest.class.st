@@ -9,9 +9,3 @@ RwProjectFiletreeReaderWriterTest >> _repositoryFormat [
 
 	^ 'filetree'
 ]
-
-{ #category : 'private' }
-RwProjectFiletreeReaderWriterTest >> _writerVisitorClass [
-
-	^ RwModificationFiletreeWriterVisitor
-]

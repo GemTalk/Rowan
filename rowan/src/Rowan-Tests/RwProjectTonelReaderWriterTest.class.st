@@ -9,9 +9,3 @@ RwProjectTonelReaderWriterTest >> _repositoryFormat [
 
 	^ 'tonel'
 ]
-
-{ #category : 'private' }
-RwProjectTonelReaderWriterTest >> _writerVisitorClass [
-
-	^ RwModificationTonelWriterVisitor
-]
