@@ -37,7 +37,8 @@ Class {
 		'expand',
 		'visibleTests',
 		'isNewClass',
-		'updateAfterCommand'
+		'updateAfterCommand',
+		'isInSymbolList'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -396,6 +397,7 @@ RowanClassService >> initialize [
 	selectedPackageServices := Array new.
 	isNewClass := false.
 	methods := Array new.
+	isInSymbolList := true.
 ]
 
 { #category : 'initialization' }
@@ -994,8 +996,8 @@ RowanClassService >> theClass [
 	| theClass |
 	theClass := oop ifNil:[Rowan globalNamed: name] ifNotNil: [Object _objectForOop: oop].
 	theClass isMeta ifTrue:[oop := theClass thisClass asOop]. 
+	(Rowan globalNamed: name) ifNil:[isInSymbolList := false]. 
 	^theClass thisClass
-
 ]
 
 { #category : 'updates' }
