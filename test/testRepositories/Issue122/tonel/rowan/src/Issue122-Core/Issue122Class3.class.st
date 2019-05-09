@@ -1,5 +1,5 @@
 "
-this is a test comment for Issue361Class3
+this is a test comment for Issue122Class3
 "
 Class {
 	#name : 'Issue122Class3',

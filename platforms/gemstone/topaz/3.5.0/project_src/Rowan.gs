@@ -31158,7 +31158,7 @@ projectName
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-validateClassCategory: category  forPackageNamed: packageName
+validateClassCategory: aClassDefinition  forPackageNamed: packageName
 
 	"
 		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
@@ -31169,9 +31169,9 @@ validateClassCategory: category  forPackageNamed: packageName
 	"signal an error if the protocol does not conform to the convention for the current project"
 
 	self packageConvention = 'RowanHybrid'
-		ifTrue: [ ^ self _validateRowanHybridClassCategoryConvention: category forPackageNamed: packageName ].
+		ifTrue: [ ^ self _validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName ].
 	self packageConvention = 'Monticello'
-		ifTrue: [ ^ self _validateRowanMonticelloClassCategoryConvention: category forPackageNamed: packageName ].
+		ifTrue: [ ^ self _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName ].
 	"Rowan - no convention ... any old protocol is fine"
 %
 
@@ -31231,9 +31231,9 @@ _repositoryPropertyDictFor: packagesRoot
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-_validateRowanHybridClassCategoryConvention: category forPackageNamed: packageName
+_validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName
 
-	category = packageName ifTrue: [ ^ self ].
+	aClassDefinition category = packageName ifTrue: [ ^ self ].
 	self error: 'not yet implemented'
 %
 
@@ -31263,9 +31263,9 @@ _validateRowanHybridProtocolConvention: protocol forPackageNamed: packageName
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-_validateRowanMonticelloClassCategoryConvention: category forPackageNamed: packageName
+_validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName
 
-	(category beginsWith: packageName) ifTrue: [ ^ self ].
+	(aClassDefinition category beginsWith: packageName) ifTrue: [ ^ self ].
 	self error: 'not yet implemented'
 %
 
@@ -33156,7 +33156,7 @@ readClassDirectory: classDirectory inPackage: packageName
 		nil. 
 		normalizedMetadata
 	}.
-	self validateClassCategory: classDef category  forPackageNamed: packageName.
+	self validateClassCategory: classDef forPackageNamed: packageName.
 	(currentProjectDefinition packageNamed: packageName)
 		addClassDefinition: currentClassDefinition.
 
@@ -33385,7 +33385,7 @@ readClassFile: file inPackage: packageName
 		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
 		definitions := (TonelParser on: stream forReader: self) start.
-		self validateClassCategory: currentClassDefinition category forPackageNamed: packageName.
+		self validateClassCategory: currentClassDefinition forPackageNamed: packageName.
 		((definitions at: 2) at: 1) do: [:mDef |
 			currentClassDefinition addClassMethodDefinition: mDef ].
 		((definitions at: 2) at: 2) do: [:mDef |

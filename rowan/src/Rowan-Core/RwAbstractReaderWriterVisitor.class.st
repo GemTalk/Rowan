@@ -62,9 +62,9 @@ RwAbstractReaderWriterVisitor >> _repositoryPropertyDictFor: packagesRoot [
 ]
 
 { #category : 'validation' }
-RwAbstractReaderWriterVisitor >> _validateRowanHybridClassCategoryConvention: category forPackageNamed: packageName [
+RwAbstractReaderWriterVisitor >> _validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName [
 
-	category = packageName ifTrue: [ ^ self ].
+	aClassDefinition category = packageName ifTrue: [ ^ self ].
 	self error: 'not yet implemented'
 ]
 
@@ -92,9 +92,9 @@ RwAbstractReaderWriterVisitor >> _validateRowanHybridProtocolConvention: protoco
 ]
 
 { #category : 'validation' }
-RwAbstractReaderWriterVisitor >> _validateRowanMonticelloClassCategoryConvention: category forPackageNamed: packageName [
+RwAbstractReaderWriterVisitor >> _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName [
 
-	(category beginsWith: packageName) ifTrue: [ ^ self ].
+	(aClassDefinition category beginsWith: packageName) ifTrue: [ ^ self ].
 	self error: 'not yet implemented'
 ]
 
@@ -191,7 +191,7 @@ RwAbstractReaderWriterVisitor >> projectName [
 ]
 
 { #category : 'validation' }
-RwAbstractReaderWriterVisitor >> validateClassCategory: category  forPackageNamed: packageName [
+RwAbstractReaderWriterVisitor >> validateClassCategory: aClassDefinition  forPackageNamed: packageName [
 
 	"
 		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
@@ -202,9 +202,9 @@ RwAbstractReaderWriterVisitor >> validateClassCategory: category  forPackageName
 	"signal an error if the protocol does not conform to the convention for the current project"
 
 	self packageConvention = 'RowanHybrid'
-		ifTrue: [ ^ self _validateRowanHybridClassCategoryConvention: category forPackageNamed: packageName ].
+		ifTrue: [ ^ self _validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName ].
 	self packageConvention = 'Monticello'
-		ifTrue: [ ^ self _validateRowanMonticelloClassCategoryConvention: category forPackageNamed: packageName ].
+		ifTrue: [ ^ self _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName ].
 	"Rowan - no convention ... any old protocol is fine"
 ]
 

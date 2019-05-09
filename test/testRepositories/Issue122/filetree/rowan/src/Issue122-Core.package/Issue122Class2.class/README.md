@@ -1,1 +1,1 @@
-this is a test comment for Issue361Class2
+this is a test comment for Issue122Class2

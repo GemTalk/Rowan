@@ -92,7 +92,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithClassCa
 	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
-	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122.ston'.
+	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_CategoryValidationError.ston'.
 
 "create project definition"
 	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
