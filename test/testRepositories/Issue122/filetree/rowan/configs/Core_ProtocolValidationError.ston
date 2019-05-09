@@ -1,5 +1,5 @@
 RwComponentLoadConfiguration {
-	#name : 'Core_CategoryValidationError',
+	#name : 'Core_ProtocolValidationError',
 	#comment : '',
 	#projectName : 'Issue122',
 	#version : '0.1.0',
@@ -9,7 +9,7 @@ RwComponentLoadConfiguration {
 		] : {
 			'core' : {
 				#packageNames : [
-					'Issue122-Core-CategoryValidationError'
+					'Issue122-Core-ProtocolValidationError'
 				]
 			}
 		}

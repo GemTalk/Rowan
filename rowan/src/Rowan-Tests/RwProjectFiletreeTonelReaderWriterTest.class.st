@@ -147,6 +147,54 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithClassCa
 ]
 
 { #category : 'tests' }
+RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithExtensionMethodProtocolValidationError [
+	"https://github.com/GemTalk/Rowan/issues/122"
+
+	"
+		extension method protocol doesn't start with a *
+			OR
+		extension method protocol does start with a *, but does not match the package name
+	"
+
+	| rowanSpec projectHome specUrlString projectDefinition |	
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+
+"identify spec to be used for reading project"
+	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Extension-ProtocolValidationError.ston'.
+
+"create project definition"
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+"point to directory where the disk project is located"
+	projectDefinition projectHome: projectHome.
+
+"read project -- hit protocol is invalid error"
+	Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition
+]
+
+{ #category : 'tests' }
+RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithMethodProtocolValidationError [
+	"https://github.com/GemTalk/Rowan/issues/122"
+
+	"method protocol starts with a * for non-extension method"
+
+	| rowanSpec projectHome specUrlString projectDefinition |	
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+
+"identify spec to be used for reading project"
+	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Core-ProtocolValidationError.ston'.
+
+"create project definition"
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+"point to directory where the disk project is located"
+	projectDefinition projectHome: projectHome.
+
+"read project -- hit protocol is invalid error"
+	Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition
+]
+
+{ #category : 'tests' }
 RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
 
 	"multiple class extensions from multiple packages for multiple classes"

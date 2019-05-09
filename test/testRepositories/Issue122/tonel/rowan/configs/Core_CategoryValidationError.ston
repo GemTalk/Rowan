@@ -1,5 +1,5 @@
 RwComponentLoadConfiguration {
-	#name : 'Core',
+	#name : 'Core_CategoryValidationError',
 	#comment : '',
 	#projectName : 'Issue122',
 	#version : '0.1.0',
