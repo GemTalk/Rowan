@@ -3148,6 +3148,21 @@ true.
 
 doit
 (RwProjectTool
+	subclass: 'RwPrjDiffTool'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwProjectTool
 	subclass: 'RwPrjDisownTool'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -34461,30 +34476,6 @@ patchForPackageName: packageName
 	^ CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot
 %
 
-category: 'smalltalk api'
-method: RwPkgDiffTool
-patchSpecification: aRwSpecification packageName: packageName
-
-	| repo diskSnapshot imageSnapshot |
-	super specification: aRwSpecification.
-	repo := CypressAbstractRepository
-		onUrl: (CypressUrl absoluteFromText: specification repositoryUrl)
-		alias: ''.
-
-	diskSnapshot := repo readPackageStructureForPackageNamed: packageName.
-	imageSnapshot := (CypressPackageDefinition named: packageName) snapshot.
-	^ CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot
-%
-
-category: 'smalltalk api'
-method: RwPkgDiffTool
-patchSpecUrl: aString packageName: packageName
-
-	^ self
-		patchSpecification: (RwSpecification fromUrl: aString)
-		packageName: packageName
-%
-
 ! Class implementation for 'RwPkgDisownTool'
 
 !		Instance methods for 'RwPkgDisownTool'
@@ -34766,6 +34757,13 @@ classmethod: RwProjectTool
 delete
 
 	^ RwPrjDeleteTool new
+%
+
+category: 'commands'
+classmethod: RwProjectTool
+diff
+
+	^ RwPrjDiffTool new
 %
 
 category: 'commands'
@@ -37088,6 +37086,27 @@ forceDeleteProjectSetDefinition: projectSetDefinitionToDelete
 		(selectorDict at: 'class' ifAbsent: [ #() ]) do: [:selector |
 			GsFile gciLogServer: '		', selector asString printString.
 			behavior removeSelector: selector ] ].
+%
+
+! Class implementation for 'RwPrjDiffTool'
+
+!		Instance methods for 'RwPrjDiffTool'
+
+category: 'smalltalk api'
+method: RwPrjDiffTool
+patchesForProjectNamed: projectName
+
+	| imagePackageDefinitions imageProject diskProject diskPackageDefinitionMaps |
+	imageProject := Rowan image loadedProjectNamed: projectName.
+	imagePackageDefinitions := imageProject loadedPackageDefinitions.
+	diskProject := (imageProject asDefinition readProjectSet) projectNamed: imageProject name.
+	diskPackageDefinitionMaps := diskProject packages.
+	^ imagePackageDefinitions collect: [:packageDefinition |
+		| imageSnapshot diskPackageDefinition diskSnapshot |
+		imageSnapshot := (RwCypressPackageStructure fromPackage: packageDefinition ) snapshot.
+		diskPackageDefinition := diskPackageDefinitionMaps at: packageDefinition name.
+		diskSnapshot := (RwCypressPackageStructure fromPackage: diskPackageDefinition ) snapshot.
+		packageDefinition name -> (CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot) ]
 %
 
 ! Class implementation for 'RwPrjDisownTool'
