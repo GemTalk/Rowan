@@ -1,18 +1,18 @@
 Class {
 	#name : 'RwInvalidClassCategoryConventionErrorNotification',
-	#superclass : 'RwNotification',
+	#superclass : 'RwInvalidCategoryProtocolConventionErrorNotification',
 	#instVars : [
-		'classDefinition',
-		'packageConvention'
+		'classDefinition'
 	],
 	#category : 'Rowan-Core'
 }
 
 { #category : 'instance creation' }
-RwInvalidClassCategoryConventionErrorNotification class >> signalWithClassDefinition: aClassDefinition packageConvention: aString [
+RwInvalidClassCategoryConventionErrorNotification class >> signalWithClassDefinition: aClassDefinition packageName: packageName packageConvention: aString [
 
 	^ self new
 			classDefinition: aClassDefinition;
+			packageName:  packageName;
 			packageConvention: aString;
 			signal
 ]
@@ -28,6 +28,13 @@ RwInvalidClassCategoryConventionErrorNotification >> _errorMessage [
 		self packageConvention printString
 ]
 
+{ #category : 'Handling' }
+RwInvalidClassCategoryConventionErrorNotification >> classCategoryNotificationDo: classCategoryBlock nonExtensionMethodNoficationDo: nonExtensionMethodBlock extensionMethodPackageMismatchNoficationDo: extensionMethodPackageMismatchBlock  extensionMethodNonExtensionProtocolNoficationDo: extensionMethodNonExtensionProtocolBlock [
+	"class category does not match the package name"
+
+	classCategoryBlock value
+]
+
 { #category : 'accessing' }
 RwInvalidClassCategoryConventionErrorNotification >> classDefinition [
 
@@ -38,22 +45,4 @@ RwInvalidClassCategoryConventionErrorNotification >> classDefinition [
 RwInvalidClassCategoryConventionErrorNotification >> classDefinition: aClassDefinition [
 
 	classDefinition := aClassDefinition
-]
-
-{ #category : 'Handling' }
-RwInvalidClassCategoryConventionErrorNotification >> defaultAction [
- 
-	^ Error signal: self _errorMessage
-]
-
-{ #category : 'accessing' }
-RwInvalidClassCategoryConventionErrorNotification >> packageConvention [
-
-	^ packageConvention
-]
-
-{ #category : 'accessing' }
-RwInvalidClassCategoryConventionErrorNotification >> packageConvention: aString [
-
-	packageConvention := aString
 ]

@@ -1,19 +1,16 @@
 Class {
 	#name : 'RwInvalidMethodProtocolConventionErrorNotification',
-	#superclass : 'RwNotification',
+	#superclass : 'RwInvalidCategoryProtocolConventionErrorNotification',
 	#instVars : [
 		'methodDefinition',
 		'className',
-		'packageName',
-		'isMeta',
-		'packageConvention',
-		'violationReason'
+		'isMeta'
 	],
 	#category : 'Rowan-Core'
 }
 
 { #category : 'instance creation' }
-RwInvalidMethodProtocolConventionErrorNotification class >> signalWithMethodDefinition: aMethodDefinition className: className isMeta: isMeta packageName:  packageName packageConvention: aString violationReason: violationReason [
+RwInvalidMethodProtocolConventionErrorNotification class >> signalWithMethodDefinition: aMethodDefinition className: className isMeta: isMeta packageName:  packageName packageConvention: aString [
 
 	^ self new
 			methodDefinition: aMethodDefinition;
@@ -21,7 +18,6 @@ RwInvalidMethodProtocolConventionErrorNotification class >> signalWithMethodDefi
 			isMeta: isMeta;
 			packageName:  packageName;
 			packageConvention: aString;
-			violationReason: violationReason;
 			signal
 ]
 
@@ -36,7 +32,7 @@ RwInvalidMethodProtocolConventionErrorNotification >> _errorMessage [
 		self packageName printString,
 		' violates the package convention ', 
 		self packageConvention printString, 
-		'. ', self violationReason
+		'. '
 ]
 
 { #category : 'private' }
@@ -85,40 +81,4 @@ RwInvalidMethodProtocolConventionErrorNotification >> methodDefinition [
 RwInvalidMethodProtocolConventionErrorNotification >> methodDefinition: aMethodDef [
 
 	methodDefinition := aMethodDef
-]
-
-{ #category : 'accessing' }
-RwInvalidMethodProtocolConventionErrorNotification >> packageConvention [
-
-	^ packageConvention
-]
-
-{ #category : 'accessing' }
-RwInvalidMethodProtocolConventionErrorNotification >> packageConvention: aString [
-
-	packageConvention := aString
-]
-
-{ #category : 'accessing' }
-RwInvalidMethodProtocolConventionErrorNotification >> packageName [
-
-	^ packageName
-]
-
-{ #category : 'accessing' }
-RwInvalidMethodProtocolConventionErrorNotification >> packageName: aString [
-
-	packageName := aString
-]
-
-{ #category : 'accessing' }
-RwInvalidMethodProtocolConventionErrorNotification >> violationReason [
-
-	^ violationReason
-]
-
-{ #category : 'accessing' }
-RwInvalidMethodProtocolConventionErrorNotification >> violationReason: aString [
-
-	violationReason := aString
 ]

@@ -630,8 +630,8 @@ true.
 
 doit
 (RwNotification
-	subclass: 'RwInvalidClassCategoryConventionErrorNotification'
-	instVarNames: #( classDefinition packageConvention )
+	subclass: 'RwInvalidCategoryProtocolConventionErrorNotification'
+	instVarNames: #( packageName packageConvention )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -644,9 +644,69 @@ true.
 %
 
 doit
-(RwNotification
+(RwInvalidCategoryProtocolConventionErrorNotification
+	subclass: 'RwInvalidClassCategoryConventionErrorNotification'
+	instVarNames: #( classDefinition )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwInvalidCategoryProtocolConventionErrorNotification
 	subclass: 'RwInvalidMethodProtocolConventionErrorNotification'
-	instVarNames: #( methodDefinition className packageName isMeta packageConvention violationReason )
+	instVarNames: #( methodDefinition className isMeta )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwInvalidMethodProtocolConventionErrorNotification
+	subclass: 'RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwInvalidMethodProtocolConventionErrorNotification
+	subclass: 'RwExtensionProtocolNonExtensionMethodErrorNotification'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwInvalidMethodProtocolConventionErrorNotification
+	subclass: 'RwNonExtensionProtocolExtensionMethodErrorNotification'
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -7175,21 +7235,85 @@ loadedProject: aLoadedProject
 	loadedProject := aLoadedProject
 %
 
+! Class implementation for 'RwInvalidCategoryProtocolConventionErrorNotification'
+
+!		Instance methods for 'RwInvalidCategoryProtocolConventionErrorNotification'
+
+category: 'Handling'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+classCategoryNotificationDo: classCategoryBlock nonExtensionMethodNoficationDo: nonExtensionMethodBlock extensionMethodPackageMismatchNoficationDo: extensionMethodPackageMismatchBlock  extensionMethodNonExtensionProtocolNoficationDo: extensionMethodNonExtensionProtocolBlock
+	"helper method for use in exception handling block ... avoid isKindOf:"
+
+	
+	self subclassResponsibility: #classCategoryNotificationDo:nonExtensionMethodNoficationDo:extensionMethodPackageMismatchNoficationDo:extensionMethodNonExtensionProtocolNoficationDo:
+%
+
+category: 'Handling'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+defaultAction
+ 
+	^ Error signal: self _errorMessage
+%
+
+category: 'accessing'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+packageConvention
+
+	^ packageConvention
+%
+
+category: 'accessing'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+packageConvention: aString
+
+	packageConvention := aString
+%
+
+category: 'accessing'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+packageName
+
+	^ packageName
+%
+
+category: 'accessing'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+packageName: aString
+
+	packageName := aString
+%
+
+category: 'private'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+_errorMessage
+
+	^ self subclassResponsibility: #_errorMessage
+%
+
 ! Class implementation for 'RwInvalidClassCategoryConventionErrorNotification'
 
 !		Class methods for 'RwInvalidClassCategoryConventionErrorNotification'
 
 category: 'instance creation'
 classmethod: RwInvalidClassCategoryConventionErrorNotification
-signalWithClassDefinition: aClassDefinition packageConvention: aString
+signalWithClassDefinition: aClassDefinition packageName: packageName packageConvention: aString
 
 	^ self new
 			classDefinition: aClassDefinition;
+			packageName:  packageName;
 			packageConvention: aString;
 			signal
 %
 
 !		Instance methods for 'RwInvalidClassCategoryConventionErrorNotification'
+
+category: 'Handling'
+method: RwInvalidClassCategoryConventionErrorNotification
+classCategoryNotificationDo: classCategoryBlock nonExtensionMethodNoficationDo: nonExtensionMethodBlock extensionMethodPackageMismatchNoficationDo: extensionMethodPackageMismatchBlock  extensionMethodNonExtensionProtocolNoficationDo: extensionMethodNonExtensionProtocolBlock
+	"class category does not match the package name"
+
+	classCategoryBlock value
+%
 
 category: 'accessing'
 method: RwInvalidClassCategoryConventionErrorNotification
@@ -7203,27 +7327,6 @@ method: RwInvalidClassCategoryConventionErrorNotification
 classDefinition: aClassDefinition
 
 	classDefinition := aClassDefinition
-%
-
-category: 'Handling'
-method: RwInvalidClassCategoryConventionErrorNotification
-defaultAction
- 
-	^ Error signal: self _errorMessage
-%
-
-category: 'accessing'
-method: RwInvalidClassCategoryConventionErrorNotification
-packageConvention
-
-	^ packageConvention
-%
-
-category: 'accessing'
-method: RwInvalidClassCategoryConventionErrorNotification
-packageConvention: aString
-
-	packageConvention := aString
 %
 
 category: 'private'
@@ -7244,7 +7347,7 @@ _errorMessage
 
 category: 'instance creation'
 classmethod: RwInvalidMethodProtocolConventionErrorNotification
-signalWithMethodDefinition: aMethodDefinition className: className isMeta: isMeta packageName:  packageName packageConvention: aString violationReason: violationReason
+signalWithMethodDefinition: aMethodDefinition className: className isMeta: isMeta packageName:  packageName packageConvention: aString
 
 	^ self new
 			methodDefinition: aMethodDefinition;
@@ -7252,7 +7355,6 @@ signalWithMethodDefinition: aMethodDefinition className: className isMeta: isMet
 			isMeta: isMeta;
 			packageName:  packageName;
 			packageConvention: aString;
-			violationReason: violationReason;
 			signal
 %
 
@@ -7307,48 +7409,6 @@ methodDefinition: aMethodDef
 	methodDefinition := aMethodDef
 %
 
-category: 'accessing'
-method: RwInvalidMethodProtocolConventionErrorNotification
-packageConvention
-
-	^ packageConvention
-%
-
-category: 'accessing'
-method: RwInvalidMethodProtocolConventionErrorNotification
-packageConvention: aString
-
-	packageConvention := aString
-%
-
-category: 'accessing'
-method: RwInvalidMethodProtocolConventionErrorNotification
-packageName
-
-	^ packageName
-%
-
-category: 'accessing'
-method: RwInvalidMethodProtocolConventionErrorNotification
-packageName: aString
-
-	packageName := aString
-%
-
-category: 'accessing'
-method: RwInvalidMethodProtocolConventionErrorNotification
-violationReason
-
-	^ violationReason
-%
-
-category: 'accessing'
-method: RwInvalidMethodProtocolConventionErrorNotification
-violationReason: aString
-
-	violationReason := aString
-%
-
 category: 'private'
 method: RwInvalidMethodProtocolConventionErrorNotification
 _errorMessage
@@ -7361,7 +7421,7 @@ _errorMessage
 		self packageName printString,
 		' violates the package convention ', 
 		self packageConvention printString, 
-		'. ', self violationReason
+		'. '
 %
 
 category: 'private'
@@ -7369,6 +7429,63 @@ method: RwInvalidMethodProtocolConventionErrorNotification
 _methodPrintString
 
 	^ self className, (self isMeta ifTrue: [ ' class>>' ] ifFalse: [ '>>' ]), self methodDefinition selector
+%
+
+! Class implementation for 'RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification'
+
+!		Instance methods for 'RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification'
+
+category: 'Handling'
+method: RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
+classCategoryNotificationDo: classCategoryBlock nonExtensionMethodNoficationDo: nonExtensionMethodBlock extensionMethodPackageMismatchNoficationDo: extensionMethodPackageMismatchBlock  extensionMethodNonExtensionProtocolNoficationDo: extensionMethodNonExtensionProtocolBlock
+	"extension method protocol does start with a *, but does not match the package name"
+
+	extensionMethodPackageMismatchBlock value
+%
+
+category: 'private'
+method: RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
+_errorMessage
+
+	^ super _errorMessage, 'The extension protocol does not match the package of the extension method.'
+%
+
+! Class implementation for 'RwExtensionProtocolNonExtensionMethodErrorNotification'
+
+!		Instance methods for 'RwExtensionProtocolNonExtensionMethodErrorNotification'
+
+category: 'Handling'
+method: RwExtensionProtocolNonExtensionMethodErrorNotification
+classCategoryNotificationDo: classCategoryBlock nonExtensionMethodNoficationDo: nonExtensionMethodBlock extensionMethodPackageMismatchNoficationDo: extensionMethodPackageMismatchBlock  extensionMethodNonExtensionProtocolNoficationDo: extensionMethodNonExtensionProtocolBlock
+	"method protocol starts with a * for non-extension method"
+
+	nonExtensionMethodBlock value
+%
+
+category: 'private'
+method: RwExtensionProtocolNonExtensionMethodErrorNotification
+_errorMessage
+
+	^ super _errorMessage, 'The protocol should not start with a *, as the method is NOT an extension method.'
+%
+
+! Class implementation for 'RwNonExtensionProtocolExtensionMethodErrorNotification'
+
+!		Instance methods for 'RwNonExtensionProtocolExtensionMethodErrorNotification'
+
+category: 'Handling'
+method: RwNonExtensionProtocolExtensionMethodErrorNotification
+classCategoryNotificationDo: classCategoryBlock nonExtensionMethodNoficationDo: nonExtensionMethodBlock extensionMethodPackageMismatchNoficationDo: extensionMethodPackageMismatchBlock  extensionMethodNonExtensionProtocolNoficationDo: extensionMethodNonExtensionProtocolBlock
+	"extension method protocol doesn't start with a *"
+
+	extensionMethodNonExtensionProtocolBlock value
+%
+
+category: 'private'
+method: RwNonExtensionProtocolExtensionMethodErrorNotification
+_errorMessage
+
+	^ super _errorMessage, 'The protocol should start with a *, as the method IS an extension method.'
 %
 
 ! Class implementation for 'RwPerformingUnpackagedEditNotification'
@@ -31460,10 +31577,10 @@ method: RwAbstractReaderWriterVisitor
 _validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName
 
 	aClassDefinition category = packageName ifTrue: [ ^ self ].
-	(RwInvalidClassCategoryConventionErrorNotification signalWithClassDefinition: aClassDefinition packageConvention: 'RowanHybrid')
-		ifTrue: [ 
-			"repair the class category"
-			aClassDefinition category: packageName ].
+	RwInvalidClassCategoryConventionErrorNotification 
+		signalWithClassDefinition: aClassDefinition 
+			packageName: packageName 
+			packageConvention: 'RowanHybrid'
 %
 
 category: 'validation'
@@ -31476,25 +31593,40 @@ _validateRowanHybridProtocolConvention:  methodDef className: className isMeta: 
 		ifTrue: [
 			currentClassDefinition
 				ifNotNil: [
-					"protocol should not start with $* -- an obvious violation"
-					RwInvalidMethodProtocolConventionErrorNotification 
+					"protocol should not start with $* for a non-extension method"
+					RwExtensionProtocolNonExtensionMethodErrorNotification 
 						signalWithMethodDefinition: methodDef
-						className: className 
-						isMeta: isMeta 
-						packageName:  packageName
-						packageConvention: 'RowanHybrid'
-						violationReason: 'The protocol should not start with a *, as the method is NOT an extension method.'] ]
+							className: className 
+							isMeta: isMeta 
+							packageName:  packageName
+							packageConvention: 'RowanHybrid'.
+					^ self ] ]
 		ifFalse: [
 			currentClassDefinition 
 				ifNotNil:  [ 
 					"protocol does not start with $* as expected"
 					^ self ] ].			
 	"validate conformance to convention for extension method"
+	(protocol at: 1) = $*
+		ifFalse: [
+			"extension method protocol must start with a *"
+			RwNonExtensionProtocolExtensionMethodErrorNotification
+				signalWithMethodDefinition: methodDef
+					className: className 
+					isMeta: isMeta 
+					packageName:  packageName
+					packageConvention: 'RowanHybrid'.
+			^ self  ].
 	canonProtocol := protocol asLowercase.
 	expectedProtocol := '*', packageName asLowercase.
 	canonProtocol = expectedProtocol ifTrue: [ ^ self ].
-	"protocol does not conform to Rowan Hybrid convention"
-	self error: 'not yet implemented'
+	"protocol does not match package name"
+	RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
+		signalWithMethodDefinition: methodDef
+			className: className 
+			isMeta: isMeta 
+			packageName:  packageName
+			packageConvention: 'RowanHybrid'
 %
 
 category: 'validation'
@@ -31502,7 +31634,7 @@ method: RwAbstractReaderWriterVisitor
 _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName
 
 	(aClassDefinition category beginsWith: packageName) ifTrue: [ ^ self ].
-	RwInvalidClassCategoryConventionErrorNotification signalWithClassDefinition: aClassDefinition packageConvention: 'Monticello'
+	RwInvalidClassCategoryConventionErrorNotification signalWithClassDefinition: aClassDefinition packageName: packageName packageConvention: 'Monticello'
 %
 
 category: 'validation'
