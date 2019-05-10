@@ -70,20 +70,10 @@ RowanPackageService >> classHierarchy [
 { #category : 'client commands' }
 RowanPackageService >> compileClass: definitionString [
 
-	| theClass classService packageService |
-	theClass := definitionString evaluate.
-	classService := RowanClassService new name: theClass name. 
-	classService update. 
-	classService isNewClass: true.
-	classService packageName = name 
-		ifTrue:[
-			self selectedClass: classService
-		]
-		ifFalse:[
-			packageService := RowanPackageService forPackageNamed: classService packageName. 
-			packageService update. 
-			packageService selectedClass: classService].
-	RowanCommandResult addResult: classService.
+	|  anonymousMethod |
+	anonymousMethod := definitionString _compileInContext: nil 
+       symbolList: GsSession currentSession symbolList.
+	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
 ]
 
 { #category : 'rowan' }
@@ -295,6 +285,28 @@ RowanPackageService >> projectName [
 { #category : 'Updating' }
 RowanPackageService >> projectName: newValue [
 	projectName := newValue
+]
+
+{ #category : 'client commands' }
+RowanPackageService >> recompileMethodsAfterClassCompilation [
+
+	"compileClass: must be run first"
+	| theClass classService packageService |
+
+	theClass := [(UserGlobals at: #jadeiteCompileClassMethod) _executeInContext: nil] 
+		ensure: [UserGlobals at: #jadeiteCompileClassMethod put: nil].
+	classService := RowanClassService new name: theClass name. 
+	classService update. 
+	classService isNewClass: true.
+	classService packageName = name 
+		ifTrue:[
+			self selectedClass: classService
+		]
+		ifFalse:[
+			packageService := RowanPackageService forPackageNamed: classService packageName. 
+			packageService update. 
+			packageService selectedClass: classService].
+	RowanCommandResult addResult: classService.
 ]
 
 { #category : 'client commands' }
