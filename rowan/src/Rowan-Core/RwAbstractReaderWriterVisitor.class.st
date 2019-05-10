@@ -72,15 +72,22 @@ RwAbstractReaderWriterVisitor >> _validateRowanHybridClassCategoryConvention: aC
 ]
 
 { #category : 'validation' }
-RwAbstractReaderWriterVisitor >> _validateRowanHybridProtocolConvention: protocol forPackageNamed: packageName [
+RwAbstractReaderWriterVisitor >> _validateRowanHybridProtocolConvention:  methodDef className: className isMeta: isMeta forPackageNamed:  packageName [
 
-	| canonProtocol expectedProtocol |
+	| canonProtocol expectedProtocol protocol |
+	protocol := methodDef protocol.
 	(protocol at: 1) = $*
 		ifTrue: [
 			currentClassDefinition
 				ifNotNil: [
-					"protocol should not start with $* if NOT an extension method"
-					self error: 'not yet implemented']]
+					"protocol should not start with $* -- an obvious violation"
+					RwInvalidMethodProtocolConventionErrorNotification 
+						signalWithMethodDefinition: methodDef
+						className: className 
+						isMeta: isMeta 
+						packageName:  packageName
+						packageConvention: 'RowanHybrid'
+						violationReason: 'The protocol should not start with a *, as the method is NOT an extension method.'] ]
 		ifFalse: [
 			currentClassDefinition 
 				ifNotNil:  [ 
@@ -212,7 +219,7 @@ RwAbstractReaderWriterVisitor >> validateClassCategory: aClassDefinition  forPac
 ]
 
 { #category : 'validation' }
-RwAbstractReaderWriterVisitor >> validateMethodProtocol: protocol  forPackageNamed: packageName [
+RwAbstractReaderWriterVisitor >> validateMethodDefinitionProtocol: methodDef className: className isMeta: isMeta forPackageNamed:  packageName [
 
 	"
 		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
@@ -223,8 +230,8 @@ RwAbstractReaderWriterVisitor >> validateMethodProtocol: protocol  forPackageNam
 	"signal an error if the protocol does not conform to the convention for the current project"
 
 	self packageConvention = 'RowanHybrid'
-		ifTrue: [ ^ self _validateRowanHybridProtocolConvention: protocol forPackageNamed: packageName ].
+		ifTrue: [ ^ self _validateRowanHybridProtocolConvention: methodDef className: className isMeta: isMeta forPackageNamed:  packageName ].
 	self packageConvention = 'Monticello'
-		ifTrue: [ ^ self _validateRowanMonticelloProtocolConvention: protocol forPackageNamed: packageName ].
+		ifTrue: [ ^ self _validateRowanMonticelloProtocolConvention:methodDef className: className isMeta: isMeta forPackageNamed:  packageName ].
 	"Rowan - no convention ... any old protocol is fine"
 ]

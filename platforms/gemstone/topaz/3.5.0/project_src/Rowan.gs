@@ -645,6 +645,21 @@ true.
 
 doit
 (RwNotification
+	subclass: 'RwInvalidMethodProtocolConventionErrorNotification'
+	instVarNames: #( methodDefinition className packageName isMeta packageConvention violationReason )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwNotification
 	subclass: 'RwPerformingUnpackagedEditNotification'
 	instVarNames: #( informMessage )
 	classVars: #(  )
@@ -7219,8 +7234,141 @@ _errorMessage
 		self classDefinition category printString, 
 		' for the class ', 
 		self classDefinition name printString, 
-		' violates the package convention', 
+		' violates the package convention ', 
 		self packageConvention printString
+%
+
+! Class implementation for 'RwInvalidMethodProtocolConventionErrorNotification'
+
+!		Class methods for 'RwInvalidMethodProtocolConventionErrorNotification'
+
+category: 'instance creation'
+classmethod: RwInvalidMethodProtocolConventionErrorNotification
+signalWithMethodDefinition: aMethodDefinition className: className isMeta: isMeta packageName:  packageName packageConvention: aString violationReason: violationReason
+
+	^ self new
+			methodDefinition: aMethodDefinition;
+			className: className;
+			isMeta: isMeta;
+			packageName:  packageName;
+			packageConvention: aString;
+			violationReason: violationReason;
+			signal
+%
+
+!		Instance methods for 'RwInvalidMethodProtocolConventionErrorNotification'
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+className
+
+	^ className
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+className: aString
+
+	className := aString
+%
+
+category: 'Handling'
+method: RwInvalidMethodProtocolConventionErrorNotification
+defaultAction
+ 
+	^ Error signal: self _errorMessage
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+isMeta
+
+	^ isMeta
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+isMeta: aBool
+
+	isMeta := aBool
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+methodDefinition
+
+	^ methodDefinition
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+methodDefinition: aMethodDef
+
+	methodDefinition := aMethodDef
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+packageConvention
+
+	^ packageConvention
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+packageConvention: aString
+
+	packageConvention := aString
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+packageName
+
+	^ packageName
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+packageName: aString
+
+	packageName := aString
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+violationReason
+
+	^ violationReason
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+violationReason: aString
+
+	violationReason := aString
+%
+
+category: 'private'
+method: RwInvalidMethodProtocolConventionErrorNotification
+_errorMessage
+
+	^ 'The method protocol ', 
+		self methodDefinition protocol printString, 
+		' for the method ', 
+		self _methodPrintString printString, 
+		' in the package ', 
+		self packageName printString,
+		' violates the package convention ', 
+		self packageConvention printString, 
+		'. ', self violationReason
+%
+
+category: 'private'
+method: RwInvalidMethodProtocolConventionErrorNotification
+_methodPrintString
+
+	^ self className, (self isMeta ifTrue: [ ' class>>' ] ifFalse: [ '>>' ]), self methodDefinition selector
 %
 
 ! Class implementation for 'RwPerformingUnpackagedEditNotification'
@@ -31255,7 +31403,7 @@ validateClassCategory: aClassDefinition  forPackageNamed: packageName
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-validateMethodProtocol: protocol  forPackageNamed: packageName
+validateMethodDefinitionProtocol: methodDef className: className isMeta: isMeta forPackageNamed:  packageName
 
 	"
 		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
@@ -31266,9 +31414,9 @@ validateMethodProtocol: protocol  forPackageNamed: packageName
 	"signal an error if the protocol does not conform to the convention for the current project"
 
 	self packageConvention = 'RowanHybrid'
-		ifTrue: [ ^ self _validateRowanHybridProtocolConvention: protocol forPackageNamed: packageName ].
+		ifTrue: [ ^ self _validateRowanHybridProtocolConvention: methodDef className: className isMeta: isMeta forPackageNamed:  packageName ].
 	self packageConvention = 'Monticello'
-		ifTrue: [ ^ self _validateRowanMonticelloProtocolConvention: protocol forPackageNamed: packageName ].
+		ifTrue: [ ^ self _validateRowanMonticelloProtocolConvention:methodDef className: className isMeta: isMeta forPackageNamed:  packageName ].
 	"Rowan - no convention ... any old protocol is fine"
 %
 
@@ -31320,15 +31468,22 @@ _validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: p
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-_validateRowanHybridProtocolConvention: protocol forPackageNamed: packageName
+_validateRowanHybridProtocolConvention:  methodDef className: className isMeta: isMeta forPackageNamed:  packageName
 
-	| canonProtocol expectedProtocol |
+	| canonProtocol expectedProtocol protocol |
+	protocol := methodDef protocol.
 	(protocol at: 1) = $*
 		ifTrue: [
 			currentClassDefinition
 				ifNotNil: [
-					"protocol should not start with $* if NOT an extension method"
-					self error: 'not yet implemented']]
+					"protocol should not start with $* -- an obvious violation"
+					RwInvalidMethodProtocolConventionErrorNotification 
+						signalWithMethodDefinition: methodDef
+						className: className 
+						isMeta: isMeta 
+						packageName:  packageName
+						packageConvention: 'RowanHybrid'
+						violationReason: 'The protocol should not start with a *, as the method is NOT an extension method.'] ]
 		ifFalse: [
 			currentClassDefinition 
 				ifNotNil:  [ 
@@ -33281,15 +33436,15 @@ category: 'method reading'
 method: RwRepositoryComponentProjectFiletreeReaderVisitor
 readMethodDirectories: classDirectory forClassDefinition: classDefinition inPackage: packageName
 
-	(self readMethodDirectory: classDirectory / 'instance' inPackage: packageName) do: [:methodDefinition |
+	(self readMethodDirectory: classDirectory / 'instance' forClassDefinition: classDefinition isClassMeta: false inPackage: packageName) do: [:methodDefinition |
 		classDefinition addInstanceMethodDefinition: methodDefinition ].
-	(self readMethodDirectory: classDirectory / 'class' inPackage: packageName) do: [:methodDefinition |
+	(self readMethodDirectory: classDirectory / 'class' forClassDefinition: classDefinition isClassMeta: true inPackage: packageName) do: [:methodDefinition |
 		classDefinition addClassMethodDefinition: methodDefinition ]
 %
 
 category: 'method reading'
 method: RwRepositoryComponentProjectFiletreeReaderVisitor
-readMethodDirectory: methodDirectory inPackage: packageName
+readMethodDirectory: methodDirectory forClassDefinition: classDefinition isClassMeta: isClassMeta inPackage: packageName
 
 	| methodDefinitions methodDefinitionStream |
 	methodDefinitions := {}.
@@ -33299,12 +33454,17 @@ readMethodDirectory: methodDirectory inPackage: packageName
 	methodDirectory files do: [:file |
 		file extension = 'st'
 			ifTrue: [ 
-				| protocol methodSource methodStream |
+				| protocol methodSource methodStream methodDef |
 				methodStream := file contents  readStreamPortable.
 				protocol := methodStream nextLine.
 				methodSource := methodStream upToEnd.
-				self validateMethodProtocol: protocol  forPackageNamed: packageName.
-				methodDefinitionStream nextPut: (RwMethodDefinition newForSource: methodSource protocol: protocol) ] ].
+				methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
+				self 
+					validateMethodDefinitionProtocol: methodDef 
+						className: classDefinition name
+						isMeta: isClassMeta 
+						forPackageNamed:  packageName.
+				methodDefinitionStream nextPut: methodDef ] ].
 
 	^ methodDefinitions
 %
@@ -33392,13 +33552,19 @@ definitionForType: aString
 
 category: 'tonel parser'
 method: RwRepositoryComponentProjectTonelReaderVisitor
-newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source
+newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: protocol source: source
 
-	self validateMethodProtocol: category  forPackageNamed: self currentPackageDefinition name.
-	^ RwMethodDefinition
+	| methodDef |
+	methodDef := RwMethodDefinition
 		newForSelector: selector 
-			protocol: category 
-			source: source
+			protocol: protocol 
+			source: source.
+	self 
+		validateMethodDefinitionProtocol: methodDef 
+			className: className
+			isMeta: meta
+			forPackageNamed: self currentPackageDefinition name.
+	^ methodDef
 %
 
 category: 'tonel parser'

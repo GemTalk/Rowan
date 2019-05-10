@@ -24,7 +24,7 @@ RwInvalidClassCategoryConventionErrorNotification >> _errorMessage [
 		self classDefinition category printString, 
 		' for the class ', 
 		self classDefinition name printString, 
-		' violates the package convention', 
+		' violates the package convention ', 
 		self packageConvention printString
 ]
 

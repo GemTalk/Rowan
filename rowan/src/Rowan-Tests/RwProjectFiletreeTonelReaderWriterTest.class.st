@@ -191,7 +191,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithMethodP
 	projectDefinition projectHome: projectHome.
 
 "read project -- hit protocol is invalid error"
-	Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition
+	self 
+		should: [ Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+		raise: Error.
 ]
 
 { #category : 'tests' }

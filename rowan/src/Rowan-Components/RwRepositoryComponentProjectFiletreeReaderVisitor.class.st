@@ -123,14 +123,14 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> readClassExtensionDirectory
 { #category : 'method reading' }
 RwRepositoryComponentProjectFiletreeReaderVisitor >> readMethodDirectories: classDirectory forClassDefinition: classDefinition inPackage: packageName [
 
-	(self readMethodDirectory: classDirectory / 'instance' inPackage: packageName) do: [:methodDefinition |
+	(self readMethodDirectory: classDirectory / 'instance' forClassDefinition: classDefinition isClassMeta: false inPackage: packageName) do: [:methodDefinition |
 		classDefinition addInstanceMethodDefinition: methodDefinition ].
-	(self readMethodDirectory: classDirectory / 'class' inPackage: packageName) do: [:methodDefinition |
+	(self readMethodDirectory: classDirectory / 'class' forClassDefinition: classDefinition isClassMeta: true inPackage: packageName) do: [:methodDefinition |
 		classDefinition addClassMethodDefinition: methodDefinition ]
 ]
 
 { #category : 'method reading' }
-RwRepositoryComponentProjectFiletreeReaderVisitor >> readMethodDirectory: methodDirectory inPackage: packageName [
+RwRepositoryComponentProjectFiletreeReaderVisitor >> readMethodDirectory: methodDirectory forClassDefinition: classDefinition isClassMeta: isClassMeta inPackage: packageName [
 
 	| methodDefinitions methodDefinitionStream |
 	methodDefinitions := {}.
@@ -140,12 +140,17 @@ RwRepositoryComponentProjectFiletreeReaderVisitor >> readMethodDirectory: method
 	methodDirectory files do: [:file |
 		file extension = 'st'
 			ifTrue: [ 
-				| protocol methodSource methodStream |
+				| protocol methodSource methodStream methodDef |
 				methodStream := file contents  readStreamPortable.
 				protocol := methodStream nextLine.
 				methodSource := methodStream upToEnd.
-				self validateMethodProtocol: protocol  forPackageNamed: packageName.
-				methodDefinitionStream nextPut: (RwMethodDefinition newForSource: methodSource protocol: protocol) ] ].
+				methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
+				self 
+					validateMethodDefinitionProtocol: methodDef 
+						className: classDefinition name
+						isMeta: isClassMeta 
+						forPackageNamed:  packageName.
+				methodDefinitionStream nextPut: methodDef ] ].
 
 	^ methodDefinitions
 ]
