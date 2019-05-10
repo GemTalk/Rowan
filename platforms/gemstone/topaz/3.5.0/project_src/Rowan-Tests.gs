@@ -18640,6 +18640,65 @@ testReadExistingDiskProject
 
 category: 'tests'
 method: RwProjectFiletreeTonelReaderWriterTest
+testReadExistingDiskProjectWithBothMethodProtocolValidationError
+	"https://github.com/GemTalk/Rowan/issues/122"
+
+	"method protocol starts with a * for non-extension method"
+
+	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet patches |	
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+
+"identify spec to be used for reading project"
+	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Both-ProtocolValidationError.ston'.
+
+"create project definition"
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+"point to directory where the disk project is located"
+	projectDefinition projectHome: projectHome.
+
+"read project -- catch and resume the notification ... repair the protocol"
+	[ projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+		on: RwInvalidCategoryProtocolConventionErrorNotification
+		do: [:ex | 
+			ex
+				classCategoryNotificationDo: [ self assert: 'Unexpected notification ', ex class printString ]
+				nonExtensionMethodNoficationDo: [ 
+					"repair the protocol"
+					ex methodDefinition protocol: 'repaired'.
+					ex resume ] 
+				extensionMethodPackageMismatchNoficationDo: [ 
+					"repair the protocol - extension method protocol does start with a *, but does not match the package name"
+					ex methodDefinition protocol: '*', ex packageName asLowercase.
+					ex resume ]  
+				extensionMethodNonExtensionProtocolNoficationDo: [ 
+					"repair the protocol - extension method protocol doesn't start with a *"
+					ex methodDefinition protocol: '*', ex packageName asLowercase.
+					ex resume ] ].
+
+"validation - read from disk, without repairing the issues (creating a patch reads without repairing validation errors"
+	patches := Rowan projectTools diff patchesForProjectDefinition: projectDefinition.
+	self assert: patches size = 1.
+	patches do: [:assoc |
+		| packageName patch operations |
+		packageName := assoc key.
+		patch := assoc value.
+		self assert: packageName = 'Issue122-Extension1-ProtocolValidationError'.
+		operations := patch operations.
+		self assert: operations size = 2.
+		operations do: [:modification |
+			| definition |
+			definition := modification modification.
+			definition selector = 'method1'
+				ifTrue: [ self assert: definition category = '*issue122-extension1-protocolvalidationerror' ]
+				ifFalse: [
+					definition selector = 'method20'
+						ifTrue: [ self assert: definition category = '*issue122-extension1-protocolvalidationerror' ]
+						ifFalse: [ self assert: false description: 'unknown definition ', definition printString ] ] ] ]
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
 testReadExistingDiskProjectWithClassCategoryValidationError
 	"https://github.com/GemTalk/Rowan/issues/122"
 
@@ -18682,7 +18741,7 @@ testReadExistingDiskProjectWithClassCategoryValidationError
 				extensionMethodNonExtensionProtocolNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ] ].
 
 "validation"
-	self _validateIssue122RepairedInvalidClassCategoryConventionProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
+	self _validateIssue122Repaired_CategoryValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
 %
 
 category: 'tests'
@@ -18736,7 +18795,7 @@ testReadExistingDiskProjectWithExtensionMethodProtocolValidationError
 					ex resume ] ].
 
 "validation"
-	self _validateIssue122RepairedInvalidExtensionProtocolConventionProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
+	self _validateIssue122Repaired_ExtensionProtocolValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
 %
 
 category: 'tests'
@@ -18783,7 +18842,7 @@ testReadExistingDiskProjectWithMethodProtocolValidationError
 				extensionMethodNonExtensionProtocolNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ] ].
 
 "validation"
-	self _validateIssue122RepairedInvalidMethodProtocolConventionProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
+	self _validateIssue122Repaired_CoreProtocolValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
 %
 
 category: 'tests'
@@ -18872,7 +18931,7 @@ _validateIssue122ProjectDefinitionSet: projectDefinitionSet projectName: project
 
 category: 'private'
 method: RwProjectFiletreeTonelReaderWriterTest
-_validateIssue122RepairedInvalidClassCategoryConventionProjectDefinitionSet: projectDefinitionSet projectName: projectName
+_validateIssue122Repaired_CategoryValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectName
 
 	self assert: projectDefinitionSet  projects size = 1.
 	projectDefinitionSet  projects keysAndValuesDo: [:projName :projectDefinition |  
@@ -18895,7 +18954,33 @@ _validateIssue122RepairedInvalidClassCategoryConventionProjectDefinitionSet: pro
 
 category: 'private'
 method: RwProjectFiletreeTonelReaderWriterTest
-_validateIssue122RepairedInvalidExtensionProtocolConventionProjectDefinitionSet: projectDefinitionSet projectName: projectName
+_validateIssue122Repaired_CoreProtocolValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectName
+
+	self assert: projectDefinitionSet  projects size = 1.
+	projectDefinitionSet  projects keysAndValuesDo: [:projName :projectDefinition |  
+		self assert: projectDefinition name = projectName.
+		self assert: projectDefinition packages size = 1.
+		projectDefinition  packages keysAndValuesDo: [:packageName :packageDefinition |
+			packageDefinition name = 'Issue122-Core-ProtocolValidationError'
+				ifTrue: [
+					self assert: packageDefinition classExtensions isEmpty.
+					self assert: packageDefinition classDefinitions size = 1.
+					packageDefinition classDefinitions keysAndValuesDo: [:className :classDefinition | 
+						classDefinition name = 'Issue122Class1'
+							ifTrue: [
+								self assert: classDefinition category = packageName.
+								self assert: classDefinition instanceMethodDefinitions size = 1.
+								self assert: classDefinition classMethodDefinitions size = 1.
+								classDefinition instanceMethodDefinitions keysAndValuesDo: [:selector :methodDefinition | 
+									self assert: selector = #method6.
+									self assert: methodDefinition protocol = 'repaired' ] ]
+							ifFalse: [  self assert: false description: 'unexpected class definition ', classDefinition name printString  ] ] ]
+				ifFalse: [ self assert: false description: 'unexpected package definition ', packageDefinition name printString ] ] ]
+%
+
+category: 'private'
+method: RwProjectFiletreeTonelReaderWriterTest
+_validateIssue122Repaired_ExtensionProtocolValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectName
 
 
 	self assert: projectDefinitionSet  projects size = 1.
@@ -18945,32 +19030,6 @@ _validateIssue122RepairedInvalidExtensionProtocolConventionProjectDefinitionSet:
 														ifFalse: [ self assert: false description: 'unexpected method definition ', methodDefinition selector printString ] ] ] ]
 											ifFalse: [ self assert: false description: 'unexpected classExtenstion definition ', classExtension name printString ] ] ]
 						ifFalse: [ self assert: false description: 'unexpected package definition ', packageDefinition name printString ] ] ] ]
-%
-
-category: 'private'
-method: RwProjectFiletreeTonelReaderWriterTest
-_validateIssue122RepairedInvalidMethodProtocolConventionProjectDefinitionSet: projectDefinitionSet projectName: projectName
-
-	self assert: projectDefinitionSet  projects size = 1.
-	projectDefinitionSet  projects keysAndValuesDo: [:projName :projectDefinition |  
-		self assert: projectDefinition name = projectName.
-		self assert: projectDefinition packages size = 1.
-		projectDefinition  packages keysAndValuesDo: [:packageName :packageDefinition |
-			packageDefinition name = 'Issue122-Core-ProtocolValidationError'
-				ifTrue: [
-					self assert: packageDefinition classExtensions isEmpty.
-					self assert: packageDefinition classDefinitions size = 1.
-					packageDefinition classDefinitions keysAndValuesDo: [:className :classDefinition | 
-						classDefinition name = 'Issue122Class1'
-							ifTrue: [
-								self assert: classDefinition category = packageName.
-								self assert: classDefinition instanceMethodDefinitions size = 1.
-								self assert: classDefinition classMethodDefinitions size = 1.
-								classDefinition instanceMethodDefinitions keysAndValuesDo: [:selector :methodDefinition | 
-									self assert: selector = #method6.
-									self assert: methodDefinition protocol = 'repaired' ] ]
-							ifFalse: [  self assert: false description: 'unexpected class definition ', classDefinition name printString  ] ] ]
-				ifFalse: [ self assert: false description: 'unexpected package definition ', packageDefinition name printString ] ] ]
 %
 
 ! Class implementation for 'RwProjectFiletreeReaderWriterTest'

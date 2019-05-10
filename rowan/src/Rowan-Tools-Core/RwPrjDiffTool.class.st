@@ -5,12 +5,14 @@ Class {
 }
 
 { #category : 'smalltalk api' }
-RwPrjDiffTool >> patchesForProjectNamed: projectName [
+RwPrjDiffTool >> patchesForProjectDefinition: imageProjectDefinition [
 
-	| imagePackageDefinitions imageProject diskProject diskPackageDefinitionMaps |
-	imageProject := Rowan image loadedProjectNamed: projectName.
-	imagePackageDefinitions := imageProject loadedPackageDefinitions.
-	diskProject := (imageProject asDefinition readProjectSet) projectNamed: imageProject name.
+	| imagePackageDefinitions diskProjectSet diskProject diskPackageDefinitionMaps |
+	imagePackageDefinitions := imageProjectDefinition packages values.
+	[ diskProjectSet :=  imageProjectDefinition readProjectSet ]
+		on: RwInvalidCategoryProtocolConventionErrorNotification
+		do: [:ex | ex resume ].
+	diskProject := diskProjectSet projectNamed: imageProjectDefinition name.
 	diskPackageDefinitionMaps := diskProject packages.
 	^ imagePackageDefinitions collect: [:packageDefinition |
 		| imageSnapshot diskPackageDefinition diskSnapshot |
@@ -18,4 +20,12 @@ RwPrjDiffTool >> patchesForProjectNamed: projectName [
 		diskPackageDefinition := diskPackageDefinitionMaps at: packageDefinition name.
 		diskSnapshot := (RwCypressPackageStructure fromPackage: diskPackageDefinition ) snapshot.
 		packageDefinition name -> (CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot) ]
+]
+
+{ #category : 'smalltalk api' }
+RwPrjDiffTool >> patchesForProjectNamed: projectName [
+
+	| imageProject |
+	imageProject := Rowan image loadedProjectNamed: projectName.
+	^ self patchesForProjectDefinition: imageProject asDefinition
 ]
