@@ -18924,7 +18924,15 @@ _validateIssue122ProjectDefinitionSet: projectDefinitionSet projectName: project
 							self assert: packageDefinition classExtensions size = 1.
 							packageDefinition classExtensions keysAndValuesDo: [:className :classExtension | 
 								classExtension name = 'Issue122Class1'
-									ifTrue: [ self assert: classExtension instanceMethodDefinitions size = 1 ]
+									ifTrue: [ 
+										self assert: classExtension instanceMethodDefinitions size = 2.
+										classExtension instanceMethodDefinitions keysAndValuesDo: [:selector :methodDefinition | 
+											selector = #method1
+												ifTrue: [	self assert: methodDefinition protocol = '*issue122-extension1' ]
+												ifFalse: [
+													selector = #method122
+														ifTrue: [	self assert: methodDefinition protocol = '*issue122-extension1' ]
+														ifFalse: [ self assert: false description: 'unexpected method definition ', methodDefinition selector printString ] ] ] ]
 									ifFalse: [ self assert: false description: 'unexpected classExtenstion definition ', classExtension name printString ] ] ]
 						ifFalse: [ self assert: false description: 'unexpected package definition ', packageDefinition name printString ] ] ] ]
 %

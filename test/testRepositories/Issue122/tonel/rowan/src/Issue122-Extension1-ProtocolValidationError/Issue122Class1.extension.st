@@ -6,7 +6,7 @@ Issue122Class1 >> method20 [ ^20
 ]
 
 { #category : 'accessing' }
-Issue122Class1 >> method1 [ ^1
+Issue122Class3 >> method1 [ ^1
 
 ]
 
