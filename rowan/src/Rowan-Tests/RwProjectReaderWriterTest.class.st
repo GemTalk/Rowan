@@ -159,36 +159,6 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 	^ projectDefinition
 ]
 
-{ #category : 'private' }
-RwProjectReaderWriterTest >> _writeProjectSetDefinition: projectSetDefinition writerVisitorClass: writerVisitorClass format: repositoryFormat [
-
-	| projectName projectDefinition projectSetModification visitor projectHome |
-"project set"
-	projectName := projectSetDefinition projectNames at: 1.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
-
-	projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
-
-"set project up for using filesystem"
-	projectHome := filesystem workingDirectory / projectName.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
-
-	projectDefinition projectHome: projectHome.
-	projectDefinition packageFormat: repositoryFormat.
-	projectDefinition create.
-
-"write project set"
-	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new. "compare against empty project to write out entire project"
-	visitor := writerVisitorClass new
-		repositoryRootPath: projectHome / projectName;
-		yourself.
-
-	visitor visit: projectSetModification.
-]
-
 { #category : 'running' }
 RwProjectReaderWriterTest >> setUp [
 	super setUp.

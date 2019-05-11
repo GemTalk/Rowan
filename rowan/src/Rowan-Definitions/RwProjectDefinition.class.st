@@ -258,9 +258,11 @@ RwProjectDefinition >> packages: aPackageDefinitionDictionary [
 { #category : 'copying' }
 RwProjectDefinition >> postCopy [
 
+	| oldPackages |
 	super postCopy.
-	packages := packages copy.
-	packages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
+	oldPackages := packages.
+	packages := Dictionary new.
+	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
 ]
 
 { #category : 'tool api' }

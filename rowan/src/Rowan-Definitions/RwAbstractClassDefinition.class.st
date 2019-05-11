@@ -242,10 +242,13 @@ RwAbstractClassDefinition >> name: aString [
 { #category : 'copying' }
 RwAbstractClassDefinition >> postCopy [
 
-	super postCopy.
-	classMethodDefinitions :=  classMethodDefinitions copy.
-	instanceMethodDefinitions := instanceMethodDefinitions copy
-
+	| oldDefs |
+	oldDefs := classMethodDefinitions.
+	classMethodDefinitions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classMethodDefinitions at: key put: value copy ].
+	oldDefs := instanceMethodDefinitions.
+	instanceMethodDefinitions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | instanceMethodDefinitions at: key put: value copy ].
 ]
 
 { #category : 'accessing' }

@@ -118,7 +118,7 @@ RwModificationWriterVisitor >> changedPackage: aPackageModification [
 RwModificationWriterVisitor >> changedProject: aProjectModification [
 
 	currentProjectDefinition := aProjectModification after.
-self halt.
+self error: 'not yet implemented'.
 ]
 
 { #category : 'actions' }

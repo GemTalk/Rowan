@@ -135,10 +135,14 @@ RwPackageDefinition >> key [
 { #category : 'copying' }
 RwPackageDefinition >> postCopy [
 
+	| oldDefs |
 	super postCopy.
-	classDefinitions := classDefinitions copy.
-	classExtensions := classExtensions copy
-
+	oldDefs := classDefinitions.
+	classDefinitions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classDefinitions at: key put: value copy ].
+	oldDefs := classExtensions.
+	classExtensions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classExtensions at: key put: value copy ].
 ]
 
 { #category : 'accessing' }
