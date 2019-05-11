@@ -2790,7 +2790,7 @@ true.
 doit
 (RwModificationWriterVisitor
 	subclass: 'RwModificationCypressFamilyWriterVisitor'
-	instVarNames: #( instanceFileNameMap classFileNameMap classDefFileNameMap classExtFileNameMap packageDefFileNameMap )
+	instVarNames: #( instanceFileNameMap classFileNameMap classDefFileNameMap classExtFileNameMap packageDefFileNameMap packageDefBeforeFileNameMap )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -31742,7 +31742,7 @@ method: RwModificationWriterVisitor
 changedProject: aProjectModification
 
 	currentProjectDefinition := aProjectModification after.
-self halt.
+	self processProject: aProjectModification
 %
 
 category: 'actions'
@@ -32483,9 +32483,9 @@ category: 'actions'
 method: RwModificationCypressFamilyWriterVisitor
 deletedPackage: aPackageModification
 
-	currentPackageDefinition := aPackageModification after.
+	currentPackageDefinition := aPackageModification before.
 
-	self halt. "delete the whole package directory"
+	self _packageSourceDir ensureDeleteAll.	"delete the whole package directory"
 %
 
 category: 'package writing'
@@ -32519,7 +32519,11 @@ method: RwModificationCypressFamilyWriterVisitor
 _packageSourceDir
 
 	| filename |
-	filename := packageDefFileNameMap at:  self currentPackageDefinition name.
+	filename := packageDefFileNameMap 
+		at:  self currentPackageDefinition name 
+		ifAbsent: [
+			"in the case of package removal, need to use the before package map"
+			packageDefBeforeFileNameMap at: self currentPackageDefinition name ].
 	^ self packageExtension isEmpty
 		ifTrue: [ self _projectSourceDir /filename ]
 		ifFalse: [ self _projectSourceDir /filename, self packageExtension ]
@@ -32755,6 +32759,7 @@ processProject: aProjectModification
 	| projectProperties |
 
 	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
+	packageDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification before packages.
 
 	"confirm that the project source is written in Tonel format"
 	(self _repositoryFormatFor:  aProjectModification after packagesRoot) = 'filetree' ifFalse: [ self error: 'expected tonel format repository' ].
@@ -33111,6 +33116,8 @@ processProject: aProjectModification
 
 	| format |
 	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
+	packageDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification before packages.
+
 	(format := self _repositoryFormatFor:  aProjectModification after packagesRoot) = 'tonel' ifFalse: [ self error: 'expected tonel format repository, instead format is ', format printString ].
 	super processProject: aProjectModification.
 %
@@ -39112,8 +39119,11 @@ category: 'copying'
 method: RwDefinition
 postCopy
 
+	| oldProperties |
 	super postCopy.
-	properties := properties copy
+	oldProperties := properties.
+	properties := Dictionary new.
+	oldProperties keysAndValuesDo: [:key :value| properties at: key put: value copy ]
 %
 
 category: 'printing'
@@ -39434,9 +39444,13 @@ category: 'copying'
 method: RwAbstractClassDefinition
 postCopy
 
-	super postCopy.
-	classMethodDefinitions :=  classMethodDefinitions copy.
-	instanceMethodDefinitions := instanceMethodDefinitions copy
+	| oldDefs |
+	oldDefs := classMethodDefinitions.
+	classMethodDefinitions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classMethodDefinitions at: key put: value copy ].
+	oldDefs := instanceMethodDefinitions.
+	instanceMethodDefinitions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | instanceMethodDefinitions at: key put: value copy ].
 %
 
 category: 'accessing'
@@ -40532,9 +40546,14 @@ category: 'copying'
 method: RwPackageDefinition
 postCopy
 
+	| oldDefs |
 	super postCopy.
-	classDefinitions := classDefinitions copy.
-	classExtensions := classExtensions copy
+	oldDefs := classDefinitions.
+	classDefinitions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classDefinitions at: key put: value copy ].
+	oldDefs := classExtensions.
+	classExtensions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classExtensions at: key put: value copy ].
 %
 
 category: 'accessing'
@@ -40848,9 +40867,11 @@ category: 'copying'
 method: RwProjectDefinition
 postCopy
 
+	| oldPackages |
 	super postCopy.
-	packages := packages copy.
-	packages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
+	oldPackages := packages.
+	packages := Dictionary new.
+	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
 %
 
 category: 'tool api'
@@ -60497,8 +60518,9 @@ category: '*rowan-core-definitions-extensions'
 method: RwProjectDefinition
 _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 
-	({ 'spec'. RwLoadedProject _projectDefinitionSourceKey } includes: propertyKey)
+	({ 'spec'. RwLoadedProject _projectDefinitionSourceKey. 'projectRef' } includes: propertyKey)
 		ifTrue: [ 
+		"projectRef entries are considered to be equal for comparison purposes"
 		"spec entries are considered to be equal for comparison purposes"
 		"_projectDefinitionSourceKey entries are considered equal for comparison purpposes"
 		^ true ].

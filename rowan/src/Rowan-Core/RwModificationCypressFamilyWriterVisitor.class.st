@@ -6,7 +6,8 @@ Class {
 		'classFileNameMap',
 		'classDefFileNameMap',
 		'classExtFileNameMap',
-		'packageDefFileNameMap'
+		'packageDefFileNameMap',
+		'packageDefBeforeFileNameMap'
 	],
 	#category : 'Rowan-Core'
 }
@@ -30,7 +31,11 @@ RwModificationCypressFamilyWriterVisitor >> _commentOf: aClassDefinition [
 RwModificationCypressFamilyWriterVisitor >> _packageSourceDir [
 
 	| filename |
-	filename := packageDefFileNameMap at:  self currentPackageDefinition name.
+	filename := packageDefFileNameMap 
+		at:  self currentPackageDefinition name 
+		ifAbsent: [
+			"in the case of package removal, need to use the before package map"
+			packageDefBeforeFileNameMap at: self currentPackageDefinition name ].
 	^ self packageExtension isEmpty
 		ifTrue: [ self _projectSourceDir /filename ]
 		ifFalse: [ self _projectSourceDir /filename, self packageExtension ]
@@ -68,9 +73,9 @@ RwModificationCypressFamilyWriterVisitor >> changedPackage: aPackageModification
 { #category : 'actions' }
 RwModificationCypressFamilyWriterVisitor >> deletedPackage: aPackageModification [
 
-	currentPackageDefinition := aPackageModification after.
+	currentPackageDefinition := aPackageModification before.
 
-	self halt. "delete the whole package directory"
+	self _packageSourceDir ensureDeleteAll.	"delete the whole package directory"
 ]
 
 { #category : 'package writing' }

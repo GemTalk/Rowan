@@ -433,7 +433,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removePackage [
 	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
 		Expecting to incrementally write only the changed definitions"
 
-	| projectName writtenProjectDefinition readProjectSetDefinition changedPojectSetDefinition visitor
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
 		projectSetModification writeProjectSetDefinition changedProjectDefinition changedProjectSetModification
 		writerVisitorClass writtenPojectSetDefinition|
 
@@ -463,18 +463,19 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removePackage [
 	writerVisitorClass := self _repositoryFormat = 'tonel'
 		ifTrue: [ RwModificationTonelWriterVisitor ]
 		ifFalse: [ RwModificationFiletreeWriterVisitor ].
-	changedPojectSetDefinition:= RwProjectSetDefinition new.
-	changedPojectSetDefinition addDefinition: changedProjectDefinition.
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
 	writtenPojectSetDefinition:= RwProjectSetDefinition new.
 	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
-	changedProjectSetModification := changedPojectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
 	visitor := writerVisitorClass new.
 
 	visitor visit: changedProjectSetModification.
 
 "validation"
 	readProjectSetDefinition := changedProjectDefinition readProjectSet.
-	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedPojectSetDefinition; yourself.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
 	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
 	self assert: projectSetModification isEmpty.
+
 ]

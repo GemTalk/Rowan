@@ -118,7 +118,7 @@ RwModificationWriterVisitor >> changedPackage: aPackageModification [
 RwModificationWriterVisitor >> changedProject: aProjectModification [
 
 	currentProjectDefinition := aProjectModification after.
-self error: 'not yet implemented'.
+	self processProject: aProjectModification
 ]
 
 { #category : 'actions' }
