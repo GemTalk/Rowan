@@ -124,9 +124,7 @@ RwModificationWriterVisitor >> changedProject: aProjectModification [
 { #category : 'actions' }
 RwModificationWriterVisitor >> deletedClass: aClassModification [
 
-	currentClassDefinition := aClassModification after.
-
-	self halt. "delete the class file"
+	self subclassResponsibility: #deletedClass:
 ]
 
 { #category : 'actions' }

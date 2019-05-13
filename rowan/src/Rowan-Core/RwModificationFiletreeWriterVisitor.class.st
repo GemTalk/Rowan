@@ -68,7 +68,11 @@ RwModificationFiletreeWriterVisitor >> _classExtensionOf: aClassExtension [
 RwModificationFiletreeWriterVisitor >> _classExtensionSourceDir [
 
 	| filename |
-	filename := classExtFileNameMap at:  self currentClassExtension name.
+	filename := classExtFileNameMap 
+		at:  self currentClassExtension name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classExtBeforeFileNameMap at: self currentClassExtension name ].
 	^ self _packageSourceDir / filename, 'extension'
 ]
 
@@ -76,7 +80,11 @@ RwModificationFiletreeWriterVisitor >> _classExtensionSourceDir [
 RwModificationFiletreeWriterVisitor >> _classSourceDir [
 
 	| filename |
-	filename := classDefFileNameMap at:  self currentClassDefinition name.
+	filename := classDefFileNameMap 
+		at:  self currentClassDefinition name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classDefBeforeFileNameMap at: self currentClassDefinition name ].
 	^ self _packageSourceDir / filename, 'class'
 ]
 
@@ -334,6 +342,14 @@ RwModificationFiletreeWriterVisitor >> addedPackage: aPackageModification [
 			self error: 'only useCypressPropertiesFile not supported.' ].
 
 	self processPackage: aPackageModification
+]
+
+{ #category : 'actions' }
+RwModificationFiletreeWriterVisitor >> deletedClass: aClassModification [
+
+	currentClassDefinition := aClassModification before.
+
+	self _classSourceDir ensureDeleteAll
 ]
 
 { #category : 'package writing' }

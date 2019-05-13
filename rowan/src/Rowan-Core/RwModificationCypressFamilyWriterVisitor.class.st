@@ -4,8 +4,12 @@ Class {
 	#instVars : [
 		'instanceFileNameMap',
 		'classFileNameMap',
+		'instanceBeforeFileNameMap',
+		'classBeforeFileNameMap',
 		'classDefFileNameMap',
 		'classExtFileNameMap',
+		'classDefBeforeFileNameMap',
+		'classExtBeforeFileNameMap',
 		'packageDefFileNameMap',
 		'packageDefBeforeFileNameMap'
 	],
@@ -61,16 +65,6 @@ RwModificationCypressFamilyWriterVisitor >> _toSTON: anObject [
 ]
 
 { #category : 'actions' }
-RwModificationCypressFamilyWriterVisitor >> changedPackage: aPackageModification [
-
-	currentPackageDefinition := aPackageModification after.
-
-	self halt. "anything need to be done for tonel?"
-
-	self processPackage: aPackageModification
-]
-
-{ #category : 'actions' }
 RwModificationCypressFamilyWriterVisitor >> deletedPackage: aPackageModification [
 
 	currentPackageDefinition := aPackageModification before.
@@ -89,6 +83,8 @@ RwModificationCypressFamilyWriterVisitor >> processPackage: aPackageModification
 
 	classDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification after classDefinitions.
 	classExtFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification after classExtensions.
+	classDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification before classDefinitions.
+	classExtBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification before classExtensions.
 
 	super processPackage: aPackageModification
 ]

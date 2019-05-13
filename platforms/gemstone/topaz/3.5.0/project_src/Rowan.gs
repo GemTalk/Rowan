@@ -2790,7 +2790,7 @@ true.
 doit
 (RwModificationWriterVisitor
 	subclass: 'RwModificationCypressFamilyWriterVisitor'
-	instVarNames: #( instanceFileNameMap classFileNameMap classDefFileNameMap classExtFileNameMap packageDefFileNameMap packageDefBeforeFileNameMap )
+	instVarNames: #( instanceFileNameMap classFileNameMap instanceBeforeFileNameMap classBeforeFileNameMap classDefFileNameMap classExtFileNameMap classDefBeforeFileNameMap classExtBeforeFileNameMap packageDefFileNameMap packageDefBeforeFileNameMap )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -31749,9 +31749,7 @@ category: 'actions'
 method: RwModificationWriterVisitor
 deletedClass: aClassModification
 
-	currentClassDefinition := aClassModification after.
-
-	self halt. "delete the class file"
+	self subclassResponsibility: #deletedClass:
 %
 
 category: 'actions'
@@ -32470,17 +32468,6 @@ orderedDictionaryClass
 
 category: 'actions'
 method: RwModificationCypressFamilyWriterVisitor
-changedPackage: aPackageModification
-
-	currentPackageDefinition := aPackageModification after.
-
-	self halt. "anything need to be done for tonel?"
-
-	self processPackage: aPackageModification
-%
-
-category: 'actions'
-method: RwModificationCypressFamilyWriterVisitor
 deletedPackage: aPackageModification
 
 	currentPackageDefinition := aPackageModification before.
@@ -32501,6 +32488,8 @@ processPackage: aPackageModification
 
 	classDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification after classDefinitions.
 	classExtFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification after classExtensions.
+	classDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification before classDefinitions.
+	classExtBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification before classExtensions.
 
 	super processPackage: aPackageModification
 %
@@ -32683,6 +32672,15 @@ addedPackage: aPackageModification
 	self processPackage: aPackageModification
 %
 
+category: 'actions'
+method: RwModificationFiletreeWriterVisitor
+deletedClass: aClassModification
+
+	currentClassDefinition := aClassModification before.
+
+	self _classSourceDir ensureDeleteAll
+%
+
 category: 'package writing'
 method: RwModificationFiletreeWriterVisitor
 monticelloMetadata
@@ -32848,7 +32846,11 @@ method: RwModificationFiletreeWriterVisitor
 _classExtensionSourceDir
 
 	| filename |
-	filename := classExtFileNameMap at:  self currentClassExtension name.
+	filename := classExtFileNameMap 
+		at:  self currentClassExtension name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classExtBeforeFileNameMap at: self currentClassExtension name ].
 	^ self _packageSourceDir / filename, 'extension'
 %
 
@@ -32857,7 +32859,11 @@ method: RwModificationFiletreeWriterVisitor
 _classSourceDir
 
 	| filename |
-	filename := classDefFileNameMap at:  self currentClassDefinition name.
+	filename := classDefFileNameMap 
+		at:  self currentClassDefinition name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classDefBeforeFileNameMap at: self currentClassDefinition name ].
 	^ self _packageSourceDir / filename, 'class'
 %
 
@@ -33083,6 +33089,15 @@ addedPackage: aPackageModification
 	self processPackage: aPackageModification
 %
 
+category: 'actions'
+method: RwModificationTonelWriterVisitor
+deletedClass: aClassModification
+
+	currentClassDefinition := aClassModification before.
+
+	self _classSourceFile ensureDelete
+%
+
 category: 'class writing'
 method: RwModificationTonelWriterVisitor
 processClass: aClassModification
@@ -33127,7 +33142,11 @@ method: RwModificationTonelWriterVisitor
 _classExtensionSourceFile
 
 	| filename |
-	filename := classExtFileNameMap at:  self currentClassExtension name.
+	filename := classExtFileNameMap 
+		at:  self currentClassExtension name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classExtBeforeFileNameMap at: self currentClassExtension name ].
 	^ self _packageSourceDir / (filename, '.extension.st')
 %
 
@@ -33136,7 +33155,11 @@ method: RwModificationTonelWriterVisitor
 _classSourceFile
 
 	| filename |
-	filename := classDefFileNameMap at:  self currentClassDefinition name.
+	filename := classDefFileNameMap 
+		at:  self currentClassDefinition name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classDefBeforeFileNameMap at: self currentClassDefinition name ].
 	^ self _packageSourceDir / (filename, '.class.st')
 %
 
