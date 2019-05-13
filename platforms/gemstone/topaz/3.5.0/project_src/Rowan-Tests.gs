@@ -18849,6 +18849,89 @@ testWriterReader_A
 
 category: 'tests'
 method: RwProjectFiletreeTonelReaderWriterTest
+testWriterReader_B_emptyCLassExtension_1
+
+	"readers and writers need to be able to handle emtpy class extension structures (file or directory)"
+
+	"remove the class extension definition completely --- an empty package"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition
+		projectSetModification writeProjectSetDefinition |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	"remove the class extension definition"
+	(writtenProjectDefinition packageNamed: 'Issue361-Extension1')
+		removeClassExtensionDefinitionNamed: 'Issue361Class1'.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+	writeProjectSetDefinition := RwProjectSetDefinition new
+		addProject: writtenProjectDefinition.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
+testWriterReader_B_emptyCLassExtension_2
+
+	"readers and writers need to be able to handle emtpy class extension structures (file or directory)"
+
+	"remove the method from the class extension definition --- an empty extension definition"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition
+		projectSetModification writeProjectSetDefinition |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	"remove the class extension definition"
+	((writtenProjectDefinition packageNamed: 'Issue361-Extension1')
+		classExtensionDefinitionNamed: 'Issue361Class1' ifAbsent: [])
+			removeInstanceMethod: #method1.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+	writeProjectSetDefinition := RwProjectSetDefinition new
+		addProject: writtenProjectDefinition.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
 testWriterReader_B_removeClass
 
 	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
@@ -18880,6 +18963,60 @@ testWriterReader_B_removeClass
 	changedProjectDefinition := writtenProjectDefinition copy.
 	(changedProjectDefinition packageNamed: 'Issue361-Core')
 		removeClassNamed: 'Issue361Class1'.
+
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
+
+	visitor visit: changedProjectSetModification.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
+testWriterReader_B_removeExtensionClass
+
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition changedProjectSetModification
+		writerVisitorClass writtenPojectSetDefinition|
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	(changedProjectDefinition packageNamed: 'Issue361-Extension1')
+		removeClassExtensionDefinitionNamed: 'Issue361Class1'.
 
 "write changes"
 	writerVisitorClass := self _repositoryFormat = 'tonel'

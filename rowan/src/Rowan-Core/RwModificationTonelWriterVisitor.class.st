@@ -227,6 +227,14 @@ RwModificationTonelWriterVisitor >> deletedClass: aClassModification [
 	self _classSourceFile ensureDelete
 ]
 
+{ #category : 'actions' }
+RwModificationTonelWriterVisitor >> deletedClassExtension: aClassExtensionModification [
+
+	currentClassExtension := aClassExtensionModification before.
+
+	self _classExtensionSourceFile ensureDelete
+]
+
 { #category : 'class writing' }
 RwModificationTonelWriterVisitor >> processClass: aClassModification [
 

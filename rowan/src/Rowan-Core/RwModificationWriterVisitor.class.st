@@ -130,10 +130,7 @@ RwModificationWriterVisitor >> deletedClass: aClassModification [
 { #category : 'actions' }
 RwModificationWriterVisitor >> deletedClassExtension: aClassExtensionModification [
 
-	currentClassExtension := aClassExtensionModification after.
-
-
-	self halt. "delete the class extension file"
+	self subclassResponsibility: #deletedClassExtension:
 ]
 
 { #category : 'actions' }

@@ -31756,10 +31756,7 @@ category: 'actions'
 method: RwModificationWriterVisitor
 deletedClassExtension: aClassExtensionModification
 
-	currentClassExtension := aClassExtensionModification after.
-
-
-	self halt. "delete the class extension file"
+	self subclassResponsibility: #deletedClassExtension:
 %
 
 category: 'actions'
@@ -32681,6 +32678,15 @@ deletedClass: aClassModification
 	self _classSourceDir ensureDeleteAll
 %
 
+category: 'actions'
+method: RwModificationFiletreeWriterVisitor
+deletedClassExtension: aClassExtensionModification
+
+	currentClassExtension := aClassExtensionModification before.
+
+	self _classExtensionSourceDir ensureDeleteAll
+%
+
 category: 'package writing'
 method: RwModificationFiletreeWriterVisitor
 monticelloMetadata
@@ -33096,6 +33102,15 @@ deletedClass: aClassModification
 	currentClassDefinition := aClassModification before.
 
 	self _classSourceFile ensureDelete
+%
+
+category: 'actions'
+method: RwModificationTonelWriterVisitor
+deletedClassExtension: aClassExtensionModification
+
+	currentClassExtension := aClassExtensionModification before.
+
+	self _classExtensionSourceFile ensureDelete
 %
 
 category: 'class writing'
@@ -40591,6 +40606,13 @@ method: RwPackageDefinition
 removeClassExtensionDefinition: aClassExtension
 
 	self removeDefinition: aClassExtension from: classExtensions
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+removeClassExtensionDefinitionNamed: className
+
+	self removeKey: className from: classExtensions
 %
 
 category: 'accessing'

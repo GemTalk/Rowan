@@ -352,6 +352,14 @@ RwModificationFiletreeWriterVisitor >> deletedClass: aClassModification [
 	self _classSourceDir ensureDeleteAll
 ]
 
+{ #category : 'actions' }
+RwModificationFiletreeWriterVisitor >> deletedClassExtension: aClassExtensionModification [
+
+	currentClassExtension := aClassExtensionModification before.
+
+	self _classExtensionSourceDir ensureDeleteAll
+]
+
 { #category : 'package writing' }
 RwModificationFiletreeWriterVisitor >> monticelloMetadata [
 	"monticello metadata  --- for writing metadataless is the only supported format"
