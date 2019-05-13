@@ -430,6 +430,8 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_A [
 { #category : 'tests' }
 RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_emptyCLassExtension_1 [
 
+	"https://github.com/GemTalk/Rowan/issues/361"
+
 	"readers and writers need to be able to handle emtpy class extension structures (file or directory)"
 
 	"remove the class extension definition completely --- an empty package"
@@ -470,6 +472,8 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_emptyCLassExtension
 { #category : 'tests' }
 RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_emptyCLassExtension_2 [
 
+	"https://github.com/GemTalk/Rowan/issues/361"
+
 	"readers and writers need to be able to handle emtpy class extension structures (file or directory)"
 
 	"remove the method from the class extension definition --- an empty extension definition"
@@ -509,7 +513,74 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_emptyCLassExtension
 ]
 
 { #category : 'tests' }
+RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_emptyCLassExtension_3 [
+
+	"https://github.com/GemTalk/Rowan/issues/361"
+
+	"readers and writers need to be able to handle empty class extension structures (file or directory)"
+
+	"in order for the class extenstion structure handling to be correct, an empty class extension should be the same as a missing class extension
+		during comparison"
+
+	| projectName packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition classExtensionDefinition packageDefinition
+		className1 projectModifications |
+
+	projectName := 'issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension1'.
+	className1 := 'Issue361Class1'.
+
+"project definition1"
+	projectDefinition1 := (RwComponentProjectDefinition
+		projectName: projectName 
+			configurationNames: #('Core') 
+			groupNames: #('core') 
+			useGit: false 
+			projectUrl: '' 
+			comment: '')
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		yourself.
+	packageDefinition := projectDefinition1 packageNamed: packageName1.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		category: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	packageDefinition := projectDefinition1 packageNamed: packageName2.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+"project definition1"
+	projectDefinition2 := (RwComponentProjectDefinition
+		projectName: projectName 
+			configurationNames: #('Core') 
+			groupNames: #('core') 
+			useGit: false 
+			projectUrl: '' 
+			comment: '')
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		yourself.
+	packageDefinition := projectDefinition2 packageNamed: packageName1.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		category: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+	"leave packageName2 with an empty packageDefinition"
+
+"validate"
+	projectModifications := projectDefinition1 compareAgainstBase: projectDefinition2.
+	self assert: projectModifications isEmpty.
+	projectModifications := projectDefinition2 compareAgainstBase: projectDefinition1.
+	self assert: projectModifications isEmpty.
+]
+
+{ #category : 'tests' }
 RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeClass [
+
+	"https://github.com/GemTalk/Rowan/issues/361"
 
 	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
 		Expecting to incrementally write only the changed definitions"
@@ -564,6 +635,8 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeClass [
 { #category : 'tests' }
 RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeExtensionClass [
 
+	"https://github.com/GemTalk/Rowan/issues/361"
+
 	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
 		Expecting to incrementally write only the changed definitions"
 
@@ -616,6 +689,8 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeExtensionClas
 
 { #category : 'tests' }
 RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removePackage [
+
+	"https://github.com/GemTalk/Rowan/issues/361"
 
 	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
 		Expecting to incrementally write only the changed definitions"

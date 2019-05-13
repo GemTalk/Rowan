@@ -2,6 +2,10 @@ Class {
 	#name : 'RwModificationFiletreeWriterVisitor',
 	#superclass : 'RwModificationCypressFamilyWriterVisitor',
 	#instVars : [
+		'instanceFileNameMap',
+		'classFileNameMap',
+		'instanceBeforeFileNameMap',
+		'classBeforeFileNameMap',
 		'packageExtension',
 		'separateMethodMetaAndSource',
 		'noMethodMetaData',
@@ -360,6 +364,26 @@ RwModificationFiletreeWriterVisitor >> deletedClassExtension: aClassExtensionMod
 	self _classExtensionSourceDir ensureDeleteAll
 ]
 
+{ #category : 'actions' }
+RwModificationFiletreeWriterVisitor >> deletedMethodExtension: aMethodExtensionModification [
+
+	| methodDefinition methodDir methodFileName |
+
+	methodDefinition := aMethodExtensionModification before.
+
+	"create instance/class directory as needed ... write method source file"
+	 (aMethodExtensionModification isMeta
+		ifTrue: [
+			methodFileName := classBeforeFileNameMap at: methodDefinition selector.
+			methodDir := self _methodClassExtensionDir ensureCreateDirectory ]
+		ifFalse: [ 
+			methodFileName := instanceBeforeFileNameMap at: methodDefinition selector.
+			methodDir := self _methodInstanceExtensionDir ensureCreateDirectory ]) .
+
+
+	(methodDir / methodFileName, 'st') ensureDelete
+]
+
 { #category : 'package writing' }
 RwModificationFiletreeWriterVisitor >> monticelloMetadata [
 	"monticello metadata  --- for writing metadataless is the only supported format"
@@ -397,8 +421,10 @@ RwModificationFiletreeWriterVisitor >> processClass: aClassModification [
 				<< (self _typeClassDefinitionOf: self currentClassDefinition)
 				<< self _newLine ].
 
-	instanceFileNameMap  := self _createFileNameMapForMethods: self currentClassDefinition instanceMethodDefinitions.
-	classFileNameMap := self _createFileNameMapForMethods: self currentClassDefinition classMethodDefinitions.
+	instanceFileNameMap  := self _createFileNameMapForMethods: aClassModification after instanceMethodDefinitions.
+	classFileNameMap := self _createFileNameMapForMethods: aClassModification after classMethodDefinitions.
+	instanceBeforeFileNameMap  := self _createFileNameMapForMethods: aClassModification before instanceMethodDefinitions.
+	classBeforeFileNameMap := self _createFileNameMapForMethods: aClassModification before classMethodDefinitions.
 
 	aClassModification instanceMethodsModification acceptVisitor: self.
 	aClassModification classMethodsModification acceptVisitor: self
@@ -417,8 +443,10 @@ RwModificationFiletreeWriterVisitor >> processClassExtension: aClassExtensionMod
 				<< (self _classExtensionOf: self currentClassExtension)
 				<< self _newLine ].
 
-	instanceFileNameMap  := self _createFileNameMapForMethods: self currentClassExtension instanceMethodDefinitions.
-	classFileNameMap := self _createFileNameMapForMethods: self currentClassExtension classMethodDefinitions.
+	instanceFileNameMap  := self _createFileNameMapForMethods: aClassExtensionModification after instanceMethodDefinitions.
+	classFileNameMap := self _createFileNameMapForMethods: aClassExtensionModification after classMethodDefinitions.
+	instanceBeforeFileNameMap  := self _createFileNameMapForMethods: aClassExtensionModification before instanceMethodDefinitions.
+	classBeforeFileNameMap := self _createFileNameMapForMethods: aClassExtensionModification before classMethodDefinitions.
 
 	aClassExtensionModification instanceMethodsModification acceptVisitor: self.
 	aClassExtensionModification classMethodsModification acceptVisitor: self

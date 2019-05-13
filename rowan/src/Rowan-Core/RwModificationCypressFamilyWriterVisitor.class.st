@@ -2,10 +2,6 @@ Class {
 	#name : 'RwModificationCypressFamilyWriterVisitor',
 	#superclass : 'RwModificationWriterVisitor',
 	#instVars : [
-		'instanceFileNameMap',
-		'classFileNameMap',
-		'instanceBeforeFileNameMap',
-		'classBeforeFileNameMap',
 		'classDefFileNameMap',
 		'classExtFileNameMap',
 		'classDefBeforeFileNameMap',
