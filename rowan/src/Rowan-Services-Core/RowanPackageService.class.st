@@ -195,6 +195,13 @@ RowanPackageService >> isDirty: boolean [
 	isDirty := boolean
 ]
 
+{ #category : 'Accessing' }
+RowanPackageService >> jadeite_testClasses [
+
+	"for testing" 
+	^testClasses
+]
+
 { #category : 'rowan' }
 RowanPackageService >> loadedClasses [
 
@@ -407,7 +414,9 @@ RowanPackageService >> testClasses [
 					| classService |
 					classService := RowanClassService basicForClassNamed: testSubclass name.
 					testClasses detect:[:testClassService | testClassService name = classService name] ifNone:[
-						testClasses add: classService]]]]]. 
+					(self loadedClassExtensions keys asArray includes: classService name) ifFalse:[
+							"don't include extension classes"
+							testClasses add: classService]]]]]]. 
 	updateType := #testClasses:. 
 	testClasses := testClasses asArray. 
 	RowanCommandResult addResult: self.
