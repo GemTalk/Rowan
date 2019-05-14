@@ -2790,7 +2790,7 @@ true.
 doit
 (RwModificationWriterVisitor
 	subclass: 'RwModificationCypressFamilyWriterVisitor'
-	instVarNames: #( instanceFileNameMap classFileNameMap instanceBeforeFileNameMap classBeforeFileNameMap classDefFileNameMap classExtFileNameMap classDefBeforeFileNameMap classExtBeforeFileNameMap packageDefFileNameMap packageDefBeforeFileNameMap )
+	instVarNames: #( classDefFileNameMap classExtFileNameMap classDefBeforeFileNameMap classExtBeforeFileNameMap packageDefFileNameMap packageDefBeforeFileNameMap )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -2805,7 +2805,7 @@ true.
 doit
 (RwModificationCypressFamilyWriterVisitor
 	subclass: 'RwModificationFiletreeWriterVisitor'
-	instVarNames: #( packageExtension separateMethodMetaAndSource noMethodMetaData useCypressPropertiesFile monticelloMetadata )
+	instVarNames: #( instanceFileNameMap classFileNameMap instanceBeforeFileNameMap classBeforeFileNameMap packageExtension separateMethodMetaAndSource noMethodMetaData useCypressPropertiesFile monticelloMetadata )
 	classVars: #(  )
 	classInstVars: #( specials )
 	poolDictionaries: #()
@@ -32687,6 +32687,27 @@ deletedClassExtension: aClassExtensionModification
 	self _classExtensionSourceDir ensureDeleteAll
 %
 
+category: 'actions'
+method: RwModificationFiletreeWriterVisitor
+deletedMethodExtension: aMethodExtensionModification
+
+	| methodDefinition methodDir methodFileName |
+
+	methodDefinition := aMethodExtensionModification before.
+
+	"create instance/class directory as needed ... write method source file"
+	 (aMethodExtensionModification isMeta
+		ifTrue: [
+			methodFileName := classBeforeFileNameMap at: methodDefinition selector.
+			methodDir := self _methodClassExtensionDir ensureCreateDirectory ]
+		ifFalse: [ 
+			methodFileName := instanceBeforeFileNameMap at: methodDefinition selector.
+			methodDir := self _methodInstanceExtensionDir ensureCreateDirectory ]) .
+
+
+	(methodDir / methodFileName, 'st') ensureDelete
+%
+
 category: 'package writing'
 method: RwModificationFiletreeWriterVisitor
 monticelloMetadata
@@ -32728,8 +32749,10 @@ processClass: aClassModification
 				<< (self _typeClassDefinitionOf: self currentClassDefinition)
 				<< self _newLine ].
 
-	instanceFileNameMap  := self _createFileNameMapForMethods: self currentClassDefinition instanceMethodDefinitions.
-	classFileNameMap := self _createFileNameMapForMethods: self currentClassDefinition classMethodDefinitions.
+	instanceFileNameMap  := self _createFileNameMapForMethods: aClassModification after instanceMethodDefinitions.
+	classFileNameMap := self _createFileNameMapForMethods: aClassModification after classMethodDefinitions.
+	instanceBeforeFileNameMap  := self _createFileNameMapForMethods: aClassModification before instanceMethodDefinitions.
+	classBeforeFileNameMap := self _createFileNameMapForMethods: aClassModification before classMethodDefinitions.
 
 	aClassModification instanceMethodsModification acceptVisitor: self.
 	aClassModification classMethodsModification acceptVisitor: self
@@ -32749,8 +32772,10 @@ processClassExtension: aClassExtensionModification
 				<< (self _classExtensionOf: self currentClassExtension)
 				<< self _newLine ].
 
-	instanceFileNameMap  := self _createFileNameMapForMethods: self currentClassExtension instanceMethodDefinitions.
-	classFileNameMap := self _createFileNameMapForMethods: self currentClassExtension classMethodDefinitions.
+	instanceFileNameMap  := self _createFileNameMapForMethods: aClassExtensionModification after instanceMethodDefinitions.
+	classFileNameMap := self _createFileNameMapForMethods: aClassExtensionModification after classMethodDefinitions.
+	instanceBeforeFileNameMap  := self _createFileNameMapForMethods: aClassExtensionModification before instanceMethodDefinitions.
+	classBeforeFileNameMap := self _createFileNameMapForMethods: aClassExtensionModification before classMethodDefinitions.
 
 	aClassExtensionModification instanceMethodsModification acceptVisitor: self.
 	aClassExtensionModification classMethodsModification acceptVisitor: self
@@ -59626,6 +59651,14 @@ _modificationForcingNewClassVersion
 ! Class extensions for 'RwClassExtensionDefinition'
 
 !		Instance methods for 'RwClassExtensionDefinition'
+
+category: '*rowan-core-definitions-extensions'
+method: RwClassExtensionDefinition
+comparePropertiesAgainstBase: aDefinition
+	"property differences aren't of interest for a class extension ..."
+
+	^ RwPropertiesModification new
+%
 
 category: '*rowan-core-definitions-extensions'
 method: RwClassExtensionDefinition
