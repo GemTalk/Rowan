@@ -568,12 +568,154 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_emptyCLassExtension
 		super: 'Object'
 		category: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
-	"leave packageName2 with an empty packageDefinition"
+	"leave packageName2 with an empty packageDefinition and no class extension definition"
 
 "validate"
 	projectModifications := projectDefinition1 compareAgainstBase: projectDefinition2.
 	self assert: projectModifications isEmpty.
 	projectModifications := projectDefinition2 compareAgainstBase: projectDefinition1.
+	self assert: projectModifications isEmpty.
+]
+
+{ #category : 'tests' }
+RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_emptyCLassExtension_4_A [
+
+	"https://github.com/GemTalk/Rowan/issues/361"
+
+	"readers and writers need to be able to handle empty class extension structures (file or directory)"
+
+	"in order for the class extenstion structure handling to be correct, an empty class extension should be the same as a missing class extension
+		during comparison"
+
+	"-->A. remove an extension method explicitly from a class extension to produce an empty class definition"
+	"B. remove an extension method implicitly by leaving the class extension out of the package"
+
+	| projectName packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition classExtensionDefinition packageDefinition
+		className1 projectModifications |
+
+	projectName := 'issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension1'.
+	className1 := 'Issue361Class1'.
+
+"project definition1"
+	projectDefinition1 := (RwComponentProjectDefinition
+		projectName: projectName 
+			configurationNames: #('Core') 
+			groupNames: #('core') 
+			useGit: false 
+			projectUrl: '' 
+			comment: '')
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		yourself.
+	packageDefinition := projectDefinition1 packageNamed: packageName1.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		category: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethod: 'method1 ^1' protocol: '*', packageName2 asLowercase.
+	packageDefinition := projectDefinition1 packageNamed: packageName2.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+"project definition1"
+	projectDefinition2 := (RwComponentProjectDefinition
+		projectName: projectName 
+			configurationNames: #('Core') 
+			groupNames: #('core') 
+			useGit: false 
+			projectUrl: '' 
+			comment: '')
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		yourself.
+	packageDefinition := projectDefinition2 packageNamed: packageName1.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		category: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	packageDefinition := projectDefinition2 packageNamed: packageName2.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+"validate"
+	projectModifications := projectDefinition2 compareAgainstBase: projectDefinition1.
+	self assert: projectModifications isEmpty.
+	projectModifications := projectDefinition1 compareAgainstBase: projectDefinition2.
+	self assert: projectModifications isEmpty.
+]
+
+{ #category : 'tests' }
+RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_emptyCLassExtension_4_B [
+
+	"https://github.com/GemTalk/Rowan/issues/361"
+
+	"readers and writers need to be able to handle empty class extension structures (file or directory)"
+
+	"in order for the class extenstion structure handling to be correct, an empty class extension should be the same as a missing class extension
+		during comparison"
+
+	"A. remove an extension method explicitly from a class extension to produce an empty class definition"
+	"-->B. remove an extension method implicitly by leaving the class extension out of the package"
+
+	| projectName packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition classExtensionDefinition packageDefinition
+		className1 projectModifications |
+
+	projectName := 'issue361'.
+	packageName1 := 'Issue361-Core'.
+	packageName2 := 'Issue361-Extension1'.
+	className1 := 'Issue361Class1'.
+
+"project definition1"
+	projectDefinition1 := (RwComponentProjectDefinition
+		projectName: projectName 
+			configurationNames: #('Core') 
+			groupNames: #('core') 
+			useGit: false 
+			projectUrl: '' 
+			comment: '')
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		yourself.
+	packageDefinition := projectDefinition1 packageNamed: packageName1.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		category: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
+	classExtensionDefinition
+		addInstanceMethod: 'method1 ^1' protocol: '*', packageName2 asLowercase.
+	packageDefinition := projectDefinition1 packageNamed: packageName2.
+	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+
+"project definition1"
+	projectDefinition2 := (RwComponentProjectDefinition
+		projectName: projectName 
+			configurationNames: #('Core') 
+			groupNames: #('core') 
+			useGit: false 
+			projectUrl: '' 
+			comment: '')
+		addPackageNamed: packageName1;
+		addPackageNamed: packageName2;
+		yourself.
+	packageDefinition := projectDefinition2 packageNamed: packageName1.
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		category: packageName1.
+	packageDefinition addClassDefinition: classDefinition.
+	"leave packageName2 with an empty packageDefinition and no class extension definition"
+
+"validate"
+	projectModifications := projectDefinition2 compareAgainstBase: projectDefinition1.
+	self assert: projectModifications isEmpty.
+	projectModifications := projectDefinition1 compareAgainstBase: projectDefinition2.
 	self assert: projectModifications isEmpty.
 ]
 
