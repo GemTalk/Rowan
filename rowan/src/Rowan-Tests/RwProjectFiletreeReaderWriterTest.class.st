@@ -11,6 +11,18 @@ RwProjectFiletreeReaderWriterTest >> _classExtensionRemovedArtifactFileReference
 ]
 
 { #category : 'private' }
+RwProjectFiletreeReaderWriterTest >> _classRemovedArtifactFileReference: repositoryRoot [
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class'
+]
+
+{ #category : 'private' }
+RwProjectFiletreeReaderWriterTest >> _packageRemovedArtifactFileReference: repositoryRoot [
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension2.package'
+]
+
+{ #category : 'private' }
 RwProjectFiletreeReaderWriterTest >> _repositoryFormat [
 
 	^ 'filetree'
