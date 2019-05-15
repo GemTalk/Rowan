@@ -438,6 +438,8 @@ RowanClassServiceTest >> test_setSuperSubIndicators [
 			category: ''RowanSample1-Core''
 			options: #()'.
 	classService := RowanClassService forClassNamed: 'RowanSample1'.
+	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
+	packageService recompileMethodsAfterClassCompilation. 
 	classService saveMethodSource: selector asString,  ' ^#deleteThisMethod' category: 'abc'.
 	superclassMethodService := (classService methodsNamed: selector) first.
 	self deny: superclassMethodService hasSupers.
