@@ -34,18 +34,6 @@ RwClassExtensionDefinition >> _classNameForCompare: aDefinition [
 ]
 
 { #category : 'comparing' }
-RwClassExtensionDefinition >> compareAgainstBase: aDefinition [
-
-	| modification |
-	modification := super compareAgainstBase: aDefinition.
-	(modification after instanceMethodDefinitions isEmpty and: [ modification after classMethodDefinitions isEmpty ]) 
-		ifTrue: [ 
-			"class extension after modification is empty, so the receiver should be deleted"
-			self yourself ].
-	^ modification
-]
-
-{ #category : 'comparing' }
 RwClassExtensionDefinition >> compareDictionary: myDictionary againstBaseDictionary: baseDictionary into: anElementsModification elementClass: elementClass isMeta: isClassMeta [
 
 	| keys |

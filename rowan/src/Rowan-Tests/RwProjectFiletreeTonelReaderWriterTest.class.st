@@ -644,9 +644,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_emptyCLassExtension
 
 "validate"
 	projectModifications := projectDefinition2 compareAgainstBase: projectDefinition1.
-	self assert: projectModifications isEmpty.
-	projectModifications := projectDefinition1 compareAgainstBase: projectDefinition2.
-	self assert: projectModifications isEmpty.
+	self assert: projectModifications isEmpty
 ]
 
 { #category : 'tests' }
@@ -714,9 +712,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_emptyCLassExtension
 
 "validate"
 	projectModifications := projectDefinition2 compareAgainstBase: projectDefinition1.
-	self assert: projectModifications isEmpty.
-	projectModifications := projectDefinition1 compareAgainstBase: projectDefinition2.
-	self assert: projectModifications isEmpty.
+	self assert: projectModifications isEmpty
 ]
 
 { #category : 'tests' }
@@ -825,8 +821,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeExtensionClas
 "validation"
 	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
 	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
-	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	projectSetModification := writeProjectSetDefinition compareAgainstBase: readProjectSetDefinition.
 	self assert: projectSetModification isEmpty.
+
 ]
 
 { #category : 'tests' }
