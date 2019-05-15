@@ -18914,7 +18914,7 @@ testWriterReader_B_removeExtensionClass
 
 	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
 		projectSetModification writeProjectSetDefinition changedProjectDefinition changedProjectSetModification
-		writerVisitorClass writtenPojectSetDefinition|
+		writerVisitorClass writtenPojectSetDefinition repositoryRoot x |
 
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -18932,6 +18932,9 @@ testWriterReader_B_removeExtensionClass
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
+
+	repositoryRoot := writtenProjectDefinition repositoryRoot.
+	self assert: (x := self _classExtensionRemovedArtifactFileReference: repositoryRoot) exists.
 
 "copy and make desired modifications"
 
@@ -18956,7 +18959,9 @@ testWriterReader_B_removeExtensionClass
 	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
 	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
 	projectSetModification := writeProjectSetDefinition compareAgainstBase: readProjectSetDefinition.
-	self assert: projectSetModification isEmpty
+	self assert: projectSetModification isEmpty.
+
+	self deny: (self _classExtensionRemovedArtifactFileReference: repositoryRoot) exists
 %
 
 category: 'tests'
@@ -19012,6 +19017,13 @@ testWriterReader_B_removePackage
 	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
 	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
 	self assert: projectSetModification isEmpty.
+%
+
+category: 'private'
+method: RwProjectFiletreeTonelReaderWriterTest
+_classExtensionRemovedArtifactFileReference: repositoryRoot
+
+	self subclassResponsibility: #_classExtensionRemovedArtifactFileReference:
 %
 
 category: 'private'
@@ -19182,6 +19194,13 @@ _validateIssue122Repaired_ExtensionProtocolValidationError_ProjectDefinitionSet:
 
 category: 'private'
 method: RwProjectFiletreeReaderWriterTest
+_classExtensionRemovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension1.package' / 'Issue361Class1.extension'
+%
+
+category: 'private'
+method: RwProjectFiletreeReaderWriterTest
 _repositoryFormat
 
 	^ 'filetree'
@@ -19190,6 +19209,13 @@ _repositoryFormat
 ! Class implementation for 'RwProjectTonelReaderWriterTest'
 
 !		Instance methods for 'RwProjectTonelReaderWriterTest'
+
+category: 'private'
+method: RwProjectTonelReaderWriterTest
+_classExtensionRemovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension1' / 'Issue361Class1.extension.st'
+%
 
 category: 'private'
 method: RwProjectTonelReaderWriterTest

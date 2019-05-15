@@ -13,6 +13,12 @@ RwProjectFiletreeTonelReaderWriterTest class >> isAbstract [
 ]
 
 { #category : 'private' }
+RwProjectFiletreeTonelReaderWriterTest >> _classExtensionRemovedArtifactFileReference: repositoryRoot [
+
+	self subclassResponsibility: #_classExtensionRemovedArtifactFileReference:
+]
+
+{ #category : 'private' }
 RwProjectFiletreeTonelReaderWriterTest >> _repositoryFormat [
 
 	^ self subclassResponsibility: #_repositoryFormat
@@ -492,7 +498,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeExtensionClas
 
 	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
 		projectSetModification writeProjectSetDefinition changedProjectDefinition changedProjectSetModification
-		writerVisitorClass writtenPojectSetDefinition|
+		writerVisitorClass writtenPojectSetDefinition repositoryRoot x |
 
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -510,6 +516,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeExtensionClas
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
+
+	repositoryRoot := writtenProjectDefinition repositoryRoot.
+	self assert: (x := self _classExtensionRemovedArtifactFileReference: repositoryRoot) exists.
 
 "copy and make desired modifications"
 
@@ -534,7 +543,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_B_removeExtensionClas
 	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
 	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
 	projectSetModification := writeProjectSetDefinition compareAgainstBase: readProjectSetDefinition.
-	self assert: projectSetModification isEmpty
+	self assert: projectSetModification isEmpty.
+
+	self deny: (self _classExtensionRemovedArtifactFileReference: repositoryRoot) exists
 ]
 
 { #category : 'tests' }
