@@ -1675,6 +1675,142 @@ createClassNamed: className
 
 category: 'support'
 method: RowanClassServiceTest
+createHierarchyWithNonResolvableClass
+
+	"do not delete - sent by Jadeite client test
+	RowanClassServiceTest new createHierarchyWithNonResolvableClass.
+	Code by dhenrich"
+
+  | projectName  packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
+    className4 projectSetDefinition class1 class2 class3 class4 oldClass1 oldClass2 oldClass3  |
+
+  projectName := 'Issue470'.
+  packageName1 := 'Issue470-Core'.
+  packageName2 := 'Issue470-Extensions'.
+  className1 := 'Issue470Class1'.
+  className2 := 'Issue470Class2'.
+  className3 := 'Issue470Class3'.
+  className4 := 'Issue470Class4'.
+
+  {projectName}
+    do: [ :pn |
+      (Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+        ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+  projectDefinition := (RwProjectDefinition
+    newForGitBasedProjectNamed: projectName)
+    addPackageNamed: packageName1;
+    addPackageNamed: packageName2;
+    defaultSymbolDictName: 'UserGlobals';
+    yourself.
+
+  packageDefinition := projectDefinition packageNamed: packageName1.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className1
+      super: 'Object'
+      instvars: #(ivar1)
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className2
+      super: className1
+      instvars: #('ivar2')
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className3
+      super: className2
+      instvars: #('ivar4' 'ivar3')
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+   yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+
+"load"
+  projectSetDefinition := RwProjectSetDefinition new.
+  projectSetDefinition addDefinition: projectDefinition.
+  Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+  class1 := Rowan globalNamed: className1.
+  self assert: class1 instVarNames = #(ivar1).
+
+  class2 := Rowan globalNamed: className2.
+  self assert: class2 instVarNames = #(ivar2).
+  self assert: class2 superClass == class1.
+
+  class3 := Rowan globalNamed: className3.
+  self assert: class3 instVarNames = #(ivar4 ivar3).
+  self assert: class3 superClass == class2.
+
+"remove class2 and add class4 -- edit projectDefinition structure in place"
+  projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+  packageDefinition := projectDefinition packageNamed: packageName1.
+
+  packageDefinition removeClassNamed: className2.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className4
+      super: className1
+      instvars: #('ivar2')
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+"load"
+  projectSetDefinition := RwProjectSetDefinition new.
+  projectSetDefinition addDefinition: projectDefinition.
+  Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+  oldClass1 := class1.
+  oldClass2 := class2.
+  oldClass3 := class3.
+ 
+  class1 := Rowan globalNamed: className1.
+  self assert: class1 instVarNames = #(ivar1).
+  self assert: oldClass1 == class1.
+
+  class4 := Rowan globalNamed: className4.
+  self assert: class4 instVarNames = #(ivar2).
+  self assert: class4 superClass == class1.
+
+  class3 := Rowan globalNamed: className3.
+  self assert: class3 instVarNames = #(ivar4 ivar3).
+  self assert: class3 superClass == oldClass2.
+  self assert: oldClass3 == class3.
+%
+
+category: 'support'
+method: RowanClassServiceTest
 servicesClassInstance
 
 	^self servicesDefaultClassName evaluate perform: #new
@@ -1767,9 +1903,9 @@ test_classFromName
 	"always return thisClass" 
 	| classService |
 	classService := RowanClassService forClassNamed: 'Array' meta: false.
-	self assert: classService classFromName equals: Array.
+	self assert: classService theClass equals: Array.
 	classService := RowanClassService forClassNamed: 'OrderedCollection' meta: true.
-	self assert: classService classFromName equals: OrderedCollection
+	self assert: classService theClass equals: OrderedCollection
 %
 
 category: 'tests'
@@ -1982,6 +2118,8 @@ test_setSuperSubIndicators
 			category: ''RowanSample1-Core''
 			options: #()'.
 	classService := RowanClassService forClassNamed: 'RowanSample1'.
+	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
+	packageService recompileMethodsAfterClassCompilation. 
 	classService saveMethodSource: selector asString,  ' ^#deleteThisMethod' category: 'abc'.
 	superclassMethodService := (classService methodsNamed: selector) first.
 	self deny: superclassMethodService hasSupers.
@@ -2491,7 +2629,8 @@ testCompileClassSelectsPackageAndClass
 			poolDictionaries: #()
 			category: ''', self servicesTestPackageName, '''
 			options: #()'.
-	self assert: RowanCommandResult results size equals: 1.
+	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
+	packageService recompileMethodsAfterClassCompilation. 
 	newClassService := RowanCommandResult results first.
 	self assert: newClassService name equals: 'TestCompileClass'. 
 	self assert: newClassService selectedPackageServices size equals: 1. 
@@ -2518,6 +2657,8 @@ test_compileAndSelectClass
 		poolDictionaries: #()
 		category: ''', self servicesTestPackageName,  '''
 		options: #()'.
+	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
+	packageService recompileMethodsAfterClassCompilation. 
 	self assert: RowanCommandResult results size equals: 1. 
 	self assert: RowanCommandResult results first name equals: 'RowanTestCompile'. 
 	self assert: packageService selectedClass name equals: 'RowanTestCompile'.
@@ -2543,6 +2684,8 @@ test_compileAndSelectClassDifferentPackage
 		poolDictionaries: #()
 		category: ''Rowan-Services-Tests''
 		options: #()'.
+	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
+	packageService recompileMethodsAfterClassCompilation. 
 	self assert: RowanCommandResult results size equals: 2. 
 	self assert: RowanCommandResult results last name equals: 'RowanTestCompile'. 
 	self assert: RowanCommandResult results first name equals: 'Rowan-Services-Tests'. 
@@ -2564,6 +2707,23 @@ test_packageWasDeleted
 	self deny: packageService wasDeleted.
 	System abortTransaction. 
 	self assert: packageService wasDeleted.
+%
+
+category: 'tests'
+method: RowanPackageServiceTest
+test_testClassesDoNotIncludeExtensions
+	| packageService testClassNames |
+	self jadeiteIssueTested: #issue378 withTitle: '(3.0.53) test class not defined in package shows up in package of SUnit browser'.
+	packageService := RowanPackageService forPackageNamed: 'Rowan-Services-Tests'.
+	packageService testClasses. 
+	testClassNames := packageService jadeite_testClasses collect:[:classService | classService name].
+	self deny: (testClassNames includes: 'RwRowanProjectIssuesTest').
+	self assert: (testClassNames includes: 'RowanPackageServiceTest').
+
+	packageService := RowanPackageService forPackageNamed: 'Rowan-Tests'.
+	packageService testClasses. 
+	testClassNames := packageService jadeite_testClasses collect:[:classService | classService name].
+	self assert: (testClassNames includes: 'RwRowanProjectIssuesTest').
 %
 
 ! Class implementation for 'RowanProjectServiceTest'
@@ -19216,6 +19376,73 @@ _validateIssue122Repaired_ExtensionProtocolValidationError_ProjectDefinitionSet:
 
 !		Instance methods for 'RwProjectFiletreeReaderWriterTest'
 
+category: 'tests'
+method: RwProjectFiletreeReaderWriterTest
+testWriterReader_B_removeLastInstanceClassMethods
+
+	"https://github.com/GemTalk/Rowan/issues/361"
+
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	"only applies to filetree, since methods are not stored in separate files for tonel"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition 
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x repositoryRoot |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+	repositoryRoot := writtenProjectDefinition repositoryRoot.
+	self assert: (x := self _lastClassMethodRemovedArtifactFileReference: repositoryRoot) exists.
+	self assert: (x := self _lastInstanceMethodRemovedArtifactFileReference: repositoryRoot) exists.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	((changedProjectDefinition packageNamed: 'Issue361-Core')
+		classDefinitionNamed: 'Issue361Class1'ifAbsent: [])
+		removeInstanceMethod: #method6;
+		removeClassMethod: #method2.
+
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
+
+	visitor visit: changedProjectSetModification.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+
+	self deny: (x := self _lastClassMethodRemovedArtifactFileReference: repositoryRoot) exists.
+	self deny: (x := self _instanceMethodRemovedArtifactFileReference: repositoryRoot) exists.
+%
+
 category: 'private'
 method: RwProjectFiletreeReaderWriterTest
 _classExtensionRemovedArtifactFileReference: repositoryRoot
@@ -19228,6 +19455,20 @@ method: RwProjectFiletreeReaderWriterTest
 _classRemovedArtifactFileReference: repositoryRoot
 
 	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class'
+%
+
+category: 'private'
+method: RwProjectFiletreeReaderWriterTest
+_lastClassMethodRemovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class' / 'class'
+%
+
+category: 'private'
+method: RwProjectFiletreeReaderWriterTest
+_lastInstanceMethodRemovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class' / 'instance'
 %
 
 category: 'private'
