@@ -41628,6 +41628,14 @@ repositoryRoot
 	^ self projectRef repositoryRoot
 %
 
+category: 'properties'
+method: RwComponentProjectDefinition
+repositoryRoot: aFileReferenceOrPath
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ self projectRef repositoryRoot: aFileReferenceOrPath
+%
+
 category: 'temporary compat'
 method: RwComponentProjectDefinition
 repositoryRootPath
@@ -42228,6 +42236,17 @@ repositoryRoot
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^self projectHome / self projectAlias
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+repositoryRoot: aFileReferenceOrPath
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	| fileRef |
+	fileRef := aFileReferenceOrPath asFileReference.
+	self projectHome: fileRef parent.
+	self projectAlias: fileRef basename
 %
 
 category: 'temporary compat'

@@ -443,6 +443,13 @@ RwComponentProjectDefinition >> repositoryRoot [
 	^ self projectRef repositoryRoot
 ]
 
+{ #category : 'properties' }
+RwComponentProjectDefinition >> repositoryRoot: aFileReferenceOrPath [
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ self projectRef repositoryRoot: aFileReferenceOrPath
+]
+
 { #category : 'temporary compat' }
 RwComponentProjectDefinition >> repositoryRootPath [
 
