@@ -123,11 +123,21 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 					newForSelector: #'method8:'
 					protocol: 'accessing'
 					source: 'method8: ignored ^ignored');
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method9'
+					protocol: 'accessing'
+					source: 'method9 ^9');
 		addClassMethodDefinition:
 			(RwMethodDefinition
 					newForSelector: #'method4'
 					protocol: 'accessing'
-					source: 'method4 ^4').
+					source: 'method4 ^4');
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method10'
+					protocol: 'accessing'
+					source: 'method10 ^10').
 	packageDefinition addClassDefinition: classDefinition.
 
 	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.

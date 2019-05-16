@@ -32720,6 +32720,29 @@ deletedClassExtension: aClassExtensionModification
 
 category: 'actions'
 method: RwModificationFiletreeWriterVisitor
+deletedMethod: aMethodModification
+
+	| methodDefinition methodDir methodFileName |
+
+	methodDefinition := aMethodModification before.
+
+	"delete method source file"
+	 (aMethodModification isMeta
+		ifTrue: [
+			methodFileName := classFileNameMap at: methodDefinition selector
+				ifAbsent: [ classBeforeFileNameMap at: methodDefinition selector ].
+			methodDir := self _methodClassDir ensureCreateDirectory ]
+		ifFalse: [ 
+			methodFileName := instanceFileNameMap at: methodDefinition selector
+				ifAbsent: [ instanceBeforeFileNameMap at: methodDefinition selector ].
+			methodDir := self _methodInstanceDir ensureCreateDirectory ]) .
+
+
+	(methodDir / methodFileName, 'st') ensureDelete
+%
+
+category: 'actions'
+method: RwModificationFiletreeWriterVisitor
 deletedMethodExtension: aMethodExtensionModification
 
 	| methodDefinition methodDir methodFileName |
@@ -32785,8 +32808,12 @@ processClass: aClassModification
 	instanceBeforeFileNameMap  := self _createFileNameMapForMethods: aClassModification before instanceMethodDefinitions.
 	classBeforeFileNameMap := self _createFileNameMapForMethods: aClassModification before classMethodDefinitions.
 
-	aClassModification instanceMethodsModification acceptVisitor: self.
-	aClassModification classMethodsModification acceptVisitor: self
+	currentClassDefinition instanceMethodDefinitions isEmpty
+		ifTrue: [  self _methodInstanceDir ensureDeleteAll ]
+		ifFalse: [ aClassModification instanceMethodsModification acceptVisitor: self ].
+	currentClassDefinition classMethodDefinitions isEmpty
+		ifTrue: [  self _methodClassDir ensureDeleteAll ]
+		ifFalse: [ aClassModification classMethodsModification acceptVisitor: self ]
 %
 
 category: 'class writing'
