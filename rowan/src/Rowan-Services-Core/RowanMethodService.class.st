@@ -406,7 +406,6 @@ RowanMethodService >> meta: aBoolean [
 RowanMethodService >> method [
 
 	^self classFromName compiledMethodAt: selector otherwise: nil
-
 ]
 
 { #category : 'Accessing' }

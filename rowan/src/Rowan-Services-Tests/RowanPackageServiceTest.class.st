@@ -21,6 +21,8 @@ RowanPackageServiceTest >> test_compileAndSelectClass [
 		poolDictionaries: #()
 		category: ''', self servicesTestPackageName,  '''
 		options: #()'.
+	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
+	packageService recompileMethodsAfterClassCompilation. 
 	self assert: RowanCommandResult results size equals: 1. 
 	self assert: RowanCommandResult results first name equals: 'RowanTestCompile'. 
 	self assert: packageService selectedClass name equals: 'RowanTestCompile'.
@@ -45,6 +47,8 @@ RowanPackageServiceTest >> test_compileAndSelectClassDifferentPackage [
 		poolDictionaries: #()
 		category: ''Rowan-Services-Tests''
 		options: #()'.
+	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
+	packageService recompileMethodsAfterClassCompilation. 
 	self assert: RowanCommandResult results size equals: 2. 
 	self assert: RowanCommandResult results last name equals: 'RowanTestCompile'. 
 	self assert: RowanCommandResult results first name equals: 'Rowan-Services-Tests'. 
@@ -65,6 +69,22 @@ RowanPackageServiceTest >> test_packageWasDeleted [
 	self deny: packageService wasDeleted.
 	System abortTransaction. 
 	self assert: packageService wasDeleted.
+]
+
+{ #category : 'tests' }
+RowanPackageServiceTest >> test_testClassesDoNotIncludeExtensions [
+	| packageService testClassNames |
+	self jadeiteIssueTested: #issue378 withTitle: '(3.0.53) test class not defined in package shows up in package of SUnit browser'.
+	packageService := RowanPackageService forPackageNamed: 'Rowan-Services-Tests'.
+	packageService testClasses. 
+	testClassNames := packageService jadeite_testClasses collect:[:classService | classService name].
+	self deny: (testClassNames includes: 'RwRowanProjectIssuesTest').
+	self assert: (testClassNames includes: 'RowanPackageServiceTest').
+
+	packageService := RowanPackageService forPackageNamed: 'Rowan-Tests'.
+	packageService testClasses. 
+	testClassNames := packageService jadeite_testClasses collect:[:classService | classService name].
+	self assert: (testClassNames includes: 'RwRowanProjectIssuesTest').
 ]
 
 { #category : 'tests' }
@@ -105,7 +125,8 @@ RowanPackageServiceTest >> testCompileClassSelectsPackageAndClass [
 			poolDictionaries: #()
 			category: ''', self servicesTestPackageName, '''
 			options: #()'.
-	self assert: RowanCommandResult results size equals: 1.
+	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
+	packageService recompileMethodsAfterClassCompilation. 
 	newClassService := RowanCommandResult results first.
 	self assert: newClassService name equals: 'TestCompileClass'. 
 	self assert: newClassService selectedPackageServices size equals: 1. 
