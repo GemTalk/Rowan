@@ -243,6 +243,7 @@ RwAbstractClassDefinition >> name: aString [
 RwAbstractClassDefinition >> postCopy [
 
 	| oldDefs |
+	super postCopy.
 	oldDefs := classMethodDefinitions.
 	classMethodDefinitions := Dictionary new.
 	oldDefs keysAndValuesDo: [:key :value | classMethodDefinitions at: key put: value copy ].

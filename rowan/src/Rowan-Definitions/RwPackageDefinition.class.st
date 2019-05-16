@@ -75,6 +75,12 @@ RwPackageDefinition >> addClassNamed: className super: superclassName instvars: 
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> classDefinitionNamed: className [
+
+	^ self classDefinitionNamed: className ifAbsent: [ self error: 'No class definition found with the name ', className printString ]
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> classDefinitionNamed: className ifAbsent: absentBlock [
 
 	^ self classDefinitions at: className ifAbsent: absentBlock
