@@ -32702,6 +32702,32 @@ addedPackage: aPackageModification
 
 category: 'actions'
 method: RwModificationFiletreeWriterVisitor
+changedMethod: aMethodModification
+
+	| methodDefinition methodDir methodFileName |
+
+	methodDefinition := aMethodModification after.
+
+	"create instance/class directory as needed ... write method source file"
+	 (aMethodModification isMeta
+		ifTrue: [
+			methodFileName := classFileNameMap at: methodDefinition selector.
+			methodDir := self _methodClassDir ensureCreateDirectory ]
+		ifFalse: [ 
+			methodFileName := instanceFileNameMap at: methodDefinition selector.
+			methodDir := self _methodInstanceDir ensureCreateDirectory ]) .
+
+
+	(methodDir / methodFileName, 'st')
+		writeStreamDo: [:aStream |
+		aStream 
+			<< methodDefinition protocol
+			<< self _newLine
+			<< (methodDefinition source withLineEndings: self _newLine) ]
+%
+
+category: 'actions'
+method: RwModificationFiletreeWriterVisitor
 deletedClass: aClassModification
 
 	currentClassDefinition := aClassModification before.
@@ -39571,6 +39597,7 @@ method: RwAbstractClassDefinition
 postCopy
 
 	| oldDefs |
+	super postCopy.
 	oldDefs := classMethodDefinitions.
 	classMethodDefinitions := Dictionary new.
 	oldDefs keysAndValuesDo: [:key :value | classMethodDefinitions at: key put: value copy ].
@@ -40599,6 +40626,13 @@ addClassNamed: className super: superclassName instvars: instvars classinstvars:
 				comment: comment 
 				pools: pools 
 				type: type)
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+classDefinitionNamed: className
+
+	^ self classDefinitionNamed: className ifAbsent: [ self error: 'No class definition found with the name ', className printString ]
 %
 
 category: 'accessing'
