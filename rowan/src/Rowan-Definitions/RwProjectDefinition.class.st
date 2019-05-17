@@ -165,6 +165,12 @@ RwProjectDefinition >> definitionWithKey: aKey ifAbsent: absentBlock [
 	^packages at: aKey ifAbsent: absentBlock
 ]
 
+{ #category : 'actions' }
+RwProjectDefinition >> export [
+
+	Rowan projectTools write writeDeprecatedProjectDefinition: self
+]
+
 { #category : 'initialization' }
 RwProjectDefinition >> initialize [
 

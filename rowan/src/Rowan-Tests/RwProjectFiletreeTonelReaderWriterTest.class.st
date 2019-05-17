@@ -730,10 +730,7 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_C [
 	newRepositoryRoot ensureDeleteAll.
 	copyProjectDefinition repositoryRoot: newRepositoryRoot.
 
-	Rowan projectTools create createProjectRepository: copyProjectDefinition projectRef.
-	copyProjectDefinition exportProjects.
-	copyProjectDefinition exportComponents.
-	copyProjectDefinition exportPackages.
+	copyProjectDefinition export.
 
 "read from alternate root directory"
 	copyProjectSetDefinition := copyProjectDefinition readProjectSet.

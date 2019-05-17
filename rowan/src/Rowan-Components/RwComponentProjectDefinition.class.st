@@ -197,6 +197,12 @@ RwComponentProjectDefinition >> defaultGroupNames [
 	^ self projectRef groupNames
 ]
 
+{ #category : 'actions' }
+RwComponentProjectDefinition >> export [
+
+	Rowan projectTools write writeComponentProjectDefinition: self
+]
+
 { #category : 'exporting' }
 RwComponentProjectDefinition >> exportComponents [
 
