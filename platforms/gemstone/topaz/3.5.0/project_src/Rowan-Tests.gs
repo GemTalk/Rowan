@@ -31763,7 +31763,7 @@ _cloneGitRepositoryFor: projectName projectUrlString: projectUrlString
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/issues/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: projectUrlString
