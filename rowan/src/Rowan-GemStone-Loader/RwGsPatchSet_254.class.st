@@ -1265,6 +1265,12 @@ RwGsPatchSet_254 >> setupForNewClassVersionUpdates [
 { #category : 'patch access' }
 RwGsPatchSet_254 >> superclassNamed: aName [
 
+	^ self superclassNamed: aName ifAbsent: [ self error: 'Superclass not found: ' , aName printString ]
+]
+
+{ #category : 'patch access' }
+RwGsPatchSet_254 >> superclassNamed: aName ifAbsent: absentBlock [
+
 	| superclassName |
 	superclassName := aName asSymbol.
 	^ createdClasses
@@ -1272,7 +1278,7 @@ RwGsPatchSet_254 >> superclassNamed: aName [
 		ifAbsent: [ 
 			tempSymbols
 				at: superclassName
-				ifAbsent: [ self error: 'Superclass not found: ' , aName printString ] ]
+				ifAbsent: absentBlock ]
 ]
 
 { #category : 'accessing' }

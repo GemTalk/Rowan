@@ -44919,7 +44919,14 @@ method: RwGsClassPatch
 privateCreateClassFor: aPatchSet
 
 	| superclass |
-	superclass := aPatchSet superclassNamed: classDefinition superclassName.
+	superclass := aPatchSet 
+		superclassNamed: classDefinition superclassName 
+		ifAbsent: [
+			"https://github.com/GemTalk/Rowan/issues/471"
+			"if we can't look up the class, try accessing the superclass from the class itself"
+			(aPatchSet tempSymbols 
+				at: classDefinition name asSymbol
+				ifAbsent: [ self error: 'Class not found ', classDefinition className printString ]) superClass ].
 	superclass
 		ifNil: [ 
 			classDefinition superclassName = 'nil'
@@ -47920,6 +47927,13 @@ category: 'patch access'
 method: RwGsPatchSet_254
 superclassNamed: aName
 
+	^ self superclassNamed: aName ifAbsent: [ self error: 'Superclass not found: ' , aName printString ]
+%
+
+category: 'patch access'
+method: RwGsPatchSet_254
+superclassNamed: aName ifAbsent: absentBlock
+
 	| superclassName |
 	superclassName := aName asSymbol.
 	^ createdClasses
@@ -47927,7 +47941,7 @@ superclassNamed: aName
 		ifAbsent: [ 
 			tempSymbols
 				at: superclassName
-				ifAbsent: [ self error: 'Superclass not found: ' , aName printString ] ]
+				ifAbsent: absentBlock ]
 %
 
 category: 'accessing'
@@ -59620,7 +59634,6 @@ modificationForcingNewVersion
 category: '*rowan-cypress-definitions'
 method: RwAbstractClassDefinition
 name
-
   ^ self key
 %
 
