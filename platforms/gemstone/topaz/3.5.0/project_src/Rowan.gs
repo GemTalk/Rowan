@@ -37432,8 +37432,8 @@ createProjectRepository: projectReferenceDefinition
 		useGit: projectReferenceDefinition useGit 
 		abort: [
 			"abort occurs because directory exists and user has not confirmed that the directory should be deleted"
-			"probably should try to cofirm that the directory appears to be complete relative to this project"
-			self error: 'not yet implemented'.
+			"cofirm that the repository appears to be complete relative to this project ... we will likely be writing new information to the repo"
+			projectReferenceDefinition validateRepository.
 			^ projectReferenceDefinition ].
 
 	{projectReferenceDefinition configsRoot. projectReferenceDefinition packagesRoot. projectReferenceDefinition specsRoot. projectReferenceDefinition projectsRoot }
@@ -42414,6 +42414,22 @@ method: RwProjectReferenceDefinition
 useGit: aBool
 
 	^ self properties at: 'useGit' put: aBool
+%
+
+category: 'actions'
+method: RwProjectReferenceDefinition
+validateRepository
+	"cofirm that the repository appears to be complete relative to this project"
+
+	{
+		'configs' -> self configsRoot. 
+		'packages' -> self packagesRoot. 
+		'specs' -> self specsRoot. 
+		'projects' -> self projectsRoot
+	}
+		do: [ :assoc | 
+			(assoc value) exists 
+				ifFalse: [ self error: 'The repository at ', self repositoryRootPath printString, ' is missing the ', (assoc key) printString, ' directory.'  ] ].
 %
 
 category: 'private'
