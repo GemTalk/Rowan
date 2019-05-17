@@ -217,6 +217,12 @@ RwComponentProjectDefinition >> exportComponents [
 { #category : 'exporting' }
 RwComponentProjectDefinition >> exportPackages [
 
+	self exportPackages: RwProjectSetDefinition new "force entire project to be written to disk"
+]
+
+{ #category : 'exporting' }
+RwComponentProjectDefinition >> exportPackages: diskProjectSetDefinition [
+
 	| projectSetDefinition visitor projectSetModification writerVisitorClass |
 	(self packagesRoot /  'properties', 'st') 
 		writeStreamDo: [ :fileStream | 
@@ -237,7 +243,7 @@ RwComponentProjectDefinition >> exportPackages [
 		ifFalse: [ RwModificationFiletreeWriterVisitor ].
 	projectSetDefinition:= RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: self.
-	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new. "compare against empty project to write out entire project"
+	projectSetModification := projectSetDefinition compareAgainstBase: diskProjectSetDefinition.
 	visitor := writerVisitorClass new.
 
 	visitor visit: projectSetModification.
