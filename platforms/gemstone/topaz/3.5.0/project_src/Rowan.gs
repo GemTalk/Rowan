@@ -41448,6 +41448,13 @@ category: 'exporting'
 method: RwComponentProjectDefinition
 exportPackages
 
+	self exportPackages: (self class newForProjectReference: self projectRef) readProjectSet.
+%
+
+category: 'exporting'
+method: RwComponentProjectDefinition
+exportPackages: diskProjectSetDefinition
+
 	| projectSetDefinition visitor projectSetModification writerVisitorClass |
 	(self packagesRoot /  'properties', 'st') 
 		writeStreamDo: [ :fileStream | 
@@ -41468,7 +41475,7 @@ exportPackages
 		ifFalse: [ RwModificationFiletreeWriterVisitor ].
 	projectSetDefinition:= RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: self.
-	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new. "compare against empty project to write out entire project"
+	projectSetModification := projectSetDefinition compareAgainstBase: diskProjectSetDefinition.
 	visitor := writerVisitorClass new.
 
 	visitor visit: projectSetModification.
@@ -59799,12 +59806,15 @@ category: '*rowan-gemstone-definitions'
 method: RwClassDefinition
 _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 
-	propertyKey = 'comment' ifFalse: [ ^super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue ].
-	propertyValue = baseValue
-		ifTrue: [ ^ true ]
-		ifFalse: [ 
-			"empty or nil comments need to compare equal in GemStone"
-			^(propertyValue == nil or: [ propertyValue isEmpty]) and: [ baseValue == nil or: [ baseValue isEmpty] ] ]
+	propertyKey = 'gs_SymbolDictionary' ifTrue: [ "ignored" ^ true ].
+	propertyKey = 'comment'
+		ifTrue: [
+			propertyValue = baseValue
+				ifTrue: [ ^ true ]
+				ifFalse: [ 
+					"empty or nil comments need to compare equal in GemStone"
+					^(propertyValue == nil or: [ propertyValue isEmpty]) and: [ baseValue == nil or: [ baseValue isEmpty] ] ] ].
+	^super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 %
 
 category: '*rowan-core-definitions-extensions'

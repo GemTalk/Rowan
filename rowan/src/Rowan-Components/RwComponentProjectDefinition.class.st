@@ -217,7 +217,7 @@ RwComponentProjectDefinition >> exportComponents [
 { #category : 'exporting' }
 RwComponentProjectDefinition >> exportPackages [
 
-	self exportPackages: RwProjectSetDefinition new "force entire project to be written to disk"
+	self exportPackages: (self class newForProjectReference: self projectRef) readProjectSet.
 ]
 
 { #category : 'exporting' }
