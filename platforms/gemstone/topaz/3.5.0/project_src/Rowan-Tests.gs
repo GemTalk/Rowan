@@ -42654,40 +42654,6 @@ testCreateNewProjectFromUrl
 
 category: 'tests'
 method: RwRowanSample7Test
-testCreateProjectFromUrl
-
-	"load RowanSample7_Colors project using load project named after clone and v2.0.0 api"
-
-	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition x |
-
-	projectName := 'RowanSample7_Colors'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
-
-	specUrlString :=  self _rowanSample7_ColorsSpecificationUrl.
-	projectSpec := specUrlString asRwUrl asSpecification.
-
-"create project reference definitions"
-	projectReferenceDefinition := RwProjectReferenceDefinition 
-		newForSpecification: projectSpec 
-		projectHome: gitRootPath.
-
-	projectReferenceDefinition repositoryRoot ensureDeleteAll.
-
-"resolve and register project ... preparing to load next"
-	projectReferenceDefinition resolve.
-	x := projectReferenceDefinition register.
-
-"load project"
-	Rowan projectTools load
-		loadProjectNamed: projectName
-%
-
-category: 'tests'
-method: RwRowanSample7Test
 testCreateProjectReference
 
 	"Excercise RwProjectReferenceDefinition instance creation protocol ... 
@@ -42808,8 +42774,9 @@ testCreateProjectReferenceFromUrl
 "validate"
 	self assert: projectReferenceDefinition projectName = projectName.
 	self assert: projectReferenceDefinition projectAlias = projectReferenceDefinition projectName.
-	self assert: projectReferenceDefinition configurationNames = #( 'Default').
+	self assert: projectReferenceDefinition configurationNames = #( 'Main').
 	self assert: projectReferenceDefinition groupNames = #( 'core').
+	self assert: projectReferenceDefinition defaultComponentName = 'Main'.
 	self assert: projectReferenceDefinition projectUrl = 'https://github.com/dalehenrich/RowanSample7'.
 
 	self assert: (x := projectReferenceDefinition projectHome pathString) = (y := gitRootPath asFileReference pathString).
@@ -42918,7 +42885,7 @@ testCreateRepositoryDefinitionFromUrl_1
 
 	"exercise the RwAbstractRepositoryDefinition class creation protocol"
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition_1 |
+	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition_1 x y |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -42938,7 +42905,7 @@ testCreateRepositoryDefinitionFromUrl_1
 
 	self assert: repositoryDefinition_1  name = projectSpec specName.
 	self assert: repositoryDefinition_1  repositoryRoot = (gitRootPath asFileReference / projectName).
-	self assert: repositoryDefinition_1  committish =  ('v', self _projectVersionString).
+	self assert: (x := repositoryDefinition_1  committish) =  (y := 'v', self _projectVersionString).
 	self assert: repositoryDefinition_1  projectUrl = self _gitHubProjectUrl
 %
 
@@ -43200,7 +43167,8 @@ _expected_rowanSample7_component_specification
 		''core'',
 		''tests''
 	],
-	#projectsPath : ''rowan/projects''
+	#projectsPath : ''rowan/projects'',
+	#defaultComponentName : ''Core''
 }'
 %
 
@@ -43233,7 +43201,7 @@ category: 'private'
 method: RwRowanSample7Test
 _projectVersionString
 
-	^ '0.0.2'
+	^ '0.0.3'
 %
 
 category: 'private'
