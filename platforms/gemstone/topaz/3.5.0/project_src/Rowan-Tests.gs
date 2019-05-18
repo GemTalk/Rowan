@@ -7312,7 +7312,7 @@ testSpecificationConversion
 		ifFalse: [
 			1 to: (x size min: y size) do: [:i |
 				| a b |
-				(a := x at: i) = (b := y at: i) ifFalse: [ self halt ] ]].
+				(a := x at: i) = (b := y at: i) ifFalse: [ self assert: false description: 'spec mismatch' ] ]].
 	self assert: x = y.
 %
 
@@ -42558,7 +42558,11 @@ testCreateComponentProject
 		projectName, '-Extension' . projectName, '-Tests_Main' . projectName, '-Tests-GemStone_Main'
 	}
 		do: [:pName | 
-			self assert: (cpd packagesRoot / pName, 'package') exists ].
+			| packageDir |
+			packageDir := cpd packageFormat = 'tonel'
+				ifTrue: [ cpd packagesRoot / pName ]
+				ifFalse: [ cpd packagesRoot / pName , 'package' ].
+			self assert: packageDir exists ].
 
 	self assert: cpd projectsRoot exists.
 
@@ -42577,7 +42581,7 @@ testCreateNewProjectFromUrl
 		4. write the project definition to the new project.
 	"
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec_1 projectDefinition_2 projectReferenceDefinition_3 projectName_3 |
+	| specUrlString rowanSpec gitRootPath projectName projectSpec_1 projectDefinition_2 projectDefinition_3 projectName_3 |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -42588,7 +42592,7 @@ testCreateNewProjectFromUrl
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
 
-"1. clone RowanSample7 using non-component API (v1.2.x style"
+"1. clone RowanSample7 using non-component API (v1.2.x style)"
 	specUrlString :=  self _rowanSample7SpecificationUrl_12x.
 	projectSpec_1 := specUrlString asRwUrl asSpecification.
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
@@ -42604,10 +42608,13 @@ testCreateNewProjectFromUrl
 "validate"
 	self assert: (Rowan image projectRepositoryNamed: projectSpec_1 specName ifAbsent: [  ]) isNil.
 
-"2. read project from disk into a project definition"
-	projectDefinition_2 := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: gitRootPath / projectName.
+"2. read project from disk into a project definition, using component API (v2.0 style)"
+	specUrlString := self _rowanSample7SpecificationUrl.
+	projectDefinition_2 := (RwComponentProjectDefinition newForUrl: specUrlString)
+		repositoryRoot: gitRootPath / projectName;
+		yourself.
 
-	Rowan projectTools read readProjectDefinition: projectDefinition_2.
+	projectDefinition_2 readProjectSet.
 
 "3. create a new git project on disk using component API"
 
@@ -42616,26 +42623,33 @@ testCreateNewProjectFromUrl
 	(Rowan image projectRepositoryNamed: projectName_3 ifAbsent: [  ])
 		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
-	projectReferenceDefinition_3 := RwProjectReferenceDefinition
+	projectDefinition_3 := RwComponentProjectDefinition
 		projectName: projectName_3
 			configurationNames: #( 'Main' ) 
 			groupNames: #('core')  
+			defaultComponentName: 'Main'
 			useGit: true
-			projectUrl: '' 
+			projectUrl: 'https://github.com/dalehenrich/RowanSample7' 
+			projectHome: gitRootPath
 			committish: 'candidateV1.0' 
 			committishType: 'branch'
 			comment: 'sample project created from scratch -- copied programatically from RowanSample7'.
-	projectReferenceDefinition_3 projectHome: gitRootPath.
 
-	projectReferenceDefinition_3 repositoryRoot ensureDeleteAll.
+	projectDefinition_3 repositoryRoot ensureDeleteAll.
 
-	projectReferenceDefinition_3 create.
+	projectDefinition_3 create.
 
 "validate"
-	self assert: projectReferenceDefinition_3 repositoryRoot exists.
+	self assert: projectDefinition_3 repositoryRoot exists.
 	self assert: (Rowan image projectRepositoryNamed: projectName_3 ifAbsent: [  ]) notNil.
-"4. write the project definition to the new project"
-self error: 'not yet implemented'. "need to write project definition"
+
+"4. write the project definition to the new project location"
+
+	projectDefinition_2 projectRef: projectDefinition_3 projectRef.
+	projectDefinition_2 export.
+
+"validate"
+	self assert: (gitRootPath asFileReference / projectName_3 / 'rowan' / 'configs' / 'Main', 'ston') exists
 %
 
 category: 'tests'

@@ -2,13 +2,15 @@ RwComponentSpecification{
 	#specName : 'RowanSample7',
 	#projectUrl : 'https://github.com/dalehenrich/RowanSample7',
 	#repoSpec : RwGitRepositorySpecification {
-		#committish : 'v0.0.2',
+		#committish : 'v0.0.3',
 		#committishType : 'tag',
 		#remoteUrl : 'git@github.com:dalehenrich/RowanSample7.git'
 	},
 	#configsPath : 'rowan/configs',
 	#repoPath : 'rowan/src',
 	#specsPath : 'rowan/specs',
+	#defaultComponentName :	'Main',
+	#defaultConfigurationNames : [ 'Main' ],
 	#defaultGroupNames : [ 'core' ],
 	#comment : 'Sample project for Rowan v2.0.0.'
 }

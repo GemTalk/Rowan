@@ -15,5 +15,6 @@ RwComponentSpecification {
 	#defaultGroupNames : [
 		'core'
 	],
-	#projectsPath : 'filetree/rowan/projects'
+	#projectsPath : 'filetree/rowan/projects',
+	#defaultComponentName : 'Core'
 }

@@ -49,6 +49,23 @@ RwComponentProjectDefinition class >> newForUrl: specUrl [
 ]
 
 { #category : 'instance creation' }
+RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment [
+
+
+	^ self newForProjectReference: (RwProjectReferenceDefinition
+		projectName: projectName 
+			configurationNames: configurationNames 
+			groupNames: groupNames 
+			defaultComponentName: defaultComponentName
+			useGit: useGit 
+			projectUrl: projectUrl 
+			projectHome: projectHomeFileReferenceOrString
+			committish: committish 
+			committishType: committishType 
+			comment: comment)
+]
+
+{ #category : 'instance creation' }
 RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl comment: comment [
 
 
@@ -62,26 +79,6 @@ RwComponentProjectDefinition class >> projectName: projectName configurationName
 ]
 
 { #category : 'instance creation' }
-RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames  useGit: useGit projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath [
-
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames  
-			useGit: useGit 
-			projectUrl: projectUrl 
-			comment: comment 
-			projectHome: projectHomeFileReferenceOrString 
-			committish: committish 
-			committishType: committishType 
-			configsPath: configsPath 
-			packagesPath: packagesPath 
-			projectsPath: projectsPath 
-			specsPath: specsPath)
-]
-
-{ #category : 'instance creation' }
 RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl committish: committish committishType: committishType comment: comment [
 
 	^ self newForProjectReference: (RwProjectReferenceDefinition
@@ -90,6 +87,22 @@ RwComponentProjectDefinition class >> projectName: projectName configurationName
 			groupNames: groupNames 
 			useGit: useGit 
 			projectUrl: projectUrl 
+			committish: committish 
+			committishType: committishType 
+			comment: comment)
+]
+
+{ #category : 'instance creation' }
+RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment [
+
+
+	^ self newForProjectReference: (RwProjectReferenceDefinition
+		projectName: projectName 
+			configurationNames: configurationNames 
+			groupNames: groupNames 
+			useGit: useGit 
+			projectUrl: projectUrl 
+			projectHome: projectHomeFileReferenceOrString
 			committish: committish 
 			committishType: committishType 
 			comment: comment)
@@ -179,6 +192,12 @@ RwComponentProjectDefinition >> defaultComponentName [
 	^ self projectRef defaultComponentName
 ]
 
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> defaultComponentName: aString [
+
+	^ self projectRef defaultComponentName: aString
+]
+
 { #category : 'properties' }
 RwComponentProjectDefinition >> defaultConfigurationNames [
 
@@ -216,8 +235,12 @@ RwComponentProjectDefinition >> exportComponents [
 
 { #category : 'exporting' }
 RwComponentProjectDefinition >> exportPackages [
-
-	self exportPackages: (self class newForProjectReference: self projectRef) readProjectSet.
+	"attempt to do incremental write to disk, however, if disk cannot be read, write all packages to disk"
+	| projectSetDefinition |
+	projectSetDefinition := [ (self class newForProjectReference: self projectRef) readProjectSet ]
+		on: Error
+		do: [:ignored | RwProjectSetDefinition new ].
+	self exportPackages: projectSetDefinition.
 ]
 
 { #category : 'exporting' }
@@ -380,6 +403,12 @@ RwComponentProjectDefinition >> projectNames: anArray [
 RwComponentProjectDefinition >> projectRef [
 
 	^ self propertyAt: 'projectRef' ifAbsent: [ ]
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> projectRef: aRwProjectReferenceDefinition [
+
+	^ self propertyAt: 'projectRef' put: aRwProjectReferenceDefinition
 ]
 
 { #category : 'properties' }

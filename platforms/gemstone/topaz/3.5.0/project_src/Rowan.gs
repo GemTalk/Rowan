@@ -5399,7 +5399,7 @@ true.
 doit
 (RwProjectSpecification
 	subclass: 'RwComponentSpecification'
-	instVarNames: #( projectName projectsPath )
+	instVarNames: #( projectName projectsPath defaultComponentName )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -41269,6 +41269,24 @@ newForUrl: specUrl
 
 category: 'instance creation'
 classmethod: RwComponentProjectDefinition
+projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment
+
+
+	^ self newForProjectReference: (RwProjectReferenceDefinition
+		projectName: projectName 
+			configurationNames: configurationNames 
+			groupNames: groupNames 
+			defaultComponentName: defaultComponentName
+			useGit: useGit 
+			projectUrl: projectUrl 
+			projectHome: projectHomeFileReferenceOrString
+			committish: committish 
+			committishType: committishType 
+			comment: comment)
+%
+
+category: 'instance creation'
+classmethod: RwComponentProjectDefinition
 projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl comment: comment
 
 
@@ -41283,27 +41301,6 @@ projectName: projectName configurationNames: configurationNames groupNames: grou
 
 category: 'instance creation'
 classmethod: RwComponentProjectDefinition
-projectName: projectName configurationNames: configurationNames groupNames: groupNames  useGit: useGit projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath
-
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames  
-			useGit: useGit 
-			projectUrl: projectUrl 
-			comment: comment 
-			projectHome: projectHomeFileReferenceOrString 
-			committish: committish 
-			committishType: committishType 
-			configsPath: configsPath 
-			packagesPath: packagesPath 
-			projectsPath: projectsPath 
-			specsPath: specsPath)
-%
-
-category: 'instance creation'
-classmethod: RwComponentProjectDefinition
 projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl committish: committish committishType: committishType comment: comment
 
 	^ self newForProjectReference: (RwProjectReferenceDefinition
@@ -41312,6 +41309,23 @@ projectName: projectName configurationNames: configurationNames groupNames: grou
 			groupNames: groupNames 
 			useGit: useGit 
 			projectUrl: projectUrl 
+			committish: committish 
+			committishType: committishType 
+			comment: comment)
+%
+
+category: 'instance creation'
+classmethod: RwComponentProjectDefinition
+projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment
+
+
+	^ self newForProjectReference: (RwProjectReferenceDefinition
+		projectName: projectName 
+			configurationNames: configurationNames 
+			groupNames: groupNames 
+			useGit: useGit 
+			projectUrl: projectUrl 
+			projectHome: projectHomeFileReferenceOrString
 			committish: committish 
 			committishType: committishType 
 			comment: comment)
@@ -41414,6 +41428,13 @@ defaultComponentName
 	^ self projectRef defaultComponentName
 %
 
+category: 'accessing'
+method: RwComponentProjectDefinition
+defaultComponentName: aString
+
+	^ self projectRef defaultComponentName: aString
+%
+
 category: 'properties'
 method: RwComponentProjectDefinition
 defaultConfigurationNames
@@ -41457,8 +41478,12 @@ exportComponents
 category: 'exporting'
 method: RwComponentProjectDefinition
 exportPackages
-
-	self exportPackages: (self class newForProjectReference: self projectRef) readProjectSet.
+	"attempt to do incremental write to disk, however, if disk cannot be read, write all packages to disk"
+	| projectSetDefinition |
+	projectSetDefinition := [ (self class newForProjectReference: self projectRef) readProjectSet ]
+		on: Error
+		do: [:ignored | RwProjectSetDefinition new ].
+	self exportPackages: projectSetDefinition.
 %
 
 category: 'exporting'
@@ -41645,6 +41670,13 @@ projectRef
 	^ self propertyAt: 'projectRef' ifAbsent: [ ]
 %
 
+category: 'accessing'
+method: RwComponentProjectDefinition
+projectRef: aRwProjectReferenceDefinition
+
+	^ self propertyAt: 'projectRef' put: aRwProjectReferenceDefinition
+%
+
 category: 'properties'
 method: RwComponentProjectDefinition
 projectsPath
@@ -41827,6 +41859,7 @@ newNamed: projectName forSpecification: aRwSpecification projectHome: projectHom
 		projectName: projectName
 			configurationNames: aRwSpecification defaultConfigurationNames
 			groupNames: aRwSpecification defaultGroupNames
+			defaultComponentName: aRwSpecification defaultComponentName
 			useGit: aRwSpecification useGit
 			projectUrl: aRwSpecification projectUrl
 			comment: aRwSpecification comment
@@ -41837,6 +41870,44 @@ newNamed: projectName forSpecification: aRwSpecification projectHome: projectHom
 			packagesPath: aRwSpecification repoPath
 			projectsPath: aRwSpecification projectsPath
 			specsPath: aRwSpecification specsPath
+%
+
+category: 'instance creation'
+classmethod: RwProjectReferenceDefinition
+projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath
+
+	^ self new
+		projectName: projectName;
+		configurationNames: configurationNames;
+		defaultComponentName: defaultComponentName;
+		groupNames: groupNames;
+		projectUrl: projectUrl;
+		useGit: useGit;
+		comment: comment;
+		projectHome: projectHomeFileReferenceOrString;
+		committish: committish committishType: committishType;
+		configsPath: configsPath;
+		packagesPath: packagesPath;
+		projectsPath: projectsPath;
+		specsPath: specsPath;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwProjectReferenceDefinition
+projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment
+
+	^ self new
+		projectName: projectName;
+		configurationNames: configurationNames;
+		groupNames: groupNames;
+		 defaultComponentName: defaultComponentName;
+		useGit: useGit;
+		projectUrl: projectUrl;
+		projectHome: projectHomeFileReferenceOrString;
+		comment: comment;
+		committish: committish committishType: committishType;
+		yourself
 %
 
 category: 'instance creation'
@@ -41855,26 +41926,6 @@ projectName: projectName configurationNames: configurationNames groupNames: grou
 
 category: 'instance creation'
 classmethod: RwProjectReferenceDefinition
-projectName: projectName configurationNames: configurationNames groupNames: groupNames  useGit: useGit projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath
-
-	^ self new
-		projectName: projectName;
-		configurationNames: configurationNames;
-		groupNames: groupNames;
-		projectUrl: projectUrl;
-		useGit: useGit;
-		comment: comment;
-		projectHome: projectHomeFileReferenceOrString;
-		committish: committish committishType: committishType;
-		configsPath: configsPath;
-		packagesPath: packagesPath;
-		projectsPath: projectsPath;
-		specsPath: specsPath;
-		yourself
-%
-
-category: 'instance creation'
-classmethod: RwProjectReferenceDefinition
 projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl committish: committish committishType: committishType comment: comment
 
 	^ self new
@@ -41883,6 +41934,22 @@ projectName: projectName configurationNames: configurationNames groupNames: grou
 		groupNames: groupNames;
 		useGit: useGit;
 		projectUrl: projectUrl;
+		comment: comment;
+		committish: committish committishType: committishType;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwProjectReferenceDefinition
+projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment
+
+	^ self new
+		projectName: projectName;
+		configurationNames: configurationNames;
+		groupNames: groupNames;
+		useGit: useGit;
+		projectUrl: projectUrl;
+		projectHome: projectHomeFileReferenceOrString;
 		comment: comment;
 		committish: committish committishType: committishType;
 		yourself
@@ -41930,6 +41997,7 @@ asSpecification
 		configsPath: self configsPath;
 		specsPath: self specsPath;
 		projectsPath: self projectsPath;
+		defaultComponentName: self defaultComponentName;
 		defaultConfigurationNames: self configurationNames;
 		defaultGroupNames: self groupNames;
 		comment: self comment;
@@ -42036,7 +42104,14 @@ category: 'accessing'
 method: RwProjectReferenceDefinition
 defaultComponentName
 
-	^ 'Core'
+	^ self properties at: 'defaultComponentName' ifAbsent: [ 'Core' ]
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+defaultComponentName: aString
+
+	^ self properties at: 'defaultComponentName' put: aString
 %
 
 category: 'accessing'
@@ -54800,6 +54875,20 @@ asProjectReferenceDefinition
 
 	"answer an RwProjectReferenceDefinition created using the reciever"
 	^RwProjectReferenceDefinition newForSpecification: self
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+defaultComponentName
+
+	^ defaultComponentName ifNil: [ 'Core' ]
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+defaultComponentName: aString
+
+	defaultComponentName := aString
 %
 
 category: 'accessing'

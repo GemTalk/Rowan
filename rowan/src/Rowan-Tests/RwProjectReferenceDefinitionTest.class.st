@@ -36,6 +36,6 @@ RwProjectReferenceDefinitionTest >> testSpecificationConversion [
 		ifFalse: [
 			1 to: (x size min: y size) do: [:i |
 				| a b |
-				(a := x at: i) = (b := y at: i) ifFalse: [ self halt ] ]].
+				(a := x at: i) = (b := y at: i) ifFalse: [ self assert: false description: 'spec mismatch' ] ]].
 	self assert: x = y.
 ]
