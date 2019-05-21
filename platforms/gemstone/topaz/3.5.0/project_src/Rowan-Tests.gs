@@ -42558,23 +42558,23 @@ testCreateComponentProject
 		addPackageNamed: projectName, '-Extension' 
 			toComponentNamed: 'Main' 
 			withConditions: #( 'common' ) 
-			andGroup: 'core';
+			andGroupName: 'core';
 		addPackageNamed: projectName, '-Core' 
 			toComponentNamed: 'Main' 
 			withConditions: #( 'common' ) 
-			andGroup: 'core';
+			andGroupName: 'core';
 		addPackageNamed: projectName, '-GemStone-Core' 
 			toComponentNamed: 'Main' 
 			withConditions: #( 'gemstone' ) 
-			andGroup: 'core';
+			andGroupName: 'core';
 		addPackageNamed: projectName, '-Tests_Main' 
 			toComponentNamed: 'Main' 
 			withConditions: #( 'common' ) 
-			andGroup: 'tests';
+			andGroupName: 'tests';
 		addPackageNamed: projectName, '-Tests-GemStone_Main' 
 			toComponentNamed: 'Main' 
 			withConditions: #( 'gemstone' ) 
-			andGroup: 'tests';
+			andGroupName: 'tests';
 		yourself.
 
 "create class and method definitions"
@@ -42722,7 +42722,7 @@ testCreateNewProjectFromUrl
 	projectDefinition_2 export.
 
 "validate"
-	self assert: (gitRootPath asFileReference / projectName_3 / 'rowan' / 'configs' / 'Main', 'ston') exists
+	self assert: (gitRootPath asFileReference / projectName_3 / 'rowan' / 'components' / 'Main', 'ston') exists
 %
 
 category: 'tests'
@@ -43224,7 +43224,7 @@ _expected_rowanSample7_component_specification
 	#specName : ''RowanSample7_component'',
 	#version : ''0.3.0'',
 	#projectUrl : ''https://github.com/dalehenrich/RowanSample7'',
-	#configsPath : ''rowan/configs'',
+	#configsPath : ''rowan/components'',
 	#specsPath : ''rowan/specs'',
 	#repoSpec : RwGitRepositorySpecification {
 		#committish : ''master'',
