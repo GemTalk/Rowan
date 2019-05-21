@@ -5,13 +5,25 @@ Class {
 }
 
 { #category : 'private' }
-RwProjectTonelReaderWriterTest >> _repositoryFormat [
+RwProjectTonelReaderWriterTest >> _classExtensionRemovedArtifactFileReference: repositoryRoot [
 
-	^ 'tonel'
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension1' / 'Issue361Class1.extension.st'
 ]
 
 { #category : 'private' }
-RwProjectTonelReaderWriterTest >> _writerVisitorClass [
+RwProjectTonelReaderWriterTest >> _classRemovedArtifactFileReference: repositoryRoot [
 
-	^ RwModificationTonelWriterVisitor
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core' / 'Issue361Class1.class.st'
+]
+
+{ #category : 'private' }
+RwProjectTonelReaderWriterTest >> _packageRemovedArtifactFileReference: repositoryRoot [
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension2'
+]
+
+{ #category : 'private' }
+RwProjectTonelReaderWriterTest >> _repositoryFormat [
+
+	^ 'tonel'
 ]

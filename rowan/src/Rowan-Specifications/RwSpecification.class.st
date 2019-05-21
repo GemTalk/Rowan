@@ -51,6 +51,12 @@ RwSpecification class >> new [
 	^self basicNew initialize
 ]
 
+{ #category : 'conversion' }
+RwSpecification >> asSpecification [
+
+	^ self
+]
+
 { #category : 'private' }
 RwSpecification >> currentVersion [
 	"

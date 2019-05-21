@@ -2,6 +2,10 @@ Class {
 	#name : 'RwModificationFiletreeWriterVisitor',
 	#superclass : 'RwModificationCypressFamilyWriterVisitor',
 	#instVars : [
+		'instanceFileNameMap',
+		'classFileNameMap',
+		'instanceBeforeFileNameMap',
+		'classBeforeFileNameMap',
 		'packageExtension',
 		'separateMethodMetaAndSource',
 		'noMethodMetaData',
@@ -68,7 +72,11 @@ RwModificationFiletreeWriterVisitor >> _classExtensionOf: aClassExtension [
 RwModificationFiletreeWriterVisitor >> _classExtensionSourceDir [
 
 	| filename |
-	filename := classExtFileNameMap at:  self currentClassExtension name.
+	filename := classExtFileNameMap 
+		at:  self currentClassExtension name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classExtBeforeFileNameMap at: self currentClassExtension name ].
 	^ self _packageSourceDir / filename, 'extension'
 ]
 
@@ -76,7 +84,11 @@ RwModificationFiletreeWriterVisitor >> _classExtensionSourceDir [
 RwModificationFiletreeWriterVisitor >> _classSourceDir [
 
 	| filename |
-	filename := classDefFileNameMap at:  self currentClassDefinition name.
+	filename := classDefFileNameMap 
+		at:  self currentClassDefinition name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classDefBeforeFileNameMap at: self currentClassDefinition name ].
 	^ self _packageSourceDir / filename, 'class'
 ]
 
@@ -336,6 +348,89 @@ RwModificationFiletreeWriterVisitor >> addedPackage: aPackageModification [
 	self processPackage: aPackageModification
 ]
 
+{ #category : 'actions' }
+RwModificationFiletreeWriterVisitor >> changedMethod: aMethodModification [
+
+	| methodDefinition methodDir methodFileName |
+
+	methodDefinition := aMethodModification after.
+
+	"create instance/class directory as needed ... write method source file"
+	 (aMethodModification isMeta
+		ifTrue: [
+			methodFileName := classFileNameMap at: methodDefinition selector.
+			methodDir := self _methodClassDir ensureCreateDirectory ]
+		ifFalse: [ 
+			methodFileName := instanceFileNameMap at: methodDefinition selector.
+			methodDir := self _methodInstanceDir ensureCreateDirectory ]) .
+
+
+	(methodDir / methodFileName, 'st')
+		writeStreamDo: [:aStream |
+		aStream 
+			<< methodDefinition protocol
+			<< self _newLine
+			<< (methodDefinition source withLineEndings: self _newLine) ]
+]
+
+{ #category : 'actions' }
+RwModificationFiletreeWriterVisitor >> deletedClass: aClassModification [
+
+	currentClassDefinition := aClassModification before.
+
+	self _classSourceDir ensureDeleteAll
+]
+
+{ #category : 'actions' }
+RwModificationFiletreeWriterVisitor >> deletedClassExtension: aClassExtensionModification [
+
+	currentClassExtension := aClassExtensionModification before.
+
+	self _classExtensionSourceDir ensureDeleteAll
+]
+
+{ #category : 'actions' }
+RwModificationFiletreeWriterVisitor >> deletedMethod: aMethodModification [
+
+	| methodDefinition methodDir methodFileName |
+
+	methodDefinition := aMethodModification before.
+
+	"delete method source file"
+	 (aMethodModification isMeta
+		ifTrue: [
+			methodFileName := classFileNameMap at: methodDefinition selector
+				ifAbsent: [ classBeforeFileNameMap at: methodDefinition selector ].
+			methodDir := self _methodClassDir ensureCreateDirectory ]
+		ifFalse: [ 
+			methodFileName := instanceFileNameMap at: methodDefinition selector
+				ifAbsent: [ instanceBeforeFileNameMap at: methodDefinition selector ].
+			methodDir := self _methodInstanceDir ensureCreateDirectory ]) .
+
+
+	(methodDir / methodFileName, 'st') ensureDelete
+]
+
+{ #category : 'actions' }
+RwModificationFiletreeWriterVisitor >> deletedMethodExtension: aMethodExtensionModification [
+
+	| methodDefinition methodDir methodFileName |
+
+	methodDefinition := aMethodExtensionModification before.
+
+	"create instance/class directory as needed ... write method source file"
+	 (aMethodExtensionModification isMeta
+		ifTrue: [
+			methodFileName := classBeforeFileNameMap at: methodDefinition selector.
+			methodDir := self _methodClassExtensionDir ensureCreateDirectory ]
+		ifFalse: [ 
+			methodFileName := instanceBeforeFileNameMap at: methodDefinition selector.
+			methodDir := self _methodInstanceExtensionDir ensureCreateDirectory ]) .
+
+
+	(methodDir / methodFileName, 'st') ensureDelete
+]
+
 { #category : 'package writing' }
 RwModificationFiletreeWriterVisitor >> monticelloMetadata [
 	"monticello metadata  --- for writing metadataless is the only supported format"
@@ -373,11 +468,17 @@ RwModificationFiletreeWriterVisitor >> processClass: aClassModification [
 				<< (self _typeClassDefinitionOf: self currentClassDefinition)
 				<< self _newLine ].
 
-	instanceFileNameMap  := self _createFileNameMapForMethods: self currentClassDefinition instanceMethodDefinitions.
-	classFileNameMap := self _createFileNameMapForMethods: self currentClassDefinition classMethodDefinitions.
+	instanceFileNameMap  := self _createFileNameMapForMethods: aClassModification after instanceMethodDefinitions.
+	classFileNameMap := self _createFileNameMapForMethods: aClassModification after classMethodDefinitions.
+	instanceBeforeFileNameMap  := self _createFileNameMapForMethods: aClassModification before instanceMethodDefinitions.
+	classBeforeFileNameMap := self _createFileNameMapForMethods: aClassModification before classMethodDefinitions.
 
-	aClassModification instanceMethodsModification acceptVisitor: self.
-	aClassModification classMethodsModification acceptVisitor: self
+	currentClassDefinition instanceMethodDefinitions isEmpty
+		ifTrue: [  self _methodInstanceDir ensureDeleteAll ]
+		ifFalse: [ aClassModification instanceMethodsModification acceptVisitor: self ].
+	currentClassDefinition classMethodDefinitions isEmpty
+		ifTrue: [  self _methodClassDir ensureDeleteAll ]
+		ifFalse: [ aClassModification classMethodsModification acceptVisitor: self ]
 ]
 
 { #category : 'class writing' }
@@ -385,19 +486,23 @@ RwModificationFiletreeWriterVisitor >> processClassExtension: aClassExtensionMod
 
 	"create class extension directory and defintion structure"
 
-	self _classExtensionSourceDir ensureCreateDirectory.
+	(currentClassExtension instanceMethodDefinitions isEmpty and: [ currentClassExtension classMethodDefinitions isEmpty ])
+		ifTrue: [ self _classExtensionSourceDir ensureDeleteAll ]
+		ifFalse: [ 
+			self _classExtensionSourceDir ensureCreateDirectory.
+			(self _classExtensionSourceDir /  'properties.json')
+				writeStreamDo: [:aStream |
+					aStream 
+						<< (self _classExtensionOf: self currentClassExtension)
+						<< self _newLine ].
 
-	(self _classExtensionSourceDir /  'properties.json')
-		writeStreamDo: [:aStream |
-			aStream 
-				<< (self _classExtensionOf: self currentClassExtension)
-				<< self _newLine ].
+			instanceFileNameMap  := self _createFileNameMapForMethods: aClassExtensionModification after instanceMethodDefinitions.
+			classFileNameMap := self _createFileNameMapForMethods: aClassExtensionModification after classMethodDefinitions.
+			instanceBeforeFileNameMap  := self _createFileNameMapForMethods: aClassExtensionModification before instanceMethodDefinitions.
+			classBeforeFileNameMap := self _createFileNameMapForMethods: aClassExtensionModification before classMethodDefinitions.
 
-	instanceFileNameMap  := self _createFileNameMapForMethods: self currentClassExtension instanceMethodDefinitions.
-	classFileNameMap := self _createFileNameMapForMethods: self currentClassExtension classMethodDefinitions.
-
-	aClassExtensionModification instanceMethodsModification acceptVisitor: self.
-	aClassExtensionModification classMethodsModification acceptVisitor: self
+			aClassExtensionModification instanceMethodsModification acceptVisitor: self.
+			aClassExtensionModification classMethodsModification acceptVisitor: self ]
 ]
 
 { #category : 'project writing' }
@@ -406,6 +511,7 @@ RwModificationFiletreeWriterVisitor >> processProject: aProjectModification [
 	| projectProperties |
 
 	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
+	packageDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification before packages.
 
 	"confirm that the project source is written in Tonel format"
 	(self _repositoryFormatFor:  aProjectModification after packagesRoot) = 'filetree' ifFalse: [ self error: 'expected tonel format repository' ].

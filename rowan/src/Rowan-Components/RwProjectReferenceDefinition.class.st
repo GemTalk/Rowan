@@ -38,6 +38,7 @@ RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aR
 		projectName: projectName
 			configurationNames: aRwSpecification defaultConfigurationNames
 			groupNames: aRwSpecification defaultGroupNames
+			defaultComponentName: aRwSpecification defaultComponentName
 			useGit: aRwSpecification useGit
 			projectUrl: aRwSpecification projectUrl
 			comment: aRwSpecification comment
@@ -48,6 +49,42 @@ RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aR
 			packagesPath: aRwSpecification repoPath
 			projectsPath: aRwSpecification projectsPath
 			specsPath: aRwSpecification specsPath
+]
+
+{ #category : 'instance creation' }
+RwProjectReferenceDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath [
+
+	^ self new
+		projectName: projectName;
+		configurationNames: configurationNames;
+		defaultComponentName: defaultComponentName;
+		groupNames: groupNames;
+		projectUrl: projectUrl;
+		useGit: useGit;
+		comment: comment;
+		projectHome: projectHomeFileReferenceOrString;
+		committish: committish committishType: committishType;
+		configsPath: configsPath;
+		packagesPath: packagesPath;
+		projectsPath: projectsPath;
+		specsPath: specsPath;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwProjectReferenceDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment [
+
+	^ self new
+		projectName: projectName;
+		configurationNames: configurationNames;
+		groupNames: groupNames;
+		 defaultComponentName: defaultComponentName;
+		useGit: useGit;
+		projectUrl: projectUrl;
+		projectHome: projectHomeFileReferenceOrString;
+		comment: comment;
+		committish: committish committishType: committishType;
+		yourself
 ]
 
 { #category : 'instance creation' }
@@ -64,25 +101,6 @@ RwProjectReferenceDefinition class >> projectName: projectName configurationName
 ]
 
 { #category : 'instance creation' }
-RwProjectReferenceDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames  useGit: useGit projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath [
-
-	^ self new
-		projectName: projectName;
-		configurationNames: configurationNames;
-		groupNames: groupNames;
-		projectUrl: projectUrl;
-		useGit: useGit;
-		comment: comment;
-		projectHome: projectHomeFileReferenceOrString;
-		committish: committish committishType: committishType;
-		configsPath: configsPath;
-		packagesPath: packagesPath;
-		projectsPath: projectsPath;
-		specsPath: specsPath;
-		yourself
-]
-
-{ #category : 'instance creation' }
 RwProjectReferenceDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl committish: committish committishType: committishType comment: comment [
 
 	^ self new
@@ -91,6 +109,21 @@ RwProjectReferenceDefinition class >> projectName: projectName configurationName
 		groupNames: groupNames;
 		useGit: useGit;
 		projectUrl: projectUrl;
+		comment: comment;
+		committish: committish committishType: committishType;
+		yourself
+]
+
+{ #category : 'instance creation' }
+RwProjectReferenceDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment [
+
+	^ self new
+		projectName: projectName;
+		configurationNames: configurationNames;
+		groupNames: groupNames;
+		useGit: useGit;
+		projectUrl: projectUrl;
+		projectHome: projectHomeFileReferenceOrString;
 		comment: comment;
 		committish: committish committishType: committishType;
 		yourself
@@ -170,6 +203,7 @@ RwProjectReferenceDefinition >> asSpecification [
 		configsPath: self configsPath;
 		specsPath: self specsPath;
 		projectsPath: self projectsPath;
+		defaultComponentName: self defaultComponentName;
 		defaultConfigurationNames: self configurationNames;
 		defaultGroupNames: self groupNames;
 		comment: self comment;
@@ -194,6 +228,12 @@ RwProjectReferenceDefinition >> comment [
 RwProjectReferenceDefinition >> comment: aString [
 
 	^ self properties at: 'comment' put: aString
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> commitLog: logLimit [
+
+	^ self repositoryDefinition commitLog: logLimit
 ]
 
 { #category : 'accessing' }
@@ -256,7 +296,13 @@ RwProjectReferenceDefinition >> create [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> defaultComponentName [
 
-	^ 'Core'
+	^ self properties at: 'defaultComponentName' ifAbsent: [ 'Core' ]
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> defaultComponentName: aString [
+
+	^ self properties at: 'defaultComponentName' put: aString
 ]
 
 { #category : 'accessing' }
@@ -271,6 +317,12 @@ RwProjectReferenceDefinition >> exportSpecification [
 	| spec |
 	spec := self asSpecification.
 	spec exportToUrl: 'file:',  self specsRoot pathString, '/'
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> gitRoot: aGitRootReferenceOrString [ 
+
+	self repositoryDefinition gitRoot: aGitRootReferenceOrString
 ]
 
 { #category : 'accessing' }
@@ -297,16 +349,40 @@ RwProjectReferenceDefinition >> key [
 	^ self projectName
 ]
 
-{ #category : 'temporary compat' }
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> loadedCommitId [
 
-self deprecated: 'temporary method ... simulating RwSpecification api'.
-	^''
+	^ self properties at: 'loadedCommitId' ifAbsent: [ '' ]
 ]
 
-{ #category : 'temporary compat' }
-RwProjectReferenceDefinition >> loadedCommitId:  ignored [
-self deprecated: 'temporary method ... simulating RwSpecification api'.
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> loadedCommitId:  aCommitId [
+
+	^ self properties at: 'loadedCommitId' put: aCommitId
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> loadedConfigurationNames [
+
+	^ self configurationNames
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> loadedConfigurationNames: anArray [
+
+	^ self configurationNames: anArray
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> loadedGroupNames [
+
+	^ self groupNames
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> loadedGroupNames: anArray [
+
+	^ self groupNames: anArray
 ]
 
 { #category : 'accessing' }
@@ -390,8 +466,9 @@ RwProjectReferenceDefinition >> projectHome [
 RwProjectReferenceDefinition >> projectHome: projectHomeFileReferenceOrString [
 
 	self repositoryDefinition: nil. "changing project home invalidates the current repository definition"
-	projectHomeFileReferenceOrString ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
-	^ self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference
+	projectHomeFileReferenceOrString
+		ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
+	self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference.
 ]
 
 { #category : 'accessing' }
@@ -461,6 +538,12 @@ RwProjectReferenceDefinition >> remoteUrl: aRemoteUrl [
 ]
 
 { #category : 'accessing' }
+RwProjectReferenceDefinition >> repositoryCommitId [
+
+	^ self repositoryDefinition repositoryCommitId
+]
+
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> repositoryDefinition [
 
 	^ self properties at: 'repositoryDefinition' ifAbsentPut: [ self _repositoryDefinitionForProjectHome: self projectHome ]
@@ -475,14 +558,24 @@ RwProjectReferenceDefinition >> repositoryDefinition: aRepositoryDefinition [
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> repositoryRoot [
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^self projectHome / self projectAlias
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> repositoryRoot: aFileReferenceOrPath [
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	| fileRef |
+	fileRef := aFileReferenceOrPath asFileReference.
+	self projectHome: fileRef parent.
+	self projectAlias: fileRef basename
 ]
 
 { #category : 'temporary compat' }
 RwProjectReferenceDefinition >> repositoryRootPath [
 
-self deprecated: 'temporary method ... simulating RwSpecification api'.
 	^ self repositoryRoot pathString
 ]
 
@@ -529,6 +622,12 @@ RwProjectReferenceDefinition >> tag: aString [
 	self committish: aString committishType: 'tag'
 ]
 
+{ #category : 'loading' }
+RwProjectReferenceDefinition >> updateLoadedCommitId [
+
+	self loadedCommitId: self repositoryDefinition commitId
+]
+
 { #category : 'temporary compat' }
 RwProjectReferenceDefinition >> updateLoadedCommitIdForTool: aRwTool [
 self deprecated: 'temporary method ... simulating RwSpecification api'.
@@ -545,4 +644,19 @@ RwProjectReferenceDefinition >> useGit [
 RwProjectReferenceDefinition >> useGit: aBool [
 
 	^ self properties at: 'useGit' put: aBool
+]
+
+{ #category : 'actions' }
+RwProjectReferenceDefinition >> validateRepository [
+	"cofirm that the repository appears to be complete relative to this project"
+
+	{
+		'configs' -> self configsRoot. 
+		'packages' -> self packagesRoot. 
+		'specs' -> self specsRoot. 
+		'projects' -> self projectsRoot
+	}
+		do: [ :assoc | 
+			(assoc value) exists 
+				ifFalse: [ self error: 'The repository at ', self repositoryRootPath printString, ' is missing the ', (assoc key) printString, ' directory.'  ] ].
 ]

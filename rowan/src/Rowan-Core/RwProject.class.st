@@ -50,9 +50,9 @@ RwProject >> definedClasses [
 RwProject >> existsOnDisk [
 
 	Rowan image loadedProjectNamed: self name ifAbsent: [ ^false ].
-	^ (self repositoryRootPath) 
+	^ self repositoryRoot
 		ifNil: [ false ]
-		ifNotNil: [:path | path asFileReference exists ]
+		ifNotNil: [:fileRef | fileRef exists ]
 ]
 
 { #category : 'accessing' }
@@ -71,7 +71,7 @@ RwProject >> isDirty [
 { #category : 'properties' }
 RwProject >> loadedCommitId [
 
-	^ self _specification loadedCommitId
+	^ self _loadedProject loadedCommitId
 ]
 
 { #category : 'accessing' }
@@ -117,24 +117,26 @@ RwProject >> remote [
 { #category : 'accessing' }
 RwProject >> repositoryCommitId [
 
-	| rootPath |
-	self useGit
-		ifFalse: [ ^ '' ].
-	rootPath := self repositoryRootPath.
-	rootPath ifNil: [ ^ '' ].
-	^ Rowan gitTools gitcommitShaIn: rootPath
+	^ self _loadedProject repositoryCommitId
 
+]
+
+{ #category : 'properties' }
+RwProject >> repositoryRoot [
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ self _loadedProject repositoryRoot
 ]
 
 { #category : 'properties' }
 RwProject >> repositoryRootPath [
 
-	^ self _specification repositoryRootPath
+	^ self repositoryRoot pathString
 ]
 
 { #category : 'testing' }
 RwProject >> useGit [
 
-	^self _specification useGit
+	^self _loadedProject useGit
 
 ]

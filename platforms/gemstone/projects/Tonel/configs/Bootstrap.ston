@@ -1,0 +1,19 @@
+RwProjectLoadConfiguration {
+	#name : 'Bootstrap',
+	#version : '0.1.0',
+		#definedGroupNames : {
+		'core' : [ ]
+	},
+	#conditionalPackages : { },
+	#configurationNames : [
+		'Gs3215'
+	],
+  #conditionalPackageMapSpecs : {
+		'gemstone' : {
+			'SystemUser' : {
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
+	#comment : 'For Bootstrap load Gs3215 only - skip Tests'
+}

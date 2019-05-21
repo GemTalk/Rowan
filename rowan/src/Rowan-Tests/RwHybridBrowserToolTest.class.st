@@ -617,7 +617,6 @@ RwHybridBrowserToolTest >> testHybridCompileMethodRemove [
 
 	self should: [ normalClass bar ] raise: MessageNotUnderstood.
 	self should: [ normalInstance foo ] raise: MessageNotUnderstood
-
 ]
 
 { #category : 'tests' }

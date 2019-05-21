@@ -1,7 +1,7 @@
   set u SystemUser p swordfish
   login
 
-	run
+ 	run
 	(System myUserProfile objectNamed: 'Rowan')
 		ifNotNil: [ self error: 'Rowan is already installed!' ].
 %
@@ -562,7 +562,7 @@ currentOrNil
 	| packageManager repo |
 	packageManager := CypressPackageManager3 new.
 	repo := CypressAbstractRepository
-		onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/rowan/src/'  )
+		onUrl: (CypressUrl absoluteFromText: 'tonel:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/FileSystemGs/rowan/src/'  )
 		alias: ''.
 	packageManager defaultSymbolDictionaryName: #Globals.
 	#( 'FileSystem-GemStone-Kernel' 'Files' 'Files-Tests' 'FileSystem-Core-32x' 'Network-UUID' 'Network-UUID-Tests' 
@@ -634,7 +634,7 @@ commit
     value: #('GemStone-Interactions-Core' 'Rowan-Url-3215' 
       'Rowan-Core' 'Rowan-GemStone-Core' 'Rowan-Cypress-Core' 'Rowan-Core-Definitions-Extensions'
       'Rowan-Services-Core' 'Rowan-Url-Extensions'
-      'Rowan-Services-Extensions'
+      'Rowan-Services-Extensions' 'AST-Core' 'AST-Kernel-Tests-Core' 'AST-Tests-Core'
 	).	"Populate with Rowan implementation classes"
 %
   commit
@@ -684,7 +684,8 @@ commit
   CypressBootstrapRowanBlock 
     value: 'Globals'
     value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel' 
-      'Rowan-Tools-Kernel' 'Rowan-GemStone-3215' 'Rowan-GemStone-32x' 'Rowan-Components-Kernel'
+      'Rowan-Tools-Kernel' 'Rowan-GemStone-3215' 'AST-Kernel-Core' 'Rowan-GemStone-32x' 
+			'Rowan-Components-Kernel'
 	).		"Extension methods for GemStone kernel classes"
 %
   commit
@@ -711,15 +712,15 @@ commit
 	loadedProjectInfo := Dictionary new.
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
 	{
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/rowan/specs/FileSystemGs.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/FileSystemGs/rowan/specs/FileSystemGs.ston'. 'Default'}.
 		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'. 'Load'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'. 'Bootstrap'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'. 'Bootstrap'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/STON/specs/STON_SystemUser.ston'. 'Bootstrap'}.
+		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/Tonel/specs/Tonel_SystemUser.ston'. 'Bootstrap'}.
 	} 
 	do: [:ar |
 		"Read project and packages from disk, creating a projectSetDefinition with all 5 projects"
-		| specification specUrl readTool |
+		| specification specUrl readTool configName groupNames theProjectSetDefinition |
 		specUrl := ar at: 1.
 		specification := RwSpecification fromUrl: specUrl.
 		specification
@@ -727,29 +728,22 @@ commit
 			repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
 			register. "Create each of the loaded projects"
 		readTool := Rowan projectTools read.
-		ar size = 1
-			ifTrue: [
-				| theProjectSetDefinition |
-				theProjectSetDefinition := readTool readProjectSetForProjectNamed: specification specName.
-				theProjectSetDefinition
-					do: [:projectDefinition |
-						projectSetDefinition addProject: projectDefinition ].
-				loadedProjectInfo at: specification specName put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: specification specName) ]
-			ifFalse: [
-      	| configName groupNames theProjectSetDefinition |
-				configName := ar at: 2.
-				groupNames := specification defaultGroupNames.
-        theProjectSetDefinition := readTool
-					readProjectSetForProjectNamed: specification specName 
-						withConfigurations: { configName } 
-						groupNames: groupNames.
-				loadedProjectInfo at: specification specName put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: specification specName).
-				theProjectSetDefinition
-            	do: [:projectDefinition |
-              	projectSetDefinition addProject: projectDefinition ] ] ].
+		configName := ar at: 2.
+		groupNames := specification defaultGroupNames.
+    theProjectSetDefinition := readTool
+				readProjectSetForProjectNamed: specification specName 
+				withConfigurations: { configName } 
+				groupNames: groupNames.
+		loadedProjectInfo at: specification specName put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: specification specName).
+    theProjectSetDefinition
+    	do: [:projectDefinition |	
+				GsFile stdout nextPutAll: 'Project: ', projectDefinition name; lf.
+				projectDefinition packageNames do: [:pkgName | 
+					GsFile stdout nextPutAll: '	', pkgName; lf ].
+				projectSetDefinition addProject: projectDefinition ] ].
 
 	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
-			(#('FileSystemGs' 'Rowan') includes: projectName)
+			(#('FileSystemGs' 'Rowan' 'Cypress' 'Tonel' 'STON') includes: projectName)
 				ifTrue: [ 
 					"install the packageMapSpecs for this load into the specification prior to the load"
 					| projectDefinition spec gemstoneSpec thePackageMapSpecs |

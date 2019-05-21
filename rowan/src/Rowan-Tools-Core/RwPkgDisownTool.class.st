@@ -16,7 +16,7 @@ RwPkgDisownTool >> disownClassExtensionMethodsInClassNamed: className forPackage
 			adoptClassExtensionNamed: className  instanceSelectors: <instanceSelectors> classSelectors: <classSelectors> intoPackageNamed: packageName
 	to restore the classes and methods to the loaded things"
 
-	| loadedPackage loadedProject loadedClassExtension gemstoneSpec packageSymDictName theClass theSymbolDictionary registry |
+	| loadedPackage loadedProject loadedClassExtension packageSymDictName theClass theSymbolDictionary registry |
 	theClass := Rowan globalNamed: className.
 
 	loadedClassExtension := (Rowan image loadedClassExtensionsForClass: theClass) 
@@ -26,15 +26,13 @@ RwPkgDisownTool >> disownClassExtensionMethodsInClassNamed: className forPackage
 	loadedPackage := loadedClassExtension loadedPackage.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
 	registry disownClassExtensions: theClass forLoadedPackage: loadedPackage
-
 ]
 
 { #category : 'classes' }
@@ -50,7 +48,7 @@ RwPkgDisownTool >> disownClassNamed: className [
 			adoptClassNamed: className classExtension: classExtension instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: <packageName>
 	to restore the classes and methods to the loaded things"
 
-	| packageName loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry |
+	| packageName loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry |
 	theClass := Rowan globalNamed: className.
 
 	theClass rowanProjectName = Rowan unpackagedName
@@ -60,15 +58,13 @@ RwPkgDisownTool >> disownClassNamed: className [
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
 	registry disownClass: theClass
-
 ]
 
 { #category : 'methods' }
@@ -81,7 +77,7 @@ RwPkgDisownTool >> disownMethod: methodSelector inClassNamed: className isMeta: 
 			adoptMethod: methodSelector inClassNamed: className  isMeta: isMeta intoPackageNamed: <packageName>
 	to restore the specified method to the loaded things"
 
-	| packageName loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
+	| packageName loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry 
 		theBehavior theCompiledMethod |
 	theClass := Rowan globalNamed: className.
 	theBehavior := isMeta
@@ -96,15 +92,13 @@ RwPkgDisownTool >> disownMethod: methodSelector inClassNamed: className isMeta: 
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
 	registry _doDeleteCompiledMethodFromLoadedThings: theCompiledMethod for: theBehavior
-
 ]
 
 { #category : 'packages' }

@@ -1,0 +1,19 @@
+RwComponentSpecification {
+	#specName : 'Issue361',
+	#version : '0.3.0',
+	#projectUrl : '',
+	#configsPath : 'tonel/rowan/configs',
+	#specsPath : 'tonel/rowan/specs',
+	#repoSpec : RwDiskRepositorySpecification {
+		
+	},
+	#repoPath : 'tonel/rowan/src',
+	#comment : 'Issue #361: empty extension file (tonel); emtpy extension directory (filetree)',
+	#defaultConfigurationNames : [
+		'Core'
+	],
+	#defaultGroupNames : [
+		'core'
+	],
+	#projectsPath : 'tonel/rowan/projects'
+}

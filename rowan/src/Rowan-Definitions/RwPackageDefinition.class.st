@@ -75,6 +75,12 @@ RwPackageDefinition >> addClassNamed: className super: superclassName instvars: 
 ]
 
 { #category : 'accessing' }
+RwPackageDefinition >> classDefinitionNamed: className [
+
+	^ self classDefinitionNamed: className ifAbsent: [ self error: 'No class definition found with the name ', className printString ]
+]
+
+{ #category : 'accessing' }
 RwPackageDefinition >> classDefinitionNamed: className ifAbsent: absentBlock [
 
 	^ self classDefinitions at: className ifAbsent: absentBlock
@@ -135,10 +141,14 @@ RwPackageDefinition >> key [
 { #category : 'copying' }
 RwPackageDefinition >> postCopy [
 
+	| oldDefs |
 	super postCopy.
-	classDefinitions := classDefinitions copy.
-	classExtensions := classExtensions copy
-
+	oldDefs := classDefinitions.
+	classDefinitions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classDefinitions at: key put: value copy ].
+	oldDefs := classExtensions.
+	classExtensions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classExtensions at: key put: value copy ].
 ]
 
 { #category : 'accessing' }
@@ -151,6 +161,12 @@ RwPackageDefinition >> removeClassDefinition: aClassDefinition [
 RwPackageDefinition >> removeClassExtensionDefinition: aClassExtension [
 
 	self removeDefinition: aClassExtension from: classExtensions
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> removeClassExtensionDefinitionNamed: className [
+
+	self removeKey: className from: classExtensions
 ]
 
 { #category : 'accessing' }

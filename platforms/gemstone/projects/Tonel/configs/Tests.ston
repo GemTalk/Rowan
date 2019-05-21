@@ -1,0 +1,21 @@
+RwProjectLoadConfiguration {
+	#name : 'Tests',
+	#version : '0.1.0',
+	#conditionalPackages : {
+		[
+			'gemstone'
+		] : {
+			'core' : {
+				#packageNames : [
+					'CypressTonel-Tests',
+					'CypressTonel-GemStone-Tests',
+					'Tonel-Cypress-Tests',
+					'Tonel-GemStone-Tests',
+					'Tonel-Tests'
+				]
+			}
+		}
+	},
+	#configurationNames : [ ],
+	#comment : 'Tonel test packages'
+}

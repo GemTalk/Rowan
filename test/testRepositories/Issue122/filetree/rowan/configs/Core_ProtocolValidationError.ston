@@ -1,0 +1,17 @@
+RwComponentLoadConfiguration {
+	#name : 'Core_ProtocolValidationError',
+	#comment : '',
+	#projectName : 'Issue122',
+	#version : '0.1.0',
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#packageNames : [
+					'Issue122-Core-ProtocolValidationError'
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,18 @@
+RwComponentLoadConfiguration {
+	#name : 'Core',
+	#comment : 'Issue #361: empty extension file (tonel); emtpy extension directory (filetree)',
+	#projectName : 'Issue122',
+	#version : '0.1.0',
+	#conditionalPackages : {
+		[
+			'common'
+		] : {
+			'core' : {
+				#packageNames : [
+					'Issue122-Core',
+					'Issue122-Extension1'
+				]
+			}
+		}
+	}
+}

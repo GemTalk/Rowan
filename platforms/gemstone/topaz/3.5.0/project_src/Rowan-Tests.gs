@@ -1248,6 +1248,22 @@ test_updateFromSton
 
 !		Instance methods for 'RowanServicesTest'
 
+category: 'unicode method'
+method: RowanServicesTest
+compileUnicodeMethod
+	"RowanServicesTest new compileUnicodeMethod"
+
+	RowanServicesTest rwCompileMethod:
+	'iAmAUnicodeMethod
+
+		| abc |
+		abc := ''', (String with: (Character withValue: 16r3DA)), '''.
+		self halt. 
+		^abc'
+
+	category: 'unicode method'
+%
+
 category: 'support'
 method: RowanServicesTest
 createClassDefinitionNamed: className
@@ -1506,32 +1522,28 @@ setUp
 category: 'tests'
 method: RowanAnsweringServiceTest
 test_execCompileError
-	| gotError |
 
-	gotError := [service exec: '1 +' context: nil] on: CompileError do:[:ex |
-		true].
-	self assert: gotError.
+	self deny: (service exec: '1 +' context: nil asOop) key.
 %
 
 category: 'tests'
 method: RowanAnsweringServiceTest
 test_execNilContext
 
-	self assert: (service exec: '123' context: nil) equals: 123.
-	self assert: (service exec: '$a' context: nil) equals: $a.
-	self assert: (service exec: '''abc''' context: nil) equals: 'abc'.
-	self assert: (service exec: '3+4' context: nil) equals: 7.
-	self assert: (service exec: 'true' context: nil) equals: true.
-	self assert: (service exec: 'false' context: nil) equals: false.
+	self assert: (service exec: '123' context: nil asOop) value equals: 123 asOop.
+	self assert: (service exec: '$a' context: nil asOop) value equals: $a asOop.
+	self assert: (service exec: '3+4' context: nil asOop) value equals: 7 asOop.
+	self assert: (service exec: 'true' context: nil asOop) value equals: true asOop.
+	self assert: (service exec: 'false' context: nil asOop) value equals: false asOop.
 %
 
 category: 'tests'
 method: RowanAnsweringServiceTest
 test_execWithContext
 
-	self assert: (service exec: 'self' context: 123) equals: 123.
-	self assert: (service exec: 'self size' context: Array new) equals: 0.
-	self assert: (service exec: '1 + self' context: 2) equals: 3.
+	self assert: (service exec: 'self' context: 123 asOop) value equals: 123 asOop.
+	self assert: (service exec: 'self size' context: Array new asOop) value equals: 0 asOop.
+	self assert: (service exec: '1 + self' context: 2 asOop) value equals: 3 asOop.
 %
 
 category: 'tests'
@@ -1663,6 +1675,142 @@ createClassNamed: className
 
 category: 'support'
 method: RowanClassServiceTest
+createHierarchyWithNonResolvableClass
+
+	"do not delete - sent by Jadeite client test
+	RowanClassServiceTest new createHierarchyWithNonResolvableClass.
+	Code by dhenrich"
+
+  | projectName  packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
+    className4 projectSetDefinition class1 class2 class3 class4 oldClass1 oldClass2 oldClass3  |
+
+  projectName := 'Issue470'.
+  packageName1 := 'Issue470-Core'.
+  packageName2 := 'Issue470-Extensions'.
+  className1 := 'Issue470Class1'.
+  className2 := 'Issue470Class2'.
+  className3 := 'Issue470Class3'.
+  className4 := 'Issue470Class4'.
+
+  {projectName}
+    do: [ :pn |
+      (Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+        ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+
+"create project"
+  projectDefinition := (RwProjectDefinition
+    newForGitBasedProjectNamed: projectName)
+    addPackageNamed: packageName1;
+    addPackageNamed: packageName2;
+    defaultSymbolDictName: 'UserGlobals';
+    yourself.
+
+  packageDefinition := projectDefinition packageNamed: packageName1.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className1
+      super: 'Object'
+      instvars: #(ivar1)
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className2
+      super: className1
+      instvars: #('ivar2')
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className3
+      super: className2
+      instvars: #('ivar4' 'ivar3')
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+   yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+
+"load"
+  projectSetDefinition := RwProjectSetDefinition new.
+  projectSetDefinition addDefinition: projectDefinition.
+  Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+  class1 := Rowan globalNamed: className1.
+  self assert: class1 instVarNames = #(ivar1).
+
+  class2 := Rowan globalNamed: className2.
+  self assert: class2 instVarNames = #(ivar2).
+  self assert: class2 superClass == class1.
+
+  class3 := Rowan globalNamed: className3.
+  self assert: class3 instVarNames = #(ivar4 ivar3).
+  self assert: class3 superClass == class2.
+
+"remove class2 and add class4 -- edit projectDefinition structure in place"
+  projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+  packageDefinition := projectDefinition packageNamed: packageName1.
+
+  packageDefinition removeClassNamed: className2.
+
+  classDefinition := (RwClassDefinition
+    newForClassNamed: className4
+      super: className1
+      instvars: #('ivar2')
+      classinstvars: #()
+      classvars: #()
+      category: packageName1
+      comment: 'comment'
+      pools: #()
+      type: 'normal')
+    yourself.
+  packageDefinition
+    addClassDefinition: classDefinition.
+"load"
+  projectSetDefinition := RwProjectSetDefinition new.
+  projectSetDefinition addDefinition: projectDefinition.
+  Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+  oldClass1 := class1.
+  oldClass2 := class2.
+  oldClass3 := class3.
+ 
+  class1 := Rowan globalNamed: className1.
+  self assert: class1 instVarNames = #(ivar1).
+  self assert: oldClass1 == class1.
+
+  class4 := Rowan globalNamed: className4.
+  self assert: class4 instVarNames = #(ivar2).
+  self assert: class4 superClass == class1.
+
+  class3 := Rowan globalNamed: className3.
+  self assert: class3 instVarNames = #(ivar4 ivar3).
+  self assert: class3 superClass == oldClass2.
+  self assert: oldClass3 == class3.
+%
+
+category: 'support'
+method: RowanClassServiceTest
 servicesClassInstance
 
 	^self servicesDefaultClassName evaluate perform: #new
@@ -1755,9 +1903,9 @@ test_classFromName
 	"always return thisClass" 
 	| classService |
 	classService := RowanClassService forClassNamed: 'Array' meta: false.
-	self assert: classService classFromName equals: Array.
+	self assert: classService theClass equals: Array.
 	classService := RowanClassService forClassNamed: 'OrderedCollection' meta: true.
-	self assert: classService classFromName equals: OrderedCollection
+	self assert: classService theClass equals: OrderedCollection
 %
 
 category: 'tests'
@@ -1970,6 +2118,8 @@ test_setSuperSubIndicators
 			category: ''RowanSample1-Core''
 			options: #()'.
 	classService := RowanClassService forClassNamed: 'RowanSample1'.
+	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
+	packageService recompileMethodsAfterClassCompilation. 
 	classService saveMethodSource: selector asString,  ' ^#deleteThisMethod' category: 'abc'.
 	superclassMethodService := (classService methodsNamed: selector) first.
 	self deny: superclassMethodService hasSupers.
@@ -2479,7 +2629,8 @@ testCompileClassSelectsPackageAndClass
 			poolDictionaries: #()
 			category: ''', self servicesTestPackageName, '''
 			options: #()'.
-	self assert: RowanCommandResult results size equals: 1.
+	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
+	packageService recompileMethodsAfterClassCompilation. 
 	newClassService := RowanCommandResult results first.
 	self assert: newClassService name equals: 'TestCompileClass'. 
 	self assert: newClassService selectedPackageServices size equals: 1. 
@@ -2506,6 +2657,8 @@ test_compileAndSelectClass
 		poolDictionaries: #()
 		category: ''', self servicesTestPackageName,  '''
 		options: #()'.
+	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
+	packageService recompileMethodsAfterClassCompilation. 
 	self assert: RowanCommandResult results size equals: 1. 
 	self assert: RowanCommandResult results first name equals: 'RowanTestCompile'. 
 	self assert: packageService selectedClass name equals: 'RowanTestCompile'.
@@ -2531,6 +2684,8 @@ test_compileAndSelectClassDifferentPackage
 		poolDictionaries: #()
 		category: ''Rowan-Services-Tests''
 		options: #()'.
+	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
+	packageService recompileMethodsAfterClassCompilation. 
 	self assert: RowanCommandResult results size equals: 2. 
 	self assert: RowanCommandResult results last name equals: 'RowanTestCompile'. 
 	self assert: RowanCommandResult results first name equals: 'Rowan-Services-Tests'. 
@@ -2552,6 +2707,23 @@ test_packageWasDeleted
 	self deny: packageService wasDeleted.
 	System abortTransaction. 
 	self assert: packageService wasDeleted.
+%
+
+category: 'tests'
+method: RowanPackageServiceTest
+test_testClassesDoNotIncludeExtensions
+	| packageService testClassNames |
+	self jadeiteIssueTested: #issue378 withTitle: '(3.0.53) test class not defined in package shows up in package of SUnit browser'.
+	packageService := RowanPackageService forPackageNamed: 'Rowan-Services-Tests'.
+	packageService testClasses. 
+	testClassNames := packageService jadeite_testClasses collect:[:classService | classService name].
+	self deny: (testClassNames includes: 'RwRowanProjectIssuesTest').
+	self assert: (testClassNames includes: 'RowanPackageServiceTest').
+
+	packageService := RowanPackageService forPackageNamed: 'Rowan-Tests'.
+	packageService testClasses. 
+	testClassNames := packageService jadeite_testClasses collect:[:classService | classService name].
+	self assert: (testClassNames includes: 'RwRowanProjectIssuesTest').
 %
 
 ! Class implementation for 'RowanProjectServiceTest'
@@ -7140,7 +7312,7 @@ testSpecificationConversion
 		ifFalse: [
 			1 to: (x size min: y size) do: [:i |
 				| a b |
-				(a := x at: i) = (b := y at: i) ifFalse: [ self halt ] ]].
+				(a := x at: i) = (b := y at: i) ifFalse: [ self assert: false description: 'spec mismatch' ] ]].
 	self assert: x = y.
 %
 
@@ -7300,6 +7472,97 @@ _globalExtensionsProjectDefinition: projectName packageNames: packageNames defau
 				forPackageNamed: packageName ].
 
 	^ projectDefinition
+%
+
+category: 'private'
+method: RwBrowserToolTest
+_issue481_loadProjectDefinition: projectName  packageName1: packageName1 packageName2: packageName2 symDictName: symDictName
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: { packageName1 . packageName2}
+		defaultSymbolDictName: symDictName
+		comment: 'project for testing package adopt api'.
+%
+
+category: 'private'
+method: RwBrowserToolTest
+_issue481_projectDefinition: projectName  packageName1: packageName1 packageName2: packageName2 className1: className1 className2: className2 symDictName: symDictName
+
+	| theClass1 theClass2 symDict instanceMethod1 classMethod1 symbolList 
+		instanceMethod2 classMethod2 |
+	symbolList := Rowan image symbolList.
+
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+	symDict := Rowan globalNamed: symDictName.
+
+	"Use non-Rowan api to create class and methods"
+	theClass1 := Object subclass: className1
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symDict
+		options: #().
+	theClass1 category: packageName1.
+
+	instanceMethod1 := theClass1
+		compileMethod: 'foo ^''foo'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+	classMethod1 := theClass1 class
+		compileMethod: 'bar ^''bar'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+	Rowan packageTools adopt 
+		adoptClassNamed: className1
+		intoPackageNamed: packageName1.
+
+	self assert: theClass1 rowanPackageName = packageName1.
+	self assert: instanceMethod1 rowanPackageName = packageName1.
+	self assert: classMethod1 rowanPackageName = packageName1.
+
+	theClass2 := Object subclass: className2
+		instVarNames: #()
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: symDict
+		options: #().
+	theClass2 category: packageName2.
+
+	instanceMethod2 := theClass2
+		compileMethod: 'foo ^''foo'''
+		dictionaries: symbolList
+		category: '*', packageName2 asLowercase
+		environmentId: 0.
+
+	classMethod2 := theClass2 class
+		compileMethod: 'bar ^''bar'''
+		dictionaries: symbolList
+		category: '*', packageName2 asLowercase
+		environmentId: 0.
+
+	Rowan packageTools adopt 
+		adoptClassExtensionNamed: className2  
+		instanceSelectors: #(foo) 
+		classSelectors: #(bar)
+		intoPackageNamed: packageName2.
+
+	self assert: theClass2 rowanPackageName = Rowan unpackagedName.
+	self assert: instanceMethod2 rowanPackageName = packageName2.
+	self assert: classMethod2 rowanPackageName = packageName2.
+
+	^(Rowan image loadedProjectNamed: projectName) asDefinition
 %
 
 category: 'private'
@@ -8700,6 +8963,547 @@ testAdoptSymbolList_2
 	self assert: classMethod rowanPackageName = packageName.
 %
 
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_A
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing instance method for packaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName projectDefinition notified audit |
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove #foo method"
+	(Rowan globalNamed: className1) removeSelector: #foo.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing method"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptAuditMethodErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className1.
+			self deny: ex isClassExtension.
+			self assert: ex selector = #foo.
+			self deny: ex isMetaclass.
+			self assert: ex packageName = packageName1.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_A_F
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing unpackaged class and missing instance method for packaged class"
+
+	"test for RwAdoptAuditErrorNotification>>methodErrorDo:classErrorDo:"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName projectDefinition notified audit report |
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove #foo method"
+	(Rowan globalNamed: className1) removeSelector: #foo.
+"remove className2"
+	(Rowan globalNamed: symDictName) removeKey: className2 asSymbol.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing class and missing method"
+	notified := false.
+	report := WriteStream on: String new.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptMissingMethodErrorNotification, RwAdoptMissingClassErrorNotification
+		do: [:ex |
+			notified := true.
+			ex 
+				methodErrorDo: [
+					"RwAdoptAuditMethodErrorNotification"
+					self assert: ex className = className1.
+					self deny: ex isClassExtension.
+					self assert: ex selector = #foo.
+					self deny: ex isMetaclass.
+					self assert: ex packageName = packageName1.
+					report nextPutAll: 'Missing loaded method ', ex methodPrintString, ' encountered during adopt ... IGNORED'; lf ]
+				classErrorDo: [
+					"RwAdoptMissingClassErrorNotification"
+					self assert: ex className = className2.
+					self assert: ex isClassExtension.
+					self assert: ex packageName = packageName2.
+					report nextPutAll: 'Missing loaded class ', ex className, ' encountered during adopt ... IGNORED'; lf  ].
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_B
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing class method for packaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName projectDefinition notified audit |
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove #bar class method"
+	(Rowan globalNamed: className1) class removeSelector: #bar.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing method"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptMissingMethodErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className1.
+			self deny: ex isClassExtension.
+			self assert: ex selector = #bar.
+			self assert: ex isMetaclass.
+			self assert: ex packageName = packageName1.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_C
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing instance method extension for unpackaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2 
+		symDictName projectDefinition notified audit |
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove #foo method"
+	(Rowan globalNamed: className2) removeSelector: #foo.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing method"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptAuditMethodErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className2.
+			self assert: ex isClassExtension.
+			self assert: ex selector = #foo.
+			self deny: ex isMetaclass.
+			self assert: ex packageName = packageName2.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_D
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing class method extension for unpackaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName projectDefinition notified audit |
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove #bar class method"
+	(Rowan globalNamed: className2) class removeSelector: #bar.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing method"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptAuditMethodErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className2.
+			self assert: ex isClassExtension.
+			self assert: ex selector = #bar.
+			self assert: ex isMetaclass.
+			self assert: ex packageName = packageName2.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_E
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing packaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2  symDictName projectDefinition notified audit |
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove className1"
+	(Rowan globalNamed: symDictName) removeKey: className1 asSymbol.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing class"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptMissingClassErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className1.
+			self deny: ex isClassExtension.
+			self assert: ex packageName = packageName1.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwAdoptToolApiTest
+testAdopt_issue481_F
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"missing unpackaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2  symDictName projectDefinition notified audit|
+
+	projectName := 'AdoptProject_481'.
+	packageName1 := 'Adopt-Core'.
+	packageName2 := 'Adopt-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AdoptedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create image artifacts and projectDefinition"
+	projectDefinition := self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"remove className2"
+	(Rowan globalNamed: symDictName) removeKey: className2 asSymbol.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and expect an error"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: Error
+		do: [:ex | notified := true ].
+	self assert: notified.
+
+"disown the project"
+	Rowan projectTools disown disownProjectNamed: projectDefinition name.
+
+"create an empty loaded project"
+	self
+		_issue481_loadProjectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			symDictName: symDictName.
+
+"adopt and handle the missing class"
+	notified := false.
+	[ Rowan projectTools adopt adoptProjectDefinition: projectDefinition ]
+		on: RwAdoptMissingClassErrorNotification
+		do: [:ex |
+			notified := true.
+			self assert: ex className = className2.
+			self assert: ex isClassExtension.
+			self assert: ex packageName = packageName2.
+			ex resume ].
+	self assert: notified.
+
+"audit"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
 category: 'private'
 method: RwAdoptToolApiTest
 _validateExpectedMonticelloConventionFailure_389: audit packageName: packageName className: className
@@ -8731,7 +9535,7 @@ _validateExpectedMonticelloConventionFailure_389_A: audit packageNames: packageN
 	unexpectedFailures := ((audit at: (packageNames at: 1)) at: className)
 		reject: [:each | (each value = 'Class category has changed in compiled class v loaded class')
 			or: [ (each value = 'Missing instance method extension category ') or: [ (each value = 'Missing class method extension category ')
-			or: [ (each value = 'Missing loaded instance method. ') or: [ (each value = 'Missing loaded class method ') ]] ] ] ].
+			or: [ (each value = 'Missing loaded instance method. ') or: [ (each value = 'Missing loaded class method. ') ]] ] ] ].
 	self assert: unexpectedFailures isEmpty
 %
 
@@ -16479,6 +17283,238 @@ _standardProjectDefinition: projectName packageNameMap: packageNameMap defaultSy
 
 category: 'tests'
 method: RwProjectAuditToolTest
+testAuditAndRepair_issue481_A
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"extra instance method for packaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName audit symbolList |
+
+	symbolList := Rowan image symbolList.
+
+	projectName := 'AuditProject_481'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AuditedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create loadedProject"
+	self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"add extra instance method"
+	(Rowan globalNamed: className1)
+		compileMethod: 'foobar ^''foobar'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+"audit - audit errors expected"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"audit - repair audit errors"
+	[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+		on: RwAuditMethodErrorNotification
+		do: [:ex | 
+			"adopt the method"
+			Rowan packageTools adopt 
+				adoptMethod: ex selector 
+					inClassNamed: ex className  
+					isMeta: ex isMetaclass 
+					intoPackageNamed: ex packageName.
+			ex resume: false ].
+	self assert: audit isEmpty.
+
+"double check audit - pass"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwProjectAuditToolTest
+testAuditAndRepair_issue481_B
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"extra class method for packaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName audit symbolList |
+
+	symbolList := Rowan image symbolList.
+
+	projectName := 'AuditProject_481'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AuditedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create loadedProject"
+	self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"add extra class method"
+	(Rowan globalNamed: className1) class
+		compileMethod: 'foobar ^''foobar'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+"audit - audit errors expected"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"audit - repair audit errors"
+	[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+		on: RwAuditMethodErrorNotification
+		do: [:ex | 
+			"adopt the method"
+			Rowan packageTools adopt 
+				adoptMethod: ex selector 
+					inClassNamed: ex className  
+					isMeta: ex isMetaclass 
+					intoPackageNamed: ex packageName.
+			ex resume: false ].
+	self assert: audit isEmpty.
+
+"double check audit - pass"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwProjectAuditToolTest
+testAuditAndRepair_issue481_C
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"extra instance method for unpackaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName audit symbolList |
+
+	symbolList := Rowan image symbolList.
+
+	projectName := 'AuditProject_481'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AuditedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create loadedProject"
+	self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"add extra instance method"
+	(Rowan globalNamed: className2)
+		compileMethod: 'foobar ^''foobar'''
+		dictionaries: symbolList
+		category: '*' , packageName2 asLowercase
+		environmentId: 0.
+
+"audit - audit errors expected"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"audit - repair audit errors"
+	[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+		on: RwAuditMethodErrorNotification
+		do: [:ex | 
+			"adopt the method"
+			Rowan packageTools adopt 
+				adoptMethod: ex selector 
+					inClassNamed: ex className  
+					isMeta: ex isMetaclass 
+					intoPackageNamed: ex packageName.
+			ex resume: false ].
+	self assert: audit isEmpty.
+
+"validate that method is packaged properly"
+	self assert: ((Rowan globalNamed: className2) compiledMethodAt: #foobar) rowanPackageName = packageName2.
+
+"double check audit - pass"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwProjectAuditToolTest
+testAuditAndRepair_issue481_D
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"extra class method for unpackaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName audit symbolList |
+
+	symbolList := Rowan image symbolList.
+
+	projectName := 'AuditProject_481'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AuditedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create loadedProject"
+	self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"add extra instance method"
+	(Rowan globalNamed: className2) class
+		compileMethod: 'foobar ^''foobar'''
+		dictionaries: symbolList
+		category: '*' , packageName2 asLowercase
+		environmentId: 0.
+
+"audit - audit errors expected"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"audit - repair audit errors"
+	[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+		on: RwAuditMethodErrorNotification
+		do: [:ex | 
+			"adopt the method"
+			Rowan packageTools adopt 
+				adoptMethod: ex selector 
+					inClassNamed: ex className  
+					isMeta: ex isMetaclass 
+					intoPackageNamed: ex packageName.
+			ex resume: false ].
+	self assert: audit isEmpty.
+
+"validate that method is packaged properly"
+	self assert: ((Rowan globalNamed: className2) class compiledMethodAt: #foobar) rowanPackageName = packageName2.
+
+"double check audit - pass"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+%
+
+category: 'tests'
+method: RwProjectAuditToolTest
 testClassBadExtensionName
 
 | packageTools projectName packageNames className packageName1 packageName2 theClass fooMethod x y|
@@ -17656,11 +18692,21 @@ _projectDefinitionForStructureWriters_A: projectName format: repositoryFormat
 					newForSelector: #'method8:'
 					protocol: 'accessing'
 					source: 'method8: ignored ^ignored');
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method9'
+					protocol: 'accessing'
+					source: 'method9 ^9');
 		addClassMethodDefinition:
 			(RwMethodDefinition
 					newForSelector: #'method4'
 					protocol: 'accessing'
-					source: 'method4 ^4').
+					source: 'method4 ^4');
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method10'
+					protocol: 'accessing'
+					source: 'method10 ^10').
 	packageDefinition addClassDefinition: classDefinition.
 
 	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
@@ -17692,37 +18738,6 @@ _projectDefinitionForStructureWriters_A: projectName format: repositoryFormat
 	^ projectDefinition
 %
 
-category: 'private'
-method: RwProjectReaderWriterTest
-_writeProjectSetDefinition: projectSetDefinition writerVisitorClass: writerVisitorClass format: repositoryFormat
-
-	| projectName projectDefinition projectSetModification visitor projectHome |
-"project set"
-	projectName := projectSetDefinition projectNames at: 1.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
-
-	projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
-
-"set project up for using filesystem"
-	projectHome := filesystem workingDirectory / projectName.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
-
-	projectDefinition projectHome: projectHome.
-	projectDefinition packageFormat: repositoryFormat.
-	projectDefinition create.
-
-"write project set"
-	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new. "compare against empty project to write out entire project"
-	visitor := writerVisitorClass new
-		repositoryRootPath: projectHome / projectName;
-		yourself.
-
-	visitor visit: projectSetModification.
-%
-
 ! Class implementation for 'RwProjectFiletreeTonelReaderWriterTest'
 
 !		Class methods for 'RwProjectFiletreeTonelReaderWriterTest'
@@ -17742,7 +18757,7 @@ category: 'tests'
 method: RwProjectFiletreeTonelReaderWriterTest
 testReadExistingDiskProject
 
-	| rowanSpec projectHome specUrlString projectDefinition |	
+	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
 
@@ -17755,8 +18770,244 @@ testReadExistingDiskProject
 	projectDefinition projectHome: projectHome.
 
 "read project"
-	Rowan projectTools read 
+	projectDefinitionSet := Rowan projectTools read 
 		readProjectSetForComponentProjectDefinition: projectDefinition.
+
+"validation"
+	self _validateIssue122ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
+testReadExistingDiskProjectWithBothMethodProtocolValidationError
+	"https://github.com/GemTalk/Rowan/issues/122"
+
+	"method protocol starts with a * for non-extension method"
+
+	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet patches |	
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+
+"identify spec to be used for reading project"
+	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Both-ProtocolValidationError.ston'.
+
+"create project definition"
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+"point to directory where the disk project is located"
+	projectDefinition projectHome: projectHome.
+
+"read project -- catch and resume the notification ... repair the protocol"
+	[ projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+		on: RwInvalidCategoryProtocolConventionErrorNotification
+		do: [:ex | 
+			ex
+				classCategoryNotificationDo: [ self assert: 'Unexpected notification ', ex class printString ]
+				nonExtensionMethodNoficationDo: [ 
+					"repair the protocol"
+					ex methodDefinition protocol: 'repaired'.
+					ex resume ] 
+				extensionMethodPackageMismatchNoficationDo: [ 
+					"repair the protocol - extension method protocol does start with a *, but does not match the package name"
+					ex methodDefinition protocol: '*', ex packageName asLowercase.
+					ex resume ]  
+				extensionMethodNonExtensionProtocolNoficationDo: [ 
+					"repair the protocol - extension method protocol doesn't start with a *"
+					ex methodDefinition protocol: '*', ex packageName asLowercase.
+					ex resume ] ].
+
+"validation - read from disk, without repairing the issues (creating a patch reads without repairing validation errors"
+	patches := Rowan projectTools diff patchesForProjectDefinition: projectDefinition.
+	self assert: patches size = 1.
+	patches do: [:assoc |
+		| packageName patch operations |
+		packageName := assoc key.
+		patch := assoc value.
+		self assert: packageName = 'Issue122-Extension1-ProtocolValidationError'.
+		operations := patch operations.
+		self assert: operations size = 2.
+		operations do: [:modification |
+			| definition |
+			definition := modification modification.
+			definition selector = 'method1'
+				ifTrue: [ self assert: definition category = '*issue122-extension1-protocolvalidationerror' ]
+				ifFalse: [
+					definition selector = 'method20'
+						ifTrue: [ self assert: definition category = '*issue122-extension1-protocolvalidationerror' ]
+						ifFalse: [ self assert: false description: 'unknown definition ', definition printString ] ] ] ]
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
+testReadExistingDiskProjectWithClassCategoryValidationError
+	"https://github.com/GemTalk/Rowan/issues/122"
+
+	"class category does not match package name -- Rowan Hybrid"
+
+	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+
+"identify spec to be used for reading project"
+	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_CategoryValidationError.ston'.
+
+"create project definition"
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+"point to directory where the disk project is located"
+	projectDefinition projectHome: projectHome.
+
+"read project -- hit category does not match error"
+	self 
+		should: [ Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+		raise: Error.
+
+"recreate project definition"
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+
+"point to directory where the disk project is located"
+	projectDefinition projectHome: projectHome.
+
+"read project -- catch and resume the notification ... repair the category"
+	[ projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+		on: RwInvalidCategoryProtocolConventionErrorNotification
+		do: [:ex | 
+			ex
+				classCategoryNotificationDo: [
+					"repair the class category"
+					ex classDefinition category: ex packageName.
+					ex resume: true ]
+				nonExtensionMethodNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ] 
+				extensionMethodPackageMismatchNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ]  
+				extensionMethodNonExtensionProtocolNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ] ].
+
+"validation"
+	self _validateIssue122Repaired_CategoryValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
+testReadExistingDiskProjectWithEmptyClassExtension
+	"https://github.com/GemTalk/Rowan/issues/361"
+
+
+	| rowanSpec projectHome projectName specUrlString projectDefinition projectDefinitionSet |	
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+
+"identify spec to be used for reading project"
+	projectName := 'Issue361'.
+	specUrlString :=  'file:' , projectHome, '/', projectName, '/', self _repositoryFormat, '/rowan/specs/Issue122.ston'.
+
+"create project definition"
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+"point to directory where the disk project is located"
+	projectDefinition projectHome: projectHome.
+
+"read project -- hit protocol is invalid error"
+	projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition.
+
+"validate"
+	self _validateIssue361ProjectDefinitionSet: projectDefinitionSet projectName: projectName
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
+testReadExistingDiskProjectWithExtensionMethodProtocolValidationError
+	"https://github.com/GemTalk/Rowan/issues/122"
+
+	"
+		extension method protocol doesn't start with a *
+			OR
+		extension method protocol does start with a *, but does not match the package name
+	"
+
+	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+
+"identify spec to be used for reading project"
+	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Extension-ProtocolValidationError.ston'.
+
+"create project definition"
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+"point to directory where the disk project is located"
+	projectDefinition projectHome: projectHome.
+
+"read project -- hit protocol is invalid error"
+	self 
+		should: [ Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+		raise: Error.
+
+"recreate project definition"
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+
+"point to directory where the disk project is located"
+	projectDefinition projectHome: projectHome.
+
+"read project -- catch and resume the notification ... repair the protocol"
+	[ projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+		on: RwInvalidCategoryProtocolConventionErrorNotification
+		do: [:ex | 
+			ex
+				classCategoryNotificationDo: [ self assert: 'Unexpected notification ', ex class printString ]
+				nonExtensionMethodNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ] 
+				extensionMethodPackageMismatchNoficationDo: [ 
+					"repair the protocol - extension method protocol does start with a *, but does not match the package name"
+					ex methodDefinition protocol: '*', ex packageName asLowercase.
+					ex resume ]  
+				extensionMethodNonExtensionProtocolNoficationDo: [ 
+					"repair the protocol - extension method protocol doesn't start with a *"
+					ex methodDefinition protocol: '*', ex packageName asLowercase.
+					ex resume ] ].
+
+"validation"
+	self _validateIssue122Repaired_ExtensionProtocolValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
+testReadExistingDiskProjectWithMethodProtocolValidationError
+	"https://github.com/GemTalk/Rowan/issues/122"
+
+	"method protocol starts with a * for non-extension method"
+
+	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+
+"identify spec to be used for reading project"
+	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Core-ProtocolValidationError.ston'.
+
+"create project definition"
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+"point to directory where the disk project is located"
+	projectDefinition projectHome: projectHome.
+
+"read project -- hit protocol is invalid error"
+	self 
+		should: [ Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+		raise: Error.
+
+"recreate project definition"
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+
+"point to directory where the disk project is located"
+	projectDefinition projectHome: projectHome.
+
+"read project -- catch and resume the notification ... repair the protocol"
+	[ projectDefinitionSet := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition ]
+		on: RwInvalidCategoryProtocolConventionErrorNotification
+		do: [:ex | 
+			ex
+				classCategoryNotificationDo: [ self assert: 'Unexpected notification ', ex class printString ]
+				nonExtensionMethodNoficationDo: [ 
+					"repair the protocol"
+					ex methodDefinition protocol: 'repaired'.
+					ex resume ] 
+				extensionMethodPackageMismatchNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ]  
+				extensionMethodNonExtensionProtocolNoficationDo: [ self assert: 'Unexpected notification ', ex class printString ] ].
+
+"validation"
+	self _validateIssue122Repaired_CoreProtocolValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectDefinition name
 %
 
 category: 'tests'
@@ -17792,124 +19043,429 @@ testWriterReader_A
 	self assert: projectSetModification isEmpty.
 %
 
-category: 'private'
+category: 'tests'
 method: RwProjectFiletreeTonelReaderWriterTest
-_projectSetDefinitionForStructureWriters_A
+testWriterReader_B_removeClass
 
-	"multiple class extensions from multiple packages for multiple classes"
+	"https://github.com/GemTalk/Rowan/issues/361"
 
-	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition projectSetDefinition packageName3 |
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition 
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x repositoryRoot |
 
 	projectName := 'Issue361'.
-	self _markForProjectCleanup: projectName.
-	packageName1 := 'Issue361-Core'.
-	packageName2 := 'Issue361-Extension1'.
-	packageName3 := 'Issue361-Extension2'.
-	className1 := 'Issue361Class1'. 
-	className2 := 'Issue361Class2'. 
-	className3 := 'Issue361Class3'. 
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
-"create definitions"
-	projectDefinition := (RwProjectDefinition
-		newForDiskBasedProjectNamed: projectName)
-		addPackageNamed: packageName1;
-		addPackageNamed: packageName2;
-		addPackageNamed: packageName3;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName1;
-		setSymbolDictName: self _symbolDictionaryName forPackageNamed: packageName2;
-		yourself.
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
-	packageDefinition := projectDefinition packageNamed: packageName1.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
-	classDefinition := RwClassDefinition
-		newForClassNamed: className1
-		super: 'Object'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	classDefinition
-		addClassMethodDefinition:
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+	repositoryRoot := writtenProjectDefinition repositoryRoot.
+	self assert: (x := self _classRemovedArtifactFileReference: repositoryRoot) exists.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	(changedProjectDefinition packageNamed: 'Issue361-Core')
+		removeClassNamed: 'Issue361Class1'.
+
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
+
+	visitor visit: changedProjectSetModification.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+
+	self deny: (self _classRemovedArtifactFileReference: repositoryRoot) exists.
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
+testWriterReader_B_removeExtensionClass
+
+	"https://github.com/GemTalk/Rowan/issues/361"
+
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition changedProjectSetModification
+		writerVisitorClass writtenPojectSetDefinition repositoryRoot x |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+	repositoryRoot := writtenProjectDefinition repositoryRoot.
+	self assert: (x := self _classExtensionRemovedArtifactFileReference: repositoryRoot) exists.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	(changedProjectDefinition packageNamed: 'Issue361-Extension1')
+		removeClassExtensionDefinitionNamed: 'Issue361Class1'.
+
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
+
+	visitor visit: changedProjectSetModification.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := writeProjectSetDefinition compareAgainstBase: readProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+
+	self deny: (self _classExtensionRemovedArtifactFileReference: repositoryRoot) exists
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
+testWriterReader_B_removePackage
+
+	"https://github.com/GemTalk/Rowan/issues/361"
+
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition 
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition x repositoryRoot |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+	repositoryRoot := writtenProjectDefinition repositoryRoot.
+	self assert: (x := self _packageRemovedArtifactFileReference: repositoryRoot) exists.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	changedProjectDefinition removePackageNamed: 'Issue361-Extension2'.
+
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
+
+	visitor visit: changedProjectSetModification.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+
+	self deny: (self _packageRemovedArtifactFileReference: repositoryRoot) exists.
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
+testWriterReader_C
+
+	"https://github.com/GemTalk/Rowan/issues/361"
+
+	"write repository to an alternate root directory"
+
+	| projectName writtenProjectDefinition copyProjectDefinition copyProjectSetDefinition 
+		projectSetModification writeProjectSetDefinition oldRepositoryRoot newRepositoryRoot |
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+"copy project definition and write to an alternate repository root"
+	copyProjectDefinition := writtenProjectDefinition copy.
+	oldRepositoryRoot := writtenProjectDefinition repositoryRoot.
+	newRepositoryRoot := oldRepositoryRoot parent / (copyProjectDefinition name, '_COPY').
+	newRepositoryRoot ensureDeleteAll.
+	copyProjectDefinition repositoryRoot: newRepositoryRoot.
+
+	copyProjectDefinition export.
+
+"read from alternate root directory"
+	copyProjectSetDefinition := copyProjectDefinition readProjectSet.
+
+"validation"
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: writtenProjectDefinition; yourself.
+	projectSetModification := copyProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
+testWriterReader_D_changeClass
+
+	"https://github.com/GemTalk/Rowan/issues/361"
+
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition 
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition
+		classDef packageDef |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	packageDef := changedProjectDefinition packageNamed: 'Issue361-Core'.
+	classDef := packageDef classDefinitionNamed: 'Issue361Class1'.
+	classDef instVarNames: classDef instVarNames, #( 'iv1').
+	packageDef updateClassDefinition: classDef.
+
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
+
+	self deny: changedProjectSetModification isEmpty.
+	visitor visit: changedProjectSetModification.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+%
+
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
+testWriterReader_D_changeMethods
+
+	"https://github.com/GemTalk/Rowan/issues/361"
+
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition 
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition
+		classDef packageDef |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	packageDef := changedProjectDefinition packageNamed: 'Issue361-Core'.
+	classDef := packageDef classDefinitionNamed: 'Issue361Class1'.
+	classDef 
+		updateInstanceMethodDefinition: 
+			(RwMethodDefinition
+					newForSelector: #'method6'
+					protocol: 'instance accessing'
+					source: 'method6 "changed" ^6');
+		updateClassMethodDefinition: 
 			(RwMethodDefinition
 					newForSelector: #'method2'
-					protocol: 'accessing'
-					source: 'method2 ^2').
-	packageDefinition addClassDefinition: classDefinition.
+					protocol: 'class accessing'
+					source: 'method2 "changed" ^2').
 
-	classDefinition := RwClassDefinition
-		newForClassNamed: className2
-		super: 'Array'
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	classDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method3'
-					protocol: 'accessing'
-					source: 'method3 ^3').
-	packageDefinition addClassDefinition: classDefinition.
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
 
-	classDefinition := RwClassDefinition
-		newForClassNamed: className3
-		super: className1
-		instvars: #()
-		classinstvars: #()
-		classvars: #()
-		category: packageName1
-		comment: ''
-		pools: #()
-		type: 'normal'.
-	classDefinition
-		addClassMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method4'
-					protocol: 'accessing'
-					source: 'method4 ^4').
-	packageDefinition addClassDefinition: classDefinition.
+	self deny: changedProjectSetModification isEmpty.
+	visitor visit: changedProjectSetModification.
 
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method1'
-					protocol: '*', packageName2 asLowercase
-					source: 'method1 ^1').
-	packageDefinition := projectDefinition packageNamed: packageName2.
-	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+%
 
-	packageDefinition := projectDefinition packageNamed: packageName3.
+category: 'tests'
+method: RwProjectFiletreeTonelReaderWriterTest
+testWriterReader_E
 
-	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
-	classExtensionDefinition
-		addInstanceMethodDefinition:
-			(RwMethodDefinition
-					newForSelector: #'method5'
-					protocol: '*', packageName3 asLowercase
-					source: 'method5 ^5').
-	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
+	"https://github.com/GemTalk/Rowan/issues/361"
 
-"project set"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition.
+	"write repository to an alternate root directory and rewrite ... without error"
 
-	^ projectSetDefinition
+	| projectName writtenProjectDefinition copyProjectDefinition copyProjectSetDefinition 
+		projectSetModification writeProjectSetDefinition oldRepositoryRoot newRepositoryRoot |
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+"copy project definition and write to an alternate repository root"
+	copyProjectDefinition := writtenProjectDefinition copy.
+	oldRepositoryRoot := writtenProjectDefinition repositoryRoot.
+	newRepositoryRoot := oldRepositoryRoot parent / (copyProjectDefinition name, '_COPY').
+	newRepositoryRoot ensureDeleteAll.
+	copyProjectDefinition repositoryRoot: newRepositoryRoot.
+
+	copyProjectDefinition export.
+
+"should be able to writeover and over and over again ... once is enough for me:)"
+	copyProjectDefinition export.
+
+"read from alternate root directory"
+	copyProjectSetDefinition := copyProjectDefinition readProjectSet.
+
+"validation"
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: writtenProjectDefinition; yourself.
+	projectSetModification := copyProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
 %
 
 category: 'private'
 method: RwProjectFiletreeTonelReaderWriterTest
-_readProjectDefinition: projectDefinition
+_classExtensionRemovedArtifactFileReference: repositoryRoot
 
-	RwRepositoryComponentProjectReaderVisitor new visit: projectDefinition.
-self error: 'not yet implemented'.
+	self subclassResponsibility: #_classExtensionRemovedArtifactFileReference:
+%
+
+category: 'private'
+method: RwProjectFiletreeTonelReaderWriterTest
+_classRemovedArtifactFileReference: repositoryRoot
+
+	self subclassResponsibility: #_classRemovedArtifactFileReference:
+%
+
+category: 'private'
+method: RwProjectFiletreeTonelReaderWriterTest
+_packageRemovedArtifactFileReference: repositoryRoot
+
+	self subclassResponsibility: #_packageRemovedArtifactFileReference:
 %
 
 category: 'private'
@@ -17921,28 +19477,400 @@ _repositoryFormat
 
 category: 'private'
 method: RwProjectFiletreeTonelReaderWriterTest
-_repositoryPropertyDictFor: aProjectDefinition repositoryRootPath: repositoryRootPath
+_validateIssue122ProjectDefinitionSet: projectDefinitionSet projectName: projectName
 
-	| propertiesFile |
-	propertiesFile := repositoryRootPath / 'properties' , 'st'.
-	propertiesFile exists
-		ifFalse: [
-			propertiesFile := repositoryRootPath / '.filetree'.
-			propertiesFile exists
-				ifFalse: [ propertiesFile := repositoryRootPath / '.cypress' ] ].
-	^ STON fromStream: (ZnBufferedReadStream on: propertiesFile  readStream)
+	self assert: projectDefinitionSet  projects size = 1.
+	projectDefinitionSet  projects keysAndValuesDo: [:projName :projectDefinition |  
+		self assert: projectDefinition name = projectName.
+		self assert: projectDefinition packages size = 2.
+		projectDefinition  packages keysAndValuesDo: [:packageName :packageDefinition |
+			packageDefinition name = 'Issue122-Core'
+				ifTrue: [
+					self assert: packageDefinition classExtensions isEmpty.
+					self assert: packageDefinition classDefinitions size = 3.
+					packageDefinition classDefinitions keysAndValuesDo: [:className :classDefinition | 
+						classDefinition name = 'Issue122Class1'
+							ifTrue: [
+								self assert: classDefinition category = packageName.
+								self assert: classDefinition instanceMethodDefinitions size = 1.
+								self assert: classDefinition classMethodDefinitions size = 1 ]
+							ifFalse: [
+								classDefinition name = 'Issue122Class2'
+								ifTrue: [
+									self assert: classDefinition category = packageName.
+									self assert: classDefinition instanceMethodDefinitions size = 1.
+									self assert: classDefinition classMethodDefinitions size = 0 ]
+								ifFalse: [
+									classDefinition name = 'Issue122Class3'
+									ifTrue: [
+										self assert: classDefinition instanceMethodDefinitions size = 1.
+										self assert: classDefinition category = packageName.
+										self assert: classDefinition classMethodDefinitions size = 1 ]
+									ifFalse: [ self assert: false description: 'unexpected class definition ', classDefinition name printString ] ] ] ] ]
+				ifFalse: [
+					packageDefinition name = 'Issue122-Extension1'
+						ifTrue: [
+							self assert: packageDefinition classDefinitions isEmpty.
+							self assert: packageDefinition classExtensions size = 1.
+							packageDefinition classExtensions keysAndValuesDo: [:className :classExtension | 
+								classExtension name = 'Issue122Class1'
+									ifTrue: [ 
+										self assert: classExtension classMethodDefinitions isEmpty.
+										self assert: classExtension instanceMethodDefinitions size = 2.
+										classExtension instanceMethodDefinitions keysAndValuesDo: [:selector :methodDefinition | 
+											selector = #method1
+												ifTrue: [	self assert: methodDefinition protocol = '*issue122-extension1' ]
+												ifFalse: [
+													selector = #method122
+														ifTrue: [	self assert: methodDefinition protocol = '*issue122-extension1' ]
+														ifFalse: [ self assert: false description: 'unexpected method definition ', methodDefinition selector printString ] ] ] ]
+									ifFalse: [ self assert: false description: 'unexpected classExtenstion definition ', classExtension name printString ] ] ]
+						ifFalse: [ self assert: false description: 'unexpected package definition ', packageDefinition name printString ] ] ] ]
 %
 
 category: 'private'
 method: RwProjectFiletreeTonelReaderWriterTest
-_writerVisitorClass
+_validateIssue122Repaired_CategoryValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectName
 
-	^ self subclassResponsibility: #_writerVisitorClass
+	self assert: projectDefinitionSet  projects size = 1.
+	projectDefinitionSet  projects keysAndValuesDo: [:projName :projectDefinition |  
+		self assert: projectDefinition name = projectName.
+		self assert: projectDefinition packages size = 1.
+		projectDefinition  packages keysAndValuesDo: [:packageName :packageDefinition |
+			packageDefinition name = 'Issue122-Core-CategoryValidationError'
+				ifTrue: [
+					self assert: packageDefinition classExtensions isEmpty.
+					self assert: packageDefinition classDefinitions size = 1.
+					packageDefinition classDefinitions keysAndValuesDo: [:className :classDefinition | 
+						classDefinition name = 'Issue122Class1'
+							ifTrue: [
+								self assert: classDefinition category = packageName.
+								self assert: classDefinition instanceMethodDefinitions size = 1.
+								self assert: classDefinition classMethodDefinitions size = 1 ]
+							ifFalse: [  self assert: false description: 'unexpected class definition ', classDefinition name printString  ] ] ]
+				ifFalse: [ self assert: false description: 'unexpected package definition ', packageDefinition name printString ] ] ]
+%
+
+category: 'private'
+method: RwProjectFiletreeTonelReaderWriterTest
+_validateIssue122Repaired_CoreProtocolValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectName
+
+	self assert: projectDefinitionSet  projects size = 1.
+	projectDefinitionSet  projects keysAndValuesDo: [:projName :projectDefinition |  
+		self assert: projectDefinition name = projectName.
+		self assert: projectDefinition packages size = 1.
+		projectDefinition  packages keysAndValuesDo: [:packageName :packageDefinition |
+			packageDefinition name = 'Issue122-Core-ProtocolValidationError'
+				ifTrue: [
+					self assert: packageDefinition classExtensions isEmpty.
+					self assert: packageDefinition classDefinitions size = 1.
+					packageDefinition classDefinitions keysAndValuesDo: [:className :classDefinition | 
+						classDefinition name = 'Issue122Class1'
+							ifTrue: [
+								self assert: classDefinition category = packageName.
+								self assert: classDefinition instanceMethodDefinitions size = 1.
+								self assert: classDefinition classMethodDefinitions size = 1.
+								classDefinition instanceMethodDefinitions keysAndValuesDo: [:selector :methodDefinition | 
+									self assert: selector = #method6.
+									self assert: methodDefinition protocol = 'repaired' ] ]
+							ifFalse: [  self assert: false description: 'unexpected class definition ', classDefinition name printString  ] ] ]
+				ifFalse: [ self assert: false description: 'unexpected package definition ', packageDefinition name printString ] ] ]
+%
+
+category: 'private'
+method: RwProjectFiletreeTonelReaderWriterTest
+_validateIssue122Repaired_ExtensionProtocolValidationError_ProjectDefinitionSet: projectDefinitionSet projectName: projectName
+
+
+	self assert: projectDefinitionSet  projects size = 1.
+	projectDefinitionSet  projects keysAndValuesDo: [:projName :projectDefinition |  
+		self assert: projectDefinition name = projectName.
+		self assert: projectDefinition packages size = 2.
+		projectDefinition  packages keysAndValuesDo: [:packageName :packageDefinition |
+			packageDefinition name = 'Issue122-Core'
+				ifTrue: [
+					self assert: packageDefinition classExtensions isEmpty.
+					self assert: packageDefinition classDefinitions size = 3.
+					packageDefinition classDefinitions keysAndValuesDo: [:className :classDefinition | 
+						classDefinition name = 'Issue122Class1'
+							ifTrue: [
+								self assert: classDefinition category = packageName.
+								self assert: classDefinition instanceMethodDefinitions size = 1.
+								self assert: classDefinition classMethodDefinitions size = 1 ]
+							ifFalse: [
+								classDefinition name = 'Issue122Class2'
+								ifTrue: [
+									self assert: classDefinition category = packageName.
+									self assert: classDefinition instanceMethodDefinitions size = 1.
+									self assert: classDefinition classMethodDefinitions size = 0 ]
+								ifFalse: [
+									classDefinition name = 'Issue122Class3'
+									ifTrue: [
+										self assert: classDefinition instanceMethodDefinitions size = 1.
+										self assert: classDefinition category = packageName.
+										self assert: classDefinition classMethodDefinitions size = 1 ]
+									ifFalse: [ self assert: false description: 'unexpected class definition ', classDefinition name printString ] ] ] ] ]
+				ifFalse: [
+					packageDefinition name = 'Issue122-Extension1-ProtocolValidationError'
+						ifTrue: [
+							self assert: packageDefinition classDefinitions isEmpty.
+							self assert: packageDefinition classExtensions size = 1.
+							packageDefinition classExtensions keysAndValuesDo: [:className :classExtension | 
+								classExtension name = 'Issue122Class1'
+									ifTrue: [ 
+										self assert: classExtension classMethodDefinitions size = 0.
+										self assert: classExtension instanceMethodDefinitions size = 2.
+										classExtension instanceMethodDefinitions keysAndValuesDo: [:selector :methodDefinition | 
+											selector = #method1
+												ifTrue: [	self assert: methodDefinition protocol = '*issue122-extension1-protocolvalidationerror' ]
+												ifFalse: [
+													selector = #method20
+														ifTrue: [	self assert: methodDefinition protocol = '*issue122-extension1-protocolvalidationerror' ]
+														ifFalse: [ self assert: false description: 'unexpected method definition ', methodDefinition selector printString ] ] ] ]
+											ifFalse: [ self assert: false description: 'unexpected classExtenstion definition ', classExtension name printString ] ] ]
+						ifFalse: [ self assert: false description: 'unexpected package definition ', packageDefinition name printString ] ] ] ]
+%
+
+category: 'private'
+method: RwProjectFiletreeTonelReaderWriterTest
+_validateIssue361ProjectDefinitionSet: projectDefinitionSet projectName: projectName
+
+	"on disk the class extions directory/file exists, but is empty ... need to properly read from disk without errors"
+
+	self assert: projectDefinitionSet  projects size = 1.
+	projectDefinitionSet  projects keysAndValuesDo: [:projName :projectDefinition |  
+		self assert: projectDefinition name = projectName.
+		self assert: projectDefinition packages size = 2.
+		projectDefinition  packages keysAndValuesDo: [:packageName :packageDefinition |
+			packageDefinition name = 'Issue122-Core'
+				ifTrue: [
+					self assert: packageDefinition classExtensions isEmpty.
+					self assert: packageDefinition classDefinitions size = 3.
+					packageDefinition classDefinitions keysAndValuesDo: [:className :classDefinition | 
+						classDefinition name = 'Issue122Class1'
+							ifTrue: [
+								self assert: classDefinition category = packageName.
+								self assert: classDefinition instanceMethodDefinitions size = 1.
+								self assert: classDefinition classMethodDefinitions size = 1 ]
+							ifFalse: [
+								classDefinition name = 'Issue122Class2'
+								ifTrue: [
+									self assert: classDefinition category = packageName.
+									self assert: classDefinition instanceMethodDefinitions size = 1.
+									self assert: classDefinition classMethodDefinitions size = 0 ]
+								ifFalse: [
+									classDefinition name = 'Issue122Class3'
+									ifTrue: [
+										self assert: classDefinition instanceMethodDefinitions size = 1.
+										self assert: classDefinition category = packageName.
+										self assert: classDefinition classMethodDefinitions size = 1 ]
+									ifFalse: [ self assert: false description: 'unexpected class definition ', classDefinition name printString ] ] ] ] ]
+				ifFalse: [
+					packageDefinition name = 'Issue122-Extension1'
+						ifTrue: [
+							self assert: packageDefinition classDefinitions isEmpty.
+							self assert: packageDefinition classExtensions size = 1.
+							packageDefinition classExtensions keysAndValuesDo: [:className :classExtension | 
+								classExtension name = 'Issue122Class1'
+									ifTrue: [ 
+										self assert: classExtension instanceMethodDefinitions isEmpty.
+										self assert: classExtension classMethodDefinitions isEmpty ]
+									ifFalse: [ self assert: false description: 'unexpected classExtenstion definition ', classExtension name printString ] ] ]
+						ifFalse: [ self assert: false description: 'unexpected package definition ', packageDefinition name printString ] ] ] ]
 %
 
 ! Class implementation for 'RwProjectFiletreeReaderWriterTest'
 
 !		Instance methods for 'RwProjectFiletreeReaderWriterTest'
+
+category: 'tests'
+method: RwProjectFiletreeReaderWriterTest
+testWriterReader_B_removeInstanceClassMethods
+
+	"https://github.com/GemTalk/Rowan/issues/361"
+
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	"only applies to filetree, since methods are not stored in separate files for tonel"
+
+	"delete instance/class directory when last instance/class method is removed"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition 
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x repositoryRoot |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+	repositoryRoot := writtenProjectDefinition repositoryRoot.
+	self assert: (x := self _classMethodRemovedArtifactFileReference: repositoryRoot) exists.
+	self assert: (x := self _instanceMethodRemovedArtifactFileReference: repositoryRoot) exists.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	((changedProjectDefinition packageNamed: 'Issue361-Core')
+		classDefinitionNamed: 'Issue361Class3'ifAbsent: [])
+		removeInstanceMethod: #method9;
+		removeClassMethod: #method10.
+
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
+
+	visitor visit: changedProjectSetModification.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+
+	self deny: (x := self _classMethodRemovedArtifactFileReference: repositoryRoot) exists.
+	self deny: (x := self _instanceMethodRemovedArtifactFileReference: repositoryRoot) exists.
+	self assert: (x := self _classMethodRemovedArtifactFileReference: repositoryRoot) parent exists.		"class dir should not be deleted"
+	self assert: (x := self _instanceMethodRemovedArtifactFileReference: repositoryRoot) parent exists.	"instance dir should not be deleted"
+%
+
+category: 'tests'
+method: RwProjectFiletreeReaderWriterTest
+testWriterReader_B_removeLastInstanceClassMethods
+
+	"https://github.com/GemTalk/Rowan/issues/361"
+
+	"Set of tests that add, change, and remove classes, methods, and extension methods; write to an existing disk repo.
+		Expecting to incrementally write only the changed definitions"
+
+	"only applies to filetree, since methods are not stored in separate files for tonel"
+
+	"remove the instance or class method file"
+
+	| projectName writtenProjectDefinition readProjectSetDefinition changedProjectSetDefinition visitor
+		projectSetModification writeProjectSetDefinition changedProjectDefinition 
+		changedProjectSetModification writerVisitorClass writtenPojectSetDefinition  x repositoryRoot |
+
+	projectName := 'Issue361'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+"write projectDefinition to disk"
+	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
+
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
+
+	writtenProjectDefinition repositoryRoot ensureDeleteAll.
+	writtenProjectDefinition create.
+
+	repositoryRoot := writtenProjectDefinition repositoryRoot.
+	self assert: (x := self _lastClassMethodRemovedArtifactFileReference: repositoryRoot) exists.
+	self assert: (x := self _lastInstanceMethodRemovedArtifactFileReference: repositoryRoot) exists.
+
+"copy and make desired modifications"
+
+	changedProjectDefinition := writtenProjectDefinition copy.
+	((changedProjectDefinition packageNamed: 'Issue361-Core')
+		classDefinitionNamed: 'Issue361Class1'ifAbsent: [])
+		removeInstanceMethod: #method6;
+		removeClassMethod: #method2.
+
+"write changes"
+	writerVisitorClass := self _repositoryFormat = 'tonel'
+		ifTrue: [ RwModificationTonelWriterVisitor ]
+		ifFalse: [ RwModificationFiletreeWriterVisitor ].
+	changedProjectSetDefinition:= RwProjectSetDefinition new.
+	changedProjectSetDefinition addDefinition: changedProjectDefinition.
+	writtenPojectSetDefinition:= RwProjectSetDefinition new.
+	writtenPojectSetDefinition addDefinition: writtenProjectDefinition.
+	changedProjectSetModification := changedProjectSetDefinition compareAgainstBase: writtenPojectSetDefinition.
+	visitor := writerVisitorClass new.
+
+	visitor visit: changedProjectSetModification.
+
+"validation"
+	readProjectSetDefinition := writtenProjectDefinition readProjectSet.
+	writeProjectSetDefinition := RwProjectSetDefinition new addProject: changedProjectDefinition; yourself.
+	projectSetModification := readProjectSetDefinition compareAgainstBase: writeProjectSetDefinition.
+	self assert: projectSetModification isEmpty.
+
+	self deny: (x := self _lastClassMethodRemovedArtifactFileReference: repositoryRoot) exists.
+	self deny: (x := self _lastInstanceMethodRemovedArtifactFileReference: repositoryRoot) exists.
+%
+
+category: 'private'
+method: RwProjectFiletreeReaderWriterTest
+_classExtensionRemovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension1.package' / 'Issue361Class1.extension'
+%
+
+category: 'private'
+method: RwProjectFiletreeReaderWriterTest
+_classMethodRemovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class3.class' / 'class' / 'method10', 'st'
+%
+
+category: 'private'
+method: RwProjectFiletreeReaderWriterTest
+_classRemovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class'
+%
+
+category: 'private'
+method: RwProjectFiletreeReaderWriterTest
+_instanceMethodRemovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class3.class' / 'instance' / 'method9', 'st'
+%
+
+category: 'private'
+method: RwProjectFiletreeReaderWriterTest
+_lastClassMethodRemovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class' / 'class'
+%
+
+category: 'private'
+method: RwProjectFiletreeReaderWriterTest
+_lastInstanceMethodRemovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core.package' / 'Issue361Class1.class' / 'instance'
+%
+
+category: 'private'
+method: RwProjectFiletreeReaderWriterTest
+_packageRemovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension2.package'
+%
 
 category: 'private'
 method: RwProjectFiletreeReaderWriterTest
@@ -17951,29 +19879,36 @@ _repositoryFormat
 	^ 'filetree'
 %
 
-category: 'private'
-method: RwProjectFiletreeReaderWriterTest
-_writerVisitorClass
-
-	^ RwModificationFiletreeWriterVisitor
-%
-
 ! Class implementation for 'RwProjectTonelReaderWriterTest'
 
 !		Instance methods for 'RwProjectTonelReaderWriterTest'
 
 category: 'private'
 method: RwProjectTonelReaderWriterTest
-_repositoryFormat
+_classExtensionRemovedArtifactFileReference: repositoryRoot
 
-	^ 'tonel'
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension1' / 'Issue361Class1.extension.st'
 %
 
 category: 'private'
 method: RwProjectTonelReaderWriterTest
-_writerVisitorClass
+_classRemovedArtifactFileReference: repositoryRoot
 
-	^ RwModificationTonelWriterVisitor
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Core' / 'Issue361Class1.class.st'
+%
+
+category: 'private'
+method: RwProjectTonelReaderWriterTest
+_packageRemovedArtifactFileReference: repositoryRoot
+
+	^ repositoryRoot / 'rowan' / 'src' / 'Issue361-Extension2'
+%
+
+category: 'private'
+method: RwProjectTonelReaderWriterTest
+_repositoryFormat
+
+	^ 'tonel'
 %
 
 ! Class implementation for 'RwProjectTopazWriterTest'
@@ -23872,7 +25807,11 @@ testIssue217
 	"https://github.com/dalehenrich/Rowan/issues/217"
 
 	| spec specExportString |
-	spec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	[spec := (Rowan image _projectForNonTestProject: 'Rowan') specification asSpecification ] 
+		on: Deprecated 
+		do: [:ex | 
+			"ignore any Deprecation errors ... we're specification testing the speciciation"
+			ex resume ].
 	specExportString := STON toStringPretty: spec.
 	self assert: (specExportString includes: Character lf).
 %
@@ -29824,7 +31763,7 @@ _cloneGitRepositoryFor: projectName projectUrlString: projectUrlString
 
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/issues/'.
 
-	(gitRootPath / projectName) deleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: projectUrlString
@@ -40619,7 +42558,11 @@ testCreateComponentProject
 		projectName, '-Extension' . projectName, '-Tests_Main' . projectName, '-Tests-GemStone_Main'
 	}
 		do: [:pName | 
-			self assert: (cpd packagesRoot / pName, 'package') exists ].
+			| packageDir |
+			packageDir := cpd packageFormat = 'tonel'
+				ifTrue: [ cpd packagesRoot / pName ]
+				ifFalse: [ cpd packagesRoot / pName , 'package' ].
+			self assert: packageDir exists ].
 
 	self assert: cpd projectsRoot exists.
 
@@ -40638,7 +42581,7 @@ testCreateNewProjectFromUrl
 		4. write the project definition to the new project.
 	"
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec_1 projectDefinition_2 projectReferenceDefinition_3 projectName_3 |
+	| specUrlString rowanSpec gitRootPath projectName projectSpec_1 projectDefinition_2 projectDefinition_3 projectName_3 |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -40649,7 +42592,7 @@ testCreateNewProjectFromUrl
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
 
-"1. clone RowanSample7 using non-component API (v1.2.x style"
+"1. clone RowanSample7 using non-component API (v1.2.x style)"
 	specUrlString :=  self _rowanSample7SpecificationUrl_12x.
 	projectSpec_1 := specUrlString asRwUrl asSpecification.
 	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
@@ -40665,10 +42608,13 @@ testCreateNewProjectFromUrl
 "validate"
 	self assert: (Rowan image projectRepositoryNamed: projectSpec_1 specName ifAbsent: [  ]) isNil.
 
-"2. read project from disk into a project definition"
-	projectDefinition_2 := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: gitRootPath / projectName.
+"2. read project from disk into a project definition, using component API (v2.0 style)"
+	specUrlString := self _rowanSample7SpecificationUrl.
+	projectDefinition_2 := (RwComponentProjectDefinition newForUrl: specUrlString)
+		repositoryRoot: gitRootPath / projectName;
+		yourself.
 
-	Rowan projectTools read readProjectDefinition: projectDefinition_2.
+	projectDefinition_2 readProjectSet.
 
 "3. create a new git project on disk using component API"
 
@@ -40677,60 +42623,33 @@ testCreateNewProjectFromUrl
 	(Rowan image projectRepositoryNamed: projectName_3 ifAbsent: [  ])
 		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
-	projectReferenceDefinition_3 := RwProjectReferenceDefinition
+	projectDefinition_3 := RwComponentProjectDefinition
 		projectName: projectName_3
 			configurationNames: #( 'Main' ) 
 			groupNames: #('core')  
+			defaultComponentName: 'Main'
 			useGit: true
-			projectUrl: '' 
+			projectUrl: 'https://github.com/dalehenrich/RowanSample7' 
+			projectHome: gitRootPath
 			committish: 'candidateV1.0' 
 			committishType: 'branch'
 			comment: 'sample project created from scratch -- copied programatically from RowanSample7'.
-	projectReferenceDefinition_3 projectHome: gitRootPath.
 
-	projectReferenceDefinition_3 repositoryRoot ensureDeleteAll.
+	projectDefinition_3 repositoryRoot ensureDeleteAll.
 
-	projectReferenceDefinition_3 create.
+	projectDefinition_3 create.
 
 "validate"
-	self assert: projectReferenceDefinition_3 repositoryRoot exists.
+	self assert: projectDefinition_3 repositoryRoot exists.
 	self assert: (Rowan image projectRepositoryNamed: projectName_3 ifAbsent: [  ]) notNil.
-"4. write the project definition to the new project"
-self error: 'not yet implemented'. "need to write project definition"
-%
 
-category: 'tests'
-method: RwRowanSample7Test
-testCreateProjectFromUrl
+"4. write the project definition to the new project location"
 
-	"load RowanSample7_Colors project using load project named after clone and v2.0.0 api"
+	projectDefinition_2 projectRef: projectDefinition_3 projectRef.
+	projectDefinition_2 export.
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition x |
-
-	projectName := 'RowanSample7_Colors'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
-
-	specUrlString :=  self _rowanSample7_ColorsSpecificationUrl.
-	projectSpec := specUrlString asRwUrl asSpecification.
-
-"create project reference definitions"
-	projectReferenceDefinition := RwProjectReferenceDefinition 
-		newForSpecification: projectSpec 
-		projectHome: gitRootPath.
-
-	projectReferenceDefinition repositoryRoot ensureDeleteAll.
-
-"resolve and register project ... preparing to load next"
-	projectReferenceDefinition resolve.
-	x := projectReferenceDefinition register.
-
-"load project"
-	Rowan projectTools load
-		loadProjectNamed: projectName
+"validate"
+	self assert: (gitRootPath asFileReference / projectName_3 / 'rowan' / 'configs' / 'Main', 'ston') exists
 %
 
 category: 'tests'
@@ -40855,8 +42774,9 @@ testCreateProjectReferenceFromUrl
 "validate"
 	self assert: projectReferenceDefinition projectName = projectName.
 	self assert: projectReferenceDefinition projectAlias = projectReferenceDefinition projectName.
-	self assert: projectReferenceDefinition configurationNames = #( 'Default').
+	self assert: projectReferenceDefinition configurationNames = #( 'Main').
 	self assert: projectReferenceDefinition groupNames = #( 'core').
+	self assert: projectReferenceDefinition defaultComponentName = 'Main'.
 	self assert: projectReferenceDefinition projectUrl = 'https://github.com/dalehenrich/RowanSample7'.
 
 	self assert: (x := projectReferenceDefinition projectHome pathString) = (y := gitRootPath asFileReference pathString).
@@ -40965,7 +42885,7 @@ testCreateRepositoryDefinitionFromUrl_1
 
 	"exercise the RwAbstractRepositoryDefinition class creation protocol"
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition_1 |
+	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition_1 x y |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -40985,7 +42905,7 @@ testCreateRepositoryDefinitionFromUrl_1
 
 	self assert: repositoryDefinition_1  name = projectSpec specName.
 	self assert: repositoryDefinition_1  repositoryRoot = (gitRootPath asFileReference / projectName).
-	self assert: repositoryDefinition_1  committish =  ('v', self _projectVersionString).
+	self assert: (x := repositoryDefinition_1  committish) =  (y := 'v', self _projectVersionString).
 	self assert: repositoryDefinition_1  projectUrl = self _gitHubProjectUrl
 %
 
@@ -41048,7 +42968,7 @@ testResolveProjectReference
 
 	"clone a repository from github, attach to an existing git repository, clone to an alternate projectHome"
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition_1 projectReferenceDefinition_2 informHappened |
+	| specUrlString rowanSpec projectHome projectName projectSpec projectReferenceDefinition_1 projectReferenceDefinition_2 informHappened |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -41057,7 +42977,7 @@ testResolveProjectReference
 		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -41065,7 +42985,7 @@ testResolveProjectReference
 "create project reference definitions"
 	projectReferenceDefinition_1 := RwProjectReferenceDefinition 
 		newForSpecification: projectSpec 
-		projectHome: gitRootPath.
+		projectHome: projectHome.
 
 	projectReferenceDefinition_1 repositoryRoot ensureDeleteAll.
 	(Rowan image projectRepositoryNamed: projectReferenceDefinition_1 projectAlias ifAbsent: [  ])
@@ -41084,7 +43004,7 @@ testResolveProjectReference
 "2. create second project reference definitions"
 	projectReferenceDefinition_2 := RwProjectReferenceDefinition 
 		newForSpecification: projectSpec 
-		projectHome: gitRootPath.
+		projectHome: projectHome.
 
 "attach to repository - inform confirms that skip branch was taken"
 	informHappened := false.
@@ -41105,13 +43025,13 @@ testResolveProjectReference
 	(Rowan image projectRepositoryNamed: projectReferenceDefinition_2 projectAlias ifAbsent: [  ])
 		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
-	gitRootPath := gitRootPath asFileReference / 'sample7_repos'.
-	gitRootPath ensureDeleteAll.
+	projectHome := projectHome asFileReference / 'sample7_repos'.
+	projectHome ensureDeleteAll.
 	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
-	gitRootPath ensureCreateDirectory.
+	projectHome ensureCreateDirectory.
 
-	projectReferenceDefinition_2 projectHome: gitRootPath.
+	projectReferenceDefinition_2 projectHome: projectHome.
 
 "clone to new location"
 	self assert: (Rowan image projectRepositoryNamed: projectReferenceDefinition_2 projectAlias ifAbsent: [  ]) isNil.
@@ -41247,7 +43167,8 @@ _expected_rowanSample7_component_specification
 		''core'',
 		''tests''
 	],
-	#projectsPath : ''rowan/projects''
+	#projectsPath : ''rowan/projects'',
+	#defaultComponentName : ''Core''
 }'
 %
 
@@ -41280,7 +43201,7 @@ category: 'private'
 method: RwRowanSample7Test
 _projectVersionString
 
-	^ '0.0.2'
+	^ '0.0.3'
 %
 
 category: 'private'
@@ -42275,7 +44196,8 @@ method: RwProjectConfigurationsTest
 _expectedRowan_LoadPackageNames
 
 	^ (self _expectedLoadPackageNames_gemstone , self _expectedLoadPackageNames_gemstone_version,
-			#('Rowan-GemStone-3215' 'Rowan-Url-3215' 'GemStone-Interactions-Core' 
+			#('AST-Core' 'AST-Kernel-Core' 'AST-Kernel-Tests-Core' 'AST-Tests-Core' 
+				'Rowan-GemStone-3215' 'Rowan-Url-3215' 'GemStone-Interactions-Core' 
 				'GemStone-Interactions-Kernel' 'Rowan-Url-Extensions' 'Rowan-Kernel' 
 				'Rowan-GemStone-Specifications' 'Rowan-Core-Definitions-Extensions' 
 				'Rowan-GemStone-Definitions' 'Rowan-Cypress-Definitions' ) ) sort

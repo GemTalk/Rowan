@@ -19,13 +19,6 @@ RwRepositorySpecification >> commitForTool: aRwTool message: messageString [
   
 ]
 
-{ #category : 'actions' }
-RwRepositorySpecification >> commitLogForTool: aRwTool limit: logLimit [
-  "commit log not supported by default"
-
-  
-]
-
 { #category : 'initialization' }
 RwRepositorySpecification >> initializeForExport [
   "if spec has been exported, clear out any of the fields that represent local disk state"

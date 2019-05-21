@@ -37,6 +37,7 @@ RwPrjReadTool >> _readProjectSetForProjectComponentDefinition: projectComponentD
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectComponentDefinition readProjectSetForPackageNames: packageNames.
 	projectSetDefinition addProject: projectComponentDefinition.
+	projectComponentDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
 	^ projectSetDefinition
 ]
 
@@ -51,7 +52,7 @@ RwPrjReadTool >> _readProjectSetForProjectDefinition: projectDefinition packageN
 ]
 
 { #category : 'private' }
-RwPrjReadTool >> _visitConfigurations: visitorClass forProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames forLoad: forLoad [
+RwPrjReadTool >> _visitConfigurations: visitorClass forProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad [
 
 	| projectName configDirectory projectsDirectory visitor |
 	projectName := projectComponentDefinition name.
@@ -62,7 +63,7 @@ RwPrjReadTool >> _visitConfigurations: visitorClass forProjectComponentDefinitio
 	projectsDirectory exists
 		ifFalse: [ ^ self error: 'No projects directory (', projectsDirectory pathString printString, ') found for project ', projectName printString ].
 	visitor := visitorClass new
-		platformAttributes: Rowan platformConfigurationAttributes;
+		platformAttributes: platformConfigurationAttributes;
 		groupNames: groupNames;
 		configurationBasePath: configDirectory pathString;
 		projectBasePath: projectsDirectory pathString;
@@ -83,7 +84,7 @@ RwPrjReadTool >> _visitConfigurations: visitorClass forProjectComponentDefinitio
 ]
 
 { #category : 'private' }
-RwPrjReadTool >> _visitConfigurations: visitorClass forProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: forLoad [
+RwPrjReadTool >> _visitConfigurations: visitorClass forProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad [
 
 	| projectName configDirectory visitor |
 	projectDefinition repositoryRootPath ifNil: [ ^ nil ].
@@ -92,7 +93,7 @@ RwPrjReadTool >> _visitConfigurations: visitorClass forProjectDefinition: projec
 	configDirectory exists
 		ifFalse: [ ^ nil ].
 	visitor := visitorClass new
-		platformAttributes: Rowan platformConfigurationAttributes;
+		platformAttributes: platformConfigurationAttributes;
 		groupNames: groupNames;
 		configurationBasePath: configDirectory pathString;
 		yourself.
@@ -112,13 +113,18 @@ RwPrjReadTool >> _visitConfigurations: visitorClass forProjectDefinition: projec
 ]
 
 { #category : 'read components' }
-RwPrjReadTool >> readConfigurationsForProjectComponentDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames [
+RwPrjReadTool >> readConfigurationsForProjectComponentDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
 
-	^self readConfigurationsForProjectComponentDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: true
+	^self 
+		readConfigurationsForProjectComponentDefinition: projectDefinition 
+			withConfigurations: configNames 
+			groupNames: groupNames 
+			platformConfigurationAttributes: platformConfigurationAttributes 
+			forLoad: true
 ]
 
 { #category : 'read components' }
-RwPrjReadTool >> readConfigurationsForProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames forLoad: forLoad [
+RwPrjReadTool >> readConfigurationsForProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad [
 
 	| theConfigNames theGroupNames |
 	theConfigNames := configNames isEmpty
@@ -132,6 +138,7 @@ RwPrjReadTool >> readConfigurationsForProjectComponentDefinition: projectCompone
 		forProjectComponentDefinition: projectComponentDefinition 
 		withConfigurations: theConfigNames 
 		groupNames: theGroupNames
+		platformConfigurationAttributes: platformConfigurationAttributes
 		forLoad: forLoad
 ]
 
@@ -156,6 +163,7 @@ RwPrjReadTool >> readConfigurationsForProjectDefinition: projectDefinition withC
 		forProjectDefinition: projectDefinition 
 		withConfigurations: theConfigNames 
 		groupNames: theGroupNames
+		platformConfigurationAttributes: Rowan platformConfigurationAttributes
 		forLoad: forLoad
 ]
 
@@ -193,9 +201,19 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 { #category : 'read project definitions' }
 RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames [
 
+	^ self 
+		readProjectSetForComponentProjectDefinition: projectComponentDefinition 
+			withConfigurations: configNames 
+			groupNames: groupNames 
+			platformConfigurationAttributes: Rowan platformConfigurationAttributes
+]
+
+{ #category : 'read project definitions' }
+RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
+
 	| projectName packageNames projectSetDefinition packageMapSpecs visitor |
 	projectName := projectComponentDefinition name.
-	visitor := self readConfigurationsForProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames.
+	visitor := self readConfigurationsForProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes.
 	visitor 
 		ifNotNil: [ 
 			packageNames := visitor packageNames.
@@ -282,25 +300,25 @@ RwPrjReadTool >> readProjectSetForProjectNamed: projectName withConfigurations: 
 
 	| projectDefinition |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	^ self readProjectSetForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames
-
+	^ projectDefinition
+		readProjectSetReadTool: self
+			withConfigurations: configNames 
+			groupNames: groupNames
 ]
 
 { #category : 'read project by name' }
 RwPrjReadTool >> readProjectSetForProjectNamed: projectName withGroupNames: groupNames [
 
-	| projectDefinition spec theConfigNames |
+	| projectDefinition theConfigNames |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	spec := projectDefinition specification.
-	theConfigNames := spec loadedConfigurationNames
+	theConfigNames := projectDefinition loadedConfigurationNames
 		ifNotNil: [:configNames | configNames ]
 		ifNil: [
-			spec defaultConfigurationNames
+			projectDefinition defaultConfigurationNames
 				ifNotNil: [:configNames | configNames ]
 				ifNil: [ #('Default') ] ].
-	^ self 
-		readProjectSetForProjectDefinition: projectDefinition 
-		withConfigurations: theConfigNames 
-		groupNames: groupNames
-
+	^ projectDefinition
+		readProjectSetReadTool: self
+			withConfigurations: theConfigNames 
+			groupNames: groupNames
 ]

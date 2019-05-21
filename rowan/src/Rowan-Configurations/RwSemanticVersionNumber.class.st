@@ -357,14 +357,15 @@ Class {
 RwSemanticVersionNumber class >> extractNumericComponent: subString [
     "$. separated components are integers"
 
-    | number |
-    number := [ subString asInteger ]
-        on: Error
-        do: [ :ex | ex return: subString ].
-    ^ number asString = subString
-        ifTrue: [ number ]
-        ifFalse: [ subString ]
-
+    | number stream |
+	stream := subString readStream.
+	number := [ Integer fromStream: stream ] on: Error do: [:ex | ^ subString ].
+	^ stream atEnd
+		ifTrue: [ 
+			(subString size > 1 and: [ (subString at: 1) = $0 ])
+				ifTrue: [ self error: 'invalid version number: numberic components may not have a leading 0' ]
+				ifFalse: [ number ] ]
+		ifFalse: [ subString ]
 ]
 
 { #category : 'instance creation' }
@@ -385,55 +386,59 @@ RwSemanticVersionNumber class >> fromString: aString [
     ifFalse: [ preRelease - 1 ].
   versionString := aString copyFrom: 1 to: normalEnd.
   identifierCount := 0.
-  (versionString substrings: '.')
+  (versionString subStrings: '.')
     do: [ :subString | 
       | integer |
+      subString isEmpty
+        ifTrue: [ self error: 'invalid version number: normal version component MUST NOT be empty' ].
 	  integer := self integerFromString: subString.
 	  integer < 0
 		ifTrue: [ 
 		  self
 			error:
-			  'invalid version number: normal version component must be integer '
+			  'invalid version number: normal version component MUST be integer '
 				, subString printString ] .
       normalComponents add: integer.
       identifierCount := identifierCount + 1 ].
   identifierCount ~= 3
-    ifTrue: [ self error: 'invalid version number: normal version must have only 3 components' ].
+    ifTrue: [ self error: 'invalid version number: normal version MUST have only 3 components' ].
   preReleaseEnd := build = 0
     ifTrue: [ aString size ]
     ifFalse: [ build - 1 ].
   preRelease > 0
     ifTrue: [ 
       versionString := aString copyFrom: preRelease + 1 to: preReleaseEnd.
-      (versionString substrings: '.')
+      (versionString subStrings: '.')
         do: [ :subString | 
+	      subString isEmpty
+              ifTrue: [ self error: 'invalid version number: preRelease version component MUST NOT be empty' ].
           (self isSemanticIdentifier: subString)
             ifFalse: [ 
               self
                 error:
-                  'invalid version number: preRelease version component must be one of [0-9A-Za-z-]' ].
+                  'invalid version number: preRelease version component must be one of [0-9A-Za-z-], MUST NOT be empty, and first component MUST NOT be 0' ].
           preReleaseComponents
             add:
               (self extractNumericComponent: subString) ] ].
   build > 0
     ifTrue: [ 
       versionString := aString copyFrom: build + 1 to: aString size.
-      (versionString substrings: '.')
+      (versionString subStrings: '.')
         do: [ :subString | 
+	      subString isEmpty
+              ifTrue: [ self error: 'invalid version number: preRelease version component MUST NOT be empty' ].
           (self isSemanticIdentifier: subString)
             ifFalse: [ 
               self
                 error:
-                  'invalid version number: build version component must be one of [0-9A-Za-z-]' ].
-          buildComponents
-            add:
-              (self extractNumericComponent: subString) ] ].
+                  'invalid version number: build version component must be one of [0-9A-Za-z-] and MUST NOT be empty' ].
+          buildComponents add: subString ] ].
+
   ^ self new
     normalVersion: normalComponents;
     preReleaseVersion: preReleaseComponents;
     buildVersion: buildComponents;
     yourself
-
 ]
 
 { #category : 'private' }
@@ -461,14 +466,10 @@ RwSemanticVersionNumber class >> integerFromString: aString [
 RwSemanticVersionNumber class >> isSemanticIdentifier: aString [
     "whether the receiver is composed entirely of alphanumerics"
 
-    aString
-        do: [ :c | 
-            c isAlphaNumeric
-                ifFalse: [ 
-                    c = $-
-                        ifFalse: [ ^ false ] ] ].
+   aString do: [ :c | 
+     c isAlphaNumeric
+       ifFalse: [ c = $- ifFalse: [ ^ false ] ] ].
     ^ true
-
 ]
 
 { #category : 'private' }

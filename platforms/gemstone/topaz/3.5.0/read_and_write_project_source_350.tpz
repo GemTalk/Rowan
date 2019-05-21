@@ -1,0 +1,125 @@
+#!/usr/bin/gemstone/topaz
+#
+#	read project source from rowan/source and then write project source for loaded projects in a 3.5.0 image
+#
+# If you are using GsDevKit_home[1] and have stash[2] installed, this topaz 
+#	script can be directly executed:
+#
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/write_project_source.tpz <gsdevkit-stone-name> -lq
+#
+# If you are not using GsDevKit_home, you can directly run this script as long as
+# 	1. $GEMSTONE is defined
+# 	2. $GEMSTONE/bin is you path
+#	then execute using the following invocation
+#
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_1.tpz -lq
+#
+#	[1] https://github.com/GsDevKit/GsDevKit_home
+# [2] https://github.com/dalehenrich/stash
+#
+
+ omit pushonly
+  iferr 1 stk
+  iferr 2 stack
+#  iferr 3 exit 1
+	display oops
+
+  set user SystemUser p swordfish
+  login
+
+run
+
+	| platformConfigurationAttributes projectDefinition projectSetDefinition projectSetModification visitor
+		topazFileNameMap repositoryRoot gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo 
+		auditFailures readTool |
+
+	platformConfigurationAttributes := {
+		'common'.
+		'gemstone'.
+		'gemstone-kernel'.
+		'3.5.0' asRwGemStoneVersionNumber.	"want to read 3.5.0 packages"
+	}.
+	projectSetDefinition := RwProjectSetDefinition new.
+	loadedProjectInfo := Dictionary new.
+	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
+	readTool := Rowan projectTools read.
+	{
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/FileSystemGs_component.ston'. 
+			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
+		}.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Rowan_component.ston'. 
+			'$ROWAN_PROJECTS_HOME'
+		}.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Cypress_component.ston'.
+			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
+		}.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/STON_component.ston'.
+			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
+		}.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Tonel_component.ston'.
+			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
+		}.
+	} 
+	do: [:ar |
+		"Read project and packages from disk, creating a projectSetDefinition with all 5 projects"
+		| configNames groupNames projectDefinition theProjectSetDefinition specUrl projectHome |
+		specUrl := ar at: 1.
+		projectHome := ar at: 2.
+		projectDefinition := RwComponentProjectDefinition newForUrl: specUrl.
+		projectDefinition projectHome: projectHome.
+		theProjectSetDefinition := readTool 
+			readProjectSetForComponentProjectDefinition: projectDefinition 
+				withConfigurations: projectDefinition defaultConfigurationNames 
+				groupNames: projectDefinition defaultGroupNames
+				platformConfigurationAttributes: platformConfigurationAttributes.
+
+		loadedProjectInfo 
+			at: projectDefinition name 
+			put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: projectDefinition name).
+
+		theProjectSetDefinition
+			do: [:projectDefinition |	
+				GsFile stdout nextPutAll: 'Project: ', projectDefinition name; lf.
+				projectDefinition packageNames do: [:pkgName | 
+					GsFile stdout nextPutAll: '	', pkgName; lf ].
+				projectSetDefinition addProject: projectDefinition ] ].
+
+	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
+		"install the packageMapSpecs for this load into the specification prior to the load"
+		| projectDefinition thePackageMapSpecs |
+		projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
+		thePackageMapSpecs := projectInfo at: 'packageMapSpecs' .
+		(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
+			ifNotNil: [:name | 
+				projectDefinition defaultSymbolDictName: name ].
+		(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
+			ifNotNil: [:boolean | 
+				projectDefinition defaultUseSessionMethodsForExtensions: boolean  ].
+		(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
+			ifNotNil: [:map |
+				projectDefinition packageNameToPlatformPropertiesMap: map ] ].
+
+	repositoryRoot := '$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src' asFileReference.
+	repositoryRoot ensureCreateDirectory.
+	repositoryRoot deleteAllChildren.
+	{ 'Cypress' . 'FileSystemGs' . 'Rowan' . 'Tonel' . 'STON' } do: [:projectName |
+		projectDefinition := projectSetDefinition projectNamed: projectName.
+		projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+		topazFileNameMap := Dictionary new.
+		topazFileNameMap at: projectName  put: {}.
+		projectDefinition packageNames do: [:packageName |
+			((#('Rowan-Tests'  'Rowan-Services-Tests' 'Rowan-Tests-32x' 'Rowan-Tests-35x') includes: packageName) 
+					and: [ projectName = 'Rowan'])
+				ifTrue: [  (topazFileNameMap at: 'Rowan-Tests' ifAbsentPut: [{} ]) add: packageName ]
+				ifFalse: [ (topazFileNameMap at: projectName) add: packageName ] ].
+		visitor := RwGsModificationTopazWriterVisitor new
+			repositoryRootPath: repositoryRoot;
+			topazFilenamePackageNamesMap: topazFileNameMap;
+			yourself.
+		visitor visit: projectSetModification ].
+%

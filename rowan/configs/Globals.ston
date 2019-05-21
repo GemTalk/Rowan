@@ -14,6 +14,7 @@
 		[ 'gemstone' ] : {
       'core': {
 				#packageNames : [
+					'AST-Kernel-Core',
 					'Rowan-GemStone-Kernel'
 					]
 				}
@@ -45,6 +46,7 @@
 		'gemstone' : {
 			'SystemUser' : {
 				#packageNameToPlatformPropertiesMap : {
+					'AST-Kernel-Core' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Components-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },

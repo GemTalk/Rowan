@@ -72,8 +72,7 @@ RwGsPatch >> symbolDictionaryFor: aPackageName [
 RwGsPatch >> symbolDictionaryFor: aPackageName projectDefinition: aProjectDefinition [
 
 	| symDictName symDict |
-	symDictName := aProjectDefinition
-		symbolDictNameForPackageNamed:aPackageName.
+	symDictName := aProjectDefinition symbolDictNameForPackageNamed: aPackageName.
 	symDict := GsCurrentSession currentSession symbolList objectNamed: symDictName asSymbol.
 	symDict
 		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].

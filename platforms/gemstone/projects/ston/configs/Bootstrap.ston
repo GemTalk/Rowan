@@ -1,9 +1,0 @@
-RwProjectCompoundConfiguration{
-	#name : 'Bootstrap',
-	#version : '0.1.0',
-	#packageNames : Set [ ],
-	#configurationNames : [
-		'Gs3215'
-	],
-	#comment : 'For Bootstrap load Gs3215 only - skip Tests'
-}

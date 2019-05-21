@@ -3,7 +3,8 @@ Class {
 	#superclass : 'RwProjectSpecification',
 	#instVars : [
 		'projectName',
-		'projectsPath'
+		'projectsPath',
+		'defaultComponentName'
 	],
 	#category : 'Rowan-Components'
 }
@@ -20,6 +21,18 @@ RwComponentSpecification >> asProjectReferenceDefinition [
 
 	"answer an RwProjectReferenceDefinition created using the reciever"
 	^RwProjectReferenceDefinition newForSpecification: self
+]
+
+{ #category : 'accessing' }
+RwComponentSpecification >> defaultComponentName [
+
+	^ defaultComponentName ifNil: [ 'Core' ]
+]
+
+{ #category : 'accessing' }
+RwComponentSpecification >> defaultComponentName: aString [
+
+	defaultComponentName := aString
 ]
 
 { #category : 'accessing' }

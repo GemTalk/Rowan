@@ -26,11 +26,6 @@ RwGitRepositorySpecification >> commitForTool: aRwTool message: messageString [
   ^ aRwTool doGitCommit: messageString
 ]
 
-{ #category : 'actions' }
-RwGitRepositorySpecification >> commitLogForTool: aRwTool limit: logLimit [
-  ^ aRwTool doGitCommitLog: logLimit
-]
-
 { #category : 'accessing' }
 RwGitRepositorySpecification >> committish [
   ^ committish

@@ -16,9 +16,10 @@
 # [2] https://github.com/dalehenrich/stash
 #
 
+	omit pushonly
   iferr 1 stk
   iferr 2 stack
-  iferr 3 exit 1
+#  iferr 3 exit 1
 
   set u SystemUser p swordfish
   login
@@ -26,113 +27,141 @@
 # Install FileSystem, Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
 #  methods into the correct package structure
   run
- 	| projectSetDefinition gitRepoPath packageCreateTool projectLoadTool loadedProjectInfo auditFailures |
+ 	| projectSetDefinition gitRepoPath packageCreateTool loadedProjectInfo auditFailures readTool
+		reAudit gitRoot |
 	projectSetDefinition := RwProjectSetDefinition new.
 	loadedProjectInfo := Dictionary new.
 	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
+	readTool := Rowan projectTools read.
 	{
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/filesystem/rowan/specs/FileSystemGs.ston'. 'Default'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/Rowan.ston'. 'Load'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/cypress/specs/Cypress_SystemUser.ston'. 'Default'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/ston/specs/STON_SystemUser.ston'. 'Default'}.
-		{'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects/tonel/specs/Tonel_SystemUser.ston'. 'Default'}.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/FileSystemGs_component.ston'. 
+			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
+		}.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Rowan_component.ston'. 
+			'$ROWAN_PROJECTS_HOME'
+		}.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Cypress_component.ston'.
+			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
+		}.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/STON_component.ston'.
+			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
+		}.
+		{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Tonel_component.ston'.
+			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
+		}.
 	} 
 	do: [:ar |
 		"Read project and packages from disk, creating a projectSetDefinition with all 5 projects"
-		| specification specUrl readTool |
+		| configNames groupNames projectDefinition theProjectSetDefinition specUrl projectHome |
 		specUrl := ar at: 1.
-		specification := RwSpecification fromUrl: specUrl.
-		specification
-			repositoryRootPath: gitRepoPath;
-			repositoryUrl: 'cypress:' , gitRepoPath , '/' , specification repoPath , '/';
-			register. "Create each of the loaded projects"
-		readTool := Rowan projectTools read.
-		ar size = 1
-			ifTrue: [
-				| theProjectSetDefinition |
-				theProjectSetDefinition := readTool readProjectSetForProjectNamed: specification specName.
-				theProjectSetDefinition
-					do: [:projectDefinition |
-						projectSetDefinition addProject: projectDefinition ].
-				loadedProjectInfo at: specification specName put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: specification specName) ]
-			ifFalse: [
-      	| configName groupNames theProjectSetDefinition |
-				configName := ar at: 2.
-				groupNames := specification defaultGroupNames.
-        theProjectSetDefinition := readTool
-					readProjectSetForProjectNamed: specification specName 
-						withConfigurations: { configName } 
-						groupNames: groupNames.
-				loadedProjectInfo at: specification specName put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: specification specName).
-				theProjectSetDefinition
-            	do: [:projectDefinition |
-              	projectSetDefinition addProject: projectDefinition ] ] ].
+		projectHome := ar at: 2.
+		gitRoot := '$ROWAN_PROJECTS_HOME/Rowan'.
+		projectDefinition := (RwComponentProjectDefinition newForUrl: specUrl) 
+			projectHome: projectHome;
+			gitRoot: gitRoot;
+			yourself.
+		theProjectSetDefinition := readTool 
+			readProjectSetForComponentProjectDefinition: projectDefinition 
+				withConfigurations: projectDefinition defaultConfigurationNames 
+				groupNames: projectDefinition defaultGroupNames.
+
+		loadedProjectInfo 
+			at: projectDefinition name 
+			put: ((theProjectSetDefinition properties at: 'loadedProjectInfo') at: projectDefinition name).
+
+		theProjectSetDefinition
+			do: [:projectDefinition |	
+				GsFile stdout nextPutAll: 'Project: ', projectDefinition name; lf.
+				projectDefinition packageNames do: [:pkgName | 
+					GsFile stdout nextPutAll: '	', pkgName; lf ].
+				projectSetDefinition addProject: projectDefinition ] ].
 
 	loadedProjectInfo keysAndValuesDo: [:projectName :projectInfo |
-			(#('FileSystemGs' 'Rowan') includes: projectName)
-				ifTrue: [ 
-					"install the packageMapSpecs for this load into the specification prior to the load"
-					| projectDefinition spec gemstoneSpec thePackageMapSpecs |
-					projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
-					spec := projectDefinition specification.
-					thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
-					gemstoneSpec := spec platformSpec at: 'gemstone'.
-					(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
-						ifNotNil: [:name | gemstoneSpec defaultSymbolDictName: name ].
-					(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
-						ifNotNil: [:boolean | 
-							gemstoneSpec defaultUseSessionMethodsForExtensions: boolean  ].
-					(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
-						ifNotNil: [:map | gemstoneSpec packageNameToPlatformPropertiesMap: map] ] ].
-
-	Rowan image newOrExistingSymbolDictionaryNamed: 'RowanKernel'.
-	Rowan image newOrExistingSymbolDictionaryNamed: 'RowanLoader'.
-	Rowan image newOrExistingSymbolDictionaryNamed: 'RowanTools'.
+		"install the packageMapSpecs for this load into the specification prior to the load"
+		| projectDefinition thePackageMapSpecs |
+		projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
+		thePackageMapSpecs := projectInfo at: 'packageMapSpecs' .
+		(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
+			ifNotNil: [:name | 
+				projectDefinition defaultSymbolDictName: name ].
+		(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
+			ifNotNil: [:boolean | 
+				projectDefinition defaultUseSessionMethodsForExtensions: boolean  ].
+		(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
+			ifNotNil: [:map |
+				projectDefinition packageNameToPlatformPropertiesMap: map ] ].
 
 	packageCreateTool := Rowan packageTools create.
 	projectSetDefinition projects 
 		do: [:projectDefinition |
-			"The loaded project was created by the earlier #register,
-				traverse the package definitions and create loaded packages for each"
-			| specification projectName |
+			"Create loaded project (if needed), traverse the package definitions and 
+				create loaded packages for each"
+			| projectName |
+			projectDefinition register.	"make sure that the project is created"
 			projectName := projectDefinition name.
-			specification := (Rowan image loadedProjectNamed: projectName) specification.
 			projectDefinition packageNames
 				do: [:packageName |
 					packageCreateTool createLoadedPackageNamed: packageName inProjectNamed: projectName ] ].
 
-	"Adopt the project set definition"
-	Rowan projectTools adopt adoptProjectSetDefinition: projectSetDefinition.
-
-	projectLoadTool := Rowan projectTools load.
+	"Adopt the project set definition ... 
+		Log and ignore any missing method or missing classes encountered as they may not be
+		present in the .gs bootstrap file for the proejct ... The will be created when we
+		reload the project a little bit later on."
+	[ Rowan projectTools adopt adoptProjectSetDefinition: projectSetDefinition ]
+		on: RwAdoptMissingMethodErrorNotification, RwAdoptMissingClassErrorNotification
+		do: [:ex |
+			ex
+				methodErrorDo: [ GsFile gciLogServer: 'Missing loaded method ', ex methodPrintString, ' encountered during adopt ... IGNORED' ]
+				classErrorDo: [  GsFile gciLogServer: 'Missing loaded class ', ex className, ' encountered during adopt ... IGNORED' ].
+			ex resume: nil ].
 
 	projectSetDefinition projects 
 		do: [:projectDefinition |
 			"make sure that the loaded SHA is set for each project"
-			projectLoadTool specification: projectDefinition specification.
-			projectDefinition specification updateLoadedCommitIdForTool: projectLoadTool.
-			projectDefinition name = 'Rowan'
-				ifTrue: [
-					(loadedProjectInfo at: projectDefinition name ifAbsent: [])
-						ifNotNil: [:map |
-							projectDefinition specification imageSpec
-								loadedConfigurationNames: (map at: 'loadedConfigurationNames');
-								loadedGroupNames: (map at: 'loadedGroupNames') ] ] ].
+			projectDefinition updateLoadedCommitId.
+			(loadedProjectInfo at: projectDefinition name ifAbsent: [])
+				ifNotNil: [:map |
+					projectDefinition specification imageSpec
+						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
+						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
 
 	projectSetDefinition deriveLoadedThings do: [:loadedProject |
 		"mark projects and packages not dirty"
 		loadedProject markNotDirty.
 		loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
 
-	auditFailures := {}.
-	projectSetDefinition projects
-		do: [:projectDefinition |
-			| audit projectName |
-			projectName := projectDefinition name.
-			GsFile gciLogServer: '---Auditing project: ', projectName printString.
-			audit := Rowan projectTools audit auditForProjectNamed: projectName.
-			GsFile gciLogServer: '	-- audit finished '. 
-			audit isEmpty ifFalse: [ auditFailures add: projectName ] ].
+	reAudit := true.	"kick off the first audit"
+	[ reAudit ] whileTrue: [
+		auditFailures := {}.
+		reAudit := false.
+		projectSetDefinition projects
+			do: [:projectDefinition |
+				| audit projectName |
+				projectName := projectDefinition name.
+				[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+					on: RwAuditMethodErrorNotification
+					do: [:ex |
+						| beh |
+						GsFile gciLogServer: 'extra unpackaged method ', ex methodPrintString, ' encountered during audit ... REMOVED (audit will be rerun)'.
+						"method is not present in the current package structure, so it should be removed"
+						beh := Rowan globalNamed: ex className.
+						ex isMetaclass ifTrue: [ beh := beh class ].
+						beh removeSelector: ex selector.
+						"don't record as an audit error, but make sure that we rerun the audit"
+						reAudit := true.
+						ex resume: false ].
+				GsFile gciLogServer: '	-- audit finished '. 
+				audit isEmpty 
+					ifFalse: [
+						reAudit := false. "we must have had an audit failure that was not handled" 
+GsFile gciLogServer: 'FAILED AUDIT: ', projectName.
+						auditFailures add: projectName ] ].
+		reAudit ifTrue: [ GsFile gciLogServer: 'RERUN AUDIT' ] ].
 	auditFailures isEmpty 
 		ifFalse: [ 
 			self error: 'Post load Rowan audit failed for projects ', auditFailures printString ] 
@@ -163,3 +192,4 @@ UserGlobals at: #rowanCompile put: true.
 	logout
 
 	errorCount
+

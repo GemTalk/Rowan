@@ -1,0 +1,19 @@
+RwProjectLoadConfiguration {
+	#name : 'Common',
+	#version : '0.1.0',
+	#conditionalPackages : {
+		[
+			'gemstone'
+		] : {
+			'core' : {
+				#packageNames : [
+					'CypressTonel-Core',
+					'Tonel-Core',
+					'Tonel-GemStoneCommon-Core',
+					'Tonel-GemStone-Kernel'
+				]
+			}
+		}
+	},
+	#comment : 'Common set of packages '
+}

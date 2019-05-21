@@ -27,6 +27,12 @@ RwGsLoadedSymbolDictComponentProject >> asDefinition [
 		componentDefinitions: self loadedComponentDefinitions
 ]
 
+{ #category : 'commit log' }
+RwGsLoadedSymbolDictComponentProject >> commitLog: logLimit [
+
+	^ self projectRef commitLog: logLimit
+]
+
 { #category : 'initialization' }
 RwGsLoadedSymbolDictComponentProject >> initialize [
 
@@ -41,12 +47,32 @@ RwGsLoadedSymbolDictComponentProject >> initializeForProjectReferenceDefinition:
 	handle := aProjectReferenceDefinition
 ]
 
+{ #category : 'properties' }
+RwGsLoadedSymbolDictComponentProject >> loadedCommitId [
+
+	^ self projectRef loadedCommitId
+]
+
 { #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> loadedComponentDefinitions [
 
 	"Create definitions from all of the components I define, and answer the collection of them"
 
 	^ self definitionsFor: loadedComponents
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> loadedConfigurationNames: configNames [
+
+
+	self projectRef loadedConfigurationNames: configNames
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> loadedGroupNames: groupNames [
+
+
+	self projectRef loadedGroupNames: groupNames
 ]
 
 { #category : 'private' }
@@ -68,6 +94,20 @@ RwGsLoadedSymbolDictComponentProject >> projectOwnerId: aString [
 	^ self propertyAt: 'projectOwnerId' put: aString
 ]
 
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> projectRef [
+
+	^ self handle
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> projectUrl [
+
+	"Return the projectUrl used to clone the project"
+
+	^ self projectRef projectUrl
+]
+
 { #category : 'definitions' }
 RwGsLoadedSymbolDictComponentProject >> propertiesForDefinition [
 
@@ -78,7 +118,39 @@ RwGsLoadedSymbolDictComponentProject >> propertiesForDefinition [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> repositoryCommitId [
+
+	^ self projectRef repositoryCommitId
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> repositoryRoot [
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ self projectRef repositoryRoot
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> specification [
 
+self deprecated: 'temporary patch .. sender should send direct message to receiver'.
 	^ handle
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> symbolDictNameForPackageNamed: packageName [
+
+	^self projectRef symbolDictNameForPackageNamed: packageName
+]
+
+{ #category : 'loading' }
+RwGsLoadedSymbolDictComponentProject >> updateLoadedCommitId [
+
+	self projectRef updateLoadedCommitId
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> useGit [
+
+	^ self projectRef useGit
 ]

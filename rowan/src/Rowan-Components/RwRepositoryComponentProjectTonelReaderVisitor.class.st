@@ -74,13 +74,19 @@ RwRepositoryComponentProjectTonelReaderVisitor >> definitionForType: aString [
 ]
 
 { #category : 'tonel parser' }
-RwRepositoryComponentProjectTonelReaderVisitor >> newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source [
+RwRepositoryComponentProjectTonelReaderVisitor >> newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: protocol source: source [
 
-	self validateMethodProtocol: category  forPackageNamed: self currentPackageDefinition name.
-	^ RwMethodDefinition
+	| methodDef |
+	methodDef := RwMethodDefinition
 		newForSelector: selector 
-			protocol: category 
-			source: source
+			protocol: protocol 
+			source: source.
+	self 
+		validateMethodDefinitionProtocol: methodDef 
+			className: className
+			isMeta: meta
+			forPackageNamed: self currentPackageDefinition name.
+	^ methodDef
 ]
 
 { #category : 'tonel parser' }
@@ -125,7 +131,7 @@ RwRepositoryComponentProjectTonelReaderVisitor >> readClassExtensionFile: file i
 	file readStreamDo: [:fileStream |
 		| definitions stream |
 		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: 10000. "part of workaround for GemTalk/FileSystemGs#9"
+		stream sizeBuffer: 20000. "part of workaround for GemTalk/FileSystemGs#9"
 		definitions := (TonelParser on: stream forReader: self) start.
 		((definitions at: 2) at: 1) do: [:mDef |
 			currentClassExtension addClassMethodDefinition: mDef ].
@@ -143,7 +149,7 @@ RwRepositoryComponentProjectTonelReaderVisitor >> readClassFile: file inPackage:
 		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
 		definitions := (TonelParser on: stream forReader: self) start.
-		self validateClassCategory: currentClassDefinition category forPackageNamed: packageName.
+		self validateClassCategory: currentClassDefinition forPackageNamed: packageName.
 		((definitions at: 2) at: 1) do: [:mDef |
 			currentClassDefinition addClassMethodDefinition: mDef ].
 		((definitions at: 2) at: 2) do: [:mDef |

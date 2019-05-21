@@ -106,9 +106,11 @@ RwDefinition >> key [
 { #category : 'copying' }
 RwDefinition >> postCopy [
 
+	| oldProperties |
 	super postCopy.
-	properties := properties copy
-
+	oldProperties := properties.
+	properties := Dictionary new.
+	oldProperties keysAndValuesDo: [:key :value| properties at: key put: value copy ]
 ]
 
 { #category : 'printing' }

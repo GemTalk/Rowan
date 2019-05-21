@@ -54,7 +54,7 @@ RowanPackageService >> changes [
 RowanPackageService >> classHierarchy [
 	| superclassChains levels services hierarchies theClasses toExpand |
 	self update. 
-	theClasses := classes collect:[:classService | classService classFromName].
+	theClasses := classes collect:[:classService | classService theClass].
 	superclassChains := self superclassChainsFor: theClasses. 
 	hierarchies := self extendHierarchies: superclassChains. 
 	levels := self hierarchiesByLevel: hierarchies.
@@ -70,20 +70,10 @@ RowanPackageService >> classHierarchy [
 { #category : 'client commands' }
 RowanPackageService >> compileClass: definitionString [
 
-	| theClass classService packageService |
-	theClass := definitionString evaluate.
-	classService := RowanClassService new name: theClass name. 
-	classService update. 
-	classService isNewClass: true.
-	classService packageName = name 
-		ifTrue:[
-			self selectedClass: classService
-		]
-		ifFalse:[
-			packageService := RowanPackageService forPackageNamed: classService packageName. 
-			packageService update. 
-			packageService selectedClass: classService].
-	RowanCommandResult addResult: classService.
+	|  anonymousMethod |
+	anonymousMethod := definitionString _compileInContext: nil 
+       symbolList: GsSession currentSession symbolList.
+	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
 ]
 
 { #category : 'rowan' }
@@ -205,6 +195,13 @@ RowanPackageService >> isDirty: boolean [
 	isDirty := boolean
 ]
 
+{ #category : 'Accessing' }
+RowanPackageService >> jadeite_testClasses [
+
+	"for testing" 
+	^testClasses
+]
+
 { #category : 'rowan' }
 RowanPackageService >> loadedClasses [
 
@@ -298,10 +295,33 @@ RowanPackageService >> projectName: newValue [
 ]
 
 { #category : 'client commands' }
+RowanPackageService >> recompileMethodsAfterClassCompilation [
+
+	"compileClass: must be run first"
+	| theClass classService packageService |
+
+	theClass := [(UserGlobals at: #jadeiteCompileClassMethod) _executeInContext: nil] 
+		ensure: [UserGlobals at: #jadeiteCompileClassMethod put: nil].
+	classService := RowanClassService new name: theClass name. 
+	classService update. 
+	classService isNewClass: true.
+	classService packageName = name 
+		ifTrue:[
+			self selectedClass: classService
+		]
+		ifFalse:[
+			packageService := RowanPackageService forPackageNamed: classService packageName. 
+			packageService update. 
+			packageService selectedClass: classService].
+	RowanCommandResult addResult: classService.
+]
+
+{ #category : 'client commands' }
 RowanPackageService >> removeClass: classService [
 
 	self removeClassNamed: classService name. 
 	self update.
+	self setDefaultTemplate.
 	classService updateType: #removedClass:.
 	RowanCommandResult addResult: classService
 ]
@@ -351,17 +371,17 @@ RowanPackageService >> servicePerform: symbol withArguments: collection [
 { #category : 'commands support' }
 RowanPackageService >> services: services from: levels expand: toExpand [
 
-	(classes collect:[:svc | svc classFromName]) do:[:aClass |
+	(classes collect:[:svc | svc theClass]) do:[:aClass |
 		toExpand addAll: aClass allSuperclasses].
 	levels keysAndValuesDo: [:key :value |
 		| newKey service  | 
 		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
-			service := (RowanClassService minimalForClassNamed: key name).
-			(toExpand includes: service classFromName) ifTrue:[service expand: true] ifFalse:[service expand: false].
+			service := (RowanClassService new classServiceFromOop: key asOop).
+			(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
 			service].
 		services at: newKey put: (value collect:[:cls | 
-				service := (RowanClassService minimalForClassNamed: cls name).
-				(toExpand includes: service classFromName) ifTrue:[service expand: true] ifFalse:[service expand: false].
+				service := (RowanClassService new classServiceFromOop: cls asOop).
+				(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
 				service
 				])]
 ]
@@ -394,7 +414,9 @@ RowanPackageService >> testClasses [
 					| classService |
 					classService := RowanClassService basicForClassNamed: testSubclass name.
 					testClasses detect:[:testClassService | testClassService name = classService name] ifNone:[
-						testClasses add: classService]]]]]. 
+					(self loadedClassExtensions keys asArray includes: classService name) ifFalse:[
+							"don't include extension classes"
+							testClasses add: classService]]]]]]. 
 	updateType := #testClasses:. 
 	testClasses := testClasses asArray. 
 	RowanCommandResult addResult: self.
@@ -408,7 +430,7 @@ RowanPackageService >> update [
 		| classService | 
 		classService := (RowanClassService minimalForClassNamed: string) 
 			isExtension: true.
-		(Rowan image loadedClassForClass: classService classFromName ifAbsent:[]) 
+		(Rowan image loadedClassForClass: classService theClass ifAbsent:[]) 
 			ifNotNil:[:cls | classService definedPackageName: cls packageName].
 		classService]).
 	classes do: [:clsService | clsService packageName: self name]. 

@@ -49,6 +49,23 @@ RwComponentProjectDefinition class >> newForUrl: specUrl [
 ]
 
 { #category : 'instance creation' }
+RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment [
+
+
+	^ self newForProjectReference: (RwProjectReferenceDefinition
+		projectName: projectName 
+			configurationNames: configurationNames 
+			groupNames: groupNames 
+			defaultComponentName: defaultComponentName
+			useGit: useGit 
+			projectUrl: projectUrl 
+			projectHome: projectHomeFileReferenceOrString
+			committish: committish 
+			committishType: committishType 
+			comment: comment)
+]
+
+{ #category : 'instance creation' }
 RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl comment: comment [
 
 
@@ -62,26 +79,6 @@ RwComponentProjectDefinition class >> projectName: projectName configurationName
 ]
 
 { #category : 'instance creation' }
-RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames  useGit: useGit projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath [
-
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames  
-			useGit: useGit 
-			projectUrl: projectUrl 
-			comment: comment 
-			projectHome: projectHomeFileReferenceOrString 
-			committish: committish 
-			committishType: committishType 
-			configsPath: configsPath 
-			packagesPath: packagesPath 
-			projectsPath: projectsPath 
-			specsPath: specsPath)
-]
-
-{ #category : 'instance creation' }
 RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl committish: committish committishType: committishType comment: comment [
 
 	^ self newForProjectReference: (RwProjectReferenceDefinition
@@ -90,6 +87,22 @@ RwComponentProjectDefinition class >> projectName: projectName configurationName
 			groupNames: groupNames 
 			useGit: useGit 
 			projectUrl: projectUrl 
+			committish: committish 
+			committishType: committishType 
+			comment: comment)
+]
+
+{ #category : 'instance creation' }
+RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment [
+
+
+	^ self newForProjectReference: (RwProjectReferenceDefinition
+		projectName: projectName 
+			configurationNames: configurationNames 
+			groupNames: groupNames 
+			useGit: useGit 
+			projectUrl: projectUrl 
+			projectHome: projectHomeFileReferenceOrString
 			committish: committish 
 			committishType: committishType 
 			comment: comment)
@@ -179,6 +192,12 @@ RwComponentProjectDefinition >> defaultComponentName [
 	^ self projectRef defaultComponentName
 ]
 
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> defaultComponentName: aString [
+
+	^ self projectRef defaultComponentName: aString
+]
+
 { #category : 'properties' }
 RwComponentProjectDefinition >> defaultConfigurationNames [
 
@@ -194,7 +213,13 @@ RwComponentProjectDefinition >> defaultGroupName [
 { #category : 'properties' }
 RwComponentProjectDefinition >> defaultGroupNames [
 
-	^ self propertyAt: 'defaultGroupNames' ifAbsent: [ self projectRef groupNames ]
+	^ self projectRef groupNames
+]
+
+{ #category : 'actions' }
+RwComponentProjectDefinition >> export [
+
+	Rowan projectTools write writeComponentProjectDefinition: self
 ]
 
 { #category : 'exporting' }
@@ -210,6 +235,16 @@ RwComponentProjectDefinition >> exportComponents [
 
 { #category : 'exporting' }
 RwComponentProjectDefinition >> exportPackages [
+	"attempt to do incremental write to disk, however, if disk cannot be read, write all packages to disk"
+	| projectSetDefinition |
+	projectSetDefinition := [ (self class newForProjectReference: self projectRef) readProjectSet ]
+		on: Error
+		do: [:ignored | RwProjectSetDefinition new ].
+	self exportPackages: projectSetDefinition.
+]
+
+{ #category : 'exporting' }
+RwComponentProjectDefinition >> exportPackages: diskProjectSetDefinition [
 
 	| projectSetDefinition visitor projectSetModification writerVisitorClass |
 	(self packagesRoot /  'properties', 'st') 
@@ -231,7 +266,7 @@ RwComponentProjectDefinition >> exportPackages [
 		ifFalse: [ RwModificationFiletreeWriterVisitor ].
 	projectSetDefinition:= RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: self.
-	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new. "compare against empty project to write out entire project"
+	projectSetModification := projectSetDefinition compareAgainstBase: diskProjectSetDefinition.
 	visitor := writerVisitorClass new.
 
 	visitor visit: projectSetModification.
@@ -248,16 +283,40 @@ RwComponentProjectDefinition >> exportProjects [
 			(self projectsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
 ]
 
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> gitRoot: aGitRootReferenceOrString [ 
+
+	^ self projectRef gitRoot: aGitRootReferenceOrString
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> loadedCommitId [
+
+	^ self projectRef loadedCommitId
+]
+
 { #category : 'properties' }
 RwComponentProjectDefinition >> loadedConfigurationNames [
 
-	^ self propertyAt: 'loadedConfigurationNames' ifAbsent: [ ]
+	^ self projectRef loadedConfigurationNames
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> loadedConfigurationNames: anArray [
+
+	^ self projectRef loadedConfigurationNames: anArray
 ]
 
 { #category : 'properties' }
 RwComponentProjectDefinition >> loadedGroupNames [
 
-	^ self propertyAt: 'loadedGroupNames' ifAbsent: [ ]
+	^ self projectRef loadedGroupNames
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> loadedGroupNames: anArray [
+
+	^ self projectRef loadedGroupNames: anArray
 ]
 
 { #category : 'accessing' }
@@ -346,6 +405,12 @@ RwComponentProjectDefinition >> projectRef [
 	^ self propertyAt: 'projectRef' ifAbsent: [ ]
 ]
 
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> projectRef: aRwProjectReferenceDefinition [
+
+	^ self propertyAt: 'projectRef' put: aRwProjectReferenceDefinition
+]
+
 { #category : 'properties' }
 RwComponentProjectDefinition >> projectsPath [
 
@@ -389,6 +454,15 @@ RwComponentProjectDefinition >> readProjectSetForPackageNames: packageNames [
 		visit: self.
 ]
 
+{ #category : 'reading' }
+RwComponentProjectDefinition >> readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: theGroupNames [
+
+	^ readTool
+		readProjectSetForComponentProjectDefinition: self
+			withConfigurations: theConfigNames 
+			groupNames: theGroupNames
+]
+
 { #category : 'temporary compat' }
 RwComponentProjectDefinition >> repoPath [
 
@@ -405,8 +479,16 @@ RwComponentProjectDefinition >> repoPath: astring [
 
 { #category : 'properties' }
 RwComponentProjectDefinition >> repositoryRoot [
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self projectRef repositoryRoot
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> repositoryRoot: aFileReferenceOrPath [
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ self projectRef repositoryRoot: aFileReferenceOrPath
 ]
 
 { #category : 'temporary compat' }
@@ -438,4 +520,16 @@ RwComponentProjectDefinition >> specsPath: aDirectoryPathString [
 RwComponentProjectDefinition >> specsRoot [
 
 	^ self projectRef specsRoot
+]
+
+{ #category : 'loading' }
+RwComponentProjectDefinition >> updateLoadedCommitId [
+
+	self projectRef updateLoadedCommitId
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> useGit [
+
+	^ self projectRef useGit
 ]

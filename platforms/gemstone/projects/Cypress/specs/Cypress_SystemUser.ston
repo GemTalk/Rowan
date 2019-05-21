@@ -1,0 +1,11 @@
+ RwSimpleProjectSpecification{
+	#specName : 'Cypress',
+	#version : '0.1.0',
+	#projectUrl : 'https://github.com/dalehenrich/Rowan',
+	#configsPath : 'platforms/gemstone/projects/Cypress/configs',
+	#repoPath : 'platforms/gemstone/projects/Cypress/src',
+	#specsPath : 'platforms/gemstone/projects/Cypress/specs',
+	#defaultConfigurationNames : [ 'Default' ],
+	#defaultGroupNames : [ 'core' ],
+	#comment : ''
+}

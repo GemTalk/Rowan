@@ -50,9 +50,13 @@ RowanAnsweringService >> exec: aString [
 ]
 
 { #category : 'client commands' }
-RowanAnsweringService >> exec: aString context: anObject [
+RowanAnsweringService >> exec: aString context: oop [
 
-	answer := (aString evaluateInContext: anObject symbolList: GsSession currentSession symbolList). 
+	answer := [true -> (aString evaluateInContext: (Object _objectForOop: oop) symbolList: GsSession currentSession symbolList) asOop] 
+		on: CompileError do: [:ex | 
+			false -> ex errorDetails
+	].
+	answer key ifTrue:[(RowanService autoCommit == true) ifTrue:[System commitTransaction]].
 	RowanCommandResult addResult: self.
 
 	"return answer for testing" 
@@ -105,7 +109,7 @@ RowanAnsweringService >> runMethodTests: methodServices [
 	| behavior |
 	methodServices do:[:methodService |
 		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
-			behavior := methodService classFromName. 
+			behavior := methodService theClass. 
 			behavior debug: methodService selector]].
 	answer := true. 
 	RowanCommandResult initializeResults. "squash any client updates during server test run"
@@ -122,9 +126,9 @@ RowanAnsweringService >> selectorsMatchingPattern: pattern [
 ]
 
 { #category : 'client commands' }
-RowanAnsweringService >> setAutoCommit: boolean [
+RowanAnsweringService >> setAutoCommit: object [
 
-	answer := RowanService setAutoCommit: boolean.
+	answer := RowanService setAutoCommit: object.
 	RowanCommandResult addResult: self.
 ]
 

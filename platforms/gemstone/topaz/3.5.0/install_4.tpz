@@ -16,9 +16,10 @@
 # [2] https://github.com/dalehenrich/stash
 #
 
+	omit pushonly
   iferr 1 stk
   iferr 2 stack
-  iferr 3 exit 1
+#  iferr 3 exit 1
 
   set u SystemUser p swordfish
   login
@@ -31,7 +32,7 @@
 	projectNames do: [:projectName |
 		[	Rowan projectTools load
 			loadProjectNamed: projectName
-			withGroupNames: #('tests' 'jadeServer') ]
+			withGroupNames: #('core' 'tests' 'jadeServer') ]
 				on: CompileWarning do: [:ex |
 					(ex description includesString: 'not optimized')
 						ifFalse: [ warnings add: ex asString printString ].
@@ -53,6 +54,8 @@
 %
   commit
 
-  logout
+	logout
 
 	errorCount
+
+	

@@ -1,9 +1,45 @@
 Extension { #name : 'RwComponentProjectDefinition' }
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> defaultSymbolDictName [
+
+	^ self projectRef defaultSymbolDictName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> defaultSymbolDictName: symDictName [
+
+	self projectRef defaultSymbolDictName: symDictName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> defaultUseSessionMethodsForExtensions [
+
+	^ self projectRef defaultUseSessionMethodsForExtensions
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> defaultUseSessionMethodsForExtensions: aBool [
+
+	self projectRef defaultUseSessionMethodsForExtensions: aBool
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwComponentProjectDefinition >> methodEnvForPackageNamed: packageName [
 
 	^self projectRef methodEnvForPackageNamed: packageName
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> packageNameToPlatformPropertiesMap [
+
+	^self projectRef packageNameToPlatformPropertiesMap
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> packageNameToPlatformPropertiesMap: aDictionary [
+
+	^self projectRef packageNameToPlatformPropertiesMap: aDictionary
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }

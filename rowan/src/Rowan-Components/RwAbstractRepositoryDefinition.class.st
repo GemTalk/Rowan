@@ -90,6 +90,18 @@ RwAbstractRepositoryDefinition >> attach [
 ]
 
 { #category : 'accessing' }
+RwAbstractRepositoryDefinition >> commitId [
+
+	^ ''
+]
+
+{ #category : 'accessing' }
+RwAbstractRepositoryDefinition >> commitLog: logLimit [
+
+	^ ''
+]
+
+{ #category : 'accessing' }
 RwAbstractRepositoryDefinition >> committish [
 
 	^ self properties at: 'committish' ifAbsent: []
@@ -112,6 +124,10 @@ RwAbstractRepositoryDefinition >> committishType [
 RwAbstractRepositoryDefinition >> create [
 
 	self error: 'not yet implemented'
+]
+
+{ #category : 'accessing' }
+RwAbstractRepositoryDefinition >> gitRoot: ignored [
 ]
 
 { #category : 'accessing' }
@@ -145,6 +161,12 @@ RwAbstractRepositoryDefinition >> projectUrl: anUrlString [
 	self properties at: 'projectUrl' put: anUrlString
 ]
 
+{ #category : 'accessing' }
+RwAbstractRepositoryDefinition >> repositoryCommitId [
+
+	^ ''
+]
+
 { #category : 'testing' }
 RwAbstractRepositoryDefinition >> repositoryExists [
 
@@ -153,6 +175,7 @@ RwAbstractRepositoryDefinition >> repositoryExists [
 
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> repositoryRoot [
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self properties at: 'repositoryRoot'
 ]
@@ -163,6 +186,7 @@ RwAbstractRepositoryDefinition >> repositoryRoot: pathStringOrReference [
 	| fileRef |
 	fileRef := pathStringOrReference asFileReference.
 	self projectUrl: nil.
+	self gitRoot: nil.
 	self properties at: 'repositoryRoot' put: fileRef
 ]
 

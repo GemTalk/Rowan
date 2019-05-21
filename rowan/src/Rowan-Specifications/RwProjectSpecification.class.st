@@ -94,11 +94,6 @@ RwProjectSpecification >> commitForTool: aRwTool message: messageString [
   ^ self repoSpec commitForTool: aRwTool message: messageString
 ]
 
-{ #category : 'actions' }
-RwProjectSpecification >> commitLogForTool: aRwTool limit: logLimit [
-  ^ self repoSpec commitLogForTool: aRwTool limit: logLimit
-]
-
 { #category : 'accessing' }
 RwProjectSpecification >> configsPath [
 

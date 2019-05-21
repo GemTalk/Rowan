@@ -1,0 +1,18 @@
+RwComponentSpecification {
+	#specName : 'Rowan',
+	#version : '0.3.0',
+	#projectUrl : 'https://github.com/GemTalk/Rowan',
+	#configsPath : 'rowan/configs',
+	#specsPath : 'rowan/specs',
+	#repoPath : 'rowan/src',
+	#projectsPath : 'rowan/projects',
+	#repoSpec : RwGitRepositorySpecification {
+	},
+	#defaultConfigurationNames : [
+		'Load'
+	],
+	#defaultGroupNames : [
+		'core', 'tests', 'jadeServer'
+	],
+	#comment : 'Used for reading the project from disk'
+}

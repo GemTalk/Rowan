@@ -465,6 +465,111 @@ true.
 
 doit
 (RwNotification
+	subclass: 'RwAdoptAuditErrorNotification'
+	instVarNames: #( className isClassExtension packageName description )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAdoptAuditErrorNotification
+	subclass: 'RwAdoptAuditClassErrorNotification'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAdoptAuditClassErrorNotification
+	subclass: 'RwAdoptMissingClassErrorNotification'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAdoptAuditClassErrorNotification
+	subclass: 'RwAuditClassErrorNotification'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAdoptAuditErrorNotification
+	subclass: 'RwAdoptAuditMethodErrorNotification'
+	instVarNames: #( selector isMetaclass )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAdoptAuditMethodErrorNotification
+	subclass: 'RwAdoptMissingMethodErrorNotification'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwAdoptAuditMethodErrorNotification
+	subclass: 'RwAuditMethodErrorNotification'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwNotification
 	subclass: 'RwDeleteClassFromSystemNotification'
 	instVarNames: #( candidateClass )
 	classVars: #(  )
@@ -512,6 +617,96 @@ doit
 (RwNotification
 	subclass: 'RwExistingVisitorAddingExistingClassNotification'
 	instVarNames: #( classDefinition loadedProject )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwNotification
+	subclass: 'RwInvalidCategoryProtocolConventionErrorNotification'
+	instVarNames: #( packageName packageConvention )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwInvalidCategoryProtocolConventionErrorNotification
+	subclass: 'RwInvalidClassCategoryConventionErrorNotification'
+	instVarNames: #( classDefinition )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwInvalidCategoryProtocolConventionErrorNotification
+	subclass: 'RwInvalidMethodProtocolConventionErrorNotification'
+	instVarNames: #( methodDefinition className isMeta )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwInvalidMethodProtocolConventionErrorNotification
+	subclass: 'RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwInvalidMethodProtocolConventionErrorNotification
+	subclass: 'RwExtensionProtocolNonExtensionMethodErrorNotification'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwInvalidMethodProtocolConventionErrorNotification
+	subclass: 'RwNonExtensionProtocolExtensionMethodErrorNotification'
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -759,6 +954,1089 @@ doit
 	options: #())
 		category: 'Rowan-JadeServer';
 		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RBParser'
+	instVarNames: #( scanner currentToken nextToken errorBlock source comments pragmas )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBParser takes a source code string and generates an AST for it. This is a hand-written, recursive descent parser and has been optimized for speed. The simplest way to call this is either ''RBParser parseExpression: aString'' if you want the AST for an expression, or ''RBParser parseMethod: aString'' if you want to parse an entire method.
+
+Instance Variables:
+	currentToken	<RBToken>	The current token being processed.
+	emptyStatements	<Boolean>	True if empty statements are allowed. In IBM, they are, in VW they aren''t.
+	errorBlock	<BlockClosure>	The block to evaluate on a syntax error.
+	nextToken	<RBToken>	The next token that will be processed. This allows one-token lookahead.
+	scanner	<RBScanner>	The scanner that generates a stream of tokens to parse.
+	source	<String>	The source code to parse
+	tags	<Collection of: Interval>	The source intervals of the tags appearing at the top of a method (e.g. Primitive calls)
+
+Shared Variables:
+	ParserType	<Symbol>	the type code we are parsing';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBParser
+	subclass: 'RBPatternParser'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBPatternParser is a subclass of RBParser that allows the extended syntax that creates matching trees. These trees can be used by the ParseTreeMatcher to search and transform source code.
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RBParseTreeRule'
+	instVarNames: #( searchTree owner )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBParseTreeRule is the abstract superclass of all of the parse tree searching rules. A parse tree rule is the first class representation of a particular rule to search for. The owner of a rule is the algorithm that actually executes the search. This arrangement allows multiple searches to be conducted by a single Searcher.
+
+Instance Variables:
+	owner	<ParseTreeSearcher>	The searcher that is actually performing the search.
+	searchTree	<RBProgramNode>	The parse tree to be searched.
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBParseTreeRule
+	subclass: 'RBReplaceRule'
+	instVarNames: #( verificationBlock )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBReplaceRule is the abstract superclass of all of the transforming rules. The rules change the source code by replacing the node that matches the rule. Subclasses implement different strategies for this replacement.
+
+Subclasses must implement the following messages:
+	matching
+		foundMatchFor:
+
+Instance Variables:
+	verificationBlock	<BlockClosure>	Is evaluated with the matching node. This allows for further verification of a match beyond simple tree matching.
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBReplaceRule
+	subclass: 'RBBlockReplaceRule'
+	instVarNames: #( replaceBlock )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBBlockReplaceRule replaces the matching node by the result of evaluating replaceBlock. This allows arbitrary computation to come up with a replacement.
+
+Instance Variables:
+	replaceBlock	<BlockClosure>	The block that returns the node to replace to matching node with.
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBReplaceRule
+	subclass: 'RBStringReplaceRule'
+	instVarNames: #( replaceTree )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBStringReplaceRule replaces a matched tree with another tree (which may include metavariable from the matching tree). This is a very succint syntax for specifying most rewrites.
+
+Instance Variables:
+	replaceTree	<RBProgramNode>	The tree to replace the matched tree with.
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBParseTreeRule
+	subclass: 'RBSearchRule'
+	instVarNames: #( answerBlock )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBSearchRule is a parse tree rule that simply searches for matches to the rule. Every time a match is found, answerBlock is evaluated with the node that matches and the cureent answer. This two-argument approach allows a collection to be formed from all of the matches (Think inject:into:).
+
+Instance Variables:
+	answerBlock	<BlockClosure>	Block to evaluate with the matching node and the current answer.
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RBProgramNode'
+	instVarNames: #( parent comments properties )
+	classVars: #( FormatterClass )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBProgramNode is an abstract class that represents an abstract syntax tree node in a Smalltalk program.
+
+Subclasses must implement the following messages:
+	accessing
+		start
+		stop
+	visitor
+		acceptVisitor:
+
+The #start and #stop methods are used to find the source that corresponds to this node. "source copyFrom: self start to: self stop" should return the source for this node.
+
+The #acceptVisitor: method is used by RBProgramNodeVisitors (the visitor pattern). This will also require updating all the RBProgramNodeVisitors so that they know of the new node.
+
+Subclasses might also want to redefine match:inContext: and copyInContext: to do parse tree searching and replacing.
+
+Subclasses that contain other nodes should override equalTo:withMapping: to compare nodes while ignoring renaming temporary variables, and children that returns a collection of our children nodes.
+
+Instance Variables:
+	comments	<Collection of: Interval>	the intervals in the source that have comments for this node
+	parent	<RBProgramNode>	the node we''re contained in
+
+Shared Variables:
+	FormatterClass	<Behavior>	the formatter class that is used when we are formatted';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBProgramNode
+	subclass: 'RBMethodNode'
+	instVarNames: #( selector selectorParts body source arguments pragmas replacements nodeReplacements )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBMethodNode is the AST that represents a Smalltalk method.
+
+Instance Variables:
+	arguments	<SequenceableCollection of: RBVariableNode>	the arguments to the method
+	body	<BRSequenceNode>	the body/statements of the method
+	nodeReplacements	<Dictionary>	a dictionary of oldNode -> newNode replacements
+	replacements	<Collection of: RBStringReplacement>	the collection of string replacements for each node replacement in the parse tree
+	selector	<Symbol | nil>	the method name (cached)
+	selectorParts	<SequenceableCollection of: RBValueToken>	the tokens for the selector keywords
+	source	<String>	the source we compiled
+	tags	<Collection of: Interval>	the source location of any resource/primitive tags
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBMethodNode
+	subclass: 'RBPatternMethodNode'
+	instVarNames: #( isList )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBPatternMethodNode is a RBMethodNode that will match other method nodes without their selectors being equal. 
+
+Instance Variables:
+	isList	<Boolean>	are we matching each keyword or matching all keywords together (e.g., `keyword1: would match a one argument method whereas `@keywords: would match 0 or more arguments)
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBProgramNode
+	subclass: 'RBPragmaNode'
+	instVarNames: #( selector selectorParts arguments isProtected left right )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBPragmaNode is an AST node that represents a method pragma.
+
+Instance Variables:
+	arguments <SequenceableCollection of: RBLiteralNode> our argument nodes
+	left <Integer | nil> position of <
+	right <Integer | nil> position of >
+	selector <Symbol | nil>	the selector we''re sending (cached)
+	selectorParts <SequenceableCollection of: RBValueToken> the tokens for each keyword';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBPragmaNode
+	subclass: 'RBPatternPragmaNode'
+	instVarNames: #( isList )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBProgramNode
+	subclass: 'RBReturnNode'
+	instVarNames: #( return value )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBReturnNode is an AST node that represents a return expression.
+
+Instance Variables:
+	return	<Integer>	the position of the ^ character
+	value	<RBValueNode>	the value that is being returned
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBProgramNode
+	subclass: 'RBSequenceNode'
+	instVarNames: #( leftBar rightBar statements periods temporaries )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBSequenceNode is an AST node that represents a sequence of statements. Both RBBlockNodes and RBMethodNodes contain these.
+
+Instance Variables:
+	leftBar	<Integer | nil>	the position of the left | in the temporaries definition
+	periods	<SequenceableCollection of: Integer>	the positions of all the periods that separate the statements
+	rightBar	<Integer | nil>	the position of the right | in the temporaries definition
+	statements	<SequenceableCollection of: RBStatementNode>	the statement nodes
+	temporaries	<SequenceableCollection of: RBVariableNode>	the temporaries defined
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBProgramNode
+	subclass: 'RBValueNode'
+	instVarNames: #( parentheses )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBValueNode is an abstract class that represents a node that returns some value.
+
+Subclasses must implement the following messages:
+	accessing
+		startWithoutParentheses
+		stopWithoutParentheses
+	testing
+		needsParenthesis
+
+Instance Variables:
+	parentheses	<SequenceableCollection of: Inteval>	the positions of the parethesis around this node. We need a collection of intervals for stupid code such as "((3 + 4))" that has multiple parethesis around the same expression.
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueNode
+	subclass: 'RBArrayNode'
+	instVarNames: #( left right statements periods )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'A RBArrayNode is an AST node for runtime arrays.
+
+Instance Variables
+	left:	 <Integer | nil> position of {
+	periods: <SequenceableCollection of: Integer> the positions of all the periods that separate the statements
+	right: <Integer | nil> position of }
+	statements: <SequenceableCollection of: RBStatementNode> the statement nodes';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueNode
+	subclass: 'RBAssignmentNode'
+	instVarNames: #( variable assignment value )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBAssignmentNode is an AST node for assignment statements
+
+Instance Variables:
+	assignment	<Integer>	position of the :=
+	value	<RBValueNode>	the value that we''re assigning
+	variable	<RBVariableNode>	the variable being assigned
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueNode
+	subclass: 'RBBlockNode'
+	instVarNames: #( left right colons arguments bar body )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBBlockNode is an AST node that represents a block "[...]".
+
+Instance Variables:
+	arguments	<SequenceableCollection of: RBVariableNode>	the arguments for the block
+	bar	<Integer | nil>	position of the | after the arguments
+	body	<RBSequenceNode>	the code inside the block
+	colons	<SequenceableCollection of: Integer>	positions of each : before each argument
+	left	<Integer>	position of [
+	right	<Integer>	position of ]
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBBlockNode
+	subclass: 'RBPatternBlockNode'
+	instVarNames: #( valueBlock )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBPatternBlockNode is the node in matching parse trees (it never occurs in normal Smalltalk code) that executes a block to determine if a match occurs. valueBlock takes two arguments, the first is the actual node that we are trying to match against, and second node is the dictionary that contains all the metavariable bindings that the matcher has made thus far.
+
+Instance Variables:
+	valueBlock	<BlockClosure>	The block to execute when attempting to match this to a node.
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBPatternBlockNode
+	subclass: 'RBPatternWrapperBlockNode'
+	instVarNames: #( wrappedNode )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBPatternWrapperBlockNode allows further matching using a block after a node has been matched by a pattern node.
+
+Instance Variables:
+	wrappedNode	<RBProgramNode>	The original pattern node to match';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBBlockNode
+	subclass: 'RBQueryBlockNode'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueNode
+	subclass: 'RBCascadeNode'
+	instVarNames: #( messages semicolons )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBCascadeNode is an AST node for cascaded messages (e.g., "self print1 ; print2").
+
+Instance Variables:
+	messages	<SequenceableCollection of: RBMessageNode>	the messages 
+	semicolons	<SequenceableCollection of: Integer>	positions of the ; between messages
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueNode
+	subclass: 'RBLiteralNode'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBLiteralNode is an AST node that represents literals.';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBLiteralNode
+	subclass: 'RBLiteralArrayNode'
+	instVarNames: #( isByteArray stop contents start )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'A RBLiteralArrayNode is an AST node that represents literal arrays and literal byte arrays.
+
+Instance Variables
+	contents: <Array of: RBLiteralNode> literal nodes of the array
+	isByteArray: <Boolean> if the receiver is a literal byte array
+	start: <Integer | nil> source position of #( or #[
+	stop: <Integer | nil> source position of ) or ]';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBLiteralNode
+	subclass: 'RBLiteralValueNode'
+	instVarNames: #( token )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBLiteralNode is an AST node that represents literal values (e.g., #foo, true, 1, etc.), but not literal arrays.
+
+Instance Variables:
+	token	<RBLiteralToken>	the token that contains the literal value as well as its source positions';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueNode
+	subclass: 'RBMessageNode'
+	instVarNames: #( receiver selector selectorParts arguments )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBMessageNode is an AST node that represents a message send.
+
+Instance Variables:
+	arguments	<SequenceableCollection of: RBValueNode>	our argument nodes
+	receiver	<RBValueNode>	the receiver''s node
+	selector	<Symbol | nil>	the selector we''re sending (cached)
+	selectorParts	<SequenceableCollection of: RBValueToken>	the tokens for each keyword
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBMessageNode
+	subclass: 'RBPatternMessageNode'
+	instVarNames: #( isList isCascadeList )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBPatternMessageNode is a RBMessageNode that will match other message nodes without their selectors being equal. 
+
+Instance Variables:
+	isCascadeList	<Boolean>	are we matching a list of message nodes in a cascaded message
+	isList	<Boolean>	are we matching each keyword or matching all keywords together (e.g., `keyword1: would match a one argument method whereas `@keywords: would match 0 or more arguments)';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueNode
+	subclass: 'RBVariableNode'
+	instVarNames: #( token )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBVariableNode is an AST node that represent a variable (global, inst var, temp, etc.).
+
+Instance Variables:
+	token	<RBValueToken>	the token that contains our name and position
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBVariableNode
+	subclass: 'RBPatternVariableNode'
+	instVarNames: #( recurseInto isList isLiteral isStatement isAnything )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBPatternVariableNode is an AST node that is used to match several other types of nodes (literals, variables, value nodes, statement nodes, and sequences of statement nodes).
+
+The different types of matches are determined by the name of the node. If the name contains a # character, then it will match a literal. If it contains, a . then it matches statements. If it contains no extra characters, then it matches only variables. These options are mutually exclusive.
+
+The @ character can be combined with the name to match lists of items. If combined with the . character, then it will match a list of statement nodes (0 or more). If used without the . or # character, then it matches anything except for list of statements. Combining the @ with the # is not supported.
+
+Adding another ` in the name will cause the search/replace to look for more matches inside the node that this node matched. This option should not be used for top level expressions since that would cause infinite recursion (e.g., searching only for "``@anything").
+
+Instance Variables:
+	isAnything	<Boolean>	can we match any type of node
+	isList	<Boolean>	can we match a list of items (@)
+	isLiteral	<Boolean>	only match a literal node (#)
+	isStatement	<Boolean>	only match statements (.)
+	recurseInto	<Boolean>	search for more matches in the node we match (`)
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RBProgramNodeVisitor'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBProgramNodeVisitor is an abstract visitor for the RBProgramNodes.
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBProgramNodeVisitor
+	subclass: 'RBConfigurableFormatter'
+	instVarNames: #( codeStream indent lookaheadCode originalSource lineStart inQueryBlock )
+	classVars: #( CascadedMessageInsideParentheses FormatCommentWithStatements IndentsForKeywords IndentString InQueryBlock KeepBlockInMessage LineUpBlockBrackets MaxLineLength MethodSignatureOnMultipleLines MinimumNewLinesBetweenStatements MultiLineMessages NewLineAfterCascade NewLineBeforeFirstCascade NewLineBeforeFirstKeyword NewLinesAfterMethodComment NewLinesAfterMethodPattern NewLinesAfterTemporaries NumberOfArgumentsForMultiLine OneLineMessages PeriodsAtEndOfBlock PeriodsAtEndOfMethod RetainBlankLinesBetweenStatements StringFollowingReturn StringInsideBlocks StringInsideParentheses TraditionalBinaryPrecedence UseTraditionalBinaryPrecedenceForParentheses )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBConfigurableFormatter formats the Refactoring Browser''s parse trees. It has many more formatting options than the default formatter used by the RB. To change the RB to use this formatter, execute "RBProgramNode formatterClass: RBConfigurableFormatter". For some refactorings the RB must reformat the code after the change, so it is good to have a formatter configured to your tastes.
+
+Instance Variables:
+	codeStream	<PositionableStream>	the stream we are writing our output to
+	indent	<Integer>	how many times are we indenting a new line -- indents are normally tabs but could be any whitespace string
+	lineStart	<Integer>	the position of the character that started the current line. This is used for calculating the line length.
+	lookaheadCode	<Dictionary key: RBProgramNode value: String>	sometimes we need to lookahead while formatting, this dictionary contains the nodes that have already been formatted by lookahead
+	originalSource	<String>	the original source before we started formatting. This is used to extract the comments from the original source.
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBProgramNodeVisitor
+	subclass: 'RBFormatter'
+	instVarNames: #( codeStream lineStart firstLineLength tabs inQueryBlock )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBFormatter formats a parse tree. It is an example of a Visitor. This is rarely called directly. Sending ''formattedCode'' to a parse tree uses this algorithm to return a pretty-printed version.
+
+Instance Variables:
+	codeStream	<PositionableStream>	The buffer where the output is accumulated.
+	firstLineLength	<Integer>	The length of the first line of a message send.
+	lineStart	<Integer>	The position of the current line''s start.
+	tabs	<Integer>	The number of tabs currently indented.
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBProgramNodeVisitor
+	subclass: 'RBParseTreeSearcher'
+	instVarNames: #( searches answer argumentSearches context messages )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'ParseTreeSearcher walks over a normal source code parse tree using the visitor pattern, and then matches these nodes against the meta-nodes using the match:inContext: methods defined for the meta-nodes.
+
+Instance Variables:
+	answer	<Object>	the "answer" that is propagated between matches
+	argumentSearches	<Collection of: (Association key: RBProgramNode value: BlockClosure)>	argument searches (search for the BRProgramNode and perform the BlockClosure when its found)
+	context	<RBSmallDictionary>	a dictionary that contains what each meta-node matches against. This could be a normal Dictionary that is created for each search, but is created once and reused (efficiency).
+	messages	<Collection>	the sent messages in our searches
+	searches	<Collection of: (Association key: RBProgramNode value: BlockClosure)>	non-argument searches (search for the BRProgramNode and perform the BlockClosure when its found)';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBParseTreeSearcher
+	subclass: 'RBParseTreeRewriter'
+	instVarNames: #( tree )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'ParseTreeRewriter walks over and transforms its RBProgramNode (tree). If the tree is modified, then answer is set to true, and the modified tree can be retrieved by the #tree method.
+
+Instance Variables:
+	tree	<RBProgramNode>	the parse tree we''re transforming';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBProgramNodeVisitor
+	subclass: 'RBReadBeforeWrittenTester'
+	instVarNames: #( read checkNewTemps scopeStack )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBReadBeforeWrittenTester is a visitor that identifies variables that may have been read before they are initialized.
+
+Instance Variables:
+	checkNewTemps	<Boolean>	description of checkNewTemps
+	read	<Collection>	description of read
+	scopeStack	<OrderedCollection>	description of scopeStack
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RBScanner'
+	instVarNames: #( stream buffer tokenStart currentCharacter characterType classificationTable comments errorBlock )
+	classVars: #( PatternVariableCharacter )
+	classInstVars: #( classificationTable )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBScanner is a stream that returns a sequence of token from the string that it is created on. The tokens know where they came from in the source code and which comments were attached to them.
+
+Instance Variables:
+	buffer	<PositionableStream>	Accumulates the text for the current token.
+	characterType	<ByteSymbol>	The type of the next character. (e.g. #alphabetic, etc.)
+	classificationTable	<Array of: Symbol>	Mapping from Character values to their characterType.
+	comments	<Collection of: Interval>	Source intervals of scanned comments that must be attached to the next token.
+	currentCharacter	<Character>	The character currently being processed.
+	errorBlock	<BlockClosure>	The block to execute on lexical errors.
+	extendedLiterals	<Boolean>	True if IBM-type literals are allowed. In VW, this is false.
+	nameSpaceCharacter	<Character>	The character used to separate namespaces.
+	numberType	<ByteSymbol>	The method to perform: to scan a number. 
+	separatorsInLiterals	<Boolean>	True if separators are allowed within literals.
+	stream	<PositionableStream>	Contains the text to be scanned.
+	tokenStart	<Integer>	The source position of the beginning of the current token
+
+Class Instance Variables:
+	classificationTable	<Array>		the default classification table for all characters
+
+Shared Variables:
+	PatternVariableCharacter	<Character>	the character that starts a pattern node';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBScanner
+	subclass: 'RBPatternScanner'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBPatternScanner is a subclass of RBScanner that allows the extended syntax of pattern matching trees.
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RBSmallDictionary'
+	instVarNames: #( keys values tally )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBSmallDictionary is a special dictionary optimized for small collections. In addition to the normal dictionary protocol, it also supports an #empty message which "empties" the collection but may hang on to the original elements (so it could collect garbage). Without #empty we would either need to create a new dictionary or explicitly remove everything from the dictionary. Both of these take more time and #empty.
+
+Instance Variables:
+array <Array of: Object> array of keys (we don''t use Associations for our key value pairs)
+tally <Integer> the size of the dictionary
+values <Array of: Object> array of our values
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RBStringReplacement'
+	instVarNames: #( startPosition stopPosition string )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBStringReplacement represents replacing source in the original method with a different string. These are used when reformatting code after a parse tree change has been made. Depending on the change, it may be possible to minimally change the parse tree without needing to format it.
+
+Instance Variables:
+	startPosition	<Integer>	the start position in the original source
+	stopPosition	<Integer>	the end position in the original source
+	string	<String>	replaces everything from the startPosition to the endPosition with this string
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RBToken'
+	instVarNames: #( sourcePointer comments )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBToken is the abstract superclass of all of the RB tokens. These tokens (unlike the standard parser''s) remember where they came from in the original source code.
+
+Subclasses must implement the following messages:
+	accessing
+		length
+
+Instance Variables:
+	sourcePointer	<Integer>	The position in the original source code where this token began.
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBToken
+	subclass: 'RBAssignmentToken'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBAssignmentToken is the first-class representation of the assignment token '':=''
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBAssignmentToken
+	subclass: 'RBShortAssignmentToken'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBToken
+	subclass: 'RBValueToken'
+	instVarNames: #( value )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBValueToken is the abstract superclass of all tokens that have additional information attached. For example, the BinarySelector token holds onto the actual character (e.g. $+).
+
+Instance Variables:
+	value	<String>	The value of this token
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueToken
+	subclass: 'RBBinarySelectorToken'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBBinarySelectorToken is the first-class representation of a binary selector (e.g. +)
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueToken
+	subclass: 'RBIdentifierToken'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBIdentifierToken is the first class representation of an identifier token (e.g. Class)
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBIdentifierToken
+	subclass: 'RBPathToken'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueToken
+	subclass: 'RBKeywordToken'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBKeywordToken is the first-class representation of a keyword token (e.g. add:)';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueToken
+	subclass: 'RBLiteralArrayToken'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueToken
+	subclass: 'RBLiteralToken'
+	instVarNames: #( stopPosition )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBLiteralToken is the first-class representation of a literal token (entire literals, even literal arrays, are a single token in the ST80 grammar.).
+
+Instance Variables:
+	stopPosition	<Integer>	The position within the source code where the token terminates.
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBLiteralToken
+	subclass: 'RBMultiKeywordLiteralToken'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBLiteralToken
+	subclass: 'RBNumberLiteralToken'
+	instVarNames: #( source )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueToken
+	subclass: 'RBPatternBlockToken'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBPatternBlockToken is the first-class representation of the pattern block token.
+
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RBValueToken
+	subclass: 'RBSpecialCharacterToken'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: 'RBSpecialCharacterToken is the first class representation of special characters.
+
+';
 		immediateInvariant.
 true.
 %
@@ -1102,7 +2380,7 @@ true.
 doit
 (RowanService
 	subclass: 'RowanClassService'
-	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand )
+	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -1134,7 +2412,7 @@ true.
 doit
 (RowanService
 	subclass: 'RowanFrameService'
-	instVarNames: #( label method stepPoint vars )
+	instVarNames: #( label method stepPoint vars oop )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -1149,7 +2427,7 @@ true.
 doit
 (RowanService
 	subclass: 'RowanMethodService'
-	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superSource superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile )
+	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -1512,7 +2790,7 @@ true.
 doit
 (RwModificationWriterVisitor
 	subclass: 'RwModificationCypressFamilyWriterVisitor'
-	instVarNames: #( instanceFileNameMap classFileNameMap classDefFileNameMap classExtFileNameMap packageDefFileNameMap )
+	instVarNames: #( classDefFileNameMap classExtFileNameMap classDefBeforeFileNameMap classExtBeforeFileNameMap packageDefFileNameMap packageDefBeforeFileNameMap )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -1527,7 +2805,7 @@ true.
 doit
 (RwModificationCypressFamilyWriterVisitor
 	subclass: 'RwModificationFiletreeWriterVisitor'
-	instVarNames: #( packageExtension separateMethodMetaAndSource noMethodMetaData useCypressPropertiesFile monticelloMetadata )
+	instVarNames: #( instanceFileNameMap classFileNameMap instanceBeforeFileNameMap classBeforeFileNameMap packageExtension separateMethodMetaAndSource noMethodMetaData useCypressPropertiesFile monticelloMetadata )
 	classVars: #(  )
 	classInstVars: #( specials )
 	poolDictionaries: #()
@@ -1946,6 +3224,21 @@ true.
 doit
 (RwProjectTool
 	subclass: 'RwPrjDeleteTool'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RwProjectTool
+	subclass: 'RwPrjDiffTool'
 	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
@@ -4106,7 +5399,7 @@ true.
 doit
 (RwProjectSpecification
 	subclass: 'RwComponentSpecification'
-	instVarNames: #( projectName projectsPath )
+	instVarNames: #( projectName projectsPath defaultComponentName )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -4504,6 +5797,81 @@ From the method comment[1]:
 		dir : repository
 
 [1] https://github.com/dalehenrich/filetree/blob/734eed46ea57ebf5e24e5d935768bd49727fc22f/repository/MonticelloFileTree-Git.package/MCFileTreeGitRepository.class/class/basicFromUrl..st';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RBFormatterTests'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Tests-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RBGemStoneNumberParserTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Kernel-Tests-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RBParserTest'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Tests-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RBProgramNodeTest'
+	instVarNames: #( node previous )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Tests-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(TestCase
+	subclass: 'RBSmallDictionaryTest'
+	instVarNames: #( dict )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Tests-Core';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -5002,13 +6370,15 @@ classmethod: RwSemanticVersionNumber
 extractNumericComponent: subString
     "$. separated components are integers"
 
-    | number |
-    number := [ subString asInteger ]
-        on: Error
-        do: [ :ex | ex return: subString ].
-    ^ number asString = subString
-        ifTrue: [ number ]
-        ifFalse: [ subString ]
+    | number stream |
+	stream := subString readStream.
+	number := [ Integer fromStream: stream ] on: Error do: [:ex | ^ subString ].
+	^ stream atEnd
+		ifTrue: [ 
+			(subString size > 1 and: [ (subString at: 1) = $0 ])
+				ifTrue: [ self error: 'invalid version number: numberic components may not have a leading 0' ]
+				ifFalse: [ number ] ]
+		ifFalse: [ subString ]
 %
 
 category: 'instance creation'
@@ -5030,49 +6400,54 @@ fromString: aString
     ifFalse: [ preRelease - 1 ].
   versionString := aString copyFrom: 1 to: normalEnd.
   identifierCount := 0.
-  (versionString substrings: '.')
+  (versionString subStrings: '.')
     do: [ :subString | 
       | integer |
+      subString isEmpty
+        ifTrue: [ self error: 'invalid version number: normal version component MUST NOT be empty' ].
 	  integer := self integerFromString: subString.
 	  integer < 0
 		ifTrue: [ 
 		  self
 			error:
-			  'invalid version number: normal version component must be integer '
+			  'invalid version number: normal version component MUST be integer '
 				, subString printString ] .
       normalComponents add: integer.
       identifierCount := identifierCount + 1 ].
   identifierCount ~= 3
-    ifTrue: [ self error: 'invalid version number: normal version must have only 3 components' ].
+    ifTrue: [ self error: 'invalid version number: normal version MUST have only 3 components' ].
   preReleaseEnd := build = 0
     ifTrue: [ aString size ]
     ifFalse: [ build - 1 ].
   preRelease > 0
     ifTrue: [ 
       versionString := aString copyFrom: preRelease + 1 to: preReleaseEnd.
-      (versionString substrings: '.')
+      (versionString subStrings: '.')
         do: [ :subString | 
+	      subString isEmpty
+              ifTrue: [ self error: 'invalid version number: preRelease version component MUST NOT be empty' ].
           (self isSemanticIdentifier: subString)
             ifFalse: [ 
               self
                 error:
-                  'invalid version number: preRelease version component must be one of [0-9A-Za-z-]' ].
+                  'invalid version number: preRelease version component must be one of [0-9A-Za-z-], MUST NOT be empty, and first component MUST NOT be 0' ].
           preReleaseComponents
             add:
               (self extractNumericComponent: subString) ] ].
   build > 0
     ifTrue: [ 
       versionString := aString copyFrom: build + 1 to: aString size.
-      (versionString substrings: '.')
+      (versionString subStrings: '.')
         do: [ :subString | 
+	      subString isEmpty
+              ifTrue: [ self error: 'invalid version number: preRelease version component MUST NOT be empty' ].
           (self isSemanticIdentifier: subString)
             ifFalse: [ 
               self
                 error:
-                  'invalid version number: build version component must be one of [0-9A-Za-z-]' ].
-          buildComponents
-            add:
-              (self extractNumericComponent: subString) ] ].
+                  'invalid version number: build version component must be one of [0-9A-Za-z-] and MUST NOT be empty' ].
+          buildComponents add: subString ] ].
+
   ^ self new
     normalVersion: normalComponents;
     preReleaseVersion: preReleaseComponents;
@@ -5106,12 +6481,9 @@ classmethod: RwSemanticVersionNumber
 isSemanticIdentifier: aString
     "whether the receiver is composed entirely of alphanumerics"
 
-    aString
-        do: [ :c | 
-            c isAlphaNumeric
-                ifFalse: [ 
-                    c = $-
-                        ifFalse: [ ^ false ] ] ].
+   aString do: [ :c | 
+     c isAlphaNumeric
+       ifFalse: [ c = $- ifFalse: [ ^ false ] ] ].
     ^ true
 %
 
@@ -5520,6 +6892,231 @@ response: anObject
   self resume: anObject
 %
 
+! Class implementation for 'RwAdoptAuditErrorNotification'
+
+!		Class methods for 'RwAdoptAuditErrorNotification'
+
+category: 'instance creation'
+classmethod: RwAdoptAuditErrorNotification
+classNamed: className isClassExtension: classExtension  intoPackageNamed: packageName
+
+	^ self new
+		className: className;
+		isClassExtension: classExtension;
+		packageName: packageName;
+		yourself
+%
+
+!		Instance methods for 'RwAdoptAuditErrorNotification'
+
+category: 'accessing'
+method: RwAdoptAuditErrorNotification
+className
+
+	^ className
+%
+
+category: 'accessing'
+method: RwAdoptAuditErrorNotification
+className: aString
+
+	className := aString
+%
+
+category: 'Handling'
+method: RwAdoptAuditErrorNotification
+defaultAction
+ 
+	^ Error signal: self _errorMessage
+%
+
+category: 'accessing'
+method: RwAdoptAuditErrorNotification
+description
+
+	^ description ifNil: [ '' ]
+%
+
+category: 'accessing'
+method: RwAdoptAuditErrorNotification
+description: aString
+
+	description := aString
+%
+
+category: 'accessing'
+method: RwAdoptAuditErrorNotification
+isClassExtension
+
+	^ isClassExtension
+%
+
+category: 'accessing'
+method: RwAdoptAuditErrorNotification
+isClassExtension: aBoolean
+
+	isClassExtension := aBoolean
+%
+
+category: 'Handling'
+method: RwAdoptAuditErrorNotification
+methodErrorDo: methodBlock classErrorDo: classBlock
+	"helper method for use in exception handling block ... avoid isKindOf:"
+
+	self subclassResponsibility: #methodErrorDo:classErrorDo:
+%
+
+category: 'accessing'
+method: RwAdoptAuditErrorNotification
+packageName
+
+	^ packageName
+%
+
+category: 'accessing'
+method: RwAdoptAuditErrorNotification
+packageName: aString
+
+	packageName := aString
+%
+
+category: 'private'
+method: RwAdoptAuditErrorNotification
+_errorMessage
+
+	self subclassResponsibility: #_errorMessage
+%
+
+! Class implementation for 'RwAdoptAuditClassErrorNotification'
+
+!		Instance methods for 'RwAdoptAuditClassErrorNotification'
+
+category: 'Handling'
+method: RwAdoptAuditClassErrorNotification
+methodErrorDo: methodBlock classErrorDo: classBlock
+	"helper method for use in exception handling block ... avoid isKindOf:"
+
+	classBlock value
+%
+
+! Class implementation for 'RwAdoptMissingClassErrorNotification'
+
+!		Instance methods for 'RwAdoptMissingClassErrorNotification'
+
+category: 'private'
+method: RwAdoptMissingClassErrorNotification
+_errorMessage
+
+	| extensionMessage |
+	extensionMessage := self isClassExtension
+		ifTrue: [ ' extension ' ]
+		ifFalse: [ ' ' ].
+	^ 'Unable to adopt the class ', self className printString, ' into the', extensionMessage, 'package ', self packageName printString, ' as it is not present in the current user''s symbol list.'
+%
+
+! Class implementation for 'RwAuditClassErrorNotification'
+
+!		Instance methods for 'RwAuditClassErrorNotification'
+
+category: 'Handling'
+method: RwAuditClassErrorNotification
+defaultAction
+	"record audit error"
+	^ true
+%
+
+! Class implementation for 'RwAdoptAuditMethodErrorNotification'
+
+!		Class methods for 'RwAdoptAuditMethodErrorNotification'
+
+category: 'instance creation'
+classmethod: RwAdoptAuditMethodErrorNotification
+method: methodSelector isMeta: isMeta inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName
+
+
+	^ (self classNamed: className isClassExtension: classExtension  intoPackageNamed: packageName)
+		selector: methodSelector;
+		isMetaclass: isMeta;
+		yourself
+%
+
+!		Instance methods for 'RwAdoptAuditMethodErrorNotification'
+
+category: 'accessing'
+method: RwAdoptAuditMethodErrorNotification
+isMetaclass
+
+	^ isMetaclass
+%
+
+category: 'accessing'
+method: RwAdoptAuditMethodErrorNotification
+isMetaclass: aBoolean
+
+	isMetaclass := aBoolean
+%
+
+category: 'Handling'
+method: RwAdoptAuditMethodErrorNotification
+methodErrorDo: methodBlock classErrorDo: classBlock
+	"helper method for use in exception handling block ... avoid isKindOf:"
+
+	methodBlock value
+%
+
+category: 'accessing'
+method: RwAdoptAuditMethodErrorNotification
+methodPrintString
+
+	^ self 
+		className, 
+		(self isMetaclass ifTrue: [ ' class >> ' ] ifFalse: [ ' >> ' ]),
+		self selector
+%
+
+category: 'accessing'
+method: RwAdoptAuditMethodErrorNotification
+selector
+
+	^ selector
+%
+
+category: 'accessing'
+method: RwAdoptAuditMethodErrorNotification
+selector: aString
+
+	selector := aString
+%
+
+! Class implementation for 'RwAdoptMissingMethodErrorNotification'
+
+!		Instance methods for 'RwAdoptMissingMethodErrorNotification'
+
+category: 'private'
+method: RwAdoptMissingMethodErrorNotification
+_errorMessage
+
+	| extensionMessage metaClassMessage |
+	metaClassMessage := self isMetaclass
+		ifTrue: [ ' class << #' ]
+		ifFalse: [ '  << #' ].
+	extensionMessage := self isClassExtension
+		ifTrue: [ ' extension ' ]
+		ifFalse: [ ' ' ].
+	^ 'Unable to adopt the method ', self className, metaClassMessage, self selector asString, ' into the package ', self packageName printString, '. The method is not present in the class''s method dictionary.'
+%
+
+! Class implementation for 'RwAuditMethodErrorNotification'
+
+!		Instance methods for 'RwAuditMethodErrorNotification'
+
+category: 'Handling'
+method: RwAuditMethodErrorNotification
+defaultAction
+	"record audit error"
+	^ true
+%
+
 ! Class implementation for 'RwDeleteClassFromSystemNotification'
 
 !		Instance methods for 'RwDeleteClassFromSystemNotification'
@@ -5640,6 +7237,259 @@ method: RwExistingVisitorAddingExistingClassNotification
 loadedProject: aLoadedProject
 
 	loadedProject := aLoadedProject
+%
+
+! Class implementation for 'RwInvalidCategoryProtocolConventionErrorNotification'
+
+!		Instance methods for 'RwInvalidCategoryProtocolConventionErrorNotification'
+
+category: 'Handling'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+classCategoryNotificationDo: classCategoryBlock nonExtensionMethodNoficationDo: nonExtensionMethodBlock extensionMethodPackageMismatchNoficationDo: extensionMethodPackageMismatchBlock  extensionMethodNonExtensionProtocolNoficationDo: extensionMethodNonExtensionProtocolBlock
+	"helper method for use in exception handling block ... avoid isKindOf:"
+
+	
+	self subclassResponsibility: #classCategoryNotificationDo:nonExtensionMethodNoficationDo:extensionMethodPackageMismatchNoficationDo:extensionMethodNonExtensionProtocolNoficationDo:
+%
+
+category: 'Handling'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+defaultAction
+ 
+	^ Error signal: self _errorMessage
+%
+
+category: 'accessing'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+packageConvention
+
+	^ packageConvention
+%
+
+category: 'accessing'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+packageConvention: aString
+
+	packageConvention := aString
+%
+
+category: 'accessing'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+packageName
+
+	^ packageName
+%
+
+category: 'accessing'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+packageName: aString
+
+	packageName := aString
+%
+
+category: 'private'
+method: RwInvalidCategoryProtocolConventionErrorNotification
+_errorMessage
+
+	^ self subclassResponsibility: #_errorMessage
+%
+
+! Class implementation for 'RwInvalidClassCategoryConventionErrorNotification'
+
+!		Class methods for 'RwInvalidClassCategoryConventionErrorNotification'
+
+category: 'instance creation'
+classmethod: RwInvalidClassCategoryConventionErrorNotification
+signalWithClassDefinition: aClassDefinition packageName: packageName packageConvention: aString
+
+	^ self new
+			classDefinition: aClassDefinition;
+			packageName:  packageName;
+			packageConvention: aString;
+			signal
+%
+
+!		Instance methods for 'RwInvalidClassCategoryConventionErrorNotification'
+
+category: 'Handling'
+method: RwInvalidClassCategoryConventionErrorNotification
+classCategoryNotificationDo: classCategoryBlock nonExtensionMethodNoficationDo: nonExtensionMethodBlock extensionMethodPackageMismatchNoficationDo: extensionMethodPackageMismatchBlock  extensionMethodNonExtensionProtocolNoficationDo: extensionMethodNonExtensionProtocolBlock
+	"class category does not match the package name"
+
+	classCategoryBlock value
+%
+
+category: 'accessing'
+method: RwInvalidClassCategoryConventionErrorNotification
+classDefinition
+
+	^ classDefinition
+%
+
+category: 'accessing'
+method: RwInvalidClassCategoryConventionErrorNotification
+classDefinition: aClassDefinition
+
+	classDefinition := aClassDefinition
+%
+
+category: 'private'
+method: RwInvalidClassCategoryConventionErrorNotification
+_errorMessage
+
+	^ 'The class category ', 
+		self classDefinition category printString, 
+		' for the class ', 
+		self classDefinition name printString, 
+		' violates the package convention ', 
+		self packageConvention printString
+%
+
+! Class implementation for 'RwInvalidMethodProtocolConventionErrorNotification'
+
+!		Class methods for 'RwInvalidMethodProtocolConventionErrorNotification'
+
+category: 'instance creation'
+classmethod: RwInvalidMethodProtocolConventionErrorNotification
+signalWithMethodDefinition: aMethodDefinition className: className isMeta: isMeta packageName:  packageName packageConvention: aString
+
+	^ self new
+			methodDefinition: aMethodDefinition;
+			className: className;
+			isMeta: isMeta;
+			packageName:  packageName;
+			packageConvention: aString;
+			signal
+%
+
+!		Instance methods for 'RwInvalidMethodProtocolConventionErrorNotification'
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+className
+
+	^ className
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+className: aString
+
+	className := aString
+%
+
+category: 'Handling'
+method: RwInvalidMethodProtocolConventionErrorNotification
+defaultAction
+ 
+	^ Error signal: self _errorMessage
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+isMeta
+
+	^ isMeta
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+isMeta: aBool
+
+	isMeta := aBool
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+methodDefinition
+
+	^ methodDefinition
+%
+
+category: 'accessing'
+method: RwInvalidMethodProtocolConventionErrorNotification
+methodDefinition: aMethodDef
+
+	methodDefinition := aMethodDef
+%
+
+category: 'private'
+method: RwInvalidMethodProtocolConventionErrorNotification
+_errorMessage
+
+	^ 'The method protocol ', 
+		self methodDefinition protocol printString, 
+		' for the method ', 
+		self _methodPrintString printString, 
+		' in the package ', 
+		self packageName printString,
+		' violates the package convention ', 
+		self packageConvention printString, 
+		'. '
+%
+
+category: 'private'
+method: RwInvalidMethodProtocolConventionErrorNotification
+_methodPrintString
+
+	^ self className, (self isMeta ifTrue: [ ' class>>' ] ifFalse: [ '>>' ]), self methodDefinition selector
+%
+
+! Class implementation for 'RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification'
+
+!		Instance methods for 'RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification'
+
+category: 'Handling'
+method: RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
+classCategoryNotificationDo: classCategoryBlock nonExtensionMethodNoficationDo: nonExtensionMethodBlock extensionMethodPackageMismatchNoficationDo: extensionMethodPackageMismatchBlock  extensionMethodNonExtensionProtocolNoficationDo: extensionMethodNonExtensionProtocolBlock
+	"extension method protocol does start with a *, but does not match the package name"
+
+	extensionMethodPackageMismatchBlock value
+%
+
+category: 'private'
+method: RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
+_errorMessage
+
+	^ super _errorMessage, 'The extension protocol does not match the package of the extension method.'
+%
+
+! Class implementation for 'RwExtensionProtocolNonExtensionMethodErrorNotification'
+
+!		Instance methods for 'RwExtensionProtocolNonExtensionMethodErrorNotification'
+
+category: 'Handling'
+method: RwExtensionProtocolNonExtensionMethodErrorNotification
+classCategoryNotificationDo: classCategoryBlock nonExtensionMethodNoficationDo: nonExtensionMethodBlock extensionMethodPackageMismatchNoficationDo: extensionMethodPackageMismatchBlock  extensionMethodNonExtensionProtocolNoficationDo: extensionMethodNonExtensionProtocolBlock
+	"method protocol starts with a * for non-extension method"
+
+	nonExtensionMethodBlock value
+%
+
+category: 'private'
+method: RwExtensionProtocolNonExtensionMethodErrorNotification
+_errorMessage
+
+	^ super _errorMessage, 'The protocol should not start with a *, as the method is NOT an extension method.'
+%
+
+! Class implementation for 'RwNonExtensionProtocolExtensionMethodErrorNotification'
+
+!		Instance methods for 'RwNonExtensionProtocolExtensionMethodErrorNotification'
+
+category: 'Handling'
+method: RwNonExtensionProtocolExtensionMethodErrorNotification
+classCategoryNotificationDo: classCategoryBlock nonExtensionMethodNoficationDo: nonExtensionMethodBlock extensionMethodPackageMismatchNoficationDo: extensionMethodPackageMismatchBlock  extensionMethodNonExtensionProtocolNoficationDo: extensionMethodNonExtensionProtocolBlock
+	"extension method protocol doesn't start with a *"
+
+	extensionMethodNonExtensionProtocolBlock value
+%
+
+category: 'private'
+method: RwNonExtensionProtocolExtensionMethodErrorNotification
+_errorMessage
+
+	^ super _errorMessage, 'The protocol should start with a *, as the method IS an extension method.'
 %
 
 ! Class implementation for 'RwPerformingUnpackagedEditNotification'
@@ -6748,6 +8598,18 @@ authorInitials: aString
 
 %
 
+category: 'jadeite'
+method: JadeServer
+autoCommitIfRequired
+	| commitResult |
+	RowanService autoCommit == true ifTrue:[
+		commitResult := System commitTransaction.
+		RowanBrowserService new autoCommit: 
+			(commitResult 
+				ifTrue:[true]
+				ifFalse:[#failed])].
+%
+
 category: 'category'
 method: JadeServer
 beginTransaction
@@ -7641,7 +9503,6 @@ inspect: anObject
 	^stream 
 		nextPutAll: string; 
 		contents.
-
 %
 
 category: 'category'
@@ -11193,8 +13054,8 @@ updateFromSton: stonString
 			service command
 				ifNil: [service update]
 				ifNotNil: [service servicePerform: service command withArguments: service commandArgs]].
+	self autoCommitIfRequired.
 	resultString := STON toString: RowanCommandResult results.
-	RowanService autoCommit ifTrue:[System commitTransaction]. 
 	^resultString
 %
 
@@ -11405,7 +13266,8 @@ _describeMCDefinition: anMCDefinition on: aStream
 category: 'category'
 method: JadeServer
 _describeMCMethodDefinition: anMCMethodDefinition on: aStream
-
+	| unicodeFreeSource |
+	unicodeFreeSource := RowanMethodService removeUnicodeFromSource: anMCMethodDefinition source.
 	aStream
 		nextPut: $M; tab;
 		nextPutAll: anMCMethodDefinition timeStamp; tab;
@@ -11413,9 +13275,8 @@ _describeMCMethodDefinition: anMCMethodDefinition on: aStream
 		nextPutAll: anMCMethodDefinition classIsMeta printString; tab;
 		nextPutAll: anMCMethodDefinition category; tab;
 		nextPutAll: anMCMethodDefinition selector; tab;
-		nextPutAll: anMCMethodDefinition source size printString; tab;
-		nextPutAll: anMCMethodDefinition source; lf.
-
+		nextPutAll: unicodeFreeSource size printString; tab;
+		nextPutAll: unicodeFreeSource; lf.
 %
 
 category: 'category'
@@ -11480,7 +13341,7 @@ _describeMethod: aMethod
 "4"		selector: aMethod selector;
 "5"		category: (self categoryOfMethod: aMethod);
 "6"		isReadOnly: (self currentUserMayEditMethod: aMethod);
-			source: aMethod sourceString.
+			source: (RowanMethodService removeUnicodeFromSource: aMethod sourceString).
 
 	"unimplemented selectors"			"https://github.com/jgfoster/Jade/issues/117"
 	((aMethod class includesSelector: #'_selectorPool') and: [aMethod class includesSelector: #'_sourceOffsetOfFirstSendOf:']) ifTrue: [
@@ -11514,9 +13375,6 @@ _describeMethod: aMethod
 	string isNil ifTrue: [string := ''].
 	methodUpdate compilationWarnings: string.
 	methodUpdate writeMethodTo: writeStream.
-
- 
-
 %
 
 category: 'category'
@@ -12808,6 +14666,10275 @@ gsPackagePolicy
 
 %
 
+! Class implementation for 'RBParser'
+
+!		Class methods for 'RBParser'
+
+category: 'instance creation'
+classmethod: RBParser
+new
+
+	^self basicNew initialize
+%
+
+category: 'accessing'
+classmethod: RBParser
+parseExpression: aString 
+	^self parseExpression: aString onError: nil
+%
+
+category: 'accessing'
+classmethod: RBParser
+parseExpression: aString onError: aBlock 
+	| node parser |
+	parser := self new.
+	parser errorBlock: aBlock.
+	parser initializeParserWith: aString.
+	node := parser parseExpression: aString.
+	^(node statements size == 1 and: [node temporaries isEmpty]) 
+		ifTrue: [node statements first]
+		ifFalse: [node]
+%
+
+category: 'accessing'
+classmethod: RBParser
+parseMethod: aString 
+	^self parseMethod: aString onError: nil
+%
+
+category: 'accessing'
+classmethod: RBParser
+parseMethod: aString onError: aBlock 
+	| parser |
+	parser := self new.
+	parser errorBlock: aBlock.
+	parser initializeParserWith: aString.
+	^parser parseMethod: aString
+%
+
+category: 'parsing'
+classmethod: RBParser
+parseMethodPattern: aString 
+	| parser |
+	parser := self new.
+	parser errorBlock: [:error :position | ^nil].
+	parser initializeParserWith: aString.
+	^parser parseMessagePattern selector
+%
+
+category: 'accessing'
+classmethod: RBParser
+parseRewriteExpression: aString 
+	^self parseRewriteExpression: aString onError: nil
+%
+
+category: 'accessing'
+classmethod: RBParser
+parseRewriteExpression: aString onError: aBlock 
+	^RBPatternParser parseExpression: aString onError: aBlock
+%
+
+category: 'accessing'
+classmethod: RBParser
+parseRewriteMethod: aString 
+	^self parseRewriteMethod: aString onError: nil
+%
+
+category: 'accessing'
+classmethod: RBParser
+parseRewriteMethod: aString onError: aBlock 
+	^RBPatternParser parseMethod: aString onError: aBlock
+%
+
+!		Instance methods for 'RBParser'
+
+category: 'private'
+method: RBParser
+addCommentsTo: aNode
+	aNode comments: aNode comments , comments.
+	comments := OrderedCollection new
+%
+
+category: 'private-classes'
+method: RBParser
+arrayNodeClass
+	^ RBArrayNode
+%
+
+category: 'private-classes'
+method: RBParser
+assignmentNodeClass
+	^ RBAssignmentNode
+%
+
+category: 'testing'
+method: RBParser
+atEnd
+	^currentToken class == RBToken
+%
+
+category: 'private-classes'
+method: RBParser
+blockNodeClass
+	^ RBBlockNode
+%
+
+category: 'private-classes'
+method: RBParser
+cascadeNodeClass
+	^ RBCascadeNode
+%
+
+category: 'error handling'
+method: RBParser
+errorBlock
+	^errorBlock isNil ifTrue: [[:message :position | ]] ifFalse: [errorBlock]
+%
+
+category: 'accessing'
+method: RBParser
+errorBlock: aBlock 
+	errorBlock := aBlock.
+	scanner notNil ifTrue: [scanner errorBlock: aBlock]
+%
+
+category: 'error handling'
+method: RBParser
+errorPosition
+	^currentToken start
+%
+
+category: 'initialize-release'
+method: RBParser
+initialize
+	comments := OrderedCollection new
+%
+
+category: 'accessing'
+method: RBParser
+initializeParserWith: aString 
+	source := aString.
+	self scanner: (self scannerClass on: aString readStreamPortable
+				errorBlock: self errorBlock)
+%
+
+category: 'private-classes'
+method: RBParser
+literalArrayNodeClass
+	^ RBLiteralArrayNode
+%
+
+category: 'private-classes'
+method: RBParser
+literalNodeClass
+	^ RBLiteralNode
+%
+
+category: 'private-classes'
+method: RBParser
+messageNodeClass
+	^ RBMessageNode
+%
+
+category: 'private-classes'
+method: RBParser
+methodNodeClass
+	^ RBMethodNode
+%
+
+category: 'private'
+method: RBParser
+nextToken
+	^nextToken isNil ifTrue: [nextToken := scanner next] ifFalse: [nextToken]
+%
+
+category: 'private-parsing'
+method: RBParser
+parseArgs
+	| args |
+	args := OrderedCollection new.
+	[currentToken isIdentifier] whileTrue: [args add: self parseVariableNode].
+	^args
+%
+
+category: 'private-parsing'
+method: RBParser
+parseArray
+  | position node |
+  position := currentToken start.
+  self step.
+  (currentToken isSpecial and: [ currentToken value = $: ])
+    ifTrue: [ ^self parseQueryBlock: position ].
+  node := self arrayNodeClass new.
+  node left: position.
+  self parseStatementList: false into: node.
+  (currentToken isSpecial and: [ currentToken value = $} ])
+    ifFalse: [ self parserError: 'expected }' ].
+  node right: currentToken start.
+  self step.
+  ^ node
+%
+
+category: 'private-parsing'
+method: RBParser
+parseAssignment
+	"Need one token lookahead to see if we have a ':='. This method could 
+	make it possible to assign the literals true, false and nil."
+
+	| node position |
+	(currentToken isIdentifier and: [self nextToken isAssignment]) 
+		ifFalse: [^self parseCascadeMessage].
+	node := self parseVariableNode.
+	position := currentToken start.
+	self step.
+	^self assignmentNodeClass 
+		variable: node
+		value: self parseAssignment
+		position: position
+%
+
+category: 'private-parsing'
+method: RBParser
+parseBinaryMessage
+	| node |
+	node := self parseUnaryMessage.
+	
+	[currentToken isLiteralToken ifTrue: [self patchNegativeLiteral].
+	currentToken isBinary] 
+			whileTrue: [node := self parseBinaryMessageWith: node].
+	^node
+%
+
+category: 'private-parsing'
+method: RBParser
+parseBinaryMessageWith: aNode 
+	| binaryToken |
+	binaryToken := currentToken.
+	self step.
+	^self messageNodeClass 
+		receiver: aNode
+		selectorParts: (Array with: binaryToken)
+		arguments: (Array with: self parseUnaryMessage)
+%
+
+category: 'private-parsing'
+method: RBParser
+parseBinaryPattern
+	| binaryToken node args |
+	currentToken isBinary
+		ifFalse: [self parserError: 'Message pattern expected'].
+	binaryToken := currentToken.
+	self step.
+	args := Array with: self parseVariableNode.
+	node := self methodNodeClass
+		selectorParts: (Array with: binaryToken)
+		arguments: args.
+	node comments: node comments , args last comments.
+	args last comments: nil.
+	^node
+%
+
+category: 'private-parsing'
+method: RBParser
+parseBinaryPragma
+	| binaryToken |
+	currentToken isBinary 
+		ifFalse: [ self parserError: 'Message pattern expected' ].
+	binaryToken := currentToken.
+	self step.
+	^ self pragmaNodeClass
+		selectorParts: (Array with: binaryToken)
+		arguments: (Array with: self parsePragmaLiteral)
+%
+
+category: 'private-parsing'
+method: RBParser
+parseBlock
+	| position node |
+	position := currentToken start.
+	self step.
+	node := self blockNodeClass new. 
+	self parseBlockArgsInto: node.
+	node left: position.
+	node body: (self parseStatements: false).
+	(currentToken isSpecial and: [currentToken value = $]])
+		ifFalse: [self parserError: ''']'' expected'].
+	node right: currentToken start.
+	self step.
+	^node
+%
+
+category: 'private-parsing'
+method: RBParser
+parseBlockArgsInto: node 
+	| verticalBar args colons |
+	args := OrderedCollection new: 2.
+	colons := OrderedCollection new: 2.
+	verticalBar := false.
+	[currentToken isSpecial and: [currentToken value = $:]] whileTrue: 
+			[colons add: currentToken start.
+			self step.	":"
+			verticalBar := true.
+			args add: self parseVariableNode].
+	verticalBar 
+		ifTrue: 
+			[currentToken isBinary 
+				ifTrue: 
+					[node bar: currentToken start.
+					currentToken value = #| 
+						ifTrue: [self step]
+						ifFalse: 
+							[currentToken value = #'||' 
+								ifTrue: 
+									["Hack the current token to be the start 
+									of temps bar"
+
+									currentToken
+										value: #|;
+										start: currentToken start + 1]
+								ifFalse: [self parserError: '''|'' expected']]]
+				ifFalse: 
+					[(currentToken isSpecial and: [currentToken value = $]]) 
+						ifFalse: [self parserError: '''|'' expected']]].
+	node
+		arguments: args;
+		colons: colons.
+	^node
+%
+
+category: 'private-parsing'
+method: RBParser
+parseCascadeMessage
+	| node receiver messages semicolons |
+	node := self parseKeywordMessage.
+	(currentToken isSpecial 
+		and: [currentToken value = $; and: [node isMessage]]) ifFalse: [^node].
+	receiver := node receiver.
+	messages := OrderedCollection new: 3.
+	semicolons := OrderedCollection new: 3.
+	messages add: node.
+	[currentToken isSpecial and: [currentToken value = $;]] whileTrue: 
+			[semicolons add: currentToken start.
+			self step.
+			messages add: (currentToken isIdentifier 
+						ifTrue: [self parseUnaryMessageWith: receiver]
+						ifFalse: 
+							[currentToken isKeyword 
+								ifTrue: [self parseKeywordMessageWith: receiver]
+								ifFalse: 
+									[| temp |
+									currentToken isLiteralToken ifTrue: [self patchNegativeLiteral].
+									currentToken isBinary ifFalse: [self parserError: 'Message expected'].
+									temp := self parseBinaryMessageWith: receiver.
+									temp == receiver ifTrue: [self parserError: 'Message expected'].
+									temp]])].
+	^self cascadeNodeClass messages: messages semicolons: semicolons
+%
+
+category: 'accessing'
+method: RBParser
+parseExpression: aString 
+	| node |
+	node := self parseStatements: false.
+	(RBMethodNode selector: #noMethod body: node) source: aString.	"Make the sequence node have a method node as its parent"
+	self atEnd ifFalse: [self parserError: 'Unknown input at end'].
+	^node
+%
+
+category: 'private-parsing'
+method: RBParser
+parseKeywordMessage
+	^self parseKeywordMessageWith: self parseBinaryMessage
+%
+
+category: 'private-parsing'
+method: RBParser
+parseKeywordMessageWith: node 
+	| args isKeyword keywords |
+	args := OrderedCollection new: 3.
+	keywords := OrderedCollection new: 3.
+	isKeyword := false.
+	[currentToken isKeyword] whileTrue: 
+			[keywords add: currentToken.
+			self step.
+			args add: self parseBinaryMessage.
+			isKeyword := true].
+	^isKeyword 
+		ifTrue: 
+			[self messageNodeClass 
+				receiver: node
+				selectorParts: keywords
+				arguments: args]
+		ifFalse: [node]
+%
+
+category: 'private-parsing'
+method: RBParser
+parseKeywordPattern
+	| keywords args node |
+	keywords := OrderedCollection new.
+	args := OrderedCollection new.
+	[currentToken isKeyword]
+		whileTrue:
+			[keywords add: currentToken.
+			self step.
+			args add: self parseVariableNode].
+	node := self methodNodeClass
+		selectorParts: keywords
+		arguments: args.
+	node comments: (node comments, args last comments).
+	args last comments: nil.
+	^node
+%
+
+category: 'private-parsing'
+method: RBParser
+parseKeywordPragma
+	| keywords arguments |
+	keywords := OrderedCollection new: 2.
+	arguments := OrderedCollection new: 2.
+	[ currentToken isKeyword ] whileTrue: [
+		keywords addLast: currentToken.
+		self step.
+		arguments addLast: self parsePragmaLiteral ].
+	^ self pragmaNodeClass selectorParts: keywords arguments: arguments
+%
+
+category: 'private-parsing'
+method: RBParser
+parseLiteralArray
+	| stream start stop |
+	start := currentToken start.
+	stream := WriteStreamPortable on: Array new.
+	self step.
+	[self atEnd or: [currentToken isSpecial and: [currentToken value = $)]]] 
+		whileFalse: [stream nextPut: self parseLiteralArrayObject].
+	(currentToken isSpecial and: [currentToken value = $)]) 
+		ifFalse: [self parserError: ''')'' expected'].
+	stop := currentToken stop.
+	self step.
+	^self literalArrayNodeClass 
+		startPosition: start
+		contents: stream contents
+		stopPosition: stop
+		isByteArray: false
+%
+
+category: 'private-parsing'
+method: RBParser
+parseLiteralArrayObject
+	currentToken isSpecial 
+		ifTrue: 
+			[currentToken value = $( ifTrue: [^self parseLiteralArray].
+			"currentToken value == $[ ifTrue: [^self parseLiteralByteArray]"].
+	currentToken isLiteralArrayToken 
+		ifTrue: 
+			[^currentToken isForByteArray 
+				ifTrue: [self parseLiteralByteArray]
+				ifFalse: [self parseLiteralArray]].
+	currentToken isLiteralToken ifFalse: [self patchLiteralArrayToken].
+	^self parsePrimitiveLiteral
+%
+
+category: 'private-parsing'
+method: RBParser
+parseLiteralByteArray
+	| stream start stop |
+	start := currentToken start.
+	stream := WriteStreamPortable on: Array new.
+	self step.
+	[self atEnd or: [currentToken isSpecial and: [currentToken value = $]]]] 
+		whileFalse: [stream nextPut: self parseLiteralByteArrayObject].
+	(currentToken isSpecial and: [currentToken value = $]]) 
+		ifFalse: [self parserError: ''']'' expected'].
+	stop := currentToken stop.
+	self step.
+	^self literalArrayNodeClass 
+		startPosition: start
+		contents: stream contents
+		stopPosition: stop
+		isByteArray: true
+%
+
+category: 'private-parsing'
+method: RBParser
+parseLiteralByteArrayObject
+	(currentToken isLiteralToken and: 
+			[currentToken value _isInteger and: [currentToken value between: 0 and: 255]]) 
+		ifFalse: [self parserError: 'Expecting 8-bit integer'].
+	^self parsePrimitiveLiteral
+%
+
+category: 'private-parsing'
+method: RBParser
+parseMessagePattern
+	currentToken isLiteralToken ifTrue: [self patchLiteralMessage].
+	^currentToken isIdentifier 
+		ifTrue: [self parseUnaryPattern]
+		ifFalse: 
+			[currentToken isKeyword 
+				ifTrue: [self parseKeywordPattern]
+				ifFalse: [self parseBinaryPattern]]
+%
+
+category: 'private-parsing'
+method: RBParser
+parseMethod
+	| methodNode | 
+	methodNode := self parseMessagePattern.
+	self parsePragmas.
+	self addCommentsTo: methodNode.
+	methodNode body: (self parseStatements: true).
+	pragmas isNil
+		ifFalse: [ methodNode pragmas: pragmas ].
+	^methodNode
+%
+
+category: 'accessing'
+method: RBParser
+parseMethod: aString 
+	| node |
+	node := self parseMethod.
+	self atEnd ifFalse: [self parserError: 'Unknown input at end'].
+	node source: aString.
+	^node
+%
+
+category: 'private-parsing'
+method: RBParser
+parseNegatedNumber
+	| token |
+	(self nextToken isLiteral not or: [ self nextToken realValue isNumber not ])
+		ifTrue: [ self parserError: 'only numbers may be negated' ].
+	token := RBLiteralToken value: self nextToken realValue negated start: currentToken start stop: nextToken stop.
+	self step; step.
+	^ self literalNodeClass literalToken: token
+%
+
+category: 'private-parsing'
+method: RBParser
+parseParenthesizedExpression
+	| leftParen node |
+	leftParen := currentToken start.
+	self step.
+	node := self parseAssignment.
+	^(currentToken isSpecial and: [currentToken value = $)])
+		ifTrue: 
+			[node addParenthesis: (leftParen to: currentToken start).
+			self step.
+			node]
+		ifFalse: [self parserError: ''')'' expected']
+%
+
+category: 'private-parsing'
+method: RBParser
+parsePragma
+  ^ currentToken isIdentifier
+    ifTrue: [ 
+      currentToken value = 'protected'
+        ifTrue: [ self parseProtectedPragma ]
+        ifFalse: [ self parseUnaryPragma ] ]
+    ifFalse: [ 
+      currentToken isKeyword
+        ifTrue: [ self parseKeywordPragma ]
+        ifFalse: [ self parseBinaryPragma ] ]
+%
+
+category: 'private-parsing'
+method: RBParser
+parsePragmaLiteral
+	^ self parseLiteralArrayObject
+%
+
+category: 'private-parsing'
+method: RBParser
+parsePragmas
+	| pragma start |
+	[ currentToken isBinary and: [ currentToken value = #< ] ] whileTrue: [
+		start := currentToken start.
+		self step.
+		pragma := self parsePragma.
+		(currentToken isBinary and: [ currentToken value = #> ]) 
+			ifFalse: [ self parserError: '''>'' expected' ].
+		pragma left: start; right: currentToken start.
+		pragmas isNil
+			ifTrue: [ pragmas := OrderedCollection new ].
+		pragmas addLast: pragma.
+		self step ]
+%
+
+category: 'private-parsing'
+method: RBParser
+parsePrimitiveIdentifier
+	| token node |
+	token := currentToken.
+	self step.
+	node := self variableNodeClass identifierToken: token.
+	self addCommentsTo: node.
+	^node
+%
+
+category: 'private-parsing'
+method: RBParser
+parsePrimitiveLiteral
+	| token |
+	token := currentToken.
+	self step.
+	^self literalNodeClass literalToken: token
+%
+
+category: 'private-parsing'
+method: RBParser
+parsePrimitiveObject
+	currentToken isIdentifier ifTrue: [^self parsePrimitiveIdentifier].
+	(currentToken isLiteralToken and: [currentToken isMultiKeyword not]) 
+		ifTrue: [^self parsePrimitiveLiteral].
+	currentToken isLiteralArrayToken 
+		ifTrue: 
+			[^currentToken isForByteArray 
+				ifTrue: [self parseLiteralByteArray]
+				ifFalse: [self parseLiteralArray]].
+	currentToken isSpecial 
+		ifTrue: 
+			[currentToken value = $[ ifTrue: [^self parseBlock].
+			currentToken value = $( ifTrue: [^self parseParenthesizedExpression].
+			currentToken value = ${ ifTrue: [^self parseArray]].
+	(currentToken isBinary and: [ currentToken value = #- ]) 
+		ifTrue: [ ^self parseNegatedNumber ].
+	self parserError: 'Variable expected'
+%
+
+category: 'private-parsing'
+method: RBParser
+parseProtectedPragma
+  "encoutered 'protected' as first token in pragma"
+
+  self step.
+  currentToken isKeyword
+    ifFalse: [ ^ self pragmaNodeClass selectorParts: (Array with: 'protected') arguments: #() ].
+  ^ self parseKeywordPragma
+    isProtected: true;
+    yourself
+%
+
+category: 'private-parsing'
+method: RBParser
+parseQueryBlock: startPosition
+  | position node |
+  position := startPosition.
+  node := self queryBlockNodeClass new.
+  self parseBlockArgsInto: node.
+  node left: position.
+  node body: (self parseStatements: false).
+  (currentToken isSpecial and: [ currentToken value = $} ])
+    ifFalse: [ self parserError: '''}'' expected' ].
+  node right: currentToken start.
+  self step.
+  ^ node
+%
+
+category: 'error handling'
+method: RBParser
+parserError: aString 
+	"Evaluate the block. If it returns raise an error"
+
+	self errorBlock value: aString value: self errorPosition.
+	self error: aString
+%
+
+category: 'private-parsing'
+method: RBParser
+parseStatementList: pragmaBoolean into: sequenceNode 
+	| statements return periods returnPosition node |
+	return := false.
+	statements := OrderedCollection new.
+	periods := OrderedCollection new.
+	self addCommentsTo: sequenceNode.
+	pragmaBoolean ifTrue: [self parsePragmas].
+	[currentToken isSpecial and: [currentToken value = $.]] whileTrue: 
+		[periods add: currentToken start.
+		self step].
+	[self atEnd 
+		or: [currentToken isSpecial and: ['])}' includes: currentToken value]]] 
+			whileFalse: 
+				[return ifTrue: [self parserError: 'End of statement list encounted'].
+				(currentToken isSpecial and: [currentToken value = $^]) 
+					ifTrue: 
+						[returnPosition := currentToken start.
+						self step.
+						node := self returnNodeClass return: returnPosition
+									value: self parseAssignment.
+						statements add: node.
+						return := true]
+					ifFalse: 
+						[node := self parseAssignment.
+						statements add: node].
+				(currentToken isSpecial and: [currentToken value = $.]) 
+					ifTrue: 
+						[periods add: currentToken start.
+						self step.
+						self addCommentsTo: node]
+					ifFalse: [return := true].
+				[currentToken isSpecial and: [currentToken value = $.]] whileTrue: 
+					[periods add: currentToken start.
+					self step]].
+	statements notEmpty ifTrue: [self addCommentsTo: statements last].
+	sequenceNode
+		statements: statements;
+		periods: periods.
+	^sequenceNode
+%
+
+category: 'private-parsing'
+method: RBParser
+parseStatements: pragmaBoolean 
+	| args leftBar rightBar |
+	args := #().
+	leftBar := rightBar := nil.
+	currentToken isBinary 
+		ifTrue: 
+			[currentToken value = #| 
+				ifTrue: 
+					[leftBar := currentToken start.
+					self step.
+					args := self parseArgs.
+					(currentToken isBinary and: [currentToken value = #|]) 
+						ifFalse: [self parserError: '''|'' expected'].
+					rightBar := currentToken start.
+					self step]
+				ifFalse: 
+					[currentToken value = #'||' 
+						ifTrue: 
+							[rightBar := (leftBar := currentToken start) + 1.
+							self step]]].
+	^self parseStatementList: pragmaBoolean
+		into: (self sequenceNodeClass 
+				leftBar: leftBar
+				temporaries: args
+				rightBar: rightBar)
+%
+
+category: 'private-parsing'
+method: RBParser
+parseUnaryMessage
+	| node |
+	node := self parsePrimitiveObject.
+	self addCommentsTo: node.
+	[currentToken isLiteralToken ifTrue: [self patchLiteralMessage].
+	currentToken isIdentifier] 
+			whileTrue: [node := self parseUnaryMessageWith: node].
+	self addCommentsTo: node.
+	^node
+%
+
+category: 'private-parsing'
+method: RBParser
+parseUnaryMessageWith: aNode 
+	| selector |
+	selector := currentToken.
+	self step.
+	^self messageNodeClass 
+		receiver: aNode
+		selectorParts: (Array with: selector)
+		arguments: #()
+%
+
+category: 'private-parsing'
+method: RBParser
+parseUnaryPattern
+	| selector |
+	selector := currentToken.
+	self step.
+	^self methodNodeClass selectorParts: (Array with: selector) arguments: #()
+%
+
+category: 'private-parsing'
+method: RBParser
+parseUnaryPragma
+	| selector |
+	selector := currentToken.
+	self step.
+	^ self pragmaNodeClass selectorParts: (Array with: selector) arguments: #()
+%
+
+category: 'private-parsing'
+method: RBParser
+parseVariableNode
+	currentToken isIdentifier 
+		ifFalse: [self parserError: 'Variable name expected'].
+	^self parsePrimitiveIdentifier
+%
+
+category: 'private'
+method: RBParser
+patchLiteralArrayToken
+	(currentToken isIdentifier and: 
+			[self nextToken isAssignment 
+				and: [currentToken stop + 1 = self nextToken start]]) 
+		ifTrue: 
+			[currentToken := RBLiteralToken 
+						value: (currentToken value , ':') asSymbol
+						start: currentToken start
+						stop: self nextToken start.
+			nextToken := RBLiteralToken 
+						value: #=
+						start: nextToken stop
+						stop: nextToken stop.
+			^self].
+	currentToken isAssignment 
+		ifTrue: 
+			[currentToken := RBLiteralToken 
+						value: #':'
+						start: currentToken start
+						stop: currentToken start.
+			nextToken := RBLiteralToken 
+						value: #=
+						start: currentToken stop
+						stop: currentToken stop.
+			^self].
+	currentToken isSpecial 
+		ifTrue: 
+			[currentToken := RBLiteralToken 
+						value: (String with: currentToken value) asSymbol
+						start: currentToken start
+						stop: currentToken stop.
+			^self].
+	(currentToken isIdentifier and: [currentToken value includes: $.]) 
+		ifTrue: 
+			[currentToken := RBLiteralToken 
+						value: currentToken value
+						start: currentToken start
+						stop: currentToken stop.
+			^self].
+	(currentToken isIdentifier 
+		or: [currentToken isBinary or: [currentToken isKeyword]]) 
+			ifFalse: [^self parserError: 'Invalid token'].
+	currentToken := RBLiteralToken 
+				value: currentToken value asSymbol
+				start: currentToken start
+				stop: currentToken stop
+%
+
+category: 'private'
+method: RBParser
+patchLiteralMessage
+	currentToken value == true 
+		ifTrue: 
+			[^currentToken := RBIdentifierToken value: 'true' start: currentToken start].
+	currentToken value == false 
+		ifTrue: 
+			[^currentToken := RBIdentifierToken value: 'false' start: currentToken start].
+	currentToken value == nil 
+		ifTrue: 
+			[^currentToken := RBIdentifierToken value: 'nil' start: currentToken start]
+%
+
+category: 'private'
+method: RBParser
+patchNegativeLiteral
+	"Handle the special negative number case for binary message sends."
+
+	currentToken value isNumber 
+		ifFalse: [^self].
+	currentToken value <= 0 ifFalse: [^self].
+	currentToken value = 0 
+		ifTrue: 
+			[(source notNil and: 
+					[source notEmpty 
+						and: [(source at: (currentToken start min: source size)) = $-]]) 
+				ifFalse: [^self]].
+	nextToken := currentToken.
+	currentToken := RBBinarySelectorToken value: #- start: nextToken start.
+	nextToken value: nextToken value negated.
+	(nextToken isKindOf: RBNumberLiteralToken) 
+		ifTrue: 
+			[nextToken source: (nextToken source copyFrom: 2 to: nextToken source size)].
+	nextToken start: nextToken start + 1
+%
+
+category: 'private-classes'
+method: RBParser
+pragmaNodeClass
+	^ RBPragmaNode
+%
+
+category: 'private-classes'
+method: RBParser
+queryBlockNodeClass
+  ^ RBQueryBlockNode
+%
+
+category: 'private-classes'
+method: RBParser
+returnNodeClass
+	^ RBReturnNode
+%
+
+category: 'initialize-release'
+method: RBParser
+scanner: aScanner 
+	scanner := aScanner.
+	pragmas := nil.
+	self initialize.
+	self step
+%
+
+category: 'accessing'
+method: RBParser
+scannerClass
+	^RBScanner
+%
+
+category: 'private-classes'
+method: RBParser
+sequenceNodeClass
+	^ RBSequenceNode
+%
+
+category: 'private'
+method: RBParser
+step
+	(currentToken notNil and: [currentToken comments notNil]) 
+		ifTrue: [comments addAll: currentToken comments].
+	nextToken notNil 
+		ifTrue: 
+			[currentToken := nextToken.
+			nextToken := nil]
+		ifFalse: [currentToken := scanner next]
+%
+
+category: 'private-classes'
+method: RBParser
+variableNodeClass
+	^ RBVariableNode
+%
+
+! Class implementation for 'RBPatternParser'
+
+!		Instance methods for 'RBPatternParser'
+
+category: 'private-classes'
+method: RBPatternParser
+messageNodeClass
+	^RBPatternMessageNode
+%
+
+category: 'private-classes'
+method: RBPatternParser
+methodNodeClass
+	^RBPatternMethodNode
+%
+
+category: 'private-parsing'
+method: RBPatternParser
+parseLiteralByteArrayObject
+	| node |
+	(currentToken isIdentifier and: [currentToken isPatternVariable]) 
+		ifTrue: 
+			[node := self variableNodeClass identifierToken: currentToken.
+			node isLiteralNode 
+				ifTrue: 
+					[self step.
+					^node]].
+	^super parseLiteralByteArrayObject
+%
+
+category: 'private-parsing'
+method: RBPatternParser
+parsePatternBlock: aClass 
+	| position node |
+	position := currentToken start.
+	self step.
+	node := self parseBlockArgsInto: aClass new.
+	node left: position.
+	node body: (self parseStatements: false).
+	(currentToken isSpecial and: [currentToken value = $}]) 
+		ifFalse: [self parserError: '''}'' expected'].
+	node right: currentToken start.
+	self step.
+	^node
+%
+
+category: 'private-parsing'
+method: RBPatternParser
+parsePragmaLiteral
+  | node |
+  currentToken isPatternBlock
+    ifTrue: [ ^ self parsePatternBlock: RBPatternBlockNode ].
+  (currentToken isIdentifier and: [ currentToken isPatternVariable ])
+    ifTrue: [ 
+      node := self variableNodeClass identifierToken: currentToken.
+      node isLiteralNode
+        ifFalse: [ self error: 'Literal pattern expected' ].
+      self step.
+      currentToken isPatternBlock
+        ifTrue: [ 
+          node := (self parsePatternBlock: RBPatternWrapperBlockNode)
+            wrappedNode: node;
+            yourself ].
+      ^ node ].
+  ^ super parsePragmaLiteral
+%
+
+category: 'private-parsing'
+method: RBPatternParser
+parsePrimitiveLiteral
+	| node |
+	(currentToken isIdentifier and: [currentToken isPatternVariable]) 
+		ifTrue: 
+			[node := self variableNodeClass identifierToken: currentToken.
+			node isLiteralNode 
+				ifTrue: 
+					[self step.
+					^node].
+			currentToken := RBLiteralToken 
+						value: currentToken value asSymbol
+						start: currentToken start
+						stop: currentToken stop].
+	^super parsePrimitiveLiteral
+%
+
+category: 'private-parsing'
+method: RBPatternParser
+parsePrimitiveObject
+	currentToken isPatternBlock 
+		ifTrue: [^self parsePatternBlock: RBPatternBlockNode].
+	^super parsePrimitiveObject
+%
+
+category: 'private-parsing'
+method: RBPatternParser
+parseUnaryMessage
+	| node |
+	node := self parsePrimitiveObject.
+	self addCommentsTo: node.
+	
+	[currentToken isLiteralToken ifTrue: [self patchLiteralMessage].
+	currentToken isPatternBlock 
+		ifTrue: 
+			[node := (self parsePatternBlock: RBPatternWrapperBlockNode)
+						wrappedNode: node;
+						yourself].
+	currentToken isIdentifier] 
+			whileTrue: [node := self parseUnaryMessageWith: node].
+	self addCommentsTo: node.
+	^node
+%
+
+category: 'private'
+method: RBPatternParser
+patchLiteralArrayToken
+	(currentToken isIdentifier and: [currentToken isPatternVariable]) 
+		ifTrue: [^self].
+	super patchLiteralArrayToken
+%
+
+category: 'private-classes'
+method: RBPatternParser
+pragmaNodeClass
+	^RBPatternPragmaNode
+%
+
+category: 'accessing'
+method: RBPatternParser
+scannerClass
+	^RBPatternScanner
+%
+
+category: 'private-classes'
+method: RBPatternParser
+variableNodeClass
+	^RBPatternVariableNode
+%
+
+! Class implementation for 'RBParseTreeRule'
+
+!		Class methods for 'RBParseTreeRule'
+
+category: 'instance creation'
+classmethod: RBParseTreeRule
+methodSearch: aString 
+	^(self new)
+		methodSearchString: aString;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RBParseTreeRule
+new
+
+	^self basicNew initialize
+%
+
+category: 'instance creation'
+classmethod: RBParseTreeRule
+search: aString 
+	^(self new)
+		searchString: aString;
+		yourself
+%
+
+!		Instance methods for 'RBParseTreeRule'
+
+category: 'matching'
+method: RBParseTreeRule
+canMatch: aProgramNode 
+	^true
+%
+
+category: 'private'
+method: RBParseTreeRule
+context
+	^owner context
+%
+
+category: 'matching'
+method: RBParseTreeRule
+foundMatchFor: aProgramNode
+	^aProgramNode
+%
+
+category: 'initialize-release'
+method: RBParseTreeRule
+initialize
+%
+
+category: 'initialize-release'
+method: RBParseTreeRule
+methodSearchString: aString 
+	searchTree := RBParser parseRewriteMethod: aString
+%
+
+category: 'initialize-release'
+method: RBParseTreeRule
+owner: aParseTreeSearcher
+	owner := aParseTreeSearcher
+%
+
+category: 'matching'
+method: RBParseTreeRule
+performOn: aProgramNode 
+	self context empty.
+	^((searchTree match: aProgramNode inContext: self context) 
+		and: [self canMatch: aProgramNode]) 
+			ifTrue: 
+				[owner recusivelySearchInContext.
+				self foundMatchFor: aProgramNode]
+			ifFalse: [nil]
+%
+
+category: 'initialize-release'
+method: RBParseTreeRule
+searchString: aString 
+	searchTree := RBParser parseRewriteExpression: aString
+%
+
+category: 'accessing'
+method: RBParseTreeRule
+sentMessages
+	^searchTree sentMessages
+%
+
+! Class implementation for 'RBReplaceRule'
+
+!		Instance methods for 'RBReplaceRule'
+
+category: 'matching'
+method: RBReplaceRule
+canMatch: aProgramNode 
+	^verificationBlock value: aProgramNode
+%
+
+category: 'matching'
+method: RBReplaceRule
+foundMatchFor: aProgramNode 
+	self subclassResponsibility
+%
+
+category: 'initialize-release'
+method: RBReplaceRule
+initialize
+	super initialize.
+	verificationBlock := [:aNode | true]
+%
+
+category: 'matching'
+method: RBReplaceRule
+replace: aProgramNode with: newNode 
+	aProgramNode replaceMethodSource: newNode
+%
+
+! Class implementation for 'RBBlockReplaceRule'
+
+!		Class methods for 'RBBlockReplaceRule'
+
+category: 'instance creation'
+classmethod: RBBlockReplaceRule
+searchFor: searchString replaceWith: replaceBlock 
+	^self new searchFor: searchString replaceWith: replaceBlock
+%
+
+category: 'instance creation'
+classmethod: RBBlockReplaceRule
+searchFor: searchString replaceWith: replaceBlock when: aBlock 
+	^self new 
+		searchFor: searchString
+		replaceWith: replaceBlock
+		when: aBlock
+%
+
+category: 'instance creation'
+classmethod: RBBlockReplaceRule
+searchForMethod: searchString replaceWith: replaceBlock 
+	^self new searchForMethod: searchString replaceWith: replaceBlock
+%
+
+category: 'instance creation'
+classmethod: RBBlockReplaceRule
+searchForMethod: searchString replaceWith: replaceBlock when: aBlock 
+	^self new 
+		searchForMethod: searchString
+		replaceWith: replaceBlock
+		when: aBlock
+%
+
+category: 'instance creation'
+classmethod: RBBlockReplaceRule
+searchForTree: aRBProgramNode replaceWith: replaceBlock 
+	^self new searchForTree: aRBProgramNode replaceWith: replaceBlock
+%
+
+category: 'instance creation'
+classmethod: RBBlockReplaceRule
+searchForTree: aRBProgramNode replaceWith: replaceBlock when: aBlock 
+	^self new 
+		searchForTree: aRBProgramNode
+		replaceWith: replaceBlock
+		when: aBlock
+%
+
+!		Instance methods for 'RBBlockReplaceRule'
+
+category: 'matching'
+method: RBBlockReplaceRule
+foundMatchFor: aProgramNode 
+	| newNode |
+	newNode := replaceBlock value: aProgramNode.
+	aProgramNode replaceMethodSource: newNode.
+	^newNode
+%
+
+category: 'initialize-release'
+method: RBBlockReplaceRule
+initialize
+	super initialize.
+	replaceBlock := [:aNode | aNode]
+%
+
+category: 'initialize-release'
+method: RBBlockReplaceRule
+searchFor: searchString replaceWith: aBlock 
+	self searchString: searchString.
+	replaceBlock := aBlock
+%
+
+category: 'initialize-release'
+method: RBBlockReplaceRule
+searchFor: searchString replaceWith: replBlock when: verifyBlock 
+	self searchFor: searchString replaceWith: replBlock.
+	verificationBlock := verifyBlock
+%
+
+category: 'initialize-release'
+method: RBBlockReplaceRule
+searchForMethod: searchString replaceWith: aBlock 
+	self methodSearchString: searchString.
+	replaceBlock := aBlock
+%
+
+category: 'initialize-release'
+method: RBBlockReplaceRule
+searchForMethod: searchString replaceWith: replBlock when: verifyBlock 
+	self searchForMethod: searchString replaceWith: replBlock.
+	verificationBlock := verifyBlock
+%
+
+category: 'initialize-release'
+method: RBBlockReplaceRule
+searchForTree: aBRProgramNode replaceWith: aBlock 
+	searchTree := aBRProgramNode.
+	replaceBlock := aBlock
+%
+
+category: 'initialize-release'
+method: RBBlockReplaceRule
+searchForTree: aBRProgramNode replaceWith: replBlock when: verifyBlock 
+	self searchForTree: aBRProgramNode replaceWith: replBlock.
+	verificationBlock := verifyBlock
+%
+
+! Class implementation for 'RBStringReplaceRule'
+
+!		Class methods for 'RBStringReplaceRule'
+
+category: 'instance creation'
+classmethod: RBStringReplaceRule
+searchFor: searchString replaceWith: replaceString 
+	^self new searchFor: searchString replaceWith: replaceString
+%
+
+category: 'instance creation'
+classmethod: RBStringReplaceRule
+searchFor: searchString replaceWith: replaceString when: aBlock 
+	^self new 
+		searchFor: searchString
+		replaceWith: replaceString
+		when: aBlock
+%
+
+category: 'instance creation'
+classmethod: RBStringReplaceRule
+searchForMethod: searchString replaceWith: replaceString 
+	^(self new)
+		searchForMethod: searchString replaceWith: replaceString;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RBStringReplaceRule
+searchForMethod: searchString replaceWith: replaceString when: aBlock 
+	^self new 
+		searchForMethod: searchString
+		replaceWith: replaceString
+		when: aBlock
+%
+
+category: 'instance creation'
+classmethod: RBStringReplaceRule
+searchForTree: aRBProgramNode replaceWith: replaceString 
+	^self new searchForTree: aRBProgramNode replaceWith: replaceString
+%
+
+category: 'instance creation'
+classmethod: RBStringReplaceRule
+searchForTree: aRBProgramNode replaceWith: replaceString when: aBlock 
+	^self new 
+		searchForTree: aRBProgramNode
+		replaceWith: replaceString
+		when: aBlock
+%
+
+!		Instance methods for 'RBStringReplaceRule'
+
+category: 'matching'
+method: RBStringReplaceRule
+foundMatchFor: aProgramNode 
+	| newNode |
+	newNode := replaceTree copyInContext: self context.
+	aProgramNode replaceMethodSource: newNode.
+	newNode copyCommentsFrom: aProgramNode.
+	^newNode
+%
+
+category: 'initialize-release'
+method: RBStringReplaceRule
+methodReplaceString: replaceString 
+	replaceTree := RBParser parseRewriteMethod: replaceString
+%
+
+category: 'initialize-release'
+method: RBStringReplaceRule
+replaceString: replaceString 
+	replaceTree := RBParser parseRewriteExpression: replaceString.
+	searchTree isSequence = replaceTree isSequence 
+		ifFalse: 
+			[searchTree isSequence 
+				ifTrue: [replaceTree := RBSequenceNode statements: (Array with: replaceTree)]
+				ifFalse: [searchTree := RBSequenceNode statements: (Array with: searchTree)]]
+%
+
+category: 'initialize-release'
+method: RBStringReplaceRule
+searchFor: searchString replaceWith: replaceString 
+	self searchString: searchString.
+	self replaceString: replaceString
+%
+
+category: 'initialize-release'
+method: RBStringReplaceRule
+searchFor: searchString replaceWith: replaceString when: aBlock 
+	self searchFor: searchString replaceWith: replaceString.
+	verificationBlock := aBlock
+%
+
+category: 'initialize-release'
+method: RBStringReplaceRule
+searchForMethod: searchString replaceWith: replaceString 
+	self methodSearchString: searchString.
+	self methodReplaceString: replaceString
+%
+
+category: 'initialize-release'
+method: RBStringReplaceRule
+searchForMethod: searchString replaceWith: replaceString when: aBlock 
+	self searchForMethod: searchString replaceWith: replaceString.
+	verificationBlock := aBlock
+%
+
+category: 'initialize-release'
+method: RBStringReplaceRule
+searchForTree: aBRProgramNode replaceWith: replaceNode 
+	searchTree := aBRProgramNode.
+	replaceTree := replaceNode
+%
+
+category: 'initialize-release'
+method: RBStringReplaceRule
+searchForTree: aBRProgramNode replaceWith: replaceString when: aBlock 
+	self searchForTree: aBRProgramNode replaceWith: replaceString.
+	verificationBlock := aBlock
+%
+
+! Class implementation for 'RBSearchRule'
+
+!		Class methods for 'RBSearchRule'
+
+category: 'instance creation'
+classmethod: RBSearchRule
+searchFor: aString thenDo: aBlock 
+	^self new searchFor: aString thenDo: aBlock
+%
+
+category: 'instance creation'
+classmethod: RBSearchRule
+searchForMethod: aString thenDo: aBlock 
+	^self new searchForMethod: aString thenDo: aBlock
+%
+
+category: 'instance creation'
+classmethod: RBSearchRule
+searchForTree: aBRProgramNode thenDo: aBlock 
+	^self new searchForTree: aBRProgramNode thenDo: aBlock
+%
+
+!		Instance methods for 'RBSearchRule'
+
+category: 'testing'
+method: RBSearchRule
+canMatch: aProgramNode 
+	owner answer: (answerBlock value: aProgramNode value: owner answer).
+	^true
+%
+
+category: 'initialize-release'
+method: RBSearchRule
+searchFor: aString thenDo: aBlock 
+	self searchString: aString.
+	answerBlock := aBlock
+%
+
+category: 'initialize-release'
+method: RBSearchRule
+searchForMethod: aString thenDo: aBlock 
+	self methodSearchString: aString.
+	answerBlock := aBlock
+%
+
+category: 'initialize-release'
+method: RBSearchRule
+searchForTree: aBRProgramNode thenDo: aBlock 
+	searchTree := aBRProgramNode.
+	answerBlock := aBlock
+%
+
+! Class implementation for 'RBProgramNode'
+
+!		Class methods for 'RBProgramNode'
+
+category: 'accessing'
+classmethod: RBProgramNode
+formatterClass
+  ^ FormatterClass isNil
+    ifTrue: [ RBConfigurableFormatter ]
+    ifFalse: [ ^ Rowan globalNamed: FormatterClass name ]
+%
+
+category: 'accessing'
+classmethod: RBProgramNode
+formatterClass: aClass 
+	FormatterClass := aClass
+%
+
+category: 'instance creation'
+classmethod: RBProgramNode
+new
+
+	^self basicNew initialize
+%
+
+category: 'accessing'
+classmethod: RBProgramNode
+optimizedSelectors
+	^ #( and: caseOf: caseOf:otherwise: ifFalse: ifFalse:ifTrue: ifNil: ifNil:ifNotNil: ifNotNil: ifNotNil:ifNil: ifTrue: ifTrue:ifFalse: or: to:by:do: to:do: whileFalse whileFalse: whileTrue whileTrue: )
+%
+
+!		Instance methods for 'RBProgramNode'
+
+category: 'visitor'
+method: RBProgramNode
+acceptVisitor: aProgramNodeVisitor 
+	self subclassResponsibility
+%
+
+category: 'replacing'
+method: RBProgramNode
+addReplacement: aStringReplacement
+	parent isNil ifTrue: [^self].
+	parent addReplacement: aStringReplacement
+%
+
+category: 'accessing'
+method: RBProgramNode
+allArgumentVariables
+	| children |
+	children := self children.
+	children isEmpty ifTrue: [^#()].
+	^children inject: OrderedCollection new
+		into: 
+			[:vars :each | 
+			vars
+				addAll: each allArgumentVariables;
+				yourself]
+%
+
+category: 'iterating'
+method: RBProgramNode
+allChildren
+	| children |
+	children := OrderedCollection new.
+	self nodesDo: [ :each | children addLast: each ].
+	^ children
+%
+
+category: 'accessing'
+method: RBProgramNode
+allDefinedVariables
+	| children |
+	children := self children.
+	children isEmpty ifTrue: [^#()].
+	^children inject: OrderedCollection new
+		into: 
+			[:vars :each | 
+			vars
+				addAll: each allDefinedVariables;
+				yourself]
+%
+
+category: 'accessing'
+method: RBProgramNode
+allTemporaryVariables
+	| children |
+	children := self children.
+	children isEmpty ifTrue: [^#()].
+	^children inject: OrderedCollection new
+		into: 
+			[:vars :each | 
+			vars
+				addAll: each allTemporaryVariables;
+				yourself]
+%
+
+category: 'accessing'
+method: RBProgramNode
+asReturn
+	"Change the current node to a return node."
+
+	parent isNil 
+		ifTrue: [self error: 'Cannot change to a return without a parent node.'].
+	parent isSequence 
+		ifFalse: [self error: 'Parent node must be a sequence node.'].
+	(parent isLast: self) ifFalse: [self error: 'Return node must be last.'].
+	^parent addReturn
+%
+
+category: 'testing'
+method: RBProgramNode
+assigns: aVariableName 
+	^self children anySatisfy: [:each | each assigns: aVariableName]
+%
+
+category: 'querying'
+method: RBProgramNode
+bestNodeFor: anInterval 
+	| selectedChildren |
+	(self intersectsInterval: anInterval) ifFalse: [^nil].
+	(self containedBy: anInterval) ifTrue: [^self].
+	selectedChildren := self children 
+				select: [:each | each intersectsInterval: anInterval].
+	^selectedChildren size == 1 
+		ifTrue: [selectedChildren first bestNodeFor: anInterval]
+		ifFalse: [self]
+%
+
+category: 'accessing'
+method: RBProgramNode
+blockVariables
+	^parent isNil ifTrue: [#()] ifFalse: [parent blockVariables]
+%
+
+category: 'testing-matching'
+method: RBProgramNode
+canMatchMethod: aCompiledMethod 
+	^self sentMessages allSatisfy: 
+			[:each | 
+			(self class optimizedSelectors includes: each) 
+				or: [aCompiledMethod refersToLiteral: each]]
+%
+
+category: 'meta variable-accessing'
+method: RBProgramNode
+cascadeListCharacter
+	^$;
+%
+
+category: 'accessing'
+method: RBProgramNode
+children
+	^#()
+%
+
+category: 'replacing'
+method: RBProgramNode
+clearReplacements
+	parent isNil ifTrue: [^self].
+	parent clearReplacements
+%
+
+category: 'enumeration'
+method: RBProgramNode
+collect: aBlock 
+	"Hacked to fit collection protocols"
+
+	^aBlock value: self
+%
+
+category: 'accessing'
+method: RBProgramNode
+comments
+	"Answer the comments of the receiving parse tree node as intervals of starting and ending indices."
+	
+	^ comments isNil ifTrue: [ #() ] ifFalse: [ comments ]
+%
+
+category: 'accessing'
+method: RBProgramNode
+comments: aCollection
+	comments := aCollection
+%
+
+category: 'testing'
+method: RBProgramNode
+containedBy: anInterval 
+	^anInterval first <= self start and: [anInterval last >= self stop]
+%
+
+category: 'testing'
+method: RBProgramNode
+containsReturn
+	^self children anySatisfy: [:each | each containsReturn]
+%
+
+category: 'copying'
+method: RBProgramNode
+copyCommentsFrom: aNode 
+	"Add all comments from aNode to us. If we already have the comment, then don't add it."
+
+	| newComments |
+	newComments := OrderedCollection new.
+	aNode nodesDo: [:each | newComments addAll: each comments].
+	self nodesDo: 
+			[:each | 
+			each comments do: [:comment | newComments remove: comment ifAbsent: []]].
+	newComments isEmpty ifTrue: [^self].
+	newComments := newComments asSortedCollection: [:a :b | a first < b first].
+	self comments: newComments
+%
+
+category: 'matching'
+method: RBProgramNode
+copyInContext: aDictionary
+	^ self copy
+%
+
+category: 'matching'
+method: RBProgramNode
+copyList: matchNodes inContext: aDictionary 
+	| newNodes |
+	newNodes := OrderedCollection new.
+	matchNodes do: 
+			[:each | 
+			| object |
+			object := each copyInContext: aDictionary.
+			newNodes addAll: object].
+	^newNodes
+%
+
+category: 'testing'
+method: RBProgramNode
+defines: aName
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+directlyUses: aNode
+	^true
+%
+
+category: 'enumeration'
+method: RBProgramNode
+do: aBlock 
+	"Hacked to fit collection protocols"
+
+	aBlock value: self
+%
+
+category: 'comparing'
+method: RBProgramNode
+equalTo: aNode exceptForVariables: variableNameCollection 
+	| dictionary |
+	dictionary := Dictionary new.
+	(self equalTo: aNode withMapping: dictionary) ifFalse: [^false].
+	dictionary keysAndValuesDo: 
+			[:key :value | 
+			(key = value or: [variableNameCollection includes: key]) ifFalse: [^false]].
+	^true
+%
+
+category: 'comparing'
+method: RBProgramNode
+equalTo: aNode withMapping: aDictionary 
+	^self = aNode
+%
+
+category: 'testing'
+method: RBProgramNode
+evaluatedFirst: aNode 
+	self children do: 
+			[:each | 
+			each == aNode ifTrue: [^true].
+			each isImmediateNode ifFalse: [^false]].
+	^false
+%
+
+category: 'accessing'
+method: RBProgramNode
+formattedCode
+	^ self formatterClass new format: self
+%
+
+category: 'accessing'
+method: RBProgramNode
+formatterClass
+	^ self class formatterClass
+%
+
+category: 'comparing'
+method: RBProgramNode
+hashForCollection: aCollection
+	^ aCollection isEmpty ifTrue: [ 0 ] ifFalse: [ aCollection first hash ]
+%
+
+category: 'testing'
+method: RBProgramNode
+hasMultipleReturns
+	| count |
+	count := 0.
+	self nodesDo: [:each | each isReturn ifTrue: [count := count + 1]].
+	^count > 1
+%
+
+category: 'properties'
+method: RBProgramNode
+hasProperty: aKey
+	"Test if the property aKey is present."
+	
+	^ properties notNil and: [ properties includesKey: aKey ]
+%
+
+category: 'initialize release'
+method: RBProgramNode
+initialize
+%
+
+category: 'testing'
+method: RBProgramNode
+intersectsInterval: anInterval 
+	^(anInterval first between: self start and: self stop) 
+		or: [self start between: anInterval first and: anInterval last]
+%
+
+category: 'testing'
+method: RBProgramNode
+isArray
+	^ false
+%
+
+category: 'testing'
+method: RBProgramNode
+isAssignment
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+isBlock
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+isCascade
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+isDirectlyUsed
+	"This node is directly used as an argument, receiver, or part of an assignment."
+
+	^parent isNil ifTrue: [false] ifFalse: [parent directlyUses: self]
+%
+
+category: 'testing'
+method: RBProgramNode
+isEvaluatedFirst
+	"Return true if we are the first thing evaluated in this statement."
+
+	^parent isNil or: [parent isSequence or: [parent evaluatedFirst: self]]
+%
+
+category: 'deprecated'
+method: RBProgramNode
+isImmediate
+	^self isImmediateNode
+%
+
+category: 'testing'
+method: RBProgramNode
+isImmediateNode
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+isLast: aNode 
+	| children |
+	children := self children.
+	^children notEmpty and: [children last == aNode]
+%
+
+category: 'testing-matching'
+method: RBProgramNode
+isList
+	^false
+%
+
+category: 'deprecated'
+method: RBProgramNode
+isLiteral
+	^self isLiteralNode
+%
+
+category: 'testing'
+method: RBProgramNode
+isLiteralArray
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+isLiteralNode
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+isMessage
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+isMethod
+	^false
+%
+
+category: 'testing-matching'
+method: RBProgramNode
+isPatternNode
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+isPragma
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+isReturn
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+isSequence
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+isUsed
+	"Answer true if this node could be used as part of another expression. For example, you could use the 
+	result of this node as a receiver of a message, an argument, the right part of an assignment, or the 
+	return value of a block. This differs from isDirectlyUsed in that it is conservative since it also includes 
+	return values of blocks."
+
+	^parent isNil ifTrue: [false] ifFalse: [parent uses: self]
+%
+
+category: 'testing'
+method: RBProgramNode
+isValue
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+isVariable
+	^false
+%
+
+category: 'testing'
+method: RBProgramNode
+lastIsReturn
+	^self isReturn
+%
+
+category: 'meta variable-accessing'
+method: RBProgramNode
+listCharacter
+	^$@
+%
+
+category: 'meta variable-accessing'
+method: RBProgramNode
+literalCharacter
+	^$#
+%
+
+category: 'accessing'
+method: RBProgramNode
+mappingFor: aNode
+	| method |
+	method := self methodNode.
+	method isNil ifTrue: [^aNode].
+	^method mappingFor: aNode
+%
+
+category: 'matching'
+method: RBProgramNode
+match: aNode inContext: aDictionary 
+	^ self = aNode
+%
+
+category: 'matching'
+method: RBProgramNode
+matchList: matchNodes against: programNodes inContext: aDictionary 
+	^self
+		matchList: matchNodes
+		index: 1
+		against: programNodes
+		index: 1
+		inContext: aDictionary
+%
+
+category: 'matching'
+method: RBProgramNode
+matchList: matchNodes index: matchIndex against: programNodes index: programIndex inContext: aDictionary 
+	| node currentIndex currentDictionary nodes |
+	matchNodes size < matchIndex ifTrue: [^programNodes size < programIndex].
+	node := matchNodes at: matchIndex.
+	node isList 
+		ifTrue: 
+			[currentIndex := programIndex - 1.
+			
+			[currentDictionary := aDictionary copy.
+			programNodes size < currentIndex or: 
+					[nodes := programNodes copyFrom: programIndex to: currentIndex.
+					(currentDictionary at: node ifAbsentPut: [nodes]) = nodes and: 
+							[(self 
+								matchList: matchNodes
+								index: matchIndex + 1
+								against: programNodes
+								index: currentIndex + 1
+								inContext: currentDictionary) 
+									ifTrue: 
+										[currentDictionary 
+											keysAndValuesDo: [:key :value | aDictionary at: key put: value].
+										^true].
+							false]]] 
+					whileFalse: [currentIndex := currentIndex + 1].
+			^false].
+	programNodes size < programIndex ifTrue: [^false].
+	(node match: (programNodes at: programIndex) inContext: aDictionary) 
+		ifFalse: [^false].
+	^self 
+		matchList: matchNodes
+		index: matchIndex + 1
+		against: programNodes
+		index: programIndex + 1
+		inContext: aDictionary
+%
+
+category: 'accessing'
+method: RBProgramNode
+methodComments
+	^self comments
+%
+
+category: 'accessing'
+method: RBProgramNode
+methodNode
+	^parent isNil ifTrue: [nil] ifFalse: [parent methodNode]
+%
+
+category: 'accessing'
+method: RBProgramNode
+newSource
+	^self formattedCode
+%
+
+category: 'iterating'
+method: RBProgramNode
+nodesDo: aBlock 
+	aBlock value: self.
+	self children do: [ :each | each nodesDo: aBlock ]
+%
+
+category: 'accessing'
+method: RBProgramNode
+parent
+	^parent
+%
+
+category: 'accessing'
+method: RBProgramNode
+parent: aRBProgramNode 
+	parent := aRBProgramNode
+%
+
+category: 'accessing'
+method: RBProgramNode
+parents
+	^ parent isNil
+		ifTrue: [ OrderedCollection with: self ]
+		ifFalse: [ 
+			parent parents
+				addLast: self;
+				yourself ]
+%
+
+category: 'copying'
+method: RBProgramNode
+postCopy
+	super postCopy.
+	properties := properties copy
+%
+
+category: 'accessing'
+method: RBProgramNode
+precedence
+	^6
+%
+
+category: 'printing'
+method: RBProgramNode
+printOn: aStream 
+	aStream
+		nextPutAll: self class name;
+		nextPut: $(;
+		nextPutAll: self formattedCode;
+		nextPut: $)
+%
+
+category: 'properties'
+method: RBProgramNode
+propertyAt: aKey
+	"Answer the property value associated with aKey."
+	
+	^ self propertyAt: aKey ifAbsent: [ self error: 'Property not found' ]
+%
+
+category: 'properties'
+method: RBProgramNode
+propertyAt: aKey ifAbsent: aBlock
+	"Answer the property value associated with aKey or, if aKey isn't found, answer the result of evaluating aBlock."
+	
+	^ properties isNil
+		ifTrue: [ aBlock value ]
+		ifFalse: [ properties at: aKey ifAbsent: aBlock ]
+%
+
+category: 'properties'
+method: RBProgramNode
+propertyAt: aKey ifAbsentPut: aBlock
+	"Answer the property associated with aKey or, if aKey isn't found store the result of evaluating aBlock as new value."
+	
+	^ self propertyAt: aKey ifAbsent: [ self propertyAt: aKey put: aBlock value ]
+%
+
+category: 'properties'
+method: RBProgramNode
+propertyAt: aKey put: anObject
+	"Set the property at aKey to be anObject. If aKey is not found, create a new entry for aKey and set is value to anObject. Answer anObject."
+
+	^ (properties ifNil: [ properties := RBSmallDictionary new: 1 ])
+		at: aKey put: anObject
+%
+
+category: 'testing-matching'
+method: RBProgramNode
+recurseInto
+	^false
+%
+
+category: 'meta variable-accessing'
+method: RBProgramNode
+recurseIntoCharacter
+	^$`
+%
+
+category: 'testing'
+method: RBProgramNode
+references: aVariableName 
+	^self children anySatisfy: [:each | each references: aVariableName]
+%
+
+category: 'replacing'
+method: RBProgramNode
+removeDeadCode
+	self children do: [:each | each removeDeadCode]
+%
+
+category: 'properties'
+method: RBProgramNode
+removeProperty: aKey
+	"Remove the property with aKey. Answer the property or raise an error if aKey isn't found."
+	
+	^ self removeProperty: aKey ifAbsent: [ self error: 'Property not found' ].
+%
+
+category: 'properties'
+method: RBProgramNode
+removeProperty: aKey ifAbsent: aBlock
+	"Remove the property with aKey. Answer the value or, if aKey isn't found, answer the result of evaluating aBlock."
+	
+	| answer |
+	properties isNil ifTrue: [ ^ aBlock value ].
+	answer := properties removeKey: aKey ifAbsent: aBlock.
+	properties isEmpty ifTrue: [ properties := nil ].
+	^ answer
+%
+
+category: 'replacing'
+method: RBProgramNode
+replaceMethodSource: aNode 
+	"We are being replaced with aNode -- if possible try to perform an in place edit of the source."
+
+	| method |
+	method := self methodNode.
+	method notNil ifTrue: [method map: self to: aNode].
+	aNode parent: self parent.
+	[self replaceSourceWith: aNode] on: Error
+		do: 
+			[:ex | 
+			self clearReplacements.
+			ex return]
+%
+
+category: 'replacing'
+method: RBProgramNode
+replaceNode: aNode withNode: anotherNode 
+	self error: 'I don''t store other nodes'
+%
+
+category: 'private-replacing'
+method: RBProgramNode
+replaceSourceFrom: aNode
+	self == aNode
+		ifFalse: [ self clearReplacements ]
+%
+
+category: 'private-replacing'
+method: RBProgramNode
+replaceSourceWith: aNode 
+	aNode replaceSourceFrom: self
+%
+
+category: 'replacing'
+method: RBProgramNode
+replaceWith: aNode 
+	parent isNil ifTrue: [self error: 'This node doesn''t have a parent'].
+	self replaceMethodSource: aNode.
+	parent replaceNode: self withNode: aNode
+%
+
+category: 'querying'
+method: RBProgramNode
+selfMessages
+	| searcher |
+	searcher := RBParseTreeSearcher new.
+	searcher matches: 'self `@msg: ``@args'
+		do: 
+			[:aNode :answer | 
+			answer
+				add: aNode selector;
+				yourself].
+	^searcher executeTree: self initialAnswer: Set new
+%
+
+category: 'accessing'
+method: RBProgramNode
+sentMessages
+	^ self children
+		inject: Set new
+		into: [ :messages :each | 
+			messages
+				addAll: each sentMessages;
+				yourself ]
+%
+
+category: 'enumeration'
+method: RBProgramNode
+size
+	"Hacked to fit collection protocols"
+
+	^1
+%
+
+category: 'accessing'
+method: RBProgramNode
+source
+	^parent notNil ifTrue: [parent source] ifFalse: [nil]
+%
+
+category: 'accessing'
+method: RBProgramNode
+sourceInterval
+	^self start to: self stop
+%
+
+category: 'accessing'
+method: RBProgramNode
+start
+	self subclassResponsibility
+%
+
+category: 'meta variable-accessing'
+method: RBProgramNode
+statementCharacter
+	^$.
+%
+
+category: 'accessing'
+method: RBProgramNode
+statementComments
+	| statementComments |
+	statementComments := OrderedCollection withAll: self comments.
+	self children do: [:each | statementComments addAll: each statementComments].
+	^statementComments asSortedCollection: [:a :b | a first < b first]
+%
+
+category: 'querying'
+method: RBProgramNode
+statementNode
+	"Return your topmost node that is contained by a sequence node."
+
+	(parent isNil or: [parent isSequence]) ifTrue: [^self].
+	^parent statementNode
+%
+
+category: 'accessing'
+method: RBProgramNode
+stop
+	self subclassResponsibility
+%
+
+category: 'querying'
+method: RBProgramNode
+superMessages
+	| searcher |
+	searcher := RBParseTreeSearcher new.
+	searcher matches: 'super `@msg: ``@args'
+		do: 
+			[:aNode :answer | 
+			answer
+				add: aNode selector;
+				yourself].
+	^searcher executeTree: self initialAnswer: Set new
+%
+
+category: 'accessing'
+method: RBProgramNode
+temporaryVariables
+	^parent isNil ifTrue: [#()] ifFalse: [parent temporaryVariables]
+%
+
+category: 'testing'
+method: RBProgramNode
+uses: aNode
+	^true
+%
+
+category: 'querying'
+method: RBProgramNode
+whichNodeIsContainedBy: anInterval 
+	| selectedChildren |
+	(self intersectsInterval: anInterval) ifFalse: [^nil].
+	(self containedBy: anInterval) ifTrue: [^self].
+	selectedChildren := self children 
+				select: [:each | each intersectsInterval: anInterval].
+	^selectedChildren size == 1 
+		ifTrue: [selectedChildren first whichNodeIsContainedBy: anInterval]
+		ifFalse: [nil]
+%
+
+category: 'querying'
+method: RBProgramNode
+whoDefines: aName 
+	^(self defines: aName) 
+		ifTrue: [self]
+		ifFalse: [parent notNil ifTrue: [parent whoDefines: aName] ifFalse: [nil]]
+%
+
+! Class implementation for 'RBMethodNode'
+
+!		Class methods for 'RBMethodNode'
+
+category: 'instance creation'
+classmethod: RBMethodNode
+selector: aSymbol arguments: variableNodes body: aSequenceNode 
+	^(self new)
+		arguments: variableNodes;
+		selector: aSymbol;
+		body: aSequenceNode;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RBMethodNode
+selector: aSymbol body: aSequenceNode 
+	^self 
+		selector: aSymbol
+		arguments: #()
+		body: aSequenceNode
+%
+
+category: 'instance creation'
+classmethod: RBMethodNode
+selectorParts: tokenCollection arguments: variableNodes 
+	^(self new)
+		selectorParts: tokenCollection arguments: variableNodes;
+		yourself
+%
+
+!		Instance methods for 'RBMethodNode'
+
+category: 'comparing'
+method: RBMethodNode
+= anObject 
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	(self selector = anObject selector
+		and: [ self pragmas size = anObject pragmas size
+		and: [ self body = anObject body ] ])
+			ifFalse: [ ^ false ].
+	self arguments with: anObject arguments do: [ :first :second |
+		first = second 
+			ifFalse: [ ^ false ] ].
+	self pragmas with: anObject pragmas do: [ :first :second |
+		first = second 
+			ifFalse: [ ^ false ] ].
+	^ true
+%
+
+category: 'visitor'
+method: RBMethodNode
+acceptVisitor: aProgramNodeVisitor 
+	^aProgramNodeVisitor acceptMethodNode: self
+%
+
+category: 'accessing'
+method: RBMethodNode
+addNode: aNode
+	^ body addNode: aNode
+%
+
+category: 'replacing'
+method: RBMethodNode
+addReplacement: aStringReplacement 
+	replacements isNil ifTrue: [^self].
+	replacements add: aStringReplacement
+%
+
+category: 'accessing'
+method: RBMethodNode
+addReturn
+	^ body addReturn
+%
+
+category: 'accessing'
+method: RBMethodNode
+addSelfReturn
+	^ body addSelfReturn
+%
+
+category: 'accessing'
+method: RBMethodNode
+allArgumentVariables
+	^(self argumentNames asOrderedCollection)
+		addAll: super allArgumentVariables;
+		yourself
+%
+
+category: 'accessing'
+method: RBMethodNode
+allDefinedVariables
+	^(self argumentNames asOrderedCollection)
+		addAll: super allDefinedVariables;
+		yourself
+%
+
+category: 'accessing'
+method: RBMethodNode
+argumentNames
+	^self arguments collect: [:each | each name]
+%
+
+category: 'accessing'
+method: RBMethodNode
+arguments
+	^arguments
+%
+
+category: 'accessing'
+method: RBMethodNode
+arguments: variableNodes 
+	arguments := variableNodes.
+	arguments do: [:each | each parent: self]
+%
+
+category: 'accessing'
+method: RBMethodNode
+body
+	^body
+%
+
+category: 'accessing'
+method: RBMethodNode
+body: stmtsNode 
+	body := stmtsNode.
+	body parent: self
+%
+
+category: 'private'
+method: RBMethodNode
+buildSelector
+	| selectorStream |
+	selectorStream := WriteStreamPortable on: String new.
+	selectorParts do: [:each | selectorStream nextPutAll: each value].
+	^selectorStream contents asSymbol
+%
+
+category: 'private-replacing'
+method: RBMethodNode
+changeSourceSelectors: oldSelectorParts arguments: oldArguments
+	"If this is the same number of arguments, we try a one to one replacement of selector parts and arguments. If this is not the case try to rewrite the signature as a whole, what unfortunately drops the comments within the signature."
+	
+	[ (oldSelectorParts size = selectorParts size and: [ oldArguments size = arguments size ])
+		ifTrue: [
+			oldSelectorParts with: selectorParts do: [ :old :new | 
+				self addReplacement: (RBStringReplacement 
+					replaceFrom: old start
+					to: old stop
+					with: new value) ].
+			oldArguments with: arguments do: [ :old :new | 
+				self addReplacement: (RBStringReplacement 
+					replaceFrom: old start
+					to: old stop
+					with: new name) ] ]
+		ifFalse: [
+			self addReplacement: (RBStringReplacement
+				replaceFrom: oldSelectorParts first start
+				to: (oldArguments notEmpty
+					ifTrue: [ oldArguments last stop ]
+					ifFalse: [ oldSelectorParts last stop ])
+				with: (String streamContents: [ :stream |
+					selectorParts keysAndValuesDo: [ :index :part |
+						index = 1 ifFalse: [ stream space ].
+						stream nextPutAll: part value.
+						index <= arguments size
+							ifTrue: [ stream space; nextPutAll: (arguments at: index) name ] ] ])) ] ]
+		on: Error
+		do: [ :ex | ex return ]
+%
+
+category: 'accessing'
+method: RBMethodNode
+children
+	^ OrderedCollection new
+		addAll: self arguments;
+		addAll: self pragmas;
+		add: self body;
+		yourself
+%
+
+category: 'replacing'
+method: RBMethodNode
+clearReplacements
+	replacements := nil
+%
+
+category: 'matching'
+method: RBMethodNode
+copyInContext: aDictionary
+	^ self class new
+		selectorParts: (self selectorParts collect: [ :each | each copy removePositions ]);
+		arguments: (self arguments collect: [ :each | each copyInContext: aDictionary ]);
+		pragmas: (self pragmas isEmpty
+			ifTrue: [ aDictionary at: '-pragmas-' ifAbsent: [ #() ] ]
+			ifFalse: [ self copyList: self pragmas inContext: aDictionary ]);
+		body: (self body copyInContext: aDictionary);
+		source: (aDictionary at: '-source-' ifAbsentPut: [ self source ]);
+		yourself
+%
+
+category: 'testing'
+method: RBMethodNode
+defines: aName 
+	^arguments anySatisfy: [:each | each name = aName]
+%
+
+category: 'comparing'
+method: RBMethodNode
+equalTo: anObject withMapping: aDictionary 
+	self class = anObject class ifFalse: [ ^ false ].
+	(self selector = anObject selector
+		and: [ self pragmas size = anObject pragmas size
+		and: [ self body equalTo: anObject body withMapping: aDictionary ] ]) 
+			ifFalse: [ ^ false ].
+	self arguments with: anObject arguments do: [ :first :second |
+		(first equalTo: second	withMapping: aDictionary)
+			ifFalse: [ ^ false ].
+		aDictionary removeKey: first name ].
+	self pragmas with: anObject pragmas do: [ :first :second |
+		(first equalTo: second	withMapping: aDictionary) 
+			ifFalse: [ ^ false ] ].
+	^ true
+%
+
+category: 'comparing'
+method: RBMethodNode
+hash
+	^ ((self selector hash bitXor: (self hashForCollection: self arguments)) bitXor: (self hashForCollection: self pragmas)) bitXor: self body hash
+%
+
+category: 'initialize-release'
+method: RBMethodNode
+initialize
+	replacements := SortedCollection sortBlock: 
+					[:a :b | 
+					a startPosition < b startPosition 
+						or: [a startPosition = b startPosition and: [a stopPosition < b stopPosition]]].
+	nodeReplacements := IdentityDictionary new
+%
+
+category: 'testing'
+method: RBMethodNode
+isLast: aNode 
+	^body isLast: aNode
+%
+
+category: 'testing'
+method: RBMethodNode
+isMethod
+	^true
+%
+
+category: 'testing'
+method: RBMethodNode
+isPrimitive
+	^ self pragmas anySatisfy: [ :each | each isPrimitive ]
+%
+
+category: 'testing'
+method: RBMethodNode
+lastIsReturn
+	^body lastIsReturn
+%
+
+category: 'replacing'
+method: RBMethodNode
+map: oldNode to: newNode 
+	nodeReplacements at: oldNode put: newNode
+%
+
+category: 'replacing'
+method: RBMethodNode
+mappingFor: oldNode 
+	^nodeReplacements at: oldNode ifAbsent: [oldNode]
+%
+
+category: 'matching'
+method: RBMethodNode
+match: aNode inContext: aDictionary 
+	self class = aNode class ifFalse: [ ^ false ].
+	aDictionary at: '-source-' put: aNode source.
+	self selector = aNode selector ifFalse: [ ^ false ].
+	^ (self matchList: arguments against: aNode arguments inContext: aDictionary)
+		and: [ (self matchPragmas: self pragmas against: aNode pragmas inContext: aDictionary)
+		and: [ body match: aNode body inContext: aDictionary ] ]
+%
+
+category: 'matching'
+method: RBMethodNode
+matchPragmas: matchNodes against: pragmaNodes inContext: aDictionary
+	matchNodes isEmpty ifTrue: [ 
+		aDictionary at: '-pragmas-' put: pragmaNodes.
+		^ true ].
+	^ matchNodes allSatisfy: [ :matchNode |
+		pragmaNodes anySatisfy: [ :pragmaNode |
+			matchNode match: pragmaNode inContext: aDictionary ] ]
+%
+
+category: 'accessing'
+method: RBMethodNode
+methodComments
+	| methodComments |
+	methodComments := OrderedCollection withAll: self comments.
+	arguments do: [:each | methodComments addAll: each comments].
+	^methodComments asSortedCollection: [:a :b | a first < b first]
+%
+
+category: 'accessing'
+method: RBMethodNode
+methodNode
+	^self
+%
+
+category: 'accessing'
+method: RBMethodNode
+newSource
+	replacements isNil ifTrue: [^self formattedCode].
+	^[self reformatSource] on: Error do: [:ex | ex return: self formattedCode]
+%
+
+category: 'accessing'
+method: RBMethodNode
+numArgs
+	^self selector numArgs
+%
+
+category: 'copying'
+method: RBMethodNode
+postCopy
+	super postCopy.
+	self arguments: (self arguments collect: [ :each | each copy ]).
+	self pragmas: (self pragmas collect: [ :each | each copy ]).
+	self body: self body copy
+%
+
+category: 'accessing'
+method: RBMethodNode
+pragmas
+	^ pragmas ifNil: [ #() ]
+%
+
+category: 'accessing'
+method: RBMethodNode
+pragmas: aCollection
+	pragmas := aCollection.
+	pragmas do: [ :each | each parent: self ]
+%
+
+category: 'accessing'
+method: RBMethodNode
+primitiveSources
+	^ self pragmas collect: [ :each | self source copyFrom: each first to: each last ]
+%
+
+category: 'printing'
+method: RBMethodNode
+printOn: aStream 
+	aStream nextPutAll: self formattedCode
+%
+
+category: 'testing'
+method: RBMethodNode
+references: aVariableName 
+	^body references: aVariableName
+%
+
+category: 'private'
+method: RBMethodNode
+reformatSource
+	| stream newSource newTree |
+	stream := WriteStreamPortable on: String new.
+	stream
+		nextPutAll: (source
+			copyFrom: (replacements
+				inject: 1
+				into: [ :sum :each | 
+					stream
+						nextPutAll: (source copyFrom: sum to: each startPosition - 1);
+						nextPutAll: (each string).
+					each stopPosition + 1 ])
+			to: source size).
+	newSource := stream contents.
+	newTree := RBParser 
+		parseMethod: newSource 
+		onError: [ :msg :pos | ^ self formattedCode ].
+	self = newTree
+		ifFalse: [ ^ self formattedCode ].
+	^ newSource
+%
+
+category: 'accessing'
+method: RBMethodNode
+renameSelector: newSelector andArguments: varNodeCollection 
+	| oldSelectorParts oldArguments |
+	oldSelectorParts := selectorParts.
+	oldArguments := arguments.
+	self
+		arguments: varNodeCollection;
+		selector: newSelector.
+	self changeSourceSelectors: oldSelectorParts arguments: oldArguments
+%
+
+category: 'replacing'
+method: RBMethodNode
+replaceNode: aNode withNode: anotherNode 
+	aNode == body ifTrue: [self body: anotherNode].
+	self arguments: (arguments 
+				collect: [:each | each == aNode ifTrue: [anotherNode] ifFalse: [each]])
+%
+
+category: 'accessing'
+method: RBMethodNode
+selector
+	^selector isNil
+		ifTrue: [selector := self buildSelector]
+		ifFalse: [selector]
+%
+
+category: 'accessing'
+method: RBMethodNode
+selector: aSelector 
+	| keywords numArgs |
+	keywords := aSelector keywords.
+	numArgs := aSelector numArgs.
+	numArgs == arguments size 
+		ifFalse: 
+			[self 
+				error: 'Attempting to assign selector with wrong number of arguments.'].
+	selectorParts := numArgs == 0 
+				ifTrue: [Array with: (RBIdentifierToken value: keywords first start: nil)]
+				ifFalse: 
+					[keywords first last = $: 
+						ifTrue: [keywords collect: [:each | RBKeywordToken value: each start: nil]]
+						ifFalse: [Array with: (RBBinarySelectorToken value: aSelector start: nil)]].
+	selector := aSelector asSymbol
+%
+
+category: 'private'
+method: RBMethodNode
+selectorParts
+	^selectorParts
+%
+
+category: 'private'
+method: RBMethodNode
+selectorParts: tokenCollection 
+	selectorParts := tokenCollection
+%
+
+category: 'initialize-release'
+method: RBMethodNode
+selectorParts: tokenCollection arguments: variableNodes 
+	selectorParts := tokenCollection.
+	self arguments: variableNodes
+%
+
+category: 'accessing'
+method: RBMethodNode
+source
+	^source
+%
+
+category: 'accessing'
+method: RBMethodNode
+source: anObject
+	source := anObject
+%
+
+category: 'accessing'
+method: RBMethodNode
+start
+	^1
+%
+
+category: 'accessing'
+method: RBMethodNode
+stop
+	^source size
+%
+
+category: 'testing'
+method: RBMethodNode
+uses: aNode 
+	^body == aNode and: [aNode lastIsReturn]
+%
+
+! Class implementation for 'RBPatternMethodNode'
+
+!		Class methods for 'RBPatternMethodNode'
+
+category: 'instance creation'
+classmethod: RBPatternMethodNode
+selectorParts: tokenCollection arguments: variableNodes 
+	^(tokenCollection anySatisfy: [:each | each isPatternVariable]) 
+		ifTrue: [super selectorParts: tokenCollection arguments: variableNodes]
+		ifFalse: 
+			[RBMethodNode selectorParts: tokenCollection arguments: variableNodes]
+%
+
+!		Instance methods for 'RBPatternMethodNode'
+
+category: 'matching'
+method: RBPatternMethodNode
+copyInContext: aDictionary 
+	| selectors |
+	selectors := self isSelectorList 
+		ifTrue: [ (aDictionary at: selectorParts first value) keywords ]
+		ifFalse: [ self selectorParts collect: [ :each | aDictionary at: each value ] ].
+	^ RBMethodNode new
+		selectorParts: (selectors collect: [ :each | 
+			(each last = $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
+				value: each start: nil ]);
+		arguments: (self copyList: self arguments inContext: aDictionary);
+		pragmas: (self pragmas isEmpty
+			ifTrue: [ aDictionary at: '-pragmas-' ifAbsent: [ #() ] ]
+			ifFalse: [ self copyList: self pragmas inContext: aDictionary ]);
+		body: (self body copyInContext: aDictionary);
+		source: (aDictionary at: '-source-');
+		yourself
+%
+
+category: 'testing-matching'
+method: RBPatternMethodNode
+isPatternNode
+	^true
+%
+
+category: 'testing'
+method: RBPatternMethodNode
+isSelectorList
+	^isList
+%
+
+category: 'matching'
+method: RBPatternMethodNode
+match: aNode inContext: aDictionary 
+	aNode class = self matchingClass 
+		ifFalse: [ ^ false ].
+	aDictionary at: '-source-' put: aNode source.
+	self isSelectorList ifTrue: [
+		^ (aDictionary at: selectorParts first value ifAbsentPut: [ aNode selector ]) = aNode selector
+			and: [ (aDictionary at: arguments first ifAbsentPut: [ aNode arguments ]) = aNode arguments
+			and: [ (self matchPragmas: self pragmas against: aNode pragmas inContext: aDictionary)
+			and: [ body match: aNode body inContext: aDictionary ] ] ] ].
+	^(self matchArgumentsAgainst: aNode inContext: aDictionary) 
+		and: [ (self matchPragmas: self pragmas against: aNode pragmas inContext: aDictionary)
+		and: [ body match: aNode body inContext: aDictionary ] ]
+%
+
+category: 'matching'
+method: RBPatternMethodNode
+matchArgumentsAgainst: aNode inContext: aDictionary 
+	self arguments size = aNode arguments size
+		ifFalse: [ ^ false ].
+	(self matchSelectorAgainst: aNode inContext: aDictionary) 
+		ifFalse: [ ^ false ].
+	self arguments with: aNode arguments do: [ :first :second |
+		(first match: second inContext: aDictionary) 
+			ifFalse: [ ^ false ] ].
+	^ true
+%
+
+category: 'private'
+method: RBPatternMethodNode
+matchingClass
+	^RBMethodNode
+%
+
+category: 'matching'
+method: RBPatternMethodNode
+matchSelectorAgainst: aNode inContext: aDictionary 
+	self selectorParts with: aNode selectorParts do: [ :first :second |
+		| keyword |
+		keyword := aDictionary
+			at: first value
+			ifAbsentPut: [ 
+				first isPatternVariable 
+					ifTrue: [ second value ]
+					ifFalse: [ first value ] ].
+		keyword = second value 
+			ifFalse: [ ^ false ] ].
+	^ true
+%
+
+category: 'initialize-release'
+method: RBPatternMethodNode
+selectorParts: tokenCollection arguments: variableNodes 
+	super selectorParts: tokenCollection arguments: variableNodes.
+	isList := (tokenCollection first value at: 2) == self listCharacter
+%
+
+! Class implementation for 'RBPragmaNode'
+
+!		Class methods for 'RBPragmaNode'
+
+category: 'instance creation'
+classmethod: RBPragmaNode
+selectorParts: keywordTokens arguments: valueNodes 
+	^ self new selectorParts: keywordTokens arguments: valueNodes
+%
+
+!		Instance methods for 'RBPragmaNode'
+
+category: 'comparing'
+method: RBPragmaNode
+= anObject
+  self == anObject
+    ifTrue: [ ^ true ].
+  self class = anObject class
+    ifFalse: [ ^ false ].
+  self selector = anObject selector
+    ifFalse: [ ^ false ].
+  1 to: self arguments size do: [ :i | 
+    (self arguments at: i) = (anObject arguments at: i)
+      ifFalse: [ ^ false ] ].
+  self isProtected == anObject isProtected
+    ifFalse: [ ^ false ].
+  ^ true
+%
+
+category: 'visitor'
+method: RBPragmaNode
+acceptVisitor: aProgramNodeVisitor 
+	^ aProgramNodeVisitor acceptPragmaNode: self
+%
+
+category: 'accessing'
+method: RBPragmaNode
+arguments
+	^ arguments ifNil: [ #() ]
+%
+
+category: 'accessing'
+method: RBPragmaNode
+arguments: aLiteralCollection 
+	arguments := aLiteralCollection.
+	arguments do: [ :each | each parent: self ]
+%
+
+category: 'private'
+method: RBPragmaNode
+buildSelector
+	| selectorStream |
+	selectorStream := WriteStreamPortable on: String new.
+	selectorParts do: [ :each | selectorStream nextPutAll: each value ].
+	^ selectorStream contents asSymbol
+%
+
+category: 'accessing'
+method: RBPragmaNode
+children
+	^ self arguments
+%
+
+category: 'matching'
+method: RBPragmaNode
+copyInContext: aDictionary 
+	^ self class new
+		selectorParts: (self selectorParts collect: [ :each | each copy removePositions ]);
+		arguments: (self arguments collect: [ :each | each copyInContext: aDictionary ]);
+		yourself
+%
+
+category: 'comparing'
+method: RBPragmaNode
+equalTo: anObject withMapping: aDictionary 
+	self class = anObject class ifFalse: [ ^ false ].
+	self selector = anObject selector ifFalse: [ ^ false ].
+	self arguments with: anObject arguments do: [ :first :second |
+		(first equalTo: second withMapping: aDictionary) 
+			ifFalse: [ ^ false ] ].
+	^ true
+%
+
+category: 'comparing'
+method: RBPragmaNode
+hash
+	^ self selector hash bitXor: (self hashForCollection: self arguments)
+%
+
+category: 'testing'
+method: RBPragmaNode
+isBinary
+	^ (self isUnary or: [self isKeyword]) not
+%
+
+category: 'testing'
+method: RBPragmaNode
+isKeyword
+	^ selectorParts first value last = $:
+%
+
+category: 'testing'
+method: RBPragmaNode
+isPragma
+	^ true
+%
+
+category: 'testing'
+method: RBPragmaNode
+isPrimitive
+	^ #(primitive: primitive:error: primitive:error:module: primitive:module: primitive:module:error:) includes: self selector
+%
+
+category: 'testing'
+method: RBPragmaNode
+isProtected
+  isProtected ifNil: [ ^ false ].
+  ^ isProtected
+%
+
+category: 'testing'
+method: RBPragmaNode
+isProtected: aBool
+  isProtected := aBool
+%
+
+category: 'testing'
+method: RBPragmaNode
+isProtectedPrimitive
+  ^ self isProtected and: [ self isPrimitive ]
+%
+
+category: 'testing'
+method: RBPragmaNode
+isUnary
+	^ arguments isEmpty
+%
+
+category: 'accessing-token'
+method: RBPragmaNode
+left
+	^ left
+%
+
+category: 'accessing-token'
+method: RBPragmaNode
+left: anInteger
+	left := anInteger
+%
+
+category: 'matching'
+method: RBPragmaNode
+match: aNode inContext: aDictionary 
+	aNode class = self class
+		ifFalse: [ ^ false ].
+	self selector = aNode selector
+		ifFalse: [ ^ false ].
+	self arguments with: aNode arguments do: [ :first :second |
+		(first match: second inContext: aDictionary)
+			ifFalse: [ ^ false ] ].
+	^ true
+%
+
+category: 'accessing'
+method: RBPragmaNode
+numArgs
+	^ self selector numArgs
+%
+
+category: 'copying'
+method: RBPragmaNode
+postCopy
+	super postCopy.
+	self arguments: (self arguments collect: [ :each | each copy ])
+%
+
+category: 'replacing'
+method: RBPragmaNode
+replaceNode: aNode withNode: anotherNode 
+	self arguments: (arguments collect: [ :each | 
+		each == aNode 
+			ifTrue: [ anotherNode ]
+			ifFalse: [ each ] ])
+%
+
+category: 'accessing-token'
+method: RBPragmaNode
+right
+	^ right
+%
+
+category: 'accessing-token'
+method: RBPragmaNode
+right: anInteger
+	right := anInteger
+%
+
+category: 'accessing'
+method: RBPragmaNode
+selector
+	^ selector ifNil: [ selector := self buildSelector ]
+%
+
+category: 'accessing'
+method: RBPragmaNode
+selector: aSelector 
+	| keywords numArgs |
+	keywords := aSelector keywords.
+	numArgs := aSelector numArgs.
+	numArgs == arguments size 
+		ifFalse: 
+			[self 
+				error: 'Attempting to assign selector with wrong number of arguments.'].
+	selectorParts := numArgs == 0 
+				ifTrue: [Array with: (RBIdentifierToken value: keywords first start: nil)]
+				ifFalse: 
+					[keywords first last = $: 
+						ifTrue: [keywords collect: [:each | RBKeywordToken value: each start: nil]]
+						ifFalse: [Array with: (RBBinarySelectorToken value: aSelector start: nil)]].
+	selector := aSelector asSymbol
+%
+
+category: 'private'
+method: RBPragmaNode
+selectorParts
+	^ selectorParts
+%
+
+category: 'private'
+method: RBPragmaNode
+selectorParts: tokenCollection 
+	selectorParts := tokenCollection
+%
+
+category: 'initialization'
+method: RBPragmaNode
+selectorParts: keywordTokens arguments: valueNodes 
+	self selectorParts: keywordTokens.
+	self arguments: valueNodes
+%
+
+category: 'accessing'
+method: RBPragmaNode
+sentMessages
+	^ super sentMessages
+		add: self selector;
+		yourself
+%
+
+category: 'accessing'
+method: RBPragmaNode
+start
+	^ left
+%
+
+category: 'accessing'
+method: RBPragmaNode
+stop
+	^ right
+%
+
+! Class implementation for 'RBPatternPragmaNode'
+
+!		Class methods for 'RBPatternPragmaNode'
+
+category: 'instance creation'
+classmethod: RBPatternPragmaNode
+selectorParts: keywordTokens arguments: valueNodes 
+	^ (keywordTokens anySatisfy: [ :each | each isPatternVariable ]) 
+		ifTrue: [ super selectorParts: keywordTokens arguments: valueNodes ]
+		ifFalse: [ RBPragmaNode selectorParts: keywordTokens arguments: valueNodes ]
+%
+
+!		Instance methods for 'RBPatternPragmaNode'
+
+category: 'matching'
+method: RBPatternPragmaNode
+copyInContext: aDictionary 
+	| selectors |
+	selectors := self isSelectorList 
+		ifTrue: [ (aDictionary at: selectorParts first value) keywords ]
+		ifFalse: [ self selectorParts collect: [ :each | aDictionary at: each value ] ].
+	^ RBPragmaNode new
+		selectorParts: (selectors collect: [ :each | 
+			(each last = $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
+				value: each start: nil ]);
+		arguments: (self copyList: self arguments inContext: aDictionary);
+		yourself
+%
+
+category: 'testing-matching'
+method: RBPatternPragmaNode
+isPatternNode
+	^ true
+%
+
+category: 'testing-matching'
+method: RBPatternPragmaNode
+isSelectorList
+	^ isList
+%
+
+category: 'matching'
+method: RBPatternPragmaNode
+match: aNode inContext: aDictionary
+	aNode class = self matchingClass
+		ifFalse: [ ^ false ].
+	self isSelectorList ifTrue: [
+		^ (aDictionary at: selectorParts first value ifAbsentPut: [ aNode selector ]) = aNode selector
+			and: [ (aDictionary at: arguments first ifAbsentPut: [ aNode arguments ]) = aNode arguments ] ].
+	^ self matchArgumentsAgainst: aNode inContext: aDictionary
+%
+
+category: 'matching'
+method: RBPatternPragmaNode
+matchArgumentsAgainst: aNode inContext: aDictionary 
+	self arguments size = aNode arguments size
+		ifFalse: [ ^ false ].
+	(self matchSelectorAgainst: aNode inContext: aDictionary) 
+		ifFalse: [ ^ false ].
+	self arguments with: aNode arguments do: [ :first :second |
+		(first match: second inContext: aDictionary) 
+			ifFalse: [ ^ false ] ].
+	^ true
+%
+
+category: 'private'
+method: RBPatternPragmaNode
+matchingClass
+	^ RBPragmaNode
+%
+
+category: 'matching'
+method: RBPatternPragmaNode
+matchSelectorAgainst: aNode inContext: aDictionary 
+	self selectorParts with: aNode selectorParts do: [ :first :second |
+		| keyword |
+		keyword := aDictionary
+			at: first value
+			ifAbsentPut: [ 
+				first isPatternVariable 
+					ifTrue: [ second value ]
+					ifFalse: [ first value ] ].
+		keyword = second value 
+			ifFalse: [ ^ false ] ].
+	^ true
+%
+
+category: 'initialization'
+method: RBPatternPragmaNode
+selectorParts: keywordTokens arguments: valueNodes 
+	super selectorParts: keywordTokens arguments: valueNodes.
+	isList := (keywordTokens first value at: 2) == self listCharacter
+%
+
+category: 'accessing'
+method: RBPatternPragmaNode
+sentMessages
+	^ super sentMessages
+		remove: self selector ifAbsent: [ ];
+		yourself
+%
+
+! Class implementation for 'RBReturnNode'
+
+!		Class methods for 'RBReturnNode'
+
+category: 'instance creation'
+classmethod: RBReturnNode
+return: returnInteger value: aValueNode 
+	^self new return: returnInteger value: aValueNode
+%
+
+category: 'instance creation'
+classmethod: RBReturnNode
+value: aNode
+	^self return: nil value: aNode
+%
+
+!		Instance methods for 'RBReturnNode'
+
+category: 'comparing'
+method: RBReturnNode
+= anObject 
+	self == anObject ifTrue: [^true].
+	self class = anObject class ifFalse: [^false].
+	^self value = anObject value
+%
+
+category: 'visitor'
+method: RBReturnNode
+acceptVisitor: aProgramNodeVisitor 
+	^aProgramNodeVisitor acceptReturnNode: self
+%
+
+category: 'accessing'
+method: RBReturnNode
+children
+	^Array with: value
+%
+
+category: 'testing'
+method: RBReturnNode
+containsReturn
+	^true
+%
+
+category: 'matching'
+method: RBReturnNode
+copyInContext: aDictionary 
+	^ self class new
+		value: (self value copyInContext: aDictionary);
+		yourself
+%
+
+category: 'comparing'
+method: RBReturnNode
+equalTo: anObject withMapping: aDictionary 
+	^self class = anObject class 
+		and: [self value equalTo: anObject value withMapping: aDictionary]
+%
+
+category: 'comparing'
+method: RBReturnNode
+hash
+	^self value hash
+%
+
+category: 'testing'
+method: RBReturnNode
+isReturn
+	^true
+%
+
+category: 'matching'
+method: RBReturnNode
+match: aNode inContext: aDictionary 
+	aNode class = self class ifFalse: [^false].
+	^value match: aNode value inContext: aDictionary
+%
+
+category: 'copying'
+method: RBReturnNode
+postCopy
+	super postCopy.
+	self value: self value copy
+%
+
+category: 'replacing'
+method: RBReturnNode
+replaceNode: aNode withNode: anotherNode 
+	value == aNode ifTrue: [self value: anotherNode]
+%
+
+category: 'accessing-token'
+method: RBReturnNode
+return
+	^ return
+%
+
+category: 'accessing-token'
+method: RBReturnNode
+return: anInteger
+	return := anInteger
+%
+
+category: 'initialize-release'
+method: RBReturnNode
+return: returnInteger value: aValueNode 
+	return := returnInteger.
+	self value: aValueNode
+%
+
+category: 'accessing'
+method: RBReturnNode
+start
+	^return
+%
+
+category: 'accessing'
+method: RBReturnNode
+stop
+	^value stop
+%
+
+category: 'accessing'
+method: RBReturnNode
+value
+	^value
+%
+
+category: 'accessing'
+method: RBReturnNode
+value: valueNode 
+	value := valueNode.
+	value parent: self
+%
+
+! Class implementation for 'RBSequenceNode'
+
+!		Class methods for 'RBSequenceNode'
+
+category: 'instance creation'
+classmethod: RBSequenceNode
+leftBar: leftInteger temporaries: variableNodes rightBar: rightInteger 
+	^(self new)
+		leftBar: leftInteger
+			temporaries: variableNodes
+			rightBar: rightInteger;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RBSequenceNode
+statements: statementNodes 
+	^self temporaries: #() statements: statementNodes
+%
+
+category: 'instance creation'
+classmethod: RBSequenceNode
+temporaries: variableNodes statements: statementNodes 
+	^(self new)
+		temporaries: variableNodes;
+		statements: statementNodes;
+		yourself
+%
+
+!		Instance methods for 'RBSequenceNode'
+
+category: 'comparing'
+method: RBSequenceNode
+= anObject 
+	"Can't send = to the temporaries and statements collection since they might change from arrays to OCs"
+
+	self == anObject ifTrue: [^true].
+	self class = anObject class ifFalse: [^false].
+	self temporaries size = anObject temporaries size ifFalse: [^false].
+	1 to: self temporaries size
+		do: 
+			[:i | 
+			(self temporaries at: i) = (anObject temporaries at: i) ifFalse: [^false]].
+	self statements size = anObject statements size ifFalse: [^false].
+	1 to: self statements size
+		do: [:i | (self statements at: i) = (anObject statements at: i) ifFalse: [^false]].
+	^true
+%
+
+category: 'visitor'
+method: RBSequenceNode
+acceptVisitor: aProgramNodeVisitor 
+	^aProgramNodeVisitor acceptSequenceNode: self
+%
+
+category: 'adding nodes'
+method: RBSequenceNode
+addNode: aNode
+	aNode parent: self.
+	(statements notEmpty and: [ statements last isReturn ])
+		ifTrue: [ self error: 'Cannot add statement after return node' ].
+	statements := statements asOrderedCollection
+		add: aNode;
+		yourself.
+	^ aNode
+%
+
+category: 'adding nodes'
+method: RBSequenceNode
+addNode: aNode before: anotherNode
+	| index |
+	index := self indexOfNode: anotherNode.
+	index = 0
+		ifTrue: [ ^ self addNode: aNode ].
+	statements := statements asOrderedCollection
+		add: aNode beforeIndex: index;
+		yourself.
+	aNode parent: self.
+	^ aNode
+%
+
+category: 'adding nodes'
+method: RBSequenceNode
+addNodeFirst: aNode
+	aNode parent: self.
+	statements := statements asOrderedCollection
+		addFirst: aNode;
+		yourself.
+	^ aNode
+%
+
+category: 'adding nodes'
+method: RBSequenceNode
+addNodes: aCollection
+	aCollection do: [ :each | each parent: self ].
+	(statements notEmpty and: [ statements last isReturn ])
+		ifTrue: [ self error: 'Cannot add statement after return node' ].
+	statements := statements asOrderedCollection
+		addAll: aCollection;
+		yourself.
+	^ aCollection
+%
+
+category: 'adding nodes'
+method: RBSequenceNode
+addNodes: aCollection before: anotherNode
+	aCollection do: [ :each | self addNode: each before: anotherNode ].
+	^ aCollection
+%
+
+category: 'adding nodes'
+method: RBSequenceNode
+addNodesFirst: aCollection
+	aCollection do: [ :each | each parent: self ].
+	statements := statements asOrderedCollection
+		addAllFirst: aCollection;
+		yourself.
+	^ aCollection
+%
+
+category: 'accessing'
+method: RBSequenceNode
+addReturn
+	| node |
+	statements isEmpty
+		ifTrue: [ ^ nil ].
+	statements last isReturn
+		ifTrue: [ ^ statements last ].
+	node := RBReturnNode value: statements last.
+	statements at: statements size put: node.
+	node parent: self.
+	^ node
+%
+
+category: 'adding nodes'
+method: RBSequenceNode
+addSelfReturn
+	| node |
+	self lastIsReturn
+		ifTrue: [ ^ self statements last ].
+	node := RBReturnNode value: (RBVariableNode named: 'self').
+	^ self addNode: node
+%
+
+category: 'adding nodes'
+method: RBSequenceNode
+addTemporariesNamed: aCollection
+	^ aCollection collect: [ :each | self addTemporaryNamed: each ]
+%
+
+category: 'adding nodes'
+method: RBSequenceNode
+addTemporaryNamed: aString 
+	| variableNode |
+	variableNode := RBVariableNode named: aString.
+	variableNode parent: self.
+	temporaries := temporaries copyWith: variableNode.
+	^ variableNode
+%
+
+category: 'accessing'
+method: RBSequenceNode
+allDefinedVariables
+	^(self temporaryNames asOrderedCollection)
+		addAll: super allDefinedVariables;
+		yourself
+%
+
+category: 'accessing'
+method: RBSequenceNode
+allTemporaryVariables
+	^(self temporaryNames asOrderedCollection)
+		addAll: super allTemporaryVariables;
+		yourself
+%
+
+category: 'querying'
+method: RBSequenceNode
+bestNodeFor: anInterval 
+	| node |
+	node := super bestNodeFor: anInterval.
+	node == self 
+		ifTrue: 
+			[(temporaries isEmpty and: [statements size == 1]) 
+				ifTrue: [^statements first]].
+	^node
+%
+
+category: 'accessing'
+method: RBSequenceNode
+children
+	^(OrderedCollection new)
+		addAll: self temporaries;
+		addAll: self statements;
+		yourself
+%
+
+category: 'matching'
+method: RBSequenceNode
+copyInContext: aDictionary 
+	^ self class new
+		temporaries: (self copyList: self temporaries inContext: aDictionary);
+		statements: (self copyList: self statements inContext: aDictionary);
+		yourself
+%
+
+category: 'testing'
+method: RBSequenceNode
+defines: aName 
+	^temporaries anySatisfy: [:each | each name = aName]
+%
+
+category: 'testing'
+method: RBSequenceNode
+directlyUses: aNode 
+	^false
+%
+
+category: 'comparing'
+method: RBSequenceNode
+equalTo: anObject withMapping: aDictionary 
+	self class = anObject class ifFalse: [^false].
+	self statements size = anObject statements size ifFalse: [^false].
+	1 to: self statements size
+		do: 
+			[:i | 
+			((self statements at: i) equalTo: (anObject statements at: i)
+				withMapping: aDictionary) ifFalse: [^false]].
+	aDictionary values asSet size = aDictionary size ifFalse: [^false].	"Not a one-to-one mapping"
+	self temporaries
+		do: [:each | aDictionary removeKey: each name ifAbsent: []].
+	^true
+%
+
+category: 'comparing'
+method: RBSequenceNode
+hash
+	^ (self hashForCollection: self temporaries) bitXor: (self hashForCollection: self statements)
+%
+
+category: 'private'
+method: RBSequenceNode
+indexOfNode: aNode 
+	"Try to find the node by first looking for ==, and then for ="
+
+	^(1 to: statements size) detect: [:each | (statements at: each) == aNode]
+		ifNone: [statements indexOf: aNode]
+%
+
+category: 'initialize-release'
+method: RBSequenceNode
+initialize
+	super initialize.
+	periods := statements := temporaries := #()
+%
+
+category: 'testing'
+method: RBSequenceNode
+isLast: aNode 
+	| last |
+	statements isEmpty ifTrue: [^false].
+	last := statements last.
+	^last == aNode or: 
+			[last isMessage and: 
+					[(#(#ifTrue:ifFalse: #ifFalse:ifTrue:) includes: last selector) 
+						and: [last arguments anySatisfy: [:each | each isLast: aNode]]]]
+%
+
+category: 'testing'
+method: RBSequenceNode
+isSequence
+	^true
+%
+
+category: 'testing'
+method: RBSequenceNode
+lastIsReturn
+	^statements notEmpty and: [statements last lastIsReturn]
+%
+
+category: 'accessing-token'
+method: RBSequenceNode
+leftBar
+	^ leftBar
+%
+
+category: 'accessing-token'
+method: RBSequenceNode
+leftBar: anInteger
+	leftBar := anInteger
+%
+
+category: 'initialize-release'
+method: RBSequenceNode
+leftBar: leftInteger temporaries: variableNodes rightBar: rightInteger 
+	leftBar := leftInteger.
+	self temporaries: variableNodes.
+	rightBar := rightInteger
+%
+
+category: 'matching'
+method: RBSequenceNode
+match: aNode inContext: aDictionary 
+	self class = aNode class ifFalse: [^false].
+	^(self 
+		matchList: temporaries
+		against: aNode temporaries
+		inContext: aDictionary) and: 
+				[self 
+					matchList: statements
+					against: aNode statements
+					inContext: aDictionary]
+%
+
+category: 'accessing'
+method: RBSequenceNode
+methodComments
+	| methodComments |
+	methodComments := OrderedCollection withAll: self comments.
+	temporaries do: [:each | methodComments addAll: each comments].
+	(parent notNil and: [parent isBlock]) 
+		ifTrue: [parent arguments do: [:each | methodComments addAll: each comments]].
+	^methodComments asSortedCollection: [:a :b | a first < b first]
+%
+
+category: 'accessing-token'
+method: RBSequenceNode
+periods
+	^ periods
+%
+
+category: 'accessing-token'
+method: RBSequenceNode
+periods: anArray
+	periods := anArray
+%
+
+category: 'copying'
+method: RBSequenceNode
+postCopy
+	super postCopy.
+	self temporaries: (self temporaries collect: [ :each | each copy ]).
+	self statements: (self statements collect: [ :each | each copy ])
+%
+
+category: 'testing'
+method: RBSequenceNode
+references: aVariableName 
+	^statements anySatisfy: [:each | each references: aVariableName]
+%
+
+category: 'replacing'
+method: RBSequenceNode
+removeDeadCode
+	(self isUsed ifTrue: [statements size - 1] ifFalse: [statements size]) 
+		to: 1
+		by: -1
+		do: 
+			[:i | 
+			(statements at: i) isImmediateNode 
+				ifTrue: 
+					[self clearReplacements.
+					statements removeAtIndex: i]].
+	super removeDeadCode
+%
+
+category: 'replacing'
+method: RBSequenceNode
+removeNode: aNode
+	self replaceNode: aNode withNodes: #()
+%
+
+category: 'accessing'
+method: RBSequenceNode
+removeTemporaryNamed: aName 
+	temporaries := temporaries reject: [:each | each name = aName]
+%
+
+category: 'replacing'
+method: RBSequenceNode
+replaceNode: aNode withNode: anotherNode 
+	self statements: (statements 
+				collect: [:each | each == aNode ifTrue: [anotherNode] ifFalse: [each]]).
+	self temporaries: (temporaries 
+				collect: [:each | each == aNode ifTrue: [anotherNode] ifFalse: [each]])
+%
+
+category: 'replacing'
+method: RBSequenceNode
+replaceNode: aNode withNodes: aCollection 
+	| index newStatements |
+	self clearReplacements.
+	index := self indexOfNode: aNode.
+	newStatements := OrderedCollection new: statements size + aCollection size.
+	1 to: index - 1 do: [:i | newStatements add: (statements at: i)].
+	newStatements addAll: aCollection.
+	index + 1 to: statements size
+		do: [:i | newStatements add: (statements at: i)].
+	aCollection do: [:each | each parent: self].
+	statements := newStatements
+%
+
+category: 'accessing-token'
+method: RBSequenceNode
+rightBar
+	^ rightBar
+%
+
+category: 'accessing-token'
+method: RBSequenceNode
+rightBar: anInteger
+	rightBar := anInteger
+%
+
+category: 'accessing'
+method: RBSequenceNode
+start
+	^leftBar isNil 
+		ifTrue: [statements isEmpty ifTrue: [1] ifFalse: [statements first start]]
+		ifFalse: [leftBar]
+%
+
+category: 'accessing'
+method: RBSequenceNode
+statements
+	^statements
+%
+
+category: 'accessing'
+method: RBSequenceNode
+statements: stmtCollection 
+	statements := stmtCollection.
+	statements do: [:each | each parent: self]
+%
+
+category: 'accessing'
+method: RBSequenceNode
+stop
+	^(periods isEmpty ifTrue: [0] ifFalse: [periods last]) 
+		max: (statements isEmpty ifTrue: [0] ifFalse: [statements last stop])
+%
+
+category: 'accessing'
+method: RBSequenceNode
+temporaries
+	^temporaries
+%
+
+category: 'accessing'
+method: RBSequenceNode
+temporaries: tempCollection 
+	temporaries := tempCollection.
+	temporaries do: [:each | each parent: self]
+%
+
+category: 'accessing'
+method: RBSequenceNode
+temporaryNames
+	^temporaries collect: [:each | each name]
+%
+
+category: 'accessing'
+method: RBSequenceNode
+temporaryVariables
+	^(super temporaryVariables asOrderedCollection)
+		addAll: self temporaryNames;
+		yourself
+%
+
+category: 'testing'
+method: RBSequenceNode
+uses: aNode 
+	statements isEmpty ifTrue: [^false].
+	aNode == statements last ifFalse: [^false].
+	^self isUsed
+%
+
+category: 'querying'
+method: RBSequenceNode
+whichNodeIsContainedBy: anInterval 
+	| node |
+	node := super whichNodeIsContainedBy: anInterval.
+	node == self 
+		ifTrue: 
+			[(temporaries isEmpty and: [statements size == 1]) 
+				ifTrue: [^statements first]].
+	^node
+%
+
+! Class implementation for 'RBValueNode'
+
+!		Instance methods for 'RBValueNode'
+
+category: 'accessing'
+method: RBValueNode
+addParenthesis: anInterval 
+	parentheses isNil ifTrue: [parentheses := OrderedCollection new: 1].
+	parentheses add: anInterval
+%
+
+category: 'testing'
+method: RBValueNode
+containedBy: anInterval 
+	^anInterval first <= self startWithoutParentheses 
+		and: [anInterval last >= self stopWithoutParentheses]
+%
+
+category: 'testing'
+method: RBValueNode
+hasParentheses
+	^self parentheses notEmpty
+%
+
+category: 'testing'
+method: RBValueNode
+isValue
+	^true
+%
+
+category: 'testing'
+method: RBValueNode
+needsParenthesis
+	^self subclassResponsibility
+%
+
+category: 'accessing'
+method: RBValueNode
+parentheses
+	^parentheses isNil ifTrue: [#()] ifFalse: [parentheses]
+%
+
+category: 'accessing'
+method: RBValueNode
+start
+	^parentheses isNil 
+		ifTrue: [self startWithoutParentheses]
+		ifFalse: [parentheses last first]
+%
+
+category: 'accessing'
+method: RBValueNode
+startWithoutParentheses
+	^self subclassResponsibility
+%
+
+category: 'accessing'
+method: RBValueNode
+stop
+	^parentheses isNil
+		ifTrue: [self stopWithoutParentheses]
+		ifFalse: [parentheses last last]
+%
+
+category: 'accessing'
+method: RBValueNode
+stopWithoutParentheses
+	^self subclassResponsibility
+%
+
+! Class implementation for 'RBArrayNode'
+
+!		Class methods for 'RBArrayNode'
+
+category: 'instance creation'
+classmethod: RBArrayNode
+statements: statements
+	^ self new statements: statements
+%
+
+!		Instance methods for 'RBArrayNode'
+
+category: 'comparing'
+method: RBArrayNode
+= anObject 
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	self statements size = anObject statements size ifFalse: [ ^ false ].
+	1 to: self statements size do: [ :i | 
+		(self statements at: i) = (anObject statements at: i) 
+			ifFalse: [ ^ false ] ].
+	^ true
+%
+
+category: 'visitor'
+method: RBArrayNode
+acceptVisitor: aProgramNodeVisitor
+	^ aProgramNodeVisitor acceptArrayNode: self
+%
+
+category: 'adding nodes'
+method: RBArrayNode
+addNode: aNode
+	statements := statements asOrderedCollection
+		add: aNode;
+		yourself.
+	aNode parent: self.
+	^ aNode
+%
+
+category: 'adding nodes'
+method: RBArrayNode
+addNode: aNode before: anotherNode 
+	| index |
+	aNode isReturn 
+		ifTrue: [ self error: 'Cannot add return node' ].
+	index := self indexOfNode: anotherNode.
+	index = 0 ifTrue: [ ^ self addNode: aNode ].
+	statements := statements asOrderedCollection
+		add: aNode beforeIndex: index;
+		yourself.
+	aNode parent: self.
+	^ aNode
+%
+
+category: 'adding nodes'
+method: RBArrayNode
+addNodeFirst: aNode
+	statements := statements asOrderedCollection
+		addFirst: aNode;
+		yourself.
+	aNode parent: self.
+	^ aNode
+%
+
+category: 'adding nodes'
+method: RBArrayNode
+addNodes: aCollection
+	statements := statements asOrderedCollection
+		addAll: aCollection;
+		yourself.
+	aCollection do: [ :each | each parent: self ].
+	^ aCollection
+%
+
+category: 'adding nodes'
+method: RBArrayNode
+addNodes: aCollection before: anotherNode 
+	aCollection do: [ :each | self addNode: each before: anotherNode ].
+	^ aCollection
+%
+
+category: 'adding nodes'
+method: RBArrayNode
+addNodesFirst: aCollection
+	statements := statements asOrderedCollection
+		addAllFirst: aCollection;
+		yourself.
+	aCollection do: [ :each | each parent: self ].
+	^ aCollection
+%
+
+category: 'accessing'
+method: RBArrayNode
+children
+	^ self statements
+%
+
+category: 'matching'
+method: RBArrayNode
+copyInContext: aDictionary 
+	^ self class statements: (self copyList: self statements inContext: aDictionary)
+%
+
+category: 'comparing'
+method: RBArrayNode
+equalTo: anObject withMapping: aDictionary 
+	self class = anObject class 
+		ifFalse: [ ^ false ].
+	self statements size = anObject statements size 
+		ifFalse: [ ^ false ].
+	self statements with: anObject statements do: [ :first :second |
+		(first equalTo: second withMapping: aDictionary)
+			ifFalse: [ ^ false ] ].
+	aDictionary values asSet size = aDictionary size 
+		ifFalse: [ ^ false ].
+	^ true
+%
+
+category: 'comparing'
+method: RBArrayNode
+hash
+	^ self hashForCollection: self statements
+%
+
+category: 'private'
+method: RBArrayNode
+indexOfNode: aNode 
+	"Try to find the node by first looking for ==, and then for ="
+
+	^ (1 to: statements size) 
+		detect: [ :each | (statements at: each) == aNode ]
+		ifNone: [ statements indexOf: aNode ]
+%
+
+category: 'initialize-release'
+method: RBArrayNode
+initialize
+	super initialize.
+	statements := periods := #()
+%
+
+category: 'testing'
+method: RBArrayNode
+isArray
+	^ true
+%
+
+category: 'testing'
+method: RBArrayNode
+lastIsReturn
+	statements isEmpty ifTrue:[ ^false ].
+	^statements last lastIsReturn
+%
+
+category: 'accessing-token'
+method: RBArrayNode
+left
+	^ left
+%
+
+category: 'accessing-token'
+method: RBArrayNode
+left: anInteger
+	left := anInteger
+%
+
+category: 'matching'
+method: RBArrayNode
+match: aNode inContext: aDictionary 
+	aNode class = self class ifFalse: [ ^ false ].
+	^ self matchList: statements against: aNode statements inContext: aDictionary
+%
+
+category: 'testing'
+method: RBArrayNode
+needsParenthesis
+	^ false
+%
+
+category: 'accessing-token'
+method: RBArrayNode
+periods
+	^ periods
+%
+
+category: 'accessing-token'
+method: RBArrayNode
+periods: anArray
+	periods := anArray
+%
+
+category: 'copying'
+method: RBArrayNode
+postCopy
+	super postCopy.
+	self statements: (self statements collect: [ :each | each copy ])
+%
+
+category: 'accessing'
+method: RBArrayNode
+precedence
+	^0
+%
+
+category: 'testing'
+method: RBArrayNode
+references: aVariableName 
+	^ statements anySatisfy: [ :each | each references: aVariableName ]
+%
+
+category: 'replacing'
+method: RBArrayNode
+replaceNode: oldNode  withNode: newNode
+	self statements: (statements collect: [ :statement |
+		statement == oldNode 
+			ifTrue: [ newNode ]
+			ifFalse: [ statement ] ])
+%
+
+category: 'accessing-token'
+method: RBArrayNode
+right
+	^ right
+%
+
+category: 'accessing-token'
+method: RBArrayNode
+right: anInteger
+	right := anInteger
+%
+
+category: 'accessing'
+method: RBArrayNode
+startWithoutParentheses 
+	^ left
+%
+
+category: 'accessing'
+method: RBArrayNode
+statementComments
+	^self comments
+%
+
+category: 'accessing'
+method: RBArrayNode
+statements
+	^statements
+%
+
+category: 'accessing'
+method: RBArrayNode
+statements: statements0 
+	statements := statements0.
+	statements do: [:statement | statement parent: self]
+%
+
+category: 'accessing'
+method: RBArrayNode
+stopWithoutParentheses 
+	^ right
+%
+
+category: 'testing'
+method: RBArrayNode
+uses: aNode 
+	^ (statements anySatisfy: [ :each | each == aNode ]) or: [ self isUsed ]
+%
+
+! Class implementation for 'RBAssignmentNode'
+
+!		Class methods for 'RBAssignmentNode'
+
+category: 'instance creation'
+classmethod: RBAssignmentNode
+variable: aVariableNode value: aValueNode 
+	^self 
+		variable: aVariableNode
+		value: aValueNode
+		position: nil
+%
+
+category: 'instance creation'
+classmethod: RBAssignmentNode
+variable: aVariableNode value: aValueNode position: anInteger 
+	^(self new)
+		variable: aVariableNode
+			value: aValueNode
+			position: anInteger;
+		yourself
+%
+
+!		Instance methods for 'RBAssignmentNode'
+
+category: 'comparing'
+method: RBAssignmentNode
+= anObject 
+	self == anObject ifTrue: [^true].
+	self class = anObject class ifFalse: [^false].
+	^self variable = anObject variable and: [self value = anObject value]
+%
+
+category: 'visitor'
+method: RBAssignmentNode
+acceptVisitor: aProgramNodeVisitor 
+	^aProgramNodeVisitor acceptAssignmentNode: self
+%
+
+category: 'accessing-token'
+method: RBAssignmentNode
+assignment
+	^ assignment
+%
+
+category: 'accessing-token'
+method: RBAssignmentNode
+assignment: anInteger
+	assignment := anInteger
+%
+
+category: 'accessing'
+method: RBAssignmentNode
+assignmentOperator
+	^ (self assignmentPosition notNil and: [ self source notNil and: [ (self source at: self assignmentPosition ifAbsent: [ nil ]) = $_ ] ])
+		ifTrue: [ '_' ]
+		ifFalse: [ ':=' ]
+%
+
+category: 'accessing'
+method: RBAssignmentNode
+assignmentPosition
+	^ assignment
+%
+
+category: 'testing'
+method: RBAssignmentNode
+assigns: aVariableName 
+	^variable name = aVariableName or: [value assigns: aVariableName]
+%
+
+category: 'querying'
+method: RBAssignmentNode
+bestNodeFor: anInterval 
+	(self intersectsInterval: anInterval) ifFalse: [^nil].
+	(self containedBy: anInterval) ifTrue: [^self].
+	assignment isNil ifTrue: [^super bestNodeFor: anInterval].
+	((anInterval first between: assignment and: assignment + 1) 
+		or: [assignment between: anInterval first and: anInterval last]) 
+			ifTrue: [^self].
+	self children do: 
+			[:each | 
+			| node |
+			node := each bestNodeFor: anInterval.
+			node notNil ifTrue: [^node]]
+%
+
+category: 'accessing'
+method: RBAssignmentNode
+children
+	^Array with: value with: variable
+%
+
+category: 'matching'
+method: RBAssignmentNode
+copyInContext: aDictionary 
+	^ self class new
+		variable: (self variable copyInContext: aDictionary);
+		value: (self value copyInContext: aDictionary);
+		yourself
+%
+
+category: 'testing'
+method: RBAssignmentNode
+directlyUses: aNode 
+	^aNode = value ifTrue: [true] ifFalse: [self isDirectlyUsed]
+%
+
+category: 'comparing'
+method: RBAssignmentNode
+equalTo: anObject withMapping: aDictionary 
+	^self class = anObject class and: 
+			[(self variable equalTo: anObject variable withMapping: aDictionary) 
+				and: [self value equalTo: anObject value withMapping: aDictionary]]
+%
+
+category: 'comparing'
+method: RBAssignmentNode
+hash
+	^self variable hash bitXor: self value hash
+%
+
+category: 'testing'
+method: RBAssignmentNode
+isAssignment
+	^true
+%
+
+category: 'matching'
+method: RBAssignmentNode
+match: aNode inContext: aDictionary 
+	aNode class = self class ifFalse: [^false].
+	^(variable match: aNode variable inContext: aDictionary)
+		and: [value match: aNode value inContext: aDictionary]
+%
+
+category: 'testing'
+method: RBAssignmentNode
+needsParenthesis
+	^parent isNil 
+		ifTrue: [false]
+		ifFalse: [self precedence > parent precedence]
+%
+
+category: 'copying'
+method: RBAssignmentNode
+postCopy
+	super postCopy.
+	self variable: self variable copy.
+	self value: self value copy
+%
+
+category: 'accessing'
+method: RBAssignmentNode
+precedence
+	^5
+%
+
+category: 'replacing'
+method: RBAssignmentNode
+replaceNode: aNode withNode: anotherNode 
+	value == aNode ifTrue: [self value: anotherNode].
+	variable == aNode ifTrue: [self variable: anotherNode]
+%
+
+category: 'replacing'
+method: RBAssignmentNode
+replaceSourceWith: aNode 
+	"Check if we need to convert the assignment. Also check if we are being replaced with a setter message send. If so, create the replacements to edit the original source."
+
+	(aNode isAssignment and: [ aNode assignmentOperator ~= self assignmentOperator ]) ifTrue: [
+		self addReplacement: (RBStringReplacement 
+			replaceFrom: self assignmentPosition
+			to: self assignmentPosition + self assignmentOperator size - 1
+			with: aNode assignmentOperator).
+		(aNode variable = variable and: [ aNode value = value ])
+			ifTrue: [ ^ self ] ].
+	aNode isMessage ifFalse: [^super replaceSourceWith: aNode].
+	aNode receiver isVariable ifFalse: [^super replaceSourceWith: aNode].
+	aNode numArgs = 1 ifFalse: [^super replaceSourceWith: aNode].
+	(self mappingFor: self value) = aNode arguments first 
+		ifFalse: [^super replaceSourceWith: aNode].
+	(self value hasParentheses not 
+		and: [aNode arguments first precedence >= aNode precedence]) 
+			ifTrue: 
+				[self
+					addReplacement: (RBStringReplacement 
+								replaceFrom: self value start
+								to: self value start - 1
+								with: '(');
+					addReplacement: (RBStringReplacement 
+								replaceFrom: self value stop + 1
+								to: self value stop
+								with: ')')].
+	self addReplacement: (RBStringReplacement 
+				replaceFrom: self variable start
+				to: self assignmentPosition + 1
+				with: aNode receiver name , ' ' , aNode selector)
+%
+
+category: 'accessing'
+method: RBAssignmentNode
+startWithoutParentheses
+	^variable start
+%
+
+category: 'accessing'
+method: RBAssignmentNode
+stopWithoutParentheses
+	^value stop
+%
+
+category: 'testing'
+method: RBAssignmentNode
+uses: aNode 
+	^aNode = value ifTrue: [true] ifFalse: [self isUsed]
+%
+
+category: 'accessing'
+method: RBAssignmentNode
+value
+	^value
+%
+
+category: 'accessing'
+method: RBAssignmentNode
+value: aValueNode 
+	value := aValueNode.
+	value parent: self
+%
+
+category: 'accessing'
+method: RBAssignmentNode
+variable
+	^variable
+%
+
+category: 'accessing'
+method: RBAssignmentNode
+variable: varNode 
+	variable := varNode.
+	variable parent: self
+%
+
+category: 'initialize-release'
+method: RBAssignmentNode
+variable: aVariableNode value: aValueNode position: anInteger 
+	self variable: aVariableNode.
+	self value: aValueNode.
+	assignment := anInteger
+%
+
+! Class implementation for 'RBBlockNode'
+
+!		Class methods for 'RBBlockNode'
+
+category: 'instance creation'
+classmethod: RBBlockNode
+arguments: argNodes body: sequenceNode 
+	^(self new)
+		arguments: argNodes;
+		body: sequenceNode;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RBBlockNode
+body: sequenceNode 
+	^self arguments: #() body: sequenceNode
+%
+
+!		Instance methods for 'RBBlockNode'
+
+category: 'comparing'
+method: RBBlockNode
+= anObject 
+	self == anObject ifTrue: [^true].
+	self class = anObject class ifFalse: [^false].
+	self body = anObject body ifFalse: [^false].
+	self arguments size = anObject arguments size ifFalse: [^false].
+	1 to: self arguments size
+		do: [:i | (self arguments at: i) = (anObject arguments at: i) ifFalse: [^false]].
+	^true
+%
+
+category: 'visitor'
+method: RBBlockNode
+acceptVisitor: aProgramNodeVisitor 
+	^aProgramNodeVisitor acceptBlockNode: self
+%
+
+category: 'accessing'
+method: RBBlockNode
+allArgumentVariables
+	^(self argumentNames asOrderedCollection)
+		addAll: super allArgumentVariables;
+		yourself
+%
+
+category: 'accessing'
+method: RBBlockNode
+allDefinedVariables
+	^(self argumentNames asOrderedCollection)
+		addAll: super allDefinedVariables;
+		yourself
+%
+
+category: 'accessing'
+method: RBBlockNode
+argumentNames
+	^self arguments collect: [:each | each name]
+%
+
+category: 'accessing'
+method: RBBlockNode
+arguments
+	^arguments
+%
+
+category: 'accessing'
+method: RBBlockNode
+arguments: argCollection 
+	arguments := argCollection.
+	arguments do: [:each | each parent: self]
+%
+
+category: 'accessing-token'
+method: RBBlockNode
+bar
+	^ bar
+%
+
+category: 'accessing-token'
+method: RBBlockNode
+bar: anInteger
+	bar := anInteger
+%
+
+category: 'accessing'
+method: RBBlockNode
+blockVariables
+	| vars |
+	vars := super blockVariables asOrderedCollection.
+	vars addAll: self argumentNames.
+	^vars
+%
+
+category: 'accessing'
+method: RBBlockNode
+body
+	^body
+%
+
+category: 'accessing'
+method: RBBlockNode
+body: stmtsNode 
+	body := stmtsNode.
+	body parent: self
+%
+
+category: 'accessing'
+method: RBBlockNode
+children
+	^self arguments copyWith: self body
+%
+
+category: 'accessing-token'
+method: RBBlockNode
+colons
+	^ colons
+%
+
+category: 'accessing-token'
+method: RBBlockNode
+colons: anArray 
+	colons := anArray
+%
+
+category: 'matching'
+method: RBBlockNode
+copyInContext: aDictionary 
+	^ self class new
+		arguments: (self copyList: self arguments inContext: aDictionary);
+		body: (self body copyInContext: aDictionary);
+		yourself
+%
+
+category: 'testing'
+method: RBBlockNode
+defines: aName 
+	^arguments anySatisfy: [:each | each name = aName]
+%
+
+category: 'testing'
+method: RBBlockNode
+directlyUses: aNode 
+	^false
+%
+
+category: 'comparing'
+method: RBBlockNode
+equalTo: anObject withMapping: aDictionary 
+	self class = anObject class ifFalse: [^false].
+	self arguments size = anObject arguments size ifFalse: [^false].
+	1 to: self arguments size
+		do: 
+			[:i | 
+			((self arguments at: i) equalTo: (anObject arguments at: i)
+				withMapping: aDictionary) ifFalse: [^false]].
+	(self body equalTo: anObject body withMapping: aDictionary)
+		ifFalse: [^false].
+	self arguments do: [:each | aDictionary removeKey: each name].
+	^true
+%
+
+category: 'comparing'
+method: RBBlockNode
+hash
+	^ (self hashForCollection: self arguments) bitXor: self body hash
+%
+
+category: 'testing'
+method: RBBlockNode
+isBlock
+	^true
+%
+
+category: 'testing'
+method: RBBlockNode
+isImmediateNode
+	^true
+%
+
+category: 'testing'
+method: RBBlockNode
+isLast: aNode 
+	^body isLast: aNode
+%
+
+category: 'accessing-token'
+method: RBBlockNode
+left
+	^ left
+%
+
+category: 'accessing-token'
+method: RBBlockNode
+left: anInteger
+	left := anInteger
+%
+
+category: 'matching'
+method: RBBlockNode
+match: aNode inContext: aDictionary 
+	aNode class = self class ifFalse: [^false].
+	^(self 
+		matchList: arguments
+		against: aNode arguments
+		inContext: aDictionary) 
+			and: [body match: aNode body inContext: aDictionary]
+%
+
+category: 'testing'
+method: RBBlockNode
+needsParenthesis
+	^false
+%
+
+category: 'copying'
+method: RBBlockNode
+postCopy
+	super postCopy.
+	self arguments: (self arguments collect: [ :each | each copy ]).
+	self body: self body copy
+%
+
+category: 'accessing'
+method: RBBlockNode
+precedence
+	^0
+%
+
+category: 'testing'
+method: RBBlockNode
+references: aVariableName 
+	^body references: aVariableName
+%
+
+category: 'replacing'
+method: RBBlockNode
+replaceNode: aNode withNode: anotherNode 
+	body == aNode ifTrue: [self body: anotherNode].
+	self arguments: (arguments 
+				collect: [:each | each == aNode ifTrue: [anotherNode] ifFalse: [each]])
+%
+
+category: 'accessing-token'
+method: RBBlockNode
+right
+	^ right
+%
+
+category: 'accessing-token'
+method: RBBlockNode
+right: anInteger
+	right := anInteger
+%
+
+category: 'accessing'
+method: RBBlockNode
+startWithoutParentheses
+	^left
+%
+
+category: 'accessing'
+method: RBBlockNode
+statementComments
+	^self comments
+%
+
+category: 'accessing'
+method: RBBlockNode
+stopWithoutParentheses
+	^right
+%
+
+category: 'testing'
+method: RBBlockNode
+uses: aNode 
+	aNode = body ifFalse: [^false].
+	^parent isMessage 
+		ifTrue: 
+			[(#(#ifTrue:ifFalse: #ifTrue: #ifFalse: #ifFalse:ifTrue:) 
+				includes: parent selector) not 
+				or: [parent isUsed]]
+		ifFalse: [self isUsed]
+%
+
+! Class implementation for 'RBPatternBlockNode'
+
+!		Instance methods for 'RBPatternBlockNode'
+
+category: 'visitor'
+method: RBPatternBlockNode
+acceptVisitor: aProgramNodeVisitor 
+	^aProgramNodeVisitor acceptPatternBlockNode: self
+%
+
+category: 'matching'
+method: RBPatternBlockNode
+addArgumentWithNameBasedOn: aString to: aRBBlockNode 
+	| name index vars |
+	name := aString.
+	vars := aRBBlockNode allDefinedVariables.
+	index := 0.
+	[vars includes: name] whileTrue: 
+			[index := index + 1.
+			name := name , index printString].
+	aRBBlockNode 
+		arguments: (aRBBlockNode arguments copyWith: (RBVariableNode named: name))
+%
+
+category: 'matching'
+method: RBPatternBlockNode
+constructLookupNodeFor: aString in: aRBBlockNode 
+	| argumentNode |
+	argumentNode := RBLiteralNode literalToken: (RBLiteralToken 
+						value: aString
+						start: nil
+						stop: nil).
+	^RBMessageNode 
+		receiver: (RBVariableNode named: 'self')
+		selector: #lookupMatchFor:in:
+		arguments: (Array with: argumentNode with: aRBBlockNode arguments last)
+%
+
+category: 'matching'
+method: RBPatternBlockNode
+copyInContext: aDictionary 
+	^ self replacingBlock value: aDictionary
+%
+
+category: 'matching'
+method: RBPatternBlockNode
+createBlockFor: aRBBlockNode
+  | source |
+  self replacePatternNodesIn: aRBBlockNode.
+  source := aRBBlockNode formattedCode.
+  ^ (source
+    _compileInContext: self
+    symbolList: GsSession currentSession symbolList
+    oldLitVars: nil
+    environmentId: 0) _executeInContext: self
+%
+
+category: 'matching'
+method: RBPatternBlockNode
+createMatchingBlock
+	| newBlock |
+	self arguments size > 2 
+		ifTrue: 
+			[self 
+				error: 'Search blocks can only contain arguments for the node and matching dictionary'].
+	newBlock := RBBlockNode arguments: arguments body: body.
+	newBlock arguments isEmpty 
+		ifTrue: [self addArgumentWithNameBasedOn: 'aNode' to: newBlock].
+	newBlock arguments size = 1 
+		ifTrue: [self addArgumentWithNameBasedOn: 'aDictionary' to: newBlock].
+	^self createBlockFor: newBlock
+%
+
+category: 'matching'
+method: RBPatternBlockNode
+createReplacingBlock
+	| newBlock |
+	self arguments size > 1 
+		ifTrue: 
+			[self 
+				error: 'Replace blocks can only contain an argument for the matching dictionary'].
+	newBlock := RBBlockNode arguments: arguments body: body.
+	self arguments isEmpty 
+		ifTrue: [self addArgumentWithNameBasedOn: 'aDictionary' to: newBlock].
+	^self createBlockFor: newBlock
+%
+
+category: 'matching'
+method: RBPatternBlockNode
+lookupMatchFor: aString in: aDictionary 
+	^aDictionary at: aString
+		ifAbsent: 
+			[| variableNode |
+			variableNode := RBPatternVariableNode named: aString.
+			aDictionary at: variableNode ifAbsent: [nil]]
+%
+
+category: 'matching'
+method: RBPatternBlockNode
+match: aNode inContext: aDictionary 
+	^self matchingBlock value: aNode value: aDictionary
+%
+
+category: 'matching'
+method: RBPatternBlockNode
+matchingBlock
+	^valueBlock isNil 
+		ifTrue: [valueBlock := self createMatchingBlock]
+		ifFalse: [valueBlock]
+%
+
+category: 'matching'
+method: RBPatternBlockNode
+replacePatternNodesIn: aRBBlockNode 
+	aRBBlockNode body nodesDo: 
+			[:each | 
+			(each isVariable and: [each isPatternNode]) 
+				ifTrue: 
+					[each 
+						replaceWith: (self constructLookupNodeFor: each name in: aRBBlockNode)]]
+%
+
+category: 'matching'
+method: RBPatternBlockNode
+replacingBlock
+	^valueBlock isNil 
+		ifTrue: [valueBlock := self createReplacingBlock]
+		ifFalse: [valueBlock]
+%
+
+category: 'accessing'
+method: RBPatternBlockNode
+sentMessages
+	^ OrderedCollection new
+%
+
+! Class implementation for 'RBPatternWrapperBlockNode'
+
+!		Instance methods for 'RBPatternWrapperBlockNode'
+
+category: 'visitor'
+method: RBPatternWrapperBlockNode
+acceptVisitor: aProgramNodeVisitor 
+	^aProgramNodeVisitor acceptPatternWrapperBlockNode: self
+%
+
+category: 'matching'
+method: RBPatternWrapperBlockNode
+copyInContext: aDictionary 
+	"I don't know what this would mean, so ignore it."
+
+	^ wrappedNode copyInContext: aDictionary
+%
+
+category: 'matching'
+method: RBPatternWrapperBlockNode
+match: aNode inContext: aDictionary 
+	(wrappedNode match: aNode inContext: aDictionary) ifFalse: [^false].
+	^super match: aNode inContext: aDictionary
+%
+
+category: 'accessing'
+method: RBPatternWrapperBlockNode
+precedence
+	^1
+%
+
+category: 'accessing'
+method: RBPatternWrapperBlockNode
+wrappedNode
+	^wrappedNode
+%
+
+category: 'accessing'
+method: RBPatternWrapperBlockNode
+wrappedNode: aRBProgramNode 
+	wrappedNode := aRBProgramNode.
+	aRBProgramNode parent: self
+%
+
+! Class implementation for 'RBQueryBlockNode'
+
+!		Instance methods for 'RBQueryBlockNode'
+
+category: 'visitor'
+method: RBQueryBlockNode
+acceptVisitor: aProgramNodeVisitor
+  ^ aProgramNodeVisitor acceptQueryBlockNode: self
+%
+
+! Class implementation for 'RBCascadeNode'
+
+!		Class methods for 'RBCascadeNode'
+
+category: 'instance creation'
+classmethod: RBCascadeNode
+messages: messageNodes 
+	^self new messages: messageNodes
+%
+
+category: 'instance creation'
+classmethod: RBCascadeNode
+messages: messageNodes semicolons: integerCollection 
+	^self new messages: messageNodes semicolons: integerCollection
+%
+
+!		Instance methods for 'RBCascadeNode'
+
+category: 'comparing'
+method: RBCascadeNode
+= anObject 
+	self == anObject ifTrue: [^true].
+	self class = anObject class ifFalse: [^false].
+	self messages size = anObject messages size ifFalse: [^false].
+	1 to: self messages size
+		do: [:i | (self messages at: i) = (anObject messages at: i) ifFalse: [^false]].
+	^true
+%
+
+category: 'visitor'
+method: RBCascadeNode
+acceptVisitor: aProgramNodeVisitor 
+	^aProgramNodeVisitor acceptCascadeNode: self
+%
+
+category: 'querying'
+method: RBCascadeNode
+bestNodeFor: anInterval 
+	| selectedChildren |
+	(self intersectsInterval: anInterval) ifFalse: [^nil].
+	(self containedBy: anInterval) ifTrue: [^self].
+	messages 
+		reverseDo: [:each | (each containedBy: anInterval) ifTrue: [^each]].
+	selectedChildren := (messages 
+				collect: [:each | each bestNodeFor: anInterval]) 
+					reject: [:each | each isNil].
+	^selectedChildren detect: [:each | true] ifNone: [nil]
+%
+
+category: 'accessing'
+method: RBCascadeNode
+children
+	^self messages
+%
+
+category: 'matching'
+method: RBCascadeNode
+copyInContext: aDictionary 
+	^ self class new
+		messages: (self copyList: self messages inContext: aDictionary);
+		yourself
+%
+
+category: 'testing'
+method: RBCascadeNode
+directlyUses: aNode 
+	^messages last = aNode and: [self isDirectlyUsed]
+%
+
+category: 'comparing'
+method: RBCascadeNode
+equalTo: anObject withMapping: aDictionary 
+	self class = anObject class ifFalse: [^false].
+	self messages size = anObject messages size ifFalse: [^false].
+	1 to: self messages size
+		do: 
+			[:i | 
+			((self messages at: i) equalTo: (anObject messages at: i)
+				withMapping: aDictionary) ifFalse: [^false]].
+	^true
+%
+
+category: 'comparing'
+method: RBCascadeNode
+hash
+	^ self hashForCollection: self messages
+%
+
+category: 'testing'
+method: RBCascadeNode
+isCascade
+	^true
+%
+
+category: 'matching'
+method: RBCascadeNode
+match: aNode inContext: aDictionary 
+	aNode class = self class ifFalse: [^false].
+	^self 
+		matchList: messages
+		against: aNode messages
+		inContext: aDictionary
+%
+
+category: 'accessing'
+method: RBCascadeNode
+messages
+	^messages
+%
+
+category: 'accessing'
+method: RBCascadeNode
+messages: messageNodeCollection 
+	messages := messageNodeCollection.
+	messages do: [:each | each parent: self]
+%
+
+category: 'initialize-release'
+method: RBCascadeNode
+messages: messageNodes semicolons: integerCollection 
+	self messages: messageNodes.
+	semicolons := integerCollection
+%
+
+category: 'testing'
+method: RBCascadeNode
+needsParenthesis
+	^parent isNil 
+		ifTrue: [false]
+		ifFalse: [self precedence > parent precedence]
+%
+
+category: 'copying'
+method: RBCascadeNode
+postCopy
+	super postCopy.
+	self messages: (self messages collect: [ :each | each copy ])
+%
+
+category: 'accessing'
+method: RBCascadeNode
+precedence
+	^4
+%
+
+category: 'accessing'
+method: RBCascadeNode
+receiver
+	^self messages first receiver
+%
+
+category: 'replacing'
+method: RBCascadeNode
+replaceNode: aNode withNode: anotherNode 
+	self messages: (messages 
+				collect: [:each | each == aNode ifTrue: [anotherNode] ifFalse: [each]])
+%
+
+category: 'accessing-token'
+method: RBCascadeNode
+semicolons
+	^ semicolons
+%
+
+category: 'accessing-token'
+method: RBCascadeNode
+semicolons: anArray
+	semicolons := anArray
+%
+
+category: 'accessing'
+method: RBCascadeNode
+startWithoutParentheses
+	^messages first start
+%
+
+category: 'accessing'
+method: RBCascadeNode
+statementComments
+	| statementComments |
+	statementComments := OrderedCollection withAll: self comments.
+	statementComments addAll: messages first receiver statementComments.
+	messages do: 
+			[:each | 
+			each arguments 
+				do: [:arg | statementComments addAll: arg statementComments]].
+	^statementComments asSortedCollection: [:a :b | a first < b first]
+%
+
+category: 'accessing'
+method: RBCascadeNode
+stopWithoutParentheses
+	^messages last stop
+%
+
+category: 'testing'
+method: RBCascadeNode
+uses: aNode 
+	^messages last = aNode and: [self isUsed]
+%
+
+category: 'querying'
+method: RBCascadeNode
+whichNodeIsContainedBy: anInterval 
+	| selectedChildren |
+	(self intersectsInterval: anInterval) ifFalse: [^nil].
+	(self containedBy: anInterval) ifTrue: [^self].
+	messages 
+		reverseDo: [:each | (each containedBy: anInterval) ifTrue: [^each]].
+	selectedChildren := (messages 
+				collect: [:each | each whichNodeIsContainedBy: anInterval]) 
+					reject: [:each | each isNil].
+	^selectedChildren detect: [:each | true] ifNone: [nil]
+%
+
+! Class implementation for 'RBLiteralNode'
+
+!		Class methods for 'RBLiteralNode'
+
+category: 'instance creation'
+classmethod: RBLiteralNode
+literalToken: aLiteralToken 
+	^(aLiteralToken realValue class == Array 
+		or: [aLiteralToken realValue class == ByteArray]) 
+			ifTrue: 
+				[RBLiteralArrayNode 
+					startPosition: aLiteralToken start
+					contents: (aLiteralToken value asArray 
+							collect: [:each | RBLiteralNode literalToken: each])
+					stopPosition: aLiteralToken stop
+					isByteArray: aLiteralToken value class ~~ Array]
+			ifFalse: [RBLiteralValueNode literalToken: aLiteralToken]
+%
+
+category: 'instance creation'
+classmethod: RBLiteralNode
+value: aValue 
+	^((aValue class == Array or: [aValue class == ByteArray]) 
+		ifTrue: [RBLiteralArrayNode]
+		ifFalse: [RBLiteralValueNode]) value: aValue
+%
+
+!		Instance methods for 'RBLiteralNode'
+
+category: 'comparing'
+method: RBLiteralNode
+= anObject 
+	self == anObject ifTrue: [^true].
+	^self class = anObject class
+%
+
+category: 'comparing'
+method: RBLiteralNode
+hash
+	^self value hash
+%
+
+category: 'testing'
+method: RBLiteralNode
+isImmediateNode
+	^true
+%
+
+category: 'testing'
+method: RBLiteralNode
+isLiteralNode
+	^true
+%
+
+category: 'testing'
+method: RBLiteralNode
+needsParenthesis
+	^false
+%
+
+category: 'accessing'
+method: RBLiteralNode
+precedence
+	^0
+%
+
+category: 'private-replacing'
+method: RBLiteralNode
+replaceSourceFrom: aNode 
+	self addReplacement: (RBStringReplacement 
+				replaceFrom: aNode start
+				to: aNode stop
+				with: self formattedCode)
+%
+
+category: 'private-replacing'
+method: RBLiteralNode
+replaceSourceWith: aNode 
+	self addReplacement: (RBStringReplacement 
+				replaceFrom: self start
+				to: self stop
+				with: aNode formattedCode)
+%
+
+category: 'accessing'
+method: RBLiteralNode
+value
+	^self subclassResponsibility
+%
+
+! Class implementation for 'RBLiteralArrayNode'
+
+!		Class methods for 'RBLiteralArrayNode'
+
+category: 'instance creation'
+classmethod: RBLiteralArrayNode
+startPosition: startInteger contents: anArray stopPosition: stopInteger isByteArray: aBoolean 
+	^(self new)
+		startPosition: startInteger
+			contents: anArray
+			stopPosition: stopInteger
+			isByteArray: aBoolean;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RBLiteralArrayNode
+value: aValue 
+	^(self new)
+		startPosition: nil
+			contents: (aValue asArray collect: [:each | RBLiteralNode value: each])
+			stopPosition: nil
+			isByteArray: aValue class ~~ Array;
+		yourself
+%
+
+!		Instance methods for 'RBLiteralArrayNode'
+
+category: 'comparing'
+method: RBLiteralArrayNode
+= anObject 
+	super = anObject ifFalse: [^false].
+	self isForByteArray = anObject isForByteArray ifFalse: [^false].
+	self contents size = anObject contents size ifFalse: [^false].
+	1 to: self contents size
+		do: [:i | (self contents at: i) = (anObject contents at: i) ifFalse: [^false]].
+	^true
+%
+
+category: 'visitor'
+method: RBLiteralArrayNode
+acceptVisitor: aProgramNodeVisitor 
+	^aProgramNodeVisitor acceptLiteralArrayNode: self
+%
+
+category: 'accessing'
+method: RBLiteralArrayNode
+children
+	^contents
+%
+
+category: 'accessing'
+method: RBLiteralArrayNode
+contents
+	^contents
+%
+
+category: 'initialize-release'
+method: RBLiteralArrayNode
+contents: aRBLiteralNodeCollection 
+	contents := aRBLiteralNodeCollection.
+	contents do: [:each | each parent: self]
+%
+
+category: 'matching'
+method: RBLiteralArrayNode
+copyInContext: aDictionary 
+	^ self class 
+		startPosition: nil
+		contents: (self copyList: self contents inContext: aDictionary)
+		stopPosition: nil
+		isByteArray: isByteArray
+%
+
+category: 'comparing'
+method: RBLiteralArrayNode
+equalTo: anObject withMapping: aDictionary 
+	self class = anObject class ifFalse: [^false].
+	self isForByteArray = anObject isForByteArray ifFalse: [^false].
+	self contents size = anObject contents size ifFalse: [^false].
+	1 to: self contents size
+		do: 
+			[:i | 
+			((self contents at: i) equalTo: (anObject contents at: i)
+				withMapping: aDictionary) ifFalse: [^false]].
+	^true
+%
+
+category: 'testing'
+method: RBLiteralArrayNode
+isForByteArray
+	^isByteArray
+%
+
+category: 'testing'
+method: RBLiteralArrayNode
+isLiteralArray
+	^true
+%
+
+category: 'matching'
+method: RBLiteralArrayNode
+match: aNode inContext: aDictionary 
+	aNode class = self class ifFalse: [^false].
+	self isForByteArray = aNode isForByteArray ifFalse: [^false].
+	^self 
+		matchList: contents
+		against: aNode contents
+		inContext: aDictionary
+%
+
+category: 'copying'
+method: RBLiteralArrayNode
+postCopy
+	super postCopy.
+	self contents: (self contents collect: [ :each | each copy ])
+%
+
+category: 'replacing'
+method: RBLiteralArrayNode
+replaceNode: aNode withNode: anotherNode 
+	self contents: (contents 
+				collect: [:each | each == aNode ifTrue: [anotherNode] ifFalse: [each]])
+%
+
+category: 'private-replacing'
+method: RBLiteralArrayNode
+replaceSourceWith: aNode 
+	(self class = aNode class and: 
+			[self isForByteArray = aNode isForByteArray 
+				and: [self contents size = aNode contents size]]) 
+		ifFalse: [^super replaceSourceWith: aNode].
+	1 to: self contents size
+		do: 
+			[:i | 
+			(self contents at: i) = (aNode contents at: i) 
+				ifFalse: [(self contents at: i) replaceSourceWith: (aNode contents at: i)]]
+%
+
+category: 'initialize-release'
+method: RBLiteralArrayNode
+startPosition: startInteger contents: anArray stopPosition: stopInteger isByteArray: aBoolean 
+	start := startInteger.
+	self contents: anArray.
+	stop := stopInteger.
+	isByteArray := aBoolean
+%
+
+category: 'accessing'
+method: RBLiteralArrayNode
+startWithoutParentheses
+	^start
+%
+
+category: 'accessing'
+method: RBLiteralArrayNode
+stopWithoutParentheses
+	^stop
+%
+
+category: 'accessing'
+method: RBLiteralArrayNode
+value
+	| array |
+	array := (isByteArray ifTrue: [ByteArray] ifFalse: [Array]) 
+				new: contents size.
+	1 to: contents size
+		do: [:each | array at: each put: (contents at: each) value].
+	^array
+%
+
+! Class implementation for 'RBLiteralValueNode'
+
+!		Class methods for 'RBLiteralValueNode'
+
+category: 'instance creation'
+classmethod: RBLiteralValueNode
+literalToken: aLiteralToken 
+	^(self new)
+		literalToken: aLiteralToken;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RBLiteralValueNode
+value: aValue 
+	^self literalToken: (RBLiteralToken value: aValue)
+%
+
+!		Instance methods for 'RBLiteralValueNode'
+
+category: 'comparing'
+method: RBLiteralValueNode
+= anObject 
+	^ super = anObject 
+		and: [ self value = anObject value 
+		and: [ self value species = anObject value species ] ]
+%
+
+category: 'visitor'
+method: RBLiteralValueNode
+acceptVisitor: aProgramNodeVisitor 
+	^aProgramNodeVisitor acceptLiteralNode: self
+%
+
+category: 'matching'
+method: RBLiteralValueNode
+copyInContext: aDictionary
+	^ self class literalToken: self token copy removePositions
+%
+
+category: 'initialize-release'
+method: RBLiteralValueNode
+literalToken: aLiteralToken 
+	token := aLiteralToken
+%
+
+category: 'accessing'
+method: RBLiteralValueNode
+startWithoutParentheses
+	^token start
+%
+
+category: 'accessing'
+method: RBLiteralValueNode
+stopWithoutParentheses
+	^token stop
+%
+
+category: 'accessing'
+method: RBLiteralValueNode
+token
+	^token
+%
+
+category: 'accessing'
+method: RBLiteralValueNode
+value
+	^token realValue
+%
+
+! Class implementation for 'RBMessageNode'
+
+!		Class methods for 'RBMessageNode'
+
+category: 'instance creation'
+classmethod: RBMessageNode
+receiver: aValueNode selector: aSymbol 
+	^self 
+		receiver: aValueNode
+		selector: aSymbol
+		arguments: #()
+%
+
+category: 'instance creation'
+classmethod: RBMessageNode
+receiver: aValueNode selector: aSymbol arguments: valueNodes 
+	^(self new)
+		receiver: aValueNode;
+		arguments: valueNodes;
+		selector: aSymbol;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RBMessageNode
+receiver: aValueNode selectorParts: keywordTokens arguments: valueNodes 
+	^(self new)
+		receiver: aValueNode
+			selectorParts: keywordTokens
+			arguments: valueNodes;
+		yourself
+%
+
+!		Instance methods for 'RBMessageNode'
+
+category: 'comparing'
+method: RBMessageNode
+= anObject 
+	self == anObject ifTrue: [^true].
+	self class = anObject class ifFalse: [^false].
+	(self receiver = anObject receiver 
+		and: [self selector = anObject selector]) ifFalse: [^false].
+	1 to: self arguments size
+		do: [:i | (self arguments at: i) = (anObject arguments at: i) ifFalse: [^false]].
+	^true
+%
+
+category: 'visitor'
+method: RBMessageNode
+acceptVisitor: aProgramNodeVisitor 
+	^aProgramNodeVisitor acceptMessageNode: self
+%
+
+category: 'accessing'
+method: RBMessageNode
+arguments
+	^arguments isNil ifTrue: [#()] ifFalse: [arguments]
+%
+
+category: 'accessing'
+method: RBMessageNode
+arguments: argCollection 
+	arguments := argCollection.
+	arguments do: [:each | each parent: self]
+%
+
+category: 'querying'
+method: RBMessageNode
+bestNodeFor: anInterval 
+	(self intersectsInterval: anInterval) ifFalse: [^nil].
+	(self containedBy: anInterval) ifTrue: [^self].
+	selectorParts do: 
+			[:each | 
+			((anInterval first between: each start and: each stop) 
+				or: [each start between: anInterval first and: anInterval last]) 
+					ifTrue: [^self]].
+	self children do: 
+			[:each | 
+			| node |
+			node := each bestNodeFor: anInterval.
+			node notNil ifTrue: [^node]]
+%
+
+category: 'private'
+method: RBMessageNode
+buildSelector
+	| selectorStream |
+	selectorStream := WriteStreamPortable on: String new.
+	selectorParts do: [ :each | selectorStream nextPutAll: each value ].
+	^ selectorStream contents asSymbol
+%
+
+category: 'accessing'
+method: RBMessageNode
+children
+	^(OrderedCollection with: self receiver)
+		addAll: self arguments;
+		yourself
+%
+
+category: 'matching'
+method: RBMessageNode
+copyInContext: aDictionary 
+	^ self class new
+		receiver: (self receiver copyInContext: aDictionary);
+		selectorParts: (self selectorParts collect: [ :each | each copy removePositions ]);
+		arguments: (self arguments collect: [ :each | each copyInContext: aDictionary ]);
+		yourself
+%
+
+category: 'comparing'
+method: RBMessageNode
+equalTo: anObject withMapping: aDictionary 
+	self class = anObject class ifFalse: [^false].
+	((self receiver equalTo: anObject receiver withMapping: aDictionary)
+		and: [self selector = anObject selector]) ifFalse: [^false].
+	1 to: self arguments size
+		do: 
+			[:i | 
+			((self arguments at: i) equalTo: (anObject arguments at: i)
+				withMapping: aDictionary) ifFalse: [^false]].
+	^true
+%
+
+category: 'comparing'
+method: RBMessageNode
+hash
+	^ (self receiver hash bitXor: self selector hash) bitXor: (self hashForCollection: self arguments)
+%
+
+category: 'testing'
+method: RBMessageNode
+isBinary
+	^(self isUnary or: [self isKeyword]) not
+%
+
+category: 'testing'
+method: RBMessageNode
+isCascaded
+	^parent notNil and: [parent isCascade]
+%
+
+category: 'private-replacing'
+method: RBMessageNode
+isContainmentReplacement: aNode 
+	^(self mappingFor: self receiver) = aNode 
+		or: [self arguments anySatisfy: [:each | (self mappingFor: each) = aNode]]
+%
+
+category: 'testing'
+method: RBMessageNode
+isFirstCascaded
+	^self isCascaded and: [parent messages first == self]
+%
+
+category: 'testing'
+method: RBMessageNode
+isKeyword
+	^selectorParts first value last = $:
+%
+
+category: 'testing'
+method: RBMessageNode
+isMessage
+	^true
+%
+
+category: 'testing'
+method: RBMessageNode
+isSelfSend
+	^ self receiver isVariable and: [ self receiver name = 'self' ]
+%
+
+category: 'testing'
+method: RBMessageNode
+isSuperSend
+	^ self receiver isVariable and: [ self receiver name = 'super' ]
+%
+
+category: 'testing'
+method: RBMessageNode
+isUnary
+	^arguments isEmpty
+%
+
+category: 'testing'
+method: RBMessageNode
+lastIsReturn
+	^ (#(#ifTrue:ifFalse: #ifFalse:ifTrue: #ifNil:ifNotNil: #ifNotNil:ifNil:) includes: self selector)
+		and: [ arguments first isBlock and: [ arguments first body lastIsReturn 
+		and: [ arguments last isBlock and: [ arguments last body lastIsReturn ] ] ] ]
+%
+
+category: 'matching'
+method: RBMessageNode
+match: aNode inContext: aDictionary 
+	aNode class = self class ifFalse: [^false].
+	self selector = aNode selector ifFalse: [^false].
+	(receiver match: aNode receiver inContext: aDictionary) ifFalse: [^false].
+	1 to: arguments size
+		do: 
+			[:i | 
+			((arguments at: i) match: (aNode arguments at: i) inContext: aDictionary)
+				ifFalse: [^false]].
+	^true
+%
+
+category: 'testing'
+method: RBMessageNode
+needsParenthesis
+	^parent isNil 
+		ifTrue: [false]
+		ifFalse: 
+			[self precedence > parent precedence 
+				or: [self precedence = parent precedence and: [self isUnary not]]]
+%
+
+category: 'accessing'
+method: RBMessageNode
+numArgs
+	^self selector numArgs
+%
+
+category: 'copying'
+method: RBMessageNode
+postCopy
+	super postCopy.
+	self receiver: self receiver copy.
+	self arguments: (self arguments collect: [ :each | each copy ])
+%
+
+category: 'accessing'
+method: RBMessageNode
+precedence
+	^self isUnary 
+		ifTrue: [1]
+		ifFalse: [self isKeyword ifTrue: [3] ifFalse: [2]]
+%
+
+category: 'accessing'
+method: RBMessageNode
+receiver
+	^receiver
+%
+
+category: 'accessing'
+method: RBMessageNode
+receiver: aValueNode 
+	receiver := aValueNode.
+	receiver parent: self
+%
+
+category: 'initialize-release'
+method: RBMessageNode
+receiver: aValueNode selectorParts: keywordTokens arguments: valueNodes 
+	self receiver: aValueNode.
+	selectorParts := keywordTokens.
+	self arguments: valueNodes
+%
+
+category: 'accessing'
+method: RBMessageNode
+renameSelector: newSelector andArguments: varNodeCollection 
+	self
+		arguments: varNodeCollection;
+		selector: newSelector
+%
+
+category: 'private-replacing'
+method: RBMessageNode
+replaceContainmentSourceWith: aNode 
+	| originalNode needsParenthesis |
+	needsParenthesis := aNode hasParentheses not and: [aNode needsParenthesis].
+	originalNode := (self mappingFor: self receiver) = aNode 
+				ifTrue: [self receiver]
+				ifFalse: [self arguments detect: [:each | (self mappingFor: each) = aNode]].
+	self
+		addReplacement: (RBStringReplacement 
+					replaceFrom: self start
+					to: originalNode start - 1
+					with: (needsParenthesis ifTrue: ['('] ifFalse: ['']));
+		addReplacement: (RBStringReplacement 
+					replaceFrom: originalNode stop + 1
+					to: self stop
+					with: (needsParenthesis ifTrue: [')'] ifFalse: ['']))
+%
+
+category: 'replacing'
+method: RBMessageNode
+replaceNode: aNode withNode: anotherNode 
+	"If we're inside a cascade node and are changing the receiver, change all the receivers"
+
+	receiver == aNode 
+		ifTrue: 
+			[self receiver: anotherNode.
+			(parent notNil and: [parent isCascade]) 
+				ifTrue: [parent messages do: [:each | each receiver: anotherNode]]].
+	self arguments: (arguments 
+				collect: [:each | each == aNode ifTrue: [anotherNode] ifFalse: [each]])
+%
+
+category: 'private-replacing'
+method: RBMessageNode
+replaceSourceWith: aNode 
+	(self isContainmentReplacement: aNode) 
+		ifTrue: [^self replaceContainmentSourceWith: aNode].
+	aNode isMessage ifFalse: [^super replaceSourceWith: aNode].
+	^self replaceSourceWithMessageNode: aNode
+%
+
+category: 'private-replacing'
+method: RBMessageNode
+replaceSourceWithMessageNode: aNode 
+	| isBinaryToKeyword |
+	self numArgs = aNode numArgs ifFalse: [^super replaceSourceWith: aNode].
+	self arguments with: aNode arguments
+		do: [:old :new | (self mappingFor: old) = new ifFalse: [^super replaceSourceWith: aNode]].
+	(self mappingFor: self receiver) = aNode receiver 
+		ifFalse:
+			[(self receiver isVariable and: [aNode receiver isVariable])
+				ifFalse:
+					[^super replaceSourceWith: aNode].
+			self addReplacement:
+				(RBStringReplacement
+					replaceFrom: self receiver start
+					to: self receiver stop
+					with: aNode receiver name)].
+	(isBinaryToKeyword := self isBinary and: [aNode isKeyword]) 
+		ifTrue: 
+			[(self hasParentheses not and: [self parent precedence <= aNode precedence]) 
+				ifTrue: 
+					[self
+						addReplacement: (RBStringReplacement 
+									replaceFrom: self start
+									to: self start - 1
+									with: '(');
+						addReplacement: (RBStringReplacement 
+									replaceFrom: self stop + 1
+									to: self stop
+									with: ')')]].
+	self selectorParts with: aNode selectorParts
+		do: 
+			[:old :new | 
+			old value ~= new value 
+				ifTrue: 
+					[self addReplacement: (RBStringReplacement 
+								replaceFrom: old start
+								to: old stop
+								with: ((isBinaryToKeyword 
+										and: [(self source at: old start - 1) isSqueakSeparator not]) 
+											ifTrue: [' ' , new value]
+											ifFalse: [new value]))]]
+%
+
+category: 'accessing'
+method: RBMessageNode
+selector
+	^selector isNil
+		ifTrue: [selector := self buildSelector]
+		ifFalse: [selector]
+%
+
+category: 'accessing'
+method: RBMessageNode
+selector: aSelector 
+	| keywords numArgs |
+	keywords := aSelector keywords.
+	numArgs := aSelector numArgs.
+	numArgs == arguments size 
+		ifFalse: 
+			[self 
+				error: 'Attempting to assign selector with wrong number of arguments.'].
+	selectorParts := numArgs == 0 
+				ifTrue: [Array with: (RBIdentifierToken value: keywords first start: nil)]
+				ifFalse: 
+					[keywords first last = $: 
+						ifTrue: [keywords collect: [:each | RBKeywordToken value: each start: nil]]
+						ifFalse: [Array with: (RBBinarySelectorToken value: aSelector start: nil)]].
+	selector := aSelector asSymbol
+%
+
+category: 'private'
+method: RBMessageNode
+selectorParts
+	^ selectorParts
+%
+
+category: 'private'
+method: RBMessageNode
+selectorParts: tokenCollection 
+	selectorParts := tokenCollection
+%
+
+category: 'accessing'
+method: RBMessageNode
+sentMessages
+	^ super sentMessages
+		add: self selector;
+		yourself
+%
+
+category: 'accessing'
+method: RBMessageNode
+startWithoutParentheses
+	^receiver start
+%
+
+category: 'accessing'
+method: RBMessageNode
+stopWithoutParentheses
+	^arguments isEmpty 
+		ifTrue: [selectorParts first stop]
+		ifFalse: [arguments last stop]
+%
+
+! Class implementation for 'RBPatternMessageNode'
+
+!		Class methods for 'RBPatternMessageNode'
+
+category: 'instance creation'
+classmethod: RBPatternMessageNode
+receiver: aValueNode selectorParts: keywordTokens arguments: valueNodes 
+	^(keywordTokens anySatisfy: [:each | each isPatternVariable]) 
+		ifTrue: 
+			[super 
+				receiver: aValueNode
+				selectorParts: keywordTokens
+				arguments: valueNodes]
+		ifFalse: 
+			[RBMessageNode 
+				receiver: aValueNode
+				selectorParts: keywordTokens
+				arguments: valueNodes]
+%
+
+!		Instance methods for 'RBPatternMessageNode'
+
+category: 'matching'
+method: RBPatternMessageNode
+copyInContext: aDictionary 
+	| selectors |
+	self isList 
+		ifTrue: [ ^ aDictionary at: self ].
+	selectors := self isSelectorList 
+		ifTrue: [ (aDictionary at: selectorParts first value) keywords ]
+		ifFalse: [ self selectorParts collect: [ :each | aDictionary at: each value ] ].
+	^ RBMessageNode new
+		receiver: (self receiver copyInContext: aDictionary);
+		selectorParts: (selectors collect: [ :each | 
+			(each last = $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
+				value: each start: nil ]);
+		arguments: (self copyList: self arguments inContext: aDictionary);
+		yourself
+%
+
+category: 'testing-matching'
+method: RBPatternMessageNode
+isList
+	^isCascadeList and: [parent notNil and: [parent isCascade]]
+%
+
+category: 'testing-matching'
+method: RBPatternMessageNode
+isPatternNode
+	^true
+%
+
+category: 'testing-matching'
+method: RBPatternMessageNode
+isSelectorList
+	^isList
+%
+
+category: 'matching'
+method: RBPatternMessageNode
+match: aNode inContext: aDictionary 
+	aNode class == self matchingClass ifFalse: [^false].
+	(receiver match: aNode receiver inContext: aDictionary) ifFalse: [^false].
+	self isSelectorList 
+		ifTrue: 
+			[^(aDictionary at: selectorParts first value ifAbsentPut: [aNode selector]) 
+				== aNode selector and: 
+						[(aDictionary at: arguments first ifAbsentPut: [aNode arguments]) 
+							= aNode arguments]].
+	^self matchArgumentsAgainst: aNode inContext: aDictionary
+%
+
+category: 'matching'
+method: RBPatternMessageNode
+matchArgumentsAgainst: aNode inContext: aDictionary 
+	self arguments size = aNode arguments size
+		ifFalse: [ ^ false ].
+	(self matchSelectorAgainst: aNode inContext: aDictionary) 
+		ifFalse: [ ^ false ].
+	self arguments with: aNode arguments do: [ :first :second |
+		(first match: second inContext: aDictionary) 
+			ifFalse: [ ^ false ] ].
+	^ true
+%
+
+category: 'private'
+method: RBPatternMessageNode
+matchingClass
+	^RBMessageNode
+%
+
+category: 'matching'
+method: RBPatternMessageNode
+matchSelectorAgainst: aNode inContext: aDictionary 
+	self selectorParts with: aNode selectorParts do: [ :first :second |
+		| keyword |
+		keyword := aDictionary
+			at: first value
+			ifAbsentPut: [ 
+				first isPatternVariable 
+					ifTrue: [ second value ]
+					ifFalse: [ first value ] ].
+		keyword = second value 
+			ifFalse: [ ^ false ] ].
+	^ true
+%
+
+category: 'initialize-release'
+method: RBPatternMessageNode
+receiver: aValueNode selectorParts: keywordTokens arguments: valueNodes 
+	| message |
+	super 
+		receiver: aValueNode
+		selectorParts: keywordTokens
+		arguments: valueNodes.
+	isCascadeList := isList := false.
+	message := keywordTokens first value.
+	2 to: message size
+		do: 
+			[:i | 
+			| character |
+			character := message at: i.
+			character == self listCharacter 
+				ifTrue: [isList := true]
+				ifFalse: 
+					[character == self cascadeListCharacter 
+						ifTrue: [isCascadeList := true]
+						ifFalse: [^self]]]
+%
+
+category: 'accessing'
+method: RBPatternMessageNode
+sentMessages
+	^ super sentMessages
+		remove: self selector ifAbsent: [ ];
+		yourself
+%
+
+! Class implementation for 'RBVariableNode'
+
+!		Class methods for 'RBVariableNode'
+
+category: 'instance creation'
+classmethod: RBVariableNode
+identifierToken: anIdentifierToken 
+	^(self new)
+		identifierToken: anIdentifierToken;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RBVariableNode
+named: aString 
+	^self identifierToken: (RBIdentifierToken value: aString start: 0)
+%
+
+!		Instance methods for 'RBVariableNode'
+
+category: 'comparing'
+method: RBVariableNode
+= anObject 
+	self == anObject ifTrue: [^true].
+	self class = anObject class ifFalse: [^false].
+	^self name = anObject name
+%
+
+category: 'visitor'
+method: RBVariableNode
+acceptVisitor: aProgramNodeVisitor 
+	^aProgramNodeVisitor acceptVariableNode: self
+%
+
+category: 'matching'
+method: RBVariableNode
+copyInContext: aDictionary 
+	^ self class identifierToken: token copy removePositions
+%
+
+category: 'comparing'
+method: RBVariableNode
+equalTo: anObject withMapping: aDictionary 
+	^self class = anObject class and: 
+			[(aDictionary at: self name ifAbsentPut: [anObject name]) = anObject name]
+%
+
+category: 'comparing'
+method: RBVariableNode
+hash
+	^self name hash
+%
+
+category: 'initialize-release'
+method: RBVariableNode
+identifierToken: anIdentifierToken 
+	token := anIdentifierToken
+%
+
+category: 'testing'
+method: RBVariableNode
+isImmediateNode
+	^true
+%
+
+category: 'testing'
+method: RBVariableNode
+isRead
+	^ self isWrite not and: [ self isUsed ]
+%
+
+category: 'testing'
+method: RBVariableNode
+isVariable
+	^true
+%
+
+category: 'testing'
+method: RBVariableNode
+isWrite
+	^ self parent notNil and: [ self parent isAssignment and: [ self parent variable == self ] ]
+%
+
+category: 'accessing'
+method: RBVariableNode
+name
+	^token value
+%
+
+category: 'testing'
+method: RBVariableNode
+needsParenthesis
+	^false
+%
+
+category: 'accessing'
+method: RBVariableNode
+precedence
+	^0
+%
+
+category: 'testing'
+method: RBVariableNode
+references: aVariableName 
+	^self name = aVariableName
+%
+
+category: 'replacing'
+method: RBVariableNode
+replaceSourceFrom: aNode 
+	self addReplacement: (RBStringReplacement 
+				replaceFrom: aNode start
+				to: aNode stop
+				with: self name)
+%
+
+category: 'replacing'
+method: RBVariableNode
+replaceSourceWith: aNode
+	self addReplacement: (RBStringReplacement 
+				replaceFrom: self start
+				to: self stop
+				with: aNode formattedCode)
+%
+
+category: 'accessing'
+method: RBVariableNode
+startWithoutParentheses
+	^token start
+%
+
+category: 'accessing'
+method: RBVariableNode
+stopWithoutParentheses
+	^token stop
+%
+
+category: 'accessing'
+method: RBVariableNode
+token
+	^ token
+%
+
+! Class implementation for 'RBPatternVariableNode'
+
+!		Class methods for 'RBPatternVariableNode'
+
+category: 'instance creation'
+classmethod: RBPatternVariableNode
+identifierToken: anIdentifierToken 
+	^anIdentifierToken isPatternVariable 
+		ifTrue: [super identifierToken: anIdentifierToken]
+		ifFalse: [RBVariableNode identifierToken: anIdentifierToken]
+%
+
+!		Instance methods for 'RBPatternVariableNode'
+
+category: 'matching'
+method: RBPatternVariableNode
+copyInContext: aDictionary 
+	^ (aDictionary at: self) copy
+%
+
+category: 'initialize-release'
+method: RBPatternVariableNode
+identifierToken: anIdentifierToken 
+	super identifierToken: anIdentifierToken.
+	self initializePatternVariables
+%
+
+category: 'initialize-release'
+method: RBPatternVariableNode
+initializePatternVariables
+	| name |
+	name := self name.
+	isAnything := isList := isLiteral := isStatement := recurseInto := false.
+	2 to: name size
+		do: 
+			[:i | 
+			| character |
+			character := name at: i.
+			character == self listCharacter 
+				ifTrue: [isAnything := isList := true]
+				ifFalse: 
+					[character == self literalCharacter 
+						ifTrue: [isLiteral := true]
+						ifFalse: 
+							[character == self statementCharacter 
+								ifTrue: [isStatement := true]
+								ifFalse: 
+									[character == self recurseIntoCharacter 
+										ifTrue: [recurseInto := true]
+										ifFalse: [^self]]]]]
+%
+
+category: 'testing-matching'
+method: RBPatternVariableNode
+isAnything
+	^isAnything
+%
+
+category: 'testing-matching'
+method: RBPatternVariableNode
+isList
+	^isList
+%
+
+category: 'testing-matching'
+method: RBPatternVariableNode
+isLiteralNode
+	^isLiteral
+%
+
+category: 'testing-matching'
+method: RBPatternVariableNode
+isPatternNode
+	^true
+%
+
+category: 'testing-matching'
+method: RBPatternVariableNode
+isStatement
+	^isStatement
+%
+
+category: 'matching'
+method: RBPatternVariableNode
+match: aNode inContext: aDictionary 
+	self isAnything 
+		ifTrue: [^(aDictionary at: self ifAbsentPut: [aNode]) = aNode].
+	self isLiteralNode ifTrue: [^self matchLiteral: aNode inContext: aDictionary].
+	self isStatement 
+		ifTrue: [^self matchStatement: aNode inContext: aDictionary].
+	aNode class == self matchingClass ifFalse: [^false].
+	^(aDictionary at: self ifAbsentPut: [aNode]) = aNode
+%
+
+category: 'private'
+method: RBPatternVariableNode
+matchingClass
+	^RBVariableNode
+%
+
+category: 'matching'
+method: RBPatternVariableNode
+matchLiteral: aNode inContext: aDictionary 
+	^aNode isLiteralNode
+		and: [(aDictionary at: self ifAbsentPut: [aNode]) = aNode]
+%
+
+category: 'matching'
+method: RBPatternVariableNode
+matchStatement: aNode inContext: aDictionary 
+	(aNode parent notNil and: [aNode parent isSequence]) ifFalse: [^false].
+	^(aDictionary at: self ifAbsentPut: [aNode]) = aNode
+%
+
+category: 'accessing'
+method: RBPatternVariableNode
+parent: aBRProgramNode 
+	"Fix the case where '``@node' should match a single node, not a sequence node."
+
+	super parent: aBRProgramNode.
+	parent isSequence 
+		ifTrue: 
+			[(self isStatement or: [parent temporaries includes: self]) 
+				ifFalse: [isList := false]]
+%
+
+category: 'testing-matching'
+method: RBPatternVariableNode
+recurseInto
+	^recurseInto
+%
+
+! Class implementation for 'RBProgramNodeVisitor'
+
+!		Class methods for 'RBProgramNodeVisitor'
+
+category: 'instance creation'
+classmethod: RBProgramNodeVisitor
+new
+
+	^self basicNew initialize
+%
+
+!		Instance methods for 'RBProgramNodeVisitor'
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptArrayNode: anArrayNode 
+	anArrayNode children do: [:each | self visitNode: each]
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptAssignmentNode: anAssignmentNode 
+	self visitNode: anAssignmentNode variable.
+	self visitNode: anAssignmentNode value
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptBlockNode: aBlockNode 
+	self visitArguments: aBlockNode arguments.
+	self visitNode: aBlockNode body
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptCascadeNode: aCascadeNode 
+	aCascadeNode messages do: [:each | self visitNode: each]
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptLiteralArrayNode: aRBLiteralArrayNode 
+	aRBLiteralArrayNode contents do: [:each | self visitNode: each]
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptLiteralNode: aLiteralNode
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptMessageNode: aMessageNode 
+	(aMessageNode isCascaded not or: [aMessageNode isFirstCascaded]) 
+		ifTrue: [self visitNode: aMessageNode receiver].
+	aMessageNode arguments do: [:each | self visitNode: each]
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptMethodNode: aMethodNode 
+	self visitArguments: aMethodNode arguments.
+	aMethodNode pragmas
+		do: [ :each | self visitNode: each ].
+	self visitNode: aMethodNode body
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptPatternBlockNode: aRBPatternBlockNode 
+	self visitArguments: aRBPatternBlockNode arguments.
+	self visitNode: aRBPatternBlockNode body
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptPatternWrapperBlockNode: aRBPatternWrapperBlockNode 
+	self visitNode: aRBPatternWrapperBlockNode wrappedNode.
+	self visitArguments: aRBPatternWrapperBlockNode arguments.
+	self visitNode: aRBPatternWrapperBlockNode body
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptPragmaNode: aPragmaNode
+	aPragmaNode arguments do: [ :each | self visitNode: each ]
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptQueryBlockNode: aBlockNode
+  self visitArguments: aBlockNode arguments.
+  self visitNode: aBlockNode body
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptReturnNode: aReturnNode 
+	self visitNode: aReturnNode value
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptSequenceNode: aSequenceNode 
+	self visitArguments: aSequenceNode temporaries.
+	aSequenceNode statements do: [:each | self visitNode: each]
+%
+
+category: 'visitor-double dispatching'
+method: RBProgramNodeVisitor
+acceptVariableNode: aVariableNode
+%
+
+category: 'initialize release'
+method: RBProgramNodeVisitor
+initialize
+%
+
+category: 'visiting'
+method: RBProgramNodeVisitor
+visitArgument: each 
+	"Here to allow subclasses to detect arguments or temporaries."
+
+	^self visitNode: each
+%
+
+category: 'visiting'
+method: RBProgramNodeVisitor
+visitArguments: aNodeCollection 
+	^aNodeCollection do: [:each | self visitArgument: each]
+%
+
+category: 'visiting'
+method: RBProgramNodeVisitor
+visitNode: aNode 
+	^aNode acceptVisitor: self
+%
+
+! Class implementation for 'RBConfigurableFormatter'
+
+!		Class methods for 'RBConfigurableFormatter'
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+cascadedMessageInsideParentheses
+	^ CascadedMessageInsideParentheses
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+cascadedMessageInsideParentheses: aBoolean
+	CascadedMessageInsideParentheses := aBoolean
+%
+
+category: 'public'
+classmethod: RBConfigurableFormatter
+format: aParseTree 
+	^self format: aParseTree withIndents: 0
+%
+
+category: 'public'
+classmethod: RBConfigurableFormatter
+format: aParseTree withIndents: anInteger 
+	^ self new
+		indent: anInteger;
+		format: aParseTree
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+formatCommentWithStatements
+	^ FormatCommentWithStatements
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+formatCommentWithStatements: aBoolean
+	FormatCommentWithStatements := aBoolean
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+indentsForKeywords
+	^ IndentsForKeywords
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+indentsForKeywords: anInteger
+	IndentsForKeywords := anInteger
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+indentString
+	^ IndentString
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+indentString: aString
+	IndentString := aString
+%
+
+category: 'initialization'
+classmethod: RBConfigurableFormatter
+initialize
+  InQueryBlock := false.
+  CascadedMessageInsideParentheses := false.
+  FormatCommentWithStatements := true.
+  IndentString := '  '.
+  IndentsForKeywords := 1.
+  KeepBlockInMessage := true.
+  LineUpBlockBrackets := false.
+  MaxLineLength := 80.
+  MethodSignatureOnMultipleLines := false.
+  MinimumNewLinesBetweenStatements := 1.
+  MultiLineMessages := #(#'ifTrue:ifFalse:' #'ifFalse:ifTrue:' #'ifTrue:' #'ifFalse:' #'on:do:' #'ensure:' #'ifCurtailed:').
+  NewLineAfterCascade := true.
+  NewLineBeforeFirstCascade := true.
+  NewLineBeforeFirstKeyword := false.
+  NewLinesAfterMethodComment := 2.
+  NewLinesAfterMethodPattern := 1.
+  NewLinesAfterTemporaries := 1.
+  NumberOfArgumentsForMultiLine := 4.
+  OneLineMessages := #(#'to:' #'to:do:' #'to:by:' #'to:by:do:').
+  PeriodsAtEndOfBlock := false.
+  PeriodsAtEndOfMethod := false.
+  RetainBlankLinesBetweenStatements := false.
+  StringFollowingReturn := ' '.
+  StringInsideBlocks := ' '.
+  StringInsideParentheses := ''.
+  TraditionalBinaryPrecedence := #(#($| $& $?) #($= $~ $< $>) #($- $+) #($* $/ $% $\) #($@)).
+  UseTraditionalBinaryPrecedenceForParentheses := true
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+keepBlockInMessage
+	^ KeepBlockInMessage
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+keepBlockInMessage: aBoolean
+	KeepBlockInMessage := aBoolean
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+lineUpBlockBrackets
+	^ LineUpBlockBrackets
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+lineUpBlockBrackets: aBoolean
+	LineUpBlockBrackets := aBoolean
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+maxLineLength
+	^ MaxLineLength
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+maxLineLength: anInteger
+	MaxLineLength := anInteger
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+methodSignatureOnMultipleLines
+	^ MethodSignatureOnMultipleLines
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+methodSignatureOnMultipleLines: aBoolean
+	MethodSignatureOnMultipleLines := aBoolean
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+minimumNewLinesBetweenStatements
+	^ MinimumNewLinesBetweenStatements
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+minimumNewLinesBetweenStatements: anInteger
+	MinimumNewLinesBetweenStatements := anInteger
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+newLineAfterCascade
+	^ NewLineAfterCascade
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+newLineAfterCascade: aBoolean
+	NewLineAfterCascade := aBoolean
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+newLineBeforeFirstCascade
+	^ NewLineBeforeFirstCascade
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+newLineBeforeFirstCascade: aBoolean
+	NewLineBeforeFirstCascade := aBoolean
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+newLineBeforeFirstKeyword
+	^ NewLineBeforeFirstKeyword
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+newLineBeforeFirstKeyword: aBoolean
+	NewLineBeforeFirstKeyword := aBoolean
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+newLinesAfterMethodComment
+	^ NewLinesAfterMethodComment
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+newLinesAfterMethodComment: anInteger
+	NewLinesAfterMethodComment := anInteger
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+newLinesAfterMethodPattern
+	^ NewLinesAfterMethodPattern
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+newLinesAfterMethodPattern: anInteger
+	NewLinesAfterMethodPattern := anInteger
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+newLinesAfterTemporaries
+	^ NewLinesAfterTemporaries
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+newLinesAfterTemporaries: anInteger
+	NewLinesAfterTemporaries := anInteger
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+numberOfArgumentsForMultiLine
+	^ NumberOfArgumentsForMultiLine
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+numberOfArgumentsForMultiLine: anInteger
+	NumberOfArgumentsForMultiLine := anInteger
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+periodsAsTerminators
+	^ PeriodsAtEndOfBlock and: [ PeriodsAtEndOfMethod ]
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+periodsAsTerminators: aBoolean
+	PeriodsAtEndOfBlock := aBoolean.
+	PeriodsAtEndOfMethod := aBoolean
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+periodsAtEndOfBlock
+	^ PeriodsAtEndOfBlock
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+periodsAtEndOfBlock: aBoolean
+	PeriodsAtEndOfBlock := aBoolean
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+periodsAtEndOfMethod
+	^ PeriodsAtEndOfMethod
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+periodsAtEndOfMethod: aBoolean
+	PeriodsAtEndOfMethod := aBoolean
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+retainBlankLinesBetweenStatements
+	^ RetainBlankLinesBetweenStatements
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+retainBlankLinesBetweenStatements: aBoolean
+	RetainBlankLinesBetweenStatements := aBoolean
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+stringFollowingReturn
+	^ StringFollowingReturn
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+stringFollowingReturn: aString
+	StringFollowingReturn := aString
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+stringInsideBlocks
+	^ StringInsideBlocks
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+stringInsideBlocks: aString
+	StringInsideBlocks := aString
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+stringInsideParentheses
+	^ StringInsideParentheses
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+stringInsideParentheses: aString
+	StringInsideParentheses := aString
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+useTraditionalBinaryPrecedenceForParentheses
+	^ UseTraditionalBinaryPrecedenceForParentheses
+%
+
+category: 'accessing'
+classmethod: RBConfigurableFormatter
+useTraditionalBinaryPrecedenceForParentheses: aBoolean
+	UseTraditionalBinaryPrecedenceForParentheses := aBoolean
+%
+
+!		Instance methods for 'RBConfigurableFormatter'
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptArrayNode: anArrayNode
+	self bracketWith: '{}' around: [ self formatArray: anArrayNode ]
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptAssignmentNode: anAssignmentNode 
+	self visitNode: anAssignmentNode variable.
+	codeStream space; nextPutAll: anAssignmentNode assignmentOperator; space.
+	self visitNode: anAssignmentNode value
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptBlockNode: aBlockNode
+	self bracketWith: '[]' around: [self formatBlock: aBlockNode]
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptCascadeNode: aCascadeNode 
+	self visitNode: aCascadeNode receiver.
+	self indentAround: 
+			[NewLineBeforeFirstCascade ifTrue: [self newLine] ifFalse: [self space].
+			aCascadeNode messages do: 
+					[:each | 
+					self indentAround: 
+							[self 
+								formatSelectorAndArguments: each
+								firstSeparator: []
+								restSeparator: ((self isMultiLineMessage: each) 
+										ifTrue: [[self newLine]]
+										ifFalse: [[self space]])]]
+				separatedBy: 
+					[codeStream nextPut: $;.
+					NewLineAfterCascade ifTrue: [self newLine] ifFalse: [self space]]]
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptLiteralArrayNode: aRBArrayLiteralNode 
+	| brackets |
+	codeStream nextPut: $#.
+	brackets := aRBArrayLiteralNode isForByteArray 
+				ifTrue: ['[]']
+				ifFalse: ['()'].
+	self bracketWith: brackets
+		around: 
+			[aRBArrayLiteralNode contents do: [:each | self visitNode: each]
+				separatedBy: [self space]]
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptLiteralNode: aLiteralNode 
+	self writeString: aLiteralNode token rbStoreString
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptMessageNode: aMessageNode 
+	self visitNode: aMessageNode receiver.
+	self formatSelectorAndArguments: aMessageNode
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptMethodNode: aMethodNode 
+	self formatMethodPatternFor: aMethodNode.
+	self formatMethodBodyFor: aMethodNode
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptPatternBlockNode: aRBPatternBlockNode 
+	codeStream nextPut: $`.
+	self 
+		bracketWith: '{}' 
+		around: [self formatBlock: aRBPatternBlockNode]
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptPatternWrapperBlockNode: aRBPatternWrapperBlockNode
+	self visitNode: aRBPatternWrapperBlockNode wrappedNode.
+	codeStream nextPut: $`.
+	self 
+		bracketWith: '{}' 
+		around: [self formatBlock: aRBPatternWrapperBlockNode]
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptPragmaNode: aPragmaNode
+  codeStream nextPut: $<.
+  aPragmaNode isProtected
+    ifTrue: [ codeStream nextPutAll: 'protected ' ].
+  self
+    formatSelectorAndArguments: aPragmaNode
+    firstSeparator: [ 
+      aPragmaNode selector isInfix
+        ifTrue: [ self space ] ]
+    restSeparator: [ self space ].
+  codeStream nextPut: $>
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptQueryBlockNode: aBlockNode
+  self
+    bracketWith: '{}'
+    around: [ 
+      [ 
+      "query blocks are not nested"
+      InQueryBlock := true.
+      self formatBlock: aBlockNode ]
+        ensure: [ InQueryBlock := false ] ]
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptReturnNode: aReturnNode 
+	codeStream
+		nextPut: $^;
+		nextPutAll: StringFollowingReturn.
+	self visitNode: aReturnNode value
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptSequenceNode: aSequenceNode 
+	self formatTemporariesFor: aSequenceNode.
+	self formatSequenceCommentsFor: aSequenceNode.
+	self formatSequenceNodeStatementsFor: aSequenceNode
+%
+
+category: 'visitor-double dispatching'
+method: RBConfigurableFormatter
+acceptVariableNode: aVariableNode 
+	codeStream nextPutAll: aVariableNode name
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+addNewLinesBeforeStatementStartingAt: anInteger 
+	| newLines |
+	newLines := MinimumNewLinesBetweenStatements 
+				max: (RetainBlankLinesBetweenStatements 
+						ifTrue: [self newLinesBeforeStartingAt: anInteger]
+						ifFalse: [0]).
+	newLines = 0 ifTrue: [self space] ifFalse: [self newLines: newLines]
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+bracketWith: bracketString around: aBlock 
+	bracketString isEmpty ifTrue: [^aBlock value].
+	codeStream nextPut: bracketString first.
+	^aBlock ensure: [codeStream nextPut: bracketString last]
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+currentLineLength
+	^codeStream position - lineStart
+%
+
+category: 'public interface'
+method: RBConfigurableFormatter
+format: aParseTree 
+	originalSource := aParseTree source.
+	self visitNode: aParseTree.
+	^codeStream contents
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+formatArray: anArrayNode
+	self formatSequenceCommentsFor: anArrayNode.
+	self formatSequenceNodeStatementsFor: anArrayNode
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+formatBlock: aBlockNode
+	(LineUpBlockBrackets and: [ self willBeMultiline: aBlockNode body ])
+		ifTrue: [ self newLine ]
+		ifFalse: [ codeStream nextPutAll: StringInsideBlocks ].
+	self formatBlockArgumentsFor: aBlockNode.
+	(self willBeMultiline: aBlockNode body)
+		ifTrue: [ self newLine ].
+	self visitNode: aBlockNode body.
+	(LineUpBlockBrackets and: [ self willBeMultiline: aBlockNode body ])
+		ifTrue: [ self newLine ]
+		ifFalse: [ codeStream nextPutAll: StringInsideBlocks ]
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+formatBlockArgumentsFor: aBlockNode
+	aBlockNode arguments isEmpty
+		ifTrue: [ ^ self ].
+	aBlockNode arguments
+		do: [ :each | 
+			codeStream nextPut: $:.
+			self visitNode: each.
+			FormatCommentWithStatements
+				ifTrue: [ self formatCommentsFor: each ].
+			self space ].
+	codeStream nextPutAll: '| '
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+formatCommentsFor: aNode 
+	originalSource isNil ifTrue: [^self].
+	aNode comments do: 
+			[:each | 
+			codeStream
+				space;
+				nextPutAll: (originalSource copyFrom: each first to: each last)]
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+formatMethodBodyFor: aMethodNode 
+	self
+		indentAround: 
+			[self newLines: NewLinesAfterMethodPattern.
+			self formatMethodCommentFor: aMethodNode.
+			self formatPragmasFor: aMethodNode.
+			self visitNode: aMethodNode body]
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+formatMethodCommentFor: aMethodNode
+	originalSource isNil ifTrue: [^self].
+	(FormatCommentWithStatements
+		ifTrue: [aMethodNode methodComments]
+		ifFalse: [aMethodNode comments])
+		do:
+			[:each | 
+			codeStream
+				nextPutAll:
+					(originalSource
+						copyFrom: each first
+						to: each last).
+			self newLines: NewLinesAfterMethodComment]
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+formatMethodPatternFor: aMethodNode 
+	aMethodNode arguments isEmpty
+		ifTrue: [codeStream nextPutAll: aMethodNode selector]
+		ifFalse: 
+			[self
+				with: aMethodNode selectorParts
+				and: aMethodNode arguments
+				do: 
+					[:key :arg | 
+					codeStream nextPutAll: key value.
+					self space.
+					self visitNode: arg]
+				separatedBy: 
+					[MethodSignatureOnMultipleLines
+						ifTrue: [self newLine]
+						ifFalse: [self space]]]
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+formatPragmasFor: aMethodNode
+	aMethodNode pragmas do: [ :each | self visitNode: each; newLine ]
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+formatSelectorAndArguments: aMessageNode
+	| newLineBetweenArguments |
+	newLineBetweenArguments := self isMultiLineMessage: aMessageNode.
+	self
+		indent:
+			(newLineBetweenArguments
+				ifTrue: [ IndentsForKeywords ]
+				ifFalse: [ 0 ])
+		around: [ 
+			self
+				formatSelectorAndArguments: aMessageNode
+				firstSeparator:
+					((newLineBetweenArguments or: [ NewLineBeforeFirstKeyword ])
+						ifTrue: [ [ self newLine ] ]
+						ifFalse: [ [ self space ] ])
+				restSeparator:
+					(newLineBetweenArguments
+						ifTrue: [ [ self newLine ] ]
+						ifFalse: [ [ self space ] ]) ]
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+formatSelectorAndArguments: aMessageNode firstSeparator: firstBlock restSeparator: restBlock
+	| separatorBlock |
+	separatorBlock := firstBlock.
+	aMessageNode isUnary
+		ifTrue: [ 
+			(self isLineTooLong: aMessageNode selector)
+				ifTrue: [ self newLine ]
+				ifFalse: [ separatorBlock value ].
+			codeStream nextPutAll: aMessageNode selector ]
+		ifFalse: [ 
+			aMessageNode selectorParts
+				with: aMessageNode arguments
+				do: [ :selector :argument | 
+					(self isLineTooLong: selector value)
+						ifTrue: [ self newLine ]
+						ifFalse: [ separatorBlock value ].
+					separatorBlock := restBlock.
+					self
+						indentAround: [ 
+							codeStream nextPutAll: selector value.
+							(KeepBlockInMessage and: [ argument isBlock ])
+								ifTrue: [ 
+									self
+										space;
+										visitNode: argument ]
+								ifFalse: [ 
+									((self willBeMultiline: argument) or: [ self isLineTooLong: (self formattedSourceFor: argument) ])
+										ifTrue: [ self newLine ]
+										ifFalse: [ self space ].
+									self visitNode: argument ] ] ] ]
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+formatSequenceCommentsFor: aSequenceNode
+	originalSource isNil ifTrue: [^self].
+	aSequenceNode comments
+		do:
+			[:each | 
+			codeStream
+				nextPutAll:
+					(originalSource
+						copyFrom: each first
+						to: each last).
+			self newLine]
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+formatSequenceNodeStatementsFor: aSequenceNode 
+	| statements |
+	statements := aSequenceNode statements.
+	statements isEmpty ifTrue: [^self].
+	1 to: statements size
+		do: 
+			[:i | 
+			self visitNode: (statements at: i).
+			(i < statements size or: 
+					[| parent |
+					(parent := aSequenceNode parent) ifNil: [self class periodsAsTerminators]
+						ifNotNil: 
+							[ 
+							parent isBlock 
+								ifTrue: [self class periodsAtEndOfBlock]
+								ifFalse: [self class periodsAtEndOfMethod]]]) 
+				ifTrue: [codeStream nextPut: $.].
+			self formatStatementCommentsFor: (statements at: i).
+			i < statements size 
+				ifTrue: 
+					[self addNewLinesBeforeStatementStartingAt: (statements at: i + 1) start]]
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+formatStatementCommentsFor: aStatementNode
+	originalSource isNil ifTrue: [^self].
+	FormatCommentWithStatements ifFalse: [^self].
+	aStatementNode statementComments
+		do:
+			[:each | 
+			codeStream
+				tab;
+				nextPutAll:
+						(originalSource
+								copyFrom: each first
+								to: each last)]
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+formattedSourceFor: aNode 
+	^lookaheadCode at: aNode
+		ifAbsentPut: [self class format: aNode withIndents: indent]
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+formatTemporariesFor: aSequenceNode
+	aSequenceNode temporaries isEmpty ifTrue: [^self].
+	self
+		bracketWith: '|'
+		around:
+			[self space.
+			aSequenceNode temporaries
+				do:
+					[:each | 
+					self visitNode: each.
+					FormatCommentWithStatements ifTrue: [self formatCommentsFor: each].
+					self space]].
+	self newLines: NewLinesAfterTemporaries
+%
+
+category: 'initialize-release'
+method: RBConfigurableFormatter
+indent: anInteger
+	indent := anInteger
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+indent: anInteger around: aBlock 
+	indent := indent + anInteger.
+	^aBlock ensure: [indent := indent - anInteger]
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+indentAround: aBlock 
+	self indent: 1 around: aBlock
+%
+
+category: 'initialize-release'
+method: RBConfigurableFormatter
+initialize
+	super initialize.
+	lineStart := 0.
+	indent := 0.
+	lookaheadCode := IdentityDictionary new.
+	codeStream := WriteStreamPortable on: String new
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+isLineTooLong: aString 
+	^ self currentLineLength + (aString indexOf: Character lf ifAbsent: [ aString size ]) >= MaxLineLength
+%
+
+category: 'private-formatting'
+method: RBConfigurableFormatter
+isMultiLineMessage: aMessageNode
+	| messageStream |
+	(MultiLineMessages includes: aMessageNode selector)
+		ifTrue: [ ^ true ].
+	(OneLineMessages includes: aMessageNode selector)
+		ifTrue: [ ^ false ].
+	(NumberOfArgumentsForMultiLine <= aMessageNode arguments size)
+		ifTrue: [ ^ true ].
+	(aMessageNode arguments 
+		anySatisfy: [ :each | self indent: IndentsForKeywords + 1 around: [ self willBeMultiline: each ] ]) 
+		ifTrue: [ ^ true ].
+	aMessageNode isUnary
+		ifTrue: [ ^ self isLineTooLong: aMessageNode selector ].
+	messageStream := WriteStreamPortable on: String new.
+	self  with: aMessageNode selectorParts and: aMessageNode arguments 
+		do: [ :sel :arg | messageStream nextPutAll: sel value; space; nextPutAll: (self formattedSourceFor: arg) ]
+		separatedBy: [ messageStream space ].
+	^ self isLineTooLong: messageStream contents
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+needsParenthesisFor: aNode
+  | parent grandparent |
+  aNode isValue
+    ifFalse: [ ^ false ].
+  parent := aNode parent ifNil: [ ^ false ].
+  (CascadedMessageInsideParentheses
+    and: [ aNode isMessage and: [ parent isMessage and: [ parent receiver == aNode ] ] ])
+    ifTrue: [ 
+      grandparent := parent parent.
+      (grandparent notNil and: [ grandparent isCascade ])
+        ifTrue: [ ^ true ] ].
+  InQueryBlock
+    ifTrue: [ 
+      aNode isVariable
+        ifTrue: [ 
+          (aNode token isPath
+            and: [ 
+              parent isMessage
+                and: [ parent receiver == aNode and: [ aNode parent selector == #'&' ] ] ])
+            ifTrue: [ ^ true ] ] ].
+  aNode precedence < parent precedence
+    ifTrue: [ ^ false ].
+  (aNode isAssignment and: [ parent isAssignment ])
+    ifTrue: [ ^ false ].
+  (aNode isAssignment and: [ aNode isCascade ])
+    ifTrue: [ ^ true ].
+  aNode precedence = 0
+    ifTrue: [ ^ false ].
+  aNode isMessage
+    ifFalse: [ ^ true ].
+  aNode precedence = parent precedence
+    ifFalse: [ ^ true ].
+  aNode isUnary
+    ifTrue: [ ^ false ].
+  aNode isKeyword
+    ifTrue: [ ^ true ].
+  parent receiver == aNode
+    ifFalse: [ ^ true ].
+  InQueryBlock
+    ifTrue: [ ^ aNode receiver isMessage not and: [ aNode selector ~~ #'&' ] ].
+  ^ UseTraditionalBinaryPrecedenceForParentheses
+    and: [ self precedenceOf: parent selector greaterThan: aNode selector ]
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+newLine
+	self newLines: 1
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+newLines: anInteger 
+	anInteger + IndentString size = 0 ifTrue: [codeStream space].
+	anInteger timesRepeat: [codeStream lf].
+	lineStart := codeStream position.
+	indent timesRepeat: [codeStream nextPutAll: IndentString]
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+newLinesBeforeStartingAt: anIndex 
+	| count cr lf index char |
+	(anIndex isNil or: [anIndex > originalSource size]) ifTrue: [^0].
+	cr := Character value: 13.
+	lf := Character value: 10.
+	count := 0.
+	index := anIndex - 1.
+	[index > 0 and: [(char := originalSource at: index) isSqueakSeparator]] 
+		whileTrue: 
+			[char == lf 
+				ifTrue: 
+					[count := count + 1.
+					(originalSource at: (index - 1 max: 1)) == cr ifTrue: [index := index - 1]].
+			char == cr ifTrue: [count := count + 1].
+			index := index - 1].
+	^count
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+precedenceOf: parentSelector greaterThan: childSelector 
+	"Put parenthesis around things that are preceived to have 'lower' precedence. For example, 'a + b * c' 
+	-> '(a + b) * c' but 'a * b + c' -> 'a * b + c'"
+
+	| childIndex parentIndex |
+	childIndex := 0.
+	parentIndex := 0.
+	1 to: TraditionalBinaryPrecedence size
+		do: 
+			[:i | 
+			((TraditionalBinaryPrecedence at: i) includes: parentSelector first) 
+				ifTrue: [parentIndex := i].
+			((TraditionalBinaryPrecedence at: i) includes: childSelector first) 
+				ifTrue: [childIndex := i]].
+	^childIndex < parentIndex
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+space
+	codeStream space
+%
+
+category: 'visiting'
+method: RBConfigurableFormatter
+visitNode: aNode
+	| needsParenthesis |
+	(lookaheadCode includesKey: aNode)
+		ifTrue: [^self writeString: (lookaheadCode at: aNode)].
+	needsParenthesis := self needsParenthesisFor: aNode.
+	self
+		bracketWith:
+			(needsParenthesis
+				ifTrue: ['()']
+				ifFalse: [''])
+		around:
+			[needsParenthesis ifTrue: [codeStream nextPutAll: StringInsideParentheses].
+			super visitNode: aNode.
+			(FormatCommentWithStatements or: [aNode isMethod or: [aNode isSequence]])
+				ifFalse: [self formatCommentsFor: aNode].
+			needsParenthesis
+				ifTrue: [codeStream nextPutAll: StringInsideParentheses]]
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+willBeMultiline: aNode 
+	^(self formattedSourceFor: aNode) includes: Character lf
+%
+
+category: 'utility'
+method: RBConfigurableFormatter
+with: firstCollection and: secondCollection do: aBlock separatedBy: separatorBlock 
+	firstCollection isEmpty ifTrue: [^self].
+	aBlock
+		value: firstCollection first
+		value: secondCollection first.
+	2
+		to: firstCollection size
+		do: 
+			[:i | 
+			separatorBlock value.
+			aBlock
+				value: (firstCollection at: i)
+				value: (secondCollection at: i)]
+%
+
+category: 'private'
+method: RBConfigurableFormatter
+writeString: aString 
+	| index |
+	index := aString lastIndexOf: Character lf ifAbsent: [0].
+	codeStream nextPutAll: aString.
+	index > 0 
+		ifTrue: [lineStart := codeStream position - (aString size - index)]
+%
+
+! Class implementation for 'RBFormatter'
+
+!		Instance methods for 'RBFormatter'
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptArrayNode: anArrayNode
+	codeStream nextPut: ${.
+	anArrayNode statements isEmpty ifFalse: [
+		anArrayNode statements size > 1
+			ifTrue: [
+				self indent: 1 while: [
+					self indent.
+					self formatStatementsFor: anArrayNode ].
+				self indent ]
+			ifFalse: [ self formatStatementsFor: anArrayNode ] ].
+	codeStream nextPut: $}
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptAssignmentNode: anAssignmentNode 
+	self indent: 2
+		while: 
+			[self visitNode: anAssignmentNode variable.
+			codeStream space; nextPutAll: anAssignmentNode assignmentOperator; space.
+			self visitNode: anAssignmentNode value]
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptBlockNode: aBlockNode 
+	self 
+		acceptBlockNode: aBlockNode
+		startBlockString: '['
+		endBlockString: ']'
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptBlockNode: aBlockNode startBlockString: startBlockString endBlockString: endBlockString 
+	| seqNode multiline formattedBody formatter |
+	seqNode := aBlockNode body.
+	formatter := (self copy)
+				lineStart: 0;
+				yourself.
+	formattedBody := formatter format: seqNode.
+	multiline := self lineLength + formattedBody size > self maxLineSize 
+				or: [formatter isMultiLine].
+	multiline ifTrue: [self indent].
+	codeStream nextPutAll: startBlockString.
+	aBlockNode arguments do: 
+			[:each | 
+			codeStream nextPut: $:.
+			self visitNode: each.
+			codeStream nextPut: $ ].
+	aBlockNode arguments notEmpty 
+		ifTrue: 
+			[codeStream nextPutAll: '| '.
+			multiline ifTrue: [self indent]].
+	codeStream
+		nextPutAll: formattedBody;
+		nextPutAll: endBlockString
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptCascadeNode: aCascadeNode 
+	| messages |
+	messages := aCascadeNode messages.
+	self visitNode: messages first receiver.
+	self indentWhile: 
+			[self 
+				for: messages
+				do: 
+					[:each | 
+					self
+						indent;
+						indentWhile: [self formatMessage: each cascade: true]]
+				separatedBy: [codeStream nextPut: $;]]
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptLiteralArrayNode: aRBArrayLiteralNode 
+	codeStream nextPutAll: (aRBArrayLiteralNode isForByteArray 
+				ifTrue: ['#[']
+				ifFalse: ['#(']).
+	self 
+		for: aRBArrayLiteralNode contents
+		do: [:each | self visitNode: each]
+		separatedBy: [codeStream nextPut: $ ].
+	codeStream 
+		nextPut: (aRBArrayLiteralNode isForByteArray ifTrue: [$]] ifFalse: [$)])
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptLiteralNode: aLiteralNode 
+	aLiteralNode token rbStoreOn: codeStream
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptMessageNode: aMessageNode 
+	| newFormatter code |
+	newFormatter := self copy.
+	code := newFormatter format: aMessageNode receiver.
+	codeStream nextPutAll: code.
+	codeStream nextPut: $ .
+	newFormatter isMultiLine
+		ifTrue: [lineStart := codeStream position - newFormatter lastLineLength].
+	self indent: (newFormatter isMultiLine ifTrue: [2] ifFalse: [1])
+		while: [self formatMessage: aMessageNode cascade: false]
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptMethodNode: aMethodNode 
+	self formatMethodPatternFor: aMethodNode.
+	self indentWhile: [
+		self formatMethodCommentFor: aMethodNode indentBefore: true.
+		self indent.
+		self formatPragmasFor: aMethodNode.
+		aMethodNode body statements notEmpty 
+			ifTrue: [ self visitNode: aMethodNode body ] ]
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptPatternBlockNode: aRBPatternBlockNode 
+	self 
+		acceptBlockNode: aRBPatternBlockNode
+		startBlockString: '`{'
+		endBlockString: '}'
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptPatternWrapperBlockNode: aRBPatternWrapperBlockNode 
+	self visitNode: aRBPatternWrapperBlockNode wrappedNode.
+	self 
+		acceptBlockNode: aRBPatternWrapperBlockNode
+		startBlockString: '`{'
+		endBlockString: '}'
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptPragmaNode: aPragmaNode
+  codeStream nextPut: $<.
+  aPragmaNode isProtected
+    ifTrue: [ codeStream nextPutAll: 'protected ' ].
+  aPragmaNode selector isInfix
+    ifTrue: [ codeStream nextPut: $  ].
+  self formatMessage: aPragmaNode cascade: false.
+  codeStream nextPut: $>
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptQueryBlockNode: aBlockNode
+  [ 
+  inQueryBlock := true.
+  self
+    acceptQueryBlockNode: aBlockNode
+    startBlockString: '{'
+    endBlockString: '}' ]
+    ensure: [ inQueryBlock := false ]
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptQueryBlockNode: aBlockNode startBlockString: startBlockString endBlockString: endBlockString
+  | seqNode multiline formattedBody formatter |
+  seqNode := aBlockNode body.
+  formatter := self copy
+    lineStart: 0;
+    yourself.
+  formattedBody := formatter format: seqNode.
+  multiline := self lineLength + formattedBody size > self maxLineSize
+    or: [ formatter isMultiLine ].
+  multiline
+    ifTrue: [ self indent ].
+  codeStream nextPutAll: startBlockString.
+  aBlockNode arguments
+    do: [ :each | 
+      codeStream nextPut: $:.
+      self visitNode: each.
+      codeStream nextPut: $  ].
+  aBlockNode arguments notEmpty
+    ifTrue: [ 
+      codeStream nextPutAll: '| '.
+      multiline
+        ifTrue: [ self indent ] ].
+  codeStream
+    nextPutAll: formattedBody;
+    nextPutAll: endBlockString
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptReturnNode: aReturnNode 
+	codeStream nextPut: $^.
+	self visitNode: aReturnNode value
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptSequenceNode: aSequenceNode 
+	self formatMethodCommentFor: aSequenceNode indentBefore: false.
+	self formatTemporariesFor: aSequenceNode.
+	self formatStatementsFor: aSequenceNode
+%
+
+category: 'visitor-double dispatching'
+method: RBFormatter
+acceptVariableNode: aVariableNode 
+	codeStream nextPutAll: aVariableNode name
+%
+
+category: 'accessing'
+method: RBFormatter
+firstLineLength
+	^firstLineLength isNil
+		ifTrue: [codeStream position]
+		ifFalse: [firstLineLength]
+%
+
+category: 'private'
+method: RBFormatter
+for: aValue do: doBlock separatedBy: separatorBlock 
+	"This is implemented here since IBM Smalltalk doesn't implement a do:separatedBy: method"
+
+	aValue isEmpty ifTrue: [^self].
+	1 to: aValue size - 1
+		do: 
+			[:i | 
+			doBlock value: (aValue at: i).
+			separatorBlock value].
+	doBlock value: aValue last
+%
+
+category: 'accessing'
+method: RBFormatter
+format: aNode 
+	self visitNode: aNode.
+	^codeStream contents
+%
+
+category: 'private-formatting'
+method: RBFormatter
+formatMessage: aMessageNode cascade: cascadeBoolean 
+	| selectorParts arguments multiLine formattedArgs indentFirst firstArgLength length |
+	selectorParts := aMessageNode selectorParts.
+	arguments := aMessageNode arguments.
+	formattedArgs := OrderedCollection new.
+	multiLine := aMessageNode selector numArgs > self maximumArgumentsPerLine.
+	length := aMessageNode selector size + arguments size + 1.
+	firstArgLength := 0.
+	self indentWhile: 
+			[1 to: arguments size
+				do: 
+					[:i | 
+					| formatter string |
+					formatter := (self copy)
+								lineStart: (selectorParts at: i) length negated;
+								yourself.
+					string := formatter format: (arguments at: i).
+					formattedArgs add: string.
+					i == 1 ifTrue: [firstArgLength := formatter firstLineLength].
+					length := length + string size.
+					multiLine := multiLine or: [formatter isMultiLine]]].
+	multiLine := multiLine or: [length + self lineLength > self maxLineSize].
+	indentFirst := cascadeBoolean not and: 
+					[multiLine and: 
+							[(self startMessageSendOnNewLine: aMessageNode) or: 
+									[self lineLength + selectorParts first length + 2 + firstArgLength 
+										> self maxLineSize]]].
+	indentFirst ifTrue: [self indent].
+	self 
+		formatMessageSelector: selectorParts
+		withArguments: formattedArgs
+		multiline: multiLine
+%
+
+category: 'private-formatting'
+method: RBFormatter
+formatMessageSelector: selectorParts withArguments: formattedArgs multiline: multiLine 
+	formattedArgs isEmpty 
+		ifTrue: [codeStream nextPutAll: selectorParts first value]
+		ifFalse: 
+			[1 to: formattedArgs size
+				do: 
+					[:i | 
+					(i ~= 1 and: [ multiLine not ])
+						ifTrue: [codeStream nextPut: $ ].
+					codeStream 
+						nextPutAll: (selectorParts at: i) value;
+						nextPut: $ ;
+						nextPutAll: (formattedArgs at: i).
+					(multiLine and: [i < formattedArgs size]) ifTrue: [self indent]]]
+%
+
+category: 'private-formatting'
+method: RBFormatter
+formatMethodCommentFor: aNode indentBefore: aBoolean 
+	| source |
+	source := aNode source.
+	source isNil ifTrue: [^self].
+	aNode methodComments do: 
+			[:each | 
+			aBoolean ifTrue: [self indent].
+			codeStream
+				nextPutAll: (aNode source copyFrom: each first to: each last);
+				lf.
+			aBoolean ifFalse: [self indent]]
+%
+
+category: 'private-formatting'
+method: RBFormatter
+formatMethodPatternFor: aMethodNode 
+	| selectorParts arguments |
+	selectorParts := aMethodNode selectorParts.
+	arguments := aMethodNode arguments.
+	arguments isEmpty 
+		ifTrue: [codeStream nextPutAll: selectorParts first value]
+		ifFalse: 
+			[selectorParts with: arguments
+				do: 
+					[:selector :arg | 
+					codeStream
+						nextPutAll: selector value;
+						nextPut: $ .
+					self visitArgument: arg.
+					codeStream nextPut: $ ]]
+%
+
+category: 'private-formatting'
+method: RBFormatter
+formatPragmasFor: aNode
+	aNode pragmas do: [ :each | self visitNode: each; indent ]
+%
+
+category: 'private-formatting'
+method: RBFormatter
+formatStatementCommentFor: aNode 
+	| source |
+	source := aNode source.
+	source isNil ifTrue: [^self].
+	aNode statementComments do: 
+			[:each | 
+			| crs |
+			crs := self newLinesFor: source startingAt: each first.
+			(crs - 1 max: 0) timesRepeat: [codeStream lf].
+			crs == 0 ifTrue: [codeStream tab] ifFalse: [self indent].
+			codeStream nextPutAll: (source copyFrom: each first to: each last)]
+%
+
+category: 'private-formatting'
+method: RBFormatter
+formatStatementsFor: aSequenceNode 
+	| statements |
+	statements := aSequenceNode statements.
+	statements isEmpty ifTrue: [^self].
+	1 to: statements size - 1
+		do: 
+			[:i | 
+			self visitNode: (statements at: i).
+			codeStream nextPut: $..
+			self formatStatementCommentFor: (statements at: i).
+			self indent].
+	self visitNode: statements last.
+	self formatStatementCommentFor: statements last
+%
+
+category: 'private-formatting'
+method: RBFormatter
+formatTemporariesFor: aSequenceNode 
+	| temps |
+	temps := aSequenceNode temporaries.
+	temps isEmpty ifTrue: [^self].
+	codeStream nextPutAll: '| '.
+	temps do: 
+			[:each | 
+			self visitArgument: each.
+			codeStream nextPut: $ ].
+	codeStream nextPut: $|.
+	self indent
+%
+
+category: 'private'
+method: RBFormatter
+indent
+	firstLineLength isNil ifTrue: [firstLineLength := codeStream position].
+	codeStream lf.
+	tabs timesRepeat: [codeStream tab].
+	lineStart := codeStream position
+%
+
+category: 'private'
+method: RBFormatter
+indent: anInteger while: aBlock 
+	tabs := tabs + anInteger.
+	aBlock value.
+	tabs := tabs - anInteger
+%
+
+category: 'private'
+method: RBFormatter
+indentWhile: aBlock 
+	self indent: 1 while: aBlock
+%
+
+category: 'initialize-release'
+method: RBFormatter
+initialize
+  super initialize.
+  codeStream := WriteStreamPortable on: String new.
+  tabs := 0.
+  lineStart := 0.
+  inQueryBlock := false
+%
+
+category: 'accessing'
+method: RBFormatter
+isMultiLine
+	^firstLineLength notNil
+%
+
+category: 'accessing'
+method: RBFormatter
+lastLineLength
+	^codeStream position - (lineStart max: 0)
+%
+
+category: 'private'
+method: RBFormatter
+lineLength
+	^codeStream position - lineStart
+%
+
+category: 'private'
+method: RBFormatter
+lineStart: aPosition 
+	lineStart := aPosition
+%
+
+category: 'private'
+method: RBFormatter
+maximumArgumentsPerLine
+	^2
+%
+
+category: 'private'
+method: RBFormatter
+maxLineSize
+	^75
+%
+
+category: 'private'
+method: RBFormatter
+needsParenthesisFor: aNode
+  | parent grandparent |
+  aNode isValue
+    ifFalse: [ ^ false ].
+  parent := aNode parent ifNil: [ ^ false ].
+  (aNode isMessage and: [ parent isMessage and: [ parent receiver == aNode ] ])
+    ifTrue: [ 
+      grandparent := parent parent.
+      (grandparent notNil and: [ grandparent isCascade ])
+        ifTrue: [ ^ true ] ].
+  inQueryBlock
+    ifTrue: [ 
+      aNode isLiteralNode
+        ifTrue: [ 
+          (parent isMessage
+            and: [ parent receiver == aNode and: [ aNode parent selector == #'&' ] ])
+            ifTrue: [ ^ true ] ].
+      aNode isVariable
+        ifTrue: [ 
+          (aNode token isPath
+            and: [ 
+              parent isMessage
+                and: [ parent receiver == aNode and: [ aNode parent selector == #'&' ] ] ])
+            ifTrue: [ ^ true ] ] ].
+  aNode precedence < parent precedence
+    ifTrue: [ ^ false ].
+  (aNode isAssignment and: [ parent isAssignment ])
+    ifTrue: [ ^ false ].
+  (aNode isAssignment and: [ aNode isCascade ])
+    ifTrue: [ ^ true ].
+  aNode precedence = 0
+    ifTrue: [ ^ false ].
+  aNode isMessage
+    ifFalse: [ ^ true ].
+  aNode precedence = parent precedence
+    ifFalse: [ ^ true ].
+  aNode isUnary
+    ifTrue: [ ^ false ].
+  aNode isKeyword
+    ifTrue: [ ^ true ].
+  parent receiver == aNode
+    ifFalse: [ ^ true ].
+  inQueryBlock
+    ifTrue: [ ^ aNode receiver isMessage not and: [ aNode selector ~~ #'&' ] ].
+  ^ self precedenceOf: parent selector greaterThan: aNode selector
+%
+
+category: 'private-formatting'
+method: RBFormatter
+newLinesFor: aString startingAt: anIndex 
+	| count cr lf index char |
+	cr := Character codePoint: 13.
+	lf := Character codePoint: 10.
+	count := 0.
+	index := anIndex - 1.
+	[index > 0 and: 
+			[char := aString at: index.
+			char isSeparator]] 
+		whileTrue: 
+			[char == lf 
+				ifTrue: 
+					[count := count + 1.
+					(aString at: (index - 1 max: 1)) == cr ifTrue: [index := index - 1]].
+			char == cr ifTrue: [count := count + 1].
+			index := index - 1].
+	^count
+%
+
+category: 'copying'
+method: RBFormatter
+postCopy
+	super postCopy.
+	lineStart := self lineLength negated.
+	codeStream := WriteStreamPortable on: String new.
+	firstLineLength := nil
+%
+
+category: 'private'
+method: RBFormatter
+precedenceOf: parentSelector greaterThan: childSelector 
+	"Put parenthesis around things that are preceived to have 'lower' precedence. For example, 'a + b * c' 
+	-> '(a + b) * c' but 'a * b + c' -> 'a * b + c'"
+
+	| childIndex parentIndex operators |
+	operators := #(#($| $& $?) #($= $~ $< $>) #($- $+) #($* $/ $% $\) #($@)).
+	childIndex := 0.
+	parentIndex := 0.
+	1 to: operators size
+		do: 
+			[:i | 
+			((operators at: i) includes: parentSelector first) 
+				ifTrue: [parentIndex := i].
+			((operators at: i) includes: childSelector first) 
+				ifTrue: [childIndex := i]].
+	^childIndex < parentIndex
+%
+
+category: 'private'
+method: RBFormatter
+selectorsToLeaveOnLine
+	^#(#to:do: #to:by: #to:by:do:)
+%
+
+category: 'private'
+method: RBFormatter
+selectorsToStartOnNewLine
+	^#(#ifTrue:ifFalse: #ifFalse:ifTrue: #ifTrue: #ifFalse:)
+%
+
+category: 'testing'
+method: RBFormatter
+startMessageSendOnNewLine: aMessageNode 
+	(self selectorsToStartOnNewLine includes: aMessageNode selector) 
+		ifTrue: [^true].
+	(self selectorsToLeaveOnLine includes: aMessageNode selector) 
+		ifTrue: [^false].
+	^aMessageNode selector numArgs > self maximumArgumentsPerLine
+%
+
+category: 'visiting'
+method: RBFormatter
+visitNode: aNode
+  | parenthesis |
+  parenthesis := self needsParenthesisFor: aNode.
+  parenthesis
+    ifTrue: [ codeStream nextPut: $( ].
+  aNode acceptVisitor: self.
+  parenthesis
+    ifTrue: [ codeStream nextPut: $) ]
+%
+
+! Class implementation for 'RBParseTreeSearcher'
+
+!		Class methods for 'RBParseTreeSearcher'
+
+category: 'private'
+classmethod: RBParseTreeSearcher
+buildSelectorString: aSelector 
+	| stream keywords |
+	aSelector numArgs = 0 ifTrue: [^aSelector].
+	stream := WriteStreamPortable on: String new.
+	keywords := aSelector keywords.
+	1 to: keywords size
+		do: 
+			[:i | 
+			stream
+				nextPutAll: (keywords at: i);
+				nextPutAll: ' ``@arg';
+				nextPutAll: i printString;
+				nextPut: $ ].
+	^stream contents
+%
+
+category: 'private'
+classmethod: RBParseTreeSearcher
+buildSelectorTree: aSelector 
+	aSelector isEmpty ifTrue: [^nil].
+	^RBParser parseRewriteExpression: '``@receiver ' 
+				, (self buildSelectorString: aSelector)
+		onError: [:err :pos | ^nil]
+%
+
+category: 'private'
+classmethod: RBParseTreeSearcher
+buildTree: aString method: aBoolean 
+	^aBoolean 
+		ifTrue: [RBParser parseRewriteMethod: aString]
+		ifFalse: [RBParser parseRewriteExpression: aString]
+%
+
+category: 'instance creation'
+classmethod: RBParseTreeSearcher
+getterMethod: aVarName 
+	^(self new)
+		matchesMethod: '`method ^' , aVarName do: [:aNode :ans | aNode selector];
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RBParseTreeSearcher
+justSendsSuper
+	^ self new
+		matchesAnyMethodOf: #(
+			'`@method: `@args ^ super `@method: `@args' 
+			'`@method: `@args super `@method: `@args')
+		do: [ :node :answer | true ];
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RBParseTreeSearcher
+returnSetterMethod: aVarName 
+	^(self new)
+		matchesMethod: '`method: `Arg ^' , aVarName , ' := `Arg'
+			do: [:aNode :ans | aNode selector];
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RBParseTreeSearcher
+setterMethod: aVarName 
+	^(self new)
+		matchesAnyMethodOf: (Array with: '`method: `Arg ' , aVarName , ' := `Arg'
+					with: '`method: `Arg ^' , aVarName , ' := `Arg')
+			do: [:aNode :ans | aNode selector];
+		yourself
+%
+
+category: 'accessing'
+classmethod: RBParseTreeSearcher
+treeMatching: aString in: aParseTree 
+	(self new)
+		matches: aString do: [:aNode :answer | ^aNode];
+		executeTree: aParseTree.
+	^nil
+%
+
+category: 'accessing'
+classmethod: RBParseTreeSearcher
+treeMatchingStatements: aString in: aParseTree 
+	| notifier tree |
+	notifier := self new.
+	tree := RBParser parseExpression: aString.
+	tree isSequence 
+		ifFalse: [tree := RBSequenceNode statements: (Array with: tree)].
+	tree temporaries: (Array with: (RBPatternVariableNode named: '`@temps')).
+	tree addNodeFirst: (RBPatternVariableNode named: '`@.S1').
+	tree lastIsReturn 
+		ifFalse: [tree addNode: (RBPatternVariableNode named: '`@.S2')].
+	notifier matchesTree: tree
+		do: [:aNode :answer | ^RBParser parseExpression: aString].
+	notifier executeTree: aParseTree.
+	^nil
+%
+
+!		Instance methods for 'RBParseTreeSearcher'
+
+category: 'accessing'
+method: RBParseTreeSearcher
+addArgumentRule: aParseTreeRule 
+	argumentSearches add: aParseTreeRule.
+	aParseTreeRule owner: self
+%
+
+category: 'accessing'
+method: RBParseTreeSearcher
+addArgumentRules: ruleCollection 
+	ruleCollection do: [:each | self addArgumentRule: each]
+%
+
+category: 'accessing'
+method: RBParseTreeSearcher
+addRule: aParseTreeRule 
+	searches add: aParseTreeRule.
+	aParseTreeRule owner: self
+%
+
+category: 'accessing'
+method: RBParseTreeSearcher
+addRules: ruleCollection 
+	ruleCollection do: [:each | self addRule: each]
+%
+
+category: 'accessing'
+method: RBParseTreeSearcher
+answer
+	^answer
+%
+
+category: 'initialize-release'
+method: RBParseTreeSearcher
+answer: anObject
+	answer := anObject
+%
+
+category: 'testing'
+method: RBParseTreeSearcher
+canMatchMethod: aCompiledMethod
+	| actualMessages |
+	self messages isEmpty
+		ifTrue: [ ^ true ].
+	actualMessages := aCompiledMethod messages.
+	^ self messages 
+		anySatisfy: [ :each | actualMessages includes: each ]
+%
+
+category: 'accessing'
+method: RBParseTreeSearcher
+context
+	^context
+%
+
+category: 'accessing'
+method: RBParseTreeSearcher
+executeMethod: aParseTree initialAnswer: anObject 
+	answer := anObject.
+	searches detect: [:each | (each performOn: aParseTree) notNil] ifNone: [].
+	^answer
+%
+
+category: 'accessing'
+method: RBParseTreeSearcher
+executeTree: aParseTree 
+	"Save our current context, in case someone is performing another search inside a match."
+
+	| oldContext |
+	oldContext := context.
+	context := RBSmallDictionary new.
+	self visitNode: aParseTree.
+	context := oldContext.
+	^answer
+%
+
+category: 'accessing'
+method: RBParseTreeSearcher
+executeTree: aParseTree initialAnswer: aValue 
+	answer := aValue.
+	^self executeTree: aParseTree
+%
+
+category: 'private'
+method: RBParseTreeSearcher
+foundMatch
+%
+
+category: 'testing'
+method: RBParseTreeSearcher
+hasRules
+	^searches notEmpty
+%
+
+category: 'initialize-release'
+method: RBParseTreeSearcher
+initialize
+	super initialize.
+	context := RBSmallDictionary new.
+	searches := OrderedCollection new.
+	argumentSearches := OrderedCollection new: 0.
+	answer := nil
+%
+
+category: 'private'
+method: RBParseTreeSearcher
+lookForMoreMatchesInContext: oldContext 
+	oldContext keysAndValuesDo: 
+			[:key :value | 
+			(key isString not and: [key recurseInto]) 
+				ifTrue: [value do: [:each | self visitNode: each]]]
+%
+
+category: 'searching'
+method: RBParseTreeSearcher
+matches: aString do: aBlock 
+	self addRule: (RBSearchRule searchFor: aString thenDo: aBlock)
+%
+
+category: 'searching'
+method: RBParseTreeSearcher
+matchesAnyArgumentOf: stringCollection do: aBlock 
+	stringCollection do: [:each | self matchesArgument: each do: aBlock]
+%
+
+category: 'searching'
+method: RBParseTreeSearcher
+matchesAnyMethodOf: aStringCollection do: aBlock 
+	aStringCollection do: [:each | self matchesMethod: each do: aBlock]
+%
+
+category: 'searching'
+method: RBParseTreeSearcher
+matchesAnyOf: aStringCollection do: aBlock 
+	aStringCollection do: [:each | self matches: each do: aBlock]
+%
+
+category: 'searching'
+method: RBParseTreeSearcher
+matchesAnyTreeOf: treeCollection do: aBlock 
+	treeCollection do: [:each | self matchesTree: each do: aBlock]
+%
+
+category: 'searching'
+method: RBParseTreeSearcher
+matchesArgument: aString do: aBlock 
+	self addArgumentRule: (RBSearchRule searchFor: aString thenDo: aBlock)
+%
+
+category: 'searching'
+method: RBParseTreeSearcher
+matchesArgumentTree: aBRProgramNode do: aBlock 
+	self 
+		addArgumentRule: (RBSearchRule searchForTree: aBRProgramNode thenDo: aBlock)
+%
+
+category: 'searching'
+method: RBParseTreeSearcher
+matchesMethod: aString do: aBlock 
+	self addRule: (RBSearchRule searchForMethod: aString thenDo: aBlock)
+%
+
+category: 'searching'
+method: RBParseTreeSearcher
+matchesTree: aBRProgramNode do: aBlock 
+	self addRule: (RBSearchRule searchForTree: aBRProgramNode thenDo: aBlock)
+%
+
+category: 'accessing'
+method: RBParseTreeSearcher
+messages
+	messages notNil ifTrue: [^messages].
+	argumentSearches notEmpty ifTrue: [^messages := #()].
+	messages := Set new.
+	searches do: 
+			[:each | 
+			| searchMessages |
+			searchMessages := each sentMessages.
+			RBProgramNode optimizedSelectors 
+				do: [:sel | searchMessages remove: sel ifAbsent: []].
+			searchMessages isEmpty ifTrue: [^messages := #()].
+			messages addAll: searchMessages].
+	^messages := messages asArray
+%
+
+category: 'private'
+method: RBParseTreeSearcher
+performSearches: aSearchCollection on: aNode 
+	| value |
+	1 to: aSearchCollection size
+		do: 
+			[:i | 
+			value := (aSearchCollection at: i) performOn: aNode.
+			value notNil 
+				ifTrue: 
+					[self foundMatch.
+					^value]].
+	^nil
+%
+
+category: 'private'
+method: RBParseTreeSearcher
+recusivelySearchInContext
+	"We need to save the matched context since the other searches might overwrite it."
+
+	| oldContext |
+	oldContext := context.
+	context := RBSmallDictionary new.
+	self lookForMoreMatchesInContext: oldContext.
+	context := oldContext
+%
+
+category: 'visiting'
+method: RBParseTreeSearcher
+visitArgument: aNode 
+	| value |
+	value := self performSearches: argumentSearches on: aNode.
+	^value isNil 
+		ifTrue: 
+			[aNode acceptVisitor: self.
+			aNode]
+		ifFalse: [value]
+%
+
+category: 'visiting'
+method: RBParseTreeSearcher
+visitNode: aNode 
+	| value |
+	value := self performSearches: searches on: aNode.
+	^value isNil 
+		ifTrue: 
+			[aNode acceptVisitor: self.
+			aNode]
+		ifFalse: [value]
+%
+
+! Class implementation for 'RBParseTreeRewriter'
+
+!		Class methods for 'RBParseTreeRewriter'
+
+category: 'instance creation'
+classmethod: RBParseTreeRewriter
+removeTemporaryNamed: aName 
+	| rewriteRule |
+	rewriteRule := self new.
+	rewriteRule replace: '| `@temps1 ' , aName , ' `@temps2 | ``@.Statements'
+		with: '| `@temps1  `@temps2 | ``@.Statements'.
+	^rewriteRule
+%
+
+category: 'instance creation'
+classmethod: RBParseTreeRewriter
+rename: varName to: newVarName 
+	| rewriteRule |
+	rewriteRule := self new.
+	rewriteRule
+		replace: varName with: newVarName;
+		replaceArgument: varName with: newVarName.
+	^rewriteRule
+%
+
+category: 'instance creation'
+classmethod: RBParseTreeRewriter
+rename: varName to: newVarName handler: aBlock 
+	"Rename varName to newVarName, evaluating aBlock if there is a 
+	temporary variable with the same name as newVarName. This 
+	does not change temporary variables with varName."
+
+	| rewriteRule |
+	rewriteRule := self new.
+	rewriteRule
+		replace: varName with: newVarName;
+		replaceArgument: newVarName
+			withValueFrom: 
+				[:aNode | 
+				aBlock value.
+				aNode].
+	^rewriteRule
+%
+
+category: 'accessing'
+classmethod: RBParseTreeRewriter
+replace: code with: newCode in: aParseTree 
+	^(self 
+		replace: code
+		with: newCode
+		method: false)
+		executeTree: aParseTree;
+		tree
+%
+
+category: 'accessing'
+classmethod: RBParseTreeRewriter
+replace: code with: newCode in: aParseTree onInterval: anInterval 
+	| rewriteRule |
+	rewriteRule := self new.
+	^rewriteRule
+		replace: code
+			with: newCode
+			when: [:aNode | aNode intersectsInterval: anInterval];
+		executeTree: aParseTree;
+		tree
+%
+
+category: 'instance creation'
+classmethod: RBParseTreeRewriter
+replace: code with: newCode method: aBoolean 
+	| rewriteRule |
+	rewriteRule := self new.
+	aBoolean 
+		ifTrue: [rewriteRule replaceMethod: code with: newCode]
+		ifFalse: [rewriteRule replace: code with: newCode].
+	^rewriteRule
+%
+
+category: 'instance creation'
+classmethod: RBParseTreeRewriter
+replaceLiteral: literal with: newLiteral 
+	| rewriteRule |
+	rewriteRule := self new.
+	rewriteRule replaceTree: (RBLiteralNode value: literal)
+		withTree: (RBLiteralNode value: newLiteral).
+	^rewriteRule
+%
+
+category: 'accessing'
+classmethod: RBParseTreeRewriter
+replaceStatements: code with: newCode in: aParseTree onInterval: anInterval 
+	| tree replaceStmt |
+	tree := self buildTree: code method: false.
+	tree isSequence 
+		ifFalse: [tree := RBSequenceNode statements: (Array with: tree)].
+	tree temporaries: (Array with: (RBPatternVariableNode named: '`@temps')).
+	tree addNodeFirst: (RBPatternVariableNode named: '`@.S1').
+	tree lastIsReturn 
+		ifTrue: [replaceStmt := '| `@temps | `@.S1. ^' , newCode]
+		ifFalse: 
+			[tree addNode: (RBPatternVariableNode named: '`@.S2').
+			replaceStmt := '| `@temps | `@.S1. ' , newCode , '. `@.S2'].
+	^self 
+		replace: tree formattedCode
+		with: replaceStmt
+		in: aParseTree
+		onInterval: anInterval
+%
+
+category: 'instance creation'
+classmethod: RBParseTreeRewriter
+variable: aVarName getter: getMethod setter: setMethod 
+	^self 
+		variable: aVarName
+		getter: getMethod
+		setter: setMethod
+		receiver: 'self'
+%
+
+category: 'instance creation'
+classmethod: RBParseTreeRewriter
+variable: aVarName getter: getMethod setter: setMethod receiver: aString 
+	| rewriteRule |
+	rewriteRule := self new.
+	rewriteRule
+		replace: aVarName , ' := ``@object'
+			with: aString , ' ' , setMethod , ' ``@object';
+		replace: aVarName with: aString , ' ' , getMethod.
+	^rewriteRule
+%
+
+!		Instance methods for 'RBParseTreeRewriter'
+
+category: 'visitor-double dispatching'
+method: RBParseTreeRewriter
+acceptArrayNode: anArrayNode
+	anArrayNode statements: (anArrayNode statements 
+				collect: [:each | self visitNode: each])
+%
+
+category: 'visitor-double dispatching'
+method: RBParseTreeRewriter
+acceptAssignmentNode: anAssignmentNode 
+	anAssignmentNode variable: (self visitNode: anAssignmentNode variable).
+	anAssignmentNode value: (self visitNode: anAssignmentNode value)
+%
+
+category: 'visitor-double dispatching'
+method: RBParseTreeRewriter
+acceptBlockNode: aBlockNode 
+	aBlockNode arguments: (self visitArguments: aBlockNode arguments).
+	aBlockNode body: (self visitNode: aBlockNode body)
+%
+
+category: 'visitor-double dispatching'
+method: RBParseTreeRewriter
+acceptCascadeNode: aCascadeNode 
+	| newMessages notFound |
+	newMessages := OrderedCollection new: aCascadeNode messages size.
+	notFound := OrderedCollection new: aCascadeNode messages size.
+	aCascadeNode messages do: 
+			[:each | 
+			| newNode |
+			newNode := self performSearches: searches on: each.
+			newNode isNil 
+				ifTrue: 
+					[newNode := each.
+					notFound add: newNode].
+			newNode isMessage 
+				ifTrue: [newMessages add: newNode]
+				ifFalse: 
+					[newNode isCascade 
+						ifTrue: [newMessages addAll: newNode messages]
+						ifFalse: 
+							[Transcript
+								show: 'Cannot replace message node inside of cascaded node with non-message node.';
+								cr.
+							newMessages add: each]]].
+	notFound size = aCascadeNode messages size 
+		ifTrue: 
+			[| receiver |
+			receiver := self visitNode: aCascadeNode messages first receiver.
+			newMessages do: [:each | each receiver: receiver]].
+	notFound 
+		do: [:each | each arguments: (each arguments collect: [:arg | self visitNode: arg])].
+	aCascadeNode messages: newMessages
+%
+
+category: 'visitor-double dispatching'
+method: RBParseTreeRewriter
+acceptLiteralArrayNode: aRBArrayLiteralNode 
+	aRBArrayLiteralNode contents: (aRBArrayLiteralNode contents 
+				collect: [:each | self visitNode: each])
+%
+
+category: 'visitor-double dispatching'
+method: RBParseTreeRewriter
+acceptMessageNode: aMessageNode 
+	aMessageNode receiver: (self visitNode: aMessageNode receiver).
+	aMessageNode 
+		arguments: (aMessageNode arguments collect: [:each | self visitNode: each])
+%
+
+category: 'visitor-double dispatching'
+method: RBParseTreeRewriter
+acceptMethodNode: aMethodNode 
+	aMethodNode arguments: (self visitArguments: aMethodNode arguments).
+	aMethodNode pragmas: (aMethodNode pragmas 
+		collect: [:each | self visitNode: each]).
+	aMethodNode body: (self visitNode: aMethodNode body)
+%
+
+category: 'visitor-double dispatching'
+method: RBParseTreeRewriter
+acceptPragmaNode: aPragmaNode 
+	aPragmaNode arguments: (aPragmaNode arguments collect: [:each | self visitNode: each])
+%
+
+category: 'visitor-double dispatching'
+method: RBParseTreeRewriter
+acceptReturnNode: aReturnNode 
+	aReturnNode value: (self visitNode: aReturnNode value)
+%
+
+category: 'visitor-double dispatching'
+method: RBParseTreeRewriter
+acceptSequenceNode: aSequenceNode 
+	aSequenceNode 
+		temporaries: (self visitArguments: aSequenceNode temporaries).
+	aSequenceNode statements: (aSequenceNode statements 
+				collect: [:each | self visitNode: each])
+%
+
+category: 'accessing'
+method: RBParseTreeRewriter
+executeTree: aParseTree 
+	| oldContext |
+	oldContext := context.
+	context := RBSmallDictionary new.
+	answer := false.
+	tree := self visitNode: aParseTree.
+	context := oldContext.
+	^answer
+%
+
+category: 'private'
+method: RBParseTreeRewriter
+foundMatch
+	answer := true
+%
+
+category: 'private'
+method: RBParseTreeRewriter
+lookForMoreMatchesInContext: oldContext 
+	oldContext keysAndValuesDo: 
+			[:key :value | 
+			(key isString not and: [key recurseInto]) 
+				ifTrue: 
+					[oldContext at: key put: (value collect: [:each | self visitNode: each])]]
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replace: searchString with: replaceString 
+	self addRule: (RBStringReplaceRule searchFor: searchString
+				replaceWith: replaceString)
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replace: searchString with: replaceString when: aBlock 
+	self addRule: (RBStringReplaceRule 
+				searchFor: searchString
+				replaceWith: replaceString
+				when: aBlock)
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replace: searchString withValueFrom: replaceBlock 
+	self addRule: (RBBlockReplaceRule searchFor: searchString
+				replaceWith: replaceBlock)
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replace: searchString withValueFrom: replaceBlock when: conditionBlock 
+	self addRule: (RBBlockReplaceRule 
+				searchFor: searchString
+				replaceWith: replaceBlock
+				when: conditionBlock)
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replaceArgument: searchString with: replaceString 
+	self addArgumentRule: (RBStringReplaceRule searchFor: searchString
+				replaceWith: replaceString)
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replaceArgument: searchString with: replaceString when: aBlock 
+	self addArgumentRule: (RBStringReplaceRule 
+				searchFor: searchString
+				replaceWith: replaceString
+				when: aBlock)
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replaceArgument: searchString withValueFrom: replaceBlock 
+	self addArgumentRule: (RBBlockReplaceRule searchFor: searchString
+				replaceWith: replaceBlock)
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replaceArgument: searchString withValueFrom: replaceBlock when: conditionBlock 
+	self addArgumentRule: (RBBlockReplaceRule 
+				searchFor: searchString
+				replaceWith: replaceBlock
+				when: conditionBlock)
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replaceMethod: searchString with: replaceString 
+	self addRule: (RBStringReplaceRule searchForMethod: searchString
+				replaceWith: replaceString)
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replaceMethod: searchString with: replaceString when: aBlock 
+	self addRule: (RBStringReplaceRule 
+				searchForMethod: searchString
+				replaceWith: replaceString
+				when: aBlock)
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replaceMethod: searchString withValueFrom: replaceBlock 
+	self addRule: (RBBlockReplaceRule searchForMethod: searchString
+				replaceWith: replaceBlock)
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replaceMethod: searchString withValueFrom: replaceBlock when: conditionBlock 
+	self addRule: (RBBlockReplaceRule 
+				searchForMethod: searchString
+				replaceWith: replaceBlock
+				when: conditionBlock)
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replaceTree: searchTree withTree: replaceTree 
+	self addRule: (RBStringReplaceRule searchForTree: searchTree
+				replaceWith: replaceTree)
+%
+
+category: 'replacing'
+method: RBParseTreeRewriter
+replaceTree: searchTree withTree: replaceTree when: aBlock 
+	self addRule: (RBStringReplaceRule 
+				searchForTree: searchTree
+				replaceWith: replaceTree
+				when: aBlock)
+%
+
+category: 'accessing'
+method: RBParseTreeRewriter
+tree
+	^tree
+%
+
+category: 'visiting'
+method: RBParseTreeRewriter
+visitArguments: aNodeCollection 
+	^aNodeCollection collect: [:each | self visitArgument: each]
+%
+
+! Class implementation for 'RBReadBeforeWrittenTester'
+
+!		Class methods for 'RBReadBeforeWrittenTester'
+
+category: 'accessing'
+classmethod: RBReadBeforeWrittenTester
+isVariable: aString readBeforeWrittenIn: aBRProgramNode 
+	^(self isVariable: aString writtenBeforeReadIn: aBRProgramNode) not
+%
+
+category: 'accessing'
+classmethod: RBReadBeforeWrittenTester
+isVariable: aString writtenBeforeReadIn: aBRProgramNode 
+	^(self readBeforeWritten: (Array with: aString) in: aBRProgramNode) 
+		isEmpty
+%
+
+category: 'accessing'
+classmethod: RBReadBeforeWrittenTester
+readBeforeWritten: varNames in: aParseTree 
+	^(self new)
+		checkNewTemps: false;
+		initializeVars: varNames;
+		executeTree: aParseTree;
+		read
+%
+
+category: 'accessing'
+classmethod: RBReadBeforeWrittenTester
+variablesReadBeforeWrittenIn: aParseTree 
+	^(self new)
+		executeTree: aParseTree;
+		read
+%
+
+!		Instance methods for 'RBReadBeforeWrittenTester'
+
+category: 'visitor-double dispatching'
+method: RBReadBeforeWrittenTester
+acceptAssignmentNode: anAssignmentNode 
+	self visitNode: anAssignmentNode value.
+	self variableWritten: anAssignmentNode
+%
+
+category: 'visitor-double dispatching'
+method: RBReadBeforeWrittenTester
+acceptBlockNode: aBlockNode 
+	self processBlock: aBlockNode
+%
+
+category: 'visitor-double dispatching'
+method: RBReadBeforeWrittenTester
+acceptMessageNode: aMessageNode 
+	((#(#whileTrue: #whileFalse: #whileTrue #whileFalse) 
+		includes: aMessageNode selector) and: [aMessageNode receiver isBlock]) 
+		ifTrue: [self executeTree: aMessageNode receiver body]
+		ifFalse: 
+			[(aMessageNode isCascaded not or: [aMessageNode isFirstCascaded]) 
+				ifTrue: [self visitNode: aMessageNode receiver]].
+	((#(#ifTrue:ifFalse: #ifFalse:ifTrue:) includes: aMessageNode selector) 
+		and: [aMessageNode arguments allSatisfy: [:each | each isBlock]]) 
+			ifTrue: [^self processIfTrueIfFalse: aMessageNode].
+	aMessageNode arguments do: [:each | self visitNode: each]
+%
+
+category: 'visitor-double dispatching'
+method: RBReadBeforeWrittenTester
+acceptSequenceNode: aSequenceNode 
+	self processStatementNode: aSequenceNode
+%
+
+category: 'visitor-double dispatching'
+method: RBReadBeforeWrittenTester
+acceptVariableNode: aVariableNode 
+	self variableRead: aVariableNode
+%
+
+category: 'initialize-release'
+method: RBReadBeforeWrittenTester
+checkNewTemps: aBoolean 
+	checkNewTemps := aBoolean
+%
+
+category: 'private'
+method: RBReadBeforeWrittenTester
+copyDictionary: aDictionary 
+	"We could send aDictionary the copy message, but that doesn't copy the associations."
+
+	| newDictionary |
+	newDictionary := Dictionary new: aDictionary size.
+	aDictionary keysAndValuesDo: [ :key :value | newDictionary at: key put: value ].
+	^ newDictionary
+%
+
+category: 'private'
+method: RBReadBeforeWrittenTester
+createScope
+	scopeStack add: (self copyDictionary: scopeStack last)
+%
+
+category: 'private'
+method: RBReadBeforeWrittenTester
+currentScope
+	^scopeStack last
+%
+
+category: 'accessing'
+method: RBReadBeforeWrittenTester
+executeTree: aParseTree 
+	^self visitNode: aParseTree
+%
+
+category: 'initialize-release'
+method: RBReadBeforeWrittenTester
+initialize
+	super initialize.
+	scopeStack := OrderedCollection with: Dictionary new.
+	read := Set new.
+	checkNewTemps := true
+%
+
+category: 'initialize-release'
+method: RBReadBeforeWrittenTester
+initializeVars: varNames 
+	varNames do: [:each | self currentScope at: each put: nil]
+%
+
+category: 'private'
+method: RBReadBeforeWrittenTester
+processBlock: aNode 
+	| newScope |
+	self createScope.
+	self executeTree: aNode body.
+	newScope := self removeScope.
+	newScope keysAndValuesDo: 
+			[:key :value | 
+			(value == true and: [(self currentScope at: key) isNil]) 
+				ifTrue: [self currentScope at: key put: value]]
+%
+
+category: 'private'
+method: RBReadBeforeWrittenTester
+processIfTrueIfFalse: aNode 
+	| trueScope falseScope |
+	self createScope.
+	self executeTree: aNode arguments first body.
+	trueScope := self removeScope.
+	self createScope.
+	self executeTree: aNode arguments last body.
+	falseScope := self removeScope.
+	self currentScope keysAndValuesDo: 
+			[:key :value | 
+			value isNil 
+				ifTrue: 
+					[(trueScope at: key) == (falseScope at: key) 
+						ifTrue: [self currentScope at: key put: (trueScope at: key)]
+						ifFalse: 
+							[((trueScope at: key) == true or: [(falseScope at: key) == true]) 
+								ifTrue: [self currentScope at: key put: true]]]]
+%
+
+category: 'private'
+method: RBReadBeforeWrittenTester
+processStatementNode: aNode 
+	| temps |
+	(checkNewTemps not or: [aNode temporaries isEmpty]) 
+		ifTrue: 
+			[aNode statements do: [:each | self executeTree: each].
+			^self].
+	self createScope.
+	temps := aNode temporaries collect: [:each | each name].
+	self initializeVars: temps.
+	aNode statements do: [:each | self executeTree: each].
+	self removeScope keysAndValuesDo: 
+			[:key :value | 
+			(temps includes: key) 
+				ifTrue: [value == true ifTrue: [read add: key]]
+				ifFalse: 
+					[(self currentScope at: key) isNil 
+						ifTrue: [self currentScope at: key put: value]]]
+%
+
+category: 'accessing'
+method: RBReadBeforeWrittenTester
+read
+	self currentScope
+		keysAndValuesDo: [:key :value | value == true ifTrue: [read add: key]].
+	^read
+%
+
+category: 'private'
+method: RBReadBeforeWrittenTester
+removeScope
+	^scopeStack removeLast
+%
+
+category: 'private'
+method: RBReadBeforeWrittenTester
+variableRead: aNode 
+	(self currentScope includesKey: aNode name) 
+		ifTrue: 
+			[(self currentScope at: aNode name) isNil 
+				ifTrue: [self currentScope at: aNode name put: true]]
+%
+
+category: 'private'
+method: RBReadBeforeWrittenTester
+variableWritten: aNode 
+	(self currentScope includesKey: aNode variable name) 
+		ifTrue: 
+			[(self currentScope at: aNode variable name) isNil 
+				ifTrue: [self currentScope at: aNode variable name put: false]]
+%
+
+! Class implementation for 'RBScanner'
+
+!		Class methods for 'RBScanner'
+
+category: 'accessing'
+classmethod: RBScanner
+classificationTable
+	classificationTable isNil 
+		ifTrue: [ self initializeClassificationTable ].
+	^ classificationTable
+%
+
+category: 'class initialization'
+classmethod: RBScanner
+initialize
+	self initializeClassificationTable
+%
+
+category: 'class initialization'
+classmethod: RBScanner
+initializeChars: characters to: aSymbol 
+	characters do: [:c | classificationTable at: c asInteger put: aSymbol]
+%
+
+category: 'class initialization'
+classmethod: RBScanner
+initializeClassificationTable
+  PatternVariableCharacter := $`.
+  classificationTable := Array new: 255.
+  self
+    initializeChars: (((0 to: 255) collect: [ :v | Character codePoint: v ]) select: [ :each | each isLetter ])
+    to: #'alphabetic'.
+  self initializeUnderscore.
+  self initializeChars: '01234567890' to: #'digit'.
+  self initializeChars: '!%&*+,-/<=>?@\~|' to: #'binary'.
+  classificationTable at: 177 put: #'binary'.	"plus-or-minus"
+  classificationTable at: 183 put: #'binary'.	"centered dot"
+  classificationTable at: 215 put: #'binary'.	"times"
+  classificationTable at: 247 put: #'binary'.	"divide"
+  self initializeChars: '().:;[]{}^' to: #'special'.
+  self
+    initializeChars:
+      (((1 to: 255) collect: [ :v | Character codePoint: v ]) select: [ :each | each isSeparator ])
+    to: #'separator'
+%
+
+category: 'class initialization'
+classmethod: RBScanner
+initializeUnderscore
+  self classificationTable
+    at: $_ asInteger
+    put: #'alphabetic' 
+"
+      ((Scanner isLiteralSymbol: '_')
+        ifTrue: [ #'alphabetic' ]
+        ifFalse: [ #'special' ])
+"
+%
+
+category: 'testing'
+classmethod: RBScanner
+isSelector: aSymbol 
+	| scanner token |
+	scanner := self basicNew.
+	scanner on: aSymbol asString readStreamPortable.
+	scanner step.
+	token := scanner scanAnySymbol.
+	token isLiteralToken ifFalse: [^false].
+	token value isEmpty ifTrue: [^false].
+	^scanner atEnd
+%
+
+category: 'testing'
+classmethod: RBScanner
+isVariable: aString 
+	| scanner token |
+	scanner := self on: aString readStreamPortable errorBlock: [:s :p | ^false].
+	token := scanner next.
+	token isIdentifier ifFalse: [^false].
+	(token start = 1 and: [token stop = aString size]) ifFalse: [^false].
+	^(aString includes: $.) not
+%
+
+category: 'instance creation'
+classmethod: RBScanner
+new
+  ^ super new
+%
+
+category: 'instance creation'
+classmethod: RBScanner
+on: aStream 
+	| str |
+	str := self new on: aStream.
+	str
+		step;
+		stripSeparators.
+	^str
+%
+
+category: 'instance creation'
+classmethod: RBScanner
+on: aStream errorBlock: aBlock 
+	| str |
+	str := self new on: aStream.
+	str
+		errorBlock: aBlock;
+		step;
+		stripSeparators.
+	^str
+%
+
+category: 'accessing'
+classmethod: RBScanner
+patternVariableCharacter
+	^ PatternVariableCharacter
+%
+
+!		Instance methods for 'RBScanner'
+
+category: 'testing'
+method: RBScanner
+atEnd
+	^characterType = #eof
+%
+
+category: 'private'
+method: RBScanner
+classify: aCharacter 
+	| index |
+	aCharacter isNil ifTrue: [^nil].
+	index := aCharacter asInteger.
+	index == 0 ifTrue: [^#separator].
+	index > 255 
+		ifTrue: 
+			[^aCharacter isLetter 
+				ifTrue: [#alphabetic]
+				ifFalse: [aCharacter isSqueakSeparator ifTrue: [#separator] ifFalse: [nil]]].
+	^classificationTable at: index
+%
+
+category: 'accessing'
+method: RBScanner
+contents
+	| contentsStream |
+	contentsStream := WriteStreamPortable on: String new.
+	[ self atEnd ]
+		whileFalse: [ contentsStream nextPut: self next ].
+	^ contentsStream contents
+%
+
+category: 'error handling'
+method: RBScanner
+errorBlock
+	^errorBlock isNil ifTrue: [[:message :position | ]] ifFalse: [errorBlock]
+%
+
+category: 'accessing'
+method: RBScanner
+errorBlock: aBlock 
+	errorBlock := aBlock
+%
+
+category: 'error handling'
+method: RBScanner
+errorPosition
+	^stream position
+%
+
+category: 'accessing'
+method: RBScanner
+flush
+%
+
+category: 'accessing'
+method: RBScanner
+getComments
+	| oldComments |
+	comments isEmpty ifTrue: [^nil].
+	oldComments := comments.
+	comments := OrderedCollection new: 1.
+	^oldComments
+%
+
+category: 'testing'
+method: RBScanner
+isReadable
+	^true
+%
+
+category: 'testing'
+method: RBScanner
+isWritable
+	^false
+%
+
+category: 'accessing'
+method: RBScanner
+next
+	| token |
+	buffer reset.
+	tokenStart := stream position.
+	token := characterType = #eof 
+				ifTrue: 
+					[RBToken start: tokenStart + 1	"The EOF token should occur after the end of input"]
+				ifFalse: [self scanToken].
+	self stripSeparators.
+	token comments: self getComments.
+	^token
+%
+
+category: 'accessing'
+method: RBScanner
+nextPut: anObject 
+	"Provide an error notification that the receiver does not
+	implement this message."
+
+	self shouldNotImplement
+%
+
+category: 'initialize-release'
+method: RBScanner
+on: aStream 
+	buffer := WriteStreamPortable on: String new.
+	stream := aStream.
+	classificationTable := self class classificationTable.
+	comments := OrderedCollection new
+%
+
+category: 'private'
+method: RBScanner
+previousStepPosition
+	^characterType = #eof 
+		ifTrue: [stream position]
+		ifFalse: [stream position - 1]
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanAnySymbol
+	characterType = #alphabetic ifTrue: [^self scanSymbol].
+	characterType = #binary ifTrue: [^self scanBinary: RBLiteralToken].
+	^RBToken new
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanBinary: aClass 
+	| val |
+	buffer nextPut: currentCharacter.
+	self step.
+	[ characterType = #binary ] whileTrue: 
+		[ buffer nextPut: currentCharacter.
+		self step ].
+	val := buffer contents.
+	val := val asSymbol.
+	^aClass value: val start: tokenStart
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanIdentifierOrKeyword
+  | name |
+  self scanName.
+  [ 
+  currentCharacter = $.
+    and: [ 'abcdefghijklmnopqrstuvwxyz*|#' includes: stream peek ] ]
+    whileTrue: [ 
+      buffer nextPut: currentCharacter.
+      self step.
+      self scanPathName.
+      name := buffer contents.
+      ^ RBPathToken value: name start: tokenStart ].
+  (currentCharacter = $: and: [ stream peek ~= $= ])
+    ifTrue: [ ^ self scanKeyword ].
+  name := buffer contents.
+  name = '_'
+    ifTrue: [ ^ RBShortAssignmentToken start: tokenStart ].
+  name = 'true'
+    ifTrue: [ ^ RBLiteralToken value: true start: tokenStart stop: self previousStepPosition ].
+  name = 'false'
+    ifTrue: [ ^ RBLiteralToken value: false start: tokenStart stop: self previousStepPosition ].
+  name = 'nil'
+    ifTrue: [ ^ RBLiteralToken value: nil start: tokenStart stop: self previousStepPosition ].
+  ^ RBIdentifierToken value: name start: tokenStart
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanKeyword
+	| outputPosition inputPosition name |
+	[currentCharacter = $:] whileTrue: 
+			[buffer nextPut: currentCharacter.
+			outputPosition := buffer position.
+			inputPosition := stream position.
+			self step.	":"
+			[characterType = #alphabetic] whileTrue: [self scanName]].
+	buffer position: outputPosition.
+	stream position: inputPosition.
+	self step.
+	name := buffer contents.
+	^(name occurrencesOf: $:) == 1 
+		ifTrue: [RBKeywordToken value: name start: tokenStart]
+		ifFalse: 
+			[RBMultiKeywordLiteralToken 
+				value: name asSymbol
+				start: tokenStart
+				stop: tokenStart + name size - 1]
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanLiteral
+	self step.
+	self stripSeparators.
+	characterType = #alphabetic 
+		ifTrue: [ ^ self scanSymbol ].
+	characterType = #binary 
+		ifTrue: [ ^ (self scanBinary: RBLiteralToken) stop: self previousStepPosition ].
+	currentCharacter = $' 
+		ifTrue: [ ^ self scanStringSymbol ].
+	(currentCharacter = $( or: [ currentCharacter = $[ ]) 
+		ifTrue: [ ^ self scanLiteralArrayToken].
+	"Accept some strange literals like '#1', '# species' and '##species:'"
+	characterType = #digit
+		ifTrue: [ ^ self scanNumber ].
+	currentCharacter = $#
+		ifTrue: [ ^ self scanLiteral ].
+	self scannerError: 'Expecting a literal type'
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanLiteralArrayToken
+	| token |
+	token := RBLiteralArrayToken 
+				value: (String with: $# with: currentCharacter)
+				start: tokenStart.
+	self step.
+	^token
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanLiteralCharacter
+	| token |
+	self step.	"$"
+	token := RBLiteralToken 
+				value: currentCharacter
+				start: tokenStart
+				stop: stream position.
+	self step.	"char"
+	^token
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanLiteralString
+	self step.
+	
+	[currentCharacter isNil 
+		ifTrue: [self scannerError: 'Unmatched '' in string literal.'].
+	currentCharacter = $' and: [self step ~= $']] 
+			whileFalse: 
+				[buffer nextPut: currentCharacter.
+				self step].
+	^RBLiteralToken 
+		value: buffer contents
+		start: tokenStart
+		stop: self previousStepPosition
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanName
+	[characterType = #alphabetic or: [characterType = #digit]] whileTrue: 
+			[buffer nextPut: currentCharacter.
+			self step]
+%
+
+category: 'error handling'
+method: RBScanner
+scannerError: aString 
+	"Evaluate the block. If it returns raise an error"
+
+	self errorBlock value: aString value: self errorPosition.
+	self error: aString
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanNumber
+	| start number stop string |
+	start := stream position.
+	stream position: start - 1.
+	number := Number rwFromStream: stream.
+	stop := stream position.
+	stream position: start - 1.
+	string := stream next: stop - start + 1.
+	stream position: stop.
+	self step.
+	^RBNumberLiteralToken 
+		value: number
+		start: start
+		stop: stop
+		source: string
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanPathName
+  [ 
+  (characterType = #'alphabetic' or: [ characterType = #'digit' ])
+    or: [ 
+      ((currentCharacter = $. or: [ currentCharacter = $| ])
+        and: [ 'abcdefghijklmnopqrstuvwxyz' includes: stream peek ])
+        or: [ 
+          (currentCharacter = $. and: [ stream peek = $* ])
+            or: [ currentCharacter = $* and: [ stream peek = $. ] ] ] ] ]
+    whileTrue: [ 
+      buffer nextPut: currentCharacter.
+      self step ]
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanPatternVariable
+	buffer nextPut: currentCharacter.
+	self step.
+	currentCharacter = ${ 
+		ifTrue: 
+			[self step.
+			^RBPatternBlockToken value: '`{' start: tokenStart].
+	[characterType = #alphabetic] whileFalse: 
+			[characterType = #eof 
+				ifTrue: [self scannerError: 'Meta variable expected'].
+			buffer nextPut: currentCharacter.
+			self step].
+	^self scanIdentifierOrKeyword
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanSpecialCharacter
+	| character |
+	currentCharacter = $: 
+		ifTrue: 
+			[self step.
+			^currentCharacter = $= 
+				ifTrue: 
+					[self step.
+					RBAssignmentToken start: tokenStart]
+				ifFalse: [RBSpecialCharacterToken value: $: start: tokenStart]].
+	currentCharacter = $_ ifTrue:
+		[ self step.  ^RBShortAssignmentToken start: tokenStart ].
+	character := currentCharacter.
+	self step.
+	^RBSpecialCharacterToken value: character start: tokenStart
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanStringSymbol
+	| literalToken |
+	literalToken := self scanLiteralString.
+	literalToken value: literalToken value asSymbol.
+	^literalToken
+%
+
+category: 'private-scanning'
+method: RBScanner
+scanSymbol
+	[ characterType = #alphabetic or: [ currentCharacter = $: ] ] whileTrue: [
+		self scanName.
+		currentCharacter = $: ifTrue: [
+			buffer nextPut: $:.
+			self step ] ].
+	^ RBLiteralToken 
+		value: buffer contents asSymbol
+		start: tokenStart
+		stop: self previousStepPosition
+%
+
+category: 'accessing'
+method: RBScanner
+scanToken
+	"fast-n-ugly. Don't write stuff like this. Has been found to cause cancer in laboratory rats. Basically a 
+	case statement. Didn't use Dictionary because lookup is pretty slow."
+
+	characterType = #alphabetic ifTrue: [^self scanIdentifierOrKeyword].
+	(characterType = #digit 
+		or: [currentCharacter = $- and: [(self classify: stream peek) = #digit]]) 
+			ifTrue: [^self scanNumber].
+	characterType = #binary ifTrue: [^self scanBinary: RBBinarySelectorToken].
+	characterType = #special ifTrue: [^self scanSpecialCharacter].
+	currentCharacter = $' ifTrue: [^self scanLiteralString].
+	currentCharacter = $# ifTrue: [^self scanLiteral].
+	currentCharacter = $$ ifTrue: [^self scanLiteralCharacter].
+	^self scannerError: 'Unknown character'
+%
+
+category: 'private'
+method: RBScanner
+step
+	stream atEnd 
+		ifTrue: 
+			[characterType := #eof.
+			^currentCharacter := nil].
+	currentCharacter := stream next.
+	characterType := self classify: currentCharacter.
+	^currentCharacter
+%
+
+category: 'private-scanning'
+method: RBScanner
+stripComment
+	| start stop |
+	start := stream position.
+	[self step = $"] whileFalse: 
+			[characterType = #eof
+				ifTrue: [self scannerError: 'Unmatched " in comment.']].
+	stop := stream position.
+	self step.
+	comments add: (start to: stop)
+%
+
+category: 'private-scanning'
+method: RBScanner
+stripSeparators
+	
+	[[characterType = #separator] whileTrue: [self step].
+	currentCharacter = $"] 
+			whileTrue: [self stripComment]
+%
+
+! Class implementation for 'RBPatternScanner'
+
+!		Class methods for 'RBPatternScanner'
+
+category: 'class initialization'
+classmethod: RBPatternScanner
+initialize
+  "force initialization on load"
+
+  "self initialize"
+
+  super initialize
+%
+
+!		Instance methods for 'RBPatternScanner'
+
+category: 'accessing'
+method: RBPatternScanner
+scanToken
+	currentCharacter = PatternVariableCharacter 
+		ifTrue: [^self scanPatternVariable].
+	currentCharacter = $} ifTrue: [^self scanSpecialCharacter].
+	^super scanToken
+%
+
+! Class implementation for 'RBSmallDictionary'
+
+!		Class methods for 'RBSmallDictionary'
+
+category: 'instance creation'
+classmethod: RBSmallDictionary
+new
+	^ self new: 2
+%
+
+category: 'instance creation'
+classmethod: RBSmallDictionary
+new: anInteger 
+	^ self basicNew initialize: anInteger
+%
+
+!		Instance methods for 'RBSmallDictionary'
+
+category: 'accessing'
+method: RBSmallDictionary
+at: aKey
+	"Answer the value associated with aKey. Raise an exception, if no such key is defined."
+
+	^ self at: aKey ifAbsent: [ self errorKeyNotFound ]
+%
+
+category: 'accessing'
+method: RBSmallDictionary
+at: aKey ifAbsent: aBlock
+	"Answer the value associated with aKey. Evaluate aBlock, if no such key is defined."
+
+	| index |
+	index := self findIndexFor: aKey.
+	^ index = 0
+		ifFalse: [ values at: index ]
+		ifTrue: [ aBlock value ]
+%
+
+category: 'accessing'
+method: RBSmallDictionary
+at: aKey ifAbsentPut: aBlock
+	"Answer the value associated with aKey. Evaluate aBlock, if no such key is defined and store the return value."
+
+	| index |
+	index := self findIndexFor: aKey.
+	^ index = 0
+		ifFalse: [ values at: index ]
+		ifTrue: [ self privateAt: aKey put: aBlock value ]
+%
+
+category: 'accessing'
+method: RBSmallDictionary
+at: aKey put: aValue
+	"Set the value of aKey to be aValue."
+
+	| index |
+	index := self findIndexFor: aKey.
+	^ index = 0
+		ifFalse: [ values at: index put: aValue ]
+		ifTrue: [ self privateAt: aKey put: aValue ]
+%
+
+category: 'accessing'
+method: RBSmallDictionary
+empty
+	tally := 0
+%
+
+category: 'private'
+method: RBSmallDictionary
+errorKeyNotFound
+	self error: 'Key not found'
+%
+
+category: 'private'
+method: RBSmallDictionary
+findIndexFor: aKey
+	1 to: tally do: [ :index |
+		(keys at: index) = aKey
+			ifTrue: [ ^ index ] ].
+	^ 0
+%
+
+category: 'private'
+method: RBSmallDictionary
+grow
+	| newKeys newValues |
+	newKeys := Array new: 2 * tally.
+	newValues := Array new: 2 * tally.
+	1 to: tally do: [ :index |
+		newKeys at: index put: (keys at: index).
+		newValues at: index put: (values at: index) ].
+	keys := newKeys.
+	values := newValues
+%
+
+category: 'testing'
+method: RBSmallDictionary
+includesKey: aKey
+	"Answer whether the receiver has a key equal to aKey."
+
+	^ (self findIndexFor: aKey) ~= 0
+%
+
+category: 'initialization'
+method: RBSmallDictionary
+initialize: anInteger
+	tally := 0.
+	keys := Array new: anInteger.
+	values := Array new: anInteger
+%
+
+category: 'testing'
+method: RBSmallDictionary
+isEmpty
+	^ tally = 0
+%
+
+category: 'accessing'
+method: RBSmallDictionary
+keys
+	^ keys copyFrom: 1 to: tally
+%
+
+category: 'enumerating'
+method: RBSmallDictionary
+keysAndValuesDo: aBlock
+	1 to: tally do: [ :index | aBlock value: (keys at: index) value: (values at: index) ]
+%
+
+category: 'enumerating'
+method: RBSmallDictionary
+keysDo: aBlock
+	1 to: tally do: [ :each | aBlock value: (keys at: each) ]
+%
+
+category: 'copying'
+method: RBSmallDictionary
+postCopy
+	super postCopy.
+	keys := keys copy.
+	values := values copy
+%
+
+category: 'private'
+method: RBSmallDictionary
+privateAt: aKey put: aValue
+	tally = keys size ifTrue: [ self grow ].
+	keys at: (tally := tally + 1) put: aKey.
+	^ values at: tally put: aValue
+%
+
+category: 'removing'
+method: RBSmallDictionary
+removeKey: aKey
+	"Remove aKey from the receiver, raise an exception if the element is missing."
+
+	^ self removeKey: aKey ifAbsent: [ self errorKeyNotFound ]
+%
+
+category: 'removing'
+method: RBSmallDictionary
+removeKey: aKey ifAbsent: aBlock
+	"Remove aKey from the receiver, evaluate aBlock if the element is missing."
+
+	| index value |
+	index := self findIndexFor: aKey.
+	index = 0 ifTrue: [ ^ aBlock value ].
+	value := values at: index.
+	index to: tally - 1 do: [ :i |
+		keys at: i put: (keys at: i + 1).
+		values at: i put: (values at: i + 1) ].
+	keys at: tally put: nil.
+	values at: tally put: nil.
+	tally := tally - 1.
+	^ value
+%
+
+category: 'accessing'
+method: RBSmallDictionary
+size
+	^ tally
+%
+
+category: 'accessing'
+method: RBSmallDictionary
+values
+	^ values copyFrom: 1 to: tally
+%
+
+category: 'enumerating'
+method: RBSmallDictionary
+valuesDo: aBlock
+	1 to: tally do: [ :index | aBlock value: (values at: index) ]
+%
+
+! Class implementation for 'RBStringReplacement'
+
+!		Class methods for 'RBStringReplacement'
+
+category: 'instance creation'
+classmethod: RBStringReplacement
+replaceFrom: startInteger to: stopInteger with: aString 
+	^(self new)
+		startPosition: startInteger;
+		stopPosition: stopInteger;
+		string: aString;
+		yourself
+%
+
+!		Instance methods for 'RBStringReplacement'
+
+category: 'accessing'
+method: RBStringReplacement
+startPosition
+	^startPosition
+%
+
+category: 'initialize-release'
+method: RBStringReplacement
+startPosition: anInteger 
+	startPosition := anInteger
+%
+
+category: 'accessing'
+method: RBStringReplacement
+stopPosition
+	^stopPosition
+%
+
+category: 'initialize-release'
+method: RBStringReplacement
+stopPosition: anInteger 
+	stopPosition := anInteger
+%
+
+category: 'accessing'
+method: RBStringReplacement
+string
+	^string
+%
+
+category: 'initialize-release'
+method: RBStringReplacement
+string: aString 
+	string := aString
+%
+
+! Class implementation for 'RBToken'
+
+!		Class methods for 'RBToken'
+
+category: 'instance creation'
+classmethod: RBToken
+start: anInterval 
+	^self new start: anInterval
+%
+
+!		Instance methods for 'RBToken'
+
+category: 'accessing'
+method: RBToken
+comments
+	^comments
+%
+
+category: 'accessing'
+method: RBToken
+comments: anObject
+	comments := anObject
+%
+
+category: 'testing'
+method: RBToken
+isAssignment
+	^false
+%
+
+category: 'testing'
+method: RBToken
+isBinary
+	^false
+%
+
+category: 'testing'
+method: RBToken
+isIdentifier
+	^false
+%
+
+category: 'testing'
+method: RBToken
+isKeyword
+	^false
+%
+
+category: 'testing'
+method: RBToken
+isLiteral
+	^self isLiteralToken
+%
+
+category: 'testing'
+method: RBToken
+isLiteralArrayToken
+	^false
+%
+
+category: 'testing'
+method: RBToken
+isLiteralToken
+	^false
+%
+
+category: 'testing'
+method: RBToken
+isPath
+  ^ false
+%
+
+category: 'testing'
+method: RBToken
+isPatternBlock
+	^false
+%
+
+category: 'testing'
+method: RBToken
+isPatternVariable
+	^false
+%
+
+category: 'testing'
+method: RBToken
+isSpecial
+	^false
+%
+
+category: 'accessing'
+method: RBToken
+length
+	^self subclassResponsibility
+%
+
+category: 'printing'
+method: RBToken
+printOn: aStream 
+	aStream
+		nextPut: $ ;
+		nextPutAll: self class name
+%
+
+category: 'printing'
+method: RBToken
+rbStoreString
+
+"Returns a string that, when evaluated, will recreate a copy of the
+ receiver.  The default is to use storeOn: to create the description."
+
+| stream str |
+str := String new.
+stream := WriteStreamPortable on: str.
+self rbStoreOn: stream.
+^str
+%
+
+category: 'accessing'
+method: RBToken
+removePositions
+	sourcePointer := nil
+%
+
+category: 'accessing'
+method: RBToken
+start
+	^ sourcePointer ifNil: [ 0 ]
+%
+
+category: 'initialize-release'
+method: RBToken
+start: anInteger 
+	sourcePointer := anInteger
+%
+
+category: 'accessing'
+method: RBToken
+stop
+	^ sourcePointer isNil 
+		ifTrue: [ -1 ]
+		ifFalse: [ self start + self length - 1 ]
+%
+
+! Class implementation for 'RBAssignmentToken'
+
+!		Instance methods for 'RBAssignmentToken'
+
+category: 'testing'
+method: RBAssignmentToken
+isAssignment
+	^true
+%
+
+category: 'private'
+method: RBAssignmentToken
+length
+	^2
+%
+
+! Class implementation for 'RBShortAssignmentToken'
+
+!		Instance methods for 'RBShortAssignmentToken'
+
+category: 'private'
+method: RBShortAssignmentToken
+length
+	^ 1
+%
+
+! Class implementation for 'RBValueToken'
+
+!		Class methods for 'RBValueToken'
+
+category: 'instance creation'
+classmethod: RBValueToken
+value: aString start: anInteger 
+	^self new value: aString start: anInteger
+%
+
+!		Instance methods for 'RBValueToken'
+
+category: 'private'
+method: RBValueToken
+length
+	^value size
+%
+
+category: 'printing'
+method: RBValueToken
+printOn: aStream
+	super printOn: aStream.
+	aStream nextPut: $(.
+	value printOn: aStream.
+	aStream nextPutAll: ')'
+%
+
+category: 'accessing'
+method: RBValueToken
+value
+	^value
+%
+
+category: 'accessing'
+method: RBValueToken
+value: anObject
+	value := anObject
+%
+
+category: 'initialize-release'
+method: RBValueToken
+value: aString start: anInteger 
+	value := aString.
+	sourcePointer := anInteger
+%
+
+! Class implementation for 'RBBinarySelectorToken'
+
+!		Instance methods for 'RBBinarySelectorToken'
+
+category: 'testing'
+method: RBBinarySelectorToken
+isBinary
+	^true
+%
+
+! Class implementation for 'RBIdentifierToken'
+
+!		Instance methods for 'RBIdentifierToken'
+
+category: 'testing'
+method: RBIdentifierToken
+isIdentifier
+	^true
+%
+
+category: 'testing'
+method: RBIdentifierToken
+isPatternVariable
+	^value first = RBScanner patternVariableCharacter
+%
+
+! Class implementation for 'RBPathToken'
+
+!		Instance methods for 'RBPathToken'
+
+category: 'testing'
+method: RBPathToken
+isPath
+  ^ true
+%
+
+! Class implementation for 'RBKeywordToken'
+
+!		Instance methods for 'RBKeywordToken'
+
+category: 'testing'
+method: RBKeywordToken
+isKeyword
+	^true
+%
+
+category: 'testing'
+method: RBKeywordToken
+isPatternVariable
+	^value first = RBScanner patternVariableCharacter
+%
+
+! Class implementation for 'RBLiteralArrayToken'
+
+!		Instance methods for 'RBLiteralArrayToken'
+
+category: 'testing'
+method: RBLiteralArrayToken
+isForByteArray
+	^value last = $[
+%
+
+category: 'testing'
+method: RBLiteralArrayToken
+isLiteralArrayToken
+	^true
+%
+
+! Class implementation for 'RBLiteralToken'
+
+!		Class methods for 'RBLiteralToken'
+
+category: 'instance creation'
+classmethod: RBLiteralToken
+value: anObject 
+	| literal |
+	literal := anObject class == Array 
+				ifTrue: [anObject collect: [:each | self value: each]]
+				ifFalse: [anObject].
+	^self 
+		value: literal
+		start: nil
+		stop: nil
+%
+
+category: 'instance creation'
+classmethod: RBLiteralToken
+value: aString start: anInteger stop: stopInteger 
+	^(self new)
+		value: aString
+			start: anInteger
+			stop: stopInteger;
+		yourself
+%
+
+!		Instance methods for 'RBLiteralToken'
+
+category: 'testing'
+method: RBLiteralToken
+isLiteralToken
+	^true
+%
+
+category: 'testing'
+method: RBLiteralToken
+isMultiKeyword
+	^false
+%
+
+category: 'private'
+method: RBLiteralToken
+length
+	^stopPosition - self start + 1
+%
+
+category: 'printing'
+method: RBLiteralToken
+rbStoreOn: aStream
+    value isSymbol
+        ifTrue: [ 
+            aStream nextPut: $#.
+            value asString printOn: aStream.
+            ^ self ].
+    value class == Character
+        ifTrue: [ 
+            aStream
+                nextPut: $$;
+                nextPut: value.
+            ^ self ].
+    value rbStoreOn: aStream
+%
+
+category: 'accessing'
+method: RBLiteralToken
+realValue
+	^value
+%
+
+category: 'accessing'
+method: RBLiteralToken
+stop: anObject 
+	stopPosition := anObject
+%
+
+category: 'initialize-release'
+method: RBLiteralToken
+value: aString start: anInteger stop: stopInteger 
+	value := aString.
+	sourcePointer := anInteger.
+	stopPosition := stopInteger
+%
+
+! Class implementation for 'RBMultiKeywordLiteralToken'
+
+!		Instance methods for 'RBMultiKeywordLiteralToken'
+
+category: 'testing'
+method: RBMultiKeywordLiteralToken
+isMultiKeyword
+	^true
+%
+
+! Class implementation for 'RBNumberLiteralToken'
+
+!		Class methods for 'RBNumberLiteralToken'
+
+category: 'instance creation'
+classmethod: RBNumberLiteralToken
+value: aNumber start: anInteger stop: stopInteger source: sourceString 
+	^(self 
+		value: aNumber
+		start: anInteger
+		stop: stopInteger)
+		source: sourceString;
+		yourself
+%
+
+!		Instance methods for 'RBNumberLiteralToken'
+
+category: 'printing'
+method: RBNumberLiteralToken
+rbStoreOn: aStream 
+	aStream nextPutAll: source
+%
+
+category: 'accessing'
+method: RBNumberLiteralToken
+source
+	^source
+%
+
+category: 'initialize-release'
+method: RBNumberLiteralToken
+source: aString 
+	source := aString
+%
+
+! Class implementation for 'RBPatternBlockToken'
+
+!		Instance methods for 'RBPatternBlockToken'
+
+category: 'testing'
+method: RBPatternBlockToken
+isPatternBlock
+	^true
+%
+
+! Class implementation for 'RBSpecialCharacterToken'
+
+!		Instance methods for 'RBSpecialCharacterToken'
+
+category: 'testing'
+method: RBSpecialCharacterToken
+isSpecial
+	^true
+%
+
+category: 'private'
+method: RBSpecialCharacterToken
+length
+	^1
+%
+
 ! Class implementation for 'Rowan'
 
 !		Class methods for 'Rowan'
@@ -12954,6 +25081,15 @@ platformConfigurationAttributes
 	"Return list of platform-specific configuration attributes"
 
 	^ self platform platformConfigurationAttributes
+%
+
+category: 'public'
+classmethod: Rowan
+projectNamed: aName
+
+	"Answer a project with the given name.  If no project with the given name is found, signals error."
+
+	^ self platform projectNamed: aName
 %
 
 category: 'public'
@@ -14464,9 +26600,9 @@ method: RwProject
 existsOnDisk
 
 	Rowan image loadedProjectNamed: self name ifAbsent: [ ^false ].
-	^ (self repositoryRootPath) 
+	^ self repositoryRoot
 		ifNil: [ false ]
-		ifNotNil: [:path | path asFileReference exists ]
+		ifNotNil: [:fileRef | fileRef exists ]
 %
 
 category: 'accessing'
@@ -14487,7 +26623,7 @@ category: 'properties'
 method: RwProject
 loadedCommitId
 
-	^ self _specification loadedCommitId
+	^ self _loadedProject loadedCommitId
 %
 
 category: 'accessing'
@@ -14539,26 +26675,29 @@ category: 'accessing'
 method: RwProject
 repositoryCommitId
 
-	| rootPath |
-	self useGit
-		ifFalse: [ ^ '' ].
-	rootPath := self repositoryRootPath.
-	rootPath ifNil: [ ^ '' ].
-	^ Rowan gitTools gitcommitShaIn: rootPath
+	^ self _loadedProject repositoryCommitId
+%
+
+category: 'properties'
+method: RwProject
+repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ self _loadedProject repositoryRoot
 %
 
 category: 'properties'
 method: RwProject
 repositoryRootPath
 
-	^ self _specification repositoryRootPath
+	^ self repositoryRoot pathString
 %
 
 category: 'testing'
 method: RwProject
 useGit
 
-	^self _specification useGit
+	^self _loadedProject useGit
 %
 
 category: 'private'
@@ -14589,8 +26728,9 @@ autoCommit
 category: 'autocommit'
 classmethod: RowanService
 flipAutoCommit
-
-	^self setAutoCommit: self autoCommit not
+	| newValue |
+	newValue := self autoCommit == #failed ifTrue:[false] ifFalse:[self autoCommit not].
+	^self setAutoCommit: newValue
 %
 
 category: 'instance creation'
@@ -14616,9 +26756,9 @@ sampleService
 
 category: 'autocommit'
 classmethod: RowanService
-setAutoCommit: boolean
+setAutoCommit: object
 
-	^SessionTemps current at: #'Jadeite_AutoCommit' put: boolean
+	^SessionTemps current at: #'Jadeite_AutoCommit' put: object
 %
 
 !		Instance methods for 'RowanService'
@@ -14986,9 +27126,13 @@ exec: aString
 
 category: 'client commands'
 method: RowanAnsweringService
-exec: aString context: anObject
+exec: aString context: oop
 
-	answer := (aString evaluateInContext: anObject symbolList: GsSession currentSession symbolList). 
+	answer := [true -> (aString evaluateInContext: (Object _objectForOop: oop) symbolList: GsSession currentSession symbolList) asOop] 
+		on: CompileError do: [:ex | 
+			false -> ex errorDetails
+	].
+	answer key ifTrue:[(RowanService autoCommit == true) ifTrue:[System commitTransaction]].
 	RowanCommandResult addResult: self.
 
 	"return answer for testing" 
@@ -15047,7 +27191,7 @@ runMethodTests: methodServices
 	| behavior |
 	methodServices do:[:methodService |
 		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
-			behavior := methodService classFromName. 
+			behavior := methodService theClass. 
 			behavior debug: methodService selector]].
 	answer := true. 
 	RowanCommandResult initializeResults. "squash any client updates during server test run"
@@ -15066,9 +27210,9 @@ selectorsMatchingPattern: pattern
 
 category: 'client commands'
 method: RowanAnsweringService
-setAutoCommit: boolean
+setAutoCommit: object
 
-	answer := RowanService setAutoCommit: boolean.
+	answer := RowanService setAutoCommit: object.
 	RowanCommandResult addResult: self.
 %
 
@@ -15134,9 +27278,9 @@ allClasses
 
 category: 'client commands'
 method: RowanBrowserService
-autoCommit: boolean
+autoCommit: object
 
-	RowanService setAutoCommit: boolean.
+	RowanService setAutoCommit: object.
 	autoCommit := RowanService autoCommit. 
 	updateType := #autoCommitUpdate:.
 	RowanCommandResult addResult: self.
@@ -15355,7 +27499,7 @@ addCategory: string
 
 	| theClass |
 
-	theClass := self classFromName.
+	theClass := self theClass.
 	meta ifTrue:[theClass := theClass class]. 
 	theClass addCategory: string.
 %
@@ -15365,9 +27509,9 @@ method: RowanClassService
 allTests
 	| allSelectors theClass |
 	self isTestCase ifFalse:[^Array new]. 
-	theClass := self classFromName thisClass.
+	theClass := self theClass thisClass.
 	theClass isAbstract ifTrue:[^Array new].
-	allSelectors := self classFromName thisClass allTestSelectors.
+	allSelectors := self theClass thisClass allTestSelectors.
 	^allSelectors collect:[:selector | 
 			RowanMethodService forSelector: selector 
 										class: (theClass whichClassIncludesSelector: selector asString)
@@ -15388,7 +27532,7 @@ basicForClassNamed: className
 
 	| theClass |
 	self name: className. 
-	theClass := self classFromName. 
+	theClass := self theClass. 
 	theClass isNil ifTrue:[oop := nil. ^self].
 	self basicRefreshFrom: theClass.
 %
@@ -15397,6 +27541,7 @@ category: 'initialization'
 method: RowanClassService
 basicRefreshFrom: theClass
 	| classOrMeta theFilters |
+	oop := theClass asOop.
 	command := nil. 
 	commandArgs := nil. 
 	superclassName := theClass superClass ifNotNil:[:theSuper | theSuper name asString]. 
@@ -15404,9 +27549,8 @@ basicRefreshFrom: theClass
 	organizer ifNil: [organizer := ClassOrganizer new]. "for Jade and tests"
 	versions := theClass classHistory size.
 	version := theClass classHistory indexOf: theClass.
-	template := self classCreationTemplate.
 	self setComment.
-	oop := theClass asOop.
+	template := self classCreationTemplate.
 	theFilters := SortedCollection new.
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	self initializeVariablesFor: classOrMeta. 
@@ -15422,7 +27566,7 @@ method: RowanClassService
 behavior
 
 	| behavior |
-	behavior := self classFromName. 
+	behavior := self theClass. 
 	meta == true ifTrue:[behavior := behavior class].
 	^behavior
 %
@@ -15431,7 +27575,7 @@ category: 'client commands'
 method: RowanClassService
 classComment: string
 	| theClass |
-	theClass := self classFromName. 
+	theClass := self theClass. 
 	theClass rwComment: string.
 %
 
@@ -15439,26 +27583,19 @@ category: 'rowan'
 method: RowanClassService
 classCreationTemplate
 	
-	^self browserTool classCreationTemplateForClass: self classFromName hybridBrowser: true.
-%
-
-category: 'Accessing'
-method: RowanClassService
-classFromName
-
-	^Rowan globalNamed: name
+	^self browserTool classCreationTemplateForClass: self theClass hybridBrowser: true.
 %
 
 category: 'client commands'
 method: RowanClassService
 classHierarchy
 	| behavior |
-	behavior := self classFromName. 
+	behavior := self theClass. 
 	organizer := ClassOrganizer newWithRoot: behavior. 
 	hierarchyServices := Dictionary new.   
 	organizer hierarchy keysAndValuesDo: [:key :value |
 		| classService |
-		classService := key == #nil ifTrue:[#nil] ifFalse: [(self hierarchyClassServiceFor: key name) meta: meta].
+		classService := key == #nil ifTrue:[#nil] ifFalse: [(self classServiceFromOop: key asOop) meta: meta].
 		hierarchyServices at: classService put: (self subclassServices: value). 
 	].
 	RowanCommandResult addResult: self.
@@ -15492,8 +27629,25 @@ method: RowanClassService
 classOrMeta
 
 	^meta 
-			ifTrue:[self classFromName class] 
-			ifFalse: [self classFromName].
+			ifTrue:[self theClass class] 
+			ifFalse: [self theClass].
+%
+
+category: 'instance creation'
+method: RowanClassService
+classServiceFromOop: anOop
+	| theClass className classService |
+	theClass := Object _objectForOop: anOop. 
+	className := theClass name. 
+	classService := RowanClassService new name: className.
+	^className asString = name asString ifTrue:[
+			className asString = 'Object' 
+				ifTrue:[
+					classService basicRefreshFrom: theClass]
+				ifFalse:[
+					classService refreshFrom: theClass]]
+		ifFalse:[
+			classService minimalRefreshFrom: theClass]
 %
 
 category: 'Accessing'
@@ -15567,13 +27721,13 @@ expand: boolean
 	expand := boolean
 %
 
-category: 'client commands'
+category: 'other'
 method: RowanClassService
 fastRefresh
 	"pushes less information to ston so it's faster"
 
 	| theClass |
-	theClass := self classFromName. 
+	theClass := self theClass. 
 	self refreshFrom: theClass. 
 	methods do:[:service1 |
 			service1 source: nil; 
@@ -15641,7 +27795,7 @@ forClassNamed: className
 
 	| theClass |
 	self name: className. 
-	theClass := self classFromName. 
+	theClass := self theClass. 
 	self refreshFrom: theClass.
 %
 
@@ -15649,19 +27803,6 @@ category: 'comparing'
 method: RowanClassService
 hash
 	^self name hash bitXor: meta hash
-%
-
-category: 'private'
-method: RowanClassService
-hierarchyClassServiceFor: className
-	^className asString = name asString ifTrue:[
-			className asString = 'Object' 
-				ifTrue:[
-					RowanClassService basicForClassNamed: className]
-				ifFalse:[
-					RowanClassService forClassNamed: className]]
-		ifFalse:[
-			RowanClassService minimalForClassNamed: className]
 %
 
 category: 'Accessing'
@@ -15681,6 +27822,7 @@ initialize
 	selectedPackageServices := Array new.
 	isNewClass := false.
 	methods := Array new.
+	isInSymbolList := true.
 %
 
 category: 'initialization'
@@ -15826,7 +27968,7 @@ minimalForClassNamed: className
 
 	| theClass |
 	self name: className. 
-	theClass := self classFromName. 
+	theClass := self theClass. 
 	self minimalRefreshFrom: theClass.
 %
 
@@ -15843,6 +27985,7 @@ minimalRefreshFrom: theClass
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	projectName := classOrMeta rowanProjectName.
 	instVarNames := classOrMeta instVarNames. 
+	template := self classCreationTemplate.
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
 	self setIsTestCase.
@@ -15884,13 +28027,13 @@ method: RowanClassService
 oneLevelClassHierarchy
 	"good for expanding an existing hierarchy quickly"
 	| behavior sortedSubclasses |
-	behavior := self classFromName. 
+	behavior := self theClass. 
 	hierarchyServices := Dictionary new. 
 	hierarchyServices at: #expand put: Array new. 
 	sortedSubclasses := behavior subclasses asSortedCollection:[:x :y | x name < y name].
 	sortedSubclasses do: [:subclass |
 		| classService |
-		classService := (self hierarchyClassServiceFor: subclass name) meta: meta.
+		classService := (self classServiceFromOop: subclass asOop) meta: meta.
 		(hierarchyServices at: #expand) add: classService. 
 	].
 %
@@ -15912,7 +28055,7 @@ method: RowanClassService
 packageIsDirty
 
 	| behavior |
-	behavior := self classFromName.
+	behavior := self theClass.
 	behavior rowanPackageName =  Rowan unpackagedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
 	^(RowanPackageService new name: behavior rowanPackageName) rowanDirty
 %
@@ -15957,7 +28100,7 @@ method: RowanClassService
 projectIsDirty
 
 	| behavior |
-	behavior := self classFromName.
+	behavior := self theClass.
 	behavior rowanProjectName =  Rowan unpackagedName ifTrue:[^true]. "avoid a refresh by assuming it's dirty" 
 	^(RowanProjectService new name: behavior rowanProjectName) rowanDirty
 %
@@ -16007,8 +28150,8 @@ category: 'client commands'
 method: RowanClassService
 removeCategories: theCategories
 	| theClass  | 
-	self refreshFrom: self classFromName. 
-	theClass := self classFromName.
+	self refreshFrom: self theClass. 
+	theClass := self theClass.
 	meta ifTrue:[theClass := theClass class]. 
 	theCategories do: [:category |
 		theClass rwRemoveCategory: category.
@@ -16042,7 +28185,7 @@ category: 'rowan'
 method: RowanClassService
 removeSelector: selector ifAbsent: absentBlock
 	| theClass |
-	theClass := self classFromName. 
+	theClass := self theClass. 
 	meta ifTrue: [theClass := theClass class].
 	(theClass compiledMethodAt: selector otherwise: nil) isNil ifTrue:[ ^absentBlock value ].
 	self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta
@@ -16073,13 +28216,18 @@ renameClass: oldClassName to: newClassName
 	organizer := ClassOrganizer new. 
 	references := organizer update referencesTo: oldClassName asSymbol.
 	1 to: references first size do:[:index |
-		| method newSource compileResult failedCompile methodService |
+		| method newSource compileResult failedCompile methodService oldSource |
 		failedCompile := false. 
 		method := references first at: index. 
-		newSource := self replaceSubString: oldClassName in: method sourceString with: newClassName.
+		oldSource := method sourceString. 
+		newSource := self replaceSubString: oldClassName in: oldSource with: newClassName.
 		compileResult := [method inClass rwCompileMethod: newSource
 									category: (method inClass categoryOfSelector: method selector) asSymbol] on: CompileError do:[:ex | failedCompile := true. method].
 		methodService := RowanMethodService forGsNMethod: compileResult organizer: organizer.
+		failedCompile ifTrue:[
+				methodService comparisonSource: oldClassName]
+			ifFalse:[
+				methodService comparisonSource: oldSource].
 		methodService failedCompile: failedCompile. 
 		newMethods add: methodService.
 		].
@@ -16114,7 +28262,7 @@ runClassTests: classService
 	If it passes, we return true and the client
 	will display decent results." 
 	| behavior |
-	behavior := classService classFromName. 
+	behavior := classService theClass. 
 	self refreshFrom: behavior.
 	self tests do:[:methodService |
 			behavior debug: methodService selector]. 
@@ -16126,7 +28274,7 @@ method: RowanClassService
 runMethodTests: methodServices
 
 	| behavior |
-	behavior := self classFromName.  
+	behavior := self theClass.  
 	methodServices do:[:methodService |
 		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
 			behavior debug: methodService selector]].
@@ -16142,7 +28290,7 @@ saveMethodSource: source category: category
 				behavior := (Object _objectForOop: oop). 
 				meta := behavior isMeta]
 			ifNotNil:[ 
-				behavior := meta ifTrue:[self classFromName class] ifFalse:[self classFromName]]. 
+				behavior := meta ifTrue:[self theClass class] ifFalse:[self theClass]]. 
 	updatedCategory := category ifNil: ['other'].
 	compilationResult := self		
 		compileMethod: source 
@@ -16214,9 +28362,9 @@ method: RowanClassService
 setComment
 
 	| theClass |
-	theClass := self classFromName.
-	(theClass canUnderstand: #rwComment)
-		ifTrue: [comment := theClass rwComment]
+	theClass := self theClass.
+	(theClass canUnderstand: #comment)
+		ifTrue: [comment := theClass comment]
 		ifFalse: 
 			[(theClass canUnderstand: #description)
 					ifTrue: 
@@ -16231,7 +28379,7 @@ category: 'Updating'
 method: RowanClassService
 setIsTestCase
 
-	isTestCase := self classFromName isSubclassOf: TestCase
+	isTestCase := self theClass isSubclassOf: TestCase
 %
 
 category: 'client commands'
@@ -16255,7 +28403,7 @@ subclassCreationTemplate
 	| answerService |
 	answerService := RowanAnsweringService new. 
 	answerService answer: (self browserTool classCreationTemplateForSubclassOf: name 
-								className: 'NewSubclass' category: self classFromName rowanPackageName).
+								className: 'NewSubclass' category: self theClass rowanPackageName).
 	RowanCommandResult addResult: answerService.
 %
 
@@ -16267,7 +28415,7 @@ subclassServices: subclasses
 
 	sortedSubclasses := SortedCollection sortBlock: [:x :y | x name < y name]. 
 	sortedSubclasses addAll: subclasses. 
-	^(sortedSubclasses collect:[:cls | (self hierarchyClassServiceFor: cls name) meta: meta]) asArray.
+	^(sortedSubclasses collect:[:cls | (self classServiceFromOop: cls asOop) meta: meta]) asArray.
 %
 
 category: 'Accessing'
@@ -16313,6 +28461,16 @@ tests
 	^methods select:[:methodService | methodService selector asString matchPattern: #('test' $*)]
 %
 
+category: 'instance creation'
+method: RowanClassService
+theClass
+	| theClass |
+	theClass := oop ifNil:[Rowan globalNamed: name] ifNotNil: [Object _objectForOop: oop].
+	theClass isMeta ifTrue:[oop := theClass thisClass asOop]. 
+	(Rowan globalNamed: name) ifNil:[isInSymbolList := false]. 
+	^theClass thisClass
+%
+
 category: 'updates'
 method: RowanClassService
 update
@@ -16328,7 +28486,7 @@ updateClass
 	a class then aborted."
 
 	| theClass |
-	theClass := self classFromName. 
+	theClass := self theClass. 
 	theClass isNil ifTrue:[oop := nil. ^self]. 
 	theClass isBehavior ifFalse:[oop := theClass asOop. ^self].
 	self refreshFrom: theClass.
@@ -16342,7 +28500,7 @@ updateDirtyState
 	selectedPackageServices do:[:packageService | 
 		packageService update. 
 		RowanCommandResult addResult: packageService].
-	projectService := RowanProjectService newNamed: self classFromName rowanProjectName. 
+	projectService := RowanProjectService newNamed: self theClass rowanProjectName. 
 	RowanCommandResult addResult: projectService.
 %
 
@@ -16450,6 +28608,7 @@ initializeProcess: aGsProcess level: anInteger organizer: aClassOrganizer
 
 	| frameData gsNMethod |
 	frameData := aGsProcess _frameContentsAt: anInteger.
+	oop := (frameData at: 8) asOop.
 	gsNMethod := frameData at: 1.
 	label := aGsProcess _reportAt: anInteger.
 	method := RowanMethodService forGsNMethod: gsNMethod organizer: aClassOrganizer.
@@ -16488,11 +28647,11 @@ varsFor: anArray
 		ifTrue: [anArray copyFrom: 11 to: anArray size]
 		ifFalse: [#()]).
 	list := Array new.
-	1 to: (keys size min: values size) do: [:i | | oop key value valueClass |
+	1 to: (keys size min: values size) do: [:i | | theOop key value valueClass | 
 		key := keys at: i.
 		value := values at: i.
 		valueClass := value class.
-		oop := value asOop.
+		theOop := value asOop.
 		value := [
 			value printString.
 		] on: Error do: [:ex | 
@@ -16500,7 +28659,7 @@ varsFor: anArray
 		].
 		value size > 500 ifTrue: [value := (value copyFrom: 1 to: 500) , '...'].
 		value := value collect: [:char | (char asciiValue < 32 or: [127 < char asciiValue]) ifTrue: [$?] ifFalse: [char]].
-		list add: (RowanVariableService oop: oop key: key value: value className: valueClass name asString).
+		list add: (RowanVariableService oop: theOop key: key value: value className: valueClass name asString).
 	].
 	^list
 %
@@ -16528,6 +28687,50 @@ forSelector: sel class: theClass meta: boolean organizer: anOrganizer
 		meta: boolean.
 	service forClass: theClass organizer: anOrganizer.
 	^service
+%
+
+category: 'utility'
+classmethod: RowanMethodService
+put: string onStreamWithoutUnicode: stream
+
+	string do:[:char | 
+			char asInteger > 255 ifTrue:[
+				stream nextPutAll: '$\x', char asInteger asHexString]
+			ifFalse:[
+				stream nextPut: char
+			]].
+%
+
+category: 'utility'
+classmethod: RowanMethodService
+removeUnicode: string
+
+		| ws | 
+		ws := WriteStream on: String new. 
+		self put: string onStreamWithoutUnicode: ws. 
+		^ws contents
+%
+
+category: 'utility'
+classmethod: RowanMethodService
+removeUnicodeFromSource: string
+
+	"possibly a unicode string which is not yet 
+	presentable in Jadeite."
+
+	(string isKindOf: MultiByteString) ifTrue:[
+		| ws | 
+		ws := WriteStream on: String new. 
+		ws nextPutAll: '''METHOD SOURCE CANNOT BE DISPLAYED
+This method source contains unicode and is not displayable in Jadeite. 
+An approximation of the source code is given printed below with $\x<char hex value>
+replacing the actual unicode character.''';
+			cr; 
+			cr.
+		self put: string onStreamWithoutUnicode: ws. 
+		^ws contents]
+	ifFalse:[
+		^string].
 %
 
 category: 'instance creation'
@@ -16677,6 +28880,13 @@ clearBreakAt: stepPoint
 	RowanCommandResult addResult: self.
 %
 
+category: 'Updating'
+method: RowanMethodService
+comparisonSource: string
+
+	comparisonSource := string
+%
+
 category: 'Accessing'
 method: RowanMethodService
 compilationWarnings
@@ -16729,7 +28939,7 @@ forClass: theClass organizer: theOrganizer
 	oop := gsNMethod asOop. 
 	stepPoints := self stepPointsFor: gsNMethod.
 	breakPoints := self breakPointsFor: gsNMethod.
-	source := gsNMethod sourceString.
+	self updateSource: gsNMethod sourceString.
 	category := (classOrMeta categoryOfSelector: selector) asString.
 	className := theClass name asString. 
 	packageName := gsNMethod rowanPackageName. 
@@ -16803,7 +29013,7 @@ initialize: aGsNMethod organizer: aClassOrganizer
 	breakPoints := self breakPointsFor: aGsNMethod.
 	((inClass := aGsNMethod inClass) isNil or: [selector isNil]) ifTrue: [
 		meta := false.
-		source := aGsNMethod sourceString.
+		self updateSource: aGsNMethod sourceString.
 		hasSupers := false.
 		hasSubs := false.
 		organizer := aClassOrganizer. 
@@ -16830,7 +29040,7 @@ isTestMethod
 	^isTestMethod
 %
 
-category: 'Accessing'
+category: 'Updating'
 method: RowanMethodService
 isTestMethod: boolean
 
@@ -16964,7 +29174,7 @@ selector
 	^selector
 %
 
-category: 'Accessing'
+category: 'Updating'
 method: RowanMethodService
 selector: aSymbol
 
@@ -17000,7 +29210,7 @@ setSupersAndSubsFor: theClass
 	[theSuper notNil and:[hasSupers not]] whileTrue:[
 		hasSupers := theSuper selectors includes: selector.
 		hasSupers ifTrue:[
-			superSource := theSuper sourceCodeAt: selector.
+			comparisonSource := theSuper sourceCodeAt: selector.
 			superDisplayString := theSuper name, '>>', selector].
 		theSuper := theSuper superClass].
 	(organizer allSubclassesOf: theClass thisClass) do:[:cls |
@@ -17017,11 +29227,11 @@ source
 	^source
 %
 
-category: 'Accessing'
+category: 'Updating'
 method: RowanMethodService
-source: aString
+source: string
 	
-	source := aString
+	self updateSource: string
 %
 
 category: 'Accessing'
@@ -17079,6 +29289,13 @@ update
 		initialize: (Object _objectForOop: oop) 
 		organizer: ClassOrganizer new.
 	RowanCommandResult addResult: self.
+%
+
+category: 'private'
+method: RowanMethodService
+updateSource: string
+
+	source := self class removeUnicodeFromSource: string
 %
 
 category: 'testing'
@@ -17142,7 +29359,7 @@ method: RowanPackageService
 classHierarchy
 	| superclassChains levels services hierarchies theClasses toExpand |
 	self update. 
-	theClasses := classes collect:[:classService | classService classFromName].
+	theClasses := classes collect:[:classService | classService theClass].
 	superclassChains := self superclassChainsFor: theClasses. 
 	hierarchies := self extendHierarchies: superclassChains. 
 	levels := self hierarchiesByLevel: hierarchies.
@@ -17159,20 +29376,10 @@ category: 'client commands'
 method: RowanPackageService
 compileClass: definitionString
 
-	| theClass classService packageService |
-	theClass := definitionString evaluate.
-	classService := RowanClassService new name: theClass name. 
-	classService update. 
-	classService isNewClass: true.
-	classService packageName = name 
-		ifTrue:[
-			self selectedClass: classService
-		]
-		ifFalse:[
-			packageService := RowanPackageService forPackageNamed: classService packageName. 
-			packageService update. 
-			packageService selectedClass: classService].
-	RowanCommandResult addResult: classService.
+	|  anonymousMethod |
+	anonymousMethod := definitionString _compileInContext: nil 
+       symbolList: GsSession currentSession symbolList.
+	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
 %
 
 category: 'rowan'
@@ -17301,6 +29508,14 @@ isDirty: boolean
 	isDirty := boolean
 %
 
+category: 'Accessing'
+method: RowanPackageService
+jadeite_testClasses
+
+	"for testing" 
+	^testClasses
+%
+
 category: 'rowan'
 method: RowanPackageService
 loadedClasses
@@ -17401,10 +29616,34 @@ projectName: newValue
 
 category: 'client commands'
 method: RowanPackageService
+recompileMethodsAfterClassCompilation
+
+	"compileClass: must be run first"
+	| theClass classService packageService |
+
+	theClass := [(UserGlobals at: #jadeiteCompileClassMethod) _executeInContext: nil] 
+		ensure: [UserGlobals at: #jadeiteCompileClassMethod put: nil].
+	classService := RowanClassService new name: theClass name. 
+	classService update. 
+	classService isNewClass: true.
+	classService packageName = name 
+		ifTrue:[
+			self selectedClass: classService
+		]
+		ifFalse:[
+			packageService := RowanPackageService forPackageNamed: classService packageName. 
+			packageService update. 
+			packageService selectedClass: classService].
+	RowanCommandResult addResult: classService.
+%
+
+category: 'client commands'
+method: RowanPackageService
 removeClass: classService
 
 	self removeClassNamed: classService name. 
 	self update.
+	self setDefaultTemplate.
 	classService updateType: #removedClass:.
 	RowanCommandResult addResult: classService
 %
@@ -17459,17 +29698,17 @@ category: 'commands support'
 method: RowanPackageService
 services: services from: levels expand: toExpand
 
-	(classes collect:[:svc | svc classFromName]) do:[:aClass |
+	(classes collect:[:svc | svc theClass]) do:[:aClass |
 		toExpand addAll: aClass allSuperclasses].
 	levels keysAndValuesDo: [:key :value |
 		| newKey service  | 
 		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
-			service := (RowanClassService minimalForClassNamed: key name).
-			(toExpand includes: service classFromName) ifTrue:[service expand: true] ifFalse:[service expand: false].
+			service := (RowanClassService new classServiceFromOop: key asOop).
+			(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
 			service].
 		services at: newKey put: (value collect:[:cls | 
-				service := (RowanClassService minimalForClassNamed: cls name).
-				(toExpand includes: service classFromName) ifTrue:[service expand: true] ifFalse:[service expand: false].
+				service := (RowanClassService new classServiceFromOop: cls asOop).
+				(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
 				service
 				])]
 %
@@ -17505,7 +29744,9 @@ testClasses
 					| classService |
 					classService := RowanClassService basicForClassNamed: testSubclass name.
 					testClasses detect:[:testClassService | testClassService name = classService name] ifNone:[
-						testClasses add: classService]]]]]. 
+					(self loadedClassExtensions keys asArray includes: classService name) ifFalse:[
+							"don't include extension classes"
+							testClasses add: classService]]]]]]. 
 	updateType := #testClasses:. 
 	testClasses := testClasses asArray. 
 	RowanCommandResult addResult: self.
@@ -17520,7 +29761,7 @@ update
 		| classService | 
 		classService := (RowanClassService minimalForClassNamed: string) 
 			isExtension: true.
-		(Rowan image loadedClassForClass: classService classFromName ifAbsent:[]) 
+		(Rowan image loadedClassForClass: classService theClass ifAbsent:[]) 
 			ifNotNil:[:cls | classService definedPackageName: cls packageName].
 		classService]).
 	classes do: [:clsService | clsService packageName: self name]. 
@@ -17721,13 +29962,15 @@ changes
 	| jadeServer |
 	jadeServer := Rowan platform jadeServerClassNamed: #JadeServer. 
 	changes := Array new. 
-	self packageNames do:[:packageName |
+	(Rowan projectTools diff
+		patchesForProjectNamed: 'Rowan') do: [:assoc | 
+			"key is packageName, value is a CypressPatch"
 			| patch |
-			patch := Rowan packageTools diff patchForPackageName: packageName.
+			patch := assoc value.
 			changes add:(jadeServer new
 				_mcDescriptionOfPatch: patch
 				baseName: 'closest ancestor'
-				alternateName: nil)].
+				alternateName: nil) ].
 	self refresh.
 	RowanCommandResult addResult: self.
 %
@@ -19293,7 +31536,7 @@ projectName
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-validateClassCategory: category  forPackageNamed: packageName
+validateClassCategory: aClassDefinition  forPackageNamed: packageName
 
 	"
 		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
@@ -19304,15 +31547,15 @@ validateClassCategory: category  forPackageNamed: packageName
 	"signal an error if the protocol does not conform to the convention for the current project"
 
 	self packageConvention = 'RowanHybrid'
-		ifTrue: [ ^ self _validateRowanHybridClassCategoryConvention: category forPackageNamed: packageName ].
+		ifTrue: [ ^ self _validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName ].
 	self packageConvention = 'Monticello'
-		ifTrue: [ ^ self _validateRowanMonticelloClassCategoryConvention: category forPackageNamed: packageName ].
+		ifTrue: [ ^ self _validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName ].
 	"Rowan - no convention ... any old protocol is fine"
 %
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-validateMethodProtocol: protocol  forPackageNamed: packageName
+validateMethodDefinitionProtocol: methodDef className: className isMeta: isMeta forPackageNamed:  packageName
 
 	"
 		RowanHybrid	- [default] Class category is package name, method protocol with leading $* is case insensitive package name
@@ -19323,9 +31566,9 @@ validateMethodProtocol: protocol  forPackageNamed: packageName
 	"signal an error if the protocol does not conform to the convention for the current project"
 
 	self packageConvention = 'RowanHybrid'
-		ifTrue: [ ^ self _validateRowanHybridProtocolConvention: protocol forPackageNamed: packageName ].
+		ifTrue: [ ^ self _validateRowanHybridProtocolConvention: methodDef className: className isMeta: isMeta forPackageNamed:  packageName ].
 	self packageConvention = 'Monticello'
-		ifTrue: [ ^ self _validateRowanMonticelloProtocolConvention: protocol forPackageNamed: packageName ].
+		ifTrue: [ ^ self _validateRowanMonticelloProtocolConvention:methodDef className: className isMeta: isMeta forPackageNamed:  packageName ].
 	"Rowan - no convention ... any old protocol is fine"
 %
 
@@ -19366,42 +31609,67 @@ _repositoryPropertyDictFor: packagesRoot
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-_validateRowanHybridClassCategoryConvention: category forPackageNamed: packageName
+_validateRowanHybridClassCategoryConvention: aClassDefinition forPackageNamed: packageName
 
-	category = packageName ifTrue: [ ^ self ].
-	self error: 'not yet implemented'
+	aClassDefinition category = packageName ifTrue: [ ^ self ].
+	RwInvalidClassCategoryConventionErrorNotification 
+		signalWithClassDefinition: aClassDefinition 
+			packageName: packageName 
+			packageConvention: 'RowanHybrid'
 %
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-_validateRowanHybridProtocolConvention: protocol forPackageNamed: packageName
+_validateRowanHybridProtocolConvention:  methodDef className: className isMeta: isMeta forPackageNamed:  packageName
 
-	| canonProtocol expectedProtocol |
+	| canonProtocol expectedProtocol protocol |
+	protocol := methodDef protocol.
 	(protocol at: 1) = $*
 		ifTrue: [
 			currentClassDefinition
 				ifNotNil: [
-					"protocol should not start with $* if NOT an extension method"
-					self error: 'not yet implemented']]
+					"protocol should not start with $* for a non-extension method"
+					RwExtensionProtocolNonExtensionMethodErrorNotification 
+						signalWithMethodDefinition: methodDef
+							className: className 
+							isMeta: isMeta 
+							packageName:  packageName
+							packageConvention: 'RowanHybrid'.
+					^ self ] ]
 		ifFalse: [
 			currentClassDefinition 
 				ifNotNil:  [ 
 					"protocol does not start with $* as expected"
 					^ self ] ].			
 	"validate conformance to convention for extension method"
+	(protocol at: 1) = $*
+		ifFalse: [
+			"extension method protocol must start with a *"
+			RwNonExtensionProtocolExtensionMethodErrorNotification
+				signalWithMethodDefinition: methodDef
+					className: className 
+					isMeta: isMeta 
+					packageName:  packageName
+					packageConvention: 'RowanHybrid'.
+			^ self  ].
 	canonProtocol := protocol asLowercase.
 	expectedProtocol := '*', packageName asLowercase.
 	canonProtocol = expectedProtocol ifTrue: [ ^ self ].
-	"protocol does not conform to Rowan Hybrid convention"
-	self error: 'not yet implemented'
+	"protocol does not match package name"
+	RwExtensionProtocolExtensionMethodPackageMismatchErrorNotification
+		signalWithMethodDefinition: methodDef
+			className: className 
+			isMeta: isMeta 
+			packageName:  packageName
+			packageConvention: 'RowanHybrid'
 %
 
 category: 'validation'
 method: RwAbstractReaderWriterVisitor
-_validateRowanMonticelloClassCategoryConvention: category forPackageNamed: packageName
+_validateRowanMonticelloClassCategoryConvention: aClassDefinition forPackageNamed: packageName
 
-	(category beginsWith: packageName) ifTrue: [ ^ self ].
-	self error: 'not yet implemented'
+	(aClassDefinition category beginsWith: packageName) ifTrue: [ ^ self ].
+	RwInvalidClassCategoryConventionErrorNotification signalWithClassDefinition: aClassDefinition packageName: packageName packageConvention: 'Monticello'
 %
 
 category: 'validation'
@@ -19509,26 +31777,21 @@ method: RwModificationWriterVisitor
 changedProject: aProjectModification
 
 	currentProjectDefinition := aProjectModification after.
-self halt.
+	self processProject: aProjectModification
 %
 
 category: 'actions'
 method: RwModificationWriterVisitor
 deletedClass: aClassModification
 
-	currentClassDefinition := aClassModification after.
-
-	self halt. "delete the class file"
+	self subclassResponsibility: #deletedClass:
 %
 
 category: 'actions'
 method: RwModificationWriterVisitor
 deletedClassExtension: aClassExtensionModification
 
-	currentClassExtension := aClassExtensionModification after.
-
-
-	self halt. "delete the class extension file"
+	self subclassResponsibility: #deletedClassExtension:
 %
 
 category: 'actions'
@@ -19625,6 +31888,16 @@ visitClassModification: aClassModification
 		ifTrue: [ ^ self addedClass: aClassModification ] .
 	aClassModification isDeletion
 		ifTrue: [ ^ self deletedClass: aClassModification ].
+(aClassModification instanceMethodsModification isEmpty and: [ aClassModification classMethodsModification isEmpty ])
+	ifTrue: [
+		"no instance or class modifications, check to see if the only Property modification is for 'gs_SymbolDictionary' "
+		| propertiesModification elementsModified |
+		propertiesModification := aClassModification propertiesModification.
+		elementsModified := propertiesModification elementsModified.
+		(elementsModified size = 1 and: [ (elementsModified at: 'gs_SymbolDictionary' ifAbsent: []) notNil])
+			ifTrue: [
+				"'gs_symbolDictionary' property is not written to disk, so we can skip this class"
+				^ self ]].
 	^ self changedClass: aClassModification
 %
 
@@ -20237,29 +32510,18 @@ orderedDictionaryClass
 
 category: 'actions'
 method: RwModificationCypressFamilyWriterVisitor
-changedPackage: aPackageModification
-
-	currentPackageDefinition := aPackageModification after.
-
-	self halt. "anything need to be done for tonel?"
-
-	self processPackage: aPackageModification
-%
-
-category: 'actions'
-method: RwModificationCypressFamilyWriterVisitor
 deletedPackage: aPackageModification
 
-	currentPackageDefinition := aPackageModification after.
+	currentPackageDefinition := aPackageModification before.
 
-	self halt. "delete the whole package directory"
+	self _packageSourceDir ensureDeleteAll.	"delete the whole package directory"
 %
 
 category: 'package writing'
 method: RwModificationCypressFamilyWriterVisitor
 packageExtension
 
-	^ 'package'
+	^ ''
 %
 
 category: 'package writing'
@@ -20268,6 +32530,8 @@ processPackage: aPackageModification
 
 	classDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification after classDefinitions.
 	classExtFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification after classExtensions.
+	classDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification before classDefinitions.
+	classExtBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification before classExtensions.
 
 	super processPackage: aPackageModification
 %
@@ -20286,8 +32550,14 @@ method: RwModificationCypressFamilyWriterVisitor
 _packageSourceDir
 
 	| filename |
-	filename := packageDefFileNameMap at:  self currentPackageDefinition name.
-	^ self _projectSourceDir /filename, self packageExtension
+	filename := packageDefFileNameMap 
+		at:  self currentPackageDefinition name 
+		ifAbsent: [
+			"in the case of package removal, need to use the before package map"
+			packageDefBeforeFileNameMap at: self currentPackageDefinition name ].
+	^ self packageExtension isEmpty
+		ifTrue: [ self _projectSourceDir /filename ]
+		ifFalse: [ self _projectSourceDir /filename, self packageExtension ]
 %
 
 category: 'project writing'
@@ -20444,6 +32714,94 @@ addedPackage: aPackageModification
 	self processPackage: aPackageModification
 %
 
+category: 'actions'
+method: RwModificationFiletreeWriterVisitor
+changedMethod: aMethodModification
+
+	| methodDefinition methodDir methodFileName |
+
+	methodDefinition := aMethodModification after.
+
+	"create instance/class directory as needed ... write method source file"
+	 (aMethodModification isMeta
+		ifTrue: [
+			methodFileName := classFileNameMap at: methodDefinition selector.
+			methodDir := self _methodClassDir ensureCreateDirectory ]
+		ifFalse: [ 
+			methodFileName := instanceFileNameMap at: methodDefinition selector.
+			methodDir := self _methodInstanceDir ensureCreateDirectory ]) .
+
+
+	(methodDir / methodFileName, 'st')
+		writeStreamDo: [:aStream |
+		aStream 
+			<< methodDefinition protocol
+			<< self _newLine
+			<< (methodDefinition source withLineEndings: self _newLine) ]
+%
+
+category: 'actions'
+method: RwModificationFiletreeWriterVisitor
+deletedClass: aClassModification
+
+	currentClassDefinition := aClassModification before.
+
+	self _classSourceDir ensureDeleteAll
+%
+
+category: 'actions'
+method: RwModificationFiletreeWriterVisitor
+deletedClassExtension: aClassExtensionModification
+
+	currentClassExtension := aClassExtensionModification before.
+
+	self _classExtensionSourceDir ensureDeleteAll
+%
+
+category: 'actions'
+method: RwModificationFiletreeWriterVisitor
+deletedMethod: aMethodModification
+
+	| methodDefinition methodDir methodFileName |
+
+	methodDefinition := aMethodModification before.
+
+	"delete method source file"
+	 (aMethodModification isMeta
+		ifTrue: [
+			methodFileName := classFileNameMap at: methodDefinition selector
+				ifAbsent: [ classBeforeFileNameMap at: methodDefinition selector ].
+			methodDir := self _methodClassDir ensureCreateDirectory ]
+		ifFalse: [ 
+			methodFileName := instanceFileNameMap at: methodDefinition selector
+				ifAbsent: [ instanceBeforeFileNameMap at: methodDefinition selector ].
+			methodDir := self _methodInstanceDir ensureCreateDirectory ]) .
+
+
+	(methodDir / methodFileName, 'st') ensureDelete
+%
+
+category: 'actions'
+method: RwModificationFiletreeWriterVisitor
+deletedMethodExtension: aMethodExtensionModification
+
+	| methodDefinition methodDir methodFileName |
+
+	methodDefinition := aMethodExtensionModification before.
+
+	"create instance/class directory as needed ... write method source file"
+	 (aMethodExtensionModification isMeta
+		ifTrue: [
+			methodFileName := classBeforeFileNameMap at: methodDefinition selector.
+			methodDir := self _methodClassExtensionDir ensureCreateDirectory ]
+		ifFalse: [ 
+			methodFileName := instanceBeforeFileNameMap at: methodDefinition selector.
+			methodDir := self _methodInstanceExtensionDir ensureCreateDirectory ]) .
+
+
+	(methodDir / methodFileName, 'st') ensureDelete
+%
+
 category: 'package writing'
 method: RwModificationFiletreeWriterVisitor
 monticelloMetadata
@@ -20485,11 +32843,17 @@ processClass: aClassModification
 				<< (self _typeClassDefinitionOf: self currentClassDefinition)
 				<< self _newLine ].
 
-	instanceFileNameMap  := self _createFileNameMapForMethods: self currentClassDefinition instanceMethodDefinitions.
-	classFileNameMap := self _createFileNameMapForMethods: self currentClassDefinition classMethodDefinitions.
+	instanceFileNameMap  := self _createFileNameMapForMethods: aClassModification after instanceMethodDefinitions.
+	classFileNameMap := self _createFileNameMapForMethods: aClassModification after classMethodDefinitions.
+	instanceBeforeFileNameMap  := self _createFileNameMapForMethods: aClassModification before instanceMethodDefinitions.
+	classBeforeFileNameMap := self _createFileNameMapForMethods: aClassModification before classMethodDefinitions.
 
-	aClassModification instanceMethodsModification acceptVisitor: self.
-	aClassModification classMethodsModification acceptVisitor: self
+	currentClassDefinition instanceMethodDefinitions isEmpty
+		ifTrue: [  self _methodInstanceDir ensureDeleteAll ]
+		ifFalse: [ aClassModification instanceMethodsModification acceptVisitor: self ].
+	currentClassDefinition classMethodDefinitions isEmpty
+		ifTrue: [  self _methodClassDir ensureDeleteAll ]
+		ifFalse: [ aClassModification classMethodsModification acceptVisitor: self ]
 %
 
 category: 'class writing'
@@ -20498,19 +32862,23 @@ processClassExtension: aClassExtensionModification
 
 	"create class extension directory and defintion structure"
 
-	self _classExtensionSourceDir ensureCreateDirectory.
+	(currentClassExtension instanceMethodDefinitions isEmpty and: [ currentClassExtension classMethodDefinitions isEmpty ])
+		ifTrue: [ self _classExtensionSourceDir ensureDeleteAll ]
+		ifFalse: [ 
+			self _classExtensionSourceDir ensureCreateDirectory.
+			(self _classExtensionSourceDir /  'properties.json')
+				writeStreamDo: [:aStream |
+					aStream 
+						<< (self _classExtensionOf: self currentClassExtension)
+						<< self _newLine ].
 
-	(self _classExtensionSourceDir /  'properties.json')
-		writeStreamDo: [:aStream |
-			aStream 
-				<< (self _classExtensionOf: self currentClassExtension)
-				<< self _newLine ].
+			instanceFileNameMap  := self _createFileNameMapForMethods: aClassExtensionModification after instanceMethodDefinitions.
+			classFileNameMap := self _createFileNameMapForMethods: aClassExtensionModification after classMethodDefinitions.
+			instanceBeforeFileNameMap  := self _createFileNameMapForMethods: aClassExtensionModification before instanceMethodDefinitions.
+			classBeforeFileNameMap := self _createFileNameMapForMethods: aClassExtensionModification before classMethodDefinitions.
 
-	instanceFileNameMap  := self _createFileNameMapForMethods: self currentClassExtension instanceMethodDefinitions.
-	classFileNameMap := self _createFileNameMapForMethods: self currentClassExtension classMethodDefinitions.
-
-	aClassExtensionModification instanceMethodsModification acceptVisitor: self.
-	aClassExtensionModification classMethodsModification acceptVisitor: self
+			aClassExtensionModification instanceMethodsModification acceptVisitor: self.
+			aClassExtensionModification classMethodsModification acceptVisitor: self ]
 %
 
 category: 'project writing'
@@ -20520,6 +32888,7 @@ processProject: aProjectModification
 	| projectProperties |
 
 	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
+	packageDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification before packages.
 
 	"confirm that the project source is written in Tonel format"
 	(self _repositoryFormatFor:  aProjectModification after packagesRoot) = 'filetree' ifFalse: [ self error: 'expected tonel format repository' ].
@@ -20608,7 +32977,11 @@ method: RwModificationFiletreeWriterVisitor
 _classExtensionSourceDir
 
 	| filename |
-	filename := classExtFileNameMap at:  self currentClassExtension name.
+	filename := classExtFileNameMap 
+		at:  self currentClassExtension name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classExtBeforeFileNameMap at: self currentClassExtension name ].
 	^ self _packageSourceDir / filename, 'extension'
 %
 
@@ -20617,7 +32990,11 @@ method: RwModificationFiletreeWriterVisitor
 _classSourceDir
 
 	| filename |
-	filename := classDefFileNameMap at:  self currentClassDefinition name.
+	filename := classDefFileNameMap 
+		at:  self currentClassDefinition name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classDefBeforeFileNameMap at: self currentClassDefinition name ].
 	^ self _packageSourceDir / filename, 'class'
 %
 
@@ -20843,6 +33220,24 @@ addedPackage: aPackageModification
 	self processPackage: aPackageModification
 %
 
+category: 'actions'
+method: RwModificationTonelWriterVisitor
+deletedClass: aClassModification
+
+	currentClassDefinition := aClassModification before.
+
+	self _classSourceFile ensureDelete
+%
+
+category: 'actions'
+method: RwModificationTonelWriterVisitor
+deletedClassExtension: aClassExtensionModification
+
+	currentClassExtension := aClassExtensionModification before.
+
+	self _classExtensionSourceFile ensureDelete
+%
+
 category: 'class writing'
 method: RwModificationTonelWriterVisitor
 processClass: aClassModification
@@ -20862,11 +33257,14 @@ processClassExtension: aClassExtensionModification
 
 	"write out the class definition"
 
-	self _classExtensionSourceFile
-		writeStreamDo: [:aStream |
-			self _writeClassExtension: currentClassExtension on: aStream.
-			self _writeClassSideMethodDefinitions: currentClassExtension on: aStream.
-			self _writeInstanceSideMethodDefinitions: currentClassExtension on: aStream ]
+	(currentClassExtension instanceMethodDefinitions isEmpty and: [ currentClassExtension classMethodDefinitions isEmpty ])
+		ifTrue: [ self _classExtensionSourceFile ensureDelete ]
+		ifFalse: [ 
+			self _classExtensionSourceFile
+				writeStreamDo: [:aStream |
+					self _writeClassExtension: currentClassExtension on: aStream.
+					self _writeClassSideMethodDefinitions: currentClassExtension on: aStream.
+					self _writeInstanceSideMethodDefinitions: currentClassExtension on: aStream ] ]
 %
 
 category: 'project writing'
@@ -20876,6 +33274,8 @@ processProject: aProjectModification
 
 	| format |
 	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
+	packageDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification before packages.
+
 	(format := self _repositoryFormatFor:  aProjectModification after packagesRoot) = 'tonel' ifFalse: [ self error: 'expected tonel format repository, instead format is ', format printString ].
 	super processProject: aProjectModification.
 %
@@ -20885,7 +33285,11 @@ method: RwModificationTonelWriterVisitor
 _classExtensionSourceFile
 
 	| filename |
-	filename := classExtFileNameMap at:  self currentClassExtension name.
+	filename := classExtFileNameMap 
+		at:  self currentClassExtension name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classExtBeforeFileNameMap at: self currentClassExtension name ].
 	^ self _packageSourceDir / (filename, '.extension.st')
 %
 
@@ -20894,7 +33298,11 @@ method: RwModificationTonelWriterVisitor
 _classSourceFile
 
 	| filename |
-	filename := classDefFileNameMap at:  self currentClassDefinition name.
+	filename := classDefFileNameMap 
+		at:  self currentClassDefinition name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classDefBeforeFileNameMap at: self currentClassDefinition name ].
 	^ self _packageSourceDir / (filename, '.class.st')
 %
 
@@ -21289,7 +33697,7 @@ readClassDirectory: classDirectory inPackage: packageName
 		nil. 
 		normalizedMetadata
 	}.
-	self validateClassCategory: classDef category  forPackageNamed: packageName.
+	self validateClassCategory: classDef forPackageNamed: packageName.
 	(currentProjectDefinition packageNamed: packageName)
 		addClassDefinition: currentClassDefinition.
 
@@ -21333,15 +33741,15 @@ category: 'method reading'
 method: RwRepositoryComponentProjectFiletreeReaderVisitor
 readMethodDirectories: classDirectory forClassDefinition: classDefinition inPackage: packageName
 
-	(self readMethodDirectory: classDirectory / 'instance' inPackage: packageName) do: [:methodDefinition |
+	(self readMethodDirectory: classDirectory / 'instance' forClassDefinition: classDefinition isClassMeta: false inPackage: packageName) do: [:methodDefinition |
 		classDefinition addInstanceMethodDefinition: methodDefinition ].
-	(self readMethodDirectory: classDirectory / 'class' inPackage: packageName) do: [:methodDefinition |
+	(self readMethodDirectory: classDirectory / 'class' forClassDefinition: classDefinition isClassMeta: true inPackage: packageName) do: [:methodDefinition |
 		classDefinition addClassMethodDefinition: methodDefinition ]
 %
 
 category: 'method reading'
 method: RwRepositoryComponentProjectFiletreeReaderVisitor
-readMethodDirectory: methodDirectory inPackage: packageName
+readMethodDirectory: methodDirectory forClassDefinition: classDefinition isClassMeta: isClassMeta inPackage: packageName
 
 	| methodDefinitions methodDefinitionStream |
 	methodDefinitions := {}.
@@ -21351,12 +33759,17 @@ readMethodDirectory: methodDirectory inPackage: packageName
 	methodDirectory files do: [:file |
 		file extension = 'st'
 			ifTrue: [ 
-				| protocol methodSource methodStream |
+				| protocol methodSource methodStream methodDef |
 				methodStream := file contents  readStreamPortable.
 				protocol := methodStream nextLine.
 				methodSource := methodStream upToEnd.
-				self validateMethodProtocol: protocol  forPackageNamed: packageName.
-				methodDefinitionStream nextPut: (RwMethodDefinition newForSource: methodSource protocol: protocol) ] ].
+				methodDef := RwMethodDefinition newForSource: methodSource protocol: protocol.
+				self 
+					validateMethodDefinitionProtocol: methodDef 
+						className: classDefinition name
+						isMeta: isClassMeta 
+						forPackageNamed:  packageName.
+				methodDefinitionStream nextPut: methodDef ] ].
 
 	^ methodDefinitions
 %
@@ -21444,13 +33857,19 @@ definitionForType: aString
 
 category: 'tonel parser'
 method: RwRepositoryComponentProjectTonelReaderVisitor
-newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source
+newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: protocol source: source
 
-	self validateMethodProtocol: category  forPackageNamed: self currentPackageDefinition name.
-	^ RwMethodDefinition
+	| methodDef |
+	methodDef := RwMethodDefinition
 		newForSelector: selector 
-			protocol: category 
-			source: source
+			protocol: protocol 
+			source: source.
+	self 
+		validateMethodDefinitionProtocol: methodDef 
+			className: className
+			isMeta: meta
+			forPackageNamed: self currentPackageDefinition name.
+	^ methodDef
 %
 
 category: 'tonel parser'
@@ -21499,7 +33918,7 @@ readClassExtensionFile: file inPackage: packageName
 	file readStreamDo: [:fileStream |
 		| definitions stream |
 		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: 10000. "part of workaround for GemTalk/FileSystemGs#9"
+		stream sizeBuffer: 20000. "part of workaround for GemTalk/FileSystemGs#9"
 		definitions := (TonelParser on: stream forReader: self) start.
 		((definitions at: 2) at: 1) do: [:mDef |
 			currentClassExtension addClassMethodDefinition: mDef ].
@@ -21518,7 +33937,7 @@ readClassFile: file inPackage: packageName
 		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
 		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
 		definitions := (TonelParser on: stream forReader: self) start.
-		self validateClassCategory: currentClassDefinition category forPackageNamed: packageName.
+		self validateClassCategory: currentClassDefinition forPackageNamed: packageName.
 		((definitions at: 2) at: 1) do: [:mDef |
 			currentClassDefinition addClassMethodDefinition: mDef ].
 		((definitions at: 2) at: 2) do: [:mDef |
@@ -21837,7 +34256,21 @@ _auditClassSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
 "audit a selector. verify compiled method matches loaded method reference return nil if no problem found"
 
 	^(aLoadedClass loadedMethodAt: aSelector isMeta:  true)
-			ifNil: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded class method '.]
+			ifNil: [
+				| notification |
+				notification := (RwAuditMethodErrorNotification
+					method: aSelector 
+					isMeta: true
+					inClassNamed: aBehavior theNonMetaClass name
+					isClassExtension: aLoadedClass isLoadedClassExtension
+					intoPackageNamed: aLoadedClass packageName )
+						description: 'Missing loaded instance method. ';
+						yourself.
+				(notification signal) 
+					ifTrue: [ (aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded class method. ' ]
+					ifFalse: [ 
+						"don't record audit error"
+						nil ] ]
 			ifNotNil: [:aLoadedMethod |
 				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle
 						ifTrue: [
@@ -21918,7 +34351,21 @@ _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
 "audit an instance selector. return nil if no problem found"
 
 	^(aLoadedClass loadedMethodAt: aSelector isMeta:  aBehavior isMeta)
-			ifNil: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded instance method. '.]
+			ifNil: [
+				| notification |
+				notification := (RwAuditMethodErrorNotification
+					method: aSelector 
+					isMeta: false
+					inClassNamed: aBehavior theNonMetaClass name
+					isClassExtension: aLoadedClass isLoadedClassExtension
+					intoPackageNamed: aLoadedClass packageName )
+						description: 'Missing loaded instance method. ';
+						yourself.
+				(notification signal) 
+					ifTrue: [ (aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded instance method. ' ]
+					ifFalse: [ 
+						"don't record audit error"
+						nil ]  ]
 			ifNotNil: [:aLoadedMethod |
 				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle
 						ifTrue: [
@@ -22325,17 +34772,18 @@ adoptClassNamed: className classExtension: classExtension instanceSelectors: ins
 
 	"Ignore packaged instance and class methods"
 
-	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
-		theBehavior actualPackageSymDictName |
+	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary
+		registry theBehavior actualPackageSymDictName |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := (gemstoneSpec symbolDictNameForPackageNamed: packageName) asSymbol.
+	packageSymDictName := (loadedProject symbolDictNameForPackageNamed: packageName) asSymbol.
 
 	theClass := Rowan globalNamed: className.
-	theClass ifNil: [ self error: 'The class ', className printString, ' is not present in the current user''s symbol list' ].
+	theClass ifNil: [ 
+		(RwAdoptMissingClassErrorNotification classNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
+		"if exception resumed then we'll skip the adopt operation for this class"
+		^ self ].
 	(Rowan image symbolList dictionariesAndSymbolsOf: theClass)
 		do: [:ar |
 			actualPackageSymDictName := (ar at: 1) name.
@@ -22363,24 +34811,35 @@ adoptClassNamed: className classExtension: classExtension instanceSelectors: ins
 	theBehavior := theClass.
 	instanceSelectors do: [:methodSelector |
 		| theCompiledMethod |
-		theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
-		registry
-			adoptCompiledMethod: theCompiledMethod
-			classExtension: classExtension
-			for: theBehavior 
-			protocol: (theBehavior categoryOfSelector: methodSelector) 
-			toPackageNamed: packageName ].
+		theCompiledMethod := (theBehavior compiledMethodAt: methodSelector  otherwise: nil)
+			ifNil: [ 
+				(RwAdoptMissingMethodErrorNotification method: methodSelector isMeta: false inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
+				"skip adoption of this method"
+				nil ].
+		theCompiledMethod
+			ifNotNil: [ 
+				registry
+					adoptCompiledMethod: theCompiledMethod
+					classExtension: classExtension
+					for: theBehavior 
+					protocol: (theBehavior categoryOfSelector: methodSelector) 
+					toPackageNamed: packageName ] ] .
 
 	theBehavior := theClass class.
 	classSelectors do: [:methodSelector |
 		| theCompiledMethod |
-		theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
-		registry
-			adoptCompiledMethod: theCompiledMethod 
-			classExtension: classExtension
-			for: theBehavior 
-			protocol: (theBehavior categoryOfSelector: methodSelector) 
-			toPackageNamed: packageName ].
+		theCompiledMethod := (theBehavior compiledMethodAt: methodSelector  otherwise: nil)
+			ifNil: [ (RwAdoptMissingMethodErrorNotification method: methodSelector isMeta: true inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
+				"skip adoption of this method"
+				nil ].
+		theCompiledMethod
+			ifNotNil: [ 
+				registry
+					adoptCompiledMethod: theCompiledMethod 
+					classExtension: classExtension
+					for: theBehavior 
+					protocol: (theBehavior categoryOfSelector: methodSelector) 
+					toPackageNamed: packageName ] ].
 %
 
 category: 'smalltalk api'
@@ -22444,13 +34903,12 @@ adoptMethod: methodSelector protocol: protocolString inClassNamed: className  is
 	"adopt the method <methodSelector> in class named <className> and it's methods into the package named <packageName>.
 		move the method into protocol <protocolString> "
 
-	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
+	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry 
 		theBehavior theCompiledMethod |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theClass := Rowan globalNamed: className.
 	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
@@ -22543,11 +35001,9 @@ createLoadedPackageNamed: packageName inProjectNamed: projectName
 
 	"create a loaded package named <packageName> in the loaded project named <projectName>"
 
-	| spec registry theSymbolDictionary packageSymDictName gemstoneSpec loadedPackage loadedProject |
+	| registry theSymbolDictionary packageSymDictName loadedPackage loadedProject |
 	loadedProject := Rowan image loadedProjectNamed: projectName.
-	spec := loadedProject specification.
-	gemstoneSpec := spec platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 	theSymbolDictionary := Rowan image newOrExistingSymbolDictionaryNamed: packageSymDictName.
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 	loadedPackage := registry newLoadedPackageNamed: packageName.
@@ -22563,6 +35019,7 @@ method: RwPkgDiffTool
 patchForPackageName: packageName
 
 	| loadedPackage loadedProject repo diskSnapshot imageSnapshot |
+self deprecated: 'patchForPackageName: deprecated in favor or RwPrjDiffTool>>patchesForProjectNamed:'.
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 	super specification: loadedProject specification.
@@ -22572,30 +35029,6 @@ patchForPackageName: packageName
 	imageSnapshot := (RwCypressPackageStructure
 		fromPackage: loadedPackage asDefinition) snapshot.
 	^ CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot
-%
-
-category: 'smalltalk api'
-method: RwPkgDiffTool
-patchSpecification: aRwSpecification packageName: packageName
-
-	| repo diskSnapshot imageSnapshot |
-	super specification: aRwSpecification.
-	repo := CypressAbstractRepository
-		onUrl: (CypressUrl absoluteFromText: specification repositoryUrl)
-		alias: ''.
-
-	diskSnapshot := repo readPackageStructureForPackageNamed: packageName.
-	imageSnapshot := (CypressPackageDefinition named: packageName) snapshot.
-	^ CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot
-%
-
-category: 'smalltalk api'
-method: RwPkgDiffTool
-patchSpecUrl: aString packageName: packageName
-
-	^ self
-		patchSpecification: (RwSpecification fromUrl: aString)
-		packageName: packageName
 %
 
 ! Class implementation for 'RwPkgDisownTool'
@@ -22615,7 +35048,7 @@ disownClassExtensionMethodsInClassNamed: className forPackageNamed: packageName
 			adoptClassExtensionNamed: className  instanceSelectors: <instanceSelectors> classSelectors: <classSelectors> intoPackageNamed: packageName
 	to restore the classes and methods to the loaded things"
 
-	| loadedPackage loadedProject loadedClassExtension gemstoneSpec packageSymDictName theClass theSymbolDictionary registry |
+	| loadedPackage loadedProject loadedClassExtension packageSymDictName theClass theSymbolDictionary registry |
 	theClass := Rowan globalNamed: className.
 
 	loadedClassExtension := (Rowan image loadedClassExtensionsForClass: theClass) 
@@ -22625,8 +35058,7 @@ disownClassExtensionMethodsInClassNamed: className forPackageNamed: packageName
 	loadedPackage := loadedClassExtension loadedPackage.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
 
@@ -22649,7 +35081,7 @@ disownClassNamed: className
 			adoptClassNamed: className classExtension: classExtension instanceSelectors: instanceSelectors classSelectors: classSelectors intoPackageNamed: <packageName>
 	to restore the classes and methods to the loaded things"
 
-	| packageName loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry |
+	| packageName loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry |
 	theClass := Rowan globalNamed: className.
 
 	theClass rowanProjectName = Rowan unpackagedName
@@ -22659,8 +35091,7 @@ disownClassNamed: className
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
 
@@ -22680,7 +35111,7 @@ disownMethod: methodSelector inClassNamed: className isMeta: isMeta
 			adoptMethod: methodSelector inClassNamed: className  isMeta: isMeta intoPackageNamed: <packageName>
 	to restore the specified method to the loaded things"
 
-	| packageName loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
+	| packageName loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry 
 		theBehavior theCompiledMethod |
 	theClass := Rowan globalNamed: className.
 	theBehavior := isMeta
@@ -22695,8 +35126,7 @@ disownMethod: methodSelector inClassNamed: className isMeta: isMeta
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theSymbolDictionary := Rowan globalNamed: packageSymDictName.
 
@@ -22882,6 +35312,13 @@ classmethod: RwProjectTool
 delete
 
 	^ RwPrjDeleteTool new
+%
+
+category: 'commands'
+classmethod: RwProjectTool
+diff
+
+	^ RwPrjDiffTool new
 %
 
 category: 'commands'
@@ -25009,8 +37446,8 @@ createProjectRepository: projectReferenceDefinition
 		useGit: projectReferenceDefinition useGit 
 		abort: [
 			"abort occurs because directory exists and user has not confirmed that the directory should be deleted"
-			"probably should try to cofirm that the directory appears to be complete relative to this project"
-			self error: 'not yet implemented'.
+			"cofirm that the repository appears to be complete relative to this project ... we will likely be writing new information to the repo"
+			projectReferenceDefinition validateRepository.
 			^ projectReferenceDefinition ].
 
 	{projectReferenceDefinition configsRoot. projectReferenceDefinition packagesRoot. projectReferenceDefinition specsRoot. projectReferenceDefinition projectsRoot }
@@ -25204,6 +37641,38 @@ forceDeleteProjectSetDefinition: projectSetDefinitionToDelete
 		(selectorDict at: 'class' ifAbsent: [ #() ]) do: [:selector |
 			GsFile gciLogServer: '		', selector asString printString.
 			behavior removeSelector: selector ] ].
+%
+
+! Class implementation for 'RwPrjDiffTool'
+
+!		Instance methods for 'RwPrjDiffTool'
+
+category: 'smalltalk api'
+method: RwPrjDiffTool
+patchesForProjectDefinition: imageProjectDefinition
+
+	| imagePackageDefinitions diskProjectSet diskProject diskPackageDefinitionMaps |
+	imagePackageDefinitions := imageProjectDefinition packages values.
+	[ diskProjectSet :=  imageProjectDefinition readProjectSet ]
+		on: RwInvalidCategoryProtocolConventionErrorNotification
+		do: [:ex | ex resume ].
+	diskProject := diskProjectSet projectNamed: imageProjectDefinition name.
+	diskPackageDefinitionMaps := diskProject packages.
+	^ imagePackageDefinitions collect: [:packageDefinition |
+		| imageSnapshot diskPackageDefinition diskSnapshot |
+		imageSnapshot := (RwCypressPackageStructure fromPackage: packageDefinition ) snapshot.
+		diskPackageDefinition := diskPackageDefinitionMaps at: packageDefinition name.
+		diskSnapshot := (RwCypressPackageStructure fromPackage: diskPackageDefinition ) snapshot.
+		packageDefinition name -> (CypressPatch fromBase: diskSnapshot toTarget: imageSnapshot) ]
+%
+
+category: 'smalltalk api'
+method: RwPrjDiffTool
+patchesForProjectNamed: projectName
+
+	| imageProject |
+	imageProject := Rowan image loadedProjectNamed: projectName.
+	^ self patchesForProjectDefinition: imageProject asDefinition
 %
 
 ! Class implementation for 'RwPrjDisownTool'
@@ -25665,16 +38134,15 @@ _loadProjectSetDefinition_254: projectSetDefinitionToLoad instanceMigrator: inst
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef |
-			| theSpec |
-			theSpec := (loadedProjectSet entities at: projectDef name ifAbsent: [])
-				ifNil: [ projectDef specification ]
-				ifNotNil: [:loadedProject | loadedProject specification ].
-			self specification: theSpec.
+			| theProjectDef |
+			theProjectDef := (loadedProjectSet entities at: projectDef name ifAbsent: [])
+				ifNil: [ projectDef ]
+				ifNotNil: [:loadedProject | loadedProject ].
 			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
-				ifTrue: [  theSpec updateLoadedCommitIdForTool: self ].
+				ifTrue: [  theProjectDef updateLoadedCommitId ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
 				ifNotNil: [:map |
-					theSpec imageSpec
+					theProjectDef
 						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
 						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
 	^ diff
@@ -25688,25 +38156,7 @@ category: 'smalltalk api'
 method: RwPrjLogTool
 commitLogProjectNamed: projectName limit: logLimit
 
-	| loadedProject |
-	loadedProject := Rowan image loadedProjectNamed: projectName.
-	self specification: loadedProject specification.
-	^ specification commitLogForTool: self limit: logLimit
-%
-
-category: 'smalltalk api'
-method: RwPrjLogTool
-commitLogSpecification: aRwSpecification limit: logLimit
-  self specification: aRwSpecification.
-  ^ specification commitLogForTool: self limit: logLimit
-%
-
-category: 'smalltalk api'
-method: RwPrjLogTool
-commitLogSpecUrl: aString limit: logLimit
-  ^ self
-    commitLogSpecification: (RwSpecification fromUrl: aString)
-    limit: logLimit
+	^ (Rowan image loadedProjectNamed: projectName) commitLog: logLimit
 %
 
 category: 'git'
@@ -25861,14 +38311,19 @@ classExtensionsForProjectNamed: projectName
 
 category: 'read components'
 method: RwPrjReadTool
-readConfigurationsForProjectComponentDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames
+readConfigurationsForProjectComponentDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
 
-	^self readConfigurationsForProjectComponentDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: true
+	^self 
+		readConfigurationsForProjectComponentDefinition: projectDefinition 
+			withConfigurations: configNames 
+			groupNames: groupNames 
+			platformConfigurationAttributes: platformConfigurationAttributes 
+			forLoad: true
 %
 
 category: 'read components'
 method: RwPrjReadTool
-readConfigurationsForProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames forLoad: forLoad
+readConfigurationsForProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad
 
 	| theConfigNames theGroupNames |
 	theConfigNames := configNames isEmpty
@@ -25882,6 +38337,7 @@ readConfigurationsForProjectComponentDefinition: projectComponentDefinition with
 		forProjectComponentDefinition: projectComponentDefinition 
 		withConfigurations: theConfigNames 
 		groupNames: theGroupNames
+		platformConfigurationAttributes: platformConfigurationAttributes
 		forLoad: forLoad
 %
 
@@ -25908,6 +38364,7 @@ readConfigurationsForProjectDefinition: projectDefinition withConfigurations: co
 		forProjectDefinition: projectDefinition 
 		withConfigurations: theConfigNames 
 		groupNames: theGroupNames
+		platformConfigurationAttributes: Rowan platformConfigurationAttributes
 		forLoad: forLoad
 %
 
@@ -25947,9 +38404,20 @@ category: 'read project definitions'
 method: RwPrjReadTool
 readProjectSetForComponentProjectDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames
 
+	^ self 
+		readProjectSetForComponentProjectDefinition: projectComponentDefinition 
+			withConfigurations: configNames 
+			groupNames: groupNames 
+			platformConfigurationAttributes: Rowan platformConfigurationAttributes
+%
+
+category: 'read project definitions'
+method: RwPrjReadTool
+readProjectSetForComponentProjectDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
+
 	| projectName packageNames projectSetDefinition packageMapSpecs visitor |
 	projectName := projectComponentDefinition name.
-	visitor := self readConfigurationsForProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames.
+	visitor := self readConfigurationsForProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes.
 	visitor 
 		ifNotNil: [ 
 			packageNames := visitor packageNames.
@@ -26038,26 +38506,28 @@ readProjectSetForProjectNamed: projectName withConfigurations: configNames group
 
 	| projectDefinition |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	^ self readProjectSetForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames
+	^ projectDefinition
+		readProjectSetReadTool: self
+			withConfigurations: configNames 
+			groupNames: groupNames
 %
 
 category: 'read project by name'
 method: RwPrjReadTool
 readProjectSetForProjectNamed: projectName withGroupNames: groupNames
 
-	| projectDefinition spec theConfigNames |
+	| projectDefinition theConfigNames |
 	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
-	spec := projectDefinition specification.
-	theConfigNames := spec loadedConfigurationNames
+	theConfigNames := projectDefinition loadedConfigurationNames
 		ifNotNil: [:configNames | configNames ]
 		ifNil: [
-			spec defaultConfigurationNames
+			projectDefinition defaultConfigurationNames
 				ifNotNil: [:configNames | configNames ]
 				ifNil: [ #('Default') ] ].
-	^ self 
-		readProjectSetForProjectDefinition: projectDefinition 
-		withConfigurations: theConfigNames 
-		groupNames: groupNames
+	^ projectDefinition
+		readProjectSetReadTool: self
+			withConfigurations: theConfigNames 
+			groupNames: groupNames
 %
 
 category: 'private'
@@ -26095,6 +38565,7 @@ _readProjectSetForProjectComponentDefinition: projectComponentDefinition package
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectComponentDefinition readProjectSetForPackageNames: packageNames.
 	projectSetDefinition addProject: projectComponentDefinition.
+	projectComponentDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
 	^ projectSetDefinition
 %
 
@@ -26110,7 +38581,7 @@ _readProjectSetForProjectDefinition: projectDefinition packageNames: packageName
 
 category: 'private'
 method: RwPrjReadTool
-_visitConfigurations: visitorClass forProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames forLoad: forLoad
+_visitConfigurations: visitorClass forProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad
 
 	| projectName configDirectory projectsDirectory visitor |
 	projectName := projectComponentDefinition name.
@@ -26121,7 +38592,7 @@ _visitConfigurations: visitorClass forProjectComponentDefinition: projectCompone
 	projectsDirectory exists
 		ifFalse: [ ^ self error: 'No projects directory (', projectsDirectory pathString printString, ') found for project ', projectName printString ].
 	visitor := visitorClass new
-		platformAttributes: Rowan platformConfigurationAttributes;
+		platformAttributes: platformConfigurationAttributes;
 		groupNames: groupNames;
 		configurationBasePath: configDirectory pathString;
 		projectBasePath: projectsDirectory pathString;
@@ -26143,7 +38614,7 @@ _visitConfigurations: visitorClass forProjectComponentDefinition: projectCompone
 
 category: 'private'
 method: RwPrjReadTool
-_visitConfigurations: visitorClass forProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: forLoad
+_visitConfigurations: visitorClass forProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad
 
 	| projectName configDirectory visitor |
 	projectDefinition repositoryRootPath ifNil: [ ^ nil ].
@@ -26152,7 +38623,7 @@ _visitConfigurations: visitorClass forProjectDefinition: projectDefinition withC
 	configDirectory exists
 		ifFalse: [ ^ nil ].
 	visitor := visitorClass new
-		platformAttributes: Rowan platformConfigurationAttributes;
+		platformAttributes: platformConfigurationAttributes;
 		groupNames: groupNames;
 		configurationBasePath: configDirectory pathString;
 		yourself.
@@ -26510,32 +38981,21 @@ _addTestsForProjectNamed: projectName toTestSuite: suite
 
 category: 'smalltalk api'
 method: RwPrjWriteTool
-writePackageSet: aRwPackageSet specification: aRwSpecification
+writeComponentProjectDefinition: projectDefinition
 
-	| repo repositoryUrl |
-	self specification: aRwSpecification.
-	repositoryUrl := specification repositoryUrl
-		ifNil: [ 
-			specification repoSpec repositoryRootPath
-				ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
-				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , specification repoPath , '/') asRwUrl ] ]
-		ifNotNil: [ :urlString | urlString asRwUrl ].
-	repo := repositoryUrl asRwRepository.
-	aRwPackageSet packages values
-		do: [ :rwPackage | 
-			| packageStructure |
-			packageStructure := RwCypressPackageStructure fromPackage: rwPackage.
-			repo writePackageStructure: packageStructure ].
-	^ specification
+	Rowan projectTools create createProjectRepository: projectDefinition projectRef.
+	projectDefinition 
+		exportProjects;
+		exportComponents;
+		exportPackages
 %
 
-category: 'smalltalk api'
+category: 'deprecated'
 method: RwPrjWriteTool
-writeProjectDefinition: projectDefinition
-	"project defintion does represent a loaded project, so the loaded projects and packages 
-		will not be marked not dirty"
+writeDeprecatedProjectDefinition: projectDefinition
 
 	| repo repositoryUrl |
+	self deprecated: 'Use RwComponentProjectDefinition instead'.
 	repositoryUrl := projectDefinition repositoryUrl
 		ifNil: [ 
 			projectDefinition repositoryRootPath
@@ -26551,11 +39011,12 @@ writeProjectDefinition: projectDefinition
 			repo writePackageStructure: packageStructure ]
 %
 
-category: 'smalltalk api'
+category: 'deprecated'
 method: RwPrjWriteTool
-writeProjectNamed: projectName
+writeDeprecatedProjectNamed: projectName
 
 	| loadedProject repo repositoryUrl projectDefinition packageDefinitionSet loadedPackages |
+	self deprecated: 'Use RwComponentProjectDefinition instead'.
 	loadedProject := Rowan image loadedProjectNamed: projectName.
 	projectDefinition := loadedProject asDefinition.
 	repositoryUrl := projectDefinition repositoryUrl
@@ -26576,6 +39037,48 @@ writeProjectNamed: projectName
 	"loaded project and loaded packages written to disk - mark them not dirty"
 	loadedProject markNotDirty.
 	loadedPackages do: [:loadedPackage | loadedPackage markNotDirty ].
+%
+
+category: 'deprecated'
+method: RwPrjWriteTool
+writePackageSet: aRwPackageSet specification: aRwSpecification
+
+	| repo repositoryUrl |
+	self deprecated: 'RwPackageSet definition and writing package sets is no longer supported'.
+	self specification: aRwSpecification.
+	repositoryUrl := specification repositoryUrl
+		ifNil: [ 
+			specification repoSpec repositoryRootPath
+				ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
+				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , specification repoPath , '/') asRwUrl ] ]
+		ifNotNil: [ :urlString | urlString asRwUrl ].
+	repo := repositoryUrl asRwRepository.
+	aRwPackageSet packages values
+		do: [ :rwPackage | 
+			| packageStructure |
+			packageStructure := RwCypressPackageStructure fromPackage: rwPackage.
+			repo writePackageStructure: packageStructure ].
+	^ specification
+%
+
+category: 'smalltalk api'
+method: RwPrjWriteTool
+writeProjectDefinition: projectDefinition
+
+	projectDefinition export
+%
+
+category: 'smalltalk api'
+method: RwPrjWriteTool
+writeProjectNamed: projectName
+
+	| loadedProject projectDefinition |
+	loadedProject := Rowan image loadedProjectNamed: projectName.
+	projectDefinition := loadedProject asDefinition.
+	self writeProjectDefinition: projectDefinition.
+	"loaded project and loaded packages written to disk - mark them not dirty"
+	loadedProject markNotDirty.
+	loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ].
 %
 
 category: 'private'
@@ -26603,7 +39106,9 @@ _loadedPackagesNamed: someNames forProject: projectDefinition
 
 	| loadedPackages |
 	loadedPackages := someNames
-		collect: [ :aName | Rowan image loadedPackageNamed: aName ifAbsent: [ nil ] ].
+		collect: [ :aName | 
+			projectDefinition packageNamed: aName ifAbsent: [ self error: 'package not a member of projectDefinition' ].
+			Rowan image loadedPackageNamed: aName ifAbsent: [ nil ] ].
 	^ RwEntitySet
 		withAll:
 			(loadedPackages
@@ -26814,8 +39319,11 @@ category: 'copying'
 method: RwDefinition
 postCopy
 
+	| oldProperties |
 	super postCopy.
-	properties := properties copy
+	oldProperties := properties.
+	properties := Dictionary new.
+	oldProperties keysAndValuesDo: [:key :value| properties at: key put: value copy ]
 %
 
 category: 'printing'
@@ -27136,9 +39644,14 @@ category: 'copying'
 method: RwAbstractClassDefinition
 postCopy
 
+	| oldDefs |
 	super postCopy.
-	classMethodDefinitions :=  classMethodDefinitions copy.
-	instanceMethodDefinitions := instanceMethodDefinitions copy
+	oldDefs := classMethodDefinitions.
+	classMethodDefinitions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classMethodDefinitions at: key put: value copy ].
+	oldDefs := instanceMethodDefinitions.
+	instanceMethodDefinitions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | instanceMethodDefinitions at: key put: value copy ].
 %
 
 category: 'accessing'
@@ -27541,6 +40054,20 @@ attach
 
 category: 'accessing'
 method: RwAbstractRepositoryDefinition
+commitId
+
+	^ ''
+%
+
+category: 'accessing'
+method: RwAbstractRepositoryDefinition
+commitLog: logLimit
+
+	^ ''
+%
+
+category: 'accessing'
+method: RwAbstractRepositoryDefinition
 committish
 
 	^ self properties at: 'committish' ifAbsent: []
@@ -27566,6 +40093,11 @@ method: RwAbstractRepositoryDefinition
 create
 
 	self error: 'not yet implemented'
+%
+
+category: 'accessing'
+method: RwAbstractRepositoryDefinition
+gitRoot: ignored
 %
 
 category: 'accessing'
@@ -27604,6 +40136,13 @@ projectUrl: anUrlString
 	self properties at: 'projectUrl' put: anUrlString
 %
 
+category: 'accessing'
+method: RwAbstractRepositoryDefinition
+repositoryCommitId
+
+	^ ''
+%
+
 category: 'testing'
 method: RwAbstractRepositoryDefinition
 repositoryExists
@@ -27614,6 +40153,7 @@ repositoryExists
 category: 'accessing'
 method: RwAbstractRepositoryDefinition
 repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self properties at: 'repositoryRoot'
 %
@@ -27625,6 +40165,7 @@ repositoryRoot: pathStringOrReference
 	| fileRef |
 	fileRef := pathStringOrReference asFileReference.
 	self projectUrl: nil.
+	self gitRoot: nil.
 	self properties at: 'repositoryRoot' put: fileRef
 %
 
@@ -27687,14 +40228,36 @@ newNamed: repositoryName repositoryRoot: repoRoot projectUrl: anUrlString remote
 category: 'accessing'
 method: RwGitRepositoryDefinition
 commitId
-self error: 'use a git command to extract commitId'
+
+	^ [  Rowan gitTools gitcommitShaIn: self gitRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			'' ].
+%
+
+category: 'loading'
+method: RwGitRepositoryDefinition
+commitLog: logLimit
+
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self gitRoot pathString
 %
 
 category: 'accessing'
 method: RwGitRepositoryDefinition
-commitId: aString
+gitRoot
+	"The root directory of the git repository that the project is located in. If the project is not git based
+		or the git root is not explicitly assigned, git root is synonymous with repository root."
 
-	self shouldNotImplement: #commitId
+	^ self properties at: 'gitRoot' ifAbsent: [ self repositoryRoot ]
+%
+
+category: 'accessing'
+method: RwGitRepositoryDefinition
+gitRoot: aGitRootReferenceOrString
+
+	aGitRootReferenceOrString ifNil: [ ^ self properties removeKey: 'gitRoot' ifAbsent: [] ].
+	^ self properties at: 'gitRoot' put: aGitRootReferenceOrString asFileReference
 %
 
 category: 'accessing'
@@ -27709,6 +40272,17 @@ method: RwGitRepositoryDefinition
 remoteUrl: aRemoteUrlString
 
 	^ self properties at: 'remoteUrl' put: aRemoteUrlString
+%
+
+category: 'accessing'
+method: RwGitRepositoryDefinition
+repositoryCommitId
+
+	^ [  Rowan gitTools gitcommitShaIn: self gitRoot pathString ]
+			on: Error
+			do: [ :ignored | 
+			"most likely no commits yet"
+			'' ]
 %
 
 category: 'actions'
@@ -27913,6 +40487,15 @@ deriveLoadedThings
 
 category: 'accessing'
 method: RwProjectSetDefinition
+projectNamed: projectName
+
+	^ self 
+		projectNamed: projectName
+		ifAbsent: [ self error: 'No project named ', projectName printString , ' found.']
+%
+
+category: 'accessing'
+method: RwProjectSetDefinition
 projectNamed: projectName ifAbsent: absentBlock
 
 	^ self definitionWithKey: projectName ifAbsent: absentBlock
@@ -28095,6 +40678,13 @@ addClassNamed: className super: superclassName instvars: instvars classinstvars:
 
 category: 'accessing'
 method: RwPackageDefinition
+classDefinitionNamed: className
+
+	^ self classDefinitionNamed: className ifAbsent: [ self error: 'No class definition found with the name ', className printString ]
+%
+
+category: 'accessing'
+method: RwPackageDefinition
 classDefinitionNamed: className ifAbsent: absentBlock
 
 	^ self classDefinitions at: className ifAbsent: absentBlock
@@ -28164,9 +40754,14 @@ category: 'copying'
 method: RwPackageDefinition
 postCopy
 
+	| oldDefs |
 	super postCopy.
-	classDefinitions := classDefinitions copy.
-	classExtensions := classExtensions copy
+	oldDefs := classDefinitions.
+	classDefinitions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classDefinitions at: key put: value copy ].
+	oldDefs := classExtensions.
+	classExtensions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classExtensions at: key put: value copy ].
 %
 
 category: 'accessing'
@@ -28181,6 +40776,13 @@ method: RwPackageDefinition
 removeClassExtensionDefinition: aClassExtension
 
 	self removeDefinition: aClassExtension from: classExtensions
+%
+
+category: 'accessing'
+method: RwPackageDefinition
+removeClassExtensionDefinitionNamed: className
+
+	self removeKey: className from: classExtensions
 %
 
 category: 'accessing'
@@ -28373,6 +40975,13 @@ definitionWithKey: aKey ifAbsent: absentBlock
 	^packages at: aKey ifAbsent: absentBlock
 %
 
+category: 'actions'
+method: RwProjectDefinition
+export
+
+	Rowan projectTools write writeDeprecatedProjectDefinition: self
+%
+
 category: 'initialization'
 method: RwProjectDefinition
 initialize
@@ -28416,6 +41025,20 @@ method: RwProjectDefinition
 loadedConfigurationNames
 
 	^ self specification loadedConfigurationNames
+%
+
+category: 'properties'
+method: RwProjectDefinition
+loadedConfigurationNames: anArray
+
+	^ self specification imageSpec loadedConfigurationNames: anArray
+%
+
+category: 'properties'
+method: RwProjectDefinition
+loadedGroupNames: anArray
+
+	^ self specification imageSpec loadedGroupNames: anArray
 %
 
 category: 'accessing'
@@ -28466,9 +41089,11 @@ category: 'copying'
 method: RwProjectDefinition
 postCopy
 
+	| oldPackages |
 	super postCopy.
-	packages := packages copy.
-	packages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
+	oldPackages := packages.
+	packages := Dictionary new.
+	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
 %
 
 category: 'tool api'
@@ -28476,6 +41101,16 @@ method: RwProjectDefinition
 readProjectSet
 
 	^ Rowan projectTools read  readProjectSetForProjectDefinition: self
+%
+
+category: 'reading'
+method: RwProjectDefinition
+readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: theGroupNames
+
+	^ readTool
+		readProjectSetForProjectDefinition: self
+			withConfigurations: theConfigNames 
+			groupNames: theGroupNames
 %
 
 category: 'accessing'
@@ -28507,6 +41142,14 @@ method: RwProjectDefinition
 repoPath: aDirectoryPathString
 
 	self specification repoPath: aDirectoryPathString
+%
+
+category: 'properties'
+method: RwProjectDefinition
+repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ self repositoryRootPath asFileReference
 %
 
 category: 'properties'
@@ -28556,6 +41199,19 @@ method: RwProjectDefinition
 specsPath: aDirectoryPathString
 
 	self specification specsPath: aDirectoryPathString
+%
+
+category: 'loading'
+method: RwProjectDefinition
+updateLoadedCommitId
+
+	| loadedCommitId |
+	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			^ nil ].
+	self specification imageSpec loadedCommitId: loadedCommitId
 %
 
 category: 'properties'
@@ -28617,6 +41273,24 @@ newForUrl: specUrl
 
 category: 'instance creation'
 classmethod: RwComponentProjectDefinition
+projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment
+
+
+	^ self newForProjectReference: (RwProjectReferenceDefinition
+		projectName: projectName 
+			configurationNames: configurationNames 
+			groupNames: groupNames 
+			defaultComponentName: defaultComponentName
+			useGit: useGit 
+			projectUrl: projectUrl 
+			projectHome: projectHomeFileReferenceOrString
+			committish: committish 
+			committishType: committishType 
+			comment: comment)
+%
+
+category: 'instance creation'
+classmethod: RwComponentProjectDefinition
 projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl comment: comment
 
 
@@ -28631,27 +41305,6 @@ projectName: projectName configurationNames: configurationNames groupNames: grou
 
 category: 'instance creation'
 classmethod: RwComponentProjectDefinition
-projectName: projectName configurationNames: configurationNames groupNames: groupNames  useGit: useGit projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath
-
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames  
-			useGit: useGit 
-			projectUrl: projectUrl 
-			comment: comment 
-			projectHome: projectHomeFileReferenceOrString 
-			committish: committish 
-			committishType: committishType 
-			configsPath: configsPath 
-			packagesPath: packagesPath 
-			projectsPath: projectsPath 
-			specsPath: specsPath)
-%
-
-category: 'instance creation'
-classmethod: RwComponentProjectDefinition
 projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl committish: committish committishType: committishType comment: comment
 
 	^ self newForProjectReference: (RwProjectReferenceDefinition
@@ -28660,6 +41313,23 @@ projectName: projectName configurationNames: configurationNames groupNames: grou
 			groupNames: groupNames 
 			useGit: useGit 
 			projectUrl: projectUrl 
+			committish: committish 
+			committishType: committishType 
+			comment: comment)
+%
+
+category: 'instance creation'
+classmethod: RwComponentProjectDefinition
+projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment
+
+
+	^ self newForProjectReference: (RwProjectReferenceDefinition
+		projectName: projectName 
+			configurationNames: configurationNames 
+			groupNames: groupNames 
+			useGit: useGit 
+			projectUrl: projectUrl 
+			projectHome: projectHomeFileReferenceOrString
 			committish: committish 
 			committishType: committishType 
 			comment: comment)
@@ -28762,6 +41432,13 @@ defaultComponentName
 	^ self projectRef defaultComponentName
 %
 
+category: 'accessing'
+method: RwComponentProjectDefinition
+defaultComponentName: aString
+
+	^ self projectRef defaultComponentName: aString
+%
+
 category: 'properties'
 method: RwComponentProjectDefinition
 defaultConfigurationNames
@@ -28780,7 +41457,14 @@ category: 'properties'
 method: RwComponentProjectDefinition
 defaultGroupNames
 
-	^ self propertyAt: 'defaultGroupNames' ifAbsent: [ self projectRef groupNames ]
+	^ self projectRef groupNames
+%
+
+category: 'actions'
+method: RwComponentProjectDefinition
+export
+
+	Rowan projectTools write writeComponentProjectDefinition: self
 %
 
 category: 'exporting'
@@ -28798,6 +41482,17 @@ exportComponents
 category: 'exporting'
 method: RwComponentProjectDefinition
 exportPackages
+	"attempt to do incremental write to disk, however, if disk cannot be read, write all packages to disk"
+	| projectSetDefinition |
+	projectSetDefinition := [ (self class newForProjectReference: self projectRef) readProjectSet ]
+		on: Error
+		do: [:ignored | RwProjectSetDefinition new ].
+	self exportPackages: projectSetDefinition.
+%
+
+category: 'exporting'
+method: RwComponentProjectDefinition
+exportPackages: diskProjectSetDefinition
 
 	| projectSetDefinition visitor projectSetModification writerVisitorClass |
 	(self packagesRoot /  'properties', 'st') 
@@ -28819,7 +41514,7 @@ exportPackages
 		ifFalse: [ RwModificationFiletreeWriterVisitor ].
 	projectSetDefinition:= RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: self.
-	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new. "compare against empty project to write out entire project"
+	projectSetModification := projectSetDefinition compareAgainstBase: diskProjectSetDefinition.
 	visitor := writerVisitorClass new.
 
 	visitor visit: projectSetModification.
@@ -28837,18 +41532,46 @@ exportProjects
 			(self projectsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
 %
 
+category: 'accessing'
+method: RwComponentProjectDefinition
+gitRoot: aGitRootReferenceOrString 
+
+	^ self projectRef gitRoot: aGitRootReferenceOrString
+%
+
+category: 'accessing'
+method: RwComponentProjectDefinition
+loadedCommitId
+
+	^ self projectRef loadedCommitId
+%
+
 category: 'properties'
 method: RwComponentProjectDefinition
 loadedConfigurationNames
 
-	^ self propertyAt: 'loadedConfigurationNames' ifAbsent: [ ]
+	^ self projectRef loadedConfigurationNames
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+loadedConfigurationNames: anArray
+
+	^ self projectRef loadedConfigurationNames: anArray
 %
 
 category: 'properties'
 method: RwComponentProjectDefinition
 loadedGroupNames
 
-	^ self propertyAt: 'loadedGroupNames' ifAbsent: [ ]
+	^ self projectRef loadedGroupNames
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+loadedGroupNames: anArray
+
+	^ self projectRef loadedGroupNames: anArray
 %
 
 category: 'accessing'
@@ -28951,6 +41674,13 @@ projectRef
 	^ self propertyAt: 'projectRef' ifAbsent: [ ]
 %
 
+category: 'accessing'
+method: RwComponentProjectDefinition
+projectRef: aRwProjectReferenceDefinition
+
+	^ self propertyAt: 'projectRef' put: aRwProjectReferenceDefinition
+%
+
 category: 'properties'
 method: RwComponentProjectDefinition
 projectsPath
@@ -28999,6 +41729,16 @@ readProjectSetForPackageNames: packageNames
 		visit: self.
 %
 
+category: 'reading'
+method: RwComponentProjectDefinition
+readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: theGroupNames
+
+	^ readTool
+		readProjectSetForComponentProjectDefinition: self
+			withConfigurations: theConfigNames 
+			groupNames: theGroupNames
+%
+
 category: 'temporary compat'
 method: RwComponentProjectDefinition
 repoPath
@@ -29018,8 +41758,17 @@ repoPath: astring
 category: 'properties'
 method: RwComponentProjectDefinition
 repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self projectRef repositoryRoot
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+repositoryRoot: aFileReferenceOrPath
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ self projectRef repositoryRoot: aFileReferenceOrPath
 %
 
 category: 'temporary compat'
@@ -29056,6 +41805,20 @@ method: RwComponentProjectDefinition
 specsRoot
 
 	^ self projectRef specsRoot
+%
+
+category: 'loading'
+method: RwComponentProjectDefinition
+updateLoadedCommitId
+
+	self projectRef updateLoadedCommitId
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+useGit
+
+	^ self projectRef useGit
 %
 
 ! Class implementation for 'RwProjectReferenceDefinition'
@@ -29100,6 +41863,7 @@ newNamed: projectName forSpecification: aRwSpecification projectHome: projectHom
 		projectName: projectName
 			configurationNames: aRwSpecification defaultConfigurationNames
 			groupNames: aRwSpecification defaultGroupNames
+			defaultComponentName: aRwSpecification defaultComponentName
 			useGit: aRwSpecification useGit
 			projectUrl: aRwSpecification projectUrl
 			comment: aRwSpecification comment
@@ -29110,6 +41874,44 @@ newNamed: projectName forSpecification: aRwSpecification projectHome: projectHom
 			packagesPath: aRwSpecification repoPath
 			projectsPath: aRwSpecification projectsPath
 			specsPath: aRwSpecification specsPath
+%
+
+category: 'instance creation'
+classmethod: RwProjectReferenceDefinition
+projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath
+
+	^ self new
+		projectName: projectName;
+		configurationNames: configurationNames;
+		defaultComponentName: defaultComponentName;
+		groupNames: groupNames;
+		projectUrl: projectUrl;
+		useGit: useGit;
+		comment: comment;
+		projectHome: projectHomeFileReferenceOrString;
+		committish: committish committishType: committishType;
+		configsPath: configsPath;
+		packagesPath: packagesPath;
+		projectsPath: projectsPath;
+		specsPath: specsPath;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwProjectReferenceDefinition
+projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment
+
+	^ self new
+		projectName: projectName;
+		configurationNames: configurationNames;
+		groupNames: groupNames;
+		 defaultComponentName: defaultComponentName;
+		useGit: useGit;
+		projectUrl: projectUrl;
+		projectHome: projectHomeFileReferenceOrString;
+		comment: comment;
+		committish: committish committishType: committishType;
+		yourself
 %
 
 category: 'instance creation'
@@ -29128,26 +41930,6 @@ projectName: projectName configurationNames: configurationNames groupNames: grou
 
 category: 'instance creation'
 classmethod: RwProjectReferenceDefinition
-projectName: projectName configurationNames: configurationNames groupNames: groupNames  useGit: useGit projectUrl: projectUrl comment: comment projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType configsPath: configsPath packagesPath: packagesPath projectsPath: projectsPath specsPath: specsPath
-
-	^ self new
-		projectName: projectName;
-		configurationNames: configurationNames;
-		groupNames: groupNames;
-		projectUrl: projectUrl;
-		useGit: useGit;
-		comment: comment;
-		projectHome: projectHomeFileReferenceOrString;
-		committish: committish committishType: committishType;
-		configsPath: configsPath;
-		packagesPath: packagesPath;
-		projectsPath: projectsPath;
-		specsPath: specsPath;
-		yourself
-%
-
-category: 'instance creation'
-classmethod: RwProjectReferenceDefinition
 projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl committish: committish committishType: committishType comment: comment
 
 	^ self new
@@ -29156,6 +41938,22 @@ projectName: projectName configurationNames: configurationNames groupNames: grou
 		groupNames: groupNames;
 		useGit: useGit;
 		projectUrl: projectUrl;
+		comment: comment;
+		committish: committish committishType: committishType;
+		yourself
+%
+
+category: 'instance creation'
+classmethod: RwProjectReferenceDefinition
+projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment
+
+	^ self new
+		projectName: projectName;
+		configurationNames: configurationNames;
+		groupNames: groupNames;
+		useGit: useGit;
+		projectUrl: projectUrl;
+		projectHome: projectHomeFileReferenceOrString;
 		comment: comment;
 		committish: committish committishType: committishType;
 		yourself
@@ -29203,6 +42001,7 @@ asSpecification
 		configsPath: self configsPath;
 		specsPath: self specsPath;
 		projectsPath: self projectsPath;
+		defaultComponentName: self defaultComponentName;
 		defaultConfigurationNames: self configurationNames;
 		defaultGroupNames: self groupNames;
 		comment: self comment;
@@ -29230,6 +42029,13 @@ method: RwProjectReferenceDefinition
 comment: aString
 
 	^ self properties at: 'comment' put: aString
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+commitLog: logLimit
+
+	^ self repositoryDefinition commitLog: logLimit
 %
 
 category: 'accessing'
@@ -29302,7 +42108,14 @@ category: 'accessing'
 method: RwProjectReferenceDefinition
 defaultComponentName
 
-	^ 'Core'
+	^ self properties at: 'defaultComponentName' ifAbsent: [ 'Core' ]
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+defaultComponentName: aString
+
+	^ self properties at: 'defaultComponentName' put: aString
 %
 
 category: 'accessing'
@@ -29319,6 +42132,13 @@ exportSpecification
 	| spec |
 	spec := self asSpecification.
 	spec exportToUrl: 'file:',  self specsRoot pathString, '/'
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+gitRoot: aGitRootReferenceOrString 
+
+	self repositoryDefinition gitRoot: aGitRootReferenceOrString
 %
 
 category: 'accessing'
@@ -29349,18 +42169,46 @@ key
 	^ self projectName
 %
 
-category: 'temporary compat'
+category: 'accessing'
 method: RwProjectReferenceDefinition
 loadedCommitId
 
-self deprecated: 'temporary method ... simulating RwSpecification api'.
-	^''
+	^ self properties at: 'loadedCommitId' ifAbsent: [ '' ]
 %
 
-category: 'temporary compat'
+category: 'accessing'
 method: RwProjectReferenceDefinition
-loadedCommitId:  ignored
-self deprecated: 'temporary method ... simulating RwSpecification api'.
+loadedCommitId:  aCommitId
+
+	^ self properties at: 'loadedCommitId' put: aCommitId
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+loadedConfigurationNames
+
+	^ self configurationNames
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+loadedConfigurationNames: anArray
+
+	^ self configurationNames: anArray
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+loadedGroupNames
+
+	^ self groupNames
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+loadedGroupNames: anArray
+
+	^ self groupNames: anArray
 %
 
 category: 'accessing'
@@ -29456,8 +42304,9 @@ method: RwProjectReferenceDefinition
 projectHome: projectHomeFileReferenceOrString
 
 	self repositoryDefinition: nil. "changing project home invalidates the current repository definition"
-	projectHomeFileReferenceOrString ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
-	^ self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference
+	projectHomeFileReferenceOrString
+		ifNil: [ ^ self properties removeKey: 'projectHome' ifAbsent: [] ].
+	self properties at: 'projectHome' put: projectHomeFileReferenceOrString asFileReference.
 %
 
 category: 'accessing'
@@ -29539,6 +42388,13 @@ remoteUrl: aRemoteUrl
 
 category: 'accessing'
 method: RwProjectReferenceDefinition
+repositoryCommitId
+
+	^ self repositoryDefinition repositoryCommitId
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
 repositoryDefinition
 
 	^ self properties at: 'repositoryDefinition' ifAbsentPut: [ self _repositoryDefinitionForProjectHome: self projectHome ]
@@ -29555,15 +42411,26 @@ repositoryDefinition: aRepositoryDefinition
 category: 'accessing'
 method: RwProjectReferenceDefinition
 repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^self projectHome / self projectAlias
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+repositoryRoot: aFileReferenceOrPath
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	| fileRef |
+	fileRef := aFileReferenceOrPath asFileReference.
+	self projectHome: fileRef parent.
+	self projectAlias: fileRef basename
 %
 
 category: 'temporary compat'
 method: RwProjectReferenceDefinition
 repositoryRootPath
 
-self deprecated: 'temporary method ... simulating RwSpecification api'.
 	^ self repositoryRoot pathString
 %
 
@@ -29617,6 +42484,13 @@ tag: aString
 	self committish: aString committishType: 'tag'
 %
 
+category: 'loading'
+method: RwProjectReferenceDefinition
+updateLoadedCommitId
+
+	self loadedCommitId: self repositoryDefinition commitId
+%
+
 category: 'temporary compat'
 method: RwProjectReferenceDefinition
 updateLoadedCommitIdForTool: aRwTool
@@ -29636,6 +42510,22 @@ method: RwProjectReferenceDefinition
 useGit: aBool
 
 	^ self properties at: 'useGit' put: aBool
+%
+
+category: 'actions'
+method: RwProjectReferenceDefinition
+validateRepository
+	"cofirm that the repository appears to be complete relative to this project"
+
+	{
+		'configs' -> self configsRoot. 
+		'packages' -> self packagesRoot. 
+		'specs' -> self specsRoot. 
+		'projects' -> self projectsRoot
+	}
+		do: [ :assoc | 
+			(assoc value) exists 
+				ifFalse: [ self error: 'The repository at ', self repositoryRootPath printString, ' is missing the ', (assoc key) printString, ' directory.'  ] ].
 %
 
 category: 'private'
@@ -31941,8 +44831,7 @@ method: RwGsPatch
 symbolDictionaryFor: aPackageName projectDefinition: aProjectDefinition
 
 	| symDictName symDict |
-	symDictName := aProjectDefinition
-		symbolDictNameForPackageNamed:aPackageName.
+	symDictName := aProjectDefinition symbolDictNameForPackageNamed: aPackageName.
 	symDict := GsCurrentSession currentSession symbolList objectNamed: symDictName asSymbol.
 	symDict
 		ifNotNil: [ symDict rowanSymbolDictionaryRegistry ifNotNil: [ ^ symDict ] ].
@@ -32109,7 +44998,14 @@ method: RwGsClassPatch
 privateCreateClassFor: aPatchSet
 
 	| superclass |
-	superclass := aPatchSet superclassNamed: classDefinition superclassName.
+	superclass := aPatchSet 
+		superclassNamed: classDefinition superclassName 
+		ifAbsent: [
+			"https://github.com/GemTalk/Rowan/issues/471"
+			"if we can't look up the class, try accessing the superclass from the class itself"
+			(aPatchSet tempSymbols 
+				at: classDefinition name asSymbol
+				ifAbsent: [ self error: 'Class not found ', classDefinition className printString ]) superClass ].
 	superclass
 		ifNil: [ 
 			classDefinition superclassName = 'nil'
@@ -32463,8 +45359,7 @@ installSymbolDictionaryPatchFor: aPatchSet
 	assoc := originalSymbolDictionary associationAt: before key asSymbol.
 	registry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 	registry deleteClassNamedFromPackage: classDefinition name implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
-	newSymbolDictionary := Rowan globalNamed: ((projectDefinition specification platformSpec at: 'gemstone')
-				symbolDictNameForPackageNamed: packageDefinition name) .
+	newSymbolDictionary := Rowan globalNamed: (projectDefinition symbolDictNameForPackageNamed: packageDefinition name) .
 	registry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 	registry 
 		addClassAssociation: assoc 
@@ -34855,8 +47750,7 @@ doMoveMethodsBetweenPackages
 			packageDef := aMethodMove packageAfter.
 			classOrExtensionDef := aMethodMove classOrExtensionAfter.
 			loadedPackage := image loadedPackageNamed: packageDef name.
-			registry := (Rowan globalNamed: ((aMethodMove projectAfter specification platformSpec at: 'gemstone')
-				symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
+			registry := (Rowan globalNamed: (aMethodMove projectAfter  symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
 			loadedClassOrExtension := loadedPackage 
 				classOrExtensionForClassNamed: classOrExtensionDef name 
 				ifAbsent: [ 
@@ -35112,6 +48006,13 @@ category: 'patch access'
 method: RwGsPatchSet_254
 superclassNamed: aName
 
+	^ self superclassNamed: aName ifAbsent: [ self error: 'Superclass not found: ' , aName printString ]
+%
+
+category: 'patch access'
+method: RwGsPatchSet_254
+superclassNamed: aName ifAbsent: absentBlock
+
 	| superclassName |
 	superclassName := aName asSymbol.
 	^ createdClasses
@@ -35119,7 +48020,7 @@ superclassNamed: aName
 		ifAbsent: [ 
 			tempSymbols
 				at: superclassName
-				ifAbsent: [ self error: 'Superclass not found: ' , aName printString ] ]
+				ifAbsent: absentBlock ]
 %
 
 category: 'accessing'
@@ -36725,8 +49626,7 @@ moveClassFor: classMove
 	theBehavior := theClass class.
 	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	newSymbolDictionary := Rowan globalNamed: ((classMove projectAfter specification platformSpec at: 'gemstone')
-				symbolDictNameForPackageNamed: classMove packageAfter name) .
+	newSymbolDictionary := Rowan globalNamed: (classMove projectAfter symbolDictNameForPackageNamed: classMove packageAfter name) .
 	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 
 	loadedClass := oldRegistry classRegistry removeKey: theClass classHistory.
@@ -38583,6 +51483,13 @@ asDefinition
 		packageDefinitions: self loadedPackageDefinitions
 %
 
+category: 'commit log'
+method: RwLoadedProject
+commitLog: logLimit
+
+	self subclassResponsibility: #commitLog:
+%
+
 category: 'initialization'
 method: RwLoadedProject
 initialize
@@ -38626,6 +51533,13 @@ method: RwLoadedProject
 key
 
 	^ name
+%
+
+category: 'accessing'
+method: RwLoadedProject
+loadedCommitId
+
+	self subclassResponsibility: #loadedCommitId
 %
 
 category: 'accessing'
@@ -38713,6 +51627,13 @@ packageNames
 
 category: 'accessing'
 method: RwLoadedProject
+projectDefinitionSourceProperty
+
+	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
+%
+
+category: 'accessing'
+method: RwLoadedProject
 projectUrl
 
 	"Return the projectUrl used to clone the project"
@@ -38739,11 +51660,25 @@ removeLoadedPackage: aLoadedPackage
 	loadedPackages removeKey: aLoadedPackage key
 %
 
+category: 'accessing'
+method: RwLoadedProject
+repositoryCommitId
+
+	self subclassResponsibility: #repositoryCommitId
+%
+
 category: 'properties'
 method: RwLoadedProject
 specification
 
 	^ properties at: 'spec'
+%
+
+category: 'testing'
+method: RwLoadedProject
+useGit
+
+	^ self subclassResponsibility: #useGit
 %
 
 ! Class implementation for 'RwGsLoadedSymbolDictComponentProject'
@@ -38774,6 +51709,13 @@ asDefinition
 		componentDefinitions: self loadedComponentDefinitions
 %
 
+category: 'commit log'
+method: RwGsLoadedSymbolDictComponentProject
+commitLog: logLimit
+
+	^ self projectRef commitLog: logLimit
+%
+
 category: 'initialization'
 method: RwGsLoadedSymbolDictComponentProject
 initialize
@@ -38790,6 +51732,13 @@ initializeForProjectReferenceDefinition: aProjectReferenceDefinition
 	handle := aProjectReferenceDefinition
 %
 
+category: 'properties'
+method: RwGsLoadedSymbolDictComponentProject
+loadedCommitId
+
+	^ self projectRef loadedCommitId
+%
+
 category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
 loadedComponentDefinitions
@@ -38797,6 +51746,22 @@ loadedComponentDefinitions
 	"Create definitions from all of the components I define, and answer the collection of them"
 
 	^ self definitionsFor: loadedComponents
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+loadedConfigurationNames: configNames
+
+
+	self projectRef loadedConfigurationNames: configNames
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+loadedGroupNames: groupNames
+
+
+	self projectRef loadedGroupNames: groupNames
 %
 
 category: 'private'
@@ -38821,6 +51786,22 @@ projectOwnerId: aString
 	^ self propertyAt: 'projectOwnerId' put: aString
 %
 
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+projectRef
+
+	^ self handle
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+projectUrl
+
+	"Return the projectUrl used to clone the project"
+
+	^ self projectRef projectUrl
+%
+
 category: 'definitions'
 method: RwGsLoadedSymbolDictComponentProject
 propertiesForDefinition
@@ -38833,14 +51814,80 @@ propertiesForDefinition
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
+repositoryCommitId
+
+	^ self projectRef repositoryCommitId
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ self projectRef repositoryRoot
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
 specification
 
+self deprecated: 'temporary patch .. sender should send direct message to receiver'.
 	^ handle
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+symbolDictNameForPackageNamed: packageName
+
+	^self projectRef symbolDictNameForPackageNamed: packageName
+%
+
+category: 'loading'
+method: RwGsLoadedSymbolDictComponentProject
+updateLoadedCommitId
+
+	self projectRef updateLoadedCommitId
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+useGit
+
+	^ self projectRef useGit
 %
 
 ! Class implementation for 'RwGsLoadedSymbolDictProject'
 
 !		Instance methods for 'RwGsLoadedSymbolDictProject'
+
+category: 'commit log'
+method: RwGsLoadedSymbolDictProject
+commitLog: logLimit
+
+	self useGit ifFalse: [ ^ '' ].
+	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self repositoryRootPath
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+loadedCommitId
+
+	^ self specification loadedCommitId
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+loadedConfigurationNames: configNames
+
+	self specification imageSpec loadedConfigurationNames: configNames
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+loadedGroupNames: groupNames
+
+	self specification imageSpec loadedGroupNames: groupNames
+%
 
 category: 'specifiction'
 method: RwGsLoadedSymbolDictProject
@@ -38866,11 +51913,70 @@ propertiesForDefinition
 	^ props
 %
 
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+repositoryCommitId
+
+	| rootPath |
+	self useGit
+		ifFalse: [ ^ '' ].
+	rootPath := self repositoryRootPath.
+	rootPath ifNil: [ ^ '' ].
+	^ Rowan gitTools gitcommitShaIn: rootPath
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+repositoryRoot
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ self repositoryRootPath
+		ifNotNil: [:path | path asFileReference ]
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+repositoryRootPath
+
+	^ self specification repositoryRootPath
+%
+
 category: 'properties'
 method: RwGsLoadedSymbolDictProject
 specification
 
 	^ handle
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+symbolDictNameForPackageNamed: packageName
+
+	| spec gemstoneSpec |
+	spec := self specification.
+	gemstoneSpec := spec platformSpec at: 'gemstone'.
+	^ gemstoneSpec symbolDictNameForPackageNamed: packageName.
+%
+
+category: 'loading'
+method: RwGsLoadedSymbolDictProject
+updateLoadedCommitId
+
+	| loadedCommitId |
+	self useGit ifFalse: [ ^ nil ].
+	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			^ nil ].
+	self specification imageSpec loadedCommitId: loadedCommitId
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+useGit
+
+	^ self specification useGit
 %
 
 ! Class implementation for 'RwMethodAdditionOrRemoval'
@@ -41015,6 +54121,13 @@ new
 
 !		Instance methods for 'RwSpecification'
 
+category: 'conversion'
+method: RwSpecification
+asSpecification
+
+	^ self
+%
+
 category: 'private'
 method: RwSpecification
 currentVersion
@@ -41379,12 +54492,6 @@ category: 'actions'
 method: RwProjectSpecification
 commitForTool: aRwTool message: messageString
   ^ self repoSpec commitForTool: aRwTool message: messageString
-%
-
-category: 'actions'
-method: RwProjectSpecification
-commitLogForTool: aRwTool limit: logLimit
-  ^ self repoSpec commitLogForTool: aRwTool limit: logLimit
 %
 
 category: 'accessing'
@@ -41776,6 +54883,20 @@ asProjectReferenceDefinition
 
 category: 'accessing'
 method: RwComponentSpecification
+defaultComponentName
+
+	^ defaultComponentName ifNil: [ 'Core' ]
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+defaultComponentName: aString
+
+	defaultComponentName := aString
+%
+
+category: 'accessing'
+method: RwComponentSpecification
 projectName
 
 	^ projectName ifNil: [ self specName ]
@@ -41848,14 +54969,6 @@ category: 'actions'
 method: RwRepositorySpecification
 commitForTool: aRwTool message: messageString
   "commit not supported by default"
-
-  
-%
-
-category: 'actions'
-method: RwRepositorySpecification
-commitLogForTool: aRwTool limit: logLimit
-  "commit log not supported by default"
 
   
 %
@@ -41997,12 +55110,6 @@ category: 'actions'
 method: RwGitRepositorySpecification
 commitForTool: aRwTool message: messageString
   ^ aRwTool doGitCommit: messageString
-%
-
-category: 'actions'
-method: RwGitRepositorySpecification
-commitLogForTool: aRwTool limit: logLimit
-  ^ aRwTool doGitCommitLog: logLimit
 %
 
 category: 'accessing'
@@ -43278,6 +56385,1473 @@ schemeName
   ^ 'gitfiletree'
 %
 
+! Class implementation for 'RBFormatterTests'
+
+!		Instance methods for 'RBFormatterTests'
+
+category: 'private'
+method: RBFormatterTests
+formatClass: aClass
+	aClass selectors
+		do: [ :each | self formatClass: aClass selector: each ]
+%
+
+category: 'private'
+method: RBFormatterTests
+formatClass: aClass selector: aSymbol
+	self formatters
+		do: [ :each | self formatClass: aClass selector: aSymbol formatter: each ]
+%
+
+category: 'private'
+method: RBFormatterTests
+formatClass: aClass selector: aSymbol formatter: aFormatterClass
+	| source tree1 tree2 | 
+	source := aClass sourceCodeAt: aSymbol.
+	tree1 := RBParser parseMethod: source.
+	tree2 := RBParser 
+		parseMethod: (aFormatterClass new format: tree1)
+		onError: [ :err :pos | self assert: false ].
+	self assert: tree1 = tree2
+%
+
+category: 'private'
+method: RBFormatterTests
+formatMethodSource: source expected: expectedArray
+  1 to: self formatters size do: [ :index | 
+    | formatter |
+    formatter := self formatters at: index.
+    self
+      formatMethodSource: source
+      formatter: formatter
+      expected: (expectedArray at: index) ]
+%
+
+category: 'private'
+method: RBFormatterTests
+formatMethodSource: source formatter: aFormatterClass expected: expected
+  | tree1 tree2 x |
+  tree1 := RBParser parseMethod: source.
+  tree2 := RBParser
+    parseMethod: (aFormatterClass new format: tree1)
+    onError: [ :err :pos | self assert: false ].
+  x := tree2 source.
+self assert: x size = expected size.
+1 to: x size do: [:index | | z y | self assert: (z := x at: index) = (y := expected at: index) ].
+  self assert: x = expected.
+  self assert: tree1 = tree2
+%
+
+category: 'accessing'
+method: RBFormatterTests
+formatters
+	^ Array with: RBFormatter with: RBConfigurableFormatter
+%
+
+category: 'testing'
+method: RBFormatterTests
+testCoreSystem
+  #(#'Object' #'Behavior' #'Boolean' #'Integer' #'SmallInteger' #'Collection' #'String')
+    do: [ :each | 
+      | class |
+      class := Rowan globalNamed: each.
+      self
+        formatClass: class;
+        formatClass: class class ]
+%
+
+category: 'testing'
+method: RBFormatterTests
+testIndexingSystem
+  #(#'IXCompoundQueryPredicateTests' #'IXGsClassicQueryBlockOptimizerTests' #'IXQueryBlockPredicateTests' #'IXQueryExpressionPrintStringTests' #'IXQueryExpressionTests' #'IXQueryPredicateTests')
+    do: [ :each | 
+       (Rowan globalNamed: each) ifNotNil: [ :class | 
+          class ifNotNilself
+            formatClass: class;
+            formatClass: class class ] ]
+%
+
+category: 'testing'
+method: RBFormatterTests
+testQueryBlocks
+  "GemStone query blocks must have () around predicates when more than one predicate is involved and the only operator between predicates is & ... formatter may be a little more conservative"
+
+  self
+    formatMethodSource: 'select: nsc nsc select: { :person | adam == adam }'
+    expected:
+      {'select: nsc 
+	nsc select: {:person | adam == adam}'.
+      'select: nsc
+  nsc select: { :person | adam == adam }'}.
+  self
+    formatMethodSource:
+      'select: nsc nsc select: { :person | (true) & (1 < person) & (person <= 3) }'
+    expected:
+      {'select: nsc 
+	nsc select: {:person | (true) & (1 < person) & (person <= 3)}'.
+      'select: nsc
+  nsc select: { :person | true & (1 < person) & (person <= 3) }'}.
+  self
+    formatMethodSource:
+      'select: nsc nsc select: { :person | (person.isMale) & (1 < person.numberOfChildren) & (person.numberOfChildren <= 3) }'
+    expected:
+      {'select: nsc 
+	nsc select: 
+			{:person | 
+			(person.isMale) & (1 < person.numberOfChildren) 
+				& (person.numberOfChildren <= 3)}'.
+      'select: nsc
+  nsc
+    select: { :person | (person.isMale) & (1 < person.numberOfChildren) & (person.numberOfChildren <= 3) }'}.
+  self
+    formatMethodSource:
+      'select: nsc nsc select: { :person | (person.isMale == true) & (1 < person.numberOfChildren) & (person.numberOfChildren <= 3) }'
+    expected:
+      {'select: nsc 
+	nsc select: 
+			{:person | 
+			(person.isMale == true) & (1 < person.numberOfChildren) 
+				& (person.numberOfChildren <= 3)}'.
+      'select: nsc
+  nsc
+    select: { :person | 
+      (person.isMale == true) & (1 < person.numberOfChildren)
+        & (person.numberOfChildren <= 3) }'}.
+  self
+    formatMethodSource:
+      'select: nsc nsc select: {:person | (person.isMale) & (person.firstName = ''Casey'')}'
+    expected:
+      {'select: nsc 
+	nsc select: {:person | (person.isMale) & (person.firstName = ''Casey'')}'.
+      'select: nsc
+  nsc select: { :person | (person.isMale) & (person.firstName = ''Casey'') }'}
+%
+
+! Class implementation for 'RBGemStoneNumberParserTest'
+
+!		Instance methods for 'RBGemStoneNumberParserTest'
+
+category: 'tests'
+method: RBGemStoneNumberParserTest
+testNumberParser
+
+	"Bugs in Number class>>fromStream: that needed to be fixed for use in RBParser"
+
+	self assert: (Number rwFromStream: '1.2' readStream) = 1.2.
+	self assert: (Number rwFromStream: '1.' readStream) = 1.0.
+	self assert: (Number rwFromStream: '1' readStream) = 1.
+	self assert: (Number rwFromStream: '16r10000"' readStream) =  65536.
+%
+
+category: 'tests'
+method: RBGemStoneNumberParserTest
+testRadixNumberParser
+
+	"Bugs in Number class>>fromStream: that needed to be fixed for use in RBParser"
+
+	| x |
+	self assert: (x := Number rwFromStream: '11rA' readStream) = 10.
+%
+
+! Class implementation for 'RBParserTest'
+
+!		Instance methods for 'RBParserTest'
+
+category: 'accessing'
+method: RBParserTest
+compare: anObject to: anotherObject 
+	self assert: anObject hash = anotherObject hash.
+	self assert: anObject = anotherObject
+%
+
+category: 'accessing'
+method: RBParserTest
+exampleClasses
+	^ Array with: RBParser with: RBScanner with: RBProgramNode with: RBConfigurableFormatter
+%
+
+category: 'private'
+method: RBParserTest
+parseError: each
+	RBParser 
+		parseExpression: each first 
+		onError: [ :string :pos | ^ self assert: pos = each last ].
+	self assert: false description: 'Parser didn''t fail'
+%
+
+category: 'tests'
+method: RBParserTest
+testArray
+	| tree |
+	#(('{}' 0 0) ('{.}' 0 1) ('{..}' 0 2) ('{foo. bar}' 2 1) ('{foo. bar.}' 2 2) ('{foo. bar. .}' 2 3) ('{. foo. bar}' 2 2) ('{foo.. bar}' 2 2)) do: [ :each |
+		tree := RBParser parseExpression: each first.
+		self assert: tree statements size = each second.
+		self assert: tree periods size = each last.
+		self assert: tree left = 1.
+		self assert: tree right = each first size ]
+%
+
+category: 'tests'
+method: RBParserTest
+testBestNodeFor
+	| tree |
+	tree := self treeWithReallyEverything.
+	tree nodesDo: 
+			[:each | 
+			each sourceInterval isEmpty 
+				ifFalse: 
+					[self assert: ((tree bestNodeFor: each sourceInterval) = each 
+								or: [each parent isCascade and: [each parent messages last = each]])]]
+%
+
+category: 'tests'
+method: RBParserTest
+testBlockRewrites
+	| rewriter tree |
+	tree := RBParser 
+				parseMethod: 'method: asdf
+	<primitive: 1>
+	<primitive: 2>
+	^asdf + self foo + asdf'.
+	rewriter := RBParseTreeRewriter new.
+	rewriter 
+		replace: 'asdf'
+		with: 'fdsa'
+		when: [:aNode | aNode parent parent isReturn].
+	rewriter replace: 'self foo'
+		withValueFrom: [:aNode | RBVariableNode named: aNode selector asString].
+	rewriter 
+		replaceArgument: 'asdf'
+		withValueFrom: [:aNode | RBVariableNode named: 'xxx']
+		when: [:aNode | false].
+	rewriter executeTree: tree.
+	self compare: tree
+		to: (RBParser 
+				parseMethod: 'method: asdf
+	<primitive: 1>
+	<primitive: 2>
+	^asdf +  foo + fdsa')
+%
+
+category: 'tests'
+method: RBParserTest
+testCascadeReplacement
+	| cascade |
+	cascade := RBParser parseExpression: 'self foo; bar; baz'.
+	(cascade messages at: 2) 
+		replaceWith: (RBParser parseExpression: 'self bar: 2').
+	self compare: cascade
+		to: (RBParser parseExpression: 'self foo; bar: 2; baz')
+%
+
+category: 'tests'
+method: RBParserTest
+testComparingTrees
+	self compare: self treeWithEverything to: self treeWithEverything.
+	self compare: self treeWithReallyEverything to: self treeWithReallyEverything.
+	
+	self exampleClasses do: [ :class |
+		class selectors do: [ :selector | 
+			self
+				compare: (class parseTreeFor: selector) 
+				to: (class parseTreeFor: selector) ] ]
+%
+
+category: 'tests'
+method: RBParserTest
+testCopy
+	| tree |
+	tree := self treeWithEverything.
+	self compare: tree to: tree copy.
+	tree := self treeWithReallyEverything.
+	self compare: tree to: tree copy.
+	
+	self exampleClasses do: [ :class |
+		class selectors do: [ :each |
+			tree := class parseTreeFor: each.
+			self compare: tree to: tree copy ] ]
+%
+
+category: 'tests'
+method: RBParserTest
+testCopyInContext
+	| tree |
+	tree := self treeWithEverything.
+	self compare: tree to: (tree copyInContext: Dictionary new).
+	tree := self treeWithReallyEverything.
+	self compare: tree to: (tree copyInContext: Dictionary new).
+	
+	self exampleClasses do: [ :class |
+		class selectors do: [ :each |
+			tree := class parseTreeFor: each.
+			self compare: tree to: (tree copyInContext: Dictionary new) ] ]
+%
+
+category: 'tests'
+method: RBParserTest
+testCreationProtocol
+	| messageNode |
+	self compare: (RBMessageNode 
+				receiver: (RBVariableNode named: 'self')
+				selector: #+
+				arguments: (Array with: (RBLiteralNode value: 0)))
+		to: (RBParser parseExpression: 'self + 0').
+	messageNode := RBMessageNode receiver: (RBVariableNode named: 'self')
+				selector: #foo.
+	self compare: (RBMethodNode selector: #bar
+				body: (RBSequenceNode statements: (OrderedCollection 
+								with: (RBCascadeNode messages: (OrderedCollection with: messageNode with: messageNode)))))
+		to: (RBParser parseMethod: 'bar self foo; foo')
+%
+
+category: 'tests'
+method: RBParserTest
+testEqualToWithMapping
+	| tree |
+	tree := self treeWithEverything.
+	self assert: (tree equalTo: tree withMapping: Dictionary new).
+	tree := self treeWithReallyEverything.
+	self assert: (tree equalTo: tree withMapping: Dictionary new).
+	
+	self exampleClasses do: [ :class |
+		class selectors do: [ :each |
+			tree := class parseTreeFor: each.
+			self assert: (tree equalTo: tree withMapping: Dictionary new) ] ]
+%
+
+category: 'tests'
+method: RBParserTest
+testEquivalentExceptRenaming
+	#(('a 3-4' 'a 4-3' false ) ('a #[3 4]' 'a #(3 4)' false ) ('a variable1 ~~ "comment" variable2' 'a variable1 ~~ variable2' true ) ('a variable1' 'a variable2' false ) ('a [:a :b | a + b]' 'a [:b :a | a + b]' false ) ('a | a b | a + b' 'a | b a | a + b' true ) ('a | a | a msg1; msg2' 'a | b | b msg2; msg2' false ) ('a c' 'a d' true ) ('a | a b | a := b. ^b msg1' 'a | a b | b := a. ^a msg1' true ) ('a | a b | a := b. ^b msg1: a' 'a | a b | b := a. ^b msg1: a' false ) ('a: b b + 4' 'a: e e + 4' true ) ('a: b b + 4' 'b: b b + 4' false ) ('a: b b: c b + c' 'a: c b: b c + b' true ) ('a: a b: b a + b' 'a: b b: a a + b' false ) ) do: [:each | self assert: ((RBParser parseMethod: each first)
+				equalTo: (RBParser parseMethod: (each at: 2))
+				exceptForVariables: #('c' ))
+				== each last ]
+%
+
+category: 'tests'
+method: RBParserTest
+testFormatter
+	self exampleClasses do: [ :class |
+		class selectors do: [ :selector | 
+		self 
+			compare: (class parseTreeFor: selector)
+			to: (RBParser parseMethod: (class parseTreeFor: selector) printString) ] ]
+%
+
+category: 'tests'
+method: RBParserTest
+testGsNumberParsing
+  | numbers node |
+  numbers := #(#('16#11' 16#11)).
+  numbers
+    do: [ :spec | 
+      node := RBParser parseExpression: spec first.
+      self assert: node token source = spec first.
+      self assert: node value = spec second ]
+%
+
+category: 'tests'
+method: RBParserTest
+testIntervals
+	| tree |
+	tree := self treeWithReallyEverything.
+	tree nodesDo: 
+			[:each | 
+			(each parent isNil or: [each parent isCascade not and: [ each parent isLiteral not]]) 
+				ifTrue: 
+					[| newNode source |
+					source := tree source copyFrom: each start to: each stop.
+					each isPragma ifFalse: [
+						newNode := each isMethod 
+								ifTrue: [RBParser parseMethod: source]
+								ifFalse: [RBParser parseExpression: source].
+						self compare: each to: newNode]]]
+%
+
+category: 'tests'
+method: RBParserTest
+testIsA
+	| nodes types |
+	nodes := Bag new.
+	types := Set new.
+	#(#(#isAssignment 1) #(#isBlock 1) #(#isCascade 1) #(#isLiteral 2) #(#isMessage 3) #(#isMethod 1) #(#isReturn 1) #(#isSequence 2) #(#isValue 15) #(#isVariable 7) #(#isUsed 10) #(#isDirectlyUsed 9) #(#hasParentheses 1) #(#isBinary 0) #(#isPrimitive 0) #(#isImmediate 10) #(#isWrite 1) #(#isRead 3)) 
+		do: 
+			[:each | 
+			each last timesRepeat: [nodes add: each first].
+			types add: each first].
+	self treeWithEverything nodesDo: 
+			[:each | 
+			types do: 
+					[:sel | 
+					((each respondsTo: sel) and: [each perform: sel]) 
+						ifTrue: [nodes remove: sel]]].
+	self assert: nodes isEmpty
+%
+
+category: 'tests'
+method: RBParserTest
+testLiteralArray
+	| tree collection |
+	tree := RBParser parseExpression: '#( a #b #''c'' . + - 1 -2 3.4 #true true #false false #nil nil "comment" ''string'' #[ 1 2 3 ] #(1 2 3))'.
+	collection := OrderedCollection new.
+	collection add: #a; add: #b; add: #c; add: #'.'; add: #+; add: #-; add: 1; add: -2; add: 3.4; add: #true; add: true; add: #false; add: false; add: #nil; add: nil; add: 'string'; add: #[1 2 3]; add: #(1 2 3).	
+	tree value with: collection do: [ :token :value | 
+		self assert: token value = value ]
+%
+
+category: 'tests'
+method: RBParserTest
+testLiteralIntevals
+	| tree |
+	tree := RBParser parseExpression: '#(#a b #( c ))'.
+	self assert: tree contents first start = 3.
+	self assert: tree contents first stop = 4.
+	self assert: tree contents last contents first start = 11
+%
+
+category: 'tests'
+method: RBParserTest
+testMatchInContext
+	| tree |
+	tree := self treeWithEverything.
+	self assert: (tree match: tree inContext: Dictionary new).
+	tree := self treeWithReallyEverything.
+	self assert: (tree match: tree inContext: Dictionary new).
+	
+	self exampleClasses do: [ :class |
+		class selectors do: [ :each |
+			tree := class parseTreeFor: each.
+			self assert: (tree match: tree inContext: Dictionary new) ] ]
+%
+
+category: 'tests'
+method: RBParserTest
+testMethodPatterns
+	#(#('+ a ^self + a' #+) #('foo ^self foo' #foo) #('foo: a bar: b ^a + b' #foo:bar:)) 
+		do: [:each | self assert: (RBParser parseMethodPattern: each first) == each last]
+%
+
+category: 'tests'
+method: RBParserTest
+testModifying
+	| tree |
+	tree := RBParser 
+				parseMethod: 'foo: a bar: b | c | self first. self second. a + b + c'.
+	self deny: tree lastIsReturn.
+	self deny: (tree body statements at: 2) isUsed.
+	self assert: tree body statements last arguments first isUsed.
+	self assert: (tree isLast: tree body statements last).
+	self deny: (tree isLast: tree body statements first).
+	self assert: (tree defines: 'a').
+	self deny: (tree defines: 'c').
+	self assert: (tree body defines: 'c').
+	self deny: (tree body defines: 'a').
+	tree
+		addReturn;
+		selector: #bar:foo:.
+	(tree body)
+		addTemporaryNamed: 'd';
+		removeTemporaryNamed: 'c'.
+	self compare: tree
+		to: (RBParser 
+				parseMethod: 'bar: a foo: b | d | self first. self second. ^a + b + c').
+	self 
+		assert: ((tree argumentNames asSet)
+				removeAll: #('a' 'b');
+				yourself) isEmpty.
+	self 
+		assert: ((tree allDefinedVariables asSet)
+				removeAll: #('a' 'b' 'd');
+				yourself) isEmpty.
+	tree := RBParser parseExpression: 'self foo: 0'.
+	tree selector: #+.
+	self compare: tree to: (RBParser parseExpression: 'self + 0').
+	self should: [tree selector: #foo] raise: TestResult error.
+%
+
+category: 'tests'
+method: RBParserTest
+testMultimatch
+	| rewriter count |
+	count := 0.
+	rewriter := RBParseTreeRewriter new.
+	rewriter 
+		replace: '``@object at: ``@foo'
+		with: '``@object foo: ``@foo'
+		when: [:aNode | (count := count + 1) == 2].
+	self compare: (rewriter
+				executeTree: (RBParser parseExpression: 'self at: (bar at: 3)');
+				tree)
+		to: (RBParser parseExpression: 'self at: (bar foo: 3)')
+%
+
+category: 'tests'
+method: RBParserTest
+testNodesDo
+	| size |
+	size := 0.
+	self treeWithEverything nodesDo: [:e | size := size + 1].
+	self assert: size = 19
+%
+
+category: 'tests'
+method: RBParserTest
+testNumberParsing
+  | numbers node |
+  numbers := #(#('1' 1) #('-1' -1) #('123' 123) #('123' 123) #('-123' -123) #('1.1' 1.1) #('-1.1' -1.1) #('1.23' 1.23) #('-1.23' -1.23) #('1e3' 1e3) #('1d3' 1d3) #('-1e3' -1e3) #('1e-3' 1e-3) #('-1e-3' -1e-3) #('0.50s2' 0.50s2) #('0.500s3' 0.500s3) #('0.050s3' 0.050s3)).	"('1q3' 1q3) "	"('2r1e8'  2r1e8) ('-2r1e8' -2r1e8) ('2r1E-8' 2r1e-8) ('-2r1e-8' -2r1e-8) "
+  numbers
+    do: [ :spec | 
+      node := RBParser parseExpression: spec first.
+      self assert: node token source = spec first.
+      self assert: node value = spec second ]
+%
+
+category: 'tests'
+method: RBParserTest
+testNumberRadixParsing
+	2 to: 32 do: [ :radix | 
+		| radixString |
+		radixString := radix printString, 'r'.
+		0 to: 72 do: [ :i | 
+			| x |
+			self  assert: (x := ((RBParser parseExpression: (radixString, (i printStringRadix: radix)))
+				value)) = i ] ]
+%
+
+category: 'tests'
+method: RBParserTest
+testParents
+	(Array with: self treeWithEverything with: self treeWithReallyEverything) do: [ :tree |
+		(Array with: tree with: tree copy) do: [ :root |
+			root nodesDo: [ :node |
+				node children do: [ :each |
+					(each parent isMessage and: [ each parent isCascaded ]) ifFalse: [ 
+						self assert: each parent == node.
+						self assert: each methodNode == root ] ] ] ] ]
+%
+
+category: 'tests'
+method: RBParserTest
+testParserErrors
+	#(#('self foo. + 3' 11) #('#(' 3) #('self 0' 6) #('self asdf;;asfd' 11)) 
+		do: [:each | self parseError: each]
+%
+
+category: 'tests'
+method: RBParserTest
+testParsingLiteralMessages
+	self assert: (RBParser parseExpression: 'nil self nil') isMessage.
+	self assert: (RBParser parseExpression: 'self true') isMessage.
+	self assert: (RBParser parseExpression: 'self false') isMessage.
+	self assert: (RBParser parseExpression: 'self -1') isMessage.
+	
+	self assert: (RBParser parseMethod: 'nil') isMethod.
+	self assert: (RBParser parseMethod: 'true') isMethod.
+	self assert: (RBParser parseMethod: 'false') isMethod
+%
+
+category: 'tests'
+method: RBParserTest
+testPatternCascade
+	| rewriter |
+	rewriter := RBParseTreeRewriter new.
+	rewriter replace: 'self `;messages; foo: 4; `;messages1'
+		with: 'self `;messages1; bar: 4; `;messages'.
+	self compare: (rewriter
+				executeTree: (RBParser 
+							parseExpression: 'self foo; printString; foo: 4; bar. self foo: 4');
+				tree)
+		to: (RBParser 
+				parseExpression: 'self bar; bar: 4; foo; printString. self foo:4')
+%
+
+category: 'tests'
+method: RBParserTest
+testPositions
+	| blockNode |
+	blockNode := RBParser parseExpression: '[:a :b | ]'.
+	self assert: blockNode left = 1.
+	self assert: blockNode right = 10.
+	self assert: blockNode bar = 8.
+	self assert: blockNode sourceInterval = (1 to: 10).
+	self assert: blockNode size = 1.	"test dummy collection protocol"
+	blockNode printString.	"coverage"
+	self deny: (blockNode isLast: (RBVariableNode named: 'b')).
+	self compare: blockNode
+		to: (RBBlockNode 
+				arguments: (OrderedCollection with: (RBVariableNode named: 'a')
+						with: (RBVariableNode named: 'b'))
+				body: (RBSequenceNode statements: OrderedCollection new)).
+%
+
+category: 'tests'
+method: RBParserTest
+testPragmas
+	| tree node |
+	#( ('foo <foo>' #foo ()) ('foo <foo: 1>' #foo: (1)) ('foo <foo: 1.2>' #foo: (1.2)) ('foo <foo: -3>' #foo: (-3)) ('foo <foo: a>' #foo: (a)) ('foo <foo: #a>' #foo: (a)) ('foo <foo: $a>' #foo: ($a)) ('foo <foo: ''bar''>' #foo: ('bar')) ('foo <foo: true>' #foo: (true)) ('foo <foo: false>' #foo: (false)) ('foo <foo: nil>' #foo: (nil)) ('foo <foo: #(1 2)>' #foo: ((1 2))) ('foo <foo: 1 bar: 2>' #foo:bar: (1 2))) do: [ :each |
+		tree := RBParser parseMethod: each first.
+		self assert: (tree pragmas size = 1).
+		node := tree pragmas first.
+		self assert: node selector = each second.
+		1 to: node arguments size do: [ :i |
+			self assert: (node arguments at: i) value = (each last at: i) ].
+		self assert: (each first at: node start) = $<.
+		self assert: (each first at: node stop) = $> ]
+%
+
+category: 'tests'
+method: RBParserTest
+testPrimitives
+  self assert: (Object parseTreeFor: #'_basicAt:') isPrimitive.
+  #(#('foo ^true' false) #('foo <some: tag> ^true' false) #(' foo <some: tag> <primitive: 123> ^true' true))
+    do: [ :each | self assert: (RBParser parseMethod: each first) isPrimitive = each last ]
+%
+
+category: 'tests'
+method: RBParserTest
+testProtectedPrimitives
+  self assert: (GemStoneParameters parseTreeFor: #'_getArg:key:') isPrimitive.
+  #(#('foo ^true' false) #('foo <some: tag> ^true' false) #(' foo <some: tag> <protected primitive: 123> ^true' true))
+    do: [ :each | self assert: (RBParser parseMethod: each first) isPrimitive = each last ]
+%
+
+category: 'tests'
+method: RBParserTest
+testQuerying
+	| tree aNode arg1Node bNode |
+	tree := RBParser 
+				parseMethod: ('test: a`	| b |`	b := (self foo: a; bar) baz.`	b := super test: b.`	^[:arg1 | self foa1 + (super foo: arg1 foo: a foo: b)]' 
+						copyReplaceAll: '`'
+						with: (String with: (Character codePoint: 13))).
+	self 
+		assert: tree selfMessages asSortedCollection asArray = #(#bar #foa1 #foo:).
+	self assert: tree superMessages asSortedCollection asArray 
+				= #(#foo:foo:foo: #test:).
+	aNode := tree whichNodeIsContainedBy: (112 to: 112).
+	self assert: aNode name = 'a'.
+	bNode := tree whichNodeIsContainedBy: (119 to: 119).
+	self assert: bNode name = 'b'.
+	arg1Node := tree whichNodeIsContainedBy: (102 to: 105).
+	self assert: arg1Node name = 'arg1'.
+	self assert: (arg1Node statementNode isMessage 
+				and: [arg1Node statementNode selector = #+]).
+	self assert: (arg1Node whoDefines: 'arg1') isBlock.
+	self assert: (aNode whoDefines: 'a') isMethod.
+	self assert: (aNode whoDefines: 'b') isSequence.
+	self assert: (tree whichNodeIsContainedBy: (91 to: 119)) selector 
+				= #foo:foo:foo:.
+	self assert: (tree whichNodeIsContainedBy: (69 to: 121)) isBlock.
+	self assert: (tree whichNodeIsContainedBy: (69 to: 118)) isNil.
+	self assert: aNode blockVariables asSortedCollection asArray = #('arg1').
+	self assert: aNode temporaryVariables asSortedCollection asArray = #('b').
+	self assert: tree allDefinedVariables asSortedCollection asArray 
+				= #('a' 'arg1' 'b').
+	self assert: tree allArgumentVariables asSortedCollection asArray 
+				= #('a' 'arg1').
+	self 
+		assert: tree allTemporaryVariables asSortedCollection asArray = #('b')
+%
+
+category: 'tests'
+method: RBParserTest
+testReadBeforeWritten
+	#(('a ifTrue: [^self]' true ) ('self foo. a := b' false ) ('condition ifTrue: [a := b] ifFalse: [self foo: a]' true ) ('condition ifTrue: [a := b] ifFalse: [self foo]. a isNil' true ) ('condition ifTrue: [a := b]. a := c' false ) ('[a := b] whileFalse: [a isNil]' false ) ('self foo: b' false ) ) do: 
+		[:each | 
+		self assert: ((RBReadBeforeWrittenTester readBeforeWritten: #('a' ) in: (RBParser parseExpression: each first))
+				includes: 'a')
+				== each last.
+		self assert: (RBReadBeforeWrittenTester isVariable: 'a' readBeforeWrittenIn: (RBParser parseExpression: each first))
+				= each last].
+	#('| temp read written written1 |
+			read ifTrue: [^self].
+			written1 := self foo ifFalse: [written := true] ifTrue: [written := false].
+			[temp := true] whileTrue: [temp notNil & written].
+			^temp' '| read written |
+			self foo ifTrue: [written := true] ifFalse: [written := false].
+			self foo ifTrue: [read := true].
+			^read' '| read written |
+			self foo do: [:i | i].
+			[| i | i := 1. i == 1] whileFalse: [read notNil]' '| written |
+			[written := 2] whileFalse.
+			self do: [:each | | read | each & read]' '| read |
+			self do: [:each | read := each].
+			self do: [:each | each & read]' ) do: 
+		[:each | 
+		| read | 
+		read := RBReadBeforeWrittenTester variablesReadBeforeWrittenIn: (RBParser parseExpression: each).
+		self assert: (read size = 1 and: [read includes: 'read'])]
+%
+
+category: 'tests'
+method: RBParserTest
+testReadBeforeWritten1
+	self 
+		assert: (RBReadBeforeWrittenTester variablesReadBeforeWrittenIn: (RBParser 
+						parseMethod: 'addAll: aCollection 
+	"Answer aCollection, having added all elements
+	 of aCollection to the receiver.
+
+	 Fail if aCollection is not a kind of
+	 Collection."
+
+	| newSize elementsSize growSize |
+	(newSize := aCollection size * 2) > elements size ifTrue: [self rehash: newSize].
+	elementsSize := elements size.
+	growSize := elementsSize // 2.
+	aCollection do: 
+			[:newObject | 
+			| hashIndex element |
+			newObject == nil ifFalse: 
+					[hashIndex := self hashIndexFor: newObject.
+					
+					[(element := elements at: hashIndex) == nil
+						ifTrue: 
+							[elements at: hashIndex put: newObject.
+							(elementCount := elementCount + 1) > growSize ifTrue: 
+									[self expand.
+									elementsSize := elements size.
+									growSize := elementsSize // 2].
+							true]
+						ifFalse: [element == newObject]]
+							whileFalse: 
+								[(hashIndex := hashIndex + 1) > elementsSize ifTrue: [hashIndex := 1]]]].
+	^aCollection')) 
+				isEmpty
+%
+
+category: 'tests'
+method: RBParserTest
+testReplacingNodes
+	| tree search block |
+	tree := RBParser 
+				parseMethod: '+ a | a b | self ifTrue: [a] ifFalse: [b := c]. a := b. [:b :c :a | a foo: a; foo1: a; foo2: a foo: b]. {a. b}. ^a'.
+	search := RBParseTreeSearcher new.
+	block := [:aNode :answer | aNode replaceWith: (RBVariableNode named: 'q')].
+	search
+		matches: 'a' do: block;
+		matchesArgument: 'a' do: block.
+	search executeTree: tree.
+	self 
+		assert: tree = (RBParser 
+						parseMethod: '+ q | q b | self ifTrue: [q] ifFalse: [b := c]. q := b. [:b :c :q | q foo: q; foo1: q; foo2: q foo: b]. {q. b}. ^q').
+	self 
+		assert: tree removeDeadCode = (RBParser 
+						parseMethod: '+ q | q b | self ifTrue: [] ifFalse: [b := c]. q := b. {q. b}. ^q')
+%
+
+category: 'tests'
+method: RBParserTest
+testRewriteMethods
+	"#('source' 'target' 'source pattern' 'target pattern')"
+	#(#('arg1: a arg2: b | temp1 temp2 | self stmt1 ifTrue: [^a]. self arg1: a arg2: b' 'arg2: a arg1: b | temp1 temp2 | self stmt1 ifTrue: [^a]. self arg2: b arg2: a' '`arg1: `var1 `arg2: `var2 | `@temps | ``@.stmts. self `arg1: `var1 `arg2: `var2. `@.stmts1' '`arg2: `var1 `arg1: `var2 | `@temps | ``@.stmts. self `arg2: `var2 `arg2: `var1. `@.stmts1') #('arg1: a arg2: b | temp1 temp2 | self stmt1. self arg1: a arg2: b' 'arg1: a arg2: b | temp1 temp2 | [self stmt1] repeat' '`@args: `@vars | `@temps | `@.stmts. self `@args: `@vars' '`@args: `@vars | `@temps | [`@.stmts] repeat') #('+ a | temps | ^self primitiveValue' '- a | temps | ^self primitiveValue' '+ `temp | `@tmps | `@.stmts' '- `temp | `@tmps | `@.stmts') #('a self stmt1. self stmt2' 'a self stmt1. self stmt2' 'b | `@temps | `@.stmts' 'c | `@temps | `@.stmts') #('a <foo: 1 bar: 2>' 'a <bar: 2 foo: 1>' 'a <`sel1: `#arg1 `sel2: `#arg2>' 'a <`sel2: `#arg2 `sel1: `#arg1>') #('a <foo> self foo' 'b <foo> self foo' 'a `@.stmts' 'b `@.stmts'))
+		do: 
+			[:each | 
+			| rewrite |
+			rewrite := RBParseTreeRewriter new.
+			rewrite replaceMethod: (each at: 3) with: each last.
+			self compare: (RBParser 
+						parseMethod: (rewrite
+								executeTree: (RBParser parseMethod: each first);
+								tree) formattedCode)
+				to: (RBParser parseMethod: (each at: 2)).
+			rewrite := RBParseTreeRewriter new.
+			rewrite replaceTree: (RBParser parseRewriteMethod: (each at: 3))
+				withTree: (RBParser parseRewriteMethod: each last).
+			self compare: (RBParser 
+						parseMethod: (rewrite
+								executeTree: (RBParser parseMethod: each first);
+								tree) formattedCode)
+				to: (RBParser parseMethod: (each at: 2))]
+%
+
+category: 'tests'
+method: RBParserTest
+testRewrites
+	"#('source' 'target' 'source pattern' 'target pattern')"
+	#(('[:c | |a| a foo1; foo2]' '[:c | |a| b foo1; foo2]' 'a' 'b' ) ('self foo: 1. bar foo1 foo: 2. (self foo: a) foo: (b foo: c)' 'self bar: 1. bar foo1 bar: 2. (self bar: a) bar: (b bar: c)' '``@rcvr foo: ``@arg1' '``@rcvr bar: ``@arg1' ) ('3 + 4' '4 + 4' '3' '4' ) ('a := self a' 'b := self a' 'a' 'b' ) ('^self at: 1 put: 2' '^self put: 1 put: 2' '^`@rcvr `at: `@arg1 put: `@arg2' '^`@rcvr put: `@arg1 put: `@arg2' ) ('1 + 2 + 3' '0 + 0 + 0' '`#literal' '0' ) ('1 + 2 + 3. 3 foo: 4' '3 + (2 + 1). 4 foo: 3' '``@rcvr `msg: ``@arg' '``@arg `msg: ``@rcvr' ) ('self foo: a bar: b. 1 foo: a bar: b' '2 foo: a bar: b. 1 foo: a bar: b' 'self `@msg: `@args' '2 `@msg: `@args' ) ('a := b. a := c + d' 'b := a. a := c + d' '`var1 := `var2' '`var2 := `var1' ) ('^self foo value: 1' 'self return: (self foo value: 1)' '^`@anything' 'self return: `@anything' ) ('self first; second. self first; second. self a. self b' '2 timesRepeat: [self first; second]. self a. self b' '`.Stmt1. `.Stmt1. `@.stmts' '2 timesRepeat: [`.Stmt1]. `@.stmts' ) ('[:a | self a: 1 c: 2; b]' '[:a | self d: 2 e: 1; f. self halt]' '`@rcvr `msg1: `@arg1 `msg2: `@arg2; `msg' '`@rcvr d: `@arg2 e: `@arg1; f. self halt' )  ) do: 
+		[:each | 
+		| rewrite | 
+		rewrite := RBParseTreeRewriter new.
+		rewrite replace: (each at: 3)
+			with: each last.
+		self compare: (RBParser parseExpression: (rewrite executeTree: (RBParser parseExpression: each first);
+				 tree) formattedCode)
+			to: (RBParser parseExpression: (each at: 2))]
+%
+
+category: 'tests'
+method: RBParserTest
+testSearching
+	| searcher |
+	searcher := RBParseTreeSearcher new.
+	searcher matches: '``@rcv at: ``@arg `sel: ``@arg1'
+		do: [:aNode :answer | answer + 1].
+	self 
+		assert: (searcher executeTree: (RBParser 
+						parseExpression: 'self at: 1 put: 2; at: 2 ifAbsent: []; ifAbsent: 2 at: 1; at: 4; foo')
+				initialAnswer: 0) = 2.
+	searcher := RBParseTreeSearcher new.
+	searcher matches: '``@rcv `at: ``@arg1 `at: ``@arg2'
+		do: [:aNode :answer | answer + 1].
+	self 
+		assert: (searcher executeTree: (RBParser 
+						parseExpression: 'self at: 1 at: 3; at: 1 put: 32; at: 2; foo; at: 1 at: 1 at: 2')
+				initialAnswer: 0) = 1.
+	searcher := RBParseTreeSearcher new.
+	searcher matchesMethod: 'at: `object `put: `o1 ``@rcv `put: 1'
+		do: [:aNode :answer | true].
+	self assert: (searcher 
+				executeTree: (RBParser parseMethod: 'at: a put: b self foo put: 1')
+				initialAnswer: false)
+%
+
+category: 'tests'
+method: RBParserTest
+testStatements
+	| tree |
+	#(('' 0 0) ('.' 0 1) ('| bar |' 0 0) ('| bar | .' 0 1) ('| bar | ..' 0 2) ('foo. bar' 2 1) ('foo. bar.' 2 2) ('foo. bar. .' 2 3) ('. foo. bar' 2 2)) do: [ :each |
+		tree := RBParser parseExpression: each first.
+		self assert: tree statements size = each second.
+		self assert: tree periods size = each last ]
+%
+
+category: 'tests'
+method: RBParserTest
+testSymbolLiteral
+	| tree |
+	#(('# foo' #foo) ('#"bar"foo' #foo) ('##foo' #foo) ('###foo' #foo) ('#foo:' #foo:) ('#foo::' #'foo::') ('#foo::bar' #'foo::bar') ('#foo::bar:' #'foo::bar:') ('#foo::bar::' #'foo::bar::')) do: [ :pair |
+		tree := RBParser parseExpression: pair first.
+		self assert: tree value = pair second.		
+		self assert: tree start = 1.
+		self assert: tree stop = pair first size ].
+	#(('#1' 1) ('#12' 12) ('#12.3' 12.3) ('# 1' 1) ('##1' 1) ('#"bar"1' 1)) do: [ :pair | 
+		tree := RBParser parseExpression: pair first.
+		self assert: tree value = pair second.		
+		self assert: tree start > 1.
+		self assert: tree stop = pair first size ]
+%
+
+category: 'tests'
+method: RBParserTest
+testSymbolNumber
+	| tree |
+	#(('#1' 1) ('#12' 12) ('#12.3' 12.3) ('# 1' 1) ('##1' 1) ('#"bar"1' 1)) do: [ :pair | 
+		tree := RBParser parseExpression: pair first.
+		self assert: tree value = pair second.		
+		self assert: tree start > 1.
+		self assert: tree stop = pair first size ]
+%
+
+category: 'private'
+method: RBParserTest
+treeWithEverything
+	^ RBParser parseMethod: 'method: arg1 | temps | temps := #(10). temps foo; foo. ^(temps collect: [:e | ])'
+%
+
+category: 'private'
+method: RBParserTest
+treeWithReallyEverything
+	^ RBParser parseMethod: 'method: arg1 <foo> <foo: 1.2> | temps | temps := #[ 1 2 3 ]. temps := #(true false nil 1 1.2 $a foo #foo ''foo'' #() #(1 2) #[] #[1 2]). { 1 negated. 1 + 2. 1 raisedTo: 2 }. temps foo; foo: self. ^ (temps collect: [:e | | btemps | ((e isNil)) ])'
+%
+
+! Class implementation for 'RBProgramNodeTest'
+
+!		Class methods for 'RBProgramNodeTest'
+
+category: 'accessing'
+classmethod: RBProgramNodeTest
+packageNamesUnderTest
+	^ #('AST-Core')
+%
+
+!		Instance methods for 'RBProgramNodeTest'
+
+category: 'accessing'
+method: RBProgramNodeTest
+node
+	^ node ifNil: [ node := RBProgramNode new ]
+%
+
+category: 'accessing'
+method: RBProgramNodeTest
+parseExpression: aString
+	^ RBParser parseExpression: aString
+%
+
+category: 'accessing'
+method: RBProgramNodeTest
+parseMethod: aString
+	^ RBParser parseMethod: aString
+%
+
+category: 'running'
+method: RBProgramNodeTest
+setUp
+	super setUp.
+	previous := RBProgramNode formatterClass.
+	RBProgramNode formatterClass: RBFormatter
+%
+
+category: 'running'
+method: RBProgramNodeTest
+tearDown
+  super tearDown.
+  RBProgramNode formatterClass: previous.
+  node := previous := nil
+%
+
+category: 'testing-adding'
+method: RBProgramNodeTest
+testAddNode
+	| tree treeNode |
+	tree := self parseExpression: '1. 2'.
+	treeNode := tree addNode: (self parseExpression: '3').
+	self assert: (self parseExpression: '1. 2. 3') = tree.
+	self assert: tree statements last = treeNode.
+	
+	tree := self parseExpression: '{ 1. 2 }'.
+	treeNode := tree addNode: (self parseExpression: '3').
+	self assert: (self parseExpression: '{ 1. 2. 3 }') = tree.
+	self assert: tree statements last = treeNode
+%
+
+category: 'testing-adding'
+method: RBProgramNodeTest
+testAddNodeBefore
+	| tree treeNode |
+	tree := self parseExpression: '1. 3'.
+	treeNode := tree
+		addNode: (self parseExpression: '2')
+		before: tree statements last.
+	self assert: (self parseExpression: '1. 2. 3') = tree.
+	self assert: (tree statements at: 2) = treeNode.
+	
+	tree := self parseExpression: '{ 1. 3 }'.
+	treeNode := tree
+		addNode: (self parseExpression: '2')
+		before: tree statements last.
+	self assert: (self parseExpression: '{ 1. 2. 3 }') = tree.
+	self assert: (tree statements at: 2) = treeNode
+%
+
+category: 'testing-adding'
+method: RBProgramNodeTest
+testAddNodeFirst
+	| tree treeNode |
+	tree := self parseExpression: '2. 3'.
+	treeNode := tree addNodeFirst: (self parseExpression: '1').
+	self assert: (self parseExpression: '1. 2. 3') = tree.
+	self assert: tree statements first = treeNode.
+	
+	tree := self parseExpression: '{ 2. 3 }'.
+	treeNode := tree addNodeFirst: (self parseExpression: '1').
+	self assert: (self parseExpression: '{ 1. 2. 3 }') = tree.
+	self assert: tree statements first = treeNode
+%
+
+category: 'testing-adding'
+method: RBProgramNodeTest
+testAddNodes
+	| tree treeNodes |
+	tree := self parseExpression: '1. 2'.
+	treeNodes := tree addNodes: (self parseExpression: '3. 4') statements.
+	self assert: (self parseExpression: '1. 2. 3. 4') = tree.
+	self assert: (tree statements at: 3) = treeNodes first.
+	self assert: (tree statements at: 4) = treeNodes last.
+	
+	tree := self parseExpression: '{ 1. 2 }'.
+	treeNodes := tree addNodes: (self parseExpression: '3. 4') statements.
+	self assert: (self parseExpression: '{ 1. 2. 3. 4 }') = tree.
+	self assert: (tree statements at: 3) = treeNodes first.
+	self assert: (tree statements at: 4) = treeNodes last
+%
+
+category: 'testing-adding'
+method: RBProgramNodeTest
+testAddNodesBefore
+	| tree treeNodes |
+	tree := self parseExpression: '1. 4'.
+	treeNodes := tree 
+		addNodes: (self parseExpression: '2. 3') statements
+		before: tree statements last.
+	self assert: (self parseExpression: '1. 2. 3. 4') = tree.
+	self assert: (tree statements at: 2) = treeNodes first.
+	self assert: (tree statements at: 3) = treeNodes last.
+	
+	tree := self parseExpression: '{ 1. 4 }'.
+	treeNodes := tree 
+		addNodes: (self parseExpression: '2. 3') statements
+		before: tree statements last.
+	self assert: (self parseExpression: '{ 1. 2. 3. 4 }') = tree.
+	self assert: (tree statements at: 2) = treeNodes first.
+	self assert: (tree statements at: 3) = treeNodes last
+%
+
+category: 'testing-adding'
+method: RBProgramNodeTest
+testAddNodesFirst
+	| tree treeNodes |
+	tree := self parseExpression: '3. 4'.
+	treeNodes := tree addNodesFirst: (self parseExpression: '1. 2') statements.
+	self assert: (self parseExpression: '1. 2. 3. 4') = tree.
+	self assert: (tree statements at: 1) = treeNodes first.
+	self assert: (tree statements at: 2) = treeNodes last.
+	
+	tree := self parseExpression: '{ 3. 4 }'.
+	treeNodes := tree addNodesFirst: (self parseExpression: '1. 2') statements.
+	self assert: (self parseExpression: '{ 1. 2. 3. 4 }') = tree.
+	self assert: (tree statements at: 1) = treeNodes first.
+	self assert: (tree statements at: 2) = treeNodes last
+%
+
+category: 'testing-adding'
+method: RBProgramNodeTest
+testAddReturn
+	| tree return |
+	tree := self parseExpression: '1. 2'.
+	return := tree addReturn.
+	self assert: tree statements last = return.
+	self assert: (self parseExpression: '1. ^ 2') = tree.
+	
+	tree := self parseExpression: '3. ^ 4'.
+	return := tree addReturn.
+	self assert: tree statements last = return.
+	self assert: (self parseExpression: '3. ^ 4') = tree
+%
+
+category: 'testing-adding'
+method: RBProgramNodeTest
+testAddSelfReturn
+	| tree return |
+	tree := self parseExpression: '1. 2'.
+	return := tree addSelfReturn.
+	self assert: tree statements last = return.
+	self assert: (self parseExpression: '1. 2. ^ self') = tree.
+	
+	tree := self parseExpression: '3. ^ 4'.
+	return := tree addSelfReturn.
+	self assert: tree statements last = return.
+	self assert: (self parseExpression: '3. ^ 4') = tree
+%
+
+category: 'testing-adding'
+method: RBProgramNodeTest
+testAddTemporariesNamed
+	| tree variables |
+	tree := self parseExpression: '| a | a'.
+	variables := tree addTemporariesNamed: #('b' 'c').
+	self assert: variables first isVariable.
+	self assert: variables first name = 'b'.
+	self assert: variables second isVariable.
+	self assert: variables second name = 'c'.
+	self assert: tree temporaries second = variables first.
+	self assert: tree temporaries last = variables second
+%
+
+category: 'testing-adding'
+method: RBProgramNodeTest
+testAddTemporaryNamed
+	| tree variable |
+	tree := self parseExpression: '| a | a'.
+	variable := tree addTemporaryNamed: 'b'.
+	self assert: variable isVariable.
+	self assert: variable name = 'b'.
+	self assert: tree temporaries last = variable
+%
+
+category: 'testing-properties'
+method: RBProgramNodeTest
+testHasProperty
+	self deny: (self node hasProperty: #foo).
+	self node propertyAt: #foo put: 123.
+	self assert: (self node hasProperty: #foo)
+%
+
+category: 'testing-properties'
+method: RBProgramNodeTest
+testPropertyAt
+	self should: [ self node propertyAt: #foo ] raise: Error.
+	self node propertyAt: #foo put: true.
+	self assert: (self node propertyAt: #foo)
+%
+
+category: 'testing-properties'
+method: RBProgramNodeTest
+testPropertyAtIfAbsent
+	self assert: (self node propertyAt: #foo ifAbsent: [ true ]).
+	self node propertyAt: #foo put: true.
+	self assert: (self node propertyAt: #foo ifAbsent: [ false ])
+%
+
+category: 'testing-properties'
+method: RBProgramNodeTest
+testPropertyAtIfAbsentPut
+	self assert: (self node propertyAt: #foo ifAbsentPut: [ true ]).
+	self assert: (self node propertyAt: #foo ifAbsentPut: [ false ])
+%
+
+category: 'testing-properties'
+method: RBProgramNodeTest
+testRemoveProperty
+	self should: [ self node removeProperty: #foo ] raise: Error.
+	self node propertyAt: #foo put: true.
+	self assert: (self node removeProperty: #foo)
+%
+
+category: 'testing-properties'
+method: RBProgramNodeTest
+testRemovePropertyIfAbsent
+	self assert: (self node removeProperty: #foo ifAbsent: [ true ]).
+	self node propertyAt: #foo put: true.
+	self assert: (self node removeProperty: #foo ifAbsent: [ false ])
+%
+
+category: 'testing-replacing'
+method: RBProgramNodeTest
+testReplaceLiteral
+	| tree |
+	tree := self parseMethod: 'run "1" 123 "2"'.
+	tree body statements first
+		replaceWith: (self parseExpression: '$a').
+	self assert: tree newSource = 'run "1" $a "2"'.
+	
+	tree := self parseMethod: 'run "1" 123 "2"'.
+	tree body statements first
+		replaceWith: (self parseExpression: 'zork').
+	self assert: tree newSource = 'run "1" zork "2"'
+%
+
+category: 'testing-replacing'
+method: RBProgramNodeTest
+testReplaceLiteralArray
+	| tree |
+	tree := self parseMethod: 'run "1" #(1 2 3) "2"'.
+	tree body statements first
+		replaceWith: (self parseExpression: '#[1 2 3]').
+	self assert: tree newSource = 'run "1" #[1 2 3] "2"'.
+	
+	tree := self parseMethod: 'run "1" #(1 2 3) "2"'.
+	tree body statements first
+		replaceWith: (self parseExpression: '123').
+	self assert: tree newSource = 'run "1" 123 "2"'.
+
+	tree := self parseMethod: 'run "1" #[1 2 3] "2"'.
+	tree body statements first
+		replaceWith: (self parseExpression: '#(1 2 3)').
+	self assert: tree newSource = 'run "1" #(1 2 3) "2"'.
+	
+	tree := self parseMethod: 'run "1" #[1 2 3] "2"'.
+	tree body statements first
+		replaceWith: (self parseExpression: '123').
+	self assert: tree newSource = 'run "1" 123 "2"'
+%
+
+category: 'testing-replacing'
+method: RBProgramNodeTest
+testReplaceMessage
+	| tree |
+	tree := self parseMethod: 'run "1" self "2" run "3"'.
+	tree body statements first
+		replaceWith: (self parseExpression: 'self runCase').
+	self assert: tree newSource = 'run "1" self "2" runCase "3"'
+%
+
+category: 'testing-replacing'
+method: RBProgramNodeTest
+testReplaceMessageArgument
+	| tree |
+	tree := self parseMethod: 'foo "1" self "2" foo: "3" foo "4"'.
+	tree body statements first arguments first
+		replaceWith: (self parseExpression: 'bar').
+	self assert: tree newSource = 'foo "1" self "2" foo: "3" bar "4"'.
+
+	tree := self parseMethod: 'foo "1" self "2" foo: "3" foo "4"'.
+	tree body statements first arguments first
+		replaceWith: (self parseExpression: 'bar msg1 msg2').
+	self assert: tree newSource = 'foo "1" self "2" foo: "3" bar msg1 msg2 "4"'.
+	
+	tree := self parseMethod: 'foo "1" self "2" foo: "3" foo bar "4"'.
+	tree body statements first arguments first
+		replaceWith: (self parseExpression: 'bar').
+	self assert: tree newSource = 'foo "1" self "2" foo: "3" bar "4"'.
+%
+
+category: 'testing-replacing'
+method: RBProgramNodeTest
+testReplaceMessageReceiver
+	| tree |
+	tree := self parseMethod: 'foo "1" self "2" foo: "3" 123 "4"'.
+	tree body statements first receiver 
+		replaceWith: (self parseExpression: 'bar').
+	self assert: tree newSource = 'foo "1" bar "2" foo: "3" 123 "4"'.
+	
+	tree := self parseMethod: 'foo "1" self "2" foo: "3" 123 "4"'.
+	tree body statements first receiver 
+		replaceWith: (self parseExpression: 'bar msg1 msg2').
+	self assert: tree newSource = 'foo "1" bar msg1 msg2 "2" foo: "3" 123 "4"'.
+	
+	tree := self parseMethod: 'foo "1" self foo "2" foo: "3" 123 "4"'.
+	tree body statements first receiver
+		replaceWith: (self parseExpression: 'bar').
+	self assert: tree newSource = 'foo "1" bar "2" foo: "3" 123 "4"'
+%
+
+category: 'testing-replacing'
+method: RBProgramNodeTest
+testReplaceMethodBinary
+	| tree |
+	tree := self parseMethod: '= "1" anObject "2" ^ "3" 4 "5"'.
+	tree renameSelector: #runCase andArguments: #().
+	self assert: tree newSource = 'runCase "2" ^ "3" 4 "5"'.
+	
+	tree := self parseMethod: '= "1" anObject "2" ^ "3" 4 "5"'.
+	tree renameSelector: #~~ andArguments: (Array with: (self parseExpression: 'first')).
+	self assert: tree newSource = '~~ "1" first "2" ^ "3" 4 "5"'.
+
+	tree := self parseMethod: '= "1" anObject "2" ^ "3" 4 "5"'.
+	tree renameSelector: #assert: andArguments: (Array with: (RBVariableNode named: 'first')).
+	self assert: tree newSource = 'assert: "1" first "2" ^ "3" 4 "5"'.
+
+	tree := self parseMethod: '= "1" anObject "2" ^ "3" 4 "5"'.
+	tree renameSelector: #assert:description: andArguments: (Array with: (RBVariableNode named: 'first') with: (RBVariableNode named: 'second')).
+	self assert: tree newSource = 'assert: first description: second "2" ^ "3" 4 "5"'
+%
+
+category: 'testing-replacing'
+method: RBProgramNodeTest
+testReplaceMethodKeyword
+	| tree |
+	tree := self parseMethod: 'deny: "1" anObject "2" ^ "3" 4 "5"'.
+	tree renameSelector: #runCase andArguments: #().
+	self assert: tree newSource = 'runCase "2" ^ "3" 4 "5"'.
+	
+	tree := self parseMethod: 'deny: "1" anObject "2" ^ "3" 4 "5"'.
+	tree renameSelector: #~~ andArguments: (Array with: (self parseExpression: 'first')).
+	self assert: tree newSource = '~~ "1" first "2" ^ "3" 4 "5"'.
+
+	tree := self parseMethod: 'deny: "1" anObject "2" ^ "3" 4 "5"'.
+	tree renameSelector: #assert: andArguments: (Array with: (RBVariableNode named: 'first')).
+	self assert: tree newSource = 'assert: "1" first "2" ^ "3" 4 "5"'.
+
+	tree := self parseMethod: 'deny: "1" anObject "2" ^ "3" 4 "5"'.
+	tree renameSelector: #assert:description: andArguments: (Array with: (RBVariableNode named: 'first') with: (RBVariableNode named: 'second')).
+	self assert: tree newSource = 'assert: first description: second "2" ^ "3" 4 "5"'
+%
+
+category: 'testing-replacing'
+method: RBProgramNodeTest
+testReplaceMethodKeywordLong
+	| tree |
+	tree := self parseMethod: 'deny: "1" anObject "2" description: "3" anotherObject "4" ^ "5" 6 "7"'.
+	tree renameSelector: #runCase andArguments: #().
+	self assert: tree newSource = 'runCase "4" ^ "5" 6 "7"'.
+	
+	tree := self parseMethod: 'deny: "1" anObject "2" description: "3" anotherObject "4" ^ "5" 6 "7"'.
+	tree renameSelector: #~~ andArguments: (Array with: (self parseExpression: 'first')).
+	self assert: tree newSource = '~~ first "4" ^ "5" 6 "7"'.
+
+	tree := self parseMethod: 'deny: "1" anObject "2" description: "3" anotherObject "4" ^ "5" 6 "7"'.
+	tree renameSelector: #assert: andArguments: (Array with: (self parseExpression: 'first')).
+	self assert: tree newSource = 'assert: first "4" ^ "5" 6 "7"'.
+
+	tree := self parseMethod: 'deny: "1" anObject "2" description: "3" anotherObject "4" ^ "5" 6 "7"'.
+	tree renameSelector: #assert:description: andArguments: (Array with: (self parseExpression: 'first') with: (self parseExpression: 'second')).
+	self assert: tree newSource = 'assert: "1" first "2" description: "3" second "4" ^ "5" 6 "7"'
+%
+
+category: 'testing-replacing'
+method: RBProgramNodeTest
+testReplaceMethodUnary
+	| tree |
+	tree := self parseMethod: 'run "1" ^ "2" 3 "4"'.
+	tree renameSelector: #runCase andArguments: #().
+	self assert: tree newSource = 'runCase "1" ^ "2" 3 "4"'.
+	
+	tree := self parseMethod: 'run "1" ^ "2" 3 "4"'.
+	tree renameSelector: #~~ andArguments: (Array with: (self parseExpression: 'first')).
+	self assert: tree newSource = '~~ first "1" ^ "2" 3 "4"'.
+
+	tree := self parseMethod: 'run "1" ^ "2" 3 "4"'.
+	tree renameSelector: #assert: andArguments: (Array with: (self parseExpression: 'first')).
+	self assert: tree newSource = 'assert: first "1" ^ "2" 3 "4"'.
+
+	tree := self parseMethod: 'run "1" ^ "2" 3 "4"'.
+	tree renameSelector: #assert:description: andArguments: (Array with: (self parseExpression: 'first') with: (self parseExpression: 'second')).
+	self assert: tree newSource = 'assert: first description: second "1" ^ "2" 3 "4"'
+%
+
+category: 'testing-replacing'
+method: RBProgramNodeTest
+testReplaceVariable
+	| tree |
+	tree := self parseMethod: 'run "1" foo "2"'.
+	tree body statements first
+		replaceWith: (self parseExpression: 'zork').
+	self assert: tree newSource = 'run "1" zork "2"'.
+	
+	tree := self parseMethod: 'run "1" foo "2"'.
+	tree body statements first
+		replaceWith: (self parseExpression: '123').
+	self assert: tree newSource = 'run "1" 123 "2"'
+%
+
+! Class implementation for 'RBSmallDictionaryTest'
+
+!		Instance methods for 'RBSmallDictionaryTest'
+
+category: 'running'
+method: RBSmallDictionaryTest
+setUp
+	super setUp.
+	dict := RBSmallDictionary new
+%
+
+category: 'testing'
+method: RBSmallDictionaryTest
+testAtError
+	dict at: #a put: 1.
+	self shouldnt: [ dict at: #a ] raise: Error.
+	self should: [ dict at: #b ] raise: Error
+%
+
+category: 'testing'
+method: RBSmallDictionaryTest
+testAtIfAbsent
+	dict at: #a put: 666.
+	self assert: (dict at: #a ifAbsent: [ nil ]) = 666.
+	self assert: (dict at: #b ifAbsent: [ nil ]) isNil
+%
+
+category: 'testing'
+method: RBSmallDictionaryTest
+testAtPut
+	self assert: (dict at: #a put: 3) = 3.
+	self assert: (dict at: #a) = 3.
+	self assert: (dict at: #a put: 4) = 4.
+	self assert: (dict at: #a) = 4.
+	self assert: (dict at: nil put: 5) = 5.
+	self assert: (dict at: nil) = 5
+%
+
+category: 'testing'
+method: RBSmallDictionaryTest
+testCopy
+	| copy |
+	dict at: 'France' put: 'Paris'.
+	dict at: 'Italie' put: 'Rome'.
+	copy := dict copy.
+	copy at: 'Germany' put: 'Berlin'.
+	dict at: 'Switzerland' put: 'Bern'.
+	self assert: copy size = 3.
+	self assert: (copy includesKey: 'Germany').
+	self deny: (copy includesKey: 'Switzerland').
+	self assert: dict size = 3.
+	self assert: (dict includesKey: 'Switzerland').
+	self deny: (dict includesKey: 'Germany')
+%
+
+category: 'testing'
+method: RBSmallDictionaryTest
+testEmpty
+	dict at: 'France' put: 'Paris'.
+	dict at: 'Italie' put: 'Rome'.
+	dict empty.
+	self assert: dict isEmpty.
+	self deny: (dict includesKey: 'France').
+	self deny: (dict includesKey: 'Italie').
+	self assert: dict keys isEmpty.
+	self assert: dict values isEmpty
+%
+
+category: 'testing'
+method: RBSmallDictionaryTest
+testIncludesKey
+	dict at: 'Italie' put: nil.
+	dict at: 'France' put: 'Paris'.
+	self assert: (dict includesKey: 'Italie').
+	self assert: (dict includesKey: 'France').
+	self deny: (dict includesKey: 'Switzerland')
+%
+
+category: 'testing'
+method: RBSmallDictionaryTest
+testKeys
+	dict at: 'France' put: 'Paris'.
+	dict at: 'Italie' put: 'Rome'.
+	self assert: dict keys = #('France' 'Italie')
+%
+
+category: 'testing'
+method: RBSmallDictionaryTest
+testKeysAndValuesDo
+	| keys values |
+	dict at: 'France' put: 'Paris'.
+	dict at: 'Italie' put: 'Rome'.
+	keys := OrderedCollection new.
+	values := OrderedCollection new.
+	dict keysAndValuesDo: [ :key :value | 
+		keys add: key.
+		values add: value ].
+	self assert: keys asArray = #('France' 'Italie').
+	self assert: values asArray = #('Paris' 'Rome')
+%
+
+category: 'testing'
+method: RBSmallDictionaryTest
+testKeysDo
+	| keys |
+	dict at: 'France' put: 'Paris'.
+	dict at: 'Italie' put: 'Rome'.
+	keys := OrderedCollection new.
+	dict keysDo: [ :each | keys add: each ].
+	self assert: keys asArray = #('France' 'Italie')
+%
+
+category: 'testing'
+method: RBSmallDictionaryTest
+testRemoveKey
+	dict at: #a put: 1.
+	dict at: #b put: 2.
+	self assert: (dict keys size) = 2.
+	self assert: (dict removeKey: #a) = 1.
+	self assert: (dict keys size) = 1.
+	self assert: (dict at: #a ifAbsent: [ true ]).
+	self assert: (dict at: #b) = 2.
+	self should: [ dict removeKey: #a ] raise: Error
+%
+
+category: 'testing'
+method: RBSmallDictionaryTest
+testRemoveKeyIfAbsent
+	dict at: #a put: 1.
+	dict at: #b put: 2.
+	self assert: (dict keys size) = 2.
+	self assert: (dict removeKey: #a ifAbsent: [ false ]) = 1.
+	self assert: (dict keys size) = 1.
+	self assert: (dict at: #a ifAbsent: [ true ]).
+	self assert: (dict at: #b) = 2.
+	self assert: (dict removeKey: #a ifAbsent: [ true ])
+%
+
+category: 'testing'
+method: RBSmallDictionaryTest
+testValues
+	dict at: 'France' put: 'Paris'.
+	dict at: 'Italie' put: 'Rome'.
+	self assert: dict values = #('Paris' 'Rome')
+%
+
+category: 'testing'
+method: RBSmallDictionaryTest
+testValuesDo
+	| values |
+	dict at: 'France' put: 'Paris'.
+	dict at: 'Italie' put: 'Rome'.
+	values := OrderedCollection new.
+	dict valuesDo: [ :each | values add: each ].
+	self assert: values asArray = #('Paris' 'Rome')
+%
+
 ! Class extensions for 'Behavior'
 
 !		Instance methods for 'Behavior'
@@ -43317,6 +57891,12 @@ moveMethod: aSelector toCategory: categoryName environmentId: envId
 		ifFalse: [ GsPackagePolicy current moveSelector: selSym toCategory: catSym for: self ].
 	self _needsAnnouncement
 		ifTrue: [ self _announceMethodMoved: (self compiledMethodAt: selSym) oldCategory: oldCat ]
+%
+
+category: '*ast-kernel-core'
+method: Behavior
+parseTreeFor: aSymbol	
+	^ RBParser parseMethod: (self sourceCodeAt: aSymbol) onError: [ :msg :pos | ^ nil ]
 %
 
 category: '*rowan-gemstone-kernel'
@@ -43706,6 +58286,16 @@ self _validatePrivilege ifTrue:[
 ]
 %
 
+! Class extensions for 'Boolean'
+
+!		Instance methods for 'Boolean'
+
+category: '*ast-kernel-core'
+method: Boolean
+rbStoreOn: aStream
+  aStream nextPutAll: self asString
+%
+
 ! Class extensions for 'ByteArray'
 
 !		Instance methods for 'ByteArray'
@@ -43782,6 +58372,20 @@ indexOfAnyOf: aByteArray startingAt: start ifAbsent: aBlock
 	ans = 0
 		ifTrue: [ ^ aBlock value ]
 		ifFalse: [ ^ ans ]
+%
+
+category: '*ast-kernel-core'
+method: CharacterCollection
+rbStoreOn: aStream
+  "Print inside string quotes, doubling inbedded quotes."
+
+  | x |
+  aStream nextPut: $'.
+  1 to: self size do: [ :i | 
+    aStream nextPut: (x := self at: i).
+    x = $'
+      ifTrue: [ aStream nextPut: x ] ].
+  aStream nextPut: $'
 %
 
 category: '*rowan-gemstone-kernel'
@@ -44580,6 +59184,17 @@ rowanRepositoryDefinitionClass
 	^ RwDiskRepositoryDefinition
 %
 
+! Class extensions for 'DoubleByteSymbol'
+
+!		Instance methods for 'DoubleByteSymbol'
+
+category: '*ast-kernel-core'
+method: DoubleByteSymbol
+rbStoreOn: aStream
+  aStream nextPut: $#.
+  super rbStoreOn: aStream
+%
+
 ! Class extensions for 'ExecBlock'
 
 !		Instance methods for 'ExecBlock'
@@ -44761,6 +59376,52 @@ currentOrNil
 
 ! Class extensions for 'Integer'
 
+!		Class methods for 'Integer'
+
+category: '*ast-kernel-core'
+classmethod: Integer
+_rwFinishFromStream: aStream signFound: aSignFound factor: aFactor radix: radix
+  "BinaryExponent = ( 'e' | 'E' | 'd' | 'D' | 'q' ) ['-' | '+'] Digits
+   DecimalExponent = ( 'f' | 'F' ) ['-' | '+'] Digits
+   Digit = '0' | '1' | '2' | ... | '9'
+   Digits = Digit {Digit}
+   Exponent = BinaryExponent | DecimalExponent | ScaledDecimalExponent | FixedPointExponent
+   FractionalPart = '.' Digits [Exponent]
+   FixedPointExponent = 'p' [ ['-' | '+'] Digits ] 
+   Number = RadixedLiteral | NumericLiteral
+   Numeric = Digit | 'A' | 'B' | ... | 'Z'
+   NumericLiteral = Digits ( [FractionalPart] | [Exponent] )
+   Numerics = Numeric { Numeric }
+   RadixedLiteral = Digits ( '#' | 'r' ) ['-'] Numerics
+   ScaledDecimalExponent = 's' [ ['-' | '+'] Digits ]
+"
+  "parse Numerics (plus option sign) for RadixedLiteral"
+
+  | number ch signFound factor |
+  signFound := aSignFound.
+  factor := aFactor.
+  number := 0.
+  (aStream peek isEquivalent: $-)
+    ifTrue: [ 
+      signFound
+        ifTrue: [ ^ self _errIncorrectFormat: aStream ].
+      aStream next.
+      signFound := true.
+      factor := -1 ]
+    ifFalse: [ 
+      (aStream peek isEquivalent: $+)
+        ifTrue: [ 
+          signFound
+            ifTrue: [ ^ self _errIncorrectFormat: aStream ].
+          aStream next.
+          signFound := true ] ].
+  [ aStream atEnd not and: [ | peekCh | peekCh := aStream peek. radix <= 10 ifTrue: [ peekCh isDigit ] ifFalse: [ peekCh isAlphaNumeric ] ] ]
+    whileTrue: [ 
+      ch := aStream next.
+      number := number * radix + (ch digitValueInRadix: radix) ].
+  ^ number * factor
+%
+
 !		Instance methods for 'Integer'
 
 category: '*rowan-gemstone-kernel'
@@ -44795,6 +59456,99 @@ method: MemoryStore
 rowanRepositoryDefinitionClass
 
 	^ RwMemoryRepositoryDefinition
+%
+
+! Class extensions for 'Number'
+
+!		Class methods for 'Number'
+
+category: '*ast-kernel-core'
+classmethod: Number
+rwFromStream: aStream
+  "BinaryExponent = ( 'e' | 'E' | 'd' | 'D'  'q' | 'Q') ['-' | '+'] Digits
+   DecimalExponent = ( 'f' | 'F' ) ['-' | '+'] Digits
+   Digit = '0' | '1' | '2' | ... | '9'
+   Digits = Digit {Digit}
+   Exponent = BinaryExponent | DecimalExponent | ScaledDecimalExponent | FixedPointExponent
+   FractionalPart = '.' Digits [Exponent]
+   FixedPointExponent = 'p' [ ['-' | '+'] Digits ] 
+   Number = RadixedLiteral | NumericLiteral
+   Numeric = Digit | 'A' | 'B' | ... | 'Z'
+   NumericLiteral = Digits ( [FractionalPart] | [Exponent] )
+   Numerics = Numeric { Numeric }
+   RadixedLiteral = Digits ( '#' | 'r' ) ['-'] Numerics
+   ScaledDecimalExponent = 's' [ ['-' | '+'] Digits ]
+"
+  | ch integerPart factor signFound |
+  self _checkReadStream: aStream forClass: CharacterCollection.
+  ch := aStream next.
+  [ ch unicodeIsWhitespace] whileTrue: [ ch := aStream next ].
+  aStream skip: -1.
+  integerPart := 0.
+  factor := 1.
+  signFound := false.
+  (aStream peek isEquivalent: $-)
+    ifTrue: [ 
+      aStream next.
+      signFound := true.
+      factor := -1 ]
+    ifFalse: [ 
+      (aStream peek isEquivalent: $+)
+        ifTrue: [ 
+          aStream next.
+          signFound := true ] ].
+  (aStream atEnd or: [ aStream peek isDigit not ])
+    ifTrue: [ ^ self _errIncorrectFormat: aStream ].
+  [ aStream atEnd not and: [ (ch := aStream peek) isDigit ] ]
+    whileTrue: [ 
+      aStream next.
+      integerPart := integerPart * 10 + ch digitValue ].
+
+  (ch == $r or: [ ch == $# ])
+    ifTrue: [ 
+      "found a radix separator"
+      aStream next.
+      ^ Integer
+        _rwFinishFromStream: aStream
+        signFound: signFound
+        factor: factor
+        radix: integerPart ].
+  (ch isEquivalent: (Locale decimalPoint at: 1))
+    ifTrue: [ 
+      | chch |
+		chch := aStream peek2. ".?"
+		chch notNil
+			ifTrue: [
+				"not at eof"
+				chch isDigit 
+					ifFalse: [
+						"we're done"
+						^ integerPart * factor ] ].
+	  "found a decimal point, followed by a numeric character."
+      aStream next.
+      ^ BinaryFloat
+        _finishFromStream: aStream
+        signFound: signFound
+        factor: factor
+        integerPart: integerPart ].
+  (#( $e $E $d $D $q $s $p $f $F ) includesIdentical: ch) ifTrue:[ 
+      aStream next.
+      ^ BinaryFloat
+        _finishFromStream: aStream
+        signFound: signFound
+        factor: factor
+        integerPart: integerPart
+        fractionalPart: 0
+        exponent: ch ].
+  ^ integerPart * factor
+%
+
+!		Instance methods for 'Number'
+
+category: '*ast-kernel-core'
+method: Number
+rbStoreOn: aStream
+  self printOn: aStream
 %
 
 ! Class extensions for 'Object'
@@ -44854,6 +59608,24 @@ method: Object
 rwSemanticVersionComponentLessThan: aRwSemanticVersonComponent
   ^ self
     error: 'Invalid semantic verson component - should be String or Integer.'
+%
+
+category: '*ast-kernel-core'
+method: Object
+value
+
+	^self
+%
+
+! Class extensions for 'QuadByteSymbol'
+
+!		Instance methods for 'QuadByteSymbol'
+
+category: '*ast-kernel-core'
+method: QuadByteSymbol
+rbStoreOn: aStream
+  aStream nextPut: $#.
+  super rbStoreOn: aStream
 %
 
 ! Class extensions for 'Rowan'
@@ -45150,7 +59922,7 @@ subclassType
 category: '*rowan-gemstone-definitions'
 method: RwClassDefinition
 _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
-
+ 
 	propertyKey = 'comment' ifFalse: [ ^super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue ].
 	propertyValue = baseValue
 		ifTrue: [ ^ true ]
@@ -45183,6 +59955,14 @@ _modificationForcingNewClassVersion
 ! Class extensions for 'RwClassExtensionDefinition'
 
 !		Instance methods for 'RwClassExtensionDefinition'
+
+category: '*rowan-core-definitions-extensions'
+method: RwClassExtensionDefinition
+comparePropertiesAgainstBase: aDefinition
+	"property differences aren't of interest for a class extension ..."
+
+	^ RwPropertiesModification new
+%
 
 category: '*rowan-core-definitions-extensions'
 method: RwClassExtensionDefinition
@@ -45250,9 +60030,51 @@ addMovedClassToPatchSet: aPatchSet
 
 category: '*rowan-gemstone-components-extensions'
 method: RwComponentProjectDefinition
+defaultSymbolDictName
+
+	^ self projectRef defaultSymbolDictName
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
+defaultSymbolDictName: symDictName
+
+	self projectRef defaultSymbolDictName: symDictName
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
+defaultUseSessionMethodsForExtensions
+
+	^ self projectRef defaultUseSessionMethodsForExtensions
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
+defaultUseSessionMethodsForExtensions: aBool
+
+	self projectRef defaultUseSessionMethodsForExtensions: aBool
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
 methodEnvForPackageNamed: packageName
 
 	^self projectRef methodEnvForPackageNamed: packageName
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
+packageNameToPlatformPropertiesMap
+
+	^self projectRef packageNameToPlatformPropertiesMap
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
+packageNameToPlatformPropertiesMap: aDictionary
+
+	^self projectRef packageNameToPlatformPropertiesMap: aDictionary
 %
 
 category: '*rowan-gemstone-components-extensions'
@@ -45882,6 +60704,20 @@ _userPlatformDictionaryForUser: aUserId
 		ifFalse: [ SessionTemps current ]
 %
 
+!		Instance methods for 'RwPlatform'
+
+category: '*rowan-core'
+method: RwPlatform
+projectNamed: aName
+
+	"Answer a project with the given name.  If no project with the given name is found, signals error."
+
+	| project |
+	project := RwProject newNamed: aName.
+	project _loadedProject.	"signal error, if the project does not exist"
+	^ project
+%
+
 ! Class extensions for 'RwProject'
 
 !		Instance methods for 'RwProject'
@@ -46064,8 +60900,9 @@ category: '*rowan-core-definitions-extensions'
 method: RwProjectDefinition
 _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 
-	({ 'spec'. RwLoadedProject _projectDefinitionSourceKey } includes: propertyKey)
+	({ 'spec'. RwLoadedProject _projectDefinitionSourceKey. 'projectRef' } includes: propertyKey)
 		ifTrue: [ 
+		"projectRef entries are considered to be equal for comparison purposes"
 		"spec entries are considered to be equal for comparison purposes"
 		"_projectDefinitionSourceKey entries are considered equal for comparison purpposes"
 		^ true ].
@@ -46088,8 +60925,28 @@ category: '*rowan-gemstone-components-extensions'
 method: RwProjectReferenceDefinition
 defaultSymbolDictName
 
-self deprecated: 'temporary patch .. this is probably the right spot, but it is worth double checking'.
-	^ 'UserGlobals'
+	^ self properties at: 'defaultSymbolDictName' ifAbsent: [ 'UserGlobals' ]
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwProjectReferenceDefinition
+defaultSymbolDictName: aString
+
+	^ self properties at: 'defaultSymbolDictName' put: aString
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwProjectReferenceDefinition
+defaultUseSessionMethodsForExtensions
+
+	^ self properties at: 'defaultUseSessionMethodsForExtensions' ifAbsent: [ false ]
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwProjectReferenceDefinition
+defaultUseSessionMethodsForExtensions: aBool
+
+	^ self properties at: 'defaultUseSessionMethodsForExtensions' put: aBool
 %
 
 category: '*rowan-gemstone-components-extensions'
@@ -46109,6 +60966,13 @@ method: RwProjectReferenceDefinition
 packageNameToPlatformPropertiesMap
 
 	^ self properties at: 'packageNameToPlatformPropertiesMap' ifAbsentPut: [ Dictionary new ]
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwProjectReferenceDefinition
+packageNameToPlatformPropertiesMap: aDictionary
+
+	^ self properties at: 'packageNameToPlatformPropertiesMap' put: aDictionary
 %
 
 category: '*rowan-gemstone-components-extensions'
@@ -46306,6 +61170,39 @@ copyUpTo: anObject
 		ifFalse: [ ^ self copyFrom: 1 to: idx - 1 ]
 %
 
+category: '*ast-kernel-core'
+method: SequenceableCollection
+rbStoreElementsFrom: firstIndex to: lastIndex on: aStream
+  | noneYet defaultElement arrayElement |
+  noneYet := true.
+  defaultElement := nil.
+  firstIndex to: lastIndex do: [ :index | 
+    arrayElement := self at: index.
+    arrayElement = defaultElement
+      ifFalse: [ 
+        noneYet
+          ifTrue: [ noneYet := false ]
+          ifFalse: [ aStream nextPut: $; ].
+        aStream nextPutAll: ' at: '.
+        index rbStoreOn: aStream.
+        aStream nextPutAll: ' put: '.
+        arrayElement rbStoreOn: aStream] ].
+  ^ noneYet
+%
+
+category: '*ast-kernel-core'
+method: SequenceableCollection
+rbStoreOn: aStream
+  aStream nextPutAll: '(('.
+  aStream nextPutAll: self class name.
+  aStream nextPutAll: ' new: '.
+  self size rbStoreOn: aStream.
+  aStream nextPut: $).
+  (self rbStoreElementsFrom: 1 to: self size on: aStream)
+    ifFalse: [ aStream nextPutAll: '; yourself' ].
+  aStream nextPut: $)
+%
+
 ! Class extensions for 'String'
 
 !		Instance methods for 'String'
@@ -46323,6 +61220,17 @@ decodeFromUTF8
  using the minimum character size needed to represent decoded result."
 
  ^ self _decodeFromUtf8: true
+%
+
+! Class extensions for 'Symbol'
+
+!		Instance methods for 'Symbol'
+
+category: '*ast-kernel-core'
+method: Symbol
+rbStoreOn: aStream
+  aStream nextPut: $#.
+  super rbStoreOn: aStream
 %
 
 ! Class extensions for 'SymbolDictionary'
@@ -46402,6 +61310,12 @@ _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 ! Class extensions for 'UndefinedObject'
 
 !		Instance methods for 'UndefinedObject'
+
+category: '*ast-kernel-core'
+method: UndefinedObject
+rbStoreOn: aStream
+  aStream nextPutAll: self asString
+%
 
 category: '*rowan-gemstone-kernel'
 method: UndefinedObject
@@ -46483,6 +61397,9 @@ defaultAction
 ! Class Initialization
 
 run
+RBConfigurableFormatter initialize.
+RBPatternScanner initialize.
+RBScanner initialize.
 Rowan initialize.
 RwLoadedThing initialize.
 RwModificationFiletreeWriterVisitor initialize.

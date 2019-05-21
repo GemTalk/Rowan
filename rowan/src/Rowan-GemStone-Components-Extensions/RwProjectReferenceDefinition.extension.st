@@ -10,8 +10,25 @@ self deprecated: 'temporary patch .. this is probably the right spot, but it is 
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinition >> defaultSymbolDictName [
 
-self deprecated: 'temporary patch .. this is probably the right spot, but it is worth double checking'.
-	^ 'UserGlobals'
+	^ self properties at: 'defaultSymbolDictName' ifAbsent: [ 'UserGlobals' ]
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> defaultSymbolDictName: aString [
+
+	^ self properties at: 'defaultSymbolDictName' put: aString
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> defaultUseSessionMethodsForExtensions [
+
+	^ self properties at: 'defaultUseSessionMethodsForExtensions' ifAbsent: [ false ]
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> defaultUseSessionMethodsForExtensions: aBool [
+
+	^ self properties at: 'defaultUseSessionMethodsForExtensions' put: aBool
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
@@ -29,6 +46,12 @@ self deprecated: 'temporary patch .. see RwGemStoneSpecification>>methodEnvForPa
 RwProjectReferenceDefinition >> packageNameToPlatformPropertiesMap [
 
 	^ self properties at: 'packageNameToPlatformPropertiesMap' ifAbsentPut: [ Dictionary new ]
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> packageNameToPlatformPropertiesMap: aDictionary [
+
+	^ self properties at: 'packageNameToPlatformPropertiesMap' put: aDictionary
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }

@@ -13,7 +13,11 @@ RwModificationTonelWriterVisitor class >> classLabel [
 RwModificationTonelWriterVisitor >> _classExtensionSourceFile [
 
 	| filename |
-	filename := classExtFileNameMap at:  self currentClassExtension name.
+	filename := classExtFileNameMap 
+		at:  self currentClassExtension name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classExtBeforeFileNameMap at: self currentClassExtension name ].
 	^ self _packageSourceDir / (filename, '.extension.st')
 ]
 
@@ -21,7 +25,11 @@ RwModificationTonelWriterVisitor >> _classExtensionSourceFile [
 RwModificationTonelWriterVisitor >> _classSourceFile [
 
 	| filename |
-	filename := classDefFileNameMap at:  self currentClassDefinition name.
+	filename := classDefFileNameMap 
+		at:  self currentClassDefinition name
+		ifAbsent: [
+			"in the case of class removal, need to use the before class def map"
+			classDefBeforeFileNameMap at: self currentClassDefinition name ].
 	^ self _packageSourceDir / (filename, '.class.st')
 ]
 
@@ -211,6 +219,22 @@ RwModificationTonelWriterVisitor >> addedPackage: aPackageModification [
 	self processPackage: aPackageModification
 ]
 
+{ #category : 'actions' }
+RwModificationTonelWriterVisitor >> deletedClass: aClassModification [
+
+	currentClassDefinition := aClassModification before.
+
+	self _classSourceFile ensureDelete
+]
+
+{ #category : 'actions' }
+RwModificationTonelWriterVisitor >> deletedClassExtension: aClassExtensionModification [
+
+	currentClassExtension := aClassExtensionModification before.
+
+	self _classExtensionSourceFile ensureDelete
+]
+
 { #category : 'class writing' }
 RwModificationTonelWriterVisitor >> processClass: aClassModification [
 
@@ -228,11 +252,14 @@ RwModificationTonelWriterVisitor >> processClassExtension: aClassExtensionModifi
 
 	"write out the class definition"
 
-	self _classExtensionSourceFile
-		writeStreamDo: [:aStream |
-			self _writeClassExtension: currentClassExtension on: aStream.
-			self _writeClassSideMethodDefinitions: currentClassExtension on: aStream.
-			self _writeInstanceSideMethodDefinitions: currentClassExtension on: aStream ]
+	(currentClassExtension instanceMethodDefinitions isEmpty and: [ currentClassExtension classMethodDefinitions isEmpty ])
+		ifTrue: [ self _classExtensionSourceFile ensureDelete ]
+		ifFalse: [ 
+			self _classExtensionSourceFile
+				writeStreamDo: [:aStream |
+					self _writeClassExtension: currentClassExtension on: aStream.
+					self _writeClassSideMethodDefinitions: currentClassExtension on: aStream.
+					self _writeInstanceSideMethodDefinitions: currentClassExtension on: aStream ] ]
 ]
 
 { #category : 'project writing' }
@@ -241,6 +268,8 @@ RwModificationTonelWriterVisitor >> processProject: aProjectModification [
 
 	| format |
 	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
+	packageDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification before packages.
+
 	(format := self _repositoryFormatFor:  aProjectModification after packagesRoot) = 'tonel' ifFalse: [ self error: 'expected tonel format repository, instead format is ', format printString ].
 	super processProject: aProjectModification.
 ]
