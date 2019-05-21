@@ -29,6 +29,7 @@ RwGitRepositoryDefinition class >> newNamed: repositoryName repositoryRoot: repo
 RwGitRepositoryDefinition >> _createRemoteUrl [
 
 	| projectUrl remoteUrl segments |
+	self projectUrl isEmpty ifTrue:  [ ^ nil ].
 	projectUrl := RwUrl fromString: self projectUrl.
 	remoteUrl := 'git@' , projectUrl authority , ':'.
 	segments := projectUrl segments.

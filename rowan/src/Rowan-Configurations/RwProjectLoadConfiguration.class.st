@@ -35,8 +35,8 @@ RwProjectLoadConfiguration >> addDefinedGroupName: groupName includeGroups: incl
 { #category : 'accessing' }
 RwProjectLoadConfiguration >> definedGroupNames [
 
-	^ definedGroupNames ifNil: [ definedGroupNames :=  Dictionary new ]
-
+	^ definedGroupNames 
+		ifNil: [ definedGroupNames :=  Dictionary new]
 ]
 
 { #category : 'accessing' }

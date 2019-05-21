@@ -31333,7 +31333,8 @@ category: 'accessing'
 method: RwProjectLoadConfiguration
 definedGroupNames
 
-	^ definedGroupNames ifNil: [ definedGroupNames :=  Dictionary new ]
+	^ definedGroupNames 
+		ifNil: [ definedGroupNames :=  Dictionary new]
 %
 
 category: 'accessing'
@@ -40342,6 +40343,7 @@ method: RwGitRepositoryDefinition
 _createRemoteUrl
 
 	| projectUrl remoteUrl segments |
+	self projectUrl isEmpty ifTrue:  [ ^ nil ].
 	projectUrl := RwUrl fromString: self projectUrl.
 	remoteUrl := 'git@' , projectUrl authority , ':'.
 	segments := projectUrl segments.
@@ -41441,10 +41443,11 @@ addComponentNamed: aComponentName comment: commentString
 	| component |
 	component := self 
 		components at: aComponentName 
-		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: component for: self name ].
-	component
-		comment: commentString.
-	^ component
+		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: aComponentName for: self name ].
+	^ component 
+		addDefinedGroupName: self defaultGroupName includeGroups: #();
+		comment: commentString;
+		yourself
 %
 
 category: 'accessing'
@@ -41454,12 +41457,12 @@ addComponentNamed: aComponentName definedGroupNames: groupNameDict gemstoneDefau
 	| component |
 	component := self 
 		components at: aComponentName 
-		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: component for: self name ].
+		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: aComponentName for: self name ].
 	groupNameDict keysAndValuesDo: [:groupName :includeGroups |
 		component addDefinedGroupName: groupName includeGroups: includeGroups ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
-			setDefaultSymbolDictNameTo: aSymbolDictAssoc key;
+			setDefaultSymbolDictNameTo: aSymbolDictAssoc value;
 		comment: commentString.
 	^ component
 %
@@ -41501,8 +41504,9 @@ addPackageNamed: packageName toComponentNamed: componentName withConditions: con
 		components at: componentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
 	component
-		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
-			setDefaultSymbolDictNameTo: aSymbolDictAssoc key;
+		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
+			andPackageName: packageName
+			setSymbolDictNameTo: aSymbolDictAssoc value;
 		conditionalPackagesAtConditions: conditionArray
 			andGroup: groupName
 			addPackageNames: { packageName }.
@@ -41519,8 +41523,9 @@ addPackageNamed: packageName toComponentNamed: componentName withConditions: con
 		components at: componentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
 	component
-		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
-			setDefaultSymbolDictNameTo: aSymbolDictAssoc key;
+		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
+			andPackageName: packageName 
+			setSymbolDictNameTo: aSymbolDictAssoc value;
 		conditionalPackagesAtConditions: conditionArray
 			andGroup: self defaultGroupName
 			addPackageNames: { packageName }.
@@ -41532,7 +41537,11 @@ method: RwComponentProjectDefinition
 addPackageNamed: packageName withConditions: conditionArray
 
 	| package component |
-	package := super addPackageNamed: packageName.
+	package := self
+		addPackageNamed: packageName 
+			toComponentNamed: self defaultComponentName 
+			withConditions: conditionArray
+			andGroupName: self defaultGroupName.
 	component := self 
 		components at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
@@ -41548,7 +41557,11 @@ method: RwComponentProjectDefinition
 addPackageNamed: packageName withConditions: conditionArray andGroupName: groupName
 
 	| package component |
-	package := super addPackageNamed: packageName.
+	package := self
+		addPackageNamed: packageName 
+			toComponentNamed: self defaultComponentName 
+			withConditions: conditionArray
+			andGroupName: groupName.
 	component := self 
 		components at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
@@ -41564,13 +41577,18 @@ method: RwComponentProjectDefinition
 addPackageNamed: packageName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
 
 	| package component |
-	package := super addPackageNamed: packageName.
+	package := self
+		addPackageNamed: packageName 
+			toComponentNamed: self defaultComponentName 
+			withConditions: conditionArray
+			andGroupName: groupName.
 	component := self 
 		components at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
-		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
-			setDefaultSymbolDictNameTo: aSymbolDictAssoc key;
+		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
+			andPackageName: packageName
+			setSymbolDictNameTo: aSymbolDictAssoc value;
 		conditionalPackagesAtConditions: conditionArray
 			andGroup: groupName
 			addPackageNames: { packageName }.
@@ -41582,13 +41600,18 @@ method: RwComponentProjectDefinition
 addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc
 
 	| package component |
-	package := super addPackageNamed: packageName.
+	package := self
+		addPackageNamed: packageName 
+			toComponentNamed: self defaultComponentName 
+			withConditions: conditionArray
+			andGroupName: self defaultGroupName.
 	component := self 
 		components at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
-			setDefaultSymbolDictNameTo: aSymbolDictAssoc key.
+			andPackageName: packageName
+			setSymbolDictNameTo: aSymbolDictAssoc value.
 	^package
 %
 
@@ -41655,6 +41678,22 @@ addPackagesNamed: packageNames withConditions: conditionArray gemstoneDefaultSym
 
 	^ packageNames collect: [:packageName | 
 		self addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
+%
+
+category: 'accessing'
+method: RwComponentProjectDefinition
+componentNamed: aComponentName
+
+	^ self componentNamed: aComponentName ifAbsent: [ self error: 'The component named ', aComponentName printString, ' was not found' ]
+%
+
+category: 'accessing'
+method: RwComponentProjectDefinition
+componentNamed: aComponentName ifAbsent: absentBlock
+
+	^ self components 
+		at: aComponentName 
+		ifAbsent: absentBlock
 %
 
 category: 'accessing'
@@ -41740,6 +41779,15 @@ method: RwComponentProjectDefinition
 defaultGroupNames
 
 	^ self projectRef groupNames
+%
+
+category: 'accessing'
+method: RwComponentProjectDefinition
+defaultSymbolDictionary: symDictName forUser: userId
+
+	(self componentNamed: self defaultComponentName)
+		conditionalPackageMapSpecsAtGemStoneUserId: userId 
+			setDefaultSymbolDictNameTo: symDictName
 %
 
 category: 'actions'
@@ -42346,7 +42394,7 @@ category: 'accessing'
 method: RwProjectReferenceDefinition
 configsPath
 
-	^ self properties at: 'configsPath' ifAbsent: [ 'rowan/configs' ]
+	^ self properties at: 'configsPath' ifAbsent: [ 'rowan/components' ]
 %
 
 category: 'accessing'

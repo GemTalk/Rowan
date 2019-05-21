@@ -258,7 +258,7 @@ RwProjectReferenceDefinition >> committishType [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> configsPath [
 
-	^ self properties at: 'configsPath' ifAbsent: [ 'rowan/configs' ]
+	^ self properties at: 'configsPath' ifAbsent: [ 'rowan/components' ]
 ]
 
 { #category : 'accessing' }
