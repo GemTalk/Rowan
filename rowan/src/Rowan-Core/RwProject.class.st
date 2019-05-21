@@ -49,10 +49,13 @@ RwProject >> definedClasses [
 { #category : 'testing' }
 RwProject >> existsOnDisk [
 
-	Rowan image loadedProjectNamed: self name ifAbsent: [ ^false ].
-	^ self repositoryRoot
-		ifNil: [ false ]
-		ifNotNil: [:fileRef | fileRef exists ]
+	^ Rowan image 
+		loadedProjectNamed: self name 
+			ifPresent: [:loadedProject |
+				self repositoryRoot
+					ifNil: [ false ]
+					ifNotNil: [:fileRef | fileRef exists ] ]
+			ifAbsent: [ false ]
 ]
 
 { #category : 'accessing' }

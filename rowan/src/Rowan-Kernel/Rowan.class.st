@@ -148,7 +148,43 @@ Rowan class >> projectNamed: aName [
 
 	"Answer a project with the given name.  If no project with the given name is found, signals error."
 
-	^ self platform projectNamed: aName
+	^ self 
+		projectNamed: aName 
+			ifPresent: [:loadedProject | loadedProject ]
+			ifAbsent: [ self error: 'The project ', aName printString, ' was not found' ]
+]
+
+{ #category : 'public' }
+Rowan class >> projectNamed: aName ifAbsent: absentBlock [
+
+	"Lookup a project with the given name, if found return the project. if not found evaluate the <absentBlock>."
+
+	^ self 
+		projectNamed: aName 
+			ifPresent: [:loadedProject | loadedProject ]
+			ifAbsent: absentBlock
+]
+
+{ #category : 'public' }
+Rowan class >> projectNamed: aName ifPresent: presentBlock [
+
+	"Lookup a project with the given name, if found evaluate the <presentBlock>. if not found return nil."
+
+	^ self 
+		projectNamed: aName 
+			ifPresent: presentBlock
+			ifAbsent: []
+]
+
+{ #category : 'public' }
+Rowan class >> projectNamed: aName ifPresent: presentBlock ifAbsent: absentBlock [
+
+	"Lookup a project with the given name, if found evaluate the <presentBlock>, if not evaluate the <absentBlock.."
+
+	^ self platform 
+		projectNamed: aName 
+			ifPresent: presentBlock 
+			ifAbsent: absentBlock
 ]
 
 { #category : 'public' }

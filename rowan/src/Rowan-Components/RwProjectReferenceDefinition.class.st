@@ -308,7 +308,13 @@ RwProjectReferenceDefinition >> defaultComponentName: aString [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> defaultGroupName [
 
-	^ 'core'
+	^ self properties at: 'defaultGroupName' ifAbsent: [ 'core' ]
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> defaultGroupName: aString [
+
+	^ self properties at: 'defaultGroupName' put: aString
 ]
 
 { #category : 'exporting' }

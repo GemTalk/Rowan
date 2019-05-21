@@ -49,6 +49,28 @@ RwComponentProjectDefinition class >> newForUrl: specUrl [
 ]
 
 { #category : 'instance creation' }
+RwComponentProjectDefinition class >> projectName: projectName componentNamesToLoad: componentNamesToLoad groupNamesToLoad: groupNamesToLoad defaultComponentName: defaultComponentName defaultGroupName: defaultGroupName packageFormat: packageFormat projectHome: projectHomeFileReferenceOrString specsPath: specsPath componentsPath: componentsPath packagesPath: packagesPath projectsPath: projectsPath useGit: useGit comment: comment [
+
+	| projectRef |
+	projectRef := RwProjectReferenceDefinition new
+		projectName: projectName;
+		configurationNames: componentNamesToLoad;
+		defaultComponentName: defaultComponentName;
+		groupNames: groupNamesToLoad;
+		useGit: useGit;
+		comment: comment;
+		projectHome: projectHomeFileReferenceOrString;
+		configsPath: componentsPath;
+		packagesPath: packagesPath;
+		projectsPath: projectsPath;
+		specsPath: specsPath;
+		packageFormat: packageFormat;
+		defaultGroupName: defaultGroupName;
+		yourself.
+	^ self newForProjectReference: projectRef
+]
+
+{ #category : 'deprecated' }
 RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment [
 
 
@@ -65,7 +87,7 @@ RwComponentProjectDefinition class >> projectName: projectName configurationName
 			comment: comment)
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'deprecated' }
 RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl comment: comment [
 
 
@@ -78,7 +100,7 @@ RwComponentProjectDefinition class >> projectName: projectName configurationName
 			comment: comment)
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'deprecated' }
 RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl committish: committish committishType: committishType comment: comment [
 
 	^ self newForProjectReference: (RwProjectReferenceDefinition
@@ -92,7 +114,7 @@ RwComponentProjectDefinition class >> projectName: projectName configurationName
 			comment: comment)
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'deprecated' }
 RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment [
 
 
@@ -106,6 +128,19 @@ RwComponentProjectDefinition class >> projectName: projectName configurationName
 			committish: committish 
 			committishType: committishType 
 			comment: comment)
+]
+
+{ #category : 'instance creation' }
+RwComponentProjectDefinition class >> projectName: projectName projectHome: projectHomeFileReferenceOrString useGit: useGit comment: comment [
+
+	| projectRef |
+	projectRef := RwProjectReferenceDefinition new
+		projectName: projectName;
+		useGit: useGit;
+		comment: comment;
+		projectHome: projectHomeFileReferenceOrString;
+		yourself.
+	^ self newForProjectReference: projectRef
 ]
 
 { #category : 'instance creation' }
@@ -125,28 +160,208 @@ RwComponentProjectDefinition >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'accessing' }
+RwComponentProjectDefinition >> addComponentNamed: aComponentName comment: commentString [
+
+	| component |
+	component := self 
+		components at: aComponentName 
+		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: component for: self name ].
+	component
+		comment: commentString.
+	^ component
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addComponentNamed: aComponentName definedGroupNames: groupNameDict gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc comment: commentString [
+
+	| component |
+	component := self 
+		components at: aComponentName 
+		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: component for: self name ].
+	groupNameDict keysAndValuesDo: [:groupName :includeGroups |
+		component addDefinedGroupName: groupName includeGroups: includeGroups ].
+	component
+		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
+			setDefaultSymbolDictNameTo: aSymbolDictAssoc key;
+		comment: commentString.
+	^ component
+]
+
+{ #category : 'accessing' }
 RwComponentProjectDefinition >> addPackageNamed: packageName [
 
 	^ self
 		addPackageNamed: packageName 
 			toComponentNamed: self defaultComponentName 
 			withConditions: #( 'common' ) 
-			andGroup: self defaultGroupName
+			andGroupName: self defaultGroupName
 ]
 
 { #category : 'accessing' }
-RwComponentProjectDefinition >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroup: groupName [
+RwComponentProjectDefinition >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
 
 	| package component |
 	package := super addPackageNamed: packageName.
 	component := self 
 		components at: componentName 
-		ifAbsentPut: [ RwComponentLoadConfiguration newNamed:componentName for: self name ].
+		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
 	component
 		conditionalPackagesAtConditions: conditionArray
 			andGroup: groupName
 			addPackageNames: { packageName }.
 	^package
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName  gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
+
+	| package component |
+	package := super addPackageNamed: packageName.
+	component := self 
+		components at: componentName 
+		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
+	component
+		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
+			setDefaultSymbolDictNameTo: aSymbolDictAssoc key;
+		conditionalPackagesAtConditions: conditionArray
+			andGroup: groupName
+			addPackageNames: { packageName }.
+	^package
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
+
+	| package component |
+	package := super addPackageNamed: packageName.
+	component := self 
+		components at: componentName 
+		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
+	component
+		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
+			setDefaultSymbolDictNameTo: aSymbolDictAssoc key;
+		conditionalPackagesAtConditions: conditionArray
+			andGroup: self defaultGroupName
+			addPackageNames: { packageName }.
+	^package
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackageNamed: packageName withConditions: conditionArray [
+
+	| package component |
+	package := super addPackageNamed: packageName.
+	component := self 
+		components at: self defaultComponentName 
+		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
+	component
+		conditionalPackagesAtConditions: conditionArray
+			andGroup: self defaultGroupName
+			addPackageNames: { packageName }.
+	^package
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackageNamed: packageName withConditions: conditionArray andGroupName: groupName [
+
+	| package component |
+	package := super addPackageNamed: packageName.
+	component := self 
+		components at: self defaultComponentName 
+		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
+	component
+		conditionalPackagesAtConditions: conditionArray
+			andGroup: groupName
+			addPackageNames: { packageName }.
+	^package
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackageNamed: packageName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
+
+	| package component |
+	package := super addPackageNamed: packageName.
+	component := self 
+		components at: self defaultComponentName 
+		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
+	component
+		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
+			setDefaultSymbolDictNameTo: aSymbolDictAssoc key;
+		conditionalPackagesAtConditions: conditionArray
+			andGroup: groupName
+			addPackageNames: { packageName }.
+	^package
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
+
+	| package component |
+	package := super addPackageNamed: packageName.
+	component := self 
+		components at: self defaultComponentName 
+		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
+	component
+		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
+			setDefaultSymbolDictNameTo: aSymbolDictAssoc key.
+	^package
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackagesNamed: packageNames [
+
+	^ packageNames collect: [:packageName | 
+		self addPackageNamed: packageName ]
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName [
+
+
+	^ packageNames collect: [:packageName | 
+		self addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName ]
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName  gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
+
+	^ packageNames collect: [:packageName | 
+		self addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray andGroupName: groupName  gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackagesNamed: packageNames toComponentNamed: componentName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
+
+	^ packageNames collect: [:packageName | 
+		self addPackageNamed: packageName toComponentNamed: componentName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackagesNamed: packageNames withConditions: conditionArray [
+
+	^ packageNames collect: [:packageName |
+			self addPackageNamed: packageName withConditions: conditionArray ]
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackagesNamed: packageNames withConditions: conditionArray andGroupName: groupName [
+
+	^ packageNames collect: [:packageName | 
+		self addPackageNamed: packageName withConditions: conditionArray andGroupName: groupName ]
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackagesNamed: packageNames withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [
+
+	^ packageNames collect: [:packageName | 
+		self addPackageNamed: packageName withConditions: conditionArray andGroupName: groupName gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addPackagesNamed: packageNames withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc [ 
+
+	^ packageNames collect: [:packageName | 
+		self addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
 ]
 
 { #category : 'accessing' }
@@ -208,6 +423,12 @@ RwComponentProjectDefinition >> defaultConfigurationNames [
 RwComponentProjectDefinition >> defaultGroupName [
 
 	^ self projectRef defaultGroupName
+]
+
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> defaultGroupName: aString [
+
+	^ self projectRef defaultGroupName: aString
 ]
 
 { #category : 'properties' }

@@ -309,6 +309,7 @@ RwGsImage class >> loadedProjectNamed: aString [
 
 	^ self
 		loadedProjectNamed: aString
+		ifPresent: [:loadedProject | loadedProject ]
 		ifAbsent: [ self error: 'No loaded project named ' , aString printString , ' found' ]
 ]
 
@@ -317,14 +318,27 @@ RwGsImage class >> loadedProjectNamed: aString ifAbsent: absentBlock [
 
 	"Look up a loaded project in the loaded project registry"
 
-	^ self _loadedProjectRegistry
+	^ self
+		loadedProjectNamed: aString
+		ifPresent: [:loadedProject | loadedProject ]
+		ifAbsent: absentBlock
+]
+
+{ #category : 'querying' }
+RwGsImage class >> loadedProjectNamed: aString ifPresent: presentBlock ifAbsent: absentBlock [
+
+	"Look up a loaded project in the loaded project registry"
+
+	| loadedProject |
+	loadedProject := self _loadedProjectRegistry
 		at: aString
 		ifAbsent: [
 			| matchingProjects |
 			matchingProjects := self loadedProjects select: [:each | each name = aString ].
 			matchingProjects size > 1 ifTrue: [ self error: 'Multiple projects with same name available from symbol dictionaries in symbol list' ].
 			matchingProjects size = 0 ifTrue: [ ^ absentBlock value ].
-			matchingProjects any ]
+			matchingProjects any ].
+	^ presentBlock cull: loadedProject
 ]
 
 { #category : 'querying' }
