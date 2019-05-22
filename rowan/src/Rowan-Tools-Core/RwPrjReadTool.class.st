@@ -229,7 +229,7 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 			| lsd |
 			lsd := loadSpec asDefinition.
 			projectVisitorQueue addLast: {lsd . lsd loadedConfigurationNames . lsd loadedGroupNames }.
-			self halt ] ].
+			 ] ].
 	projectVisitedQueue do: [:visitedArray |
 		| projectName ndf theVisitor theProjectComponentDefinition theProjectSetDefinition theConfigNames
 			theGroupNames thePackageNames thePackageMapSpecs |

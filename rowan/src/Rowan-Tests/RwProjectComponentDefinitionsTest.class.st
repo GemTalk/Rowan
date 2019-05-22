@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'tests' }
-RwProjectComponentDefinitionsTest >> testCloneComponentProject_01 [
+RwProjectComponentDefinitionsTest >> testCloneComponentProject [
 
 	| rowanSpec urlString projectDefinition |
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
@@ -182,4 +182,57 @@ RwProjectComponentDefinitionsTest >> testCreateComponentProject_03 [
 			andGroupName: 'tests'
 			gemstoneDefaultSymbolDictionaryForUser: 'SystemUser' -> 'Globals';
 		yourself
+]
+
+{ #category : 'tests' }
+RwProjectComponentDefinitionsTest >> testLoadRowanSample1_masterV20 [
+
+	| rowanSpec projectsHome urlString projectSample1Definition projectSample2Definition |
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectsHome := (rowanSpec repositoryRootPath , '/test/testRepositories/repos') asFileReference.
+
+	urlString :=  'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample1_masterV2.ston'.
+	projectSample1Definition := (urlString asRwUrl asSpecification asDefinition)
+		projectHome: projectsHome;
+		yourself.
+
+	urlString :=  'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample2_masterV2.ston'.
+	projectSample2Definition := (urlString asRwUrl asSpecification asDefinition)
+		projectHome: projectsHome;
+		yourself.
+
+"setup"
+	projectSample1Definition repositoryRoot ensureDeleteAll.
+	projectSample2Definition repositoryRoot ensureDeleteAll.
+
+"clone and load"
+	projectSample2Definition clone.	"we want RowanSample2 to be freshly cloned into projectsHome"
+	projectSample1Definition 
+		clone;
+		load.									"this should load RowanSample2 as well"
+
+"validate"
+]
+
+{ #category : 'tests' }
+RwProjectComponentDefinitionsTest >> testReadComponentProject [
+
+	| rowanSpec urlString projectDefinition x projectSetDefinition |
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	urlString :=  'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample2_masterV2.ston'.
+
+	projectDefinition := (urlString asRwUrl asSpecification asDefinition)
+		projectHome: (rowanSpec repositoryRootPath , '/test/testRepositories/repos') asFileReference;
+		yourself.
+
+"setup"
+	projectDefinition repositoryRoot ensureDeleteAll.
+	self assert: (x := projectDefinition packageNames isEmpty).
+
+"clone"
+	projectSetDefinition := projectDefinition clone.	"does a read as part of the clone"
+
+"validate"
+	self assert: (x := projectSetDefinition projectNames asArray sort) = #( 'RowanSample2').
+	self assert: (x := projectDefinition packageNames asArray sort) = #( 'RowanSample2-Core')
 ]

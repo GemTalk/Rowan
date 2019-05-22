@@ -412,8 +412,10 @@ RwComponentProjectDefinition >> addPackagesNamed: packageNames withConditions: c
 
 { #category : 'actions' }
 RwComponentProjectDefinition >> clone [
+	"clone remote git project to disk"
 
-	self projectRef clone
+	self projectRef clone.
+	^ self read						"refresh receiver from the cloned repository and answer project definition set that contains reciever along with any dependent projects"
 ]
 
 { #category : 'accessing' }
@@ -584,6 +586,14 @@ RwComponentProjectDefinition >> gitRoot: aGitRootReferenceOrString [
 	^ self projectRef gitRoot: aGitRootReferenceOrString
 ]
 
+{ #category : 'actions' }
+RwComponentProjectDefinition >> load [
+	"load the receiver into the image"
+
+	true ifTrue: [ ^self ].	"noop for now"
+	^ Rowan projectTools load loadProjectDefinition: self
+]
+
 { #category : 'accessing' }
 RwComponentProjectDefinition >> loadedCommitId [
 
@@ -724,6 +734,18 @@ RwComponentProjectDefinition >> projectsRoot [
 	^ self projectRef projectsRoot
 ]
 
+{ #category : 'actions' }
+RwComponentProjectDefinition >> read [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the default component and group names"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools read
+		readProjectSetForComponentProjectDefinition: self 
+			withConfigurations: self defaultConfigurationNames
+			groupNames: self defaultGroupNames
+]
+
 { #category : 'tool api' }
 RwComponentProjectDefinition >> readProjectSet [
 
@@ -732,8 +754,10 @@ RwComponentProjectDefinition >> readProjectSet [
 
 { #category : 'actions' }
 RwComponentProjectDefinition >> readProjectSetForPackageNames: packageNames [
+	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
 
 	| format visitorClass |
+	packages := Dictionary new. 
 	format := self 
 		packageFormatIfAbsent: [  
 			| formatFromDisk |
