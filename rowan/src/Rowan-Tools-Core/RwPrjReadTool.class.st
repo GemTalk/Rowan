@@ -211,24 +211,45 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 { #category : 'read project definitions' }
 RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
 
-	| projectName packageNames projectSetDefinition packageMapSpecs visitor |
-	projectName := projectComponentDefinition name.
-	visitor := self readConfigurationsForProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes.
-	visitor 
-		ifNotNil: [ 
-			packageNames := visitor packageNames.
-			packageMapSpecs := visitor packageMapSpecs ]
-		ifNil: [ 
-			packageNames := projectComponentDefinition packageNames.
-			packageMapSpecs := Dictionary new ].	
-	projectSetDefinition := self 
-		_readProjectSetForProjectComponentDefinition: projectComponentDefinition 
-		packageNames: packageNames.
-	((projectSetDefinition properties at: 'loadedProjectInfo' ifAbsentPut: [Dictionary new])
-		at: projectName ifAbsentPut: [ Dictionary new ])
-			at: 'loadedConfigurationNames' put: configNames;
-			at: 'loadedGroupNames' put: groupNames;
-			at: 'packageMapSpecs' put: packageMapSpecs.
+	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectVisitedQueue := {}.
+	projectVisitorQueue := {
+		{ projectComponentDefinition . configNames . groupNames }
+	}.
+	[ projectVisitorQueue isEmpty ] whileFalse: [
+		| nextDefArray pcd cn gn |
+		nextDefArray := projectVisitorQueue removeFirst.
+		pcd := nextDefArray at: 1. 
+		cn := nextDefArray at: 2.
+		gn := nextDefArray at: 3.
+		visitor := self readConfigurationsForProjectComponentDefinition: pcd withConfigurations: cn groupNames: gn platformConfigurationAttributes: platformConfigurationAttributes .
+		projectVisitedQueue addLast: { visitor . nextDefArray  } ].
+	projectVisitedQueue do: [:visitedArray |
+		| projectName ndf theVisitor theProjectComponentDefinition theProjectSetDefinition theConfigNames
+			theGroupNames thePackageNames thePackageMapSpecs |
+		theVisitor := visitedArray at: 1.
+		ndf := visitedArray at: 2.
+		theProjectComponentDefinition := ndf at: 1.
+		projectName := theProjectComponentDefinition name.
+		theConfigNames := ndf at: 2.
+		theGroupNames := ndf at: 3.
+		theVisitor 
+			ifNotNil: [ 
+				thePackageNames := theVisitor packageNames.
+				thePackageMapSpecs := theVisitor packageMapSpecs ]
+			ifNil: [ 
+				thePackageNames := theProjectComponentDefinition packageNames.
+				thePackageMapSpecs := Dictionary new ].	
+		theProjectSetDefinition := self 
+			_readProjectSetForProjectComponentDefinition: theProjectComponentDefinition 
+			packageNames: thePackageNames.
+		projectSetDefinition addProject: (theProjectSetDefinition projectNamed: projectName).
+		((projectSetDefinition properties at: 'loadedProjectInfo' ifAbsentPut: [Dictionary new])
+			at: projectName ifAbsentPut: [ Dictionary new ])
+				at: 'loadedConfigurationNames' put: theConfigNames;
+				at: 'loadedGroupNames' put: theGroupNames;
+				at: 'packageMapSpecs' put: thePackageMapSpecs ].
 	^ projectSetDefinition
 ]
 
