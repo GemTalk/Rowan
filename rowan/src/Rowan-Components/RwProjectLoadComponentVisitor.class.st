@@ -3,7 +3,8 @@ Class {
 	#superclass : 'RwProjectLoadConfigurationVisitor',
 	#instVars : [
 		'projectNames',
-		'projectBasePath'
+		'projectBasePath',
+		'projectLoadSpecs'
 	],
 	#category : 'Rowan-Components'
 }
@@ -18,8 +19,7 @@ RwProjectLoadComponentVisitor >> _projects: projectDirPath forProject: aProjectN
 		collect: [ :prjName | 
 			| url |
 			url := urlBase , prjName , '.ston'.
-self error: 'now which class are we expecting here? ... does it matter?'.
-			(RwAbstractProjectConfiguration fromUrl: url)
+			(RwSpecification fromUrl: url)
 				projectName: aProjectName;
 				yourself ]
 ]
@@ -29,6 +29,7 @@ RwProjectLoadComponentVisitor >> initialize [
 
 	super initialize.
 	projectNames := Set new.
+	projectLoadSpecs := Set new
 ]
 
 { #category : 'accessing' }
@@ -41,6 +42,12 @@ RwProjectLoadComponentVisitor >> projectBasePath [
 RwProjectLoadComponentVisitor >> projectBasePath: aString [
 
 	projectBasePath := aString
+]
+
+{ #category : 'accessing' }
+RwProjectLoadComponentVisitor >> projectLoadSpecs [
+
+	^ projectLoadSpecs
 ]
 
 { #category : 'accessing' }
@@ -80,5 +87,11 @@ RwProjectLoadComponentVisitor >> visitComponentLoadConfiguration: aComponentLoad
 
 	self projectNames addAll: aComponentLoadConfiguration projectNames.
 	(self _projects: self projectBasePath, '/' forProject: aComponentLoadConfiguration projectName)
-		do: [:projectReference | projectReference acceptVisitor: self ].
+		do: [:projectSpec | projectSpec acceptVisitor: self ].
+]
+
+{ #category : 'visiting' }
+RwProjectLoadComponentVisitor >> visitComponentSpecification: aComponentSpecification [
+
+	self projectLoadSpecs add: aComponentSpecification
 ]

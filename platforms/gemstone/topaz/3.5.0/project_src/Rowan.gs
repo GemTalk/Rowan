@@ -5239,7 +5239,7 @@ true.
 doit
 (RwProjectLoadConfigurationVisitor
 	subclass: 'RwProjectLoadComponentVisitor'
-	instVarNames: #( projectNames projectBasePath )
+	instVarNames: #( projectNames projectBasePath projectLoadSpecs )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -38481,6 +38481,77 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 
 category: 'read project definitions'
 method: RwPrjReadTool
+readProjectSetForComponentProjectDefinitionX: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
+
+	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectVisitedQueue := {}.
+	projectVisitorQueue := {
+		{ projectComponentDefinition . configNames . groupNames }
+	}.
+	[ projectVisitorQueue isEmpty ] whileFalse: [
+		| nextDefArray pcd cn gn |
+		nextDefArray := projectVisitorQueue removeFirst.
+		pcd := nextDefArray at: 1. 
+		cn := nextDefArray at: 2.
+		gn := nextDefArray at: 3.
+		visitor := self readConfigurationsForProjectComponentDefinition: pcd withConfigurations: cn groupNames: gn platformConfigurationAttributes: platformConfigurationAttributes .
+		projectVisitedQueue addLast: { visitor . nextDefArray  } ].
+	projectVisitedQueue do: [:visitedArray |
+		| projectName ndf theVisitor theProjectComponentDefinition theProjectSetDefinition theConfigNames
+			theGroupNames thePackageNames thePackageMapSpecs |
+		theVisitor := visitedArray at: 1.
+		ndf := visitedArray at: 2.
+		theProjectComponentDefinition := ndf at: 1.
+		projectName := theProjectComponentDefinition name.
+		theConfigNames := ndf at: 2.
+		theGroupNames := ndf at: 3.
+		theVisitor 
+			ifNotNil: [ 
+				thePackageNames := theVisitor packageNames.
+				thePackageMapSpecs := theVisitor packageMapSpecs ]
+			ifNil: [ 
+				thePackageNames := theProjectComponentDefinition packageNames.
+				thePackageMapSpecs := Dictionary new ].	
+		theProjectSetDefinition := self 
+			_readProjectSetForProjectComponentDefinition: theProjectComponentDefinition 
+			packageNames: thePackageNames.
+		projectSetDefinition addProject: (theProjectSetDefinition projectNamed: projectName).
+		((projectSetDefinition properties at: 'loadedProjectInfo' ifAbsentPut: [Dictionary new])
+			at: projectName ifAbsentPut: [ Dictionary new ])
+				at: 'loadedConfigurationNames' put: theConfigNames;
+				at: 'loadedGroupNames' put: theGroupNames;
+				at: 'packageMapSpecs' put: thePackageMapSpecs ].
+	^ projectSetDefinition
+%
+
+category: 'read project definitions'
+method: RwPrjReadTool
+readProjectSetForComponentProjectDefinitionY: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
+
+	| projectName packageNames projectSetDefinition packageMapSpecs visitor |
+	projectName := projectComponentDefinition name.
+	visitor := self readConfigurationsForProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes.
+	visitor 
+		ifNotNil: [ 
+			packageNames := visitor packageNames.
+			packageMapSpecs := visitor packageMapSpecs ]
+		ifNil: [ 
+			packageNames := projectComponentDefinition packageNames.
+			packageMapSpecs := Dictionary new ].	
+	projectSetDefinition := self 
+		_readProjectSetForProjectComponentDefinition: projectComponentDefinition 
+		packageNames: packageNames.
+	((projectSetDefinition properties at: 'loadedProjectInfo' ifAbsentPut: [Dictionary new])
+		at: projectName ifAbsentPut: [ Dictionary new ])
+			at: 'loadedConfigurationNames' put: configNames;
+			at: 'loadedGroupNames' put: groupNames;
+			at: 'packageMapSpecs' put: packageMapSpecs.
+	^ projectSetDefinition
+%
+
+category: 'read project definitions'
+method: RwPrjReadTool
 readProjectSetForProjectDefinition: projectDefinition
 
 	| repo spec packageNames |
@@ -52104,6 +52175,14 @@ initialize
 
 category: 'initialization'
 method: RwGsLoadedSymbolDictComponentProject
+initializeForLoadSpecification: aLoadSpecification
+
+	self initializeForName: aLoadSpecification specName.
+	handle := RwProjectReferenceDefinition newForSpecification: aLoadSpecification
+%
+
+category: 'initialization'
+method: RwGsLoadedSymbolDictComponentProject
 initializeForProjectReferenceDefinition: aProjectReferenceDefinition
 
 	self initializeForName: aProjectReferenceDefinition projectAlias.
@@ -54254,6 +54333,7 @@ initialize
 
 	super initialize.
 	projectNames := Set new.
+	projectLoadSpecs := Set new
 %
 
 category: 'accessing'
@@ -54268,6 +54348,13 @@ method: RwProjectLoadComponentVisitor
 projectBasePath: aString
 
 	projectBasePath := aString
+%
+
+category: 'accessing'
+method: RwProjectLoadComponentVisitor
+projectLoadSpecs
+
+	^ projectLoadSpecs
 %
 
 category: 'accessing'
@@ -54309,7 +54396,14 @@ visitComponentLoadConfiguration: aComponentLoadConfiguration
 
 	self projectNames addAll: aComponentLoadConfiguration projectNames.
 	(self _projects: self projectBasePath, '/' forProject: aComponentLoadConfiguration projectName)
-		do: [:projectReference | projectReference acceptVisitor: self ].
+		do: [:projectSpec | projectSpec acceptVisitor: self ].
+%
+
+category: 'visiting'
+method: RwProjectLoadComponentVisitor
+visitComponentSpecification: aComponentSpecification
+
+	self projectLoadSpecs add: aComponentSpecification
 %
 
 category: 'private'
@@ -54323,8 +54417,7 @@ _projects: projectDirPath forProject: aProjectName
 		collect: [ :prjName | 
 			| url |
 			url := urlBase , prjName , '.ston'.
-self error: 'now which class are we expecting here? ... does it matter?'.
-			(RwAbstractProjectConfiguration fromUrl: url)
+			(RwSpecification fromUrl: url)
 				projectName: aProjectName;
 				yourself ]
 %
@@ -55242,6 +55335,13 @@ _myUserProfile
 ! Class implementation for 'RwComponentSpecification'
 
 !		Instance methods for 'RwComponentSpecification'
+
+category: 'visiting'
+method: RwComponentSpecification
+acceptVisitor: aVisitor
+
+	^ aVisitor visitComponentSpecification: self
+%
 
 category: 'converting'
 method: RwComponentSpecification

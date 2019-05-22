@@ -9,6 +9,12 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'visiting' }
+RwComponentSpecification >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitComponentSpecification: self
+]
+
 { #category : 'converting' }
 RwComponentSpecification >> asDefinition [
 

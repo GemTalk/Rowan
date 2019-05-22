@@ -41,6 +41,13 @@ RwGsLoadedSymbolDictComponentProject >> initialize [
 ]
 
 { #category : 'initialization' }
+RwGsLoadedSymbolDictComponentProject >> initializeForLoadSpecification: aLoadSpecification [
+
+	self initializeForName: aLoadSpecification specName.
+	handle := RwProjectReferenceDefinition newForSpecification: aLoadSpecification
+]
+
+{ #category : 'initialization' }
 RwGsLoadedSymbolDictComponentProject >> initializeForProjectReferenceDefinition: aProjectReferenceDefinition [
 
 	self initializeForName: aProjectReferenceDefinition projectAlias.
