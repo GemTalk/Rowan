@@ -37884,12 +37884,42 @@ updateOrAddClass: classDefinition inPackageNamed: packageName inProjectNamed: pr
 
 category: 'load project definitions'
 method: RwPrjLoadTool
-loadProjectDefinition: projectDefinition
+loadComponentProjectDefinition: projectDefinition
 
+	^ self loadProjectDefinition: projectDefinition platformConfigurationAttributes: Rowan platformConfigurationAttributes
+%
+
+category: 'load project definitions'
+method: RwPrjLoadTool
+loadProjectDefinition: projectDefinition
 	| projectSetDefinition |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
+	^ self loadProjectSetDefinition: projectSetDefinition
+%
 
+category: 'load project definitions'
+method: RwPrjLoadTool
+loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes
+	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+
+	| visitor projectSetDefinition |
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	visitor := Rowan projectTools read
+			readConfigurationsForProjectComponentDefinition: projectDefinition
+			withConfigurations: projectDefinition loadedConfigurationNames
+			groupNames: projectDefinition loadedGroupNames 
+			platformConfigurationAttributes: platformConfigurationAttributes
+			forLoad: true.
+	visitor projectLoadSpecs do: [:loadSpec |
+		| dependentProjectDefinition |
+		dependentProjectDefinition := loadSpec asDefinition.
+		dependentProjectDefinition clone.
+		dependentProjectDefinition read do: [:readProjectDef |
+			(projectSetDefinition projectNames includes: readProjectDef name)
+				ifTrue: [ self error: 'duplicate dependent projects encountered ', readProjectDef name printString]
+				ifFalse: [ projectSetDefinition addDefinition: readProjectDef ] ] ].
 	^ self loadProjectSetDefinition: projectSetDefinition
 %
 
@@ -38475,8 +38505,7 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 		visitor projectLoadSpecs do: [:loadSpec |
 			| lsd |
 			lsd := loadSpec asDefinition.
-			projectVisitorQueue addLast: {lsd . lsd loadedConfigurationNames . lsd loadedGroupNames }.
-			self halt ] ].
+			projectVisitorQueue addLast: {lsd . lsd loadedConfigurationNames . lsd loadedGroupNames } ] ].
 	projectVisitedQueue do: [:visitedArray |
 		| projectName ndf theVisitor theProjectComponentDefinition theProjectSetDefinition theConfigNames
 			theGroupNames thePackageNames thePackageMapSpecs |
@@ -41110,6 +41139,14 @@ keys
 	^packages keys
 %
 
+category: 'actions'
+method: RwProjectDefinition
+load
+	"load the receiver into the image"
+
+	^ Rowan projectTools load loadProjectDefinition: self
+%
+
 category: 'properties'
 method: RwProjectDefinition
 loadedCommitId
@@ -41762,8 +41799,10 @@ addPackagesNamed: packageNames withConditions: conditionArray gemstoneDefaultSym
 category: 'actions'
 method: RwComponentProjectDefinition
 clone
+	"clone remote git project to disk"
 
-	self projectRef clone
+	self projectRef clone.
+	^ self read						"refresh receiver from the cloned repository and answer project definition set that contains reciever along with any dependent projects"
 %
 
 category: 'accessing'
@@ -41955,6 +41994,14 @@ gitRoot: aGitRootReferenceOrString
 	^ self projectRef gitRoot: aGitRootReferenceOrString
 %
 
+category: 'actions'
+method: RwComponentProjectDefinition
+load
+	"load the receiver into the image"
+
+	^ Rowan projectTools load loadComponentProjectDefinition: self
+%
+
 category: 'accessing'
 method: RwComponentProjectDefinition
 loadedCommitId
@@ -42118,6 +42165,19 @@ projectsRoot
 	^ self projectRef projectsRoot
 %
 
+category: 'actions'
+method: RwComponentProjectDefinition
+read
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the default component and group names"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools read
+		readProjectSetForComponentProjectDefinition: self 
+			withConfigurations: self defaultConfigurationNames
+			groupNames: self defaultGroupNames
+%
+
 category: 'tool api'
 method: RwComponentProjectDefinition
 readProjectSet
@@ -42128,8 +42188,10 @@ readProjectSet
 category: 'actions'
 method: RwComponentProjectDefinition
 readProjectSetForPackageNames: packageNames
+	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
 
 	| format visitorClass |
+	packages := Dictionary new. 
 	format := self 
 		packageFormatIfAbsent: [  
 			| formatFromDisk |

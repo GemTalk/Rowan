@@ -187,7 +187,8 @@ RwProjectComponentDefinitionsTest >> testCreateComponentProject_03 [
 { #category : 'tests' }
 RwProjectComponentDefinitionsTest >> testLoadRowanSample1_masterV20 [
 
-	| rowanSpec projectsHome urlString projectSample1Definition projectSample2Definition |
+	| rowanSpec projectsHome urlString projectSample1Definition projectSample2Definition 
+		projectSetDefinition1 projectSetDefinition2 x |
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	projectsHome := (rowanSpec repositoryRootPath , '/test/testRepositories/repos') asFileReference.
 
@@ -205,11 +206,15 @@ RwProjectComponentDefinitionsTest >> testLoadRowanSample1_masterV20 [
 	projectSample1Definition repositoryRoot ensureDeleteAll.
 	projectSample2Definition repositoryRoot ensureDeleteAll.
 
-"clone and load"
-	projectSample2Definition clone.	"we want RowanSample2 to be freshly cloned into projectsHome"
-	projectSample1Definition 
-		clone;
-		load.									"this should load RowanSample2 as well"
+"clone"
+	projectSetDefinition2 := projectSample2Definition clone.	"we want RowanSample2 to be freshly cloned into projectsHome"
+	projectSetDefinition1 := projectSample1Definition clone.
+
+"validate"
+	self assert: (x := projectSetDefinition1 projectNames asArray sort) = #( 'RowanSample1' 'RowanSample2').
+
+"load both 1 and 2"
+	projectSample1Definition load.
 
 "validate"
 ]

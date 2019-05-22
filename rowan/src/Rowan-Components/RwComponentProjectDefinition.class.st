@@ -590,8 +590,7 @@ RwComponentProjectDefinition >> gitRoot: aGitRootReferenceOrString [
 RwComponentProjectDefinition >> load [
 	"load the receiver into the image"
 
-	true ifTrue: [ ^self ].	"noop for now"
-	^ Rowan projectTools load loadProjectDefinition: self
+	^ Rowan projectTools load loadComponentProjectDefinition: self
 ]
 
 { #category : 'accessing' }

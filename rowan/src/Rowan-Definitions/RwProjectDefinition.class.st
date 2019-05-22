@@ -198,6 +198,13 @@ RwProjectDefinition >> keys [
 	^packages keys
 ]
 
+{ #category : 'actions' }
+RwProjectDefinition >> load [
+	"load the receiver into the image"
+
+	^ Rowan projectTools load loadProjectDefinition: self
+]
+
 { #category : 'properties' }
 RwProjectDefinition >> loadedCommitId [
 
