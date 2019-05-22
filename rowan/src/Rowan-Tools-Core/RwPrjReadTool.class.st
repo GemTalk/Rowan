@@ -223,8 +223,13 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 		pcd := nextDefArray at: 1. 
 		cn := nextDefArray at: 2.
 		gn := nextDefArray at: 3.
-		visitor := self readConfigurationsForProjectComponentDefinition: pcd withConfigurations: cn groupNames: gn platformConfigurationAttributes: platformConfigurationAttributes .
-		projectVisitedQueue addLast: { visitor . nextDefArray  } ].
+		visitor := self readConfigurationsForProjectComponentDefinition: pcd withConfigurations: cn groupNames: gn platformConfigurationAttributes: platformConfigurationAttributes.
+		projectVisitedQueue addLast: { visitor . nextDefArray  }.
+		visitor projectLoadSpecs do: [:loadSpec |
+			| lsd |
+			lsd := loadSpec asDefinition.
+			projectVisitorQueue addLast: {lsd . lsd loadedConfigurationNames . lsd loadedGroupNames }.
+			self halt ] ].
 	projectVisitedQueue do: [:visitedArray |
 		| projectName ndf theVisitor theProjectComponentDefinition theProjectSetDefinition theConfigNames
 			theGroupNames thePackageNames thePackageMapSpecs |

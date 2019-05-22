@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'private' }
-RwProjectLoadComponentVisitor >> _projects: projectDirPath forProject: aProjectName [
+RwProjectLoadComponentVisitor >> _projects: projectDirPath forProject: ignored [
 
 	| urlBase |
 	self projectNames isEmpty ifTrue: [ ^ #() ].
@@ -20,7 +20,7 @@ RwProjectLoadComponentVisitor >> _projects: projectDirPath forProject: aProjectN
 			| url |
 			url := urlBase , prjName , '.ston'.
 			(RwSpecification fromUrl: url)
-				projectName: aProjectName;
+				projectName: prjName;
 				yourself ]
 ]
 
