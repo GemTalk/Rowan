@@ -218,6 +218,14 @@ RwProjectReferenceDefinition >> branch: aString [
 	self committish: aString committishType: 'branch'
 ]
 
+{ #category : 'actions' }
+RwProjectReferenceDefinition >> clone [
+
+	"who wins? resolve or clone"
+
+	^ self repositoryDefinition clone
+]
+
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> comment [
 
@@ -594,6 +602,8 @@ self deprecated: 'temporary method ... simulating RwSpecification api'.
 
 { #category : 'actions' }
 RwProjectReferenceDefinition >> resolve [
+
+	"who wins? resolve or clone"
 
 	^ self repositoryDefinition resolve
 ]

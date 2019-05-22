@@ -410,6 +410,12 @@ RwComponentProjectDefinition >> addPackagesNamed: packageNames withConditions: c
 		self addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
 ]
 
+{ #category : 'actions' }
+RwComponentProjectDefinition >> clone [
+
+	self projectRef clone
+]
+
 { #category : 'accessing' }
 RwComponentProjectDefinition >> componentNamed: aComponentName [
 

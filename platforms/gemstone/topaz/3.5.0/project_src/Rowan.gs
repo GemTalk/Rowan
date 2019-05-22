@@ -38507,77 +38507,6 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 
 category: 'read project definitions'
 method: RwPrjReadTool
-readProjectSetForComponentProjectDefinitionX: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
-
-	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectVisitedQueue := {}.
-	projectVisitorQueue := {
-		{ projectComponentDefinition . configNames . groupNames }
-	}.
-	[ projectVisitorQueue isEmpty ] whileFalse: [
-		| nextDefArray pcd cn gn |
-		nextDefArray := projectVisitorQueue removeFirst.
-		pcd := nextDefArray at: 1. 
-		cn := nextDefArray at: 2.
-		gn := nextDefArray at: 3.
-		visitor := self readConfigurationsForProjectComponentDefinition: pcd withConfigurations: cn groupNames: gn platformConfigurationAttributes: platformConfigurationAttributes .
-		projectVisitedQueue addLast: { visitor . nextDefArray  } ].
-	projectVisitedQueue do: [:visitedArray |
-		| projectName ndf theVisitor theProjectComponentDefinition theProjectSetDefinition theConfigNames
-			theGroupNames thePackageNames thePackageMapSpecs |
-		theVisitor := visitedArray at: 1.
-		ndf := visitedArray at: 2.
-		theProjectComponentDefinition := ndf at: 1.
-		projectName := theProjectComponentDefinition name.
-		theConfigNames := ndf at: 2.
-		theGroupNames := ndf at: 3.
-		theVisitor 
-			ifNotNil: [ 
-				thePackageNames := theVisitor packageNames.
-				thePackageMapSpecs := theVisitor packageMapSpecs ]
-			ifNil: [ 
-				thePackageNames := theProjectComponentDefinition packageNames.
-				thePackageMapSpecs := Dictionary new ].	
-		theProjectSetDefinition := self 
-			_readProjectSetForProjectComponentDefinition: theProjectComponentDefinition 
-			packageNames: thePackageNames.
-		projectSetDefinition addProject: (theProjectSetDefinition projectNamed: projectName).
-		((projectSetDefinition properties at: 'loadedProjectInfo' ifAbsentPut: [Dictionary new])
-			at: projectName ifAbsentPut: [ Dictionary new ])
-				at: 'loadedConfigurationNames' put: theConfigNames;
-				at: 'loadedGroupNames' put: theGroupNames;
-				at: 'packageMapSpecs' put: thePackageMapSpecs ].
-	^ projectSetDefinition
-%
-
-category: 'read project definitions'
-method: RwPrjReadTool
-readProjectSetForComponentProjectDefinitionY: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
-
-	| projectName packageNames projectSetDefinition packageMapSpecs visitor |
-	projectName := projectComponentDefinition name.
-	visitor := self readConfigurationsForProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes.
-	visitor 
-		ifNotNil: [ 
-			packageNames := visitor packageNames.
-			packageMapSpecs := visitor packageMapSpecs ]
-		ifNil: [ 
-			packageNames := projectComponentDefinition packageNames.
-			packageMapSpecs := Dictionary new ].	
-	projectSetDefinition := self 
-		_readProjectSetForProjectComponentDefinition: projectComponentDefinition 
-		packageNames: packageNames.
-	((projectSetDefinition properties at: 'loadedProjectInfo' ifAbsentPut: [Dictionary new])
-		at: projectName ifAbsentPut: [ Dictionary new ])
-			at: 'loadedConfigurationNames' put: configNames;
-			at: 'loadedGroupNames' put: groupNames;
-			at: 'packageMapSpecs' put: packageMapSpecs.
-	^ projectSetDefinition
-%
-
-category: 'read project definitions'
-method: RwPrjReadTool
 readProjectSetForProjectDefinition: projectDefinition
 
 	| repo spec packageNames |
@@ -40192,6 +40121,17 @@ attach
 	self error: 'not yet implemented'
 %
 
+category: 'actions'
+method: RwAbstractRepositoryDefinition
+clone
+
+	"attach to existing cloned disk structure or clone project from remote repository"
+
+	"who wins? resolve or clone"
+
+	self subclassResponsibility: #clone
+%
+
 category: 'accessing'
 method: RwAbstractRepositoryDefinition
 commitId
@@ -40315,6 +40255,8 @@ resolve
 
 	"attach to existing repository structure or create"
 
+	"who wins? resolve or clone"
+
 	self subclassResponsibility: #resolve
 %
 
@@ -40364,6 +40306,18 @@ newNamed: repositoryName repositoryRoot: repoRoot projectUrl: anUrlString remote
 %
 
 !		Instance methods for 'RwGitRepositoryDefinition'
+
+category: 'actions'
+method: RwGitRepositoryDefinition
+clone
+
+	"attach to existing cloned disk structure or clone project from remote repository"
+
+	"who wins? resolve or clone"
+
+	Rowan projectTools clone
+		cloneRepository: self
+%
 
 category: 'accessing'
 method: RwGitRepositoryDefinition
@@ -40430,6 +40384,8 @@ method: RwGitRepositoryDefinition
 resolve
 
 	"attach to existing git repository structure, clone, or create"
+
+	"who wins? resolve or clone"
 
 	Rowan projectTools clone
 		cloneRepository: self
@@ -41803,6 +41759,13 @@ addPackagesNamed: packageNames withConditions: conditionArray gemstoneDefaultSym
 		self addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
 %
 
+category: 'actions'
+method: RwComponentProjectDefinition
+clone
+
+	self projectRef clone
+%
+
 category: 'accessing'
 method: RwComponentProjectDefinition
 componentNamed: aComponentName
@@ -42470,6 +42433,15 @@ branch: aString
 	self committish: aString committishType: 'branch'
 %
 
+category: 'actions'
+method: RwProjectReferenceDefinition
+clone
+
+	"who wins? resolve or clone"
+
+	^ self repositoryDefinition clone
+%
+
 category: 'accessing'
 method: RwProjectReferenceDefinition
 comment
@@ -42905,6 +42877,8 @@ self deprecated: 'temporary method ... simulating RwSpecification api'.
 category: 'actions'
 method: RwProjectReferenceDefinition
 resolve
+
+	"who wins? resolve or clone"
 
 	^ self repositoryDefinition resolve
 %

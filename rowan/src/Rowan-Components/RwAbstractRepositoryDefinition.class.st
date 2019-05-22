@@ -89,6 +89,16 @@ RwAbstractRepositoryDefinition >> attach [
 	self error: 'not yet implemented'
 ]
 
+{ #category : 'actions' }
+RwAbstractRepositoryDefinition >> clone [
+
+	"attach to existing cloned disk structure or clone project from remote repository"
+
+	"who wins? resolve or clone"
+
+	self subclassResponsibility: #clone
+]
+
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> commitId [
 
@@ -194,6 +204,8 @@ RwAbstractRepositoryDefinition >> repositoryRoot: pathStringOrReference [
 RwAbstractRepositoryDefinition >> resolve [
 
 	"attach to existing repository structure or create"
+
+	"who wins? resolve or clone"
 
 	self subclassResponsibility: #resolve
 ]
