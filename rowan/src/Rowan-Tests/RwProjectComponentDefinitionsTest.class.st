@@ -189,6 +189,11 @@ RwProjectComponentDefinitionsTest >> testLoadRowanSample1_masterV20 [
 
 	| rowanSpec projectsHome urlString projectSample1Definition projectSample2Definition 
 		projectSetDefinition1 projectSetDefinition2 x |
+
+	#( 'RowanSample1' 'RowanSample2') do: [:prjName |
+		(Rowan image loadedProjectNamed: prjName ifAbsent: [  ])
+			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
+
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	projectsHome := (rowanSpec repositoryRootPath , '/test/testRepositories/repos') asFileReference.
 

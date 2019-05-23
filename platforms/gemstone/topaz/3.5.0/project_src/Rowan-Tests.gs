@@ -6661,6 +6661,11 @@ testLoadRowanSample1_masterV20
 
 	| rowanSpec projectsHome urlString projectSample1Definition projectSample2Definition 
 		projectSetDefinition1 projectSetDefinition2 x |
+
+	#( 'RowanSample1' 'RowanSample2') do: [:prjName |
+		(Rowan image loadedProjectNamed: prjName ifAbsent: [  ])
+			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
+
 	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
 	projectsHome := (rowanSpec repositoryRootPath , '/test/testRepositories/repos') asFileReference.
 
@@ -33062,8 +33067,8 @@ testIssue263
 
 	| projectName  packageName projectDefinition projectSetDefinition audit testClass |
 
-	projectName := 'Issue263'.
-	packageName := 'Issue263-Extension'.
+	projectName := 'Issue263_A'.
+	packageName := 'Issue263_A-Extension'.
 
 	{projectName}
 		do: [ :pn | 
