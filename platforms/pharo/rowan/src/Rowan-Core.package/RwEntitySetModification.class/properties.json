@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"movedClasses",
+		"movedMethods"
+	],
+	"name" : "RwEntitySetModification",
+	"super" : "RwElementsModification",
+	"type" : "normal"
+}

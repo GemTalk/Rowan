@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tools-Core",
+	"name" : "RwPrjReadTool",
+	"super" : "RwProjectTool",
+	"type" : "normal"
+}

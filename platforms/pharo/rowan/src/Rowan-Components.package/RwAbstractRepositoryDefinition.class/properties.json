@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Components",
+	"name" : "RwAbstractRepositoryDefinition",
+	"super" : "RwDefinition",
+	"type" : "normal"
+}

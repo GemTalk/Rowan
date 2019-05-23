@@ -1,0 +1,14 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"repository",
+		"commitId",
+		"loadedClasses",
+		"loadedClassExtensions",
+		"isDirty",
+		"loadedProject"
+	],
+	"name" : "RwLoadedPackage",
+	"super" : "RwLoadedThing",
+	"type" : "normal"
+}

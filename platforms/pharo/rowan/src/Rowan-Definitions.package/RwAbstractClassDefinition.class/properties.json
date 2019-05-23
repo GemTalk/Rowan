@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Definitions",
+	"instvars" : [
+		"classMethodDefinitions",
+		"instanceMethodDefinitions"
+	],
+	"name" : "RwAbstractClassDefinition",
+	"super" : "RwDefinition",
+	"type" : "normal"
+}

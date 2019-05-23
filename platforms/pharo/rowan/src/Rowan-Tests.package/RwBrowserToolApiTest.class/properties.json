@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tests",
+	"name" : "RwBrowserToolApiTest",
+	"super" : "RwBrowserToolTest",
+	"type" : "normal"
+}

@@ -1,0 +1,11 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"propertiesModification",
+		"before",
+		"after"
+	],
+	"name" : "RwModification",
+	"super" : "Object",
+	"type" : "normal"
+}

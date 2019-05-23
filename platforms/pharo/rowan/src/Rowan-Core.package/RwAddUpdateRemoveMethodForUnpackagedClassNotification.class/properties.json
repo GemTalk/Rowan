@@ -1,0 +1,9 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"errorMessage"
+	],
+	"name" : "RwAddUpdateRemoveMethodForUnpackagedClassNotification",
+	"super" : "RwNotification",
+	"type" : "normal"
+}

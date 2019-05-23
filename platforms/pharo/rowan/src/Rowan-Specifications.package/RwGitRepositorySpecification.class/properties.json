@@ -1,0 +1,12 @@
+{
+	"category" : "Rowan-Specifications",
+	"instvars" : [
+		"committish",
+		"committishType",
+		"remote",
+		"remoteUrl"
+	],
+	"name" : "RwGitRepositorySpecification",
+	"super" : "RwRepositorySpecification",
+	"type" : "normal"
+}

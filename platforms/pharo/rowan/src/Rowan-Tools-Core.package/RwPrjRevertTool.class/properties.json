@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tools-Core",
+	"name" : "RwPrjRevertTool",
+	"super" : "RwProjectTool",
+	"type" : "normal"
+}

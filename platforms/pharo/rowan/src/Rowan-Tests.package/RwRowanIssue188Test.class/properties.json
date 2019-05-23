@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tests",
+	"name" : "RwRowanIssue188Test",
+	"super" : "RwRowanProjectIssuesTest",
+	"type" : "normal"
+}

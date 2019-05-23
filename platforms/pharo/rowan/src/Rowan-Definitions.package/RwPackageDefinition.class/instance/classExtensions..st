@@ -1,0 +1,4 @@
+accessing
+classExtensions: classExtensionDefinitionsDictionary
+
+	classExtensions := classExtensionDefinitionsDictionary

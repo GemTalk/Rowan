@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Core",
+	"name" : "RwProjectSetModification",
+	"super" : "RwEntitySetModification",
+	"type" : "normal"
+}

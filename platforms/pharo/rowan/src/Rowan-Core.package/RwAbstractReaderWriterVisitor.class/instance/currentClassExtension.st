@@ -1,0 +1,4 @@
+accessing
+currentClassExtension
+
+	^ currentClassExtension

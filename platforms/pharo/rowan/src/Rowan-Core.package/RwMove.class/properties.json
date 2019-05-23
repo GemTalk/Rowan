@@ -1,0 +1,12 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"projectBefore",
+		"projectAfter",
+		"packageBefore",
+		"packageAfter"
+	],
+	"name" : "RwMove",
+	"super" : "Object",
+	"type" : "normal"
+}

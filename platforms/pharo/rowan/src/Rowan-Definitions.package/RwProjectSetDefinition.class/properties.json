@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Definitions",
+	"name" : "RwProjectSetDefinition",
+	"super" : "RwDefinitionSetDefinition",
+	"type" : "normal"
+}

@@ -1,0 +1,4 @@
+private
+instanceMethodDefinitions
+
+	^self definitionsFor: loadedInstanceMethods

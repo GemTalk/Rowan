@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Url-Core",
+	"name" : "RwCypressUrl",
+	"super" : "RwFileUrl",
+	"type" : "normal"
+}

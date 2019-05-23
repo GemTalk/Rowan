@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"classBefore",
+		"classAfter"
+	],
+	"name" : "RwClassMove",
+	"super" : "RwMove",
+	"type" : "normal"
+}

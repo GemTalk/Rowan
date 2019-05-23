@@ -1,0 +1,9 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"candidateClass"
+	],
+	"name" : "RwDeleteClassFromSystemNotification",
+	"super" : "RwNotification",
+	"type" : "normal"
+}

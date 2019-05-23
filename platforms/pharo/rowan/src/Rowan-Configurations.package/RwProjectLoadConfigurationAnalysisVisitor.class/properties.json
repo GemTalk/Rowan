@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Configurations",
+	"instvars" : [
+		"visitedConfigurationMap",
+		"packageToConfigurationMap"
+	],
+	"name" : "RwProjectLoadConfigurationAnalysisVisitor",
+	"super" : "RwProjectLoadConfigurationVisitor",
+	"type" : "normal"
+}

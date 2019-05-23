@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"packageName",
+		"packageConvention"
+	],
+	"name" : "RwInvalidCategoryProtocolConventionErrorNotification",
+	"super" : "RwNotification",
+	"type" : "normal"
+}

@@ -1,0 +1,4 @@
+accessing
+loadedCommitId
+
+	^ loadedCommitId ifNil: [ '' ]

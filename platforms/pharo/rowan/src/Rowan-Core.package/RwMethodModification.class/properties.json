@@ -1,0 +1,11 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"sourceModification",
+		"isMeta",
+		"classDefinition"
+	],
+	"name" : "RwMethodModification",
+	"super" : "RwModification",
+	"type" : "normal"
+}

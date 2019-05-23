@@ -1,0 +1,4 @@
+accessing
+size
+
+	^ entities size

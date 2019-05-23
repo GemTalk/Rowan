@@ -1,0 +1,14 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"projectDefinition",
+		"packageDefinition",
+		"classDefinitionOrExtension",
+		"methodKey",
+		"isMeta",
+		"methodsModification"
+	],
+	"name" : "RwMethodAdditionOrRemoval",
+	"super" : "Object",
+	"type" : "normal"
+}

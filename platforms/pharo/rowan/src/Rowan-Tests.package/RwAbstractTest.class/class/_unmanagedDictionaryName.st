@@ -1,0 +1,4 @@
+private
+_unmanagedDictionaryName
+
+	^ #'UnmanagedPackages'

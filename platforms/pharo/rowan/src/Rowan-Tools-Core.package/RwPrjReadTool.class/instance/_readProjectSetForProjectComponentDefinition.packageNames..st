@@ -1,0 +1,9 @@
+private
+_readProjectSetForProjectComponentDefinition: projectComponentDefinition packageNames: packageNames
+
+	| projectSetDefinition |
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectComponentDefinition readProjectSetForPackageNames: packageNames.
+	projectSetDefinition addProject: projectComponentDefinition.
+	projectComponentDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
+	^ projectSetDefinition

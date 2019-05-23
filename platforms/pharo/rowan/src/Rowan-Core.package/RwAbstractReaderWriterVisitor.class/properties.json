@@ -1,0 +1,13 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"currentProjectDefinition",
+		"packageConvention",
+		"currentPackageDefinition",
+		"currentClassDefinition",
+		"currentClassExtension"
+	],
+	"name" : "RwAbstractReaderWriterVisitor",
+	"super" : "Object",
+	"type" : "normal"
+}

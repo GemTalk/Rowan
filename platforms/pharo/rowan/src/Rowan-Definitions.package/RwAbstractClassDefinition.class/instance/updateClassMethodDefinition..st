@@ -1,0 +1,4 @@
+accessing
+updateClassMethodDefinition: aMethodDefinition
+
+	self updateDefinition: aMethodDefinition in: classMethodDefinitions

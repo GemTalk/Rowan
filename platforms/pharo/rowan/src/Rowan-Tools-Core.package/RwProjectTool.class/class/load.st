@@ -1,0 +1,4 @@
+commands
+load
+
+	^RwPrjLoadTool new

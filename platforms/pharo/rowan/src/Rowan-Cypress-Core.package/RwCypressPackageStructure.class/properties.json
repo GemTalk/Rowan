@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Cypress-Core",
+	"name" : "RwCypressPackageStructure",
+	"super" : "CypressPackageStructure",
+	"type" : "normal"
+}

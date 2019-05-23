@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"classDefinition",
+		"loadedProject"
+	],
+	"name" : "RwExistingVisitorAddingExistingClassNotification",
+	"super" : "RwNotification",
+	"type" : "normal"
+}

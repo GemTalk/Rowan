@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tools-Core",
+	"name" : "RwPkgDisownTool",
+	"super" : "RwPackageTool",
+	"type" : "normal"
+}

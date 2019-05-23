@@ -1,0 +1,11 @@
+{
+	"category" : "Rowan-Components",
+	"instvars" : [
+		"packageNames",
+		"currentDirectory",
+		"currentProjectReferenceDefinition"
+	],
+	"name" : "RwRepositoryComponentProjectReaderVisitor",
+	"super" : "RwAbstractReaderWriterVisitor",
+	"type" : "normal"
+}

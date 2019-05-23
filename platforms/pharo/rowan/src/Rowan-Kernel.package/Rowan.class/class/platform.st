@@ -1,0 +1,4 @@
+private
+platform
+
+	^ RwPlatform current

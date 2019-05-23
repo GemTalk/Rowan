@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tests",
+	"name" : "RwSemanticVersionNumber200TestCase",
+	"super" : "TestCase",
+	"type" : "normal"
+}

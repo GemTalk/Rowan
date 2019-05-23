@@ -1,0 +1,4 @@
+accessing
+loadedGroupNames
+
+	^ self groupNames

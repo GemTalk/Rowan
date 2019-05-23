@@ -1,0 +1,4 @@
+accessing
+loadedConfigurationNames
+
+	^ self configurationNames

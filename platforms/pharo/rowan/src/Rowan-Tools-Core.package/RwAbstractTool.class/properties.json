@@ -1,0 +1,9 @@
+{
+	"category" : "Rowan-Tools-Core",
+	"instvars" : [
+		"specification"
+	],
+	"name" : "RwAbstractTool",
+	"super" : "Object",
+	"type" : "normal"
+}

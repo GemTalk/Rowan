@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"instanceMethodsModification",
+		"classMethodsModification"
+	],
+	"name" : "RwClassModification",
+	"super" : "RwModification",
+	"type" : "normal"
+}

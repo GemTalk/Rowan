@@ -1,0 +1,4 @@
+accessing
+currentClassDefinition
+
+	^ currentClassDefinition

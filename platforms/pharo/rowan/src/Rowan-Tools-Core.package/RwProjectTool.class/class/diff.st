@@ -1,0 +1,4 @@
+commands
+diff
+
+	^ RwPrjDiffTool new

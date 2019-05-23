@@ -1,0 +1,4 @@
+accessing
+currentDirectory
+
+	^ currentDirectory

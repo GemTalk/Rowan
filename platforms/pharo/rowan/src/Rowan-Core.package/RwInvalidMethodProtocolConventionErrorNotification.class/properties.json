@@ -1,0 +1,11 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"methodDefinition",
+		"className",
+		"isMeta"
+	],
+	"name" : "RwInvalidMethodProtocolConventionErrorNotification",
+	"super" : "RwInvalidCategoryProtocolConventionErrorNotification",
+	"type" : "normal"
+}

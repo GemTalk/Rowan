@@ -1,0 +1,11 @@
+{
+	"category" : "Rowan-Components",
+	"instvars" : [
+		"projectName",
+		"projectsPath",
+		"defaultComponentName"
+	],
+	"name" : "RwComponentSpecification",
+	"super" : "RwProjectSpecification",
+	"type" : "normal"
+}

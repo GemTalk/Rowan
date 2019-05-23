@@ -1,0 +1,4 @@
+smalltalk api
+writeProjectDefinition: projectDefinition
+
+	projectDefinition export

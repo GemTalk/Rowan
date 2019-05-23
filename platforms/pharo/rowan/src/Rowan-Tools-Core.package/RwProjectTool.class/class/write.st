@@ -1,0 +1,4 @@
+commands
+write
+
+	^RwPrjWriteTool new

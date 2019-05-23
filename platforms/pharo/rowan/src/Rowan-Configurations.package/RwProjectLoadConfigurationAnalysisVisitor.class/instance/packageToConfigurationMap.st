@@ -1,0 +1,4 @@
+accessing
+packageToConfigurationMap 
+
+	^ packageToConfigurationMap

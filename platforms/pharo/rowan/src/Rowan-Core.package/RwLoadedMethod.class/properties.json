@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"loadedClass",
+		"classIsMeta"
+	],
+	"name" : "RwLoadedMethod",
+	"super" : "RwLoadedThing",
+	"type" : "normal"
+}

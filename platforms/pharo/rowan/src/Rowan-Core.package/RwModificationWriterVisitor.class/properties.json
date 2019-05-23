@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Core",
+	"name" : "RwModificationWriterVisitor",
+	"super" : "RwAbstractReaderWriterVisitor",
+	"type" : "normal"
+}

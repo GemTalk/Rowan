@@ -1,0 +1,4 @@
+testing
+isLoadedClassExtension
+
+	^ true

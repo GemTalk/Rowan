@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Specifications",
+	"name" : "RwSimpleProjectSpecification",
+	"super" : "RwProjectSpecification",
+	"type" : "normal"
+}

@@ -9,7 +9,7 @@ RwComponentSpecification {
 	#repoSpec : RwGitRepositorySpecification {
 	},
 	#defaultConfigurationNames : [
-		'Load'
+		'Load', 'Baseline'
 	],
 	#defaultGroupNames : [
 		'core', 'tests'

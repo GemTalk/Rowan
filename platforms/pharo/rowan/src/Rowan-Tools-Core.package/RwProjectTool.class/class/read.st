@@ -1,0 +1,3 @@
+commands
+read
+  ^ RwPrjReadTool new

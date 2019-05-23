@@ -1,0 +1,4 @@
+commands
+checkout
+
+	^RwPrjCheckoutTool new

@@ -1,0 +1,3 @@
+commands
+audit
+  ^ RwPkgAuditTool new

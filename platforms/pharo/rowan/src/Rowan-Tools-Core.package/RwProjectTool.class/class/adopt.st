@@ -1,0 +1,4 @@
+commands
+adopt
+
+	^ RwPrjAdoptTool new

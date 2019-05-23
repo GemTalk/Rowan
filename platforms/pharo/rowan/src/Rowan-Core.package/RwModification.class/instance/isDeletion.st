@@ -1,0 +1,4 @@
+testing
+isDeletion
+
+	^after isEmpty

@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tools-Core",
+	"name" : "RwAdoptMissingMethodErrorNotification",
+	"super" : "RwAdoptAuditMethodErrorNotification",
+	"type" : "normal"
+}

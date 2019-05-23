@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tools-Core",
+	"name" : "RwPrjAuditTool",
+	"super" : "RwProjectTool",
+	"type" : "normal"
+}

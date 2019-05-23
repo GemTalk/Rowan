@@ -1,0 +1,4 @@
+private
+markProjectDirty
+
+	self markDirty

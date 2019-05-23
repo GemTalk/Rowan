@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Configurations",
+	"name" : "RwNestedProjectLoadConfiguration",
+	"super" : "RwAbstractProjectLoadConfiguration",
+	"type" : "normal"
+}

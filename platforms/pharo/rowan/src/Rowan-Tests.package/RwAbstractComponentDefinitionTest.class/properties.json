@@ -1,0 +1,9 @@
+{
+	"category" : "Rowan-Tests",
+	"instvars" : [
+		"repositoryRoot"
+	],
+	"name" : "RwAbstractComponentDefinitionTest",
+	"super" : "RwToolTest",
+	"type" : "normal"
+}

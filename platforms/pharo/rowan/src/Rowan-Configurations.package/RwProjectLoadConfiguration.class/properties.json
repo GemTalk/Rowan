@@ -1,0 +1,9 @@
+{
+	"category" : "Rowan-Configurations",
+	"instvars" : [
+		"definedGroupNames"
+	],
+	"name" : "RwProjectLoadConfiguration",
+	"super" : "RwAbstractProjectLoadConfiguration",
+	"type" : "normal"
+}

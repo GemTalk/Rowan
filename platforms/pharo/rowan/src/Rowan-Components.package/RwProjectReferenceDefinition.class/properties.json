@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Components",
+	"name" : "RwProjectReferenceDefinition",
+	"super" : "RwDefinition",
+	"type" : "normal"
+}

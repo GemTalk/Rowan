@@ -1,0 +1,9 @@
+{
+	"category" : "Rowan-Kernel",
+	"classinstvars" : [
+		"configuration"
+	],
+	"name" : "Rowan",
+	"super" : "Object",
+	"type" : "normal"
+}

@@ -1,0 +1,4 @@
+Testing
+shouldInheritSelectors
+
+	^false

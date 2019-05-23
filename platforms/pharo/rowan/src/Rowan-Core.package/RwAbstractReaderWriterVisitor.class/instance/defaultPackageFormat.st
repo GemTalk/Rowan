@@ -1,0 +1,4 @@
+accessing
+defaultPackageFormat
+
+	self subclassResponsibility: #defaultPackageFormat

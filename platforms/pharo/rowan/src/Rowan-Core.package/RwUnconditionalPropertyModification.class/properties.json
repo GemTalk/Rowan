@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Core",
+	"name" : "RwUnconditionalPropertyModification",
+	"super" : "RwPropertyModification",
+	"type" : "normal"
+}

@@ -1,0 +1,4 @@
+accessing
+addInstanceMethodDefinition: aMethodDefinition
+
+	self addDefinition: aMethodDefinition to: instanceMethodDefinitions

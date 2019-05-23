@@ -1,0 +1,13 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"methodBefore",
+		"methodAfter",
+		"isMeta",
+		"classOrExtensionBefore",
+		"classOrExtensionAfter"
+	],
+	"name" : "RwMethodMove",
+	"super" : "RwMove",
+	"type" : "normal"
+}

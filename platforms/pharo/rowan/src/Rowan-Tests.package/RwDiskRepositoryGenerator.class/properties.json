@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Tests",
+	"instvars" : [
+		"gs_options",
+		"gs_constraints"
+	],
+	"name" : "RwDiskRepositoryGenerator",
+	"super" : "Object",
+	"type" : "normal"
+}

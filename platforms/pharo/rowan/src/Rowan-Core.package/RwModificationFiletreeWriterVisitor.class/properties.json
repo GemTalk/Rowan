@@ -1,0 +1,20 @@
+{
+	"category" : "Rowan-Core",
+	"classinstvars" : [
+		"specials"
+	],
+	"instvars" : [
+		"instanceFileNameMap",
+		"classFileNameMap",
+		"instanceBeforeFileNameMap",
+		"classBeforeFileNameMap",
+		"packageExtension",
+		"separateMethodMetaAndSource",
+		"noMethodMetaData",
+		"useCypressPropertiesFile",
+		"monticelloMetadata"
+	],
+	"name" : "RwModificationFiletreeWriterVisitor",
+	"super" : "RwModificationCypressFamilyWriterVisitor",
+	"type" : "normal"
+}

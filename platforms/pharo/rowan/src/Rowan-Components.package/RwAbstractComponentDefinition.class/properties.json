@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Components",
+	"instvars" : [
+		"components",
+		"packages"
+	],
+	"name" : "RwAbstractComponentDefinition",
+	"super" : "RwDefinition",
+	"type" : "normal"
+}

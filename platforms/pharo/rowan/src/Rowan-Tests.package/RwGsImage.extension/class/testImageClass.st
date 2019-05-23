@@ -1,0 +1,6 @@
+*rowan-tests
+testImageClass
+
+	"answer an alternate image class (presumably a subclass of the receiver) that can be used as the image class for the duration of tests"
+
+	^ RwGsTestImage

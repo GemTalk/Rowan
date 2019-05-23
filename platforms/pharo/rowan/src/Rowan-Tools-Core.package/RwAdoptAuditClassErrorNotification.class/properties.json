@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tools-Core",
+	"name" : "RwAdoptAuditClassErrorNotification",
+	"super" : "RwAdoptAuditErrorNotification",
+	"type" : "normal"
+}

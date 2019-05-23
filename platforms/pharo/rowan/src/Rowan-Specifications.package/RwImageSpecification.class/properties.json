@@ -1,0 +1,12 @@
+{
+	"category" : "Rowan-Specifications",
+	"instvars" : [
+		"loadedCommitId",
+		"loadedConfigurationNames",
+		"loadedGroupNames",
+		"repositoryUrl"
+	],
+	"name" : "RwImageSpecification",
+	"super" : "RwSpecification",
+	"type" : "normal"
+}

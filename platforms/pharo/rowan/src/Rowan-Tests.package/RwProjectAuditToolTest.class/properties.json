@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tests",
+	"name" : "RwProjectAuditToolTest",
+	"super" : "RwBrowserToolTest",
+	"type" : "normal"
+}

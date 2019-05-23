@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tests",
+	"name" : "RwProjectTopazWriterTest",
+	"super" : "RwProjectReaderWriterTest",
+	"type" : "normal"
+}

@@ -1,0 +1,4 @@
+commands
+browser
+
+	^ RwPrjBrowserTool new

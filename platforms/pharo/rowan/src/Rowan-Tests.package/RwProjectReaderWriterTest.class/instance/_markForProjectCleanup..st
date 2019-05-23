@@ -1,0 +1,3 @@
+private
+_markForProjectCleanup: aProjectName
+	projectsToDelete add: aProjectName

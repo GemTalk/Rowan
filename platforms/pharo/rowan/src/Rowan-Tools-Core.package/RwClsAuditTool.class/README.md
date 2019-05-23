@@ -1,0 +1,1 @@
+This class audits individual classes

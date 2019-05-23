@@ -1,0 +1,9 @@
+{
+	"category" : "Rowan-Components",
+	"instvars" : [
+		"packageExtension"
+	],
+	"name" : "RwRepositoryComponentProjectFiletreeReaderVisitor",
+	"super" : "RwRepositoryComponentProjectReaderVisitor",
+	"type" : "normal"
+}

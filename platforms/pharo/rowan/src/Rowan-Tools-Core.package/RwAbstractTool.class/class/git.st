@@ -1,0 +1,4 @@
+commands
+git
+
+	^ RwGitTool new

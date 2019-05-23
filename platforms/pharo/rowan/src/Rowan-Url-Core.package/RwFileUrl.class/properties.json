@@ -1,0 +1,11 @@
+{
+	"category" : "Rowan-Url-Core",
+	"instvars" : [
+		"host",
+		"path",
+		"isAbsolute"
+	],
+	"name" : "RwFileUrl",
+	"super" : "RwUrl",
+	"type" : "normal"
+}

@@ -1,0 +1,4 @@
+accessing
+errorMessage
+
+   ^self informMessage

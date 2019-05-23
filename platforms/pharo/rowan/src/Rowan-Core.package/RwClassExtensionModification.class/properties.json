@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Core",
+	"name" : "RwClassExtensionModification",
+	"super" : "RwClassModification",
+	"type" : "normal"
+}

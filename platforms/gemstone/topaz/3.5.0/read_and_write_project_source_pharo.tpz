@@ -1,6 +1,6 @@
 #!/usr/bin/gemstone/smalltalk
 "
-#	read project source from rowan/source and then write list of packages needed for pharo7/8 image
+#	read project source from rowan/source and then write project source for loaded projects in a pharo7/8 image
 #
 # If you are using GsDevKit_home[1] and have stash[2] installed, this topaz 
 #	script can be directly executed:
@@ -18,7 +18,7 @@
 # [2] https://github.com/dalehenrich/stash
 "
 	| platformConfigurationAttributes projectDefinition projectSetDefinition projectSetModification visitor
-		projectHome stdout |
+		projectHome |
 
 "Read project and packages from disk for Pharo"
 	platformConfigurationAttributes := {
@@ -35,11 +35,11 @@
 		packagesPath: 'src';
 		projectHome: '$ROWAN_PROJECTS_HOME/Rowan/platforms/pharo/' asFileReference;
 		projectAlias: 'rowan';
-		packageFormat: 'tonel';
+		packageFormat: 'filetree';
 		yourself.
-
-	stdout := GsFile stdout.
-	stdout nextPutAll: 'Rowan packages'.
-	projectDefinition
-		packageNames do: [:packageName |
-			stdout tab; nextPutAll: packageName; lf ].
+	projectSetDefinition := RwProjectSetDefinition new
+		addProject: projectDefinition;
+		yourself.
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwModificationFiletreeWriterVisitor new.
+		visitor visit: projectSetModification.

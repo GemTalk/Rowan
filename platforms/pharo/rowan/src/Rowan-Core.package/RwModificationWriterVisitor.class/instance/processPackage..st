@@ -1,0 +1,5 @@
+package writing
+processPackage: aPackageModification
+
+	aPackageModification classesModification acceptVisitor: self.
+	aPackageModification classExtensionsModification acceptVisitor: self

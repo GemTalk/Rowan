@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Specifications",
+	"name" : "RwPlatformSpecification",
+	"super" : "RwSpecification",
+	"type" : "normal"
+}

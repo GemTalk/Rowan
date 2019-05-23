@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tools-Core",
+	"name" : "RwProjectTool",
+	"super" : "RwAbstractTool",
+	"type" : "normal"
+}

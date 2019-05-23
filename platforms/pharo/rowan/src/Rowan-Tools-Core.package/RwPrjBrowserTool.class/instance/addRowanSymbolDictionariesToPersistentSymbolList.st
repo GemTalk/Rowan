@@ -1,0 +1,4 @@
+project browsing
+addRowanSymbolDictionariesToPersistentSymbolList
+
+	self addRowanSymbolDictionariesToPersistentSymbolListFor: System myUserProfile

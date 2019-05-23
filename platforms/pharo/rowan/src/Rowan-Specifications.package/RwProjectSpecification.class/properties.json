@@ -1,0 +1,20 @@
+{
+	"category" : "Rowan-Specifications",
+	"instvars" : [
+		"specName",
+		"version",
+		"projectUrl",
+		"platformSpec",
+		"configsPath",
+		"specsPath",
+		"repoSpec",
+		"repoPath",
+		"comment",
+		"imageSpec",
+		"defaultConfigurationNames",
+		"defaultGroupNames"
+	],
+	"name" : "RwProjectSpecification",
+	"super" : "RwSpecification",
+	"type" : "normal"
+}

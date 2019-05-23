@@ -1,0 +1,9 @@
+{
+	"category" : "Rowan-Definitions",
+	"instvars" : [
+		"entities"
+	],
+	"name" : "RwEntitySet",
+	"super" : "Object",
+	"type" : "normal"
+}

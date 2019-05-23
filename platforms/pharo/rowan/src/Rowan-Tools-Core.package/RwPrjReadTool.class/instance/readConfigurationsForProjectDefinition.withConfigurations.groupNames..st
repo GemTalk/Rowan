@@ -1,0 +1,4 @@
+read configurations
+readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames
+
+	^self readConfigurationsForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames forLoad: true

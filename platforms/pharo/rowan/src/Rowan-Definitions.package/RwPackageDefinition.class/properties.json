@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Definitions",
+	"instvars" : [
+		"classDefinitions",
+		"classExtensions"
+	],
+	"name" : "RwPackageDefinition",
+	"super" : "RwDefinition",
+	"type" : "normal"
+}

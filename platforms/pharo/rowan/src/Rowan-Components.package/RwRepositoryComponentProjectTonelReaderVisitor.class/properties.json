@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Components",
+	"name" : "RwRepositoryComponentProjectTonelReaderVisitor",
+	"super" : "RwRepositoryComponentProjectReaderVisitor",
+	"type" : "normal"
+}

@@ -1,0 +1,11 @@
+{
+	"category" : "Rowan-Components",
+	"instvars" : [
+		"projectNames",
+		"projectBasePath",
+		"projectLoadSpecs"
+	],
+	"name" : "RwProjectLoadComponentVisitor",
+	"super" : "RwProjectLoadConfigurationVisitor",
+	"type" : "normal"
+}

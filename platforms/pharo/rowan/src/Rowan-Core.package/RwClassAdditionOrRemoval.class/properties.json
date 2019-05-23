@@ -1,0 +1,12 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"projectDefinition",
+		"packageDefinition",
+		"classKey",
+		"classesModification"
+	],
+	"name" : "RwClassAdditionOrRemoval",
+	"super" : "Object",
+	"type" : "normal"
+}

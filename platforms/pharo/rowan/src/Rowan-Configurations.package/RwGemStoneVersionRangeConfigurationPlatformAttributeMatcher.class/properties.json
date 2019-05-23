@@ -1,0 +1,9 @@
+{
+	"category" : "Rowan-Configurations",
+	"instvars" : [
+		"pattern2"
+	],
+	"name" : "RwGemStoneVersionRangeConfigurationPlatformAttributeMatcher",
+	"super" : "RwGemStoneVersionConfigurationPlatformAttributeMatcher",
+	"type" : "normal"
+}

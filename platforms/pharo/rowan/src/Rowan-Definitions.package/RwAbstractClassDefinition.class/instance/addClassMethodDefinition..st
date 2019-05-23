@@ -1,0 +1,4 @@
+accessing
+addClassMethodDefinition: aMethodDefinition
+
+	self addDefinition: aMethodDefinition to: classMethodDefinitions

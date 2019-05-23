@@ -1,0 +1,12 @@
+{
+	"category" : "Rowan-Configurations",
+	"instvars" : [
+		"conditionalPackages",
+		"conditionalPackageMatchers",
+		"conditionalPackageMapSpecs",
+		"conditionalPackageMapSpecMatchers"
+	],
+	"name" : "RwAbstractProjectLoadConfiguration",
+	"super" : "RwAbstractProjectConfiguration",
+	"type" : "normal"
+}

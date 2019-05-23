@@ -1,0 +1,4 @@
+commands
+reconcile
+
+	^ RwPrjReconcileTool new

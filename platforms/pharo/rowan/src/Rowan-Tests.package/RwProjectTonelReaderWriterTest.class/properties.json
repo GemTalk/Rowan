@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tests",
+	"name" : "RwProjectTonelReaderWriterTest",
+	"super" : "RwProjectFiletreeTonelReaderWriterTest",
+	"type" : "normal"
+}

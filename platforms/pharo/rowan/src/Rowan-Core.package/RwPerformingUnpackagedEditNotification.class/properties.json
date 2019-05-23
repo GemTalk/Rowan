@@ -1,0 +1,9 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"informMessage"
+	],
+	"name" : "RwPerformingUnpackagedEditNotification",
+	"super" : "RwNotification",
+	"type" : "normal"
+}

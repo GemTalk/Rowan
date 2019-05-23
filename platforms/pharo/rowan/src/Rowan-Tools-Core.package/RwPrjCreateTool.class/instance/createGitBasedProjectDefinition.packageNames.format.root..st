@@ -1,0 +1,12 @@
+project definition creation
+createGitBasedProjectDefinition: projectName packageNames: packageNames format: format root: rootPath
+	"Create a new project definition for a git-based Rowan project with the given attributes"
+
+	| utils rootRepoPath |
+	utils := self fileUtilities.
+	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
+	^(RwProjectDefinition newForGitBasedProjectNamed: projectName)
+		packageNames: packageNames;
+		repositoryRootPath: rootRepoPath;
+		projectOwnerId: Rowan image currentUserId;
+		yourself.

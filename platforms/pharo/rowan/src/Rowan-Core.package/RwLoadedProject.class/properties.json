@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"loadedPackages",
+		"isDirty"
+	],
+	"name" : "RwLoadedProject",
+	"super" : "RwLoadedThing",
+	"type" : "normal"
+}

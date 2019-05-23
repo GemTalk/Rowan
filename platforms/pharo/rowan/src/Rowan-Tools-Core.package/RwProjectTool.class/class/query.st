@@ -1,0 +1,4 @@
+commands
+query
+
+	^ RwPrjQueryTool new

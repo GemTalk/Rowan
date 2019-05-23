@@ -1,0 +1,4 @@
+accessing
+currentProjectDefinition: aRwComponentProjectDefinition
+
+	currentProjectDefinition := aRwComponentProjectDefinition

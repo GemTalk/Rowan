@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Core",
+	"name" : "RwProject",
+	"super" : "RowanInterface",
+	"type" : "normal"
+}

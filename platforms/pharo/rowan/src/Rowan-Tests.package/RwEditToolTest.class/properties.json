@@ -1,0 +1,11 @@
+{
+	"category" : "Rowan-Tests",
+	"instvars" : [
+		"globalBlackList",
+		"userBlackList",
+		"sessionBlackList"
+	],
+	"name" : "RwEditToolTest",
+	"super" : "RwToolTest",
+	"type" : "normal"
+}

@@ -1,0 +1,3 @@
+Accessing
+newValue
+	^newValue

@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Tools-Core",
+	"instvars" : [
+		"selector",
+		"isMetaclass"
+	],
+	"name" : "RwAdoptAuditMethodErrorNotification",
+	"super" : "RwAdoptAuditErrorNotification",
+	"type" : "normal"
+}

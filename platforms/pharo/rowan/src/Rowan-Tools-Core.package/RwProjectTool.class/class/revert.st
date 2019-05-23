@@ -1,0 +1,4 @@
+commands
+revert
+
+	^RwPrjRevertTool new

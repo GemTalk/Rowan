@@ -1,0 +1,63 @@
+tests-issue 114
+testIssue114_missingClassModification
+
+	"https://github.com/dalehenrich/Rowan/issues/114"
+
+	"RwGsClassVersioningSymbolDictPatch>>updatePatchesForNewClassVersion:"
+
+	| projectName packageName1 packageName2 theClass1 theClass2 projectDefinition classDefinition |
+	projectName := 'Issue114_project'.
+	packageName1 := 'Issue114-Core1'.
+	packageName2 := 'Issue114-Core2'.
+
+	self _createLoadedProjectNamed: projectName root: '/tmp/rowanIssuesProject/' validate: false.
+	self _addPackageNamed: packageName1 toProjectNamed: projectName validate: false.
+	self _addPackageNamed: packageName2 toProjectNamed: projectName validate: false.
+
+	theClass1 := self 
+		_addClassNamed: 'Issue114Class_1' 
+		superclassName: 'Object' 
+		classVars: #(  )
+		toPackageNamed: packageName1 
+		inProjectNamed: projectName 
+		validate: false.
+
+	theClass2 := self 
+		_addClassNamed: 'Issue114Class_2' 
+		superclassName: 'Object' 
+		classVars: #(  )
+		toPackageNamed: packageName2
+		inProjectNamed: projectName
+		validate: false.
+	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass1  inPackage: packageName1 inProjectNamed: projectName validate: false.
+	self _addOrUpdateMethod: 'foo ^1' forBehavior: theClass2  inPackage: packageName2 inProjectNamed: projectName validate: false.
+
+	self assert: theClass1 new foo = 1.
+	self assert: theClass2 new foo = 1.
+
+	projectDefinition := (Rowan image loadedProjectNamed: projectName) asDefinition.
+	classDefinition := (projectDefinition packageNamed: packageName1) classDefinitions at:  'Issue114Class_1'.
+	classDefinition instVarNames: #(ivar1).	"new class version"
+	classDefinition updateInstanceMethodDefinition:  (RwMethodDefinition
+						newForSelector: #'foo'
+						protocol: 'accessing'
+						source: 'foo ^2').
+	classDefinition updateInstanceMethodDefinition:  (RwMethodDefinition
+						newForSelector: #'ivar1'
+						protocol: 'accessing'
+						source: 'ivar1 ^ivar1').
+	classDefinition := (projectDefinition packageNamed: packageName2) classDefinitions at:  'Issue114Class_2'.
+	classDefinition instVarNames: #().
+	classDefinition updateInstanceMethodDefinition:  (RwMethodDefinition
+						newForSelector: #'foo'
+						protocol: 'accessing'
+						source: 'foo ^ 2') .
+	[ Rowan projectTools load loadProjectDefinition: projectDefinition ]
+			on: RwExecuteClassInitializeMethodsAfterLoadNotification
+			do: [:ex | ex resume: true ].
+
+	theClass1 := Rowan globalNamed: 'Issue114Class_1'.
+	theClass2 := Rowan globalNamed: 'Issue114Class_2'.
+	self assert: theClass1 new foo = 2.
+	self assert: theClass1 new ivar1 isNil.
+	self assert: theClass2 new foo = 2.

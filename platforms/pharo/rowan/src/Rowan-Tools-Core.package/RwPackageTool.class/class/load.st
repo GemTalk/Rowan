@@ -1,0 +1,3 @@
+commands
+load
+  ^ RwPkgLoadTool new

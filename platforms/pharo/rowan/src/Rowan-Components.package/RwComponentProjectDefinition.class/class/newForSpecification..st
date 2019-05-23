@@ -1,0 +1,4 @@
+instance creation
+newForSpecification: aRwSpecification
+
+	^ RwComponentProjectDefinition newForProjectReference: (RwProjectReferenceDefinition newForSpecification: aRwSpecification)

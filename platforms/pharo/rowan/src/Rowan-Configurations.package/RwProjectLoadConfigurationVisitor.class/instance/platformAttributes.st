@@ -1,0 +1,4 @@
+accessing
+platformAttributes
+
+	^ platformAttributes

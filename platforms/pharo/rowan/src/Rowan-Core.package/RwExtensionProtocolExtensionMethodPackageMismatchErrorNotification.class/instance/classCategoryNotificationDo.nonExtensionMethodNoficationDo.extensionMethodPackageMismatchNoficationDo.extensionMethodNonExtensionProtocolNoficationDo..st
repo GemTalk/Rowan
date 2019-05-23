@@ -1,0 +1,5 @@
+Handling
+classCategoryNotificationDo: classCategoryBlock nonExtensionMethodNoficationDo: nonExtensionMethodBlock extensionMethodPackageMismatchNoficationDo: extensionMethodPackageMismatchBlock  extensionMethodNonExtensionProtocolNoficationDo: extensionMethodNonExtensionProtocolBlock
+	"extension method protocol does start with a *, but does not match the package name"
+
+	extensionMethodPackageMismatchBlock value

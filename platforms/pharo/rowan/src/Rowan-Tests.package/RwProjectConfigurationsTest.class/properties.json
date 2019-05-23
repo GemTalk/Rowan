@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tests",
+	"name" : "RwProjectConfigurationsTest",
+	"super" : "TestCase",
+	"type" : "normal"
+}

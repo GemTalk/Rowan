@@ -1,0 +1,28 @@
+private - moves
+updateForClassMoveFrom: removal to: addition
+	"Transform the given removal and addition to a move."
+
+	| oldDefinition newDefinition classModification |
+	oldDefinition := (removal classesModification
+				modificationOf: removal classKey) before.
+	newDefinition := (addition classesModification
+				modificationOf: addition classKey) after.
+
+	"Delete the removal and the addition."
+	removal classesModification removeModificationOf: removal classKey.
+	addition classesModification removeModificationOf: addition classKey.
+
+	"Record the move."
+	movedClasses add: (RwClassMove
+				classBefore: oldDefinition
+				classAfter: newDefinition
+				packageBefore: removal packageDefinition
+				packageAfter: addition packageDefinition
+				projectBefore: removal projectDefinition
+				projectAfter: addition projectDefinition).
+
+	"Does the class have other modifications that need to be recorded?"
+	classModification := newDefinition compareAgainstBase: oldDefinition.
+	classModification isEmpty
+		ifFalse: 
+			[addition classesModification addElementModification: classModification]

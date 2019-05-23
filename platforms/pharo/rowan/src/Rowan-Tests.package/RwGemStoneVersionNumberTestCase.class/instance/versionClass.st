@@ -1,0 +1,4 @@
+private
+versionClass
+
+	^RwGemStoneVersionNumber

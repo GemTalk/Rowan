@@ -1,0 +1,14 @@
+{
+	"category" : "Rowan-Core",
+	"classvars" : [
+		"AbsentToken"
+	],
+	"instvars" : [
+		"properties",
+		"name",
+		"handle"
+	],
+	"name" : "RwLoadedThing",
+	"super" : "Object",
+	"type" : "normal"
+}

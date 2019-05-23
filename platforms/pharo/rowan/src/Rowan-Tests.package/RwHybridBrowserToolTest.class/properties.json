@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tests",
+	"name" : "RwHybridBrowserToolTest",
+	"super" : "RwBrowserToolTest",
+	"type" : "normal"
+}

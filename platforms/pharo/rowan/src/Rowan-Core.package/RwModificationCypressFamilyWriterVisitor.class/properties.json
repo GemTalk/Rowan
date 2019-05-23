@@ -1,0 +1,14 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"classDefFileNameMap",
+		"classExtFileNameMap",
+		"classDefBeforeFileNameMap",
+		"classExtBeforeFileNameMap",
+		"packageDefFileNameMap",
+		"packageDefBeforeFileNameMap"
+	],
+	"name" : "RwModificationCypressFamilyWriterVisitor",
+	"super" : "RwModificationWriterVisitor",
+	"type" : "normal"
+}

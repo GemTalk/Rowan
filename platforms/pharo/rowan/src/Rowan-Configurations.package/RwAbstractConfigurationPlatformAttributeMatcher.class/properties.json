@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Configurations",
+	"instvars" : [
+		"pattern",
+		"patternMatchBlock"
+	],
+	"name" : "RwAbstractConfigurationPlatformAttributeMatcher",
+	"super" : "Object",
+	"type" : "normal"
+}

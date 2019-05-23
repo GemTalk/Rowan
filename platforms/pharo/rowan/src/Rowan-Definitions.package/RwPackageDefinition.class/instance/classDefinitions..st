@@ -1,0 +1,4 @@
+accessing
+classDefinitions: classDefinitionDictionary
+
+	classDefinitions := classDefinitionDictionary

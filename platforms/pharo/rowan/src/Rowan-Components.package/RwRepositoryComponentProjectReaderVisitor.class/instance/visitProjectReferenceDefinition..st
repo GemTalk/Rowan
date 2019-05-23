@@ -1,0 +1,6 @@
+visiting
+visitProjectReferenceDefinition: aRwProjectReferenceDefinition
+	"read the packageNames from the repository"
+
+	self currentProjectReferenceDefinition: aRwProjectReferenceDefinition.
+	self readPackages: aRwProjectReferenceDefinition packagesRoot

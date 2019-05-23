@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tools-Core",
+	"name" : "RwPrjDiffTool",
+	"super" : "RwProjectTool",
+	"type" : "normal"
+}

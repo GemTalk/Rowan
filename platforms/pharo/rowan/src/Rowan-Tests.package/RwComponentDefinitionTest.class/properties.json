@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tests",
+	"name" : "RwComponentDefinitionTest",
+	"super" : "RwAbstractComponentDefinitionTest",
+	"type" : "normal"
+}

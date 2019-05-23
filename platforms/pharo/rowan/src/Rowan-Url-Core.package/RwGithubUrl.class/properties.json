@@ -1,0 +1,11 @@
+{
+	"category" : "Rowan-Url-Core",
+	"instvars" : [
+		"project",
+		"committish",
+		"dir"
+	],
+	"name" : "RwGithubUrl",
+	"super" : "RwFileUrl",
+	"type" : "normal"
+}

@@ -1,0 +1,4 @@
+accessing
+repositoryRootPath
+
+   ^repositoryRootPath

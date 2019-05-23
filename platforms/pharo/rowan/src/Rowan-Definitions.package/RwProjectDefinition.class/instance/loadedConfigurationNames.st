@@ -1,0 +1,4 @@
+properties
+loadedConfigurationNames
+
+	^ self specification loadedConfigurationNames

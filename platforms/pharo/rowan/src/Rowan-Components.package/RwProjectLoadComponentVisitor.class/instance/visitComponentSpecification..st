@@ -1,0 +1,4 @@
+visiting
+visitComponentSpecification: aComponentSpecification
+
+	self projectLoadSpecs add: aComponentSpecification

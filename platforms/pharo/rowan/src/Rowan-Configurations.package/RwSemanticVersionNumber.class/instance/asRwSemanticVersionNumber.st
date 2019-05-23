@@ -1,0 +1,3 @@
+converting
+asRwSemanticVersionNumber
+    ^ self

@@ -1,0 +1,4 @@
+matching
+rwPlatformAttributeMatchForGemStoneVersion: anRwGemStoneVersionConfigurationPlatformAttributeMatcher
+
+	^ anRwGemStoneVersionConfigurationPlatformAttributeMatcher matchVersion: self

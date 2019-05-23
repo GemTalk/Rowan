@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Tests",
+	"name" : "RwProjectToolTest",
+	"super" : "RwToolTest",
+	"type" : "normal"
+}

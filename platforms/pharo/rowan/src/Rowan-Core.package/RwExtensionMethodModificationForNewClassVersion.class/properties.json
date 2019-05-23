@@ -1,0 +1,6 @@
+{
+	"category" : "Rowan-Core",
+	"name" : "RwExtensionMethodModificationForNewClassVersion",
+	"super" : "RwMethodModificationForNewClassVersion",
+	"type" : "normal"
+}

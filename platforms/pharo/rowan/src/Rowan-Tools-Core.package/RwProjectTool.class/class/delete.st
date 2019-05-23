@@ -1,0 +1,4 @@
+commands
+delete
+
+	^ RwPrjDeleteTool new

@@ -1,0 +1,4 @@
+commands
+test
+
+	^RwPrjTestTool new

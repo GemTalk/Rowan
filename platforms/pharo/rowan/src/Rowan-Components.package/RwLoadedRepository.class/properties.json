@@ -1,0 +1,9 @@
+{
+	"category" : "Rowan-Components",
+	"instvars" : [
+		"loadedChildComponents"
+	],
+	"name" : "RwLoadedRepository",
+	"super" : "RwLoadedThing",
+	"type" : "normal"
+}

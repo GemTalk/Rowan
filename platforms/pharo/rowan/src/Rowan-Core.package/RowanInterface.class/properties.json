@@ -1,0 +1,9 @@
+{
+	"category" : "Rowan-Core",
+	"instvars" : [
+		"name"
+	],
+	"name" : "RowanInterface",
+	"super" : "Object",
+	"type" : "normal"
+}

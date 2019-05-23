@@ -1,0 +1,10 @@
+{
+	"category" : "Rowan-Url-Core",
+	"instvars" : [
+		"schemeName",
+		"locator"
+	],
+	"name" : "RwGenericUrl",
+	"super" : "RwUrl",
+	"type" : "normal"
+}
