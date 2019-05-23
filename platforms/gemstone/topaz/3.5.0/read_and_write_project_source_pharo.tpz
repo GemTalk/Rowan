@@ -1,0 +1,45 @@
+#!/usr/bin/gemstone/smalltalk
+"
+#	read project source from rowan/source and then write project source for loaded projects in a pharo7/8 image
+#
+# If you are using GsDevKit_home[1] and have stash[2] installed, this topaz 
+#	script can be directly executed:
+#
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/read_and_write_project_source_pharo.tpz <gsdevkit-stone-name> -lq
+#
+# If you are not using GsDevKit_home, you can directly run this script as long as
+# 	1. $GEMSTONE is defined
+# 	2. $GEMSTONE/bin is you path
+#	then execute using the following invocation
+#
+#		$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/install_1.tpz -lq
+#
+#	[1] https://github.com/GsDevKit/GsDevKit_home
+# [2] https://github.com/dalehenrich/stash
+"
+	| platformConfigurationAttributes projectDefinition projectSetDefinition projectSetModification visitor
+		projectHome |
+
+"Read project and packages from disk for Pharo"
+	platformConfigurationAttributes := {
+		'common'.
+		'pharo'.	"want to read pharo packages"
+	}.
+	projectDefinition := RwComponentProjectDefinition 
+		newForUrl: 'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/pharo/rowan/specs/Rowan_component.ston'.
+	projectDefinition projectHome: '$ROWAN_PROJECTS_HOME'.
+	projectDefinition read: platformConfigurationAttributes.
+
+"Write project and packages to disk in filetree format, for bootstrapping Pharo"
+	projectDefinition
+		packagesPath: 'src';
+		projectHome: '$ROWAN_PROJECTS_HOME/Rowan/platforms/pharo/' asFileReference;
+		projectAlias: 'rowan';
+		packageFormat: 'tonel';
+		yourself.
+	projectSetDefinition := RwProjectSetDefinition new
+		addProject: projectDefinition;
+		yourself.
+	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
+	visitor := RwModificationTonelWriterVisitor new.
+		visitor visit: projectSetModification.

@@ -52,7 +52,7 @@ RwAbstractReaderWriterVisitor >> _repositoryConventionFor: packagesRoot [
 { #category : 'private' }
 RwAbstractReaderWriterVisitor >> _repositoryFormatFor: packagesRoot [
 
-	^ (self _repositoryPropertyDictFor: packagesRoot) at: #format ifAbsent: [ 'filetree' ]
+	^ (self _repositoryPropertyDictFor: packagesRoot) at: #format ifAbsent: [ self defaultPackageFormat ]
 ]
 
 { #category : 'private' }
@@ -183,6 +183,12 @@ RwAbstractReaderWriterVisitor >> currentProjectDefinition [
 RwAbstractReaderWriterVisitor >> currentProjectDefinition: aRwComponentProjectDefinition [
 
 	currentProjectDefinition := aRwComponentProjectDefinition
+]
+
+{ #category : 'accessing' }
+RwAbstractReaderWriterVisitor >> defaultPackageFormat [
+
+	self subclassResponsibility: #defaultPackageFormat
 ]
 
 { #category : 'accessing' }

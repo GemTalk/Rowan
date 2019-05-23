@@ -31546,6 +31546,13 @@ currentProjectDefinition: aRwComponentProjectDefinition
 
 category: 'accessing'
 method: RwAbstractReaderWriterVisitor
+defaultPackageFormat
+
+	self subclassResponsibility: #defaultPackageFormat
+%
+
+category: 'accessing'
+method: RwAbstractReaderWriterVisitor
 packageConvention
 
 	"
@@ -31640,7 +31647,7 @@ category: 'private'
 method: RwAbstractReaderWriterVisitor
 _repositoryFormatFor: packagesRoot
 
-	^ (self _repositoryPropertyDictFor: packagesRoot) at: #format ifAbsent: [ 'filetree' ]
+	^ (self _repositoryPropertyDictFor: packagesRoot) at: #format ifAbsent: [ self defaultPackageFormat ]
 %
 
 category: 'private'
@@ -32783,6 +32790,13 @@ changedMethod: aMethodModification
 			<< (methodDefinition source withLineEndings: self _newLine) ]
 %
 
+category: 'accessing'
+method: RwModificationFiletreeWriterVisitor
+defaultPackageFormat
+
+	^ 'filetree'
+%
+
 category: 'actions'
 method: RwModificationFiletreeWriterVisitor
 deletedClass: aClassModification
@@ -33158,7 +33172,7 @@ _methodFileNameFor: aMethodDefinition
 		ifFalse: [ selector ]
 		ifTrue: [ 
 		  | output specials |
-		  specials := self class seletorSpecials.
+		  specials := self class selectorSpecials.
 		  output := String new writeStream.
 		  output nextPut: $^.
 		  selector
@@ -33263,6 +33277,13 @@ addedPackage: aPackageModification
 	self processPackage: aPackageModification
 %
 
+category: 'accessing'
+method: RwModificationTonelWriterVisitor
+defaultPackageFormat
+
+	^ 'tonel'
+%
+
 category: 'actions'
 method: RwModificationTonelWriterVisitor
 deletedClass: aClassModification
@@ -33315,11 +33336,22 @@ method: RwModificationTonelWriterVisitor
 processProject: aProjectModification
 	"confirm that the project source is written in Tonel format"
 
-	| format |
+	| format propertiesFile |
 	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
 	packageDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification before packages.
 
 	(format := self _repositoryFormatFor:  aProjectModification after packagesRoot) = 'tonel' ifFalse: [ self error: 'expected tonel format repository, instead format is ', format printString ].
+
+	propertiesFile := aProjectModification after packagesRoot /  'properties.st'.
+	propertiesFile exists
+		ifFalse: [
+			propertiesFile writeStreamDo: [ :fileStream | 
+				fileStream 
+					nextPutAll: '{ #format : ' , format printString , '}';
+					lf;
+					nextPutAll: '{ #convention : ' , currentProjectDefinition packageConvention printString , '}';
+					yourself ] ].
+
 	super processProject: aProjectModification.
 %
 
@@ -42104,6 +42136,20 @@ postCopy
 
 category: 'accessing'
 method: RwComponentProjectDefinition
+projectAlias
+
+	^ self projectRef projectAlias
+%
+
+category: 'accessing'
+method: RwComponentProjectDefinition
+projectAlias: aStringOrNil
+
+	self projectRef projectAlias: aStringOrNil
+%
+
+category: 'accessing'
+method: RwComponentProjectDefinition
 projectHome
 
 	^ self projectRef projectHome
@@ -42176,6 +42222,20 @@ read
 		readProjectSetForComponentProjectDefinition: self 
 			withConfigurations: self defaultConfigurationNames
 			groupNames: self defaultGroupNames
+%
+
+category: 'actions'
+method: RwComponentProjectDefinition
+read: platformConfigurationAttributes
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the default component and group names"
+
+	"return a project definition set that will contain the project definition along with any dependent project definitions"
+
+	^ Rowan projectTools read
+		readProjectSetForComponentProjectDefinition: self 
+			withConfigurations: self defaultConfigurationNames
+			groupNames: self defaultGroupNames
+			platformConfigurationAttributes: platformConfigurationAttributes
 %
 
 category: 'tool api'

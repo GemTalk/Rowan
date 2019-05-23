@@ -2,10 +2,17 @@
 	#name : 'Tests',
 	#version : '0.1.0',
 	#conditionalPackages : {
+
+		[ 'common' ] : {
+			'tests' : {
+				#packageNames : [
+					'Rowan-Tests'
+					]
+				}
+			},
 		[ 'gemstone' ] : {
 			'tests' : {
 				#packageNames : [
-					'Rowan-Tests',
 					'Rowan-Services-Tests',
 					'AST-Tests-Core',
 					'AST-Kernel-Tests-Core'
