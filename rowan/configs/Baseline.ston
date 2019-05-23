@@ -1,9 +1,6 @@
- RwProjectLoadConfiguration{
-	#name : 'Load',
+RwProjectLoadConfiguration{
+	#name : 'Baseline',
 	#version : '0.1.0',
-	#definedGroupNames : {
-		'core' : [ ]
-		},
 	#conditionalPackages : {
 		[ 'common' ] : {
 			'core' : {

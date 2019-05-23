@@ -1,4 +1,4 @@
- RwProjectLoadConfiguration{
+RwProjectLoadConfiguration{
 	#name : 'Load',
 	#version : '0.1.0',
 	#definedGroupNames : {

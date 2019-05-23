@@ -43,3 +43,4 @@
 	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new.
 	visitor := RwModificationFiletreeWriterVisitor new.
 		visitor visit: projectSetModification.
+self halt.
