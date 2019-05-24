@@ -1,1 +1,4 @@
-{ #format : 'tonel'}
+{ 
+	#format : 'tonel',
+	#convention : 'RowanHybrid'
+}
