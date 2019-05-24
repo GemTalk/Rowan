@@ -1,4 +1,0 @@
-accessing
-defaultGroupNames
-
-	^ defaultGroupNames

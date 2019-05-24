@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tests",
-	"name" : "RwInterfaceTest",
-	"super" : "RwAbstractTest",
-	"type" : "normal"
-}

@@ -1,4 +1,0 @@
-commands
-log
-
-	^RwPrjLogTool new

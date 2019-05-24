@@ -1,4 +1,0 @@
-accessing
-instanceMethodDefinitions: dictionaryOfDefinitions
-
-	instanceMethodDefinitions := dictionaryOfDefinitions

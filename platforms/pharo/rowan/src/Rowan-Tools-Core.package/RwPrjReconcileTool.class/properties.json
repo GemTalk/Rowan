@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tools-Core",
-	"name" : "RwPrjReconcileTool",
-	"super" : "RwProjectTool",
-	"type" : "normal"
-}

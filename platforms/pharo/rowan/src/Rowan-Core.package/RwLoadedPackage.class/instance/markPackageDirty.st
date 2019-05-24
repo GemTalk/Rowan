@@ -1,4 +1,0 @@
-private
-markPackageDirty
-
-	self markDirty

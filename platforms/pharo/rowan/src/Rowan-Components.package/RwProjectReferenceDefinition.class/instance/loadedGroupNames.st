@@ -1,4 +1,0 @@
-accessing
-loadedGroupNames
-
-	^ self groupNames

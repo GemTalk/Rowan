@@ -1,4 +1,0 @@
-properties
-defaultConfigurationNames
-
-	^self specification defaultConfigurationNames

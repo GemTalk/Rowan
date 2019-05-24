@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tools-Core",
-	"name" : "RwPrjCloneTool",
-	"super" : "RwProjectTool",
-	"type" : "normal"
-}

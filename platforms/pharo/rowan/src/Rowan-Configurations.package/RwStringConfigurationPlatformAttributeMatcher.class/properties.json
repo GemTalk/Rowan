@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Configurations",
-	"name" : "RwStringConfigurationPlatformAttributeMatcher",
-	"super" : "RwAbstractConfigurationPlatformAttributeMatcher",
-	"type" : "normal"
-}

@@ -1,5 +1,0 @@
-private
-markDirty
-	"I have been changed independent of a change to my repository, and therefore may be out of sync with my repository"
-
-	isDirty := true

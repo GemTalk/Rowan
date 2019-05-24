@@ -1,4 +1,0 @@
-testing
-isEmpty
-
-	^elementsModified isEmpty

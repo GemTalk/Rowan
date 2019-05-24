@@ -1,4 +1,0 @@
-accessing
-currentPackageDefinition: aRwPackageDefinition
-
-	currentPackageDefinition := aRwPackageDefinition

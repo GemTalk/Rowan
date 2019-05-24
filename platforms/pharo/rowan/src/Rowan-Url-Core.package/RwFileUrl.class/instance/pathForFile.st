@@ -1,3 +1,0 @@
-paths
-pathForFile
-  ^ self pathString

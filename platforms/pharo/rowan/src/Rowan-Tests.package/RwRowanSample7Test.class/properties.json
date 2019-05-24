@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Tests",
-	"instvars" : [
-		"repositoryRoot"
-	],
-	"name" : "RwRowanSample7Test",
-	"super" : "RwToolTest",
-	"type" : "normal"
-}

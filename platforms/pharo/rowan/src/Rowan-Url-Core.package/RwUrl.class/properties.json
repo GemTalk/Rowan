@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Url-Core",
-	"instvars" : [
-		"fragment"
-	],
-	"name" : "RwUrl",
-	"super" : "Object",
-	"type" : "normal"
-}

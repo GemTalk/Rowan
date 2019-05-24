@@ -1,4 +1,0 @@
-accessing
-components: aComponentDefinitionDictionary
-
-	components := aComponentDefinitionDictionary

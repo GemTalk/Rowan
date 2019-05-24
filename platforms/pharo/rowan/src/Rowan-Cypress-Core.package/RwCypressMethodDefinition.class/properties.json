@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Cypress-Core",
-	"instvars" : [
-		"isExtensionMethod"
-	],
-	"name" : "RwCypressMethodDefinition",
-	"super" : "CypressMethodDefinition",
-	"type" : "normal"
-}

@@ -1,4 +1,0 @@
-private
-markProjectDirty
-
-	self markDirty

@@ -1,4 +1,0 @@
-testing
-isAddition
-
-	^before isEmpty

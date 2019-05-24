@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Core",
-	"name" : "RwPropertiesModification",
-	"super" : "RwElementsModification",
-	"type" : "normal"
-}

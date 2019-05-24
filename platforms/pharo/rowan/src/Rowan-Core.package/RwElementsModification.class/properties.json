@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Core",
-	"instvars" : [
-		"elementsModified"
-	],
-	"name" : "RwElementsModification",
-	"super" : "Object",
-	"type" : "normal"
-}

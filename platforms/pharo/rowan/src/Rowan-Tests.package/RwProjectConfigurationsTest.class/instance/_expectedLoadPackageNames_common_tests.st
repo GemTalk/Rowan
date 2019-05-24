@@ -1,4 +1,0 @@
-private
-_expectedLoadPackageNames_common_tests
-
-	^ self _expectedLoadPackageNames_common_core_tests

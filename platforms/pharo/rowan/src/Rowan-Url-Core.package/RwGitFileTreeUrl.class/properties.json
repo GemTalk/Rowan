@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Url-Core",
-	"name" : "RwGitFileTreeUrl",
-	"super" : "RwSmalltalkRepositoryUrl",
-	"type" : "normal"
-}

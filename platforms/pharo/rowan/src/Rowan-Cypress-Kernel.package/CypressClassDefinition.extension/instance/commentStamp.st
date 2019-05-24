@@ -1,4 +1,0 @@
-*rowan-cypress-kernel
-commentStamp
-
-	^ ''

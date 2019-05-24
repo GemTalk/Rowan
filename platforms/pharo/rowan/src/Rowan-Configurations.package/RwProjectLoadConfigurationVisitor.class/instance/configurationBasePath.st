@@ -1,4 +1,0 @@
-accessing
-configurationBasePath
-
-	^ configurationBasePath

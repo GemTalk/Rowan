@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tests",
-	"name" : "RwUrlTest",
-	"super" : "RwAbstractTest",
-	"type" : "normal"
-}

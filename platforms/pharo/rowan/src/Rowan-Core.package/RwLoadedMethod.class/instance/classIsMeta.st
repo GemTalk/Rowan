@@ -1,4 +1,0 @@
-accessing
-classIsMeta
-
-	^classIsMeta

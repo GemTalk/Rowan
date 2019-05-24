@@ -1,4 +1,0 @@
-accessing
-loadedConfigurationNames
-
-	^ self configurationNames

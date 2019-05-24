@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Definitions",
-	"name" : "RwClassDefinition",
-	"super" : "RwAbstractClassDefinition",
-	"type" : "normal"
-}

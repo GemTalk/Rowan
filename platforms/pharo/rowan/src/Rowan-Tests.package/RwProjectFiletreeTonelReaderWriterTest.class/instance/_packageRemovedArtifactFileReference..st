@@ -1,4 +1,0 @@
-private
-_packageRemovedArtifactFileReference: repositoryRoot
-
-	self subclassResponsibility: #_packageRemovedArtifactFileReference:

@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Core",
-	"instvars" : [
-		"packageInfoSource"
-	],
-	"name" : "RwConfiguration",
-	"super" : "Object",
-	"type" : "normal"
-}

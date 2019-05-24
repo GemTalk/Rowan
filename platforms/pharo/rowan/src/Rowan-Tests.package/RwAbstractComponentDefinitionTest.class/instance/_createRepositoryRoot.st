@@ -1,4 +1,0 @@
-private
-_createRepositoryRoot
-
-	self subclassResponsibility: #_createRepositoryRoot

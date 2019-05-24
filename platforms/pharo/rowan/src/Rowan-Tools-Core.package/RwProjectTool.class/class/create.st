@@ -1,3 +1,0 @@
-commands
-create
-  ^ RwPrjCreateTool new

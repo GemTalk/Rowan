@@ -1,4 +1,0 @@
-testing
-isDeletion
-
-	^after isEmpty

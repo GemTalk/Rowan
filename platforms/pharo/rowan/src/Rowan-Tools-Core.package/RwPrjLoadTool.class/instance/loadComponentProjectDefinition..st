@@ -1,4 +1,0 @@
-load project definitions
-loadComponentProjectDefinition: projectDefinition
-
-	^ self loadProjectDefinition: projectDefinition platformConfigurationAttributes: Rowan platformConfigurationAttributes

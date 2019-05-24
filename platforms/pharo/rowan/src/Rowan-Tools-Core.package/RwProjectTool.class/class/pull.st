@@ -1,4 +1,0 @@
-commands
-pull
-
-	^RwPrjPullTool new

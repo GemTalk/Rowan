@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Tests",
-	"classvars" : [
-		"PoolDictionaryDictionary"
-	],
-	"name" : "RwLoadingTest",
-	"super" : "RwAbstractTest",
-	"type" : "normal"
-}

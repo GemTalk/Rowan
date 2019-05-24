@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tests",
-	"name" : "RwAbstractTest",
-	"super" : "TestCase",
-	"type" : "normal"
-}

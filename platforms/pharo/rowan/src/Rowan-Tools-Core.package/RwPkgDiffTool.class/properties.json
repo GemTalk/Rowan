@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tools-Core",
-	"name" : "RwPkgDiffTool",
-	"super" : "RwPackageTool",
-	"type" : "normal"
-}

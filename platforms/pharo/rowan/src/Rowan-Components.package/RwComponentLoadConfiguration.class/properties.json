@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Components",
-	"instvars" : [
-		"projectNames"
-	],
-	"name" : "RwComponentLoadConfiguration",
-	"super" : "RwProjectLoadConfiguration",
-	"type" : "normal"
-}

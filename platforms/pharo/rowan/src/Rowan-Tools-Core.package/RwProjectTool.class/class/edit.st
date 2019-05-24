@@ -1,4 +1,0 @@
-commands
-edit
-
-	^ RwPrjEditTool new

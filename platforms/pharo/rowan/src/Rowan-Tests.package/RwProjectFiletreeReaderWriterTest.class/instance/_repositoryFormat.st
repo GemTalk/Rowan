@@ -1,4 +1,0 @@
-private
-_repositoryFormat
-
-	^ 'filetree'

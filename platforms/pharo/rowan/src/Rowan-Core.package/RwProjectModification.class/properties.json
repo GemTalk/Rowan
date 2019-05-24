@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Core",
-	"instvars" : [
-		"packagesModification"
-	],
-	"name" : "RwProjectModification",
-	"super" : "RwModification",
-	"type" : "normal"
-}

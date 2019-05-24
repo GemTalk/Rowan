@@ -1,4 +1,0 @@
-accessing
-projects
-
-	^ self definitions

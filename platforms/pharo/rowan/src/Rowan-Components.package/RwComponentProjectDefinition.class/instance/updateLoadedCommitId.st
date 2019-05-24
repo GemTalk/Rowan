@@ -1,4 +1,0 @@
-loading
-updateLoadedCommitId
-
-	self projectRef updateLoadedCommitId

@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Definitions",
-	"instvars" : [
-		"packages"
-	],
-	"name" : "RwProjectDefinition",
-	"super" : "RwDefinition",
-	"type" : "normal"
-}

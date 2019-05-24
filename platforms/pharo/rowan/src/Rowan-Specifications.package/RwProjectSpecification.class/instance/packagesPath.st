@@ -1,4 +1,0 @@
-accessing
-packagesPath
-
-	^ self repoPath

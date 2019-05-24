@@ -1,4 +1,0 @@
-accessing
-packageOrGroupNamesToLoad: packageOrGroupNames
-
-	self subclassResponsibility: #packageOrGroupNamesToLoad:

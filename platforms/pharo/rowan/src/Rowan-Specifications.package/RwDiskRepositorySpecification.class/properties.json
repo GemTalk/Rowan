@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Specifications",
-	"name" : "RwDiskRepositorySpecification",
-	"super" : "RwRepositorySpecification",
-	"type" : "normal"
-}

@@ -1,4 +1,0 @@
-testing
-isEmpty
-
-	^oldValue = newValue

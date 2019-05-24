@@ -1,4 +1,0 @@
-accessing
-projectNames
-
-	^ self definitionNames

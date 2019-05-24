@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tests",
-	"name" : "RwDisownToolApiTest",
-	"super" : "RwBrowserToolTest",
-	"type" : "normal"
-}

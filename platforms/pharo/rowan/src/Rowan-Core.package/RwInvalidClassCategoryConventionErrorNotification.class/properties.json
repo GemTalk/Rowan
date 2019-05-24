@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Core",
-	"instvars" : [
-		"classDefinition"
-	],
-	"name" : "RwInvalidClassCategoryConventionErrorNotification",
-	"super" : "RwInvalidCategoryProtocolConventionErrorNotification",
-	"type" : "normal"
-}

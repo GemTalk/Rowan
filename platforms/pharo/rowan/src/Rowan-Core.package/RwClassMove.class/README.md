@@ -1,1 +1,0 @@
-Represents the move of a class definition from one package to another.

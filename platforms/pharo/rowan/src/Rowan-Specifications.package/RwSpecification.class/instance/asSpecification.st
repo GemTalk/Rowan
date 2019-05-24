@@ -1,4 +1,0 @@
-conversion
-asSpecification
-
-	^ self

@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Core",
-	"instvars" : [
-		"candidateClass"
-	],
-	"name" : "RwExecuteClassInitializeMethodsAfterLoadNotification",
-	"super" : "RwNotification",
-	"type" : "normal"
-}

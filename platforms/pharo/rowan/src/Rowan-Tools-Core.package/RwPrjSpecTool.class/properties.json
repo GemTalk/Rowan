@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tools-Core",
-	"name" : "RwPrjSpecTool",
-	"super" : "RwProjectTool",
-	"type" : "normal"
-}

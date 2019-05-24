@@ -1,4 +1,0 @@
-commands
-write
-
-	^RwPrjWriteTool new

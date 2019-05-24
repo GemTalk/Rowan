@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Core",
-	"instvars" : [
-		"extendedClassName"
-	],
-	"name" : "RwExtensionMethodsModification",
-	"super" : "RwMethodsModification",
-	"type" : "normal"
-}

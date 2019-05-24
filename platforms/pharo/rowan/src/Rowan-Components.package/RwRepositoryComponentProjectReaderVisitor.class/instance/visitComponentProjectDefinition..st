@@ -1,6 +1,0 @@
-visiting
-visitComponentProjectDefinition: aRwComponentProjectDefinition
-
-	self currentProjectDefinition: aRwComponentProjectDefinition.
-	aRwComponentProjectDefinition packages: Dictionary new.
-	self visit: aRwComponentProjectDefinition projectRef

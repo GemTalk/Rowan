@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tools-Core",
-	"name" : "RwClassTool",
-	"super" : "RwAbstractTool",
-	"type" : "normal"
-}

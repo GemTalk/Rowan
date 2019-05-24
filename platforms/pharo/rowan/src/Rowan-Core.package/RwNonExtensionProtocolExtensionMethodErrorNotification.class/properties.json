@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Core",
-	"name" : "RwNonExtensionProtocolExtensionMethodErrorNotification",
-	"super" : "RwInvalidMethodProtocolConventionErrorNotification",
-	"type" : "normal"
-}

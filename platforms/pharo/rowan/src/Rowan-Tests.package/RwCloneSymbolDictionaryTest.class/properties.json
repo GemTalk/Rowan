@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tests",
-	"name" : "RwCloneSymbolDictionaryTest",
-	"super" : "RwRowanProjectIssuesTest",
-	"type" : "normal"
-}

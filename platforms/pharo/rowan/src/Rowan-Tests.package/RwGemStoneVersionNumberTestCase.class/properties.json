@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tests",
-	"name" : "RwGemStoneVersionNumberTestCase",
-	"super" : "TestCase",
-	"type" : "normal"
-}

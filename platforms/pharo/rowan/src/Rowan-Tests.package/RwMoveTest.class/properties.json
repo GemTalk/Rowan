@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tests",
-	"name" : "RwMoveTest",
-	"super" : "RwToolTest",
-	"type" : "normal"
-}

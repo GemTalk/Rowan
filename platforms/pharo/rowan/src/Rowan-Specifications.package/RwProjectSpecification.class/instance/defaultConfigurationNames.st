@@ -1,4 +1,0 @@
-accessing
-defaultConfigurationNames
-
-	^ defaultConfigurationNames

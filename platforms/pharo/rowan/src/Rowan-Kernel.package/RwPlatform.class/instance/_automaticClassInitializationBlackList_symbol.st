@@ -1,4 +1,0 @@
-automatic class initialization
-_automaticClassInitializationBlackList_symbol
-
-	^#automaticClassInitializationBlackList

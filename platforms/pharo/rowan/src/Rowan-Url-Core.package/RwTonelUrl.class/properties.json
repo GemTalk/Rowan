@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Url-Core",
-	"name" : "RwTonelUrl",
-	"super" : "RwCypressUrl",
-	"type" : "normal"
-}

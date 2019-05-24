@@ -1,4 +1,0 @@
-properties
-loadedConfigurationNames
-
-	^ self projectRef loadedConfigurationNames

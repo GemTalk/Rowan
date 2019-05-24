@@ -1,4 +1,0 @@
-actions
-deletedClassExtension: aClassExtensionModification
-
-	self subclassResponsibility: #deletedClassExtension:

@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Components",
-	"name" : "RwGitRepositoryDefinition",
-	"super" : "RwDiskRepositoryDefinition",
-	"type" : "normal"
-}

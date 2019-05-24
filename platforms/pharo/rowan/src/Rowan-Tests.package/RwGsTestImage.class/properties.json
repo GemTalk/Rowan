@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tests",
-	"name" : "RwGsTestImage",
-	"super" : "RwGsImage",
-	"type" : "normal"
-}

@@ -1,6 +1,0 @@
-Handling
-classCategoryNotificationDo: classCategoryBlock nonExtensionMethodNoficationDo: nonExtensionMethodBlock extensionMethodPackageMismatchNoficationDo: extensionMethodPackageMismatchBlock  extensionMethodNonExtensionProtocolNoficationDo: extensionMethodNonExtensionProtocolBlock
-	"helper method for use in exception handling block ... avoid isKindOf:"
-
-	
-	self subclassResponsibility: #classCategoryNotificationDo:nonExtensionMethodNoficationDo:extensionMethodPackageMismatchNoficationDo:extensionMethodNonExtensionProtocolNoficationDo:

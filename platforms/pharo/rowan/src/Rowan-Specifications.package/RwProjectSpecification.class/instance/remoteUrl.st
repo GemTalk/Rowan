@@ -1,4 +1,0 @@
-accessing
-remoteUrl
-
-   ^repoSpec remoteUrl

@@ -1,3 +1,0 @@
-commands
-diff
-  ^ RwPkgDiffTool new

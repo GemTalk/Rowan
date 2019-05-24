@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Configurations",
-	"instvars" : [
-		"packageNames"
-	],
-	"name" : "RwProjectCompoundConfiguration",
-	"super" : "RwAbstractProjectConfiguration",
-	"type" : "normal"
-}

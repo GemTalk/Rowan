@@ -1,3 +1,0 @@
-Accessing
-classOrExtensionBefore
-	^classOrExtensionBefore

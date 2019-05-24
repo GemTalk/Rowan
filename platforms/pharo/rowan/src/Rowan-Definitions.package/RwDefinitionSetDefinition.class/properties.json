@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Definitions",
-	"instvars" : [
-		"definitions"
-	],
-	"name" : "RwDefinitionSetDefinition",
-	"super" : "RwDefinition",
-	"type" : "normal"
-}

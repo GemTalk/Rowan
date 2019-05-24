@@ -1,4 +1,0 @@
-Tests
-shouldInheritSelectors
-
-	^true

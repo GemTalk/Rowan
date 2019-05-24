@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tests",
-	"name" : "RwSymbolDictionaryTest",
-	"super" : "RwAbstractTest",
-	"type" : "normal"
-}

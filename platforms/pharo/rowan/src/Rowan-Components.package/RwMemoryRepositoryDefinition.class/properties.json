@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Components",
-	"name" : "RwMemoryRepositoryDefinition",
-	"super" : "RwAbstractRepositoryDefinition",
-	"type" : "normal"
-}

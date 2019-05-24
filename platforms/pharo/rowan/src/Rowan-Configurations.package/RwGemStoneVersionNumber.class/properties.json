@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Configurations",
-	"name" : "RwGemStoneVersionNumber",
-	"super" : "Magnitude",
-	"type" : "variable"
-}

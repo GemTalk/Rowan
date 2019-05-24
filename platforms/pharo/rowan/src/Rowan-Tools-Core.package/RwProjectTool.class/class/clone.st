@@ -1,4 +1,0 @@
-commands
-clone
-
-	^RwPrjCloneTool new

@@ -1,3 +1,0 @@
-commands
-adopt
-  ^ RwPkgAdoptTool new

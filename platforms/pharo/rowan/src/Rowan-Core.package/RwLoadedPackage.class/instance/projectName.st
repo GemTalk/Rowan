@@ -1,4 +1,0 @@
-accessing
-projectName
-
-	^ loadedProject name

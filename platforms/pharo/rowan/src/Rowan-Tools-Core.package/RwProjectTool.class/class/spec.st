@@ -1,3 +1,0 @@
-commands
-spec
-  ^ RwPrjSpecTool new

@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Core",
-	"instvars" : [
-		"errorMessage"
-	],
-	"name" : "RwExistingAssociationWithSameKeyNotification",
-	"super" : "RwNotification",
-	"type" : "normal"
-}

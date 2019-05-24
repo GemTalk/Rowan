@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tools-Core",
-	"name" : "RwClsExtensionAuditTool",
-	"super" : "RwClsAuditTool",
-	"type" : "normal"
-}

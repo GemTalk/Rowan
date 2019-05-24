@@ -1,4 +1,0 @@
-class writing
-processClassExtension: aClassExtensionModification
-
-	self subclassResponsibility: #processClassExtension:

@@ -1,4 +1,0 @@
-accessing
-projectNames
-
-	^ projectNames ifNil: [ #() ]

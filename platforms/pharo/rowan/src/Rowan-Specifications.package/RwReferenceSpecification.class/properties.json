@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Specifications",
-	"instvars" : [
-		"referenceUrl"
-	],
-	"name" : "RwReferenceSpecification",
-	"super" : "RwSpecification",
-	"type" : "normal"
-}

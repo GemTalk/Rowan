@@ -1,4 +1,0 @@
-paths
-pathForDirectory
-
-	^self locator

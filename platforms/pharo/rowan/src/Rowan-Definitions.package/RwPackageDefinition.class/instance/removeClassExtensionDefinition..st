@@ -1,4 +1,0 @@
-accessing
-removeClassExtensionDefinition: aClassExtension
-
-	self removeDefinition: aClassExtension from: classExtensions

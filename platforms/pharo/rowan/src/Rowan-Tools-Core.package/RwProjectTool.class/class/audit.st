@@ -1,4 +1,0 @@
-commands
-audit
-
-	^RwPrjAuditTool new

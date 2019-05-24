@@ -1,4 +1,0 @@
-commands
-push
-
-	^RwPrjPushTool new

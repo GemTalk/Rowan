@@ -1,4 +1,0 @@
-commands
-commit
-
-	^RwPrjCommitTool new

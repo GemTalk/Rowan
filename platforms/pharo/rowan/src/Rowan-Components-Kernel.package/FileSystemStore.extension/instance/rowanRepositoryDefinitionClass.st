@@ -1,4 +1,0 @@
-*rowan-components-kernel
-rowanRepositoryDefinitionClass
-
-	self subclassResponsibility: #rowanRepositoryDefinitionClass

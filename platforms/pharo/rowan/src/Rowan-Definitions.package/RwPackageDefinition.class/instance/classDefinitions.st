@@ -1,4 +1,0 @@
-accessing
-classDefinitions
-
-	^classDefinitions

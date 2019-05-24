@@ -1,9 +1,0 @@
-{
-	"category" : "Rowan-Specifications",
-	"instvars" : [
-		"repositoryRootPath"
-	],
-	"name" : "RwRepositorySpecification",
-	"super" : "RwSpecification",
-	"type" : "normal"
-}

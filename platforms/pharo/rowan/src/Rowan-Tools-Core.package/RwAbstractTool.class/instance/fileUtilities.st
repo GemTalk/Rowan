@@ -1,3 +1,0 @@
-private
-fileUtilities
-  ^ Rowan fileUtilities

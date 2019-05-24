@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Definitions",
-	"name" : "RwPackageSetDefinition",
-	"super" : "RwDefinitionSetDefinition",
-	"type" : "normal"
-}

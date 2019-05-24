@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Tests",
-	"name" : "RwSemanticVersionNumberTestCase",
-	"super" : "TestCase",
-	"type" : "normal"
-}

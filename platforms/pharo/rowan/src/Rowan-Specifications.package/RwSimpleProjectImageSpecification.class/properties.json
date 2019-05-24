@@ -1,6 +1,0 @@
-{
-	"category" : "Rowan-Specifications",
-	"name" : "RwSimpleProjectImageSpecification",
-	"super" : "RwImageSpecification",
-	"type" : "normal"
-}

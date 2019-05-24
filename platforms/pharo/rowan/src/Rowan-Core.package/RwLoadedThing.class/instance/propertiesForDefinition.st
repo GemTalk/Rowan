@@ -1,4 +1,0 @@
-private
-propertiesForDefinition
-
-	^properties copy
