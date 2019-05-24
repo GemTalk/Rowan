@@ -17,11 +17,8 @@ BaselineOfRowan >> baseline: spec [
 				package: 'Rowan-Tools-Core';
 				package: 'Rowan-Configurations';
 				package: 'Rowan-Definitions';
-				package: 'Rowan-Cypress-Core';
-				package: 'Rowan-Cypress-Kernel';
 				package: 'Rowan-Core-Definitions-Extensions';
 				package: 'Rowan-Core';
-				package: 'Rowan-Cypress-Definitions';
 				package: 'Rowan-Tools-Extensions';
 				package: 'Rowan-Specifications';
 				package: 'Rowan-Url-Extensions';

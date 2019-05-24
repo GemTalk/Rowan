@@ -8,10 +8,8 @@
 					'Rowan-Kernel',
 					'Rowan-Url-Core',
 					'Rowan-Url-Extensions',
-					'Rowan-Cypress-Core',
 					'Rowan-Definitions',
 					'Rowan-Core-Definitions-Extensions',
-					'Rowan-Cypress-Definitions',
 					'Rowan-Specifications',
 					'Rowan-Components',
 					'Rowan-Core-Definitions-Extensions',
@@ -34,6 +32,8 @@
       'core': {
 				#packageNames : [
 					'AST-Core',
+					'Rowan-Cypress-Core',
+					'Rowan-Cypress-Definitions',
 					'Rowan-Services-Extensions',
 					'Rowan-Services-Core',
 					'Rowan-GemStone-Core',
