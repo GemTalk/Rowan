@@ -33173,7 +33173,7 @@ _methodFileNameFor: aMethodDefinition
 		ifTrue: [ 
 		  | output specials |
 		  specials := self class selectorSpecials.
-		  output := String new writeStream.
+		  output := String new writeStreamPortable.
 		  output nextPut: $^.
 		  selector
 			do: [ :each | 
@@ -60936,7 +60936,7 @@ classServiceClass
 	^ RowanClassService
 %
 
-category: '*rowan-tools-extensions'
+category: '*rowan-tools-extensions-gemstone'
 method: RwGsPlatform
 classTools
 
@@ -60945,7 +60945,7 @@ classTools
 	^ RwClassTool
 %
 
-category: '*rowan-tools-extensions'
+category: '*rowan-tools-extensions-gemstone'
 method: RwGsPlatform
 gitTools
 
@@ -60978,7 +60978,7 @@ packageServiceClass
 	^ RowanPackageService
 %
 
-category: '*rowan-tools-extensions'
+category: '*rowan-tools-extensions-gemstone'
 method: RwGsPlatform
 packageTools
 	"Answer the platform-specific class for package tools"
@@ -60993,7 +60993,7 @@ projectServiceClass
 	^ RowanProjectService
 %
 
-category: '*rowan-tools-extensions'
+category: '*rowan-tools-extensions-gemstone'
 method: RwGsPlatform
 projectTools
 	"Answer the platform-specific class for project tools"

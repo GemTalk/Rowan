@@ -24,7 +24,7 @@ doit
 	poolDictionaries: #()
 	inDictionary: RowanKernel
 	options: #())
-		category: 'Rowan-Tests';
+		category: 'Rowan-Tests-GemStone';
 		comment: '';
 		immediateInvariant.
 true.
@@ -45222,7 +45222,7 @@ _specialCases
 
 !		Class methods for 'RwGsImage'
 
-category: '*rowan-tests'
+category: '*rowan-tests-gemstone'
 classmethod: RwGsImage
 testImageClass
 

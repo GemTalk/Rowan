@@ -15,7 +15,8 @@
 				#packageNames : [
 					'Rowan-Services-Tests',
 					'AST-Tests-Core',
-					'AST-Kernel-Tests-Core'
+					'AST-Kernel-Tests-Core',
+					'Rowan-Tests-GemStone'
 					]
 				},
 			'deprecated tests' : {

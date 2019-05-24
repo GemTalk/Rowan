@@ -42,7 +42,8 @@
 					'Rowan-GemStone-Definitions',
 					'Rowan-GemStone-Components',
 					'Rowan-GemStone-Specifications',
-					'Rowan-GemStone-Components-Extensions'
+					'Rowan-GemStone-Components-Extensions',
+					'Rowan-Tools-Extensions-GemStone'
 					]
 				}
 			},
