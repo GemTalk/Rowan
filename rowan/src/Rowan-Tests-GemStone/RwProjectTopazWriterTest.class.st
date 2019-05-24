@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwProjectTopazWriterTest',
 	#superclass : 'RwProjectReaderWriterTest',
-	#category : 'Rowan-Tests'
+	#category : 'Rowan-Tests-GemStone'
 }
 
 { #category : 'private' }

@@ -26,8 +26,8 @@ RwPrjAuditTool >> auditForProject: aLoadedProject [
 
 	| res |
 
-	res := KeyValueDictionary new.
-	GsFile gciLogClient: '==============Auditing project ', aLoadedProject name.
+	res := Dictionary new.
+	self _log: '==============Auditing project ', aLoadedProject name.
 		aLoadedProject loadedPackages values do: [:e | (Rowan packageTools audit auditForPackage: e) 
 				ifNotEmpty: [:aColl | res at: e name put: aColl]].	
 	^res

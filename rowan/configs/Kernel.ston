@@ -34,6 +34,7 @@
 					'AST-Core',
 					'Rowan-Cypress-Core',
 					'Rowan-Cypress-Definitions',
+					'Rowan-Url-Cypress',
 					'Rowan-Services-Extensions',
 					'Rowan-Services-Core',
 					'Rowan-GemStone-Core',
@@ -43,6 +44,7 @@
 					'Rowan-GemStone-Components',
 					'Rowan-GemStone-Specifications',
 					'Rowan-GemStone-Components-Extensions',
+					'Rowan-Tools-GemStone',
 					'Rowan-Tools-Extensions-GemStone'
 					]
 				}
@@ -89,7 +91,8 @@
 					'Rowan-Definitions-Deprecated' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Cypress-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Tools-Core' : { 'symbolDictName' : 'RowanTools' },
-					'Rowan-Tools-Deprecated' : { 'symbolDictName' : 'RowanTools' }
+					'Rowan-Tools-Deprecated' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Tools-GemStone' : { 'symbolDictName' : 'RowanTools' }
 					}
 				}
 			}

@@ -33990,10 +33990,12 @@ category: 'class reading'
 method: RwRepositoryComponentProjectTonelReaderVisitor
 readClassExtensionFile: file inPackage: packageName
 
-	file readStreamDo: [:fileStream |
+	| fileReference |
+	fileReference := file asFileReference.
+	fileReference readStreamDo: [:fileStream |
 		| definitions stream |
 		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: 20000. "part of workaround for GemTalk/FileSystemGs#9"
+		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
 		definitions := (TonelParser on: stream forReader: self) start.
 		((definitions at: 2) at: 1) do: [:mDef |
 			currentClassExtension addClassMethodDefinition: mDef ].
@@ -34528,21 +34530,6 @@ _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoad
 
 category: 'smalltalk api'
 method: RwGitTool
-createTmpFileWith: fileContents
-
-	| file filename |
-	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX' logging: true) trimRight.
-	[ 
-	| count |
-	file := GsFile openWriteOnServer: filename.
-	(count := file nextPutAll: fileContents withGemstoneLineEndings)
-		ifNil: [ self error: 'failed write' ] ]
-		ensure: [ file close ].
-	^ filename
-%
-
-category: 'smalltalk api'
-method: RwGitTool
 gitaddIn: gitRepoPath with: args
 
 	^ self performGitCommand: 'add' in: gitRepoPath with: args
@@ -34770,14 +34757,6 @@ performOnServer: commandLine logging: logging
         cr;
         show: result ].
   ^ result
-%
-
-category: 'private'
-method: RwGitTool
-performOnServer: commandLine status: statusBlock
-  | performOnServerStatusArray |
-  performOnServerStatusArray := System _performOnServer: commandLine.
-  ^ statusBlock value: performOnServerStatusArray
 %
 
 ! Class implementation for 'RwPackageTool'
@@ -35284,7 +35263,7 @@ auditForPackage: loadedPackage
 "audit dirty packages"
 	|  res|
 	res := KeyValueDictionary new.
-	GsFile gciLogClient: '  -- Auditing package ', loadedPackage name.
+	self _log: '  -- Auditing package ', loadedPackage name.
 		loadedPackage 
 				loadedClassesDo: [:aLoadedClass |  (self auditLoadedClass: aLoadedClass) 
 					ifNotEmpty: [:aColl | res at: aLoadedClass name put: aColl]]				
@@ -35314,13 +35293,6 @@ auditLoadedClassExtension: aLoadedClass
 "look for methods compiled into class without Rowan API"
 
 	^RwClsExtensionAuditTool new auditLoadedClassExtension: aLoadedClass
-%
-
-category: 'other'
-method: RwPkgAuditTool
-checkAll
-"check all packages regardless dirty or not"
-	^(SessionTemps current at: #RwDirtyOnly otherwise: false) not
 %
 
 category: 'other'
@@ -35567,8 +35539,8 @@ auditForProject: aLoadedProject
 
 	| res |
 
-	res := KeyValueDictionary new.
-	GsFile gciLogClient: '==============Auditing project ', aLoadedProject name.
+	res := Dictionary new.
+	self _log: '==============Auditing project ', aLoadedProject name.
 		aLoadedProject loadedPackages values do: [:e | (Rowan packageTools audit auditForPackage: e) 
 				ifNotEmpty: [:aColl | res at: e name put: aColl]].	
 	^res
@@ -55978,34 +55950,6 @@ authority
 
 category: 'rowan support'
 method: RwUrl
-createRwCypressRepositoryForPath: repositoryDirectoryPath
-  | repo |
-  repo := CypressFileSystemRepository new
-    initializeDefaultRepositoryProperties;
-    codeFormatProperty: 'Cypress';
-    strictCodeFormat: false;
-    initializeForDirectory: repositoryDirectoryPath;
-    url: self printString;
-    yourself.
-  ^ repo
-%
-
-category: 'rowan support'
-method: RwUrl
-createRwFiletreeRepositoryForPath: repositoryDirectoryPath
-
-	^ CypressFileSystemRepository new
-		initializeDefaultRepositoryProperties;
-		initializeForDirectory: repositoryDirectoryPath;
-		codeFormatProperty: 'FileTree';
-		strictCodeFormat: false;
-		initializeReaderAndWriterClasses;
-		url: self printString;
-		yourself
-%
-
-category: 'rowan support'
-method: RwUrl
 createRwRepositoryForFormat: repositoryFormat forPath: repositoryDirectoryPath
   repositoryFormat = 'tonel'
     ifTrue: [ ^ self createRwTonelRepositoryForPath: repositoryDirectoryPath ].
@@ -56049,19 +55993,6 @@ createRwRepositoryForPath: repositoryDirectoryPath
   hasFiletree
     ifTrue: [ ^ self createRwRepositoryForFormat: 'filetree' forPath: repositoryDirectoryPath ].
   ^ self createRwRepositoryForFormat: 'cypress' forPath: repositoryDirectoryPath
-%
-
-category: 'rowan support'
-method: RwUrl
-createRwTonelRepositoryForPath: repositoryDirectoryPath
-  ^ CypressTonelRepository new
-    initializeDefaultRepositoryProperties;
-    initializeForDirectory: repositoryDirectoryPath;
-    codeFormatProperty: 'Tonel';
-    strictCodeFormat: false;
-    initializeReaderAndWriterClasses;
-    url: self printString;
-    yourself
 %
 
 category: 'rowan support'
@@ -60330,6 +60261,22 @@ name
   ^ self key
 %
 
+! Class extensions for 'RwAbstractTool'
+
+!		Instance methods for 'RwAbstractTool'
+
+category: '*rowan-tools-gemstone'
+method: RwAbstractTool
+_log: aString
+
+"
+If the client is a topaz process, the default logger writes to the 
+ current output file as controlled by topaz OUTPUT PUSH statements, 
+ else to stdout.
+"
+	GsFile gciLogClient: aString
+%
+
 ! Class extensions for 'RwClassDefinition'
 
 !		Class methods for 'RwClassDefinition'
@@ -60763,6 +60710,33 @@ asSpecification
   "Answer an RwSpecification "
 
   ^ RwSpecification fromUrl: self
+%
+
+! Class extensions for 'RwGitTool'
+
+!		Instance methods for 'RwGitTool'
+
+category: '*rowan-tools-gemstone'
+method: RwGitTool
+createTmpFileWith: fileContents
+
+	| file filename |
+	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX' logging: true) trimRight.
+	[ 
+	| count |
+	file := GsFile openWriteOnServer: filename.
+	(count := file nextPutAll: fileContents withGemstoneLineEndings)
+		ifNil: [ self error: 'failed write' ] ]
+		ensure: [ file close ].
+	^ filename
+%
+
+category: '*rowan-tools-gemstone'
+method: RwGitTool
+performOnServer: commandLine status: statusBlock
+  | performOnServerStatusArray |
+  performOnServerStatusArray := System _performOnServer: commandLine.
+  ^ statusBlock value: performOnServerStatusArray
 %
 
 ! Class extensions for 'RwGsImage'
@@ -61748,6 +61722,49 @@ category: '*rowan-url-3215'
 classmethod: RwUrl
 httpFromString: aString
   ^CypressUrl absoluteFromText: aString
+%
+
+!		Instance methods for 'RwUrl'
+
+category: '*rowan-url-cypress'
+method: RwUrl
+createRwCypressRepositoryForPath: repositoryDirectoryPath
+  | repo |
+  repo := CypressFileSystemRepository new
+    initializeDefaultRepositoryProperties;
+    codeFormatProperty: 'Cypress';
+    strictCodeFormat: false;
+    initializeForDirectory: repositoryDirectoryPath;
+    url: self printString;
+    yourself.
+  ^ repo
+%
+
+category: '*rowan-url-cypress'
+method: RwUrl
+createRwFiletreeRepositoryForPath: repositoryDirectoryPath
+
+	^ CypressFileSystemRepository new
+		initializeDefaultRepositoryProperties;
+		initializeForDirectory: repositoryDirectoryPath;
+		codeFormatProperty: 'FileTree';
+		strictCodeFormat: false;
+		initializeReaderAndWriterClasses;
+		url: self printString;
+		yourself
+%
+
+category: '*rowan-url-cypress'
+method: RwUrl
+createRwTonelRepositoryForPath: repositoryDirectoryPath
+  ^ CypressTonelRepository new
+    initializeDefaultRepositoryProperties;
+    initializeForDirectory: repositoryDirectoryPath;
+    codeFormatProperty: 'Tonel';
+    strictCodeFormat: false;
+    initializeReaderAndWriterClasses;
+    url: self printString;
+    yourself
 %
 
 ! Class extensions for 'SequenceableCollection'
