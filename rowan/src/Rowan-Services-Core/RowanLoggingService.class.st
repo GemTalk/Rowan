@@ -41,6 +41,24 @@ RowanLoggingService >> fileName: object [
 	fileName := object
 ]
 
+{ #category : 'client commands' }
+RowanLoggingService >> logComment: string [
+
+	| stonString ws |
+	isLogging ifFalse:[^self].
+	comment := string.
+	id := id + 1. 
+	date := Date today.
+	time := Time now.
+	location := #server.
+	stonString := STON toString: self.
+	ws := FileStream 
+				write: fileName
+				mode: #append.
+	[ws nextPutAll: stonString] ensure: [ws close].
+	comment := nil "service may be reused. Clear comment"
+]
+
 { #category : 'accessing' }
 RowanLoggingService >> logFileContents [
 
