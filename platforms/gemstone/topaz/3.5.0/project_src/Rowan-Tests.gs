@@ -1276,6 +1276,17 @@ test_updateFromSton
 
 ! Class implementation for 'RowanServicesTest'
 
+!		Class methods for 'RowanServicesTest'
+
+category: 'Testing'
+classmethod: RowanServicesTest
+isAbstract
+	"Override to true if a TestCase subclass is Abstract and should not have
+	TestCase instances built from it"
+
+	^self sunitName = #RowanServicesTest
+%
+
 !		Instance methods for 'RowanServicesTest'
 
 category: 'unicode method'
@@ -1517,9 +1528,38 @@ servicesTestProjectName
 category: 'setup teardown'
 method: RowanServicesTest
 setUp
-	"ensure results are clean as service requests not coming through #updateFromSton: like the client"
 
+	| user symListP symListT dictP dictT index |
+"ensure results are clean as service requests not coming through #updateFromSton: like the client"
 	RowanCommandResult initializeResults.
+"ensure that project is unloaded"
+	(Rowan image loadedProjectNamed: self servicesTestProjectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+"ensure that the default symbol dictionary has been removed and that any classes used in tests are not preset"
+	user := System myUserProfile.
+	symListP := user symbolList.
+	symListT := GsCurrentSession currentSession symbolList.
+
+	{self defaultSymbolDictionaryName}
+		do: [ :symDictName | 
+			dictP := symListP objectNamed: symDictName.
+			dictP
+				ifNotNil: [ 
+					(dictP at: GsPackagePolicy globalName otherwise: nil)
+						ifNotNil: [ :policy | policy disable ].
+					index := symListP indexOf: dictP.
+					index > 0
+						ifTrue: [ user removeDictionaryAt: index ] ].
+
+			dictT := symListT objectNamed: symDictName.
+			dictT
+				ifNotNil: [ 
+					(dictT at: GsPackagePolicy globalName otherwise: nil)
+						ifNotNil: [ :policy | policy disable ].
+					index := symListT indexOf: dictT.
+					index > 0
+						ifTrue: [ symListT removeAtIndex: index ] ] ].
+	GsPackagePolicy current refreshSessionMethodDictionary.
 %
 
 category: 'setup teardown'
@@ -1696,6 +1736,17 @@ test_windowsRegistry
 
 ! Class implementation for 'RowanClassServiceTest'
 
+!		Class methods for 'RowanClassServiceTest'
+
+category: 'Testing'
+classmethod: RowanClassServiceTest
+isAbstract
+	"Override to true if a TestCase subclass is Abstract and should not have
+	TestCase instances built from it"
+
+	^self sunitName = #RowanClassServiceTest
+%
+
 !		Instance methods for 'RowanClassServiceTest'
 
 category: 'patch'
@@ -1852,8 +1903,8 @@ setUp
 
 	super setUp.
 	self createServicesTestClass. 
+	Rowan platform _alternateImageClass: Rowan image testImageClass.
 	self loadServicesTestProject.
-	Rowan platform _alternateImageClass: Rowan image testImageClass
 %
 
 category: 'support'
@@ -1861,8 +1912,8 @@ method: RowanClassServiceTest
 tearDown
 
 	super tearDown.
-	Rowan platform _alternateImageClass: nil.
 	self unloadServicesTestProject.
+	Rowan platform _alternateImageClass: nil.
 %
 
 category: 'tests'
@@ -1920,6 +1971,7 @@ category: 'tests'
 method: RowanClassServiceTest
 test_classComment
 	| classService behavior |
+
 	behavior := Rowan globalNamed: self servicesDefaultClassName. 
 	self assert: behavior comment equals: String new. 
 	classService := RowanClassService forClassNamed: self servicesDefaultClassName meta: false. 

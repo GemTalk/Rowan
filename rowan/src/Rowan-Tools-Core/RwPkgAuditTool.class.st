@@ -15,7 +15,7 @@ RwPkgAuditTool >> _addAll: aColl to: aDict for: aName [
 RwPkgAuditTool >> auditForPackage: loadedPackage [
 "audit dirty packages"
 	|  res|
-	res := KeyValueDictionary new.
+	res := Dictionary new.
 	self _log: '  -- Auditing package ', loadedPackage name.
 		loadedPackage 
 				loadedClassesDo: [:aLoadedClass |  (self auditLoadedClass: aLoadedClass) 

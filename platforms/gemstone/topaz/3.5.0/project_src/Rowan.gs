@@ -33173,7 +33173,7 @@ _methodFileNameFor: aMethodDefinition
 		ifTrue: [ 
 		  | output specials |
 		  specials := self class selectorSpecials.
-		  output := String new writeStreamPortable.
+		  output := WriteStream on: String new.
 		  output nextPut: $^.
 		  selector
 			do: [ :each | 
@@ -35262,7 +35262,7 @@ method: RwPkgAuditTool
 auditForPackage: loadedPackage
 "audit dirty packages"
 	|  res|
-	res := KeyValueDictionary new.
+	res := Dictionary new.
 	self _log: '  -- Auditing package ', loadedPackage name.
 		loadedPackage 
 				loadedClassesDo: [:aLoadedClass |  (self auditLoadedClass: aLoadedClass) 
@@ -42486,38 +42486,6 @@ method: RwProjectReferenceDefinition
 acceptVisitor: aVisitor
 
 	^ aVisitor visitProjectReferenceDefinition: self
-%
-
-category: 'conversion'
-method: RwProjectReferenceDefinition
-asSpecification
-
-	| repoSpec platformSpec platformDict |
-	self useGit
-		ifTrue: [
-			repoSpec := RwGitRepositorySpecification new
-				committish: self committish;
-				committishType: self committishType;
-				remoteUrl: self remoteUrl;
-				yourself ]
-		ifFalse: [  repoSpec := RwDiskRepositorySpecification new ] .
-	platformSpec := RwGemStoneSpecification new.
-	platformSpec packageNameToPlatformPropertiesMap: self packageNameToPlatformPropertiesMap.
-	platformDict := (Dictionary new) at: 'gemstone' put: platformSpec; yourself.
-	^ RwComponentSpecification new
-		specName: self projectName;
-		projectUrl: self projectUrl;
-		repoPath: self packagesPath;
-		configsPath: self configsPath;
-		specsPath: self specsPath;
-		projectsPath: self projectsPath;
-		defaultComponentName: self defaultComponentName;
-		defaultConfigurationNames: self configurationNames;
-		defaultGroupNames: self groupNames;
-		comment: self comment;
-		repoSpec: repoSpec;
-		platformSpec: platformDict;
-		yourself.
 %
 
 category: 'accessing'
@@ -61498,6 +61466,38 @@ _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: base
 ! Class extensions for 'RwProjectReferenceDefinition'
 
 !		Instance methods for 'RwProjectReferenceDefinition'
+
+category: '*rowan-gemstone-components-extensions'
+method: RwProjectReferenceDefinition
+asSpecification
+
+	| repoSpec platformSpec platformDict |
+	self useGit
+		ifTrue: [
+			repoSpec := RwGitRepositorySpecification new
+				committish: self committish;
+				committishType: self committishType;
+				remoteUrl: self remoteUrl;
+				yourself ]
+		ifFalse: [  repoSpec := RwDiskRepositorySpecification new ] .
+	platformSpec := RwGemStoneSpecification new.
+	platformSpec packageNameToPlatformPropertiesMap: self packageNameToPlatformPropertiesMap.
+	platformDict := (Dictionary new) at: 'gemstone' put: platformSpec; yourself.
+	^ RwComponentSpecification new
+		specName: self projectName;
+		projectUrl: self projectUrl;
+		repoPath: self packagesPath;
+		configsPath: self configsPath;
+		specsPath: self specsPath;
+		projectsPath: self projectsPath;
+		defaultComponentName: self defaultComponentName;
+		defaultConfigurationNames: self configurationNames;
+		defaultGroupNames: self groupNames;
+		comment: self comment;
+		repoSpec: repoSpec;
+		platformSpec: platformDict;
+		yourself.
+%
 
 category: '*rowan-gemstone-components-extensions'
 method: RwProjectReferenceDefinition
