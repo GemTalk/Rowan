@@ -95,66 +95,6 @@ RwComponentProjectDefinition class >> projectName: projectName componentNamesToL
 	^ self newForProjectReference: projectRef
 ]
 
-{ #category : 'deprecated' }
-RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment [
-
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames 
-			defaultComponentName: defaultComponentName
-			useGit: useGit 
-			projectUrl: projectUrl 
-			projectHome: projectHomeFileReferenceOrString
-			committish: committish 
-			committishType: committishType 
-			comment: comment)
-]
-
-{ #category : 'deprecated' }
-RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl comment: comment [
-
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames 
-			useGit: useGit 
-			projectUrl: projectUrl 
-			comment: comment)
-]
-
-{ #category : 'deprecated' }
-RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl committish: committish committishType: committishType comment: comment [
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames 
-			useGit: useGit 
-			projectUrl: projectUrl 
-			committish: committish 
-			committishType: committishType 
-			comment: comment)
-]
-
-{ #category : 'deprecated' }
-RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment [
-
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames 
-			useGit: useGit 
-			projectUrl: projectUrl 
-			projectHome: projectHomeFileReferenceOrString
-			committish: committish 
-			committishType: committishType 
-			comment: comment)
-]
-
 { #category : 'instance creation' }
 RwComponentProjectDefinition class >> projectName: projectName projectHome: projectHomeFileReferenceOrString useGit: useGit comment: comment [
 
@@ -804,20 +744,6 @@ RwComponentProjectDefinition >> readProjectSetReadTool: readTool withConfigurati
 		readProjectSetForComponentProjectDefinition: self
 			withConfigurations: theConfigNames 
 			groupNames: theGroupNames
-]
-
-{ #category : 'temporary compat' }
-RwComponentProjectDefinition >> repoPath [
-
-	"use packagesPath"
-	^ self shouldNotImplement: #repoPath
-]
-
-{ #category : 'temporary compat' }
-RwComponentProjectDefinition >> repoPath: astring [
-
-	"use packagesPath:"
-	^ self shouldNotImplement: #repoPath:
 ]
 
 { #category : 'properties' }

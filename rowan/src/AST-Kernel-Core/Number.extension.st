@@ -1,6 +1,12 @@
 Extension { #name : 'Number' }
 
 { #category : '*ast-kernel-core' }
+Number >> rbStoreOn: aStream [
+  self printOn: aStream
+
+]
+
+{ #category : '*ast-kernel-core' }
 Number class >> rwFromStream: aStream [
   "BinaryExponent = ( 'e' | 'E' | 'd' | 'D'  'q' | 'Q') ['-' | '+'] Digits
    DecimalExponent = ( 'f' | 'F' ) ['-' | '+'] Digits
@@ -78,10 +84,4 @@ Number class >> rwFromStream: aStream [
         fractionalPart: 0
         exponent: ch ].
   ^ integerPart * factor
-]
-
-{ #category : '*ast-kernel-core' }
-Number >> rbStoreOn: aStream [
-  self printOn: aStream
-
 ]

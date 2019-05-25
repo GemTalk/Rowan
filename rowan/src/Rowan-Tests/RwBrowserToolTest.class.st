@@ -247,24 +247,21 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	projectDefinition := (RwProjectDefinition newForGitBasedProjectNamed: projectName)
-		comment: comment;
+	projectDefinition := (RwComponentProjectDefinition 
+		projectName: projectName 
+			projectHome: rootPath "?" 
+			useGit: true 
+			comment: comment)
 		defaultSymbolDictName: defaultSymbolDictName;
-		packageNames: packageNames;
+		configsPath: 'configs';
+		packagesPath: 'src';
+		specsPath: 'specs';
 		yourself.
 
 	self
-		handleConfirmationDuring: [ 
-			projectTools create
-				createProjectFor: projectDefinition
-				format: format
-				root: rootPath
-				configsPath: 'configs'
-				repoPath: 'src' 
-				specsPath: 'specs' ].
+		handleConfirmationDuring: [ projectDefinition create ].
 
 	projectTools load loadProjectDefinition: projectDefinition
-
 ]
 
 { #category : 'private' }
