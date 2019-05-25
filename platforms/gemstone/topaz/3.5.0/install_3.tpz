@@ -39,7 +39,7 @@
 			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
 		}.
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Rowan_component.ston'. 
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/RowanV2.ston'. 
 			'$ROWAN_PROJECTS_HOME'
 		}.
 		{
