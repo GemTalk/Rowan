@@ -204,7 +204,7 @@ RwModificationFiletreeWriterVisitor >> _methodFileNameFor: aMethodDefinition [
 		ifTrue: [ 
 		  | output specials |
 		  specials := self class selectorSpecials.
-		  output := WriteStream on: String new
+		  output := WriteStream on: String new.
 		  output nextPut: $^.
 		  selector
 			do: [ :each | 

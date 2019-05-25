@@ -43,7 +43,7 @@ run
 			audit := Rowan projectTools audit auditForProjectNamed: projectName.
 			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
 
-		Deprecated doErrorOnDeprecated.
+		false ifTrue: [ Deprecated doErrorOnDeprecated ].
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 
