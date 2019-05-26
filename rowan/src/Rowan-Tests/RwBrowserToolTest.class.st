@@ -256,12 +256,16 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 		configsPath: 'configs';
 		packagesPath: 'src';
 		specsPath: 'specs';
+		packageNames: packageNames;
 		yourself.
+
+	(rootPath asFileReference / projectName) ensureDeleteAll.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].
 
-	projectTools load loadProjectDefinition: projectDefinition
+	projectTools load loadProjectDefinition: projectDefinition.
+	^ projectDefinition
 ]
 
 { #category : 'private' }

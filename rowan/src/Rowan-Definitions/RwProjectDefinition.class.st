@@ -252,8 +252,7 @@ RwProjectDefinition >> packageNames [
 RwProjectDefinition >> packageNames: packageNames [
 
 	packageNames
-		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
-
+		do: [ :packageName | self addPackageNamed: packageName ]
 ]
 
 { #category : 'accessing' }

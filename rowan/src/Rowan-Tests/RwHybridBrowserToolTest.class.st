@@ -671,13 +671,19 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 
 	"Write project to disk, make a few modifications and then reload the project from disk"
 
-	| normalClass1 normalClass2 projectName packageNames packageName1 packageName2 normalInstance1 normalInstance2 projectTools className1 className2 theLoadedProject theLoadedPackage theLoadedClassOrClassExtension writtenStateValidationBlock classNames oldNormalClass2 |
+	| normalClass1 normalClass2 projectName packageNames packageName1 packageName2 normalInstance1 
+		normalInstance2 projectTools className1 className2 theLoadedProject theLoadedPackage 
+		theLoadedClassOrClassExtension writtenStateValidationBlock classNames oldNormalClass2 
+		projectDefinition useExport |
+
+	useExport := false.
+
 	projectName := 'HybridPatchProjectA'.
 	packageName1 := 'Hybrid-Patch-Core'.
 	packageName2 := 'Hybrid-Patch-Extensions'.
 	packageNames := {packageName1.
 	packageName2}.
-	self
+	projectDefinition := self
 		_loadDiskProjectDefinition: projectName
 		packageNames: packageNames
 		defaultSymbolDictName: self _symbolDictionaryName1
@@ -725,8 +731,10 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 	self should: [ normalInstance2 biff ] raise: MessageNotUnderstood.
 
 	projectTools := Rowan projectTools.
-	projectTools spec exportProjectNamed: projectName.
-	projectTools write writeProjectNamed: projectName.
+	projectDefinition exportSpecification.	"when should the spec be exported? ... not on every write since we do expect the spec to manually modified over time"
+	useExport
+		ifTrue: [ projectDefinition export ]
+		ifFalse: [ projectTools write writeProjectNamed: projectName ].
 	projectTools commit
 		commitProjectNamed: projectName
 		message:

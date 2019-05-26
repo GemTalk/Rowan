@@ -121,11 +121,6 @@ RwProjectTool class >> revert [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> spec [
-  ^ RwPrjSpecTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> test [
 
 	^RwPrjTestTool new

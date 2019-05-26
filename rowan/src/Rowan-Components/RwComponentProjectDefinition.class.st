@@ -462,6 +462,8 @@ RwComponentProjectDefinition >> export [
 { #category : 'exporting' }
 RwComponentProjectDefinition >> exportComponents [
 
+	self components isEmpty ifTrue: [
+		self addComponentNamed: self defaultComponentName comment: '' ].
 	self components values do: [:component|
 		component exportToUrl: 'file:',  self configsRoot pathString, '/' ].
 	self components isEmpty
@@ -518,6 +520,12 @@ RwComponentProjectDefinition >> exportProjects [
 		ifTrue: [
 			"add README.md as placeholder to ensure that the directory is preserved by git"
 			(self projectsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
+]
+
+{ #category : 'exporting' }
+RwComponentProjectDefinition >> exportSpecification [
+
+	self projectRef exportSpecification
 ]
 
 { #category : 'accessing' }

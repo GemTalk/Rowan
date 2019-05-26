@@ -1,7 +1,7 @@
 Class {
 	#name : 'RwPrjSpecTool',
 	#superclass : 'RwProjectTool',
-	#category : 'Rowan-Tools-Core'
+	#category : 'Rowan-Tools-Deprecated'
 }
 
 { #category : 'smalltalk api' }
