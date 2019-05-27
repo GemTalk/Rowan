@@ -224,6 +224,7 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 		cn := nextDefArray at: 2.
 		gn := nextDefArray at: 3.
 		visitor := self readConfigurationsForProjectComponentDefinition: pcd withConfigurations: cn groupNames: gn platformConfigurationAttributes: platformConfigurationAttributes.
+		visitor visitedComponents keysAndValuesDo: [:cName :cmp | pcd components at: cName put: cmp ].
 		projectVisitedQueue addLast: { visitor . nextDefArray  }.
 		visitor projectLoadSpecs do: [:loadSpec |
 			| lsd |

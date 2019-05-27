@@ -233,6 +233,18 @@ RwProjectReferenceDefinition >> committishType [
 ]
 
 { #category : 'accessing' }
+RwProjectReferenceDefinition >> components [
+
+	^ self properties at: 'components' ifAbsentPut: [ Dictionary new ]
+]
+
+{ #category : 'accessing' }
+RwProjectReferenceDefinition >> components: aComponentDefinitionDictionary [
+
+	^ self properties at: 'components' put: aComponentDefinitionDictionary
+]
+
+{ #category : 'accessing' }
 RwProjectReferenceDefinition >> configsPath [
 
 	^ self properties at: 'configsPath' ifAbsent: [ 'rowan/components' ]
@@ -347,7 +359,9 @@ RwProjectReferenceDefinition >> loadedCommitId:  aCommitId [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> loadedConfigurationNames [
 
-	^ self configurationNames
+	^ self components isEmpty
+		ifTrue: [ self configurationNames ]
+		ifFalse: [ self components keys ]
 ]
 
 { #category : 'accessing' }
@@ -424,6 +438,16 @@ RwProjectReferenceDefinition >> packagesPath: aString [
 RwProjectReferenceDefinition >> packagesRoot [
 
 	^self repositoryRoot / self packagesPath
+]
+
+{ #category : 'copying' }
+RwProjectReferenceDefinition >> postCopy [
+
+	| components |
+	super postCopy.
+	components := self components copy.
+	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
+	self components: components
 ]
 
 { #category : 'accessing' }

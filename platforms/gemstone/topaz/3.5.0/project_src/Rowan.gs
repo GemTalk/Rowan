@@ -3403,21 +3403,6 @@ true.
 
 doit
 (RwProjectTool
-	subclass: 'RwPrjSpecTool'
-	instVarNames: #(  )
-	classVars: #(  )
-	classInstVars: #(  )
-	poolDictionaries: #()
-	inDictionary: RowanTools
-	options: #())
-		category: 'Rowan-Tools-Core';
-		comment: '';
-		immediateInvariant.
-true.
-%
-
-doit
-(RwProjectTool
 	subclass: 'RwPrjTestTool'
 	instVarNames: #(  )
 	classVars: #(  )
@@ -3795,7 +3780,7 @@ true.
 doit
 (RwProjectDefinition
 	subclass: 'RwComponentProjectDefinition'
-	instVarNames: #( components )
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -4875,7 +4860,7 @@ true.
 doit
 (RwLoadedProject
 	subclass: 'RwGsLoadedSymbolDictComponentProject'
-	instVarNames: #( loadedComponents )
+	instVarNames: #(  )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -5239,7 +5224,7 @@ true.
 doit
 (RwProjectLoadConfigurationVisitor
 	subclass: 'RwProjectLoadComponentVisitor'
-	instVarNames: #( projectNames projectBasePath projectLoadSpecs )
+	instVarNames: #( projectNames projectBasePath projectLoadSpecs visitedComponents )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -35439,12 +35424,6 @@ revert
 
 category: 'commands'
 classmethod: RwProjectTool
-spec
-  ^ RwPrjSpecTool new
-%
-
-category: 'commands'
-classmethod: RwProjectTool
 test
 
 	^RwPrjTestTool new
@@ -38505,6 +38484,7 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 		cn := nextDefArray at: 2.
 		gn := nextDefArray at: 3.
 		visitor := self readConfigurationsForProjectComponentDefinition: pcd withConfigurations: cn groupNames: gn platformConfigurationAttributes: platformConfigurationAttributes.
+		visitor visitedComponents keysAndValuesDo: [:cName :cmp | pcd components at: cName put: cmp ].
 		projectVisitedQueue addLast: { visitor . nextDefArray  }.
 		visitor projectLoadSpecs do: [:loadSpec |
 			| lsd |
@@ -38970,67 +38950,6 @@ _moveClassExtension: theClassExtension toNewPackageNamed: newPackageName clonedF
 	^ newPackageDef
 %
 
-! Class implementation for 'RwPrjSpecTool'
-
-!		Instance methods for 'RwPrjSpecTool'
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-exportProjectDefinition: projectDefinition
-
-	self specification: projectDefinition specification.
-	^ specification export
-%
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-exportProjectNamed: projectName
-
-	| loadedProject |
-	loadedProject := Rowan image loadedProjectNamed: projectName.
-	self specification: loadedProject specification.
-	^ specification export
-%
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-exportSpecification: aRwSpecification
-
-	self specification: aRwSpecification.
-	^specification export
-%
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-exportSpecification: aRwSpecification toUrl: fileUrl
-
-	self specification: aRwSpecification.
-	^specification exportToUrl: fileUrl
-%
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-exportSpecUrl: aString
-
-	^ self exportSpecification: (RwSpecification fromUrl: aString)
-%
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-exportSpecUrl: aString toUrl: exportUrl
-
-	^ self exportSpecification: (RwSpecification fromUrl: aString) toUrl: exportUrl
-%
-
-category: 'smalltalk api'
-method: RwPrjSpecTool
-specForProjectNamed: projectName
-
-	| loadedProject |
-	loadedProject := Rowan image loadedProjectNamed: projectName.
-	^ loadedProject specification
-%
-
 ! Class implementation for 'RwPrjTestTool'
 
 !		Instance methods for 'RwPrjTestTool'
@@ -39090,77 +39009,6 @@ writeComponentProjectDefinition: projectDefinition
 		exportProjects;
 		exportComponents;
 		exportPackages
-%
-
-category: 'deprecated'
-method: RwPrjWriteTool
-writeDeprecatedProjectDefinition: projectDefinition
-
-	| repo repositoryUrl |
-	self deprecated: 'Use RwComponentProjectDefinition instead'.
-	repositoryUrl := projectDefinition repositoryUrl
-		ifNil: [ 
-			projectDefinition repositoryRootPath
-				ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
-				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , projectDefinition repoPath , '/') asRwUrl ] ]
-		ifNotNil: [ :urlString | urlString asRwUrl ].
-	repo := repositoryUrl asRwRepository.
-	projectDefinition packages values
-		do: [ :rwPackageDefinition | 
-			| packageStructure |
-			packageStructure := RwCypressPackageStructure
-				fromPackage: rwPackageDefinition.
-			repo writePackageStructure: packageStructure ]
-%
-
-category: 'deprecated'
-method: RwPrjWriteTool
-writeDeprecatedProjectNamed: projectName
-
-	| loadedProject repo repositoryUrl projectDefinition packageDefinitionSet loadedPackages |
-	self deprecated: 'Use RwComponentProjectDefinition instead'.
-	loadedProject := Rowan image loadedProjectNamed: projectName.
-	projectDefinition := loadedProject asDefinition.
-	repositoryUrl := projectDefinition repositoryUrl
-		ifNil: [ 
-			projectDefinition repositoryRootPath
-				ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
-				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , projectDefinition repoPath , '/') asRwUrl ] ]
-		ifNotNil: [ :urlString | urlString asRwUrl ].
-	repo := repositoryUrl asRwRepository.
-	loadedPackages := self _loadedPackagesForProject: projectDefinition.
-	packageDefinitionSet := loadedPackages asPackageDefinitionSet.
-	packageDefinitionSet
-		do: [ :rwPackageDefinition | 
-			| packageStructure |
-			packageStructure := RwCypressPackageStructure
-				fromPackage: rwPackageDefinition.
-			repo writePackageStructure: packageStructure ].
-	"loaded project and loaded packages written to disk - mark them not dirty"
-	loadedProject markNotDirty.
-	loadedPackages do: [:loadedPackage | loadedPackage markNotDirty ].
-%
-
-category: 'deprecated'
-method: RwPrjWriteTool
-writePackageSet: aRwPackageSet specification: aRwSpecification
-
-	| repo repositoryUrl |
-	self deprecated: 'RwPackageSet definition and writing package sets is no longer supported'.
-	self specification: aRwSpecification.
-	repositoryUrl := specification repositoryUrl
-		ifNil: [ 
-			specification repoSpec repositoryRootPath
-				ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
-				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , specification repoPath , '/') asRwUrl ] ]
-		ifNotNil: [ :urlString | urlString asRwUrl ].
-	repo := repositoryUrl asRwRepository.
-	aRwPackageSet packages values
-		do: [ :rwPackage | 
-			| packageStructure |
-			packageStructure := RwCypressPackageStructure fromPackage: rwPackage.
-			repo writePackageStructure: packageStructure ].
-	^ specification
 %
 
 category: 'smalltalk api'
@@ -41206,7 +41054,7 @@ method: RwProjectDefinition
 packageNames: packageNames
 
 	packageNames
-		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
+		do: [ :packageName | self addPackageNamed: packageName ]
 %
 
 category: 'accessing'
@@ -41392,7 +41240,6 @@ newForProjectReference: aRwProjectReferenceDefintion
 				add: 'projectRef' -> aRwProjectReferenceDefintion;
 				yourself)
 		packageDefinitions: Dictionary new
-		componentDefinitions: Dictionary new
 %
 
 category: 'instance creation'
@@ -41458,70 +41305,6 @@ projectName: projectName componentNamesToLoad: componentNamesToLoad groupNamesTo
 	^ self newForProjectReference: projectRef
 %
 
-category: 'deprecated'
-classmethod: RwComponentProjectDefinition
-projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment
-
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames 
-			defaultComponentName: defaultComponentName
-			useGit: useGit 
-			projectUrl: projectUrl 
-			projectHome: projectHomeFileReferenceOrString
-			committish: committish 
-			committishType: committishType 
-			comment: comment)
-%
-
-category: 'deprecated'
-classmethod: RwComponentProjectDefinition
-projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl comment: comment
-
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames 
-			useGit: useGit 
-			projectUrl: projectUrl 
-			comment: comment)
-%
-
-category: 'deprecated'
-classmethod: RwComponentProjectDefinition
-projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl committish: committish committishType: committishType comment: comment
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames 
-			useGit: useGit 
-			projectUrl: projectUrl 
-			committish: committish 
-			committishType: committishType 
-			comment: comment)
-%
-
-category: 'deprecated'
-classmethod: RwComponentProjectDefinition
-projectName: projectName configurationNames: configurationNames groupNames: groupNames useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment
-
-
-	^ self newForProjectReference: (RwProjectReferenceDefinition
-		projectName: projectName 
-			configurationNames: configurationNames 
-			groupNames: groupNames 
-			useGit: useGit 
-			projectUrl: projectUrl 
-			projectHome: projectHomeFileReferenceOrString
-			committish: committish 
-			committishType: committishType 
-			comment: comment)
-%
-
 category: 'instance creation'
 classmethod: RwComponentProjectDefinition
 projectName: projectName projectHome: projectHomeFileReferenceOrString useGit: useGit comment: comment
@@ -41538,12 +41321,11 @@ projectName: projectName projectHome: projectHomeFileReferenceOrString useGit: u
 
 category: 'instance creation'
 classmethod: RwComponentProjectDefinition
-withProperties: properties packageDefinitions: packageDefinitions componentDefinitions: componentDefinitions
+withProperties: properties packageDefinitions: packageDefinitions
 
 	^ self basicNew
 		properties: properties;
 		packages: packageDefinitions;
-		components: componentDefinitions;
 		yourself
 %
 
@@ -41604,8 +41386,8 @@ addPackageNamed: packageName toComponentNamed: componentName withConditions: con
 
 	| package component |
 	package := super addPackageNamed: packageName.
-	component := self 
-		components at: componentName 
+	component := self components 
+		at: componentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
 	component
 		conditionalPackagesAtConditions: conditionArray
@@ -41620,8 +41402,8 @@ addPackageNamed: packageName toComponentNamed: componentName withConditions: con
 
 	| package component |
 	package := super addPackageNamed: packageName.
-	component := self 
-		components at: componentName 
+	component := self components
+		at: componentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
@@ -41639,8 +41421,8 @@ addPackageNamed: packageName toComponentNamed: componentName withConditions: con
 
 	| package component |
 	package := super addPackageNamed: packageName.
-	component := self 
-		components at: componentName 
+	component := self components
+		at: componentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
@@ -41662,8 +41444,8 @@ addPackageNamed: packageName withConditions: conditionArray
 			toComponentNamed: self defaultComponentName 
 			withConditions: conditionArray
 			andGroupName: self defaultGroupName.
-	component := self 
-		components at: self defaultComponentName 
+	component := self components 
+		at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
 		conditionalPackagesAtConditions: conditionArray
@@ -41682,8 +41464,8 @@ addPackageNamed: packageName withConditions: conditionArray andGroupName: groupN
 			toComponentNamed: self defaultComponentName 
 			withConditions: conditionArray
 			andGroupName: groupName.
-	component := self 
-		components at: self defaultComponentName 
+	component := self components
+		at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
 		conditionalPackagesAtConditions: conditionArray
@@ -41702,8 +41484,8 @@ addPackageNamed: packageName withConditions: conditionArray andGroupName: groupN
 			toComponentNamed: self defaultComponentName 
 			withConditions: conditionArray
 			andGroupName: groupName.
-	component := self 
-		components at: self defaultComponentName 
+	component := self components
+		at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
@@ -41725,8 +41507,8 @@ addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbo
 			toComponentNamed: self defaultComponentName 
 			withConditions: conditionArray
 			andGroupName: self defaultGroupName.
-	component := self 
-		components at: self defaultComponentName 
+	component := self components
+		at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
@@ -41829,14 +41611,14 @@ category: 'accessing'
 method: RwComponentProjectDefinition
 components
 
-	^ components
+	^ self projectRef components
 %
 
 category: 'accessing'
 method: RwComponentProjectDefinition
 components: aComponentDefinitionDictionary
 
-	components := aComponentDefinitionDictionary
+	self projectRef components: aComponentDefinitionDictionary
 %
 
 category: 'properties'
@@ -41930,6 +41712,8 @@ category: 'exporting'
 method: RwComponentProjectDefinition
 exportComponents
 
+	self components isEmpty ifTrue: [
+		self addComponentNamed: self defaultComponentName comment: '' ].
 	self components values do: [:component|
 		component exportToUrl: 'file:',  self configsRoot pathString, '/' ].
 	self components isEmpty
@@ -41991,6 +41775,13 @@ exportProjects
 			(self projectsRoot /  'README', 'md') writeStreamDo: [ :fileStream | ] ]
 %
 
+category: 'exporting'
+method: RwComponentProjectDefinition
+exportSpecification
+
+	self projectRef exportSpecification
+%
+
 category: 'accessing'
 method: RwComponentProjectDefinition
 gitRoot: aGitRootReferenceOrString 
@@ -42022,9 +41813,16 @@ loadedConfigurationNames
 
 category: 'properties'
 method: RwComponentProjectDefinition
-loadedConfigurationNames: anArray
+loadedConfigurationNames: configNames
 
-	^ self projectRef loadedConfigurationNames: anArray
+	"noop - project ref component keys is list of loaded config names"
+
+	"https://github.com/GemTalk/Rowan/issues/308"
+
+	"eventually this method will be completely removed/deprecated"
+
+	configNames asArray sort = self components keys asArray sort
+		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
 %
 
 category: 'properties'
@@ -42095,15 +41893,6 @@ method: RwComponentProjectDefinition
 packagesRoot
 
 	^ self projectRef packagesRoot
-%
-
-category: 'copying'
-method: RwComponentProjectDefinition
-postCopy
-
-	super postCopy.
-	components := components copy.
-	components keysAndValuesDo: [:key : value | components at: key put: value copy ] .
 %
 
 category: 'accessing'
@@ -42247,22 +42036,6 @@ readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: 
 		readProjectSetForComponentProjectDefinition: self
 			withConfigurations: theConfigNames 
 			groupNames: theGroupNames
-%
-
-category: 'temporary compat'
-method: RwComponentProjectDefinition
-repoPath
-
-	"use packagesPath"
-	^ self shouldNotImplement: #repoPath
-%
-
-category: 'temporary compat'
-method: RwComponentProjectDefinition
-repoPath: astring
-
-	"use packagesPath:"
-	^ self shouldNotImplement: #repoPath:
 %
 
 category: 'properties'
@@ -42549,6 +42322,20 @@ committishType
 
 category: 'accessing'
 method: RwProjectReferenceDefinition
+components
+
+	^ self properties at: 'components' ifAbsentPut: [ Dictionary new ]
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
+components: aComponentDefinitionDictionary
+
+	^ self properties at: 'components' put: aComponentDefinitionDictionary
+%
+
+category: 'accessing'
+method: RwProjectReferenceDefinition
 configsPath
 
 	^ self properties at: 'configsPath' ifAbsent: [ 'rowan/components' ]
@@ -42681,7 +42468,9 @@ category: 'accessing'
 method: RwProjectReferenceDefinition
 loadedConfigurationNames
 
-	^ self configurationNames
+	^ self components isEmpty
+		ifTrue: [ self configurationNames ]
+		ifFalse: [ self components keys ]
 %
 
 category: 'accessing'
@@ -42769,6 +42558,17 @@ method: RwProjectReferenceDefinition
 packagesRoot
 
 	^self repositoryRoot / self packagesPath
+%
+
+category: 'copying'
+method: RwProjectReferenceDefinition
+postCopy
+
+	| components |
+	super postCopy.
+	components := self components copy.
+	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
+	self components: components
 %
 
 category: 'accessing'
@@ -52217,7 +52017,6 @@ asDefinition
 	^ RwComponentProjectDefinition
 		withProperties: self propertiesForDefinition
 		packageDefinitions: self loadedPackageDefinitions
-		componentDefinitions: self loadedComponentDefinitions
 %
 
 category: 'commit log'
@@ -52227,12 +52026,11 @@ commitLog: logLimit
 	^ self projectRef commitLog: logLimit
 %
 
-category: 'initialization'
+category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
-initialize
+components
 
-	super initialize.
-	loadedComponents := KeyValueDictionary new.
+	^ self projectRef components
 %
 
 category: 'initialization'
@@ -52248,7 +52046,7 @@ method: RwGsLoadedSymbolDictComponentProject
 initializeForProjectReferenceDefinition: aProjectReferenceDefinition
 
 	self initializeForName: aProjectReferenceDefinition projectAlias.
-	handle := aProjectReferenceDefinition
+	handle := aProjectReferenceDefinition copy
 %
 
 category: 'properties'
@@ -52264,15 +52062,24 @@ loadedComponentDefinitions
 
 	"Create definitions from all of the components I define, and answer the collection of them"
 
-	^ self definitionsFor: loadedComponents
+	| components |
+	components := self componenents copy.
+	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
+	^ components
 %
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
 loadedConfigurationNames: configNames
 
+	"noop - project ref component keys is list of loaded config names"
 
-	self projectRef loadedConfigurationNames: configNames
+	"https://github.com/GemTalk/Rowan/issues/308"
+
+	"eventually this method will be completely removed/deprecated"
+
+	configNames asArray sort = self components keys asArray sort
+		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
 %
 
 category: 'accessing'
@@ -52327,7 +52134,7 @@ propertiesForDefinition
 
 	| props |
 	props := super propertiesForDefinition.
-	props at: 'projectRef' put: handle.
+	props at: 'projectRef' put: handle copy.
 	^ props
 %
 
@@ -54395,7 +54202,8 @@ initialize
 
 	super initialize.
 	projectNames := Set new.
-	projectLoadSpecs := Set new
+	projectLoadSpecs := Set new.
+	visitedComponents := Dictionary new
 %
 
 category: 'accessing'
@@ -54468,6 +54276,13 @@ visitComponentSpecification: aComponentSpecification
 	self projectLoadSpecs add: aComponentSpecification
 %
 
+category: 'accessing'
+method: RwProjectLoadComponentVisitor
+visitedComponents
+
+	^ visitedComponents
+%
+
 category: 'private'
 method: RwProjectLoadComponentVisitor
 _projects: projectDirPath forProject: ignored
@@ -54482,6 +54297,14 @@ _projects: projectDirPath forProject: ignored
 			(RwSpecification fromUrl: url)
 				projectName: prjName;
 				yourself ]
+%
+
+category: 'private'
+method: RwProjectLoadComponentVisitor
+_visited: aComponent
+
+	super _visited: aComponent.
+	visitedComponents at: aComponent name put: aComponent.
 %
 
 ! Class implementation for 'RwProjectLoadConfigurationAnalysisVisitor'
@@ -61454,11 +61277,12 @@ category: '*rowan-core-definitions-extensions'
 method: RwProjectDefinition
 _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 
-	({ 'spec'. RwLoadedProject _projectDefinitionSourceKey. 'projectRef' } includes: propertyKey)
+	({ 'projectOwnerId' . 'spec'. RwLoadedProject _projectDefinitionSourceKey. 'projectRef' } includes: propertyKey)
 		ifTrue: [ 
 		"projectRef entries are considered to be equal for comparison purposes"
 		"spec entries are considered to be equal for comparison purposes"
 		"_projectDefinitionSourceKey entries are considered equal for comparison purpposes"
+		"projectOwnerId entries are considered equal for comparison purpposes"
 		^ true ].
 	^ super _compareProperty: propertyKey propertyVaue: propertyValue againstBaseValue: baseValue
 %

@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'projectNames',
 		'projectBasePath',
-		'projectLoadSpecs'
+		'projectLoadSpecs',
+		'visitedComponents'
 	],
 	#category : 'Rowan-Components'
 }
@@ -24,12 +25,20 @@ RwProjectLoadComponentVisitor >> _projects: projectDirPath forProject: ignored [
 				yourself ]
 ]
 
+{ #category : 'private' }
+RwProjectLoadComponentVisitor >> _visited: aComponent [
+
+	super _visited: aComponent.
+	visitedComponents at: aComponent name put: aComponent.
+]
+
 { #category : 'initialization' }
 RwProjectLoadComponentVisitor >> initialize [
 
 	super initialize.
 	projectNames := Set new.
-	projectLoadSpecs := Set new
+	projectLoadSpecs := Set new.
+	visitedComponents := Dictionary new
 ]
 
 { #category : 'accessing' }
@@ -94,4 +103,10 @@ RwProjectLoadComponentVisitor >> visitComponentLoadConfiguration: aComponentLoad
 RwProjectLoadComponentVisitor >> visitComponentSpecification: aComponentSpecification [
 
 	self projectLoadSpecs add: aComponentSpecification
+]
+
+{ #category : 'accessing' }
+RwProjectLoadComponentVisitor >> visitedComponents [
+
+	^ visitedComponents
 ]

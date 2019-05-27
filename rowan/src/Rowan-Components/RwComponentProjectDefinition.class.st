@@ -1,9 +1,6 @@
 Class {
 	#name : 'RwComponentProjectDefinition',
 	#superclass : 'RwProjectDefinition',
-	#instVars : [
-		'components'
-	],
 	#category : 'Rowan-Components'
 }
 
@@ -33,7 +30,6 @@ RwComponentProjectDefinition class >> newForProjectReference: aRwProjectReferenc
 				add: 'projectRef' -> aRwProjectReferenceDefintion;
 				yourself)
 		packageDefinitions: Dictionary new
-		componentDefinitions: Dictionary new
 ]
 
 { #category : 'instance creation' }
@@ -109,12 +105,11 @@ RwComponentProjectDefinition class >> projectName: projectName projectHome: proj
 ]
 
 { #category : 'instance creation' }
-RwComponentProjectDefinition class >> withProperties: properties packageDefinitions: packageDefinitions componentDefinitions: componentDefinitions [
+RwComponentProjectDefinition class >> withProperties: properties packageDefinitions: packageDefinitions [
 
 	^ self basicNew
 		properties: properties;
 		packages: packageDefinitions;
-		components: componentDefinitions;
 		yourself
 ]
 
@@ -168,8 +163,8 @@ RwComponentProjectDefinition >> addPackageNamed: packageName toComponentNamed: c
 
 	| package component |
 	package := super addPackageNamed: packageName.
-	component := self 
-		components at: componentName 
+	component := self components 
+		at: componentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
 	component
 		conditionalPackagesAtConditions: conditionArray
@@ -183,8 +178,8 @@ RwComponentProjectDefinition >> addPackageNamed: packageName toComponentNamed: c
 
 	| package component |
 	package := super addPackageNamed: packageName.
-	component := self 
-		components at: componentName 
+	component := self components
+		at: componentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
@@ -201,8 +196,8 @@ RwComponentProjectDefinition >> addPackageNamed: packageName toComponentNamed: c
 
 	| package component |
 	package := super addPackageNamed: packageName.
-	component := self 
-		components at: componentName 
+	component := self components
+		at: componentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: componentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
@@ -223,8 +218,8 @@ RwComponentProjectDefinition >> addPackageNamed: packageName withConditions: con
 			toComponentNamed: self defaultComponentName 
 			withConditions: conditionArray
 			andGroupName: self defaultGroupName.
-	component := self 
-		components at: self defaultComponentName 
+	component := self components 
+		at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
 		conditionalPackagesAtConditions: conditionArray
@@ -242,8 +237,8 @@ RwComponentProjectDefinition >> addPackageNamed: packageName withConditions: con
 			toComponentNamed: self defaultComponentName 
 			withConditions: conditionArray
 			andGroupName: groupName.
-	component := self 
-		components at: self defaultComponentName 
+	component := self components
+		at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
 		conditionalPackagesAtConditions: conditionArray
@@ -261,8 +256,8 @@ RwComponentProjectDefinition >> addPackageNamed: packageName withConditions: con
 			toComponentNamed: self defaultComponentName 
 			withConditions: conditionArray
 			andGroupName: groupName.
-	component := self 
-		components at: self defaultComponentName 
+	component := self components
+		at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key
@@ -283,8 +278,8 @@ RwComponentProjectDefinition >> addPackageNamed: packageName withConditions: con
 			toComponentNamed: self defaultComponentName 
 			withConditions: conditionArray
 			andGroupName: self defaultGroupName.
-	component := self 
-		components at: self defaultComponentName 
+	component := self components
+		at: self defaultComponentName 
 		ifAbsentPut: [ RwComponentLoadConfiguration newNamed: self defaultComponentName for: self name ].
 	component
 		conditionalPackageMapSpecsAtGemStoneUserId: aSymbolDictAssoc key 
@@ -375,13 +370,13 @@ RwComponentProjectDefinition >> componentNamed: aComponentName ifAbsent: absentB
 { #category : 'accessing' }
 RwComponentProjectDefinition >> components [
 
-	^ components
+	^ self projectRef components
 ]
 
 { #category : 'accessing' }
 RwComponentProjectDefinition >> components: aComponentDefinitionDictionary [
 
-	components := aComponentDefinitionDictionary
+	self projectRef components: aComponentDefinitionDictionary
 ]
 
 { #category : 'properties' }
@@ -554,9 +549,16 @@ RwComponentProjectDefinition >> loadedConfigurationNames [
 ]
 
 { #category : 'properties' }
-RwComponentProjectDefinition >> loadedConfigurationNames: anArray [
+RwComponentProjectDefinition >> loadedConfigurationNames: configNames [
 
-	^ self projectRef loadedConfigurationNames: anArray
+	"noop - project ref component keys is list of loaded config names"
+
+	"https://github.com/GemTalk/Rowan/issues/308"
+
+	"eventually this method will be completely removed/deprecated"
+
+	configNames asArray sort = self components keys asArray sort
+		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
 ]
 
 { #category : 'properties' }
@@ -617,14 +619,6 @@ RwComponentProjectDefinition >> packagesPath: aString [
 RwComponentProjectDefinition >> packagesRoot [
 
 	^ self projectRef packagesRoot
-]
-
-{ #category : 'copying' }
-RwComponentProjectDefinition >> postCopy [
-
-	super postCopy.
-	components := components copy.
-	components keysAndValuesDo: [:key : value | components at: key put: value copy ] .
 ]
 
 { #category : 'accessing' }

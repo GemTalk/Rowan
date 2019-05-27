@@ -246,3 +246,35 @@ RwProjectComponentDefinitionsTest >> testReadComponentProject [
 	self assert: (x := projectSetDefinition projectNames asArray sort) = #( 'RowanSample2').
 	self assert: (x := projectDefinition packageNames asArray sort) = #( 'RowanSample2-Core')
 ]
+
+{ #category : 'tests' }
+RwProjectComponentDefinitionsTest >> testRowanInstall_3 [
+
+	"derived from platforms/gemstone/topaz/3.5.0/install_3.tpz"
+
+	"install_3.tpz"
+ 	| projectSetDefinition gitRepoPath  loadedProjectInfo readTool gitRoot x |
+	projectSetDefinition := RwProjectSetDefinition new.
+	loadedProjectInfo := Dictionary new.
+	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
+	readTool := Rowan projectTools read.
+	{	{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/RowanV2.ston'. 
+			'$ROWAN_PROJECTS_HOME'
+		}	} 
+	do: [:ar |
+		"Read project and packages from disk, creating a projectSetDefinition with all 5 projects"
+		| projectDefinition theProjectSetDefinition specUrl projectHome |
+		specUrl := ar at: 1.
+		projectHome := ar at: 2.
+		gitRoot := '$ROWAN_PROJECTS_HOME/Rowan'.
+		projectDefinition := (RwComponentProjectDefinition newForUrl: specUrl) 
+			projectHome: projectHome;
+			gitRoot: gitRoot;
+			yourself.
+		theProjectSetDefinition := readTool 
+			readProjectSetForComponentProjectDefinition: projectDefinition 
+				withConfigurations: projectDefinition defaultConfigurationNames 
+				groupNames: projectDefinition defaultGroupNames.
+		self assert: #( 'Globals' 'Kernel' 'Load' 'Tests' 'UserGlobals') sort = (x := (theProjectSetDefinition projectNamed: projectDefinition name) loadedConfigurationNames asArray sort) ]
+]

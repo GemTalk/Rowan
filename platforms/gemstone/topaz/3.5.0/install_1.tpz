@@ -26,6 +26,7 @@
 #	Create Rowan symbol dictionaris
 
   run
+	"install_1.tpz"
 	| session symbolList |
 	session := GsCurrentSession currentSession.
 	symbolList := session symbolList.

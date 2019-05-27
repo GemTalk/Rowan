@@ -26,6 +26,7 @@
 
 # reload projects to pick up latest source in packages
   run
+	"install_4.tpz"
 	| projectNames warnings |
 	projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' 'FileSystemGs' ).
 	warnings := {}.

@@ -6772,6 +6772,39 @@ testReadComponentProject
 	self assert: (x := projectDefinition packageNames asArray sort) = #( 'RowanSample2-Core')
 %
 
+category: 'tests'
+method: RwProjectComponentDefinitionsTest
+testRowanInstall_3
+
+	"derived from platforms/gemstone/topaz/3.5.0/install_3.tpz"
+
+	"install_3.tpz"
+ 	| projectSetDefinition gitRepoPath  loadedProjectInfo readTool gitRoot x |
+	projectSetDefinition := RwProjectSetDefinition new.
+	loadedProjectInfo := Dictionary new.
+	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
+	readTool := Rowan projectTools read.
+	{	{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/RowanV2.ston'. 
+			'$ROWAN_PROJECTS_HOME'
+		}	} 
+	do: [:ar |
+		"Read project and packages from disk, creating a projectSetDefinition with all 5 projects"
+		| projectDefinition theProjectSetDefinition specUrl projectHome |
+		specUrl := ar at: 1.
+		projectHome := ar at: 2.
+		gitRoot := '$ROWAN_PROJECTS_HOME/Rowan'.
+		projectDefinition := (RwComponentProjectDefinition newForUrl: specUrl) 
+			projectHome: projectHome;
+			gitRoot: gitRoot;
+			yourself.
+		theProjectSetDefinition := readTool 
+			readProjectSetForComponentProjectDefinition: projectDefinition 
+				withConfigurations: projectDefinition defaultConfigurationNames 
+				groupNames: projectDefinition defaultGroupNames.
+		self assert: #( 'Globals' 'Kernel' 'Load' 'Tests' 'UserGlobals') sort = (x := (theProjectSetDefinition projectNamed: projectDefinition name) loadedConfigurationNames asArray sort) ]
+%
+
 ! Class implementation for 'RwSymbolDictionaryTest'
 
 !		Instance methods for 'RwSymbolDictionaryTest'
@@ -7910,23 +7943,25 @@ _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbol
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	projectDefinition := (RwProjectDefinition newForGitBasedProjectNamed: projectName)
-		comment: comment;
+	projectDefinition := (RwComponentProjectDefinition 
+		projectName: projectName 
+			projectHome: rootPath "?" 
+			useGit: true 
+			comment: comment)
 		defaultSymbolDictName: defaultSymbolDictName;
+		configsPath: 'configs';
+		packagesPath: 'src';
+		specsPath: 'specs';
 		packageNames: packageNames;
 		yourself.
 
-	self
-		handleConfirmationDuring: [ 
-			projectTools create
-				createProjectFor: projectDefinition
-				format: format
-				root: rootPath
-				configsPath: 'configs'
-				repoPath: 'src' 
-				specsPath: 'specs' ].
+	(rootPath asFileReference / projectName) ensureDeleteAll.
 
-	projectTools load loadProjectDefinition: projectDefinition
+	self
+		handleConfirmationDuring: [ projectDefinition create ].
+
+	projectTools load loadProjectDefinition: projectDefinition.
+	^ projectDefinition
 %
 
 category: 'private'
@@ -15406,13 +15441,19 @@ testHybridComplicatedProjectLoad
 
 	"Write project to disk, make a few modifications and then reload the project from disk"
 
-	| normalClass1 normalClass2 projectName packageNames packageName1 packageName2 normalInstance1 normalInstance2 projectTools className1 className2 theLoadedProject theLoadedPackage theLoadedClassOrClassExtension writtenStateValidationBlock classNames oldNormalClass2 |
+	| normalClass1 normalClass2 projectName packageNames packageName1 packageName2 normalInstance1 
+		normalInstance2 projectTools className1 className2 theLoadedProject theLoadedPackage 
+		theLoadedClassOrClassExtension writtenStateValidationBlock classNames oldNormalClass2 
+		projectDefinition useExport |
+
+	useExport := false.
+
 	projectName := 'HybridPatchProjectA'.
 	packageName1 := 'Hybrid-Patch-Core'.
 	packageName2 := 'Hybrid-Patch-Extensions'.
 	packageNames := {packageName1.
 	packageName2}.
-	self
+	projectDefinition := self
 		_loadDiskProjectDefinition: projectName
 		packageNames: packageNames
 		defaultSymbolDictName: self _symbolDictionaryName1
@@ -15460,8 +15501,10 @@ testHybridComplicatedProjectLoad
 	self should: [ normalInstance2 biff ] raise: MessageNotUnderstood.
 
 	projectTools := Rowan projectTools.
-	projectTools spec exportProjectNamed: projectName.
-	projectTools write writeProjectNamed: projectName.
+	projectDefinition exportSpecification.	"when should the spec be exported? ... not on every write since we do expect the spec to manually modified over time"
+	useExport
+		ifTrue: [ projectDefinition export ]
+		ifFalse: [ projectTools write writeProjectNamed: projectName ].
 	projectTools commit
 		commitProjectNamed: projectName
 		message:
