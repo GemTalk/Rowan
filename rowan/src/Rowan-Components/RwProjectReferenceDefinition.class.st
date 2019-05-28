@@ -361,11 +361,15 @@ RwProjectReferenceDefinition >> loadedConfigurationNames [
 
 	^ self components isEmpty
 		ifTrue: [ self configurationNames ]
-		ifFalse: [ self components keys ]
+		ifFalse: [ (self components values select: [:each | each isIndependentlyLoadable ]) collect: [:each | each name ] ]
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> loadedConfigurationNames: anArray [
+
+	"https://github.com/GemTalk/Rowan/issues/308"
+
+	"eventually this method will be completely removed/deprecated"
 
 	^ self configurationNames: anArray
 ]

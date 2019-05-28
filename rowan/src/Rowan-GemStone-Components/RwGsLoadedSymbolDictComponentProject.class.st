@@ -67,6 +67,12 @@ RwGsLoadedSymbolDictComponentProject >> loadedComponentDefinitions [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> loadedConfigurationNames [
+
+	^ self projectRef loadedConfigurationNames
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> loadedConfigurationNames: configNames [
 
 	"noop - project ref component keys is list of loaded config names"
@@ -75,7 +81,7 @@ RwGsLoadedSymbolDictComponentProject >> loadedConfigurationNames: configNames [
 
 	"eventually this method will be completely removed/deprecated"
 
-	configNames asArray sort = self components keys asArray sort
+	configNames asArray sort = self loadedConfigurationNames asArray sort
 		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
 ]
 

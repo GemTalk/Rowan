@@ -290,6 +290,8 @@ RwComponentProjectDefinition >> addPackageNamed: packageName withConditions: con
 
 { #category : 'accessing' }
 RwComponentProjectDefinition >> addPackages: somePackageNames forComponent: aComponent [
+	"should be sent from the component visitor ... not unexpected to have a duplicate, but the new
+		component --- presumably freshly read from disk --- wins"
 
 	| componentName |
 	componentName := aComponent name.
@@ -299,7 +301,9 @@ RwComponentProjectDefinition >> addPackages: somePackageNames forComponent: aCom
 			ifNil: [ self components at: componentName put: aComponent ]
 			ifNotNil: [:theComponent |
 				theComponent ~~ aComponent
-					ifTrue: [ self error: 'Unexpected duplicate components named ', componentName printString ] ].
+					ifTrue: [ 
+						"newest component wins"
+						self components at: componentName put: aComponent ] ].
 	somePackageNames asSet do: [:packageName |
 		super addPackageNamed: packageName ].
 ]
@@ -573,7 +577,7 @@ RwComponentProjectDefinition >> loadedConfigurationNames: configNames [
 
 	"eventually this method will be completely removed/deprecated"
 
-	configNames asArray sort = self components keys asArray sort
+	configNames asArray sort = self loadedConfigurationNames asArray sort
 		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
 ]
 

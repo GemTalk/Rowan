@@ -30937,6 +30937,13 @@ initializeForImport
 	projectName := nil
 %
 
+category: 'testing'
+method: RwAbstractProjectConfiguration
+isIndependentlyLoadable
+	
+	^ true
+%
+
 category: 'accessing'
 method: RwAbstractProjectConfiguration
 name
@@ -31283,6 +31290,14 @@ method: RwNestedProjectLoadConfiguration
 acceptVisitor: aVisitor
 
 	^self error: 'nested configuration cannot be used as a top-level configuration. The receiver is nested inside of project load configurations'
+%
+
+category: 'testing'
+method: RwNestedProjectLoadConfiguration
+isIndependentlyLoadable
+	"nested configuration is not independently loadable ... they can only be loaded when referenced from another config"
+
+	^ false
 %
 
 ! Class implementation for 'RwProjectLoadConfiguration'
@@ -38472,6 +38487,7 @@ method: RwPrjReadTool
 readProjectSetForComponentProjectDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes
 
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
+	projectComponentDefinition components: Dictionary new. "build new list of components based on (potentially) new list of configNames"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
 	projectVisitorQueue := {
@@ -41521,6 +41537,8 @@ addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbo
 category: 'accessing'
 method: RwComponentProjectDefinition
 addPackages: somePackageNames forComponent: aComponent
+	"should be sent from the component visitor ... not unexpected to have a duplicate, but the new
+		component --- presumably freshly read from disk --- wins"
 
 	| componentName |
 	componentName := aComponent name.
@@ -41530,7 +41548,9 @@ addPackages: somePackageNames forComponent: aComponent
 			ifNil: [ self components at: componentName put: aComponent ]
 			ifNotNil: [:theComponent |
 				theComponent ~~ aComponent
-					ifTrue: [ self error: 'Unexpected duplicate components named ', componentName printString ] ].
+					ifTrue: [ 
+						"newest component wins"
+						self components at: componentName put: aComponent ] ].
 	somePackageNames asSet do: [:packageName |
 		super addPackageNamed: packageName ].
 %
@@ -41839,7 +41859,7 @@ loadedConfigurationNames: configNames
 
 	"eventually this method will be completely removed/deprecated"
 
-	configNames asArray sort = self components keys asArray sort
+	configNames asArray sort = self loadedConfigurationNames asArray sort
 		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
 %
 
@@ -42488,12 +42508,16 @@ loadedConfigurationNames
 
 	^ self components isEmpty
 		ifTrue: [ self configurationNames ]
-		ifFalse: [ self components keys ]
+		ifFalse: [ (self components values select: [:each | each isIndependentlyLoadable ]) collect: [:each | each name ] ]
 %
 
 category: 'accessing'
 method: RwProjectReferenceDefinition
 loadedConfigurationNames: anArray
+
+	"https://github.com/GemTalk/Rowan/issues/308"
+
+	"eventually this method will be completely removed/deprecated"
 
 	^ self configurationNames: anArray
 %
@@ -52088,6 +52112,13 @@ loadedComponentDefinitions
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
+loadedConfigurationNames
+
+	^ self projectRef loadedConfigurationNames
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
 loadedConfigurationNames: configNames
 
 	"noop - project ref component keys is list of loaded config names"
@@ -52096,7 +52127,7 @@ loadedConfigurationNames: configNames
 
 	"eventually this method will be completely removed/deprecated"
 
-	configNames asArray sort = self components keys asArray sort
+	configNames asArray sort = self loadedConfigurationNames asArray sort
 		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
 %
 

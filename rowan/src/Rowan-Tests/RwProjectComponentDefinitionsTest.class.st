@@ -276,5 +276,5 @@ RwProjectComponentDefinitionsTest >> testRowanInstall_3 [
 			readProjectSetForComponentProjectDefinition: projectDefinition 
 				withConfigurations: projectDefinition defaultConfigurationNames 
 				groupNames: projectDefinition defaultGroupNames.
-		self assert: #( 'Globals' 'Kernel' 'Load' 'Tests' 'UserGlobals') sort = (x := (theProjectSetDefinition projectNamed: projectDefinition name) loadedConfigurationNames asArray sort) ]
+		self assert: #( 'Load' ) sort = (x := (theProjectSetDefinition projectNamed: projectDefinition name) loadedConfigurationNames asArray sort) ]
 ]
