@@ -5291,6 +5291,7 @@ JadeServer >> updateFromSton: stonString [
 			[:service |
 			service organizer: organizer. 
 			service updateType: nil.  "Update type is only for returned commands"
+			service command ifNil:[service command: #update]. 
 			service servicePerform: service command withArguments: service commandArgs].
 	self autoCommitIfRequired.
 	RowanLoggingService current logSentServices. 
