@@ -19,6 +19,7 @@ RwComponentLoadConfiguration >> initializeForExport [
 	"for export, the keys in the dictionaris of the conditional packages structure need to be put into canonical order"
 
 	| cp orderedConditionalPackages |
+	super initializeForExport.
 	cp := self conditionalPackages.
 	orderedConditionalPackages := Rowan platform orderedDictionaryClass new.
 
