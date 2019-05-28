@@ -5,10 +5,17 @@ Class {
 		'projectNames',
 		'projectBasePath',
 		'projectLoadSpecs',
-		'visitedComponents'
+		'visitedComponents',
+		'projectComponentDefinition'
 	],
 	#category : 'Rowan-Components'
 }
+
+{ #category : 'private' }
+RwProjectLoadComponentVisitor >> _addPackageNames: somePackageNames for: aComponent [
+
+	self projectComponentDefinition addPackages: somePackageNames forComponent: aComponent
+]
 
 { #category : 'private' }
 RwProjectLoadComponentVisitor >> _projects: projectDirPath forProject: ignored [
@@ -51,6 +58,18 @@ RwProjectLoadComponentVisitor >> projectBasePath [
 RwProjectLoadComponentVisitor >> projectBasePath: aString [
 
 	projectBasePath := aString
+]
+
+{ #category : 'accessing' }
+RwProjectLoadComponentVisitor >> projectComponentDefinition [
+
+	^ projectComponentDefinition
+]
+
+{ #category : 'accessing' }
+RwProjectLoadComponentVisitor >> projectComponentDefinition: aProjectComponentDefinition [
+
+	projectComponentDefinition := aProjectComponentDefinition
 ]
 
 { #category : 'accessing' }

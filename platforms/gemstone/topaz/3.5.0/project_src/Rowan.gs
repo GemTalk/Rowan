@@ -5224,7 +5224,7 @@ true.
 doit
 (RwProjectLoadConfigurationVisitor
 	subclass: 'RwProjectLoadComponentVisitor'
-	instVarNames: #( projectNames projectBasePath projectLoadSpecs visitedComponents )
+	instVarNames: #( projectNames projectBasePath projectLoadSpecs visitedComponents projectComponentDefinition )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -38678,6 +38678,7 @@ _visitConfigurations: visitorClass forProjectComponentDefinition: projectCompone
 		groupNames: groupNames;
 		configurationBasePath: configDirectory pathString;
 		projectBasePath: projectsDirectory pathString;
+		projectComponentDefinition: projectComponentDefinition;
 		yourself.
 	configNames do: [:configName |
 		| config url |
@@ -41515,6 +41516,23 @@ addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbo
 			andPackageName: packageName
 			setSymbolDictNameTo: aSymbolDictAssoc value.
 	^package
+%
+
+category: 'accessing'
+method: RwComponentProjectDefinition
+addPackages: somePackageNames forComponent: aComponent
+
+	| componentName |
+	componentName := aComponent name.
+	(self components 
+		at: componentName 
+		ifAbsent: [])
+			ifNil: [ self components at: componentName put: aComponent ]
+			ifNotNil: [:theComponent |
+				theComponent ~~ aComponent
+					ifTrue: [ self error: 'Unexpected duplicate components named ', componentName printString ] ].
+	somePackageNames asSet do: [:packageName |
+		super addPackageNamed: packageName ].
 %
 
 category: 'accessing'
@@ -54222,6 +54240,20 @@ projectBasePath: aString
 
 category: 'accessing'
 method: RwProjectLoadComponentVisitor
+projectComponentDefinition
+
+	^ projectComponentDefinition
+%
+
+category: 'accessing'
+method: RwProjectLoadComponentVisitor
+projectComponentDefinition: aProjectComponentDefinition
+
+	projectComponentDefinition := aProjectComponentDefinition
+%
+
+category: 'accessing'
+method: RwProjectLoadComponentVisitor
 projectLoadSpecs
 
 	^ projectLoadSpecs
@@ -54281,6 +54313,13 @@ method: RwProjectLoadComponentVisitor
 visitedComponents
 
 	^ visitedComponents
+%
+
+category: 'private'
+method: RwProjectLoadComponentVisitor
+_addPackageNames: somePackageNames for: aComponent
+
+	self projectComponentDefinition addPackages: somePackageNames forComponent: aComponent
 %
 
 category: 'private'

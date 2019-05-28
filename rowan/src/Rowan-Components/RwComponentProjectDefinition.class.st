@@ -289,6 +289,22 @@ RwComponentProjectDefinition >> addPackageNamed: packageName withConditions: con
 ]
 
 { #category : 'accessing' }
+RwComponentProjectDefinition >> addPackages: somePackageNames forComponent: aComponent [
+
+	| componentName |
+	componentName := aComponent name.
+	(self components 
+		at: componentName 
+		ifAbsent: [])
+			ifNil: [ self components at: componentName put: aComponent ]
+			ifNotNil: [:theComponent |
+				theComponent ~~ aComponent
+					ifTrue: [ self error: 'Unexpected duplicate components named ', componentName printString ] ].
+	somePackageNames asSet do: [:packageName |
+		super addPackageNamed: packageName ].
+]
+
+{ #category : 'accessing' }
 RwComponentProjectDefinition >> addPackagesNamed: packageNames [
 
 	^ packageNames collect: [:packageName | 

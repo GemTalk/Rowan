@@ -67,6 +67,7 @@ RwPrjReadTool >> _visitConfigurations: visitorClass forProjectComponentDefinitio
 		groupNames: groupNames;
 		configurationBasePath: configDirectory pathString;
 		projectBasePath: projectsDirectory pathString;
+		projectComponentDefinition: projectComponentDefinition;
 		yourself.
 	configNames do: [:configName |
 		| config url |
