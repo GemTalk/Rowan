@@ -105,10 +105,11 @@ JadeServerTest >> test_updateFromSton [
 	stonString := STON toString: (Array with: service).
 	resultString := self jadeiteServer updateFromSton: stonString. 
 	[services := STON fromString: resultString.
-	self assert: services size equals: 2.
+	self assert: services size equals: 3.
 	self assert: (services first isKindOf: RowanMethodService).
-	self assert: (services last isKindOf: RowanQueryService).
-	self assert: (services last queryResults first isKindOf: RowanMethodService).
-	self assert: services last queryResults first selector == #test_updateFromSton]
+	self assert: ((services at: 2) isKindOf: RowanQueryService).
+	self assert: ((services at: 2) queryResults first isKindOf: RowanMethodService).
+	self assert: (services at: 2) queryResults first selector == #test_updateFromSton.
+	self assert: (services last isKindOf: RowanLoggingService)]
 		ensure: [RowanCommandResult initializeResults.]
 ]
