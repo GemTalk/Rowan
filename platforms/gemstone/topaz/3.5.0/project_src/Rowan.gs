@@ -2426,6 +2426,21 @@ true.
 
 doit
 (RowanService
+	subclass: 'RowanLoggingService'
+	instVarNames: #( fileName id groupId date time comment services mode location isLogging )
+	classVars: #( Current )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Services-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RowanService
 	subclass: 'RowanMethodService'
 	instVarNames: #( oop source selector methodDefinitions classService category packageName projectName className meta hasSupers hasSubs compilationWarnings isExtension inSelectedPackage references stepPoints selectedPackageServices superDisplayString accessedInstVars breakPoints testResult definedPackage isTestMethod testRunClassName failedCompile comparisonSource )
 	classVars: #(  )
@@ -3435,6 +3450,21 @@ doit
 (RwProjectTool
 	subclass: 'RwPrjWriteTool'
 	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'RwAuditDetail'
+	instVarNames: #( message owner )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -5797,6 +5827,51 @@ From the method comment[1]:
 		dir : repository
 
 [1] https://github.com/dalehenrich/filetree/blob/734eed46ea57ebf5e24e5d935768bd49727fc22f/repository/MonticelloFileTree-Git.package/MCFileTreeGitRepository.class/class/basicFromUrl..st';
+		immediateInvariant.
+true.
+%
+
+doit
+(StringKeyValueDictionary
+	subclass: 'RwAuditReport'
+	instVarNames: #( owner )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(StringKeyValueDictionary
+	subclass: 'RwPackageAuditReport'
+	instVarNames: #( packageName )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Tools-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(StringKeyValueDictionary
+	subclass: 'RwProjectAuditReport'
+	instVarNames: #( projectName )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Tools-Core';
+		comment: '';
 		immediateInvariant.
 true.
 %
@@ -13051,10 +13126,10 @@ updateFromSton: stonString
 			[:service |
 			service organizer: organizer. 
 			service updateType: nil.  "Update type is only for returned commands"
-			service command
-				ifNil: [service update]
-				ifNotNil: [service servicePerform: service command withArguments: service commandArgs]].
+			service command ifNil:[service command: #update]. 
+			service servicePerform: service command withArguments: service commandArgs].
 	self autoCommitIfRequired.
+	RowanLoggingService current logSentServices. 
 	resultString := STON toString: RowanCommandResult results.
 	^resultString
 %
@@ -27395,6 +27470,7 @@ method: RowanBrowserService
 releaseWindowHandle: integer
 
 	| registry |
+	RowanLoggingService current logComment: 'Release window with handle: ', integer printString. 
 	registry := SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[^self].
 	registry removeKey: integer ifAbsent: []
 %
@@ -28706,6 +28782,102 @@ varsFor: anArray
 	^list
 %
 
+! Class implementation for 'RowanLoggingService'
+
+!		Class methods for 'RowanLoggingService'
+
+category: 'accessing'
+classmethod: RowanLoggingService
+current
+
+	^Current
+%
+
+category: 'accessing'
+classmethod: RowanLoggingService
+current: anObject
+
+	^Current := anObject
+%
+
+!		Instance methods for 'RowanLoggingService'
+
+category: 'accessing'
+method: RowanLoggingService
+fileName
+	^fileName
+%
+
+category: 'accessing'
+method: RowanLoggingService
+fileName: object
+	fileName := object
+%
+
+category: 'client commands'
+method: RowanLoggingService
+logComment: string
+
+	| stonString ws |
+	isLogging ifFalse:[^self].
+	comment := string.
+	id := id + 1. 
+	date := Date today.
+	time := Time now.
+	location := #server.
+	stonString := STON toString: self.
+	ws := FileStream 
+				write: fileName
+				mode: #append.
+	[ws nextPutAll: stonString] ensure: [ws close].
+	comment := nil "service may be reused. Clear comment"
+%
+
+category: 'accessing'
+method: RowanLoggingService
+logFileContents
+
+	| rs |
+	rs := [FileStream read: fileName] on: Error do:[:ex | ^String new].
+	[^rs contents] ensure: [rs close]
+%
+
+category: 'client commands'
+method: RowanLoggingService
+logReceivedServices
+
+	mode := #received.
+	self class current: self. 
+	self logServices
+%
+
+category: 'client commands'
+method: RowanLoggingService
+logSentServices
+
+	mode := #sent.
+	services := RowanCommandResult results. 
+	self logServices.
+	RowanCommandResult addResult: self.
+%
+
+category: 'client commands'
+method: RowanLoggingService
+logServices
+
+	| stonString ws |
+	isLogging ifFalse:[^self].
+	id := id + 1. 
+	date := Date today.
+	time := Time now.
+	location := #server.
+	stonString := STON toString: self.
+	ws := FileStream 
+				write: fileName
+				mode: #append.
+	[ws nextPutAll: stonString] ensure: [ws close]
+%
+
 ! Class implementation for 'RowanMethodService'
 
 !		Class methods for 'RowanMethodService'
@@ -29682,9 +29854,7 @@ recompileMethodsAfterClassCompilation
 category: 'client commands'
 method: RowanPackageService
 removeClass: classService
-
 	self removeClassNamed: classService name. 
-	self update.
 	self setDefaultTemplate.
 	classService updateType: #removedClass:.
 	RowanCommandResult addResult: classService
@@ -34201,17 +34371,17 @@ auditLoadedClass: aLoadedClass
 
 	res := self _result.
 	(Rowan globalNamed: aLoadedClass name)  
-		ifNil: [self errorLog: res add: aLoadedClass name -> 'Missing gemstone class for loaded class ' ] "there is no matching Class for LoadedClass"
+		ifNil: [res add: (RwAuditDetail for: aLoadedClass message:  'Missing gemstone class for loaded class ') "aLoadedClass name -> 'Missing gemstone class for loaded class '" ] "there is no matching Class for LoadedClass"
 		ifNotNil: [:aBehavior | 
 			"audit class properties"
-			self errorLog: res addAll:  (self _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior).
+			res addAll:  (self _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior).
 			"audit categories"
 
 			aBehavior categorysDo: [:category :selectors | 
-				self errorLog: res addAll: (self  _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass)
+				res addAll: (self  _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass)
 			].
 			aBehavior class categorysDo: [:category :selectors | 
-				self errorLog: res  addAll: (self  _auditCategory: category forBehavior: aBehavior class loadedClass: aLoadedClass)
+				res  addAll: (self  _auditCategory: category forBehavior: aBehavior class loadedClass: aLoadedClass)
 			].
 		"audit loaded class methods"
 		aLoadedClass 
@@ -34243,13 +34413,6 @@ errorLog: aResult addAll: aCol
 
 category: 'audit'
 method: RwClsAuditTool
-_asClassPrefix: aBoolean
-
-	^aBoolean ifTrue: ['class' ] ifFalse: ['']
-%
-
-category: 'audit'
-method: RwClsAuditTool
 _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass
 	| aPackage |
 		"must be an extension. Do basic checks"
@@ -34257,15 +34420,14 @@ _auditCategory: category forBehavior: aBehavior loadedClass: aLoadedClass
 
 	^category first == $*	ifTrue: ["must be an extension category. See if package exists"
 		(aPackage asLowercase isEquivalent: aBehavior rowanPackageName asLowercase) 
-			ifTrue: [{aLoadedClass name , ' #' , category asString -> 'Extension category name can not be same as class package' }]
+			ifTrue: [{RwAuditDetail for: aLoadedClass message: 'Extension category name <', category, '>  must not match class package name.' 
+							"aLoadedClass name , ' #' , category asString -> 'Extension category name can not be same as class package' "}]
 			ifFalse: [
 				(Rowan image loadedClassExtensionsNamed: aBehavior thisClass name 
 					ifFound: [:extensions | extensions detect: [:e | e loadedPackage name asLowercase isEquivalent: aPackage] ifNone: [nil]] 
 					ifAbsent: [nil]) isNil 
 						ifTrue: [ | res | 
 									res := self _auditCategory: category selectors: (aBehavior selectorsIn: category)  forBehavior: aBehavior loadedClass: aLoadedClass		.
-									"res add: (aLoadedClass name , ' #' , category asString -> 'Class Extension is not present in the package '); 
-									yourself"
 						] 
 						ifFalse: [{}"no basic extension problems found, class extension will be audited separately"]
 			]
@@ -34282,15 +34444,13 @@ _auditCategory: category selectors: aSelectorSet forBehavior: aBehavior loadedCl
 		res := res := self _result.
 
 		aSelectorSet do: [:aSelector |
-				(
-					aBehavior isMeta
-						ifTrue: [	self  _auditClassSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass ]
-						ifFalse: [ self  _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass]	
-				)  ifNotNil: [:aRes | self errorLog: res add: aRes]
+				( self  _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass)  
+					ifNotNil: [:aRes | res add: aRes]
 				
 		].
 
 		^res
+
 %
 
 category: 'audit'
@@ -34328,96 +34488,88 @@ _auditClassSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
 
 category: 'audit'
 method: RwClsAuditTool
-_auditLoadedClassMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoadedClassOrExtension
-"verify that compiled method is present for each loaded class method. return nil if no error"
-"we already check verifying selectors that compiled method matches loaded method"
-
-		^( aClassOrMeta compiledMethodAt: aLoadedMethod name  otherwise: nil) 
-				ifNil: [(aLoadedClassOrExtension name ,  ' >> ', aLoadedMethod name) -> 'Missing compiled class method. ' ]
-				ifNotNil: [:aMethod | aMethod == aLoadedMethod handle 
-						ifTrue: [((aLoadedMethod propertyAt: 'protocol') equalsNoCase: (aClassOrMeta categoryOfSelector: aMethod selector) ) 
-							ifTrue: [nil]
-							ifFalse: [aLoadedClassOrExtension name , '#', (aLoadedMethod properties at: 'protocol') -> 'Missing class method category for loaded class']
-						]
-						ifFalse: [(aClassOrMeta name ,  ' >> ', aLoadedMethod name) -> 'Compiled class method is not identical to loaded class method. ']		
-			]
-%
-
-category: 'audit'
-method: RwClsAuditTool
 _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior
 "Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
 
 	| res  aDict |
 	res :=  self _result.
-	((aLoadedClass propertyAt: 'superclass') isEquivalent: aBehavior superclass name ) 
-		ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Superclass is different from loaded class'].
-	((aLoadedClass propertyAt: 'instvars') = (aBehavior instVarNames collect: [:e | e asString]) ) 
-			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'instVarNames changed in compiled class v loaded class'].
-	((aLoadedClass propertyAt: 'classvars') = ((aBehavior.classVars ifNil: [SymbolDictionary new]) 
+	(aLoadedClass classSuperclass isEquivalent: aBehavior superclass name ) 
+		ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Superclass is different from loaded class')].
+	(aLoadedClass classInstVarNames = (aBehavior instVarNames collect: [:e | e asString]) ) 
+			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'instVarNames changed in compiled class v loaded class')].
+	(aLoadedClass classClassVarNames = ((aBehavior.classVars ifNil: [SymbolDictionary new]) 
 			keys collect: [:e | e asString]) asSortedCollection asArray) ifFalse: [
-				self errorLog: res  add: aLoadedClass name -> 'ClassVars changed in compiled class v loaded class'].
-	((aLoadedClass propertyAt: 'pools') = ((aBehavior.poolDictionaries ifNil: [Array new]) collect: [:e | e asString]) ) 
-			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'PoolDictionaries changed in compiled class v loaded class'].
-	((aLoadedClass propertyAt: 'comment' ifAbsent: ['']) isEquivalent: aBehavior rwComment ) 
-			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Comment has changed in compiled class v loaded class'].
-	((aLoadedClass propertyAt: 'category') = aBehavior category ) 
-			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Class category has changed in compiled class v loaded class'].
-	(aDict := System myUserProfile resolveSymbol: (aLoadedClass propertyAt: 'gs_SymbolDictionary') asSymbol ) 
-			ifNil: [self errorLog: res  add: aLoadedClass name -> ('Unable to find SymbolDictionary ' ,(aLoadedClass propertyAt: 'gs_SymbolDictionary'))] 
+				res  add: (RwAuditDetail for: aLoadedClass message: 'ClassVars changed in compiled class v loaded class')].
+	(aLoadedClass classPoolDictionaries = ((aBehavior.poolDictionaries ifNil: [Array new]) collect: [:e | e asString]) ) 
+			ifFalse: [ res  add: (RwAuditDetail for: aLoadedClass message: 'PoolDictionaries changed in compiled class v loaded class')].
+	(aLoadedClass classComment isEquivalent: aBehavior rwComment ) 
+			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Comment has changed in compiled class v loaded class')].
+	(aLoadedClass classCategory = aBehavior category ) 
+			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Class category has changed in compiled class v loaded class')].
+	(aDict := System myUserProfile resolveSymbol: aLoadedClass classSymbolDictionaryName asSymbol ) 
+			ifNil: [res  add: (RwAuditDetail for: aLoadedClass message: ('Unable to find SymbolDictionary ' , aLoadedClass classSymbolDictionaryName))] 
 			ifNotNil: [:smbd | smbd value at: aLoadedClass name asSymbol 
-					ifAbsent: [self errorLog: res  add: aLoadedClass name -> 'Compiled class not found in symbol dictionary of loaded class']] .
+					ifAbsent: [res  add: aLoadedClass name -> 'Compiled class not found in symbol dictionary of loaded class']] .
 
 	^res
 %
 
 category: 'audit'
 method: RwClsAuditTool
-_auditLoadedInstanceMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoadedClassOrExtension
-"verify that compiled method is present for each loaded instance method. return nil if no error"
+_auditLoadedMethod: aLoadedMethod forBehavior: aClassOrMeta loadedClass: aLoadedClassOrExtension
+"verify that compiled method is present for each loaded class method. return nil if no error"
 "we already check verifying selectors that compiled method matches loaded method"
 
 		^( aClassOrMeta compiledMethodAt: aLoadedMethod name  otherwise: nil) 
-				ifNil: [(aLoadedClassOrExtension name ,  ' >> ', aLoadedMethod name) -> 'Missing compiled instance method. ' ]
+				ifNil: [RwAuditDetail for: aLoadedClassOrExtension message: 'Missing compiled method>>', aLoadedMethod name 
+							"(aLoadedClassOrExtension name ,  ' >> ', aLoadedMethod name) -> 'Missing compiled class method. ' "]
 				ifNotNil: [:aMethod | aMethod == aLoadedMethod handle 
-						ifTrue: [((aLoadedMethod propertyAt: 'protocol') equalsNoCase: (aClassOrMeta categoryOfSelector: aMethod selector) ) 
+						ifTrue: [((aLoadedMethod methodCategory) equalsNoCase: (aClassOrMeta categoryOfSelector: aMethod selector) ) 
 							ifTrue: [nil]
-							ifFalse: [aLoadedClassOrExtension name , '#', (aLoadedMethod propertyAt: 'protocol') -> 'Missing method category for loaded class. ']
+							ifFalse: [RwAuditDetail for: aClassOrMeta category: aLoadedMethod methodCategory 
+										message: 'Missing method category for loaded class'
+								"aLoadedClassOrExtension name , '#', (aLoadedMethod properties at: 'protocol') -> 'Missing class method category for loaded class'"]
 						]
-						ifFalse: [(aClassOrMeta name ,  ' >> ', aLoadedMethod name) -> 'Compiled instance method is not identical to loaded instance method. ']		
+						ifFalse: [RwAuditDetail for: aLoadedClassOrExtension 
+										message:  'Compiled method is not identical to loaded class method>>' , aLoadedMethod name]		
 			]
 %
 
 category: 'audit'
 method: RwClsAuditTool
 _auditSelector: aSelector forBehavior: aBehavior loadedClass: aLoadedClass
-"audit an instance selector. return nil if no problem found"
+"#rentamed from _auidtClassSelector since functionality is same for instanance and class
+ verify compiled method matches loaded method reference return nil if no problem found"
 
 	^(aLoadedClass loadedMethodAt: aSelector isMeta:  aBehavior isMeta)
 			ifNil: [
 				| notification |
 				notification := (RwAuditMethodErrorNotification
 					method: aSelector 
-					isMeta: false
+					isMeta: aBehavior isMeta
 					inClassNamed: aBehavior theNonMetaClass name
 					isClassExtension: aLoadedClass isLoadedClassExtension
 					intoPackageNamed: aLoadedClass packageName )
-						description: 'Missing loaded instance method. ';
+						description: 'Missing loaded method. ';
 						yourself.
 				(notification signal) 
-					ifTrue: [ (aLoadedClass name ,  ' >> ', aSelector) -> 'Missing loaded instance method. ' ]
+					ifTrue: [ RwAuditDetail for: aBehavior message: 'Missing loaded method>>' , aSelector asString ]
 					ifFalse: [ 
 						"don't record audit error"
 						nil ]  ]
 			ifNotNil: [:aLoadedMethod |
 				(aBehavior compiledMethodAt: aSelector  otherwise: nil) == aLoadedMethod handle
-						ifTrue: [
-							| expected actual |
-							((expected := aLoadedMethod propertyAt: 'protocol') equalsNoCase: (actual := aBehavior categoryOfSelector:   aSelector ) ) 
-								ifTrue: [nil]
-								ifFalse: [aLoadedClass name , '#', (aLoadedMethod propertyAt: 'protocol') -> ('Missing instance method category for loaded class (expected: ', expected printString, ' actual: ', actual printString, ')') ]
-						] 
-						ifFalse: [(aLoadedClass name ,  ' >> ', aSelector) -> 'Compiled instance method is not identical to loaded method. ']
+					ifTrue: [
+						| expected actual |
+						((expected := aLoadedMethod methodCategory) equalsNoCase: (actual := aBehavior categoryOfSelector:  aSelector ) ) 
+							ifTrue: [nil]
+							ifFalse: [RwAuditDetail for: aBehavior message: (
+										'Mismatched method category (expected: ', expected printString, 
+										' actual: ', actual printString, ')')
+						]
+					] 
+					ifFalse: [RwAuditDetail for: aLoadedClass message:  'Compiled method is not identical to loaded method '
+				] 
 			]
 %
 
@@ -34441,7 +34593,7 @@ auditLoadedClassExtension: aLoadedClassExtension
 	res := self _result.
 	extensionCategoryName :=  aLoadedClassExtension loadedPackage asExtensionName "'*' , aLoadedClassExtension loadedPackage name" .
 	(Rowan globalNamed: aLoadedClassExtension name) 
-		ifNil: [self errorLog: res  add: aLoadedClassExtension name -> ' Class does not exists for loaded class '] 
+		ifNil: [(RwAuditDetail for: aLoadedClassExtension message: ' Class does not exists for loaded class extension')] 
 		ifNotNil: [:aBehavior ||categories | 
 					
 			categories := (aBehavior _baseCategorys: 0)
@@ -34449,25 +34601,25 @@ auditLoadedClassExtension: aLoadedClassExtension
 				ifNotNil: [:catDict | catDict keys ].
 			(categories	
 				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
-					ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
+					ifNotNil: [:aCategory | res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior loadedClass: aLoadedClassExtension)]
 					ifNil: [aLoadedClassExtension loadedInstanceMethods notEmpty ifTrue: [
-						self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing instance method extension category ' ] ].
+						res add: (RwAuditDetail for: aLoadedClassExtension message: 'Missing instance method extension category named ', extensionCategoryName) ] ].
 
 			categories := (aBehavior class _baseCategorys: 0)
 				ifNil: [ #() ]
 				ifNotNil: [:catDict | catDict keys ].
 			(categories
 				detect: [:each | each equalsNoCase: extensionCategoryName ] ifNone: [ ])
-					ifNotNil: [:aCategory | self errorLog: res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
+					ifNotNil: [:aCategory | res  addAll:  (self _auditCategory: aCategory forBehavior: aBehavior class loadedClass: aLoadedClassExtension)]
 					ifNil: [aLoadedClassExtension loadedClassMethods notEmpty ifTrue: [
-						self errorLog: res add: aLoadedClassExtension name , ' #' ,extensionCategoryName -> 'Missing class method extension category ' ] ].
+						res add: (RwAuditDetail for: aLoadedClassExtension message: 'Missing class method extension category named ' ,extensionCategoryName) ] ].
 
 			aLoadedClassExtension 
 				loadedInstanceMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod | 
-					(self _auditLoadedInstanceMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:x | self errorLog: res add: x]
+					(self _auditLoadedMethod: aLoadedMethod forBehavior: aBehavior loadedClass: loadedClass) ifNotNil: [:x | res add: x]
 				] 
 				loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
-					(self _auditLoadedClassMethod: aLoadedMethod forBehavior: aBehavior class loadedClass: loadedClass) ifNotNil: [:x |self errorLog: res add: x]
+					(self _auditLoadedMethod: aLoadedMethod forBehavior: aBehavior class loadedClass: loadedClass) ifNotNil: [:x | res add: x]
 				]
 		].
 		^res
@@ -34482,10 +34634,12 @@ _auditCategory: anExtentionCategory forBehavior: aClassOrMeta loadedClass: aLoad
 	aClassOrMeta isMeta 
 		ifTrue: [
 			(aLoadedClassExtension loadedClassMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
-				ifTrue: [ self errorLog: res  add: ((aLoadedClassExtension name , ' #' ,anExtentionCategory asString -> 'Missing expected class methods in the category '))   ].
+				ifTrue: [res  add: (RwAuditDetail for: aLoadedClassExtension 
+								message:  'Missing expected class methods in the category ', ' #' , anExtentionCategory asString )   ].
 	] 	ifFalse: [
 			(aLoadedClassExtension loadedInstanceMethods notEmpty and: [(aClassOrMeta selectorsIn: anExtentionCategory) isEmpty])
-				ifTrue: [ self errorLog: res  add: (aLoadedClassExtension name , ' #' ,anExtentionCategory asString -> ('Missing expected instances methods in the category'))   ].
+				ifTrue: [ res  add: (RwAuditDetail for: aLoadedClassExtension 
+								message: 'Missing expected instances methods in the category' , ' #' , anExtentionCategory asString)   ].
 	].
 	^res
 %
@@ -35251,8 +35405,8 @@ method: RwPkgAuditTool
 auditForPackage: loadedPackage
 "audit dirty packages"
 	|  res|
-	res := KeyValueDictionary new.
-	GsFile gciLogClient: '  -- Auditing package ', loadedPackage name.
+	res := RwAuditReport for: loadedPackage.
+	"GsFile gciLogClient: '===Auditing package ', loadedPackage name."
 		loadedPackage 
 				loadedClassesDo: [:aLoadedClass |  (self auditLoadedClass: aLoadedClass) 
 					ifNotEmpty: [:aColl | res at: aLoadedClass name put: aColl]]				
@@ -35535,8 +35689,8 @@ auditForProject: aLoadedProject
 
 	| res |
 
-	res := KeyValueDictionary new.
-	GsFile gciLogClient: '==============Auditing project ', aLoadedProject name.
+	res := RwAuditReport for: aLoadedProject.
+	"GsFile gciLogClient: '==============Auditing project ', aLoadedProject name."
 		aLoadedProject loadedPackages values do: [:e | (Rowan packageTools audit auditForPackage: e) 
 				ifNotEmpty: [:aColl | res at: e name put: aColl]].	
 	^res
@@ -39213,6 +39367,79 @@ _loadedPackagesNamed: someNames forProject: projectDefinition
 				select: [ :loadedPackage | 
 					loadedPackage notNil
 						and: [ loadedPackage loadedProject name = projectDefinition name ] ])
+%
+
+! Class implementation for 'RwAuditDetail'
+
+!		Class methods for 'RwAuditDetail'
+
+category: 'other'
+classmethod: RwAuditDetail
+for: anObject message: aString	
+"add error to results. print to file"
+	
+	^self new owner: anObject; 
+			message: aString; 
+			notify; 
+			yourself
+%
+
+!		Instance methods for 'RwAuditDetail'
+
+category: 'other'
+method: RwAuditDetail
+matches: aString
+"see if my messages matches expected string"
+
+	^self message matchPattern: {$* . aString . $*}
+%
+
+category: 'other'
+method: RwAuditDetail
+message
+
+	^message
+%
+
+category: 'other'
+method: RwAuditDetail
+message: aString
+
+	message := aString
+%
+
+category: 'other'
+method: RwAuditDetail
+notify
+
+	GsFile gciLogServer: self message,'  ', self owner name asString.
+	Notification signal: self message asString,'  ', self owner name asString.
+%
+
+category: 'other'
+method: RwAuditDetail
+owner
+	^owner
+%
+
+category: 'other'
+method: RwAuditDetail
+owner: anObject
+
+	owner := anObject
+%
+
+category: 'other'
+method: RwAuditDetail
+printOn: aStream
+
+	aStream 
+			nextPutAll: '---------------';
+			nextPutAll: self owner name asString.
+	self owner isMeta ifTrue: [aStream space; nextPutAll: 'class'].
+	aStream
+			nextPutAll: '>>';
+			nextPutAll: self message
 %
 
 ! Class implementation for 'RwClassAdditionOrRemoval'
@@ -50583,6 +50810,13 @@ name: aString
 	name := aString
 %
 
+category: 'accessing'
+method: RwLoadedThing
+prettyName
+
+	^self name
+%
+
 category: 'printing'
 method: RwLoadedThing
 printOn: aStream
@@ -50654,11 +50888,60 @@ asDefinition
 		instanceMethodDefinitions: self instanceMethodDefinitions
 %
 
+category: 'accessing'
+method: RwLoadedClass
+classCategory
+
+	^self propertyAt: 'category'
+%
+
+category: 'accessing'
+method: RwLoadedClass
+classClassVarNames
+
+	^self propertyAt: 'classvars'
+%
+
+category: 'accessing'
+method: RwLoadedClass
+classComment
+
+	^self propertyAt: 'comment' ifAbsent: ['']
+%
+
+category: 'accessing'
+method: RwLoadedClass
+classInstVarNames
+
+	^self propertyAt: 'instvars'
+%
+
 category: 'private'
 method: RwLoadedClass
 classMethodDefinitions
 
 	^self definitionsFor: loadedClassMethods
+%
+
+category: 'accessing'
+method: RwLoadedClass
+classPoolDictionaries
+
+	^self propertyAt: 'pools'
+%
+
+category: 'accessing'
+method: RwLoadedClass
+classSuperclass
+
+	^self propertyAt: 'superclass'
+%
+
+category: 'accessing'
+method: RwLoadedClass
+classSymbolDictionaryName
+
+	^self propertyAt: 'gs_SymbolDictionary'
 %
 
 category: 'testing'
@@ -50770,6 +51053,13 @@ method: RwLoadedClass
 packageName
 
 	^loadedPackage name
+%
+
+category: 'other'
+method: RwLoadedClass
+prettyName
+
+	^' class ', self name
 %
 
 ! Class implementation for 'RwGsLoadedSymbolDictClass'
@@ -51516,6 +51806,13 @@ markPackageDirty
 	loadedClass ifNotNil: [loadedClass markPackageDirty]
 %
 
+category: 'accessing'
+method: RwLoadedMethod
+methodCategory
+
+	^ properties at: 'protocol'
+%
+
 category: 'definitions'
 method: RwLoadedMethod
 propertiesForDefinition
@@ -51812,6 +52109,13 @@ method: RwLoadedPackage
 markPackageDirty
 
 	self markDirty
+%
+
+category: 'other'
+method: RwLoadedPackage
+prettyName
+
+	^' package ', self name
 %
 
 category: 'accessing'
@@ -52134,6 +52438,13 @@ packageNames
 	"Return list of package names in the receiver"
 
 	^ self loadedPackages keys asArray
+%
+
+category: 'accessing'
+method: RwLoadedProject
+prettyName
+
+	^' project ' , self name
 %
 
 category: 'accessing'
@@ -56923,6 +57234,55 @@ category: 'constants'
 classmethod: RwGitFileTreeUrl
 schemeName
   ^ 'gitfiletree'
+%
+
+! Class implementation for 'RwAuditReport'
+
+!		Class methods for 'RwAuditReport'
+
+category: 'other'
+classmethod: RwAuditReport
+for: anObject
+
+	^self new owner: anObject; 
+			log;
+			yourself
+%
+
+!		Instance methods for 'RwAuditReport'
+
+category: 'other'
+method: RwAuditReport
+log
+
+	GsFile gciLogClient: '  -- Auditing ', owner prettyName.
+%
+
+category: 'other'
+method: RwAuditReport
+owner
+
+	^owner
+%
+
+category: 'other'
+method: RwAuditReport
+owner: anObject
+
+
+	owner := anObject
+%
+
+category: 'other'
+method: RwAuditReport
+printOn: aStream
+	
+	aStream nextPutAll: '==============Auditing ', self owner prettyName asString; lf.
+	self do: [:e | 
+		(e isKindOf: Array) ifTrue: [
+			e do: [:err | err printOn: aStream. aStream lf]
+		] ifFalse: [e printOn: aStream].
+	]
 %
 
 ! Class implementation for 'RBFormatterTests'
