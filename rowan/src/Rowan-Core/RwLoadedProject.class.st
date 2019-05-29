@@ -197,6 +197,12 @@ RwLoadedProject >> packageNames [
 ]
 
 { #category : 'accessing' }
+RwLoadedProject >> prettyName [
+
+	^' project ' , self name
+]
+
+{ #category : 'accessing' }
 RwLoadedProject >> projectDefinitionSourceProperty [
 
 	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
