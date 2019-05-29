@@ -112,6 +112,7 @@ RowanBrowserService >> packagesWithTests [
 RowanBrowserService >> releaseWindowHandle: integer [
 
 	| registry |
+	RowanLoggingService current logComment: 'Release window with handle: ', integer printString. 
 	registry := SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[^self].
 	registry removeKey: integer ifAbsent: []
 ]
