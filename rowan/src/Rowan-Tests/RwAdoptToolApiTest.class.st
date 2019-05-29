@@ -15,9 +15,9 @@ RwAdoptToolApiTest >> _validateExpectedMonticelloConventionFailure_389_A: audit 
 
 	"class category not following Monticello conventions"
 	unexpectedFailures := ((audit at: (packageNames at: 1)) at: className)
-		reject: [:each | (each value = 'Class category has changed in compiled class v loaded class')
-			or: [ (each value = 'Missing instance method extension category ') or: [ (each value = 'Missing class method extension category ')
-			or: [ (each value = 'Missing loaded instance method. ') or: [ (each value = 'Missing loaded class method. ') ]] ] ] ].
+		reject: [:each | (each matches: 'Class category has changed in compiled class v loaded class')
+			or: [ (each matches: 'Missing instance method extension category') or: [ (each matches:  'Missing class method extension category')
+			or: [ (each matches:  'Missing loaded method') ] ] ] ].
 	self assert: unexpectedFailures isEmpty
 ]
 
@@ -43,7 +43,7 @@ RwAdoptToolApiTest >> _validateExpectedMonticelloConventionFailure_389: audit pa
 	self assert: failures size = 2.
 
 	"extension categories not named according to Monticello conventions (no leading $*)"
-	unexpectedFailures := failures reject: [:each | (each value = 'Missing instance method extension category ') or: [ each value = 'Missing class method extension category ' ] ].
+	unexpectedFailures := failures reject: [:each | (each matches: 'Missing instance method extension category ') or: [ each matches: 'Missing class method extension category ' ] ].
 	self assert: unexpectedFailures isEmpty
 ]
 
@@ -972,8 +972,10 @@ RwAdoptToolApiTest >> testAdoptMethod_issue389_3 [
 	self assert: audit size = 1.
 	expectedFailure := ((audit at: packageName1) at: className).
 	self assert: expectedFailure size = 1.
-	self assert: expectedFailure first key =  'AdoptedClass #*adopt-core'.
-	self assert: expectedFailure first value = 'Extension category name can not be same as class package'.
+	self assert: expectedFailure first owner name =  'AdoptedClass'.
+	self assert: expectedFailure first owner classCategory = 'Adopt-Core'.
+	self assert: (expectedFailure first message matchPattern: { 'Extension category name' . $* . 'must not match class package name.'})
+
 ]
 
 { #category : 'tests' }

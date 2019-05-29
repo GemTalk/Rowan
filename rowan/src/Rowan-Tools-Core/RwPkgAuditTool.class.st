@@ -15,8 +15,8 @@ RwPkgAuditTool >> _addAll: aColl to: aDict for: aName [
 RwPkgAuditTool >> auditForPackage: loadedPackage [
 "audit dirty packages"
 	|  res|
-	res := KeyValueDictionary new.
-	GsFile gciLogClient: '  -- Auditing package ', loadedPackage name.
+	res := RwAuditReport for: loadedPackage.
+	"GsFile gciLogClient: '===Auditing package ', loadedPackage name."
 		loadedPackage 
 				loadedClassesDo: [:aLoadedClass |  (self auditLoadedClass: aLoadedClass) 
 					ifNotEmpty: [:aColl | res at: aLoadedClass name put: aColl]]				
