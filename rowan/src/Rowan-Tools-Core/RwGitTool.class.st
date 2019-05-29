@@ -8,7 +8,7 @@ Class {
 RwGitTool >> createTmpFileWith: fileContents [
 
 	| file filename |
-	filename := '/tmp/commitMessage'.
+	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX' logging: true) trimRight.
 	[ 
 	| count |
 	file := GsFile openWriteOnServer: filename.
