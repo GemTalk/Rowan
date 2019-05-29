@@ -1,13 +1,6 @@
 Extension { #name : 'RwClassDefinition' }
 
 { #category : '*rowan-cypress-definitions' }
-RwClassDefinition class >> fromCypressClassStructure: aCypressClassStructure [
-  ^ self new
-    fromCypressClassStructure: aCypressClassStructure;
-    yourself
-]
-
-{ #category : '*rowan-cypress-definitions' }
 RwClassDefinition >> category [
 
 	^ properties at: 'category' ifAbsent: [  ]
@@ -80,4 +73,11 @@ RwClassDefinition >> subclassType [
   type = 'normal'
     ifTrue: [ ^ '' ].
   ^ type
+]
+
+{ #category : '*rowan-cypress-definitions' }
+RwClassDefinition class >> fromCypressClassStructure: aCypressClassStructure [
+  ^ self new
+    fromCypressClassStructure: aCypressClassStructure;
+    yourself
 ]

@@ -20,6 +20,13 @@ RwAuditDetail class >> for: anObject message: aString [
 ]
 
 { #category : 'other' }
+RwAuditDetail >> matches: aString [
+"see if my messages matches expected string"
+
+	^self message matchPattern: {$* . aString . $*}
+]
+
+{ #category : 'other' }
 RwAuditDetail >> message [
 
 	^message

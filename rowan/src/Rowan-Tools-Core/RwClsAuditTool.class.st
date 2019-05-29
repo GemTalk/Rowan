@@ -80,7 +80,6 @@ RwClsAuditTool >> _auditClassSelector: aSelector forBehavior: aBehavior loadedCl
 			]
 ]
 
-
 { #category : 'audit' }
 RwClsAuditTool >> _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior [
 "Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
@@ -138,11 +137,11 @@ RwClsAuditTool >> _auditSelector: aSelector forBehavior: aBehavior loadedClass: 
 				| notification |
 				notification := (RwAuditMethodErrorNotification
 					method: aSelector 
-					isMeta: false
+					isMeta: aBehavior isMeta
 					inClassNamed: aBehavior theNonMetaClass name
 					isClassExtension: aLoadedClass isLoadedClassExtension
 					intoPackageNamed: aLoadedClass packageName )
-						description: 'Missing loaded instance method. ';
+						description: 'Missing loaded method. ';
 						yourself.
 				(notification signal) 
 					ifTrue: [ RwAuditDetail for: aBehavior message: 'Missing loaded method>>' , aSelector asString ]
