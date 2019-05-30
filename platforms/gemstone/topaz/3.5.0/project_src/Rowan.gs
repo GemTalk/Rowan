@@ -35690,7 +35690,7 @@ auditForProject: aLoadedProject
 
 	res := RwAuditReport for: aLoadedProject.
 	"self _log: '==============Auditing project ', aLoadedProject name."
-	aLoadedProject loadedPackages values do: [:e | (Rowan packageTools audit auditForPackage: e) 
+		aLoadedProject loadedPackages values do: [:e | (Rowan packageTools audit auditForPackage: e) 
 				ifNotEmpty: [:aColl | res at: e name put: aColl]].	
 	^res
 %
@@ -38643,6 +38643,7 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectComponentDefinition components: Dictionary new. "build new list of components based on (potentially) new list of configNames"
+	projectComponentDefinition packages: Dictionary new.	"bulid new list of packages as well"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
 	projectVisitorQueue := {
@@ -38670,13 +38671,10 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 		projectName := theProjectComponentDefinition name.
 		theConfigNames := ndf at: 2.
 		theGroupNames := ndf at: 3.
+		thePackageNames := theProjectComponentDefinition packageNames.
 		theVisitor 
-			ifNotNil: [ 
-				thePackageNames := theVisitor packageNames.
-				thePackageMapSpecs := theVisitor packageMapSpecs ]
-			ifNil: [ 
-				thePackageNames := theProjectComponentDefinition packageNames.
-				thePackageMapSpecs := Dictionary new ].	
+			ifNotNil: [ thePackageMapSpecs := theVisitor packageMapSpecs ]
+			ifNil: [ thePackageMapSpecs := Dictionary new ].	
 		theProjectSetDefinition := self 
 			_readProjectSetForProjectComponentDefinition: theProjectComponentDefinition 
 			packageNames: thePackageNames.

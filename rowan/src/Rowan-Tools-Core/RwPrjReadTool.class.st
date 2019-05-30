@@ -214,6 +214,7 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
 	projectComponentDefinition components: Dictionary new. "build new list of components based on (potentially) new list of configNames"
+	projectComponentDefinition packages: Dictionary new.	"bulid new list of packages as well"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
 	projectVisitorQueue := {
@@ -241,13 +242,10 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 		projectName := theProjectComponentDefinition name.
 		theConfigNames := ndf at: 2.
 		theGroupNames := ndf at: 3.
+		thePackageNames := theProjectComponentDefinition packageNames.
 		theVisitor 
-			ifNotNil: [ 
-				thePackageNames := theVisitor packageNames.
-				thePackageMapSpecs := theVisitor packageMapSpecs ]
-			ifNil: [ 
-				thePackageNames := theProjectComponentDefinition packageNames.
-				thePackageMapSpecs := Dictionary new ].	
+			ifNotNil: [ thePackageMapSpecs := theVisitor packageMapSpecs ]
+			ifNil: [ thePackageMapSpecs := Dictionary new ].	
 		theProjectSetDefinition := self 
 			_readProjectSetForProjectComponentDefinition: theProjectComponentDefinition 
 			packageNames: thePackageNames.
@@ -258,6 +256,7 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 				at: 'loadedGroupNames' put: theGroupNames;
 				at: 'packageMapSpecs' put: thePackageMapSpecs ].
 	^ projectSetDefinition
+
 ]
 
 { #category : 'read project definitions' }

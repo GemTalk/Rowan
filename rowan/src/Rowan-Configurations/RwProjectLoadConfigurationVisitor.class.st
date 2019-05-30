@@ -175,7 +175,6 @@ RwProjectLoadConfigurationVisitor >> packageMapSpecs [
 RwProjectLoadConfigurationVisitor >> packageNames [
 
 	^ packageNames
-
 ]
 
 { #category : 'accessing' }

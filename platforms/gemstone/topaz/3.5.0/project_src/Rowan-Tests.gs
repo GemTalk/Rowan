@@ -7962,6 +7962,7 @@ _loadDiskProjectDefinition: projectName packageNames: packageNames defaultSymbol
 		defaultSymbolDictName: defaultSymbolDictName;
 		configsPath: 'configs';
 		packagesPath: 'src';
+		projectsPath: 'projects';
 		specsPath: 'specs';
 		packageNames: packageNames;
 		yourself.

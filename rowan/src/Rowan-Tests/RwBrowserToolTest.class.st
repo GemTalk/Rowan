@@ -255,6 +255,7 @@ RwBrowserToolTest >> _loadDiskProjectDefinition: projectName packageNames: packa
 		defaultSymbolDictName: defaultSymbolDictName;
 		configsPath: 'configs';
 		packagesPath: 'src';
+		projectsPath: 'projects';
 		specsPath: 'specs';
 		packageNames: packageNames;
 		yourself.
