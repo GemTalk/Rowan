@@ -58,6 +58,12 @@ RwProject >> existsOnDisk [
 			ifAbsent: [ false ]
 ]
 
+{ #category : 'exporting' }
+RwProject >> exportSpecification [
+
+	self _loadedProject asDefinition exportSpecification
+]
+
 { #category : 'accessing' }
 RwProject >> extendedClasses [
 

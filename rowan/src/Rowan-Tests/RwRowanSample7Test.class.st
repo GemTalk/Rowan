@@ -13,7 +13,6 @@ RwRowanSample7Test >> _expected_rowanSample7_component_configuration [
 	^ 'RwComponentLoadConfiguration {
 	#name : ''Main'',
 	#comment : '''',
-	#projectName : ''RowanSample7_component'',
 	#version : ''0.1.0'',
 	#conditionalPackages : {
 		[

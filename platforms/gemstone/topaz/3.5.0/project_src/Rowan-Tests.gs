@@ -17211,12 +17211,17 @@ testHybridProjectLoad
 
 	"Write project to disk, make a few modifications and then reload the project from disk"
 
-	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance projectTools bazMethod ivar1Method className theLoadedProject theLoadedPackage theLoadedClassOrClassExtension writtenStateValidationBlock |
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod 
+		barMethod normalInstance projectTools bazMethod ivar1Method className 
+		theLoadedProject theLoadedPackage theLoadedClassOrClassExtension 
+		writtenStateValidationBlock project |
 	projectName := 'HybridPatchProjectA'.
 	packageName1 := 'Hybrid-Patch-Core'.
 	packageName2 := 'Hybrid-Patch-Extensions'.
-	packageNames := {packageName1.
-	packageName2}.
+	packageNames := { packageName1 . packageName2 }.
+
+	projectTools := Rowan projectTools.
+
 	self
 		_loadDiskProjectDefinition: projectName
 		packageNames: packageNames
@@ -17245,8 +17250,8 @@ testHybridProjectLoad
 	normalInstance := normalClass new.
 	self assert: normalInstance foo = 'foo'.
 
-	projectTools := Rowan projectTools.
-	projectTools spec exportProjectNamed: projectName.
+	project := RwProject newNamed: projectName.
+	project exportSpecification.
 	projectTools write writeProjectNamed: projectName.
 	projectTools commit
 		commitProjectNamed: projectName
@@ -42533,7 +42538,6 @@ _expected_rowanSample7_component_configuration
 	^ 'RwComponentLoadConfiguration {
 	#name : ''Main'',
 	#comment : '''',
-	#projectName : ''RowanSample7_component'',
 	#version : ''0.1.0'',
 	#conditionalPackages : {
 		[

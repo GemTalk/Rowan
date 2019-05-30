@@ -26707,6 +26707,13 @@ existsOnDisk
 			ifAbsent: [ false ]
 %
 
+category: 'exporting'
+method: RwProject
+exportSpecification
+
+	self _loadedProject asDefinition exportSpecification
+%
+
 category: 'accessing'
 method: RwProject
 extendedClasses

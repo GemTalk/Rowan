@@ -2419,12 +2419,17 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 
 	"Write project to disk, make a few modifications and then reload the project from disk"
 
-	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance projectTools bazMethod ivar1Method className theLoadedProject theLoadedPackage theLoadedClassOrClassExtension writtenStateValidationBlock |
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod 
+		barMethod normalInstance projectTools bazMethod ivar1Method className 
+		theLoadedProject theLoadedPackage theLoadedClassOrClassExtension 
+		writtenStateValidationBlock project |
 	projectName := 'HybridPatchProjectA'.
 	packageName1 := 'Hybrid-Patch-Core'.
 	packageName2 := 'Hybrid-Patch-Extensions'.
-	packageNames := {packageName1.
-	packageName2}.
+	packageNames := { packageName1 . packageName2 }.
+
+	projectTools := Rowan projectTools.
+
 	self
 		_loadDiskProjectDefinition: projectName
 		packageNames: packageNames
@@ -2453,8 +2458,8 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 	normalInstance := normalClass new.
 	self assert: normalInstance foo = 'foo'.
 
-	projectTools := Rowan projectTools.
-	projectTools spec exportProjectNamed: projectName.
+	project := RwProject newNamed: projectName.
+	project exportSpecification.
 	projectTools write writeProjectNamed: projectName.
 	projectTools commit
 		commitProjectNamed: projectName
