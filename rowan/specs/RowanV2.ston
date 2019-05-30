@@ -8,6 +8,7 @@ RwComponentSpecification {
 	#projectsPath : 'rowan/projects',
 	#repoSpec : RwGitRepositorySpecification {
 	},
+	#defaultComponentName : 'Kernel',
 	#defaultConfigurationNames : [
 		'Load'
 	],

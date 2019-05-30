@@ -43155,7 +43155,7 @@ testRowanLoadConfiguration
 
 	packageNames := visitor packageNames asArray sort.
 
-	self assert: packageNames = (x := self _expectedRowan_LoadPackageNames).
+	self assert: packageNames = (x := (self _expectedRowan_LoadPackageNames, self _expectedLoadPackageNames_gemstone_tests) sort).
 
 	packageMapSpecs := visitor packageMapSpecs.
 	self assert: packageMapSpecs notNil.
@@ -43569,7 +43569,7 @@ _expectedLoadPackageNames_gemstone
 			#('Rowan-Services-Extensions' 'Rowan-Services-Core' 'Rowan-GemStone-Core' 
 					'Rowan-GemStone-Kernel' 'Rowan-GemStone-Loader' 'Rowan-GemStone-Components'
 					'Rowan-GemStone-Components-Extensions'
-					'Rowan-GemStone-Loader-Extensions' 'Rowan-Services-Tests') ) sort
+					'Rowan-GemStone-Loader-Extensions' 'Rowan-Services-Tests' ) ) sort
 %
 
 category: 'private'
@@ -43625,12 +43625,14 @@ category: 'private'
 method: RwProjectConfigurationsTest
 _expectedRowan_LoadPackageNames
 
-	^ (self _expectedLoadPackageNames_gemstone , self _expectedLoadPackageNames_gemstone_version,
+	^ (self _expectedLoadPackageNames_gemstone , 
+			self _expectedLoadPackageNames_gemstone_version, 
 			#('AST-Core' 'AST-Kernel-Core' 'AST-Kernel-Tests-Core' 'AST-Tests-Core' 
 				'Rowan-GemStone-3215' 'Rowan-Url-3215' 'GemStone-Interactions-Core' 
 				'GemStone-Interactions-Kernel' 'Rowan-Url-Extensions' 'Rowan-Kernel' 
 				'Rowan-GemStone-Specifications' 'Rowan-Core-Definitions-Extensions' 
-				'Rowan-GemStone-Definitions' 'Rowan-Cypress-Definitions' ) ) sort
+				'Rowan-GemStone-Definitions' 'Rowan-Cypress-Definitions' 'Rowan-Url-Cypress' 
+				'Rowan-Tools-GemStone' 'Rowan-Tools-Extensions-GemStone') ) sort
 %
 
 category: 'private'

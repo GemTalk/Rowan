@@ -128,6 +128,8 @@ RwPrjReadTool >> readConfigurationsForProjectComponentDefinition: projectDefinit
 RwPrjReadTool >> readConfigurationsForProjectComponentDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes forLoad: forLoad [
 
 	| theConfigNames theGroupNames |
+	projectComponentDefinition components: Dictionary new. "build new list of components based on (potentially) new list of configNames"
+	projectComponentDefinition packages: Dictionary new.	"bulid new list of packages as well"
 	theConfigNames := configNames isEmpty
 		ifTrue: [ projectComponentDefinition defaultConfigurationNames ]
 		ifFalse: [ configNames ].
@@ -213,8 +215,6 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames platformConfigurationAttributes: platformConfigurationAttributes [
 
 	| projectSetDefinition visitor projectVisitorQueue projectVisitedQueue |
-	projectComponentDefinition components: Dictionary new. "build new list of components based on (potentially) new list of configNames"
-	projectComponentDefinition packages: Dictionary new.	"bulid new list of packages as well"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectVisitedQueue := {}.
 	projectVisitorQueue := {
@@ -256,7 +256,6 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 				at: 'loadedGroupNames' put: theGroupNames;
 				at: 'packageMapSpecs' put: thePackageMapSpecs ].
 	^ projectSetDefinition
-
 ]
 
 { #category : 'read project definitions' }
