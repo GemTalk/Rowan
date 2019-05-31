@@ -34,8 +34,13 @@ RwProjectReferenceDefinition >> asSpecification [
 { #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinition >> defaultMethodEnv [
 
-self deprecated: 'temporary patch .. this is probably the right spot, but it is worth double checking'.
-	^ 0
+	^ self properties at: 'defaultMethodEnv' ifAbsent: [ 0 ]
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> defaultMethodEnv: anInteger [
+
+	^ self properties at: 'defaultMethodEnv' put: anInteger
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
@@ -66,7 +71,6 @@ RwProjectReferenceDefinition >> defaultUseSessionMethodsForExtensions: aBool [
 RwProjectReferenceDefinition >> methodEnvForPackageNamed: packageName [
 
 	| packageProperties |
-self deprecated: 'temporary patch .. see RwGemStoneSpecification>>methodEnvForPackageNamed: for full implementation'.
 	packageProperties :=self packageNameToPlatformPropertiesMap
 		at: packageName
 		ifAbsent: [ ^ self defaultMethodEnv ].
@@ -105,7 +109,6 @@ RwProjectReferenceDefinition >> setSymbolDictName: symbolDictName forPackageName
 RwProjectReferenceDefinition >> symbolDictNameForPackageNamed: packageName [
 
 	| packageProperties |
-self deprecated: 'temporary patch .. see RwGemStoneSpecification>>symbolDictNameForPackageNamed: for full implementation'.
 	packageProperties := self packageNameToPlatformPropertiesMap
 		at: packageName
 		ifAbsent: [ ^ self defaultSymbolDictName ].
