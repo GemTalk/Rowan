@@ -99,6 +99,13 @@ RwProjectDefinition >> comment: aString [
 	self specification comment: aString
 ]
 
+{ #category : 'actions' }
+RwProjectDefinition >> commit: message [
+	"lperform commit on the repository associated with receiver ..."
+
+	^ Rowan projectTools commit commitProjectDefinition: self message: message
+]
+
 { #category : 'properties' }
 RwProjectDefinition >> configsPath [
 

@@ -312,6 +312,12 @@ RwProjectReferenceDefinition >> defaultGroupName: aString [
 	^ self properties at: 'defaultGroupName' put: aString
 ]
 
+{ #category : 'actions' }
+RwProjectReferenceDefinition >> doCommit: message [
+
+	^ self repositoryDefinition doCommit: message
+]
+
 { #category : 'exporting' }
 RwProjectReferenceDefinition >> exportSpecification [
 

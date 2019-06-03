@@ -379,6 +379,20 @@ RwComponentProjectDefinition >> clone [
 	^ self read						"refresh receiver from the cloned repository and answer project definition set that contains reciever along with any dependent projects"
 ]
 
+{ #category : 'actions' }
+RwComponentProjectDefinition >> commit: message [
+	"commit the repository associated with receiver ..."
+
+	self canCommit
+		ifFalse: [ 
+			| msg |
+			msg := 'repository for project ' , self name printString
+				, ' does not support commit operations.'.
+			self inform: msg.
+			^ msg ].
+	^ self projectRef doCommit: message
+]
+
 { #category : 'accessing' }
 RwComponentProjectDefinition >> componentNamed: aComponentName [
 
@@ -792,6 +806,13 @@ RwComponentProjectDefinition >> repositoryRoot: aFileReferenceOrPath [
 RwComponentProjectDefinition >> repositoryRootPath [
 
 	^ self repositoryRoot fullName
+]
+
+{ #category : 'temporary compat' }
+RwComponentProjectDefinition >> specification [
+
+self deprecated: 'temporary patch .. sender should be replaced with projectRef'.
+	^ self projectRef asSpecification
 ]
 
 { #category : 'properties' }

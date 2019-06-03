@@ -37256,54 +37256,6 @@ The project project has been registered with Rowan at the existing location .'.
 
 category: 'smalltalk api'
 method: RwPrjCommitTool
-commitPackagesForSpecification: aRwSpecification message: messageString
-
-	"commit repository ... packages must be written out independently with write tool"
-
-	self specification: aRwSpecification.
-	specification canCommit
-		ifFalse: [ 
-			| msg |
-			msg := 'repository for ' , specification specName printString
-				,
-					' does not support commit operations. Source written to repository and skipping commit'.
-			self inform: msg.
-			^ msg ].
-	specification commitForTool: self message: messageString.
-	^ specification updateLoadedCommitIdForTool: self
-%
-
-category: 'smalltalk api'
-method: RwPrjCommitTool
-commitPackagesForSpecUrl: aSpecUrlString message: messageString
-
-	"commit repository ... packages must be written out independently with write tool"
-
-	^ self
-		commitPackagesForSpecification: (RwSpecification fromUrl: aSpecUrlString)
-		message: messageString
-%
-
-category: 'smalltalk api'
-method: RwPrjCommitTool
-commitProjectDefinition: projectDefinition message: messageString
-
-	"commit repository ... packages must be written out independently with write tool"
-
-	projectDefinition canCommit
-		ifFalse: [ 
-			| msg |
-			msg := 'repository for project ' , projectDefinition name printString
-				, ' does not support commit operations.'.
-			self inform: msg.
-			^ msg ].
-	self specification: projectDefinition specification.
-	specification commitForTool: self message: messageString.
-	^ specification updateLoadedCommitIdForTool: self
-%
-
-category: 'smalltalk api'
-method: RwPrjCommitTool
 commitProjectNamed: projectName message: messageString
 
 	"commit repository ... packages must be written out independently with write tool"
@@ -37311,16 +37263,7 @@ commitProjectNamed: projectName message: messageString
 	| loadedProject projectDefinition |
 	loadedProject := Rowan image loadedProjectNamed: projectName.
 	projectDefinition := loadedProject asDefinition.
-	projectDefinition canCommit
-		ifFalse: [ 
-			| msg |
-			msg := 'repository for project ' , projectDefinition name printString
-				, ' does not support commit operations.'.
-			self inform: msg.
-			^ msg ].
-	self specification: projectDefinition specification.
-	specification commitForTool: self message: messageString.
-	^ specification updateLoadedCommitIdForTool: self
+	projectDefinition commit: messageString
 %
 
 ! Class implementation for 'RwPrjCreateTool'
@@ -40252,6 +40195,13 @@ attach
 	self error: 'not yet implemented'
 %
 
+category: 'testing'
+method: RwAbstractRepositoryDefinition
+canCommit
+
+	^ false
+%
+
 category: 'actions'
 method: RwAbstractRepositoryDefinition
 clone
@@ -40304,6 +40254,13 @@ method: RwAbstractRepositoryDefinition
 create
 
 	self error: 'not yet implemented'
+%
+
+category: 'actions'
+method: RwAbstractRepositoryDefinition
+doCommit: message
+
+	"noop by default"
 %
 
 category: 'accessing'
@@ -40438,6 +40395,13 @@ newNamed: repositoryName repositoryRoot: repoRoot projectUrl: anUrlString remote
 
 !		Instance methods for 'RwGitRepositoryDefinition'
 
+category: 'testing'
+method: RwGitRepositoryDefinition
+canCommit
+
+	^ true
+%
+
 category: 'actions'
 method: RwGitRepositoryDefinition
 clone
@@ -40466,6 +40430,25 @@ method: RwGitRepositoryDefinition
 commitLog: logLimit
 
 	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self gitRoot pathString
+%
+
+category: 'actions'
+method: RwGitRepositoryDefinition
+doCommit: message
+
+	| gitTool gitRootPath commitMessageFileName status |
+	gitTool := Rowan gitTools.
+	gitRootPath := self repositoryRoot pathString.
+	commitMessageFileName := gitTool createTmpFileWith: message.
+	gitTool gitaddIn: gitRootPath with: '-A .'.
+	gitTool gitcommitIn: gitRootPath with: '--file=' , commitMessageFileName.
+	status := gitTool gitlogIn: gitRootPath with: '-1'.
+	Transcript
+		cr;
+		show: '==============';
+		cr;
+		show: status.
+	^ status
 %
 
 category: 'accessing'
@@ -41132,6 +41115,14 @@ method: RwProjectDefinition
 comment: aString
 
 	self specification comment: aString
+%
+
+category: 'actions'
+method: RwProjectDefinition
+commit: message
+	"lperform commit on the repository associated with receiver ..."
+
+	^ Rowan projectTools commit commitProjectDefinition: self message: message
 %
 
 category: 'properties'
@@ -41853,6 +41844,13 @@ addPackagesNamed: packageNames withConditions: conditionArray gemstoneDefaultSym
 		self addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
 %
 
+category: 'properties'
+method: RwComponentProjectDefinition
+canCommit
+
+	^ self projectRef canCommit
+%
+
 category: 'actions'
 method: RwComponentProjectDefinition
 clone
@@ -41860,6 +41858,21 @@ clone
 
 	self projectRef clone.
 	^ self read						"refresh receiver from the cloned repository and answer project definition set that contains reciever along with any dependent projects"
+%
+
+category: 'actions'
+method: RwComponentProjectDefinition
+commit: message
+	"commit the repository associated with receiver ..."
+
+	self canCommit
+		ifFalse: [ 
+			| msg |
+			msg := 'repository for project ' , self name printString
+				, ' does not support commit operations.'.
+			self inform: msg.
+			^ msg ].
+	^ self projectRef doCommit: message
 %
 
 category: 'accessing'
@@ -42539,6 +42552,13 @@ branch: aString
 	self committish: aString committishType: 'branch'
 %
 
+category: 'properties'
+method: RwProjectReferenceDefinition
+canCommit
+
+	^ self repositoryDefinition canCommit
+%
+
 category: 'actions'
 method: RwProjectReferenceDefinition
 clone
@@ -42675,6 +42695,13 @@ method: RwProjectReferenceDefinition
 defaultGroupName: aString
 
 	^ self properties at: 'defaultGroupName' put: aString
+%
+
+category: 'actions'
+method: RwProjectReferenceDefinition
+doCommit: message
+
+	^ self repositoryDefinition doCommit: message
 %
 
 category: 'exporting'
@@ -60877,6 +60904,28 @@ symbolDictNameForPackageNamed: packageName
 	^self projectRef symbolDictNameForPackageNamed: packageName
 %
 
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
+updateGsPlatformSpecLoadedProjectInfo: projectInfo
+
+	| thePackageMapSpecs |
+	thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
+	(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
+		ifNotNil: [:name | self defaultSymbolDictName: name ].
+	(thePackageMapSpecs at: #defaultUseSessionMethodsForExtensions otherwise: nil) 
+		ifNotNil: [:boolean | 
+			self defaultUseSessionMethodsForExtensions: boolean  ].
+	(thePackageMapSpecs at: #packageNameToPlatformPropertiesMap otherwise: nil) 
+		ifNotNil: [:map | self packageNameToPlatformPropertiesMap: map]
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
+useSessionMethodsForExtensionsForPackageNamed: packageName
+
+	^ self projectRef useSessionMethodsForExtensionsForPackageNamed: packageName
+%
+
 ! Class extensions for 'RwComponentSpecification'
 
 !		Instance methods for 'RwComponentSpecification'
@@ -61854,6 +61903,19 @@ symbolDictNameForPackageNamed: packageName
 	^ packageProperties
 		at: 'symbolDictName'
 		ifAbsent: [ ^ self defaultSymbolDictName ]
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwProjectReferenceDefinition
+useSessionMethodsForExtensionsForPackageNamed: packageName
+
+	| packageProperties |
+	packageProperties := self packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self defaultUseSessionMethodsForExtensions ].
+	^ packageProperties
+		at: 'useSessionMethodsForExtensions'
+		ifAbsent: [ ^ self defaultUseSessionMethodsForExtensions ]
 %
 
 ! Class extensions for 'RwProjectSetDefinition'

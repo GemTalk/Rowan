@@ -72,6 +72,24 @@ RwGitRepositoryDefinition >> commitLog: logLimit [
 	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self gitRoot pathString
 ]
 
+{ #category : 'actions' }
+RwGitRepositoryDefinition >> doCommit: message [
+
+	| gitTool gitRootPath commitMessageFileName status |
+	gitTool := Rowan gitTools.
+	gitRootPath := self repositoryRoot pathString.
+	commitMessageFileName := gitTool createTmpFileWith: message.
+	gitTool gitaddIn: gitRootPath with: '-A .'.
+	gitTool gitcommitIn: gitRootPath with: '--file=' , commitMessageFileName.
+	status := gitTool gitlogIn: gitRootPath with: '-1'.
+	Transcript
+		cr;
+		show: '==============';
+		cr;
+		show: status.
+	^ status
+]
+
 { #category : 'accessing' }
 RwGitRepositoryDefinition >> gitRoot [
 	"The root directory of the git repository that the project is located in. If the project is not git based

@@ -142,6 +142,12 @@ RwAbstractRepositoryDefinition >> create [
 	self error: 'not yet implemented'
 ]
 
+{ #category : 'actions' }
+RwAbstractRepositoryDefinition >> doCommit: message [
+
+	"noop by default"
+]
+
 { #category : 'accessing' }
 RwAbstractRepositoryDefinition >> gitRoot: ignored [
 ]
