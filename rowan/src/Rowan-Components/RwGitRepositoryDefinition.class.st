@@ -39,6 +39,12 @@ RwGitRepositoryDefinition >> _createRemoteUrl [
 	^ remoteUrl
 ]
 
+{ #category : 'testing' }
+RwGitRepositoryDefinition >> canCommit [
+
+	^ true
+]
+
 { #category : 'actions' }
 RwGitRepositoryDefinition >> clone [
 

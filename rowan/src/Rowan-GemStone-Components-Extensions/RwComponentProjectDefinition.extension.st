@@ -64,3 +64,9 @@ RwComponentProjectDefinition >> symbolDictNameForPackageNamed: packageName [
 
 	^self projectRef symbolDictNameForPackageNamed: packageName
 ]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> useSessionMethodsForExtensionsForPackageNamed: packageName [
+
+	^ self projectRef useSessionMethodsForExtensionsForPackageNamed: packageName
+]

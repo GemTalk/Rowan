@@ -89,6 +89,12 @@ RwAbstractRepositoryDefinition >> attach [
 	self error: 'not yet implemented'
 ]
 
+{ #category : 'testing' }
+RwAbstractRepositoryDefinition >> canCommit [
+
+	^ false
+]
+
 { #category : 'actions' }
 RwAbstractRepositoryDefinition >> clone [
 

@@ -16,6 +16,13 @@ RwComponentProjectDefinition >> repoPath: astring [
 ]
 
 { #category : '*rowan-definitions-deprecated' }
+RwComponentProjectDefinition >> specification [
+
+self deprecated: 'temporary patch .. sender should be replaced with projectRef'.
+	^ self projectRef asSpecification
+]
+
+{ #category : '*rowan-definitions-deprecated' }
 RwComponentProjectDefinition class >> projectName: projectName configurationNames: configurationNames groupNames: groupNames defaultComponentName: defaultComponentName useGit: useGit projectUrl: projectUrl projectHome: projectHomeFileReferenceOrString committish: committish committishType: committishType comment: comment [
 
 

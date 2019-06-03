@@ -365,6 +365,12 @@ RwComponentProjectDefinition >> addPackagesNamed: packageNames withConditions: c
 		self addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
 ]
 
+{ #category : 'properties' }
+RwComponentProjectDefinition >> canCommit [
+
+	^ self projectRef canCommit
+]
+
 { #category : 'actions' }
 RwComponentProjectDefinition >> clone [
 	"clone remote git project to disk"
@@ -786,13 +792,6 @@ RwComponentProjectDefinition >> repositoryRoot: aFileReferenceOrPath [
 RwComponentProjectDefinition >> repositoryRootPath [
 
 	^ self repositoryRoot fullName
-]
-
-{ #category : 'temporary compat' }
-RwComponentProjectDefinition >> specification [
-
-self deprecated: 'temporary patch .. sender should be replaced with projectRef'.
-	^ self projectRef asSpecification
 ]
 
 { #category : 'properties' }

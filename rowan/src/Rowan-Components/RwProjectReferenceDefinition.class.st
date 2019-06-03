@@ -187,6 +187,12 @@ RwProjectReferenceDefinition >> branch: aString [
 	self committish: aString committishType: 'branch'
 ]
 
+{ #category : 'properties' }
+RwProjectReferenceDefinition >> canCommit [
+
+	^ self repositoryDefinition canCommit
+]
+
 { #category : 'actions' }
 RwProjectReferenceDefinition >> clone [
 

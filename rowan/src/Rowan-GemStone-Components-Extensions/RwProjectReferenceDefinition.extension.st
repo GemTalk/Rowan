@@ -116,3 +116,15 @@ RwProjectReferenceDefinition >> symbolDictNameForPackageNamed: packageName [
 		at: 'symbolDictName'
 		ifAbsent: [ ^ self defaultSymbolDictName ]
 ]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> useSessionMethodsForExtensionsForPackageNamed: packageName [
+
+	| packageProperties |
+	packageProperties := self packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self defaultUseSessionMethodsForExtensions ].
+	^ packageProperties
+		at: 'useSessionMethodsForExtensions'
+		ifAbsent: [ ^ self defaultUseSessionMethodsForExtensions ]
+]
