@@ -238,9 +238,9 @@ RwProjectFiletreeTonelReaderWriterTest >> _validateIssue361ProjectDefinitionSet:
 { #category : 'tests' }
 RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProject [
 
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122.ston'.
@@ -264,9 +264,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithBothMet
 
 	"method protocol starts with a * for non-extension method"
 
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet patches |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet patches |	
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Both-ProtocolValidationError.ston'.
@@ -322,9 +322,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithClassCa
 
 	"class category does not match package name -- Rowan Hybrid"
 
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_CategoryValidationError.ston'.
@@ -367,9 +367,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithEmptyCl
 	"https://github.com/GemTalk/Rowan/issues/361"
 
 
-	| rowanSpec projectHome projectName specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+	| rowanProject projectHome projectName specUrlString projectDefinition projectDefinitionSet |	
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	projectName := 'Issue361'.
@@ -397,9 +397,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithExtensi
 		extension method protocol does start with a *, but does not match the package name
 	"
 
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Extension-ProtocolValidationError.ston'.
@@ -446,9 +446,9 @@ RwProjectFiletreeTonelReaderWriterTest >> testReadExistingDiskProjectWithMethodP
 
 	"method protocol starts with a * for non-extension method"
 
-	| rowanSpec projectHome specUrlString projectDefinition projectDefinitionSet |	
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/'.
+	| rowanProject projectHome specUrlString projectDefinition projectDefinitionSet |	
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/'.
 
 "identify spec to be used for reading project"
 	specUrlString :=  'file:' , projectHome, '/Issue122/', self _repositoryFormat, '/rowan/specs/Issue122_Core-ProtocolValidationError.ston'.
@@ -923,10 +923,10 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_Rowan_pharo [
 	"execute without errors"
 
 	| platformConfigurationAttributes projectDefinition projectSetDefinition projectSetModification visitor
-		projectHome rowanSpec projectAlias writerVisitorClass |
+		projectHome rowanProject projectAlias writerVisitorClass |
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := (rowanSpec repositoryRootPath , '/test/testRepositories/repos/') asFileReference.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := (rowanProject repositoryRootPath , '/test/testRepositories/repos/') asFileReference.
 	projectAlias := 'Rowan_', self _repositoryFormat.
 
 	(projectHome / projectAlias / 'src') 
@@ -940,8 +940,8 @@ RwProjectFiletreeTonelReaderWriterTest >> testWriterReader_Rowan_pharo [
 		'pharo'.	"want to read pharo packages"
 	}.
 	projectDefinition := RwComponentProjectDefinition 
-		newForUrl: 'file:', rowanSpec repositoryRootPath, '/platforms/pharo/rowan/specs/Rowan_component.ston'.
-	projectDefinition projectHome: rowanSpec repositoryRootPath asFileReference parent.
+		newForUrl: 'file:', rowanProject repositoryRootPath, '/platforms/pharo/rowan/specs/Rowan_component.ston'.
+	projectDefinition projectHome: rowanProject repositoryRootPath asFileReference parent.
 	projectDefinition read: platformConfigurationAttributes.
 
 "Write project and packages to disk in filetree format, for bootstrapping Pharo"

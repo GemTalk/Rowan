@@ -35,9 +35,7 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.
-	projectTools commit
-		commitProjectDefinition: projectDefinition
-		message: 'Initial commit'.
+	projectDefinition commit: 'Initial commit'.
 	self
 		handleInformAsFailureDuring: [ projectTools load loadProjectDefinition: projectDefinition ].
 
@@ -70,10 +68,7 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 
 	projectTools spec exportSpecification: projectDefinition specification.
 	projectTools write writeProjectDefinition: projectDefinition.
-	projectTools commit
-		commitProjectDefinition: projectDefinition
-		message: 'Added Simple class'
-
+	projectDefinition commit: 'Added Simple class'
 ]
 
 { #category : 'tests' }
@@ -174,9 +169,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.
-	projectTools commit
-		commitProjectDefinition: projectDefinition
-		message: 'Added Simple class and extension methods'
+	projectDefinition commit: 'Added Simple class and extension methods'
 ]
 
 { #category : 'tests' }
@@ -395,9 +388,7 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.
-	projectTools commit
-		commitProjectDefinition: projectDefinition
-		message:
+	projectDefinition commit:
 			'3 packages with extension methods for first package in third package.'
 ]
 
@@ -593,9 +584,7 @@ RwProjectToolTest >> testSimpleProject1 [
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.
-	projectTools commit
-		commitProjectDefinition: projectDefinition
-		message: 'Initial commit'.
+	projectDefinition commit: 'Initial commit'.
 	self
 		handleInformAsFailureDuring: [ projectTools load loadProjectDefinition: projectDefinition ].
 
@@ -628,10 +617,7 @@ RwProjectToolTest >> testSimpleProject1 [
 
 	projectTools spec exportSpecification: projectDefinition specification.
 	projectTools write writeProjectDefinition: projectDefinition.
-	projectTools commit
-		commitProjectDefinition: projectDefinition
-		message: 'Added Simple class'
-
+	projectDefinition commit: 'Added Simple class'
 ]
 
 { #category : 'tests' }
@@ -688,9 +674,7 @@ RwProjectToolTest >> testSimpleProject2 [
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.
-	projectTools commit
-		commitProjectDefinition: projectDefinition
-		message: 'Added Simple class'
+	projectDefinition commit: 'Added Simple class'
 ]
 
 { #category : 'tests' }
@@ -774,7 +758,5 @@ RwProjectToolTest >> testSimpleProject3 [
 
 	projectTools spec exportProjectDefinition: projectDefinition.
 	projectTools write writeProjectDefinition: projectDefinition.
-	projectTools commit
-		commitProjectDefinition: projectDefinition
-		message: 'Added Simple3 class and methods'
+	projectDefinition commit: 'Added Simple3 class and methods'
 ]

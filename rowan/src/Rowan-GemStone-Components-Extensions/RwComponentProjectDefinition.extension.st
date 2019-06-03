@@ -1,6 +1,12 @@
 Extension { #name : 'RwComponentProjectDefinition' }
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwComponentProjectDefinition >> asLoadedSymbolDictProject [
+
+	^ RwGsLoadedSymbolDictComponentProject newForProjectReferenceDefinition: self projectRef.
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwComponentProjectDefinition >> defaultSymbolDictName [
 
 	^ self projectRef defaultSymbolDictName

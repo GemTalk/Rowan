@@ -19,40 +19,36 @@ RwRowanSample2Test >> _migrationClassMap [
 { #category : 'private' }
 RwRowanSample2Test >> _rowanSample2_bitbucketSpecificationUrl [
 
-	| rowanSpec |
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	^ 'file:' , rowanSpec repositoryRootPath
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
 		, '/test/specs/RowanSample2_bitbucket.ston'
-
 ]
 
 { #category : 'private' }
 RwRowanSample2Test >> _rowanSample2_gitlabSpecificationUrl [
 
-	| rowanSpec |
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	^ 'file:' , rowanSpec repositoryRootPath
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
 		, '/test/specs/RowanSample2_gitlab.ston'
-
 ]
 
 { #category : 'private' }
 RwRowanSample2Test >> _rowanSample2_gitoliteSpecificationUrl [
 
-	| rowanSpec |
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	^ 'file:' , rowanSpec repositoryRootPath
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath
 		, '/test/specs/RowanSample2_gitolite.ston'
-
 ]
 
 { #category : 'private' }
 RwRowanSample2Test >> _rowanSample2SpecificationUrl [
 
-	| rowanSpec |
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	^ 'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample2.ston'
-
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample2.ston'
 ]
 
 { #category : 'tests' }
@@ -60,22 +56,22 @@ RwRowanSample2Test >> testAutomaticMigration [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after automtic migration the permanent instance variables (a-f) should retain the values, while the moved instance variables (ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec instanceMap |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-  	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+  	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	 (gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
-		gitRootPath: rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
 		useSsh: true.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
@@ -134,23 +130,23 @@ RwRowanSample2Test >> testDeferredMigration [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. after deferred migration ..."
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec instanceMigrator 
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec instanceMigrator 
 		classesToMigrate expectedClassesToMigrate |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-  	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+  	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
-		gitRootPath: rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
 		useSsh: true.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
@@ -187,22 +183,22 @@ RwRowanSample2Test >> testNoMigration [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec instanceMap |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	(gitRootPath /projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
-		gitRootPath: rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
 		useSsh: true.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
@@ -252,22 +248,22 @@ RwRowanSample2Test >> testNoMigration_bitbucket [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec instanceMap |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample2_bitbucketSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
-		gitRootPath: rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
 		useSsh: true.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
@@ -317,22 +313,22 @@ RwRowanSample2Test >> testNoMigration_gitlab [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec instanceMap |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample2_gitlabSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
-		gitRootPath: rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
 		useSsh: true.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
@@ -382,22 +378,22 @@ RwRowanSample2Test >> testNoMigration_gitolite [
 
 	"load migration_1, set all of the instance variables (a-f, ivar0-ivar2), then load migration_2. with no migration all of the instance variables (a-f, ivar0-ivar2) should be niled out"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec instanceMap |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec instanceMap |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample2_gitoliteSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
-		gitRootPath: rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
 		useSsh: true.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
@@ -469,17 +465,17 @@ RwRowanSample2Test >> testRemoveSubclassOfClassWithNewVersion [
 
 	"load migration_1, then load migration_0 (new version of RowanSample2 and all subclasses deleted"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSample2Class subclasses rowanSampleSpec |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSample2Class subclasses rowanSampleSpec |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 	projectTools clone
 		cloneSpecUrl: specUrlString
-		gitRootPath: rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
 		useSsh: true.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
@@ -511,16 +507,16 @@ RwRowanSample2Test >> testSampleDefaultConfiguration [
 
 	"SampleDefault configuration is an instance of RwProjectConfiguration"
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec project x |
 	projectName := 'RowanSample2'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample2SpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 

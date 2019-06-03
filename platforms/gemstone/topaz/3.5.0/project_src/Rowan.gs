@@ -35621,18 +35621,6 @@ repositoryUrl
   ^ self specification repositoryUrl
 %
 
-category: 'private'
-method: RwProjectTool
-_createLoadedProject: aRwProjectReference
-
-	Rowan image 
-		loadedProjectNamed: aRwProjectReference projectAlias
-		ifAbsent: [
-			| newLoadedProject |
-			newLoadedProject := RwGsLoadedSymbolDictProject newForProjectReference: aRwProjectReference.
-			Rowan image addLoadedProject: newLoadedProject ]
-%
-
 ! Class implementation for 'RwPrjAdoptTool'
 
 !		Instance methods for 'RwPrjAdoptTool'
@@ -47488,8 +47476,7 @@ createLoadedProject
 		ifAbsent: [ nil ].
 	existingLoadedProject
 		ifNotNil: [ self error: 'Internal error -- Attempt to add a project that exists.' ].
-	newLoadedProject := RwGsLoadedSymbolDictProject
-		newForLoadSpecification: projectDefinition specification.
+	newLoadedProject := projectDefinition asLoadedSymbolDictProject.
 	Rowan image addLoadedProject: newLoadedProject.
 	self updateProjectProperties
 %
@@ -52544,6 +52531,13 @@ repositoryRoot
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self projectRef repositoryRoot
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
+repositoryRootPath
+
+	^ self repositoryRoot pathString
 %
 
 category: 'accessing'
@@ -60831,6 +60825,13 @@ addMovedClassToPatchSet: aPatchSet
 
 category: '*rowan-gemstone-components-extensions'
 method: RwComponentProjectDefinition
+asLoadedSymbolDictProject
+
+	^ RwGsLoadedSymbolDictComponentProject newForProjectReferenceDefinition: self projectRef.
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwComponentProjectDefinition
 defaultSymbolDictName
 
 	^ self projectRef defaultSymbolDictName
@@ -61623,6 +61624,13 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 ! Class extensions for 'RwProjectDefinition'
 
 !		Instance methods for 'RwProjectDefinition'
+
+category: '*rowan-gemstone-definitions'
+method: RwProjectDefinition
+asLoadedSymbolDictProject
+
+	^ RwGsLoadedSymbolDictProject newForLoadSpecification: self specification.
+%
 
 category: '*rowan-core-definitions-extensions'
 method: RwProjectDefinition

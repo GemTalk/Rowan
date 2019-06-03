@@ -148,6 +148,12 @@ RwGsLoadedSymbolDictComponentProject >> repositoryRoot [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> repositoryRootPath [
+
+	^ self repositoryRoot pathString
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> specification [
 
 self deprecated: 'temporary patch .. sender should send direct message to receiver'.

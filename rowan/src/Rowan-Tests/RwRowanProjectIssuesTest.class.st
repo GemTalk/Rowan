@@ -137,20 +137,20 @@ RwRowanProjectIssuesTest >> _addPackageNamed: packageName toProjectNamed: projec
 { #category : 'private-issue 150' }
 RwRowanProjectIssuesTest >> _cloneGitRepositoryFor: projectName projectUrlString: projectUrlString [
 
-	| rowanSpec projectTools gitRootPath |
+	| rowanProject projectTools gitRootPath |
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/issues/'.
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/issues/'.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: projectUrlString
-		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
+		gitRootPath: rowanProject repositoryRootPath , '/test/testRepositories/repos/'
 		useSsh: true.
 ]
 

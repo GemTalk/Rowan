@@ -5,6 +5,7 @@ RwPrjCommitTool >> commitPackagesForSpecification: aRwSpecification message: mes
 
 	"commit repository ... packages must be written out independently with write tool"
 
+self deprecated: 'package commit not supported in v2'.
 	self specification: aRwSpecification.
 	specification canCommit
 		ifFalse: [ 
@@ -23,6 +24,7 @@ RwPrjCommitTool >> commitPackagesForSpecUrl: aSpecUrlString message: messageStri
 
 	"commit repository ... packages must be written out independently with write tool"
 
+self deprecated: 'package commit not supported in v2'.
 	^ self
 		commitPackagesForSpecification: (RwSpecification fromUrl: aSpecUrlString)
 		message: messageString
@@ -33,6 +35,7 @@ RwPrjCommitTool >> commitProjectDefinition: projectDefinition message: messageSt
 
 	"commit repository ... packages must be written out independently with write tool"
 
+self deprecated: 'Use RwProjectDefinition>>commit:'.
 	projectDefinition canCommit
 		ifFalse: [ 
 			| msg |

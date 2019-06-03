@@ -1,6 +1,12 @@
 Extension { #name : 'RwProjectDefinition' }
 
 { #category : '*rowan-gemstone-definitions' }
+RwProjectDefinition >> asLoadedSymbolDictProject [
+
+	^ RwGsLoadedSymbolDictProject newForLoadSpecification: self specification.
+]
+
+{ #category : '*rowan-gemstone-definitions' }
 RwProjectDefinition >> defaultSymbolDictName [
 
 	^ (self specification platformSpec at: 'gemstone') defaultSymbolDictName

@@ -38,7 +38,7 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 	"multiple class extensions from multiple packages for multiple classes"
 
 	| packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition packageName3 rowanSpec projectHome |
+		classExtensionDefinition packageName3 rowanProject projectHome |
 
 	self _markForProjectCleanup: projectName.
 	packageName1 := 'Issue361-Core'.
@@ -48,8 +48,8 @@ RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectNam
 	className2 := 'Issue361Class2'. 
 	className3 := 'Issue361Class3'. 
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
 
 
 "create definitions"
