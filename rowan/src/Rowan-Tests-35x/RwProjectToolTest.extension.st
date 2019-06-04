@@ -15,23 +15,26 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
-	self
-		handleConfirmationDuring: [ 
-			projectDefinition := projectTools create
-				createDiskBasedProject: projectName
-				packageNames: packageNames
-				format: 'tonel'
-				root: '/tmp/rowanSimpleProject/'].
-	projectDefinition
-		comment:
-				'This is a simple project to demonstrate the smalltalk API used for a project lifecycle';
-		yourself.
+	('/tmp/rowanSimpleProject/' asFileReference)
+		ensureCreateDirectory;
+		deleteAllChildren.
+
+	projectDefinition := RwComponentProjectDefinition
+		projectName: projectName 
+			projectHome: '/tmp/rowanSimpleProject/'
+			useGit: true
+			comment: 'This is a simple project to demonstrate the smalltalk API used for a project lifecycle'.
+	 
 	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
-	projectDefinition exportSpecification.
-	projectTools write writeProjectDefinition: projectDefinition.
+	projectDefinition addPackagesNamed: packageNames.
+
+	self
+		handleConfirmationDuring: [ projectDefinition create ].
+
 	projectDefinition commit: 'Initial commit'.
+
 	self
 		handleInformAsFailureDuring: [ projectTools load loadProjectDefinition: projectDefinition ].
 
