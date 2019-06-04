@@ -4,6 +4,7 @@ Extension { #name : 'RwPrjCreateTool' }
 RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPathIn useGit: useGit abort: abortBlock [
 
 	| gitTool repoPath |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	gitTool := Rowan gitTools.
 	repoPath := repoPathIn asFileReference.
 	repoPath exists
@@ -31,6 +32,7 @@ RwPrjCreateTool >> createDiskBasedProject: projectName packageNames: packageName
 		it will be used, if the project does not exist on disk it will be created. "
 
 	| projectDefinition |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	projectDefinition := (RwProjectDefinition newForDiskBasedProjectNamed: projectName)
 		packageNames: packageNames;
 		yourself.
@@ -41,7 +43,6 @@ RwPrjCreateTool >> createDiskBasedProject: projectName packageNames: packageName
 		configsPath: 'rowan/configs' 
 		repoPath: 'rowan/src' 
 		specsPath: 'rowan/specs'
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -51,6 +52,7 @@ RwPrjCreateTool >> createDiskBasedProject: projectName packageNames: packageName
 		it will be used, if the project does not exist on disk it will be created. "
 
 	| projectDefinition |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	projectDefinition := self 
 		createDiskBasedProjectDefinition: projectName 
 		packageNames: packageNames 
@@ -62,7 +64,6 @@ RwPrjCreateTool >> createDiskBasedProject: projectName packageNames: packageName
 	^ self
 		createProjectFor: projectDefinition 
 		format: format
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -70,6 +71,7 @@ RwPrjCreateTool >> createDiskBasedProjectDefinition: projectName packageNames: p
 	"Create a new project definition for a disk-based Rowan project with the given attributes"
 
 	| utils rootRepoPath |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	utils := self fileUtilities.
 	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
 	^ (RwProjectDefinition newForDiskBasedProjectNamed: projectName)
@@ -77,7 +79,6 @@ RwPrjCreateTool >> createDiskBasedProjectDefinition: projectName packageNames: p
 		repositoryRootPath: rootRepoPath;
 		projectOwnerId: Rowan image currentUserId;
 		yourself.
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -85,6 +86,7 @@ RwPrjCreateTool >> createDiskBasedProjectDefinition: projectName packageNames: p
 	"Create a new project definition for a disk-based Rowan project with the given attributes"
 
 	| utils rootRepoPath |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	utils := self fileUtilities.
 	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
 	^ (RwProjectDefinition newForDiskBasedProjectNamed: projectName)
@@ -95,7 +97,6 @@ RwPrjCreateTool >> createDiskBasedProjectDefinition: projectName packageNames: p
 		repositoryRootPath: rootRepoPath;
 		projectOwnerId: Rowan image currentUserId;
 		yourself.
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -105,6 +106,7 @@ RwPrjCreateTool >> createGitBasedProject: projectName packageNames: packageNames
 		it will be used, if the git project does not exist on disk it will be created. "
 
 	| projectDefinition |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	projectDefinition := (RwProjectDefinition newForGitBasedProjectNamed: projectName)
 		packageNames: packageNames;
 		yourself.
@@ -115,7 +117,6 @@ RwPrjCreateTool >> createGitBasedProject: projectName packageNames: packageNames
 		configsPath: 'rowan/configs' 
 		repoPath: 'rowan/src' 
 		specsPath: 'rowan/specs'
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -125,6 +126,7 @@ RwPrjCreateTool >> createGitBasedProject: projectName packageNames: packageNames
 		it will be used, if the git project does not exist on disk it will be created. "
 
 	| projectDefinition |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	projectDefinition := self 
 		createGitBasedProjectDefinition: projectName 
 		packageNames: packageNames 
@@ -136,7 +138,6 @@ RwPrjCreateTool >> createGitBasedProject: projectName packageNames: packageNames
 	^ self
 		createProjectFor: projectDefinition 
 		format: format
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -144,6 +145,7 @@ RwPrjCreateTool >> createGitBasedProjectDefinition: projectName packageNames: pa
 	"Create a new project definition for a git-based Rowan project with the given attributes"
 
 	| utils rootRepoPath |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	utils := self fileUtilities.
 	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
 	^(RwProjectDefinition newForGitBasedProjectNamed: projectName)
@@ -151,7 +153,6 @@ RwPrjCreateTool >> createGitBasedProjectDefinition: projectName packageNames: pa
 		repositoryRootPath: rootRepoPath;
 		projectOwnerId: Rowan image currentUserId;
 		yourself.
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -159,6 +160,7 @@ RwPrjCreateTool >> createGitBasedProjectDefinition: projectName packageNames: pa
 	"Create a new project definition for a git-based Rowan project with the given attributes"
 
 	| utils rootRepoPath |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	utils := self fileUtilities.
 	rootRepoPath := rootPath , utils pathNameDelimiter , projectName.
 	^(RwProjectDefinition newForGitBasedProjectNamed: projectName)
@@ -169,7 +171,6 @@ RwPrjCreateTool >> createGitBasedProjectDefinition: projectName packageNames: pa
 		repositoryRootPath: rootRepoPath;
 		projectOwnerId: Rowan image currentUserId;
 		yourself.
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -178,6 +179,7 @@ RwPrjCreateTool >> createProjectDefinitionFromSpecUrl: fileUrlOrString [
 		<fileUrlOrString> is expected to be an RwFileUrl for a project spec _in_ an existing Rowan project"
 
 	| fileUrl spec specsPath specFilePath index projectRootPath |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	fileUrl := fileUrlOrString asRwUrl.
 	fileUrl scheme = 'file'
 		ifFalse: [ self error: 'the url ', fileUrlOrString printString, ' is expected to be a file: url referencing a project specification file in an existing Rowan project' ].
@@ -187,7 +189,6 @@ RwPrjCreateTool >> createProjectDefinitionFromSpecUrl: fileUrlOrString [
 	index := specFilePath findString: specsPath startingAt: 1.
 	projectRootPath := specFilePath copyFrom: 1 to: index - 1.
 	^ self createProjectDefinitionFromSpecUrl: fileUrlOrString projectRootPath: projectRootPath
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -196,6 +197,7 @@ RwPrjCreateTool >> createProjectDefinitionFromSpecUrl: fileUrlOrString projectRo
 		<projectRootPath> is the path to the root directory of the Rowan project"
 
 	| path fileUrl spec projectDefinition projectRootRef |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	fileUrl := fileUrlOrString asRwUrl.
 	fileUrl scheme = 'file'
 		ifFalse: [ self error: 'the url ', fileUrlOrString printString, ' is expected to be a file: url referencing a project specification file in an existing Rowan project' ].
@@ -222,8 +224,8 @@ RwPrjCreateTool >> createProjectFor: projectDefinition [
 
 	"If project does not exist on disk, create project on disk using tonel format"
 
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	^ self createProjectFor: projectDefinition format: 'tonel'
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -235,6 +237,7 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format [
 	"format is only used if project does not exist on disk"
 
 	| projectName rootRepoPath dirPath useGit repositoryUrl |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	projectName := projectDefinition name.
 	useGit := projectDefinition useGit.
 	rootRepoPath := projectDefinition repositoryRootPath asFileReference.
@@ -265,7 +268,6 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format [
 	projectDefinition configurationTemplate export.
 
 	^ projectDefinition
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -275,11 +277,11 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format root: root
 		does not exist on disk it will be created."
 
 	| projectName utils |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	projectName := projectDefinition name.
 	utils := self fileUtilities.
 	projectDefinition repositoryRootPath:  rootPath , utils pathNameDelimiter , projectName.
 	^ self createProjectFor: projectDefinition format: format
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -289,6 +291,7 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format root: root
 		does not exist on disk it will be created."
 
 	| projectName utils |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	projectName := projectDefinition name.
 	utils := self fileUtilities.
 	projectDefinition
@@ -300,7 +303,6 @@ RwPrjCreateTool >> createProjectFor: projectDefinition format: format root: root
 		repositoryRootPath: rootPath , utils pathNameDelimiter , projectName;
 		projectOwnerId: Rowan image currentUserId.
 	^ self createProjectFor: projectDefinition format: format
-
 ]
 
 { #category : '*rowan-tools-deprecated' }
@@ -310,7 +312,7 @@ RwPrjCreateTool >> createProjectFromSpecUrl: fileUrlOrString [
 		does not exist on disk it will be created."
 
 	| projectDefinition |
+self deprecated: 'Use RwComponentProjectDefinition api directly'.
 	projectDefinition := self createProjectDefinitionFromSpecUrl: fileUrlOrString.
 	^ self createProjectFor: projectDefinition
-
 ]
