@@ -14,6 +14,8 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	('/tmp/rowanSimpleProject/' asFileReference)
 		ensureCreateDirectory;
@@ -84,6 +86,8 @@ RwProjectToolTest >> testProjectClassExtensions [
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
 				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
@@ -97,9 +101,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 		specsPath: 'specs';
 		yourself.
 
-	('/tmp/rowanSimpleExtensionProject/' asFileReference)
-		ensureCreateDirectory;
-		deleteAllChildren.
+	'/tmp/rowanSimpleExtensionProject/' asFileReference ensureDeleteAll.
 
 	self
 		handleConfirmationDuring: [ projectDefinition create ].
