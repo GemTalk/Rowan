@@ -49,13 +49,6 @@ RwGsLoadedSymbolDictComponentProject >> initializeForProjectReferenceDefinition:
 	handle := aProjectReferenceDefinition copy
 ]
 
-{ #category : 'actions' }
-RwGsLoadedSymbolDictComponentProject >> load [
-	"load the receiver into the image"
-
-	^ self asDefinition load
-]
-
 { #category : 'properties' }
 RwGsLoadedSymbolDictComponentProject >> loadedCommitId [
 

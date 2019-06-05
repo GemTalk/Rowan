@@ -51950,6 +51950,14 @@ key
 	^ name
 %
 
+category: 'actions'
+method: RwLoadedProject
+load
+	"load the receiver into the image"
+
+	^ self asDefinition load
+%
+
 category: 'accessing'
 method: RwLoadedProject
 loadedCommitId
@@ -52158,14 +52166,6 @@ initializeForProjectReferenceDefinition: aProjectReferenceDefinition
 
 	self initializeForName: aProjectReferenceDefinition projectAlias.
 	handle := aProjectReferenceDefinition copy
-%
-
-category: 'actions'
-method: RwGsLoadedSymbolDictComponentProject
-load
-	"load the receiver into the image"
-
-	^ self asDefinition load
 %
 
 category: 'properties'

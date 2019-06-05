@@ -116,6 +116,13 @@ RwLoadedProject >> key [
 	^ name
 ]
 
+{ #category : 'actions' }
+RwLoadedProject >> load [
+	"load the receiver into the image"
+
+	^ self asDefinition load
+]
+
 { #category : 'accessing' }
 RwLoadedProject >> loadedCommitId [
 
