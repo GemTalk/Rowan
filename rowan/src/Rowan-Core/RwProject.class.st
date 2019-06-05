@@ -77,6 +77,13 @@ RwProject >> isDirty [
 
 ]
 
+{ #category : 'actions' }
+RwProject >> load [
+	"load the receiver into the image"
+
+	^ self _loadedProject load
+]
+
 { #category : 'properties' }
 RwProject >> loadedCommitId [
 

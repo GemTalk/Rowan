@@ -1,31 +1,6 @@
 Extension { #name : 'RwPrjCreateTool' }
 
 { #category : '*rowan-tools-deprecated' }
-RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPathIn useGit: useGit abort: abortBlock [
-
-	| gitTool repoPath |
-self deprecated: 'Use RwComponentProjectDefinition api directly'.
-	gitTool := Rowan gitTools.
-	repoPath := repoPathIn asFileReference.
-	repoPath exists
-		ifTrue: [ 
-			(self
-				confirm:
-					'There is already a directory named ' , repoPath pathString printString
-						, '. The contents of the directory will be deleted if you continue.')
-				== true
-				ifFalse: [ ^ abortBlock value ].
-			repoPath ensureDeleteAllChildren ]
-		ifFalse: [ repoPath ensureCreateDirectory ].
-	useGit
-		ifTrue: [ 
-			(gitTool gitPresentIn: repoPath pathString )
-				ifFalse: [ 
-					"create a git repository"
-					gitTool gitinitIn: repoPath pathString with: '' ] ]
-]
-
-{ #category : '*rowan-tools-deprecated' }
 RwPrjCreateTool >> createDiskBasedProject: projectName packageNames: packageNames format: format root: rootPath [
 
 	"Create a new loaded project based on the given attributes. <rootPath> is the parent directory of the Rowan project. If the project exists on disk

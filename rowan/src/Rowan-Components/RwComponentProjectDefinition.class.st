@@ -379,6 +379,18 @@ RwComponentProjectDefinition >> clone [
 	^ self read						"refresh receiver from the cloned repository and answer project definition set that contains reciever along with any dependent projects"
 ]
 
+{ #category : 'properties' }
+RwComponentProjectDefinition >> comment [
+
+	^ self projectRef comment
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> comment: aString [
+
+	self projectRef comment: aString
+]
+
 { #category : 'actions' }
 RwComponentProjectDefinition >> commit: message [
 	"commit the repository associated with receiver ..."
@@ -567,6 +579,13 @@ RwComponentProjectDefinition >> exportSpecification [
 RwComponentProjectDefinition >> gitRoot: aGitRootReferenceOrString [ 
 
 	^ self projectRef gitRoot: aGitRootReferenceOrString
+]
+
+{ #category : 'properties' }
+RwComponentProjectDefinition >> key [
+	"Answer an object that can be used to uniquely identify myself in the context of my container."
+
+	^self projectAlias
 ]
 
 { #category : 'actions' }

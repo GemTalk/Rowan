@@ -26728,6 +26728,14 @@ isDirty
 	^self _loadedProject isDirty
 %
 
+category: 'actions'
+method: RwProject
+load
+	"load the receiver into the image"
+
+	^ self _loadedProject load
+%
+
 category: 'properties'
 method: RwProject
 loadedCommitId
@@ -37266,7 +37274,6 @@ createComponentProject: componentProjectDefinition
 
 	self createProjectRepository: componentProjectDefinition projectRef.
 
-	componentProjectDefinition exportSpecification.
 	componentProjectDefinition exportProjects.
 	componentProjectDefinition exportComponents.
 	componentProjectDefinition exportPackages.
@@ -37298,6 +37305,31 @@ createProjectRepository: projectReferenceDefinition
 
 	projectReferenceDefinition exportSpecification.
 	^ projectReferenceDefinition
+%
+
+category: 'private'
+method: RwPrjCreateTool
+_createProjectRepositoryDirectory: repoPathIn useGit: useGit abort: abortBlock
+
+	| gitTool repoPath |
+	gitTool := Rowan gitTools.
+	repoPath := repoPathIn asFileReference.
+	repoPath exists
+		ifTrue: [ 
+			(self
+				confirm:
+					'There is already a directory named ' , repoPath pathString printString
+						, '. The contents of the directory will be deleted if you continue.')
+				== true
+				ifFalse: [ ^ abortBlock value ].
+			repoPath ensureDeleteAllChildren ]
+		ifFalse: [ repoPath ensureCreateDirectory ].
+	useGit
+		ifTrue: [ 
+			(gitTool gitPresentIn: repoPath pathString )
+				ifFalse: [ 
+					"create a git repository"
+					gitTool gitinitIn: repoPath pathString with: '' ] ]
 %
 
 ! Class implementation for 'RwPrjDeleteTool'
@@ -41532,6 +41564,20 @@ clone
 	^ self read						"refresh receiver from the cloned repository and answer project definition set that contains reciever along with any dependent projects"
 %
 
+category: 'properties'
+method: RwComponentProjectDefinition
+comment
+
+	^ self projectRef comment
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+comment: aString
+
+	self projectRef comment: aString
+%
+
 category: 'actions'
 method: RwComponentProjectDefinition
 commit: message
@@ -41743,6 +41789,14 @@ method: RwComponentProjectDefinition
 gitRoot: aGitRootReferenceOrString 
 
 	^ self projectRef gitRoot: aGitRootReferenceOrString
+%
+
+category: 'properties'
+method: RwComponentProjectDefinition
+key
+	"Answer an object that can be used to uniquely identify myself in the context of my container."
+
+	^self projectAlias
 %
 
 category: 'actions'
@@ -52106,6 +52160,14 @@ initializeForProjectReferenceDefinition: aProjectReferenceDefinition
 	handle := aProjectReferenceDefinition copy
 %
 
+category: 'actions'
+method: RwGsLoadedSymbolDictComponentProject
+load
+	"load the receiver into the image"
+
+	^ self asDefinition load
+%
+
 category: 'properties'
 method: RwGsLoadedSymbolDictComponentProject
 loadedCommitId
@@ -60549,6 +60611,12 @@ methodEnvForPackageNamed: packageName
 	^self projectRef methodEnvForPackageNamed: packageName
 %
 
+category: '*rowan-cypress-definitions'
+method: RwComponentProjectDefinition
+name
+  ^ self projectAlias
+%
+
 category: '*rowan-gemstone-components-extensions'
 method: RwComponentProjectDefinition
 packageNameToPlatformPropertiesMap
@@ -60580,6 +60648,15 @@ method: RwComponentProjectDefinition
 setSymbolDictName: symbolDictName forPackageNamed: packageName
 
 	^self projectRef setSymbolDictName: symbolDictName forPackageNamed: packageName
+%
+
+category: '*rowan-gemstone-definitions'
+method: RwComponentProjectDefinition
+setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName
+
+	self projectRef
+		setUseSessionMethodsForExtensions: aBool
+		forPackageNamed: packageName
 %
 
 category: '*rowan-gemstone-components-extensions'
@@ -61582,6 +61659,23 @@ setSymbolDictName: symbolDictName forPackageNamed: packageName
 			packageProperties removeKey: 'symbolDictName' ifAbsent: [].
 			^self ].
 	packageProperties at: 'symbolDictName' put: symbolDictName
+%
+
+category: '*rowan-gemstone-components-extensions'
+method: RwProjectReferenceDefinition
+setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName
+
+	| packageProperties |
+	packageProperties := self packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ self packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
+	aBool 
+		ifNil: [
+			"remove the entry if it exists"
+			packageProperties removeKey: 'useSessionMethodsForExtensions' ifAbsent: [].
+			^self ].
+	aBool ifTrue: [ Rowan image ensureSessionMethodsEnabled ].
+	packageProperties at: 'useSessionMethodsForExtensions' put: aBool
 %
 
 category: '*rowan-gemstone-components-extensions'

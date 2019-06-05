@@ -106,6 +106,22 @@ RwProjectReferenceDefinition >> setSymbolDictName: symbolDictName forPackageName
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
+
+	| packageProperties |
+	packageProperties := self packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ self packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
+	aBool 
+		ifNil: [
+			"remove the entry if it exists"
+			packageProperties removeKey: 'useSessionMethodsForExtensions' ifAbsent: [].
+			^self ].
+	aBool ifTrue: [ Rowan image ensureSessionMethodsEnabled ].
+	packageProperties at: 'useSessionMethodsForExtensions' put: aBool
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinition >> symbolDictNameForPackageNamed: packageName [
 
 	| packageProperties |
