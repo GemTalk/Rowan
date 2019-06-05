@@ -23,6 +23,12 @@ RwGsLoadedSymbolDictComponentProject >> asDefinition [
 		packageDefinitions: self loadedPackageDefinitions
 ]
 
+{ #category : 'testing' }
+RwGsLoadedSymbolDictComponentProject >> canCommit [
+
+	^ self projectRef canCommit
+]
+
 { #category : 'commit log' }
 RwGsLoadedSymbolDictComponentProject >> commitLog: logLimit [
 

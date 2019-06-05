@@ -19,7 +19,7 @@ RwProject >> _specification [
 { #category : 'properties' }
 RwProject >> canCommit [
 
-	^ self _specification canCommit
+	^ self _loadedProject canCommit
 ]
 
 { #category : 'properties' }

@@ -4,6 +4,12 @@ Class {
 	#category : 'Rowan-GemStone-Core'
 }
 
+{ #category : 'testing' }
+RwGsLoadedSymbolDictProject >> canCommit [
+
+	^ self specification canCommit
+]
+
 { #category : 'commit log' }
 RwGsLoadedSymbolDictProject >> commitLog: logLimit [
 

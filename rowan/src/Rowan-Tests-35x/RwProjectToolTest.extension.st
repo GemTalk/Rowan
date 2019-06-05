@@ -13,7 +13,7 @@ RwProjectToolTest >> testDiskSimpleProject1 [
 	{projectName}
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
+				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
 
 	('/tmp/rowanSimpleProject/' asFileReference)
 		ensureCreateDirectory;
@@ -75,7 +75,7 @@ RwProjectToolTest >> testProjectClassExtensions [
 
 	"Build our project in memory without committing to disk until we've created a class with methods, then write to disk."
 
-	| projectName projectDefinition projectTools classDefinition packageDefinition1 packageDefinition2 className testClass testInstance classExtensionDefinition packageNames |
+	| projectName projectDefinition projectTools classDefinition packageDefinition1 packageDefinition2 className testClass testInstance classExtensionDefinition packageNames project |
 	projectName := 'Simple'.
 	packageNames := #('Simple-Core' 'Simple-Extensions' 'Simple-Tests').
 	projectTools := Rowan projectTools.
@@ -83,15 +83,26 @@ RwProjectToolTest >> testProjectClassExtensions [
 	{projectName}
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
+				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
 
-	projectDefinition := (RwProjectDefinition
+	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
-		comment:
-				'This is a simple project created in memory first, then written to disk.';
-		packageNames: packageNames;
+		comment: 'This is a simple project created in memory first, then written to disk.';
+		addPackagesNamed: packageNames;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		packageFormat: 'tonel';
+		projectHome: '/tmp/rowanSimpleExtensionProject/';
+		configsPath: 'configs';
+		packagesPath: 'src';
+		specsPath: 'specs';
 		yourself.
-	projectDefinition defaultSymbolDictName: self _symbolDictionaryName1.
+
+	('/tmp/rowanSimpleExtensionProject/' asFileReference)
+		ensureCreateDirectory;
+		deleteAllChildren.
+
+	self
+		handleConfirmationDuring: [ projectDefinition create ].
 
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 
@@ -156,19 +167,28 @@ RwProjectToolTest >> testProjectClassExtensions [
 	testInstance := testClass new.
 	self assert: testInstance ivar1 isNil.
 
-	self
-		handleConfirmationDuring: [ 
-			projectTools create
-				createProjectFor: projectDefinition
-				format: 'tonel'
-				root: '/tmp/rowanSimpleExtensionProject/'
-				configsPath: 'configs'
-				repoPath: 'src' 
-				specsPath: 'specs' ].
 
-	projectDefinition exportSpecification.
-	projectTools write writeProjectDefinition: projectDefinition.
-	projectDefinition commit: 'Added Simple class and extension methods'
+	projectDefinition 
+		export;
+		commit: 'Added Simple class and extension methods'.
+
+	
+	projectTools load loadProjectDefinition: projectDefinition.
+
+	project := Rowan projectNamed: projectName.
+	self assert: project _loadedProject notNil.
+	self assert: project existsOnDisk.
+	self assert: project canCommit.
+	self assert: project currentBranchName = 'master'.
+	self assert: (project extendedClasses asArray collect: [:beh | beh name asString ]) = { className }.
+	self deny: project repositoryCommitId isEmpty.
+	self assert: project repositoryRoot = (projectDefinition projectHome / projectName).
+	self assert: (project repositoryRoot / 'specs' / projectName, 'ston') exists.
+	self assert: (project repositoryRoot / 'configs' / 'Core', 'ston') exists.
+	self assert: (project repositoryRoot / 'src' / 'Simple-Core') exists.
+	self assert: (project repositoryRoot / 'src' / 'Simple-Extensions') exists.
+	self assert: (project repositoryRoot / 'src' / 'Simple-Tests') exists.
+	self assert: (project repositoryRoot / 'src' / 'Simple-Extensions' / 'Simple.extension.st') exists.
 ]
 
 { #category : '*rowan-tests-35x' }

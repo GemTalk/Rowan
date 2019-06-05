@@ -26665,7 +26665,7 @@ category: 'properties'
 method: RwProject
 canCommit
 
-	^ self _specification canCommit
+	^ self _loadedProject canCommit
 %
 
 category: 'properties'
@@ -52138,6 +52138,13 @@ asDefinition
 		packageDefinitions: self loadedPackageDefinitions
 %
 
+category: 'testing'
+method: RwGsLoadedSymbolDictComponentProject
+canCommit
+
+	^ self projectRef canCommit
+%
+
 category: 'commit log'
 method: RwGsLoadedSymbolDictComponentProject
 commitLog: logLimit
@@ -52318,6 +52325,13 @@ useGit
 ! Class implementation for 'RwGsLoadedSymbolDictProject'
 
 !		Instance methods for 'RwGsLoadedSymbolDictProject'
+
+category: 'testing'
+method: RwGsLoadedSymbolDictProject
+canCommit
+
+	^ self specification canCommit
+%
 
 category: 'commit log'
 method: RwGsLoadedSymbolDictProject
