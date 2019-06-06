@@ -198,7 +198,10 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 
 	"Proper way to add extension methods to a class --- load spec expanded to allow user to specify per package symbol dictionaries ... symbolDictName redefined as defaultSymbolDictName."
 
-	| projectName projectDefinition projectTools classDefinition packageDefinition1 packageDefinition2 packageDefinition3 className1 className2 testClass1 testClass2 testInstance1 testInstance2 classExtensionDefinition dictionariesAndSymbols x y packageNames |
+	| projectName projectDefinition projectTools classDefinition packageDefinition1 
+		packageDefinition2 packageDefinition3 className1 className2 testClass1 testClass2 
+		testInstance1 testInstance2 classExtensionDefinition dictionariesAndSymbols x y 
+		packageNames project |
 	projectName := 'Simple'.
 	packageNames := #('Simple-Core1' 'Simple-Core2' 'Simple-Extensions1').
 	projectTools := Rowan projectTools.
@@ -206,18 +209,27 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 	{projectName}
 		do: [ :name | 
 			(Rowan image loadedProjectNamed: name ifAbsent: [  ])
-				ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
+				ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
+	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
-	projectDefinition := (RwProjectDefinition
+	projectDefinition := (RwComponentProjectDefinition
 		newForGitBasedProjectNamed: projectName)
 		comment:
 				'This is a project created in memory first, then written to disk. There are three packages 21 of which creates classes in a different symbol dictionary.';
-		packageNames: packageNames;
+		addPackagesNamed: packageNames;
 		defaultSymbolDictName: self _symbolDictionaryName2;
+		packageFormat: 'tonel';
+		projectHome: '/tmp/rowanClassExtensionsProject/';
 		setSymbolDictName: self _symbolDictionaryName1 forPackageNamed: 'Simple-Core1';
 		setSymbolDictName: self _symbolDictionaryName1
 			forPackageNamed: 'Simple-Extensions1';
 		yourself.
+
+	'/tmp/rowanClassExtensionsProject/' asFileReference ensureDeleteAll.
+
+	self
+		handleConfirmationDuring: [ projectDefinition create ].
 
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName1.
 	Rowan image newOrExistingSymbolDictionaryNamed: self _symbolDictionaryName2.
@@ -313,20 +325,26 @@ RwProjectToolTest >> testProjectClassExtensionsInSeparateSymbolDictionaryTheRigh
 
 	self assert: testClass1 civar1 = 1.
 
-	self
-		handleConfirmationDuring: [ 
-			projectTools create
-				createProjectFor: projectDefinition
-				format: 'tonel'
-				root: '/tmp/rowanClassExtensionsProject/'
-				configsPath: 'configs'
-				repoPath: 'src' 
-				specsPath: 'specs' ].
+	projectDefinition
+		export;
+		commit: '3 packages with extension methods for first package in third package.'.
 
-	projectDefinition exportSpecification.
-	projectTools write writeProjectDefinition: projectDefinition.
-	projectDefinition commit:
-			'3 packages with extension methods for first package in third package.'
+	projectTools load loadProjectDefinition: projectDefinition.
+
+	project := Rowan projectNamed: projectName.
+	self assert: project _loadedProject notNil.
+	self assert: project existsOnDisk.
+	self assert: project canCommit.
+	self assert: project currentBranchName = 'master'.
+	self assert: (x := (project extendedClasses asArray collect: [:beh | beh name asString ]) sort) = { className1 } sort.
+	self deny: project repositoryCommitId isEmpty.
+	self assert: project repositoryRoot = (projectDefinition projectHome / projectName).
+	self assert: (project repositoryRoot / 'rowan' / 'specs' / projectName, 'ston') exists.
+	self assert: (project repositoryRoot / 'rowan' / 'components' / 'Core', 'ston') exists.
+	self assert: (project repositoryRoot / 'rowan' / 'src' / 'Simple-Core1') exists.
+	self assert: (project repositoryRoot / 'rowan' / 'src' / 'Simple-Core2') exists.
+	self assert: (project repositoryRoot / 'rowan' / 'src' / 'Simple-Extensions1') exists.
+	self assert: (project repositoryRoot / 'rowan' / 'src' / 'Simple-Extensions1' / 'Simple1.extension.st') exists.
 ]
 
 { #category : '*rowan-tests-35x' }
