@@ -15,7 +15,6 @@ RwProjectSpecification >> initialize [
 	version := self currentVersion.
 	defaultConfigurationNames := {'Default'}.
 	defaultGroupNames := {'default'}.
-
 ]
 
 { #category : '*rowan-gemstone-specifications' }

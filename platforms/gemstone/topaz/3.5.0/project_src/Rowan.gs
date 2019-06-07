@@ -5414,7 +5414,7 @@ true.
 doit
 (RwProjectSpecification
 	subclass: 'RwComponentSpecification'
-	instVarNames: #( projectName projectsPath defaultComponentName )
+	instVarNames: #( projectName projectsPath defaultComponentName defaultGroupName )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -41027,6 +41027,19 @@ postCopy
 	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
 %
 
+category: 'actions'
+method: RwProjectDefinition
+read
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the default component and group names"
+
+	"return a project definition set that will contain the project definition"
+
+	| projecSetDefinition |
+	projecSetDefinition := RwProjectSetDefinition new.
+	projecSetDefinition addProject: (Rowan projectTools read readProjectDefinition: self).
+	^ projecSetDefinition
+%
+
 category: 'tool api'
 method: RwProjectDefinition
 readProjectSet
@@ -41560,8 +41573,16 @@ method: RwComponentProjectDefinition
 clone
 	"clone remote git project to disk"
 
-	self projectRef clone.
+	self cloneRepository.
 	^ self read						"refresh receiver from the cloned repository and answer project definition set that contains reciever along with any dependent projects"
+%
+
+category: 'actions'
+method: RwComponentProjectDefinition
+cloneRepository
+	"clone remote git project to disk"
+
+	self projectRef clone
 %
 
 category: 'properties'
@@ -55428,6 +55449,34 @@ defaultComponentName: aString
 
 category: 'accessing'
 method: RwComponentSpecification
+defaultConfigurationNames
+
+	^ defaultConfigurationNames ifNil: [ defaultConfigurationNames := { self defaultComponentName } ]
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+defaultGroupName
+
+	^ defaultGroupName ifNil: [ 'core' ]
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+defaultGroupName: aString
+
+	defaultGroupName := aString
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+defaultGroupNames
+
+	^ defaultGroupNames ifNil: [ defaultGroupNames := { self defaultGroupName } ]
+%
+
+category: 'accessing'
+method: RwComponentSpecification
 projectName
 
 	^ projectName ifNil: [ self specName ]
@@ -60705,6 +60754,15 @@ useSessionMethodsForExtensionsForPackageNamed: packageName
 ! Class extensions for 'RwComponentSpecification'
 
 !		Instance methods for 'RwComponentSpecification'
+
+category: '*rowan-gemstone-specifications'
+method: RwComponentSpecification
+initialize
+
+	super initialize.
+	defaultConfigurationNames := nil.
+	defaultGroupNames := nil.
+%
 
 category: '*rowan-gemstone-components-extensions'
 method: RwComponentSpecification

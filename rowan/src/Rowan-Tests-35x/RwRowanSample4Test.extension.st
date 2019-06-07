@@ -1,9 +1,22 @@
 Extension { #name : 'RwRowanSample4Test' }
 
 { #category : '*rowan-tests-35x' }
-RwRowanSample4Test >> _createProjectDefinitionFromSpecUrl: specUrlString [
+RwRowanSample4Test >> _createProjectDefinitionFromSpecUrl: specUrlString projectName: projectName [
 
-	^ RwComponentProjectDefinition newForUrl: specUrlString
+	| rowanProject projectHome projectDefinition loadSpecUrl |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+
+	(projectHome / projectName) ensureDeleteAll.
+
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+	projectDefinition projectHome: projectHome.
+	projectDefinition cloneRepository.
+
+	loadSpecUrl := 'file:', (projectHome / projectName / projectDefinition specsPath / 'RowanSample4_load_v2.ston') pathString.
+	projectDefinition := RwComponentProjectDefinition newForUrl: loadSpecUrl.
+	projectDefinition projectHome: projectHome.
+	projectDefinition register.
 ]
 
 { #category : '*rowan-tests-35x' }
