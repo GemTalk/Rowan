@@ -12,38 +12,6 @@ RwRowanSample4Test class >> _symbolDictionaryNames [
 					#'RowanSample4DictionarySymbolDict_295_3')
 ]
 
-{ #category : 'private' }
-RwRowanSample4Test >> _rowanSample4_208_LoadSpecificationUrl [
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_208_load.ston'
-]
-
-{ #category : 'private' }
-RwRowanSample4Test >> _rowanSample4LoadSpecificationUrl [
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_load.ston'
-]
-
-{ #category : 'private' }
-RwRowanSample4Test >> _rowanSample4LoadSpecificationUrl_295 [
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_295.ston'
-]
-
-{ #category : 'private' }
-RwRowanSample4Test >> _rowanSample4SpecificationUrl [
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , (rowanProject repositoryRootPath asFileReference / 'test/specs/RowanSample4.ston') pathString
-]
-
 { #category : 'tests' }
 RwRowanSample4Test >> test_projectUrl_issue_463 [
 
@@ -95,18 +63,8 @@ RwRowanSample4Test >> testCreateProjectDefinition [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecification: specUrlString asRwUrl asSpecification
-		gitRootPath: gitRootPath
-		useSsh: true
-		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
-
 	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
-	projectDefinition := projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: gitRootPath / projectName.
-
-	self assert: projectDefinition packageNames isEmpty.
-	
-	projectTools read readProjectDefinition: projectDefinition.
+	projectDefinition := self _projectDefinitionFromSpecUrl: specUrlString projectRootPath: gitRootPath / projectName.
 
 	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
 
@@ -139,7 +97,7 @@ RwRowanSample4Test >> testCreateProjectFromUrl [
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 
 	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
-	projectDefinition := projectTools create createProjectFromSpecUrl: 'file:', (gitRootPath / projectName / spec specsPath / 'RowanSample4_load.ston') pathString.
+	projectDefinition := self _createProjectDefinitionFromSpecUrl: 'file:', (gitRootPath / projectName / spec specsPath / 'RowanSample4_load.ston') pathString.
 
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
 

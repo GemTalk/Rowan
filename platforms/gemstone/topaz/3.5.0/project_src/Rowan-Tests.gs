@@ -38428,7 +38428,7 @@ testCreateProjectDefinition
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 
 	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
-	projectDefinition := projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: gitRootPath / projectName.
+	projectDefinition := self _projectDefinitionFromSpecUrl: specUrlString projectRootPath: gitRootPath / projectName.
 
 	self assert: projectDefinition packageNames isEmpty.
 	
@@ -38466,7 +38466,7 @@ testCreateProjectFromUrl
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 
 	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
-	projectDefinition := projectTools create createProjectFromSpecUrl: 'file:', (gitRootPath / projectName / spec specsPath / 'RowanSample4_load.ston') pathString.
+	projectDefinition := self _createProjectDefinitionFromSpecUrl: 'file:', (gitRootPath / projectName / spec specsPath / 'RowanSample4_load.ston') pathString.
 
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
 
@@ -41186,42 +41186,6 @@ test_projectUrl_issue_463
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	self assert: project projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
-%
-
-category: 'private'
-method: RwRowanSample4Test
-_rowanSample4LoadSpecificationUrl
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_load.ston'
-%
-
-category: 'private'
-method: RwRowanSample4Test
-_rowanSample4LoadSpecificationUrl_295
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_295.ston'
-%
-
-category: 'private'
-method: RwRowanSample4Test
-_rowanSample4SpecificationUrl
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , (rowanProject repositoryRootPath asFileReference / 'test/specs/RowanSample4.ston') pathString
-%
-
-category: 'private'
-method: RwRowanSample4Test
-_rowanSample4_208_LoadSpecificationUrl
-
-	| rowanProject |
-	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
-	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_208_load.ston'
 %
 
 ! Class implementation for 'RwRowanSample7Test'
@@ -45448,6 +45412,63 @@ _createLoadedProjectNamed: projectName packageNames: packageNames root: rootPath
 	project := RwProject newNamed: projectName.
 
 	validate ifTrue: [ self assert: project isDirty ]. "a project is dirty if it has changes that are not written to disk"
+%
+
+! Class extensions for 'RwRowanSample4Test'
+
+!		Instance methods for 'RwRowanSample4Test'
+
+category: '*rowan-tests-35x'
+method: RwRowanSample4Test
+_createProjectDefinitionFromSpecUrl: specUrlString
+
+	^ RwComponentProjectDefinition newForUrl: specUrlString
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample4Test
+_projectDefinitionFromSpecUrl: specUrlString projectRootPath: projectRootPath
+
+	| projectDefinition |
+	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
+	projectDefinition create.
+	^ projectDefinition
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample4Test
+_rowanSample4LoadSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_load_v2.ston'
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample4Test
+_rowanSample4LoadSpecificationUrl_295
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_295_v2.ston'
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample4Test
+_rowanSample4SpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , (rowanProject repositoryRootPath asFileReference / 'test/specs/RowanSample4_v2.ston') pathString
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample4Test
+_rowanSample4_208_LoadSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_208_load_v2.ston'
 %
 
 ! Class Initialization

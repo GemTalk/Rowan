@@ -284,6 +284,18 @@ RwProjectDefinition >> postCopy [
 	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
 ]
 
+{ #category : 'actions' }
+RwProjectDefinition >> read [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the default component and group names"
+
+	"return a project definition set that will contain the project definition"
+
+	| projecSetDefinition |
+	projecSetDefinition := RwProjectSetDefinition new.
+	projecSetDefinition addProject: (Rowan projectTools read readProjectDefinition: self).
+	^ projecSetDefinition
+]
+
 { #category : 'tool api' }
 RwProjectDefinition >> readProjectSet [
 
