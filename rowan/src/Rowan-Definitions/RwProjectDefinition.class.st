@@ -231,6 +231,12 @@ RwProjectDefinition >> loadedConfigurationNames: anArray [
 ]
 
 { #category : 'properties' }
+RwProjectDefinition >> loadedGroupNames [
+
+	^ self specification loadedGroupNames
+]
+
+{ #category : 'properties' }
 RwProjectDefinition >> loadedGroupNames: anArray [
 
 	^ self specification imageSpec loadedGroupNames: anArray

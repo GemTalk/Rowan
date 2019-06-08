@@ -24,9 +24,21 @@ RwGsLoadedSymbolDictProject >> loadedCommitId [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictProject >> loadedConfigurationNames [
+
+	self specification loadedConfigurationNames
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictProject >> loadedConfigurationNames: configNames [
 
 	self specification imageSpec loadedConfigurationNames: configNames
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictProject >> loadedGroupNames [
+
+	self specification loadedGroupNames
 ]
 
 { #category : 'accessing' }

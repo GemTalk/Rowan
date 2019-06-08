@@ -1,6 +1,16 @@
 Extension { #name : 'RwRowanSample4Test' }
 
 { #category : '*rowan-tests-32x' }
+RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome [
+
+	Rowan projectTools clone
+		cloneSpecification: specUrlString asRwUrl asSpecification
+		gitRootPath: projectsHome
+		useSsh: true
+		registerProject: true.
+]
+
+{ #category : '*rowan-tests-32x' }
 RwRowanSample4Test >> _createProjectDefinitionFromSpecUrl: specUrlString projectName: projectName [
 
 	| gitRootPath spec rowanProject|

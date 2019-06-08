@@ -26743,6 +26743,20 @@ loadedCommitId
 	^ self _loadedProject loadedCommitId
 %
 
+category: 'properties'
+method: RwProject
+loadedConfigurationNames
+
+	^ self _loadedProject loadedConfigurationNames
+%
+
+category: 'properties'
+method: RwProject
+loadedGroupNames
+
+	^ self _loadedProject loadedGroupNames
+%
+
 category: 'accessing'
 method: RwProject
 packageNames
@@ -40967,6 +40981,13 @@ loadedConfigurationNames: anArray
 
 category: 'properties'
 method: RwProjectDefinition
+loadedGroupNames
+
+	^ self specification loadedGroupNames
+%
+
+category: 'properties'
+method: RwProjectDefinition
 loadedGroupNames: anArray
 
 	^ self specification imageSpec loadedGroupNames: anArray
@@ -52238,6 +52259,13 @@ loadedConfigurationNames: configNames
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictComponentProject
+loadedGroupNames
+
+	^ self projectRef loadedGroupNames
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictComponentProject
 loadedGroupNames: groupNames
 
 
@@ -52371,9 +52399,23 @@ loadedCommitId
 
 category: 'accessing'
 method: RwGsLoadedSymbolDictProject
+loadedConfigurationNames
+
+	self specification loadedConfigurationNames
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
 loadedConfigurationNames: configNames
 
 	self specification imageSpec loadedConfigurationNames: configNames
+%
+
+category: 'accessing'
+method: RwGsLoadedSymbolDictProject
+loadedGroupNames
+
+	self specification loadedGroupNames
 %
 
 category: 'accessing'

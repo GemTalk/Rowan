@@ -38454,8 +38454,8 @@ category: 'tests'
 method: RwRowanSample4Test
 testIssue14
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec 
-		project x repoRootPath theClass constraint |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project 
+		x repoRootPath theClass constraint |
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
@@ -38468,13 +38468,9 @@ testIssue14
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
 
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	repoRootPath := rowanSampleSpec repositoryRootPath asFileReference.
+	repoRootPath := (Rowan image loadedProjectNamed: projectName) repositoryRootPath asFileReference.
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_231_0'.
@@ -38489,9 +38485,8 @@ testIssue14
 			(x := project packageNames asArray sort)
 				= #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 'RowanSample4-GemStone-Tests') sort.
 
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	self assert: (x := rowanSampleSpec loadedGroupNames) = #('tests').
-	self assert: (x := rowanSampleSpec loadedConfigurationNames) = #('Load').
+	self assert: (x := project loadedGroupNames asArray) = #('tests').
+	self assert: (x := project loadedConfigurationNames asArray) = #('Load').
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 	self assert: (x := theClass _constraintOn: #instvar1) = Integer.
@@ -45394,6 +45389,16 @@ _createLoadedProjectNamed: projectName packageNames: packageNames root: rootPath
 ! Class extensions for 'RwRowanSample4Test'
 
 !		Instance methods for 'RwRowanSample4Test'
+
+category: '*rowan-tests-35x'
+method: RwRowanSample4Test
+_cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome
+
+	(RwComponentProjectDefinition newForUrl: specUrlString)
+		projectHome: projectsHome;
+		clone;
+		register.
+%
 
 category: '*rowan-tests-35x'
 method: RwRowanSample4Test

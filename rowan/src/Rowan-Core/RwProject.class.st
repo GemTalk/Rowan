@@ -90,6 +90,18 @@ RwProject >> loadedCommitId [
 	^ self _loadedProject loadedCommitId
 ]
 
+{ #category : 'properties' }
+RwProject >> loadedConfigurationNames [
+
+	^ self _loadedProject loadedConfigurationNames
+]
+
+{ #category : 'properties' }
+RwProject >> loadedGroupNames [
+
+	^ self _loadedProject loadedGroupNames
+]
+
 { #category : 'accessing' }
 RwProject >> packageNames [
 

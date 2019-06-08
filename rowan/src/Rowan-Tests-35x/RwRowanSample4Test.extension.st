@@ -1,6 +1,15 @@
 Extension { #name : 'RwRowanSample4Test' }
 
 { #category : '*rowan-tests-35x' }
+RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome [
+
+	(RwComponentProjectDefinition newForUrl: specUrlString)
+		projectHome: projectsHome;
+		clone;
+		register.
+]
+
+{ #category : '*rowan-tests-35x' }
 RwRowanSample4Test >> _createProjectDefinitionFromSpecUrl: specUrlString projectName: projectName [
 
 	| rowanProject projectHome projectDefinition loadSpecUrl |

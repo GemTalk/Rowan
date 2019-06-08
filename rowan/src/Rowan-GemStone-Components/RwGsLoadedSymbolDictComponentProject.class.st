@@ -92,6 +92,12 @@ RwGsLoadedSymbolDictComponentProject >> loadedConfigurationNames: configNames [
 ]
 
 { #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> loadedGroupNames [
+
+	^ self projectRef loadedGroupNames
+]
+
+{ #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> loadedGroupNames: groupNames [
 
 
