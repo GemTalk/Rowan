@@ -46,11 +46,13 @@ RwGsImage class >> _removeLoadedProject: aRwLoadedProject [
 	projectName := aRwLoadedProject name.
 	projectRegistry := self
 		_loadedProjectRegistryForUserId: aRwLoadedProject projectOwnerId.
-	(projectRegistry at: projectName ifAbsent: [ ^ nil ]) == aRwLoadedProject
-		ifFalse: [ 
-			self
-				error:
-					'The specified project is not identical to the loaded project in the registry ... this is not expected' ].
+	(projectRegistry 
+		at: projectName 
+		ifAbsent: [ self error: 'The specified project was not found in the loaded project registry.' ]) == aRwLoadedProject
+			ifFalse: [ 
+				self
+					error:
+						'The specified project is not identical to the loaded project in the registry.' ].
 	projectRegistry removeKey: projectName
 ]
 

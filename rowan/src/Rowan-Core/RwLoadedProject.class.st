@@ -120,7 +120,9 @@ RwLoadedProject >> key [
 RwLoadedProject >> load [
 	"load the receiver into the image"
 
-	^ self asDefinition load
+	| projectSetDefinition |
+	projectSetDefinition := self asDefinition read.
+	^ Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
 ]
 
 { #category : 'accessing' }

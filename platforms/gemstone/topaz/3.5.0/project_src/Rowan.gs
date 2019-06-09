@@ -44666,11 +44666,13 @@ _removeLoadedProject: aRwLoadedProject
 	projectName := aRwLoadedProject name.
 	projectRegistry := self
 		_loadedProjectRegistryForUserId: aRwLoadedProject projectOwnerId.
-	(projectRegistry at: projectName ifAbsent: [ ^ nil ]) == aRwLoadedProject
-		ifFalse: [ 
-			self
-				error:
-					'The specified project is not identical to the loaded project in the registry ... this is not expected' ].
+	(projectRegistry 
+		at: projectName 
+		ifAbsent: [ self error: 'The specified project was not found in the loaded project registry.' ]) == aRwLoadedProject
+			ifFalse: [ 
+				self
+					error:
+						'The specified project is not identical to the loaded project in the registry.' ].
 	projectRegistry removeKey: projectName
 %
 
@@ -51997,7 +51999,9 @@ method: RwLoadedProject
 load
 	"load the receiver into the image"
 
-	^ self asDefinition load
+	| projectSetDefinition |
+	projectSetDefinition := self asDefinition read.
+	^ Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
 %
 
 category: 'accessing'
@@ -52401,7 +52405,7 @@ category: 'accessing'
 method: RwGsLoadedSymbolDictProject
 loadedConfigurationNames
 
-	self specification loadedConfigurationNames
+	^ self specification loadedConfigurationNames
 %
 
 category: 'accessing'
@@ -52415,7 +52419,7 @@ category: 'accessing'
 method: RwGsLoadedSymbolDictProject
 loadedGroupNames
 
-	self specification loadedGroupNames
+	^ self specification loadedGroupNames
 %
 
 category: 'accessing'
