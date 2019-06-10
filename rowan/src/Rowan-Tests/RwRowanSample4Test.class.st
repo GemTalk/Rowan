@@ -9,7 +9,7 @@ RwRowanSample4Test class >> _symbolDictionaryNames [
 
 	^ 	super _symbolDictionaryNames, 
 			#( #'RowanSample4SymbolDict' #'RowanSample4DictionarySymbolDict' #'RowanSample4DictionarySymbolDict_295'
-					#'RowanSample4DictionarySymbolDict_295_3')
+					#'RowanSample4DictionarySymbolDict_295_3' #'SampleSymbolDict')
 ]
 
 { #category : 'tests' }
@@ -52,10 +52,12 @@ RwRowanSample4Test >> testCreateProjectDefinition [
 
 	| specUrlString projectTools rowanProject gitRootPath projectName projectDefinition x |
 	projectName := 'RowanSample4'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
+	Rowan
+		projectNamed: projectName 
+		ifPresent: [:prj | Rowan image _removeLoadedProject: prj _loadedProject ].
+	Rowan 
+		projectNamed: projectName 
+		ifPresent: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4SpecificationUrl.
@@ -74,7 +76,7 @@ RwRowanSample4Test >> testCreateProjectDefinition [
 
 	Rowan 
 		projectNamed: projectName 
-			ifPresent: [:project | self assert: false description: 'The project ', projectName printString. ' is not expected to be loaded.' ]
+			ifPresent: [:project | self assert: false description: 'The project ', projectName printString. ' is not expected to be loaded.' ].
 ]
 
 { #category : 'tests' }
@@ -82,10 +84,12 @@ RwRowanSample4Test >> testCreateProjectFromUrl [
 
 	| specUrlString projectTools projectName |
 	projectName := 'RowanSample4'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
+	Rowan
+		projectNamed: projectName 
+		ifPresent: [:prj | Rowan image _removeLoadedProject: prj _loadedProject ].
+	Rowan 
+		projectNamed: projectName 
+		ifPresent: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
 
 	specUrlString := self _rowanSample4SpecificationUrl.
 	projectTools := Rowan projectTools.
@@ -99,7 +103,7 @@ RwRowanSample4Test >> testCreateProjectFromUrl [
 	Rowan 
 		projectNamed: projectName 
 			ifPresent: [:project | "noop" ]
-			ifAbsent: [ self assert: false description: 'expected project ', projectName printString, ' to be loaded' ]
+			ifAbsent: [ self assert: false description: 'expected project ', projectName printString, ' to be loaded' ].
 ]
 
 { #category : 'tests' }
@@ -108,10 +112,12 @@ RwRowanSample4Test >> testIssue14 [
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project 
 		x repoRootPath theClass constraint |
 	projectName := 'RowanSample4'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
+	Rowan
+		projectNamed: projectName 
+		ifPresent: [:prj | Rowan image _removeLoadedProject: prj _loadedProject ].
+	Rowan 
+		projectNamed: projectName 
+		ifPresent: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
