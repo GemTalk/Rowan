@@ -120,8 +120,14 @@ RwLoadedProject >> key [
 RwLoadedProject >> load [
 	"load the receiver into the image"
 
-	| projectSetDefinition |
+	| projectDefinition projectSetDefinition readProjectDefinition |
+	projectDefinition := self asDefinition.
 	projectSetDefinition := self asDefinition read.
+	readProjectDefinition := projectSetDefinition projectNamed: projectDefinition name.
+	readProjectDefinition == projectDefinition 
+		ifFalse: [
+			"https://github.com/GemTalk/Rowan/issues/488"
+			self error: 'expected to update the projectDefinition in-place' ].
 	^ Rowan projectTools load loadProjectSetDefinition: projectSetDefinition
 ]
 
