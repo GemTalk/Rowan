@@ -52001,7 +52001,7 @@ load
 
 	| projectDefinition projectSetDefinition readProjectDefinition |
 	projectDefinition := self asDefinition.
-	projectSetDefinition := self asDefinition read.
+	projectSetDefinition := projectDefinition read.
 	readProjectDefinition := projectSetDefinition projectNamed: projectDefinition name.
 	readProjectDefinition == projectDefinition 
 		ifFalse: [
