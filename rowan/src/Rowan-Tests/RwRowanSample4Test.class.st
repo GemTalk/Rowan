@@ -165,12 +165,16 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict [
 
 	"issue_185_1 --> issue_185_3	:: move NewRowanSample4 class to RowanSample4SymbolDict symbol dictionary (no package rename)"
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath 
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
 		baselinePackageNames newClass ar |
 
 	projectName := 'RowanSample4'.
-	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+	Rowan
+		projectNamed: projectName 
+		ifPresent: [:prj | Rowan image _removeLoadedProject: prj _loadedProject ].
+	Rowan 
+		projectNamed: projectName 
+		ifPresent: [ :prj | self error: 'The project ', projectName printString, ' should not be loaded' ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample4LoadSpecificationUrl.
@@ -180,13 +184,10 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	projectTools clone
-		cloneSpecUrl: specUrlString
-		gitRootPath: gitRootPath
-		useSsh: true.
+	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath.
 
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	repoRootPath := rowanSampleSpec repositoryRootPath asFileReference.
+	project := Rowan projectNamed: projectName.
+	repoRootPath := project repositoryRootPath asFileReference.
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_185_0'.				"starting point of test"
@@ -195,16 +196,14 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict [
 		loadProjectNamed: projectName
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
-	project := RwProject newNamed: projectName.
 	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
 											'RowanSample4-GemStone-Tests').
 	self
 		assert:
 			(x := project packageNames asArray sort) =  baselinePackageNames sort.
 
-	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
-	self assert: (x := rowanSampleSpec loadedGroupNames) = #('tests').
-	self assert: (x := rowanSampleSpec loadedConfigurationNames) = #('Load').
+	self assert: (x := project loadedGroupNames) asArray = #('tests').
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
 
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_185_1'.				"New package added to the project"
 
