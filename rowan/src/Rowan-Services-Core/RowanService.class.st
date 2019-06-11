@@ -282,6 +282,9 @@ RowanService >> sampleSymbolDictionaryName [
 
 { #category : 'perform' }
 RowanService >> servicePerform: symbol withArguments: collection [
+	"each service updates itself after performing a command.
+	Therefore, if the command is #update, don't run it here"
+	symbol == #update ifTrue:[^self].
 	^super perform: symbol withArguments: collection.
 ]
 

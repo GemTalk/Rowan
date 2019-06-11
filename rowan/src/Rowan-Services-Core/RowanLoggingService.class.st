@@ -79,7 +79,7 @@ RowanLoggingService >> logReceivedServices [
 RowanLoggingService >> logSentServices [
 
 	mode := #sent.
-	services := RowanCommandResult results. 
+	services := RowanCommandResult results copy asOrderedCollection.
 	self logServices.
 	RowanCommandResult addResult: self.
 ]
