@@ -1143,9 +1143,9 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_newProjec
 																								move new version of NewRowanSample4 to RowanSample4SymbolDict"
 "trigger the bug on this load"
 	specUrlString := self _rowanSample4LoadSpecificationUrl_295.
-	projectTools load
-		loadProjectFromSpecUrl: specUrlString
-		projectRootPath: repoRootPath.
+	self
+		_loadProjectFromSpecUrl: specUrlString
+		repoRootPath: repoRootPath.
 
 	oldClass := newClass.
 	newClass := Rowan globalNamed: 'NewRowanSample4'.

@@ -37644,66 +37644,6 @@ loadProjectDefinition: projectDefinition platformConfigurationAttributes: platfo
 	^ self loadProjectSetDefinition: projectSetDefinition
 %
 
-category: 'load project by spec url'
-method: RwPrjLoadTool
-loadProjectFromSpecUrl: fileUrlOrString
-
-	| projectDefinition projectSetDefinition res |
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString.
-	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
-	res := self loadProjectSetDefinition: projectSetDefinition.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-%
-
-category: 'load project by spec url'
-method: RwPrjLoadTool
-loadProjectFromSpecUrl: fileUrlOrString  projectRootPath: projectRootPath
-
-	| projectDefinition projectSetDefinition res |
-
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString projectRootPath: projectRootPath.
-	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
-	res := self loadProjectSetDefinition: projectSetDefinition.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-%
-
-category: 'load project by spec url'
-method: RwPrjLoadTool
-loadProjectFromSpecUrl: fileUrlOrString withConfigurations: configNames groupNames: groupNames
-
-	| projectDefinition projectSetDefinition res |
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString.
-	projectSetDefinition := Rowan projectTools read 
-		readProjectSetForProjectDefinition: projectDefinition 
-		withConfigurations: configNames
-		groupNames: groupNames.
-	res := self loadProjectSetDefinition: projectSetDefinition.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-%
-
-category: 'load project by spec url'
-method: RwPrjLoadTool
-loadProjectFromSpecUrl: fileUrlOrString  withConfigurations: configNames groupNames: groupNames projectRootPath: projectRootPath
-
-	| projectDefinition projectSetDefinition res |
-
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: fileUrlOrString projectRootPath: projectRootPath.
-	projectSetDefinition := Rowan projectTools read 
-		readProjectSetForProjectDefinition: projectDefinition 
-		withConfigurations: configNames
-		groupNames: groupNames.
-	res := self loadProjectSetDefinition: projectSetDefinition.
-	"loaded project and loaded packages read from disk - mark them not dirty"
-	self markProjectSetNotDirty: projectSetDefinition.
-	^ res
-%
-
 category: 'load project by name'
 method: RwPrjLoadTool
 loadProjectNamed: projectNamed
