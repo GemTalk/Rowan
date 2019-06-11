@@ -64,3 +64,8 @@ RowanProcessService >> initialize: aGsProcess status: aString [
 	oop := aGsProcess asOop.  
 	status := aString.
 ]
+
+{ #category : 'perform' }
+RowanProcessService >> servicePerform: symbol withArguments: collection [
+	^self perform: symbol withArguments: collection.
+]

@@ -29,6 +29,11 @@ RowanDebuggerService >> debugStringFrom: aString [
 	^newStream contents
 ]
 
+{ #category : 'perform' }
+RowanDebuggerService >> servicePerform: symbol withArguments: collection [
+	^self perform: symbol withArguments: collection.
+]
+
 { #category : 'other' }
 RowanDebuggerService >> update [
 
