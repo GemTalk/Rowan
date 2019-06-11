@@ -16,6 +16,21 @@ true.
 %
 
 doit
+(RowanLoggingService
+	subclass: 'TestLoggingService'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Services-Tests';
+		comment: 'Used for Jadeite testing';
+		immediateInvariant.
+true.
+%
+
+doit
 (RwGsImage
 	subclass: 'RwGsTestImage'
 	instVarNames: #(  )
@@ -1426,16 +1441,6 @@ method: RowanServicesTest
 defaultSymbolDictionaryName
 
 	^'ServicesTestDictionary'
-%
-
-category: 'unicode method'
-method: RowanServicesTest
-iAmAUnicodeMethod
-
-		| abc |
-		abc := 'Ϛ'.
-		self halt. 
-		^abc
 %
 
 category: 'support'
@@ -41544,7 +41549,7 @@ testIssue284
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	loadedCommitId := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId.
-	self assert: loadedCommitId = '4bdcf1a'.
+	self assert: loadedCommitId = '0f7683b'.
 
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_284_0'.				"README commit"
 

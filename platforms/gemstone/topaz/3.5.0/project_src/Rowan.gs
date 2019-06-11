@@ -27107,6 +27107,9 @@ sampleSymbolDictionaryName
 category: 'perform'
 method: RowanService
 servicePerform: symbol withArguments: collection
+	"each service updates itself after performing a command.
+	Therefore, if the command is #update, don't run it here"
+	symbol == #update ifTrue:[^self].
 	^super perform: symbol withArguments: collection.
 %
 
@@ -28692,6 +28695,12 @@ debugStringFrom: aString
 	^newStream contents
 %
 
+category: 'perform'
+method: RowanDebuggerService
+servicePerform: symbol withArguments: collection
+	^self perform: symbol withArguments: collection.
+%
+
 category: 'other'
 method: RowanDebuggerService
 update
@@ -28734,6 +28743,12 @@ initializeProcess: aGsProcess level: anInteger organizer: aClassOrganizer
 		ifTrue: [aGsProcess _stepPointAt: anInteger]
 		ifFalse: [gsNMethod homeMethod _stepPointForMeth: gsNMethod ip: (frameData at: 2)].
 	vars := self varsFor: frameData.
+%
+
+category: 'perform'
+method: RowanFrameService
+servicePerform: symbol withArguments: collection
+	^self perform: symbol withArguments: collection.
 %
 
 category: 'other'
@@ -28856,7 +28871,7 @@ method: RowanLoggingService
 logSentServices
 
 	mode := #sent.
-	services := RowanCommandResult results. 
+	services := RowanCommandResult results copy asOrderedCollection.
 	self logServices.
 	RowanCommandResult addResult: self.
 %
@@ -30085,6 +30100,12 @@ initialize: aGsProcess status: aString
 	].
 	oop := aGsProcess asOop.  
 	status := aString.
+%
+
+category: 'perform'
+method: RowanProcessService
+servicePerform: symbol withArguments: collection
+	^self perform: symbol withArguments: collection.
 %
 
 ! Class implementation for 'RowanProjectService'
