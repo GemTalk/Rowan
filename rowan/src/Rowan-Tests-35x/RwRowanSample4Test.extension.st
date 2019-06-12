@@ -44,7 +44,7 @@ RwRowanSample4Test >> _projectDefinitionFromSpecUrl: specUrlString projectRootPa
 	| projectDefinition |
 	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
 	projectDefinition projectHome: projectRootPath parent.
-	projectDefinition clone.
+	projectDefinition cloneRepository.
 	^ projectDefinition
 ]
 

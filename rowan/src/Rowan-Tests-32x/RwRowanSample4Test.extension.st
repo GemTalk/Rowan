@@ -1,6 +1,22 @@
 Extension { #name : 'RwRowanSample4Test' }
 
 { #category : '*rowan-tests-32x' }
+RwRowanSample4Test >> _cloneAndCreateProjectDefinitionFromSpecUrl: specUrlString projectRootPath: projectRootPath [
+
+	| projectDefinition |
+
+	Rowan projectTools clone
+		cloneSpecification: specUrlString asRwUrl asSpecification
+		gitRootPath: projectRootPath parent
+		useSsh: true
+		registerProject: false.
+
+	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: projectRootPath.
+
+	^ Rowan projectTools read readProjectDefinition: projectDefinition.
+]
+
+{ #category : '*rowan-tests-32x' }
 RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome [
 
 	Rowan projectTools clone
@@ -43,18 +59,11 @@ RwRowanSample4Test >> _loadProjectFromSpecUrl: specUrlString repoRootPath: repoR
 RwRowanSample4Test >> _projectDefinitionFromSpecUrl: specUrlString projectRootPath: projectRootPath [
 
 	| projectDefinition |
-
-	Rowan projectTools clone
-		cloneSpecification: specUrlString asRwUrl asSpecification
-		gitRootPath: projectRootPath parent
-		useSsh: true
-		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
-
 	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: projectRootPath.
-
-	projectDefinition read.
-
-	^ projectDefinition
+	^ Rowan projectTools read
+		readProjectSetForProjectDefinition: projectDefinition 
+			withConfigurations: projectDefinition defaultConfigurationNames
+			groupNames: projectDefinition defaultGroupNames
 ]
 
 { #category : '*rowan-tests-32x' }
