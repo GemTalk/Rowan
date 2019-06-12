@@ -45032,6 +45032,19 @@ testIssue185_move_class_to_symbolDict_A
 
 category: '*rowan-tests-35x'
 method: RwRowanSample4Test
+_cloneAndCreateProjectDefinitionFromSpecUrl: specUrlString projectRootPath: projectRootPath
+
+	| projectDefinition projectSetDefinition |
+	projectDefinition := (RwComponentProjectDefinition newForUrl: specUrlString)
+		projectHome: projectRootPath parent;
+		clone;
+		yourself.
+	projectSetDefinition := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition.
+	^ projectSetDefinition projectNamed: projectDefinition name
+%
+
+category: '*rowan-tests-35x'
+method: RwRowanSample4Test
 _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome
 
 	(RwComponentProjectDefinition newForUrl: specUrlString)

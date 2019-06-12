@@ -1,6 +1,18 @@
 Extension { #name : 'RwRowanSample4Test' }
 
 { #category : '*rowan-tests-35x' }
+RwRowanSample4Test >> _cloneAndCreateProjectDefinitionFromSpecUrl: specUrlString projectRootPath: projectRootPath [
+
+	| projectDefinition projectSetDefinition |
+	projectDefinition := (RwComponentProjectDefinition newForUrl: specUrlString)
+		projectHome: projectRootPath parent;
+		clone;
+		yourself.
+	projectSetDefinition := Rowan projectTools read readProjectSetForComponentProjectDefinition: projectDefinition.
+	^ projectSetDefinition projectNamed: projectDefinition name
+]
+
+{ #category : '*rowan-tests-35x' }
 RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome [
 
 	(RwComponentProjectDefinition newForUrl: specUrlString)
