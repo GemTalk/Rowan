@@ -583,17 +583,31 @@ RwProjectReferenceDefinition >> repositoryDefinition: aRepositoryDefinition [
 RwProjectReferenceDefinition >> repositoryRoot [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	^self projectHome / self projectAlias
+	^self projectHome / self projectName
 ]
 
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> repositoryRoot: aFileReferenceOrPath [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
-	| fileRef |
+	| fileRef projectDirName |
 	fileRef := aFileReferenceOrPath asFileReference.
 	self projectHome: fileRef parent.
-	self projectAlias: fileRef basename
+	"the project name should match the name of the directory ... use the alias if the names don't match"
+	projectDirName := fileRef basename.
+	self projectName
+		ifNotNil: [:nm | 
+			nm = projectDirName
+				ifTrue: [
+					"we're done"
+					^ self ].
+			"project name does not equal name project directory"
+			self projectAlias = self projectName
+				ifTrue: [
+					"move the old name to the alias"
+					self projectAlias: self projectName ] ].
+	"set project name to projectDirName "
+	self projectName: projectDirName
 ]
 
 { #category : 'temporary compat' }

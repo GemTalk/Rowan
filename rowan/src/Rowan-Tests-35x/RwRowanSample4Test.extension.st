@@ -31,10 +31,11 @@ RwRowanSample4Test >> _createProjectDefinitionFromSpecUrl: specUrlString project
 { #category : '*rowan-tests-35x' }
 RwRowanSample4Test >> _loadProjectFromSpecUrl: specUrlString repoRootPath: repoRootPath [
 
-	| projectDefinition |
+	| projectDefinition projectSetDefinition |
 	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
 	projectDefinition repositoryRoot: repoRootPath.
-	^ projectDefinition load.
+	projectSetDefinition := projectDefinition read.
+	^ projectSetDefinition load
 ]
 
 { #category : '*rowan-tests-35x' }

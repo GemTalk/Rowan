@@ -45031,10 +45031,11 @@ category: '*rowan-tests-35x'
 method: RwRowanSample4Test
 _loadProjectFromSpecUrl: specUrlString repoRootPath: repoRootPath
 
-	| projectDefinition |
+	| projectDefinition projectSetDefinition |
 	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
 	projectDefinition repositoryRoot: repoRootPath.
-	^ projectDefinition load.
+	projectSetDefinition := projectDefinition read.
+	^ projectSetDefinition load
 %
 
 category: '*rowan-tests-35x'
