@@ -18790,9 +18790,7 @@ tearDown
 	projectsToDelete
 		do: [ :projectName | 
 		(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-			(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-				ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ] ].
+			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
 	super tearDown
 %
 
@@ -19234,16 +19232,12 @@ testWriterReader_A
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -19273,16 +19267,12 @@ testWriterReader_B_removeClass
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -19334,16 +19324,12 @@ testWriterReader_B_removeExtensionClass
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -19395,16 +19381,12 @@ testWriterReader_B_removePackage
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -19452,16 +19434,12 @@ testWriterReader_C
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -19501,16 +19479,12 @@ testWriterReader_D_changeClass
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -19561,16 +19535,12 @@ testWriterReader_D_changeMethods
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -19626,16 +19596,12 @@ testWriterReader_E
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -19965,16 +19931,12 @@ testWriterReader_B_removeInstanceClassMethods
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -20036,16 +19998,12 @@ testWriterReader_B_removeLastInstanceClassMethods
 	projectName := 'Issue361'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "write projectDefinition to disk"
 	writtenProjectDefinition := self _projectDefinitionForStructureWriters_A: projectName format: self _repositoryFormat.
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	writtenProjectDefinition repositoryRoot ensureDeleteAll.
 	writtenProjectDefinition create.
@@ -40720,8 +40678,6 @@ testCreateComponentProject
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
@@ -40822,7 +40778,6 @@ testCreateComponentProject
 	self assert: cpd projectsRoot exists.
 
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: [  ]) notNil.
-	self assert: (Rowan image projectRepositoryNamed: projectName ifAbsent: [  ]) notNil
 %
 
 category: 'tests'
@@ -40841,8 +40796,6 @@ testCreateNewProjectFromUrl
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
@@ -40860,9 +40813,6 @@ testCreateNewProjectFromUrl
 		useSsh: true
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 
-"validate"
-	self assert: (Rowan image projectRepositoryNamed: projectSpec_1 specName ifAbsent: [  ]) isNil.
-
 "2. read project from disk into a project definition, using component API (v2.0 style)"
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectDefinition_2 := (RwComponentProjectDefinition newForUrl: specUrlString)
@@ -40874,9 +40824,6 @@ testCreateNewProjectFromUrl
 "3. create a new git project on disk using component API"
 
 	projectName_3 := projectName, '_3'.
-
-	(Rowan image projectRepositoryNamed: projectName_3 ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition_3 := RwComponentProjectDefinition
 		projectName: projectName_3
@@ -40896,7 +40843,6 @@ testCreateNewProjectFromUrl
 
 "validate"
 	self assert: projectDefinition_3 repositoryRoot exists.
-	self assert: (Rowan image projectRepositoryNamed: projectName_3 ifAbsent: [  ]) notNil.
 
 "4. write the project definition to the new project location"
 
@@ -40925,8 +40871,6 @@ testCreateProjectReference
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
@@ -40959,7 +40903,6 @@ testCreateProjectReference
 	self assert: prd specsRoot hasChildren.
 
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: [  ]) isNil.
-	self assert: (Rowan image projectRepositoryNamed: projectName ifAbsent: [  ]) notNil.
 %
 
 category: 'tests'
@@ -40971,8 +40914,6 @@ testCreateProjectReferenceFromScratch
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
@@ -41228,8 +41169,6 @@ testResolveProjectReference
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
@@ -41243,18 +41182,14 @@ testResolveProjectReference
 		projectHome: projectHome.
 
 	projectReferenceDefinition_1 repositoryRoot ensureDeleteAll.
-	(Rowan image projectRepositoryNamed: projectReferenceDefinition_1 projectAlias ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "1. clone repository"
-	self assert: (Rowan image projectRepositoryNamed: projectReferenceDefinition_1 projectAlias ifAbsent: [  ]) isNil.
 	self 
 		handleInformDuring: [ projectReferenceDefinition_1 resolve ] 
 		interactionBlock: [:inform | self assert: false description: 'unexpected inform' ].
 
 "validate"
 	self assert: projectReferenceDefinition_1 repositoryRoot exists.
-	self assert: (Rowan image projectRepositoryNamed: projectReferenceDefinition_1 projectAlias ifAbsent: [  ]) notNil.
 
 "2. create second project reference definitions"
 	projectReferenceDefinition_2 := RwProjectReferenceDefinition 
@@ -41273,23 +41208,17 @@ testResolveProjectReference
 
 "validate"
 	self assert: projectReferenceDefinition_1 projectHome = projectReferenceDefinition_2 projectHome.
-	self assert: (Rowan image projectRepositoryNamed: projectReferenceDefinition_1 projectAlias ifAbsent: [  ]) == projectReferenceDefinition_2 repositoryDefinition. "expect repository defintion to be shared"
 
 "3. now clone to a different spot by just changing the project home"
 	projectReferenceDefinition_2 repositoryRoot ensureDeleteAll.
-	(Rowan image projectRepositoryNamed: projectReferenceDefinition_2 projectAlias ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectHome := projectHome asFileReference / 'sample7_repos'.
 	projectHome ensureDeleteAll.
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 	projectHome ensureCreateDirectory.
 
 	projectReferenceDefinition_2 projectHome: projectHome.
 
 "clone to new location"
-	self assert: (Rowan image projectRepositoryNamed: projectReferenceDefinition_2 projectAlias ifAbsent: [  ]) isNil.
 	self 
 		handleInformDuring: [ projectReferenceDefinition_2 resolve ] 
 		interactionBlock: [:inform | self assert: false dexcription: 'unexpected inform: ', inform message printString ].
@@ -41297,7 +41226,6 @@ testResolveProjectReference
 "validate"
 	self assert: projectReferenceDefinition_2 repositoryRoot exists.
 	self deny: projectReferenceDefinition_1 repositoryRoot exists.	"confirm that the repo wasn't cloned to old location"
-	self assert: (Rowan image projectRepositoryNamed: projectReferenceDefinition_2 projectAlias ifAbsent: [  ]) notNil.
 %
 
 category: 'tests'

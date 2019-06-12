@@ -185,8 +185,6 @@ RwProjectReaderWriterTest >> tearDown [
 	projectsToDelete
 		do: [ :projectName | 
 		(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
-			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-			(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-				ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ] ].
+			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
 	super tearDown
 ]

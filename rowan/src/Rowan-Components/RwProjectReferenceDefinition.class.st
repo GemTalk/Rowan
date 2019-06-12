@@ -155,24 +155,14 @@ RwProjectReferenceDefinition >> _repositoryDefinitionClass [
 RwProjectReferenceDefinition >> _repositoryDefinitionForProjectHome: projectHomeFileReferenceOrString [
 
 
-	| existingProjectRepository |
-	existingProjectRepository := 
-		Rowan image 
-			projectRepositoryNamed: self projectAlias
-				ifAbsent: [
-					| newProjectRepository |
-					newProjectRepository := self _repositoryDefinitionClass
-						newNamed: self projectAlias
-							repositoryRoot: projectHomeFileReferenceOrString asFileReference / self projectAlias
-							projectUrl: self projectUrl
-							committish: self committish 
-							committishType: self committishType.
-					Rowan image addProjectRepository: newProjectRepository.
-					^ newProjectRepository ].
-	"confirm that the existing project repository is compatible with the receiver"
-	existingProjectRepository projectUrl = self projectUrl
-		ifFalse: [ self error: 'incompatible project repository found in registry' ].
-	^ existingProjectRepository
+	| newProjectRepository |
+	newProjectRepository := self _repositoryDefinitionClass
+		newNamed: self projectAlias
+			repositoryRoot: self repositoryRoot	"not a good idea to have repository root stored in two spots"
+			projectUrl: self projectUrl
+			committish: self committish 
+			committishType: self committishType.
+	^ newProjectRepository
 ]
 
 { #category : 'visiting' }
@@ -503,6 +493,7 @@ RwProjectReferenceDefinition >> projectName [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> projectName: aString [
 
+	self repositoryDefinition: nil. "changing project name invalidates the current repository definition"
 	^ self properties at: 'projectName' put: aString
 ]
 
@@ -592,7 +583,7 @@ RwProjectReferenceDefinition >> repositoryRoot: aFileReferenceOrPath [
 
 	| fileRef projectDirName |
 	fileRef := aFileReferenceOrPath asFileReference.
-	self projectHome: fileRef parent.
+	self projectHome: fileRef parent.	 "changing project home invalidates the current repository definition"
 	"the project name should match the name of the directory ... use the alias if the names don't match"
 	projectDirName := fileRef basename.
 	self projectName
