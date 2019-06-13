@@ -58,7 +58,11 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 	projectSetDefinitionToLoad definitions keysAndValuesDo: [:projectName :projectDefinition |
 			projectDefinition packages keysAndValuesDo: [:packageName :packageDefinition |
 				"set the target symbol dictionary name for each incoming package definition"
-				packageDefinition gs_symbolDictionary: (projectDefinition symbolDictNameForPackageNamed: packageName) ] ].
+				(packageDefinition gs_symbolDictionary isNil or: [ loadedProjectInfo includesKey: projectName ])
+					ifTrue: [ 
+						"set gs_symbolDictionary for the first time, or (potentially) override if project freshly read 
+							from disk (loadedProjectInfo available)"
+						packageDefinition gs_symbolDictionary: (projectDefinition symbolDictNameForPackageNamed: packageName) ] ] ].
 	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectDefinitionSet.
 	diff isEmpty
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].

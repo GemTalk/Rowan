@@ -397,6 +397,13 @@ RwProjectDefinition >> specsPath: aDirectoryPathString [
 
 ]
 
+{ #category : 'actions' }
+RwProjectDefinition >> unload [
+	"unload the receiver from the image"
+
+	^ Rowan projectTools delete deleteProjectDefinition: self copy	"delete operation is destructive to the projectDefinition"
+]
+
 { #category : 'loading' }
 RwProjectDefinition >> updateLoadedCommitId [
 
