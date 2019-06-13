@@ -49,8 +49,22 @@ run
 
 		false	
 			ifTrue: [ 
-				"Deprection error will halt tests immediately"
-				res := suite run ]
+				"custom test debugging"
+				false
+					ifTrue:  [
+						"bring up debugger on Deprecated exception"
+						res := suite run ]
+					ifFalse: [
+						"debug selectors that only fail during full test run"
+						res := TestResult new.
+						suite tests do: [:each | 
+							each selector == #'testIssue295_rename_package_move_newClassVersion_newProject_3'
+								ifTrue: [ each debug ]
+								ifFalse: [ 
+									[ each run: res ] 
+										on: Deprecated do: [:ex |
+											ex resignalAs: (Error new messageText: ex description; yourself)
+										] ] ] ] ]
 			ifFalse: [ 
 				[ 
 					res := suite run.

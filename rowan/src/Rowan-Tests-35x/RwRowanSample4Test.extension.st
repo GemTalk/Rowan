@@ -55,9 +55,9 @@ RwRowanSample4Test >> _projectDefinitionFromSpecUrl: specUrlString projectRootPa
 
 	| projectDefinition |
 	projectDefinition := RwComponentProjectDefinition newForUrl: specUrlString.
-	projectDefinition projectHome: projectRootPath parent.
+	projectDefinition repositoryRoot: projectRootPath.
 	projectDefinition cloneRepository.
-	^ projectDefinition
+	^ projectDefinition read
 ]
 
 { #category : '*rowan-tests-35x' }

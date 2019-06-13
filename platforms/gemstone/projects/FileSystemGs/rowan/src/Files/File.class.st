@@ -224,6 +224,7 @@ File class >> lookupPath: fullPath [
    On Macs and PCs, it is the container of the system volumes."
 
 	| gsFileStat |
+	(GsFile existsOnServer: fullPath) ifFalse: [^ nil ].
 	gsFileStat := GsFile stat: fullPath isLstat: true.
 	gsFileStat _isSmallInteger ifTrue: [ ^ nil ].
 	^	{
@@ -235,7 +236,6 @@ File class >> lookupPath: fullPath [
 		gsFileStat mode bitAnd: 8r777. "https://github.com/GemTalk/FileSystemGs/issues/11"
 		(gsFileStat mode bitAnd: 8r0120000) = 8r0120000. "https://github.com/GemTalk/FileSystemGs/issues/10"
 	}
-
 ]
 
 { #category : 'file creation' }
