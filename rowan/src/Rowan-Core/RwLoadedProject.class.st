@@ -260,6 +260,15 @@ RwLoadedProject >> specification [
 	^ properties at: 'spec'
 ]
 
+{ #category : 'actions' }
+RwLoadedProject >> unload [
+	"unload the receiver from the image"
+
+	| projectDefinition |
+	projectDefinition := self asDefinition.
+	^ Rowan projectTools delete deleteProjectDefinition: projectDefinition
+]
+
 { #category : 'testing' }
 RwLoadedProject >> useGit [
 

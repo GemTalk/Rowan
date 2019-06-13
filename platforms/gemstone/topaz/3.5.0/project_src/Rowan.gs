@@ -26824,6 +26824,14 @@ repositoryRootPath
 	^ self repositoryRoot pathString
 %
 
+category: 'actions'
+method: RwProject
+unload
+	"unload the receiver into the image"
+
+	^ self _loadedProject unload
+%
+
 category: 'testing'
 method: RwProject
 useGit
@@ -51999,6 +52007,16 @@ method: RwLoadedProject
 specification
 
 	^ properties at: 'spec'
+%
+
+category: 'actions'
+method: RwLoadedProject
+unload
+	"unload the receiver from the image"
+
+	| projectDefinition |
+	projectDefinition := self asDefinition.
+	^ Rowan projectTools delete deleteProjectDefinition: projectDefinition
 %
 
 category: 'testing'

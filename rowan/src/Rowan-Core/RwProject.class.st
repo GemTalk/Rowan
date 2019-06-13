@@ -162,6 +162,13 @@ RwProject >> repositoryRootPath [
 	^ self repositoryRoot pathString
 ]
 
+{ #category : 'actions' }
+RwProject >> unload [
+	"unload the receiver into the image"
+
+	^ self _loadedProject unload
+]
+
 { #category : 'testing' }
 RwProject >> useGit [
 

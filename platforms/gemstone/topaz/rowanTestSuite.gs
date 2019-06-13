@@ -66,6 +66,7 @@ run
 											ex resignalAs: (Error new messageText: ex description; yourself)
 										] ] ] ] ]
 			ifFalse: [ 
+				"standard test suite run"
 				[ 
 					res := suite run.
 				] on: Deprecated do: [:ex |

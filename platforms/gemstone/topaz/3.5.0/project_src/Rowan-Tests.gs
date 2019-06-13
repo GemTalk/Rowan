@@ -38367,6 +38367,14 @@ _symbolDictionaryNames
 
 !		Instance methods for 'RwRowanSample4Test'
 
+category: 'running'
+method: RwRowanSample4Test
+setUp
+
+	super setUp.
+	Transcript cr; show: self printString
+%
+
 category: 'tests'
 method: RwRowanSample4Test
 testCreateProjectDefinition
@@ -39491,7 +39499,10 @@ testIssue295_rename_package_move_newClassVersion_newProject_1
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295'.
 
-	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4').
+
+	project unload.
+	(Rowan projectNamed: projectName, '_295') unload
 %
 
 category: 'tests'
@@ -39511,7 +39522,6 @@ testIssue295_rename_package_move_newClassVersion_newProject_3
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
 		baselinePackageNames newClass ar oldClass projectDefinition projectSetDefinition oldProjectDefinition |
-
 	projectName := 'RowanSample4'.
 	{ projectName . projectName, '_295'} do: [:pn |
 		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
