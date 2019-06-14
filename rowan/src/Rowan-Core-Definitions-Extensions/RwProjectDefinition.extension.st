@@ -35,3 +35,10 @@ RwProjectDefinition >> projectDefinitionSourceProperty [
 
 	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
 ]
+
+{ #category : '*rowan-core-definitions-extensions' }
+RwProjectDefinition >> projectDefinitionSourceProperty: sourceKeyOrNil [
+
+	sourceKeyOrNil ifNil: [ ^ properties removeKey: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [] ].
+	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
+]

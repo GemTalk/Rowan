@@ -39500,7 +39500,6 @@ testIssue295_rename_package_move_newClassVersion_newProject_1
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295'.
 
 	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4').
-
 	project unload.
 	(Rowan projectNamed: projectName, '_295') unload
 %
