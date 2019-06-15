@@ -1347,8 +1347,8 @@ RwRowanSample4Test >> testIssue295_rename_package_move_newClassVersion_with_subc
 	specUrlString := self _rowanSample4LoadSpecificationUrl_295.
 
 "need to add old project definition with all classes and extensions removed to the projectSet Definition to reproduce bug"
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
-	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
+	projectSetDefinition := self _projectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
+	projectDefinition := projectSetDefinition projectNamed: projectName, '_295'.
 
 	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
 
