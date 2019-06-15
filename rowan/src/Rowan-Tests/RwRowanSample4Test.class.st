@@ -292,8 +292,8 @@ RwRowanSample4Test >> testIssue185_move_newClassVariable_to_symbolDict [
 		assert:
 			(x := project packageNames asArray sort) =  baselinePackageNames sort.
 
-	self assert: (x := project loadedGroupNames) = #('tests').
-	self assert: (x := project loadedConfigurationNames) = #('Load').
+	self assert: (x := project loadedGroupNames) asArray = #('tests').
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
 
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_185_1'.				"New package added to the project"
 
