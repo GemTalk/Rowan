@@ -1689,7 +1689,7 @@ RwRowanSample4Test >> testIssue284 [
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	loadedCommitId := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId.
-	self assert: loadedCommitId = '4bdcf1a'.
+	self assert: loadedCommitId = '0f7683b'.
 
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_284_0'.				"README commit"
 
@@ -1699,7 +1699,6 @@ RwRowanSample4Test >> testIssue284 [
 
 	loadedCommitId := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId.
 	self assert: loadedCommitId = '1d4ae93'
-
 ]
 
 { #category : 'tests' }
