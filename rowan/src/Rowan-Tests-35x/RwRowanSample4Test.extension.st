@@ -91,6 +91,7 @@ RwRowanSample4Test >> _rowanSample4SpecificationUrl [
 	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	^ 'file:' , (rowanProject repositoryRootPath asFileReference / 'test/specs/RowanSample4_v2.ston') pathString
 ]
+
 { #category : '*rowan-tests-35x' }
 RwRowanSample4Test >> testIssue185_move_class_to_symbolDict_A [
 

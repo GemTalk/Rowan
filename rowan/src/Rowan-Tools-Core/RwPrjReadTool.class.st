@@ -26,7 +26,7 @@ RwPrjReadTool >> _readProjectDefinition: projectDefinition packageNames: package
 				readPackageStructure.
 			packageDefinition := reader packageStructure rwSnapshot.
 			projectDefinition addOrUpdatePackage: packageDefinition ].
-	projectDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
+	projectDefinition projectDefinitionSourceProperty: RwLoadedProject _projectDiskDefinitionSourceValue.
 	^ projectDefinition
 ]
 
@@ -37,7 +37,7 @@ RwPrjReadTool >> _readProjectSetForProjectComponentDefinition: projectComponentD
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectComponentDefinition readProjectSetForPackageNames: packageNames.
 	projectSetDefinition addProject: projectComponentDefinition.
-	projectComponentDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
+	projectComponentDefinition projectDefinitionSourceProperty: RwLoadedProject _projectDiskDefinitionSourceValue.
 	^ projectSetDefinition
 ]
 
@@ -227,6 +227,7 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 		cn := nextDefArray at: 2.
 		gn := nextDefArray at: 3.
 		visitor := self readConfigurationsForProjectComponentDefinition: pcd withConfigurations: cn groupNames: gn platformConfigurationAttributes: platformConfigurationAttributes.
+		pcd projectDefinitionSourceProperty: RwLoadedProject _projectDiskDefinitionSourceValue.
 		visitor visitedComponents keysAndValuesDo: [:cName :cmp | pcd components at: cName put: cmp ].
 		projectVisitedQueue addLast: { visitor . nextDefArray  }.
 		visitor projectLoadSpecs do: [:loadSpec |

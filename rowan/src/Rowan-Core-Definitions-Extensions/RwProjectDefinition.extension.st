@@ -40,5 +40,5 @@ RwProjectDefinition >> projectDefinitionSourceProperty [
 RwProjectDefinition >> projectDefinitionSourceProperty: sourceKeyOrNil [
 
 	sourceKeyOrNil ifNil: [ ^ properties removeKey: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [] ].
-	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
+	^ properties at: RwLoadedProject _projectDefinitionSourceKey put: sourceKeyOrNil
 ]

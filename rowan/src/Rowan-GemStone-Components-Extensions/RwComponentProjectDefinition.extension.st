@@ -15,7 +15,7 @@ RwComponentProjectDefinition >> defaultSymbolDictName [
 { #category : '*rowan-gemstone-components-extensions' }
 RwComponentProjectDefinition >> defaultSymbolDictName: symDictName [
 
-	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
+false ifTrue: [ 	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary" ].
 	self projectRef defaultSymbolDictName: symDictName
 ]
 
@@ -77,7 +77,7 @@ RwComponentProjectDefinition >> symbolDictNameForPackageNamed: packageName [
 RwComponentProjectDefinition >> updateGsPlatformSpecLoadedProjectInfo: projectInfo [
 
 	| thePackageMapSpecs |
-	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
+false ifTrue: [ 	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"].
 	thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
 	(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
 		ifNotNil: [:name | self defaultSymbolDictName: name ].

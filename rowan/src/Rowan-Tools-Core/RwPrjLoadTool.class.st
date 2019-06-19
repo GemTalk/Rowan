@@ -59,7 +59,7 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 			projectDefinition packages keysAndValuesDo: [:packageName :packageDefinition |
 				"set the target symbol dictionary name for each incoming package definition"
 				(packageDefinition gs_symbolDictionary isNil 
-					or: [ (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectLoadedDefinitionSourceValue) not])
+					or: [ (loadedProjectInfo includesKey: projectName) or: [ (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectLoadedDefinitionSourceValue) not ] ])
 						ifTrue: [ 
 							"set gs_symbolDictionary for the first time, or (potentially) override if project freshly read 
 								from disk (loadedProjectInfo available)"
