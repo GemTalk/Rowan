@@ -30707,10 +30707,11 @@ implementorsOf: selector
 
 category: 'queries'
 method: RowanQueryService
-literalReferences: symbol
+literalReferences: string
 
-	| methods |
-	methods := organizer referencesToLiteral: symbol.
+	| methods compilationResult |
+	compilationResult := string evaluate.  
+	methods := organizer referencesToLiteral: compilationResult.
 	queryResults := self methodServicesFrom: methods first.
 	self returnQueryToClient.
 %
