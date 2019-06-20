@@ -12,7 +12,8 @@ Class {
 		'hierarchyServices',
 		'testPackages',
 		'testCount',
-		'autoCommit'
+		'autoCommit',
+		'dictionaries'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -181,11 +182,22 @@ RowanBrowserService >> update [
 ]
 
 { #category : 'client commands' }
+RowanBrowserService >> updateDictionaries [
+
+	| sorted | 
+	sorted := SortedCollection new. 
+	sorted addAll:  System myUserProfile symbolList names.
+	dictionaries := sorted collect:[:name | RowanDictionaryService new name: name].
+	updateType := #dictionaryListUpdate:.
+	RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> updateProjects [
 	| sortedProjects | 
 	sortedProjects := SortedCollection sortBlock: [:a :b | a name < b name]. 
 	sortedProjects addAll:  Rowan image loadedProjects.
 	projects := sortedProjects collect:[:project | RowanProjectService newNamed: project name].
-	updateType := #projectsUpdate:.
+	updateType := #projectsUpdate:browser:.
 	RowanCommandResult addResult: self
 ]
