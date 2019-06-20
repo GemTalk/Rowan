@@ -15,7 +15,6 @@ RwProjectDefinition >> defaultSymbolDictName [
 { #category : '*rowan-gemstone-definitions' }
 RwProjectDefinition >> defaultSymbolDictName: symbolDictName [
 
-	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
 	(self specification platformSpec at: 'gemstone')
 		defaultSymbolDictName: symbolDictName
 ]
@@ -81,8 +80,6 @@ RwProjectDefinition >> symbolDictNameForPackageNamed: packageName [
 RwProjectDefinition >> updateGsPlatformSpecLoadedProjectInfo: projectInfo [
 
 	| spec gemstoneSpec thePackageMapSpecs |
-false ifTrue: [ 	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
-].
 	spec := self specification.
 	thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
 	gemstoneSpec := spec platformSpec at: 'gemstone'.
