@@ -37854,7 +37854,7 @@ _loadProjectSetDefinition_254: projectSetDefinitionToLoad instanceMigrator: inst
 			projectDefinition packages keysAndValuesDo: [:packageName :packageDefinition |
 				"set the target symbol dictionary name for each incoming package definition"
 				(packageDefinition gs_symbolDictionary isNil 
-					or: [ (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectLoadedDefinitionSourceValue) not])
+					or: [ (loadedProjectInfo includesKey: projectName) or: [ (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectLoadedDefinitionSourceValue) not ] ])
 						ifTrue: [ 
 							"set gs_symbolDictionary for the first time, or (potentially) override if project freshly read 
 								from disk (loadedProjectInfo available)"
@@ -38160,6 +38160,7 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 		cn := nextDefArray at: 2.
 		gn := nextDefArray at: 3.
 		visitor := self readConfigurationsForProjectComponentDefinition: pcd withConfigurations: cn groupNames: gn platformConfigurationAttributes: platformConfigurationAttributes.
+		pcd projectDefinitionSourceProperty: RwLoadedProject _projectDiskDefinitionSourceValue.
 		visitor visitedComponents keysAndValuesDo: [:cName :cmp | pcd components at: cName put: cmp ].
 		projectVisitedQueue addLast: { visitor . nextDefArray  }.
 		visitor projectLoadSpecs do: [:loadSpec |
@@ -38308,7 +38309,7 @@ _readProjectDefinition: projectDefinition packageNames: packageNames fromRepo: r
 				readPackageStructure.
 			packageDefinition := reader packageStructure rwSnapshot.
 			projectDefinition addOrUpdatePackage: packageDefinition ].
-	projectDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
+	projectDefinition projectDefinitionSourceProperty: RwLoadedProject _projectDiskDefinitionSourceValue.
 	^ projectDefinition
 %
 
@@ -38320,7 +38321,7 @@ _readProjectSetForProjectComponentDefinition: projectComponentDefinition package
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectComponentDefinition readProjectSetForPackageNames: packageNames.
 	projectSetDefinition addProject: projectComponentDefinition.
-	projectComponentDefinition propertyAt: RwLoadedProject _projectDefinitionSourceKey put: RwLoadedProject _projectDiskDefinitionSourceValue.
+	projectComponentDefinition projectDefinitionSourceProperty: RwLoadedProject _projectDiskDefinitionSourceValue.
 	^ projectSetDefinition
 %
 
@@ -60579,7 +60580,7 @@ category: '*rowan-gemstone-components-extensions'
 method: RwComponentProjectDefinition
 defaultSymbolDictName: symDictName
 
-	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
+false ifTrue: [ 	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary" ].
 	self projectRef defaultSymbolDictName: symDictName
 %
 
@@ -60665,7 +60666,7 @@ method: RwComponentProjectDefinition
 updateGsPlatformSpecLoadedProjectInfo: projectInfo
 
 	| thePackageMapSpecs |
-	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
+false ifTrue: [ 	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"].
 	thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
 	(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
 		ifNotNil: [:name | self defaultSymbolDictName: name ].
@@ -61384,7 +61385,7 @@ method: RwProjectDefinition
 projectDefinitionSourceProperty: sourceKeyOrNil
 
 	sourceKeyOrNil ifNil: [ ^ properties removeKey: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [] ].
-	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
+	^ properties at: RwLoadedProject _projectDefinitionSourceKey put: sourceKeyOrNil
 %
 
 category: '*rowan-gemstone-definitions'
@@ -61440,7 +61441,8 @@ method: RwProjectDefinition
 updateGsPlatformSpecLoadedProjectInfo: projectInfo
 
 	| spec gemstoneSpec thePackageMapSpecs |
-	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
+false ifTrue: [ 	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
+].
 	spec := self specification.
 	thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
 	gemstoneSpec := spec platformSpec at: 'gemstone'.
