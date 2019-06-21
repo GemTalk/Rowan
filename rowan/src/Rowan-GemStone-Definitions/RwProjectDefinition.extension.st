@@ -46,6 +46,12 @@ RwProjectDefinition >> projectOwnerId: aUserId [
 ]
 
 { #category : '*rowan-gemstone-definitions' }
+RwProjectDefinition >> register [
+
+	self specification register
+]
+
+{ #category : '*rowan-gemstone-definitions' }
 RwProjectDefinition >> setSymbolDictName: symbolDictName forPackageNamed: packageName [
 
 	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"

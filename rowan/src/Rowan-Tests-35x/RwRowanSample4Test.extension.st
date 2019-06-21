@@ -13,6 +13,17 @@ RwRowanSample4Test >> _cloneAndCreateProjectDefinitionFromSpecUrl: specUrlString
 ]
 
 { #category : '*rowan-tests-35x' }
+RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome registerProject: aBool [
+
+	| projectDefinition |
+	projectDefinition := (RwComponentProjectDefinition newForUrl: specUrlString)
+		projectHome: projectsHome;
+		clone;
+		yourself.
+	aBool ifTrue: [ projectDefinition register ].
+]
+
+{ #category : '*rowan-tests-35x' }
 RwRowanSample4Test >> _cloneProjectFromSpecUrl: specUrlString projectsHome: projectsHome [
 
 	(RwComponentProjectDefinition newForUrl: specUrlString)

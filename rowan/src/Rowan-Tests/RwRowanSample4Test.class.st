@@ -1778,7 +1778,8 @@ RwRowanSample4Test >> testIssue490_rename_package_move_newClassVersion_newProjec
 { #category : 'tests' }
 RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 
-	| specUrlString projectTools rowanProject gitRootPath projectName projectDefinition spec theClass |
+	| specUrlString projectTools rowanProject gitRootPath projectName projectRootPath projectSetDefinition
+		projectDefinition theClass |
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
@@ -1791,21 +1792,17 @@ RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
-	spec := specUrlString asRwUrl asSpecification.
-	projectTools clone
-		cloneSpecification: spec
-		gitRootPath: gitRootPath
-		useSsh: true
-		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
+	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath registerProject: false.
 
-	"attach a project definition to the Rowan project on disk ... not loaded and not registered"
-	projectDefinition := projectTools create createProjectFromSpecUrl: 'file:', gitRootPath pathString, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'.
+	projectRootPath := gitRootPath / projectName.
+	projectSetDefinition := self 
+		_projectDefinitionFromSpecUrl: (self _rowanSample4_loadSpecificationUrl: projectRootPath)
+		projectRootPath: projectRootPath.
 
-	projectTools read readProjectDefinition: projectDefinition.
+	projectDefinition := projectSetDefinition projectNamed: projectName.
+	projectDefinition register.
 
 	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
-
-	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: []) notNil.
 
 	projectTools load loadProjectNamed: projectName.
 
@@ -1817,7 +1814,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 { #category : 'tests' }
 RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 
-	| specUrlString projectTools rowanProject gitRootPath projectName spec theClass |
+	| specUrlString projectTools rowanProject gitRootPath projectName projectRootPath theClass |
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
@@ -1828,20 +1825,15 @@ RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 
 	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-		(gitRootPath / projectName) ensureDeleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
-	spec := specUrlString asRwUrl asSpecification.
-	projectTools clone
-		cloneSpecification: spec
-		gitRootPath: gitRootPath
-		useSsh: true
-		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
+	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath registerProject: false.
 
-	"load project into stone"
-
+"load project into stone"
+	projectRootPath := gitRootPath / projectName.
 	self 
-		_loadProjectFromSpecUrl:  'file:' , gitRootPath pathString,  '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'
-		repoRootPath: gitRootPath / projectName.
+		_loadProjectFromSpecUrl: (self _rowanSample4_loadSpecificationUrl: projectRootPath)
+		repoRootPath: projectRootPath.
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
@@ -1855,7 +1847,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_1 [
 
 	"validation for testLoadProjectFromUrl_300_1, that a non-symbolic link clone/load works"
 
-	| specUrlString projectTools rowanProject gitRootPath projectName spec theClass |
+	| specUrlString projectTools rowanProject gitRootPath projectName projectRootPath theClass |
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
@@ -1866,19 +1858,15 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_1 [
 
 	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-		(gitRootPath / projectName) ensureDeleteAll.
+	(gitRootPath / projectName) ensureDeleteAll.
 
-	spec := specUrlString asRwUrl asSpecification.
-	projectTools clone
-		cloneSpecification: spec
-		gitRootPath: gitRootPath
-		useSsh: true
-		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
+	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath registerProject: false.
 
-	"load project into stone"
-	projectTools load 
-		loadProjectFromSpecUrl: 'file:', gitRootPath pathString, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'
-		projectRootPath: gitRootPath / projectName.
+"load project into stone"
+	projectRootPath := gitRootPath / projectName.
+	self 
+		_loadProjectFromSpecUrl: (self _rowanSample4_loadSpecificationUrl: projectRootPath)
+		repoRootPath: projectRootPath.
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
