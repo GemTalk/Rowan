@@ -1880,7 +1880,8 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
 
 	"regression test for bug ... mixed symbolic link and absolute path referencing same git repository"
 
-	| specUrlString projectTools rowanProject gitRootPath projectName spec theClass commandLine symLinkName gitRootPath_symLink |
+	| specUrlString projectTools rowanProject gitRootPath projectName theClass commandLine
+		symLinkName gitRootPath_symLink repoRootPath |
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
@@ -1899,14 +1900,9 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
 	Rowan gitTools performOnServer: commandLine logging: true.
 
 "clone project to make sure that we have an existing git project"
-	spec := specUrlString asRwUrl asSpecification.
-	projectTools clone
-		cloneSpecification: spec
-		gitRootPath: gitRootPath
-		useSsh: true
-		registerProject: false. 	"does not register the project, so it is not visible in project list ... does however clone the project to local disk --- which we need"
+	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath registerProject: false.
 
-	self assert: 	(gitRootPath / projectName) exists.
+	self assert: (gitRootPath / projectName) exists.
 
 "create symbolic link..."
 	symLinkName := 'issue_300_symLink'.
@@ -1914,20 +1910,16 @@ RwRowanSample4Test >> testLoadProjectFromUrl_300_2 [
 	Rowan gitTools performOnServer: commandLine logging: true.
 
 "...and now run clone again using symbolic link" 
-	spec := specUrlString asRwUrl asSpecification.
-	self assert: spec repositoryUrl isNil.
-	projectTools clone
-		cloneSpecification: spec
-		gitRootPath: gitRootPath_symLink, '/', symLinkName
-		useSsh: true
+	self
+		_cloneProjectFromSpecUrl_300: specUrlString 
+		projectsHome: gitRootPath_symLink, '/', symLinkName 
 		registerProject: true.
 
-	self assert: spec repositoryUrl notNil.
-
-	"load project into stone"
-	projectTools load 
-		loadProjectFromSpecUrl: 'file:', gitRootPath pathString, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'
-		projectRootPath: gitRootPath_symLink, '/', symLinkName, '/', projectName, '/'.
+"load project into stone"
+	repoRootPath := gitRootPath / projectName.
+	self 
+		_loadProjectFromSpecUrl: (self _rowanSample4_loadSpecificationUrl: repoRootPath) 
+		repoRootPath: repoRootPath.
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 

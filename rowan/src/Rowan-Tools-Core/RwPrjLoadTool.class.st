@@ -66,6 +66,9 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 							packageDefinition gs_symbolDictionary: (projectDefinition symbolDictNameForPackageNamed: packageName) ] ] ].
 	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectDefinitionSet.
 	diff isEmpty
+		ifTrue: [ 
+			"provide a breakpoint location"
+			diff yourself ]
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef |
