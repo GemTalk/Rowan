@@ -32,6 +32,11 @@ RowanDictionaryService >> update [
 	dictionary := System myUserProfile symbolList objectNamed: name. 
 	dictionary keysAndValuesDo:[:className :theClass |
 		theClass isClass ifTrue:[
-			classes add: (RowanClassService minimalForClassNamed: className asString) ]].
+			| classService | 
+			classService :=  RowanClassService new name: className asString. 
+			classService versions: theClass classHistory size.
+			classService version: (theClass classHistory indexOf: theClass).
+			classes add: classService. 
+ ]].
 	RowanCommandResult addResult: self
 ]
