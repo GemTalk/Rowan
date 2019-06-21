@@ -38,7 +38,8 @@ Class {
 		'visibleTests',
 		'isNewClass',
 		'updateAfterCommand',
-		'isInSymbolList'
+		'isInSymbolList',
+		'dictionaryName'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -148,6 +149,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
 	packageName := definedPackageName := classOrMeta rowanPackageName.
+	self setDictionary: classOrMeta.
 	projectName := classOrMeta rowanProjectName.
 	instVarNames := classOrMeta instVarNames. 
 	self setIsTestCase.
@@ -544,6 +546,7 @@ RowanClassService >> minimalRefreshFrom: theClass [
 	oop := theClass asOop.
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	packageName := definedPackageName := classOrMeta rowanPackageName.
+	self setDictionary: classOrMeta.
 	projectName := classOrMeta rowanProjectName.
 	instVarNames := classOrMeta instVarNames. 
 	template := self classCreationTemplate.
@@ -908,6 +911,15 @@ RowanClassService >> setComment [
 							ifTrue: [comment := description detailsAboutClass]]].
 	comment isNil ifTrue: [comment := String new].
 
+]
+
+{ #category : 'private' }
+RowanClassService >> setDictionary: classOrMeta [
+	| dictionaryList |
+		dictionaryList := Rowan image symbolList dictionariesAndSymbolsOf: classOrMeta.
+		dictionaryName := dictionaryList isEmpty 
+		ifTrue:[String new]
+		ifFalse:[dictionaryList first first name].
 ]
 
 { #category : 'Updating' }
