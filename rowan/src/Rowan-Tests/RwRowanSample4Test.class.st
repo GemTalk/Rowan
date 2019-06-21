@@ -1384,7 +1384,8 @@ RwRowanSample4Test >> testIssue304 [
 
 	"load a different config and group using the spec url load api ... SHA needs to change as well"
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project repoRootPath x masterBranchSHA |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project repoRootPath 
+		x masterBranchSHA |
 
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
@@ -1406,27 +1407,34 @@ RwRowanSample4Test >> testIssue304 [
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.				"no tests loaded"
 
-	projectTools load
-		loadProjectFromSpecUrl: 'file:' , repoRootPath pathString, '/rowan/specs/RowanSample4_core.ston'.
+	self 
+		_loadProjectFromSpecUrl: (self _rowanSample4_coreSpecificationUrl: repoRootPath)
+		repoRootPath: repoRootPath.
 
 	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
 
-	masterBranchSHA := '66a9de3'.
+	masterBranchSHA := 'ea371eb'.
 
-	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Load').
-	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #('core').
-	self deny: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId) = masterBranchSHA.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
+	self assert: (x := project loadedGroupNames) asArray = #('core').
+	self deny: (x := project loadedCommitId) = masterBranchSHA.
 
 	gitTool := projectTools git.
-	gitTool gitcheckoutIn: repoRootPath with: masterBranchSHA.				"now load tests group"
+	gitTool gitcheckoutIn: repoRootPath with: masterBranchSHA.
 
+"now load tests group"
+	self 
+		_loadProjectFromSpecUrl: (self _rowanSample4_loadSpecificationUrl: repoRootPath)
+		repoRootPath: repoRootPath.
+"
 	projectTools load
 		loadProjectFromSpecUrl: 'file:' , repoRootPath pathString, '/rowan/specs/RowanSample4_load.ston'.
+"
 
 	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
-	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedConfigurationNames) = #('Load').
-	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedGroupNames) = #('tests').
-	self assert: (x := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId) = masterBranchSHA.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
+	self assert: (x := project  loadedGroupNames) asArray = #('tests').
+	self assert: (x := project loadedCommitId) = masterBranchSHA.
 ]
 
 { #category : 'tests' }
@@ -1461,8 +1469,9 @@ RwRowanSample4Test >> testIssue305 [
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.				"useful spec --- no tests group"
 
-	projectTools load
-		loadProjectFromSpecUrl: 'file:' , repoRootPath pathString, '/rowan/specs/RowanSample4_core.ston'.
+	self 
+		_loadProjectFromSpecUrl:  'file:' , repoRootPath pathString, '/rowan/specs/RowanSample4_core.ston'
+		repoRootPath: repoRootPath.
 
 	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
 ]
@@ -1829,7 +1838,10 @@ RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
 
 	"load project into stone"
-	projectTools load loadProjectFromSpecUrl: 'file:', gitRootPath pathString, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'.
+
+	self 
+		_loadProjectFromSpecUrl:  'file:' , gitRootPath pathString,  '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'
+		repoRootPath: gitRootPath / projectName.
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 
@@ -1963,7 +1975,9 @@ RwRowanSample4Test >> testLoadProjectFromUrl_issue180 [
 	projectTools load loadProjectFromSpecUrl: 'file:', gitRootPath pathString, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'.
 
 	"load project into stone, again ... should be legal"
-	projectTools load loadProjectFromSpecUrl: 'file:', gitRootPath pathString, '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'.
+	self 
+		_loadProjectFromSpecUrl:  'file:' , gitRootPath pathString,  '/', projectName, '/', spec specsPath, '/RowanSample4_load.ston'
+		repoRootPath: gitRootPath / projectName
 ]
 
 { #category : 'tests' }
@@ -1997,8 +2011,9 @@ RwRowanSample4Test >> testLoadProjectNamed_221A [
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.
 
 "load core group"
-	projectTools load
-		loadProjectFromSpecUrl: 'file:' , repoRootPath pathString, '/rowan/specs/RowanSample4_core.ston'. 
+	self 
+		_loadProjectFromSpecUrl:  'file:' , repoRootPath pathString,  '/rowan/specs/RowanSample4_core.ston'
+		repoRootPath: repoRootPath.
 
 "validate"
 	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.

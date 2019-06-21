@@ -61,6 +61,18 @@ RwRowanSample4Test >> _projectDefinitionFromSpecUrl: specUrlString projectRootPa
 ]
 
 { #category : '*rowan-tests-35x' }
+RwRowanSample4Test >> _rowanSample4_coreSpecificationUrl: repositoryRootPath [
+
+	^ 'file:' , repositoryRootPath pathString, '/rowan/specs/RowanSample4_core_v2.ston'
+]
+
+{ #category : '*rowan-tests-35x' }
+RwRowanSample4Test >> _rowanSample4_loadSpecificationUrl: repositoryRootPath [
+
+	^ 'file:' , repositoryRootPath pathString, '/rowan/specs/RowanSample4_load_v2.ston'
+]
+
+{ #category : '*rowan-tests-35x' }
 RwRowanSample4Test >> _rowanSample4_208_LoadSpecificationUrl [
 
 	| rowanProject |
