@@ -1470,7 +1470,7 @@ RwRowanSample4Test >> testIssue305 [
 	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.				"useful spec --- no tests group"
 
 	self 
-		_loadProjectFromSpecUrl:  'file:' , repoRootPath pathString, '/rowan/specs/RowanSample4_core.ston'
+		_loadProjectFromSpecUrl: (self _rowanSample4_coreSpecificationUrl: repoRootPath)
 		repoRootPath: repoRootPath.
 
 	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
@@ -1548,8 +1548,8 @@ RwRowanSample4Test >> testIssue460_1 [
 	specUrlString := self _rowanSample4LoadSpecificationUrl_295.
 
 "need to add old project definition with all classes and extensions removed to the projectSet Definition to reproduce bug"
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
-	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
+	projectSetDefinition := self _projectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
+	projectDefinition := projectSetDefinition projectNamed: projectName, '_295'.
 
 	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
 
@@ -1651,8 +1651,8 @@ RwRowanSample4Test >> testIssue460_2 [
 	specUrlString := self _rowanSample4LoadSpecificationUrl_295.
 
 "need to add old project definition with all classes and extensions removed to the projectSet Definition to reproduce bug"
-	projectDefinition := Rowan projectTools create createProjectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
-	projectSetDefinition := Rowan projectTools read readProjectSetForProjectDefinition: projectDefinition.
+	projectSetDefinition := self _projectDefinitionFromSpecUrl: specUrlString projectRootPath: repoRootPath.
+	projectDefinition := projectSetDefinition projectNamed: projectName, '_295'.
 
 	self assert: (projectDefinition projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue).
 
