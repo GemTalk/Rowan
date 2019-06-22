@@ -423,7 +423,7 @@ RwRowanSample7Test >> testCreateProjectReferenceFromScratch [
 	self assert: projectReferenceDefinition projectName = projectName.
 	self assert: projectReferenceDefinition projectAlias = projectReferenceDefinition projectName.
 	self assert: projectReferenceDefinition configurationNames = #( 'Default').
-	self assert: projectReferenceDefinition groupNames = #( 'core').
+	self assert: projectReferenceDefinition groupNames asArray = #( 'core').
 	self assert: projectReferenceDefinition committish = 'master'.
 	self assert: projectReferenceDefinition committishType = 'branch'.
 	self assert: projectReferenceDefinition projectUrl = self _gitHubProjectUrl.
@@ -455,7 +455,7 @@ RwRowanSample7Test >> testCreateProjectReferenceFromUrl [
 	self assert: projectReferenceDefinition projectName = projectName.
 	self assert: projectReferenceDefinition projectAlias = projectReferenceDefinition projectName.
 	self assert: projectReferenceDefinition configurationNames = #( 'Main').
-	self assert: projectReferenceDefinition groupNames = #( 'core').
+	self assert: projectReferenceDefinition groupNames asArray = #( 'core').
 	self assert: projectReferenceDefinition defaultComponentName = 'Main'.
 	self assert: projectReferenceDefinition projectUrl = 'https://github.com/dalehenrich/RowanSample7'.
 
