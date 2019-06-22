@@ -1814,7 +1814,7 @@ RwRowanSample4Test >> testLoadProjectFromUrl_1 [
 { #category : 'tests' }
 RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 
-	| specUrlString projectTools rowanProject gitRootPath projectName projectRootPath theClass |
+	| specUrlString projectTools rowanProject gitRootPath projectName projectRootPath theClass x |
 	projectName := 'RowanSample4'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
@@ -1834,6 +1834,8 @@ RwRowanSample4Test >> testLoadProjectFromUrl_2 [
 	self 
 		_loadProjectFromSpecUrl: (self _rowanSample4_loadSpecificationUrl: projectRootPath)
 		repoRootPath: projectRootPath.
+
+	self assert: (x := (Rowan projectNamed: projectName) loadedCommitId) = 'ea371eb'.
 
 	theClass := Rowan globalNamed: 'RowanSample4'.
 

@@ -865,6 +865,22 @@ RwComponentProjectDefinition >> updateLoadedCommitId [
 	self projectRef updateLoadedCommitId
 ]
 
+{ #category : 'loading' }
+RwComponentProjectDefinition >> updateLoadedComponentInfoFor: aLoadedProject from: map [
+	"really need to update loaded components"
+
+	| theComponentNames |
+	aLoadedProject loadedGroupNames: (map at: 'loadedGroupNames').
+
+	theComponentNames := map at: 'loadedConfigurationNames'.
+	aLoadedProject components keys do: [:aComponentName |
+		(theComponentNames includes: aComponentName)
+			ifFalse: [ aLoadedProject components removeKey: aComponentName ] ].
+
+	theComponentNames do: [:configName |
+		aLoadedProject components at: configName put: (self components at: configName) copy ].
+]
+
 { #category : 'properties' }
 RwComponentProjectDefinition >> useGit [
 

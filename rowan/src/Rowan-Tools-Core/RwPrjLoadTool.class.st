@@ -66,23 +66,15 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 							packageDefinition gs_symbolDictionary: (projectDefinition symbolDictNameForPackageNamed: packageName) ] ] ].
 	diff := projectSetDefinitionToLoad compareAgainstBase_254: loadedProjectDefinitionSet.
 	diff isEmpty
-		ifTrue: [ 
-			"provide a breakpoint location"
-			diff yourself ]
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef |
-			| theProjectDef |
-			theProjectDef := (loadedProjectSet entities at: projectDef name ifAbsent: [])
-				ifNil: [ projectDef ]
-				ifNotNil: [:loadedProject | loadedProject ].
+			| theLoadedProject |
+			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
 			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
-				ifTrue: [  theProjectDef updateLoadedCommitId ].
+				ifTrue: [  theLoadedProject updateLoadedCommitId ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
-				ifNotNil: [:map |
-					theProjectDef
-						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
-						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
+				ifNotNil: [:map | projectDef updateLoadedComponentInfoFor: theLoadedProject from: map ] ].
 	^ diff
 ]
 

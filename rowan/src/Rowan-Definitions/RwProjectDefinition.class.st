@@ -416,6 +416,14 @@ RwProjectDefinition >> updateLoadedCommitId [
 	self specification imageSpec loadedCommitId: loadedCommitId
 ]
 
+{ #category : 'loading' }
+RwProjectDefinition >> updateLoadedComponentInfoFor: aLoadedProject from: map [
+
+	aLoadedProject
+		loadedConfigurationNames: (map at: 'loadedConfigurationNames');
+		loadedGroupNames: (map at: 'loadedGroupNames')
+]
+
 { #category : 'properties' }
 RwProjectDefinition >> useGit [
 
