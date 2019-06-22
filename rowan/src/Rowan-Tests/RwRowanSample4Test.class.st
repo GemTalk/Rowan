@@ -2093,6 +2093,47 @@ RwRowanSample4Test >> testLoadProjectNamed_221D [
 ]
 
 { #category : 'tests' }
+RwRowanSample4Test >> testLoadProjectNamed_493 [
+
+	"https://github.com/dalehenrich/Rowan/issues/493"
+
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName repoRootPath 
+		project audit |
+
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath registerProject: true.
+
+	repoRootPath := gitRootPath / projectName.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.
+
+"load core group"
+	self 
+		_loadProjectFromSpecUrl: (self _rowanSample4_coreSpecificationUrl: repoRootPath)
+		repoRootPath: repoRootPath.
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withConfigurations: #( 'Load' ) groupNames: #('core').
+	self assert: (audit := project audit) isEmpty.
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withConfigurations: #( 'Issue_493' ) groupNames: #().
+	self assert: (audit := project audit) isEmpty.
+]
+
+{ #category : 'tests' }
 RwRowanSample4Test >> testSampleCompoundConfiguration [
 
 	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec project x |
