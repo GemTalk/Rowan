@@ -68,6 +68,13 @@ RwLoadedProject >> asDefinition [
 		packageDefinitions: self loadedPackageDefinitions
 ]
 
+{ #category : 'actions' }
+RwLoadedProject >> audit [
+	"run audit on the receiver"
+
+	^ Rowan projectTools audit auditForProject: self
+]
+
 { #category : 'commit log' }
 RwLoadedProject >> commitLog: logLimit [
 

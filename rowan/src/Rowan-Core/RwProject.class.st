@@ -16,6 +16,13 @@ RwProject >> _specification [
 	^ self _loadedProject specification
 ]
 
+{ #category : 'actions' }
+RwProject >> audit [
+	"run audit on the receiver"
+
+	^ self _loadedProject audit
+]
+
 { #category : 'properties' }
 RwProject >> canCommit [
 
