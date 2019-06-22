@@ -92,12 +92,14 @@ RwProject >> loadedCommitId [
 
 { #category : 'properties' }
 RwProject >> loadedConfigurationNames [
+	"Answer the list of configuration names that were explicitly specified when the project was loaded"
 
 	^ self _loadedProject loadedConfigurationNames
 ]
 
 { #category : 'properties' }
 RwProject >> loadedGroupNames [
+	"Answer the list of group names that were explicitly specified when the project was loaded"
 
 	^ self _loadedProject loadedGroupNames
 ]

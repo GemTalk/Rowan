@@ -240,7 +240,7 @@ RwProjectLoadConfigurationVisitor >> visitProjectCompoundConfiguration: aProject
 { #category : 'visiting' }
 RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjectLoadConfiguration [
 
-	| seedGroupNames |
+	| seedGroupNames seeded |
 	(visitedConfigurationNames includes: aProjectLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
@@ -248,6 +248,7 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjectLoad
 
 	definedGroupNames := aProjectLoadConfiguration definedGroupNames.
 	seedGroupNames := groupNames asSet copy.
+	seeded := Set new.
 	[seedGroupNames isEmpty ]
 		whileFalse: [ 
 			seedGroupNames copy do: [:groupName |
@@ -256,7 +257,12 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjectLoad
 				seedGroupNames remove: groupName.
 				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
 				groupNames addAll: referencedGroupNames.
-				seedGroupNames addAll: referencedGroupNames ] ].
+				referencedGroupNames do: [:refGroupName |
+					(seeded includes: refGroupName)
+						ifFalse: [
+						"ensure that we seed each group only once"
+						seeded add: refGroupName.
+						seedGroupNames add: refGroupName ] ] ] ].
 
 	self _processConditionalPackageNames: aProjectLoadConfiguration.
 
@@ -265,5 +271,4 @@ RwProjectLoadConfigurationVisitor >> visitProjectLoadConfiguration: aProjectLoad
 	self configurationNames addAll: aProjectLoadConfiguration configurationNames.
 	(self _configurations: self configurationBasePath, '/' forProject: aProjectLoadConfiguration projectName)
 		do: [:config | config acceptNestedVisitor: self ].
-
 ]

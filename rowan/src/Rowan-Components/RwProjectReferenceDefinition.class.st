@@ -325,7 +325,11 @@ RwProjectReferenceDefinition >> gitRoot: aGitRootReferenceOrString [
 { #category : 'accessing' }
 RwProjectReferenceDefinition >> groupNames [
 
-	^ self properties at: 'groupNames' ifAbsent: [{ self defaultGroupName } ]
+	| gns |
+	gns := self properties at: 'groupNames' ifAbsent: [ {} ].
+	^ gns isEmpty
+		ifTrue: [ { self defaultGroupName } ]
+		ifFalse: [ gns ]
 ]
 
 { #category : 'accessing' }
