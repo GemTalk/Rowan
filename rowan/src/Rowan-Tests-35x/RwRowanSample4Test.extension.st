@@ -198,7 +198,7 @@ RwRowanSample4Test >> testIssue185_move_class_to_symbolDict_A_v20 [
 ]
 
 { #category : '*rowan-tests-35x' }
-RwRowanSample4Test >> testLoadProjectNamed_221A_v20 [
+RwRowanSample4Test >> testLoadProjectNamed_221A_v20_1 [
 
 	"https://github.com/dalehenrich/Rowan/issues/221"
 
@@ -233,6 +233,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221A_v20 [
 
 "validate"
 	project := Rowan projectNamed: projectName.
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
 	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
 	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
 	self assert: (x := project loadedGroupNames) asArray = #('core').
@@ -242,6 +243,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221A_v20 [
 		loadProjectNamed: 'RowanSample4' withGroupNames: #('tests').
 
 "validate"
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
 	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
 	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
 	self assert: (x := project loadedGroupNames) asArray = #('tests').
@@ -251,15 +253,17 @@ RwRowanSample4Test >> testLoadProjectNamed_221A_v20 [
 		loadProjectNamed: 'RowanSample4' withGroupNames: #('core').
 
 "validate"
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
 	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
 	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
 	self assert: (x := project loadedGroupNames) asArray = #('core').
 
-"load Default configuration (by default) -- tests loaded"
+"load Core configuration -- tests loaded"
 	projectTools load
 		loadProjectNamed: 'RowanSample4' withConfigurations: #( 'Core' ) groupNames: #().
 
 "validate"
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
 	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
 	self assert: (x := project loadedConfigurationNames) asArray = #( 'Core' ).
 	self assert: (x := project loadedGroupNames) asArray = #( 'core' ).
@@ -269,6 +273,7 @@ RwRowanSample4Test >> testLoadProjectNamed_221A_v20 [
 		loadProjectNamed: 'RowanSample4'.
 
 "validate"
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
 	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
 	self assert: (x := project  loadedConfigurationNames) asArray = #( 'Core' ).
 	self assert: (x := project loadedGroupNames) asArray = #( 'core' ).
@@ -278,6 +283,110 @@ RwRowanSample4Test >> testLoadProjectNamed_221A_v20 [
 		loadProjectNamed: 'RowanSample4' withConfigurations: #('Load') groupNames: #('core').
 
 "validate"
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
+	self assert: (x := project  loadedGroupNames) asArray = #('core').
+]
+
+{ #category : '*rowan-tests-35x' }
+RwRowanSample4Test >> testLoadProjectNamed_221A_v20_2 [
+
+	"https://github.com/dalehenrich/Rowan/issues/221"
+
+	"default configuration loading behavior differs between v1.2 and v2.0 ... this is the v1.2 variant"
+
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName repoRootPath x 
+		project |
+
+	projectName := 'RowanSample4'.
+	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+
+	(gitRootPath / projectName) ensureDeleteAll.
+
+	self _cloneProjectFromSpecUrl: specUrlString projectsHome: gitRootPath registerProject: true.
+
+	repoRootPath := gitRootPath / projectName.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.
+
+"load core group"
+	self 
+		_loadProjectFromSpecUrl: (self _rowanSample4_coreSpecificationUrl: repoRootPath)
+		repoRootPath: repoRootPath.
+
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
+	self assert: (x := project loadedGroupNames) asArray = #('core').
+
+"load tests group"
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withGroupNames: #('tests').
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
+	self assert: (x := project loadedGroupNames) asArray = #('tests').
+
+"load core group -- unload the tests package"
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withGroupNames: #('core').
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
+	self assert: (x := project loadedGroupNames) asArray = #('core').
+
+"load Core configuration -- tests loaded"
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withConfigurations: #( 'Core' ) groupNames: #().
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
+	self assert: (x := project loadedConfigurationNames) asArray = #( 'Core' ).
+	self assert: (x := project loadedGroupNames) asArray = #( 'core' ).
+
+"(re)load Core configuration"
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withConfigurations: #( 'Core' ) groupNames: #().
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
+	self assert: (x := project loadedConfigurationNames) asArray = #( 'Core' ).
+	self assert: (x := project loadedGroupNames) asArray = #( 'core' ).
+
+
+"(re)load project"
+	projectTools load
+		loadProjectNamed: 'RowanSample4'.
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4Test') notNil.
+	self assert: (x := project  loadedConfigurationNames) asArray = #( 'Core' ).
+	self assert: (x := project loadedGroupNames) asArray = #( 'core' ).
+
+"load Load configuraiont and core group -- unload the tests package"
+	projectTools load
+		loadProjectNamed: 'RowanSample4' withConfigurations: #('Load') groupNames: #('core').
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
 	self assert: (Rowan globalNamed: 'RowanSample4Test') isNil.
 	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
 	self assert: (x := project  loadedGroupNames) asArray = #('core').

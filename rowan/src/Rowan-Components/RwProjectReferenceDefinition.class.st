@@ -333,9 +333,9 @@ RwProjectReferenceDefinition >> groupNames [
 ]
 
 { #category : 'accessing' }
-RwProjectReferenceDefinition >> groupNames: anArray [
+RwProjectReferenceDefinition >> groupNames: aSet [
 
-	^ self properties at: 'groupNames' put: anArray
+	^ self properties at: 'groupNames' put: aSet asSet
 ]
 
 { #category : 'temporary compat' }

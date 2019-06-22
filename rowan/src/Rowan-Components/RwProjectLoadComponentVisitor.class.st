@@ -87,23 +87,13 @@ RwProjectLoadComponentVisitor >> projectNames [
 { #category : 'visiting' }
 RwProjectLoadComponentVisitor >> visitComponentLoadConfiguration: aComponentLoadConfiguration [
 
-	| seedGroupNames |
 	(visitedConfigurationNames includes: aComponentLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
 	self _visited: aComponentLoadConfiguration. 
 
 	definedGroupNames := aComponentLoadConfiguration definedGroupNames.
-	seedGroupNames := groupNames asSet copy.
-	[seedGroupNames isEmpty ]
-		whileFalse: [ 
-			seedGroupNames copy do: [:groupName |
-				| referencedGroupNames |
-				"make sure that required groups are included in group names, recursively"
-				seedGroupNames remove: groupName.
-				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
-				groupNames addAll: referencedGroupNames.
-				seedGroupNames addAll: referencedGroupNames ] ].
+	self _processGroupNames.
 
 	self _processConditionalPackageNames: aComponentLoadConfiguration.
 
