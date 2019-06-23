@@ -26661,6 +26661,14 @@ _loadedProject
 
 !		Instance methods for 'RwProject'
 
+category: 'actions'
+method: RwProject
+audit
+	"run audit on the receiver"
+
+	^ self _loadedProject audit
+%
+
 category: 'properties'
 method: RwProject
 canCommit
@@ -26746,6 +26754,7 @@ loadedCommitId
 category: 'properties'
 method: RwProject
 loadedConfigurationNames
+	"Answer the list of configuration names that were explicitly specified when the project was loaded"
 
 	^ self _loadedProject loadedConfigurationNames
 %
@@ -26753,6 +26762,7 @@ loadedConfigurationNames
 category: 'properties'
 method: RwProject
 loadedGroupNames
+	"Answer the list of group names that were explicitly specified when the project was loaded"
 
 	^ self _loadedProject loadedGroupNames
 %
@@ -37864,17 +37874,12 @@ _loadProjectSetDefinition_254: projectSetDefinitionToLoad instanceMigrator: inst
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef |
-			| theProjectDef |
-			theProjectDef := (loadedProjectSet entities at: projectDef name ifAbsent: [])
-				ifNil: [ projectDef ]
-				ifNotNil: [:loadedProject | loadedProject ].
+			| theLoadedProject |
+			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
 			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
-				ifTrue: [  theProjectDef updateLoadedCommitId ].
+				ifTrue: [  theLoadedProject updateLoadedCommitId ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
-				ifNotNil: [:map |
-					theProjectDef
-						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
-						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
+				ifNotNil: [:map | projectDef updateLoadedComponentInfoFor: theLoadedProject from: map ] ].
 	^ diff
 %
 
@@ -41031,6 +41036,15 @@ updateLoadedCommitId
 	self specification imageSpec loadedCommitId: loadedCommitId
 %
 
+category: 'loading'
+method: RwProjectDefinition
+updateLoadedComponentInfoFor: aLoadedProject from: map
+
+	aLoadedProject
+		loadedConfigurationNames: (map at: 'loadedConfigurationNames');
+		loadedGroupNames: (map at: 'loadedGroupNames')
+%
+
 category: 'properties'
 method: RwProjectDefinition
 useGit
@@ -42001,6 +42015,23 @@ updateLoadedCommitId
 	self projectRef updateLoadedCommitId
 %
 
+category: 'loading'
+method: RwComponentProjectDefinition
+updateLoadedComponentInfoFor: aLoadedProject from: map
+	"really need to update loaded components"
+
+	| theComponentNames |
+	aLoadedProject loadedGroupNames: (map at: 'loadedGroupNames').
+
+	theComponentNames := map at: 'loadedConfigurationNames'.
+	aLoadedProject components keys do: [:aComponentName |
+		(theComponentNames includes: aComponentName)
+			ifFalse: [ aLoadedProject components removeKey: aComponentName ] ].
+
+	theComponentNames do: [:configName |
+		aLoadedProject components at: configName put: (self components at: configName) copy ].
+%
+
 category: 'properties'
 method: RwComponentProjectDefinition
 useGit
@@ -42344,14 +42375,18 @@ category: 'accessing'
 method: RwProjectReferenceDefinition
 groupNames
 
-	^ self properties at: 'groupNames' ifAbsent: [{ self defaultGroupName } ]
+	| gns |
+	gns := self properties at: 'groupNames' ifAbsent: [ {} ].
+	^ gns isEmpty
+		ifTrue: [ { self defaultGroupName } ]
+		ifFalse: [ gns ]
 %
 
 category: 'accessing'
 method: RwProjectReferenceDefinition
-groupNames: anArray
+groupNames: aSet
 
-	^ self properties at: 'groupNames' put: anArray
+	^ self properties at: 'groupNames' put: aSet asSet
 %
 
 category: 'temporary compat'
@@ -51810,6 +51845,14 @@ asDefinition
 		packageDefinitions: self loadedPackageDefinitions
 %
 
+category: 'actions'
+method: RwLoadedProject
+audit
+	"run audit on the receiver"
+
+	^ Rowan projectTools audit auditForProject: self
+%
+
 category: 'commit log'
 method: RwLoadedProject
 commitLog: logLimit
@@ -52141,7 +52184,8 @@ loadedConfigurationNames: configNames
 
 	"eventually this method will be completely removed/deprecated"
 
-	configNames asArray sort = self loadedConfigurationNames asArray sort
+	| x y |
+	(x := configNames asArray sort) = (y := self loadedConfigurationNames asArray sort)
 		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
 %
 
@@ -54083,7 +54127,7 @@ initialize
 	visitedConfigurationNames := Set new.
 	configurationNames := Set new.
 	platformAttributes := #().
-	groupNames := {}.
+	groupNames := Set new.
 	configurationBasePath := ''.
 	packageMapSpecs := Dictionary new.
 %
@@ -54167,23 +54211,13 @@ category: 'visiting'
 method: RwProjectLoadConfigurationVisitor
 visitProjectLoadConfiguration: aProjectLoadConfiguration
 
-	| seedGroupNames |
 	(visitedConfigurationNames includes: aProjectLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
 	self _visited: aProjectLoadConfiguration. 
 
 	definedGroupNames := aProjectLoadConfiguration definedGroupNames.
-	seedGroupNames := groupNames asSet copy.
-	[seedGroupNames isEmpty ]
-		whileFalse: [ 
-			seedGroupNames copy do: [:groupName |
-				| referencedGroupNames |
-				"make sure that required groups are included in group names, recursively"
-				seedGroupNames remove: groupName.
-				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
-				groupNames addAll: referencedGroupNames.
-				seedGroupNames addAll: referencedGroupNames ] ].
+	self _processGroupNames.
 
 	self _processConditionalPackageNames: aProjectLoadConfiguration.
 
@@ -54285,6 +54319,29 @@ _processConditionalPackageNames: aProjectLoadConfiguration
 
 category: 'private'
 method: RwProjectLoadConfigurationVisitor
+_processGroupNames
+
+	| seedGroupNames seeded |
+	seedGroupNames := groupNames asSet copy.
+	seeded := Set new.
+	[seedGroupNames isEmpty ]
+		whileFalse: [ 
+			seedGroupNames copy do: [:groupName |
+				| referencedGroupNames |
+				"make sure that required groups are included in group names, recursively"
+				seedGroupNames remove: groupName.
+				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
+				groupNames addAll: referencedGroupNames.
+				referencedGroupNames do: [:refGroupName |
+					(seeded includes: refGroupName)
+						ifFalse: [
+						"ensure that we seed each group only once"
+						seeded add: refGroupName.
+						seedGroupNames add: refGroupName ] ] ] ].
+%
+
+category: 'private'
+method: RwProjectLoadConfigurationVisitor
 _visited: aConfiguration
 
 	visitedConfigurationNames add:  aConfiguration name.
@@ -54350,23 +54407,13 @@ category: 'visiting'
 method: RwProjectLoadComponentVisitor
 visitComponentLoadConfiguration: aComponentLoadConfiguration
 
-	| seedGroupNames |
 	(visitedConfigurationNames includes: aComponentLoadConfiguration name)
 		ifTrue: [ ^ self ].
 
 	self _visited: aComponentLoadConfiguration. 
 
 	definedGroupNames := aComponentLoadConfiguration definedGroupNames.
-	seedGroupNames := groupNames asSet copy.
-	[seedGroupNames isEmpty ]
-		whileFalse: [ 
-			seedGroupNames copy do: [:groupName |
-				| referencedGroupNames |
-				"make sure that required groups are included in group names, recursively"
-				seedGroupNames remove: groupName.
-				referencedGroupNames := definedGroupNames at: groupName ifAbsent: [ #() ].
-				groupNames addAll: referencedGroupNames.
-				seedGroupNames addAll: referencedGroupNames ] ].
+	self _processGroupNames.
 
 	self _processConditionalPackageNames: aComponentLoadConfiguration.
 
@@ -55008,7 +55055,7 @@ category: 'accessing'
 method: RwProjectSpecification
 defaultGroupNames: anArray
 
-	defaultGroupNames := anArray
+	defaultGroupNames := anArray asArray
 %
 
 category: 'exporting'
@@ -60580,7 +60627,6 @@ category: '*rowan-gemstone-components-extensions'
 method: RwComponentProjectDefinition
 defaultSymbolDictName: symDictName
 
-false ifTrue: [ 	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary" ].
 	self projectRef defaultSymbolDictName: symDictName
 %
 
@@ -60666,7 +60712,6 @@ method: RwComponentProjectDefinition
 updateGsPlatformSpecLoadedProjectInfo: projectInfo
 
 	| thePackageMapSpecs |
-false ifTrue: [ 	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"].
 	thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
 	(thePackageMapSpecs at: #defaultSymbolDictName otherwise: nil) 
 		ifNotNil: [:name | self defaultSymbolDictName: name ].
@@ -61346,7 +61391,6 @@ category: '*rowan-gemstone-definitions'
 method: RwProjectDefinition
 defaultSymbolDictName: symbolDictName
 
-	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
 	(self specification platformSpec at: 'gemstone')
 		defaultSymbolDictName: symbolDictName
 %
@@ -61404,6 +61448,13 @@ projectOwnerId: aUserId
 
 category: '*rowan-gemstone-definitions'
 method: RwProjectDefinition
+register
+
+	self specification register
+%
+
+category: '*rowan-gemstone-definitions'
+method: RwProjectDefinition
 setSymbolDictName: symbolDictName forPackageNamed: packageName
 
 	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
@@ -61441,8 +61492,6 @@ method: RwProjectDefinition
 updateGsPlatformSpecLoadedProjectInfo: projectInfo
 
 	| spec gemstoneSpec thePackageMapSpecs |
-false ifTrue: [ 	self projectDefinitionSourceProperty: nil.	"when project definition is loaded,each package needs to update it's target symbol dictionary"
-].
 	spec := self specification.
 	thePackageMapSpecs := projectInfo at:  'packageMapSpecs' .
 	gemstoneSpec := spec platformSpec at: 'gemstone'.

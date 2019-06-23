@@ -376,7 +376,8 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages_and
 
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class project audit
 		ar oldClass loadedClass symDict registry |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
@@ -421,6 +422,8 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages_and
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
@@ -453,6 +456,7 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages_and
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
+	self assert: (audit := project audit) isEmpty.
 	loadedClass := Rowan image loadedClassNamed: className.
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
@@ -481,7 +485,6 @@ RwMoveTest >> testProjectSet_move_class_with_changed_method_between_packages_and
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -598,9 +601,9 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
-	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 projectDefinition2 
-		classDefinition packageDefinition className projectSetDefinition class classExtensionDefinition
-		ar oldClass loadedClass symDict registry |
+	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1
+		projectDefinition2 classDefinition packageDefinition className projectSetDefinition class 
+		classExtensionDefinition ar oldClass loadedClass symDict registry project audit|
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Extension2'.
@@ -659,6 +662,8 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
@@ -689,6 +694,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
+	self assert: (audit := project audit) isEmpty.
 	loadedClass := Rowan image loadedClassNamed: className.
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
@@ -814,8 +820,9 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		ar oldClass loadedClass symDict registry |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class ar oldClass loadedClass symDict registry
+		project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -856,6 +863,9 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
@@ -879,6 +889,8 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 	loadedClass := Rowan image loadedClassNamed: className.
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
+"validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
@@ -904,7 +916,6 @@ RwMoveTest >> testProjectSet_move_class_with_method_between_packages_and_symbolD
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -1019,8 +1030,9 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages_and_sym
 
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		ar oldClass loadedClass symDict registry |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class ar oldClass loadedClass symDict registry
+		project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -1064,6 +1076,8 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages_and_sym
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
@@ -1096,6 +1110,7 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages_and_sym
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
+	self assert: (audit := project audit) isEmpty.
 	loadedClass := Rowan image loadedClassNamed: className.
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
@@ -1125,7 +1140,6 @@ RwMoveTest >> testProjectSet_move_class_with_new_method_between_packages_and_sym
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 2.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -1489,7 +1503,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 
 	| projectName  packageName1 packageName2  projectDefinition1 projectDefinition2 packageDefinition 
 		className1 className2 className3 className4 className5 className6 className7
-		projectSetDefinition class3 class4 class5  oldClass3 oldClass4 oldClass5 |
+		projectSetDefinition class3 class4 class5  oldClass3 oldClass4 oldClass5 project audit |
 
 	projectName := 'Issue'.
 	packageName1 := 'Issue-Core1'.
@@ -1578,6 +1592,8 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "verify"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class3 := Rowan globalNamed: className3.
 	class4 := Rowan globalNamed: className4.
 	class5 := Rowan globalNamed: className5.
@@ -1658,6 +1674,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "verify"
+	self assert: (audit := project audit) isEmpty.
 	oldClass3 := class3.
 	oldClass4 := class4.
 	oldClass5 := class5.
@@ -1671,7 +1688,6 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_between_packages_and_
 	self assert: class3 == oldClass3.
 	self assert: class4 == oldClass4.
 	self assert: class5 == oldClass5.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -1700,7 +1716,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_with_new_class_versio
 
 	| projectName  packageName1 packageName2  projectDefinition1 projectDefinition2 packageDefinition 
 		className1 className2 className3 className4 className5 className6 className7
-		projectSetDefinition class3 class4 class5  oldClass3 oldClass4 oldClass5 |
+		projectSetDefinition class3 class4 class5  oldClass3 oldClass4 oldClass5 project audit |
 
 	projectName := 'Issue'.
 	packageName1 := 'Issue-Core1'.
@@ -1789,6 +1805,8 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_with_new_class_versio
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "verify"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class3 := Rowan globalNamed: className3.
 	class4 := Rowan globalNamed: className4.
 	class5 := Rowan globalNamed: className5.
@@ -1869,6 +1887,7 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_with_new_class_versio
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "verify"
+	self assert: (audit := project audit) isEmpty.
 	oldClass3 := class3.
 	oldClass4 := class4.
 	oldClass5 := class5.
@@ -1882,7 +1901,6 @@ RwMoveTest >> testProjectSet_move_modified_class_structure_with_new_class_versio
 	self assert: class3 ~~ oldClass3.
 	self assert: class4 ~~ oldClass4.
 	self assert: class5 ~~ oldClass5.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -1971,7 +1989,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages_and_symbolD
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass ar symDict registry |
+		className projectSetDefinition class oldClass ar symDict registry project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -2002,10 +2020,14 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages_and_symbolD
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
 
+";oad"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
@@ -2024,9 +2046,12 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages_and_symbolD
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
@@ -2051,7 +2076,6 @@ RwMoveTest >> testProjectSet_move_new_class_version_between_packages_and_symbolD
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -2174,8 +2198,9 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
-	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass ar loadedClass symDict registry classExtensionDefinition |
+	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 
+		projectDefinition2 classDefinition packageDefinition className projectSetDefinition class 
+		oldClass ar loadedClass symDict registry classExtensionDefinition project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Extension2'.
@@ -2238,6 +2263,8 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
 "validation"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
@@ -2275,6 +2302,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
 "validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName3.
@@ -2420,7 +2448,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
 	| projectName  packageName1 packageName2 packageName3 packageName4 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass ar loadedClass symDict registry classExtensionDefinition |
+		className projectSetDefinition class oldClass ar loadedClass symDict registry classExtensionDefinition project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Extension2'.
@@ -2481,6 +2509,8 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
 "validation"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
@@ -2516,6 +2546,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
 "validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName3.
@@ -2639,7 +2670,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass ar loadedClass symDict registry |
+		className projectSetDefinition class oldClass ar loadedClass symDict registry project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -2676,6 +2707,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
@@ -2683,6 +2715,9 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 	loadedClass := Rowan image loadedClassNamed: className.
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
@@ -2703,12 +2738,15 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	loadedClass := Rowan image loadedClassNamed: className.
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
+"validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
@@ -2734,7 +2772,6 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_existing
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -2831,7 +2868,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass ar loadedClass symDict registry |
+		className projectSetDefinition class oldClass ar loadedClass symDict registry project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -2868,13 +2905,16 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
 
-	projectSetDefinition := RwProjectSetDefinition new.
+"load"	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	loadedClass := Rowan image loadedClassNamed: className.
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
@@ -2894,12 +2934,15 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	loadedClass := Rowan image loadedClassNamed: className.
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
+"validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
@@ -2925,7 +2968,6 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_method_between_packages
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 1.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -3035,7 +3077,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_new_method_between_pack
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class oldClass ar loadedClass symDict registry |
+		className projectSetDefinition class oldClass ar loadedClass symDict registry project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -3072,6 +3114,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_new_method_between_pack
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
@@ -3079,6 +3122,9 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_new_method_between_pack
 	loadedClass := Rowan image loadedClassNamed: className.
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #method1) rowanPackageName = packageName1.
@@ -3105,12 +3151,15 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_new_method_between_pack
 
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	loadedClass := Rowan image loadedClassNamed: className.
 	loadedClass loadedInstanceMethods includesKey: #method1.
 
+"validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
@@ -3137,7 +3186,6 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_new_method_between_pack
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 2.
-
 ]
 
 { #category : 'tests - issue 254' }
@@ -3148,7 +3196,7 @@ RwMoveTest >> testProjectSet_move_packages_between_symbolDict [
 	"initial load uses symbol dictionary _1, second load uses symbol dictionary _2"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 projectSetDefinition
-		symDict registry x |
+		symDict registry x project audit |
 	projectName := 'Issue254'.
 	packageName1 := 'Issue254-Core1'.
 	packageName2 := 'Issue254-Core2'.
@@ -3171,7 +3219,8 @@ RwMoveTest >> testProjectSet_move_packages_between_symbolDict [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
-
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
@@ -3194,6 +3243,7 @@ RwMoveTest >> testProjectSet_move_packages_between_symbolDict [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
+	self assert: (audit := project audit) isEmpty.
 	symDict := Rowan globalNamed: self _symbolDictionaryName1.
 	registry := symDict rowanSymbolDictionaryRegistry.
 
@@ -3209,7 +3259,6 @@ RwMoveTest >> testProjectSet_move_packages_between_symbolDict [
 	self assert: registry classRegistry size = 0.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests - issue 254' }

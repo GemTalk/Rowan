@@ -57,8 +57,9 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 
 	"use RwClassExtensionDefinition>>removeKey: to do final update (source changed)--- definition comparison bug (see testIssue206_move_extension_method_to_new_package_1)"
 
-	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		classExtensionDefinition packageName3 loadedPackage loadedClassExtensions x |
+	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition 
+		packageDefinition className projectSetDefinition class classExtensionDefinition packageName3 
+		loadedPackage loadedClassExtensions x audit project|
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core1'.
 	packageName2 := 'Issue185-Core2'.
@@ -155,6 +156,9 @@ RwRowanProjectIssuesTest >> testIssue185_254_move_extension_method_to_new_packag
 	Rowan projectTools load loadProjectSetDefinition_254: projectSetDefinition.
 
 	"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
+
 	self assert: class rowanPackageName = packageName1.
 	self assert: class new method1 = 1.
 	self assert: class new mover = 3.

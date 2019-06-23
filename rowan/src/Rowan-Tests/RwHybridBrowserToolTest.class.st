@@ -1147,7 +1147,7 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackage [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict [
 
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry |
+	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry project audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -1199,6 +1199,9 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict [
 		category: packageName2
 		options: #().
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	self assert: movedNormalClass == normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2.
 	self assert: movedNormalClass category= packageName2.
@@ -1218,13 +1221,12 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict [
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_class_vars [
 
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry |
+	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry project audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -1276,6 +1278,9 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 		category: packageName2
 		options: #().
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	self assert: movedNormalClass == normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2.
 	self assert: movedNormalClass category= packageName2.
@@ -1296,13 +1301,12 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_class_vars_constraints [
 
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry |
+	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry project audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -1355,6 +1359,9 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 		constraints: {{#ivar1 . Association}}
 		options: #().
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	self assert: movedNormalClass == normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2.
 	self assert: movedNormalClass category= packageName2.
@@ -1376,13 +1383,12 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_class_vars_constraints_new_class_version [
 
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry |
+	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry project audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -1437,6 +1443,9 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 		constraints: {{#ivar1 . Association}}
 		options: #().
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	self assert: movedNormalClass ~~ normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2.
 	self assert: movedNormalClass category= packageName2.
@@ -1460,7 +1469,6 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests' }

@@ -1105,7 +1105,7 @@ RwRowanProjectIssuesTest >> testIssue123_definition_based_moveExistingClassWithM
 "
 
 	| projectName packageName1 packageName2 className1 className2 projectDefinition classDefinition1 classDefinition2 packageDefinition
-		projectSetDefinition theClass1 theClass2 ivNames oldClass1 oldClass2 |
+		projectSetDefinition theClass1 theClass2 ivNames oldClass1 oldClass2 project audit |
 	projectName := 'Issue123_Project'.
 	packageName1 := 'Issue123-Core'.
 	packageName2 := 'Issue123-Extensions'.
@@ -1163,6 +1163,8 @@ RwRowanProjectIssuesTest >> testIssue123_definition_based_moveExistingClassWithM
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validation"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	theClass1 := Rowan globalNamed: className1.
 	theClass2 := Rowan globalNamed: className2.
 	self assert: theClass1 new foo = 1.
@@ -1192,6 +1194,7 @@ RwRowanProjectIssuesTest >> testIssue123_definition_based_moveExistingClassWithM
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validation"
+	self assert: (audit := project audit) isEmpty.
 	oldClass1 := theClass1.
 	oldClass2 := theClass2.
 	theClass1 := Rowan globalNamed: className1.
@@ -1207,7 +1210,6 @@ RwRowanProjectIssuesTest >> testIssue123_definition_based_moveExistingClassWithM
 	self assert: theClass2 new foo = 1.
 	self assert: theClass2 category = packageName1.
 	self assert: theClass2 rowanPackageName = packageName1.
-
 ]
 
 { #category : 'tests-issue 123' }
@@ -1787,7 +1789,7 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 	"initial load uses custom symbol dictionary, second load uses default symbol dictionary -- change category of class"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		ar oldClass x y |
+		ar oldClass x y project audit |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core'.
 	packageName2 := 'Issue185-RenamedCore'.
@@ -1819,10 +1821,14 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition_254: projectSetDefinition.
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
@@ -1840,9 +1846,12 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 	classDefinition category: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition_254: projectSetDefinition.
 
+"validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
@@ -1851,7 +1860,6 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 	self assert: (x := (ar first at: 1) name) = (y := self _symbolDictionaryName1 asSymbol).
 
 	self assert: class == oldClass.
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -1860,7 +1868,7 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 	"https://github.com/dalehenrich/Rowan/issues/185"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		ar oldClass x y |
+		ar oldClass x y project audit |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core'.
 	packageName2 := 'Issue185-RenamedCore'.
@@ -1908,10 +1916,14 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition_254: projectSetDefinition.
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
@@ -1945,9 +1957,12 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 					protocol: 'accessing'
 					source: 'method4 ^4').
 
+"load"
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition_254: projectSetDefinition.
 
+"validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
@@ -1960,7 +1975,6 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 	self assert: class new method4 = 4.
 
 	self assert: class == oldClass.
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -1972,7 +1986,7 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 		that I'm trying to resolve"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class x |
+		className projectSetDefinition class x project audit |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core'.
 	packageName2 := 'Issue185-RenamedCore'.
@@ -2010,15 +2024,21 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition_254: projectSetDefinition.
+
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
 		removePackageNamed: packageName1;
 		addPackageNamed: packageName2;
 		setSymbolDictName: nil forPackageNamed: packageName2.
+
 
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	classDefinition category: packageName2.
@@ -2032,13 +2052,15 @@ RwRowanProjectIssuesTest >> testIssue185_254_rename_package_move_class_to_symbol
 					protocol: 'accessing'
 					source: 'method3 ^5').
 
+"load"
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition_254: projectSetDefinition.
 
+"validate"
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 
 	self assert: (x := class new method3) = 5.
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -2170,7 +2192,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	"initial load uses default symbol dictionary, second load uses custom symbol dictionary"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		ar oldClass |
+		ar oldClass project audit |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core'.
 	packageName2 := 'Issue185-RenamedCore'.
@@ -2201,10 +2223,14 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
@@ -2222,9 +2248,12 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
@@ -2233,7 +2262,6 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	self assert: (ar first at: 1) name = self _symbolDictionaryName2 asSymbol.
 
 	self assert: class == oldClass.
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -2244,7 +2272,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	"initial load uses custom symbol dictionary, second load uses default symbol dictionary"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		ar oldClass x y |
+		ar oldClass x y project audit |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core'.
 	packageName2 := 'Issue185-RenamedCore'.
@@ -2276,10 +2304,14 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
@@ -2296,9 +2328,12 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	packageDefinition := projectDefinition2 packageNamed: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
@@ -2307,7 +2342,6 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	self assert: (x := (ar first at: 1) name) = (y := self _symbolDictionaryName1 asSymbol).
 
 	self assert: class == oldClass.
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -2318,7 +2352,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	"initial load uses custom symbol dictionary, second load uses default symbol dictionary -- change category of class"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		ar oldClass x y |
+		ar oldClass x y project audit |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core'.
 	packageName2 := 'Issue185-RenamedCore'.
@@ -2350,10 +2384,14 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
@@ -2371,9 +2409,12 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	classDefinition category: packageName2.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
@@ -2382,7 +2423,6 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	self assert: (x := (ar first at: 1) name) = (y := self _symbolDictionaryName1 asSymbol).
 
 	self assert: class == oldClass.
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -2391,7 +2431,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	"https://github.com/dalehenrich/Rowan/issues/185"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition className projectSetDefinition class
-		ar oldClass x y |
+		ar oldClass x y project audit |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core'.
 	packageName2 := 'Issue185-RenamedCore'.
@@ -2439,10 +2479,14 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName1.
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: class.
@@ -2476,9 +2520,12 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 					protocol: 'accessing'
 					source: 'method4 ^4').
 
+"load"
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className.
 	self assert: class rowanPackageName = packageName2.
@@ -2491,7 +2538,6 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	self assert: class new method4 = 4.
 
 	self assert: class == oldClass.
-
 ]
 
 { #category : 'tests-issue 185' }
@@ -2503,7 +2549,7 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 		that I'm trying to resolve"
 
 	| projectName  packageName1 packageName2 projectDefinition1 projectDefinition2 classDefinition packageDefinition 
-		className projectSetDefinition class x |
+		className projectSetDefinition class x project audit |
 	projectName := 'Issue185'.
 	packageName1 := 'Issue185-Core'.
 	packageName2 := 'Issue185-RenamedCore'.
@@ -2541,9 +2587,14 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 	packageDefinition := projectDefinition1 packageNamed: packageName1.
 	packageDefinition addClassDefinition: classDefinition.
 
+"load"
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition1.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectDefinition2 := (Rowan image loadedProjectNamed: projectName) asDefinition
@@ -2563,13 +2614,15 @@ RwRowanProjectIssuesTest >> testIssue185_rename_package_move_class_to_symbolDict
 					protocol: 'accessing'
 					source: 'method3 ^5').
 
+"load"
 	projectSetDefinition addDefinition: projectDefinition2.
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
+"validate"
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className.
 
 	self assert: (x := class new method3) = 5.
-
 ]
 
 { #category : 'tests-issue 198' }
@@ -3056,8 +3109,9 @@ RwRowanProjectIssuesTest >> testIssue215_move_class_and_extension_method_to_new_
 
 	"https://github.com/dalehenrich/Rowan/issues/215"
 
-	| projectName  packageName1 packageName2 packageName3 projectDefinition1 projectDefinition2 classDefinition packageDefinition className1 className2 projectSetDefinition class
-		classExtensionDefinition oldClass |
+	| projectName  packageName1 packageName2 packageName3 projectDefinition1 projectDefinition2 
+		classDefinition packageDefinition className1 className2 projectSetDefinition class
+		classExtensionDefinition oldClass project audit |
 	projectName := 'Issue215'.
 	packageName1 := 'Issue215-Core1'.
 	packageName2 := 'Issue215-Tools'.
@@ -3122,6 +3176,8 @@ RwRowanProjectIssuesTest >> testIssue215_move_class_and_extension_method_to_new_
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	class := Rowan globalNamed: className1.
 	self assert: class rowanPackageName = packageName1.
 	self assert: (class compiledMethodAt: #mover) rowanPackageName = packageName2.
@@ -3155,6 +3211,7 @@ RwRowanProjectIssuesTest >> testIssue215_move_class_and_extension_method_to_new_
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 	"validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := class.
 	class := Rowan globalNamed: className1.
 	self assert: class == oldClass.
@@ -5180,8 +5237,8 @@ RwRowanProjectIssuesTest >> testIssue310 [
 
 		"unpackaged subclasses of a packaged class are to be ignored when a new version of the packaged class is created"
 
-       | projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 
-               projectSetDefinition baseClass oldClass |
+       | projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition 
+			className1 projectSetDefinition baseClass oldClass project audit |
 
        projectName := 'HR9880'.
        packageName := 'HR9880-Core'.
@@ -5243,6 +5300,8 @@ RwRowanProjectIssuesTest >> testIssue310 [
 
 "validate"
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
        baseClass := Rowan globalNamed: className1.
        1 to: 10 do: [:index | 
                | theClass |
@@ -5267,6 +5326,7 @@ RwRowanProjectIssuesTest >> testIssue310 [
        options: #().
 
 "validate"
+	self assert: (audit := project audit) isEmpty.
        oldClass := baseClass.
        baseClass := Rowan globalNamed: className1.
        self assert: oldClass ~~ baseClass.
@@ -5277,7 +5337,6 @@ RwRowanProjectIssuesTest >> testIssue310 [
 
                self assert: theClass superclass == oldClass.
                self assert: (theClass compiledMethodAt: #foo) rowanPackageName = Rowan unpackagedName ].
-
 ]
 
 { #category : 'tests-issue 313' }
@@ -5287,8 +5346,8 @@ RwRowanProjectIssuesTest >> testIssue313_1 [
 
 	"initial test case for HR9880 - testing definition based load"
 
-	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 
-		projectSetDefinition baseClass oldClass |
+	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition 
+		className1 projectSetDefinition baseClass oldClass project audit |
 
 	projectName := 'HR9880'.
 	packageName := 'HR9880-Core'.
@@ -5350,6 +5409,8 @@ RwRowanProjectIssuesTest >> testIssue313_1 [
 
 "validate"
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	baseClass := Rowan globalNamed: className1.
 	1 to: 10 do: [:index | 
 		| theClass |
@@ -5371,6 +5432,7 @@ RwRowanProjectIssuesTest >> testIssue313_1 [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := baseClass.
 	baseClass := Rowan globalNamed: className1.
 	self assert: oldClass ~~ baseClass.
@@ -5381,7 +5443,6 @@ RwRowanProjectIssuesTest >> testIssue313_1 [
 
 		self assert: theClass superclass == baseClass.
 		self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName ].
-
 ]
 
 { #category : 'tests-issue 313' }
@@ -5393,8 +5454,8 @@ RwRowanProjectIssuesTest >> testIssue313_2 [
 
 	"change superclass to TestCase to create new version ... instead of inst var addition"
 
-	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition className1 
-		projectSetDefinition baseClass oldClass |
+	| projectName  packageName projectDefinition classDefinition1 classDefinition packageDefinition 
+		className1 projectSetDefinition baseClass oldClass project audit |
 
 	projectName := 'HR9880'.
 	packageName := 'HR9880-Core'.
@@ -5456,6 +5517,8 @@ RwRowanProjectIssuesTest >> testIssue313_2 [
 
 "validate"
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	baseClass := Rowan globalNamed: className1.
 	1 to: 10 do: [:index | 
 		| theClass |
@@ -5477,6 +5540,7 @@ RwRowanProjectIssuesTest >> testIssue313_2 [
 	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
 
 "validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := baseClass.
 	baseClass := Rowan globalNamed: className1.
 	self assert: oldClass ~~ baseClass.
@@ -5487,7 +5551,6 @@ RwRowanProjectIssuesTest >> testIssue313_2 [
 
 		self assert: theClass superclass == baseClass.
 		self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName ].
-
 ]
 
 { #category : 'tests-issue 313' }
@@ -5602,7 +5665,7 @@ RwRowanProjectIssuesTest >> testIssue313_4 [
 
 	| projectName  packageName1 packageName2 projectDefinition classDefinition1 classDefinition 
 		packageDefinition1 packageDefinition2 className1 projectSetDefinition baseClass oldClass 
-		classExtensionDefinition |
+		classExtensionDefinition project audit |
 
 	projectName := 'HR9880'.
 	packageName1 := 'HR9880-Core'.
@@ -5671,6 +5734,8 @@ RwRowanProjectIssuesTest >> testIssue313_4 [
 
 "validate"
 
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	baseClass := Rowan globalNamed: className1.
 	1 to: 10 do: [:index | 
 		| theClass |
@@ -5691,6 +5756,7 @@ RwRowanProjectIssuesTest >> testIssue313_4 [
 	options: #().
 
 "validate"
+	self assert: (audit := project audit) isEmpty.
 	oldClass := baseClass.
 	baseClass := Rowan globalNamed: className1.
 	self assert: oldClass ~~ baseClass.
