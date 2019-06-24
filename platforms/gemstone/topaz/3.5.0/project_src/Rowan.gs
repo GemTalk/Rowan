@@ -34608,7 +34608,7 @@ _auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior
 			ifFalse: [ res  add: (RwAuditDetail for: aLoadedClass message: 'PoolDictionaries changed in compiled class v loaded class')].
 	(aLoadedClass classComment isEquivalent: aBehavior rwComment ) 
 			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Comment has changed in compiled class v loaded class')].
-	(aLoadedClass classCategory = aBehavior category ) 
+	(aLoadedClass classCategory = (aBehavior _classCategory ifNil: ['']) ) 
 			ifFalse: [res  add: (RwAuditDetail for: aLoadedClass message: 'Class category has changed in compiled class v loaded class')].
 	(aDict := System myUserProfile resolveSymbol: aLoadedClass classSymbolDictionaryName asSymbol ) 
 			ifNil: [res  add: (RwAuditDetail for: aLoadedClass message: ('Unable to find SymbolDictionary ' , aLoadedClass classSymbolDictionaryName))] 
@@ -50439,7 +50439,7 @@ category: 'accessing'
 method: RwLoadedClass
 classCategory
 
-	^self propertyAt: 'category'
+	^self propertyAt: 'category' ifAbsent: [ '' ]
 %
 
 category: 'accessing'

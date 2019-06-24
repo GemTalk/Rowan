@@ -650,7 +650,7 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 		addInstanceMethodDefinition:
 				(RwMethodDefinition
 						newForSelector: #ext1
-						protocol: 'extension'
+						protocol: '*', packageName2 asLowercase
 						source: 'ext1 ^ 1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
@@ -687,6 +687,8 @@ RwMoveTest >> testProjectSet_move_class_with_extension_method_between_packages_a
 	packageDefinition addClassDefinition: classDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
+	(classExtensionDefinition instanceMethodDefinitions at: #ext1)
+		protocol: '*', packageName4 asLowercase.
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 	projectSetDefinition addDefinition: projectDefinition2.
@@ -2248,7 +2250,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 		addInstanceMethodDefinition:
 				(RwMethodDefinition
 						newForSelector: #ext1
-						protocol: 'extension'
+						protocol: '*', packageName2 asLowercase
 						source: 'ext1 ^ 1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
@@ -2292,6 +2294,8 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	packageDefinition addClassDefinition: classDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
+	(classExtensionDefinition instanceMethodDefinitions at: #ext1)
+		protocol: '*', packageName4 asLowercase.
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 "load"
@@ -2494,7 +2498,7 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 		addInstanceMethodDefinition:
 				(RwMethodDefinition
 						newForSelector: #ext1
-						protocol: 'extension'
+						protocol: '*', packageName2 asLowercase
 						source: 'ext1 ^ 1').
 
 	packageDefinition := projectDefinition1 packageNamed: packageName2.
@@ -2536,6 +2540,8 @@ RwMoveTest >> testProjectSet_move_new_class_version_with_extension_method_betwee
 	packageDefinition addClassDefinition: classDefinition.
 
 	packageDefinition := projectDefinition2 packageNamed: packageName4.
+	(classExtensionDefinition instanceMethodDefinitions at: #ext1)
+		protocol: '*', packageName4 asLowercase.
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
 "load"

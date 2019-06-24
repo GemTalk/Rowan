@@ -25,8 +25,7 @@ RwLoadedClass >> asDefinition [
 { #category : 'accessing' }
 RwLoadedClass >> classCategory [
 
-	^self propertyAt: 'category'
-
+	^self propertyAt: 'category' ifAbsent: [ '' ]
 ]
 
 { #category : 'accessing' }
