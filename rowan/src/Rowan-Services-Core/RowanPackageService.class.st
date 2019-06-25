@@ -50,11 +50,24 @@ RowanPackageService >> changes [
 
 ]
 
+{ #category : 'other' }
+RowanPackageService >> classes: collection [
+
+	classes := collection
+]
+
 { #category : 'client commands' }
 RowanPackageService >> classHierarchy [
-	| superclassChains levels services hierarchies theClasses toExpand |
+	| theClasses |
 	self update. 
 	theClasses := classes collect:[:classService | classService theClass].
+	hierarchyServices := self classHierarchy: theClasses. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'private' }
+RowanPackageService >> classHierarchy: theClasses [
+	| superclassChains levels services hierarchies toExpand |
 	superclassChains := self superclassChainsFor: theClasses. 
 	hierarchies := self extendHierarchies: superclassChains. 
 	levels := self hierarchiesByLevel: hierarchies.
@@ -64,7 +77,7 @@ RowanPackageService >> classHierarchy [
 	hierarchyServices := services reject:[:array | array isEmpty].
 	hierarchyServices copy keysAndValuesDo:[:key :value | 
 		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
-	RowanCommandResult addResult: self.
+	^hierarchyServices
 ]
 
 { #category : 'client commands' }

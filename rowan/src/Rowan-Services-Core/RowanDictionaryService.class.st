@@ -3,10 +3,22 @@ Class {
 	#superclass : 'RowanService',
 	#instVars : [
 		'name',
-		'classes'
+		'classes',
+		'hierarchyServices'
 	],
 	#category : 'Rowan-Services-Core'
 }
+
+{ #category : 'other' }
+RowanDictionaryService >> classHierarchy [
+	| theClasses |
+	self update. 
+	theClasses := classes collect:[:classService | classService theClass].
+	"reuse behavior in package service for now" 
+	hierarchyServices := (RowanPackageService new classes: classes) classHierarchy: theClasses. 
+	(name isKindOf: String) ifFalse:[self halt]. 
+	RowanCommandResult addResult: self.
+]
 
 { #category : 'accessing' }
 RowanDictionaryService >> name [
@@ -38,5 +50,6 @@ RowanDictionaryService >> update [
 			classService version: (theClass classHistory indexOf: theClass).
 			classes add: classService. 
  ]].
+(name isKindOf: String) ifFalse:[self halt]. 
 	RowanCommandResult addResult: self
 ]
