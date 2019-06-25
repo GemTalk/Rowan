@@ -16,7 +16,6 @@ RowanDictionaryService >> classHierarchy [
 	theClasses := classes collect:[:classService | classService theClass].
 	"reuse behavior in package service for now" 
 	hierarchyServices := (RowanPackageService new classes: classes) classHierarchy: theClasses. 
-	(name isKindOf: String) ifFalse:[self halt]. 
 	RowanCommandResult addResult: self.
 ]
 
@@ -50,6 +49,5 @@ RowanDictionaryService >> update [
 			classService version: (theClass classHistory indexOf: theClass).
 			classes add: classService. 
  ]].
-(name isKindOf: String) ifFalse:[self halt]. 
 	RowanCommandResult addResult: self
 ]
