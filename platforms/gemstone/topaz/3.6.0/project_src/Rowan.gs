@@ -37641,7 +37641,21 @@ category: 'load project definitions'
 method: RwPrjLoadTool
 loadComponentProjectDefinition: projectDefinition
 
-	^ self loadProjectDefinition: projectDefinition platformConfigurationAttributes: Rowan platformConfigurationAttributes
+	^ self loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: Rowan platformConfigurationAttributes
+%
+
+category: 'load project definitions'
+method: RwPrjLoadTool
+loadComponentProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes
+	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+
+	| projectSetDefinition |
+	projectSetDefinition := Rowan projectTools read
+			readProjectSetForComponentProjectDefinition: projectDefinition
+			withConfigurations: projectDefinition loadedConfigurationNames
+			groupNames: projectDefinition loadedGroupNames 
+			platformConfigurationAttributes: platformConfigurationAttributes.
+	^ self loadProjectSetDefinition: projectSetDefinition
 %
 
 category: 'load project definitions'
@@ -37650,32 +37664,6 @@ loadProjectDefinition: projectDefinition
 	| projectSetDefinition |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
-	^ self loadProjectSetDefinition: projectSetDefinition
-%
-
-category: 'load project definitions'
-method: RwPrjLoadTool
-loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes
-	"read the configurations for <projectDefinition> to develop the list of dependent projects"
-
-	| visitor projectSetDefinition |
-	visitor := Rowan projectTools read
-			readConfigurationsForProjectComponentDefinition: projectDefinition
-			withConfigurations: projectDefinition loadedConfigurationNames
-			groupNames: projectDefinition loadedGroupNames 
-			platformConfigurationAttributes: platformConfigurationAttributes
-			forLoad: true.
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition.	"incoming projectDefinition _is_ transformed by the read ... the name can change ... 
-																				wait until after the read to add to projectSetDefinition"
-	visitor projectLoadSpecs do: [:loadSpec |
-		| dependentProjectDefinition |
-		dependentProjectDefinition := loadSpec asDefinition.
-		dependentProjectDefinition clone.
-		dependentProjectDefinition read do: [:readProjectDef |
-			(projectSetDefinition projectNames includes: readProjectDef name)
-				ifTrue: [ self error: 'duplicate dependent projects encountered ', readProjectDef name printString]
-				ifFalse: [ projectSetDefinition addDefinition: readProjectDef ] ] ].
 	^ self loadProjectSetDefinition: projectSetDefinition
 %
 
@@ -38179,7 +38167,11 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 		pcd := nextDefArray at: 1. 
 		cn := nextDefArray at: 2.
 		gn := nextDefArray at: 3.
-		visitor := self readConfigurationsForProjectComponentDefinition: pcd withConfigurations: cn groupNames: gn platformConfigurationAttributes: platformConfigurationAttributes.
+		visitor := self 
+			readConfigurationsForProjectComponentDefinition: pcd 
+				withConfigurations: cn 
+				groupNames: gn 
+				platformConfigurationAttributes: platformConfigurationAttributes.
 		pcd projectDefinitionSourceProperty: RwLoadedProject _projectDiskDefinitionSourceValue.
 		visitor visitedComponents keysAndValuesDo: [:cName :cmp | pcd components at: cName put: cmp ].
 		projectVisitedQueue addLast: { visitor . nextDefArray  }.
