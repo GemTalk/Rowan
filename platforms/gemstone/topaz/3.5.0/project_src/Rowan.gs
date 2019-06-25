@@ -31629,6 +31629,21 @@ projectNames: anArray
 	projectNames := anArray
 %
 
+category: 'private'
+method: RwComponentLoadConfiguration
+_processConditionalPackageNames: aProjectLoadConfiguration
+
+	aProjectLoadConfiguration conditionalPackageMatchers keysAndValuesDo: [:platformMatchers :groupMap | 
+		(self _platformAttributeMatchIn: platformMatchers)
+			ifTrue: [
+				groupMap keysAndValuesDo: [:group :map |
+					(self groupNames includes: group)
+						ifTrue: [ 
+							self _addPackageNames: (map at: #packageNames ifAbsent: [ #() ]) for: aProjectLoadConfiguration.
+							self configurationNames addAll: (map at: #configurationNames ifAbsent: [ #() ] ).
+							self projectNames addAll: (map at: #projectNames ifAbsent: [ #() ] ) ] ] ] ].
+%
+
 ! Class implementation for 'RwProjectCompoundConfiguration'
 
 !		Instance methods for 'RwProjectCompoundConfiguration'
@@ -38171,6 +38186,8 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 		visitor projectLoadSpecs do: [:loadSpec |
 			| lsd |
 			lsd := loadSpec asDefinition.
+			lsd projectHome: pcd projectHome.
+			lsd cloneRepository.
 			projectVisitorQueue addLast: {lsd . lsd loadedConfigurationNames . lsd loadedGroupNames } ] ].
 	projectVisitedQueue do: [:visitedArray |
 		| projectName ndf theVisitor theProjectComponentDefinition theProjectSetDefinition theConfigNames

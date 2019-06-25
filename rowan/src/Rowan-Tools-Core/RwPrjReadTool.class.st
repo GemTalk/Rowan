@@ -233,6 +233,8 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 		visitor projectLoadSpecs do: [:loadSpec |
 			| lsd |
 			lsd := loadSpec asDefinition.
+			lsd projectHome: pcd projectHome.
+			lsd cloneRepository.
 			projectVisitorQueue addLast: {lsd . lsd loadedConfigurationNames . lsd loadedGroupNames } ] ].
 	projectVisitedQueue do: [:visitedArray |
 		| projectName ndf theVisitor theProjectComponentDefinition theProjectSetDefinition theConfigNames

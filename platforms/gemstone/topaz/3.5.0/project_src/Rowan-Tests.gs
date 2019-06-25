@@ -39101,7 +39101,7 @@ testIssue185_rename_package_move_classVariable
 	"issue_185_1 --> issue_185_8	:: rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
 													move NewRowanSample4 with new class variable to RowanSample4SymbolDict"
 
-	| specUrlString projectTools rowanProject gitTool gitRootPath projectName project x repoRootPath 
+	| specUrlString projectTools gitTool rowanProject gitRootPath projectName project x repoRootPath 
 		baselinePackageNames newClass ar |
 
 	projectName := 'RowanSample4'.
@@ -39336,6 +39336,69 @@ testIssue185_simple_package_rename
 	self assert: (x := newClass rowanPackageName) = 'RowanSample4-RenamedPackage'.
 
 	self deny: ((Rowan globalNamed: 'RowanSample4SymbolDict') includesKey: #'NewRowanSample4')
+%
+
+category: 'tests'
+method: RwRowanSample4Test
+testIssue200
+
+	"https://github.com/dalehenrich/Rowan/issues/200"
+
+	"load RowanSampl4 project which depends upon RowanSample3"
+
+	| specUrlString projectTools rowanProject gitRootPath project repoRootPath x
+		projectName3 projectName4 |
+
+	projectName3 := 'RowanSample3'.
+	projectName4 := 'RowanSample4'.
+	{ projectName3 . projectName4 } do: [:projectName |
+		(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
+
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+
+	(gitRootPath / projectName3) ensureDeleteAll.
+	(gitRootPath / projectName4) ensureDeleteAll.
+
+	self deny: (gitRootPath / projectName3) exists.
+	self deny: (gitRootPath / projectName4) exists.
+
+	specUrlString := self _rowanSample4_200_LoadSpecificationUrl.
+
+	(RwComponentProjectDefinition newForUrl: specUrlString)
+		projectHome: gitRootPath;
+		clone;
+		register.
+
+	project := Rowan projectNamed: projectName4.
+
+	repoRootPath := project repositoryRootPath asFileReference.
+
+	self assert: project currentBranchName = 'issue_200_0'.
+	self deny: (Rowan globalNamed: 'RowanSample5') notNil.
+	self deny: (Rowan globalNamed: 'RowanSample3') notNil.
+	self deny: (Rowan globalNamed: 'RowanSample4') notNil.
+
+"load"
+	project load.
+
+"validate"
+	self assert: (Rowan globalNamed: 'RowanSample5') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample3') notNil.
+	self assert: (Rowan globalNamed: 'RowanSample4') notNil.
+
+	project := Rowan projectNamed: projectName4.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Load').
+
+	project := Rowan projectNamed: projectName3.
+	self assert: (x := project loadedConfigurationNames) asArray = #('Default').
+
+	self assert: (gitRootPath / projectName4) exists.
+	self assert: (gitRootPath / projectName3) exists.
 %
 
 category: 'tests'
@@ -40879,6 +40942,15 @@ test_projectUrl_issue_463
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	self assert: project projectUrl = 'https://github.com/dalehenrich/RowanSample4'.
+%
+
+category: 'private'
+method: RwRowanSample4Test
+_rowanSample4_200_LoadSpecificationUrl
+
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample4_200_load.ston'
 %
 
 ! Class implementation for 'RwRowanSample7Test'
