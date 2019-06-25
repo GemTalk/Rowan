@@ -187,7 +187,7 @@ RowanBrowserService >> updateDictionaries [
 	| sorted | 
 	sorted := SortedCollection new. 
 	sorted addAll:  System myUserProfile symbolList names.
-	dictionaries := sorted collect:[:name | RowanDictionaryService new name: name].
+	dictionaries := sorted collect:[:name | RowanDictionaryService new name: name asString].
 	updateType := #dictionaryListUpdate:.
 	RowanCommandResult addResult: self
 ]

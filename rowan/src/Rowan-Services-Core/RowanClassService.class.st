@@ -919,7 +919,7 @@ RowanClassService >> setDictionary: classOrMeta [
 		dictionaryList := Rowan image symbolList dictionariesAndSymbolsOf: classOrMeta.
 		dictionaryName := dictionaryList isEmpty 
 		ifTrue:[String new]
-		ifFalse:[dictionaryList first first name].
+		ifFalse:[dictionaryList first first name asString].
 ]
 
 { #category : 'Updating' }
