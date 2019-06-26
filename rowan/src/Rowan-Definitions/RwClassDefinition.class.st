@@ -90,7 +90,7 @@ RwClassDefinition >> instVarNames: arrayOfInstanceVariableNames [
 { #category : 'accessing' }
 RwClassDefinition >> shebang [
 
-	^ self propertAt: 'shebang' ifAbsent: []
+	^ self propertyAt: 'shebang' ifAbsent: []
 ]
 
 { #category : 'accessing' }

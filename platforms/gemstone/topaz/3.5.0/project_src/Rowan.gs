@@ -33657,6 +33657,13 @@ _hasCommentOf: aClassDefinition
 
 category: 'class writing'
 method: RwModificationTonelWriterVisitor
+_hasShebangOf: aClassDefinition 
+
+	^  aClassDefinition shebang notNil
+%
+
+category: 'class writing'
+method: RwModificationTonelWriterVisitor
 _methodDefinitionOf: aMethodDefinition
 	^ self _toSTON: (self class orderedDictionaryClass new 
 		at: #category put: aMethodDefinition protocol; 
@@ -33677,6 +33684,13 @@ _selectorIsComplete: keywords in: aString
 		index = 0 ifTrue: [ ^ false ].
 		start := index + each size ].
 	^ true
+%
+
+category: 'class writing'
+method: RwModificationTonelWriterVisitor
+_shebangOf: aClassDefinition
+
+	^ aClassDefinition shebang
 %
 
 category: 'class writing'
@@ -33755,6 +33769,8 @@ _writeClassDefinition: aClassDefinition on: aStream
 	| nl |
 	nl := self _newLine.
 	
+	(self _hasShebangOf: aClassDefinition)
+		ifTrue: [ aStream << '#!' << (self _shebangOf: aClassDefinition) << nl ].
 	(self _hasCommentOf: aClassDefinition) 
 		ifTrue: [ 
 			aStream 
@@ -39516,7 +39532,7 @@ category: 'accessing'
 method: RwClassDefinition
 shebang
 
-	^ self propertAt: 'shebang' ifAbsent: []
+	^ self propertyAt: 'shebang' ifAbsent: []
 %
 
 category: 'accessing'
@@ -45416,16 +45432,6 @@ _gemStoneConstraintsFrom:	gs_constraints
 
 category: 'actions'
 method: RwGsClassAdditionSymbolDictPatch
-createAndInstallLoadedClass
-
-	self symbolDictionaryRegistry
-		createAndInstallLoadedClassForClass: newClass 
-		toPackageNamed: self packageName
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
-%
-
-category: 'actions'
-method: RwGsClassAdditionSymbolDictPatch
 createClassFor: aPatchSet
 	newClass := super createClassFor: aPatchSet.
 	symbolAssociation := aPatchSet tempAssociationFor: newClass name.
@@ -45440,11 +45446,13 @@ installClassInSystem
         SymbolDictionary in the live SymbolList.
         Create a LoadedClass for the new class, add it to the defining LoadedPackage."
 
-	self symbolDictionaryRegistry
+	| loadedClass |
+	loadedClass := self symbolDictionaryRegistry
 		addClassAssociation: symbolAssociation
 		forClass: newClass
 		toPackageNamed: self packageName
-		implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+		implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+	loadedClass updatePropertiesFromClassDefinition: self classDefinition
 %
 
 category: 'accessing'
@@ -45686,7 +45694,7 @@ category: 'installing'
 method: RwGsClassSymbolDictionaryMoveSymDictPatch
 installSymbolDictionaryPatchFor: aPatchSet
 
-	| before originalSymbolDictionary assoc newSymbolDictionary theClass registry |
+	| before originalSymbolDictionary assoc newSymbolDictionary theClass registry loadedClass |
 	theClass := Rowan globalNamed: classDefinition name.
 	before := classModification before.
 	originalSymbolDictionary := Rowan globalNamed: before gs_symbolDictionary.
@@ -45695,11 +45703,12 @@ installSymbolDictionaryPatchFor: aPatchSet
 	registry deleteClassNamedFromPackage: classDefinition name implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 	newSymbolDictionary := Rowan globalNamed: (projectDefinition symbolDictNameForPackageNamed: packageDefinition name) .
 	registry := newSymbolDictionary rowanSymbolDictionaryRegistry.
-	registry 
+	loadedClass := registry 
 		addClassAssociation: assoc 
 			forClass: theClass 
 			toPackageNamed: packageDefinition name
-			implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+			implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+	loadedClass updatePropertiesFromClassDefinition: self classDefinition
 %
 
 category: 'installing'
@@ -48900,30 +48909,6 @@ classRegistry
    ^classRegistry
 %
 
-category: 'private'
-method: RwGsSymbolDictionaryRegistry
-createAndInstallLoadedClassForClass: class toPackageNamed: packageName
-
-	"Copy the name association to the correct 
-        SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
-
-	^ self class registry_ImplementationClass createAndInstallLoadedClassForClass: class toPackageNamed: packageName instance: self
-%
-
-category: 'private'
-method: RwGsSymbolDictionaryRegistry
-createAndInstallLoadedClassForClass: class toPackageNamed: packageName implementationClass: implementationClass
-
-	"Copy the name association to the correct 
-        SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass createAndInstallLoadedClassForClass: class toPackageNamed: packageName instance: self
-%
-
 category: 'package - patch api'
 method: RwGsSymbolDictionaryRegistry
 createLoadedPackageFromDefinition: packageDefinition
@@ -49415,7 +49400,8 @@ addClassAssociation: assoc forClass: class toPackageNamed: packageName instance:
 				ifNotNil: [ :loadedClassExtension | 
 					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
 					"have yet to come with a test case that takes this path"
-					registryInstance error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ] ].
+					registryInstance error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ].
+			loadedClass ].
 
 	self 
 		_symbolDictionary: registryInstance _symbolDictionary 
@@ -49434,7 +49420,7 @@ addClassAssociation: assoc forClass: class toPackageNamed: packageName instance:
 		ifAbsent: [
 			assoc value: class.
 			registryInstance _symbolDictionary add: assoc].
-	^ registryInstance
+	^ loadedClass
 %
 
 category: 'private'
@@ -49694,32 +49680,6 @@ addRecompiledSessionMethodMethod: newCompiledMethod instance: registryInstance
 	registryInstance methodRegistry removeKey: oldCompiledMethod.
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod
-%
-
-category: 'private'
-classmethod: RwGsSymbolDictionaryRegistry_Implementation
-createAndInstallLoadedClassForClass: class toPackageNamed: packageName instance: registryInstance
-
-	"Copy the name association to the correct 
-        SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
-
-	| loadedPackage loadedClass |
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
-
-	registryInstance classRegistry
-		at: class classHistory
-		ifAbsent: [ 
-			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
-			loadedPackage addLoadedClass: loadedClass.
-			loadedClass updatePropertiesFromClassFor: registryInstance.
-			registryInstance classRegistry at: class classHistory put: loadedClass.
-			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
-				ifNotNil: [ :loadedClassExtension | 
-					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
-					"have yet to come with a test case that takes this path"
-					registryInstance error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ] ].
-	^ registryInstance
 %
 
 category: 'package - patch api'
@@ -50657,6 +50617,27 @@ prettyName
 	^' class ', self name
 %
 
+category: 'properties'
+method: RwLoadedClass
+updatePropertiesFromClassDefinition: classDefinition
+	"Copy all properties to the receiver's property dictionary that are not recorded in the class directly"
+
+	| recordedPropertyNames |
+	recordedPropertyNames := self _classBasedProperties asSet.
+	classDefinition properties keysAndValuesDo: [:propertyName :propertyValue |
+		(recordedPropertyNames includes: propertyName)
+			ifFalse: [ self propertyAt: propertyName put: propertyValue ] ]
+%
+
+category: 'private'
+method: RwLoadedClass
+_classBasedProperties
+
+	"Answer the list of properties that are derived from the class instance itself"
+
+	^ #()
+%
+
 ! Class implementation for 'RwGsLoadedSymbolDictClass'
 
 !		Class methods for 'RwGsLoadedSymbolDictClass'
@@ -50843,7 +50824,7 @@ method: RwGsLoadedSymbolDictClass
 updateCategoryFromClass
 
 	| propertyName oldValue newValue absentToken |
-	propertyName := 'category'.
+	propertyName := 'category'.	"needs to be listed in _classBasedProperties method"
 	absentToken := self absentToken.
 	oldValue := self propertyAt: propertyName.
 	newValue := handle _classCategory ifNil: [ absentToken ].
@@ -50864,7 +50845,7 @@ updateClassInstvarNamesFromClass
 	"Order of instvars does not matter to Cypress (at least not in GemStone) so we keep the instvar names sorted."
 
 	| propertyName oldNames newNames |
-	propertyName := 'classinstvars'.
+	propertyName := 'classinstvars'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := handle class instVarNames collect: [:each | each asString].
 	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
@@ -50880,7 +50861,7 @@ updateClassNameFromClass
 	oldName = newName
 		ifFalse: 
 			[self name: newName.
-			self propertyAt: 'name' put: name]
+			self propertyAt: 'name' put: name] 	"needs to be listed in _classBasedProperties method"
 %
 
 category: 'private-updating'
@@ -50894,7 +50875,7 @@ updateClassTypeFromClass
 	"Must be in-synch with RwGsClassCreationPatch>>basicCreateClassFor:"
 
 	| propertyName oldValue newValue |
-	propertyName := 'type'.
+	propertyName := 'type'. 	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
 	newValue := handle isBytes
 						ifTrue: [
@@ -50923,7 +50904,7 @@ updateClassVariableNamesFromClass
 	"Order of variable names does not matter to Cypress (at least not for GemStone) so we keep the names sorted."
 
 	| propertyName oldNames newNames |
-	propertyName := 'classvars'.
+	propertyName := 'classvars'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := (handle classVarNames collect: [:each | each asString])
 				asSortedCollection asArray.
@@ -50935,7 +50916,7 @@ method: RwGsLoadedSymbolDictClass
 updateCommentFromClass
 
 	| propertyName oldValue newValue absentToken |
-	propertyName := 'comment'.
+	propertyName := 'comment'.	"needs to be listed in _classBasedProperties method"
 	absentToken := self absentToken.
 	oldValue := self propertyAt: propertyName.
 	(oldValue ~~ absentToken and: [oldValue isEmpty])
@@ -50958,7 +50939,7 @@ category: 'private-updating'
 method: RwGsLoadedSymbolDictClass
 updateConstraintsFromClass
 	| propertyName oldValue newValue sortedConstraints |
-	propertyName := 'gs_constraints'.
+	propertyName := 'gs_constraints'.	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
 	sortedConstraints := handle _rwSortedConstraints.
 	(sortedConstraints isKindOf: Array ) 
@@ -50989,7 +50970,7 @@ updateInstvarNamesFromClass
 	"Order of instvars does not matter to Cypress (at least not in GemStone) so we keep the instvar names sorted."
 
 	| propertyName oldNames newNames |
-	propertyName := 'instvars'.
+	propertyName := 'instvars'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := handle instVarNames collect: [:each | each asString].
 	oldNames = newNames ifFalse: [self propertyAt: propertyName put: newNames]
@@ -51013,7 +50994,7 @@ updateOptionsFromClass
 	from the image, and the image is trusted to only have valid values."
 
 	| propertyName oldValue newValue |
-	propertyName := 'gs_options'.
+	propertyName := 'gs_options'.	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
 	newValue := (handle _rwOptionsArray collect: [:option | option asString])
 				asSortedCollection asArray.
@@ -51033,7 +51014,7 @@ updatePoolDictionaryNamesFromClass
 	"Order of pool dictionaries *does* matter in GemStone, so we keep the names in the order given in the image."
 
 	| propertyName oldNames newNames |
-	propertyName := 'pools'.
+	propertyName := 'pools'.	"needs to be listed in _classBasedProperties method"
 	oldNames := self propertyAt: propertyName.
 	newNames := (handle sharedPools collect: [ :each | each name asString ])
 		asArray.
@@ -51067,7 +51048,7 @@ category: 'private-updating'
 method: RwGsLoadedSymbolDictClass
 updateSuperclassNameFromClass
   | oldName newName |
-  oldName := self propertyAt: 'superclass'.
+  oldName := self propertyAt: 'superclass'.	"needs to be listed in _classBasedProperties method"
   newName := handle superclass
     ifNil: [ 'nil' ]
     ifNotNil: [ :superclass | superclass name asString ].
@@ -51081,9 +51062,19 @@ updateSymbolDictionaryFromClassFor: aSymbolDictionary
 
 	| newName oldName |
 	newName := aSymbolDictionary name.
-	oldName := self propertyAt: 'gs_SymbolDictionary'.
+	oldName := self propertyAt: 'gs_SymbolDictionary'.	"needs to be listed in _classBasedProperties method"
 	oldName = newName
 		ifFalse: [ self symbolDictionaryName: newName ]
+%
+
+category: 'private'
+method: RwGsLoadedSymbolDictClass
+_classBasedProperties
+
+	"Answer the list of properties that are derived from the class instance itself"
+
+	^ #(  'category' 'classinstvars'  'name' 'type' 'classvars' 'comment' 'gs_constraints' 'instvars'  'gs_options' 
+			'pools' 'superclass' 'gs_SymbolDictionary' )
 %
 
 ! Class implementation for 'RwLoadedClassExtension'

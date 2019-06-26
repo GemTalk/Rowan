@@ -375,30 +375,6 @@ RwGsSymbolDictionaryRegistry >> classRegistry [
 
 ]
 
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry >> createAndInstallLoadedClassForClass: class toPackageNamed: packageName [
-
-	"Copy the name association to the correct 
-        SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
-
-	^ self class registry_ImplementationClass createAndInstallLoadedClassForClass: class toPackageNamed: packageName instance: self
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry >> createAndInstallLoadedClassForClass: class toPackageNamed: packageName implementationClass: implementationClass [
-
-	"Copy the name association to the correct 
-        SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
-
-	"Use for calls from classes in Rowan-GemStone-Loader package"
-
-	^ implementationClass createAndInstallLoadedClassForClass: class toPackageNamed: packageName instance: self
-
-]
-
 { #category : 'package - patch api' }
 RwGsSymbolDictionaryRegistry >> createLoadedPackageFromDefinition: packageDefinition [
 

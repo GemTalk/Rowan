@@ -274,7 +274,8 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 				ifNotNil: [ :loadedClassExtension | 
 					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
 					"have yet to come with a test case that takes this path"
-					registryInstance error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ] ].
+					registryInstance error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ].
+			loadedClass ].
 
 	self 
 		_symbolDictionary: registryInstance _symbolDictionary 
@@ -293,8 +294,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 		ifAbsent: [
 			assoc value: class.
 			registryInstance _symbolDictionary add: assoc].
-	^ registryInstance
-
+	^ loadedClass
 ]
 
 { #category : 'private' }
@@ -550,32 +550,6 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addRecompiledSessionMethodM
 	registryInstance methodRegistry removeKey: oldCompiledMethod.
 	loadedMethod handle: newCompiledMethod.
 	registryInstance methodRegistry at: newCompiledMethod put: loadedMethod
-
-]
-
-{ #category : 'private' }
-RwGsSymbolDictionaryRegistry_Implementation class >> createAndInstallLoadedClassForClass: class toPackageNamed: packageName instance: registryInstance [
-
-	"Copy the name association to the correct 
-        SymbolDictionary in the live SymbolList.
-        Create a LoadedClass for the new class, add it to the defining LoadedPackage."
-
-	| loadedPackage loadedClass |
-	loadedPackage := self existingOrNewLoadedPackageNamed: packageName instance: registryInstance.
-
-	registryInstance classRegistry
-		at: class classHistory
-		ifAbsent: [ 
-			loadedClass := RwGsLoadedSymbolDictClass newForClass: class.
-			loadedPackage addLoadedClass: loadedClass.
-			loadedClass updatePropertiesFromClassFor: registryInstance.
-			registryInstance classRegistry at: class classHistory put: loadedClass.
-			(loadedPackage loadedClassExtensions at: class name ifAbsent: [  ])
-				ifNotNil: [ :loadedClassExtension | 
-					"I think we need to subsume the loadedClassExtension methods into a loadedClass ..."
-					"have yet to come with a test case that takes this path"
-					registryInstance error: 'internal error - unexpected class extenstions for a loaded class ', class name asString printString , ' that has no entry in classRegistry in package ', loadedPackage name printString, '.' ] ].
-	^ registryInstance
 
 ]
 
