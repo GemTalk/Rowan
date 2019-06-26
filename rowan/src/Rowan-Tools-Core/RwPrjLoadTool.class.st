@@ -72,7 +72,12 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 			| theLoadedProject |
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
 			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
-				ifTrue: [  theLoadedProject updateLoadedCommitId ].
+				ifTrue: [  
+					theLoadedProject 
+						updateLoadedCommitId;
+						markNotDirty.
+					theLoadedProject
+						loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
 				ifNotNil: [:map | projectDef updateLoadedComponentInfoFor: theLoadedProject from: map ] ].
 	^ diff

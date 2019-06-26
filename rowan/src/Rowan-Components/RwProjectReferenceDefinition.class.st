@@ -8,7 +8,7 @@ Class {
 RwProjectReferenceDefinition class >> newForSpecification: aRwSpecification [
 
 	^ self
-		newNamed: aRwSpecification projectName 
+		newNamed: aRwSpecification projectName
 			forSpecification: aRwSpecification 
 			projectHome: nil
 ]
@@ -34,7 +34,7 @@ RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aR
 { #category : 'instance creation' }
 RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString [
 
-	^ self
+	^ (self
 		projectName: projectName
 			configurationNames: aRwSpecification defaultConfigurationNames
 			groupNames: aRwSpecification defaultGroupNames
@@ -48,7 +48,9 @@ RwProjectReferenceDefinition class >> newNamed: projectName forSpecification: aR
 			configsPath: aRwSpecification configsPath
 			packagesPath: aRwSpecification repoPath
 			projectsPath: aRwSpecification projectsPath
-			specsPath: aRwSpecification specsPath
+			specsPath: aRwSpecification specsPath)
+				projectAlias: aRwSpecification projectAlias;
+				yourself
 ]
 
 { #category : 'instance creation' }

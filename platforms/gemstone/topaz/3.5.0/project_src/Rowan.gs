@@ -5414,7 +5414,7 @@ true.
 doit
 (RwProjectSpecification
 	subclass: 'RwComponentSpecification'
-	instVarNames: #( projectName projectsPath defaultComponentName defaultGroupName )
+	instVarNames: #( projectName projectAlias projectsPath defaultComponentName defaultGroupName )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -37880,7 +37880,12 @@ _loadProjectSetDefinition_254: projectSetDefinitionToLoad instanceMigrator: inst
 			| theLoadedProject |
 			theLoadedProject := Rowan image loadedProjectNamed: projectDef name.
 			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
-				ifTrue: [  theLoadedProject updateLoadedCommitId ].
+				ifTrue: [  
+					theLoadedProject 
+						updateLoadedCommitId;
+						markNotDirty.
+					theLoadedProject
+						loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ] ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
 				ifNotNil: [:map | projectDef updateLoadedComponentInfoFor: theLoadedProject from: map ] ].
 	^ diff
@@ -42073,7 +42078,7 @@ classmethod: RwProjectReferenceDefinition
 newForSpecification: aRwSpecification
 
 	^ self
-		newNamed: aRwSpecification projectName 
+		newNamed: aRwSpecification projectName
 			forSpecification: aRwSpecification 
 			projectHome: nil
 %
@@ -42102,7 +42107,7 @@ category: 'instance creation'
 classmethod: RwProjectReferenceDefinition
 newNamed: projectName forSpecification: aRwSpecification projectHome: projectHomeFileReferenceOrString
 
-	^ self
+	^ (self
 		projectName: projectName
 			configurationNames: aRwSpecification defaultConfigurationNames
 			groupNames: aRwSpecification defaultGroupNames
@@ -42116,7 +42121,9 @@ newNamed: projectName forSpecification: aRwSpecification projectHome: projectHom
 			configsPath: aRwSpecification configsPath
 			packagesPath: aRwSpecification repoPath
 			projectsPath: aRwSpecification projectsPath
-			specsPath: aRwSpecification specsPath
+			specsPath: aRwSpecification specsPath)
+				projectAlias: aRwSpecification projectAlias;
+				yourself
 %
 
 category: 'instance creation'
@@ -54485,9 +54492,7 @@ _projects: projectDirPath forProject: ignored
 		collect: [ :prjName | 
 			| url |
 			url := urlBase , prjName , '.ston'.
-			(RwSpecification fromUrl: url)
-				projectName: prjName;
-				yourself ]
+			RwSpecification fromUrl: url ]
 %
 
 category: 'private'
@@ -55475,6 +55480,20 @@ method: RwComponentSpecification
 defaultGroupNames
 
 	^ defaultGroupNames ifNil: [ defaultGroupNames := { self defaultGroupName } ]
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+projectAlias
+
+	^ projectAlias ifNil: [ self projectName ]
+%
+
+category: 'accessing'
+method: RwComponentSpecification
+projectAlias: aString
+
+	projectAlias := aString
 %
 
 category: 'accessing'

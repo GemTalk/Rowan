@@ -27,9 +27,7 @@ RwProjectLoadComponentVisitor >> _projects: projectDirPath forProject: ignored [
 		collect: [ :prjName | 
 			| url |
 			url := urlBase , prjName , '.ston'.
-			(RwSpecification fromUrl: url)
-				projectName: prjName;
-				yourself ]
+			RwSpecification fromUrl: url ]
 ]
 
 { #category : 'private' }

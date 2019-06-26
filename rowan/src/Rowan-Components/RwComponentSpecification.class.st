@@ -3,6 +3,7 @@ Class {
 	#superclass : 'RwProjectSpecification',
 	#instVars : [
 		'projectName',
+		'projectAlias',
 		'projectsPath',
 		'defaultComponentName',
 		'defaultGroupName'
@@ -64,6 +65,18 @@ RwComponentSpecification >> defaultGroupName: aString [
 RwComponentSpecification >> defaultGroupNames [
 
 	^ defaultGroupNames ifNil: [ defaultGroupNames := { self defaultGroupName } ]
+]
+
+{ #category : 'accessing' }
+RwComponentSpecification >> projectAlias [
+
+	^ projectAlias ifNil: [ self projectName ]
+]
+
+{ #category : 'accessing' }
+RwComponentSpecification >> projectAlias: aString [
+
+	projectAlias := aString
 ]
 
 { #category : 'accessing' }
