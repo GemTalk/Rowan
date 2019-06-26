@@ -33860,6 +33860,7 @@ newClassDefinitionFrom: anArray
 	^ currentClassDefinition
 		gs_options: (metadata at: #'gs_options' ifAbsent: [ #() ]);
 		gs_constraints: (metadata at: #'gs_constraints' ifAbsent: [ #() ]);
+		shebang: (metadata at: #'shebang' ifAbsent: [ ]);
 		yourself
 %
 
@@ -39509,6 +39510,21 @@ method: RwClassDefinition
 instVarNames: arrayOfInstanceVariableNames
 
 	^ properties at: 'instvars' put: arrayOfInstanceVariableNames
+%
+
+category: 'accessing'
+method: RwClassDefinition
+shebang
+
+	^ self propertAt: 'shebang' ifAbsent: []
+%
+
+category: 'accessing'
+method: RwClassDefinition
+shebang: aStringOrNil
+
+	aStringOrNil ifNil: [ ^ self properties removeKey: 'shebang' ifAbsent: [] ].
+	^ self propertyAt: 'shebang' put: aStringOrNil
 %
 
 category: 'accessing'
