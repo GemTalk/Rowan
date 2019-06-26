@@ -64,7 +64,7 @@ RowanProjectService >> addPackageNamed: packageName [
 
 { #category : 'initialization' }
 RowanProjectService >> basicRefresh [
-	name = Rowan unpackagedName ifTrue:[^self]. 
+	name = Rowan unpackagedName ifTrue:[RowanBrowserService new updateDictionaries. ^self]. 
 	(isLoaded := self projectIsLoaded) ifFalse:[
 		existsOnDisk := false. 
 		updateType := #removedProject:. 
