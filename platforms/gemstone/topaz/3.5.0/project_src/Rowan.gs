@@ -38144,6 +38144,9 @@ category: 'read project definitions'
 method: RwPrjReadTool
 readProjectSetForComponentProjectDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames
 
+	"read packages and project metadata into projectComponentDefinition ... return a project definition
+		set that contains projectComponentDefinition and any dependent projects"
+
 	^ self 
 		readProjectSetForComponentProjectDefinition: projectComponentDefinition 
 			withConfigurations: configNames 
@@ -38182,7 +38185,7 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 			lsd cloneRepository.
 			projectVisitorQueue addLast: {lsd . lsd loadedConfigurationNames . lsd loadedGroupNames } ] ].
 	projectVisitedQueue do: [:visitedArray |
-		| projectName ndf theVisitor theProjectComponentDefinition theProjectSetDefinition theConfigNames
+		| projectName ndf theVisitor theProjectComponentDefinition theConfigNames
 			theGroupNames thePackageNames thePackageMapSpecs |
 		theVisitor := visitedArray at: 1.
 		ndf := visitedArray at: 2.
@@ -38194,10 +38197,8 @@ readProjectSetForComponentProjectDefinition: projectComponentDefinition withConf
 		theVisitor 
 			ifNotNil: [ thePackageMapSpecs := theVisitor packageMapSpecs ]
 			ifNil: [ thePackageMapSpecs := Dictionary new ].	
-		theProjectSetDefinition := self 
-			_readProjectSetForProjectComponentDefinition: theProjectComponentDefinition 
-			packageNames: thePackageNames.
-		projectSetDefinition addProject: (theProjectSetDefinition projectNamed: projectName).
+		theProjectComponentDefinition readPackageNames: thePackageNames.
+		projectSetDefinition addProject: theProjectComponentDefinition.
 		((projectSetDefinition properties at: 'loadedProjectInfo' ifAbsentPut: [Dictionary new])
 			at: projectName ifAbsentPut: [ Dictionary new ])
 				at: 'loadedConfigurationNames' put: theConfigNames;
@@ -38238,6 +38239,9 @@ readProjectSetForProjectDefinition: projectDefinition
 category: 'read project definitions'
 method: RwPrjReadTool
 readProjectSetForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames
+
+	"read packages and project metadata into projectComponentDefinition ... return a project definition
+		set that contains projectComponentDefinition and any dependent projects"
 
 	| projectName repo spec packageNames projectSetDefinition packageMapSpecs visitor |
 	projectName := projectDefinition name.
@@ -38325,18 +38329,6 @@ _readProjectDefinition: projectDefinition packageNames: packageNames fromRepo: r
 			projectDefinition addOrUpdatePackage: packageDefinition ].
 	projectDefinition projectDefinitionSourceProperty: RwLoadedProject _projectDiskDefinitionSourceValue.
 	^ projectDefinition
-%
-
-category: 'private'
-method: RwPrjReadTool
-_readProjectSetForProjectComponentDefinition: projectComponentDefinition packageNames: packageNames
-
-	| projectSetDefinition |
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectComponentDefinition readProjectSetForPackageNames: packageNames.
-	projectSetDefinition addProject: projectComponentDefinition.
-	projectComponentDefinition projectDefinitionSourceProperty: RwLoadedProject _projectDiskDefinitionSourceValue.
-	^ projectSetDefinition
 %
 
 category: 'private'
@@ -41926,6 +41918,29 @@ read: platformConfigurationAttributes
 			platformConfigurationAttributes: platformConfigurationAttributes
 %
 
+category: 'actions'
+method: RwComponentProjectDefinition
+readPackageNames: packageNames
+
+	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
+
+	| format visitorClass |
+	packages := Dictionary new. 
+	format := self 
+		packageFormatIfAbsent: [  
+			| formatFromDisk |
+			formatFromDisk := (RwAbstractReaderWriterVisitor _repositoryPropertyDictFor: self packagesRoot)
+				at: #format ifAbsent: [ 'tonel' ].
+			self packageFormat: formatFromDisk.
+			formatFromDisk ].
+	visitorClass := format = 'tonel'
+		ifTrue: [ RwRepositoryComponentProjectTonelReaderVisitor ]
+		ifFalse: [ RwRepositoryComponentProjectFiletreeReaderVisitor ].
+	^ visitorClass new
+		packageNames: packageNames;
+		visit: self.
+%
+
 category: 'tool api'
 method: RwComponentProjectDefinition
 readProjectSet
@@ -41936,6 +41951,7 @@ readProjectSet
 category: 'actions'
 method: RwComponentProjectDefinition
 readProjectSetForPackageNames: packageNames
+
 	"drop all existing packages on the floor and replace with fresh versions of the packageNames read from disk"
 
 	| format visitorClass |

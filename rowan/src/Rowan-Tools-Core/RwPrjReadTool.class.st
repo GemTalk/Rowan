@@ -31,17 +31,6 @@ RwPrjReadTool >> _readProjectDefinition: projectDefinition packageNames: package
 ]
 
 { #category : 'private' }
-RwPrjReadTool >> _readProjectSetForProjectComponentDefinition: projectComponentDefinition packageNames: packageNames [
-
-	| projectSetDefinition |
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectComponentDefinition readProjectSetForPackageNames: packageNames.
-	projectSetDefinition addProject: projectComponentDefinition.
-	projectComponentDefinition projectDefinitionSourceProperty: RwLoadedProject _projectDiskDefinitionSourceValue.
-	^ projectSetDefinition
-]
-
-{ #category : 'private' }
 RwPrjReadTool >> _readProjectSetForProjectDefinition: projectDefinition packageNames: packageNames fromRepo: repo [
 
 	self _readProjectDefinition: projectDefinition packageNames: packageNames fromRepo: repo.
@@ -204,6 +193,9 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 { #category : 'read project definitions' }
 RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDefinition withConfigurations: configNames groupNames: groupNames [
 
+	"read packages and project metadata into projectComponentDefinition ... return a project definition
+		set that contains projectComponentDefinition and any dependent projects"
+
 	^ self 
 		readProjectSetForComponentProjectDefinition: projectComponentDefinition 
 			withConfigurations: configNames 
@@ -241,7 +233,7 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 			lsd cloneRepository.
 			projectVisitorQueue addLast: {lsd . lsd loadedConfigurationNames . lsd loadedGroupNames } ] ].
 	projectVisitedQueue do: [:visitedArray |
-		| projectName ndf theVisitor theProjectComponentDefinition theProjectSetDefinition theConfigNames
+		| projectName ndf theVisitor theProjectComponentDefinition theConfigNames
 			theGroupNames thePackageNames thePackageMapSpecs |
 		theVisitor := visitedArray at: 1.
 		ndf := visitedArray at: 2.
@@ -253,10 +245,8 @@ RwPrjReadTool >> readProjectSetForComponentProjectDefinition: projectComponentDe
 		theVisitor 
 			ifNotNil: [ thePackageMapSpecs := theVisitor packageMapSpecs ]
 			ifNil: [ thePackageMapSpecs := Dictionary new ].	
-		theProjectSetDefinition := self 
-			_readProjectSetForProjectComponentDefinition: theProjectComponentDefinition 
-			packageNames: thePackageNames.
-		projectSetDefinition addProject: (theProjectSetDefinition projectNamed: projectName).
+		theProjectComponentDefinition readPackageNames: thePackageNames.
+		projectSetDefinition addProject: theProjectComponentDefinition.
 		((projectSetDefinition properties at: 'loadedProjectInfo' ifAbsentPut: [Dictionary new])
 			at: projectName ifAbsentPut: [ Dictionary new ])
 				at: 'loadedConfigurationNames' put: theConfigNames;
@@ -297,6 +287,9 @@ RwPrjReadTool >> readProjectSetForProjectDefinition: projectDefinition [
 { #category : 'read project definitions' }
 RwPrjReadTool >> readProjectSetForProjectDefinition: projectDefinition withConfigurations: configNames groupNames: groupNames [
 
+	"read packages and project metadata into projectComponentDefinition ... return a project definition
+		set that contains projectComponentDefinition and any dependent projects"
+
 	| projectName repo spec packageNames projectSetDefinition packageMapSpecs visitor |
 	projectName := projectDefinition name.
 	spec := projectDefinition specification.
@@ -319,7 +312,6 @@ RwPrjReadTool >> readProjectSetForProjectDefinition: projectDefinition withConfi
 			at: 'loadedGroupNames' put: groupNames;
 			at: 'packageMapSpecs' put: packageMapSpecs.
 	^ projectSetDefinition
-
 ]
 
 { #category : 'read project by name' }
