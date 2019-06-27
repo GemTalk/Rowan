@@ -1048,11 +1048,8 @@ RowanClassService >> updatePackageProject [
 
 	packageService := RowanPackageService new name: packageName. 
 	packageService update. 
-	RowanCommandResult addResult: packageService.
-
 	projectService := RowanProjectService new name: projectName. 
 	projectService update.
-	RowanCommandResult addResult: projectService.
 ]
 
 { #category : 'Accessing' }
