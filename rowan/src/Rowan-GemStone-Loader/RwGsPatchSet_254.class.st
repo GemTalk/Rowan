@@ -68,6 +68,32 @@ RwGsPatchSet_254 class >> _orderBySuperclass: aClass from: toBeOrdered into: ord
 ]
 
 { #category : 'private - method initialization order' }
+RwGsPatchSet_254 class >> classPatchesInReverseHierarchyOrder: classPatches tempSymbols: tempSymbols [
+
+	"Returns acollection of the specified classPatches ordered in reverse superclass order"
+
+	| order toBeOrdered processed aClass patchMap |
+	patchMap := IdentityKeyValueDictionary new.
+	classPatches do: [:classPatch |
+		| class |
+		class := tempSymbols
+				at: classPatch className
+				ifAbsent: [ self error: 'Cannot find class to update constraints for.' ].
+		patchMap at: class put: classPatch ].
+	toBeOrdered := patchMap keys asIdentitySet.
+	order := OrderedCollection new.
+	processed := IdentitySet new.
+	[ (aClass := self _anyElementOf: toBeOrdered ifEmpty: [ nil ]) isNil ]
+		whileFalse: [ 
+			self
+				_orderBySuperclass: aClass
+				from: toBeOrdered
+				into: order
+				ignoring: processed ].
+  ^ ((order collect: [:orderedClass | patchMap at: orderedClass ifAbsent: []]) select: [:patch | patch notNil ]) reverse
+]
+
+{ #category : 'private - method initialization order' }
 RwGsPatchSet_254 class >> methodPatchesInInitializationOrder: methodPatches [
 
 	"Returns acollection of the specified methodPatches ordered in superclass order, which is sufficient for initialization order."
@@ -1301,14 +1327,16 @@ RwGsPatchSet_254 >> updateClassProperties [
 	"For classes with changes that don't require versioning, 
 	update the properties in the class and the LoadedClasses as appropriate."
 
-	(classesWithClassVariableChanges copy
+	| classPatches |
+	classPatches := classesWithClassVariableChanges copy
 		addAll: classesWithPropertyChanges;
 		addAll: classesWithConstraintChanges;
-		yourself) do: [ :each | 
+		yourself.
+	(self class classPatchesInReverseHierarchyOrder: classPatches tempSymbols: self tempSymbols) 
+		do: [ :each | 
 			(movedClassesMap at: each className ifAbsent: [])
 				ifNil: [ each installPropertiesPatchFor: self ]
 				ifNotNil: [:aClassMove | each installPropertiesPatchFor: self classMove: aClassMove ] ]
-
 ]
 
 { #category : 'private - applying' }
