@@ -1327,12 +1327,15 @@ RwGsPatchSet_254 >> updateClassProperties [
 	"For classes with changes that don't require versioning, 
 	update the properties in the class and the LoadedClasses as appropriate."
 
-	| classPatches |
-	classPatches := classesWithClassVariableChanges copy
-		addAll: classesWithPropertyChanges;
-		addAll: classesWithConstraintChanges;
+	| classPatches ts |
+	ts := self tempSymbols.
+	classPatches := OrderedCollection new.
+	classPatches 
+		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithClassVariableChanges tempSymbols: ts);
+		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithPropertyChanges tempSymbols: ts);
+		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithConstraintChanges tempSymbols: ts);
 		yourself.
-	(self class classPatchesInReverseHierarchyOrder: classPatches tempSymbols: self tempSymbols) 
+	classPatches 
 		do: [ :each | 
 			(movedClassesMap at: each className ifAbsent: [])
 				ifNil: [ each installPropertiesPatchFor: self ]
