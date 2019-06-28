@@ -47656,6 +47656,33 @@ updateProjectProperties
 
 category: 'private - method initialization order'
 classmethod: RwGsPatchSet_254
+classPatchesInReverseHierarchyOrder: classPatches tempSymbols: tempSymbols
+
+	"Returns acollection of the specified classPatches ordered in reverse superclass order"
+
+	| order toBeOrdered processed aClass patchMap |
+	patchMap := IdentityKeyValueDictionary new.
+	classPatches do: [:classPatch |
+		| class |
+		class := tempSymbols
+				at: classPatch className
+				ifAbsent: [ self error: 'Cannot find class to update constraints for.' ].
+		patchMap at: class put: classPatch ].
+	toBeOrdered := patchMap keys asIdentitySet.
+	order := OrderedCollection new.
+	processed := IdentitySet new.
+	[ (aClass := self _anyElementOf: toBeOrdered ifEmpty: [ nil ]) isNil ]
+		whileFalse: [ 
+			self
+				_orderBySuperclass: aClass
+				from: toBeOrdered
+				into: order
+				ignoring: processed ].
+  ^ ((order collect: [:orderedClass | patchMap at: orderedClass ifAbsent: []]) select: [:patch | patch notNil ]) reverse
+%
+
+category: 'private - method initialization order'
+classmethod: RwGsPatchSet_254
 methodPatchesInInitializationOrder: methodPatches
 
 	"Returns acollection of the specified methodPatches ordered in superclass order, which is sufficient for initialization order."
@@ -48811,10 +48838,16 @@ updateClassProperties
 	"For classes with changes that don't require versioning, 
 	update the properties in the class and the LoadedClasses as appropriate."
 
-	(classesWithClassVariableChanges copy
-		addAll: classesWithPropertyChanges;
-		addAll: classesWithConstraintChanges;
-		yourself) do: [ :each | 
+	| classPatches ts |
+	ts := self tempSymbols.
+	classPatches := OrderedCollection new.
+	classPatches 
+		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithClassVariableChanges tempSymbols: ts);
+		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithPropertyChanges tempSymbols: ts);
+		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithConstraintChanges tempSymbols: ts);
+		yourself.
+	classPatches 
+		do: [ :each | 
 			(movedClassesMap at: each className ifAbsent: [])
 				ifNil: [ each installPropertiesPatchFor: self ]
 				ifNotNil: [:aClassMove | each installPropertiesPatchFor: self classMove: aClassMove ] ]

@@ -31682,6 +31682,205 @@ testIssue467_new_version_class_with_subclasses_6
 	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 %
 
+category: 'tests-issue 498'
+method: RwRowanProjectIssuesTest
+testIssue498_constraint_ordering_1
+
+	"https://github.com/dalehenrich/Rowan/issues/498 -- expanded validation over https://github.com/dalehenrich/Rowan/issues/293"
+
+	"constraints should be displayed in inst var order, not alphabetical order"
+
+	"non-rowan variant of test ... _2 uses Rowan api"
+
+	| className1 className2 className3 class constraintBlock1 constraintBlock2 constraintBlock3 x
+		class1 class2 class3 |
+	className1 := 'Issue293Class1'.
+	className2 := 'Issue293Subclass2'.
+	className3 := 'Issue293Subclass3'.
+
+	{className1 . className2. className3 }
+		do: [ :className | 
+			UserGlobals removeKey: className1 asSymbol ifAbsent: [].
+			UserGlobals removeKey: className2 asSymbol  ifAbsent: [].
+			UserGlobals removeKey: className3 asSymbol  ifAbsent: [] ].
+
+	[ 
+	class1 := Object
+		subclass: className1
+		instVarNames: #( ivar2 ivar3 ivar4 ivar1)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: UserGlobals
+		constraints: { { 'ivar4' . Association }. { 'ivar3' . Association }. { 'ivar2' . Association}. { 'ivar1' . Association }. }
+		options: {}.
+
+	class2 := class1
+		subclass: className2
+		instVarNames: #( ivar7 ivar6)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: UserGlobals
+		constraints: { { 'ivar7' . Association }. { 'ivar6' . Association }. }
+		options: {}.
+
+	class3 := class2
+		subclass: className3
+		instVarNames: #( ivar8 ivar9)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		inDictionary: UserGlobals
+		constraints: { { 'ivar9' . Association }. { 'ivar8' . Association }. }
+		options: {} ] 
+			on: Deprecated 
+			do: [:ex | 
+				"ignore any Deprecation errors ... we're using the deprecated class creation on purpose"
+				ex resume ].
+
+"validate"
+	class := Rowan globalNamed: className1.
+	self assert: (class _constraintsEqual: {  { #'ivar1' . Association }.  { #'ivar2' . Association }. { #'ivar3' . Association }. { #'ivar4' . Association }.  }).
+
+	class := Rowan globalNamed: className2.
+	self assert: (class _constraintsEqual: {  { #'ivar7' . Association }.  { #'ivar6' . Association }. }).
+
+	class := Rowan globalNamed: className3.
+	self assert: (class _constraintsEqual: {  { #'ivar8' . Association }.  { #'ivar9' . Association }. }).
+
+	constraintBlock1 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar1) == Association.
+		self assert: (x := theClass _constraintOn: #ivar2) == Association.
+		self assert: (x := theClass _constraintOn: #ivar3) == Association.
+		self assert: (x := theClass _constraintOn: #ivar4) == Association ].
+	constraintBlock2 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar6) == Association.
+		self assert: (x := theClass _constraintOn: #ivar7) == Association ].
+	constraintBlock3 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar8) == Association.
+		self assert: (x := theClass _constraintOn: #ivar9) == Association ].
+
+	constraintBlock1 value: (Rowan globalNamed: className1).
+
+	constraintBlock1 value: (Rowan globalNamed: className2).
+	constraintBlock2 value: (Rowan globalNamed: className2).
+
+	constraintBlock1 value: (Rowan globalNamed: className3).
+	constraintBlock2 value: (Rowan globalNamed: className3).
+	constraintBlock3 value: (Rowan globalNamed: className3).
+%
+
+category: 'tests-issue 498'
+method: RwRowanProjectIssuesTest
+testIssue498_constraint_ordering_2
+
+	"https://github.com/dalehenrich/Rowan/issues/498 -- expanded validation over https://github.com/dalehenrich/Rowan/issues/293"
+
+	"constraints should be displayed in inst var order, not alphabetical order"
+
+	"rowan variant of test ... _1 uses non-Rowan api"
+
+	| projectName  packageName projectDefinition classDefinition packageDefinition className1 className2 
+		className3 projectSetDefinition class constraintBlock1 constraintBlock2 constraintBlock3 x |
+	projectName := 'Issue255'.
+	packageName := 'Issue255-Core'.
+	className1 := 'Issue255Class1'.
+	className2 := 'Issue255Subclass2'.
+	className3 := 'Issue255Subclass3'.
+
+	{projectName}
+		do: [ :pn | 
+			(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+				ifNotNil: [ :loadedProject | Rowan image _removeLoadedProject: loadedProject ] ].
+"create project"
+	projectDefinition := (RwProjectDefinition
+		newForGitBasedProjectNamed: projectName)
+		addPackageNamed: packageName;
+		defaultSymbolDictName: self _symbolDictionaryName1;
+		yourself.
+
+	packageDefinition := projectDefinition packageNamed: packageName.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className1
+		super: 'Object'
+		instvars: #( ivar2 ivar3 ivar4 ivar1)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { { 'ivar4' . 'Association' }. { 'ivar3' . 'Association' }. { 'ivar2' . 'Association' }. { 'ivar1' . 'Association' }. }.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className2
+		super: className1
+		instvars: #( ivar7 ivar6)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { { 'ivar7' . 'Association' }. { 'ivar6' . 'Association' }. }.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+	classDefinition := RwClassDefinition
+		newForClassNamed: className3
+		super: className2
+		instvars: #( ivar8 ivar9)
+		classinstvars: #()
+		classvars: #()
+		category: nil
+		comment: ''
+		pools: #()
+		type: 'normal'.
+	classDefinition gs_constraints: { { 'ivar9' . 'Association' }. { 'ivar8' . 'Association' }. }.
+	packageDefinition 
+		addClassDefinition: classDefinition.
+
+"load"
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	Rowan projectTools load loadProjectSetDefinition: projectSetDefinition.
+
+"validate"
+	class := Rowan globalNamed: className1.
+	self assert: (class _constraintsEqual: {  { #'ivar1' . Association }.  { #'ivar2' . Association }. { #'ivar3' . Association }. { #'ivar4' . Association }.  }).
+
+	class := Rowan globalNamed: className2.
+	self assert: (class _constraintsEqual: {  { #'ivar7' . Association }.  { #'ivar6' . Association }. }).
+
+	class := Rowan globalNamed: className3.
+	self assert: (class _constraintsEqual: {  { #'ivar8' . Association }.  { #'ivar9' . Association }. }).
+
+	constraintBlock1 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar1) == Association.
+		self assert: (x := theClass _constraintOn: #ivar2) == Association.
+		self assert: (x := theClass _constraintOn: #ivar3) == Association.
+		self assert: (x := theClass _constraintOn: #ivar4) == Association ].
+	constraintBlock2 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar6) == Association.
+		self assert: (x := theClass _constraintOn: #ivar7) == Association ].
+	constraintBlock3 := [:theClass |
+		self assert: (x := theClass _constraintOn: #ivar8) == Association.
+		self assert: (x := theClass _constraintOn: #ivar9) == Association ].
+
+	constraintBlock1 value: (Rowan globalNamed: className1).
+
+	constraintBlock1 value: (Rowan globalNamed: className2).
+	constraintBlock2 value: (Rowan globalNamed: className2).
+
+	constraintBlock1 value: (Rowan globalNamed: className3).
+	constraintBlock2 value: (Rowan globalNamed: className3).
+	constraintBlock3 value: (Rowan globalNamed: className3).
+%
+
 category: 'tests-issue 72'
 method: RwRowanProjectIssuesTest
 testIssue72_addMethod
@@ -41558,7 +41757,7 @@ testIssue284
 		instanceMigrator: RwGsInstanceMigrator noMigration.
 
 	loadedCommitId := (Rowan image loadedProjectNamed: projectName) specification imageSpec loadedCommitId.
-	self assert: loadedCommitId = '1d4ae93'
+	self assert: loadedCommitId = '8a4a450'
 %
 
 category: 'tests'
@@ -42188,6 +42387,99 @@ projectSetDefinition addProject: oldProjectDefinition.
 
 	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
 	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295_3'.
+
+	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
+%
+
+category: 'tests'
+method: RwRowanSample4Test
+testIssue490
+
+	"https://github.com/GemTalk/Rowan/issues/490"
+
+	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec project x repoRootPath 
+		baselinePackageNames newClass ar oldClass |
+
+	projectName := 'RowanSample4'.
+	{ projectName . projectName, '_295'} do: [:pn |
+		(Rowan image loadedProjectNamed: pn ifAbsent: [  ])
+			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ] ].
+
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	specUrlString := self _rowanSample4LoadSpecificationUrl.
+	projectTools := Rowan projectTools.
+
+	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
+		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+
+	projectTools clone
+		cloneSpecUrl: specUrlString
+		gitRootPath: gitRootPath
+		useSsh: true.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	repoRootPath := rowanSampleSpec repositoryRootPath.
+
+	gitTool := projectTools git.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_0'.				"starting point of test"
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	project := RwProject newNamed: projectName.
+	baselinePackageNames := #( 'RowanSample4-Core' 'RowanSample4-Extensions' 'RowanSample4-Tests' 'RowanSample4-GemStone' 
+											'RowanSample4-GemStone-Tests').
+	self
+		assert:
+			(x := project packageNames asArray sort) =  baselinePackageNames sort.
+
+	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
+	self assert: (x := rowanSampleSpec loadedGroupNames) = #('tests').
+	self assert: (x := rowanSampleSpec loadedConfigurationNames) = #('Load').
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_1'.				"New package added to the project"
+
+	self assert: (Rowan globalNamed: 'NewRowanSample4') isNil.
+
+	projectTools load
+		loadProjectNamed: projectName
+		instanceMigrator: RwGsInstanceMigrator noMigration.
+
+	self
+		assert:
+			(x := project packageNames asArray sort) =  (baselinePackageNames, #('RowanSample4-NewPackage')) sort.
+
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: newClass new foo = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (ar first at: 1) name = #'RowanSample4DictionarySymbolDict'.
+
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_295_2'.				"Rename RowanSample4-NewPackage to RowanSample4-RenamedPackage; 
+																								move new version of NewRowanSample4 to RowanSample4SymbolDict"
+
+	specUrlString := self _rowanSample4LoadSpecificationUrl_295.
+	projectTools load
+		loadProjectFromSpecUrl: specUrlString
+		projectRootPath: repoRootPath.
+
+"expose bug"
+	self assert: (((Rowan image loadedProjectNamed: 'RowanSample4')
+	loadedPackages at: 'RowanSample4-Extensions')
+		loadedClassExtensions isEmpty).
+
+	oldClass := newClass.
+	newClass := Rowan globalNamed: 'NewRowanSample4'.
+
+	self assert: oldClass ~~ newClass.
+	self assert: newClass new foo = 'foo'.
+
+	ar := Rowan image symbolList dictionariesAndSymbolsOf: newClass.
+	self assert: (x := (ar first at: 1) name) = #'RowanSample4DictionarySymbolDict_295'.
 
 	self deny: ((Rowan globalNamed: 'RowanSample4DictionarySymbolDict') includesKey: #'NewRowanSample4')
 %
