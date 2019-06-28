@@ -8887,6 +8887,7 @@ RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_1 [
 			UserGlobals removeKey: className2 asSymbol  ifAbsent: [].
 			UserGlobals removeKey: className3 asSymbol  ifAbsent: [] ].
 
+	[ 
 	class1 := Object
 		subclass: className1
 		instVarNames: #( ivar2 ivar3 ivar4 ivar1)
@@ -8915,7 +8916,11 @@ RwRowanProjectIssuesTest >> testIssue498_constraint_ordering_1 [
 		poolDictionaries: #()
 		inDictionary: UserGlobals
 		constraints: { { 'ivar9' . Association }. { 'ivar8' . Association }. }
-		options: {}.
+		options: {} ] 
+			on: Deprecated 
+			do: [:ex | 
+				"ignore any Deprecation errors ... we're using the deprecated class creation on purpose"
+				ex resume ].
 
 "validate"
 	class := Rowan globalNamed: className1.
