@@ -31,12 +31,12 @@ RwProjectLoadConfiguration {
 	#conditionalPackageMapSpecs : {
 		'gemstone' : {
 			'allusers' : {
-				#defaultSymbolDictName : 'UserGlobals',
-				#defaultUseSessionMethodsForExtensions : false
+				#defaultUseSessionMethodsForExtensions : false,
+				#defaultSymbolDictName : 'UserGlobals'
 			},
 			'SystemUser' : {
-				#defaultSymbolDictName : 'RowanKernel',
-				#defaultUseSessionMethodsForExtensions : false
+				#defaultUseSessionMethodsForExtensions : false,
+				#defaultSymbolDictName : 'RowanKernel'
 			}
 		}
 	},

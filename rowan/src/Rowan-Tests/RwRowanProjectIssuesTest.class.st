@@ -4613,7 +4613,6 @@ RwRowanProjectIssuesTest >> testIssue291_new_version_class_with_subclass_constra
 	self assert: oldClass3 ~~ class3.
 	self assert: class3 instVarNames = #(ivar4 ivar3).
 	self assert: (class3 _constraintsEqual: { { #'ivar4' . Association }. { #'ivar3' . Association }. }).
-
 ]
 
 { #category : 'tests-issue 291' }
