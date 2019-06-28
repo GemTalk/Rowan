@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'name',
 		'classes',
-		'hierarchyServices'
+		'hierarchyServices',
+		'globals'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -38,16 +39,26 @@ RowanDictionaryService >> servicePerform: symbol withArguments: collection [
 
 { #category : 'updates' }
 RowanDictionaryService >> update [ 
-	| dictionary | 
+	| dictionary sorted | 
 	classes := Array new. 
+	sorted := SortedCollection sortBlock: [:x :y | x first < y first].  
 	dictionary := System myUserProfile symbolList objectNamed: name. 
-	dictionary keysAndValuesDo:[:className :theClass |
-		theClass isClass ifTrue:[
+	dictionary keysAndValuesDo:[:key :value |
+		value isClass ifTrue:[
 			| classService | 
-			classService :=  RowanClassService new name: className asString. 
-			classService versions: theClass classHistory size.
-			classService version: (theClass classHistory indexOf: theClass).
+			classService :=  RowanClassService new name: key asString. 
+			classService versions: value classHistory size.
+			classService version: (value classHistory indexOf: value).
 			classes add: classService. 
- ]].
+		]
+		ifFalse:[
+			sorted add: (Array 	with: (name, '.', key)
+										with: value class name
+										with: value asOop
+										with: value printString
+										)
+		]
+	].
+	globals := sorted asArray. 
 	RowanCommandResult addResult: self
 ]
