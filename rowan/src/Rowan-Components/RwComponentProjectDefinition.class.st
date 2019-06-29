@@ -45,6 +45,17 @@ RwComponentProjectDefinition class >> newForUrl: specUrl [
 ]
 
 { #category : 'instance creation' }
+RwComponentProjectDefinition class >> projectName: projectName [ 
+
+	| projectRef |
+	projectRef := RwProjectReferenceDefinition new
+		projectName: projectName;
+		useGit: true;
+		yourself.
+	^ self newForProjectReference: projectRef
+]
+
+{ #category : 'instance creation' }
 RwComponentProjectDefinition class >> projectName: projectName componentNamesToLoad: componentNamesToLoad groupNamesToLoad: groupNamesToLoad defaultComponentName: defaultComponentName defaultGroupName: defaultGroupName packageFormat: packageFormat projectHome: projectHomeFileReferenceOrString specsPath: specsPath componentsPath: componentsPath packagesPath: packagesPath projectsPath: projectsPath projectUrl: projectUrl committish: commitish committishType: committishType comment: comment [
 
 	| projectRef |

@@ -94,11 +94,17 @@ RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition platformConfi
 	"read the configurations for <projectDefinition> to develop the list of dependent projects"
 
 	| projectSetDefinition |
-	projectSetDefinition := Rowan projectTools read
-			readProjectSetForComponentProjectDefinition: projectDefinition
-			withConfigurations: projectDefinition loadedConfigurationNames
-			groupNames: projectDefinition loadedGroupNames 
-			platformConfigurationAttributes: platformConfigurationAttributes.
+	projectSetDefinition := projectDefinition repositoryRoot exists
+		ifTrue: [ 
+			Rowan projectTools read
+				readProjectSetForComponentProjectDefinition: projectDefinition
+				withConfigurations: projectDefinition loadedConfigurationNames
+				groupNames: projectDefinition loadedGroupNames 
+				platformConfigurationAttributes: platformConfigurationAttributes ]
+		ifFalse: [ 
+			RwProjectSetDefinition new
+				addProject: projectDefinition;
+				yourself ].
 	^ self loadProjectSetDefinition: projectSetDefinition
 ]
 

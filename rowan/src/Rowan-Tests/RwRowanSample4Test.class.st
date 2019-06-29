@@ -2187,7 +2187,7 @@ RwRowanSample4Test >> testLoadProjectNamed_493 [
 	repoRootPath := gitRootPath / projectName.
 
 	gitTool := projectTools git.
-	gitTool gitcheckoutIn: repoRootPath with: 'issue_302'.
+	gitTool gitcheckoutIn: repoRootPath with: 'issue_493'.
 
 "load core group"
 	self 
