@@ -376,6 +376,12 @@ RwComponentProjectDefinition >> addPackagesNamed: packageNames withConditions: c
 		self addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
 ]
 
+{ #category : 'accessing' }
+RwComponentProjectDefinition >> addRawPackageNamed: packageName [
+
+	^ self addPackage: (RwPackageDefinition newNamed: packageName)
+]
+
 { #category : 'properties' }
 RwComponentProjectDefinition >> canCommit [
 

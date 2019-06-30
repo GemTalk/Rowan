@@ -34245,7 +34245,7 @@ readClassesFor: packageName packageRoot: packageRoot
 	| classFileExtensions classExtensionFileExtensions |
 	currentPackageDefinition := currentProjectDefinition 
 		packageNamed: packageName 
-		ifAbsent: [ currentProjectDefinition addPackageNamed: packageName ].
+		ifAbsent: [ currentProjectDefinition addRawPackageNamed: packageName ].
 	classExtensionFileExtensions := self classExtensionFileExtensions.
 	classFileExtensions := self classFileExtensions.
 	packageRoot files do: [:file |
@@ -41502,6 +41502,13 @@ addPackagesNamed: packageNames withConditions: conditionArray gemstoneDefaultSym
 
 	^ packageNames collect: [:packageName | 
 		self addPackageNamed: packageName withConditions: conditionArray gemstoneDefaultSymbolDictionaryForUser: aSymbolDictAssoc ]
+%
+
+category: 'accessing'
+method: RwComponentProjectDefinition
+addRawPackageNamed: packageName
+
+	^ self addPackage: (RwPackageDefinition newNamed: packageName)
 %
 
 category: 'properties'
