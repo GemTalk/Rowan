@@ -16,6 +16,15 @@ RowanQueryService >> browseClassReferences: className [
 	self returnQueryToClient.
 ]
 
+{ #category : 'queries' }
+RowanQueryService >> browseReferencesTo: symbol [
+
+	| methods |
+	methods := organizer referencesTo: symbol.
+	queryResults := self methodServicesFrom: methods first.
+	self returnQueryToClient.
+]
+
 { #category : 'private' }
 RowanQueryService >> defaultProjectLogSize [
 
