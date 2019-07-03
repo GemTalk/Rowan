@@ -62,6 +62,7 @@ RowanDictionaryService >> update [
 	classes := Array new. 
 	sorted := SortedCollection sortBlock: [:x :y | x first < y first].  
 	dictionary := System myUserProfile symbolList objectNamed: name. 
+	dictionary ifNil:[^self].
 	dictionary keysAndValuesDo:[:key :value |
 		value isClass ifTrue:[
 			| classService | 
