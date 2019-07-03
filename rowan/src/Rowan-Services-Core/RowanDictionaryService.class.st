@@ -20,6 +20,16 @@ RowanDictionaryService >> classHierarchy [
 	RowanCommandResult addResult: self.
 ]
 
+{ #category : 'client commands' }
+RowanDictionaryService >> insertAt: index [
+
+	| theDictionary |
+	theDictionary := SymbolDictionary new. 
+	theDictionary at: name asSymbol put: theDictionary. 
+	System myUserProfile insertDictionary: theDictionary at: index. 
+	RowanBrowserService new updateDictionaries.
+]
+
 { #category : 'accessing' }
 RowanDictionaryService >> name [
 	^name
