@@ -10,7 +10,7 @@ Class {
 	#category : 'Rowan-Services-Core'
 }
 
-{ #category : 'other' }
+{ #category : 'client commands' }
 RowanDictionaryService >> classHierarchy [
 	| theClasses |
 	self update. 
@@ -28,6 +28,15 @@ RowanDictionaryService >> name [
 { #category : 'accessing' }
 RowanDictionaryService >> name: object [
 	name := object
+]
+
+{ #category : 'client commands' }
+RowanDictionaryService >> removeGlobalNamed: symbol [
+	| dictionary |
+	dictionary := (System myUserProfile resolveSymbol: name asSymbol) value.
+	dictionary ifNotNil: [
+		dictionary removeKey: symbol ifAbsent:[]].
+	self update.
 ]
 
 { #category : 'perform' }
