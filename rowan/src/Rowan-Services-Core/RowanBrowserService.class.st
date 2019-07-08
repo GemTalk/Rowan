@@ -23,6 +23,7 @@ RowanBrowserService >> abortTransaction [
 
 	System abortTransaction.
 	self updateProjects.
+	self updateDictionaries. 
 	self packagesWithTests.
 	self updateType: #aborted:browser:.
 ]
@@ -126,6 +127,14 @@ RowanBrowserService >> reloadProjects: projectServices andUpdateServices: servic
 	projectNames := projectServices collect: [:projectService | projectService name]. 
 	services do:[:service | 
 		(projectNames includes: service rowanProjectName) ifTrue:[service update]].
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> removeDictionariesNamed: dictionaryNames [
+
+	dictionaryNames do:[:dictionaryName | 
+		System myUserProfile symbolList removeDictionaryNamed: dictionaryName asSymbol].
+	self updateDictionaries
 ]
 
 { #category : 'client commands' }
