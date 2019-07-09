@@ -138,12 +138,12 @@ RowanPackageService >> extendHierarchies: hierarchies [
 	| extendedHierarchies |
 	extendedHierarchies := Array new. 
 	hierarchies do:[:hierarchy |
-		| theClass |
+		| theClass subclasses |
 		theClass := hierarchy last. 
-		theClass subclasses isEmpty 
+		(subclasses := organizer subclassesOf: theClass) isEmpty 
 			ifTrue:[extendedHierarchies add: hierarchy]
 			ifFalse:[
-				theClass subclasses do:[:sub |
+				subclasses do:[:sub |
 					extendedHierarchies add: (hierarchy copy add: sub; yourself)
 				]]].
 	^extendedHierarchies
@@ -383,7 +383,7 @@ RowanPackageService >> servicePerform: symbol withArguments: collection [
 RowanPackageService >> services: services from: levels expand: toExpand [
 
 	(classes collect:[:svc | svc theClass]) do:[:aClass |
-		toExpand addAll: aClass allSuperclasses].
+		toExpand addAll: (organizer allSuperclassesOf: aClass)].
 	levels keysAndValuesDo: [:key :value |
 		| newKey service  | 
 		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
@@ -405,11 +405,12 @@ RowanPackageService >> setDefaultTemplate [
 
 { #category : 'commands support' }
 RowanPackageService >> superclassChainsFor: behaviors [
-
+	organizer := ClassOrganizer new. 
 	^behaviors collect:[:behavior | | supers |
-			supers := behavior allSuperclasses. 
+			supers := organizer allSuperclassesOf: behavior. 
 			supers add: behavior. 
 			supers].
+
 ]
 
 { #category : 'client commands' }
