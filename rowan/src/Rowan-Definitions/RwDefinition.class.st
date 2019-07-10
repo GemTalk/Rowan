@@ -170,6 +170,12 @@ RwDefinition >> removeKey: key from: aDictionary [
 		ifAbsent: [ self error: 'no definition for ' , key printString , ' found' ]
 ]
 
+{ #category : 'properties' }
+RwDefinition >> removeProperty: propertyName [
+
+	properties removeKey: propertyName ifAbsent: []
+]
+
 { #category : 'private' }
 RwDefinition >> updateDefinition: aDefinition in: aDictionary [
 

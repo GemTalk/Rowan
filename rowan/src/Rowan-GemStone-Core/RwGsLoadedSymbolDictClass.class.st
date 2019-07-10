@@ -214,7 +214,7 @@ RwGsLoadedSymbolDictClass >> updateClassTypeFromClass [
 	variable
 	normal for non-indexable pointer object"
 
-	"Must be in-synch with RwGsClassCreationPatch>>basicCreateClassFor:"
+	"Must be in-synch with RwClassDefinition>>_updateClassTypeFromClass:"
 
 	| propertyName oldValue newValue |
 	propertyName := 'type'.
@@ -238,7 +238,6 @@ RwGsLoadedSymbolDictClass >> updateClassTypeFromClass [
 	oldValue = newValue
 		ifFalse: 
 			[ self propertyAt: propertyName put: newValue ]
-
 ]
 
 { #category : 'private-updating' }
