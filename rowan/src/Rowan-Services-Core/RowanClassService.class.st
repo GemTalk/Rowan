@@ -151,7 +151,7 @@ RowanClassService >> basicRefreshFrom: theClass [
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	self setDictionary: classOrMeta.
 	projectName := classOrMeta rowanProjectName.
-	instVarNames := classOrMeta instVarNames. 
+	instVarNames := classOrMeta instVarNames asArray. 
 	self setIsTestCase.
 ]
 
@@ -548,7 +548,7 @@ RowanClassService >> minimalRefreshFrom: theClass [
 	packageName := definedPackageName := classOrMeta rowanPackageName.
 	self setDictionary: classOrMeta.
 	projectName := classOrMeta rowanProjectName.
-	instVarNames := classOrMeta instVarNames. 
+	instVarNames := classOrMeta instVarNames asArray. 
 	template := self classCreationTemplate.
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
