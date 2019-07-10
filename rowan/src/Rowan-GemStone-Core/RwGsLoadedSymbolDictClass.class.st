@@ -223,7 +223,7 @@ RwGsLoadedSymbolDictClass >> updateClassTypeFromClass [
 	variable
 	normal for non-indexable pointer object"
 
-	"Must be in-synch with RwGsClassCreationPatch>>basicCreateClassFor:"
+	"Must be in-synch with RwClassDefinition>>_updateClassTypeFromClass:"
 
 	| propertyName oldValue newValue |
 	propertyName := 'type'. 	"needs to be listed in _classBasedProperties method"
