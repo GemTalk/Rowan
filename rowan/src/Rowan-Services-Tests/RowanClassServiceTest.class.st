@@ -416,6 +416,18 @@ RowanClassServiceTest >> test_nameIsString [
 ]
 
 { #category : 'test method compilation' }
+RowanClassServiceTest >> test_rowanCompileGone [
+
+	"#rowanCompile was used to tell Rowan
+	to compile a method in a Rowan package
+	or in the traditional manner. That is no 
+	longer needed. Make sure it's not referenced
+	anywhere." 
+
+	self assert: (ClassOrganizer new referencesToLiteral: '#rowanCompile' evaluate) first isEmpty
+]
+
+{ #category : 'test method compilation' }
 RowanClassServiceTest >> test_selectedMethod [
 	| classService methodService selector |
 	self jadeiteIssueTested: #issue356 withTitle: 'Add method compilation tests in server services tests'.

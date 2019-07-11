@@ -308,7 +308,9 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 					^ (Rowan image objectNamed: className)
 						compileMethod: methodSource
 						dictionaries: Rowan image symbolList
-						category: hybridPackageName].
+						category: hybridPackageName
+						environmentId: 0 
+						].
 			loadedClass loadedPackage ].
 
 	^ self
