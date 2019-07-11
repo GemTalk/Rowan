@@ -375,6 +375,16 @@ RowanClassServiceTest >> test_equality [
 ]
 
 { #category : 'tests' }
+RowanClassServiceTest >> test_instVarNamesIsArray [
+	"instVarNames was getting set to a collection which
+	was not handled well by STON"
+	| classService |
+	
+	classService := RowanClassService forClassNamed: 'UnauthorizedObjectStub' meta: false. 
+	self assert: (classService instVarNames isKindOf: Array).
+]
+
+{ #category : 'tests' }
 RowanClassServiceTest >> test_nameIsString [
 
 	| classService |
