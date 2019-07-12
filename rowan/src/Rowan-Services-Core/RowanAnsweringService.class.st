@@ -109,7 +109,7 @@ RowanAnsweringService >> runMethodTests: methodServices [
 	| behavior |
 	methodServices do:[:methodService |
 		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
-			behavior := methodService theClass. 
+			behavior := methodService classFromName. 
 			behavior debug: methodService selector]].
 	answer := true. 
 	RowanCommandResult initializeResults. "squash any client updates during server test run"
