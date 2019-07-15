@@ -582,7 +582,7 @@ RowanClassService >> name: newValue [
 { #category : 'private' }
 RowanClassService >> objectInBaseNamed: aString [
 
-	^System myUserProfile symbolList objectNamed: aString asSymbol
+	^Rowan image symbolList objectNamed: aString asSymbol
 ]
 
 { #category : 'client commands' }
@@ -843,7 +843,7 @@ RowanClassService >> saveMethodSource: source category: category [
 	compilationResult := self		
 		compileMethod: source 
 		behavior: behavior 
-		symbolList: System myUserProfile symbolList
+		symbolList: Rowan image symbolList
 		inCategory: updatedCategory asSymbol.
 	(gsNMethod := compilationResult key) isNil ifTrue: [
 		System

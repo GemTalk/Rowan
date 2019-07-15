@@ -133,7 +133,7 @@ RowanBrowserService >> reloadProjects: projectServices andUpdateServices: servic
 RowanBrowserService >> removeDictionariesNamed: dictionaryNames [
 
 	dictionaryNames do:[:dictionaryName | 
-		System myUserProfile symbolList removeDictionaryNamed: dictionaryName asSymbol].
+		Rowan image symbolList removeDictionaryNamed: dictionaryName asSymbol].
 	self updateDictionaries
 ]
 
@@ -193,7 +193,7 @@ RowanBrowserService >> update [
 { #category : 'client commands' }
 RowanBrowserService >> updateDictionaries [
 
-	dictionaries := System myUserProfile symbolList names collect:[:name | RowanDictionaryService new name: name asString].
+	dictionaries := Rowan image symbolList names collect:[:name | RowanDictionaryService new name: name asString].
 	dictionaries := dictionaries asOrderedCollection. 
 	updateType := #dictionaryListUpdate:.
 	RowanCommandResult addResult: self

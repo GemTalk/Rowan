@@ -85,7 +85,7 @@ RowanPackageService >> compileClass: definitionString [
 
 	|  anonymousMethod |
 	anonymousMethod := definitionString _compileInContext: nil 
-       symbolList: GsSession currentSession symbolList.
+       symbolList: Rowan image symbolList.
 	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
 ]
 

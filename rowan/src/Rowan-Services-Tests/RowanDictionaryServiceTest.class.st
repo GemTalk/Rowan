@@ -13,5 +13,5 @@ RowanDictionaryServiceTest >> test_insertRemoveDictionary [
 
 	browserService := RowanBrowserService new. 
 	browserService removeDictionariesNamed: #('FnoodleDictionary').
-	self deny: System myUserProfile symbolList first name equals: #FnoodleDictionary.
+	self deny: Rowan image symbolList first name equals: #FnoodleDictionary.
 ]

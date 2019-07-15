@@ -5082,9 +5082,7 @@ JadeServer >> superclassesOf: aClass isMeta: aBoolean [
 { #category : 'category' }
 JadeServer >> symbolList [
 
-	^System myUserProfile symbolList.
-
-
+	^Rowan image symbolList
 ]
 
 { #category : 'category' }
