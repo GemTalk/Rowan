@@ -119,7 +119,7 @@ JadeServer64bit >> metacelloConfigurations [
 
 	| list |
 	list := Array new.
-	GsSession currentSession symbolList do: [:eachSymbolList | 
+	Rowan image symbolList do: [:eachSymbolList | 
 		eachSymbolList do: [:eachGlobal | 
 			(eachGlobal isBehavior and: [
 			(eachGlobal class includesSelector: #'isMetacelloConfig') and: [
@@ -127,8 +127,6 @@ JadeServer64bit >> metacelloConfigurations [
 		].
 	].
 	^list
-
-
 ]
 
 { #category : 'category' }

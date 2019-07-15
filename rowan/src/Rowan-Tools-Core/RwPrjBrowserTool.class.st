@@ -1040,7 +1040,7 @@ RwPrjBrowserTool >> removeClassNamed: className [
 			"need to do the actual removal of the unpackaged class after Rowan has done it's job"
 			| theClass |
 			theClass := Rowan image objectNamed: className.
-			(GsCurrentSession currentSession symbolList dictionariesAndSymbolsOf: theClass)
+			(Rowan image symbolList dictionariesAndSymbolsOf: theClass)
 				do: [:ar | | dict key |
 					"brute force removal of the class from system dictionaries"
 					dict := ar at: 1.	

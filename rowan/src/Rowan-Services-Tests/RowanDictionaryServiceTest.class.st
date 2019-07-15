@@ -9,7 +9,7 @@ RowanDictionaryServiceTest >> test_insertRemoveDictionary [
 	| dictionaryService browserService |
 	dictionaryService := RowanDictionaryService new name: 'FnoodleDictionary'. 
 	dictionaryService insertAt: 1. 
-	self assert: System myUserProfile symbolList first name equals: #FnoodleDictionary.
+	self assert: Rowan image symbolList first name equals: #FnoodleDictionary.
 
 	browserService := RowanBrowserService new. 
 	browserService removeDictionariesNamed: #('FnoodleDictionary').
