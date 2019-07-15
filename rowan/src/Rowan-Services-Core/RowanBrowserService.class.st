@@ -135,7 +135,8 @@ RowanBrowserService >> removeDictionariesNamed: dictionaryNames [
 	dictionaryNames do:[:dictionaryName | 
 		Rowan image symbolList removeDictionaryNamed: dictionaryName asSymbol.
 		System myUserProfile symbolList removeDictionaryNamed: dictionaryName asSymbol].
-	self updateDictionaries
+	self updateDictionaries.
+	System commitTransaction.
 ]
 
 { #category : 'client commands' }

@@ -26,8 +26,9 @@ RowanDictionaryService >> insertAt: index [
 	| theDictionary |
 	theDictionary := SymbolDictionary new. 
 	theDictionary at: name asSymbol put: theDictionary. 
-	GsSession currentSession userProfile insertDictionary: theDictionary at: index. 
+	System myUserProfile insertDictionary: theDictionary at: index. 
 	RowanBrowserService new updateDictionaries.
+	System commitTransaction.
 ]
 
 { #category : 'accessing' }
