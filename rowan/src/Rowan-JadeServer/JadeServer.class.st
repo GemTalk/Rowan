@@ -854,9 +854,9 @@ JadeServer >> authorInitials: aString [
 { #category : 'jadeite' }
 JadeServer >> autoCommitIfRequired [
 	| commitResult |
-	RowanService autoCommit == true ifTrue:[
+	Rowan serviceClass autoCommit == true ifTrue:[
 		commitResult := System commitTransaction.
-		RowanBrowserService new autoCommit: 
+		Rowan browserServiceClass new autoCommit: 
 			(commitResult 
 				ifTrue:[true]
 				ifFalse:[#failed])].
@@ -5273,7 +5273,7 @@ JadeServer >> terminate: aGsProcess [
 { #category : 'jadeite' }
 JadeServer >> updateFromSton: stonString [
 	| services organizer resultString |
-	RowanCommandResult initializeResults. 
+	Rowan commandResultClass initializeResults. 
 	services := STON fromString: stonString.
 	organizer := ClassOrganizer new.
 	services do: 
@@ -5283,8 +5283,8 @@ JadeServer >> updateFromSton: stonString [
 			service command ifNil:[service command: #update]. 
 			service servicePerform: service command withArguments: service commandArgs].
 	self autoCommitIfRequired.
-	RowanLoggingService current logSentServices. 
-	resultString := STON toString: RowanCommandResult results.
+	Rowan loggingServiceClass current logSentServices. 
+	resultString := STON toString: Rowan commandResultClass results.
 	^resultString
 ]
 

@@ -114,7 +114,7 @@ RowanBrowserService >> packagesWithTests [
 RowanBrowserService >> releaseWindowHandle: integer [
 
 	| registry |
-	RowanLoggingService current logComment: 'Release window with handle: ', integer printString. 
+	Rowan loggingServiceClass current logComment: 'Release window with handle: ', integer printString. 
 	registry := SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[^self].
 	registry removeKey: integer ifAbsent: []
 ]
@@ -131,12 +131,18 @@ RowanBrowserService >> reloadProjects: projectServices andUpdateServices: servic
 
 { #category : 'client commands' }
 RowanBrowserService >> removeDictionariesNamed: dictionaryNames [
+	"remove from both transient & persistent symbol lists" 
 
 	dictionaryNames do:[:dictionaryName | 
-		Rowan image symbolList removeDictionaryNamed: dictionaryName asSymbol.
-		System myUserProfile symbolList removeDictionaryNamed: dictionaryName asSymbol].
+		| dictionaryNameSymbol |
+		dictionaryNameSymbol := dictionaryName asSymbol.
+		(Rowan image symbolList names includes: dictionaryNameSymbol) ifTrue:[
+			Rowan image symbolList removeDictionaryNamed: dictionaryNameSymbol].
+		(System myUserProfile symbolList names includes: dictionaryNameSymbol) ifTrue:[
+			System myUserProfile symbolList removeDictionaryNamed: dictionaryNameSymbol]].
 	self updateDictionaries.
 	System commitTransaction.
+
 ]
 
 { #category : 'client commands' }
