@@ -12,7 +12,6 @@ Class {
 		'hierarchyServices',
 		'testPackages',
 		'testCount',
-		'autoCommit',
 		'dictionaries'
 	],
 	#category : 'Rowan-Services-Core'
@@ -30,7 +29,6 @@ RowanBrowserService >> abortTransaction [
 
 { #category : 'client commands' }
 RowanBrowserService >> allClasses [
-
 	allClasses := SortedCollection sortBlock: [:x :y | x name < y name].
 	allClasses addAll: (organizer classes collect:[:class | 
 			| service |
@@ -42,15 +40,6 @@ RowanBrowserService >> allClasses [
 	allClasses := allClasses asArray. 
 	updateType := #classes. "#classes not used at the moment so no updates will be done"
 	RowanCommandResult addResult: self
-]
-
-{ #category : 'client commands' }
-RowanBrowserService >> autoCommit: object [
-
-	RowanService setAutoCommit: object.
-	autoCommit := RowanService autoCommit. 
-	updateType := #autoCommitUpdate:.
-	RowanCommandResult addResult: self.
 ]
 
 { #category : 'client commands' }
@@ -74,14 +63,6 @@ RowanBrowserService >> findRemovedServices: services [
 				RowanCommandResult addResult: service.
 		]
 	].
-]
-
-{ #category : 'client commands' }
-RowanBrowserService >> flipAutoCommit [
-
-	autoCommit := RowanService flipAutoCommit. 
-	updateType := #autoCommitUpdate:.
-	RowanCommandResult addResult: self.
 ]
 
 { #category : 'window registry' }
