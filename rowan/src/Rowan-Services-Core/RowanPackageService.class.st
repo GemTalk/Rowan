@@ -38,8 +38,7 @@ RowanPackageService >> = packageService [
 
 { #category : 'testing' }
 RowanPackageService >> arePackageAndProjectClean [
-
-	^self rowanDirty not and:[self projectIsDirty not]
+  ^ self rowanDirty not and: [ self projectIsDirty not ]
 ]
 
 { #category : 'rowan' }
