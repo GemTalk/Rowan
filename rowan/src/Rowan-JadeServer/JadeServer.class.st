@@ -854,11 +854,11 @@ JadeServer >> authorInitials: aString [
 { #category : 'jadeite' }
 JadeServer >> autoCommitIfRequired [
 	| commitResult |
-	RowanService autoCommit == true ifTrue:[
+	Rowan serviceClass autoCommit == true ifTrue:[
 		commitResult := System commitTransaction.
-		RowanBrowserService new autoCommit: 
+		RowanAutoCommitService new autoCommit:  
 			(commitResult 
-				ifTrue:[true]
+				ifTrue:[true] 
 				ifFalse:[#failed])].
 ]
 
@@ -1041,18 +1041,13 @@ JadeServer >> compile: aString frame: anInteger process: aGsProcess [
 	selector := oldMethod selector.
 	selector isNil ifTrue: [^result].
 	category := self _behavior: aBehavior categoryOfSelector: selector.
-	result := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
-				ifAbsent: [false])
-					ifTrue: [ 
-						[ aBehavior rwCompileMethod: aString category: category ]
+	result := [[ aBehavior rwCompileMethod: aString category: category ]
 							on: RwExecuteClassInitializeMethodsAfterLoadNotification
-							do: [:ex | ex resume: false ] ]
-					ifFalse: 
-						[self
-							compileMethod: aString
-							behavior: aBehavior
-							user: nil
-							inCategory: category].
+							do: [:ex | ex resume: false ]] 
+								on: RwPerformingUnpackagedEditNotification
+								do: [:ex | ex resume ].
+
+					
 	^result
 ]
 
@@ -4013,15 +4008,11 @@ JadeServer >> sbRemoveMethodCategories: anOrderedCollection [
 JadeServer >> sbRemoveMethods: anOrderedCollection [
 	| behavior classEntity  notRemoved|
 	behavior := self sbClassFrom: anOrderedCollection.
-	classEntity := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
-				ifAbsent: [false])
-					ifTrue: [Rowan classServiceClass forClassNamed: behavior name meta: behavior isMeta]
-					ifFalse: [behavior].
+	classEntity := Rowan classServiceClass forClassNamed: behavior name meta: behavior isMeta.
 	notRemoved := Array new. 
 	anOrderedCollection do: [:each | classEntity removeSelector: each asSymbol ifAbsent: [notRemoved add: each]].
 	self systemBrowserUpdate.
 	notRemoved isEmpty ifFalse:[self error: 'The following selectors were not removed. Possibly in a superclass? ', notRemoved printString].
-
 ]
 
 { #category : 'category' }
@@ -5091,9 +5082,7 @@ JadeServer >> superclassesOf: aClass isMeta: aBoolean [
 { #category : 'category' }
 JadeServer >> symbolList [
 
-	^System myUserProfile symbolList.
-
-
+	^Rowan image symbolList
 ]
 
 { #category : 'category' }
@@ -5284,7 +5273,7 @@ JadeServer >> terminate: aGsProcess [
 { #category : 'jadeite' }
 JadeServer >> updateFromSton: stonString [
 	| services organizer resultString |
-	RowanCommandResult initializeResults.
+	Rowan commandResultClass initializeResults. 
 	services := STON fromString: stonString.
 	organizer := ClassOrganizer new.
 	services do: 
@@ -5294,8 +5283,8 @@ JadeServer >> updateFromSton: stonString [
 			service command ifNil:[service command: #update]. 
 			service servicePerform: service command withArguments: service commandArgs].
 	self autoCommitIfRequired.
-	RowanLoggingService current logSentServices. 
-	resultString := STON toString: RowanCommandResult results.
+	Rowan loggingServiceClass current logSentServices. 
+	resultString := STON toString: Rowan commandResultClass results.
 	^resultString
 ]
 
