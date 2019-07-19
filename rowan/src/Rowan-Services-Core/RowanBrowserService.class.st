@@ -12,7 +12,7 @@ Class {
 		'hierarchyServices',
 		'testPackages',
 		'testCount',
-		'autoCommit'
+		'dictionaries'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -22,13 +22,13 @@ RowanBrowserService >> abortTransaction [
 
 	System abortTransaction.
 	self updateProjects.
+	self updateDictionaries. 
 	self packagesWithTests.
 	self updateType: #aborted:browser:.
 ]
 
 { #category : 'client commands' }
 RowanBrowserService >> allClasses [
-
 	allClasses := SortedCollection sortBlock: [:x :y | x name < y name].
 	allClasses addAll: (organizer classes collect:[:class | 
 			| service |
@@ -40,15 +40,6 @@ RowanBrowserService >> allClasses [
 	allClasses := allClasses asArray. 
 	updateType := #classes. "#classes not used at the moment so no updates will be done"
 	RowanCommandResult addResult: self
-]
-
-{ #category : 'client commands' }
-RowanBrowserService >> autoCommit: object [
-
-	RowanService setAutoCommit: object.
-	autoCommit := RowanService autoCommit. 
-	updateType := #autoCommitUpdate:.
-	RowanCommandResult addResult: self.
 ]
 
 { #category : 'client commands' }
@@ -72,14 +63,6 @@ RowanBrowserService >> findRemovedServices: services [
 				RowanCommandResult addResult: service.
 		]
 	].
-]
-
-{ #category : 'client commands' }
-RowanBrowserService >> flipAutoCommit [
-
-	autoCommit := RowanService flipAutoCommit. 
-	updateType := #autoCommitUpdate:.
-	RowanCommandResult addResult: self.
 ]
 
 { #category : 'window registry' }
@@ -112,7 +95,7 @@ RowanBrowserService >> packagesWithTests [
 RowanBrowserService >> releaseWindowHandle: integer [
 
 	| registry |
-	RowanLoggingService current logComment: 'Release window with handle: ', integer printString. 
+	Rowan loggingServiceClass current logComment: 'Release window with handle: ', integer printString. 
 	registry := SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[^self].
 	registry removeKey: integer ifAbsent: []
 ]
@@ -125,6 +108,22 @@ RowanBrowserService >> reloadProjects: projectServices andUpdateServices: servic
 	projectNames := projectServices collect: [:projectService | projectService name]. 
 	services do:[:service | 
 		(projectNames includes: service rowanProjectName) ifTrue:[service update]].
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> removeDictionariesNamed: dictionaryNames [
+	"remove from both transient & persistent symbol lists" 
+
+	dictionaryNames do:[:dictionaryName | 
+		| dictionaryNameSymbol |
+		dictionaryNameSymbol := dictionaryName asSymbol.
+		(Rowan image symbolList names includes: dictionaryNameSymbol) ifTrue:[
+			Rowan image symbolList removeDictionaryNamed: dictionaryNameSymbol].
+		(System myUserProfile symbolList names includes: dictionaryNameSymbol) ifTrue:[
+			System myUserProfile symbolList removeDictionaryNamed: dictionaryNameSymbol]].
+	self updateDictionaries.
+	System commitTransaction.
+
 ]
 
 { #category : 'client commands' }
@@ -181,11 +180,20 @@ RowanBrowserService >> update [
 ]
 
 { #category : 'client commands' }
+RowanBrowserService >> updateDictionaries [
+
+	dictionaries := Rowan image symbolList names collect:[:name | RowanDictionaryService new name: name asString].
+	dictionaries := dictionaries asOrderedCollection. 
+	updateType := #dictionaryListUpdate:.
+	RowanCommandResult addResult: self
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> updateProjects [
 	| sortedProjects | 
 	sortedProjects := SortedCollection sortBlock: [:a :b | a name < b name]. 
 	sortedProjects addAll:  Rowan image loadedProjects.
 	projects := sortedProjects collect:[:project | RowanProjectService newNamed: project name].
-	updateType := #projectsUpdate:.
+	updateType := #projectsUpdate:browser:.
 	RowanCommandResult addResult: self
 ]

@@ -1055,7 +1055,7 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 							(aMethodMove projectAfter
 								useSessionMethodsForExtensionsForPackageNamed: aMethodMove packageAfter name)
 								ifTrue: [ | resolved |
-									((resolved := GsCurrentSession currentSession symbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
+									((resolved := Rowan image symbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
 										and: [resolved isBehavior and: [ resolved isMeta not ]])
 										ifFalse: [ 
 											self
@@ -1078,7 +1078,6 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 			loadedClassOrExtension addLoadedMethod: loadedMethod.
 
 			registry methodRegistry at: compiledMethod put: loadedMethod ]
-
 ]
 
 { #category : 'initialization' }
