@@ -133,7 +133,7 @@ RowanService >> createSymbolDictionaryNamed: aName [
 	| dictionary size |
 	dictionary := SymbolDictionary new.
 	dictionary at: aName asSymbol put: dictionary.
-	size := System myUserProfile symbolList size.
+	size := Rowan image symbolList size.
 	System myUserProfile insertDictionary: dictionary at: size + 1.
 	^ dictionary
 ]
@@ -231,10 +231,9 @@ RowanService >> removeSampleSymbolDictionary [
 RowanService >> removeSymbolDictionaryNamed: aName [
 
 	| index |
-	index := System myUserProfile symbolList names indexOf: aName asSymbol.
+	index := Rowan image symbolList names indexOf: aName asSymbol.
 	index ~= 0 ifTrue:[
 		System myUserProfile removeDictionaryAt: index]
-
 ]
 
 { #category : 'other' }

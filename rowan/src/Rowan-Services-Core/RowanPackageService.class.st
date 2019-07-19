@@ -50,11 +50,24 @@ RowanPackageService >> changes [
 
 ]
 
+{ #category : 'other' }
+RowanPackageService >> classes: collection [
+
+	classes := collection
+]
+
 { #category : 'client commands' }
 RowanPackageService >> classHierarchy [
-	| superclassChains levels services hierarchies theClasses toExpand |
+	| theClasses |
 	self update. 
 	theClasses := classes collect:[:classService | classService theClass].
+	hierarchyServices := self classHierarchy: theClasses. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'private' }
+RowanPackageService >> classHierarchy: theClasses [
+	| superclassChains levels services hierarchies toExpand |
 	superclassChains := self superclassChainsFor: theClasses. 
 	hierarchies := self extendHierarchies: superclassChains. 
 	levels := self hierarchiesByLevel: hierarchies.
@@ -64,7 +77,7 @@ RowanPackageService >> classHierarchy [
 	hierarchyServices := services reject:[:array | array isEmpty].
 	hierarchyServices copy keysAndValuesDo:[:key :value | 
 		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
-	RowanCommandResult addResult: self.
+	^hierarchyServices
 ]
 
 { #category : 'client commands' }
@@ -72,7 +85,7 @@ RowanPackageService >> compileClass: definitionString [
 
 	|  anonymousMethod |
 	anonymousMethod := definitionString _compileInContext: nil 
-       symbolList: GsSession currentSession symbolList.
+       symbolList: Rowan image symbolList.
 	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
 ]
 
@@ -125,12 +138,12 @@ RowanPackageService >> extendHierarchies: hierarchies [
 	| extendedHierarchies |
 	extendedHierarchies := Array new. 
 	hierarchies do:[:hierarchy |
-		| theClass |
+		| theClass subclasses |
 		theClass := hierarchy last. 
-		theClass subclasses isEmpty 
+		(subclasses := organizer subclassesOf: theClass) isEmpty 
 			ifTrue:[extendedHierarchies add: hierarchy]
 			ifFalse:[
-				theClass subclasses do:[:sub |
+				subclasses do:[:sub |
 					extendedHierarchies add: (hierarchy copy add: sub; yourself)
 				]]].
 	^extendedHierarchies
@@ -370,7 +383,7 @@ RowanPackageService >> servicePerform: symbol withArguments: collection [
 RowanPackageService >> services: services from: levels expand: toExpand [
 
 	(classes collect:[:svc | svc theClass]) do:[:aClass |
-		toExpand addAll: aClass allSuperclasses].
+		toExpand addAll: (organizer allSuperclassesOf: aClass)].
 	levels keysAndValuesDo: [:key :value |
 		| newKey service  | 
 		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
@@ -392,11 +405,12 @@ RowanPackageService >> setDefaultTemplate [
 
 { #category : 'commands support' }
 RowanPackageService >> superclassChainsFor: behaviors [
-
+	organizer := ClassOrganizer new. 
 	^behaviors collect:[:behavior | | supers |
-			supers := behavior allSuperclasses. 
+			supers := organizer allSuperclassesOf: behavior. 
 			supers add: behavior. 
 			supers].
+
 ]
 
 { #category : 'client commands' }

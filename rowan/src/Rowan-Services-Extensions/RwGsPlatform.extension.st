@@ -1,10 +1,21 @@
 Extension { #name : 'RwGsPlatform' }
 
 { #category : '*rowan-services-extensions' }
+RwGsPlatform >> browserServiceClass [
+
+	^ RowanBrowserService
+]
+
+{ #category : '*rowan-services-extensions' }
 RwGsPlatform >> classServiceClass [
 
 	^ RowanClassService
+]
 
+{ #category : '*rowan-services-extensions' }
+RwGsPlatform >> commandResultClass [
+
+	^ RowanCommandResult
 ]
 
 { #category : '*rowan-services-extensions' }
@@ -14,6 +25,12 @@ RwGsPlatform >> jadeServerClassNamed: className [
 	jadeClasses := Array with: (UserGlobals at: #JadeServer). 
 	jadeClasses add: (UserGlobals at: #JadeServer64bit32). 
 	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]
+]
+
+{ #category : '*rowan-services-extensions' }
+RwGsPlatform >> loggingServiceClass [
+
+	^ RowanLoggingService
 ]
 
 { #category : '*rowan-services-extensions' }
@@ -48,7 +65,7 @@ RwGsPlatform >> serviceClass [
 RwGsPlatform >> serviceClasses [
 	"Explicitly add each class rather than sending #allSubclasses so
 	that users other than SystemUser have visibility. Visibility in Rowan
-	is determined at compile time."
+	is determined at compile time. See STONReader>>lookupClass:"
 	
 	| array |
 	array := Array with: RowanService. 
@@ -57,6 +74,7 @@ RwGsPlatform >> serviceClasses [
 		add: RowanClassService; 
 		add: RowanDebuggerService; 
 		add: RowanFrameService;
+		add: RowanLoggingService;
 		add: RowanMethodService;
 		add: RowanPackageService; 
 		add: RowanProcessService;
