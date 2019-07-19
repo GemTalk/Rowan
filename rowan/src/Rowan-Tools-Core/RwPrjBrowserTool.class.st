@@ -308,7 +308,9 @@ RwPrjBrowserTool >> addOrUpdateMethod: methodSource inProtocol: hybridPackageNam
 					^ (Rowan image objectNamed: className)
 						compileMethod: methodSource
 						dictionaries: Rowan image symbolList
-						category: hybridPackageName].
+						category: hybridPackageName
+						environmentId: 0 
+						].
 			loadedClass loadedPackage ].
 
 	^ self
@@ -1038,7 +1040,7 @@ RwPrjBrowserTool >> removeClassNamed: className [
 			"need to do the actual removal of the unpackaged class after Rowan has done it's job"
 			| theClass |
 			theClass := Rowan image objectNamed: className.
-			(GsCurrentSession currentSession symbolList dictionariesAndSymbolsOf: theClass)
+			(Rowan image symbolList dictionariesAndSymbolsOf: theClass)
 				do: [:ar | | dict key |
 					"brute force removal of the class from system dictionaries"
 					dict := ar at: 1.	

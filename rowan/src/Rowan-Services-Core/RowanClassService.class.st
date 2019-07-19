@@ -38,7 +38,8 @@ Class {
 		'visibleTests',
 		'isNewClass',
 		'updateAfterCommand',
-		'isInSymbolList'
+		'isInSymbolList',
+		'dictionaryName'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -148,8 +149,9 @@ RowanClassService >> basicRefreshFrom: theClass [
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
 	packageName := definedPackageName := classOrMeta rowanPackageName.
+	self setDictionary: classOrMeta.
 	projectName := classOrMeta rowanProjectName.
-	instVarNames := classOrMeta instVarNames. 
+	instVarNames := classOrMeta instVarNames asArray. 
 	self setIsTestCase.
 ]
 
@@ -277,16 +279,18 @@ RowanClassService >> compileMethod: methodString behavior: aBehavior symbolList:
 
 	| method warnings |
 	
-	[ [ [ method := aBehavior rwCompileMethod: methodString category: categorySymbol  ]
+	[ [ [ [ method := aBehavior rwCompileMethod: methodString category: categorySymbol. Transcript cr; show: method printString]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
-		do: [:ex | ex resume: false ] ] 
+		do: [:ex | ex resume: false ]]
 			on: CompileError
 			do: [:ex | ^nil -> (ex gsArguments at: 1)]]
 				on: CompileWarning
 				do: 
 					[:ex | 
 					warnings := ex warningString.
-					ex resume].
+					ex resume]]
+					on: RwPerformingUnpackagedEditNotification
+					do: [:ex | ex resume ] .
 	^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] on: Error
 		do: [:ex | ex return: method -> warnings]
 ]
@@ -544,8 +548,9 @@ RowanClassService >> minimalRefreshFrom: theClass [
 	oop := theClass asOop.
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	packageName := definedPackageName := classOrMeta rowanPackageName.
+	self setDictionary: classOrMeta.
 	projectName := classOrMeta rowanProjectName.
-	instVarNames := classOrMeta instVarNames. 
+	instVarNames := classOrMeta instVarNames asArray. 
 	template := self classCreationTemplate.
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
@@ -577,7 +582,7 @@ RowanClassService >> name: newValue [
 { #category : 'private' }
 RowanClassService >> objectInBaseNamed: aString [
 
-	^System myUserProfile symbolList objectNamed: aString asSymbol
+	^Rowan image symbolList objectNamed: aString asSymbol
 ]
 
 { #category : 'client commands' }
@@ -736,7 +741,9 @@ RowanClassService >> removeSelector: selector ifAbsent: absentBlock [
 	theClass := self theClass. 
 	meta ifTrue: [theClass := theClass class].
 	(theClass compiledMethodAt: selector otherwise: nil) isNil ifTrue:[ ^absentBlock value ].
-	self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta
+	[self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta]
+		on: RwPerformingUnpackagedEditNotification
+		do: [:ex | ex resume ]
 ]
 
 { #category : 'client commands' }
@@ -836,7 +843,7 @@ RowanClassService >> saveMethodSource: source category: category [
 	compilationResult := self		
 		compileMethod: source 
 		behavior: behavior 
-		symbolList: System myUserProfile symbolList
+		symbolList: Rowan image symbolList
 		inCategory: updatedCategory asSymbol.
 	(gsNMethod := compilationResult key) isNil ifTrue: [
 		System
@@ -908,6 +915,15 @@ RowanClassService >> setComment [
 							ifTrue: [comment := description detailsAboutClass]]].
 	comment isNil ifTrue: [comment := String new].
 
+]
+
+{ #category : 'private' }
+RowanClassService >> setDictionary: classOrMeta [
+	| dictionaryList |
+		dictionaryList := Rowan image symbolList dictionariesAndSymbolsOf: classOrMeta.
+		dictionaryName := dictionaryList isEmpty 
+		ifTrue:[String new]
+		ifFalse:[dictionaryList first first name asString].
 ]
 
 { #category : 'Updating' }
@@ -1036,11 +1052,8 @@ RowanClassService >> updatePackageProject [
 
 	packageService := RowanPackageService new name: packageName. 
 	packageService update. 
-	RowanCommandResult addResult: packageService.
-
 	projectService := RowanProjectService new name: projectName. 
 	projectService update.
-	RowanCommandResult addResult: projectService.
 ]
 
 { #category : 'Accessing' }
