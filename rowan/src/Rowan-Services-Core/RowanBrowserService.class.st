@@ -43,6 +43,30 @@ RowanBrowserService >> allClasses [
 ]
 
 { #category : 'client commands' }
+RowanBrowserService >> classHierarchy [
+	| theClasses |
+	theClasses := allClasses collect:[:classService | classService theClass].
+	hierarchyServices := self classHierarchy: theClasses. 
+	updateType := #classHierarchyUpdate:browser:. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'private' }
+RowanBrowserService >> classHierarchy: theClasses [
+	| superclassChains levels services hierarchies toExpand |
+	superclassChains := self superclassChainsFor: theClasses. 
+	hierarchies := self extendHierarchies: superclassChains. 
+	levels := self hierarchiesByLevel: hierarchies.
+	services := Dictionary new. 
+	toExpand := Set new. 
+	self services: services from: levels expand: toExpand.
+	hierarchyServices := services reject:[:array | array isEmpty].
+	hierarchyServices copy keysAndValuesDo:[:key :value | 
+		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
+	^hierarchyServices
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> defaultClassHierarchy [
 	hierarchyServices := Dictionary new.   
 	organizer hierarchy keysAndValuesDo: [:key :value |
@@ -161,6 +185,12 @@ RowanBrowserService >> saveRootObject: oop windowHandle: integer [
 { #category : 'perform' }
 RowanBrowserService >> servicePerform: symbol withArguments: collection [
 	super perform: symbol withArguments: collection.
+]
+
+{ #category : 'command support' }
+RowanBrowserService >> services: services from: levels expand: toExpand [
+
+	^super services: services from: levels expand: toExpand classes: allClasses
 ]
 
 { #category : 'client commands' }
