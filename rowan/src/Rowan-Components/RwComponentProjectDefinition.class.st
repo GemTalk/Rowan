@@ -619,6 +619,13 @@ RwComponentProjectDefinition >> load [
 	^ Rowan projectTools load loadComponentProjectDefinition: self
 ]
 
+{ #category : 'actions' }
+RwComponentProjectDefinition >> load: platformConfigurationAttributes [
+	"load the receiver into the image"
+
+	^ Rowan projectTools load loadComponentProjectDefinition: self platformConfigurationAttributes: platformConfigurationAttributes
+]
+
 { #category : 'accessing' }
 RwComponentProjectDefinition >> loadedCommitId [
 
