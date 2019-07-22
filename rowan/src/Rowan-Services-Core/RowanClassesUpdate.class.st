@@ -56,8 +56,7 @@ RowanClassesUpdate >> initialize [
 { #category : 'private' }
 RowanClassesUpdate >> objectInBaseNamed: aString [
 
-	^System myUserProfile symbolList objectNamed: aString asSymbol
-
+	^Rowan image symbolList objectNamed: aString asSymbol
 ]
 
 { #category : 'accessing' }

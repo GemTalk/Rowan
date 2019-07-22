@@ -7,31 +7,30 @@ Class {
 { #category : 'private' }
 RwRowanSample1Test >> _rowanSample1LoadSpecificationUrl [
 
-	| rowanSpec |
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	^ 'file:' , rowanSpec repositoryRootPath , '/samples/RowanSample1.ston'
-
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/samples/RowanSample1.ston'
 ]
 
 { #category : 'tests' }
 RwRowanSample1Test >> testIssue345 [
 
-	| specUrlString projectTools rowanSpec gitTool gitRootPath projectName rowanSampleSpec symDict registry |
+	| specUrlString projectTools rowanProject gitTool gitRootPath projectName rowanSampleSpec symDict registry |
 	projectName := 'RowanSample1'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :project | Rowan image _removeLoadedProject: project ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	specUrlString := self _rowanSample1LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
-		gitRootPath: rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'
+		gitRootPath: rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'
 		useSsh: true.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.

@@ -27,6 +27,7 @@
 # Install FileSystem, Rowan, Cypress, STON, and Tonel using Rowan to adopt the existing classes and extension
 #  methods into the correct package structure
   run
+	"install_3.tpz"
  	| projectSetDefinition gitRepoPath packageCreateTool loadedProjectInfo auditFailures readTool
 		reAudit gitRoot |
 	projectSetDefinition := RwProjectSetDefinition new.
@@ -39,7 +40,7 @@
 			'$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/projects'
 		}.
 		{
-			'file:$ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/specs/Rowan_component.ston'. 
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/RowanV2.ston'. 
 			'$ROWAN_PROJECTS_HOME'
 		}.
 		{

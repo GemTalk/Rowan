@@ -1,9 +1,6 @@
 Class {
 	#name : 'RwGsLoadedSymbolDictComponentProject',
 	#superclass : 'RwLoadedProject',
-	#instVars : [
-		'loadedComponents'
-	],
 	#category : 'Rowan-GemStone-Components'
 }
 
@@ -24,7 +21,12 @@ RwGsLoadedSymbolDictComponentProject >> asDefinition [
 	^ RwComponentProjectDefinition
 		withProperties: self propertiesForDefinition
 		packageDefinitions: self loadedPackageDefinitions
-		componentDefinitions: self loadedComponentDefinitions
+]
+
+{ #category : 'testing' }
+RwGsLoadedSymbolDictComponentProject >> canCommit [
+
+	^ self projectRef canCommit
 ]
 
 { #category : 'commit log' }
@@ -33,11 +35,10 @@ RwGsLoadedSymbolDictComponentProject >> commitLog: logLimit [
 	^ self projectRef commitLog: logLimit
 ]
 
-{ #category : 'initialization' }
-RwGsLoadedSymbolDictComponentProject >> initialize [
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> components [
 
-	super initialize.
-	loadedComponents := KeyValueDictionary new.
+	^ self projectRef components
 ]
 
 { #category : 'initialization' }
@@ -51,7 +52,7 @@ RwGsLoadedSymbolDictComponentProject >> initializeForLoadSpecification: aLoadSpe
 RwGsLoadedSymbolDictComponentProject >> initializeForProjectReferenceDefinition: aProjectReferenceDefinition [
 
 	self initializeForName: aProjectReferenceDefinition projectAlias.
-	handle := aProjectReferenceDefinition
+	handle := aProjectReferenceDefinition copy
 ]
 
 { #category : 'properties' }
@@ -65,14 +66,36 @@ RwGsLoadedSymbolDictComponentProject >> loadedComponentDefinitions [
 
 	"Create definitions from all of the components I define, and answer the collection of them"
 
-	^ self definitionsFor: loadedComponents
+	| components |
+	components := self componenents copy.
+	components keysAndValuesDo: [:key :value | components at: key put: value copy ].
+	^ components
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> loadedConfigurationNames [
+
+	^ self projectRef loadedConfigurationNames
 ]
 
 { #category : 'accessing' }
 RwGsLoadedSymbolDictComponentProject >> loadedConfigurationNames: configNames [
 
+	"noop - project ref component keys is list of loaded config names"
 
-	self projectRef loadedConfigurationNames: configNames
+	"https://github.com/GemTalk/Rowan/issues/308"
+
+	"eventually this method will be completely removed/deprecated"
+
+	| x y |
+	(x := configNames asArray sort) = (y := self loadedConfigurationNames asArray sort)
+		ifFalse: [ self error: 'The configNames are expected to match the component keys' ]
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> loadedGroupNames [
+
+	^ self projectRef loadedGroupNames
 ]
 
 { #category : 'accessing' }
@@ -120,7 +143,7 @@ RwGsLoadedSymbolDictComponentProject >> propertiesForDefinition [
 
 	| props |
 	props := super propertiesForDefinition.
-	props at: 'projectRef' put: handle.
+	props at: 'projectRef' put: handle copy.
 	^ props
 ]
 
@@ -135,6 +158,12 @@ RwGsLoadedSymbolDictComponentProject >> repositoryRoot [
 	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
 
 	^ self projectRef repositoryRoot
+]
+
+{ #category : 'accessing' }
+RwGsLoadedSymbolDictComponentProject >> repositoryRootPath [
+
+	^ self repositoryRoot pathString
 ]
 
 { #category : 'accessing' }

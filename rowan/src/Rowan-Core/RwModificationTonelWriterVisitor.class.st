@@ -51,6 +51,12 @@ RwModificationTonelWriterVisitor >> _hasCommentOf: aClassDefinition [
 ]
 
 { #category : 'class writing' }
+RwModificationTonelWriterVisitor >> _hasShebangOf: aClassDefinition [ 
+
+	^  aClassDefinition shebang notNil
+]
+
+{ #category : 'class writing' }
 RwModificationTonelWriterVisitor >> _methodDefinitionOf: aMethodDefinition [
 	^ self _toSTON: (self class orderedDictionaryClass new 
 		at: #category put: aMethodDefinition protocol; 
@@ -70,6 +76,12 @@ RwModificationTonelWriterVisitor >> _selectorIsComplete: keywords in: aString [
 		index = 0 ifTrue: [ ^ false ].
 		start := index + each size ].
 	^ true
+]
+
+{ #category : 'class writing' }
+RwModificationTonelWriterVisitor >> _shebangOf: aClassDefinition [
+
+	^ aClassDefinition shebang
 ]
 
 { #category : 'class writing' }
@@ -144,6 +156,8 @@ RwModificationTonelWriterVisitor >> _writeClassDefinition: aClassDefinition on: 
 	| nl |
 	nl := self _newLine.
 	
+	(self _hasShebangOf: aClassDefinition)
+		ifTrue: [ aStream << '#!' << (self _shebangOf: aClassDefinition) << nl ].
 	(self _hasCommentOf: aClassDefinition) 
 		ifTrue: [ 
 			aStream 
@@ -219,6 +233,12 @@ RwModificationTonelWriterVisitor >> addedPackage: aPackageModification [
 	self processPackage: aPackageModification
 ]
 
+{ #category : 'accessing' }
+RwModificationTonelWriterVisitor >> defaultPackageFormat [
+
+	^ 'tonel'
+]
+
 { #category : 'actions' }
 RwModificationTonelWriterVisitor >> deletedClass: aClassModification [
 
@@ -266,11 +286,22 @@ RwModificationTonelWriterVisitor >> processClassExtension: aClassExtensionModifi
 RwModificationTonelWriterVisitor >> processProject: aProjectModification [
 	"confirm that the project source is written in Tonel format"
 
-	| format |
+	| format propertiesFile |
 	packageDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification after packages.
 	packageDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aProjectModification before packages.
 
 	(format := self _repositoryFormatFor:  aProjectModification after packagesRoot) = 'tonel' ifFalse: [ self error: 'expected tonel format repository, instead format is ', format printString ].
+
+	propertiesFile := aProjectModification after packagesRoot /  'properties.st'.
+	propertiesFile exists
+		ifFalse: [
+			propertiesFile writeStreamDo: [ :fileStream | 
+				fileStream 
+					nextPutAll: '{ #format : ' , format printString , '}';
+					lf;
+					nextPutAll: '{ #convention : ' , currentProjectDefinition packageConvention printString , '}';
+					yourself ] ].
+
 	super processProject: aProjectModification.
 ]
 

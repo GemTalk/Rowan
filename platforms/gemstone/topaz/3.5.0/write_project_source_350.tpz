@@ -45,8 +45,9 @@ run
 		topazFileNameMap := Dictionary new.
 		topazFileNameMap at: projectName  put: {}.
 		projectDefinition packageNames do: [:packageName |
-			((#('Rowan-Tests'  'Rowan-Services-Tests' 'Rowan-Tests-32x' 'Rowan-Tests-35x') includes: packageName) 
-					and: [ projectName = 'Rowan'])
+			((#('Rowan-Tests'  'Rowan-Services-Tests' 'Rowan-Tests-32x' 'Rowan-Tests-35x' 'Rowan-Tests-GemStone') 
+					includes: packageName) 
+						and: [ projectName = 'Rowan'])
 				ifTrue: [  (topazFileNameMap at: 'Rowan-Tests' ifAbsentPut: [{} ]) add: packageName ]
 				ifFalse: [ (topazFileNameMap at: projectName) add: packageName ] ].
 		visitor := RwGsModificationTopazWriterVisitor new

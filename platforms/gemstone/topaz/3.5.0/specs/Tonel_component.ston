@@ -13,6 +13,7 @@ RwComponentSpecification {
 	#projectsPath : 'projects',
 	#repoSpec : RwGitRepositorySpecification {
 	},
+	#defaultComponentName : 'Common',
 	#defaultConfigurationNames : [
 		'Default'
 	],

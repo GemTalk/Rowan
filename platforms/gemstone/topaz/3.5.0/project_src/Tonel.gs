@@ -1526,7 +1526,7 @@ shebang
 
 	(stream peekFor: $#) ifFalse: [ ^ nil ].	
 	(stream peekFor: $!) ifFalse: [ ^ nil ].
-	stream  upTo: Character lf.
+	^ stream  upTo: Character lf.
 %
 
 category: 'accessing'
@@ -1596,7 +1596,8 @@ type
 category: 'parsing'
 method: TonelParser
 typeDef
-	self shebang. "ignore shebang on first line of file if present"
+	| shebang |
+	shebang := self shebang. "ignore shebang on first line of file if present"
 	^ self newTypeDefinitionFrom: { 
 		self separator.
 		self try: [ self comment ]. 
@@ -1609,6 +1610,7 @@ typeDef
 			normalizedMetadata := Dictionary new.
 			typeMetadata keysAndValuesDo: [:key :value |
 				normalizedMetadata at: key asLowercase asSymbol put: value ].
+			normalizedMetadata at: #shebang put: shebang.
 			normalizedMetadata ] 
 	}
 %

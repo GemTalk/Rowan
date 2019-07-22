@@ -35,7 +35,7 @@ RwGsClassSymbolDictionaryMoveSymDictPatch >> classModification: aClassModificati
 { #category : 'installing' }
 RwGsClassSymbolDictionaryMoveSymDictPatch >> installSymbolDictionaryPatchFor: aPatchSet [
 
-	| before originalSymbolDictionary assoc newSymbolDictionary theClass registry |
+	| before originalSymbolDictionary assoc newSymbolDictionary theClass registry loadedClass |
 	theClass := Rowan globalNamed: classDefinition name.
 	before := classModification before.
 	originalSymbolDictionary := Rowan globalNamed: before gs_symbolDictionary.
@@ -44,11 +44,12 @@ RwGsClassSymbolDictionaryMoveSymDictPatch >> installSymbolDictionaryPatchFor: aP
 	registry deleteClassNamedFromPackage: classDefinition name implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
 	newSymbolDictionary := Rowan globalNamed: (projectDefinition symbolDictNameForPackageNamed: packageDefinition name) .
 	registry := newSymbolDictionary rowanSymbolDictionaryRegistry.
-	registry 
+	loadedClass := registry 
 		addClassAssociation: assoc 
 			forClass: theClass 
 			toPackageNamed: packageDefinition name
-			implementationClass: RwGsSymbolDictionaryRegistry_Implementation
+			implementationClass: RwGsSymbolDictionaryRegistry_Implementation.
+	loadedClass updatePropertiesFromClassDefinition: self classDefinition
 ]
 
 { #category : 'installing' }

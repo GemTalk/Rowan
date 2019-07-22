@@ -13,7 +13,6 @@ RwRowanSample7Test >> _expected_rowanSample7_component_configuration [
 	^ 'RwComponentLoadConfiguration {
 	#name : ''Main'',
 	#comment : '''',
-	#projectName : ''RowanSample7_component'',
 	#version : ''0.1.0'',
 	#conditionalPackages : {
 		[
@@ -120,17 +119,17 @@ RwRowanSample7Test >> _repositoryRoot: anObject [
 { #category : 'private' }
 RwRowanSample7Test >> _rowanSample7_ColorsSpecificationUrl [
 
-	| rowanSpec |
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	^ 'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample7_Colors.ston'
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample7_Colors.ston'
 ]
 
 { #category : 'private' }
 RwRowanSample7Test >> _rowanSample7SpecificationUrl [
 
-	| rowanSpec |
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	^ 'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample7.ston'
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample7.ston'
 ]
 
 { #category : 'private' }
@@ -138,9 +137,9 @@ RwRowanSample7Test >> _rowanSample7SpecificationUrl_12x [
 
 	"1.2.x compat project spec"
 
-	| rowanSpec |
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	^ 'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample7_12x.ston'
+	| rowanProject |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	^ 'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample7_12x.ston'
 ]
 
 { #category : 'running' }
@@ -157,7 +156,7 @@ RwRowanSample7Test >> testCreateComponentProject [
 		create the project on disk -- this is the full deal"
 
 	| projectUrl projectName configurationNames groupNames comment projectHome
-		rowanSpec cpd x y packageName className testClassName|
+		rowanProject cpd x y packageName className testClassName|
 
 	projectName := 'RowanSample7_component'.
 	configurationNames := #( 'Main' ).
@@ -167,11 +166,9 @@ RwRowanSample7Test >> testCreateComponentProject [
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
 
 "create project definition"
 	cpd := RwComponentProjectDefinition
@@ -269,7 +266,6 @@ RwRowanSample7Test >> testCreateComponentProject [
 	self assert: cpd projectsRoot exists.
 
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: [  ]) notNil.
-	self assert: (Rowan image projectRepositoryNamed: projectName ifAbsent: [  ]) notNil
 ]
 
 { #category : 'tests' }
@@ -282,21 +278,19 @@ RwRowanSample7Test >> testCreateNewProjectFromUrl [
 		4. write the project definition to the new project.
 	"
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec_1 projectDefinition_2 projectDefinition_3 projectName_3 |
+	| specUrlString rowanProject gitRootPath projectName projectSpec_1 projectDefinition_2 projectDefinition_3 projectName_3 |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
 
 "1. clone RowanSample7 using non-component API (v1.2.x style)"
 	specUrlString :=  self _rowanSample7SpecificationUrl_12x.
 	projectSpec_1 := specUrlString asRwUrl asSpecification.
-	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
+	gitRootPath := rowanProject repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
 	(gitRootPath / projectName) ensureDeleteAll.
 
@@ -305,9 +299,6 @@ RwRowanSample7Test >> testCreateNewProjectFromUrl [
 		gitRootPath: gitRootPath
 		useSsh: true
 		registerProject: false.	"does not register the project, so it is not visible in project list ... does however clone the project to local disk"
-
-"validate"
-	self assert: (Rowan image projectRepositoryNamed: projectSpec_1 specName ifAbsent: [  ]) isNil.
 
 "2. read project from disk into a project definition, using component API (v2.0 style)"
 	specUrlString := self _rowanSample7SpecificationUrl.
@@ -320,9 +311,6 @@ RwRowanSample7Test >> testCreateNewProjectFromUrl [
 "3. create a new git project on disk using component API"
 
 	projectName_3 := projectName, '_3'.
-
-	(Rowan image projectRepositoryNamed: projectName_3 ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectDefinition_3 := RwComponentProjectDefinition
 		projectName: projectName_3
@@ -342,7 +330,6 @@ RwRowanSample7Test >> testCreateNewProjectFromUrl [
 
 "validate"
 	self assert: projectDefinition_3 repositoryRoot exists.
-	self assert: (Rowan image projectRepositoryNamed: projectName_3 ifAbsent: [  ]) notNil.
 
 "4. write the project definition to the new project location"
 
@@ -360,7 +347,7 @@ RwRowanSample7Test >> testCreateProjectReference [
 		create the project reference on disk"
 
 	| prd projectUrl projectName configurationNames groupNames comment projectHome
-		rowanSpec|
+		rowanProject|
 
 	projectName := 'RowanSample7_test'.
 	configurationNames := #( 'Main' ).
@@ -370,11 +357,9 @@ RwRowanSample7Test >> testCreateProjectReference [
 
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
 
 "create definition"
 	prd := RwProjectReferenceDefinition
@@ -404,22 +389,19 @@ RwRowanSample7Test >> testCreateProjectReference [
 	self assert: prd specsRoot hasChildren.
 
 	self assert: (Rowan image loadedProjectNamed: projectName ifAbsent: [  ]) isNil.
-	self assert: (Rowan image projectRepositoryNamed: projectName ifAbsent: [  ]) notNil.
 ]
 
 { #category : 'tests' }
 RwRowanSample7Test >> testCreateProjectReferenceFromScratch [
 
-	| rowanSpec gitRootPath projectName projectReferenceDefinition projectSpec |
+	| rowanProject gitRootPath projectName projectReferenceDefinition projectSpec |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
 
 	projectSpec := RwComponentSpecification new
 		specName: projectName;
@@ -441,7 +423,7 @@ RwRowanSample7Test >> testCreateProjectReferenceFromScratch [
 	self assert: projectReferenceDefinition projectName = projectName.
 	self assert: projectReferenceDefinition projectAlias = projectReferenceDefinition projectName.
 	self assert: projectReferenceDefinition configurationNames = #( 'Default').
-	self assert: projectReferenceDefinition groupNames = #( 'core').
+	self assert: projectReferenceDefinition groupNames asArray = #( 'core').
 	self assert: projectReferenceDefinition committish = 'master'.
 	self assert: projectReferenceDefinition committishType = 'branch'.
 	self assert: projectReferenceDefinition projectUrl = self _gitHubProjectUrl.
@@ -452,14 +434,14 @@ RwRowanSample7Test >> testCreateProjectReferenceFromScratch [
 { #category : 'tests' }
 RwRowanSample7Test >> testCreateProjectReferenceFromUrl [
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec projectReferenceDefinition x y |
+	| specUrlString rowanProject gitRootPath projectName projectSpec projectReferenceDefinition x y |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -473,7 +455,7 @@ RwRowanSample7Test >> testCreateProjectReferenceFromUrl [
 	self assert: projectReferenceDefinition projectName = projectName.
 	self assert: projectReferenceDefinition projectAlias = projectReferenceDefinition projectName.
 	self assert: projectReferenceDefinition configurationNames = #( 'Main').
-	self assert: projectReferenceDefinition groupNames = #( 'core').
+	self assert: projectReferenceDefinition groupNames asArray = #( 'core').
 	self assert: projectReferenceDefinition defaultComponentName = 'Main'.
 	self assert: projectReferenceDefinition projectUrl = 'https://github.com/dalehenrich/RowanSample7'.
 
@@ -491,10 +473,10 @@ RwRowanSample7Test >> testCreateRepositoryDefinition [
 
 	"exercise the RwAbstractRepositoryDefinition class creation protocol"
 
-	| rowanSpec gitRootPath repositoryName repositoryDefinition_1  repositoryDefinition_2 repoRoot
+	| rowanProject gitRootPath repositoryName repositoryDefinition_1  repositoryDefinition_2 repoRoot
 		projectVersionString gitHubProjectUrl gitHubRemoteUrl x y |
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
 
 	repositoryName := 'RowanSample7'.
 	repoRoot := gitRootPath asFileReference / repositoryName.
@@ -581,14 +563,14 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_1 [
 
 	"exercise the RwAbstractRepositoryDefinition class creation protocol"
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition_1 x y |
+	| specUrlString rowanProject gitRootPath projectName projectSpec repositoryDefinition_1 x y |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	gitRootPath := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -610,13 +592,13 @@ RwRowanSample7Test >> testCreateRepositoryDefinitionFromUrl_2 [
 
 	"verify that the repository root can be dynamically swapped out (if desired) ... repository definitioin can be ointed wholesale to another $ROWAN_PROJECTS_HOME"
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition x y  memoryRoot repositoryDefinition_1 |
+	| specUrlString rowanProject gitRootPath projectName projectSpec repositoryDefinition x y  memoryRoot repositoryDefinition_1 |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
 	gitRootPath := FileLocator rowanProjectsHome resolve / 'Rowan/test/testRepositories/repos/'.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
@@ -662,16 +644,14 @@ RwRowanSample7Test >> testResolveProjectReference [
 
 	"clone a repository from github, attach to an existing git repository, clone to an alternate projectHome"
 
-	| specUrlString rowanSpec projectHome projectName projectSpec projectReferenceDefinition_1 projectReferenceDefinition_2 informHappened |
+	| specUrlString rowanProject projectHome projectName projectSpec projectReferenceDefinition_1 projectReferenceDefinition_2 informHappened |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectHome := rowanProject repositoryRootPath , '/test/testRepositories/repos/'.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.
@@ -682,18 +662,14 @@ RwRowanSample7Test >> testResolveProjectReference [
 		projectHome: projectHome.
 
 	projectReferenceDefinition_1 repositoryRoot ensureDeleteAll.
-	(Rowan image projectRepositoryNamed: projectReferenceDefinition_1 projectAlias ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 "1. clone repository"
-	self assert: (Rowan image projectRepositoryNamed: projectReferenceDefinition_1 projectAlias ifAbsent: [  ]) isNil.
 	self 
 		handleInformDuring: [ projectReferenceDefinition_1 resolve ] 
 		interactionBlock: [:inform | self assert: false description: 'unexpected inform' ].
 
 "validate"
 	self assert: projectReferenceDefinition_1 repositoryRoot exists.
-	self assert: (Rowan image projectRepositoryNamed: projectReferenceDefinition_1 projectAlias ifAbsent: [  ]) notNil.
 
 "2. create second project reference definitions"
 	projectReferenceDefinition_2 := RwProjectReferenceDefinition 
@@ -712,23 +688,17 @@ RwRowanSample7Test >> testResolveProjectReference [
 
 "validate"
 	self assert: projectReferenceDefinition_1 projectHome = projectReferenceDefinition_2 projectHome.
-	self assert: (Rowan image projectRepositoryNamed: projectReferenceDefinition_1 projectAlias ifAbsent: [  ]) == projectReferenceDefinition_2 repositoryDefinition. "expect repository defintion to be shared"
 
 "3. now clone to a different spot by just changing the project home"
 	projectReferenceDefinition_2 repositoryRoot ensureDeleteAll.
-	(Rowan image projectRepositoryNamed: projectReferenceDefinition_2 projectAlias ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 
 	projectHome := projectHome asFileReference / 'sample7_repos'.
 	projectHome ensureDeleteAll.
-	(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
-		ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ].
 	projectHome ensureCreateDirectory.
 
 	projectReferenceDefinition_2 projectHome: projectHome.
 
 "clone to new location"
-	self assert: (Rowan image projectRepositoryNamed: projectReferenceDefinition_2 projectAlias ifAbsent: [  ]) isNil.
 	self 
 		handleInformDuring: [ projectReferenceDefinition_2 resolve ] 
 		interactionBlock: [:inform | self assert: false dexcription: 'unexpected inform: ', inform message printString ].
@@ -736,7 +706,6 @@ RwRowanSample7Test >> testResolveProjectReference [
 "validate"
 	self assert: projectReferenceDefinition_2 repositoryRoot exists.
 	self deny: projectReferenceDefinition_1 repositoryRoot exists.	"confirm that the repo wasn't cloned to old location"
-	self assert: (Rowan image projectRepositoryNamed: projectReferenceDefinition_2 projectAlias ifAbsent: [  ]) notNil.
 ]
 
 { #category : 'tests' }
@@ -744,14 +713,14 @@ RwRowanSample7Test >> testResolveRepositoryDefinition [
 
 	"clone a repository from github using repositoryDefinition"
 
-	| specUrlString rowanSpec gitRootPath projectName projectSpec repositoryDefinition |
+	| specUrlString rowanProject gitRootPath projectName projectSpec repositoryDefinition |
 
 	projectName := 'RowanSample7'.
 	(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
 		ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	gitRootPath := (rowanSpec repositoryRootPath , '/test/testRepositories/repos/') asFileReference.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	gitRootPath := (rowanProject repositoryRootPath , '/test/testRepositories/repos/') asFileReference.
 
 	specUrlString := self _rowanSample7SpecificationUrl.
 	projectSpec := specUrlString asRwUrl asSpecification.

@@ -7,12 +7,12 @@ Class {
 { #category : 'tests' }
 RwProjectComponentDefinitionsTest >> testCloneComponentProject [
 
-	| rowanSpec urlString projectDefinition |
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	urlString :=  'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample1_masterV2.ston'.
+	| rowanProject urlString projectDefinition |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	urlString :=  'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample1_masterV2.ston'.
 
 	projectDefinition := (urlString asRwUrl asSpecification asDefinition)
-		projectHome: (rowanSpec repositoryRootPath , '/test/testRepositories/repos') asFileReference;
+		projectHome: (rowanProject repositoryRootPath , '/test/testRepositories/repos') asFileReference;
 		yourself.
 
 "setup"
@@ -187,22 +187,22 @@ RwProjectComponentDefinitionsTest >> testCreateComponentProject_03 [
 { #category : 'tests' }
 RwProjectComponentDefinitionsTest >> testLoadRowanSample1_masterV20 [
 
-	| rowanSpec projectsHome urlString projectSample1Definition projectSample2Definition 
+	| rowanProject projectsHome urlString projectSample1Definition projectSample2Definition 
 		projectSetDefinition1 projectSetDefinition2 x |
 
 	#( 'RowanSample1' 'RowanSample2') do: [:prjName |
 		(Rowan image loadedProjectNamed: prjName ifAbsent: [  ])
 			ifNotNil: [ :project | Rowan image _removeLoadedProject: project ] ].
 
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	projectsHome := (rowanSpec repositoryRootPath , '/test/testRepositories/repos') asFileReference.
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	projectsHome := (rowanProject repositoryRootPath , '/test/testRepositories/repos') asFileReference.
 
-	urlString :=  'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample1_masterV2.ston'.
+	urlString :=  'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample1_masterV2.ston'.
 	projectSample1Definition := (urlString asRwUrl asSpecification asDefinition)
 		projectHome: projectsHome;
 		yourself.
 
-	urlString :=  'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample2_masterV2.ston'.
+	urlString :=  'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample2_masterV2.ston'.
 	projectSample2Definition := (urlString asRwUrl asSpecification asDefinition)
 		projectHome: projectsHome;
 		yourself.
@@ -227,12 +227,12 @@ RwProjectComponentDefinitionsTest >> testLoadRowanSample1_masterV20 [
 { #category : 'tests' }
 RwProjectComponentDefinitionsTest >> testReadComponentProject [
 
-	| rowanSpec urlString projectDefinition x projectSetDefinition |
-	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
-	urlString :=  'file:' , rowanSpec repositoryRootPath , '/test/specs/RowanSample2_masterV2.ston'.
+	| rowanProject urlString projectDefinition x projectSetDefinition |
+	rowanProject := Rowan image _projectForNonTestProject: 'Rowan'.
+	urlString :=  'file:' , rowanProject repositoryRootPath , '/test/specs/RowanSample2_masterV2.ston'.
 
 	projectDefinition := (urlString asRwUrl asSpecification asDefinition)
-		projectHome: (rowanSpec repositoryRootPath , '/test/testRepositories/repos') asFileReference;
+		projectHome: (rowanProject repositoryRootPath , '/test/testRepositories/repos') asFileReference;
 		yourself.
 
 "setup"
@@ -245,4 +245,36 @@ RwProjectComponentDefinitionsTest >> testReadComponentProject [
 "validate"
 	self assert: (x := projectSetDefinition projectNames asArray sort) = #( 'RowanSample2').
 	self assert: (x := projectDefinition packageNames asArray sort) = #( 'RowanSample2-Core')
+]
+
+{ #category : 'tests' }
+RwProjectComponentDefinitionsTest >> testRowanInstall_3 [
+
+	"derived from platforms/gemstone/topaz/3.5.0/install_3.tpz"
+
+	"install_3.tpz"
+ 	| projectSetDefinition gitRepoPath  loadedProjectInfo readTool gitRoot x |
+	projectSetDefinition := RwProjectSetDefinition new.
+	loadedProjectInfo := Dictionary new.
+	gitRepoPath := '$ROWAN_PROJECTS_HOME/Rowan'.
+	readTool := Rowan projectTools read.
+	{	{
+			'file:$ROWAN_PROJECTS_HOME/Rowan/rowan/specs/RowanV2.ston'. 
+			'$ROWAN_PROJECTS_HOME'
+		}	} 
+	do: [:ar |
+		"Read project and packages from disk, creating a projectSetDefinition with all 5 projects"
+		| projectDefinition theProjectSetDefinition specUrl projectHome |
+		specUrl := ar at: 1.
+		projectHome := ar at: 2.
+		gitRoot := '$ROWAN_PROJECTS_HOME/Rowan'.
+		projectDefinition := (RwComponentProjectDefinition newForUrl: specUrl) 
+			projectHome: projectHome;
+			gitRoot: gitRoot;
+			yourself.
+		theProjectSetDefinition := readTool 
+			readProjectSetForComponentProjectDefinition: projectDefinition 
+				withConfigurations: projectDefinition defaultConfigurationNames 
+				groupNames: projectDefinition defaultGroupNames.
+		self assert: #( 'Load' ) sort = (x := (theProjectSetDefinition projectNamed: projectDefinition name) loadedConfigurationNames asArray sort) ]
 ]

@@ -121,11 +121,6 @@ RwProjectTool class >> revert [
 ]
 
 { #category : 'commands' }
-RwProjectTool class >> spec [
-  ^ RwPrjSpecTool new
-]
-
-{ #category : 'commands' }
 RwProjectTool class >> test [
 
 	^RwPrjTestTool new
@@ -135,17 +130,6 @@ RwProjectTool class >> test [
 RwProjectTool class >> write [
 
 	^RwPrjWriteTool new
-]
-
-{ #category : 'private' }
-RwProjectTool >> _createLoadedProject: aRwProjectReference [
-
-	Rowan image 
-		loadedProjectNamed: aRwProjectReference projectAlias
-		ifAbsent: [
-			| newLoadedProject |
-			newLoadedProject := RwGsLoadedSymbolDictProject newForProjectReference: aRwProjectReference.
-			Rowan image addLoadedProject: newLoadedProject ]
 ]
 
 { #category : 'smalltalk api' }

@@ -112,7 +112,7 @@ RwRepositoryComponentProjectTonelReaderVisitor >> readClassesFor: packageName pa
 	| classFileExtensions classExtensionFileExtensions |
 	currentPackageDefinition := currentProjectDefinition 
 		packageNamed: packageName 
-		ifAbsent: [ currentProjectDefinition addPackageNamed: packageName ].
+		ifAbsent: [ currentProjectDefinition addRawPackageNamed: packageName ].
 	classExtensionFileExtensions := self classExtensionFileExtensions.
 	classFileExtensions := self classFileExtensions.
 	packageRoot files do: [:file |
@@ -128,10 +128,12 @@ RwRepositoryComponentProjectTonelReaderVisitor >> readClassesFor: packageName pa
 { #category : 'class reading' }
 RwRepositoryComponentProjectTonelReaderVisitor >> readClassExtensionFile: file inPackage: packageName [
 
-	file readStreamDo: [:fileStream |
+	| fileReference |
+	fileReference := file asFileReference.
+	fileReference readStreamDo: [:fileStream |
 		| definitions stream |
 		stream := ZnBufferedReadStream on: fileStream. "wrap with buffered stream to bypass https://github.com/GemTalk/FileSystemGs/issues/9"
-		stream sizeBuffer: 20000. "part of workaround for GemTalk/FileSystemGs#9"
+		stream sizeBuffer: fileReference size. "part of workaround for GemTalk/FileSystemGs#9"
 		definitions := (TonelParser on: stream forReader: self) start.
 		((definitions at: 2) at: 1) do: [:mDef |
 			currentClassExtension addClassMethodDefinition: mDef ].

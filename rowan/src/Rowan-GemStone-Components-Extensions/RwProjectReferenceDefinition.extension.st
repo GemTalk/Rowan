@@ -1,10 +1,46 @@
 Extension { #name : 'RwProjectReferenceDefinition' }
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> asSpecification [
+
+	| repoSpec platformSpec platformDict |
+	self useGit
+		ifTrue: [
+			repoSpec := RwGitRepositorySpecification new
+				committish: self committish;
+				committishType: self committishType;
+				remoteUrl: self remoteUrl;
+				yourself ]
+		ifFalse: [  repoSpec := RwDiskRepositorySpecification new ] .
+	platformSpec := RwGemStoneSpecification new.
+	platformSpec packageNameToPlatformPropertiesMap: self packageNameToPlatformPropertiesMap.
+	platformDict := (Dictionary new) at: 'gemstone' put: platformSpec; yourself.
+	^ RwComponentSpecification new
+		specName: self projectName;
+		projectUrl: self projectUrl;
+		repoPath: self packagesPath;
+		configsPath: self configsPath;
+		specsPath: self specsPath;
+		projectsPath: self projectsPath;
+		defaultComponentName: self defaultComponentName;
+		defaultConfigurationNames: self configurationNames;
+		defaultGroupNames: self groupNames;
+		comment: self comment;
+		repoSpec: repoSpec;
+		platformSpec: platformDict;
+		yourself.
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinition >> defaultMethodEnv [
 
-self deprecated: 'temporary patch .. this is probably the right spot, but it is worth double checking'.
-	^ 0
+	^ self properties at: 'defaultMethodEnv' ifAbsent: [ 0 ]
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> defaultMethodEnv: anInteger [
+
+	^ self properties at: 'defaultMethodEnv' put: anInteger
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
@@ -35,7 +71,6 @@ RwProjectReferenceDefinition >> defaultUseSessionMethodsForExtensions: aBool [
 RwProjectReferenceDefinition >> methodEnvForPackageNamed: packageName [
 
 	| packageProperties |
-self deprecated: 'temporary patch .. see RwGemStoneSpecification>>methodEnvForPackageNamed: for full implementation'.
 	packageProperties :=self packageNameToPlatformPropertiesMap
 		at: packageName
 		ifAbsent: [ ^ self defaultMethodEnv ].
@@ -71,14 +106,41 @@ RwProjectReferenceDefinition >> setSymbolDictName: symbolDictName forPackageName
 ]
 
 { #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> setUseSessionMethodsForExtensions: aBool forPackageNamed: packageName [
+
+	| packageProperties |
+	packageProperties := self packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ self packageNameToPlatformPropertiesMap at: packageName put: Dictionary new ].
+	aBool 
+		ifNil: [
+			"remove the entry if it exists"
+			packageProperties removeKey: 'useSessionMethodsForExtensions' ifAbsent: [].
+			^self ].
+	aBool ifTrue: [ Rowan image ensureSessionMethodsEnabled ].
+	packageProperties at: 'useSessionMethodsForExtensions' put: aBool
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
 RwProjectReferenceDefinition >> symbolDictNameForPackageNamed: packageName [
 
 	| packageProperties |
-self deprecated: 'temporary patch .. see RwGemStoneSpecification>>symbolDictNameForPackageNamed: for full implementation'.
 	packageProperties := self packageNameToPlatformPropertiesMap
 		at: packageName
 		ifAbsent: [ ^ self defaultSymbolDictName ].
 	^ packageProperties
 		at: 'symbolDictName'
 		ifAbsent: [ ^ self defaultSymbolDictName ]
+]
+
+{ #category : '*rowan-gemstone-components-extensions' }
+RwProjectReferenceDefinition >> useSessionMethodsForExtensionsForPackageNamed: packageName [
+
+	| packageProperties |
+	packageProperties := self packageNameToPlatformPropertiesMap
+		at: packageName
+		ifAbsent: [ ^ self defaultUseSessionMethodsForExtensions ].
+	^ packageProperties
+		at: 'useSessionMethodsForExtensions'
+		ifAbsent: [ ^ self defaultUseSessionMethodsForExtensions ]
 ]

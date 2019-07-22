@@ -99,6 +99,13 @@ RwProjectDefinition >> comment: aString [
 	self specification comment: aString
 ]
 
+{ #category : 'actions' }
+RwProjectDefinition >> commit: message [
+	"lperform commit on the repository associated with receiver ..."
+
+	^ Rowan projectTools commit commitProjectDefinition: self message: message
+]
+
 { #category : 'properties' }
 RwProjectDefinition >> configsPath [
 
@@ -224,6 +231,12 @@ RwProjectDefinition >> loadedConfigurationNames: anArray [
 ]
 
 { #category : 'properties' }
+RwProjectDefinition >> loadedGroupNames [
+
+	^ self specification loadedGroupNames
+]
+
+{ #category : 'properties' }
 RwProjectDefinition >> loadedGroupNames: anArray [
 
 	^ self specification imageSpec loadedGroupNames: anArray
@@ -252,8 +265,7 @@ RwProjectDefinition >> packageNames [
 RwProjectDefinition >> packageNames: packageNames [
 
 	packageNames
-		do: [ :packageName | self addPackage: (RwPackageDefinition newNamed: packageName) ]
-
+		do: [ :packageName | self addPackageNamed: packageName ]
 ]
 
 { #category : 'accessing' }
@@ -276,6 +288,18 @@ RwProjectDefinition >> postCopy [
 	oldPackages := packages.
 	packages := Dictionary new.
 	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
+]
+
+{ #category : 'actions' }
+RwProjectDefinition >> read [
+	"refresh the contents of the receiver ... the reciever will match the definitions on disk based on the default component and group names"
+
+	"return a project definition set that will contain the project definition"
+
+	| projecSetDefinition |
+	projecSetDefinition := RwProjectSetDefinition new.
+	projecSetDefinition addProject: (Rowan projectTools read readProjectDefinition: self).
+	^ projecSetDefinition
 ]
 
 { #category : 'tool api' }
@@ -373,6 +397,13 @@ RwProjectDefinition >> specsPath: aDirectoryPathString [
 
 ]
 
+{ #category : 'actions' }
+RwProjectDefinition >> unload [
+	"unload the receiver from the image"
+
+	^ Rowan projectTools delete deleteProjectDefinition: self copy	"delete operation is destructive to the projectDefinition"
+]
+
 { #category : 'loading' }
 RwProjectDefinition >> updateLoadedCommitId [
 
@@ -383,6 +414,14 @@ RwProjectDefinition >> updateLoadedCommitId [
 			"most likely no commits yet"
 			^ nil ].
 	self specification imageSpec loadedCommitId: loadedCommitId
+]
+
+{ #category : 'loading' }
+RwProjectDefinition >> updateLoadedComponentInfoFor: aLoadedProject from: map [
+
+	aLoadedProject
+		loadedConfigurationNames: (map at: 'loadedConfigurationNames');
+		loadedGroupNames: (map at: 'loadedGroupNames')
 ]
 
 { #category : 'properties' }

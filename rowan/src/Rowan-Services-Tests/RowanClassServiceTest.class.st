@@ -7,6 +7,14 @@ Class {
 	#category : 'Rowan-Services-Tests'
 }
 
+{ #category : 'Testing' }
+RowanClassServiceTest class >> isAbstract [
+	"Override to true if a TestCase subclass is Abstract and should not have
+	TestCase instances built from it"
+
+	^self sunitName = #RowanClassServiceTest
+]
+
 { #category : 'patch' }
 RowanClassServiceTest >> createClassNamed: className [
 
@@ -158,16 +166,16 @@ RowanClassServiceTest >> setUp [
 
 	super setUp.
 	self createServicesTestClass. 
+	Rowan platform _alternateImageClass: Rowan image testImageClass.
 	self loadServicesTestProject.
-	Rowan platform _alternateImageClass: Rowan image testImageClass
 ]
 
 { #category : 'support' }
 RowanClassServiceTest >> tearDown [
 
 	super tearDown.
-	Rowan platform _alternateImageClass: nil.
 	self unloadServicesTestProject.
+	Rowan platform _alternateImageClass: nil.
 ]
 
 { #category : 'tests' }
@@ -221,6 +229,7 @@ RowanClassServiceTest >> test_behavior [
 { #category : 'tests' }
 RowanClassServiceTest >> test_classComment [
 	| classService behavior |
+
 	behavior := Rowan globalNamed: self servicesDefaultClassName. 
 	self assert: behavior comment equals: String new. 
 	classService := RowanClassService forClassNamed: self servicesDefaultClassName meta: false. 
@@ -375,6 +384,16 @@ RowanClassServiceTest >> test_equality [
 ]
 
 { #category : 'tests' }
+RowanClassServiceTest >> test_instVarNamesIsArray [
+	"instVarNames was getting set to a collection which
+	was not handled well by STON"
+	| classService |
+	
+	classService := RowanClassService forClassNamed: 'UnauthorizedObjectStub' meta: false. 
+	self assert: (classService instVarNames isKindOf: Array).
+]
+
+{ #category : 'tests' }
 RowanClassServiceTest >> test_nameIsString [
 
 	| classService |
@@ -403,6 +422,18 @@ RowanClassServiceTest >> test_nameIsString [
 	self assert: (classService name isKindOf: String).
 	classService := RowanClassService minimalForClassNamed: #RowanClassService.
 	self assert: (classService name isKindOf: String).
+]
+
+{ #category : 'test method compilation' }
+RowanClassServiceTest >> test_rowanCompileGone [
+
+	"#rowanCompile was used to tell Rowan
+	to compile a method in a Rowan package
+	or in the traditional manner. That is no 
+	longer needed. Make sure it's not referenced
+	anywhere." 
+
+	self assert: (ClassOrganizer new referencesToLiteral: '#rowanCompile' evaluate) first isEmpty
 ]
 
 { #category : 'test method compilation' }

@@ -131,7 +131,7 @@ RwProjectSpecification >> defaultGroupNames [
 { #category : 'accessing' }
 RwProjectSpecification >> defaultGroupNames: anArray [
 
-	defaultGroupNames := anArray
+	defaultGroupNames := anArray asArray
 ]
 
 { #category : 'exporting' }

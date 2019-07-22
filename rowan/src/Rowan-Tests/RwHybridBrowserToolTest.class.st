@@ -153,161 +153,6 @@ RwHybridBrowserToolTest >> testHybridClassCreation [
 ]
 
 { #category : 'tests' }
-RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplate_292 [
-
-	"https://github.com/dalehenrich/Rowan/issues/292"
-
-	|  class projectName packageNames packageName1 template expectedTemplate oldClass |
-	projectName := 'Hybrid Project A'.
-	packageName1 := 'HybridA-Core'.
-	packageNames := {packageName1}.
-
-	self
-		_loadProjectDefinition: projectName
-		packageNames: packageNames
-		defaultSymbolDictName: self _symbolDictionaryName1
-		comment: 'hybrid browser project'.
-"1 create class - indexable"
-	class := Object
-		rwIndexableSubclass: 'TestVariableClass'
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-
-	template := Rowan projectTools browser
-		classCreationTemplateForClass: class
-		hybridBrowser: true.
-	expectedTemplate := 'Object rwIndexableSubclass: ''TestVariableClass''
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	category: ', packageName1 printString, '
-	options: #()
-'.
-	self assert: template = expectedTemplate.
-
-"2 create subclass - indexable"
-	oldClass := class.
-	class := oldClass
-		rwIndexableSubclass: 'TestVariableSubclass'
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-
-	template := Rowan projectTools browser
-		classCreationTemplateForClass: class
-		hybridBrowser: true.
-	expectedTemplate := 'TestVariableClass rwSubclass: ''TestVariableSubclass''
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	category: ', packageName1 printString, '
-	options: #()
-'.
-	self assert: template = expectedTemplate.
-
-"1 create class - bytes"
-	class := Object
-		rwByteSubclass: 'TestByteClass'
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-
-	template := Rowan projectTools browser
-		classCreationTemplateForClass: class
-		hybridBrowser: true.
-	expectedTemplate := 'Object rwByteSubclass: ''TestByteClass''
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	category: ', packageName1 printString, '
-	options: #()
-'.
-	self assert: template = expectedTemplate.
-
-"2 create subclass - bytes"
-	oldClass := class.
-	class := oldClass
-		rwSubclass: 'TestByteSubclass'
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-
-	template := Rowan projectTools browser
-		classCreationTemplateForClass: class
-		hybridBrowser: true.
-	expectedTemplate := 'TestByteClass rwSubclass: ''TestByteSubclass''
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	category: ', packageName1 printString, '
-	options: #()
-'.
-	self assert: template = expectedTemplate.
-
-"1 create class - disallowGciStore"
-	class := Error
-		rwSubclass: 'TestErrorClass'
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-
-	template := Rowan projectTools browser
-		classCreationTemplateForClass: class
-		hybridBrowser: true.
-	expectedTemplate := 'Error rwSubclass: ''TestErrorClass''
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	category: ', packageName1 printString, '
-	options: #()
-'.
-	self assert: template = expectedTemplate.
-
-"1 create class - traverseByCallback"
-	class := RcIdentityBag
-		rwSubclass: 'TestRcIdentityBagClass'
-		instVarNames: #()
-		classVars: #()
-		classInstVars: #()
-		poolDictionaries: #()
-		category: packageName1
-		options: #().
-
-	template := Rowan projectTools browser
-		classCreationTemplateForClass: class
-		hybridBrowser: true.
-	expectedTemplate := 'RcIdentityBag rwSubclass: ''TestRcIdentityBagClass''
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	category: ', packageName1 printString, '
-	options: #()
-'.
-	self assert: template = expectedTemplate.
-
-]
-
-{ #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridClassCreationWithClassCreationTemplateA [
 
 	"https://github.com/dalehenrich/Rowan/issues/17"
@@ -826,13 +671,19 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 
 	"Write project to disk, make a few modifications and then reload the project from disk"
 
-	| normalClass1 normalClass2 projectName packageNames packageName1 packageName2 normalInstance1 normalInstance2 projectTools className1 className2 theLoadedProject theLoadedPackage theLoadedClassOrClassExtension writtenStateValidationBlock classNames oldNormalClass2 |
+	| normalClass1 normalClass2 projectName packageNames packageName1 packageName2 normalInstance1 
+		normalInstance2 projectTools className1 className2 theLoadedProject theLoadedPackage 
+		theLoadedClassOrClassExtension writtenStateValidationBlock classNames oldNormalClass2 
+		projectDefinition useExport |
+
+	useExport := false.
+
 	projectName := 'HybridPatchProjectA'.
 	packageName1 := 'Hybrid-Patch-Core'.
 	packageName2 := 'Hybrid-Patch-Extensions'.
 	packageNames := {packageName1.
 	packageName2}.
-	self
+	projectDefinition := self
 		_loadDiskProjectDefinition: projectName
 		packageNames: packageNames
 		defaultSymbolDictName: self _symbolDictionaryName1
@@ -880,8 +731,10 @@ RwHybridBrowserToolTest >> testHybridComplicatedProjectLoad [
 	self should: [ normalInstance2 biff ] raise: MessageNotUnderstood.
 
 	projectTools := Rowan projectTools.
-	projectTools spec exportProjectNamed: projectName.
-	projectTools write writeProjectNamed: projectName.
+	projectDefinition exportSpecification.	"when should the spec be exported? ... not on every write since we do expect the spec to manually modified over time"
+	useExport
+		ifTrue: [ projectDefinition export ]
+		ifFalse: [ projectTools write writeProjectNamed: projectName ].
 	projectTools commit
 		commitProjectNamed: projectName
 		message:
@@ -1294,7 +1147,7 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackage [
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict [
 
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry |
+	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry project audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -1346,6 +1199,9 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict [
 		category: packageName2
 		options: #().
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	self assert: movedNormalClass == normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2.
 	self assert: movedNormalClass category= packageName2.
@@ -1365,13 +1221,12 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict [
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_class_vars [
 
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry |
+	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry project audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -1423,6 +1278,9 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 		category: packageName2
 		options: #().
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	self assert: movedNormalClass == normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2.
 	self assert: movedNormalClass category= packageName2.
@@ -1443,13 +1301,12 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_class_vars_constraints [
 
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry |
+	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry project audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -1502,6 +1359,9 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 		constraints: {{#ivar1 . Association}}
 		options: #().
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	self assert: movedNormalClass == normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2.
 	self assert: movedNormalClass category= packageName2.
@@ -1523,13 +1383,12 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests' }
 RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_class_vars_constraints_new_class_version [
 
-	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry |
+	| normalClass projectName packageNames packageName1 packageName2 movedNormalClass packageNameMap symDict registry project audit |
 	projectName := 'Hybrid Project A'.
 	packageName1 := 'HybridA-Core'.
 	packageName2 := 'HybridA-Extensions'.
@@ -1584,6 +1443,9 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 		constraints: {{#ivar1 . Association}}
 		options: #().
 
+"validate"
+	project := Rowan projectNamed: projectName.
+	self assert: (audit := project audit) isEmpty.
 	self assert: movedNormalClass ~~ normalClass.
 	self assert: movedNormalClass rowanPackageName = packageName2.
 	self assert: movedNormalClass category= packageName2.
@@ -1607,7 +1469,6 @@ RwHybridBrowserToolTest >> testHybridMoveClassToPackageInAlternaterSymbolDict_cl
 	self assert: registry classRegistry size = 1.
 	self assert: registry classExtensionRegistry size = 0.
 	self assert: registry methodRegistry size = 0.
-
 ]
 
 { #category : 'tests' }
@@ -2566,12 +2427,17 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 
 	"Write project to disk, make a few modifications and then reload the project from disk"
 
-	| normalClass projectName packageNames packageName1 packageName2 fooMethod barMethod normalInstance projectTools bazMethod ivar1Method className theLoadedProject theLoadedPackage theLoadedClassOrClassExtension writtenStateValidationBlock |
+	| normalClass projectName packageNames packageName1 packageName2 fooMethod 
+		barMethod normalInstance projectTools bazMethod ivar1Method className 
+		theLoadedProject theLoadedPackage theLoadedClassOrClassExtension 
+		writtenStateValidationBlock project |
 	projectName := 'HybridPatchProjectA'.
 	packageName1 := 'Hybrid-Patch-Core'.
 	packageName2 := 'Hybrid-Patch-Extensions'.
-	packageNames := {packageName1.
-	packageName2}.
+	packageNames := { packageName1 . packageName2 }.
+
+	projectTools := Rowan projectTools.
+
 	self
 		_loadDiskProjectDefinition: projectName
 		packageNames: packageNames
@@ -2600,8 +2466,8 @@ RwHybridBrowserToolTest >> testHybridProjectLoad [
 	normalInstance := normalClass new.
 	self assert: normalInstance foo = 'foo'.
 
-	projectTools := Rowan projectTools.
-	projectTools spec exportProjectNamed: projectName.
+	project := RwProject newNamed: projectName.
+	project exportSpecification.
 	projectTools write writeProjectNamed: projectName.
 	projectTools commit
 		commitProjectNamed: projectName

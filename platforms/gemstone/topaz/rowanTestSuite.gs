@@ -1,7 +1,7 @@
 run
 	| deprecationAction suite strm res projectNames includeDeprecatedPackages warnings |
 
-	includeDeprecatedPackages := false. "true means load deprecated packages"
+	includeDeprecatedPackages := true. "true means load deprecated packages"
 
 	deprecationAction := Deprecated deprecatedAction.
 	warnings := {}.
@@ -43,15 +43,30 @@ run
 			audit := Rowan projectTools audit auditForProjectNamed: projectName.
 			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ] ].
 
-		Deprecated doErrorOnDeprecated.
+		(System stoneVersionReport at: 'gsVersion') >= '3.5.0' ifTrue: [ Deprecated doErrorOnDeprecated ].
 
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 
 		false	
 			ifTrue: [ 
-				"Deprection error will halt tests immediately"
-				res := suite run ]
+				"custom test debugging"
+				false
+					ifTrue:  [
+						"bring up debugger on Deprecated exception"
+						res := suite run ]
+					ifFalse: [
+						"debug selectors that only fail during full test run"
+						res := TestResult new.
+						suite tests do: [:each | 
+							each selector == #'testIssue295_rename_package_move_newClassVersion_newProject_3'
+								ifTrue: [ each debug ]
+								ifFalse: [ 
+									[ each run: res ] 
+										on: Deprecated do: [:ex |
+											ex resignalAs: (Error new messageText: ex description; yourself)
+										] ] ] ] ]
 			ifFalse: [ 
+				"standard test suite run"
 				[ 
 					res := suite run.
 				] on: Deprecated do: [:ex |
@@ -82,3 +97,4 @@ run
 			].
 %
 
+time

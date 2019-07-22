@@ -203,8 +203,8 @@ RwModificationFiletreeWriterVisitor >> _methodFileNameFor: aMethodDefinition [
 		ifFalse: [ selector ]
 		ifTrue: [ 
 		  | output specials |
-		  specials := self class seletorSpecials.
-		  output := String new writeStream.
+		  specials := self class selectorSpecials.
+		  output := WriteStream on: String new.
 		  output nextPut: $^.
 		  selector
 			do: [ :each | 
@@ -371,6 +371,12 @@ RwModificationFiletreeWriterVisitor >> changedMethod: aMethodModification [
 			<< methodDefinition protocol
 			<< self _newLine
 			<< (methodDefinition source withLineEndings: self _newLine) ]
+]
+
+{ #category : 'accessing' }
+RwModificationFiletreeWriterVisitor >> defaultPackageFormat [
+
+	^ 'filetree'
 ]
 
 { #category : 'actions' }

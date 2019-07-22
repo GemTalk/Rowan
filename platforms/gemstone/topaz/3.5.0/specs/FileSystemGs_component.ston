@@ -13,6 +13,7 @@ RwComponentSpecification {
 	#repoPath : 'rowan/src',
 	#projectsPath : 'rowan/projects',
 	#specsPath : 'rowan/specs',
+	#defaultComponentName : 'Default',
 	#defaultConfigurationNames : [ 'Default' ],
 	#defaultGroupNames : [ 'tests' ],
 	#comment : 'Used for reading the project from disk'

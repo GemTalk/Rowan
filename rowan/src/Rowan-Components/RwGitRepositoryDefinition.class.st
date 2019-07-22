@@ -39,6 +39,12 @@ RwGitRepositoryDefinition >> _createRemoteUrl [
 	^ remoteUrl
 ]
 
+{ #category : 'testing' }
+RwGitRepositoryDefinition >> canCommit [
+
+	^ true
+]
+
 { #category : 'actions' }
 RwGitRepositoryDefinition >> clone [
 
@@ -64,6 +70,24 @@ RwGitRepositoryDefinition >> commitId [
 RwGitRepositoryDefinition >> commitLog: logLimit [
 
 	^ Rowan gitTools gitlogtool: 'HEAD' limit: logLimit gitRepoDirectory: self gitRoot pathString
+]
+
+{ #category : 'actions' }
+RwGitRepositoryDefinition >> doCommit: message [
+
+	| gitTool gitRootPath commitMessageFileName status |
+	gitTool := Rowan gitTools.
+	gitRootPath := self repositoryRoot pathString.
+	commitMessageFileName := gitTool createTmpFileWith: message.
+	gitTool gitaddIn: gitRootPath with: '-A .'.
+	gitTool gitcommitIn: gitRootPath with: '--file=' , commitMessageFileName.
+	status := gitTool gitlogIn: gitRootPath with: '-1'.
+	Transcript
+		cr;
+		show: '==============';
+		cr;
+		show: status.
+	^ status
 ]
 
 { #category : 'accessing' }

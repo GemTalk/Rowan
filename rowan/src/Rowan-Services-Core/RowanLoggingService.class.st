@@ -22,13 +22,14 @@ Class {
 { #category : 'accessing' }
 RowanLoggingService class >> current [
 
-	^Current
+	"lazy initialize for a topaz session test" 
+	^SessionTemps current at: #rowanLoggingService ifAbsentPut: [nil]
 ]
 
 { #category : 'accessing' }
 RowanLoggingService class >> current: anObject [
 
-	^Current := anObject
+	SessionTemps current at: #rowanLoggingService put: anObject
 ]
 
 { #category : 'accessing' }

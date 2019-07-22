@@ -1,0 +1,223 @@
+"This package depends on the following classes:
+  RwGsPlatform
+  RwGsImage
+You must resolve these dependencies before you will be able to load these definitions: 
+  RwGsImage>>#testImageClass
+  RwGsPlatform>>#classTools
+  RwGsPlatform>>#gitTools
+  RwGsPlatform>>#packageTools
+  RwGsPlatform>>#projectTools
+  RwGsTestImage
+  RwGsTestImage>>#_loadedProjectNamedForNonTestProjects:ifAbsent:
+  RwGsTestImage>>#_loadedProjectRegistryForUserId:
+  RwGsTestImage>>#_loadedTestProjectRegistryForUserId:
+  RwGsTestImage>>#_projectForNonTestProject:
+  RwGsTestImage>>#_projectRepositoryRegistryForUserId:
+  RwGsTestImage>>#resetTestProjectRegistry
+
+
+Select Proceed to continue, or close this window to cancel the operation."
+
+"RwGitTool>>createTmpFileWith: (GsFile is Undeclared) 
+
+RwGitTool>>performOnServer:status: (System is Undeclared) 
+
+RwPkgAuditTool>>auditForPackage: (KeyValueDictionary is Undeclared) 
+
+RwPkgAuditTool>>auditForPackage: (GsFile is Undeclared) 
+
+RwPkgAuditTool>>checkAll (SessionTemps is Undeclared) 
+
+RwProjectReferenceDefinition>>asSpecification (RwGemStoneSpecification is Undeclared) 
+
+RwHybridBrowserToolTest>>testHybridClassCreationWithClassCreationTemplate_292 (RcIdentityBag is Undeclared) 
+
+RwUrl>>createRwCypressRepositoryForPath: (CypressFileSystemRepository is Undeclared) 
+
+RwUrl>>createRwFiletreeRepositoryForPath: (CypressFileSystemRepository is Undeclared) 
+
+RwUrl>>createRwTonelRepositoryForPath: (CypressTonelRepository is Undeclared) 
+
+RwUrl>>pathFor: (WriteStreamPortable is Undeclared) 
+
+RwHierarchicalUrl>>fullPath (WriteStreamPortable is Undeclared) 
+
+RwHierarchicalUrl>>privateParsePath:relativeTo: (WriteStreamPortable is Undeclared) 
+
+RwModificationCypressFamilyWriterVisitor class>>orderedDictionaryClass (GsTonelOrderedDictionary is Undeclared) 
+
+RwProjectTopazWriterTest>>testGsTopazWriter_A (RwGsModificationTopazWriterVisitor is Undeclared) 
+
+RwProjectTopazWriterTest>>testGsTopazWriter_B (RwGsModificationTopazWriterVisitor is Undeclared) 
+
+RwProjectTopazWriterTest>>testGsTopazWriter_C (RwGsModificationTopazWriterVisitor is Undeclared) 
+
+RwProjectTopazWriterTest>>testGsTopazWriter_D (RwGsModificationTopazWriterVisitor is Undeclared) 
+
+RwProjectTopazWriterTest>>testGsTopazWriter_MultiProject_A (RwGsModificationTopazWriterVisitor is Undeclared) 
+
+RwProjectTopazWriterTest>>testGsTopazWriter_MultiProject_B (RwGsModificationTopazWriterVisitor is Undeclared) 
+
+RwProjectTopazWriterTest>>testGsTopazWriter_error (RwGsModificationTopazWriterVisitor is Undeclared) 
+
+RwToolTest>>gsInteractionInformFailureHandler (GsInteractionHandler is Undeclared) 
+
+RwToolTest>>handleInformAsFailureDuring: (GsInteractionRequest is Undeclared) 
+
+RwPrjWriteTool>>writeDeprecatedProjectDefinition: (RwCypressPackageStructure is Undeclared) 
+
+RwPrjWriteTool>>writeDeprecatedProjectNamed: (RwCypressPackageStructure is Undeclared) 
+
+RwPrjWriteTool>>writePackageSet:specification: (RwCypressPackageStructure is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue165 (SymbolDictionary is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue165 (System is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue165 (System is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue185_254_move_extension_method_to_new_package_1 (RwGsLoadedSymbolDictClassExtension is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue185_254_move_extension_method_to_new_package_3 (RwGsLoadedSymbolDictClassExtension is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue185_254_move_extension_method_to_new_package_4 (RwGsLoadedSymbolDictClassExtension is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue185_move_extension_method_to_new_package_1 (RwGsLoadedSymbolDictClassExtension is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue185_move_extension_method_to_new_package_2 (RwGsLoadedSymbolDictClassExtension is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue185_move_extension_method_to_new_package_3 (RwGsLoadedSymbolDictClassExtension is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue185_move_extension_method_to_new_package_4 (RwGsLoadedSymbolDictClassExtension is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue217 (Deprecated is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue325 (SymbolDictionary is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue325 (System is Undeclared) 
+
+RwRowanProjectIssuesTest>>testIssue325 (System is Undeclared) 
+
+RwAbstractProjectConfiguration class>>fromUrl: (CypressFileUtilities is Undeclared) 
+
+RwAbstractProjectConfiguration class>>fromUrl: (GsSecureSocket is Undeclared) 
+
+RwPrjAuditTool>>auditAll (System is Undeclared) 
+
+RwPrjAuditTool>>auditAllForUser: (StringKeyValueDictionary is Undeclared) 
+
+RwPrjAuditTool>>auditForProject: (KeyValueDictionary is Undeclared) 
+
+RwPrjAuditTool>>auditForProject: (GsFile is Undeclared) 
+
+RwLoadedProject>>initialize (KeyValueDictionary is Undeclared) 
+
+RwBrowserToolApiTest>>testDeleteComplicatedPackage (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testDeleteComplicatedPackage (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersionA (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersionA (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersionB (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersionB (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersionB (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersionB (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_260_change_extension_method_protocol (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_260_change_extension_method_protocol (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_260_change_extension_method_source (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_260_change_extension_method_source (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_260_unchanged_extension_method_protocol (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_260_unchanged_extension_method_protocol (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_multi_project_change_extension_method_protocol (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_multi_project_change_extension_method_protocol (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_multi_project_change_extension_method_protocol (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_multi_project_change_extension_method_protocol (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_multi_project_change_extension_method_source (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_multi_project_change_extension_method_source (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_multi_project_change_extension_method_source (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_multi_project_change_extension_method_source (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_multi_project_unchanged_extension_method_protocol (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_multi_project_unchanged_extension_method_protocol (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_multi_project_unchanged_extension_method_protocol (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_multi_project_unchanged_extension_method_protocol (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_session_method_change_extension_method_protocol (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_session_method_change_extension_method_protocol (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_session_method_change_extension_method_protocol (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_session_method_change_extension_method_protocol (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_session_method_change_extension_method_source (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_session_method_change_extension_method_source (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_session_method_change_extension_method_source (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_session_method_change_extension_method_source (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_session_method_unchanged_extension_method_protocol (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_session_method_unchanged_extension_method_protocol (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_session_method_unchanged_extension_method_protocol (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testNewClassVersion_session_method_unchanged_extension_method_protocol (GsPackagePolicy is Undeclared) 
+
+RwBrowserToolApiTest>>testRenameClass_4 (CompileError is Undeclared) 
+
+RwBrowserToolApiTest>>testRenameClass_5 (CompileError is Undeclared) 
+
+RwSpecification class>>fromUrl: (CypressFileUtilities is Undeclared) 
+
+RwSpecification class>>fromUrl: (GsSecureSocket is Undeclared) "
+
+"_auditLoadedClassProperties: aLoadedClass forBehavior: aBehavior
+"Check #( 'instvars', 'superclass', 'classinstvars',  'gs_SymbolDictionary', 'comment', 'classvars', 'pools', 'category')"
+
+	| res  aDict |
+	res :=  self _result.
+	((aLoadedClass propertyAt: 'superclass') isEquivalent: aBehavior superclass name ) 
+		ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Superclass is different from loaded class'].
+	((aLoadedClass propertyAt: 'instvars') = (aBehavior instVarNames collect: [:e | e asString]) ) 
+			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'instVarNames changed in compiled class v loaded class'].
+	((aLoadedClass propertyAt: 'classvars') = ((aBehavior')' expected -> .classVars ifNil: [SymbolDictionary new]) 
+			keys collect: [:e | e asString]) asSortedCollection asArray) ifFalse: [
+				self errorLog: res  add: aLoadedClass name -> 'ClassVars changed in compiled class v loaded class'].
+	((aLoadedClass propertyAt: 'pools') = ((aBehavior.poolDictionaries ifNil: [Array new]) collect: [:e | e asString]) ) 
+			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'PoolDictionaries changed in compiled class v loaded class'].
+	((aLoadedClass propertyAt: 'comment' ifAbsent: ['']) isEquivalent: aBehavior rwComment ) 
+			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Comment has changed in compiled class v loaded class'].
+	((aLoadedClass propertyAt: 'category') = aBehavior category ) 
+			ifFalse: [self errorLog: res  add: aLoadedClass name -> 'Class category has changed in compiled class v loaded class'].
+	(aDict := System myUserProfile resolveSymbol: (aLoadedClass propertyAt: 'gs_SymbolDictionary') asSymbol ) 
+			ifNil: [self errorLog: res  add: aLoadedClass name -> ('Unable to find SymbolDictionary ' ,(aLoadedClass propertyAt: 'gs_SymbolDictionary'))] 
+			ifNotNil: [:smbd | smbd value at: aLoadedClass name asSymbol 
+					ifAbsent: [self errorLog: res  add: aLoadedClass name -> 'Compiled class not found in symbol dictionary of loaded class']] .
+
+	^res"
+
