@@ -193,8 +193,7 @@ RwClassDefinition >> _updatePoolDictionaryNamesFromClass: aClass [
 
 { #category : 'utility' }
 RwClassDefinition >> _updateSuperclassNameFromClass: aClass [
-
-	self superclassName: aClass superclass name asString
+	self superclassName: (aClass superclass ifNotNil:[:sup | sup name asString] ifNil:['nil'])
 ]
 
 { #category : 'utility' }
@@ -203,6 +202,16 @@ RwClassDefinition >> _updateSymbolDictionaryFromClass: aClass [
 	| ar symbolDictName |
 	ar := System myUserProfile dictionariesAndSymbolsOf: aClass.
 	symbolDictName := ((ar at: 1) at: 1) name.
+	self gs_symbolDictionary: symbolDictName
+]
+
+{ #category : 'utility' }
+RwClassDefinition >> _updateSymbolDictionaryFromGemStoneKernelClass: aClass [
+
+	| ar symbolDictName |
+	ar := System myUserProfile dictionariesAndSymbolsOf: aClass.
+  ar size == 0 ifTrue:[ symbolDictName := 'Globals' ]
+	   ifFalse:[  symbolDictName := ((ar at: 1) at: 1) name ].
 	self gs_symbolDictionary: symbolDictName
 ]
 
@@ -273,3 +282,23 @@ RwClassDefinition >> updatePropertiesFromClass: aClass [
 		_updateCommentFromClass: aClass;
 		_updateCategoryFromClass: aClass
 ]
+
+{ #category : 'utility' }
+RwClassDefinition >> updatePropertiesFromGemStoneKernelClass: aClass [
+
+	"Update my properties from the class. Leave unknown properties alone, they may apply to another platform."
+	self
+		_updateSymbolDictionaryFromGemStoneKernelClass: aClass;
+		_updateClassNameFromClass: aClass;
+		_updateSuperclassNameFromClass: aClass;
+		_updateInstvarNamesFromClass: aClass;
+		_updateClassInstvarNamesFromClass: aClass;
+		_updateClassVariableNamesFromClass: aClass;
+		_updatePoolDictionaryNamesFromClass: aClass;
+		_updateClassTypeFromClass: aClass;
+		_updateOptionsFromClass: aClass;
+		_updateConstraintsFromClass: aClass;
+		_updateCommentFromClass: aClass;
+		_updateCategoryFromClass: aClass
+]
+

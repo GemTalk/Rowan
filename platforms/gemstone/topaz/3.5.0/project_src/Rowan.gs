@@ -6450,7 +6450,7 @@ extractNumericComponent: subString
 	number := [ Integer fromStream: stream ] on: Error do: [:ex | ^ subString ].
 	^ stream atEnd
 		ifTrue: [ 
-			(subString size > 1 and: [ (subString at: 1) = $0 ])
+			(subString size > 1 and: [ (subString at: 1) == $0 ])
 				ifTrue: [ self error: 'invalid version number: numberic components may not have a leading 0' ]
 				ifFalse: [ number ] ]
 		ifFalse: [ subString ]
@@ -6538,7 +6538,7 @@ integerFromString: aString
     ifNone: [ 
       | integer |
       integer := aString asInteger.
-      ((aString at: 1) = $0 and: [ aString size > 1 ])
+      ((aString at: 1) == $0 and: [ aString size > 1 ])
         ifTrue: [ 
           self
             error:
@@ -6558,7 +6558,7 @@ isSemanticIdentifier: aString
 
    aString do: [ :c | 
      c isAlphaNumeric
-       ifFalse: [ c = $- ifFalse: [ ^ false ] ] ].
+       ifFalse: [ c == $- ifFalse: [ ^ false ] ] ].
     ^ true
 %
 
@@ -8723,7 +8723,7 @@ categoryListFor: aSymbolDictionary
 	].
 	categories copy do: [:each | 
 		1 to: each size do: [:i | 
-			(each at: i) = $- ifTrue: [
+			(each at: i) == $- ifTrue: [
 				| string |
 				string := each copyFrom: 1 to: i - 1.
 				(categories includes: string) ifFalse: [
@@ -9154,7 +9154,7 @@ descriptionOfConfigOption: aString
 	dict := self systemConfigAsDictionary.
 	(string := dict at: aString ifAbsent: [nil]) notNil ifTrue: [^string].	string := aString asUppercase.
 	dict keys do: [:each1 | 
-		key := (each1 reject: [:each2 | each2 = $_]) asUppercase.
+		key := (each1 reject: [:each2 | each2 == $_ ]) asUppercase.
 		key = string ifTrue: [^dict at: each1].
 	].
 	^''
@@ -9302,8 +9302,8 @@ fileInClass: aString
 	| list className index dictionaryName dictionary oldClass oldString |
 	list := aString subStrings.
 	className := list at: 3.
-	className first = $' ifFalse: [self error: 'Class name ' , className printString , ' expected to begin and end with a quote!'].
-	className last = $' ifFalse: [self error: 'Class name ' , className printString , ' expected to begin and end with a quote!'].
+	className first == $' ifFalse: [self error: 'Class name ' , className printString , ' expected to begin and end with a quote!'].
+	className last == $' ifFalse: [self error: 'Class name ' , className printString , ' expected to begin and end with a quote!'].
 	className := className copyFrom: 2 to: className size - 1.
 	index := list indexOf: 'inDictionary:'.
 	dictionaryName := list at: index + 1.
@@ -9599,7 +9599,7 @@ inspectDictionary: aDictionary on: aStream
 	aStream lf.
 	keyDict keys asSortedCollection do: [:each | 
 		| index keyString key value valueString |
-		index := each findLast: [:char | char = $~].
+		index := each findLast: [:char | char == $~ ].
 		keyString := each copyFrom: 1 to: index - 1.
 		key := keyDict at: each.
 		value := aDictionary at: key. 
@@ -9984,7 +9984,7 @@ method: JadeServer
 mcPatchFrom: aString1 to: aString2 inDictionaryRepository: aDictionaryRepository
 
 	| index name leftSnapshot rightSnapshot patch |
-	index := aString2 findLast: [:each | each = $-].
+	index := aString2 findLast: [:each | each == $- ].
 	name := aString2 copyFrom: 1 to: index - 1.
 	(name includes: $.) ifTrue: [name := (name subStrings: $.) first].
 	leftSnapshot := aString1 isNil ifTrue: [
@@ -10006,7 +10006,7 @@ method: JadeServer
 mcPatchFrom: aString1 to: aString2 inFileBasedRepository: aFileRepository
 
 	| index name leftSnapshot rightSnapshot patch |
-	index := aString2 findLast: [:each | each = $-].
+	index := aString2 findLast: [:each | each == $- ].
 	name := aString2 copyFrom: 1 to: index - 1.
 	(name includes: $.) ifTrue: [name := (name subStrings: $.) first].
 	leftSnapshot := aString1 isNil ifTrue: [
@@ -11650,7 +11650,7 @@ sbNextParagraph
 	| stream |
 	stream := WriteStream on: String new.
 	[
-		readStream peek = $%.
+		readStream peek == $%  .
 	] whileFalse: [
 		stream nextPutAll: self nextLine; lf.
 	].
@@ -12628,7 +12628,7 @@ selectorsMatching: aString
 	| user stream list |
 	list := (aString subStrings: $*) asOrderedCollection collect: [:each | each asUppercase].
 	list size - 1 to: 1 do: [:i | list add: $* afterIndex: i].
-	aString last = $* ifTrue: [list addLast: $*].
+	aString last == $* ifTrue: [list addLast: $* ].
 	stream := WriteStream on: String new.
 	user := AllUsers 
 		userWithId: #SymbolUser 
@@ -12714,7 +12714,7 @@ sourceFor: anObject in: aClass
 		behaviorFor: selector 
 		in: aClass.
 	category := self _behavior: behavior categoryOfSelector: selector.
-	packageName := category first = $*
+	packageName := category first == $*
 		ifTrue: [self _packageNameFor: category]
 		ifFalse: [behavior thisClass _classCategory].
 	packageName isNil ifTrue: [packageName := ''].
@@ -14938,12 +14938,12 @@ parseArray
   | position node |
   position := currentToken start.
   self step.
-  (currentToken isSpecial and: [ currentToken value = $: ])
+  (currentToken isSpecial and: [ currentToken value == $: ])
     ifTrue: [ ^self parseQueryBlock: position ].
   node := self arrayNodeClass new.
   node left: position.
   self parseStatementList: false into: node.
-  (currentToken isSpecial and: [ currentToken value = $} ])
+  (currentToken isSpecial and: [ currentToken value == $} ])
     ifFalse: [ self parserError: 'expected }' ].
   node right: currentToken start.
   self step.
@@ -15032,7 +15032,7 @@ parseBlock
 	self parseBlockArgsInto: node.
 	node left: position.
 	node body: (self parseStatements: false).
-	(currentToken isSpecial and: [currentToken value = $]])
+	(currentToken isSpecial and: [currentToken value == $] ])
 		ifFalse: [self parserError: ''']'' expected'].
 	node right: currentToken start.
 	self step.
@@ -15046,7 +15046,7 @@ parseBlockArgsInto: node
 	args := OrderedCollection new: 2.
 	colons := OrderedCollection new: 2.
 	verticalBar := false.
-	[currentToken isSpecial and: [currentToken value = $:]] whileTrue: 
+	[currentToken isSpecial and: [currentToken value == $: ]] whileTrue: 
 			[colons add: currentToken start.
 			self step.	":"
 			verticalBar := true.
@@ -15069,7 +15069,7 @@ parseBlockArgsInto: node
 										start: currentToken start + 1]
 								ifFalse: [self parserError: '''|'' expected']]]
 				ifFalse: 
-					[(currentToken isSpecial and: [currentToken value = $]]) 
+					[(currentToken isSpecial and: [currentToken value == $] ]) 
 						ifFalse: [self parserError: '''|'' expected']]].
 	node
 		arguments: args;
@@ -15083,12 +15083,12 @@ parseCascadeMessage
 	| node receiver messages semicolons |
 	node := self parseKeywordMessage.
 	(currentToken isSpecial 
-		and: [currentToken value = $; and: [node isMessage]]) ifFalse: [^node].
+		and: [currentToken value == $; and: [node isMessage]]) ifFalse: [^node].
 	receiver := node receiver.
 	messages := OrderedCollection new: 3.
 	semicolons := OrderedCollection new: 3.
 	messages add: node.
-	[currentToken isSpecial and: [currentToken value = $;]] whileTrue: 
+	[currentToken isSpecial and: [currentToken value == $; ]] whileTrue: 
 			[semicolons add: currentToken start.
 			self step.
 			messages add: (currentToken isIdentifier 
@@ -15182,9 +15182,9 @@ parseLiteralArray
 	start := currentToken start.
 	stream := WriteStreamPortable on: Array new.
 	self step.
-	[self atEnd or: [currentToken isSpecial and: [currentToken value = $)]]] 
+	[self atEnd or: [currentToken isSpecial and: [currentToken value == $) ]]] 
 		whileFalse: [stream nextPut: self parseLiteralArrayObject].
-	(currentToken isSpecial and: [currentToken value = $)]) 
+	(currentToken isSpecial and: [currentToken value == $) ]) 
 		ifFalse: [self parserError: ''')'' expected'].
 	stop := currentToken stop.
 	self step.
@@ -15200,7 +15200,7 @@ method: RBParser
 parseLiteralArrayObject
 	currentToken isSpecial 
 		ifTrue: 
-			[currentToken value = $( ifTrue: [^self parseLiteralArray].
+			[currentToken value == $( ifTrue: [^self parseLiteralArray].
 			"currentToken value == $[ ifTrue: [^self parseLiteralByteArray]"].
 	currentToken isLiteralArrayToken 
 		ifTrue: 
@@ -15218,9 +15218,9 @@ parseLiteralByteArray
 	start := currentToken start.
 	stream := WriteStreamPortable on: Array new.
 	self step.
-	[self atEnd or: [currentToken isSpecial and: [currentToken value = $]]]] 
+	[self atEnd or: [currentToken isSpecial and: [currentToken value == $] ]]] 
 		whileFalse: [stream nextPut: self parseLiteralByteArrayObject].
-	(currentToken isSpecial and: [currentToken value = $]]) 
+	(currentToken isSpecial and: [currentToken value == $] ]) 
 		ifFalse: [self parserError: ''']'' expected'].
 	stop := currentToken stop.
 	self step.
@@ -15293,7 +15293,7 @@ parseParenthesizedExpression
 	leftParen := currentToken start.
 	self step.
 	node := self parseAssignment.
-	^(currentToken isSpecial and: [currentToken value = $)])
+	^(currentToken isSpecial and: [currentToken value == $) ])
 		ifTrue: 
 			[node addParenthesis: (leftParen to: currentToken start).
 			self step.
@@ -15371,9 +15371,9 @@ parsePrimitiveObject
 				ifFalse: [self parseLiteralArray]].
 	currentToken isSpecial 
 		ifTrue: 
-			[currentToken value = $[ ifTrue: [^self parseBlock].
-			currentToken value = $( ifTrue: [^self parseParenthesizedExpression].
-			currentToken value = ${ ifTrue: [^self parseArray]].
+			[currentToken value == $[ ifTrue: [^self parseBlock].
+			currentToken value == $( ifTrue: [^self parseParenthesizedExpression].
+			currentToken value == ${ ifTrue: [^self parseArray]].
 	(currentToken isBinary and: [ currentToken value = #- ]) 
 		ifTrue: [ ^self parseNegatedNumber ].
 	self parserError: 'Variable expected'
@@ -15426,7 +15426,7 @@ parseStatementList: pragmaBoolean into: sequenceNode
 	periods := OrderedCollection new.
 	self addCommentsTo: sequenceNode.
 	pragmaBoolean ifTrue: [self parsePragmas].
-	[currentToken isSpecial and: [currentToken value = $.]] whileTrue: 
+	[currentToken isSpecial and: [currentToken value = $. ]] whileTrue: 
 		[periods add: currentToken start.
 		self step].
 	[self atEnd 
@@ -15616,7 +15616,7 @@ patchNegativeLiteral
 		ifTrue: 
 			[(source notNil and: 
 					[source notEmpty 
-						and: [(source at: (currentToken start min: source size)) = $-]]) 
+						and: [(source at: (currentToken start min: source size)) == $- ]]) 
 				ifFalse: [^self]].
 	nextToken := currentToken.
 	currentToken := RBBinarySelectorToken value: #- start: nextToken start.
@@ -15723,7 +15723,7 @@ parsePatternBlock: aClass
 	node := self parseBlockArgsInto: aClass new.
 	node left: position.
 	node body: (self parseStatements: false).
-	(currentToken isSpecial and: [currentToken value = $}]) 
+	(currentToken isSpecial and: [currentToken value = $} ]) 
 		ifFalse: [self parserError: '''}'' expected'].
 	node right: currentToken start.
 	self step.
@@ -17528,7 +17528,7 @@ selector: aSelector
 	selectorParts := numArgs == 0 
 				ifTrue: [Array with: (RBIdentifierToken value: keywords first start: nil)]
 				ifFalse: 
-					[keywords first last = $: 
+					[keywords first last == $: 
 						ifTrue: [keywords collect: [:each | RBKeywordToken value: each start: nil]]
 						ifFalse: [Array with: (RBBinarySelectorToken value: aSelector start: nil)]].
 	selector := aSelector asSymbol
@@ -17607,7 +17607,7 @@ copyInContext: aDictionary
 		ifFalse: [ self selectorParts collect: [ :each | aDictionary at: each value ] ].
 	^ RBMethodNode new
 		selectorParts: (selectors collect: [ :each | 
-			(each last = $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
+			(each last == $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
 				value: each start: nil ]);
 		arguments: (self copyList: self arguments inContext: aDictionary);
 		pragmas: (self pragmas isEmpty
@@ -17786,7 +17786,7 @@ isBinary
 category: 'testing'
 method: RBPragmaNode
 isKeyword
-	^ selectorParts first value last = $:
+	^ selectorParts first value last == $:
 %
 
 category: 'testing'
@@ -17904,7 +17904,7 @@ selector: aSelector
 	selectorParts := numArgs == 0 
 				ifTrue: [Array with: (RBIdentifierToken value: keywords first start: nil)]
 				ifFalse: 
-					[keywords first last = $: 
+					[keywords first last == $: 
 						ifTrue: [keywords collect: [:each | RBKeywordToken value: each start: nil]]
 						ifFalse: [Array with: (RBBinarySelectorToken value: aSelector start: nil)]].
 	selector := aSelector asSymbol
@@ -17972,7 +17972,7 @@ copyInContext: aDictionary
 		ifFalse: [ self selectorParts collect: [ :each | aDictionary at: each value ] ].
 	^ RBPragmaNode new
 		selectorParts: (selectors collect: [ :each | 
-			(each last = $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
+			(each last == $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
 				value: each start: nil ]);
 		arguments: (self copyList: self arguments inContext: aDictionary);
 		yourself
@@ -19068,7 +19068,7 @@ assignment: anInteger
 category: 'accessing'
 method: RBAssignmentNode
 assignmentOperator
-	^ (self assignmentPosition notNil and: [ self source notNil and: [ (self source at: self assignmentPosition ifAbsent: [ nil ]) = $_ ] ])
+	^ (self assignmentPosition notNil and: [ self source notNil and: [ (self source at: self assignmentPosition ifAbsent: [ nil ]) == $_ ] ])
 		ifTrue: [ '_' ]
 		ifFalse: [ ':=' ]
 %
@@ -20446,7 +20446,7 @@ isFirstCascaded
 category: 'testing'
 method: RBMessageNode
 isKeyword
-	^selectorParts first value last = $:
+	^selectorParts first value last == $:
 %
 
 category: 'testing'
@@ -20663,7 +20663,7 @@ selector: aSelector
 	selectorParts := numArgs == 0 
 				ifTrue: [Array with: (RBIdentifierToken value: keywords first start: nil)]
 				ifFalse: 
-					[keywords first last = $: 
+					[keywords first last == $: 
 						ifTrue: [keywords collect: [:each | RBKeywordToken value: each start: nil]]
 						ifFalse: [Array with: (RBBinarySelectorToken value: aSelector start: nil)]].
 	selector := aSelector asSymbol
@@ -20737,7 +20737,7 @@ copyInContext: aDictionary
 	^ RBMessageNode new
 		receiver: (self receiver copyInContext: aDictionary);
 		selectorParts: (selectors collect: [ :each | 
-			(each last = $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
+			(each last == $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
 				value: each start: nil ]);
 		arguments: (self copyList: self arguments inContext: aDictionary);
 		yourself
@@ -23790,7 +23790,7 @@ initializeChars: characters to: aSymbol
 category: 'class initialization'
 classmethod: RBScanner
 initializeClassificationTable
-  PatternVariableCharacter := $`.
+  PatternVariableCharacter := $` .
   classificationTable := Array new: 255.
   self
     initializeChars: (((0 to: 255) collect: [ :v | Character codePoint: v ]) select: [ :each | each isLetter ])
@@ -23886,7 +23886,7 @@ patternVariableCharacter
 category: 'testing'
 method: RBScanner
 atEnd
-	^characterType = #eof
+	^characterType == #eof
 %
 
 category: 'private'
@@ -23965,7 +23965,7 @@ next
 	| token |
 	buffer reset.
 	tokenStart := stream position.
-	token := characterType = #eof 
+	token := characterType == #eof 
 				ifTrue: 
 					[RBToken start: tokenStart + 1	"The EOF token should occur after the end of input"]
 				ifFalse: [self scanToken].
@@ -23995,7 +23995,7 @@ on: aStream
 category: 'private'
 method: RBScanner
 previousStepPosition
-	^characterType = #eof 
+	^characterType == #eof 
 		ifTrue: [stream position]
 		ifFalse: [stream position - 1]
 %
@@ -24003,8 +24003,8 @@ previousStepPosition
 category: 'private-scanning'
 method: RBScanner
 scanAnySymbol
-	characterType = #alphabetic ifTrue: [^self scanSymbol].
-	characterType = #binary ifTrue: [^self scanBinary: RBLiteralToken].
+	characterType == #alphabetic ifTrue: [^self scanSymbol].
+	characterType == #binary ifTrue: [^self scanBinary: RBLiteralToken].
 	^RBToken new
 %
 
@@ -24014,7 +24014,7 @@ scanBinary: aClass
 	| val |
 	buffer nextPut: currentCharacter.
 	self step.
-	[ characterType = #binary ] whileTrue: 
+	[ characterType == #binary ] whileTrue: 
 		[ buffer nextPut: currentCharacter.
 		self step ].
 	val := buffer contents.
@@ -24028,7 +24028,7 @@ scanIdentifierOrKeyword
   | name |
   self scanName.
   [ 
-  currentCharacter = $.
+  currentCharacter == $.
     and: [ 'abcdefghijklmnopqrstuvwxyz*|#' includes: stream peek ] ]
     whileTrue: [ 
       buffer nextPut: currentCharacter.
@@ -24036,7 +24036,7 @@ scanIdentifierOrKeyword
       self scanPathName.
       name := buffer contents.
       ^ RBPathToken value: name start: tokenStart ].
-  (currentCharacter = $: and: [ stream peek ~= $= ])
+  (currentCharacter == $: and: [ stream peek ~~ $= ])
     ifTrue: [ ^ self scanKeyword ].
   name := buffer contents.
   name = '_'
@@ -24054,12 +24054,12 @@ category: 'private-scanning'
 method: RBScanner
 scanKeyword
 	| outputPosition inputPosition name |
-	[currentCharacter = $:] whileTrue: 
+	[currentCharacter == $:] whileTrue: 
 			[buffer nextPut: currentCharacter.
 			outputPosition := buffer position.
 			inputPosition := stream position.
 			self step.	":"
-			[characterType = #alphabetic] whileTrue: [self scanName]].
+			[characterType == #alphabetic] whileTrue: [self scanName]].
 	buffer position: outputPosition.
 	stream position: inputPosition.
 	self step.
@@ -24078,18 +24078,18 @@ method: RBScanner
 scanLiteral
 	self step.
 	self stripSeparators.
-	characterType = #alphabetic 
+	characterType == #alphabetic 
 		ifTrue: [ ^ self scanSymbol ].
-	characterType = #binary 
+	characterType == #binary 
 		ifTrue: [ ^ (self scanBinary: RBLiteralToken) stop: self previousStepPosition ].
-	currentCharacter = $' 
+	currentCharacter == $' 
 		ifTrue: [ ^ self scanStringSymbol ].
-	(currentCharacter = $( or: [ currentCharacter = $[ ]) 
+	(currentCharacter == $( or: [ currentCharacter == $[ ]) 
 		ifTrue: [ ^ self scanLiteralArrayToken].
 	"Accept some strange literals like '#1', '# species' and '##species:'"
-	characterType = #digit
+	characterType == #digit
 		ifTrue: [ ^ self scanNumber ].
-	currentCharacter = $#
+	currentCharacter == $#
 		ifTrue: [ ^ self scanLiteral ].
 	self scannerError: 'Expecting a literal type'
 %
@@ -24125,7 +24125,7 @@ scanLiteralString
 	
 	[currentCharacter isNil 
 		ifTrue: [self scannerError: 'Unmatched '' in string literal.'].
-	currentCharacter = $' and: [self step ~= $']] 
+	currentCharacter == $' and: [self step ~= $']] 
 			whileFalse: 
 				[buffer nextPut: currentCharacter.
 				self step].
@@ -24138,7 +24138,7 @@ scanLiteralString
 category: 'private-scanning'
 method: RBScanner
 scanName
-	[characterType = #alphabetic or: [characterType = #digit]] whileTrue: 
+	[characterType == #alphabetic or: [characterType == #digit]] whileTrue: 
 			[buffer nextPut: currentCharacter.
 			self step]
 %
@@ -24175,13 +24175,13 @@ category: 'private-scanning'
 method: RBScanner
 scanPathName
   [ 
-  (characterType = #'alphabetic' or: [ characterType = #'digit' ])
+  (characterType == #'alphabetic' or: [ characterType == #'digit' ])
     or: [ 
-      ((currentCharacter = $. or: [ currentCharacter = $| ])
+      ((currentCharacter == $. or: [ currentCharacter == $| ])
         and: [ 'abcdefghijklmnopqrstuvwxyz' includes: stream peek ])
         or: [ 
-          (currentCharacter = $. and: [ stream peek = $* ])
-            or: [ currentCharacter = $* and: [ stream peek = $. ] ] ] ] ]
+          (currentCharacter == $. and: [ stream peek == $* ])
+            or: [ currentCharacter == $* and: [ stream peek == $. ] ] ] ] ]
     whileTrue: [ 
       buffer nextPut: currentCharacter.
       self step ]
@@ -24192,12 +24192,12 @@ method: RBScanner
 scanPatternVariable
 	buffer nextPut: currentCharacter.
 	self step.
-	currentCharacter = ${ 
+	currentCharacter == ${ 
 		ifTrue: 
 			[self step.
 			^RBPatternBlockToken value: '`{' start: tokenStart].
-	[characterType = #alphabetic] whileFalse: 
-			[characterType = #eof 
+	[characterType == #alphabetic] whileFalse: 
+			[characterType == #eof 
 				ifTrue: [self scannerError: 'Meta variable expected'].
 			buffer nextPut: currentCharacter.
 			self step].
@@ -24208,15 +24208,15 @@ category: 'private-scanning'
 method: RBScanner
 scanSpecialCharacter
 	| character |
-	currentCharacter = $: 
+	currentCharacter == $: 
 		ifTrue: 
 			[self step.
-			^currentCharacter = $= 
+			^currentCharacter == $= 
 				ifTrue: 
 					[self step.
 					RBAssignmentToken start: tokenStart]
 				ifFalse: [RBSpecialCharacterToken value: $: start: tokenStart]].
-	currentCharacter = $_ ifTrue:
+	currentCharacter == $_ ifTrue:
 		[ self step.  ^RBShortAssignmentToken start: tokenStart ].
 	character := currentCharacter.
 	self step.
@@ -24235,9 +24235,9 @@ scanStringSymbol
 category: 'private-scanning'
 method: RBScanner
 scanSymbol
-	[ characterType = #alphabetic or: [ currentCharacter = $: ] ] whileTrue: [
+	[ characterType == #alphabetic or: [ currentCharacter == $: ] ] whileTrue: [
 		self scanName.
-		currentCharacter = $: ifTrue: [
+		currentCharacter == $: ifTrue: [
 			buffer nextPut: $:.
 			self step ] ].
 	^ RBLiteralToken 
@@ -24252,15 +24252,15 @@ scanToken
 	"fast-n-ugly. Don't write stuff like this. Has been found to cause cancer in laboratory rats. Basically a 
 	case statement. Didn't use Dictionary because lookup is pretty slow."
 
-	characterType = #alphabetic ifTrue: [^self scanIdentifierOrKeyword].
-	(characterType = #digit 
-		or: [currentCharacter = $- and: [(self classify: stream peek) = #digit]]) 
+	characterType == #alphabetic ifTrue: [^self scanIdentifierOrKeyword].
+	(characterType == #digit 
+		or: [currentCharacter == $- and: [(self classify: stream peek) == #digit]]) 
 			ifTrue: [^self scanNumber].
-	characterType = #binary ifTrue: [^self scanBinary: RBBinarySelectorToken].
-	characterType = #special ifTrue: [^self scanSpecialCharacter].
-	currentCharacter = $' ifTrue: [^self scanLiteralString].
-	currentCharacter = $# ifTrue: [^self scanLiteral].
-	currentCharacter = $$ ifTrue: [^self scanLiteralCharacter].
+	characterType == #binary ifTrue: [^self scanBinary: RBBinarySelectorToken].
+	characterType == #special ifTrue: [^self scanSpecialCharacter].
+	currentCharacter == $' ifTrue: [^self scanLiteralString].
+	currentCharacter == $# ifTrue: [^self scanLiteral].
+	currentCharacter == $$ ifTrue: [^self scanLiteralCharacter].
 	^self scannerError: 'Unknown character'
 %
 
@@ -24281,8 +24281,8 @@ method: RBScanner
 stripComment
 	| start stop |
 	start := stream position.
-	[self step = $"] whileFalse: 
-			[characterType = #eof
+	[self step == $" ] whileFalse: 
+			[characterType == #eof
 				ifTrue: [self scannerError: 'Unmatched " in comment.']].
 	stop := stream position.
 	self step.
@@ -24293,8 +24293,8 @@ category: 'private-scanning'
 method: RBScanner
 stripSeparators
 	
-	[[characterType = #separator] whileTrue: [self step].
-	currentCharacter = $"] 
+	[[characterType == #separator] whileTrue: [self step].
+	currentCharacter == $" ] 
 			whileTrue: [self stripComment]
 %
 
@@ -24317,9 +24317,9 @@ initialize
 category: 'accessing'
 method: RBPatternScanner
 scanToken
-	currentCharacter = PatternVariableCharacter 
+	currentCharacter == PatternVariableCharacter 
 		ifTrue: [^self scanPatternVariable].
-	currentCharacter = $} ifTrue: [^self scanSpecialCharacter].
+	currentCharacter == $} ifTrue: [^self scanSpecialCharacter].
 	^super scanToken
 %
 
@@ -59642,8 +59642,8 @@ withGemstoneLineEndings
 			outString at: newOutPos - 1 put: lf.
 			outPos := newOutPos.
 
-			((self at: lineEndPos) = cr
-				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) = lf ] ])
+			((self at: lineEndPos) == cr
+				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) == lf ] ])
 				ifTrue: [ 
 					"CRLF ending"
 					inPos := lineEndPos + 2 ]
@@ -59691,8 +59691,8 @@ withoutGemstoneLineEndings
 				startingAt: inPos.
 			outPos := newOutPos - 1.
 
-			((self at: lineEndPos) = cr
-				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) = lf ] ])
+			((self at: lineEndPos) == cr
+				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) == lf ] ])
 				ifTrue: [ 
 					"CRLF ending"
 					inPos := lineEndPos + 2 ]
@@ -62159,7 +62159,7 @@ method: RwProjectReferenceDefinition
 symbolDictNameForPackageNamed: packageName
 
 	| packageProperties |
-self deprecated: 'temporary patch .. see RwGemStoneSpecification>>symbolDictNameForPackageNamed: for full implementation'.
+"self deprecated: 'temporary patch .. see RwGemStoneSpecification>>symbolDictNameForPackageNamed: for full implementation'."
 	packageProperties := self packageNameToPlatformPropertiesMap
 		at: packageName
 		ifAbsent: [ ^ self defaultSymbolDictName ].

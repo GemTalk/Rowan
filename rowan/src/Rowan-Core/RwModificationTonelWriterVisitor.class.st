@@ -273,3 +273,19 @@ RwModificationTonelWriterVisitor >> processProject: aProjectModification [
 	(format := self _repositoryFormatFor:  aProjectModification after packagesRoot) = 'tonel' ifFalse: [ self error: 'expected tonel format repository, instead format is ', format printString ].
 	super processProject: aProjectModification.
 ]
+
+{ #category: 'private' }
+RwModificationTonelWriterVisitor >> skipComment: aStream [
+  "I assume I'm on top of the begining of a comment"
+  aStream skip: 1.
+  [ aStream atEnd not 
+    and: [ aStream next ~= $" or: [ aStream peek = $" ] ] ]
+  whileTrue.  
+]
+
+{ #category: 'private' }
+RwModificationTonelWriterVisitor >> skipSeparators: aStream [
+  [ aStream peek isSeparator ]
+    whileTrue: [ aStream skip: 1 ]. 
+]
+

@@ -32,7 +32,7 @@
 	projectNames do: [:projectName |
 		[	Rowan projectTools load
 			loadProjectNamed: projectName
-			withGroupNames: #('core' 'tests' 'jadeServer') ]
+			withGroupNames: #('core' " 'tests'"  'jadeServer') ]
 				on: CompileWarning do: [:ex |
 					(ex description includesString: 'not optimized')
 						ifFalse: [ warnings add: ex asString printString ].
