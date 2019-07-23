@@ -11,33 +11,29 @@ Class {
 
 { #category : 'parsing' }
 NewTonelParser >> method [
-	| type start end currentPosition selector count ar  |
+	| type start end currentPosition selector count  |
 	
 	type := self untilIncluding: '>>'.
+start := stream position.
 	methodParser := RBParser new.
 	methodParser
 		scanner: (methodParser scannerClass on: stream
 				errorBlock: [:errorMessage :errorPosition |self halt]).
-self halt.
-	ar := methodParser parseTonelMessagePattern.
-currentMethodNode :=  ar at: 1.
+	currentMethodNode := methodParser parseTonelMessagePattern.
+end := stream position.
 	methodBodyStart := methodParser scanner previousStepPosition - 2.
-self halt.
-start := methodParser scanner previousStepPosition.
-	currentMethodNode := methodParser b.
-end := methodParser scanner previousStepPosition.
 	currentPosition := methodParser scanner stream position.
-	methodParser scanner stream position: start -1.
-count := end - start + 1.
+	methodParser scanner stream position: start.
+count := end - start.
 selector := String new: count.
 	methodParser scanner stream readInto: selector startingAt: 1 count: count.
 	methodParser scanner stream position: currentPosition.
-
+selector := selector trimBoth.
 	type := type trimBoth substrings: ' '.
 	type size = 1 ifTrue: [ type := type copyWith: nil ].
 	^ { 
 		type.
-		ar at: 2.
+		selector.
 	}
 ]
 
