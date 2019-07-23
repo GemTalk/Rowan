@@ -507,6 +507,11 @@ RBScanner >> step [
 	^currentCharacter
 ]
 
+{ #category : 'error handling' }
+RBScanner >> stream [
+	^stream
+]
+
 { #category : 'private-scanning' }
 RBScanner >> stripComment [
 	| start stop |

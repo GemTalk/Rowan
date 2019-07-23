@@ -94,6 +94,11 @@ RBParser class >> parseRewriteMethod: aString onError: aBlock [
 	^RBPatternParser parseMethod: aString onError: aBlock
 ]
 
+{ #category : 'initialize-release' }
+RBParser >> _scanner: aScanner [ 
+	scanner := aScanner.
+]
+
 { #category : 'private' }
 RBParser >> addCommentsTo: aNode [
 	aNode comments: aNode comments , comments.
@@ -123,6 +128,12 @@ RBParser >> blockNodeClass [
 { #category : 'private-classes' }
 RBParser >> cascadeNodeClass [
 	^ RBCascadeNode
+]
+
+{ #category : 'accessing' }
+RBParser >> currentToken [
+
+	^currentToken
 ]
 
 { #category : 'error handling' }
@@ -710,6 +721,103 @@ RBParser >> parseStatements: pragmaBoolean [
 ]
 
 { #category : 'private-parsing' }
+RBParser >> parseTonelMessagePattern [
+
+	| result |
+	result := self parseMessagePattern.
+	(currentToken isSpecial and: [ currentToken value = $[ ])
+		ifFalse: [ self error: 'Cannot parse Tonel method. Missing ''[''.' ].
+	self step.	"skip the $["
+	^ result
+]
+
+{ #category : 'private-parsing' }
+RBParser >> parseTonelPragmas [
+	| pragma start |
+	[ currentToken isBinary and: [ currentToken value = #< ] ] whileTrue: [
+		start := currentToken start.
+		self step.
+		pragma := self parsePragma.
+		(currentToken isBinary and: [ currentToken value = #> ]) 
+			ifFalse: [ self parserError: '''>'' expected' ].
+		pragma left: start; right: currentToken start.
+		pragmas isNil
+			ifTrue: [ pragmas := OrderedCollection new ].
+		pragmas addLast: pragma.
+		self step ]
+]
+
+{ #category : 'private-parsing' }
+RBParser >> parseTonelStatementList: pragmaBoolean into: sequenceNode [ 
+	| statements return periods returnPosition node |
+	return := false.
+	statements := OrderedCollection new.
+	periods := OrderedCollection new.
+	self addCommentsTo: sequenceNode.
+	pragmaBoolean ifTrue: [self parsePragmas].
+	[currentToken isSpecial and: [currentToken value = $.]] whileTrue: 
+		[periods add: currentToken start.
+		self step].
+	[self atEnd 
+		or: [currentToken isSpecial and: ['])}' includes: currentToken value]]] 
+			whileFalse: 
+				[return ifTrue: [self parserError: 'End of statement list encounted'].
+				(currentToken isSpecial and: [currentToken value = $^]) 
+					ifTrue: 
+						[returnPosition := currentToken start.
+						self step.
+						node := self returnNodeClass return: returnPosition
+									value: self parseAssignment.
+						statements add: node.
+						return := true]
+					ifFalse: 
+						[node := self parseAssignment.
+						statements add: node].
+				(currentToken isSpecial and: [currentToken value = $.]) 
+					ifTrue: 
+						[periods add: currentToken start.
+						self step.
+						self addCommentsTo: node]
+					ifFalse: [return := true].
+				[currentToken isSpecial and: [currentToken value = $.]] whileTrue: 
+					[periods add: currentToken start.
+					self step]].
+	statements notEmpty ifTrue: [self addCommentsTo: statements last].
+	sequenceNode
+		statements: statements;
+		periods: periods.
+	^sequenceNode
+]
+
+{ #category : 'private-parsing' }
+RBParser >> parseTonelStatements: pragmaBoolean [ 
+	| args leftBar rightBar |
+	args := #().
+	leftBar := rightBar := nil.
+	currentToken isBinary 
+		ifTrue: 
+			[currentToken value = #| 
+				ifTrue: 
+					[leftBar := currentToken start.
+					self step.
+					args := self parseArgs.
+					(currentToken isBinary and: [currentToken value = #|]) 
+						ifFalse: [self parserError: '''|'' expected'].
+					rightBar := currentToken start.
+					self step]
+				ifFalse: 
+					[currentToken value = #'||' 
+						ifTrue: 
+							[rightBar := (leftBar := currentToken start) + 1.
+							self step]]].
+	^self parseTonelStatementList: pragmaBoolean
+		into: (self sequenceNodeClass 
+				leftBar: leftBar
+				temporaries: args
+				rightBar: rightBar)
+]
+
+{ #category : 'private-parsing' }
 RBParser >> parseUnaryMessage [
 	| node |
 	node := self parsePrimitiveObject.
@@ -854,6 +962,12 @@ RBParser >> returnNodeClass [
 	^ RBReturnNode
 ]
 
+{ #category : 'accessing' }
+RBParser >> scanner [
+
+	^scanner
+]
+
 { #category : 'initialize-release' }
 RBParser >> scanner: aScanner [ 
 	scanner := aScanner.
@@ -886,4 +1000,11 @@ RBParser >> step [
 { #category : 'private-classes' }
 RBParser >> variableNodeClass [
 	^ RBVariableNode
+]
+
+{ #category : 'private-parsing' }
+RBParser >> xxx [ [
+"lkjlkjlkj"
+^ 3 +4
+]
 ]
