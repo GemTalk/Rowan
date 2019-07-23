@@ -11,26 +11,39 @@ Class {
 
 { #category : 'parsing' }
 NewTonelParser >> method [
-	| type |
+	| type start end currentPosition selector count |
 	
 	type := self untilIncluding: '>>'.
 	methodParser := RBParser new.
 	methodParser
 		scanner: (methodParser scannerClass on: stream
 				errorBlock: [:errorMessage :errorPosition |self halt]).
-	currentMethodNode := methodParser parseTonelMessagePattern.
-	methodBodyStart := methodParser scanner previousStepPosition - 2.
+start := methodParser scanner previousStepPosition.
+	currentMethodNode := methodParser b.
+end := methodParser scanner previousStepPosition.
+	currentPosition := methodParser scanner stream position.
+	methodParser scanner stream position: start -1.
+count := end - start + 1.
+selector := String new: count.
+	methodParser scanner stream readInto: selector startingAt: 1 count: count.
+	methodParser scanner stream position: currentPosition.
+
 	type := type trimBoth substrings: ' '.
 	type size = 1 ifTrue: [ type := type copyWith: nil ].
 	^ { 
 		type.
-		currentMethodNode selector.
+		selector.
 	}
 ]
 
 { #category : 'parsing' }
 NewTonelParser >> methodBody [
 	| source end count currentPosition |
+
+	(methodParser currentToken isSpecial and: [ methodParser currentToken value = $[ ])
+		ifFalse: [ self error: 'Cannot parse Tonel method body. Missing ''[''.' ].
+	self step.	"skip the $["
+	methodBodyStart := methodParser scanner previousStepPosition - 2.
 	methodParser parseTonelPragmas.
 	currentMethodNode body: (methodParser parseTonelStatements: true).
 	(methodParser currentToken isSpecial and: [ methodParser currentToken value = $]])

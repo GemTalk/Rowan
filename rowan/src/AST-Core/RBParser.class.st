@@ -723,12 +723,7 @@ RBParser >> parseStatements: pragmaBoolean [
 { #category : 'private-parsing' }
 RBParser >> parseTonelMessagePattern [
 
-	| result |
-	result := self parseMessagePattern.
-	(currentToken isSpecial and: [ currentToken value = $[ ])
-		ifFalse: [ self error: 'Cannot parse Tonel method. Missing ''[''.' ].
-	self step.	"skip the $["
-	^ result
+	^ self parseMessagePattern
 ]
 
 { #category : 'private-parsing' }
