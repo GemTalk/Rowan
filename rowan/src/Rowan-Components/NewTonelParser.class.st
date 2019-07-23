@@ -3,7 +3,7 @@ Class {
 	#superclass : 'TonelParser',
 	#instVars : [
 		'methodParser',
-		'methodNode'
+		'currentMethodNode'
 	],
 	#category : 'Rowan-Components'
 }
@@ -16,29 +16,27 @@ NewTonelParser >> method [
 	methodParser := RBParser new.
 	methodParser
 		scanner: (methodParser scannerClass on: stream
-				errorBlock: [self halt]).
-	methodNode := methodParser parseTonelMessagePattern.
+				errorBlock: [:errorMessage :errorPosition |self halt]).
+	currentMethodNode := methodParser parseTonelMessagePattern.
 	type := type trimBoth substrings: ' '.
 	type size = 1 ifTrue: [ type := type copyWith: nil ].
 	^ { 
 		type.
-		methodNode selector.
+		currentMethodNode selector.
 	}
 ]
 
 { #category : 'parsing' }
 NewTonelParser >> methodBody [
-	| start end_1 end_2 buffer source window |
-buffer := methodParser scanner stream buffer.
-start := methodParser scanner stream position.
-window:= buffer copyFrom: start-1 to: start+1.
+	| start source end count |
+	start := methodParser scanner stream position.
 	methodParser parseTonelPragmas.
-	methodNode body: (methodParser parseTonelStatements: true).
-end_1 := methodParser scanner stream position.
-end_2 := methodParser scanner previousStepPosition.
-buffer := methodParser scanner stream buffer.
-(methodParser currentToken isSpecial and: [ methodParser currentToken value = $]])
-	ifFalse: [ self error: 'Cannot parse Tonel method. Missing '']''.'].
-source := buffer copyFrom: start to: methodParser currentToken start - 2.
-self halt.
+	currentMethodNode body: (methodParser parseTonelStatements: true).
+	(methodParser currentToken isSpecial and: [ methodParser currentToken value = $]])
+		ifFalse: [ self error: 'Cannot parse Tonel method. Missing '']''.'].
+	end := methodParser currentToken start - 2.
+	count :=  end - start + 1.
+	source := String new: count.
+	methodParser scanner stream readInto: source startingAt: start count: count.
+	^ source
 ]

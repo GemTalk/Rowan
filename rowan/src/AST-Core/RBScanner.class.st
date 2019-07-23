@@ -504,6 +504,7 @@ RBScanner >> step [
 			^currentCharacter := nil].
 	currentCharacter := stream next.
 	characterType := self classify: currentCharacter.
+GsFile stderr nextPutAll: 'step: ' , currentCharacter asString, ' ', currentCharacter codePoint printString, ' ', characterType printString; lf.
 	^currentCharacter
 ]
 

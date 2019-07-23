@@ -1001,10 +1001,3 @@ RBParser >> step [
 RBParser >> variableNodeClass [
 	^ RBVariableNode
 ]
-
-{ #category : 'private-parsing' }
-RBParser >> xxx [ [
-"lkjlkjlkj"
-^ 3 +4
-]
-]
