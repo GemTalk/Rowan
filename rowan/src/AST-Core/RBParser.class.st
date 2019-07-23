@@ -723,13 +723,7 @@ RBParser >> parseStatements: pragmaBoolean [
 { #category : 'private-parsing' }
 RBParser >> parseTonelMessagePattern [
 
-	| methodNode selectorWithArgs start end |
-start := self scanner stream position.
-	methodNode := self parseMessagePattern.
-end := self scanner stream position - 4.
-	selectorWithArgs := self scanner stream contents copyFrom: start to: end.
-self halt.
-	^ { methodNode . selectorWithArgs }
+	^ self parseMessagePattern
 ]
 
 { #category : 'private-parsing' }
