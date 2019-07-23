@@ -728,8 +728,6 @@ RBParser >> parseTonelMessagePattern [
 	(currentToken isSpecial and: [ currentToken value = $[ ])
 		ifFalse: [ self error: 'Cannot parse Tonel method. Missing ''[''.' ].
 	self step.	"skip the $["
-GsFile stderr nextPutAll: 'post skip ', currentToken value printString; lf.
-GsFile stderr nextPutAll: 'tmp pos: ', currentToken start printString; lf.
 	^ result
 ]
 
