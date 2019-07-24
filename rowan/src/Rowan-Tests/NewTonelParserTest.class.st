@@ -43,14 +43,14 @@ NewTonelParserTest >> newTypeDefinitionFrom: anArray [
 { #category : 'private' }
 NewTonelParserTest >> parse: aString rule: rule [
   | parser |
-  parser := NewTonelParser onString: aString forReader: self.
+  parser := self tonelParserClass onString: aString forReader: self.
   ^ parser perform: rule
 ]
 
 { #category : 'asserting' }
 NewTonelParserTest >> shouldParse: aString rule: rule raise: error [
   | parser |
-  parser := NewTonelParser onString: aString  forReader: self.
+  parser := self tonelParserClass onString: aString  forReader: self.
   self should: [ parser perform: rule ] raise: error
 ]
 
@@ -76,7 +76,7 @@ NewTonelParserTest >> testComment [
 NewTonelParserTest >> testExtractSelector [
 	| parser |
 	
-	parser := NewTonelParser new.
+	parser := self tonelParserClass new.
 	
 	self assert: (parser extractSelector: 'unary') equals: #unary.
 	self assert: (parser extractSelector: '+ something') equals: #+.
@@ -249,7 +249,7 @@ Object>>printOn: aStream [
 NewTonelParserTest >> testRemoveFromEnclosingStartEnd [
   | parser nl |
   nl := TonelWriter lineEnding.
-  parser := NewTonelParser new.
+  parser := self tonelParserClass new.
   self
     assert: (parser removeFrom: '[ ^ self ]' enclosingStart: $[ end: $])
     equals: '^ self'.
@@ -355,4 +355,12 @@ Class {
         classInstVarNames: #()
         type: #'normal'
         comment: 'this is a test')
+]
+
+{ #category : 'private' }
+NewTonelParserTest >> tonelParserClass [
+
+	^true
+		ifTrue: [ NewTonelParser ]
+		ifFalse: [ TonelParser ]
 ]
