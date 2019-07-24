@@ -16,7 +16,7 @@ NewTonelParser >> method [
 	
 	type := self untilIncluding: '>>'.
 	start := stream position.
-	methodParser := RBParser new.
+	methodParser := RBTonelParser new.
 	methodParser
 		scanner: (methodParser scannerClass on: stream
 				errorBlock: [:errorMessage :errorPosition |self halt]).

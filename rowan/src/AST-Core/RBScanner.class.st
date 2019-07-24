@@ -243,12 +243,6 @@ RBScanner >> on: aStream [
 ]
 
 { #category : 'private' }
-RBScanner >> peekTonelFor: aCharacterType value: aCharacterValue [
-
-	^ currentCharacter = aCharacterValue and: [ characterType =  aCharacterType ]
-]
-
-{ #category : 'private' }
 RBScanner >> previousStepPosition [
 	^characterType = #eof 
 		ifTrue: [stream position]
@@ -536,26 +530,4 @@ RBScanner >> stripSeparators [
 	[[characterType = #separator] whileTrue: [self step].
 	currentCharacter = $"] 
 			whileTrue: [self stripComment]
-]
-
-{ #category : 'accessing' }
-RBScanner >> tonelNext [
-	"only used when parsing the tonel method selector line"
-
-	| token |
-(characterType == #special and: [currentCharacter = $[ ])
-	ifFalse: [ 
-		 characterType ~~ #eof
-			ifTrue: [ self error: 'Cannot parse Tonel method body. Missing ''[''.' ] ].
-	buffer reset.
-	tokenStart := stream position.
-	token := characterType = #eof 
-				ifTrue: 
-					[RBToken start: tokenStart + 1	"The EOF token should occur after the end of input"]
-				ifFalse: [self scanToken].
-	self stripSeparators.
-"don't read comments"
-	false ifTrue: [ token comments: self getComments ].
-"skip the $[ and get next token"
-	^self next
 ]
