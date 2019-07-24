@@ -9,6 +9,15 @@ Class {
 	#category : 'Rowan-Components'
 }
 
+{ #category : 'private' }
+NewTonelParser >> extractCommentsFor:  aNode from: originalSource on: codeStream [
+	aNode comments do: 
+			[:each | 
+			codeStream
+				space;
+				nextPutAll: (originalSource copyFrom: each first to: each last)].
+]
+
 { #category : 'parsing' }
 NewTonelParser >> method [
 
@@ -32,6 +41,7 @@ NewTonelParser >> method [
 	selector := selector trimBoth.
 	type := type trimBoth substrings: ' '.
 	type size = 1 ifTrue: [ type := type copyWith: nil ].
+	methodBodyStart := stream position.
 	methodParser tonelStep.	"eat the $["
 	^ { 
 		type.
@@ -41,19 +51,22 @@ NewTonelParser >> method [
 
 { #category : 'parsing' }
 NewTonelParser >> methodBody [
-	| start source end count currentPosition |
+	| codeStream source start end count currentPosition |
+	codeStream := WriteStreamPortable on: String new.
+	self extractCommentsFor:  methodParser currentToken from: stream contents on: codeStream.
 	start := stream position.
-	methodBodyStart := methodParser scanner previousStepPosition - 2.
 	methodParser parseTonelPragmas.
 	currentMethodNode body: (methodParser parseTonelStatements: true).
 	end := methodParser currentToken start - 2.
 	count :=  end - methodBodyStart.
 	source := String new: count.
 	currentPosition := methodParser scanner stream position.
-	methodParser scanner stream position: methodBodyStart -1.
+	methodParser scanner stream position: methodBodyStart + 2.
 	methodParser scanner stream readInto: source startingAt: 1 count: count + 1.
 	methodParser scanner stream position: currentPosition.
+self halt.
 	^ source
+
 ]
 
 { #category : 'private factory' }
