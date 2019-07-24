@@ -721,15 +721,37 @@ RBParser >> parseStatements: pragmaBoolean [
 ]
 
 { #category : 'private-parsing' }
+RBParser >> parseTonelKeywordPattern [
+	" do not process $[ token .. caller will do the right thing"
+
+	| keywords args node continue |
+	keywords := OrderedCollection new.
+	args := OrderedCollection new.
+	continue := true.
+	[  continue and: [ currentToken isKeyword ]  ]
+		whileTrue:
+			[keywords add: currentToken.
+			continue := (self peekTonelFor: #special value: $[) not.
+			continue ifTrue: [ self step ].
+			args add: self parseTonelVariableNode].
+	node := self methodNodeClass
+		selectorParts: keywords
+		arguments: args.
+	node comments: (node comments, args last comments).
+	args last comments: nil.
+	^node
+]
+
+{ #category : 'private-parsing' }
 RBParser >> parseTonelMessagePattern [
 
 	currentToken isLiteralToken ifTrue: [self patchTonelLiteralMessage].
-	^currentToken isIdentifier 
-		ifTrue: [self parseTonelUnaryPattern]
+	^ currentToken isIdentifier 
+		ifTrue: [ self parseTonelUnaryPattern]
 		ifFalse: 
 			[currentToken isKeyword 
-				ifTrue: [self parseKeywordPattern]
-				ifFalse: [self parseTonelBinaryPattern]]
+				ifTrue: [self parseTonelKeywordPattern]
+				ifFalse: [self parseTonelBinaryPattern] ]
 ]
 
 { #category : 'private-parsing' }
@@ -746,6 +768,17 @@ RBParser >> parseTonelPragmas [
 			ifTrue: [ pragmas := OrderedCollection new ].
 		pragmas addLast: pragma.
 		self step ]
+]
+
+{ #category : 'private-parsing' }
+RBParser >> parseTonelPrimitiveIdentifier [
+	| token node |
+	token := currentToken.
+	(self peekTonelFor: #special value: $[)
+		ifFalse: [ self step ].
+	node := self variableNodeClass identifierToken: token.
+	self addCommentsTo: node.
+	^node
 ]
 
 { #category : 'private-parsing' }
@@ -824,8 +857,14 @@ RBParser >> parseTonelUnaryPattern [
 
 	| selector |
 	selector := currentToken.
-	self tonelStep.
 	^self methodNodeClass selectorParts: (Array with: selector) arguments: #()
+]
+
+{ #category : 'private-parsing' }
+RBParser >> parseTonelVariableNode [
+	currentToken isIdentifier 
+		ifFalse: [self parserError: 'Variable name expected'].
+	^self parseTonelPrimitiveIdentifier
 ]
 
 { #category : 'private-parsing' }
@@ -956,6 +995,12 @@ RBParser >> patchNegativeLiteral [
 		ifTrue: 
 			[nextToken source: (nextToken source copyFrom: 2 to: nextToken source size)].
 	nextToken start: nextToken start + 1
+]
+
+{ #category : 'private-parsing' }
+RBParser >> peekTonelFor: characterType value: characterValue [
+
+	^ self scanner peekTonelFor: characterType value: characterValue
 ]
 
 { #category : 'private-classes' }

@@ -21,17 +21,19 @@ xStart := stream position.
 		scanner: (methodParser scannerClass on: stream
 				errorBlock: [:errorMessage :errorPosition |self halt]).
 	currentMethodNode := methodParser parseTonelMessagePattern.
-end := methodParser scanner stream position.
+end := methodParser scanner previousStepPosition.
 	start := methodBodyStart := methodParser scanner previousStepPosition - 3.
 	currentPosition := methodParser scanner stream position.
 	methodParser scanner stream position: xStart.
-count := end - xStart + 1.
+count := end - xStart.
 selector := String new: count.
 	methodParser scanner stream readInto: selector startingAt: 1 count: count.
 	methodParser scanner stream position: currentPosition.
 selector := selector trimBoth.
 	type := type trimBoth substrings: ' '.
 	type size = 1 ifTrue: [ type := type copyWith: nil ].
+	methodParser tonelStep.
+
 	^ { 
 		type.
 		selector.

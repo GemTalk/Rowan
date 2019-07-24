@@ -243,6 +243,12 @@ RBScanner >> on: aStream [
 ]
 
 { #category : 'private' }
+RBScanner >> peekTonelFor: aCharacterType value: aCharacterValue [
+
+	^ currentCharacter = aCharacterValue and: [ characterType =  aCharacterType ]
+]
+
+{ #category : 'private' }
 RBScanner >> previousStepPosition [
 	^characterType = #eof 
 		ifTrue: [stream position]
@@ -539,7 +545,7 @@ RBScanner >> tonelNext [
 	| token |
 (characterType == #special and: [currentCharacter = $[ ])
 	ifFalse: [ 
-		characterType ~~ #eof
+		 characterType ~~ #eof
 			ifTrue: [ self error: 'Cannot parse Tonel method body. Missing ''[''.' ] ].
 	buffer reset.
 	tokenStart := stream position.

@@ -171,6 +171,22 @@ what] is inside'.
 NewTonelParserTest >> testMethodDef [
 	self 
 		assertParse: '
+TClass classSide >> template: aSystemCategoryName [
+	"I really do not care"
+]'
+		rule: #methodDef
+		equals: (self newMethodDefinitionForClassNamed: #TClass
+			classIsMeta: true
+			selector: #template:
+			category: ''
+			source: 'template: aSystemCategoryName 
+	"I really do not care"').
+]
+
+{ #category : 'tests' }
+NewTonelParserTest >> testMethodDef_PASSING [
+	self 
+		assertParse: '
 { #category: ''accessing'' }
 Object>>name [
 	^ self printString
@@ -195,19 +211,6 @@ Object class>>name [
 			category: ''
 			source: 'name
 	^ self printString').
-
-	self 
-		assertParse: '
-TClass classSide >> template: aSystemCategoryName [
-	"I really do not care"
-]'
-		rule: #methodDef
-		equals: (self newMethodDefinitionForClassNamed: #TClass
-			classIsMeta: true
-			selector: #template:
-			category: ''
-			source: 'template: aSystemCategoryName 
-	"I really do not care"').
 ]
 
 { #category : 'tests' }
