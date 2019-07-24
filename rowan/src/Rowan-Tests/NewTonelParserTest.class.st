@@ -185,7 +185,7 @@ Object>>name [
 			
 	self 
 		assertParse: '
-Object class>>name [ 
+Object class>>name [
 	^ self printString
 ]'
 		rule: #methodDef
@@ -193,12 +193,12 @@ Object class>>name [
 			classIsMeta: true
 			selector: #name
 			category: ''
-			source: 'name 
+			source: 'name
 	^ self printString').
 
 	self 
 		assertParse: '
-TClass classSide >> template: aSystemCategoryName [ 
+TClass classSide >> template: aSystemCategoryName [
 	"I really do not care"
 ]'
 		rule: #methodDef
