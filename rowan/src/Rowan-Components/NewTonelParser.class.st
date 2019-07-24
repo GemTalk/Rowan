@@ -42,8 +42,7 @@ NewTonelParser >> method [
 
 { #category : 'parsing' }
 NewTonelParser >> methodBody [
-	| source end count currentPosition start |
-start := stream position.
+	| source end count currentPosition |
 	methodParser tonelMethodBodyTerminationToken
 		ifFalse: [
 			methodParser parseTonelPragmas.
@@ -65,7 +64,7 @@ NewTonelParser >> newMethodDefinitionFrom: anArray [
 	metadata := anArray second ifNil: [ Dictionary new ].
 	className := anArray fourth first first.
 	meta := anArray fourth first second notNil.
-	selector := self extractSelector: anArray fourth second trimBoth.
+	selector :=  anArray fourth second trimBoth.
 	source := String streamContents: [ :s | 
 		s << selector.
 		anArray fifth ifNotEmpty: [ :src | 
@@ -74,7 +73,7 @@ NewTonelParser >> newMethodDefinitionFrom: anArray [
 
 	^ self packageReader newMethodDefinitionForClassNamed: className
 		classIsMeta: meta
-		selector: selector
+		selector: (self extractSelector: selector)
 		category: (metadata at: #category ifAbsent: [ '' ]) 
 		source: source
 ]

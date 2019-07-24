@@ -179,7 +179,7 @@ TClass classSide >> template: aSystemCategoryName [
 			classIsMeta: true
 			selector: #template:
 			category: ''
-			source: 'template: aSystemCategoryName 
+			source: 'template: aSystemCategoryName
 	"I really do not care"').
 ]
 
