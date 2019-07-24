@@ -12,6 +12,20 @@ NewTonelParserTest >> assertParse: aString rule: rule equals: result [
 ]
 
 { #category : 'private' }
+NewTonelParserTest >> newClassDefinitionForClassNamed: nameString superclassName: superclassString category: categoryString instVarNames: ivarArray classVarNames: cvarArray poolDictionaryNames: poolArray classInstVarNames: civarArray type: typeSymbol comment: commentString [
+  ^ TonelCypressReader
+    newClassDefinitionForClassNamed: nameString
+    superclassName: superclassString
+    category: categoryString
+    instVarNames: ivarArray
+    classVarNames: cvarArray
+    poolDictionaryNames: poolArray
+    classInstVarNames: civarArray
+    type: typeSymbol
+    comment: commentString
+]
+
+{ #category : 'private' }
 NewTonelParserTest >> newMethodDefinitionForClassNamed: className classIsMeta: meta selector: selector category: category source: source [
   ^ TonelCypressReader
     newMethodDefinitionForClassNamed: className
@@ -19,6 +33,11 @@ NewTonelParserTest >> newMethodDefinitionForClassNamed: className classIsMeta: m
     selector: selector
     category: category
     source: source
+]
+
+{ #category : 'private' }
+NewTonelParserTest >> newTypeDefinitionFrom: anArray [
+  ^ TonelCypressReader newTypeDefinitionFrom: anArray
 ]
 
 { #category : 'private' }
