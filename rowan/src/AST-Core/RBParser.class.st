@@ -721,24 +721,6 @@ RBParser >> parseStatements: pragmaBoolean [
 ]
 
 { #category : 'private-parsing' }
-RBParser >> parseTonelKeywordPattern [
-	| keywords args node |
-	keywords := OrderedCollection new.
-	args := OrderedCollection new.
-	[currentToken isKeyword]
-		whileTrue:
-			[keywords add: currentToken.
-			self step.
-			args add: self parseVariableNode].
-	node := self methodNodeClass
-		selectorParts: keywords
-		arguments: args.
-	node comments: (node comments, args last comments).
-	args last comments: nil.
-	^node
-]
-
-{ #category : 'private-parsing' }
 RBParser >> parseTonelMessagePattern [
 
 	currentToken isLiteralToken ifTrue: [self patchTonelLiteralMessage].
@@ -746,7 +728,7 @@ RBParser >> parseTonelMessagePattern [
 		ifTrue: [self parseTonelUnaryPattern]
 		ifFalse: 
 			[currentToken isKeyword 
-				ifTrue: [self parseTonelKeywordPattern]
+				ifTrue: [self parseKeywordPattern]
 				ifFalse: [self parseTonelBinaryPattern]]
 ]
 

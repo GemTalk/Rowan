@@ -12,10 +12,6 @@ Class {
 { #category : 'parsing' }
 NewTonelParser >> method [
 
-"this is what we're looking for:
-	self copyFrom: 37 to: 41
- 'name '
-"
 	| type start end currentPosition selector count xStart |
 	
 	type := self untilIncluding: '>>'.
@@ -29,7 +25,7 @@ end := methodParser scanner stream position.
 	start := methodBodyStart := methodParser scanner previousStepPosition - 3.
 	currentPosition := methodParser scanner stream position.
 	methodParser scanner stream position: xStart.
-count := end - start.
+count := end - xStart + 1.
 selector := String new: count.
 	methodParser scanner stream readInto: selector startingAt: 1 count: count.
 	methodParser scanner stream position: currentPosition.

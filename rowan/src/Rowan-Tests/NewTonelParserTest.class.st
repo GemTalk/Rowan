@@ -115,6 +115,7 @@ NewTonelParserTest >> testMetadata [
 
 { #category : 'tests' }
 NewTonelParserTest >> testMethod [
+
 	self 
 		assertParse: 'Object>>name' 
 		rule: #method
@@ -131,7 +132,6 @@ false ifTrue: [	"I'm not sure that this pattern will show up in the wild ...so i
 		rule: #method
 		equals: #(('Object' nil) 'name: aString').
 ].
-		
 	self 
 		assertParse: 'Object class >> name: aString' 
 		rule: #method
