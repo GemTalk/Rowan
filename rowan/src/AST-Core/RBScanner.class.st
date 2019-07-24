@@ -554,7 +554,8 @@ RBScanner >> tonelNext [
 					[RBToken start: tokenStart + 1	"The EOF token should occur after the end of input"]
 				ifFalse: [self scanToken].
 	self stripSeparators.
-	token comments: self getComments.
+"don't read comments"
+	false ifTrue: [ token comments: self getComments ].
 "skip the $[ and get next token"
 	^self next
 ]
