@@ -43,7 +43,7 @@ NewTonelParser >> methodBody [
 
 	(methodParser currentToken isSpecial and: [ methodParser currentToken value = $[ ])
 		ifFalse: [ self error: 'Cannot parse Tonel method body. Missing ''[''.' ].
-	self step.	"skip the $["
+	methodParser step.	"skip the $["
 	methodBodyStart := methodParser scanner previousStepPosition - 2.
 	methodParser parseTonelPragmas.
 	currentMethodNode body: (methodParser parseTonelStatements: true).
