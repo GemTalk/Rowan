@@ -5,6 +5,24 @@ Class {
 }
 
 { #category : 'private' }
+NewTonelParserTest >> _CPreprocessor_initializePaths_method_source [
+
+	^ '| list |
+  self nativeCppCmd .
+	list := { '''' }.
+	(path ~~ nil and: [path first == $$]) ifTrue: [list add: self directory].
+  cppArchMType ifNil:[  "not using native cpp"
+	  list add: ''/usr/include/''; add: ''/usr/local/include/'' .
+    systemSearchPaths := { } .
+  ] ifNotNil:[
+    systemSearchPaths := { ''/usr/include/'' . ''/usr/local/include/'' }.
+    cppArchMType == 50 ifTrue:[ systemSearchPaths add: ''/usr/include/linux'' ].
+  ].
+  searchPaths := list .
+'
+]
+
+{ #category : 'private' }
 NewTonelParserTest >> _issue_45_method_source [
 ^'"
 
@@ -397,6 +415,23 @@ NewTonelParserTest >> testComment [
 		assertParse: '"""this"" is a comment with ""nested"" colons ""also at the end"""'
 		rule: #comment
 		equals: '"this" is a comment with "nested" colons "also at the end"'
+]
+
+{ #category : 'tests' }
+NewTonelParserTest >> testCPreprocessor_initializePaths [
+	self 
+		assertParse: '
+{ #category: ''Private'' }
+CPreprocessor>>_initializePaths [
+', self _CPreprocessor_initializePaths_method_source, '
+]'
+		rule: #methodDef
+		equals: (self newMethodDefinitionForClassNamed: #CPreprocessor
+			classIsMeta: false
+			selector: #_initializePaths
+			category: 'Private'
+			source: '_initializePaths
+', self _CPreprocessor_initializePaths_method_source).
 ]
 
 { #category : 'tests' }
