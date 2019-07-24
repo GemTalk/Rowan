@@ -721,9 +721,33 @@ RBParser >> parseStatements: pragmaBoolean [
 ]
 
 { #category : 'private-parsing' }
+RBParser >> parseTonelKeywordPattern [
+	| keywords args node |
+	keywords := OrderedCollection new.
+	args := OrderedCollection new.
+	[currentToken isKeyword]
+		whileTrue:
+			[keywords add: currentToken.
+			self step.
+			args add: self parseVariableNode].
+	node := self methodNodeClass
+		selectorParts: keywords
+		arguments: args.
+	node comments: (node comments, args last comments).
+	args last comments: nil.
+	^node
+]
+
+{ #category : 'private-parsing' }
 RBParser >> parseTonelMessagePattern [
 
-	^ self parseMessagePattern
+	currentToken isLiteralToken ifTrue: [self patchTonelLiteralMessage].
+	^currentToken isIdentifier 
+		ifTrue: [self parseTonelUnaryPattern]
+		ifFalse: 
+			[currentToken isKeyword 
+				ifTrue: [self parseTonelKeywordPattern]
+				ifFalse: [self parseTonelBinaryPattern]]
 ]
 
 { #category : 'private-parsing' }
@@ -810,6 +834,16 @@ RBParser >> parseTonelStatements: pragmaBoolean [
 				leftBar: leftBar
 				temporaries: args
 				rightBar: rightBar)
+]
+
+{ #category : 'private-parsing' }
+RBParser >> parseTonelUnaryPattern [
+	"only used when parsing the tonel method selector line"
+
+	| selector |
+	selector := currentToken.
+	self tonelStep.
+	^self methodNodeClass selectorParts: (Array with: selector) arguments: #()
 ]
 
 { #category : 'private-parsing' }
@@ -990,6 +1024,19 @@ RBParser >> step [
 			[currentToken := nextToken.
 			nextToken := nil]
 		ifFalse: [currentToken := scanner next]
+]
+
+{ #category : 'private' }
+RBParser >> tonelStep [
+	"only used when parsing the tonel method selector line"
+
+	(currentToken notNil and: [currentToken comments notNil]) 
+		ifTrue: [comments addAll: currentToken comments].
+	nextToken notNil 
+		ifTrue: 
+			[currentToken := nextToken.
+			nextToken := nil]
+		ifFalse: [currentToken := scanner tonelNext]
 ]
 
 { #category : 'private-classes' }

@@ -41,14 +41,9 @@ selector := selector trimBoth.
 NewTonelParser >> methodBody [
 	| source end count currentPosition |
 
-	(methodParser currentToken isSpecial and: [ methodParser currentToken value = $[ ])
-		ifFalse: [ self error: 'Cannot parse Tonel method body. Missing ''[''.' ].
-	methodParser step.	"skip the $["
 	methodBodyStart := methodParser scanner previousStepPosition - 2.
 	methodParser parseTonelPragmas.
 	currentMethodNode body: (methodParser parseTonelStatements: true).
-	(methodParser currentToken isSpecial and: [ methodParser currentToken value = $]])
-		ifFalse: [ self error: 'Cannot parse Tonel method. Missing '']''.'].
 	end := methodParser currentToken start - 2.
 	count :=  end - methodBodyStart.
 	source := String new: count.
