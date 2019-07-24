@@ -162,6 +162,11 @@ RBTonelParser >> scannerClass [
 	^RBTonelScanner
 ]
 
+{ #category : 'testing' }
+RBTonelParser >> tonelMethodBodyTerminationToken [
+	^ currentToken isSpecial and: [ currentToken value = $] ]
+]
+
 { #category : 'private' }
 RBTonelParser >> tonelStep [
 	"only used when parsing the tonel method selector line"

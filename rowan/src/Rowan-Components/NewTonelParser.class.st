@@ -9,15 +9,6 @@ Class {
 	#category : 'Rowan-Components'
 }
 
-{ #category : 'private' }
-NewTonelParser >> extractCommentsFor:  aNode from: originalSource on: codeStream [
-	aNode comments do: 
-			[:each | 
-			codeStream
-				space;
-				nextPutAll: (originalSource copyFrom: each first to: each last)].
-]
-
 { #category : 'parsing' }
 NewTonelParser >> method [
 
@@ -51,22 +42,20 @@ NewTonelParser >> method [
 
 { #category : 'parsing' }
 NewTonelParser >> methodBody [
-	| codeStream source start end count currentPosition |
-	codeStream := WriteStreamPortable on: String new.
-	self extractCommentsFor:  methodParser currentToken from: stream contents on: codeStream.
-	start := stream position.
-	methodParser parseTonelPragmas.
-	currentMethodNode body: (methodParser parseTonelStatements: true).
-	end := methodParser currentToken start - 2.
+	| source end count currentPosition start |
+start := stream position.
+	methodParser tonelMethodBodyTerminationToken
+		ifFalse: [
+			methodParser parseTonelPragmas.
+			currentMethodNode body: (methodParser parseTonelStatements: true) ].
+	end := methodParser currentToken start - 1.
 	count :=  end - methodBodyStart.
-	source := String new: count.
+	source := String new: count - 2.
 	currentPosition := methodParser scanner stream position.
-	methodParser scanner stream position: methodBodyStart + 2.
-	methodParser scanner stream readInto: source startingAt: 1 count: count + 1.
+	methodParser scanner stream position: methodBodyStart + 1.
+	methodParser scanner stream readInto: source startingAt: 1 count: count - 2.
 	methodParser scanner stream position: currentPosition.
-self halt.
 	^ source
-
 ]
 
 { #category : 'private factory' }
