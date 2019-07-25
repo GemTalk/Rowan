@@ -34242,7 +34242,8 @@ category: 'class reading'
 method: RwRepositoryComponentProjectTonelReaderVisitor
 readClassesFor: packageName packageRoot: packageRoot
 
-	| classFileExtensions classExtensionFileExtensions |
+	| classFileExtensions classExtensionFileExtensions trace |
+  trace := SessionTemps current at: #ROWAN_TRACE otherwise: nil .
 	currentPackageDefinition := currentProjectDefinition 
 		packageNamed: packageName 
 		ifAbsent: [ currentProjectDefinition addRawPackageNamed: packageName ].
@@ -34250,6 +34251,7 @@ readClassesFor: packageName packageRoot: packageRoot
 	classFileExtensions := self classFileExtensions.
 	packageRoot files do: [:file |
 		| fileExtensions |
+    trace == #gciLogServer ifTrue:[ GsFile gciLogServer: '--- reading ', file asString ].
 		fileExtensions := file extensions asArray.
 		fileExtensions = classFileExtensions
 			ifTrue: [ self readClassFile: file inPackage: packageName ]
@@ -59838,23 +59840,7 @@ result add: 'constraints: '.
 category: '*rowan-gemstone-kernel'
 method: Class
 _rwOptionsArray
-  "copy of _optionsArray"
-
-  | result optCount | 
-  result := { } .
-  optCount := 0 .
-  self instancesDbTransient ifTrue:[ result add: #dbTransient . optCount := optCount + 1 ].
-  self instancesNonPersistent ifTrue:[ result add:  #instancesNonPersistent  . optCount := optCount + 1 ].
-  self instancesInvariant ifTrue:[ result add:  #instancesInvariant  . optCount := optCount + 1 ].
-  optCount > 1 ifTrue:[
-    self _error: #classErrBadFormat
-        with:'only one of #dbTransient #instancesNonPersistent  #instancesInvariant allowed' .
-  ].
-  "self _structuralUpdatesDisallowed ifTrue:[ result add: #disallowGciStore  ]." "commented out variant of _optionsArray (https://github.com/dalehenrich/Rowan/issues/292)"
-  self isModifiable ifTrue:[ result add: #modifiable  ].
-  self subclassesDisallowed ifTrue:[ result add: #subclassesDisallowed  ].
-  "self _traversalByCallback ifTrue:[ result add: #traverseByCallback  ]." "commented out variant of _optionsArray (https://github.com/dalehenrich/Rowan/issues/292)"
-  ^ result
+  ^ self _optionsArrayForDefinition
 %
 
 category: '*rowan-gemstone-kernel'
@@ -62402,7 +62388,7 @@ _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 				inDictionary: nil
 				inClassHistory: hist
 				description: ''
-				options: oldClass _nonInheritedOptions.
+				options: oldClass _optionsArrayForDefinition .
 			clonedSymDict at: oldClassName put: clonedClass.
 			clonedClasses add: {clonedClass. oldClass} ].
 			"compile methods in cloned class"
@@ -62514,5 +62500,6 @@ RBScanner initialize.
 Rowan initialize.
 RwLoadedThing initialize.
 RwModificationFiletreeWriterVisitor initialize.
+true
 %
 

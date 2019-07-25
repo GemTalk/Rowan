@@ -79,11 +79,11 @@ RwClassDefinition >> _updateClassNameFromClass: aClass [
 RwClassDefinition >> _updateClassTypeFromClass: aClass [
 
 	"For GemStone, the valid values are:
-	bytes
+	byteSubclass
 	variable
 	normal for non-indexable pointer object"
 
-	"Must be in-synch with RwGsLoadedSymbolDictPatch>>updateClassTypeFromClass"
+	"Must be in-synch with RwGsLoadedSymbolDictClass>>updateClassTypeFromClass"
 
 	| propertyName oldValue newValue |
 	propertyName := 'type'.
@@ -91,7 +91,7 @@ RwClassDefinition >> _updateClassTypeFromClass: aClass [
 	newValue := aClass isBytes
 						ifTrue: [
 							aClass superClass isBytes not
-								ifTrue: [ 'bytes' ]
+								ifTrue: [ 'byteSubclass' ]
 								ifFalse: [ 'normal' ]]
 						ifFalse: [ 
 							aClass isSpecial
@@ -177,8 +177,9 @@ RwClassDefinition >> _updateOptionsFromClass: aClass [
 				asSortedCollection asArray.
 	newValue isEmpty 
 		ifTrue: [ self removeProperty: propertyName ]
-		ifFalse: 
-			[ self propertyAt: propertyName put: newValue ]
+		ifFalse: [ self propertyAt: propertyName put: newValue ].
+  aClass _rwReservedOop ifNotNil:[:resOop | self propertyAt:'gs_reservedOop' put: resOop ]
+                          ifNil:[ self removeProperty:'gs_reservedOop' ].
 ]
 
 { #category : 'utility' }
@@ -202,16 +203,6 @@ RwClassDefinition >> _updateSymbolDictionaryFromClass: aClass [
 	| ar symbolDictName |
 	ar := System myUserProfile dictionariesAndSymbolsOf: aClass.
 	symbolDictName := ((ar at: 1) at: 1) name.
-	self gs_symbolDictionary: symbolDictName
-]
-
-{ #category : 'utility' }
-RwClassDefinition >> _updateSymbolDictionaryFromGemStoneKernelClass: aClass [
-
-	| ar symbolDictName |
-	ar := System myUserProfile dictionariesAndSymbolsOf: aClass.
-  ar size == 0 ifTrue:[ symbolDictName := 'Globals' ]
-	   ifFalse:[  symbolDictName := ((ar at: 1) at: 1) name ].
 	self gs_symbolDictionary: symbolDictName
 ]
 
@@ -283,25 +274,6 @@ RwClassDefinition >> updatePropertiesFromClass: aClass [
 
 	self
 		_updateSymbolDictionaryFromClass: aClass;
-		_updateClassNameFromClass: aClass;
-		_updateSuperclassNameFromClass: aClass;
-		_updateInstvarNamesFromClass: aClass;
-		_updateClassInstvarNamesFromClass: aClass;
-		_updateClassVariableNamesFromClass: aClass;
-		_updatePoolDictionaryNamesFromClass: aClass;
-		_updateClassTypeFromClass: aClass;
-		_updateOptionsFromClass: aClass;
-		_updateConstraintsFromClass: aClass;
-		_updateCommentFromClass: aClass;
-		_updateCategoryFromClass: aClass
-]
-
-{ #category : 'utility' }
-RwClassDefinition >> updatePropertiesFromGemStoneKernelClass: aClass [
-
-	"Update my properties from the class. Leave unknown properties alone, they may apply to another platform."
-	self
-		_updateSymbolDictionaryFromGemStoneKernelClass: aClass;
 		_updateClassNameFromClass: aClass;
 		_updateSuperclassNameFromClass: aClass;
 		_updateInstvarNamesFromClass: aClass;

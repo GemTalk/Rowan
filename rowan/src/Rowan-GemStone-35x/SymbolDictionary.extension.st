@@ -44,7 +44,7 @@ SymbolDictionary >> _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbol
 				inDictionary: nil
 				inClassHistory: hist
 				description: ''
-				options: oldClass _nonInheritedOptions.
+				options: oldClass _optionsArrayForDefinition .
 			clonedSymDict at: oldClassName put: clonedClass.
 			clonedClasses add: {clonedClass. oldClass} ].
 			"compile methods in cloned class"
