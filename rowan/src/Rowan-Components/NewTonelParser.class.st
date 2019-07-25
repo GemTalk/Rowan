@@ -16,8 +16,7 @@ NewTonelParser >> method [
 	
 	type := self untilIncluding: '>>'.
 	start := stream position.
-	methodParser := RBTonelParser new.
-	methodParser
+	self methodParser
 		scanner: (methodParser scannerClass on: stream
 				errorBlock: [:errorMessage :errorPosition |self halt]).
 	currentMethodNode := methodParser parseTonelMessagePattern.
@@ -43,7 +42,7 @@ NewTonelParser >> method [
 { #category : 'parsing' }
 NewTonelParser >> methodBody [
 	| source end count currentPosition |
-	methodParser tonelMethodBodyTerminationToken
+	self methodParser tonelMethodBodyTerminationToken
 		ifFalse: [
 			methodParser parseTonelPragmas.
 			currentMethodNode body: (methodParser parseTonelStatements: true) ].
@@ -55,6 +54,12 @@ NewTonelParser >> methodBody [
 	methodParser scanner stream readInto: source startingAt: 1 count: count - 2.
 	methodParser scanner stream position: currentPosition.
 	^ source
+]
+
+{ #category : 'accessing' }
+NewTonelParser >> methodParser [
+
+	^ methodParser ifNil: [ methodParser := RBTonelParser new ]
 ]
 
 { #category : 'private factory' }

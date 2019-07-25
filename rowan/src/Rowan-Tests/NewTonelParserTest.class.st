@@ -547,17 +547,6 @@ what] is inside'.
 ]
 
 { #category : 'tests' }
-NewTonelParserTest >> testMethodBodyWithDollarAndBracket [
-
-	"https://github.com/pharo-vcs/tonel/issues/57"
-
-	self 
-		assertParse: '[ [ $$] ]'
-		rule: #methodBody
-		equals: ' [ $$] '.
-]
-
-{ #category : 'tests' }
 NewTonelParserTest >> testMethodDef [
 	self 
 		assertParse: '
