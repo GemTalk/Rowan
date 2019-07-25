@@ -2137,7 +2137,8 @@ category: 'instance creation'
 classmethod: FileException
 signalOnFile: aFile 
 	
-	(self fileName: aFile basename) signal
+	(self fileName: aFile basename) 
+     signal: aFile name"so file name shows up in printString"
 %
 
 category: 'instance creation'
@@ -2145,8 +2146,9 @@ classmethod: FileException
 signalWith: aReference
 	"Signal a new instance of the receiver with the supplied reference.
 	aReference is something that can be converted to a path, e.g. a String, Path or FileReference"
-
-	^(self fileName: aReference asPath pathString) signal
+  | str |
+	^(self fileName: (str := aReference asPath pathString)) signal: str
+  "use signal: so details show up in printString"
 %
 
 !		Instance methods for 'FileException'
@@ -2191,7 +2193,7 @@ signalOnFile: aFile
 	
 	self new
 		file: aFile;
-		signal
+		signal: aFile name "use signal: so filename shows up in exception printString"
 %
 
 !		Instance methods for 'FileAlreadyExistsException'
@@ -2224,9 +2226,10 @@ category: 'signalling'
 classmethod: FileDoesNotExistException
 signalWithFile: aFile writeMode: writeMode
 
-	^ (self fileName: aFile basename)
+  | ex |
+	^ (ex := self fileName: aFile basename)
 		readOnly: writeMode not;
-		signal
+		signal: ex fileName  "use signal: so file name shows up in  ex printString"
 %
 
 !		Instance methods for 'FileDoesNotExistException'
@@ -18904,5 +18907,21 @@ asByteArray
 
 run
 FastUUIDGenerator initialize.
+true
+%
+
+method: FileReference
+asString 
+  "needed for informative topaz stack display"
+  ^ path asString 
+%
+method: AbsolutePath
+asString 
+  "used by topaz stack display"
+  | str sz |
+  str := '/' copy .
+  1 to: (sz := self size) - 1 do:[:j | str addAll: (self at: j) ; add: $/ ].
+  str add: (self at: sz ).
+  ^ str
 %
 
