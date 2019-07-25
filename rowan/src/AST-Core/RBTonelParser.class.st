@@ -4,6 +4,12 @@ Class {
 	#category : 'AST-Core'
 }
 
+{ #category : 'accessing' }
+RBTonelParser >> currentToken [
+
+	^currentToken
+]
+
 { #category : 'private-parsing' }
 RBTonelParser >> parseTonelKeywordPattern [
 	" do not process $[ token .. caller will do the right thing"
@@ -155,6 +161,12 @@ RBTonelParser >> parseTonelVariableNode [
 RBTonelParser >> peekTonelFor: characterType value: characterValue [
 
 	^ self scanner peekTonelFor: characterType value: characterValue
+]
+
+{ #category : 'accessing' }
+RBTonelParser >> scanner [
+
+	^scanner
 ]
 
 { #category : 'accessing' }

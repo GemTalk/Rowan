@@ -10,6 +10,11 @@ RBTonelScanner >> peekTonelFor: aCharacterType value: aCharacterValue [
 	^ currentCharacter = aCharacterValue and: [ characterType =  aCharacterType ]
 ]
 
+{ #category : 'error handling' }
+RBTonelScanner >> stream [
+	^stream
+]
+
 { #category : 'accessing' }
 RBTonelScanner >> tonelNext [
 	"only used when parsing the tonel method selector line"

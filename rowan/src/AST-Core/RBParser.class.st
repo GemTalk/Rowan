@@ -94,11 +94,6 @@ RBParser class >> parseRewriteMethod: aString onError: aBlock [
 	^RBPatternParser parseMethod: aString onError: aBlock
 ]
 
-{ #category : 'initialize-release' }
-RBParser >> _scanner: aScanner [ 
-	scanner := aScanner.
-]
-
 { #category : 'private' }
 RBParser >> addCommentsTo: aNode [
 	aNode comments: aNode comments , comments.
@@ -128,12 +123,6 @@ RBParser >> blockNodeClass [
 { #category : 'private-classes' }
 RBParser >> cascadeNodeClass [
 	^ RBCascadeNode
-]
-
-{ #category : 'accessing' }
-RBParser >> currentToken [
-
-	^currentToken
 ]
 
 { #category : 'error handling' }
@@ -863,12 +852,6 @@ RBParser >> queryBlockNodeClass [
 { #category : 'private-classes' }
 RBParser >> returnNodeClass [
 	^ RBReturnNode
-]
-
-{ #category : 'accessing' }
-RBParser >> scanner [
-
-	^scanner
 ]
 
 { #category : 'initialize-release' }
