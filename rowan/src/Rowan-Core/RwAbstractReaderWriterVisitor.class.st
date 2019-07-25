@@ -205,7 +205,8 @@ RwAbstractReaderWriterVisitor >> packageConvention [
 		ppc := self currentProjectDefinition packageConvention.
 		dpc := self _repositoryConventionFor: self packagesRoot.
 		dpc ~= ppc
-			ifTrue:  [ self error: 'Disk package convention ' , dpc printString, ' does not match expected package convention ', ppc printstring. ' for project ', self projectName printString ].
+			ifTrue:  [ self error: 'Disk package convention ' , dpc printString, 
+           ' does not match expected package convention ', ppc printString. ' for project ', self projectName printString ].
 		packageConvention := ppc ]
 ]
 
