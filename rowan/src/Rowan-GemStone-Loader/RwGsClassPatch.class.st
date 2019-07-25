@@ -74,9 +74,8 @@ RwGsClassPatch >> addToNewClassesByName: aDictionary [
 
 { #category : 'private' }
 RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
-
 	"For GemStone, the valid values are:
-	bytes
+	byteSubclass
 	variable
 	normal for non-indexable pointer object"
 
@@ -118,7 +117,7 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 						constraints: oldConstraints
 						options: gs_options ]
 				ifFalse: [ 
-					type = 'bytes'
+					type = 'byteSubclass'
 						ifTrue: [ 
 							(classDefinition propertyAt: 'instvars') isEmpty
 								ifFalse: [ self error: 'Cannot define byte class with named instvars.' ].
@@ -133,7 +132,6 @@ RwGsClassPatch >> basicCreateClassWithSuperclass: superclass [
 								options: gs_options ]
 						ifFalse: [ self error: 'Unknown class type' ] ] ].
 	^ createdClass
-
 ]
 
 { #category : 'accessing' }
