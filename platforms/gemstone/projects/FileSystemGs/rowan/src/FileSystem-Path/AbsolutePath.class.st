@@ -42,6 +42,15 @@ AbsolutePath >> printOn: aStream [
 				 	nextPutAll: (self at: i);
 					nextPut: $']]
 ]
+{ #category : 'printing' }
+AbsolutePath >> asString [
+  "used by topaz stack display"
+  | str sz |
+  str := '/' copy .
+  1 to: (sz := self size) - 1 do:[:j | str addAll: (self at: j) ; add: $/ ].
+  str add: (self at: sz ).
+  ^ str
+]  
 
 { #category : 'printing' }
 AbsolutePath >> printPathOn: aStream delimiter: aCharacter [
