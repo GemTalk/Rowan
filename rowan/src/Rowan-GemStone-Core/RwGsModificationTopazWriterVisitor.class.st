@@ -1,5 +1,5 @@
 "
-Example script that produces topaz bootstrap files for the Rowan projects:
+  Example script that produces topaz bootstrap files for the Rowan projects:
 
 	| repositoryRootPath projectSetDefinition projectSetModification visitor |
 	repositoryRootPath := FileLocator dbfScratchDir / 'rowanBootstrap'.
@@ -302,29 +302,39 @@ RwGsModificationTopazWriterVisitor >> exportClassDefinitions: classDefinitionsIn
 		ifTrue: [ 
 			stream
 				nextPutAll: '! Class Declarations'; lf;
+				nextPutAll: '! Generated file, do not Edit'; lf;
 				lf ].
 	classDefinitionsInOrder do: [:classDef | 
 		self _fileOutClassDeclaration: classDef on: stream ].
 ]
 
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> excludeClassInitializers [
+  self dynamicInstVarAt: #excludeClassInitializers put: true
+]
+
 { #category : 'exporting' }
 RwGsModificationTopazWriterVisitor >> exportClassInitializations [
-
-	| stream |
+	| stream exclude |
 	self classInitializationDefinitions isEmpty ifTrue: [ ^ self ].
-
 	stream := self bufferedStream.
-
-	stream 
-		nextPutAll: '! Class Initialization'; lf;
-		lf;
-		nextPutAll: 'run'; lf.
-
+  exclude := (self dynamicInstVarAt: #excludeClassInitializers) ~~ nil  .
+  exclude ifTrue:[
+    stream nextPutAll: '! Class Initialization Excluded by export visitor'; lf .
+  ] ifFalse:[
+	  stream 
+		  nextPutAll: '! Class Initialization'; lf;
+      lf;
+		  nextPutAll: 'run'; lf.
+  ].
 	(self classInitializationDefinitions sort: [:a :b | a name <= b name ]) do: [ :classDef |
-		stream nextPutAll: classDef name, ' initialize.'; lf ].
-
-	stream nextPutAll: '%'; lf;
-		lf
+    exclude ifTrue:[ stream nextPutAll:'!  ' ].
+		stream nextPutAll: classDef name, ' initialize.'; lf 
+  ].
+  exclude ifFalse:[
+	  stream nextPutAll: 'true'; lf;
+	  nextPutAll: '%'; lf .
+  ].
 ]
 
 { #category : 'exporting' }
@@ -341,7 +351,6 @@ RwGsModificationTopazWriterVisitor >> exportMethodDefinitions: classDefinitionsI
 
 { #category : 'exporting' }
 RwGsModificationTopazWriterVisitor >> exportMethodDefinitions: classDefinitionsInOrder labeled: label [
-
 	| stream |
 	stream := self bufferedStream.
 	classDefinitionsInOrder do: [:classDef | 
@@ -384,9 +393,10 @@ RwGsModificationTopazWriterVisitor >> filenameExtension: aString [
 { #category : 'class writing' }
 RwGsModificationTopazWriterVisitor >> processClass: aClassModification [
 
-	| classDefinition symbolDictName |
+	| classDefinition symbolDictName clsName |
 	classDefinition := aClassModification after.
-	(self classDefinitions at: classDefinition name ifAbsent: []) ifNotNil: [ self error: 'duplicate class defintion for ', classDefinition name printString, ' encountered.'].
+	(self classDefinitions at: (clsName := classDefinition name) ifAbsent: []) ifNotNil: [ 
+   self error: 'duplicate class definition for ', clsName printString, ' encountered.'].
 
 	symbolDictName := self currentProjectDefinition symbolDictNameForPackageNamed: self currentPackageDefinition name.
 	self classSymbolDictionaryNames at: classDefinition name put: symbolDictName.
