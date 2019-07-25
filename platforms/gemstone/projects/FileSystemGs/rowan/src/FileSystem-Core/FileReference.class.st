@@ -425,3 +425,8 @@ FileReference >> writeStream [
 	
 	^ self writeStreamEncoded: 'utf8'
 ]
+{ #category : 'printing' }
+FileReference >> asString [
+  "needed for informative topaz stack display"
+  ^ path asString 
+]
