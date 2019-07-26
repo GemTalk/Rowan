@@ -5,7 +5,8 @@ Class {
 		'name',
 		'classes',
 		'hierarchyServices',
-		'globals'
+		'globals',
+		'defaultTemplate'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -18,6 +19,23 @@ RowanDictionaryService >> classHierarchy [
 	"reuse behavior in package service for now" 
 	hierarchyServices := (RowanPackageService new classes: classes) classHierarchy: theClasses. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'Updating' }
+RowanDictionaryService >> defaultTemplate: newValue [
+	defaultTemplate := newValue
+]
+
+{ #category : 'command support' }
+RowanDictionaryService >> genericClassCreationTemplate [
+
+	^self browserTool classCreationTemplateForSubclassOf: 'Object' category: nil packageName: nil
+]
+
+{ #category : 'initialization' }
+RowanDictionaryService >> initialize [
+
+	self setDefaultTemplate
 ]
 
 { #category : 'client commands' }
@@ -42,6 +60,21 @@ RowanDictionaryService >> name: object [
 ]
 
 { #category : 'client commands' }
+RowanDictionaryService >> removeClass: classService [
+	self removeClassNamed: classService name. 
+	self setDefaultTemplate.
+	classService updateType: #removedClass:.
+	RowanCommandResult addResult: classService
+]
+
+{ #category : 'client commands' }
+RowanDictionaryService >> removeClassNamed: className [
+
+	self browserTool removeClassNamed: className.
+
+]
+
+{ #category : 'client commands' }
 RowanDictionaryService >> removeGlobalNamed: symbol [
 	| dictionary |
 	dictionary := (System myUserProfile resolveSymbol: name asSymbol) value.
@@ -55,6 +88,12 @@ RowanDictionaryService >> servicePerform: symbol withArguments: collection [
 
 	super servicePerform: symbol withArguments: collection.
 	self update.
+]
+
+{ #category : 'client commands' }
+RowanDictionaryService >> setDefaultTemplate [
+
+	defaultTemplate := self genericClassCreationTemplate.
 ]
 
 { #category : 'updates' }
