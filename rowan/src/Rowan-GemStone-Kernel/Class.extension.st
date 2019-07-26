@@ -49,13 +49,6 @@ result add: 'constraints: '.
 ]
 
 { #category : '*rowan-gemstone-kernel' }
-Class >> _rwReservedOop [
- "returns nil or the SmallInteger specifying a reserved oopNumber"
-  | oop|
-  ^ (oop := self asOopNumber) <= System _lastReservedOopNumber ifTrue:[ oop ] ifFalse:[ nil ].
-]
-
-{ #category : '*rowan-gemstone-kernel' }
 Class >> _rwOptionsForDefinition [ 
   "copy of _optionsForDefinition"
 
@@ -66,6 +59,13 @@ Class >> _rwOptionsForDefinition [
   result add: $)  .
   ^ result
 
+]
+
+{ #category : '*rowan-gemstone-kernel' }
+Class >> _rwReservedOop [
+ "returns nil or the SmallInteger specifying a reserved oopNumber"
+  | oop|
+  ^ (oop := self asOopNumber) <= System _lastReservedOopNumber ifTrue:[ oop ] ifFalse:[ nil ].
 ]
 
 { #category : '*rowan-gemstone-kernel' }

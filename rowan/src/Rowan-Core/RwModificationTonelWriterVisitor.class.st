@@ -140,6 +140,9 @@ RwModificationTonelWriterVisitor >> _typeClassDefinitionOf: aClassDefinition [
 	(aClassDefinition gs_options)
 		ifNotEmpty: [:gs_options | definition at: #'gs_options' put: gs_options asArray ].
 
+	(aClassDefinition gs_reservedOop)
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedOop' put: gs_reservedOop asString ].
+
 	definition 		
 		at: #category put: aClassDefinition category.
 	
@@ -305,7 +308,7 @@ RwModificationTonelWriterVisitor >> processProject: aProjectModification [
 	super processProject: aProjectModification.
 ]
 
-{ #category: 'private' }
+{ #category : 'private' }
 RwModificationTonelWriterVisitor >> skipComment: aStream [
   "I assume I'm on top of the begining of a comment"
   aStream skip: 1.
@@ -314,9 +317,8 @@ RwModificationTonelWriterVisitor >> skipComment: aStream [
   whileTrue.  
 ]
 
-{ #category: 'private' }
+{ #category : 'private' }
 RwModificationTonelWriterVisitor >> skipSeparators: aStream [
   [ aStream peek isSeparator ]
     whileTrue: [ aStream skip: 1 ]. 
 ]
-

@@ -34,8 +34,8 @@
   commit
   input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src/Rowan.gs
   commit
-#  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src/Rowan-Tests.gs
-#  commit
+  input $ROWAN_PROJECTS_HOME/Rowan/platforms/gemstone/topaz/3.5.0/project_src/Rowan-Tests.gs
+  commit
 
 	logout
 

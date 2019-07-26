@@ -1,6 +1,8 @@
 RwProjectLoadConfiguration {
 	#name : 'Tests',
+	#comment : 'Tonel test packages',
 	#version : '0.1.0',
+	#configurationNames : [ ],
 	#conditionalPackages : {
 		[
 			'gemstone'
@@ -16,6 +18,6 @@ RwProjectLoadConfiguration {
 			}
 		}
 	},
-	#configurationNames : [ ],
-	#comment : 'Tonel test packages'
+	#conditionalPackageMapSpecs : { },
+	#definedGroupNames : { }
 }
