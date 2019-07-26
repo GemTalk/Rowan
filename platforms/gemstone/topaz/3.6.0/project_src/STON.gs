@@ -4051,5 +4051,6 @@ stonProcessSubObjects: block
 
 run
 STONWriter initialize.
+true
 %
 

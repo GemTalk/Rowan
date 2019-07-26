@@ -1341,7 +1341,7 @@ methodBody
 		- I can have inner blocks
 		- I can mention a comment of the form ""$"" or a comment of the form '$'
 	 all that needs to be skipped "
-	| result char prevChar comment string count startPos startBody |
+	| result char prevChar comment string count |
 	
 	result := self class writeStreamClass on: String new.
 
@@ -1349,8 +1349,6 @@ methodBody
 	string := false.
 	prevChar := nil.
 	count := 0.
-  startPos := stream position .
-  "startBody := stream peek: 300 ." "do not checkin"
 	stream peek = $[ ifFalse: [ TonelParseError signal: 'Can''t parse method body' ].
 	[ stream atEnd not ]
 	whileTrue: [ 

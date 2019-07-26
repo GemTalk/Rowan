@@ -49,11 +49,6 @@ result add: 'constraints: '.
 ]
 
 { #category : '*rowan-gemstone-kernel' }
-Class >> _rwOptionsArray [
-  ^ self _optionsArrayForDefinition
-]
-
-{ #category : '*rowan-gemstone-kernel' }
 Class >> _rwReservedOop [
  "returns nil or the SmallInteger specifying a reserved oopNumber"
   | oop|
