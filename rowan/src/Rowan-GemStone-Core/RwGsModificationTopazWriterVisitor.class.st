@@ -70,6 +70,7 @@ Class {
 
 { #category : 'private exporting' }
 RwGsModificationTopazWriterVisitor >> _fileOutClassDeclaration: classDefinition on: aStream [
+	 | optionsString |
   aStream
     nextPutAll: 'doit';
     lf;
@@ -82,6 +83,9 @@ RwGsModificationTopazWriterVisitor >> _fileOutClassDeclaration: classDefinition 
         nextPutAll:
             '	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames) , ' )';
         lf ].
+	optionsString := ''.
+	classDefinition gs_options isEmpty
+		ifFalse: [ optionsString :=  ' ', (self _symbolsForVariables: classDefinition gs_options), ' ' ].
   aStream
     nextPutAll: '	classVars: #( ' ,  (self _stringForVariables: classDefinition classVarNames) , ' )';
     lf;
@@ -92,7 +96,7 @@ RwGsModificationTopazWriterVisitor >> _fileOutClassDeclaration: classDefinition 
     lf;
     nextPutAll: '	inDictionary: ', (self classSymbolDictionaryNames at: classDefinition name);
     lf;
-    nextPutAll: '	options: #())';
+    nextPutAll: '	options: #(', optionsString, '))';
     lf;
     nextPutAll: '		category: ' , classDefinition category printString , ';';
     lf;
@@ -140,6 +144,16 @@ RwGsModificationTopazWriterVisitor >> _stringForVariables: variableList [
 	| stream |
 	stream := WriteStreamPortable on: (String new: 100).
 	variableList do: [:each | stream nextPutAll: each]
+		separatedBy: [stream space].
+	^stream contents
+]
+
+{ #category : 'private exporting' }
+RwGsModificationTopazWriterVisitor >> _symbolsForVariables: variableList [
+
+	| stream |
+	stream := WriteStreamPortable on: (String new: 100).
+	variableList do: [:each | stream nextPutAll: each asSymbol printString ]
 		separatedBy: [stream space].
 	^stream contents
 ]
