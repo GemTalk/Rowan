@@ -255,7 +255,7 @@ RwModificationFiletreeWriterVisitor >> _typeClassDefinitionOf: aClassDefinition 
 		ifNotEmpty: [ :vars | definition at: #instvars put: vars asArray ].
 
 	(aClassDefinition gs_reservedOop)
-		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedOop' put: gs_reservedOop asString ].
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedoop' put: gs_reservedOop asString ].
 
 	definition at: #name put: aClassDefinition name.
 

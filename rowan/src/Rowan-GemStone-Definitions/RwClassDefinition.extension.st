@@ -95,7 +95,7 @@ RwClassDefinition >> gs_options: optionsArray [
 RwClassDefinition >> gs_reservedOop [
 
 	^self properties
-				at: 'gs_reservedOop'
+				at: 'gs_reservedoop'
 				ifAbsent: [ '' ]
 ]
 
@@ -103,7 +103,7 @@ RwClassDefinition >> gs_reservedOop [
 RwClassDefinition >> gs_reservedOop: aString [
 
 	self properties
-		at: 'gs_reservedOop'
+		at: 'gs_reservedoop'
 		put: aString
 ]
 

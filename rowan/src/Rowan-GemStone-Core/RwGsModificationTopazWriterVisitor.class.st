@@ -91,7 +91,7 @@ RwGsModificationTopazWriterVisitor >> _fileOutClassDeclaration: classDefinition 
 		ifFalse: [
 			| strm |
 			strm := WriteStream on: String new.
-			strm nextPutAll: '	reservedOop: ', classDefinition gs_reserverdOop; lf.
+			strm nextPutAll: '	reservedOop: ', classDefinition gs_reservedOop; lf.
 			reservedOopString := strm contents ].
 	aStream
 		nextPutAll: '	classVars: #( ' ,  (self _stringForVariables: classDefinition classVarNames) , ' )';
