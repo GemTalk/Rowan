@@ -687,7 +687,7 @@ commit
     value: 'Globals'
     value: #('GemStone-Interactions-Kernel' 'Rowan-GemStone-Kernel' 'Rowan-Cypress-Kernel' 
       'Rowan-Tools-Kernel' 'Rowan-GemStone-3215' 'AST-Kernel-Core' 'Rowan-GemStone-32x' 
-			'Rowan-Components-Kernel'
+			'Rowan-Components-Kernel' 'Rowan-GemStone-Kernel-32x'
 	).		"Extension methods for GemStone kernel classes"
 %
   commit
