@@ -101,6 +101,12 @@ RowanClassService >> addCategory: string [
 	theClass addCategory: string.
 ]
 
+{ #category : 'constants' }
+RowanClassService >> addSubclassWarningString [
+
+	^'Superclass is not packaged. Enter the desired package name'
+]
+
 { #category : 'Accessing' }
 RowanClassService >> allTests [
 	| allSelectors theClass |
@@ -948,11 +954,18 @@ RowanClassService >> setVisibleTests [
 
 { #category : 'client commands' }
 RowanClassService >> subclassCreationTemplate [
-	| answerService |
-	answerService := RowanAnsweringService new. 
-	answerService answer: (self browserTool classCreationTemplateForSubclassOf: name 
-								className: 'NewSubclass' category: self theClass rowanPackageName).
-	RowanCommandResult addResult: answerService.
+  | answerService newClassPackageName |
+  answerService := RowanAnsweringService new.
+  newClassPackageName := self theClass rowanPackageName = Rowan unpackagedName
+    ifTrue: [ self addSubclassWarningString ]
+    ifFalse: [ self theClass rowanPackageName ].
+  answerService
+    answer:
+      (self browserTool
+        classCreationTemplateForSubclassOf: name
+        className: 'NewSubclass'
+        category: newClassPackageName).
+  RowanCommandResult addResult: answerService
 ]
 
 { #category : 'private' }

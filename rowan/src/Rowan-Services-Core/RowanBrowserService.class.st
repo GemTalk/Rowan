@@ -67,6 +67,15 @@ RowanBrowserService >> classHierarchy: theClasses [
 ]
 
 { #category : 'client commands' }
+RowanBrowserService >> compileClass: definitionString [
+
+	|  anonymousMethod |
+	anonymousMethod := definitionString _compileInContext: nil 
+       symbolList: Rowan image symbolList.
+	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
+]
+
+{ #category : 'client commands' }
 RowanBrowserService >> defaultClassHierarchy [
 	hierarchyServices := Dictionary new.   
 	organizer hierarchy keysAndValuesDo: [:key :value |
@@ -113,6 +122,23 @@ RowanBrowserService >> packagesWithTests [
 	updateType := #testPackages:. 
 	testPackages := testPackages asArray. 
 	RowanCommandResult addResult: self.
+]
+
+{ #category : 'client commands' }
+RowanBrowserService >> recompileMethodsAfterClassCompilation [
+  "compileClass: must be run first"
+
+  | theClass classService packageService |
+  theClass := [ (UserGlobals at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
+    ensure: [ UserGlobals at: #'jadeiteCompileClassMethod' put: nil ].
+  classService := RowanClassService new name: theClass name.
+  classService update.
+  classService isNewClass: true.
+  packageService := RowanPackageService
+    forPackageNamed: classService packageName.
+  packageService update.
+  packageService selectedClass: classService.
+  RowanCommandResult addResult: classService
 ]
 
 { #category : 'client commands' }
