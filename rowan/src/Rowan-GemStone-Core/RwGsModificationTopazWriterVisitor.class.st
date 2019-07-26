@@ -87,7 +87,7 @@ RwGsModificationTopazWriterVisitor >> _fileOutClassDeclaration: classDefinition 
 	classDefinition gs_options isEmpty
 		ifFalse: [ optionsString :=  ' ', (self _symbolsForVariables: classDefinition gs_options), ' ' ].
 	reservedOopString := ''.
-	classDefinition gs_reserverdOop isEmpty
+	classDefinition gs_reservedOop isEmpty
 		ifFalse: [
 			| strm |
 			strm := WriteStream on: String new.
@@ -176,7 +176,7 @@ RwGsModificationTopazWriterVisitor >> _symbolsForVariables: variableList [
 RwGsModificationTopazWriterVisitor >> _writeClassTypeMessage: classDefinition on: aStream hasInstanceVariables: instanceVariableBlock [
 	| classType classTypeMessage hasInstanceVariables hasReservedOop hasClassInstVars |
 	hasInstanceVariables := true.
-	hasReservedOop := classDefinition gs_reserverdOop isEmpty not.
+	hasReservedOop := classDefinition gs_reservedOop isEmpty not.
 	hasClassInstVars := true.
 	classType := classDefinition subclassType.
 	classType = 'variable'

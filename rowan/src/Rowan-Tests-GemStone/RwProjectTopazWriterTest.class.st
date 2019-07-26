@@ -10,6 +10,7 @@ RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_A [
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -19,7 +20,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -34,7 +36,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -49,7 +52,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -101,6 +105,7 @@ RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_B [
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -110,7 +115,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -125,7 +131,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -140,7 +147,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -197,6 +205,7 @@ RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_C_Issue361Core [
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -206,7 +215,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -221,7 +231,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -236,7 +247,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -313,6 +325,7 @@ RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_D_Issue361Core [
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -322,7 +335,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -337,7 +351,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -352,7 +367,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core'';
 		comment: '''';
 		immediateInvariant.
@@ -396,7 +412,6 @@ method4 ^4
 run
 Issue361Class1 initialize.
 ', percent, '
-
 '
 ]
 
@@ -413,7 +428,6 @@ category: ''*issue361-extension1''
 method: Issue361Class1
 method1 ^1
 ', percent, '
-
 '
 ]
 
@@ -445,7 +459,6 @@ initialize "another noop"
 run
 Issue361Class2 initialize.
 ', percent, '
-
 '
 ]
 
@@ -455,6 +468,7 @@ RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_Multi_A [
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -464,7 +478,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -479,7 +494,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -494,7 +510,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -509,7 +526,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -524,7 +542,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -539,7 +558,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -674,6 +694,7 @@ RwProjectTopazWriterTest >> _expectedGsTopazWriterFileContents_MULTI_B_Issue361C
 | percent|
 percent := '%'.	"a method containing % in the first column cannot be loaded into GemStone using topaz"
 	^ '! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Array
@@ -683,7 +704,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -698,7 +720,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -713,7 +736,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -728,7 +752,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
@@ -743,7 +768,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_1'';
 		comment: '''';
 		immediateInvariant.
@@ -758,7 +784,8 @@ doit
 	classInstVars: #(  )
 	poolDictionaries: #()
 	inDictionary: CypressTestData
-	options: #())
+	options: #()
+)
 		category: ''Issue361-Core_2'';
 		comment: '''';
 		immediateInvariant.
