@@ -12,7 +12,8 @@ Class {
 		'hierarchyServices',
 		'testPackages',
 		'testCount',
-		'dictionaries'
+		'dictionaries',
+		'selectedClass'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -138,7 +139,10 @@ RowanBrowserService >> recompileMethodsAfterClassCompilation [
     forPackageNamed: classService packageName.
   packageService update.
   packageService selectedClass: classService.
-  RowanCommandResult addResult: classService
+  RowanCommandResult addResult: classService.
+  selectedClass := classService.
+  updateType := #none. 
+  RowanCommandResult addResult: self
 ]
 
 { #category : 'client commands' }
