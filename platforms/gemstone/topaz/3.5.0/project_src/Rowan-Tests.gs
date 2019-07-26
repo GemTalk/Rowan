@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Object
@@ -46519,5 +46520,5 @@ _rowanSample4_loadSpecificationUrl: repositoryRootPath
 
 run
 RwLoadingTest initialize.
+true
 %
-

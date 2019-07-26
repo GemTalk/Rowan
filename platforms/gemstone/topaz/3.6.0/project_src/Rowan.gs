@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (CypressMethodDefinition
@@ -1002,6 +1003,21 @@ true.
 %
 
 doit
+(RBParser
+	subclass: 'RBTonelParser'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (Object
 	subclass: 'RBParseTreeRule'
 	instVarNames: #( searchTree owner )
@@ -1764,6 +1780,21 @@ true.
 %
 
 doit
+(RBScanner
+	subclass: 'RBTonelScanner'
+	instVarNames: #(  )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'AST-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
 (Object
 	subclass: 'RBSmallDictionary'
 	instVarNames: #( keys values tally )
@@ -2363,8 +2394,23 @@ true.
 
 doit
 (RowanService
+	subclass: 'RowanAutoCommitService'
+	instVarNames: #( autoCommit )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Services-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RowanService
 	subclass: 'RowanBrowserService'
-	instVarNames: #( projects removedMethods allClasses hierarchyServices testPackages testCount autoCommit )
+	instVarNames: #( projects removedMethods allClasses hierarchyServices testPackages testCount dictionaries )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -2380,7 +2426,7 @@ true.
 doit
 (RowanService
 	subclass: 'RowanClassService'
-	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList )
+	instVarNames: #( name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList dictionaryName )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -2398,6 +2444,21 @@ doit
 (RowanService
 	subclass: 'RowanDebuggerService'
 	instVarNames: #( initialProcessOop processes )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanKernel
+	options: #())
+		category: 'Rowan-Services-Core';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
+doit
+(RowanService
+	subclass: 'RowanDictionaryService'
+	instVarNames: #( name classes hierarchyServices globals )
 	classVars: #(  )
 	classInstVars: #(  )
 	poolDictionaries: #()
@@ -2752,7 +2813,7 @@ doit
 	inDictionary: RowanKernel
 	options: #())
 		category: 'Rowan-GemStone-Core';
-		comment: 'Example script that produces topaz bootstrap files for the Rowan projects:
+		comment: '  Example script that produces topaz bootstrap files for the Rowan projects:
 
 	| repositoryRootPath projectSetDefinition projectSetModification visitor |
 	repositoryRootPath := FileLocator dbfScratchDir / ''rowanBootstrap''.
@@ -5936,6 +5997,21 @@ doit
 true.
 %
 
+doit
+(TonelParser
+	subclass: 'NewTonelParser'
+	instVarNames: #( methodParser currentMethodNode methodBodyStart )
+	classVars: #(  )
+	classInstVars: #(  )
+	poolDictionaries: #()
+	inDictionary: RowanTools
+	options: #())
+		category: 'Rowan-Components';
+		comment: '';
+		immediateInvariant.
+true.
+%
+
 ! Class implementation for 'RwCypressMethodDefinition'
 
 !		Instance methods for 'RwCypressMethodDefinition'
@@ -6435,7 +6511,7 @@ extractNumericComponent: subString
 	number := [ Integer fromStream: stream ] on: Error do: [:ex | ^ subString ].
 	^ stream atEnd
 		ifTrue: [ 
-			(subString size > 1 and: [ (subString at: 1) == $0 ])
+			(subString size > 1 and: [ (subString at: 1) = $0 ])
 				ifTrue: [ self error: 'invalid version number: numberic components may not have a leading 0' ]
 				ifFalse: [ number ] ]
 		ifFalse: [ subString ]
@@ -6523,7 +6599,7 @@ integerFromString: aString
     ifNone: [ 
       | integer |
       integer := aString asInteger.
-      ((aString at: 1) == $0 and: [ aString size > 1 ])
+      ((aString at: 1) = $0 and: [ aString size > 1 ])
         ifTrue: [ 
           self
             error:
@@ -6543,7 +6619,7 @@ isSemanticIdentifier: aString
 
    aString do: [ :c | 
      c isAlphaNumeric
-       ifFalse: [ c == $- ifFalse: [ ^ false ] ] ].
+       ifFalse: [ c = $- ifFalse: [ ^ false ] ] ].
     ^ true
 %
 
@@ -8662,11 +8738,11 @@ category: 'jadeite'
 method: JadeServer
 autoCommitIfRequired
 	| commitResult |
-	RowanService autoCommit == true ifTrue:[
+	Rowan serviceClass autoCommit == true ifTrue:[
 		commitResult := System commitTransaction.
-		RowanBrowserService new autoCommit: 
+		RowanAutoCommitService new autoCommit:  
 			(commitResult 
-				ifTrue:[true]
+				ifTrue:[true] 
 				ifFalse:[#failed])].
 %
 
@@ -8708,7 +8784,7 @@ categoryListFor: aSymbolDictionary
 	].
 	categories copy do: [:each | 
 		1 to: each size do: [:i | 
-			(each at: i) == $- ifTrue: [
+			(each at: i) = $- ifTrue: [
 				| string |
 				string := each copyFrom: 1 to: i - 1.
 				(categories includes: string) ifFalse: [
@@ -8850,18 +8926,13 @@ compile: aString frame: anInteger process: aGsProcess
 	selector := oldMethod selector.
 	selector isNil ifTrue: [^result].
 	category := self _behavior: aBehavior categoryOfSelector: selector.
-	result := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
-				ifAbsent: [false])
-					ifTrue: [ 
-						[ aBehavior rwCompileMethod: aString category: category ]
+	result := [[ aBehavior rwCompileMethod: aString category: category ]
 							on: RwExecuteClassInitializeMethodsAfterLoadNotification
-							do: [:ex | ex resume: false ] ]
-					ifFalse: 
-						[self
-							compileMethod: aString
-							behavior: aBehavior
-							user: nil
-							inCategory: category].
+							do: [:ex | ex resume: false ]] 
+								on: RwPerformingUnpackagedEditNotification
+								do: [:ex | ex resume ].
+
+					
 	^result
 %
 
@@ -9139,7 +9210,7 @@ descriptionOfConfigOption: aString
 	dict := self systemConfigAsDictionary.
 	(string := dict at: aString ifAbsent: [nil]) notNil ifTrue: [^string].	string := aString asUppercase.
 	dict keys do: [:each1 | 
-		key := (each1 reject: [:each2 | each2 == $_ ]) asUppercase.
+		key := (each1 reject: [:each2 | each2 = $_]) asUppercase.
 		key = string ifTrue: [^dict at: each1].
 	].
 	^''
@@ -9287,8 +9358,8 @@ fileInClass: aString
 	| list className index dictionaryName dictionary oldClass oldString |
 	list := aString subStrings.
 	className := list at: 3.
-	className first == $' ifFalse: [self error: 'Class name ' , className printString , ' expected to begin and end with a quote!'].
-	className last == $' ifFalse: [self error: 'Class name ' , className printString , ' expected to begin and end with a quote!'].
+	className first = $' ifFalse: [self error: 'Class name ' , className printString , ' expected to begin and end with a quote!'].
+	className last = $' ifFalse: [self error: 'Class name ' , className printString , ' expected to begin and end with a quote!'].
 	className := className copyFrom: 2 to: className size - 1.
 	index := list indexOf: 'inDictionary:'.
 	dictionaryName := list at: index + 1.
@@ -9584,7 +9655,7 @@ inspectDictionary: aDictionary on: aStream
 	aStream lf.
 	keyDict keys asSortedCollection do: [:each | 
 		| index keyString key value valueString |
-		index := each findLast: [:char | char == $~ ].
+		index := each findLast: [:char | char = $~].
 		keyString := each copyFrom: 1 to: index - 1.
 		key := keyDict at: each.
 		value := aDictionary at: key. 
@@ -9969,7 +10040,7 @@ method: JadeServer
 mcPatchFrom: aString1 to: aString2 inDictionaryRepository: aDictionaryRepository
 
 	| index name leftSnapshot rightSnapshot patch |
-	index := aString2 findLast: [:each | each == $- ].
+	index := aString2 findLast: [:each | each = $-].
 	name := aString2 copyFrom: 1 to: index - 1.
 	(name includes: $.) ifTrue: [name := (name subStrings: $.) first].
 	leftSnapshot := aString1 isNil ifTrue: [
@@ -9991,7 +10062,7 @@ method: JadeServer
 mcPatchFrom: aString1 to: aString2 inFileBasedRepository: aFileRepository
 
 	| index name leftSnapshot rightSnapshot patch |
-	index := aString2 findLast: [:each | each == $- ].
+	index := aString2 findLast: [:each | each = $-].
 	name := aString2 copyFrom: 1 to: index - 1.
 	(name includes: $.) ifTrue: [name := (name subStrings: $.) first].
 	leftSnapshot := aString1 isNil ifTrue: [
@@ -11635,7 +11706,7 @@ sbNextParagraph
 	| stream |
 	stream := WriteStream on: String new.
 	[
-		readStream peek == $%  .
+		readStream peek = $%.
 	] whileFalse: [
 		stream nextPutAll: self nextLine; lf.
 	].
@@ -11831,10 +11902,7 @@ method: JadeServer
 sbRemoveMethods: anOrderedCollection
 	| behavior classEntity  notRemoved|
 	behavior := self sbClassFrom: anOrderedCollection.
-	classEntity := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
-				ifAbsent: [false])
-					ifTrue: [Rowan classServiceClass forClassNamed: behavior name meta: behavior isMeta]
-					ifFalse: [behavior].
+	classEntity := Rowan classServiceClass forClassNamed: behavior name meta: behavior isMeta.
 	notRemoved := Array new. 
 	anOrderedCollection do: [:each | classEntity removeSelector: each asSymbol ifAbsent: [notRemoved add: each]].
 	self systemBrowserUpdate.
@@ -12613,7 +12681,7 @@ selectorsMatching: aString
 	| user stream list |
 	list := (aString subStrings: $*) asOrderedCollection collect: [:each | each asUppercase].
 	list size - 1 to: 1 do: [:i | list add: $* afterIndex: i].
-	aString last == $* ifTrue: [list addLast: $* ].
+	aString last = $* ifTrue: [list addLast: $*].
 	stream := WriteStream on: String new.
 	user := AllUsers 
 		userWithId: #SymbolUser 
@@ -12699,7 +12767,7 @@ sourceFor: anObject in: aClass
 		behaviorFor: selector 
 		in: aClass.
 	category := self _behavior: behavior categoryOfSelector: selector.
-	packageName := category first == $*
+	packageName := category first = $*
 		ifTrue: [self _packageNameFor: category]
 		ifFalse: [behavior thisClass _classCategory].
 	packageName isNil ifTrue: [packageName := ''].
@@ -12910,8 +12978,7 @@ category: 'category'
 method: JadeServer
 symbolList
 
-	^System myUserProfile symbolList.
-
+	^Rowan image symbolList
 %
 
 category: 'category'
@@ -13104,7 +13171,7 @@ category: 'jadeite'
 method: JadeServer
 updateFromSton: stonString
 	| services organizer resultString |
-	RowanCommandResult initializeResults.
+	Rowan commandResultClass initializeResults. 
 	services := STON fromString: stonString.
 	organizer := ClassOrganizer new.
 	services do: 
@@ -13114,8 +13181,8 @@ updateFromSton: stonString
 			service command ifNil:[service command: #update]. 
 			service servicePerform: service command withArguments: service commandArgs].
 	self autoCommitIfRequired.
-	RowanLoggingService current logSentServices. 
-	resultString := STON toString: RowanCommandResult results.
+	Rowan loggingServiceClass current logSentServices. 
+	resultString := STON toString: Rowan commandResultClass results.
 	^resultString
 %
 
@@ -13821,7 +13888,7 @@ metacelloConfigurations
 
 	| list |
 	list := Array new.
-	GsSession currentSession symbolList do: [:eachSymbolList | 
+	Rowan image symbolList do: [:eachSymbolList | 
 		eachSymbolList do: [:eachGlobal | 
 			(eachGlobal isBehavior and: [
 			(eachGlobal class includesSelector: #'isMetacelloConfig') and: [
@@ -13829,7 +13896,6 @@ metacelloConfigurations
 		].
 	].
 	^list
-
 %
 
 category: 'category'
@@ -13843,20 +13909,16 @@ objectForOop: anInteger
 category: 'category'
 method: JadeServer64bit
 recompile: aMethod withSource: aString
-	| result behavior |
+	| behavior |
 	behavior := aMethod inClass.
-	((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile ifAbsent: [false])
-		ifTrue: 
-			[ [ behavior rwCompileMethod: aString
+	[[ behavior rwCompileMethod: aString
 				category: (self _behavior: behavior categoryOfSelector: aMethod selector) ]
 					on: RwExecuteClassInitializeMethodsAfterLoadNotification
-					do: [:ex | ex resume: false ].
+					do: [:ex | ex resume: false ]]
+								on: RwPerformingUnpackagedEditNotification
+								do: [:ex | ex resume ].
 			Rowan serviceClass rowanFixMe.	"need to handle compile errors"
-			^true]
-		ifFalse: 
-			[result := aMethod _recompileWithSource: aString.
-			result isNil ifTrue: [^true].	"Bug 41195 returns nil if success so assume it is the same method"
-			^result]
+			^true
 %
 
 category: 'category'
@@ -14128,17 +14190,13 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 
 	| method warnings | 
 
-	[[((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile ifAbsent:[false]) ifTrue:[
-			[ method := aBehavior rwCompileMethod: methodString category: categorySymbol ]
+	[[ 
+			[[ method := aBehavior rwCompileMethod: methodString category: categorySymbol ]
 					on: RwExecuteClassInitializeMethodsAfterLoadNotification
-					do: [:ex | ex resume: false ] ]
-		ifFalse:[
-			method := aBehavior
-			compileMethod: methodString
-			dictionaries: aSymbolList
-			category: categorySymbol
-			environmentId: environment].
-	] on: CompileError do: [:ex |
+					do: [:ex | ex resume: false ]]
+						on: RwPerformingUnpackagedEditNotification
+						do: [:ex | ex resume ].
+		] on: CompileError do: [:ex |
 		^nil -> (ex gsArguments at: 1)
 	]] on: CompileWarning do: [:ex |
 		warnings := ex gsArguments at: 1.
@@ -14923,12 +14981,12 @@ parseArray
   | position node |
   position := currentToken start.
   self step.
-  (currentToken isSpecial and: [ currentToken value == $: ])
+  (currentToken isSpecial and: [ currentToken value = $: ])
     ifTrue: [ ^self parseQueryBlock: position ].
   node := self arrayNodeClass new.
   node left: position.
   self parseStatementList: false into: node.
-  (currentToken isSpecial and: [ currentToken value == $} ])
+  (currentToken isSpecial and: [ currentToken value = $} ])
     ifFalse: [ self parserError: 'expected }' ].
   node right: currentToken start.
   self step.
@@ -15017,7 +15075,7 @@ parseBlock
 	self parseBlockArgsInto: node.
 	node left: position.
 	node body: (self parseStatements: false).
-	(currentToken isSpecial and: [currentToken value == $] ])
+	(currentToken isSpecial and: [currentToken value = $]])
 		ifFalse: [self parserError: ''']'' expected'].
 	node right: currentToken start.
 	self step.
@@ -15031,7 +15089,7 @@ parseBlockArgsInto: node
 	args := OrderedCollection new: 2.
 	colons := OrderedCollection new: 2.
 	verticalBar := false.
-	[currentToken isSpecial and: [currentToken value == $: ]] whileTrue: 
+	[currentToken isSpecial and: [currentToken value = $:]] whileTrue: 
 			[colons add: currentToken start.
 			self step.	":"
 			verticalBar := true.
@@ -15054,7 +15112,7 @@ parseBlockArgsInto: node
 										start: currentToken start + 1]
 								ifFalse: [self parserError: '''|'' expected']]]
 				ifFalse: 
-					[(currentToken isSpecial and: [currentToken value == $] ]) 
+					[(currentToken isSpecial and: [currentToken value = $]]) 
 						ifFalse: [self parserError: '''|'' expected']]].
 	node
 		arguments: args;
@@ -15068,12 +15126,12 @@ parseCascadeMessage
 	| node receiver messages semicolons |
 	node := self parseKeywordMessage.
 	(currentToken isSpecial 
-		and: [currentToken value == $; and: [node isMessage]]) ifFalse: [^node].
+		and: [currentToken value = $; and: [node isMessage]]) ifFalse: [^node].
 	receiver := node receiver.
 	messages := OrderedCollection new: 3.
 	semicolons := OrderedCollection new: 3.
 	messages add: node.
-	[currentToken isSpecial and: [currentToken value == $; ]] whileTrue: 
+	[currentToken isSpecial and: [currentToken value = $;]] whileTrue: 
 			[semicolons add: currentToken start.
 			self step.
 			messages add: (currentToken isIdentifier 
@@ -15167,9 +15225,9 @@ parseLiteralArray
 	start := currentToken start.
 	stream := WriteStreamPortable on: Array new.
 	self step.
-	[self atEnd or: [currentToken isSpecial and: [currentToken value == $) ]]] 
+	[self atEnd or: [currentToken isSpecial and: [currentToken value = $)]]] 
 		whileFalse: [stream nextPut: self parseLiteralArrayObject].
-	(currentToken isSpecial and: [currentToken value == $) ]) 
+	(currentToken isSpecial and: [currentToken value = $)]) 
 		ifFalse: [self parserError: ''')'' expected'].
 	stop := currentToken stop.
 	self step.
@@ -15185,7 +15243,7 @@ method: RBParser
 parseLiteralArrayObject
 	currentToken isSpecial 
 		ifTrue: 
-			[currentToken value == $( ifTrue: [^self parseLiteralArray].
+			[currentToken value = $( ifTrue: [^self parseLiteralArray].
 			"currentToken value == $[ ifTrue: [^self parseLiteralByteArray]"].
 	currentToken isLiteralArrayToken 
 		ifTrue: 
@@ -15203,9 +15261,9 @@ parseLiteralByteArray
 	start := currentToken start.
 	stream := WriteStreamPortable on: Array new.
 	self step.
-	[self atEnd or: [currentToken isSpecial and: [currentToken value == $] ]]] 
+	[self atEnd or: [currentToken isSpecial and: [currentToken value = $]]]] 
 		whileFalse: [stream nextPut: self parseLiteralByteArrayObject].
-	(currentToken isSpecial and: [currentToken value == $] ]) 
+	(currentToken isSpecial and: [currentToken value = $]]) 
 		ifFalse: [self parserError: ''']'' expected'].
 	stop := currentToken stop.
 	self step.
@@ -15278,7 +15336,7 @@ parseParenthesizedExpression
 	leftParen := currentToken start.
 	self step.
 	node := self parseAssignment.
-	^(currentToken isSpecial and: [currentToken value == $) ])
+	^(currentToken isSpecial and: [currentToken value = $)])
 		ifTrue: 
 			[node addParenthesis: (leftParen to: currentToken start).
 			self step.
@@ -15356,9 +15414,9 @@ parsePrimitiveObject
 				ifFalse: [self parseLiteralArray]].
 	currentToken isSpecial 
 		ifTrue: 
-			[currentToken value == $[ ifTrue: [^self parseBlock].
-			currentToken value == $( ifTrue: [^self parseParenthesizedExpression].
-			currentToken value == ${ ifTrue: [^self parseArray]].
+			[currentToken value = $[ ifTrue: [^self parseBlock].
+			currentToken value = $( ifTrue: [^self parseParenthesizedExpression].
+			currentToken value = ${ ifTrue: [^self parseArray]].
 	(currentToken isBinary and: [ currentToken value = #- ]) 
 		ifTrue: [ ^self parseNegatedNumber ].
 	self parserError: 'Variable expected'
@@ -15411,7 +15469,7 @@ parseStatementList: pragmaBoolean into: sequenceNode
 	periods := OrderedCollection new.
 	self addCommentsTo: sequenceNode.
 	pragmaBoolean ifTrue: [self parsePragmas].
-	[currentToken isSpecial and: [currentToken value = $. ]] whileTrue: 
+	[currentToken isSpecial and: [currentToken value = $.]] whileTrue: 
 		[periods add: currentToken start.
 		self step].
 	[self atEnd 
@@ -15601,7 +15659,7 @@ patchNegativeLiteral
 		ifTrue: 
 			[(source notNil and: 
 					[source notEmpty 
-						and: [(source at: (currentToken start min: source size)) == $- ]]) 
+						and: [(source at: (currentToken start min: source size)) = $-]]) 
 				ifFalse: [^self]].
 	nextToken := currentToken.
 	currentToken := RBBinarySelectorToken value: #- start: nextToken start.
@@ -15708,7 +15766,7 @@ parsePatternBlock: aClass
 	node := self parseBlockArgsInto: aClass new.
 	node left: position.
 	node body: (self parseStatements: false).
-	(currentToken isSpecial and: [currentToken value = $} ]) 
+	(currentToken isSpecial and: [currentToken value = $}]) 
 		ifFalse: [self parserError: '''}'' expected'].
 	node right: currentToken start.
 	self step.
@@ -15805,6 +15863,212 @@ category: 'private-classes'
 method: RBPatternParser
 variableNodeClass
 	^RBPatternVariableNode
+%
+
+! Class implementation for 'RBTonelParser'
+
+!		Instance methods for 'RBTonelParser'
+
+category: 'accessing'
+method: RBTonelParser
+currentToken
+
+	^currentToken
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelKeywordPattern
+	" do not process $[ token .. caller will do the right thing"
+
+	| keywords args node continue |
+	keywords := OrderedCollection new.
+	args := OrderedCollection new.
+	continue := true.
+	[  continue and: [ currentToken isKeyword ]  ]
+		whileTrue:
+			[keywords add: currentToken.
+			continue := (self peekTonelFor: #special value: $[) not.
+			continue ifTrue: [ self step ].
+			args add: self parseTonelVariableNode].
+	node := self methodNodeClass
+		selectorParts: keywords
+		arguments: args.
+	node comments: (node comments, args last comments).
+	args last comments: nil.
+	^node
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelMessagePattern
+
+	currentToken isLiteralToken ifTrue: [self patchTonelLiteralMessage].
+	^ currentToken isIdentifier 
+		ifTrue: [ self parseTonelUnaryPattern]
+		ifFalse: 
+			[currentToken isKeyword 
+				ifTrue: [self parseTonelKeywordPattern]
+				ifFalse: [self parseTonelBinaryPattern] ]
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelPragmas
+	| pragma start |
+	[ currentToken isBinary and: [ currentToken value = #< ] ] whileTrue: [
+		start := currentToken start.
+		self step.
+		pragma := self parsePragma.
+		(currentToken isBinary and: [ currentToken value = #> ]) 
+			ifFalse: [ self parserError: '''>'' expected' ].
+		pragma left: start; right: currentToken start.
+		pragmas isNil
+			ifTrue: [ pragmas := OrderedCollection new ].
+		pragmas addLast: pragma.
+		self step ]
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelPrimitiveIdentifier
+	| token node |
+	token := currentToken.
+	(self peekTonelFor: #special value: $[)
+		ifFalse: [ self step ].
+	node := self variableNodeClass identifierToken: token.
+	self addCommentsTo: node.
+	^node
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelStatementList: pragmaBoolean into: sequenceNode 
+	| statements return periods returnPosition node |
+	return := false.
+	statements := OrderedCollection new.
+	periods := OrderedCollection new.
+	self addCommentsTo: sequenceNode.
+	pragmaBoolean ifTrue: [self parsePragmas].
+	[currentToken isSpecial and: [currentToken value = $.]] whileTrue: 
+		[periods add: currentToken start.
+		self step].
+	[self atEnd 
+		or: [currentToken isSpecial and: ['])}' includes: currentToken value]]] 
+			whileFalse: 
+				[return ifTrue: [self parserError: 'End of statement list encounted'].
+				(currentToken isSpecial and: [currentToken value = $^]) 
+					ifTrue: 
+						[returnPosition := currentToken start.
+						self step.
+						node := self returnNodeClass return: returnPosition
+									value: self parseAssignment.
+						statements add: node.
+						return := true]
+					ifFalse: 
+						[node := self parseAssignment.
+						statements add: node].
+				(currentToken isSpecial and: [currentToken value = $.]) 
+					ifTrue: 
+						[periods add: currentToken start.
+						self step.
+						self addCommentsTo: node]
+					ifFalse: [return := true].
+				[currentToken isSpecial and: [currentToken value = $.]] whileTrue: 
+					[periods add: currentToken start.
+					self step]].
+	statements notEmpty ifTrue: [self addCommentsTo: statements last].
+	sequenceNode
+		statements: statements;
+		periods: periods.
+	^sequenceNode
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelStatements: pragmaBoolean 
+	| args leftBar rightBar |
+	args := #().
+	leftBar := rightBar := nil.
+	currentToken isBinary 
+		ifTrue: 
+			[currentToken value = #| 
+				ifTrue: 
+					[leftBar := currentToken start.
+					self step.
+					args := self parseArgs.
+					(currentToken isBinary and: [currentToken value = #|]) 
+						ifFalse: [self parserError: '''|'' expected'].
+					rightBar := currentToken start.
+					self step]
+				ifFalse: 
+					[currentToken value = #'||' 
+						ifTrue: 
+							[rightBar := (leftBar := currentToken start) + 1.
+							self step]]].
+	^self parseTonelStatementList: pragmaBoolean
+		into: (self sequenceNodeClass 
+				leftBar: leftBar
+				temporaries: args
+				rightBar: rightBar)
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelUnaryPattern
+	"only used when parsing the tonel method selector line"
+
+	| selector |
+	selector := currentToken.
+	^self methodNodeClass selectorParts: (Array with: selector) arguments: #()
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+parseTonelVariableNode
+	currentToken isIdentifier 
+		ifFalse: [self parserError: 'Variable name expected'].
+	^self parseTonelPrimitiveIdentifier
+%
+
+category: 'private-parsing'
+method: RBTonelParser
+peekTonelFor: characterType value: characterValue
+
+	^ self scanner peekTonelFor: characterType value: characterValue
+%
+
+category: 'accessing'
+method: RBTonelParser
+scanner
+
+	^scanner
+%
+
+category: 'accessing'
+method: RBTonelParser
+scannerClass
+	^RBTonelScanner
+%
+
+category: 'testing'
+method: RBTonelParser
+tonelMethodBodyTerminationToken
+	^ currentToken isSpecial and: [ currentToken value = $] ]
+%
+
+category: 'private'
+method: RBTonelParser
+tonelStep
+	"only used when parsing the tonel method selector line"
+
+	(currentToken notNil and: [currentToken comments notNil]) 
+		ifTrue: [comments addAll: currentToken comments].
+	nextToken notNil 
+		ifTrue: 
+			[currentToken := nextToken.
+			nextToken := nil]
+		ifFalse: [currentToken := scanner tonelNext]
 %
 
 ! Class implementation for 'RBParseTreeRule'
@@ -17513,7 +17777,7 @@ selector: aSelector
 	selectorParts := numArgs == 0 
 				ifTrue: [Array with: (RBIdentifierToken value: keywords first start: nil)]
 				ifFalse: 
-					[keywords first last == $: 
+					[keywords first last = $: 
 						ifTrue: [keywords collect: [:each | RBKeywordToken value: each start: nil]]
 						ifFalse: [Array with: (RBBinarySelectorToken value: aSelector start: nil)]].
 	selector := aSelector asSymbol
@@ -17592,7 +17856,7 @@ copyInContext: aDictionary
 		ifFalse: [ self selectorParts collect: [ :each | aDictionary at: each value ] ].
 	^ RBMethodNode new
 		selectorParts: (selectors collect: [ :each | 
-			(each last == $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
+			(each last = $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
 				value: each start: nil ]);
 		arguments: (self copyList: self arguments inContext: aDictionary);
 		pragmas: (self pragmas isEmpty
@@ -17771,7 +18035,7 @@ isBinary
 category: 'testing'
 method: RBPragmaNode
 isKeyword
-	^ selectorParts first value last == $:
+	^ selectorParts first value last = $:
 %
 
 category: 'testing'
@@ -17889,7 +18153,7 @@ selector: aSelector
 	selectorParts := numArgs == 0 
 				ifTrue: [Array with: (RBIdentifierToken value: keywords first start: nil)]
 				ifFalse: 
-					[keywords first last == $: 
+					[keywords first last = $: 
 						ifTrue: [keywords collect: [:each | RBKeywordToken value: each start: nil]]
 						ifFalse: [Array with: (RBBinarySelectorToken value: aSelector start: nil)]].
 	selector := aSelector asSymbol
@@ -17957,7 +18221,7 @@ copyInContext: aDictionary
 		ifFalse: [ self selectorParts collect: [ :each | aDictionary at: each value ] ].
 	^ RBPragmaNode new
 		selectorParts: (selectors collect: [ :each | 
-			(each last == $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
+			(each last = $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
 				value: each start: nil ]);
 		arguments: (self copyList: self arguments inContext: aDictionary);
 		yourself
@@ -19053,7 +19317,7 @@ assignment: anInteger
 category: 'accessing'
 method: RBAssignmentNode
 assignmentOperator
-	^ (self assignmentPosition notNil and: [ self source notNil and: [ (self source at: self assignmentPosition ifAbsent: [ nil ]) == $_ ] ])
+	^ (self assignmentPosition notNil and: [ self source notNil and: [ (self source at: self assignmentPosition ifAbsent: [ nil ]) = $_ ] ])
 		ifTrue: [ '_' ]
 		ifFalse: [ ':=' ]
 %
@@ -20431,7 +20695,7 @@ isFirstCascaded
 category: 'testing'
 method: RBMessageNode
 isKeyword
-	^selectorParts first value last == $:
+	^selectorParts first value last = $:
 %
 
 category: 'testing'
@@ -20648,7 +20912,7 @@ selector: aSelector
 	selectorParts := numArgs == 0 
 				ifTrue: [Array with: (RBIdentifierToken value: keywords first start: nil)]
 				ifFalse: 
-					[keywords first last == $: 
+					[keywords first last = $: 
 						ifTrue: [keywords collect: [:each | RBKeywordToken value: each start: nil]]
 						ifFalse: [Array with: (RBBinarySelectorToken value: aSelector start: nil)]].
 	selector := aSelector asSymbol
@@ -20722,7 +20986,7 @@ copyInContext: aDictionary
 	^ RBMessageNode new
 		receiver: (self receiver copyInContext: aDictionary);
 		selectorParts: (selectors collect: [ :each | 
-			(each last == $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
+			(each last = $: ifTrue: [ RBKeywordToken ] ifFalse: [ RBIdentifierToken ]) 
 				value: each start: nil ]);
 		arguments: (self copyList: self arguments inContext: aDictionary);
 		yourself
@@ -23775,7 +24039,7 @@ initializeChars: characters to: aSymbol
 category: 'class initialization'
 classmethod: RBScanner
 initializeClassificationTable
-  PatternVariableCharacter := $` .
+  PatternVariableCharacter := $`.
   classificationTable := Array new: 255.
   self
     initializeChars: (((0 to: 255) collect: [ :v | Character codePoint: v ]) select: [ :each | each isLetter ])
@@ -23871,7 +24135,7 @@ patternVariableCharacter
 category: 'testing'
 method: RBScanner
 atEnd
-	^characterType == #eof
+	^characterType = #eof
 %
 
 category: 'private'
@@ -23950,7 +24214,7 @@ next
 	| token |
 	buffer reset.
 	tokenStart := stream position.
-	token := characterType == #eof 
+	token := characterType = #eof 
 				ifTrue: 
 					[RBToken start: tokenStart + 1	"The EOF token should occur after the end of input"]
 				ifFalse: [self scanToken].
@@ -23980,7 +24244,7 @@ on: aStream
 category: 'private'
 method: RBScanner
 previousStepPosition
-	^characterType == #eof 
+	^characterType = #eof 
 		ifTrue: [stream position]
 		ifFalse: [stream position - 1]
 %
@@ -23988,8 +24252,8 @@ previousStepPosition
 category: 'private-scanning'
 method: RBScanner
 scanAnySymbol
-	characterType == #alphabetic ifTrue: [^self scanSymbol].
-	characterType == #binary ifTrue: [^self scanBinary: RBLiteralToken].
+	characterType = #alphabetic ifTrue: [^self scanSymbol].
+	characterType = #binary ifTrue: [^self scanBinary: RBLiteralToken].
 	^RBToken new
 %
 
@@ -23999,7 +24263,7 @@ scanBinary: aClass
 	| val |
 	buffer nextPut: currentCharacter.
 	self step.
-	[ characterType == #binary ] whileTrue: 
+	[ characterType = #binary ] whileTrue: 
 		[ buffer nextPut: currentCharacter.
 		self step ].
 	val := buffer contents.
@@ -24013,7 +24277,7 @@ scanIdentifierOrKeyword
   | name |
   self scanName.
   [ 
-  currentCharacter == $.
+  currentCharacter = $.
     and: [ 'abcdefghijklmnopqrstuvwxyz*|#' includes: stream peek ] ]
     whileTrue: [ 
       buffer nextPut: currentCharacter.
@@ -24021,7 +24285,7 @@ scanIdentifierOrKeyword
       self scanPathName.
       name := buffer contents.
       ^ RBPathToken value: name start: tokenStart ].
-  (currentCharacter == $: and: [ stream peek ~~ $= ])
+  (currentCharacter = $: and: [ stream peek ~= $= ])
     ifTrue: [ ^ self scanKeyword ].
   name := buffer contents.
   name = '_'
@@ -24039,12 +24303,12 @@ category: 'private-scanning'
 method: RBScanner
 scanKeyword
 	| outputPosition inputPosition name |
-	[currentCharacter == $:] whileTrue: 
+	[currentCharacter = $:] whileTrue: 
 			[buffer nextPut: currentCharacter.
 			outputPosition := buffer position.
 			inputPosition := stream position.
 			self step.	":"
-			[characterType == #alphabetic] whileTrue: [self scanName]].
+			[characterType = #alphabetic] whileTrue: [self scanName]].
 	buffer position: outputPosition.
 	stream position: inputPosition.
 	self step.
@@ -24063,18 +24327,18 @@ method: RBScanner
 scanLiteral
 	self step.
 	self stripSeparators.
-	characterType == #alphabetic 
+	characterType = #alphabetic 
 		ifTrue: [ ^ self scanSymbol ].
-	characterType == #binary 
+	characterType = #binary 
 		ifTrue: [ ^ (self scanBinary: RBLiteralToken) stop: self previousStepPosition ].
-	currentCharacter == $' 
+	currentCharacter = $' 
 		ifTrue: [ ^ self scanStringSymbol ].
-	(currentCharacter == $( or: [ currentCharacter == $[ ]) 
+	(currentCharacter = $( or: [ currentCharacter = $[ ]) 
 		ifTrue: [ ^ self scanLiteralArrayToken].
 	"Accept some strange literals like '#1', '# species' and '##species:'"
-	characterType == #digit
+	characterType = #digit
 		ifTrue: [ ^ self scanNumber ].
-	currentCharacter == $#
+	currentCharacter = $#
 		ifTrue: [ ^ self scanLiteral ].
 	self scannerError: 'Expecting a literal type'
 %
@@ -24110,7 +24374,7 @@ scanLiteralString
 	
 	[currentCharacter isNil 
 		ifTrue: [self scannerError: 'Unmatched '' in string literal.'].
-	currentCharacter == $' and: [self step ~= $']] 
+	currentCharacter = $' and: [self step ~= $']] 
 			whileFalse: 
 				[buffer nextPut: currentCharacter.
 				self step].
@@ -24123,7 +24387,7 @@ scanLiteralString
 category: 'private-scanning'
 method: RBScanner
 scanName
-	[characterType == #alphabetic or: [characterType == #digit]] whileTrue: 
+	[characterType = #alphabetic or: [characterType = #digit]] whileTrue: 
 			[buffer nextPut: currentCharacter.
 			self step]
 %
@@ -24160,13 +24424,13 @@ category: 'private-scanning'
 method: RBScanner
 scanPathName
   [ 
-  (characterType == #'alphabetic' or: [ characterType == #'digit' ])
+  (characterType = #'alphabetic' or: [ characterType = #'digit' ])
     or: [ 
-      ((currentCharacter == $. or: [ currentCharacter == $| ])
+      ((currentCharacter = $. or: [ currentCharacter = $| ])
         and: [ 'abcdefghijklmnopqrstuvwxyz' includes: stream peek ])
         or: [ 
-          (currentCharacter == $. and: [ stream peek == $* ])
-            or: [ currentCharacter == $* and: [ stream peek == $. ] ] ] ] ]
+          (currentCharacter = $. and: [ stream peek = $* ])
+            or: [ currentCharacter = $* and: [ stream peek = $. ] ] ] ] ]
     whileTrue: [ 
       buffer nextPut: currentCharacter.
       self step ]
@@ -24177,12 +24441,12 @@ method: RBScanner
 scanPatternVariable
 	buffer nextPut: currentCharacter.
 	self step.
-	currentCharacter == ${ 
+	currentCharacter = ${ 
 		ifTrue: 
 			[self step.
 			^RBPatternBlockToken value: '`{' start: tokenStart].
-	[characterType == #alphabetic] whileFalse: 
-			[characterType == #eof 
+	[characterType = #alphabetic] whileFalse: 
+			[characterType = #eof 
 				ifTrue: [self scannerError: 'Meta variable expected'].
 			buffer nextPut: currentCharacter.
 			self step].
@@ -24193,15 +24457,15 @@ category: 'private-scanning'
 method: RBScanner
 scanSpecialCharacter
 	| character |
-	currentCharacter == $: 
+	currentCharacter = $: 
 		ifTrue: 
 			[self step.
-			^currentCharacter == $= 
+			^currentCharacter = $= 
 				ifTrue: 
 					[self step.
 					RBAssignmentToken start: tokenStart]
 				ifFalse: [RBSpecialCharacterToken value: $: start: tokenStart]].
-	currentCharacter == $_ ifTrue:
+	currentCharacter = $_ ifTrue:
 		[ self step.  ^RBShortAssignmentToken start: tokenStart ].
 	character := currentCharacter.
 	self step.
@@ -24220,9 +24484,9 @@ scanStringSymbol
 category: 'private-scanning'
 method: RBScanner
 scanSymbol
-	[ characterType == #alphabetic or: [ currentCharacter == $: ] ] whileTrue: [
+	[ characterType = #alphabetic or: [ currentCharacter = $: ] ] whileTrue: [
 		self scanName.
-		currentCharacter == $: ifTrue: [
+		currentCharacter = $: ifTrue: [
 			buffer nextPut: $:.
 			self step ] ].
 	^ RBLiteralToken 
@@ -24237,15 +24501,15 @@ scanToken
 	"fast-n-ugly. Don't write stuff like this. Has been found to cause cancer in laboratory rats. Basically a 
 	case statement. Didn't use Dictionary because lookup is pretty slow."
 
-	characterType == #alphabetic ifTrue: [^self scanIdentifierOrKeyword].
-	(characterType == #digit 
-		or: [currentCharacter == $- and: [(self classify: stream peek) == #digit]]) 
+	characterType = #alphabetic ifTrue: [^self scanIdentifierOrKeyword].
+	(characterType = #digit 
+		or: [currentCharacter = $- and: [(self classify: stream peek) = #digit]]) 
 			ifTrue: [^self scanNumber].
-	characterType == #binary ifTrue: [^self scanBinary: RBBinarySelectorToken].
-	characterType == #special ifTrue: [^self scanSpecialCharacter].
-	currentCharacter == $' ifTrue: [^self scanLiteralString].
-	currentCharacter == $# ifTrue: [^self scanLiteral].
-	currentCharacter == $$ ifTrue: [^self scanLiteralCharacter].
+	characterType = #binary ifTrue: [^self scanBinary: RBBinarySelectorToken].
+	characterType = #special ifTrue: [^self scanSpecialCharacter].
+	currentCharacter = $' ifTrue: [^self scanLiteralString].
+	currentCharacter = $# ifTrue: [^self scanLiteral].
+	currentCharacter = $$ ifTrue: [^self scanLiteralCharacter].
 	^self scannerError: 'Unknown character'
 %
 
@@ -24266,8 +24530,8 @@ method: RBScanner
 stripComment
 	| start stop |
 	start := stream position.
-	[self step == $" ] whileFalse: 
-			[characterType == #eof
+	[self step = $"] whileFalse: 
+			[characterType = #eof
 				ifTrue: [self scannerError: 'Unmatched " in comment.']].
 	stop := stream position.
 	self step.
@@ -24278,8 +24542,8 @@ category: 'private-scanning'
 method: RBScanner
 stripSeparators
 	
-	[[characterType == #separator] whileTrue: [self step].
-	currentCharacter == $" ] 
+	[[characterType = #separator] whileTrue: [self step].
+	currentCharacter = $"] 
 			whileTrue: [self stripComment]
 %
 
@@ -24302,10 +24566,50 @@ initialize
 category: 'accessing'
 method: RBPatternScanner
 scanToken
-	currentCharacter == PatternVariableCharacter 
+	currentCharacter = PatternVariableCharacter 
 		ifTrue: [^self scanPatternVariable].
-	currentCharacter == $} ifTrue: [^self scanSpecialCharacter].
+	currentCharacter = $} ifTrue: [^self scanSpecialCharacter].
 	^super scanToken
+%
+
+! Class implementation for 'RBTonelScanner'
+
+!		Instance methods for 'RBTonelScanner'
+
+category: 'private'
+method: RBTonelScanner
+peekTonelFor: aCharacterType value: aCharacterValue
+
+	^ currentCharacter = aCharacterValue and: [ characterType =  aCharacterType ]
+%
+
+category: 'error handling'
+method: RBTonelScanner
+stream
+	^stream
+%
+
+category: 'accessing'
+method: RBTonelScanner
+tonelNext
+	"only used when parsing the tonel method selector line"
+
+	| token |
+(characterType == #special and: [currentCharacter = $[ ])
+	ifFalse: [ 
+		 characterType ~~ #eof
+			ifTrue: [ self error: 'Cannot parse Tonel method body. Missing ''[''.' ] ].
+	buffer reset.
+	tokenStart := stream position.
+	token := characterType = #eof 
+				ifTrue: 
+					[RBToken start: tokenStart + 1	"The EOF token should occur after the end of input"]
+				ifFalse: [self scanToken].
+	self stripSeparators.
+"don't read comments"
+	false ifTrue: [ token comments: self getComments ].
+"skip the $[ and get next token"
+	^self next
 %
 
 ! Class implementation for 'RBSmallDictionary'
@@ -25010,6 +25314,13 @@ automaticClassInitializationBlackList
 
 category: 'public client services'
 classmethod: Rowan
+browserServiceClass
+
+	^ self platform browserServiceClass
+%
+
+category: 'public client services'
+classmethod: Rowan
 classServiceClass
 
 	^ self platform classServiceClass
@@ -25039,6 +25350,13 @@ clearDefaultAutomaticClassInitializationBlackList
 		Individual users may override the black list."
 
 	^ self platform clearAutomaticClassInitializationBlackList_default
+%
+
+category: 'public client services'
+classmethod: Rowan
+commandResultClass
+
+	^ self platform commandResultClass
 %
 
 category: 'public'
@@ -25095,6 +25413,13 @@ classmethod: Rowan
 jadeServerClassNamed: className
 
 	^ self platform jadeServerClassNamed: className
+%
+
+category: 'public client services'
+classmethod: Rowan
+loggingServiceClass
+
+	^ self platform loggingServiceClass
 %
 
 category: 'public client services'
@@ -25435,7 +25760,7 @@ category: 'private'
 method: RowanClassesUpdate
 objectInBaseNamed: aString
 
-	^System myUserProfile symbolList objectNamed: aString asSymbol
+	^Rowan image symbolList objectNamed: aString asSymbol
 %
 
 category: 'accessing'
@@ -26981,7 +27306,7 @@ createSymbolDictionaryNamed: aName
 	| dictionary size |
 	dictionary := SymbolDictionary new.
 	dictionary at: aName asSymbol put: dictionary.
-	size := System myUserProfile symbolList size.
+	size := Rowan image symbolList size.
 	System myUserProfile insertDictionary: dictionary at: size + 1.
 	^ dictionary
 %
@@ -27087,7 +27412,7 @@ method: RowanService
 removeSymbolDictionaryNamed: aName
 
 	| index |
-	index := System myUserProfile symbolList names indexOf: aName asSymbol.
+	index := Rowan image symbolList names indexOf: aName asSymbol.
 	index ~= 0 ifTrue:[
 		System myUserProfile removeDictionaryAt: index]
 %
@@ -27280,7 +27605,7 @@ category: 'client commands'
 method: RowanAnsweringService
 exec: aString context: oop
 
-	answer := [true -> (aString evaluateInContext: (Object _objectForOop: oop) symbolList: GsSession currentSession symbolList) asOop] 
+	answer := [true -> (aString evaluateInContext: (Object _objectForOop: oop) symbolList: Rowan image symbolList) asOop] 
 		on: CompileError do: [:ex | 
 			false -> ex errorDetails
 	].
@@ -27343,7 +27668,7 @@ runMethodTests: methodServices
 	| behavior |
 	methodServices do:[:methodService |
 		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
-			behavior := methodService theClass. 
+			behavior := methodService classFromName. 
 			behavior debug: methodService selector]].
 	answer := true. 
 	RowanCommandResult initializeResults. "squash any client updates during server test run"
@@ -27397,6 +27722,29 @@ turnOffTranscriptWrites
 		self flipTranscript]
 %
 
+! Class implementation for 'RowanAutoCommitService'
+
+!		Instance methods for 'RowanAutoCommitService'
+
+category: 'client commands'
+method: RowanAutoCommitService
+autoCommit: boolean
+
+	self class setAutoCommit: boolean.
+	autoCommit := self class autoCommit. 
+	updateType := #autoCommitUpdate:.
+	RowanCommandResult addResult: self.
+%
+
+category: 'client commands'
+method: RowanAutoCommitService
+flipAutoCommit
+
+	autoCommit := self class flipAutoCommit. 
+	updateType := #autoCommitUpdate:.
+	RowanCommandResult addResult: self.
+%
+
 ! Class implementation for 'RowanBrowserService'
 
 !		Instance methods for 'RowanBrowserService'
@@ -27407,6 +27755,7 @@ abortTransaction
 
 	System abortTransaction.
 	self updateProjects.
+	self updateDictionaries. 
 	self packagesWithTests.
 	self updateType: #aborted:browser:.
 %
@@ -27414,7 +27763,6 @@ abortTransaction
 category: 'client commands'
 method: RowanBrowserService
 allClasses
-
 	allClasses := SortedCollection sortBlock: [:x :y | x name < y name].
 	allClasses addAll: (organizer classes collect:[:class | 
 			| service |
@@ -27426,16 +27774,6 @@ allClasses
 	allClasses := allClasses asArray. 
 	updateType := #classes. "#classes not used at the moment so no updates will be done"
 	RowanCommandResult addResult: self
-%
-
-category: 'client commands'
-method: RowanBrowserService
-autoCommit: object
-
-	RowanService setAutoCommit: object.
-	autoCommit := RowanService autoCommit. 
-	updateType := #autoCommitUpdate:.
-	RowanCommandResult addResult: self.
 %
 
 category: 'client commands'
@@ -27461,15 +27799,6 @@ findRemovedServices: services
 				RowanCommandResult addResult: service.
 		]
 	].
-%
-
-category: 'client commands'
-method: RowanBrowserService
-flipAutoCommit
-
-	autoCommit := RowanService flipAutoCommit. 
-	updateType := #autoCommitUpdate:.
-	RowanCommandResult addResult: self.
 %
 
 category: 'window registry'
@@ -27505,7 +27834,7 @@ method: RowanBrowserService
 releaseWindowHandle: integer
 
 	| registry |
-	RowanLoggingService current logComment: 'Release window with handle: ', integer printString. 
+	Rowan loggingServiceClass current logComment: 'Release window with handle: ', integer printString. 
 	registry := SessionTemps current at: #rowanServicesWindowRegistry ifAbsent:[^self].
 	registry removeKey: integer ifAbsent: []
 %
@@ -27519,6 +27848,22 @@ reloadProjects: projectServices andUpdateServices: services
 	projectNames := projectServices collect: [:projectService | projectService name]. 
 	services do:[:service | 
 		(projectNames includes: service rowanProjectName) ifTrue:[service update]].
+%
+
+category: 'client commands'
+method: RowanBrowserService
+removeDictionariesNamed: dictionaryNames
+	"remove from both transient & persistent symbol lists" 
+
+	dictionaryNames do:[:dictionaryName | 
+		| dictionaryNameSymbol |
+		dictionaryNameSymbol := dictionaryName asSymbol.
+		(Rowan image symbolList names includes: dictionaryNameSymbol) ifTrue:[
+			Rowan image symbolList removeDictionaryNamed: dictionaryNameSymbol].
+		(System myUserProfile symbolList names includes: dictionaryNameSymbol) ifTrue:[
+			System myUserProfile symbolList removeDictionaryNamed: dictionaryNameSymbol]].
+	self updateDictionaries.
+	System commitTransaction.
 %
 
 category: 'client commands'
@@ -27581,12 +27926,22 @@ update
 
 category: 'client commands'
 method: RowanBrowserService
+updateDictionaries
+
+	dictionaries := Rowan image symbolList names collect:[:name | RowanDictionaryService new name: name asString].
+	dictionaries := dictionaries asOrderedCollection. 
+	updateType := #dictionaryListUpdate:.
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanBrowserService
 updateProjects
 	| sortedProjects | 
 	sortedProjects := SortedCollection sortBlock: [:a :b | a name < b name]. 
 	sortedProjects addAll:  Rowan image loadedProjects.
 	projects := sortedProjects collect:[:project | RowanProjectService newNamed: project name].
-	updateType := #projectsUpdate:.
+	updateType := #projectsUpdate:browser:.
 	RowanCommandResult addResult: self
 %
 
@@ -27709,8 +28064,9 @@ basicRefreshFrom: theClass
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
 	packageName := definedPackageName := classOrMeta rowanPackageName.
+	self setDictionary: classOrMeta.
 	projectName := classOrMeta rowanProjectName.
-	instVarNames := classOrMeta instVarNames. 
+	instVarNames := classOrMeta instVarNames asArray. 
 	self setIsTestCase.
 %
 
@@ -27846,16 +28202,18 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 
 	| method warnings |
 	
-	[ [ [ method := aBehavior rwCompileMethod: methodString category: categorySymbol  ]
+	[ [ [ [ method := aBehavior rwCompileMethod: methodString category: categorySymbol. Transcript cr; show: method printString]
 		on: RwExecuteClassInitializeMethodsAfterLoadNotification
-		do: [:ex | ex resume: false ] ] 
+		do: [:ex | ex resume: false ]]
 			on: CompileError
 			do: [:ex | ^nil -> (ex gsArguments at: 1)]]
 				on: CompileWarning
 				do: 
 					[:ex | 
 					warnings := ex warningString.
-					ex resume].
+					ex resume]]
+					on: RwPerformingUnpackagedEditNotification
+					do: [:ex | ex resume ] .
 	^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] on: Error
 		do: [:ex | ex return: method -> warnings]
 %
@@ -28136,8 +28494,9 @@ minimalRefreshFrom: theClass
 	oop := theClass asOop.
 	classOrMeta := meta == true ifTrue:[theClass class] ifFalse:[theClass].
 	packageName := definedPackageName := classOrMeta rowanPackageName.
+	self setDictionary: classOrMeta.
 	projectName := classOrMeta rowanProjectName.
-	instVarNames := classOrMeta instVarNames. 
+	instVarNames := classOrMeta instVarNames asArray. 
 	template := self classCreationTemplate.
 	self initializeVariablesFor: classOrMeta. 
 	self initializeCategoriesFor: classOrMeta.
@@ -28172,7 +28531,7 @@ category: 'private'
 method: RowanClassService
 objectInBaseNamed: aString
 
-	^System myUserProfile symbolList objectNamed: aString asSymbol
+	^Rowan image symbolList objectNamed: aString asSymbol
 %
 
 category: 'client commands'
@@ -28341,7 +28700,9 @@ removeSelector: selector ifAbsent: absentBlock
 	theClass := self theClass. 
 	meta ifTrue: [theClass := theClass class].
 	(theClass compiledMethodAt: selector otherwise: nil) isNil ifTrue:[ ^absentBlock value ].
-	self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta
+	[self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta]
+		on: RwPerformingUnpackagedEditNotification
+		do: [:ex | ex resume ]
 %
 
 category: 'client commands'
@@ -28448,7 +28809,7 @@ saveMethodSource: source category: category
 	compilationResult := self		
 		compileMethod: source 
 		behavior: behavior 
-		symbolList: System myUserProfile symbolList
+		symbolList: Rowan image symbolList
 		inCategory: updatedCategory asSymbol.
 	(gsNMethod := compilationResult key) isNil ifTrue: [
 		System
@@ -28526,6 +28887,16 @@ setComment
 						description class name = #GsClassDocumentation
 							ifTrue: [comment := description detailsAboutClass]]].
 	comment isNil ifTrue: [comment := String new].
+%
+
+category: 'private'
+method: RowanClassService
+setDictionary: classOrMeta
+	| dictionaryList |
+		dictionaryList := Rowan image symbolList dictionariesAndSymbolsOf: classOrMeta.
+		dictionaryName := dictionaryList isEmpty 
+		ifTrue:[String new]
+		ifFalse:[dictionaryList first first name asString].
 %
 
 category: 'Updating'
@@ -28664,11 +29035,8 @@ updatePackageProject
 
 	packageService := RowanPackageService new name: packageName. 
 	packageService update. 
-	RowanCommandResult addResult: packageService.
-
 	projectService := RowanProjectService new name: projectName. 
 	projectService update.
-	RowanCommandResult addResult: projectService.
 %
 
 category: 'Accessing'
@@ -28742,6 +29110,91 @@ update
 	ProcessorScheduler scheduler suspendedProcesses 	do: [:each | processes add: (RowanProcessService onSuspendedProcess: 	each)].
 	ProcessorScheduler scheduler waitingProcesses 		do: [:each | processes add: (RowanProcessService onWaitingProcess: 		each)].
 	RowanCommandResult addResult: self.
+%
+
+! Class implementation for 'RowanDictionaryService'
+
+!		Instance methods for 'RowanDictionaryService'
+
+category: 'client commands'
+method: RowanDictionaryService
+classHierarchy
+	| theClasses |
+	self update. 
+	theClasses := classes collect:[:classService | classService theClass].
+	"reuse behavior in package service for now" 
+	hierarchyServices := (RowanPackageService new classes: classes) classHierarchy: theClasses. 
+	RowanCommandResult addResult: self.
+%
+
+category: 'client commands'
+method: RowanDictionaryService
+insertAt: index
+
+	| theDictionary |
+	theDictionary := SymbolDictionary new. 
+	theDictionary at: name asSymbol put: theDictionary. 
+	System myUserProfile insertDictionary: theDictionary at: index. 
+	RowanBrowserService new updateDictionaries.
+	System commitTransaction.
+%
+
+category: 'accessing'
+method: RowanDictionaryService
+name
+	^name
+%
+
+category: 'accessing'
+method: RowanDictionaryService
+name: object
+	name := object
+%
+
+category: 'client commands'
+method: RowanDictionaryService
+removeGlobalNamed: symbol
+	| dictionary |
+	dictionary := (System myUserProfile resolveSymbol: name asSymbol) value.
+	dictionary ifNotNil: [
+		dictionary removeKey: symbol ifAbsent:[]].
+	self update.
+%
+
+category: 'perform'
+method: RowanDictionaryService
+servicePerform: symbol withArguments: collection	
+
+	super servicePerform: symbol withArguments: collection.
+	self update.
+%
+
+category: 'updates'
+method: RowanDictionaryService
+update 
+	| dictionary sorted | 
+	classes := Array new. 
+	sorted := SortedCollection sortBlock: [:x :y | x first < y first].  
+	dictionary := Rowan image symbolList objectNamed: name. 
+	dictionary ifNil:[^self].
+	dictionary keysAndValuesDo:[:key :value |
+		value isClass ifTrue:[
+			| classService | 
+			classService :=  RowanClassService new name: key asString. 
+			classService versions: value classHistory size.
+			classService version: (value classHistory indexOf: value).
+			classes add: classService. 
+		]
+		ifFalse:[
+			sorted add: (Array 	with: (name, '.', key)
+										with: value class name
+										with: value asOop
+										with: value printString
+										)
+		]
+	].
+	globals := sorted asArray. 
+	RowanCommandResult addResult: self
 %
 
 ! Class implementation for 'RowanFrameService'
@@ -28837,14 +29290,15 @@ category: 'accessing'
 classmethod: RowanLoggingService
 current
 
-	^Current
+	"lazy initialize for a topaz session test" 
+	^SessionTemps current at: #rowanLoggingService ifAbsentPut: [nil]
 %
 
 category: 'accessing'
 classmethod: RowanLoggingService
 current: anObject
 
-	^Current := anObject
+	SessionTemps current at: #rowanLoggingService put: anObject
 %
 
 !		Instance methods for 'RowanLoggingService'
@@ -29615,12 +30069,27 @@ changes
    ^ (Rowan packageTools diff diffForPackageName: name) asString
 %
 
+category: 'other'
+method: RowanPackageService
+classes: collection
+
+	classes := collection
+%
+
 category: 'client commands'
 method: RowanPackageService
 classHierarchy
-	| superclassChains levels services hierarchies theClasses toExpand |
+	| theClasses |
 	self update. 
 	theClasses := classes collect:[:classService | classService theClass].
+	hierarchyServices := self classHierarchy: theClasses. 
+	RowanCommandResult addResult: self.
+%
+
+category: 'private'
+method: RowanPackageService
+classHierarchy: theClasses
+	| superclassChains levels services hierarchies toExpand |
 	superclassChains := self superclassChainsFor: theClasses. 
 	hierarchies := self extendHierarchies: superclassChains. 
 	levels := self hierarchiesByLevel: hierarchies.
@@ -29630,7 +30099,7 @@ classHierarchy
 	hierarchyServices := services reject:[:array | array isEmpty].
 	hierarchyServices copy keysAndValuesDo:[:key :value | 
 		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
-	RowanCommandResult addResult: self.
+	^hierarchyServices
 %
 
 category: 'client commands'
@@ -29639,7 +30108,7 @@ compileClass: definitionString
 
 	|  anonymousMethod |
 	anonymousMethod := definitionString _compileInContext: nil 
-       symbolList: GsSession currentSession symbolList.
+       symbolList: Rowan image symbolList.
 	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
 %
 
@@ -29695,12 +30164,12 @@ extendHierarchies: hierarchies
 	| extendedHierarchies |
 	extendedHierarchies := Array new. 
 	hierarchies do:[:hierarchy |
-		| theClass |
+		| theClass subclasses |
 		theClass := hierarchy last. 
-		theClass subclasses isEmpty 
+		(subclasses := organizer subclassesOf: theClass) isEmpty 
 			ifTrue:[extendedHierarchies add: hierarchy]
 			ifFalse:[
-				theClass subclasses do:[:sub |
+				subclasses do:[:sub |
 					extendedHierarchies add: (hierarchy copy add: sub; yourself)
 				]]].
 	^extendedHierarchies
@@ -29958,7 +30427,7 @@ method: RowanPackageService
 services: services from: levels expand: toExpand
 
 	(classes collect:[:svc | svc theClass]) do:[:aClass |
-		toExpand addAll: aClass allSuperclasses].
+		toExpand addAll: (organizer allSuperclassesOf: aClass)].
 	levels keysAndValuesDo: [:key :value |
 		| newKey service  | 
 		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
@@ -29982,9 +30451,9 @@ setDefaultTemplate
 category: 'commands support'
 method: RowanPackageService
 superclassChainsFor: behaviors
-
+	organizer := ClassOrganizer new. 
 	^behaviors collect:[:behavior | | supers |
-			supers := behavior allSuperclasses. 
+			supers := organizer allSuperclassesOf: behavior. 
 			supers add: behavior. 
 			supers].
 %
@@ -30191,6 +30660,9 @@ addPackageNamed: packageName
 category: 'initialization'
 method: RowanProjectService
 basicRefresh
+	name = Rowan unpackagedName ifTrue:[
+		isLoaded := false.
+		RowanBrowserService new updateDictionaries. ^self]. 
 	(isLoaded := self projectIsLoaded) ifFalse:[
 		existsOnDisk := false. 
 		updateType := #removedProject:. 
@@ -30666,6 +31138,16 @@ browseClassReferences: className
 
 	| methods |
 	methods := organizer referencesTo: className asSymbol.
+	queryResults := self methodServicesFrom: methods first.
+	self returnQueryToClient.
+%
+
+category: 'queries'
+method: RowanQueryService
+browseReferencesTo: symbol
+
+	| methods |
+	methods := organizer referencesTo: symbol.
 	queryResults := self methodServicesFrom: methods first.
 	self returnQueryToClient.
 %
@@ -31435,8 +31917,40 @@ initializeForExport
 	"if spec is to be exported, clear out any of the fields that represent state that should 
 	not be shared"
 
+	"for export, the keys in the dictionaries of the structures need to be put into canonical order"
+
+
 	super initializeForExport.
-	conditionalPackageMatchers :=  conditionalPackageMapSpecMatchers := nil
+	conditionalPackageMatchers :=  conditionalPackageMapSpecMatchers := nil.
+
+	self conditionalPackages
+		ifNotNil: [:cp |
+			| orderedConditionalPackages |
+			orderedConditionalPackages := Rowan platform orderedDictionaryClass new.
+			(cp keys asSortedCollection: [:a :b | (a at: 1) <= (b at: 1) ]) do: [:ar |
+				| dict orderedPackageNames |
+				dict := cp at: ar.
+				orderedPackageNames := Rowan platform orderedDictionaryClass new.
+				dict keys asArray sort do: [:group | orderedPackageNames at: group put: (dict at: group) ].
+				orderedConditionalPackages at: ar put: orderedPackageNames ].
+			conditionalPackages := orderedConditionalPackages ].
+
+	conditionalPackageMapSpecs ifNotNil: [
+		| orderedConditionalPackageMapSpecs |
+		orderedConditionalPackageMapSpecs := Rowan platform orderedDictionaryClass new.
+		(conditionalPackageMapSpecs keys asSortedCollection: [:a :b | a <= b ]) do: [:platformName |
+			| orderedUserMap userMap |
+			orderedUserMap := Rowan platform orderedDictionaryClass new.
+			userMap := conditionalPackageMapSpecs at: platformName.
+			(userMap keys  asSortedCollection: [:a :b | a <= b ]) do: [:userName |
+				| attributeMap orderedAttributeMap |
+				attributeMap := userMap at: userName.
+				orderedAttributeMap  := Rowan platform orderedDictionaryClass new.
+				(attributeMap keys asSortedCollection: [:a :b | a <= b ]) do: [:attributeName |
+					orderedAttributeMap at: attributeName put: (attributeMap at: attributeName) ].
+				orderedUserMap at: userName put: orderedAttributeMap ].
+			orderedConditionalPackageMapSpecs at: platformName put: orderedUserMap ].
+		conditionalPackageMapSpecs := orderedConditionalPackageMapSpecs ]
 %
 
 category: 'private'
@@ -31592,27 +32106,6 @@ method: RwComponentLoadConfiguration
 acceptVisitor: aVisitor
 
 	^aVisitor visitComponentLoadConfiguration: self
-%
-
-category: 'initialization'
-method: RwComponentLoadConfiguration
-initializeForExport
-
-	"for export, the keys in the dictionaris of the conditional packages structure need to be put into canonical order"
-
-	| cp orderedConditionalPackages |
-	super initializeForExport.
-	cp := self conditionalPackages.
-	orderedConditionalPackages := Rowan platform orderedDictionaryClass new.
-
-	(cp keys asSortedCollection: [:a :b | (a at: 1) <= (b at: 1) ]) do: [:ar |
-		| dict orderedPackageNames |
-		dict := cp at: ar.
-		orderedPackageNames := Rowan platform orderedDictionaryClass new.
-		dict keys asArray sort do: [:group | orderedPackageNames at: group put: (dict at: group) ].
-		orderedConditionalPackages at: ar put: orderedPackageNames ].
-	
-	conditionalPackages := orderedConditionalPackages
 %
 
 category: 'accessing'
@@ -31821,7 +32314,8 @@ packageConvention
 		ppc := self currentProjectDefinition packageConvention.
 		dpc := self _repositoryConventionFor: self packagesRoot.
 		dpc ~= ppc
-			ifTrue:  [ self error: 'Disk package convention ' , dpc printString, ' does not match expected package convention ', ppc printstring. ' for project ', self projectName printString ].
+			ifTrue:  [ self error: 'Disk package convention ' , dpc printString, 
+           ' does not match expected package convention ', ppc printString. ' for project ', self projectName printString ].
 		packageConvention := ppc ]
 %
 
@@ -32377,6 +32871,12 @@ deletededPackage: aPackageModification
 	"a deleted package is ignored for topaz ... the deleted classes and methods are simply not written out"
 %
 
+category: 'accessing'
+method: RwGsModificationTopazWriterVisitor
+excludeClassInitializers
+  self dynamicInstVarAt: #excludeClassInitializers put: true
+%
+
 category: 'exporting'
 method: RwGsModificationTopazWriterVisitor
 export
@@ -32444,6 +32944,7 @@ exportClassDefinitions: classDefinitionsInOrder
 		ifTrue: [ 
 			stream
 				nextPutAll: '! Class Declarations'; lf;
+				nextPutAll: '! Generated file, do not Edit'; lf;
 				lf ].
 	classDefinitionsInOrder do: [:classDef | 
 		self _fileOutClassDeclaration: classDef on: stream ].
@@ -32452,22 +32953,26 @@ exportClassDefinitions: classDefinitionsInOrder
 category: 'exporting'
 method: RwGsModificationTopazWriterVisitor
 exportClassInitializations
-
-	| stream |
+	| stream exclude |
 	self classInitializationDefinitions isEmpty ifTrue: [ ^ self ].
-
 	stream := self bufferedStream.
-
-	stream 
-		nextPutAll: '! Class Initialization'; lf;
-		lf;
-		nextPutAll: 'run'; lf.
-
+  exclude := (self dynamicInstVarAt: #excludeClassInitializers) ~~ nil  .
+  exclude ifTrue:[
+    stream nextPutAll: '! Class Initialization Excluded by export visitor'; lf .
+  ] ifFalse:[
+	  stream 
+		  nextPutAll: '! Class Initialization'; lf;
+      lf;
+		  nextPutAll: 'run'; lf.
+  ].
 	(self classInitializationDefinitions sort: [:a :b | a name <= b name ]) do: [ :classDef |
-		stream nextPutAll: classDef name, ' initialize.'; lf ].
-
-	stream nextPutAll: '%'; lf;
-		lf
+    exclude ifTrue:[ stream nextPutAll:'!  ' ].
+		stream nextPutAll: classDef name, ' initialize.'; lf 
+  ].
+  exclude ifFalse:[
+	  stream nextPutAll: 'true'; lf;
+	  nextPutAll: '%'; lf .
+  ].
 %
 
 category: 'exporting'
@@ -32487,7 +32992,6 @@ exportMethodDefinitions: classDefinitionsInOrder
 category: 'exporting'
 method: RwGsModificationTopazWriterVisitor
 exportMethodDefinitions: classDefinitionsInOrder labeled: label
-
 	| stream |
 	stream := self bufferedStream.
 	classDefinitionsInOrder do: [:classDef | 
@@ -32533,9 +33037,10 @@ category: 'class writing'
 method: RwGsModificationTopazWriterVisitor
 processClass: aClassModification
 
-	| classDefinition symbolDictName |
+	| classDefinition symbolDictName clsName |
 	classDefinition := aClassModification after.
-	(self classDefinitions at: classDefinition name ifAbsent: []) ifNotNil: [ self error: 'duplicate class defintion for ', classDefinition name printString, ' encountered.'].
+	(self classDefinitions at: (clsName := classDefinition name) ifAbsent: []) ifNotNil: [ 
+   self error: 'duplicate class definition for ', clsName printString, ' encountered.'].
 
 	symbolDictName := self currentProjectDefinition symbolDictNameForPackageNamed: self currentPackageDefinition name.
 	self classSymbolDictionaryNames at: classDefinition name put: symbolDictName.
@@ -32699,6 +33204,7 @@ topazFileReference
 category: 'private exporting'
 method: RwGsModificationTopazWriterVisitor
 _fileOutClassDeclaration: classDefinition on: aStream
+	 | optionsString |
   aStream
     nextPutAll: 'doit';
     lf;
@@ -32711,6 +33217,9 @@ _fileOutClassDeclaration: classDefinition on: aStream
         nextPutAll:
             '	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames) , ' )';
         lf ].
+	optionsString := ''.
+	classDefinition gs_options isEmpty
+		ifFalse: [ optionsString :=  ' ', (self _symbolsForVariables: classDefinition gs_options), ' ' ].
   aStream
     nextPutAll: '	classVars: #( ' ,  (self _stringForVariables: classDefinition classVarNames) , ' )';
     lf;
@@ -32721,7 +33230,7 @@ _fileOutClassDeclaration: classDefinition on: aStream
     lf;
     nextPutAll: '	inDictionary: ', (self classSymbolDictionaryNames at: classDefinition name);
     lf;
-    nextPutAll: '	options: #())';
+    nextPutAll: '	options: #(', optionsString, '))';
     lf;
     nextPutAll: '		category: ' , classDefinition category printString , ';';
     lf;
@@ -32773,6 +33282,17 @@ _stringForVariables: variableList
 	| stream |
 	stream := WriteStreamPortable on: (String new: 100).
 	variableList do: [:each | stream nextPutAll: each]
+		separatedBy: [stream space].
+	^stream contents
+%
+
+category: 'private exporting'
+method: RwGsModificationTopazWriterVisitor
+_symbolsForVariables: variableList
+
+	| stream |
+	stream := WriteStreamPortable on: (String new: 100).
+	variableList do: [:each | stream nextPutAll: each asSymbol printString ]
 		separatedBy: [stream space].
 	^stream contents
 %
@@ -33608,6 +34128,23 @@ processProject: aProjectModification
 					yourself ] ].
 
 	super processProject: aProjectModification.
+%
+
+category: 'private'
+method: RwModificationTonelWriterVisitor
+skipComment: aStream
+  "I assume I'm on top of the begining of a comment"
+  aStream skip: 1.
+  [ aStream atEnd not 
+    and: [ aStream next ~= $" or: [ aStream peek = $" ] ] ]
+  whileTrue.  
+%
+
+category: 'private'
+method: RwModificationTonelWriterVisitor
+skipSeparators: aStream
+  [ aStream peek isSeparator ]
+    whileTrue: [ aStream skip: 1 ]. 
 %
 
 category: 'class extension writing'
@@ -35950,7 +36487,9 @@ addOrUpdateMethod: methodSource inProtocol: hybridPackageName forClassNamed: cla
 					^ (Rowan image objectNamed: className)
 						compileMethod: methodSource
 						dictionaries: Rowan image symbolList
-						category: hybridPackageName].
+						category: hybridPackageName
+						environmentId: 0 
+						].
 			loadedClass loadedPackage ].
 
 	^ self
@@ -36698,7 +37237,7 @@ removeClassNamed: className
 			"need to do the actual removal of the unpackaged class after Rowan has done it's job"
 			| theClass |
 			theClass := Rowan image objectNamed: className.
-			(GsCurrentSession currentSession symbolList dictionariesAndSymbolsOf: theClass)
+			(Rowan image symbolList dictionariesAndSymbolsOf: theClass)
 				do: [:ar | | dict key |
 					"brute force removal of the class from system dictionaries"
 					dict := ar at: 1.	
@@ -38976,8 +39515,11 @@ addDefinition: aDefinition to: aDictionary
 
 	| key |
 	key := aDefinition key.
-	(aDictionary includesKey: key)
-		ifTrue: [self error: 'Duplicate definition.'].
+	(aDictionary includesKey: key) ifTrue: [
+     | nam |
+     nam := [ ' in ' , self name ] on: Error do:[:ex | '' ].
+     self error: 'Duplicate definition of ', key , nam .
+   ].
 	^ aDictionary at: key put: aDefinition
 %
 
@@ -39625,11 +40167,11 @@ method: RwClassDefinition
 _updateClassTypeFromClass: aClass
 
 	"For GemStone, the valid values are:
-	bytes
+	byteSubclass
 	variable
 	normal for non-indexable pointer object"
 
-	"Must be in-synch with RwGsLoadedSymbolDictPatch>>updateClassTypeFromClass"
+	"Must be in-synch with RwGsLoadedSymbolDictClass>>updateClassTypeFromClass"
 
 	| propertyName oldValue newValue |
 	propertyName := 'type'.
@@ -39637,7 +40179,7 @@ _updateClassTypeFromClass: aClass
 	newValue := aClass isBytes
 						ifTrue: [
 							aClass superClass isBytes not
-								ifTrue: [ 'bytes' ]
+								ifTrue: [ 'byteSubclass' ]
 								ifFalse: [ 'normal' ]]
 						ifFalse: [ 
 							aClass isSpecial
@@ -39728,8 +40270,9 @@ _updateOptionsFromClass: aClass
 				asSortedCollection asArray.
 	newValue isEmpty 
 		ifTrue: [ self removeProperty: propertyName ]
-		ifFalse: 
-			[ self propertyAt: propertyName put: newValue ]
+		ifFalse: [ self propertyAt: propertyName put: newValue ].
+  aClass _rwReservedOop ifNotNil:[:resOop | self propertyAt:'gs_reservedOop' put: resOop ]
+                          ifNil:[ self removeProperty:'gs_reservedOop' ].
 %
 
 category: 'utility'
@@ -39746,8 +40289,7 @@ _updatePoolDictionaryNamesFromClass: aClass
 category: 'utility'
 method: RwClassDefinition
 _updateSuperclassNameFromClass: aClass
-
-	self superclassName: aClass superclass name asString
+	self superclassName: (aClass superclass ifNotNil:[:sup | sup name asString] ifNil:['nil'])
 %
 
 category: 'utility'
@@ -41973,6 +42515,14 @@ load
 	"load the receiver into the image"
 
 	^ Rowan projectTools load loadComponentProjectDefinition: self
+%
+
+category: 'actions'
+method: RwComponentProjectDefinition
+load: platformConfigurationAttributes
+	"load the receiver into the image"
+
+	^ Rowan projectTools load loadComponentProjectDefinition: self platformConfigurationAttributes: platformConfigurationAttributes
 %
 
 category: 'accessing'
@@ -45457,9 +46007,8 @@ addToNewClassesByName: aDictionary
 category: 'private'
 method: RwGsClassPatch
 basicCreateClassWithSuperclass: superclass
-
 	"For GemStone, the valid values are:
-	bytes
+	byteSubclass
 	variable
 	normal for non-indexable pointer object"
 
@@ -45501,7 +46050,7 @@ basicCreateClassWithSuperclass: superclass
 						constraints: oldConstraints
 						options: gs_options ]
 				ifFalse: [ 
-					type = 'bytes'
+					type = 'byteSubclass'
 						ifTrue: [ 
 							(classDefinition propertyAt: 'instvars') isEmpty
 								ifFalse: [ self error: 'Cannot define byte class with named instvars.' ].
@@ -45826,7 +46375,7 @@ installClassExtensionInSystem
 	(self projectDefinition
 		useSessionMethodsForExtensionsForPackageNamed: self packageName)
 		ifTrue: [ | resolved |
-			((resolved := GsCurrentSession currentSession symbolList objectNamed: self className asSymbol) notNil and: [resolved isBehavior and: [ resolved isMeta not ]])
+			((resolved := Rowan image symbolList objectNamed: self className asSymbol) notNil and: [resolved isBehavior and: [ resolved isMeta not ]])
 				ifFalse: [ 
 					self
 						error:
@@ -48351,7 +48900,7 @@ doMoveMethodsBetweenPackages
 							(aMethodMove projectAfter
 								useSessionMethodsForExtensionsForPackageNamed: aMethodMove packageAfter name)
 								ifTrue: [ | resolved |
-									((resolved := GsCurrentSession currentSession symbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
+									((resolved := Rowan image symbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
 										and: [resolved isBehavior and: [ resolved isMeta not ]])
 										ifFalse: [ 
 											self
@@ -51135,7 +51684,7 @@ updateClassTypeFromClass
 	newValue := handle isBytes
 						ifTrue: [
 							handle superClass isBytes not
-								ifTrue: [ 'bytes' ]
+								ifTrue: [ 'byteSubclass' ]
 								ifFalse: [ 'normal' ]]
 						ifFalse: [ 
 							handle isSpecial
@@ -51251,6 +51800,7 @@ updateOptionsFromClass
 	| propertyName oldValue newValue |
 	propertyName := 'gs_options'.	"needs to be listed in _classBasedProperties method"
 	oldValue := self propertyAt: propertyName.
+"TODO, may need changes to result of _rwOptionsArray , see RwClassDefinition >> _updateOptionsFromClass "
 	newValue := (handle _rwOptionsArray collect: [:option | option asString])
 				asSortedCollection asArray.
 	newValue isEmpty ifTrue: [newValue := self absentToken].
@@ -58723,6 +59273,88 @@ testValuesDo
 	self assert: values asArray = #('Paris' 'Rome')
 %
 
+! Class implementation for 'NewTonelParser'
+
+!		Instance methods for 'NewTonelParser'
+
+category: 'parsing'
+method: NewTonelParser
+method
+
+	| type start end currentPosition selector count |
+	
+	type := self untilIncluding: '>>'.
+	start := stream position.
+	self methodParser
+		scanner: (methodParser scannerClass on: stream
+				errorBlock: [:errorMessage :errorPosition |self halt]).
+	currentMethodNode := methodParser parseTonelMessagePattern.
+	end := methodParser scanner previousStepPosition.
+	currentPosition := methodParser scanner stream position.
+
+	methodParser scanner stream position: start.
+	count := end - start.
+	selector := String new: count.
+	methodParser scanner stream readInto: selector startingAt: 1 count: count.
+	methodParser scanner stream position: currentPosition.
+	selector := selector trimBoth.
+	type := type trimBoth substrings: ' '.
+	type size = 1 ifTrue: [ type := type copyWith: nil ].
+	methodBodyStart := stream position.
+	methodParser tonelStep.	"eat the $["
+	^ { 
+		type.
+		selector.
+	}
+%
+
+category: 'parsing'
+method: NewTonelParser
+methodBody
+	| source end count currentPosition |
+	self methodParser tonelMethodBodyTerminationToken
+		ifFalse: [
+			methodParser parseTonelPragmas.
+			currentMethodNode body: (methodParser parseTonelStatements: true) ].
+	end := methodParser currentToken start - 1.
+	count :=  end - methodBodyStart.
+	source := String new: count - 2.
+	currentPosition := methodParser scanner stream position.
+	methodParser scanner stream position: methodBodyStart + 1.
+	methodParser scanner stream readInto: source startingAt: 1 count: count - 2.
+	methodParser scanner stream position: currentPosition.
+	^ source
+%
+
+category: 'accessing'
+method: NewTonelParser
+methodParser
+
+	^ methodParser ifNil: [ methodParser := RBTonelParser new ]
+%
+
+category: 'private factory'
+method: NewTonelParser
+newMethodDefinitionFrom: anArray
+	| metadata className meta selector source  |
+	
+	metadata := anArray second ifNil: [ Dictionary new ].
+	className := anArray fourth first first.
+	meta := anArray fourth first second notNil.
+	selector :=  anArray fourth second trimBoth.
+	source := String streamContents: [ :s | 
+		s << selector.
+		anArray fifth ifNotEmpty: [ :src | 
+			s lf.
+			s << src ] ].
+
+	^ self packageReader newMethodDefinitionForClassNamed: className
+		classIsMeta: meta
+		selector: (self extractSelector: selector)
+		category: (metadata at: #category ifAbsent: [ '' ]) 
+		source: source
+%
+
 ! Class extensions for 'Behavior'
 
 !		Instance methods for 'Behavior'
@@ -59363,8 +59995,8 @@ withGemstoneLineEndings
 			outString at: newOutPos - 1 put: lf.
 			outPos := newOutPos.
 
-			((self at: lineEndPos) == cr
-				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) == lf ] ])
+			((self at: lineEndPos) = cr
+				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) = lf ] ])
 				ifTrue: [ 
 					"CRLF ending"
 					inPos := lineEndPos + 2 ]
@@ -59412,8 +60044,8 @@ withoutGemstoneLineEndings
 				startingAt: inPos.
 			outPos := newOutPos - 1.
 
-			((self at: lineEndPos) == cr
-				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) == lf ] ])
+			((self at: lineEndPos) = cr
+				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) = lf ] ])
 				ifTrue: [ 
 					"CRLF ending"
 					inPos := lineEndPos + 2 ]
@@ -59837,7 +60469,7 @@ result add: 'constraints: '.
 ^result
 %
 
-category: '*rowan-gemstone-kernel'
+category: '*rowan-gemstone-kernel-36x'
 method: Class
 _rwOptionsArray
   ^ self _optionsArrayForDefinition
@@ -59854,6 +60486,14 @@ _rwOptionsForDefinition
   1 to: arr size do:[:j | result add: $ ; add: (arr at: j) ].
   result add: $)  .
   ^ result
+%
+
+category: '*rowan-gemstone-kernel'
+method: Class
+_rwReservedOop
+ "returns nil or the SmallInteger specifying a reserved oopNumber"
+  | oop|
+  ^ (oop := self asOopNumber) <= System _lastReservedOopNumber ifTrue:[ oop ] ifFalse:[ nil ].
 %
 
 category: '*rowan-gemstone-kernel'
@@ -60490,6 +61130,11 @@ rbStoreOn: aStream
 
 !		Instance methods for 'Object'
 
+category: '*ast-kernel-core'
+method: Object
+acceptVisitor: aVisitor
+%
+
 category: '*gemstone-interactions-kernel'
 method: Object
 confirm: aString
@@ -60508,6 +61153,13 @@ category: '*gemstone-interactions-kernel'
 method: Object
 inspect
   ^ (GsInspectInteraction theObject: self) signal
+%
+
+category: '*ast-kernel-core'
+method: Object
+isValue
+
+	^false
 %
 
 category: '*rowan-gemstone-kernel'
@@ -61282,6 +61934,13 @@ _shouldCloneRowanLoader: aProjectSetModification
 
 category: '*rowan-services-extensions'
 method: RwGsPlatform
+browserServiceClass
+
+	^ RowanBrowserService
+%
+
+category: '*rowan-services-extensions'
+method: RwGsPlatform
 classServiceClass
 
 	^ RowanClassService
@@ -61294,6 +61953,13 @@ classTools
 	"Answer the platform-specific class for class tools"
 
 	^ RwClassTool
+%
+
+category: '*rowan-services-extensions'
+method: RwGsPlatform
+commandResultClass
+
+	^ RowanCommandResult
 %
 
 category: '*rowan-tools-extensions-gemstone'
@@ -61313,6 +61979,13 @@ jadeServerClassNamed: className
 	jadeClasses := Array with: (UserGlobals at: #JadeServer). 
 	jadeClasses add: (UserGlobals at: #JadeServer64bit32). 
 	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]
+%
+
+category: '*rowan-services-extensions'
+method: RwGsPlatform
+loggingServiceClass
+
+	^ RowanLoggingService
 %
 
 category: '*rowan-services-extensions'
@@ -61364,7 +62037,7 @@ method: RwGsPlatform
 serviceClasses
 	"Explicitly add each class rather than sending #allSubclasses so
 	that users other than SystemUser have visibility. Visibility in Rowan
-	is determined at compile time."
+	is determined at compile time. See STONReader>>lookupClass:"
 	
 	| array |
 	array := Array with: RowanService. 
@@ -61373,6 +62046,7 @@ serviceClasses
 		add: RowanClassService; 
 		add: RowanDebuggerService; 
 		add: RowanFrameService;
+		add: RowanLoggingService;
 		add: RowanMethodService;
 		add: RowanPackageService; 
 		add: RowanProcessService;
@@ -62038,7 +62712,6 @@ method: RwProjectReferenceDefinition
 symbolDictNameForPackageNamed: packageName
 
 	| packageProperties |
-"self deprecated: 'temporary patch .. see RwGemStoneSpecification>>symbolDictNameForPackageNamed: for full implementation'."
 	packageProperties := self packageNameToPlatformPropertiesMap
 		at: packageName
 		ifAbsent: [ ^ self defaultSymbolDictName ].
@@ -62343,7 +63016,7 @@ rowanSymbolDictionaryRegistry
 	^ self at: #'RwSymbolDictionaryRegistry' ifAbsent: [  ]
 %
 
-category: '*rowan-gemstone-35x'
+category: '*rowan-gemstone-kernel-36x'
 method: SymbolDictionary
 _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 
@@ -62491,6 +63164,17 @@ defaultAction
   ^ Processor activeProcess terminate
 %
 
+! Class extensions for 'ZnBufferedReadStream'
+
+!		Instance methods for 'ZnBufferedReadStream'
+
+category: '*rowan-components-kernel'
+method: ZnBufferedReadStream
+buffer
+
+	^ buffer
+%
+
 ! Class Initialization
 
 run
@@ -62502,4 +63186,3 @@ RwLoadedThing initialize.
 RwModificationFiletreeWriterVisitor initialize.
 true
 %
-

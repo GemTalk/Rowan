@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (CypressMethodDefinition
@@ -63031,7 +63032,7 @@ rowanSymbolDictionaryRegistry
 	^ self at: #'RwSymbolDictionaryRegistry' ifAbsent: [  ]
 %
 
-category: '*rowan-gemstone-35x'
+category: '*rowan-gemstone-kernel-32x'
 method: SymbolDictionary
 _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 
@@ -63070,13 +63071,14 @@ _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList
 				_subclass: oldClassName asString 
 				instVarNames: oldClass instVarNames
 				format: oldClass format  
+				constraints: #() 
 				classVars: oldClass classVarNames
 				classInstVars: oldClass class instVarNames
 				poolDictionaries: #()
 				inDictionary: nil
 				inClassHistory: hist
 				description: ''
-				options: oldClass _optionsArrayForDefinition .
+				options: oldClass _nonInheritedOptions.
 			clonedSymDict at: oldClassName put: clonedClass.
 			clonedClasses add: {clonedClass. oldClass} ].
 			"compile methods in cloned class"
@@ -63199,5 +63201,5 @@ RBScanner initialize.
 Rowan initialize.
 RwLoadedThing initialize.
 RwModificationFiletreeWriterVisitor initialize.
+true
 %
-

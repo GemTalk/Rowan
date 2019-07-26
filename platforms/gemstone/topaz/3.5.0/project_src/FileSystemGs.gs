@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (ByteArray
@@ -18940,5 +18941,5 @@ asByteArray
 
 run
 FastUUIDGenerator initialize.
+true
 %
-
