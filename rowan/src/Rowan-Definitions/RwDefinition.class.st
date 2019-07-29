@@ -39,7 +39,7 @@ RwDefinition >> addDefinition: aDefinition to: aDictionary [
 	key := aDefinition key.
 	(aDictionary includesKey: key)
 		ifTrue: [self error: 'Duplicate definition.'].
-	aDictionary at: key put: aDefinition
+	^ aDictionary at: key put: aDefinition
 ]
 
 { #category : 'converting' }
@@ -106,9 +106,11 @@ RwDefinition >> key [
 { #category : 'copying' }
 RwDefinition >> postCopy [
 
+	| oldProperties |
 	super postCopy.
-	properties := properties copy
-
+	oldProperties := properties.
+	properties := Dictionary new.
+	oldProperties keysAndValuesDo: [:key :value| properties at: key put: value copy ]
 ]
 
 { #category : 'printing' }
@@ -166,6 +168,12 @@ RwDefinition >> removeKey: key from: aDictionary [
 	aDictionary
 		removeKey: key
 		ifAbsent: [ self error: 'no definition for ' , key printString , ' found' ]
+]
+
+{ #category : 'properties' }
+RwDefinition >> removeProperty: propertyName [
+
+	properties removeKey: propertyName ifAbsent: []
 ]
 
 { #category : 'private' }

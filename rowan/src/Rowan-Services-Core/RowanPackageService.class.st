@@ -50,11 +50,24 @@ RowanPackageService >> changes [
 
 ]
 
+{ #category : 'other' }
+RowanPackageService >> classes: collection [
+
+	classes := collection
+]
+
 { #category : 'client commands' }
 RowanPackageService >> classHierarchy [
-	| superclassChains levels services hierarchies theClasses toExpand |
+	| theClasses |
 	self update. 
-	theClasses := classes collect:[:classService | classService classFromName].
+	theClasses := classes collect:[:classService | classService theClass].
+	hierarchyServices := self classHierarchy: theClasses. 
+	RowanCommandResult addResult: self.
+]
+
+{ #category : 'private' }
+RowanPackageService >> classHierarchy: theClasses [
+	| superclassChains levels services hierarchies toExpand |
 	superclassChains := self superclassChainsFor: theClasses. 
 	hierarchies := self extendHierarchies: superclassChains. 
 	levels := self hierarchiesByLevel: hierarchies.
@@ -64,26 +77,16 @@ RowanPackageService >> classHierarchy [
 	hierarchyServices := services reject:[:array | array isEmpty].
 	hierarchyServices copy keysAndValuesDo:[:key :value | 
 		hierarchyServices at: key put: (value asSet asSortedCollection:[:x :y | x name < y name]) asArray].
-	RowanCommandResult addResult: self.
+	^hierarchyServices
 ]
 
 { #category : 'client commands' }
 RowanPackageService >> compileClass: definitionString [
 
-	| theClass classService packageService |
-	theClass := definitionString evaluate.
-	classService := RowanClassService new name: theClass name. 
-	classService update. 
-	classService isNewClass: true.
-	classService packageName = name 
-		ifTrue:[
-			self selectedClass: classService
-		]
-		ifFalse:[
-			packageService := RowanPackageService forPackageNamed: classService packageName. 
-			packageService update. 
-			packageService selectedClass: classService].
-	RowanCommandResult addResult: classService.
+	|  anonymousMethod |
+	anonymousMethod := definitionString _compileInContext: nil 
+       symbolList: Rowan image symbolList.
+	UserGlobals at: #jadeiteCompileClassMethod put: anonymousMethod.
 ]
 
 { #category : 'rowan' }
@@ -135,12 +138,12 @@ RowanPackageService >> extendHierarchies: hierarchies [
 	| extendedHierarchies |
 	extendedHierarchies := Array new. 
 	hierarchies do:[:hierarchy |
-		| theClass |
+		| theClass subclasses |
 		theClass := hierarchy last. 
-		theClass subclasses isEmpty 
+		(subclasses := organizer subclassesOf: theClass) isEmpty 
 			ifTrue:[extendedHierarchies add: hierarchy]
 			ifFalse:[
-				theClass subclasses do:[:sub |
+				subclasses do:[:sub |
 					extendedHierarchies add: (hierarchy copy add: sub; yourself)
 				]]].
 	^extendedHierarchies
@@ -203,6 +206,13 @@ RowanPackageService >> isDirty [
 RowanPackageService >> isDirty: boolean [
 
 	isDirty := boolean
+]
+
+{ #category : 'Accessing' }
+RowanPackageService >> jadeite_testClasses [
+
+	"for testing" 
+	^testClasses
 ]
 
 { #category : 'rowan' }
@@ -298,10 +308,31 @@ RowanPackageService >> projectName: newValue [
 ]
 
 { #category : 'client commands' }
-RowanPackageService >> removeClass: classService [
+RowanPackageService >> recompileMethodsAfterClassCompilation [
 
+	"compileClass: must be run first"
+	| theClass classService packageService |
+
+	theClass := [(UserGlobals at: #jadeiteCompileClassMethod) _executeInContext: nil] 
+		ensure: [UserGlobals at: #jadeiteCompileClassMethod put: nil].
+	classService := RowanClassService new name: theClass name. 
+	classService update. 
+	classService isNewClass: true.
+	classService packageName = name 
+		ifTrue:[
+			self selectedClass: classService
+		]
+		ifFalse:[
+			packageService := RowanPackageService forPackageNamed: classService packageName. 
+			packageService update. 
+			packageService selectedClass: classService].
+	RowanCommandResult addResult: classService.
+]
+
+{ #category : 'client commands' }
+RowanPackageService >> removeClass: classService [
 	self removeClassNamed: classService name. 
-	self update.
+	self setDefaultTemplate.
 	classService updateType: #removedClass:.
 	RowanCommandResult addResult: classService
 ]
@@ -351,17 +382,17 @@ RowanPackageService >> servicePerform: symbol withArguments: collection [
 { #category : 'commands support' }
 RowanPackageService >> services: services from: levels expand: toExpand [
 
-	(classes collect:[:svc | svc classFromName]) do:[:aClass |
-		toExpand addAll: aClass allSuperclasses].
+	(classes collect:[:svc | svc theClass]) do:[:aClass |
+		toExpand addAll: (organizer allSuperclassesOf: aClass)].
 	levels keysAndValuesDo: [:key :value |
 		| newKey service  | 
 		newKey := key = #'nil' ifTrue:[#'nil'] ifFalse:[
-			service := (RowanClassService minimalForClassNamed: key name).
-			(toExpand includes: service classFromName) ifTrue:[service expand: true] ifFalse:[service expand: false].
+			service := (RowanClassService new classServiceFromOop: key asOop).
+			(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
 			service].
 		services at: newKey put: (value collect:[:cls | 
-				service := (RowanClassService minimalForClassNamed: cls name).
-				(toExpand includes: service classFromName) ifTrue:[service expand: true] ifFalse:[service expand: false].
+				service := (RowanClassService new classServiceFromOop: cls asOop).
+				(toExpand includes: service theClass) ifTrue:[service expand: true] ifFalse:[service expand: false].
 				service
 				])]
 ]
@@ -374,11 +405,12 @@ RowanPackageService >> setDefaultTemplate [
 
 { #category : 'commands support' }
 RowanPackageService >> superclassChainsFor: behaviors [
-
+	organizer := ClassOrganizer new. 
 	^behaviors collect:[:behavior | | supers |
-			supers := behavior allSuperclasses. 
+			supers := organizer allSuperclassesOf: behavior. 
 			supers add: behavior. 
 			supers].
+
 ]
 
 { #category : 'client commands' }
@@ -394,7 +426,9 @@ RowanPackageService >> testClasses [
 					| classService |
 					classService := RowanClassService basicForClassNamed: testSubclass name.
 					testClasses detect:[:testClassService | testClassService name = classService name] ifNone:[
-						testClasses add: classService]]]]]. 
+					(self loadedClassExtensions keys asArray includes: classService name) ifFalse:[
+							"don't include extension classes"
+							testClasses add: classService]]]]]]. 
 	updateType := #testClasses:. 
 	testClasses := testClasses asArray. 
 	RowanCommandResult addResult: self.
@@ -408,7 +442,7 @@ RowanPackageService >> update [
 		| classService | 
 		classService := (RowanClassService minimalForClassNamed: string) 
 			isExtension: true.
-		(Rowan image loadedClassForClass: classService classFromName ifAbsent:[]) 
+		(Rowan image loadedClassForClass: classService theClass ifAbsent:[]) 
 			ifNotNil:[:cls | classService definedPackageName: cls packageName].
 		classService]).
 	classes do: [:clsService | clsService packageName: self name]. 

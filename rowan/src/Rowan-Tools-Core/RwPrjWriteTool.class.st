@@ -28,42 +28,32 @@ RwPrjWriteTool >> _loadedPackagesNamed: someNames forProject: projectDefinition 
 
 	| loadedPackages |
 	loadedPackages := someNames
-		collect: [ :aName | Rowan image loadedPackageNamed: aName ifAbsent: [ nil ] ].
+		collect: [ :aName | 
+			projectDefinition packageNamed: aName ifAbsent: [ self error: 'package not a member of projectDefinition' ].
+			Rowan image loadedPackageNamed: aName ifAbsent: [ nil ] ].
 	^ RwEntitySet
 		withAll:
 			(loadedPackages
 				select: [ :loadedPackage | 
 					loadedPackage notNil
 						and: [ loadedPackage loadedProject name = projectDefinition name ] ])
-
 ]
 
 { #category : 'smalltalk api' }
-RwPrjWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification [
+RwPrjWriteTool >> writeComponentProjectDefinition: projectDefinition [
 
-	| repo repositoryUrl |
-	self specification: aRwSpecification.
-	repositoryUrl := specification repositoryUrl
-		ifNil: [ 
-			specification repoSpec repositoryRootPath
-				ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
-				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , specification repoPath , '/') asRwUrl ] ]
-		ifNotNil: [ :urlString | urlString asRwUrl ].
-	repo := repositoryUrl asRwRepository.
-	aRwPackageSet packages values
-		do: [ :rwPackage | 
-			| packageStructure |
-			packageStructure := RwCypressPackageStructure fromPackage: rwPackage.
-			repo writePackageStructure: packageStructure ].
-	^ specification
+	Rowan projectTools create createProjectRepository: projectDefinition projectRef.
+	projectDefinition 
+		exportProjects;
+		exportComponents;
+		exportPackages
 ]
 
-{ #category : 'smalltalk api' }
-RwPrjWriteTool >> writeProjectDefinition: projectDefinition [
-	"project defintion does represent a loaded project, so the loaded projects and packages 
-		will not be marked not dirty"
+{ #category : 'deprecated' }
+RwPrjWriteTool >> writeDeprecatedProjectDefinition: projectDefinition [
 
 	| repo repositoryUrl |
+	self deprecated: 'Use RwComponentProjectDefinition instead'.
 	repositoryUrl := projectDefinition repositoryUrl
 		ifNil: [ 
 			projectDefinition repositoryRootPath
@@ -77,13 +67,13 @@ RwPrjWriteTool >> writeProjectDefinition: projectDefinition [
 			packageStructure := RwCypressPackageStructure
 				fromPackage: rwPackageDefinition.
 			repo writePackageStructure: packageStructure ]
-
 ]
 
-{ #category : 'smalltalk api' }
-RwPrjWriteTool >> writeProjectNamed: projectName [
+{ #category : 'deprecated' }
+RwPrjWriteTool >> writeDeprecatedProjectNamed: projectName [
 
 	| loadedProject repo repositoryUrl projectDefinition packageDefinitionSet loadedPackages |
+	self deprecated: 'Use RwComponentProjectDefinition instead'.
 	loadedProject := Rowan image loadedProjectNamed: projectName.
 	projectDefinition := loadedProject asDefinition.
 	repositoryUrl := projectDefinition repositoryUrl
@@ -104,5 +94,43 @@ RwPrjWriteTool >> writeProjectNamed: projectName [
 	"loaded project and loaded packages written to disk - mark them not dirty"
 	loadedProject markNotDirty.
 	loadedPackages do: [:loadedPackage | loadedPackage markNotDirty ].
+]
 
+{ #category : 'deprecated' }
+RwPrjWriteTool >> writePackageSet: aRwPackageSet specification: aRwSpecification [
+
+	| repo repositoryUrl |
+	self deprecated: 'RwPackageSet definition and writing package sets is no longer supported'.
+	self specification: aRwSpecification.
+	repositoryUrl := specification repositoryUrl
+		ifNil: [ 
+			specification repoSpec repositoryRootPath
+				ifNil: [ self error: 'repositoryUrl or repository rootPath must be defined in url' ]
+				ifNotNil: [ :rootPath | ('cypress:' , rootPath , '/' , specification repoPath , '/') asRwUrl ] ]
+		ifNotNil: [ :urlString | urlString asRwUrl ].
+	repo := repositoryUrl asRwRepository.
+	aRwPackageSet packages values
+		do: [ :rwPackage | 
+			| packageStructure |
+			packageStructure := RwCypressPackageStructure fromPackage: rwPackage.
+			repo writePackageStructure: packageStructure ].
+	^ specification
+]
+
+{ #category : 'smalltalk api' }
+RwPrjWriteTool >> writeProjectDefinition: projectDefinition [
+
+	projectDefinition export
+]
+
+{ #category : 'smalltalk api' }
+RwPrjWriteTool >> writeProjectNamed: projectName [
+
+	| loadedProject projectDefinition |
+	loadedProject := Rowan image loadedProjectNamed: projectName.
+	projectDefinition := loadedProject asDefinition.
+	self writeProjectDefinition: projectDefinition.
+	"loaded project and loaded packages written to disk - mark them not dirty"
+	loadedProject markNotDirty.
+	loadedProject loadedPackages valuesDo: [:loadedPackage | loadedPackage markNotDirty ].
 ]

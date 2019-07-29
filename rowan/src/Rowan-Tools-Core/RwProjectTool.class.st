@@ -54,6 +54,12 @@ RwProjectTool class >> delete [
 ]
 
 { #category : 'commands' }
+RwProjectTool class >> diff [
+
+	^ RwPrjDiffTool new
+]
+
+{ #category : 'commands' }
 RwProjectTool class >> disown [
 
 	^ RwPrjDisownTool new
@@ -129,6 +135,17 @@ RwProjectTool class >> test [
 RwProjectTool class >> write [
 
 	^RwPrjWriteTool new
+]
+
+{ #category : 'private' }
+RwProjectTool >> _createLoadedProject: aRwProjectReference [
+
+	Rowan image 
+		loadedProjectNamed: aRwProjectReference projectAlias
+		ifAbsent: [
+			| newLoadedProject |
+			newLoadedProject := RwGsLoadedSymbolDictProject newForProjectReference: aRwProjectReference.
+			Rowan image addLoadedProject: newLoadedProject ]
 ]
 
 { #category : 'smalltalk api' }

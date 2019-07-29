@@ -7,23 +7,7 @@ Class {
 { #category : 'smalltalk api' }
 RwPrjLogTool >> commitLogProjectNamed: projectName limit: logLimit [
 
-	| loadedProject |
-	loadedProject := Rowan image loadedProjectNamed: projectName.
-	self specification: loadedProject specification.
-	^ specification commitLogForTool: self limit: logLimit
-]
-
-{ #category : 'smalltalk api' }
-RwPrjLogTool >> commitLogSpecification: aRwSpecification limit: logLimit [
-  self specification: aRwSpecification.
-  ^ specification commitLogForTool: self limit: logLimit
-]
-
-{ #category : 'smalltalk api' }
-RwPrjLogTool >> commitLogSpecUrl: aString limit: logLimit [
-  ^ self
-    commitLogSpecification: (RwSpecification fromUrl: aString)
-    limit: logLimit
+	^ (Rowan image loadedProjectNamed: projectName) commitLog: logLimit
 ]
 
 { #category : 'git' }

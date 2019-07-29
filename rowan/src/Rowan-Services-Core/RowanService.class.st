@@ -35,8 +35,9 @@ RowanService class >> autoCommit [
 
 { #category : 'autocommit' }
 RowanService class >> flipAutoCommit [
-
-	^self setAutoCommit: self autoCommit not
+	| newValue |
+	newValue := self autoCommit == #failed ifTrue:[false] ifFalse:[self autoCommit not].
+	^self setAutoCommit: newValue
 ]
 
 { #category : 'instance creation' }
@@ -61,9 +62,9 @@ RowanService class >> sampleService [
 ]
 
 { #category : 'autocommit' }
-RowanService class >> setAutoCommit: boolean [
+RowanService class >> setAutoCommit: object [
 
-	^SessionTemps current at: #'Jadeite_AutoCommit' put: boolean
+	^SessionTemps current at: #'Jadeite_AutoCommit' put: object
 ]
 
 { #category : 'other' }
@@ -132,7 +133,7 @@ RowanService >> createSymbolDictionaryNamed: aName [
 	| dictionary size |
 	dictionary := SymbolDictionary new.
 	dictionary at: aName asSymbol put: dictionary.
-	size := System myUserProfile symbolList size.
+	size := Rowan image symbolList size.
 	System myUserProfile insertDictionary: dictionary at: size + 1.
 	^ dictionary
 ]
@@ -230,10 +231,9 @@ RowanService >> removeSampleSymbolDictionary [
 RowanService >> removeSymbolDictionaryNamed: aName [
 
 	| index |
-	index := System myUserProfile symbolList names indexOf: aName asSymbol.
+	index := Rowan image symbolList names indexOf: aName asSymbol.
 	index ~= 0 ifTrue:[
 		System myUserProfile removeDictionaryAt: index]
-
 ]
 
 { #category : 'other' }
@@ -281,6 +281,9 @@ RowanService >> sampleSymbolDictionaryName [
 
 { #category : 'perform' }
 RowanService >> servicePerform: symbol withArguments: collection [
+	"each service updates itself after performing a command.
+	Therefore, if the command is #update, don't run it here"
+	symbol == #update ifTrue:[^self].
 	^super perform: symbol withArguments: collection.
 ]
 

@@ -184,7 +184,14 @@ RwGsClassPatch >> oldClassVersion [
 RwGsClassPatch >> privateCreateClassFor: aPatchSet [
 
 	| superclass |
-	superclass := aPatchSet superclassNamed: classDefinition superclassName.
+	superclass := aPatchSet 
+		superclassNamed: classDefinition superclassName 
+		ifAbsent: [
+			"https://github.com/GemTalk/Rowan/issues/471"
+			"if we can't look up the class, try accessing the superclass from the class itself"
+			(aPatchSet tempSymbols 
+				at: classDefinition name asSymbol
+				ifAbsent: [ self error: 'Class not found ', classDefinition className printString ]) superClass ].
 	superclass
 		ifNil: [ 
 			classDefinition superclassName = 'nil'

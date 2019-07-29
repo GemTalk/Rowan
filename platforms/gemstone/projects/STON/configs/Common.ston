@@ -1,0 +1,18 @@
+RwProjectLoadConfiguration {
+	#name : 'Common',
+	#version : '0.1.0',
+	#conditionalPackages : {
+		[
+			'gemstone'
+		] : {
+			'core' : {
+				#packageNames : [
+					'STON-Core',
+					'STON-GemStoneBase',
+					'STON-GemStoneCommon'
+				]
+			}
+		}
+	},
+	#comment : 'Common set of packages '
+}

@@ -233,13 +233,12 @@ RwFileUrl >> pathString [
 	
 	
 	^String streamContents: [ :s | | first |
-		"isAbsolute ifTrue:[ s nextPut: $/ ]."
+		self isAbsolute ifTrue:[ s nextPut: $/ ].
 		first := true.
 		self path do: [ :p |
 			first ifFalse: [ s nextPut: $/ ].
 			first := false.
 			s nextPutAll: p  ] ]
-
 ]
 
 { #category : 'copying' }
@@ -265,8 +264,6 @@ RwFileUrl >> printOn: aStream [
 						aStream nextPutAll: '//';
 						nextPutAll: host].
 
-	isAbsolute ifTrue: [aStream nextPut: $/].
-
 	aStream
 		nextPutAll: self pathString.
 
@@ -274,7 +271,6 @@ RwFileUrl >> printOn: aStream [
 		[aStream
 			nextPut: $#;
 			nextPutAll: fragment ].
-
 ]
 
 { #category : 'private-initialization' }

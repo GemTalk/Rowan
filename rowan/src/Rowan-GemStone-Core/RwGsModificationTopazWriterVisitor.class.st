@@ -52,6 +52,7 @@ Class {
 	#instVars : [
 		'topazFilenameConfigsMap',
 		'topazFilename',
+		'topazFileHeader',
 		'filenameExtension',
 		'classSymbolDictionaryNames',
 		'classDefinitions',
@@ -61,7 +62,8 @@ Class {
 		'classDefPackageNameMap',
 		'classExtPackageNameMap',
 		'classInitializationDefinitions',
-		'buildPackageNamesMap'
+		'buildPackageNamesMap',
+		'repositoryRootPath'
 	],
 	#category : 'Rowan-GemStone-Core'
 }
@@ -242,6 +244,7 @@ RwGsModificationTopazWriterVisitor >> export [
 		| classDefinitionsInOrder classExtensionsInOrder classExtensionsList classDefinitionsList |
 
 		self _setBufferedStreamFor: filename.
+		self bufferedStream nextPutAll: self topazFileHeader.
 
 		classInitializationDefinitions := Set new. "per file record"
 		classDefinitionsList := Set new.
@@ -435,6 +438,31 @@ RwGsModificationTopazWriterVisitor >> processProject: aProjectModification [
 							ifNotNil: [  visitor packageNames ].
 						(topazFilenamePackageNamesMap at: filename ifAbsentPut: [ Set new ]) addAll: packageNames ] ] ].
 	aProjectModification packagesModification acceptVisitor: self
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> repositoryRootPath [
+
+	^ repositoryRootPath
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> repositoryRootPath: aStringOrFileReference [ 
+
+	repositoryRootPath := aStringOrFileReference asFileReference.
+	repositoryRootPath exists ifFalse: [ self error: 'The repository root path must exist: ', repositoryRootPath pathString printString ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> topazFileHeader [
+
+	^ topazFileHeader ifNil: [ '' ]
+]
+
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> topazFileHeader: aString [
+
+	topazFileHeader := aString
 ]
 
 { #category : 'accessing' }

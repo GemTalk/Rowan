@@ -38,9 +38,21 @@ RwAbstractClassDefinition >> _modificationClass [
 ]
 
 { #category : 'accessing' }
+RwAbstractClassDefinition >> addClassMethod: methodSource protocol: protocol [
+
+	^self addClassMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
+]
+
+{ #category : 'accessing' }
 RwAbstractClassDefinition >> addClassMethodDefinition: aMethodDefinition [
 
 	self addDefinition: aMethodDefinition to: classMethodDefinitions
+]
+
+{ #category : 'accessing' }
+RwAbstractClassDefinition >> addInstanceMethod: methodSource protocol: protocol [
+
+	^self addInstanceMethodDefinition: (RwMethodDefinition newForSource: methodSource protocol: protocol)
 ]
 
 { #category : 'accessing' }
@@ -230,10 +242,14 @@ RwAbstractClassDefinition >> name: aString [
 { #category : 'copying' }
 RwAbstractClassDefinition >> postCopy [
 
+	| oldDefs |
 	super postCopy.
-	classMethodDefinitions :=  classMethodDefinitions copy.
-	instanceMethodDefinitions := instanceMethodDefinitions copy
-
+	oldDefs := classMethodDefinitions.
+	classMethodDefinitions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classMethodDefinitions at: key put: value copy ].
+	oldDefs := instanceMethodDefinitions.
+	instanceMethodDefinitions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | instanceMethodDefinitions at: key put: value copy ].
 ]
 
 { #category : 'accessing' }

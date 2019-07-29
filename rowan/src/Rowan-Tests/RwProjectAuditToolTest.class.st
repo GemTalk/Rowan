@@ -59,7 +59,7 @@ RwProjectAuditToolTest >> _auditLoadedClassBlock [
 					((aBehavior class categoryOfSelector: e) first == $*) or: [
 						aLoadedClass includesSelector: e isMeta: true]]) 
 							do: [:aSelector |
-								ar addAll: {aSelector  -> 'Missing loaded classmethod ' }.
+								ar addAll: {aSelector  -> 'Missing loaded class method ' }.
 								GsFile gciLogServer: 'Missing loaded method ', aLoadedClass name, ' class>>', aSelector ].
 				"look for methods removed outside of Rowan API"
 				aLoadedClass 
@@ -71,10 +71,9 @@ RwProjectAuditToolTest >> _auditLoadedClassBlock [
 					loadedClassMethodsDo: [:loadedProject :loadedPackage :loadedClass :aLoadedMethod |
 						(aBehavior class compiledMethodAt: aLoadedMethod name otherwise: nil) 
 							ifNil: [
-								ar addAll: { aLoadedMethod name  -> 'Missing compiled classmethod ' }.
+								ar addAll: { aLoadedMethod name  -> 'Missing compiled class method ' }.
 								GsFile gciLogServer: 'Missing compiled method ', loadedClass name, ' class>>', aLoadedMethod name ] ] ].
 		ar ].
-
 ]
 
 { #category : 'tests' }
@@ -88,10 +87,13 @@ RwProjectAuditToolTest >> _auditLoadedClassExtensionBlock [
 				ar addAll: { 'Class does not exists '-> aLoadedClassExtension name }.
 				GsFile gciLogServer: 'Class does not exist ', aLoadedClassExtension name ]
 			ifNotNil: [ :aBehavior |
-				| selectors extensionCategoryName |
+				| selectors extensionCategoryName categories |
 				extensionCategoryName := '*', aLoadedClassExtension loadedPackage name asLowercase.
 
-				((aBehavior _baseCategorys: 0) keys
+				categories := (aBehavior _baseCategorys: 0)
+					ifNil: [ #() ]
+					ifNotNil: [:catDict | catDict keys ].
+				(categories
 						detect: [:each | each equalsNoCase: extensionCategoryName ]
 						ifNone: [ ])
 					ifNotNil: [:categoryName |
@@ -123,13 +125,16 @@ RwProjectAuditToolTest >> _auditLoadedClassExtensionBlock [
 								GsFile gciLogServer: 'expected methods in category ', extensionCategoryName printString, 'for class ', aLoadedClassExtension name printString ] 
 				].
 
-				((aBehavior class _baseCategorys: 0) keys
+				categories := (aBehavior class _baseCategorys: 0)
+					ifNil: [ #() ]
+					ifNotNil: [:catDict | catDict keys ].
+				(categories
 						detect: [:each | each equalsNoCase: extensionCategoryName ]
 						ifNone: [ ])
 					ifNotNil: [:categoryName |
 						selectors := aBehavior class selectorsIn: categoryName.
 						(selectors reject: [:e | aLoadedClassExtension includesSelector: e isMeta: true]) do: [:aSelector |
-								ar addAll: {aSelector -> 'Missing loaded extensions classmethod: ' }.
+								ar addAll: {aSelector -> 'Missing loaded extensions class method: ' }.
 								GsFile gciLogServer: 'Missing loaded extension method ', aLoadedClassExtension name, ' class>>', aSelector ].
 						selectors do: [:sel |
 							| cMeth lMeth |
@@ -165,7 +170,276 @@ RwProjectAuditToolTest >> _auditLoadedClassExtensionBlock [
 								ar addAll: { aLoadedMethod name -> 'Missing compiled class method: ' }.
 								GsFile gciLogServer: 'Missing compiled  class method ', loadedClass name, ' class>>', aLoadedMethod name ] ] ].
 		ar ].
+]
 
+{ #category : 'tests' }
+RwProjectAuditToolTest >> test_issue478 [
+
+	"https://github.com/GemTalk/Rowan/issues/478"
+
+	| projectName packageNames className packageName1 packageName2 theClass  audit |
+	projectName := 'AuditProject'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extensions'.
+	packageNames := {packageName1 .  packageName2}.
+	className := 'AuditClass'.
+
+	self
+		_loadProjectDefinition: projectName
+		packageNames: packageNames
+		defaultSymbolDictName: self _symbolDictionaryName1
+		comment: 'project for testing audit api'.
+
+	theClass := Object
+		rwSubclass: className
+		instVarNames: #(bar)
+		classVars: #()
+		classInstVars: #()
+		poolDictionaries: #()
+		category: packageName1
+		options: #().
+	self assert: theClass rowanPackageName = packageName1.
+
+	theClass
+		rwCompileMethod: 'bar ^bar'
+		category: '*' , packageName2 asLowercase.
+	 	 
+	theClass
+		rwCompileMethod: 'foo ^''foo'''
+		category: '*' , 'audit-extenSions'.
+
+	self assert: (theClass compiledMethodAt: #bar) rowanPackageName = packageName2.
+	self assert: (theClass compiledMethodAt: #foo) rowanPackageName = packageName2.
+
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty
+]
+
+{ #category : 'tests' }
+RwProjectAuditToolTest >> testAuditAndRepair_issue481_A [
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"extra instance method for packaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName audit symbolList |
+
+	symbolList := Rowan image symbolList.
+
+	projectName := 'AuditProject_481'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AuditedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create loadedProject"
+	self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"add extra instance method"
+	(Rowan globalNamed: className1)
+		compileMethod: 'foobar ^''foobar'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+"audit - audit errors expected"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"audit - repair audit errors"
+	[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+		on: RwAuditMethodErrorNotification
+		do: [:ex | 
+			"adopt the method"
+			Rowan packageTools adopt 
+				adoptMethod: ex selector 
+					inClassNamed: ex className  
+					isMeta: ex isMetaclass 
+					intoPackageNamed: ex packageName.
+			ex resume: false ].
+	self assert: audit isEmpty.
+
+"double check audit - pass"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+]
+
+{ #category : 'tests' }
+RwProjectAuditToolTest >> testAuditAndRepair_issue481_B [
+
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"extra class method for packaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName audit symbolList |
+
+	symbolList := Rowan image symbolList.
+
+	projectName := 'AuditProject_481'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AuditedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create loadedProject"
+	self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"add extra class method"
+	(Rowan globalNamed: className1) class
+		compileMethod: 'foobar ^''foobar'''
+		dictionaries: symbolList
+		category: 'accessing'
+		environmentId: 0.
+
+"audit - audit errors expected"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"audit - repair audit errors"
+	[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+		on: RwAuditMethodErrorNotification
+		do: [:ex | 
+			"adopt the method"
+			Rowan packageTools adopt 
+				adoptMethod: ex selector 
+					inClassNamed: ex className  
+					isMeta: ex isMetaclass 
+					intoPackageNamed: ex packageName.
+			ex resume: false ].
+	self assert: audit isEmpty.
+
+"double check audit - pass"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+]
+
+{ #category : 'tests' }
+RwProjectAuditToolTest >> testAuditAndRepair_issue481_C [
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"extra instance method for unpackaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName audit symbolList |
+
+	symbolList := Rowan image symbolList.
+
+	projectName := 'AuditProject_481'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AuditedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create loadedProject"
+	self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"add extra instance method"
+	(Rowan globalNamed: className2)
+		compileMethod: 'foobar ^''foobar'''
+		dictionaries: symbolList
+		category: '*' , packageName2 asLowercase
+		environmentId: 0.
+
+"audit - audit errors expected"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"audit - repair audit errors"
+	[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+		on: RwAuditMethodErrorNotification
+		do: [:ex | 
+			"adopt the method"
+			Rowan packageTools adopt 
+				adoptMethod: ex selector 
+					inClassNamed: ex className  
+					isMeta: ex isMetaclass 
+					intoPackageNamed: ex packageName.
+			ex resume: false ].
+	self assert: audit isEmpty.
+
+"validate that method is packaged properly"
+	self assert: ((Rowan globalNamed: className2) compiledMethodAt: #foobar) rowanPackageName = packageName2.
+
+"double check audit - pass"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+]
+
+{ #category : 'tests' }
+RwProjectAuditToolTest >> testAuditAndRepair_issue481_D [
+	"https://github.com/GemTalk/Rowan/issues/481"
+
+	"extra class method for unpackaged class"
+
+	| projectName packageNames className1 className2 packageName1 packageName2
+		symDictName audit symbolList |
+
+	symbolList := Rowan image symbolList.
+
+	projectName := 'AuditProject_481'.
+	packageName1 := 'Audit-Core'.
+	packageName2 := 'Audit-Extension'.
+	packageNames := {packageName1 .  packageName2}.
+	symDictName := self _symbolDictionaryName2.
+	className1 := 'AuditedClass'.
+	className2 := 'ExtendedUnpackagedClass'.
+
+"create loadedProject"
+	self 
+		_issue481_projectDefinition: projectName  
+			packageName1: packageName1 
+			packageName2: packageName2 
+			className1: className1 
+			className2: className2 
+			symDictName: symDictName.
+
+"add extra instance method"
+	(Rowan globalNamed: className2) class
+		compileMethod: 'foobar ^''foobar'''
+		dictionaries: symbolList
+		category: '*' , packageName2 asLowercase
+		environmentId: 0.
+
+"audit - audit errors expected"
+	self deny: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
+
+"audit - repair audit errors"
+	[audit := Rowan projectTools audit auditForProjectNamed: projectName ]
+		on: RwAuditMethodErrorNotification
+		do: [:ex | 
+			"adopt the method"
+			Rowan packageTools adopt 
+				adoptMethod: ex selector 
+					inClassNamed: ex className  
+					isMeta: ex isMetaclass 
+					intoPackageNamed: ex packageName.
+			ex resume: false ].
+	self assert: audit isEmpty.
+
+"validate that method is packaged properly"
+	self assert: ((Rowan globalNamed: className2) class compiledMethodAt: #foobar) rowanPackageName = packageName2.
+
+"double check audit - pass"
+	self assert: (audit := Rowan projectTools audit auditForProjectNamed: projectName) isEmpty.
 ]
 
 { #category : 'tests' }
@@ -557,6 +831,6 @@ RwProjectAuditToolTest >> testNotification [
 	theClass compileMissingAccessingMethods. "this should add: #bar #bar:"
 
 
-	[Rowan projectTools audit auditForProjectNamed:  'AuditProject'] on: Notification do: [:ex | self assert: (ex description matchPattern: {$* . 'Missing loaded instance method' . $*})].
+	[Rowan projectTools audit auditForProjectNamed:  'AuditProject'] on: Notification do: [:ex | self assert: (ex description matchPattern: {$* . 'Missing loaded method' . $*})].
 
 ]

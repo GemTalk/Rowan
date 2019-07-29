@@ -25,14 +25,13 @@ RwRowanSample1Test >> testIssue345 [
 	specUrlString := self _rowanSample1LoadSpecificationUrl.
 	projectTools := Rowan projectTools.
 
-	gitRootPath := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+	gitRootPath := rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'.
 
-	(Rowan fileUtilities directoryExists: gitRootPath , projectName)
-		ifTrue: [ Rowan fileUtilities deleteAll: gitRootPath , projectName ].
+	(gitRootPath / projectName) ensureDeleteAll.
 
 	projectTools clone
 		cloneSpecUrl: specUrlString
-		gitRootPath: rowanSpec repositoryRootPath , '/test/testRepositories/repos/'
+		gitRootPath: rowanSpec repositoryRootPath asFileReference / 'test/testRepositories/repos/'
 		useSsh: true.
 
 	rowanSampleSpec := (Rowan image loadedProjectNamed: projectName) specification.
@@ -41,7 +40,7 @@ RwRowanSample1Test >> testIssue345 [
 		defaultSymbolDictName: self _symbolDictionaryName;
 		yourself.
 
-	gitRootPath := rowanSampleSpec repositoryRootPath.
+	gitRootPath := rowanSampleSpec repositoryRootPath asFileReference.
 
 	gitTool := projectTools git.
 	gitTool gitcheckoutIn: gitRootPath with: 'issue_345'.

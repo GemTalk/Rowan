@@ -892,6 +892,13 @@ processSubObjectsOf: object
 
 category: 'initialize-release'
 method: STONReader
+classes
+
+	^ classes
+%
+
+category: 'initialize-release'
+method: STONReader
 reset
 	unresolvedReferences := 0.
 	objects removeAll

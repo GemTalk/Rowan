@@ -5,7 +5,8 @@ Class {
 		'label',
 		'method',
 		'stepPoint',
-		'vars'
+		'vars',
+		'oop'
 	],
 	#category : 'Rowan-Services-Core'
 }
@@ -26,6 +27,7 @@ RowanFrameService >> initializeProcess: aGsProcess level: anInteger organizer: a
 
 	| frameData gsNMethod |
 	frameData := aGsProcess _frameContentsAt: anInteger.
+	oop := (frameData at: 8) asOop.
 	gsNMethod := frameData at: 1.
 	label := aGsProcess _reportAt: anInteger.
 	method := RowanMethodService forGsNMethod: gsNMethod organizer: aClassOrganizer.
@@ -33,6 +35,11 @@ RowanFrameService >> initializeProcess: aGsProcess level: anInteger organizer: a
 		ifTrue: [aGsProcess _stepPointAt: anInteger]
 		ifFalse: [gsNMethod homeMethod _stepPointForMeth: gsNMethod ip: (frameData at: 2)].
 	vars := self varsFor: frameData.
+]
+
+{ #category : 'perform' }
+RowanFrameService >> servicePerform: symbol withArguments: collection [
+	^self perform: symbol withArguments: collection.
 ]
 
 { #category : 'other' }
@@ -63,11 +70,11 @@ RowanFrameService >> varsFor: anArray [
 		ifTrue: [anArray copyFrom: 11 to: anArray size]
 		ifFalse: [#()]).
 	list := Array new.
-	1 to: (keys size min: values size) do: [:i | | oop key value valueClass |
+	1 to: (keys size min: values size) do: [:i | | theOop key value valueClass | 
 		key := keys at: i.
 		value := values at: i.
 		valueClass := value class.
-		oop := value asOop.
+		theOop := value asOop.
 		value := [
 			value printString.
 		] on: Error do: [:ex | 
@@ -75,8 +82,7 @@ RowanFrameService >> varsFor: anArray [
 		].
 		value size > 500 ifTrue: [value := (value copyFrom: 1 to: 500) , '...'].
 		value := value collect: [:char | (char asciiValue < 32 or: [127 < char asciiValue]) ifTrue: [$?] ifFalse: [char]].
-		list add: (RowanVariableService oop: oop key: key value: value className: valueClass name asString).
+		list add: (RowanVariableService oop: theOop key: key value: value className: valueClass name asString).
 	].
 	^list
-
 ]

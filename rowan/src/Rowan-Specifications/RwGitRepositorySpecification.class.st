@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'committish',
 		'committishType',
-		'remote'
+		'remote',
+		'remoteUrl'
 	],
 	#category : 'Rowan-Specifications'
 }
@@ -12,8 +13,7 @@ Class {
 { #category : 'accessing' }
 RwGitRepositorySpecification >> branch: aString [
 
-	self committish: aString.
-	self committishType: 'branch'
+	self committish: aString committishType: 'branch'
 ]
 
 { #category : 'testing' }
@@ -24,11 +24,6 @@ RwGitRepositorySpecification >> canCommit [
 { #category : 'actions' }
 RwGitRepositorySpecification >> commitForTool: aRwTool message: messageString [
   ^ aRwTool doGitCommit: messageString
-]
-
-{ #category : 'actions' }
-RwGitRepositorySpecification >> commitLogForTool: aRwTool limit: logLimit [
-  ^ aRwTool doGitCommitLog: logLimit
 ]
 
 { #category : 'accessing' }
@@ -108,24 +103,33 @@ RwGitRepositorySpecification >> remote: anObject [
 ]
 
 { #category : 'accessing' }
+RwGitRepositorySpecification >> remoteUrl [
+
+	^ remoteUrl
+]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> remoteUrl: aRemoteUrlString [
+
+	remoteUrl := aRemoteUrlString
+]
+
+{ #category : 'accessing' }
 RwGitRepositorySpecification >> SHA: aString [
 
-	self committish: aString.
-	self committishType: 'SHA'
+	self committish: aString committishType: 'SHA'
 ]
 
 { #category : 'accessing' }
 RwGitRepositorySpecification >> tag: aString [
 
-	self committish: aString.
-	self committishType: 'tag'
+	self committish: aString committishType: 'tag'
 ]
 
 { #category : 'accessing' }
 RwGitRepositorySpecification >> tagPattern: aString [
 
-	self committish: aString.
-	self committishType: 'tagPattern'
+	self committish: aString committishType: 'tagPattern'
 ]
 
 { #category : 'actions' }
@@ -137,4 +141,23 @@ RwGitRepositorySpecification >> updateLoadedCommitIdForTool: aRwTool [
 RwGitRepositorySpecification >> useGit [
 
 	^ true
+]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> version [
+
+	| vers |
+	vers :=  self versionString.
+	vers isEmpty ifTrue: [ ^ nil ].
+	^ vers asRwSemanticVersionNumber
+]
+
+{ #category : 'accessing' }
+RwGitRepositorySpecification >> versionString [
+
+	self committishType =  'tag'
+		ifFalse: [ ^ '' ].
+	self committish first = $v
+		ifTrue: [ ^self committish copyFrom: 2 to: self committish size ].
+	^self committish
 ]

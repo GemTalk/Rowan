@@ -2,11 +2,12 @@ Class {
 	#name : 'RwModificationCypressFamilyWriterVisitor',
 	#superclass : 'RwModificationWriterVisitor',
 	#instVars : [
-		'instanceFileNameMap',
-		'classFileNameMap',
 		'classDefFileNameMap',
 		'classExtFileNameMap',
-		'packageDefFileNameMap'
+		'classDefBeforeFileNameMap',
+		'classExtBeforeFileNameMap',
+		'packageDefFileNameMap',
+		'packageDefBeforeFileNameMap'
 	],
 	#category : 'Rowan-Core'
 }
@@ -30,14 +31,20 @@ RwModificationCypressFamilyWriterVisitor >> _commentOf: aClassDefinition [
 RwModificationCypressFamilyWriterVisitor >> _packageSourceDir [
 
 	| filename |
-	filename := packageDefFileNameMap at:  self currentPackageDefinition name.
-	^ self _projectSourceDir /filename, self packageExtension
+	filename := packageDefFileNameMap 
+		at:  self currentPackageDefinition name 
+		ifAbsent: [
+			"in the case of package removal, need to use the before package map"
+			packageDefBeforeFileNameMap at: self currentPackageDefinition name ].
+	^ self packageExtension isEmpty
+		ifTrue: [ self _projectSourceDir /filename ]
+		ifFalse: [ self _projectSourceDir /filename, self packageExtension ]
 ]
 
 { #category : 'project writing' }
 RwModificationCypressFamilyWriterVisitor >> _projectSourceDir [
 
-	^ self repositoryRootPath / self currentProjectDefinition repoPath
+	^ self currentProjectDefinition packagesRoot
 ]
 
 { #category : 'private' }
@@ -54,27 +61,17 @@ RwModificationCypressFamilyWriterVisitor >> _toSTON: anObject [
 ]
 
 { #category : 'actions' }
-RwModificationCypressFamilyWriterVisitor >> changedPackage: aPackageModification [
-
-	currentPackageDefinition := aPackageModification after.
-
-	self halt. "anything need to be done for tonel?"
-
-	self processPackage: aPackageModification
-]
-
-{ #category : 'actions' }
 RwModificationCypressFamilyWriterVisitor >> deletedPackage: aPackageModification [
 
-	currentPackageDefinition := aPackageModification after.
+	currentPackageDefinition := aPackageModification before.
 
-	self halt. "delete the whole package directory"
+	self _packageSourceDir ensureDeleteAll.	"delete the whole package directory"
 ]
 
 { #category : 'package writing' }
 RwModificationCypressFamilyWriterVisitor >> packageExtension [
 
-	^ 'package'
+	^ ''
 ]
 
 { #category : 'package writing' }
@@ -82,6 +79,8 @@ RwModificationCypressFamilyWriterVisitor >> processPackage: aPackageModification
 
 	classDefFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification after classDefinitions.
 	classExtFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification after classExtensions.
+	classDefBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification before classDefinitions.
+	classExtBeforeFileNameMap := self _createFileNameMapForClassesOrPackages:  aPackageModification before classExtensions.
 
 	super processPackage: aPackageModification
 ]

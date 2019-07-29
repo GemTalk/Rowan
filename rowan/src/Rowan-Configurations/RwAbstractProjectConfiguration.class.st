@@ -202,9 +202,8 @@ RwAbstractProjectConfiguration >> export [
 RwAbstractProjectConfiguration >> exportToUrl: fileUrl [
 
 	^ self copy
-		initializeForExport;
+		initializeForExport
 		_exportToUrl: fileUrl
-
 ]
 
 { #category : 'initialization' }

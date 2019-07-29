@@ -19,13 +19,6 @@ RwRepositorySpecification >> commitForTool: aRwTool message: messageString [
   
 ]
 
-{ #category : 'actions' }
-RwRepositorySpecification >> commitLogForTool: aRwTool limit: logLimit [
-  "commit log not supported by default"
-
-  
-]
-
 { #category : 'initialization' }
 RwRepositorySpecification >> initializeForExport [
   "if spec has been exported, clear out any of the fields that represent local disk state"
@@ -64,6 +57,12 @@ RwRepositorySpecification >> pushForTool: aRwTool remote: remoteOrNil [
 ]
 
 { #category : 'accessing' }
+RwRepositorySpecification >> remoteUrl [
+
+	^ nil
+]
+
+{ #category : 'accessing' }
 RwRepositorySpecification >> repositoryRootPath [
 
    ^repositoryRootPath
@@ -77,6 +76,12 @@ RwRepositorySpecification >> repositoryRootPath: anObject [
 
 ]
 
+{ #category : 'accessing' }
+RwRepositorySpecification >> repositoryRootReference [
+
+   ^repositoryRootPath asFileReference
+]
+
 { #category : 'actions' }
 RwRepositorySpecification >> updateLoadedCommitIdForTool: aRwTool [
   "commit not supported by default"
@@ -88,4 +93,10 @@ RwRepositorySpecification >> updateLoadedCommitIdForTool: aRwTool [
 RwRepositorySpecification >> useGit [
 
 	^ false
+]
+
+{ #category : 'accessing' }
+RwRepositorySpecification >> version [
+
+	^ nil
 ]

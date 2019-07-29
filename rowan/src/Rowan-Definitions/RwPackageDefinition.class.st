@@ -36,13 +36,54 @@ RwPackageDefinition class >> withProperties: properties classDefinitions: classD
 { #category : 'accessing' }
 RwPackageDefinition >> addClassDefinition: aClassDefinition [
 
-	self addDefinition: aClassDefinition to: classDefinitions
+	^ self addDefinition: aClassDefinition to: classDefinitions
 ]
 
 { #category : 'accessing' }
 RwPackageDefinition >> addClassExtensionDefinition: aClassExtensionDefinition [
 
-	self addDefinition: aClassExtensionDefinition to: classExtensions
+	^ self addDefinition: aClassExtensionDefinition to: classExtensions
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassExtensionNamed: className [
+
+	^ self addClassExtensionDefinition: (RwClassExtensionDefinition newForClassNamed: className)
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName category: categryName [
+
+	^ self addClassDefinition: (RwClassDefinition newForClassNamed: className super: superclassName  category: categryName)
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> addClassNamed: className super: superclassName instvars: instvars classinstvars: classinstvars classvars: classvars category: category comment: comment pools: pools type: type [
+
+	^ self addClassDefinition: 
+		(RwClassDefinition 
+			newForClassNamed: className 
+				super: superclassName 
+				instvars: instvars 
+				classinstvars: 
+				classinstvars 
+				classvars: classvars 
+				category: category 
+				comment: comment 
+				pools: pools 
+				type: type)
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> classDefinitionNamed: className [
+
+	^ self classDefinitionNamed: className ifAbsent: [ self error: 'No class definition found with the name ', className printString ]
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> classDefinitionNamed: className ifAbsent: absentBlock [
+
+	^ self classDefinitions at: className ifAbsent: absentBlock
 ]
 
 { #category : 'accessing' }
@@ -55,6 +96,12 @@ RwPackageDefinition >> classDefinitions [
 RwPackageDefinition >> classDefinitions: classDefinitionDictionary [
 
 	classDefinitions := classDefinitionDictionary
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> classExtensionDefinitionNamed: className ifAbsent: absentBlock [
+
+	^ self classExtensions at: className ifAbsent: absentBlock
 ]
 
 { #category : 'accessing' }
@@ -94,10 +141,14 @@ RwPackageDefinition >> key [
 { #category : 'copying' }
 RwPackageDefinition >> postCopy [
 
+	| oldDefs |
 	super postCopy.
-	classDefinitions := classDefinitions copy.
-	classExtensions := classExtensions copy
-
+	oldDefs := classDefinitions.
+	classDefinitions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classDefinitions at: key put: value copy ].
+	oldDefs := classExtensions.
+	classExtensions := Dictionary new.
+	oldDefs keysAndValuesDo: [:key :value | classExtensions at: key put: value copy ].
 ]
 
 { #category : 'accessing' }
@@ -110,6 +161,12 @@ RwPackageDefinition >> removeClassDefinition: aClassDefinition [
 RwPackageDefinition >> removeClassExtensionDefinition: aClassExtension [
 
 	self removeDefinition: aClassExtension from: classExtensions
+]
+
+{ #category : 'accessing' }
+RwPackageDefinition >> removeClassExtensionDefinitionNamed: className [
+
+	self removeKey: className from: classExtensions
 ]
 
 { #category : 'accessing' }

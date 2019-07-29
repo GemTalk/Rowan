@@ -22,10 +22,22 @@ Rowan class >> automaticClassInitializationBlackList [
 ]
 
 { #category : 'public client services' }
+Rowan class >> browserServiceClass [
+
+	^ self platform browserServiceClass
+]
+
+{ #category : 'public client services' }
 Rowan class >> classServiceClass [
 
 	^ self platform classServiceClass
 
+]
+
+{ #category : 'public tools' }
+Rowan class >> classTools [
+
+	^ self platform classTools
 ]
 
 { #category : 'public' }
@@ -43,6 +55,12 @@ Rowan class >> clearDefaultAutomaticClassInitializationBlackList [
 		Individual users may override the black list."
 
 	^ self platform clearAutomaticClassInitializationBlackList_default
+]
+
+{ #category : 'public client services' }
+Rowan class >> commandResultClass [
+
+	^ self platform commandResultClass
 ]
 
 { #category : 'public' }
@@ -95,6 +113,12 @@ Rowan class >> jadeServerClassNamed: className [
 ]
 
 { #category : 'public client services' }
+Rowan class >> loggingServiceClass [
+
+	^ self platform loggingServiceClass
+]
+
+{ #category : 'public client services' }
 Rowan class >> methodServiceClass [
 
 	^ self platform methodServiceClass
@@ -135,6 +159,50 @@ Rowan class >> platformConfigurationAttributes [
 
 	^ self platform platformConfigurationAttributes
 
+]
+
+{ #category : 'public' }
+Rowan class >> projectNamed: aName [
+
+	"Answer a project with the given name.  If no project with the given name is found, signals error."
+
+	^ self 
+		projectNamed: aName 
+			ifPresent: [:loadedProject | loadedProject ]
+			ifAbsent: [ self error: 'The project ', aName printString, ' was not found' ]
+]
+
+{ #category : 'public' }
+Rowan class >> projectNamed: aName ifAbsent: absentBlock [
+
+	"Lookup a project with the given name, if found return the project. if not found evaluate the <absentBlock>."
+
+	^ self 
+		projectNamed: aName 
+			ifPresent: [:loadedProject | loadedProject ]
+			ifAbsent: absentBlock
+]
+
+{ #category : 'public' }
+Rowan class >> projectNamed: aName ifPresent: presentBlock [
+
+	"Lookup a project with the given name, if found evaluate the <presentBlock>. if not found return nil."
+
+	^ self 
+		projectNamed: aName 
+			ifPresent: presentBlock
+			ifAbsent: []
+]
+
+{ #category : 'public' }
+Rowan class >> projectNamed: aName ifPresent: presentBlock ifAbsent: absentBlock [
+
+	"Lookup a project with the given name, if found evaluate the <presentBlock>, if not evaluate the <absentBlock.."
+
+	^ self platform 
+		projectNamed: aName 
+			ifPresent: presentBlock 
+			ifAbsent: absentBlock
 ]
 
 { #category : 'public' }

@@ -6,7 +6,6 @@ run
 	deprecationAction := Deprecated deprecatedAction.
 	warnings := {}.
 	[
-		Deprecated doErrorOnDeprecated.
 		projectNames := #( 'Rowan' 'STON' 'Cypress' 'Tonel' 'FileSystemGs' ).
 		"audit before load"
 		projectNames do: [:projectName |
@@ -20,14 +19,15 @@ run
 				"make sure test group is loaded ... include deprecated packages"
 				Rowan projectTools load
 					loadProjectNamed: projectName
-					withGroupNames: #('tests' 'deprecated' 'jadeServer' 'deprecated tests') ]
+					withGroupNames: #('core' 'tests' 'deprecated' 'jadeServer' 'deprecated tests') ]
 			ifFalse: [
 				"make sure test group is loaded ... do NOT include deprecated packages"
 				Rowan projectTools load
 					loadProjectNamed: projectName
-					withGroupNames: #('tests' 'jadeServer') ] ]
+					withGroupNames: #('core' 'tests' 'jadeServer') ] ]
 					on: CompileWarning do: [:ex |
-						warnings add: ex asString printString.
+						(ex description includesString: 'not optimized')
+							ifFalse: [ warnings add: ex asString printString ].
 						ex resume ] ].
 
  		warnings isEmpty ifFalse: [
@@ -44,9 +44,11 @@ run
 			audit isEmpty ifFalse: [ self error: 'Post load Rowan audit failed for project ', projectName printString ].
  ].
 
+		Deprecated doErrorOnDeprecated.
+
 		suite := Rowan projectTools test testSuiteForProjectsNamed: projectNames.
 
-		true
+		false	
 			ifTrue: [ 
 				"Deprection error will halt tests immediately"
 				res := suite run ]
@@ -80,3 +82,4 @@ run
 					ifTrue: [ Deprecated doErrorOnDeprecated ].
 			].
 %
+

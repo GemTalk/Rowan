@@ -28,6 +28,22 @@ RwPrjCreateTool >> _createProjectRepositoryDirectory: repoPathIn useGit: useGit 
 					gitTool gitinitIn: repoPath pathString with: '' ] ]
 ]
 
+{ #category : 'component project defintion creation' }
+RwPrjCreateTool >> createComponentProject: componentProjectDefinition [
+
+	"Create create new repository on `disk`, based on the given repository definition."
+
+	self createProjectRepository: componentProjectDefinition projectRef.
+
+	componentProjectDefinition exportProjects.
+	componentProjectDefinition exportComponents.
+	componentProjectDefinition exportPackages.
+
+	componentProjectDefinition register.
+
+	^ componentProjectDefinition
+]
+
 { #category : 'loaded project creation' }
 RwPrjCreateTool >> createDiskBasedProject: projectName packageNames: packageNames format: format root: rootPath [
 
@@ -199,23 +215,23 @@ RwPrjCreateTool >> createProjectDefinitionFromSpecUrl: fileUrlOrString projectRo
 	"Answer a project definition based on the spec given in <fileUrlOrString> 
 		<projectRootPath> is the path to the root directory of the Rowan project"
 
-	| path fileUrl spec projectDefinition |
+	| path fileUrl spec projectDefinition projectRootRef |
 	fileUrl := fileUrlOrString asRwUrl.
 	fileUrl scheme = 'file'
 		ifFalse: [ self error: 'the url ', fileUrlOrString printString, ' is expected to be a file: url referencing a project specification file in an existing Rowan project' ].
 	spec := fileUrl asSpecification.
+	projectRootRef := projectRootPath  asFileReference.
 	spec 
-		repositoryRootPath: projectRootPath;
-		repositoryUrl: 'cypress:', projectRootPath, '/', spec repoPath, '/'.
-	path :=  spec repositoryRootPath , '/' , spec repoPath , '/'.
-	(Rowan fileUtilities directoryExists: path)
-		ifFalse: [ self error: 'No source repository found at ' , path printString ].
-	path :=  spec repositoryRootPath , '/' , spec configsPath , '/'.
-	(Rowan fileUtilities directoryExists: path)
-		ifFalse: [ self error: 'No configuration directory found at ' , path printString ].
+		repositoryRootPath: projectRootRef ;
+		repositoryUrl: 'cypress:', (projectRootRef  / spec repoPath) pathString, '/'.
+	path :=  spec repositoryRootPath / spec repoPath.
+	path exists
+		ifFalse: [ self error: 'No source repository found at ' , path pathString printString ].
+	path :=  spec repositoryRootPath / spec configsPath.
+	path exists
+		ifFalse: [ self error: 'No configuration directory found at ' , path pathString printString ].
 	projectDefinition := spec asDefinition.
 	^ projectDefinition
-
 ]
 
 { #category : 'loaded project creation' }
@@ -317,4 +333,27 @@ RwPrjCreateTool >> createProjectFromSpecUrl: fileUrlOrString [
 	projectDefinition := self createProjectDefinitionFromSpecUrl: fileUrlOrString.
 	^ self createProjectFor: projectDefinition
 
+]
+
+{ #category : 'project repository creation' }
+RwPrjCreateTool >> createProjectRepository: projectReferenceDefinition [
+
+	"Create create new repository on `disk`, based on the given repository definition."
+
+	| repositoryDefinition |
+	repositoryDefinition := projectReferenceDefinition repositoryDefinition.
+	self _createProjectRepositoryDirectory: 
+		repositoryDefinition repositoryRoot 
+		useGit: projectReferenceDefinition useGit 
+		abort: [
+			"abort occurs because directory exists and user has not confirmed that the directory should be deleted"
+			"cofirm that the repository appears to be complete relative to this project ... we will likely be writing new information to the repo"
+			projectReferenceDefinition validateRepository.
+			^ projectReferenceDefinition ].
+
+	{projectReferenceDefinition configsRoot. projectReferenceDefinition packagesRoot. projectReferenceDefinition specsRoot. projectReferenceDefinition projectsRoot }
+		do: [ :path | path ensureCreateDirectory ].
+
+	projectReferenceDefinition exportSpecification.
+	^ projectReferenceDefinition
 ]

@@ -64,6 +64,9 @@ RowanProjectService >> addPackageNamed: packageName [
 
 { #category : 'initialization' }
 RowanProjectService >> basicRefresh [
+	name = Rowan unpackagedName ifTrue:[
+		isLoaded := false.
+		RowanBrowserService new updateDictionaries. ^self]. 
 	(isLoaded := self projectIsLoaded) ifFalse:[
 		existsOnDisk := false. 
 		updateType := #removedProject:. 
@@ -99,13 +102,15 @@ RowanProjectService >> changes [
 	| jadeServer |
 	jadeServer := Rowan platform jadeServerClassNamed: #JadeServer. 
 	changes := Array new. 
-	self packageNames do:[:packageName |
+	(Rowan projectTools diff
+		patchesForProjectNamed: 'Rowan') do: [:assoc | 
+			"key is packageName, value is a CypressPatch"
 			| patch |
-			patch := Rowan packageTools diff patchForPackageName: packageName.
+			patch := assoc value.
 			changes add:(jadeServer new
 				_mcDescriptionOfPatch: patch
 				baseName: 'closest ancestor'
-				alternateName: nil)].
+				alternateName: nil) ].
 	self refresh.
 	RowanCommandResult addResult: self.
 ]
@@ -116,9 +121,8 @@ RowanProjectService >> checkout: branchName [
 	| project branches |
 
 	project := (RwProject newNamed: name). 
-	branches := Rowan gitTools gitcheckoutIn: project repositoryRootPath with: branchName.
+	branches := Rowan gitTools gitcheckoutIn: project repositoryRootPath asFileReference with: branchName.
 	^branches
-
 ]
 
 { #category : 'client commands' }

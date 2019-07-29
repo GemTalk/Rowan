@@ -51,14 +51,20 @@ RwSpecification class >> new [
 	^self basicNew initialize
 ]
 
+{ #category : 'conversion' }
+RwSpecification >> asSpecification [
+
+	^ self
+]
+
 { #category : 'private' }
 RwSpecification >> currentVersion [
 	"
 		0.1.0 - initial version for specs
 		0.2.0 - defaultConfigurationNames and defaultGroupNames i.v. added to RwProjectSpecification
+		0.3.0 - remoteUrl i.v. added to RwGitRepositorySpecification
 	"
-	^ '0.2.0'
-
+	^ '0.3.0'
 ]
 
 { #category : 'initialization' }
@@ -90,4 +96,10 @@ RwSpecification >> postCopy [
 { #category : 'accessing' }
 RwSpecification >> projectUrl: ignored [
   
+]
+
+{ #category : 'accessing' }
+RwSpecification >> version [
+
+	^ nil
 ]

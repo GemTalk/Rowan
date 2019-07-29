@@ -33,14 +33,13 @@ RwProjectReaderWriterTest >> _markForProjectCleanup: aProjectName [
 ]
 
 { #category : 'private' }
-RwProjectReaderWriterTest >> _projectSetDefinitionForStructureWriters_A [
+RwProjectReaderWriterTest >> _projectDefinitionForStructureWriters_A: projectName format: repositoryFormat [
 
 	"multiple class extensions from multiple packages for multiple classes"
 
-	|  projectName packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
-		classExtensionDefinition projectSetDefinition packageName3 |
+	| packageName1 packageName2 projectDefinition classDefinition packageDefinition className1 className2 className3
+		classExtensionDefinition packageName3 rowanSpec projectHome |
 
-	projectName := 'Issue361'.
 	self _markForProjectCleanup: projectName.
 	packageName1 := 'Issue361-Core'.
 	packageName2 := 'Issue361-Extension1'.
@@ -49,9 +48,15 @@ RwProjectReaderWriterTest >> _projectSetDefinitionForStructureWriters_A [
 	className2 := 'Issue361Class2'. 
 	className3 := 'Issue361Class3'. 
 
+	rowanSpec := (Rowan image _projectForNonTestProject: 'Rowan') specification.
+	projectHome := rowanSpec repositoryRootPath , '/test/testRepositories/repos/'.
+
+
 "create definitions"
-	projectDefinition := (RwProjectDefinition
+	projectDefinition := (RwComponentProjectDefinition
 		newForDiskBasedProjectNamed: projectName)
+		packageFormat: repositoryFormat;
+		projectHome: projectHome;
 		addPackageNamed: packageName1;
 		addPackageNamed: packageName2;
 		addPackageNamed: packageName3;
@@ -68,14 +73,19 @@ RwProjectReaderWriterTest >> _projectSetDefinitionForStructureWriters_A [
 		classinstvars: #()
 		classvars: #()
 		category: packageName1
-		comment: ''
+		comment: 'this is a test comment for ', className1
 		pools: #()
 		type: 'normal'.
 	classDefinition
+		addInstanceMethodDefinition: 
+			(RwMethodDefinition
+					newForSelector: #'method6'
+					protocol: 'instance accessing'
+					source: 'method6 ^6');
 		addClassMethodDefinition:
 			(RwMethodDefinition
 					newForSelector: #'method2'
-					protocol: 'accessing'
+					protocol: 'class accessing'
 					source: 'method2 ^2').
 	packageDefinition addClassDefinition: classDefinition.
 
@@ -86,7 +96,7 @@ RwProjectReaderWriterTest >> _projectSetDefinitionForStructureWriters_A [
 		classinstvars: #()
 		classvars: #()
 		category: packageName1
-		comment: ''
+		comment: 'this is a test comment for ', className2
 		pools: #()
 		type: 'normal'.
 	classDefinition
@@ -104,15 +114,30 @@ RwProjectReaderWriterTest >> _projectSetDefinitionForStructureWriters_A [
 		classinstvars: #()
 		classvars: #()
 		category: packageName1
-		comment: ''
+		comment: 'this is a test comment for ', className3
 		pools: #()
 		type: 'normal'.
 	classDefinition
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method8:'
+					protocol: 'accessing'
+					source: 'method8: ignored ^ignored');
+		addInstanceMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method9'
+					protocol: 'accessing'
+					source: 'method9 ^9');
 		addClassMethodDefinition:
 			(RwMethodDefinition
 					newForSelector: #'method4'
 					protocol: 'accessing'
-					source: 'method4 ^4').
+					source: 'method4 ^4');
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method10'
+					protocol: 'accessing'
+					source: 'method10 ^10').
 	packageDefinition addClassDefinition: classDefinition.
 
 	classExtensionDefinition := RwClassExtensionDefinition newForClassNamed: className1.
@@ -133,38 +158,15 @@ RwProjectReaderWriterTest >> _projectSetDefinitionForStructureWriters_A [
 			(RwMethodDefinition
 					newForSelector: #'method5'
 					protocol: '*', packageName3 asLowercase
-					source: 'method5 ^5').
+					source: 'method5 ^5');
+		addClassMethodDefinition:
+			(RwMethodDefinition
+					newForSelector: #'method6'
+					protocol: '*', packageName3 asLowercase
+					source: 'method6 ^6').
 	packageDefinition addClassExtensionDefinition: classExtensionDefinition.
 
-"project set"
-	projectSetDefinition := RwProjectSetDefinition new.
-	projectSetDefinition addDefinition: projectDefinition.
-
-	^ projectSetDefinition
-]
-
-{ #category : 'private' }
-RwProjectReaderWriterTest >> _writeProjectSetDefinition: projectSetDefinition writerVisitorClass: writerVisitorClass format: repositoryFormat [
-
-	| projectName projectDefinition projectSetModification visitor repositoryRootPath |
-"project set"
-	projectName := projectSetDefinition projectNames at: 1.
-	projectDefinition := projectSetDefinition projectNamed: projectName ifAbsent: [].
-
-"set project up for using filesystem"
-	repositoryRootPath := filesystem workingDirectory / projectName.
-	self _markForCleanup: (filesystem workingDirectory / projectName).
-
-	projectDefinition repositoryRootPath: repositoryRootPath.
-	Rowan projectTools create createProjectFor: projectDefinition format:repositoryFormat.
-
-"write project set"
-	projectSetModification := projectSetDefinition compareAgainstBase: RwProjectSetDefinition new. "compare against empty project to write out entire project"
-	visitor := writerVisitorClass new
-		repositoryRootPath: repositoryRootPath;
-		yourself.
-
-	visitor visit: projectSetModification.
+	^ projectDefinition
 ]
 
 { #category : 'running' }
@@ -181,6 +183,10 @@ RwProjectReaderWriterTest >> tearDown [
 		select: [ :aFileRef | aFileRef exists ]
 		thenDo: [ :aFileRef | aFileRef deleteAll ].
 	projectsToDelete
-		do: [ :projectName | Rowan projectTools delete deleteProjectNamed: projectName ].
+		do: [ :projectName | 
+		(Rowan image loadedProjectNamed: projectName ifAbsent: [  ])
+			ifNotNil: [ :prj | Rowan image _removeLoadedProject: prj ].
+			(Rowan image projectRepositoryNamed: projectName ifAbsent: [  ])
+				ifNotNil: [ :repo | Rowan image _removeProjectRepository: repo ] ].
 	super tearDown
 ]

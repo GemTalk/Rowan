@@ -1,0 +1,19 @@
+RwComponentSpecification {
+	#specName : 'Issue122',
+	#version : '0.3.0',
+	#projectUrl : '',
+	#configsPath : 'tonel/rowan/configs',
+	#specsPath : 'tonel/rowan/specs',
+	#repoSpec : RwDiskRepositorySpecification {
+		
+	},
+	#repoPath : 'tonel/rowan/src',
+	#comment : '',
+	#defaultConfigurationNames : [
+		'Core_ProtocolValidationError'
+	],
+	#defaultGroupNames : [
+		'core'
+	],
+	#projectsPath : 'tonel/rowan/projects'
+}

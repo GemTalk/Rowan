@@ -13,6 +13,7 @@
 					'Rowan-Core-Definitions-Extensions',
 					'Rowan-Cypress-Definitions',
 					'Rowan-Specifications',
+					'Rowan-Components',
 					'Rowan-Core-Definitions-Extensions',
 					'Rowan-Configurations',
 					'Rowan-Core',
@@ -32,27 +33,38 @@
 		[ 'gemstone' ] : {
       'core': {
 				#packageNames : [
+					'AST-Core',
 					'Rowan-Services-Extensions',
 					'Rowan-Services-Core',
 					'Rowan-GemStone-Core',
 					'Rowan-GemStone-Loader',
 					'Rowan-GemStone-Loader-Extensions',
 					'Rowan-GemStone-Definitions',
-					'Rowan-GemStone-Specifications'
+					'Rowan-GemStone-Components',
+					'Rowan-GemStone-Specifications',
+					'Rowan-GemStone-Components-Extensions'
+					]
+				}
+			},
+		[ 'gs3.[2-4]' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-Loader32x'
 					]
 				}
 			},
 		[ 'gs3.[2-]' ] : {
       'core': {
 				#packageNames : [
-          'GemStone-Interactions-Core'
+          'GemStone-Interactions-Core',
+					'Rowan-Url-3215'
 					]
 				}
 			},
-		[ 'gs3.2.[15-]' ] : {
+		[ 'gs3.[5-]' ] : {
       'core': {
 				#packageNames : [
-					'Rowan-Url-3215'
+					'Rowan-GemStone-Loader35x'
 					]
 				}
 			}
@@ -61,12 +73,16 @@
 		'gemstone' : {
 			'SystemUser' : {
 				#packageNameToPlatformPropertiesMap : {
+					'Rowan-GemStone-Loader32x' : { 'symbolDictName' : 'RowanLoader' },
+					'Rowan-GemStone-Loader35x' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-GemStone-Loader' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-GemStone-Loader-Deprecated' : { 'symbolDictName' : 'RowanLoader' },
 					'Rowan-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Core-Definitions-Extensions' : { 'symbolDictName' : 'RowanTools' },
-					'Rowan-Configurations' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Components' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Specifications' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-GemStone-Components-Extensions' : { 'symbolDictName' : 'RowanTools' },
+					'Rowan-Configurations' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-Definitions' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-GemStone-Specifications' : { 'symbolDictName' : 'RowanTools' },
 					'Rowan-Definitions-Deprecated' : { 'symbolDictName' : 'RowanTools' },

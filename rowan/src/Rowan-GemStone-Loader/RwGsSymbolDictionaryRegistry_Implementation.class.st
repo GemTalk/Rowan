@@ -44,7 +44,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> _addMovedDeletedMethod: new
 	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
 	selector := newCompiledMethod selector.
 	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	oldCompiledMethod := methodDictionary
 		at: selector
 		ifAbsent: [ 
@@ -301,7 +301,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addClassAssociation: assoc 
 RwGsSymbolDictionaryRegistry_Implementation class >> addExtensionCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance [
 
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassExtension |
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	methodDictionary at: selector put: compiledMethod.
 	self _clearLookupCachesFor: behavior env: 0.
@@ -401,7 +401,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addMovedDeletedMethod: comp
 		back using specialized processing"
 
 	| methodDictionary selector |
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
 	selector := compiledMethod selector.
 	methodDictionary 
 		at: selector 
@@ -439,7 +439,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addNewClassVersionToAssocia
 RwGsSymbolDictionaryRegistry_Implementation class >> addNewCompiledMethod: compiledMethod for: behavior protocol: protocolString toPackageNamed: packageName instance: registryInstance [
 
 	| methodDictionary selector protocolSymbol existing loadedMethod loadedPackage loadedClassOrExtension |
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	selector := compiledMethod selector.
 	(methodDictionary at: selector ifAbsent: [  ])
 		ifNotNil: [ :oldCompiledMethod | 
@@ -487,7 +487,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> addRecompiledMethod: newCom
 	| selector behavior methodDictionary oldCompiledMethod loadedMethod |
 	selector := newCompiledMethod selector.
 	behavior := newCompiledMethod inClass.
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := behavior rwGuaranteePersistentMethodDictForEnv: 0.
 	oldCompiledMethod := methodDictionary
 		at: selector
 		ifAbsent: [ 
@@ -815,8 +815,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveClassFor: classMove [
 	theBehavior := theClass class.
 	oldRegistry := originalSymbolDictionary rowanSymbolDictionaryRegistry.
 
-	newSymbolDictionary := Rowan globalNamed: ((classMove projectAfter specification platformSpec at: 'gemstone')
-				symbolDictNameForPackageNamed: classMove packageAfter name) .
+	newSymbolDictionary := Rowan globalNamed: (classMove projectAfter symbolDictNameForPackageNamed: classMove packageAfter name) .
 	newRegistry := newSymbolDictionary rowanSymbolDictionaryRegistry.
 
 	loadedClass := oldRegistry classRegistry removeKey: theClass classHistory.
@@ -846,7 +845,6 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveClassFor: classMove [
 		compiledMethod := theBehavior compiledMethodAt: loadedMethod selector asSymbol.
 		oldRegistry methodRegistry removeKey: compiledMethod.
 		newRegistry methodRegistry at: compiledMethod put: loadedMethod ].
-
 ]
 
 { #category : 'method - patch api' }
@@ -858,7 +856,7 @@ RwGsSymbolDictionaryRegistry_Implementation class >> moveCompiledMethod: compile
 	selector := compiledMethod selector.
 	behavior := compiledMethod inClass.
 
-	methodDictionary := behavior persistentMethodDictForEnv: 0.
+	methodDictionary := (behavior persistentMethodDictForEnv: 0 ) ifNil:[ Dictionary new ].
 	existingCompiledMethod := methodDictionary
 		at: selector
 		ifAbsent: [ 

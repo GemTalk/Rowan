@@ -1,0 +1,23 @@
+RwComponentSpecification {
+	#specName : 'RowanSample2',
+	#comment : 'standard load spec',
+	#version : '0.3.0',
+	#projectUrl : 'https://github.com/dalehenrich/RowanSample2',
+	#configsPath : 'components',
+	#projectsPath : 'projects',
+	#repoPath : 'src',
+	#specsPath : 'specs',
+	#repoSpec : RwGitRepositorySpecification {
+		#committish : 'masterV2.0',
+		#committishType : 'branch'
+	},
+	#defaultConfigurationNames : [
+		'Core'
+	],
+	#defaultGroupNames : [
+		'core'
+	],
+	#defaultComponentName : 'Core'
+}
+
+

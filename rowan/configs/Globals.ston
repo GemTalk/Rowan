@@ -6,13 +6,15 @@
     	'core': {
 				#packageNames : [
 					'Rowan-Cypress-Kernel',
-					'Rowan-Tools-Kernel'
+					'Rowan-Tools-Kernel',
+					'Rowan-Components-Kernel'
 					]
 				}
 			},
 		[ 'gemstone' ] : {
       'core': {
 				#packageNames : [
+					'AST-Kernel-Core',
 					'Rowan-GemStone-Kernel'
 					]
 				}
@@ -20,14 +22,22 @@
 		[ 'gs3.[2-]' ] : {
       'core': {
 				#packageNames : [
-					'GemStone-Interactions-Kernel'
+					'GemStone-Interactions-Kernel',
+					'Rowan-GemStone-3215'
 					]
 				}
 			},
-		[ 'gs3.2.[15-]' ] : {
+		[ 'gs3.[2-4]' ] : {
       'core': {
 				#packageNames : [
-					'Rowan-GemStone-3215'
+					'Rowan-GemStone-32x'
+					]
+				}
+			},
+		[ 'gs3.[5-]' ] : {
+      'core': {
+				#packageNames : [
+					'Rowan-GemStone-35x'
 					]
 				}
 			}
@@ -36,11 +46,15 @@
 		'gemstone' : {
 			'SystemUser' : {
 				#packageNameToPlatformPropertiesMap : {
+					'AST-Kernel-Core' : { 'symbolDictName' : 'Globals' },
+					'Rowan-Components-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Cypress-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-GemStone-Kernel' : { 'symbolDictName' : 'Globals' },
 					'Rowan-Tools-Kernel' : { 'symbolDictName' : 'Globals' },
 					'GemStone-Interactions-Kernel' : { 'symbolDictName' : 'Globals' },
-					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' }
+					'Rowan-GemStone-3215' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-32x' : { 'symbolDictName' : 'Globals' },
+					'Rowan-GemStone-35x' : { 'symbolDictName' : 'Globals' }
 					}
 				}
 			}

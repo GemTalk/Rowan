@@ -274,6 +274,13 @@ RwGsPlatform >> instanceMigrator: anInstanceMigrator [
 	instanceMigrator := anInstanceMigrator
 ]
 
+{ #category : 'queries' }
+RwGsPlatform >> orderedDictionaryClass [
+  "Answer the platform-specific OrderedDictionary-compatible class"
+
+  ^ GsTonelOrderedDictionary
+]
+
 { #category : 'parsing' }
 RwGsPlatform >> parseSelectorFrom: methodString [
 

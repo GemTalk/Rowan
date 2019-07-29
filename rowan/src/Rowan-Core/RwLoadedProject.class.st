@@ -68,6 +68,12 @@ RwLoadedProject >> asDefinition [
 		packageDefinitions: self loadedPackageDefinitions
 ]
 
+{ #category : 'commit log' }
+RwLoadedProject >> commitLog: logLimit [
+
+	self subclassResponsibility: #commitLog:
+]
+
 { #category : 'initialization' }
 RwLoadedProject >> initialize [
 
@@ -108,6 +114,12 @@ RwLoadedProject >> isEmpty [
 RwLoadedProject >> key [
 
 	^ name
+]
+
+{ #category : 'accessing' }
+RwLoadedProject >> loadedCommitId [
+
+	self subclassResponsibility: #loadedCommitId
 ]
 
 { #category : 'accessing' }
@@ -166,9 +178,8 @@ RwLoadedProject >> markDirty [
 { #category : 'private' }
 RwLoadedProject >> markNotDirty [
 	"I have been changed to be consistent with my source, so mark not dirty."
-self halt.
-	isDirty := false
 
+	isDirty := false
 ]
 
 { #category : 'private' }
@@ -183,6 +194,18 @@ RwLoadedProject >> packageNames [
 	"Return list of package names in the receiver"
 
 	^ self loadedPackages keys asArray
+]
+
+{ #category : 'accessing' }
+RwLoadedProject >> prettyName [
+
+	^' project ' , self name
+]
+
+{ #category : 'accessing' }
+RwLoadedProject >> projectDefinitionSourceProperty [
+
+	^ properties at: RwLoadedProject _projectDefinitionSourceKey ifAbsent: [ RwLoadedProject _projectUnknownDefinitionSourceValue ]
 ]
 
 { #category : 'accessing' }
@@ -210,8 +233,20 @@ RwLoadedProject >> removeLoadedPackage: aLoadedPackage [
 	loadedPackages removeKey: aLoadedPackage key
 ]
 
+{ #category : 'accessing' }
+RwLoadedProject >> repositoryCommitId [
+
+	self subclassResponsibility: #repositoryCommitId
+]
+
 { #category : 'properties' }
 RwLoadedProject >> specification [
 
 	^ properties at: 'spec'
+]
+
+{ #category : 'testing' }
+RwLoadedProject >> useGit [
+
+	^ self subclassResponsibility: #useGit
 ]

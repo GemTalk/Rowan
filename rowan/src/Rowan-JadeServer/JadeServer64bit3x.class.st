@@ -139,17 +139,13 @@ JadeServer64bit3x >> compileMethod: methodString behavior: aBehavior symbolList:
 
 	| method warnings | 
 
-	[[((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile ifAbsent:[false]) ifTrue:[
-			[ method := aBehavior rwCompileMethod: methodString category: categorySymbol ]
+	[[ 
+			[[ method := aBehavior rwCompileMethod: methodString category: categorySymbol ]
 					on: RwExecuteClassInitializeMethodsAfterLoadNotification
-					do: [:ex | ex resume: false ] ]
-		ifFalse:[
-			method := aBehavior
-			compileMethod: methodString
-			dictionaries: aSymbolList
-			category: categorySymbol
-			environmentId: environment].
-	] on: CompileError do: [:ex |
+					do: [:ex | ex resume: false ]]
+						on: RwPerformingUnpackagedEditNotification
+						do: [:ex | ex resume ].
+		] on: CompileError do: [:ex |
 		^nil -> (ex gsArguments at: 1)
 	]] on: CompileWarning do: [:ex |
 		warnings := ex gsArguments at: 1.
@@ -560,14 +556,15 @@ JadeServer64bit3x >> sbUpdateMethodsByCategories [
 				(category isNil and: [ methodFilters includes: #'other']) or: [ methodFilters includes: category asSymbol]]) ifTrue: [
 				| method |
 				method := eachClass compiledMethodAt: eachSelector environmentId: environment.
-				method isRubyBridgeMethod ifFalse: [
-					selectors add: eachSelector.
-				].
+				(method respondsTo: #isRubyBridgeMethod)
+					ifTrue: [ 
+						method isRubyBridgeMethod ifFalse: [
+							selectors add: eachSelector ] ]
+					ifFalse: [ selectors add: eachSelector ]
 			].
 		].
 	].
 	^selectors.
-
 ]
 
 { #category : 'category' }

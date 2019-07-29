@@ -8,7 +8,7 @@ Class {
 RwGitTool >> createTmpFileWith: fileContents [
 
 	| file filename |
-	filename := '/tmp/commitMessage'.
+	filename := (self performOnServer: '/bin/mktemp --tmpdir commitMessage.XXXX' logging: true) trimRight.
 	[ 
 	| count |
 	file := GsFile openWriteOnServer: filename.
@@ -44,7 +44,7 @@ RwGitTool >> gitBranchNameIn: gitRepoPath [
 { #category : 'smalltalk api' }
 RwGitTool >> gitcheckoutIn: gitRepoPath with: args [
 
-	^ self performGitCommand: 'checkout' in: gitRepoPath with: args
+	^ self performGitCommand: 'checkout' in: gitRepoPath pathString with: args
 ]
 
 { #category : 'smalltalk api' }

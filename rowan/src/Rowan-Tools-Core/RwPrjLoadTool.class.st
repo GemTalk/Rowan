@@ -64,29 +64,57 @@ RwPrjLoadTool >> _loadProjectSetDefinition_254: projectSetDefinitionToLoad insta
 		ifFalse: [  Rowan image applyModification_254: diff instanceMigrator: instanceMigrator ].
 	projectSetDefinitionToLoad definitions
 		do: [ :projectDef |
-			| theSpec |
-			theSpec := (loadedProjectSet entities at: projectDef name ifAbsent: [])
-				ifNil: [ projectDef specification ]
-				ifNotNil: [:loadedProject | loadedProject specification ].
-			self specification: theSpec.
+			| theProjectDef |
+			theProjectDef := (loadedProjectSet entities at: projectDef name ifAbsent: [])
+				ifNil: [ projectDef ]
+				ifNotNil: [:loadedProject | loadedProject ].
 			projectDef projectDefinitionSourceProperty = RwLoadedProject _projectDiskDefinitionSourceValue
-				ifTrue: [  theSpec updateLoadedCommitIdForTool: self ].
+				ifTrue: [  theProjectDef updateLoadedCommitId ].
 			(loadedProjectInfo at: projectDef name ifAbsent: [])
 				ifNotNil: [:map |
-					theSpec imageSpec
+					theProjectDef
 						loadedConfigurationNames: (map at: 'loadedConfigurationNames');
 						loadedGroupNames: (map at: 'loadedGroupNames') ] ].
 	^ diff
 ]
 
 { #category : 'load project definitions' }
-RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
+RwPrjLoadTool >> loadComponentProjectDefinition: projectDefinition [
 
+	^ self loadProjectDefinition: projectDefinition platformConfigurationAttributes: Rowan platformConfigurationAttributes
+]
+
+{ #category : 'load project definitions' }
+RwPrjLoadTool >> loadProjectDefinition: projectDefinition [
 	| projectSetDefinition |
 	projectSetDefinition := RwProjectSetDefinition new.
 	projectSetDefinition addDefinition: projectDefinition.
-
 	^ self loadProjectSetDefinition: projectSetDefinition
+]
+
+{ #category : 'load project definitions' }
+RwPrjLoadTool >> loadProjectDefinition: projectDefinition platformConfigurationAttributes: platformConfigurationAttributes [
+	"read the configurations for <projectDefinition> to develop the list of dependent projects"
+
+	| visitor projectSetDefinition |
+	projectSetDefinition := RwProjectSetDefinition new.
+	projectSetDefinition addDefinition: projectDefinition.
+	visitor := Rowan projectTools read
+			readConfigurationsForProjectComponentDefinition: projectDefinition
+			withConfigurations: projectDefinition loadedConfigurationNames
+			groupNames: projectDefinition loadedGroupNames 
+			platformConfigurationAttributes: platformConfigurationAttributes
+			forLoad: true.
+	visitor projectLoadSpecs do: [:loadSpec |
+		| dependentProjectDefinition |
+		dependentProjectDefinition := loadSpec asDefinition.
+		dependentProjectDefinition clone.
+		dependentProjectDefinition read do: [:readProjectDef |
+			(projectSetDefinition projectNames includes: readProjectDef name)
+				ifTrue: [ self error: 'duplicate dependent projects encountered ', readProjectDef name printString]
+				ifFalse: [ projectSetDefinition addDefinition: readProjectDef ] ] ].
+	^ self loadProjectSetDefinition: projectSetDefinition
+
 ]
 
 { #category : 'load project by spec url' }

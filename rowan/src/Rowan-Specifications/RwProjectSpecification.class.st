@@ -87,17 +87,11 @@ RwProjectSpecification >> comment [
 RwProjectSpecification >> comment: anObject [
 
    comment := anObject
-
 ]
 
 { #category : 'actions' }
 RwProjectSpecification >> commitForTool: aRwTool message: messageString [
   ^ self repoSpec commitForTool: aRwTool message: messageString
-]
-
-{ #category : 'actions' }
-RwProjectSpecification >> commitLogForTool: aRwTool limit: logLimit [
-  ^ self repoSpec commitLogForTool: aRwTool limit: logLimit
 ]
 
 { #category : 'accessing' }
@@ -122,10 +116,22 @@ RwProjectSpecification >> defaultConfigurationNames [
 ]
 
 { #category : 'accessing' }
+RwProjectSpecification >> defaultConfigurationNames: anArray [
+
+	defaultConfigurationNames := anArray
+]
+
+{ #category : 'accessing' }
 RwProjectSpecification >> defaultGroupNames [
 
 	^ defaultGroupNames
 
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> defaultGroupNames: anArray [
+
+	defaultGroupNames := anArray
 ]
 
 { #category : 'exporting' }
@@ -147,7 +153,7 @@ RwProjectSpecification >> export [
 RwProjectSpecification >> exportToUrl: fileUrl [
 
 	^ self copy
-		initializeForExport;
+		initializeForExport
 		_exportToUrl: fileUrl
 
 ]
@@ -156,9 +162,8 @@ RwProjectSpecification >> exportToUrl: fileUrl [
 RwProjectSpecification >> exportToUrl: fileUrl as: fileName [
 
 	^ self copy
-		initializeForExport;
+		initializeForExport
 		_exportToUrl: fileUrl as: fileName
-
 ]
 
 { #category : 'accessing' }
@@ -182,9 +187,8 @@ RwProjectSpecification >> initializeForExport [
 
 	super initializeForExport.
 	imageSpec := nil.
-	platformSpec valuesDo: [:each | each initializeForExport ].
+	platformSpec := nil.
 	repoSpec initializeForExport
-
 ]
 
 { #category : 'initialization' }
@@ -227,6 +231,18 @@ RwProjectSpecification >> loadedGroupNames [
 RwProjectSpecification >> packageOrGroupNamesToLoad: packageOrGroupNames [
 
 	self subclassResponsibility: #packageOrGroupNamesToLoad:
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> packagesPath [
+
+	^ self repoPath
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> packagesPath: aString [
+
+	self repoPath: aString
 ]
 
 { #category : 'accessing' }
@@ -278,6 +294,12 @@ RwProjectSpecification >> pushForTool: aRwTool remote: remoteString [
 RwProjectSpecification >> remote [
 
 	^ self repoSpec remote
+]
+
+{ #category : 'accessing' }
+RwProjectSpecification >> remoteUrl [
+
+   ^repoSpec remoteUrl
 ]
 
 { #category : 'accessing' }

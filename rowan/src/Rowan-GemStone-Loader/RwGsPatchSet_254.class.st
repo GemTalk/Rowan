@@ -68,6 +68,32 @@ RwGsPatchSet_254 class >> _orderBySuperclass: aClass from: toBeOrdered into: ord
 ]
 
 { #category : 'private - method initialization order' }
+RwGsPatchSet_254 class >> classPatchesInReverseHierarchyOrder: classPatches tempSymbols: tempSymbols [
+
+	"Returns acollection of the specified classPatches ordered in reverse superclass order"
+
+	| order toBeOrdered processed aClass patchMap |
+	patchMap := IdentityKeyValueDictionary new.
+	classPatches do: [:classPatch |
+		| class |
+		class := tempSymbols
+				at: classPatch className
+				ifAbsent: [ self error: 'Cannot find class to update constraints for.' ].
+		patchMap at: class put: classPatch ].
+	toBeOrdered := patchMap keys asIdentitySet.
+	order := OrderedCollection new.
+	processed := IdentitySet new.
+	[ (aClass := self _anyElementOf: toBeOrdered ifEmpty: [ nil ]) isNil ]
+		whileFalse: [ 
+			self
+				_orderBySuperclass: aClass
+				from: toBeOrdered
+				into: order
+				ignoring: processed ].
+  ^ ((order collect: [:orderedClass | patchMap at: orderedClass ifAbsent: []]) select: [:patch | patch notNil ]) reverse
+]
+
+{ #category : 'private - method initialization order' }
 RwGsPatchSet_254 class >> methodPatchesInInitializationOrder: methodPatches [
 
 	"Returns acollection of the specified methodPatches ordered in superclass order, which is sufficient for initialization order."
@@ -1018,8 +1044,7 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 			packageDef := aMethodMove packageAfter.
 			classOrExtensionDef := aMethodMove classOrExtensionAfter.
 			loadedPackage := image loadedPackageNamed: packageDef name.
-			registry := (Rowan globalNamed: ((aMethodMove projectAfter specification platformSpec at: 'gemstone')
-				symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
+			registry := (Rowan globalNamed: (aMethodMove projectAfter  symbolDictNameForPackageNamed: aMethodMove packageAfter name)) rowanSymbolDictionaryRegistry.
 			loadedClassOrExtension := loadedPackage 
 				classOrExtensionForClassNamed: classOrExtensionDef name 
 				ifAbsent: [ 
@@ -1029,7 +1054,7 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 							(aMethodMove projectAfter
 								useSessionMethodsForExtensionsForPackageNamed: aMethodMove packageAfter name)
 								ifTrue: [ | resolved |
-									((resolved := GsCurrentSession currentSession symbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
+									((resolved := Rowan image symbolList objectNamed: classOrExtensionDef name asSymbol) notNil 
 										and: [resolved isBehavior and: [ resolved isMeta not ]])
 										ifFalse: [ 
 											self
@@ -1052,7 +1077,6 @@ RwGsPatchSet_254 >> doMoveMethodsBetweenPackages [
 			loadedClassOrExtension addLoadedMethod: loadedMethod.
 
 			registry methodRegistry at: compiledMethod put: loadedMethod ]
-
 ]
 
 { #category : 'initialization' }
@@ -1267,6 +1291,12 @@ RwGsPatchSet_254 >> setupForNewClassVersionUpdates [
 { #category : 'patch access' }
 RwGsPatchSet_254 >> superclassNamed: aName [
 
+	^ self superclassNamed: aName ifAbsent: [ self error: 'Superclass not found: ' , aName printString ]
+]
+
+{ #category : 'patch access' }
+RwGsPatchSet_254 >> superclassNamed: aName ifAbsent: absentBlock [
+
 	| superclassName |
 	superclassName := aName asSymbol.
 	^ createdClasses
@@ -1274,7 +1304,7 @@ RwGsPatchSet_254 >> superclassNamed: aName [
 		ifAbsent: [ 
 			tempSymbols
 				at: superclassName
-				ifAbsent: [ self error: 'Superclass not found: ' , aName printString ] ]
+				ifAbsent: absentBlock ]
 ]
 
 { #category : 'accessing' }
@@ -1301,14 +1331,19 @@ RwGsPatchSet_254 >> updateClassProperties [
 	"For classes with changes that don't require versioning, 
 	update the properties in the class and the LoadedClasses as appropriate."
 
-	(classesWithClassVariableChanges copy
-		addAll: classesWithPropertyChanges;
-		addAll: classesWithConstraintChanges;
-		yourself) do: [ :each | 
+	| classPatches ts |
+	ts := self tempSymbols.
+	classPatches := OrderedCollection new.
+	classPatches 
+		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithClassVariableChanges tempSymbols: ts);
+		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithPropertyChanges tempSymbols: ts);
+		addAll: (self class classPatchesInReverseHierarchyOrder: classesWithConstraintChanges tempSymbols: ts);
+		yourself.
+	classPatches 
+		do: [ :each | 
 			(movedClassesMap at: each className ifAbsent: [])
 				ifNil: [ each installPropertiesPatchFor: self ]
 				ifNotNil: [:aClassMove | each installPropertiesPatchFor: self classMove: aClassMove ] ]
-
 ]
 
 { #category : 'private - applying' }

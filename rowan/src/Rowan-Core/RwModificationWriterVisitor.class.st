@@ -6,14 +6,7 @@ Abstract class with support for walking a modification tree and writing out the 
 "
 Class {
 	#name : 'RwModificationWriterVisitor',
-	#superclass : 'Object',
-	#instVars : [
-		'currentProjectDefinition',
-		'currentPackageDefinition',
-		'currentClassDefinition',
-		'currentClassExtension',
-		'repositoryRootPath'
-	],
+	#superclass : 'RwAbstractReaderWriterVisitor',
 	#category : 'Rowan-Core'
 }
 
@@ -69,22 +62,6 @@ RwModificationWriterVisitor >> _newLine [
 	 ^ self class lineEnding
 ]
 
-{ #category : 'project writing' }
-RwModificationWriterVisitor >> _repositoryFormatFor: aProjectModification [
-
-	^ (self _repositoryPropertyDictFor: aProjectModification) at: #format ifAbsent: [ 'filetree' ]
-]
-
-{ #category : 'project writing' }
-RwModificationWriterVisitor >> _repositoryPropertyDictFor: aProjectModification [
-
-	| propertiesFile |
-	propertiesFile := self repositoryRootPath / aProjectModification after repoPath / 'properties.st'.
-	propertiesFile exists
-		ifFalse: [ propertiesFile := self repositoryRootPath / aProjectModification after repoPath / '.cypress' ].
-	^ STON fromStream: (ZnBufferedReadStream on: propertiesFile  readStream)
-]
-
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedClass: aClassModification [
 
@@ -111,7 +88,6 @@ RwModificationWriterVisitor >> addedPackage: aPackageModification [
 { #category : 'actions' }
 RwModificationWriterVisitor >> addedProject: aProjectModification [
 	currentProjectDefinition := aProjectModification after.
-	self repositoryRootPath ifNil: [ self repositoryRootPath: currentProjectDefinition repositoryRootPath ].
 	self processProject: aProjectModification
 ]
 
@@ -142,49 +118,19 @@ RwModificationWriterVisitor >> changedPackage: aPackageModification [
 RwModificationWriterVisitor >> changedProject: aProjectModification [
 
 	currentProjectDefinition := aProjectModification after.
-	self repositoryRootPath ifNil: [ self repositoryRootPath: currentProjectDefinition repositoryRootPath ].
-self halt.
-]
-
-{ #category : 'accessing' }
-RwModificationWriterVisitor >> currentClassDefinition [
-
-	^ currentClassDefinition
-]
-
-{ #category : 'accessing' }
-RwModificationWriterVisitor >> currentClassExtension [
-
-	^ currentClassExtension
-]
-
-{ #category : 'accessing' }
-RwModificationWriterVisitor >> currentPackageDefinition [
-
-	^ currentPackageDefinition
-]
-
-{ #category : 'accessing' }
-RwModificationWriterVisitor >> currentProjectDefinition [
-
-	^ currentProjectDefinition
+	self processProject: aProjectModification
 ]
 
 { #category : 'actions' }
 RwModificationWriterVisitor >> deletedClass: aClassModification [
 
-	currentClassDefinition := aClassModification after.
-
-	self halt. "delete the class file"
+	self subclassResponsibility: #deletedClass:
 ]
 
 { #category : 'actions' }
 RwModificationWriterVisitor >> deletedClassExtension: aClassExtensionModification [
 
-	currentClassExtension := aClassExtensionModification after.
-
-
-	self halt. "delete the class extension file"
+	self subclassResponsibility: #deletedClassExtension:
 ]
 
 { #category : 'actions' }
@@ -231,19 +177,6 @@ RwModificationWriterVisitor >> processProject: aProjectModification [
 	aProjectModification packagesModification acceptVisitor: self
 ]
 
-{ #category : 'accessing' }
-RwModificationWriterVisitor >> repositoryRootPath [
-
-	^ repositoryRootPath
-]
-
-{ #category : 'accessing' }
-RwModificationWriterVisitor >> repositoryRootPath: aStringOrFileReference [
-
-	repositoryRootPath := aStringOrFileReference asFileReference.
-	repositoryRootPath exists ifFalse: [ self error: 'The repository root path must exist: ', repositoryRootPath pathString printString ]
-]
-
 { #category : 'public' }
 RwModificationWriterVisitor >> visit: aPackageSetModification [
 
@@ -282,7 +215,18 @@ RwModificationWriterVisitor >> visitClassModification: aClassModification [
 		ifTrue: [ ^ self addedClass: aClassModification ] .
 	aClassModification isDeletion
 		ifTrue: [ ^ self deletedClass: aClassModification ].
+(aClassModification instanceMethodsModification isEmpty and: [ aClassModification classMethodsModification isEmpty ])
+	ifTrue: [
+		"no instance or class modifications, check to see if the only Property modification is for 'gs_SymbolDictionary' "
+		| propertiesModification elementsModified |
+		propertiesModification := aClassModification propertiesModification.
+		elementsModified := propertiesModification elementsModified.
+		(elementsModified size = 1 and: [ (elementsModified at: 'gs_SymbolDictionary' ifAbsent: []) notNil])
+			ifTrue: [
+				"'gs_symbolDictionary' property is not written to disk, so we can skip this class"
+				^ self ]].
 	^ self changedClass: aClassModification
+
 ]
 
 { #category : 'visiting' }

@@ -65,13 +65,13 @@ RwProjectDefinition >> addPackage: aPackageDefinition [
 	| key |
 	key := aPackageDefinition key.
 	(packages includesKey: key) ifTrue: [self error: 'Duplicate package'].
-	packages at: key put: aPackageDefinition
+	^ packages at: key put: aPackageDefinition
 ]
 
 { #category : 'accessing' }
 RwProjectDefinition >> addPackageNamed: packageName [
 
-	self addPackage: (RwPackageDefinition newNamed: packageName)
+	^ self addPackage: (RwPackageDefinition newNamed: packageName)
 ]
 
 { #category : 'accessing' }
@@ -147,10 +147,28 @@ RwProjectDefinition >> configurationTemplate [
 
 ]
 
+{ #category : 'properties' }
+RwProjectDefinition >> defaultConfigurationNames [
+
+	^self specification defaultConfigurationNames
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> defaultGroupNames [
+
+	^self specification defaultGroupNames
+]
+
 { #category : 'accessing' }
 RwProjectDefinition >> definitionWithKey: aKey ifAbsent: absentBlock [
 
 	^packages at: aKey ifAbsent: absentBlock
+]
+
+{ #category : 'actions' }
+RwProjectDefinition >> export [
+
+	Rowan projectTools write writeDeprecatedProjectDefinition: self
 ]
 
 { #category : 'initialization' }
@@ -180,10 +198,35 @@ RwProjectDefinition >> keys [
 	^packages keys
 ]
 
+{ #category : 'actions' }
+RwProjectDefinition >> load [
+	"load the receiver into the image"
+
+	^ Rowan projectTools load loadProjectDefinition: self
+]
+
 { #category : 'properties' }
 RwProjectDefinition >> loadedCommitId [
 
 	^ self specification loadedCommitId
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> loadedConfigurationNames [
+
+	^ self specification loadedConfigurationNames
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> loadedConfigurationNames: anArray [
+
+	^ self specification imageSpec loadedConfigurationNames: anArray
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> loadedGroupNames: anArray [
+
+	^ self specification imageSpec loadedGroupNames: anArray
 ]
 
 { #category : 'accessing' }
@@ -228,9 +271,26 @@ RwProjectDefinition >> packages: aPackageDefinitionDictionary [
 { #category : 'copying' }
 RwProjectDefinition >> postCopy [
 
+	| oldPackages |
 	super postCopy.
-	packages := packages copy
+	oldPackages := packages.
+	packages := Dictionary new.
+	oldPackages keysAndValuesDo: [:key : value | packages at: key put: value copy ] .
+]
 
+{ #category : 'tool api' }
+RwProjectDefinition >> readProjectSet [
+
+	^ Rowan projectTools read  readProjectSetForProjectDefinition: self
+]
+
+{ #category : 'reading' }
+RwProjectDefinition >> readProjectSetReadTool: readTool withConfigurations: theConfigNames groupNames: theGroupNames [
+
+	^ readTool
+		readProjectSetForProjectDefinition: self
+			withConfigurations: theConfigNames 
+			groupNames: theGroupNames
 ]
 
 { #category : 'accessing' }
@@ -261,6 +321,13 @@ RwProjectDefinition >> repoPath: aDirectoryPathString [
 
 	self specification repoPath: aDirectoryPathString
 
+]
+
+{ #category : 'properties' }
+RwProjectDefinition >> repositoryRoot [
+	"Root directory of the project. The configsPath, repoPath, specsPath, and projectsPath are specified relative to the repository root."
+
+	^ self repositoryRootPath asFileReference
 ]
 
 { #category : 'properties' }
@@ -304,6 +371,18 @@ RwProjectDefinition >> specsPath: aDirectoryPathString [
 
 	self specification specsPath: aDirectoryPathString
 
+]
+
+{ #category : 'loading' }
+RwProjectDefinition >> updateLoadedCommitId [
+
+	| loadedCommitId |
+	loadedCommitId := [  Rowan gitTools gitcommitShaIn: self repositoryRoot pathString ]
+		on: Error
+		do: [ :ignored | 
+			"most likely no commits yet"
+			^ nil ].
+	self specification imageSpec loadedCommitId: loadedCommitId
 ]
 
 { #category : 'properties' }

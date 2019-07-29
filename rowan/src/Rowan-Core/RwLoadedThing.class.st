@@ -108,6 +108,13 @@ RwLoadedThing >> name: aString [
 	name := aString
 ]
 
+{ #category : 'accessing' }
+RwLoadedThing >> prettyName [
+
+	^self name
+
+]
+
 { #category : 'printing' }
 RwLoadedThing >> printOn: aStream [
 

@@ -26,27 +26,30 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 
 	"Ignore packaged instance and class methods"
 
-	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
-		theBehavior |
+	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary
+		registry theBehavior actualPackageSymDictName |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := (gemstoneSpec symbolDictNameForPackageNamed: packageName) asSymbol.
+	packageSymDictName := (loadedProject symbolDictNameForPackageNamed: packageName) asSymbol.
 
 	theClass := Rowan globalNamed: className.
+	theClass ifNil: [ 
+		(RwAdoptMissingClassErrorNotification classNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
+		"if exception resumed then we'll skip the adopt operation for this class"
+		^ self ].
 	(Rowan image symbolList dictionariesAndSymbolsOf: theClass)
 		do: [:ar |
-			(ar at: 1) name == packageSymDictName
+			actualPackageSymDictName := (ar at: 1) name.
+			actualPackageSymDictName == packageSymDictName
 				ifTrue: [ theSymbolDictionary := (ar at: 1). ] ].
 	theSymbolDictionary 
 		ifNil: [ 
 			self error: 'The symbol dictionary for class ', 
 				className printString, 
-				' does not match the symbol dictionary for the package ', 
+				' (', actualPackageSymDictName, ') does not match the expected symbol dictionary for the package ', 
 				packageName printString, 
-				'. REQUIRED.'.]. 
+				'. (', packageSymDictName, '). REQUIRED.'.]. 
 
 	registry := theSymbolDictionary rowanSymbolDictionaryRegistry.
 
@@ -62,25 +65,35 @@ RwPkgAdoptTool >> adoptClassNamed: className classExtension: classExtension inst
 	theBehavior := theClass.
 	instanceSelectors do: [:methodSelector |
 		| theCompiledMethod |
-		theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
-		registry
-			adoptCompiledMethod: theCompiledMethod
-			classExtension: classExtension
-			for: theBehavior 
-			protocol: (theBehavior categoryOfSelector: methodSelector) 
-			toPackageNamed: packageName ].
+		theCompiledMethod := (theBehavior compiledMethodAt: methodSelector  otherwise: nil)
+			ifNil: [ 
+				(RwAdoptMissingMethodErrorNotification method: methodSelector isMeta: false inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
+				"skip adoption of this method"
+				nil ].
+		theCompiledMethod
+			ifNotNil: [ 
+				registry
+					adoptCompiledMethod: theCompiledMethod
+					classExtension: classExtension
+					for: theBehavior 
+					protocol: (theBehavior categoryOfSelector: methodSelector) 
+					toPackageNamed: packageName ] ] .
 
 	theBehavior := theClass class.
 	classSelectors do: [:methodSelector |
 		| theCompiledMethod |
-		theCompiledMethod := theBehavior compiledMethodAt: methodSelector.
-		registry
-			adoptCompiledMethod: theCompiledMethod 
-			classExtension: classExtension
-			for: theBehavior 
-			protocol: (theBehavior categoryOfSelector: methodSelector) 
-			toPackageNamed: packageName ].
-
+		theCompiledMethod := (theBehavior compiledMethodAt: methodSelector  otherwise: nil)
+			ifNil: [ (RwAdoptMissingMethodErrorNotification method: methodSelector isMeta: true inClassNamed: className isClassExtension: classExtension  intoPackageNamed: packageName) signal.
+				"skip adoption of this method"
+				nil ].
+		theCompiledMethod
+			ifNotNil: [ 
+				registry
+					adoptCompiledMethod: theCompiledMethod 
+					classExtension: classExtension
+					for: theBehavior 
+					protocol: (theBehavior categoryOfSelector: methodSelector) 
+					toPackageNamed: packageName ] ].
 ]
 
 { #category : 'smalltalk api' }
@@ -143,13 +156,12 @@ RwPkgAdoptTool >> adoptMethod: methodSelector protocol: protocolString inClassNa
 	"adopt the method <methodSelector> in class named <className> and it's methods into the package named <packageName>.
 		move the method into protocol <protocolString> "
 
-	| loadedPackage loadedProject gemstoneSpec packageSymDictName theClass theSymbolDictionary registry 
+	| loadedPackage loadedProject packageSymDictName theClass theSymbolDictionary registry 
 		theBehavior theCompiledMethod |
 	loadedPackage := Rowan image loadedPackageNamed: packageName.
 	loadedProject := loadedPackage loadedProject.
 
-	gemstoneSpec := loadedProject specification platformSpec at: 'gemstone'.
-	packageSymDictName := gemstoneSpec symbolDictNameForPackageNamed: packageName.
+	packageSymDictName := loadedProject symbolDictNameForPackageNamed: packageName.
 
 	theClass := Rowan globalNamed: className.
 	theSymbolDictionary := Rowan globalNamed: packageSymDictName.

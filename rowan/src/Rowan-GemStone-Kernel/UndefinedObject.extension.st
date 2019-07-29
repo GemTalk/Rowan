@@ -29,7 +29,7 @@ options: optionsArray [
             oldClass _commentOrDescription: aDescription.
             ^oldClass "avoid creation of a new version"
         ].
-      descr ifNil: [descr := oldClass comment]
+      descr ifNil: [descr := oldClass rwComment]
   ].
   theClass := Object
         subclass: aString

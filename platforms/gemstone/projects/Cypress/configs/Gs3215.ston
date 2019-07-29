@@ -1,0 +1,9 @@
+RwProjectLoadConfiguration {
+	#name : 'Gs3215',
+	#version : '0.1.0',
+	#conditionalPackages :  { },
+	#configurationNames : [
+		'Common'
+	],
+	#comment : '3.2.15 config for Rowan'
+}

@@ -35,6 +35,14 @@ RwGithubUrl >> dirPath [
   ^ self pathFor: dir
 ]
 
+{ #category : 'accessing' }
+RwGithubUrl >> isAbsolute [
+	"Should the path be considered absolute to
+	the filesystem instead of relative to the default directory?"
+ 
+	^false
+]
+
 { #category : 'printing' }
 RwGithubUrl >> printOn: aStream [
   aStream

@@ -185,7 +185,8 @@ JadeServer >> _describeMCDefinition: anMCDefinition on: aStream [
 
 { #category : 'category' }
 JadeServer >> _describeMCMethodDefinition: anMCMethodDefinition on: aStream [
-
+	| unicodeFreeSource |
+	unicodeFreeSource := RowanMethodService removeUnicodeFromSource: anMCMethodDefinition source.
 	aStream
 		nextPut: $M; tab;
 		nextPutAll: anMCMethodDefinition timeStamp; tab;
@@ -193,10 +194,8 @@ JadeServer >> _describeMCMethodDefinition: anMCMethodDefinition on: aStream [
 		nextPutAll: anMCMethodDefinition classIsMeta printString; tab;
 		nextPutAll: anMCMethodDefinition category; tab;
 		nextPutAll: anMCMethodDefinition selector; tab;
-		nextPutAll: anMCMethodDefinition source size printString; tab;
-		nextPutAll: anMCMethodDefinition source; lf.
-
-
+		nextPutAll: unicodeFreeSource size printString; tab;
+		nextPutAll: unicodeFreeSource; lf.
 ]
 
 { #category : 'category' }
@@ -260,7 +259,7 @@ JadeServer >> _describeMethod: aMethod [
 "4"		selector: aMethod selector;
 "5"		category: (self categoryOfMethod: aMethod);
 "6"		isReadOnly: (self currentUserMayEditMethod: aMethod);
-			source: aMethod sourceString.
+			source: (RowanMethodService removeUnicodeFromSource: aMethod sourceString).
 
 	"unimplemented selectors"			"https://github.com/jgfoster/Jade/issues/117"
 	((aMethod class includesSelector: #'_selectorPool') and: [aMethod class includesSelector: #'_sourceOffsetOfFirstSendOf:']) ifTrue: [
@@ -294,10 +293,6 @@ JadeServer >> _describeMethod: aMethod [
 	string isNil ifTrue: [string := ''].
 	methodUpdate compilationWarnings: string.
 	methodUpdate writeMethodTo: writeStream.
-
- 
-
-
 ]
 
 { #category : 'category' }
@@ -856,6 +851,17 @@ JadeServer >> authorInitials: aString [
 
 ]
 
+{ #category : 'jadeite' }
+JadeServer >> autoCommitIfRequired [
+	| commitResult |
+	Rowan serviceClass autoCommit == true ifTrue:[
+		commitResult := System commitTransaction.
+		RowanAutoCommitService new autoCommit:  
+			(commitResult 
+				ifTrue:[true] 
+				ifFalse:[#failed])].
+]
+
 { #category : 'category' }
 JadeServer >> beginTransaction [
 
@@ -1035,18 +1041,13 @@ JadeServer >> compile: aString frame: anInteger process: aGsProcess [
 	selector := oldMethod selector.
 	selector isNil ifTrue: [^result].
 	category := self _behavior: aBehavior categoryOfSelector: selector.
-	result := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
-				ifAbsent: [false])
-					ifTrue: [ 
-						[ aBehavior rwCompileMethod: aString category: category ]
+	result := [[ aBehavior rwCompileMethod: aString category: category ]
 							on: RwExecuteClassInitializeMethodsAfterLoadNotification
-							do: [:ex | ex resume: false ] ]
-					ifFalse: 
-						[self
-							compileMethod: aString
-							behavior: aBehavior
-							user: nil
-							inCategory: category].
+							do: [:ex | ex resume: false ]] 
+								on: RwPerformingUnpackagedEditNotification
+								do: [:ex | ex resume ].
+
+					
 	^result
 ]
 
@@ -1745,8 +1746,6 @@ JadeServer >> inspect: anObject [
 	^stream 
 		nextPutAll: string; 
 		contents.
-
-
 ]
 
 { #category : 'category' }
@@ -4009,15 +4008,11 @@ JadeServer >> sbRemoveMethodCategories: anOrderedCollection [
 JadeServer >> sbRemoveMethods: anOrderedCollection [
 	| behavior classEntity  notRemoved|
 	behavior := self sbClassFrom: anOrderedCollection.
-	classEntity := ((System myUserProfile resolveSymbol: #UserGlobals) value at: #rowanCompile
-				ifAbsent: [false])
-					ifTrue: [Rowan classServiceClass forClassNamed: behavior name meta: behavior isMeta]
-					ifFalse: [behavior].
+	classEntity := Rowan classServiceClass forClassNamed: behavior name meta: behavior isMeta.
 	notRemoved := Array new. 
 	anOrderedCollection do: [:each | classEntity removeSelector: each asSymbol ifAbsent: [notRemoved add: each]].
 	self systemBrowserUpdate.
 	notRemoved isEmpty ifFalse:[self error: 'The following selectors were not removed. Possibly in a superclass? ', notRemoved printString].
-
 ]
 
 { #category : 'category' }
@@ -4312,7 +4307,7 @@ JadeServer >> sbUpdateClassInfo [
 							classCreationTemplate.
 	classInfoUpdate category: ((classInfoUpdate template includesString: 'category: ''')
 					ifFalse: [' category: ' , selectedClass category printString]).
-	classInfoUpdate comment: selectedClass comment. 
+	classInfoUpdate comment: selectedClass rwComment. 
 	classInfoUpdate writeInfoOn: writeStream.
 ]
 
@@ -5087,9 +5082,7 @@ JadeServer >> superclassesOf: aClass isMeta: aBoolean [
 { #category : 'category' }
 JadeServer >> symbolList [
 
-	^System myUserProfile symbolList.
-
-
+	^Rowan image symbolList
 ]
 
 { #category : 'category' }
@@ -5280,18 +5273,18 @@ JadeServer >> terminate: aGsProcess [
 { #category : 'jadeite' }
 JadeServer >> updateFromSton: stonString [
 	| services organizer resultString |
-	RowanCommandResult initializeResults.
+	Rowan commandResultClass initializeResults. 
 	services := STON fromString: stonString.
 	organizer := ClassOrganizer new.
 	services do: 
 			[:service |
 			service organizer: organizer. 
 			service updateType: nil.  "Update type is only for returned commands"
-			service command
-				ifNil: [service update]
-				ifNotNil: [service servicePerform: service command withArguments: service commandArgs]].
-	resultString := STON toString: RowanCommandResult results.
-	RowanService autoCommit ifTrue:[System commitTransaction]. 
+			service command ifNil:[service command: #update]. 
+			service servicePerform: service command withArguments: service commandArgs].
+	self autoCommitIfRequired.
+	Rowan loggingServiceClass current logSentServices. 
+	resultString := STON toString: Rowan commandResultClass results.
 	^resultString
 ]
 

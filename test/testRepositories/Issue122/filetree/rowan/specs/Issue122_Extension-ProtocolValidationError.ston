@@ -1,0 +1,19 @@
+RwComponentSpecification {
+	#specName : 'Issue122',
+	#version : '0.3.0',
+	#projectUrl : '',
+	#configsPath : 'filetree/rowan/configs',
+	#specsPath : 'filetree/rowan/specs',
+	#repoSpec : RwDiskRepositorySpecification {
+		
+	},
+	#repoPath : 'filetree/rowan/src',
+	#comment : '',
+	#defaultConfigurationNames : [
+		'Extension_ProtocolValidationError'
+	],
+	#defaultGroupNames : [
+		'core'
+	],
+	#projectsPath : 'filetree/rowan/projects'
+}
