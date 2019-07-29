@@ -110,12 +110,12 @@ RowanPackageServiceTest >> testClassHierarchy [
 { #category : 'tests' }
 RowanPackageServiceTest >> testCompileClassSelectsPackageAndClass [
 
-	| package packageService newClassService |
+	| package browserService newClassService |
 
 	self jadeiteIssueTested: #issue228 withTitle: 'lose selected class in project browser when new version created'.
 	package := self createJadeiteTestPackage. 
-	[packageService := RowanPackageService forPackageNamed: self servicesTestPackageName.
-	packageService compileClass: 
+	[browserService := RowanBrowserService new.
+	browserService compileClass: 
 		'RowanServicesTest rwSubclass: ''TestCompileClass''
 			instVarNames: #()
 			classVars: #()
@@ -124,11 +124,8 @@ RowanPackageServiceTest >> testCompileClassSelectsPackageAndClass [
 			category: ''', self servicesTestPackageName, '''
 			options: #()'.
 	self assert: RowanCommandResult results size equals: 0. "we no longer return a service on first stage of compile"
-	packageService recompileMethodsAfterClassCompilation. 
-	newClassService := RowanCommandResult results first.
-	self assert: newClassService name equals: 'TestCompileClass'. 
-	self assert: newClassService selectedPackageServices size equals: 1. 
-	self assert: newClassService selectedPackageServices first name equals: self servicesTestPackageName. 
-	self assert: newClassService selectedPackageServices first selectedClass == newClassService]
+	browserService recompileMethodsAfterClassCompilation. 
+	newClassService := RowanCommandResult results at: 2.
+	self assert: newClassService name equals: 'TestCompileClass'.]
 		ensure:[RowanBrowserService new unloadProjectsNamed: (Array with: self servicesTestProjectName)]
 ]
