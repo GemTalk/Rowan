@@ -254,6 +254,9 @@ RwModificationFiletreeWriterVisitor >> _typeClassDefinitionOf: aClassDefinition 
 	(aClassDefinition instVarNames)
 		ifNotEmpty: [ :vars | definition at: #instvars put: vars asArray ].
 
+	(aClassDefinition gs_reservedOop)
+		ifNotEmpty: [:gs_reservedOop | definition at: #'gs_reservedoop' put: gs_reservedOop asString ].
+
 	definition at: #name put: aClassDefinition name.
 
 	((aClassDefinition poolDictionaryNames) collect: [:each | each asString])

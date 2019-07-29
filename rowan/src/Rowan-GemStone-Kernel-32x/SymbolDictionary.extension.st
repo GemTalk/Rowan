@@ -1,6 +1,6 @@
 Extension { #name : 'SymbolDictionary' }
 
-{ #category : '*rowan-gemstone-35x' }
+{ #category : '*rowan-gemstone-kernel-32x' }
 SymbolDictionary >> _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbolList [
 
 	"return a new symbol dictionary containing copies of all of the classes in the receiver ... the state of each class should be the same with 
@@ -38,13 +38,14 @@ SymbolDictionary >> _rowanCloneSymbolDictionaryNamed: aSymbol symbolList: symbol
 				_subclass: oldClassName asString 
 				instVarNames: oldClass instVarNames
 				format: oldClass format  
+				constraints: #() 
 				classVars: oldClass classVarNames
 				classInstVars: oldClass class instVarNames
 				poolDictionaries: #()
 				inDictionary: nil
 				inClassHistory: hist
 				description: ''
-				options: oldClass _optionsArrayForDefinition .
+				options: oldClass _nonInheritedOptions.
 			clonedSymDict at: oldClassName put: clonedClass.
 			clonedClasses add: {clonedClass. oldClass} ].
 			"compile methods in cloned class"

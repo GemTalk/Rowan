@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Error
@@ -12896,4 +12897,3 @@ CypressGemStoneDirectoryUtilities initialize.
 CypressPackageManager2 initialize.
 true
 %
-

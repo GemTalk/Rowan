@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (ByteArray
@@ -2137,8 +2138,7 @@ category: 'instance creation'
 classmethod: FileException
 signalOnFile: aFile 
 	
-	(self fileName: aFile basename) 
-     signal: aFile name"so file name shows up in printString"
+	(self fileName: aFile basename) signal: aFile name
 %
 
 category: 'instance creation'
@@ -2148,7 +2148,6 @@ signalWith: aReference
 	aReference is something that can be converted to a path, e.g. a String, Path or FileReference"
   | str |
 	^(self fileName: (str := aReference asPath pathString)) signal: str
-  "use signal: so details show up in printString"
 %
 
 !		Instance methods for 'FileException'
@@ -3910,6 +3909,13 @@ asPath
 	^path
 %
 
+category: 'printing'
+method: FileReference
+asString
+  "needed for informative topaz stack display"
+  ^ path asString 
+%
+
 category: 'streams'
 method: FileReference
 binaryReadStream
@@ -4617,8 +4623,11 @@ open: fileName writable: writeMode
 		ifTrue: [ 'w+' ] 
 		ifFalse: [ 
 			writeMode = #read
-				ifTrue: [ 'r+' ]
-				ifFalse: [ 'a+' ] ].
+				ifTrue: [ 'r' ]
+				ifFalse: [ 
+           writeMode == #append 
+             ifTrue:[ 'a+' ] 
+             ifFalse:[ Error signal:'invalid mode']]].
 	^ GsFile
 		open: fileName 
 		mode: mode 
@@ -4764,6 +4773,13 @@ write: aGsFile from: stringOrByteArray startingAt: startIndex count: count
 %
 
 !		Instance methods for 'File'
+
+category: 'printing'
+method: File
+asString
+  "Needed for topaz debugging"
+  ^ name
+%
 
 category: 'accessing'
 method: File
@@ -9974,6 +9990,17 @@ from: aString delimiter: aDelimiterCharater
 
 !		Instance methods for 'AbsolutePath'
 
+category: 'printing'
+method: AbsolutePath
+asString
+  "used by topaz stack display"
+  | str sz |
+  str := '/' copy .
+  1 to: (sz := self size) - 1 do:[:j | str addAll: (self at: j) ; add: $/ ].
+  str add: (self at: sz ).
+  ^ str
+%
+
 category: 'testing'
 method: AbsolutePath
 isAbsolute
@@ -10324,6 +10351,13 @@ peek
 	^ position <= limit
 		ifTrue: [ buffer at: position ]
 		ifFalse: [ nil ]
+%
+
+category: 'accessing'
+method: ZnBufferedReadStream
+peek: count
+  self peek .
+  ^ buffer copyFrom: position to: (position + count min: limit)
 %
 
 category: 'accessing'
@@ -18909,19 +18943,3 @@ run
 FastUUIDGenerator initialize.
 true
 %
-
-method: FileReference
-asString 
-  "needed for informative topaz stack display"
-  ^ path asString 
-%
-method: AbsolutePath
-asString 
-  "used by topaz stack display"
-  | str sz |
-  str := '/' copy .
-  1 to: (sz := self size) - 1 do:[:j | str addAll: (self at: j) ; add: $/ ].
-  str add: (self at: sz ).
-  ^ str
-%
-

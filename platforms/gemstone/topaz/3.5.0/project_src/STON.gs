@@ -1,4 +1,5 @@
 ! Class Declarations
+! Generated file, do not Edit
 
 doit
 (Dictionary
@@ -4053,4 +4054,3 @@ run
 STONWriter initialize.
 true
 %
-

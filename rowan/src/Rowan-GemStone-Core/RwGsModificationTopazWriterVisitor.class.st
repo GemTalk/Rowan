@@ -70,45 +70,59 @@ Class {
 
 { #category : 'private exporting' }
 RwGsModificationTopazWriterVisitor >> _fileOutClassDeclaration: classDefinition on: aStream [
-	 | optionsString |
-  aStream
-    nextPutAll: 'doit';
-    lf;
-    nextPutAll: '(' , classDefinition superclassName;
-    lf.
-  self
-    _writeClassTypeMessage: classDefinition
-    on: aStream
-    hasInstanceVariables: [ aStream
-        nextPutAll:
-            '	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames) , ' )';
-        lf ].
+	| optionsString reservedOopString hasClassInstVars |
+	aStream
+		nextPutAll: 'doit';
+		lf;
+		nextPutAll: '(' , classDefinition superclassName;
+		lf.
+	hasClassInstVars := self
+		_writeClassTypeMessage: classDefinition
+		on: aStream
+		hasInstanceVariables: [ aStream
+			nextPutAll:
+			'	instVarNames: #( ' , (self _stringForVariables: classDefinition instVarNames) , ' )';
+			lf ].
 	optionsString := ''.
 	classDefinition gs_options isEmpty
 		ifFalse: [ optionsString :=  ' ', (self _symbolsForVariables: classDefinition gs_options), ' ' ].
-  aStream
-    nextPutAll: '	classVars: #( ' ,  (self _stringForVariables: classDefinition classVarNames) , ' )';
-    lf;
-    nextPutAll:
-        '	classInstVars: #( ' ,  (self _stringForVariables: classDefinition classInstVarNames) , ' )';
-    lf;
-    nextPutAll: '	poolDictionaries: #()';
-    lf;
-    nextPutAll: '	inDictionary: ', (self classSymbolDictionaryNames at: classDefinition name);
-    lf;
-    nextPutAll: '	options: #(', optionsString, '))';
-    lf;
-    nextPutAll: '		category: ' , classDefinition category printString , ';';
-    lf;
-    nextPutAll: '		comment: ' , classDefinition comment printString , ';';
-    lf;
-    nextPutAll: '		immediateInvariant.';
-    lf;
-    nextPutAll: 'true.';
-    lf;
-    nextPutAll: '%';
-    lf;
-    lf
+	reservedOopString := ''.
+	classDefinition gs_reservedOop isEmpty
+		ifFalse: [
+			| strm |
+			strm := WriteStream on: String new.
+			strm nextPutAll: '	reservedOop: ', classDefinition gs_reservedOop; lf.
+			reservedOopString := strm contents ].
+	aStream
+		nextPutAll: '	classVars: #( ' ,  (self _stringForVariables: classDefinition classVarNames) , ' )';
+		lf.
+	hasClassInstVars
+		ifTrue: [ 
+		aStream
+			nextPutAll:
+			'	classInstVars: #( ' ,  (self _stringForVariables: classDefinition classInstVarNames) , ' )';
+			lf ].
+	aStream
+		nextPutAll: '	poolDictionaries: #()';
+		lf;
+		nextPutAll: '	inDictionary: ', (self classSymbolDictionaryNames at: classDefinition name);
+		lf;
+		nextPutAll: '	options: #(', optionsString, ')';
+		lf;
+		nextPutAll: reservedOopString;
+		nextPutAll: ')';
+		lf;
+		nextPutAll: '		category: ' , classDefinition category printString , ';';
+		lf;
+		nextPutAll: '		comment: ' , classDefinition comment printString , ';';
+		lf;
+		nextPutAll: '		immediateInvariant.';
+		lf;
+		nextPutAll: 'true.';
+		lf;
+		nextPutAll: '%';
+		lf;
+		lf
 ]
 
 { #category : 'private exporting' }
@@ -160,23 +174,35 @@ RwGsModificationTopazWriterVisitor >> _symbolsForVariables: variableList [
 
 { #category : 'private exporting' }
 RwGsModificationTopazWriterVisitor >> _writeClassTypeMessage: classDefinition on: aStream hasInstanceVariables: instanceVariableBlock [
-  | classType classTypeMessage hasInstanceVariables |
-  hasInstanceVariables := true.
-  classType := classDefinition subclassType.
-  classType = 'variable'
-    ifTrue: [ classTypeMessage := 'indexableSubclass: ' ]
-    ifFalse: [ classType = 'byteSubclass'
-        ifTrue: [ classTypeMessage := 'byteSubclass: '.
-          hasInstanceVariables := false ]
-        ifFalse: [ classType = ''
-            ifTrue: [ classTypeMessage := 'subclass: ' ]
-            ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
-  aStream
-    tab;
-    nextPutAll: classTypeMessage , classDefinition name asString printString;
-    lf.
-  hasInstanceVariables
-    ifTrue: [ instanceVariableBlock value ]
+	| classType classTypeMessage hasInstanceVariables hasReservedOop hasClassInstVars |
+	hasInstanceVariables := true.
+	hasReservedOop := classDefinition gs_reservedOop isEmpty not.
+	hasClassInstVars := true.
+	classType := classDefinition subclassType.
+	classType = 'variable'
+		ifTrue: [ 
+			classTypeMessage :=  hasReservedOop
+				ifTrue: [ '_newKernelIndexableSubclass:' ]
+				ifFalse: [ 'indexableSubclass: ' ] ]
+		ifFalse: [ classType = 'byteSubclass'
+			ifTrue: [ 
+				classTypeMessage :=  hasReservedOop
+					ifTrue: [ '_newKernelByteSubclass:' ]
+					ifFalse: [ 'byteSubclass: ' ].
+				hasClassInstVars := hasInstanceVariables := false ]
+			ifFalse: [ classType = ''
+				ifTrue: [ 
+					classTypeMessage :=  hasReservedOop
+						ifTrue: [ '_newKernelSubclass:' ]
+						ifFalse: [ 'subclass: ' ] ]
+				ifFalse: [ self error: 'unknown subclass type: ' , classType ] ] ].
+	aStream
+		tab;
+		nextPutAll: classTypeMessage , classDefinition name asString printString;
+		lf.
+	hasInstanceVariables
+		ifTrue: [ instanceVariableBlock value ].
+	^ hasClassInstVars
 ]
 
 { #category : 'accessing' }
@@ -251,6 +277,11 @@ RwGsModificationTopazWriterVisitor >> deletededPackage: aPackageModification [
 	"a deleted package is ignored for topaz ... the deleted classes and methods are simply not written out"
 ]
 
+{ #category : 'accessing' }
+RwGsModificationTopazWriterVisitor >> excludeClassInitializers [
+  self dynamicInstVarAt: #excludeClassInitializers put: true
+]
+
 { #category : 'exporting' }
 RwGsModificationTopazWriterVisitor >> export [
 
@@ -320,11 +351,6 @@ RwGsModificationTopazWriterVisitor >> exportClassDefinitions: classDefinitionsIn
 				lf ].
 	classDefinitionsInOrder do: [:classDef | 
 		self _fileOutClassDeclaration: classDef on: stream ].
-]
-
-{ #category : 'accessing' }
-RwGsModificationTopazWriterVisitor >> excludeClassInitializers [
-  self dynamicInstVarAt: #excludeClassInitializers put: true
 ]
 
 { #category : 'exporting' }

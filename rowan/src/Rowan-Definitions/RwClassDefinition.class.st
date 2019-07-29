@@ -178,8 +178,8 @@ RwClassDefinition >> _updateOptionsFromClass: aClass [
 	newValue isEmpty 
 		ifTrue: [ self removeProperty: propertyName ]
 		ifFalse: [ self propertyAt: propertyName put: newValue ].
-  aClass _rwReservedOop ifNotNil:[:resOop | self propertyAt:'gs_reservedOop' put: resOop ]
-                          ifNil:[ self removeProperty:'gs_reservedOop' ].
+  aClass _rwReservedOop ifNotNil:[:resOop | self propertyAt:'gs_reservedoop' put: resOop asString ]
+                          ifNil:[ self removeProperty:'gs_reservedoop' ].
 ]
 
 { #category : 'utility' }
@@ -286,4 +286,3 @@ RwClassDefinition >> updatePropertiesFromClass: aClass [
 		_updateCommentFromClass: aClass;
 		_updateCategoryFromClass: aClass
 ]
-
