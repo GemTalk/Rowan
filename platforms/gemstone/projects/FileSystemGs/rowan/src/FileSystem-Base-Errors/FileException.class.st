@@ -7,11 +7,7 @@ Class {
 	#instVars : [
 		'fileName'
 	],
-<<<<<<< HEAD:platforms/gemstone/projects/FileSystemGs/rowan/src/FileSystem-Base-Errors/FileException.class.st
 	#category : 'FileSystem-Base-Errors'
-=======
-	#category : 'Files'
->>>>>>> origin/candidateV2.0:platforms/gemstone/projects/FileSystemGs/rowan/src/Files/FileException.class.st
 }
 
 { #category : 'exceptioninstantiator' }

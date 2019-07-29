@@ -9,11 +9,7 @@ stream upToEnd
 Class {
 	#name : 'BinaryFileStream',
 	#superclass : 'AbstractBinaryFileStream',
-<<<<<<< HEAD:platforms/gemstone/projects/FileSystemGs/rowan/src/FileSystem-Streams/BinaryFileStream.class.st
 	#category : 'FileSystem-Streams'
-=======
-	#category : 'Files'
->>>>>>> origin/candidateV2.0:platforms/gemstone/projects/FileSystemGs/rowan/src/Files/BinaryFileStream.class.st
 }
 
 { #category : 'open/close' }

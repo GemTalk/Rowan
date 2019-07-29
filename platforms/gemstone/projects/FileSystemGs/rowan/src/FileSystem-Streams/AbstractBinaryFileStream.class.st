@@ -37,11 +37,7 @@ Class {
 	#instVars : [
 		'terminal'
 	],
-<<<<<<< HEAD:platforms/gemstone/projects/FileSystemGs/rowan/src/FileSystem-Streams/AbstractBinaryFileStream.class.st
 	#category : 'FileSystem-Streams'
-=======
-	#category : 'Files'
->>>>>>> origin/candidateV2.0:platforms/gemstone/projects/FileSystemGs/rowan/src/Files/AbstractBinaryFileStream.class.st
 }
 
 { #category : 'instance creation' }

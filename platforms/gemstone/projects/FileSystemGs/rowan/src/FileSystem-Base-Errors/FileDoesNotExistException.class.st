@@ -19,11 +19,7 @@ Class {
 	#instVars : [
 		'readOnly'
 	],
-<<<<<<< HEAD:platforms/gemstone/projects/FileSystemGs/rowan/src/FileSystem-Base-Errors/FileDoesNotExistException.class.st
 	#category : 'FileSystem-Base-Errors'
-=======
-	#category : 'Files'
->>>>>>> origin/candidateV2.0:platforms/gemstone/projects/FileSystemGs/rowan/src/Files/FileDoesNotExistException.class.st
 }
 
 { #category : 'signalling' }

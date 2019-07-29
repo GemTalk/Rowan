@@ -7,11 +7,8 @@ Class {
 	#instVars : [
 		'file'
 	],
-<<<<<<< HEAD:platforms/gemstone/projects/FileSystemGs/rowan/src/FileSystem-Base-Errors/FileAlreadyExistsException.class.st
+FileAlreadyExistsException.class.st
 	#category : 'FileSystem-Base-Errors'
-=======
-	#category : 'Files'
->>>>>>> origin/candidateV2.0:platforms/gemstone/projects/FileSystemGs/rowan/src/Files/FileAlreadyExistsException.class.st
 }
 
 { #category : 'instance creation' }
