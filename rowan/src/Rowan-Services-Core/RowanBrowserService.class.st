@@ -212,6 +212,12 @@ RowanBrowserService >> saveRootObject: oop windowHandle: integer [
 	dictionary at: integer put: (Object _objectForOop: oop).
 ]
 
+{ #category : 'other' }
+RowanBrowserService >> selectedClass [
+
+	^selectedClass
+]
+
 { #category : 'perform' }
 RowanBrowserService >> servicePerform: symbol withArguments: collection [
 	super perform: symbol withArguments: collection.
